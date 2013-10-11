@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: xulftk.xlcl,v 1.12 2013/07/18 19:46:21 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Translations text="XULFTK_Backendtext">
+		<Translation language="fr">text du 'backend'</Translation>
+		<Translation language="en">Backend text</Translation>
+	</Translations>
+	<Translations text="XULFTK_ProjectClosingAsking">
+		<Translation language="fr">Êtes-vous sûr de vouloir fermer ce projet ?</Translation>
+		<Translation language="en">Are you sure you want to close this project ?</Translation>
+	</Translations>
+	<Translations text="XULFTK_ProjectClosingWarning">
+		<Translation language="fr">Toutes les modifications vont être perdues !</Translation>
+		<Translation language="en">All modifications will be lost !</Translation>
+	</Translations>
+	<Translations text="XULFTK_MissingOrBadAnnexTarget">
+		<Translation language="fr">Absence ou mauvaise valeur pour la cible de l'annexe.</Translation>
+		<Translation language="en">Bad or no value for annex target.</Translation>
+	</Translations>
+	<Translations text="XULFTK_MissingOrBadAnnexTargetType">
+		<Translation language="fr">Absence ou mauvaise valeur pour le type de la cible de l'annexe.</Translation>
+		<Translation language="en">Bad or no value for annex target type.</Translation>
+	</Translations>
+	<Translations text="XULFTK_UnableToStoreSetups">
+		<Translation language="fr">Impossible de stocker les paramétrages.</Translation>
+		<Translation language="en">Unable to store setups.</Translation>
+	</Translations>
+	<Translations text="XULFTK_UnableToRetrieveSetups">
+		<Translation language="fr">Impossible de récupèrer les paramétrages.</Translation>
+		<Translation language="en">Unable to retrieve setups.</Translation>
+	</Translations>
+	<Translations text="XULFTK_UnableToFindSetups">
+		<Translation language="fr">Paramétrages introuvables.</Translation>
+		<Translation language="en">Unable to find setups.</Translation>
+	</Translations>
+	<Translations text="XULFTK_BadOrNoProjectId">
+		<Translation language="fr">Identifiant de projet absent ou incorrect.</Translation>
+		<Translation language="en">Bad or no project id.</Translation>
+	</Translations>
+  <Translations text="XULFTK_AuthorText">
+    <Translation language="fr">par %1 (%2)</Translation>
+    <Translation language="en">by %1 (%2)</Translation>
+  </Translations>
+  <Translations text="XULFTK_AffiliatedSoftwareText">
+    <Translation language="fr">Fait partie de %1 (%2)</Translation>
+    <Translation language="en">Part of %1 (%2)</Translation>
+  </Translations>
+  <Translations text="XULFTK_AffiliatedProjectText">
+    <Translation language="fr">Affilié au projet %1 (%2)</Translation>
+    <Translation language="en">Affiliated to the %1 project (%2)</Translation>
+  </Translations>
+  <Translations text="XULFTK_ExitConfirmation">
+    <Translation language="fr">Êtes-vous sûr de vouloir fermer l'application ?</Translation>
+    <Translation language="en">Are you sure you want to exit ?</Translation>
+  </Translations>
+  <!--
+	<Translations text="XULFTK_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

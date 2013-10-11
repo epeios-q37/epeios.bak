@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: nsxpcm.xlcl,v 1.4 2013/07/18 19:46:20 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<!--Translations text="NSXPCM_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations-->
+	<Translations text="NSXPCM_XPRJFilterLabel">
+		<Translation language="fr">Fichier XML de projet</Translation>
+		<Translation language="en">XML-Based project file</Translation>
+	</Translations>
+	<Translations text="NSXPCM_DynamicLibraryFilterLabel">
+		<Translation language="fr">Bibliothèque dynamique</Translation>
+		<Translation language="en">Dynamic library</Translation>
+	</Translations>
+</xpp:bloc>

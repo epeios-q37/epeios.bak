@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: xml.xlcl,v 1.9 2013/07/18 19:46:20 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <Translations text="XML_ErrorAtLineColumn"><!-- Generic text displayed before error description. -->
+    <Translation language="fr">erreur ligne %2, colonne %3 : %1</Translation>
+    <Translation language="en">error line %2, column %3: %1</Translation>
+  </Translations>
+  <Translations text="XML_UnexpectedEOF">
+		<Translation language="fr">fin de fichier inattendue</Translation>
+		<Translation language="en">unexpected end of file</Translation>
+	</Translations>
+	<Translations text="XML_UnknownEntity">
+		<Translation language="fr">entité inconnue</Translation>
+		<Translation language="en">unknown entity</Translation>
+	</Translations>
+	<Translations text="XML_MissingEqualSign">
+		<Translation language="fr">'=' manquant</Translation>
+		<Translation language="en">missing '='</Translation>
+	</Translations>
+	<Translations text="XML_BadAttributeValueDelimiter">
+		<Translation language="fr">mauvais délimiteur d'attribut</Translation>
+		<Translation language="en">bad attribute delimiter</Translation>
+	</Translations>
+	<Translations text="XML_UnexpectedCharacter">
+		<Translation language="fr">caractère inattendu</Translation>
+		<Translation language="en">unexpected character</Translation>
+	</Translations>
+	<Translations text="XML_EmptyTagName">
+		<Translation language="fr">nom de balise vide</Translation>
+		<Translation language="en">empty tag name</Translation>
+	</Translations>
+	<Translations text="XML_MismatchedTag">
+		<Translation language="fr">balise non appariée</Translation>
+		<Translation language="en">mismatched tag</Translation>
+	</Translations>
+</xpp:bloc>

@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: clnarg.xlcl,v 1.8 2013/07/18 19:46:19 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp/">
+	<Translations message="CLNARG_HelpHintMessage">
+		<Translation language="fr">Essayez '%1 --help' pour plus d'informations</Translation>
+		<Translation language="en">Try '%1 --help' for more informations</Translation>
+	</Translations>
+	<Translations message="CLNARG_OptionWording">
+		<Translation language="fr">Option</Translation>
+		<Translation language="en">Option</Translation>
+	</Translations>
+	<Translations message="CLNARG_OptionsWording">
+		<Translation language="fr">Options</Translation>
+		<Translation language="en">Options</Translation>
+	</Translations>
+	<Translations message="CLNARG_ArgumentWording">
+		<Translation language="fr">Argument</Translation>
+		<Translation language="en">Argument</Translation>
+	</Translations>
+	<Translations message="CLNARG_ArgumentsWording">
+		<Translation language="fr">Arguments</Translation>
+		<Translation language="en">Arguments</Translation>
+	</Translations>
+	<Translations message="CLNARG_VersionCommandDescription">
+		<Translation language="fr">Affiche la version du programme</Translation>
+		<Translation language="en">Displays the version of the program</Translation>
+	</Translations>
+	<Translations message="CLNARG_LicenseCommandDescription">
+		<Translation language="fr">Affiche la licence du programme</Translation>
+		<Translation language="en">Displays the program license</Translation>
+	</Translations>
+	<Translations message="CLNARG_HelpCommandDescription">
+		<Translation language="fr">Affiche cette page</Translation>
+		<Translation language="en">Displays this page</Translation>
+	</Translations>
+	<Translations message="CLNARG_MissingCommandError">
+		<Translation language="fr">Commande manquante</Translation>
+		<Translation language="en">Missing command</Translation>
+	</Translations>
+	<Translations message="CLNARG_UnknownOptionError">
+		<Translation language="fr">Option '%1' inconnue</Translation>
+		<Translation language="en">Unkown '%1' option</Translation>
+	</Translations>
+	<Translations message="CLNARG_MissingOptionArgumentError">
+		<Translation language="fr">Argument manquant pour l'option '%1'</Translation>
+		<Translation language="en">Missing argument for '%1' option</Translation>
+	</Translations>
+	<Translations message="CLNARG_UnexpectedOptionError">
+		<Translation language="fr">Option '%1' inattendue</Translation>
+		<Translation language="en">Unexpected '%1' option</Translation>
+	</Translations>
+	<Translations message="CLNARG_WrongNumberOfArgumentsError">
+		<Translation language="fr">Nombre d'arguments incorrect</Translation>
+		<Translation language="en">Wrong number of arguments</Translation>
+	</Translations>
+	<!--
+	<Translations message="CLNARG_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

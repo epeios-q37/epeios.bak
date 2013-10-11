@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: xpp.xlcl,v 1.14 2013/07/18 19:46:20 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:expand href="xml.xlcl"/>"
+	<Translations text="XPP_ErrorAtLineColumn">
+		<!-- One of the 2 generic text displayed before error description. -->
+		<Translation language="fr">%3 (ligne %1, colonne %2)</Translation>
+		<Translation language="en">%3 (line %1, column %2)</Translation>
+	</Translations>
+	<Translations text="XPP_ErrorInFileAtLineColumn">
+		<!-- One of the 2 generic text displayed before error description. -->
+		<Translation language="fr">%4 (fichier '%1', ligne %2, colonne %3)</Translation>
+		<Translation language="en">%4 (file '%1', line %2, column %3)</Translation>
+	</Translations>
+	<Translations text="XPP_NoTagsAllowedHere">
+		<Translation language="fr">balises non autorisées ici</Translation>
+		<Translation language="en">no tag allowed here</Translation>
+	</Translations>
+	<Translations text="XPP_UnexpectedValue">
+		<Translation language="fr">valeur inatendue</Translation>
+		<Translation language="en">unexpected value</Translation>
+	</Translations>
+	<Translations text="XPP_UnknownDirective">
+		<Translation language="fr">directive inconnue</Translation>
+		<Translation language="en">unknown directive</Translation>
+	</Translations>
+	<Translations text="XPP_UnexpectedAttribute">
+		<Translation language="fr">attribut inattendu</Translation>
+		<Translation language="en">unexpected attribute</Translation>
+	</Translations>
+	<Translations text="XPP_UnknownAttribute">
+		<Translation language="fr">attribut inconnu</Translation>
+		<Translation language="en">unknown attribute</Translation>
+	</Translations>
+	<Translations text="XPP_MissingNameAttribute">
+		<Translation language="fr">attribut 'name' manquant</Translation>
+		<Translation language="en">missing 'name' attribute</Translation>
+	</Translations>
+  <Translations text="XPP_EmptyNameAttributeValue">
+    <Translation language="fr">valeur pour l'attribut 'name' absente</Translation>
+    <Translation language="en">'name' attribute value is empty</Translation>
+  </Translations>
+  <Translations text="XPP_MissingSelectOrHRefAttribute">
+    <Translation language="fr">attribut 'select' ou 'href' manquant</Translation>
+    <Translation language="en">missing 'select' or 'href' attribute</Translation>
+  </Translations>
+  <Translations text="XPP_EmptySelectOrHRefAttributeValue">
+    <Translation language="fr">valeur pour l'attribut 'select' ou 'href' absente</Translation>
+    <Translation language="en">'select' or 'href' attribute value is empty</Translation>
+  </Translations>
+  <Translations text="XPP_MissingSelectAttribute">
+    <Translation language="fr">attribut 'select' manquant</Translation>
+    <Translation language="en">missing 'select' attribute</Translation>
+  </Translations>
+  <Translations text="XPP_EmptySelectAttributeValue">
+    <Translation language="fr">valeur pour l'attribut 'select' absente</Translation>
+    <Translation language="en">'select' attribute value is epmpty</Translation>
+  </Translations>
+  <Translations text="XPP_MissingValueAttribute">
+		<Translation language="fr">attribut 'value' manquant</Translation>
+		<Translation language="en">missing 'value' attribute</Translation>
+	</Translations>
+	<Translations text="XPP_MissingNameAndValueAttributes">
+		<Translation language="fr">attributs 'name' et 'value' manquants</Translation>
+		<Translation language="en">missing 'name' and 'value' attributes</Translation>
+	</Translations>
+	<Translations text="XPP_MissingSelectAndValueAttributes">
+		<Translation language="fr">attributs 'select' et 'value' manquants</Translation>
+		<Translation language="en">missing 'select' and 'value' attributes</Translation>
+	</Translations>
+	<Translations text="XPP_MustBeEmpty">
+		<Translation language="fr">doit être vide</Translation>
+		<Translation language="en">must be empty</Translation>
+	</Translations>
+	<Translations text="XPP_TooManyTags">
+		<Translation language="fr">trop de balises</Translation>
+		<Translation language="en">too many tags</Translation>
+	</Translations>
+	<Translations text="XPP_UnableToOpenFile">
+		<Translation language="fr">impossible d'ouvrir le fichier</Translation>
+		<Translation language="en">unable to open file</Translation>
+	</Translations>
+	<Translations text="XPP_UnknownMacro">
+		<Translation language="fr">macro inconnue</Translation>
+		<Translation language="en">unknown macro</Translation>
+	</Translations>
+	<Translations text="XPP_BadAttributeDefinitionSyntax">
+		<Translation language="fr">mauvaise syntaxe pour une définition d'attribut</Translation>
+		<Translation language="en">bad attribute definition syntax</Translation>
+	</Translations>
+	<Translations text="XPP_BadCypherKey">
+		<Translation language="fr">mauvaise clef de cryptage</Translation>
+		<Translation language="en">bad cypher key</Translation>
+	</Translations>
+	<Translations text="XPP_MissingCypherKey">
+		<Translation language="fr">clef de cryptage manquante</Translation>
+		<Translation language="en">missing cypher key</Translation>
+	</Translations>
+	<Translations text="XPP_MissingKeyOrFormatAttribute">
+		<Translation language="fr">attribut 'key' ou 'format' manquant</Translation>
+		<Translation language="en">missing 'key' or 'format' attribute</Translation>
+	</Translations>
+	<Translations text="XPP_EmptyResult">
+		<Translation language="fr">Résultat vide.</Translation>
+		<Translation language="en">Empty result.</Translation>
+	</Translations>
+  <Translations text="XPP_CDataNestingForbidden">
+    <Translation language="fr">Les 'CDATA' ne peuvent pas être imbriqués</Translation>
+    <Translation language="en">Nesting from 'CDATA' are forbidden</Translation>
+  </Translations>
+  <!--
+	<Translations text="XPP_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

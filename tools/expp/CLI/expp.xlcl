@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Locales xmlns="http://zeusw.org/epeios/xlcl" xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Locale target="expp">
+		<xpp:expand href="epeios.xlcl"/>
+		<Translations text="ProgramDescription">
+			<Translation language="fr">Processeur XML du projet Epeios</Translation>
+			<Translation language="en">Epeios XML preprocessor</Translation>
+		</Translations>
+		<Translations text="ProcessCommandDescription">
+			<Translation language="fr">Traitement du fichier XML</Translation>
+			<Translation language="en">Process XML file</Translation>
+		</Translations>
+		<Translations text="EncryptCommandDescription">
+			<Translation language="fr">Chiffrement du fichier XML</Translation>
+			<Translation language="en">Encrypt XML file</Translation>
+		</Translations>
+		<Translations text="NamespaceOptionDescription">
+			<Translation language="fr">Utilise &lt;ns&gt; comme espace de nom à la place de '%1'</Translation>
+			<Translation language="en">Use &lt;ns&gt; name space instead of '%1'</Translation>
+		</Translations>
+		<Translations text="NoIndentOptionDescription">
+			<Translation language="fr">Pas d'indentation</Translation>
+			<Translation language="en">No indentation</Translation>
+		</Translations>
+		<Translations text="SourceFileArgumentDescription">
+			<Translation language="fr">Nom du fichier source ; entrée standard si absent</Translation>
+			<Translation language="en">Input file name; standard input if missing</Translation>
+		</Translations>
+		<Translations text="DestFileArgumentDescription">
+			<Translation language="fr">Nom du fichier destination ; sortie standard si absent</Translation>
+			<Translation language="en">Output file name; standard output if missing</Translation>
+		</Translations>
+		<Translations text="ProcessingError">
+			<Translation language="fr">Erreur de traitement : %1</Translation>
+			<Translation language="en">Processing error: %1</Translation>
+		</Translations>
+		<Translations text="EncryptionError">
+			<Translation language="fr">Erreur de chiffrement : %1</Translation>
+			<Translation language="en">Encryption error: %1</Translation>
+		</Translations>
+	</Locale>
+</Locales>

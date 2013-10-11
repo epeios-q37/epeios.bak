@@ -1,0 +1,114 @@
+/*
+	'cpe' library by Claude SIMON (http://zeusw.org/intl/contact.html)
+	Requires the 'cpe' header file ('cpe.h').
+	Copyright (C) 2000-2001, 2004 Claude SIMON (http://zeusw.org/intl/contact.html).
+
+	This file is part of the Epeios (http://zeusw.org/epeios/) project.
+
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 3
+	of the License, or (at your option) any later version.
+ 
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, go to http://www.fsf.org/
+	or write to the:
+  
+         	         Free Software Foundation, Inc.,
+           59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+
+
+//	$Id: cpe.cpp,v 1.51 2013/07/18 19:46:23 csimon Exp $
+
+#define CPE__COMPILATION
+
+#include "cpe.h"
+
+class cpetutor
+: public ttr_tutor
+{
+public:
+	cpetutor( void )
+	: ttr_tutor( CPE_NAME )
+	{
+#ifdef CPE_DBG
+		Version = CPE_VERSION "\b\bD $";
+#else
+		Version = CPE_VERSION;
+#endif
+		Owner = CPE_OWNER;
+		Date = "$Date: 2013/07/18 19:46:23 $";
+	}
+	virtual ~cpetutor( void ){}
+};
+
+/******************************************************************************/
+				  /* do not modify anything above this limit */
+				  /*			  unless specified			 */
+				  /*******************************************/
+/*$BEGIN$*/
+
+#include "strng.h"
+
+using namespace cpe;
+
+static const char *Enviroment_( void )
+{
+	return CPE_ENVIROMENT_LABEL;
+}
+
+static const char *Architecture_( void )
+{
+	return CPE_ARCHITECTURE_LABEL;
+}
+
+const char *cpe::GetDescription( void )
+{
+	static char Buffer[100];
+	Buffer[0] = 0;
+
+	strcat( Buffer, Enviroment_() );
+	strcat( Buffer, "_" );
+	strcat( Buffer, Architecture_() );
+
+	return Buffer;
+}
+
+
+/* Although in theory this class is inaccessible to the different modules,
+it is necessary to personalize it, or certain compiler would not work properly */
+class cpepersonnalization
+: public cpetutor
+{
+public:
+	cpepersonnalization( void )
+	{
+		/* place here the actions concerning this library
+		to be realized at the launching of the application  */
+	}
+	~cpepersonnalization( void )
+	{
+		/* place here the actions concerning this library
+		to be realized at the ending of the application  */
+	}
+};
+
+
+/*$END$*/
+				  /********************************************/
+				  /* do not modify anything belove this limit */
+				  /*			  unless specified		   	  */
+/******************************************************************************/
+
+// 'static' by GNU C++.
+
+static cpepersonnalization Tutor;
+
+ttr_tutor &CPETutor = Tutor;

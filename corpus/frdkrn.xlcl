@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: frdkrn.xlcl,v 1.9 2013/07/18 19:46:20 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Translations text="FRDKRN_ProjectParsingError">
+		<Translation language="fr">Lecture projet : %1</Translation>
+		<Translation language="en">Project reading : %1</Translation>
+	</Translations>
+	<Translations text="FRDKRN_ParametersParsingError">
+		<Translation language="fr">Lecture paramètres ; %1</Translation>
+		<Translation language="en">Parameters reading; %1</Translation>
+	</Translations>
+	<Translations text="FRDKRN_NoOrBadProjectId">
+		<Translation language="fr">Identifiant de projet absent ou incorrect ('%1').</Translation>
+		<Translation language="en">Bad Or no project id ('%1').</Translation>
+	</Translations>
+	<Translations text="FRDKRN_NoOrBadBackendDefinition">
+		<Translation language="fr">Pas de ou mauvaise définition du moteur de traitement ('backend').</Translation>
+		<Translation language="en">No or bad backend definition.</Translation>
+	</Translations>
+	<Translations text="FRDKRN_NoBackendLocation">
+		<Translation language="fr">Localisation du moteur de traitement ('backend') non définie.</Translation>
+		<Translation language="en">No backend location.</Translation>
+	</Translations>
+	<Translations text="FRDKRN_UnableToConnect">
+		<Translation language="fr">Impossible de se connecter au moteur de traitement ('backend') '%1'.</Translation>
+		<Translation language="en">Unable to connect to the backend '%1'.</Translation>
+	</Translations>
+	<Translations text="FRDKRN_IncompatibleBackend">
+		<Translation language="fr">Moteur de traitement ('backend') incompatible '%1'.</Translation>
+		<Translation language="en">Incompatible backend '%1'.</Translation>
+	</Translations>
+	<Translations text="FRDKRN_BackendError">
+		<Translation language="fr">Erreur du moteur de traitement ('backend') %1 : %2</Translation>
+		<Translation language="en">Error backend %1: %2</Translation>
+	</Translations>
+	<Translations text="FRDKRN_UnableToOpenFile">
+		<Translation language="fr">Impossible d'ouvrir le fichier '%1'.</Translation>
+		<Translation language="en">Unable to open file '%1'.</Translation>
+	</Translations>
+	<!--
+	<Translations text="FRDKRN_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

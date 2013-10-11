@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: mscrmi.xlcl,v 1.6 2013/07/18 19:46:20 csimon Exp $ -->
+<!-- Traductions pour la bibliothèque 'MSCRMI' -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<!--
+	<Translations message="MSCRMI_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	 -->
+	
+	<!-- Messages génériques -->
+	<Translations message="MSCRMI_ErrorAtLineColumnInFile">
+		<Translation language="fr">Erreur à la ligne %1, colonne %2 dans le fichier '%3'</Translation>
+		<Translation language="en">Error at line %1, column %2 in file '%3'</Translation>
+	</Translations>
+	<Translations message="MSCRMI_ErrorAtLineColumn">
+		<Translation language="fr">Erreur à la ligne %1, colonne %2</Translation>
+		<Translation language="en">Error at line %1, column %2</Translation>
+	</Translations>
+
+	<!-- Début traductions 'parse_status' -->
+	<Translations message="MSCRMI_ParserError">
+		<Translation language="fr">Erreur durant l'analyse</Translation>
+		<Translation language="en">Error during parsing</Translation>
+	</Translations>
+	<Translations message="MSCRMI_UnexpectedTag">
+		<Translation language="fr">Balise inattendue</Translation>
+		<Translation language="en">Unexpected tag</Translation>
+	</Translations>
+	<Translations message="MSCRMI_AttributeAlreadyDefined">
+		<Translation language="fr">Attribut déjà défini</Translation>
+		<Translation language="en">Attribute already defined</Translation>
+	</Translations>
+	<Translations message="MSCRMI_UnexpectedAttribute">
+		<Translation language="fr">Attribut inattendu</Translation>
+		<Translation language="en">Unexpected attribute</Translation>
+	</Translations>
+	<Translations message="MSCRMI_MissingAttribute">
+		<Translation language="fr">Attribut manquant</Translation>
+		<Translation language="en">Missing attribute</Translation>
+	</Translations>
+	<Translations message="MSCRMI_BadValue">
+		<Translation language="fr">Valeur incorrecte</Translation>
+		<Translation language="en">Bad value</Translation>
+	</Translations>
+	<!-- Fin traductions 'parse_status' -->
+	
+	<!-- Début traductions 'transmission_status' -->
+	<Translations message="MSCRMI_ChecksumError">
+		<Translation language="fr">Somme de contrôle incorrecte</Translation>
+		<Translation language="en">Checksum error</Translation>
+	</Translations>
+	<Translations message="MSCRMI_IncorrectData">
+		<Translation language="fr">Données incorrectes</Translation>
+		<Translation language="en">Incorrect data</Translation>
+	</Translations>
+	<!-- Fin traductions 'transmission_status' -->
+</xpp:bloc>

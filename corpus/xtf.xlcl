@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: xtf.xlcl,v 1.3 2013/07/18 19:46:20 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <Translations text="XTF_UnsupportedEncoding">
+    <Translation language="fr">Encodage non pris en charge</Translation>
+    <Translation language="en">Unsupported uncoding</Translation>
+  </Translations>
+  <Translations text="XTF_UnexpectedEncoding">
+    <Translation language="fr">Encodage inattendu</Translation>
+    <Translation language="en">Unexpected encoding</Translation>
+  </Translations>
+  <Translations text="XTF_EncodingDiscrepancy">
+    <Translation language="fr">Divergence d'encodage</Translation>
+    <Translation language="en">Encoding discrepancy</Translation>
+  </Translations>
+  <!--
+	<Translations text="XTF_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+  -->
+</xpp:bloc>

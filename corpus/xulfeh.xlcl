@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: xulfkl.xlcl,v 1.6 2013/07/18 19:46:21 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <Translations text="XULFEH_SelectProjectFile">
+    <Translation language="fr">Sélectionnez un fichier de projet</Translation>
+    <Translation language="en">Select a project file</Translation>
+  </Translations>
+</xpp:bloc>

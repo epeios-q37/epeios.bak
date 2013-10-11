@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: xulfsf.xlcl,v 1.2 2013/07/18 19:46:21 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Translations message="XULFSF_EmbeddedBackendFileSelectionDialogBoxTitle">
+		<Translation language="fr">Sélectionnez un 'backend'</Translation>
+		<Translation language="en">Select a backend</Translation>
+	</Translations>
+	<Translations message="XULFSF_BadValueForBackendSelectionMode">
+		<Translation language="fr">Mauvaise valeur pour le mode de sélection du 'backend'</Translation>
+		<Translation language="en">Bad value for backend selection mode</Translation>
+	</Translations>
+	<!--
+	<Translations message="XULFSF_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

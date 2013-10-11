@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:bloc><!-- User definitions -->
+	<xpp:define name="Version">
+		<xpp:bloc>(Version)</xpp:bloc>
+	</xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2013</xpp:bloc>
+    </xpp:define>
+  </xpp:bloc>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="Type" value="GeckoComponent"/>
+  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <About>
+    <Program>esketchgck</Program>
+    <Software>eSketch</Software>
+	<UUID>163513ac-6a96-4c31-8ee4-247a8578c48d</UUID>
+  </About>
+  <Modules>
+    <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+      </Modules>
+	  <Modules Group="XULF">
+        <xpp:expand select="XULF"/>
+	  </Modules>
+      <Modules Group="FBL">
+        <xpp:expand select="FBLF"/>
+      </Modules>
+      <Modules Group="CSD">
+        <xpp:expand select="CSDF"/>
+      </Modules>
+      <Modules Group="FRD">
+        <xpp:expand select="FRD"/>
+      </Modules>
+      <Modules Group="GECKO">
+        <xpp:expand select="GECKO"/>
+      </Modules>
+      <Modules Group="SCL">
+        <xpp:expand select="SCL"/>
+      </Modules>
+    </Modules>
+	<Modules Group="UI">
+		<Modules Group="eh">
+			<Module>eh</Module>
+		</Modules>
+		<Module>ui</Module>
+    <Module>ui_base</Module>
+    <Module>ui_main</Module>
+		<Module>ui_ssn_frm</Module>
+		<Module>ui_ssn_vew</Module>
+	</Modules>
+    <Modules Group="FRD" Path="../../">
+      <Module>frdkernl</Module>
+      <Module>frdrgstry</Module>
+      <Module>frdsessn</Module>
+    </Modules>
+	<Module>trunk</Module>
+  </Modules>
+  <Files>
+	<Files Group="XUL" Type="XUL">
+		<Files Group="Misc">
+			<File>debug</File>
+		</Files>
+		<Files Group="Main">
+			<File>Main</File>
+		</Files>
+		<Files Group="Session">
+			<Files Group="View">
+				<File>SessionView</File>
+			</Files>
+			<Files Group="Form">
+				<File>SessionForm</File>
+			</Files>
+		</Files>
+	</Files>
+  </Files>
+  <SourceDirs>
+    <SourceDir>../../</SourceDir>
+    <SourceDir>../../../../</SourceDir>
+  </SourceDirs>
+  <PreprocessorDefinitions>
+  </PreprocessorDefinitions>
+</Project>

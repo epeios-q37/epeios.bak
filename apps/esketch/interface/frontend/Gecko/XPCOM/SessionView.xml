@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Entities>
+
+	<!--
+	<Entity name="">
+		<Translation language="en"</Translation>
+		<Translation language="fr"</Translation>
+		<Translation language="de"</Translation>
+	</Entity>
+	-->
+
+	<Raw language="en">
+		<![CDATA[
+		]]>
+	</Raw>
+	<Raw language="fr">
+		<![CDATA[
+		]]>
+	</Raw>
+</Entities>

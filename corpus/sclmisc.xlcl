@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: sclmisc.xlcl,v 1.3 2013/07/18 19:46:20 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Translations text="SCLMISC_UnableToOpenConfigurationFile">
+		<Translation language="fr">Impossible d'ouvrir le fichier de configuration.</Translation>
+		<Translation language="en">Unable to open configuration file.</Translation>
+	</Translations>
+  <Translations text="SCLMISC_ConfigurationLocaleParsingError">
+    <Translation language="fr">Erreur durant l'analyse de la locale du fichier de configuration : %1</Translation>
+    <Translation language="en">Configuration locale parsing error : %1</Translation>
+  </Translations>
+  <Translations message="SCLMISC_UnableToOpenFile">
+    <Translation language="fr">Echec de l'ouverture du fichier '%1'</Translation>
+    <Translation language="en">Unable to open file '%1'</Translation>
+  </Translations>
+  <!--
+	<Translations text="SCLMISC_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>
