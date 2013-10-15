@@ -1,2 +1,2 @@
 version = "(Version)"
-copyright_years = ""
+copyright_years = "2013"
