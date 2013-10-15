@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!--
+	'SessionForm.xul' by Claude SIMON (http://zeusw.org/).
+
+	 This file is part of 'eSketch' software.
+
+	'eSketch' is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	'eSketch' is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- $Id$ -->
+
+<!DOCTYPE page SYSTEM "chrome://esketchgck/locale/SessionForm.dtd">
+<!--<!DOCTYPE page SYSTEM "../locale/fr/SessionForm.dtd">-->
+
+<page
+	id="pgeSessionForm"
+	title="SessionForm"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:xex="http://zeusw.org/epeios/xex"
+	onload="register();"
+	pack="center"
+	>
+	<script type="text/javascript" src="egeckocom.js"/>
+  <broadcasterset id="bcsAvailability"/>
+  <broadcasterset>
+		<!-- Gestion 'hidden'/'disabled' -->
+		<broadcaster id="bdcNoBackend"/>
+		<broadcaster id="bdcPredefinedBackend"/>
+		<broadcaster id="bdcDaemonBackend"/>
+		<broadcaster id="bdcEmbeddedBackend"/>
+		<broadcaster id="bdcEmbeddedBackendSelection"/>
+		<broadcaster id="bdcAuthentication"/>"
+	</broadcasterset>
+	<broadcasterset>
+		<broadcaster id="dspBackendType"
+					 label="&backendType.lbl;"
+					 tooltiptext="&backendType.ttt;"
+					 />
+		<broadcaster id="glbNoBackend"
+					 xex:oncommand="ehBackendTypeSelection"
+					 label="&noBackend.lbl;"
+					 value="None"
+					 observes="bdcNoBackend"
+					 />
+		<broadcaster id="glbPredefinedBackend"
+					 xex:oncommand="ehBackendTypeSelection"
+					 label="&predefinedBackend.lbl;"
+					 tooltiptext="&predefinedBackend.ttt;"
+					 value="Predefined"
+					 observes="bdcPredefinedBackend"
+					 />
+		<broadcaster
+			id="glbDaemonBackend"
+			xex:oncommand="ehBackendTypeSelection"
+			label="&daemonBackend.lbl;"
+			value="Daemon"
+			observes="bdcDaemonBackend"
+			/>
+		<broadcaster
+			id="dspDaemonBackendLocation"
+			tooltiptext="&daemonBackendLocation.ttt;"
+			placeholder="&daemonBackendLocation.phd;"
+			observes="bdcDaemonBackend"
+			/>
+		<broadcaster
+			id="glbEmbeddedBackend"
+			xex:oncommand="ehBackendTypeSelection"
+			label="&embeddedBackend.lbl;"
+			value="Embedded"
+			observes="bdcEmbeddedBackend"
+			/>
+		<broadcaster
+			id="dspEmbeddedBackendLocation"
+			tooltiptext="&embeddedBackendLocation.ttt;"
+			placeholder="&embeddedBackendLocation.phd;"
+			observes="bdcEmbeddedBackend"
+			/>
+		<broadcaster
+			id="glbEmbeddedBackendSelection"
+			xex:oncommand="ehEmbeddedBackendSelection"
+			label="&embeddedBackendSelection.lbl;"
+			tooltiptext="&embeddedBackendSelection.ttt;"
+			accesskey="&embeddedBackendSelection.ack;"
+			observes="bdcEmbeddedBackendSelection"
+			/>
+		<broadcaster
+			id="dspLogin"
+			label="&login.lbl;"
+			tooltiptext="&login.ttt;"
+			value="&login.vlu;"
+			/>
+		<broadcaster
+			id="dspPassword"
+			label="&password.lbl;"
+			tooltiptext="&password.ttt;"
+			value="&password.vlu;"
+			/>
+		<broadcaster
+			id="dspApply"
+			xex:oncommand="ehApply"
+			label="&apply.lbl;"
+			tooltiptext="&apply.ttt;"
+			accesskey="&apply.ack;"
+			/>
+		<broadcaster
+			id="dspCancel"
+			xex:oncommand="ehCancel"
+			label="&cancel.lbl;"
+			tooltiptext="&cancel.ttt;"
+			accesskey="&cancel.ack;"
+			/>
+	</broadcasterset>
+	<keyset>
+		<!--<key id="keyApply" keycode="O" xex:oncommand="ehApply"/>-->
+	</keyset>
+	<hbox pack="center" align="center">
+		<groupbox>
+			<hbox>
+				<groupbox>
+					<caption label="&backendSelection.lbl;"/>
+					<hbox>
+						<menulist id="mnlBackendType"
+								  observes="dspBackendType"
+								  >
+							<menupopup>
+								<menuitem id="mniNoBackend" observes="glbNoBackend"/>
+								<menuitem id="mniPredefinedBackend" observes="glbPredefinedBackend"/>
+								<menuitem id="mniDaemonBackend" observes="glbDaemonBackend"/>
+								<menuitem id="mniEmbeddedBackend" observes="glbEmbeddedBackend"/>
+							</menupopup>
+						</menulist>
+						<deck id="dckBackendType">
+							<hbox/>
+							<hbox>
+								<menulist id="mnlPredefinedBackend"
+										  observes="dspPredefinedBackend"
+										  />
+							</hbox>
+							<hbox>
+								<textbox id="txbDaemonBackend"
+										 observes="dspDaemonBackendLocation"
+										 />
+							</hbox>
+							<hbox>
+								<textbox id="txbEmbeddedBackend"
+										 observes="dspEmbeddedBackendLocation"
+										 />
+								<button observes="glbEmbeddedBackendSelection"/>
+							</hbox>
+						</deck>
+					</hbox>
+				</groupbox>
+				<spacer/>
+			</hbox>
+			<hbox>
+				<groupbox>
+					<caption label="&authentication.lbl;" observes="bdcAuthentication"/>
+					<grid>
+						<columns>
+							<column/>
+							<column/>
+						</columns>
+						<rows>
+							<row>
+								<label control="txbLogin"  observes="dspLogin"/>
+								<textbox id="txbLogin" observes="dspLogin"/>
+							</row>
+							<row>
+								<label control="txbPassword" observes="dspPassword"/>
+								<textbox id="txbPassword" type="password" observes="dspPassword"/>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+				<spacer/>
+			</hbox>
+			<hbox pack="center">
+				<button observes="dspApply"/>
+				<button observes="dspCancel"/>
+			</hbox>
+		</groupbox>
+	</hbox>
+</page>

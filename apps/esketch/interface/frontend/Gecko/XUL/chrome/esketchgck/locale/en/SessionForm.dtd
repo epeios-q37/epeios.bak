@@ -1,0 +1,42 @@
+<!ENTITY backendSelection.lbl "Backend">
+
+<!ENTITY noBackend.lbl "None">
+
+<!ENTITY daemonBackend.lbl "Daemon">
+
+<!ENTITY embeddedBackend.lbl "Embedded">
+
+<!ENTITY authentication.lbl "Authentication">
+
+<!ENTITY backendType.lbl "Backend type">
+<!ENTITY backendType.ttt "Select backend type.">
+
+<!ENTITY daemonBackendLocation.phd "address:port">
+<!ENTITY daemonBackendLocation.ttt "Address and port of the daemon">
+
+<!ENTITY embeddedBackendLocation.phd "">
+<!ENTITY embeddedBackendLocation.ttt "Location and name of the backend dynamic library.">
+
+<!ENTITY predefinedBackend.lbl "Predefined">
+<!ENTITY predefinedBackend.ttt "Select one of the predefined backend.">
+
+<!ENTITY embeddedBackendSelection.lbl "Browse...">
+<!ENTITY embeddedBackendSelection.ttt "Select the backend dynamic library.">
+<!ENTITY embeddedBackendSelection.ack "B">
+
+<!ENTITY login.lbl "Login">
+<!ENTITY login.vlu "&login.lbl;">
+<!ENTITY login.ttt "Your login.">
+
+<!ENTITY password.lbl "Password">
+<!ENTITY password.vlu "&password.lbl;">
+<!ENTITY password.ttt "Your password.">
+
+<!ENTITY apply.lbl "OK">
+<!ENTITY apply.ttt "Launch session.">
+<!ENTITY apply.ack "O">
+
+<!ENTITY cancel.lbl "Cancel">
+<!ENTITY cancel.ttt "Cancel session.">
+<!ENTITY cancel.ack "C">
+

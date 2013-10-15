@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!--
+	'Main.xul' by Claude SIMON (http://zeusw.org/).
+
+	 This file is part of 'esketch' software.
+
+	'eSketch' is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	'eSketch' is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!-- $Id$ -->
+
+<!DOCTYPE window SYSTEM "chrome://esketchgck/locale/Main.dtd">
+<!--<!DOCTYPE window SYSTEM "../locale/fr/Main.dtd">-->
+
+<window	id="wdwMain"
+		title="eSketch"
+		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		xmlns:html="http://www.w3.org/1999/xhtml"
+		xmlns:xex="http://zeusw.org/epeios/xex"
+		onload="register();stop();"
+		onunload="terminate();"
+		persist="height width screenX screenY Annex"
+>
+<!-- NOTA :'xex:onclose="..."' doesn't work on a 'window' element ... -->
+
+	<script type="text/javascript"
+			src="egeckocom.js"/>
+	<script type="text/javascript">create( 'esketchgck', "&Language;" );</script>
+  <broadcasterset id="bcsAvailability"/>
+  <broadcasterset>
+		<broadcaster id="bdcProjectType"
+					 label="&ProjectType.label;"
+					 tooltiptext="&ProjectType.tooltiptext;"
+					 />
+		<broadcaster id="bdcNewProject"
+					 label="&NewProject.label;"
+					 tooltiptext="&NewProject.tooltiptext;"
+					 accesskey="&NewProject.accesskey;"
+					 acceltext="&NewProject.acceltext;"
+			     modifiers="accel"
+			     key="&NewProject.key;"
+ 					 xex:oncommand="ehNewProject"
+					 />
+		<broadcaster id="bdcNewProjectTypeSelection"
+					 label="&NewProjectTypeSelection.label;"
+					 tooltiptext="&NewProjectTypeSelection.tooltiptext;"
+					 accesskey="&NewProjectTypeSelection.accesskey;"
+					 acceltext="&NewProjectTypeSelection.acceltext;"
+					 xex:oncommand="ehProjectTypeSelection"
+					 value="New"
+					 />
+		<broadcaster id="bdcPredefinedProject"
+					 label="&PredefinedProject.label;"
+					 tooltiptext="&PredefinedProject.tooltiptext;"
+					 accesskey="&PredefinedProject.accesskey;"
+					 acceltext="&PredefinedProject.acceltext;"
+					 />
+		<broadcaster id="bdcPredefinedProjectTypeSelection"
+					 xex:oncommand="ehProjectTypeSelection"
+					 value="Predefined"
+					 observes="bdcPredefinedProject"
+					 />
+		<broadcaster id="bdcUserProject"
+					 label="&UserProject.label;"
+					 tooltiptext="&UserProject.tooltiptext;"
+					 accesskey="&UserProject.accesskey;"
+					 acceltext="&UserProject.acceltext;"
+			     modifiers="accel"
+			     key="&UserProject.key;"
+           xex:oncommand="ehUserProject"
+					 />
+		<broadcaster id="bdcUserProjectSelection"
+					 label="&UserProjectSelection.label;"
+					 tooltiptext="&UserProjectSelection.tooltiptext;"
+					 accesskey="&UserProjectSelection.accesskey;"
+					 acceltext="&UserProjectSelection.acceltext;"
+					 xex:oncommand="ehUserProjectSelection"
+					 />
+		<broadcaster id="bdcUserProjectTypeSelection"
+					 label="&UserProjectTypeSelection.label;"
+					 tooltiptext="&UserProjectTypeSelection.tooltiptext;"
+					 accesskey="&UserProjectTypeSelection.accesskey;"
+					 acceltext="&UserProjectTypeSelection.acceltext;"
+					 xex:oncommand="ehProjectTypeSelection"
+					 value="User"
+					 />
+		<broadcaster id="bdcCloseProject"
+					 label="&CloseProject.label;"
+					 tooltiptext="&CloseProject.tooltiptext;"
+					 accesskey="&CloseProject.accesskey;"
+					 acceltext="&CloseProject.acceltext;"
+			     modifiers="accel"
+			     key="&CloseProject.key;"
+					 xex:oncommand="ehCloseProject"
+					 xex:observes="avbCloseProject"
+					 />
+		<broadcaster id="bdcApply"
+					 label="&Apply.label;"
+					 tooltiptext="&Apply.tooltiptext;"
+					 accesskey="&Apply.accesskey;"
+					 xex:oncommand="ehApply"
+					 />
+		<broadcaster id="bdcExit"
+					 label="&Exit.label;"
+					 tooltiptext="&Exit.tooltiptext;"
+					 accesskey="&Exit.accesskey;"
+					 acceltext="&Exit.acceltext;"
+			     modifiers="accel"
+			     key="&Exit.key;"
+					 xex:oncommand="ehExit"
+					 />
+		<broadcaster id="bdcAbout"
+					 label="&About.label;"
+					 tooltiptext="&About.tooltiptext;"
+    			 key="&Version.key;"
+     			 modifiers="accel shift"
+					 xex:oncommand="ehAbout"
+					 />
+		<broadcaster id="bdcWebSite"
+					 label="&WebSite.label;"
+					 tooltiptext="WwebSite.tooltiptext;"
+					 xex:oncommand="ehWebSite"
+					 />
+		<broadcaster id="bdcDebug"
+			     modifiers="accel shift"
+			     key="&Debug.key;"
+			     xex:oncommand="ehDebug"
+			 />
+	</broadcasterset>
+	<keyset>
+		<key observes="bdcAbout"/>
+		<key observes="bdcDebug"/>
+		<key observes="bdcNewProject"/>
+		<key observes="bdcUserProject"/>
+		<key observes="bdcCloseProject"/>
+		<key observes="bdcExit"/>
+	</keyset>
+	<menubar>
+		<menu label="&File.label;"
+			  accesskey="&File.accesskey;">
+			<menupopup>
+				<menuitem observes="bdcNewProject"/>
+				<menuitem observes="bdcUserProject"/>
+        <menu id="mnuPredefinedProject" acceltext="">
+            <observes element="bdcPredefinedProject" attribute="label"/>
+        </menu>
+				<menuitem observes="bdcCloseProject"/>
+				<menuseparator/>
+				<menuitem observes="bdcExit"/>
+			</menupopup>
+		</menu>
+		<menu label="&Misc.label;">
+			<menupopup>
+				<menuitem observes="bdcAbout"/>
+				<menuitem observes="bdcWebSite"/>
+			</menupopup>
+		</menu>
+	</menubar>
+	<deck id="dckMain"
+		  flex="1"
+		  >
+		<box id="vewHome"
+			 flex="1"
+			 pack="center"
+			 align="center"
+			 >
+			<groupbox>
+				<vbox pack="center">
+					<groupbox orient="horizontal">
+						<caption label="&ProjectType.label;"/>
+						<menulist id="mnlProjectType"
+								  observes="bdcProjectType">
+							<menupopup>
+								<menuitem id="mniNewProject"
+										  observes="bdcNewProjectTypeSelection"
+										  />
+								<menuitem id="mniPredefinedProject"
+										  observes="bdcPredefinedProjectTypeSelection"
+										  />
+								<menuitem id="mniUserProject"
+										  observes="bdcUserProjectTypeSelection"
+										  />
+							</menupopup>
+						</menulist>
+						<deck id="dckProjectType">
+							<hbox/>
+							<hbox>
+								<menulist id="mnlPredefinedProjectList"
+										  observes="bdcPredefinedProjectList"/>
+							</hbox>
+							<hbox>
+								<textbox id="txbUserProjectLocation"
+										 observes="bdcUserProjectLocation"/>
+								<button observes="bdcUserProjectSelection"/>
+							</hbox>
+						</deck>
+					</groupbox>
+					<box pack="center">
+						<button observes="bdcApply"/>
+					</box>
+				</vbox>
+			</groupbox>
+		</box>
+		<box id="vewSessionForm">
+			<iframe src="SessionForm.xul"
+					flex="1"/>
+		</box>
+		<box id="vewSessionView">
+			<iframe src="SessionView.xul"
+					flex="1"/>
+		</box>
+	</deck>
+</window>

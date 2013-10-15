@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Entities xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Entity Name="Language">
+		<Translation language="en">en</Translation>
+		<Translation language="fr">fr</Translation>
+	</Entity>
+
+	<Entity Name="Version.key">
+		<Translation language="en">v</Translation>
+		<Translation language="fr">v</Translation>
+	</Entity>
+	
+	<Entity Name="Debug.key">
+		<Translation language="en">d</Translation>
+		<Translation language="fr">d</Translation>
+	</Entity>
+
+	<EntitySet Affix="File">
+		<Entity Suffix="label">
+			<Translation language="en">File</Translation>
+			<Translation language="fr">Fichier</Translation>
+		</Entity>
+		<Entity Suffix="accesskey">
+			<Translation language="en">F</Translation>
+			<Translation language="fr">F</Translation>
+		</Entity>
+	</EntitySet>
+
+	<EntitySet Affix="ProjectType">
+		<Entity Suffix="label">
+			<Translation language="en">Project</Translation>
+			<Translation language="fr">Projet</Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en">SProject type</Translation>
+			<Translation language="fr">Type de projet</Translation>
+		</Entity>
+	</EntitySet>
+
+  <xpp:define name="NewProject">
+    <xpp:bloc>
+      <Entity Suffix="label">
+        <Translation language="en">New</Translation>
+        <Translation language="fr">Nouveau</Translation>
+      </Entity>
+      <Entity Suffix="tooltiptext">
+        <Translation language="en">Creation of a new project</Translation>
+        <Translation language="fr">Créer un nouveau projet</Translation>
+      </Entity>
+    </xpp:bloc>
+  </xpp:define>
+
+	<EntitySet Affix="NewProject">
+    <xpp:expand select="NewProject"/>
+		<Entity Suffix="accesskey">
+			<Translation language="en">N</Translation>
+			<Translation language="fr">N</Translation>
+		</Entity>
+		<Entity Suffix="key">
+			<Translation language="en">N</Translation>
+			<Translation language="fr">N</Translation>
+		</Entity>
+		<Entity Suffix="acceltext">
+			<Translation language="en">Ctrl+&amp;NewProject.key;</Translation>
+			<Translation language="fr">Ctrl+&amp;NewProject.key;</Translation>
+		</Entity>
+	</EntitySet>
+
+  <EntitySet Affix="NewProjectTypeSelection">
+    <xpp:expand select="NewProject"/>
+    <Entity Suffix="accesskey">
+      <Translation language="en">N</Translation>
+      <Translation language="fr">N</Translation>
+    </Entity>
+    <Entity Suffix="key">
+      <Translation language="en">N</Translation>
+      <Translation language="fr">N</Translation>
+    </Entity>
+    <Entity Suffix="acceltext">
+      <Translation language="en">Ctrl+&amp;NewProject.key;</Translation>
+      <Translation language="fr">Ctrl+&amp;NewProject.key;</Translation>
+    </Entity>
+  </EntitySet>
+
+  <EntitySet Affix="PredefinedProject">
+    <Entity Suffix="label">
+      <Translation language="en">Predefined</Translation>
+      <Translation language="fr">Prédefini</Translation>
+    </Entity>
+    <Entity Suffix="tooltiptext">
+      <Translation language="en">Load a predefined project</Translation>
+      <Translation language="fr">Ouvrir un projet prédfini</Translation>
+    </Entity>
+    <Entity Suffix="accesskey">
+      <Translation language="en">P</Translation>
+      <Translation language="fr">P</Translation>
+    </Entity>
+    <Entity Suffix="key">
+      <Translation language="en">&amp;PredefinedProject.accesskey;</Translation>
+      <Translation language="fr">&amp;PredefinedProject.accesskey;</Translation>
+    </Entity>
+    <Entity Suffix="acceltext">
+      <Translation language="en">Ctrl+&amp;PredefinedProject.key;</Translation>
+      <Translation language="fr">Ctrl+&amp;PredefinedProject.key;</Translation>
+    </Entity>
+  </EntitySet>
+  
+  <xpp:define name="UserProject">
+    <xpp:bloc>
+      <Entity Suffix="label">
+        <Translation language="en">Load ...</Translation>
+        <Translation language="fr">Ouvrir ...</Translation>
+      </Entity>
+      <Entity Suffix="tooltiptext">
+        <Translation language="en">Load an existing Project</Translation>
+        <Translation language="fr">Ouvrir un projet existant</Translation>
+      </Entity>
+    </xpp:bloc>
+  </xpp:define>
+  
+  <EntitySet Affix="UserProject">
+    <xpp:expand select="UserProject"/>
+		<Entity Suffix="accesskey">
+			<Translation language="en">L</Translation>
+			<Translation language="fr">O</Translation>
+		</Entity>
+		<Entity Suffix="key">
+			<Translation language="en">&amp;UserProject.accesskey;</Translation>
+			<Translation language="fr">&amp;UserProject.accesskey;</Translation>
+		</Entity>
+		<Entity Suffix="acceltext">
+			<Translation language="en">Ctrl+&amp;UserProject.key;</Translation>
+			<Translation language="fr">Ctrl+&amp;UserProject.key;</Translation>
+		</Entity>
+	</EntitySet>
+
+  <EntitySet Affix="UserProjectTypeSelection">
+    <xpp:expand select="UserProject"/>
+    <Entity Suffix="accesskey">
+      <Translation language="en">L</Translation>
+      <Translation language="fr">O</Translation>
+    </Entity>
+    <Entity Suffix="key">
+      <Translation language="en">&amp;UserProjectTypeSelection.accesskey;</Translation>
+      <Translation language="fr">&amp;UserProjectTypeSelection.accesskey;</Translation>
+    </Entity>
+    <Entity Suffix="acceltext">
+      <Translation language="en">Ctrl+&amp;UserProjectTypeSelection.key;</Translation>
+      <Translation language="fr">Ctrl+&amp;UserProjectTypeSelection.key;</Translation>
+    </Entity>
+  </EntitySet>
+
+  <EntitySet Affix="UserProjectSelection">
+		<Entity Suffix="label">
+			<Translation language="en">Browse ...</Translation>
+			<Translation language="fr">Parcourir ...</Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en">Select a project file</Translation>
+			<Translation language="fr">Sélectionner a fichier projet</Translation>
+		</Entity>
+		<Entity Suffix="accesskey">
+			<Translation language="en">B</Translation>
+			<Translation language="fr">P</Translation>
+		</Entity>
+		<Entity Suffix="key">
+			<Translation language="en">&amp;UserProjectSelection.accesskey;</Translation>
+			<Translation language="fr">&amp;UserProjectSelection.accesskey;</Translation>
+		</Entity>
+		<Entity Suffix="acceltext">
+			<Translation language="en">Ctrl+&amp;UserProjectSelection.key;</Translation>
+			<Translation language="fr">Ctrl+&amp;UserProjectSelection.key;</Translation>
+		</Entity>
+	</EntitySet>
+
+	<EntitySet Affix="CloseProject">
+		<Entity Suffix="label">
+			<Translation language="en">Close</Translation>
+			<Translation language="fr">Fermer</Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en">Close project</Translation>
+			<Translation language="fr">Fermer le projet</Translation>
+		</Entity>
+		<Entity Suffix="accesskey">
+			<Translation language="en">C</Translation>
+			<Translation language="fr">F</Translation>
+		</Entity>
+		<Entity Suffix="key">
+			<Translation language="en">&amp;CloseProject.accesskey;</Translation>
+			<Translation language="fr">&amp;CloseProject.accesskey;</Translation>
+		</Entity>
+		<Entity Suffix="acceltext">
+			<Translation language="en">CTRL+&amp;CloseProject.key;</Translation>
+			<Translation language="fr">CTRL+&amp;CloseProject.key;</Translation>
+		</Entity>
+	</EntitySet>
+	
+	<EntitySet Affix="Apply">
+		<Entity Suffix="label">
+			<Translation language="en">OK</Translation>
+			<Translation language="fr">OK</Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en">Open the projet</Translation>
+			<Translation language="fr">Ouvre le projet</Translation>
+		</Entity>
+		<Entity Suffix="accesskey">
+			<Translation language="en">O</Translation>
+			<Translation language="fr">O</Translation>
+		</Entity>
+	</EntitySet>
+
+	<EntitySet Affix="Exit">
+		<Entity Suffix="label">
+			<Translation language="en">Exit</Translation>
+			<Translation language="fr">Quitter</Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en">Exit from program</Translation>
+			<Translation language="fr">Quitter le programme</Translation>
+		</Entity>
+		<Entity Suffix="accesskey">
+			<Translation language="en">E</Translation>
+			<Translation language="fr">Q</Translation>
+		</Entity>
+		<Entity Suffix="key">
+			<Translation language="en">&amp;Exit.accesskey;</Translation>
+			<Translation language="fr">&amp;Exit.accesskey;</Translation>
+		</Entity>
+		<Entity Suffix="acceltext">
+			<Translation language="en">CTRL+&amp;Exit.key;</Translation>
+			<Translation language="fr">CTRL+&amp;Exit.key;</Translation>
+		</Entity>
+	</EntitySet>
+
+	<Entity Name="Misc.label">
+		<Translation language="en">?</Translation>
+		<Translation language="fr">?</Translation>
+	</Entity>
+
+	<EntitySet Affix="About">
+		<Entity Suffix="label">
+			<Translation language="en">About ...</Translation>
+			<Translation language="fr">A propos ...</Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en">Display informations about this program</Translation>
+			<Translation language="fr">Afficher des informations à propos de cette application</Translation>
+		</Entity>
+	</EntitySet>
+
+	<EntitySet Affix="WebSite">
+		<Entity Suffix="label">
+			<Translation language="en">Web site</Translation>
+			<Translation language="fr">Site Web</Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en">Display the Web site dedicated to this program</Translation>
+			<Translation language="fr">Afficher le site Web dédié à ce programme </Translation>
+		</Entity>
+	</EntitySet>
+
+	<!--
+	<Entity Name="">
+		<Translation language="en"></Translation>
+		<Translation language="fr"></Translation>
+	</Entity>
+	-->
+	<!--
+	<EntitySet Affix="">
+		<Entity Suffix="label">
+			<Translation language="en"></Translation>
+			<Translation language="fr"></Translation>
+		</Entity>
+		<Entity Suffix="tooltiptext">
+			<Translation language="en"></Translation>
+			<Translation language="fr"></Translation>
+		</Entity>
+		<Entity Suffix="accesskey">
+			<Translation language="en"></Translation>
+			<Translation language="fr"></Translation>
+		</Entity>
+		<Entity Suffix="key">
+			<Translation language="en"></Translation>
+			<Translation language="fr"></Translation>
+		</Entity>
+		<Entity Suffix="acceltext">
+			<Translation language="en"></Translation>
+			<Translation language="fr"></Translation>
+		</Entity>
+	</EntitySet>
+	-->
+	<!--
+	<Raw language="">
+		<![CDATA[
+		]]>
+	</Raw>
+	-->
+</Entities>

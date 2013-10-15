@@ -1,0 +1,17 @@
+
+<!ENTITY JSConsole.lbl "JS Console">
+<!ENTITY JSConsole.ttt "Open JS Console">
+<!ENTITY JSConsole.ack "J">
+
+<!ENTITY DOMInspector.lbl "DOM Inspector">
+<!ENTITY DOMInspector.ttt "Open 'DOM Inspector'">
+<!ENTITY DOMInspector.ack "D">
+
+<!ENTITY FrontendError.lbl "Frontend error">
+<!ENTITY FrontendError.ttt "Test error of frontend type.">
+<!ENTITY FrontendError.ack "F">
+
+<!ENTITY BackendError.lbl "Backend error">
+<!ENTITY BackendError.ttt "Test error of backend type.">
+<!ENTITY BackendError.ack "B">
+			

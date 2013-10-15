@@ -1,0 +1,42 @@
+<!ENTITY backendSelection.lbl "Moteur de traitement">
+
+<!ENTITY noBackend.lbl "Aucun">
+
+<!ENTITY daemonBackend.lbl "Daemon">
+
+<!ENTITY embeddedBackend.lbl "Enclavé">
+
+<!ENTITY authentication.lbl "Authentification">
+
+<!ENTITY backendType.lbl "Type de moteur de traitement">
+<!ENTITY backendType.ttt "Sélectionner le type de moteur de traitement.">
+
+<!ENTITY daemonBackendLocation.phd "adresse:port">
+<!ENTITY daemonBackendLocation.ttt "Adresse et port du 'daemon'.">
+
+<!ENTITY embeddedBackendLocation.phd "">
+<!ENTITY embeddedBackendLocation.ttt "Localisation et nom de la bibliothèque dynamique du moteur de traitement.">
+
+<!ENTITY predefinedBackend.lbl "Prédéfini">
+<!ENTITY predefinedBackend.ttt "Sélectionner un des moteurs de traitement prédéfinis.">
+
+<!ENTITY embeddedBackendSelection.lbl "Parcourir...">
+<!ENTITY embeddedBackendSelection.ttt "Sélectionner la bibliothèque dynamique du moteur de traitement.">
+<!ENTITY embeddedBackendSelection.ack "P">
+
+<!ENTITY login.lbl "Identifiant">
+<!ENTITY login.vlu "&login.lbl;">
+<!ENTITY login.ttt "Votre identifiant.">
+
+<!ENTITY password.lbl "Mot de passe">
+<!ENTITY password.vlu "&password.lbl;">
+<!ENTITY password.ttt "Votre mot de passe.">
+
+<!ENTITY apply.lbl "OK">
+<!ENTITY apply.ttt "Lancer la session.">
+<!ENTITY apply.ack "O">
+
+<!ENTITY cancel.lbl "Annuler">
+<!ENTITY cancel.ttt "Annule la session.">
+<!ENTITY cancel.ack "A">
+

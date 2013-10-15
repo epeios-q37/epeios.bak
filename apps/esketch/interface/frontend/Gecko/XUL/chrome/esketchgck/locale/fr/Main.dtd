@@ -1,0 +1,72 @@
+<!ENTITY Language "fr">
+
+<!ENTITY Version.key "v">
+
+<!ENTITY Debug.key "d">
+
+<!ENTITY Misc.label "?">
+
+<!ENTITY File.label "Fichier">
+<!ENTITY File.accesskey "F">
+
+<!ENTITY ProjectType.label "Projet">
+<!ENTITY ProjectType.tooltiptext "Type de projet">
+
+<!ENTITY NewProject.label "Nouveau">
+<!ENTITY NewProject.tooltiptext "Créer un nouveau projet">
+<!ENTITY NewProject.accesskey "N">
+<!ENTITY NewProject.key "N">
+<!ENTITY NewProject.acceltext "Ctrl+&NewProject.key;">
+
+<!ENTITY NewProjectTypeSelection.label "Nouveau">
+<!ENTITY NewProjectTypeSelection.tooltiptext "Créer un nouveau projet">
+<!ENTITY NewProjectTypeSelection.accesskey "N">
+<!ENTITY NewProjectTypeSelection.key "N">
+<!ENTITY NewProjectTypeSelection.acceltext "Ctrl+&NewProject.key;">
+
+<!ENTITY PredefinedProject.label "Prédefini">
+<!ENTITY PredefinedProject.tooltiptext "Ouvrir un projet prédfini">
+<!ENTITY PredefinedProject.accesskey "P">
+<!ENTITY PredefinedProject.key "&PredefinedProject.accesskey;">
+<!ENTITY PredefinedProject.acceltext "Ctrl+&PredefinedProject.key;">
+
+<!ENTITY UserProject.label "Ouvrir ...">
+<!ENTITY UserProject.tooltiptext "Ouvrir un projet existant">
+<!ENTITY UserProject.accesskey "O">
+<!ENTITY UserProject.key "&UserProject.accesskey;">
+<!ENTITY UserProject.acceltext "Ctrl+&UserProject.key;">
+
+<!ENTITY UserProjectTypeSelection.label "Ouvrir ...">
+<!ENTITY UserProjectTypeSelection.tooltiptext "Ouvrir un projet existant">
+<!ENTITY UserProjectTypeSelection.accesskey "O">
+<!ENTITY UserProjectTypeSelection.key "&UserProjectTypeSelection.accesskey;">
+<!ENTITY UserProjectTypeSelection.acceltext "Ctrl+&UserProjectTypeSelection.key;">
+
+<!ENTITY UserProjectSelection.label "Parcourir ...">
+<!ENTITY UserProjectSelection.tooltiptext "Sélectionner a fichier projet">
+<!ENTITY UserProjectSelection.accesskey "P">
+<!ENTITY UserProjectSelection.key "&UserProjectSelection.accesskey;">
+<!ENTITY UserProjectSelection.acceltext "Ctrl+&UserProjectSelection.key;">
+
+<!ENTITY CloseProject.label "Fermer">
+<!ENTITY CloseProject.tooltiptext "Fermer le projet">
+<!ENTITY CloseProject.accesskey "F">
+<!ENTITY CloseProject.key "&CloseProject.accesskey;">
+<!ENTITY CloseProject.acceltext "CTRL+&CloseProject.key;">
+
+<!ENTITY Apply.label "OK">
+<!ENTITY Apply.tooltiptext "Ouvre le projet">
+<!ENTITY Apply.accesskey "O">
+
+<!ENTITY Exit.label "Quitter">
+<!ENTITY Exit.tooltiptext "Quitter le programme">
+<!ENTITY Exit.accesskey "Q">
+<!ENTITY Exit.key "&Exit.accesskey;">
+<!ENTITY Exit.acceltext "CTRL+&Exit.key;">
+
+<!ENTITY About.label "A propos ...">
+<!ENTITY About.tooltiptext "Afficher des informations à propos de cette application">
+
+<!ENTITY WebSite.label "Site Web">
+<!ENTITY WebSite.tooltiptext "Afficher le site Web dédié à ce programme ">
+
