@@ -25,7 +25,6 @@
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
-/*$$BEGIN$$*/
 
 using namespace skt;
 
@@ -48,7 +47,6 @@ public:
 };
 
 
-/*$$END$$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */

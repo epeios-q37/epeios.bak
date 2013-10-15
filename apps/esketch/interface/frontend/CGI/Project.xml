@@ -43,5 +43,6 @@
     <SourceDir>../../..</SourceDir>
   </SourceDirs>
   <PreprocessorDefinitions>
+    <PreprocessorDefinition>E_MT</PreprocessorDefinition>
   </PreprocessorDefinitions>
 </Project>
