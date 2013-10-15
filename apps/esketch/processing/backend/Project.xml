@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:bloc><!-- User definitions -->
+	<xpp:define name="Version">
+		<xpp:bloc>(Version)</xpp:bloc>
+	</xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2013</xpp:bloc>
+    </xpp:define>
+  </xpp:bloc>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="Type" value="Backend"/>
+  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <About>
+    <Program>esketchbkd</Program>
+    <Software>eSketch</Software>
+	<UUID>c8c33276-5e09-4f11-bd1b-3283b0ef0697</UUID>
+  </About>
+  <Modules>
+    <Modules Group="Epeios" Path="h:/cvs/epeios/stable">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+      </Modules>
+      <Modules Group="SCL">
+        <xpp:expand select="SCL"/>
+      </Modules>
+      <Modules Group="FBL">
+        <xpp:expand select="FBLB"/>
+      </Modules>
+      <Modules Group="CSD">
+        <xpp:expand select="CSDB"/>
+      </Modules>
+    </Modules>
+    <Module>registry</Module>
+    <Module>wrpexample</Module>
+    <Module>wrpunbound</Module>
+  </Modules>
+  <SourceDirs>
+    <SourceDir>..</SourceDir>
+    <SourceDir>../..</SourceDir>
+  </SourceDirs>
+  <PreprocessorDefinitions>
+  </PreprocessorDefinitions>
+</Project>
