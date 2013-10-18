@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns="http://zeusw.org/epeios/xcfg"
+                xmlns:xpp="http://zeusw.org/epeios/expp">
+	<Configuration xmlns="http://zeusw.org/intl/expp"
+                 target="esketchdvk">
+	    <Language>en</Language>
+		<Test>Test message.</Test>
+	</Configuration>
+</Configurations>

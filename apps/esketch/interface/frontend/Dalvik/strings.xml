@@ -1,0 +1,63 @@
+<Strings><!-- NOTA : 'en' is the default one -->
+	<String name="app_name">
+		<Translation language="en">eSketch</Translation>
+	</String>
+	<String name="Main_ProjectType_Prompt">
+		<Translation language="en">Project</Translation>
+		<Translation language="fr">Projet</Translation>
+	</String>
+	<String name="Main_PredefinedProjectList_Prompt">
+		<Translation language="en">Predefined projects</Translation>
+		<Translation language="fr">Projets prédéfinis</Translation>
+	</String>
+	<String-Array name="Main_ProjectType_Entries">
+		<Item>
+			<Translation language="en">New</Translation>
+			<Translation language="fr">Nouveau</Translation>
+		</Item>>
+		<Item>
+			<Translation language="en">Predefined</Translation>
+			<Translation language="fr">Prédefini</Translation>
+		</Item>>
+	</String-Array>
+	<String name="Main_Apply">
+		<Translation language="en">OK</Translation>
+		<Translation language="fr">OK</Translation>
+	</String>
+	<String name="SessionForm_BackendType_Prompt">
+		<Translation language="en">Backend</Translation>
+		<Translation language="fr">Moteur de traitement</Translation>
+	</String>
+	<String name="SessionForm_DaemonBackendLocation_Hint">
+		<Translation language="en">address:port</Translation>
+		<Translation language="fr">adresse:port</Translation>
+	</String>
+	<String-Array name="SessionForm_BackendType_Entries">
+		<Item>
+			<Translation language="en">None</Translation>
+			<Translation language="fr">Aucun</Translation>
+		</Item>>
+		<Item>
+			<Translation language="en">Predefined</Translation>
+			<Translation language="fr">Prédéfini</Translation>
+		</Item>>
+		<Item>
+			<Translation language="en">Daemon</Translation>
+			<Translation language="fr">Daemon</Translation>
+		</Item>>
+	</String-Array>
+	<!--
+	<String name="">
+		<Translation language="en"></Translation>
+		<Translation language="fr"></Translation>
+	</String>
+	-->
+	<!-- NOTE : Pour chaque 'Item', TOUTES les langues doivent être présentes !
+	<String-Array name="">
+		<Item>
+			<Translation language="en"></Translation>
+			<Translation language="fr"></Translation>
+		</Item>>
+	</String-Array>
+	-->
+</Strings>

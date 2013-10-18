@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:bloc><!-- User definitions -->
+	<xpp:define name="Version">
+		<xpp:bloc>99999999</xpp:bloc>
+	</xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2013</xpp:bloc>
+    </xpp:define>
+  </xpp:bloc>
+  <xpp:set name="Type" value="DalvikComponent"/>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <About>
+    <Program>esketchdvk</Program>
+    <Software>eSketch</Software>
+    <UUID>6d9e76f2-2b54-4a04-8ac1-ac5bf8b858d4</UUID>
+  </About>
+  <Modules>
+    <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+		<Modules Group="Core">
+			<xpp:expand select="Core"/>
+		</Modules>
+		<Modules Group="DALVIK">
+			<xpp:expand select="DALVIK"/>
+		</Modules>
+		<Modules Group="JAVA">
+			<xpp:expand select="JAVA"/>
+		</Modules>
+		<Modules Group="SCL">
+			<xpp:expand select="SCL"/>
+		</Modules>
+    </Modules>
+	<Modules Group="UI" Path="jni/">
+		<Module>ui</Module>
+		<Module>ui_main</Module>
+		<Module>ui_ssn_frm</Module>
+	</Modules>
+  </Modules>
+  <SourceDirs>
+    <SourceDir>../../..</SourceDir>
+    <SourceDir>..</SourceDir>
+  </SourceDirs>
+  <PreprocessorDefinitions>
+  </PreprocessorDefinitions>
+</Project>
