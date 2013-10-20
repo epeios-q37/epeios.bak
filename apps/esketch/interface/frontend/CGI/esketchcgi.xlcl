@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: esketchfrd.xlc,v 1.6 2009/10/01 15:52:03 csimon Exp $ -->
+<Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Locale target="esketchcgi">
+    <xpp:expand href="epeios.xlcl"/>
+	</Locale>
+</Locales>

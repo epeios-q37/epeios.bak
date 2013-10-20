@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Locales>
+  <Locale target="esketchgck">
+    <xpp:expand xmlns:xpp="http://zeusw.org/epeios/xpp"
+                href="../../esketchfrd.xlcl"/>
+  </Locale>
+</Locales>

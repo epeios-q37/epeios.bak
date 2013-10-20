@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<!-- $Id$ -->
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Configuration target="esketchcgi">
+		<Language>fr</Language>
+	</Configuration>
+</Configurations>

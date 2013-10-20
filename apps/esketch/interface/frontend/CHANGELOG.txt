@@ -1,0 +1,7 @@
+***** eSketch frontends changelog *****
+
+REMINDER :
+	- This file concerns all the frontends.
+	- Each frontend version have their own file for what is specific to them.
+	
+	
