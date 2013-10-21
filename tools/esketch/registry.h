@@ -20,8 +20,6 @@
     You should have received a copy of the GNU General Public License
     along with 'expp'.  If not, see <http://www.gnu.org/licenses/>.
 */
-// $Id: registry.h,v 1.3 2012/12/04 15:28:55 csimon Exp $
-
 
 #ifndef REGISTRY__INC
 # define REGISTRY__INC

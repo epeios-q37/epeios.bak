@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: ui_main.cpp,v 1.1 2012/12/04 15:49:26 csimon Exp $
-
 #include "ui_main.h"
 
 #include "dalvik.h"

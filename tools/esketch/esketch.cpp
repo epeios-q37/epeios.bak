@@ -21,8 +21,6 @@
     along with 'esketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $$Id: esketch.cpp,v 1.21 2013/06/11 10:32:30 csimon Exp $$
-
 #include "scltool.h"
 #include "sclerror.h"
 
@@ -294,10 +292,11 @@ void scltool::Main(
 {
 ERRProlog
 	parameters___ Parameters;
+	command__ Command = c_Undefined;
 ERRBegin
-	AnalyzeArgs( argc, argv, Parameters );
+	Command = AnalyzeArgs( argc, argv, Parameters );
 
-	Go_( Parameters );
+	Go( Command, Parameters );
 ERRErr
 ERREnd
 ERREpilog

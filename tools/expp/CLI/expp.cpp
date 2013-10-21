@@ -21,8 +21,6 @@
     along with 'expp'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $$Id: expp.cpp,v 1.21 2013/06/11 10:32:30 csimon Exp $$
-
 #include "details.h"
 
 #include "locale.h"

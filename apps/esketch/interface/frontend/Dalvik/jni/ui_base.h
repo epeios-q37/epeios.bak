@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: ui_base.h,v 1.1 2012/12/04 15:49:25 csimon Exp $
-
 #ifndef UI_BASE__INC
 # define UI_BASE__INC
 

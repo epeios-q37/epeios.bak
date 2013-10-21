@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- $Id: esketchdvk.xlcl,v 1.1 2012/12/04 15:52:49 csimon Exp $ -->
 <Locales xmlns="http://zeusw.org/epeios/xlcl"
          xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="esketchdvk">

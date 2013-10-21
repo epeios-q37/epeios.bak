@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: esketchcgi.cpp,v 1.4 2013/07/25 15:59:07 csimon Exp $
-
 #include "scldaemon.h"
 #include "sclrgstry.h"
 #include "scllocale.h"

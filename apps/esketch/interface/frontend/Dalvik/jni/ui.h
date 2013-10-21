@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: ui.h,v 1.1 2012/12/04 15:49:25 csimon Exp $
-
 #ifndef UI__INC
 # define UI__INC
 

@@ -20,8 +20,6 @@
     You should have received a copy of the GNU General Public License
     along with 'expp'.  If not, see <http://www.gnu.org/licenses/>.
 */
-// $Id: registry.cpp,v 1.2 2012/12/04 15:28:55 csimon Exp $
-
 
 #include "registry.h"
 

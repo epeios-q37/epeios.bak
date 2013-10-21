@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- $Id: epeios.xlcl,v 1.1 2012/04/23 15:02:28 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:expand href="../../../corpus/epeios.xlcl"/>
 </xpp:bloc>

@@ -20,8 +20,6 @@
     You should have received a copy of the GNU General Public License
     along with 'xxx'.  If not, see <http://www.gnu.org/licenses/>.
 */	
-// $Id: locale.h,v 1.3 2013/06/11 10:32:30 csimon Exp $
-
 
 #ifndef LOCALE__INC
 # define LOCALE__INC

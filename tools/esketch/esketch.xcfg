@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Configuration target="esketchcgi">
-		<Language>fr</Language>
+	<Configuration target="esketch">
+    <Parameters>
+		  <Language>fr</Language>
+    </Parameters>
 	</Configuration>
 </Configurations>

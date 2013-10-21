@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: trunk.h,v 1.1 2012/12/04 15:49:25 csimon Exp $
-
 #ifndef TRUNK__INC
 # define TRUNK__INC
 

@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: ui_ssn_frm.cpp,v 1.1 2012/12/04 15:49:26 csimon Exp $
-
 #include "ui_ssn_frm.h"
 
 #include "ui.h"

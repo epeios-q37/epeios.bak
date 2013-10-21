@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Locale target="esketch">
+		<xpp:expand href="epeios.xlcl"/>
+		<Translations text="ProgramDescription">
+		  <Translation language="fr">Mettre ici la description du programme en français !</Translation>
+		  <Translation language="en">Put here the english description of the program !</Translation>
+		</Translations>
+		<!--
+		<Translations text="">
+		  <Translation language="fr"></Translation>
+		  <Translation language="en"></Translation>
+		</Translations>
+		-->
+  </Locale>
+</Locales>

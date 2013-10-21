@@ -22,8 +22,6 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: xulwdg.h,v 1.23 2013/01/11 17:35:04 csimon Exp $
-
 #ifndef XULWDG__INC
 #define XULWDG__INC
 
