@@ -157,12 +157,12 @@ ERREpilog
 
 static void PrintHeader_( void )
 {
-	COut << NAME " " VERSION << " (" WEBSITE_URL ")" << txf::nl;
-	COut << COPYRIGHT << txf::nl;
+	COut << NAME " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
+	COut << "Copyright " COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
-static void AnalyzeOptions(
+static void AnalyzeOptions_(
 	clnarg::analyzer___ &Analyzer,
 	parameters___ &Parameters )
 {
@@ -197,7 +197,7 @@ ERREnd
 ERREpilog
 }
 
-static void AnalyzeFreeArguments(
+static void AnalyzeFreeArguments_(
 	clnarg::analyzer___ &Analyzer,
 	parameters___ &Parameters )
 {
@@ -224,11 +224,12 @@ ERREnd
 ERREpilog
 }
 
-static void AnalyzeArgs(
+static command__ AnalyzeArgs_(
 	int argc,
 	const char *argv[],
 	parameters___ &Parameters )
 {
+	command__ Command = c_Undefined;
 ERRProlog
 	clnarg::description Description;
 	clnarg::analyzer___ Analyzer;
@@ -242,7 +243,7 @@ ERRBegin
 
 	Analyzer.Init( argc, argv, Description );
 
-	switch ( Analyzer.GetCommand() ) {
+	switch ( Command = (command__)Analyzer.GetCommand() ) {
 	case scltool::cVersion:
 		PrintHeader_();
 //		TTR.Advertise( COut );
@@ -258,24 +259,28 @@ ERRBegin
 		break;
 //	case c:
 	case CLNARG_NONE:
+//		clnarg::ReportMissingCommandError( NAME, scllocale::GetLocale(), scltool::GetLanguage() );
 		break;
 	default:
 		ERRFwk();
 		break;
 	}
 
-	AnalyzeOptions( Analyzer, Parameters );
+	AnalyzeOptions_( Analyzer, Parameters );
 
-	AnalyzeFreeArguments( Analyzer, Parameters );
+	AnalyzeFreeArguments_( Analyzer, Parameters );
 
 ERRErr
 ERREnd
 ERREpilog
+	return Command;
 }
 
 /* End of the part which handles command line arguments. */
 
-static void Go_( const parameters___ &Parameters )
+static void Go_(
+	command__ Command,
+	const parameters___ &Parameters )
 {
 ERRProlog
 ERRBegin
@@ -294,9 +299,9 @@ ERRProlog
 	parameters___ Parameters;
 	command__ Command = c_Undefined;
 ERRBegin
-	Command = AnalyzeArgs( argc, argv, Parameters );
+	Command = AnalyzeArgs_( argc, argv, Parameters );
 
-	Go( Command, Parameters );
+	Go_( Command, Parameters );
 ERRErr
 ERREnd
 ERREpilog
