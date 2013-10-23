@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:bloc><!-- User definitions -->
+	<xpp:define name="Version">
+		<xpp:bloc>20131023</xpp:bloc>
+	</xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2013</xpp:bloc>
+    </xpp:define>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="Type" value="Tool"/>
+  </xpp:bloc>
+  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <About>
+    <Program>edbpck</Program>
+    <Software>eDBPck</Software>
+	<UUID>710c54fa-7b66-42ae-b6dc-a5ccd658d48a</UUID>
+  </About>
+  <Modules>
+    <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+      </Modules>
+      <Modules Group="SCL">
+        <xpp:expand select="SCL"/>
+      </Modules>
+    </Modules>
+    <Modules Group="DBP">
+      <Module>dbpals</Module>
+      <Module>dbpctx</Module>
+    </Modules>
+    <Module>registry</Module>
+  </Modules>
+  <SourceDirs>
+  </SourceDirs>
+  <PreprocessorDefinitions>
+	<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+  </PreprocessorDefinitions>
+</Project>

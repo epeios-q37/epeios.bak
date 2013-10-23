@@ -40,7 +40,7 @@ using cio::CIn;
 // Ne pas enlever ce qu'il y a entre le 'BEGIN' ci-dessus et le 'END' ci-dessous !
 /* PLACEHOLDER */
 
-#define NAME			"eSketch"
+#define NAME_MC			"eSketch"
 #define NAME_UC			"ESKETCH"
 #define NAME_LC			"esketch"
 #define WEBSITE_URL		"http://zeusw.org/intl/"
@@ -95,7 +95,7 @@ ERRProlog
 	lcl::meaning Meaning;
 	str::string Translation;
 ERRBegin
-	scltool::PrintDefaultCommandDescriptions( NAME, Description );
+	scltool::PrintDefaultCommandDescriptions( NAME_LC, Description );
 
 #if 0	// Exemples.
 	// Commands.
@@ -157,7 +157,7 @@ ERREpilog
 
 static void PrintHeader_( void )
 {
-	COut << NAME " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
+	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
 	COut << "Copyright " COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
@@ -177,7 +177,7 @@ ERRBegin
 	Options.Init();
 
 	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		clnarg::ReportUnknownOptionError( Unknown, NAME, scllocale::GetLocale(), scltool::GetLanguage() );
+		clnarg::ReportUnknownOptionError( Unknown, NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
 
 	P = Options.First();
 
@@ -215,7 +215,7 @@ ERRBegin
 	case 0:
 		break;
 	default:
-		clnarg::ReportWrongNumberOfArgumentsError( NAME, scllocale::GetLocale(), scltool::GetLanguage() );
+		clnarg::ReportWrongNumberOfArgumentsError( NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
 		break;
 	}
 

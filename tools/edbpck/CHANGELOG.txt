@@ -1,0 +1,7 @@
+***** Changelog for the 'eDBPck' tool *****
+
+23/10/2013 :
+	- Reprising from 'erpck'.
+	- PUSBLICATION.
+
+
