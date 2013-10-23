@@ -1,11 +1,9 @@
 /*
-	'rpktbl' module by Claude SIMON ((http://zeusw.org/epeios/contact.html))
+	'dbptbl' module by Claude SIMON ((http://zeusw.org/epeios/contact.html))
 	Part of the 'erpck' tool.
 	Copyright (C) 2010 Claude SIMON.
 */
 
-// $Id: rpktbl.cpp,v 1.2 2013/07/18 19:46:26 csimon Exp $
+#include "dbptbl.h"
 
-#include "rpktbl.h"
-
-using namespace rpktbl;
+using namespace dbptbl;

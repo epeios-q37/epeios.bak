@@ -27,7 +27,10 @@
     </Modules>
     <Modules Group="DBP">
       <Module>dbpals</Module>
+      <Module>dbpbsc</Module>
       <Module>dbpctx</Module>
+      <Module>dbprcd</Module>
+      <Module>dbptbl</Module>
     </Modules>
     <Module>registry</Module>
   </Modules>
