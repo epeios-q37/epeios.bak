@@ -30,19 +30,24 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
-mods += ags bso cpe epsmsc err 
-mods += flw ias str tol ttr 
-mods += uys cio bom cdgb64 fil 
-mods += fnm lcl rgstry stsfsm xml 
-mods += xpp clnarg 
-
+mods += ags aem bch bitbch bso 
+mods += cpe crptgr ctn dir dte 
+mods += dtfbsc dtfptb epsmsc err fdr 
+mods += flf fls flw flx ias 
+mods += ids iof iop llio lst 
+mods += lstbch lstctn mns que sdr 
+mods += stk str strng tol ttr 
+mods += txf tys uys utf xtf 
+mods += cio bom cdgb64 fil fnm 
+mods += lcl rgstry stsfsm xml xpp 
+mods += clnarg 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
-
-mods += dbpals dbpctx 
-
+mods += dbpals dbpbsc dbpctx dbprcd dbptbl 
 mods += registry 
 
+pmods += pllio 
 
+wmods += wllio 
 
 ##############################
 # Common to all environment. #
@@ -153,14 +158,18 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -DCYGWIN
-
+	
 	LDFLAGS += -static
 
 	ifeq ("$(arch)","$(IA_32)")
 		CXX = i686-w64-mingw32-g++
+		mods += $(wmods)
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
 		ifeq ("$(arch)","$(x86_64)")
 			CXX = x86_64-w64-mingw32-g++
+			mods += $(wmods)
+		else
+			mods += $(pmods)
 		endif
     
 	endif
@@ -179,6 +188,8 @@ endif
 ifeq ("$(os)", "$(MinGW)")
 
 	co += -DMSYS
+	
+	mods += $(wmods)
 
 	LDFLAGS += -static
 
@@ -205,6 +216,8 @@ endif
 ifeq ("$(os)","$(GNULinux)")
 
 	co += -DGNULINUX
+	
+	mods += $(pmods)
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -228,6 +241,8 @@ endif
 ifeq ("$(os)","$(Linux)")
 
 	co += -DLINUX
+	
+	mods += $(pmods)
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -251,6 +266,8 @@ endif
 ifeq ("$(os)","$(MacOS)")
 
 	co += -DDARWIN
+	
+	mods += $(pmods)
 
 	#LDFLAGS += -static	// Doesn't work.
 
@@ -269,17 +286,18 @@ endif
 
 ##########################
 		
+all: $(target)
+	rm -f *.o
 
-include Details.mk
+copt += -DVERSION=\"20131023\"
+copt += -DCOPYRIGHT_YEARS=\"2013\"
 
-copt += -DVERSION=\"$(version)\"
-copt += -DCOPYRIGHT_YEARS=\"$(copyright_years)\"
-	
 ifndef EPEIOS_SRC
 	src += :../epeios:epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
+
     
 ox = o
 ds = :
@@ -298,4 +316,8 @@ $(target): $(objs)
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
+
+clean:
+	rm -rf *.o
+
 		
