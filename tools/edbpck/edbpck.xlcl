@@ -16,7 +16,7 @@
     </Translations>
     <Translations text="IdArgumentDescription">
       <Translation language="fr">identifiant de l'enregistrement sélectionné ; si absent, sélection d'une entrée aléatoire, si 0, sélection de tous les enregistrements</Translation>
-      <Translation language="en">id of the enry to pick ; if absent, picks a random entry, if 0, picks all entries</Translation>
+      <Translation language="en">id of the entry to pick ; if absent, picks a random entry, if 0, picks all entries</Translation>
     </Translations>
 
     <!-- Wordings -->

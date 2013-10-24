@@ -293,7 +293,7 @@ copt += -DVERSION=\"20131023\"
 copt += -DCOPYRIGHT_YEARS=\"2013\"
 
 ifndef EPEIOS_SRC
-	src += :../epeios:epeios
+	src += :src
 else
 	src += :$(EPEIOS_SRC)
 endif
