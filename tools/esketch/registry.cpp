@@ -23,3 +23,5 @@
 
 #include "registry.h"
 
+using namespace registry;
+

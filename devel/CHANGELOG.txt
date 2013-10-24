@@ -1,0 +1,5774 @@
+$Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
+
+23/10/2013 :
+	- FLS :
+		- Correction relative au message 'mixed signed/unsigned' lorsque compilation en x86-64.
+	- RGSTRY :
+		- Le marqueur de balise devient '$' au lieu de '%', qui pose problème à la 'LCL'.
+
+20/09/2013 :
+	- XULFxx :
+		- Adaptation.
+
+19/09/2013 :
+	- GECKOO :
+		- Cette bibliothèque prend maintenant en charge le 'patchage' du comportement des commandes (appel de 'nsxpcm::PatchBadCommandBehaviors()') . Plus besoin de le faire de manière explicite.
+	- NSXPCM :
+		- Ajout 'page__'.
+	- XULFxx :
+		- Adaptation.
+	- XULWDG :
+		- Rajout 'Refresh()' pour 'page__' et 'window__'.
+
+01/09/2013 :
+	- SCLXSLUI :
+		- Création.
+
+31/08/2013 :
+	- FBLxxx, FRDxxx :
+		- Réorgansation.
+
+30/08/2013 :
+	- BOM :
+		- Gestion du cas où le flux ext vide.
+	- XULFTK :
+		- Gestion du cas où le flux contenant des 'Setups' est vide. Ainsi, si les 'Setups' sont stockés dans un fichier, celui-ci peut maintenant être inexistant ou vide;
+		il sera crée si nécessaire à la sortie du logiciel. De la même manière, dans le cas où les 'Setups' sont 'embedded', l'attribut correspondant ('Annex' par défaut)
+		n'a plus besoin d'être présent ou peut être vide.
+
+28/08/2013 :
+	- SCLDAEMON :
+		- Retrait de tout ce qui est relatif au mécanisme 'frontend/backend'.
+
+27/08/2013 :
+	- FRDBKD :
+		- Adaptation aux modifications 'FBLFRD'.
+	- FRDKRN :
+		- Adaptation aux modifications 'FRDBKD'.
+	- XULFTK :
+		- Adaptation à 'FRDKRN'.
+
+26/08/2013 :
+	- FBLBKD :
+		- Ajout informations de copyright sur le backend.
+	- FBLCMD, FBLFRD :
+		- Adaptation aux modifications 'FBLBKD'.
+	- FBLOVL :
+		- Incrémentation numéro version API suite aux modifications 'FBLBKD'.
+
+23/08/2013 :
+	- FRDKRN :
+		- Amélioration de l'affichage de l'erreur remontée par le 'backend'.
+
+22/08/2013 :
+	- XPP :
+		- Rajout du '>' ferlant lorsqu'un 'CDATA' suivait immédiatement une balise ouvrante.
+
+20/08/2013 :
+	- XULF.. :
+		- Mise en oeuvre nouvelle gestion des 'event handler's.
+
+19/08/2013 :
+	- FRD... :
+		- Adaptations 'FBL...'.
+
+18/08/2013 :
+	- FBLFRD :
+		- Rajout d'un test de cohérence.
+	- FBL... :
+		- La comamnde 'About()' retourne des informations sur le 'software'.
+		- Les différentes informations sur le 'backend' sont maintenant dupliquées.
+		- 'BackendInformations'->'ExtendedBackendInformations'.
+
+12/08/2013 :
+	- XULFSF, XULFSV :
+		- Rajout 'xulfbs::' à 'ui_core__' car son absence perturbait VC++ 11.
+
+19/07/2013 :
+	- FRD :
+		- '...read...( Amount -X, Buffer, ...)' -> '...read...( Amount -X, Buffer + X, ...)'
+
+18/07/2013 :
+	- FDR : 
+		- '= +' -> '+='
+		- 'Read()' en 'blocking' passe dorénavant par un '_LoopingRead()' si la taille demandée dépasse la capacité du cache (cas qui provoquait une erreur auparavent).
+
+...
+
+30/05/2013 :
+	- Général :
+		- Adaptation.
+	- XTF :
+		- 'coord__' -> 'pos__'
+
+22/05/2013 :
+	- DIR :
+		- Adaptation.
+
+18/01/2013 :
+	- CGIMNG :
+		- Adaptation.
+
+30/12/2012 :
+	- CSDLEO :
+		- 'CSDLEO_SHARED_DATA_VERSION' passe à '2' (suite à une modification annulée, mais on la laisse, au cas où...).
+	- CSDLES :
+		- Ajout gestion mutex de retardement de déchargement de la bibliothèque.
+
+26/11/2012 :
+	- Général :
+		- Adaptation au compilateur 'MinGW'.
+
+25/11/2012 :
+	- XPP :
+		- 'GetMessage(...)' -> 'GetMeaning(...)'.
+
+22/11/2012 :
+	- SCLMISC :
+		- Ajouut 'ReportFileOpeningErrorAndExit(...)'.
+	- SCLTOOL :
+		- Gestion des erreurs issus de SCLERROR.
+
+20/11/2012 :
+	- FIL :
+		- Correction du problème avec 'TouchFile()', qui fonctionnait lorsque le logiciel était lancé à partir d'une console DOS,
+		mais pas lorsque lancé à partir d'une console 'Cygwin' (décalage d'une heure, peut-être dépendat de l'heure d'hiver/d'été).
+	- TOL :
+		Correction bogue similaire relative aux fonctions 'Date(...)', 'Time(...)', 'DateAndTime(...)'.
+
+18/11/2012 :
+	- NDBIDX :
+		- Ajout de 'bind_behaviour__'.
+
+05/11/2012 :
+	- Général :
+		- Adaptation.
+	- ERR :
+		- Refonte.
+
+30/10/2012 :
+	- Général :
+		- Adaptation.
+
+29/10/2012 :
+	- Général :
+		- Adaptation.
+
+26/10/2012 :	
+	- Général :
+		- Adaptation.
+	LCL :
+		- Mise en oeuvre 'meaning(_)' et consorts.
+
+21/10/2012 :
+	- Général :
+		- Adaptation.
+		- Suppression de la fonction 'GetTRanslation(...)' dans la plupart des bibliothèques.
+		- 'GetLabel(...)' de la plupart des bibliothèques retourne dorénavant les labels préfixés.
+	- LCL :
+		- Suppression de 'rack__'.
+		- Suppression 'LCL_CASE(...)'.
+		- Suppression du paramètre 'Prefix'.
+
+22/10/2012 :
+	- Général :
+		- Adaptation.
+	- RGSTRY
+		- Mise en oeuvre 'tentry__'.
+		- '(multi_level_)registry_' acceptent dorénavant '(t)entry__(_)' en paramètre, au lieu de l'inverse.
+
+19/10/2012 :
+	-	Général :
+		- Adaptation.
+	- CSDULC :
+		- Utilisation de 'bso::ulong__' à la place de 'time_t'.
+	- LCL :
+		- 'Init(...)' -> 'Push(...)' pour la plupart, et ajout de 'Pop()'.
+	- RGSTRY :
+		- Dans 'multi_level_registry_', 'Add(..)' -> 'Push(..)' et ajout de 'Pop(...)'.
+	- SCLREGISTRY :
+		- 'Load(...)' retroune dorénvant 'void' et non plus 'bso::bool__', les erreurs étant gèrées en interne.
+
+17/10/2012 :
+	- XPP :
+		- Ajout balise 'xpp:cdata'.
+
+10/10/2012 :
+	- NSXPCM :
+		- Ajout 'GetAttributeNameAndValue(...)'.
+
+05/10/2012 :
+	- XULFMN :
+		- Simplification et standardisation.
+
+04/10/2012 :
+	- XULFTK:
+		- Ajout (GoToHome(...)' et consorts.
+
+03/10/2012 :
+	- Correction bogue 20.
+
+01/10/2012 :
+	- 'XULFMN' :
+		- 'open_project' et consorts -> 'user_project'.
+
+27/09/2012 :
+	- Général :
+		- Adaptation.
+	- DALVIK :
+		- Simplification.
+	- DVKBSE :
+		- Création de variantes de fonctions  utilisant un 'Id' et un 'Name'.
+	- DVKDEV :
+		- Simplification et variantes fonctions 'Install(...)' avec 'Id' et un 'View'.
+
+22/09/2012 :
+	- NDBTBL :
+		- Correction bogue lorsque l'on efface dés le lancement de l'application le dernier élément d'une table.
+
+21/09/2012 :
+	- Général :
+		- Adaptation.
+
+20/09/2012 :
+	- TOL :
+		- Mise en oeuvre de 'Ticks(...)', 'EpochTime(...)' et consorts à la place de 'Clock(...)', qui pouvait ^prêter à confusion.
+		- 'chrono__' --> 'timer__'.
+	- Général :
+		- Adaptation.
+
+09/09/2012 :
+	- CPE :
+		- Ajout 'CPE__GECKO'.
+	- NSXPCM :
+		- Test 'CPE__GECKO' et 'CPE__LIBRARY'.
+	- XULFSF :
+		- La sélection du type de 'backend' ne mettait plus l'interface à jour.
+
+06/09/2012 :	
+	- MSCxxx :
+		- Adaptation.
+
+05/09/2012 :
+	- XULFTK :
+		- Changement du message d'erreur lorsque celle-ci est issu du 'backend'.
+
+28/08/2012 :
+	- BSO :
+		- Mise en place solution de repli pour 'BSO_SIZE_MAX' lorsque, ni 'SIZE_MAX', ni '__SIZE_MAX__' ne sont disponibles ('g++' V4.4.3 sous 'Ubuntu').
+
+26/08/2012 :
+	- CPE :
+		- '#ifdef __I386__' -> '#ifdef __i386__'
+	- TOL :
+		- Gestion de l'absence de menmbre 'decimal_point' dans la structure 'lconv' pour Android (précédemment basé sur 'CPE__ARM').
+
+20/08/2012 :
+	- JVASTF :
+		- Réalisation modifications oubliées nécessitées par précédentes modifications.
+
+19/08/2012 :
+	- JVASTF :
+		- L'objet passé en paramètre est directement un '(In|Out)putStream', et non plus un object contenant un membre '(in|out)' de type '(In|Out)putStream'
+		- 'JNIParam' est stocké par valeur, et non plus par adresse (il ne contient de toute manière que des adresses).
+
+18/08/2012 :
+	- CIO :
+		- Ajout 'Target(...)'.
+	- ERR :
+		- 'CPE__CONSOLE' et 'CPE__GUI' ne sont plus pris en compte.
+		- Prise en compte de 'cio::Target()'.
+
+06/08/2012 :
+	- SCL... :
+		- Les 'registry' de configuration et de locale peuvent maintenant être chargés à partir d'un 'iflow'.
+		- Le fichier de locale ne peut dorénvant plus être spécifié dans le fichier de configuration.
+
+12/08/2012 :
+	- CPE :
+		- Ajout détermination du processeur.
+
+10/08/2012 :
+	- Général :
+		- Adaptation.
+
+08/08/2012 :
+	- CPE :
+		- Simplification.
+	- JVABSE :
+		- Renommage fonctions.
+	- Général :
+		- Adaptation.
+
+01/08/2012 :
+	- BSO :
+		- Utilisation de '__SIZE_MAX__' lorsque 'SIZE_MAX' indéfini (ce qui est le cas lorsqu'uitlisation du compilateur 'MinGW'.
+
+19/07/2012 :
+	- NSXPCM :
+		- Toute utilisation d'un 'event_handler__' provoque une erreur s'il n'a pas été initialisé. Sans ce test,
+		tout oubli d'initialisation avait pour seul effet que l'évènement n'était pas gèré.
+
+04/07/2012 :
+	- XULWDG :
+		- Correction relatives aux fonctions 'Init(...)' de 'tree__'.
+
+26/06/2012 :
+	DTE : 
+		- Ajout pointeur sur la position d'une éventuelle erreur.
+
+20/06/2012 :
+	- FRDKRN :
+		- 'report__' -> 'recap__'.
+		- 'ReporteError...' -> 'Report' '...ErrorReporting...' -> '...Reporting...'.
+	- Général :
+		- Adaptation.
+
+07/06/2012 :
+	- CTN : 
+		- Déplacement de 'Append(...)' de la version 'extended' à la version normale. A terme, la version 'extended' devrait disparaître.
+
+07/05/2012 :
+	- CPE :
+		- Ajout CPE__T_JAVA
+
+04/05/2012 :
+	- GENERAL :
+		- Adaptation.
+
+03/05/2012 :
+	- Mise en obsolescence de la bibliothèque 'EPEIOS'.
+	 
+	- GENERAL :
+		- Adaptation.
+
+27/04/2012 :
+	- FRDKRN :
+		- Ajout d'une fonction permettant de remonter un message d'erreur au gestionnaire d'interface.
+
+19/04/2012 :	
+	- FDR :
+		- Suite à un 'EndOfFlow()', une nouvel appel à 'EndOfFlow()' retourne 'true' sans accéder le le dispositif sous-jacent.
+
+18/04/2012 :
+	- Général :
+		- Adaptation.
+
+17/04/2012 :
+	- Général :
+		- Adaptation.
+
+15/04/2012 :
+	- Général :
+		- Adaptation.
+	- FLW :
+		- Suppression de toue ce qui est relatif à 'EOD'.
+		- Ajout 'EndOfFlow()'.
+
+14/04/2012 :
+	- FDR, FLW :
+		- Ajout 'Available(....)' pour les '...iflow...'.
+
+03/04/2012 :
+	- NSXPCM :
+		- Ajout paramètre 'SelectFirstOneIfNone' à 'SeSelected(...)'.
+
+30/03/2012 :
+	- NSXPCM :
+		- Ajout d'une séparateur de répertoire à la fin de la valeur renvoyée par un 'Get[...]Directory(...)'.
+
+23/03/2012 :
+	- NSXPCM :
+		- 'SetSelectedItem(...)' accepte dorénavant un item 'NULL' pour n'avoir aucun item de sélectionné.
+		- Mise en oeuvre de 'supports__'.
+	- XULFDG, XULFUI :
+		- Adaptation.
+	- XULWDG :
+		- Adaptation.
+
+16/03/2012 :
+	- BCH :
+		- Correction 'FillWithAndAdjust(...)'.
+
+15/03/2012 :
+	- NSXPCM :
+		- Ajout méthode 'HasAttribute(...)' au 'widget' générique.
+		- Rajout automatique de l'attribut 'type="autocomplete"' pour un 'autocomplete_textbox__'.
+	- XULFUI :
+		- Ajout automatique de l'attribut "autocompletesearch".
+
+08/03/2012 :
+	- STR :
+		- Correction bogue non prise en compte du fait que le pointeur contenant la position d'une éventuelle erreur lors d'une conversion peut être à 'NULL'.
+
+29/02/2012 :
+	- CSDLEO :
+		- Ajout paramètre 'DryRun', qui permet à 'getbkdapi' de consulter le 'backend' sans que celui-ci soit vraiment lancé (évite la tentative de lexture du fichier de configuration).
+	- FBLFAQ :
+		- Adaptation.
+	- GECKOO :
+		- Ajout 'HandlePseudoEvent(...)'.
+	- SCLBACKND :
+		Mise en oeuvre modification 'CSDLEO'.
+
+24/02/2012 :
+	- CSDLES :
+		- 'CSDLESRetrieveSteering(...)' reçoit dorénavant un 'data__' et non plus un 'shared_data__'.
+	- FRDKRN :
+		- Dnas le cas d'un backend enclavé dans une bibiothèque, cette dernière reçoit sa localisation (pour pouvoir y lire le fichier de configuration).
+	- SCLBACKND :
+		- Adaptation.
+		- La localisation est récupèrée du 'frontend' et sert pour au chargement du fichier de configuration.
+
+23/02/2012 :
+	- Général :
+		- Adaptation.
+	
+	- RGSTRY :
+		- 'entry__' -> 'entry___'.
+		- Optimisation des performances de 'entry___'.
+
+22/02/2012 :
+	- TOL :
+		- Suppression 'operator *' inutile de la macro E_AUTO(_).
+
+17/02/2012 :
+	- FBLBER, FBLBRR :
+		- Adaptation.
+
+16/02/2012 :
+	- Général :
+		- Adaptation.
+	- FBLTYP :
+		- Récriture des types par rapport à leur équivalence pour simplification.
+
+10/02/2012 :
+	- Général :
+		- Adaptation.
+	- RGSTRY :
+		- Le contructeur avec paramètre de 'entry__' se contente de stocker le 'Parent', et ne lit plus son contenu, dû au problème de non maîtrise de l'ordre d'initialisation de variables de bibliothèques, ordre qui dépend de l'ordre des bibliothèques lors de l'édition de lien.
+		- 'entry[_] -> 'entry__'.
+
+08/02/2012 :
+	- NSXPCM :
+		- Adaptation à XULRunner 10.0
+
+07/02/2012 :
+	- RGSTRY :
+		- Certains caractères, notamment '/', étaient arbitrairement interdits dans une valeur d'attribut. Ce n'est désormais plus le cas.
+
+05/02/2012 :
+	- XULFxx :
+		- Ajout annulation de session.
+
+04/02/2012 :
+	- NSXPCM :
+		- Suppresionn de 'panel__' ; remplacement par un 'widget' générique base sur 'nsIDOMNode' dans 'deck__'.
+	- XULWDG :
+		- Adaptation.
+
+03/02/2012 :
+	- XULFMN :
+		- 'ifr...' -> 'vew...'.
+
+29/01/2012 :
+	 NSXPCM :
+		- Changement de nuémrotation et de nom de l''event_listener__'.
+
+28/01/2012 :
+	- SCLGECKO :
+		- Interception des execptions au niveau de 'geckob::GECKOBCreateSteering(...)'
+
+27/01/2012 :
+	Général :
+		- Correction des erreurs détectées par 'g++'.
+
+26/01/2012 :
+	- Général (relatif à Gecko).
+		- Mise en oeuvre du 'LauncherIdentification', permettant d'identifier le lanceur du compsant (normalement 'egeckcom').
+		- Mise en oeuvre possibilité d'utiliser une application sans se connecter à un backend.
+	- NSXPCM :
+		- Correction des erreurs détectées par 'g++'.
+
+11/01/2012 :
+	- NSXPCM :
+		- Mise en place de 'const's.
+	- XULFxx :
+		- Adaptation.
+	- XULWDG :
+		- Mise en oeuvre '_trunk_depot__'.
+
+09/01/2012 :
+	- NSXPCM :
+		- 'Attach(...)' prend dorénvant un 'nSIDOMNode *' comme argument à la place d'un 'nsIDOMDocument *'.
+
+08/01/2012 :
+	- NSXPCM :
+		- Rajout gestion 'Focus(/Blur)'.
+		- Ajout gestion évènement 'onchange'.
+
+07/01/2012 :
+	- NSXPCM :
+		- 'XSLTransformProvidungFileName(...)' accepte dorénavant également les fichiers non issus de 'chrome://'.
+
+
+06/01/2012 :
+	- FRDKRN :
+		- Adaptation.
+	- RGSTRY :
+		- 'parameters[_]' -> 'tags[_]'.
+	- SCLREGISTRY :
+		- Adaptation.
+
+03/01/2012 :
+	- GECKOx :
+		- Refonte.
+	- NSXPCM :
+		- Suppression 'ievent_listener__'.
+	- SCLGECKO :
+		 - Adaptation.
+	- XULFTK :
+		 - Adaptation.
+
+01/01/2012 :
+	- NSXPCM :
+		- Ajout 'ReplaceChild(...)'.
+	- XULFMN :
+		- Ajout gestion 'Home'.
+
+30/12/2011 :
+	- BCH :
+		- 'Set...(...)'->'FillWith...(...)' pour éviter source de bogue.
+	- NDBBSC :
+		- Adaptation.
+	- NSXPCM :
+		- Correction bogue dû à l'utilisation de 'Set(...)' à la place de 'Store(...)'.
+	- RGSTRY :
+		- Correction bogue dû à l'utilisation de 'Set(...)' à la place de 'Store(...)'.
+
+24/12/2011 :
+	- ERR :
+		- Simplification et ajout de 'ERRError()'.
+
+23/12/2011 :
+	- RGSTRY :
+		- Ajout 'multi_level_registry_::MoveTo(...)' et ''multi_level_registry_::Delete(...)'.
+	- SCLRGSTRY :
+		- Mise en oeuvre de 'rgstry:entry[_]' à la place de 'xpath'.
+
+22/12/2011 :
+	- NSXPCM :
+		- 'GetObject(...)'  -> 'GetWidget(...)'.
+
+21/12/2011 :
+	- TOL :
+		- Création de E_AUTO_(...)'.
+	- XULFxx :
+		- Adaptation.
+
+20/12/2011 :
+	- RGSTRY :
+		- Ajout  'entry[_]'.
+	- SCLLOCALE :
+		- Adaptation.
+	- SCLRGSTRY :
+		- Utilisation de 'rgstry:(marker|entry)' à la place de 'path'.
+	- XULFxx :
+		- Adaptation.
+
+19/12/2011 :
+	- FRDKRN :
+		- Adaptation.
+	- FRDRGY :
+		- Dans 'registry_' : 'parameters' -> 'settings'.
+	- RGSTRY :
+		- 'multi_level_registry_::SetValue(...)' sans paramètre 'Level' n'effectue l'écriture que si la valeur n'existe pas déjà dans la 'registry'.
+	- XULFRG :
+		- 'parameters' -> 'annex'.
+	- XULFTK :
+		- Adaptation.
+
+18/12/2011 :
+	- FIL :
+		- Ajout 'GetBackendFileName(...)'.
+		- Ajout 'bm_Default'.
+	- SCLLOCALE :
+		- Modification 'GetTranslation(...)'.
+	- SCLMISC :
+		- Adaptation.
+	- XPP :
+		- Gestion des cas où le résultat de la transformation est vide.
+
+15/12/2011 :
+	- GECKOO :
+		- 'const char *User' -> 'void * UP'.
+		+ Rajout de 'Path'.
+	- NSXPCM :
+		- Les fonctions concernant 'listbox[_]' sont inclus dans l'objet 'listbox__'.
+		- Les version '[_]' des 'widgets' sont marquées 'deprecated' (absents par défaut, mais réactivables avec la macro 'NSXPCM_USE_DEPRECATED').
+		- 'menu_item__' -> 'menuitem'.
+		- Ajout boite de dialogue dédiée à la sélection d'un bibliothèque dynamique.
+	- SCLLOCALE :
+		- 'Load[Temporary]Locale(...)' prend maintenant un paramètre permettant de suggérer un chemin dans lequel chercher le fichier (utilise pour les bibliothèques dynamiques).
+	- SCLRGSTRY :
+		- 'LoadRegistry(...)' prend maintenant un paramètre permettant de suggérer un chemin dans lequel chercher le fichier (utilise pour les bibliothèques dynamiques).
+	- SCLxxx :
+		- Adaptation.
+	- XULFKL :
+		- Déplacement de 'GetTranslation(...)'.
+	- XULFTK :
+		- Adaptation.
+	- XULWDG :
+		- Adaptation.
+
+14/12/2011 :
+	- FRDKRN :
+		- Déportation dans 'Connect(...)' de la partie connection de 'LoadProject(...)'.
+	- FRDRGY :
+		- 'GetBackendType(...)' -> 'GetRawBackendExtendedType(...)'.
+		- Utilisation de '_registry_' à la place de 'registry_'.
+
+13/12/2011 :
+	- NSXPCM :
+		- Ajout 'event_data__::GetTarget(...)'.
+
+12/12/2011 :
+	- NSXPCM :
+		- Attach(...)' prend maintenant un 'const char *' à la place d'un 'const str::string_'.
+
+08/12/2011 :
+	- NSXPCM :
+		- Ajout variantes 'event_handler__::Init(...)'.
+	- XULFxx :
+		- Adaptation.
+	- XULWDG :
+		- Ajout variantes 'event_handler__::Init(...)'.
+
+07/12/2011 :
+	- NSXPCM :
+		- Refonte gestion d'évènements.
+
+05/11/2011 :
+	- FRDRGY :
+		- Rajout 'paths::backend_selection__'.
+
+03/12/2011 :
+	- NSXPCM :
+		- Ajout paramètre 'Event' à '_generic__::Init(...)'.
+
+02/12/2011 :
+	- NSXPCM :
+		- Rajout 'radiogroup__'.
+		- 'broadcast__' -> 'broadcaster__'.
+	- XULFxx :
+		- Adaptation.
+	- XULWDG :
+		- Adaptation.
+		- Ajout 'radiogroup__'.
+
+01/12/2011 :
+	- XULFTK :
+		- Mise en peuvre de (user_functions__'.
+
+30/11/2011 :
+	- RGSTRY :
+		- Correction bogue 'Add(...)'.
+	- XULFTK :
+		- Correction bogue et élargissement contrôle validité 'target' de 'Parameters'.
+
+29/11/2011 :
+	- FRDKRN :
+		- Changement du traitement des paramètres.
+	- FRDRGY :
+		- Ajout variantes 'Dump(...).
+	- RGSTRY :
+		- Correction bogue détection erreur.
+		- Réorganisation valeurs retournées par 'Parse(...)'.
+		- Ajout 'multi_level_registry_::SetRoot(...)'.
+	- XULFxx :
+		- Adaptation.
+
+27/11/2011 :
+	- Général :
+		- Adpatation.
+	- TXF :
+		- Mise en place de contructeurs pour faciliter la mise en oeuvre de cette bibliothèque.
+	- XPP :
+		- Comme c'est un 'xtf::extended_text_iflow__' qui est utilisé en interne, c'est un objet de ce type qui est dorénavant passé en paramètre à la place d'un flw::iflow__'.
+	- XTF :
+		- Mise en place d'un contructeur pour faciliter la mise en oeuvre de cette bibliothèque.
+
+26/11/2011 :
+	- FRDRGY :
+		- 'User' -> 'Parameters'.
+	- FRDKRN :
+		- Adpatation.
+
+25/11/2011 :
+	- FRDKRN :
+		- Adaptation.
+	- FRDRGY :
+		- Initialisation avec un 'rgstry::multi_level_registry_'.
+	- RGSTRY :
+		- Ajout 'multi_level_registry_::Get(Root|Registry)(...)'.
+		- Standardisation de 'entry__'.
+		- Ajout 'muti_level_registry_::Add( const multi_level_registry_ &)'.
+	- SCLRGSTRY :
+		- La 'registry' de base est dorénavant un 'rgstry::multi_level_registry'.
+	- XULFKL :
+		- Adaptation.
+	- XULFTK :
+		- Prise en charge de la lecture et de l'enregistrement des paramètres utilisateurs.
+	- XULFUI :
+		- L'attribut utilisé pour sauver les paramètres et désormais paramétrable.
+
+24/11/2011 :
+	- FRDRGY :
+		- Ajout méthodes 'Get(User|Project|Configuration)Value(...)'.
+	- FDRKRN :
+		- Prise en charge du chargement de la 'user registry' par 'LoadProject(...').
+	- FRDRGY :
+		- Ajout 'registry_::CreateUserPath(...)'.
+	- RGSTRY :
+		- Ajout 'status__' 'sUnableToFindRootPath'.
+		- Ajout 'multi_level_registry_::Create(...)'.
+
+23/11/2011 :
+	- FBLOVL :
+		- Changement des libellés de 'reply__'.
+	- FBLxxx :
+		- Adaptation.
+	- NSXPCM :
+		- Correction bogue 'GetRoot(...)'.
+	- XULFUI :
+		- Chaque applicaiton à maintenant sa propre console JS.
+	- XULFxx :
+		- Adaptation.
+
+22/11/2011 :
+	- CSDLEC :
+		- Adaptation.
+		- 'shared_data__' est traité de manière interne et plus par l'utilisateur.
+		- Correction bogue bibliothèque pas déchargée correctement à la fermeture de l'application lorsqu'erreur.
+	- CSDLEO :
+		- Remaniement 'shared_data__'.
+	- CSDLES :
+		- Mise en place de l'interception d'erreurs.
+	- CSDSNC :
+		- Lorsqu'une erreur survenait dans le chargement du backend, dans certains cas elle déclenchait un 'ERR...()' au d'être remontée.
+	- CSDUCL :
+		- Adaptation.
+	- DLBRRY :
+		- Le fait qu'une bibliothèque dynamique ne contient pas la fcontion demandée ne provoque plus d'erreur, mais est signalé par un pointeur 'NULL'.
+	- FRDKRN :
+		- Réorganisation de la gestion des messages d'erreur.
+		- Adpatation.
+	- NSXPCM :
+		- Renommage et réorganisation fonctions relatives à des 'Window's.
+	- SCLBACKND :
+		- Adaptation.
+	- XPP :
+		- Correction bogue mauvaises coordonées lorsque erreur dans un '<ifeq ...>'.
+	- XULFxx
+		- Adaptation.
+	- XULWDG :
+		- Pour afficher un message d'erreur, on utilise maintenant la fenêtre racine de l'application.
+
+21/11/2011 :
+	- XULFMN :
+		- Adaptation.
+	- XULFTK :
+		- Mise en place d'un 'DropSession(...)' par défaut.
+		- Mise en place d'un 'Exit(...)' par défaut.
+
+19/11/2011 :
+	- XULFDG :
+		- 'UpdateUI()' -> 'Update()' (standardisation).
+	- XULFMN :
+		- Ajout méthode 'Update()'.
+		- Les 'Alert(...)'s utilisent maintenant la bonne fenêtre.
+	- XULFUI :
+		- Ajout méthode 'XULFUIUpdate()'.
+	- XULFTK :
+		- La mise à jour de l'interface 'UpdateUI()' s'appuie maintenant dur 'XULFUI'.
+
+
+
+18/11/2011 :
+	- CSDBNC :
+		- 'CSD__NO_SERVICE_HANDLING' -> 'CSD_NO_SERVICE_HANDLING'.
+	- SCLRGDTRY :
+		- Ajout 'GetValues(...)'.
+		- Mise en oeuvre 'xpath___'.
+
+17/11/2011 :
+	- XML :
+		- Ajout du 'token' 'SpecialAttribute' ('xmlns[:...]', pour l'instant).
+		- Ajout 'tfAllButUseless'.
+		- 'tProcessed' -> 't_Processed' et 'tError' -> 't_Error'.
+	- XPP :
+		- Adaptation.
+
+15/11/2011 :
+	- NSXPCM :
+		- Pour simplification, mise en oeuvre de 'nsIDOMWindowInternal' à la place de 'nsIDOWindow' dans certains cas.
+	- XULFxx :
+		- Adaptation.
+	- XULFDG :
+		- La boîte de dialogue de 'debug' est fermée lorsque la 'registration' échoue.
+	- XULFMN
+		- Ajout d'une macro contenant l'identifiant de la fenêtre principale.
+
+10/11/2011 :
+	- FBLxxx :
+		- Adaptation.
+	- FBLFRD :
+		- 'Error report(ing)' -> 'Error handl(e|ing)'.
+		- Rajout test initialisation '_ErrorReportingFunctions'.
+	- FBLFUB :
+		- Adaptation.
+	- FBLOVL :
+		- Rajout fonction 'Label(...)' manquante.
+		- Renommage de 'reply__'.
+	- FRDxxx :
+		- Adaptation.
+	- FRDKRN :
+		- Le paramètre 'ErrorReportingFunctions' n'est désormais plus optionnel.
+	- XULFKL :
+		- Adaptation.
+	- XULFUI :
+		- Ajout méthodes 'Log(Quietly|AndPrompt)(...)'.
+	- XULFTK :
+		- Ajout d'une 'DefaultErrorReportingFunctions'.
+
+09/11/2011 :
+	- NSXPCM :
+		- Le destructeur associé à la bibliothèque ferme l'éventuelle console JavaScript pour éviter une fenêtre fantôme.
+		- Ajout méthode/fonction 'Get(Parent|Root)Window(...)'.
+		- Pour faciliter leur usage, à la place de retourner une 'nsIDOMWindow (*)', les méthodes/fonctions retournent désormais la classe fille 'nsIDOMWindowInternal (*)'
+	- XULFxx :
+		- Adaptation.
+
+08/11/2011 :
+	- SCLRGSTRY :
+		- Correction bogue 'GetRegistry()' ('&' manquant).
+	- XULFxx :
+		- Adaptation.
+	- XULWDG :
+		- Suppression code obsolete.
+		- Mise en oeuvre interception erreur.
+
+03/11/2011 :
+	- Général :
+		- Adaptation.
+	- DLBRRY :
+		- Standadisation du nom (ajout d'un '_').
+	- GECKOx :
+		- Ajout gestion 'lone steering'.
+	- XULFDG :
+		- Comme un même composant peut être utilisé par plusieurs applications, on ne peut plus utiliser la 'master window' de 'NSXPCM'.
+	- XULFTK :
+		- Ajout métode 'ExposeSteering(...)'.
+
+02/11/2011 :
+	- STR :
+		- 'ReplaceTag(...)' et consorts
+
+31/10/2011 :
+	- FLX :
+		- Ajout STR_(I|O)_FLOW_DRIVER___.
+
+30/10/2011 :
+	- SCLRGSTRY :
+		- Exposition de la 'registry' et du 'root' associé.
+
+28/10/2011 :
+	- FRDxxx :
+		- Adaptation.
+	- XUKxxx :
+		- Adaptation.
+	- RGSTRY :
+		- 'multi_level_registry_' accepte maintenant des 'registry's extérieures.
+		- Renommage de certaines fonctions.
+
+27/10/2011 :
+	- CSDLEC :
+		- Mise en oeuvre 'DLBRRY'.
+
+26/10/2011 :
+	- CSDLEC :
+		- Renforcement gestion d'erreurs.
+	- NSXPCM :
+		- Correction (à priori) problème d'encodage.
+
+23/10/2011 :
+	- FRDKRN :
+		- Adaptation.
+
+21/10/2011 :
+	- FBLBKD :
+		- Adaptation.
+	- LCL :
+		- Réorganisation 'rack__'.
+
+15/10/2011 :
+	- MSCMLD :
+		- L'impossibilté d'ajuster les barres de mesures ne provoque plus une erreur, mais l'abandon de tentative d'ajustement.
+	- STR :
+		- La conversion d'une chaîne en nombre avec une limite inférieure à la base est dorénavant possible.
+
+14/10/2011 :
+	- Général :
+		- Adaptation aux modifications.
+	- FRDKRN :
+		- Prise en charge 'csdleo::shared_data__'.
+
+12/10/2011 :
+	- Général :
+		- Adaptation aux modifications.
+	- MSCMDD :
+		- '...[D|d]escription...' -> '...[N[n]ame...'
+		- Ajout fonction 'GetMidiDeviceNames(...)'.
+
+11/10/2011 :
+	STR :
+		- Changement paramètres méthodes relatives aux conversions numériques à cause de risques de bogues.
+
+09/10/2011 :
+	- NDBSCT :
+		- Correction bogue fichiers accessoires non sauvegardées lorsque l'on fait seulement une suppression.
+
+06/10/2011 :
+	- MSCMDD :
+		- Suppression des 'template' (utilisation d'une valeur par défaut).
+	- MSCMDM :
+		- 'origin__' -> 'extraneous__'.
+		- Gestion automatique du 'extraneous__' lorsque le flux est issu d'un 'device'.
+
+04/10/2011 :
+	- FLX :
+		- Correction errreurs détectées par 'g++'.
+	- MSCMDD :
+		- Adaptation aux modifications.
+
+03/10/2011 :
+	- FBLxxx :
+		- Suppression du 'Publisher'.
+		- Changement version du protocol : "4".
+		- FBLRPL -> FBLOVL ; mise en commun 'mode__'.
+		- Utilisation de 'FBLOVL'.
+	- FLX, FDR :
+		- Diverses modifications desctructeurs/constructeurs (qui se sont révèlées inutiles, mais qui ne gênent pas ...)
+
+02/10/2011 :
+	- CSDLEx :
+		- Codage.
+	- FLX :
+		- Standardisation, pour éviter bogue 'pure virtual function call'.
+
+28/09/2011 :
+	- CSDLxx :
+		- Codage.
+	- CSDUCL :
+		- Adaptation.
+	- FBLBUR :
+		- 'Embed' -> 'Embedded'.
+
+27/09/2011 :
+	- CSDLEO :
+		- Mise en commun client/serveur des fonctions d'entrée pour la DLL.
+
+23/09/2011 :
+	Général :
+		- Rénommages des bibliothèques relatives à la gestion client/serveur à travers une bibliothèque dynamique en 'CSDLEx'.
+		- Adaptation aux modifications suite à la mise en oeuvre 'CSDLEx'.
+
+21/09/2011 :
+	- Réecriture méthodes de conversion vers un nombre.
+
+20/09/2011 :
+	- Correction 'Upadet...' -> 'Update...'.
+
+18/09/2011 :
+	- CSDDLC :
+		- Ajout 'GetStreering()'.
+	- CSDSNS :
+		- 'log_functions__' est de nouveau à part.
+
+12/09/2011 :
+	- FBLFRD :
+		- Ajout 'FBLFRDPreProcess(...)' nécessaires pour éviter certains problèmes dans la gestion des paramètres lors de la survenu d'une erreur dans le backend.
+
+	- FBLxxx :
+		- Adaptation aux modifications 'FBLFRD'.
+
+07/09/2011 :
+	- Général :
+		- Mise en oeuvre 'FDR'.
+
+06/09/2011 :
+	- FDR :
+		- Ajout 'reset(...)' manquant.
+	- FLX :
+		- Correction (contournement ?) bogue (VC++ 10 ?) 'pure virtual function call'.
+
+05/09/2011 :
+	- TXF :
+		- Rajout méthode 'IsInitialized()'.
+		- Un 'Commit()' d'un objet non initilaisé ne provoque plus d'erreur.
+
+04/09/2011 :
+	- FLX :
+		- Rajout 'Void(I|O)Flow'.
+	- TXF :
+		- Adaptation modifications 'FLX'.
+		- 'nul' -> 'VoidTOFlow'.
+
+03/09/2011 :
+	- Général :
+		- Adaptation aux modifications 'CIO'.
+	- FLX :
+		- Ajout méthode 'IsInitialized(...)' aux classes 'relay_(i|o)_flow_driver__'.
+
+02/09/2011 :
+	- CIO :
+		- Renommage de certaines variables pour éviter des confusions.
+		- Lors de l'initialisation, on peut spécifier que les flow ne lise/n'écrive de/dans rien pour la mise en oeuvre d'un programme en tant que service.
+	- FLX :
+		- 'dump_...' -> 'void_...'.
+		- Ajout 'void_...' en lecture (ne retourne rien ; toujours vide).
+		- Ajout 'relay_(i|o)flow_driver___'.
+	- XULFTK :
+		- Adaptation aux modifications 'XPP'.
+
+01/09/2011 :
+	- Général :
+		- Mise en oeuvre 'FDR'.
+	- NSXPCM :
+		- Retrait d'un 'Register(...)' oublié.
+	- XUL... :
+		- Adaptation à la suppresion de la fonction 'Register(...)'.
+	- XULFTK :
+		- Adaptation aux modifications bibliothèques sous-jacentes.
+	- XULWDG :
+		- Utilisation de 'TTCLONE' à la place de 'TMIMIC' pour simplification.
+
+30/08/2011 :
+	- FDR remplace FLW.
+	- Général :
+		- Mise en oeuvre 'FDR'.
+	- CSDSNS :
+		- Standardisation.
+		- Inclusion 'log_functions__' dans 'user_functions__'.
+
+22/08/2011 :
+	- NSXPCM :
+		- Ajout pointeur utilisateur pour les 'widget's.
+		- Ajoput variantes méthode 'Init(...)' pour les 'widget's.
+		- Retrait des fonctions 'Register(...)'.
+		- Ajout de l'évènement 'onload'.
+
+21/08/2011 :
+	- ERR :
+		- Ajout 'ERRBeam()' et 'ERRAbort()'.
+	- NSXPCM :
+		- Amélioration gestion d'erreurs.
+
+19/08/2011 :
+	- FLW :
+		- Un appel à 'Dismiss(...)' ou 'Commit(...)' d'un objet non initialisé ne provoque plus d'erreur.
+
+18/08/2011 :
+	- CRPTGR :
+		- Pas d'encryptage ou de cryptage réalsé si la clef est vide.
+	- STR :
+		- Une initialisation avec NULL donne maintenant une chaîne vide.
+
+14/08/2011 :
+	- CRPTGR :
+		- Ajout fonctions '(En|De)crypt(...)' 
+		- Standardisation type paramètre 'Key'.
+	- XPP :
+		- Adaptation aux modifications 'CRPTGR'.
+
+13/08/2011 :
+	- XPP :
+		- Correction bogue 'processing instruction' non relayée lorsque suivie d'un commentaire.
+
+12/08/2011 :
+	- CIO :
+		- Suppression 'c(in|out|err)f___' (accessible via 'c(in|out|err)'.
+		- 'c(in|out|err)' toujours disponibles, même en contexte 'multi-thread' (pour le thread principal).
+	- EPSMSC
+		- Retouches cosmétiques.
+	- XML :
+		- Correction bogue 'Outfit'.
+
+10/08/2011 :
+	- MSCMDM :
+		- Ajout gestion évènements 'meta' 'Channel|Port Prefix' et 'SMPTE'
+
+09/08/2011 :
+	- CSDSCM :
+		- Standardisation.
+	- FBLBKD :
+		- Amélioration ergonomie 'test_log_functions__'.
+
+08/08/2011 :
+	- Général :
+		- Adaptation aux bibliothèques sous-jacentes.
+	- EPSMSC :
+		- Mise à jour texte licence.
+
+04/08/2011 :
+	- Général :
+		- Adaptation aux bibliothèques sous-jacentes.
+
+02/08/2011 :
+	- CLNARG :
+		- Contournement bogue 'va_...' sous VC++ 10.
+
+01/08/2011 :
+	- RGSTRY :
+		- Correction bogue 'Status' non relayé.
+
+27/07/2011 :
+	- CLNARG :
+		- Correction mauvais passage d'arguments 'ReplaceTag(...)'.
+
+	- RGSTRY, XPP :
+		- Correction erreurs détectées par 'g++'.
+
+26/07/2011 :
+	- SCK :
+		- Correction problème 'timeout'.
+
+25/07/2011 :
+	- CGIDAT :
+		- Adaptation aux modifications bibliothèques sous-jacentes.
+	- CLNARG :
+		- Ajout paramètre 'ProgramName'.
+
+23/07/2011 :
+	- XPP :	
+		- Correction bogues 'GetTranslation()'.
+			- Gestion du nom de fichier.
+			- Gestion du tag '%0'.
+
+22/07/2011 :
+	- Général :
+		- Adaptation aux modifications 'XPP' et 'RGSTRY'.
+	- RGSTRY :
+		- Mise en oeuvre 'context___'.
+	- TXF :
+		- Ajout méthode 'Flow()' retournant le 'flw::(i|o)flow__' sous-jacent.
+	- XPP :
+		- Mise en oeuvre 'context___'.
+
+20/07/2011 :
+	- TXF :
+		- Correction bogue affichage pointeur.
+
+18/07/2011 :
+	- LTF :
+		- Correction errreur détectées par g++.
+	- SCK :
+		- Correction errreur détectées par g++.
+
+17/07/2011 :
+	- Général :
+		- Adaptation aux modifications 'TOL'.
+	- TOL :
+		- Remplacement de 'E_...TYPEDEF...' par 'E_...TCLONE...' et 'E_...TMIMIC...'.
+
+05/07/2011 :
+	- NSXPCM :
+		- Mise en oeuvre de 'NSXPCM_GECKO_Vx' pour basculer facilement d'une version à l'autre de Gecko.
+
+04/07/2011 :
+	- XPP :
+		- Changement prise en compte du namespace par défaut.
+		- Codage contournement bogue VC++ 10.
+
+03/07/2011 :
+	- Général :
+		- Adaptation aux modifications 'XPP'.
+	- CRPTGR :
+		- Donnée '_Key' passe de 'const char *' à 'str::string' pour faciliter la gestion de paramètres dans certaines bibliothèques.
+	- FBL... :
+		- Refonte paramètres relatifs à la gestion de la compatibilité entre frontend et backend.
+	- FRD... :
+		- Utilisation des nouvelles bibliothèques 'FBL...'.
+	- XPP :
+		- Regroupement de certains paramètres dans une structure ('criterions___' ).
+	- XUL... :
+		Adaptation aux modification bilbliothèques sous-jacentes.
+
+02/07/2011 :
+	- FBL... :
+		- Renommage de certains paramètres pour une meilleur compréhension.
+	- FRD... :
+		- Utilisation des nouvelles bibliothèques 'FBL...'.
+	- RGSTRY :
+		- Correction bogue cas paramètre 'Error' à NULL non traité.
+
+30/06/2011 :
+	- DIR :
+		- Adaptation au Mac.
+
+29/06/2011 :
+	- PLLIO :
+		- Correction bogue génération d'une exception non interceptée.
+
+25/06/2011 :
+	- MTX :
+		- Correction bogue lié au Mac. Les fonctions issues de 'OSBase.h' ne se comportent pas de la même manière que celle issues de 'OSAtomic.h' !
+
+24/06/2011 :
+	- NSXPCM :
+		- Ajout possibilité de basculer entre Gecko 1.9 et Gecko 2.
+
+15/06/2011 :
+	- Général :
+		- Correction erreurs détectées par g++.
+
+12/06/2011 :
+	- NXSPCM :
+		- Adaptation à XULRunner 2.0.
+
+08/06/2011 :
+	- Retrait de ce qui est relatif à la gestion 'frontend'/'backend'.
+
+25/05/2011 :
+	- FLM
+		- Correction bogue synchronisation taille fichier écrasant la dernière donnée d'un fichier car taille physique ne correspondait pas aux données effectivement écrites.
+
+19/05/2011 :
+	- Général :
+		- Adaptation aux modifications des différentes bibliothèques.
+
+18/05/2011 :
+	- Général :
+		- Adaptation aux modifications 'FWF'.
+	- FWF :
+		- Réorganisation cause suspiscion de bogue.
+	- XPP :
+		- Correction bogue constructeur.
+
+17/05/2011 :
+	- Génaral :
+		- Adaptation modifications 'CSDSCM'.
+	- CSDSCM :
+		- Suppression paramètre 'Flow' de la méthode 'CSDPreProcess(...)' (pouvait poser problème en utilisation en mode bibliothèque).
+	- FWF :
+		- Suppression '_FakeMutex'; posait problème dans des bibliothèques dynamiques.
+
+13/05/2011 :
+	- Général :
+		- Mise au point nouveau protocole client/serveur.
+		- adaptation modifications 'LCL'
+	- CGIMNG :
+		- Adaptation modifications 'CSDxxx'.
+	- LCL :
+		- Le paramètre 'Language' est systématiquement de type 'char *'.
+
+12/05/2011 :
+	- Général :
+		- Mise au point nouveau protocole client/serveur.
+
+11/05/2011 :
+	- BKDUAC :
+		- 'type__' -> 'mode__'.
+	- BKDxxx :
+		- La commande 'About()' retourne maintenant également le 'TargetLabel', le 'ProtocolVersion' ainsi que le 'APIVersion'.
+		- Suppression de la commande 'TargetLabel()'.
+	- CSDSNC :
+		- Modification pour pouvoir l'utiliser en contexte 'single threaded'.
+	- FWF :
+		- Modification pour pouvoir l'utiliser en contexte 'single threaded'.
+
+09/05/2011 :
+	- Général :
+		- Mise en place nouveau protocole client/serveur.
+
+07/05/2011 :
+	- Général :
+		- Mise en place nouveau protocole client/serveur.
+	- CSDxxx :
+		- Mise en place d'un 'ping' (pour éviter que certains sytème coupe d'autorité une connection pour cause d'absence d'activité).
+
+06/05/2011 :
+	- Général :
+		- Mise en place nouveau protocole client/serveur.
+	- CSDxxx :
+		- Mise en place d'un 'ping' (pour éviter que certains sytème coupe d'autorité une connection pour cause d'absence d'activité).
+	- FWF, FLW :
+		- Rajout méthodes '...IsLocked()'.
+	- SCK :
+		- Rajout 'TimeStamp()'.
+
+05/05/2011 :
+	- Général :
+		- Mise en place nouveau protocole client/serveur.
+
+03/05/2011 :
+	- Général :
+		- Adaptation modifications 'DTFPTB'.
+	- DTFPTB :
+		- Création variantes 'Fixed...'/'Fitted...'.
+
+02/05/2011 :
+	- DTFPTB :
+		- Correction bogue décodage taille.
+
+28/04/2011 :
+	- Général :
+		- Adaptation aux modifications 'DTFPTB'.
+	- BKDxxx :
+		- Implémentation nouveau protocole.
+	- DTFPTB :
+		- Fonctions actuelles préfixées par 'Old' (amenée à disparaître).
+		- Fonctions implémentant le nouveau système préfixées par 'New'.
+
+27/04/2011 :
+	- BKDxxx :
+		- Implémentation nouveau protocole.
+	- MSCRMI :
+		- 'Print(...)' d'un paramètre affiche maintenant également le type.
+
+
+25/04/2011 :
+	- MSCRMI :
+		- Ajout balise racine manquante 'Print( midi_implmentations_ ... )'.
+		- Correction mauvais 'parse status'.
+		- Rajout 'Octet3' et "Nibble3'.
+
+21/04/2011 :
+	- FRDxxx, XULxxx :
+		- Adaptation aux modifications sous-jacentes.
+	- LCL :
+		- Standardisation 'rack__'.
+
+20/04/2011 :
+	- CSDEBD :
+		- Adaptation aux modifications 'CSDxxx'.
+	- FLW :
+		- Ajout test validité '_Functions' et 'IsInitialized()'.
+	- NSXPCM :
+		- Adaptation aux modifications 'LCL'.
+
+19/04/2011 :
+	- Général :
+		- Adaptation aux modifications 'AEM'.
+
+18/04/2011 :
+	- Général :
+		- Adaptation aux modifications 'AEM'.
+	- AEM :
+		- 'mDefault -> 'm_Default' (mise en conformité avec nouveau standard).
+		- Un 'Init(...)' ne touche plus dorémavant à la 'step value', celle-ci étant généralement initialisée (si nécessaire) lors d'un 'Plug(...)' (dont le résultat n'est pas non plus modifié lors d'un  'Init(...)').
+	- FLW :
+		- Correction bogue incrémentation du nombre d'octets lues lors d'un 'View()'.
+		- 'EOFD(...)' remet maintenant à 0 le nombre d'octets lus.
+
+15/04/2011 :
+	- FLM :
+		- Correction bogue taille fichier non ajustée losqu'allocation non suivie d'une écriture.
+
+14/04/2011 :
+	- Général :
+		- Adaptation aux différentes modifications.
+	- BKDMNG :
+		- Mise en oeuvre de l'origine du client.
+	- CSDBNS :
+		- Récupération de l'adresse du client.
+	- CSDSCM :
+		- Mise en oeuvre de l'origine du client.
+	- MMM :
+		- Correction bogue copie incomplète lorsque extension sous-mémoire.
+
+12/04/2001 :
+	- CCH :
+		- Correction bogue mauvaise gestion méthode 'Append(...)' lorsque taille du cache nulle.
+	- MSCRMI :
+		- Mise en oeuvre de 'Octetx' et 'Nibblex' à la place de 'Rawx'.
+
+06/04/2011 :
+	- Général :
+		- Adaptation aux modifications bibliothèque 'LCL'.
+
+05/04/2011 :
+	- Général :
+		- Adaptation aux modifications bibliothèque 'LCL'.
+	- MSCRMI :
+		- Récupération du 'Software Revision'.
+
+04/04/2011 :
+	- Général :
+		- Adaptation aux modifications bibliothèque 'LCL'.
+	- LCL :
+		- 'locale_rack___' est simplifié et devient 'rack__'.
+
+03/04/2011 :
+	- MSCMDX :
+		- Adaptation aux modifications des bibliothèques sous-jacentes.
+	- XML :
+		- 'XMLComment(...)' est rendue concrète (suppression du '== 0'; ajout d'une définition par défaut) car mise en oeuvre trop exceptionnelle pour forcer sa définition dans une classe fille.
+
+01/04/2011 :
+	- MSCRMI :
+		- Mise en oeuvre de la notion de 'type', remplaçant 'size' dans un paramètre.
+
+29/03/2011 :
+	- MSCRMI :
+		- L'adresse affichée des 'Parameters' est maintenant relative lorsque c'est adapté, et non plus systématiquement relative.
+		- Suppression double-encodage lors de l'envoi de 'settings'.
+
+27/03/2011 :
+	- FNM :
+		- Correction bogue 'Type(...)'.
+
+24/03/2011 :
+	- DIR :
+		- Adaptation à 'GNU/Linux'/'Cygwin' ('POSIX' ?).
+	- MTX :
+		- Correction problème avec mutexes 'pthread' sous 'cygwin'.
+
+23/03/2011 :
+	- Général :
+		- Correction erreurs détectées par 'g++'.
+	- CLNARG :
+		- Ajout de buffer.
+
+22/03/2011 :
+	- CLNARG :
+		- Internationalisation.
+
+21/03/2011 :
+	- MSCRMI :
+		- Ajout 'Search(...)'.
+
+19/03/2011 :
+	- LCL :
+		- Ajout suffixe par défaut.
+	- MSCRMI :
+		- Renommages.
+
+18/03/2011 :
+	- XML :
+		- Généralisation encodage.
+
+17/03/2011 :
+	- FLW :
+		- Ajout 'GetCacheSize()' à 'oflow___'.
+
+16/03/2011 :
+	- Général :
+		- Adaptation aux modifications des différentes bibliothèques.
+	- FIL :
+		- Création de versions des fonctions relatives à la gestion des fichiers de 'backup' qui prennent en charge l'affichage des messages d'erreur.
+	- FLW :
+		- Correction bogue mauvaise gestion 'EOFD'.
+	- XPP :
+		- Correction bogue 'Process(...)' sans clé d'encryptage.
+		- Correction bogue lors de l'encryptage empêchant la remontée certaines erreurs.
+		- Correction bogue du '>' résiduel accompagnant les commentaires lors de l'encryptage.
+	- XTF :
+		- Correction bogue mauvaise gestion 'EOXD'.
+
+15/03/2011 :
+	- Géneral :
+		- Adaptation modifications 'XPP'.
+	- CLNARG :
+		- Ajout '#include' manquant.
+	- FLW :
+		- Ajout de la possibilité de savoir si le cache est vide.
+	- FLX :
+		- Ajout du 'mediator_ioflow[_function___]'.
+	- FWF :
+		- Ajout de la possibilité de savoir si le cache est vide.
+	- XPP :
+		- Ajout gestion directive 'cypher'.
+
+14/03/2011 :
+	- FLW :
+		- Ajout de 'Unget()'.
+	- FWF :
+		- Ajout de 'Unget()'.
+	- XTF :
+		- Suppression du cache pour rendre l'objet le plus neutre possible.
+		- Rajout de 'UnderlyingFlow(...)'.
+
+11/03/2011 :
+	- Géneral :
+		- Adaptation modifications 'FWF'.
+	- FWF :
+		- Déportation de la prise en charge du cache en lecture depuis 'FWL' vers 'FWF'.
+
+10/03/2011 :
+	- Géneral :
+		- Adaptation modifications 'LCL'.
+	- DIR :
+		- Ajout de 'GetSelfPath(...)' (version Windows).
+	- FIL :
+		- Correction bogue mauvaise construction nom fichier de sauvegarde.
+	- LCL :
+		- Ajout du prefix lorsqu'une traduction n'a pas été trouvée.
+		- Suppression macro 'LCL_CASE_N'.
+	- RGSTRY :
+		- Correction bogue traduction en double.
+	- XPP :
+		- Ajout '&' manquant (source de plantage).
+		- Correction inconsistence gestion des traductions.
+
+09/03/2011 :
+	- CLNARG :
+		- Mise en oeuvre internationalisation.
+	- FIL :
+		- Mise en oeuvre internationalisation.
+
+07/03/2011 :
+	- Géneral :
+		- Réorganisation mécanisme de traduction.
+
+06/03/2011 :
+	- LCL :
+		- Le marqueur est maintenant d'office '%' (plus possible d'en choisir un autre), sachant que pour afficher un '%', il suffit de mettre '%%'.
+		- Lorsqu'une traduction n'est pas trouvée, un '%0' (remplacé par la liste des paramètres) est rajouté d'office à l'argument retourné.
+		- Prise en compte d'un prefixe pour le libellé des messages bruts.
+		- Changement du type d'argument de certaines fonctions/méthodes.
+
+03/03/2011 :
+	- MSCMDD :
+		- Ajout variantes au niveau des paramètres de certaines méthodes.
+	- RGSTRY :
+		- Ajout variantes au niveau des paramètres de certaines méthodes.
+		- Correction non prise en compte du type dans la macro '_M(...)'.
+
+28/02/2011 :
+	- LCL :
+		- Rajout 'LCL_CASE'.
+
+27/02/2011 :
+	- Géneral :
+		- Adapatation modifications 'XML'.
+	- XML :
+		- Renommage 'browse[r]' en 'parse[r]'.
+
+24/02/2011 :
+	- FIL :	
+		- Les fichiers étaient ouverts jusqu'à présent en lecture seule ou en lecture écriture; dorénavant, ils sont ouverts en lecture seule lorsque nécessaire.
+
+17/02/2011 :
+	- MSCMDM :
+		- 'GetEventData( ... )' retourne dorénavant la taille des données lues.
+
+15/02/2011 :
+	- MSCMDD :
+		- Rajout 'Start()' a 'Stop()'.
+
+14/02/2011 :
+	- MSCMDD :
+		- Ajout 'midi_iflow___'.
+
+13/02/2011 :
+	- FLW :
+		- La taille du cache pour les objets 'standalone_...' est maintenant passé en paramètre via un 'template'.
+	- MSCMDF :
+		- Adaptation modifications bibliothèques sous-jacentes.
+	- MSCMDM :
+		- Exposition de certaines fonction précédemment cachées.
+
+12/02/2011 :
+	- MSCMDD :
+		- Adaptation modifications bibliothèques sous-jacentes.
+	- MSCMDM :
+		- Adaptation modifications bibliothèques sous-jacentes.
+
+09/02/2011 :
+	- STR :
+		- Mise en oeuvre 'STR_HEXADECIMAL_MARKER'.
+
+26/01/2011 :
+	- Géneral :
+		- Adaptation aux modifications 'FWF' et 'FWL'.
+	- LTF :
+		- Ajout 'ClearAll()'.
+	- RGSTRY :
+		- Ajout décrypteur (temporaire !).
+
+25/01/2011 :
+	- Géneral :
+		- Adaptation aux modifications 'FWF' et 'FWL'.
+
+24/01/2011 :
+	- Géneral :
+		- Adaptation aux modifications 'FWF' et 'FWL'.
+
+23/01/2011 :
+	- Géneral :
+		- Adaptation aux modifications 'FWF' et 'FWL'.
+	- FWF :
+		- La sécurisation par rapport au 'multi-threading' ne se fait plus de manière globale à la compilation, mais par objet à l'exécution.
+	- FWL :
+		- Standardisation.
+	
+22/01/2011 :
+	- Géneral :
+		- Adaptation aux modifications 'FWF'.
+	- FWF :
+		- Simplification 'FWFRead(...)' et 'FWFWrite(...)'.
+
+04/01/2011 :
+	- CSDBNS :
+		- Adaptation modifications 'CIO'.
+
+23/12/2010 :
+	- CIO :
+		- 'aware_...' -> 'unsafe_...' (plus explicite).
+	- ERR :
+		- Adaptation aux modifications 'CIO'.
+	- TXF :
+		- Standardisation.
+		- Adaptation aux modifications 'CIO'.
+
+19/12/2010 :
+	- CSDBNC :
+		- 'Service(...)' ne génère plus une exception d'office si pas de service.
+
+17/12/2010 :
+	- TXF : Suppression du 'commit' d'office pour 'nl' et 'rfl' qui ralentissait considérablement l'écriture dans des fichiers.
+
+09/12/2010 :
+	- NSXPCM :
+		- Adaptation modification 'tol::Swap(...)'.
+
+08/12/2010 :
+	- FLM :
+		- Correction du bogue se produisant lorsque l'on tente de lire un emplacement alloué avant d'avoir écrit dedans.
+
+06/12/2010 :
+	- PLLIO
+		- Adaptation aux modifications gestion des bibliothèques '...LLIO'.
+	- CTN, LSTCTN, MMG :
+		- Correction anomalies détectées par 'g++'.
+	- TXF :
+		- Adaptation aux modifications bibliothèques sous-jacentes.
+
+03/12/2010 :
+	- NDBSCT :
+		- Adaptation aux modifications bibliothèques sous-jacentes.
+
+02/12/2010 :
+	- Géneral :
+		- Diverses modifications relatives aux '..._file_manager___'s.
+
+02/12/2010 :
+	- Géneral :
+		- Diverses modifications relatives aux '..._file_manager___'s.
+	- BTR, IDXBTR :
+		- Ajout 'GetRoot(...)'.
+	- LST :
+		- Rajout gestion de 'mode__' au '..._file_manager___', uniquement à des fins de standardisation.
+		- Rajout gestion de la persistence au '..._file_manager___', uniquement à des fins de standardisation.
+
+30/11/2010 :
+	-  LSTBCH, LSTCTN, NDBDCT, NDBSCT :
+		- Correction bogue fichiers accessoires non sauvés lors de la déstructuin d'un '..._file_manager___'.
+
+28/11/2010 :
+	- CTN :
+		- Rajout 'State()' to '..._file_manager___'.
+	- FIL :
+		- Suppression 'mode__::mUnknown'.
+	- FLM :
+		- 'Mode(...)' renvoit maintenant la valeur précédente.
+	- IDXBTQ :
+		- Rajout 'State()' to '..._file_manager___'.
+	- LSTCTN :
+		- Rajout 'State()' to '..._file_manager___'.
+	- MMI :
+		- Rajout 'State()' to '..._file_manager___'.
+	- TOL :
+		- Modification de 'Swap(...)' pour pouvoir être utilisé avec des 'enum's.
+
+25/11/2010 :
+	- FNM :
+		- Correction mauvaise gestion mémoire 'BuildFileName(...)'.
+	- FRDKRN :
+		- Gestion mise en place contenu 'LibaryData'.
+
+23/11/2010 :
+	- FRDFBC :
+		- Ajout 'Message' à la place de 'Log'.
+		- 'data__' -> 'data___'.
+	- FRDRGY :
+		- Suppression chemin 'Configuration' pour le 'backend'.
+		- Ajout chemin 'Root' pour le 'backend'.
+	- FRDKRN :
+		- Mise en place de la 'locale' à l'usage de la bibliothèque en mode 'library'.
+		- Adaptation aux modifications bibliothèque 'FRDFBC'.
+	- LCL :
+		- Ajout d'un '&' manquant (provoquant un plantage).
+	- RGSTRY :
+		- Ajout 'Search(...)' à 'multi_level_registry[_]'.
+	- XULFKL :
+		- Adaptation aux modifications bibliothèque 'FRDKRN'.
+		- Adaptation aux modifications bibliothèque 'FRDFBC'.
+	- XULFTK :
+		- Adaptation aux modifications bibliothèque 'FRDFBC'.
+		- Adaptation aux modifications bibliothèque 'FRDKRN'.
+
+22/11/2010 :
+	- BKDMNG :
+		- Utilisation de 'lcl::locale_rack___' à la place de 'lcl::locale_'.
+	- FLM :
+		- 'TimeStamp()' retourne '0' (valeur entrainant généralement un traitement particulier) si le fichier n'existe pas.
+
+19/11/2010 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèques 'FWF' et 'MDR'.
+	- FWF :
+		- 'Sync[...]' -> 'Commit'.
+	- MDR :
+		- Suppression de 'MDRFlush()' (non-utilisé).
+	- WLLIO :
+		- Suppression du paramètre 'FlushToDevice'.
+		- Mise en oeuvre de '_commit'.
+
+18/11/2010 !
+	- Géneral :
+		- Refonte gestion '[...]_file_manager__'.
+
+17/11/2010 !
+	- Géneral :
+		- Refonte gestion '[...]_file_manager__'.
+
+16/11/2010 :
+	- FRDRGY :
+		- Ajout de 'Get(Configuration|Project|User)Root()'.
+	- RGSTRY :
+		- Ajout 'GetRoot(...)' à 'multi_level_registry[_]'.
+		- 'Registry' -> 'BaseRegistry' dans 'multi_level_registry[_]'.
+	- XULFKL :
+		- Standardisation ordre des paramètres.
+	- XULFTK :
+		- Ajout paramètre 'LibraryData'.
+
+15/11/2010 :
+	- FRDKRN :
+		- Ajout paramètre 'LibraryData'.
+	- XULFKL :
+		- Adaptation aux modifications bibliothqèue 'FRDKRN'.
+
+12/11/2010 :
+	- Géneral :
+		- Adaptation aux modification bibliothèque 'UYM'.
+	- LST :
+		- L'écriture des données accessoires n'est réalisé que si le contenu du fichier correspondant est obsolète.
+	- NDBCTT :
+		- Suppression de 'synchronization_function__'.
+	- NDBDCT :
+		- '...LocationsAndAvailables...' -> '...Availables...'.
+		- Les données accessoires ne sont sauvés que si ceux contenues dans le fichier sont obsolètes.
+	- UYM :
+		- 'Sync' -> 'Settle'.
+
+10/11/2010 :
+	- LSTCTN :
+		- Modifications pour adaptation aux exigences de 'g++'.
+
+09/11/2010 :
+	- NDBCTT :
+		- 'NDBIDXCompleteInitialization()' -> 'NDBCTTCompleteInitialization(...)'.
+		- Mise en oeuvre de la fonction de synchronisation.
+	- NDBTBL :
+		- Adaptation aux modifications bibliothèque 'NDBCTT'.
+
+04/11/2010 :
+	- Géneral :
+		- Adaptation aux modification bibliothqèue 'UYM'.
+	- IDS :
+		- Ajout 'SetFirstUnused(...)'.
+
+03/11/2010 :
+	- UYM :
+		- Suppression de 'action__' (ex-'purpose__').
+		- 'Connect(...)' -> 'Plug(...)'.
+		- Création 'Bind(...)' et 'Sync(...)'.
+	- Géneral :
+		- Adaptation aux modification bibliothqèue 'UYM'.
+
+02/11/2010 :
+	- Géneral :
+		- Adaptation aux modification bibliothqèue 'UYM'.
+	- NSXPCM :
+		- Ajout version 'const str::string_ &' de 'LanchURI(...)'.
+	- UYM :
+		- 'status__' -> 'state__'.
+		- 'purpose__' -> 'action__'.
+		- Ajout de 'aSync'.
+	- XULFTK :
+		- Mise en oeuvre de 'BrowseInformations()' et 'BrowseWEBSite()'.
+
+29/10/2010 :
+	- NSXPCM :
+		- Correction erreur dans définition 'repository_'.
+
+26/10/2010 :
+	- FRDKRN :
+		Réorganisation.
+
+24/10/2010 :
+	- 'XULUI' -> 'XULWDG'.
+
+22/10/2010 :
+	- NSXPCM :
+		- '{...]element[...]' -> '[...]widget[...]'.
+		- La gestion des évènements est pris en charge par une classe dédiée ('event_handler__').
+	- XULUI :
+		- Adaptation aux modifications bibliothèque 'NSXPCM'.
+
+21/10/2010 :
+	- FRDKRN :
+		- Ajout '_LoadEmbede(_)' manquant.
+		- '=' -> '==' dans un  test dans 'LoadProject'.
+
+20/10/2010 :
+	- FRDKRN :
+		- Réorganisation.
+		- 'status__' -> 'report__'.
+	- Géneral :
+		- Adaptation aux modifications bibliothèques 'UYM'.
+
+18/10/2010 :
+	- FRDKRN :
+		- Adaptation aux modifications 'FRDRGY'.
+	- FRDRGY :
+		- Adaptation aux modifications 'RGSTRY'.
+	- RGSTRY :
+		- Toute modification de 'multi_level_registry_' est maintenant horodatée.
+
+14/10/2010 :
+	- LST :
+		- Utilisation de 'uym::status__' et 'uym::purpose__' dans 'ReadFromFile(...)'.
+	- LSTCTN :
+		- Adaptation aux modifications bibliothèque 'LST'.
+	- NDBDCT :
+		- 'Purpose' n'était pas pris en compte dans 'ConnectToFiles(...)'.
+		- Le test de 'ConnectToFiles(...)' n'était pas assez poussé.
+	- XULUI :
+		- Correction visant à autoriser un 'Register(...)' directement un élément en passant par son pointeur, et non pas seulement avec son 'id'.
+		- Ajout d'une fonction interdisant de récupèrer un 'nsIDOMWindow' par son id; 'GetDocumentById(...)' en passant l'id d'une balise 'window' ne retourne pas un 'nsIDOMWindow'.
+
+13/10/2010 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèques 'UYM'.
+	- UYM :
+		- Ajout 'inline' manqaunt
+
+12/10/2010 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèques 'UYM'.
+	- NSXPCM :
+		- Ajout paramètre à la méthode 'disable(...)'.
+	- UYM :
+		- Ajout 'status__' et 'purpose__' pour être utilisé avec 'Connect(...)'.
+
+08/10/2010 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèque 'ERR'.
+
+07/10/2010 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèque 'ERR'.
+	- CSDSNC :
+		- Une tentative de connection est réalisée dés l'initialisation, la valeur retournée signalant la réussite ou l'échec de cette tentative.
+	- ERR :
+		- 'handle' -> 'handling__', + changement des libellés et mise aux normes.
+
+06/10/2010 :
+	- FRDKRN :
+		- Correction erreur sur l'extension par défaut du fichier de configuration.
+		- Correction erreur 'path' dans 'FillProjectRegistry(...)'.
+		- Changement d'un libellé de 'status__'.
+	- LCL :
+		- La traduction est ajouté dans la variable destination et n'en écrase plus le contenu.
+	- RGSTRY :
+		- 'GetValue(...)' ajoute la valeur demandée au contenu de la variable destination, et ne l'écrase plus.
+
+05/10/2010 :
+	- FRDBKD :
+		- Si pas de fonction fournie pour traiter une erreur du 'backend', une erreur 'ERRb()' est lancée.
+	- FRDKRN :
+		- Réorganisation paramètres 'Connect(...)'.
+
+04/10/2010 :
+	- FRDKRN :
+		- Ajout 'Connect(...)' avec paramètres déduits de la 'registry'.
+	- FRDRGY :
+		- Completion.
+
+01/10/2010 :
+	- XULUI :
+		- Factorisation.
+
+29/09/2010 :
+	- FRDKRN :
+		- Correction oublis.
+	- NSXPCM :
+		- Correction oubli déverouillage mutex.
+	- RGSTRY :
+		- Correction bogue.
+
+28/09/2010 :
+	- NSXPCM :
+		- Ajout fonction 'HasAttribute(...='.
+		- Les fonctions corrigeant les bogues ne touchent plus à l'attribut 'oncommand' que s'il est inexistant.
+
+27/09/2010 :
+	- FRDKRN :
+		- Réorganisation de la gestion des messages d'erreurs et des traductions associées.
+
+21/09/2010 :
+	- FRDKRN :
+		- Codage.
+	- RGSTRY: 
+		- Ajout variante 'GetTranslation(...)'.
+
+19/09/2010 :
+	- NSXPCM :
+		- Suppression utilisation de 'MasterWindow' si 'ParentWindow' non fourni pour les boîtes de dialogues.
+		- Exposition 'Window' dans 'core_element__'.
+		- 'OpenDialog(...)' ouvre maintenant des fenêtres modales.
+		- Horodatage des entrées de 'Log(...)'.
+
+17/09/2010 :
+	- NSXPCM :
+		- Ajout d'un 'window' dans 'core_element__'.
+		- Correction bogue dans gestion 'MasterWindows'.
+	- XULUI :
+		- Adaptation aux modifications 'NSXPCM'.
+
+15/09/2010 :
+	- NSXPCM :
+		- Révision gestion de la 'MasterWindow'.
+
+14/09/2010 :
+	- XPP :
+		- Correction bogue relatifs aux commentaires.
+
+13/09/2010 :
+	- XML :
+		- Correction bogue introduit par la modifcation de la veille.
+	- XPP :
+		- Adaptation modifications 'XML'.
+
+12/09/2010 :
+	- RGSTRY :
+		- Correction bogue 'FillRegistry(...)'.
+		- 'Parse()' retourne maintenant le noeud père, le créant si nécessaire, de celui de la racine du document analysé.
+		- 'multi_level_registry_' : ajout 'CreateNewLevel(...)'.
+		- Adaptation modifications 'XML'.
+	- XML :
+		- Lex commentaires sont maintenant également récupèrés.
+
+08/09/2010 :
+	- ERR :
+		- 'iError' -> 'iExit'.
+	- LCL :
+		- 'locales' ->'locale'.
+	- NSXPCM :
+		- Ajout variante 'Close(...)'.
+		- Adaptation modifications bibliothèque 'ERR'.
+		- Création de 'NSXPCM_ERR'.
+
+05/09/2010 :
+	- NSXPCM :
+		- Correction non prise en compte paramètre 'ParentWindow' dans 'GetJSConsole(...)'.
+
+03/09/2010 :
+	- Géneral :
+		- Adaptation aux modifications 'LCL'.
+	- FRDKRN :
+		- Ajout 'GetDefaultConfigurationFileName(...)'.
+	- TOL :
+		- Ajout de 'E_STRING(...).
+
+02/09/2010 :
+	- Géneral :
+		- Adaptation aux modifications dans 'LCL'.
+	- LCL :
+		- 'locales[...]' ->'locale[...]'
+
+30/08/2010 :
+	- LCL :
+		- Remplacement de 'Message' par 'Text'.
+		- Création de "locales_rack___'.
+	- NSXPCM :
+		- Ajout gestion des 'locales'.
+
+25/08/2010 :
+	- NSXPCM :
+		- Mise en oeuvre de 'xxxf_' pour les entrée étant une combinaisons de plusieurs drapeaux.
+	- TOL :
+		- Ajout fonction 'Swap(...).
+		- Légère réorganisation.
+	- XULUI :
+		- Adaptation aux modifications 'NSXPCM'.
+
+24/08/2010 :
+	- NSXPCM :
+		- Enrichissement et modification des fonctions concernant la sélection d'un fichier ou d'un répertoire (partiellement réalisé).
+
+20/08/2010 :	
+	- BKDxxx :
+		- Rajout de la commande 'TargetLabel'.
+	- NSXPCM :
+		- Renommage 'broadcaster__' en  'broadcast__' qui est le nom XUL de la balise.
+		- Ajout de quelques méthodes triviale à '_element__'.
+	- XULUI :
+		- Adaptation aux modifications 'NSXPCM'
+
+19/08/2010 :
+	- NSXPCM :
+		- Renforcement détection d'erreurs.
+		- Suppression 'ErrorHandling'.
+		- Ajout fonctions permettant de contourner les bogues XUL suivant :
+			- un 'menuitem' n'hérite pas de l'attribut 'command' du 'broadcast' qu'il écoute; le 'patch' consiste à copier l'attribut 'command' du 'broadcast' qu'il écoute.
+			- un 'key' ne lance pas la commande qui lui est affecté à travers l'attribut 'command'; le patch consiste à rajouter un attribut 'oncommand=";"' à toutes les balises 'command'.
+
+11/08/2010 :
+	- BKDACC :
+		- Adaptation aux modifications 'BKDxxx'.
+	- BKDCMD :
+		- Modifications pour accompagner les modifications de 'BKDMNG'.
+	- BKDMNG :
+		- Simplification de la gestion des informations concernant le 'backend' et le 'publisher'.
+
+10/08/2010 :
+	- TOL :
+		- Ajout 'E_DTOR(...)' et 'E_CTOR(...)'.
+
+09/08/2010 :
+	- RGSTRY :
+		- Ajout des fonctions permettant de récupèrer un entier.
+	- STR :
+		- Remaniement pour gestion complète des conversions en 64 bits, signés et non signés.
+
+08/08/2010 :
+	- BSO :
+		- Ajout méthodes manquantes concernant les type 64 bits.
+	- RGSTRY :
+		- Adaptation à la modification bibliothèque 'XML'.
+	- XML :
+		- Correction bogue dans le passage de paramètre 'EntitiesHandling'.
+
+06/08/2010 :
+	- BKDxxx :
+		- Introduction de la notion de 'Publisher'.
+
+03/08/2010 :
+	- CSDDLC :
+		- Adaptation aux modifications 'CSDEBD'.
+		- 'dynamic_library_client' -> 'dynamic_library_client_ioflow___'
+	- CSDEBD :
+		- 'embed_client_server' -> 'embed_client_server_ioflow___'
+	- 'CSDSNC' :
+		- 'client_flow___' -> 'client_ioflow___'
+	- 'CSDUCL' :
+		- 'universal_client' -> 'universal_client_ioflow___'.
+		- Adaptation aux modifications des bibliothèques sous-jacentes.
+
+01/08/2010 :
+	- BKDACC :
+		- Mise en oeuvre de 'backed_access_functions__'.
+	- BKDxxx :
+		- Adaptation aux modifications 'BKDACC'.
+		- Suppression du test des messages (déporté en aval).
+
+30/07/2010 :	
+	- RGSTRY :
+		- Ajout métohodes 'Dump(...)' et 'Fill(...)'.
+
+28/07/2010 :
+	- RGSTRY :
+		- Ajout paramètre à la méthode 'AddLevel(...)'.
+
+27/07/2010 :
+	- RGSTRY :
+		- Suppression 'Exists(...)' redondant.
+		- Pour toute les fonctions prenant 'Missing' (en 'bso::bool__ *') pour paramètre, si cette variable est à 'true', elle ne réalisent aucune action.
+		- Ajout de certaines méthodes qui sont des variantes de méthodes existantes avec des variations dans les paramètres.
+		- Ajout 'multi_level_registry[_]'.
+
+26/07/2010 :
+	- NSXPCM :
+		- Ajout 'OpenDialog(...)'.
+
+18/07/2010 :
+	- NDBIDX :
+		- Ajout d'un 'const' manquant.
+
+16/07/2010 :
+	- Géneral :
+		- Adpatation des différents bibliothèques aux modifications des bibliothèques sous-jacentes.
+
+15/07/2010 :
+	- Géneral :
+		- Déplacement des différentes applications des les sous-projets vers le projet principal.
+		- Adpatation des différents bibliothèques aux modifications des bibliothèques sous-jacentes.
+
+14/07/2010 :
+	- Géneral :
+		- Déplacement des sous-projets dans le projet principal.
+	- MTX :
+		- Correction d'un bogue entraînant un quasi-blocage sous Linux.
+	- XMLBSC : 
+		- Adaptation aux modifications 'XML'.
+
+08/07/2010 :
+	- NSXPCM
+		- Correction bogue introduit lors des dernières modifications.
+		- Adaptation modifications 'XPP'.
+	- XPP :
+		- Changement ordre arguments 'Transform(...)' et ajout variations.
+
+07/07/2010 :
+	- Géneral :
+		- Adaptation aux modifications 'FLW' et 'XPP'.
+	- FLW :
+		- Change les 'unsafe_...___' en 'unsafe_...__' (un '_' de moins), plus cohérents.
+		- Suppression des version '___' (3 '_') des objets.
+	- NSXPCM :
+		- Simplification et diversification de 'XSLTransform...(...)'.
+	- XPP :
+		- Le coeur du préprocesseur n'est plus un 'xtf::extended_text_iflow__', mais un simple 'flw::unsafe__iflow__'.
+
+06/07/2010 :
+	- Géneral :
+		- Adaptation aux modification dans 'XML'.
+	- NSXPCM :
+		- Ajout pour 'XSLTransfom(...)' de répertoires de base à l'usage du préprocesseur.
+	- RGSTRY :
+		- A l'instar de 'XML', mise en oeuvre de 'xml::outfit__' pour l'indetation en lieu et place d'un booléen.
+	- XML :
+		- Les caratères spéciaux ('&', '<') ne sont remaplacés par leur 'entity' correspondant que sur demande (à l'exception des '"'
+		qui sont toujours remplacés par leur 'entity' dans les valeurs d'attributs.
+		- Mise en oeuvre de 'entities_handling__', 'outfit__' et 'special_char_handling__' pour remplacer des nooléens pour certains.
+	- XPP :
+		- Les 'entity's ne sont plus remplacés par leur caractères équivalent (sauf pour '"' dans les valeurs d'attributs).
+		- A l'instar de 'XML', mise en oeuvre de 'xml::outfit__' pour l'indexation en lieu et place d'un booléen.
+		- Corrections du bogues de certaines fonctions qui avaient un 'namespace' vide par défaut.
+
+05/07/2010 :
+	- Géneral :
+		- Adaptation aux modifications de 'XML'.
+	- NSXPCM :
+		- Dû a des problèmes de stratégies de sécurité trop contraignante (et mal documentée), ce n'est plus un nom du fichier XSL qui est passé à 'XLSTransform(...)',
+		  mais un flux au format XSL.
+		- Le contenu XML n'est plus passé sous forme de chaine de caractères, mais sous forme de flux dans 'XSLTransform(...)'.
+		- Le flux XML, ainsi que le flux XSL, sont passés par le préprocesseur ('xpp').
+	- XML :
+		- '-' est maintenant accepté dans un identifiant d'attribut/de balise.
+		- Ajout d'un paramètre ('HandleEntities') permettant de traiter ou non les 'entities'.
+
+24/06/2010 :
+	- XML :
+		- Correction définition 'tfObvious'.
+
+21/06/2010 :
+	- XPP :
+		- Correction bogue non propagation du nom de fichier lors d'une expansion de macro.
+
+13/06/2010 :
+	- NSXPCM :
+		- Modification pour compatitbilité avec XULRunner 1.9.0.4 et 1.9.2.
+
+10/06/2010 :
+	- THT :
+		- Ajout 'include' manquant détecté par g++ sous Cygwin.
+
+09/06/2010 :
+	- UYM :
+		- Suppression d'un 'reset()' source de ralentissements.
+
+05/06/2010 :
+	- RGSTRY :
+		- Ajout 'Search(...)' to 'overloaded_registry___'.
+		- Rajout variante méthode 'Dump(...)' prenant un 'xml::writer_' comme paramètre.
+	- NSXPCM :
+		- 'XSLTTransform(...)' -> 'XSLTransform(...)'
+
+03/06/2010 :
+	- HTP :
+		- Correction bogue 'GetULong_()' qui signalait une erreur alors qu'il n'y avait pas lieu ('Error' non initialisé).
+	- XTF :
+		- Correction bogue cellule vide 'GetCell()' suite modification précédente.
+
+24/05/2010 :
+	- XPP :
+		- Correction du bogue se produisant lors de l'inclusion d'un fichier vide.
+
+23/05/2010 :
+	- XPP :
+		- Ajout directive 'xpp:attribute'.
+
+16/05/2010 :
+	- STR :
+		- Ajout 'ReplaceTag(...)' et 'ReplaceTags(...)' et des objets 'strings[_]' (issus de 'LCL').
+	- LCL :
+		- Déplacement vers et utilisation des fonctions 'ReplaceTag(...)' et 'ReplaceTags(...)' des objets 'strings[_]' de 'STR'.
+	- XPP :
+		- Correction bogue non-détection balises multiples dans un 'ifeq'.
+
+10/05/2010 :
+	- XPP :
+		- Ajout variantes fonctions 'Process(...)' prenant un 'xml::writer_'.
+
+09/05/2010 :
+	- XML :
+		- Rajout méthode 'WriteXSLDeclaration(...)'.
+
+08/05/2010 :
+	- XPP :
+		- Rajout variantes fonction 'Parse(...)'.
+
+03/05/2010 :
+	- XML :
+		- Ajour de la méthode 'Token()' à l'objet 'browser__' permettant de connaître de manière diffèré le dernier 'token'.
+	- XPP :
+		- Correction du bogue qui voyait des valeurs suivies de sauts de lignes lorsqu'encapsulé dans des instructions du préprocesseur.
+
+02/05/2010 :
+	- MMI :
+		- Correction bogue 'UnderlyingSize' lors de l'initialisation.
+	- XML :
+		- Correction bogue second attribut provoquant une erreur.
+	- XPP :
+		- Correction bogue de l'ajout d'un saut de ligne à la valeur d'un tag lorsque cette valeur était encadrée par un 'xcf:bloc' sur une ligne à soi.
+
+30/04/2010 :
+	- XML :
+		- Différentes modifications pour que les coordonnées localisant une éventuelle erreur soient correctes.
+		- Corrections suite aux modifications ci-dessus pour que la nature de l'erreur soit correcte.
+	- XPP :
+		- Adaptation aux modifications 'XML'.
+	- XTF :
+		- Correction du bogue de décalage des coordonnées d'un caractère.
+
+27/04/2010 :
+	- XML :
+		- Les coordonnées du 'Dump' ne sont plus décalées de 1.
+
+25/04/2010 :
+	- XML :
+		- Correction de problèmes gênant la détection de la bonne position d'une éventuelle erreur lorsque l'on passe par 'XPP'. 
+	- XPP :
+		- Ajout de la méthode 'Preprocessor()'.
+	- RGSTRY :
+		- Adaptation aux modification 'XPP'.
+
+22/04/2010 :
+	- XPP :
+		- Retrait d'un 'static' inutile.
+
+20/04/2010 :
+	- XML :
+		- Nettoyage (suite au transfert du préprocesseur vers 'XPP').
+	- XPP :
+		- Ajout 'Process(...)'.
+		- Nettoyage.
+		- Correction bogue provoqué lorsque qu'une 'processing instruction' est présent dans un fichier inclus.
+
+19/04/2010 :
+	- Géneral :
+		- Adaptation aux modifications dans 'XML'; mise en oeuvre 'XPP'.
+	- XML :
+		- Rajout version 'const ...(...) const ' de certaines méthodes.
+		- 'GetLabel_(status__ ...)' devient publique ('GetLabel(extended_status__ ...)' va être déplacé ver 'XPP').
+		- Purge de tout ce qui concerne le préprocesseur (déplacé si nécessaire dans 'XPP').
+	- XTF :
+		- Rajout d'un 'const' manquant.
+
+18/04/2010 :
+	- XML :
+		- Ne tente plus de lire la suite si l'arbre XML a été entièrement parcouru.
+	- XPP (création):
+		- Prise en charge de la partie préprocesseur de la bibliothèque 'XML' (reste à purger cette dernière de cette partie).
+
+14/04/2010:
+	- XML :
+		- Suppression du realais vers 'Dump' inutile.
+		- Remaniement 'dump_'.
+
+11/04/2010 :
+	- FLW :
+		- Ajout méthodes 'Init(...)' à des fins de standardisation.
+
+01/04/2010 :
+	- CLNARG :
+		- Redéfinition de 'CLNARG_STRING_PARAM___(...)' pour éviter source de bogue.
+
+19/03/2010 :
+	- MMM :
+		- Prend en compte le problème souleve par la méthode '_ExtendUsedFragmentFollowedByUndersizedTailingFreeFragment()' depuis que 'S_.Size' n'existe plus.
+
+17/03/2010 :
+	- UYM :
+		- Suppression de 'IsPlugged()'.
+		- 'plug()' est désormais de type 'void'.
+		- La récupération de la taille de la mémoire affectée au 'driver' (lorsque c'est une mémoire persistante) est récupéré lors de l'initialisation.
+		
+15/03/2010 :
+	- CVM :
+		- Par défaut, la taille de la mémoire ne peut que grandir durant sa durée de vie. Combiné au fait qu'un 'Init()' ne vide pas la mémoire,
+		on obtient un gain de temps appréciable.
+	- MMM :
+		- La préallocation est déportée vers 'CVM' (on défait en partie les modifications apportées le 11/03/2010).
+
+11/03/2010 :	
+	- MMM :
+		- Gestion d'une taille interne, pour permettre la préallocation.
+		- Correction bogue variable non initialisées 'standalone_multimemory_driver__'.
+
+05/03/2010 :
+	- NDBIDX :
+		- Prise en compte du cas où l'on indexe un enregistrement inexsitant.
+
+04/03/2010 :
+	- NDBCTT :
+		- Correction bogue mauvaise gestion de la taille du cache dû à l'utilisation de 'Amount()' à la place de 'Extent()'.
+
+15/02/2010 :
+	- XML :
+		- Correction mauvaise propagation erreur.
+
+14/02/2010 :
+	- XML :
+		- Modification gestion objet 'dump[_]' pour plus de cohérence.
+
+12/02/2010 :
+	- DTR :
+		- Renommage de certaines méthodes pour plus de clareté.
+	- MMG :
+		- Correction erreurs détectées par g++.
+	- NDBTBL :
+		- Petite moficiation pour éviter un 'warning' sous g++.
+	- NSXPCM :
+		- Correction erreur traitement macro 'EF()'.
+	- WINTOL :
+		- Correction problème signal 'SIGBREAK' inconnu sous Cygwin.
+	- XML :
+		- Mise en oeuvre de 'token_flag__'.
+		
+07/02/2010 :
+	- NDBIDX
+		- Correction bogue 'Delete()' post-initialisation manquante.*
+	- EPSMSC :
+		- Changement de quelques libellés.
+
+06/02/2010 :
+	- NDBBSC :
+		- Il n'y a plud de préallocation; l'allocation se fait à la demande.
+	- NDBCTT :
+		- Correction bogue post-initialisation non réalisée lors de l'appel de l'opérateur '='.
+	- NDBIDX :
+		- Correction bogue post-initialisation non réalisée lors de l'appel de l'opérateur '='.
+	- NSXPCM :
+		- Rajout du type 'argument[_]'.
+
+05/02/2010 :
+	- NSXPCM :
+		- Ajout 'GetArguments()', qui permet de récupèrer les arguments d'une ligne de commande.
+
+04/02/2010 :
+	- ERR :
+		- 'uTest' -> 'iTest'.
+	- NSXPCM :
+		- Ajout et mise en oeuvre 'OpenWindow(...)'.
+
+03/02/2010 :
+	- Géneral :
+		- Adaptation modifications 'MDR'.
+	- MDR :
+		- Suppression 'mode' apparament inutile.
+	- NDBDCT :
+		- La connection aux fichiers de l''atomized_file_manager' peut maintenant être diffèrée.
+	- NDBSCT :
+		- La connection aux fichiers de l''atomized_file_manager' peut maintenant être diffèrée.
+	- NDBTBL :
+		- Ajout 'ConnectToFiles(...)'.
+		- Retrait mode 'mAdmin'.
+
+02/02/2010 :
+	- FLM :
+		- 'FileSize()' ne requiert plus l'ouverture du fichier concerné.
+	- NSBBSC :
+		- Ajout méthodes 'Size(...)' et 'Resize(...)' à l'objet '_cache[_]'.
+	- NDBCTT :
+		- Mise en oeuvre systématique d'un cache.
+	- NDBIDX :
+		- Adaptation aux modifications 'NDB...'.
+		- Mise en place de la post-initialization, qui retarde la connection aux fichiers.
+
+31/01/2010 :
+	- Géneral :
+		- Codage 'XUI'.
+
+29/01/2009 :
+	- XML :
+		- Réactivation 'GetLabel(...).
+
+26/01/2009 :
+	- RGSTRY :
+		- L'écriture 'Tag[@Attribute="Value"]...' et 'Tag[Attribute="Value"]...' sont maintenant toutes deux acceptées (bien que la dernière soit incorrecte).
+
+22/01/2010
+	- RGSTRY :
+		- Correction bogue 'Dump()' qui traitait mal les attributs.
+
+21/01/2010 :
+	- NDBDCT, NDBSCT :
+		- Correction bogue opérateur '=' qui mettait à jour le marquage horaire mais si les deux objets étaient vides.
+	- XML :
+		- Correction bogue 'BelongsToNamespace(...)'.
+
+20/01/2010 :
+	- LTF :
+		- Un 'CR()' ne fait dorénavant reculer que jusqu'à la position d'un éventuel 'Freeze()', et non plus jusqu'au début de la ligne.
+		- Un 'Clear()' n'efface dorénavant qu'à partir de la position d'un éventuel 'Freeze()' et non plus du début de la ligne.
+	- NDBTBL :
+		- Correction incohérence opérateur '='.
+
+17/01/2010 :
+	- MMM :
+		- Modification rendant son fonctionnement plus cohérent.
+	- UYM :
+		- Modification rendant son fonctionnement plus cohérent.
+
+13/01/2010 :
+	- MMG :
+		- Petites modifications facilitant le débogage.
+		- Suppression membre en doublon.
+
+10/01/2010 :
+	- MMG :
+		- Mise au point.
+	- NDBTBL :
+		- Correction bogue concernant les indexes.
+
+08/01/2010 :
+	- MMG :
+		- Ajout 'Immortalize(...)(.
+
+07/01/2010 :
+	- NBIDX :
+		- Correction bogue synchronisation taille avec taille contenu.
+
+05/01/2010 :
+	- NDBIDX :
+		- Correction problème pointeur.
+
+04/01/2010 :
+	- Géneral :
+		- Refonte globale de la gestion de la notion d''extent'.
+
+02/01/2010 :
+	- Géneral :
+		- Refonte globale de la gestion de la notion d''extent'.
+
+01/01/2010 :
+	- Géneral :
+		- Refonte globale de la gestion de la notion d''extent'.
+
+31/12/2009 :
+	- Géneral :
+		- Refonte globale de la gestion de la notion d''extent'.
+
+22/12/2009 :
+	- MMI :
+		- La fonction 'New()' initialise maintenant correctement le descripteur associé.
+
+21/12/2009 :
+	- MDR :
+		- L'extent' est maintenant consultable.
+	- MMM :
+		- Mise à niveau.
+		- Simplification suite à la prise en charge de la 'multimémoire' par la bibliothèque 'uym'.
+	- UYM :
+		- L'extent' est maintenant consultable.
+
+20/12/2009 :
+	- FLM :
+		- Mise à niveau.
+	- MMG :
+		- Mise à niveau.
+
+17/12/2009 :
+	- MMG :
+		- Corrections pb détectés à l'utilisation de cette bibliothèque (erreurs de compilation non détectées
+		 immédiatement du fait de l'utilisation de 'template').
+
+13/12/2009
+	- MMG :
+		Correction bogue constructeur.
+
+11/12/2009 :
+	- XML :
+		Correction inexactitudes.
+
+08/12/2009 :
+	- 'NBDISX' :
+		- Possibilité d'effacer les ficihers associés à un index 'atomized' lors de son initialisation.
+
+03/12/2009 :
+	- 'NDB...' :
+		- '...spreaded...' -> '...atomized...'.
+
+02/12/2009 :
+	- MMG :
+		- Suite refonte ...
+	- NDB... :
+		- Exposition 'BaseFieldName'.
+		
+
+01/12/2009 :
+	- MMM :
+		- Mise en place d'instructions préprocesseurs pour permettre l'auto-inclusion 'mmm.h'/'uym.h'.
+	- TYM :
+		- Déplacement de la gestion de la 'multimémoire' vers 'UYM'.
+	- UYM :
+		- 'untyped_memory[_]' accepte maintenant la 'multimémoire'.
+
+30/11/2009 :
+	- Géneral :
+		- Codage 'NDB...'.
+	- MMG :
+		- Légère refonte pour faciliter utilisation avec 'NDB...'.
+		
+29/11/2009 :
+	- Géneral :
+		- Codage 'NDB...'.
+		
+27/11/2009 :
+	- Géneral :
+		- Codage 'NDB...'.
+		
+25/11/2009 :
+	- Géneral :
+		- Codage 'NDB...'.
+		
+24/11/2009 :
+	- Géneral :
+		- Codage 'NDB...'.
+		
+18/11/2009 :
+	- DBSTBL :
+		- Ajout notion de label.
+15/11/2009 :
+	- DBS...
+		- 'file_...' -> 'exploded_...' pour souligner l'aspect fragmentation poussée à m'extrême (un fichier par 'objet').
+	- LCK
+		- Réecriture pour pouvoir mettre toutes les objets membres de 'control__' en 'const'.
+
+12/11/2009 :
+	- DBSBSC :
+		- Récupération de 'rrows[_]' de 'DBSTBL'.
+	- DBSCTT :
+		- Ajout de 'IsEmpty()'.
+	- DBSIDX :
+		- Récupération de de 'observer_functions__' de 'DBSTBL'. 
+		- Récupération de 'Reindex' de 'DBSTBL'.
+	- DBSTBL :
+		- Suppression de 'irow__'.
+		- Déplacement de tout ce qui concerne la réindexation vers 'DBSIDX'.
+		- Ajout des méthodes de navigation.
+
+11/11/2009 :
+	- DBSTBL :
+		- Exposition du 'content__'.
+
+10/11/2009 :
+	- DBSBSC :
+		- '[...]Drop()' devient '[...]ErasePhysically()'.
+	- DBSCCT :
+		- Adaptation aux modifications dans 'DBSBSC'.
+	- DBSDCT :
+		- Adaptation aux modifications dans 'DBSBSC'.
+	- DBSIDX :
+		- Ajout d'un destructeur virtuel.
+		- Adaptation aux modifications dans 'DBSBSC'.
+	- DBSSCT :
+		- Adaptation aux modifications dans 'DBSBSC'.
+	- DBSTBL :
+		- Ajout d'un destructeur virtuel.
+		- Ajout d'une méthode 'ErasePhysically()'.
+	- TOL :
+		- Ajout 'E_VDTOR(...)'.
+		
+
+06/11/2009 :
+	- RGSTRY :
+		- Correction bogue boucle infinie lorsque recherche de la veleur d'un attribut.
+		- Correction bogue dû à un '&' manquant.
+
+05/11/2009 :
+	- LCL :
+		- Ajout varianes 'Init(...)'.
+	- RGSTRY :
+		- Ajout variantes 'FillRegistry(...)'.
+		- Suppression 'Delete(...)' redondant.
+		- Lorsqu'une nouvelle 'registry' est crée, elle est fille d'une balise '_registry'.
+	- WINTOL :
+		- 'Remove(...)' n'est plus une méthode, mais une fonctions.
+
+03/11/2009 :
+	- DBSCCT :
+		- Ajout operateurs '->' et '*' à l'objet 'content[_]'.
+	- DBSTBL :
+		- Récupération de 'file_table' de 'DBIEDB'.
+
+02/11/2009 :
+	- DBSCCT :
+		- Ajout objet 'content[_]'.
+	- DBSDCT :
+		- Correction erreur qui rendait la classe 'dynamic_content_' ininstanciable.
+	- DBSSCT :
+		- Correction erreur qui rendait la classe 'static_content_' ininstanciable.
+
+30/10/2009 :
+	- CIO :
+		- Ajout commentaire concernat 'WINTOL'.
+	- WINTOL :
+		- Ajout d'un test sur l'initialisation automatique de la 'CIO', pour éviter plantage lors du lancement en tant que service Windows.
+
+29/10/2009 :
+	- CSDBNS :
+		- 'service__' -> 'port__' pour éviter lma confusion avec le système de service Windows.
+		- Prise en charge du système de 'service' de Windows.
+		- Correction : CSDNBS...' --> 'CSDBNS...'
+	- CSDSCM :
+		- Ajout de '[CSDBNS]Exit()', pour faciliter la mise en oeuvre de service Windows.
+	- CSDSNS :
+		- Adaptation aux modifications dans 'CSDBNS'.
+	- WINTOL :
+		- Simplification de la procédure d'installation d'un service (méthode 'Install()' devient une fonction indépendente 'InstallService(...)'.
+		- Le nom du service n'est plus stocké, mais passé en paramètre à chaque fois.
+
+28/10/2009 :
+	- LCL :
+		- Ajout du tag de la gestion de la balise d'indice '0' (qui est remplacé par l'ensemble des valeurs).
+	- RGSTRY :
+		- Modification du label des erreurs, pour y inclure la balise d'indice '0' (voir 'LCL').
+		- Les fichiers résultants en un fichier vide sont maintenant correctement rconnu.
+	- XML :
+		- Les attributs 'xmlns:...' sont maintenant acceptés.
+
+27/10/2009 :
+	- FNM :
+		- Correction bogue 'CorrectLocation'.
+	- LCL :
+		- Adaptation aux modifications de 'RGSTRY'.
+		- Mise en oeuvre des nouvelles fonctionnalités de 'RGSTRY'.
+		- Enrichissement.
+	- RGSTRY :
+		- Mise en oeuvre de 'error_details[_]', plus complet que 'xcoord[_]', pour simplifier la gestion des erreurs.
+	- XML :
+		- Amélioration de l'affichage de la gestion des messages d'erreurs.
+		- 'sUserError' -> 'sUserDefinedError'.
+		- Correction du bogue empêchant l'expansion d'un fichier à cause de séparateurs de répertoires déifférents dans la spécification de son chemin.
+
+26/10/2009 :
+	- LCL :
+		- Modification de certaines fonctions pour simplification d'utilisation.
+	- RGSTRY :
+		- Amélioration 'FillRegsitry(...)'.
+
+22/10/2009
+	- RGSTRY :
+		- Nettoyage suite aux modification faites récemment.
+		- Correction erreurs argument 'PathErrorRow' de 'FillRegistry(...)'.
+
+21/10/2009 :
+	- RGSTRY :
+		- Simplification de la gestion du paramètre 'PathErroRow' qui devient optionnel, et n'est modifié qu'en cas d'erreur.
+		- Ajout 'FillRegistry(...)'.
+	- LCL :
+		- Adaptation aux changements dans 'RGSTRY'.
+
+20/10/2009 :
+	- LCL :
+		- Adaptation aux changements dans 'RGSTRY'.
+	- RGSTRY :
+		- Simplification.
+
+10/10/2009 :
+	- CSDBNS :
+		- Correction affectation de 'NULL' au lieu de 'NONE'.
+
+04/10/2009 :
+	- CLNARG :
+		- Ajout macro 'CLNARG_STRING_PARAM(...)' simplifiant la récupération d'un paramèetre de type 'str::string'.
+	- MTX :
+		- Retrait du nom de domaine anonyme qui dérange g++.
+
+30/09/2009 :
+	- NSXPCM :
+		- Ajout '(Add|Set)EventsToIgnore(...)'.
+		- Par défaut, un 'ClearSelection' lance un évènemnt 'select'. Cela peut-être maintenant évité.
+
+27/09/2009 :
+	- NSXPCM :
+		- Interception d'erreur remaniée.
+		- Propagation d'évènement remaniée.
+		- L'imbrication d'évènements est à nouveau possible, et l'on dispose d'un 'EventImbricationLevel' pour connaître le niveau
+		  d'imbrication.
+
+25/09/2009 :
+	- NSXPCM :
+		- Lorsqu'un évènement est en cours de traitement, tout autre évènement survenant sur le meme objet est dorénavant ignoré.
+
+24/09/2009 :	
+	- NSXPCM :
+		- Lors d'une erreur dans le traitement d'un évènement, l'exception est maintenant interceptée, et un message d'erreur affiché.
+
+20/09/2009 :
+	- CSDUCL :
+		- 'tShared' devient 'tDaemon'.
+
+18/09/2009 :
+	- RGSTRY :
+		- Correction bogue provoquant plantage lorsque pas de registre définis.
+		- Création automatique d'une racine si pas fournie.
+
+17/09/2009 :
+	- RGSTRY :
+		- Correction bogue provoquant plantage lorsque pas de registre définis.
+
+15/09/2009 :
+	- LCL :
+		- Correction mauvaise définition 'ReplaceTags(...)'.
+
+08/09/2009 :
+	- MTX :
+		- Correction non-conformité aux standards C++ detectée par 'g++'.
+
+04/09/2009 :
+	- ERR :
+		- Ajout 'cIncoherency', pour signaler une incohérence dans le logiciel.
+
+02/09/2009 :
+	- LCL :
+		- Correction bogue 'GetTranslation(...)' qui retournait une chaîne vide dans certains cas.
+		- Ajout 'ReplaceTags(...)' avec variations dans les paramètres.
+
+01/09/2009 :
+	- LCL :
+		- Correction bogue se produisant lors de la lecture d'un fichier vide.
+	- STR :
+		- Correction de quelques inexactitudes C++ détectées par g++. 
+		
+27/085/2009 :
+	- RGSTRY :
+		- Mise en oeuvre 'xcoord[_]'.
+
+24/08/2009 :
+	- LCL :
+		- Rajout 'GetTranlation(...)' retournant un 'const char *'.
+
+21/08/2009 :
+	- LGG :
+		- Obsolescence définitive au profit de la bibliothèque 'LCL', sans possibilité de réactivation (trop compliqué).
+	- Géneral :
+		- Adaptation à la modification ci-dessus.
+
+20/08/2009 :
+	- LCL : création (bibliothèque de gestion des locales à l'aide d'un ficher XML).
+	- LGG, MSG : rendus obsolètes (peuvent quand même être réactivé en definissant 'LGG_REVIVAL' ).
+
+17/08/2009 :
+	- RGSTRY :
+		- Le domaine de ome pour le preprocesseur est maintenant par défaut 'xpp' (et non plus 'xcf'). Cela peut être modifier
+		en définissant 'RGSTRY_PREPROCESSOR_NAMESPACE'.
+	- XML :
+		- Ajout statuts d'erreur manquants.
+
+16/08/2009 :
+	- STR :
+		- Rajout 'ToNumber(...)'s.
+
+13/08/2009 :
+	- EPSMSC :
+		- Correction erreur dans macro 'EPSMSC_COPYRIGHT(...)'.
+
+06/08/2009 :
+	- NSXPCM :
+		- Désactivation par défaut des 'form history's dans 'Windows' également, car parfois empêche le chargement du composant.
+	- RGSTRY :
+		- Correction bogue introduit dans modification de hier.
+
+05/08/2009 :
+	- RGSTRY :
+		- Ajout possibilité de retarder l'initialisationde  la 'registry' local des 'overloaded_[..._]registry_'.
+
+03/08/2009 :
+	- STR :
+		- Ajout méthode 'Replace()' (remplacement d'une balise).
+		- Retrait 'namespace str {...}' dans le '.cpp' à des fins de normalisation.
+
+31/07/2009 :
+	- NSXPCM :
+		- Désactivation des 'form history's sous Linux, car plantage.
+
+27/07/2009 :
+	- XML :
+		- Correction bogue plantage lorsque 'FileName' de 'Parse(...)' == 'NULL'.
+
+17/07/2009 :
+	- NSXPCM :
+		- Ajout 'menu__'.
+		- Ajout '(Get|Set)(Size|MaxLength)(...)' à 'textbox__'.
+		- Ajout 'efAllButAnnoying', qui enlève les évènements génant lors d'un débogage.
+		- Ajout évènement 'keypress'.
+
+15/07/2009 :
+	- STR :
+		- Les conversions en numérique génèrent maintenant une erreur si l'entrée est incorrecte est qu'un 'ErrP' n'est pas fourni.
+		- En outre, 'ErrP' n'est modifié (s'il est fourni), que s'il y a une erreur.
+
+09/07/2009 :
+	- NSXPCM :
+		- Ajout fonctions relatifs aux 'textbox's avec historique.
+
+08/07/2009 :
+	- NSXPCM :
+		- Le 'CreateNewObject(...)' de 'repository_' n'initalise plus l'objet; cela doit dorénavent être fait explicitement.
+
+06/07/2009 :
+	- NSXPCM :
+		- Changement méthodes 'Set(...)' de vient 'Init(..)' pour 'ui_core__' car mieux à l'usage.
+
+05/07/2009 :	
+	- MTX :
+		- Attend maintenant pendant une durée aléatoire entre 2 tentatives de verrouillage, sinon risque non négligeable de se
+		retrouver dans une situation bloquante avec des machines équipées de processeurs multi-coeurs.
+	- NSXPCM :
+		- Ajout 'radio__'.
+
+02/07/2009 :
+	- MTX :
+		- Sous Cygwin et GNU/Linux, l'atomicité est maintenant assurée en utilisant les mutex 'pthread'.
+
+21/06/2009 :
+	- DTE :
+		- '0' comme année ne provoque dorénavant plus d'erreur.
+
+17/06/2009 :
+	- NSXPCM :
+		- Rajout 'Alert(...)' utilisant la 'MasterWindows'.
+
+05/06/2009 :
+	- NSXPCM :
+		- Ajout 'LaunchURI(...)'.
+
+29/05/2009 :
+	- EPSMSC :
+		- Modification pour retirer tout e-mail (remplacé par un lien
+		sur un formulaire d'envoi de courrier de 'http://zeusw.org/')
+
+28/04/2009 :
+	- CSDUCL :
+		- Rajout 'reset(...)' manquants dont l'absence était source de plantages.
+
+28/04/2009 :
+	- NSXPCM :
+		- Rajout gestion évènement 'Unload' (pour les 'nsIDOMWindow').
+		- Rajout 'window__'.
+		- Réécriture de ce qui concerne la gestion des évènements pour s'appuyer sur un 'nsISupports', classe mère
+		de plus d'éléments que 'nsIDOMElement' utilisé jusqu'à présent.
+		- Ajout 'EventStopPropagation()' et 'EventPreventDefault()' à l'objet 'element_core__'.
+	- STR :
+		- Ajout de 'Truncate(...)', normalement hérité de 'bunch_<...>', qui obtenir un 'string_' en retour.
+
+26/04/2009 :
+	- NSXPCM :
+		- Rajout test 'IsClosed(...)'.
+		- Rajout 'Close(...)' de fenêtre.
+
+24/04/2009 :
+	- NSXPCM :
+		- 'CreateNewObject(...)' de 'repository_' prend maintenant un 'void *' qui est passé à l'objet crée lors de son initialisation.
+		- Lors de la création d'un objet par 'CreateNewObject(...)' de 'repsitory_', celui-ci reçoit maintenant également son 'row__'.
+		- Ajout 'SetCurrentRow(...)' à 'repository_'.
+
+10/04/2009 :
+	- NSXPCM :
+		- Ajout 'GetDOMInspector(...)'.
+
+09/04/2009 :
+	- NSXPCM :
+		- Ajout 'GetWindowDocument(...)', 'GetDocumentElement(...)', 'GetWindowElement(...)'.
+		- Introduction de 'MasterWindow', pour faciliter l'utilisation de certaines fonctions ('GetJSConsole(...), 'Alert(...)', ...);
+		- Une erreur dorénavant ouvre ou place en avant plan la console JS, à condition d'avoir défini 'MasterWindow'.
+
+06/04/2009 :
+	- DBSIDX :
+		- Introduction de 'LooseSeek()' et 'StrictSeek()' pour éviter des bogues ptentiels.
+	- Géneral :
+		- Adaptation aux modifications 'DBSIDX'.
+
+03/04/2009 :
+	- DBSTBL :
+		- Modification des paramètres du 'Seek(...)' simplifié pour éviter des risques de bogues.
+	- NSXPCM :
+		- Ajout evènement 'DblClick' (double click).
+
+26/03/2009 :
+	- CSDBNS :
+		- Les objets utilisateurs sont maintenant détruits correctement même en ces de ^C (contournement bogue VC++ 9).
+	- CSDSNS :
+		- L'objet 'core' n'a plus a être crée par l'utilisateur.
+	- ERR :
+		- Correction du bogue provoqué par le code facilitant l'insertion de points d'arrêts.
+		
+26/03/2009 :
+	- CSDBNS :
+		- Les objets utilisateurs sont maintenant détruits correctement même en ces de ^C.
+	- FLM :
+		- Correction bogue 'flusher'.
+
+11/03/2009 :
+	- NSXPCM :
+		- Gestion plus poussée des erreurs de 'GetAttribute( nsIDOMNode *, ...)'.
+
+05/03/2009 :
+	- STR :
+		- Ajout prise en compte du signe '+' lors d'un 'ToSL(...)' et d'un 'ToLF(...)'.
+	- XML :
+		- Les paramètres de 'browser___:Browse(...)' sont maintenant embarqués pour éviter d'avoir a les déclarer et à les passer en paramètres.
+
+04/03/2009
+	- NSXPCM :
+		- 'menuitem__' -> 'menu_item__'.
+
+03/03/2009 :
+	- NSXPCM :
+		- Ajout 'panel__'.
+		- Ajout à 'deck__' de 'SetSelectedPanel( deck__ &)'.
+
+28/02/2009 :
+	- NSXPCM :
+		- Enrichissement/modification 'tree__'.
+		- Enrichissement 'textbox__'.
+
+27/02/2009 :
+	- NSXPCM :
+		- Ajout 'element__'.
+
+22/02/2009 :
+	- NSXPCM :
+		- Ajouts 'SetAttribute(...)' prenant un 'nsIDOMNode *'.
+
+18/02/2009 :
+	- Géneral :
+		- Adaptation aux modifications de 'STR'.
+	- STR :
+		- 'Convert()' prend maintenant un 'buffer'.
+	- XML :
+		- Codage 'browser___'.
+		- Mise en oeuvre de 'browser___' dans l'ExtendedParse(...)'.
+
+08/02/2009 :
+	- XML :
+		- Correction faute ('ehanced' -> 'enhanced').
+
+02/02/2009 :
+	- NSXPCM :
+		- Ajout 'menuitem___'.
+		- Ajout 'browser__'.
+		- Ajout version 'GetAttribute(...)' avec un 'nsIDOMNode' comme paramètre.
+
+01/02/2009 :
+	- MSG :
+		- Extension du contournement de bogue VC++ 'GetMessage(A)()'.
+	- NSXPCM :
+		- 'Enable()' enlève l'attribut au ileu de le mettre à 'false'.
+
+26/01/2009 :
+	- NSXPCM :
+		- Réorganisation gestion évènements.
+		- Suppression évènement 'onbroadcast'.
+		- Ajout gestion évènement 'OnAttributeChange'.
+
+25/01/2009 :
+	- FNM :
+		- Le paramètre 'Nom' de 'BuidFileName()' peut être vide, auquel cas l'extension est juste rajoutée à la location
+		(aprés retrait séparateur de répertoire si nécessaire).
+	- NSXPCM :
+		- Ajout gestion évènement 'onbroadcast'.
+
+24/01/2009 :
+	- NSXPCM :
+		- Ajout 'Show()' et 'Hide()'.
+
+19/01/2008 :
+	- FLW :
+		- Correction  bogue 'reset(...)'.
+	- DBSTBL :
+		- Modification paramètres 'Seek' pour éviter ambigüité.
+		
+
+12/01/2009 :
+	- NSXPCM :
+		- Ajout de 'command__'.
+
+11/01/2009 :
+	- NSXPCM :
+		- Modification de 'deck__'
+		- Ajout de 'broadcaster__'.
+
+10/01/2009 :
+	- NSXPCM :
+		- Modification 'deck__'.
+
+09/01/2009 :
+	- NSXPCM :
+		- Ajout 'tree__' et 'deck__'.
+
+08/01/2008 :
+	- IDS :
+		- Renommage de 'RestorationNew(...)' en 'New(...)'.
+	- Géneral :
+		- Adaptation aux modifications bibliothèque 'IDS'.
+
+06/01/2009 :
+	- NSXPCM :
+		- Ajout 'ehanced_parser___'.
+	
+03/01/2009 :
+	- NSXPCM :
+		- Ajout gestion de l'évènement 'onselect'.
+		- Enrichissement de l'objet 'listbox__' avec des fonctions dédiées.
+
+01/01/2009 :
+	- NSXPCM :
+		- Ajout 'repository[_]'.
+
+31/12/2008 :
+	- CSDSCM :
+		- Ajout fonction 'Init()'.
+
+29/12/2008 :
+	- DBSxxx :
+		- Extension de l'utilisation du 'SkipLevel'.
+
+27/12/2008 :
+	- DBSxxx :
+		- Ajout 'SkipLevel' dans la fonction de comparaison.
+
+26/12/2008 :
+	- DBSTBL :
+		- Ajout 'mdr::mode__ Convert( mode__ Mode )'.
+
+21/12/2008 :
+	- NSXPCM :
+		- Remplacement des "@mozilla/..." par leur 'CONTRACTID' quand possible.
+	
+
+18/12/2008 :
+	- NSXPCM :
+		- Ajout élément 'html_anchor' (correspondant au '<a ...></a>').
+
+...
+
+16/12/2008 :
+	- CSDUCL
+		- Rejout fonction 'reset(...)', constructeur et destructeur.
+	- CSDSNC :
+		- Correction bogues 'FWFDismiss(...)' et FWFSynchronize(...)'.
+	- FLW :
+		Remaniement des fonctions 'reset(...)' pour évéiter deux appels successifs de 'dismiss()' ou de 'sychronize().' sans lecture ou écriture de données.
+
+14/12/2008 :
+	NSXPCM :
+		- Ajout 'GetJSConsole(...)'.
+		- Ajout 'GetWindowInternal(...)'.
+		- Ajout 'IsClosed(...)'.
+		- Mise en place contournement bogue 'nsDOMWindowInternal' sour architecture ARMEL.
+
+11/12/2008 :
+	- NSXPCM :
+		- Rajout fonction 'Register(...)' avec autres paramètres.
+
+10/12/2008 :
+	- NSXPCM :
+		- Rajout gestion automatique des erreurs dans la gestion des évènements.
+		- Rajour diverses fonctions.
+
+09/12/2008 :
+	- NSXPCM :
+		- Ajout fonction 'Register(...)'.
+		- Ajout élément 'label'.
+
+08/12/2008 :
+	- NSXPCM :
+		- Ajout de la gestion des évènements.
+
+05/12/2008 :
+	- NSXPCM :
+		- Ajout fonction 'Log(...)'.
+
+03/12/2008 :
+	- NSXPCM :
+		- Correction casse incorrecte dans le nom de fichiers d'entête inclus.
+
+02/12/2008 :
+	- NSXPCM :
+		- Création de 'GetService(...)'.
+
+09/11/2008 :
+	- IOF :
+		- Ajout 'virtual's manqaunt.
+
+05/11/2008 :
+	- NSXPCM :
+		- Modification des inclusions dans l'espoir de faciliter la mise en oeuvre de XPCOM.
+
+16/10/2008 :
+	- XML :
+		- Correction bogue ('&' manquant dans 'operator =(...)').
+		
+
+09/10/2008 :
+	- MSG :
+		- Adaptation aux modifications 'XTF'.
+	- RGSTRY :
+		- Adaptation aux modifications 'XTF' et 'XML'.
+
+07/10/2008 :
+	- TXMTBL :
+		- Adaptation aux modifications XTF.
+
+
+06/10/2008 :
+	- XML :
+		- Adaptation aux modifications XTF.
+	- XTF :
+		- Mise en oeuvre de 'coord__' à la place de 'Ligne' et 'Colonne'.
+
+17/09/2008 :
+	- XML :
+		- Rajout de la localisation des données (ligne et colonne).
+
+10/09/2008 :
+	- DTE :
+		- Ajout 'GetLabel(...)' a 'GetFormat(...)'.
+
+29/08/2008 :
+	- Géneral :
+		- Adaptations aux modification 'TOL' et 'FIL'
+
+27/08/2008 :
+	- Géneral :
+		- Adaptations aux modification 'TOL' et 'FIL'
+
+25/08/2008 :
+	- Géneral :
+		- Adaptations aux modification 'TOL' et 'FIL'
+
+24/08/2008 :
+	- LTF :
+		- Mise en oeuvre 'Freeze(...)'.
+
+22/08/2008 :
+	- Géneral
+		- Introduction des particularités liés au 64 bits.
+		- Adaptations aux modification 'FIL' et 'TOL'.
+	- BSO :
+		- Renommage de 'p_long__' en 'p_32bits__'.
+
+20/08/2008 :
+	- DIR :
+		- Mise en oeuvre 'DIR_INVALID_HANDLE'
+	- FLW :
+		- Optimisation fonction 'Copy(...)'.
+
+19/08/2008 :
+	- Géneral :
+		- Adaptations aux modifications 'TOL' et 'FIL'.
+	- DIR :
+		- Poursuite codage ...
+	- FIL :
+		- Récupération des fonctions relatives aux fichiers de la 'TOL'.
+		- Rajout 'IsDirectory(...)' et 'IsFile(...)'.
+	- FLW :
+		- Rajout fonction 'Copy(...)'.
+	- TOL :
+		- Déportation des fonctions relatives au fichiers vers 'FIL'.
+
+18/08/2008 :
+	- DIR :
+		- Correction entêtes manquants.
+		- Codage 'FindFirstFile(...)', 'FindNextFile(...)' et 'Close(...)'.
+
+09/06/2008 :
+	- CSDDLC
+		- Prise en compte de la plateforme Mac.
+		
+08/06/2008 :
+	- CSDBNC
+		- Prise en compte de la plateforme Mac.
+	- NSXPCM :
+		- Correction incongruité détectée par g++ V4.0.1
+
+30/06/2008 :
+	- NSXPCM :
+		- Ajout 'HTML(Open|Save)FileDialogBox(...)'.
+
+22/05/2008 :
+	- CPE :
+		- Mise en place 'CPE__C_VC9'.
+		- Dorénavant, une version inconnue du compilateur VC++ ne provoquera plus d'erreur.
+
+24/04/2008 :
+	- TXMTBL :
+		- Correction bogue location 'line_'.
+
+21/04/2008
+	- FLM :
+		- Introduction des macros 'FLM_NO_AUTOFLUSH' et 'FLM_NO_MT'.
+
+14/04/2008 :
+	- DBSIDX :
+		- Suppression 'DBSIDXGetMember()'.
+		- Simplification recherche post-initialisation d'un membre pour chercher la racine de 
+		l'arbre de l'index.
+	- DBSTBL :
+		- Avant de terminer l'initialisation d'un index, on s'assure que la table sous-jacente est
+		initalisée (avec la recherche de la racine de l'arbre de l'index, l'initialisation de l'index
+		ne se faisait pas correctement).
+	- FLM :
+		- Correction erreurs de compilation en mode mono-thread.
+
+09/04/2008 :
+	- DBSIDX :
+		- Ajout de la méthode 'DBSIDXGetMember()' pour éviter d'avoir à ouvrir les fichiers de la
+		structure (coûteux en temps) lors de l'initialisation de l'index.
+		- Suppression du paramètre 'Member', au profit du système ci-dessus.
+
+07/04/2008 :
+	- FLM :
+		- Ajout d'un verrou propre à chaque fichier.
+		- Refonte du 'flushage' automatique.
+
+03/04/2008 :
+	- Géneral :
+		- Adaptation aux modifications de 'UYM'.
+	- FLM :
+		- Mise en oeuvre d'un 'flushage' automatique.
+
+02/04/2008 :
+	- UYM :
+		- Remise en oeuvre de 'Store(...)' à la place de 'Store_(..)' (crée à des fins de test).
+	- Géneral :
+		- Adaptation aux modifications de 'UYM'.
+
+31/03/2008 :
+	- Géneral :
+		- Adptation aux modifications 'FLM' (devrait accèlèrer l'ouverture des fichiers).
+	- WLLIO :
+		- Ajout méthode ('IsSDTOUT()' et 'IsSTDERR()').
+		- Simplification gestion du 'FlushToDevice()'.
+
+27/03/2008 :
+	- PLLIO :
+		- Adaptation à la modification de 'WLLIO' (contournement temporaire).
+
+19/03/2008 :
+	- Géneral :
+		- Adaptation aux modifications 'WLLIO'.
+	- WLLIO :
+		- Ajout '_FlushToDevice', pour moduler l'action du 'Flush()'.
+
+18/03/2008 :
+	- FLF :
+		- Correction bogue du 'reset()' (mauvais ordre d'appel du 'reset()' de la classe mère'.
+	- FLM :
+		- Une écriture force maintenant le vidage des classes.
+	- IOF :
+		- correction bogue 'reset()' ('reset()' d'un membre manquant).
+	- WLLIO :
+		- Réactivation en oeuvre de 'Synchronize(...)'. (nota : '_commit()' force le système
+		d'exploitation à écrire sur le disque, et non pas la bibliothèque à vider ses caches,
+		car les appels bas niveau de lma bibliothèque ('_write(...)') ne sont 'bufférisé').
+
+17/03/2008 :
+	- DBSIDX :
+		- Les '.edr' (stockage de la racine de l'arbre de l'index) ne sont plus utilisés.
+
+20/01/2008 :
+	- LGG :
+		- Ajout du néerlandais et du portugais (pour 'gesbib').
+
+07/01/2008 :
+	- CVM :
+		- Changements normalement sans effet dans la méthode 'Allocate(...)' dans l'espoir de contourner
+		ce qui semble un bogue de la fonction 'realloc(...)' (échec d'un 'realloc( NULL, 2048)' alors
+		qu'il y a suffisamment de mémoire ???).(Mise à jour : la fonction 'realloc(...)' n'était pas en cause,
+		mais la réaction du debugger au bogue est trompeuse).
+
+23/01/2008 :
+	- DTE :
+		- Correction bogue 'AddMonth(...)'.
+		- Ajout 'SubMonth(...)'.
+
+14/12/2007 :
+	- BTF :
+		- Ajout 'const' manquant.
+
+29/11/2007 :
+	- ERR :
+		- Ajout 'uObsolete', signalant la tentative de mise en oeuvre d'un code obsolete.
+
+19/11/2007 :
+	- CCH :
+		- Correction bogue 'DumpCache_(...)'.
+
+29/10/2007 :
+	- DBSTBL :
+		- Correction bogue 'SwitchMode(...)'.
+
+26/10/2007 :
+	- FNM :
+		- Ajout de test en 'debug' pour faciliter la détection de bogues.
+
+23/10/2007 :
+	- NSXPCM :
+		- Ajout de la gestion de l'évènement 'onblur' (inverse de 'onfocus').
+
+22/10/2007 :
+	- Géneral :
+		- Adaptation aux modifications 'FNM'.
+	- FNM:
+		- Ajout 'GetExtension(...)'.
+		- Mise en oeuvre de 'FNM_BUFFER__' pour éviter oubli 'free(...)' sur pointeurs retournées.
+	- TOL :
+		- Correction 'operator *(..)' de '_core_pointer<...>'.
+
+10/10/2007 :
+	- STR :
+		- Un 'string' peut maintenant être initialisé avec lui-même sans que cela l'initialise.
+
+06/10/2007 :
+	- Géneral :
+		- Adaptation modifications 'MMI' et 'MMM'.
+
+05/10/2007 :
+	- Géneral :
+		- Adaptation modifications 'MMI' et 'MMM'.
+	- MMM
+		- Mise en place définitive du nouvel algorithme ('MMM2') de gestion de la 'multimémoire'.
+	- MMI :
+		- Modification pour ne plus avoir à utilisee la sous-bibliothèque 'MMISUB'.
+
+03/10/2007 :
+	 - DIR :
+		- Ajout 'ChangeDir(...)'.
+
+25/09/2007 :
+	- STR :
+		- Amélioration de l'algorithme de détection de dépassement.
+
+20/09/2007 :
+	- FNM :
+		- Modification de 'BuildFileName(...)' pour traiter le cas où le paramètre 'Nom' est une localisation absolue
+	- TOL :
+		- Déplacement 'PatchSignalHandlingForWindowsService(...)' vers 'WINTOL'.
+	- WINTOL :
+		- Codage (?#!* de service Windows !).
+		- Récupération 'PatchSignalHandlingForWindowsService(...)' de 'TOL'.
+
+19/09/2007 :
+	- CIO :
+		- Rajout 'IsInitialized(...)'.
+	- ERR :
+		- Adaptation à la bibliothèque 'CIO'.
+	- TOL :
+		- Cerrection bogue potentiel (delete|free)_pointer___.
+	- WINTOL :
+		- Le service est maintenant configuré en démarrage automatique par défault.
+		- Specification possible du nom du service, de son nom affiché et de sa description.
+		- Modification du gestionnaire de signaux pour éviter qu'une fermeture de session ne coupe le service.
+
+18/09/2007 :
+	- CSNBNS :
+		- Modification pour faciliter mise en place en tant que service Windows.
+	- CSNSNS :
+		- Modification pour faciliter mise en place en tant que service Windows.
+
+13/09/2007 :
+	- CSDBNS :
+		- Généralisation 'TimeOut'.
+	- CSDSNS :
+		- Ajout paramètre 'TimeOut'.
+		
+12/09/2007 :
+	- Géneral :
+		- Création de 'WINTOL', bibliothèque facilitant la mise en place d'une application en tant que service Windows.
+
+11/09/2007 :
+	- CIO :
+		- L'initialization peut ne peut plus être faite de manière automatique.
+		- Possibilité de lancer explcitement l'initialisation si elle n'a pas été faite de manière automatique.
+
+10/09/2007 :
+	- CTN :
+		- Correction pour éviter une erreur signalée par g++ (V3.4.4).
+	- DTFPTB :
+		- Correction bogue calcul taiile.
+
+07/09/2007 :
+	- XML :
+		- Correction bogue affichage chemin lors d'une erreur dans un fichier situé dans un sous-répertoire inclus par un fichier lui-même dans un sous-répertoire.
+
+06/09/2007 :
+	- CCH :
+		- Correction bogue vidage cache au mauvais endroit.
+
+10/08/2007 :
+	- Géneral :
+		- Adaptation aux modifications 'IOP'.
+	- CSLIO :
+		- Modification pour que le retour chariot ne soit pas bufferisé lorsqu'on lit l'entrée standard ('stdin').
+	- IOP :
+		- Mise en oeuvre de la 'PLLIO' sous cygwin, au lieu de 'CSLIO'.
+	- XTF :
+		- Correction du bogue retardant la détection d'une cellule lorsque le retour chariot est constitué d'un seul caractère.
+
+09/08/2007 :
+	- TOL :
+		- Utilisation de 'TOL__MS' au lieu de 'CPE__T_MS'.
+
+01/07/2007 :
+	- TOL :
+		- Ajout 'PatchSignalHandlingForWindowsService(...)'.
+
+30/07/2007 :
+	- MMM2 :
+		- Correction bogue 'Reallocate(...)' lorsque taille nulle.
+
+27/07/2007 :
+	- TOL :
+		- Retrait de la surcharge de 'SIGBREAK', car ce signal est lancé lors d'une déconnection,
+		  ce qui lance la fermeture du logiciel même lorsqu'il s'agit d'un service. La documentation sur le sujet
+		  prête parfois à confusion, mais il semblerait que ce soit 'SIGINT' qui réagisse au 'Ctrl-C'.
+
+26/07/2007 :
+	- MMM2 :
+		- Correction bogue 'Shrink(...)' lorsque fragment 'linké' complètement supprimé.
+
+19/07/2007 :
+	- Géneral :
+		- Adaptations aux modifications bibliothèque 'DBSBSC'.
+	- DBSBSC :
+		- Ajout paramètre 'IgnoreAdditionalFiles' méthode 'DBSBSCCompleteInitialization(...)'.
+	- DBSTBL :
+		- Renommage '_ITest(...)' en '_ConnectIndexToFileIfNot(...)'
+		- Ajout paramètre 'DontConnectToFiles' à la méthode '_I(...)'.
+	- MMM2 :
+		- Correction bogue '...Shrink...(...)' interdisant les 'linked fragment'.
+
+15/07/2007 :
+	- CTN :
+		- Ajout méthode 'Insert(...)'.
+	- MMI :
+		- La taille d'une sous-mémoire n'est plus stockée dans le 'descripteur__' mais récupèré de la multimémoire.
+		- Ajout de 'Shift(...)'.
+
+13/07/2007 :
+	- MMM2 :
+		- Correction bogue 'Shrink...(...)'.
+
+12/07/2007 :
+	- Géneral :
+		- Correction erreurs détectées par g++.
+	- MMM2 :
+		- Quelques statistiques sont affichées par 'DisplayStructure()'.
+
+11/07/2007 :
+	- Géneral :
+		- Adaptation aux modifications 'AEM'.
+	- AEM :
+		- Mise aux normes du type 'mode(__)'.
+		- Ajout méthode protègée 'Preallocate'.
+		- Réorganisation.
+	- BCH :
+		- Ajout méthode protègée 'Preallocate'.
+		- La copie alloue maintenant le strict minimum dans l'objet cible.
+	- MMI :
+		- Ajout paramètre 'Mode' manquant.
+		- La copie alloue maintenant le strict minimum dans l'objet cible.
+		
+	
+10/07/2007 :
+	- CTN :
+		- Adaptation à la 'MMM' V2.
+	- MMM0 :
+		- Par défaut, c'est la V2 qui est utilisée.
+	- MMM2 :
+		- Correction de bogues divers.
+	
+09/07/2007 :
+	- FIL :
+		- Certains items de la bibliothèque 'IOP' sont maintenant directement accessible à partir de la bibliothèque 'FIL'.
+	- FLM :
+		- Ajout 'ReleaseInactiveFiles(...)'.
+	- MMI :
+		- Adaptation à la 'MMM' V2.
+	- MMM2 :
+		- Publication.
+	
+03/07/2007 :
+	- STR :
+		- Ajout test sur le nombre d'octets demandés méthode 'Convert(...)'.
+	
+01/07/2007 :
+	- CLNARG :
+		- Changement affichage réalisé par différentes méthodes/fonctions.
+	- TXF :
+		- Ajout fonction 'pad'.
+	
+30/06/2007 :
+	- STR :
+		- Réorganisation des paramètres des méthodes 'To(U|S)(L|S|B)(...)'.
+	- TOL :
+		- Ajout 'GetEmbedeDecimalPoint()'.
+	
+29/06/2007 :
+	- STR :
+		- Gestion de la valeur 'NULL' pour certains paramètres.
+	
+28/06/2007 :
+	- STR :
+		- Adaptation aux modifications bibliothèque 'TOL'.
+	- TOL :
+		- Ajout 'operator *()' aux macros définissant les version 'autonomes' des objets dynamiques (macros 'E_AUTOx(...)').
+	
+26/06/2007 :
+	- SSNMNG :
+		- Correction d'un bogue qui rendait les sessions valides en permanence.
+
+22/06/2007 :
+	- BCH :
+		- Correction pour mieux coller à la norme.
+	- UYM :
+		- Retrait de ce qui a trait à la compilation conditionnelle par rapport à la bibliothèque 'FLM'.
+	
+21/06/2007 :
+	- Géneral :
+		- Suite de ce qui a été commencé le 20/06/2007.
+	
+20/06/2007 :
+	- Géneral :
+		- Adaptation aux modifications de la bibliothèque 'FML'.
+		- Adaptation aux modifications de la bibliothèque 'UYM'.
+	- FLM :
+		- Chaque 'mémoire' se voit affecter un gestionnaire de fichiers simultanéments ouverts particulier et non plus celui par défaut.
+	- UYM :
+		- Ajout inclusion conditionnelle de la bibliothèque 'FLM' pour éviter problème d'inclusion récursive.
+	
+12/06/2007 :
+	- DBSTBL :
+		- Reforcement test cohérence mode.
+	
+07/06/2007 :
+	- MMI :
+		- Correction bogue 'Initialize(...)'.
+	- NSXPCM :
+		- Suppression de 'GetInteface(...)' apparament inutile et source de bogue (confusion avec 'QueryInterface(...)').
+	
+05/06/2007 :
+	- RGSTRY :
+		- Remplacement du paramètre 'Exists' par son opposé 'Missing' car moins susceptible de provoquer des bogues.
+		
+26/05/2007 :
+	- STR :
+		- Correction bogues conversion en entier.
+	
+24/05/2007 :
+	- BCH :
+		- Correction bogues et simplifications.
+
+23/05/2007 :
+	- FNM :
+		- Correction bogue construction nom de fichier ('BuildFileName(...)').
+	
+22/05/2007 :
+	- Géneral :
+		- Adaptation modifications bibliothèque 'MMM(0)'.
+	- MMM :
+		- Déportation définition version 'MMM' vers 'MMM0'.
+	- MMM(0) :
+		- Importation définition version 'MMM' depuis 'MMM'.
+		- Création 'MMM_UNDEFINED_DESCRIPTOR'.
+	- UYM :
+		- Ajout méthode 'Put(...)'.
+		- Ajout de l'opérateur '=' pour détecter son utilisation (ce qui est interdit) à l'exécution.
+	
+21/05/2007 :
+	- Géneral :
+		- Adaptation modifications bibliothèque 'MMM'.
+	
+20/05/2007 :
+	- MMM :
+		- Ajout possibilité de basculer entre V1 et V2.
+	- TYM :
+		- Pour faciliter le codage de la nouvelle bibliothèque 'MMM', inclusion de 'mmmO.h' au lieu de 'mmm.h'.
+
+17/05/2007 :
+	- CVM :
+		- Correction erreurs typographiques.
+	- XML :
+		- Ajout 'xsNestingOverflow'.
+		- Correction bogue d'imbrication trop profonde.
+		- Correction bogue d'inclusion de fichier avec chemin relatif.
+
+15/05/2007 :
+	- NSXPCM :
+		- Ajout 'listbox__'.
+
+11/05/2007 :
+	- XML :
+		- Ajout de la définition du 'namespace' par défaut pour 'extended parser'.
+
+26/04/2007 :
+	- NSXPCM :
+		- Ajout paramètre 'ErrHandle' fonction 'QueryInterface(...)'.
+		- Ajout test fonction 'Handle(...)'.
+	- SCK :
+		- Par défaut, il n'y a plus de 'timeout', que l'on soit ou non en mode 'debug'.
+
+25/04/2007 :
+	- NSXPCM :
+		- Ajout fonction 'HasAttributes(...)'.
+
+23/04/2007 :
+	- DTE :
+		- Correction bogue détection année.
+	- RGSTRY :
+		- Adaptation aux modifications bibliothèque 'XML'.
+	- TOL :
+		- Annulations des dernière modifications.
+	- XML :
+		- Changement de l'ordre des paramètres pour certaines fonctions.
+		- Adaptation aux modifications bitliothèque 'TOL4.
+
+22/04/2007:
+	- TOL :
+		- Correction bogue macro 'E_RRODISCLOSE__(...)'.
+	- XML :
+		- Correction bogue non-appel de 'XMLStartTagClosed(...)' avec '<tag/>' (sans attribut).
+		- '[Extended]|Parse(...)' retourne maintenant un code d'erreur, et non plus seulement un booléen.
+
+20/04/2007 :
+	- DTE :
+		- Ajout du format 'fYYYYMMDD' (ex:'2007-04-20').
+		- On doit maintenant préciser le format lors de l'initalisation d'une date.
+
+19/04/2007 :
+	- FIL :
+		- Correction bogue sous GNU/Linux empêchant l'ouverture d'un fichier en lecture/écriture si le fichier n'existe pas.
+
+18/04/2007 :
+	- XML :
+		- Ajout définition de macros locales.
+
+17/04/2007 :
+	- DBSIDX :
+		- Ajout 'StrictGreater(...)'
+	- DBSTBL :
+		- Ajout 'GetStrictGreater(...)'
+	- IDXBTQ :
+		- Ajout 'IsTree[Lesser|Greater](...)'.
+	- STK:
+		- Ajout 'E_XCSTACK[t][_]'.
+		- Ajout méthode 'Pop()' (sans argument).
+
+16/04/2007 :
+	- IDXBTQ :
+		- Ajout 'GetTree[Parent|Greater|Lesser](...)'.
+	- IDXBTR :
+		- Ajout 'GetParent(...)'.
+
+11/04/2007 :
+	- XML :
+		- Correction bogue empêchant d'avoir une macro portant le même nom qu'une variable.
+
+-----------
+Publication
+-----------
+
+10/04/2007 :
+	- FIL :
+		- Correction bogue, sous GNU/Linux, conduisant à affecter des droits aléatoires à un fichier nouvellement crée.
+	- TOL :
+		- Correction bogue instruction préprocesseur concernant la version 'single threaded' des fonctions 'Date(...)', 'Time(...)' et 'DateAndTime(...)'.
+
+08/04/2007 :
+	- XML :
+		- Rajout contrôle sur la détection d'un 'namespace'.
+		- Correction bogue lorsque le 'prolog' n'est pas au début du fichier.
+		- Correction bogue détection erreur lors d'une inclusion de fichier.
+
+06/04/2007 :
+	- XML :
+		- Correction bogue mauvaise initialisation '_ExpandIsHRef'.
+	- WLLIO :
+		- Amélioration gestion fin de fichier (EOF) avec stdin.
+	- PLLIO :
+		- Amélioration gestion fin de fichier (EOF) avec stdin.
+
+05/04/2007 :
+	- XML :
+		- Ajout paramètre 'Indent' à la fonction 'Normalize(...)'.
+		
+03/04/2007 :
+	- XML :
+		- Ajout 'XMLProcessingIntruction(...)'.
+
+02/04/2007 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèque 'XML'.
+	- FNM :
+		- Modification liste 'type'.
+		- 'type' -> 'type__'.
+		- Modification fonction 'MakeFileName(...)'.
+		- 'MakeFileName(...)' -> 'BuildFileName(...)'
+	- RGSTRY :
+		- Mise en place de la gestion des 'xcf:...' par la bibliothèque 'XML' (utilisation de 'xml::ExtendedParse(...)'.
+	- XML :
+		- Ajout prise en compte répertoire de base pour l'inclusion de fichiers.
+
+28/03/2007 :
+	- EPSMSC :
+		- Ajout paramètre 'Flow' fonction 'PrintLicense(...)'.
+	- MMI :
+		- Mise en place contournement problème 'CreateFile(...)' du à VC++.
+
+26/03/2007 :
+	- CTN :
+		- Correction 'SubInit(...)'.
+
+25/03/2007 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèque 'LST'.
+	- AEM :
+		- Amélioration métohod( 'Init(...)'.
+	- CTN :
+		- Correction bogue 'Connect(...)'.
+	- LST :
+		- Prise en compte du 'timestamp' des fichiers associés lors de la sauvegarde du fichier contenant les emplacements libres.
+
+24/03/2007 :
+	- LST :
+		- Correction bogue allocation.
+
+21/03/2007 :
+	- Géneral :
+		- Ajout méthode 'CreateFile(s)()' dans les '..._file_manager___' ou elle n'existait pas.
+	- TOL :
+		- Ajout 'CreateFile(...)'.
+
+20/03/2007 :
+	- Géneral :
+		- Adaptation modifications bibliothèque 'CTN'.
+	- CTN :
+		- 'ReleaseFile()' -> 'ReleaseFiles()'
+	- IDXBTQ :
+		- Ajout méthode 'Exists()' classe 'index_file_manager___'.
+
+19/03/2007 :
+	- UYM :
+		- Modification pour éviter des 'warnings'.
+
+07/03/2007 :
+	- CTN :
+		- Adaptations aux modifications 'MMI'.
+	- MMI :
+		- Renommage 'Allocate' en 'Reallocate' : permet déviter certains bogues.
+
+27/02/2007 :
+	- MMI : 
+		- Recodage en utilisant un 'bunch' au lieu de simplement une 'tym::memory'.
+		
+	- BCH :
+		- Recodage pour autoriser modifications 'MMI'.
+
+26/02/2007 :
+	- MMM :
+		- Recodage.
+
+22/02/2007 :
+	- FLM :
+		- Ajout méthode 'CreateFile()'.
+	- LST :
+		- Correction problème de 'namespace'.
+
+21/02/2007 :
+	- CCH :
+		- Modifications (ajout des 'this') pour que la bibliothèque soit compilable sous g++ v3.4.4
+		- Correction de bogues.
+	- LST :
+		- Corection problème de paramètres.
+	- NSXPCM :
+		- Toutes les méthodes virtuelles sont rendues pures.
+		- Ajout de la gestion de l'évènement 'onfocus'.
+
+20/02/2007 :
+	- BCH :
+		- Changement propagation du 'size_handler'.
+
+19/02/2007 :
+	- CCH :
+		- Réactivation ...
+		- Adaptation à 'g++'.
+	- CPE :
+		- Sous 'cygwin', on est maintenant, par défaut, dans un contexted 'single thread'.
+	- MDR :
+		- Correction définition 'MDR_ROW_T_MAX'.
+
+16/02/2007 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèque 'LST'.
+		- Généralisation et remaniement des '..._file_manager___'.
+
+15/02/2007 :
+	- Géneral :
+		- Adaptation aux modifications bibliothèque 'LST'.
+		- Généralisation et remaniement des '..._file_manager___'.
+	- CTN :
+		- Ajout 'GetStaticsItemSize()'.
+	- DBT :
+		- 'DBTAllocate()' devient 'virtual pure' et prend un paramètre supplémentaire (de type 'aem::mode').
+	- LST :
+		- Ajout méthode 'Allocate()'.
+		- 'DBTAllocate()' est maintenant 'virtual pure' et prend un paramètre supplémentaire (de type 'aem::mode').
+	- TOL :
+		- Macro 'XNAVt()'  est enrichie de la méthode 'Allocate()'.
+
+14/02/2007 :
+	- Géneral :
+		- Généralisation et remaniement des '..._file_manager___'.
+	- FLM :
+		- Renommage 'Size' en 'FileSize' pour éviter certaines ambigüités.
+	- TYM :
+		- 'GetItemSize()' devient 'static'.
+	- UTM :
+		- Adaptation modification bibliothèque 'FLM'.
+
+13/02/2007 :
+	- Géneral :
+		- Généralisation des '..._file_manager___'.
+	- NSXPCM
+		- Enrichissement.
+
+24/02/2007 :
+	- DTR :
+		- Ajout de la notion de niveau ('Level').
+	- XTF :
+		- On peut maintenant forcer la valeur des membres 'Line' et 'Column'
+
+21/01/2007 :
+	- STR :
+		- Introduction de la notion de base pour les conversions de nombres.
+	- XML :
+		- Correction bogue commentaire.
+
+20/01/2007 :
+	- DTR :
+		- 'HasFirst()' et 'HasLast()' sont tous deux remplacés par 'HasChild()'.
+
+11/01/2007 :
+	- RGSTRY :
+		- Simplification.
+		- Mise en oeuvre des balises 'xcf:set' et 'xcf:ifeq'.
+
+10/01/2007 :
+	- XML :
+		- S'il n'y a pas d'espace entre deux attributs, une erreur est maintenant génèrée.
+		- Correction bogue appel 'XMLStartTagClosed()'
+
+07/01/2007
+	- XML :
+		- '<... />' appelle maintenant 'StartTagClosed()' avant 'EndTag()'.
+
+03/12/2006 :
+	- Géneral :
+		- Adaptation à VC++ 8.
+
+20/11/2006 :
+	- FLM :
+		- Ajout gestion 'FLM_[_]MAX_FILE_AMOUNT'.
+		- Rendue 'thread-safe'.
+
+19/11/2006 :
+	- CSDBNS :
+		- Ajout de code pour traquer bogue apparu sous Linux concernant cette bibliothèque.
+
+16/11/2006 :
+	- Géneral :
+		- Correction bogues apparus lors de la compilation sous Linux.
+	- RGSTRY :
+		- Correction bogue apparus suite modification 'XML'.
+
+15/11/2006 :
+	- Géneral :
+		- Correction bogues apparus lors de la compilation sous Linux.
+
+07/11/2006 :
+	- XML :
+		- Le parser ne parse plus que le contenu de la première balise rencontrée et non plus jusqu'à la fin du 'flow'.
+		- La position d'un éventuelle erreur n'est plus récupèrée à travers les paramètres, mais directement par l'objet 'flow'.
+	- XTF :
+		- Modifications pour faciliter les modification bibliothèque 'XML'.
+
+30/10/2006 :
+	- Géneral :
+		- Mise en place des routines pour le stockage des données dans fichier (stockage en temps réel).
+
+27/10/2006 :
+	- Géneral :
+		- Mise en place des routines pour le stockage des données dans fichier (stockage en temps réel).
+
+26/10/2006 :
+	- Géneral :
+		- Mise en place des routines pour le stockage des données dans fichier (stockage en temps réel).
+
+19/10/2006 :
+	- FLM :
+		- Ajout méthode 'Drop()'.
+	- IDXBTR :
+		- Correction bogue 'Delete()'.
+
+15/10/2006 :
+	- BCH :
+		- Codage '[ReadFrom|WriteTo]Flow()'.
+		- Adaptation aux modifications bibliothèque 'BSO'.
+	- BSO :
+		- Ajout fonction 'Compare()'.
+	- DTE :
+		- Adaptation modifications bibliothèque 'BSO'.
+	- STR :
+		- Adaptation modifications bibliothèque 'BSO'.
+	- TYM :
+		- Codage '[ReadFrom|WriteTo]Flow()'.
+	- UYM :
+		- Codage '[ReadFrom|WriteTo]Flow()'.
+
+09/10/2006 :
+	- NSXPCM :
+		- Ajout méthode 'DeleteListboxContent()'.
+		- Changement type argument 'QueryInterface()'.
+		- Ajout fonction 'SelectListboxItem()'.
+
+08/10/2006 :
+	- LCK :
+		- Ajout méthodes 'Get[Exclusive|Shared]Access()' et 'Release[Exclusive|Shared]Access()'.
+
+07/10/2006 :
+	- Géneral :
+		- Création DBSBSC.
+		- Adaptation aux modifications 'MDR'.
+	- MDR :
+		- Mise aux normes enum 'mode'.
+
+06/10/2006 :
+	- LCK :
+		- Ajout classe '[exclusive|shared]_access___'.
+	- TOL :
+		- Ajout de la macro 'E_TTYPEDEF___'.
+
+03/10/2006 :
+	- MSG :
+		- Correction bogue apparaissant en mode 'Release'.
+
+28/09/2006 :
+	- DBSTBL :
+		- Suppression méthode 'SetDelay()' (pris en charge par 'Init()').
+
+27/09/06
+	- DBSCTT :
+		- Correction bogue objet '_cache_'.
+	- DBSIDX :
+		- Ajout méthode 'CompareTreeAndQueue()'.
+	- IDXBTQ :
+		- Ajout méthode 'Compare()' nécessitée par modification 'DBSIDX'.
+	- IDXBTR :
+		- Ajout méthode 'Compare()' nécessitée par modification 'IDXBTQ'.
+	- NSXPCM :
+		- Ajout quelques fonctions.
+
+25/09/2006 :
+	- BTR :
+		- Adaptation aux particularités de le 'DTR'.
+	- DTR :
+		- Correction bogue 'Become[First|Last]()'.
+	- STR :
+		- Correction bogue méthode 'Convert()'.
+	- TOL :
+		- Réécriture fonction 'FileExists()' pour s'appuyer sur la fonction 'stat()'.
+
+24/09/2006 :
+	- EPEIOS :
+		- Mise en place définition conditionelle de 'NONE'.
+	- FLM :
+		- Correction bogue fonction d'allocation.
+		- Mise en oeuvre du contrôle automatique du nombre de fichiers simultanément ouverts.
+	- TOL :
+		- Correction problème ouverture intempestive fichier lors de l'allocation.
+	- UYM :
+		- Rajout définition conditionelle de 'NONE'.
+
+18/09/2006 :
+	- CVM :
+		- Modification pour adaptation modification 'MDR'.
+	- IDXBTR :
+		- Suppression algorithme 'red-black'.
+	- MDR :
+		- L'utilisation de la mémoire conventionelle (RAM) ne passe plus par des appels a des fonctions virtuelles.
+	- QUE :
+		- Rajout méthode 'IsMember()'.
+
+07/09/2006 :
+	- BCH :
+		- Correction.
+
+04/09/2006 :
+	- NSXPCM :
+		- Codage nouvelles fonctions.
+
+27/08/2006 :
+	- Géneral :
+		- Creation 'DBSTBL'
+
+26/08/2006 :
+	- Géneral :
+		- Codage 'DBSxxx'.
+
+23/08/06
+	- Géneral :
+		- Correction erreurs apparus lors d'une compilation sous Linux.
+
+21/08/2006 :
+	- BTR :
+		- Implémentation des fonctions de nouvelles fonctions nécessaire à la modification de 'IDXBTR'.
+	- IDXBTQ
+		- Adaptation aux modifications 'IDXBTR'.
+	- IDXBTR :
+		- Implémentation de l'algorithme 'red-black tree'.
+	- SSNMNG
+		- Adaptation aux modifications 'IDXBTQ'.
+
+20/08/2006 :
+	- BTR :
+		- Implémentation des fonctions de nouvelles fonctions nécessaire à la modification de 'IDXBTR'.
+	- IDXBTR :
+		- Implémentation de l'algorithme 'red-black tree'.
+
+
+18/08/2006 :
+	- BTR :
+		- Implémentation des fonctions de nouvelles fonctions nécessaire à la modification de 'IDXBTR'.
+	- IDXBTR :
+		- Implémentation de l'algorithme 'red-black tree'.
+
+17/08/2006 :
+	- IDXBTQ :
+		- Amélioration de l'ergonomie.
+	- TOL :
+		- Ajout fonction 'RemoveFile()'.
+
+16/08/2006 :
+	- CSLIO :
+		- Ajout méthode 'Size'.
+	- FLM :
+		- Correction erreur sur nom classes.
+	- FLW :
+		- Ajout méthode 'EOFD()' avec paramètre taille.
+	- LSTBCH :
+		- Amélioration ergonomie.
+	- WLLIO :
+		- Ajout méthode 'Size'.
+
+15/08/2006 :
+	- IDXQUE :
+		- Suppression méthode 'MarkAsSame', source de bogues.
+	- IDXBTR
+		- Suppression méthode 'MarkAsSame', source de bogues.
+	- IDXBTQ
+		- Suppression méthode 'MarkAsSame', source de bogues.
+
+14/08/06 
+	- Géneral :
+		- Début codage de la version portable de différentes bibliothèques.
+
+13/08/2006 :
+	- DTFPTB :
+		- Améliorations.
+		
+
+11/08/2006 :
+	- Géneral :
+		- Corrections bogues apparus suite aux modifications 'MDR'.
+
+10/08/2006 :
+	- CSLIO :
+		- Correction bogue 'Seek'.
+	- FIL :
+		- Correction bogue paramètre 'Mode'.
+
+09/08/2006 :
+	- CPE :
+		- Correction oublie test 'CPE_ST' pour 'cygwin'.
+	- CTN :
+		- Petite modification dû aux changement dans 'MMI'.
+	- MMI :
+		- Suppression d'un test en mode débogage qui n'avait pas de sens.
+
+07/08/2006 :
+	- Géneral :
+		- Déplacement test capacité en mode débogage de 'UYM' vers 'MDR'.
+		- Adaptation aux modifications 'MDR' et 'UYM'.
+
+17/07/06
+	- CIO :
+		- Adaptation aux modifications de la bibliothèque 'CPE'.
+	- CSDSNC :
+		- Correction pb utilisation bibliothèque 'MTX' même si pas en contexte multitâche.
+
+13/07/2006 :
+	- BSO :
+		- LA conversion d'un '...float__' n'utilise plus la notation exponentielle.
+	- ERR :
+		- Adaptation aux modifications 'CPE' (voir 30/06/06).
+
+04/07/2006 :
+	- NSXPCM :
+		- Ajout fonctions 'CloneNode()', 'GetPreviousSibling()' et 'GetNextSibling()'
+
+30/06/2006 :
+	- CPE :
+		- Simplification.
+
+24/06/2006 :
+	- Géneral :
+		- Création 'FWF' pour remplacer 'FLF'.
+		- Création 'IOP'.
+		- Adaptation aux modifications des différents bibliothèques.
+	- FIL :
+		- Déportation de ce qui concerne les 'flow's dans 'FLF'.
+		- Déportation de 'file___' vers 'FLM'
+	- FLF :
+		- Déportation de ce qui concerne les 'flow functions' dans 'FWF'.
+		- Importation de ce qui concerne les 'flow's de 'FIL'.
+	- FLM :
+		- Importation d'une partie de 'FIL'.
+
+
+13/06/06
+	- Géneral :
+		- Adaptation aux modifications dans 'FLF'.
+	- TOL :
+		- Ajout fonction 'SignalExits()'.
+	- FLF :
+		- Toutes les méthodes virtuelles doivent maintenant être surchargées.
+
+05/06/2006 :
+	- Géneral :
+		- Création bibliothèque 'BFL' (Bit FLow) de lecture/écriture par bit.
+	- FLW :
+		- Rajout méthode 'GetCurrentCacheDatum'.
+		- Renommage des variables de la classe 'oflow__' pour la rendre conforme à la norme.
+
+26/05/2006 :
+	- BSO :
+		- Simplification de la classe 'bso::sign__' pour éviter des ambiguïtés..
+	- LCK :
+		- Correction erreurs typographiques.
+
+25/05/2006 :
+	- Géneral :
+		- Adaptations aux changements dans 'FLW'.
+	- FLF :
+		- Création (voir 'FLW').
+	- FLW :
+		- Déportation des classes '...flow_functions___' vers 'LFL'.
+
+22/05/2006 :
+	- RGSTRY :
+		- Correction bogue 'xcf:bloc' successifs.
+
+02/05/2006
+	- ERR :
+		- Ajout 'lNotImplemented'.
+
+26/04/2006
+	- NSXPCM :
+		- Ajout fonction 'InsertBefore'.
+
+19/04/2006
+	- RGSTRY :
+		- Correction bogue.
+
+12/04/2006 :
+	- RGSTRY :
+		- Ajout du booléen 'Append' pour la méthode 'SetValue()'.
+
+02/04/2006 :
+	- RGSTRY :
+		- Utilisation du namespace 'xcf' (XML-based configuration file) à la place de 'exml'.
+		- Introduction de 'xcf:bloc".
+		- '<xcf:define>' et '<xcf:expand> (en combinaison avec 'xml:bloc') peuvent maintenant
+		être utilisé avec un simple texte, et non plus simplement avec un arbre XML.
+		- 'xcf:expand' se voit attribuer un nouvel attribut ('href') en plus de 'select' déjà existant,
+		permettant d'inclure un fichier.
+		- Remaniement assez conséquent pour implanter toutes ces fonctionnalités.
+		
+30/03/2006 :
+	- FLX :
+		- Correction bogue suite aux modifications bibliothèque 'FLW'.
+	- XML :
+		- Correction bogue apparaissant avec l'arbre XML suivant :
+		"<A><B/>Valeur</A>" (balise vide syntaxe '<.../>' suivi d'une valeur).
+
+27/03/2006 :
+	- NSXPCM :
+		- Ajout gestion des types 'ulongs' et 'slongs'.
+
+15/03/2006 :
+	- DTE :
+		- Le test de la validité d'une date est maintenant correcte !
+
+14/03/2006 :
+	- BCH :
+		- Ajout méthode 'Top()' (pour aller avec la méthode 'Pop()').
+
+12/03/2006 :
+	- FLW :
+		- Modification pour éviter supprimer des 'warning' de g++.
+	- TAGEXP :
+		- Adaptation au modifications bibliothèque 'FIL'.
+
+06/03/2006 :
+	- RGSTRY :
+		- Correction bogue recherche valeurs multiples.
+
+04/03/2006 :
+	- CPE :
+		- Ajout macro 'CPE__LINUX'.
+		- Correction bogue 'CPE__MS' dans CYGWIN.
+	- MTX :
+		- Mise en oeuvre d'opérateur atomiques.
+
+02/03/2006 :
+	- FLW :
+		- Correction bogue lorsque tentative de lire 0 octet.
+
+25/02/2006 :
+	- RGSTRY :
+		- Correction bogue balise sans attribut.
+
+24/02/2006 :
+	- FIL :
+		- Ajout classe 'file_(i|o)flow_functions___'.
+	- FLX :
+		- Ajout objet 'dump'.
+
+21/02/2006 :
+	- Géneral :
+		- Adaptation aux changements de la bibliothèque 'FLW'.
+	- FLW :
+		- Retrait paramètre 'Synchronization' de la méthode 'FLWWrite(...)'.
+
+20/02/2006 :
+	- Géneral :
+		- Adaptation aux changements de la bibliothèque 'FLW'.
+
+19/02/2006 :
+	- Géneral :
+		- Adaptation aux changements de la bibliothèque 'FLW'.
+	- FLW :
+		- Réecriture pour faciliter la mise en oeuvre du verouillage.
+
+17/02/2006
+	- MTX :
+		- Renommage '...RELEASED...' en '...DELETED...'.
+
+28/01/2006 :
+	- Géneral :
+		- Création de la bibliothèque 'THT' (void 'MTK' et 'TOL' ).
+		- Adaptation aux changements de la bibliothèque 'MTX'.
+	- MTX :
+		- Suppression de l'utilisation des mutex 'pthread' pour Linux.
+		- Mise en place d'un mode de fonctionnement.
+	- CPE :
+		- Suppression 'CPE__THREADS_REMAIN'.
+		- Ajout 'CPE__UNIX_LIKE'
+	- MTK :
+		- Déplacement de la fonction 'GetTID()' vers la bibliothèques 'THT'.
+		- Voir 'TOL'.
+	- TOL :
+		- Déplacement des fonctions 'Defer(...)' et 'Wait' vers la bibliothèque 'THT'.
+		- Déplacement de la fonction 'ForceExit(...)' vers bibloithèque 'MTK'.
+
+27/01/2006
+	- NSXPDM :
+		- Rajout d'une fonction 'GetElementById()...' avec variation sur le type des paramètres.
+
+23/01/2006 :
+	- RGSTRY :
+		- Rajout d'une méthode 'GetPathValue(...)'.
+
+23/01/2006 :
+	- RGSTRY :
+		- Rajout d'une méthode 'GetPathValue(...)'.
+		- Toutes les variables booléenes 'Exists' sont maintenant passé par pointeur et non plus par référence,
+		  pour mettre en évidence le fait qu'elle n'est jamais mise à vrai, mais seulement à faux, le cas échéant
+		  (pour pouvoir appeler plusieurs méthodes à la suite sans avoir à tester et à réinitialiser cette variable
+		  à chaque appel).
+
+
+18/01/2006 :
+	- BCH :
+		- Mise en place modifications requises par g++ v3.4.4.
+	- NSXPCM :
+		- Mise en oeuvre de 'templates'.
+
+10/01/2006 :
+	- BCH :
+		- Ajout méthode 'Pop()'.
+
+09/01/2006 :
+	- BCH :
+		- Ajout méthode 'Set()'.
+
+03/01/2006 :
+	- DIR :
+		- Ajout fonction suppression de répertoire.
+
+20/12/2005 :
+	- BSO :
+		- Ajout de l'initialisation par un flottant pour 'bso::sign__'.
+
+14/12/2005 :
+	- DBT :
+		- Correction confusion type 'row__'.
+	- NSXPCM :
+		- Correction bogue 'Split()'.
+
+05/12/2005 :
+	- UYM :
+		- Correction bogue comparaison.
+
+29/11/2005 :
+	- CPE :
+		- Adaptation aux particularités de la compilation d'une bibliothèque sous Unix.
+
+20/11/2005 :
+	- Géneral :
+		- Création de la bibliothèque 'DIR', de gestion des répertoires.
+	- TOL : 
+		- Correction bogue marco 'E_TYPEDEF_'.
+
+18/11/2005 :
+	- RGSTRY :
+		- Correction bogue 'SearchChild()'".
+
+17/11/2005 :
+	- RGSTRY :
+		- Correction bogue 'GetPathValues()'.
+
+15/11/2005 :
+	- RGSTRY :
+		- Ajout méthodes avec variation sur nombre de paramètres.
+
+
+14/11/2005 :
+	- RGSTRY :
+		- Correction bogue parsing dans un arbre existant.
+		- Ajout gestion 'exml:define' et 'exml:expand'.
+	- XML :
+		- Correction bogue avec flux content un seul tag.
+
+10/11/2005 :
+	- RGSTRY :
+		- Ajout méthodes 'GetPathValues(...)'.
+
+09/11/2005 :
+	- XML :
+		- Ajout de la possibilité de génèrer du XML sans présentation.
+
+08/11/2005 :
+	- CIO :
+		- Ajout du message d'erreur lors de l'utilisation dans un contexte de bibliothèque (DLL, '.so'. ...).
+	- FIL :
+		- Adpatation aux changements dans la bibliothèque 'CIO'.
+
+05/11/2005 :
+	- CSDSNC :
+		- Le paramètre 'HostService' passé à l'initialisation de l'objet 'core_' voit son contenu stocké, et non plus seulement son pointeur.
+
+27/10/2005
+	- CIO : 
+		- Déplacement de l'objet '(unsafe_)nul' vers la bibliothèque 'TXF'.
+	- TXF :
+		- Voir entrée concernant le bibliothèque 'CIO'.
+
+23/10/2005 :
+	- CTN :
+		- Correction d'un bogue sur les constructeurs.
+	- DBT :
+		- Correction bogue.
+	- MDR :
+		- Correction constructeur/destructeur.
+
+29/09/2005 :
+	- DTE :
+		- Ajout fonction 'Now()'.
+
+25/09/2005 :
+	- Géneral :
+		- Adaptations aux modifications de la bibliothèque 'FLW'.
+
+24/09/2005 :
+	- CSLIO::
+		- Adaptation aux chnagements de la bibliothèque 'FLW'.
+	- FLW :
+		- Remise en place méthode 'reset(...)' et 'Init(...)' en lieu et place du contructeur avec argument et de l'opérateur '()'.
+
+22/09/2005 :
+	- STR :
+		- Ajout des opérateurs de comparaisons entre un 'const string_ &' et un 'const char *'
+
+21/09/2005 :
+	- XML :
+		- Renommage méthodes classe 'callback__'.
+		- Ajout et gestion code d'erreur méthodes classe 'callback__'.
+		- Ajout du nom de la balise en cours à toutes les méthodes de la classe 'callback__'.
+	- RGSTRY:
+		- Adaptation modification bibliothèque 'XML'.
+
+20/09/2005:
+	- XML :
+		- Suppression de la gestion de suffixes.
+		- Ajout correspondance balise fermante.
+	- RGSTRY:
+		- Adaptation modification bibliothèque 'XML'.
+	- TAGDTC : 
+		- Adaptation changements différentes bibliothèques.
+	- TAGEXP : 
+		- Adaptation changements différentes bibliothèques.
+
+18/09/2005
+	- Géneral:
+		- Adaptation aux changememnts de la bibliothèque 'STK'.
+		- Nouvelle bibliothèque 'XML' à la place de 'LXMLPR'.
+		- Mise en oeuvre de la bibliothèque 'XML'.
+	- STK :
+		- Mise en place d'une pile basée sur un 'BUNCH' et d'une autre sur un '(X)(M)CONTAINER'.
+
+10/09/2005:
+	- DTR :
+		- Simplification du parcour de l'arbre (objet 'browser__').
+		- Mise à niveau (nouveaux standards).
+	 
+07/09/2005:
+	- CSDDLC:
+		- Mise en place de la gestion d'un code de retour signalant une erreur.
+	- CSDDLS : 
+		- Retourne maintemant un pointeur sur les fonctions utilisateurs, et non plus une référence,
+			pour faciliter la mise en place d'un code de retour signalant une erreur ('NULL').
+	- CSDULC :
+		- Mise en place d'un code de retour lors de l'initialisation pour signaler une erreur.
+	- CSDSNC :
+		- Mise en place d'un code de retour lors de l'initialisation pour signaler une erreur.
+	
+
+03/09/2005:
+	- TOL :
+		- Ajout de la directive préprocesseur '__LOC__'.
+
+29/08/2005 :
+	- FLX :
+		- Ajout du paramètre 'Position' lors de l'initialisation d'un 'bunch_iflow__'.
+
+27/08/2005
+	- LXMLPR :
+		- Amélioration de la détection d"erreurs du flux d'entrée.
+	- RGSTRY :
+		- Amélioration de la détection d'erreurs.
+		- Gestion des 'path' se terminant par un attribut ('.../@Nom').
+
+18/08/2005
+	- ERR :
+		- Correction d'un problème apparaissant lors de l'édition de liens.
+	- LSTCTN :
+		- Correction erreur macros.
+	- LXMLPR :
+		- Remplacement de la méthhde par une fonction.
+	- RGSTRY :
+		- Adaptation aux modifications de la bibliothèque 'LXMLPR'.
+
+17/08/2005:
+	- BCH :
+		- Ajout d'une variante de la méthode 'Append'.
+
+14/08/2005:
+	- LXMLPR :
+		- Lors d'une erreur lors de l'analyse, la ligne et la colonne incriminées sont disponibles.
+	- RGSTRY:
+		- Lors d'une erreur lors de l'analyse, la ligne et la colonne incriminées sont disponibles.
+
+16/07/2005 :
+	- Géneral :
+		- Adaptation à VC8.
+
+11/07/2005 :
+	- ERR :
+		- Correction affichage message d'erreur sur la mauvaise console.
+
+07/07/2005 :
+	- SSNMNG :
+		- Ajout de la caractéristique 'AlwaysValid'.
+	- FLW :
+		- Correction bogue deadlock lorsque problème sur flot de lecture.
+
+05/07/2005 :
+	- RGSTRY :
+		- Complétion.
+
+04/07/2005 :
+	- FLW :
+		- Correction bogue.
+
+02/07/2005 :
+	- Géneral :
+		- Adaptation aux modification de la bibliothèque 'FLW'.
+	- FLW :
+		- Ajout des méthodes '<Write|Read>Relay(...)'.
+		- Possibilité de rendre les flots 'thread-safe'.
+
+30/06/2005
+	- FLW :
+		- Ajout de la focntionnalite 'Dismiss()'.
+	- SCK :
+		- Ajout méthode 'GetSocket()'
+	- SRV :
+		- Découpage des fonctions utilisateurs.
+	- TOL:
+	- Ajout de la gesion d'un pointeur gèré par 'new'/'delete'.
+
+23/06/2005
+	- Ajout de la bibliothèque 'LXMLPR'.
+
+20/06/2005
+- IDXBTQ :
+	- Ajout 'const' manquant.
+
+18/06/2005
+- Géneral:
+	- Adapting to G++ 3.4.4
+
+01/06/2005
+	- NSXPCM :
+		- Completion.
+
+25/05/2005
+	- Géneral
+		- Ajout bibliothèque 'NSXPCM', dédié à l'interaction Epeios/XPCOM.
+
+09/05/2005
+- CLT:
+	- Ajout d'un 'inline' manquant.
+
+06/05/2005:
+- CLT :
+	- Modifications pour rendre cette biliothèque 'thread-safe'.
+
+04/05/2005:
+- Géneral :
+	- Modifications pour rendre les biliothèques 'thread-safe'.
+
+18/04/2005:
+- Géneral:
+	- Adaptation aux changements de la bibliothèque 'TOL'.
+
+17/04/2005:
+- TOL:
+	- Adaptation des macros '...DISCLOSE...' au nouveau standard concernant les variables privées.
+
+10/04/2005:
+- STR:
+	- La virgule est, en plus du point, reconnu comme séparateur décimal par la méthode 'ToLF()'.
+
+21/04/2005
+- ERR:
+	- Correction du bogue concernant les fonctions appelées lors du traitement d'erreur.
+
+04/04/2005
+- FIL:
+	- Correction de bogues.
+- FLW:
+	- Améliorations.
+- IOF:
+	- Améliorations.
+
+02/04/2005:
+- ERR:
+	- Amélioration de la gestion d'erreurs en cours de traitement d'erreur.
+
+28/03/2005:
+- Codage bibliothèque LTF.
+- FLX :
+	- Adaptation à la nouvell norme des ojects de type '__'.
+- CIO :
+	- Suppression de l'objet 'lout'.
+	- Création de l'objet 'nul'.
+
+26/03/2005:
+- FLW:
+	- Amélioration visant à pouvoir utiliser un flux de sortie sans cache.
+
+24/03/2005
+- TOL :
+	- Adaptation aux changements de la bibliothèque 'AEM'.
+- TXMTBL:
+	- Adaptation aux changements de la bibliothqèue 'TOL'.
+
+23/03/2005:
+- AEM :
+	- Rajout des méthodes 'First()' et 'Last()' avec offset.
+- LST :
+	- Adaptation aux changements de la bibliothèque 'AEM'.
+- TOL :
+	- Adaptation aux changements de la bibliothèque 'AEM'.
+- TXMTBL :
+	- Correction de bogue.
+
+21/03/2005:
+- FLX :
+	- Correction de bogue.
+- LCK :
+	- Rajout méthode 'IsLocked...()'.
+- MTX :
+	- Ajout fonction/méthode 'IsLocked()'.
+	- Correction bogue.
+
+17/03/2005:
+- MTX:
+	- Correction bogue fonction 'Delete()'.
+	- Ajout paramètre 'EvenIfLocked' à la fonction 'Delete()'.
+
+16/03/2005:
+- HTP:
+	- Ajout du champ 'Content-Type' dans l'objet 'header'.
+	- Modifications cosmétiques.
+
+13/03/2005:
+- HTP:
+	- Ajout du traitement du code '302' ('Found').
+	- Ajout du champ 'Location' dans la classe 'header_'.
+	- Quelques modification cosmétiques.
+
+12/03/2005
+- LCK:
+	- Amélioration de l'ergonomie.
+	- Ajout de la protection des données partagées.
+	- Suppression de fonctions délicates.
+
+11/03/2005:
+- CTN:
+	- Corrections dûs à des précédents changements.
+
+10/03/2005:
+- CTN:
+	- Ajout de méthodes 'Index()' et de nouveaux 'operator()( void )'.
+
+08/03/2005:
+- IDXBTR:
+	- Correction d'un bogue potentiel.
+	- Renommage de la méthode 'Remove' en 'Delete'.
+
+07/03/2005
+- SSNMNG:
+	- Correction d'un bogue dans la méthode 'Close()'.
+
+06/03/2005:
+- SSNMNG :
+	- Ajout de la gestion des pointeurs utilisateurs.
+
+==== Ancien format ====
+
+Géneral:
+- (01/02/2005) Adding 'IODEF', 'WLLIO', 'PLLIO', MLLIO' and 'CSLIO' libraries.
+- (02/02/2005) Adding 'LLIO' and 'io' libraries.
+
+AEM:
+- (09/02/2005) Fixing some compilation issue due to templates.
+
+BCH:
+- (10/01/2005) Fixing type problem.
+
+CCH:
+- (24/01/2005) Adapting to changes in 'TOL' library.
+
+CIO:
+- (03/02/2005) Use now 'IOF' library.
+
+CPE:
+- (02/03/2005) 'CPE__CONSOLE' n'est plus défini par défaut, ce qui posait problème avec des DLL sous Windows.
+
+ERR:
+- (26/02/2005) Add 'uTest' and 'bTest' items to 'usr' and 'bkd' error type.
+
+FIL:
+- (02/02/2005) Use now 'IOF' library.
+
+FLM:
+- (02/02/2005) Use now 'IOF' library.
+- (02/02/2005) Adapting to changes in 'IOF' library.
+
+FLW:
+- (03/02/2005) No more 'Init()', 'reset()', ... method (new rules for '__' objects).
+
+FLX:
+- (03/02/2005) Adapting to changes in 'FLW' library.
+
+MSG:
+- (26/01/2005) Coding workaround for the silly 'GetMessage' problem for cygwin too.
+
+SCK:
+- (03/02/2005) Adapting to changes in 'FLW'.
+
+SSNMNG:
+- (04/03/2005) Removing default values in 'Init()' function.
+- (05/03/2005) Adding and using the 'rows[_]' type.
+-			 Removing a non-thread-safe method.
+
+TAGECP:
+- (03/02/2005) Adapting to changes in 'FIL' library.
+
+TOL:
+- (20/01/2005) Fixing empty 'pointer__' object copying problem.
+
+TYM:
+- (20/01/2005) Fixing destructor calling problem.
+
+--------
+20050109
+--------
+
+Géneral:
+- (23/05/2004) Creation of the 'FLF' library.
+- (24/05/2004) Creation of the 'CIO' library.
+- (24/05/2004) Adapting to changes in 'FLW' library.
+- (24/05/2004) Adapting to changes in 'TXF' library.
+- (30/05/2004) Adapting to changes in 'FLW' library.
+- (31/05/2004) Adapting to changes in 'FLW' library.
+- (31/05/2004) Using 'CIO' library instead of 'STF' for 'c(out|in|err)'.
+- (11/06/2004) Adding the 'MSG' library.
+- (14/07/2004) Adapting to changes in 'FLW' library.
+- (14/07/2004) Adapting to changes in 'BSO' library.
+- (14/07/2004) Removing apparently unused read/write methods.
+- (21/08/2004) Obsoletes 'FAM' library, because not thread-safe.
+- (10/10/2004) Adding 'UIF' library.
+- (23/10/2004) Replacing 'Delete' with 'Remove' or 'Erase'.
+- (27/10/2004) Adapting to changes in 'TOL' library.
+- (27/11/2004) Adapting to changes in 'TOL' library.
+
+AEM:
+- (06/09/2004) Adding 'Exists()' and 'IsEmpty()' to the static version.
+- (05/10/2004) Adding 'Previous/Next' with offset.
+
+BCH:
+- (09/06/2004) Adding 'relations(_)' type.
+- (07/09/2004) Adding the truncate function with a position.
+- (22/10/2004) Renaming 'Delete' to 'Remove'.
+- (15/12/2004) Addin 'Crop()' methods.
+
+BITBCH:
+- (23/06/2004) Adding the 'And', 'Or', 'XOr' and 'Not' functions.
+- (23/06/2004) Fixing some template problems.
+- (07/07/2004) Adding 'operator <<' function.
+- (30/07/2004) Fixing error preventing compiling under g++.
+- (18/08/2004) Optimization.
+
+BSO:
+- (12/03/2004) Adding 'Convert()' function with 'String' parameter.
+- (03/05/2004) disable thread-unsafe functions when working in multithreading.
+-			 fixing the 'Allocate' bug.
+- (14/07/2004) Removing the unused 'TXF' header.
+- (11/08/2004) Renaming some preprocessor definitions.
+	
+CCH:
+- (20/05/2004) Replacing the old 'Write', 'Fill' and 'Read' method.
+- (25/09/2004) Optimizing dumping ot the write cache.
+- (09/10/2004) Bug fixing.
+
+CPE:
+- (09/08/2004) Introducing 'CPE_ST' to force single thread configuration even if the compiler is set to multithreading.
+- (28/08/2004) Adding Console/GUI detection (with wxWidgets).
+
+CTN:
+- Adding a 'FlushTest()' to '=' operator in debug mode.
+- (23/04/2004) Adding a test in debug mode to avoid retrieving of an undefined item.
+- (10/05/2004) Fixing 'Delete()' bug.
+- (24/10/2004) Removing 'EstVide', replaced by 'IsEmpty'.
+- (13/12/2004) 'Store' methods now return position where where object is stored.
+- (15/12/2004) Addin 'Crop()' methods + misc. improvements.
+
+DTE:
+- (15/04/2004) Introducing the new structure.
+- (21/07/2004) Improving some features about the thread-safeness of this library.
+- (31/07/2004) Adding the 'GetSimplifiedRawDate()' function.
+- (09/08/2004) Fixing sign bug.
+- (14/09/2004) Some improvements.
+
+DTFPTB:
+- (13/10/2004) Correcting misspelled function name (PutSShort -> PutSLong).
+
+EPEIOS:
+- (15/06/2004) Adding some useful constants.
+- (26/09/2004) Adding 'EPEIOS_ROW_MAX'.
+
+EPSMSC:
+- Adding 'EPSMSC_COPYRIGHT()' macro.
+
+ERR:
+- Adding some minor features for the 'Intentional' error type.
+- (24/05/2004) Using the 'CIO' library instead of 'STF'.
+- (28/08/2004) No more use of the 'CIO' library when in GUI enviroment.
+- (03/09/2004) Adding some facilities.
+- (06/09/2004) Adding some other facilities.
+- (12/12/2004) Improvement error handling when flow ('FLW' library) involved.
+
+FLW:
+- (24/05/2004) Removing the a tailing '_' to the object name.
+- (17/07/2004) Adding amount of data red/written handling.
+-			 Renaming some methods.
+- (20/07/2004) Improvements.
+- (31/07/2004) Fixing bug concerning the 'Reset()' function.
+- (10/12/2004) Improvements.
+- (12/12/2004) Improving error handling.
+
+FLF:
+- (02/02/2005) Amelioration, bug fixing about the EOF handling.
+
+FLX:
+- (31/07/2004) The 'bunch_(i|o)flow__' now works with all type of bunch.
+- (01/08/2004) Correcting little error.
+- (05/11/2004) Adding 'E_STRING_(I|O)FLOW__'.
+
+FNM:
+- (15/12/2004) Adding the 'GetLocation()' function.
+
+GNUMLL:
+- (09/01/05) Adapting to changes in 'XTF' and 'TXF' libraries.
+
+HTP:
+- (18/07/2004) Little improvements.
+- (01/11/2004) Changing 'Post' function parameters.
+
+IDS:
+- (08/01/2005) Fixing bug test bug (:->).
+
+IDXQUE:
+- (16/09/2004) Using the core queue and no more the manage queue, to fit with 'IDXBTR'.
+
+IDXBTQ:
+- (15/09/2004) Adapting to changes in 'IDXBTR'.
+- (16/09/2004) Adapting to changes in 'IDXBTR'.
+- (17/09/2004) Removing obsolete method.
+-			 Adding E_ISEEKER(t)__
+
+IDXBTR
+- Fixing bug in the 'tree_index_::Remove()' function.
+- (15/09/2004) The root is no more stored in the index, so an index can, in fact, contains several indexes.
+- (16/09/2004) The root is no more stored in the index, so an index can, in fact, contains several indexes.
+- (17/09/2004) Simplifying the seeker object.
+
+LCK:
+- Adding 'GetUnlocked()' method.
+- (17/08/2004) Some little changes in names.
+
+MDR:
+- (15/06/2004) Adding some useful constants.
+- (26/09/2004) Adding 'MDR_ROW_MAX'.
+
+MMG:
+- (19/07/2004) Adapting to changes in 'FLW' library.
+
+MMM:
+- (14/07/2004) Using the 'CIO' library instead of 'STF'.
+
+MTX:
+- (31/07/2004) Adding a 'Delay' parameter for locking functions.
+
+SCK:
+- (31/07/2004) A timeout yet launch an error.
+-			 Rearranging some '#define'
+- (10/12/2004) Adapting to changes in 'FLW' library.
+
+SRV:
+- (21/09/2004) Adding socket timeout handling.
+
+SSNMNG:
+- Using own row type for session id 'row__'.
+- Adding 'sessions_manager_::IsValid()' method.
+- Adding 'sessions_manager_::GetExpired()' methods.
+- Adding navigation 'sessions_manager_::First()', 'sessions_manager_::Next()', ...) methods.
+- (22/03/2004) Fixing bug in session id creation.
+- (15/09/2004) Adapting to changes in 'IDXBTQ' library.
+- (16/09/2004) Adapting to changes in 'IDXBTQ' library.
+
+STF:
+- (24/05/2004) Removing the console stuff (they are put in 'CIO' library).
+- (24/05/2004) Adating to changes in 'FLW' library.
+- (24/05/2004) Renaming the objects ('stream...' instead'(i|o)stream...', removing one tailing '_')
+
+STR:
+- (16/08/2004) Fixing bug in 'ToLF' function.
+- (16/11/2004) Adding 'string_' contructor and return value for 'ToUpper' and 'ToLower' functions.
+- (19/11/2004) Handling acentuented characters in 'To(Low|Upp)er' functions.
+
+TOL:
+- Adding the 'E_DISCLOSE_(_)' macro.
+- (05/05/2004) Adding a 'Clock()' temporary workaround for CW.
+- (24/05/2004) Using 'cio' library instead of 'stf'.
+- (24/06/2004) Adding 'E_TTYPEDEF' macro.
+- (31/07/2004) Adding 'Delay' function and 'Defer()' with delay parameter.
+- (28/08/2004) No more use of the 'CIO' library when in GUI enviroment.
+- (29/09/2004) Made it more thread-safe.
+- (27/10/2004) The 'E_DISCLOSE_[_]' is replaced by 'E_RODISCLOSE_[_]' and 'E_RWDISCLOSE_[_]'
+- (27/11/2004) Removing 'Free(...)', replaced with 'E_POINTER___'.
+- (13/12/2004) Improving 'E_RODISCLOSE()'.
+- (04/01/2005) Adding debugging issue and missing methods to 'pointer___' object.
+
+TTR:
+- (23/05/2004) Using 'CIO' library instead of 'STF'.
+- (24/05/2004) Adapting to changes in 'TXF' library.
+- (27/07/2004) Little improvement.
+
+TXF:
+- (24/05/2004) Adapting to changes in 'FLW' library.
+- (24/05/2004) Removing tailing '_' in name objetcs.
+- (28/08/2004) Removing references to the 'CIO' library in order to allowing
+			 the use of this library in a program with GUI.
+
+TXMPGH:
+- (09/01/05) Adapting to changes in 'XTF' and 'TXF' libraries.
+
+TXMTBL:
+- (05/12/2004) The'GetUniqueCell' methods return now a boolean to signal if there is or not really only one cell.
+-			 Adding 'Location()' method to 'table_' object.
+
+XTF:
+- (31/05/2004) Removing a tailing '_' to object name.
+- (20/07/2004) Fixing 'View()' bug.
+- (24/10/2004) Removing previous correction. There is a conception problem.
+- (01/11/2004) Adding NL handling possibility for 'EOX()'.
+- (09/11/2004) Adding handling of NL in 'View()'
+
+--------
+20040215
+--------
+
+Géneral:
+- Adapting to Code Warrior for Windows and Macintosh.
+- Fixing g++ warning.
+- Fixing CW warnings (all but 'unused argument').
+- Adapting to changes in 'TOL' library ('E_' prefix for macros).
+- Renaming 'Read', 'Write', 'Synchronize' adn 'data__' in
+- 'Recall' 'Store', 'Flush' and 'datum__' in all memory-related libraries.
+
+AEM:
+- Bug fixing of the (p_)_amount_extent_manager__ and related classes.
+- Adding (p_)_amount_extent_manager___ class.
+
+BCH:
+- Bug fixing of the E_BUNCHt__(_) and related classes.
+- Rewriting 'WriteAndAdjust()' methods.
+- Renaming in 'Append' and rewriting 'Add' methods.
+- Renaming 'Row()' into 'Search()'.
+- Fixing bug in 'StoreAndAdjust()' method.
+- Adding 'GetRelations()' function.
+
+BITBCH:
+- Fixing bug.
+- Renaming 'Add' to 'Append'.
+- Adapting to changes in 'BCH' library.
+- Adding 'E_BIT_BUNCH(t)(_) macros.
+- Fixing 'operator =' bug.
+
+BSO:
+- Adding the 'Convert(...)' functions.
+
+BTF:
+- Adding a dummy 'Exists()' method, and the 'row__' type due to changes in 'STK' library.
+- Adding 'Root' parameter to the 'Init' function.
+- Handling empty tree.
+
+BTS:
+- Adding 'tBack' and 'tForward' in replacement of 'tParent'.
+- Handling empty tree.
+
+CCH:
+- Renaming 'Add' to 'Append'.
+
+CLNARG:
+- Adapting to changes in 'BCH' library.
+- Adaptinf to changes in 'CTN' library.
+
+CSM:
+- Adapting tochanges in 'MTK'.
+
+CTN:
+- Renaming the 'Sync()' method in 'Set()' and 'Flush()'.
+- Fixing GNU GCC issues.
+- Renaming 'Create()' into 'New()' to avoid mistakes.
+- Renaming 'Add' to 'Append'.
+- Adding features to avoid problems which appears when some 'Flush' call are missing.
+- Fixing mistake in 'Delete' method.
+- Adding some tests about flushing in debug context.
+
+CPE:
+- Adding detection of cygwin.
+- Disabling C++ warning C4786.
+- Adding multithreading detection for CodeWarrior.
+
+CVM:
+- Adapting to changes in 'MDR' library.
+
+DBT:
+- Adapting to changes in 'LST' library.
+- Adapting to changes in 'LSTBCH' library.
+- Adding the virtual 'DBTAllocate' method.
+- Using 'E_NAVt' macro.
+- Adapting to changes in 'BTF' library.
+
+DTE:
+- Adding the 'IsValid'()' method.
+
+DTFBSC:
+- Adding 'byte__', 'short__' and 'long__' type.
+
+DTFRMF:
+- Adapting to CW.
+- Adding the '(Put|Get)Size' from the 'BKDTPM' library.
+
+DTR:
+- Fixing call to an iexistent method;
+
+EPSMSC:
+- Adapting to changes in the 'STF' library.
+
+ERR:
+- Renaming the 'throw' error in 'intentional'.
+- Adding the 'iReturn' item.
+- Adapting to changes in 'STF' library.
+
+FIL:
+- Fixing destructor bug.
+
+FLW:
+- Changing some type definition to simplify castings.
+- Changing 'datum__' definition from 'char' to 'unsigned char' to avoid
+  problem when used as integer.
+
+FLX:
+- Adding some casting to avoid warning under VC++.
+- Adapting to changes in 'BCH' library.
+- Adding missing 'const' qualifier.
+
+GNUMLL:
+- Adapting to changes in 'TOL' library.
+- Adapting to changes in 'BCH' library.
+- Adapting to changes in 'CTN' library.
+
+
+IDS:
+- Adapting to changes in 'STK' library.
+- Fixing the 'operator =()' bug.
+
+LGG:
+- Adding 'Test' language for testing purpose.
+- Adding language labels.
+- Adding some features.
+
+LST:
+- Renaming 'CreateEntry' to 'New'.
+- Introducing feature to fix some cast problem.
+- Renaming 'Store' object in 'Locations' to avoid some name conflicts.
+- Creation of the 'E_ROW' macro.
+
+LSTBCH:
+- Fixing bug.
+- Adapting to changes in 'LST' library.
+
+LSTCTN:
+- Fixing bug.
+- Adapting to changes in 'LST' library.
+- Adapting to changes in 'CTN' library.
+- Adding missing 'Flush()' to 'Delete' method.
+- Renaming 'Create()' into 'New()' to avoid mistakes.
+- Adding the 'New' with parameter.
+
+MDR:
+- Using 'Store', 'Recall' and 'Flush' instead of 'Write', 'Read' and 'Synchronize'.
+- Renaming 'data__' in 'datum__'.
+
+MMI:
+- Adding some missing 'const' qualifier'.
+
+MMM:
+- Fixing 'reset()' bug.
+
+MTK:
+- Adapting to the NPTL (GNU/Linux Redhat 9)
+- Removing old MTK... functions.
+
+MTX:
+- Using counter under cygwin due to problems with pthread mutexes .
+- Adding of testing if we are in a multitasking context.
+- Adapting to changes in 'TOL' library.
+
+PIP:
+- Adapting to changes in 'TOL' library.
+
+QUE:
+- Adding some missing 'const' qualifier.
+- Adding 'E_STACK(r)' due to 'Exists()' method conflict due to changes in 'STK' library.
+
+SSNMNG:
+- Adapting to changes in 'LST' library.
+
+STF:
+- Renaming f[(out|in|err)[F]] to c[(out|in|err)[F]]
+
+STK:
+- Renaming 'ObjectExists' to 'Exists', to avoid some mistake risks.
+- Adding 'Top()' method.
+- Using 'E_NAVt' macro.
+- Fixing the bug about the 'E_MEMORY_' used instead of 'E_MEMORYt_'.
+- Adapting to changes in 'BCH' library.
+- Introducing the 'Row' type to avoid conflict with default 'epeios::row__' type.
+- Fixing the 'operator =()' bug.
+
+STR:
+- Adding 'ToU[S|B]()'.
+- Trying to convert an empty string to a number sets the error pointer to 0 (instead of 'NONE').
+- Renaming 'Add' to 'Append'.
+- Adapting to changes in 'BCH' library.
+- Adding the 'Begin' parameter to 'To...' Conversion method.
+- Changing the way the 'ErrP' parameter is passed in the 'To...' conversion method.
+- Adding 'To...' methods with variataion in the parameters.
+- Adding stripping methods.
+
+TAGDTC:
+- Adapting to changes in 'TYM' library.
+
+TAGEXP:
+- Adapting to changes in 'TOL' and 'BCH' libraries.
+
+TOL:
+- Correcting the problem in 'NAVt()' for which the gcc 3.x preprocessor issued a warning.
+- Adapting to changes in 'STF' library.
+- Adapting to CodeWarrior.
+- Renaming 'Yield()' to 'Defer()' due to the silly 'Yield()' definition under Windows.
+- Adding 'AUTO4()' macro.
+
+TSRCPR:
+- Adapting to changes in 'TOL' library.
+- Adapting to changes in 'STR' library.
+
+TTR:
+- Adapting to changes in 'STF' library.
+
+TXF:
+- Adapting to changes in 'FLW' library.
+
+TXMPGH:
+- Adapting to changes in 'TOL' library.
+- Adapting to changes in 'BCH' library.
+
+TXMTBL:
+- Adapting to changes in 'XTF' library.
+- Adapting to changes in 'TOL' library.
+- Adapting to changes in 'CTN' library.
+
+TYM:
+- Fixing bug.
+- Revert to version before adaptation to CW.
+- Adding 'const' qualifier to return value to avoid smoe problems.
+- Renaming 'Locate' into 'Search'.
+
+UYM:
+- Fixing bug in 'untyped_memory__(_)'
+- Renaming 'Locate' into 'Search'.
+- Fixing 'Search()' bug.
+- Test in debug mode more reliable.
+
+XTF:
+- Adapting to changes in 'BCH' library.
+- Adapting to changes in 'FLW' library.
+
+--------
+20030219
+--------
+
+Géneral:
+- Creating library 'BTS'.
+- Creating library 'BTF'.
+- Creating library 'LSTBCH'.
+- Creating library 'LSTCTN'.
+
+AEM:
+- Adding 'Exists' method.
+
+CPE:
+- Adapting to Metrowerks Codewarrior.
+
+IDS:
+- Adapting to changes in 'STK' library.
+
+IDXBTQ:
+- Renaming 'Remove', to 'Delete' which seems more appropriate.
+
+LST:
+- Renaming 'Remove', to 'Delete' which seems more appropriate.
+
+QUE:
+- Renaming 'Remove', to 'Delete' which seems more appropriate.
+- Adding 'Exists' method.
+- Using the 'BCH' library instead of 'AEM' and 'UYM'.
+
+SSNMNG:
+- Adapting to changes in 'LST' library.
+- Adapting to changes in 'QUE' library.
+
+STK:
+- Renaming 'Exists()' method to 'ObjectExists()', due to modification of the 'tol::NAVt' macro.
+
+STR:
+- Adding 'Insert()' method.
+
+TOL:
+- Adding the 'Exists()' method to 'NAV(t)' macro.
+- Fixing bug in 'AUTO3' macro.
+
+--------
+20030104
+--------
+
+Géneral:
+- Adding 'CCH'.
+- Adding 'SMA' to use in 'CCH'.
+- Adding portable data types.
+- Adding 'HTP' library.
+- Introducing '_' prefix for internal/intermediate classes.
+- Creating library 'IDS'.
+
+AEM:
+- Adding portable versions of classes.
+
+BCH:
+- Adding portable versions of classes.
+- Adding 'bunch___'.
+- Adapting to the new 'AUTO(x)' macros.
+- Fixing spelling error.
+
+BITBCH:
+- Adapting to the new 'AUTO(x)' macros.
+
+BSO:
+- Adding the 'sign__' type.
+- Adding the portable ('p_...') types.
+- Removing old unused code.
+- Force 'sign__' to contain only -1,0,1.
+
+BTR:
+- Adapting to the new 'AUTO(x)' macros.
+- Renaming of classes and methods.
+
+CPE:
+- Adding 'CPE__USE_[VC|GCC]_WORKAROUND'.
+
+CTN:
+- Adding 'reset()' method to the item-related objects.
+- Renaming to 'Sync' where needed.
+- Adding GCC workaround.
+- Adding VC++ workaround.
+- Adapting to the new 'AUTO(x)' macros.
+
+DTR:
+- Adapting to changes in 'que'.
+- Adapting to the new 'AUTO(x)' macros.
+- Adapting to changes in 'BTR' library.
+
+EPSMSC:
+- Removing IDEALX-related text.
+- Adding Epeios text.
+
+ERR:
+- Adding external error (ERRX, ext).
+- Changing 'brk' to 'bkd'.
+- Adding 'bInexistentData' for 'bkd' error.
+- Adding debugging feature.
+
+FLM:
+- Using now the UNIX system calls under UNIX instead of the C/C++ call (which seems bugged).
+- Using low-level io functions under Windows instead of the C/C++ call.
+- Adding a static part for standardization.
+
+FLW:
+- Fixing bug which fills the cache even if there is asked for more then the cache can contain.
+- Adding length feature.
+- 'data__' type renamed in 'datum__'.
+- Adding 'Skip()' method.
+- Adding 'virtual' qualifier for destructor.
+- Fixing 'pure virtual call' bug when socket disconnected.
+
+FLX:
+- Adapting to vhanges in 'FLW'.
+
+IDXBTR:
+- Adding 'MarkAs...()' method.
+- Adapting to new 'AUTO(x)' macros.
+- Adapting to changes in 'BTR' library.
+
+IDXBTQ:
+- Adding 'E_IBTREEt()'.
+- Adding 'MarkAs...()' method.
+- Adding 'E_INDEX(_)'.
+- Adapting to new 'AUTO(x)' macros.
+
+IDXQUE:
+- Fixing bugs concerning row type.
+- Adding 'MarkAs...()' method.
+- Adapting to new 'AUTO(x)' macros.
+
+LGG:
+- Removing the 'lDefault' "language".
+
+LST:
+- Adapting to the new 'AUTO(x)' macros.
+- Using new library 'IDS'.
+
+MDR:
+- Adding some features for portable data types.
+- Removing 'basic_' prefix.
+
+MMG:
+- Adapting to new 'AUTO(x)' macros.
+
+QUE:
+- Fixing bug from typed queue.
+- Fixing amount/size handling bug.
+- Replacing 'Insert...()' methods by 'Become...()' methods.
+
+MMG:
+- Fixing autonome declaration bug.
+- Adaptation to changes in underlying libraries.
+- Coding of operators '->' and '*' to replace operator '()'.
+
+MMM:
+- Adding 'E_MULTIMEMORY(_)' #define.
+
+QUE:
+- Adapting to the new 'AUTO(x)' macros.
+
+SALCSM:
+- Adapting to changes in 'FLW'.
+
+SCK:
+- Adapting to changes in 'FLW'.
+
+SSNMNG:
+- Adapting to modification made in 'IDXBTQ' library.
+
+STF:
+- Adapting to vhanges in 'FLW'.
+
+STK:
+- Adapting to the new 'AUTO(x)' macros.
+- Adding 'Exists' function.
+
+STR:
+- Adding missing 'const' qualifier.
+- Adding 'ToLF()' method.
+- Adding 'Init()' with str::string_ argument.
+
+TOL:
+- Fixing bug in the 'NAVt()' macro.
+- Rewriting of the 'AUTO(x)' macros.
+
+TSRCPR:
+- Using 'que' instead of 'idxque'.
+- Adapting to the new 'AUTO(x)' macros.
+
+TXF:
+- Adapting to changes in 'FLW'.
+
+TXMTBL:
+- Adding some helpful methods.
+
+TYM:
+- Adding 'memory___' class.
+- Adapting to the new 'AUTO(x)' macros.
+- Adding a forgottent 'const' qualifier.
+- Fixing problems with 'Position' method.
+- Adding 'Swap()' method.
+
+UYM:
+- Fixing bug which have as result the loss of the memory pilote when calling 'reset()'.
+- Fixing 'Fill()' compilation error.
+- Adding 'untyped_memory___' class.
+- Renaming some classes.
+- Fixing buf in overflow detection in 'untyped_memory__' class.
+- Adding a forgotten 'const' qualifier.
+- Fixing pointer of pointer bug.
+
+XTF:
+- Adapting to vhanges in 'FLW'.
+
+
+
+--------
+20011119
+--------
+
+CLNARG:
+- Adding a 's' to the 'Get<Option|Command>Label' function name.
+- Adding 'Separator' parameter to 'GetCommandLabels' method.
+- Adding 'CLNARG_<DETAIL|GENERAL>_SEPARATOR' defines.
+- Adding 'view' enum and modifying functions as needed.
+
+ITG:
+- moving it to the 'emth' subproject.
+
+XMLxxx:
+- Renamed to 'HOSxxx' and moved to their own project ('ehos').
+
+XMLDBS:
+- Adding missing return value.
+
+TOL:
+- Fixing cast problem.
+- Removing incorrect comment which disturbs quickdoc generation.
+
+TXF:
+- Fixing long double printing bug.
+
+--------
+20010804
+--------
+
+Géneral:
+- moving backed-related libraries ('BKDEND', 'BKDxxx' & also 'FRTEND') to 'ebkd' sub-project.
+- moving cgi-related libraries and software ('FRTEND', 'URLARG' and 'getbkdapi') to 'ecgi' sub-project.
+- Using the g++ 3.0 due to an ICE by gcc 2.95.3
+- Removing the obolete 'BRK*' and 'BROKER' libraries. You may use the libraries from the 'ebkd' sub-project.
+- Adapting to Metrowerks CodeWarrior
+
+BCH:
+- Adding the 'Init()' function with parameter.
+
+CPE:
+- Adding the 'CPE__[NO_]IOS_EXTENSION'
+
+ERR:
+- Introducing 'err' namespace due to conflict with content of a g++ 3.0 header.
+
+FIL:
+- Make use of the 'CPE__[NO_]IOS_EXTENSION' to handle the 'ios::nocreate' problem.
+
+FLM:
+- Make use of the 'CPE__[NO_]IOS_EXTENSION' to handle the 'ios::nocreate' problem.
+
+STF:
+- Make changes required by g++ 3.0.
+
+STR:
+- Adding the 'Init()' function with parameter.
+
+TSRCPR:
+- Changes required by g++ 3.0.
+
+TTR:
+- Changes required by g++ 3.0.
+
+TOL:
+- Make use of the 'CPE__[NO_]IOS_EXTENSION' to handle the 'ios::nocreate' problem.
+
+XMLCOR:
+- Adding the 'Convert()' function.
+
+XMLDBM:
+- Using the 'Convert()' from 'XMLCOR' in 'Filter_()'.
+
+XMLDCM:
+- Using the 'Convert()' from 'XMLCOR' in 'Filter_()'.
+
+--------
+20010618
+--------
+
+AEM:
+- Adapting to changes in 'TOL'.
+
+BCH:
+- Adapting to changes in 'TOL'.
+
+BCKEND:
+- Adapting to changes in 'TOL'.
+
+BITBCH
+- Adapting to changes in 'TOL'.
+
+BTR:
+- Adapting to changes in 'TOL'.
+
+CTN:
+- Adapting to changes in 'TOL'.
+
+GNUMLL:
+- Adapting to changes in 'TOL'.
+
+MMI:
+- Adapting to changes in 'TOL'.
+
+QUE:
+- Adapting to changes in 'TOL'.
+
+LST:
+- Adapting to changes in 'TOL'.
+
+STR:
+- Adapting to changes in 'TOL'.
+
+TAGDTC:
+- Adapting to changes in 'TOL'.
+
+TAGEXP:
+- Adapting to changes in 'TOL'.
+
+TOL:
+- Adding 'TYPEDEF__()'
+- Using operator '->' for 'TYPEDEF()' and 'TYPEDEF__()'
+- Disable VC++ warning issue due to 'TYPEDEF()'.
+- 'TYPEDEF_()' makes now automatically 'AUTO()'.
+- Adding 'operator =()' to 'TYPEDEF_()'.
+
+
+TSRCPR:
+- Adapting to changes in 'TOL'.
+
+TYM:
+- Adapting to changes in 'TOL'.
+
+XMLCOR:
+- Adding 'quick_tag...'.
+
+XMLDBS:
+- Methods of filler which handles tag/attribute value returns now a value row.
+- Adding the 'GetDatabase()' method.
+
+XMLDCM:
+- Methods of filler which handles tag/attribute value returns now a value row.
+- Adding the 'GetDocument()' method.
+
+XMLTAG:
+- Adapting to changes in 'TOL'.
+
+
+
+--------
+20010604
+--------
+
+Géneral:
+- Adding 'DTE'.
+
+BSO:
+- using namespace.
+- adding 'bso::sign__' type.
+
+BTR:
+- Correcting a namespace lack due to (VC++ ?) template issue.
+
+CGIFRT:
+- adapting to changes in 'BSO'.
+
+ERR:
+- adapting to changes in 'TOL'.
+
+FAM:
+- using namespace.
+
+FNM:
+- adapting to changes in 'TOL'.
+
+DTFBSC:
+- adapting to changes in 'BSO'.
+
+DTRRMF:
+- adapting to changes in 'BSO'.
+
+IDXBTR:
+- adapting to changes in 'BSO'.
+
+LST:
+- Fixing bug of 'Next' function (list_::Successeur_).
+
+MTX:
+- Adapting to changes in 'TOL'.
+- Coding VC++ 'Yield()' workaround.
+
+PIP:
+- Adapting to changes in 'TOL'.
+- Coding VC++ 'Yield()' workaround.
+
+SSNMNG:
+- adapting to changes in 'BSO'.
+
+TOL:
+- Using namespace.
+- Deleting 'tol__manipulateur' class.
+- Adding 'TYPEDEF_'.
+- Coding VC++ 'Yield()' workaround.
+
+TXMPGH:
+- Introducing new 'line(s)(_)' type.
+
+XMLDBS:
+- Correcting XML writing bug (attribute as ending tag).
+- Add a 'PushTag' function to accept same input parameter with different type.
+
+UYM:
+- Adapting to changed in 'FAM'.
+
+
+--------
+20010513
+--------
+
+General changes.
+- I had some difficulties with the 'broker::broker' object, due to
+the fact that class name and namespace are the same, (had the same
+problem with 'set::set', which becames 'bch::bunch'), all libraries
+related to 'broker' are renamed into 'backend'.
+- Removing all the 'BROKERx' libraries.
+- Adding the 'XMLxxx' libraries.
+
+BCH:
+- fixing 'WriteAndAdjust' bug.
+
+BCKEND:
+- Created from 'BROKER'.
+
+BKDCST:
+- Created from 'BRKCST'.
+
+BKDDCB:
+- Created from 'BRKANL'.
+
+BKDCMD:
+- Created from 'BRKCMD'.
+
+BKDRQM:
+- Created from 'BRKRQM'.
+
+BKDTPM:
+- Created from 'BRKTPM'.
+
+BRKANL:
+- Replaced by 'BKDDCB'.
+
+BRKCST:
+- Replaced by 'BKDCST'.
+
+BRKCMD:
+- Replaced by 'BKDCMD'.
+
+BRKRQM:
+- Replaced by 'BKDRQM'.
+
+BRKTPM:
+- Replaced by 'BKDTPM'.
+
+BROKER:
+- Replaced by 'BCKEND'.
+
+BROKER:
+- adapting to 'LST' modifications.
+
+CLNARG:
+- Adding the 'Parameter' parameter to 'PrintOptionUsage'.
+
+CLT:
+- Adapting to 'BSO' modifications.
+
+EPSMSC:
+- Update.
+
+FRTEND:
+- Adapting to the new 'BKDxxx' libraries.
+- Adapting to modifications in 'BSO'.
+
+GNUMLL:
+- Adapting to 'CTN', 'MMM', 'BSO', 'TXMPGH' modifications.
+- Using 'EPEIOS' stuff.
+- Move all 'operator <<' from inside namespace to outside, because I had trouble with linking.
+
+STF: 
+- Take away all the internal 'EOFT' stuff. Using the standard 'EOFD' stuff instead.
+
+TAGEXP:
+- Adapting to changes in 'STF'.
+
+TOL:
+- 'TOLYield' is now available only in a multitasking context.
+
+TSRCPR:
+- Fixing '#define' bogue.
+- Fixing tagged comment in comment bug.
+
+TXMPGH:
+- Introducing namespace.
+- Adapting to namespace use in 'CTN', 'STR' and 'BSO'.
+- Using 'EPEIOS' stuff.
+
+TXMTBL:
+- Changing 'commentary' label to 'comment'.
+
+XMLDBS:
+- Adding method which are faster by allowing the direct use of tag row
+  in addition of the tag name. 
+- Adding missing some missing methods regarding 'XMLDCM'.
+
+XMLDCM:
+- Adding method which are faster by allowing the direct use of tag row
+  in addition of the tag name. 
+
+XMLPRS:
+- Adding the parsing into a XML database.
+
+XTF:
+- Correct a bug due to a missing 'EOX()' in 'GetLine()'.
+
+--------
+20000501
+--------
+
+Creation

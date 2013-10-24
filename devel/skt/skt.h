@@ -22,10 +22,6 @@
 
 #define SKT_NAME		"SKT"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SKTTutor;
-
 #if defined( E_DEBUG ) && !defined( SKT_NODBG )
 #define SKT_DBG
 #endif

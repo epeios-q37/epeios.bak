@@ -28,6 +28,12 @@
 
 namespace registry {
 	using namespace sclrgstry;
+
+	namespace {
+		using rgstry::entry___;
+	}
+
+
 }
 
 #endif

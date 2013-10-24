@@ -28,6 +28,20 @@
 
 namespace registry {
 	using namespace sclrgstry;
+
+	namespace {
+		using rgstry::entry___;
+	}
+
+	extern entry___ Data;
+	extern entry___ Output;
+	extern entry___ XSL;
+	extern entry___ Context;
+	extern entry___ Command;
+	extern entry___ SessionMaxDuration;
+
+	extern entry___ RandomName;
+	extern entry___ TaggedRandomLimit;
 }
 
 #endif

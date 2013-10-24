@@ -37,6 +37,8 @@
 #include "dbptbl.h"
 #include "dbpctx.h"
 
+#include "registry.h"
+
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
@@ -57,6 +59,7 @@ typedef bso::uint__		id__;
 
 #define _( name )	#name
 
+using namespace registry;
 
 /*
 Ne pas modifier ; utilisé pour la génération automatique.
@@ -256,7 +259,6 @@ ERRBegin
 		Free( P ).Convert( Parameters.Project );
 		break;
 	case 0:
-		break;
 	default:
 		clnarg::ReportWrongNumberOfArgumentsError( NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
 		break;
@@ -321,12 +323,116 @@ ERREpilog
 
 /* End of the part which handles command line arguments. */
 
+class random_
+{
+public:
+	struct s {
+		str::string_::s Name;
+		bso::uint__ Limit;
+	} &S_;
+	str::string_ Name;
+	random_( s &S )
+	: S_( S ),
+	  Name( S.Name )
+	{}
+	void reset( bso::bool__ P = true )
+	{
+		Name.reset( P );
+		S_.Limit = 0;
+	}
+	void plug( sdr::E_SDRIVER__ &SD )
+	{
+		Name.plug( SD );
+	}
+	void plug( ags::E_ASTORAGE_ &AS )
+	{
+		Name.plug( AS );
+	}
+	random_ &operator =( const random_ &R )
+	{
+		Name = R.Name;
+		S_.Limit = R.S_.Limit;
+
+		return *this;
+	}
+	void Init( void )
+	{
+		Name.Init();
+		S_.Limit = 0;
+	}
+	void Init(
+		const str::string_ &Name,
+		bso::uint__ Limit )
+	{
+		this->Name.Init( Name );
+		S_.Limit = Limit;
+	}
+	E_RODISCLOSE_( bso::uint__, Limit );
+};
+
+E_AUTO( random );
+
+typedef ctn::E_MCONTAINER_( random_ ) randoms_;
+E_AUTO( randoms );
+
+static bso::uint__ GetRandomLimit_( const str::string_ &Name )
+{
+	bso::uint__ Limit = 0;
+ERRProlog
+	rgstry::tags Tags;
+ERRBegin
+	Tags.Init();
+	Tags.Append( Name );
+
+	Limit = scltool::GetMandatoryUInt( rgstry::tentry__( TaggedRandomLimit, Tags ), RAND_MAX );
+ERRErr
+ERREnd
+ERREpilog
+	return Limit;
+}
+
+static void GetRandoms_(
+	const str::strings_ &Names,
+	randoms_ &Randoms )
+{
+ERRProlog
+	random Random;
+	ctn::E_CMITEM( str::string_ ) Name;
+	sdr::row__ Row = E_NIL;
+ERRBegin
+	Name.Init( Names );
+
+	Row = Names.First();
+
+	while ( Row != E_NIL ) {
+		Random.Init( Name( Row ), GetRandomLimit_( Name( Row ) ) );
+		Randoms.Append( Random );
+
+		Row = Names.Next( Row );
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void GetRandoms_( randoms_ &Randoms )
+{
+ERRProlog
+	str::strings Names;
+ERRBegin
+	Names.Init();
+	scltool::GetValues( RandomName, Names );
+
+	GetRandoms_( Names, Randoms );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 using namespace dbpals;
 using namespace dbprcd;
 using namespace dbptbl;
-
-typedef rgstry::multi_level_registry_ registry_;
-E_AUTO( registry );
 
 typedef tables_	data_;
 E_AUTO( data )
@@ -1429,6 +1535,44 @@ static id__ Display_(
 	return Id;
 }
 
+static void HandleRandom_(
+	const random_ &Random,
+	xml::writer_ &Writer )
+{
+	Writer.PushTag( "Random" );
+	Writer.PutAttribute( "Name", Random.Name );
+	xml::PutAttribute( "Limit", Random.Limit(), Writer );
+	xml::PutAttribute( "Value", rand() % Random.GetLimit(), Writer );
+	Writer.PopTag();
+}
+
+static void HandleRandoms_(
+	const randoms_ &Randoms,
+	xml::writer_ &Writer )
+{
+	ctn::E_CMITEM( random_ ) Random;
+	sdr::row__ Row = E_NIL;
+
+	if ( Randoms.Amount() == 0 )
+		return;
+
+	tol::InitializeRandomGenerator();
+
+	Random.Init( Randoms );
+
+	Row = Randoms.First();
+
+	Writer.PushTag( "Parameters" );
+
+	while ( Row != E_NIL ) {
+		HandleRandom_( Random( Row ), Writer );
+
+		Row = Randoms.Next( Row );
+	}
+
+	Writer.PopTag();
+}
+
 static id__ Display_(
 	id__ Id,
 	const data_ &Data,
@@ -1441,7 +1585,11 @@ static id__ Display_(
 ERRProlog
 	xml::writer Writer;
 	ctn::E_CITEMt( table_, trow__ ) Table;
+	randoms Randoms;
 ERRBegin
+	Randoms.Init();
+	GetRandoms_( Randoms );
+
 	xml::WriteXMLHeader( Output, xml::eISO_8859_1 );
 	Output << txf::nl;
 
@@ -1487,6 +1635,8 @@ ERRBegin
 	Writer.PopTag();
 	Writer.PopTag();
 	Writer.PopTag();
+
+	HandleRandoms_( Randoms, Writer );
 
 	Writer.PushTag( "Data" );
 
@@ -1572,13 +1722,6 @@ ERREnd
 ERREpilog
 	return Id;
 }
-
-#define DATA_FILENAME_TAG			"Data"
-#define OUTPUT_FILENAME_TAG			"Output"
-#define XSL_FILENAME_TAG			"XSL"
-#define COMMAND_TAG					"Command"
-#define CONTEXT_FILENAME_TAG		"Context"
-#define SESSION_MAX_DURATION_TAG	"SessionMaxDuration"
 
 void LaunchCommand_(
 	const str::string_ &Command,
@@ -1734,13 +1877,6 @@ ERREnd
 ERREpilog
 }
 
-static rgstry::entry___ Data_( DATA_FILENAME_TAG );
-static rgstry::entry___ Output_( OUTPUT_FILENAME_TAG );
-static rgstry::entry___ XSL_( XSL_FILENAME_TAG );
-static rgstry::entry___ Context_( CONTEXT_FILENAME_TAG );
-static rgstry::entry___ Command_( COMMAND_TAG );
-static rgstry::entry___ SessionMaxDuration_( SESSION_MAX_DURATION_TAG );
-
 void Process_( id__ Id )
 {
 ERRProlog
@@ -1757,18 +1893,18 @@ ERRProlog
 	str::string Label;
 ERRBegin
 	DataFileName.Init();
-	if ( !scltool::GetValue( Data_, DataFileName ) )
+	if ( !scltool::GetValue( registry::Data, DataFileName ) )
 		scltool::ReportAndExit( _( DataFileNotSpecifiedError ) );
 
 	OutputFileName.Init();
-	if ( !scltool::GetValue( Output_, OutputFileName ) )
+	if ( !scltool::GetValue( Output, OutputFileName ) )
 		scltool::ReportAndExit( _( OutputFileNotSpecifiedError ) );
 
 	XSLFileName.Init();
-	scltool::GetValue( XSL_, XSLFileName );
+	scltool::GetValue( XSL, XSLFileName );
 
 	ContextFileName.Init();
-	if ( !scltool::GetValue( Context_, ContextFileName ) )
+	if ( !scltool::GetValue( registry::Context, ContextFileName ) )
 		scltool::ReportAndExit( _( ContextFileNotSpecifiedError ) );
 
 	Context.Init();
@@ -1777,13 +1913,13 @@ ERRBegin
 	Data.Init();
 	RetrieveData_( DataFileName.Convert( Buffer ), Data );
 
-	SessionMaxDuration = scltool::GetUInt( SessionMaxDuration_, 0 );
+	SessionMaxDuration = scltool::GetUInt( registry::SessionMaxDuration, 0 );
 
 	Label.Init();
 	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName );
 
 	Command.Init();
-	scltool::GetValue( Command_, Command );
+	scltool::GetValue( registry::Command, Command );
 
 	DumpContext_( Context, ContextFileName.Convert( Buffer ) );
 
