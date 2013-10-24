@@ -2,7 +2,7 @@
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="esketch">
     <Parameters>
-		  <Language>fr</Language>
+		  <Language>en</Language>
     </Parameters>
 	</Configuration>
 </Configurations>
