@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Locale target="edaemon">
+		<xpp:expand href="epeios.xlcl"/>
+    <Translations text="ProgramDescription">
+      <Translation language="fr">'Daemoniseur' du projet Epeios</Translation>
+      <Translation language="en">Epeios project's 'daemonizer'</Translation>
+    </Translations>
+    <Translations text="ModuleError">
+      <Translation language="fr">Erreur module : %1</Translation>
+      <Translation language="en">Module error : %1</Translation>
+    </Translations>
+    <Translations text="UnableToLoadModuleError">
+      <Translation language="fr">Impossible de charger le module '%1'</Translation>
+      <Translation language="en">Unable to load module '%1'</Translation>
+    </Translations>
+    <Translations text="UnknownError">
+      <Translation language="fr">Erreur inconnue</Translation>
+      <Translation language="en">Unknown error</Translation>
+    </Translations>
+    <Translations text="ProjectFileArgumentDescription">
+      <Translation language="fr">Fichier projet</Translation>
+      <Translation language="en">Project file</Translation>
+    </Translations>
+    <Translations text="UnableToOpenLogFileError">
+      <Translation language="fr">Impossible d'ouvrir le ficher de log '%1'.</Translation>
+      <Translation language="en">Unable to open '%1' log file.</Translation>
+    </Translations>
+
+    <!--
+		<Translations text="">
+		  <Translation language="fr"></Translation>
+		  <Translation language="en"></Translation>
+		</Translations>
+		-->
+  </Locale>
+</Locales>

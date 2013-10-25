@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:bloc><!-- User definitions -->
+	<xpp:define name="Version">
+		<xpp:bloc>(Version)</xpp:bloc>
+	</xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2013</xpp:bloc>
+    </xpp:define>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="Type" value="Tool"/>
+  </xpp:bloc>
+  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <About>
+    <Program>edaemon</Program>
+    <Software>eDaemon</Software>
+	<UUID>6119b8ad-2fb0-43cf-b14c-0f920015dda1</UUID>
+  </About>
+  <Modules>
+    <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+        <Module>dlbrry</Module>
+        <Module>mtk</Module>
+        <Module>sck</Module>
+        <Module>tht</Module>
+      </Modules>
+      <Modules Group="CSD">
+        <Module>csdbns</Module>
+        <Module>csdlec</Module>
+        <Module>csdsns</Module>
+      </Modules>
+      <Modules Group="SCL">
+        <xpp:expand select="SCL"/>
+      </Modules>
+    </Modules>
+    <Module>registry</Module>
+  </Modules>
+  <SourceDirs>
+  </SourceDirs>
+  <PreprocessorDefinitions>
+	<PreprocessorDefinition>E_MT</PreprocessorDefinition>
+    <PreprocessorDefinition>CSD_NO_SERVICE_HANDLING</PreprocessorDefinition>
+  </PreprocessorDefinitions>
+</Project>

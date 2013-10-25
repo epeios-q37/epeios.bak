@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Configuration target="edaemon">
+    <Parameters>
+		  <Language>en</Language>
+    </Parameters>
+	</Configuration>
+</Configurations>
