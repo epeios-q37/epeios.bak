@@ -426,14 +426,15 @@ ERREnd
 ERREpilog
 }
 
-static csdlec::library_embedded_client_core__ *Go_(
+static csdlec::library_embedded_client_core__ *Core_ = NULL;
+
+static void Go_(
 	const bso::char__ *ModuleFileName,
 	csdbns::port__ Port,
 	module_connection_type__ ConnectionType,
 	const char *LogFileName,
 	log_file_handling__ LogFileHandling )
 {
-	csdlec::library_embedded_client_core__ *Core = NULL;
 ERRProlog
 	lcl::locale SharedLocale;
 	rgstry::registry SharedRegistry;
@@ -447,10 +448,10 @@ ERRBegin
 
 	LibraryData.Init( csdleo::mRemote, cio::COutDriver, cio::CErrDriver, false, (void *)ModuleFileName );
 
-	if ( ( Core = new csdlec::library_embedded_client_core__ ) == NULL )
+	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();
 
-	if ( !Core->Init( ModuleFileName, LibraryData, err::hUserDefined ) ) {
+	if ( !Core_->Init( ModuleFileName, LibraryData, err::hUserDefined ) ) {
 		Meaning.Init();
 		Meaning.SetValue( "UnableToLoadModule" );
 		Meaning.AddTag( ModuleFileName );
@@ -460,10 +461,10 @@ ERRBegin
 
 	switch ( ConnectionType ) {
 	case mctStraight:
-		UseStraightConnections_( Core->GetSteering(), ModuleFileName, Port );
+		UseStraightConnections_( Core_->GetSteering(), ModuleFileName, Port );
 		break;
 	case mctSwitched:
-		UseSwitchingConnections_( Core->GetSteering(), LogFileName, LogFileHandling, ModuleFileName, Port );
+		UseSwitchingConnections_( Core_->GetSteering(), LogFileName, LogFileHandling, ModuleFileName, Port );
 		break;
 	default:
 		ERRFwk();
@@ -491,7 +492,6 @@ ERRErr
 	cio::CErr << Translation << txf::nl << txf::commit;
 ERREnd
 ERREpilog
-	return Core;
 }
 
 static inline csdbns::port__ GetService_( void )
@@ -499,29 +499,24 @@ static inline csdbns::port__ GetService_( void )
 	return registry::GetRawModuleService();
 }
 
-static csdlec::library_embedded_client_core__ *Go_(
+static void Go_(
 	const char *LogFileName,
 	log_file_handling__ LogFileHandling )
 {
-	csdlec::library_embedded_client_core__ *Core = NULL;
 ERRProlog
 	str::string ModuleFileName;
 	STR_BUFFER___ Buffer;
 ERRBegin
 	ModuleFileName.Init();
 
-	Core = Go_( registry::GetModuleFileName( ModuleFileName ).Convert( Buffer ), GetService_(), GetModuleConnectionType_(), LogFileName, LogFileHandling );
+	Go_( registry::GetModuleFileName( ModuleFileName ).Convert( Buffer ), GetService_(), GetModuleConnectionType_(), LogFileName, LogFileHandling );
 ERRErr
 ERREnd
 ERREpilog
-	return Core;
 }
 
-static csdlec::library_embedded_client_core__ *Core_ = NULL;
-
-static csdlec::library_embedded_client_core__ *Go_( const char *ProjectFilename )
+static void Go_( const char *ProjectFilename )
 {
-	csdlec::library_embedded_client_core__ *Core = NULL;
 ERRProlog
 	STR_BUFFER___ Buffer;
 	const char *LogFileName = NULL;
@@ -529,17 +524,19 @@ ERRBegin
 	if ( ( ProjectFilename != NULL ) && ( *ProjectFilename ) )
 		scltool::LoadProject( ProjectFilename, NAME_LC );
 
-	Core = Go_( registry::GetModuleLogFileName( Buffer ), GetLogFileHandling_() );
+	Go_( registry::GetModuleLogFileName( Buffer ), GetLogFileHandling_() );
 ERRErr
 ERREnd
 ERREpilog
-	return Core;
 }
 
 static void ExitFunction_( void )
 {
-	if ( Core_ != NULL )
+	if ( Core_ != NULL ) {
+		COut << "Terminatinge module..." << txf::nl << txf::commit;
 		delete Core_;
+		COut << "Teminated." << txf::nl;
+	}
 
 	Core_ = NULL;
 }
@@ -550,10 +547,7 @@ static void Go_(
 {
 	atexit( ExitFunction_ );
 
-	Core_ = Go_( Parameters.Project );
-
-	while ( 1 )
-		tht::Suspend( 1000 );
+	Go_( Parameters.Project );
 }
 
 const char *scltool::TargetName = NAME_LC;

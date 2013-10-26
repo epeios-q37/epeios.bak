@@ -323,7 +323,7 @@ ERREpilog
 
 /* End of the part which handles command line arguments. */
 
-class random_
+class random_parameter_
 {
 public:
 	struct s {
@@ -331,7 +331,7 @@ public:
 		bso::uint__ Limit;
 	} &S_;
 	str::string_ Name;
-	random_( s &S )
+	random_parameter_( s &S )
 	: S_( S ),
 	  Name( S.Name )
 	{}
@@ -348,10 +348,10 @@ public:
 	{
 		Name.plug( AS );
 	}
-	random_ &operator =( const random_ &R )
+	random_parameter_ &operator =( const random_parameter_ &RP )
 	{
-		Name = R.Name;
-		S_.Limit = R.S_.Limit;
+		Name = RP.Name;
+		S_.Limit = RP.S_.Limit;
 
 		return *this;
 	}
@@ -370,10 +370,10 @@ public:
 	E_RODISCLOSE_( bso::uint__, Limit );
 };
 
-E_AUTO( random );
+E_AUTO( random_parameter );
 
-typedef ctn::E_MCONTAINER_( random_ ) randoms_;
-E_AUTO( randoms );
+typedef ctn::E_MCONTAINER_( random_parameter_ ) random_parameters_;
+E_AUTO( random_parameters );
 
 static bso::uint__ GetRandomLimit_( const str::string_ &Name )
 {
@@ -393,10 +393,10 @@ ERREpilog
 
 static void GetRandoms_(
 	const str::strings_ &Names,
-	randoms_ &Randoms )
+	random_parameters_ &Randoms )
 {
 ERRProlog
-	random Random;
+	random_parameter Random;
 	ctn::E_CMITEM( str::string_ ) Name;
 	sdr::row__ Row = E_NIL;
 ERRBegin
@@ -415,7 +415,7 @@ ERREnd
 ERREpilog
 }
 
-static void GetRandoms_( randoms_ &Randoms )
+static void GetRandoms_( random_parameters_ &Randoms )
 {
 ERRProlog
 	str::strings Names;
@@ -1536,7 +1536,7 @@ static id__ Display_(
 }
 
 static void HandleRandom_(
-	const random_ &Random,
+	const random_parameter_ &Random,
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( "Random" );
@@ -1547,10 +1547,10 @@ static void HandleRandom_(
 }
 
 static void HandleRandoms_(
-	const randoms_ &Randoms,
+	const random_parameters_ &Randoms,
 	xml::writer_ &Writer )
 {
-	ctn::E_CMITEM( random_ ) Random;
+	ctn::E_CMITEM( random_parameter_ ) Random;
 	sdr::row__ Row = E_NIL;
 
 	if ( Randoms.Amount() == 0 )
@@ -1585,7 +1585,7 @@ static id__ Display_(
 ERRProlog
 	xml::writer Writer;
 	ctn::E_CITEMt( table_, trow__ ) Table;
-	randoms Randoms;
+	random_parameters Randoms;
 ERRBegin
 	Randoms.Init();
 	GetRandoms_( Randoms );
