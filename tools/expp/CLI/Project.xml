@@ -28,7 +28,7 @@
     <Module>registry</Module>
   </Modules>
   <SourceDirs>
-    <SourceDir>..</SourceDir>
+    <SourceDir>../</SourceDir>
   </SourceDirs>
   <PreprocessorDefinitions>
 	<PreprocessorDefinition>E_ST</PreprocessorDefinition>

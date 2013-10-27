@@ -288,8 +288,8 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\"(Version)\"
-copt += -DCOPYRIGHT_YEARS=\"2013\"
+copt += -D"VERSION=(Version)"
+copt += -D"COPYRIGHT_YEARS=2013"
 
 ifndef EPEIOS_SRC
 	src += :src
