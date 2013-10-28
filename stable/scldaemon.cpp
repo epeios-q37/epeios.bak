@@ -1,59 +1,30 @@
 /*
-	'scldaemon' library by Claude SIMON (csimon at zeusw dot org)
-	Requires the 'scldaemon' header file ('scldaemon.h').
-	Copyright (C) 20132004 Claude SIMON.
+	'scldaemon.cpp' by Claude SIMON (http://zeusw.org/).
 
-	This file is part of the Epeios (http://zeusw.org/epeios/) project.
+	'scldaemon' is part of the Epeios framework.
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
- 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, go to http://www.fsf.org/
-	or write to the:
-  
-         	         Free Software Foundation, Inc.,
-           59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+    The Epeios framework is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-
-
-//	$Id: scldaemon.cpp,v 1.4 2013/04/09 17:57:26 csimon Exp $
 
 #define SCLDAEMON__COMPILATION
 
 #include "scldaemon.h"
 
-class scldaemontutor
-: public ttr_tutor
-{
-public:
-	scldaemontutor( void )
-	: ttr_tutor( SCLDAEMON_NAME )
-	{
-#ifdef SCLDAEMON_DBG
-		Version = SCLDAEMON_VERSION "\b\bD $";
-#else
-		Version = SCLDAEMON_VERSION;
-#endif
-		Owner = SCLDAEMON_OWNER;
-		Date = "$Date: 2013/04/09 17:57:26 $";
-	}
-	virtual ~scldaemontutor( void ){}
-};
-
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace scldaemon;
 
@@ -77,9 +48,9 @@ const char *scldaemon::GetLanguage( void )
 }
 
 
-csdleo::user_functions__ *csdles::CSDLESRetrieveSteering( csdleo::data__ *Data )
+csdleo::callback__ *csdles::CSDLESRetrieveSteering( csdleo::data__ *Data )
 {
-	csdleo::user_functions__ *Steering = NULL;
+	csdleo::callback__ *Steering = NULL;
 ERRProlog
 	FNM_BUFFER___ Buffer;
 ERRBegin
@@ -130,7 +101,7 @@ ERREpilog
 	return Steering;
 }
 
-void csdles::CSDLESReleaseSteering( csdleo::user_functions__ *Steering )
+void csdles::CSDLESReleaseSteering( csdleo::callback__ *Steering )
 {
 	ReleaseSteering( Steering );
 }
@@ -167,7 +138,6 @@ ERREpilog
 it is necessary to personalize it, or certain compiler would not work properly */
 
 class scldaemonpersonnalization
-: public scldaemontutor
 {
 public:
 	scldaemonpersonnalization( void )
@@ -183,14 +153,9 @@ public:
 };
 
 
-/*$END$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-// 'static' by GNU C++.
-
 static scldaemonpersonnalization Tutor;
-
-ttr_tutor &SCLDAEMONTutor = Tutor;
