@@ -63,7 +63,8 @@ CXXFLAGS += -O
 #CXXFLAGS += -pg
 
 ###############################
-	copt += -DE_ST
+	
+copt += -DE_ST
 
 IA_32=x86
 x86_64=x64
@@ -289,8 +290,8 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\"20131023\"
-copt += -DCOPYRIGHT_YEARS=\"2013\"
+copt += -DVERSION=\""20131023"\"
+copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
 ifndef EPEIOS_SRC
 	src += :src

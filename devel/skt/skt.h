@@ -18,13 +18,13 @@
 */
 
 #ifndef SKT__INC
-#define SKT__INC
+# define SKT__INC
 
-#define SKT_NAME		"SKT"
+# define SKT_NAME		"SKT"
 
-#if defined( E_DEBUG ) && !defined( SKT_NODBG )
-#define SKT_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( SKT_NODBG )
+#  define SKT_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
@@ -33,8 +33,8 @@
 
 // SKeTch
 
-#include "err.h"
-#include "flw.h"
+# include "err.h"
+# include "flw.h"
 
 namespace skt {
 
