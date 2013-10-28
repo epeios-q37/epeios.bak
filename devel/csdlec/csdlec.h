@@ -1,7 +1,7 @@
 /*
-	'sclbackend.h' by Claude SIMON (http://zeusw.org/).
+	'csdlec.h' by Claude SIMON (http://zeusw.org/).
 
-	'sclbackend' is part of the Epeios framework.
+	'csdlec' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCLBACKEND__INC
-# define SCLBACKEND__INC
+#ifndef CSDLEC__INC
+# define CSDLEC__INC
 
-# define SCLBACKEND_NAME		"SCLBACKEND"
+# define CSDLEC_NAME		"CSDLEC"
 
-# if defined( E_DEBUG ) && !defined( SCLBACKEND_NODBG )
-#  define SCLBACKEND_DBG
+# if defined( E_DEBUG ) && !defined( CSDLEC_NODBG )
+#  define CSDLEC_DBG
 # endif
 
 /******************************************************************************/
@@ -31,57 +31,13 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// SoCLe BACKEND
+// Client-Server Devices Library Embedded Client
 
 # include "err.h"
 # include "flw.h"
 
-# include "csdleo.h"
+namespace csdlec {
 
-# include "fblbkd.h"
-
-namespace sclbacknd {
-
-	struct _data__ 
-	{
-		fblbkd::backend___ &Backend;
-		fblbkd::text_log_functions__<> RequestLogFunctions;
-		flx::void_oflow_driver___ VoidFlowDriver;
-		_data__( fblbkd::backend___ &Backend )
-		: Backend( Backend )
-		{}
-		void Init( void )
-		{
-			VoidFlowDriver.Init( fdr::tsDisabled );
-			RequestLogFunctions.Init( VoidFlowDriver );
-		}
-	};
-
-	template <typename backend>	struct data___
-	: public _data__
-	{
-	public:
-		backend Backend;
-		data___( void )
-		: _data__( Backend )
-		{}
-		void Init( 
-			fblbur::mode__ Mode,
-			const lcl::locale_ &Locale,
-			const char *Origin )
-		{
-			_data__::Init();
-			Backend.Init( Mode, Locale, Origin );
-		}
-	};
-
-	// A définir par l'utilisateur.
-	extern const char *TargetName;
-
-	void *New(
-		fblbur::mode__ Mode,
-		const lcl::locale_ &Locale,
-		const char *Origin );	// A Surcharger.
 }
 
 				  /********************************************/

@@ -48,12 +48,12 @@ const char *csdsns::GetLogLabel( log__ Log )
 	}
 }
 
-void csdsns::_functions___::_Clean( void )
+void csdsns::_callback___::_Clean( void )
 {
 	sdr::row__ Row = _Core.UPs.First();
 
 	while ( Row != E_NIL ) {
-		_Functions->PostProcess( _Core.UPs( Row ) );
+		_Callback->PostProcess( _Core.UPs( Row ) );
 
 		Row = _Core.UPs.Next( Row );
 	}

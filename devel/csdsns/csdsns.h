@@ -43,7 +43,7 @@
 namespace csdsns {
 
 	using namespace csdsnb;
-	using namespace csdsuf;
+	using namespace csdscb;
 
 	using csdbns::port__;
 
@@ -249,24 +249,22 @@ ERREpilog
 
 	E_AUTO( core)
 
-	typedef csdsuf::user_functions__ _user_functions__;
-
-	class _functions___
-	: public _user_functions__
+	class _callback___
+	: public callback__
 	{
 	private:
 		core _Core;
-		user_functions__ *_Functions;
+		callback__ *_Callback;
 		const char *_Origin;
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
 	protected:
-		virtual void *CSDSUFPreProcess( const char *Origin )
+		virtual void *CSDSCBPreProcess( const char *Origin )
 		{
 			_Origin = Origin;
 
 			return NULL;
 		}
-		virtual action__ CSDSUFProcess(
+		virtual action__ CSDSCBProcess(
 			flw::ioflow__ &Flow,
 			void *UP )
 		{
@@ -284,9 +282,9 @@ ERREpilog
 			if ( Id == CSDSNB_UNDEFINED ) {
 				Id = _Core.New();
 				PutId( Id, Flow );
-				UP = _Functions->PreProcess( _Origin );
+				UP = _Callback->PreProcess( _Origin );
 				_Core.Store( UP, Id );
-				Action = _Functions->Process( Flow, UP );
+				Action = _Callback->Process( Flow, UP );
 			} else if ( Id == CSDSNB_PING ) {
 				Flow.Put( (flw::datum__)0 );
 				Flow.Commit();
@@ -296,14 +294,14 @@ ERREpilog
 				Action = aStop;
 			} else {
 				Flow.Put( 0 );
-				Action = _Functions->Process( Flow, UP );
+				Action = _Callback->Process( Flow, UP );
 			}
 
 			switch ( Action ) {
 			case aContinue:
 				break;
 			case aStop:
-				_Functions->PostProcess( UP );
+				_Callback->PostProcess( UP );
 				if ( Id < CSDSNB_RESERVED )
 					_Core.Delete( Id );
 				break;
@@ -314,7 +312,7 @@ ERREpilog
 
 			return Action;
 		}
-		virtual void CSDSUFPostProcess( void *UP )
+		virtual void CSDSCBPostProcess( void *UP )
 		{
 			if ( UP != NULL )
 				ERRPrm();
@@ -326,27 +324,27 @@ ERREpilog
 				_Clean();
 
 			_Core.reset( P );
-			_Functions = NULL;
+			_Callback = NULL;
 			_Origin = NULL;
-			_user_functions__::reset( P );
+			callback__::reset( P );
 		}
-		_functions___( void)
+		_callback___( void)
 		{
 			reset( false );
 		}
-		~_functions___( void)
+		~_callback___( void)
 		{
 			reset();
 		}
 		void Init(
-			user_functions__ &Functions,
+			callback__ &Callback,
 			log_functions__ &LogFunctions )
 		{
 			reset();
 
 			_Core.Init( LogFunctions );
-			_Functions = &Functions;
-			_user_functions__::Init();
+			_Callback = &Callback;
+			callback__::Init();
 		}
 	};
 
@@ -355,16 +353,16 @@ ERREpilog
 	{
 	private:
 		csdbns::server___ _Server;
-		_functions___ _Functions;
+		_callback___ _Callback;
 	public:
 		void Init(
 			port__ Port,
-			user_functions__ &UserFunctions,
+			callback__ &Callback,
 			log_functions__ &LogFunctions = *(log_functions__ *)NULL )
 		{
-			_Functions.Init( UserFunctions, LogFunctions );
+			_Callback.Init( Callback, LogFunctions );
 
-			_Server.Init( Port, _Functions );
+			_Server.Init( Port, _Callback );
 		}
 		bso::bool__ LaunchService( const char *ServiceName )
 		{

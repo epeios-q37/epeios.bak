@@ -1,59 +1,30 @@
 /*
-	'sclbacknd' library by Claude SIMON (csimon at zeusw dot org)
-	Requires the 'sclbacknd' header file ('sclbacknd.h').
-	Copyright (C) 20112004 Claude SIMON.
+	'sclbackend.cpp' by Claude SIMON (http://zeusw.org/).
 
-	This file is part of the Epeios (http://zeusw.org/epeios/) project.
+	'sclbackend' is part of the Epeios framework.
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
- 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, go to http://www.fsf.org/
-	or write to the:
-  
-         	         Free Software Foundation, Inc.,
-           59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+    The Epeios framework is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define SCLBACKEND__COMPILATION
 
-
-//	$Id: sclbacknd.cpp,v 1.9 2013/01/02 17:32:10 csimon Exp $
-
-#define SCLBACKND__COMPILATION
-
-#include "sclbacknd.h"
-
-class sclbackndtutor
-: public ttr_tutor
-{
-public:
-	sclbackndtutor( void )
-	: ttr_tutor( SCLBACKND_NAME )
-	{
-#ifdef SCLBACKND_DBG
-		Version = SCLBACKND_VERSION "\b\bD $";
-#else
-		Version = SCLBACKND_VERSION;
-#endif
-		Owner = SCLBACKND_OWNER;
-		Date = "$Date: 2013/01/02 17:32:10 $";
-	}
-	virtual ~sclbackndtutor( void ){}
-};
+#include "sclbackend.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
-/*$BEGIN$*/
 
 #include "sclmisc.h"
 #include "scllocale.h"
@@ -72,72 +43,62 @@ public:
 
 using namespace sclbacknd;
 
-typedef csdsuf::user_functions__ _user_functions__;
+typedef csdscb::callback__ _callback__;
 
 const char *scldaemon::TargetName = sclbacknd::TargetName;
 
-class user_functions__
-: public _user_functions__
+class callback__
+: public _callback__
 {
 private:
 	fblbur::mode__ _Mode;
 	const lcl::locale_ *_Locale;
 protected:
-	virtual void *CSDSUFPreProcess( const char *Origin )
+	virtual void *CSDSCBPreProcess( const char *Origin )
 	{
 		return New( _Mode, *_Locale, Origin );
 	}
 
-	virtual csdsuf::action__ CSDSUFProcess(
+	virtual csdscb::action__ CSDSCBProcess(
 		flw::ioflow__ &Flow,
 		void *UP )
 	{
 		_data__ &Data = *(_data__ *)UP;
 
 		if ( Data.Backend.Handle( Flow, NULL, Data.RequestLogFunctions ) )
-			return csdsuf::aContinue;
+			return csdscb::aContinue;
 		else
-			return csdsuf::aStop;
+			return csdscb::aStop;
 	}
-	virtual void CSDSUFPostProcess( void *UP )
+	virtual void CSDSCBPostProcess( void *UP )
 	{
 		delete (_data__ *)UP;
-	}
-	virtual void CSDSUFExit( void )
-	{
-		scldaemon::DisplayModuleClosingMessage();
-		cio::COut << txf::commit;
-
-		// Do here what neede to exit properly the module.
-
-		scldaemon::DisplayModuleClosedMessage();
-		cio::COut << txf::commit;
 	}
 public:
 	void reset( bso::bool__ P = true )
 	{
-		_user_functions__::reset( P );
+		_callback__::reset( P );
 
 		_Mode = fblbur::m_Undefined;
 		_Locale = NULL;
 	}
-	E_CVDTOR( user_functions__ );
+	E_CVDTOR( callback__ );
 	void Init(
 		fblbur::mode__ Mode,
 		const lcl::locale_ &Locale )
 	{
-		_user_functions__::Init();
+		_callback__::Init();
 
 		_Mode = Mode;
 		_Locale = &Locale;
 	}
 };
 
-csdleo::user_functions__ *scldaemon::RetrieveSteering(
+csdleo::callback__ *scldaemon::RetrieveSteering(
 	csdleo::mode__ CSDMode,
 	const lcl::locale_ &Locale )
 {
-	user_functions__ *Functions = NULL;
+	callback__ *Callback = NULL;
 ERRProlog
 	fblbur::mode__ FBLMode = fblbur::m_Undefined;
 ERRBegin
@@ -153,24 +114,24 @@ ERRBegin
 		break;
 	}
 
-	if ( ( Functions = new user_functions__ ) == NULL )
+	if ( ( Callback = new callback__ ) == NULL )
 		ERRAlc();
 
-	Functions->Init( FBLMode, Locale );
+	Callback->Init( FBLMode, Locale );
 ERRErr
-	if ( Functions != NULL )
-		delete Functions;
+	if ( Callback != NULL )
+		delete Callback;
 
-	Functions = NULL;
+	Callback = NULL;
 
 	ERRRst();	// Error catched to avoid that it goes further.
 				// Error reported by the fact that the returned value is 'NULL'.
 ERREnd
 ERREpilog
-	return Functions;
+	return Callback;
 }
 
-void scldaemon::ReleaseSteering( csdleo::user_functions__ *Steering )
+void scldaemon::ReleaseSteering( csdleo::callback__ *Steering )
 {
 	if ( Steering != NULL )
 		delete Steering;
@@ -181,16 +142,15 @@ void scldaemon::ReleaseSteering( csdleo::user_functions__ *Steering )
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-class sclbackndpersonnalization
-: public sclbackndtutor
+class sclbackendpersonnalization
 {
 public:
-	sclbackndpersonnalization( void )
+	sclbackendpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
-	~sclbackndpersonnalization( void )
+	~sclbackendpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
@@ -198,14 +158,9 @@ public:
 };
 
 
-/*$END$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-// 'static' by GNU C++.
-
-static sclbackndpersonnalization Tutor;
-
-ttr_tutor &SCLBACKNDTutor = Tutor;
+static sclbackendpersonnalization Tutor;
