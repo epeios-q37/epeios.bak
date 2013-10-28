@@ -1,7 +1,7 @@
 /*
-	'csdsuf.h' by Claude SIMON (http://zeusw.org/).
+	'csdscb.h' by Claude SIMON (http://zeusw.org/).
 
-	'csdsuf' is part of the Epeios framework.
+	'csdscb' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,29 +17,27 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CSDSUF__INC
-#define CSDSUF__INC
+#ifndef CSDSCB__INC
+# define CSDSCB__INC
 
-#define CSDSUF_NAME		"CSDSUF"
+# define CSDSCB_NAME		"CSDSCB"
 
-#if defined( E_DEBUG ) && !defined( CSDSUF_NODBG )
-#define CSDSUF_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( CSDSCB_NODBG )
+#  define CSDSCB_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// Client-Server Devices Server User Functions
-
-# error "Obsolete ! Use 'CSDSCB' instead !"
+// Client-Server Devices Server CallBack
 
 # include "err.h"
 # include "flw.h"
 # include "tol.h"
 
-namespace csdsuf {
+namespace csdscb {
 	enum action__ {
 		aContinue,
 		aStop,
@@ -47,38 +45,39 @@ namespace csdsuf {
 		a_Undefined
 	};
 
-	class user_functions__ {
+	class callback__ {
 	protected:
-		virtual void *CSDSUFPreProcess( const char *Origin ) = 0;
-		virtual action__ CSDSUFProcess(
+		virtual void *CSDSCBPreProcess( const char *Origin ) = 0;
+		virtual action__ CSDSCBProcess(
 			flw::ioflow__ &Flow,
 			void *UP ) = 0;
-		virtual void CSDSUFPostProcess( void *UP ) = 0;
+		virtual void CSDSCBPostProcess( void *UP ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
 			// Standardisation.
 		}
-		E_CVDTOR( user_functions__ );
+		E_CVDTOR( callback__ );
 		void *PreProcess( const char *Origin )
 		{
-			return CSDSUFPreProcess( Origin );
+			return CSDSCBPreProcess( Origin );
 		}
 		action__ Process(
 			flw::ioflow__ &Flow,
 			void *UP )
 		{
-			return CSDSUFProcess( Flow, UP );
+			return CSDSCBProcess( Flow, UP );
 		}
 		void PostProcess( void *UP )
 		{
-			CSDSUFPostProcess( UP );
+			CSDSCBPostProcess( UP );
 		}
 		void Init( void )
 		{
 			// Standadisation.
 		}
 	};
+
 }
 
 				  /********************************************/

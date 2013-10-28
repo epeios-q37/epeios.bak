@@ -33,6 +33,8 @@
 
 // Client-Server Devices Server User Functions
 
+# error "Obsolete ! Use 'CSDSCB' instead !"
+
 # include "err.h"
 # include "flw.h"
 # include "tol.h"

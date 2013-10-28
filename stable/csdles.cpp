@@ -28,7 +28,7 @@
 
 using namespace csdles;
 
-static bch::E_BUNCH( csdleo::user_functions__ *) Steerings_;
+static bch::E_BUNCH( csdleo::callback__ *) Steerings_;
 
 #ifdef CPE_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
@@ -71,7 +71,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 static void Terminate_( void )
 {
 	sdr::row__ Row = Steerings_.First();
-	csdleo::user_functions__ *Steering = NULL;
+	csdleo::callback__ *Steering = NULL;
 
 	while ( Row != E_NIL ) {
 
@@ -91,9 +91,9 @@ static void ExitFunction_( void )
 	Terminate_();
 }
 
-csdleo::user_functions__ *CSDLEORetrieveSteering( csdleo::shared_data__ *Data )
+csdleo::callback__ *CSDLEORetrieveSteering( csdleo::shared_data__ *Data )
 {
-	csdleo::user_functions__ *Steering = NULL;
+	csdleo::callback__ *Steering = NULL;
 ERRFProlog
 	flw::standalone_oflow__<> OFlow;
 	txf::text_oflow__ TOFlow;
@@ -125,7 +125,7 @@ ERRFEpilog
 	return Steering;
 }
 
-void CSDLEOReleaseSteering( csdleo::user_functions__ *Steering )
+void CSDLEOReleaseSteering( csdleo::callback__ *Steering )
 {
 	csdles::CSDLESReleaseSteering( Steering );
 }

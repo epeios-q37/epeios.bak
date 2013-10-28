@@ -37,20 +37,19 @@
 # include "sck.h"
 # include "cpe.h"
 
-# include "csdsuf.h"
+# include "csdscb.h"
 
 # define CSDNBS__DEFAULT_TIMEOUT	SCK__DEFAULT_TIMEOUT
 
 namespace csdbns {
 	using namespace sck;
 
-	using namespace csdsuf;
+	using namespace csdscb;
 
 	//t The type of a port.
 	typedef bso::u16__	port__;
 
-	//c User functions with socket.
-	class socket_user_functions__ {
+	class socket_callback__ {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			sck::socket__ Socket,
@@ -83,14 +82,11 @@ namespace csdbns {
 	{
 	private:
 		socket__ Socket_;
-		/* Retourne une socket sur une connection. FONCTION BLOQUANTE.
-		Lorsque 'IgnorerErreur' à vrai, toute les erreurs sont ignorées, ceci pour garantir
-		la présence du processus d'écoute. */
-		socket_user_functions__ *_UserFunctions;
+		socket_callback__ *_Callback;
 		void *_UP;
-		bso::bool__ _UserFunctionsCalled( void ) const	// Retourne 'true', si une fonction utilisateurs a été appelée.
+		bso::bool__ _CallbackAvailable( void ) const	// Retourne 'true', si un 'callback' est présent.
 		{
-			return _UserFunctions != NULL;
+			return _Callback != NULL;
 		}
 		socket__ _Interroger(
 			err::handling__ ErrorHandling,
@@ -104,12 +100,12 @@ namespace csdbns {
 				if ( Socket_ != SCK_INVALID_SOCKET )
 					Close( Socket_ );
 
-				if ( _UserFunctionsCalled() )
-					_UserFunctions->PostProcess( _UP );	// Même si 'UP' != NULL;
+				if ( _CallbackAvailable() )
+					_Callback->PostProcess( _UP );	// Même si 'UP' != NULL;
 			}
 
 			Socket_ = SCK_INVALID_SOCKET;
-			_UserFunctions = NULL;
+			_Callback = NULL;
 			_UP = NULL;
 		}
 		listener___( void )
@@ -155,7 +151,7 @@ namespace csdbns {
 		// If returned value = 'true', then exiting is because 'TimeOut' reached.
 		// If returned value == 'false', then underlying user function retuns 'bStop'.
 		bso::bool__ Process(
-			socket_user_functions__ &Functions,
+			socket_callback__ &Callback,
 			err::handling__ ErrorHandling = err::h_Default,
 			sck::duration__ TimeOut = SCK_INFINITE );
 	};
@@ -167,8 +163,8 @@ namespace csdbns {
 		void *UP;
 	};
 
-	class _functions__
-	: public socket_user_functions__
+	class _callback__
+	: public socket_callback__
 	{
 	protected:
 		virtual void *CSDBNSPreProcess(
@@ -184,7 +180,7 @@ namespace csdbns {
 				ERRAlc();
 
 			Data->Flow.Init( Socket );
-			Data->UP = UserFunctions->PreProcess( IP );
+			Data->UP = BaseCallback->PreProcess( IP );
 		ERRErr
 			if ( Data != NULL )
 				delete Data;
@@ -203,36 +199,27 @@ namespace csdbns {
 				ERRc();
 #endif
 
-			return UserFunctions->Process( Data.Flow, Data.UP );
+			return BaseCallback->Process( Data.Flow, Data.UP );
 		}
 		virtual void CSDBNSPostProcess( void *UP )
 		{
 			if ( UP == NULL )
 				ERRPrm();
 
-			UserFunctions->PostProcess( ((_flow_data__ *)UP)->UP );
+			BaseCallback->PostProcess( ((_flow_data__ *)UP)->UP );
 
 			delete (_flow_data__ *)UP;
 		}
 	public:
-		user_functions__ *UserFunctions;
+		csdscb::callback__ *BaseCallback;
 	};
 
-	/*c Handling a server, with process duplication for each client. */
-	/* Sous Windows, pour utiliser comme service :
-		- Pour installer le service : 
-			- 'InitService(...)' (Pas d'autres 'Init(...)',
-			- 'InstallService(...)'.
-		- Pour lancer le service (lorsque l'application lancée par le gestionnaire de service de 'Windows', auqual cas 'argc' == '0').
-			- 'Init(...)',
-			- 'LaunchService()'.
-	*/
 	class server___
 	: public listener___
 	{
 	private:
-		socket_user_functions__ *_SocketFunctions;
-		_functions__ _Functions;
+		socket_callback__ *_SocketCallback;
+		_callback__ _Callback;
 	public:
 		void reset( bool P = true )
 		{
@@ -241,7 +228,7 @@ namespace csdbns {
 		server___( void )
 		{
 			reset( false );
-			_SocketFunctions = NULL;
+			_SocketCallback = NULL;
 		}
 		~server___( void )
 		{
@@ -251,7 +238,7 @@ namespace csdbns {
 		A maximum of 'Amount' are accepted in the waiting queue. */
 		bso::bool__ Init(
 			port__ Port,
-			socket_user_functions__ &SocketFunctions,
+			socket_callback__ &SocketCallback,
 			int Amount,
 			err::handling__ ErrorHandling = err::h_Default )
 		{
@@ -259,7 +246,7 @@ namespace csdbns {
 			if ( !_service__::Init() )
 				ERRFwk();
 #endif
-			_SocketFunctions = &SocketFunctions;
+			_SocketCallback = &SocketCallback;
 			
 			return listener___::Init( Port, Amount, ErrorHandling );
 		}
@@ -267,7 +254,7 @@ namespace csdbns {
 		A maximum of 'Amount' are accepted in the waiting queue. */
 		bso::bool__ Init(
 			port__ Port,
-			socket_user_functions__ &SocketFunctions,
+			socket_callback__ &SocketCallback,
 			err::handling__ ErrorHandling = err::h_Default,
 			int Amount = 5 )
 		{
@@ -275,13 +262,13 @@ namespace csdbns {
 			if ( !_service__::Init() )
 				ERRFwk();
 #endif
-			_SocketFunctions = &SocketFunctions;
+			_SocketCallback = &SocketCallback;
 
 			return listener___::Init( Port, Amount, ErrorHandling );
 		}
 		bso::bool__ Init(
 			port__ Port,
-			user_functions__ &UserFunctions,
+			csdscb::callback__ &Callback,
 			err::handling__ ErrorHandling = err::h_Default,
 			int Amount = 5 )
 		{
@@ -289,13 +276,13 @@ namespace csdbns {
 			if ( !_service__::Init() )
 				ERRFwk();
 #endif
-			_Functions.UserFunctions = &UserFunctions;
+			_Callback.BaseCallback = &Callback;
 
-			return Init( Port, this->_Functions, Amount, ErrorHandling );
+			return Init( Port, this->_Callback, Amount, ErrorHandling );
 		}
 		bso::bool__ Init(
 			port__ Port,
-			user_functions__ &UserFunctions,
+			csdscb::callback__ &Callback,
 			int Amount,
 			err::handling__ ErrorHandling = err::h_Default )
 		{
@@ -303,9 +290,9 @@ namespace csdbns {
 			if ( !_service__::Init() )
 				ERRFwk();
 #endif
-			_Functions.UserFunctions = &UserFunctions;
+			_Callback.BaseCallback = &Callback;
 
-			return Init( Port, this->_Functions, Amount, ErrorHandling );
+			return Init( Port, this->_Callback, Amount, ErrorHandling );
 		}
 		bso::bool__ LaunchService( const char *ServiceName )
 		{

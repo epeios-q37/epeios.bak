@@ -39,8 +39,8 @@
 # include "csdleo.h"
 
 namespace csdles {
-	csdleo::user_functions__ *CSDLESRetrieveSteering( csdleo::data__ *Data );	// A surcharger.
-	void CSDLESReleaseSteering( csdleo::user_functions__ * );	// A surcharger.
+	csdleo::callback__ *CSDLESRetrieveSteering( csdleo::data__ *Data );	// A surcharger.
+	void CSDLESReleaseSteering( csdleo::callback__ * );	// A surcharger.
 }		
 
 				  /********************************************/

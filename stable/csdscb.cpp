@@ -1,7 +1,7 @@
 /*
-	'csdsuf.h' by Claude SIMON (http://zeusw.org/).
+	'csdscb.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'csdsuf' is part of the Epeios framework.
+	'csdscb' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,73 +17,39 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CSDSUF__INC
-#define CSDSUF__INC
+#define CSDSCB__COMPILATION
 
-#define CSDSUF_NAME		"CSDSUF"
-
-#if defined( E_DEBUG ) && !defined( CSDSUF_NODBG )
-#define CSDSUF_DBG
-#endif
+#include "csdscb.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// Client-Server Devices Server User Functions
+using namespace csdscb;
 
-# error "Obsolete ! Use 'CSDSCB' instead !"
+/* Although in theory this class is inaccessible to the different modules,
+it is necessary to personalize it, or certain compiler would not work properly */
 
-# include "err.h"
-# include "flw.h"
-# include "tol.h"
+class csdscbpersonnalization
+{
+public:
+	csdscbpersonnalization( void )
+	{
+		/* place here the actions concerning this library
+		to be realized at the launching of the application  */
+	}
+	~csdscbpersonnalization( void )
+	{
+		/* place here the actions concerning this library
+		to be realized at the ending of the application  */
+	}
+};
 
-namespace csdsuf {
-	enum action__ {
-		aContinue,
-		aStop,
-		a_amount,
-		a_Undefined
-	};
-
-	class user_functions__ {
-	protected:
-		virtual void *CSDSUFPreProcess( const char *Origin ) = 0;
-		virtual action__ CSDSUFProcess(
-			flw::ioflow__ &Flow,
-			void *UP ) = 0;
-		virtual void CSDSUFPostProcess( void *UP ) = 0;
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( user_functions__ );
-		void *PreProcess( const char *Origin )
-		{
-			return CSDSUFPreProcess( Origin );
-		}
-		action__ Process(
-			flw::ioflow__ &Flow,
-			void *UP )
-		{
-			return CSDSUFProcess( Flow, UP );
-		}
-		void PostProcess( void *UP )
-		{
-			CSDSUFPostProcess( UP );
-		}
-		void Init( void )
-		{
-			// Standadisation.
-		}
-	};
-}
 
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-#endif
+static csdscbpersonnalization Tutor;

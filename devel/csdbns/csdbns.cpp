@@ -149,7 +149,7 @@ ERREpilog
 }
 
 bso::bool__ csdbns::listener___::Process(
-	socket_user_functions__ &Functions,
+	socket_callback__ &Callback,
 	err::handling__ ErrorHandling,
 	sck::duration__ TimeOut )
 {
@@ -157,9 +157,9 @@ bso::bool__ csdbns::listener___::Process(
 ERRProlog
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	action__ Action = a_Undefined;
-	const char *IP = NULL;
+	const char *UP = NULL;
 ERRBegin
-	Socket = _Interroger( ErrorHandling, TimeOut, IP );
+	Socket = _Interroger( ErrorHandling, TimeOut, UP );
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
 
@@ -169,10 +169,10 @@ ERRBegin
 			correctement l'objet qu'il a crée (référencé par 'UP'), même lors d'un ^C,
 			qui nous éjecte directement de cette fonction, mais provoque quand même un appel du destructeur. */
 
-		_UP = Functions.PreProcess( Socket, IP );
-		_UserFunctions = &Functions;
+		_UP = Callback.PreProcess( Socket, UP );
+		_Callback = &Callback;
 
-		while ( ( Action = Functions.Process( Socket, _UP ) ) == aContinue );
+		while ( ( Action = Callback.Process( Socket, _UP ) ) == aContinue );
 
 		switch( Action ) {
 		case aContinue:
@@ -190,10 +190,10 @@ ERRBegin
 
 ERRErr
 ERREnd
-	if ( _UserFunctionsCalled() ) {
-		Functions.PostProcess( _UP );
+	if ( _CallbackAvailable() ) {
+		Callback.PostProcess( _UP );
 		_UP = NULL;
-		_UserFunctions = NULL;	// Pour empêcher un autre appel au 'PostProcess' lors de l'appel du destructeur.
+		_Callback = NULL;	// Pour empêcher un autre appel au 'PostProcess' lors de l'appel du destructeur.
 	}
 
 ERREpilog
@@ -204,7 +204,7 @@ ERREpilog
 
 struct socket_data__
 {
-	socket_user_functions__ *Functions;
+	socket_callback__ *Callback;
 	sck::socket__ Socket;
 	const char *IP;
 	mtx::mutex_handler__ Mutex;
@@ -214,7 +214,7 @@ struct socket_data__
 détruits correctement même en cas de ^C */
 
 struct csdbns_repository_item__ {
-	socket_user_functions__ *UserFunctions;
+	socket_callback__ *Callback;
 	void *UP;
 };
 
@@ -256,7 +256,7 @@ inline static void UnsafeClean_( rrow__ Row )
 
 	Repository_.Recall( Row, Item );
 
-	Item.UserFunctions->PostProcess( Item.UP );
+	Item.Callback->PostProcess( Item.UP );
 
 	Repository_.Delete( Row );
 }
@@ -292,7 +292,7 @@ static void Traiter_( void *PU )
 	::socket_data__ &Data = *(::socket_data__ *)PU;
 ERRFProlog
 	bso::bool__ Close = true;
-	socket_user_functions__ &Functions = *Data.Functions;
+	socket_callback__ &Callback = *Data.Callback;
 	socket__ Socket = Data.Socket;
 	void *UP = NULL;
 	action__ Action = a_Undefined;
@@ -308,14 +308,14 @@ ERRFBegin
 
 	ERRProlog
 	ERRBegin
-		UP = Functions.PreProcess( Socket, Buffer );
+		UP = Callback.PreProcess( Socket, Buffer );
 
-		Item.UserFunctions = &Functions;
+		Item.Callback = &Callback;
 		Item.UP = UP;
 
 		Row = New_( Item );
 
-		while ( ( Action = Functions.Process( Socket, UP ) ) == aContinue );
+		while ( ( Action = Callback.Process( Socket, UP ) ) == aContinue );
 	ERRErr
 	ERREnd
 		if ( Row != E_NIL )
@@ -341,7 +341,7 @@ ERRBegin
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
 
-		Data.Functions = _SocketFunctions;
+		Data.Callback = _SocketCallback;
 		Data.Mutex = mtx::Create( mtx::mSynchronizing );
 
 		mtx::Lock( Data.Mutex );	// Unlocked by the 'Traiter_()' function.

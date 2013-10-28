@@ -1,7 +1,7 @@
 /*
-	'csdsuf.h' by Claude SIMON (http://zeusw.org/).
+	'scldaemon.h' by Claude SIMON (http://zeusw.org/).
 
-	'csdsuf' is part of the Epeios framework.
+	'scldaemon' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,68 +17,44 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CSDSUF__INC
-#define CSDSUF__INC
+#ifndef SCLDAEMON__INC
+# define SCLDAEMON__INC
 
-#define CSDSUF_NAME		"CSDSUF"
+# define SCLDAEMON_NAME		"SCLDAEMON"
 
-#if defined( E_DEBUG ) && !defined( CSDSUF_NODBG )
-#define CSDSUF_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( SCLDAEMON_NODBG )
+#  define SCLDAEMON_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// Client-Server Devices Server User Functions
-
-# error "Obsolete ! Use 'CSDSCB' instead !"
+// SoCLe DAEMON
 
 # include "err.h"
 # include "flw.h"
-# include "tol.h"
 
-namespace csdsuf {
-	enum action__ {
-		aContinue,
-		aStop,
-		a_amount,
-		a_Undefined
-	};
+# include "csdleo.h"
 
-	class user_functions__ {
-	protected:
-		virtual void *CSDSUFPreProcess( const char *Origin ) = 0;
-		virtual action__ CSDSUFProcess(
-			flw::ioflow__ &Flow,
-			void *UP ) = 0;
-		virtual void CSDSUFPostProcess( void *UP ) = 0;
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( user_functions__ );
-		void *PreProcess( const char *Origin )
-		{
-			return CSDSUFPreProcess( Origin );
-		}
-		action__ Process(
-			flw::ioflow__ &Flow,
-			void *UP )
-		{
-			return CSDSUFProcess( Flow, UP );
-		}
-		void PostProcess( void *UP )
-		{
-			CSDSUFPostProcess( UP );
-		}
-		void Init( void )
-		{
-			// Standadisation.
-		}
-	};
+namespace scldaemon {
+	const char *GetLanguage( void );
+
+	// A définir par l'utilisateur.
+	extern const char *TargetName;
+
+	// A définir par l'utilisateur.
+	csdleo::callback__ *RetrieveSteering(
+		csdleo::mode__ Mode,
+		const lcl::locale_ &Locale );	// To overload !
+
+	// A définir par l'utilisateur.
+	void ReleaseSteering( csdleo::callback__ *Steering );	// To overload.
+
+	void DisplayModuleClosingMessage( void );
+
+	void DisplayModuleClosedMessage( void );
 }
 
 				  /********************************************/
