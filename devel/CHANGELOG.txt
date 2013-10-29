@@ -1,5 +1,17 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
+29/10/2013 :
+	- Général :
+		- Adaptation modification 'ERR'.
+	- ERR :
+		- Retrait de tout ce qui concern 'ERRExit()' (redondant avec 'ERRAbort()').
+	- FBL..., CSD... :
+		- Modifications relatives à modificaiton 'SCLBACKND'.
+	- RGSTRY :
+		- La classe 'callback' est désormais 'cachée' pour éviter des conflits.
+	- SCLBACKND :
+		Refonte pour prises en compte données communes à tous les 'backend'.
+
 23/10/2013 :
 	- FLS :
 		- Correction relative au message 'mixed signed/unsigned' lorsque compilation en x86-64.

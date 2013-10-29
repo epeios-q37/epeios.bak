@@ -543,123 +543,125 @@ ERREpilog
 #	define DEFAULT_NAMESPACE XPP__PREPROCESSOR_DEFAULT_NAMESPACE
 #endif
 
-class callback___
-: public xml::callback__
-{
-private:
-	registry_ &_Registry;
-	row__ _Target, _Current;
-protected:
-	virtual bso::bool__ XMLProcessingInstruction( const xml::dump_ & )
+namespace {
+	class callback___
+	: public xml::callback__
 	{
-		return true;
-	}
-	virtual bso::bool__ XMLStartTag(
-		const str::string_ &TagName,
-		const xml::dump_ &Dump )
-	{
+	private:
+		registry_ &_Registry;
+		row__ _Target, _Current;
+	protected:
+		virtual bso::bool__ XMLProcessingInstruction( const xml::dump_ & )
+		{
+			return true;
+		}
+		virtual bso::bool__ XMLStartTag(
+			const str::string_ &TagName,
+			const xml::dump_ &Dump )
+		{
 
-		if ( _Current == E_NIL )
-			_Current = _Registry.CreateRegistry( str::string( "_root" ) );
+			if ( _Current == E_NIL )
+				_Current = _Registry.CreateRegistry( str::string( "_root" ) );
 		
-		_Current = _Registry.AddKey( TagName, _Current );
+			_Current = _Registry.AddKey( TagName, _Current );
 
-		if ( _Target == E_NIL )
-			_Target = _Current;
+			if ( _Target == E_NIL )
+				_Target = _Current;
 
-		return true;
-	}
-	virtual bso::bool__ XMLAttribute(
-		const str::string_ &TagName,
-		const str::string_ &Name,
-		const str::string_ &Value,
-		const xml::dump_ &Dump )
-	{
-		_Registry.AddAttribute( Name, Value, _Current );
+			return true;
+		}
+		virtual bso::bool__ XMLAttribute(
+			const str::string_ &TagName,
+			const str::string_ &Name,
+			const str::string_ &Value,
+			const xml::dump_ &Dump )
+		{
+			_Registry.AddAttribute( Name, Value, _Current );
 
-		return true;
-	}
-	virtual bso::bool__ XMLStartTagClosed(
-		const str::string_ &TagName,
-		const xml::dump_ &Dump )
-	{
-		return true;
-	}
-	virtual bso::bool__ XMLValue(
-		const str::string_ &TagName,
-		const str::string_ &Value,
-		const xml::dump_ &Dump )
-	{
-		_Registry.SetValue( Value, _Current, true );
+			return true;
+		}
+		virtual bso::bool__ XMLStartTagClosed(
+			const str::string_ &TagName,
+			const xml::dump_ &Dump )
+		{
+			return true;
+		}
+		virtual bso::bool__ XMLValue(
+			const str::string_ &TagName,
+			const str::string_ &Value,
+			const xml::dump_ &Dump )
+		{
+			_Registry.SetValue( Value, _Current, true );
 
-		return true;
-	}
-	virtual bso::bool__ XMLEndTag(
-		const str::string_ &TagName,
-		const xml::dump_ &Dump )
-	{
+			return true;
+		}
+		virtual bso::bool__ XMLEndTag(
+			const str::string_ &TagName,
+			const xml::dump_ &Dump )
+		{
 
-		_Current = _Registry.GetParentRow( _Current );
+			_Current = _Registry.GetParentRow( _Current );
 
-		if ( _Current == E_NIL )
-			return false;
+			if ( _Current == E_NIL )
+				return false;
 
-		return true;
-	}
-	virtual bso::bool__ XMLComment(
-		const str::string_ &Value,
-		const xml::dump_ &Dump )
-	{
-		return true;
-	}
-public:
-	callback___( registry_ &Registry )
-	: _Registry( Registry )
-	{
-		_Target = _Current = E_NIL;
-	}
-	void Init( row__ Root )
-	{
-		_Target = E_NIL;
-		_Current = Root;
-	}
-	row__ GetTarget( void ) const
-	{
-		return _Target;
-	}
-	row__ GetRoot( void ) const
-	{
-		return _Current;
-	}
-};
-
-void rgstry::registry_::_Delete( row__ Row )
-{
-	const node_ &Node = Nodes( Row );
-
-	_Delete( Node.Children );
-
-	Nodes.Delete( Row );
+			return true;
+		}
+		virtual bso::bool__ XMLComment(
+			const str::string_ &Value,
+			const xml::dump_ &Dump )
+		{
+			return true;
+		}
+	public:
+		callback___( registry_ &Registry )
+		: _Registry( Registry )
+		{
+			_Target = _Current = E_NIL;
+		}
+		void Init( row__ Root )
+		{
+			_Target = E_NIL;
+			_Current = Root;
+		}
+		row__ GetTarget( void ) const
+		{
+			return _Target;
+		}
+		row__ GetRoot( void ) const
+		{
+			return _Current;
+		}
+	};
 }
 
-bso::bool__ rgstry::registry_::Exists(
-	const str::string_ &PathString,
-	row__ ParentRow,
-	sdr::row__ *PathErrorRow ) const
-{
-	bso::bool__ Result = false;
-ERRProlog
-	path Path;
-ERRBegin
-	Path.Init();
+	void rgstry::registry_::_Delete( row__ Row )
+	{
+		const node_ &Node = Nodes( Row );
 
-	if ( BuildPath_( PathString, Path, PathErrorRow ) )
-		Result = Exists( Path, ParentRow );
-ERRErr
-ERREnd
-ERREpilog
-	return Result;
-}
+		_Delete( Node.Children );
+
+		Nodes.Delete( Row );
+	}
+
+	bso::bool__ rgstry::registry_::Exists(
+		const str::string_ &PathString,
+		row__ ParentRow,
+		sdr::row__ *PathErrorRow ) const
+	{
+		bso::bool__ Result = false;
+	ERRProlog
+		path Path;
+	ERRBegin
+		Path.Init();
+
+		if ( BuildPath_( PathString, Path, PathErrorRow ) )
+			Result = Exists( Path, ParentRow );
+	ERRErr
+	ERREnd
+	ERREpilog
+		return Result;
+	}
 
 void rgstry::registry_::_DumpAttributes(
 	row__ Row,

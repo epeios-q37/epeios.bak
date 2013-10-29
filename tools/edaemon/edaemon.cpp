@@ -209,15 +209,15 @@ ERRBegin
 	case scltool::cVersion:
 		PrintHeader_();
 //		TTR.Advertise( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cHelp:
 		PrintUsage_( Description );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cLicense:
 		epsmsc::PrintLicense( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 //	case c:
 	case CLNARG_NONE:

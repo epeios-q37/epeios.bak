@@ -103,6 +103,11 @@ public:
 	void reset( bso::bool__ P = true )
 	{
 		_callback___::reset( P );
+
+		if ( P == true ) {
+			scldaemon::DisplayModuleClosingMessage();
+			scldaemon::DisplayModuleClosedMessage();
+		}
 	}
 	E_CVDTOR( callback___ )
 	void Init(

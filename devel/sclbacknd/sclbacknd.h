@@ -41,6 +41,8 @@
 # include "fblbkd.h"
 # include "fblbur.h"
 
+# include "scldaemon.h"
+
 namespace sclbacknd {
 
 	// Prédéclaration.
