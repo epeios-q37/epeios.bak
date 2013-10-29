@@ -304,14 +304,14 @@ ERREpilog
 }
 
 static void UseStraightConnections_(
-	csdsuf::user_functions__ &UserFunctions,
+	csdscb::callback__ &Callback,
 	const bso::char__ *Module,
 	csdbns::port__ Port )
 {
 ERRProlog
 	csdbns::server___ Server;
 ERRBegin
-	Server.Init( Port, UserFunctions );
+	Server.Init( Port, Callback );
 
 	Server.Process();
 ERRErr
@@ -320,7 +320,7 @@ ERREpilog
 }
 
 static void UseSwitchingConnections_(
-	csdsuf::user_functions__ &UserFunctions,
+	csdscb::callback__ &Callback,
 	csdsns::log_functions__ &LogFunctions,
 	const bso::char__ *Module,
 	csdbns::port__ Port )
@@ -328,7 +328,7 @@ static void UseSwitchingConnections_(
 ERRProlog
 	csdsns::server___ Server;
 ERRBegin
-	Server.Init( Port, UserFunctions, LogFunctions );
+	Server.Init( Port, Callback, LogFunctions );
 
 	Server.Process();
 ERRErr
@@ -379,7 +379,7 @@ public:
 };
 
 static void UseSwitchingConnections_(
-	csdsuf::user_functions__ &UserFunctions,
+	csdscb::callback__ &Callback,
 	const char *LogFileName,
 	log_file_handling__ LogFileHandling,
 	const bso::char__ *Module,
@@ -420,7 +420,7 @@ ERRBegin
 			TFlow.Init( FFlow );
 	}
 
-	UseSwitchingConnections_( UserFunctions, LogFileName == NULL ? *(csdsns::log_functions__ *)NULL : LogFunctions, Module, Port );
+	UseSwitchingConnections_( Callback, LogFileName == NULL ? *(csdsns::log_functions__ *)NULL : LogFunctions, Module, Port );
 ERRErr
 ERREnd
 ERREpilog

@@ -28,6 +28,67 @@
 
 using namespace csdlec;
 
+bso::bool__ csdlec::library_embedded_client_core__::Init(
+	const char *LibraryName,
+	library_data__ &Data,
+	err::handling__ ERRHandling )
+{
+	csdleo::shared_data__ SharedData;
+
+	SharedData.Init( Data );
+
+	reset();
+
+	if ( _Library.Init( LibraryName, ERRHandling ) )
+		if ( _RetrieveSteering( &SharedData ) )
+			return true;
+		else
+			reset();	// Sinon le bibliothèque n'est pas déchargée correctement à la fermeture de l'application.
+
+	if ( ERRHandling != err::hUserDefined )
+		ERRSys();
+
+	return false;
+}
+
+
+extern "C" typedef csdleo::retrieve_steering retrieve_steering;
+
+bso::bool__ csdlec::library_embedded_client_core__::_RetrieveSteering( csdleo::shared_data__ *Data )
+{
+	retrieve_steering *RetrieveSteering = dlbrry::GetFunction<retrieve_steering *>( E_STRING( CSDLEO_RETRIEVE_STEERING_FUNCTION_NAME ), _Library );
+
+	if ( RetrieveSteering == NULL )
+		return false;
+
+	if ( _Steering != NULL )
+		ERRFwk();
+
+	if ( ( _Steering = RetrieveSteering( Data ) ) == NULL )
+		return false;
+
+	return true;
+}
+
+extern "C" typedef csdleo::release_steering release_steering;
+
+bso::bool__ csdlec::library_embedded_client_core__::_ReleaseSteering( void )
+{
+	release_steering *ReleaseSteering = dlbrry::GetFunction<release_steering *>( E_STRING( CSDLEO_RELEASE_STEERING_FUNCTION_NAME ), _Library );
+
+	if ( ReleaseSteering == NULL )
+		return false;
+
+	if ( _Steering == NULL )
+		ERRFwk();
+
+	ReleaseSteering( _Steering );
+
+	_Steering = NULL;
+
+	return true;
+}
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 

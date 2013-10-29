@@ -36,9 +36,9 @@
 #define COPYRIGHT		COPYRIGHT_YEARS " " SKTINF_OWNER_NAME " (" SKTINF_OWNER_CONTACT ")"	
 #define API_VERSION		"1"
 
-const char *sclbacknd::TargetName = BACKEND_NAME;
+typedef sclbacknd::callback__ _callback___;
 
-typedef fblbkd::backend___	_backend___;
+typedef sclbacknd::backend___	_backend___;
 
 class backend___
 : public _backend___
@@ -46,6 +46,11 @@ class backend___
 private:
 	FBLBKD_RAM_MODULE( wrpexample::myobject_ ) MyObject;
 public:
+	void reset( bso::bool__ P = true )
+	{
+		_backend___::reset( P );
+	}
+	E_CVDTOR( backend___ );
 	void Init(
 		fblbur::mode__ Mode,
 		const lcl::locale_ &Locale,
@@ -68,28 +73,65 @@ public:
 	}
 };
 
-typedef fblbkd::text_log_functions__<> log_functions__;
-
-typedef sclbacknd::data___<backend___> data___;
-
-void *sclbacknd::New( 
-	fblbur::mode__ Mode,
-	const lcl::locale_ &Locale,
-	const char *Origin )
+// Dans cette classe, on place ce qui est commun à tous les 'backend's.
+class callback___
+: public _callback___
 {
-	::data___ *Data = NULL;
+protected:
+	virtual _backend___ *SCLBACKNDNew( 
+		fblbur::mode__ Mode,
+		const lcl::locale_ &Locale,
+		const char *Origin )
+	{
+		backend___ *Backend = NULL;
+	ERRProlog
+	ERRBegin
+		if ( ( Backend = new backend___ ) == NULL )
+			ERRAlc();
+
+		Backend->Init( Mode, Locale, Origin );
+	ERRErr
+		if ( Backend != NULL )
+			delete Backend;
+
+		Backend = NULL;
+	ERREnd
+	ERREpilog
+		return Backend;
+	}
+public:
+	void reset( bso::bool__ P = true )
+	{
+		_callback___::reset( P );
+	}
+	E_CVDTOR( callback___ )
+	void Init(
+		fblbur::mode__ Mode,
+		const lcl::locale_ &Locale )
+	{
+		_callback___::Init( Mode, Locale );
+	}
+};
+
+const char *sclbacknd::TargetName = BACKEND_NAME;
+
+_callback___ *sclbacknd::SCLBACKNDNew(
+	fblbur::mode__ Mode,
+	const lcl::locale_ &Locale )
+{
+	_callback___ *Callback = NULL;
 ERRProlog
 ERRBegin
-	if ( ( Data = new ::data___ ) == NULL )
+	if ( ( Callback = new callback___ ) == NULL )
 		ERRAlc();
 
-	Data->Init( Mode, Locale, Origin );
+	Callback->Init( Mode, Locale );
 ERRErr
-	if ( Data != NULL )
-		delete Data;
+	if ( Callback != NULL )
+		delete Callback;
 
-	Data = NULL;
+	Callback = NULL;
 ERREnd
 ERREpilog
-	return Data;
+	return Callback;
 }

@@ -1,64 +1,37 @@
 /*
-	Header for the 'csdlec' library by Claude SIMON (csimon at zeusw dot org)
-	Copyright (C) 2004 Claude SIMON.
+	'csdlec.h' by Claude SIMON (http://zeusw.org/).
 
-	This file is part of the Epeios (http://zeusw.org/epeios/) project.
+	'csdlec' is part of the Epeios framework.
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
- 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, go to http://www.fsf.org/
-	or write to the:
-  
-         	         Free Software Foundation, Inc.,
-           59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+    The Epeios framework is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//	$Id: csdlec.h,v 1.16 2013/04/15 10:50:49 csimon Exp $
-
 #ifndef CSDLEC__INC
-#define CSDLEC__INC
+# define CSDLEC__INC
 
-#define CSDLEC_NAME		"CSDLEC"
+# define CSDLEC_NAME		"CSDLEC"
 
-#define	CSDLEC_VERSION	"$Revision: 1.16 $"
-
-#define CSDLEC_OWNER		"Claude SIMON"
-
-#include "ttr.h"
-
-extern class ttr_tutor &CSDLECTutor;
-
-#if defined( E_DEBUG ) && !defined( CSDLEC_NODBG )
-#define CSDLEC_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.16 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/15 10:50:49 $
-
-/* End of automatic documentation generation part. */
+# if defined( E_DEBUG ) && !defined( CSDLEC_NODBG )
+#  define CSDLEC_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-/* Addendum to the automatic documentation generation part. */
-//D Client-Server Devices Library Embedded Client 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+// Client-Server Devices Library Embedded Client
 
 #include "err.h"
 #include "flw.h"
@@ -160,18 +133,18 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 	: public _passive_generic_driver___
 	{
 	private:
-		csdleo::user_functions__ *_UserFunctions;
+		csdleo::callback__ *_Callback;
 		void *_UP;
 		flw::ioflow__ *_Flow;
 		bso::bool__ _DataAvailable;
 		void _Create( void )
 		{
-			_UP = _UserFunctions->PreProcess( "(embed)" );
+			_UP = _Callback->PreProcess( "(embed)" );
 		}
 		void _Delete( void )
 		{
 			if( _UP != NULL )
-				_UserFunctions->PostProcess( _UP );
+				_Callback->PostProcess( _UP );
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(
@@ -185,7 +158,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 		virtual void FDRCommit( void )
 		{
 			if ( _DataAvailable )
-				_UserFunctions->Process( *_Flow, _UP );
+				_Callback->Process( *_Flow, _UP );
 
 			_DataAvailable = false;
 		}
@@ -197,7 +170,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 			if ( P )
 				_Delete();
 
-			_UserFunctions = NULL;
+			_Callback = NULL;
 			_UP = NULL;
 			_Flow = NULL;
 			_DataAvailable = false;
@@ -214,13 +187,13 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 			reset();
 		}
 		void Init(
-			csdleo::user_functions__ &UserFunctions,
+			csdleo::callback__ &Callback,
 			flw::ioflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			reset();
 
-			_UserFunctions = &UserFunctions;
+			_Callback = &Callback;
 			_Flow = &Flow;
 
 			_passive_generic_driver___::Init( ThreadSafety );
@@ -282,7 +255,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 			_Master.reset( P );
 			_Slave.reset( P );
 		}
-		void Init( csdleo::user_functions__ &UserFunctions)
+		void Init( csdleo::callback__ &Callback )
 		{
 			reset();
 /*
@@ -294,7 +267,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 
 			_Backend.Init();
 
-			_Driver.Init( UserFunctions, _Backend.Flow, fdr::tsDisabled );
+			_Driver.Init(Callback, _Backend.Flow, fdr::tsDisabled );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), FLW_AMOUNT_MAX );
 		}
 	};
@@ -303,7 +276,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 	{
 	private:
 		dlbrry::dynamic_library___ _Library;
-		csdleo::user_functions__ *_Steering;
+		csdleo::callback__ *_Steering;
 		bso::bool__ _RetrieveSteering( csdleo::shared_data__ *Data );
 		bso::bool__ _ReleaseSteering( void );
 	public:
@@ -338,7 +311,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 		{
 			return _Steering != NULL;
 		}
-		csdleo::user_functions__ &GetSteering( void ) const
+		csdleo::callback__ &GetSteering( void ) const
 		{
 			if ( !IsInitialized() )
 				ERRFwk();
@@ -359,7 +332,6 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 
 }
 
-/*$END$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */

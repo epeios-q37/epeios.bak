@@ -36,52 +36,108 @@
 # include "err.h"
 # include "flw.h"
 
-# include "csdleo.h"
+# include "csdscb.h"
 
 # include "fblbkd.h"
+# include "fblbur.h"
 
 namespace sclbacknd {
 
-	struct _data__ 
+	// Prédéclaration.
+	class callback__;
+
+	typedef fblbkd::backend___	_backend___;
+
+	struct backend___ 
+	: public _backend___
 	{
-		fblbkd::backend___ &Backend;
-		fblbkd::text_log_functions__<> RequestLogFunctions;
-		flx::void_oflow_driver___ VoidFlowDriver;
-		_data__( fblbkd::backend___ &Backend )
-		: Backend( Backend )
-		{}
-		void Init( void )
+	private:
+		fblbkd::text_log_functions__<> _RequestLogFunctions;
+		flx::void_oflow_driver___ _VoidFlowDriver;
+	public:
+		void reset( bso::bool__ P = true )
 		{
-			VoidFlowDriver.Init( fdr::tsDisabled );
-			RequestLogFunctions.Init( VoidFlowDriver );
+			_backend___::reset( P );
+			_RequestLogFunctions.reset( P );
+			_VoidFlowDriver.reset( P );
+		}
+		E_CVDTOR( backend___ );
+		void Init(
+			fblbur::mode__ Mode,
+			const char *APIVersion,
+			const char *ClientOrigin,
+			const char *BackendLabel,
+			const lcl::locale_ &Locale,
+			const char *BackendInformations,
+			const char *BackendCopyright,
+			const char *SoftwareInformations )
+		{
+			_backend___::Init( Mode, APIVersion, ClientOrigin, BackendLabel, Locale, BackendInformations, BackendCopyright, SoftwareInformations );
+			_VoidFlowDriver.Init( fdr::tsDisabled );
+			_RequestLogFunctions.Init( _VoidFlowDriver );
+		}
+		friend class sclbacknd::callback__;
+	};
+
+	typedef csdscb::callback__ _callback__;
+
+	class callback__
+	: public _callback__
+	{
+	private:
+		fblbur::mode__ _Mode;
+		const lcl::locale_ *_Locale;
+		virtual void *CSDSCBPreProcess( const char *Origin )
+		{
+			return SCLBACKNDNew( _Mode, *_Locale, Origin );
+		}
+		virtual csdscb::action__ CSDSCBProcess(
+			flw::ioflow__ &Flow,
+			void *UP )
+		{
+			backend___ &Backend = *(backend___ *)UP;
+
+			if ( Backend.Handle( Flow, NULL, Backend._RequestLogFunctions ) )
+				return csdscb::aContinue;
+			else
+				return csdscb::aStop;
+		}
+		virtual void CSDSCBPostProcess( void *UP )
+		{
+			delete (backend___ *)UP;
+		}
+	protected:
+		virtual backend___ *SCLBACKNDNew(
+			fblbur::mode__ Mode,
+			const lcl::locale_ &Locale,
+			const char *Origin ) = 0;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_callback__::reset( P );
+
+			_Mode = fblbur::m_Undefined;
+			_Locale = NULL;
+		}
+		E_CVDTOR( callback__ );
+		void Init(
+			fblbur::mode__ Mode,
+			const lcl::locale_ &Locale )
+		{
+			_callback__::Init();
+
+			_Mode = Mode;
+			_Locale = &Locale;
 		}
 	};
 
-	template <typename backend>	struct data___
-	: public _data__
-	{
-	public:
-		backend Backend;
-		data___( void )
-		: _data__( Backend )
-		{}
-		void Init( 
-			fblbur::mode__ Mode,
-			const lcl::locale_ &Locale,
-			const char *Origin )
-		{
-			_data__::Init();
-			Backend.Init( Mode, Locale, Origin );
-		}
-	};
+	callback__ *SCLBACKNDNew( 
+		fblbur::mode__ Mode,
+		const lcl::locale_ &Locale );	// A surcharger.
+
 
 	// A définir par l'utilisateur.
 	extern const char *TargetName;
-
-	void *New(
-		fblbur::mode__ Mode,
-		const lcl::locale_ &Locale,
-		const char *Origin );	// A Surcharger.
 }
 
 				  /********************************************/
