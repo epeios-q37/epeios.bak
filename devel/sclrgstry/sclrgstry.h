@@ -65,7 +65,7 @@ namespace sclrgstry {
 
 	bso::bool__ IsReady( void );
 
-	void ReportBadOrNoValueForEntryError( const rgstry::tentry__ &Entry );
+	void ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry );
 }
 
 				  /********************************************/

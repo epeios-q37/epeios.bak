@@ -87,6 +87,7 @@ struct parameters___ {
 	}
 };
 
+#pragma warning( disable: 101 )
 static void PrintUsage_( const clnarg::description_ &Description )
 {
 ERRProlog
@@ -154,6 +155,7 @@ ERRErr
 ERREnd
 ERREpilog
 }
+#pragma warning( default: 101 )
 
 static void PrintHeader_( void )
 {
@@ -162,6 +164,7 @@ static void PrintHeader_( void )
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
+#pragma warning( disable: 101 65 )
 static void AnalyzeOptions_(
 	clnarg::analyzer___ &Analyzer,
 	parameters___ &Parameters )
@@ -177,7 +180,7 @@ ERRBegin
 	Options.Init();
 
 	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		clnarg::ReportUnknownOptionError( Unknown, NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
 
 	P = Options.First();
 
@@ -196,6 +199,7 @@ ERRErr
 ERREnd
 ERREpilog
 }
+#pragma warning( default: 101 65 )
 
 static void AnalyzeFreeArguments_(
 	clnarg::analyzer___ &Analyzer,
@@ -215,7 +219,7 @@ ERRBegin
 	case 0:
 		break;
 	default:
-		clnarg::ReportWrongNumberOfArgumentsError( NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
 		break;
 	}
 
@@ -246,16 +250,15 @@ ERRBegin
 	switch ( Command = (command__)Analyzer.GetCommand() ) {
 	case scltool::cVersion:
 		PrintHeader_();
-//		TTR.Advertise( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cHelp:
 		PrintUsage_( Description );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cLicense:
 		epsmsc::PrintLicense( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 //	case c:
 	case CLNARG_NONE:

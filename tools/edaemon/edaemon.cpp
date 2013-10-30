@@ -136,7 +136,7 @@ ERRBegin
 	Options.Init();
 
 	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		clnarg::ReportUnknownOptionError( Unknown, NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
 
 	P = Options.First();
 
@@ -177,7 +177,7 @@ ERRBegin
 	case 0:
 		break;
 	default:
-		clnarg::ReportWrongNumberOfArgumentsError( NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
 		break;
 	}
 
@@ -261,11 +261,8 @@ ERRBegin
 		Type = mctStraight;
 	else if ( Value == "Switched" )
 		Type = mctSwitched;
-	else {
-		Value.Init();
-		sclrgstry::ReportBadOrNoValueForEntryError( registry::ModuleServiceType );
-		ERRExit( EXIT_FAILURE );
-	}
+	else
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleServiceType );
 ERRErr
 ERREnd
 ERREpilog
@@ -293,10 +290,8 @@ ERRBegin
 		Handling = lfhAppend;
 	else if ( Value == "Drop" )
 		Handling = lfhDrop;
-	else {
-		sclrgstry::ReportBadOrNoValueForEntryError( registry::ModuleLogMode );
-		ERRExit( EXIT_FAILURE );
-	}
+	else
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleLogMode );
 ERRErr
 ERREnd
 ERREpilog
@@ -456,7 +451,7 @@ ERRBegin
 		Meaning.SetValue( "UnableToLoadModule" );
 		Meaning.AddTag( ModuleFileName );
 		sclerror::SetMeaning( Meaning );
-		ERRExit( EXIT_FAILURE );
+		ERRAbort();
 	}
 
 	switch ( ConnectionType ) {

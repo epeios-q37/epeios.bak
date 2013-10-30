@@ -116,6 +116,38 @@ ERREnd
 ERREpilog
 }
 
+void scltool::ReportUnknownOptionErrorAndAbort( const char *Option )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+
+	clnarg::GetUnknownOptionErrorMeaning( Option, Meaning );
+
+	ReportAndAbort( Meaning );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void scltool::ReportWrongNumberOfArgumentsErrorAndAbort( void )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+
+	clnarg::GetWrongNumberOfArgumentsErrorMeaning( Meaning );
+
+	ReportAndAbort( Meaning );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+
 static bso::bool__ ReportSCLPendingError_( void )
 {
 	return sclerror::ReportPendingError( GetLanguage() );
@@ -280,10 +312,8 @@ const str::string_ &scltool::GetMandatoryValue(
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
-	if ( !GetValue( Entry, Value ) ) {
-		sclrgstry::ReportBadOrNoValueForEntryError( Entry );
-		ERRAbort();
-	}
+	if ( !GetValue( Entry, Value ) )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 
 	return Value;
 }
@@ -323,10 +353,8 @@ ERRBegin
 
 	RawValue.ToNumber( Limit, Value, &Error );
 
-	if ( Error != E_NIL ) {
-		sclrgstry::ReportBadOrNoValueForEntryError( Entry );
-		ERRAbort();
-	}
+	if ( Error != E_NIL )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 ERRErr
 ERREnd
 ERREpilog
@@ -351,10 +379,8 @@ ERRBegin
 
 	RawValue.ToNumber( UpperLimit, LowerLimit, Value, &Error );
 
-	if ( Error != E_NIL ) {
-		sclrgstry::ReportBadOrNoValueForEntryError( Entry );
-		ERRAbort();
-	}
+	if ( Error != E_NIL )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 ERRErr
 ERREnd
 ERREpilog
@@ -368,10 +394,8 @@ ERREpilog
 	{\
 		type Value;\
 \
-		if ( !GetUnsignedNumber_( Entry, Limit, Value ) ) {\
-			sclrgstry::ReportBadOrNoValueForEntryError( Entry );\
-			ERRAbort();\
-		}\
+		if ( !GetUnsignedNumber_( Entry, Limit, Value ) )\
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
 \
 		return Value;\
 	}\
@@ -405,10 +429,9 @@ UN( U8, bso::u8__ )
 	{\
 		type Value;\
 \
-		if ( !GetSignedNumber_( Entry, Min, Max, Value ) ) {\
-			sclrgstry::ReportBadOrNoValueForEntryError( Entry );\
-			ERRAbort();\
-		}\
+		if ( !GetSignedNumber_( Entry, Min, Max, Value ) )\
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
+\
 		return Value;\
 	}\
 	type scltool::Get##name(\

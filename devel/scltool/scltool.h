@@ -98,6 +98,10 @@ namespace scltool {
 
 	void ReportAndAbort( const char *Text );
 
+	void ReportUnknownOptionErrorAndAbort( const char *Option );
+
+	void ReportWrongNumberOfArgumentsErrorAndAbort( void );
+
 	bso::bool__ GetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value );

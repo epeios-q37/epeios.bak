@@ -1,5 +1,9 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
+30/10/2013 :
+	- Général :
+		- Suite de ce qui a été commencé hier.
+
 29/10/2013 :
 	- Général :
 		- Adaptation modification 'ERR'.

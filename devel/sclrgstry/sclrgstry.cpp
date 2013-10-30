@@ -85,7 +85,7 @@ ERREpilog
 }
 
 
-void sclrgstry::ReportBadOrNoValueForEntryError( const rgstry::tentry__ &Entry )
+void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
 {
 ERRProlog
 	lcl::meaning Meaning;
@@ -98,6 +98,8 @@ ERRBegin
 	Meaning.AddTag( Entry.GetPath( Path ) );
 
 	sclerror::SetMeaning( Meaning );
+
+	ERRAbort();
 ERRErr
 ERREnd
 ERREpilog
@@ -135,7 +137,7 @@ ERRBegin
 
 	if ( FillRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK ) {
 		ReportConfigurationFileParsingError_( Context );
-		ERRExit( EXIT_FAILURE );
+		ERRAbort();
 	}
 ERRErr
 ERREnd

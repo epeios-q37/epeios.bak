@@ -1,7 +1,7 @@
 /*
-	'skt_test.cpp' by Claude SIMON (http://zeusw.org/).
+	'sclmisc_test.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'skt_test.cpp' is part of the Epeios framework.
+	'sclmisc_test.cpp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "skt.h"
+#include "sclmisc.h"
 
 #include "err.h"
 #include "cio.h"
@@ -41,15 +41,12 @@ ERREpilog
 
 int main( int argc, char *argv[] )
 {
-	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
 ERRFBegin
-	COut << "Test of library " << SKT_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << SCLMISC_NAME << ' ' << __DATE__" "__TIME__"\n";
 
-	Generic( argc, argv );
 ERRFErr
-	ExitValue = EXIT_FAILURE;
 ERRFEnd
 ERRFEpilog
-	return ExitValue;
+	return ERRExitValue;
 }
