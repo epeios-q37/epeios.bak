@@ -146,7 +146,20 @@ ERREnd
 ERREpilog
 }
 
+void scltool::ReportMissingCommandErrorAndAbort( void )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
 
+	clnarg::GetMissingCommandErrorMeaning( Meaning );
+
+	ReportAndAbort( Meaning );
+ERRErr
+ERREnd
+ERREpilog
+}
 
 static bso::bool__ ReportSCLPendingError_( void )
 {

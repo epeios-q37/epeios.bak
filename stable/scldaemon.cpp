@@ -56,13 +56,16 @@ ERRProlog
 ERRBegin
 	if ( Data == NULL )
 		ERRPrm();
-
-	if ( !IsInitialized_ && !Data->DryRun )	{
+		
+	if ( !cio::IsInitialized() ) {
 		cio::COutDriver.Init( *Data->COut, fdr::ts_Default );
 		cio::CErrDriver.Init( *Data->CErr, fdr::ts_Default );
 		cio::CInDriver.Init( flx::VoidIFlowDriver, fdr::ts_Default );
 
 		cio::Initialize( cio::tUser );
+	}
+
+	if ( !IsInitialized_ && !Data->DryRun )	{
 
 		// Do not work when placed in 'global_cdtor'.
 		if ( Data->UP != NULL )

@@ -102,6 +102,8 @@ namespace scltool {
 
 	void ReportWrongNumberOfArgumentsErrorAndAbort( void );
 
+	void ReportMissingCommandErrorAndAbort( void );
+
 	bso::bool__ GetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value );

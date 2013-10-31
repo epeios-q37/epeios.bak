@@ -30,23 +30,26 @@ copt += -DE_DEBUG
 # For using <setjmp.h> instead of C++ exceptions.
 #copt += -DERR_JMPUSE
 	
-mods += ags bso cpe epsmsc err 
-mods += flw ias str tol ttr 
-mods += uys flx cio dtfptb bom 
-mods += cdgb64 fil fnm lcl rgstry 
-mods += stsfsm xml xpp 
-
+mods += ags aem bch bitbch bso 
+mods += cpe crptgr ctn dir dte 
+mods += dtfbsc dtfptb epsmsc err fdr 
+mods += flf fls flw flx ias 
+mods += ids iof iop lst lstbch 
+mods += lstctn mns que sdr stk 
+mods += str strng tol ttr txf 
+mods += tys uys utf xtf cio 
+mods += llio bom cdgb64 fil fnm 
+mods += lcl rgstry stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += sclbacknd 
-
 mods += fblber fblbkd fblbrd fblbrr fblcmd 
 mods += fblcst fbltyp 
-
 mods += csdleo csdles 
-
 mods += registry wrpexample wrpunbound 
 
+pmods += pllio 
 
+wmods += wllio 
 
 ##############################
 # Common to all environment. #
@@ -72,6 +75,10 @@ Linux=Linux
 MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
   
+src += :..
+
+src += :../..
+
 
 ##########################
 # For Cygwin environment #
@@ -156,14 +163,18 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -DCYGWIN
-
+	
 	LDFLAGS += -static
 
 	ifeq ("$(arch)","$(IA_32)")
 		CXX = i686-w64-mingw32-g++
+		mods += $(wmods)
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
 		ifeq ("$(arch)","$(x86_64)")
 			CXX = x86_64-w64-mingw32-g++
+			mods += $(wmods)
+		else
+			mods += $(pmods)
 		endif
     
 	endif
@@ -183,6 +194,8 @@ endif
 ifeq ("$(os)", "$(MinGW)")
 
 	co += -DMSYS
+	
+	mods += $(wmods)
 
 	LDFLAGS += -static
 
@@ -210,6 +223,8 @@ endif
 ifeq ("$(os)","$(GNULinux)")
 
 	co += -DGNULINUX
+	
+	mods += $(pmods)
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -235,6 +250,8 @@ endif
 ifeq ("$(os)","$(Linux)")
 
 	co += -DLINUX
+	
+	mods += $(pmods)
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -260,6 +277,8 @@ endif
 ifeq ("$(os)","$(MacOS)")
 
 	co += -DDARWIN
+	
+	mods += $(pmods)
 
 	#LDFLAGS += -static	// Doesn't work.
 
@@ -280,19 +299,18 @@ endif
 
 ##########################
 		
-src += :..
-src += :../..
+all: $(target)
+	rm -f *.o
 
-include Details.mk
+copt += -DVERSION=\""(Version)"\"
+copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
-copt += -DVERSION=\"$(version)\"
-copt += -DCOPYRIGHT_YEARS=\"$(copyright_years)\"
-	
 ifndef EPEIOS_SRC
-	src += :../epeios:epeios
+	src += :src
 else
 	src += :$(EPEIOS_SRC)
 endif
+
     
 ox = o
 ds = :
@@ -311,4 +329,8 @@ $(target): $(objs)
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
+
+clean:
+	rm -rf *.o
+
 		

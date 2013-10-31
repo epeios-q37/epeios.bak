@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd (Version) (Build : Aug 30 2013 12:12:36 MSVC_IA-32)
+	API from : esketchbkd (Version) (Build : Oct 31 2013 11:45:16 MSVC_IA-32)
 
-	This file was generated using getbkdapi 20130826 (Build Aug 26 2013 16:45:59 MSVC_IA-32)
+	This file was generated using eGetAPI 20131021 (Build Oct 31 2013 11:23:15 MSVC_IA-32)
 */
 
 #ifndef ESKETCH__INC
