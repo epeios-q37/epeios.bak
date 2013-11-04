@@ -29,7 +29,7 @@
 
 # define SKTBFC_VERSION			"1"
 
-namespace sktbfc {
+namespace sktfbc {
 
 }
 

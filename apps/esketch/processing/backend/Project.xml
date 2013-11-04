@@ -31,6 +31,10 @@
         <xpp:expand select="CSDB"/>
       </Modules>
     </Modules>
+    <Modules Group="SKT">
+      <Module Path="../../">sktfbc</Module>
+      <Module Path="../../">sktinf</Module>
+    </Modules>
     <Module>registry</Module>
     <Module>wrpexample</Module>
     <Module>wrpunbound</Module>

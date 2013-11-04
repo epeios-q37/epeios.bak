@@ -77,8 +77,6 @@ static const char *GetMessage_(
 
 typedef void (* f_manager ) ARGS;
 
-#define DEC( name )	static message__ exported##name ARGS
-
 void wrpexample::myobject_::HANDLE(
 	fblbkd::backend___ &Backend,
 	fblbkd::untyped_module &Module,
@@ -89,6 +87,8 @@ void wrpexample::myobject_::HANDLE(
 {
 	((f_manager)Module.UPs( Command ))( *this, Backend, Request );
 }
+
+#define DEC( name )	static message__ exported##name ARGS
 
 DEC( Test )
 {
