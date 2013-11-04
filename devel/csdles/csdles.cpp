@@ -141,6 +141,7 @@ public:
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
+		Steerings_.Init();
 	}
 	~csdlespersonnalization( void )
 	{
