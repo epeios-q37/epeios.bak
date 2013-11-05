@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id$
-
 #include "wrpexample.h"
 #include "registry.h"
 #include "dir.h"
@@ -26,8 +24,11 @@
 
 #include "sktinf.h"
 
+#include "wrpcommon.h"
+
 using namespace wrpexample;
 using namespace sktxmp;
+using wrpcommon::data___;
 
 const char *wrpexample::myobject_::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
 const char *wrpexample::myobject_::NAME = WRPEXAMPLE_MYOBJECT_NAME;
@@ -73,7 +74,8 @@ static const char *GetMessage_(
 #define ARGS (\
 	_myobject_ &MyObject,\
 	fblbkd::backend___ &Backend,\
-	fblbkd::request__ &Request )\
+	fblbkd::request__ &Request,\
+	data___ &Data )\
 
 typedef void (* f_manager ) ARGS;
 
@@ -85,7 +87,7 @@ void wrpexample::myobject_::HANDLE(
 	fblbkd::request__ &Request,
 	void *UP )
 {
-	((f_manager)Module.UPs( Command ))( *this, Backend, Request );
+	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(data___ *)UP );
 }
 
 #define DEC( name )	static message__ exported##name ARGS

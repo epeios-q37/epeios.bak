@@ -36,8 +36,11 @@
       <Module Path="../../">sktinf</Module>
     </Modules>
     <Module>registry</Module>
-    <Module>wrpexample</Module>
-    <Module>wrpunbound</Module>
+    <Modules Group="WRP">
+      <Module>wrpcommon</Module>
+      <Module>wrpexample</Module>
+      <Module>wrpunbound</Module>
+    </Modules>
   </Modules>
   <SourceDirs>
     <SourceDir>..</SourceDir>

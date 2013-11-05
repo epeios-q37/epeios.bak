@@ -45,10 +45,12 @@ class backend___
 {
 private:
 	FBLBKD_RAM_MODULE( wrpexample::myobject_ ) MyObject;
+	wrpcommon::data___ _Data;
 public:
 	void reset( bso::bool__ P = true )
 	{
 		_backend___::reset( P );
+		_Data.reset();
 	}
 	E_CVDTOR( backend___ );
 	void Init(
@@ -56,6 +58,8 @@ public:
 		const lcl::locale_ &Locale,
 		const char *ClientOrigin )
 	{
+		_Data.Init();
+
 		_backend___::Init(
 			Mode,
 			API_VERSION,
@@ -64,9 +68,10 @@ public:
 			Locale,
 			BACKEND_NAME " " VERSION,
 			COPYRIGHT,
-			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION );
+			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION,
+			&_Data );
 
-		wrpunbound::Inform( *this );
+		wrpunbound::Inform( *this, _Data );
 
 		MyObject.Init();
 		Add( MyObject );

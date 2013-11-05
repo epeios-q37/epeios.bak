@@ -1,5 +1,5 @@
 /*
-	'wrpunbound.h' by Claude SIMON (http://zeusw.org/).
+	'wrpcommon.h' by Claude SIMON (http://zeusw.org/).
 
 	 This file is part of 'eSketch' software.
 
@@ -19,21 +19,28 @@
 
 // $Id: example.h,v 1.5 2009/10/04 16:59:50 csimon Exp $
 
-#ifndef WRPUNBOUND__INC
-# define WRPUNBOUND__INC
+// BaCKend MaNGER
+
+#ifndef WRPCOMMON__INC
+# define WRPCOMMON__INC
 
 # include "sktbsc.h"
 # include "sktinf.h"
 
 # include "fblbkd.h"
 
-# include "wrpcommon.h"
-
-namespace wrpunbound {
-
-	void Inform(
-		fblbkd::backend___ &Backend,
-		wrpcommon::data___ &Data );
+namespace wrpcommon {
+	class data___
+	{
+	public:
+		void reset( bso::bool__ = true )
+		{
+		}
+		E_CVDTOR( data___ );
+		void Init( void )
+		{
+		}
+	};
 }
 
 

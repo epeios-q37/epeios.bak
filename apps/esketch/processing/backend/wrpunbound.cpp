@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id$
-
 #include "wrpunbound.h"
 #include "registry.h"
 #include "dir.h"
@@ -26,6 +24,8 @@
 #include "sktinf.h"
 
 using namespace wrpunbound;
+
+using wrpcommon::data___;
 
 enum message__ {
 	mTestMessage,
@@ -63,7 +63,7 @@ static const char *GetRawMessage_( message__ MessageId )
 		fblbkd::command__,\
 		fblbkd::request__ &Request,\
 		bso::bool__ &,\
-		void * )
+		void *)
 
 DEC( Test )
 {
@@ -71,7 +71,9 @@ DEC( Test )
 
 #define D( name )	SKTINF_UC_SHORT #name, ::name
 
-void wrpunbound::Inform( fblbkd::backend___ &Backend )
+void wrpunbound::Inform(
+	fblbkd::backend___ &Backend,
+	data___ &Data )
 {
 	Backend.Add( D( Test ),
 		fblbkd::cEnd,

@@ -56,12 +56,14 @@ namespace sclbacknd {
 	private:
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
 		flx::void_oflow_driver___ _VoidFlowDriver;
+		void *_UP;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_backend___::reset( P );
 			_RequestLogFunctions.reset( P );
 			_VoidFlowDriver.reset( P );
+			_UP = NULL;
 		}
 		E_CVDTOR( backend___ );
 		void Init(
@@ -72,13 +74,19 @@ namespace sclbacknd {
 			const lcl::locale_ &Locale,
 			const char *BackendInformations,
 			const char *BackendCopyright,
-			const char *SoftwareInformations )
+			const char *SoftwareInformations,
+			void *UP )
 		{
 			_backend___::Init( Mode, APIVersion, ClientOrigin, BackendLabel, Locale, BackendInformations, BackendCopyright, SoftwareInformations );
 			_VoidFlowDriver.Init( fdr::tsDisabled );
 			_RequestLogFunctions.Init( _VoidFlowDriver );
+			_UP = UP;
 		}
 		friend class sclbacknd::callback__;
+		void *UP( void ) const
+		{
+			return _UP;
+		}
 	};
 
 	typedef csdscb::callback__ _callback__;
@@ -99,7 +107,7 @@ namespace sclbacknd {
 		{
 			backend___ &Backend = *(backend___ *)UP;
 
-			if ( Backend.Handle( Flow, NULL, Backend._RequestLogFunctions ) )
+			if ( Backend.Handle( Flow, Backend.UP(), Backend._RequestLogFunctions ) )
 				return csdscb::aContinue;
 			else
 				return csdscb::aStop;
