@@ -64,7 +64,7 @@ public:
 			Locale,
 			BACKEND_NAME " " VERSION,
 			COPYRIGHT,
-			SKTINF_MC_AFFIX " " SKTINF_VERSION );
+			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION );
 
 		wrpunbound::Inform( *this );
 

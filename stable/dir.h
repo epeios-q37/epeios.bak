@@ -236,25 +236,25 @@ namespace dir {
 		else
 			return File.cFileName;
 #elif defined( DIR__POSIX )
-	struct dirent * ent;
-    DIR *&rep = Handle;
-    
-    rep = opendir( Directory );
+		struct dirent * ent;
+		DIR *&rep = Handle;
+		
+		rep = opendir( Directory );
 
-	if( rep == NULL )
-		return NULL;
-
-	errno = 0;
-    
-    if ( ( ent = readdir(rep) ) == NULL )
-		if ( errno != 0 )
+		if( rep == NULL )
 			return NULL;
+
+		errno = 0;
+		
+		if ( ( ent = readdir(rep) ) == NULL )
+			if ( errno != 0 )
+				return NULL;
+			else
+				return "";
 		else
-			return "";
-	else
-		return ent->d_name;
-    
-    return 0;
+			return ent->d_name;
+		
+		return 0;
 #endif
 	}
 
@@ -278,20 +278,20 @@ namespace dir {
 		return File.cFileName;
 #endif
 #ifdef DIR__POSIX
-	struct dirent * ent;
-    DIR *&rep = Handle;
-    
-	errno = 0;
-    
-    if ( ( ent = readdir(rep) ) == NULL )
-		if ( errno != 0 )
-			return NULL;
+		struct dirent * ent;
+		DIR *&rep = Handle;
+		
+		errno = 0;
+		
+		if ( ( ent = readdir(rep) ) == NULL )
+			if ( errno != 0 )
+				return NULL;
+			else
+				return "";
 		else
-			return "";
-	else
-		return ent->d_name;
-    
-    return 0;
+			return ent->d_name;
+		
+		return 0;
 #endif
 	}
 
@@ -309,12 +309,12 @@ namespace dir {
 #endif
 		
 #ifdef DIR__POSIX
-    DIR *&rep = Handle;
-    
-    if ( closedir(rep) )
-		ERRLbr();
+		DIR *&rep = Handle;
+		
+		if ( closedir(rep) )
+			ERRLbr();
 
-	Handle = NULL;
+		Handle = NULL;
 #endif
 	}
 }

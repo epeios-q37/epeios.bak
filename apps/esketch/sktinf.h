@@ -24,15 +24,18 @@
 #ifndef SKTINF__INC
 # define SKTINF__INC
 
-# define SKTINF_VERSION 					"1.0"	// Version of the whole software, not of a particular program.
 # define SKTINF_LC_AFFIX					"esketch"
 # define SKTINF_UC_AFFIX					"ESKETCH"
 # define SKTINF_MC_AFFIX					"eSketch"
 # define SKTINF_UC_SHORT					"SKT"
 # define SKTINF_LC_SHORT					"skt"
+
 # define SKTINF_WEBSITE_URL					"http://zeusw.org/intl/"
-# define SKTINF_AFFILIATED_SOFTWARE_NAME	SKTINF_MC_AFFIX " " SKTINF_VERSION
-# define SKTINF_AFFILIATED_SOFTWARE_URL		SKTINF_WEBSITE_URL
+
+# define SKTINF_SOFTWARE_NAME				SKTINF_MC_AFFIX	// Commercial name of the software ; set to appropriate value if needed.
+# define SKTINF_SOFTWARE_VERSION 			"1.0"	// Version of the whole software, not of a particular program.
+# define SKTINF_SOFTWARE_URL				SKTINF_WEBSITE_URL
+
 # define SKTINF_AUTHOR_NAME					"Claude SIMON"
 # define SKTINF_AUTHOR_CONTACT				"http://zeusw.org/intl/contact.html"
 # define SKTINF_OWNER_NAME					"Claude SIMON"
