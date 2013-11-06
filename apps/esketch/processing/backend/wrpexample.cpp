@@ -79,6 +79,24 @@ static const char *GetMessage_(
 
 typedef void (* f_manager ) ARGS;
 
+static void Report_(
+	message__ Message,
+	const fblbkd::backend___ &Backend,
+	fblbrq::request__ &Request )
+{
+ERRProlog
+	str::string Translation;
+	STR_BUFFER___ Buffer;
+ERRBegin
+	Translation.Init();
+
+	Backend.Locale().GetTranslation( GetRawMessage_( Message ), Backend.Language(), Translation );
+	Request.ReportRequestError( Translation.Convert( Buffer ) );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 void wrpexample::myobject_::HANDLE(
 	fblbkd::backend___ &Backend,
 	fblbkd::untyped_module &Module,
@@ -90,7 +108,21 @@ void wrpexample::myobject_::HANDLE(
 	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(data___ *)UP );
 }
 
-#define DEC( name )	static message__ exported##name ARGS
+#define REPORT( v )	Report_( ( v ), Backend, Request )
+
+static void Handle_(
+	message__ Message,
+	const fblbkd::backend___ &Backend,
+	fblbrq::request__ &Request )
+{
+	if ( Message != m_OK )
+		REPORT( Message );
+}
+
+#define HANDLE( f )	Handle_( ( f ), Backend, Request )
+
+
+#define DEC( name )	static void exported##name ARGS
 
 DEC( Test )
 {
@@ -100,8 +132,8 @@ ERRBegin
 	Message = mTestMessage;
 ERRErr
 ERREnd
+	HANDLE( Message );
 ERREpilog
-	return Message;
 }
 
 #define D( name )	#name, (void *)exported##name

@@ -129,7 +129,7 @@ _callback___ *sclbacknd::SCLBACKNDNew(
 	fblbur::mode__ Mode,
 	const lcl::locale_ &Locale )
 {
-	_callback___ *Callback = NULL;
+	callback___ *Callback = NULL;
 ERRProlog
 ERRBegin
 	if ( ( Callback = new callback___ ) == NULL )

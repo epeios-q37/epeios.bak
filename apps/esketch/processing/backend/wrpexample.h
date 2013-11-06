@@ -59,7 +59,6 @@ namespace wrpexample {
 		{
 			return this;
 		}
-		void Init( void );
 	};
 
 	E_AUTO(	myobject );
