@@ -1,5 +1,5 @@
 /*
-	'wrpcommon.cpp' by Claude SIMON (http://zeusw.org/).
+	'common.cpp' by Claude SIMON (http://zeusw.org/).
 
 	 This file is part of 'eSketch' software.
 
@@ -17,13 +17,7 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id$
+#include "common.h"
 
-#include "wrpcommon.h"
-#include "registry.h"
-#include "dir.h"
-#include "fnm.h"
-#include "sktinf.h"
-
-using namespace wrpcommon;
+using namespace common;
 

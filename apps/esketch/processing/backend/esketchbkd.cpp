@@ -44,8 +44,8 @@ class backend___
 : public _backend___
 {
 private:
-	FBLBKD_RAM_MODULE( wrpexample::myobject_ ) MyObject;
-	wrpcommon::data___ _Data;
+	FBLBKD_RAM_MODULE( wrpexample::myobject_, common::data___ ) MyObject;
+	common::data___ _Data;
 public:
 	void reset( bso::bool__ P = true )
 	{
@@ -73,7 +73,7 @@ public:
 
 		wrpunbound::Inform( *this, _Data );
 
-		MyObject.Init();
+		MyObject.Init( _Data );
 		Add( MyObject );
 	}
 };

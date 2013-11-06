@@ -27,13 +27,13 @@
 
 # include "fblbkd.h"
 
-# include "wrpcommon.h"
+# include "common.h"
 
 namespace wrpunbound {
 
 	void Inform(
 		fblbkd::backend___ &Backend,
-		wrpcommon::data___ &Data );
+		common::data___ &Data );
 }
 
 

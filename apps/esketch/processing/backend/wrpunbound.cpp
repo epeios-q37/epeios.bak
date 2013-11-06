@@ -25,7 +25,7 @@
 
 using namespace wrpunbound;
 
-using wrpcommon::data___;
+using common::data___;
 
 enum message__ {
 	mTestMessage,

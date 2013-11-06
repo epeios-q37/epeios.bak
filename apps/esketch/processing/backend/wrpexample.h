@@ -24,6 +24,8 @@
 
 # include "fblbkd.h"
 
+# include "common.h"
+
 # define WRPEXAMPLE_MYOBJECT_PREFIX	SKTINF_LC_SHORT
 # define WRPEXAMPLE_MYOBJECT_NAME	"myobject"
 
@@ -47,7 +49,9 @@ namespace wrpexample {
 			fblbkd::command__ Command,
 			fblbkd::request__ &Request,
 			void *UP );
-		static void NOTIFY( fblbkd::untyped_module &Module );
+		static void NOTIFY(
+			fblbkd::untyped_module &Module,
+			common::data___ &Data );
 		static const char *PREFIX;
 		static const char *NAME;
 //		static void RAW_MESSAGES( lcl::strings_ &Messages );

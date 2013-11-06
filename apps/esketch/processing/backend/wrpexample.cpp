@@ -24,11 +24,11 @@
 
 #include "sktinf.h"
 
-#include "wrpcommon.h"
+#include "common.h"
 
 using namespace wrpexample;
 using namespace sktxmp;
-using wrpcommon::data___;
+using common::data___;
 
 const char *wrpexample::myobject_::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
 const char *wrpexample::myobject_::NAME = WRPEXAMPLE_MYOBJECT_NAME;
@@ -106,7 +106,9 @@ ERREpilog
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpexample::myobject_::NOTIFY( fblbkd::untyped_module &Module )
+void wrpexample::myobject_::NOTIFY(
+	fblbkd::untyped_module &Module,
+	common::data___ &Data )
 {
 	Module.Add( D( Test ),
 		fblbkd::cEnd,

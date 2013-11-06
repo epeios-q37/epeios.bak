@@ -1,5 +1,5 @@
 /*
-	'wrpcommon.h' by Claude SIMON (http://zeusw.org/).
+	'common.h' by Claude SIMON (http://zeusw.org/).
 
 	 This file is part of 'eSketch' software.
 
@@ -21,15 +21,15 @@
 
 // BaCKend MaNGER
 
-#ifndef WRPCOMMON__INC
-# define WRPCOMMON__INC
+#ifndef COMMON__INC
+# define COMMON__INC
 
 # include "sktbsc.h"
 # include "sktinf.h"
 
 # include "fblbkd.h"
 
-namespace wrpcommon {
+namespace common {
 	class data___
 	{
 	public:
