@@ -361,7 +361,7 @@ namespace fblbkd {
 	};
 
 	//c A module for an object of type 't'.
-	template <class t> class module
+	template <class t, class user> class module
 	: public untyped_module
 	{
 	private:
@@ -410,17 +410,17 @@ namespace fblbkd {
 		}
 	public:
 		//f Initialization.
-		void Init( void )
+		void Init( user &User )
 		{
 			untyped_module::Init( t::PREFIX, t::NAME  );
 
-			t::NOTIFY( *this );
+			t::NOTIFY( *this, User );
 		}
 	};
 	
 	//c A module with object stored in RAM.
-	template <class t, class st> class ram_module
-	: public module<t>,
+	template <class t, class st, class user> class ram_module
+	: public module<t,user>,
 	  private lst::E_LIST
 	{
 	private:
@@ -486,17 +486,17 @@ namespace fblbkd {
 		//r The pointer object.
 		bch::E_BUNCH( t * ) Objets;
 		//f Initialization.
-		void Init( void )
+		void Init( user &User )
 		{
 			_List().Init();
 			Objets.Init();
-			module<t>::Init();
+			module::Init( User );
 		}
 	};
 	
 	//c A module with object stored in standard memory.
-	template <class t, class st> class standard_module
-	: public module<t>,
+	template <class t, class st, class user> class standard_module
+	: public module<t,user>,
 	  private lst::E_LIST
 	{
 	private:
@@ -551,18 +551,18 @@ namespace fblbkd {
 			reset( true );
 		}
 		// Initialisation.
-		void Init( void )
+		void Init( user &User )
 		{
 			_List().Init();
 			Objets.Init();
 			Element_.Init( Objets );
-			module<t>::Init();
+			module::Init( User );
 		}
 	};
 
 	//c A shared module. One instance for all.
-	template <class t, class st> class shared_module
-	: public module<t>
+	template <class t, class st, class user> class shared_module
+	: public module<t,user>
 	{
 	private:
 		t T_;
@@ -601,10 +601,10 @@ namespace fblbkd {
 			reset( true );
 		}
 		// Initialisation.
-		void Init( void )
+		void Init( user &User )
 		{
 			reset();
-			module<t>::Init();
+			module<t>::Init( User );
 			Created_ = false;
 		}
 	};
@@ -952,13 +952,13 @@ namespace fblbkd {
 }
 
 //d A ram module of an object of type 't'.
-# define FBLBKD_RAM_MODULE( t )	fblbkd::ram_module<t, t::s>	
+# define FBLBKD_RAM_MODULE( t, user )	fblbkd::ram_module<t, t::s, user>	
 
 //d A standard module of an object of type 't'.
-# define FBLBKD_STANDARD_MODULE( t )	fblbkd::standard_module<t, t::s>	
+# define FBLBKD_STANDARD_MODULE( t, user )	fblbkd::standard_module<t, t::s, user>	
 
 //d A shared module of an object od type 't'.
-# define FBLBKD_SHARED_MODULE( t )	fblbkd::shared_module<t, t::s>	
+# define FBLBKD_SHARED_MODULE( t, user )	fblbkd::shared_module<t, t::s, user>	
 
 
 				  /********************************************/
