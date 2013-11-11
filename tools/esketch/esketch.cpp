@@ -77,6 +77,8 @@ enum command__ {
 };
 
 enum option {
+	 o_amount,	
+	 o_Undefined,
 };
 
 #define STRING_PARAM___( name )	CLNARG_STRING_PARAM___( name )
@@ -233,7 +235,7 @@ static command__ AnalyzeArgs_(
 	const char *argv[],
 	parameters___ &Parameters )
 {
-	command__ Command = c_Undefined;
+	clnarg::id__ Command = c_Undefined;
 ERRProlog
 	clnarg::description Description;
 	clnarg::analyzer___ Analyzer;
@@ -247,7 +249,7 @@ ERRBegin
 
 	Analyzer.Init( argc, argv, Description );
 
-	switch ( Command = (command__)Analyzer.GetCommand() ) {
+	switch ( Command =Analyzer.GetCommand() ) {
 	case scltool::cVersion:
 		PrintHeader_();
 		ERRAbort();
@@ -276,7 +278,7 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-	return Command;
+	return (command__)Command;
 }
 
 /* End of the part which handles command line arguments. */

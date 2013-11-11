@@ -207,7 +207,7 @@ ERRBegin
 	Options.Init();
 
 	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		clnarg::ReportUnknownOptionError( Unknown, NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
 
 	P = Options.First();
 
@@ -250,7 +250,7 @@ ERRBegin
 		if ( Error != E_NIL ) {
 			Meaning.Init();
 			Meaning.SetValue( _( BadIdError ) );
-			scltool::ReportAndExit( Meaning );
+			scltool::ReportAndAbort( Meaning );
 		}
 
 		Parameters.Id = ( Id == 0 ? ALL : Id );
@@ -260,7 +260,7 @@ ERRBegin
 		break;
 	case 0:
 	default:
-		clnarg::ReportWrongNumberOfArgumentsError( NAME_LC, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
 		break;
 	}
 
@@ -274,7 +274,7 @@ static command__ AnalyzeArgs_(
 	const char *argv[],
 	parameters___ &Parameters )
 {
-	command__ Command = c_Undefined;
+	clnarg::id__ Command = c_Undefined;
 ERRProlog
 	clnarg::description Description;
 	clnarg::analyzer___ Analyzer;
@@ -292,15 +292,15 @@ ERRBegin
 	case scltool::cVersion:
 		PrintHeader_();
 //		TTR.Advertise( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cHelp:
 		PrintUsage_( Description );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cLicense:
 		epsmsc::PrintLicense( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 //	case c:
 	case CLNARG_NONE:
@@ -318,7 +318,7 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-	return Command;
+	return (command__)Command;
 }
 
 /* End of the part which handles command line arguments. */
@@ -488,7 +488,7 @@ ERRBegin
 
 	sclerror::SetMeaning( Error );
 
-	ERRExit( EXIT_FAILURE );
+	ERRAbort();
 ERRErr
 ERREnd
 ERREpilog
@@ -533,7 +533,7 @@ ERRBegin
 
 	GenericMeaning.AddTag( MeaningBuffer );
 
-	scltool::ReportAndExit( GenericMeaning );
+	scltool::ReportAndAbort( GenericMeaning );
 ERRErr
 ERREnd
 ERREpilog
@@ -1502,7 +1502,7 @@ ERRBegin
 				Meaning.Init();
 				Meaning.SetValue( _( NoRecordOfGivenIdError ) );
 				Meaning.AddTag( bso::Convert( Id, Buffer ) );
-				scltool::ReportAndExit( Meaning );
+				scltool::ReportAndAbort( Meaning );
 			} else {
 				Writer.PutAttribute( "Amount", "1" );
 				Row = Id - 1;
@@ -1894,18 +1894,18 @@ ERRProlog
 ERRBegin
 	DataFileName.Init();
 	if ( !scltool::GetValue( registry::Data, DataFileName ) )
-		scltool::ReportAndExit( _( DataFileNotSpecifiedError ) );
+		scltool::ReportAndAbort( _( DataFileNotSpecifiedError ) );
 
 	OutputFileName.Init();
 	if ( !scltool::GetValue( Output, OutputFileName ) )
-		scltool::ReportAndExit( _( OutputFileNotSpecifiedError ) );
+		scltool::ReportAndAbort( _( OutputFileNotSpecifiedError ) );
 
 	XSLFileName.Init();
 	scltool::GetValue( XSL, XSLFileName );
 
 	ContextFileName.Init();
 	if ( !scltool::GetValue( registry::Context, ContextFileName ) )
-		scltool::ReportAndExit( _( ContextFileNotSpecifiedError ) );
+		scltool::ReportAndAbort( _( ContextFileNotSpecifiedError ) );
 
 	Context.Init();
 	RetrieveContext_( ContextFileName.Convert( Buffer ), Context );

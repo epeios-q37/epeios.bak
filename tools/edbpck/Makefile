@@ -34,13 +34,13 @@ mods += ags aem bch bitbch bso
 mods += cpe crptgr ctn dir dte 
 mods += dtfbsc dtfptb epsmsc err fdr 
 mods += flf fls flw flx ias 
-mods += ids iof iop llio lst 
-mods += lstbch lstctn mns que sdr 
-mods += stk str strng tol ttr 
-mods += txf tys uys utf xtf 
-mods += cio bom cdgb64 fil fnm 
-mods += lcl rgstry stsfsm xml xpp 
-mods += clnarg 
+mods += ids iof iop lst lstbch 
+mods += lstctn mns que sdr stk 
+mods += str strng tol ttr txf 
+mods += tys uys utf xtf cio 
+mods += bom cdgb64 fil fnm lcl 
+mods += rgstry stsfsm xml xpp clnarg 
+mods += llio 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += dbpals dbpbsc dbpctx dbprcd dbptbl 
 mods += registry 
@@ -290,7 +290,7 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\""20131023"\"
+copt += -DVERSION=\""20131108"\"
 copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
 ifndef EPEIOS_SRC

@@ -1,5 +1,9 @@
 ***** Changelog for the 'eDBPck' tool *****
 
+08/11/2013 :
+	- Adaptation to changes in framework.
+	- PUBLICATION.
+
 24/10/2013 :
 	- Launching with no arguments issues now an error.
 	- Moving registry-related stuff to 'registry' module.

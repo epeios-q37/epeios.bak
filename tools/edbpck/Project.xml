@@ -2,7 +2,7 @@
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
   <xpp:bloc><!-- User definitions -->
 	<xpp:define name="Version">
-		<xpp:bloc>20131023</xpp:bloc>
+		<xpp:bloc>20131108</xpp:bloc>
 	</xpp:define>
     <xpp:define name="CopyrightYears">
       <xpp:bloc>2013</xpp:bloc>
@@ -20,6 +20,7 @@
     <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
       <Modules Group="Core">
         <xpp:expand select="Core"/>
+        <xpp:expand select="LLIO"/>
       </Modules>
       <Modules Group="SCL">
         <xpp:expand select="SCL"/>
