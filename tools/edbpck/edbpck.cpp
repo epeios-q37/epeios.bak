@@ -1590,7 +1590,7 @@ ERRBegin
 	Randoms.Init();
 	GetRandoms_( Randoms );
 
-	xml::WriteXMLHeader( Output, xml::eISO_8859_1 );
+	xml::WriteXMLHeader( Output, xml::eUTF_8 );
 	Output << txf::nl;
 
 	if ( XSLFileName.Amount() != 0 ) {
@@ -1776,7 +1776,7 @@ ERRBegin
 
 	TFlow.Init( FFlow );
 
-	Writer.Init( TFlow, xml::oIndent, xml::eISO_8859_1 );
+	Writer.Init( TFlow, xml::oIndent, xml::eUTF_8 );
 
 	DumpContext_( Context, Writer ); 
 ERRErr

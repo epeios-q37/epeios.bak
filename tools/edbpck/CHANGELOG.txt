@@ -1,5 +1,8 @@
 ***** Changelog for the 'eDBPck' tool *****
 
+13/11/2013 :
+	- Fichier généré encodé en 'UTF-8'.
+
 08/11/2013 :
 	- Adaptation to changes in framework.
 	- PUBLICATION.

@@ -47,6 +47,39 @@ static rgstry::multi_level_registry Registry_;
 static rgstry::level__ RegistryProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
 static rgstry::level__ ArgumentsProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
 
+static rgstry::entry___ ArgumentAliases_( "ArgumentAliases" );
+#define ARGUMENT_ALIAS_TAG "ArgumentAlias"
+#define ARGUMENT_ALIAS_ID_ATTRIBUTE "id"
+static rgstry::entry___ ShortTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, "short" ), ArgumentAliases_ );
+static rgstry::entry___ LongTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, "long" ), ArgumentAliases_ );
+static rgstry::entry___ IdTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, ARGUMENT_ALIAS_ID_ATTRIBUTE ), ArgumentAliases_ );
+#define ARGUMENT_ALIAS_TAGGING_ID_ATTRIBUTE "@"  ARGUMENT_ALIAS_ID_ATTRIBUTE
+static rgstry::entry___ LongTaggedArgumentAliasId_( ARGUMENT_ALIAS_TAGGING_ID_ATTRIBUTE, LongTaggedArgumentAlias_ );
+static rgstry::entry___ ShortTaggedArgumentAliasId_( ARGUMENT_ALIAS_TAGGING_ID_ATTRIBUTE, ShortTaggedArgumentAlias_ );
+
+static const str::string_ &GetMandatoryValue_( 
+	const rgstry::tentry___ &Entry,
+	str::string_ &Value )
+{
+	if ( !Registry_.GetValue( Entry, Value ) )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+}
+
+static const str::string_ &GetLongTaggedArguemntAliasId_(
+	str::string_ &Name,
+	str::string_ &Id )
+{
+	return GetMandatoryValue_( rgstry::tentry___( LongTaggedArgumentAliasId_, Name ), Id );
+}
+
+static const str::string_ &GetShortTaggedArguemntAliasId_(
+	str::string_ &Name,
+	str::string_ &Id )
+{
+	return GetMandatoryValue_( rgstry::tentry___( ShortTaggedArgumentAliasId_, Name ), Id );
+}
+
+
 const char *scltool::GetLanguage( void )
 {
 	if ( Language_ == NULL )
@@ -286,20 +319,149 @@ E_AUTO( argument );
 typedef ctn::E_MCONTAINER_( argument_ ) arguments_;
 E_AUTO( arguments );
 
-void FillWithShort_( 
+static void ReportBadArgumentAndAbort_(	const char *Arg )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+	Meaning.SetValue( SCLTOOL_NAME "_BadArgument" );
+	Meaning.AddTag( Arg );
+	ReportAndAbort( Meaning );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void FillShort_(
+	const char *First,
+	const char *Last,
+	flags_ &Flags )
+{
+ERRProlog
+	const char *Current = First;
+	flag Flag;
+ERRBegin
+	while ( Current <= Last ) {
+		Flag.Init( tShort, str::string( Current ) );
+
+		Flags.Append( Flag );
+
+		Current++;
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void FillShort_(
+	const char *Arg,
+	options_ &Options )
+{
+ERRProlog
+	const char *Equal = NULL, *Last = NULL;
+	option Option;
+	str::string Name, Value;
+ERRBegin
+	Equal = strchr( Arg, '=' );
+
+	if ( ( Equal - Arg  ) != 1 )
+		ERRFwk();
+
+	Last = Arg + strlen( Arg );
+
+	Name.Init();
+	Name.Append( *Arg );
+
+	Value.Init();
+	Value.Append( Equal + 1, Last - Equal );
+
+	Option.Init( tShort, Name, Value );
+
+	Options.Append( Option );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void FillShort_( 
 	const char *Arg,
 	flags_ &Flags,
-	options_ &Options,
-	arguments_ &Arguments )
+	options_ &Options )
 {
-	const char *Egal = strchr( Arg, '=' );
-	const char *Quote = strchr( Arg, '"' );
+	const char
+		*Equal = strchr( Arg, '=' ),
+		*Last = Arg + strlen( Arg ) - 1;
 
-	if ( Egal == NULL )
-		Fill_( Arg, Flags );
+	if ( Equal == NULL )
+		FillShort_( Arg, Last, Flags );
+	else {
+		if ( Equal == Arg )
+			ReportBadArgumentAndAbort_( Arg );
 
-	if ( Egal < Quote )
-		Fill_( Arg, Options );
+		FillShort_( Arg, Equal - 2, Flags );
+		FillShort_( Equal - 1, Options );
+	}
+}
+
+void FillLong_(
+	const char *Arg,
+	flags_ &Flags )
+{
+ERRProlog
+	flag Flag;
+ERRBegin
+	Flag.Init( tLong, str::string( Arg ) );
+
+	Flags.Append( Flag );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void FillLong_(
+	const char *Arg,
+	options_ &Options )
+{
+ERRProlog
+	const char *Equal = NULL, *Last = NULL;
+	option Option;
+	str::string Name, Value;
+ERRBegin
+	Equal = strchr( Arg, '=' );
+
+	if ( Equal == Arg  )
+		ReportBadArgumentAndAbort_( Arg );
+
+	Last = Arg + strlen( Arg );
+
+	Name.Init();
+	Name.Append( Arg, Equal - Arg );
+
+	Value.Init();
+	Value.Append( Equal + 1, Last - Equal );
+
+	Option.Init( tShort, Name, Value );
+
+	Options.Append( Option );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+static void FillLong_( 
+	const char *Arg,
+	flags_ &Flags,
+	options_ &Options )
+{
+	const char*Equal = strchr( Arg, '=' );
+
+	if ( Equal == NULL )
+		FillLong_( Arg, Flags );
+	else
+		FillLong_( Arg, Options );
+
 }
 
 bso::bool__ Fill_(
@@ -315,23 +477,23 @@ bso::bool__ Fill_(
 		ERRDta();
 		break;
 	case 1:
-		Arguments.Append( Arg );
+		Arguments.Append( str::string( Arg ) );
 		break;
 	case 2:
 		if ( ( Arg[0] == '-' ) && ( Arg[1] == '-' ) )
 			return true;
 
-		FillWithShort_( Arg + 1, Options, Flags ); );
+		FillShort_( Arg + 1, Flags, Options );
 
 		break;
 	default:
 		if ( Arg[0] == '-' )
 			if ( Arg[1] == '-' )
-				FillWithLong_( Arg + 2, Options, Flags );
+				FillLong_( Arg + 2, Flags, Options );
 			else
-				FillWithShort_( Arg + 1, Options, Flags );
+				FillShort_( Arg + 1, Flags, Options );
 		else
-			Arguments.Append( Arg );
+			Arguments.Append( str::string( Arg ) );
 		break;
 	}
 
@@ -351,8 +513,18 @@ void Fill_(
 
 	while ( ( Current < argc ) && ( !FreeArgumentsOnly ) )
 	{
-		FreeArgumentsOnly = Fill_( argv[Current++] );
+		FreeArgumentsOnly = Fill_( argv[Current++], Flags, Options, Arguments );
 	}
+
+	while ( Current < argc )
+		Arguments.Append( str::string( argv[Current++] );
+}
+
+void FillArgumentsRegistry_(
+	flags_ &Flags,
+	options_ &Options,
+	arguments_ &Arguments )
+{
 }
 
 
