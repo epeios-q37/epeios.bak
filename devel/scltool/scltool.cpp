@@ -45,6 +45,7 @@ static STR_BUFFER___ Language_;
 static rgstry::multi_level_registry Registry_;
 
 static rgstry::level__ RegistryProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
+static rgstry::level__ ArgumentsProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
 
 const char *scltool::GetLanguage( void )
 {
@@ -161,6 +162,200 @@ ERREnd
 ERREpilog
 }
 
+enum type__ {
+	tShort,	// '-...'
+	tLong,	// '--...'
+	t_amount,
+	t_Undefined
+};
+
+class flag_
+{
+public:
+	struct s {
+		type__ Type;
+		str::string_::s Name;
+	} &S_;
+	str::string_ Name;
+	flag_( s &S )
+	: S_( S ),
+	  Name( S.Name )
+	{}
+	void reset( bso::bool__ P = true )
+	{
+		S_.Type = t_Undefined;
+		Name.reset( P );
+	}
+	void plug( sdr::E_SDRIVER__ &SD )
+	{
+		Name.plug( SD );
+	}
+	void plug( ags::E_ASTORAGE_ &AS )
+	{
+		Name.plug( AS );
+	}
+	flag_ &operator =( const flag_ &F )
+	{
+		S_.Type = F.S_.Type;
+		Name = F.Name;
+
+		return *this;
+	}
+	void Init( type__ Type = t_Undefined )
+	{
+		S_.Type = Type;
+		Name.Init();
+	}
+	void Init(
+		type__ Type,
+		const str::string_ &Name )
+	{
+		Init( Type );
+
+		this->Name = Name;
+	}
+};
+
+E_AUTO( flag );
+
+typedef ctn::E_MCONTAINER_( flag_ ) flags_;
+E_AUTO( flags );
+
+class option_
+: public flag_
+{
+public:
+	struct s 
+	: public flag_::s
+	{
+		str::string_::s Value;
+	};
+	str::string_ Value;
+	option_( s &S )
+	: flag_( S ),
+		Value( S.Value )
+	{}
+	void reset( bso::bool__ P = true )
+	{
+		flag_::reset( P );
+
+		Value.reset( P );
+	}
+	void plug( ags::E_ASTORAGE_ &AS )
+	{
+		flag_::plug( AS );
+
+		Value.plug( AS );
+	}
+	option_ &operator =( const option_ &O )
+	{
+		flag_::operator=( O );
+
+		Value = O.Value;
+
+		return *this;
+	}
+	void Init( void )
+	{
+		flag_::Init();
+
+		Value.Init();
+	}
+	void Init(
+		type__ Type,
+		const str::string_ &Name,
+		const char *Value )
+	{
+		Init();
+
+		flag_::Init( Type, Name );
+
+		this->Value = Value;
+	}
+};
+
+E_AUTO( option );
+
+typedef ctn::E_MCONTAINER_( option_ ) options_;
+E_AUTO( options );
+
+
+typedef str::string_ argument_;
+E_AUTO( argument );
+
+typedef ctn::E_MCONTAINER_( argument_ ) arguments_;
+E_AUTO( arguments );
+
+void FillWithShort_( 
+	const char *Arg,
+	flags_ &Flags,
+	options_ &Options,
+	arguments_ &Arguments )
+{
+	const char *Egal = strchr( Arg, '=' );
+	const char *Quote = strchr( Arg, '"' );
+
+	if ( Egal == NULL )
+		Fill_( Arg, Flags );
+
+	if ( Egal < Quote )
+		Fill_( Arg, Options );
+}
+
+bso::bool__ Fill_(
+	const char *Arg,
+	flags_ &Flags,
+	options_ &Options,
+	arguments_ &Arguments )
+{
+	size_t Size = strlen( Arg );
+
+	switch ( Size ) {
+	case 0:
+		ERRDta();
+		break;
+	case 1:
+		Arguments.Append( Arg );
+		break;
+	case 2:
+		if ( ( Arg[0] == '-' ) && ( Arg[1] == '-' ) )
+			return true;
+
+		FillWithShort_( Arg + 1, Options, Flags ); );
+
+		break;
+	default:
+		if ( Arg[0] == '-' )
+			if ( Arg[1] == '-' )
+				FillWithLong_( Arg + 2, Options, Flags );
+			else
+				FillWithShort_( Arg + 1, Options, Flags );
+		else
+			Arguments.Append( Arg );
+		break;
+	}
+
+	return false;
+}
+
+
+void Fill_(
+	int argc,
+	const char **argv,
+	flags_ &Flags,
+	options_ &Options,
+	arguments_ &Arguments )
+{
+	int Current = 1;
+	bso::bool__ FreeArgumentsOnly = false;
+
+	while ( ( Current < argc ) && ( !FreeArgumentsOnly ) )
+	{
+		FreeArgumentsOnly = Fill_( argv[Current++] );
+	}
+}
+
+
 static bso::bool__ ReportSCLPendingError_( void )
 {
 	return sclerror::ReportPendingError( GetLanguage() );
@@ -185,6 +380,7 @@ ERRBegin
 
 	Registry_.PushImportedLevel( sclrgstry::GetRegistry(), sclrgstry::GetRoot() );
 	RegistryProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
+	ArgumentsProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Arguments" ) );
 
 	Main( argc, argv );
 ERRErr
