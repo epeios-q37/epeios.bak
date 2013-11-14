@@ -517,7 +517,7 @@ void Fill_(
 	}
 
 	while ( Current < argc )
-		Arguments.Append( str::string( argv[Current++] );
+		Arguments.Append( str::string( argv[Current++] ) );
 }
 
 void FillArgumentsRegistry_(
