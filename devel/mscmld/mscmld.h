@@ -421,7 +421,7 @@ namespace mscmld {
 		const signature_time__ &Op1,
 		const signature_time__ &Op2 )
 	{
-		return ( ( Op1.Numerator != Op2.Numerator ) || ( Op1.DenominatorPower != Op2.DenominatorPower ) );
+		return ( ( Op1.Numerator() != Op2.Numerator() ) || ( Op1.Denominator() != Op2.Denominator() ) );
 	}
 
 	struct signature__ {

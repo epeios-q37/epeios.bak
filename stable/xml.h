@@ -378,6 +378,7 @@ namespace xml {
 
 			return Token;
 		}
+		void Skip( void );	// Saute le contenu de la balise en cours.
 		const xtf::pos__ &DumpPosition( void ) const
 		{
 			return _Flow.Dump.Position();

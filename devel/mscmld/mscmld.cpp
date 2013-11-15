@@ -31,7 +31,10 @@ using namespace mscmld;
 #include "mthfrc.h"
 
 #define SIGNATURE_TAG						"Signature"
+
 #define NOTE_TAG							"Note"
+#define PITCH_TAG							"Pitch"
+
 #define REST_TAG							"Rest"
 #define BAR_TAG								"Bar"
 #define MELODY_TAG							"Melody"
@@ -249,7 +252,7 @@ ERRBegin
 		Melody.Append( note__( Pitch, Duration, Signature ) );
 	}
 
-	Bar.Init( Time.Numerator, Time.Denominator() );
+	Bar.Init( Time.Numerator(), Time.Denominator() );
 
 	Buffer.Init();
 
@@ -291,7 +294,7 @@ ERRBegin
 
 		if ( Time != Source( Row ).Signature.Time ) {
 			Time = Source( Row ).Signature.Time;
-			Bar.Init( Time.Numerator, Time.Denominator() );
+			Bar.Init( Time.Numerator(), Time.Denominator() );
 		}
 
 		Note.Init();
@@ -307,7 +310,7 @@ ERRBegin
 			Target.Append( Source( Row ) );
 			break;
 		case 0:
-			Bar.Init( Time.Numerator, Time.Denominator );
+			Bar.Init( Time.Numerator(), Time.Denominator() );
 			Target.Append( Source( Row ) );
 			break;
 		case -1:
@@ -492,7 +495,7 @@ ERRBegin
 
 	Row = First();
 
-	Total.Init( Get( Row ).Signature.Time.Numerator, Get( Row ).Signature.Time.Denominator() );
+	Total.Init( Get( Row ).Signature.Time.Numerator(), Get( Row ).Signature.Time.Denominator() );
 
 	Remaining.Init( Total );
 
@@ -536,7 +539,7 @@ static void WriteXML_(
 {
 	bso::integer_buffer__ Buffer;
 
-	Writer.PushTag( "Pitch" );
+	Writer.PushTag( PITCH_TAG );
 
 	Writer.PutAttribute( "Name", GetPitchNameLabel( Pitch.Name ) );
 
@@ -799,7 +802,7 @@ ERRBegin
 				Writer.PopTag();
 			}
 
-			BarFraction.Init( Note.Signature.Time.Numerator, Note.Signature.Time.Denominator() );
+			BarFraction.Init( Note.Signature.Time.Numerator(), Note.Signature.Time.Denominator() );
 
 			if ( HandleAnacrousis ) {
 				Buffer.Init( BarFraction );
@@ -1054,6 +1057,84 @@ ERREnd
 ERREpilog
 	return Status;
 }
+
+// ...<Pitch>...</Pitch>...
+//           ^
+// ...<Pitch>...</Pitch>...
+//                      ^
+static parse_status__ ParsePitch_( 
+
+// ...<Note>...</Note>...
+//          ^
+// ...<Note>...</Note>...
+//                   ^
+static parse_status__ ParseNote_( 
+	xml::parser___ &Parser,
+	note__ &Note )
+{
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	pitch__ Pitch;
+	duration__ Duration;
+
+	Pitch.Init();
+	Duration.Init();
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			if ( Parser.TagName() == PITCH_TAG ) {
+				if ( Pitch.IsValid() )
+					Status = psAlreadyDefined;
+				Status = ParsePitch_( Parser, Pitch );
+			} else if ( Parser.TagName() == DURATION_TAG ) {
+				if ( Duration.IsValid() )
+					Status = psAlreadyDefined;
+				Status = ParseDuration_( Parser, Duration );
+			} else
+				Status = psUnexpectedTag;
+		break;
+		case xml::tAttribute:
+			Status = psUnexpectedAttribute;
+			break;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Parser.TagName() != NOTE_TAG )
+				ERRFwk();
+
+			if ( !Pitch.IsValid() )
+				Status = psMissingPitch;
+
+			if ( !Duration.IsValid() )
+				Status = psMissingDuration;
+
+			Note.Pitch = Pitch;
+			Note.Duration = Duration;
+
+			Continue = false;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		if  ( Status != psOK )
+			Continue = false;
+	}
+}
+
+
+// ...<Bar>...</Bar>...
+//         ^
+// ...<Bar>...</Bar>...
+//                  ^
+static parse_status__ ParseBar_( xml::parser___ &Parser )
+{
+	Parser.Skip();
+}
+
 
 // ...<Melody>...</Melody>...
 //            ^

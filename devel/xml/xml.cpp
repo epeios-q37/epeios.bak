@@ -1022,6 +1022,26 @@ ERREpilog
 	return _Token;
 }
 
+void xml::parser___::Skip( void )
+{
+	if ( _Tags.IsEmpty() )
+		ERRFwk();
+
+	sdr::size__ Limit = _Tags.Amount() - 1;
+
+	while ( _Tags.Amount() > Limit )
+		switch( Parse( tfEndTag ) ) {
+		case tEndTag:
+			break;
+		default:
+			ERRFwk();
+			break;
+	}
+
+	if ( _Tags.Amount() != Limit )
+		ERRFwk();
+}
+
 status__ xml::Parse(
 	xtf::extended_text_iflow__ &UserFlow,
 	entities_handling__ EntitiesHandling,
