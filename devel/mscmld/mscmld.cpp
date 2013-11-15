@@ -30,14 +30,22 @@ using namespace mscmld;
 
 #include "mthfrc.h"
 
-#define SIGNATURE_TAG	"Signature"
-#define NOTE_TAG		"Note"
-#define REST_TAG		"Rest"
-#define BAR_TAG			"Bar"
-#define MELODY_TAG		"Melody"
-#define KEY_TAG			"Key"
-#define TIME_TAG		"Time"
-#define RAW_ATTRIBUTE	"Raw"
+#define SIGNATURE_TAG						"Signature"
+#define NOTE_TAG							"Note"
+#define REST_TAG							"Rest"
+#define BAR_TAG								"Bar"
+#define MELODY_TAG							"Melody"
+#define KEY_TAG								"Key"
+#define TIME_TAG							"Time"
+#define RAW_ATTRIBUTE						"Raw"
+#define NUMERATOR_ATTRIBUTE					"Numerator"
+#define RAW_NUMERATOR_ATTRIBUTE				"RawNumerator"
+#define DENOMINATOR_ATTRIBUTE				"DenominatorTag"
+#define DENOMINATOR_POWER_ATTRIBUTE			"DenominatorPowerTag"
+#define HIDDEN_DENOMINATOR_FLAG_ATTRIBUTE	"DenominatorIsHidden"
+#define DIFF_ATTRIBUTE						"Diff"
+#define YES_VALUE							"yes"
+#define NO_VALUE							"no"
 
 const char *mscmld::GetPitchNameLabel( pitch_name__ Name )
 {
@@ -241,7 +249,7 @@ ERRBegin
 		Melody.Append( note__( Pitch, Duration, Signature ) );
 	}
 
-	Bar.Init( Time.Numerator, Time.ComputeDenominator() );
+	Bar.Init( Time.Numerator, Time.Denominator() );
 
 	Buffer.Init();
 
@@ -283,7 +291,7 @@ ERRBegin
 
 		if ( Time != Source( Row ).Signature.Time ) {
 			Time = Source( Row ).Signature.Time;
-			Bar.Init( Time.Numerator, Time.ComputeDenominator() );
+			Bar.Init( Time.Numerator, Time.Denominator() );
 		}
 
 		Note.Init();
@@ -299,7 +307,7 @@ ERRBegin
 			Target.Append( Source( Row ) );
 			break;
 		case 0:
-			Bar.Init( Time.Numerator, Time.ComputeDenominator() );
+			Bar.Init( Time.Numerator, Time.Denominator );
 			Target.Append( Source( Row ) );
 			break;
 		case -1:
@@ -484,7 +492,7 @@ ERRBegin
 
 	Row = First();
 
-	Total.Init( Get( Row ).Signature.Time.Numerator, Get( Row ).Signature.Time.ComputeDenominator() );
+	Total.Init( Get( Row ).Signature.Time.Numerator, Get( Row ).Signature.Time.Denominator() );
 
 	Remaining.Init( Total );
 
@@ -683,14 +691,18 @@ static void WriteXML_(
 
 	Writer.PushTag( TIME_TAG );
 
-	Writer.PutAttribute( "Numerator", bso::Convert( Time.Numerator, Buffer ) );
+	Writer.PutAttribute( NUMERATOR_ATTRIBUTE, bso::Convert( Time.Numerator(), Buffer ) );
 
-	Writer.PutAttribute( "Denominator", bso::Convert( Time.ComputeDenominator(), Buffer ) );
+	Writer.PutAttribute( RAW_NUMERATOR_ATTRIBUTE, bso::Convert( Time.RawNumerator(), Buffer ) );
+
+	Writer.PutAttribute( DENOMINATOR_ATTRIBUTE, bso::Convert( Time.Denominator(), Buffer ) );
+
+	Writer.PutAttribute( DENOMINATOR_POWER_ATTRIBUTE, bso::Convert( Time.DenominatorPower(), Buffer ) );
 
 	if ( Time.IsDenHidden() )
-		Writer.PutAttribute( "DenominatorIsHidden", "true" );
+		Writer.PutAttribute( HIDDEN_DENOMINATOR_FLAG_ATTRIBUTE, YES_VALUE );
 
-	Writer.PutAttribute( "Diff", ( Time != PreviousTime ) ? "yes" : "no" );
+	Writer.PutAttribute( DIFF_ATTRIBUTE, ( Time != PreviousTime ) ? YES_VALUE : NO_VALUE );
 
 	Writer.PopTag();
 }
@@ -787,7 +799,7 @@ ERRBegin
 				Writer.PopTag();
 			}
 
-			BarFraction.Init( Note.Signature.Time.Numerator, Note.Signature.Time.ComputeDenominator() );
+			BarFraction.Init( Note.Signature.Time.Numerator, Note.Signature.Time.Denominator() );
 
 			if ( HandleAnacrousis ) {
 				Buffer.Init( BarFraction );
@@ -870,7 +882,7 @@ static parse_status__ ParseKey_(
 		case xml::tAttribute:
 			if ( Parser.AttributeName() == RAW_ATTRIBUTE )
 				if ( IsValid( Key ) )
-					Status = psKeySignatureAlreadyDefined;
+					Status = psAlreadyDefined;
 				else
 					Status = GetKeyRaw_( Parser.Value(), Key );
 		case xml::tValue:
@@ -891,6 +903,90 @@ static parse_status__ ParseKey_(
 	}
 }
 
+static parse_status__ GetU8(
+	const str::string_ &Value,
+	bso::u8__ &U8 )
+{
+	sdr::row__ Error E_NIL;
+
+	U8 = Value.ToU8( &Error );
+
+	if ( Error != E_NIL )
+		return psBadValue;
+
+	return psOK;
+}
+
+static parse_status__ GetNumerator(
+	const str::string_ &Value,
+	bso::u8__ &Numerator )
+{
+	return GetU8( Value, Numerator );
+}
+
+static parse_status__ GetDenominatorPower(
+	const str::string_ &Value,
+	bso::u8__ &DenominatorPower )
+{
+	return GetU8( Value, DenominatorPower );
+}
+
+// ...<Time>...</Time>...
+//          ^
+// ...<Time>...</Time>...
+//                    ^
+static parse_status__ ParseTime_(
+	xml::parser___ &Parser,
+	signature_time__ &Time )
+{
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	bso::s8__ RawNumerator = MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR;
+	bso::u8__ DenominatorPower = MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
+	sdr::row__ Error = E_NIL;
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			Status = psUnexpectedTag;
+			break;
+		case xml::tAttribute:
+			if ( Parser.AttributeName() == RAW_NUMERATOR_ATTRIBUTE ) {
+				if ( RawNumerator != MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR )
+					Status = psAlreadyDefined;
+
+				RawNumerator = Parser.Value().ToS8( &Error );
+
+				if ( Error != E_NIL )
+					Status = psBadValue;
+			} else if ( Parser.AttributeName() == DENOMINATOR_POWER_ATTRIBUTE ) {
+				if ( DenominatorPower != MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER )
+					Status = psAlreadyDefined;
+
+				DenominatorPower = Parser.GetValue().ToU8();
+
+				if ( Error != E_NIL )
+					Status = psBadValue;
+			}
+			break;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Parser.TagName() != TIME_TAG )
+				ERRFwk();
+			Continue = false;
+			break;
+		default:
+			ERRFwk();
+		}
+
+		if ( Status != psOK )
+			Continue = false;
+	}
+
+	return Status;
+}
 
 
 // ...<Signature>...<Signature>...
@@ -905,21 +1001,22 @@ static parse_status__ ParseSignature_(
 ERRProlog
 	signature_key__ Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
 	signature_time__ Time;
+	bso::bool__ Continue = true;
 ERRBegin
 	Initialize( Key );
 	Time.Init();
 
-	while ( Status == psOK ) {
+	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::tStartTag:
 			if ( Parser.TagName() == KEY_TAG )
 				if ( IsValid( Key ) )
-					Status = psKeySignatureAlreadyDefined;
+					Status = psAlreadyDefined;
 				else
 					Status = ParseKey_( Parser, Key );
 			else if ( Parser.TagName() == TIME_TAG )
 				if ( Time.IsValid() )
-					Status = psTimeSignatureAlreadyDefined;
+					Status = psAlreadyDefined;
 				else
 					Status = ParseTime_( Parser, Time );
 			else
@@ -934,7 +1031,18 @@ ERRBegin
 		case xml::tEndTag:
 			if ( Parser.TagName() != SIGNATURE_TAG )
 				ERRFwk();
-			if ( Key != 
+
+			if ( !IsValid( Key ) )
+				Status = psMissingKeySignature;
+
+			if ( !Time.IsValid() )
+				Status = psMissingTimeSignature;
+
+			Signature.Time = Time;
+			Signature.Key = Key;
+
+			Continue = false;
+
 			break;
 		default:
 			ERRFwk();
@@ -966,7 +1074,7 @@ ERRBegin
 		case xml::tStartTag:
 			if ( Parser.TagName() == SIGNATURE_TAG )
 				Status = ParseSignature_( Parser, Signature );
-			else if ( Parser.TagName() == NOTE_TAG ) {
+			else if ( Parser.TagName() == NOTE_TAG )
 				Status = ParserNote_( Parser, Signature, Note );
 			else if ( Parser.TagName() == REST_TAG )
 				Status = ParseRest_( Parser, Signature, Note );
@@ -975,7 +1083,7 @@ ERRBegin
 			else
 				Status = psUnexpectedTag;
 
-			if ( Status == sOK )
+			if ( Status == psOK )
 				if ( Note.IsValid() )
 					Melody.Append( Note );
 			break;
@@ -999,7 +1107,7 @@ ERREnd
 ERREpilog
 }
 
-void mscmld::ParseXML(
+parse_status__ mscmld::ParseXML(
 	xml::parser___ &Parser,
 	melody_ &Melody,
 	bso::bool__ WithRoot );	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au rerour on est à l'extérieur de la balise 'Melody'.

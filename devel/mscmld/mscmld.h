@@ -317,53 +317,96 @@ namespace mscmld {
 		return Key != MSCMLD_UNDEFINED_KEY_SIGNATURE;
 	}
 
+	E_TMIMIC__( bso::s8__, numerator__ );
+	E_TMIMIC__( bso::u8__, denominator_power__ );
+
+# define MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR			0
+# define MSCMLD_TIME_SIGNATURE_NUMERATOR_MAX				BSO_S8_MAX
+# define MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER	BSO_U8_MAX
+
+	inline bso::bool__ IsValid( numerator__ Numerator )
+	{
+		return Numerator != MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR;
+	}
+
+	inline bso::bool__ IsValid( denominator_power__ DenominatorPower )
+	{
+		return DenominatorPower != MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
+	}
+
 	struct signature_time__ {
-		bso::u8__ Numerator;
-		bso::s8__ DenominatorPower;	// Le dénominateur réel est égal à = 2 ^ abs('DenominatorPower'). Si '<0', le dénominateur n'est pas censé être affiché.
+	private:
+		numerator__ _Numerator;	// Si < 0, le dénominateur (bien le dénominateur) n'est pas censé être affiché.
+		denominator_power__ _DenominatorPower;	// Le dénominateur réel est égal à = 2 ^ abs('DenominatorPower').
+		void _Test( void ) const
+		{
+			if ( !IsValid() )
+				ERRFwk();
+		}
+	public:
 		void reset( bso::bool__ P = true )
 		{
-			Numerator = 0;
-			DenominatorPower = 0;
+			_Numerator = MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR;
+			_DenominatorPower = MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
 		}
-		signature_time__( void )
-		{
-			reset( false );
-		}
+		E_CVDTOR( signature_time__ );
 		signature_time__ (
 			bso::u8__ Numerator,
-			bso::s8__ Denominator )
+			bso::s8__ Denominator,
+			bso::bool__ DenominatorIsHidden = false )
 		{
 			reset( false );
 
-			if ( Numerator == 0 )
-				ERRFwk();
-
-			this->Numerator = Numerator;
-
-			this->DenominatorPower = Log2Abs_( Denominator );
+			Init( Numerator, Denominator, DenominatorIsHidden );
 		}
 		void Init( void )
 		{
 			reset();
 		}
+		void Init(
+			bso::u8__ Numerator,
+			bso::u8__ Denominator,
+			bso::bool__ DenominatorIsHidden = false  )
+		{
+			if ( Numerator > MSCMLD_TIME_SIGNATURE_NUMERATOR_MAX )
+				ERRFwk();
+
+			if ( Numerator == 0 )
+				ERRFwk();
+
+			_Numerator = ( DenominatorIsHidden ? -Numerator : Numerator );
+
+			_DenominatorPower = Log2Abs_( Denominator );
+		}
 		bso::bool__ IsValid( void ) const
 		{
-			return ( ( Numerator != 0 ) && ( DenominatorPower != 0 ) );
+			return ( mscmld::IsValid( _Numerator ) && mscmld::IsValid( _DenominatorPower ) );
 		}
-		bso::u8__ ComputeDenominator ( void ) const
+		bso::u8__ DenominatorPower( void ) const
 		{
-#ifdef MSCMLD_DBG
-			if ( !IsValid() )
-				ERRFwk();
-#endif
-			return 1 << ( DenominatorPower < 0 ? - DenominatorPower : DenominatorPower );
+			_Test();
+
+			return *_DenominatorPower;
+		}
+		bso::u8__ Denominator ( void ) const
+		{
+			return 1 << DenominatorPower();
+		}
+		bso::s8__ RawNumerator( void ) const
+		{
+			_Test();
+
+			return *_Numerator;
+		}
+		bso::u8__ Numerator( void ) const
+		{
+			bso::s8__ N = RawNumerator();
+
+			return ( N < 0 ? -N : N );
 		}
 		bso::bool__ IsDenHidden( void ) const
 		{
-			if ( !IsValid() )
-				ERRFwk();
-
-			return DenominatorPower < 0;
+			return RawNumerator() < 0;
 		}
 	};
 
@@ -371,7 +414,7 @@ namespace mscmld {
 		const signature_time__ &Op1,
 		const signature_time__ &Op2 )
 	{
-		return ( ( Op1.Numerator == Op2.Numerator ) && ( Op1.DenominatorPower == Op2.DenominatorPower ) );
+		return ( ( Op1.Numerator() == Op2.Numerator() ) && ( Op1.Denominator() == Op2.Denominator() ) );
 	}
 
 	inline int operator !=(
@@ -554,10 +597,12 @@ namespace mscmld {
 		psOK,
 		psXML,	// Erreur dans le flux XML.
 		psUnexpectedTag,
+		psUnexpectedAttribute,
 		psUnexpectedValue,
 		psBadValue,
-		psKeySignatureAlreadyDefined,
-		psTimeSignatureAlreadyDefined,
+		psAlreadyDefined,
+		psMissingKeySignature,
+		psMissingTimeSignature,
 		ps_amount,
 		ps_Undefined
 	};
