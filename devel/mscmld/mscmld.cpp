@@ -30,25 +30,42 @@ using namespace mscmld;
 
 #include "mthfrc.h"
 
+#define MELODY_TAG							"Melody"
+
+
 #define SIGNATURE_TAG						"Signature"
+
+#define KEY_TAG								"Key"
+
+#define TIME_TAG							"Time"
 
 #define NOTE_TAG							"Note"
 #define PITCH_TAG							"Pitch"
+#define DURATION_TAG						"Duration"
+
+#define DIFF_TAG							"Diff"
 
 #define REST_TAG							"Rest"
+
 #define BAR_TAG								"Bar"
-#define MELODY_TAG							"Melody"
-#define KEY_TAG								"Key"
-#define TIME_TAG							"Time"
+
 #define RAW_ATTRIBUTE						"Raw"
 #define NUMERATOR_ATTRIBUTE					"Numerator"
 #define RAW_NUMERATOR_ATTRIBUTE				"RawNumerator"
 #define DENOMINATOR_ATTRIBUTE				"DenominatorTag"
 #define DENOMINATOR_POWER_ATTRIBUTE			"DenominatorPowerTag"
 #define HIDDEN_DENOMINATOR_FLAG_ATTRIBUTE	"DenominatorIsHidden"
+
+#define NAME_ATTRIBUTE						"Name"
+#define ACCIDENTAL_ATTRIBUTE				"Accidental"
+#define OCTAVE_ATTRIBUTE					"Octave"
+
 #define DIFF_ATTRIBUTE						"Diff"
+
 #define YES_VALUE							"yes"
 #define NO_VALUE							"no"
+
+
 
 const char *mscmld::GetPitchNameLabel( pitch_name__ Name )
 {
@@ -541,11 +558,11 @@ static void WriteXML_(
 
 	Writer.PushTag( PITCH_TAG );
 
-	Writer.PutAttribute( "Name", GetPitchNameLabel( Pitch.Name ) );
+	Writer.PutAttribute( NAME_ATTRIBUTE, GetPitchNameLabel( Pitch.Name ) );
 
-	Writer.PutAttribute( "Accidental", GetPitchAccidentalLabel( Pitch.Accidental ) );
+	Writer.PutAttribute( ACCIDENTAL_ATTRIBUTE, GetPitchAccidentalLabel( Pitch.Accidental ) );
 
-	Writer.PutAttribute( "Octave", bso::Convert( Pitch.Octave, Buffer ) );
+	Writer.PutAttribute( OCTAVE_ATTRIBUTE, bso::Convert( Pitch.Octave, Buffer ) );
 
 	Writer.PutAttribute( "Diatonic", bso::Convert( GetDiatonicAbsolute_( Pitch ), Buffer ) );
 
@@ -555,7 +572,7 @@ static void WriteXML_(
 		bso::s16__ DiatonicDelta = (bso::s16__)GetDiatonicAbsolute_( Pitch ) - GetDiatonicAbsolute_( PreviousPitch );
 		bso::s16__ ChromaticDelta = (bso::s16__)GetChromaticAbsolute_( Pitch ) - GetChromaticAbsolute_( PreviousPitch );
 
-		Writer.PushTag( "Diff" );
+		Writer.PushTag( DIFF_TAG );
 
 		Writer.PutAttribute( "Diatonic", bso::Convert( DiatonicDelta, Buffer ) );
 		Writer.PutAttribute( "Chromatic", bso::Convert( ChromaticDelta, Buffer ) );
@@ -582,7 +599,7 @@ static void WriteXML_(
 	const duration__ &PreviousDuration,
 	xml::writer_ &Writer )
 {
-	Writer.PushTag( "Duration" );
+	Writer.PushTag( DURATION_TAG );
 
 	WriteXMLCoreAttributes_( Duration, Writer );
 
@@ -591,7 +608,7 @@ static void WriteXML_(
 
 	Writer.PutAttribute( "TiedToNext", ( Duration.TiedToNext ? "yes" : "no" ) );
 
-	Writer.PutAttribute( "Diff", ( ( Duration != PreviousDuration ) ? "yes" : "no" ) );
+	Writer.PutAttribute( DIFF_ATTRIBUTE, ( ( Duration != PreviousDuration ) ? "yes" : "no" ) );
 
 	Writer.PopTag();
 
@@ -674,13 +691,13 @@ static void WriteXML_(
 		break;
 	}
 
-	Writer.PutAttribute( "Name", GetPitchNameLabel( Name ) );
+	Writer.PutAttribute( NAME_ATTRIBUTE, GetPitchNameLabel( Name ) );
 
-	Writer.PutAttribute( "Accidental", GetPitchAccidentalLabel( Accidental ) );
+	Writer.PutAttribute( ACCIDENTAL_ATTRIBUTE, GetPitchAccidentalLabel( Accidental ) );
 
 	Writer.PutAttribute( RAW_ATTRIBUTE, bso::Convert( Key, Buffer ) );
 
-	Writer.PutAttribute( "Diff", ( Key != PreviousKey ) ? "yes" : "no" );
+	Writer.PutAttribute( DIFF_ATTRIBUTE, ( Key != PreviousKey ) ? "yes" : "no" );
 
 	Writer.PopTag();
 }
@@ -1058,11 +1075,125 @@ ERREpilog
 	return Status;
 }
 
+static pitch_name__ GetPitchName_( const str::string_ &Name )
+{
+	int i = 0;
+
+	while ( ( i < pn_amount ) && ( Name != GetPitchNameLabel( (pitch_name__)i ) ) )
+		i++;
+
+	if ( i > pn_amount )
+		i = pn_Undefined;
+
+	return (pitch_name__)i;
+}
+
+static pitch_accidental__ GetPitchAccidental_( const str::string_ &Accidental )
+{
+	int i = 0;
+
+	while ( ( i < pa_amount ) && ( Accidental != GetPitchAccidentalLabel( (pitch_accidental__)i ) ) )
+		i++;
+
+	if ( i > pa_amount )
+		i = pa_Undefined;
+
+	return (pitch_accidental__)i;
+}
+
+static pitch_octave__ GetPitchOctave_( const str::string_ &Octave )
+{
+	sdr::row__ Error = E_NIL;
+	pitch_octave__ O = Octave.ToU8( &Error );
+
+	if ( Error != E_NIL )
+		O = MSCMLD_UNDEFINED_PITCH_OCTAVE;
+
+	return O;
+
+
+}
+
+
 // ...<Pitch>...</Pitch>...
 //           ^
 // ...<Pitch>...</Pitch>...
 //                      ^
-static parse_status__ ParsePitch_( 
+static parse_status__ ParsePitch_(
+	xml::parser___ &Parser,
+	pitch__ Pitch )
+{
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	pitch_name__ Name = pn_Undefined;
+	pitch_accidental__ Accidental = pa_Undefined;
+	pitch_octave__ Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE;
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			if ( Parser.TagName() == DIFF_TAG )
+				Parser.Skip();
+			else
+				Status = psUnexpectedTag;
+			break;
+		case xml::tAttribute:
+			if ( Parser.AttributeName() == NAME_ATTRIBUTE ) {
+				if ( Name != pn_Undefined )
+					Status = psAlreadyDefined;
+				else {
+					Name = GetPitchName_( Parser.Value() );
+
+					if ( Name == pn_Undefined )
+						Status = psBadValue;
+				}
+			} if ( Parser.AttributeName() == ACCIDENTAL_ATTRIBUTE ) {
+				if ( Accidental != pa_Undefined )
+					Status = psAlreadyDefined;
+				else {
+					Accidental = GetPitchAccidental_( Parser.Value() );
+
+					if ( Accidental == pa_Undefined )
+						Status = psBadValue;
+				}
+			} else if ( Parser.AttributeName() == OCTAVE_ATTRIBUTE ) {
+				if ( Octave != MSCMLD_UNDEFINED_PITCH_OCTAVE )
+					Status = psAlreadyDefined;
+				else {
+					Octave = GetPitchOctave_( Parser.Value );
+
+					if ( Octave == MSCMLD_UNDEFINED_PITCH_OCTAVE )
+						Status = psBadValue;
+				}
+			}
+			break;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Name == pn_Undefined )
+				Status = psMissingPitchName;
+			else if ( Accidental == pa_Undefined )
+				Status = psMissingPitchAccidental;
+			else if ( Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE )
+				Status = psMissingPitchOctave;
+			else {
+				Pitch.Name = Name;
+				Pitch.Accidental = Accidental;
+				Pitch.Octave = Octave;
+			}
+
+			Continue = false;
+			break;
+		}
+
+		if ( Status != psOK )
+			Continue = false;
+	}
+
+	return Status;
+}
+
 
 // ...<Note>...</Note>...
 //          ^

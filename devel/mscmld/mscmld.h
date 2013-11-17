@@ -603,6 +603,11 @@ namespace mscmld {
 		psAlreadyDefined,
 		psMissingKeySignature,
 		psMissingTimeSignature,
+		psMissingPitch,
+		psMissingDuration,
+		psMissingPitchName,
+		psMissingPitchAccidental,
+		psMissingPitchOctave,
 		ps_amount,
 		ps_Undefined
 	};
