@@ -39,9 +39,14 @@ using namespace mscmld;
 
 #define TIME_TAG							"Time"
 
+#define ANACROUSIS_TAG						"Anacrousis"
+
+
 #define NOTE_TAG							"Note"
 #define PITCH_TAG							"Pitch"
 #define DURATION_TAG						"Duration"
+#define BASE_TAG							"Base"
+#define MODIFIER_TAG						"Modifier"
 
 #define DIFF_TAG							"Diff"
 
@@ -52,13 +57,16 @@ using namespace mscmld;
 #define RAW_ATTRIBUTE						"Raw"
 #define NUMERATOR_ATTRIBUTE					"Numerator"
 #define RAW_NUMERATOR_ATTRIBUTE				"RawNumerator"
-#define DENOMINATOR_ATTRIBUTE				"DenominatorTag"
-#define DENOMINATOR_POWER_ATTRIBUTE			"DenominatorPowerTag"
+#define DENOMINATOR_ATTRIBUTE				"Denominator"
+#define DENOMINATOR_POWER_ATTRIBUTE			"DenominatorPower"
 #define HIDDEN_DENOMINATOR_FLAG_ATTRIBUTE	"DenominatorIsHidden"
 
 #define NAME_ATTRIBUTE						"Name"
 #define ACCIDENTAL_ATTRIBUTE				"Accidental"
 #define OCTAVE_ATTRIBUTE					"Octave"
+
+#define TIED_FLAG_ATTRIBUTE					"TiedToNext"
+#define TUPLET_TAG							"Tuplet"
 
 #define DIFF_ATTRIBUTE						"Diff"
 
@@ -151,9 +159,9 @@ ERRBegin
 		mthfrc::Add( Buffer, Dot, Result );
 	}
 
-	if ( Tuplet.IsInUse() ) {
-		mthfrc::Div( Result, mthfrc::fraction( Tuplet.Den ), Buffer );
-		mthfrc::Mul( Buffer, mthfrc::fraction( Tuplet.Num ), Result );
+	if ( Tuplet.IsValid() ) {
+		mthfrc::Div( Result, mthfrc::fraction( Tuplet.Denominator ), Buffer );
+		mthfrc::Mul( Buffer, mthfrc::fraction( Tuplet.Numerator ), Result );
 	}
 ERRErr
 ERREnd
@@ -589,9 +597,10 @@ static void WriteXMLCoreAttributes_(
 {
 	bso::integer_buffer__ Buffer;
 
-	Writer.PutAttribute( "Base", bso::Convert( Duration.Base, Buffer ) );
+	Writer.PutAttribute( BASE_TAG, bso::Convert( Duration.Base, Buffer ) );
 
-	Writer.PutAttribute( "Modifier", bso::Convert( Duration.Modifier, Buffer ) );
+	if ( Duration.Modifier != 0 )
+		Writer.PutAttribute( "Modifier", bso::Convert( Duration.Modifier, Buffer ) );
 }
 
 static void WriteXML_(
@@ -606,7 +615,7 @@ static void WriteXML_(
 	if ( PreviousDuration.Base != 0 )
 		Writer.PutAttribute( "TiedToPrevious", ( PreviousDuration.TiedToNext ? "yes" : "no" ) );
 
-	Writer.PutAttribute( "TiedToNext", ( Duration.TiedToNext ? "yes" : "no" ) );
+	Writer.PutAttribute( TIED_FLAG_ATTRIBUTE, ( Duration.TiedToNext ? "yes" : "no" ) );
 
 	Writer.PutAttribute( DIFF_ATTRIBUTE, ( ( Duration != PreviousDuration ) ? "yes" : "no" ) );
 
@@ -784,7 +793,7 @@ ERRBegin
 	Row = Melody.First();
 
 	if ( Melody.Anacrousis().IsValid() ) {
-		Writer.PushTag( "Anacrousis" );
+		Writer.PushTag( ANACROUSIS_TAG );
 		WriteXMLCoreAttributes_( Melody.Anacrousis(), Writer );
 		Writer.PopTag();
 		HandleAnacrousis = true;
@@ -831,15 +840,15 @@ ERRBegin
 			}
 		}
 
-		if ( Note.Duration.Tuplet.IsInUse() ) {
+		if ( Note.Duration.Tuplet.IsValid() ) {
 			if ( Note.Duration.Tuplet != PreviousNote.Duration.Tuplet ) {
-				if ( PreviousNote.Duration.Tuplet.IsInUse() )
+				if ( PreviousNote.Duration.Tuplet.IsValid() )
 					Writer.PopTag( TupletControl );
-				TupletControl = Writer.PushTag( "Tuplet" );
-				xml::PutAttribute( "Numerator", Note.Duration.Tuplet.Num, Writer );
-				xml::PutAttribute( "Denominator", Note.Duration.Tuplet.Den, Writer );
+				TupletControl = Writer.PushTag( TUPLET_TAG );
+				xml::PutAttribute( NUMERATOR_ATTRIBUTE, Note.Duration.Tuplet.Numerator, Writer );
+				xml::PutAttribute( DENOMINATOR_ATTRIBUTE, Note.Duration.Tuplet.Denominator, Writer );
 			}
-		} else if ( PreviousNote.Duration.Tuplet.IsInUse() )
+		} else if ( PreviousNote.Duration.Tuplet.IsValid() )
 			Writer.PopTag( TupletControl );
 
 		WriteXML_( Note, PreviousNote, Writer );
@@ -853,7 +862,7 @@ ERRBegin
 		Row = Melody.Next( Row );
 	}
 
-	if ( Note.Duration.Tuplet.IsInUse() )
+	if ( Note.Duration.Tuplet.IsValid() )
 		Writer.PopTag( TupletControl );
 ERRErr
 ERREnd
@@ -937,24 +946,6 @@ static parse_status__ GetU8(
 	return psOK;
 }
 
-static parse_status__ GetNumerator(
-	const str::string_ &Value,
-	bso::u8__ &Numerator )
-{
-	return GetU8( Value, Numerator );
-}
-
-static parse_status__ GetDenominatorPower(
-	const str::string_ &Value,
-	bso::u8__ &DenominatorPower )
-{
-	return GetU8( Value, DenominatorPower );
-}
-
-// ...<Time>...</Time>...
-//          ^
-// ...<Time>...</Time>...
-//                    ^
 static parse_status__ ParseTime_(
 	xml::parser___ &Parser,
 	signature_time__ &Time )
@@ -1053,10 +1044,10 @@ ERRBegin
 				ERRFwk();
 
 			if ( !IsValid( Key ) )
-				Status = psMissingKeySignature;
+				Status = psMissingSignatureKey;
 
 			if ( !Time.IsValid() )
-				Status = psMissingTimeSignature;
+				Status = psMissingSignatureTime;
 
 			Signature.Time = Time;
 			Signature.Key = Key;
@@ -1160,7 +1151,7 @@ static parse_status__ ParsePitch_(
 				if ( Octave != MSCMLD_UNDEFINED_PITCH_OCTAVE )
 					Status = psAlreadyDefined;
 				else {
-					Octave = GetPitchOctave_( Parser.Value );
+					Octave = GetPitchOctave_( Parser.Value() );
 
 					if ( Octave == MSCMLD_UNDEFINED_PITCH_OCTAVE )
 						Status = psBadValue;
@@ -1194,13 +1185,130 @@ static parse_status__ ParsePitch_(
 	return Status;
 }
 
+static bso::s8__ GetDurationBase_( const str::string_ &Value )
+{
+	bso::s8__ Base = MSCMLD_UNDEFINED_DURATION_BASE;
+	sdr::row__ Error = E_NIL;
 
-// ...<Note>...</Note>...
-//          ^
-// ...<Note>...</Note>...
-//                   ^
+	Base = Value.ToS8( &Error );
+
+	if ( Error != E_NIL )
+		Base = MSCMLD_UNDEFINED_DURATION_BASE;
+
+	return Base;
+}
+
+static bso::u8__ GetDurationModifier_( const str::string_ &Value )
+{
+	bso::u8__ Modifier = MSCMLD_UNDEFINED_DURATION_MODIFIER;
+	sdr::row__ Error = E_NIL;
+
+	Modifier = Value.ToU8( &Error );
+
+	if ( Error != E_NIL )
+		Modifier = MSCMLD_UNDEFINED_DURATION_BASE;
+
+	return Modifier;
+}
+
+bso::xbool__ GetTiedFlag_( const str::string_ &Value )
+{
+	if ( Value == NO_VALUE )
+		return bso::xbFalse;
+	else if ( Value == YES_VALUE )
+		return bso::xbYes;
+	else
+		return bso::xb_Undefined;
+}
+
+
+
+static parse_status__ ParseDuration_(
+	xml::parser___ &Parser,
+	const tuplet__ &Tuplet,
+	duration__ &Duration )
+{
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	bso::s8__ Base = MSCMLD_UNDEFINED_DURATION_BASE;
+	bso::u8__ Modifier = MSCMLD_UNDEFINED_DURATION_MODIFIER;
+	bso::xbool__ TiedToNext = bso::xb_Undefined;
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			Status = psUnexpectedTag;
+			break;
+		case xml::tAttribute:
+			if ( Parser.TagName() == BASE_TAG ) {
+				if ( Base != MSCMLD_UNDEFINED_DURATION_BASE )
+					Status = psAlreadyDefined;
+				else {
+					Base = GetDurationBase_( Parser.GetValue() );
+
+					if ( Base == MSCMLD_UNDEFINED_DURATION_BASE )
+						Status = psBadValue;
+				}
+			} else if ( Parser.AttributeName() == MODIFIER_TAG ) {
+				if ( Modifier != MSCMLD_UNDEFINED_DURATION_MODIFIER )
+					Status = psAlreadyDefined;
+				else {
+					Modifier = GetDurationModifier_( Parser.Value() );
+
+					if ( Modifier == MSCMLD_UNDEFINED_DURATION_MODIFIER )
+						Status = psBadValue;
+				}
+			} else if ( Parser.AttributeName() == TIED_FLAG_ATTRIBUTE ) {
+				if( TiedToNext != bso::xb_Undefined )
+					Status = psAlreadyDefined;
+				else {
+					TiedToNext = GetTiedFlag_( Parser.GetValue() );
+
+					if ( TiedToNext == bso::xb_Undefined )
+						Status = psBadValue;
+				}
+			}
+			break;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Parser.TagName() != DURATION_TAG )
+				ERRFwk();
+
+			if ( Base == MSCMLD_UNDEFINED_DURATION_BASE )
+				Status = psMissingDurationBase;
+			else {
+				if ( Modifier == MSCMLD_UNDEFINED_DURATION_MODIFIER )
+					Modifier = 0;
+
+				if ( TiedToNext == bso::xb_Undefined )
+					TiedToNext = bso::xbFalse;
+
+				if ( Tuplet.IsValid() )
+					Duration.Init( Base, Modifier, Tuplet, bso::Convert( TiedToNext ) );
+				else
+					Duration.Init( Base, Modifier, bso::Convert( TiedToNext ) );
+			}
+
+			Continue = false;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		if ( Status != psOK )
+			Continue = false;
+	}
+
+	return Status;
+}
+
 static parse_status__ ParseNote_( 
 	xml::parser___ &Parser,
+	const signature__ &Signature,
+	const tuplet__ &Tuplet,
 	note__ &Note )
 {
 	parse_status__ Status = psOK;
@@ -1221,7 +1329,7 @@ static parse_status__ ParseNote_(
 			} else if ( Parser.TagName() == DURATION_TAG ) {
 				if ( Duration.IsValid() )
 					Status = psAlreadyDefined;
-				Status = ParseDuration_( Parser, Duration );
+				Status = ParseDuration_( Parser, Tuplet, Duration );
 			} else
 				Status = psUnexpectedTag;
 		break;
@@ -1237,12 +1345,14 @@ static parse_status__ ParseNote_(
 
 			if ( !Pitch.IsValid() )
 				Status = psMissingPitch;
-
-			if ( !Duration.IsValid() )
+			else if ( !Duration.IsValid() )
 				Status = psMissingDuration;
-
-			Note.Pitch = Pitch;
-			Note.Duration = Duration;
+			else if ( !Signature.IsValid() )
+				Status = psMissingSignature;
+			else {
+				Note.Pitch = Pitch;
+				Note.Duration = Duration;
+			}
 
 			Continue = false;
 			break;
@@ -1256,42 +1366,205 @@ static parse_status__ ParseNote_(
 	}
 }
 
-
-// ...<Bar>...</Bar>...
-//         ^
-// ...<Bar>...</Bar>...
-//                  ^
 static parse_status__ ParseBar_( xml::parser___ &Parser )
 {
 	Parser.Skip();
 }
 
-
-// ...<Melody>...</Melody>...
-//            ^
-// ...<Melody>...</Melody>...
-//                        ^
-static parse_status__ Parse_(
+static parse_status__ ParseRest_(
 	xml::parser___ &Parser,
+	const signature__ &Signature,
+	const tuplet__ &Tuplet,
+	note__ Note  )
+{
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	pitch__ Pitch;
+	duration__ Duration;
+
+	Pitch.Init();
+	Pitch.Name = pnRest;
+
+	Duration.Init();
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			if ( Parser.TagName() == DURATION_TAG ) {
+				if ( Duration.IsValid() )
+					Status = psAlreadyDefined;
+				Status = ParseDuration_( Parser, Tuplet, Duration );
+			} else
+				Status = psUnexpectedTag;
+		break;
+		case xml::tAttribute:
+			Status = psUnexpectedAttribute;
+			break;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Parser.TagName() != NOTE_TAG )
+				ERRFwk();
+
+			if ( !Pitch.IsValid() )
+				ERRFwk();
+			else if ( !Duration.IsValid() )
+				Status = psMissingDuration;
+			else if ( !Signature.IsValid() )
+				Status = psMissingSignature;
+			else {
+				Note.Pitch = Pitch;
+				Note.Duration = Duration;
+			}
+
+			Continue = false;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		if  ( Status != psOK )
+			Continue = false;
+	}
+}
+
+static bso::u8__ GetTupletNumerator_( const str::string_ &Value )
+{
+	bso::u8__ Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR;
+	sdr::row__ Error = E_NIL;
+
+	Numerator = Value.ToU8( &Error );
+
+	if ( Error != E_NIL )
+		Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR;
+
+	return Numerator;
+}
+
+static bso::u8__ GetTupletDenominator_( const str::string_ &Value )
+{
+	bso::u8__ Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
+	sdr::row__ Error = E_NIL;
+
+	Denominator = Value.ToU8( &Error );
+
+	if ( Error != E_NIL )
+		Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
+
+	return Denominator;
+}
+
+static parse_status__ ParseTuplet_( 
+	xml::parser___ &Parser,
+	const signature__ &Signature,
+	melody_ &Melody )
+{
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	bso::u8__
+		Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR,
+		Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
+	tuplet__ Tuplet;
+	note__ Note;
+
+	Note.Init();
+
+	Tuplet.Init();
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			if ( !Tuplet.IsValid() ) {
+				if ( Numerator == MSCMLD_UNDEFINED_TUPLET_NUMERATOR )
+					Status = psMissingTupletNumerator;
+				else if ( Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
+					Status = psMissingTupletDenominator;
+				else {
+					Tuplet.Numerator = Numerator;
+					Tuplet.Denominator = Denominator;
+				}
+
+			if ( Status == psOK ) {
+
+				if ( !Tuplet.IsValid() )
+					ERRFwk();
+
+				if ( Parser.TagName() == NOTE_TAG )
+					Status = ParseNote_( Parser, Signature, Tuplet, Note );
+				else if ( Parser.TagName() == REST_TAG )
+					Status = ParseRest_( Parser, Signature, Tuplet, Note );
+				else
+					Status = psUnexpectedTag;
+
+				if ( Status == psOK )
+					if ( Note.IsValid() )
+						Melody.Append( Note );
+			}
+			break;
+		case xml::tAttribute:
+			if ( Parser.AttributeName() == NUMERATOR_ATTRIBUTE )
+				if ( Numerator != MSCMLD_UNDEFINED_TUPLET_NUMERATOR )
+					Status = psAlreadyDefined;
+				else
+					Numerator = GetTupletNumerator_( Parser.Value() );
+
+				if ( Numerator != MSCMLD_UNDEFINED_TUPLET_NUMERATOR )
+					Status = psBadValue;
+			if ( Parser.AttributeName() == DENOMINATOR_ATTRIBUTE )
+				if ( Denominator != MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
+					Status = psAlreadyDefined;
+				else
+					Numerator = GetTupletDenominator_( Parser.Value() );
+
+				if ( Denominator != MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
+						Status = psBadValue;
+			}
+			break;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Parser.TagName() != TUPLET_TAG )
+				ERRFwk();
+
+			Continue = false;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		if ( Status != psOK )
+			Continue = false;
+	}
+}
+
+static parse_status__ ParseAnacrousis_(
+	xml::parser___ &Parser,
+	const signature__ &Signature,
 	melody_ &Melody ) 
 {
 	parse_status__ Status = psOK;
-ERRProlog
-	signature__ Signature;
-	note__ Note;
 	bso::bool__ Continue = true;
-ERRBegin
-	while ( Status == psOK ) {
+	note__ Note;
+
+	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::tStartTag:
 			if ( Parser.TagName() == SIGNATURE_TAG )
 				Status = ParseSignature_( Parser, Signature );
 			else if ( Parser.TagName() == NOTE_TAG )
-				Status = ParserNote_( Parser, Signature, Note );
+				Status = ParseNote_( Parser, Signature, tuplet__(), Note );
 			else if ( Parser.TagName() == REST_TAG )
-				Status = ParseRest_( Parser, Signature, Note );
+				Status = ParseRest_( Parser, Signature, tuplet__(), Note );
 			else if ( Parser.TagName() == BAR_TAG )
 				Status = ParseBar_( Parser );
+			else if ( Parser.TagName() == TUPLET_TAG )
+				Status = ParseTuplet_( Parser, Signature, Melody );
+			else if ( Parser.TagName() == ANACROUSIS_TAG )
+				Status = ParseAnacrousis_( Parser, Signture, Melody );
 			else
 				Status = psUnexpectedTag;
 
@@ -1308,11 +1581,73 @@ ERRBegin
 		case xml::tEndTag:
 			if ( Parser.TagName() != MELODY_TAG )
 				ERRFwk();
+
+			Continue = false;
 			break;
 		default:
 			ERRFwk();
 			break;
 		}
+
+		if ( Status != psOK )
+			Continue = false;
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+static parse_status__ Parse_(
+	xml::parser___ &Parser,
+	melody_ &Melody ) 
+{
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	signature__ Signature;
+	note__ Note;
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			if ( Parser.TagName() == SIGNATURE_TAG )
+				Status = ParseSignature_( Parser, Signature );
+			else if ( Parser.TagName() == NOTE_TAG )
+				Status = ParseNote_( Parser, Signature, tuplet__(), Note );
+			else if ( Parser.TagName() == REST_TAG )
+				Status = ParseRest_( Parser, Signature, tuplet__(), Note );
+			else if ( Parser.TagName() == BAR_TAG )
+				Status = ParseBar_( Parser );
+			else if ( Parser.TagName() == TUPLET_TAG )
+				Status = ParseTuplet_( Parser, Signature, Melody );
+			else if ( Parser.TagName() == ANACROUSIS_TAG )
+				Status = ParseAnacrousis_( Parser, Signture, Melody );
+			else
+				Status = psUnexpectedTag;
+
+			if ( Status == psOK )
+				if ( Note.IsValid() )
+					Melody.Append( Note );
+			break;
+		case xml::tAttribute:
+			Status = psUnexpectedAttribute;
+			break;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Parser.TagName() != MELODY_TAG )
+				ERRFwk();
+
+			Continue = false;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		if ( Status != psOK )
+			Continue = false;
 	}
 ERRErr
 ERREnd

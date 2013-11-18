@@ -187,22 +187,25 @@ namespace mscmld {
 	typedef bch::E_BUNCHt_( pitch__, prow__ ) pitches_;
 	E_AUTO( pitches )
 
+# define MSCMLD_UNDEFINED_TUPLET_NUMERATOR		BSO_U8_MAX
+# define MSCMLD_UNDEFINED_TUPLET_DENOMINATOR	BSO_U8_MAX
+
 	struct tuplet__ {
-		bso::u8__ Num;
-		bso::u8__ Den;
+		bso::u8__ Numerator;
+		bso::u8__ Denominator;
 		void reset( bso::bool__ = true )
 		{
-			Num = 0;
-			Den = 1;
+			Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR;
+			Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
 		}
 		E_CDTOR( tuplet__ );
 		void Init( void )
 		{
 			reset();
 		}
-		bso::bool__ IsInUse( void ) const
+		bso::bool__ IsValid( void ) const
 		{
-			return Num != 0;
+			return ( Numerator != MSCMLD_UNDEFINED_TUPLET_NUMERATOR ) && ( Denominator != MSCMLD_UNDEFINED_TUPLET_DENOMINATOR );
 		}
 	};
 
@@ -210,12 +213,12 @@ namespace mscmld {
 		tuplet__ Op1,
 		tuplet__ Op2 )
 	{
-		if ( Op1.IsInUse() )
-			if ( Op1.IsInUse() )
-				return ( ( Op1.Den == Op2.Den ) && ( Op1.Num == Op2.Num ) );
+		if ( Op1.IsValid() )
+			if ( Op1.IsValid() )
+				return ( ( Op1.Denominator == Op2.Denominator ) && ( Op1.Numerator == Op2.Numerator ) );
 			else
 				return false;
-		else if ( Op2.IsInUse() )
+		else if ( Op2.IsValid() )
 			return false;
 		else
 			return true;
@@ -225,16 +228,19 @@ namespace mscmld {
 		tuplet__ Op1,
 		tuplet__ Op2 )
 	{
-		if ( Op1.IsInUse() )
-			if ( Op1.IsInUse() )
-				return ( ( Op1.Den != Op2.Den ) || ( Op1.Num != Op2.Num ) );
+		if ( Op1.IsValid() )
+			if ( Op1.IsValid() )
+				return ( ( Op1.Denominator != Op2.Denominator ) || ( Op1.Numerator != Op2.Numerator ) );
 			else
 				return true;
-		else if ( Op2.IsInUse() )
+		else if ( Op2.IsValid() )
 			return true;
 		else
 			return false;
 	}
+
+# define MSCMLD_UNDEFINED_DURATION_BASE	0
+# define MSCMLD_UNDEFINED_DURATION_MODIFIER	BSO_U8_MAX
 
 	struct duration__
 	{
@@ -244,8 +250,8 @@ namespace mscmld {
 		bso::bool__ TiedToNext;
 		void reset( bso::bool__ P = true )
 		{
-			Base = 0;
-			Modifier = 0;
+			Base = MSCMLD_UNDEFINED_DURATION_BASE;
+			Modifier = MSCMLD_UNDEFINED_DURATION_MODIFIER;
 			Tuplet.reset( P );
 			TiedToNext = false;
 		}
@@ -259,10 +265,7 @@ namespace mscmld {
 			tuplet__ Tuplet = tuplet__(),
 			bso::bool__ TiedToNext = false )
 		{
-			this->Base = Base;
-			this->Modifier = Modifier;
-			this->Tuplet = Tuplet;
-			this->TiedToNext = TiedToNext;
+			Init( Base, Modifier, TiedToNext, Tuplet );
 		}
 		duration__(
 			bso::s8__ Base,
@@ -270,18 +273,36 @@ namespace mscmld {
 			bso::bool__ TiedToNext,
 			tuplet__ Tuplet = tuplet__() )
 		{
-			this->Base = Base;
-			this->Modifier = Modifier;
-			this->Tuplet = Tuplet;
-			this->TiedToNext = TiedToNext;
+			Init( Base, Modifier, TiedToNext, Tuplet );
 		}
 		void Init( void )
 		{
 			reset();
 		}
+		void Init(
+			bso::s8__ Base,
+			bso::u8__ Modifier,
+			bso::bool__ TiedToNext,
+			tuplet__ Tuplet = tuplet__() )
+		{
+			Init();
+
+			this->Base = Base;
+			this->Modifier = Modifier;
+			this->Tuplet = Tuplet;
+			this->TiedToNext = TiedToNext;
+		}
+		void Init(
+			bso::s8__ Base,
+			bso::u8__ Modifier = 0,
+			tuplet__ Tuplet = tuplet__(),
+			bso::bool__ TiedToNext = false )
+		{
+			Init( Base, Modifier, TiedToNext, Tuplet );
+		}
 		bso::bool__ IsValid( void ) const
 		{
-			return Base != 0;
+			return ( Base != MSCMLD_UNDEFINED_DURATION_BASE ) && ( Modifier != MSCMLD_UNDEFINED_DURATION_MODIFIER );
 		}
 	};
 
@@ -601,13 +622,18 @@ namespace mscmld {
 		psUnexpectedValue,
 		psBadValue,
 		psAlreadyDefined,
-		psMissingKeySignature,
-		psMissingTimeSignature,
+		psMissingSignature,
+		psMissingSignatureKey,
+		psMissingSignatureTime,
+		psMissingTupletNumerator,
+		psMissingTupletDenominator,
 		psMissingPitch,
-		psMissingDuration,
 		psMissingPitchName,
 		psMissingPitchAccidental,
 		psMissingPitchOctave,
+		psMissingDuration,
+		psMissingDurationBase,
+		psMissingDurationModifier,
 		ps_amount,
 		ps_Undefined
 	};

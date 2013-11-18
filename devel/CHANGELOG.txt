@@ -1,5 +1,9 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
+18/11/2013 :*
+	- BSO :
+		- Ajout 'extended_boolean__' ('xbool__').
+
 15/11/2013 :
 	- XML :
 		- Ajout 'Skip()' à 'parser___'.
