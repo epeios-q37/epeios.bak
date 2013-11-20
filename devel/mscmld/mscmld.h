@@ -166,6 +166,7 @@ namespace mscmld {
 				          && ( Octave != MSCMLD_UNDEFINED_PITCH_OCTAVE ) )
 				        || ( Name == pnRest ) );
 		}
+		bso::u8__ GetChromatic( void ) const;
 	};
 
 	inline int operator ==(
@@ -435,6 +436,18 @@ namespace mscmld {
 		const signature_time__ &Op1,
 		const signature_time__ &Op2 )
 	{
+		bso::bool__
+			V1 = Op1.IsValid(),
+			V2 = Op2.IsValid();
+
+		if ( !V1 )
+			if ( !V2 )
+				return true;
+			else
+				return false;
+		else if ( !V2 )
+			return false;
+
 		return ( ( Op1.Numerator() == Op2.Numerator() ) && ( Op1.Denominator() == Op2.Denominator() ) );
 	}
 
@@ -442,7 +455,7 @@ namespace mscmld {
 		const signature_time__ &Op1,
 		const signature_time__ &Op2 )
 	{
-		return ( ( Op1.Numerator() != Op2.Numerator() ) || ( Op1.Denominator() != Op2.Denominator() ) );
+		return !operator==( Op1, Op2 );
 	}
 
 	struct signature__ {

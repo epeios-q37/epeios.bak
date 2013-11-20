@@ -407,6 +407,12 @@ static bso::u8__ GetChromaticAbsolute_( const pitch__ &Pitch )
 	return Absolute;
 }
 
+bso::u8__ mscmld::pitch__::GetChromatic( void ) const
+{
+	return GetChromaticAbsolute_( *this );
+}
+
+
 static bso::u8__ GetDiatonicAbsolute_( const pitch__ &Pitch )
 {
 	if ( ( BSO_U8_MAX / 7 ) < Pitch.Octave )
@@ -930,6 +936,8 @@ static parse_status__ ParseKey_(
 		if ( Status != psOK )
 			Continue = false;
 	}
+
+	return Status;
 }
 
 static parse_status__ GetU8(
@@ -1224,6 +1232,7 @@ bso::xbool__ GetTiedFlag_( const str::string_ &Value )
 
 
 static parse_status__ ParseDuration_(
+	const char *Tag,
 	xml::parser___ &Parser,
 	const tuplet__ &Tuplet,
 	duration__ &Duration )
@@ -1273,7 +1282,7 @@ static parse_status__ ParseDuration_(
 			Status = psUnexpectedValue;
 			break;
 		case xml::tEndTag:
-			if ( Parser.TagName() != DURATION_TAG )
+			if ( Parser.TagName() != Tag )
 				ERRFwk();
 
 			if ( Base == MSCMLD_UNDEFINED_DURATION_BASE )
@@ -1329,7 +1338,7 @@ static parse_status__ ParseNote_(
 			} else if ( Parser.TagName() == DURATION_TAG ) {
 				if ( Duration.IsValid() )
 					Status = psAlreadyDefined;
-				Status = ParseDuration_( Parser, Tuplet, Duration );
+				Status = ParseDuration_( DURATION_TAG, Parser, Tuplet, Duration );
 			} else
 				Status = psUnexpectedTag;
 		break;
@@ -1364,11 +1373,15 @@ static parse_status__ ParseNote_(
 		if  ( Status != psOK )
 			Continue = false;
 	}
+
+	return Status;
 }
 
 static parse_status__ ParseBar_( xml::parser___ &Parser )
 {
 	Parser.Skip();
+
+	return psOK;
 }
 
 static parse_status__ ParseRest_(
@@ -1393,7 +1406,7 @@ static parse_status__ ParseRest_(
 			if ( Parser.TagName() == DURATION_TAG ) {
 				if ( Duration.IsValid() )
 					Status = psAlreadyDefined;
-				Status = ParseDuration_( Parser, Tuplet, Duration );
+				Status = ParseDuration_( DURATION_TAG, Parser, Tuplet, Duration );
 			} else
 				Status = psUnexpectedTag;
 		break;
@@ -1428,6 +1441,8 @@ static parse_status__ ParseRest_(
 		if  ( Status != psOK )
 			Continue = false;
 	}
+
+	return Status;
 }
 
 static bso::u8__ GetTupletNumerator_( const str::string_ &Value )
@@ -1539,6 +1554,8 @@ static parse_status__ ParseTuplet_(
 		if ( Status != psOK )
 			Continue = false;
 	}
+
+	return Status;
 }
 
 static parse_status__ ParseAnacrousis_(
@@ -1546,55 +1563,7 @@ static parse_status__ ParseAnacrousis_(
 	const signature__ &Signature,
 	melody_ &Melody ) 
 {
-	parse_status__ Status = psOK;
-	bso::bool__ Continue = true;
-	note__ Note;
-
-	while ( Continue ) {
-		switch ( Parser.Parse( xml::tfObvious ) ) {
-		case xml::tStartTag:
-			if ( Parser.TagName() == SIGNATURE_TAG )
-				Status = ParseSignature_( Parser, Signature );
-			else if ( Parser.TagName() == NOTE_TAG )
-				Status = ParseNote_( Parser, Signature, tuplet__(), Note );
-			else if ( Parser.TagName() == REST_TAG )
-				Status = ParseRest_( Parser, Signature, tuplet__(), Note );
-			else if ( Parser.TagName() == BAR_TAG )
-				Status = ParseBar_( Parser );
-			else if ( Parser.TagName() == TUPLET_TAG )
-				Status = ParseTuplet_( Parser, Signature, Melody );
-			else if ( Parser.TagName() == ANACROUSIS_TAG )
-				Status = ParseAnacrousis_( Parser, Signture, Melody );
-			else
-				Status = psUnexpectedTag;
-
-			if ( Status == psOK )
-				if ( Note.IsValid() )
-					Melody.Append( Note );
-			break;
-		case xml::tAttribute:
-			Status = psUnexpectedAttribute;
-			break;
-		case xml::tValue:
-			Status = psUnexpectedValue;
-			break;
-		case xml::tEndTag:
-			if ( Parser.TagName() != MELODY_TAG )
-				ERRFwk();
-
-			Continue = false;
-			break;
-		default:
-			ERRFwk();
-			break;
-		}
-
-		if ( Status != psOK )
-			Continue = false;
-	}
-ERRErr
-ERREnd
-ERREpilog
+	return ParseDuration_( ANACROUSIS_TAG, Parser, tuplet__(), Melody.S_.Anacrousis );
 }
 
 
@@ -1621,7 +1590,7 @@ static parse_status__ Parse_(
 			else if ( Parser.TagName() == TUPLET_TAG )
 				Status = ParseTuplet_( Parser, Signature, Melody );
 			else if ( Parser.TagName() == ANACROUSIS_TAG )
-				Status = ParseAnacrousis_( Parser, Signture, Melody );
+				Status = ParseAnacrousis_( Parser, Signature, Melody );
 			else
 				Status = psUnexpectedTag;
 
@@ -1649,15 +1618,20 @@ static parse_status__ Parse_(
 		if ( Status != psOK )
 			Continue = false;
 	}
-ERRErr
-ERREnd
-ERREpilog
+
+	return Status;
 }
 
 parse_status__ mscmld::ParseXML(
 	xml::parser___ &Parser,
 	melody_ &Melody,
-	bso::bool__ WithRoot );	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au rerour on est à l'extérieur de la balise 'Melody'.
+	bso::bool__ WithRoot )	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au retour on est à l'extérieur de la balise 'Melody'.
+{
+	if ( WithRoot)
+		ERRVct();
+
+	return Parse_( Parser, Melody );
+}
 
 
 

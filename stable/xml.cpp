@@ -1027,16 +1027,17 @@ void xml::parser___::Skip( void )
 	if ( _Tags.IsEmpty() )
 		ERRFwk();
 
-	sdr::size__ Limit = _Tags.Amount() - 1;
+	sdr::size__ Limit = _Tags.Amount();
 
-	while ( _Tags.Amount() > Limit )
+	do {
 		switch( Parse( tfEndTag ) ) {
 		case tEndTag:
 			break;
 		default:
 			ERRFwk();
 			break;
-	}
+		}
+	} while ( _Tags.Amount() > Limit );
 
 	if ( _Tags.Amount() != Limit )
 		ERRFwk();

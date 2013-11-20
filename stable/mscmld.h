@@ -1,70 +1,43 @@
 /*
-	Header for the 'mscmld' library by Claude SIMON (csimon at zeusw dot org)
-	Copyright (C) 2004 Claude SIMON.
+	'mscmld.h' by Claude SIMON (http://zeusw.org/).
 
-	This file is part of the Epeios (http://zeusw.org/epeios/) project.
+	'mscmld' is part of the Epeios framework.
 
-	This library is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 3
-	of the License, or (at your option) any later version.
- 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    The Epeios framework is free software: you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, go to http://www.fsf.org/
-	or write to the:
-  
-         	         Free Software Foundation, Inc.,
-           59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+    The Epeios framework is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//	$Id: mscmld.h,v 1.1 2010/07/15 10:58:18 csimon Exp $
-
 #ifndef MSCMLD__INC
-#define MSCMLD__INC
+# define MSCMLD__INC
 
-#define MSCMLD_NAME		"MSCMLD"
+# define MSCMLD_NAME		"MSCMLD"
 
-#define	MSCMLD_VERSION	"$Revision: 1.1 $"
-
-#define MSCMLD_OWNER		"Claude SIMON"
-
-#include "ttr.h"
-
-extern class ttr_tutor &MSCMLDTutor;
-
-#if defined( E_DEBUG ) && !defined( MSCMLD_NODBG )
-#define MSCMLD_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.1 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2010/07/15 10:58:18 $
-
-/* End of automatic documentation generation part. */
+# if defined( E_DEBUG ) && !defined( MSCMLD_NODBG )
+#  define MSCMLD_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-/* Addendum to the automatic documentation generation part. */
-//D MuSiC MeLody Description 
-/* End addendum to automatic documentation generation part. */
+// MuSiC MeLody Description
 
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "bch.h"
-#include "xml.h"
-#include "bso.h"
+# include "err.h"
+# include "flw.h"
+# include "bch.h"
+# include "xml.h"
+# include "bso.h"
 
 namespace mscmld {
 
@@ -182,6 +155,10 @@ namespace mscmld {
 			this->Accidental = Accidental;
 			this->Octave = Octave;
 		}
+		void Init( void )
+		{
+			reset();
+		}
 		bso::bool__ IsValid( void ) const
 		{
 			return ( Name != pn_Undefined )
@@ -189,6 +166,7 @@ namespace mscmld {
 				          && ( Octave != MSCMLD_UNDEFINED_PITCH_OCTAVE ) )
 				        || ( Name == pnRest ) );
 		}
+		bso::u8__ GetChromatic( void ) const;
 	};
 
 	inline int operator ==(
@@ -210,22 +188,25 @@ namespace mscmld {
 	typedef bch::E_BUNCHt_( pitch__, prow__ ) pitches_;
 	E_AUTO( pitches )
 
+# define MSCMLD_UNDEFINED_TUPLET_NUMERATOR		BSO_U8_MAX
+# define MSCMLD_UNDEFINED_TUPLET_DENOMINATOR	BSO_U8_MAX
+
 	struct tuplet__ {
-		bso::u8__ Num;
-		bso::u8__ Den;
+		bso::u8__ Numerator;
+		bso::u8__ Denominator;
 		void reset( bso::bool__ = true )
 		{
-			Num = 0;
-			Den = 1;
+			Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR;
+			Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
 		}
 		E_CDTOR( tuplet__ );
 		void Init( void )
 		{
 			reset();
 		}
-		bso::bool__ IsInUse( void ) const
+		bso::bool__ IsValid( void ) const
 		{
-			return Num != 0;
+			return ( Numerator != MSCMLD_UNDEFINED_TUPLET_NUMERATOR ) && ( Denominator != MSCMLD_UNDEFINED_TUPLET_DENOMINATOR );
 		}
 	};
 
@@ -233,12 +214,12 @@ namespace mscmld {
 		tuplet__ Op1,
 		tuplet__ Op2 )
 	{
-		if ( Op1.IsInUse() )
-			if ( Op1.IsInUse() )
-				return ( ( Op1.Den == Op2.Den ) && ( Op1.Num == Op2.Num ) );
+		if ( Op1.IsValid() )
+			if ( Op1.IsValid() )
+				return ( ( Op1.Denominator == Op2.Denominator ) && ( Op1.Numerator == Op2.Numerator ) );
 			else
 				return false;
-		else if ( Op2.IsInUse() )
+		else if ( Op2.IsValid() )
 			return false;
 		else
 			return true;
@@ -248,16 +229,19 @@ namespace mscmld {
 		tuplet__ Op1,
 		tuplet__ Op2 )
 	{
-		if ( Op1.IsInUse() )
-			if ( Op1.IsInUse() )
-				return ( ( Op1.Den != Op2.Den ) || ( Op1.Num != Op2.Num ) );
+		if ( Op1.IsValid() )
+			if ( Op1.IsValid() )
+				return ( ( Op1.Denominator != Op2.Denominator ) || ( Op1.Numerator != Op2.Numerator ) );
 			else
 				return true;
-		else if ( Op2.IsInUse() )
+		else if ( Op2.IsValid() )
 			return true;
 		else
 			return false;
 	}
+
+# define MSCMLD_UNDEFINED_DURATION_BASE	0
+# define MSCMLD_UNDEFINED_DURATION_MODIFIER	BSO_U8_MAX
 
 	struct duration__
 	{
@@ -267,8 +251,8 @@ namespace mscmld {
 		bso::bool__ TiedToNext;
 		void reset( bso::bool__ P = true )
 		{
-			Base = 0;
-			Modifier = 0;
+			Base = MSCMLD_UNDEFINED_DURATION_BASE;
+			Modifier = MSCMLD_UNDEFINED_DURATION_MODIFIER;
 			Tuplet.reset( P );
 			TiedToNext = false;
 		}
@@ -282,10 +266,7 @@ namespace mscmld {
 			tuplet__ Tuplet = tuplet__(),
 			bso::bool__ TiedToNext = false )
 		{
-			this->Base = Base;
-			this->Modifier = Modifier;
-			this->Tuplet = Tuplet;
-			this->TiedToNext = TiedToNext;
+			Init( Base, Modifier, TiedToNext, Tuplet );
 		}
 		duration__(
 			bso::s8__ Base,
@@ -293,14 +274,36 @@ namespace mscmld {
 			bso::bool__ TiedToNext,
 			tuplet__ Tuplet = tuplet__() )
 		{
+			Init( Base, Modifier, TiedToNext, Tuplet );
+		}
+		void Init( void )
+		{
+			reset();
+		}
+		void Init(
+			bso::s8__ Base,
+			bso::u8__ Modifier,
+			bso::bool__ TiedToNext,
+			tuplet__ Tuplet = tuplet__() )
+		{
+			Init();
+
 			this->Base = Base;
 			this->Modifier = Modifier;
 			this->Tuplet = Tuplet;
 			this->TiedToNext = TiedToNext;
 		}
+		void Init(
+			bso::s8__ Base,
+			bso::u8__ Modifier = 0,
+			tuplet__ Tuplet = tuplet__(),
+			bso::bool__ TiedToNext = false )
+		{
+			Init( Base, Modifier, TiedToNext, Tuplet );
+		}
 		bso::bool__ IsValid( void ) const
 		{
-			return Base != 0;
+			return ( Base != MSCMLD_UNDEFINED_DURATION_BASE ) && ( Modifier != MSCMLD_UNDEFINED_DURATION_MODIFIER );
 		}
 	};
 
@@ -326,49 +329,106 @@ namespace mscmld {
 	typedef bso::s8__ signature_key__;	// -1: 1 flat, -2, 2 flats, ..., 0 : C key, 1 : 1 sharp, 2 : 2 sharps, ...
 #define MSCMLD_UNDEFINED_KEY_SIGNATURE	BSO_S8_MAX
 
+	inline void Initialize( signature_key__ &Key )
+	{
+		Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
+	}
+
+	inline bso::bool__ IsValid( signature_key__ Key )
+	{
+		return Key != MSCMLD_UNDEFINED_KEY_SIGNATURE;
+	}
+
+	E_TMIMIC__( bso::s8__, numerator__ );
+	E_TMIMIC__( bso::u8__, denominator_power__ );
+
+# define MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR			0
+# define MSCMLD_TIME_SIGNATURE_NUMERATOR_MAX				BSO_S8_MAX
+# define MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER	BSO_U8_MAX
+
+	inline bso::bool__ IsValid( numerator__ Numerator )
+	{
+		return Numerator != MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR;
+	}
+
+	inline bso::bool__ IsValid( denominator_power__ DenominatorPower )
+	{
+		return DenominatorPower != MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
+	}
+
 	struct signature_time__ {
-		bso::u8__ Numerator;
-		bso::s8__ DenominatorPower;	// Le dénominateur réel est égal à = 2 ^ abs('DenominatorPower'). Si '<0', le dénominateur n'est pas censé être affiché.
+	private:
+		numerator__ _Numerator;	// Si < 0, le dénominateur (bien le dénominateur) n'est pas censé être affiché.
+		denominator_power__ _DenominatorPower;	// Le dénominateur réel est égal à = 2 ^ abs('DenominatorPower').
+		void _Test( void ) const
+		{
+			if ( !IsValid() )
+				ERRFwk();
+		}
+	public:
 		void reset( bso::bool__ P = true )
 		{
-			Numerator = 0;
-			DenominatorPower = 0;
+			_Numerator = MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR;
+			_DenominatorPower = MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
 		}
-		signature_time__( void )
-		{
-			reset( false );
-		}
+		E_CVDTOR( signature_time__ );
 		signature_time__ (
 			bso::u8__ Numerator,
-			bso::s8__ Denominator )
+			bso::s8__ Denominator,
+			bso::bool__ DenominatorIsHidden = false )
 		{
 			reset( false );
+
+			Init( Numerator, Denominator, DenominatorIsHidden );
+		}
+		void Init( void )
+		{
+			reset();
+		}
+		void Init(
+			bso::u8__ Numerator,
+			bso::u8__ Denominator,
+			bso::bool__ DenominatorIsHidden = false  )
+		{
+			if ( Numerator > MSCMLD_TIME_SIGNATURE_NUMERATOR_MAX )
+				ERRFwk();
 
 			if ( Numerator == 0 )
 				ERRFwk();
 
-			this->Numerator = Numerator;
+			_Numerator = ( DenominatorIsHidden ? -Numerator : Numerator );
 
-			this->DenominatorPower = Log2Abs_( Denominator );
+			_DenominatorPower = Log2Abs_( Denominator );
 		}
 		bso::bool__ IsValid( void ) const
 		{
-			return ( ( Numerator != 0 ) && ( DenominatorPower != 0 ) );
+			return ( mscmld::IsValid( _Numerator ) && mscmld::IsValid( _DenominatorPower ) );
 		}
-		bso::u8__ ComputeDenominator ( void ) const
+		bso::u8__ DenominatorPower( void ) const
 		{
-#ifdef MSCMLD_DBG
-			if ( !IsValid() )
-				ERRFwk();
-#endif
-			return 1 << ( DenominatorPower < 0 ? - DenominatorPower : DenominatorPower );
+			_Test();
+
+			return *_DenominatorPower;
+		}
+		bso::u8__ Denominator ( void ) const
+		{
+			return 1 << DenominatorPower();
+		}
+		bso::s8__ RawNumerator( void ) const
+		{
+			_Test();
+
+			return *_Numerator;
+		}
+		bso::u8__ Numerator( void ) const
+		{
+			bso::s8__ N = RawNumerator();
+
+			return ( N < 0 ? -N : N );
 		}
 		bso::bool__ IsDenHidden( void ) const
 		{
-			if ( !IsValid() )
-				ERRFwk();
-
-			return DenominatorPower < 0;
+			return RawNumerator() < 0;
 		}
 	};
 
@@ -376,14 +436,26 @@ namespace mscmld {
 		const signature_time__ &Op1,
 		const signature_time__ &Op2 )
 	{
-		return ( ( Op1.Numerator == Op2.Numerator ) && ( Op1.DenominatorPower == Op2.DenominatorPower ) );
+		bso::bool__
+			V1 = Op1.IsValid(),
+			V2 = Op2.IsValid();
+
+		if ( !V1 )
+			if ( !V2 )
+				return true;
+			else
+				return false;
+		else if ( !V2 )
+			return false;
+
+		return ( ( Op1.Numerator() == Op2.Numerator() ) && ( Op1.Denominator() == Op2.Denominator() ) );
 	}
 
 	inline int operator !=(
 		const signature_time__ &Op1,
 		const signature_time__ &Op2 )
 	{
-		return ( ( Op1.Numerator != Op2.Numerator ) || ( Op1.DenominatorPower != Op2.DenominatorPower ) );
+		return !operator==( Op1, Op2 );
 	}
 
 	struct signature__ {
@@ -416,9 +488,14 @@ namespace mscmld {
 			this->Key = Key;
 			this->Time = Time;
 		}
+		void Init( void )
+		{
+			Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
+			Time.Init();
+		}
 		bso::bool__ IsValid( void ) const
 		{
-			return Time.IsValid() && ( Key != MSCMLD_UNDEFINED_KEY_SIGNATURE );
+			return Time.IsValid() && ( mscmld::IsValid( Key  ) );
 		}
 	};
 
@@ -466,6 +543,12 @@ namespace mscmld {
 			this->Pitch = Pitch;
 			this->Duration = Duration;
 			this->Signature = Signature;
+		}
+		void Init( void )
+		{
+			Pitch.Init();
+			Duration.Init();
+			Signature.Init();
 		}
 		bso::bool__ IsValid( void ) const
 		{
@@ -533,19 +616,48 @@ namespace mscmld {
 		const melody_ &Source,
 		melody_ &Target );
 
-	enum status__ {
-		sOK,
-		sBarChekError,
+	enum write_status__ {
+		wsOK,
+		wsBarChekError,
 		s_amount,
 		s_Undefined
 	};
 
-	status__ WriteXML(
+	write_status__ WriteXML(
 		const melody_ &Melody,
 		xml::writer_ &Writer );
+
+	enum parse_status__ {
+		psOK,
+		psXML,	// Erreur dans le flux XML.
+		psUnexpectedTag,
+		psUnexpectedAttribute,
+		psUnexpectedValue,
+		psBadValue,
+		psAlreadyDefined,
+		psMissingSignature,
+		psMissingSignatureKey,
+		psMissingSignatureTime,
+		psMissingTupletNumerator,
+		psMissingTupletDenominator,
+		psMissingPitch,
+		psMissingPitchName,
+		psMissingPitchAccidental,
+		psMissingPitchOctave,
+		psMissingDuration,
+		psMissingDurationBase,
+		psMissingDurationModifier,
+		ps_amount,
+		ps_Undefined
+	};
+
+	parse_status__ ParseXML(
+		xml::parser___ &Parser,
+		melody_ &Melody,
+		bso::bool__ WithRoot );	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au rerour on est à l'extérieur de la balise 'Melody'.
+
 }
 
-/*$END$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */
