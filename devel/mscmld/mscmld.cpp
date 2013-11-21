@@ -885,23 +885,18 @@ static parse_status__ GetKeyRaw_(
 {
 	sdr::row__ Error = E_NIL;
 
-	Key = Raw.ToU8( &Error );
+	Key = Raw.ToS8( &Error );
 
 	if ( Error != E_NIL )
 		return psBadValue;
 	else if ( Key > 7 )
 		return psBadValue;
-	else if ( Key < 7 )
+	else if ( Key < -7 )
 		return psBadValue;
 	else
 		return psOK;
 }
 
-
-// ...<Key>...</Key>...
-//         ^
-// ...<Key>...</Key>...
-//                  ^
 static parse_status__ ParseKey_(
 	xml::parser___ &Parser,
 	signature_key__ &Key )
@@ -920,6 +915,7 @@ static parse_status__ ParseKey_(
 					Status = psAlreadyDefined;
 				else
 					Status = GetKeyRaw_( Parser.Value(), Key );
+			break;
 		case xml::tValue:
 			Status = psUnexpectedValue;
 			break;
@@ -982,7 +978,7 @@ static parse_status__ ParseTime_(
 				if ( DenominatorPower != MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER )
 					Status = psAlreadyDefined;
 
-				DenominatorPower = Parser.GetValue().ToU8();
+				DenominatorPower = Parser.Value().ToU8();
 
 				if ( Error != E_NIL )
 					Status = psBadValue;
@@ -994,6 +990,14 @@ static parse_status__ ParseTime_(
 		case xml::tEndTag:
 			if ( Parser.TagName() != TIME_TAG )
 				ERRFwk();
+
+			if ( RawNumerator == MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR )
+				Status = psMissingSignatureTimeRawNumerator;
+			else if ( DenominatorPower == MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER )
+				Status = psMissingSignatureTimeDenominatorPower;
+			else
+				Time.SetRaw( RawNumerator, DenominatorPower );
+
 			Continue = false;
 			break;
 		default:
@@ -1007,11 +1011,6 @@ static parse_status__ ParseTime_(
 	return Status;
 }
 
-
-// ...<Signature>...<Signature>...
-//               ^
-// ...<Signature>...<Signature>...
-//                             ^
 static parse_status__ ParseSignature_(
 	xml::parser___ &Parser,
 	signature__ &Signature )
@@ -1113,14 +1112,9 @@ static pitch_octave__ GetPitchOctave_( const str::string_ &Octave )
 
 }
 
-
-// ...<Pitch>...</Pitch>...
-//           ^
-// ...<Pitch>...</Pitch>...
-//                      ^
 static parse_status__ ParsePitch_(
 	xml::parser___ &Parser,
-	pitch__ Pitch )
+	pitch__ &Pitch )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1146,7 +1140,7 @@ static parse_status__ ParsePitch_(
 					if ( Name == pn_Undefined )
 						Status = psBadValue;
 				}
-			} if ( Parser.AttributeName() == ACCIDENTAL_ATTRIBUTE ) {
+			} else if ( Parser.AttributeName() == ACCIDENTAL_ATTRIBUTE ) {
 				if ( Accidental != pa_Undefined )
 					Status = psAlreadyDefined;
 				else {
@@ -1170,11 +1164,14 @@ static parse_status__ ParsePitch_(
 			Status = psUnexpectedValue;
 			break;
 		case xml::tEndTag:
+			if ( Parser.TagName() != PITCH_TAG )
+				ERRFwk();
+
 			if ( Name == pn_Undefined )
 				Status = psMissingPitchName;
 			else if ( Accidental == pa_Undefined )
 				Status = psMissingPitchAccidental;
-			else if ( Octave = MSCMLD_UNDEFINED_PITCH_OCTAVE )
+			else if ( Octave == MSCMLD_UNDEFINED_PITCH_OCTAVE )
 				Status = psMissingPitchOctave;
 			else {
 				Pitch.Name = Name;
@@ -1249,11 +1246,11 @@ static parse_status__ ParseDuration_(
 			Status = psUnexpectedTag;
 			break;
 		case xml::tAttribute:
-			if ( Parser.TagName() == BASE_TAG ) {
+			if ( Parser.AttributeName() == BASE_TAG ) {
 				if ( Base != MSCMLD_UNDEFINED_DURATION_BASE )
 					Status = psAlreadyDefined;
 				else {
-					Base = GetDurationBase_( Parser.GetValue() );
+					Base = GetDurationBase_( Parser.Value() );
 
 					if ( Base == MSCMLD_UNDEFINED_DURATION_BASE )
 						Status = psBadValue;
@@ -1271,7 +1268,7 @@ static parse_status__ ParseDuration_(
 				if( TiedToNext != bso::xb_Undefined )
 					Status = psAlreadyDefined;
 				else {
-					TiedToNext = GetTiedFlag_( Parser.GetValue() );
+					TiedToNext = GetTiedFlag_( Parser.Value() );
 
 					if ( TiedToNext == bso::xb_Undefined )
 						Status = psBadValue;
@@ -1361,6 +1358,7 @@ static parse_status__ ParseNote_(
 			else {
 				Note.Pitch = Pitch;
 				Note.Duration = Duration;
+				Note.Signature = Signature;
 			}
 
 			Continue = false;
@@ -1388,7 +1386,7 @@ static parse_status__ ParseRest_(
 	xml::parser___ &Parser,
 	const signature__ &Signature,
 	const tuplet__ &Tuplet,
-	note__ Note  )
+	note__ &Note  )
 {
 	parse_status__ Status = psOK;
 	bso::bool__ Continue = true;
@@ -1417,7 +1415,7 @@ static parse_status__ ParseRest_(
 			Status = psUnexpectedValue;
 			break;
 		case xml::tEndTag:
-			if ( Parser.TagName() != NOTE_TAG )
+			if ( Parser.TagName() != REST_TAG )
 				ERRFwk();
 
 			if ( !Pitch.IsValid() )

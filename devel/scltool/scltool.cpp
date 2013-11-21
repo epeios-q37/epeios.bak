@@ -596,6 +596,8 @@ ERRFBegin
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd
+	cio::COut << txf::commit;
+	cio::CErr << txf::commit;
 ERRFEpilog
 	return ExitValue;
 }

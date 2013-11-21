@@ -400,6 +400,13 @@ namespace mscmld {
 
 			_DenominatorPower = Log2Abs_( Denominator );
 		}
+		void SetRaw(
+			bso::s8__ RawNumerator,
+			bso::u8__ DenominatorPower )
+		{
+			_Numerator = RawNumerator;
+			_DenominatorPower = DenominatorPower;
+		}
 		bso::bool__ IsValid( void ) const
 		{
 			return ( mscmld::IsValid( _Numerator ) && mscmld::IsValid( _DenominatorPower ) );
@@ -410,7 +417,7 @@ namespace mscmld {
 
 			return *_DenominatorPower;
 		}
-		bso::u8__ Denominator ( void ) const
+		bso::u8__ Denominator( void ) const
 		{
 			return 1 << DenominatorPower();
 		}
@@ -638,6 +645,8 @@ namespace mscmld {
 		psMissingSignature,
 		psMissingSignatureKey,
 		psMissingSignatureTime,
+		psMissingSignatureTimeRawNumerator,
+		psMissingSignatureTimeDenominatorPower,
 		psMissingTupletNumerator,
 		psMissingTupletDenominator,
 		psMissingPitch,
