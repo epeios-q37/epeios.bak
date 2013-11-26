@@ -1,7 +1,7 @@
 /*
-	'scltool_test.cpp' by Claude SIMON (http://zeusw.org/).
+	'cgimng_test.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'scltool_test.cpp' is part of the Epeios framework.
+	'cgimng_test.cpp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -21,8 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "scltool.h"
-#include "sclrgstry.h"
+#include "cgimng.h"
 
 #include "err.h"
 #include "cio.h"
@@ -40,28 +39,17 @@ ERREnd
 ERREpilog
 }
 
-const char *scltool::TargetName = "TEST";
-
-void scltool::Main(
-	int argc,
-	const char *argv[] )
-{
-	scltool::GetRegistry().Dump( scltool::GetRegistryConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
-	scltool::GetRegistry().Dump( scltool::GetRegistryProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
-	scltool::GetRegistry().Dump( scltool::GetRegistryArgumentsLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
-}
-
-#if 0	// Puyisque l'objet de cette bibliothèque est jutement de prendre en charge le 'main'.
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
 ERRFBegin
-	COut << "Test of library " << SCLTOOL_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << CGIMNG_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
 ERRFErr
 	ExitValue = EXIT_FAILURE;
 ERRFEnd
 ERRFEpilog
 	return ExitValue;
 }
-#endif

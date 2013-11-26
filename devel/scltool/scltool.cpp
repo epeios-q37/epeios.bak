@@ -44,11 +44,33 @@ static STR_BUFFER___ Language_;
 
 static rgstry::multi_level_registry Registry_;
 
+static rgstry::level__ RegistryConfigurationLevel_ = RGSTRY_UNDEFINED_LEVEL;
 static rgstry::level__ RegistryProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
-static rgstry::level__ ArgumentsProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
+static rgstry::level__ RegistryArgumentsLevel_ = RGSTRY_UNDEFINED_LEVEL;
 
-static rgstry::entry___ ArgumentAliases_( "ArgumentAliases" );
-#define ARGUMENT_ALIAS_TAG "ArgumentAlias"
+const rgstry::multi_level_registry_ &scltool::GetRegistry( void )
+{
+	return Registry_;
+}
+
+rgstry::level__ scltool::GetRegistryConfigurationLevel( void )
+{
+	return RegistryConfigurationLevel_;
+}
+
+rgstry::level__ scltool::GetRegistryProjectLevel( void )
+{
+	return RegistryProjectLevel_;
+}
+
+rgstry::level__ scltool::GetRegistryArgumentsLevel( void )
+{
+	return RegistryArgumentsLevel_;
+}
+
+
+static rgstry::entry___ ArgumentAliases_( "Arguments" );
+#define ARGUMENT_ALIAS_TAG "Argument"
 #define ARGUMENT_ALIAS_ID_ATTRIBUTE "id"
 static rgstry::entry___ ShortTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, "short" ), ArgumentAliases_ );
 static rgstry::entry___ LongTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, "long" ), ArgumentAliases_ );
@@ -305,11 +327,20 @@ public:
 
 		this->Value = Value;
 	}
+	void Init(
+		type__ Type,
+		const str::string_ &Name,
+		const str::string_ &Value )
+	{
+		flag_::Init( Type, Name );
+
+		this->Value.Init( Value );
+	}
 };
 
 E_AUTO( option );
 
-typedef ctn::E_MCONTAINER_( option_ ) options_;
+typedef ctn::E_CONTAINER_( option_ ) options_;
 E_AUTO( options );
 
 
@@ -550,9 +581,9 @@ ERRBegin
 
 	Registry_.Init();
 
-	Registry_.PushImportedLevel( sclrgstry::GetRegistry(), sclrgstry::GetRoot() );
+	RegistryConfigurationLevel_ = Registry_.PushImportedLevel( sclrgstry::GetRegistry(), sclrgstry::GetRoot() );
 	RegistryProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
-	ArgumentsProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Arguments" ) );
+	RegistryArgumentsLevel_ = Registry_.PushEmbeddedLevel( str::string( "Arguments" ) );
 
 	Main( argc, argv );
 ERRErr

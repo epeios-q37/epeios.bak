@@ -75,6 +75,12 @@ namespace scltool {
 		const str::string_ &FileName,
 		const char *Target );
 
+	const rgstry::multi_level_registry_ &GetRegistry( void );
+
+	rgstry::level__ GetRegistryConfigurationLevel( void );
+	rgstry::level__ GetRegistryProjectLevel( void );
+	rgstry::level__ GetRegistryArgumentsLevel( void );
+
 	inline const str::string_ &GetTranslation(
 		const char *Text,
 		str::string_ &Translation )
