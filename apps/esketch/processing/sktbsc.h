@@ -19,7 +19,7 @@
 
 // $Id: mbdbsc.h,v 1.13 2009/10/07 10:12:50 csimon Exp $
 
-// eSKeTch BaSiCs
+// SKeTch BaSiCs
 
 #ifndef SKTBSC__INC
 #define SKTBSC__INC

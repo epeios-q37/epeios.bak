@@ -1,5 +1,5 @@
 /*
-	'sktxmp.h' by Claude SIMON (http://zeusw.org/).
+	'sktfbc.cpp' by Claude SIMON (http://zeusw.org/).
 
 	 This file is part of 'eSketch' software.
 
@@ -17,43 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// SKeTch eXaMPle
+#include "sktfbc.h"
 
-#ifndef SKTXMP__INC
-#define SKTXMP__INC
-
-# ifdef XXX_DBG
-#	define SKTXMP__DBG
-# endif
-
-# include "sktbsc.h"
-
-namespace sktxmp {
-
-	class myobject_
-	{
-	private:
-	public:
-		struct s {
-		};
-		myobject_( s &S )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-		}
-		void plug( ags::E_ASTORAGE_ &AS )
-		{
-		}
-		myobject_ &operator =( const myobject_ &M )
-		{
-			return *this;
-		}
-		bso::bool__ Init( void )
-		{
-			return true;
-		}
-	};
-}
+using namespace sktfbc;
 
 
-#endif

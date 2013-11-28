@@ -793,6 +793,8 @@ ERRProlog
 	bso::bool__ HandleAnacrousis = false;
 	xml::mark__ TupletControl;
 	xml::mark__ Mark = XML_UNDEFINED_MARK;
+	bso::bool__ WriteBar = false;
+	bso::bool__ WriteSignature = false;
 ERRBegin
 	Mark = Writer.GetMark();
 
@@ -825,14 +827,12 @@ ERRBegin
 				Status = wsBarChekError;
 				ERRReturn;
 			}
-			WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+			WriteSignature = true;
 		}
 		
 		if ( BarClosed ) {
-			if ( PreviousNote.IsValid() ) { // Si ce n'est pas le cas, c'est que la première note n'a pas encore été traité, et on évite ainsi une 'bar' avant elle.
-				Writer.PushTag( BAR_TAG );
-				Writer.PopTag();
-			}
+			if ( PreviousNote.IsValid() ) // Si ce n'est pas le cas, c'est que la première note n'a pas encore été traité, et on évite ainsi une 'bar' avant elle.
+				WriteBar = true;
 
 			BarFraction.Init( Note.Signature.Time.Numerator(), Note.Signature.Time.Denominator() );
 
@@ -850,12 +850,42 @@ ERRBegin
 			if ( Note.Duration.Tuplet != PreviousNote.Duration.Tuplet ) {
 				if ( PreviousNote.Duration.Tuplet.IsValid() )
 					Writer.PopTag( TupletControl );
+
+				if ( WriteBar ){
+					Writer.PushTag( BAR_TAG );
+					Writer.PopTag();
+				}
+
+				if ( WriteSignature )
+					WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+
 				TupletControl = Writer.PushTag( TUPLET_TAG );
 				xml::PutAttribute( NUMERATOR_ATTRIBUTE, Note.Duration.Tuplet.Numerator, Writer );
 				xml::PutAttribute( DENOMINATOR_ATTRIBUTE, Note.Duration.Tuplet.Denominator, Writer );
 			}
-		} else if ( PreviousNote.Duration.Tuplet.IsValid() )
+		} else if ( PreviousNote.Duration.Tuplet.IsValid() ) {
 			Writer.PopTag( TupletControl );
+
+			if ( WriteBar ) {
+				Writer.PushTag( BAR_TAG );
+				Writer.PopTag();
+			}
+
+			if ( WriteSignature )
+				WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+
+		} else { 
+			if ( WriteBar ) {
+				Writer.PushTag( BAR_TAG );
+				Writer.PopTag();
+			}
+
+			if ( WriteSignature )
+				WriteXML_( Note.Signature, PreviousNote.Signature, Writer );
+		}
+
+		WriteBar = false;
+		WriteSignature = false;
 
 		WriteXML_( Note, PreviousNote, Writer );
 
@@ -1492,12 +1522,13 @@ static parse_status__ ParseTuplet_(
 			if ( !Tuplet.IsValid() ) {
 				if ( Numerator == MSCMLD_UNDEFINED_TUPLET_NUMERATOR )
 					Status = psMissingTupletNumerator;
-				else if ( Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
+				else if ( Denominator == MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
 					Status = psMissingTupletDenominator;
 				else {
 					Tuplet.Numerator = Numerator;
 					Tuplet.Denominator = Denominator;
 				}
+			}
 
 			if ( Status == psOK ) {
 
@@ -1517,21 +1548,21 @@ static parse_status__ ParseTuplet_(
 			}
 			break;
 		case xml::tAttribute:
-			if ( Parser.AttributeName() == NUMERATOR_ATTRIBUTE )
+			if ( Parser.AttributeName() == NUMERATOR_ATTRIBUTE ) {
 				if ( Numerator != MSCMLD_UNDEFINED_TUPLET_NUMERATOR )
 					Status = psAlreadyDefined;
 				else
 					Numerator = GetTupletNumerator_( Parser.Value() );
 
-				if ( Numerator != MSCMLD_UNDEFINED_TUPLET_NUMERATOR )
+				if ( Numerator == MSCMLD_UNDEFINED_TUPLET_NUMERATOR )
 					Status = psBadValue;
-			if ( Parser.AttributeName() == DENOMINATOR_ATTRIBUTE )
+			} else if ( Parser.AttributeName() == DENOMINATOR_ATTRIBUTE ) {
 				if ( Denominator != MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
 					Status = psAlreadyDefined;
 				else
-					Numerator = GetTupletDenominator_( Parser.Value() );
+					Denominator = GetTupletDenominator_( Parser.Value() );
 
-				if ( Denominator != MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
+				if ( Denominator == MSCMLD_UNDEFINED_TUPLET_DENOMINATOR )
 						Status = psBadValue;
 			}
 			break;
