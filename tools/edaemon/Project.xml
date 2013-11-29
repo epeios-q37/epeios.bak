@@ -20,14 +20,19 @@
     <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
       <Modules Group="Core">
         <xpp:expand select="Core"/>
+        <xpp:expand select="LLIO"/>
         <Module>dlbrry</Module>
         <Module>mtk</Module>
+        <Module>mtx</Module>
         <Module>sck</Module>
         <Module>tht</Module>
       </Modules>
       <Modules Group="CSD">
+        <xpp:expand select="CSDB"/>
+        <xpp:expand select="CSDF"/>
+        <Module>csdscb</Module>
         <Module>csdbns</Module>
-        <Module>csdlec</Module>
+        <Module>csdsnb</Module>
         <Module>csdsns</Module>
       </Modules>
       <Modules Group="SCL">

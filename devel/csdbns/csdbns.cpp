@@ -61,7 +61,7 @@ bso::bool__ csdbns::listener___::Init(
 
 	if ( setsockopt( Socket_, SOL_SOCKET, SO_REUSEADDR, &Val, sizeof( Val ) ) != 
 0 )
-		ERRs();
+		ERRSys();
 #endif
 
 	if( bind( Socket_, (struct sockaddr*)(&nom), sizeof(sockaddr_in) ) )

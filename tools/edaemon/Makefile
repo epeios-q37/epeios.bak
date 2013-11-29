@@ -34,14 +34,16 @@ mods += ags aem bch bitbch bso
 mods += cpe crptgr ctn dir dte 
 mods += dtfbsc dtfptb epsmsc err fdr 
 mods += flf fls flw flx ias 
-mods += ids iof iop llio lst 
-mods += lstbch lstctn mns que sdr 
-mods += stk str strng tol ttr 
-mods += txf tys uys utf xtf 
-mods += cio bom cdgb64 fil fnm 
-mods += lcl rgstry stsfsm xml xpp 
-mods += clnarg dlbrry mtk sck tht 
-mods += csdbns csdlec csdsns 
+mods += ids iof iop lst lstbch 
+mods += lstctn mns que sdr stk 
+mods += str strng tol ttr txf 
+mods += tys uys utf xtf cio 
+mods += bom cdgb64 fil fnm lcl 
+mods += rgstry stsfsm xml xpp clnarg 
+mods += llio dlbrry mtk mtx sck 
+mods += tht 
+mods += csdleo csdles csdbnc csdlec csdsnc 
+mods += csducl csdscb csdbns csdsnb csdsns 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += registry 
 
@@ -63,7 +65,9 @@ CXXFLAGS += -O
 #CXXFLAGS += -pg
 
 ###############################
-	copt += -DE_MT
+	
+copt += -DE_MT
+
 copt += -DCSD_NO_SERVICE_HANDLING
 
 IA_32=x86
@@ -290,8 +294,8 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\"(Version)\"
-copt += -DCOPYRIGHT_YEARS=\"2013\"
+copt += -DVERSION=\""(Version)"\"
+copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
 ifndef EPEIOS_SRC
 	src += :src

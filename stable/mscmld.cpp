@@ -1543,8 +1543,10 @@ static parse_status__ ParseTuplet_(
 					Status = psUnexpectedTag;
 
 				if ( Status == psOK )
-					if ( Note.IsValid() )
+					if ( Note.IsValid() ) {
 						Melody.Append( Note );
+						Note.Init();
+					}
 			}
 			break;
 		case xml::tAttribute:
@@ -1624,8 +1626,10 @@ static parse_status__ Parse_(
 				Status = psUnexpectedTag;
 
 			if ( Status == psOK )
-				if ( Note.IsValid() )
+				if ( Note.IsValid() ) {
 					Melody.Append( Note );
+					Note.Init();
+				}
 			break;
 		case xml::tAttribute:
 			Status = psUnexpectedAttribute;
