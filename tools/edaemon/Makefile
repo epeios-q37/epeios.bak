@@ -42,8 +42,8 @@ mods += bom cdgb64 fil fnm lcl
 mods += rgstry stsfsm xml xpp clnarg 
 mods += llio dlbrry mtk mtx sck 
 mods += tht 
-mods += csdleo csdles csdbnc csdlec csdsnc 
-mods += csducl csdscb csdbns csdsnb csdsns 
+mods += csdbns csdlec csdleo csdscb csdsnb 
+mods += csdsns 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += registry 
 
@@ -128,9 +128,9 @@ endif
 #############################
 	
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -223,6 +223,8 @@ ifeq ("$(os)","$(GNULinux)")
 	co += -DGNULINUX
 	
 	mods += $(pmods)
+	
+	libs += -lpthread -ldl
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -239,9 +241,9 @@ endif
 #############################
 		
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -249,6 +251,8 @@ ifeq ("$(os)","$(Linux)")
 	
 	mods += $(pmods)
 
+	libs += -lpthread -ldl
+	
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
 		lo += -m32
@@ -317,7 +321,7 @@ lo += -o $(target) $(objs)
 objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(target): $(objs)
-	$(CXX) $(LDFLAGS) $(lo) $(libs)
+	$(CXX) $(lo) $(libs) $(LDFLAGS)
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

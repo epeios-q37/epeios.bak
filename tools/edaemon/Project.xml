@@ -28,10 +28,10 @@
         <Module>tht</Module>
       </Modules>
       <Modules Group="CSD">
-        <xpp:expand select="CSDB"/>
-        <xpp:expand select="CSDF"/>
-        <Module>csdscb</Module>
         <Module>csdbns</Module>
+        <Module>csdlec</Module>
+        <Module>csdleo</Module>
+        <Module>csdscb</Module>
         <Module>csdsnb</Module>
         <Module>csdsns</Module>
       </Modules>
