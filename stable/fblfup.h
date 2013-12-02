@@ -63,7 +63,7 @@ extern class ttr_tutor &FBLFUPTutor;
 # include "fblfep.h"
 # include "fblfrp.h"
 # include "fblfph.h"
-# include "fblovl.H"
+# include "fblovl.h"
 
 # include "err.h"
 # include "flw.h"

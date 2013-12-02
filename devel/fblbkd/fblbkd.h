@@ -490,7 +490,7 @@ namespace fblbkd {
 		{
 			_List().Init();
 			Objets.Init();
-			module::Init( User );
+			module<t,user>::Init( User );
 		}
 	};
 	
@@ -556,7 +556,7 @@ namespace fblbkd {
 			_List().Init();
 			Objets.Init();
 			Element_.Init( Objets );
-			module::Init( User );
+			module<t,user>::Init( User );
 		}
 	};
 
@@ -604,7 +604,7 @@ namespace fblbkd {
 		void Init( user &User )
 		{
 			reset();
-			module<t>::Init( User );
+			module<t,user>::Init( User );
 			Created_ = false;
 		}
 	};

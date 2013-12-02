@@ -294,7 +294,7 @@ namespace mmg
 		}
 		memory_merger_ &operator =( const memory_merger_ & )
 		{
-			ERRu();
+			ERRFwk();
 
 			return *this;	// Only to avoid a warning.
 		}
