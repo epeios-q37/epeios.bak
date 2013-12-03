@@ -298,7 +298,7 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\""(Version)"\"
+copt += -DVERSION=\""20131203"\"
 copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
 ifndef EPEIOS_SRC

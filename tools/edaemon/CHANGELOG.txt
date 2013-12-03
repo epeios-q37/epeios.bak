@@ -1,2 +1,4 @@
 ***** Changelog for the 'eDaemon' tool *****
 
+- 03/12/2013 :
+	- PUBLICATION
