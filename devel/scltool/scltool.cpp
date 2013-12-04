@@ -69,15 +69,17 @@ rgstry::level__ scltool::GetRegistryArgumentsLevel( void )
 }
 
 
-static rgstry::entry___ ArgumentAliases_( "Arguments" );
-#define ARGUMENT_ALIAS_TAG "Argument"
-#define ARGUMENT_ALIAS_ID_ATTRIBUTE "id"
-static rgstry::entry___ ShortTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, "short" ), ArgumentAliases_ );
-static rgstry::entry___ LongTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, "long" ), ArgumentAliases_ );
-static rgstry::entry___ IdTaggedArgumentAlias_( RGSTRY_TAGGED_ENTRY( ARGUMENT_ALIAS_TAG, ARGUMENT_ALIAS_ID_ATTRIBUTE ), ArgumentAliases_ );
-#define ARGUMENT_ALIAS_TAGGING_ID_ATTRIBUTE "@"  ARGUMENT_ALIAS_ID_ATTRIBUTE
-static rgstry::entry___ LongTaggedArgumentAliasId_( ARGUMENT_ALIAS_TAGGING_ID_ATTRIBUTE, LongTaggedArgumentAlias_ );
-static rgstry::entry___ ShortTaggedArgumentAliasId_( ARGUMENT_ALIAS_TAGGING_ID_ATTRIBUTE, ShortTaggedArgumentAlias_ );
+static rgstry::entry___ Arguments_( "Arguments" );
+#define ARGUMENT_TAG "Argument"
+#define ARGUMENT_ID_ATTRIBUTE "id"
+static rgstry::entry___ ShortTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "short" ), Arguments_ );
+static rgstry::entry___ LongTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "long" ), Arguments_ );
+static rgstry::entry___ IdTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_ID_ATTRIBUTE ), Arguments_ );
+#define ARGUMENT_TAGGING_ID_ATTRIBUTE "@"  ARGUMENT_ID_ATTRIBUTE
+static rgstry::entry___ LongTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, LongTaggedArgument_ );
+static rgstry::entry___ ShortTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, ShortTaggedArgument_ );
+static rgstry::entry___ IdTaggedArgumentPath_( "@Path", IdTaggedArgument_ );
+static rgstry::entry___ IdTaggedArgumentValue_( "@Value", IdTaggedArgument_ );
 
 static const str::string_ &GetMandatoryValue_( 
 	const rgstry::tentry___ &Entry,
@@ -87,18 +89,18 @@ static const str::string_ &GetMandatoryValue_(
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 }
 
-static const str::string_ &GetLongTaggedArguemntAliasId_(
+static const str::string_ &GetLongTaggedArguemntId_(
 	str::string_ &Name,
 	str::string_ &Id )
 {
-	return GetMandatoryValue_( rgstry::tentry___( LongTaggedArgumentAliasId_, Name ), Id );
+	return GetMandatoryValue_( rgstry::tentry___( LongTaggedArgumentId_, Name ), Id );
 }
 
-static const str::string_ &GetShortTaggedArguemntAliasId_(
+static const str::string_ &GetShortTaggedArguemntId_(
 	str::string_ &Name,
 	str::string_ &Id )
 {
-	return GetMandatoryValue_( rgstry::tentry___( ShortTaggedArgumentAliasId_, Name ), Id );
+	return GetMandatoryValue_( rgstry::tentry___( ShortTaggedArgumentId_, Name ), Id );
 }
 
 
@@ -269,6 +271,7 @@ public:
 
 		this->Name = Name;
 	}
+	E_RODISCLOSE_( type__, Type );
 };
 
 E_AUTO( flag );
@@ -405,7 +408,7 @@ ERRBegin
 	Name.Append( *Arg );
 
 	Value.Init();
-	Value.Append( Equal + 1, Last - Equal );
+	Value.Append( Equal + 1, Last - Equal -1 );
 
 	Option.Init( tShort, Name, Value );
 
@@ -551,11 +554,230 @@ void Fill_(
 		Arguments.Append( str::string( argv[Current++] ) );
 }
 
-void FillArgumentsRegistry_(
+static const str::string_ &GetId_(
+	const str::string_ &Name,
+	rgstry::entry___ &Entry,
+	str::string_ &Id )
+{
+ERRProlog
+	rgstry::tags Tags;
+	str::string Path;
+ERRBegin
+	Tags.Init();
+	Tags.Append( Name );
+
+	Path.Init();
+	Registry_.GetValue( Entry.GetPath( Tags, Path ), Id );
+ERRErr
+ERREnd
+ERREpilog
+	return Id;
+}
+
+static const str::string_ &GetId_(
+	const str::string_ &Name,
+	type__ Type,
+	str::string_ &Id )
+{
+	switch ( Type ) {
+	case tShort:
+		GetId_( Name, ShortTaggedArgumentId_, Id );
+		break;
+	case tLong:
+		GetId_( Name, LongTaggedArgumentId_, Id );
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return Id;
+}
+
+
+static const str::string_ &GetId_(
+	const flag_ &Flag,
+	str::string_ &Id )
+{
+	return GetId_( Flag.Name, Flag.Type(), Id );
+}
+
+const str::string_ &GetIdTagged_(
+	const str::string_ &Id,
+	rgstry::entry___ &Entry,
+	str::string_ &Path )
+{
+ERRProlog
+	str::strings Tags;
+	str::string PathBuffer;
+ERRBegin
+	Tags.Init();
+	Tags.Append( Id );
+
+	PathBuffer.Init();
+	Registry_.GetValue( Entry.GetPath( Tags, PathBuffer ), Path );
+ERRErr
+ERREnd
+ERREpilog
+	return Path;
+}
+
+const str::string_ &GetPath_(
+	const str::string_ &Id,
+	str::string_ &Path )
+{
+	return GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
+}
+
+const str::string_ &GetValue_(
+	const str::string_ &Id,
+	str::string_ &Path )
+{
+	return GetIdTagged_( Id, IdTaggedArgumentValue_, Path );
+}
+
+static void FillArgumentsRegistry_( const flag_ &Flag )
+{
+ERRProlog
+	str::string Id;
+	lcl::meaning  Meaning;
+	str::strings Tags;
+	str::string Path;
+	str::string Value;
+	sdr::row__ Error = E_NIL;
+ERRBegin
+	Id.Init();
+
+	if ( GetId_( Flag, Id ).Amount() == 0 ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_UnknownFlag" );
+		Meaning.AddTag( Flag.Name );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+
+	Path.Init();
+	GetPath_( Id, Path );
+
+	if ( Path.Amount() == 0 ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_NoPathForFlag" );
+		Meaning.AddTag( Flag.Name );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+
+	Value.Init();
+	GetValue_( Id, Value );
+
+	if ( Value.Amount() == 0 ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_NoValueForFlag" );
+		Meaning.AddTag( Flag.Name );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+
+	Registry_.SetValue( Path, Value, &Error );
+
+	if ( Error != E_NIL ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_BadPathForFlag" );
+		Meaning.AddTag( Flag.Name );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void FillArgumentsRegistry_( const option_ &Option )
+{
+ERRProlog
+	str::string Id;
+	lcl::meaning  Meaning;
+	str::strings Tags;
+	str::string Path;
+	sdr::row__ Error = E_NIL;
+ERRBegin
+	Id.Init();
+
+	if ( GetId_( Option, Id ).Amount() == 0 ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_UnknownOption" );
+		Meaning.AddTag( Option.Name );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+
+	Path.Init();
+	GetPath_( Id, Path );
+
+	if ( Path.Amount() == 0 ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_NoPathForOption" );
+		Meaning.AddTag( Option.Name );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+
+	Registry_.SetValue( Path, Option.Value, &Error );
+
+	if ( Error != E_NIL ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_BadPathForOption" );
+		Meaning.AddTag( Option.Name );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+template <typename c, typename i> static void FillArgumentsRegistry_( const c &Conteneur )
+{
+	i Item;
+	sdr::row__ Row = Conteneur.First();
+
+	Item.Init( Conteneur );
+
+	while ( Row != E_NIL ) {
+		FillArgumentsRegistry_( Item( Row ) );
+
+		Row = Conteneur.Next( Row );
+	}
+}
+
+static void FillArgumentsRegistry_(
 	flags_ &Flags,
 	options_ &Options,
 	arguments_ &Arguments )
 {
+	FillArgumentsRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags );
+	FillArgumentsRegistry_<options_, ctn::E_CITEM( option_ )>( Options );
+}
+
+static void FillArgumentsRegistry_(
+	int argc,
+	const char **argv )
+{
+ERRProlog
+	flags Flags;
+	options Options;
+	arguments Arguments;
+ERRBegin
+	Flags.Init();
+	Options.Init();
+	Arguments.Init();
+
+	Fill_( argc, argv, Flags, Options, Arguments );
+
+	FillArgumentsRegistry_( Flags, Options, Arguments );
+ERRErr
+ERREnd
+ERREpilog
 }
 
 
@@ -584,6 +806,8 @@ ERRBegin
 	RegistryConfigurationLevel_ = Registry_.PushImportedLevel( sclrgstry::GetRegistry(), sclrgstry::GetRoot() );
 	RegistryProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
 	RegistryArgumentsLevel_ = Registry_.PushEmbeddedLevel( str::string( "Arguments" ) );
+
+	FillArgumentsRegistry_( argc, argv );
 
 	Main( argc, argv );
 ERRErr

@@ -5,8 +5,34 @@
     <Translation language="fr">'%1' : argument incorrect.</Translation>
 		<Translation language="en">'%1' : bad argument.</Translation>
 	</Translations>
+  <Translations text="SCLTOOL_UnknownFlag">
+    <Translation language="fr">Fanion '%1' inconnue.</Translation>
+    <Translation language="en">Unknown '%1' flag.</Translation>
+  </Translations>
+  
+  <Translations text="SCLTOOL_NoPathForFlag">
+    <Translation language="fr">Pas de chemin pour le fanion '%1'.</Translation>
+    <Translation language="en">No path for '%1' flag.</Translation>
+  </Translations>
+  <Translations text="SCLTOOL_NoValueForFlag">
+    <Translation language="fr">Pas de valeur pour le fanion '%1'.</Translation>
+    <Translation language="en">No value for '%1' flag.</Translation>
+  </Translations>
+  <Translations text="SCLTOOL_BadPathForFlag">
+    <Translation language="fr">Mauvais chemin pour le fanion '%1'.</Translation>
+    <Translation language="en">Bad path for '%1' flag.</Translation>
+  </Translations>
 
-	<!--
+  <Translations text="SCLTOOL_NoPathForOption">
+    <Translation language="fr">Pas de chemin pour l'option '%1'.</Translation>
+    <Translation language="en">No path for '%1' option.</Translation>
+  </Translations>
+  <Translations text="SCLTOOL_BadPathForOption">
+    <Translation language="fr">Mauvais chemin pour l'option '%1'.</Translation>
+    <Translation language="en">Bad path for '%1' option.</Translation>
+  </Translations>
+
+  <!--
 	<Translations text="SCLTOOL_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
