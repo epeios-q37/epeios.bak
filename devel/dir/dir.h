@@ -197,8 +197,10 @@ namespace dir {
 	}
 
 #ifdef DIR__WIN
-	typedef HANDLE	handle___;
-#	define DIR_INVALID_HANDLE	INVALID_HANDLE_VALUE
+	typedef struct _handle___ {
+		WIN32_FIND_DATAA File;
+		HANDLE hSearch;
+	} *handle___;
 #elif defined( DIR__POSIX )
 	typedef DIR	*handle___;
 #	define DIR_INVALID_HANDLE	NULL
@@ -212,8 +214,12 @@ namespace dir {
 		handle___ &Handle )
 	{
 #ifdef DIR__WIN
-		static WIN32_FIND_DATAA File;
-		HANDLE &hSearch = Handle;
+		if ( ( Handle = new _handle___) ==  NULL )
+			ERRAlc();
+
+		WIN32_FIND_DATAA &File = Handle->File;
+		HANDLE &hSearch = Handle->hSearch;
+
 		char SearchString[MAX_PATH+1] = "";
 
 		if ( ( strlen( Directory ) + 4 ) > MAX_PATH )
@@ -261,13 +267,15 @@ namespace dir {
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
 	inline const char *GetNextFile( handle___ &Handle )
 	{
+		if ( Handle ==  NULL )
+			ERRFwk();
 #ifdef DIR_DBG
-		if ( Handle == DIR_INVALID_HANDLE )
-			ERRPrm();
+		if ( Handle->hSearch == INVALID_HANDLE_VALUE )
+			ERRFwk();
 #endif
 #ifdef DIR__WIN
-		static WIN32_FIND_DATAA File;
-		HANDLE &hSearch = Handle;
+		WIN32_FIND_DATAA &File = Handle->File;
+		HANDLE &hSearch = Handle->hSearch;
 
 		if ( !FindNextFileA( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
@@ -297,15 +305,19 @@ namespace dir {
 
 	inline void Close( handle___ &Handle )
 	{
+		if ( Handle == NULL )
+			ERRFwk();
 #ifdef DIR_DBG
-		if ( Handle == DIR_INVALID_HANDLE )
-			ERRPrm();
+		if ( Handle->hSearch == INVALID_HANDLE_VALUE )
+			ERRFwk();
 #endif
 #ifdef DIR__WIN
-		if ( !FindClose( Handle ) )
+		if ( !FindClose( Handle->hSearch ) )
 			ERRLbr();
 
-		Handle = INVALID_HANDLE_VALUE;
+		delete Handle;
+
+		Handle = NULL;
 #endif
 		
 #ifdef DIR__POSIX
