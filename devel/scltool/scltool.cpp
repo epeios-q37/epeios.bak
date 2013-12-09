@@ -46,7 +46,7 @@ static rgstry::multi_level_registry Registry_;
 
 static rgstry::level__ RegistryConfigurationLevel_ = RGSTRY_UNDEFINED_LEVEL;
 static rgstry::level__ RegistryProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
-static rgstry::level__ RegistryArgumentsLevel_ = RGSTRY_UNDEFINED_LEVEL;
+static rgstry::level__ RegistrySetupLevel_ = RGSTRY_UNDEFINED_LEVEL;
 
 const rgstry::multi_level_registry_ &scltool::GetRegistry( void )
 {
@@ -63,18 +63,18 @@ rgstry::level__ scltool::GetRegistryProjectLevel( void )
 	return RegistryProjectLevel_;
 }
 
-rgstry::level__ scltool::GetRegistryArgumentsLevel( void )
+rgstry::level__ scltool::GetRegistrySetupLevel( void )
 {
-	return RegistryArgumentsLevel_;
+	return RegistrySetupLevel_;
 }
 
 
-static rgstry::entry___ Arguments_( "Arguments" );
+static rgstry::entry___ ArgumentsHandling_( "ArgumentsHandling" );
 #define ARGUMENT_TAG "Argument"
 #define ARGUMENT_ID_ATTRIBUTE "id"
-static rgstry::entry___ ShortTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "short" ), Arguments_ );
-static rgstry::entry___ LongTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "long" ), Arguments_ );
-static rgstry::entry___ IdTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_ID_ATTRIBUTE ), Arguments_ );
+static rgstry::entry___ ShortTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "short" ), ArgumentsHandling_ );
+static rgstry::entry___ LongTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "long" ), ArgumentsHandling_ );
+static rgstry::entry___ IdTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_ID_ATTRIBUTE ), ArgumentsHandling_ );
 #define ARGUMENT_TAGGING_ID_ATTRIBUTE "@"  ARGUMENT_ID_ATTRIBUTE
 static rgstry::entry___ LongTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, LongTaggedArgument_ );
 static rgstry::entry___ ShortTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, ShortTaggedArgument_ );
@@ -636,7 +636,7 @@ const str::string_ &GetValue_(
 	return GetIdTagged_( Id, IdTaggedArgumentValue_, Path );
 }
 
-static void FillArgumentsRegistry_( const flag_ &Flag )
+static void FillSetupRegistry_( const flag_ &Flag )
 {
 ERRProlog
 	str::string Id;
@@ -692,7 +692,7 @@ ERREnd
 ERREpilog
 }
 
-static void FillArgumentsRegistry_( const option_ &Option )
+static void FillSetupRegistry_( const option_ &Option )
 {
 ERRProlog
 	str::string Id;
@@ -736,7 +736,7 @@ ERREnd
 ERREpilog
 }
 
-template <typename c, typename i> static void FillArgumentsRegistry_( const c &Conteneur )
+template <typename c, typename i> static void FillSetupRegistry_( const c &Conteneur )
 {
 	i Item;
 	sdr::row__ Row = Conteneur.First();
@@ -744,22 +744,167 @@ template <typename c, typename i> static void FillArgumentsRegistry_( const c &C
 	Item.Init( Conteneur );
 
 	while ( Row != E_NIL ) {
-		FillArgumentsRegistry_( Item( Row ) );
+		FillSetupRegistry_( Item( Row ) );
 
 		Row = Conteneur.Next( Row );
 	}
 }
 
-static void FillArgumentsRegistry_(
+static void FillSetupRegistry_(
 	flags_ &Flags,
 	options_ &Options,
 	arguments_ &Arguments )
 {
-	FillArgumentsRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags );
-	FillArgumentsRegistry_<options_, ctn::E_CITEM( option_ )>( Options );
+	FillSetupRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags );
+	FillSetupRegistry_<options_, ctn::E_CITEM( option_ )>( Options );
 }
 
-static void FillArgumentsRegistry_(
+#define ARGUMENTS	"_/Arguments"
+#define RAW	ARGUMENTS "/Raw"
+#define RAW_ARGUMENT	RAW "/Argument"
+
+static void PutIndice_(
+	const char *Before,
+	bso::uint__ Indice,
+	const char *After,
+	str::string_ &Result )
+{
+	bso::integer_buffer__ Buffer;
+
+	Result.Append( Before );
+	Result.Append( "[indice=\"" );
+	Result.Append( bso::Convert( Indice, Buffer ) );
+	Result.Append( "\"]" );
+
+	if ( ( After != NULL ) && ( *After ) ) {
+		Result.Append( '/' );
+		Result.Append( After );
+	}
+}
+
+static void DumpInSetupRegistry_(
+	int argc,
+	const char **argv )
+{
+ERRProlog
+	bso::integer_buffer__ Buffer;
+	int i = 0;
+	str::string Path;
+ERRBegin
+	Registry_.SetValue( str::string( RAW "/@Amount" ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
+
+	while ( i < argc ) {
+		Path.Init();
+		PutIndice_( RAW_ARGUMENT, i, "", Path );
+
+		Registry_.SetValue( Path, str::string( argv[i++] ) );
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+#define ARGUMENT_FLAGS	ARGUMENTS "/Flags"
+#define ARGUMENT_FLAG	ARGUMENT_FLAGS "/Flag"
+
+static void DumpInSetupRegistry_(
+	bso::int__ Indice,
+	const flag_ &Flag )
+{
+ERRProlog
+	str::string Path;
+ERRBegin
+	Path.Init();
+	PutIndice_( ARGUMENT_FLAG, Indice, "", Path );
+	Registry_.SetValue( Path, Flag.Name );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+#define ARGUMENT_OPTIONS	ARGUMENTS "/Options"
+#define ARGUMENT_OPTION		ARGUMENT_OPTIONS "/Option"
+
+static void DumpInSetupRegistry_(
+	bso::int__ Indice,
+	const option_ &Option )
+{
+ERRProlog
+	str::string Path;
+ERRBegin
+	Path.Init();
+	PutIndice_( ARGUMENT_OPTION, Indice, "Name", Path );
+	Registry_.SetValue( Path, Option.Name );
+
+	Path.Init();
+	PutIndice_( ARGUMENT_OPTION, Indice, "Value", Path );
+	Registry_.SetValue( Path, Option.Value );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+#define ARGUMENT_FREES	ARGUMENTS "/Frees"
+#define ARGUMENT_FREE	ARGUMENT_FREES "/Free"
+
+static void DumpInSetupRegistry_(
+	bso::int__ Indice,
+	const argument_ &Argument )
+{
+ERRProlog
+	str::string Path;
+ERRBegin
+	Path.Init();
+	PutIndice_( ARGUMENT_FREE, Indice, "", Path );
+	Registry_.SetValue( Path, Argument );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+template <typename c, typename i> static void DumpInSetupRegistry_(
+	const char *Prefix,
+	const c &Conteneur )
+{
+ERRProlog
+	i Item;
+	sdr::row__ Row = Conteneur.First();
+	bso::integer_buffer__ Buffer;
+	str::string Path;
+ERRBegin
+	Path.Init( Prefix );
+	Path.Append( "/@Amount" );
+
+	Registry_.SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
+
+	Item.Init( Conteneur );
+
+	while ( Row != E_NIL ) {
+		DumpInSetupRegistry_( *Row, Item( Row ) );
+
+		Row = Conteneur.Next( Row );
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+static void DumpInSetupRegistry_(
+	int argc,
+	const char **argv,
+	const flags_ &Flags,
+	const options_ &Options,
+	const arguments_ &Arguments )
+{
+	DumpInSetupRegistry_( argc, argv );
+
+	DumpInSetupRegistry_<flags_, ctn::E_CMITEM( flag_ )>( ARGUMENT_FLAGS, Flags );
+	DumpInSetupRegistry_<options_, ctn::E_CITEM( option_ )>( ARGUMENT_OPTIONS, Options );
+	DumpInSetupRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( ARGUMENT_FREES, Arguments );
+}
+
+static void FillSetupRegistry_(
 	int argc,
 	const char **argv )
 {
@@ -774,7 +919,9 @@ ERRBegin
 
 	Fill_( argc, argv, Flags, Options, Arguments );
 
-	FillArgumentsRegistry_( Flags, Options, Arguments );
+	FillSetupRegistry_( Flags, Options, Arguments );
+
+	DumpInSetupRegistry_( argc, argv, Flags, Options, Arguments );
 ERRErr
 ERREnd
 ERREpilog
@@ -805,9 +952,9 @@ ERRBegin
 
 	RegistryConfigurationLevel_ = Registry_.PushImportedLevel( sclrgstry::GetRegistry(), sclrgstry::GetRoot() );
 	RegistryProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
-	RegistryArgumentsLevel_ = Registry_.PushEmbeddedLevel( str::string( "Arguments" ) );
+	RegistrySetupLevel_ = Registry_.PushEmbeddedLevel( str::string( "Setup" ) );
 
-	FillArgumentsRegistry_( argc, argv );
+	FillSetupRegistry_( argc, argv );
 
 	Main( argc, argv );
 ERRErr

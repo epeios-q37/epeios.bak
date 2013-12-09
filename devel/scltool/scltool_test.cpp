@@ -48,7 +48,7 @@ void scltool::Main(
 {
 	scltool::GetRegistry().Dump( scltool::GetRegistryConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 	scltool::GetRegistry().Dump( scltool::GetRegistryProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
-	scltool::GetRegistry().Dump( scltool::GetRegistryArgumentsLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 }
 
 #if 0	// Puyisque l'objet de cette bibliothèque est jutement de prendre en charge le 'main'.

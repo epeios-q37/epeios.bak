@@ -79,7 +79,7 @@ namespace scltool {
 
 	rgstry::level__ GetRegistryConfigurationLevel( void );
 	rgstry::level__ GetRegistryProjectLevel( void );
-	rgstry::level__ GetRegistryArgumentsLevel( void );
+	rgstry::level__ GetRegistrySetupLevel( void );
 
 	inline const str::string_ &GetTranslation(
 		const char *Text,

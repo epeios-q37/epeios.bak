@@ -203,7 +203,6 @@ namespace dir {
 	} *handle___;
 #elif defined( DIR__POSIX )
 	typedef DIR	*handle___;
-#	define DIR_INVALID_HANDLE	NULL
 #else
 #	error
 #endif
@@ -269,11 +268,11 @@ namespace dir {
 	{
 		if ( Handle ==  NULL )
 			ERRFwk();
-#ifdef DIR_DBG
+# ifdef DIR__WIN
+#  ifdef DIR_DBG
 		if ( Handle->hSearch == INVALID_HANDLE_VALUE )
 			ERRFwk();
-#endif
-#ifdef DIR__WIN
+#  endif
 		WIN32_FIND_DATAA &File = Handle->File;
 		HANDLE &hSearch = Handle->hSearch;
 
@@ -284,8 +283,8 @@ namespace dir {
 				return NULL;
 
 		return File.cFileName;
-#endif
-#ifdef DIR__POSIX
+# endif
+# ifdef DIR__POSIX
 	struct dirent * ent;
     DIR *&rep = Handle;
     
@@ -300,34 +299,34 @@ namespace dir {
 		return ent->d_name;
     
     return 0;
-#endif
+# endif
 	}
 
 	inline void Close( handle___ &Handle )
 	{
 		if ( Handle == NULL )
 			ERRFwk();
-#ifdef DIR_DBG
+# ifdef DIR__WIN
+#  ifdef DIR_DBG
 		if ( Handle->hSearch == INVALID_HANDLE_VALUE )
 			ERRFwk();
-#endif
-#ifdef DIR__WIN
+#  endif
 		if ( !FindClose( Handle->hSearch ) )
 			ERRLbr();
 
 		delete Handle;
 
 		Handle = NULL;
-#endif
+# endif
 		
-#ifdef DIR__POSIX
+# ifdef DIR__POSIX
     DIR *&rep = Handle;
     
     if ( closedir(rep) )
 		ERRLbr();
 
 	Handle = NULL;
-#endif
+# endif
 	}
 }
 
