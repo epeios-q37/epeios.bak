@@ -58,47 +58,21 @@ END
 */
 /* Beginning of the part which handles command line arguments. */
 
-enum exit_value__ {
-	evSuccess = EXIT_SUCCESS,
-	evGenericFailure = EXIT_FAILURE,
-	// Erreur dans les paramètres d'entrée.
-	evParameters,
-	// Erreur lors de l'ouverture des fichiers d'entrée ou de sortie.
-	evInputOutput,
-	// Erreur lors du traitement.
-	evProcessing,
-	ev_amount
-};
-
-enum command__ {
-	cProcess = scltool::c_amount,
-	c_amount,
-	c_Undefined
-};
-
-enum option {
-	 o_amount,	
-	 o_Undefined,
-};
-
-#define STRING_PARAM___( name )	CLNARG_STRING_PARAM___( name )
-
-struct parameters___ {
-	parameters___( void )
-	{
-	}
-};
-
 #pragma warning( disable: 101 )
-static void PrintUsage_( const clnarg::description_ &Description )
+static void PrintUsage_( void )
 {
 ERRProlog
 	STR_BUFFER___ TBuffer;
 	CLNARG_BUFFER__ Buffer;
 	lcl::meaning Meaning;
-	str::string Translation;
+	str::string Translation, ShortLong;
 ERRBegin
-	scltool::PrintDefaultCommandDescriptions( NAME_LC, Description );
+	scltool::NewPrintDefaultCommandDescriptions( NAME_LC );
+
+	ShortLong.Init();
+	cio::COut << NAME_LC << " " << scltool::GetArgumentShortLong( "Test", ShortLong ) << txf::nl;
+	Translation.Init();
+	cio::COut << txf::pad << scltool::GetArgumentDescriptionTranslation( "Test", Translation ) << txf::nl;
 
 #if 0	// Exemples.
 	// Commands.
@@ -166,129 +140,16 @@ static void PrintHeader_( void )
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
-#pragma warning( disable: 101 65 )
-static void AnalyzeOptions_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	sdr::row__ P;
-	clnarg::option_list Options;
-	clnarg::id__ Option;
-	const bso::char__ *Unknown = NULL;
-	clnarg::argument Argument;
-	clnarg::buffer__ Buffer;
-ERRBegin
-	Options.Init();
-
-	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
-
-	P = Options.First();
-
-	while( P != E_NIL ) {
-		Argument.Init();
-
-		switch( Option = Options( P ) ) {
-		default:
-			ERRFwk();
-		}
-
-		P = Options.Next( P );
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-#pragma warning( default: 101 65 )
-
-static void AnalyzeFreeArguments_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	clnarg::arguments Free;
-	sdr::row__ P;
-ERRBegin
-	Free.Init();
-
-	Analyzer.GetArguments( Free );
-
-	P = Free.Last();
-
-	switch( Free.Amount() ) {
-	case 0:
-		break;
-	default:
-		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
-		break;
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static command__ AnalyzeArgs_(
-	int argc,
-	const char *argv[],
-	parameters___ &Parameters )
-{
-	clnarg::id__ Command = c_Undefined;
-ERRProlog
-	clnarg::description Description;
-	clnarg::analyzer___ Analyzer;
-ERRBegin
-	Description.Init();
-
-	scltool::AddDefaultCommands( Description );
-
-//	Description.AddCommand( '', "", c );
-//	Description.AddOption( '', "", o );
-
-	Analyzer.Init( argc, argv, Description );
-
-	switch ( Command =Analyzer.GetCommand() ) {
-	case scltool::cVersion:
-		PrintHeader_();
-		ERRAbort();
-		break;
-	case scltool::cHelp:
-		PrintUsage_( Description );
-		ERRAbort();
-		break;
-	case scltool::cLicense:
-		epsmsc::PrintLicense( COut );
-		ERRAbort();
-		break;
-//	case c:
-	case CLNARG_NONE:
-//		clnarg::ReportMissingCommandError( NAME, scllocale::GetLocale(), scltool::GetLanguage() );
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
-
-	AnalyzeOptions_( Analyzer, Parameters );
-
-	AnalyzeFreeArguments_( Analyzer, Parameters );
-
-ERRErr
-ERREnd
-ERREpilog
-	return (command__)Command;
-}
-
 /* End of the part which handles command line arguments. */
 
-static void Go_(
-	command__ Command,
-	const parameters___ &Parameters )
+static void Go_( const str::string_ &Command )
 {
 ERRProlog
 ERRBegin
+	if ( Command == "Test" )
+		cio::COut << "Test" << txf::nl;
+	else
+		scltool::ReportAndAbort( "BadCommand" );
 ERRErr
 ERREnd
 ERREpilog
@@ -301,12 +162,19 @@ void scltool::Main(
 	const char *argv[] )
 {
 ERRProlog
-	parameters___ Parameters;
-	command__ Command = c_Undefined;
+	str::string Command;
 ERRBegin
-	Command = AnalyzeArgs_( argc, argv, Parameters );
+	Command.Init();
+	scltool::GetCommand( Command );
 
-	Go_( Command, Parameters );
+	if ( Command == "Usage" )
+		PrintUsage_();
+	else if ( Command == "Version" )
+		PrintHeader_();
+	else if ( Command == "License" )
+		epsmsc::PrintLicense();
+	else
+		Go_( Command );
 ERRErr
 ERREnd
 ERREpilog

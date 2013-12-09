@@ -43,9 +43,11 @@ static STR_BUFFER___ Translation_;
 
 rgstry::entry___ sclrgstry::Parameters( "Parameters" );
 
+rgstry::entry___ sclrgstry::Definitions( "Definitions" );
+
 rgstry::entry___ sclrgstry::Language( "Language", Parameters );
 
-rgstry::entry___ sclrgstry::Locale( "Locale", Parameters );
+rgstry::entry___ sclrgstry::Locale( "Locale", Definitions );
 
 bso::bool__ sclrgstry::IsReady( void )
 {

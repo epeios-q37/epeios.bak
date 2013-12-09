@@ -68,16 +68,22 @@ rgstry::level__ scltool::GetRegistrySetupLevel( void )
 	return RegistrySetupLevel_;
 }
 
+static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
 
 static rgstry::entry___ ArgumentsHandling_( "ArgumentsHandling" );
 #define ARGUMENT_TAG "Argument"
 #define ARGUMENT_ID_ATTRIBUTE "id"
-static rgstry::entry___ ShortTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "short" ), ArgumentsHandling_ );
-static rgstry::entry___ LongTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, "long" ), ArgumentsHandling_ );
+#define ARGUMENT_LONG_ATTRIBUTE		"long"
+#define ARGUMENT_SHORT_ATTRIBUTE	"short"
+static rgstry::entry___ ShortTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_SHORT_ATTRIBUTE ), ArgumentsHandling_ );
+static rgstry::entry___ LongTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_LONG_ATTRIBUTE ), ArgumentsHandling_ );
 static rgstry::entry___ IdTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_ID_ATTRIBUTE ), ArgumentsHandling_ );
 #define ARGUMENT_TAGGING_ID_ATTRIBUTE "@"  ARGUMENT_ID_ATTRIBUTE
 static rgstry::entry___ LongTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, LongTaggedArgument_ );
 static rgstry::entry___ ShortTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, ShortTaggedArgument_ );
+static rgstry::entry___ IdTaggedArgumentLong_( "@" ARGUMENT_LONG_ATTRIBUTE, IdTaggedArgument_ );
+static rgstry::entry___ IdTaggedArgumentShort_( "@" ARGUMENT_SHORT_ATTRIBUTE, IdTaggedArgument_ );
+static rgstry::entry___ IdTaggedArgumentDescription_( "@Description", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentPath_( "@Path", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentValue_( "@Value", IdTaggedArgument_ );
 
@@ -120,7 +126,7 @@ void scltool::AddDefaultCommands( clnarg::description_ &Description )
 }
 
 
-void scltool::PrintDefaultCommandDescriptions(
+void scltool::OldPrintDefaultCommandDescriptions(
 	const char *ProgramName,
 	const clnarg::description_ &Description )
 {
@@ -158,6 +164,7 @@ ERRErr
 ERREnd
 ERREpilog
 }
+
 
 void scltool::ReportAndAbort( const char *Text )
 {
@@ -620,6 +627,110 @@ ERRErr
 ERREnd
 ERREpilog
 	return Path;
+}
+
+const str::string_ &GetLong_(
+	const str::string_ &Id,
+	str::string_ &Long )
+{
+	return GetIdTagged_( Id, IdTaggedArgumentLong_, Long );
+}
+
+const str::string_ &GetShort_(
+	const str::string_ &Id,
+	str::string_ &Short )
+{
+	return GetIdTagged_( Id, IdTaggedArgumentShort_, Short );
+}
+
+const str::string_ &GetDescription_(
+	const str::string_ &Id,
+	str::string_ &Description )
+{
+	return GetIdTagged_( Id, IdTaggedArgumentDescription_, Description );
+}
+
+const str::string_ &scltool::GetArgumentDescriptionTranslation(
+	const str::string_ &Id,
+	str::string_ &Translation )
+{
+ERRProlog
+	str::string Description;
+	STR_BUFFER___ Buffer;
+ERRBegin
+	Description.Init();
+	GetDescription_( Id, Description );
+
+	scllocale::GetTranslation( Description.Convert( Buffer ), GetLanguage(), Translation );
+ERRErr
+ERREnd
+ERREpilog
+	return Translation;
+}
+
+const str::string_ &scltool::GetArgumentShortLong(
+	const str::string_ &Id,
+	str::string_ &LongShort )
+{
+ERRProlog
+	str::string Long, Short;
+ERRBegin
+	Long.Init();
+	GetLong_( Id, Long );
+
+	Short.Init();
+	GetShort_( Id, Short );
+
+	if ( Short.Amount() ) {
+		LongShort.Append( '-' );
+		LongShort.Append( Short );
+		if ( Long.Amount() )
+			LongShort.Append( '|' );
+	}
+
+	if ( Long.Amount() ) {
+		LongShort.Append( "--" );
+		LongShort.Append( Long );
+	}
+
+ERRErr
+ERREnd
+ERREpilog
+	return LongShort;
+}
+
+static void PrintCommandDescription_(
+	const char *ProgramName,
+	const str::string_ &Id )
+{
+ERRProlog
+	str::string Translation, LongShort;
+ERRBegin
+	LongShort.Init();
+	cio::COut << ProgramName << " " << GetArgumentShortLong( Id, LongShort ) << txf::nl;
+	Translation.Init();
+	cio::COut << txf::pad << GetArgumentDescriptionTranslation( Id, Translation ) << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void scltool::NewPrintDefaultCommandDescriptions( const char *ProgramName )
+{
+ERRProlog
+	str::string Translation;
+ERRBegin
+	Translation.Init();
+	COut << scllocale::GetLocale().GetTranslation( "ProgramDescription", GetLanguage(), Translation ) << txf::nl;
+	COut << txf::nl;
+
+	PrintCommandDescription_( ProgramName, str::string( "Usage" ) );
+	PrintCommandDescription_( ProgramName, str::string( "Version" ) );
+	PrintCommandDescription_( ProgramName, str::string( "License" ) );
+
+ERRErr
+ERREnd
+ERREpilog
 }
 
 const str::string_ &GetPath_(
@@ -1240,6 +1351,13 @@ UN( U8, bso::u8__ )
 	SN( S32, bso::s32__ )
 	SN( S16, bso::s16__ )
 	SN( S8, bso::s8__ )
+
+
+const str::string_ &scltool::GetCommand( str::string_ &Command )
+{
+	return GetMandatoryValue( Command_, Command );
+}
+
 
 
 

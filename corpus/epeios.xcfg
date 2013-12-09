@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:define name="ArgumentsHandling">
+		<xpp:bloc>
+		  <Argument id="Usage" Description="UsageCommandDescription" long="help" Path="Parameters/Command" Value="Usage"/>
+		  <Argument id="Version" Description="VersionCommandDescription" long="version" Path="Parameters/Command" Value="Version"/>
+		  <Argument id="License" Description="LicenseCommandDescription" long="license" Path="Parameters/Command" Value="License"/>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Locale">
+		<xpp:cdata>
+			<Translations message="VersionCommandDescription">
+			  <Translation language="fr">Affiche la version du programme.</Translation>
+			  <Translation language="en">Displays the version of the program.</Translation>
+			</Translations>
+			<Translations message="LicenseCommandDescription">
+			  <Translation language="fr">Affiche la licence du programme.</Translation>
+			  <Translation language="en">Displays the program license.</Translation>
+			</Translations>
+			<Translations message="UsageCommandDescription">
+			  <Translation language="fr">Affiche cette page.</Translation>
+			  <Translation language="en">Displays this page.</Translation>
+			</Translations>
+		</xpp:cdata>
+	</xpp:define>
+</xpp:bloc>

@@ -98,8 +98,11 @@ ERRBegin
 
 	sclrgstry::GetRegistry().GetValue( sclrgstry::Locale, sclrgstry::GetRoot(), Locale );
 
-	if ( Locale.Amount() != 0 )
+	if ( Locale.Amount() != 0 ) {
+		Locale.Insert( "<Locale>" );
+		Locale.Append( "</Locale>" );
 		LoadConfigurationLocale_( Locale, Format );
+	}
 ERRErr
 ERREnd
 ERREpilog

@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="esketch">
+    <xpp:expand href="epeios.xcfg"/>
     <Parameters>
-		  <Language>en</Language>
+		  <Language>fr</Language>
+      <Command>Test</Command><!-- Default command -->
     </Parameters>
-	</Configuration>
+    <Definitions>
+      <Locale>
+        <xpp:expand select="Locale"/>
+        <xpp:cdata>
+          <Translations message="TestCommandDescription">
+            <Translation language="fr">Command de test.</Translation>
+            <Translation language="en">Test command.</Translation>
+          </Translations>
+        </xpp:cdata>
+      </Locale>
+      </Definitions>
+    <ArgumentsHandling>
+      <xpp:expand select="ArgumentsHandling"/>
+      <Argument id="Test" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test"/>
+    </ArgumentsHandling>
+  </Configuration>
 </Configurations>

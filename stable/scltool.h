@@ -58,9 +58,34 @@ namespace scltool {
 
 	void AddDefaultCommands( clnarg::description_ &Description );
 
-	void PrintDefaultCommandDescriptions(
+	void OldPrintDefaultCommandDescriptions(
 		const char *ProgramName,
 		const clnarg::description_ &Description );
+
+	void NewPrintDefaultCommandDescriptions( const char *ProgramName );
+
+	const str::string_ &GetArgumentShortLong(
+		const str::string_ &Id,
+		str::string_ &ShortLong );
+
+	inline const str::string_ &GetArgumentShortLong(
+		const char *Id,
+		str::string_ &ShortLong )
+	{
+		return GetArgumentShortLong( str::string( Id ), ShortLong );
+	}
+
+	const str::string_ &GetArgumentDescriptionTranslation(
+		const str::string_ &Id,
+		str::string_ &Translation );
+
+	inline const str::string_ &GetArgumentDescriptionTranslation(
+		const char *Id,
+		str::string_ &Translation )
+	{
+		return GetArgumentDescriptionTranslation( str::string( Id ), Translation );
+	}
+
 
 	// A définir par l'utilisateur.
 	void Main(
@@ -74,6 +99,12 @@ namespace scltool {
 	void LoadProject(
 		const str::string_ &FileName,
 		const char *Target );
+
+	const rgstry::multi_level_registry_ &GetRegistry( void );
+
+	rgstry::level__ GetRegistryConfigurationLevel( void );
+	rgstry::level__ GetRegistryProjectLevel( void );
+	rgstry::level__ GetRegistrySetupLevel( void );
 
 	inline const str::string_ &GetTranslation(
 		const char *Text,
@@ -193,6 +224,8 @@ namespace scltool {
 	{\
 		return GetOptionalValue( entry, Value, Missing );\
 	}
+
+	const str::string_ &GetCommand( str::string_ &Command );
 
 }
 

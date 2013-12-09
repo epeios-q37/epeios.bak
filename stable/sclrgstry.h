@@ -50,6 +50,7 @@ namespace sclrgstry {
 	rgstry::row__ GetRoot( void );
 
 	extern rgstry::entry___ Parameters;
+	extern rgstry::entry___ Definitions;
 
 	extern rgstry::entry___ Language;
 
