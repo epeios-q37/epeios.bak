@@ -46,9 +46,18 @@ void scltool::Main(
 	int argc,
 	const char *argv[] )
 {
+ERRProlog
+	str::string Argument;
+ERRBegin
+	PutFreeArgumentTo( 1, rgstry::entry___( "Path", sclrgstry::Parameters ) );
 	scltool::GetRegistry().Dump( scltool::GetRegistryConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 	scltool::GetRegistry().Dump( scltool::GetRegistryProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 	scltool::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+
+	cio::COut << "Free arguments amount : " << scltool::GetFreeArgumentsAmount() << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
 }
 
 #if 0	// Puyisque l'objet de cette bibliothèque est jutement de prendre en charge le 'main'.

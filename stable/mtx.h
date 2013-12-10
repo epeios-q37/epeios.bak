@@ -327,7 +327,7 @@ namespace mtx {
 				case mProtecting:
 					if ( AlreadyLocked != NULL )
 						*AlreadyLocked = true;
-					return tht::GetTID() == Owner;
+					return IsOwner();
 					break;
 				default:
 					ERRFwk();

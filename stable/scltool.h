@@ -86,6 +86,15 @@ namespace scltool {
 		return GetArgumentDescriptionTranslation( str::string( Id ), Translation );
 	}
 
+	bso::int__ GetFreeArgumentsAmount( void );
+
+	const str::string_ &GetFreeArgument(
+		bso::uint__ Indice,
+		str::string_ &Argument );
+
+	void PutFreeArgumentTo(
+		bso::uint__ Indice,
+		const rgstry::tentry__ &Entry );
 
 	// A définir par l'utilisateur.
 	void Main(

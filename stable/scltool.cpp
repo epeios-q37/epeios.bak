@@ -873,6 +873,7 @@ static void FillSetupRegistry_(
 #define ARGUMENTS	"_/Arguments"
 #define RAW	ARGUMENTS "/Raw"
 #define RAW_ARGUMENT	RAW "/Argument"
+#define INDICE_ATTRIBUTE	"indice"
 
 static void PutIndice_(
 	const char *Before,
@@ -883,7 +884,7 @@ static void PutIndice_(
 	bso::integer_buffer__ Buffer;
 
 	Result.Append( Before );
-	Result.Append( "[indice=\"" );
+	Result.Append( "[" INDICE_ATTRIBUTE "=\"" );
 	Result.Append( bso::Convert( Indice, Buffer ) );
 	Result.Append( "\"]" );
 
@@ -892,6 +893,8 @@ static void PutIndice_(
 		Result.Append( After );
 	}
 }
+
+#define AMOUNT_ATTRIBUTE	"Amount"
 
 static void DumpInSetupRegistry_(
 	int argc,
@@ -902,7 +905,7 @@ ERRProlog
 	int i = 0;
 	str::string Path;
 ERRBegin
-	Registry_.SetValue( str::string( RAW "/@Amount" ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
+	Registry_.SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
 
 	while ( i < argc ) {
 		Path.Init();
@@ -973,6 +976,42 @@ ERREnd
 ERREpilog
 }
 
+static rgstry::entry___ FreeArguments_( ARGUMENT_FREES );
+static rgstry::entry___ FreeArgumentsAmount_( "@" AMOUNT_ATTRIBUTE, FreeArguments_ );
+
+bso::int__ scltool::GetFreeArgumentsAmount( void )
+{
+	return GetMandatoryUInt( FreeArgumentsAmount_ );
+}
+
+static rgstry::entry___ TaggedFreeArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_FREE, INDICE_ATTRIBUTE ) );
+
+const str::string_ &scltool::GetFreeArgument(
+	bso::uint__ Indice,
+	str::string_ &Argument )
+{
+	bso::integer_buffer__ Buffer;
+
+	return GetMandatoryValue( rgstry::tentry___( TaggedFreeArgument_, bso::Convert( Indice, Buffer ) ), Argument );
+}
+
+void scltool::PutFreeArgumentTo(
+	bso::uint__ Indice,
+	const rgstry::tentry__ &Entry )
+{
+ERRProlog
+	str::string Argument;
+ERRBegin
+	Argument.Init();
+	GetFreeArgument( Indice, Argument );
+
+	Registry_.SetValue( Entry, Argument );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 template <typename c, typename i> static void DumpInSetupRegistry_(
 	const char *Prefix,
 	const c &Conteneur )
@@ -984,7 +1023,7 @@ ERRProlog
 	str::string Path;
 ERRBegin
 	Path.Init( Prefix );
-	Path.Append( "/@Amount" );
+	Path.Append( "/@" AMOUNT_ATTRIBUTE );
 
 	Registry_.SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
 
@@ -1037,7 +1076,6 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
 
 static bso::bool__ ReportSCLPendingError_( void )
 {
