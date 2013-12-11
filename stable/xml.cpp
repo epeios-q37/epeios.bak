@@ -1165,10 +1165,10 @@ void xml::writer_::_CloseAllTags( void )
 		PopTag();
 }
 
-void xml::writer_::_WriteTabs( bso::size__ Amount ) const
+void xml::writer_::_Indent( bso::size__ Amount ) const
 {
 	while ( Amount-- )
-		*S_.Flow << txf::tab;
+		*S_.Flow << ' ';
 }
 
 void xml::writer_::PutValue( const value_ &Value )
@@ -1252,7 +1252,7 @@ ERRBegin
 		*S_.Flow << "/>";
 	else {
 		if ( !S_.TagValueInProgress && ( S_.Outfit == oIndent ) )
-			_WriteTabs( Tags.Amount() );
+			_Indent( Tags.Amount() );
 		*S_.Flow << "</" << Name << ">";
 	}
 
@@ -1282,7 +1282,6 @@ public:
 	{
 		if ( ( s_FirstNonXTFError - s_FirstXTFError ) != xtf::e_amount )
 			ERRChk();
-
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

@@ -18,17 +18,13 @@
 */
 
 #ifndef XML__INC
-#define XML__INC
+# define XML__INC
 
-#define XML_NAME		"XML"
+# define XML_NAME		"XML"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLTutor;
-
-#if defined( E_DEBUG ) && !defined( XML_NODBG )
-#define XML_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( XML_NODBG )
+#  define XML_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
@@ -590,7 +586,7 @@ namespace xml {
 	{
 	private:
 		void _CloseAllTags( void );
-		void _WriteTabs( bso::size__ Amount ) const;
+		void _Indent( bso::size__ Amount ) const;
 	public:
 		struct s {
 			stk::E_MCSTACK_( name_ )::s Tags;
@@ -678,7 +674,7 @@ namespace xml {
 			}
 
 			if ( S_.Outfit == oIndent )
-				_WriteTabs( Tags.Amount() );
+				_Indent( Tags.Amount() );
 
 			*S_.Flow << '<' << Name;
 			Mark = Tags.Push( Name );

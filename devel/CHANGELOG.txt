@@ -1,6 +1,12 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
-18/11/2013 :*
+11/10/2013 :
+	- Général :
+		- Adaptation aux modifications 'MTX'.
+	- MTX :
+		- Suppression de 'mode__' et du membre 'Owner' nécessaire à sa gestion ; cette gestion n'était pas 'thread-safe' et son implémentation en tant que tel n'était pas rentable.
+
+18/11/2013 :
 	- BSO :
 		- Ajout 'extended_boolean__' ('xbool__').
 

@@ -480,9 +480,9 @@ ERRBegin
 	Name.Append( Arg, Equal - Arg );
 
 	Value.Init();
-	Value.Append( Equal + 1, Last - Equal );
+	Value.Append( Equal + 1, Last - Equal - 1 );
 
-	Option.Init( tShort, Name, Value );
+	Option.Init( tLong, Name, Value );
 
 	Options.Append( Option );
 ERRErr
@@ -496,7 +496,7 @@ static void FillLong_(
 	flags_ &Flags,
 	options_ &Options )
 {
-	const char*Equal = strchr( Arg, '=' );
+	const char *Equal = strchr( Arg, '=' );
 
 	if ( Equal == NULL )
 		FillLong_( Arg, Flags );

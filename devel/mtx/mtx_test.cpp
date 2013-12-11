@@ -1,7 +1,7 @@
 /*
-	'mtk_test.cpp' by Claude SIMON (http://zeusw.org/).
+	'mtx_test.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'mtk_test.cpp' is part of the Epeios framework.
+	'mtx_test.cpp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "mtk.h"
+#include "mtx.h"
 
 #include "err.h"
 #include "cio.h"
@@ -41,12 +41,15 @@ ERREpilog
 
 int main( int argc, char *argv[] )
 {
+	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
 ERRFBegin
-	COut << "Test of library " << MTK_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << MTX_NAME << ' ' << __DATE__" "__TIME__"\n";
 
+	Generic( argc, argv );
 ERRFErr
+	ExitValue = EXIT_FAILURE;
 ERRFEnd
 ERRFEpilog
-	return EXIT_SUCCESS;
+	return ExitValue;
 }

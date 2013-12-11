@@ -6,8 +6,8 @@
 		<Translation language="en">Configuration file error : %1</Translation>
 	</Translations>
 	<Translations message="SCLRGSTRY_BadOrNoValueForEntry">
-		<Translation language="fr">Entrée absente ou incorrecte pour le chemin '%1'</Translation>
-		<Translation language="en">Bad or no value for path '%1'</Translation>
+		<Translation language="fr">Entrée absente ou incorrecte pour l'entrée '%1'</Translation>
+		<Translation language="en">Bad or no value for entry '%1'</Translation>
 	</Translations>
 	<!--
 	<Translations message="SCLRGSTRY_">

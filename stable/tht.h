@@ -96,12 +96,7 @@ namespace tht {
 	inline thread_id__ GetTID( void )
 	{
 #ifdef THT__WIN
-		thread_id__ Id = GetCurrentThreadId();
-
-		while ( Id == 0 )	// Parfois 'GetCurrentThreadId()' retourne inexplicablement 0 (ce qui ne devrait pas arriver), d'où ce 'workaround'.
-			Id = GetCurrentThreadId();
-
-		return Id;
+		return GetCurrentThreadId();
 #elif defined( THT__POSIX )
 		return pthread_self();
 #else
