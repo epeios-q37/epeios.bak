@@ -1198,6 +1198,8 @@ ERRBegin
 	*S_.Flow << TransformedValue;
 
 	S_.TagValueInProgress = true;
+
+	_Commit();
 ERRErr
 ERREnd
 ERREpilog
@@ -1218,6 +1220,8 @@ ERRBegin
 		ERRFwk();
 
 	*S_.Flow << ' ' << Name << "=\"" << TransformedValue << '"';
+
+	_Commit();
 ERRErr
 ERREnd
 ERREpilog
@@ -1231,6 +1235,8 @@ void xml::writer_::PutCData( const value_ &Value )
 	}
 	
 	*S_.Flow << "<![CDATA[" << Value << "]]>";
+
+	_Commit();
 }
 
 
@@ -1261,6 +1267,8 @@ ERRBegin
 
 	S_.TagNameInProgress = false;
 	S_.TagValueInProgress = false;
+
+	_Commit();
 ERRErr
 ERREnd
 ERREpilog

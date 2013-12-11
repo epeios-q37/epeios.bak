@@ -587,6 +587,11 @@ namespace xml {
 	private:
 		void _CloseAllTags( void );
 		void _Indent( bso::size__ Amount ) const;
+		void _Commit( void )
+		{
+			if ( S_.AlwaysCommit )
+				S_.Flow->Commit();
+		}
 	public:
 		struct s {
 			stk::E_MCSTACK_( name_ )::s Tags;
@@ -596,6 +601,7 @@ namespace xml {
 			outfit__ Outfit;
 			special_char_handling__ SpecialCharHandling;
 			bso::bool__ Ignore;
+			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprés chaque écriture. Utile pour le déboguage d'application.
 		} &S_;
 		stk::E_MCSTACK_( name_ ) Tags;
 		writer_( s &S )
@@ -615,6 +621,7 @@ namespace xml {
 			S_.Outfit = o_Undefined;
 			S_.SpecialCharHandling = sch_Undefined;
 			S_.Ignore = false;
+			S_.AlwaysCommit = false;
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
@@ -630,6 +637,7 @@ namespace xml {
 			S_.Outfit = W.S_.Outfit;
 			S_.SpecialCharHandling = W.S_.SpecialCharHandling;
 			S_.Ignore = W.S_.Ignore;
+			S_.AlwaysCommit = W.S_.AlwaysCommit;
 
 			return *this;
 		}
@@ -680,6 +688,8 @@ namespace xml {
 			Mark = Tags.Push( Name );
 			S_.TagNameInProgress = true;
 			S_.TagValueInProgress = false;
+
+			_Commit();
 
 			return Mark;
 		}
@@ -740,7 +750,10 @@ namespace xml {
 		{
 			return *S_.Flow;
 		}
-
+		void AlwayCommit( bso::bool__ Value = true )
+		{
+			S_.AlwaysCommit = Value;
+		}
 		E_RODISCLOSE_( outfit__, Outfit )
 		E_RODISCLOSE_( special_char_handling__, SpecialCharHandling )
 	};
