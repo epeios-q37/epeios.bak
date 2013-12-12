@@ -6,7 +6,7 @@
 		<Translation language="en">'%1' : bad argument.</Translation>
 	</Translations>
   <Translations text="SCLTOOL_UnknownFlag">
-    <Translation language="fr">Fanion '%1' inconnue.</Translation>
+    <Translation language="fr">Fanion '%1' inconnu.</Translation>
     <Translation language="en">Unknown '%1' flag.</Translation>
   </Translations>
   <Translations text="SCLTOOL_UnknownOption">

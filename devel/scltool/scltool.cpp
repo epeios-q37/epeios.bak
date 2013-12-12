@@ -521,10 +521,13 @@ bso::bool__ Fill_(
 		Arguments.Append( str::string( Arg ) );
 		break;
 	case 2:
-		if ( ( Arg[0] == '-' ) && ( Arg[1] == '-' ) )
-			return true;
-
-		FillShort_( Arg + 1, Flags, Options );
+		if (  Arg[0] == '-' )
+			if ( Arg[1] == '-' )
+				return true;
+			else
+				FillShort_( Arg + 1, Flags, Options );
+		else
+			Arguments.Append( str::string( Arg ) );
 
 		break;
 	default:
@@ -1147,8 +1150,8 @@ ERRFBegin
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd
-	cio::COut << txf::commit;
-	cio::CErr << txf::commit;
+	cio::COut << txf::nl << txf::commit;
+	cio::CErr << txf::nl << txf::commit;
 ERRFEpilog
 	return ExitValue;
 }

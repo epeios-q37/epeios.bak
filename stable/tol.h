@@ -643,19 +643,21 @@ namespace tol {
 		bso::bool__ CarryFlag = Op1->tv_nsec < Op2->tv_nsec;
 		bso::uint__ Frac = 0;
 
-		if ( Op1->tv_sec >= Op2->tv_sec )
-			if( Op1->tv_sec == Op2->tv_sec )
-				if ( Op1->tv_nsec > Op2->tv_nsec )
+		if ( Op1->tv_sec < Op2->tv_sec )
 			ERRPrm();
+
+		if( Op1->tv_sec == Op2->tv_sec )
+			if ( Op1->tv_nsec < Op2->tv_nsec )
+				ERRPrm();
 
 		Intermediate->tv_nsec = ( ( CarryFlag ? 1000000000 : 0 ) + Op1->tv_nsec ) - Op2->tv_nsec;
 
-		Intermediate->tv_sec = Op1->tv_sec - Op2->tv_sec - (CarryFlag ? 1 : 0 );
+		Intermediate->tv_sec = Op1->tv_sec - Op2->tv_sec - ( CarryFlag ? 1 : 0 );
 
-		if ( Op1->tv_sec > ( BSO_UINT_MAX / Coeff ) )
+		if ( Intermediate->tv_sec > ( BSO_UINT_MAX / Coeff ) )
 			return TOL_TICK_DIFF_OVERFLOW;
 
-		Result = Op1->tv_sec * Coeff;
+		Result = Intermediate->tv_sec * Coeff;
 
 		Frac = Intermediate->tv_nsec / ( 1000000000 / Coeff );
 
