@@ -126,7 +126,7 @@ ERRProlog
 ERRBegin
 	TS.R = Routine;
 	TS.UP = UP;
-	TS.MH = mtx::Create( mtx::mSynchronizing );
+	TS.MH = mtx::Create();
 	
 	mtx::Lock( TS.MH );	// Unlocked by 'ThreadFunction'.
 

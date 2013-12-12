@@ -48,7 +48,7 @@
 
 # include "cpe.h"
 
-# ifdef CPE_MT
+# ifdef CPE__MT
 #  define ERR__THREAD_SAFE
 # endif
 

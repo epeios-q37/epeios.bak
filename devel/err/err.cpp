@@ -150,7 +150,7 @@ void err_::Handler(
 	err::type Type )
 {
 #ifdef ERR__THREAD_SAFE
-	if ( ( !ERRError() ) || !err::Concerned() )
+	if ( ( !ERRHit() ) || !err::Concerned() )
 	{
 		mtx::Lock( MutexHandler_ );
 
