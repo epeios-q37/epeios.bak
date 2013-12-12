@@ -196,7 +196,7 @@ void err::Final( void )
 		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
 ERRProlog
-# ifdef CPE__MT
+# ifdef CPE_MT
 	cio::cout___ COut;
 	cio::cerr___ CErr;
 # else
@@ -205,7 +205,7 @@ ERRProlog
 # endif
 ERRBegin
 	if ( cio::IsInitialized() ) {
-# ifdef CPE__MT
+# ifdef CPE_MT
 		COut.Init();
 		CErr.Init();
 # endif
@@ -240,7 +240,7 @@ public:
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 #ifdef ERR__THREAD_SAFE
-		MutexHandler_ = mtx::Create( mtx::mProtecting );
+		MutexHandler_ = mtx::Create();
 #endif
 		ERR.Type = err::t_None;
 	}
