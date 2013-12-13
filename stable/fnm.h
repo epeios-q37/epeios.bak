@@ -97,7 +97,7 @@ namespace fnm
 	//f Type of the file name 'FileName'.
 	fnm::type__ Type( const char *FileName );
 
-#define FNM_BUFFER___	tol::E_FPOINTER___( char )
+#define FNM_BUFFER___	tol::E_BUFFER___( char )
 #define FNM__P	FNM_BUFFER___ &P
 
 	/*f Correct location, i. e. remplaces '\' or '/' with correct directory separator depending on OS. */

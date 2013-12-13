@@ -212,8 +212,7 @@ ERRBegin
 	if ( Quantity > ( Amount() - *Position ) )
 		Quantity = Amount() - *Position;
 
-	if ( ( Buffer = (char *)malloc( Quantity + 1 ) ) == NULL )
-		ERRAlc();
+	Buffer.Malloc( Quantity + 1 );
 
 	if ( Quantity != 0 )
 		Recall( Position, Quantity, Buffer );

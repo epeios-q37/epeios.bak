@@ -83,7 +83,7 @@ namespace dir {
 		s_Undefined
 	};
 
-	typedef tol::E_FPOINTER___(bso::char__) buffer___;
+	typedef tol::E_BUFFER___( bso::char__) buffer___;
 #	define DIR_BUFFER___ dir::buffer___
 
 	state__ HandleError( void );
@@ -196,50 +196,91 @@ namespace dir {
 		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
-#ifdef DIR__WIN
-	typedef struct _handle___ {
-		WIN32_FIND_DATAA File;
+
+# ifdef DIR__WIN
+#  define DIR__WBUFFER___	tol::E_BUFFER___( wchar_t )
+#  define DIR__BUFFER___	tol::E_BUFFER___( bso::char__ )
+	struct handle___ {
+		WIN32_FIND_DATAW File;
 		HANDLE hSearch;
-	} *handle___;
+		DIR__WBUFFER___ WBuffer;
+		DIR__BUFFER___ Buffer;
+	};
+
+	inline void Convert_(
+		const char *Source,
+		DIR__WBUFFER___ &Buffer )
+	{
+		DWORD Error;
+
+		if ( Buffer.Size() == 0 )
+			Buffer.Malloc( MultiByteToWideChar( CP_UTF8, 0, Source, -1, NULL, 0 ) );
+
+		if ( !MultiByteToWideChar( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size() )  ) {
+			if ( ( Error = GetLastError() ) != ERROR_INSUFFICIENT_BUFFER )
+				ERRLbr();
+
+			Buffer.Malloc( MultiByteToWideChar( CP_UTF8, 0, Source, -1, NULL, 0 ) );
+
+			if ( !MultiByteToWideChar( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size() )  )
+				ERRLbr();
+		}
+	}
+
+	inline void Convert_(
+		const wchar_t *Source,
+		DIR__BUFFER___ &Buffer )
+	{
+		if ( Buffer.Size() == 0 )
+			Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, Source, -1, NULL, 0, NULL, NULL ) );
+
+		if ( !WideCharToMultiByte( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size(), NULL, NULL )  ) {
+			if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
+				ERRLbr();
+
+			Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, Source, -1, NULL, 0, NULL, NULL ) );
+
+			if ( !WideCharToMultiByte( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size(), NULL, NULL ) )
+				ERRLbr();
+		}
+	}
 #elif defined( DIR__POSIX )
 	typedef DIR	*handle___;
 #else
 #	error
 #endif
-
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
 	inline const char *GetFirstFile(
 		const char *Directory,
 		handle___ &Handle )
 	{
 #ifdef DIR__WIN
-		if ( ( Handle = new _handle___) ==  NULL )
-			ERRAlc();
+		WIN32_FIND_DATAW &File = Handle.File;
+		HANDLE &hSearch = Handle.hSearch;
+		DIR__WBUFFER___ &Buffer = Handle.WBuffer;
 
-		WIN32_FIND_DATAA &File = Handle->File;
-		HANDLE &hSearch = Handle->hSearch;
+		Convert_( Directory, Buffer );
 
-		char SearchString[MAX_PATH+1] = "";
+		if ( *Buffer ) {
+			Buffer.Realloc( wcslen( Buffer ) + 2 );
+			wcscat( Buffer, L"\\" );
+		}
 
-		if ( ( strlen( Directory ) + 4 ) > MAX_PATH )
-			ERRLmt();
+		Buffer.Realloc( wcslen( Buffer ) + 2 );
+		wcscat( Buffer, L"*" );
 
-		strcpy( SearchString, Directory );
-
-		if ( *SearchString )
-			strcat( SearchString, "\\" );
-
-		strcat( SearchString, "*.*" );
-
-	    hSearch = FindFirstFileA( SearchString, &File );
+	    hSearch = FindFirstFileW( Buffer, &File );
 
 		if ( hSearch == INVALID_HANDLE_VALUE )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
 				return "";
 			else
 				return NULL;
-		else
-			return File.cFileName;
+		else {
+			Convert_( File.cFileName, Handle.Buffer );
+
+			return Handle.Buffer;
+		}
 #elif defined( DIR__POSIX )
 	struct dirent * ent;
     DIR *&rep = Handle;
@@ -266,23 +307,25 @@ namespace dir {
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
 	inline const char *GetNextFile( handle___ &Handle )
 	{
-		if ( Handle ==  NULL )
-			ERRFwk();
 # ifdef DIR__WIN
 #  ifdef DIR_DBG
-		if ( Handle->hSearch == INVALID_HANDLE_VALUE )
+		if ( Handle.hSearch == INVALID_HANDLE_VALUE )
 			ERRFwk();
 #  endif
-		WIN32_FIND_DATAA &File = Handle->File;
-		HANDLE &hSearch = Handle->hSearch;
+		WIN32_FIND_DATAW &File = Handle.File;
+		HANDLE &hSearch = Handle.hSearch;
+		DIR__WBUFFER___ &Buffer = Handle.WBuffer;
 
-		if ( !FindNextFileA( hSearch, &File ) )
+		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
 				return "";
 			else
 				return NULL;
+		else {
+			Convert_( File.cFileName, Handle.Buffer );
 
-		return File.cFileName;
+			return Handle.Buffer;
+		}
 # endif
 # ifdef DIR__POSIX
 	struct dirent * ent;
@@ -304,19 +347,13 @@ namespace dir {
 
 	inline void Close( handle___ &Handle )
 	{
-		if ( Handle == NULL )
-			ERRFwk();
 # ifdef DIR__WIN
 #  ifdef DIR_DBG
-		if ( Handle->hSearch == INVALID_HANDLE_VALUE )
+		if ( Handle.hSearch == INVALID_HANDLE_VALUE )
 			ERRFwk();
 #  endif
-		if ( !FindClose( Handle->hSearch ) )
+		if ( !FindClose( Handle.hSearch ) )
 			ERRLbr();
-
-		delete Handle;
-
-		Handle = NULL;
 # endif
 		
 # ifdef DIR__POSIX

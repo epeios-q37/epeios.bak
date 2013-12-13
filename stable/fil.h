@@ -310,7 +310,7 @@ namespace fil {
 		bm_Default = bmRename,
 	};
 
-# define FIL_BUFFER___	tol::free_pointer___< char>
+# define FIL_BUFFER___	tol::E_BUFFER___( char )
 
 	const char* GetBackupFileName(
 		const char *FileName,

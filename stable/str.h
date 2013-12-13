@@ -84,7 +84,7 @@ namespace str {
 
 	class string_;	// Prédéclaration.
 
-#define STR_BUFFER___	tol::E_FPOINTER___( bso::char__ )
+#define STR_BUFFER___	tol::E_BUFFER___( bso::char__ )
 
 
 	uint__ _GenericUnsignedConversion(

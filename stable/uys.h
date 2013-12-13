@@ -683,12 +683,16 @@ namespace uys {
 	class _untyped_storage___
 	{
 	protected:
-		tol::E_FPOINTER___( sdr::datum__ ) Data_;
+		sdr::datum__ *_Data;
 	public:
 		struct s {};	// To simplify use in library 'BCH'
 		void reset( bso::bool__ P = true )
 		{
-			Data_.reset( P );
+			if ( P )
+				if ( _Data != NULL )
+					free( _Data );
+
+			_Data = NULL;
 		}
 		_untyped_storage___( s &S = *(s *)NULL )	// To simplify use in library 'BCH'
 		{
@@ -701,12 +705,12 @@ namespace uys {
 		//f Allocation of size 'Size'.
 		void Allocate( sdr::size__ Size )
 		{
-			Data_ = realloc( Data_, Size );
+			_Data = (sdr::datum__ *)realloc( _Data, Size );
 		}
 		//f Initialization.
 		void Init( void )
 		{
-			Data_.Init();
+			// Standardisation.
 		}
 	};
 

@@ -352,7 +352,7 @@ namespace lst {
 	{
 	private:
 		lst::store_ *_Store;
-		tol::E_FPOINTER___( bso::char__ ) _FileName;
+		tol::E_BUFFER___( bso::char__ ) _FileName;
 		fil::mode__ _Mode;	// Ne sert à rien, juste présent à des fins de standardisation.
 		bso::bool__ _Persistent;	// Ne sert à rien, juste présent à des fins de standardisation.
 	public:
@@ -382,8 +382,7 @@ namespace lst {
 		{
 			reset();
 
-			if ( ( _FileName = malloc( strlen( FileName ) + 1 ) ) == NULL )
-				ERRAlc();
+			_FileName.Malloc( strlen( FileName ) + 1 );
 
 			strcpy( _FileName, FileName );
 

@@ -140,8 +140,7 @@ ERRBegin
 	if ( Ext )
 		TailleExt = strlen( Ext );
 
-	if ( ( P = calloc( TailleRep + TailleNom + TailleExt + 2, sizeof( char ) ) ) == NULL )
-		ERRAlc();
+	P.Calloc( TailleRep + TailleNom + TailleExt + 2 );
 
 	if ( ( TailleNom == 0 ) && ( TailleExt == 0 ) ) {
 		P.reset();
@@ -285,8 +284,7 @@ const char *fnm::GetFileNameRoot(
 
 	Repere = GetFileName( Nom );
 
-	if ( ( P = malloc( strlen( Repere ) + 1 ) ) == NULL )
-		ERRAlc();
+	P.Malloc( strlen( Repere ) + 1 );
 
 	strcpy( P, Repere );
 
@@ -307,8 +305,7 @@ const char *fnm::CorrectLocation(
 			ERRPrm();
 #endif
 
-	if ( ( P = (char *)malloc( strlen( Location ) + 1 ) ) == NULL )
-		ERRAlc();
+	P.Malloc( strlen( Location ) + 1 );
 
 	strcpy( P, Location );
 
@@ -329,15 +326,13 @@ const char *fnm::GetLocation(
 	size_t L = GetFileName( Name ) - Name;
 
 	if ( L != 0 ) {
-		if ( ( P = (char *)malloc( L + 1 ) ) == NULL )
-			ERRAlc();
+		 P.Malloc( L + 1 );
 
 		memcpy( P, Name, L );
 
 		P[L] = 0;
 	} else {
-		if ( ( P = (char *)malloc( 1 ) ) == NULL )
-			ERRAlc();
+		P.Malloc( 1 );
 
 		P[0] = 0;
 	}

@@ -387,21 +387,8 @@ row__ rgstry::registry_::_Search(
 
 	ResultRow = ChildRow = _Search( Item( PathRow ), Row, Cursor );
 
-#ifdef RGSTRY_DBG
-	tol::E_FPOINTER___( bso::char__ ) Key;
-	tol::E_FPOINTER___( bso::char__ ) AttributeName;
-	tol::E_FPOINTER___( bso::char__ ) AttributeValue;
-
-	Item( PathRow ).KeyName.Convert( Key );
-	Item( PathRow ).AttributeName.Convert( AttributeName );
-	Item( PathRow ).AttributeValue.Convert( AttributeValue );
-#endif
-
 	if ( PathRow != Path.Last() ) {
-#ifdef RGSTRY_DBG
-		if ( ( ResultRow != E_NIL ) && ( Buffer( ResultRow ).Nature() == nAttribute ) )
-			ERRFwk();
-#endif
+
 		while ( ChildRow != E_NIL )  {
 			ResultRow = _Search( Path, Path.Next( PathRow ), ChildRow, ResultRows );
 

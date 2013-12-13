@@ -227,8 +227,7 @@ const char* fil::GetBackupFileName(
 	FIL_BUFFER___ &Buffer )
 {
 
-	if ( ( Buffer = (char *)malloc( strlen( FileName ) + sizeof( FIL__BACKUP_FILE_EXTENSION  ) + 1 ) ) == NULL )
-		ERRAlc();
+	Buffer.Malloc( strlen( FileName ) + sizeof( FIL__BACKUP_FILE_EXTENSION  ) + 1 );
 
 	sprintf( Buffer, "%s%s", FileName, FIL__BACKUP_FILE_EXTENSION );
 
