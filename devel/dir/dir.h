@@ -88,11 +88,11 @@ namespace dir {
 
 	state__ HandleError( void );
 
-	inline const char *GetSelfPath( DIR_BUFFER___ &Buffer )
+	inline fnm::name___ GetSelfPath( fnm::name___ &Path )
 	{
 #ifdef DIR__WIN 
-		char Path[MAX_PATH];
-		DWORD Size = GetModuleFileNameA( NULL, Path, sizeof( Path ) );
+		fnm::_base__ FileName[MAX_PATH];
+		DWORD Size = GetModuleFileNameW( NULL, FileName, sizeof( Path ) );
 #endif
 #ifdef DIR__POSIX
 # ifdef CPE__MAC

@@ -1109,7 +1109,7 @@ namespace tol {
 		}
 		void Init( void )
 		{
-			ERRFWk();	// C'est un 'buffer' ; pas d'initailisation.
+			ERRFwk();	// C'est un 'buffer' ; pas d'initailisation.
 		}
 		t *Malloc(
 			bso::size__ Amount,
