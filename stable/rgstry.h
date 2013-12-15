@@ -33,15 +33,16 @@
 
 // ReGiSTRY
 
-#include "err.h"
-#include "flw.h"
-#include "str.h"
-#include "lstbch.h"
-#include "lstctn.h"
-#include "xtf.h"
-#include "cpe.h"
-#include "xpp.h"
+# include "err.h"
+# include "flw.h"
+# include "str.h"
+# include "lstbch.h"
+# include "lstctn.h"
+# include "xtf.h"
+# include "cpe.h"
+# include "xpp.h"
 # include "stk.h"
+# include "fnm.h"
 
 # define RGSTRY__TAG_MARKER_S	"$"
 # define RGSTRY__TAG_MARKER_C	'$'
@@ -1135,7 +1136,7 @@ namespace rgstry {
 	}
 
 	status__ FillRegistry(
-		const char *FileName,
+		const fnm::name___ &FileName,
 		const xpp::criterions___ &Criterions,
 		const char *RootPath,
 		rgstry::registry_ &Registry,
@@ -1143,7 +1144,7 @@ namespace rgstry {
 		context___ &Context );
 
 	inline status__ FillRegistry(
-		const char *FileName,
+		const fnm::name___ &FileName,
 		const xpp::criterions___ &Criterions,
 		const char *RootPath,
 		rgstry::registry_ &Registry,
@@ -1776,7 +1777,7 @@ namespace rgstry {
 		}
 		status__ Fill(
 			level__ Level,
-			const char *FileName,
+			const fnm::name___ &FileName,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath,
 			context___ &Context )
@@ -1794,7 +1795,7 @@ namespace rgstry {
 		}
 		status__ Fill(
 			level__ Level,
-			const char *FileName,
+			const fnm::name___ &FileName,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath )
 		{

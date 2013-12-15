@@ -1,7 +1,7 @@
 /*
-	'xml_test.cpp' by Claude SIMON (http://zeusw.org/).
+	'lst_test.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'xml_test.cpp' is part of the Epeios framework.
+	'lst_test.cpp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "xml.h"
+#include "lst.h"
 
 #include "err.h"
 #include "cio.h"
@@ -44,7 +44,7 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
 ERRFBegin
-	COut << "Test of library " << XML_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << LST_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
 ERRFErr

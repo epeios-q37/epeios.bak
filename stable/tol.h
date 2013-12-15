@@ -1111,6 +1111,11 @@ namespace tol {
 		{
 			ERRFwk();	// C'est un 'buffer' ; pas d'initailisation.
 		}
+		void Forget( void )	// Evite que le ponteur sous-jacent soit effacé à la destruction de l'objet.
+		{
+			reset( false );
+			
+		}
 		t *Malloc(
 			bso::size__ Amount,
 			TOL__ERRP )
@@ -1148,9 +1153,16 @@ namespace tol {
 		{
 			return _P;
 		}
+		buffer___ &operator =( const buffer___ & )
+		{
+			ERRFwk(); 
+
+			return *this;
+		}
 	};
 
 # define E_BUFFER___( t )	buffer___<t>
+# define TOL_CBUFFER___ tol::E_BUFFER___( bso::char__ )
 
 }
 

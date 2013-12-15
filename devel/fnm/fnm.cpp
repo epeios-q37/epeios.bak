@@ -81,7 +81,7 @@ name___ &name___::operator =( const name___ &N )
 	_Core.Malloc( Size );
 
 	if ( Size != 0 )
-		memcpy( _Core, N._Core, Size * sizeof( _base__ ) );
+		memcpy( _Core, N._Core, Size * sizeof( base__ ) );
 	else
 		*_Core = 0;
 
@@ -89,9 +89,9 @@ name___ &name___::operator =( const name___ &N )
 }
 
 
-inline static fnm::type__ Type_( const _base__ *Name )
+inline static fnm::type__ Type_( const base__ *Name )
 {
-	const _base__ *Repere = NULL;
+	const base__ *Repere = NULL;
 
 	if ( *Name == 0 )
 		return fnm::tEmpty;
@@ -125,16 +125,16 @@ fnm::type__ fnm::Type( const name___ &Name )
 	return Type_( Name.Core() );
 }
 
-static const name___ &BuildFileName_(
-	const _base__ *Dir,
-	const _base__ *Affix,
-	const _base__ *Ext,
+const name___ &fnm::BuildFileName(
+	const base__ *Dir,
+	const base__ *Affix,
+	const base__ *Ext,
 	name___ &Name )
 {
 ERRProlog
 	size_t DirSize = 0, AffixSize = 0, ExtSize = 0;
 ERRBegin
-	_core___ &Core = Name.Core();
+	core___ &Core = Name.Core();
 
 	if ( Type_( Affix ) == tAbsolute )
 		Dir = NULL;
@@ -209,17 +209,8 @@ ERREpilog
 	return Name;
 }
 
-const name___ &fnm::BuildFileName(
-	const name___ &Dir,
-	const name___ &Affix,
-	const name___ &Ext,
-	name___ &Name )
-{
-	return BuildFileName_( Dir.Core(), Affix.Core(), Ext.Core(), Name );
-}
-
-static inline const name___ &Set_(
-	const _base__ *Core,
+const name___ &fnm::_Set(
+	const base__ *Core,
 	name___ &Name )
 {
 	if ( Core == NULL )
@@ -235,9 +226,9 @@ static inline const name___ &Set_(
 	return Name;
 }
 
-const _base__ *GetFileName_( const _base__ *Name )
+const base__ *GetFileName( const base__ *Name )
 {
-	const _base__ *Repere;
+	const base__ *Repere;
 
 #ifdef FNM_DBG
 	if ( *Name == 0 )
@@ -256,23 +247,9 @@ const _base__ *GetFileName_( const _base__ *Name )
 	return Repere;
 }
 
-const name___ &fnm::GetFileName(
-	const name___ &Name,
-	name___ &Affix )
+const base__ *fnm::GetExtension( const base__ *Name )
 {
-	return Set_( GetFileName_( Name.Core() ), Affix );
-}
-
-const _base__ *GetExtension_( const _base__ *Name )
-{
-	return strrchr_( GetFileName_( Name ), '.' );
-}
-
-const name___ &fnm::GetExtension(
-	const name___ &Name,
-	name___ &Extension )
-{
-	return Set_( GetExtension_( Name.Core() ), Extension );
+	return strrchr_( GetFileName( Name ), '.' );
 }
 
 # if 0 // Obsolete ?
@@ -371,13 +348,31 @@ const char *fnm::CorrectLocation(
 }
 #endif
 
+const name___ &fnm::GetLocation(
+	const base__ *Name,
+	name___ &Location )
+{
+	size_t L = GetFileName( Name ) - Name;
+
+	if ( L != 0 ) {
+		 Location.Core().Malloc( L + 1 );
+
+		memcpy( Location.Core(), Name, L * sizeof( base__) );
+
+		Location.Core()[L] = 0;
+	} else
+		Location.Init();
+
+	return Location;
+}
+
 const name___ &fnm::GetAffix(
-	const name___ &Name,
+	const base__ *Name,
 	name___ &Affix )
 {
-	const _base__ *Repere = NULL;
+	const base__ *Repere = NULL;
 
-	Repere = GetFileName_( Name.Core() );
+	Repere = GetFileName( Name );
 
 	Affix.Core().Malloc( strlen_( Repere ) + 1 );
 
@@ -390,24 +385,6 @@ const name___ &fnm::GetAffix(
 }
 
 
-const name___ &fnm::GetLocation(
-	const name___ &Name,
-	name___ &Location )
-{
-	const _core___ &Core = Name.Core();
-	size_t L = GetFileName_( Core ) - Core;
-
-	if ( L != 0 ) {
-		 Location.Core().Malloc( L + 1 );
-
-		memcpy( Location.Core(), Core, L * sizeof( _base__) );
-
-		Location.Core()[L] = 0;
-	} else
-		Location.Init();
-
-	return Location;
-}
 
 /* Although in theory this class is inaccessible to the different modules,
 

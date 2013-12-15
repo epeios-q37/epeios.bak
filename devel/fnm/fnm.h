@@ -36,7 +36,6 @@
 # include "cpe.h"
 # include "tol.h"
 # include "strng.h"
-# include "bch.h"
 
 # if defined( CPE_POSIX )
 #  define FNM__POSIX
@@ -51,35 +50,115 @@ namespace fnm
 # ifdef FNM__POSIX
 	typedef bso::char__ base__;
 # elif defined( FNM__WIN )
-	typedef wchar_t _base__;
+	typedef wchar_t base__;
 # endif
 
-	typedef tol::E_BUFFER___( _base__ ) _core___;
+	typedef tol::E_BUFFER___( base__ ) core___;
+
+	typedef tol::E_BUFFER___( bso::char__ ) buffer___;
 
 	class name___
 	{
 	private:
-		_core___ _Core;
+		core___ _Core;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Core.reset( P );
 		}
 		E_CVDTOR( name___ );
+		name___( const char *Name )
+		{
+			reset( false );
+
+			Init( Name );
+		}
 		name___ &operator =( const name___ &N );
 		void Init( void )
 		{
-			// _Core.Init();	// C'st un buffer, donc pas d'initialisation.
+			// _Core.Init();	// C'est un buffer, donc pas d'initialisation.
 			_Core.Malloc( 1 );
 			*_Core = 0;
 		}
-		const _core___ &Core( void ) const
+		void Init( const bso::char__ *Name )
+		{
+			Init();
+# ifdef FNM__WIN
+			if ( _Core.Size() == 0 )
+				_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
+
+			if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  ) {
+				if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
+					ERRLbr();
+
+				_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
+
+				if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  )
+					ERRLbr();
+			}
+# elif defined( FNM__POSIX )
+			bso::size__ Size = strlen( Name );
+
+			_Core.Allocate( Size + 1 );
+
+			strcpy_( Core, Name, Size );
+# else
+#  error
+# endif
+		}
+		void Init( const name___ &Name )
+		{
+			Init();
+
+			operator =( Name );
+		}
+		void Forget( void )
+		{
+			_Core.Forget();
+		}
+		const bso::char__ *Get( TOL_CBUFFER___ &Buffer ) const
+		{
+# ifdef FNM__WIN
+			if ( _Core.Size() == 0 )
+				Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+
+			if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL )  ) {
+				if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
+					ERRLbr();
+
+				Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+
+				if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL ) )
+					ERRLbr();
+			}
+# elif defined( FNM__POSIX )
+			bso::size__ Size = strlen( _Core );
+
+			_Buffer.Allocate( Size + 1 );
+
+			strcpy_( Buffer, Core, Size );
+# else
+#  error
+# endif
+			return Buffer;
+		}
+		const core___ &Core( void ) const
 		{
 			return _Core;
 		}
-		_core___ &Core( void )
+		core___ &Core( void )
 		{
 			return _Core;
+		}
+		bso::size__ Size( void ) const
+		{
+# ifdef FNM__WIN
+			return wcslen( _Core );
+# elif defined FNM__OPSIX )
+			return strlen( _Core );
+# else
+#  error
+# endif
 		}
 	};
 
@@ -104,7 +183,7 @@ namespace fnm
 	};
 
 	//f Type of the file name 'FileName'.
-	fnm::type__ Type( const name___ &FileName );
+	type__ Type( const name___ &FileName );
 
 
 #if 0	// Obsolete ?
@@ -116,37 +195,66 @@ namespace fnm
 	const name___ &CorrectLocation( name___ &Name );
 #endif
 
-	//f Description of the 'Type' type.
-	const char *Description( fnm::type__ Type );
+	const char *Description( type__ Type );
 
-	/*f Make file name with 'Name', 'Directory' as default
-	directory, and 'Extension' as defaut extension; 
-	IMPORTANT: the returned pointer MUST be freed with 'free()'.*/
 	const name___ &BuildFileName(
-		const name___ &Rep,
-		const name___ &Nom,
-		const name___ &Ext,
+		const base__ *Dir,
+		const base__ *Affix,
+		const base__ *Ext,
 		name___ &Name );
 
-	/*f Return the name of the file named 'Name', without its localization. */
+	inline const name___ &BuildFileName(
+		const name___ &Dir,
+		const name___ &Affix,
+		const name___ &Ext,
+		name___ &Name )
+	{
+		return BuildFileName( Dir.Core(), Affix.Core(), Ext.Core(), Name );
+	}
+
+	const base__ *GetFileName( const base__ *LocalizedName );
+
+	const name___ &_Set(
+		const base__ *Core,
+		name___ &Name );
+
 	inline const name___ &GetFileName(
 		const name___ &LocalizedName,
-		name___ &Name );
+		name___ &Name )
+	{
+		return _Set( GetFileName( LocalizedName.Core() ), Name );
+	}
 
-	const name___ &GetExtension(
+	const base__ *GetExtension( const base__ *Name );
+
+	inline const name___ &GetExtension(
 		const name___ &Name,
-		name___ &Extension );
+		name___ &Extension )
+	{
+		return _Set( GetExtension( Name.Core() ), Extension );
+	}
 
-
-	// Return a string contaiinig the location only.
 	const name___ &GetLocation(
-		const name___ &Name,
+		const base__ *Name,
 		name___ &Location );
 
-	//f Return the file name of 'Name' without localization and extension.
-	const name___ &GetAffix(
+	inline const name___ &GetLocation(
 		const name___ &Name,
+		name___ &Location )
+	{
+		return GetLocation( Name.Core(), Location );
+	}
+
+	const name___ &GetAffix(
+		const base__ *Base,
 		name___ &Affix );
+
+	inline const name___ &GetAffix(
+		const name___ &Name,
+		name___ &Affix )
+	{
+		return GetAffix( Name.Core(), Affix );
+	}
 
 #if 0	// Obsolete ?
 

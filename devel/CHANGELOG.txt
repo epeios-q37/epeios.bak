@@ -1,6 +1,12 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
-11/10/2013 :
+14/12/2013 :
+	- Génaral :
+		- Adaptation aux modifications FNM.
+	- FNM :
+		- Gestion des noms de fichiers en Unicode.
+
+11/12/2013 :
 	- Général :
 		- Adaptation aux modifications 'MTX'.
 	- MTX :

@@ -71,6 +71,22 @@ void err::Unlock( void )
 }
 #endif
 
+const char *GetFileName_( const char *Path )
+{
+	const char *Repere;
+
+	if ( ( ( Repere = strrchr( Path, '/' ) ) == NULL )
+		&& ( ( Repere = strrchr( Path, '\\' ) ) == NULL ) )
+		if ( ( Repere = strrchr( Path, ':' ) ) == NULL )
+			Repere = Path;
+		else
+			Repere++;
+	else
+		Repere++;
+
+	return Repere;
+}
+
 // Retourne une chaîne ASCII contenant une brève description de ce qui est passé en paramètre.
 const char *err::Message(
 	const char *Fichier,
@@ -134,7 +150,7 @@ const char *err::Message(
 	}
 
 	strcat( Buffer, " error : " );
-	strcat( Buffer, fnm::GetFileName( Fichier ) );
+	strcat( Buffer, GetFileName_( Fichier ) );
 	strcat( Buffer, "(" );
 	sprintf( strchr( Buffer, 0 ), "%i", Ligne );
 	strcat( Buffer, ")" );

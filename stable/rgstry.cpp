@@ -61,6 +61,7 @@ void rgstry::GetMeaning(
 {
 ERRProlog
 	lcl::meaning MeaningBuffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	switch ( Context.Status ) {
 	case sOK:
@@ -69,7 +70,7 @@ ERRBegin
 	case sUnableToOpenFile:
 		Meaning.SetValue( GetLabel( Context.Status ) );
 
-		Meaning.AddTag( Context.Coordinates.FileName );
+		Meaning.AddTag( Context.Coordinates.FileName.Get( Buffer ) );
 		break;
 	case sParseError:
 		Meaning.SetValue( GetLabel( Context.Status ) );
@@ -1510,7 +1511,7 @@ status__ rgstry::FillRegistry(
 }
 
 status__ rgstry::FillRegistry(
-	const char *FileName,
+	const fnm::name___ &FileName,
 	const xpp::criterions___ &Criterions,
 	const char *RootPath,
 	rgstry::registry_ &Registry,
@@ -1521,7 +1522,8 @@ status__ rgstry::FillRegistry(
 ERRProlog
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
-	FNM_BUFFER___ DirectoryBuffer;
+	fnm::name___ Location;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( FFlow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
 		Status = Context.Status = sUnableToOpenFile;
@@ -1531,13 +1533,14 @@ ERRBegin
 
 	XFlow.Init( FFlow, utf::f_Default );
 
-	if ( Criterions.Directory.Amount() != 0 )
+	if ( Criterions.Directory.Size() != 0 )
 		ERRPrm();
 
-	Status = FillRegistry( XFlow, xpp::criterions___( str::string( fnm::GetLocation( FileName, DirectoryBuffer ) ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, RegistryRoot, Context );
+	Location.Init();
+	Status = FillRegistry( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, RegistryRoot, Context );
 
 	if ( Status == sParseError )
-		if ( Context.Coordinates.FileName.Amount() == 0 )
+		if ( Context.Coordinates.FileName.Size() == 0 )
 			Context.Coordinates.FileName = FileName;
 ERRErr
 ERREnd

@@ -116,10 +116,11 @@ void xpp::GetMeaning(
 ERRProlog
 	STR_BUFFER___ SBuffer;
 	bso::integer_buffer__ IBuffer;
+	FNM_BUFFER___ Buffer;
 ERRBegin
-	if ( Coordinates.FileName.Amount() != 0 ) {
+	if ( Coordinates.FileName.Size() != 0 ) {
 		Meaning.SetValue( XPP_NAME "_ErrorInFileAtLineColumn" );
-		Meaning.AddTag( Coordinates.FileName );
+		Meaning.AddTag( Coordinates.FileName.Get( Buffer ) );
 	} else
 		Meaning.SetValue( XPP_NAME "_ErrorAtLineColumn" );
 

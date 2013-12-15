@@ -84,9 +84,6 @@ namespace str {
 
 	class string_;	// Prédéclaration.
 
-#define STR_BUFFER___	tol::E_BUFFER___( bso::char__ )
-
-
 	uint__ _GenericUnsignedConversion(
 		const class string_ &String,
 		sdr::row__ Begin,
@@ -178,14 +175,14 @@ namespace str {
 		const char *Convert(
 			sdr::row__ Position,
 			sdr::size__ Amount,
-			STR_BUFFER___ &Buffer ) const;
+			TOL_CBUFFER___ &Buffer ) const;
 		const char *Convert(
 			sdr::row__ Position,
-			STR_BUFFER___ &Buffer ) const
+			TOL_CBUFFER___ &Buffer ) const
 		{
 			return Convert( Position, TYS_MAX_SIZE, Buffer );
 		}
-		const char *Convert( STR_BUFFER___ &Buffer ) const
+		const char *Convert( TOL_CBUFFER___ &Buffer ) const
 		{
 			return Convert( 0, TYS_MAX_SIZE, Buffer );
 		}

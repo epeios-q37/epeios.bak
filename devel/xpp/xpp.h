@@ -432,8 +432,8 @@ namespace xpp {
 		_repository_ &_Repository;
 		_variables_ &_Variables;
 		_qualified_preprocessor_directives___ &_Directives;
-		fnm::name___ _LocalizedFileName;	// Si le 'parser' sert à l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
-		fnm::name___ _Directory;
+		str::string _LocalizedFileName;	// Si le 'parser' sert à l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
+		str::string _Directory;
 		str::string _CypherKey;
 		bso::bool__ _IgnorePreprocessingInstruction;
 		bso::bool__ _AttributeDefinitionInProgress;
@@ -516,8 +516,8 @@ namespace xpp {
 		}
 		status__ Init(
 			xtf::extended_text_iflow__ &XFlow,
-			const fnm::name___ &LocalizedFileName,	// Si 'XFlow' est rattaché à un fichier, le nom de ce fichier (utile pour la gestion d'erreurs).
-			const fnm::name___ &Directory,
+			const str::string_ &LocalizedFileName,	// Si 'XFlow' est rattaché à un fichier, le nom de ce fichier (utile pour la gestion d'erreurs).
+			const str::string_ &Directory,
 			const str::string_ &CypherKey )
 		{
 			// _Repository.Init();

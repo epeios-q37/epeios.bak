@@ -219,7 +219,7 @@ namespace fls {
 		{
 			_Lock();
 
-			sdr::size__ Size = fil::GetFileSize( _D );
+			sdr::size__ Size = fil::GetSize( _D );
 
 			_Unlock();
 
@@ -308,7 +308,7 @@ namespace fls {
 
 				Flush();	// Pour mettre à jour la taille physique du fichier pour que la méthode 'GetFileSize(...)' retourne la bonne valeur.
 
-				if ( !fil::FileExists( Nom_ ) || ( (bso::size__)TailleFichier_ > fil::GetFileSize( Nom_ ) ) ) {
+				if ( !fil::Exists( Nom_ ) || ( (bso::size__)TailleFichier_ > fil::GetSize( Nom_ ) ) ) {
 					sdr::datum__ Datum = 0;
 					
 					Open_( true );
@@ -391,8 +391,8 @@ namespace fls {
 */		}
 		void Allocate( bso::size__ Capacite )
 		{
-			if ( ( TailleFichier_ == 0 ) && fil::FileExists( Nom_ ) )
-				TailleFichier_ = fil::GetFileSize( Nom_ );
+			if ( ( TailleFichier_ == 0 ) && fil::Exists( Nom_ ) )
+				TailleFichier_ = fil::GetSize( Nom_ );
 
 			if ( Capacite > TailleFichier_ )
 				TailleFichier_ = Capacite;
@@ -535,7 +535,7 @@ namespace fls {
 		{
 			ReleaseFile();
 
-			if ( ( Nom_ != NULL ) && fil::FileExists( Nom_ ) )
+			if ( ( Nom_ != NULL ) && fil::Exists( Nom_ ) )
 				if ( remove( Nom_ ) != 0 )
 					ERRLbr();
 
@@ -547,12 +547,12 @@ namespace fls {
 		}
 		bso::bool__ Exists( void ) const
 		{
-			return fil::FileExists( Nom_ );
+			return fil::Exists( Nom_ );
 		}
 		time_t TimeStamp( void ) const
 		{
 			if ( Exists() )
-				return fil::GetFileLastModificationTime( Nom_ );
+				return fil::GetLastModificationTime( Nom_ );
 			else
 				return 0;
 		}
@@ -564,7 +564,7 @@ namespace fls {
 			return File_.Size();
 #	else
 			if ( Exists() )
-				return fil::GetFileSize( Nom_ );
+				return fil::GetSize( Nom_ );
 			else
 				return 0;
 #	endif

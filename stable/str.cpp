@@ -200,7 +200,7 @@ string_ &str::ToLower(
 const char *string_::Convert(
 	sdr::row__ Position,
 	sdr::size__ Quantity,
-	STR_BUFFER___ &Buffer ) const
+	TOL_CBUFFER___ &Buffer ) const
 {
 ERRProlog
 ERRBegin

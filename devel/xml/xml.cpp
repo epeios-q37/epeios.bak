@@ -1165,10 +1165,10 @@ void xml::writer_::_CloseAllTags( void )
 		PopTag();
 }
 
-void xml::writer_::_WriteTabs( bso::size__ Amount ) const
+void xml::writer_::_Indent( bso::size__ Amount ) const
 {
 	while ( Amount-- )
-		*S_.Flow << txf::tab;
+		*S_.Flow << ' ';
 }
 
 void xml::writer_::PutValue( const value_ &Value )
@@ -1198,6 +1198,8 @@ ERRBegin
 	*S_.Flow << TransformedValue;
 
 	S_.TagValueInProgress = true;
+
+	_Commit();
 ERRErr
 ERREnd
 ERREpilog
@@ -1218,6 +1220,8 @@ ERRBegin
 		ERRFwk();
 
 	*S_.Flow << ' ' << Name << "=\"" << TransformedValue << '"';
+
+	_Commit();
 ERRErr
 ERREnd
 ERREpilog
@@ -1231,6 +1235,8 @@ void xml::writer_::PutCData( const value_ &Value )
 	}
 	
 	*S_.Flow << "<![CDATA[" << Value << "]]>";
+
+	_Commit();
 }
 
 
@@ -1252,7 +1258,7 @@ ERRBegin
 		*S_.Flow << "/>";
 	else {
 		if ( !S_.TagValueInProgress && ( S_.Outfit == oIndent ) )
-			_WriteTabs( Tags.Amount() );
+			_Indent( Tags.Amount() );
 		*S_.Flow << "</" << Name << ">";
 	}
 
@@ -1261,6 +1267,8 @@ ERRBegin
 
 	S_.TagNameInProgress = false;
 	S_.TagValueInProgress = false;
+
+	_Commit();
 ERRErr
 ERREnd
 ERREpilog
@@ -1282,7 +1290,6 @@ public:
 	{
 		if ( ( s_FirstNonXTFError - s_FirstXTFError ) != xtf::e_amount )
 			ERRChk();
-
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

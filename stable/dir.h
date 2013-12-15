@@ -88,11 +88,11 @@ namespace dir {
 
 	state__ HandleError( void );
 
-	inline const char *GetSelfPath( DIR_BUFFER___ &Buffer )
+	inline fnm::name___ GetSelfPath( fnm::name___ &Path )
 	{
 #ifdef DIR__WIN 
-		char Path[MAX_PATH];
-		DWORD Size = GetModuleFileNameA( NULL, Path, sizeof( Path ) );
+		fnm::base__ FileName[MAX_PATH];
+		DWORD Size = GetModuleFileNameW( NULL, FileName, sizeof( Path ) );
 #endif
 #ifdef DIR__POSIX
 # ifdef CPE__MAC
@@ -124,15 +124,15 @@ namespace dir {
 		Path[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
 # endif
 #endif
-		return fnm::GetLocation( Path, Buffer );
+		return fnm::GetLocation( FileName, Path );
 	}
 
-	inline state__ CreateDir( const char *Path )
+	inline state__ CreateDir( const fnm::name___ &Path )
 	{
 #ifdef DIR__WIN
-		switch ( _mkdir( Path ) ) {
+		switch ( _wmkdir( Path.Core() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( mkdir( Path, 0777 ) ) {
+		switch ( mkdir( Path.Core(), 0777 ) ) {
 #else
 #	error
 #endif
@@ -150,12 +150,12 @@ namespace dir {
 		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
-	inline state__ DropDir( const char *Path )
+	inline state__ DropDir( const fnm::name___ &Path )
 	{
 #ifdef DIR__WIN
-		switch ( _rmdir( Path ) ) {
+		switch ( _wrmdir( Path.Core() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( rmdir( Path ) ) {
+		switch ( rmdir( Path.Core() ) ) {
 #else
 #	error
 #endif
@@ -173,12 +173,12 @@ namespace dir {
 		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
-	inline state__ ChangeDir( const char *Path )
+	inline state__ ChangeDir( const fnm::name___ &Path )
 	{
 #ifdef DIR__WIN
-		switch ( _chdir( Path ) ) {
+		switch ( _wchdir( Path.Core() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( chdir( Path ) ) {
+		switch ( chdir( Path.Core() ) ) {
 #else
 #	error
 #endif
@@ -203,63 +203,28 @@ namespace dir {
 	struct handle___ {
 		WIN32_FIND_DATAW File;
 		HANDLE hSearch;
-		DIR__WBUFFER___ WBuffer;
-		DIR__BUFFER___ Buffer;
+		fnm::name___ Name;
 	};
 
-	inline void Convert_(
-		const char *Source,
-		DIR__WBUFFER___ &Buffer )
-	{
-		DWORD Error;
-
-		if ( Buffer.Size() == 0 )
-			Buffer.Malloc( MultiByteToWideChar( CP_UTF8, 0, Source, -1, NULL, 0 ) );
-
-		if ( !MultiByteToWideChar( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size() )  ) {
-			if ( ( Error = GetLastError() ) != ERROR_INSUFFICIENT_BUFFER )
-				ERRLbr();
-
-			Buffer.Malloc( MultiByteToWideChar( CP_UTF8, 0, Source, -1, NULL, 0 ) );
-
-			if ( !MultiByteToWideChar( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size() )  )
-				ERRLbr();
-		}
-	}
-
-	inline void Convert_(
-		const wchar_t *Source,
-		DIR__BUFFER___ &Buffer )
-	{
-		if ( Buffer.Size() == 0 )
-			Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, Source, -1, NULL, 0, NULL, NULL ) );
-
-		if ( !WideCharToMultiByte( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size(), NULL, NULL )  ) {
-			if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
-				ERRLbr();
-
-			Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, Source, -1, NULL, 0, NULL, NULL ) );
-
-			if ( !WideCharToMultiByte( CP_UTF8, 0, Source, -1, Buffer, Buffer.Size(), NULL, NULL ) )
-				ERRLbr();
-		}
-	}
 #elif defined( DIR__POSIX )
 	typedef DIR	*handle___;
 #else
 #	error
 #endif
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
-	inline const char *GetFirstFile(
-		const char *Directory,
+	inline const fnm::name___ &GetFirstFile(
+		const fnm::name___ &Path,
 		handle___ &Handle )
 	{
-#ifdef DIR__WIN
+# ifdef DIR__WIN
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		DIR__WBUFFER___ &Buffer = Handle.WBuffer;
+		fnm::core___ &Buffer = Handle.Name.Core();
 
-		Convert_( Directory, Buffer );
+		Handle.Name.Init();
+
+		Buffer.Malloc( wcslen( Path.Core() ) + 1 );
+		wcscpy( Buffer, Path.Core() );
 
 		if ( *Buffer ) {
 			Buffer.Realloc( wcslen( Buffer ) + 2 );
@@ -273,15 +238,16 @@ namespace dir {
 
 		if ( hSearch == INVALID_HANDLE_VALUE )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				return "";
+				Handle.Name.Init();
 			else
-				return NULL;
+				ERRFwk();
 		else {
-			Convert_( File.cFileName, Handle.Buffer );
-
-			return Handle.Buffer;
+			Buffer.Malloc( wcslen( File.cFileName ) + 1 );
+			wcscpy( Buffer, File.cFileName );
 		}
-#elif defined( DIR__POSIX )
+
+		return Handle.Name;
+# elif defined( DIR__POSIX )
 	struct dirent * ent;
     DIR *&rep = Handle;
     
@@ -301,11 +267,13 @@ namespace dir {
 		return ent->d_name;
     
     return 0;
-#endif
+# else
+#  error
+# endif
 	}
 
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
-	inline const char *GetNextFile( handle___ &Handle )
+	inline const fnm::name___ &GetNextFile( handle___ &Handle )
 	{
 # ifdef DIR__WIN
 #  ifdef DIR_DBG
@@ -314,18 +282,19 @@ namespace dir {
 #  endif
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		DIR__WBUFFER___ &Buffer = Handle.WBuffer;
+		DIR__WBUFFER___ &Buffer = Handle.Name.Core();
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				return "";
+				Handle.Name.Init();
 			else
-				return NULL;
+				ERRFwk();
 		else {
-			Convert_( File.cFileName, Handle.Buffer );
-
-			return Handle.Buffer;
+			Buffer.Malloc( wcslen( File.cFileName ) + 1 );
+			wcscpy( Buffer, File.cFileName );
 		}
+
+		return Handle.Name;
 # endif
 # ifdef DIR__POSIX
 	struct dirent * ent;
