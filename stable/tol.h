@@ -38,6 +38,8 @@
 # include <signal.h>
 # include <locale.h>
 
+# include "strng.h"
+
 # include "cpe.h"
 
 # ifdef CPE_POSIX

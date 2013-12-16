@@ -111,9 +111,9 @@ void fnm::name___::Init( const bso::char__ *Name )
 # elif defined( FNM__POSIX )
 	bso::size__ Size = strlen_( Name );
 
-	_Core.Allocate( Size + 1 );
+	_Core.Malloc( Size + 1 );
 
-	strcpy_( Core, Name, Size );
+	strcpy_( _Core, Name );
 # else
 #  error
 # endif
@@ -149,9 +149,9 @@ const bso::char__ *fnm::name___::UTF8( TOL_CBUFFER___ &Buffer ) const
 # elif defined( FNM__POSIX )
 	bso::size__ Size = strlen( _Core );
 
-	_Buffer.Allocate( Size + 1 );
+	Buffer.Malloc( Size + 1 );
 
-	strcpy_( Buffer, Core, Size );
+	strcpy_( Buffer, _Core );
 # else
 #  error
 # endif

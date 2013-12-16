@@ -201,8 +201,6 @@ namespace dir {
 
 
 # ifdef DIR__WIN
-#  define DIR__WBUFFER___	tol::E_BUFFER___( wchar_t )
-#  define DIR__BUFFER___	tol::E_BUFFER___( bso::char__ )
 	struct handle___ {
 		WIN32_FIND_DATAW File;
 		HANDLE hSearch;
@@ -210,7 +208,11 @@ namespace dir {
 	};
 
 #elif defined( DIR__POSIX )
-	typedef DIR	*handle___;
+	struct handle___ {
+		DIR	*Dir;
+		fnm::name___ Name;
+		TOL_CBUFFER___ Buffer;
+	};
 #else
 #	error
 #endif
@@ -248,31 +250,28 @@ namespace dir {
 			Buffer.Malloc( wcslen( File.cFileName ) + 1 );
 			wcscpy( Buffer, File.cFileName );
 		}
-
-		return Handle.Name;
 # elif defined( DIR__POSIX )
-	struct dirent * ent;
-    DIR *&rep = Handle;
-    
-    rep = opendir( Directory );
+		struct dirent * ent;
+		DIR *&rep = Handle.Dir;
 
-	if( rep == NULL )
-		return NULL;
-
-	errno = 0;
+		errno = 0;
     
-    if ( ( ent = readdir(rep) ) == NULL )
-		if ( errno != 0 )
-			return NULL;
+		rep = opendir( Path.UTF8( Handle.Buffer ) );
+
+		if( rep == NULL )
+			ERRFwk();
+
+		if ( ( ent = readdir(rep) ) == NULL )
+			if ( errno == 0 )
+				Handle.Name.Init();
+			else
+				ERRFwk();
 		else
-			return "";
-	else
-		return ent->d_name;
-    
-    return 0;
+			Handle.Name.Init( ent->d_name );
 # else
 #  error
 # endif
+		return Handle.Name;
 	}
 
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
@@ -285,7 +284,7 @@ namespace dir {
 #  endif
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		DIR__WBUFFER___ &Buffer = Handle.Name.Core();
+		fnm::core___ &Buffer = Handle.Name.Core();
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
@@ -296,25 +295,23 @@ namespace dir {
 			Buffer.Malloc( wcslen( File.cFileName ) + 1 );
 			wcscpy( Buffer, File.cFileName );
 		}
-
-		return Handle.Name;
 # endif
 # ifdef DIR__POSIX
-	struct dirent * ent;
-    DIR *&rep = Handle;
+		struct dirent * ent;
+		DIR *&rep = Handle.Dir;
     
-	errno = 0;
+		errno = 0;
     
-    if ( ( ent = readdir(rep) ) == NULL )
-		if ( errno != 0 )
-			return NULL;
+		if ( ( ent = readdir(rep) ) == NULL )
+			if ( errno == 0 )
+				Handle.Name.Init();
+			else
+				ERRFwk();
 		else
-			return "";
-	else
-		return ent->d_name;
+			Handle.Name.Init( ent->d_name );
     
-    return 0;
 # endif
+		return Handle.Name;
 	}
 
 	inline void Close( handle___ &Handle )
@@ -329,12 +326,12 @@ namespace dir {
 # endif
 		
 # ifdef DIR__POSIX
-    DIR *&rep = Handle;
+		DIR *&rep = Handle.Dir;
     
-    if ( closedir(rep) )
-		ERRLbr();
+		if ( closedir(rep) )
+			ERRLbr();
 
-	Handle = NULL;
+		rep = NULL;
 # endif
 	}
 }
