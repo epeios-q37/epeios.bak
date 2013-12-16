@@ -149,7 +149,7 @@ void sclmisc::Initialize(
 {
 ERRProlog
 	str::string LocaleRootPath, RegistryRootPath;
-	STR_BUFFER___ LocaleBuffer, RegistryBuffer;
+	TOL_CBUFFER___ LocaleBuffer, RegistryBuffer;
 ERRBegin
 	LocaleRootPath.Init();
 	BuildRootPath_( "Locale", Target, LocaleRootPath );
@@ -167,24 +167,25 @@ static bso::bool__ GuessFileName_(
 	const char *Affix,
 	const char *Suffix,
 	const char *SuggestedDirectory,
-	str::string_ &FileName )
+	fnm::name___ &FileName )
 {
 	bso::bool__ Success = false;
 ERRProlog
-	STR_BUFFER___ STRBuffer;
-	STR_BUFFER___ PathBuffer;
-	FNM_BUFFER___ FNMBuffer;
+	fnm::name___ Path;
 ERRBegin
-	FileName.Init( Affix );
-	FileName.Append( Suffix );
+	FileName.Init();
+	fnm::BuildFileName( "", Affix, Suffix, FileName );
 
-	if ( !fil::FileExists( FileName.Convert( STRBuffer ) ) ) {
-		FileName.Init( fnm::BuildFileName( SuggestedDirectory, Affix, Suffix, FNMBuffer ) );
+	if ( !fil::Exists( FileName ) ) {
+		FileName.Init();
+		fnm::BuildFileName( SuggestedDirectory, Affix, Suffix, FileName );
 
-		if ( !fil::FileExists( FileName.Convert( STRBuffer ) ) ) {
-				FileName.Init( fnm::BuildFileName( dir::GetSelfPath( PathBuffer ), Affix, Suffix, FNMBuffer ) );
+		if ( !fil::Exists( FileName ) ) {
+				FileName.Init();
+				Path.Init();
+				fnm::BuildFileName( dir::GetSelfPath( Path ), Affix, Suffix, FileName );
 
-				Success = fil::FileExists( FileName.Convert( STRBuffer ) );
+				Success = fil::Exists( FileName );
 		} else
 			Success = true;
 	} else
@@ -204,17 +205,19 @@ bso::bool__ InitializeFlow_(
 {
 	bso::bool__ Success = false;
 ERRProlog
-	str::string FileName;
-	STR_BUFFER___ FileNameBuffer, LocationBuffer;
+	fnm::name___ FileName;
+	TOL_CBUFFER___ LocationBuffer;
+	fnm::name___ Location;
 ERRBegin
 	FileName.Init();
 	Success = GuessFileName_( Target, Suffix, SuggestedDirectory, FileName );
 
 	if ( Success )
-		if ( Flow.Init( FileName.Convert( FileNameBuffer ), err::hUserDefined ) != fil::sSuccess )
+		if ( Flow.Init( FileName, err::hUserDefined ) != fil::sSuccess )
 			Success = false;
 
-	Directory.Append( fnm::GetLocation( FileName.Convert( FileNameBuffer ), LocationBuffer ) );
+	Location.Init();
+	Directory.Append( fnm::GetLocation( FileName, Location ).UTF8( LocationBuffer ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -264,6 +267,8 @@ ERREpilog
 	return Flow;
 }
 
+#include "tht.h"
+
 void sclmisc::Initialize(
 	const char *Target,
 	const char *SuggestedDirectory )
@@ -271,7 +276,7 @@ void sclmisc::Initialize(
 ERRProlog
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
 	str::string LocaleDirectory, ConfigurationDirectory;
-	STR_BUFFER___ LocaleBuffer, ConfigurationBuffer;
+	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
 ERRBegin
 	LocaleDirectory.Init();
 	InitializeLocaleFlow_( Target, SuggestedDirectory, LocaleFlow, LocaleDirectory );

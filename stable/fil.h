@@ -62,9 +62,9 @@ namespace lcl {
 # endif
 
 # ifdef FIL__WIN
-#    define FIL__STATS	_stat
-#    define FIL__STATF	_wstat
-#    define FIL__FSTAT	_fstat
+#    define FIL__STATS	_stat64
+#    define FIL__STATF	_wstat64
+#    define FIL__FSTAT	_fstat64
 # endif
 
 # ifdef FIL__POSIX
@@ -173,7 +173,7 @@ namespace fil {
 		return Stat.st_mtime;
 	}
 
-	inline bso::size__ GetSize( iop::descriptor__ Descriptor )
+	inline size__ GetSize( iop::descriptor__ Descriptor )
 	{
 		struct FIL__STATS Stat;
 
@@ -183,7 +183,7 @@ namespace fil {
 		return Stat.st_size;
 	}
 
-	inline bso::size__ GetSize( const fnm::name___ &FileName )
+	inline size__ GetSize( const fnm::name___ &FileName )
 	{
 		struct FIL__STATS Stat;
 
@@ -232,13 +232,19 @@ namespace fil {
 		if ( !SetFileTime( Handle, (LPFILETIME) NULL, (LPFILETIME) NULL, &ft ) )
 			ERRLbr();
 # else
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
 		/*
 		NOTA : Le code ci-dessous fonctionne AUSSI sous Windows, mais SEULEMENT lorsque lancé à partir d'une console DOS,
-		Lorsque lancé à partir d'une console 'Cygwin', il y a un décalage d'une heure 'dépendant de l'heure d'hiver/été ?).
+		Lorsque lancé à partir d'une console 'Cygwin', il y a un décalage d'une heure (dépendant de l'heure d'hiver/été ?).
 		*/
 
-		if ( utime( FileName, NULL ) != 0 )
+		if ( utime( FileName.UTF8( Buffer ), NULL ) != 0 )
 			ERRLbr();
+		ERRErr
+		ERREnd
+		ERREpilog
 # endif
 	}
 

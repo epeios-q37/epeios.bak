@@ -114,13 +114,12 @@ void xpp::GetMeaning(
 	lcl::meaning_ &Meaning )
 {
 ERRProlog
-	STR_BUFFER___ SBuffer;
+	TOL_CBUFFER___ CBuffer;
 	bso::integer_buffer__ IBuffer;
-	FNM_BUFFER___ Buffer;
 ERRBegin
 	if ( Coordinates.FileName.Size() != 0 ) {
 		Meaning.SetValue( XPP_NAME "_ErrorInFileAtLineColumn" );
-		Meaning.AddTag( Coordinates.FileName.Get( Buffer ) );
+		Meaning.AddTag( Coordinates.FileName.UTF8( CBuffer ) );
 	} else
 		Meaning.SetValue( XPP_NAME "_ErrorAtLineColumn" );
 
@@ -310,7 +309,7 @@ void Dump_(
 	flw::oflow__ &Flow )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Flow.Write( Data.Convert( Buffer ), Data.Amount() );
 ERRErr
@@ -929,25 +928,27 @@ status__ xpp::_extended_parser___::_InitWithFile(
 {
 	status__ Status = s_Undefined;
 ERRProlog
-	STR_BUFFER___ DirectoryBuffer;
-	STR_BUFFER___ MacroNameBuffer;
-	FNM_BUFFER___ LocalizedFileNameBuffer;
-	FNM_BUFFER___ LocationBuffer;
-	const char *LocalizedFileName = NULL;
-	const char *Location = NULL;
+	str::string LocalizedFileNameBuffer;
+	str::string LocationBuffer;
+	fnm::name___ LocalizedFileName;
+	fnm::name___ Location;
 ERRBegin
-	LocalizedFileName = fnm::BuildFileName( Directory.Convert( DirectoryBuffer ), FileName.Convert( MacroNameBuffer ), "", LocalizedFileNameBuffer );
+	LocalizedFileName.Init();
+	fnm::BuildFileName( fnm::name___( Directory ), fnm::name___( FileName ), fnm::name___( "" ), LocalizedFileName );
 
-	if ( _FFlow.Init( fnm::CorrectLocation( LocalizedFileNameBuffer, LocationBuffer ), fil::mReadOnly, err::hUserDefined ) != fil::sSuccess ) {
+	if ( _FFlow.Init( fnm::CorrectLocation( LocalizedFileName ), fil::mReadOnly, err::hUserDefined ) != fil::sSuccess ) {
 		Status = sUnableToOpenFile;
 		ERRReturn;
 	}
 
 	_XFlow.Init( _FFlow, Format );
 
-	Location = fnm::GetLocation( LocalizedFileNameBuffer, LocationBuffer );
+	fnm::GetLocation( LocalizedFileName, Location );
 
-	if ( ( Status = Init( _XFlow, str::string( LocalizedFileName ), str::string( Location ), CypherKey ) ) != sOK )
+	LocalizedFileNameBuffer.Init();
+	LocationBuffer.Init();
+
+	if ( ( Status = Init( _XFlow, LocalizedFileName.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey ) ) != sOK )
 		ERRReturn;
 
 	_IgnorePreprocessingInstruction = true;

@@ -183,7 +183,7 @@ namespace fls {
 		{
 			_Unlock();
 		}
-		void Seek( bso::size__ Offset )
+		void Seek( fil::size__ Offset )
 		{
 			_Lock();
 
@@ -203,9 +203,9 @@ namespace fls {
 
 			return Amount;
 		}
-		bso::size__ Write(
+		fil::size__ Write(
 			const void *Buffer,
-			bso::size__ Amount )
+			fil::size__ Amount )
 		{
 			_Lock();
 
@@ -215,11 +215,11 @@ namespace fls {
 
 			return Amount;
 		}
-		sdr::size__ Size( void )
+		fil::size__ Size( void )
 		{
 			_Lock();
 
-			sdr::size__ Size = fil::GetSize( _D );
+			fil::size__ Size = fil::GetSize( _D );
 
 			_Unlock();
 
@@ -261,7 +261,7 @@ namespace fls {
 		// nom du fichier
 		char *Nom_;
 		// taille du fichier
-		bso::size__ TailleFichier_;
+		fil::size__ TailleFichier_;
 		struct {
 			int
 				// signale si le Stream est ouvert ou non
@@ -340,7 +340,7 @@ namespace fls {
 				
 			while( Nombre > 0 ) {
 				
-				Amount = File_.Read( Nombre, Tampon );
+				Amount = (bso::size__)File_.Read( Nombre, Tampon );
 					
 				if ( Amount <= 0 ) {
 					if ( Amount == 0 ) {
@@ -378,7 +378,7 @@ namespace fls {
 
 			while( Nombre > 0 ) {
 			
-				Amount = File_.Write( Tampon, Nombre );
+				Amount = (bso::size__)File_.Write( Tampon, Nombre );
 			
 				Tampon = (char *)Tampon + Amount;
 				Nombre -= Amount;
@@ -556,7 +556,7 @@ namespace fls {
 			else
 				return 0;
 		}
-		sdr::size__ FileSize( void )
+		fil::size__ FileSize( void )
 		{
 #	if 0
 			Open_( false );
@@ -596,7 +596,12 @@ namespace fls {
 		// alloue 'Taille' octets
 		virtual sdr::size__ SDRUnderlyingSize( void )
 		{
-			return FileSize();
+			fil::size__ Size = FileSize();
+
+			if ( Size > SDR_SIZE_MAX )
+				ERRDta();
+
+			return (sdr::size__)Size;
 		}
 		virtual void SDRRecall(
 			sdr::row_t__ Position,

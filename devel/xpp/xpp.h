@@ -556,7 +556,7 @@ namespace xpp {
 		{
 			return _Parser.SetFormat( Format );
 		}
-		E_RODISCLOSE__( fnm::name___, LocalizedFileName );
+		E_RODISCLOSE__( str::string_, LocalizedFileName );
 	};
 
 	typedef stk::E_BSTACK_(_extended_parser___ *) _xparser_stack_;
@@ -579,8 +579,8 @@ namespace xpp {
 
 	struct criterions___
 	{
-		fnm::name___ Directory;
 		str::string
+			Directory,
 			CypherKey,
 			Namespace;
 		void reset( bso::bool__ P = true )
@@ -598,7 +598,7 @@ namespace xpp {
 			reset();
 		}
 		criterions___( 
-			const fnm::name___ &Directory,
+			const str::string_ &Directory,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string() )
 		{
@@ -607,7 +607,7 @@ namespace xpp {
 			Init( Directory, CypherKey, Namespace );
 		}
 		void Init( 
-			const fnm::name___ &Directory,
+			const str::string_ &Directory,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string() )
 		{
@@ -702,7 +702,7 @@ namespace xpp {
 			_iflow_driver___::Init( ThreadSafety );
 			_CurrentParser = NewParser( _Repository, _Variables, _Directives );
 			_Parsers.Init();
-			if ( _Parser().Init( XFlow, fnm::name___(), Criterions.Directory, Criterions.CypherKey ) != sOK )
+			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey ) != sOK )
 				ERRFwk();
 			_Status = sOK;
 
@@ -836,7 +836,7 @@ namespace xpp {
 		xtf::extended_text_iflow__ &XFlow,
 		xml::writer_ &Writer )
 	{
-		return Process( XFlow, fnm::name___(), Writer );
+		return Process( XFlow, str::string(), Writer );
 	}
 
 	inline status__ Process(
@@ -844,7 +844,7 @@ namespace xpp {
 		xml::outfit__ Outfit,
 		txf::text_oflow__ &OFlow )
 	{
-		return Process( XFlow, fnm::name___(), Outfit, OFlow );
+		return Process( XFlow, str::string(), Outfit, OFlow );
 	}
 
 }

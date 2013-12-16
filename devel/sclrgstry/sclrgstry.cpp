@@ -39,7 +39,7 @@ using namespace sclrgstry;
 
 static rgstry::registry Registry_;
 static rgstry::row__ Root_ = E_NIL;
-static STR_BUFFER___ Translation_;
+static TOL_CBUFFER___ Translation_;
 
 rgstry::entry___ sclrgstry::Parameters( "Parameters" );
 

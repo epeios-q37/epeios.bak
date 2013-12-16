@@ -88,17 +88,18 @@ namespace dir {
 
 	state__ HandleError( void );
 
-	inline fnm::name___ GetSelfPath( fnm::name___ &Path )
+	inline const fnm::name___ &GetSelfPath( fnm::name___ &Path )
 	{
 #ifdef DIR__WIN 
 		fnm::base__ FileName[MAX_PATH];
-		DWORD Size = GetModuleFileNameW( NULL, FileName, sizeof( Path ) );
+		DWORD Size = GetModuleFileNameW( NULL, FileName, sizeof( FileName ) );
+		return fnm::GetLocation( FileName, Path );
 #endif
 #ifdef DIR__POSIX
 # ifdef CPE__MAC
-		char Path[MAXPATHLEN];
-		uint32_t Size = sizeof( Path );
-		switch ( _NSGetExecutablePath( Path, &Size ) ) {
+		char FileName[MAXPATHLEN];
+		uint32_t Size = sizeof( FileName );
+		switch ( _NSGetExecutablePath( FileName, &Size ) ) {
 		case -1 :	// La taille de 'Path' est insuffisante.
 			ERRLmt();
 			break;
@@ -109,22 +110,24 @@ namespace dir {
 			break;
 		}
 
+		return fnm::GetLocation( fnm::name___( FileName ), Path );
 # else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
-		char Path[PATH_MAX];
-		int Size = readlink( "/proc/self/exe", Path, sizeof( Path ) );
+		char FileName[PATH_MAX];
+		int Size = readlink( "/proc/self/exe", FileName, sizeof( FileName ) );
 
 		// Valeur d"erreur retournée par 'GetModuleFileName(..)'.
 		// Valeur d'erreur retrounée par 'readlink(...)', mais '0' est normalement une impossibilité.
 		if ( Size <= 0 )
 			ERRSys();
 
-		if ( Size == sizeof( Path ) )
+		if ( Size == sizeof( FileName ) )
 			ERRLmt();
 
-		Path[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
+		FileName[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
+
+		return fnm::GetLocation( fnm::name___( FileName ), Path );
 # endif
 #endif
-		return fnm::GetLocation( FileName, Path );
 	}
 
 	inline state__ CreateDir( const fnm::name___ &Path )

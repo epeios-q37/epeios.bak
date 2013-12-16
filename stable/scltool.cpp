@@ -38,7 +38,7 @@ using namespace scltool;
 using cio::COut;
 using scllocale::GetLocale;
 
-static STR_BUFFER___ Language_;
+static TOL_CBUFFER___ Language_;
 
 #define DEFAULT_LANGUAGE	"en"
 
@@ -659,7 +659,7 @@ const str::string_ &scltool::GetArgumentDescriptionTranslation(
 {
 ERRProlog
 	str::string Description;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Description.Init();
 	GetDescription_( Id, Description );
@@ -1164,7 +1164,7 @@ void scltool::LoadProject(
 {
 ERRProlog
 	str::string Path;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
 	lcl::meaning Meaning;
 ERRBegin
@@ -1187,7 +1187,7 @@ void scltool::LoadProject(
 	const char *Target )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	LoadProject( FileName.Convert( Buffer ), Target );
 ERRErr
@@ -1223,7 +1223,7 @@ const str::string_ &scltool::GetOptionalValue(
 
 const char *scltool::GetOptionalValue(
 	const rgstry::tentry__ &Entry,
-	STR_BUFFER___ &Buffer,
+	TOL_CBUFFER___ &Buffer,
 	bso::bool__ *Missing )
 {
 ERRProlog
@@ -1257,7 +1257,7 @@ const str::string_ &scltool::GetMandatoryValue(
 
 const char *scltool::GetMandatoryValue(
 	const rgstry::tentry__ &Entry,
-	STR_BUFFER___ &Buffer )
+	TOL_CBUFFER___ &Buffer )
 {
 ERRProlog
 	str::string Value;

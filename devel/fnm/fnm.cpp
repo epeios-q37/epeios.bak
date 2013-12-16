@@ -29,6 +29,7 @@
 #include "err.h"
 #include "tol.h"
 #include "fil.h"
+#include "str.h"
 
 using namespace fnm;
 
@@ -78,15 +79,97 @@ name___ &name___::operator =( const name___ &N )
 {
 	bso::size__ Size = strlen_( N._Core );
 
-	_Core.Malloc( Size );
+	_Core.Malloc( Size + 1 );
 
 	if ( Size != 0 )
-		memcpy( _Core, N._Core, Size * sizeof( base__ ) );
+		strcpy_( _Core, N._Core );
 	else
 		*_Core = 0;
 
 	return *this;
 }
+
+void fnm::name___::Init( const bso::char__ *Name )
+{
+	if ( Name == NULL )
+		Name = "";
+
+	Init();
+# ifdef FNM__WIN
+	if ( _Core.Size() == 0 )
+		_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
+
+	if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  ) {
+		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
+			ERRLbr();
+
+		_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
+
+		if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  )
+			ERRLbr();
+	}
+# elif defined( FNM__POSIX )
+	bso::size__ Size = strlen_( Name );
+
+	_Core.Allocate( Size + 1 );
+
+	strcpy_( Core, Name, Size );
+# else
+#  error
+# endif
+}
+
+
+void fnm::name___::Init( const str::string_ &Name )
+{
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	Init( Name.Convert( Buffer ) );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+const bso::char__ *fnm::name___::UTF8( TOL_CBUFFER___ &Buffer ) const
+{
+# ifdef FNM__WIN
+	if ( Buffer.Size() == 0 )
+		Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+
+	if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL )  ) {
+		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
+			ERRLbr();
+
+		Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+
+		if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL ) )
+			ERRLbr();
+	}
+# elif defined( FNM__POSIX )
+	bso::size__ Size = strlen( _Core );
+
+	_Buffer.Allocate( Size + 1 );
+
+	strcpy_( Buffer, Core, Size );
+# else
+#  error
+# endif
+	return Buffer;
+}
+
+const str::string_ &fnm::name___::UTF8( str::string_ &SBuffer ) const
+{
+ERRProlog
+	TOL_CBUFFER___ CBuffer;
+ERRBegin
+	SBuffer.Append( UTF8( CBuffer ) );
+ERRErr
+ERREnd
+ERREpilog
+	return SBuffer;
+}
+
 
 
 inline static fnm::type__ Type_( const base__ *Name )
@@ -226,7 +309,7 @@ const name___ &fnm::_Set(
 	return Name;
 }
 
-const base__ *GetFileName( const base__ *Name )
+const base__ *fnm::GetFileName( const base__ *Name )
 {
 	const base__ *Repere;
 
@@ -321,32 +404,19 @@ ERREpilog
 #endif
 #endif
 
-#if 0
-const char *fnm::CorrectLocation(
-	const char *Location,
-	FNM__P )
+const name___ &fnm::CorrectLocation( name___ &Location )
 {
-	char *R = NULL;
+	base__ *R = Location.Core();
 
-#ifdef FNM_DBG
-		if ( Location == NULL )
-			ERRPrm();
-#endif
-
-	P.Malloc( strlen( Location ) + 1 );
-
-	strcpy( P, Location );
-
-	R = strpbrk( P, "\\/" );
+	R = strchr_( Location.Core(), '\\' );
 
 	while( R != NULL ) {
-		*R = FNM_DIRECTORY_SEPARATOR_CHARACTER;
-		R = strpbrk( R+1, "\\/" );
+		*R = '/';
+		R = strchr_( R+1, '\\' );
 	}
 
-	return P;
+	return Location;
 }
-#endif
 
 const name___ &fnm::GetLocation(
 	const base__ *Name,

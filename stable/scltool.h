@@ -159,7 +159,7 @@ namespace scltool {
 
 	const char *GetOptionalValue(
 		const rgstry::tentry__ &Entry,
-		STR_BUFFER___ &Buffer,
+		TOL_CBUFFER___ &Buffer,
 		bso::bool__ *Missing = NULL );
 
 	const str::string_ &GetMandatoryValue(
@@ -168,7 +168,7 @@ namespace scltool {
 
 	const char *GetMandatoryValue(
 		const rgstry::tentry__ &Entry,
-		STR_BUFFER___ &Buffer );
+		TOL_CBUFFER___ &Buffer );
 
 # define SCLTOOL__UN( type, name, limit )\
 	type GetMandatory##name(\

@@ -45,6 +45,11 @@
 #  error "Unknown target !"
 # endif
 
+// Pour éviter d'avoir à inclure 'str.h'
+namespace str {
+	class string_;
+}
+
 namespace fnm
 {
 # ifdef FNM__POSIX
@@ -73,6 +78,11 @@ namespace fnm
 
 			Init( Name );
 		}
+		name___( const str::string_ &Name )
+		{
+			reset( false );
+			Init( Name );
+		}
 		name___ &operator =( const name___ &N );
 		void Init( void )
 		{
@@ -80,32 +90,8 @@ namespace fnm
 			_Core.Malloc( 1 );
 			*_Core = 0;
 		}
-		void Init( const bso::char__ *Name )
-		{
-			Init();
-# ifdef FNM__WIN
-			if ( _Core.Size() == 0 )
-				_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
-
-			if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  ) {
-				if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
-					ERRLbr();
-
-				_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
-
-				if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  )
-					ERRLbr();
-			}
-# elif defined( FNM__POSIX )
-			bso::size__ Size = strlen( Name );
-
-			_Core.Allocate( Size + 1 );
-
-			strcpy_( Core, Name, Size );
-# else
-#  error
-# endif
-		}
+		void Init( const bso::char__ *Name );
+		void Init( const str::string_ &Name );
 		void Init( const name___ &Name )
 		{
 			Init();
@@ -116,32 +102,8 @@ namespace fnm
 		{
 			_Core.Forget();
 		}
-		const bso::char__ *Get( TOL_CBUFFER___ &Buffer ) const
-		{
-# ifdef FNM__WIN
-			if ( _Core.Size() == 0 )
-				Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
-
-			if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL )  ) {
-				if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
-					ERRLbr();
-
-				Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
-
-				if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL ) )
-					ERRLbr();
-			}
-# elif defined( FNM__POSIX )
-			bso::size__ Size = strlen( _Core );
-
-			_Buffer.Allocate( Size + 1 );
-
-			strcpy_( Buffer, Core, Size );
-# else
-#  error
-# endif
-			return Buffer;
-		}
+		const bso::char__ *UTF8( TOL_CBUFFER___ &Buffer ) const;
+		const str::string_ &UTF8( str::string_ &Buffer ) const;
 		const core___ &Core( void ) const
 		{
 			return _Core;
@@ -154,7 +116,7 @@ namespace fnm
 		{
 # ifdef FNM__WIN
 			return wcslen( _Core );
-# elif defined FNM__OPSIX )
+# elif defined( FNM__POSIX )
 			return strlen( _Core );
 # else
 #  error
@@ -190,10 +152,10 @@ namespace fnm
 	#define FNM_BUFFER___	tol::E_BUFFER___( char )
 	#define FNM__P	FNM_BUFFER___ &P
 
-
-	/*f Correct location, i. e. remplaces '\' or '/' with correct directory separator depending on OS. */
-	const name___ &CorrectLocation( name___ &Name );
 #endif
+
+	/* Remplace '\' par '/'. */
+	const name___ &CorrectLocation( name___ &Name );
 
 	const char *Description( type__ Type );
 

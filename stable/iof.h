@@ -84,7 +84,7 @@ namespace iof {
 			if ( Buffer == NULL )
 				ERRPrm();
 #endif
-			return _output__::Write( Buffer, Maximum );
+			return (fdr::size__)_output__::Write( Buffer, Maximum );
 		}
 		void _Commit( void )
 		{
@@ -103,7 +103,7 @@ namespace iof {
 			const fdr::datum__ *Tampon,
 			fdr::size__ Maximum )
 		{
-			return _output_driver__::Write( Tampon, Maximum );
+			return (fdr::size__)_output_driver__::Write( Tampon, Maximum );
 		}
 		virtual void FDRCommit( void )
 		{

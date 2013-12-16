@@ -1067,14 +1067,14 @@ namespace tol {
 	template <typename t> class buffer___ // Gestion d'un 'buffer' d'objets de type 't' de taille dynamique. Sa taille ne diminue jamais.
 	{
 	private:
-		t *_P;
+		t *_Pointer;
 		bso::size__ _Size;
 		bso::bool__ _Allocate(
 			bso::size__ Size,
 			err::handling__ ErrHandling )
 		{
 			if ( _Size < Size ) {
-				void *P = realloc( _P, Size * sizeof( t ) );
+				void *P = realloc( _Pointer, Size * sizeof( t ) );
 
 				if ( P == NULL ) {
 					if ( ErrHandling == err::hThrowException )
@@ -1082,7 +1082,7 @@ namespace tol {
 
 					return false;
 				} else 
-					_P = (t *)P;
+					_Pointer = (t *)P;
 
 				_Size = Size;
 			}
@@ -1093,11 +1093,11 @@ namespace tol {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				if ( _P!= NULL )
-					free( _P );
+				if ( _Pointer != NULL )
+					free( _Pointer );
 
-			_P = NULL;
-				_Size = 0;
+			_Pointer = NULL;
+			_Size = 0;
 		}
 		buffer___( void )
 		{
@@ -1123,7 +1123,7 @@ namespace tol {
 			if ( !_Allocate( Amount, ErrHandling ) )
 				return NULL;
 
-			return _P;
+			return _Pointer;
 		}
 		t *Calloc(
 			bso::size__ Amount,
@@ -1132,9 +1132,9 @@ namespace tol {
 			if ( !_Allocate( Amount, ErrHandling ) )
 				return NULL;
 
-			memset( _P, 0, Amount );
+			memset( _Pointer, 0, Amount * sizeof( t ) );
 
-			return _P;
+			return _Pointer;
 		}
 		t *Realloc(
 			bso::size__ Size,
@@ -1143,7 +1143,7 @@ namespace tol {
 			if ( !_Allocate( Size, ErrHandling ) )
 				return NULL;
 
-			return _P;
+			return _Pointer;
 		}
 		bso::size__ Size( void ) const
 		{
@@ -1151,7 +1151,7 @@ namespace tol {
 		}
 		operator t*( void ) const
 		{
-			return _P;
+			return _Pointer;
 		}
 		buffer___ &operator =( const buffer___ & )
 		{

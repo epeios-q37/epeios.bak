@@ -1,7 +1,14 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
 14/12/2013 :
-	- Génaral :
+	- Général :
+		- Adaptation aux modifications FNM.
+		- Adaptation aux modifications FIL.
+	- FIL :
+		- Introduction de 'size__', correspondant à la taille d'un fichier, qui peut dépasser les 4 Go, même en architecture 32 bits.
+
+14/12/2013 :
+	- Général :
 		- Adaptation aux modifications FNM.
 	- FNM :
 		- Gestion des noms de fichiers en Unicode.

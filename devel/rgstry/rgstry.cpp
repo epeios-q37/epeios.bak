@@ -70,7 +70,7 @@ ERRBegin
 	case sUnableToOpenFile:
 		Meaning.SetValue( GetLabel( Context.Status ) );
 
-		Meaning.AddTag( Context.Coordinates.FileName.Get( Buffer ) );
+		Meaning.AddTag( Context.Coordinates.FileName.UTF8( Buffer ) );
 		break;
 	case sParseError:
 		Meaning.SetValue( GetLabel( Context.Status ) );
@@ -1523,7 +1523,7 @@ ERRProlog
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
 	fnm::name___ Location;
-	TOL_CBUFFER___ Buffer;
+	str::string Buffer;
 ERRBegin
 	if ( FFlow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
 		Status = Context.Status = sUnableToOpenFile;
@@ -1537,7 +1537,8 @@ ERRBegin
 		ERRPrm();
 
 	Location.Init();
-	Status = FillRegistry( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, RegistryRoot, Context );
+	Buffer.Init();
+	Status = FillRegistry( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, RegistryRoot, Context );
 
 	if ( Status == sParseError )
 		if ( Context.Coordinates.FileName.Size() == 0 )

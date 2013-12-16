@@ -97,13 +97,19 @@ uys::state__ lst::ReadFromFile_(
 	uys::state__ State = uys::s_Undefined;
 ERRProlog
 	flf::file_iflow___ Flow;
+	fil::size__ Size = 0;
 ERRBegin
 	if ( Flow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
 		State = uys::sInconsistent;
 		ERRReturn;
 	}
 
-	Load_( Flow, fil::GetSize( FileName ) / sizeof( sdr::row__ ), Store.Released );
+	Size = fil::GetSize( FileName );
+
+	if ( Size > SDR_SIZE_MAX )
+		ERRDta();
+
+	Load_( Flow, (bso::size__)Size / sizeof( sdr::row__ ), Store.Released );
 
 	State = uys::sExists;
 ERRErr

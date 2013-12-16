@@ -72,7 +72,7 @@ extern class ttr_tutor &WLLIOTutor;
 
 namespace wllio {
 
-	using bso::size__;
+	typedef bso::u64__	size__;	// LA taille d'un fichier est toujours codé en 64 bits, même pour une architectue 32 bits.
 
 	typedef int descriptor__;
 
@@ -164,8 +164,8 @@ namespace wllio {
 		{
 			io_core__::Init( D );
 		}
-		size__ Read(
-			size__ Amount,
+		bso::size__ Read(
+			bso::size__ Amount,
 			void *Buffer )
 		{
 			int Result;
