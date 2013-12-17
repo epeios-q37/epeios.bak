@@ -55,12 +55,12 @@ namespace sclmisc {
 	using fil::GetBackupFileName;
 
 	void CreateBackupFile(
-		const char *FileName,
+		const fnm::name___ &FileName,
 		fil::backup_mode__ Mode = fil::bm_Default );
 
-	void RecoverBackupFile( const char *FileName );
+	void RecoverBackupFile( const fnm::name___ &FileName );
 
-	void ReportFileOpeningErrorAndAbort( const char *FileName );
+	void ReportFileOpeningErrorAndAbort( const fnm::name___ &FileName );
 }
 
 				  /********************************************/

@@ -67,7 +67,7 @@ void ndbsct::static_content_atomized_file_manager___::Init(
 {
 ERRProlog
 	str::string FileName;
-	tol::E_FPOINTER___( bso::char__ ) FileNameBuffer;
+	TOL_CBUFFER___ FileNameBuffer;
 ERRBegin
 	reset();
 

@@ -211,7 +211,7 @@ namespace bch {
 			const type &Object,
 			row Offset = 0 )
 		{
-			Store( Object, Offset, this->Amount() - *Offset );
+			mmr::Store( Object, Offset, this->Amount() - *Offset );
 		}
 		void Set( void )
 		{
@@ -282,7 +282,7 @@ namespace bch {
 		}
 		type Pop( void )
 		{
-			type Object = Get( this->Last() );
+			type Object = mmr::Get( this->Last() );
 
 			Truncate();
 
@@ -290,7 +290,7 @@ namespace bch {
 		}
 		type Top( void )
 		{
-			return Get( this->Last() );
+			return mmr::Get( this->Last() );
 		}
 		//f Remove 'Amount' objects from the end of the bunch.
 		void Truncate( sdr::size__ Amount = 1 )

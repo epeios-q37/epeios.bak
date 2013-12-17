@@ -63,13 +63,13 @@ void ndbbsc::DropFile(
 {
 ERRProlog
 	str::string FileName;
-	STR_BUFFER___ FileNameBuffer;
+	TOL_CBUFFER___ FileNameBuffer;
 ERRBegin
 	if ( RootFileName.Amount() != 0 ) {
 		FileName.Init( RootFileName );
 		FileName.Append( Extension );
 
-		if ( fil::FileExists( FileName.Convert( FileNameBuffer) ) )
+		if ( fil::Exists( FileName.Convert( FileNameBuffer) ) )
 			if ( remove( FileNameBuffer ) != 0 )
 				ERRLbr();
 	}

@@ -52,7 +52,8 @@ csdleo::callback__ *csdles::CSDLESRetrieveSteering( csdleo::data__ *Data )
 {
 	csdleo::callback__ *Steering = NULL;
 ERRProlog
-	FNM_BUFFER___ Buffer;
+	fnm::name___ Directory;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( Data == NULL )
 		ERRPrm();
@@ -68,9 +69,10 @@ ERRBegin
 	if ( !IsInitialized_ && !Data->DryRun )	{
 
 		// Do not work when placed in 'global_cdtor'.
+		Directory.Init();
 		if ( Data->UP != NULL )
-			fnm::GetLocation( (const char *)Data->UP, Buffer );
-		sclmisc::Initialize( TargetName, Buffer );
+			fnm::GetLocation( (const char *)Data->UP, Directory );
+		sclmisc::Initialize( TargetName, Directory.UTF8( Buffer ) );
 		IsInitialized_ = true;
 	}
 

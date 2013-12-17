@@ -193,16 +193,11 @@ ERREpilog
 	return Success;
 }
 
-const char* fil::GetBackupFileName(
-	const char *FileName,
-	FIL_BUFFER___ &Buffer )
+const fnm::name___ &fil::GetBackupFileName(
+	const fnm::name___ &FileName,
+	fnm::name___ &Buffer )
 {
-
-	Buffer.Malloc( strlen( FileName ) + sizeof( FIL__BACKUP_FILE_EXTENSION  ) + 1 );
-
-	sprintf( Buffer, "%s%s", FileName, FIL__BACKUP_FILE_EXTENSION );
-
-	return Buffer;
+	return fnm::BuildFileName( NULL, FileName, FIL__BACKUP_FILE_EXTENSION, Buffer );
 }
 
 #define CASE( m )\
@@ -226,21 +221,23 @@ const char *fil::GetLabel( backup_status__ Status )
 
 void fil::GetMeaning(
 	backup_status__ Status,
-	const char *FileName,
+	const fnm::name___ &FileName,
 	lcl::meaning_ &Meaning )
 {
 ERRProlog
-	FIL_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
+	fnm::name___ BackupFileName;
 ERRBegin
 	Meaning.SetValue( GetLabel( Status ) );
 
 	switch ( Status ) {
 	case bsUnableToRename:
 	case bsUnableToDuplicate:
-		Meaning.AddTag( FileName );
+		Meaning.AddTag( FileName.UTF8( Buffer ) );
 		break;
 	case bsUnableToSuppress:
-		Meaning.AddTag( GetBackupFileName( FileName, Buffer ) );
+		BackupFileName.Init();
+		Meaning.AddTag( GetBackupFileName( FileName, BackupFileName ).UTF8( Buffer ) );
 		break;
 	default:
 		ERRPrm();
@@ -252,43 +249,31 @@ ERREpilog
 }
 
 backup_status__ fil::CreateBackupFile(
-	const char *NomFichier,
+	const fnm::name___ &FileName,
 	backup_mode__ Mode,
 	err::handling__ ErrorHandling )
 {
 	backup_status__ Status = bs_Undefined;
 ERRProlog
-	const char *NomFichierSecurite = NULL;
-	FIL_BUFFER___ Buffer;
+	fnm::name___ BackupFileName;
 ERRBegin
-	if ( Exists( NomFichier ) )
+	if ( Exists( FileName ) )
 	{
-		NomFichierSecurite = GetBackupFileName( NomFichier, Buffer );
+		GetBackupFileName( FileName, BackupFileName );
 
-		if ( Exists( NomFichierSecurite ) )
-			if ( remove( NomFichierSecurite ) ) {
+		if ( Exists( BackupFileName ) )
+			if ( Remove( BackupFileName ) ) {
 				Status = bsUnableToSuppress;
 				ERRReturn;
 			}
 
 		if ( Mode == bmDuplicate )
 		{
-#if 0
-			std::ofstream Out( NomFichierSecurite );
-			std::ifstream In( NomFichier );
-			int C;
-
-			while( Out && In && ( ( C = In.get() ) != EOF ) )
-				Out.put( (char)C );
-
-			Out.close();
-			In.close();
-#endif
-		
+#if 0	// Old		
 			FILE *In, *Out;
 
 			/* Ouverture de l'ancien fichier en lecture */
-			In = fopen(NomFichier, "rb");
+			In = fopen( NomFichier, "rb");
 
 			if ( In == NULL )
 			{
@@ -318,10 +303,12 @@ ERRBegin
 
 			fclose(Out);
 			fclose(In);
+#endif
+			ERRVct();
 		}
 		else if ( Mode == bmRename )
 		{
-			if ( rename( NomFichier, NomFichierSecurite ) )
+			if ( Rename( FileName, BackupFileName ) )
 				Status = bsUnableToRename;
 		}
 		else
@@ -361,20 +348,22 @@ const char *fil::GetLabel( recover_status__ Status )
 
 void fil::GetMeaning(
 	recover_status__ Status,
-	const char *FileName,
+	const fnm::name___ &FileName,
 	lcl::meaning_ &Meaning )
 {
 ERRProlog
-	FIL_BUFFER___ Buffer;
+	fnm::name___ BackupFileName;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Meaning.SetValue( GetLabel( Status ) );
 
 	switch ( Status ) {
 	case rsUnableToRename:
-		Meaning.AddTag( GetBackupFileName( FileName, Buffer ) );
+		BackupFileName.Init();
+		Meaning.AddTag( GetBackupFileName( FileName, BackupFileName ).UTF8( Buffer ) );
 		break;
 	case rsUnableToSuppress:
-		Meaning.AddTag(  FileName );
+		Meaning.AddTag(  FileName.UTF8( Buffer ) );
 		break;
 	default:
 		ERRPrm();
@@ -386,24 +375,25 @@ ERREpilog
 }
 
 recover_status__ fil::RecoverBackupFile(
-	const char *NomFichier,
+	const fnm::name___ &FileName,
 	err::handling__ ErrorHandling )
 {
 	recover_status__ Status = rs_Undefined;
 ERRProlog
-	const char *NomFichierSecurite = NULL;
-	FIL_BUFFER___ Buffer;
+	fnm::name___ BackupFileName;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
-	if ( Exists( NomFichier ) )
-		if ( remove( NomFichier ) ) {
+	if ( Exists( FileName ) )
+		if ( Remove( FileName ) ) {
 			Status = rsUnableToSuppress;
 			ERRReturn;
 		}
 
-	NomFichierSecurite = GetBackupFileName( NomFichier, Buffer );
+	BackupFileName.Init();
+	GetBackupFileName( FileName, BackupFileName );
 
-	if ( Exists( NomFichierSecurite ) )
-		if ( rename( NomFichierSecurite, NomFichier ) ) {
+	if ( Exists( BackupFileName ) )
+		if ( Rename( BackupFileName, FileName ) ) {
 			Status = rsUnableToRename;
 			ERRReturn;
 		}

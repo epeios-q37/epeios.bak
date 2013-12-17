@@ -257,6 +257,16 @@ namespace fil {
 # endif
 	}
 
+	inline bso::bool__ Rename(
+		const fnm::name___ &FileName,
+		const fnm::name___ &NewFileName )
+	{
+# ifdef FIL__WIN
+		return _wrename( FileName.Core(), NewFileName.Core() ) == 0;
+# else
+		return rename( FileName.Core(), NewFileName.Core() ) == 0;
+# endif
+	}
 
 	bso::bool__ Create(
 		const fnm::name___ &FileName,
@@ -276,7 +286,7 @@ namespace fil {
 
 	void GetMeaning(
 		backup_status__ Status,
-		const char *FileName,
+		const fnm::name___ &FileName,
 		lcl::meaning_ &Meaning );
 
 	//e How handle the backuped file.
@@ -289,14 +299,12 @@ namespace fil {
 		bm_Default = bmRename,
 	};
 
-# define FIL_BUFFER___	tol::E_BUFFER___( char )
-
-	const char* GetBackupFileName(
-		const char *FileName,
-		FIL_BUFFER___ &Buffer );
+	const fnm::name___ &GetBackupFileName(
+		const fnm::name___ &FileName,
+		fnm::name___ &Name );
 
 	backup_status__ CreateBackupFile(
-		const char *FileName,
+		const fnm::name___ &FileName,
 		backup_mode__ Mode,
 		err::handling__ = err::h_Default  );
 
@@ -313,12 +321,12 @@ namespace fil {
 
 	void GetMeaning(
 		recover_status__ Status,
-		const char *FileName,
+		const fnm::name___ &FileName,
 		lcl::meaning_ &Meaning );
 
 	//f Recover the backup file 'Name' with 'Extension' as extension.
 	recover_status__ RecoverBackupFile(
-		const char *FileName,
+		const fnm::name___ &FileName,
 		err::handling__ = err::h_Default  );
 }
 				  /********************************************/

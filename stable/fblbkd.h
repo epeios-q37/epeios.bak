@@ -709,16 +709,16 @@ namespace fblbkd {
 	private:
 		bso::bool__ _CompatibilityTested;
 		fblbur::mode__ _Mode;
-		STR_BUFFER___ _ClientOrigin;
-		STR_BUFFER___ _APIVersion;
+		TOL_CBUFFER___ _ClientOrigin;
+		TOL_CBUFFER___ _APIVersion;
 		master_module Master_;
-		STR_BUFFER___ _Language;
+		TOL_CBUFFER___ _Language;
 		const lcl::locale_ *_Locale;
-		STR_BUFFER___ _BackendLabel;
+		TOL_CBUFFER___ _BackendLabel;
 		// Informations à propos du 'backend'.
-		STR_BUFFER___ _ExtendedBackendInformations;
-		STR_BUFFER___ _BackendCopyright;
-		STR_BUFFER___ _SoftwareInformations;
+		TOL_CBUFFER___ _ExtendedBackendInformations;
+		TOL_CBUFFER___ _BackendCopyright;
+		TOL_CBUFFER___ _SoftwareInformations;
 		// Retourne le module correspondant à 'IdType'.
 		untyped_module &Module_( type__ IdType ) const
 		{

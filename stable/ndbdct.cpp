@@ -94,12 +94,12 @@ template <typename item> static void Save_(
 
 template <typename item> static void Save_(
 	const stk::E_BSTACK_( item ) &Bunch,
-	const char *BaseFileName )
+	const fnm::name___ &FileName )
 {
 ERRProlog
 	flf::file_oflow___ Flow;
 ERRBegin
-	Flow.Init( BaseFileName );
+	Flow.Init( FileName );
 
 	Save_( Bunch, Flow );
 ERRErr
@@ -115,18 +115,17 @@ template <typename item> static void Save_(
 {
 ERRProlog
 	str::string FileName;
-	STR_BUFFER___ FileNameBuffer;
 ERRBegin
 	FileName.Init( BaseFileName );
 	FileName.Append( Extension );
 
-	if ( !fil::FileExists( FileName.Convert( FileNameBuffer ) )
-		 || ( fil::GetFileLastModificationTime( FileNameBuffer ) <= ReferenceTimeStamp ) )
-			Save_( Bunch, FileNameBuffer );
+	if ( !fil::Exists( FileName )
+		 || ( fil::GetLastModificationTime( FileName ) <= ReferenceTimeStamp ) )
+			Save_( Bunch, FileName );
 
-	while ( ReferenceTimeStamp >= fil::GetFileLastModificationTime( FileNameBuffer ) ) {
+	while ( ReferenceTimeStamp >= fil::GetLastModificationTime( FileName ) ) {
 		tol::EpochTime( true );
-		fil::TouchFile( FileNameBuffer );
+		fil::Touch( FileName );
 	}
 ERRErr
 ERREnd
@@ -176,7 +175,7 @@ ERRProlog
 	flf::file_iflow___ Flow;
 ERRBegin
 	if ( Flow.Init( FileName, err::hUserDefined ) == fil::sSuccess ) {
-		if ( fil::GetFileLastModificationTime( FileName ) <= ReferenceTimeStamp )
+		if ( fil::GetLastModificationTime( FileName ) <= ReferenceTimeStamp )
 			ERRReturn;
 
 		Load_( Flow, Bunch );
@@ -194,7 +193,7 @@ ERREpilog
 const char *BuildFileName_(
 	const str::string_ &BaseFileName,
 	const char *Extension,
-	STR_BUFFER___ &Buffer )
+	TOL_CBUFFER___ &Buffer )
 {
 ERRProlog
 	str::string FileName;
@@ -218,7 +217,7 @@ template <typename item> static bso::bool__ Load_(
 {
 	bso::bool__ Success = false;
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Success = Load_( BuildFileName_( BaseFileName, Extension, Buffer ), Bunch, TestValue, TimeStamp );
 ERRErr
@@ -234,7 +233,7 @@ static bso::bool__ LoadAvailables_(
 {
 	bso::bool__ Success = false;
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Success = Load_( BuildFileName_( BaseFileName, AVAILABLES_FILE_NAME_EXTENSION, Buffer ), Availables, ReferenceTimeStamp );
 ERRErr
@@ -255,11 +254,11 @@ void ndbdct::dynamic_content_atomized_file_manager___::Init(
 {
 ERRProlog
 	str::string ContentFileName;
-	STR_BUFFER___ ContentFileNameBuffer;
+	TOL_CBUFFER___ ContentFileNameBuffer;
 	str::string EntriesBunchFileName;
-	STR_BUFFER___ EntriesBunchFileNameBuffer;
+	TOL_CBUFFER___ EntriesBunchFileNameBuffer;
 	str::string EntriesListFileName;
-	STR_BUFFER___ EntriesListFileNameBuffer;
+	TOL_CBUFFER___ EntriesListFileNameBuffer;
 ERRBegin
 	reset();
 
@@ -289,15 +288,15 @@ bso::bool__ Test_(
 {
 	bso::bool__ Success = false;
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	const char *FileName = NULL;
 ERRBegin
 	FileName = BuildFileName_( BaseFileName, Extension, Buffer );
 
-	if ( !fil::FileExists( FileName ) )
+	if ( !fil::Exists( FileName ) )
 		ERRReturn;
 
-	if ( fil::GetFileLastModificationTime( FileName ) <= TimeStamp )
+	if ( fil::GetLastModificationTime( FileName ) <= TimeStamp )
 		ERRReturn;
 
 	Success = true;

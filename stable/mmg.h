@@ -364,7 +364,7 @@ namespace mmg
 
 			bso::bool__ Test;
 
-			Test = fil::FileExists( FileName );
+			Test = fil::Exists( FileName );
 
 			_ID = fls::GetId();
 

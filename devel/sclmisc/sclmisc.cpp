@@ -291,7 +291,7 @@ ERREpilog
 }
 
 void sclmisc::CreateBackupFile(
-	const char *FileName,
+	const fnm::name___ &FileName,
 	fil::backup_mode__ Mode )
 {
 ERRProlog
@@ -309,7 +309,7 @@ ERREnd
 ERREpilog
 }
 
-void sclmisc::RecoverBackupFile( const char *FileName )
+void sclmisc::RecoverBackupFile( const fnm::name___ &FileName )
 {
 ERRProlog
 	fil::recover_status__ Status = fil::rs_Undefined;
@@ -326,14 +326,15 @@ ERREnd
 ERREpilog
 }
 
-void sclmisc::ReportFileOpeningErrorAndAbort( const char *FileName )
+void sclmisc::ReportFileOpeningErrorAndAbort( const fnm::name___ &FileName )
 {
 ERRProlog
 	lcl::meaning Meaning;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Meaning.Init();
 	Meaning.SetValue( SCLMISC_NAME "_UnableToOpenFile" );
-	Meaning.AddTag( FileName );
+	Meaning.AddTag( FileName.UTF8( Buffer ) );
 
 	sclerror::SetMeaning( Meaning );
 

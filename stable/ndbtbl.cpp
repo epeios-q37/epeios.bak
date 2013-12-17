@@ -64,7 +64,7 @@ void ndbtbl::table_::_InsertInIndexes( rrow__ Row )
 	sdr::row__ IRow = _Indexes.First();
 
 	while ( IRow != E_NIL ) {
-		_Indexes( IRow )->Index( Row, false );
+		_Indexes( IRow )->Index( Row, NULL );
 
 		IRow = _Indexes.Next( IRow );
 	}

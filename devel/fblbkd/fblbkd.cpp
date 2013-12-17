@@ -76,7 +76,7 @@ static void Report_(
 {
 ERRProlog
 	str::string Translation;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Translation.Init();
 
@@ -104,7 +104,7 @@ namespace {
 	{
 		cast C = c_Unknow;
 	ERRProlog
-		STR_BUFFER___ N;
+		TOL_CBUFFER___ N;
 	ERRBegin
 		C = fblcst::GetID( Name.Convert( N  ) );
 	ERRErr
@@ -397,7 +397,7 @@ static void TestNotification_(
 	void * )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Requete.ReportRequestError( Requete.StringIn().Convert( Buffer ) );
 ERRErr
@@ -418,7 +418,7 @@ static void GetNewObject_(
 {
 ERRProlog
 	type__ T = FBLBKD_INVALID_TYPE;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	object__ O;
 ERRBegin
 	T = Request.Id16In();
@@ -453,7 +453,7 @@ static void GetType_(
 	void * )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	type__ T = FBLBKD_INVALID_TYPE;
 ERRBegin
 	const str::string_ &Type = Request.StringIn();
@@ -588,7 +588,7 @@ static void GetCommand_(
 ERRProlog
 	description Description;
 	command__ Command;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	type__ Type = Request.Id16In();
 
@@ -673,7 +673,7 @@ static void SetLanguage_(
 	void * )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	const str::string_ &Language = Request.StringIn();
 
@@ -782,7 +782,7 @@ ERRProlog
 	char RemoteProtocolVersion[10];
 	char RemoteAPIVersion[10];
 	str::string Translation;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( !flw::GetString( Flow, Language, sizeof( Language ) ) )
 		ERRDta();
@@ -830,7 +830,7 @@ bso::bool__ fblbkd::backend___::_TestCompatibility( flw::ioflow__ &Flow )
 	bso::bool__ Success = false;
 ERRProlog
 	str::string MessageLabel, URLLabel;
-	STR_BUFFER___ MessageLabelBuffer, URLLAbelBuffer;
+	TOL_CBUFFER___ MessageLabelBuffer, URLLAbelBuffer;
 ERRBegin
 	MessageLabel.Init( _BackendLabel );
 	MessageLabel.Append( "UpdateMessage" );

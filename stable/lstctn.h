@@ -287,7 +287,12 @@ namespace lstctn {
 			if ( uys::IsError( State ) ) {
 				reset();
 			} else {
-				if ( lst::Plug( ListContainer, _ListFileManager, _ContainerFileManager.StaticsFileManager().FileSize() /  ListContainer.GetStaticsItemSize(), _ContainerFileManager.TimeStamp() ) != State ) {
+				fil::size__ Size = _ContainerFileManager.StaticsFileManager().FileSize() /  ListContainer.GetStaticsItemSize();
+
+				if ( Size > SDR_SIZE_MAX )
+					ERRDta();
+
+				if ( lst::Plug( ListContainer, _ListFileManager, (sdr::size__)Size, _ContainerFileManager.TimeStamp() ) != State ) {
 					reset();
 					State = uys::sInconsistent;
 				}

@@ -223,7 +223,7 @@ namespace cgimng {
 			_LogData.Functions = &LogFunctions;
 
 			if ( _LogData.Functions != NULL )
-				_LogData.Mutex = mtx::Create( mtx::mProtecting );
+				_LogData.Mutex = mtx::Create();
 		}
 		void Create(
 			void *UP,

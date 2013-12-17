@@ -929,8 +929,6 @@ namespace tol {
 
 	E_AUTO2( object )
 
-#if 0
-
 	template <typename t> class _core_pointer___	// Classe de base de gestion d'un pointeur.
 	{
 	protected:
@@ -1063,7 +1061,6 @@ namespace tol {
 
 # define E_DPOINTER___( t )	delete_pointer___<t>
 
-#endif
 # define TOL__ERRP	err::handling__ ErrHandling = err::h_Default
 
 	template <typename t> class buffer___ // Gestion d'un 'buffer' d'objets de type 't' de taille dynamique. Sa taille ne diminue jamais.

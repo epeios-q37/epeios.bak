@@ -638,9 +638,9 @@ void ndbidx::index_atomized_file_manager___::Init(
 {
 ERRProlog
 	str::string TreeFileName;
-	STR_BUFFER___ TreeFileNameBuffer;
+	TOL_CBUFFER___ TreeFileNameBuffer;
 	str::string QueueFileName;
-	STR_BUFFER___ QueueFileNameBuffer;
+	TOL_CBUFFER___ QueueFileNameBuffer;
 ERRBegin
 	reset();
 

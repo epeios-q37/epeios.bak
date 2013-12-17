@@ -118,7 +118,7 @@ namespace csdsnc {
 	inline mutex__ _Create( void )
 	{
 #ifdef CSDSNC__MT
-		return mtx::Create( mtx::mProtecting );
+		return mtx::Create();
 #else
 		return CSDSNC_NO_MUTEX;
 #endif
