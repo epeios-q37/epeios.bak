@@ -118,13 +118,14 @@ namespace mtx {
 #elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
 	typedef int32_t	counter__;
 #elif defined ( MTX__USE_PTHREAD_MUTEX )
+	typedef volatile bso::s16__ counter_t;
 	struct counter__ {
-		volatile bso::s16__ Value;
+		counter_t Value;
 		pthread_mutexattr_t MutexAttr;
 		pthread_mutex_t Mutex;
 	};
 #elif defined( MTX__NO_ATOMIC_OPERATIONS )
-	typedef volatile bso::sshort__ counter__;
+	typedef volatile bso::s16__ counter__;
 #else
 #	error "No mutex handling scheme !"
 #endif
@@ -178,7 +179,13 @@ namespace mtx {
 #elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
 		return Counter;
 #elif defined( MTX__USE_PTHREAD_MUTEX )
-		return Counter.Value;
+		counter_t Buffer;
+		if ( pthread_mutex_lock( &Counter.Mutex ) )
+			ERRFwk();
+		Buffer = Counter.Value;
+		if ( pthread_mutex_unlock( &Counter.Mutex ) )
+			ERRFwk();
+		return Buffer;
 #elif defined( MTX__NO_ATOMIC_OPERATIONS )
 		return Counter;
 #else
@@ -195,7 +202,13 @@ namespace mtx {
 #elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
 		return Counter;
 #elif defined( MTX__USE_PTHREAD_MUTEX )
-		return Counter.Value;
+		counter_t Buffer;
+		if ( pthread_mutex_lock( &Counter.Mutex ) )
+			ERRFwk();
+		Buffer = Counter.Value;
+		if ( pthread_mutex_unlock( &Counter.Mutex ) )
+			ERRFwk();
+		return Buffer;
 #elif defined( MTX__NO_ATOMIC_OPERATIONS )
 		return Counter;
 #else

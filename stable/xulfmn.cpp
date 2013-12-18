@@ -118,11 +118,14 @@ static void FillWidget_(
 {
 ERRProlog
 	nsIDOMDocumentFragment *Fragment;
-	FNM_BUFFER___ FileNameBuffer;
+	fnm::name___ FileName;
+	str::string Buffer;
 ERRBegin
 	nsxpcm::RemoveChildren( Node );
 
-	Fragment = nsxpcm::XSLTransformByFileName( XML, str::string( fnm::BuildFileName( DefaultXSLRootPath, XSLFileNameAffix, ".xsl", FileNameBuffer ) ), Document, nsxpcm::xslt_parameters() );
+	FileName.Init();
+	Buffer.Init();
+	Fragment = nsxpcm::XSLTransformByFileName( XML, fnm::BuildFileName( DefaultXSLRootPath, XSLFileNameAffix, ".xsl", FileName ).UTF8( Buffer ), Document, nsxpcm::xslt_parameters() );
 
 	nsxpcm::AppendChild( Node, Fragment );
 ERRErr

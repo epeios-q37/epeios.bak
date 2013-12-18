@@ -27,7 +27,6 @@
 #include "err.h"
 #include "cio.h"
 #include "epsmsc.h"
-#include "clnarg.h"
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
@@ -62,8 +61,7 @@ END
 static void PrintUsage_( void )
 {
 ERRProlog
-	STR_BUFFER___ TBuffer;
-	CLNARG_BUFFER__ Buffer;
+	TOL_CBUFFER___ TBuffer;
 	lcl::meaning Meaning;
 	str::string Translation, ShortLong;
 ERRBegin

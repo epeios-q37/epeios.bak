@@ -265,13 +265,13 @@ namespace frdkrn {
 		}
 	protected:
 		recap__ _FillProjectRegistry(
-			const str::string_ &FileName,
+			const fnm::name___ &FileName,
 			const char *TargetName,
 			const xpp::criterions___ &Criterions,
 			str::string_ &Id,
 			error_set___ &ErrorSet );
 		recap__ _DumpProjectRegistry(
-			const str::string_ &FileName,
+			const fnm::name___ &FileName,
 			const char *TargetName,
 			const str::string_ &Id,
 			error_set___ &ErrorSet );

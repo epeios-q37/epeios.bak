@@ -64,7 +64,7 @@ recap__ frdssn::session___::FillSetupRegistry(
 {
 	recap__ Recap = r_Undefined;
 ERRProlog
-	STR_BUFFER___ FileNameBuffer, PathBuffer;
+	TOL_CBUFFER___ FileNameBuffer, PathBuffer;
 ERRBegin
 	if ( !IsOpen() )
 		ERRFwk();

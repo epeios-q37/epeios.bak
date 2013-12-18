@@ -86,7 +86,7 @@ static void Report_(
 {
 ERRProlog
 	str::string Translation;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Translation.Init();
 

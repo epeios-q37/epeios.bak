@@ -209,7 +209,8 @@ static void FillPredefinedBackendsWidget_( trunk___ &Trunk )
 ERRProlog
 	str::string PredefinedBackends;
 	nsIDOMDocumentFragment *Fragment;
-	FNM_BUFFER___ FileNameBuffer;
+	fnm::name___ FileName;
+	str::string Buffer;
 ERRBegin
 	PredefinedBackends.Init();
 
@@ -219,7 +220,9 @@ ERRBegin
 
 	nsxpcm::RemoveChildren( Trunk.UI().SessionForm().Widgets.mnlPredefinedBackend );
 
-	Fragment = nsxpcm::XSLTransformByFileName( PredefinedBackends, str::string( fnm::BuildFileName( Trunk.DefaultXSLRootPath(), "PredefinedBackendMenuList", ".xsl", FileNameBuffer ) ), Trunk.UI().SessionForm().Document(), nsxpcm::xslt_parameters() );
+	FileName.Init();
+	Buffer.Init();
+	Fragment = nsxpcm::XSLTransformByFileName( PredefinedBackends, fnm::BuildFileName( Trunk.DefaultXSLRootPath(), "PredefinedBackendMenuList", ".xsl", FileName ).UTF8( Buffer ), Trunk.UI().SessionForm().Document(), nsxpcm::xslt_parameters() );
 
 	nsxpcm::AppendChild( Trunk.UI().SessionForm().Widgets.mnlPredefinedBackend, Fragment );
 

@@ -70,7 +70,7 @@ using namespace sclgecko;
 
 static bso::bool__ IsInitialized_ = false;
 
-static STR_BUFFER___ Language_;
+static TOL_CBUFFER___ Language_;
 
 #define DEFAULT_LANGUAGE	"en"
 
@@ -144,7 +144,7 @@ inline static void SetElementAttribute_(
 	const str::string_ &AttributeValue )
 {
 ERRProlog
-	STR_BUFFER___  Buffer;
+	TOL_CBUFFER___  Buffer;
 ERRBegin
 	nsxpcm::SetAttribute( nsxpcm::GetElementById( Document, ElementId ), AttributeName.Convert( Buffer ), AttributeValue );
 ERRErr

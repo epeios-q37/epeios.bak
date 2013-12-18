@@ -251,13 +251,13 @@ bso::bool__ frdkrn::GetDefaultConfigurationFileName(
 {
 	bso::bool__ Exists = false;
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	FileName.Init( Affix );
 	FileName.Append( '.' );
 	FileName.Append( FRDKRN_CONFIGURATION_FILE_EXTENSION );
 
-	Exists = fil::FileExists( FileName.Convert( Buffer ) );
+	Exists = fil::Exists( FileName.Convert( Buffer ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -362,7 +362,7 @@ recap__ frdkrn::kernel___::_Connect(
 {
 	recap__ Recap = r_Undefined;
 ERRProlog
-	STR_BUFFER___ RemoteHostServiceOrLocalLibraryPathBuffer;
+	TOL_CBUFFER___ RemoteHostServiceOrLocalLibraryPathBuffer;
 ERRBegin
 	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, ReportingFunctions, Language, ErrorSet, LogFunctions );
 ERRErr
@@ -498,7 +498,7 @@ static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
 #define PROJECT_ID_RELATIVE_PATH "@id"
 
 recap__ frdkrn::kernel___::_FillProjectRegistry(
-	const str::string_ &FileName,
+	const fnm::name___ &FileName,
 	const char *Target,
 	const xpp::criterions___ &Criterions,
 	str::string_ &Id,
@@ -507,12 +507,12 @@ recap__ frdkrn::kernel___::_FillProjectRegistry(
 	recap__ Recap = r_Undefined;
 ERRProlog
 	str::string Path;
-	STR_BUFFER___ FileNameBuffer, PathBuffer;
+	TOL_CBUFFER___ FileNameBuffer, PathBuffer;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
 	str::ReplaceTag( Path, 1, str::string( Target ), '%' );
 
-	if ( _Registry.Fill( _RegistryProjectLevel = _Registry.PushEmbeddedLevel( str::string( "Project" ) ), FileName.Convert( FileNameBuffer ), Criterions, Path.Convert( PathBuffer ),  ErrorSet.Context ) != rgstry::sOK ) {
+	if ( _Registry.Fill( _RegistryProjectLevel = _Registry.PushEmbeddedLevel( str::string( "Project" ) ), FileName, Criterions, Path.Convert( PathBuffer ),  ErrorSet.Context ) != rgstry::sOK ) {
 		Recap = rProjectParsingError;
 		ERRReturn;
 	}
@@ -533,7 +533,7 @@ ERREpilog
 }
 
 recap__ frdkrn::kernel___::_DumpProjectRegistry(
-	const str::string_ &FileName,
+	const fnm::name___ &FileName,
 	const char *TargetName,
 	const str::string_ &Id,
 	error_set___ &ErrorSet )
@@ -544,17 +544,16 @@ ERRProlog
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
 	bso::bool__ Backuped = false;
-	STR_BUFFER___ FileNameBuffer;
 	txf::text_oflow__ TVoidOFlow;
 ERRBegin
 	TVoidOFlow.Init( flx::VoidOFlow );
 
-	if ( fil::CreateBackupFile( FileName.Convert( FileNameBuffer ), fil::bmRename, err::hUserDefined ) == fil::bsOK )
+	if ( fil::CreateBackupFile( FileName, fil::bmRename, err::hUserDefined ) == fil::bsOK )
 		Backuped = true;
 
-	if ( FFlow.Init( FileNameBuffer, err::hUserDefined ) != fil::sSuccess ) {
+	if ( FFlow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
 		Recap = rUnableToOpenFile;
-		ErrorSet.Misc = FileName;
+		FileName.UTF8( ErrorSet.Misc );
 		ERRReturn;
 	}
 
@@ -574,7 +573,7 @@ ERRBegin
 	Recap = r_OK;
 ERRErr
 	if ( Backuped )
-		fil::RecoverBackupFile( FileNameBuffer, err::hUserDefined );
+		fil::RecoverBackupFile( FileName );
 ERREnd
 ERREpilog
 	return Recap;
@@ -761,7 +760,7 @@ ERRProlog
 	str::string Value;
 	str::string Translation;
 	rgstry::tags Tags;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Tags.Init();
 	Tags.Append( Id );
@@ -833,7 +832,7 @@ ERRProlog
 	str::string Value;
 	str::string Translation;
 	rgstry::tags Tags;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Tags.Init();
 	Tags.Append( Id );

@@ -124,9 +124,6 @@ geckoo::steering_callback__ *GECKOORetrieveSteering( void )
 	if ( !mtx::IsLocked( Mutex_ ) )
 		ERRFwk();
 
-	if ( !mtx::IsOwner( Mutex_ ) )
-		ERRFwk();
-
 	if ( LoneSteering_ == NULL )
 		ERRFwk();
 
@@ -168,7 +165,7 @@ class geckobpersonnalization
 public:
 	geckobpersonnalization( void )
 	{
-		Mutex_ = mtx::Create( mtx::mProtecting );
+		Mutex_ = mtx::Create();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
