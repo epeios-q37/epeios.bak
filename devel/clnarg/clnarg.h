@@ -54,7 +54,7 @@
 #define CLNARG_DETAIL_SEPARATOR	", "
 
 #define CLNARG_STRING_PARAM___( name )\
-	STR_BUFFER___ name
+	TOL_CBUFFER___ name
 
 #	ifdef CLNARG_BUFFER_SIZE
 #		define CLNARG__BUFFER_SIZE	CLNARG_BUFFER_SIZE

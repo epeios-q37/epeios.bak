@@ -41,6 +41,7 @@
 # include "fnm.h"
 
 namespace flf {
+
 	class file_iflow_driver___
 	: public iof::io_iflow_driver___
 	{
@@ -66,7 +67,7 @@ namespace flf {
 		{
 			reset();
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fdr::thread_safety__ ThreadSafety,
 			fil::mode__ Mode = fil::mReadOnly,
@@ -74,11 +75,11 @@ namespace flf {
 		{
 			reset();
 
-			fil::status__ Status = fil::s_Undefined;
+			tol::report__ Report = tol::r_Undefined;
 			_D = fil::Open( FileName, Mode );
 
 			if ( _D == IOP_UNDEFINED_DESCRIPTOR ) {
-				Status = fil::sFailure;
+				Report = tol::rFailure;
 				switch ( ErrorHandling ) {
 				case err::hUserDefined:
 					break;
@@ -90,13 +91,13 @@ namespace flf {
 					break;
 				}
 			} else {
-				Status = fil::sSuccess;
+				Report = tol::rSuccess;
 				io_iflow_driver___::Init( _D, ThreadSafety );
 			}
 
-			return Status;
+			return Report;
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fdr::thread_safety__ ThreadSafety,
 			err::handling__ ErrorHandling,
@@ -134,7 +135,7 @@ namespace flf {
 		{
 			reset( true );
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fil::mode__ Mode = fil::mReadOnly,
 			err::handling__ ErrorHandling = err::h_Default,
@@ -147,7 +148,7 @@ namespace flf {
 			if ( D_ == IOP_UNDEFINED_DESCRIPTOR ) {
 				switch ( ErrorHandling ) {
 				case err::hUserDefined:
-					return fil::sFailure;
+					return tol::rFailure;
 					break;
 				case err::hThrowException:
 					ERRLbr();
@@ -160,9 +161,9 @@ namespace flf {
 
 			_io_iflow___::Init( D_, AmountMax );
 
-			return fil::sSuccess;
+			return tol::rSuccess;
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			err::handling__ ErrorHandling,
 			fil::mode__ Mode = fil::mReadOnly,
@@ -197,7 +198,7 @@ namespace flf {
 		{
 			reset();
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fdr::thread_safety__ ThreadSafety,
 			fil::mode__ Mode = fil::mRemove,
@@ -205,11 +206,11 @@ namespace flf {
 		{
 			reset();
 
-			fil::status__ Status = fil::s_Undefined;
+			tol::report__ Report = tol::r_Undefined;
 			_D = fil::Open( FileName, Mode );
 
 			if ( _D == IOP_UNDEFINED_DESCRIPTOR ) {
-				Status = fil::sFailure;
+				Report = tol::rFailure;
 				switch ( ErrorHandling ) {
 				case err::hUserDefined:
 					break;
@@ -221,13 +222,13 @@ namespace flf {
 					break;
 				}
 			} else {
-				Status = fil::sSuccess;
+				Report = tol::rSuccess;
 				io_oflow_driver___::Init( _D, ThreadSafety );
 			}
 
-			return Status;
+			return Report;
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fdr::thread_safety__ ThreadSafety,
 			err::handling__ ErrorHandling,
@@ -266,7 +267,7 @@ namespace flf {
 		{
 			reset( true );
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fil::mode__ Mode = fil::mRemove,
 			err::handling__ ErrorHandling = err::h_Default,
@@ -279,7 +280,7 @@ namespace flf {
 			if ( D_ == IOP_UNDEFINED_DESCRIPTOR ) {
 				switch ( ErrorHandling ) {
 				case err::hUserDefined:
-					return fil::sFailure;
+					return tol::rFailure;
 					break;
 				case err::hThrowException:
 					ERRLbr();
@@ -292,9 +293,9 @@ namespace flf {
 
 			io_oflow___::Init( D_, AmountMax );
 
-			return fil::sSuccess;
+			return tol::rSuccess;
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const fnm::name___ &FileName,
 			err::handling__ ErrorHandling,
 			fil::mode__ Mode = fil::mRemove )

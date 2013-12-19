@@ -1525,7 +1525,7 @@ ERRProlog
 	fnm::name___ Location;
 	str::string Buffer;
 ERRBegin
-	if ( FFlow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
+	if ( FFlow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		Status = Context.Status = sUnableToOpenFile;
 		Context.Coordinates.FileName = FileName;
 		ERRReturn;

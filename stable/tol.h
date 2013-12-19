@@ -79,6 +79,13 @@
 namespace tol
 {
 	typedef char buffer__[20];
+
+	enum report__ {
+		rFailure = 0,
+		rSuccess,
+		r_amount,
+		r_Undefined,
+	};
 }
 
 

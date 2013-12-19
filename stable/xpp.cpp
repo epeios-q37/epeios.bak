@@ -936,7 +936,7 @@ ERRBegin
 	LocalizedFileName.Init();
 	fnm::BuildFileName( fnm::name___( Directory ), fnm::name___( FileName ), fnm::name___( "" ), LocalizedFileName );
 
-	if ( _FFlow.Init( fnm::CorrectLocation( LocalizedFileName ), fil::mReadOnly, err::hUserDefined ) != fil::sSuccess ) {
+	if ( _FFlow.Init( fnm::CorrectLocation( LocalizedFileName ), fil::mReadOnly, err::hUserDefined ) != tol::rSuccess ) {
 		Status = sUnableToOpenFile;
 		ERRReturn;
 	}

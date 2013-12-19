@@ -174,7 +174,7 @@ template <typename item> static bso::bool__ Load_(
 ERRProlog
 	flf::file_iflow___ Flow;
 ERRBegin
-	if ( Flow.Init( FileName, err::hUserDefined ) == fil::sSuccess ) {
+	if ( Flow.Init( FileName, err::hUserDefined ) == tol::rSuccess ) {
 		if ( fil::GetLastModificationTime( FileName ) <= ReferenceTimeStamp )
 			ERRReturn;
 

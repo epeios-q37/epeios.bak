@@ -144,7 +144,7 @@ namespace fls {
 		{
 			reset();
 		}
-		fil::status__ Init(
+		tol::report__ Init(
 			const char *FileName,
 			fil::mode__ Mode,
 			err::handling__ ErrorHandling = err::h_Default )
@@ -160,7 +160,7 @@ namespace fls {
 			if ( _D == IOP_UNDEFINED_DESCRIPTOR ) {
 				switch ( ErrorHandling ) {
 				case err::hUserDefined:
-					return fil::sFailure;
+					return tol::rFailure;
 					break;
 				case err::hThrowException:
 					ERRLbr();
@@ -173,7 +173,7 @@ namespace fls {
 
 			_Core.Init( _D );
 
-			return fil::sSuccess;
+			return tol::rSuccess;
 		}
 		void Lock( void )
 		{
@@ -288,7 +288,7 @@ namespace fls {
 
 			if ( !Temoin_.Ouvert )
 			{
-				Success = File_.Init( Nom_, Temoin_.Mode, ErrorHandling ) == fil::sSuccess;
+				Success = File_.Init( Nom_, Temoin_.Mode, ErrorHandling ) == tol::rSuccess;
 
 				if ( Success )
 					Temoin_.Ouvert = 1;

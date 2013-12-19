@@ -88,6 +88,24 @@ namespace mthitg {
 	int Comp_(
 		const integer_ &Op1,
 		const integer_ &Op2 );
+	integer Divide_(
+		const integer_ &Num,
+		const integer_ &Den,
+		integer_ &Rest );
+	integer Div_(
+		const integer_ &Num,
+		const integer_ &Den,
+		integer_ &Rest );
+	integer Add_(
+		const integer_ &Op1,
+		const integer_ &Op2 );
+	integer Sub_(
+		const integer_ &Op1,
+		const integer_ &Op2 );
+	integer Mul_(
+		const integer_ &Op1,
+		const integer_ &Op2 );
+
 	
 	//c An integer.
 	class integer_ {

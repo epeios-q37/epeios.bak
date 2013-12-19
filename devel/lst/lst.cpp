@@ -56,7 +56,7 @@ uys::state__ lst::WriteToFile_(
 ERRProlog
 	flf::file_oflow___ Flow;
 ERRBegin
-	if ( Flow.Init( FileName ) != fil::sSuccess ) {
+	if ( Flow.Init( FileName ) != tol::rSuccess ) {
 		State = uys::sInconsistent;
 		ERRReturn;
 	}
@@ -99,7 +99,7 @@ ERRProlog
 	flf::file_iflow___ Flow;
 	fil::size__ Size = 0;
 ERRBegin
-	if ( Flow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
+	if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		State = uys::sInconsistent;
 		ERRReturn;
 	}

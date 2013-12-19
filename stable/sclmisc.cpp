@@ -213,7 +213,7 @@ ERRBegin
 	Success = GuessFileName_( Target, Suffix, SuggestedDirectory, FileName );
 
 	if ( Success )
-		if ( Flow.Init( FileName, err::hUserDefined ) != fil::sSuccess )
+		if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess )
 			Success = false;
 
 	Location.Init();

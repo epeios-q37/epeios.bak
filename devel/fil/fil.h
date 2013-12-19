@@ -106,17 +106,6 @@ namespace fil {
 		m_amount,
 		m_Undefined,
 	};
- 	//e Status.
-	enum status__ {
-		//i Failure.
-		sFailure = 0,
-		//i Success.
-		sSuccess,
-		//i Amount of status.
-		s_amount,
-		//i Unknow,
-		s_Undefined,
-	};
 
 	iop::descriptor__ Open(
 		const fnm::name___ &Name,
@@ -124,93 +113,230 @@ namespace fil {
 
 	void Close( iop::descriptor__ D );
 
-	//f Return true if the file 'Name' exists, false otherwise.
-	inline bool Exists( const fnm::name___ &Name )
+	enum error__ {
+		// No error,
+		eNone,
+		eBadF,
+		eNoEnt,
+		eNotDir,
+		eLoop,
+		eFault,
+		eAcces,
+		eNoMem,
+		eNameTooLong,
+		eUnknown,
+		e_amount,
+		e_Undefined
+	};
+
+	inline error__ _ConvertErrNo( int ErrNo )
+	{
+		switch ( ErrNo ) {
+		case EBADF:
+			return eBadF;
+			break;
+		case ENOENT:
+			return eNoEnt;
+			break;
+		case ENOTDIR:
+			return eNotDir;
+			break;
+		case ELOOP:
+			return eLoop;
+			break;
+		case EFAULT:
+			return eFault;
+			break;
+		case EACCES:
+			return eAcces;
+			break;
+		case ENOMEM:
+			return eNoMem;
+			break;
+		case ENAMETOOLONG:
+			return eNameTooLong;
+			break;
+		default:
+			return eUnknown;
+			break;
+		}
+
+		return e_Undefined;
+	}
+
+	enum type__ {
+		tFile,
+		tDir,
+		tUnknown,
+		t_amount,
+		t_Undefined
+	};
+
+	inline type__ _ConvertMode( int Mode )
+	{
+		if ( Mode &  S_IFREG )
+			return tFile;
+		else if ( Mode & S_IFDIR )
+			return tDir;
+		else
+			return tUnknown;
+	}
+
+	struct info__ {
+		type__ Type;
+		size__ Size;
+		struct time__ {
+			time_t
+				Creation,
+				Modification,
+				Access;
+			void reset( bso::bool__ = true )
+			{
+				Creation, Modification, Access = 0;
+			}
+			E_CDTOR( time__ );
+			void Init( void )
+			{
+				Creation, Modification, Access = 0;
+			}
+		} Time;
+		void reset( bso::bool__ P = true )
+		{
+			Time.reset( P );
+
+			Type = t_Undefined;
+			Size = 0;
+		}
+		E_CDTOR( info__ );
+		void Init( void )
+		{
+			Time.Init();
+
+			Type = t_Undefined;
+			Size = 0;
+		}
+	};
+
+	inline error__ _Stat(
+		const fnm::name___ &FileName,
+		struct FIL__STATS &Stat )
+	{
+		errno = 0;
+
+		if ( FIL__STATF( FileName.Core(), &Stat ) != 0 )
+			return _ConvertErrNo( errno );
+
+		return eNone;
+	}
+
+	inline error__ _Stat(
+		iop::descriptor__ Descriptor,
+		struct FIL__STATS &Stat )
+	{
+		errno = 0;
+
+		if ( FIL__FSTAT( Descriptor, &Stat ) != 0 )
+			return _ConvertErrNo( errno );
+
+		return eNone;
+	}
+
+	template <typename t> inline error__ GetInfo(
+		const t &FileSpecification,
+		info__ &Info )
 	{
 		struct FIL__STATS Stat;
 
-		if ( FIL__STATF( Name.Core(), &Stat ) == 0 )
-			return true;
+		error__ Error = _Stat( FileSpecification, Stat );
 
-		switch ( errno ) {
-		case EBADF:
+		if ( Error != eNone )
+			return Error;
+
+		Info.Size = Stat.st_size;
+		Info.Type = _ConvertMode( Stat.st_mode );
+
+		Info.Time.Access = Stat.st_atime;
+		Info.Time.Creation = Stat.st_ctime;
+		Info.Time.Modification = Stat.st_mtime;
+
+		return Error;
+	}
+
+
+	//f Return true if the file 'Name' exists, false otherwise.
+	inline bool Exists( const fnm::name___ &Name )
+	{
+		info__ Info;
+
+		Info.Init();
+
+		switch ( GetInfo( Name, Info ) ) {
+		case eNone:
+			return true;
+			break;
+		case eBadF:
 			ERRSys();	// Normalement, cette erreur ne peut arriver, compte tenu de la fonction utilisée.
 			break;
-		case ENOENT:
+		case eNoEnt:
 			break;
 		case ENOTDIR:
 			break;
-#if defined( FIL__POSIX )
-		case ELOOP:
+		case eLoop:
 			break;
-#endif
-		case EFAULT:
+		case eFault:
 			ERRLbr();
 			break;
-		case EACCES:
+		case eAcces:
 			break;
-		case ENOMEM:
+		case eNoMem:
 			ERRSys();
 			break;
-		case ENAMETOOLONG:
+		case eNameTooLong:
 			ERRSys();
 			break;
 		default:
-			ERRSys();
+			ERRFwk();
 			break;
 		}
 
 		return false;
 	}
 
-	inline time_t GetLastModificationTime( const fnm::name___ &FileName )
+	template <typename t> inline const info__ &_GetInfo(
+		const t &FileSpecification,
+		info__ &Info )
 	{
-		struct FIL__STATS Stat;
+		if ( GetInfo( FileSpecification, Info ) != eNone )
+			ERRFwk();
 
-		if ( FIL__STATF( FileName.Core(), &Stat ) != 0 )
-			ERRLbr();
-
-		return Stat.st_mtime;
+		return Info;
 	}
 
-	inline size__ GetSize( iop::descriptor__ Descriptor )
+	template <typename t> inline time_t GetLastModificationTime( const t &FileSpecification )
 	{
-		struct FIL__STATS Stat;
+		info__ Info;
 
-		if ( FIL__FSTAT( Descriptor, &Stat ) != 0 )
-			ERRLbr();
+		Info.Init();
 
-		return Stat.st_size;
+		return _GetInfo( FileSpecification, Info ).Time.Modification;
 	}
 
-	inline size__ GetSize( const fnm::name___ &FileName )
+	template <typename t> inline size__ GetSize( const t &FileSpecification )
 	{
-		struct FIL__STATS Stat;
+		info__ Info;
 
-		if ( FIL__STATF( FileName.Core(), &Stat ) != 0 )
-			ERRLbr();
+		Info.Init();
 
-		return Stat.st_size;
+		return _GetInfo( FileSpecification, Info ).Size;
 	}
 
-	inline bso::size__ IsDirectory( const fnm::name___ &FileName )
+	template <typename t> inline size__ GetType( const t &FileSpecification )
 	{
-		struct FIL__STATS Stat;
+		info__ Info;
 
-		if ( FIL__STATF( FileName.Core(), &Stat ) != 0 )
-			ERRLbr();
+		Info.Init();
 
-		return Stat.st_mode & S_IFDIR;
-	}
-
-	inline bso::size__ IsFile(const fnm::name___ &FileName )
-	{
-		struct FIL__STATS Stat;
-
-		if ( FIL__STATF( FileName.Core(), &Stat ) != 0 )
-			ERRLbr();
-
-		return Stat.st_mode & S_IFREG;
+		return _GetInfo( FileSpecification, Info ).Type;
 	}
 
 	// Modifie la date de modification d'un fichier à la date courante.
