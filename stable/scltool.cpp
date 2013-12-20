@@ -1106,7 +1106,7 @@ ERRBegin
 	RegistryProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
 	RegistrySetupLevel_ = Registry_.PushEmbeddedLevel( str::string( "Setup" ) );
 
-//	FillSetupRegistry_( argc, argv );
+	FillSetupRegistry_( argc, argv );
 
 	Main( argc, argv );
 ERRErr
