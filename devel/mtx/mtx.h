@@ -263,7 +263,7 @@ namespace mtx {
 	}
 
 	//t A mutex handler.
-	typedef struct mutex__ {
+	typedef struct _mutex__ {
 		counter__ Counter;
 #ifdef MTX__CONTROL
 		void Release( bso::bool__ Destroy )	// 'Destruction' à vrai si appelé par le destructeur.
@@ -283,7 +283,7 @@ namespace mtx {
 #endif
 			return _GetSign( Counter ) != MTX__UNLOCKED_MUTEX_COUNTER_SIGN;
 		}
-		bso::bool__ TryToLock( bso::bool__ *AlreadyLocked )	// 'AlreadyLocked' significatif seulement si valeur retournée == 'true'.
+		bso::bool__ TryToLock( void )
 		{
 #ifdef MTX__CONTROL
 			if ( IsReleased() )
@@ -295,11 +295,9 @@ namespace mtx {
 			if ( _GetValue( Counter ) == MTX__COUNTER_OVERFLOW_VALUE )
 				ERRLmt();
 
-			if ( _DecAndTest( Counter ) ) {
-				if ( AlreadyLocked != NULL )
-					*AlreadyLocked = false;
+			if ( _DecAndTest( Counter ) )
 				return true;
-			} else {
+			else {
 				_Inc( Counter );
 				return false;
 			}
@@ -311,11 +309,11 @@ namespace mtx {
 
 			_Inc( Counter );
 		}
-		mutex__( void )
+		_mutex__( void )
 		{
 			_Set( Counter, MTX__UNLOCKED_MUTEX_COUNTER_VALUE, false );
 		}
-		~mutex__( void )
+		~_mutex__( void )
 		{
 #ifdef MTX__CONTROL
 			Release( true );
@@ -329,7 +327,7 @@ namespace mtx {
 	{
 		mutex_handler__ Handler;
 		
-		if ( ( Handler = new mutex__ ) == NULL )
+		if ( ( Handler = new _mutex__ ) == NULL )
 			ERRAlc();
 
 		return Handler;
@@ -345,16 +343,13 @@ namespace mtx {
 	}
 
 
-	//f Try to lock 'Handler' without blocking. Return 'true' if locks succeed, false otherwise.
-	inline bso::bool__ TryToLock(
-		mutex_handler__ Handler,
-		bso::bool__ &AlreadyLocked = *(bso::bool__ *)NULL )	// 'AlreadyLocked' significatif seulement si valeur retournée == 'true'.
+	inline bso::bool__ TryToLock( mutex_handler__ Handler)
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			ERRPrm();
 #endif
-		return Handler->TryToLock( &AlreadyLocked );
+		return Handler->TryToLock();
 	}
 
 	// Wait until mutex unlocked.
@@ -367,19 +362,15 @@ namespace mtx {
 		}
 	}
 
-	//f Lock 'Handler'. Blocks until lock succeed.
-	inline bso::bool__ Lock( mutex_handler__ Handler )
+	// Lock 'Handler'. Blocks until lock succeed.
+	inline void Lock( mutex_handler__ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			ERRPrm();
 #endif
-		bso::bool__ AlreadyLocked = false;
-
-		if ( !TryToLock( Handler, AlreadyLocked ) )
+		if ( !TryToLock( Handler ) )
 			WaitUntilUnlocked_( Handler );
-
-		return !AlreadyLocked;
 	}
 
 	//f Unlock 'Handler'.
@@ -407,62 +398,99 @@ namespace mtx {
 		delete Handler;
 	}
 
-	//c A mutex.
+	enum state__ {
+		sDisabled,	// Uitlisation dans un contexte mono-thread.
+		sUnlocked,
+		sLocked,
+		s_amount,
+		s_Undefined
+	};
+
 	class mutex___
 	{
 	private:
-		// Mutex handler.
-		mutex_handler__ Handler_;
+		state__ _State;
+		mutex_handler__ _Handler;
+		void _Test( void )
+		{
+# ifdef MTX_DBG
+			if ( _Handler == MTX__INVALID_HANDLER )
+				ERRFwk();
+# endif
+		}
+		void _UnlockIfInitializedAndLocked( void )
+		{
+			if ( _Handler != MTX__INVALID_HANDLER )
+				if ( _State == sLocked ) {
+					mtx::Unlock( _Handler );
+
+					_State = sUnlocked;
+				}
+		}
 	public:
 		void reset( bool P = true )
 		{
-			Handler_ = MTX__INVALID_HANDLER;
+			if ( P )
+				_UnlockIfInitializedAndLocked();
+
+			_Handler = MTX__INVALID_HANDLER;
+			_State = s_Undefined;
+
 		}
-		mutex___( void )
+		E_CDTOR( mutex___ );
+		void Init(
+			mutex_handler__ Handler,
+			bso::bool__ Disabled = false )	// Si à 'true', utilisation dans un contexte mono-thread.
 		{
-			reset( false );
-		}
-		~mutex___( void )
-		{
-			reset( true );
-		}
-		//f Initialization.with mutex handler 'Handler'.
-		void Init( mutex_handler__ Handler )
-		{
-			reset();
+			_UnlockIfInitializedAndLocked();
 			
-			Handler_ = Handler;
+			_Handler = Handler;
+
+			if ( Disabled )
+				_State = sDisabled;
+			else
+				_State = sUnlocked;
 		}
-		//f Lock the semaphore.
-		bso::bool__ Lock( void )
-		{
-#ifdef MTX_DBG
-			if ( Handler_ == MTX__INVALID_HANDLER )
-				ERRPrm();
-#endif
-			mtx::Lock( Handler_ );
-		}
-		//f Unlock the semaphore.
-		void Unlock( void )
-		{
-#ifdef MTX_DBG
-			if ( Handler_ == MTX__INVALID_HANDLER )
-				ERRPrm();
-#endif
-			return mtx::Unlock( Handler_ );
-		}
-		//f Try to lock without blocking. Return true if success, false otherwise.
 		bso::bool__ TryToLock( void )
 		{
-#ifdef MTX_DBG
-			if ( Handler_ == MTX__INVALID_HANDLER )
-				ERRPrm();
-#endif
-			return mtx::TryToLock( Handler_ );
+			_Test();
+
+			if ( _State == sDisabled )
+				return true;
+			else {
+				if ( _State == sLocked )
+					return true;
+				else if ( mtx::TryToLock( _Handler ) ) {
+					_State = sLocked;
+					return true;
+				} else
+					return false;
+			}
 		}
-		bso::bool__ IsLocked( void )
+		void Lock( void )
 		{
-			return mtx::IsLocked( Handler_ );
+			_Test();
+
+			if ( _State != sDisabled ) {
+				if ( _State != sLocked ) {
+					mtx::Lock( _Handler );
+
+					_State = sLocked;
+				}
+			}
+		}
+		void Unlock( void )
+		{
+			_Test();
+
+			if ( _State != sDisabled ) {
+				if ( _State == sUnlocked )
+					ERRFwk();
+
+				_State = sUnlocked;
+
+				mtx::Unlock( _Handler );
+			}
 		}
 	};
 }
