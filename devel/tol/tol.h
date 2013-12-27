@@ -1109,7 +1109,7 @@ namespace tol {
 		{
 			reset( false );
 		}
-		virtual ~buffer___ ( void )
+		~buffer___ ( void )
 		{
 			reset();
 		}

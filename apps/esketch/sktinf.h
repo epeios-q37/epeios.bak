@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
 */
 
-// $Id$
-
 // eSKeTch INFormations.
 
 #ifndef SKTINF__INC

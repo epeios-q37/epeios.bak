@@ -37,7 +37,7 @@ namespace {
 	{
 		mtk__routine R;
 		void *UP;
-		mtx::mutex_handler__ MH;
+		mtx::handler__ MH;
 		thread_struct__( void )
 		{
 			R = NULL;
@@ -176,13 +176,13 @@ ERREpilog
 namespace {
 	struct common__ {
 		// Lock to ensure that data was red before reusing them.
-		mtx::mutex_handler__ Data;
+		mtx::handler__ Data;
 		// Lock for new thread to block caller.
-		mtx::mutex_handler__ Thread;
+		mtx::handler__ Thread;
 		// Lock for thread launcher to block new created thread.
-		mtx::mutex_handler__ Store;
+		mtx::handler__ Store;
 		// Lock to handle concurrent calls to 'LauncAndKeep()'.
-		mtx::mutex_handler__ Exclusion;
+		mtx::handler__ Exclusion;
 		bso::bool__ Continue;
 		void *UP;
 		bso::uint__ Amount;

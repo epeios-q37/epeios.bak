@@ -112,15 +112,18 @@
 namespace mtx {
 
 #ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
-	typedef LONG counter__;
+	typedef LONG counter_t__;
+	typedef counter_t__ counter__;
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
-	typedef atomic_t	counter__;
+	typedef atomic_t	counter_t__;
+	typedef counter_t__ counter__;
 #elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
-	typedef int32_t	counter__;
+	typedef int32_t	counter_t__;
+	typedef counter_t__ counter__;
 #elif defined ( MTX__USE_PTHREAD_MUTEX )
-	typedef volatile bso::s16__ counter_t;
+	typedef volatile bso::s16__ counter_t__;
 	struct counter__ {
-		counter_t Value;
+		counter_t__ Value;
 		pthread_mutexattr_t MutexAttr;
 		pthread_mutex_t Mutex;
 	};
@@ -131,9 +134,10 @@ namespace mtx {
 #endif
 
 #ifdef MTX__CONTROL
-#	define MTX__RELEASED_MUTEX_COUNTER_VALUE	2
+#	define MTX__RELEASED_MUTEX_COUNTER_VALUE	3
 #endif
 
+#define MTX__DISABLED_MUTEX_COUNTER_VALUE	2
 #define MTX__UNLOCKED_MUTEX_COUNTER_VALUE	1
 #define MTX__UNLOCKED_MUTEX_COUNTER_SIGN	MTX__UNLOCKED_MUTEX_COUNTER_VALUE
 
@@ -170,7 +174,7 @@ namespace mtx {
 #endif
 	}
 
-	inline bso::sign__ _GetSign( counter__ &Counter )	// Retourne le signe de 'Counter'.
+	inline counter_t__ _GetValue( counter__ &Counter )	// Retourne la valeur de 'Counter'.
 	{
 #ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
 		return Counter;
@@ -179,7 +183,7 @@ namespace mtx {
 #elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
 		return Counter;
 #elif defined( MTX__USE_PTHREAD_MUTEX )
-		counter_t Buffer;
+		counter_t__ Buffer;
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
 			ERRFwk();
 		Buffer = Counter.Value;
@@ -193,28 +197,11 @@ namespace mtx {
 #endif
 	}
 
-	inline int _GetValue( counter__ &Counter )	// Retourne la valeur de 'Counter'.
+	inline bso::sign__ _GetSign( counter__ &Counter )	// Retourne le signe de 'Counter'.
 	{
-#ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
-		return Counter;
-#elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
-		return atomic_read( &Counter );
-#elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
-		return Counter;
-#elif defined( MTX__USE_PTHREAD_MUTEX )
-		counter_t Buffer;
-		if ( pthread_mutex_lock( &Counter.Mutex ) )
-			ERRFwk();
-		Buffer = Counter.Value;
-		if ( pthread_mutex_unlock( &Counter.Mutex ) )
-			ERRFwk();
-		return Buffer;
-#elif defined( MTX__NO_ATOMIC_OPERATIONS )
-		return Counter;
-#else
-#	error "No mutex handling scheme !"
-#endif
+		return _GetValue( Counter );
 	}
+
 
 	inline void _Inc( counter__ &Counter )	// Incrémente 'Counter'.
 	{
@@ -275,12 +262,19 @@ namespace mtx {
 			return _GetValue( Counter ) == MTX__RELEASED_MUTEX_COUNTER_VALUE;
 		}
 #endif
+		bso::bool__ IsDisabled( void )
+		{
+			return _GetValue( Counter ) == MTX__DISABLED_MUTEX_COUNTER_VALUE;
+		}
 		bso::bool__ IsLocked( void )
 		{
 #ifdef MTX__CONTROL
 			if ( IsReleased() )
 				ERRFwk();
 #endif
+			if ( IsDisabled() )
+				return false;
+
 			return _GetSign( Counter ) != MTX__UNLOCKED_MUTEX_COUNTER_SIGN;
 		}
 		bso::bool__ TryToLock( void )
@@ -289,6 +283,9 @@ namespace mtx {
 			if ( IsReleased() )
 				ERRFwk();
 #endif
+			if ( IsDisabled() )
+				return true;
+
 			if ( IsLocked() )
 				return false;
 
@@ -304,14 +301,17 @@ namespace mtx {
 		}
 		void Unlock( void )
 		{
+			if ( IsDisabled() )
+				return;
+
 			if ( !IsLocked() )
 				ERRFwk();
 
 			_Inc( Counter );
 		}
-		_mutex__( void )
+		_mutex__( bso::bool__ Disabled )
 		{
-			_Set( Counter, MTX__UNLOCKED_MUTEX_COUNTER_VALUE, false );
+			_Set( Counter, ( Disabled ? MTX__DISABLED_MUTEX_COUNTER_VALUE: MTX__UNLOCKED_MUTEX_COUNTER_VALUE ), false );
 		}
 		~_mutex__( void )
 		{
@@ -319,21 +319,21 @@ namespace mtx {
 			Release( true );
 #endif
 		}
-	} *mutex_handler__;
+	} *handler__;
 
 
 	//f Return a new mutex handler.
-	inline mutex_handler__ Create( void )
+	inline handler__ Create( bso::bool__ Disabled = false )	// Si True, utilisation dans un contexte mono-thread.
 	{
-		mutex_handler__ Handler;
+		handler__ Handler;
 		
-		if ( ( Handler = new _mutex__ ) == NULL )
+		if ( ( Handler = new _mutex__( Disabled ) ) == NULL )
 			ERRAlc();
 
 		return Handler;
 	}
 
-	inline bso::bool__ IsLocked( mutex_handler__ Handler )
+	inline bso::bool__ IsLocked( handler__ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -343,7 +343,7 @@ namespace mtx {
 	}
 
 
-	inline bso::bool__ TryToLock( mutex_handler__ Handler)
+	inline bso::bool__ TryToLock( handler__ Handler)
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -353,7 +353,7 @@ namespace mtx {
 	}
 
 	// Wait until mutex unlocked.
-	inline void WaitUntilUnlocked_( mutex_handler__ Handler )
+	inline void WaitUntilUnlocked_( handler__ Handler )
 	{
 		while( !TryToLock( Handler ) )
 		{
@@ -363,7 +363,7 @@ namespace mtx {
 	}
 
 	// Lock 'Handler'. Blocks until lock succeed.
-	inline void Lock( mutex_handler__ Handler )
+	inline void Lock( handler__ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -374,7 +374,7 @@ namespace mtx {
 	}
 
 	//f Unlock 'Handler'.
-	inline void Unlock( mutex_handler__ Handler )
+	inline void Unlock( handler__ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -385,7 +385,7 @@ namespace mtx {
 
 	//f Delete the mutex of handler 'Handler'.
 	inline void Delete(
-		mutex_handler__ Handler,
+		handler__ Handler,
 		bso::bool__ EvenIfLocked = false )
 	{
 #ifdef MTX_DBG
@@ -399,7 +399,6 @@ namespace mtx {
 	}
 
 	enum state__ {
-		sDisabled,	// Uitlisation dans un contexte mono-thread.
 		sUnlocked,
 		sLocked,
 		s_amount,
@@ -410,7 +409,7 @@ namespace mtx {
 	{
 	private:
 		state__ _State;
-		mutex_handler__ _Handler;
+		handler__ _Handler;
 		void _Test( void )
 		{
 # ifdef MTX_DBG
@@ -438,59 +437,45 @@ namespace mtx {
 
 		}
 		E_CDTOR( mutex___ );
-		void Init(
-			mutex_handler__ Handler,
-			bso::bool__ Disabled = false )	// Si à 'true', utilisation dans un contexte mono-thread.
+		void Init( handler__ Handler )
 		{
 			_UnlockIfInitializedAndLocked();
 			
 			_Handler = Handler;
 
-			if ( Disabled )
-				_State = sDisabled;
-			else
-				_State = sUnlocked;
+			_State = sUnlocked;
 		}
 		bso::bool__ TryToLock( void )
 		{
 			_Test();
 
-			if ( _State == sDisabled )
+			if ( _State == sLocked )
 				return true;
-			else {
-				if ( _State == sLocked )
-					return true;
-				else if ( mtx::TryToLock( _Handler ) ) {
-					_State = sLocked;
-					return true;
-				} else
-					return false;
+			else if ( mtx::TryToLock( _Handler ) ) {
+				_State = sLocked;
+				return true;
 			}
 		}
 		void Lock( void )
 		{
 			_Test();
 
-			if ( _State != sDisabled ) {
-				if ( _State != sLocked ) {
-					mtx::Lock( _Handler );
+			if ( _State != sLocked ) {
+				mtx::Lock( _Handler );
 
-					_State = sLocked;
-				}
+				_State = sLocked;
 			}
 		}
 		void Unlock( void )
 		{
 			_Test();
 
-			if ( _State != sDisabled ) {
-				if ( _State == sUnlocked )
-					ERRFwk();
+			if ( _State == sUnlocked )
+				ERRFwk();
 
-				_State = sUnlocked;
+			_State = sUnlocked;
 
-				mtx::Unlock( _Handler );
-			}
+			mtx::Unlock( _Handler );
 		}
 	};
 }

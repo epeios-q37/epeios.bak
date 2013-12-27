@@ -71,7 +71,7 @@ namespace fnm
 		{
 			_Core.reset( P );
 		}
-		E_CVDTOR( name___ );
+		E_CDTOR( name___ );
 		name___( const char *Name )
 		{
 			reset( false );

@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id$
-
 #include "sktxmp.h"
 
 using namespace sktxmp;

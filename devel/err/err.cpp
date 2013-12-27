@@ -37,7 +37,7 @@ err_ err::ERR;
 #ifdef ERR__THREAD_SAFE
 #	include "mtx.h"
 #	include "mtk.h"
-static mtx::mutex_handler__ MutexHandler_ = MTX_INVALID_HANDLER;
+static mtx::handler__ MutexHandler_ = MTX_INVALID_HANDLER;
 static mtk::thread_id__ ThreadID_;
 #endif
 
