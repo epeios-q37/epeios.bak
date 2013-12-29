@@ -83,7 +83,7 @@ namespace idxbtr {
 		la file 'File' de tête 'Tete' et que l'on doit utiliser la 'Pilote' si != NULL.
 		Retourne la nouvelle racine de l'arbre. */
 		r Equilibrer_(
-			que::E_QUEUEt_( r ) &Index,
+			const que::E_QUEUEt_( r ) &Index,
 			r Premier,
 			sdr::E_SDRIVER__ &Pilote );
 		r _Compare(
@@ -358,7 +358,7 @@ namespace idxbtr {
 		r Balance( r Root );
 		//f Fill the index with the items in 'Queue' beginning at 'Head', using 'MD' as memory driver if != 'NULL'. Return the new root.
 		r Fill(
-			que::E_QUEUEt_( r ) &Queue,
+			const que::E_QUEUEt_( r ) &Queue,
 			r Head,
 			sdr::E_SDRIVER__ &SD = SDR_INTERNAL_SDRIVER )
 		{
@@ -383,7 +383,7 @@ namespace idxbtr {
 		}
 		friend sdr::row_t__ Equilibrer_(
 			tree_index_<sdr::row__> &Tree,
-			que::E_QUEUE_ &File,
+			const que::E_QUEUE_ &File,
 			sdr::row_t__ Premier,
 			sdr::E_SDRIVER__ &Pilote );
 	};
@@ -412,7 +412,7 @@ namespace idxbtr {
 
 	sdr::row_t__ Equilibrer_(
 		E_IBTREE_ &Tree,
-		que::E_QUEUE_ &File,
+		const que::E_QUEUE_ &File,
 		sdr::row_t__ Premier,
 		sdr::E_SDRIVER__ &Pilote );
 
@@ -422,11 +422,11 @@ namespace idxbtr {
 		sdr::row_t__ First );	// Compare 'Tree' avec 'Queue'.
 
 	template <typename r> inline r tree_index_<r>::Equilibrer_(
-		que::E_QUEUEt_( r ) &Index,
+		const que::E_QUEUEt_( r ) &Index,
 		r Premier,
 		sdr::E_SDRIVER__ &Pilote )
 	{
-		return idxbtr::Equilibrer_( *(E_IBTREE_ *)this, *(que::E_QUEUE_ *)&Index, *Premier, Pilote );
+		return idxbtr::Equilibrer_( *(E_IBTREE_ *)this, *(const que::E_QUEUE_ *)&Index, *Premier, Pilote );
 	}
 
 	template <typename r> inline r tree_index_<r>::Balance( r Root )

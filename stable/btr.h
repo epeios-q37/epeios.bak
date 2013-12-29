@@ -177,24 +177,21 @@ namespace btr {
 		void Release(
 			sdr::row_t__ Start,
 			sdr::row_t__ End );
-		//f Release father of 'Node'.
-		void ReleaseParent( sdr::row_t__ Node )
+		void EraseParent( sdr::row_t__ Node )
 		{
 			_node__ Buffer = _nodes_::Get( Node );
 
 			Buffer.Parent = E_NIL;
 			_nodes_::Store( Buffer, Node );
 		}
-		//f Release left child of 'Node'.
-		void ReleaseLeft( sdr::row_t__ Node )
+		void EraseLeft( sdr::row_t__ Node )
 		{
 			_node__ Buffer = _nodes_::Get( Node );
 
 			Buffer.Left = E_NIL;
 			_nodes_::Store( Buffer, Node );
 		}
-		//f Release right child of 'Node'.
-		void ReleaseRight( sdr::row_t__ Node )
+		void EraseRight( sdr::row_t__ Node )
 		{
 			_node__ Buffer = _nodes_::Get( Node );
 
@@ -412,17 +409,17 @@ namespace btr {
 		{
 			Nodes.Release( Start, End );
 		}
-		void ReleaseParent_( sdr::row_t__ Node )
+		void EraseParent_( sdr::row_t__ Node )
 		{
-			Nodes.ReleaseParent( Node );
+			Nodes.EraseParent( Node );
 		}
-		void ReleaseLeft_( sdr::row_t__ Node )
+		void EraseLeft_( sdr::row_t__ Node )
 		{
-			Nodes.ReleaseLeft( Node );
+			Nodes.EraseLeft( Node );
 		}
-		void ReleaseRight_( sdr::row_t__ Node )
+		void EraseRight_( sdr::row_t__ Node )
 		{
-			Nodes.ReleaseRight( Node );
+			Nodes.EraseRight( Node );
 		}
 		bso::bool__ HasParent_( sdr::row_t__ Node ) const
 		{
@@ -716,12 +713,12 @@ namespace btr {
 			sdr::row_t__ Parent = Parent_( *Node );
 
 			if ( HasLeft_( Parent ) && ( Left_( Parent ) == *Node ) )
-				ReleaseLeft_( Parent );
+				EraseLeft_( Parent );
 			
 			if ( HasRight_( Parent ) && ( Right_( Parent ) == *Node ) )
-				ReleaseRight_( Parent );
+				EraseRight_( Parent );
 
-			ReleaseParent_( *Node );
+			EraseParent_( *Node );
 		}
 		//f Return true if 'Child' is left of 'Parent'.
 		bso::bool__ IsLeft(

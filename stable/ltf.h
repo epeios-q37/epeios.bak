@@ -74,40 +74,47 @@ namespace ltf {
 	: public _oflow_driver___
 	{
 	private:
-		fdr::datum__ *Data_;
-		bso::u8__ Size_;
-		bso::u8__ Amount_;
-		txf::text_oflow__ *TFlow_;
+		fdr::datum__ *_Data;
+		bso::u8__ _Size;
+		bso::u8__ _Amount;
+		txf::text_oflow__ *_TFlow;
 		bso::u8__ _FreezePosition;
+		txf::text_oflow__ &_TF( void )
+		{
+			if ( _TFlow == NULL )
+				ERRFwk();
+
+			return *_TFlow;
+		}
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::datum__ *Buffer,
 			fdr::size__ Maximum )
 		{
-			if ( ( Amount_ + Maximum ) > Size_ ) {
-				if ( Maximum >= (fdr::size__)( Size_ - _FreezePosition ) ) {
-					memcpy( Data_ + _FreezePosition, Buffer + ( Size_ - _FreezePosition - Maximum ), Size_ - _FreezePosition );
+			if ( ( _Amount + Maximum ) > _Size ) {
+				if ( Maximum >= (fdr::size__)( _Size - _FreezePosition ) ) {
+					memcpy( _Data + _FreezePosition, Buffer + ( _Size - _FreezePosition - Maximum ), _Size - _FreezePosition );
 				} else {
-					memcpy( Data_ + _FreezePosition, Data_ + _FreezePosition + Maximum, Size_ - Maximum - _FreezePosition );
-					memcpy( Data_ + Size_ - Maximum, Buffer, Maximum );
+					memcpy( _Data + _FreezePosition, _Data + _FreezePosition + Maximum, _Size - Maximum - _FreezePosition );
+					memcpy( _Data + _Size - Maximum, Buffer, Maximum );
 				}
 
-				Amount_ = Size_ + 1;
+				_Amount = _Size + 1;
 			} else {
-				memcpy( Data_ + Amount_, Buffer, Maximum );
-				Amount_ += (bso::u8__)Maximum;
+				memcpy( _Data + _Amount, Buffer, Maximum );
+				_Amount += (bso::u8__)Maximum;
 			}
 
-			if ( Amount_ < Size_ ) {
-				TFlow_->Put( Buffer, Maximum );
-			} else if ( Amount_ > Size_ )
-				Data_[_FreezePosition] = '<';
+			if ( _Amount < _Size ) {
+				_TF().Put( Buffer, Maximum );
+			} else if ( _Amount > _Size )
+				_Data[_FreezePosition] = '<';
 
 			return Maximum;
 		}
 		virtual void FDRCommit( void )
 		{
-			*TFlow_ << txf::commit;
+			_TF() << txf::commit;
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -131,26 +138,30 @@ namespace ltf {
 			if ( Size > LTF__SIZE_MAX )
 				ERRLmt();
 
-			TFlow_ = &TFlow;
+			_TFlow = &TFlow;
 
 			_oflow_driver___::Init( ThreadSafety );
 			
-			Data_ = Data;
+			_Data = Data;
 
-			Size_ = (bso::u8__)Size;
+			_Size = (bso::u8__)Size;
 
-			memset( Data_, ' ', Size_ );
-			Data_[Size_] = 0;
-			Amount_ = 0;
+			memset( _Data, ' ', _Size );
+			_Data[_Size] = 0;
+			_Amount = 0;
 			_FreezePosition = 0;
 
 			Clear();
 		}
+		txf::text_oflow__ &TFlow( void )
+		{
+			return _TF();
+		}
 		void Clear( void )
 		{
-			memset( Data_ + _FreezePosition, ' ', Size_ - _FreezePosition);
-			*TFlow_ << txf::rfl;
-			TFlow_->Put( Data_, Size_ );
+			memset( _Data + _FreezePosition, ' ', _Size - _FreezePosition);
+			_TF() << txf::rfl;
+			_TF().Put( _Data, _Size );
 			CR();
 		}
 		void ClearAll( void )
@@ -161,13 +172,13 @@ namespace ltf {
 		}
 		void CR( void )
 		{
-			*TFlow_ << txf::rfl;
-			TFlow_->Put( Data_, _FreezePosition );
-			Amount_ = _FreezePosition;
+			_TF() << txf::rfl;
+			_TF().Put( _Data, _FreezePosition );
+			_Amount = _FreezePosition;
 		}
 		void Freeze( void )
 		{
-			_FreezePosition = Amount_;
+			_FreezePosition = _Amount;
 		}
 	};
 
@@ -200,6 +211,10 @@ namespace ltf {
 		{
 			_Driver.Init( TFlow, Data, Size, fdr::tsDisabled );
 			oflow__::Init( _Driver, NULL, 0, FLW_AMOUNT_MAX );
+		}
+		txf::text_oflow__ &TFlow( void )
+		{
+			return _Driver.TFlow();
 		}
 		void Clear( void )
 		{
@@ -245,6 +260,10 @@ namespace ltf {
 		{
 			Flow_.Init( TFlow, Data_, sizeof( Data_ ) );
 			txf::text_oflow__::Init( Flow_ );
+		}
+		txf::text_oflow__ &TFlow( void )
+		{
+			return Flow_.TFlow();
 		}
 		void CR( void )
 		{

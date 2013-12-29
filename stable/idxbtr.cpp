@@ -105,7 +105,7 @@ namespace idxbtr {
 	la file 'File' de tête 'Tete' et que l'on doit utiliser la pile 'Pile'. */
 	sdr::row_t__ Equilibrer_(
 		E_IBTREE_ &Tree,
-		que::E_QUEUE_ &File,
+		const que::E_QUEUE_ &File,
 		sdr::row_t__ Premier,
 		sdr::E_SDRIVER__ &Pilote )
 	{
