@@ -154,7 +154,7 @@ namespace idxbtr {
 				else
 				{
 					Boucler = false;
-					Tree.BaseTree.BecomeRight( Courant, Tree._SearchMostRightNode( Racine ) );
+					Tree.BaseTree.BecomeRight( Courant, Tree._SearchMostRightNode( Racine, *(btr::level__ *)NULL ) );
 				}
 			}
 			else

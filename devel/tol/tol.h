@@ -896,7 +896,7 @@ namespace sdr {
 namespace tol {
 
 	// A basic object 't' becomes a normal object.
-	template <class t, typename r = sdr::row__> class object_
+	template <class t> class object_
 	{
 	public:
 		struct s
@@ -920,6 +920,10 @@ namespace tol {
 
 			return *this;
 		}
+		void Init( void )
+		{
+			S_.Object.Init();
+		}
 		t &operator()( void )
 		{
 			return S_.Object;
@@ -934,7 +938,7 @@ namespace tol {
 		}
 	};
 
-	E_AUTO2( object )
+	E_AUTO1( object )
 
 	template <typename t> class _core_pointer___	// Classe de base de gestion d'un pointeur.
 	{

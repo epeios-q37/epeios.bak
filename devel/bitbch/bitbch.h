@@ -265,7 +265,7 @@ namespace bitbch {
 			sdr::size__ Nombre,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			if ( amount_extent_manager_<r>::AmountToAllocate( Nombre, Mode ) )
+			if ( amount_extent_manager_<r>::Handle( Nombre, Mode ) )
 				Table.Allocate( Convert_( Nombre ) );
 		}
 		// alloue 'Nombre' (>=1) bits

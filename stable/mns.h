@@ -142,6 +142,10 @@ namespace mns {
 			// reset();
 			// Inutile de faire un reset. On réutilise la même mémoire (gain de temps).
 		}
+		sdr::size__ Size( void ) const
+		{
+			return _Size;
+		}
 	};
 
 	class main_storage_driver__
@@ -149,6 +153,10 @@ namespace mns {
 	  public main_storage__
 	{
 	protected:
+		virtual sdr::size__ SDRUnderlyingSize( void )
+		{
+			return main_storage__::Size();
+		}
 		virtual void SDRRecall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,

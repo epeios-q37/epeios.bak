@@ -173,13 +173,17 @@ namespace idxbtq {
 		{
 			return E_IBTREEt_( r )::Compare( *this, First( Root ) );
 		}
-		r First( r Root ) const
+		r First(
+			r Root,
+			btr::level__ &Level = *(btr::level__ *)NULL ) const
 		{
-			return E_IBTREEt_( r )::First( Root );
+			return E_IBTREEt_( r )::First( Root, Level );
 		}
-		r Last( r Root ) const
+		r Last(
+			r Root,
+			btr::level__ &Level = *(btr::level__ *)NULL ) const
 		{
-			return E_IBTREEt_( r )::Last( Root );
+			return E_IBTREEt_( r )::Last( Root, Level );
 		}
 		r Next( r Current ) const
 		{

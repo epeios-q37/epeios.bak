@@ -89,16 +89,16 @@ namespace idxbtr {
 		r _Compare(
 			const que::E_QUEUEt_( r ) &Queue,
 			r First ) const;
-		r _SearchMostLeftNode( r Node ) const
+		r _SearchMostLeftNode(
+			r Node,
+			level__ &Level ) const
 		{
-			level__ Level;
-
 			return BaseTree.SearchMostLeftNode( Node, Level );
 		}
-		r _SearchMostRightNode( r Node ) const
+		r _SearchMostRightNode(
+			r Node,
+			level__ &Level ) const
 		{
-			level__ Level;
-
 			return BaseTree.SearchMostRightNode( Node, Level );
 		}
 	public:
@@ -155,20 +155,24 @@ namespace idxbtr {
 			BaseTree.Allocate( Size, Mode );
 		}
 		//f Return the first item of the index.
-		r First( r Root ) const
+		r First(
+			r Root,
+			level__ &Level = *(level__ *)NULL) const
 		{
-			return _SearchMostLeftNode( Root );
+			return _SearchMostLeftNode( Root, Level );
 		}
 		//f Return the last item of the index.
-		r Last( r Root ) const
+		r Last(
+			r Root,
+			level__ &Level = *(level__ *)NULL) const
 		{
-			return _SearchMostRightNode( Root );
+			return _SearchMostRightNode( Root, Level );
 		}
 		//f Return the item next to 'Item'.
 		r Next( r Item ) const
 		{
 			if ( BaseTree.HasRight( Item ) )
-				return _SearchMostLeftNode( BaseTree.Right( Item ) );
+				return _SearchMostLeftNode( BaseTree.Right( Item ), *(btr::level__ *)NULL );
 			else
 				if ( BaseTree.IsLeft( Item ) )
 					return BaseTree.Parent( Item );

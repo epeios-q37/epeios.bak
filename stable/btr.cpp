@@ -107,12 +107,15 @@ row_t__ btr::_nodes_manager_::SearchMostLeftNode(
 	row_t__ Node,
 	level__ &Level ) const
 {
-	Level = 0;
+	level__ L = 0;
 
 	while( HasLeft( Node ) ) {
 		Node = Left( Node );
-		Level++;
+		L++;
 	}
+
+	if ( &Level )
+		Level = L;
 
 	return Node;
 }
@@ -122,10 +125,15 @@ row_t__ btr::_nodes_manager_::SearchMostRightNode(
 	row_t__ Node,
 	level__ &Level ) const
 {
+	level__ L = 0;
+
 	while( HasRight( Node ) ) {
 		Node = Right( Node );
-		Level++;
+		L++;
 	}
+
+	if ( &Level )
+		Level = L;
 
 	return Node;
 }

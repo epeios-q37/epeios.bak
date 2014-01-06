@@ -386,7 +386,7 @@ namespace rgstry {
 			const value_ &Value,
 			row__ ParentRow = E_NIL )
 		{
-			reset();
+			Init();
 
 			S_.ParentRow = ParentRow;
 			S_.Nature = Nature;

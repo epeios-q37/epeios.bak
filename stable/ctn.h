@@ -66,8 +66,8 @@ namespace ctn {
 #ifdef CTN_DBG
 			FlushTest();
 #endif
-			if ( amount_extent_manager_<r>::AmountToAllocate( Size, Mode ) ) {
-				Dynamics.Allocate( Size, aem::mFit );
+			if ( amount_extent_manager_<r>::Handle( Size, Mode ) ) {
+				Dynamics.Allocate( Size, aem::mFitted );
 				Statics.Allocate( Size );
 			}
 		}
@@ -115,7 +115,7 @@ namespace ctn {
 			Statics.Allocate( O.Amount() );
 			Statics.Store( O.Statics, O.Amount() ); 
 
-			amount_extent_manager_<r>::Force( O.Amount() );
+			amount_extent_manager_<r>::AwareHandle( O.Amount(), aem::mFitted );
 			amount_extent_manager_<r>::operator =( O );
 
 			return *this;
@@ -146,12 +146,23 @@ namespace ctn {
 #ifdef CTN_DBG
 			FlushTest();
 #endif
+			aem::size__ Amount = 0;
+
 			Dynamics.Init();
 			Statics.Init();
-			this->amount_extent_manager_<r>::Init();
-//			amount_extent_manager_<r>::SetStepValue( 0 );	//Preallocation not very usefull for containers.
+
+			if ( amount_extent_manager_<r>::Init( Amount ) ) {
+				Dynamics.Allocate( Amount, aem::mFitted );
+				Statics.Allocate( Amount );
+			}
 		}
-		//f Allocation room for 'Size' object of statical part 'ST'.
+		void PreAllocate( sdr::size__ Size )
+		{
+			if ( amount_extent_manager_<r>::SetFixed( Size ) ) {
+				Dynamics.Allocate( Size, aem::mFitted );
+				Statics.Allocate( Size );
+			}
+		}
 		void Allocate(
 			sdr::size__ Size,
 			const st &ST,

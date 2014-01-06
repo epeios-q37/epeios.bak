@@ -87,7 +87,7 @@ namespace bch {
 			sdr::size__ Taille,
 			aem::mode__ Mode )
 		{
-			if ( mng::AmountToAllocate( Taille, Mode ) )
+			if ( mng::Handle( Taille, Mode ) )
 				mmr::Allocate( Taille );
 		}
 		// allocate if the set not big enough.
@@ -119,8 +119,12 @@ namespace bch {
 		//f Initialization.
 		void Init( void )
 		{
+			aem::size__ Amount = 0;
+
 			mmr::Init();
-			mng::Init();
+
+			if ( mng::Init( Amount ) )
+				mmr::Allocate( Amount );
 		}
 		//f Initialization with 'Seed' containing 'Size' objects.
 		void Init(
@@ -131,14 +135,14 @@ namespace bch {
 			
 			StoreAndAdjust( Seed, Size );
 		}
-		//f Allocate 'Size' objects. Extent is forced to 'Size' when 'Mode' = 'mFit'.
+		//f Allocate 'Size' objects. Extent is forced to 'Size' when 'Mode' = 'mFitted'.
 		void Allocate(
 			sdr::size__ Size,
 			aem::mode__ Mode = aem::m_Default )
 		{
 			Allouer_( Size, Mode );
 		}
-		//f Allocate 'Size' objects and fill newly created object with 'Object'. Extent is forced to 'Size' when 'Mode' = 'mFit'.
+		//f Allocate 'Size' objects and fill newly created object with 'Object'. Extent is forced to 'Size' when 'Mode' = 'mFitted'.
 		void Allocate(
 			sdr::size__ Size,
 			const type &Object,
@@ -457,7 +461,7 @@ namespace bch {
 		{
 			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row , sh>::operator =( Op );
 
-			this->Allocate( Op.Amount(), aem::mFit );
+			this->Allocate( Op.Amount(), aem::mFitted );
 
 			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::Memory().Store( Op, Op.Amount() );
 
@@ -558,9 +562,7 @@ namespace bch {
 	{
 		uys::state__ State = tys::Plug( Bunch, FileManager );
 
-		Bunch.SetStepValue( 0 );	// Pas de préallocation.
-
-		Bunch.Allocate( FileManager.UnderlyingSize() / Bunch.GetItemSize(), aem::mFit );
+		Bunch.Allocate( FileManager.UnderlyingSize() / Bunch.GetItemSize(), aem::mFitted );
 
 		return State;
 	}
@@ -709,7 +711,8 @@ namespace bch {
 		void Init( void )
 		{
 			_bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >::Init();
-			_bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >::SetStepValue( 0 );
+			if ( _bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >::SetStepValue( 0 ) )
+				ERRFwk();
 		}
 	};
 

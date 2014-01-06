@@ -99,7 +99,6 @@ namespace stk {
 		void Init( void )
 		{
 			structure::Init();
-			structure::SetNoDecreasingState( true );
 		}
 		//f Place 'Object' at the top of the stack. Return the position where this object is put.
 		row Push( const item &Object )

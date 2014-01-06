@@ -327,7 +327,7 @@ namespace ias {
 			const indexed_aggregated_storage_ &O,
 			sdr::size__ Size )
 		{
-			Descriptors.Allocate( Size, aem::mFit );
+			Descriptors.Allocate( Size, aem::mFitted );
 			Descriptors.Store( O.Descriptors, Size );
 			AStorage = O.AStorage;
 		}
