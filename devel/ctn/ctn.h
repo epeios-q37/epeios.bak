@@ -151,10 +151,12 @@ namespace ctn {
 			Dynamics.Init();
 			Statics.Init();
 
-			if ( amount_extent_manager_<r>::Init( Amount ) ) {
-				Dynamics.Allocate( Amount, aem::mFitted );
-				Statics.Allocate( Amount );
-			}
+			amount_extent_manager_<r>::Init( Amount );
+
+			// On procède aux réallocations ci-dessous, même si la fonction ci-dessus retourne 'false', à cause des précédents 'Init()'.
+			// NOTA : même si la fonction ci-dessus retourne 'false', 'Amount' contient l''extent'.
+			Dynamics.Allocate( Amount, aem::mFitted );
+			Statics.Allocate( Amount );
 		}
 		void PreAllocate( sdr::size__ Size )
 		{

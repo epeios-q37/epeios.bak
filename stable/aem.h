@@ -375,8 +375,10 @@ namespace aem {
 			if ( !_IsUsable() ) {
 				Size = S_.Extent = _ConvertSteppedExtentFromUnusableToUsableState( _GetRawExtent() );
 				return true;
-			} else
+			} else {
+				Size = _GetExtent();
 				return false;
+			}
 		}
 	public:
 		struct s {
