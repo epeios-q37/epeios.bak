@@ -297,9 +297,6 @@ namespace aem {
 	protected:
 		bso::bool__ SetFixed( size__ &Amount )
 		{
-			if ( Amount == 0 )
-				ERRFwk();
-
 			if ( _GetAmount() > Amount )
 				ERRFwk();
 
@@ -334,6 +331,8 @@ namespace aem {
 			if ( _IsFixed() ) {
 				if ( Amount > _GetExtent() )
 					ERRFwk();
+
+				S_.Amount = Amount;
 
 				return false;
 			} else if ( _IsFitted() )
@@ -371,6 +370,8 @@ namespace aem {
 		}
 		bso::bool__ Init( size__ &Size )	// Si valeur retournée == 'true', alors allouer 'Size'.
 		{
+			S_.Amount= 0;
+
 			if ( !_IsUsable() ) {
 				Size = S_.Extent = _ConvertSteppedExtentFromUnusableToUsableState( _GetRawExtent() );
 				return true;

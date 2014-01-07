@@ -155,9 +155,9 @@ namespace bch {
 			if ( Size > PreviousSize )
 				Store( Object, PreviousSize, Size - PreviousSize );
 		}
-		void Preallocate( sdr::size__ Size )
+		void PreAllocate( sdr::size__ Size )
 		{
-			if ( mng::Preallocate( Size ) )
+			if ( mng::SetFixed( Size ) )
 				mmr::Allocate( Size );
 		}
 		/*f Store at 'Offset' 'Amount' objects from 'Bunch' beginnig at 'Row'.
