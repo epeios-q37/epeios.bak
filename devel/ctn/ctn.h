@@ -146,20 +146,16 @@ namespace ctn {
 #ifdef CTN_DBG
 			FlushTest();
 #endif
-			aem::size__ Amount = 0;
-
 			Dynamics.Init();
 			Statics.Init();
 
-			amount_extent_manager_<r>::Init( Amount );
-
-			// On procède aux réallocations ci-dessous, même si la fonction ci-dessus retourne 'false', à cause des précédents 'Init()'.
-			// NOTA : même si la fonction ci-dessus retourne 'false', 'Amount' contient l''extent'.
-			Dynamics.Allocate( Amount, aem::mFitted );
-			Statics.Allocate( Amount );
+			amount_extent_manager_<r>::Init();
 		}
 		void PreAllocate( sdr::size__ Size )
 		{
+			Dynamics.Init();
+			Statics.Init();
+
 			if ( amount_extent_manager_<r>::SetFixed( Size ) ) {
 				Dynamics.Allocate( Size, aem::mFitted );
 				Statics.Allocate( Size );

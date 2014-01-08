@@ -105,6 +105,20 @@ const char *tol::DateAndTime( buffer__ &Buffer )
 #endif
 }
 
+#ifdef TOL__WIN
+
+#include <crtdbg.h>
+
+bso::size__ tol::GetMemoryUsage( void )
+{
+	_CrtMemState s;
+	_CrtMemCheckpoint( &s );
+
+	return s.lSizes[1];
+}
+
+#endif
+
 #ifdef CPE__VC
 #	undef CreateFile
 #endif

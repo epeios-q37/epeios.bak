@@ -106,7 +106,7 @@ namespace mns {
 		// alloue 'Nombre' octets
 		void Allocate( sdr::size__ Size )
 		{
-			if ( Size > _Size ) {
+			if ( Size != _Size ) {
 				sdr::datum__ *Tampon = (sdr::datum__ *)realloc( Tampon_, Size );
 
 				if ( ( Tampon == NULL ) && ( Size != 0 ) )

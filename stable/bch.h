@@ -119,12 +119,8 @@ namespace bch {
 		//f Initialization.
 		void Init( void )
 		{
-			aem::size__ Amount = 0;
-
 			mmr::Init();
-
-			if ( mng::Init( Amount ) )
-				mmr::Allocate( Amount );
+			mng::Init();
 		}
 		//f Initialization with 'Seed' containing 'Size' objects.
 		void Init(
@@ -157,6 +153,8 @@ namespace bch {
 		}
 		void PreAllocate( sdr::size__ Size )
 		{
+			mmr::Init();
+
 			if ( mng::SetFixed( Size ) )
 				mmr::Allocate( Size );
 		}

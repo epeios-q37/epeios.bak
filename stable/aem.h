@@ -211,6 +211,10 @@ namespace aem {
 		{
 			return S_.Extent;
 		}
+		size__ _GetStepMask( void ) const
+		{
+			return aem::_GetStepMask( _GetRawExtent() );
+		}
 		bso::bool__ _IsFitted( void ) const
 		{
 			return aem::_IsFitted( _GetRawExtent() );
@@ -226,10 +230,6 @@ namespace aem {
 		bso::bool__ _IsStepped( void ) const
 		{
 			return aem::_IsStepped( _GetRawExtent() );
-		}
-		size__ _GetStepMask( void ) const
-		{
-			return aem::_GetStepMask( _GetRawExtent() );
 		}
 		size__ _GetAmount( void ) const
 		{
@@ -276,8 +276,18 @@ namespace aem {
 		}
 		bso::bool__ _SteppedHandle( size__ &Amount )
 		{
+			bso::bool__ Force = false;
+
 			if ( _IsFitted() || _IsFixed() )
 				ERRFwk();
+
+			if ( !_IsUsable() )	// Nota : danse ce cas, 'S_.Amount' == 0;
+				if ( Amount == 0 )
+					return false;
+				else {
+					S_.Extent = _ConvertSteppedExtentFromUnusableToUsableState( _GetRawExtent() );
+					Force = true;
+				}
 
 			size__ StepMask = _GetStepMask();
 
@@ -286,7 +296,7 @@ namespace aem {
 			if ( _IsInStepLimit( Amount, StepMask ) ) {
 				size__ NewExtent = ( ( Amount + StepMask ) & ~StepMask ) | ( StepMask + 1 );
 
-				if ( NewExtent != _GetExtent() ) {
+				if ( ( NewExtent != _GetExtent() ) || Force ) {
 					Amount = S_.Extent = NewExtent;
 					return true;
 				} else
@@ -346,7 +356,7 @@ namespace aem {
 					return _SteppedHandle( Amount );
 					break;
 				case mOnlyGrowing:
-					if ( !_IsBigEnough( Amount ) )
+					if ( !_IsUsable() || !_IsBigEnough( Amount ) )
 						return _SteppedHandle( Amount );
 					else {
 						S_.Amount = Amount;
@@ -368,17 +378,9 @@ namespace aem {
 			if ( Handle( Amount, Mode ) )
 				ERRFwk();
 		}
-		bso::bool__ Init( size__ &Size )	// Si valeur retournée == 'true', alors allouer 'Size'.
+		void Init( void )
 		{
-			S_.Amount= 0;
-
-			if ( !_IsUsable() ) {
-				Size = S_.Extent = _ConvertSteppedExtentFromUnusableToUsableState( _GetRawExtent() );
-				return true;
-			} else {
-				Size = _GetExtent();
-				return false;
-			}
+			S_.Amount = 0;
 		}
 	public:
 		struct s {

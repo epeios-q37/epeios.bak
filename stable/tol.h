@@ -528,6 +528,9 @@ namespace tol {
 	//f Return current date é time.
 	const char *DateAndTime( buffer__ &Buffer );
 
+# ifdef TOL__WIN
+	bso::size__ GetMemoryUsage( void );
+# endif
 
 #ifndef CPE__MT
 	inline const char *Date( void )
