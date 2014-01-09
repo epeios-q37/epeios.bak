@@ -267,8 +267,6 @@ ERRBegin
 		strcat_( Core, Ext );
 		break;
 	case fnm::tSuffixed:
-		strcat_( Core, Affix );
-		break;
 	case fnm::tRelative:
 	case fnm::tAbsolute:
 	case fnm::tFree:

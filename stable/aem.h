@@ -371,14 +371,14 @@ namespace aem {
 
 			return false;	// Pour éviter un 'warning'.
 		}
-		void AwareHandle(
+/*		void AwareHandle(
 			size__ Amount,
 			mode__ Mode = m_Default )
 		{
 			if ( Handle( Amount, Mode ) )
 				ERRFwk();
 		}
-		void Init( void )
+*/		void Init( void )
 		{
 			S_.Amount = 0;
 		}

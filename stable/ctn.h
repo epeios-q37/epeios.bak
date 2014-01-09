@@ -66,8 +66,9 @@ namespace ctn {
 #ifdef CTN_DBG
 			FlushTest();
 #endif
+			Dynamics.Allocate( Size, Mode );
+
 			if ( amount_extent_manager_<r>::Handle( Size, Mode ) ) {
-				Dynamics.Allocate( Size, aem::mFitted );
 				Statics.Allocate( Size );
 			}
 		}
@@ -111,11 +112,14 @@ namespace ctn {
 			FlushTest();
 			O.FlushTest();
 #endif
-			Dynamics.Copy( O.Dynamics, O.Amount() );
-			Statics.Allocate( O.Amount() );
-			Statics.Store( O.Statics, O.Amount() ); 
+			size__ Size = O.Amount();
 
-			amount_extent_manager_<r>::AwareHandle( O.Amount(), aem::mFitted );
+			Dynamics.Copy( O.Dynamics, Size );
+			Statics.Allocate( Size );
+			Statics.Store( O.Statics, Size ); 
+
+			// Peu importe la valeur de retour, l'allocation des objets sous-jacent a déjà été traité...
+			amount_extent_manager_<r>::Handle( Size, aem::mFitted );
 			amount_extent_manager_<r>::operator =( O );
 
 			return *this;
@@ -156,8 +160,9 @@ namespace ctn {
 			Dynamics.Init();
 			Statics.Init();
 
+			Dynamics.Allocate( Size );
+
 			if ( amount_extent_manager_<r>::SetFixed( Size ) ) {
-				Dynamics.Allocate( Size, aem::mFitted );
 				Statics.Allocate( Size );
 			}
 		}

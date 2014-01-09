@@ -262,7 +262,7 @@ ERRBegin
 		GetBackupFileName( FileName, BackupFileName );
 
 		if ( Exists( BackupFileName ) )
-			if ( Remove( BackupFileName ) ) {
+			if ( !Remove( BackupFileName ) ) {
 				Status = bsUnableToSuppress;
 				ERRReturn;
 			}
@@ -308,7 +308,7 @@ ERRBegin
 		}
 		else if ( Mode == bmRename )
 		{
-			if ( Rename( FileName, BackupFileName ) )
+			if ( !Rename( FileName, BackupFileName ) )
 				Status = bsUnableToRename;
 		}
 		else
@@ -384,7 +384,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( Exists( FileName ) )
-		if ( Remove( FileName ) ) {
+		if ( !Remove( FileName ) ) {
 			Status = rsUnableToSuppress;
 			ERRReturn;
 		}
@@ -393,7 +393,7 @@ ERRBegin
 	GetBackupFileName( FileName, BackupFileName );
 
 	if ( Exists( BackupFileName ) )
-		if ( Rename( BackupFileName, FileName ) ) {
+		if ( !Rename( BackupFileName, FileName ) ) {
 			Status = rsUnableToRename;
 			ERRReturn;
 		}
