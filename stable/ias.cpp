@@ -57,17 +57,6 @@ public:
 
 using namespace ias;
 
-void indexed_aggregated_storage_::AllouerMoins_(
-	sdr::size__ CapaciteCourante,
-	sdr::size__ CapaciteDemandee,
-	aem::mode__ Mode )
-{
-	while ( CapaciteCourante-- > CapaciteDemandee )
-		AStorage.Free( Descriptors.Get( CapaciteCourante ) );
-
-	Descriptors.Allocate( CapaciteDemandee, Mode );
-}
-
 void indexed_aggregated_storage_::RemoveWithoutReallocating(
 	sdr::row__ Position,
 	sdr::size__ ActualCapacity,
@@ -80,7 +69,7 @@ void indexed_aggregated_storage_::RemoveWithoutReallocating(
 
 	Descriptors.Store( Descriptors, ActualCapacity - *Position - Amount, *Position, *Position + Amount );
 
-	Initialize_( ActualCapacity - Amount, ActualCapacity );
+	_Initialize( ActualCapacity - Amount, ActualCapacity );
 }
 
 

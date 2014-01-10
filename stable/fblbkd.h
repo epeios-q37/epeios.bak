@@ -441,7 +441,7 @@ namespace fblbkd {
 			if ( Mode != aem::m_Default )
 				ERRPrm();
 #endif
-			Objets.Allocate( Size, aem::mFit );
+			Objets.Allocate( Size, aem::mFitted );
 		}
 		virtual index__ FBLBKDNew( void )
 		{

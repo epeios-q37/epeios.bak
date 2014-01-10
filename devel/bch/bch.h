@@ -160,6 +160,11 @@ namespace bch {
 		}
 		/*f Store at 'Offset' 'Amount' objects from 'Bunch' beginnig at 'Row'.
 		Adjust the size of the bunch. */
+		void SetStepped( sdr::size__ Step )
+		{
+			if ( mng::SetStepped( Step ) )
+				mmr::Allocate( Step );
+		}
 		void StoreAndAdjust_(
 			const mmr &Bunch,
 			sdr::size__ Amount,

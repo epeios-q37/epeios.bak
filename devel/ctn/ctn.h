@@ -144,6 +144,11 @@ namespace ctn {
 				ERRFwk();
 		}
 #endif
+		void SubInit( sdr::size__ Size )	// Obsolete ?
+		{
+			amount_extent_manager_<r>::Init();
+			amount_extent_manager_<r>::Handle( Size, aem::mFitted );
+		}
 		//f Initialization.
 		void Init( void )
 		{
@@ -164,6 +169,14 @@ namespace ctn {
 
 			if ( amount_extent_manager_<r>::SetFixed( Size ) ) {
 				Statics.Allocate( Size );
+			}
+		}
+		void SetStepped( sdr::size__ Step )
+		{
+			Dynamics.SetStepped( Step );
+
+			if ( amount_extent_manager_<r>::SetStepped( Step ) ) {
+				Statics.Allocate( Step );
 			}
 		}
 		void Allocate(
@@ -309,11 +322,6 @@ namespace ctn {
 		static sdr::size__ GetStaticsItemSize( void )
 		{
 			return sizeof( st );
-		}
-		void SubInit( sdr::size__ Size )
-		{
-			amount_extent_manager_<r>::Init( Size );
-			amount_extent_manager_<r>::SetStepValue( 0 );
 		}
 	};
 

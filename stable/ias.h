@@ -207,11 +207,15 @@ namespace ias {
 	class indexed_aggregated_storage_
 	{
 	private:
-		void Initialize_(
+		void _Initialize(
 			sdr::size__ CapaciteCourante,
 			sdr::size__ NouvelleCapacite )
 		{
 #if 1
+# ifdef IAS_DBG
+			if ( CapaciteCourante <= NouvelleCapacite )
+				ERRFwk();
+# endif
 			descriptor__ Buffer[IAS_BUFFER_SIZE];
 
 			sdr::size__ Amount = NouvelleCapacite - CapaciteCourante;
@@ -231,24 +235,18 @@ namespace ias {
 			Descriptors.Store( D, CapaciteCourante, NouvelleCapacite - CapaciteCourante );
 #endif
 		}
-	// fonctions
-		void AllouerPlus_(
+		void _Free( 
 			sdr::size__ CapaciteCourante,
-			sdr::size__ NouvelleCapacite,
-			aem::mode__ Mode )
+			sdr::size__ NouvelleCapacite )
 		{
-			Descriptors.Allocate( NouvelleCapacite, Mode );
-
-			Initialize_( CapaciteCourante, NouvelleCapacite );
+# ifdef IAS_DBG
+			if ( CapaciteCourante >= NouvelleCapacite )
+				ERRFwk();
+# endif
+			while ( CapaciteCourante-- > NouvelleCapacite )
+				AStorage.Free( Descriptors.Get( CapaciteCourante ) );
 		}
-		// alloue plus de la place pour pouvoir contenir 'NouvelleCapacite' objets,
-		// sachant que 'Capacite courante' est la capacite actuelle
-		void AllouerMoins_(
-			sdr::size__ CapaciteCourante,
-			sdr::size__ NouvelleCapacite,
-			aem::mode__ Mode );
-		// alloue plus de la place pour pouvoir contenir 'NouvelleCapacite' objets,
-		// sachant que 'Capacite courante' est la capacite actuelle
+	// fonctions
 		void Lire_(
 			index__ Index,
 			sdr::row_t__ Position,
@@ -354,10 +352,33 @@ namespace ias {
 		{
 			sdr::size__ CurrentAmount = Descriptors.Amount();
 
-			if ( CurrentAmount > Amount )
-				AllouerMoins_( CurrentAmount, Amount, Mode );
-			else
-				AllouerPlus_( CurrentAmount, Amount, Mode );
+			if ( Amount > CurrentAmount ) {
+				Descriptors.Allocate( Amount, Mode );
+				_Initialize( CurrentAmount, Amount );
+			} else if ( Amount < CurrentAmount ) {
+				_Free( CurrentAmount, Amount );
+				Descriptors.Allocate( Amount, Mode );
+			} else
+				Descriptors.Allocate( Amount, Mode );
+		}
+		void PreAllocate( sdr::size__ Amount )
+		{
+			sdr::size__ CurrentAmount = Descriptors.Amount();
+
+			if ( Amount > CurrentAmount ) {
+				Descriptors.PreAllocate( Amount );
+				_Initialize( CurrentAmount, Amount );
+			} else if ( Amount < CurrentAmount ) {
+				_Free( CurrentAmount, Amount );
+				Descriptors.PreAllocate( Amount );
+			} else
+				Descriptors.PreAllocate( Amount );
+		}
+		void SetStepped( sdr::size__ Step )
+		{
+			Descriptors.SetStepped( Step );
+
+			// Pas de '_Initialize(...)' ou de '_Free(...)', car la taille ne change pas (juste éventuellement l''extent').
 		}
 		index__ New( index__ Index = E_NIL )
 		{

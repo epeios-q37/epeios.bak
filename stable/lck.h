@@ -76,10 +76,10 @@ namespace lck {
 	class lock___
 	{
 	public:
-		mtx::mutex_handler__ ReadCounterProtection;
-		mtx::mutex_handler__ WritingRequest;
-		mtx::mutex_handler__ WritingPermission;
-		mtx::mutex_handler__ OverflowProtection;
+		mtx::handler__ ReadCounterProtection;
+		mtx::handler__ WritingRequest;
+		mtx::handler__ WritingPermission;
+		mtx::handler__ OverflowProtection;
 		counter__ ReadCounter;
 		void reset( bso::bool__ P = true )
 		{
@@ -207,7 +207,7 @@ namespace lck {
 			lck::lock___ Lock;
 			bso::bool__ Locked;
 			bso::bool__ ReadWrite;
-			mtx::mutex_handler__ Mutex;
+			mtx::handler__ Mutex;
 		} _Core, &_Access;
 		/* Comme la volatibilité de l'objet en lui-même n'est pas interssante, mais uniquement celle de l'objet qu'il contrôle,
 		on utilise '_Access' pour pouvoir mettre toutes les méthodes en 'const'. */
