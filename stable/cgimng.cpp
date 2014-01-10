@@ -80,7 +80,7 @@ ERREpilog
 
 struct data__ {
 	void *UP;
-	mtx::mutex_handler__ Mutex;
+	mtx::handler__ Mutex;
 	bso::bool__ InUse;
 };
 

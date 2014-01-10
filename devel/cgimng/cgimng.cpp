@@ -80,7 +80,7 @@ ERREpilog
 
 struct data__ {
 	void *UP;
-	mtx::mutex_handler__ Mutex;
+	mtx::handler__ Mutex;
 	bso::bool__ InUse;
 };
 
@@ -130,7 +130,7 @@ ERRBegin
 		ERRAlc();
 
 	Data->UP = UP;
-	Data->Mutex = mtx::Create( mtx::mProtecting );
+	Data->Mutex = mtx::Create();
 	Data->InUse = true;
 
 	SID.Init();

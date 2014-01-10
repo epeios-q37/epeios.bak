@@ -158,10 +158,10 @@ namespace ssnmng {
 		{
 			sdr::size__ Size = Pointers.Extent();
 
-			Queue.Allocate( Size, aem::mFit );
-			Table.Allocate( Size, aem::mFit );
-			Index.Allocate( Size, aem::mFit );
-			Chronos.Allocate( Size, aem::mFit );
+			Queue.Allocate( Size, aem::mFitted );
+			Table.Allocate( Size, aem::mFitted );
+			Index.Allocate( Size, aem::mFitted );
+			Chronos.Allocate( Size, aem::mFitted );
 			
 		}
 	public:

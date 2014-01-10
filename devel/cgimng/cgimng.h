@@ -175,7 +175,7 @@ namespace cgimng {
 		lck::control___<sessions_> Sessions_;
 		struct log_data__ {
 			log_functions__ *Functions;
-			mtx::mutex_handler__ Mutex;
+			mtx::handler__ Mutex;
 		} _LogData;
 		void _Log(
 			log__ Log,
@@ -223,7 +223,7 @@ namespace cgimng {
 			_LogData.Functions = &LogFunctions;
 
 			if ( _LogData.Functions != NULL )
-				_LogData.Mutex = mtx::Create( mtx::mProtecting );
+				_LogData.Mutex = mtx::Create();
 		}
 		void Create(
 			void *UP,

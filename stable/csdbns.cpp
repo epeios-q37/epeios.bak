@@ -207,7 +207,7 @@ struct socket_data__
 	socket_callback__ *Callback;
 	sck::socket__ Socket;
 	const char *IP;
-	mtx::mutex_handler__ Mutex;
+	mtx::handler__ Mutex;
 };
 
 /* Les objets et fonctions qui suivent sont pour permettre aux objets utilisateurs d'être
@@ -222,7 +222,7 @@ E_ROW( rrow__ );
 
 static lstbch::E_LBUNCHt( csdbns_repository_item__, rrow__ ) Repository_;
 
-mtx::mutex_handler__ Mutex_ = MTX_INVALID_HANDLER;
+mtx::handler__ Mutex_ = MTX_INVALID_HANDLER;
 
 inline static void Lock_( void )
 {

@@ -495,9 +495,120 @@ namespace aem {
 	{
 	private:
 		size__ _Amount;
+	protected:
+		bso::bool__ Handle(
+			sdr::size__ &Size,
+			mode__ Mode)
+		{
+			_Amount = Size;
+
+			return false;
+		}
 	public:
 		struct s {};	// Simplifie son utilisation dans 'BCH'.
-	};
+		_amount_extent_manager__( s &S = *(s *)NULL )
+		{
+			reset( false );
+		}
+		// Simplifies the 'SET' library.
+		void reset( bso::bool__ = true )
+		{
+			_Amount = 0;
+		}
+		_amount_extent_manager__ &operator =( const _amount_extent_manager__ &AEM )
+		{
+			// 'Amount' normallement déjà traité en amont.
+
+			return *this;
+		}
+		void Init( void )
+		{
+			_Amount = 0;
+		}
+		sdr::size__ Extent( void ) const
+		{
+			return extent;
+		}
+		//f Return the amount.
+		sdr::size__ Amount( void ) const
+		{
+			return _Amount;
+		}
+		//f Return position of the last object of the set.
+		row Last( void ) const
+		{
+			if ( _Amount )
+				return _Amount - 1;
+			else
+				return E_NIL;
+		}
+		row Last( sdr::size__ Offset ) const
+		{
+			row Row = Last();
+
+			if ( Row != E_NIL )
+				Row =  Previous( Row, Offset  );
+
+			return Row;
+		}
+		//f Return position of the first object of the set.
+		row First( void ) const
+		{
+			if ( _Amount )
+				return 0;
+			else
+				return E_NIL;
+		}
+		row First( sdr::size__ Offset ) const
+		{
+			row Row = First();
+
+			if ( Row != E_NIL )
+				Row = Next( Row, Offset  );
+
+			return Row;
+		}
+		//f Return the position of 'Offset' next to 'Current'.
+		row Next(
+			row Current,
+			sdr::size__ Offset ) const
+		{
+			if ( ( *Current += Offset ) < _Amount )
+				return Current;
+			else
+				return E_NIL;
+		}
+		//f Return the position of the object after 'Current' (to the top).
+		row Next( row Current ) const
+		{
+			return Next( Current, 1 );
+		}
+		//f Return the position of 'Offset' previous to 'Current'.
+		row Previous(
+			row Current,
+			sdr::size__ Offset ) const
+		{
+			if ( *Current >= Offset )
+				return *Current - Offset;
+			else
+				return E_NIL;
+		}
+		//f Return the position of the object before 'Current' (to the bottom).
+		row Previous( row Current ) const
+		{
+			return Previous( Current, 1 );
+		}
+		//f Return true if empty, false otherwise.
+		bso::bool__ IsEmpty( void ) const
+		{
+			return _Amount == 0;
+		}
+		//f Return true if 'Row' exists, false otherwise.
+		bso::bool__ Exists( row Row ) const
+		{
+			return *Row < _Amount;
+		}
+};
 
 	template <int extent, typename row> class amount_extent_manager__
 	: public _amount_extent_manager__<extent, row>

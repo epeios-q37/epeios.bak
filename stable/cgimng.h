@@ -175,7 +175,7 @@ namespace cgimng {
 		lck::control___<sessions_> Sessions_;
 		struct log_data__ {
 			log_functions__ *Functions;
-			mtx::mutex_handler__ Mutex;
+			mtx::handler__ Mutex;
 		} _LogData;
 		void _Log(
 			log__ Log,
