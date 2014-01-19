@@ -62,7 +62,7 @@ namespace scltool {
 		const char *ProgramName,
 		const clnarg::description_ &Description );
 
-	void NewPrintDefaultCommandDescriptions( const char *ProgramName );
+	void PrintDefaultCommandDescriptions( const char *ProgramName );
 
 	const str::string_ &GetArgumentShortLong(
 		const str::string_ &Id,

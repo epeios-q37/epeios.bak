@@ -124,10 +124,10 @@ ERREpilog
 		struct s
 		{
 			user_pointers_::s UPs;
-			mtx::mutex_handler__ Mutex;
+			mtx::handler__ Mutex;
 			struct log__ {
 				log_functions__ *Functions;
-				mtx::mutex_handler__ Mutex;
+				mtx::handler__ Mutex;
 			} Log;
 		} &S_;
 		user_pointers_ UPs;
@@ -163,8 +163,8 @@ ERREpilog
 			reset();
 
 			UPs.Init();
-			S_.Mutex = mtx::Create( mtx::mProtecting );
-			S_.Log.Mutex = mtx::Create( mtx::mProtecting );
+			S_.Mutex = mtx::Create();
+			S_.Log.Mutex = mtx::Create();
 			S_.Log.Functions = &LogFunctions;
 		}
 		id__ New( void )

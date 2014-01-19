@@ -68,7 +68,7 @@ using namespace nsxpcm;
 
 nsIDOMWindow *MasterWindow_ = NULL;
 bch::E_BUNCH( nsIDOMWindow *) MasterWindows_;
-mtx::mutex_handler__ MasterWindowMutex_;
+mtx::handler__ MasterWindowMutex_;
 bso::uint__ MasterWindowCounter_ = 0;
 
 void nsxpcm::AddMasterWindow( nsIDOMWindow *Window )
@@ -2328,7 +2328,7 @@ ERREpilog
 }
 
 static inline void Process_(
-	const fnm::name___ &FileName,
+	const str::string_ &FileName,
 	str::string_ &Result )
 {
 ERRProlog
@@ -2336,22 +2336,23 @@ ERRProlog
 	txf::text_oflow__ TFlow;
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
-	fnm::name___ XSLLocation;
-	str::string Buffer;
+	TOL_CBUFFER___ STRBuffer;
+	TOL_CBUFFER___ FNMBuffer;
+	fnm::name___ Buffer;
+	const char *XSLLocation = NULL;
 ERRBegin
-	if ( FFlow.Init( FileName ) != fil::sSuccess )
+	if ( FFlow.Init( FileName.Convert( STRBuffer ) ) != tol::rSuccess )
 		ERRLmt();	// Devrait normalement faire remonter un message d'erreur explicatif.
 
 	XFlow.Init( FFlow, utf::f_Default );
 
-	XSLLocation.Init();
-	fnm::GetLocation( FileName, XSLLocation );
+	Buffer.Init();
+	XSLLocation = fnm::GetLocation( FileName.Convert( STRBuffer ), Buffer).UTF8( FNMBuffer );
 
 	SFlow.Init( Result );
 	TFlow.Init( SFlow );
 
-	Buffer.Init();
-	if ( xpp::Process( XFlow, XSLLocation.UTF8( Buffer ), xml::oCompact, TFlow ) != xpp::sOK )
+	if ( xpp::Process( XFlow, str::string( XSLLocation ), xml::oCompact, TFlow ) != xpp::sOK )
 		ERRDta();
 ERRErr
 ERREnd

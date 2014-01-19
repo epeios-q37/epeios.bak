@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:define name="ArgumentsHandling">
+	<xpp:define name="Arguments">
 		<xpp:bloc>
 		  <Argument id="Usage" Description="UsageCommandDescription" long="help" Path="Parameters/Command" Value="Usage"/>
 		  <Argument id="Version" Description="VersionCommandDescription" long="version" Path="Parameters/Command" Value="Version"/>

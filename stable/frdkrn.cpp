@@ -551,7 +551,7 @@ ERRBegin
 	if ( fil::CreateBackupFile( FileName, fil::bmRename, err::hUserDefined ) == fil::bsOK )
 		Backuped = true;
 
-	if ( FFlow.Init( FileName, err::hUserDefined ) != fil::sSuccess ) {
+	if ( FFlow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		Recap = rUnableToOpenFile;
 		FileName.UTF8( ErrorSet.Misc );
 		ERRReturn;

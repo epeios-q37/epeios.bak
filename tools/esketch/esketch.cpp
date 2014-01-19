@@ -21,6 +21,8 @@
     along with 'esketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "registry.h"
+
 #include "scltool.h"
 #include "sclerror.h"
 
@@ -65,7 +67,7 @@ ERRProlog
 	lcl::meaning Meaning;
 	str::string Translation, ShortLong;
 ERRBegin
-	scltool::NewPrintDefaultCommandDescriptions( NAME_LC );
+	scltool::PrintDefaultCommandDescriptions( NAME_LC );
 
 	ShortLong.Init();
 	cio::COut << NAME_LC << " " << scltool::GetArgumentShortLong( "Test", ShortLong ) << txf::nl;

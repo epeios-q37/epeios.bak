@@ -70,14 +70,14 @@ rgstry::level__ scltool::GetRegistrySetupLevel( void )
 
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
 
-static rgstry::entry___ ArgumentsHandling_( "ArgumentsHandling" );
+static rgstry::entry___ Arguments_( "Arguments", sclrgstry::Definitions );
 #define ARGUMENT_TAG "Argument"
 #define ARGUMENT_ID_ATTRIBUTE "id"
 #define ARGUMENT_LONG_ATTRIBUTE		"long"
 #define ARGUMENT_SHORT_ATTRIBUTE	"short"
-static rgstry::entry___ ShortTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_SHORT_ATTRIBUTE ), ArgumentsHandling_ );
-static rgstry::entry___ LongTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_LONG_ATTRIBUTE ), ArgumentsHandling_ );
-static rgstry::entry___ IdTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_ID_ATTRIBUTE ), ArgumentsHandling_ );
+static rgstry::entry___ ShortTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_SHORT_ATTRIBUTE ), Arguments_ );
+static rgstry::entry___ LongTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_LONG_ATTRIBUTE ), Arguments_ );
+static rgstry::entry___ IdTaggedArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_TAG, ARGUMENT_ID_ATTRIBUTE ), Arguments_ );
 #define ARGUMENT_TAGGING_ID_ATTRIBUTE "@"  ARGUMENT_ID_ATTRIBUTE
 static rgstry::entry___ LongTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, LongTaggedArgument_ );
 static rgstry::entry___ ShortTaggedArgumentId_( ARGUMENT_TAGGING_ID_ATTRIBUTE, ShortTaggedArgument_ );
@@ -718,7 +718,7 @@ ERREnd
 ERREpilog
 }
 
-void scltool::NewPrintDefaultCommandDescriptions( const char *ProgramName )
+void scltool::PrintDefaultCommandDescriptions( const char *ProgramName )
 {
 ERRProlog
 	str::string Translation;
@@ -1149,9 +1149,9 @@ ERRFBegin
 	if ( !main_( argc, argv ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
-ERRFEnd
-	cio::COut << txf::nl << txf::commit;
-	cio::CErr << txf::nl << txf::commit;
+ERRFEnd	
+	cio::COut.Commit();
+	cio::CErr.Commit();
 ERRFEpilog
 	return ExitValue;
 }

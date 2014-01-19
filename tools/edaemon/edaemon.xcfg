@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="edaemon">
+    <xpp:expand href="epeios.xcfg"/>
     <Parameters>
 		  <Language>en</Language>
     </Parameters>
-	</Configuration>
+    <Definitions>
+      <Locale>
+        <xpp:expand select="Locale"/>
+      </Locale>>
+      <Arguments>
+        <xpp:expand select="Arguments"/>
+        <Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Path="Parameters/Command" Value="Process"/>
+        <Argument id="ThreadAmountMaxOption" Description="ThreadAmountMaxOptionDescription" long="max-thread" short="t" Path="Parameters/ThreadAmountMax"/>
+      </Arguments>
+    </Definitions>
+  </Configuration>
 </Configurations>

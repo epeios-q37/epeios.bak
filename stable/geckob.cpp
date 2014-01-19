@@ -59,7 +59,7 @@ public:
 
 using namespace geckob;
 
-static mtx::mutex_handler__ Mutex_ = MTX_INVALID_HANDLER;
+static mtx::handler__ Mutex_ = MTX_INVALID_HANDLER;
 static geckoo::steering_callback__ *LoneSteering_ = NULL;
 
 #ifdef CPE_WIN

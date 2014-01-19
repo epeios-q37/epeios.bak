@@ -16,10 +16,10 @@
           </Translations>
         </xpp:cdata>
       </Locale>
-      </Definitions>
-    <ArgumentsHandling>
-      <xpp:expand select="ArgumentsHandling"/>
-      <Argument id="Test" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test"/>
-    </ArgumentsHandling>
+      <Arguments>
+        <xpp:expand select="Arguments"/>
+        <Argument id="Test" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test"/>
+      </Arguments>
+    </Definitions>
   </Configuration>
 </Configurations>

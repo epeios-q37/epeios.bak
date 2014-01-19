@@ -1172,6 +1172,10 @@ namespace tol {
 
 			return *this;
 		}
+		t* operator()( void ) const
+		{
+			return _Pointer;
+		}
 	};
 
 # define E_BUFFER___( t )	buffer___<t>

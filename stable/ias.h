@@ -213,7 +213,7 @@ namespace ias {
 		{
 #if 1
 # ifdef IAS_DBG
-			if ( CapaciteCourante <= NouvelleCapacite )
+			if ( CapaciteCourante >= NouvelleCapacite )
 				ERRFwk();
 # endif
 			descriptor__ Buffer[IAS_BUFFER_SIZE];
@@ -240,7 +240,7 @@ namespace ias {
 			sdr::size__ NouvelleCapacite )
 		{
 # ifdef IAS_DBG
-			if ( CapaciteCourante >= NouvelleCapacite )
+			if ( CapaciteCourante <= NouvelleCapacite )
 				ERRFwk();
 # endif
 			while ( CapaciteCourante-- > NouvelleCapacite )

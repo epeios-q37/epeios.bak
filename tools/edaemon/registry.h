@@ -38,7 +38,7 @@ namespace registry {
 	extern entry___ ModuleLogFileName;
 	extern entry___ ModuleLogMode;
 
-	inline const char *GetModuleLogFileName( STR_BUFFER___ &FileName )
+	inline const char *GetModuleLogFileName( TOL_CBUFFER___ &FileName )
 	{
 		return scltool::GetOptionalValue( ModuleLogFileName, FileName );
 	}

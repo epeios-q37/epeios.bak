@@ -98,7 +98,7 @@ static void PrintUsage_( const clnarg::description_ &Description )
 ERRProlog
 	str::string Translation;
 ERRBegin
-	scltool::PrintDefaultCommandDescriptions( NAME_MC, Description );
+	scltool::PrintDefaultCommandDescriptions( NAME_MC );
 
 	COut << NAME_LC << " [<project-file>]";
 	COut << txf::nl;
@@ -403,7 +403,7 @@ ERRBegin
 			break;
 		}
 
-		if ( FFlow.Init( LogFileName, Mode, err::hUserDefined ) != fil::sSuccess ) {
+		if ( FFlow.Init( LogFileName, Mode, err::hUserDefined ) != tol::rSuccess ) {
 			ErrorMeaning.Init();
 			ErrorMeaning.SetValue( "UnableToOpenLogFileError" );
 			ErrorMeaning.AddTag( LogFileName );
@@ -500,7 +500,7 @@ static void Go_(
 {
 ERRProlog
 	str::string ModuleFileName;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	ModuleFileName.Init();
 
@@ -513,7 +513,7 @@ ERREpilog
 static void Go_( const char *ProjectFilename )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	const char *LogFileName = NULL;
 ERRBegin
 	if ( ( ProjectFilename != NULL ) && ( *ProjectFilename ) )

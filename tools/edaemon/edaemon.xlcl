@@ -3,8 +3,8 @@
 	<Locale target="edaemon">
 		<xpp:expand href="epeios.xlcl"/>
     <Translations text="ProgramDescription">
-      <Translation language="fr">'Daemoniseur' du projet Epeios</Translation>
-      <Translation language="en">Epeios project's 'daemonizer'</Translation>
+      <Translation language="fr">Daemoniseur</Translation>
+      <Translation language="en">Daemonizer</Translation>
     </Translations>
     <Translations text="ModuleError">
       <Translation language="fr">Erreur module : %1</Translation>

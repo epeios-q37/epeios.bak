@@ -70,14 +70,12 @@ static void Init_(
 	fls::id__ ID )
 {
 ERRProlog
-	const char *FileName = NULL;
-	FNM_BUFFER___ FileNameBuffer;
+	fnm::name___ FileName;
+	TOL_CBUFFER___ FileNameBuffer;
 ERRBegin
 	sprintf( Buffer, "%s%s", Name, Discriminator );
 
-	FileName = fnm::BuildFileName( Directory, Buffer, Suffix, FileNameBuffer );
-
-	Driver.Init( ID, FileName );
+	Driver.Init( ID, fnm::BuildFileName( Directory, Buffer, Suffix, FileName ).UTF8( FileNameBuffer ) );
 ERRErr
 ERREnd
 ERREpilog

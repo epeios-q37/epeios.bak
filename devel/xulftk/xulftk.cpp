@@ -262,7 +262,7 @@ static const char *GetAnnexTarget_(
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
-	STR_BUFFER___ &Buffer )
+	TOL_CBUFFER___ &Buffer )
 {
 	const char *Result = NULL;
 ERRProlog
@@ -305,7 +305,7 @@ template <typename bag, typename flow> static flow *GetEmbeddedFlow_(
 {
 	flow *Flow = NULL;
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	const char *Target = NULL;
 ERRBegin
 	if ( ( Target = GetAnnexTarget_( UI, Registry, Locale, Language, Buffer ) ) == NULL )
@@ -340,13 +340,13 @@ template <typename bag, typename flow> static flow *GetFileFlow_(
 {
 	flow *Flow = NULL;
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	const char *Target = NULL;
 ERRBegin
 	if ( ( Target = GetAnnexTarget_( UI, Registry, Locale, Language, Buffer ) ) == NULL )
 		ERRReturn;
 
-	if ( Bag.FileFlow.Init( Target, err::hUserDefined ) != fil::sSuccess )
+	if ( Bag.FileFlow.Init( Target, err::hUserDefined ) != tol::rSuccess )
 		Flow = &Bag.VoidFlow;
 	else
 		Flow = &Bag.FileFlow;
@@ -718,7 +718,7 @@ ERRProlog
 	flw::oflow__ *Flow = NULL;
 	obag___ Bag;
 	str::string Translation;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Bag.Init();
 	
@@ -801,9 +801,11 @@ const str::string_ &xulftk::trunk___::BuildXSLFileName(
 	str::string_ &FileName )
 {
 ERRProlog
-	FNM_BUFFER___ Buffer;
+	fnm::name___ NBuffer;
+	TOL_CBUFFER___ CBuffer;
 ERRBegin
-	FileName.Append( fnm::BuildFileName( DefaultXSLRootPath(), XSLFileNameAffix, ".xsl", Buffer ) );
+	NBuffer.Init();
+	FileName.Append( fnm::BuildFileName( DefaultXSLRootPath(), XSLFileNameAffix, ".xsl", NBuffer ).UTF8( CBuffer ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -815,7 +817,7 @@ const str::string_ &xulftk::trunk___::BuildXSLDigestFileName(
 	str::string_ &FileName )
 {
 ERRProlog
-	STR_BUFFER___ STRBuffer;
+	TOL_CBUFFER___ STRBuffer;
 	str::string Buffer;
 ERRBegin
 	Buffer.Init( XSLFileNameAffix );

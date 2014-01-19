@@ -346,7 +346,7 @@ ERRBegin
 	if ( ( Target = GetAnnexTarget_( UI, Registry, Locale, Language, Buffer ) ) == NULL )
 		ERRReturn;
 
-	if ( Bag.FileFlow.Init( Target, err::hUserDefined ) != fil::sSuccess )
+	if ( Bag.FileFlow.Init( Target, err::hUserDefined ) != tol::rSuccess )
 		Flow = &Bag.VoidFlow;
 	else
 		Flow = &Bag.FileFlow;
@@ -801,10 +801,11 @@ const str::string_ &xulftk::trunk___::BuildXSLFileName(
 	str::string_ &FileName )
 {
 ERRProlog
-	fnm::name___ Buffer;
+	fnm::name___ NBuffer;
+	TOL_CBUFFER___ CBuffer;
 ERRBegin
-	Buffer.Init();
-	fnm::BuildFileName( DefaultXSLRootPath(), XSLFileNameAffix, ".xsl", Buffer ).UTF8( FileName );
+	NBuffer.Init();
+	FileName.Append( fnm::BuildFileName( DefaultXSLRootPath(), XSLFileNameAffix, ".xsl", NBuffer ).UTF8( CBuffer ) );
 ERRErr
 ERREnd
 ERREpilog

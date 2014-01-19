@@ -68,7 +68,7 @@ using namespace nsxpcm;
 
 nsIDOMWindow *MasterWindow_ = NULL;
 bch::E_BUNCH( nsIDOMWindow *) MasterWindows_;
-mtx::mutex_handler__ MasterWindowMutex_;
+mtx::handler__ MasterWindowMutex_;
 bso::uint__ MasterWindowCounter_ = 0;
 
 void nsxpcm::AddMasterWindow( nsIDOMWindow *Window )
@@ -296,7 +296,7 @@ void nsxpcm::Transform(
 	char **JString )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Transform( String.Convert( Buffer ), String.Amount() + 1, JString );
 ERRErr
@@ -319,7 +319,7 @@ void nsxpcm::TransformW(
 	nsAString &WString )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	WString.Append( (const nsString::char_type *)String.Convert( Buffer ), String.Amount() / sizeof( nsString::char_type ) );
 ERRErr
@@ -363,7 +363,7 @@ void nsxpcm::Transform(
 	nsACString &CString )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Transform( String.Convert( Buffer ), CString );
 ERRErr
@@ -636,7 +636,7 @@ static inline void AddFilter_(
 	nsIFilePicker *FilePicker )
 {
 ERRProlog
-	STR_BUFFER___ TitleBuffer, MaskBuffer;
+	TOL_CBUFFER___ TitleBuffer, MaskBuffer;
 ERRBegin
 	AddFilter_( Filter.Title.Convert( TitleBuffer ), Filter.Mask.Convert( MaskBuffer ), FilePicker );
 ERRErr
@@ -688,7 +688,7 @@ void AddExtraPredefinedFilters_(
 {
 ERRProlog
 	str::string Translation;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( Filters & fpmfXPRJ ) {
 		Translation.Init();
@@ -1483,7 +1483,7 @@ ERRProlog
 	nsString WString;
 	str::string EventString;
 	event__ Event = e_Undefined;
-	STR_BUFFER___ StrBuffer;
+	TOL_CBUFFER___ StrBuffer;
 ERRBegin
 	// Sauvegarde pour la gestion d'évènements imbriqués.
 	nsIDOMEvent *RawEventBuffer = _EventData._RawEvent;
@@ -1544,7 +1544,7 @@ static event__ GetEventIfConcerned_(
 ERRProlog
 	nsString RawName, RawValue;
 	str::string Name, Value;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	str::string NameSpaceWithSeparator;
 ERRBegin
 	nsIDOMAttr *Attribute = nsxpcm::QueryInterface<nsIDOMAttr>( Node );
@@ -1670,7 +1670,7 @@ bso::bool__ GetRelevantBroadcasterId_(
 ERRProlog
 	nsString RawName, RawValue;
 	str::string Name;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	nsIDOMAttr *Attribute = nsxpcm::QueryInterface<nsIDOMAttr>( AttributeNode );
 
@@ -2161,7 +2161,7 @@ ERRProlog
 	nsCOMPtr<nsIXSLTProcessor> Processor;
 	nsString Name;
 	nsCOMPtr<nsIWritableVariant> Value;
-	STR_BUFFER___ NameBuffer;
+	TOL_CBUFFER___ NameBuffer;
 	ctn::E_CITEM( xslt_parameter_ ) Parameter;
 	nsresult Result = NS_OK;
 	sdr::row__ Row = E_NIL;
@@ -2336,16 +2336,18 @@ ERRProlog
 	txf::text_oflow__ TFlow;
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
-	STR_BUFFER___ STRBuffer;
-	FNM_BUFFER___ FNMBuffer;
+	TOL_CBUFFER___ STRBuffer;
+	TOL_CBUFFER___ FNMBuffer;
+	fnm::name___ Buffer;
 	const char *XSLLocation = NULL;
 ERRBegin
-	if ( FFlow.Init( FileName.Convert( STRBuffer ) ) != fil::sSuccess )
+	if ( FFlow.Init( FileName.Convert( STRBuffer ) ) != tol::rSuccess )
 		ERRLmt();	// Devrait normalement faire remonter un message d'erreur explicatif.
 
 	XFlow.Init( FFlow, utf::f_Default );
 
-	XSLLocation = fnm::GetLocation( FileName.Convert( STRBuffer ), FNMBuffer );
+	Buffer.Init();
+	XSLLocation = fnm::GetLocation( FileName.Convert( STRBuffer ), Buffer).UTF8( FNMBuffer );
 
 	SFlow.Init( Result );
 	TFlow.Init( SFlow );
@@ -2474,7 +2476,7 @@ bso::bool__ nsxpcm::GetDirectory(
 	Transform( RawDirectory, Directory );
 
 	if ( Directory.Amount() != Length )
-		Directory.Append( FNM_DIRECTORY_SEPARATOR_CHARACTER );
+		Directory.Append( '/' );
 
 	return true;
 }
@@ -2770,7 +2772,7 @@ public:
 		FormHistoryMutex_ = mtx::Create( mtx::mOwned );
 # endif
 #endif
-		MasterWindowMutex_ = mtx::Create( mtx::mProtecting );
+		MasterWindowMutex_ = mtx::Create();
 		MasterWindows_.Init();
 	}
 	~nsxpcmpersonnalization( void )

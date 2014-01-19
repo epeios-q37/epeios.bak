@@ -96,16 +96,22 @@ void fnm::name___::Init( const bso::char__ *Name )
 
 	Init();
 # ifdef FNM__WIN
-	if ( _Core.Size() == 0 )
-		_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
+	if ( _Core.Size() > INT_MAX )
+		ERRFwk();
 
-	if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  ) {
+	// Nécessaire pour les architctures 64 bits (sous Windwos 'int' a une taille de 32 bits, et 'size_t', 64), certaines focntions Windows prentant un 'int'.
+	int CoreSize = (int)_Core.Size();
+
+	if ( CoreSize == 0 )
+		_Core.Malloc( CoreSize = MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
+
+	if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, CoreSize )  ) {
 		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
 			ERRLbr();
 
-		_Core.Malloc( MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
+		_Core.Malloc( CoreSize = MultiByteToWideChar( CP_UTF8, 0, Name, -1, NULL, 0 ) );
 
-		if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, _Core.Size() )  )
+		if ( !MultiByteToWideChar( CP_UTF8, 0, Name, -1, _Core, CoreSize )  )
 			ERRLbr();
 	}
 # elif defined( FNM__POSIX )
@@ -134,16 +140,22 @@ ERREpilog
 const bso::char__ *fnm::name___::UTF8( TOL_CBUFFER___ &Buffer ) const
 {
 # ifdef FNM__WIN
-	if ( Buffer.Size() == 0 )
-		Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+	if ( Buffer.Size() > INT_MAX )
+		ERRLmt();
 
-	if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL )  ) {
+	// Nécessaire pour les architctures 64 bits (sous Windwos 'int' a une taille de 32 bits, et 'size_t', 64), certaines focntions Windows prentant un 'int'.
+	int BufferSize = (int)Buffer.Size();
+
+	if ( BufferSize == 0 )
+		Buffer.Malloc( BufferSize = WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+
+	if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, BufferSize, NULL, NULL )  ) {
 		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
 			ERRLbr();
 
-		Buffer.Malloc( WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+		Buffer.Malloc( BufferSize = WideCharToMultiByte( CP_UTF8, 0, _Core, -1, NULL, 0, NULL, NULL ) );
 
-		if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, Buffer.Size(), NULL, NULL ) )
+		if ( !WideCharToMultiByte( CP_UTF8, 0, _Core, -1, Buffer, BufferSize, NULL, NULL ) )
 			ERRLbr();
 	}
 # elif defined( FNM__POSIX )

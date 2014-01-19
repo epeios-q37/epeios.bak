@@ -144,7 +144,7 @@ namespace aem {
 		return Position;
 	}
 
-	inline bso::uint__ _GetMostRigthOnePosition( size__ Value )
+	inline bso::uint__ _GetMostRightOnePosition( size__ Value )
 	{
 		bso::size__ BytePosition = _GetMostRightNonZeroBytePosition( Value );
 
