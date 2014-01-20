@@ -59,79 +59,27 @@ END
 */
 /* Beginning of the part which handles command line arguments. */
 
-#pragma warning( disable: 101 )
 static void PrintUsage_( void )
 {
-ERRProlog
-	TOL_CBUFFER___ TBuffer;
-	lcl::meaning Meaning;
-	str::string Translation, ShortLong;
-ERRBegin
 	scltool::PrintDefaultCommandDescriptions( NAME_LC );
 
-	ShortLong.Init();
-	cio::COut << NAME_LC << " " << scltool::GetArgumentShortLong( "Test", ShortLong ) << txf::nl;
-	Translation.Init();
-	cio::COut << txf::pad << scltool::GetArgumentDescriptionTranslation( "Test", Translation ) << txf::nl;
+	scltool::PrintCommandDescription( "TestCommand" );
 
 #if 0	// Exemples.
-	// Commands.
-	COut << NAME << " [" << Description.GetCommandLabels( cProcess, Buffer );
-	COut << "] [" << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns>]";
-	COut << " [" << Description.GetOptionLabels( oNoIndent, Buffer );
-	COut << "] [<src> [<dst>]]";
-	COut << txf::nl;
-	Translation.Init();
-	COut << txf::pad << locale::GetProcessCommandDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << NAME << ' ' << Description.GetCommandLabels( cEncrypt, Buffer );
-	COut << " [" << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns>]";
-	COut << " [" << Description.GetOptionLabels( oNoIndent, Buffer );
-	COut << "] [<src> [<dst>]]";
-	COut << txf::nl;
-	Translation.Init();
-	COut << txf::pad << locale::GetEncryptCommandDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::nl;
+// Commands.
+	scltool::PrintCommandDescription( "ProcessCommand", "[%ThreadAmountMaxOption%=<max-thread>] <path> [<output>]");
+	cio::COut << txf::nl;
 
 // Options.
-	Meaning.Init();
-	clnarg::GetOptionsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scllocale::GetLocale().GetTranslation( Meaning, scltool::GetLanguage(), Translation ) << " :" << txf::nl;
-
-	COut << txf::pad << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns> :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << locale::GetNamespaceOptionDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::pad << Description.GetOptionLabels( oNoIndent, Buffer ) << " :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << locale::GetNoIndentOptionDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::nl;
+	scltool::PrintOptionsHeader();
+	scltool::PrintOptionDescription( "max-thread", "ThreadAmountMaxOption" );
 
 // Arguments.
-	Meaning.Init();
-	clnarg::GetArgumentsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scllocale::GetLocale().GetTranslation( Meaning, scltool::GetLanguage(), Translation ) << " :" << txf::nl;
-
-	COut << txf::pad << "<src> :" << txf::nl;
-	COut << txf::tab;
-	COut << locale::GetSourceFileArgumentDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::pad << "<dst> :" << txf::nl;
-	COut << txf::tab;
-	COut << locale::GetDestFileArgumentDescriptionTranslation( Translation ) << '.' << txf::nl;
+	scltool::PrintArgumentsHeader();
+	scltool::PrintArgumentDescription( "path", "PathArgumentDescription" );
+	scltool::PrintArgumentDescription( "output", "OutputArgumentDescription" );
 #endif
-
-ERRErr
-ERREnd
-ERREpilog
 }
-#pragma warning( default: 101 )
 
 static void PrintHeader_( void )
 {

@@ -10,15 +10,15 @@
       <Locale>
         <xpp:expand select="Locale"/>
         <xpp:cdata>
-          <Translations message="TestCommandDescription">
-            <Translation language="fr">Command de test.</Translation>
+          <Translations text="TestCommandDescription">
+            <Translation language="fr">Commande de test.</Translation>
             <Translation language="en">Test command.</Translation>
           </Translations>
         </xpp:cdata>
       </Locale>
       <Arguments>
         <xpp:expand select="Arguments"/>
-        <Argument id="Test" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test"/>
+        <Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test"/>
       </Arguments>
     </Definitions>
   </Configuration>

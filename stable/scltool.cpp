@@ -1014,6 +1014,155 @@ ERREnd
 ERREpilog
 }
 
+static void HandleArgumentsAndOptionsTag_( const char *&Target )
+{
+ERRProlog
+	str::string Id;
+	str::string Translation, ShortLong;
+ERRBegin
+	if ( !*Target )
+		ERRFwk();
+
+	if ( *Target == '%' ) {
+		cio::COut << '%';
+		Target++;
+		ERRReturn;
+	}
+
+	Id.Init();
+
+	do  {
+		Id.Append( *Target );
+
+		Target++;
+	} while ( *Target && ( *Target != '%' ) );
+
+	if ( *Target != '%' )
+		ERRFwk();
+
+	ShortLong.Init();
+	cio::COut << GetArgumentShortLong( Id, ShortLong );
+
+	Target++;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void HandleArgumentAndOptions_( const char *Target )
+{
+	do  {
+		if ( *Target == '%' )
+			HandleArgumentsAndOptionsTag_( ++Target );	// 'Target' est ajusté
+		else {
+			cio::COut << *Target;
+			Target++;
+		}
+	} while ( *Target );
+}
+
+
+
+void scltool::PrintCommandDescription(
+	const char *CommandId,
+	const char *OptionsAndFlags )
+{
+ERRProlog
+	str::string Translation, ShortLong;
+ERRBegin
+	if ( ( CommandId == NULL ) || ( *CommandId == 0 ) )
+		ERRFwk();
+
+	ShortLong.Init();
+	cio::COut << TargetName << " " << GetArgumentShortLong( CommandId, ShortLong );
+
+	if ( ( OptionsAndFlags != NULL ) && ( *OptionsAndFlags != 0 ) ) {
+		cio::COut << ' ';
+		HandleArgumentAndOptions_( OptionsAndFlags );
+	}
+	
+	cio::COut << txf::nl;
+
+	Translation.Init();
+	cio::COut << txf::pad << scltool::GetArgumentDescriptionTranslation( CommandId, Translation ) << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void scltool::PrintFlagsAndOptionsHeader( void )
+{
+ERRProlog
+	lcl::meaning Meaning;
+	str::string Translation;
+ERRBegin
+	Meaning.Init();
+	clnarg::GetOptionsWordingMeaning( Meaning );
+	Translation.Init();
+	COut << scltool::GetTranslation( Meaning, Translation ) << " :" << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void scltool::PrintFlagDescription(	const char *FlagId )
+{
+ERRProlog
+	str::string Translation, ShortLong;
+ERRBegin
+	Translation.Init();
+	ShortLong.Init();
+	cio::COut << txf::pad <<GetArgumentShortLong( FlagId, ShortLong ) << ": ";
+	Translation.Init();
+	cio::COut << scltool::GetArgumentDescriptionTranslation( FlagId, Translation ) << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void scltool::PrintOptionDescription(
+	const char *Label,
+	const char *OptionId )
+{
+ERRProlog
+	str::string Translation;
+ERRBegin
+	Translation.Init();
+	cio::COut << txf::pad << Label << ": " << GetArgumentDescriptionTranslation( OptionId, Translation ) << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void scltool::PrintArgumentsHeader( void )
+{
+ERRProlog
+	lcl::meaning Meaning;
+	str::string Translation;
+ERRBegin
+	Meaning.Init();
+	clnarg::GetArgumentsWordingMeaning( Meaning );
+	Translation.Init();
+	COut << scltool::GetTranslation( Meaning, Translation ) << " :" << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void scltool::PrintArgumentDescription(
+	const char *Label,
+	const char *ArgumentDescriptionLabel )
+{
+ERRProlog
+	str::string Translation;
+ERRBegin
+	Translation.Init();
+	cio::COut << txf::pad << Label << ": " << GetTranslation( ArgumentDescriptionLabel, Translation ) << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 template <typename c, typename i> static void DumpInSetupRegistry_(
 	const char *Prefix,

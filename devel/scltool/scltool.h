@@ -96,6 +96,25 @@ namespace scltool {
 		bso::uint__ Indice,
 		const rgstry::tentry__ &Entry );
 
+	void PrintCommandDescription(
+		const char *CommandId,
+		const char *OptionsAndFlags = NULL );
+
+	void PrintFlagsAndOptionsHeader( void );
+
+	void PrintFlagDescription( const char *FlagId );
+
+	void PrintOptionDescription(
+		const char *Label,
+		const char *OptionId );
+
+	void PrintArgumentsHeader( void );
+
+	void PrintArgumentDescription(
+		const char *Label,
+		const char *ArgumentDescriptionLabel );
+
+
 	// A définir par l'utilisateur.
 	void Main(
 		int argc,
