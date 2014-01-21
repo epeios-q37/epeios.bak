@@ -118,8 +118,10 @@ namespace aem {
 	{
 		bso::uint__ Position = 0;
 
-		while ( ( Position < sizeof( Value ) ) && ( ((bso::raw__ *)&Value)[Position] != 0 ) )
+		while ( ( Position < sizeof( Value ) ) && ( ( Value & 0xff ) == 0 ) ) {
 			Position++;
+			Value >>= 8;
+		}
 
 		if ( Position == sizeof( Value ) )
 			Position = 0;

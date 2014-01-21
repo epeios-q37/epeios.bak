@@ -1,5 +1,5 @@
 /*
-	'edbpck' by Claude SIMON (claude.simon@zeusw.org)
+	'edbpck' by Claude SIMON (simon.claude@zeusw.org)
 	XML Preprocessor.
 	Copyright (C) 2007-2011 Claude SIMON
 
