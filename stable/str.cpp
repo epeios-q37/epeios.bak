@@ -536,9 +536,7 @@ ERREnd
 ERREpilog
 }
 
-
-
-void str::ReplaceTags(
+void str::ReplaceShortTags(
 	str::string_ &String,
 	const strings_ &Values,
 	const char TagMarker )
@@ -598,7 +596,7 @@ ERREnd
 ERREpilog
 }
 
-void str::ReplaceTag(
+void str::ReplaceShortTag(
 	str::string_ &String,
 	bso::u8__ Indice,
 	const str::string_ &Value,
@@ -627,11 +625,83 @@ ERRBegin
 
 	Values.Append( Value );
 
-	ReplaceTags( String, Values, TagMarker );
+	ReplaceShortTags( String, Values, TagMarker );
 ERRErr
 ERREnd
 ERREpilog
 }
+
+static bso::bool__ GetTag_(
+	const str::string_ &Target,
+	sdr::row__ Row,
+	str::string_ &Tag,
+	char Marker )
+{
+	if ( Row == E_NIL )
+		ERRFwk();
+
+	if ( Target( Row ) != Marker )
+		ERRFwk();
+
+	Row = Target.Next( Row );
+
+	if ( Row == E_NIL )
+		ERRFwk();
+
+	if ( Target( Row ) == Marker ) {
+		Row = Target.Next( Row );
+		return false;
+	}
+
+	do {
+		Tag.Append( Target( Row ) );
+
+		Row = Target.Next( Row );
+	} while ( ( Row != E_NIL ) && ( Target( Row ) != Marker ) );
+
+	if ( Row == E_NIL )
+		ERRFwk();
+
+	return true;
+}
+
+bso::bool__ str::ReplaceLongTags(
+	str::string_ &String,
+	replace_callback__ &Callback,
+	char Marker )
+{
+	bso::bool__ Success = false;
+ERRProlog
+	sdr::row__ Row = E_NIL;
+	str::string Tag, Value;
+ERRBegin
+	Row = String.First();
+
+	while ( Row != E_NIL ) {
+		if ( String( Row ) == '%' ) {
+			Tag.Init();
+			if ( GetTag_( String, Row, Tag, Marker ) ) {
+				String.Remove( Row, Tag.Amount() + 2 );
+				Value.Init();
+				if ( !Callback.GetTagValue( Tag, Value ) )
+					ERRReturn;
+
+				String.Insert( Value, Row );
+
+				Row = String.Next( Row, Value.Amount() );
+			} else
+				String.Remove( Row );
+		} else
+			Row = String.Next( Row );
+	}
+
+	Success = true;
+ERRErr
+ERREnd
+ERREpilog
+	return Success;
+}
+
 
 
 /* Although in theory this class is inaccessible to the different modules,

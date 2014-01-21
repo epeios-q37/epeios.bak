@@ -1620,7 +1620,7 @@ ERRProlog
 ERRBegin
 	Buffer.Init( _Path );
 
-	str::ReplaceTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
+	str::ReplaceShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
 
 	Path.Append( Buffer );
 ERRErr

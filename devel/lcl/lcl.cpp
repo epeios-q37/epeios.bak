@@ -376,7 +376,7 @@ ERRBegin
 	Tags.Init();
 	GetTags_( Basic.Tags, Core, Language, Locale, Tags );
 
-	str::ReplaceTags( Intermediate, Tags, LCL_TAG_MARKER_C );
+	str::ReplaceShortTags( Intermediate, Tags, LCL_TAG_MARKER_C );
 
 	Translation = Intermediate;
 ERRErr

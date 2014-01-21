@@ -547,15 +547,46 @@ namespace str {
 		string_ &String,
 		bso::bool__ dontHandleAccent = false );
 
-	void ReplaceTag(
+	// '%1', '%2'... (en supposant '%' comme marqueur).
+	void ReplaceShortTag(
 		str::string_ &String,
 		bso::u8__ Indice,
 		const str::string_ &Value,
 		char TagMarker );
 
-	void ReplaceTags(
+	void ReplaceShortTags(
 		str::string_ &String,
 		const strings_ &Values,
+		char TagMarker );
+
+	class replace_callback__
+	{
+	protected:
+		virtual bso::bool__ STRGetTagValue(
+			const str::string_ &Tag,
+			str::string_ &Value ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( replace_callback__ )
+		void Init( void )
+		{
+			// Standadisation.
+		}
+		const bso::bool__ GetTagValue(
+			const str::string_ &Tag,
+			str::string_ &Value )
+		{
+			return STRGetTagValue( Tag, Value );
+		}
+	};
+
+	// '%TagName%", en prenant '%' comme marqueur.
+	bso::bool__ ReplaceLongTags(
+		str::string_ &String,
+		replace_callback__ &Callback,
 		char TagMarker );
 
 }

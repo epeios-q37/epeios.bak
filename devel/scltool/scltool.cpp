@@ -1014,54 +1014,33 @@ ERREnd
 ERREpilog
 }
 
-static void HandleArgumentsAndOptionsTag_( const char *&Target )
-{
-ERRProlog
-	str::string Id;
-	str::string Translation, ShortLong;
-ERRBegin
-	if ( !*Target )
-		ERRFwk();
+typedef str::replace_callback__ _callback__;
 
-	if ( *Target == '%' ) {
-		cio::COut << '%';
-		Target++;
-		ERRReturn;
-	}
+namespace {
+	class callback__
+	: public _callback__
+	{
+	protected:
+		bso::bool__ STRGetTagValue(
+			const str::string_ &Tag,
+			str::string_ &Value )
+		{
+			GetArgumentShortLong( Tag, Value );
 
-	Id.Init();
-
-	do  {
-		Id.Append( *Target );
-
-		Target++;
-	} while ( *Target && ( *Target != '%' ) );
-
-	if ( *Target != '%' )
-		ERRFwk();
-
-	ShortLong.Init();
-	cio::COut << GetArgumentShortLong( Id, ShortLong );
-
-	Target++;
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void HandleArgumentAndOptions_( const char *Target )
-{
-	do  {
-		if ( *Target == '%' )
-			HandleArgumentsAndOptionsTag_( ++Target );	// 'Target' est ajusté
-		else {
-			cio::COut << *Target;
-			Target++;
+			return true;
 		}
-	} while ( *Target );
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_callback__::reset(  P );
+		}
+		E_CDTOR( callback__ );
+		void Init( void )
+		{
+			_callback__::Init();
+		}
+	};
 }
-
-
 
 void scltool::PrintCommandDescription(
 	const char *CommandId,
@@ -1069,6 +1048,8 @@ void scltool::PrintCommandDescription(
 {
 ERRProlog
 	str::string Translation, ShortLong;
+	str::string OptionsAndFlagsBuffer;
+	callback__ Callback;
 ERRBegin
 	if ( ( CommandId == NULL ) || ( *CommandId == 0 ) )
 		ERRFwk();
@@ -1078,7 +1059,14 @@ ERRBegin
 
 	if ( ( OptionsAndFlags != NULL ) && ( *OptionsAndFlags != 0 ) ) {
 		cio::COut << ' ';
-		HandleArgumentAndOptions_( OptionsAndFlags );
+		OptionsAndFlagsBuffer.Init( OptionsAndFlags );
+
+		Callback.Init();
+
+		if ( !str::ReplaceLongTags( OptionsAndFlagsBuffer, Callback, '%' ) )
+			ERRFwk();
+
+		cio::COut << OptionsAndFlagsBuffer;
 	}
 	
 	cio::COut << txf::nl;
@@ -1318,7 +1306,7 @@ ERRProlog
 	lcl::meaning Meaning;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
-	str::ReplaceTag( Path, 1, str::string( Target ), '%' );
+	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
 
 	if ( Registry_.Fill( RegistryProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK ) {
 		Meaning.Init();
