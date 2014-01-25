@@ -513,7 +513,7 @@ namespace fblbkd {
 		virtual void LSTAllocate( sdr::size__ Size )
 		{
 			Element_.Commit();
-			Objets.Allocate( Size, aem::mFit );
+			Objets.Allocate( Size, aem::mFitted );
 		}
 		virtual index__ FBLBKDNew( void )
 		{
