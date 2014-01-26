@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:bloc><!-- User definitions -->
+	<xpp:define name="Version">
+		<xpp:bloc>20140120</xpp:bloc>
+	</xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2012 - 2004</xpp:bloc>
+    </xpp:define>
+  </xpp:bloc>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="_OutputType" value="DynamicLibrary"/>
+  <xpp:set name="_Gecko" value="yes"/>
+  <xpp:set name="_UserPostBuild" value="yes"/>
+  <xpp:set name="_UserFiles" value="yes"/>
+  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <About>
+    <Program>egeckocom</Program>
+    <Software>eGeckoCOM</Software>
+	<UUID>5f734ce2-a867-4717-912b-ab9adc704475</UUID>
+  </About>
+  <Modules>
+    <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+      <Modules Group="Core">
+        <xpp:expand select="Core"/>
+		<Module>bom</Module>
+		<Module>cdgb64</Module>
+		<Module>fil</Module>
+		<Module>fnm</Module>
+		<Module>geckof</Module>
+		<Module>lcl</Module>
+		<Module>rgstry</Module>
+		<Module>stsfsm</Module>
+		<Module>xml</Module>
+		<Module>xpp</Module>
+      </Modules>
+	  <Modules Group="SCL">
+		<xpp:expand href="h:/batchs/DVL/prj/EpeiosSCL.xml"/>
+	  </Modules>
+	</Modules>
+	<Module>atcplsrch</Module>
+    <Module>registry</Module>
+  </Modules>
+  <Files>
+	  <File>CHANGELOG.txt</File><!-- Défini ici, en conjonction avec '_UserFiles=yes', sinon placé en '..'. -->
+  </Files>
+  <SourceDirs>
+  </SourceDirs>
+  <PreprocessorDefinitions>
+  </PreprocessorDefinitions>
+  <Oddities>
+	<PostBuildEvent>
+		<Command>copy $(TargetPath) h:\bin\</Command>
+	</PostBuildEvent>
+  </Oddities>
+</Project>
