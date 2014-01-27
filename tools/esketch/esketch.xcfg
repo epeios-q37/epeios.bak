@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-15"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="esketch">
     <xpp:expand href="epeios.xcfg"/>
@@ -18,7 +18,20 @@
       </Locale>
       <Arguments>
         <xpp:expand select="Arguments"/>
+        <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
         <Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test"/>
+        <!-- Fanaux : 'Path', mais pas de 'Value'. -->
+        <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Parameters/Flag" Value="TestFlag"/>
+        <!-- Options : 'Path' ET 'Value'. -->
+        <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Parameters/Option"/>
+        <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+        <Argument id="TestArgument" Description="TestArgumentDescription" Path="Argument"/>
+        <!-- Affectations des arguments libres-->
+        <Layouts>
+          <Layout command="test">
+            <Assignement index="0" Target="TestArgument"/>
+          </Layout>
+        </Layouts>
       </Arguments>
     </Definitions>
   </Configuration>

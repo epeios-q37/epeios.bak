@@ -92,12 +92,12 @@ struct parameters___ {
 static void PrintUsage_( const clnarg::description_ &Description )
 {
 ERRProlog
-	STR_BUFFER___ TBuffer;
+	TOL_CBUFFER___ TBuffer;
 	CLNARG_BUFFER__ Buffer;
 	lcl::meaning Meaning;
 	str::string Translation;
 ERRBegin
-	scltool::PrintDefaultCommandDescriptions( NAME, Description );
+	scltool::OldPrintDefaultCommandDescriptions( NAME, Description );
 
 	// Commands.
 	COut << NAME << " [" << Description.GetCommandLabels( cProcess, Buffer );
@@ -179,12 +179,11 @@ ERRProlog
 	clnarg::id__ Option;
 	const bso::char__ *Unknown = NULL;
 	clnarg::argument Argument;
-	clnarg::buffer__ Buffer;
 ERRBegin
 	Options.Init();
 
 	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		clnarg::ReportUnknownOptionError( Unknown, NAME, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
 
 	P = Options.First();
 
@@ -195,8 +194,8 @@ ERRBegin
 		case oNamespace:
 			Analyzer.GetArgument( Option, Argument );
 
-			if ( Argument.Amount() == 0 )
-				clnarg::ReportMissingOptionArgumentError( Analyzer.Description().GetOptionLabels( oNamespace, Buffer ), NAME, scllocale::GetLocale(), scltool::GetLanguage() );
+			if (Argument.Amount() == 0)
+				ERRFwk();
 
 			Argument.Convert( Parameters.Namespace );
 
@@ -240,7 +239,7 @@ ERRBegin
 	case 0:
 		break;
 	default:
-		clnarg::ReportWrongNumberOfArgumentsError( NAME, scllocale::GetLocale(), scltool::GetLanguage() );
+		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
 		break;
 	}
 
@@ -275,15 +274,15 @@ ERRBegin
 	case scltool::cVersion:
 		PrintHeader_();
 //		TTR.Advertise( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cHelp:
 		PrintUsage_( Description );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case scltool::cLicense:
 		epsmsc::PrintLicense( COut );
-		ERRExit( EXIT_SUCCESS );
+		ERRAbort();
 		break;
 	case cProcess:
 	case cEncrypt:
@@ -343,7 +342,7 @@ ERRBegin
 
 		sclerror::SetMeaning( Meaning );
 
-		ERRExit( EXIT_FAILURE );
+		ERRAbort();
 	}
 
 ERRErr
@@ -361,15 +360,17 @@ ERRProlog
 	flf::file_oflow___ OFlow;
 	txf::text_oflow__ TOFlow;
 	flf::file_iflow___ IFlow;
-	const char *Directory = NULL;
+	fnm::name___ Directory;
 	bso::bool__ BackedUp = false;
-	FNM_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( Source != NULL ) {
-		if ( IFlow.Init( Source, err::hUserDefined ) != fil::sSuccess )
+		if ( IFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
 			sclmisc::ReportFileOpeningErrorAndAbort( Source );
 
-		Directory = fnm::GetLocation( Source, Buffer );
+		Directory.Init();
+
+	fnm::GetLocation(Source, Directory );
 	}
 
 	if ( Destination != NULL ) {
@@ -377,13 +378,13 @@ ERRBegin
 
 		BackedUp = true;
 
-		if ( OFlow.Init( Destination, err::hUserDefined ) != fil::sSuccess )
+		if ( OFlow.Init( Destination, err::hUserDefined ) != tol::rSuccess )
 			sclmisc::ReportFileOpeningErrorAndAbort( Destination );
 
 		TOFlow.Init( OFlow );
 	}
 
-	Process_( Source == NULL ? CIn.Flow() : IFlow, Namespace, Directory, Indent ? xml::oIndent : xml::oCompact, Destination == NULL ? COut : TOFlow );
+	Process_( Source == NULL ? CIn.Flow() : IFlow, Namespace, Directory.UTF8( Buffer ), Indent ? xml::oIndent : xml::oCompact, Destination == NULL ? COut : TOFlow );
 
 ERRErr
 	if ( BackedUp ) {
@@ -410,7 +411,7 @@ ERRProlog
 	lcl::meaning Meaning;
 ERRBegin
 	if ( Source != NULL )
-		if ( IFlow.Init( Source, err::hUserDefined ) != fil::sSuccess )
+		if ( IFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
 			sclmisc::ReportFileOpeningErrorAndAbort( Source );
 
 	if ( Destination != NULL ) {
@@ -418,7 +419,7 @@ ERRBegin
 
 		BackedUp = true;
 
-		if ( OFlow.Init( Destination, err::hUserDefined ) != fil::sSuccess )
+		if ( OFlow.Init( Destination, err::hUserDefined ) != tol::rSuccess )
 			sclmisc::ReportFileOpeningErrorAndAbort( Destination );
 
 		TOFlow.Init( OFlow );
@@ -437,7 +438,7 @@ ERRBegin
 
 		sclerror::SetMeaning( Meaning );
 
-		ERRExit( EXIT_FAILURE );
+		ERRAbort();
 	}
 ERRErr
 	if ( BackedUp )

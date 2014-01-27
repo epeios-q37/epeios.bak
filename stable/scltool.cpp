@@ -86,6 +86,13 @@ static rgstry::entry___ IdTaggedArgumentShort_( "@" ARGUMENT_SHORT_ATTRIBUTE, Id
 static rgstry::entry___ IdTaggedArgumentDescription_( "@Description", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentPath_( "@Path", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentValue_( "@Value", IdTaggedArgument_ );
+static rgstry::entry___ UntaggedArgumentSet_( "Set", Arguments_ );
+static rgstry::entry___ CommandTaggedArgumentsSet_( RGSTRY_TAGGING_ATTRIBUTE( "command" ), UntaggedArgumentSet_ );
+static rgstry::entry___ UntaggedFreeArgument_( "Argument", CommandTaggedArgumentsSet_ );
+static rgstry::entry___ CommandAndIndexTaggedFreeArgument_( RGSTRY_TAGGING_ATTRIBUTE( "index" ), UntaggedFreeArgument_ );
+static rgstry::entry___ CommandAndIndexTaggedFreeArgumentId_( "@id", CommandAndIndexTaggedFreeArgument_ );
+static rgstry::entry___ CommandAndIdTaggedFreeArgument_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), UntaggedFreeArgument_ );
+static rgstry::entry___ CommandAndIdTaggedFreeArgumentPath_( "@Path", CommandAndIdTaggedFreeArgument_ );
 
 static const str::string_ &GetMandatoryValue_( 
 	const rgstry::tentry___ &Entry,
@@ -750,7 +757,11 @@ const str::string_ &GetValue_(
 	return GetIdTagged_( Id, IdTaggedArgumentValue_, Path );
 }
 
-static void FillSetupRegistry_( const flag_ &Flag )
+#define COMMAND_PATH	"Parameters/Command"
+
+static void FillSetupRegistry_(
+	sdr::row__,	// Pas utile.
+	const flag_ &Flag )
 {
 ERRProlog
 	str::string Id;
@@ -773,6 +784,11 @@ ERRBegin
 	Path.Init();
 	GetPath_( Id, Path );
 
+#if 1
+	if ( Path.Amount() == 0 )	// Il s'agit d'une commande.
+		Path = COMMAND_PATH;
+
+#else // Obsolete
 	if ( Path.Amount() == 0 ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLTOOL_NAME "_NoPathForFlag" );
@@ -780,6 +796,7 @@ ERRBegin
 		sclerror::SetMeaning( Meaning );
 		ERRAbort();
 	}
+#endif
 
 	Value.Init();
 	GetValue_( Id, Value );
@@ -806,7 +823,9 @@ ERREnd
 ERREpilog
 }
 
-static void FillSetupRegistry_( const option_ &Option )
+static void FillSetupRegistry_(
+	sdr::row__,	// Pas utile.
+	const option_ &Option )
 {
 ERRProlog
 	str::string Id;
@@ -850,7 +869,61 @@ ERREnd
 ERREpilog
 }
 
-template <typename c, typename i> static void FillSetupRegistry_( const c &Conteneur )
+static void FillSetupRegistry_(
+	sdr::row__ Index,
+	const argument_ &Argument )
+{
+ERRProlog
+	str::string Id;
+	lcl::meaning  Meaning;
+	str::strings Tags;
+	str::string Command;
+	str::string Path;
+	sdr::row__ Error = E_NIL;
+	bso::integer_buffer__ Buffer;
+ERRBegin
+	Id.Init();
+
+	Command.Init();
+	GetCommand( Command );
+
+	Tags.Init();
+	Tags.Append( Command );
+	Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
+
+	Id.Init();
+	scltool::GetMandatoryValue( rgstry::tentry__( CommandAndIndexTaggedFreeArgumentId_, Tags ), Id );
+
+	Tags.Init();
+	Tags.Append( Command );
+	Tags.Append( Id );
+
+	Path.Init();
+	GetMandatoryValue( rgstry::tentry__( CommandAndIdTaggedFreeArgumentPath_, Tags ), Path );
+
+	if ( Path.Amount() == 0 ) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_NoPathForArgument" );
+		Meaning.AddTag( Id );
+		sclerror::SetMeaning( Meaning );
+		ERRAbort();
+	}
+
+	Registry_.SetValue( Path, Argument, &Error );
+
+	if (Error != E_NIL) {
+		Meaning.Init();
+		Meaning.SetValue( SCLTOOL_NAME "_BadPathForArgument" );
+		Meaning.AddTag( Id );
+		sclerror::SetMeaning(Meaning);
+		ERRAbort();
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
+template <typename c, typename i> static void FillSetupRegistry_(const c &Conteneur)
 {
 	i Item;
 	sdr::row__ Row = Conteneur.First();
@@ -858,7 +931,7 @@ template <typename c, typename i> static void FillSetupRegistry_( const c &Conte
 	Item.Init( Conteneur );
 
 	while ( Row != E_NIL ) {
-		FillSetupRegistry_( Item( Row ) );
+		FillSetupRegistry_( Row, Item( Row ) );
 
 		Row = Conteneur.Next( Row );
 	}
@@ -871,6 +944,7 @@ static void FillSetupRegistry_(
 {
 	FillSetupRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags );
 	FillSetupRegistry_<options_, ctn::E_CITEM( option_ )>( Options );
+	FillSetupRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( Arguments);
 }
 
 #define ARGUMENTS	"_/Arguments"
@@ -982,7 +1056,7 @@ ERREpilog
 static rgstry::entry___ FreeArguments_( ARGUMENT_FREES );
 static rgstry::entry___ FreeArgumentsAmount_( "@" AMOUNT_ATTRIBUTE, FreeArguments_ );
 
-bso::int__ scltool::GetFreeArgumentsAmount( void )
+bso::int__ scltool::GetFreeArgumentsAmount(void)
 {
 	return GetMandatoryUInt( FreeArgumentsAmount_ );
 }

@@ -25,7 +25,6 @@
     <Translation language="fr">Mauvais chemin pour le fanion '%1'.</Translation>
     <Translation language="en">Bad path for '%1' flag.</Translation>
   </Translations>
-
   <Translations text="SCLTOOL_NoPathForOption">
     <Translation language="fr">Pas de chemin pour l'option '%1'.</Translation>
     <Translation language="en">No path for '%1' option.</Translation>
@@ -34,7 +33,14 @@
     <Translation language="fr">Mauvais chemin pour l'option '%1'.</Translation>
     <Translation language="en">Bad path for '%1' option.</Translation>
   </Translations>
-
+  <Translations text="SCLTOOL_NoPathForArgument">
+    <Translation language="fr">Pas de chemin pour l'argument '%1'.</Translation>
+    <Translation language="en">No path for '%1' arguemnt.</Translation>
+  </Translations>
+  <Translations text="SCLTOOL_BadPathForArgument">
+    <Translation language="fr">Mauvais chemin pour l'argument '%1'.</Translation>
+    <Translation language="en">Bad path for '%1' argument.</Translation>
+  </Translations>
   <!--
 	<Translations text="SCLTOOL_">
 		<Translation language="fr"></Translation>
