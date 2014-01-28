@@ -42,26 +42,7 @@ static TOL_CBUFFER___ Language_;
 
 #define DEFAULT_LANGUAGE	"en"
 
-static rgstry::multi_level_registry Registry_;
-
-static rgstry::level__ RegistryConfigurationLevel_ = RGSTRY_UNDEFINED_LEVEL;
-static rgstry::level__ RegistryProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
 static rgstry::level__ RegistrySetupLevel_ = RGSTRY_UNDEFINED_LEVEL;
-
-const rgstry::multi_level_registry_ &scltool::GetRegistry( void )
-{
-	return Registry_;
-}
-
-rgstry::level__ scltool::GetRegistryConfigurationLevel( void )
-{
-	return RegistryConfigurationLevel_;
-}
-
-rgstry::level__ scltool::GetRegistryProjectLevel( void )
-{
-	return RegistryProjectLevel_;
-}
 
 rgstry::level__ scltool::GetRegistrySetupLevel( void )
 {
@@ -86,34 +67,26 @@ static rgstry::entry___ IdTaggedArgumentShort_( "@" ARGUMENT_SHORT_ATTRIBUTE, Id
 static rgstry::entry___ IdTaggedArgumentDescription_( "@Description", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentPath_( "@Path", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentValue_( "@Value", IdTaggedArgument_ );
-static rgstry::entry___ UntaggedArgumentSet_( "Set", Arguments_ );
-static rgstry::entry___ CommandTaggedArgumentsSet_( RGSTRY_TAGGING_ATTRIBUTE( "command" ), UntaggedArgumentSet_ );
-static rgstry::entry___ UntaggedFreeArgument_( "Argument", CommandTaggedArgumentsSet_ );
-static rgstry::entry___ CommandAndIndexTaggedFreeArgument_( RGSTRY_TAGGING_ATTRIBUTE( "index" ), UntaggedFreeArgument_ );
-static rgstry::entry___ CommandAndIndexTaggedFreeArgumentId_( "@id", CommandAndIndexTaggedFreeArgument_ );
-static rgstry::entry___ CommandAndIdTaggedFreeArgument_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), UntaggedFreeArgument_ );
-static rgstry::entry___ CommandAndIdTaggedFreeArgumentPath_( "@Path", CommandAndIdTaggedFreeArgument_ );
 
-static const str::string_ &GetMandatoryValue_( 
-	const rgstry::tentry___ &Entry,
-	str::string_ &Value )
-{
-	if ( !Registry_.GetValue( Entry, Value ) )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-}
+static rgstry::entry___ ArgumentsLayouts_( "Layouts", Arguments_ );
+static rgstry::entry___ UntaggedArgumentsLayout_( "Layout", ArgumentsLayouts_ );
+static rgstry::entry___ CommandTaggedArgumentsLayout_( RGSTRY_TAGGING_ATTRIBUTE( "command" ), UntaggedArgumentsLayout_ );
+static rgstry::entry___ UntaggedArgumentLink_( "Link", CommandTaggedArgumentsLayout_ );
+static rgstry::entry___ IndexTaggedArgumentLink_( RGSTRY_TAGGING_ATTRIBUTE( "index" ), UntaggedArgumentLink_ );
+static rgstry::entry___ IndexTaggedArgumentLinkTarget_( "@Target", IndexTaggedArgumentLink_ );
 
 static const str::string_ &GetLongTaggedArguemntId_(
 	str::string_ &Name,
 	str::string_ &Id )
 {
-	return GetMandatoryValue_( rgstry::tentry___( LongTaggedArgumentId_, Name ), Id );
+	return sclrgstry::GetMandatoryValue( rgstry::tentry___( LongTaggedArgumentId_, Name ), Id );
 }
 
 static const str::string_ &GetShortTaggedArguemntId_(
 	str::string_ &Name,
 	str::string_ &Id )
 {
-	return GetMandatoryValue_( rgstry::tentry___( ShortTaggedArgumentId_, Name ), Id );
+	return sclrgstry::GetMandatoryValue( rgstry::tentry___( ShortTaggedArgumentId_, Name ), Id );
 }
 
 
@@ -584,7 +557,7 @@ ERRBegin
 	Tags.Append( Name );
 
 	Path.Init();
-	Registry_.GetValue( Entry.GetPath( Tags, Path ), Id );
+	sclrgstry::GetValue( rgstry::tentry__( Entry, Tags ), Id );
 ERRErr
 ERREnd
 ERREpilog
@@ -632,7 +605,7 @@ ERRBegin
 	Tags.Append( Id );
 
 	PathBuffer.Init();
-	Registry_.GetValue( Entry.GetPath( Tags, PathBuffer ), Path );
+	sclrgstry::GetValue( rgstry::tentry__( Entry, Tags ), Path );
 ERRErr
 ERREnd
 ERREpilog
@@ -809,7 +782,7 @@ ERRBegin
 		ERRAbort();
 	}
 
-	Registry_.SetValue( Path, Value, &Error );
+	sclrgstry::SetValue( Path, Value, &Error );
 
 	if ( Error != E_NIL ) {
 		Meaning.Init();
@@ -855,7 +828,7 @@ ERRBegin
 		ERRAbort();
 	}
 
-	Registry_.SetValue( Path, Option.Value, &Error );
+	sclrgstry::SetValue( Path, Option.Value, &Error );
 
 	if ( Error != E_NIL ) {
 		Meaning.Init();
@@ -892,14 +865,14 @@ ERRBegin
 	Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
 
 	Id.Init();
-	scltool::GetMandatoryValue( rgstry::tentry__( CommandAndIndexTaggedFreeArgumentId_, Tags ), Id );
+	sclrgstry::GetMandatoryValue( rgstry::tentry__( IndexTaggedArgumentLinkTarget_, Tags ), Id );
 
 	Tags.Init();
 	Tags.Append( Command );
 	Tags.Append( Id );
 
 	Path.Init();
-	GetMandatoryValue( rgstry::tentry__( CommandAndIdTaggedFreeArgumentPath_, Tags ), Path );
+	GetPath_( Id, Path );
 
 	if ( Path.Amount() == 0 ) {
 		Meaning.Init();
@@ -909,7 +882,7 @@ ERRBegin
 		ERRAbort();
 	}
 
-	Registry_.SetValue( Path, Argument, &Error );
+	sclrgstry::SetValue( Path, Argument, &Error );
 
 	if (Error != E_NIL) {
 		Meaning.Init();
@@ -982,13 +955,13 @@ ERRProlog
 	int i = 0;
 	str::string Path;
 ERRBegin
-	Registry_.SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
+	sclrgstry::SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
 
 	while ( i < argc ) {
 		Path.Init();
 		PutIndice_( RAW_ARGUMENT, i, "", Path );
 
-		Registry_.SetValue( Path, str::string( argv[i++] ) );
+		sclrgstry::SetValue( Path, str::string( argv[i++] ) );
 	}
 ERRErr
 ERREnd
@@ -1007,7 +980,7 @@ ERRProlog
 ERRBegin
 	Path.Init();
 	PutIndice_( ARGUMENT_FLAG, Indice, "", Path );
-	Registry_.SetValue( Path, Flag.Name );
+	sclrgstry::SetValue( Path, Flag.Name );
 ERRErr
 ERREnd
 ERREpilog
@@ -1025,11 +998,11 @@ ERRProlog
 ERRBegin
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Name", Path );
-	Registry_.SetValue( Path, Option.Name );
+	sclrgstry::SetValue( Path, Option.Name );
 
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Value", Path );
-	Registry_.SetValue( Path, Option.Value );
+	sclrgstry::SetValue( Path, Option.Value );
 ERRErr
 ERREnd
 ERREpilog
@@ -1047,7 +1020,7 @@ ERRProlog
 ERRBegin
 	Path.Init();
 	PutIndice_( ARGUMENT_FREE, Indice, "", Path );
-	Registry_.SetValue( Path, Argument );
+	sclrgstry::SetValue( Path, Argument );
 ERRErr
 ERREnd
 ERREpilog
@@ -1058,7 +1031,7 @@ static rgstry::entry___ FreeArgumentsAmount_( "@" AMOUNT_ATTRIBUTE, FreeArgument
 
 bso::int__ scltool::GetFreeArgumentsAmount(void)
 {
-	return GetMandatoryUInt( FreeArgumentsAmount_ );
+	return sclrgstry::GetMandatoryUInt( FreeArgumentsAmount_ );
 }
 
 static rgstry::entry___ TaggedFreeArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_FREE, INDICE_ATTRIBUTE ) );
@@ -1069,7 +1042,7 @@ const str::string_ &scltool::GetFreeArgument(
 {
 	bso::integer_buffer__ Buffer;
 
-	return GetMandatoryValue( rgstry::tentry___( TaggedFreeArgument_, bso::Convert( Indice, Buffer ) ), Argument );
+	return sclrgstry::GetMandatoryValue( rgstry::tentry___( TaggedFreeArgument_, bso::Convert( Indice, Buffer ) ), Argument );
 }
 
 void scltool::PutFreeArgumentTo(
@@ -1082,7 +1055,7 @@ ERRBegin
 	Argument.Init();
 	GetFreeArgument( Indice, Argument );
 
-	Registry_.SetValue( Entry, Argument );
+	sclrgstry::SetValue( Argument, Entry );
 ERRErr
 ERREnd
 ERREpilog
@@ -1239,7 +1212,7 @@ ERRBegin
 	Path.Init( Prefix );
 	Path.Append( "/@" AMOUNT_ATTRIBUTE );
 
-	Registry_.SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
+	sclrgstry::SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
 
 	Item.Init( Conteneur );
 
@@ -1308,14 +1281,10 @@ ERRBegin
 
 	Language.Init();
 
-	if ( sclrgstry::GetRegistry().GetValue( sclrgstry::Language, sclrgstry::GetRoot(), Language ) ) 
+	if ( sclrgstry::GetValue( sclrgstry::Language, Language ) ) 
 		Language.Convert( Language_ );
 
-	Registry_.Init();
-
-	RegistryConfigurationLevel_ = Registry_.PushImportedLevel( sclrgstry::GetRegistry(), sclrgstry::GetRoot() );
-	RegistryProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
-	RegistrySetupLevel_ = Registry_.PushEmbeddedLevel( str::string( "Setup" ) );
+	RegistrySetupLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
 
 	FillSetupRegistry_( argc, argv );
 
@@ -1374,15 +1343,12 @@ void scltool::LoadProject(
 	const char *Target )
 {
 ERRProlog
-	str::string Path;
-	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
 	lcl::meaning Meaning;
 ERRBegin
-	Path.Init( PROJECT_ROOT_PATH );
-	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
+	Context.Init();
 
-	if ( Registry_.Fill( RegistryProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK ) {
+	if ( sclrgstry::LoadProject( FileName, Target, Context ) != tol::rSuccess ) {
 		Meaning.Init();
 		rgstry::GetMeaning( Context, Meaning );
 		ReportAndAbort( Meaning );
@@ -1406,208 +1372,9 @@ ERREnd
 ERREpilog
 }
 
-bso::bool__ scltool::GetValue(
-	const rgstry::tentry__ &Entry,
-	str::string_ &Value )
-{
-	return Registry_.GetValue( Entry, Value );
-}
-
-bso::bool__ scltool::GetValues(
-	const rgstry::tentry__ &Entry,
-	str::strings_ &Values )
-{
-	return Registry_.GetValues( Entry, Values );
-}
-
-const str::string_ &scltool::GetOptionalValue(
-	const rgstry::tentry__ &Entry,
-	str::string_ &Value,
-	bso::bool__ *Missing )
-{
-	if ( !GetValue( Entry, Value ) )
-		if ( Missing != NULL )
-			*Missing = true;
-	
-	return Value;
-}
-
-const char *scltool::GetOptionalValue(
-	const rgstry::tentry__ &Entry,
-	TOL_CBUFFER___ &Buffer,
-	bso::bool__ *Missing )
-{
-ERRProlog
-	str::string Value;
-	bso::bool__ LocalMissing = false;
-ERRBegin
-	Value.Init();
-
-	GetOptionalValue( Entry, Value, &LocalMissing );
-
-	if ( LocalMissing ) {
-		if ( Missing != NULL )
-			*Missing = true;
-	} else
-		Value.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
-	return Buffer;
-}
-
-const str::string_ &scltool::GetMandatoryValue(
-	const rgstry::tentry__ &Entry,
-	str::string_ &Value )
-{
-	if ( !GetValue( Entry, Value ) )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-
-	return Value;
-}
-
-const char *scltool::GetMandatoryValue(
-	const rgstry::tentry__ &Entry,
-	TOL_CBUFFER___ &Buffer )
-{
-ERRProlog
-	str::string Value;
-ERRBegin
-	Value.Init();
-
-	GetMandatoryValue( Entry, Value );
-
-	Value.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
-	return Buffer;
-}
-
-template <typename t> static bso::bool__ GetUnsignedNumber_(
-	const rgstry::tentry__ &Entry,
-	t Limit,
-	t &Value )
-{
-	bso::bool__ Present = false;
-ERRProlog
-	str::string RawValue;
-	sdr::row__ Error = E_NIL;
-ERRBegin
-	RawValue.Init();
-
-	if ( !( Present = GetValue( Entry, RawValue ) ) )
-		ERRReturn;
-
-	RawValue.ToNumber( Limit, Value, &Error );
-
-	if ( Error != E_NIL )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-ERRErr
-ERREnd
-ERREpilog
-	return Present;
-}
-
-template <typename t> static bso::bool__ GetSignedNumber_(
-	const rgstry::tentry__ &Entry,
-	t LowerLimit,
-	t UpperLimit,
-	t &Value )
-{
-	bso::bool__ Present = false;
-ERRProlog
-	str::string RawValue;
-	sdr::row__ Error = E_NIL;
-ERRBegin
-	RawValue.Init();
-
-	if ( !( Present = GetValue( Entry, RawValue ) ) )
-		ERRReturn;
-
-	RawValue.ToNumber( UpperLimit, LowerLimit, Value, &Error );
-
-	if ( Error != E_NIL )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-ERRErr
-ERREnd
-ERREpilog
-	return Present;
-}
-
-#define UN( name, type )\
-	type scltool::GetMandatory##name(\
-		const rgstry::tentry__ &Entry,\
-		type Limit  )\
-	{\
-		type Value;\
-\
-		if ( !GetUnsignedNumber_( Entry, Limit, Value ) )\
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
-\
-		return Value;\
-	}\
-	type scltool::Get##name(\
-		const rgstry::tentry__ &Entry,\
-		type DefaultValue,\
-		type Limit )\
-	{\
-		type Value;\
-\
-		if ( !GetUnsignedNumber_( Entry, Limit, Value ) )\
-			Value = DefaultValue;\
-\
-		return Value;\
-	}
-
-
-UN( UInt, bso::uint__ )
-#ifdef BSO__64BITS_ENABLED
-UN( U64, bso::u64__ )
-#endif
-UN( U32, bso::u32__ )
-UN( U16, bso::u16__ )
-UN( U8, bso::u8__ )
-
-#define SN( name, type )\
-	type scltool::GetMandatory##name(\
-		const rgstry::tentry__ &Entry,\
-		type Min,\
-		type Max)\
-	{\
-		type Value;\
-\
-		if ( !GetSignedNumber_( Entry, Min, Max, Value ) )\
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
-\
-		return Value;\
-	}\
-	type scltool::Get##name(\
-		const rgstry::tentry__ &Entry,\
-		type DefaultValue,\
-		type Min,\
-		type Max )\
-	{\
-		type Value;\
-\
-		if ( !GetSignedNumber_( Entry, Min, Max, Value ) )\
-			Value = DefaultValue;\
-\
-		return Value;\
-	}
-
-	SN( SInt, bso::sint__ )
-#ifdef BSO__64BITS_ENABLED
-	SN( S64, bso::s64__ )
-#endif
-	SN( S32, bso::s32__ )
-	SN( S16, bso::s16__ )
-	SN( S8, bso::s8__ )
-
-
 const str::string_ &scltool::GetCommand( str::string_ &Command )
 {
-	return GetMandatoryValue( Command_, Command );
+	return sclrgstry::GetMandatoryValue( Command_, Command );
 }
 
 

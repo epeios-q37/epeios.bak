@@ -96,7 +96,7 @@ ERRProlog
 ERRBegin
 	Locale.Init();
 
-	sclrgstry::GetRegistry().GetValue( sclrgstry::Locale, sclrgstry::GetRoot(), Locale );
+	sclrgstry::GetValue( sclrgstry::Locale, Locale );
 
 	if ( Locale.Amount() != 0 ) {
 		Locale.Insert( "<Locale>" );
@@ -120,7 +120,7 @@ static void Initialize_(
 {
 	scllocale::Load( LocaleFlow, LocaleDirectory, LocaleRootPath, LocaleFormat );
 
-	sclrgstry::Load( RegistryFlow, RegistryDirectory, RegistryRootPath );
+	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
 
 	LoadConfigurationLocale_( LocaleFormat);
 }

@@ -37,7 +37,12 @@ using namespace sclrgstry;
 
 #define REGISTRY_FILE_EXTENSION ".xcfg"
 
-static rgstry::registry Registry_;
+static rgstry::registry ConfigurationRegistry_;
+static rgstry::multi_level_registry Registry_;
+
+static rgstry::level__ ConfigurationLevel_ = RGSTRY_UNDEFINED_LEVEL;
+static rgstry::level__ ProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
+
 static rgstry::row__ Root_ = E_NIL;
 static TOL_CBUFFER___ Translation_;
 
@@ -54,17 +59,12 @@ bso::bool__ sclrgstry::IsReady( void )
 	return Root_ != E_NIL;
 }
 
-const rgstry::registry_ &sclrgstry::GetRegistry( void )
+rgstry::multi_level_registry_ &sclrgstry::GetRegistry( void )
 {
 	return Registry_;
 }
 
-rgstry::row__ sclrgstry::GetRoot( void )
-{
-	return Root_;
-}
-
-static rgstry::status__ FillRegistry_(
+static rgstry::status__ FillConfigurationRegistry_(
 	flw::iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath,
@@ -79,7 +79,12 @@ ERRBegin
 
 	XFlow.Init( Flow, utf::f_Default );
 
-	Status = rgstry::FillRegistry( XFlow, xpp::criterions___( str::string( Directory ) ), RootPath, Registry_, Root_, Context );
+	Status = rgstry::FillRegistry( XFlow, xpp::criterions___( str::string( Directory ) ), RootPath, ConfigurationRegistry_, Root_, Context );
+
+	if ( Status == rgstry::sOK ) {
+		ConfigurationLevel_ = Registry_.PushImportedLevel( ConfigurationRegistry_, Root_ );
+		ProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
+	}
 ERRErr
 ERREnd
 ERREpilog
@@ -127,7 +132,7 @@ ERREnd
 ERREpilog
 }
 
-void sclrgstry::Load(
+void sclrgstry::LoadConfiguration(
 	flw::iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath )
@@ -137,7 +142,7 @@ ERRProlog
 ERRBegin
 	Context.Init();
 
-	if ( FillRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK ) {
+	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK ) {
 		ReportConfigurationFileParsingError_( Context );
 		ERRAbort();
 	}
@@ -145,6 +150,250 @@ ERRErr
 ERREnd
 ERREpilog
 }
+
+#define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
+
+ tol::report__ sclrgstry::LoadProject(
+	const char *FileName,
+	const char *Target,
+	rgstry::context___ &Context )
+{
+	 tol::report__ Report = tol::r_Undefined;
+ERRProlog
+	str::string Path;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	Path.Init( PROJECT_ROOT_PATH );
+	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
+
+	if ( Registry_.Fill( ProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) == rgstry::sOK )
+		Report = tol::rSuccess;
+	else
+		Report = tol::rFailure;
+
+ERRErr
+ERREnd
+ERREpilog
+	return Report;
+}
+
+bso::bool__ sclrgstry::GetValue(
+	const rgstry::tentry__ &Entry,
+	str::string_ &Value )
+{
+	return Registry_.GetValue( Entry, Value );
+}
+
+void sclrgstry::SetValue(
+	const str::string_ &Value,
+	const rgstry::tentry__ &Entry )
+{
+	Registry_.SetValue( Entry, Value );
+}
+
+void sclrgstry::SetValue(
+	const str::string_ &Path,
+	const str::string_ &Value,
+	sdr::row__ *Error )
+{
+	Registry_.SetValue( Path, Value, Error );
+}
+
+bso::bool__ sclrgstry::GetValues(
+	const rgstry::tentry__ &Entry,
+	str::strings_ &Values )
+{
+	return Registry_.GetValues( Entry, Values );
+}
+
+const str::string_ &sclrgstry::GetOptionalValue(
+	const rgstry::tentry__ &Entry,
+	str::string_ &Value,
+	bso::bool__ *Missing )
+{
+	if ( !GetValue( Entry, Value ) )
+		if ( Missing != NULL )
+			*Missing = true;
+
+	return Value;
+}
+
+const char *sclrgstry::GetOptionalValue(
+	const rgstry::tentry__ &Entry,
+	TOL_CBUFFER___ &Buffer,
+	bso::bool__ *Missing )
+{
+	ERRProlog
+		str::string Value;
+	bso::bool__ LocalMissing = false;
+	ERRBegin
+		Value.Init();
+
+	GetOptionalValue( Entry, Value, &LocalMissing );
+
+	if ( LocalMissing ) {
+		if ( Missing != NULL )
+			*Missing = true;
+	}
+	else
+		Value.Convert( Buffer );
+	ERRErr
+		ERREnd
+		ERREpilog
+		return Buffer;
+}
+
+const str::string_ &sclrgstry::GetMandatoryValue(
+	const rgstry::tentry__ &Entry,
+	str::string_ &Value )
+{
+	if ( !GetValue( Entry, Value ) )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+
+	return Value;
+}
+
+const char *sclrgstry::GetMandatoryValue(
+	const rgstry::tentry__ &Entry,
+	TOL_CBUFFER___ &Buffer )
+{
+	ERRProlog
+		str::string Value;
+	ERRBegin
+		Value.Init();
+
+	GetMandatoryValue( Entry, Value );
+
+	Value.Convert( Buffer );
+	ERRErr
+		ERREnd
+		ERREpilog
+		return Buffer;
+}
+
+template <typename t> static bso::bool__ GetUnsignedNumber_(
+	const rgstry::tentry__ &Entry,
+	t Limit,
+	t &Value )
+{
+	bso::bool__ Present = false;
+	ERRProlog
+		str::string RawValue;
+	sdr::row__ Error = E_NIL;
+	ERRBegin
+		RawValue.Init();
+
+	if ( !( Present = GetValue( Entry, RawValue ) ) )
+		ERRReturn;
+
+	RawValue.ToNumber( Limit, Value, &Error );
+
+	if ( Error != E_NIL )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+	ERRErr
+		ERREnd
+		ERREpilog
+		return Present;
+}
+
+template <typename t> static bso::bool__ GetSignedNumber_(
+	const rgstry::tentry__ &Entry,
+	t LowerLimit,
+	t UpperLimit,
+	t &Value )
+{
+	bso::bool__ Present = false;
+	ERRProlog
+		str::string RawValue;
+	sdr::row__ Error = E_NIL;
+	ERRBegin
+		RawValue.Init();
+
+	if ( !( Present = GetValue( Entry, RawValue ) ) )
+		ERRReturn;
+
+	RawValue.ToNumber( UpperLimit, LowerLimit, Value, &Error );
+
+	if ( Error != E_NIL )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+	ERRErr
+		ERREnd
+		ERREpilog
+		return Present;
+}
+
+#define UN( name, type )\
+	type sclrgstry::GetMandatory##name(\
+	const rgstry::tentry__ &Entry,\
+	type Limit  )\
+{\
+	type Value;\
+	\
+	if ( !GetUnsignedNumber_( Entry, Limit, Value ) )\
+	sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
+	\
+	return Value;\
+}\
+	type sclrgstry::Get##name(\
+	const rgstry::tentry__ &Entry,\
+	type DefaultValue,\
+	type Limit )\
+{\
+	type Value;\
+	\
+	if ( !GetUnsignedNumber_( Entry, Limit, Value ) )\
+	Value = DefaultValue;\
+	\
+	return Value;\
+}
+
+
+UN( UInt, bso::uint__ )
+#ifdef BSO__64BITS_ENABLED
+UN( U64, bso::u64__ )
+#endif
+UN( U32, bso::u32__ )
+UN( U16, bso::u16__ )
+UN( U8, bso::u8__ )
+
+#define SN( name, type )\
+	type sclrgstry::GetMandatory##name(\
+	const rgstry::tentry__ &Entry,\
+	type Min,\
+	type Max)\
+{\
+	type Value;\
+	\
+	if ( !GetSignedNumber_( Entry, Min, Max, Value ) )\
+	sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );\
+	\
+	return Value;\
+}\
+	type sclrgstry::Get##name(\
+	const rgstry::tentry__ &Entry,\
+	type DefaultValue,\
+	type Min,\
+	type Max )\
+{\
+	type Value;\
+	\
+	if ( !GetSignedNumber_( Entry, Min, Max, Value ) )\
+	Value = DefaultValue;\
+	\
+	return Value;\
+}
+
+SN( SInt, bso::sint__ )
+#ifdef BSO__64BITS_ENABLED
+SN( S64, bso::s64__ )
+#endif
+SN( S32, bso::s32__ )
+SN( S16, bso::s16__ )
+SN( S8, bso::s8__ )
+
+
+
+
 
 
 /* Although in theory this class is inaccessible to the different modules,
@@ -155,6 +404,7 @@ class sclrgstrypersonnalization
 public:
 	sclrgstrypersonnalization( void )
 	{
+		ConfigurationRegistry_.Init();
 		Registry_.Init();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */

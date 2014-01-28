@@ -29,7 +29,7 @@
         <!-- Affectations des arguments libres-->
         <Layouts>
           <Layout command="test">
-            <Assignement index="0" Target="TestArgument"/>
+            <Link index="0" Target="TestArgument"/>
           </Layout>
         </Layouts>
       </Arguments>
