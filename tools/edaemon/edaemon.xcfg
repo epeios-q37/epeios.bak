@@ -4,6 +4,7 @@
     <xpp:expand href="epeios.xcfg"/>
     <Parameters>
 		  <Language>en</Language>
+      <Command>Process</Command>
     </Parameters>
     <Definitions>
       <Locale>
@@ -11,8 +12,13 @@
       </Locale>>
       <Arguments>
         <xpp:expand select="Arguments"/>
-        <Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Path="Parameters/Command" Value="Process"/>
-        <Argument id="ThreadAmountMaxOption" Description="ThreadAmountMaxOptionDescription" long="max-thread" short="t" Path="Parameters/ThreadAmountMax"/>
+        <Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process"/>
+        <Argument id="ProjectArgument" Path="Parameters/ProjectFileName"/>
+        <Layouts>
+          <Layout command="Process">
+            <Link index="0" Target="ProjectArgument"/>
+          </Layout>
+        </Layouts>
       </Arguments>
     </Definitions>
   </Configuration>

@@ -24,7 +24,6 @@
 #ifndef REGISTRY__INC
 # define REGISTRY__INC
 
-# include "scltool.h"
 # include "sclrgstry.h"
 
 namespace registry {
@@ -40,27 +39,27 @@ namespace registry {
 
 	inline const char *GetModuleLogFileName( TOL_CBUFFER___ &FileName )
 	{
-		return scltool::GetOptionalValue( ModuleLogFileName, FileName );
+		return sclrgstry::GetOptionalValue( ModuleLogFileName, FileName );
 	}
 
 	inline const str::string_ &GetRawModuleLogMode( str::string_ &Mode )
 	{
-		return scltool::GetOptionalValue( ModuleLogMode, Mode );
+		return sclrgstry::GetOptionalValue( ModuleLogMode, Mode );
 	}
 
 	inline const str::string_ &GetModuleFileName( str::string_ &FileName )
 	{
-		return scltool::GetMandatoryValue( ModuleFileName, FileName );
+		return sclrgstry::GetMandatoryValue( ModuleFileName, FileName );
 	}
 
 	inline bso::u16__ GetRawModuleService( void )
 	{
-		return scltool::GetMandatoryU16( ModuleService );
+		return sclrgstry::GetMandatoryU16( ModuleService );
 	}
 
 	inline const str::string_ &GetRawModuleServiceType( str::string_ &Type )
 	{
-		return scltool::GetMandatoryValue( ModuleServiceType, Type );
+		return sclrgstry::GetMandatoryValue( ModuleServiceType, Type );
 	}
 }
 

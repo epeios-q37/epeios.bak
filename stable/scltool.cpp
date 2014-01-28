@@ -50,6 +50,7 @@ rgstry::level__ scltool::GetRegistrySetupLevel( void )
 }
 
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
+static rgstry::entry___ ProjectFileName_( "ProjectFileName", sclrgstry::Parameters );
 
 static rgstry::entry___ Arguments_( "Arguments", sclrgstry::Definitions );
 #define ARGUMENT_TAG "Argument"
@@ -1269,6 +1270,36 @@ static bso::bool__ ReportSCLPendingError_( void )
 	return sclerror::ReportPendingError( GetLanguage() );
 }
 
+static void LoadProject_( const char *FileName )
+{
+ERRProlog
+	rgstry::context___ Context;
+	lcl::meaning Meaning;
+ERRBegin
+	Context.Init();
+
+	if ( sclrgstry::LoadProject( FileName, scltool::TargetName, Context ) != tol::rSuccess ) {
+		Meaning.Init();
+		rgstry::GetMeaning( Context, Meaning );
+		ReportAndAbort( Meaning );
+	}
+
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void LoadProject_( const str::string_ &FileName )
+{
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	LoadProject_( FileName.Convert( Buffer ) );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 static bso::bool__ main_(
 	int argc,
 	const char *argv[] )
@@ -1276,6 +1307,7 @@ static bso::bool__ main_(
 	bso::bool__ Success = false;
 ERRProlog
 	str::string Language;
+	str::string ProjectFileName;
 ERRBegin
 	sclmisc::Initialize( TargetName, NULL );
 
@@ -1287,6 +1319,12 @@ ERRBegin
 	RegistrySetupLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
 
 	FillSetupRegistry_( argc, argv );
+
+	ProjectFileName.Init();
+	sclrgstry::GetValue( ProjectFileName_, ProjectFileName );
+
+	if ( ProjectFileName.Amount() != 0 )
+		LoadProject_( ProjectFileName );
 
 	Main( argc, argv );
 ERRErr
@@ -1337,40 +1375,6 @@ ERRFEpilog
 }
 
 #define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
-
-void scltool::LoadProject(
-	const char *FileName,
-	const char *Target )
-{
-ERRProlog
-	rgstry::context___ Context;
-	lcl::meaning Meaning;
-ERRBegin
-	Context.Init();
-
-	if ( sclrgstry::LoadProject( FileName, Target, Context ) != tol::rSuccess ) {
-		Meaning.Init();
-		rgstry::GetMeaning( Context, Meaning );
-		ReportAndAbort( Meaning );
-	};
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void scltool::LoadProject(
-	const str::string_ &FileName,
-	const char *Target )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	LoadProject( FileName.Convert( Buffer ), Target );
-ERRErr
-ERREnd
-ERREpilog
-}
 
 const str::string_ &scltool::GetCommand( str::string_ &Command )
 {

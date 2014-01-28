@@ -74,26 +74,8 @@ enum exit_value__ {
 	ev_amount
 };
 
-enum command__ {
-	cProcess = scltool::c_amount,
-	c_amount,
-	c_Undefined
-};
-
-enum option {
-};
-
-#define STRING_PARAM___( name )	CLNARG_STRING_PARAM___( name )
-
-struct parameters___ {
-	STRING_PARAM___( Project );
-	parameters___( void )
-	{
-	}
-};
-
 #pragma warning ( disable : 4101 ) 
-static void PrintUsage_( const clnarg::description_ &Description )
+static void PrintUsage_( void )
 {
 ERRProlog
 	str::string Translation;
@@ -119,123 +101,6 @@ static void PrintHeader_( void )
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
 	COut << "Copyright " COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
-}
-
-static void AnalyzeOptions_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	sdr::row__ P;
-	clnarg::option_list Options;
-	clnarg::id__ Option;
-	const bso::char__ *Unknown = NULL;
-	clnarg::argument Argument;
-//	clnarg::buffer__ Buffer;
-ERRBegin
-	Options.Init();
-
-	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
-
-	P = Options.First();
-
-	while( P != E_NIL ) {
-		Argument.Init();
-
-		switch( Option = Options( P ) ) {
-		default:
-			ERRFwk();
-		}
-
-		P = Options.Next( P );
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void AnalyzeFreeArguments_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	clnarg::arguments Free;
-	sdr::row__ P;
-ERRBegin
-	Free.Init();
-
-	Analyzer.GetArguments( Free );
-
-	P = Free.Last();
-
-	switch( Free.Amount() ) {
-	case 1:
-		Free.Get( Free.Last() ).Convert( Parameters.Project );
-		break;
-	case 0:
-		break;
-	default:
-		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
-		break;
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static command__ AnalyzeArgs_(
-	int argc,
-	const char *argv[],
-	parameters___ &Parameters )
-{
-	command__ Command = c_Undefined;
-ERRProlog
-	clnarg::description Description;
-	clnarg::analyzer___ Analyzer;
-ERRBegin
-	Description.Init();
-
-	scltool::AddDefaultCommands( Description );
-
-//	Description.AddCommand( '', "", c );
-//	Description.AddOption( '', "", o );
-
-	Analyzer.Init( argc, argv, Description );
-
-	switch ( Command = (command__)Analyzer.GetCommand() ) {
-	case scltool::cVersion:
-		PrintHeader_();
-//		TTR.Advertise( COut );
-		ERRAbort();
-		break;
-	case scltool::cHelp:
-		PrintUsage_( Description );
-		ERRAbort();
-		break;
-	case scltool::cLicense:
-		epsmsc::PrintLicense( COut );
-		ERRAbort();
-		break;
-//	case c:
-	case CLNARG_NONE:
-//		clnarg::ReportMissingCommandError( NAME, scllocale::GetLocale(), scltool::GetLanguage() );
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
-
-	AnalyzeOptions_( Analyzer, Parameters );
-
-	AnalyzeFreeArguments_( Analyzer, Parameters );
-
-ERRErr
-ERREnd
-ERREpilog
-	return Command;
 }
 
 /* End of the part which handles command line arguments. */
@@ -510,25 +375,10 @@ ERREnd
 ERREpilog
 }
 
-static void Go_( const char *ProjectFilename )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-	const char *LogFileName = NULL;
-ERRBegin
-	if ( ( ProjectFilename != NULL ) && ( *ProjectFilename ) )
-		scltool::LoadProject( ProjectFilename, NAME_LC );
-
-	Go_( registry::GetModuleLogFileName( Buffer ), GetLogFileHandling_() );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 static void ExitFunction_( void )
 {
 	if ( Core_ != NULL ) {
-		COut << "Terminatinge module..." << txf::nl << txf::commit;
+		COut << "Terminating module..." << txf::nl << txf::commit;
 		delete Core_;
 		COut << "Teminated." << txf::nl;
 	}
@@ -536,13 +386,33 @@ static void ExitFunction_( void )
 	Core_ = NULL;
 }
 
-static void Go_( 
-	command__ Command,
-	const parameters___ &Parameters )
+static void Go_( void )
 {
+ERRProlog
+	str::string ProjectFileName;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
 	atexit( ExitFunction_ );
 
-	Go_( Parameters.Project );
+	ProjectFileName.Init();
+
+	Go_( registry::GetModuleLogFileName( Buffer ), GetLogFileHandling_() );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void Go_( const str::string_ &Command )
+{
+	ERRProlog
+		ERRBegin
+		if ( Command == "Process" )
+			Go_();
+		else
+			scltool::ReportAndAbort( "BadCommand" );
+ERRErr
+ERREnd
+ERREpilog
 }
 
 const char *scltool::TargetName = NAME_LC;
@@ -551,14 +421,21 @@ void scltool::Main(
 	int argc,
 	const char *argv[] )
 {
-ERRProlog
-	parameters___ Parameters;
-	command__ Command = c_Undefined;
-ERRBegin
-	Command = AnalyzeArgs_( argc, argv, Parameters );
+	ERRProlog
+		str::string Command;
+	ERRBegin
+		Command.Init();
+	scltool::GetCommand( Command );
 
-	Go_( Command, Parameters );
-ERRErr
-ERREnd
-ERREpilog
+	if ( Command == "Usage" )
+		PrintUsage_();
+	else if ( Command == "Version" )
+		PrintHeader_();
+	else if ( Command == "License" )
+		epsmsc::PrintLicense();
+	else
+		Go_( Command );
+	ERRErr
+		ERREnd
+		ERREpilog
 }

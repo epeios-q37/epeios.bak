@@ -3,7 +3,7 @@
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
-#	Copyright (C) 2013 Claude SIMON.
+#	Copyright (C) 2013, 2014 Claude SIMON.
 #
 #	This file is part of 'eDaemon'.
 #
@@ -224,7 +224,7 @@ ifeq ("$(os)","$(GNULinux)")
 	
 	mods += $(pmods)
 	
-	libs += -lpthread -ldl
+	libs += -lpthread -ldl -lrt
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -251,7 +251,7 @@ ifeq ("$(os)","$(Linux)")
 	
 	mods += $(pmods)
 
-	libs += -lpthread -ldl
+	libs += -lpthread -ldl -lrt
 	
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -298,8 +298,8 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\""20131203"\"
-copt += -DCOPYRIGHT_YEARS=\""2013"\"
+copt += -DVERSION=\""20140119"\"
+copt += -DCOPYRIGHT_YEARS=\""2013, 2014"\"
 
 ifndef EPEIOS_SRC
 	src += :src

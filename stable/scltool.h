@@ -120,14 +120,6 @@ namespace scltool {
 		int argc,
 		const char *argv[] );
 
-	void LoadProject(
-		const char *FileName,
-		const char *Target );
-
-	void LoadProject(
-		const str::string_ &FileName,
-		const char *Target );
-
 	inline const rgstry::multi_level_registry_ &GetRegistry( void )
 	{
 		return sclrgstry::GetRegistry();
