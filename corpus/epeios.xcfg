@@ -2,9 +2,9 @@
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:define name="Arguments">
 		<xpp:bloc>
-		  <Argument id="Usage" Description="UsageCommandDescription" long="help" Path="Parameters/Command" Value="Usage"/>
-		  <Argument id="Version" Description="VersionCommandDescription" long="version" Path="Parameters/Command" Value="Version"/>
-		  <Argument id="License" Description="LicenseCommandDescription" long="license" Path="Parameters/Command" Value="License"/>
+		  <Argument id="Usage" Description="UsageCommandDescription" long="help" Value="Usage"/>
+		  <Argument id="Version" Description="VersionCommandDescription" long="version" Value="Version"/>
+		  <Argument id="License" Description="LicenseCommandDescription" long="license" Value="License"/>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Locale">

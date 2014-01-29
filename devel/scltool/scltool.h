@@ -62,58 +62,11 @@ namespace scltool {
 		const char *ProgramName,
 		const clnarg::description_ &Description );
 
-	void PrintDefaultCommandDescriptions( const char *ProgramName );
-
-	const str::string_ &GetArgumentShortLong(
-		const str::string_ &Id,
-		str::string_ &ShortLong );
-
-	inline const str::string_ &GetArgumentShortLong(
-		const char *Id,
-		str::string_ &ShortLong )
-	{
-		return GetArgumentShortLong( str::string( Id ), ShortLong );
-	}
-
-	const str::string_ &GetArgumentDescriptionTranslation(
-		const str::string_ &Id,
-		str::string_ &Translation );
-
-	inline const str::string_ &GetArgumentDescriptionTranslation(
-		const char *Id,
-		str::string_ &Translation )
-	{
-		return GetArgumentDescriptionTranslation( str::string( Id ), Translation );
-	}
-
-	bso::int__ GetFreeArgumentsAmount( void );
-
-	const str::string_ &GetFreeArgument(
-		bso::uint__ Indice,
-		str::string_ &Argument );
-
-	void PutFreeArgumentTo(
-		bso::uint__ Indice,
-		const rgstry::tentry__ &Entry );
-
-	void PrintCommandDescription(
-		const char *CommandId,
-		const char *OptionsAndFlags = NULL );
+	void PrintUsage( void );
 
 	void PrintFlagsAndOptionsHeader( void );
 
-	void PrintFlagDescription( const char *FlagId );
-
-	void PrintOptionDescription(
-		const char *Label,
-		const char *OptionId );
-
 	void PrintArgumentsHeader( void );
-
-	void PrintArgumentDescription(
-		const char *Label,
-		const char *ArgumentDescriptionLabel );
-
 
 	// A définir par l'utilisateur.
 	void Main(
