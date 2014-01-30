@@ -5,7 +5,7 @@
 		<Translation language="fr">Impossible d'ouvrir le fichier '%1'</Translation>
 		<Translation language="en">Unable to open file '%1'</Translation>
 	</Translations>
-	<Translations message="RGSTRY_ParseError"><!-- On repercute directement le message issu de la bibliothèque 'XPP/XML'. -->
+	<Translations message="RGSTRY_ParseError"><!-- On répercute directement le message issu de la bibliothèque 'XPP/XML'. -->
 		<Translation language="fr">%1</Translation>
 		<Translation language="en">%1</Translation>
 	</Translations>

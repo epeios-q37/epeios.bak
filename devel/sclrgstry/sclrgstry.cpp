@@ -64,6 +64,17 @@ rgstry::multi_level_registry_ &sclrgstry::GetRegistry( void )
 	return Registry_;
 }
 
+rgstry::level__ sclrgstry::GetConfigurationLevel( void )
+{
+	return ConfigurationLevel_;
+}
+
+rgstry::level__ sclrgstry::GetProjectLevel( void )
+{
+	return ProjectLevel_;
+}
+
+
 static rgstry::status__ FillConfigurationRegistry_(
 	flw::iflow__ &Flow,
 	const char *Directory,

@@ -23,6 +23,7 @@
 
 #include "details.h"
 
+#include "registry.h"
 #include "locale.h"
 #include "scltool.h"
 #include "sclerror.h"
@@ -59,108 +60,7 @@ enum exit_value__ {
 	ev_amount
 };
 
-enum command__ {
-	cProcess = scltool::c_amount,
-	cEncrypt,
-	c_amount,
-	c_Undefined
-};
-
-enum option {
-	// Définition du namespace.
-	oNamespace,
-	// Suppression de l'indentation
-	oNoIndent
-
-};
-
-#define STRING_PARAM___( name )	CLNARG_STRING_PARAM___( name )
-
-struct parameters___ {
-	STRING_PARAM___( Namespace );
-	STRING_PARAM___(  Source );
-	STRING_PARAM___( Destination );
-	bso::bool__ NoIndent;
-	command__ Command;
-	parameters___( void )
-	{
-		NoIndent = false;
-		Command = c_Undefined;
-	}
-};
-
-static void PrintUsage_( const clnarg::description_ &Description )
-{
-ERRProlog
-	TOL_CBUFFER___ TBuffer;
-	CLNARG_BUFFER__ Buffer;
-	lcl::meaning Meaning;
-	str::string Translation;
-ERRBegin
-	scltool::OldPrintDefaultCommandDescriptions( NAME, Description );
-
-	// Commands.
-	COut << NAME << " [" << Description.GetCommandLabels( cProcess, Buffer );
-	COut << "] [" << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns>]";
-	COut << " [" << Description.GetOptionLabels( oNoIndent, Buffer );
-	COut << "] [<src> [<dst>]]";
-	COut << txf::nl;
-	Translation.Init();
-	COut << txf::pad << scllocale::GetTranslation( locale::Label( locale::tProcessCommandDescription ), scltool::GetLanguage(), Translation ) << '.' << txf::nl;
-
-	COut << NAME << ' ' << Description.GetCommandLabels( cEncrypt, Buffer );
-	COut << " [" << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns>]";
-	COut << " [" << Description.GetOptionLabels( oNoIndent, Buffer );
-	COut << "] [<src> [<dst>]]";
-	COut << txf::nl;
-	Translation.Init();
-	COut << txf::pad << scllocale::GetTranslation( locale::Label( locale::tEncryptCommandDescription ), scltool::GetLanguage(), Translation ) << '.' << txf::nl;
-
-	COut << txf::nl;
-
-// Options.
-	Meaning.Init();
-	clnarg::GetOptionsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scllocale::GetTranslation( Meaning, scltool::GetLanguage(), Translation ) << " :" << txf::nl;
-
-	COut << txf::pad << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns> :" << txf::nl;
-	COut << txf::tab;
-	Meaning.Init();
-	locale::GetNamespaceOptionDescriptionMeaning( DEFAULT_NAMESPACE, Meaning );
-	Translation.Init();
-	COut << scllocale::GetTranslation( Meaning, scltool::GetLanguage(), Translation ) << '.' << txf::nl;
-
-	COut << txf::pad << Description.GetOptionLabels( oNoIndent, Buffer ) << " :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << locale::GetNoIndentOptionDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::nl;
-
-// Arguments.
-	Meaning.Init();
-	clnarg::GetArgumentsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scllocale::GetTranslation( Meaning, scltool::GetLanguage(), Translation ) << " :" << txf::nl;
-
-	COut << txf::pad << "<src> :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << locale::GetSourceFileArgumentDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::pad << "<dst> :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << locale::GetDestFileArgumentDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-
-#include "tht.h"
+// #include "tht.h"
 
 static void PrintHeader_( void )
 {
@@ -169,141 +69,6 @@ static void PrintHeader_( void )
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
-static void AnalyzeOptions_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	sdr::row__ P;
-	clnarg::option_list Options;
-	clnarg::id__ Option;
-	const bso::char__ *Unknown = NULL;
-	clnarg::argument Argument;
-ERRBegin
-	Options.Init();
-
-	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
-
-	P = Options.First();
-
-	while( P != E_NIL ) {
-		Argument.Init();
-
-		switch( Option = Options( P ) ) {
-		case oNamespace:
-			Analyzer.GetArgument( Option, Argument );
-
-			if (Argument.Amount() == 0)
-				ERRFwk();
-
-			Argument.Convert( Parameters.Namespace );
-
-			break;
-		case oNoIndent:
-			Parameters.NoIndent = true;
-			break;
-		default:
-			ERRFwk();
-		}
-
-		P = Options.Next( P );
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void AnalyzeFreeArguments_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	clnarg::arguments Free;
-	sdr::row__ P;
-ERRBegin
-	Free.Init();
-
-	Analyzer.GetArguments( Free );
-
-	P = Free.Last();
-
-	switch( Free.Amount() ) {
-	case 2:
-		Free( P ).Convert( Parameters.Destination );
-		P = Free.Previous( P );
-	case 1:
-		Free( P ).Convert( Parameters.Source );
-		break;
-	case 0:
-		break;
-	default:
-		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
-		break;
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void AnalyzeArgs_(
-	int argc,
-	const char *argv[],
-	parameters___ &Parameters )
-{
-ERRProlog
-	clnarg::description Description;
-	clnarg::analyzer___ Analyzer;
-ERRBegin
-	Description.Init();
-
-	scltool::AddDefaultCommands( Description );
-
-//	Description.AddCommand( '', "", c );
-	Description.AddCommand( 'p', "process", cProcess );
-	Description.AddCommand( CLNARG_NO_SHORT, "encrypt", cEncrypt );
-//	Description.AddOption( '', "", o );
-	Description.AddOption( 'n', "namespace", oNamespace );
-	Description.AddOption( CLNARG_NO_SHORT, "no-indent", oNoIndent );
-
-	Analyzer.Init( argc, argv, Description );
-
-	switch ( Analyzer.GetCommand() ) {
-	case scltool::cVersion:
-		PrintHeader_();
-//		TTR.Advertise( COut );
-		ERRAbort();
-		break;
-	case scltool::cHelp:
-		PrintUsage_( Description );
-		ERRAbort();
-		break;
-	case scltool::cLicense:
-		epsmsc::PrintLicense( COut );
-		ERRAbort();
-		break;
-	case cProcess:
-	case cEncrypt:
-		Parameters.Command = (command__)Analyzer.GetCommand();
-		break;
-	case CLNARG_NONE:
-		Parameters.Command = cProcess;
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
-
-	AnalyzeOptions_( Analyzer, Parameters );
-
-	AnalyzeFreeArguments_( Analyzer, Parameters );
-
-ERRErr
-ERREnd
-ERREpilog
-}
 
 /* End of the part which handles command line arguments. */
 
@@ -396,6 +161,30 @@ ERREnd
 ERREpilog
 }
 
+static void Process_( void )
+{
+	ERRProlog
+		str::string Source, Destination, NameSpace, Indentation;
+	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
+	ERRBegin
+		Source.Init();
+	sclrgstry::GetMandatoryValue( registry::Source, Source );
+
+	Destination.Init();
+	sclrgstry::GetValue( registry::Destination, Destination );
+
+	NameSpace.Init();
+	sclrgstry::GetValue( registry::NameSpace, NameSpace );
+
+	Indentation.Init();
+	sclrgstry::GetValue( registry::Indentation, Indentation );
+
+	Process_( Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL, Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL, NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) : NULL, Indentation == "Yes" );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 static void Encrypt_(
 	const char *Source,
 	const char *Destination,
@@ -447,25 +236,38 @@ ERREnd
 ERREpilog
 }
 
-static void Go_( const parameters___ &Parameters )
+static void Encrypt_( void )
 {
 ERRProlog
+	str::string Source, Destination, NameSpace, Indentation;
+	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
 ERRBegin
-	switch ( Parameters.Command ) {
-	case cProcess:
-		Process_( Parameters.Source, Parameters.Destination, Parameters.Namespace, !Parameters.NoIndent );
-		break;
-	case cEncrypt:
-		Encrypt_( Parameters.Source, Parameters.Destination, Parameters.Namespace, !Parameters.NoIndent );
-		break;
-	default:
-		ERRFwk();
-		break;
-}
+	Source.Init();
+	sclrgstry::GetMandatoryValue( registry::Source, Source );
 
+	Destination.Init();
+	sclrgstry::GetValue( registry::Destination, Destination );
+
+	NameSpace.Init();
+	sclrgstry::GetValue( registry::NameSpace, NameSpace );
+
+	Indentation.Init();
+	sclrgstry::GetValue( registry::Indentation, Indentation );
+
+	Encrypt_( Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL, Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL, NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) :  NULL, Indentation == "Yes" );
 ERRErr
 ERREnd
 ERREpilog
+}
+
+static void Go_( const str::string_ &Command )
+{
+	if ( Command == "Process" )
+		Process_();
+	else if ( Command == "Encrypt" )
+		Encrypt_();
+	else
+		ERRFwk();
 }
 
 void scltool::Main(
@@ -473,11 +275,23 @@ void scltool::Main(
 	const char *argv[] )
 {
 ERRProlog
-	parameters___ Parameters;
+	str::string Command;
+	str::string Translation;
 ERRBegin
-	AnalyzeArgs_( argc, argv, Parameters );
+	Command.Init();
+	scltool::GetCommand( Command );
 
-	Go_( Parameters );
+	if ( Command == "Usage" )
+		scltool::PrintUsage();
+	else if ( Command == "Version" )
+		PrintHeader_();
+	else if ( Command == "License" ) {
+		Translation.Init();
+		scltool::GetTranslation( "License", Translation );
+		cio::COut << Translation << txf::nl;
+	}
+	else
+		Go_( Command );
 ERRErr
 ERREnd
 ERREpilog

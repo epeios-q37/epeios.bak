@@ -2,12 +2,12 @@
 <!-- $Id: sclrgstry.xlcl,v 1.6 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Translations message="SCLRGSTRY_ConfigurationFileParsingError">
-		<Translation language="fr">Erreur fichier de configuration : %1</Translation>
-		<Translation language="en">Configuration file error : %1</Translation>
+		<Translation language="fr">Erreur fichier de configuration : %1.</Translation>
+		<Translation language="en">Configuration file error : %1.</Translation>
 	</Translations>
 	<Translations message="SCLRGSTRY_BadOrNoValueForEntry">
-		<Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'</Translation>
-		<Translation language="en">Bad or no value for entry '%1'</Translation>
+		<Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'.</Translation>
+		<Translation language="en">Bad or no value for entry '%1'.</Translation>
 	</Translations>
 	<!--
 	<Translations message="SCLRGSTRY_">

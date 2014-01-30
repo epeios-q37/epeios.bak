@@ -28,6 +28,15 @@
 
 namespace registry {
 	using namespace sclrgstry;
+
+	namespace {
+		using rgstry::entry___;
+	}
+
+	extern entry___ Source;
+	extern entry___ Destination;
+	extern entry___ Indentation;
+	extern entry___ NameSpace;
 }
 
 #endif

@@ -64,10 +64,6 @@ namespace scltool {
 
 	void PrintUsage( void );
 
-	void PrintFlagsAndOptionsHeader( void );
-
-	void PrintArgumentsHeader( void );
-
 	// A définir par l'utilisateur.
 	void Main(
 		int argc,
@@ -85,7 +81,7 @@ namespace scltool {
 
 	inline rgstry::level__ GetRegistryProjectLevel( void )
 	{
-		sclrgstry::GetProjectLevel();
+		return sclrgstry::GetProjectLevel();
 	}
 
 	rgstry::level__ GetRegistrySetupLevel( void );
@@ -118,7 +114,6 @@ namespace scltool {
 	void ReportWrongNumberOfArgumentsErrorAndAbort( void );
 
 	void ReportMissingCommandErrorAndAbort( void );
-
 
 	const str::string_ &GetCommand( str::string_ &Command );
 

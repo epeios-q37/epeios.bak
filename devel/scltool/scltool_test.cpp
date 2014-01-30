@@ -49,12 +49,13 @@ void scltool::Main(
 ERRProlog
 	str::string Argument;
 ERRBegin
-	PutFreeArgumentTo( 1, rgstry::entry___( "Path", sclrgstry::Parameters ) );
 	scltool::GetRegistry().Dump( scltool::GetRegistryConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 	scltool::GetRegistry().Dump( scltool::GetRegistryProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 	scltool::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 
-	cio::COut << "Free arguments amount : " << scltool::GetFreeArgumentsAmount() << txf::nl;
+	cio::COut << txf::nl;
+
+	scltool::PrintUsage();
 ERRErr
 ERREnd
 ERREpilog

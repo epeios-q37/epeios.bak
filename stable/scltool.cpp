@@ -70,6 +70,7 @@ static rgstry::entry___ IdTaggedArgumentDescription_( "@Description", IdTaggedAr
 static rgstry::entry___ IdTaggedArgumentPath_( "@Path", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentValue_( "@Value", IdTaggedArgument_ );
 static rgstry::entry___ IdTaggedArgumentUsage_( "@Usage", IdTaggedArgument_ );
+static rgstry::entry___ IdTaggedArgumentLabel_( "@Label", IdTaggedArgument_ );
 
 static rgstry::entry___ ArgumentsLayouts_( "Layouts", Arguments_ );
 static rgstry::entry___ UntaggedArgumentsLayout_( "Layout", ArgumentsLayouts_ );
@@ -627,11 +628,36 @@ const str::string_ &GetShort_(
 	return GetIdTagged_( Id, IdTaggedArgumentShort_, Short );
 }
 
+const str::string_ &GetLabel_(
+	const str::string_ &Id,
+	str::string_ &Label )
+{
+	return GetIdTagged_( Id, IdTaggedArgumentLabel_, Label );
+}
+
 const str::string_ &GetDescription_(
 	const str::string_ &Id,
 	str::string_ &Description )
 {
 	return GetIdTagged_( Id, IdTaggedArgumentDescription_, Description );
+}
+
+static const str::string_ &GetArgumentLabelTranslation_(
+	const str::string_ &Id,
+	str::string_ &Translation )
+{
+ERRProlog
+	str::string Label;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	Label.Init();
+	GetLabel_( Id, Label );
+
+	scllocale::GetTranslation( Label.Convert( Buffer ), GetLanguage(), Translation );
+ERRErr
+ERREnd
+ERREpilog
+	return Translation;
 }
 
 static const str::string_ &GetArgumentDescriptionTranslation_(
@@ -681,6 +707,21 @@ ERRErr
 ERREnd
 ERREpilog
 	return LongShort;
+}
+
+static const str::string_ &GetShortLongAndLabel_(
+	const str::string_ &Id,
+	str::string_ &Value )
+{
+	GetShortLong_( Id, Value );
+
+	Value.Append( "=<" );
+
+	GetArgumentLabelTranslation_(Id, Value );
+
+	Value.Append( '>' );
+
+	return Value;
 }
 
 
@@ -1083,6 +1124,49 @@ ERREpilog
 }
 #endif
 
+enum type__ {
+	tCommand,
+	tFlag,
+	tOption,
+	tFree,
+	t_amount,
+	t_Undefined
+};
+
+static type__ IdentifyArgument_( const str::string_ &Id )
+{
+	type__ Type = t_Undefined;
+ERRProlog
+	str::string Dummy;
+ERRBegin
+	Dummy.Init();
+	GetPath_( Id, Dummy );
+
+	if ( Dummy.Amount() == 0 )
+		Type = tCommand;
+	else {
+		Dummy.Init();
+		GetValue_( Id, Dummy );
+
+		if ( Dummy.Amount() != 0 )
+			Type = tFlag;
+		else {
+			Dummy.Init();
+			GetShortLong_( Id, Dummy );
+
+			if ( Dummy.Amount() == 0 )
+				Type = tFree;
+			else
+				Type = tOption;
+		}
+	}
+ERRErr
+ERREnd
+ERREpilog
+	return Type;
+}
+
+
 typedef str::replace_callback__ _callback__;
 
 namespace {
@@ -1094,7 +1178,25 @@ namespace {
 			const str::string_ &Tag,
 			str::string_ &Value )
 		{
-			GetShortLong_( Tag, Value );
+			switch ( IdentifyArgument_( Tag ) ) {
+			case tCommand:
+				ERRFwk();
+				break;
+			case tFlag:
+				GetShortLong_( Tag, Value );
+				break;
+			case tOption:
+				GetShortLongAndLabel_( Tag, Value );
+				break;
+			case tFree:
+				Value.Append( '<' );
+				GetArgumentLabelTranslation_( Tag, Value );
+				Value.Append( '>' );
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
 
 			return true;
 		}
@@ -1114,7 +1216,12 @@ namespace {
 static void PrintCommandUsage_( const str::string_ &Id )
 {
 ERRProlog
-	str::string Value, Command, ShortLong, Translation, Usage;
+	str::string Dummy, Command;
+	str::string_
+		&Value = Dummy,
+		&ShortLong = Dummy,
+		&Translation = Dummy,
+		&Usage = Dummy;
 	bso::bool__ DefaultOne = false;
 	callback__ Callback;
 ERRBegin
@@ -1159,33 +1266,108 @@ ERREpilog
 
 }
 
-enum type__ {
-	tCommand,
-	tFlag,
-	tOption,
-	tFree,
-	t_amount,
-	t_Undefined
-};
+static void PrintFlagUsage_( const str::string_ &Id )
+{
+ERRProlog
+	str::string Dummy;
+	str::string_
+		&Value = Dummy,
+		&ShortLong = Dummy,
+		&Translation = Dummy,
+		&Path = Dummy;
+ERRBegin
+	ShortLong.Init();
+	cio::COut << GetShortLong_( Id, ShortLong ) << ' ';
 
-typedef bch::E_BUNCH_( type__ ) types_;
-E_AUTO( types );
+	Path.Init();
+	cio::COut << "('" << GetPath_( Id, Path ) << '\'';
+
+	Value.Init();
+	cio::COut << "='" << GetValue_( Id, Value ) << "')";
+
+	cio::COut << ':' << txf::nl;
+
+	Translation.Init();
+	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( Id, Translation );
+ERRErr
+ERREnd
+ERREpilog
+
+}
+
+static void PrintOptionUsage_( const str::string_ &Id )
+{
+ERRProlog
+	str::string Dummy, Value;
+	str::string_
+		&Label = Dummy,
+		&Description = Dummy,
+		&Path = Dummy;
+		TOL_CBUFFER___ Buffer;
+ERRBegin
+	Label.Init();
+	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
+
+	Path.Init();
+	cio::COut << "('" << GetPath_( Id, Path ) << '\'';
+
+	Value.Init();
+	sclrgstry::GetValue( rgstry::entry___( Path.Convert( Buffer ) ), Value );
+
+	if ( Value.Amount() != 0 )
+		cio::COut << "(='" << Value << "')";
+
+	cio::COut << "):" << txf::nl;
+
+	Description.Init();
+	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( Id, Description );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void PrintFreeUsage_( const str::string_ &Id )
+{
+ERRProlog
+	str::string Dummy;
+	str::string_
+		&Value = Dummy,
+		&Label = Dummy,
+		&Description = Dummy,
+		&Path = Dummy;
+ERRBegin
+	Label.Init();
+	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
+
+	Path.Init();
+	cio::COut << "('" << GetPath_( Id, Path ) << "')";
+
+	cio::COut << ':' << txf::nl;
+
+	Description.Init();
+	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( Id, Description );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 static void PrintUsage_(
 	const str::string_ &Id,
 	type__ Type )
 {
-	cio::COut << txf::nl;
-
 	switch ( Type ) {
 	case tCommand:
 		PrintCommandUsage_( Id );
 		break;
 	case tFlag:
+		PrintFlagUsage_( Id );
 		break;
 	case tOption:
+		PrintOptionUsage_( Id );
 		break;
 	case tFree:
+		PrintFreeUsage_( Id );
 		break;
 	default:
 		ERRFwk();
@@ -1195,8 +1377,7 @@ static void PrintUsage_(
 
 static void PrintUsage_(
 	type__ Type,
-	const str::strings_ &Ids,
-	const types_ &Types )
+	const str::strings_ &Ids )
 {
 	ctn::E_CMITEM( str::string_ ) Id;
 	sdr::row__ Row = Ids.First();
@@ -1204,49 +1385,20 @@ static void PrintUsage_(
 	Id.Init( Ids );
 
 	while ( Row != E_NIL ) {
-		if ( Types( Row ) == Type )
-			PrintUsage_( Id( Row ), Type );
+		PrintUsage_( Id( Row ), Type );
 
 		Row = Ids.Next( Row );
+
+		cio::COut << txf::nl;
 	}
-}
-
-static type__ IdentifyArgument_( const str::string_ &Id )
-{
-	type__ Type = t_Undefined;
-ERRProlog
-	str::string Dummy;
-ERRBegin
-	Dummy.Init();
-	GetPath_( Id, Dummy );
-
-	if ( Dummy.Amount() == 0 )
-		Type = tCommand;
-	else {
-		Dummy.Init();
-		GetValue_( Id, Dummy );
-
-		if ( Dummy.Amount() != 0 )
-			Type = tFlag;
-		else {
-			Dummy.Init();
-			GetShortLong_( Id, Dummy );
-
-			if ( Dummy.Amount() == 0 )
-				Type = tFree;
-			else
-				Type = tOption;
-		}
-	}
-ERRErr
-ERREnd
-ERREpilog
-	return Type;
 }
 
 static void IdentifyArguments_(
 	const str::strings_ &Ids,
-	types_ &Types )
+	str::strings_ &Commands,
+	str::strings_ &Flags,
+	str::strings_ &Options,
+	str::strings_ &Frees )
 {
 	ctn::E_CMITEM( str::string_ ) Id;
 	sdr::row__ Row = Ids.First();
@@ -1255,30 +1407,31 @@ static void IdentifyArguments_(
 
 	while ( Row != E_NIL ) {
 
-		cio::COut << Id( Row ) << " : " << txf::commit;
+//		cio::COut << Id( Row ) << " : " << txf::commit;
 
-		if ( Types.Append( IdentifyArgument_( Id( Row ) ) ) != Row )
-			ERRFwk();
-		
-		switch ( Types( Row ) )  {
+		switch ( IdentifyArgument_( Id( Row ) ) )  {
 		case tCommand:
-			cio::COut << "Command";
+//			cio::COut << "Command";
+			Commands.Append( Id( Row ) );
 			break;
 		case tFlag:
-			cio::COut << "Flag";
+//			cio::COut << "Flag";
+			Flags.Append( Id( Row ) );
 			break;
 		case tOption:
-			cio::COut << "Option";
+//			cio::COut << "Option";
+			Options.Append( Id( Row ) );
 			break;
 		case tFree:
-			cio::COut << "Free";
+//			cio::COut << "Free";
+			Frees.Append( Id( Row ) );
 			break;
 		default:
 			ERRFwk();
 			break;
 		}
 		
-		cio::COut << txf::pad;
+//		cio::COut << txf::pad;
 
 		Row = Ids.Next( Row );
 	}
@@ -1287,23 +1440,33 @@ static void IdentifyArguments_(
 void scltool::PrintUsage( void )
 {
 ERRProlog
-	str::strings Ids;
-	types Types;
+	str::strings Ids, Commands, Flags, Options, Frees;
+	str::string  ProgramDescription;
 ERRBegin
 	sclrgstry::GetRegistry().Delete( "Parameters/Command", RegistrySetupLevel_ );	// Pour pouvoir récupèrer la valeur correspondant à ce 'PAth' tel qu'éventuellement défini dans le fichier de configuration.
 
 	Ids.Init();
 	sclrgstry::GetValues( ArgumentId_, Ids );
 
-	Types.Init();
-	IdentifyArguments_( Ids, Types );
+	Commands.Init();
+	Flags.Init();
+	Options.Init();
+	Frees.Init();
+	IdentifyArguments_( Ids, Commands, Flags, Options, Frees );
 
-	cio::COut << "-------------" << txf::nl;
+	ProgramDescription.Init();
+	COut << GetTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
 
-	PrintUsage_( tCommand, Ids, Types );
-	PrintUsage_( tFlag, Ids, Types );
-	PrintUsage_( tOption, Ids, Types );
-	PrintUsage_( tFree, Ids, Types );
+	PrintUsage_( tCommand, Commands );
+
+	if ( ( Flags.Amount() != 0 )
+	     || ( Options.Amount() != 0 )
+		 || ( Frees.Amount() != 0 ) )
+	cio::COut << txf::nl;
+
+	PrintUsage_( tFlag, Flags );
+	PrintUsage_( tOption, Options );
+	PrintUsage_( tFree, Frees );
 	ERRErr
 ERREnd
 ERREpilog
@@ -1347,21 +1510,6 @@ ERREpilog
 }
 #endif
 
-void scltool::PrintFlagsAndOptionsHeader( void )
-{
-ERRProlog
-	lcl::meaning Meaning;
-	str::string Translation;
-ERRBegin
-	Meaning.Init();
-	clnarg::GetOptionsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scltool::GetTranslation( Meaning, Translation ) << " :" << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-
 #if 0	// Obsolete
 void scltool::PrintFlagDescription( const char *FlagId )
 {
@@ -1392,21 +1540,6 @@ ERREnd
 ERREpilog
 }
 #endif
-
-void scltool::PrintArgumentsHeader( void )
-{
-ERRProlog
-	lcl::meaning Meaning;
-	str::string Translation;
-ERRBegin
-	Meaning.Init();
-	clnarg::GetArgumentsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scltool::GetTranslation( Meaning, Translation ) << " :" << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
 
 #if 0	// Obsolete
 void scltool::PrintArgumentDescription(
