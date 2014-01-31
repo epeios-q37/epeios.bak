@@ -129,13 +129,13 @@ ERRProlog
 	bso::bool__ BackedUp = false;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
+	Directory.Init();
+
 	if ( Source != NULL ) {
 		if ( IFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
 			sclmisc::ReportFileOpeningErrorAndAbort( Source );
 
-		Directory.Init();
-
-	fnm::GetLocation(Source, Directory );
+		fnm::GetLocation(Source, Directory );
 	}
 
 	if ( Destination != NULL ) {
@@ -168,7 +168,7 @@ static void Process_( void )
 	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
 	ERRBegin
 		Source.Init();
-	sclrgstry::GetMandatoryValue( registry::Source, Source );
+	sclrgstry::GetValue( registry::Source, Source );
 
 	Destination.Init();
 	sclrgstry::GetValue( registry::Destination, Destination );
@@ -243,7 +243,7 @@ ERRProlog
 	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
 ERRBegin
 	Source.Init();
-	sclrgstry::GetMandatoryValue( registry::Source, Source );
+	sclrgstry::GetValue( registry::Source, Source );
 
 	Destination.Init();
 	sclrgstry::GetValue( registry::Destination, Destination );
@@ -260,29 +260,15 @@ ERREnd
 ERREpilog
 }
 
-static void Go_( const str::string_ &Command )
+void scltool::Main( const str::string_ &Command )
 {
+ERRProlog
+	str::string Translation;
+ERRBegin
 	if ( Command == "Process" )
 		Process_();
 	else if ( Command == "Encrypt" )
 		Encrypt_();
-	else
-		ERRFwk();
-}
-
-void scltool::Main(
-	int argc,
-	const char *argv[] )
-{
-ERRProlog
-	str::string Command;
-	str::string Translation;
-ERRBegin
-	Command.Init();
-	scltool::GetCommand( Command );
-
-	if ( Command == "Usage" )
-		scltool::PrintUsage();
 	else if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" ) {
@@ -291,7 +277,7 @@ ERRBegin
 		cio::COut << Translation << txf::nl;
 	}
 	else
-		Go_( Command );
+		ERRFwk();
 ERRErr
 ERREnd
 ERREpilog

@@ -917,7 +917,7 @@ ERRBegin
 	Id.Init();
 
 	Command.Init();
-	GetCommand( Command );
+	sclrgstry::GetMandatoryValue( Command_, Command );
 
 	Tags.Init();
 	Tags.Append( Command );
@@ -1437,7 +1437,7 @@ static void IdentifyArguments_(
 	}
 }
 
-void scltool::PrintUsage( void )
+static void PrintUsage_( void )
 {
 ERRProlog
 	str::strings Ids, Commands, Flags, Options, Frees;
@@ -1665,6 +1665,7 @@ static bso::bool__ main_(
 ERRProlog
 	str::string Language;
 	str::string ProjectFileName;
+	str::string Command;
 ERRBegin
 	sclmisc::Initialize( TargetName, NULL );
 
@@ -1683,7 +1684,12 @@ ERRBegin
 	if ( ProjectFileName.Amount() != 0 )
 		LoadProject_( ProjectFileName );
 
-	Main( argc, argv );
+	Command.Init();
+
+	if ( sclrgstry::GetMandatoryValue( Command_, Command ) == "Usage" )
+		PrintUsage_();
+	else
+		Main( Command );
 ERRErr
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {
@@ -1730,16 +1736,6 @@ ERRFEnd
 ERRFEpilog
 	return ExitValue;
 }
-
-#define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
-
-const str::string_ &scltool::GetCommand( str::string_ &Command )
-{
-	return sclrgstry::GetMandatoryValue( Command_, Command );
-}
-
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

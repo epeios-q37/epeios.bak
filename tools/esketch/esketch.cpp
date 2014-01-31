@@ -39,28 +39,6 @@ using cio::CIn;
 
 /* Beginning of the part which handles command line arguments. */
 
-static void PrintUsage_( void )
-{
-	scltool::PrintDefaultCommandDescriptions( NAME_LC );
-
-	scltool::PrintCommandDescription( "TestCommand" );
-
-#if 0	// Exemples.
-// Commands.
-	scltool::PrintCommandDescription( "ProcessCommand", "[%ThreadAmountMaxOption%=<max-thread>] <path> [<output>]");
-	cio::COut << txf::nl;
-
-// Options.
-	scltool::PrintOptionsHeader();
-	scltool::PrintOptionDescription( "max-thread", "ThreadAmountMaxOption" );
-
-// Arguments.
-	scltool::PrintArgumentsHeader();
-	scltool::PrintArgumentDescription( "path", "PathArgumentDescription" );
-	scltool::PrintArgumentDescription( "output", "OutputArgumentDescription" );
-#endif
-}
-
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -70,14 +48,18 @@ static void PrintHeader_( void )
 
 /* End of the part which handles command line arguments. */
 
-static void Go_( const str::string_ &Command )
+void scltool::Main( const str::string_ &Command )
 {
 ERRProlog
 ERRBegin
 	if ( Command == "Test" )
 		cio::COut << "Test" << txf::nl;
+	else if ( Command == "Version" )
+		PrintHeader_();
+	else if ( Command == "License" )
+		epsmsc::PrintLicense();
 	else
-		scltool::ReportAndAbort( "BadCommand" );
+		ERRFwk();
 ERRErr
 ERREnd
 ERREpilog
@@ -85,25 +67,3 @@ ERREpilog
 
 const char *scltool::TargetName = NAME_LC;
 
-void scltool::Main(
-	int argc,
-	const char *argv[] )
-{
-ERRProlog
-	str::string Command;
-ERRBegin
-	Command.Init();
-	scltool::GetCommand( Command );
-
-	if ( Command == "Usage" )
-		PrintUsage_();
-	else if ( Command == "Version" )
-		PrintHeader_();
-	else if ( Command == "License" )
-		epsmsc::PrintLicense();
-	else
-		Go_( Command );
-ERRErr
-ERREnd
-ERREpilog
-}

@@ -40,6 +40,7 @@ namespace registry {
 	extern entry___ Command;
 	extern entry___ SessionMaxDuration;
 
+	extern entry___ Id;
 	extern entry___ RandomName;
 	extern entry___ TaggedRandomLimit;
 }

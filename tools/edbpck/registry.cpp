@@ -32,6 +32,8 @@ entry___ registry::Context( "Context" );
 entry___ registry::Command( "Command" );
 entry___ registry::SessionMaxDuration( "SessionMaxDuration" );
 
+entry___ registry::Id( "Id", Parameters );
+
 static entry___ FreeRandom_( "Random", sclrgstry::Parameters );
 entry___ registry::RandomName( "@Name", FreeRandom_ );
 static entry___ TaggedRandom_( RGSTRY_TAGGING_ATTRIBUTE( "Name" ), FreeRandom_ );

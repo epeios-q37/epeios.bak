@@ -62,12 +62,8 @@ namespace scltool {
 		const char *ProgramName,
 		const clnarg::description_ &Description );
 
-	void PrintUsage( void );
-
 	// A définir par l'utilisateur.
-	void Main(
-		int argc,
-		const char *argv[] );
+	void Main( const str::string_ &Command );
 
 	inline const rgstry::multi_level_registry_ &GetRegistry( void )
 	{
@@ -114,9 +110,6 @@ namespace scltool {
 	void ReportWrongNumberOfArgumentsErrorAndAbort( void );
 
 	void ReportMissingCommandErrorAndAbort( void );
-
-	const str::string_ &GetCommand( str::string_ &Command );
-
 }
 
 				  /********************************************/

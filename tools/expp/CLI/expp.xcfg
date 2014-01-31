@@ -4,7 +4,7 @@
 	<Configuration target="expp">
     <xpp:expand href="epeios.xcfg"/>
     <Parameters>
-	    <Language>en</Language>
+	    <Language>fr</Language>
       <Command>Process</Command>
       <Indentation>Yes</Indentation>
     </Parameters>
@@ -12,6 +12,7 @@
       <Locale>
         <xpp:expand select="Locale"/>
         <xpp:cdata>
+          <!-- Commands -->
           <Translations text="ProcessCommandDescription">
             <Translation language="fr">Traite le flux XML.</Translation>
             <Translation language="en">Process the XML flow.</Translation>
@@ -20,25 +21,36 @@
             <Translation language="fr">Chiffre le flux XML.</Translation>
             <Translation language="en">Encrypt the XML flow.</Translation>
           </Translations>
-          <Translations text="TestFlagDescription">
-            <Translation language="fr">Fanal de test.</Translation>
-            <Translation language="en">Test flag.</Translation>
+          <!-- Flags -->
+          <Translations text="NoIndentationFlagDescription">
+            <Translation language="fr">Pas d'indentation.</Translation>
+            <Translation language="en">No indentation.</Translation>
           </Translations>
-          <Translations text="TestOptionDescription">
-            <Translation language="fr">Option de test.</Translation>
-            <Translation language="en">Test option.</Translation>
+          <!-- Options -->
+          <Translations text="NameSpaceOptionDescription">
+            <Translation language="fr">Espace de nom à utiliser (à la place de 'xpp').</Translation>
+            <Translation language="en">Namespace to use (instead of 'xpp').</Translation>
           </Translations>
-          <Translations text="TestOptionLabel">
-            <Translation language="fr">option (fr)</Translation>
-            <Translation language="en">option (en)</Translation>
+          <Translations text="NameSpaceOptionLabel">
+            <Translation language="fr">ns</Translation>
+            <Translation language="en">ns</Translation>
           </Translations>
-          <Translations text="TestArgumentDescription">
-            <Translation language="fr">Argument de test.</Translation>
-            <Translation language="en">Test argument.</Translation>
+          <!-- Arguments-->
+          <Translations text="SourceArgumentDescription">
+            <Translation language="fr">Nom du fichier d'entrée (utilisation de l'entrée standard si absent).</Translation>
+            <Translation language="en">Input file name (use of standard input if missing).</Translation>
           </Translations>
-          <Translations text="TestArgumentLabel">
-            <Translation language="fr">argument (fr)</Translation>
-            <Translation language="en">argument (en)</Translation>
+          <Translations text="SourceArgumentLabel">
+            <Translation language="fr">src</Translation>
+            <Translation language="en">src</Translation>
+          </Translations>
+          <Translations text="DestinationArgumentDescription">
+            <Translation language="fr">Nom du fichier de sortie (utilisation de la sortie standard si absent).</Translation>
+            <Translation language="en">Output file name (use of standard output if missing).</Translation>
+          </Translations>
+          <Translations text="DestinationArgumentLabel">
+            <Translation language="fr">dst</Translation>
+            <Translation language="en">dst</Translation>
           </Translations>
         </xpp:cdata>
       </Locale>

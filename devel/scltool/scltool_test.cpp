@@ -31,20 +31,9 @@ using cio::CIn;
 using cio::COut;
 using cio::CErr;
 
-void Generic( int argc, char *argv[] )
-{
-ERRProlog
-ERRBegin
-ERRErr
-ERREnd
-ERREpilog
-}
-
 const char *scltool::TargetName = "TEST";
 
-void scltool::Main(
-	int argc,
-	const char *argv[] )
+void scltool::Main( const str::string_ &Command )
 {
 ERRProlog
 	str::string Argument;
@@ -54,8 +43,6 @@ ERRBegin
 	scltool::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;
-
-	scltool::PrintUsage();
 ERRErr
 ERREnd
 ERREpilog

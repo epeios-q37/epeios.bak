@@ -19,7 +19,7 @@
       <Arguments>
         <xpp:expand select="Arguments"/>
         <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-        <Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test"/>
+        <Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Path="Parameters/Command" Value="Test" Usage=""/>
         <!-- Fanaux : 'Path', mais pas de 'Value'. -->
         <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Parameters/Flag" Value="TestFlag"/>
         <!-- Options : 'Path' ET 'Value'. -->

@@ -510,7 +510,7 @@ ERRProlog
 	TOL_CBUFFER___ FileNameBuffer, PathBuffer;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
-	str::ReplaceTag( Path, 1, str::string( Target ), '%' );
+	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
 
 	if ( _Registry.Fill( _RegistryProjectLevel = _Registry.PushEmbeddedLevel( str::string( "Project" ) ), FileName, Criterions, Path.Convert( PathBuffer ),  ErrorSet.Context ) != rgstry::sOK ) {
 		Recap = rProjectParsingError;

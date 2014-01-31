@@ -35,7 +35,7 @@
   </Translations>
   <Translations text="SCLTOOL_NoPathForArgument">
     <Translation language="fr">Pas de chemin pour l'argument '%1'.</Translation>
-    <Translation language="en">No path for '%1' arguemnt.</Translation>
+    <Translation language="en">No path for '%1' argument.</Translation>
   </Translations>
   <Translations text="SCLTOOL_BadPathForArgument">
     <Translation language="fr">Mauvais chemin pour l'argument '%1'.</Translation>

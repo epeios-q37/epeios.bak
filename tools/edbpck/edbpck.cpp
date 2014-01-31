@@ -61,264 +61,11 @@ typedef bso::uint__		id__;
 
 using namespace registry;
 
-/*
-Ne pas modifier ; utilisé pour la génération automatique.
-END
-*/
-/* Beginning of the part which handles command line arguments. */
-
-enum exit_value__ {
-	evSuccess = EXIT_SUCCESS,
-	evGenericFailure = EXIT_FAILURE,
-	// Erreur dans les paramètres d'entrée.
-	evParameters,
-	// Erreur lors de l'ouverture des fichiers d'entrée ou de sortie.
-	evInputOutput,
-	// Erreur lors du traitement.
-	evProcessing,
-	ev_amount
-};
-
-enum command__ {
-	cProcess = scltool::c_amount,
-	c_amount,
-	c_Undefined
-};
-
-enum option {
-};
-
-#define STRING_PARAM___( name )	CLNARG_STRING_PARAM___( name )
-
-struct parameters___ {
-	STRING_PARAM___( Project );
-	id__ Id;
-	parameters___( void )
-	{
-		Id = 0;	// By default, a random record is displayed.
-	}
-};
-
-static void PrintUsage_( const clnarg::description_ &Description )
-{
-ERRProlog
-	STR_BUFFER___ TBuffer;
-//	CLNARG_BUFFER__ Buffer;
-	lcl::meaning Meaning;
-	str::string Translation;
-ERRBegin
-	scltool::PrintDefaultCommandDescriptions( NAME_LC, Description );
-
-	COut << NAME_LC << " <project-file> [id]";
-	COut << txf::nl;
-	Translation.Init();
-	COut << txf::pad << scltool::GetTranslation( "PickCommandDescription", Translation ) << '.' << txf::nl;
-
-	COut << txf::nl;
-
-	COut << txf::pad << "project-file :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << scltool::GetTranslation( "ProjectFileArgumentDescription", Translation ) << '.' << txf::nl;
-
-	COut << txf::pad << "id :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << scltool::GetTranslation( "IdArgumentDescription", Translation ) << '.' << txf::nl;
-
-
-#if 0	// Exemples.
-	// Commands.
-	COut << NAME << " [" << Description.GetCommandLabels( cProcess, Buffer );
-	COut << "] [" << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns>]";
-	COut << " [" << Description.GetOptionLabels( oNoIndent, Buffer );
-	COut << "] [<src> [<dst>]]";
-	COut << txf::nl;
-	Translation.Init();
-	COut << txf::pad << locale::GetProcessCommandDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << NAME << ' ' << Description.GetCommandLabels( cEncrypt, Buffer );
-	COut << " [" << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns>]";
-	COut << " [" << Description.GetOptionLabels( oNoIndent, Buffer );
-	COut << "] [<src> [<dst>]]";
-	COut << txf::nl;
-	Translation.Init();
-	COut << txf::pad << locale::GetEncryptCommandDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::nl;
-
-// Options.
-	Meaning.Init();
-	clnarg::GetOptionsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scllocale::GetLocale().GetTranslation( Meaning, scltool::GetLanguage(), Translation ) << " :" << txf::nl;
-
-	COut << txf::pad << Description.GetOptionLabels( oNamespace, Buffer ) << " <ns> :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << locale::GetNamespaceOptionDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::pad << Description.GetOptionLabels( oNoIndent, Buffer ) << " :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << locale::GetNoIndentOptionDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::nl;
-
-// Arguments.
-	Meaning.Init();
-	clnarg::GetArgumentsWordingMeaning( Meaning );
-	Translation.Init();
-	COut << scllocale::GetLocale().GetTranslation( Meaning, scltool::GetLanguage(), Translation ) << " :" << txf::nl;
-
-	COut << txf::pad << "<src> :" << txf::nl;
-	COut << txf::tab;
-	COut << locale::GetSourceFileArgumentDescriptionTranslation( Translation ) << '.' << txf::nl;
-
-	COut << txf::pad << "<dst> :" << txf::nl;
-	COut << txf::tab;
-	COut << locale::GetDestFileArgumentDescriptionTranslation( Translation ) << '.' << txf::nl;
-#endif
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
 	COut << "Copyright " COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
-}
-
-static void AnalyzeOptions_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	sdr::row__ P;
-	clnarg::option_list Options;
-	clnarg::id__ Option;
-	const bso::char__ *Unknown = NULL;
-	clnarg::argument Argument;
-//	clnarg::buffer__ Buffer;
-ERRBegin
-	Options.Init();
-
-	if ( ( Unknown = Analyzer.GetOptions( Options ) ) != NULL )
-		scltool::ReportUnknownOptionErrorAndAbort( Unknown );
-
-	P = Options.First();
-
-	while( P != E_NIL ) {
-		Argument.Init();
-
-		switch( Option = Options( P ) ) {
-		default:
-			ERRFwk();
-		}
-
-		P = Options.Next( P );
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void AnalyzeFreeArguments_(
-	clnarg::analyzer___ &Analyzer,
-	parameters___ &Parameters )
-{
-ERRProlog
-	clnarg::arguments Free;
-	sdr::row__ P = E_NIL, Error = E_NIL;
-	id__ Id = 0;
-	lcl::meaning Meaning;
-ERRBegin
-	Free.Init();
-
-	Analyzer.GetArguments( Free );
-
-	P = Free.Last();
-
-	switch( Free.Amount() ) {
-	case 2:
-		Id = Free( P ).ToUInt( &Error );
-
-		if ( Error != E_NIL ) {
-			Meaning.Init();
-			Meaning.SetValue( _( BadIdError ) );
-			scltool::ReportAndAbort( Meaning );
-		}
-
-		Parameters.Id = ( Id == 0 ? ALL : Id );
-		P = Free.Previous( P );
-	case 1:
-		Free( P ).Convert( Parameters.Project );
-		break;
-	case 0:
-	default:
-		scltool::ReportWrongNumberOfArgumentsErrorAndAbort();
-		break;
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static command__ AnalyzeArgs_(
-	int argc,
-	const char *argv[],
-	parameters___ &Parameters )
-{
-	clnarg::id__ Command = c_Undefined;
-ERRProlog
-	clnarg::description Description;
-	clnarg::analyzer___ Analyzer;
-ERRBegin
-	Description.Init();
-
-	scltool::AddDefaultCommands( Description );
-
-//	Description.AddCommand( '', "", c );
-//	Description.AddOption( '', "", o );
-
-	Analyzer.Init( argc, argv, Description );
-
-	switch ( Command = (command__)Analyzer.GetCommand() ) {
-	case scltool::cVersion:
-		PrintHeader_();
-//		TTR.Advertise( COut );
-		ERRAbort();
-		break;
-	case scltool::cHelp:
-		PrintUsage_( Description );
-		ERRAbort();
-		break;
-	case scltool::cLicense:
-		epsmsc::PrintLicense( COut );
-		ERRAbort();
-		break;
-//	case c:
-	case CLNARG_NONE:
-//		clnarg::ReportMissingCommandError( NAME, scllocale::GetLocale(), scltool::GetLanguage() );
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
-
-	AnalyzeOptions_( Analyzer, Parameters );
-
-	AnalyzeFreeArguments_( Analyzer, Parameters );
-
-ERRErr
-ERREnd
-ERREpilog
-	return (command__)Command;
 }
 
 /* End of the part which handles command line arguments. */
@@ -384,7 +131,7 @@ ERRBegin
 	Tags.Init();
 	Tags.Append( Name );
 
-	Limit = scltool::GetMandatoryUInt( rgstry::tentry__( TaggedRandomLimit, Tags ), RAND_MAX );
+	Limit = sclrgstry::GetMandatoryUInt( rgstry::tentry__( TaggedRandomLimit, Tags ), RAND_MAX );
 ERRErr
 ERREnd
 ERREpilog
@@ -421,7 +168,7 @@ ERRProlog
 	str::strings Names;
 ERRBegin
 	Names.Init();
-	scltool::GetValues( RandomName, Names );
+	sclrgstry::GetValues( RandomName, Names );
 
 	GetRandoms_( Names, Randoms );
 ERRErr
@@ -470,7 +217,10 @@ E_AUTO( data )
 
 static bso::bool__ BelongsToNamespace_( const str::string_ &Name )
 {
-	return str::Compare( Name, str::string( NAMESPACE ), 0, 0, strlen( NAMESPACE ) ) == 0;
+	if ( Name.Amount() > strlen( NAMESPACE ) )
+		return str::Compare( Name, str::string( NAMESPACE ), 0, 0, strlen( NAMESPACE ) ) == 0;
+	else
+		return false;
 }
 
 static void ReportAndExit_( const xpp::preprocessing_iflow___ &IFlow )
@@ -1313,15 +1063,17 @@ ERRProlog
 	bso::bool__ Continue = true;
 	lcl::locale Locale;
 	bso::bool__ DataDetected = false;
-	FNM_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	xtf::extended_text_iflow__ PXFlow;
+	fnm::name___ Location;
 ERRBegin
-	if ( FFlow.Init( DataFileName, err::hUserDefined ) != fil::sSuccess )
+	if ( FFlow.Init( DataFileName, err::hUserDefined ) != tol::rSuccess )
 		sclmisc::ReportFileOpeningErrorAndAbort( DataFileName );
 
 	XFlow.Init( FFlow, utf::f_Default );
 
-	IFlow.Init( XFlow, xpp::criterions___( str::string( fnm::GetLocation( DataFileName, Buffer ) ) ) );
+	Location.Init();
+	IFlow.Init( XFlow, xpp::criterions___( str::string( fnm::GetLocation( DataFileName, Location ).UTF8( Buffer ) ) ) );
 
 	PXFlow.Init( IFlow, utf::f_Default );
 
@@ -1664,7 +1416,7 @@ ERRProlog
 	flf::file_oflow___ FFlow;
 	txf::text_oflow__ TFlow;
 ERRBegin
-	if ( FFlow.Init( FileName ) != fil::sSuccess )
+	if ( FFlow.Init( FileName ) != tol::rSuccess )
 		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
 
 	TFlow.Init( FFlow );
@@ -1711,7 +1463,7 @@ static id__ Display_(
 	const str::string_ &OutputFileName )
 {
 ERRProlog
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( OutputFileName.Amount() == 0 )
 		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, COut );
@@ -1731,13 +1483,13 @@ void LaunchCommand_(
 {
 ERRProlog
 	str::string CompleteCommand;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( ( Command.Amount() != 0 ) && ( OutputFileName.Amount() != 0 ) ) {
 		CompleteCommand.Init( Command );
-		str::ReplaceTag( CompleteCommand, 1, OutputFileName, '$' );
-		str::ReplaceTag( CompleteCommand, 2, str::string( bso::Convert( Id ) ), '$' );
-		str::ReplaceTag( CompleteCommand, 3, Label, '$' );
+		str::ReplaceShortTag( CompleteCommand, 1, OutputFileName, '$' );
+		str::ReplaceShortTag( CompleteCommand, 2, str::string( bso::Convert( Id ) ), '$' );
+		str::ReplaceShortTag( CompleteCommand, 3, Label, '$' );
 		COut << "Launching '" << CompleteCommand << "\'." << txf::nl << txf::commit;
 		if ( system( CompleteCommand.Convert( Buffer ) ) == -1 )
 			ERRLbr();
@@ -1771,7 +1523,7 @@ ERRProlog
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
 ERRBegin
-	if ( FFlow.Init( FileName ) != fil::sSuccess )
+	if ( FFlow.Init( FileName ) != tol::rSuccess )
 		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
 
 	TFlow.Init( FFlow );
@@ -1859,12 +1611,12 @@ ERRProlog
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
 ERRBegin
-	if ( !fil::FileExists( FileName ) ) {
+	if ( !fil::Exists( FileName ) ) {
 //		COut << "Unable to find context file '" << FileName << "'! It will be created at exit." << txf::nl;
 		ERRReturn;
 	}
 
-	if ( FFlow.Init( FileName ) != fil::sSuccess )
+	if ( FFlow.Init( FileName ) != tol::rSuccess )
 		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
 
 	XFlow.Init( FFlow, utf::f_Default );
@@ -1881,7 +1633,7 @@ void Process_( id__ Id )
 {
 ERRProlog
 	str::string DataFileName;
-	STR_BUFFER___ Buffer;
+	TOL_CBUFFER___ Buffer;
 	data Data;
 	dbpctx::context Context;
 	str::string OutputFileName;
@@ -1892,19 +1644,30 @@ ERRProlog
 	bso::bool__ Error = false;
 	str::string Label;
 ERRBegin
+	switch ( Id ) {
+	case UNDEFINED:
+		Id = 0;
+		break;
+	case 0:
+		Id = ALL;
+		break;
+	default:
+		break;
+	}
+
 	DataFileName.Init();
-	if ( !scltool::GetValue( registry::Data, DataFileName ) )
+	if ( !sclrgstry::GetValue( registry::Data, DataFileName ) )
 		scltool::ReportAndAbort( _( DataFileNotSpecifiedError ) );
 
 	OutputFileName.Init();
-	if ( !scltool::GetValue( Output, OutputFileName ) )
+	if ( !sclrgstry::GetValue( Output, OutputFileName ) )
 		scltool::ReportAndAbort( _( OutputFileNotSpecifiedError ) );
 
 	XSLFileName.Init();
-	scltool::GetValue( XSL, XSLFileName );
+	sclrgstry::GetValue( XSL, XSLFileName );
 
 	ContextFileName.Init();
-	if ( !scltool::GetValue( registry::Context, ContextFileName ) )
+	if ( !sclrgstry::GetValue( registry::Context, ContextFileName ) )
 		scltool::ReportAndAbort( _( ContextFileNotSpecifiedError ) );
 
 	Context.Init();
@@ -1913,13 +1676,13 @@ ERRBegin
 	Data.Init();
 	RetrieveData_( DataFileName.Convert( Buffer ), Data );
 
-	SessionMaxDuration = scltool::GetUInt( registry::SessionMaxDuration, 0 );
+	SessionMaxDuration = sclrgstry::GetUInt( registry::SessionMaxDuration, 0 );
 
 	Label.Init();
 	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName );
 
 	Command.Init();
-	scltool::GetValue( registry::Command, Command );
+	sclrgstry::GetValue( registry::Command, Command );
 
 	DumpContext_( Context, ContextFileName.Convert( Buffer ) );
 
@@ -1929,42 +1692,17 @@ ERREnd
 ERREpilog
 }
 
-static void Process_(
-	id__ Id,						
-	const char *ProjectFileName )
+void scltool::Main( const str::string_ &Command )
 {
-	scltool::LoadProject( ProjectFileName, NAME_LC );
-
-	Process_( Id );
-}
-
-
-static void Go_(
-	command__ Command,
-	const parameters___ &Parameters )
-{
-ERRProlog
-ERRBegin
-	Process_( Parameters.Id, Parameters.Project );
-ERRErr
-ERREnd
-ERREpilog
+	if ( Command == "Process" )
+		Process_( sclrgstry::GetUInt( registry::Id, UNDEFINED ) );
+	else if ( Command == "Version" )
+		PrintHeader_();
+	else if ( Command == "License" )
+		epsmsc::PrintLicense();
+	else
+		ERRFwk();
 }
 
 const char *scltool::TargetName = NAME_LC;
 
-void scltool::Main(
-	int argc,
-	const char *argv[] )
-{
-ERRProlog
-	parameters___ Parameters;
-	command__ Command = c_Undefined;
-ERRBegin
-	Command = AnalyzeArgs_( argc, argv, Parameters );
-
-	Go_( Command, Parameters );
-ERRErr
-ERREnd
-ERREpilog
-}

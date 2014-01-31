@@ -6,19 +6,6 @@
 		  <Translation language="fr">Sélectionne une entrée d'une base de données.</Translation>
 		  <Translation language="en">Pick an entry from a database.</Translation>
 		</Translations>
-    <Translations text="PickCommandDescription">
-      <Translation language="fr">Sélectionne une entrée</Translation>
-      <Translation language="en">Pick an entry</Translation>
-    </Translations>
-    <Translations text="ProjectFileArgumentDescription">
-      <Translation language="fr">Fichier projet</Translation>
-      <Translation language="en">Project file</Translation>
-    </Translations>
-    <Translations text="IdArgumentDescription">
-      <Translation language="fr">identifiant de l'enregistrement sélectionné ; si absent, sélection d'une entrée aléatoire, si 0, sélection de tous les enregistrements</Translation>
-      <Translation language="en">id of the entry to pick ; if absent, picks a random entry, if 0, picks all entries</Translation>
-    </Translations>
-
     <!-- Wordings -->
     <Translations text="TableAliasWording">
       <Translation language="fr">alias de table</Translation>
