@@ -73,15 +73,14 @@ namespace frdkernl {
 			reset();
 		}
 		status__ Init(
-			const rgstry::registry_ &ConfigurationRegistry,
-			rgstry::row__ ConfigurationRegistryRoot,
+			rgstry::multi_level_registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
 			frdkrn::reporting_functions__ &ReportingFunctions )
 		{
 			// Les autres objets sont initialisés lors de la connection.
 
-			return _kernel___::Init( ConfigurationRegistry, ConfigurationRegistryRoot, Locale, Language, ReportingFunctions );
+			return _kernel___::Init( Registry, Locale, Language, ReportingFunctions );
 		}
 		void Report( const char *Message )
 		{

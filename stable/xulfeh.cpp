@@ -71,7 +71,7 @@ void xulfeh::window_eh__::NSXPCMOnEvent( event__ )
 
 void xulfeh::m::new_project__::NSXPCMOnEvent( event__ )
 {
-	Trunk().DefineSession( str::string(), xpp::criterions___() );
+	Trunk().DefineSession( str::string() );
 }
 
 void xulfeh::m::user_project__::NSXPCMOnEvent( event__ )
@@ -83,7 +83,7 @@ ERRBegin
 	FileName.Init();
 
 	if ( nsxpcm::XPRJFileOpenDialogBox( Trunk().UI().Main().Window(), Trunk().Kernel().GetTranslation( XULFEH_NAME "_SelectProjectFile", Translation ), Trunk().Kernel().Locale(), Trunk().Kernel().Language(), FileName ) )
-		Trunk().DefineSession( FileName, xpp::criterions___() );
+		Trunk().DefineSession( FileName );
 ERRErr
 ERREnd
 ERREpilog
@@ -139,7 +139,7 @@ ERRBegin
 
 	Trunk().UI().LogQuietly( Log );
 
-	Trunk().DefineSession( ProjectLocation, xpp::criterions___() );
+	Trunk().DefineSession( ProjectLocation );
 ERRErr
 ERREnd
 ERREpilog

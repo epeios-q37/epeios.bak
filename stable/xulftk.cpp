@@ -535,6 +535,42 @@ ERREpilog
 	return Root;
 }
 
+void xulftk::trunk___::_DefineSession( void )
+{
+ERRProlog
+	frdkrn::backend_extended_type__ Type = frdkrn::bxt_Undefined;
+	str::string Location;
+ERRBegin
+	Kernel().Registry().GetValue( frdrgy::Backend, Location );
+
+	switch ( Type = frdkrn::GetBackendExtendedType( Kernel().Registry() ) ) {
+	case frdkrn::bxtNone:
+		break;
+	case frdkrn::bxtPredefined:
+		ERRFwk();
+		break;
+	case frdkrn::bxtDaemon:
+		UI().SessionForm().Widgets.txbDaemonBackend.SetValue( Location );
+		break;
+	case frdkrn::bxtEmbedded:
+		UI().SessionForm().Widgets.txbEmbeddedBackend.SetValue( Location );
+		break;
+	case frdkrn::bxt_Undefined:
+		Type = frdkrn::bxtNone;
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	UI().SessionForm().SetBackendType( Type );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+#if 0 // Old
 void xulftk::trunk___::_DefineSession(
 	const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel préremplir le 'SessionForm'.
 	const xpp::criterions___ &Criterions )
@@ -583,6 +619,7 @@ ERRErr
 ERREnd
 ERREpilog
 }
+#endif
 
 static const str::string_ &GetProjectId_(
 	trunk___ &Trunk,

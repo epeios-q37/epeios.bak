@@ -96,9 +96,12 @@ namespace xulftk {
 		}
 		void _GoToHome( void )
 		{}	// Standadisation.
+		void _DefineSession( void );
+# if 0
 		void _DefineSession(
 			const str::string_ &FileName,
 			const xpp::criterions___ &Criterions );
+# endif
 		void _ApplySession( const frdkrn::compatibility_informations__ &CompatibilityInformations );
 		void _CancelSession( void );
 		// Demande de confirmation de la fermeture d'une session (projet). Normalement appelé par la redéfintion de 'XULFTKDropSession()' lorsque projet modifié.
@@ -118,12 +121,18 @@ namespace xulftk {
 			ERRFwk();	// Si pas surchargé, alors 'xulfmn::web_site_eh__::NSXPCMOnEvent()' doit être redéfini.
 		}
 		virtual void XULFTKGoToHome( void ) = 0;
+		virtual void XULFTKDefineSession( const str::string_ &ProjectName )	// Si vide, alors nouvelle session.
+		{
+			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit être redéfini.
+		}
+# if 0	// Old
 		virtual void XULFTKDefineSession(
 			const str::string_ &ProjectFileName,
 			const xpp::criterions___ &XMLPreprocessorCriterions )
 		{
 			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit être redéfini.
 		}
+# endif
 		virtual void XULFTKApplySession( void )
 		{
 			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::apply_eh__::NSXPCMOnEvent()' doit être redéfini.
@@ -170,12 +179,18 @@ namespace xulftk {
 		{
 			XULFTKGoToHome();
 		}
+		void DefineSession( const str::string_ &ProjectName )
+		{
+			XULFTKDefineSession( ProjectName );
+		}
+# if 0	// Old
 		void DefineSession(
 			const str::string_ &ProjectFileName,
 			const xpp::criterions___ &XMLPreprocessorCriterions )
 		{
 			XULFTKDefineSession( ProjectFileName, XMLPreprocessorCriterions );
 		}
+# endif
 		void ApplySession( void )
 		{
 			XULFTKApplySession();
@@ -231,9 +246,12 @@ namespace xulftk {
 		}
 	protected:
 		void Handle_( frdkrn::status__ Status );
+		void _DefineSession( void );	// 'registry' qui contient la configuration de l'application.
+# if 0 // Old
 		void _DefineSession(
 			const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel préremplir le 'SessionForm'.
 			const xpp::criterions___ &Criterions );	// 'registry' qui contient la configuration de l'application.
+# endif
 		// Normalement appelée par la redéfintion de 'XULFTKApplySession()'. Charge le projet correspondant au fichier 'FileName'.
 		void _ApplySession(	const frdkrn::compatibility_informations__ &CompatibilityInformations );
 		// Normalement appelée par la redéfintion de 'XULFTKCacnelSession()', même si ne fait rien (standardisation).
@@ -378,6 +396,20 @@ namespace xulftk {
 		bso::bool__ FinalizeLaunching( void )
 		{
 			bso::bool__ Defined = false;
+
+			if ( Kernel().Registry().Exists( frdrgy::DefaultProject ) ) {
+				Defined = true;
+			} else
+				GoToHome();
+
+			RefreshUI();
+
+			return Defined;
+		}
+# if 0 //Old
+		bso::bool__ FinalizeLaunching( void )
+		{
+			bso::bool__ Defined = false;
 		ERRProlog
 			str::string DefaultProjectFileName;
 		ERRBegin
@@ -396,6 +428,7 @@ namespace xulftk {
 		ERREpilog
 			return Defined;
 		}
+# endif
 		void BrowseWEBSite( void )
 		{
 		ERRProlog
@@ -414,6 +447,15 @@ namespace xulftk {
 		{
 			_UF().GoToHome();
 		}
+		bso::bool__ DefineSession( const str::string_ &ProjectName )
+		{
+			if ( _UF().DropSession() ) {
+				_UF().DefineSession( ProjectName );
+				return true;
+			} else
+				return false;
+		}
+# if 0	// Old.
 		bso::bool__ DefineSession(
 			const str::string_ &ProjectFileName,
 			const xpp::criterions___ &Criterions )
@@ -424,6 +466,7 @@ namespace xulftk {
 			} else
 				return false;
 		}
+# endif
 		void ApplySession( void )
 		{
 			_UF().ApplySession();
@@ -474,12 +517,18 @@ namespace xulftk {
 		friend class _user_callback__;
 	};
 
+	inline void _user_callback__::_DefineSession( void )
+	{
+		_T()._DefineSession();
+	}
+# if 0	// Old
 	inline void _user_callback__::_DefineSession(
 		const str::string_ &ProjectFileName,
 		const xpp::criterions___ &Criterions )
 	{
 		_T()._DefineSession( ProjectFileName, Criterions );
 	}
+# endif
 
 	inline void _user_callback__::_ApplySession( const frdkrn::compatibility_informations__ &CompatibilityInformations )
 	{

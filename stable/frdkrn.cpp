@@ -458,7 +458,7 @@ ERRProlog
 ERRBegin
 	Location.Init();
 
-	switch ( Type = GetBackendTypeAndLocation( _Registry, Location ) ) {
+	switch ( Type = GetBackendTypeAndLocation( _R(), Location ) ) {
 	case csducl::tLibrary:
 	case csducl::tDaemon:
 		Recap = _Connect( Location, CompatibilityInformations, Type, ReportingFunctions, Language, ErrorSet, LogFunctions );
@@ -497,6 +497,7 @@ static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
 
 #define PROJECT_ID_RELATIVE_PATH "@id"
 
+#if 0	// Old
 recap__ frdkrn::kernel___::_FillProjectRegistry(
 	const fnm::name___ &FileName,
 	const char *Target,
@@ -531,6 +532,7 @@ ERREnd
 ERREpilog
 	return Recap;
 }
+# endif
 
 recap__ frdkrn::kernel___::_DumpProjectRegistry(
 	const fnm::name___ &FileName,
@@ -568,7 +570,7 @@ ERRBegin
 	Writer.PutAttribute( "target", TargetName );
 	Writer.PutAttribute( "id", Id );
 
-	_Registry.Dump( _RegistryProjectLevel, false, Writer );
+	_R().Dump( _R().TopLevel(), false, Writer );
 	
 	Recap = r_OK;
 ERRErr
@@ -580,7 +582,7 @@ ERREpilog
 }
 
 
-
+#if 0	// Old.
 static bso::bool__ LoadProjectLocale_(
 	const str::string_ &LocaleContent,
 	lcl::locale_ &Locale,
@@ -611,7 +613,7 @@ ERRProlog
 ERRBegin
 	Locale.Init();
 
-	_Registry.GetValue( frdrgy::Locale, Locale );
+	_R().GetValue( frdrgy::Locale, Locale );
 
 	if ( Locale.Amount() != 0 ) {
 		Context.Init();
@@ -655,6 +657,8 @@ ERREnd
 ERREpilog
 	return Status;
 }
+#endif
+
 
 status__ frdkrn::kernel___::LaunchProject(
 	const compatibility_informations__ &CompatibilityInformations,

@@ -1479,6 +1479,25 @@ ERREpilog
 	return Row;
 }
 
+row__ rgstry::multi_level_registry_::Search(
+	const tentry__ &Entry,
+	sdr::row__ *PathErrorRow ) const
+{
+	row__ Row = E_NIL;
+ERRProlog
+	str::string Path;
+ERRBegin
+	Path.Init();
+	Entry.GetPath( Path );
+
+	Row = Search( Path, PathErrorRow );
+ERRErr
+ERREnd
+ERREpilog
+	return Row;
+}
+
+
 status__ rgstry::FillRegistry(
 	xtf::extended_text_iflow__ &XFlow,
 	const xpp::criterions___ &Criterions,

@@ -32,6 +32,7 @@
 #include "fnm.h"
 
 #include "sclerror.h"
+#include "scllocale.h"
 
 using namespace sclrgstry;
 
@@ -162,9 +163,53 @@ ERREnd
 ERREpilog
 }
 
+static bso::bool__ LoadProjectLocale_(
+	const str::string_ &LocaleContent,
+	lcl::context___ &Context )
+{
+	bso::bool__ Success = false;
+ERRProlog
+	flx::E_STRING_IFLOW__ Flow;
+ERRBegin
+	Flow.Init( LocaleContent );
+
+	if ( scllocale::Push( Flow, NULL, "Locale", utf::f_Default, Context ) != LCL_UNDEFINED_LEVEL )
+		Success = true;
+ERRErr
+ERREnd
+ERREpilog
+	return Success;
+}
+
+static tol::report__ LoadProjectLocale_( rgstry::context___ &Context )
+{
+	tol::report__ Report = tol::r_Undefined;
+ERRProlog
+	str::string Locale;
+ERRBegin
+	Locale.Init();
+
+	Registry_.GetValue( ProjectLevel_, Locale, Locale );
+
+	if ( Locale.Amount() != 0 ) {
+		if ( !LoadProjectLocale_( Locale, Context ) )
+			Report = tol::rFailure;
+		else
+			Report = tol::rSuccess;
+		}
+		else
+			Report = tol::rSuccess;
+
+ERRErr
+ERREnd
+ERREpilog
+	return Report;
+}
+
+
 #define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
 
- tol::report__ sclrgstry::LoadProject(
+tol::report__ sclrgstry::LoadProject(
 	const char *FileName,
 	const char *Target,
 	rgstry::context___ &Context )
@@ -181,7 +226,6 @@ ERRBegin
 		Report = tol::rSuccess;
 	else
 		Report = tol::rFailure;
-
 ERRErr
 ERREnd
 ERREpilog

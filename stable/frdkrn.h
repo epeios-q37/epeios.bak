@@ -234,9 +234,9 @@ namespace frdkrn {
 	class kernel___
 	{
 	private:
+		registry_ *_Registry;	// Configuration and project registry.
 		csducl::universal_client_core _ClientCore;
-		registry _Registry;	// Project registry, with configuration registry.
-		rgstry::level__ _RegistryProjectLevel;
+//		rgstry::level__ _RegistryProjectLevel;	// Old.
 		frdfrd::frontend___ _Frontend;
 		lcl::locale _Locale;
 		const char *_Language;	// Langue d'administration.
@@ -244,6 +244,20 @@ namespace frdkrn {
 		time_t _ProjectOriginalTimeStamp;	// Horodatage de la créationn du chargement du projet ou de sa dernière sauvegarde. Si == 0, pas de projet en cours d'utilisation.
 		time_t _ProjectModificationTimeStamp;	// Horodatage de la dernière modification du projet.
 		reporting_functions__ *_ReportingFunctions;
+		registry_ &_R( void )
+		{
+			if ( _Registry == NULL )
+				ERRFwk();
+
+			return *_Registry;
+		}
+		const registry_ &_R( void ) const
+		{
+			if ( _Registry == NULL )
+				ERRFwk();
+
+			return *_Registry;
+		}
 		status__ _LoadProjectLocale( void );
 		recap__ _Connect(
 			const str::string_ &RemoteHostServiceOrLocalLibraryPath,
@@ -264,12 +278,14 @@ namespace frdkrn {
 			_ClientCore.reset();
 		}
 	protected:
+# if 0	// Old.
 		recap__ _FillProjectRegistry(
 			const fnm::name___ &FileName,
 			const char *TargetName,
 			const xpp::criterions___ &Criterions,
 			str::string_ &Id,
 			error_set___ &ErrorSet );
+# endif
 		recap__ _DumpProjectRegistry(
 			const fnm::name___ &FileName,
 			const char *TargetName,
@@ -297,9 +313,9 @@ namespace frdkrn {
 			if ( P )
 				CloseProject();
 
+			_Registry = NULL;
 			_Frontend.reset( P );
 			_ClientCore.reset( P );
-			_Registry.reset( P );
 			_Locale.reset( P );
 			_Language = NULL;
 			_Meaning.reset( P );
@@ -309,16 +325,14 @@ namespace frdkrn {
 		}
 		E_CVDTOR( kernel___ );
 		status__ Init(
-			const rgstry::registry_ &ConfigurationRegistry,
-			rgstry::row__ ConfigurationRegistryRoot,
+			registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
 			reporting_functions__ &ReportingFunctions )
 		{
-			_Registry.Init();
-			_Registry.PushImportedLevel( ConfigurationRegistry, ConfigurationRegistryRoot ); 
+			_Registry = &Registry;
 
-			_RegistryProjectLevel = RGSTRY_UNDEFINED_LEVEL;
+//			_RegistryProjectLevel = RGSTRY_UNDEFINED_LEVEL;
 
 			_Meaning.Init();
 
@@ -340,14 +354,20 @@ namespace frdkrn {
 
 			return _Frontend;
 		}
+		registry_ &Registry( void )
+		{
+			return _R();
+		}
 		const registry_ &Registry( void ) const
 		{
-			return _Registry;
+			return _R();
 		}
+# if 0
 		registry_ &Registry( void )
 		{
 			return _Registry;
 		}
+# endif
 		const lcl::locale_ &Locale( void ) const
 		{
 			return _Locale;
@@ -393,6 +413,7 @@ namespace frdkrn {
 		ERREnd
 		ERREpilog
 		}
+#if 0
 		recap__ LoadProject(
 			const str::string_ &FileName,
 			const char *TargetName,
@@ -406,6 +427,7 @@ namespace frdkrn {
 		{
 			_RegistryProjectLevel = _Registry.PushEmbeddedLevel( str::string( "Project" ) );
 		}
+#endif
 		recap__ LaunchProject(
 			const compatibility_informations__ &CompatibilityInformations,
 			reporting_functions__ &ReportingFunctions,
@@ -423,17 +445,19 @@ namespace frdkrn {
 
 			return Recap;
 		}
+# if 0	// Old
 		status__ LoadProject(
 			const str::string_ &FileName,
 			const char *TargetName,
 			const xpp::criterions___ &Criterions,
 			str::string_ &Id );
+# endif
 		status__ LaunchProject(
 			const compatibility_informations__ &CompatibilityInformations,
 			reporting_functions__ &ReportingFunctions );
 		time_t ProjectTimeStamp( void ) const
 		{
-			return _Registry.TimeStamp( _RegistryProjectLevel );
+			return _R().TimeStamp( _R().TopLevel() );
 		}
 		recap__ SaveProject(
 			const str::string_ &FileName,
@@ -506,7 +530,7 @@ namespace frdkrn {
 			const char *Path,
 			str::string_ &Value )
 		{
-			return _Registry.GetValue( str::string( Path ), Value );
+			return _R().GetValue( str::string( Path ), Value );
 		}
 	};
 

@@ -1526,6 +1526,10 @@ namespace rgstry {
 
 			return Level;
 		}
+		level__ TopLevel( void ) const
+		{
+			return Entries.Last();
+		}
 		void Create(
 			level__ Level,
 			const str::string_ &Path )
@@ -1721,6 +1725,9 @@ namespace rgstry {
 		row__ Search(
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const;
+		row__ Search(
+			const tentry__ &Entry,
+			sdr::row__ *PathErrorRow = NULL ) const;
 		bso::bool__ Exists(
 			level__ Level,
 			const path_ &Path ) const
@@ -1739,6 +1746,12 @@ namespace rgstry {
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
 			return Search( PathString, PathErrorRow ) != E_NIL;
+		}
+		bso::bool__ Exists(
+			const tentry__ &Entry,
+			sdr::row__ *PathErrorRow = NULL ) const
+		{
+			return Search( Entry, PathErrorRow ) != E_NIL;
 		}
 		status__ Fill(
 			level__ Level,
