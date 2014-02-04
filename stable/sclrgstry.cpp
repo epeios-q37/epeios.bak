@@ -312,19 +312,99 @@ const char *sclrgstry::GetMandatoryValue(
 	const rgstry::tentry__ &Entry,
 	TOL_CBUFFER___ &Buffer )
 {
-	ERRProlog
-		str::string Value;
-	ERRBegin
-		Value.Init();
+ERRProlog
+	str::string Value;
+ERRBegin
+	Value.Init();
 
 	GetMandatoryValue( Entry, Value );
 
 	Value.Convert( Buffer );
-	ERRErr
-		ERREnd
-		ERREpilog
-		return Buffer;
+ERRErr
+ERREnd
+ERREpilog
+	return Buffer;
 }
+
+static bso::xbool__ GetBoolean_( const str::string_ &Value )
+{
+	bso::xbool__ Boolean = bso::xb_Undefined;
+ERRProlog
+	str::string Buffer;
+ERRBegin
+	Buffer.Init( Value );
+	str::ToLower( Buffer );
+
+	if ( ( Buffer == "true" ) || ( Buffer == "yes" ) )
+		Boolean = bso::xbTrue;
+	else if ( ( Buffer == "false" ) || ( Buffer == "no" ) )
+		Boolean = bso::xbFalse;
+ERRErr
+ERREnd
+ERREpilog
+	return Boolean;
+}
+
+bso::bool__ sclrgstry::GetBoolean(
+	const rgstry::tentry__ &Entry,
+	bso::bool__ DefaultValue )
+{
+	bso::bool__ &Result = DefaultValue;
+ERRProlog
+	str::string Value;
+ERRBegin
+	Value.Init();
+
+	if ( GetValue( Entry, Value ) ) {
+		switch ( GetBoolean_( Value ) ) {
+		case bso::xbFalse:
+			Result = false;
+			break;
+		case bso::xbTrue:
+			Result = true;
+			break;
+		case bso::xb_Undefined:
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+	}
+ERRErr
+ERREnd
+ERREpilog
+	return Result;
+}
+
+bso::bool__ sclrgstry::GetMandatoryBoolean( const rgstry::tentry___ &Entry )
+{
+	bso::bool__ Result = false;
+ERRProlog
+	str::string Value;
+ERRBegin
+	Value.Init();
+
+	switch ( GetBoolean_( GetMandatoryValue( Entry, Value ) ) ) {
+	case bso::xbFalse:
+		Result = false;
+		break;
+	case bso::xbTrue:
+		Result = true;
+		break;
+	case bso::xb_Undefined:
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+ERRErr
+ERREnd
+ERREpilog
+	return Result;
+}
+
 
 template <typename t> static bso::bool__ GetUnsignedNumber_(
 	const rgstry::tentry__ &Entry,

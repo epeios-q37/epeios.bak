@@ -109,6 +109,12 @@ namespace sclrgstry {
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer );
 
+	bso::bool__ GetBoolean(
+		const rgstry::tentry__ &Entry,
+		bso::bool__ DefaultValue = false );
+
+	bso::bool__ GetMandatoryBoolean( const rgstry::tentry___ &Entry );
+
 # define SCLRGSTRY__UN( type, name, limit )\
 	type GetMandatory##name(\
 	const rgstry::tentry__ &Entry,\

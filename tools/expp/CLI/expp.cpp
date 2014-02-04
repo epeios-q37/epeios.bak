@@ -76,6 +76,7 @@ static void Process_(
 	flw::iflow__ &IFlow,
 	const char *Namespace,
 	const char *Directory,
+	bso::bool__ Preserve,
 	xml::outfit__ Outfit,
 	txf::text_oflow__ &OFlow )
 {
@@ -99,7 +100,7 @@ ERRBegin
 	}
 
 	if ( ( Status = xpp::Process( XFlow, xpp::criterions___( str::string( Directory == NULL ? (const char *)"" : Directory ), str::string(),
-															 str::string( Namespace == NULL ? DEFAULT_NAMESPACE : Namespace ) ),
+															 str::string( Namespace == NULL ? DEFAULT_NAMESPACE : Namespace ), Preserve ),
 								  Outfit, OFlow,  Context ) ) != xpp::sOK )	{
 		Meaning.Init();
 
@@ -119,6 +120,7 @@ static void Process_(
 	const char *Source,
 	const char *Destination,
 	const char *Namespace,
+	bso::bool__ Preserve,
 	bso::bool__ Indent )
 {
 ERRProlog
@@ -149,7 +151,7 @@ ERRBegin
 		TOFlow.Init( OFlow );
 	}
 
-	Process_( Source == NULL ? CIn.Flow() : IFlow, Namespace, Directory.UTF8( Buffer ), Indent ? xml::oIndent : xml::oCompact, Destination == NULL ? COut : TOFlow );
+	Process_( Source == NULL ? CIn.Flow() : IFlow, Namespace, Directory.UTF8( Buffer ), Preserve, Indent ? xml::oIndent : xml::oCompact, Destination == NULL ? COut : TOFlow );
 
 ERRErr
 	if ( BackedUp ) {
@@ -163,11 +165,11 @@ ERREpilog
 
 static void Process_( void )
 {
-	ERRProlog
-		str::string Source, Destination, NameSpace, Indentation;
+ERRProlog
+	str::string Source, Destination, NameSpace;
 	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
-	ERRBegin
-		Source.Init();
+ERRBegin
+	Source.Init();
 	sclrgstry::GetValue( registry::Source, Source );
 
 	Destination.Init();
@@ -176,10 +178,12 @@ static void Process_( void )
 	NameSpace.Init();
 	sclrgstry::GetValue( registry::NameSpace, NameSpace );
 
-	Indentation.Init();
-	sclrgstry::GetValue( registry::Indentation, Indentation );
-
-	Process_( Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL, Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL, NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) : NULL, Indentation == "Yes" );
+	Process_(
+		Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL,
+		Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL,
+		NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) : NULL,
+		sclrgstry::GetBoolean( registry::Preserve ),
+		sclrgstry::GetBoolean( registry::Indentation, true ) );
 ERRErr
 ERREnd
 ERREpilog

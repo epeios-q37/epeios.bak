@@ -36,6 +36,7 @@ namespace registry {
 	extern entry___ Source;
 	extern entry___ Destination;
 	extern entry___ Indentation;
+	extern entry___ Preserve;
 	extern entry___ NameSpace;
 }
 

@@ -29,3 +29,4 @@ entry___ registry::Source( "Source", sclrgstry::Parameters );
 entry___ registry::Destination( "Destination", sclrgstry::Parameters );
 entry___ registry::NameSpace( "NameSpace", sclrgstry::Parameters );
 entry___ registry::Indentation( "Indentation", sclrgstry::Parameters );
+entry___ registry::Preserve( "Preserve", sclrgstry::Parameters );

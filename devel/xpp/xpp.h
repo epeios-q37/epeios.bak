@@ -449,6 +449,7 @@ namespace xpp {
 			const str::string_ &FileName,
 			const str::string_ &Directory,
 			const str::string_ &CypherKey,
+			bso::bool__ Preserve,
 			utf::format__ Format );
 		status__ _InitWithContent(
 			const str::string_ &Content,
@@ -456,6 +457,7 @@ namespace xpp {
 			const xtf::pos__ &Position,
 			const str::string_ &Directory,
 			const str::string_ &CypherKey,
+			bso::bool__ Preserve,
 			utf::format__ Format );
 		status__ _InitCypher(
 			flw::iflow__ &Flow,
@@ -463,6 +465,7 @@ namespace xpp {
 			const xtf::pos__ &Position,
 			const str::string_ &Directory,
 			const str::string_ &CypherKey,
+			bso::bool__ Preserve,
 			utf::format__ Format );
 		status__ _HandleMacroExpand(
 			const str::string_ &MacroName,
@@ -613,11 +616,12 @@ namespace xpp {
 		criterions___( 
 			const str::string_ &Directory,
 			const str::string_ &CypherKey = str::string() ,
-			const str::string_ &Namespace = str::string() )
+			const str::string_ &Namespace = str::string(),
+			bso::bool__ Preserve = false )
 		{
 			reset( false );
 
-			Init( Directory, CypherKey, Namespace );
+			Init( Directory, CypherKey, Namespace, Preserve );
 		}
 		void Init( 
 			const str::string_ &Directory,

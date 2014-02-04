@@ -506,7 +506,7 @@ ERRBegin
 
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
-	Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, _Parser.GetFormat() );
+	Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
 ERRErr
 	if ( Parser != NULL ) {
 		delete Parser;
@@ -532,7 +532,7 @@ ERRProlog
 ERRBegin
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
-	Status = Parser->_InitWithFile( FileName, _Directory, _CypherKey, _Parser.GetFormat() );
+	Status = Parser->_InitWithFile( FileName, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
 ERRErr
 	if ( Parser != NULL ) {
 		delete Parser;
@@ -720,7 +720,7 @@ ERRBegin
 	if ( ( _Variables.Get( Name, TrueValue ) ) && ( ExpectedValue == TrueValue ) ) {
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
-		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, _Parser.GetFormat() );
+		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
 	}
 ERRErr
 	if ( Parser != NULL ) {
@@ -782,7 +782,7 @@ status__ xpp::_extended_parser___::_HandleCypherDecryption(
 {
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
-	return Parser->_InitCypher( _Parser.Flow().UndelyingFlow(), _LocalizedFileName, Position(), _Directory, _CypherKey, _Parser.GetFormat() );
+	return Parser->_InitCypher( _Parser.Flow().UndelyingFlow(), _LocalizedFileName, Position(), _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
 }
 
 status__ xpp::_extended_parser___::_HandleCypherOverride(
@@ -798,7 +798,7 @@ status__ xpp::_extended_parser___::_HandleCypherOverride(
 		if ( _PreservationLevel != 0 )
 			ERRFwk();
 
-		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, false );
+		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, _Preserve );
 	}
 }
 
@@ -940,6 +940,7 @@ status__ xpp::_extended_parser___::_InitWithFile(
 	const str::string_ &FileName,
 	const str::string_ &Directory,
 	const str::string_ &CypherKey,
+	bso::bool__ Preserve,
 	utf::format__ Format )
 {
 	status__ Status = s_Undefined;
@@ -964,7 +965,7 @@ ERRBegin
 	LocalizedFileNameBuffer.Init();
 	LocationBuffer.Init();
 
-	if ( ( Status = Init( _XFlow, LocalizedFileName.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, false ) ) != sOK )
+	if ( ( Status = Init( _XFlow, LocalizedFileName.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve ) ) != sOK )
 		ERRReturn;
 
 	_IgnorePreprocessingInstruction = true;
@@ -982,6 +983,7 @@ status__ xpp::_extended_parser___::_InitWithContent(
 	const xtf::pos__ &Position,
 	const str::string_ &Directory,
 	const str::string_ &CypherKey,
+	bso::bool__ Preserve,
 	utf::format__ Format )
 {
 	status__ Status = s_Undefined;
@@ -993,7 +995,7 @@ ERRBegin
 
 	_XFlow.Init( _SFlow, Format, Position );
 
-	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, false ) ) != sOK )
+	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, Preserve ) ) != sOK )
 		ERRReturn;
 
 	_IgnorePreprocessingInstruction = false;
@@ -1009,6 +1011,7 @@ status__ xpp::_extended_parser___::_InitCypher(
 	const xtf::pos__ &Position,
 	const str::string_ &Directory,
 	const str::string_ &CypherKey,
+	bso::bool__ Preserve,
 	utf::format__ Format )
 {
 	_Decoder.Init( Flow );
@@ -1018,7 +1021,7 @@ status__ xpp::_extended_parser___::_InitCypher(
 	if ( _PreservationLevel != 0 )
 		ERRFwk();
 
-	return Init( _XFlow, FileName, Directory, CypherKey, false );
+	return Init( _XFlow, FileName, Directory, CypherKey, Preserve );
 }
 
 
@@ -1187,7 +1190,9 @@ status__ xpp::_extended_parser___::Handle(
 				StripHeadingSpaces = true;
 				break;
 			case dBloc:
-				if ( _CDataNesting == 0 )
+				if ( _PreservationLevel > 1 )
+					Status = sOK;
+				else if ( _CDataNesting == 0 )
 					Continue = true;
 				else
 					Status = sOK;
