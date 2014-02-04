@@ -53,6 +53,10 @@
 
 namespace xpp {
 
+	typedef bso::uint__ plevel__;	// Préservation level.
+
+	#define XPP_PLEVEL_MAX	BSO_UINT_MAX
+
 	// NOTA : Si modifié, modifier 'GetTranslation()' en conséquent, ainsi que le contenu du ficher 'exml.xlc'.
 	enum status__ {
 		sOK = xml::sOK,
@@ -435,9 +439,11 @@ namespace xpp {
 		str::string _LocalizedFileName;	// Si le 'parser' sert à l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
 		str::string _Directory;
 		str::string _CypherKey;
+		bso::bool__ _Preserve;
 		bso::bool__ _IgnorePreprocessingInstruction;
 		bso::bool__ _AttributeDefinitionInProgress;
 		bso::uint__ _CDataNesting;
+		plevel__ _PreservationLevel;
 		status__ _HandleDefineDirective( _extended_parser___ *&Parser );
 		status__ _InitWithFile(
 			const str::string_ &FileName,
@@ -495,10 +501,12 @@ namespace xpp {
 			_LocalizedFileName.reset( P );
 			_Directory.reset( P );
 			_CypherKey.reset( P );
+			_Preserve = false;
 			_Parser.reset( P );
 			_IgnorePreprocessingInstruction = false;
 			_AttributeDefinitionInProgress = false;
 			_CDataNesting = 0;
+			_PreservationLevel = 0;
 		}
 		_extended_parser___(
 			_repository_ &Repository,
@@ -518,7 +526,8 @@ namespace xpp {
 			xtf::extended_text_iflow__ &XFlow,
 			const str::string_ &LocalizedFileName,	// Si 'XFlow' est rattaché à un fichier, le nom de ce fichier (utile pour la gestion d'erreurs).
 			const str::string_ &Directory,
-			const str::string_ &CypherKey )
+			const str::string_ &CypherKey,
+			bso::bool__ Preserve )
 		{
 			// _Repository.Init();
 			// _Tags.Init();
@@ -530,6 +539,8 @@ namespace xpp {
 			_IgnorePreprocessingInstruction = false;
 			_AttributeDefinitionInProgress = false;
 			_CDataNesting = 0;
+			_PreservationLevel = 0;
+			_Preserve = Preserve;
 
 			return sOK;
 		}
@@ -583,11 +594,13 @@ namespace xpp {
 			Directory,
 			CypherKey,
 			Namespace;
+		bso::bool__ Preserve;
 		void reset( bso::bool__ P = true )
 		{
 			Directory.reset( P);
 			CypherKey.reset( P );
 			Namespace.reset( P );
+			Preserve = false;
 		}
 		criterions___( void )
 		{
@@ -609,11 +622,13 @@ namespace xpp {
 		void Init( 
 			const str::string_ &Directory,
 			const str::string_ &CypherKey = str::string() ,
-			const str::string_ &Namespace = str::string() )
+			const str::string_ &Namespace = str::string(),
+			bso::bool__ Preserve = false )
 		{
 			this->Directory.Init( Directory );
 			this->CypherKey.Init( CypherKey );
 			this->Namespace.Init( Namespace );
+			this->Preserve = Preserve;
 		}
 		bso::bool__ IsNamespaceDefined( void ) const
 		{
@@ -702,7 +717,7 @@ namespace xpp {
 			_iflow_driver___::Init( ThreadSafety );
 			_CurrentParser = NewParser( _Repository, _Variables, _Directives );
 			_Parsers.Init();
-			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey ) != sOK )
+			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve ) != sOK )
 				ERRFwk();
 			_Status = sOK;
 

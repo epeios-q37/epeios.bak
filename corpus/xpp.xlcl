@@ -17,7 +17,7 @@
 		<Translation language="en">no tag allowed here</Translation>
 	</Translations>
 	<Translations text="XPP_UnexpectedValue">
-		<Translation language="fr">valeur inatendue</Translation>
+		<Translation language="fr">valeur inattendue</Translation>
 		<Translation language="en">unexpected value</Translation>
 	</Translations>
 	<Translations text="XPP_UnknownDirective">

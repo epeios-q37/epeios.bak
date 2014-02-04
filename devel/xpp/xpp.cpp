@@ -48,6 +48,8 @@ using xml::token__;
 #define CYPHER_TAG_KEY_ATTRIBUTE	"key"
 #define CYPHER_TAG_METHOD_ATTRIBUTE	"method"
 
+#define BLOC_TAG_PRESERVE_ATTRIBUTE	"preserve"
+
 #define DEFINE_TAG			"define"
 #define EXPAND_TAG			"expand"
 #define IFEQ_TAG			"ifeq"
@@ -206,7 +208,7 @@ static sdr::size__ Fill_(
 	return Available;
 }
 
-static inline bso::bool__ BelongsToNamespace___(
+static inline bso::bool__ BelongsToNamespace_(
 	const str::string_ &Name,
 	const str::string_ &NamespaceWithSeparator )
 {
@@ -234,31 +236,42 @@ enum directive__ {
 	d_Undefined
 };
 
+
+
 static inline directive__ GetDirective_(
 	const str::string_ &Name,
-	const _qualified_preprocessor_directives___ &Directives )
+	const _qualified_preprocessor_directives___ &Directives,
+	plevel__ PreservationLevel )
 {
-	if ( BelongsToNamespace___( Name, Directives.NamespaceWithSeparator ) )
+	directive__ Directive = d_Undefined;
+
+	if ( BelongsToNamespace_( Name, Directives.NamespaceWithSeparator ) )
 		if ( Directives.DefineTag_ == Name )
-			return dDefine;
+			Directive = dDefine;
 		else if ( Directives.ExpandTag == Name )
-			return dExpand;
+			Directive = dExpand;
 		else if ( Directives.IfeqTag == Name )
-			return dIfeq;
+			Directive = dIfeq;
 		else if ( Directives.BlocTag == Name )
-			return dBloc;
+			Directive = dBloc;
 		else if ( Directives.CDataTag == Name )
-			return dCData;
+			Directive = dCData;
 		else if ( Directives.SetTag == Name )
-			return dSet;
+			Directive = dSet;
 		else if ( Directives.CypherTag == Name )
-			return dCypher;
+			Directive = dCypher;
 		else if ( Directives.AttributeAttribute == Name )
-			return dAttribute;
+			Directive = dAttribute;
 		else
-			return dUnknown;
+			Directive = dUnknown;
 	else
-		return dNone;
+		Directive = dNone;
+
+	if ( PreservationLevel != 0 )
+		if ( Directive != dBloc )
+			Directive = dNone;
+
+	return Directive;
 }
 
 static status__ AwaitingToken_(
@@ -782,7 +795,10 @@ status__ xpp::_extended_parser___::_HandleCypherOverride(
 	else {
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
-		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey );
+		if ( _PreservationLevel != 0 )
+			ERRFwk();
+
+		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, false );
 	}
 }
 
@@ -948,7 +964,7 @@ ERRBegin
 	LocalizedFileNameBuffer.Init();
 	LocationBuffer.Init();
 
-	if ( ( Status = Init( _XFlow, LocalizedFileName.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey ) ) != sOK )
+	if ( ( Status = Init( _XFlow, LocalizedFileName.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, false ) ) != sOK )
 		ERRReturn;
 
 	_IgnorePreprocessingInstruction = true;
@@ -977,7 +993,7 @@ ERRBegin
 
 	_XFlow.Init( _SFlow, Format, Position );
 
-	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey ) ) != sOK )
+	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, false ) ) != sOK )
 		ERRReturn;
 
 	_IgnorePreprocessingInstruction = false;
@@ -999,7 +1015,10 @@ status__ xpp::_extended_parser___::_InitCypher(
 	_Decrypter.Init( _Decoder, CypherKey );
 	_XFlow.Init( _Decrypter, Format, Position );
 
-	return Init( _XFlow, FileName, Directory, CypherKey );
+	if ( _PreservationLevel != 0 )
+		ERRFwk();
+
+	return Init( _XFlow, FileName, Directory, CypherKey, false );
 }
 
 
@@ -1010,7 +1029,7 @@ static bso::bool__ StripHeadingSpaces_(
 {
 	return ( PreviousToken == xml::tValue )
 		   || ( ( PreviousToken == xml::tEndTag )
-		      && ( BelongsToNamespace___( Parser.TagName(), NamespaceWithSeparator )
+		      && ( BelongsToNamespace_( Parser.TagName(), NamespaceWithSeparator )
 			  || ( Parser.Token() == xml::tEndTag ) ) );
 }
 
@@ -1051,7 +1070,7 @@ status__ xpp::_extended_parser___::Handle(
 				Status = sOK;
 			break;
 		case xml::tStartTag:
-			Directive = GetDirective_( _Parser.TagName(), _Directives );
+			Directive = GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel );
 
 			if ( Directive == dCData ) {
 				if ( _CDataNesting == CDATA_NESTING_MAX )
@@ -1069,7 +1088,14 @@ status__ xpp::_extended_parser___::Handle(
 					Status = sOK;
 					break;
 				case dBloc:
-					Continue = true;
+					if ( _PreservationLevel == 0 )
+						Continue = true;
+					else if ( _PreservationLevel == XPP_PLEVEL_MAX )
+						ERRLmt();
+					else {
+						_PreservationLevel++;
+						Status = sOK;
+					}
 					break;
 				default:
 					Status = _HandlePreprocessorDirective( Directive, Parser );
@@ -1084,9 +1110,9 @@ status__ xpp::_extended_parser___::Handle(
 			break;
 		case xml::tAttribute:
 			if ( _CDataNesting == 0 ) {
-				switch ( GetDirective_( _Parser.TagName(), _Directives ) ) {
+				switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
 				case dNone:
-					switch ( GetDirective_( _Parser.AttributeName(), _Directives ) ) {
+					switch ( GetDirective_( _Parser.AttributeName(), _Directives, _PreservationLevel ) ) {
 					case dNone:
 						Status = sOK;
 						break;
@@ -1103,6 +1129,21 @@ status__ xpp::_extended_parser___::Handle(
 					}
 					break;
 				case dBloc:
+					if ( _Parser.AttributeName() == BLOC_TAG_PRESERVE_ATTRIBUTE )
+						if ( _PreservationLevel == 0 ) {
+							if ( _Parser.Value() == "yes" ) {
+								if ( _Preserve )
+									_PreservationLevel = 1;
+								Continue = true;
+							} else if ( _Parser.Value() != "no" )
+								Status = sUnexpectedValue;
+							else
+								Continue = true;
+						} else
+							Status = sOK;
+					else
+						Status = sUnexpectedAttribute;
+					break;
 				case dCData:
 					Status = sUnexpectedAttribute;
 					break;
@@ -1115,7 +1156,7 @@ status__ xpp::_extended_parser___::Handle(
 			break;
 		case xml::tSpecialAttribute:
 			if ( _CDataNesting == 0 ) {
-				switch ( GetDirective_( _Parser.TagName(), _Directives ) ) {
+				switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
 				case dNone:
 					break;
 				case dBloc:
@@ -1132,7 +1173,7 @@ status__ xpp::_extended_parser___::Handle(
 			Status = sOK;
 			break;
 		case xml::tStartTagClosed:
-			switch ( GetDirective_( _Parser.TagName(), _Directives ) ) {
+			switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
 			case dNone:
 				Status = sOK;
 				break;
@@ -1157,40 +1198,45 @@ status__ xpp::_extended_parser___::Handle(
 			}
 			break;
 		case xml::tEndTag:
-				switch ( GetDirective_( _Parser.TagName(), _Directives ) ) {
-				case dNone:
-					if ( _CDataNesting == 0 )
-						StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
-					Status = sOK;
-					break;
-				case dCData:
-					switch( _CDataNesting ) {
-					case 0:
-						ERRFwk();
-						break;
-					case 1:
-						Continue = true;
-						Data.Append( "]]>" );
-						break;
-					default:
-						Status = sOK;
-						break;
-					}
-					_CDataNesting--;
-					break;
-				case dBloc:
-				case dCypher:
-					if ( _CDataNesting == 0 ) {
-						StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
-						Continue = true;
-					} else
-						Status = sOK;
-					break;
-				default:
+			switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
+			case dNone:
+				if ( _CDataNesting == 0 )
+					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
+				Status = sOK;
+				break;
+			case dCData:
+				switch ( _CDataNesting ) {
+				case 0:
 					ERRFwk();
 					break;
+				case 1:
+					Continue = true;
+					Data.Append( "]]>" );
+					break;
+				default:
+					Status = sOK;
+					break;
 				}
-			break;
+				_CDataNesting--;
+				break;
+			case dBloc:
+				if ( _PreservationLevel != 0 ) {
+					_PreservationLevel--;
+					Status = sOK;
+					break;
+				}
+			case dCypher:
+				if ( _CDataNesting == 0 ) {
+					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
+					Continue = true;
+				} else
+					Status = sOK;
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
+		break;
 		case xml::tValue:
 			Status = sOK;
 			break;
