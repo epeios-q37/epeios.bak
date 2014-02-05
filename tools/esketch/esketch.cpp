@@ -19,8 +19,6 @@
     along with 'esketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "esketch.h"
-
 #include "registry.h"
 
 #include "scltool.h"
@@ -36,6 +34,22 @@
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
+
+# define BEGIN
+// Ne pas enlever ce qu'il y a entre le 'BEGIN' ci-dessus et le 'END' ci-dessous !
+/* PLACEHOLDER */
+
+# define NAME_MC			"eSketch"
+# define NAME_UC			"ESKETCH"
+# define NAME_LC			"esketch"
+# define WEBSITE_URL		"http://zeusw.org/intl/"
+# define AUTHOR_NAME		"Claude SIMON"
+# define AUTHOR_CONTACT	"http://zeusw.org/intl/contact.html"
+# define OWNER_NAME		"Claude SIMON"
+# define OWNER_CONTACT	"http://zeusw.org/intl/contact.html"
+# define COPYRIGHT		COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+
+# define END
 
 /* Beginning of the part which handles command line arguments. */
 

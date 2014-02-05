@@ -28,10 +28,10 @@
 		<Translation language="fr">attribut inattendu</Translation>
 		<Translation language="en">unexpected attribute</Translation>
 	</Translations>
-	<Translations text="XPP_UnknownAttribute">
+	<!--<Translations text="XPP_UnknownAttribute">
 		<Translation language="fr">attribut inconnu</Translation>
 		<Translation language="en">unknown attribute</Translation>
-	</Translations>
+	</Translations>-->
 	<Translations text="XPP_MissingNameAttribute">
 		<Translation language="fr">attribut 'name' manquant</Translation>
 		<Translation language="en">missing 'name' attribute</Translation>
@@ -59,6 +59,10 @@
   <Translations text="XPP_MissingValueAttribute">
 		<Translation language="fr">attribut 'value' manquant</Translation>
 		<Translation language="en">missing 'value' attribute</Translation>
+	</Translations>
+  <Translations text="XPP_MissingValueOrValueOfAttribute">
+		<Translation language="fr">attribut 'value' ou 'value-of' manquant</Translation>
+		<Translation language="en">missing 'value' or 'value-of' attribute</Translation>
 	</Translations>
 	<Translations text="XPP_MissingNameAndValueAttributes">
 		<Translation language="fr">attributs 'name' et 'value' manquants</Translation>

@@ -39,8 +39,9 @@ using xml::token__;
 #define EXPAND_TAG_SELECT_ATTRIBUTE	"select"
 #define EXPAND_TAG_HREF_ATTRIBUTE	"href"
 
-#define SET_TAG_NAME_ATTRIBUTE	"name"
-#define SET_TAG_VALUE_ATTRIBUTE	"value"
+#define SET_TAG_NAME_ATTRIBUTE		"name"
+#define SET_TAG_VALUE_ATTRIBUTE		"value"
+#define SET_TAG_VALUE_OF_ATTRIBUTE	"value-of"
 
 #define IFEQ_TAG_SELECT_ATTRIBUTE	"select"
 #define IFEQ_TAG_VALUE_ATTRIBUTE	"value"
@@ -82,7 +83,7 @@ const char *xpp::GetLabel( status__ Status )
 	CASE( UnknownDirective );
 //	CASE( AttributeAlreadyDefined );
 	CASE( UnexpectedAttribute );
-	CASE( UnknownAttribute );
+//	CASE( UnknownAttribute );
 	CASE( MissingNameAttribute );
 	CASE( EmptyNameAttributeValue );
 	CASE( MissingSelectOrHRefAttribute );
@@ -90,6 +91,7 @@ const char *xpp::GetLabel( status__ Status )
 	CASE( MissingSelectAttribute );
 	CASE( EmptySelectAttributeValue );
 	CASE( MissingValueAttribute );
+	CASE( MissingValueOrValueOfAttribute );
 	CASE( MissingNameAndValueAttributes );
 	CASE( MissingSelectAndValueAttributes );
 //	CASE( UnknownVariable );
@@ -476,7 +478,7 @@ ERRBegin
 	else if ( Parser.AttributeName() == EXPAND_TAG_SELECT_ATTRIBUTE )
 		Type = etMacro;
 	else {
-		Status = sUnknownAttribute;
+		Status = sUnexpectedAttribute;
 		ERRReturn;
 	}
 
@@ -587,6 +589,19 @@ ERREpilog
 	return Status;
 }
 
+static void GetEnvVar_(
+	const str::string_ &Name,
+	str::string_ &Value )
+{
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	Value.Append( getenv( Name.Convert( Buffer ) ) );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 static status__ GetSetNameAndValue_(
 	parser___ &Parser,
 	str::string_ &Name,
@@ -598,11 +613,13 @@ static status__ GetSetNameAndValue_(
 		if ( Parser.AttributeName() == SET_TAG_NAME_ATTRIBUTE ) {
 			Name.Append( Parser.Value() );
 
-			if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingValueAttribute ) ) == sOK ) {
+			if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingValueOrValueOfAttribute ) ) == sOK ) {
 				if ( Parser.AttributeName() == SET_TAG_VALUE_ATTRIBUTE )
 					Value.Append( Parser.Value() );
+				else if ( Parser.AttributeName() == SET_TAG_VALUE_OF_ATTRIBUTE )
+					GetEnvVar_( Parser.Value(), Value );
 				else
-					Status = sUnknownAttribute;
+					Status = sUnexpectedAttribute;
 			}
 		} else if ( Parser.AttributeName() == SET_TAG_VALUE_ATTRIBUTE ) {
 			Value.Append( Parser.Value() );
@@ -614,7 +631,19 @@ static status__ GetSetNameAndValue_(
 					else
 						Name.Append( Parser.Value() );
 				else
-					Status = sUnknownAttribute;
+					Status = sUnexpectedAttribute;
+			}
+		} else if ( Parser.AttributeName() == SET_TAG_VALUE_OF_ATTRIBUTE ) {
+			GetEnvVar_( Parser.Value(), Value );
+
+			if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingNameAttribute ) ) == sOK ) {
+				if ( Parser.AttributeName() == SET_TAG_NAME_ATTRIBUTE )
+					if ( Parser.Value() == 0 )
+						Status = sEmptyNameAttributeValue;
+					else
+						Name.Append( Parser.Value() );
+				else
+					Status = sUnexpectedAttribute;
 			}
 		}
 	}
@@ -667,7 +696,7 @@ static status__ GetIfeqSelectAndValue_(
 				if ( Parser.AttributeName() == IFEQ_TAG_VALUE_ATTRIBUTE )
 					Value.Append( Parser.Value() );
 				else
-					Status = sUnknownAttribute;
+					Status = sUnexpectedAttribute;
 			}
 		} else if ( Parser.AttributeName() == IFEQ_TAG_VALUE_ATTRIBUTE ) {
 			Value.Append( Parser.Value() );
@@ -679,7 +708,7 @@ static status__ GetIfeqSelectAndValue_(
 					else
 						Name.Append( Parser.Value() );
 				else
-					Status = sUnknownAttribute;
+					Status = sUnexpectedAttribute;
 			}
 		}
 	}
@@ -765,7 +794,7 @@ ERRBegin
 	else if ( Parser.AttributeName() == CYPHER_TAG_METHOD_ATTRIBUTE )
 		Mode = cmEncrypted;
 	else {
-		Status = sUnknownAttribute;
+		Status = sUnexpectedAttribute;
 		ERRReturn;
 	}
 

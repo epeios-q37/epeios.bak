@@ -57,14 +57,13 @@ namespace xpp {
 
 	#define XPP_PLEVEL_MAX	BSO_UINT_MAX
 
-	// NOTA : Si modifié, modifier 'GetTranslation()' en conséquent, ainsi que le contenu du ficher 'exml.xlc'.
+	// NOTA : Si modifié, modifier 'GetTranslation()' en conséquent, ainsi que le contenu du ficher 'xpp.xlcl'.
 	enum status__ {
 		sOK = xml::sOK,
 		sNoTagsAllowedHere = xml::s_amount,
 		sUnexpectedValue,
 		sUnknownDirective,
 		sUnexpectedAttribute,
-		sUnknownAttribute,
 		sMissingNameAttribute,
 		sEmptyNameAttributeValue,
 		sMissingSelectOrHRefAttribute,
@@ -72,6 +71,7 @@ namespace xpp {
 		sMissingSelectAttribute,
 		sEmptySelectAttributeValue,
 		sMissingValueAttribute,
+		sMissingValueOrValueOfAttribute,
 		sMissingNameAndValueAttributes,
 		sMissingSelectAndValueAttributes,
 		sMustBeEmpty,

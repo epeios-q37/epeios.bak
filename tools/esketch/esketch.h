@@ -24,20 +24,5 @@
 #ifndef ESKETCH__INC
 # define ESKETCH__INC
 
-# define BEGIN
-// Ne pas enlever ce qu'il y a entre le 'BEGIN' ci-dessus et le 'END' ci-dessous !
-/* PLACEHOLDER */
-
-# define NAME_MC			"eSketch"
-# define NAME_UC			"ESKETCH"
-# define NAME_LC			"esketch"
-# define WEBSITE_URL		"http://zeusw.org/intl/"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT	"http://zeusw.org/intl/contact.html"
-# define OWNER_NAME		"Claude SIMON"
-# define OWNER_CONTACT	"http://zeusw.org/intl/contact.html"
-# define COPYRIGHT		COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
-
-# define END
 
 #endif
