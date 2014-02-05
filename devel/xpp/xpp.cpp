@@ -1256,8 +1256,10 @@ status__ xpp::_extended_parser___::Handle(
 			case dBloc:
 				if ( _PreservationLevel != 0 ) {
 					_PreservationLevel--;
-					Status = sOK;
-					break;
+					if ( _PreservationLevel > 0 ) {
+						Status = sOK;
+						break;
+					}
 				}
 			case dCypher:
 				if ( _CDataNesting == 0 ) {
