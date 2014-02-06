@@ -362,7 +362,7 @@ static bso::u8__ GetChromaticAbsolute_( const pitch__ &Pitch )
 		Absolute += 9;
 		break;
 	case pnB:
-		Absolute += 10;
+		Absolute += 11;
 		break;
 	case pnC:
 		Absolute += 0;

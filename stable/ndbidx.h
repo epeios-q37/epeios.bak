@@ -74,9 +74,12 @@ namespace ndbidx {
 	using ndbbsc::rrows_;
 	using ndbbsc::rrows;
 
-	typedef bso::u8__ skip_level__;
-
-#define NDBIDX_NO_SKIP	0
+	enum context__ {
+		cIndexation,
+		cSearch,
+		c_amout,
+		c_Undefined
+	};
 
 	class sort_function__
 	{
@@ -84,14 +87,14 @@ namespace ndbidx {
 		virtual bso::sign__ NDBIDXCompare(
 			const datum_ &Datum1,
 			const datum_ &Datum2,
-			skip_level__ SkipLevel ) = 0;	// Si == 0, la comparaison se fait sur tous les champs
+			context__ Context ) = 0;
 	public:
 		bso::sign__ Compare(
 			const datum_ &Datum1,
 			const datum_ &Datum2,
-			skip_level__ SkipLevel )
+			context__ Context )
 		{
-			return NDBIDXCompare( Datum1, Datum2, SkipLevel );
+			return NDBIDXCompare( Datum1, Datum2, Context );
 		}
 	};
 
@@ -216,7 +219,7 @@ namespace ndbidx {
 		}
 		bso::sign__ _Seek(
 			const datum_ &Data,
-			skip_level__ SkipLevel,
+			context__ Context,
 			behavior__ StopIfEqual,
 			rrow__ &Row,
 			bso::u8__ &Round,
@@ -246,10 +249,10 @@ namespace ndbidx {
 		}
 		rrow__ _SearchStrictLesser(
 			rrow__ Row,
-			skip_level__ SkipLevel ) const;
+			context__ Context ) const;
 		rrow__ _SearchStrictGreater(
 			rrow__ Row,
-			skip_level__ SkipLevel ) const;
+			context__ Context ) const;
 	public:
 		_index BIndex;	// 'bufferized index'.
 		_index_ DIndex;	// 'direct index'.
@@ -356,15 +359,15 @@ namespace ndbidx {
 		rrow__ LooseSeek(
 			const datum_ &Datum,
 			behavior__ EqualBehavior,
-			skip_level__ SkipLevel,
+			context__ Context,
 			bso::sign__ &Sign ) const;	// Retourne l'élément le plus proche, même si 
 		rrow__ StrictSeek(
 			const datum_ &Datum,
 			behavior__ EqualBehavior,
-			skip_level__ SkipLevel ) const
+			context__ Context ) const
 		{
 			bso::sign__ Sign;
-			rrow__ Row = LooseSeek( Datum, EqualBehavior, SkipLevel, Sign );	// Procède au '_CompleteIntialization()'.
+			rrow__ Row = LooseSeek( Datum, EqualBehavior, Context, Sign );	// Procède au '_CompleteIntialization()'.
 
 			switch ( Sign ) {
 			case -1:
@@ -391,18 +394,18 @@ namespace ndbidx {
 		bso::sign__ Compare(
 			rrow__ RecordId,
 			const datum_ &Pattern,
-			skip_level__ SkipLevel ) const;
+			context__ Context ) const;
 		bso::sign__ Compare(
 			const datum_ &Pattern,
 			rrow__ RecordId,
-			skip_level__ SkipLevel ) const
+			context__ Context ) const
 		{
-			return -Compare( RecordId, Pattern, SkipLevel );	// Procède au '_CompleteInitialization()'.
+			return -Compare( RecordId, Pattern, Context );	// Procède au '_CompleteInitialization()'.
 		}
 		bso::sign__ Compare(
 			rrow__ RecordRow1,
 			rrow__ RecordRow2,
-			skip_level__ SkipLevel ) const;
+			context__ Context ) const;
 		rrow__ SearchRoot( void ) const
 		{	
 			_CompleteInitialization();
@@ -441,7 +444,7 @@ namespace ndbidx {
 		}
 		rrow__ StrictLesser(
 			rrow__ Row,
-			skip_level__ SkipLevel ) const
+			context__ Context ) const
 		{
 			_CompleteInitialization();
 
@@ -449,14 +452,14 @@ namespace ndbidx {
 
 			if ( Candidate == E_NIL )
 				return E_NIL;
-			else if ( Compare( Row, Candidate, SkipLevel ) != 0 )
+			else if ( Compare( Row, Candidate, Context ) != 0 )
 				return Candidate;
 			else
-				return _SearchStrictLesser( Row, SkipLevel );
+				return _SearchStrictLesser( Row, Context );
 		}
 		rrow__ StrictGreater(
 			rrow__ Row,
-			skip_level__ SkipLevel ) const
+			context__ Context ) const
 		{
 			_CompleteInitialization();
 
@@ -464,10 +467,10 @@ namespace ndbidx {
 
 			if ( Candidate == E_NIL )
 				return E_NIL;
-			else if ( Compare( Row, Candidate, SkipLevel ) != 0 )
+			else if ( Compare( Row, Candidate, Context ) != 0 )
 				return Candidate;
 			else
-				return _SearchStrictGreater( Row, SkipLevel );
+				return _SearchStrictGreater( Row, Context );
 		}
 		rrow__ Previous( rrow__ Row ) const
 		{

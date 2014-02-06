@@ -72,7 +72,7 @@ pour éviter la mise en oeuvre de la mémoire virtuelle. */
 
 bso::sign__ ndbidx::index_::_Seek(
 	const datum_ &Datum,
-	skip_level__ SkipLevel,
+	context__ Context,
 	behavior__ EqualBehavior,
 	rrow__ &Row,
 	bso::u8__ &Round,
@@ -103,7 +103,7 @@ ERRBegin
 		if ( !_Retrieve( Row, DatumToCompare, Cache ) )
 			ERRFwk();
 
-		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, SkipLevel ) ) {
+		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, Context ) ) {
 		case 0:
 			switch ( EqualBehavior ) {
 			case bStop:
@@ -150,14 +150,14 @@ ERREpilog
 
 rrow__ ndbidx::index_::_SearchStrictGreater(
 	rrow__ Row,
-	skip_level__ SkipLevel ) const
+	context__ Context ) const
 {
 	_CompleteInitialization();	
 
 	rrow__ Buffer = _Index().GetTreeGreater( Row );
 	rrow__ Candidate = E_NIL;
 
-	while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, SkipLevel ) == 0 ) )
+	while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) == 0 ) )
 		Buffer = _Index().GetTreeGreater( Buffer );
 
 	if ( Buffer != E_NIL ) {
@@ -165,14 +165,14 @@ rrow__ ndbidx::index_::_SearchStrictGreater(
 
 		Buffer = _Index().GetTreeLesser( Buffer );
 
-		while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, SkipLevel ) != 0 ) ) {
+		while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) != 0 ) ) {
 			Candidate = Buffer;
 
 			Buffer = _Index().GetTreeLesser( Buffer );
 		}
 
 		if ( Buffer != E_NIL ) {
-			Buffer = _SearchStrictGreater( Buffer, SkipLevel );
+			Buffer = _SearchStrictGreater( Buffer, Context );
 
 			if ( Buffer != E_NIL )
 				Candidate = Buffer;
@@ -192,10 +192,10 @@ rrow__ ndbidx::index_::_SearchStrictGreater(
 				Buffer = _Index().GetTreeParent( Buffer );
 
 				if ( Buffer != E_NIL ) {
-					if ( Compare( Row, Buffer, SkipLevel ) != 0 )
+					if ( Compare( Row, Buffer, Context ) != 0 )
 						Candidate = Buffer;
 					else
-						Candidate = _SearchStrictGreater( Buffer, SkipLevel );
+						Candidate = _SearchStrictGreater( Buffer, Context );
 				}
 			}
 		}
@@ -206,14 +206,14 @@ rrow__ ndbidx::index_::_SearchStrictGreater(
 
 rrow__ ndbidx::index_::_SearchStrictLesser(
 	rrow__ Row,
-	skip_level__ SkipLevel ) const
+	context__ Context ) const
 {
 	_CompleteInitialization();	
 
 	rrow__ Buffer = _Index().GetTreeLesser( Row );
 	rrow__ Candidate = E_NIL;
 
-	while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, SkipLevel ) == 0 ) )
+	while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) == 0 ) )
 		Buffer = _Index().GetTreeLesser( Buffer );
 
 	if ( Buffer != E_NIL ) {
@@ -221,14 +221,14 @@ rrow__ ndbidx::index_::_SearchStrictLesser(
 
 		Buffer = _Index().GetTreeGreater( Buffer );
 
-		while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, SkipLevel ) != 0 ) ) {
+		while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) != 0 ) ) {
 			Candidate = Buffer;
 
 			Buffer = _Index().GetTreeGreater( Buffer );
 		}
 
 		if ( Buffer != E_NIL ) {
-			Buffer = _SearchStrictLesser( Buffer, SkipLevel );
+			Buffer = _SearchStrictLesser( Buffer, Context );
 
 			if ( Buffer != E_NIL )
 				Candidate = Buffer;
@@ -248,10 +248,10 @@ rrow__ ndbidx::index_::_SearchStrictLesser(
 				Buffer = _Index().GetTreeParent( Buffer );
 
 				if ( Buffer != E_NIL ) {
-					if ( Compare( Row, Buffer, SkipLevel ) != 0 )
+					if ( Compare( Row, Buffer, Context ) != 0 )
 						Candidate = Buffer;
 					else
-						Candidate = _SearchStrictLesser( Buffer, SkipLevel );
+						Candidate = _SearchStrictLesser( Buffer, Context );
 				}
 			}
 		}
@@ -308,7 +308,7 @@ ERRBegin
 		if ( !_Retrieve( TargetRow, DatumToCompare, Cache ) )
 			ERRFwk();
 
-		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, NDBIDX_NO_SKIP ) ) {
+		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, cIndexation ) ) {
 		case 0:
 			Result = -1;	// Pour forcer son positionnement en tant que premier.
 		case -1:
@@ -333,7 +333,7 @@ ERRBegin
 		if ( !_Retrieve( TargetRow, DatumToCompare, Cache ) )
 			ERRFwk();
 
-		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, NDBIDX_NO_SKIP ) ) {
+		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, cIndexation ) ) {
 		case 0:
 			Result = 1;	// Pour forcer son positionnement en tant que dernier.
 		case 1:
@@ -348,7 +348,7 @@ ERRBegin
 	} 
 
 	if ( TargetRow == E_NIL )
-		Result = _Seek( Datum, NDBIDX_NO_SKIP, bStopIfOneChildMissing, TargetRow, Round, Cache );
+		Result = _Seek( Datum, cIndexation, bStopIfOneChildMissing, TargetRow, Round, Cache );
 	else
 		Extremities->Used++;
 
@@ -401,7 +401,7 @@ ERREpilog
 rrow__ ndbidx::index_::LooseSeek( 
 	const datum_ &Datum,
 	behavior__ EqualBehavior,
-	skip_level__ SkipLevel,
+	context__ Context,
 	bso::sign__ &Sign ) const
 {
 	rrow__ Row = E_NIL;
@@ -412,7 +412,7 @@ rrow__ ndbidx::index_::LooseSeek(
 	if ( S_.Root == E_NIL )
 		return E_NIL;
 
-	Sign = _Seek( Datum, SkipLevel, EqualBehavior, Row, Round, *(ndbctt::cache_ *)NULL );
+	Sign = _Seek( Datum, Context, EqualBehavior, Row, Round, *(ndbctt::cache_ *)NULL );
 
 #ifdef NDBIDX_DBG
 	if ( Row == E_NIL )
@@ -442,7 +442,7 @@ ERRBegin
 	Row = Next( Row );
 
 	while ( Row != E_NIL ) {
-		if ( Compare( Row, Datum, NDBIDX_NO_SKIP ) == 1 )
+		if ( Compare( Row, Datum, cIndexation ) == 1 )
 			ERRReturn;
 
 		Datum.Init();
@@ -461,7 +461,7 @@ ERREpilog
 bso::sign__ ndbidx::index_::Compare(
 	rrow__ RecordRow,
 	const datum_ &Pattern,
-	skip_level__ SkipLevel ) const
+	context__ Context ) const
 {
 	bso::sign__ Result = 0;
 ERRProlog
@@ -474,7 +474,7 @@ ERRBegin
 	if ( !_Retrieve( RecordRow, Datum, *(ndbctt::cache_ *)NULL ) )
 		ERRFwk();
 
-	Result = _SortPointer->Compare( Datum, Pattern, SkipLevel  );
+	Result = _SortPointer->Compare( Datum, Pattern, Context  );
 ERRErr
 ERREnd
 ERREpilog
@@ -484,7 +484,7 @@ ERREpilog
 bso::sign__ ndbidx::index_::Compare(
 	rrow__ RecordRow1,
 	rrow__ RecordRow2,
-	skip_level__ SkipLevel ) const
+	context__ Context ) const
 {
 	bso::sign__ Result = 0;
 ERRProlog
@@ -497,7 +497,7 @@ ERRBegin
 	if ( !_Retrieve( RecordRow2, Pattern, *(ndbctt::cache_ *)NULL ) )
 		ERRFwk();
 
-	Result = Compare( RecordRow1, Pattern, SkipLevel );
+	Result = Compare( RecordRow1, Pattern, Context );
 ERRErr
 ERREnd
 ERREpilog
