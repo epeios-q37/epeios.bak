@@ -394,7 +394,7 @@ namespace txmtbl {
 
 			return Line( Row ).GetUniqueCell( Cell );
 		}
-		location__ Location( sdr::row__ Row )
+		location__ Location( sdr::row__ Row ) const
 		{
 			ctn::E_CITEM( line_ ) Line;
 
