@@ -96,20 +96,6 @@ namespace scltool {
 	{
 		return scllocale::GetTranslation( Meaning, GetLanguage(), Translation );
 	}
-
-	inline void ReportAndAbort( const lcl::meaning_ &Meaning )
-	{
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
-	}
-
-	void ReportAndAbort( const char *Text );
-
-	void ReportUnknownOptionErrorAndAbort( const char *Option );
-
-	void ReportWrongNumberOfArgumentsErrorAndAbort( void );
-
-	void ReportMissingCommandErrorAndAbort( void );
 }
 
 				  /********************************************/

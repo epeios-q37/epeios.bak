@@ -482,11 +482,7 @@ public:\
 	}\
 };
 
-
-
-/*********************************************/
-/* CLASSE DE GESTION DU POINTEUR UTILISATEUR */
-/*********************************************/
+#define system	use_System_from_tol_library	// Pour forcer l'utilisation de 'tol::System(...)'.
 
 namespace tol {
 	class UP__
@@ -518,6 +514,9 @@ namespace tol {
 		}
 	};
 
+	bso::bool__ IsSystemCommandAvailable( void );
+
+	int System( const char *Command );
 
 	//f Return the current date.
 	const char *Date( buffer__ &Buffer );

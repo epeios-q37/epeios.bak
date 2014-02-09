@@ -44,6 +44,47 @@ using namespace sclmisc;
 
 #define LOCALE_DEFAULT_FILENAME_SUFFIX ".xlcl"
 
+void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
+{
+	sclerror::SetMeaning( Meaning );
+	ERRAbort();
+}
+
+void sclmisc::ReportAndAbort( const char *Text )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+
+	Meaning.SetValue( Text );
+
+	ReportAndAbort( Meaning );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void sclmisc::ReportAndAbort(
+	const char *Text,
+	const str::string_ &Tag )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+
+	Meaning.SetValue( Text );
+	Meaning.AddTag( Tag );
+
+	ReportAndAbort( Meaning );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+
 static void GetConfigurationLocaleParsingErrorMeaning_(
 	const rgstry::context___ &Context,
 	lcl::meaning_ &Meaning )
@@ -80,8 +121,7 @@ ERRBegin
 	if ( Level == LCL_UNDEFINED_LEVEL ) {
 		ErrorMeaning.Init();
 		GetConfigurationLocaleParsingErrorMeaning_( Context, ErrorMeaning );
-		sclerror::SetMeaning( ErrorMeaning );
-		ERRAbort();
+		ReportAndAbort( ErrorMeaning );
 	} else if ( Level != 1 )
 		ERRFwk();
 ERRErr
@@ -237,8 +277,7 @@ ERRBegin
 		Meaning.Init();
 		Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu être lu.
 		Meaning.AddTag( "Unable to open locale file" );	// Ceci remaplacera le '%0' ci-dessus.
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		ReportAndAbort( Meaning );
 	}
 ERRErr
 ERREnd
@@ -258,16 +297,13 @@ ERRBegin
 	if ( !InitializeFlow_( Target, CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLMISC_NAME "_UnableToOpenConfigurationFile" );
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		ReportAndAbort( Meaning );
 	}
 ERRErr
 ERREnd
 ERREpilog
 	return Flow;
 }
-
-#include "tht.h"
 
 void sclmisc::Initialize(
 	const char *Target,
@@ -301,8 +337,7 @@ ERRBegin
 	if ( ( Status = fil::CreateBackupFile( FileName, Mode, err::hUserDefined ) )!= fil::bsOK ) {
 		Meaning.Init();
 		fil::GetMeaning( Status, FileName, Meaning );
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		ReportAndAbort( Meaning );
 	}
 ERRErr
 ERREnd
@@ -318,8 +353,7 @@ ERRBegin
 	if ( ( Status = fil::RecoverBackupFile( FileName, err::hUserDefined ) )!= fil::rsOK ) {
 		Meaning.Init();
 		fil::GetMeaning( Status, FileName, Meaning );
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		ReportAndAbort( Meaning );
 	}
 ERRErr
 ERREnd
@@ -335,10 +369,7 @@ ERRBegin
 	Meaning.Init();
 	Meaning.SetValue( SCLMISC_NAME "_UnableToOpenFile" );
 	Meaning.AddTag( FileName.UTF8( Buffer ) );
-
-	sclerror::SetMeaning( Meaning );
-
-	ERRAbort();
+	ReportAndAbort( Meaning );
 ERRErr
 ERREnd
 ERREpilog

@@ -149,67 +149,6 @@ ERREnd
 ERREpilog
 }
 
-
-void scltool::ReportAndAbort( const char *Text )
-{
-ERRProlog
-	lcl::meaning Meaning;
-ERRBegin
-	Meaning.Init();
-
-	Meaning.SetValue( Text );
-
-	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void scltool::ReportUnknownOptionErrorAndAbort( const char *Option )
-{
-ERRProlog
-	lcl::meaning Meaning;
-ERRBegin
-	Meaning.Init();
-
-	clnarg::GetUnknownOptionErrorMeaning( Option, Meaning );
-
-	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void scltool::ReportWrongNumberOfArgumentsErrorAndAbort( void )
-{
-ERRProlog
-	lcl::meaning Meaning;
-ERRBegin
-	Meaning.Init();
-
-	clnarg::GetWrongNumberOfArgumentsErrorMeaning( Meaning );
-
-	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void scltool::ReportMissingCommandErrorAndAbort( void )
-{
-ERRProlog
-	lcl::meaning Meaning;
-ERRBegin
-	Meaning.Init();
-
-	clnarg::GetMissingCommandErrorMeaning( Meaning );
-
-	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 enum stamp__ {
 	sShort,	// '-...'
 	sLong,	// '--...'
@@ -352,7 +291,7 @@ ERRBegin
 	Meaning.Init();
 	Meaning.SetValue( SCLTOOL_NAME "_BadArgument" );
 	Meaning.AddTag( Arg );
-	ReportAndAbort( Meaning );
+	sclmisc::ReportAndAbort( Meaning );
 ERRErr
 ERREnd
 ERREpilog
@@ -1638,7 +1577,7 @@ ERRBegin
 	if ( sclrgstry::LoadProject( FileName, scltool::TargetName, Context ) != tol::rSuccess ) {
 		Meaning.Init();
 		rgstry::GetMeaning( Context, Meaning );
-		ReportAndAbort( Meaning );
+		sclmisc::ReportAndAbort( Meaning );
 	}
 
 ERRErr

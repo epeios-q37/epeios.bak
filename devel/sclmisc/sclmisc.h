@@ -39,6 +39,14 @@
 
 namespace sclmisc {
 
+	void ReportAndAbort( const lcl::meaning_ &Meaning );
+
+	void ReportAndAbort( const char *Text );
+
+	void ReportAndAbort(
+		const char *Text,
+		const str::string_ &Tag );	// Pour simplifier le cas où le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
+
 	void Initialize(
 		flw::iflow__ &LocaleFlow,
 		utf::format__ LocaleFormat,

@@ -40,6 +40,57 @@ using namespace tol;
 	uint32_t tol::_Denom = 0;
 #endif
 
+static bso::xbool__ SystemCommandIsAvailable_ = bso::xb_Undefined;
+
+/*
+int system( const char * )
+{
+	ERRFbd();	// Ppour forcer l'utilisation de 'tol::System(...)'.
+
+	return 0;	// Pour éviter un 'warning'.
+}
+*/
+
+inline bso::bool__ tol::IsSystemCommandAvailable( void )
+{
+	switch ( SystemCommandIsAvailable_ ) {
+	case bso::xbTrue:
+		return true;
+		break;
+	case bso::xbFalse:
+		return false;
+		break;
+	case bso::xb_Undefined:
+		ERRFwk();
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return false;	// Pour éviter un 'warnong'.
+}
+
+#undef system
+
+int tol::System( const char *Command )
+{
+	if ( Command == NULL )
+		return system( NULL );
+
+	if ( !IsSystemCommandAvailable() )
+		ERRSys();
+
+	int Result = system( Command );
+
+	if ( Result == -1 )
+		ERRSys();
+
+	return Result;
+
+
+}
+
 #ifdef TOL__WIN		
 LARGE_INTEGER	tol::_TickFrequence;
 #else
@@ -143,6 +194,14 @@ static inline void ExitOnSignal_( void )
 	signal( SIGINT, signal_ );	// Documentations about this signal not very clear, but this handles Ctrl-C.
 }
 
+static inline void SetSystemCommandAvailabitity_( void )
+{
+	if ( system( NULL ) != 0 )
+		SystemCommandIsAvailable_ = bso::xbTrue;
+	else
+		SystemCommandIsAvailable_ = bso::xbFalse;
+}
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
@@ -154,6 +213,7 @@ public:
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 			ExitOnSignal_();
+			SetSystemCommandAvailabitity_();
 #ifdef TOL__WIN		
 		if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )
 			ERRSys();
