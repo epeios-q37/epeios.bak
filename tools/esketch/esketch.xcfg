@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="esketch">
-    <xpp:expand href="epeios.xcfg"/>
+    <xpp:set name="epeios" env-var="EPEIOS_XCFG"/>
+    <xpp:expand value-of="epeios"/>
     <Parameters>
 		  <Language>fr</Language>
       <Command>Test</Command><!-- Default command -->

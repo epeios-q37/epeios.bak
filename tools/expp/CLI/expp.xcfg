@@ -2,7 +2,8 @@
 <Configurations xmlns="http://zeusw.org/epeios/xcfg"
                 xmlns:xpp="http://zeusw.org/epeios/expp">
 	<Configuration target="expp">
-    <xpp:expand href="epeios.xcfg"/>
+    <xpp:set name="epeios" env-var="EPEIOS_XCFG"/>
+    <xpp:expand value-of="epeios"/>
     <Parameters>
 	    <Language>fr</Language>
       <Command>Process</Command>

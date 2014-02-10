@@ -36,12 +36,13 @@ using xml::token__;
 
 #define DEFINE_TAG_NAME_ATTRIBUTE	"name"
 
-#define EXPAND_TAG_SELECT_ATTRIBUTE	"select"
-#define EXPAND_TAG_HREF_ATTRIBUTE	"href"
+#define EXPAND_TAG_SELECT_ATTRIBUTE		"select"
+#define EXPAND_TAG_HREF_ATTRIBUTE		"href"
+#define EXPAND_TAG_VALUE_OF_ATTRIBUTE	"value-of"
 
 #define SET_TAG_NAME_ATTRIBUTE		"name"
 #define SET_TAG_VALUE_ATTRIBUTE		"value"
-#define SET_TAG_VALUE_OF_ATTRIBUTE	"value-of"
+#define SET_TAG_ENV_VAR_ATTRIBUTE	"env-var"
 
 #define IFEQ_TAG_SELECT_ATTRIBUTE	"select"
 #define IFEQ_TAG_VALUE_ATTRIBUTE	"value"
@@ -448,6 +449,7 @@ ERREpilog
 enum expand_type__ {
 	etMacro,
 	etFile,
+	etVariable,
 	et_amount,
 	et_Undefined
 };
@@ -477,6 +479,8 @@ ERRBegin
 		Type = etFile;
 	else if ( Parser.AttributeName() == EXPAND_TAG_SELECT_ATTRIBUTE )
 		Type = etMacro;
+	else if ( Parser.AttributeName() == EXPAND_TAG_VALUE_OF_ATTRIBUTE )
+		Type = etVariable;
 	else {
 		Status = sUnexpectedAttribute;
 		ERRReturn;
@@ -551,6 +555,49 @@ ERREpilog
 	return Status;
 }
 
+status__ xpp::_extended_parser___::_HandleVariableExpand(
+	const str::string_ &VariableName,
+	_extended_parser___ *&Parser )
+{
+	status__ Status = s_Undefined;
+ERRProlog
+	str::string Content;
+	xtf::pos__ Position;
+ERRBegin
+	Content.Init();
+
+	Content.Append( '<' );
+	Content.Append( _Directives.BlocTag );
+	Content.Append( '>' );
+
+	if ( _Variables.Get( VariableName, Content ) ) {
+		Content.Append( "</" );
+		Content.Append( _Directives.BlocTag );
+		Content.Append( '>' );
+
+		Parser = NewParser( _Repository, _Variables, _Directives );
+
+		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
+	}
+	else
+		Status = sOK;
+
+ERRErr
+	if ( Parser != NULL ) {
+		delete Parser;
+		Parser = NULL;
+	}
+ERREnd
+	if ( Status != sOK ) {
+		if ( Parser != NULL ) {
+			delete Parser;
+			Parser = NULL;
+		}
+	}
+ERREpilog
+	return Status;
+}
+
 status__ xpp::_extended_parser___::_HandleExpandDirective( _extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
@@ -566,6 +613,9 @@ ERRBegin
 		break;
 	case etFile:
 		Status = _HandleFileExpand( Value, Parser );
+		break;
+	case etVariable:
+		Status = _HandleVariableExpand( Value, Parser );
 		break;
 	case et_Undefined:
 		// 'Status' initialisé par 'etExpandTypeAndValue_(...)'.
@@ -616,7 +666,7 @@ static status__ GetSetNameAndValue_(
 			if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingValueOrValueOfAttribute ) ) == sOK ) {
 				if ( Parser.AttributeName() == SET_TAG_VALUE_ATTRIBUTE )
 					Value.Append( Parser.Value() );
-				else if ( Parser.AttributeName() == SET_TAG_VALUE_OF_ATTRIBUTE )
+				else if ( Parser.AttributeName() == SET_TAG_ENV_VAR_ATTRIBUTE )
 					GetEnvVar_( Parser.Value(), Value );
 				else
 					Status = sUnexpectedAttribute;
@@ -633,7 +683,7 @@ static status__ GetSetNameAndValue_(
 				else
 					Status = sUnexpectedAttribute;
 			}
-		} else if ( Parser.AttributeName() == SET_TAG_VALUE_OF_ATTRIBUTE ) {
+		} else if ( Parser.AttributeName() == SET_TAG_ENV_VAR_ATTRIBUTE ) {
 			GetEnvVar_( Parser.Value(), Value );
 
 			if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingNameAttribute ) ) == sOK ) {

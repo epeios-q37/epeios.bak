@@ -396,7 +396,7 @@ namespace xpp {
 				ctn::E_CMITEMt( str::string_, _vrow__ ) ValuesItem;
 				ValuesItem.Init( Values );
 
-				Value = ValuesItem( Row );
+				Value.Append( ValuesItem( Row ) );
 			}
 
 			return Row != E_NIL;
@@ -472,6 +472,9 @@ namespace xpp {
 			_extended_parser___ *&Parser );
 		status__ _HandleFileExpand(
 			const str::string_ &FileName,
+			_extended_parser___ *&Parser );
+		status__ _HandleVariableExpand(
+			const str::string_ &VariableName,
 			_extended_parser___ *&Parser );
 		status__ _HandleExpandDirective( _extended_parser___ *&Parser );
 		status__ _HandleSetDirective( _extended_parser___ *&Parser );

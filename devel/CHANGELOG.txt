@@ -1,5 +1,10 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
+10/02/2014 :
+	- XPP :
+		- Utilisation de 'env-var' à la place de 'value-of'.
+		- Ajout attribut 'value-of' pour la balise 'expand'.
+
 09/02/2014 :
 	- TOL :
 		- Ajout de 'System(...)' à appelet à la place de '::system(...)'.
