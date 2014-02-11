@@ -42,15 +42,12 @@ namespace scldaemon {
 	const char *GetLanguage( void );
 
 	// A définir par l'utilisateur.
-	extern const char *TargetName;
-
-	// A définir par l'utilisateur.
-	csdleo::callback__ *RetrieveSteering(
+	csdleo::callback__ *SCLDAEMONRetrieveSteering(
 		csdleo::mode__ Mode,
 		const lcl::locale_ &Locale );	// To overload !
 
 	// A définir par l'utilisateur.
-	void ReleaseSteering( csdleo::callback__ *Steering );	// To overload.
+	void SCLDAEMONReleaseSteering( csdleo::callback__ *Steering );	// To overload.
 
 	void DisplayModuleClosingMessage( void );
 

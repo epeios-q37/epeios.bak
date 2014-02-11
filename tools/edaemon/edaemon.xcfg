@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="edaemon">
-    <xpp:expand href="epeios.xcfg"/>
+    <xpp:set name="epeios" env-var="EPEIOS_XCFG"/>
+    <xpp:expand value-of="epeios"/>
     <Parameters>
 		  <Language>en</Language>
       <Command>Process</Command>

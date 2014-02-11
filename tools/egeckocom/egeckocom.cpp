@@ -76,6 +76,7 @@ private:
 	geckoo::shared_data__ _Data;			// Only used by the master window.
 	TOL_CBUFFER___ _IdentificationBuffer;	//				"
 	TOL_CBUFFER___ _LanguageBuffer;			//				"
+	fnm::name___ _Location;
 	~egeckocom___();
 public:
   NS_DECL_ISUPPORTS
@@ -132,7 +133,7 @@ static bso::bool__ GetValue_(
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
-	return registry::GetRegistry().GetValue( Entry, registry::GetRoot(), Value );
+	return registry::GetValue( Entry, Value );
 }
 
 static const str::string_ &GetMandatoryValue_(
@@ -185,7 +186,7 @@ static void Initialize_( void )
 ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	sclmisc::Initialize( APP_NAME, GetConfigurationDirectory_( Buffer ) );
+	sclmisc::Initialize( GetConfigurationDirectory_( Buffer ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -198,7 +199,6 @@ NS_IMETHODIMP egeckocom___::Create(
 {
 RP
 	str::string RawLibraryName, CorrectedLibraryName;
-	fnm::name___ Location;
 	TOL_CBUFFER___ Buffer, LocationBuffer;
 	str::string ConfigurationDirectory, Identification;
 RB
@@ -238,8 +238,8 @@ RB
 	Identification.Append( cpe::GetDescription() );
 	Identification.Append( ')' );
 
-	Location.Init();
-	_Data.Init( Identification.Convert( _IdentificationBuffer ), _LanguageBuffer, fnm::GetLocation( CorrectedLibraryName.Convert( Buffer ), Location ).UTF8( LocationBuffer ) );
+	_Location.Init();
+	_Data.Init( Identification.Convert( _IdentificationBuffer ), _LanguageBuffer, &fnm::GetLocation( CorrectedLibraryName.Convert( Buffer ), _Location ) );
 
 	if ( !_Wrapper.Init( Buffer, &_Data, err::hUserDefined ) ) {
 		if ( CErrString_.Amount() == 0 ) {
@@ -517,3 +517,5 @@ public:
 		}
 	}
 } _CDTor;
+
+const char *sclmisc::SCLMISCTargetName = APP_NAME;

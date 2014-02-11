@@ -71,9 +71,6 @@ namespace sclgecko {
 	using namespace sclxslui;
 
 	// A définir par l'utilisateur.
-	extern const char *SCLGECKOProgramName;
-
-	// A définir par l'utilisateur.
 	xulfui::steering_callback__ *SCLGECKOCreateSteering(
 		const char *LauncherIdentification,
 		const lcl::locale_ &Locale,

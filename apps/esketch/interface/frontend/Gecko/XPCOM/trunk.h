@@ -26,8 +26,7 @@
 # include "xulftk.h"
 # include "nsxpcm.h"
 
-# include "sclrgstry.h"
-# include "scllocale.h"
+# include "sclmisc.h"
 
 # include "sktinf.h"
 # include "frdsessn.h"
@@ -172,11 +171,14 @@ namespace trunk {
 			_GoToHome();
 			_T().FinalizeGoToHome();
 		}
-		virtual void XULFTKDefineSession(
-			const str::string_ &ProjectFileName,
-			const xpp::criterions___ &Criterions )
+		virtual void XULFTKDefineSession( const fnm::name___ &ProjectFileName )
 		{
-			_DefineSession( ProjectFileName, Criterions );
+			if ( ProjectFileName.Size() != 0 )
+				sclmisc::LoadProject( ProjectFileName );
+			else
+				sclmisc::EraseProject();
+
+			_DefineSession();
 			_T().FinalizeDefineSession();
 		}
 		virtual	void XULFTKApplySession( void )

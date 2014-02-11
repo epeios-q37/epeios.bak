@@ -43,9 +43,7 @@
 
 using namespace sclbacknd;
 
-const char *scldaemon::TargetName = sclbacknd::TargetName;
-
-csdleo::callback__ *scldaemon::RetrieveSteering(
+csdleo::callback__ *scldaemon::SCLDAEMONRetrieveSteering(
 	csdleo::mode__ CSDMode,
 	const lcl::locale_ &Locale )
 {
@@ -79,7 +77,7 @@ ERREpilog
 	return Steering;
 }
 
-void scldaemon::ReleaseSteering( csdleo::callback__ *Steering )
+void scldaemon::SCLDAEMONReleaseSteering( csdleo::callback__ *Steering )
 {
 	if ( Steering != NULL )
 		delete Steering;

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
-<Configurations>
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
   <Configuration target="esketchgck">
     <Parameters>
       <AnnexTarget Type="Embedded">Annex</AnnexTarget>
     </Parameters>
 	<Locale>
 		<xpp:cdata>
-			<Locale>
 				<Translations text="LocalBackendProject">
 					<Translation language="fr">Projet avec un 'backend' local</Translation>
 					<Translation language="en">Project with local backend</Translation>
 				</Translations>
-			</Locale>
 		</xpp:cdata>
 	</Locale>
     <xpp:expand

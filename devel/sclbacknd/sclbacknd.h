@@ -145,9 +145,6 @@ namespace sclbacknd {
 		fblbur::mode__ Mode,
 		const lcl::locale_ &Locale );	// A surcharger.
 
-
-	// A définir par l'utilisateur.
-	extern const char *TargetName;
 }
 
 				  /********************************************/

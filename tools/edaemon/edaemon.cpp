@@ -74,28 +74,6 @@ enum exit_value__ {
 	ev_amount
 };
 
-#pragma warning ( disable : 4101 ) 
-static void PrintUsage_( void )
-{
-ERRProlog
-	str::string Translation;
-ERRBegin
-	scltool::PrintDefaultCommandDescriptions( NAME_MC );
-
-	COut << NAME_LC << " [<project-file>]";
-	COut << txf::nl;
-	COut << txf::nl;
-
-	COut << txf::pad << "project-file :" << txf::nl;
-	COut << txf::tab;
-	Translation.Init();
-	COut << scltool::GetTranslation( "ProjectFileArgumentDescription", Translation ) << '.' << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-#pragma warning ( default : 4101 ) 
-
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -274,7 +252,7 @@ ERRBegin
 			ErrorMeaning.AddTag( LogFileName );
 
 			ErrorTranslation.Init();
-			CErr << scllocale::GetTranslation( ErrorMeaning, scltool::GetLanguage(), ErrorTranslation ) << txf::nl << txf::commit;
+			CErr << sclmisc::GetTranslation( ErrorMeaning, ErrorTranslation ) << txf::nl << txf::commit;
 			LogFileName = NULL;	// To notify no to use log functions.
 		} else
 			TFlow.Init( FFlow );
@@ -340,14 +318,14 @@ ERRErr
 			Meaning.AddTag( sclerror::GetMeaning() );
 		else {
 			Translation.Init();
-			Meaning.AddTag( scllocale::GetLocale().GetTranslation( "UnkonwnError", scltool::GetLanguage(), Translation ) );
+			Meaning.AddTag( sclmisc::GetTranslation( "UnkonwnError", Translation ) );
 		}
 	} else {
 		Meaning.AddTag( err::Message( ErrBuffer ) );
 	}
 
 	Translation.Init();
-	scllocale::GetTranslation( Meaning, scltool::GetLanguage(), Translation );
+	sclmisc::GetTranslation( Meaning, Translation );
 
 	cio::CErr << Translation << txf::nl << txf::commit;
 ERREnd
@@ -402,40 +380,21 @@ ERREnd
 ERREpilog
 }
 
-static void Go_( const str::string_ &Command )
+void scltool::SCLTOOLMain( const str::string_ &Command )
 {
-	ERRProlog
-		ERRBegin
-		if ( Command == "Process" )
-			Go_();
-		else
-			scltool::ReportAndAbort( "BadCommand" );
+ERRProlog
+ERRBegin
+	if ( Command == "Process" )
+		Go_();
+	else if ( Command == "Version" )
+		PrintHeader_();
+	else if ( Command == "License" )
+		sclmisc::ReportAndAbort( "BadCommand" );
+	else
+		ERRFwk();
 ERRErr
 ERREnd
 ERREpilog
 }
 
-const char *scltool::TargetName = NAME_LC;
-
-void scltool::Main(
-	int argc,
-	const char *argv[] )
-{
-	ERRProlog
-		str::string Command;
-	ERRBegin
-		Command.Init();
-	scltool::GetCommand( Command );
-
-	if ( Command == "Usage" )
-		PrintUsage_();
-	else if ( Command == "Version" )
-		PrintHeader_();
-	else if ( Command == "License" )
-		epsmsc::PrintLicense();
-	else
-		Go_( Command );
-	ERRErr
-		ERREnd
-		ERREpilog
-}
+const char *sclmisc::SCLMISCTargetName = NAME_LC;

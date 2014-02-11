@@ -2,8 +2,9 @@
 <!-- $Id: esketchfrd.xlc,v 1.6 2009/10/01 15:52:03 csimon Exp $ -->
 <Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="esketchbkd">
-		<xpp:expand href="epeios.xlcl"/>
-	<!--
+    <xpp:set name="epeios" env-var="EPEIOS_XLCL"/>
+    <xpp:expand value-of="epeios"/>
+    <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en-US"></Translation>

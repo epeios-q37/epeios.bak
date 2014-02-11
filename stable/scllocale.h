@@ -50,6 +50,8 @@ namespace scllocale {
 		t_Undefined
 	};
 
+	void EraseLocale( target__ Target );
+
 	void LoadLocale(
 		target__ Target,
 		xtf::extended_text_iflow__ &Flow,

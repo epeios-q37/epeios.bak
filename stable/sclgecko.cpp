@@ -101,7 +101,7 @@ ERRBegin
 		cio::Initialize( cio::tUser );
 
 		// Do not work when placed in 'global_cdtor'.
-		sclmisc::Initialize( SCLGECKOProgramName, Data->Path );
+		sclmisc::Initialize( *Data->Path );
 		IsInitialized_ = true;
 	}
 

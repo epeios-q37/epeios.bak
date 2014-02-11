@@ -354,6 +354,13 @@ ERREnd
 ERREpilog
 }
 
+void sclmisc::EraseProject( void )
+{
+	sclrgstry::EraseProject();
+	scllocale::EraseLocale( scllocale::tProject );
+}
+
+
 void sclmisc::LoadProject( const fnm::name___ &FileName )
 {
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName );

@@ -20,6 +20,7 @@
 // $Id: esketchbkd.cpp,v 1.10 2009/09/23 17:47:42 csimon Exp $
 
 #include "sclbacknd.h"
+#include "sclmisc.h"
 
 #include "registry.h"
 #include "sktfbc.h"
@@ -123,8 +124,6 @@ public:
 	}
 };
 
-const char *sclbacknd::TargetName = BACKEND_NAME;
-
 _callback___ *sclbacknd::SCLBACKNDNew(
 	fblbur::mode__ Mode,
 	const lcl::locale_ &Locale )
@@ -145,3 +144,5 @@ ERREnd
 ERREpilog
 	return Callback;
 }
+
+const char *sclmisc::SCLMISCTargetName = BACKEND_NAME;

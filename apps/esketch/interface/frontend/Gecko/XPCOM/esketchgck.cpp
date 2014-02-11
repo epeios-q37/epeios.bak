@@ -26,7 +26,7 @@
 #include "sclrgstry.h"
 #include "scllocale.h"
 
-const char *sclgecko::SCLGECKOProgramName = PROGRAM_NAME;
+const char *sclmisc::SCLMISCTargetName = PROGRAM_NAME;
 
 typedef xulfui::steering_callback__ _steering_callback__;
 
@@ -67,12 +67,11 @@ public:
 	E_CDTOR(callback__ )
 	xulftk::status__ Init(
 		const char *LauncherIdentification,
-		const rgstry::registry_ &ConfigurationRegistry,
-		rgstry::row__ ConfigurationRegistryRoot,
+		sclrgstry::registry_ &Registry,
 		const lcl::locale_ &Locale,
 		const char *Language )
 	{
-		xulftk::status__ Status = _Kernel.Init(  ConfigurationRegistry, ConfigurationRegistryRoot, Locale, Language, _Trunk.DefaultReportingFunctions() );
+		xulftk::status__ Status = _Kernel.Init(  Registry, Locale, Language, _Trunk.DefaultReportingFunctions() );
 		_Trunk.Init( _UserCallback, _Kernel,  Locale, Language, *this );
 		_steering_callback__::Init( _Trunk );
 		_UserCallback.Init( LauncherIdentification,  _Trunk );
@@ -94,7 +93,7 @@ ERRBegin
 	if ( ( Callback = new callback__ ) == NULL )
 		ERRAlc();
 
-	Callback->Init( LauncherIdentification, sclrgstry::GetRegistry(), sclrgstry::GetRoot(), Locale, Language );
+	Callback->Init( LauncherIdentification, sclrgstry::GetRegistry(), Locale, Language );
 ERRErr
 	if ( Callback != NULL )
 		delete Callback;

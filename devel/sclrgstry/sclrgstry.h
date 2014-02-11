@@ -43,9 +43,9 @@ namespace sclrgstry {
 	using rgstry::tags_;
 	using rgstry::tags;
 
-//	extern const lcl::rack__ *LocaleRack;	// A définir.
+	typedef rgstry::multi_level_registry_ registry_;
 
-	rgstry::multi_level_registry_ &GetRegistry( void );
+	registry_ &GetRegistry( void );
 
 	rgstry::level__ GetConfigurationLevel( void );
 	rgstry::level__ GetProjectLevel( void );
@@ -64,6 +64,8 @@ namespace sclrgstry {
 		xtf::extended_text_iflow__ &Flow,
 		const char *Directory,
 		const char *RootPath );
+
+	void EraseProject( void );
 
 	void LoadProject(
 		const fnm::name___ &FileName,

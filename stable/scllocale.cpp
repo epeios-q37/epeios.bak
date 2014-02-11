@@ -66,6 +66,42 @@ ERREnd
 ERREpilog
 }
 
+static level__ &GetLevel_( target__ Target )
+{
+	switch ( Target ) {
+	case tSoftware:
+		return SoftwareLevel_;
+		break;
+	case tConfiguration:
+		return ConfigurationLevel_;
+		break;
+	case tProject:
+		return ProjectLevel_;
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return *(level__ *)NULL;	// Pour éviter une 'warning'.
+}
+
+static level__ &EraseLocale_( target__ Target )
+{
+	level__ &Level = GetLevel_( Target );
+
+	if ( Level != LCL_UNDEFINED_LEVEL )
+		if ( Locale_.Pop() != Level )
+			ERRFwk();
+
+	return Level;
+}
+
+void scllocale::EraseLocale( target__ Target )
+{
+	EraseLocale_( Target );
+}
+
 static void Load_(
 	xtf::extended_text_iflow__ &Flow,
 	const char *Directory,
@@ -76,10 +112,6 @@ static void Load_(
 ERRProlog
 	rgstry::context___ Context;
 ERRBegin
-	if ( Level != LCL_UNDEFINED_LEVEL )
-		if ( Locale_.Pop() != Level )
-			ERRFwk();
-
 	Context.Init();
 	Level = Locale_.Push( Flow, xpp::criterions___( str::string( Directory ) ), RootPath, Context );
 
@@ -90,27 +122,23 @@ ERREnd
 ERREpilog
 }
 
-
 void scllocale::LoadLocale(
 	target__ Target,
 	xtf::extended_text_iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath )
 {
-	level__ *Level = NULL;
+	level__ &Level = EraseLocale_( Target );
 	const char *ErrorLabel = NULL;
 
 	switch ( Target ) {
 	case tSoftware:
-		Level = &SoftwareLevel_;
 		ErrorLabel = SCLLOCALE_NAME "_LocaleParsingError";
 		break;
 	case tConfiguration:
-		Level = &ConfigurationLevel_;
 		ErrorLabel = SCLLOCALE_NAME "_ConfigurationLocaleParsingError";
 		break;
 	case tProject:
-		Level = &ProjectLevel_;
 		ErrorLabel = SCLLOCALE_NAME "_ProjectLocaleParsingError";
 		break;
 	default:
@@ -118,7 +146,7 @@ void scllocale::LoadLocale(
 		break;
 	}
 
-	return Load_( Flow, Directory, RootPath, *Level, ErrorLabel );
+	return Load_( Flow, Directory, RootPath, Level, ErrorLabel );
 }
 
 /* Although in theory this class is inaccessible to the different modules,

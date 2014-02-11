@@ -51,7 +51,7 @@ rgstry::entry___ sclrgstry::Language( "Language", Parameters );
 
 rgstry::entry___ sclrgstry::Locale( "Locale", Definitions );
 
-rgstry::multi_level_registry_ &sclrgstry::GetRegistry( void )
+registry_ &sclrgstry::GetRegistry( void )
 {
 	return Registry_;
 }
@@ -116,8 +116,6 @@ ERREnd
 ERREpilog
 }
 
-
-
 void sclrgstry::LoadConfiguration(
 	xtf::extended_text_iflow__&Flow,
 	const char *Directory,
@@ -130,10 +128,25 @@ ERRBegin
 
 	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
+
+	if ( ProjectLevel_ != RGSTRY_UNDEFINED_LEVEL )
+		ERRFwk();
+
+	ProjectLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Project" ) );
 ERRErr
 ERREnd
 ERREpilog
 }
+
+void sclrgstry::EraseProject( void )
+{
+	if ( ProjectLevel_ != RGSTRY_UNDEFINED_LEVEL )
+		if ( Registry_.Pop() != ProjectLevel_ )
+			ERRFwk();
+
+	ProjectLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Project" ) );
+}
+
 
 #define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
 
@@ -149,8 +162,9 @@ ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
 	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
 
-	Context.Init();
+	EraseProject();
 
+	Context.Init();
 	if ( Registry_.Fill( ProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
 ERRErr

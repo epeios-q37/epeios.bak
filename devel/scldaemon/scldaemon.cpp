@@ -72,7 +72,7 @@ ERRBegin
 		Directory.Init();
 		if ( Data->UP != NULL )
 			fnm::GetLocation( (const char *)Data->UP, Directory );
-		sclmisc::Initialize( TargetName, Directory.UTF8( Buffer ) );
+		sclmisc::Initialize( Directory.UTF8( Buffer ) );
 		IsInitialized_ = true;
 	}
 
@@ -90,7 +90,7 @@ ERRBegin
 	}
 */
 
-	Steering = RetrieveSteering( Data->Mode, scllocale::GetLocale() );
+	Steering = SCLDAEMONRetrieveSteering( Data->Mode, scllocale::GetLocale() );
 ERRErr
 	if ( cio::IsInitialized() )
 		if ( sclerror::ReportPendingError( GetLanguage(), err::hUserDefined  )) {
@@ -108,7 +108,7 @@ ERREpilog
 
 void csdles::CSDLESReleaseSteering( csdleo::callback__ *Steering )
 {
-	ReleaseSteering( Steering );
+	SCLDAEMONReleaseSteering( Steering );
 }
 
 void scldaemon::DisplayModuleClosingMessage( void )

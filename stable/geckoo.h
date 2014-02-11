@@ -149,7 +149,7 @@ namespace geckoo {
 		static bso::uint__ Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
 		const char *LauncherIdentification;
 		const char *Language;
-		const char *Path;	// Chemin d la bibliothèque.
+		const fnm::name___ *Path;	// Chemin d la bibliothèque.
 		void *UP;				// A la discrétion de l'utilisateur.
 		fdr::oflow_driver___<> *COut, *CErr;
 		void reset( bso::bool__ P = true )
@@ -169,7 +169,7 @@ namespace geckoo {
 		void Init(
 			const char *LauncherIdentification,
 			const char *Language,
-			const char *Path,
+			const fnm::name___ *Path,
 			void *UP = NULL )
 		{
 			this->LauncherIdentification = LauncherIdentification,
