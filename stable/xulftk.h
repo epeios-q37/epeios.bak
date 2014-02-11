@@ -121,7 +121,7 @@ namespace xulftk {
 			ERRFwk();	// Si pas surchargé, alors 'xulfmn::web_site_eh__::NSXPCMOnEvent()' doit être redéfini.
 		}
 		virtual void XULFTKGoToHome( void ) = 0;
-		virtual void XULFTKDefineSession( const str::string_ &ProjectName )	// Si vide, alors nouvelle session.
+		virtual void XULFTKDefineSession( void )	
 		{
 			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit être redéfini.
 		}
@@ -179,9 +179,9 @@ namespace xulftk {
 		{
 			XULFTKGoToHome();
 		}
-		void DefineSession( const str::string_ &ProjectName )
+		void DefineSession( void )
 		{
-			XULFTKDefineSession( ProjectName );
+			XULFTKDefineSession();
 		}
 # if 0	// Old
 		void DefineSession(
@@ -447,10 +447,10 @@ namespace xulftk {
 		{
 			_UF().GoToHome();
 		}
-		bso::bool__ DefineSession( const str::string_ &ProjectName )
+		bso::bool__ DefineSession( void )
 		{
 			if ( _UF().DropSession() ) {
-				_UF().DefineSession( ProjectName );
+				_UF().DefineSession();
 				return true;
 			} else
 				return false;

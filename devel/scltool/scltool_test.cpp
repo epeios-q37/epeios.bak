@@ -31,16 +31,16 @@ using cio::CIn;
 using cio::COut;
 using cio::CErr;
 
-const char *scltool::TargetName = "TEST";
+const char *sclmisc::SCLMISCTargetName = "TEST";
 
-void scltool::Main( const str::string_ &Command )
+void scltool::SCLTOOLMain( const str::string_ &Command )
 {
 ERRProlog
 	str::string Argument;
 ERRBegin
-	scltool::GetRegistry().Dump( scltool::GetRegistryConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
-	scltool::GetRegistry().Dump( scltool::GetRegistryProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
-	scltool::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	sclrgstry::GetRegistry().Dump( sclrgstry::GetConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	sclrgstry::GetRegistry().Dump( sclrgstry::GetProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	sclrgstry::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;
 ERRErr

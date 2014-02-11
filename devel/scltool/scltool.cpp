@@ -38,10 +38,6 @@ using namespace scltool;
 using cio::COut;
 using scllocale::GetLocale;
 
-static TOL_CBUFFER___ Language_;
-
-#define DEFAULT_LANGUAGE	"en"
-
 static rgstry::level__ RegistrySetupLevel_ = RGSTRY_UNDEFINED_LEVEL;
 
 rgstry::level__ scltool::GetRegistrySetupLevel( void )
@@ -91,62 +87,6 @@ static const str::string_ &GetShortTaggedArguemntId_(
 	str::string_ &Id )
 {
 	return sclrgstry::GetMandatoryValue( rgstry::tentry___( ShortTaggedArgumentId_, Name ), Id );
-}
-
-
-const char *scltool::GetLanguage( void )
-{
-	if ( Language_ == NULL )
-		return DEFAULT_LANGUAGE;
-
-	return Language_;
-}
-
-void scltool::AddDefaultCommands( clnarg::description_ &Description )
-{
-	Description.AddCommand( CLNARG_NO_SHORT, "version", cVersion );
-	Description.AddCommand( CLNARG_NO_SHORT, "help", cHelp );
-	Description.AddCommand( CLNARG_NO_SHORT, "license", cLicense );
-}
-
-
-void scltool::OldPrintDefaultCommandDescriptions(
-	const char *ProgramName,
-	const clnarg::description_ &Description )
-{
-ERRProlog
-	CLNARG_BUFFER__ Buffer;
-	lcl::meaning Meaning;
-	str::string Translation;
-ERRBegin
-	Translation.Init();
-	COut << scllocale::GetLocale().GetTranslation( "ProgramDescription", GetLanguage(), Translation ) << txf::nl;
-	COut << txf::nl;
-
-	COut << ProgramName << ' ' << Description.GetCommandLabels( cVersion, Buffer ) << txf::nl;
-	Meaning.Init();
-	clnarg::GetVersionCommandDescription( Meaning );
-	Translation.Init();
-	GetLocale().GetTranslation( Meaning, GetLanguage(), Translation );
-	COut << txf::pad << Translation << '.' << txf::nl;
-
-	COut << ProgramName << ' ' << Description.GetCommandLabels( cLicense, Buffer ) << txf::nl;
-	Meaning.Init();
-	clnarg::GetLicenseCommandDescription( Meaning );
-	Translation.Init();
-	GetLocale().GetTranslation( Meaning, GetLanguage(), Translation );
-	COut << txf::pad << Translation << '.' << txf::nl;
-
-	COut << ProgramName << ' ' << Description.GetCommandLabels( cHelp, Buffer ) << txf::nl;
-	Meaning.Init();
-	clnarg::GetHelpCommandDescription( Meaning );
-	Translation.Init();
-	GetLocale().GetTranslation( Meaning, GetLanguage(), Translation );
-	COut << txf::pad << Translation << '.' << txf::nl;
-
-ERRErr
-ERREnd
-ERREpilog
 }
 
 enum stamp__ {
@@ -592,7 +532,7 @@ ERRBegin
 	Label.Init();
 	GetLabel_( Id, Label );
 
-	scllocale::GetTranslation( Label.Convert( Buffer ), GetLanguage(), Translation );
+	sclmisc::GetTranslation( Label.Convert( Buffer ),Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -610,7 +550,7 @@ ERRBegin
 	Description.Init();
 	GetDescription_( Id, Description );
 
-	scllocale::GetTranslation( Description.Convert( Buffer ), GetLanguage(), Translation );
+	sclmisc::GetTranslation( Description.Convert( Buffer ),Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -1172,7 +1112,7 @@ ERRBegin
 
 	DefaultOne = Command == Value;
 
-	cio::COut << scltool::TargetName << " ";
+	cio::COut << sclmisc::SCLMISCTargetName << " ";
 
 	if ( DefaultOne )
 		cio::COut << '[';
@@ -1394,7 +1334,7 @@ ERRBegin
 	IdentifyArguments_( Ids, Commands, Flags, Options, Frees );
 
 	ProgramDescription.Init();
-	COut << GetTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
+	COut << sclmisc::GetTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
 
 	PrintUsage_( tCommand, Commands );
 
@@ -1561,39 +1501,9 @@ ERREnd
 ERREpilog
 }
 
-static bso::bool__ ReportSCLPendingError_( void )
+static inline bso::bool__ ReportSCLPendingError_( void )
 {
-	return sclerror::ReportPendingError( GetLanguage() );
-}
-
-static void LoadProject_( const char *FileName )
-{
-ERRProlog
-	rgstry::context___ Context;
-	lcl::meaning Meaning;
-ERRBegin
-	Context.Init();
-
-	if ( sclrgstry::LoadProject( FileName, scltool::TargetName, Context ) != tol::rSuccess ) {
-		Meaning.Init();
-		rgstry::GetMeaning( Context, Meaning );
-		sclmisc::ReportAndAbort( Meaning );
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void LoadProject_( const str::string_ &FileName )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	LoadProject_( FileName.Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+	return sclmisc::ReportSCLPendingError();
 }
 
 static bso::bool__ main_(
@@ -1602,16 +1512,10 @@ static bso::bool__ main_(
 {
 	bso::bool__ Success = false;
 ERRProlog
-	str::string Language;
 	str::string ProjectFileName;
 	str::string Command;
 ERRBegin
-	sclmisc::Initialize( TargetName, NULL );
-
-	Language.Init();
-
-	if ( sclrgstry::GetValue( sclrgstry::Language, Language ) ) 
-		Language.Convert( Language_ );
+	sclmisc::Initialize( NULL );
 
 	RegistrySetupLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
 
@@ -1621,14 +1525,14 @@ ERRBegin
 	sclrgstry::GetValue( ProjectFileName_, ProjectFileName );
 
 	if ( ProjectFileName.Amount() != 0 )
-		LoadProject_( ProjectFileName );
+		sclmisc::LoadProject( ProjectFileName );
 
 	Command.Init();
 
 	if ( sclrgstry::GetMandatoryValue( Command_, Command ) == "Usage" )
 		PrintUsage_();
 	else
-		Main( Command );
+		SCLTOOLMain( Command );
 ERRErr
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {

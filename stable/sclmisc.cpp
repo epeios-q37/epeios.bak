@@ -38,11 +38,21 @@
 
 using namespace sclmisc;
 
+static TOL_CBUFFER___ Language_;
+
 #define DEFAULT_LANGUAGE	"en"
 
 #define CONFIGURATION_DEFAULT_FILENAME_SUFFIX ".xcfg"
 
 #define LOCALE_DEFAULT_FILENAME_SUFFIX ".xlcl"
+
+const char *sclmisc::GetLanguage( void )
+{
+	if ( Language_ == NULL )
+		return DEFAULT_LANGUAGE;
+
+	return Language_;
+}
 
 void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
 {
@@ -83,7 +93,27 @@ ERREnd
 ERREpilog
 }
 
+void sclmisc::ReportParsingErrorAndAbort(
+	const char *ErrorLabel,
+	const rgstry::context___ &Context )
+{
+ERRProlog
+	lcl::meaning Meaning;
+	lcl::meaning MeaningBuffer;
+ERRBegin
+	Meaning.Init();
+	Meaning.SetValue( ErrorLabel );
 
+	MeaningBuffer.Init();
+	rgstry::GetMeaning( Context, MeaningBuffer );
+
+	Meaning.AddTag( MeaningBuffer );
+
+	ReportAndAbort( Meaning );
+ERRErr
+ERREnd
+ERREpilog
+}
 
 static void GetConfigurationLocaleParsingErrorMeaning_(
 	const rgstry::context___ &Context,
@@ -103,45 +133,40 @@ ERREnd
 ERREpilog
 }
 
-static void LoadConfigurationLocale_(
+static void LoadLocale_(
+	scllocale::target__ Target,
 	const str::string_ &Locale,
 	utf::format__ Format )
 {
 ERRProlog
 	flx::E_STRING_IFLOW__ Flow;
-	rgstry::context___ Context;
-	lcl::meaning ErrorMeaning;
-	lcl::level__ Level = LCL_UNDEFINED_LEVEL;
+	xtf::extended_text_iflow__ XFlow;
 ERRBegin
 	Flow.Init( Locale );
-
-	Context.Init();
-	Level = scllocale::Push( Flow, NULL, "Locale", Format, Context );
-
-	if ( Level == LCL_UNDEFINED_LEVEL ) {
-		ErrorMeaning.Init();
-		GetConfigurationLocaleParsingErrorMeaning_( Context, ErrorMeaning );
-		ReportAndAbort( ErrorMeaning );
-	} else if ( Level != 1 )
-		ERRFwk();
+	XFlow.Init( Flow, Format );
+	
+	scllocale::LoadLocale( Target, XFlow, NULL, "Locale" );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-static void LoadConfigurationLocale_( utf::format__ Format )
+static void LoadLocale_(
+	rgstry::level__ Level,
+	scllocale::target__ Target,
+	utf::format__ Format )
 {
 ERRProlog
 	str::string Locale;
 ERRBegin
 	Locale.Init();
 
-	sclrgstry::GetValue( sclrgstry::Locale, Locale );
+	sclrgstry::GetRegistry().GetValue( Level, sclrgstry::Locale, Locale );
 
 	if ( Locale.Amount() != 0 ) {
 		Locale.Insert( "<Locale>" );
 		Locale.Append( "</Locale>" );
-		LoadConfigurationLocale_( Locale, Format );
+		LoadLocale_( Target, Locale, Format );
 	}
 ERRErr
 ERREnd
@@ -149,20 +174,28 @@ ERREpilog
 }
 
 static void Initialize_(
-	flw::iflow__ &LocaleFlow,
-	utf::format__ LocaleFormat,
-	flw::iflow__ &RegistryFlow,
-	utf::format__ RegistryFormat,
+	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleRootPath,
-	const char *RegistryRootPath,
 	const char *LocaleDirectory,
+	xtf::extended_text_iflow__ &RegistryFlow,
+	const char *RegistryRootPath,
 	const char *RegistryDirectory )
 {
-	scllocale::Load( LocaleFlow, LocaleDirectory, LocaleRootPath, LocaleFormat );
+ERRProlog
+	str::string Language;
+ERRBegin
+	scllocale::LoadLocale( scllocale::tSoftware, LocaleFlow, LocaleDirectory, LocaleRootPath );
 
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
 
-	LoadConfigurationLocale_( LocaleFormat);
+	Language.Init();
+	if ( sclrgstry::GetValue( sclrgstry::Language, Language ) )
+		Language.Convert( Language_ );
+
+	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format());
+ERRErr
+ERREnd
+ERREpilog
 }
 
 static void BuildRootPath_(
@@ -179,12 +212,9 @@ static void BuildRootPath_(
 }
 
 void sclmisc::Initialize(
-	flw::iflow__ &LocaleFlow,
-	utf::format__ LocaleFormat,
-	flw::iflow__ &RegistryFlow,
-	utf::format__ RegistryFormat,
-	const char *Target,
+	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
+	xtf::extended_text_iflow__ &RegistryFlow,
 	const char *RegistryDirectory )
 {
 ERRProlog
@@ -192,21 +222,21 @@ ERRProlog
 	TOL_CBUFFER___ LocaleBuffer, RegistryBuffer;
 ERRBegin
 	LocaleRootPath.Init();
-	BuildRootPath_( "Locale", Target, LocaleRootPath );
+	BuildRootPath_( "Locale", SCLMISCTargetName, LocaleRootPath );
 
 	RegistryRootPath.Init();
-	BuildRootPath_( "Configuration", Target, RegistryRootPath );
+	BuildRootPath_( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
-	Initialize_( LocaleFlow, LocaleFormat,RegistryFlow, RegistryFormat, LocaleRootPath.Convert( LocaleBuffer ), RegistryRootPath.Convert( RegistryBuffer ), LocaleDirectory, RegistryDirectory );
+	Initialize_( LocaleFlow, LocaleRootPath.Convert( LocaleBuffer ), LocaleDirectory, RegistryFlow, RegistryRootPath.Convert( RegistryBuffer ), RegistryDirectory );
 ERRErr
 ERREnd
 ERREpilog
 }
 
 static bso::bool__ GuessFileName_(
-	const char *Affix,
-	const char *Suffix,
-	const char *SuggestedDirectory,
+	const fnm::name___ &Affix,
+	const fnm::name___ &Suffix,
+	const fnm::name___ &SuggestedDirectory,
 	fnm::name___ &FileName )
 {
 	bso::bool__ Success = false;
@@ -237,9 +267,8 @@ ERREpilog
 }
 
 bso::bool__ InitializeFlow_(
-	const char *Target,
 	const char *Suffix,
-	const char *SuggestedDirectory,
+	const fnm::name___ &SuggestedDirectory,
 	flf::file_iflow___ &Flow,
 	str::string_ &Directory )
 {
@@ -250,7 +279,7 @@ ERRProlog
 	fnm::name___ Location;
 ERRBegin
 	FileName.Init();
-	Success = GuessFileName_( Target, Suffix, SuggestedDirectory, FileName );
+	Success = GuessFileName_( SCLMISCTargetName, Suffix, SuggestedDirectory, FileName );
 
 	if ( Success )
 		if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess )
@@ -265,15 +294,14 @@ ERREpilog
 }
 
 static flw::iflow__ &InitializeLocaleFlow_(
-	const char *Target,
-	const char *SuggestedDirectory,
+	const fnm::name___ &SuggestedDirectory,
 	flf::file_iflow___ &Flow,
 	str::string_ &Directory )
 {
 ERRProlog
 	lcl::meaning Meaning;
 ERRBegin
-	if ( !InitializeFlow_( Target, LOCALE_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
+	if ( !InitializeFlow_( LOCALE_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
 		Meaning.Init();
 		Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu être lu.
 		Meaning.AddTag( "Unable to open locale file" );	// Ceci remaplacera le '%0' ci-dessus.
@@ -286,15 +314,14 @@ ERREpilog
 }
 
 static flw::iflow__ &InitializeConfigurationFlow_(
-	const char *Target,
-	const char *SuggestedDirectory,
+	const fnm::name___ &SuggestedDirectory,
 	flf::file_iflow___ &Flow,
 	str::string_ &Directory )
 {
 ERRProlog
 	lcl::meaning Meaning;
 ERRBegin
-	if ( !InitializeFlow_( Target, CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
+	if ( !InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLMISC_NAME "_UnableToOpenConfigurationFile" );
 		ReportAndAbort( Meaning );
@@ -305,26 +332,35 @@ ERREpilog
 	return Flow;
 }
 
-void sclmisc::Initialize(
-	const char *Target,
-	const char *SuggestedDirectory )
+void sclmisc::Initialize( const fnm::name___ &SuggestedDirectory )
 {
 ERRProlog
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
+	xtf::extended_text_iflow__ LocaleXFlow, ConfigurationXFlow;
 	str::string LocaleDirectory, ConfigurationDirectory;
 	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
 ERRBegin
 	LocaleDirectory.Init();
-	InitializeLocaleFlow_( Target, SuggestedDirectory, LocaleFlow, LocaleDirectory );
+	InitializeLocaleFlow_( SuggestedDirectory, LocaleFlow, LocaleDirectory );
+	LocaleXFlow.Init( LocaleFlow, utf::f_Default );
 
 	ConfigurationDirectory.Init();
-	InitializeConfigurationFlow_( Target, SuggestedDirectory, ConfigurationFlow, ConfigurationDirectory );
+	InitializeConfigurationFlow_( SuggestedDirectory, ConfigurationFlow, ConfigurationDirectory );
+	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
-	Initialize( LocaleFlow, utf::f_Default, ConfigurationFlow, utf::f_Default, Target, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationDirectory.Convert( ConfigurationBuffer ) ); 
+	Initialize( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
 ERRErr
 ERREnd
 ERREpilog
 }
+
+void sclmisc::LoadProject( const fnm::name___ &FileName )
+{
+	sclrgstry::LoadProject( FileName, SCLMISCTargetName );
+
+	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tConfiguration, utf::f_Default );
+}
+
 
 void sclmisc::CreateBackupFile(
 	const fnm::name___ &FileName,

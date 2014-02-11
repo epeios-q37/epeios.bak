@@ -1214,6 +1214,25 @@ ERREpilog
 	return Found;
 }
 
+bso::bool__ rgstry::multi_level_registry_::GetValue(
+	level__ Level,
+	const tentry__ &Entry,
+	str::string_ &Value,
+	sdr::row__ *PathErrorRow ) const
+{
+	bso::bool__ Found = false;
+ERRProlog
+	str::string Path;
+ERRBegin
+	Path.Init();
+
+	Found = GetValue( Level, Entry.GetPath( Path ), Value, PathErrorRow );
+ERRErr
+ERREnd
+ERREpilog
+	return Found;
+}
+
 #if 0
 bso::bool__ rgstry::multi_level_registry_::GetValue(
 	const entry___ &Entry,

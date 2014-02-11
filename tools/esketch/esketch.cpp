@@ -62,7 +62,7 @@ static void PrintHeader_( void )
 
 /* End of the part which handles command line arguments. */
 
-void scltool::Main( const str::string_ &Command )
+void scltool::SCLTOOLMain( const str::string_ &Command )
 {
 ERRProlog
 ERRBegin
@@ -79,5 +79,5 @@ ERREnd
 ERREpilog
 }
 
-const char *scltool::TargetName = NAME_LC;
+const char *sclmisc::SCLMISCTargetName = NAME_LC;
 

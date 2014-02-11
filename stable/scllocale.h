@@ -42,6 +42,20 @@ namespace scllocale {
 
 	const lcl::locale_ &GetLocale( void );
 
+	enum target__ {
+		tSoftware,
+		tConfiguration,
+		tProject,
+		t_amount,
+		t_Undefined
+	};
+
+	void LoadLocale(
+		target__ Target,
+		xtf::extended_text_iflow__ &Flow,
+		const char *Directory,
+		const char *RootPath );
+
 	inline const str::string_ &GetTranslation(
 		const char *Text,
 		const char *Language,
@@ -57,19 +71,6 @@ namespace scllocale {
 	{
 		return GetLocale().GetTranslation( Meaning, Language, Translation );
 	}
-
-	void Load(
-		flw::iflow__ &Flow,
-		const char *Directory,
-		const char *RootPath,
-		utf::format__ Format );	// Chargement de la locale de base, propre au logiciel.
-
-	lcl::level__ Push(
-		flw::iflow__ &Flow,
-		const char *Directory,
-		const char *RootPath,
-		utf::format__ Format,
-		rgstry::context___ &Context );
 }
 
 				  /********************************************/

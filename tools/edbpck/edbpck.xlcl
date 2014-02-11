@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="edbpck">
-		<xpp:expand href="epeios.xlcl"/>
-		<Translations text="ProgramDescription">
+    <xpp:set name="epeios" env-var="EPEIOS_XLCL"/>
+    <xpp:expand value-of="epeios"/>
+    <Translations text="ProgramDescription">
 		  <Translation language="fr">Sélectionne une entrée d'une base de données.</Translation>
 		  <Translation language="en">Pick an entry from a database.</Translation>
 		</Translations>

@@ -32,20 +32,16 @@
 #include "fnm.h"
 
 #include "sclerror.h"
-#include "scllocale.h"
+#include "sclmisc.h"
 
 using namespace sclrgstry;
 
 #define REGISTRY_FILE_EXTENSION ".xcfg"
 
-static rgstry::registry ConfigurationRegistry_;
 static rgstry::multi_level_registry Registry_;
 
 static rgstry::level__ ConfigurationLevel_ = RGSTRY_UNDEFINED_LEVEL;
 static rgstry::level__ ProjectLevel_ = RGSTRY_UNDEFINED_LEVEL;
-
-static rgstry::row__ Root_ = E_NIL;
-static TOL_CBUFFER___ Translation_;
 
 rgstry::entry___ sclrgstry::Parameters( "Parameters" );
 
@@ -54,11 +50,6 @@ rgstry::entry___ sclrgstry::Definitions( "Definitions" );
 rgstry::entry___ sclrgstry::Language( "Language", Parameters );
 
 rgstry::entry___ sclrgstry::Locale( "Locale", Definitions );
-
-bso::bool__ sclrgstry::IsReady( void )
-{
-	return Root_ != E_NIL;
-}
 
 rgstry::multi_level_registry_ &sclrgstry::GetRegistry( void )
 {
@@ -75,77 +66,60 @@ rgstry::level__ sclrgstry::GetProjectLevel( void )
 	return ProjectLevel_;
 }
 
-
 static rgstry::status__ FillConfigurationRegistry_(
-	flw::iflow__ &Flow,
+	xtf::extended_text_iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	rgstry::status__ Status = rgstry::s_Undefined;
-ERRProlog
-	xtf::extended_text_iflow__ XFlow;
-ERRBegin
-	if ( Root_ != E_NIL )
+	Registry_.Init();
+	ConfigurationLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Configuration" ) );
+
+	if ( ConfigurationLevel_ == RGSTRY_UNDEFINED_LEVEL )
 		ERRFwk();
 
-	XFlow.Init( Flow, utf::f_Default );
-
-	Status = rgstry::FillRegistry( XFlow, xpp::criterions___( str::string( Directory ) ), RootPath, ConfigurationRegistry_, Root_, Context );
-
-	if ( Status == rgstry::sOK ) {
-		ConfigurationLevel_ = Registry_.PushImportedLevel( ConfigurationRegistry_, Root_ );
-		ProjectLevel_ = Registry_.PushEmbeddedLevel( str::string( "Project" ) );
-	}
-ERRErr
-ERREnd
-ERREpilog
-	return Status;
+	return  Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( str::string( Directory ) ), RootPath );
 }
 
 
 void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
 {
 ERRProlog
-	lcl::meaning Meaning;
 	str::string Path;
 ERRBegin
-	Meaning.Init();
-	Meaning.SetValue( SCLRGSTRY_NAME "_BadOrNoValueForEntry" );
-
 	Path.Init();
-	Meaning.AddTag( Entry.GetPath( Path ) );
-
-	sclerror::SetMeaning( Meaning );
-
-	ERRAbort();
+	sclmisc::ReportAndAbort( SCLRGSTRY_NAME "_BadOrNoValueForEntry", Entry.GetPath( Path ) );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-static inline void ReportConfigurationFileParsingError_( const rgstry::context___ &Context )
+static inline void ReportFileParsingErrorAndAbort_(
+	const char *ErrorLabel,
+	const rgstry::context___ &Context )
 {
 ERRProlog
 	lcl::meaning Meaning;
 	lcl::meaning MeaningBuffer;
 ERRBegin
 	Meaning.Init();
-	Meaning.SetValue( SCLRGSTRY_NAME "_ConfigurationFileParsingError" );
+	Meaning.SetValue( ErrorLabel );
 
 	MeaningBuffer.Init();
 	rgstry::GetMeaning( Context, MeaningBuffer );
 
 	Meaning.AddTag( MeaningBuffer );
 
-	sclerror::SetMeaning( Meaning );
+	sclmisc::ReportAndAbort( Meaning );
 ERRErr
 ERREnd
 ERREpilog
 }
 
+
+
 void sclrgstry::LoadConfiguration(
-	flw::iflow__ &Flow,
+	xtf::extended_text_iflow__&Flow,
 	const char *Directory,
 	const char *RootPath )
 {
@@ -154,82 +128,34 @@ ERRProlog
 ERRBegin
 	Context.Init();
 
-	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK ) {
-		ReportConfigurationFileParsingError_( Context );
-		ERRAbort();
-	}
+	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK )
+		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
 ERRErr
 ERREnd
 ERREpilog
 }
-
-static bso::bool__ LoadProjectLocale_(
-	const str::string_ &LocaleContent,
-	lcl::context___ &Context )
-{
-	bso::bool__ Success = false;
-ERRProlog
-	flx::E_STRING_IFLOW__ Flow;
-ERRBegin
-	Flow.Init( LocaleContent );
-
-	if ( scllocale::Push( Flow, NULL, "Locale", utf::f_Default, Context ) != LCL_UNDEFINED_LEVEL )
-		Success = true;
-ERRErr
-ERREnd
-ERREpilog
-	return Success;
-}
-
-static tol::report__ LoadProjectLocale_( rgstry::context___ &Context )
-{
-	tol::report__ Report = tol::r_Undefined;
-ERRProlog
-	str::string Locale;
-ERRBegin
-	Locale.Init();
-
-	Registry_.GetValue( ProjectLevel_, Locale, Locale );
-
-	if ( Locale.Amount() != 0 ) {
-		if ( !LoadProjectLocale_( Locale, Context ) )
-			Report = tol::rFailure;
-		else
-			Report = tol::rSuccess;
-		}
-		else
-			Report = tol::rSuccess;
-
-ERRErr
-ERREnd
-ERREpilog
-	return Report;
-}
-
 
 #define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
 
-tol::report__ sclrgstry::LoadProject(
-	const char *FileName,
-	const char *Target,
-	rgstry::context___ &Context )
+void sclrgstry::LoadProject(
+	const fnm::name___ &FileName,
+	const char *Target )
 {
-	 tol::report__ Report = tol::r_Undefined;
 ERRProlog
 	str::string Path;
 	TOL_CBUFFER___ Buffer;
+	rgstry::context___ Context;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
 	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
 
-	if ( Registry_.Fill( ProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) == rgstry::sOK )
-		Report = tol::rSuccess;
-	else
-		Report = tol::rFailure;
+	Context.Init();
+
+	if ( Registry_.Fill( ProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
+		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
 ERRErr
 ERREnd
 ERREpilog
-	return Report;
 }
 
 bso::bool__ sclrgstry::GetValue(
@@ -539,8 +465,6 @@ class sclrgstrypersonnalization
 public:
 	sclrgstrypersonnalization( void )
 	{
-		ConfigurationRegistry_.Init();
-		Registry_.Init();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

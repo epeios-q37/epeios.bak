@@ -52,50 +52,9 @@ namespace scltool {
 	};
 
 	// A définir par l'utilisateur.
-	extern const char *TargetName;
-
-	const char *GetLanguage( void );
-
-	void AddDefaultCommands( clnarg::description_ &Description );
-
-	void OldPrintDefaultCommandDescriptions(
-		const char *ProgramName,
-		const clnarg::description_ &Description );
-
-	// A définir par l'utilisateur.
-	void Main( const str::string_ &Command );
-
-	inline const rgstry::multi_level_registry_ &GetRegistry( void )
-	{
-		return sclrgstry::GetRegistry();
-	}
-
-	inline rgstry::level__ GetRegistryConfigurationLevel( void )
-	{
-		return sclrgstry::GetConfigurationLevel();
-	}
-
-	inline rgstry::level__ GetRegistryProjectLevel( void )
-	{
-		return sclrgstry::GetProjectLevel();
-	}
+	void SCLTOOLMain( const str::string_ &Command );
 
 	rgstry::level__ GetRegistrySetupLevel( void );
-
-	inline const str::string_ &GetTranslation(
-		const char *Text,
-		str::string_ &Translation )
-	{
-		return scllocale::GetTranslation( Text, GetLanguage(), Translation );
-	}
-
-
-	inline const str::string_ &GetTranslation(
-		const lcl::meaning_ &Meaning,
-		str::string_ &Translation )
-	{
-		return scllocale::GetTranslation( Meaning, GetLanguage(), Translation );
-	}
 }
 
 				  /********************************************/

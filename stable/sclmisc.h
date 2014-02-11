@@ -36,8 +36,34 @@
 # include "err.h"
 # include "flw.h"
 # include "utf.h"
+# include "rgstry.h"
+# include "scllocale.h"
+# include "sclerror.h"
 
 namespace sclmisc {
+
+	extern const char *SCLMISCTargetName;	// A définir par l'utilisateur.
+
+	const char *GetLanguage( void );
+
+	inline const str::string_ &GetTranslation(
+		const char *Text,
+		str::string_ &Translation )
+	{
+		return scllocale::GetTranslation( Text, GetLanguage(), Translation );
+	}
+
+	inline const str::string_ &GetTranslation(
+		const lcl::meaning_ &Meaning,
+		str::string_ &Translation )
+	{
+		return scllocale::GetTranslation( Meaning, GetLanguage(), Translation );
+	}
+
+	inline bso::bool__ ReportSCLPendingError( void )
+	{
+		return sclerror::ReportPendingError( GetLanguage() );
+	}
 
 	void ReportAndAbort( const lcl::meaning_ &Meaning );
 
@@ -47,18 +73,19 @@ namespace sclmisc {
 		const char *Text,
 		const str::string_ &Tag );	// Pour simplifier le cas où le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
 
-	void Initialize(
-		flw::iflow__ &LocaleFlow,
-		utf::format__ LocaleFormat,
-		flw::iflow__ &RegistryFlow,
-		utf::format__ RegistryFormat,
-		const char *Target,
-		const char *LocaleDirectory,
-		const char *RegistryDirectory );
+	void ReportParsingErrorAndAbort(
+		const char *ErrorLabel,
+		const rgstry::context___ &Context );
 
 	void Initialize(
-		const char *Target,
-		const char *SuggestedDirectory );
+		xtf::extended_text_iflow__ &LocaleFlow,
+		const char *LocaleDirectory,
+		xtf::extended_text_iflow__ &RegistryFlow,
+		const char *RegistryDirectory );
+
+	void Initialize( const fnm::name___ &SuggestedDirectory );
+
+	void LoadProject( const fnm::name___ &FileName );
 
 	using fil::GetBackupFileName;
 
@@ -69,6 +96,8 @@ namespace sclmisc {
 	void RecoverBackupFile( const fnm::name___ &FileName );
 
 	void ReportFileOpeningErrorAndAbort( const fnm::name___ &FileName );
+
+
 }
 
 				  /********************************************/

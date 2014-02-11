@@ -34,7 +34,7 @@
 // SoCLe ReGiSTRY
 
 # include "err.h"
-# include "flw.h"
+# include "xtf.h"
 
 # include "rgstry.h"
 
@@ -61,16 +61,13 @@ namespace sclrgstry {
 	using rgstry::value_;
 
 	void LoadConfiguration(
-		flw::iflow__ &Flow,
+		xtf::extended_text_iflow__ &Flow,
 		const char *Directory,
 		const char *RootPath );
 
-	tol::report__ LoadProject(
-		const char *FileName,
-		const char *Target,
-		rgstry::context___ &Context );
-
-	bso::bool__ IsReady( void );
+	void LoadProject(
+		const fnm::name___ &FileName,
+		const char *Target );
 
 	void ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry );
 

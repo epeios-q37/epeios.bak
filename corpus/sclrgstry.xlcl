@@ -1,15 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclrgstry.xlcl,v 1.6 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations message="SCLRGSTRY_ConfigurationFileParsingError">
-		<Translation language="fr">Erreur fichier de configuration : %1.</Translation>
-		<Translation language="en">Configuration file error : %1.</Translation>
-	</Translations>
 	<Translations message="SCLRGSTRY_BadOrNoValueForEntry">
 		<Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'.</Translation>
 		<Translation language="en">Bad or no value for entry '%1'.</Translation>
 	</Translations>
-	<!--
+  <Translations message="SCLRGSTRY_ConfigurationFileParsingError">
+    <Translation language="fr">Erreur fichier de configuration : %1.</Translation>
+    <Translation language="en">Configuration file error : %1.</Translation>
+  </Translations>
+  <Translations message="SCLRGSTRY_ConfigurationLocaleParsingError">
+    <Translation language="fr">Erreur dans la locale du fichier de configuration : %1.</Translation>
+    <Translation language="en">Erreur in the configuration locale : %1.</Translation>
+  </Translations>
+  <Translations message="SCLRGSTRY_LocaleFileParsingError">
+    <Translation language="fr">Erreur fichier de locale : %1.</Translation>
+    <Translation language="en">Locale file error : %1.</Translation>
+  </Translations>
+  <Translations message="SCLRGSTRY__ProjectLocaleParsingError">
+    <Translation language="fr">Erreur dans la locale du fichier projet : %1.</Translation>
+    <Translation language="en">Erreur in the project locale : %1.</Translation>
+  </Translations>
+  <!--
 	<Translations message="SCLRGSTRY_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

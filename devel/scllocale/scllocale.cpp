@@ -31,11 +31,17 @@
 #include "dir.h"
 #include "cio.h"
 
-#include "sclerror.h"
+#include "sclmisc.h"
 
 using namespace scllocale;
 
+using lcl::level__;
+
 static lcl::locale Locale_;
+
+static level__ SoftwareLevel_ = LCL_UNDEFINED_LEVEL;
+static level__ ConfigurationLevel_ = LCL_UNDEFINED_LEVEL;
+static level__ ProjectLevel_ = LCL_UNDEFINED_LEVEL;
 
 const lcl::locale_ &scllocale::GetLocale( void )
 {
@@ -60,50 +66,59 @@ ERREnd
 ERREpilog
 }
 
-void scllocale::Load(
-	flw::iflow__ &Flow,
+static void Load_(
+	xtf::extended_text_iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath,
-	utf::format__ Format )
+	level__ &Level,
+	const char *ErrorLabel )
 {
 ERRProlog
-	lcl::meaning ErrorMeaning;
 	rgstry::context___ Context;
-	lcl::level__ Level = LCL_UNDEFINED_LEVEL;
 ERRBegin
-	Context.Init();
-	Level = Push( Flow, Directory, RootPath, Format, Context );
+	if ( Level != LCL_UNDEFINED_LEVEL )
+		if ( Locale_.Pop() != Level )
+			ERRFwk();
 
-	if ( Level == LCL_UNDEFINED_LEVEL ) {
-		ErrorMeaning.Init();
-		GetLocaleFileParsingErrorMeaning_( Context, ErrorMeaning );
-		sclerror::SetMeaning( ErrorMeaning );
-		ERRAbort();
-	} else if ( Level != 0 )
-		ERRFwk();
+	Context.Init();
+	Level = Locale_.Push( Flow, xpp::criterions___( str::string( Directory ) ), RootPath, Context );
+
+	if ( Level == LCL_UNDEFINED_LEVEL )
+		sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-lcl::level__ scllocale::Push(
-	flw::iflow__ &Flow,
-	const char *Directory,
-	const char *RootPath,
-	utf::format__ Format,
-	rgstry::context___ &Context )
-{
-	lcl::level__ Level = LCL_UNDEFINED_LEVEL;
-ERRProlog
-	xtf::extended_text_iflow__ XFlow;
-ERRBegin
-	XFlow.Init( Flow, Format );
 
-	Level = Locale_.Push( XFlow, xpp::criterions___( str::string( Directory ) ), RootPath,  Context );
-ERRErr
-ERREnd
-ERREpilog
-	return Level;
+void scllocale::LoadLocale(
+	target__ Target,
+	xtf::extended_text_iflow__ &Flow,
+	const char *Directory,
+	const char *RootPath )
+{
+	level__ *Level = NULL;
+	const char *ErrorLabel = NULL;
+
+	switch ( Target ) {
+	case tSoftware:
+		Level = &SoftwareLevel_;
+		ErrorLabel = SCLLOCALE_NAME "_LocaleParsingError";
+		break;
+	case tConfiguration:
+		Level = &ConfigurationLevel_;
+		ErrorLabel = SCLLOCALE_NAME "_ConfigurationLocaleParsingError";
+		break;
+	case tProject:
+		Level = &ProjectLevel_;
+		ErrorLabel = SCLLOCALE_NAME "_ProjectLocaleParsingError";
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return Load_( Flow, Directory, RootPath, *Level, ErrorLabel );
 }
 
 /* Although in theory this class is inaccessible to the different modules,

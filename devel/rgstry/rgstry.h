@@ -1593,6 +1593,11 @@ namespace rgstry {
 			const tentry__ &Entry,
 			str::string_ &Value,
 			sdr::row__ *PathErrorRow = NULL ) const;
+		bso::bool__ GetValue(
+			level__ Level,
+			const tentry__ &Entry,
+			str::string_ &Value,
+			sdr::row__ *PathErrorRow = NULL ) const;
 #if 0
 		bso::bool__ GetValue(
 			const entry___ &Entry,
