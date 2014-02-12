@@ -180,7 +180,7 @@ ERRBegin
 		Path.Append( "\"]/@Wording" );
 
 		Wording.Init();
-		if ( Registry.GetValue( Path, Wording ) )
+		if ( _registry_::GetValue( Path, Wording ) )
 			Wordings.Append( Wording );
 		else
 			Wordings.Append( Label( Row ) );
@@ -207,7 +207,7 @@ ERRBegin
 	Path.Append( Text );
 	Path.Append( "\"]" );
 
-	Found = Registry.GetValue( Path, Translation );
+	Found = _registry_::GetValue( Path, Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -229,7 +229,7 @@ ERRBegin
 	Path.Append( Language );
 	Path.Append( "\"]" );
 
-	Found = Registry.GetValue( Path, Translation );
+	Found = _registry_::GetValue( Path, Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -251,7 +251,7 @@ ERRBegin
 	Path.Append( Text );
 	Path.Append( "\"]" );
 
-	Found = Registry.GetValue( Path, Translation );
+	Found = _registry_::GetValue( Path, Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -273,7 +273,7 @@ ERRBegin
 	Path.Append( Language );
 	Path.Append( "\"]" );
 
-	Found = Registry.GetValue( Path, Translation );
+	Found = _registry_::GetValue( Path, Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -305,7 +305,7 @@ void lcl::locale_::GetLanguages(
 {
 	sdr::row__ PathErrorRow = E_NIL;
 
-	Registry.GetValues( str::string( "Languages/Language/@label" ), Labels, &PathErrorRow );
+	_registry_::GetValues( str::string( "Languages/Language/@label" ), Labels, &PathErrorRow );
 
 	_GetCorrespondingLabels( Labels, Wordings );
 

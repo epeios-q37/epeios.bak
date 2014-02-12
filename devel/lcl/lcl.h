@@ -231,7 +231,13 @@ namespace lcl {
 
 	E_AUTO( meaning )
 
-	class locale_ {
+	namespace {
+		typedef rgstry::multi_level_registry_ _registry_;
+	}
+
+	class locale_
+	: public _registry_
+	{
 	private:
 		void _GetCorrespondingLabels(
 			const strings_ &Labels,
@@ -259,21 +265,19 @@ namespace lcl {
 			const char *Language,
 			str::string_ &Translation ) const;
 	public:
-		struct s {
-			rgstry::multi_level_registry_::s Registry;
-		} &S_;
-		rgstry::multi_level_registry_ Registry;
+		struct s
+			: public _registry_::s
+		{};
 		locale_( s &S )
-		: S_( S ),
-		  Registry( S.Registry )
+			: _registry_( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			Registry.reset( P );
+			_registry_::reset( P );
 		}
 		locale_ &operator =( const locale_ &L )
 		{
-			Registry = L.Registry;
+			_registry_::operator =(  L );
 
 			return *this;
 		}
@@ -281,88 +285,7 @@ namespace lcl {
 		{
 			reset();
 
-			Registry.Init();
-		}
-		level__ Push(
-			xtf::extended_text_iflow__ &XFlow,
-			const xpp::criterions___ &Criterions,
-			const char *RootPath,
-			context___ &Context )
-		{
-			level__ Level = Registry.PushEmbeddedLevel();
-
-			if ( Registry.Fill( Level, XFlow, Criterions, RootPath, Context ) != rgstry::sOK )
-				Level = LCL_UNDEFINED_LEVEL;
-
-			return Level;
-		}
-		level__ Push(
-			xtf::extended_text_iflow__ &XFlow,
-			const xpp::criterions___ &Criterions,
-			const char *RootPath )
-		{
-			level__ Level = Registry.PushEmbeddedLevel();
-
-			if ( Registry.Fill( Level, XFlow, Criterions, RootPath ) != rgstry::sOK )
-				Level = LCL_UNDEFINED_LEVEL;
-
-			return Level;
-		}
-		level__ Push(
-			const fnm::name___ &FileName,
-			const xpp::criterions___ &Criterions,
-			const char *RootPath,
-			context___ &Context )
-		{
-			level__ Level = Registry.PushEmbeddedLevel();
-
-			if ( Registry.Fill( Level, FileName, Criterions, RootPath, Context ) != rgstry::sOK )
-				Level = LCL_UNDEFINED_LEVEL;
-
-			return Level;
-		}
-		level__ Push(
-			const fnm::name___ &FileName,
-			const char *RootPath,
-			context___ &Context )
-		{
-			level__ Level = Registry.PushEmbeddedLevel();
-
-			if ( Registry.Fill( Level, FileName, xpp::criterions___(), RootPath, Context ) != rgstry::sOK )
-				Level = LCL_UNDEFINED_LEVEL;
-
-			return Level;
-		}
-		level__ Push(
-			const fnm::name___ &FileName,
-			const xpp::criterions___ &Criterions,
-			const char *RootPath )
-		{
-			level__ Level = Registry.PushEmbeddedLevel();
-
-			if ( Registry.Fill( Level, FileName, Criterions, RootPath ) != rgstry::sOK )
-				Level = LCL_UNDEFINED_LEVEL;
-
-			return Level;
-		}
-		level__ Push(
-			const fnm::name___ &FileName,
-			const char *RootPath )
-		{
-			level__ Level = Registry.PushEmbeddedLevel();
-
-			if ( Registry.Fill( Level, FileName, xpp::criterions___(), RootPath ) != rgstry::sOK )
-				Level = LCL_UNDEFINED_LEVEL;
-
-			return Level;
-		}
-		void Push( const locale_ &Locale )
-		{
-			Registry.Push( Locale.Registry );
-		}
-		level__ Pop( void )
-		{
-			return Registry.Pop();
+			_registry_::Init();
 		}
 		void GetLanguages(
 			strings_ &Labels,

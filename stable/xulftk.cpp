@@ -630,7 +630,7 @@ ERRProlog
 ERRBegin
 	if ( !Trunk.Kernel().Registry().GetValue( frdrgy::ProjectId, ProjectId ) || (  ProjectId.Amount() == 0 ) ) {
 		Translation.Init();
-		Trunk.UI().LogAndPrompt( Trunk.Session().Locale().GetTranslation( XULFTK_NAME "_BadOrNoProjectId", Trunk.Session().Language(), Translation) );
+		Trunk.UI().LogAndPrompt( Trunk.Kernel().Locale().GetTranslation( XULFTK_NAME "_BadOrNoProjectId", Trunk.Kernel().Language(), Translation) );
 
 		ERRAbort();
 	}
@@ -706,6 +706,8 @@ ERRBegin
 		Handle_( Session().FillSetupRegistry( XFlow, xpp::criterions___() ) );
 	}
 ERRErr
+	Session().CloseSession();
+	Kernel().CloseProject();
 ERREnd
 ERREpilog
 }

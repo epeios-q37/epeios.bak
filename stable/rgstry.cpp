@@ -1130,6 +1130,33 @@ ERREnd
 ERREpilog
 }
 #endif
+
+void rgstry::multi_level_registry_::Erase( level__ Level )
+{
+ERRProlog
+	name Name;
+	_entry__ Entry;
+	buffer Buffer;
+ERRBegin
+	Entry.Init();
+	Entries.Recall( Level, Entry );
+
+	if ( Entry.Registry != NULL )
+		ERRFwk();
+
+	Name.Init( EmbeddedRegistry.GetValue( Entry.Root, Buffer ) );
+
+	EmbeddedRegistry.Delete( Entry.Root );
+
+	Entry.Root = EmbeddedRegistry.CreateRegistry( Name );
+
+	Entries.Store( Entry, Level );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 const value_ &rgstry::multi_level_registry_::GetValue(
 	const str::string_ &PathString,
 	bso::bool__ *Missing,

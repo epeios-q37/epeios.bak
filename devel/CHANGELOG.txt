@@ -1,5 +1,9 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
+12/02/2014 :
+	- LCL :
+		- 'locale_' hérite dorénavant de 'rgstry::multi-level_registry_' au lieu de l'inclure.
+
 10/02/2014 :
 	- XPP :
 		- Utilisation de 'env-var' à la place de 'value-of'.

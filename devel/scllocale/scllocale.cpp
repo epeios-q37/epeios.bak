@@ -66,7 +66,7 @@ ERREnd
 ERREpilog
 }
 
-static level__ &GetLevel_( target__ Target )
+static level__ GetLevel_( target__ Target )
 {
 	switch ( Target ) {
 	case tSoftware:
@@ -86,36 +86,25 @@ static level__ &GetLevel_( target__ Target )
 	return *(level__ *)NULL;	// Pour éviter une 'warning'.
 }
 
-static level__ &EraseLocale_( target__ Target )
-{
-	level__ &Level = GetLevel_( Target );
-
-	if ( Level != LCL_UNDEFINED_LEVEL )
-		if ( Locale_.Pop() != Level )
-			ERRFwk();
-
-	return Level;
-}
-
 void scllocale::EraseLocale( target__ Target )
 {
-	EraseLocale_( Target );
+	Locale_.Erase( GetLevel_( Target ) );
 }
 
 static void Load_(
+	level__ Level,
 	xtf::extended_text_iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath,
-	level__ &Level,
 	const char *ErrorLabel )
 {
 ERRProlog
 	rgstry::context___ Context;
 ERRBegin
-	Context.Init();
-	Level = Locale_.Push( Flow, xpp::criterions___( str::string( Directory ) ), RootPath, Context );
+	Locale_.Erase( Level );
 
-	if ( Level == LCL_UNDEFINED_LEVEL )
+	Context.Init();
+	if ( Locale_.Fill( Level, Flow, xpp::criterions___( str::string( Directory ) ), RootPath, Context ) != rgstry::sOK )
 		sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
 ERRErr
 ERREnd
@@ -128,7 +117,6 @@ void scllocale::LoadLocale(
 	const char *Directory,
 	const char *RootPath )
 {
-	level__ &Level = EraseLocale_( Target );
 	const char *ErrorLabel = NULL;
 
 	switch ( Target ) {
@@ -146,7 +134,7 @@ void scllocale::LoadLocale(
 		break;
 	}
 
-	return Load_( Flow, Directory, RootPath, Level, ErrorLabel );
+	return Load_( GetLevel_( Target ), Flow, Directory, RootPath, ErrorLabel );
 }
 
 /* Although in theory this class is inaccessible to the different modules,
@@ -157,9 +145,13 @@ class scllocalepersonnalization
 public:
 	scllocalepersonnalization( void )
 	{
+		Locale_.Init();
+
+		SoftwareLevel_ = Locale_.PushEmbeddedLevel( rgstry::name( "Software" ) );
+		ConfigurationLevel_ = Locale_.PushEmbeddedLevel( rgstry::name( "Configuration" ) );
+		ProjectLevel_ = Locale_.PushEmbeddedLevel( rgstry::name( "Project" ) );
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
-		Locale_.Init();
 }
 	~scllocalepersonnalization( void )
 	{

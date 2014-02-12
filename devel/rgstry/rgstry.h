@@ -1514,11 +1514,12 @@ namespace rgstry {
 				Level = Registry.Next( Level );
 			}
 		}
+		void Erase( level__ Level );
 		level__ Pop( void )
 		{
 			level__ Level = Entries.Last();
 
-			if ( Entries.Top().Registry == &EmbeddedRegistry )
+			if ( Entries.Top().Registry == NULL )
 				EmbeddedRegistry.Delete( Entries.Top().Root );
 
 			Entries.Pop();

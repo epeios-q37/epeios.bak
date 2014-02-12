@@ -72,11 +72,7 @@ static rgstry::status__ FillConfigurationRegistry_(
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	Registry_.Init();
-	ConfigurationLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Configuration" ) );
-
-	if ( ConfigurationLevel_ == RGSTRY_UNDEFINED_LEVEL )
-		ERRFwk();
+	Registry_.Erase( ConfigurationLevel_ );
 
 	return  Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( str::string( Directory ) ), RootPath );
 }
@@ -124,15 +120,11 @@ void sclrgstry::LoadConfiguration(
 ERRProlog
 	rgstry::context___ Context;
 ERRBegin
-	Context.Init();
+	Registry_.Erase( ConfigurationLevel_ );
 
+	Context.Init();
 	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
-
-	if ( ProjectLevel_ != RGSTRY_UNDEFINED_LEVEL )
-		ERRFwk();
-
-	ProjectLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Project" ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -140,11 +132,7 @@ ERREpilog
 
 void sclrgstry::EraseProject( void )
 {
-	if ( ProjectLevel_ != RGSTRY_UNDEFINED_LEVEL )
-		if ( Registry_.Pop() != ProjectLevel_ )
-			ERRFwk();
-
-	ProjectLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Project" ) );
+	Registry_.Erase( ProjectLevel_ );
 }
 
 
@@ -479,6 +467,11 @@ class sclrgstrypersonnalization
 public:
 	sclrgstrypersonnalization( void )
 	{
+		Registry_.Init();
+
+		ConfigurationLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Configuration" ) );
+		ProjectLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Project" ) );
+
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
