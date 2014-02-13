@@ -73,36 +73,6 @@ namespace xulfsf {
 
 	typedef nsxpcm::ui_core__ _ui_core__;
 
-	class broadcasters__ {
-	public:
-		broadcaster__
-			bdcNoBackend,
-			bdcPredefinedBackend,
-			bdcDaemonBackend,
-			bdcEmbeddedBackend,
-			bdcEmbeddedBackendSelection,
-			bdcAuthentication;
-		void reset( bso::bool__ P = true )
-		{
-			bdcNoBackend.reset( P );
-			bdcPredefinedBackend.reset( P );
-			bdcDaemonBackend.reset( P );
-			bdcEmbeddedBackend.reset( P );
-			bdcEmbeddedBackendSelection.reset( P );
-			bdcAuthentication.reset( P );
-		}
-		E_CVDTOR( broadcasters__ );
-		void Init( void )
-		{
-			bdcNoBackend.Init();
-			bdcPredefinedBackend.Init();
-			bdcDaemonBackend.Init();
-			bdcEmbeddedBackend.Init();
-			bdcEmbeddedBackendSelection.Init();
-			bdcAuthentication.Init();
-		}
-	};
-
 	class widgets__ {
 	public:
 		menulist__ mnlBackendType;
@@ -156,7 +126,6 @@ namespace xulfsf {
 	protected:
 		virtual xulftk::trunk___ &XULFSFTrunk( void ) const = 0;
 	public:
-		broadcasters__ &Broadcasters;
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
 		{
@@ -164,11 +133,8 @@ namespace xulfsf {
 			_ui_core__::reset( P );
 		}
 		E_VDTOR( session_form__ )
-		session_form__(
-			broadcasters__ &Broadcasters,
-			widgets__ &Widgets )
-		: Broadcasters( Broadcasters ),
-		  Widgets( Widgets )
+		session_form__( widgets__ &Widgets )
+		: Widgets( Widgets )
 		{
 			reset( false );
 		}

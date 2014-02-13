@@ -104,7 +104,7 @@ ERREpilog
 
 bso::bool__ HideUnusedBackendSelectionMode_( 
 	const rgstry::multi_level_registry_ &Registry,
-	broadcasters__ &Broadcasters )
+	xml::writer_ &Digest )
 {
 	bso::bool__ Success = true;
 	bso::bool__ Embedded = false, Daemon = false;
@@ -121,10 +121,21 @@ bso::bool__ HideUnusedBackendSelectionMode_(
 		break;
 	}
 
-	Broadcasters.bdcEmbeddedBackend.Show( Embedded );
-	Broadcasters.bdcDaemonBackend.Show( Daemon );
-	Broadcasters.bdcPredefinedBackend.Show();	// A minima, celui-ci est toujours affiché.
-	Broadcasters.bdcNoBackend.Show();			// A minima, celui-ci est toujours affiché.
+	Digest.PushTag( "EmbeddedBackend" );
+	Digest.PutAttribute( "Available", Embedded ? "yes" : "no" );
+	Digest.PopTag();
+
+	Digest.PushTag( "DaemonBackend" );
+	Digest.PutAttribute( "Available", Daemon ? "yes" : "no" );
+	Digest.PopTag();
+
+	Digest.PushTag( "PredefinedBackend" );
+	Digest.PutAttribute( "Available", "yes"  );		// A minima, toujours disponible.
+	Digest.PopTag();
+
+	Digest.PushTag( "NoBackend" );
+	Digest.PutAttribute( "Available", "yes" );		// A minima, toujours disponible.
+	Digest.PopTag();
 
 	return Success;
 
@@ -132,7 +143,7 @@ bso::bool__ HideUnusedBackendSelectionMode_(
 
 void HandleAuthenticationSubForm_(
 	const frdkrn::registry_ &Registry,
-	broadcasters__ &Broadcasters,
+	xml::writer_ &Digest,
 	widgets__ &Widgets )
 {
 ERRProlog
@@ -166,7 +177,10 @@ ERRBegin
 
 	Widgets.txbLogin.SetValue( Login );
 	Widgets.txbPassword.SetValue( Password );
-	Broadcasters.bdcAuthentication.Disable( Disable );
+
+	Digest.PushTag( "Authentication" );
+	Digest.PutAttribute( "Available", Disable ? "no" : "yes" );
+	Digest.PopTag();
 ERRErr
 ERREnd
 ERREpilog
@@ -241,10 +255,10 @@ ERRBegin
 
 	Translation.Init();
 
-	if ( !HideUnusedBackendSelectionMode_( Trunk.Kernel().Registry(), Broadcasters ) )
+	if ( !HideUnusedBackendSelectionMode_( Trunk.Kernel().Registry(), Digest ) )
 		Trunk.UI().LogAndPrompt( Trunk.Kernel().GetTranslation( XULFSF_NAME "_BadValueForBackendSelectionMode", Translation ) );
 
-	HandleAuthenticationSubForm_( Trunk.Kernel().Registry(), Broadcasters, Widgets );
+	HandleAuthenticationSubForm_( Trunk.Kernel().Registry(), Digest, Widgets );
 
 	FillPredefinedBackendsWidget_( Trunk );
 #if 0
@@ -253,19 +267,15 @@ ERRBegin
 #endif
 	switch ( _BackendExtendedType ) {
 	case frdkrn::bxtNone:
-		Broadcasters.bdcNoBackend.Show();
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniNoBackend );
 		break;
 	case frdkrn::bxtPredefined:
-		Broadcasters.bdcPredefinedBackend.Show();
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniPredefinedBackend );
 		break;
 	case frdkrn::bxtDaemon:
-		Broadcasters.bdcDaemonBackend.Show();
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniDaemonBackend );
 		break;
 	case frdkrn::bxtEmbedded:
-		Broadcasters.bdcEmbeddedBackend.Show();
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniEmbeddedBackend );
 		break;
 	default:
@@ -299,26 +309,6 @@ ERREpilog
 }
 #endif
 
-static void Register_(
-	trunk___ &Trunk,
-	broadcaster__ &Broadcaster,
-	const char *Id )
-{
-	Broadcaster.Attach( nsxpcm::supports__( Trunk.UI().SessionForm().Window(), Id ) );
-}
-
-#define R( name ) Register_( Trunk, Broadcasters.name, #name );
-static void Register_(
-	trunk___ &Trunk,
-	broadcasters__ &Broadcasters )
-{
-	R( bdcNoBackend );
-	R( bdcPredefinedBackend );
-	R( bdcDaemonBackend );
-	R( bdcEmbeddedBackend );
-	R( bdcEmbeddedBackendSelection );
-	R( bdcAuthentication );
-}
 
 static void Register_(
 	trunk___ &Trunk,
@@ -369,7 +359,6 @@ void xulfsf::session_form__::Register( nsIDOMWindow *Window )
 
 	_ui_core__::Attach( Window );
 
-	Register_( Trunk, Trunk.UI().SessionForm().Broadcasters );
 	Register_( Trunk, Trunk.UI().SessionForm().Widgets );
 
 	Attach_( Trunk.UI().EventHandlers.SF, Trunk.UI().SessionForm().Document() );

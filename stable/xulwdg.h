@@ -132,7 +132,6 @@ namespace xulwdg {
 # define XULWDG__W( widget )	XULWDG__WN( widget, widget )
 
 	XULWDG__WN( widget, box );
-	XULWDG__W( broadcaster );
 	XULWDG__W( button );
 	XULWDG__W( checkbox );
 	XULWDG__W( deck );

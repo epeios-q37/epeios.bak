@@ -56,14 +56,6 @@ void ui_ssn_frm::session_form__::Init( trunk___ &Trunk )
 	_trunk_depot__::Init( Trunk );
 }
 
-
-static void Register_(
-	trunk___ &Trunk,
-	session_form__::broadcasters__ &Broadcasters,
-	nsIDOMWindow *Window )
-{
-}
-
 static void Register_(
 	trunk___ &Trunk,
 	session_form__::widgets__ &Widgets,
@@ -77,6 +69,5 @@ void ui_ssn_frm::session_form__::Register( nsIDOMWindow *Window )
 
 	_session_form__::Register( Window );
 
-	Register_( Trunk(), Trunk().UI().SessionForm.Broadcasters, Window );
 	Register_( Trunk(), Trunk().UI().SessionForm.Widgets, Window );
 }

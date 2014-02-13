@@ -51,9 +51,6 @@ namespace ui_ssn_frm {
 	protected:
 		xulftk::trunk___ &XULFSFTrunk( void ) const;
 	public:
-		struct broadcasters__
-		: public xulfsf::broadcasters__
-		{} Broadcasters;
 		struct widgets__
 		: public xulfsf::widgets__
 		{} Widgets;
@@ -65,7 +62,7 @@ namespace ui_ssn_frm {
 		}
 		E_VDTOR( session_form__ )
 		session_form__( void )
-		: _session_form__( Broadcasters, Widgets )
+		: _session_form__( Widgets )
 		{}
 		void Init( trunk::trunk___ &Trunk );
 		void Attach( nsIDOMWindow *Window )

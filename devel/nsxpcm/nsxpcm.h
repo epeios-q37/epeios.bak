@@ -2377,10 +2377,6 @@ namespace nsxpcm {
 #endif
 	};
 
-	class broadcaster__
-	: public _widget__<nsIDOMElement>
-	{};
-
 	class command__
 	: public _widget__<nsIDOMElement>
 	{};

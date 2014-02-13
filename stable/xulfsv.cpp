@@ -68,14 +68,6 @@ void xulfsv::session_view__::GetDigest( xml::writer_ & )
 
 static void Register_(
 	trunk___ &Trunk,
-	broadcaster__ &Broadcaster,
-	const char *Id )
-{
-	Broadcaster.Attach( nsxpcm::supports__( Trunk.UI().SessionForm().Window(), Id ) );
-}
-
-static void Register_(
-	trunk___ &Trunk,
 	xulfbs::event_handler__<xulftk::trunk___> &EventHandler,
 	const char *Id )
 {

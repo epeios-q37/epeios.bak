@@ -1,5 +1,11 @@
 $Id: CHANGELOG.txt,v 1.934 2013/07/19 14:54:33 csimon Exp $
 
+13/02/20014 :
+	- NSXPCM :
+		- Suppression du typ 'broacaster__', rendu obsolète par leur gestion par XSL.
+	- XULF..., XULWDG :
+		- Adaptation.
+
 12/02/2014 :
 	- LCL :
 		- 'locale_' hérite dorénavant de 'rgstry::multi-level_registry_' au lieu de l'inclure.

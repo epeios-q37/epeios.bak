@@ -127,7 +127,6 @@ namespace xulfbs {
 # define XULFBS__W( widget )	XULFBS__WN( widget, widget )
 
 	XULFBS__WN( widget, box );
-	XULFBS__W( broadcaster );
 	XULFBS__W( button );
 	XULFBS__W( checkbox );
 	XULFBS__W( deck );
@@ -433,7 +432,6 @@ namespace xulfbs {
 /* Manque 'autocomplete_textbox__', car surchargé dans autre bibliothèque.*/
 # define XULFBS_ALMOST_ALL_WIDGETS( target )\
 	XULFBS_WIDGET( box )\
-	XULFBS_WIDGET( broadcaster )\
 	XULFBS_WIDGET( button )\
 	XULFBS_WIDGET( checkbox )\
 	XULFBS_WIDGET( deck )\
