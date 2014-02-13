@@ -220,11 +220,6 @@ namespace xulfbs {
 	  public _wp_core__,
 	  public _trunk_depot__<trunk>
 	{
-	protected:
-		virtual xulftk::trunk___ &_Trunk( void ) const
-		{
-			return Trunk();
-		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -440,7 +435,7 @@ namespace xulfbs {
 	XULFBS_WIDGET( menu )\
 	XULFBS_WIDGET( menulist )\
 	XULFBS_WIDGET( menuitem )\
-//	XULFBS_WIDGET( page )\	// PArce queil' n"crssite un 'trunk'.
+	XULFBS_WIDGET( page )\
 	XULFBS_WIDGET( radio )\
 	XULFBS_WIDGET( radiogroup )\
 	XULFBS_WIDGET( tabs )\
@@ -448,7 +443,7 @@ namespace xulfbs {
 	XULFBS_WIDGET( textbox )\
 	XULFBS_WIDGET( tree )\
 	XULFBS_WIDGET( widget )\
-// XULFBS_WIDGET( window )	// PArce qu'il nécessite un 'trunk'.
+	XULFBS_WIDGET( window )
 
 
 

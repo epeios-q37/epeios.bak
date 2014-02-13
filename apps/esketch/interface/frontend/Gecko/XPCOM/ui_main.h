@@ -61,7 +61,7 @@ namespace ui_main {
 
 	class main__
 	: public _main__,
-	  public _window__
+	  public window__
 	{
 	private:
 		refresh_callback__ _Callback;
@@ -73,7 +73,7 @@ namespace ui_main {
 		void reset( bso::bool__ P = true )
 		{
 			_main__::reset( P );
-			_window__::reset( P );
+			window__::reset( P );
 			_Callback.reset( P );
 
 			Widgets.reset( P );

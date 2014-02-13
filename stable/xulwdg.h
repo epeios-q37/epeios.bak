@@ -189,7 +189,7 @@ namespace xulwdg {
 		{
 			// Standardisation.
 		}
-		void Refresh( void );
+		//void Refresh( void );
 	};
 
 
@@ -319,7 +319,6 @@ namespace xulwdg {
 /* Manque 'autocomplete_textbox__', car surchargé dans autre bibliothèque.*/
 # define XULWDG_ALMOST_ALL_WIDGETS( target )\
 	XULWDG_WIDGET( box, target )\
-	XULWDG_WIDGET( broadcaster, target )\
 	XULWDG_WIDGET( button, target )\
 	XULWDG_WIDGET( checkbox, target )\
 	XULWDG_WIDGET( deck, target )\

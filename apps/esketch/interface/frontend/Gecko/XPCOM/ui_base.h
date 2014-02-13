@@ -29,16 +29,17 @@ namespace trunk {
 	class trunk___;
 };
 
+/*
 # define UI_SWIDGET( widget, name )	XULWDG_SWIDGET( ui_base::widget, name )
 # define UI_UWIDGET( widget, name )	XULWDG_UWIDGET( ui_base::widget, name )
 
 # define UI_WINDOW( name )		UI_SWIDGET( window__, name )
 # define UI_COMMAND( name )		UI_SWIDGET( command__, name )
-# define UI_BROADCASTER( name )	UI_UWIDGET( broadcaster__, name )
+*/
 
 # define UI_DEF\
-		using ui_base::_window__;\
-		using ui_base::_page__;\
+		using ui_base::window__;\
+		using ui_base::page__;\
 		using ui_base::_refresh_callback__
 
 namespace ui_base {
@@ -52,12 +53,12 @@ namespace ui_base {
 	};
 
 	typedef xulfbs::event_handler__<trunk::trunk___> _event_handler__;
-
+	/*
 	typedef xulfbs::window__<trunk::trunk___> _window__;
 	typedef xulfbs::page__<trunk::trunk___> _page__;
-
+	*/
 	typedef xulfbs::refresh_callback__<trunk::trunk___> _refresh_callback__;
-
+	
 	class event_handler__
 	: public _event_handler__
 	{
