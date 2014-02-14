@@ -33,6 +33,16 @@ using nsxpcm::event__;
 
 # define DIGEST_TARGET	UI_SSN_FRM_AFFIX
 
+const char *ui_ssn_frm::session_form__::XULFBSGetDigest( xml::writer_ &Digest )
+{
+	if ( _session_form__::XULFBSGetDigest( Digest ) != NULL )
+		ERRFwk();
+
+	return DIGEST_TARGET;
+}
+
+
+
 const char *ui_ssn_frm::refresh_callback__::XULFBSRefresh( xml::writer_ &Digest )
 {
 	ui::PushDigestRootTag( DIGEST_TARGET, Digest );

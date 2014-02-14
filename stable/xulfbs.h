@@ -38,6 +38,8 @@
 
 # include "geckoo.h"
 
+# include "xulwdg.h"
+
 // Predeclarations
 namespace xulftk {
 	class trunk___;
@@ -53,73 +55,8 @@ namespace xulfbs {
 		xulftk::trunk___ &Trunk,
 		const char *Message );
 
-	template <typename trunk> class _trunk_depot__
-	{
-	private:
-		trunk *_Trunk;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_Trunk = NULL;
-		}
-		E_CVDTOR( _trunk_depot__ );
-		void Init( trunk &Trunk )
-		{
-			_Trunk = &Trunk;
-		}
-		trunk &Trunk( void ) const
-		{
-			if ( _Trunk == NULL )
-				ERRFwk();
-
-			return *_Trunk;
-		}
-	};
-
-	typedef nsxpcm::event_handler__ _event_handler__;
-
-	template <typename trunk> class event_handler__
-	: public _event_handler__,
-	  public _trunk_depot__<trunk>
-	{
-	protected:
-		virtual void NSXPCMOnErr( const char *Message )
-		{
-			_Report( Trunk(), Message );
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_event_handler__::reset( P );
-			_trunk_depot__<trunk>::reset( P );
-		}
-		E_CVDTOR( event_handler__ );
-		void Init( trunk &Trunk )
-		{
-			_event_handler__::Init();
-			_trunk_depot__<trunk>::Init( Trunk );
-		}
-		void Add(
-			nsISupports *Supports,
-			int Events )
-		{
-			_event_handler__::Add( Supports, Events);
-		}
-		void Add(
-			nsIDOMWindow *Window,
-			const str::string_ &Id,
-			int Events )
-		{
-			Add( nsxpcm::GetElementById( nsxpcm::GetDocument( Window ), Id ), Events );
-		}
-		void Add(
-			nsIDOMWindow *Window,
-			const char *Id,
-			int Events )
-		{
-			Add( Window, str::string( Id ), Events );
-		}
-	};
+	template <typename trunk> E_TTCLONE__( xulwdg::event_handler__<trunk>, _event_handler__ );
+//	template <typename trunk> E_TTCLONE__( xulwdg::_trunk_depot__<trunk>, _trunk_depot__ );
 
 # define XULFBS__WN( widget, name )\
 	typedef nsxpcm::widget##__ name##__;
@@ -145,101 +82,87 @@ namespace xulfbs {
 	XULFBS__W( widget );
 	// XULFBS__W( window );	// Définit explicitement à cause de 'XULWDGRefresh(...)'.
 
-	class _refresh_callback__
-	{
-	protected:
-		virtual const char *XULFBSRefresh( xml::writer_ &Digest ) = 0;
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( _refresh_callback__ );
-		void Init( void )
-		{
-			// Standardisation.
-		}
-		const char *Refresh( xml::writer_ &Digest )
-		{
-			return XULFBSRefresh( Digest );
-		}
-	};
-
 	class _wp_core__
 	{
 	private:
 		nsIDOMDocument *_Document;
-		nsIDOMElement *_Broadcasterset;
-		_refresh_callback__ *_Callback;
+		nsIDOMElement *_Broadcasters;
 	protected:
-		virtual xulftk::trunk___ &_Trunk( void ) const = 0;
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest ) = 0;	// Retourne l'affixe du fichier XSL.
+		const char *Refresh(
+			nsIDOMDocument *&Document,
+			nsIDOMElement *&Broadcasters,
+			xml::writer_ &Digest )
+		{
+			Document = _Document;
+			Broadcasters = _Broadcasters;
+
+			return XULFBSGetDigest( Digest );
+		}
 	public:
 		void reset( bso::bool__ = true )
 		{
 			_Document = NULL;
-			_Broadcasterset = NULL;
-			_Callback = NULL;
+			_Broadcasters = NULL;
 		}
 		E_CVDTOR( _wp_core__ );
-		void Init( _refresh_callback__ &Callback )
+		void Init( void )
 		{
 			_Document = NULL;
-			_Broadcasterset = NULL;
-			_Callback = &Callback;
+			_Broadcasters = NULL;
 		}
 		void Attach( nsIDOMDocument *Document )
 		{
 			_Document = Document;
-			_Broadcasterset = nsxpcm::GetElementById( Document, "bcsAvailability" );
-		}
-		void Refresh( void );
-	};
-
-	template <typename trunk> class refresh_callback__
-	: public _refresh_callback__,
-	  public _trunk_depot__<trunk>
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_refresh_callback__::reset( P );
-			_trunk_depot__<trunk>::reset( P );
-		}
-		E_CVDTOR( refresh_callback__ );
-		void Init( trunk &Trunk )
-		{
-			_refresh_callback__::Init();
-			_trunk_depot__<trunk>::Init( Trunk );
+			_Broadcasters = nsxpcm::GetElementById( Document, "bcsAvailability" );
 		}
 	};
 
-	typedef nsxpcm::window__ _window__;
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulwdg::window__<trunk>, _window__ );
+	}
 
 	template <typename trunk> class window__
-	: public _window__,
-	  public _wp_core__,
-	  public _trunk_depot__<trunk>
+	: public _window__<trunk>,
+	  public _wp_core__
 	{
+	protected:
+		virtual void XULWDGRefresh(
+			nsIDOMDocument *&Document,
+			nsIDOMElement *&Broadcasters,
+			xml::writer_ &Digest,
+			str::string_ &XSLFileName )
+		{
+			Digest.PushTag( "Availabilities" );
+
+			const char *XSLFileNameAffix = _wp_core__::Refresh( Document, Broadcasters, Digest );
+
+			Digest.PopTag();
+
+			Trunk().BuildXSLFileName( XSLFileNameAffix, XSLFileName );
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_window__::reset( P );
+			xulfbs::_window__<trunk>::reset( P );
 			_wp_core__::reset( P );
 			_trunk_depot__<trunk>::reset( P );
 		}
 		E_CVDTOR( window__ );
-		void Init(
-			_refresh_callback__ &Callback,
-			trunk &Trunk )
+		void Init( trunk &Trunk )
 		{
-			_window__::Init();
-			_wp_core__::Init( Callback );
+			_window__<trunk>::Init( Trunk );
+			_wp_core__::Init();
 			_trunk_depot__<trunk>::Init( Trunk );
 		}
 		void Attach( nsIDOMWindow *Window )
 		{
-			_window__::Attach( nsxpcm::supports__( Window ) );
+			_window__<trunk>::Attach( nsxpcm::supports__( Window ) );
 			_wp_core__::Attach( nsxpcm::GetDocument( Window )  );
+		}
+		void Refresh( void )
+		{
+			_window__<trunk>::Refresh();
 		}
 	};
 
@@ -247,8 +170,7 @@ namespace xulfbs {
 
 	template <typename trunk> class page__
 	: public _page__,
-	  public _wp_core__,
-	  public _trunk_depot__<trunk>
+	  public _wp_core__
 	{
 	protected:
 		virtual xulftk::trunk___ &_Trunk( void ) const
@@ -260,16 +182,12 @@ namespace xulfbs {
 		{
 			_page__::reset( P );
 			_wp_core__::reset( P );
-			_trunk_depot__<trunk>::reset( P );
 		}
 		E_CVDTOR( page__ );
-		void Init(
-			_refresh_callback__ &Callback,
-			trunk &Trunk )
+		void Init( trunk &Trunk )
 		{
 			_page__::Init();
 			_wp_core__::Init( Callback );
-			_trunk_depot__<trunk>::Init( Trunk );
 		}
 		void Attach( nsIDOMWindow *Window )
 		{
@@ -284,10 +202,11 @@ namespace xulfbs {
 
 # define XULFBS_EH( name )\
 	class name\
-	: public xulfbs::event_handler__<xulftk::trunk___>\
+	: public xulfbs::_event_handler__<xulftk::trunk___>\
 	{\
 	protected:\
-		virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
+	virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
+	virtual void NSXPCMOnErr( const char *Message );\
 	};
 
 	typedef nsxpcm::autocomplete_textbox_callback__ _autocomplete_textbox_callback__;
@@ -408,6 +327,7 @@ namespace xulfbs {
 		}
 	};
 
+/*
 	inline void PushDigestRootTag(
 		const char *Target,
 		xml::writer_ &Digest )	// Ne pas oublier de faire un 'PopTag'...
@@ -415,7 +335,7 @@ namespace xulfbs {
 		Digest.PushTag( "Availabilities" );
 		Digest.PutAttribute( "Target", Target );
 	}
-
+*/
 	inline void _PushDigestTag( xml::writer_ &Digest )	// Ne pas oublier de faire un 'PopTag'...
 	{
 		Digest.PushTag( "Epeios" );

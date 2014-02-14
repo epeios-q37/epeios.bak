@@ -60,61 +60,6 @@ void xulfbs::_Report(
 	}
 }
 
-static void UpdateAccessibility_(
-	const str::string_ &XMLDigest,
-	nsIDOMElement *Broadcasters,
-	nsIDOMDocument *Document,
-	const str::string_ &XSLFileName )
-{
-	nsxpcm::RemoveChildren( Broadcasters );
-
-	nsIDOMDocumentFragment *Fragment = nsxpcm::XSLTransformByFileName( XMLDigest, XSLFileName, Document, nsxpcm::xslt_parameters() );
-	
-	nsxpcm::AppendChild( Broadcasters, Fragment );
-
-	nsxpcm::RefreshObservers( Document );
-}
-
-
-void xulfbs::_wp_core__::Refresh( void )
-{
-ERRProlog
-	str::string XMLDigest;
-	const char *XSLFileNameAffix = NULL;
-	str::string XSLFileName;
-	flx::E_STRING_OFLOW___ Flow;
-	txf::text_oflow__ TFlow;
-	xml::writer Writer;
-ERRBegin
-	XSLFileName.Init();
-	XMLDigest.Init();
-	Flow.Init( XMLDigest );
-	TFlow.Init( Flow );
-	Writer.Init( TFlow, xml::oIndent, xml::e_Default );
-
-	if ( _Callback == NULL )
-		ERRFwk();
-
-	if ( ( XSLFileNameAffix = _Callback->Refresh( Writer ) ) == NULL )
-		ERRReturn;
-
-	XSLFileName.Init();
-
-	_Trunk().BuildXSLDigestFileName( XSLFileNameAffix, XSLFileName );
-
-	Writer.reset();
-	TFlow.reset();
-	Flow.reset();
-
-	UpdateAccessibility_( XMLDigest, _Broadcasterset, _Document, XSLFileName );
-
-	nsxpcm::Log( XMLDigest );
-	nsxpcm::Log( XSLFileName );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 

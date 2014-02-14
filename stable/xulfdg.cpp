@@ -64,9 +64,8 @@ using namespace xulftk;
 
 #define DIGEST_TARGET	XULFDG_AFFIX
 
-const char *xulfdg::refresh_callback__::XULFBSRefresh( xml::writer_ &Digest )
+const char *xulfdg::debug_dialog__::XULFBSGetDigest( xml::writer_ &Digest )
 {
-	xulfbs::PushDigestRootTag( DIGEST_TARGET, Digest );
 	xulfbs::_PushDigestTag( Digest );
 
 	Digest.PushTag( "IsConnected" );
@@ -118,7 +117,7 @@ ERREpilog
 
 static void Register_(
 	trunk___ &Trunk,
-	xulfbs::event_handler__<xulftk::trunk___> &EventHandler,
+	xulwdg::event_handler__<xulftk::trunk___> &EventHandler,
 	const char *Id )
 {
 	EventHandler.Init( Trunk );

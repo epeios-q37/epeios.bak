@@ -77,20 +77,11 @@ namespace xulfdg {
 	XULFBS_EH( frontend_error_eh__ );
 	XULFBS_EH( backend_error_eh__ );
 
-	typedef xulfbs::refresh_callback__<xulftk::trunk___> _refresh_callback__;
-
-	class refresh_callback__
-	: public _refresh_callback__
-	{
-	protected:
-		virtual const char *XULFBSRefresh( xml::writer_ &Digest );
-	};
-
 	struct debug_dialog__
 	: public _window__
 	{
-	private:
-		refresh_callback__ _Callback;
+	protected:
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
 	public:
 		struct event_handlers__ {
 			jsconsole_eh__ ehJSConsole;
@@ -101,28 +92,18 @@ namespace xulfdg {
 		void reset( bso::bool__ P = true )
 		{
 			_window__::reset( P );
-			_Callback.reset( P );
-			// Rajouter le 'reset(P)' sur 'Broadcasters' et 'EventHandlers'.
 		}
 		void Init( xulftk::trunk___ &Trunk )
 		{
-			_Callback.Init( Trunk );
-			_window__::Init( _Callback, Trunk );
-			// Rajouter le 'Init()' sur 'Broadcasters' et 'EventHandlers'.
+			_window__::Init( Trunk );
 		}
 		void Register( nsIDOMWindow *Window );
-		void ExtractSelectedDatabase( void );
+//		void ExtractSelectedDatabase( void );
 		void Close( void )
 		{
 			_window__::Close();
-//			nsxpcm::Close( Window() );
-//			Widgets.reset();
 		}
-
 	};
-
-
-
 }
 
 /*$END$*/

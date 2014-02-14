@@ -34,30 +34,20 @@ namespace ui_ssn_vew {
 
 	UI_DEF;
 
-	class refresh_callback__
-	: public _refresh_callback__
-	{
-	protected:
-		virtual const char *XULFBSRefresh( xml::writer_ &Digest );
-	};
-
 	struct session_view__
 	: public _session_view__,
-	  public _page__
+	  public _page___
 	{
-	private:
-		refresh_callback__ _Callback;
 	protected:
-		virtual xulftk::trunk___ &XULFSVTrunk( void ) const;
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
 	public:
 		struct widgets__
 		: public xulfsv::widgets__
 		{} Widgets;
 		void reset( bso::bool__ P = true )
 		{
-			_Callback.reset( P );
 			_session_view__::reset(  P);
-			_page__::reset( P );
+			_page___::reset( P );
 		}
 		E_VDTOR( session_view__ )
 		session_view__( void )

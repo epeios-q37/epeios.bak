@@ -38,9 +38,8 @@ namespace trunk {
 */
 
 # define UI_DEF\
-		using ui_base::window__;\
-		using ui_base::page__;\
-		using ui_base::_refresh_callback__
+		typedef ui_base::window___ _window___;\
+		typedef ui_base::page___ _page___;
 
 namespace ui_base {
 
@@ -52,12 +51,11 @@ namespace ui_base {
 		d_Undefined
 	};
 
-	typedef xulfbs::event_handler__<trunk::trunk___> _event_handler__;
+	typedef xulwdg::event_handler__<trunk::trunk___> _event_handler__;
 	/*
 	typedef xulfbs::window__<trunk::trunk___> _window__;
 	typedef xulfbs::page__<trunk::trunk___> _page__;
 	*/
-	typedef xulfbs::refresh_callback__<trunk::trunk___> _refresh_callback__;
 	
 	class event_handler__
 	: public _event_handler__
@@ -68,6 +66,10 @@ namespace ui_base {
 
 	XULFBS_ALMOST_ALL_WIDGETS( trunk::trunk___ )
 
+	typedef ui_base::window__<trunk::trunk___> window___; \
+	typedef ui_base::page__<trunk::trunk___> page___;
+
+
 # define UI_BASE_EH( name )\
 	class name\
 	: public ui_base::event_handler__\
@@ -75,8 +77,6 @@ namespace ui_base {
 	protected:\
 		virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
 	};
-
-	using xulfbs::PushDigestRootTag;
 };
 
 #endif

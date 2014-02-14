@@ -68,10 +68,6 @@ extern class ttr_tutor &XULFSVTutor;
 namespace xulfsv {
 	using namespace xulfbs;
 
-	typedef nsxpcm::ui_core__ _ui_core__;
-
-	typedef xulfbs::_trunk_depot__<xulftk::trunk___ >_trunk_depot__;
-
 	// Standardisation.
 	class widgets__
 	{
@@ -86,8 +82,6 @@ namespace xulfsv {
 	struct session_view__
 	: public _ui_core__
 	{
-	protected:
-		virtual xulftk::trunk___ &XULFSVTrunk( void ) const = 0;
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )

@@ -189,12 +189,13 @@ namespace xulwdg {
 		{
 			// Standardisation.
 		}
-		//void Refresh( void );
+		void Refresh( void );
 	};
 
 
-
-	typedef nsxpcm::window__ _window__;
+	namespace {
+		typedef nsxpcm::window__ _window__;
+	}
 
 	template <typename trunk> class window__
 	: public _window__,
@@ -209,12 +210,10 @@ namespace xulwdg {
 			_wp_core__::reset( P );
 		}
 		E_CVDTOR( window__ );
-		void Init(
-			trunk &Trunk,
-			const nsxpcm::supports__ &Supports )
+		void Init( trunk &Trunk )
 		{
 			_trunk_depot__<trunk>::Init( Trunk );
-			_window__::Init( Supports );
+			_window__::Init();
 			_wp_core__::Init();
 		}
 	};

@@ -68,7 +68,7 @@ void xulfsv::session_view__::GetDigest( xml::writer_ & )
 
 static void Register_(
 	trunk___ &Trunk,
-	xulfbs::event_handler__<xulftk::trunk___> &EventHandler,
+	xulwdg::event_handler__<xulftk::trunk___> &EventHandler,
 	const char *Id )
 {
 	EventHandler.Init( Trunk );
@@ -91,9 +91,7 @@ static void Register_(
 
 void xulfsv::session_view__::Register( nsIDOMWindow *Window )
 {
-	xulftk::trunk___ &Trunk = XULFSVTrunk();
-
-	Register_( Trunk, Trunk.UI().SessionView().Widgets );
+	Register_( Trunk(), Trunk().UI().SessionView().Widgets );
 }
 
 

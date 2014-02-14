@@ -63,13 +63,11 @@ using xulftk::trunk___;
 
 using namespace xulfmn;
 
-void xulfmn::main__::GetDigest( xml::writer_ &Digest )
+const char *xulfmn::main__::XULFBSGetDigest( xml::writer_ &Digest )
 {
-	xulftk::trunk___ &Trunk = XULFMNTrunk();
-
 	xulfbs::_PushDigestTag( Digest );
 	Digest.PushTag( "ProjectInProgress" );
-	Digest.PutValue( Trunk.Kernel().IsProjectInProgress() ? "true" : "false" );
+	Digest.PutValue( Trunk().Kernel().IsProjectInProgress() ? "true" : "false" );
 	Digest.PopTag();
 	Digest.PopTag();
 }
@@ -200,12 +198,10 @@ static void Register_(
 
 void xulfmn::main__::Register( nsIDOMWindow *Window )
 {
-	xulftk::trunk___ &Trunk = XULFMNTrunk();
+	Register_( Widgets, Trunk() );
+	Register_( Trunk().UI().EventHandlers.M, Trunk().UI().Main().Document() );
 
-	Register_( Widgets, Trunk );
-	Register_( Trunk.UI().EventHandlers.M, Trunk.UI().Main().Document() );
-
-	Trunk.UI().EventHandlers.M.Exit.Add( Window, nsxpcm::efClose ); // Parce que 'xex:onclose=...' est inopérant sur 'window'.
+	Trunk().UI().EventHandlers.M.Exit.Add( Window, nsxpcm::efClose ); // Parce que 'xex:onclose=...' est inopérant sur 'window'.
 }
 
 

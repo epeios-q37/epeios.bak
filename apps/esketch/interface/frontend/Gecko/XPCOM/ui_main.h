@@ -50,31 +50,21 @@ namespace ui_main {
 		}
 	};
 
-	class refresh_callback__
-	: public _refresh_callback__
-	{
-	protected:
-		const char *XULFBSRefresh( xml::writer_ &Digest );
-	};
-	
 	typedef xulfmn::main__ _main__;
 
 	class main__
 	: public _main__,
-	  public window__
+	  public _window___
 	{
-	private:
-		refresh_callback__ _Callback;
 	protected:
-		virtual xulftk::trunk___ &XULFMNTrunk( void ) const;
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
 	public:
 		nsIDOMElement *Broadcasters;
 		widgets__ Widgets;
 		void reset( bso::bool__ P = true )
 		{
 			_main__::reset( P );
-			window__::reset( P );
-			_Callback.reset( P );
+			_window__::reset( P );
 
 			Widgets.reset( P );
 		}

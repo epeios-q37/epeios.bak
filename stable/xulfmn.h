@@ -72,8 +72,6 @@ namespace xulfmn {
 
 	typedef nsxpcm::ui_core__ _ui_core__;
 
-	typedef xulfbs::_trunk_depot__<xulftk::trunk___> _trunk_depot__;
-
 	class widgets__
 	{
 	public:
@@ -114,17 +112,18 @@ namespace xulfmn {
 		}
 	};
 
+	typedef xulfbs::window__<xulftk::trunk___> _window__;
 
 	struct main__
-	: virtual _ui_core__
+	: public _window__
 	{
 	protected:
-		virtual xulftk::trunk___ &XULFMNTrunk( void ) const = 0;
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
 		{
-			_ui_core__::reset( P );
+			_window__::reset( P );
 		}
 		main__( widgets__ &Widgets )
 		: Widgets( Widgets )
@@ -134,10 +133,9 @@ namespace xulfmn {
 		E_DTOR( main__ )
 		void Init( xulftk::trunk___ &Trunk )
 		{
-			_ui_core__::Init();
+			_window__::Init( Trunk );
 		}
 		void Register( nsIDOMWindow *Window );
-		void GetDigest( xml::writer_ &Digest );
 	};
 }
 

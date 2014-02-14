@@ -33,6 +33,11 @@ using nsxpcm::event__;
 
 #define DIGEST_TARGET	UI_MAIN_AFFIX
 
+const char *ui_main::main__::XULFBSGetDigest( xml::writer_ &Digest )
+{
+	return _window___::XULFBSGetDigest( Digest );
+}
+
 const char *ui_main::refresh_callback__::XULFBSRefresh(	xml::writer_ &Digest )
 {
 	xulfbs::PushDigestRootTag( DIGEST_TARGET, Digest );

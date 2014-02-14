@@ -251,8 +251,6 @@ void xulfsf::session_form__::GetDigest( xml::writer_ &Digest )
 ERRProlog
 	str::string Translation;
 ERRBegin
-	xulftk::trunk___ &Trunk = XULFSFTrunk();
-
 	Translation.Init();
 
 	if ( !HideUnusedBackendSelectionMode_( Trunk.Kernel().Registry(), Digest ) )
@@ -312,7 +310,7 @@ ERREpilog
 
 static void Register_(
 	trunk___ &Trunk,
-	xulfbs::event_handler__<xulftk::trunk___> &EventHandler,
+	xulwdg::event_handler__<xulftk::trunk___> &EventHandler,
 	const char *Id )
 {
 	EventHandler.Init( Trunk );

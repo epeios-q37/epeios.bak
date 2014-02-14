@@ -35,21 +35,12 @@ namespace ui_ssn_frm {
 
 	UI_DEF;
 
-	class refresh_callback__
-	: public _refresh_callback__
-	{
-	protected:
-		virtual const char*XULFBSRefresh( xml::writer_ &Digest );
-	};
-
 	struct session_form__
 	: public _session_form__,
-	  public _page__
+	  public _page___
 	{
-	private:
-		refresh_callback__ _Callback;
 	protected:
-		xulftk::trunk___ &XULFSFTrunk( void ) const;
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
 	public:
 		struct widgets__
 		: public xulfsf::widgets__
@@ -57,8 +48,7 @@ namespace ui_ssn_frm {
 		void reset( bso::bool__ P = true )
 		{
 			_session_form__::reset( P );
-			_page__::reset( P );
-			_Callback.reset( P );
+			_page___::reset( P );
 		}
 		E_VDTOR( session_form__ )
 		session_form__( void )
@@ -68,7 +58,7 @@ namespace ui_ssn_frm {
 		void Attach( nsIDOMWindow *Window )
 		{
 			_session_form__::Attach( Window );
-			_page__::Attach( Window );
+			_page___::Attach( Window );
 		}
 		void Register( nsIDOMWindow *Window );
 	};

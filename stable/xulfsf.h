@@ -123,8 +123,6 @@ namespace xulfsf {
 	{
 	private:
 		frdkrn::backend_extended_type__ _BackendExtendedType;
-	protected:
-		virtual xulftk::trunk___ &XULFSFTrunk( void ) const = 0;
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
