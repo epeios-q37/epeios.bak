@@ -94,10 +94,16 @@ namespace xulfbs {
 			nsIDOMElement *&Broadcasters,
 			xml::writer_ &Digest )
 		{
+			Digest.PushTag( "Availabilities" );
+
 			Document = _Document;
 			Broadcasters = _Broadcasters;
 
-			return XULFBSGetDigest( Digest );
+			const char *XSLFileNameAffix = XULFBSGetDigest( Digest );
+
+			Digest.PopTag();
+
+			return XSLFileNameAffix;
 		}
 	public:
 		void reset( bso::bool__ = true )
@@ -133,27 +139,19 @@ namespace xulfbs {
 			xml::writer_ &Digest,
 			str::string_ &XSLFileName )
 		{
-			Digest.PushTag( "Availabilities" );
-
-			const char *XSLFileNameAffix = _wp_core__::Refresh( Document, Broadcasters, Digest );
-
-			Digest.PopTag();
-
-			Trunk().BuildXSLFileName( XSLFileNameAffix, XSLFileName );
+			Trunk().BuildXSLFileName( _wp_core__::Refresh( Document, Broadcasters, Digest ), XSLFileName );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			xulfbs::_window__<trunk>::reset( P );
 			_wp_core__::reset( P );
-			_trunk_depot__<trunk>::reset( P );
 		}
 		E_CVDTOR( window__ );
 		void Init( trunk &Trunk )
 		{
 			_window__<trunk>::Init( Trunk );
 			_wp_core__::Init();
-			_trunk_depot__<trunk>::Init( Trunk );
 		}
 		void Attach( nsIDOMWindow *Window )
 		{
@@ -166,33 +164,43 @@ namespace xulfbs {
 		}
 	};
 
-	typedef nsxpcm::page__ _page__;
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulwdg::page__<trunk>, _page__ );
+	}
 
 	template <typename trunk> class page__
-	: public _page__,
+	: public _page__<trunk>,
 	  public _wp_core__
 	{
 	protected:
-		virtual xulftk::trunk___ &_Trunk( void ) const
+		virtual void XULWDGRefresh(
+			nsIDOMDocument *&Document,
+			nsIDOMElement *&Broadcasters,
+			xml::writer_ &Digest,
+			str::string_ &XSLFileName )
 		{
-			return Trunk();
+			Trunk().BuildXSLFileName( _wp_core__::Refresh( Document, Broadcasters, Digest ), XSLFileName );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_page__::reset( P );
+			_page__<trunk>::reset( P );
 			_wp_core__::reset( P );
 		}
 		E_CVDTOR( page__ );
 		void Init( trunk &Trunk )
 		{
-			_page__::Init();
+			_page__<trunk>::Init();
 			_wp_core__::Init( Callback );
 		}
 		void Attach( nsIDOMWindow *Window )
 		{
-			_window__::Attach( nsxpcm::supports__( Window ) );
+			_page__<trunk>::Attach( nsxpcm::supports__( Window ) );
 			_wp_core__::Attach( nsxpcm::GetDocument( Window )  );
+		}
+		void Refresh( void )
+		{
+			_page__<trunk>::Refresh();
 		}
 	};
 

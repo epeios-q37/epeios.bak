@@ -31,13 +31,15 @@
 
 namespace ui_ssn_frm {
 
-	typedef xulfsf::session_form__ _session_form__;
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulfsf::session_form__<trunk>, _session_form__ );
+		typedef trunk::trunk___ _trunk___;
+	}
 
 	UI_DEF;
 
 	struct session_form__
-	: public _session_form__,
-	  public _page___
+	: public _session_form__<_trunk___>
 	{
 	protected:
 		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
@@ -48,17 +50,15 @@ namespace ui_ssn_frm {
 		void reset( bso::bool__ P = true )
 		{
 			_session_form__::reset( P );
-			_page___::reset( P );
 		}
 		E_VDTOR( session_form__ )
 		session_form__( void )
-		: _session_form__( Widgets )
+		: _session_form__<_trunk___>( Widgets )
 		{}
-		void Init( trunk::trunk___ &Trunk );
+		void Init( _trunk___ &Trunk );
 		void Attach( nsIDOMWindow *Window )
 		{
 			_session_form__::Attach( Window );
-			_page___::Attach( Window );
 		}
 		void Register( nsIDOMWindow *Window );
 	};

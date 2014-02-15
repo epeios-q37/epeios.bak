@@ -35,35 +35,19 @@ using nsxpcm::event__;
 
 const char *ui_main::main__::XULFBSGetDigest( xml::writer_ &Digest )
 {
-	return _window___::XULFBSGetDigest( Digest );
-}
-
-const char *ui_main::refresh_callback__::XULFBSRefresh(	xml::writer_ &Digest )
-{
-	xulfbs::PushDigestRootTag( DIGEST_TARGET, Digest );
-	Trunk().UI().Main.GetDigest( Digest );
-	Digest.PopTag();
+	if ( _main__::XULFBSGetDigest( Digest ) != NULL )
+		ERRFwk();
 
 	return DIGEST_TARGET;
-}
-
-xulftk::trunk___ &ui_main::main__::XULFMNTrunk( void ) const
-{
-	return Trunk();
 }
 
 void ui_main::main__::Init( trunk::trunk___ &Trunk )
 {
 	_main__::Init( Trunk );
-	_Callback.Init( Trunk );
-	_window__::Init( _Callback, Trunk );
 }
 
 
 void ui_main::main__::Register( nsIDOMWindow *Window )
 {
-	_window__::Attach( Window );
-
 	_main__::Register( Window );
-
 }

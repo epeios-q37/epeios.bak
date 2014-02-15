@@ -34,28 +34,18 @@ using trunk::trunk___;
 
 #define DIGEST_TARGET	UI_SSN_VEW_AFFIX
 
-const char*ui_ssn_vew::refresh_callback__::XULFBSRefresh( xml::writer_ &Digest )
+const char*ui_ssn_vew::session_view__::XULFBSGetDigest( xml::writer_ &Digest )
 {
-	ui::PushDigestRootTag( DIGEST_TARGET, Digest );
-	Trunk().UI().SessionView.GetDigest( Digest );
-	Digest.PopTag();
+	if ( _session_view__::XULFBSGetDigest( Digest ) != NULL )
+		ERRFwk();
 
 	return DIGEST_TARGET;
 }
 
-xulftk::trunk___ &ui_ssn_vew::session_view__::XULFSVTrunk( void ) const
-{
-	return Trunk();
-}
-
-
 void ui_ssn_vew::session_view__::Init( trunk::trunk___ &Trunk )
 {
 	_session_view__::Init( Trunk );
-	_Callback.Init( Trunk );
-	_page__::Init( _Callback, Trunk );
 }
-
 
 #define R( name ) Widgets.name.Init( Trunk, Trunk.UI().SessionView.Window(), #name );
 
@@ -68,8 +58,6 @@ static void Register_(
 
 void ui_ssn_vew::session_view__::Register( nsIDOMWindow *Window )
 {
-	_page__::Attach( Window );
-
 	_session_view__::Register( Window );
 
 	Register_( Trunk(), Trunk().UI().SessionView.Widgets, Window );

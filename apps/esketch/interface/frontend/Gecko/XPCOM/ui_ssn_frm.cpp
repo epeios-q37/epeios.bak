@@ -41,31 +41,6 @@ const char *ui_ssn_frm::session_form__::XULFBSGetDigest( xml::writer_ &Digest )
 	return DIGEST_TARGET;
 }
 
-
-
-const char *ui_ssn_frm::refresh_callback__::XULFBSRefresh( xml::writer_ &Digest )
-{
-	ui::PushDigestRootTag( DIGEST_TARGET, Digest );
-	Trunk().UI().SessionForm.GetDigest( Digest );
-	Digest.PopTag();
-
-	return DIGEST_TARGET;
-}
-
-xulftk::trunk___ &ui_ssn_frm::session_form__::XULFSFTrunk( void ) const
-{
-	return _Callback.Trunk();
-}
-
-
-void ui_ssn_frm::session_form__::Init( trunk___ &Trunk )
-{
-	_Callback.Init( Trunk );
-	_page__::Init( _Callback, Trunk );
-	_session_form__::Init();
-	_trunk_depot__::Init( Trunk );
-}
-
 static void Register_(
 	trunk___ &Trunk,
 	session_form__::widgets__ &Widgets,
@@ -73,11 +48,14 @@ static void Register_(
 {
 }
 
+void ui_ssn_frm::session_form__::Init( trunk::trunk___ &Trunk )
+{
+	_session_form__::Init( Trunk );
+}
+
 void ui_ssn_frm::session_form__::Register( nsIDOMWindow *Window )
 {
-	_page__::Attach( Window );
-
 	_session_form__::Register( Window );
 
-	Register_( Trunk(), Trunk().UI().SessionForm.Widgets, Window );
+	Register_( Trunk(), Trunk().UI().SessionForm().Widgets, Window );
 }

@@ -35,8 +35,7 @@ namespace ui_ssn_vew {
 	UI_DEF;
 
 	struct session_view__
-	: public _session_view__,
-	  public _page___
+	: public _session_view__
 	{
 	protected:
 		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
@@ -47,7 +46,6 @@ namespace ui_ssn_vew {
 		void reset( bso::bool__ P = true )
 		{
 			_session_view__::reset(  P);
-			_page___::reset( P );
 		}
 		E_VDTOR( session_view__ )
 		session_view__( void )

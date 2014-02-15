@@ -229,7 +229,7 @@ namespace xulftk {
 	class trunk___
 	{
 	private:
-		xulfui::ui___ *_UI;
+		xulfui::ui___<trunk___> *_UI;
 		frdkrn::kernel___ *_Kernel;
 		frdssn::session___ *_Session;
 		_user_callback__ *_UserCallback;
@@ -288,7 +288,7 @@ namespace xulftk {
 		status__ Init(
 			const char *TargetName,	// ATTENTION : pointeur copié, contenu NON dupliqué.
 			const char *DefaultXSLRootPath,	// ATTENTION : pointeur copié, contenu NON dupliqué.
-			xulfui::ui___ &UI,
+			xulfui::ui___<trunk___> &UI,
 			frdkrn::kernel___ &Kernel,
 			frdssn::session___ &Session,
 			_user_callback__ &UserCallback,
@@ -317,7 +317,7 @@ namespace xulftk {
 		{
 			geckob::SetSteering( *_Steering );
 		}
-		const xulfui::ui___ &UI( void ) const
+		const xulfui::ui___<trunk___> &UI( void ) const
 		{
 #ifdef XULFTK_DBG
 			if ( _UI == NULL )
@@ -325,7 +325,7 @@ namespace xulftk {
 #endif
 			return *_UI;
 		}
-		xulfui::ui___ &UI( void )
+		xulfui::ui___<trunk___> &UI( void )
 		{
 #ifdef XULFTK_DBG
 			if ( _UI == NULL )

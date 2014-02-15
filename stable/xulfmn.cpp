@@ -70,6 +70,8 @@ const char *xulfmn::main__::XULFBSGetDigest( xml::writer_ &Digest )
 	Digest.PutValue( Trunk().Kernel().IsProjectInProgress() ? "true" : "false" );
 	Digest.PopTag();
 	Digest.PopTag();
+
+	return NULL;
 }
 
 

@@ -246,7 +246,11 @@ ERREnd
 ERREpilog
 }
 
-void xulfsf::session_form__::GetDigest( xml::writer_ &Digest )
+void xulfsf::_GetDigest(
+	frdkrn::backend_extended_type__ BackendExtendedType,
+	widgets__ &Widgets,
+	xulftk::trunk___ &Trunk,
+	xml::writer_ &Digest )
 {
 ERRProlog
 	str::string Translation;
@@ -263,7 +267,7 @@ ERRBegin
 	if ( _BackendExtendedType == frdkrn::bxt_Undefined )
 		ERRReturn;
 #endif
-	switch ( _BackendExtendedType ) {
+	switch ( BackendExtendedType ) {
 	case frdkrn::bxtNone:
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniNoBackend );
 		break;
@@ -281,7 +285,7 @@ ERRBegin
 		break;
 	}
 
-	Widgets.dckBackendType.SetSelectedIndex( _BackendExtendedType );
+	Widgets.dckBackendType.SetSelectedIndex( BackendExtendedType );
 
 ERRErr
 ERREnd
@@ -321,7 +325,7 @@ static void Register_(
 
 #define R( name ) Widgets.name.Attach( nsxpcm::supports__( Trunk.UI().SessionForm().Window(), #name ) );
 
-static void Register_(
+void xulfsf::_Register(
 	trunk___ &Trunk,
 	widgets__ &Widgets )
 {
@@ -349,17 +353,6 @@ static void Attach_(
 	A( BackendTypeSelection );
 	A( Cancel );
 	A( EmbeddedBackendSelection );
-}
-
-void xulfsf::session_form__::Register( nsIDOMWindow *Window )
-{
-	xulftk::trunk___ &Trunk = XULFSFTrunk();
-
-	_ui_core__::Attach( Window );
-
-	Register_( Trunk, Trunk.UI().SessionForm().Widgets );
-
-	Attach_( Trunk.UI().EventHandlers.SF, Trunk.UI().SessionForm().Document() );
 }
 
 /* Although in theory this class is inaccessible to the different modules,

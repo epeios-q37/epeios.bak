@@ -66,7 +66,7 @@ extern class ttr_tutor &XULFSVTutor;
 # define XULFSV_AFFIX	"SessionView"
 
 namespace xulfsv {
-	using namespace xulfbs;
+	typedef xulfbs::page__<xulftk::trunk___> _page__;
 
 	// Standardisation.
 	class widgets__
@@ -80,13 +80,13 @@ namespace xulfsv {
 	};
 
 	struct session_view__
-	: public _ui_core__
+	: public _page__
 	{
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
 		{
-			_ui_core__::reset( P );
+			_page__::reset( P );
 		}
 		E_VDTOR( session_view__ );
 		session_view__( widgets__ &Widgets )
@@ -94,7 +94,7 @@ namespace xulfsv {
 		{}
 		void Init( xulftk::trunk___ &Trunk )
 		{
-			_ui_core__::Init();
+			_page__::Init( Trunk );
 		}
 		void Register( nsIDOMWindow *Window );
 		void GetDigest( xml::writer_ &Digest );

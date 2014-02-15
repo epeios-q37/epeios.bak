@@ -53,8 +53,7 @@ namespace ui_main {
 	typedef xulfmn::main__ _main__;
 
 	class main__
-	: public _main__,
-	  public _window___
+	: public _main__
 	{
 	protected:
 		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
@@ -64,7 +63,6 @@ namespace ui_main {
 		void reset( bso::bool__ P = true )
 		{
 			_main__::reset( P );
-			_window__::reset( P );
 
 			Widgets.reset( P );
 		}

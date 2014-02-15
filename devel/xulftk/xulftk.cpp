@@ -258,7 +258,7 @@ static bso::bool__ IsValid_(
 
 
 static const char *GetAnnexTarget_( 
-	xulfui::ui___ &UI,
+	xulfui::ui___<trunk___> &UI,
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
@@ -298,7 +298,7 @@ enum dir__
 template <typename bag, typename flow> static flow *GetEmbeddedFlow_(
 	dir__ Direction,
 	bag &Bag,
-	xulfui::ui___ &UI,
+	xulfui::ui___<trunk___> &UI,
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language )
@@ -333,7 +333,7 @@ ERREpilog
 
 template <typename bag, typename flow> static flow *GetFileFlow_(
 	bag &Bag,
-	xulfui::ui___ &UI,
+	xulfui::ui___<trunk___>&UI,
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language )
@@ -364,7 +364,7 @@ template <typename bag, typename flow> static flow  *GetVolatileFlow_( bag &Bag 
 template <typename bag, typename flow> static flow  *GetFlow_(
 	dir__ Direction,
 	bag &Bag,
-	xulfui::ui___ &UI,
+	xulfui::ui___<trunk___> &UI,
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language )
@@ -499,7 +499,7 @@ struct ibag___ {
 };
 
 static rgstry::row__ RetrieveSetups_(
-	xulfui::ui___ &UI,
+	xulfui::ui___<trunk___> &UI,
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
@@ -747,7 +747,7 @@ struct obag___ {
 static bso::bool__ StoreSetups_(
 	const rgstry::registry_ &Setups,
 	rgstry::row__ Root,
-	xulfui::ui___ &UI,
+	xulfui::ui___<trunk___> &UI,
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language )

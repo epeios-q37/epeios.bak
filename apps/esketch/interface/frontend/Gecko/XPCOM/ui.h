@@ -36,7 +36,9 @@
 namespace ui {
 	using namespace ui_base;
 
-	typedef xulfui::ui___ _ui___;
+	namespace {
+		typedef xulfui::ui___<trunk::trunk___> _ui___;
+	}
 
 	class ui___
 	: public _ui___

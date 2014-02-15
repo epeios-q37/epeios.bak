@@ -69,6 +69,10 @@ extern class ttr_tutor &XULFSFTutor;
 # define XULFSF_AFFIX "SessionForm"
 
 namespace xulfsf {
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulfbs::page__<xulftk::trunk___>, _page__ );
+	}
+
 	using namespace xulfbs;
 
 	typedef nsxpcm::ui_core__ _ui_core__;
@@ -118,35 +122,55 @@ namespace xulfsf {
 		}
 	};
 
-	struct session_form__
-	: public _ui_core__
+
+	void _GetDigest(
+		frdkrn::backend_extended_type__ BackendExtendedType,
+		widgets__ &Widgets,
+		xulftk::trunk___ &Trunk,
+		xml::writer_ &Digest );
+
+	void _Register(
+		xulftk::trunk___ &Trunk,
+		widgets__ &Widgets );
+	
+	template <typename trunk> struct session_form__
+	: public _page__<trunk>
 	{
 	private:
 		frdkrn::backend_extended_type__ _BackendExtendedType;
+	protected:
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest )
+		{
+			_GetDigest( _BackendExtendedType, Widgets, Trunk(), Digest );
+		}
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
 		{
 			_BackendExtendedType = frdkrn::bxt_Undefined;
-			_ui_core__::reset( P );
+			_page__<trunk>::reset( P );
 		}
 		E_VDTOR( session_form__ )
 		session_form__( widgets__ &Widgets )
 		: Widgets( Widgets )
 		{
-			reset( false );
+				reset( false );
 		}
-		void Init( void )
+		void Init( xulftk::trunk___ &Trunk )
 		{
-			_ui_core__::Init();
+			_page__<trunk>::Init( Trunk );
 			_BackendExtendedType = frdkrn::bxt_Undefined;
 		}
-		void Register( nsIDOMWindow *Window );
+		void Register( nsIDOMWindow *Window )
+		{
+			Register_( Trunk(), Trunk().UI().SessionForm().Widgets );
+
+			Attach_( Trunk().UI().EventHandlers.SF, Trunk().UI().SessionForm().Document() );
+		}
 		void SetBackendType( frdkrn::backend_extended_type__ Type )
 		{
 			_BackendExtendedType = Type;
 		}
-		void GetDigest( xml::writer_ &Digest );
 	};
 }
 

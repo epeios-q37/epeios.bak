@@ -233,12 +233,10 @@ namespace xulwdg {
 			_wp_core__::reset( P );
 		}
 		E_CVDTOR( page__ );
-		void Init(
-			trunk &Trunk,
-			const nsxpcm::supports__ &Supports )
+		void Init( trunk &Trunk )
 		{
 			_trunk_depot__<trunk>::Init( Trunk );
-			_page__::Init( Supports );
+			_page__::Init();
 			_wp_core__::Init();
 		}
 	};
