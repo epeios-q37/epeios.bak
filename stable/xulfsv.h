@@ -66,7 +66,9 @@ extern class ttr_tutor &XULFSVTutor;
 # define XULFSV_AFFIX	"SessionView"
 
 namespace xulfsv {
-	typedef xulfbs::page__<xulftk::trunk___> _page__;
+	namespace {
+		using namespace xulfbs;
+	}
 
 	// Standardisation.
 	class widgets__
@@ -79,25 +81,73 @@ namespace xulfsv {
 		{}
 	};
 
-	struct session_view__
-	: public _page__
+	struct _session_view_core__
+	: public _core__
 	{
+	protected:
+		void GetDigest( xml::writer_ &Digest );
 	public:
 		widgets__ &Widgets;
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		E_VDTOR( _session_view_core__ );
+		_session_view_core__( widgets__ &Widgets )
+		: Widgets( Widgets )
+		{}
+		void Init( void )
+		{
+			// Standardisation.
+		}
+		void Register( nsIDOMWindow *Window );
+	};
+
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulfbs::page__<trunk>, _page__ );
+	}
+
+	template <typename trunk> struct session_view__
+	: public _session_view_core__,
+	  public _page__<trunk>
+	{
+	private:
+		xulftk::trunk___ &_Trunk( void )
+		{
+			return _page__<trunk>::Trunk();
+		}
+		nsIDOMWindow *_Window( void )
+		{
+			return _page__<trunk>::Window();
+		}
+		nsIDOMDocument *_Document( void )
+		{
+			return _page__<trunk>::Document();
+		}
+	public:
 		void reset( bso::bool__ P = true )
 		{
-			_page__::reset( P );
+			_session_view_core__::reset( P );
+			_page__<trunk>::reset( P );
 		}
 		E_VDTOR( session_view__ );
 		session_view__( widgets__ &Widgets )
-		: Widgets( Widgets )
+		: _session_view_core__( Widgets )
 		{}
-		void Init( xulftk::trunk___ &Trunk )
+		void Init( trunk &Trunk )
 		{
-			_page__::Init( Trunk );
+			_session_view_core__::Init();
+			_page__<trunk>::Init( Trunk );
 		}
-		void Register( nsIDOMWindow *Window );
-		void GetDigest( xml::writer_ &Digest );
+		void Register( nsIDOMWindow *Window )
+		{
+			_session_view_core__::Register( Window );
+			_page__<trunk>::Register( Window );
+		}
+		trunk &Trunk( void )
+		{
+			return _page__<trunk>::Trunk();
+		}
 	};
 }
 

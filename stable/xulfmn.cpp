@@ -134,7 +134,9 @@ ERREpilog
 }
 
 
-static void FillPredefinedProjectsMenu_( trunk___ &Trunk )
+static void FillPredefinedProjectsMenu_(
+	trunk___ &Trunk,
+	nsIDOMDocument *Document )
 {
 ERRProlog
 	str::string PredefinedProjects;
@@ -145,8 +147,8 @@ ERRBegin
 
 	Trunk.UI().LogQuietly( PredefinedProjects );
 
-	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnuPredefinedProject, "PredefinedProjectsMenu", Trunk.UI().Main().Document() );
-	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnlPredefinedProjectList, "PredefinedProjectsMenuList", Trunk.UI().Main().Document() );
+	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnuPredefinedProject, "PredefinedProjectsMenu", Document );
+	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnlPredefinedProjectList, "PredefinedProjectsMenuList", Document );
 
 	nsxpcm::SetSelectedItem( Trunk.UI().Main().Widgets.mnlPredefinedProjectList );
 
@@ -157,11 +159,12 @@ ERREpilog
 }
 
 #define A( name )\
-	Widgets.name.Attach( nsxpcm::supports__( Trunk.UI().Main().Window(), #name ) );
+	Widgets.name.Attach( nsxpcm::supports__( Window, #name ) );
 
 
 void Register_(
 	widgets__ &Widgets,
+	nsIDOMWindow *Window,
 	trunk___ &Trunk )
 {
 	A( mnuPredefinedProject );
@@ -174,7 +177,7 @@ void Register_(
 	A( vewSessionForm );
 	A( vewSessionView );
 
-	FillPredefinedProjectsMenu_( Trunk );	// N'a à être fait qu'une seule fois.
+	FillPredefinedProjectsMenu_( Trunk, nsxpcm::GetDocument( Window ) );	// N'a à être fait qu'une seule fois.
 }
 
 #undef A
@@ -200,8 +203,9 @@ static void Register_(
 
 void xulfmn::main__::Register( nsIDOMWindow *Window )
 {
-	Register_( Widgets, Trunk() );
-	Register_( Trunk().UI().EventHandlers.M, Trunk().UI().Main().Document() );
+	_window__::Register( Window );
+	Register_( Widgets, Window, Trunk() );
+	Register_( Trunk().UI().EventHandlers.M, nsxpcm::GetDocument( Window ) );
 
 	Trunk().UI().EventHandlers.M.Exit.Add( Window, nsxpcm::efClose ); // Parce que 'xex:onclose=...' est inopérant sur 'window'.
 }

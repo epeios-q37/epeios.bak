@@ -246,28 +246,24 @@ ERREnd
 ERREpilog
 }
 
-void xulfsf::_GetDigest(
-	frdkrn::backend_extended_type__ BackendExtendedType,
-	widgets__ &Widgets,
-	xulftk::trunk___ &Trunk,
-	xml::writer_ &Digest )
+void xulfsf::_session_form_core__::_GetDigest( xml::writer_ &Digest )
 {
 ERRProlog
 	str::string Translation;
 ERRBegin
 	Translation.Init();
 
-	if ( !HideUnusedBackendSelectionMode_( Trunk.Kernel().Registry(), Digest ) )
-		Trunk.UI().LogAndPrompt( Trunk.Kernel().GetTranslation( XULFSF_NAME "_BadValueForBackendSelectionMode", Translation ) );
+	if ( !HideUnusedBackendSelectionMode_( Trunk().Kernel().Registry(), Digest ) )
+		Trunk().UI().LogAndPrompt( Trunk().Kernel().GetTranslation( XULFSF_NAME "_BadValueForBackendSelectionMode", Translation ) );
 
-	HandleAuthenticationSubForm_( Trunk.Kernel().Registry(), Digest, Widgets );
+	HandleAuthenticationSubForm_( Trunk().Kernel().Registry(), Digest, Widgets );
 
-	FillPredefinedBackendsWidget_( Trunk );
+	FillPredefinedBackendsWidget_( Trunk() );
 #if 0
 	if ( _BackendExtendedType == frdkrn::bxt_Undefined )
 		ERRReturn;
 #endif
-	switch ( BackendExtendedType ) {
+	switch ( _BackendExtendedType ) {
 	case frdkrn::bxtNone:
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniNoBackend );
 		break;
@@ -285,7 +281,7 @@ ERRBegin
 		break;
 	}
 
-	Widgets.dckBackendType.SetSelectedIndex( BackendExtendedType );
+	Widgets.dckBackendType.SetSelectedIndex( _BackendExtendedType );
 
 ERRErr
 ERREnd
@@ -323,11 +319,9 @@ static void Register_(
 
 #undef R
 
-#define R( name ) Widgets.name.Attach( nsxpcm::supports__( Trunk.UI().SessionForm().Window(), #name ) );
+#define R( name ) Widgets.name.Attach( nsxpcm::supports__( Window, #name ) );
 
-void xulfsf::_Register(
-	trunk___ &Trunk,
-	widgets__ &Widgets )
+void xulfsf::_session_form_core__::Register( nsIDOMWindow *Window )
 {
 	R( mnlBackendType );
 	R( mniNoBackend );
@@ -340,6 +334,8 @@ void xulfsf::_Register(
 	R( txbEmbeddedBackend );
 	R( txbLogin );
 	R( txbPassword );
+
+//	Attach( _Trunk().UI().EventHandlers.SF, _Trunk().UI().SessionForm().Document() );
 }
 
 #define A( name )\

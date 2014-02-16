@@ -30,7 +30,9 @@
 # define UI_SSN_VEW_PAGE_ID	"pge" UI_SSN_VEW_AFFIX
 
 namespace ui_ssn_vew {
-	typedef xulfsv::session_view__ _session_view__;
+	namespace {
+		typedef xulfsv::session_view__<trunk::trunk___> _session_view__;
+	}
 
 	UI_DEF;
 

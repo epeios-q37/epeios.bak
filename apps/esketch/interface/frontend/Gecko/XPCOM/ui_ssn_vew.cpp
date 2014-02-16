@@ -36,8 +36,7 @@ using trunk::trunk___;
 
 const char*ui_ssn_vew::session_view__::XULFBSGetDigest( xml::writer_ &Digest )
 {
-	if ( _session_view__::XULFBSGetDigest( Digest ) != NULL )
-		ERRFwk();
+	_session_view__::GetDigest( Digest );
 
 	return DIGEST_TARGET;
 }

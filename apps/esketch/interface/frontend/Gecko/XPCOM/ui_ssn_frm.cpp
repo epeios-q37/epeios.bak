@@ -35,8 +35,7 @@ using nsxpcm::event__;
 
 const char *ui_ssn_frm::session_form__::XULFBSGetDigest( xml::writer_ &Digest )
 {
-	if ( _session_form__::XULFBSGetDigest( Digest ) != NULL )
-		ERRFwk();
+	_session_form__::XULFBSGetDigest( Digest );
 
 	return DIGEST_TARGET;
 }
@@ -57,5 +56,5 @@ void ui_ssn_frm::session_form__::Register( nsIDOMWindow *Window )
 {
 	_session_form__::Register( Window );
 
-	Register_( Trunk(), Trunk().UI().SessionForm().Widgets, Window );
+	Register_( Trunk(), Trunk().UI().SessionForm.Widgets, Window );
 }

@@ -69,23 +69,23 @@ namespace xulfeh {
 	using namespace xulfbs;
 
 	namespace m { // Main
-		XULFBS_EH( exit__ );
-		XULFBS_EH( about__ );
-		XULFBS_EH( web_site__ );
-		XULFBS_EH( debug__ );
-		XULFBS_EH( new_project__ );
-		XULFBS_EH( user_project__ );
-		XULFBS_EH( project_type_selection__ );
-		XULFBS_EH( user_project_selection__ );
-		XULFBS_EH( apply__ );
-		XULFBS_EH( close_project__ );
+		XULFBS__EH( exit__ );
+		XULFBS__EH( about__ );
+		XULFBS__EH( web_site__ );
+		XULFBS__EH( debug__ );
+		XULFBS__EH( new_project__ );
+		XULFBS__EH( user_project__ );
+		XULFBS__EH( project_type_selection__ );
+		XULFBS__EH( user_project_selection__ );
+		XULFBS__EH( apply__ );
+		XULFBS__EH( close_project__ );
 	}
 
 	namespace sf { // Session form.
-		XULFBS_EH( backend_type_selection__ );
-		XULFBS_EH( embedded_backend_selection__ );
-		XULFBS_EH( apply__ );
-		XULFBS_EH( cancel__ );
+		XULFBS__EH( backend_type_selection__ );
+		XULFBS__EH( embedded_backend_selection__ );
+		XULFBS__EH( apply__ );
+		XULFBS__EH( cancel__ );
 	}
 
 	class event_handlers__

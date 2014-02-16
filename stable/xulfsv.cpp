@@ -62,7 +62,7 @@ using namespace xulfsv;
 
 using xulftk::trunk___;
 
-void xulfsv::session_view__::GetDigest( xml::writer_ & )
+void xulfsv::_session_view_core__::GetDigest( xml::writer_ & )
 {
 }
 
@@ -89,7 +89,7 @@ static void Register_(
 {
 }
 
-void xulfsv::session_view__::Register( nsIDOMWindow *Window )
+void xulfsv::_session_view_core__::Register( nsIDOMWindow *Window )
 {
 	Register_( Trunk(), Trunk().UI().SessionView().Widgets );
 }

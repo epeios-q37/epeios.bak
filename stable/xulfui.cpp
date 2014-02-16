@@ -73,7 +73,7 @@ ERRBegin
 	Success = XULFUIRegister( Window, Id );
 ERRErr
 	if ( ERRType != err::t_Abort )
-		_Trunk->UI().Alert( err::Message( Buffer ) );
+		nsxpcm::Alert( err::Message( Buffer ) );
 	else
 		Success = true;
 	ERRRst();

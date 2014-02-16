@@ -76,12 +76,12 @@ namespace xulfui {
 	typedef xulfmn::main__ _main__;
 	typedef xulfeh::event_handlers__ _event_handlers__;
 
-	template <typename trunk> class ui___
+	class ui___
 	{
 	private:
 		_main__ *_Main;
-		xulfsf::session_form__<trunk> *_SessionForm;
-		xulfsv::session_view__ *_SessionView;
+		xulfsf::_session_form_core__ *_SessionForm;
+		xulfsv::_session_view_core__ *_SessionView;
 		xulfdg::debug_dialog__ *_DebugDialog;
 		nsIDOMWindow *_JSConsoleWindow;
 	protected:
@@ -109,8 +109,8 @@ namespace xulfui {
 		}
 		void Init(
 			_main__ &Main,
-			xulfsf::session_form__<trunk> &SessionForm,
-			xulfsv::session_view__ &SessionView )
+			xulfsf::_session_form_core__ &SessionForm,
+			xulfsv::_session_view_core__ &SessionView )
 		{
 			reset();
 
@@ -130,7 +130,7 @@ namespace xulfui {
 #endif
 			return *_Main;
 		}
-		xulfsf::session_form__<trunk> &SessionForm( void ) const
+		xulfsf::_session_form_core__ &SessionForm( void ) const
 		{
 #ifdef XULFUI_DBG
 			if ( _SessionForm == NULL )
@@ -138,7 +138,7 @@ namespace xulfui {
 #endif
 			return *_SessionForm;
 		}
-		xulfsv::session_view__ &SessionView( void ) const
+		xulfsv::_session_view_core__ &SessionView( void ) const
 		{
 #ifdef XULFUI_DBG
 			if ( _SessionForm == NULL )

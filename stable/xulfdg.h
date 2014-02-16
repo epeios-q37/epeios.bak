@@ -72,10 +72,10 @@ extern class ttr_tutor &XULFDGTutor;
 namespace xulfdg {
 	typedef xulfbs::window__<xulftk::trunk___> _window__;
 
-	XULFBS_EH( jsconsole_eh__ );
-	XULFBS_EH( dominspector_eh__ );
-	XULFBS_EH( frontend_error_eh__ );
-	XULFBS_EH( backend_error_eh__ );
+	XULFBS__EH( jsconsole_eh__ );
+	XULFBS__EH( dominspector_eh__ );
+	XULFBS__EH( frontend_error_eh__ );
+	XULFBS__EH( backend_error_eh__ );
 
 	struct debug_dialog__
 	: public _window__

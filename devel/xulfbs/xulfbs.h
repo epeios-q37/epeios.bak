@@ -51,6 +51,35 @@ namespace xulfrd {
 
 namespace xulfbs {
 
+	class _core__ {
+	protected:
+		virtual xulftk::trunk___ &_Trunk( void ) = 0;
+		virtual nsIDOMWindow *_Window( void ) = 0;
+		virtual nsIDOMDocument *_Document( void ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( _core__ );
+		void Init( void )
+		{
+			//Standardisation.
+		}
+		xulftk::trunk___ &Trunk( void )
+		{
+			return _Trunk();
+		}
+		nsIDOMWindow *Window( void )
+		{
+			return _Window();
+		}
+		nsIDOMDocument *Document( void )
+		{
+			return _Document();
+		}
+	};
+
 	void _Report(
 		xulftk::trunk___ &Trunk,
 		const char *Message );
@@ -153,7 +182,7 @@ namespace xulfbs {
 			_window__<trunk>::Init( Trunk );
 			_wp_core__::Init();
 		}
-		void Attach( nsIDOMWindow *Window )
+		void Register( nsIDOMWindow *Window )
 		{
 			_window__<trunk>::Attach( nsxpcm::supports__( Window ) );
 			_wp_core__::Attach( nsxpcm::GetDocument( Window )  );
@@ -190,10 +219,10 @@ namespace xulfbs {
 		E_CVDTOR( page__ );
 		void Init( trunk &Trunk )
 		{
-			_page__<trunk>::Init();
-			_wp_core__::Init( Callback );
+			_page__<trunk>::Init( Trunk );
+			_wp_core__::Init();
 		}
-		void Attach( nsIDOMWindow *Window )
+		void Register( nsIDOMWindow *Window )
 		{
 			_page__<trunk>::Attach( nsxpcm::supports__( Window ) );
 			_wp_core__::Attach( nsxpcm::GetDocument( Window )  );
@@ -208,13 +237,16 @@ namespace xulfbs {
 	using nsxpcm::autocomplete_textbox__;
 
 
-# define XULFBS_EH( name )\
+# define XULFBS__EH( name )\
 	class name\
 	: public xulfbs::_event_handler__<xulftk::trunk___>\
 	{\
 	protected:\
-	virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
-	virtual void NSXPCMOnErr( const char *Message );\
+		virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
+		virtual void NSXPCMOnErr( const char *Message )\
+		{\
+			xulfbs::_Report( Trunk(), Message );\
+		}\
 	};
 
 	typedef nsxpcm::autocomplete_textbox_callback__ _autocomplete_textbox_callback__;

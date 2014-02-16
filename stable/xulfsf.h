@@ -70,12 +70,9 @@ extern class ttr_tutor &XULFSFTutor;
 
 namespace xulfsf {
 	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::page__<xulftk::trunk___>, _page__ );
+		using namespace xulfbs;
+		typedef nsxpcm::ui_core__ _ui_core__;
 	}
-
-	using namespace xulfbs;
-
-	typedef nsxpcm::ui_core__ _ui_core__;
 
 	class widgets__ {
 	public:
@@ -122,54 +119,91 @@ namespace xulfsf {
 		}
 	};
 
-
-	void _GetDigest(
-		frdkrn::backend_extended_type__ BackendExtendedType,
-		widgets__ &Widgets,
-		xulftk::trunk___ &Trunk,
-		xml::writer_ &Digest );
-
-	void _Register(
-		xulftk::trunk___ &Trunk,
-		widgets__ &Widgets );
-	
-	template <typename trunk> struct session_form__
-	: public _page__<trunk>
+	struct _session_form_core__
+	: public _core__
 	{
 	private:
 		frdkrn::backend_extended_type__ _BackendExtendedType;
 	protected:
-		virtual const char *XULFBSGetDigest( xml::writer_ &Digest )
-		{
-			_GetDigest( _BackendExtendedType, Widgets, Trunk(), Digest );
-		}
+		void _GetDigest( xml::writer_ &Digest );
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
 		{
+			_core__::reset( P );
 			_BackendExtendedType = frdkrn::bxt_Undefined;
+		}
+		E_VDTOR( _session_form_core__ )
+		_session_form_core__( widgets__ &Widgets )
+		: Widgets( Widgets )
+		{
+			reset( false );
+		}
+		void Init( void )
+		{
+			_BackendExtendedType = frdkrn::bxt_Undefined;
+			_core__::Init();
+		}
+		void Register( nsIDOMWindow *Window );
+		void SetBackendType( frdkrn::backend_extended_type__ Type )
+		{
+			_BackendExtendedType = Type;
+		}
+	};
+
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulfbs::page__<trunk>, _page__ );
+	}
+
+	template <typename trunk> struct session_form__
+	: public _session_form_core__,
+	  public _page__<trunk>
+	{
+	private:
+		xulftk::trunk___ &_Trunk( void )
+		{
+			return _page__<trunk>::Trunk();
+		}
+		nsIDOMWindow *_Window( void )
+		{
+			return _page__<trunk>::Window();
+		}
+		nsIDOMDocument *_Document( void )
+		{
+			return _page__<trunk>::Document();
+		}
+	protected:
+		virtual const char *XULFBSGetDigest( xml::writer_ &Digest )
+		{
+			_session_form_core__::_GetDigest( Digest );
+
+			return NULL;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_session_form_core__::reset( P );
 			_page__<trunk>::reset( P );
 		}
 		E_VDTOR( session_form__ )
 		session_form__( widgets__ &Widgets )
-		: Widgets( Widgets )
+		: _session_form_core__( Widgets )
 		{
-				reset( false );
+			reset( false );
 		}
-		void Init( xulftk::trunk___ &Trunk )
+		void Init( trunk &Trunk )
 		{
+			_session_form_core__::Init();
 			_page__<trunk>::Init( Trunk );
-			_BackendExtendedType = frdkrn::bxt_Undefined;
 		}
 		void Register( nsIDOMWindow *Window )
 		{
-			Register_( Trunk(), Trunk().UI().SessionForm().Widgets );
-
-			Attach_( Trunk().UI().EventHandlers.SF, Trunk().UI().SessionForm().Document() );
+			_session_form_core__::Register( Window );
+			_page__<trunk>::Register( Window );
 		}
-		void SetBackendType( frdkrn::backend_extended_type__ Type )
+		trunk &Trunk( void )
 		{
-			_BackendExtendedType = Type;
+			return _page__<trunk>::Trunk();
 		}
 	};
 }
