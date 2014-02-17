@@ -34,8 +34,6 @@ namespace ui_ssn_vew {
 		typedef xulfsv::session_view__<trunk::trunk___> _session_view__;
 	}
 
-	UI_DEF;
-
 	struct session_view__
 	: public _session_view__
 	{
@@ -55,6 +53,7 @@ namespace ui_ssn_vew {
 		{}
 		void Init( trunk::trunk___ &Trunk );
 		void Register( nsIDOMWindow *Window );
+		void Refresh( void );
 	};
 }
 

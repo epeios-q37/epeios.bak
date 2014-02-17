@@ -29,8 +29,6 @@ using namespace ui_ssn_frm;
 using namespace ui_base;
 using trunk::trunk___;
 
-using nsxpcm::event__;
-
 # define DIGEST_TARGET	UI_SSN_FRM_AFFIX
 
 const char *ui_ssn_frm::session_form__::XULFBSGetDigest( xml::writer_ &Digest )

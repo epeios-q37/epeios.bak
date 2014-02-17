@@ -29,17 +29,10 @@ namespace trunk {
 	class trunk___;
 };
 
-/*
-# define UI_SWIDGET( widget, name )	XULWDG_SWIDGET( ui_base::widget, name )
-# define UI_UWIDGET( widget, name )	XULWDG_UWIDGET( ui_base::widget, name )
-
-# define UI_WINDOW( name )		UI_SWIDGET( window__, name )
-# define UI_COMMAND( name )		UI_SWIDGET( command__, name )
-*/
-
 # define UI_DEF\
-		typedef ui_base::window___ _window___;\
-		typedef ui_base::page___ _page___;
+	namespace {\
+		using namespace ui_base;\
+	}
 
 namespace ui_base {
 
@@ -65,10 +58,6 @@ namespace ui_base {
 	};
 
 	XULFBS_ALMOST_ALL_WIDGETS( trunk::trunk___ )
-
-	typedef ui_base::window__<trunk::trunk___> window___; \
-	typedef ui_base::page__<trunk::trunk___> page___;
-
 
 # define UI_BASE_EH( name )\
 	class name\

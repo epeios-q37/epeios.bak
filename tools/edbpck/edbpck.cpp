@@ -283,7 +283,7 @@ ERRBegin
 
 	GenericMeaning.AddTag( MeaningBuffer );
 
-	scltool::ReportAndAbort( GenericMeaning );
+	sclmisc::ReportAndAbort( GenericMeaning );
 ERRErr
 ERREnd
 ERREpilog
@@ -1254,7 +1254,7 @@ ERRBegin
 				Meaning.Init();
 				Meaning.SetValue( _( NoRecordOfGivenIdError ) );
 				Meaning.AddTag( bso::Convert( Id, Buffer ) );
-				scltool::ReportAndAbort( Meaning );
+				sclmisc::ReportAndAbort( Meaning );
 			} else {
 				Writer.PutAttribute( "Amount", "1" );
 				Row = Id - 1;
@@ -1491,7 +1491,7 @@ ERRBegin
 		str::ReplaceShortTag( CompleteCommand, 2, str::string( bso::Convert( Id ) ), '$' );
 		str::ReplaceShortTag( CompleteCommand, 3, Label, '$' );
 		COut << "Launching '" << CompleteCommand << "\'." << txf::nl << txf::commit;
-		if ( system( CompleteCommand.Convert( Buffer ) ) == -1 )
+		if ( tol::System( CompleteCommand.Convert( Buffer ) ) == -1 )
 			ERRLbr();
 	}
 
@@ -1657,18 +1657,18 @@ ERRBegin
 
 	DataFileName.Init();
 	if ( !sclrgstry::GetValue( registry::Data, DataFileName ) )
-		scltool::ReportAndAbort( _( DataFileNotSpecifiedError ) );
+		sclmisc::ReportAndAbort( _( DataFileNotSpecifiedError ) );
 
 	OutputFileName.Init();
 	if ( !sclrgstry::GetValue( Output, OutputFileName ) )
-		scltool::ReportAndAbort( _( OutputFileNotSpecifiedError ) );
+		sclmisc::ReportAndAbort( _( OutputFileNotSpecifiedError ) );
 
 	XSLFileName.Init();
 	sclrgstry::GetValue( XSL, XSLFileName );
 
 	ContextFileName.Init();
 	if ( !sclrgstry::GetValue( registry::Context, ContextFileName ) )
-		scltool::ReportAndAbort( _( ContextFileNotSpecifiedError ) );
+		sclmisc::ReportAndAbort( _( ContextFileNotSpecifiedError ) );
 
 	Context.Init();
 	RetrieveContext_( ContextFileName.Convert( Buffer ), Context );
@@ -1692,7 +1692,7 @@ ERREnd
 ERREpilog
 }
 
-void scltool::Main( const str::string_ &Command )
+void scltool::SCLTOOLMain( const str::string_ &Command )
 {
 	if ( Command == "Process" )
 		Process_( sclrgstry::GetUInt( registry::Id, UNDEFINED ) );
@@ -1704,5 +1704,5 @@ void scltool::Main( const str::string_ &Command )
 		ERRFwk();
 }
 
-const char *scltool::TargetName = NAME_LC;
+const char *sclmisc::SCLMISCTargetName = NAME_LC;
 

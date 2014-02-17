@@ -106,28 +106,10 @@ namespace xulwdg {
 	};
 
 
-	template <typename trunk, typename widget> class _widget__
-	: public widget,
-	  public _trunk_depot__<trunk>
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			widget::reset( P );
-			_trunk_depot__<trunk>::reset( P );
-		}
-		E_CVDTOR( _widget__ );
-		void Init(
-			trunk &Trunk,
-			const nsxpcm::supports__ &Supports )
-		{
-			_trunk_depot__<trunk>::Init( Trunk );
-			widget::Init( Supports );
-		}
-	};
-
 # define XULWDG__WN( widget, name )\
-	template <typename trunk> E_TTCLONE__( _widget__< E_COVER2( trunk, nsxpcm::widget##__ )>, name##__ );
+	typedef nsxpcm::widget##__ name##__;
+//	template <typename trunk> E_TTCLONE__( _widget__< E_COVER2( trunk, nsxpcm::widget##__ )>, name##__ );
+
 
 # define XULWDG__W( widget )	XULWDG__WN( widget, widget )
 

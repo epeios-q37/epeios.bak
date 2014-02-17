@@ -70,7 +70,7 @@ extern class ttr_tutor &XULFDGTutor;
 # define XULFDG_WINDOW_ID	"dlg" XULFDG_AFFIX "_alpha1"
 
 namespace xulfdg {
-	typedef xulfbs::window__<xulftk::trunk___> _window__;
+	XULFBS_TWIDGET( xulftk::trunk___, window );
 
 	XULFBS__EH( jsconsole_eh__ );
 	XULFBS__EH( dominspector_eh__ );
@@ -78,7 +78,7 @@ namespace xulfdg {
 	XULFBS__EH( backend_error_eh__ );
 
 	struct debug_dialog__
-	: public _window__
+	: public window__
 	{
 	protected:
 		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );

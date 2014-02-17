@@ -33,8 +33,6 @@ namespace ui_main {
 
 	typedef xulfmn::widgets__ _widgets__;
 
-	UI_DEF;
-
 	class widgets__
 	: public _widgets__
 	{

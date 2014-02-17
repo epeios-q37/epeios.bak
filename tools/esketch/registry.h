@@ -32,8 +32,7 @@ namespace registry {
 	namespace {
 		using rgstry::entry___;
 	}
-
-
+	
 }
 
 #endif

@@ -34,7 +34,7 @@
 	pack="center"
 	>
 	<script type="text/javascript" src="egeckocom.js"/>
-  <broadcasterset id="bcsAvailability"/>
+  <broadcasterset id="bcsShapes"/>
   <broadcasterset>
 		<!-- Gestion 'hidden'/'disabled' -->
 		<broadcaster id="bdcNoBackend"/>

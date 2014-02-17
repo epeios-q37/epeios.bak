@@ -54,6 +54,7 @@ namespace ui_ssn_frm {
 		{}
 		void Init( trunk::trunk___ &Trunk );
 		void Register( nsIDOMWindow *Window );
+		void Refresh( void );
 	};
 
 }

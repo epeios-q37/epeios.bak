@@ -38,7 +38,7 @@
 	<script type="text/javascript"
 			src="egeckocom.js"/>
 	<script type="text/javascript">create( 'esketchgck', "&Language;" );</script>
-  <broadcasterset id="bcsAvailability"/>
+  <broadcasterset id="bcsShapes"/>
   <broadcasterset>
 		<broadcaster id="bdcProjectType"
 					 label="&ProjectType.label;"
@@ -104,7 +104,7 @@
 			     modifiers="accel"
 			     key="&CloseProject.key;"
 					 xex:oncommand="ehCloseProject"
-					 xex:observes="avbCloseProject"
+					 xex:observes="shpCloseProject"
 					 />
 		<broadcaster id="bdcApply"
 					 label="&Apply.label;"

@@ -112,10 +112,12 @@ namespace xulfmn {
 		}
 	};
 
-	typedef xulfbs::window__<xulftk::trunk___> _window__;
+	namespace {
+		typedef xulfbs::_t_window__<xulftk::trunk___> window__;
+	}
 
 	struct main__
-	: public _window__
+	: public window__
 	{
 	protected:
 		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );

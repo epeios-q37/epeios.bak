@@ -161,11 +161,9 @@ ERREpilog
 #define A( name )\
 	Widgets.name.Attach( nsxpcm::supports__( Window, #name ) );
 
-
 void Register_(
 	widgets__ &Widgets,
-	nsIDOMWindow *Window,
-	trunk___ &Trunk )
+	nsIDOMWindow *Window )
 {
 	A( mnuPredefinedProject );
 	A( dckMain );
@@ -176,8 +174,6 @@ void Register_(
 	A( mnlProjectType );
 	A( vewSessionForm );
 	A( vewSessionView );
-
-	FillPredefinedProjectsMenu_( Trunk, nsxpcm::GetDocument( Window ) );	// N'a à être fait qu'une seule fois.
 }
 
 #undef A
@@ -203,9 +199,11 @@ static void Register_(
 
 void xulfmn::main__::Register( nsIDOMWindow *Window )
 {
-	_window__::Register( Window );
-	Register_( Widgets, Window, Trunk() );
+	xulfmn::window__::Register( Window );	// 'xulfmn::' ne devrait pas être nécessaire, mais sans, 'VC++ 12' n'est pas content...
+	Register_( Widgets, Window );
 	Register_( Trunk().UI().EventHandlers.M, nsxpcm::GetDocument( Window ) );
+
+	FillPredefinedProjectsMenu_( Trunk(), nsxpcm::GetDocument( Window ) );	// N'a à être fait qu'une seule fois.
 
 	Trunk().UI().EventHandlers.M.Exit.Add( Window, nsxpcm::efClose ); // Parce que 'xex:onclose=...' est inopérant sur 'window'.
 }

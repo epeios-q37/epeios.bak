@@ -1713,6 +1713,13 @@ namespace nsxpcm {
 	{
 		nsIDOMWindow *Window;
 		nsISupports *Supports;
+		supports__( 
+			nsISupports *Supports,
+			nsIDOMWindow *Window )
+		{
+			this->Supports = Supports;
+			this->Window = Window;
+		}
 		supports__( nsIDOMWindow *Window )
 		{
 			this->Supports = this->Window  = Window;
@@ -1767,6 +1774,11 @@ namespace nsxpcm {
 
 			ui_core__::Attach( Supports.Window );
 			_Supports = Supports.Supports;
+		}
+		void Init( const supports__ &Supports )
+		{
+			Init();
+			Attach( Supports );
 		}
 		E_RODISCLOSE__( nsISupportsPointer, Supports );
 		bso::bool__ Handle( nsIDOMEvent *Event );

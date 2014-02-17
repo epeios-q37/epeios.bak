@@ -71,7 +71,6 @@ extern class ttr_tutor &XULFSFTutor;
 namespace xulfsf {
 	namespace {
 		using namespace xulfbs;
-		typedef nsxpcm::ui_core__ _ui_core__;
 	}
 
 	class widgets__ {
@@ -152,25 +151,25 @@ namespace xulfsf {
 	};
 
 	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::page__<trunk>, _page__ );
+		template <typename trunk> E_TTCLONE__( xulfbs::_t_page__<trunk>, page__ );
 	}
 
 	template <typename trunk> struct session_form__
 	: public _session_form_core__,
-	  public _page__<trunk>
+	  public page__<trunk>
 	{
 	private:
 		xulftk::trunk___ &_Trunk( void )
 		{
-			return _page__<trunk>::Trunk();
+			return page__<trunk>::Trunk();
 		}
 		nsIDOMWindow *_Window( void )
 		{
-			return _page__<trunk>::Window();
+			return page__<trunk>::Window();
 		}
 		nsIDOMDocument *_Document( void )
 		{
-			return _page__<trunk>::Document();
+			return page__<trunk>::Document();
 		}
 	protected:
 		virtual const char *XULFBSGetDigest( xml::writer_ &Digest )
@@ -183,7 +182,7 @@ namespace xulfsf {
 		void reset( bso::bool__ P = true )
 		{
 			_session_form_core__::reset( P );
-			_page__<trunk>::reset( P );
+			page__<trunk>::reset( P );
 		}
 		E_VDTOR( session_form__ )
 		session_form__( widgets__ &Widgets )
@@ -194,16 +193,16 @@ namespace xulfsf {
 		void Init( trunk &Trunk )
 		{
 			_session_form_core__::Init();
-			_page__<trunk>::Init( Trunk );
+			page__<trunk>::Init( Trunk );
 		}
 		void Register( nsIDOMWindow *Window )
 		{
 			_session_form_core__::Register( Window );
-			_page__<trunk>::Register( Window );
+			page__<trunk>::Register( Window );
 		}
 		trunk &Trunk( void )
 		{
-			return _page__<trunk>::Trunk();
+			return page__<trunk>::Trunk();
 		}
 	};
 }

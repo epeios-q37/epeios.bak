@@ -28,8 +28,6 @@
 using namespace ui_ssn_vew;
 using namespace ui_base;
 
-using nsxpcm::event__;
-
 using trunk::trunk___;
 
 #define DIGEST_TARGET	UI_SSN_VEW_AFFIX

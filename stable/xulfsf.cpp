@@ -321,7 +321,9 @@ static void Register_(
 
 #define R( name ) Widgets.name.Attach( nsxpcm::supports__( Window, #name ) );
 
-void xulfsf::_session_form_core__::Register( nsIDOMWindow *Window )
+static void Register_(
+	widgets__ &Widgets,
+	nsIDOMWindow *Window )
 {
 	R( mnlBackendType );
 	R( mniNoBackend );
@@ -341,7 +343,7 @@ void xulfsf::_session_form_core__::Register( nsIDOMWindow *Window )
 #define A( name )\
 	nsxpcm::AttachEventHandler( Document, "eh" #name, EventHandlers.name );
 
-static void Attach_(
+static void Register_(
 	xulfeh::event_handlers__::sf__ &EventHandlers,
 	nsIDOMNode *Document )
 {
@@ -350,6 +352,13 @@ static void Attach_(
 	A( Cancel );
 	A( EmbeddedBackendSelection );
 }
+
+void xulfsf::_session_form_core__::Register( nsIDOMWindow *Window )
+{
+	Register_( Widgets, Window );
+	Register_( Trunk().UI().EventHandlers.SF, nsxpcm::GetDocument( Window ) );
+}
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

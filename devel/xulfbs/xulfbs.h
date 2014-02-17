@@ -84,11 +84,12 @@ namespace xulfbs {
 		xulftk::trunk___ &Trunk,
 		const char *Message );
 
-	template <typename trunk> E_TTCLONE__( xulwdg::event_handler__<trunk>, _event_handler__ );
-//	template <typename trunk> E_TTCLONE__( xulwdg::_trunk_depot__<trunk>, _trunk_depot__ );
+	template <typename trunk> E_TTCLONE__( xulwdg::event_handler__<trunk>, _t_event_handler__ );
+	template <typename trunk> E_TTCLONE__( xulwdg::tree__<trunk>, _t_tree__ );
+	//	template <typename trunk> E_TTCLONE__( xulwdg::_trunk_depot__<trunk>, _trunk_depot__ );
 
 # define XULFBS__WN( widget, name )\
-	typedef nsxpcm::widget##__ name##__;
+	typedef xulwdg::widget##__ name##__;
 
 # define XULFBS__W( widget )	XULFBS__WN( widget, widget )
 
@@ -107,7 +108,7 @@ namespace xulfbs {
 	XULFBS__W( tabs );
 	XULFBS__W( tabpanels );
 	XULFBS__W( textbox );
-	XULFBS__W( tree );
+	// XULFBS__W( tree );	// Définit explicitement à cause de l'utilisation d'un 'trunk'.
 	XULFBS__W( widget );
 	// XULFBS__W( window );	// Définit explicitement à cause de 'XULWDGRefresh(...)'.
 
@@ -123,7 +124,7 @@ namespace xulfbs {
 			nsIDOMElement *&Broadcasters,
 			xml::writer_ &Digest )
 		{
-			Digest.PushTag( "Availabilities" );
+			Digest.PushTag( "States" );
 
 			Document = _Document;
 			Broadcasters = _Broadcasters;
@@ -149,7 +150,7 @@ namespace xulfbs {
 		void Attach( nsIDOMDocument *Document )
 		{
 			_Document = Document;
-			_Broadcasters = nsxpcm::GetElementById( Document, "bcsAvailability" );
+			_Broadcasters = nsxpcm::GetElementById( Document, "bcsShapes" );
 		}
 	};
 
@@ -157,7 +158,7 @@ namespace xulfbs {
 		template <typename trunk> E_TTCLONE__( xulwdg::window__<trunk>, _window__ );
 	}
 
-	template <typename trunk> class window__
+	template <typename trunk> class _t_window__
 	: public _window__<trunk>,
 	  public _wp_core__
 	{
@@ -176,7 +177,7 @@ namespace xulfbs {
 			xulfbs::_window__<trunk>::reset( P );
 			_wp_core__::reset( P );
 		}
-		E_CVDTOR( window__ );
+		E_CVDTOR( _t_window__ );
 		void Init( trunk &Trunk )
 		{
 			_window__<trunk>::Init( Trunk );
@@ -197,7 +198,7 @@ namespace xulfbs {
 		template <typename trunk> E_TTCLONE__( xulwdg::page__<trunk>, _page__ );
 	}
 
-	template <typename trunk> class page__
+	template <typename trunk> class _t_page__
 	: public _page__<trunk>,
 	  public _wp_core__
 	{
@@ -216,7 +217,7 @@ namespace xulfbs {
 			_page__<trunk>::reset( P );
 			_wp_core__::reset( P );
 		}
-		E_CVDTOR( page__ );
+		E_CVDTOR( _t_page__ );
 		void Init( trunk &Trunk )
 		{
 			_page__<trunk>::Init( Trunk );
@@ -239,7 +240,7 @@ namespace xulfbs {
 
 # define XULFBS__EH( name )\
 	class name\
-	: public xulfbs::_event_handler__<xulftk::trunk___>\
+	: public xulfbs::_t_event_handler__<xulftk::trunk___>\
 	{\
 	protected:\
 		virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
@@ -383,9 +384,10 @@ namespace xulfbs {
 }
 
 # define XULFBS_WIDGET( name )	using xulfbs::name##__;
+# define XULFBS_TWIDGET( trunk, name )	typedef xulfbs::_t_##name##__<trunk> name##__;
 
 /* Manque 'autocomplete_textbox__', car surchargé dans autre bibliothèque.*/
-# define XULFBS_ALMOST_ALL_WIDGETS( target )\
+# define XULFBS_ALMOST_ALL_WIDGETS( trunk )\
 	XULFBS_WIDGET( box )\
 	XULFBS_WIDGET( button )\
 	XULFBS_WIDGET( checkbox )\
@@ -395,15 +397,15 @@ namespace xulfbs {
 	XULFBS_WIDGET( menu )\
 	XULFBS_WIDGET( menulist )\
 	XULFBS_WIDGET( menuitem )\
-	XULFBS_WIDGET( page )\
+	XULFBS_TWIDGET( trunk, page )\
 	XULFBS_WIDGET( radio )\
 	XULFBS_WIDGET( radiogroup )\
 	XULFBS_WIDGET( tabs )\
 	XULFBS_WIDGET( tabpanels )\
 	XULFBS_WIDGET( textbox )\
-	XULFBS_WIDGET( tree )\
+	XULFBS_TWIDGET( trunk, tree )\
 	XULFBS_WIDGET( widget )\
-	XULFBS_WIDGET( window )
+	XULFBS_TWIDGET( trunk, window )
 
 
 

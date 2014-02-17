@@ -142,7 +142,7 @@ ERRProlog
 	str::string Id;
 	str::string Translation;
 ERRBegin
-	_window__::Attach( Window );
+	xulfdg::window__::Register( Window );	// 'xulfdg::' ne devrait pas être nécessaire, mais sans, 'VC++ 12' n'est pas content...
 
 	Id.Init();
 

@@ -37,7 +37,7 @@
 	<script type="text/javascript" src="egeckocom.js"/>
 	<script type="text/javascript">retrieve( 'esketchgck' );</script>
 
-  <broadcasterset id="bcsAvailability"/>
+  <broadcasterset id="bcsShapes"/>
 	<broadcasterset>
 		<broadcaster
 			id="bdcJSConsole"
@@ -66,7 +66,7 @@
 			label="&BackendError.lbl;"
 			tooltiptext="&BackendError.ttt;"
 			accesskey="&BackendError.ack;"
-			xex:observes="avbBackendError"
+			xex:observes="shpBackendError"
 			/>
 	</broadcasterset>
 	<grid>
