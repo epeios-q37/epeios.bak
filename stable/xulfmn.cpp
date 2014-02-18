@@ -63,15 +63,13 @@ using xulftk::trunk___;
 
 using namespace xulfmn;
 
-const char *xulfmn::main__::XULFBSGetDigest( xml::writer_ &Digest )
+void xulfmn::_main_core__::_Refresh( xml::writer_ &Digest )
 {
 	xulfbs::_PushDigestTag( Digest );
 	Digest.PushTag( "ProjectInProgress" );
 	Digest.PutValue( Trunk().Kernel().IsProjectInProgress() ? "true" : "false" );
 	Digest.PopTag();
 	Digest.PopTag();
-
-	return NULL;
 }
 
 
@@ -197,9 +195,8 @@ static void Register_(
 	A( WebSite );
 }
 
-void xulfmn::main__::Register( nsIDOMWindow *Window )
+void xulfmn::_main_core__::Register( nsIDOMWindow *Window )
 {
-	xulfmn::window__::Register( Window );	// 'xulfmn::' ne devrait pas être nécessaire, mais sans, 'VC++ 12' n'est pas content...
 	Register_( Widgets, Window );
 	Register_( Trunk().UI().EventHandlers.M, nsxpcm::GetDocument( Window ) );
 

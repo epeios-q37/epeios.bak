@@ -112,32 +112,94 @@ namespace xulfmn {
 		}
 	};
 
-	namespace {
-		typedef xulfbs::_t_window__<xulftk::trunk___> window__;
-	}
-
-	struct main__
-	: public window__
+	struct _main_core__
+	: public _core__
 	{
 	protected:
-		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
+		void _Refresh( xml::writer_ &Digest );
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
 		{
-			_window__::reset( P );
+			_core__::reset( P );
 		}
-		main__( widgets__ &Widgets )
+		_main_core__( widgets__ &Widgets )
 		: Widgets( Widgets )
 		{
 			reset( false );
 		}
-		E_DTOR( main__ )
-		void Init( xulftk::trunk___ &Trunk )
+		E_DTOR( _main_core__ )
+		void Init( void )
 		{
-			_window__::Init( Trunk );
+			_core__::Init();
 		}
 		void Register( nsIDOMWindow *Window );
+	};
+	
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulfbs::_t_window__<trunk>, window__ );
+	}
+
+	template <typename trunk> struct main__
+	: public _main_core__,
+	  public window__<trunk>
+	{
+	private:
+		xulftk::trunk___ &_Trunk( void )
+		{
+			return window__<trunk>::Trunk();
+		}
+		nsIDOMWindow *_Window( void )
+		{
+			return window__<trunk>::Window();
+		}
+		nsIDOMDocument *_Document( void )
+		{
+			return window__<trunk>::Document();
+		}
+	protected:
+		void Refresh( xml::writer_ &Digest )
+		{
+			_main_core__::_Refresh( Digest );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_main_core__::reset( P );
+			window__<trunk>::reset( P );
+		}
+		main__( widgets__ &Widgets )
+		: _main_core__( Widgets )
+		{
+			reset( false );
+		}
+		E_DTOR( main__ )
+		void Init( trunk &Trunk )
+		{
+			_main_core__::Init();
+			_window__<trunk>::Init( Trunk );
+		}
+		trunk &Trunk( void )
+		{
+			return window__<trunk>::Trunk();
+		}
+		nsIDOMWindow *Window( void )
+		{
+			return window__<trunk>::Window();
+		}
+		nsIDOMDocument *Document( void )
+		{
+			return window__<trunk>::Document();
+		}
+		void Register( nsIDOMWindow *Window )
+		{
+			_main_core__::Register( Window );
+			window__<trunk>::Register( Window );
+		}
+		void Refresh( void )
+		{
+			window__<trunk>::Refresh();
+		}
 	};
 }
 

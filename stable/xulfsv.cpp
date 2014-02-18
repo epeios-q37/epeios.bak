@@ -62,7 +62,7 @@ using namespace xulfsv;
 
 using xulftk::trunk___;
 
-void xulfsv::_session_view_core__::GetDigest( xml::writer_ & )
+void xulfsv::_session_view_core__::_Refresh( xml::writer_ & )
 {
 }
 

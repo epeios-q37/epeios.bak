@@ -31,16 +31,16 @@ using trunk::trunk___;
 
 # define DIGEST_TARGET	UI_SSN_FRM_AFFIX
 
-const char *ui_ssn_frm::session_form__::XULFBSGetDigest( xml::writer_ &Digest )
+const char *ui_ssn_frm::session_form__::XULFBSRefresh( xml::writer_ &Digest )
 {
-	_session_form__::XULFBSGetDigest( Digest );
+	_session_form__::Refresh( Digest );
 
 	return DIGEST_TARGET;
 }
 
 static void Register_(
 	trunk___ &Trunk,
-	session_form__::widgets__ &Widgets,
+	widgets__ &Widgets,
 	nsIDOMWindow *Window )
 {
 }

@@ -118,7 +118,7 @@ namespace xulfbs {
 		nsIDOMDocument *_Document;
 		nsIDOMElement *_Broadcasters;
 	protected:
-		virtual const char *XULFBSGetDigest( xml::writer_ &Digest ) = 0;	// Retourne l'affixe du fichier XSL.
+		virtual const char *XULFBSRefresh( xml::writer_ &Digest ) = 0;	// Retourne l'affixe du fichier XSL.
 		const char *Refresh(
 			nsIDOMDocument *&Document,
 			nsIDOMElement *&Broadcasters,
@@ -129,7 +129,7 @@ namespace xulfbs {
 			Document = _Document;
 			Broadcasters = _Broadcasters;
 
-			const char *XSLFileNameAffix = XULFBSGetDigest( Digest );
+			const char *XSLFileNameAffix = XULFBSRefresh( Digest );
 
 			Digest.PopTag();
 

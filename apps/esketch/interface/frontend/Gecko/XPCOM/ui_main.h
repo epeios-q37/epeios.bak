@@ -31,7 +31,10 @@
 
 namespace ui_main {
 
-	typedef xulfmn::widgets__ _widgets__;
+	namespace {
+		typedef xulfmn::main__<trunk::trunk___> _main__;
+		typedef xulfmn::widgets__ _widgets__;
+	}
 
 	class widgets__
 	: public _widgets__
@@ -48,13 +51,11 @@ namespace ui_main {
 		}
 	};
 
-	typedef xulfmn::main__ _main__;
-
 	class main__
 	: public _main__
 	{
 	protected:
-		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
+		virtual const char *XULFBSRefresh( xml::writer_ &Digest );
 	public:
 		nsIDOMElement *Broadcasters;
 		widgets__ Widgets;

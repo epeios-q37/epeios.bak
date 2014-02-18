@@ -85,7 +85,7 @@ namespace xulfsv {
 	: public _core__
 	{
 	protected:
-		void GetDigest( xml::writer_ &Digest );
+		void _Refresh( xml::writer_ &Digest );
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ = true )
@@ -124,6 +124,11 @@ namespace xulfsv {
 		{
 			return page__<trunk>::Document();
 		}
+	protected:
+		void Refresh( xml::writer_ &Digest )
+		{
+			_session_view_core__::_Refresh( Digest );
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -147,6 +152,18 @@ namespace xulfsv {
 		trunk &Trunk( void )
 		{
 			return page__<trunk>::Trunk();
+		}
+		nsIDOMWindow *Window( void )
+		{
+			return page__<trunk>::Window();
+		}
+		nsIDOMDocument *Document( void )
+		{
+			return page__<trunk>::Document();
+		}
+		void Refresh( void )
+		{
+			page__<trunk>::Refresh();
 		}
 	};
 }

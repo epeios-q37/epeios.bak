@@ -33,10 +33,9 @@ using nsxpcm::event__;
 
 #define DIGEST_TARGET	UI_MAIN_AFFIX
 
-const char *ui_main::main__::XULFBSGetDigest( xml::writer_ &Digest )
+const char *ui_main::main__::XULFBSRefresh( xml::writer_ &Digest )
 {
-	if ( _main__::XULFBSGetDigest( Digest ) != NULL )
-		ERRFwk();
+	_main__::Refresh( Digest );
 
 	return DIGEST_TARGET;
 }

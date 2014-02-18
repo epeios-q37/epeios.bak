@@ -64,7 +64,7 @@ using namespace xulftk;
 
 #define DIGEST_TARGET	XULFDG_AFFIX
 
-const char *xulfdg::debug_dialog__::XULFBSGetDigest( xml::writer_ &Digest )
+const char *xulfdg::debug_dialog__::XULFBSRefresh( xml::writer_ &Digest )
 {
 	xulfbs::_PushDigestTag( Digest );
 

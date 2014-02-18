@@ -81,7 +81,7 @@ namespace xulfdg {
 	: public window__
 	{
 	protected:
-		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
+		virtual const char *XULFBSRefresh( xml::writer_ &Digest );
 	public:
 		struct event_handlers__ {
 			jsconsole_eh__ ehJSConsole;

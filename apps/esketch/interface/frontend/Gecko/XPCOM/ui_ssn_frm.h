@@ -33,17 +33,31 @@ namespace ui_ssn_frm {
 
 	namespace {
 		typedef xulfsf::session_form__<trunk::trunk___> _session_form__;
+		typedef xulfsf::widgets__ _widgets__;
 	}
+
+	class widgets__
+	: public _widgets__
+	{
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_widgets__::reset( P );
+		}
+		E_CDTOR( widgets__ );
+		void Init( void )
+		{
+			_widgets__::Init();
+		}
+	};
 
 	struct session_form__
 	: public _session_form__
 	{
 	protected:
-		virtual const char *XULFBSGetDigest( xml::writer_ &Digest );
+		virtual const char *XULFBSRefresh( xml::writer_ &Digest );
 	public:
-		struct widgets__
-		: public xulfsf::widgets__
-		{} Widgets;
+		widgets__ Widgets;
 		void reset( bso::bool__ P = true )
 		{
 			_session_form__::reset( P );
@@ -54,7 +68,6 @@ namespace ui_ssn_frm {
 		{}
 		void Init( trunk::trunk___ &Trunk );
 		void Register( nsIDOMWindow *Window );
-		void Refresh( void );
 	};
 
 }

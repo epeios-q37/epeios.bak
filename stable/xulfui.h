@@ -73,13 +73,12 @@ extern class ttr_tutor &XULFUITutor;
 
 namespace xulfui {
 
-	typedef xulfmn::main__ _main__;
 	typedef xulfeh::event_handlers__ _event_handlers__;
 
 	class ui___
 	{
 	private:
-		_main__ *_Main;
+		xulfmn::_main_core__ *_Main;
 		xulfsf::_session_form_core__ *_SessionForm;
 		xulfsv::_session_view_core__ *_SessionView;
 		xulfdg::debug_dialog__ *_DebugDialog;
@@ -108,7 +107,7 @@ namespace xulfui {
 			reset( false );
 		}
 		void Init(
-			_main__ &Main,
+			xulfmn::_main_core__ &Main,
 			xulfsf::_session_form_core__ &SessionForm,
 			xulfsv::_session_view_core__ &SessionView )
 		{
@@ -122,7 +121,7 @@ namespace xulfui {
 		{
 			XULFUIRefresh();
 		}
-		_main__ &Main( void ) const
+		xulfmn::_main_core__ &Main( void ) const
 		{
 #ifdef XULFUI_DBG
 			if ( _Main == NULL )

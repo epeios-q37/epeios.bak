@@ -246,7 +246,7 @@ ERREnd
 ERREpilog
 }
 
-void xulfsf::_session_form_core__::_GetDigest( xml::writer_ &Digest )
+void xulfsf::_session_form_core__::_Refresh( xml::writer_ &Digest )
 {
 ERRProlog
 	str::string Translation;

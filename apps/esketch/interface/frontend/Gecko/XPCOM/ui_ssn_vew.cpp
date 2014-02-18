@@ -32,9 +32,9 @@ using trunk::trunk___;
 
 #define DIGEST_TARGET	UI_SSN_VEW_AFFIX
 
-const char*ui_ssn_vew::session_view__::XULFBSGetDigest( xml::writer_ &Digest )
+const char*ui_ssn_vew::session_view__::XULFBSRefresh( xml::writer_ &Digest )
 {
-	_session_view__::GetDigest( Digest );
+	_session_view__::Refresh( Digest );
 
 	return DIGEST_TARGET;
 }
@@ -48,7 +48,7 @@ void ui_ssn_vew::session_view__::Init( trunk::trunk___ &Trunk )
 
 static void Register_(
 	trunk___ &Trunk,
-	session_view__::widgets__ &Widgets,
+	widgets__ &Widgets,
 	nsIDOMWindow *Window )
 {
 }

@@ -124,7 +124,7 @@ namespace xulfsf {
 	private:
 		frdkrn::backend_extended_type__ _BackendExtendedType;
 	protected:
-		void _GetDigest( xml::writer_ &Digest );
+		void _Refresh( xml::writer_ &Digest );
 	public:
 		widgets__ &Widgets;
 		void reset( bso::bool__ P = true )
@@ -172,11 +172,9 @@ namespace xulfsf {
 			return page__<trunk>::Document();
 		}
 	protected:
-		virtual const char *XULFBSGetDigest( xml::writer_ &Digest )
+		void Refresh( xml::writer_ &Digest )
 		{
-			_session_form_core__::_GetDigest( Digest );
-
-			return NULL;
+			_session_form_core__::_Refresh( Digest );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -203,6 +201,18 @@ namespace xulfsf {
 		trunk &Trunk( void )
 		{
 			return page__<trunk>::Trunk();
+		}
+		nsIDOMWindow *Window( void )
+		{
+			return page__<trunk>::Window();
+		}
+		nsIDOMDocument *Document( void )
+		{
+			return page__<trunk>::Document();
+		}
+		void Refresh( void )
+		{
+			page__<trunk>::Refresh();
 		}
 	};
 }
