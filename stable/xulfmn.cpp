@@ -159,7 +159,7 @@ ERREpilog
 #define A( name )\
 	Widgets.name.Attach( nsxpcm::supports__( Window, #name ) );
 
-void Register_(
+void Attach_(
 	widgets__ &Widgets,
 	nsIDOMWindow *Window )
 {
@@ -179,7 +179,7 @@ void Register_(
 #define A( name )\
 	nsxpcm::AttachEventHandler( Document, "eh" #name, EventHandlers.name );
 
-static void Register_(
+static void Attach_(
 	xulfeh::event_handlers__::m__ &EventHandlers,
 	nsIDOMNode *Document )
 {
@@ -195,10 +195,10 @@ static void Register_(
 	A( WebSite );
 }
 
-void xulfmn::_main_core__::Register( nsIDOMWindow *Window )
+void xulfmn::_main_core__::Attach( nsIDOMWindow *Window )
 {
-	Register_( Widgets, Window );
-	Register_( Trunk().UI().EventHandlers.M, nsxpcm::GetDocument( Window ) );
+	Attach_( Widgets, Window );
+	Attach_( Trunk().UI().EventHandlers.M, nsxpcm::GetDocument( Window ) );
 
 	FillPredefinedProjectsMenu_( Trunk(), nsxpcm::GetDocument( Window ) );	// N'a à être fait qu'une seule fois.
 

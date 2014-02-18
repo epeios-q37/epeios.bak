@@ -89,7 +89,7 @@ static void Register_(
 {
 }
 
-void xulfsv::_session_view_core__::Register( nsIDOMWindow *Window )
+void xulfsv::_session_view_core__::Attach( nsIDOMWindow *Window )
 {
 	Register_( Trunk(), Trunk().UI().SessionView().Widgets );
 }

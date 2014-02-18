@@ -143,7 +143,7 @@ namespace xulfsf {
 			_BackendExtendedType = frdkrn::bxt_Undefined;
 			_core__::Init();
 		}
-		void Register( nsIDOMWindow *Window );
+		void Attach( nsIDOMWindow *Window );
 		void SetBackendType( frdkrn::backend_extended_type__ Type )
 		{
 			_BackendExtendedType = Type;
@@ -151,7 +151,7 @@ namespace xulfsf {
 	};
 
 	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::_t_page__<trunk>, page__ );
+		template <typename trunk> E_TTCLONE__( xulfbs::_page__<trunk>, page__ );
 	}
 
 	template <typename trunk> struct session_form__
@@ -193,10 +193,10 @@ namespace xulfsf {
 			_session_form_core__::Init();
 			page__<trunk>::Init( Trunk );
 		}
-		void Register( nsIDOMWindow *Window )
+		void Attach( nsIDOMWindow *Window )
 		{
-			_session_form_core__::Register( Window );
-			page__<trunk>::Register( Window );
+			_session_form_core__::Attach( Window );
+			page__<trunk>::Attach( Window );
 		}
 		trunk &Trunk( void )
 		{

@@ -57,7 +57,6 @@ namespace ui_main {
 	protected:
 		virtual const char *XULFBSRefresh( xml::writer_ &Digest );
 	public:
-		nsIDOMElement *Broadcasters;
 		widgets__ Widgets;
 		void reset( bso::bool__ P = true )
 		{
@@ -72,13 +71,12 @@ namespace ui_main {
 		}
 		E_DTOR( main__ )
 		void Init( trunk::trunk___ &Trunk );
-		void Register( nsIDOMWindow *Window );
 	};
-/*
-	void RegisterMainUI(
+
+	void Attach(
 		trunk::trunk___ &Trunk,
 		nsIDOMWindow *Window );
-*/
+
 }
 
 #endif

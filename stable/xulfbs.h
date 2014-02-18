@@ -84,9 +84,10 @@ namespace xulfbs {
 		xulftk::trunk___ &Trunk,
 		const char *Message );
 
-	template <typename trunk> E_TTCLONE__( xulwdg::event_handler__<trunk>, _t_event_handler__ );
-	template <typename trunk> E_TTCLONE__( xulwdg::tree__<trunk>, _t_tree__ );
-	//	template <typename trunk> E_TTCLONE__( xulwdg::_trunk_depot__<trunk>, _trunk_depot__ );
+	namespace {
+		template <typename trunk> E_TTCLONE__( xulwdg::event_handler__<trunk>, _event_handler__ );
+		template <typename trunk> E_TTCLONE__( xulwdg::tree__<trunk>, _tree__ );
+	}
 
 # define XULFBS__WN( widget, name )\
 	typedef xulwdg::widget##__ name##__;
@@ -154,12 +155,8 @@ namespace xulfbs {
 		}
 	};
 
-	namespace {
-		template <typename trunk> E_TTCLONE__( xulwdg::window__<trunk>, _window__ );
-	}
-
-	template <typename trunk> class _t_window__
-	: public _window__<trunk>,
+	template <typename trunk, typename wp> class _wp__
+	: public wp,
 	  public _wp_core__
 	{
 	protected:
@@ -174,65 +171,28 @@ namespace xulfbs {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			xulfbs::_window__<trunk>::reset( P );
+			wp::reset( P );
 			_wp_core__::reset( P );
 		}
-		E_CVDTOR( _t_window__ );
+		E_CVDTOR( _wp__ );
 		void Init( trunk &Trunk )
 		{
-			_window__<trunk>::Init( Trunk );
+			wp::Init( Trunk );
 			_wp_core__::Init();
 		}
-		void Register( nsIDOMWindow *Window )
+		void Attach( nsIDOMWindow *Window )
 		{
-			_window__<trunk>::Attach( nsxpcm::supports__( Window ) );
+			wp::Attach( nsxpcm::supports__( Window ) );
 			_wp_core__::Attach( nsxpcm::GetDocument( Window )  );
 		}
 		void Refresh( void )
 		{
-			_window__<trunk>::Refresh();
+			wp::Refresh();
 		}
 	};
 
-	namespace {
-		template <typename trunk> E_TTCLONE__( xulwdg::page__<trunk>, _page__ );
-	}
-
-	template <typename trunk> class _t_page__
-	: public _page__<trunk>,
-	  public _wp_core__
-	{
-	protected:
-		virtual void XULWDGRefresh(
-			nsIDOMDocument *&Document,
-			nsIDOMElement *&Broadcasters,
-			xml::writer_ &Digest,
-			str::string_ &XSLFileName )
-		{
-			Trunk().BuildXSLFileName( _wp_core__::Refresh( Document, Broadcasters, Digest ), XSLFileName );
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_page__<trunk>::reset( P );
-			_wp_core__::reset( P );
-		}
-		E_CVDTOR( _t_page__ );
-		void Init( trunk &Trunk )
-		{
-			_page__<trunk>::Init( Trunk );
-			_wp_core__::Init();
-		}
-		void Register( nsIDOMWindow *Window )
-		{
-			_page__<trunk>::Attach( nsxpcm::supports__( Window ) );
-			_wp_core__::Attach( nsxpcm::GetDocument( Window )  );
-		}
-		void Refresh( void )
-		{
-			_page__<trunk>::Refresh();
-		}
-	};
+	template <typename trunk> E_TTCLONE__( _wp__<E_COVER2( trunk, xulwdg::window__<trunk>)>, _window__ );
+	template <typename trunk> E_TTCLONE__( _wp__<E_COVER2( trunk, xulwdg::page__<trunk>)>, _page__ );
 
 
 	using nsxpcm::autocomplete_textbox__;
@@ -240,7 +200,7 @@ namespace xulfbs {
 
 # define XULFBS__EH( name )\
 	class name\
-	: public xulfbs::_t_event_handler__<xulftk::trunk___>\
+	: public xulfbs::_event_handler__<xulftk::trunk___>\
 	{\
 	protected:\
 		virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
@@ -384,7 +344,7 @@ namespace xulfbs {
 }
 
 # define XULFBS_WIDGET( name )	using xulfbs::name##__;
-# define XULFBS_TWIDGET( trunk, name )	typedef xulfbs::_t_##name##__<trunk> name##__;
+# define XULFBS_TWIDGET( trunk, name )	typedef xulfbs::_##name##__<trunk> name##__;
 
 /* Manque 'autocomplete_textbox__', car surchargé dans autre bibliothèque.*/
 # define XULFBS_ALMOST_ALL_WIDGETS( trunk )\

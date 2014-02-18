@@ -67,8 +67,12 @@ namespace ui_ssn_vew {
 		: _session_view__( Widgets )
 		{}
 		void Init( trunk::trunk___ &Trunk );
-		void Register( nsIDOMWindow *Window );
 	};
+
+
+	void Attach(
+		trunk::trunk___ &Trunk,
+		nsIDOMWindow *Window );
 }
 
 #endif

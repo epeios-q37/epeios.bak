@@ -67,9 +67,11 @@ namespace ui_ssn_frm {
 		: _session_form__( Widgets )
 		{}
 		void Init( trunk::trunk___ &Trunk );
-		void Register( nsIDOMWindow *Window );
 	};
 
+	void Attach(
+		trunk::trunk___ &Trunk,
+		nsIDOMWindow *Window );
 }
 
 #endif

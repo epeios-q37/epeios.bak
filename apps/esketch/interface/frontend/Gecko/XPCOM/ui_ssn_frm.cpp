@@ -38,8 +38,7 @@ const char *ui_ssn_frm::session_form__::XULFBSRefresh( xml::writer_ &Digest )
 	return DIGEST_TARGET;
 }
 
-static void Register_(
-	trunk___ &Trunk,
+static void Attach_(
 	widgets__ &Widgets,
 	nsIDOMWindow *Window )
 {
@@ -50,9 +49,13 @@ void ui_ssn_frm::session_form__::Init( trunk::trunk___ &Trunk )
 	_session_form__::Init( Trunk );
 }
 
-void ui_ssn_frm::session_form__::Register( nsIDOMWindow *Window )
+void ui_ssn_frm::Attach(
+	trunk::trunk___ &Trunk,
+	nsIDOMWindow *Window )
 {
-	_session_form__::Register( Window );
+	session_form__ &Target = Trunk.UI().SessionForm;
 
-	Register_( Trunk(), Trunk().UI().SessionForm.Widgets, Window );
+	Target.Attach( Window );
+
+	Attach_( Target.Widgets, Window );
 }

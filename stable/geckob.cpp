@@ -131,6 +131,9 @@ geckoo::steering_callback__ *GECKOORetrieveSteering( void )
 
 	LoneSteering_ = NULL;
 
+	mtx::Unlock( Mutex_ );
+
+
 //	geckob::GECKOBRetrieveSteering();
 
 	return Steering;
@@ -143,8 +146,6 @@ void GECKOODeleteSteering( geckoo::steering_callback__ *Steering )
 
 void geckob::SetSteering( geckoo::steering_callback__ &Steering )
 {
-	bso::bool__ FreshLock = false;
-
 	mtx::Lock( Mutex_ );
 
 	if ( LoneSteering_ != NULL )

@@ -353,7 +353,7 @@ static void Register_(
 	A( EmbeddedBackendSelection );
 }
 
-void xulfsf::_session_form_core__::Register( nsIDOMWindow *Window )
+void xulfsf::_session_form_core__::Attach( nsIDOMWindow *Window )
 {
 	Register_( Widgets, Window );
 	Register_( Trunk().UI().EventHandlers.SF, nsxpcm::GetDocument( Window ) );

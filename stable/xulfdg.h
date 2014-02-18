@@ -77,33 +77,56 @@ namespace xulfdg {
 	XULFBS__EH( frontend_error_eh__ );
 	XULFBS__EH( backend_error_eh__ );
 
+	struct event_handlers__ {
+	public:
+		jsconsole_eh__ JSConsole;
+		dominspector_eh__ DOMInspector;
+		frontend_error_eh__ FrontendError;
+		backend_error_eh__ BackendError;
+		void reset( bso::bool__ P = true )
+		{
+			JSConsole.reset( P );
+			DOMInspector.reset( P );
+			FrontendError.reset( P );
+			BackendError.reset( P );
+		}
+		E_CDTOR( event_handlers__ )
+		void Init( xulftk::trunk___ &Trunk )
+		{
+			JSConsole.Init( Trunk );
+			DOMInspector.Init( Trunk );
+			FrontendError.Init( Trunk );
+			BackendError.Init( Trunk );
+		}
+	};
+
+
 	struct debug_dialog__
 	: public window__
 	{
 	protected:
 		virtual const char *XULFBSRefresh( xml::writer_ &Digest );
 	public:
-		struct event_handlers__ {
-			jsconsole_eh__ ehJSConsole;
-			dominspector_eh__ ehDOMInspector;
-			frontend_error_eh__ ehFrontendError;
-			backend_error_eh__ ehBackendError;
-		} EventHandlers;
+		event_handlers__ EventHandlers;
 		void reset( bso::bool__ P = true )
 		{
-			_window__::reset( P );
+			window__::reset( P );
+			EventHandlers.reset( P );
 		}
 		void Init( xulftk::trunk___ &Trunk )
 		{
-			_window__::Init( Trunk );
+			window__::Init( Trunk );
+			EventHandlers.Init( Trunk );
 		}
-		void Register( nsIDOMWindow *Window );
-//		void ExtractSelectedDatabase( void );
 		void Close( void )
 		{
-			_window__::Close();
+			window__::Close();
 		}
 	};
+
+	void Attach(
+		xulftk::trunk___ &Trunk,
+		nsIDOMWindow *Window );
 }
 
 /*$END$*/

@@ -124,38 +124,42 @@ static void Register_(
 	nsxpcm::AttachEventHandler( Trunk.UI().DebugDialog().Document(), Id, EventHandler );
 }
 
-#define I( name ) Register_( Trunk, EventHandlers.name, #name );	
+#define I( name ) Register_( Trunk, EventHandlers.name, "eh" #name );	
 
 static void Register_(
 	trunk___ &Trunk,
-	debug_dialog__::event_handlers__ &EventHandlers )
+	event_handlers__ &EventHandlers )
 {
-	I( ehJSConsole );
-	I( ehDOMInspector );
-	I( ehFrontendError );
-	I( ehBackendError );
+	I( JSConsole );
+	I( DOMInspector );
+	I( FrontendError );
+	I( BackendError );
 }
 
-void xulfdg::debug_dialog__::Register( nsIDOMWindow *Window )
+void xulfdg::Attach(
+	xulftk::trunk___ &Trunk,
+	 nsIDOMWindow *Window )
 {
 ERRProlog
 	str::string Id;
 	str::string Translation;
 ERRBegin
-	xulfdg::window__::Register( Window );	// 'xulfdg::' ne devrait pas être nécessaire, mais sans, 'VC++ 12' n'est pas content...
+	debug_dialog__ &Target = Trunk.UI().DebugDialog();
+
+	Target.Attach( Window );
 
 	Id.Init();
 
 	if ( nsxpcm::GetId( nsxpcm::GetElement( Window ), Id ) != XULFDG_WINDOW_ID ) {
 		Translation.Init();
-		Trunk().UI().Alert( Trunk().Kernel().GetTranslation( XULFDG_NAME "_IncompatibleDebugDialog", Translation ) );
+		Trunk.UI().Alert( Trunk.Kernel().GetTranslation( XULFDG_NAME "_IncompatibleDebugDialog", Translation ) );
 		nsxpcm::Close( Window );
 		ERRReturn;
 	}
 
-	Register_( Trunk(), Trunk().UI().DebugDialog().EventHandlers );
+	Register_( Trunk, Target.EventHandlers );
 
-	Trunk().UI().DebugDialog().Refresh();
+	Target.Refresh();
 ERRErr
 ERREnd
 ERREpilog

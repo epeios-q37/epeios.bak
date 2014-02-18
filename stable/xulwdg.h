@@ -174,54 +174,29 @@ namespace xulwdg {
 		void Refresh( void );
 	};
 
-
-	namespace {
-		typedef nsxpcm::window__ _window__;
-	}
-
-	template <typename trunk> class window__
-	: public _window__,
-	  public _trunk_depot__<trunk>,
-	  public _wp_core__
+	template <typename trunk, typename wp> class _wp__
+	: public wp,
+	  public _wp_core__,
+	  public _trunk_depot__<trunk>
 	{
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_window__::reset( P );
-			_trunk_depot__<trunk>::reset( P );
+			wp::reset( P );
 			_wp_core__::reset( P );
+			_trunk_depot__<trunk>::reset( P );
 		}
-		E_CVDTOR( window__ );
+		E_CVDTOR( _wp__ );
 		void Init( trunk &Trunk )
 		{
-			_trunk_depot__<trunk>::Init( Trunk );
-			_window__::Init();
+			wp::Init();
 			_wp_core__::Init();
+			_trunk_depot__<trunk>::Init( Trunk );
 		}
 	};
 
-	typedef nsxpcm::page__ _page__;
-
-	template <typename trunk> class page__
-	: public _page__,
-	  public _trunk_depot__<trunk>,
-	  public _wp_core__
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_page__::reset( P );
-			_trunk_depot__<trunk>::reset( P );
-			_wp_core__::reset( P );
-		}
-		E_CVDTOR( page__ );
-		void Init( trunk &Trunk )
-		{
-			_trunk_depot__<trunk>::Init( Trunk );
-			_page__::Init();
-			_wp_core__::Init();
-		}
-	};
+	template <typename trunk> E_TTCLONE__( _wp__<E_COVER2( trunk, nsxpcm::window__ )>, window__);
+	template <typename trunk> E_TTCLONE__( _wp__<E_COVER2( trunk, nsxpcm::page__ )>, page__);
 
 	typedef nsxpcm::autocomplete_textbox__ _autocomplete_textbox__;
 

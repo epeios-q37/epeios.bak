@@ -133,11 +133,11 @@ namespace xulfmn {
 		{
 			_core__::Init();
 		}
-		void Register( nsIDOMWindow *Window );
+		void Attach( nsIDOMWindow *Window );
 	};
 	
 	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::_t_window__<trunk>, window__ );
+		template <typename trunk> E_TTCLONE__( xulfbs::_window__<trunk>, window__ );
 	}
 
 	template <typename trunk> struct main__
@@ -177,7 +177,7 @@ namespace xulfmn {
 		void Init( trunk &Trunk )
 		{
 			_main_core__::Init();
-			_window__<trunk>::Init( Trunk );
+			window__<trunk>::Init( Trunk );
 		}
 		trunk &Trunk( void )
 		{
@@ -191,10 +191,10 @@ namespace xulfmn {
 		{
 			return window__<trunk>::Document();
 		}
-		void Register( nsIDOMWindow *Window )
+		void Attach( nsIDOMWindow *Window )
 		{
-			_main_core__::Register( Window );
-			window__<trunk>::Register( Window );
+			_main_core__::Attach( Window );
+			window__<trunk>::Attach( Window );
 		}
 		void Refresh( void )
 		{

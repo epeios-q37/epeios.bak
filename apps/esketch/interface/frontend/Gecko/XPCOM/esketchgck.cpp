@@ -43,14 +43,14 @@ protected:
 		const str::string_ &Id )
 	{
 		if ( Id == UI_MAIN_WINDOW_ID ) {
-			_Trunk.UI().Main.Register( Window );
+			ui_main::Attach( _Trunk, Window );
 			_Trunk.FinalizeLaunching();
 		} else if ( Id == UI_SSN_FRM_PAGE_ID )
-			_Trunk.UI().SessionForm.Register( Window );
+			ui_ssn_frm::Attach( _Trunk, Window );
 		else if ( Id == UI_SSN_VEW_PAGE_ID )
-			_Trunk.UI().SessionView.Register( Window );
+			ui_ssn_vew::Attach( _Trunk, Window );
 		else if ( Id == XULFDG_WINDOW_ID )
-			_Trunk.UI().DebugDialog().Register( Window );
+			xulfdg::Attach( _Trunk, Window );
 		else
 			return false;
 

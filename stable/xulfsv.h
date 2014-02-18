@@ -100,11 +100,11 @@ namespace xulfsv {
 		{
 			// Standardisation.
 		}
-		void Register( nsIDOMWindow *Window );
+		void Attach( nsIDOMWindow *Window );
 	};
 
 	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::_t_page__<trunk>, page__ );
+		template <typename trunk> E_TTCLONE__( xulfbs::_page__<trunk>, page__ );
 	}
 
 	template <typename trunk> struct session_view__
@@ -144,10 +144,10 @@ namespace xulfsv {
 			_session_view_core__::Init();
 			page__<trunk>::Init( Trunk );
 		}
-		void Register( nsIDOMWindow *Window )
+		void Attach( nsIDOMWindow *Window )
 		{
-			_session_view_core__::Register( Window );
-			page__<trunk>::Register( Window );
+			_session_view_core__::Attach( Window );
+			page__<trunk>::Attach( Window );
 		}
 		trunk &Trunk( void )
 		{

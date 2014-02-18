@@ -46,16 +46,19 @@ void ui_ssn_vew::session_view__::Init( trunk::trunk___ &Trunk )
 
 #define R( name ) Widgets.name.Init( Trunk, Trunk.UI().SessionView.Window(), #name );
 
-static void Register_(
-	trunk___ &Trunk,
+static void Attach_(
 	widgets__ &Widgets,
 	nsIDOMWindow *Window )
 {
 }
 
-void ui_ssn_vew::session_view__::Register( nsIDOMWindow *Window )
+void ui_ssn_vew::Attach(
+	trunk::trunk___ &Trunk,
+	nsIDOMWindow *Window )
 {
-	_session_view__::Register( Window );
+	session_view__ &Target = Trunk.UI().SessionView;
 
-	Register_( Trunk(), Trunk().UI().SessionView.Widgets, Window );
+	Target.Attach( Window );
+
+	Attach_( Target.Widgets, Window );
 }
