@@ -46,11 +46,7 @@ void ui_main::main__::Init( trunk::trunk___ &Trunk )
 }
 
 
-void ui_main::Attach(
-	trunk::trunk___ &Trunk,
-	nsIDOMWindow *Window )
+void ui_main::main__::Attach( nsIDOMWindow *Window )
 {
-	main__ &Target = Trunk.UI().Main;
-
-	Target.Attach( Window );
+	_main__::Attach( Window );
 }

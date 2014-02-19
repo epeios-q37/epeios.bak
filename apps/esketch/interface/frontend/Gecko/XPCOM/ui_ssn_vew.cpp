@@ -52,13 +52,9 @@ static void Attach_(
 {
 }
 
-void ui_ssn_vew::Attach(
-	trunk::trunk___ &Trunk,
-	nsIDOMWindow *Window )
+void ui_ssn_vew::session_view__::Attach( nsIDOMWindow *Window )
 {
-	session_view__ &Target = Trunk.UI().SessionView;
+	_session_view__::Attach( Window );
 
-	Target.Attach( Window );
-
-	Attach_( Target.Widgets, Window );
+	Attach_( Widgets, Window );
 }

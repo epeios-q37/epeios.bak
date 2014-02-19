@@ -115,7 +115,7 @@ ERREpilog
 }
 /* UI Registrations */
 
-static void Register_(
+static void Attach_(
 	trunk___ &Trunk,
 	xulwdg::event_handler__<xulftk::trunk___> &EventHandler,
 	const char *Id )
@@ -124,9 +124,9 @@ static void Register_(
 	nsxpcm::AttachEventHandler( Trunk.UI().DebugDialog().Document(), Id, EventHandler );
 }
 
-#define I( name ) Register_( Trunk, EventHandlers.name, "eh" #name );	
+#define I( name ) Attach_( Trunk, EventHandlers.name, "eh" #name );	
 
-static void Register_(
+static void Attach_(
 	trunk___ &Trunk,
 	event_handlers__ &EventHandlers )
 {
@@ -136,30 +136,26 @@ static void Register_(
 	I( BackendError );
 }
 
-void xulfdg::Attach(
-	xulftk::trunk___ &Trunk,
-	 nsIDOMWindow *Window )
+void xulfdg::debug_dialog__::Attach( nsIDOMWindow *Window )
 {
 ERRProlog
 	str::string Id;
 	str::string Translation;
 ERRBegin
-	debug_dialog__ &Target = Trunk.UI().DebugDialog();
-
-	Target.Attach( Window );
+	window__::Attach( Window );
 
 	Id.Init();
 
 	if ( nsxpcm::GetId( nsxpcm::GetElement( Window ), Id ) != XULFDG_WINDOW_ID ) {
 		Translation.Init();
-		Trunk.UI().Alert( Trunk.Kernel().GetTranslation( XULFDG_NAME "_IncompatibleDebugDialog", Translation ) );
+		Trunk().UI().Alert( Trunk().Kernel().GetTranslation( XULFDG_NAME "_IncompatibleDebugDialog", Translation ) );
 		nsxpcm::Close( Window );
 		ERRReturn;
 	}
 
-	Register_( Trunk, Target.EventHandlers );
+	Attach_( Trunk(), EventHandlers );
 
-	Target.Refresh();
+	Refresh();
 ERRErr
 ERREnd
 ERREpilog

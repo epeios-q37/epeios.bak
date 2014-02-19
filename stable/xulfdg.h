@@ -118,15 +118,13 @@ namespace xulfdg {
 			window__::Init( Trunk );
 			EventHandlers.Init( Trunk );
 		}
+		void Attach( nsIDOMWindow *Window );
 		void Close( void )
 		{
 			window__::Close();
 		}
 	};
 
-	void Attach(
-		xulftk::trunk___ &Trunk,
-		nsIDOMWindow *Window );
 }
 
 /*$END$*/

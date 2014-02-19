@@ -49,13 +49,9 @@ void ui_ssn_frm::session_form__::Init( trunk::trunk___ &Trunk )
 	_session_form__::Init( Trunk );
 }
 
-void ui_ssn_frm::Attach(
-	trunk::trunk___ &Trunk,
-	nsIDOMWindow *Window )
+void ui_ssn_frm::session_form__::Attach( nsIDOMWindow *Window )
 {
-	session_form__ &Target = Trunk.UI().SessionForm;
+	_session_form__::Attach( Window );
 
-	Target.Attach( Window );
-
-	Attach_( Target.Widgets, Window );
+	Attach_( Widgets, Window );
 }

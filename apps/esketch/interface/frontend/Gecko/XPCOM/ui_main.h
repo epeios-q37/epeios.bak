@@ -71,11 +71,9 @@ namespace ui_main {
 		}
 		E_DTOR( main__ )
 		void Init( trunk::trunk___ &Trunk );
-	};
+		void Attach( nsIDOMWindow *Window );
+		};
 
-	void Attach(
-		trunk::trunk___ &Trunk,
-		nsIDOMWindow *Window );
 
 }
 
