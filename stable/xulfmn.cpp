@@ -157,11 +157,9 @@ ERREpilog
 }
 
 #define A( name )\
-	Widgets.name.Attach( nsxpcm::supports__( Window, #name ) );
+	name.Attach( nsxpcm::supports__( Window, #name ) );
 
-void Attach_(
-	widgets__ &Widgets,
-	nsIDOMWindow *Window )
+void xulfmn::widgets__::Attach( nsIDOMWindow *Window )
 {
 	A( mnuPredefinedProject );
 	A( dckMain );
@@ -176,29 +174,11 @@ void Attach_(
 
 #undef A
 
-#define A( name )\
-	nsxpcm::AttachEventHandler( Document, "eh" #name, EventHandlers.name );
-
-static void Attach_(
-	xulfeh::event_handlers__::m__ &EventHandlers,
-	nsIDOMNode *Document )
-{
-	A( About );
-	A( Apply );
-	A( CloseProject );
-	A( Debug );
-	A( Exit );
-	A( NewProject );
-	A( ProjectTypeSelection );
-	A( UserProject );
-	A( UserProjectSelection );
-	A( WebSite );
-}
 
 void xulfmn::_main_core__::Attach( nsIDOMWindow *Window )
 {
-	Attach_( Widgets, Window );
-	Attach_( Trunk().UI().EventHandlers.M, nsxpcm::GetDocument( Window ) );
+	Widgets.Attach( Window );
+	Trunk().UI().EventHandlers.M.Attach( Window );
 
 	FillPredefinedProjectsMenu_( Trunk(), nsxpcm::GetDocument( Window ) );	// N'a à être fait qu'une seule fois.
 

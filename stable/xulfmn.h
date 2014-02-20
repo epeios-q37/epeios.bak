@@ -110,6 +110,7 @@ namespace xulfmn {
 			vewSessionForm.Init();
 			vewSessionView.Init();
 		}
+		void Attach( nsIDOMWindow *Window );
 	};
 
 	struct _main_core__

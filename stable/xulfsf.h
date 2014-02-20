@@ -116,6 +116,7 @@ namespace xulfsf {
 			txbLogin.Init();
 			txbPassword.Init();
 		}
+		void Attach( nsIDOMWindow *Window );
 	};
 
 	struct _session_form_core__

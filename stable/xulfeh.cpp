@@ -255,6 +255,36 @@ void xulfeh::sf::cancel__::NSXPCMOnEvent( nsxpcm::event__ Event )
 	Trunk().CancelSession();
 }
 
+#define A( name )\
+	nsxpcm::AttachEventHandler( Document, "eh" #name, name );
+
+void xulfeh::event_handlers__::m__::Attach( nsIDOMWindow *Window )
+{
+	nsIDOMNode *Document = nsxpcm::GetDocument( Window );
+
+	A( About );
+	A( Apply );
+	A( CloseProject );
+	A( Debug );
+	A( Exit );
+	A( NewProject );
+	A( ProjectTypeSelection );
+	A( UserProject );
+	A( UserProjectSelection );
+	A( WebSite );
+}
+
+void xulfeh::event_handlers__::sf__::Attach( nsIDOMWindow *Window )
+{
+	nsIDOMNode *Document = nsxpcm::GetDocument( Window );
+
+	A( Apply );
+	A( BackendTypeSelection );
+	A( Cancel );
+	A( EmbeddedBackendSelection );
+}
+
+
 
 
 

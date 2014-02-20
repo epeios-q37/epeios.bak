@@ -259,10 +259,7 @@ ERRBegin
 	HandleAuthenticationSubForm_( Trunk().Kernel().Registry(), Digest, Widgets );
 
 	FillPredefinedBackendsWidget_( Trunk() );
-#if 0
-	if ( _BackendExtendedType == frdkrn::bxt_Undefined )
-		ERRReturn;
-#endif
+
 	switch ( _BackendExtendedType ) {
 	case frdkrn::bxtNone:
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniNoBackend );
@@ -288,75 +285,27 @@ ERREnd
 ERREpilog
 }
 
-#if 0
-void xulfsf::select_project_eh__::NSXPCMOnEvent( event__ )
+#define A( name ) name.Attach( nsxpcm::supports__( Window, #name ) );
+
+void xulfsf::widgets__::Attach( nsIDOMWindow *Window )
 {
-ERRProlog
-	str::string Translation;
-	str::string FileName;
-ERRBegin
-	Translation.Init();
-	FileName.Init();
-
-	if ( nsxpcm::XPRJFileOpenDialogBox( Trunk().UI().Main().Window(), Trunk().Kernel().GetTranslation( xulfkl::mSelectProjectFile, Translation ), Trunk().Kernel().LocaleRack(), FileName ) ) {
-		Trunk().UI().SessionForm().Widgets.ProjectFileNameTextbox.SetValue( FileName );
-	}
-ERRErr
-ERREnd
-ERREpilog
-}
-#endif
-
-
-static void Register_(
-	trunk___ &Trunk,
-	xulwdg::event_handler__<xulftk::trunk___> &EventHandler,
-	const char *Id )
-{
-	EventHandler.Init( Trunk );
-	nsxpcm::AttachEventHandler( Trunk.UI().SessionForm().Document(), Id, EventHandler );
-}
-
-#undef R
-
-#define R( name ) Widgets.name.Attach( nsxpcm::supports__( Window, #name ) );
-
-static void Register_(
-	widgets__ &Widgets,
-	nsIDOMWindow *Window )
-{
-	R( mnlBackendType );
-	R( mniNoBackend );
-	R( mniPredefinedBackend );
-	R( mniDaemonBackend );
-	R( mniEmbeddedBackend );
-	R( dckBackendType );
-	R( mnlPredefinedBackend );
-	R( txbDaemonBackend );
-	R( txbEmbeddedBackend );
-	R( txbLogin );
-	R( txbPassword );
-
-//	Attach( _Trunk().UI().EventHandlers.SF, _Trunk().UI().SessionForm().Document() );
-}
-
-#define A( name )\
-	nsxpcm::AttachEventHandler( Document, "eh" #name, EventHandlers.name );
-
-static void Register_(
-	xulfeh::event_handlers__::sf__ &EventHandlers,
-	nsIDOMNode *Document )
-{
-	A( Apply );
-	A( BackendTypeSelection );
-	A( Cancel );
-	A( EmbeddedBackendSelection );
+	A( mnlBackendType );
+	A( mniNoBackend );
+	A( mniPredefinedBackend );
+	A( mniDaemonBackend );
+	A( mniEmbeddedBackend );
+	A( dckBackendType );
+	A( mnlPredefinedBackend );
+	A( txbDaemonBackend );
+	A( txbEmbeddedBackend );
+	A( txbLogin );
+	A( txbPassword );
 }
 
 void xulfsf::_session_form_core__::Attach( nsIDOMWindow *Window )
 {
-	Register_( Widgets, Window );
-	Register_( Trunk().UI().EventHandlers.SF, nsxpcm::GetDocument( Window ) );
+	Widgets.Attach( Window );
+	Trunk().UI().EventHandlers.SF.Attach( Window );
 }
 
 

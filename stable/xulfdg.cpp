@@ -121,19 +121,20 @@ static void Attach_(
 	const char *Id )
 {
 	EventHandler.Init( Trunk );
-	nsxpcm::AttachEventHandler( Trunk.UI().DebugDialog().Document(), Id, EventHandler );
+	
 }
 
-#define I( name ) Attach_( Trunk, EventHandlers.name, "eh" #name );	
+#define A( name )\
+	nsxpcm::AttachEventHandler( Document, "eh" #name, name );
 
-static void Attach_(
-	trunk___ &Trunk,
-	event_handlers__ &EventHandlers )
+void xulfdg::event_handlers__::Attach( nsIDOMWindow *Window )
 {
-	I( JSConsole );
-	I( DOMInspector );
-	I( FrontendError );
-	I( BackendError );
+	nsIDOMDocument *Document = nsxpcm::GetDocument( Window );
+
+	A( JSConsole );
+	A( DOMInspector );
+	A( FrontendError );
+	A( BackendError );
 }
 
 void xulfdg::debug_dialog__::Attach( nsIDOMWindow *Window )
@@ -142,7 +143,7 @@ ERRProlog
 	str::string Id;
 	str::string Translation;
 ERRBegin
-	window__::Attach( Window );
+	xulfdg::window__::Attach( Window );	// 'xulfdg::' ne devrait pas être nécessaire, mais le mauvais 'Attach()' est appelé par VC++12 si absent...
 
 	Id.Init();
 
@@ -153,7 +154,7 @@ ERRBegin
 		ERRReturn;
 	}
 
-	Attach_( Trunk(), EventHandlers );
+	EventHandlers.Attach( Window );
 
 	Refresh();
 ERRErr

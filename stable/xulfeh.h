@@ -129,6 +129,7 @@ namespace xulfeh {
 				Debug.Init( Trunk );
 				Exit.Init( Trunk );
 			}
+			void Attach( nsIDOMWindow *Window );
 		} M;
 		struct sf__ {
 			sf::backend_type_selection__ BackendTypeSelection;
@@ -150,6 +151,7 @@ namespace xulfeh {
 				Apply.Init( Trunk );
 				Cancel.Init( Trunk );
 			}
+			void Attach( nsIDOMWindow *Window );
 		} SF;
 		void reset( bso::bool__ P = true )
 		{
@@ -162,6 +164,7 @@ namespace xulfeh {
 			M.Init( Trunk );
 			SF.Init( Trunk );
 		}
+		void Attach( nsIDOMWindow *Window );
 	};
 
 }

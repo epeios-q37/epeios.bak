@@ -98,6 +98,7 @@ namespace xulfdg {
 			FrontendError.Init( Trunk );
 			BackendError.Init( Trunk );
 		}
+		void Attach( nsIDOMWindow *Window );
 	};
 
 
