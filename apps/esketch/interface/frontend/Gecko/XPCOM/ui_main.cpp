@@ -40,13 +40,10 @@ const char *ui_main::main__::XULFBSRefresh( xml::writer_ &Digest )
 	return DIGEST_TARGET;
 }
 
-void ui_main::main__::Init( trunk::trunk___ &Trunk )
+#define A( name ) name.Attach( nsxpcm::supports__( Window, #name ) );
+
+void ui_main::widgets__::Attach( nsIDOMWindow *Window )
 {
-	_main__::Init( Trunk );
+	_widgets__::Attach( Window );
 }
 
-
-void ui_main::main__::Attach( nsIDOMWindow *Window )
-{
-	_main__::Attach( Window );
-}

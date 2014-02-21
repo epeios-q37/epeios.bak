@@ -49,6 +49,7 @@ namespace ui_ssn_vew {
 		{
 			_widgets__::Init();
 		}
+		void Attach( nsIDOMWindow *Window );
 	};
 
 	struct session_view__
@@ -61,13 +62,22 @@ namespace ui_ssn_vew {
 		void reset( bso::bool__ P = true )
 		{
 			_session_view__::reset(  P);
+			Widgets.reset( P );
 		}
 		E_VDTOR( session_view__ )
 		session_view__( void )
 		: _session_view__( Widgets )
 		{}
-		void Init( trunk::trunk___ &Trunk );
-		void Attach( nsIDOMWindow *Window );
+		void Init( trunk::trunk___ &Trunk )
+		{
+			Widgets.Init();
+			_session_view__::Init( Trunk );
+		}
+		void Attach( nsIDOMWindow *Window )
+		{
+			Widgets.Attach( Window );
+			_session_view__::Attach( Window );
+		}
 	};
 
 

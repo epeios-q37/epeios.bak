@@ -75,10 +75,18 @@ namespace xulfsv {
 	{
 	public:
 		void reset( bso::bool__ = true )
-		{}
+		{
+			// Standardisation.
+		}
 		E_CVDTOR( widgets__ );
 		void Init( void )
-		{}
+		{
+			// Standardisation.
+		}
+		void Attach( nsIDOMWindow * )
+		{
+			// Standardisation.
+		}
 	};
 
 	struct _session_view_core__

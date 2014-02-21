@@ -45,10 +45,6 @@ namespace ui_base {
 	};
 
 	typedef xulwdg::event_handler__<trunk::trunk___> _event_handler__;
-	/*
-	typedef xulfbs::window__<trunk::trunk___> _window__;
-	typedef xulfbs::page__<trunk::trunk___> _page__;
-	*/
 	
 	class event_handler__
 	: public _event_handler__
@@ -66,6 +62,6 @@ namespace ui_base {
 	protected:\
 		virtual void NSXPCMOnEvent( nsxpcm::event__ Event );\
 	};
-};
+}
 
 #endif

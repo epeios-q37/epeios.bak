@@ -49,6 +49,7 @@ namespace ui_main {
 		{
 			_widgets__::Init();
 		}
+		void Attach( nsIDOMWindow *Window );
 	};
 
 	class main__
@@ -61,7 +62,6 @@ namespace ui_main {
 		void reset( bso::bool__ P = true )
 		{
 			_main__::reset( P );
-
 			Widgets.reset( P );
 		}
 		main__( void )
@@ -69,9 +69,16 @@ namespace ui_main {
 		{
 			reset( false );
 		}
-		E_DTOR( main__ )
-		void Init( trunk::trunk___ &Trunk );
-		void Attach( nsIDOMWindow *Window );
+		E_DTOR( main__ );
+		void Init( trunk::trunk___ &Trunk )
+		{
+			Widgets.Init();
+			_main__::Init( Trunk );		}
+		void Attach( nsIDOMWindow *Window )
+		{
+			Widgets.Attach( Window );
+			_main__::Attach( Window );
+		}
 		};
 
 

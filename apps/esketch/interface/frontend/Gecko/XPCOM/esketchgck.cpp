@@ -71,13 +71,12 @@ public:
 		const lcl::locale_ &Locale,
 		const char *Language )
 	{
-		xulftk::status__ Status = _Kernel.Init(  Registry, Locale, Language, _Trunk.DefaultReportingFunctions() );
+		xulftk::status__ Status = _Kernel.Init( Registry, Locale, Language, _Trunk.DefaultReportingFunctions() );
 		_Trunk.Init( _UserCallback, _Kernel,  Locale, Language, *this );
 		_steering_callback__::Init( _Trunk );
 		_UserCallback.Init( LauncherIdentification,  _Trunk );
 
 		return Status;
-
 	}
 };
 

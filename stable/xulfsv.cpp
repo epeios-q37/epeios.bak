@@ -66,33 +66,11 @@ void xulfsv::_session_view_core__::_Refresh( xml::writer_ & )
 {
 }
 
-static void Register_(
-	trunk___ &Trunk,
-	xulwdg::event_handler__<xulftk::trunk___> &EventHandler,
-	const char *Id )
-{
-	EventHandler.Init( Trunk );
-	nsxpcm::AttachEventHandler( Trunk.UI().SessionForm().Document(), Id, EventHandler );
-}
-
-#undef R
-
-#define A( name ) Register_( Trunk, EventHandlers.name, "eh" #name )
-
-#undef R
-
-#define R( name, suffix, prefix ) Widgets.name##suffix.Init( Trunk, Trunk.UI().SessionForm().Window(), #prefix #name );
-
-static void Register_(
-	trunk___ &Trunk,
-	widgets__ &Widgets )
-{
-}
-
 void xulfsv::_session_view_core__::Attach( nsIDOMWindow *Window )
 {
-	Register_( Trunk(), Trunk().UI().SessionView().Widgets );
+	Trunk().UI().EventHandlers.SF.Attach( Window );
 }
+
 
 
 /* Although in theory this class is inaccessible to the different modules,

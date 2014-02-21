@@ -49,6 +49,7 @@ namespace ui_ssn_frm {
 		{
 			_widgets__::Init();
 		}
+		void Attach( nsIDOMWindow *Window );
 	};
 
 	struct session_form__
@@ -61,13 +62,22 @@ namespace ui_ssn_frm {
 		void reset( bso::bool__ P = true )
 		{
 			_session_form__::reset( P );
+			Widgets.reset( P );
 		}
 		E_VDTOR( session_form__ );
 		session_form__( void )
 		: _session_form__( Widgets )
 		{}
-		void Init( trunk::trunk___ &Trunk );
-		void Attach( nsIDOMWindow *Window );
+		void Init( trunk::trunk___ &Trunk )
+		{
+			Widgets.Init();
+			_session_form__::Init( Trunk );
+		}
+		void Attach( nsIDOMWindow *Window )
+		{
+			Widgets.Attach( Window );
+			_session_form__::Attach( Window );
+		}
 	};
 }
 

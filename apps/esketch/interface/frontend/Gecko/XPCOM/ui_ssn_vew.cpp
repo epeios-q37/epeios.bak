@@ -39,22 +39,10 @@ const char*ui_ssn_vew::session_view__::XULFBSRefresh( xml::writer_ &Digest )
 	return DIGEST_TARGET;
 }
 
-void ui_ssn_vew::session_view__::Init( trunk::trunk___ &Trunk )
+#define A( name ) name.Attach( nsxpcm::supports__( Window, #name ) );
+
+void ui_ssn_vew::widgets__::Attach( nsIDOMWindow *Window )
 {
-	_session_view__::Init( Trunk );
+	_widgets__::Attach( Window );
 }
 
-#define R( name ) Widgets.name.Init( Trunk, Trunk.UI().SessionView.Window(), #name );
-
-static void Attach_(
-	widgets__ &Widgets,
-	nsIDOMWindow *Window )
-{
-}
-
-void ui_ssn_vew::session_view__::Attach( nsIDOMWindow *Window )
-{
-	_session_view__::Attach( Window );
-
-	Attach_( Widgets, Window );
-}

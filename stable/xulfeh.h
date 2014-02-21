@@ -153,18 +153,34 @@ namespace xulfeh {
 			}
 			void Attach( nsIDOMWindow *Window );
 		} SF;
+		struct sv__ {
+			void reset( bso::bool__ = true )
+			{
+				// Standardisation.
+			}
+			E_CDTOR( sv__ );
+			void Init( xulftk::trunk___ & )
+			{
+				// Standardisation.
+			}
+			void Attach( nsIDOMWindow *Window )
+			{
+				// Standardisation.
+			}
+		} SV;
 		void reset( bso::bool__ P = true )
 		{
 			M.reset(  P );
 			SF.reset( P );
+			SV.reset( P );
 		}
 		E_CDTOR( event_handlers__ )
 		void Init( xulftk::trunk___ &Trunk )
 		{
 			M.Init( Trunk );
 			SF.Init( Trunk );
+			SV.Init( Trunk );
 		}
-		void Attach( nsIDOMWindow *Window );
 	};
 
 }

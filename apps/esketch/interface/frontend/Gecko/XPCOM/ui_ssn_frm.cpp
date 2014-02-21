@@ -38,20 +38,10 @@ const char *ui_ssn_frm::session_form__::XULFBSRefresh( xml::writer_ &Digest )
 	return DIGEST_TARGET;
 }
 
-static void Attach_(
-	widgets__ &Widgets,
-	nsIDOMWindow *Window )
+#define A( name ) name.Attach( nsxpcm::supports__( Window, #name ) );
+
+void ui_ssn_frm::widgets__::Attach( nsIDOMWindow *Window )
 {
+	_widgets__::Attach( Window );
 }
 
-void ui_ssn_frm::session_form__::Init( trunk::trunk___ &Trunk )
-{
-	_session_form__::Init( Trunk );
-}
-
-void ui_ssn_frm::session_form__::Attach( nsIDOMWindow *Window )
-{
-	_session_form__::Attach( Window );
-
-	Attach_( Widgets, Window );
-}
