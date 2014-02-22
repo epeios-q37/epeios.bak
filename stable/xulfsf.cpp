@@ -304,6 +304,8 @@ void xulfsf::widgets__::Attach( nsIDOMWindow *Window )
 
 void xulfsf::_session_form_core__::Attach( nsIDOMWindow *Window )
 {
+	Widgets.Init();
+
 	Trunk().UI().EventHandlers.SF.Attach( Window );
 }
 

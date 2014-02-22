@@ -42,6 +42,5 @@ const char *ui_ssn_frm::session_form__::XULFBSRefresh( xml::writer_ &Digest )
 
 void ui_ssn_frm::widgets__::Attach( nsIDOMWindow *Window )
 {
-	_widgets__::Attach( Window );
 }
 

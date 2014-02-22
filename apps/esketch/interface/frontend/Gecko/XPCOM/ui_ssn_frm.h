@@ -33,21 +33,17 @@ namespace ui_ssn_frm {
 
 	namespace {
 		typedef xulfsf::session_form__<trunk::trunk___> _session_form__;
-		typedef xulfsf::widgets__ _widgets__;
 	}
 
 	class widgets__
-	: public _widgets__
 	{
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_widgets__::reset( P );
 		}
 		E_CDTOR( widgets__ );
 		void Init( void )
 		{
-			_widgets__::Init();
 		}
 		void Attach( nsIDOMWindow *Window );
 	};
@@ -64,10 +60,7 @@ namespace ui_ssn_frm {
 			_session_form__::reset( P );
 			Widgets.reset( P );
 		}
-		E_VDTOR( session_form__ );
-		session_form__( void )
-		: _session_form__( Widgets )
-		{}
+		E_CDTOR( session_form__ );
 		void Init( trunk::trunk___ &Trunk )
 		{
 			Widgets.Init();

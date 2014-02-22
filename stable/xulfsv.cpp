@@ -68,6 +68,8 @@ void xulfsv::_session_view_core__::_Refresh( xml::writer_ & )
 
 void xulfsv::_session_view_core__::Attach( nsIDOMWindow *Window )
 {
+	Widgets.Attach( Window );
+
 	Trunk().UI().EventHandlers.SF.Attach( Window );
 }
 

@@ -177,6 +177,8 @@ void xulfmn::widgets__::Attach( nsIDOMWindow *Window )
 
 void xulfmn::_main_core__::Attach( nsIDOMWindow *Window )
 {
+	Widgets.Attach( Window );
+
 	Trunk().UI().EventHandlers.M.Attach( Window );
 
 	FillPredefinedProjectsMenu_( Trunk(), nsxpcm::GetDocument( Window ) );	// N'a à être fait qu'une seule fois.

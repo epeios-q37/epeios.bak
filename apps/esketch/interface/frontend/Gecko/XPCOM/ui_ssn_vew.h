@@ -33,21 +33,17 @@ namespace ui_ssn_vew {
 
 	namespace {
 		typedef xulfsv::session_view__<trunk::trunk___> _session_view__;
-		typedef xulfsv::widgets__ _widgets__;
 	}
 
 	class widgets__
-	: public _widgets__
 	{
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_widgets__::reset( P );
 		}
 		E_CDTOR( widgets__ );
 		void Init( void )
 		{
-			_widgets__::Init();
 		}
 		void Attach( nsIDOMWindow *Window );
 	};
@@ -64,10 +60,7 @@ namespace ui_ssn_vew {
 			_session_view__::reset(  P);
 			Widgets.reset( P );
 		}
-		E_VDTOR( session_view__ )
-		session_view__( void )
-		: _session_view__( Widgets )
-		{}
+		E_CDTOR( session_view__ );
 		void Init( trunk::trunk___ &Trunk )
 		{
 			Widgets.Init();

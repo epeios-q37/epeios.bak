@@ -95,18 +95,15 @@ namespace xulfsv {
 	protected:
 		void _Refresh( xml::writer_ &Digest );
 	public:
-		widgets__ &Widgets;
-		void reset( bso::bool__ = true )
+		widgets__ Widgets;
+		void reset( bso::bool__ P = true )
 		{
-			// Standardisation.
+			Widgets.reset( P );
 		}
-		E_VDTOR( _session_view_core__ );
-		_session_view_core__( widgets__ &Widgets )
-		: Widgets( Widgets )
-		{}
+		E_CDTOR( _session_view_core__ );
 		void Init( void )
 		{
-			// Standardisation.
+			Widgets.Init();
 		}
 		void Attach( nsIDOMWindow *Window );
 	};
@@ -143,10 +140,7 @@ namespace xulfsv {
 			_session_view_core__::reset( P );
 			page__<trunk>::reset( P );
 		}
-		E_VDTOR( session_view__ );
-		session_view__( widgets__ &Widgets )
-		: _session_view_core__( Widgets )
-		{}
+		E_CDTOR( session_view__ );
 		void Init( trunk &Trunk )
 		{
 			_session_view_core__::Init();

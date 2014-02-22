@@ -119,22 +119,35 @@ namespace xulfmn {
 	protected:
 		void _Refresh( xml::writer_ &Digest );
 	public:
-		widgets__ &Widgets;
+		widgets__ Widgets;
 		void reset( bso::bool__ P = true )
 		{
 			_core__::reset( P );
+			Widgets.reset( P );
 		}
-		_main_core__( widgets__ &Widgets )
-		: Widgets( Widgets )
-		{
-			reset( false );
-		}
-		E_DTOR( _main_core__ )
+		E_CDTOR( _main_core__ )
 		void Init( void )
 		{
 			_core__::Init();
+			Widgets.Init();
 		}
 		void Attach( nsIDOMWindow *Window );
+		widget__ &vewHome( void )
+		{
+			return Widgets.vewHome;
+		}
+		widget__ &vewSessionForm( void )
+		{
+			return Widgets.vewSessionForm;
+		}
+		widget__ &vewSessionView( void )
+		{
+			return Widgets.vewSessionView;
+		}
+		deck__ &dckMain( void )
+		{
+			return Widgets.dckMain;
+		}
 	};
 	
 	namespace {
@@ -169,12 +182,7 @@ namespace xulfmn {
 			_main_core__::reset( P );
 			window__<trunk>::reset( P );
 		}
-		main__( widgets__ &Widgets )
-		: _main_core__( Widgets )
-		{
-			reset( false );
-		}
-		E_DTOR( main__ )
+		E_CDTOR( main__ )
 		void Init( trunk &Trunk )
 		{
 			_main_core__::Init();

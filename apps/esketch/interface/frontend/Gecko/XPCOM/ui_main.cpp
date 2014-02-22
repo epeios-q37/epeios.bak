@@ -44,6 +44,5 @@ const char *ui_main::main__::XULFBSRefresh( xml::writer_ &Digest )
 
 void ui_main::widgets__::Attach( nsIDOMWindow *Window )
 {
-	_widgets__::Attach( Window );
 }
 

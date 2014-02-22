@@ -33,21 +33,17 @@ namespace ui_main {
 
 	namespace {
 		typedef xulfmn::main__<trunk::trunk___> _main__;
-		typedef xulfmn::widgets__ _widgets__;
 	}
 
 	class widgets__
-	: public _widgets__
 	{
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_widgets__::reset( P );
 		}
 		E_CDTOR( widgets__ );
 		void Init( void )
 		{
-			_widgets__::Init();
 		}
 		void Attach( nsIDOMWindow *Window );
 	};
@@ -64,12 +60,7 @@ namespace ui_main {
 			_main__::reset( P );
 			Widgets.reset( P );
 		}
-		main__( void )
-		: _main__( Widgets )
-		{
-			reset( false );
-		}
-		E_DTOR( main__ );
+		E_CDTOR( main__ );
 		void Init( trunk::trunk___ &Trunk )
 		{
 			Widgets.Init();

@@ -127,22 +127,19 @@ namespace xulfsf {
 	protected:
 		void _Refresh( xml::writer_ &Digest );
 	public:
-		widgets__ &Widgets;
+		widgets__ Widgets;
 		void reset( bso::bool__ P = true )
 		{
 			_core__::reset( P );
+			Widgets.reset( P );
 			_BackendExtendedType = frdkrn::bxt_Undefined;
 		}
-		E_VDTOR( _session_form_core__ )
-		_session_form_core__( widgets__ &Widgets )
-		: Widgets( Widgets )
-		{
-			reset( false );
-		}
+		E_CDTOR( _session_form_core__ )
 		void Init( void )
 		{
 			_BackendExtendedType = frdkrn::bxt_Undefined;
 			_core__::Init();
+			Widgets.Init();
 		}
 		void Attach( nsIDOMWindow *Window );
 		void SetBackendType( frdkrn::backend_extended_type__ Type )
@@ -183,12 +180,7 @@ namespace xulfsf {
 			_session_form_core__::reset( P );
 			page__<trunk>::reset( P );
 		}
-		E_VDTOR( session_form__ )
-		session_form__( widgets__ &Widgets )
-		: _session_form_core__( Widgets )
-		{
-			reset( false );
-		}
+		E_CDTOR( session_form__ )
 		void Init( trunk &Trunk )
 		{
 			_session_form_core__::Init();
@@ -198,6 +190,7 @@ namespace xulfsf {
 		{
 			_session_form_core__::Attach( Window );
 			page__<trunk>::Attach( Window );
+			Widgets.Attach( Window );
 		}
 		trunk &Trunk( void )
 		{

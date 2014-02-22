@@ -40,10 +40,10 @@
         <xpp:expand select="SCL"/>
       </Modules>
     </Modules>
-	<Modules Group="UI">
-		<Modules Group="eh">
-			<Module>eh</Module>
-		</Modules>
+    <Modules Group="EH">
+      <Module>eh</Module>
+    </Modules>
+    <Modules Group="UI">
 		<Module>ui</Module>
     <Module>ui_base</Module>
     <Module>ui_main</Module>

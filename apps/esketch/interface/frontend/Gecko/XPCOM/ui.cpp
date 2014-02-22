@@ -32,7 +32,6 @@ xulftk::trunk___ &ui::ui___::XULFUITrunk( void ) const
 	return *_Trunk;
 }
 
-
 static void _ShowPanel(
 	display__ Display,
 	ui___ &UI )
@@ -41,20 +40,20 @@ static void _ShowPanel(
 
 	switch ( Display ) {
 	case dHome:
-		MainPanel = UI.Main.Widgets.vewHome;
+		MainPanel = UI.Main.vewHome();
 		break;
 	case dSessionForm:
-		MainPanel = UI.Main.Widgets.vewSessionForm;
+		MainPanel = UI.Main.vewSessionForm();
 		break;
 	case dSessionView:
-		MainPanel = UI.Main.Widgets.vewSessionView;
+		MainPanel = UI.Main.vewSessionView();
 		break;
 	default:
 		ERRPrm();
 		break;
 	}
 
-	UI.Main.Widgets.dckMain.SetSelectedItem( MainPanel );
+	UI.Main.dckMain().SetSelectedItem( MainPanel );
 
 }
 
