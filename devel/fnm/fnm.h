@@ -125,7 +125,6 @@ namespace fnm
 	};
 
 
-
 	//e Different type of file name.
 	enum type__ {
 		// ""
@@ -260,6 +259,11 @@ namespace fnm
 	};
 #endif
 }
+
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const fnm::name___ &Name );
+
 
 #if 0 // Obsolete ?
 

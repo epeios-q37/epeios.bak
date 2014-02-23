@@ -464,6 +464,22 @@ const name___ &fnm::GetAffix(
 	return Affix;
 }
 
+txf::text_oflow__ &operator <<(
+	txf::text_oflow__ &Flow,
+	const name___ &Name )
+{
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	Flow << Name.UTF8( Buffer );
+ERRErr
+ERREnd
+ERREpilog
+	return Flow;
+}
+
+
+
 
 
 /* Although in theory this class is inaccessible to the different modules,
