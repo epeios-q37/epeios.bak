@@ -42,30 +42,30 @@
 		<broadcaster
 			id="bdcJSConsole"
 			xex:oncommand="ehJSConsole"
-			label="&JSConsole.lbl;"
-			tooltiptext="&JSConsole.ttt;"
-			accesskey="&JSConsole.ack;"
+			label="&JSConsole.label;"
+			tooltiptext="&JSConsole.tooltiptext;"
+			accesskey="&JSConsole.accelkey;"
 			/>
 		<broadcaster
 			id="bdcDOMInspector"
 			xex:oncommand="ehDOMInspector"
-			label="&DOMInspector.lbl;"
-			tooltiptext="&DOMInspector.ttt;"
-			accesskey="&DOMInspector.ack;"
+			label="&DOMInspector.label;"
+			tooltiptext="&DOMInspector.tooltiptext;"
+			accesskey="&DOMInspector.accelkey;"
 			/>
 		<broadcaster
 			id="bdcFrontendError"
 			xex:oncommand="ehFrontendError"
-			label="&FrontendError.lbl;"
-			tooltiptext="&FrontendError.ttt;"
-			accesskey="&FrontendError.ack;"
+			label="&FrontendError.label;"
+			tooltiptext="&FrontendError.tooltiptext;"
+			accesskey="&FrontendError.accelkey;"
 			/>
 		<broadcaster
 			id="bdcBackendError"
 			xex:oncommand="ehBackendError"
-			label="&BackendError.lbl;"
-			tooltiptext="&BackendError.ttt;"
-			accesskey="&BackendError.ack;"
+			label="&BackendError.label;"
+			tooltiptext="&BackendError.tooltiptext;"
+			accesskey="&BackendError.accelkey;"
 			xex:observes="shpBackendError"
 			/>
 	</broadcasterset>

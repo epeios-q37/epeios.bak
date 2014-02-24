@@ -46,81 +46,81 @@
 	</broadcasterset>
 	<broadcasterset>
 		<broadcaster id="dspBackendType"
-					 label="&backendType.lbl;"
-					 tooltiptext="&backendType.ttt;"
+					 label="&backendType.label;"
+					 tooltiptext="&backendType.tooltiptext;"
 					 />
 		<broadcaster id="glbNoBackend"
 					 xex:oncommand="ehBackendTypeSelection"
-					 label="&noBackend.lbl;"
+					 label="&noBackend.label;"
 					 value="None"
 					 observes="bdcNoBackend"
 					 />
 		<broadcaster id="glbPredefinedBackend"
 					 xex:oncommand="ehBackendTypeSelection"
-					 label="&predefinedBackend.lbl;"
-					 tooltiptext="&predefinedBackend.ttt;"
+					 label="&predefinedBackend.label;"
+					 tooltiptext="&predefinedBackend.tooltiptext;"
 					 value="Predefined"
 					 observes="bdcPredefinedBackend"
 					 />
 		<broadcaster
 			id="glbDaemonBackend"
 			xex:oncommand="ehBackendTypeSelection"
-			label="&daemonBackend.lbl;"
+			label="&daemonBackend.label;"
 			value="Daemon"
 			observes="bdcDaemonBackend"
 			/>
 		<broadcaster
 			id="dspDaemonBackendLocation"
-			tooltiptext="&daemonBackendLocation.ttt;"
+			tooltiptext="&daemonBackendLocation.tooltiptext;"
 			placeholder="&daemonBackendLocation.phd;"
 			observes="bdcDaemonBackend"
 			/>
 		<broadcaster
 			id="glbEmbeddedBackend"
 			xex:oncommand="ehBackendTypeSelection"
-			label="&embeddedBackend.lbl;"
+			label="&embeddedBackend.label;"
 			value="Embedded"
 			observes="bdcEmbeddedBackend"
 			/>
 		<broadcaster
 			id="dspEmbeddedBackendLocation"
-			tooltiptext="&embeddedBackendLocation.ttt;"
+			tooltiptext="&embeddedBackendLocation.tooltiptext;"
 			placeholder="&embeddedBackendLocation.phd;"
 			observes="bdcEmbeddedBackend"
 			/>
 		<broadcaster
 			id="glbEmbeddedBackendSelection"
 			xex:oncommand="ehEmbeddedBackendSelection"
-			label="&embeddedBackendSelection.lbl;"
-			tooltiptext="&embeddedBackendSelection.ttt;"
-			accesskey="&embeddedBackendSelection.ack;"
+			label="&embeddedBackendSelection.label;"
+			tooltiptext="&embeddedBackendSelection.tooltiptext;"
+			accesskey="&embeddedBackendSelection.accesskey;"
 			observes="bdcEmbeddedBackendSelection"
 			/>
 		<broadcaster
 			id="dspLogin"
-			label="&login.lbl;"
-			tooltiptext="&login.ttt;"
+			label="&login.label;"
+			tooltiptext="&login.tooltiptext;"
 			value="&login.vlu;"
 			/>
 		<broadcaster
 			id="dspPassword"
-			label="&password.lbl;"
-			tooltiptext="&password.ttt;"
+			label="&password.label;"
+			tooltiptext="&password.tooltiptext;"
 			value="&password.vlu;"
 			/>
 		<broadcaster
 			id="dspApply"
 			xex:oncommand="ehApply"
-			label="&apply.lbl;"
-			tooltiptext="&apply.ttt;"
-			accesskey="&apply.ack;"
+			label="&apply.label;"
+			tooltiptext="&apply.tooltiptext;"
+			accesskey="&apply.accesskey;"
 			/>
 		<broadcaster
 			id="dspCancel"
 			xex:oncommand="ehCancel"
-			label="&cancel.lbl;"
-			tooltiptext="&cancel.ttt;"
-			accesskey="&cancel.ack;"
+			label="&cancel.label;"
+			tooltiptext="&cancel.tooltiptext;"
+			accesskey="&cancel.accesskey;"
 			/>
 	</broadcasterset>
 	<keyset>
@@ -130,7 +130,7 @@
 		<groupbox>
 			<hbox>
 				<groupbox>
-					<caption label="&backendSelection.lbl;"/>
+					<caption label="&backendSelection.label;"/>
 					<hbox>
 						<menulist id="mnlBackendType"
 								  observes="dspBackendType"
@@ -167,7 +167,7 @@
 			</hbox>
 			<hbox>
 				<groupbox>
-					<caption label="&authentication.lbl;" observes="bdcAuthentication"/>
+					<caption label="&authentication.label;" observes="bdcAuthentication"/>
 					<grid>
 						<columns>
 							<column/>

@@ -1,42 +1,42 @@
-<!ENTITY backendSelection.lbl "Moteur de traitement">
+<!ENTITY backendSelection.label "Moteur de traitement">
 
-<!ENTITY noBackend.lbl "Aucun">
+<!ENTITY noBackend.label "Aucun">
 
-<!ENTITY daemonBackend.lbl "Daemon">
+<!ENTITY daemonBackend.label "Daemon">
 
-<!ENTITY embeddedBackend.lbl "Enclavé">
+<!ENTITY embeddedBackend.label "Enclavé">
 
-<!ENTITY authentication.lbl "Authentification">
+<!ENTITY authentication.label "Authentification">
 
-<!ENTITY backendType.lbl "Type de moteur de traitement">
-<!ENTITY backendType.ttt "Sélectionner le type de moteur de traitement.">
+<!ENTITY backendType.label "Type de moteur de traitement">
+<!ENTITY backendType.tooltiptext "Sélectionner le type de moteur de traitement.">
 
 <!ENTITY daemonBackendLocation.phd "adresse:port">
-<!ENTITY daemonBackendLocation.ttt "Adresse et port du 'daemon'.">
+<!ENTITY daemonBackendLocation.tooltiptext "Adresse et port du 'daemon'.">
 
 <!ENTITY embeddedBackendLocation.phd "">
-<!ENTITY embeddedBackendLocation.ttt "Localisation et nom de la bibliothèque dynamique du moteur de traitement.">
+<!ENTITY embeddedBackendLocation.tooltiptext "Localisation et nom de la bibliothèque dynamique du moteur de traitement.">
 
-<!ENTITY predefinedBackend.lbl "Prédéfini">
-<!ENTITY predefinedBackend.ttt "Sélectionner un des moteurs de traitement prédéfinis.">
+<!ENTITY predefinedBackend.label "Prédéfini">
+<!ENTITY predefinedBackend.tooltiptext "Sélectionner un des moteurs de traitement prédéfinis.">
 
-<!ENTITY embeddedBackendSelection.lbl "Parcourir...">
-<!ENTITY embeddedBackendSelection.ttt "Sélectionner la bibliothèque dynamique du moteur de traitement.">
-<!ENTITY embeddedBackendSelection.ack "P">
+<!ENTITY embeddedBackendSelection.label "Parcourir...">
+<!ENTITY embeddedBackendSelection.tooltiptext "Sélectionner la bibliothèque dynamique du moteur de traitement.">
+<!ENTITY embeddedBackendSelection.accesskey "P">
 
-<!ENTITY login.lbl "Identifiant">
-<!ENTITY login.vlu "&login.lbl;">
-<!ENTITY login.ttt "Votre identifiant.">
+<!ENTITY login.label "Identifiant">
+<!ENTITY login.vlu "&login.label;">
+<!ENTITY login.tooltiptext "Votre identifiant.">
 
-<!ENTITY password.lbl "Mot de passe">
-<!ENTITY password.vlu "&password.lbl;">
-<!ENTITY password.ttt "Votre mot de passe.">
+<!ENTITY password.label "Mot de passe">
+<!ENTITY password.vlu "&password.label;">
+<!ENTITY password.tooltiptext "Votre mot de passe.">
 
-<!ENTITY apply.lbl "OK">
-<!ENTITY apply.ttt "Lancer la session.">
-<!ENTITY apply.ack "O">
+<!ENTITY apply.label "OK">
+<!ENTITY apply.tooltiptext "Lancer la session.">
+<!ENTITY apply.accesskey "O">
 
-<!ENTITY cancel.lbl "Annuler">
-<!ENTITY cancel.ttt "Annule la session.">
-<!ENTITY cancel.ack "A">
+<!ENTITY cancel.label "Annuler">
+<!ENTITY cancel.tooltiptext "Annule la session.">
+<!ENTITY cancel.accesskey "A">
 

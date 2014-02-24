@@ -1,150 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Entities>
-
-  <Entity Name="backendSelection.lbl">
-    <Translation language="en">Backend</Translation>
-    <Translation language="fr">Moteur de traitement</Translation>
-  </Entity>
-  
-  <EntitySet Affix="backendType">
-    <Entity Suffix="lbl">
-      <Translation language="en">Backend type</Translation>
-      <Translation language="fr">Type de moteur de traitement</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Select backend type.</Translation>
-      <Translation language="fr">Sélectionner le type de moteur de traitement.</Translation>
-    </Entity>
-  </EntitySet>
-  
-  <Entity Name="noBackend.lbl">
-    <Translation language="en">None</Translation>
-    <Translation language="fr">Aucun</Translation>
-  </Entity>
-
-  <Entity Name="daemonBackend.lbl">
-    <Translation language="en">Daemon</Translation>
-    <Translation language="fr">Daemon</Translation>
-  </Entity>
-  
-  <EntitySet Affix="daemonBackendLocation">
-    <Entity Suffix="phd">
-      <Translation language="en">address:port</Translation>
-      <Translation language="fr">adresse:port</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Address and port of the daemon</Translation>
-      <Translation language="fr">Adresse et port du 'daemon'.</Translation>
-    </Entity>
-  </EntitySet>
-  
-  <Entity Name="embeddedBackend.lbl">
-    <Translation language="en">Embedded</Translation>
-    <Translation language="fr">Enclavé</Translation>
-  </Entity>
-  
-  <EntitySet Affix="embeddedBackendLocation">
-    <Entity Suffix="phd">
-      <Translation language="en"></Translation>
-      <Translation language="fr"></Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Location and name of the backend dynamic library.</Translation>
-      <Translation language="fr">Localisation et nom de la bibliothèque dynamique du moteur de traitement.</Translation>
-    </Entity>
-  </EntitySet>
-
-  <EntitySet Affix="predefinedBackend">
-    <Entity Suffix="lbl">
-      <Translation language="en">Predefined</Translation>
-      <Translation language="fr">Prédéfini</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Select one of the predefined backend.</Translation>
-      <Translation language="fr">Sélectionner un des moteurs de traitement prédéfinis.</Translation>
-    </Entity>
-  </EntitySet>
-
-  <EntitySet Affix="embeddedBackendSelection">
-    <Entity Suffix="lbl">
-      <Translation language="en">Browse...</Translation>
-      <Translation language="fr">Parcourir...</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Select the backend dynamic library.</Translation>
-      <Translation language="fr">Sélectionner la bibliothèque dynamique du moteur de traitement.</Translation>
-    </Entity>
-    <Entity Suffix="ack">
-      <Translation language="en">B</Translation>
-      <Translation language="fr">P</Translation>
-    </Entity>
-  </EntitySet>
-
-  <EntitySet Affix="login">
-    <Entity Suffix="lbl">
-      <Translation language="en">Login</Translation>
-      <Translation language="fr">Identifiant</Translation>
-    </Entity>
-    <Entity Suffix="vlu">
-      <Translation language="en">&amp;login.lbl;</Translation>
-      <Translation language="fr">&amp;login.lbl;</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Your login.</Translation>
-      <Translation language="fr">Votre identifiant.</Translation>
-    </Entity>
-  </EntitySet>
-
-  <Entity Name="authentication.lbl">
-    <Translation language="en">Authentication</Translation>
-    <Translation language="fr">Authentification</Translation>
-  </Entity>
-
-  <EntitySet Affix="password">
-    <Entity Suffix="lbl">
-      <Translation language="en">Password</Translation>
-      <Translation language="fr">Mot de passe</Translation>
-    </Entity>
-    <Entity Suffix="vlu">
-      <Translation language="en">&amp;password.lbl;</Translation>
-      <Translation language="fr">&amp;password.lbl;</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Your password.</Translation>
-      <Translation language="fr">Votre mot de passe.</Translation>
-    </Entity>
-  </EntitySet>
-
-  <EntitySet Affix="apply">
-    <Entity Suffix="lbl">
-      <Translation language="en">OK</Translation>
-      <Translation language="fr">OK</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Launch session.</Translation>
-      <Translation language="fr">Lancer la session.</Translation>
-    </Entity>
-    <Entity Suffix="ack">
-      <Translation language="en">O</Translation>
-      <Translation language="fr">O</Translation>
-    </Entity>
-  </EntitySet>
-
-  <EntitySet Affix="cancel">
-    <Entity Suffix="lbl">
-      <Translation language="en">Cancel</Translation>
-      <Translation language="fr">Annuler</Translation>
-    </Entity>
-    <Entity Suffix="ttt">
-      <Translation language="en">Cancel session.</Translation>
-      <Translation language="fr">Annule la session.</Translation>
-    </Entity>
-    <Entity Suffix="ack">
-      <Translation language="en">C</Translation>
-      <Translation language="fr">A</Translation>
-    </Entity>
-  </EntitySet>
-  
+<Entities  xmlns:xpp="http://zesuw.org/xpp/">
+  <xpp:expand href="eSessionForm.xml"/>
   <!--
   <EntitySet Affix="">
     <Entity Suffix="">
@@ -161,15 +17,15 @@
 	-->
   <!--
 	<EntitySet Affix="">
-		<Entity Suffix="lbl">
+		<Entity Suffix="label">
 			<Translation language="en"></Translation>
 			<Translation language="fr"></Translation>
 		</Entity>
-		<Entity Suffix="ttt">
+		<Entity Suffix="tooltiptext">
 			<Translation language="en"></Translation>
 			<Translation language="fr"></Translation>
 		</Entity>
-		<Entity Suffix="ack">
+		<Entity Suffix="accesskey">
 			<Translation language="en"></Translation>
 			<Translation language="fr"></Translation>
 		</Entity>

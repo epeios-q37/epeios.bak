@@ -1,17 +1,17 @@
 
-<!ENTITY JSConsole.lbl "JS Console">
-<!ENTITY JSConsole.ttt "Ouvre la console JavaScript">
-<!ENTITY JSConsole.ack "J">
+<!ENTITY JSConsole.label "JS Console">
+<!ENTITY JSConsole.tooltiptext "Ouvre la console JavaScript">
+<!ENTITY JSConsole.accelkey "J">
 
-<!ENTITY DOMInspector.lbl "DOM Inspector">
-<!ENTITY DOMInspector.ttt "Ouvre 'DOM Inspector'">
-<!ENTITY DOMInspector.ack "D">
+<!ENTITY DOMInspector.label "DOM Inspector">
+<!ENTITY DOMInspector.tooltiptext "Ouvre 'DOM Inspector'">
+<!ENTITY DOMInspector.accelkey "D">
 
-<!ENTITY FrontendError.lbl "Erreur 'Frontend'">
-<!ENTITY FrontendError.ttt "Teste l'erreur de type 'frontend'">
-<!ENTITY FrontendError.ack "F">
+<!ENTITY FrontendError.label "Erreur 'Frontend'">
+<!ENTITY FrontendError.tooltiptext "Teste l'erreur de type 'frontend'">
+<!ENTITY FrontendError.accelkey "F">
 
-<!ENTITY BackendError.lbl "Erreur 'Backend'">
-<!ENTITY BackendError.ttt "Teste l'erreur de type 'backend'">
-<!ENTITY BackendError.ack "B">
+<!ENTITY BackendError.label "Erreur 'Backend'">
+<!ENTITY BackendError.tooltiptext "Teste l'erreur de type 'backend'">
+<!ENTITY BackendError.accelkey "B">
 		 
