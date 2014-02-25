@@ -77,9 +77,6 @@ static void Close_( iop::descriptor__ D )
 #elif defined( IOP__USE_LOWLEVEL_IO )
 # if defined( FIL__WIN )
 
-#include "cio.h"
-#include "tht.h"
-
 static inline iop::descriptor__ Open_(
 	const fnm::name___ &Name,
 	mode__ Mode )
@@ -108,23 +105,11 @@ static inline iop::descriptor__ Open_(
 		break;
 	}
 
-	PMode = _wopen( Name.Core(), Flags, PMode );
-
-	cio::COut << (bso::uint__)PMode << " : O (" << Name << ")" << txf::nl << txf::commit;
-
-	if ( PMode == -1 ) {
-		tht::Suspend( 10000 );
-		PMode = _wopen( Name.Core(), Flags, PMode );
-		cio::COut << (bso::uint__)PMode << " : O (" << Name << ")" << txf::nl << txf::commit;
-}
-
-
-	return PMode;
+	return _wopen( Name.Core(), Flags, PMode );
 }
 
 static void Close_( iop::descriptor__ D )
 {
-	cio::COut << (bso::uint__)D << " : C" << txf::nl << txf::commit;
 	if ( _close( D ) != 0 )
 		ERRLbr();
 }
