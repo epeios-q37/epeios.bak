@@ -34,24 +34,20 @@ state__ dir::HandleError( void )
 	case EEXIST:
 		return sExists;
 		break;
-#ifdef DIR__POSIX
 	case EPERM:
 	case EACCES:
 	case EROFS:
 	case ELOOP:
 	case ENAMETOOLONG:
-#endif
+	case ENOENT:
 		return sInadequatePath;
 		break;
-	case ENOENT:
-#ifdef DIR__POSIX
 	case ENOTDIR:
 		return sBadPath;
 		break;
 	case EFAULT:
 		ERRFwk();
 		break;
-#endif
 	default:
 		ERRSys();
 		break;
