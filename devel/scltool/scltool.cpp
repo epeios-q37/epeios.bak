@@ -786,7 +786,6 @@ static void FillSetupRegistry_(
 {
 ERRProlog
 	str::string Id;
-	lcl::meaning  Meaning;
 	str::strings Tags;
 	str::string Command;
 	str::string Path;
@@ -803,7 +802,9 @@ ERRBegin
 	Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
 
 	Id.Init();
-	sclrgstry::GetMandatoryValue( rgstry::tentry__( IndexTaggedArgumentLinkTarget_, Tags ), Id );
+	if ( !sclrgstry::GetValue( rgstry::tentry__( IndexTaggedArgumentLinkTarget_, Tags ), Id ) )
+		sclmisc::ReportAndAbort( SCLTOOL_NAME "_BadAmountOfArguments" );
+		
 
 	Tags.Init();
 	Tags.Append( Command );
@@ -812,23 +813,13 @@ ERRBegin
 	Path.Init();
 	GetPath_( Id, Path );
 
-	if ( Path.Amount() == 0 ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLTOOL_NAME "_NoPathForArgument" );
-		Meaning.AddTag( Id );
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
-	}
+	if ( Path.Amount() == 0 )
+		sclmisc::ReportAndAbort( SCLTOOL_NAME "_NoPathForArgument", Id );
 
 	sclrgstry::SetValue( Path, Argument, &Error );
 
-	if (Error != E_NIL) {
-		Meaning.Init();
-		Meaning.SetValue( SCLTOOL_NAME "_BadPathForArgument" );
-		Meaning.AddTag( Id );
-		sclerror::SetMeaning(Meaning);
-		ERRAbort();
-	}
+	if (Error != E_NIL)
+		sclmisc::ReportAndAbort( SCLTOOL_NAME "_BadPathForArgument", Id );
 ERRErr
 ERREnd
 ERREpilog
@@ -967,41 +958,7 @@ ERREpilog
 static rgstry::entry___ FreeArguments_( ARGUMENT_FREES );
 static rgstry::entry___ FreeArgumentsAmount_( "@" AMOUNT_ATTRIBUTE, FreeArguments_ );
 
-#if 0	// Obsolete
-bso::int__ scltool::GetFreeArgumentsAmount( void )
-{
-	return sclrgstry::GetMandatoryUInt( FreeArgumentsAmount_ );
-}
-#endif
-
 static rgstry::entry___ TaggedFreeArgument_( RGSTRY_TAGGED_ENTRY( ARGUMENT_FREE, INDICE_ATTRIBUTE ) );
-
-#if 0	// Obsolete
-const str::string_ &scltool::GetFreeArgument(
-	bso::uint__ Indice,
-	str::string_ &Argument )
-{
-	bso::integer_buffer__ Buffer;
-
-	return sclrgstry::GetMandatoryValue( rgstry::tentry___( TaggedFreeArgument_, bso::Convert( Indice, Buffer ) ), Argument );
-}
-
-void scltool::PutFreeArgumentTo(
-	bso::uint__ Indice,
-	const rgstry::tentry__ &Entry )
-{
-ERRProlog
-	str::string Argument;
-ERRBegin
-	Argument.Init();
-	GetFreeArgument( Indice, Argument );
-
-	sclrgstry::SetValue( Argument, Entry );
-ERRErr
-ERREnd
-ERREpilog
-}
-#endif
 
 enum type__ {
 	tCommand,
@@ -1350,91 +1307,6 @@ ERRBegin
 ERREnd
 ERREpilog
 }
-
-#if 0	// Obsolete
-void scltool::PrintCommandDescription(
-	const char *CommandId,
-	const char *OptionsAndFlags )
-{
-ERRProlog
-	str::string Translation, ShortLong;
-	str::string OptionsAndFlagsBuffer;
-	callback__ Callback;
-ERRBegin
-	if ( ( CommandId == NULL ) || ( *CommandId == 0 ) )
-		ERRFwk();
-
-	ShortLong.Init();
-	cio::COut << TargetName << " " << GetArgumentShortLong( CommandId, ShortLong );
-
-	if ( ( OptionsAndFlags != NULL ) && ( *OptionsAndFlags != 0 ) ) {
-		cio::COut << ' ';
-		OptionsAndFlagsBuffer.Init( OptionsAndFlags );
-
-		Callback.Init();
-
-		if ( !str::ReplaceLongTags( OptionsAndFlagsBuffer, Callback, '%' ) )
-			ERRFwk();
-
-		cio::COut << OptionsAndFlagsBuffer;
-	}
-	
-	cio::COut << txf::nl;
-
-	Translation.Init();
-	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( CommandId, Translation ) << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-#endif
-
-#if 0	// Obsolete
-void scltool::PrintFlagDescription( const char *FlagId )
-{
-ERRProlog
-	str::string Translation, ShortLong;
-ERRBegin
-	Translation.Init();
-	ShortLong.Init();
-	cio::COut << txf::pad <<GetArgumentShortLong( FlagId, ShortLong ) << ": ";
-	Translation.Init();
-	cio::COut << scltool::GetArgumentDescriptionTranslation( FlagId, Translation ) << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void scltool::PrintOptionDescription(
-	const char *Label,
-	const char *OptionId )
-{
-ERRProlog
-	str::string Translation;
-ERRBegin
-	Translation.Init();
-	cio::COut << txf::pad << Label << ": " << GetArgumentDescriptionTranslation( OptionId, Translation ) << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-#endif
-
-#if 0	// Obsolete
-void scltool::PrintArgumentDescription(
-	const char *Label,
-	const char *ArgumentDescriptionLabel )
-{
-ERRProlog
-	str::string Translation;
-ERRBegin
-	Translation.Init();
-	cio::COut << txf::pad << Label << ": " << GetTranslation( ArgumentDescriptionLabel, Translation ) << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-#endif
 
 template <typename c, typename i> static void DumpInSetupRegistry_(
 	const char *Prefix,

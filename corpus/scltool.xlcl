@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: scltool.xlcl,v 1.2 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Translations text="SCLTOOL_BadArgument">
+  <Translations text="SCLTOOL_BadAmountOfArguments">
+    <Translation language="fr">Nombre d'arguments incorrects.</Translation>
+    <Translation language="en">Bad amount of arguments.</Translation>
+  </Translations>
+  <Translations text="SCLTOOL_BadArgument">
     <Translation language="fr">'%1' : argument incorrect.</Translation>
 		<Translation language="en">'%1' : bad argument.</Translation>
 	</Translations>
