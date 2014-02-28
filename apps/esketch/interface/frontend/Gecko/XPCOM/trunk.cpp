@@ -36,3 +36,25 @@ void trunk::user_callback__::XULFTKAboutText(
 		SOFTWARE_DETAILS, SOFTWARE_URL,
 		_T(), Text );
 }
+
+void trunk::user_callback__::XULFTKDefineSession( const fnm::name___ &ProjectFileName )
+{
+ERRProlog
+	str::string ProjectId;
+	bso::integer_buffer__ Buffer;
+ERRBegin
+	ProjectId.Init();
+
+	if ( ProjectFileName.Size() != 0 )
+		sclmisc::LoadProject( ProjectFileName, ProjectId );
+	else {
+		sclmisc::EraseProject();
+		ProjectId.Append( bso::Convert( tol::EpochTime( true ), Buffer ) );
+	}
+
+	_DefineSession( ProjectId );
+	_T().FinalizeDefineSession();
+ERRErr
+ERREnd
+ERREpilog
+}

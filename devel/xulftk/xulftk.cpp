@@ -535,12 +535,14 @@ ERREpilog
 	return Root;
 }
 
-void xulftk::trunk___::_DefineSession( void )
+void xulftk::trunk___::_DefineSession( const str::string_ &ProjectId )
 {
 ERRProlog
 	frdkrn::backend_extended_type__ Type = frdkrn::bxt_Undefined;
 	str::string Location;
 ERRBegin
+	Kernel().Registry().SetValue( frdrgy::ProjectId, ProjectId );
+
 	Kernel().Registry().GetValue( frdrgy::Backend, Location );
 
 	switch ( Type = frdkrn::GetBackendExtendedType( Kernel().Registry() ) ) {

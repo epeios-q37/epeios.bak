@@ -87,7 +87,9 @@ namespace sclmisc {
 
 	void EraseProject( void );
 
-	void LoadProject( const fnm::name___ &FileName );
+	void LoadProject(
+		const fnm::name___ &FileName,
+		str::string_ &Id );
 
 	using fil::GetBackupFileName;
 

@@ -1386,6 +1386,7 @@ static bso::bool__ main_(
 ERRProlog
 	str::string ProjectFileName;
 	str::string Command;
+	str::string ProjectId;
 ERRBegin
 	sclmisc::Initialize( NULL );
 
@@ -1396,8 +1397,10 @@ ERRBegin
 	ProjectFileName.Init();
 	sclrgstry::GetValue( ProjectFileName_, ProjectFileName );
 
+	ProjectId.Init();
+
 	if ( ProjectFileName.Amount() != 0 )
-		sclmisc::LoadProject( ProjectFileName );
+		sclmisc::LoadProject( ProjectFileName, ProjectId );
 
 	Command.Init();
 

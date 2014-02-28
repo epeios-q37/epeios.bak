@@ -171,16 +171,7 @@ namespace trunk {
 			_GoToHome();
 			_T().FinalizeGoToHome();
 		}
-		virtual void XULFTKDefineSession( const fnm::name___ &ProjectFileName )
-		{
-			if ( ProjectFileName.Size() != 0 )
-				sclmisc::LoadProject( ProjectFileName );
-			else
-				sclmisc::EraseProject();
-
-			_DefineSession();
-			_T().FinalizeDefineSession();
-		}
+		virtual void XULFTKDefineSession( const fnm::name___ &ProjectFileName );
 		virtual	void XULFTKApplySession( void )
 		{
 			_ApplySession( fblfrd::compatibility_informations__( SKTINF_LC_AFFIX, ESKETCH_API_VERSION ) );

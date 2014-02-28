@@ -361,9 +361,11 @@ void sclmisc::EraseProject( void )
 }
 
 
-void sclmisc::LoadProject( const fnm::name___ &FileName )
+void sclmisc::LoadProject(
+	const fnm::name___ &FileName,
+	str::string_ &Id )
 {
-	sclrgstry::LoadProject( FileName, SCLMISCTargetName );
+	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
 	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tConfiguration, utf::f_Default );
 }

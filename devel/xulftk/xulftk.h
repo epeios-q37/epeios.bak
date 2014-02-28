@@ -96,7 +96,7 @@ namespace xulftk {
 		}
 		void _GoToHome( void )
 		{}	// Standadisation.
-		void _DefineSession( void );
+		void _DefineSession( const str::string_ &ProjectId );
 # if 0
 		void _DefineSession(
 			const str::string_ &FileName,
@@ -246,7 +246,7 @@ namespace xulftk {
 		}
 	protected:
 		void Handle_( frdkrn::status__ Status );
-		void _DefineSession( void );	// 'registry' qui contient la configuration de l'application.
+		void _DefineSession( const str::string_ &ProjectId );	// 'registry' qui contient la configuration de l'application.
 # if 0 // Old
 		void _DefineSession(
 			const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel préremplir le 'SessionForm'.
@@ -517,9 +517,9 @@ namespace xulftk {
 		friend class _user_callback__;
 	};
 
-	inline void _user_callback__::_DefineSession( void )
+	inline void _user_callback__::_DefineSession( const str::string_ &ProjectId )
 	{
-		_T()._DefineSession();
+		_T()._DefineSession( ProjectId );
 	}
 # if 0	// Old
 	inline void _user_callback__::_DefineSession(

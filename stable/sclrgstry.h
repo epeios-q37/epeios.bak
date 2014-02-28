@@ -69,7 +69,8 @@ namespace sclrgstry {
 
 	void LoadProject(
 		const fnm::name___ &FileName,
-		const char *Target );
+		const char *Target,
+		str::string_ &Id );
 
 	void ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry );
 

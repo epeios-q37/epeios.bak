@@ -458,7 +458,7 @@ namespace bch {
 		void reset( bool P = true )
 		{
 			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::reset( P );
-			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::Memory().reset( P );
+//			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::Memory().reset( P );
 		}
 		_bunch_ &operator =( const _bunch_ &Op )
 		{

@@ -140,12 +140,14 @@ void sclrgstry::EraseProject( void )
 
 void sclrgstry::LoadProject(
 	const fnm::name___ &FileName,
-	const char *Target )
+	const char *Target,
+	str::string_ &Id )
 {
 ERRProlog
 	str::string Path;
 	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
+	bso::bool__ Missing = false;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
 	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
@@ -155,6 +157,8 @@ ERRBegin
 	Context.Init();
 	if ( Registry_.Fill( ProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
+
+	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
 ERRErr
 ERREnd
 ERREpilog
