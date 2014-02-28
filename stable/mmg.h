@@ -98,15 +98,9 @@ namespace mmg
 	private:
 		// Pointeur sur la partie statique de l'objet à sauver.
 		st *Static_;
-	protected:
-		// Alloue 'Capacite' octets.
-		virtual void SDRAllocate( sdr::size__ Capacity )
+		sdr::size__ _UnderlyingSize( void ) const
 		{
-			Memory.Allocate( Capacity + sizeof( st ) );
-		}
-		virtual sdr::size__ SDRUnderlyingSize( void )
-		{
-			sdr::size__ Size = Memory.Size();
+			sdr::size__ Size = Memory.UnderlyingSize();
 
 			if ( Size >= sizeof( st ) )
 				Size -= sizeof( st );
@@ -114,6 +108,16 @@ namespace mmg
 				ERRFwk();
 
 			return Size;
+		}
+	protected:
+		// Alloue 'Capacite' octets.
+		virtual void SDRAllocate( sdr::size__ Capacity )
+		{
+			Memory.Allocate( Capacity + sizeof( st ) );
+		}
+		virtual sdr::size__ SDRUnderlyingSize( void ) const
+		{
+			return _UnderlyingSize();
 		}
 		virtual void SDRRecall(
 			sdr::row_t__ Position,

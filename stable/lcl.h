@@ -269,7 +269,7 @@ namespace lcl {
 			: public _registry_::s
 		{};
 		locale_( s &S )
-			: _registry_( S )
+		: _registry_( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
@@ -283,8 +283,6 @@ namespace lcl {
 		}
 		void Init( void )
 		{
-			reset();
-
 			_registry_::Init();
 		}
 		void GetLanguages(

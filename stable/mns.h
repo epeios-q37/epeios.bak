@@ -89,6 +89,7 @@ namespace mns {
 			if ( Amount )
 				Test_();
 # endif
+			sdr::Test( _Size, Position, Amount );
 			memcpy( Buffer, Tampon_ + Position, Amount );
 		}
 		// écrit 'Nombre' octets à partir de 'Position' dans 'Tampon'
@@ -101,6 +102,7 @@ namespace mns {
 			if (Amount ) 
 				Test_();
 # endif
+			sdr::Test( _Size, Position, Amount );
 			memcpy( Tampon_ + Position, Buffer, Amount );
 		}
 		// alloue 'Nombre' octets
@@ -153,7 +155,7 @@ namespace mns {
 	  public main_storage__
 	{
 	protected:
-		virtual sdr::size__ SDRUnderlyingSize( void )
+		virtual sdr::size__ SDRUnderlyingSize( void ) const
 		{
 			return main_storage__::Size();
 		}

@@ -261,7 +261,7 @@ namespace fls {
 		// nom du fichier
 		char *Nom_;
 		// taille du fichier
-		fil::size__ TailleFichier_;
+		sdr::size__ TailleFichier_;	// 'sdr::size__' et non 'fil::size__', car considéré comme un 'storage', et donc soumis à ses limites.
 		struct {
 			int
 				// signale si le Stream est ouvert ou non
@@ -308,7 +308,7 @@ namespace fls {
 
 				Flush();	// Pour mettre à jour la taille physique du fichier pour que la méthode 'GetFileSize(...)' retourne la bonne valeur.
 
-				if ( !fil::Exists( Nom_ ) || ( (bso::size__)TailleFichier_ > fil::GetSize( Nom_ ) ) ) {
+				if ( !fil::Exists( Nom_ ) || ( TailleFichier_ > fil::GetSize( Nom_ ) ) ) {
 					sdr::datum__ Datum = 0;
 					
 					Open_( true );
@@ -332,6 +332,8 @@ namespace fls {
 			bso::size__ Nombre,
 			void *Tampon )
 		{
+			sdr::Test( TailleFichier_, Position, Nombre );
+
 			Open_( false );
 
 			bso::size__ Amount;
@@ -370,6 +372,8 @@ namespace fls {
 			bso::size__ Nombre,
 			position__ Position )
 		{
+			sdr::Test( TailleFichier_, Position, Nombre );
+
 			Open_( true );
 
 			bso::size__ Amount;
@@ -391,8 +395,14 @@ namespace fls {
 */		}
 		void Allocate( bso::size__ Capacite )
 		{
-			if ( ( TailleFichier_ == 0 ) && fil::Exists( Nom_ ) )
-				TailleFichier_ = fil::GetSize( Nom_ );
+			if ( ( TailleFichier_ == 0 ) && fil::Exists( Nom_ ) ) {
+				fil::size__ RawFileSize = fil::GetSize( Nom_ );
+
+				if ( RawFileSize > SDR_SIZE_MAX )
+					ERRDta();
+
+				TailleFichier_ = (sdr::size__)RawFileSize;
+			}
 
 			if ( Capacite > TailleFichier_ )
 				TailleFichier_ = Capacite;
@@ -556,7 +566,7 @@ namespace fls {
 			else
 				return 0;
 		}
-		fil::size__ FileSize( void )
+		fil::size__ FileSize( void ) const
 		{
 #	if 0
 			Open_( false );
@@ -588,13 +598,8 @@ namespace fls {
 	: public sdr::E_SDRIVER__,
 	  public file_storage___
 	{
-	protected:
-		virtual void SDRAllocate( sdr::size__ Size )
-		{
-			file_storage___::Allocate( Size );
-		}
-		// alloue 'Taille' octets
-		virtual sdr::size__ SDRUnderlyingSize( void )
+	private:
+		sdr::size__ _UnderlyingSize( void ) const
 		{
 			fil::size__ Size = FileSize();
 
@@ -602,6 +607,15 @@ namespace fls {
 				ERRDta();
 
 			return (sdr::size__)Size;
+		}
+	protected:
+		virtual void SDRAllocate( sdr::size__ Size )
+		{
+			file_storage___::Allocate( Size );
+		}
+		virtual sdr::size__ SDRUnderlyingSize( void ) const
+		{
+			return _UnderlyingSize();
 		}
 		virtual void SDRRecall(
 			sdr::row_t__ Position,

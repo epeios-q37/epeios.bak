@@ -159,15 +159,6 @@ namespace uys {
 
 			_Driver->Allocate( Size );
 		}
-		sdr::size__ UnderlyingSize( void )
-		{
-//			_Test();	// Traité ci-dessous.
-
-			if ( _Driver != NULL )
-				return _Driver->UnderlyingSize();
-			else
-				return 0;
-		}
 		void Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
@@ -192,6 +183,13 @@ namespace uys {
 			else
 				_Driver->Store( Buffer, Amount, Position );
 		}
+		sdr::size__ UnderlyingSize( void ) const
+		{
+			if ( _Driver == NULL )
+				return 0;
+			else
+				return _Driver->UnderlyingSize();
+		}
 	};
 
 	//c Untyped storage.
@@ -202,26 +200,11 @@ namespace uys {
 		_storage_driver__ _Driver;
 		// l'éventuel pilote de la multimemoire
 		ags::aggregated_storage_driver__ _AggregatedStorageDriver;
-		void _Test(
-			sdr::row_t__ Position,
-			sdr::size__ Amount ) const
-		{
-#ifdef UYS_DBG
-			if ( Position >= S_.Size )
-				if ( Amount > 0 )
-					ERRPrm();
-
-			if ( ( Position + Amount ) > S_.Size )
-				ERRPrm();
-#endif
-		}
 		void _Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount, 
 			sdr::datum__ *Buffer ) const
 		{
-			_Test( Position, Amount );
-
 			_Driver.Recall( Position, Amount, Buffer );
 		}
 		void _Store(
@@ -229,20 +212,15 @@ namespace uys {
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
-			_Test( Position, Amount );
-
 			_Driver.Store( Buffer, Amount, Position );
 		}
 		void _Allocate( sdr::size__ Size )
 		{
-			if ( Size != S_.Size ) {
-				_Driver.Allocate( Size );
-				S_.Size = Size;
-			}
+			_Driver.Allocate( Size );
 		}
 	public:
 		struct s {
-			sdr::size__ Size;
+//			sdr::size__ Size;
 			ags::descriptor__ Descriptor;
 		} &S_;
 		void reset( bool P = true )
@@ -250,7 +228,6 @@ namespace uys {
 			_Driver.reset( P );
 			_AggregatedStorageDriver.reset( P );
 
-			S_.Size = 0;
 			S_.Descriptor = E_NIL;
 		}
 		untyped_storage_( s &S )
@@ -268,21 +245,17 @@ namespace uys {
 			reset();
 
 			_Driver.plug( Driver );
-			S_.Size = _Driver.UnderlyingSize();
-
 		}
 		void plug( ags::aggregated_storage_ &AS )
 		{
 			_AggregatedStorageDriver.Init( AS );
 			_Driver.plug( _AggregatedStorageDriver );
-			S_.Size = _Driver.UnderlyingSize();
-
 		}
 		untyped_storage_ &operator =( const untyped_storage_ &US )
 		{
-			_Allocate( US.GetSize() );
+			_Allocate( US.UnderlyingSize() );
 
-			Store( US, US.GetSize(), 0, 0 );
+			Store( US, US.UnderlyingSize(), 0, 0 );
 
 			return *this;
 		}
@@ -292,8 +265,6 @@ namespace uys {
 //			reset();
 
 			_Driver.Init();
-
-			S_.Size = _Driver.UnderlyingSize();
 		}
 		void WriteToFlow(
 			sdr::row_t__ Position,
@@ -378,7 +349,10 @@ namespace uys {
 		{
 			return _Driver.Driver( Ignore );
 		}
-		E_RWDISCLOSE_( sdr::size__, Size );
+		sdr::size__ UnderlyingSize( void ) const
+		{
+			return _Driver.UnderlyingSize();
+		}
 	};
 
 	enum state__ {	// Statut de l'opération de connection.

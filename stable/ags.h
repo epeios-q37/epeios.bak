@@ -102,10 +102,14 @@ namespace ags {
 		// memoire à laquelle il a été affecté
 		class aggregated_storage_ *_AStorage;
 		void _Free( void );
+		sdr::size__ _UnderlyingSize( void ) const;
 	protected:
 		virtual void SDRAllocate( sdr::size__ Size );
 		// Fonction déportée.
-		virtual sdr::size__ SDRUnderlyingSize( void );
+		virtual sdr::size__ SDRUnderlyingSize( void ) const
+		{
+			return _UnderlyingSize();
+		}
 		// fonction déportée
 		// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
 		virtual void SDRRecall(
@@ -769,9 +773,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 	class aggregated_storage_
 	{
 	private:
-		sdr::size__ _Size( void ) const
+		sdr::size__ _UnderlyingSize( void ) const
 		{
-			return Storage.Size();
+			return Storage.UnderlyingSize();
 		}
 		void _Read(
 			sdr::row_t__ Position,
@@ -832,7 +836,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		status__ _TailFragmentStatus( void ) const
 		{
-			if ( _Size() == 0 )
+			if ( _UnderlyingSize() == 0 )
 				return s_Undefined;
 			else {
 				header__ Header;
@@ -844,7 +848,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		bso::bool__ _IsTailFragmentFree( void ) const
 		{
-			if ( _Size() == 0 )
+			if ( _UnderlyingSize() == 0 )
 				return false;
 			else
 				return _TailFragmentStatus() == sFree;
@@ -868,7 +872,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		size__ _GetTailFreeSize( void ) const
 		{
 			if ( _IsTailFragmentFree() )
-				return _GetPriorSize( _Size(), sFree );
+				return _GetPriorSize( _UnderlyingSize(), sFree );
 			else
 				return 0;
 		}
@@ -877,7 +881,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			if ( _GetTailFreeSize() == 0 )
 				return E_NIL;
 			else
-				return _Size() - _GetTailFreeSize();
+				return _UnderlyingSize() - _GetTailFreeSize();
 		}
 		size__ _GetLongSize(
 			sdr::row_t__ Row,
@@ -885,7 +889,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			sdr::size__ &SizeLength ) const
 		{
 			bso::dint__ DSize;
-			size__ Limit = _Size() - Row;
+			size__ Limit = _UnderlyingSize() - Row;
 
 			_Read( Row, sizeof( DSize ) > Limit ? Limit : sizeof( DSize ), (sdr::datum__ *)&DSize );
 
@@ -932,7 +936,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		bso::bool__ _IsLast( sdr::row_t__ Row ) const
 		{
-			return ( Row + _GetFragmentSize( Row ) ) == _Size();
+			return ( Row + _GetFragmentSize( Row ) ) == _UnderlyingSize();
 		}
 		void _WriteHeader(
 			sdr::row_t__ Row,
@@ -1014,14 +1018,14 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			bso::bool__ &UsingTail )
 		{
 			size__ TailAvailableSize = _GetTailFreeSize();
-			sdr::row_t__ Row = _Size() - TailAvailableSize;	// On qtocke dans une variable, car '_Size()' est modifié par 'Allocate(...)'.
+			sdr::row_t__ Row = _UnderlyingSize() - TailAvailableSize;	// On qtocke dans une variable, car '_Size()' est modifié par 'Allocate(...)'.
 
 			UsingTail = TailAvailableSize != 0;
 
 			if ( TailAvailableSize >= XSize.FragmentSize() )
 				ERRPrm();
 
-			Storage.Allocate( _Size() - TailAvailableSize + XSize.FragmentSize() );
+			Storage.Allocate( _UnderlyingSize() - TailAvailableSize + XSize.FragmentSize() );
 
 			return _SetFragment( Row, XSize, PredecessorStatus );
 		}
@@ -1072,7 +1076,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				Descriptor = _SetUsedFragmentUsingFreeFragment( Row, XSize, ( Row == 0 ? _TailFragmentStatus() : sUsed ), All );
 			} else { 
 				if ( ( Row = _GetTailFreeFragment() ) == E_NIL )
-					Row = _Size();
+					Row = _UnderlyingSize();
 				Descriptor = _AllocateAndSetUsedFragmentAtTail( XSize, sUsed, All );
 			}
 
@@ -1184,14 +1188,14 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		void Preallocate( sdr::size__ Size )
 		{
-			if ( _Size() > Size )
+			if ( _UnderlyingSize() > Size )
 				ERRPrm();
-			else if ( _Size() != Size ) {
-				sdr::row_t__ Row = _Size();
+			else if ( _UnderlyingSize() != Size ) {
+				sdr::row_t__ Row = _UnderlyingSize();
 
-				Size -= _Size();
+				Size -= _UnderlyingSize();
 
-				Storage.Allocate( _Size() + Size );
+				Storage.Allocate( _UnderlyingSize() + Size );
 
 				if ( ( Row != 0 ) && ( _GetTailFreeSize() != 0 ) ) {
 					Row = _GetTailFreeFragment();

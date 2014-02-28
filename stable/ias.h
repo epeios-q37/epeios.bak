@@ -79,17 +79,21 @@ namespace ias {
 	private:
 		index__ _Index;
 		const indexed_aggregated_storage_ *&_AStorage;
+		sdr::size__ _UnderlyingSize( void ) const;
 	protected:
 		virtual void SDRAllocate( sdr::size__ Capacity )
 		{
 			ERRFwk();
 		}
-		virtual sdr::size__ SDRUnderlyingSize( void )
+		virtual sdr::size__ SDRUnderlyingSize( void ) const
 		{
+			return _UnderlyingSize();
+# if 0
 			if ( _AStorage != NULL )
 				return Size();
 			else
 				return 0;
+# endif
 		}
 		// Déportée.
 		virtual void SDRRecall(
@@ -135,7 +139,6 @@ namespace ias {
 			return _Index;
 		}
 		// Déportée.
-		sdr::size__ Size( void ) const;
 		friend class indexed_aggregated_storage_driver__;
 	};
 
@@ -636,7 +639,7 @@ namespace ias {
 		_AStorage->Read( _Index, Position, Amount, Buffer );
 	}
 
-	inline sdr::size__ _indexed_aggregated_storage_driver__::Size( void ) const
+	inline sdr::size__ _indexed_aggregated_storage_driver__::_UnderlyingSize( void ) const
 	{
 		if ( _Index == E_NIL )
 			return 0;
