@@ -35,15 +35,6 @@
 	>
 	<script type="text/javascript" src="egeckocom.js"/>
   <broadcasterset id="bcsShapes"/>
-  <broadcasterset>
-		<!-- Gestion 'hidden'/'disabled' -->
-		<broadcaster id="bdcNoBackend"/>
-		<broadcaster id="bdcPredefinedBackend"/>
-		<broadcaster id="bdcDaemonBackend"/>
-		<broadcaster id="bdcEmbeddedBackend"/>
-		<broadcaster id="bdcEmbeddedBackendSelection"/>
-		<broadcaster id="bdcAuthentication"/>"
-	</broadcasterset>
 	<broadcasterset>
 		<broadcaster id="dspBackendType"
 					 label="&backendType.label;"
