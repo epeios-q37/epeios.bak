@@ -301,7 +301,7 @@ namespace ndbsct {
 		if ( uys::IsError( State ) ) {
 			FileManager.reset();
 		} else {
-			if ( State != lst::Plug( Content, FileManager._ListFileManager, Content.Storage.UnderlyingSize()/Content.Size(), FileManager._GetUnderlyingFilesLastModificationTime() ) ) {
+			if ( State != lst::Plug( Content, FileManager._ListFileManager, Content.Storage.Size()/Content.Size(), FileManager._GetUnderlyingFilesLastModificationTime() ) ) {
 				FileManager.reset();
 				return uys::sInconsistent;
 			} else 

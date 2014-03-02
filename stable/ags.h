@@ -102,14 +102,10 @@ namespace ags {
 		// memoire à laquelle il a été affecté
 		class aggregated_storage_ *_AStorage;
 		void _Free( void );
-		sdr::size__ _UnderlyingSize( void ) const;
 	protected:
 		virtual void SDRAllocate( sdr::size__ Size );
 		// Fonction déportée.
-		virtual sdr::size__ SDRUnderlyingSize( void ) const
-		{
-			return _UnderlyingSize();
-		}
+		virtual sdr::size__ SDRSize( void ) const;
 		// fonction déportée
 		// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
 		virtual void SDRRecall(
@@ -181,9 +177,9 @@ namespace ags {
 	/*
 	NOTA :
 	- Par 'Size', on entend : 
-		- pour les fragments occupés (used), la taille disponible pour les données, et non pas la taille totale occupée par le fragment,
-		- pour les fragments libres (free), la taille totale du fragment.
-	- Un 'descriptor__' pointe sur le début des données. Les métadonnées sot situés juste avant. Seul les fragment occupés ('used') ont un descritpeur.
+		- pour les fragments occupés ('used'), la taille disponible pour les données, et non pas la taille totale occupée par le fragment,
+		- pour les fragments libres ('free'), la taille totale du fragment.
+	- Un descripteur ('descriptor__') pointe sur le début des données. Les métadonnées sont situées juste avant. Seul les fragment occupés ('used') ont un descripteur.
 	- Une 'Value' est une donnée brute, sans ajustement, telle que stockée.
 	*/		
 
@@ -215,23 +211,19 @@ namespace ags {
 	enum flag_position__ {
 		/*
 		Statut du fragment : 
-			- 0 : libre (free),
-			- 1 : occupé (used).
+			- 0 : libre ('free'),
+			- 1 : occupé ('used').
 		*/
 		fpStatus,
 		/*
 		- Pour n'importe quel type de fragment (libre ou occupé), s'il est en première position, statut du fragment en dernière position :
 		- Pour un fragment occupé, s'il n'est pas en première position, statut de son prédecesseur :
-			- 0 : libre (free),
-			- 1 : occupé (used).
-		Pour un fragment libre, non situé en première position, n'a pas de signification.
+			- 0 : libre ('free'),
+			- 1 : occupé ('used').
+		Pour un fragment libre, non situé en première position, n'a pas de signification (les fragments libres étant toujours fusionnés,
+		le fragment précédent un fragment libre est toujours un fragment occupé).
 		*/
 		fpPredecessorStatus,
-		/*
-		Type de la taille d'un fragment :
-			- 0 : court (short) la taille du fragment étant encodé dans les bits restant de l'octet,
-			- 1 : long (large), la taille du fragment étant encodé sur, au maximum, les 2^(valeurs des bits restants de l'octet).
-		*/
 		/*
 			Les 5 bits qui suivent contiennent la taille (-1) du fragment lorsqu'elle est suffisament petit pour y être contenue
 			(elle est alors dite 'embedded') et qu'il s'agit d'un fragment libre (free).
@@ -243,8 +235,8 @@ namespace ags {
 				- 0 : longue (dynamique, 'long'), elle est stockée dans les octets qui suivent (nombre d'octets variables).
 				- 1 : courte ('short') dans le 'header' (taille - 1).
 
-			Pour des raisons de simplification, lorsque ce bit est à 1 pour un fragment occupé (used), alors la taille de ce fragment est
-			de 1. Lorsque la taille d'un fragment occupé est > 1, alors elle est stockée de manière dynamique.
+			Pour des raisons de simplification, lorsque ce bit est à 1 pour un fragment libre, alors la taille de ce fragment est
+			de 1. Lorsque la taille d'un fragment libre est > 1, alors elle est stockée de manière dynamique.
 
 			Ce bit sert également de marqueur (lorsqu'il est à 0) pour signaler que l'on est sur l'octet précédent le premier
 			d'une taille dynamique. Le 7ème bit du dernier octet d'une taille dynamique est toujours à 0. Les autres ont leur 7ème bits à 1.
@@ -261,7 +253,7 @@ namespace ags {
 	};
 
 # define AGS_HEADER_SIZE			sizeof( ags::header__ )
-# define AGS__HEADER_SIZE			1	// Lorsque cette value change, permet de détecter le code qu'il faut modifier.
+# define AGS__HEADER_SIZE			1	// Lorsque cette valeur change, permet de détecter le code qu'il faut modifier.
 # define AGS_EMBEDDED_VALUE_MAX		( (bso::u8__)~ags::f_All >> ags::fp_SizeBegin )
 # define AGS_SHORT_SIZE_MAX			( AGS_EMBEDDED_VALUE_MAX + 1 )
 # define AGS_LONG_SIZE_SIZE_MAX		sizeof( bso::dint__ )
@@ -528,7 +520,7 @@ namespace ags {
 		if ( !IsFreeFragmentSizeShortSuitable( Size ) )
 			ERRPrm();
 
-		return 0;
+		return 0;	// Pour un fragment libre, seule une taille de 1 peut être convertit en 'short'.
 	}
 
 	inline value__ ConvertUsedFragmentShortSizeToValue( size__ Size )
@@ -773,9 +765,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 	class aggregated_storage_
 	{
 	private:
-		sdr::size__ _UnderlyingSize( void ) const
+		sdr::size__ _Size( void ) const
 		{
-			return Storage.UnderlyingSize();
+			return Storage.Size();
 		}
 		void _Read(
 			sdr::row_t__ Position,
@@ -836,7 +828,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		status__ _TailFragmentStatus( void ) const
 		{
-			if ( _UnderlyingSize() == 0 )
+			if ( _Size() == 0 )
 				return s_Undefined;
 			else {
 				header__ Header;
@@ -848,7 +840,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		bso::bool__ _IsTailFragmentFree( void ) const
 		{
-			if ( _UnderlyingSize() == 0 )
+			if ( _Size() == 0 )
 				return false;
 			else
 				return _TailFragmentStatus() == sFree;
@@ -872,7 +864,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		size__ _GetTailFreeSize( void ) const
 		{
 			if ( _IsTailFragmentFree() )
-				return _GetPriorSize( _UnderlyingSize(), sFree );
+				return _GetPriorSize( _Size(), sFree );
 			else
 				return 0;
 		}
@@ -881,7 +873,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			if ( _GetTailFreeSize() == 0 )
 				return E_NIL;
 			else
-				return _UnderlyingSize() - _GetTailFreeSize();
+				return _Size() - _GetTailFreeSize();
 		}
 		size__ _GetLongSize(
 			sdr::row_t__ Row,
@@ -889,7 +881,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			sdr::size__ &SizeLength ) const
 		{
 			bso::dint__ DSize;
-			size__ Limit = _UnderlyingSize() - Row;
+			size__ Limit = _Size() - Row;
 
 			_Read( Row, sizeof( DSize ) > Limit ? Limit : sizeof( DSize ), (sdr::datum__ *)&DSize );
 
@@ -936,7 +928,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		bso::bool__ _IsLast( sdr::row_t__ Row ) const
 		{
-			return ( Row + _GetFragmentSize( Row ) ) == _UnderlyingSize();
+			return ( Row + _GetFragmentSize( Row ) ) == _Size();
 		}
 		void _WriteHeader(
 			sdr::row_t__ Row,
@@ -967,17 +959,20 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				ERRPrm();
 
 			switch ( XHeader.FragmentSize() ) {
-			case 0:
-				ERRPrm();
+			default:
+				// On écrit '0' pour que le marqueur précédent le début du 'long size' soit positionné (8ème bit à 0).
+				_Write( (const sdr::datum__ *)"\x0", Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength() - 1, 1 );
+			case 3:
+				// Si l'on saute directement ici, le 8ème bit de l'octet précédent le début du 'long size' est à 0 parce qu'il s'agit du dernier octet d'un entier dynamique.
+			case 2:
+				// Si l'on saute directement ici, le 8ème bit de l'octet précédent le début du 'long size' est à 0 parce qu'il s'agit du 'header' (fanion signalant un 'long size' lorsque à 0).
+				_Write( XHeader.DSizeBuffer(), Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength(), XHeader.DSizeBufferLength() );
 				break;
 			case 1:
 				// Dans ce cas, compte tenu de la taille du fragment, le 'tail meta data' est constitué du 'header' du 'head meta data'.
 				break;
-			default:
-				// On écrit '0' poue que le marqueur précédent le début du 'long size' soit positionné.
-				_Write( (const sdr::datum__ *)"\x0", Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength() - 1, 1 );
-			case 2:
-				_Write( XHeader.DSizeBuffer(), Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength(), XHeader.DSizeBufferLength() );
+			case 0:
+				ERRPrm();
 				break;
 			}
 		}
@@ -1018,14 +1013,14 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			bso::bool__ &UsingTail )
 		{
 			size__ TailAvailableSize = _GetTailFreeSize();
-			sdr::row_t__ Row = _UnderlyingSize() - TailAvailableSize;	// On qtocke dans une variable, car '_Size()' est modifié par 'Allocate(...)'.
+			sdr::row_t__ Row = _Size() - TailAvailableSize;	// On stocke dans une variable, car '_Size()' est modifié par 'Allocate(...)'.
 
 			UsingTail = TailAvailableSize != 0;
 
 			if ( TailAvailableSize >= XSize.FragmentSize() )
 				ERRPrm();
 
-			Storage.Allocate( _UnderlyingSize() - TailAvailableSize + XSize.FragmentSize() );
+			Storage.Allocate( _Size() - TailAvailableSize + XSize.FragmentSize() );
 
 			return _SetFragment( Row, XSize, PredecessorStatus );
 		}
@@ -1073,10 +1068,11 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 					Row = _GetTailFreeFragment();
 
 			if ( Row != E_NIL ) {
-				Descriptor = _SetUsedFragmentUsingFreeFragment( Row, XSize, ( Row == 0 ? _TailFragmentStatus() : sUsed ), All );
+				Descriptor = _SetUsedFragmentUsingFreeFragment( Row, XSize, ( Row == 0 ? _TailFragmentStatus() : sUsed ), All );	// Le cas où l'on utilise l'intégralité du 'TailFragment' (auquel cas '_TaileFragmentStatus()'
+																																	// va changer de valeur) sera traité ci-dessous, grâce à la valeur de 'All'.		
 			} else { 
 				if ( ( Row = _GetTailFreeFragment() ) == E_NIL )
-					Row = _UnderlyingSize();
+					Row = _Size();
 				Descriptor = _AllocateAndSetUsedFragmentAtTail( XSize, sUsed, All );
 			}
 
@@ -1185,7 +1181,11 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			Storage.Init();
 			S_.Free.Init();
+
+			if ( Storage.Size() != 0 )
+				_SetAsFreeFragment( 0, Storage.Size(), sFree );
 		}
+# if 0	// Obsolète ? Si réactivé, vérifié l'absence de bug.
 		void Preallocate( sdr::size__ Size )
 		{
 			if ( _UnderlyingSize() > Size )
@@ -1207,6 +1207,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				_UpdateFirstFragmentPredecessorStatus( sFree );
 			}
 		}
+# endif
 		descriptor__ Allocate( size__ Size )
 		{
 			if ( Size == 0 )
@@ -1264,9 +1265,6 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			return _GetSize( Descriptor );
 		}
 		void DisplayStructure( txf::text_oflow__ &Flow ) const;
-		friend uys::state__ Plug(
-			aggregated_storage_ &Storage,
-			class aggrgated_storage_file_manager___ &FileManager );
 	};
 
 	E_AUTO( aggregated_storage )
@@ -1277,13 +1275,13 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		aggregated_storage_ &AStorage,
 		aggregated_storage_file_manager___ &FileManager )
 	{
-		AStorage.Init();
+		uys::state__ State = uys::Plug( AStorage.Storage, FileManager );
 
-		return uys::Plug( AStorage.Storage, FileManager );
+		if ( !uys::IsError( State ) )
+			AStorage.S_.Free.Init();
+
+		return State;
 	}
-
-
-
 # define E_ASTORAGE_	aggregated_storage_
 # define E_ASTORAGE	aggregated_storage
 }

@@ -183,12 +183,12 @@ namespace uys {
 			else
 				_Driver->Store( Buffer, Amount, Position );
 		}
-		sdr::size__ UnderlyingSize( void ) const
+		sdr::size__ Size( void ) const
 		{
 			if ( _Driver == NULL )
 				return 0;
 			else
-				return _Driver->UnderlyingSize();
+				return _Driver->Size();
 		}
 	};
 
@@ -200,11 +200,19 @@ namespace uys {
 		_storage_driver__ _Driver;
 		// l'éventuel pilote de la multimemoire
 		ags::aggregated_storage_driver__ _AggregatedStorageDriver;
+		inline void _Test(
+			sdr::row_t__ Position,
+			sdr::size__ Amount ) const
+		{
+			if ( ( Position + Amount ) > S_. Size )
+				ERRPrm();
+		}
 		void _Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount, 
 			sdr::datum__ *Buffer ) const
 		{
+			_Test( Position, Amount );
 			_Driver.Recall( Position, Amount, Buffer );
 		}
 		void _Store(
@@ -212,15 +220,18 @@ namespace uys {
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
+			_Test( Position, Amount );
 			_Driver.Store( Buffer, Amount, Position );
 		}
 		void _Allocate( sdr::size__ Size )
 		{
 			_Driver.Allocate( Size );
+
+			S_.Size = Size;
 		}
 	public:
 		struct s {
-//			sdr::size__ Size;
+			sdr::size__ Size;
 			ags::descriptor__ Descriptor;
 		} &S_;
 		void reset( bool P = true )
@@ -229,6 +240,7 @@ namespace uys {
 			_AggregatedStorageDriver.reset( P );
 
 			S_.Descriptor = E_NIL;
+			S_.Size = 0;
 		}
 		untyped_storage_( s &S )
 		: S_( S ),
@@ -253,18 +265,17 @@ namespace uys {
 		}
 		untyped_storage_ &operator =( const untyped_storage_ &US )
 		{
-			_Allocate( US.UnderlyingSize() );
+			_Allocate( US.Size() );
 
-			Store( US, US.UnderlyingSize(), 0, 0 );
+			Store( US, US.Size(), 0, 0 );
 
 			return *this;
 		}
 		//f Initialization.
 		void Init( void )
 		{
-//			reset();
-
 			_Driver.Init();
+			S_.Size = _Driver.Size();
 		}
 		void WriteToFlow(
 			sdr::row_t__ Position,
@@ -349,9 +360,9 @@ namespace uys {
 		{
 			return _Driver.Driver( Ignore );
 		}
-		sdr::size__ UnderlyingSize( void ) const
+		sdr::size__ Size( void ) const
 		{
-			return _Driver.UnderlyingSize();
+			return S_.Size;
 		}
 	};
 
@@ -474,7 +485,7 @@ namespace uys {
 
 		Storage.plug( FileManager );
 
-		Storage.Allocate( FileManager.UnderlyingSize() );
+		Storage.Allocate( FileManager.Size() );
 
 		return State;
 	}

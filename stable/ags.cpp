@@ -69,7 +69,7 @@ void aggregated_storage_driver__::SDRAllocate( sdr::size__ Size )
 }
 
 
-sdr::size__ aggregated_storage_driver__::_UnderlyingSize( void ) const
+sdr::size__ aggregated_storage_driver__::SDRSize( void ) const
 {
 	if ( _Descriptor != AGS_UNDEFINED_DESCRIPTOR )
 		return _AStorage->Size( _Descriptor );
@@ -98,7 +98,7 @@ void ags::aggregated_storage_::DisplayStructure( txf::text_oflow__ &Flow ) const
 {
 	sdr::row_t__ Row = 0;
 
-	while ( Row < _UnderlyingSize() ) {
+	while ( Row < _Size() ) {
 		_Display( Row, Flow );
 
 		Row += _GetFragmentSize( Row );

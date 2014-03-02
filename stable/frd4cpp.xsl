@@ -49,13 +49,20 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:value-of select="/API/@target"/>
 		<xsl:text> {&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
+		<xsl:text>&tab;namespace {&nl;</xsl:text>
+		<xsl:text>&tab;&tab;typedef fblfrd::frontend_depot__ _frontend_depot__;&nl;</xsl:text>
+		<xsl:text>&tab;}&nl;</xsl:text>
+		<xsl:text>&nl;</xsl:text>
+		<!--
 		<xsl:apply-templates select="Messages" mode="enum"/>
 		<xsl:apply-templates select="Messages" mode="code"/>
 		<xsl:apply-templates select="Messages" mode="test"/>
+		-->
 		<xsl:apply-templates select="Types"/>
 		<xsl:text>}&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
 	</xsl:template>
+	<!--
 	<xsl:template match="Messages" mode="enum">
 		<xsl:text>&tab;enum message__ {&nl;</xsl:text>
 		<xsl:apply-templates select="Message" mode="enum"/>
@@ -130,6 +137,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:text>&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
 	</xsl:template>
+	-->
 	<xsl:template match="Types">
 		<xsl:apply-templates select="Type" mode="common"/>
 		<xsl:apply-templates select="Type" mode="object"/>
@@ -148,6 +156,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:text>&nl;</xsl:text>
+		<xsl:text>&tab;: public _frontend_depot__&nl;</xsl:text>
 		<xsl:text>&tab;{&nl;</xsl:text>
 		<xsl:text>&tab;private:&nl;</xsl:text>
 		<xsl:choose>
@@ -159,14 +168,13 @@ This header file contains then the API to access to the backend to which 'getbkd
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:text> _ID;&nl;</xsl:text>
-		<xsl:text>&tab;&tab;fblfrd::frontend___ *_Frontend;&nl;</xsl:text>
 		<xsl:text>&tab;&tab;fblfrd::command__ _Commands[</xsl:text>
 		<xsl:value-of select="Commands/@Amount"/>
 		<xsl:text>];&nl;</xsl:text>
 		<xsl:text>&tab;public:&nl;</xsl:text>
-		<xsl:text>&tab;&tab;void reset( bso::bool__ = true )&nl;</xsl:text>
+		<xsl:text>&tab;&tab;void reset( bso::bool__ P = true )&nl;</xsl:text>
 		<xsl:text>&tab;&tab;{&nl;</xsl:text>
-		<xsl:text>&tab;&tab;&tab;_Frontend = NULL;&nl;</xsl:text>
+		<xsl:text>&tab;&tab;&tab;_frontend_depot__::reset( P );&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;_ID = FBLFRD_UNDEFINED_OBJECT;&nl;</xsl:text>
 		<xsl:text>&tab;&tab;}&nl;</xsl:text>
 		<xsl:text>&tab;&tab;E_CVDTOR( </xsl:text>
@@ -192,7 +200,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:apply-templates select="Commands" mode="data"/>
 		<xsl:text>&tab;&tab;&tab;};&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
-		<xsl:text>&tab;&tab;&tab;_Frontend = &amp;Frontend;&nl;</xsl:text>
+		<xsl:text>&tab;&tab;&tab;_frontend_depot__::Init( Frontend );&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;_ID = </xsl:text>
 		<xsl:choose>
@@ -200,7 +208,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 				<xsl:text>FBLFRD_MASTER_OBJECT;</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:text>_Frontend->GetType( str::string( "</xsl:text>
+				<xsl:text>this->Frontend().GetType( str::string( "</xsl:text>
 				<xsl:value-of select="Name/@Raw"/>
 				<xsl:text>" ) );&nl;</xsl:text>
 			</xsl:otherwise>
@@ -210,7 +218,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:text>&nl;</xsl:text>
 		<xsl:apply-templates select="Commands" mode="affectation"/>
 		<xsl:text>&tab;&tab;&tab;Commands.Init();&nl;</xsl:text>
-		<xsl:text>&tab;&tab;&tab;_Frontend->GetCommands( </xsl:text>
+		<xsl:text>&tab;&tab;&tab;this->Frontend().GetCommands( </xsl:text>
 		<xsl:choose>
 			<xsl:when test="@Object='Master'">
 				<xsl:text>FBLFRD_MASTER_TYPE</xsl:text>
@@ -231,18 +239,14 @@ This header file contains then the API to access to the backend to which 'getbkd
 			<xsl:otherwise>
 				<xsl:text>&tab;&tab;fblfrd::object__ GetNewObject( void )&nl;</xsl:text>
 				<xsl:text>&tab;&tab;{&nl;</xsl:text>
-				<xsl:text>&tab;&tab;&tab;return _Frontend->GetNewObject( _ID );&nl;</xsl:text>
+				<xsl:text>&tab;&tab;&tab;return Frontend().GetNewObject( _ID );&nl;</xsl:text>
 				<xsl:text>&tab;&tab;}&nl;</xsl:text>
 				<xsl:text>&tab;&tab;void RemoveObject( fblfrd::object__ Object )&nl;</xsl:text>
 				<xsl:text>&tab;&tab;{&nl;</xsl:text>
-				<xsl:text>&tab;&tab;&tab;_Frontend->RemoveObject( Object );&nl;</xsl:text>
+				<xsl:text>&tab;&tab;&tab;Frontend().RemoveObject( Object );&nl;</xsl:text>
 				<xsl:text>&tab;&tab;}&nl;</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
-		<xsl:text>&tab;&tab;fblfrd::frontend___ &amp;Frontend( void ) const&nl;</xsl:text>
-		<xsl:text>&tab;&tab;{&nl;</xsl:text>
-		<xsl:text>&tab;&tab;&tab;return *_Frontend;&nl;</xsl:text>
-		<xsl:text>&tab;&tab;}&nl;</xsl:text>
 		<xsl:text>&tab;&tab;const fblfrd::command__ *Commands( void ) const&nl;</xsl:text>
 		<xsl:text>&tab;&tab;{&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;return _Commands;&nl;</xsl:text>

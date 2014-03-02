@@ -676,6 +676,29 @@ namespace fblfrd {
 		}
 	};
 
+	class frontend_depot__
+	{
+	private:
+		frontend___ *_Frontend;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			_Frontend = NULL;
+		}
+		E_CDTOR( frontend_depot__ );
+		void Init( frontend___ &Frontend )
+		{
+			_Frontend = &Frontend;
+		}
+		frontend___ &Frontend( void ) const
+		{
+			if ( _Frontend == NULL )
+				ERRFwk();
+
+			return *_Frontend;
+		}
+	};
+
 
 	class universal_frontend___
 	: public frontend___

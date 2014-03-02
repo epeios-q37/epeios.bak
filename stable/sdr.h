@@ -106,7 +106,7 @@ namespace sdr {
 		}
 		/* Si la mémoire repose sur une mémoire persistante (un fichier, par exemple), retourne la taille de cette mémoire,
 		ou, si non initialisée (fichier absent, par exemple), ou non persistente, retourne 0 */
-		virtual size__ SDRUnderlyingSize( void ) const = 0;
+		virtual size__ SDRSize( void ) const = 0;
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
 		virtual void SDRRecall(
 			row_t__ Position,
@@ -153,27 +153,13 @@ namespace sdr {
 		{
 			SDRStore( Buffer, Amount, Position );
 		}
-		sdr::size__ UnderlyingSize( void ) const
+		sdr::size__ Size( void ) const
 		{
-			return SDRUnderlyingSize();
+			return SDRSize();
 		}
 	};
 
 	#define E_SDRIVER__	storage_driver__
-
-	// Fonction d'aide pour faciliter le testr des paramètres dans les dsriver's.
-		inline void Test(
-			sdr::size__ Size,
-			sdr::row_t__ Position,
-			sdr::size__ Amount )
-		{
-			if ( Position >= Size )
-				if ( Amount > 0 )
-					ERRPrm();
-
-			if ( ( Position + Amount ) > Size )
-				ERRPrm();
-		}
 }
 
 /*$END$*/

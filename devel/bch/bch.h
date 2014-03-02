@@ -565,7 +565,7 @@ namespace bch {
 	{
 		uys::state__ State = tys::Plug( Bunch, FileManager );
 
-		Bunch.Allocate( FileManager.UnderlyingSize() / Bunch.GetItemSize(), aem::mFitted );
+		Bunch.Allocate( FileManager.Size() / Bunch.GetItemSize(), aem::mFitted );
 
 		return State;
 	}

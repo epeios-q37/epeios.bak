@@ -332,8 +332,6 @@ namespace fls {
 			bso::size__ Nombre,
 			void *Tampon )
 		{
-			sdr::Test( TailleFichier_, Position, Nombre );
-
 			Open_( false );
 
 			bso::size__ Amount;
@@ -372,8 +370,6 @@ namespace fls {
 			bso::size__ Nombre,
 			position__ Position )
 		{
-			sdr::Test( TailleFichier_, Position, Nombre );
-
 			Open_( true );
 
 			bso::size__ Amount;
@@ -598,8 +594,12 @@ namespace fls {
 	: public sdr::E_SDRIVER__,
 	  public file_storage___
 	{
-	private:
-		sdr::size__ _UnderlyingSize( void ) const
+	protected:
+		virtual void SDRAllocate( sdr::size__ Size )
+		{
+			file_storage___::Allocate( Size );
+		}
+		virtual sdr::size__ SDRSize( void ) const
 		{
 			fil::size__ Size = FileSize();
 
@@ -607,15 +607,6 @@ namespace fls {
 				ERRDta();
 
 			return (sdr::size__)Size;
-		}
-	protected:
-		virtual void SDRAllocate( sdr::size__ Size )
-		{
-			file_storage___::Allocate( Size );
-		}
-		virtual sdr::size__ SDRUnderlyingSize( void ) const
-		{
-			return _UnderlyingSize();
 		}
 		virtual void SDRRecall(
 			sdr::row_t__ Position,

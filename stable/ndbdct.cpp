@@ -337,7 +337,7 @@ uys::state__ ndbdct::Plug(
 
 	FileManager.Set( Content );
 
-	Content.S_.Unallocated = FileManager._StorageFileManager.UnderlyingSize();
+	Content.S_.Unallocated = FileManager._StorageFileManager.Size();
 
 	if ( uys::Exists( State ) )
 		if ( !Test_( FileManager._BaseFileName, AVAILABLES_FILE_NAME_EXTENSION, FileManager._GetUnderlyingFilesLastModificationTime() ) ) {

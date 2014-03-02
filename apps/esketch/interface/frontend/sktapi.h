@@ -16,16 +16,20 @@
 
 namespace esketch {
 
+	namespace {
+		typedef fblfrd::frontend_depot__ _frontend_depot__;
+	}
+
 	class statics___
+	: public _frontend_depot__
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::frontend___ *_Frontend;
 		fblfrd::command__ _Commands[1];
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
-			_Frontend = NULL;
+			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
 		E_CVDTOR( statics___ )
@@ -39,7 +43,7 @@ namespace esketch {
 				0, 
 			};
 
-			_Frontend = &Frontend;
+			_frontend_depot__::Init( Frontend );
 
 			_ID = FBLFRD_MASTER_OBJECT;
 			CommandsDetails.Init();
@@ -51,7 +55,7 @@ namespace esketch {
 
 
 			Commands.Init();
-			_Frontend->GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
+			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
 			Commands.Recall( 0, 1, _Commands );
 		}
 		fblovl::reply__ SKTTest( void ) const
@@ -63,10 +67,6 @@ namespace esketch {
 
 			return Frontend().Handle();
 		}
-		fblfrd::frontend___ &Frontend( void ) const
-		{
-			return *_Frontend;
-		}
 		const fblfrd::command__ *Commands( void ) const
 		{
 			return _Commands;
@@ -74,15 +74,15 @@ namespace esketch {
 	};
 
 	class skt_myobject_common__
+	: public _frontend_depot__
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::frontend___ *_Frontend;
 		fblfrd::command__ _Commands[1];
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
-			_Frontend = NULL;
+			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
 		E_CVDTOR( skt_myobject_common__ )
@@ -96,9 +96,9 @@ namespace esketch {
 				0, 
 			};
 
-			_Frontend = &Frontend;
+			_frontend_depot__::Init( Frontend );
 
-			_ID = _Frontend->GetType( str::string( "myobject" ) );
+			_ID = this->Frontend().GetType( str::string( "myobject" ) );
 
 			CommandsDetails.Init();
 
@@ -109,20 +109,16 @@ namespace esketch {
 
 
 			Commands.Init();
-			_Frontend->GetCommands( _ID, CommandsDetails, Commands );
+			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
 			Commands.Recall( 0, 1, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
-			return _Frontend->GetNewObject( _ID );
+			return Frontend().GetNewObject( _ID );
 		}
 		void RemoveObject( fblfrd::object__ Object )
 		{
-			_Frontend->RemoveObject( Object );
-		}
-		fblfrd::frontend___ &Frontend( void ) const
-		{
-			return *_Frontend;
+			Frontend().RemoveObject( Object );
 		}
 		const fblfrd::command__ *Commands( void ) const
 		{
