@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <!--
 	'SessionForm.xul' by Claude SIMON (http://zeusw.org/).
@@ -19,8 +19,6 @@
 	along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!-- $Id$ -->
-
 <!DOCTYPE page SYSTEM "chrome://esketchgck/locale/SessionForm.dtd">
 <!--<!DOCTYPE page SYSTEM "../locale/fr/SessionForm.dtd">-->
 
@@ -34,58 +32,53 @@
 	pack="center"
 	>
 	<script type="text/javascript" src="egeckocom.js"/>
-  <broadcasterset id="bcsShapes"/>
-	<broadcasterset>
-		<broadcaster id="dspBackendType"
-					 label="&backendType.label;"
-					 tooltiptext="&backendType.tooltiptext;"
-					 />
-		<broadcaster id="glbNoBackend"
-					 xex:oncommand="ehBackendTypeSelection"
-					 label="&noBackend.label;"
-					 value="None"
-					 observes="bdcNoBackend"
-					 />
-		<broadcaster id="glbPredefinedBackend"
-					 xex:oncommand="ehBackendTypeSelection"
-					 label="&predefinedBackend.label;"
-					 tooltiptext="&predefinedBackend.tooltiptext;"
-					 value="Predefined"
-					 observes="bdcPredefinedBackend"
-					 />
+	<broadcasterset id="bcsShapes"/>
+	<broadcasterset><!-- 'dsp...' -->
 		<broadcaster
-			id="glbDaemonBackend"
-			xex:oncommand="ehBackendTypeSelection"
+			id="dspBackendType"
+			label="&backendType.label;"
+			tooltiptext="&backendType.tooltiptext;"
+			/>
+		<broadcaster
+			id="dspNoBackend"
+			label="&noBackend.label;"
+			value="None"
+			xex:observes="shpNoBackend"
+			/>
+		<broadcaster
+			id="dspPredefinedBackend"
+			label="&predefinedBackend.label;"
+			tooltiptext="&predefinedBackend.tooltiptext;"
+			xex:observes="shpPredefinedBackend"
+			/>
+		<broadcaster
+			id="dspDaemonBackend"
 			label="&daemonBackend.label;"
-			value="Daemon"
-			observes="bdcDaemonBackend"
+			xex:observes="shpDaemonBackend"
 			/>
 		<broadcaster
 			id="dspDaemonBackendLocation"
 			tooltiptext="&daemonBackendLocation.tooltiptext;"
 			placeholder="&daemonBackendLocation.phd;"
-			observes="bdcDaemonBackend"
+			xex:observes="shpDaemonBackend"
 			/>
 		<broadcaster
-			id="glbEmbeddedBackend"
-			xex:oncommand="ehBackendTypeSelection"
+			id="dspEmbeddedBackend"
 			label="&embeddedBackend.label;"
-			value="Embedded"
-			observes="bdcEmbeddedBackend"
+			xex:observes="shpEmbeddedBackend"
 			/>
 		<broadcaster
 			id="dspEmbeddedBackendLocation"
 			tooltiptext="&embeddedBackendLocation.tooltiptext;"
 			placeholder="&embeddedBackendLocation.phd;"
-			observes="bdcEmbeddedBackend"
+			xex:observes="shpEmbeddedBackend"
 			/>
 		<broadcaster
-			id="glbEmbeddedBackendSelection"
-			xex:oncommand="ehEmbeddedBackendSelection"
+			id="dspEmbeddedBackendSelection"
 			label="&embeddedBackendSelection.label;"
 			tooltiptext="&embeddedBackendSelection.tooltiptext;"
 			accesskey="&embeddedBackendSelection.accesskey;"
-			observes="bdcEmbeddedBackendSelection"
+			xex:observes="shpEmbeddedBackendSelection"
 			/>
 		<broadcaster
 			id="dspLogin"
@@ -101,17 +94,56 @@
 			/>
 		<broadcaster
 			id="dspApply"
-			xex:oncommand="ehApply"
 			label="&apply.label;"
 			tooltiptext="&apply.tooltiptext;"
 			accesskey="&apply.accesskey;"
 			/>
 		<broadcaster
 			id="dspCancel"
-			xex:oncommand="ehCancel"
 			label="&cancel.label;"
 			tooltiptext="&cancel.tooltiptext;"
 			accesskey="&cancel.accesskey;"
+			/>
+	</broadcasterset>
+	<broadcasterset><!-- 'bdc...' -->
+		<broadcaster
+			id="bdcNoBackend"
+			xex:oncommand="ehBackendTypeSelection"
+			value="None"
+			observes="dspNoBackend"
+			/>
+		<broadcaster
+			id="bdcPredefinedBackend"
+			xex:oncommand="ehBackendTypeSelection"
+			value="Predefined"
+			observes="dspPredefinedBackend"
+			/>
+		<broadcaster
+			id="bdcDaemonBackend"
+			xex:oncommand="ehBackendTypeSelection"
+			value="Daemon"
+			observes="dspDaemonBackend"
+			/>
+		<broadcaster
+			id="bdcEmbeddedBackend"
+			xex:oncommand="ehBackendTypeSelection"
+			value="Embedded"
+			observes="dspEmbeddedBackend"
+			/>
+		<broadcaster
+			id="bdcEmbeddedBackendSelection"
+			xex:oncommand="ehEmbeddedBackendSelection"
+			observes="dspEmbeddedBackendSelection"
+			/>
+		<broadcaster
+			id="bdcApply"
+			xex:oncommand="ehApply"
+			observes="dspApply"
+			/>
+		<broadcaster
+			id="bdcCancel"
+			xex:oncommand="ehCancel"
+			observes="dspCancel"
 			/>
 	</broadcasterset>
 	<keyset>
@@ -123,33 +155,25 @@
 				<groupbox>
 					<caption label="&backendSelection.label;"/>
 					<hbox>
-						<menulist id="mnlBackendType"
-								  observes="dspBackendType"
-								  >
+						<menulist id="mnlBackendType" observes="dspBackendType">
 							<menupopup>
-								<menuitem id="mniNoBackend" observes="glbNoBackend"/>
-								<menuitem id="mniPredefinedBackend" observes="glbPredefinedBackend"/>
-								<menuitem id="mniDaemonBackend" observes="glbDaemonBackend"/>
-								<menuitem id="mniEmbeddedBackend" observes="glbEmbeddedBackend"/>
+								<menuitem id="mniNoBackend" observes="bdcNoBackend"/>
+								<menuitem id="mniPredefinedBackend" observes="bdcPredefinedBackend"/>
+								<menuitem id="mniDaemonBackend" observes="bdcDaemonBackend"/>
+								<menuitem id="mniEmbeddedBackend" observes="bdcEmbeddedBackend"/>
 							</menupopup>
 						</menulist>
 						<deck id="dckBackendType">
 							<hbox/>
 							<hbox>
-								<menulist id="mnlPredefinedBackend"
-										  observes="dspPredefinedBackend"
-										  />
+								<menulist id="mnlPredefinedBackend" observes="dspPredefinedBackend" />
 							</hbox>
 							<hbox>
-								<textbox id="txbDaemonBackend"
-										 observes="dspDaemonBackendLocation"
-										 />
+								<textbox id="txbDaemonBackend" observes="dspDaemonBackendLocation"/>
 							</hbox>
 							<hbox>
-								<textbox id="txbEmbeddedBackend"
-										 observes="dspEmbeddedBackendLocation"
-										 />
-								<button observes="glbEmbeddedBackendSelection"/>
+								<textbox id="txbEmbeddedBackend" observes="dspEmbeddedBackendLocation"/>
+								<button observes="bdcEmbeddedBackendSelection"/>
 							</hbox>
 						</deck>
 					</hbox>
@@ -179,8 +203,8 @@
 				<spacer/>
 			</hbox>
 			<hbox pack="center">
-				<button observes="dspApply"/>
-				<button observes="dspCancel"/>
+				<button observes="bdcApply"/>
+				<button observes="bdcCancel"/>
 			</hbox>
 		</groupbox>
 	</hbox>

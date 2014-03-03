@@ -20,8 +20,6 @@
 	along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!-- $Id:$ -->
-
 <!DOCTYPE window SYSTEM "chrome://esketchgck/locale/debug.dtd">
 <!--<!DOCTYPE window SYSTEM "../locale/fr/debug.dtd">-->
 
@@ -32,12 +30,10 @@
 	id="dlgDebug_alpha1"
 	title="DebugDialogBox"
 	buttons=","
-	onload="register();stop();"
->
+	onload="register();stop();">
 	<script type="text/javascript" src="egeckocom.js"/>
 	<script type="text/javascript">retrieve( 'esketchgck' );</script>
-
-  <broadcasterset id="bcsShapes"/>
+	<broadcasterset id="bcsShapes"/>
 	<broadcasterset>
 		<broadcaster
 			id="bdcJSConsole"

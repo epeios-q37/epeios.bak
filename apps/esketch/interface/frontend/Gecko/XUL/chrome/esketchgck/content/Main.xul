@@ -19,8 +19,6 @@
 	along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!-- $Id$ -->
-
 <!DOCTYPE window SYSTEM "chrome://esketchgck/locale/Main.dtd">
 <!--<!DOCTYPE window SYSTEM "../locale/fr/Main.dtd">-->
 
@@ -38,106 +36,170 @@
 	<script type="text/javascript"
 			src="egeckocom.js"/>
 	<script type="text/javascript">create( 'esketchgck', "&Language;" );</script>
-  <broadcasterset id="bcsShapes"/>
-  <broadcasterset>
-		<broadcaster id="bdcProjectType"
-					 label="&ProjectType.label;"
-					 tooltiptext="&ProjectType.tooltiptext;"
-					 />
-		<broadcaster id="bdcNewProject"
-					 label="&NewProject.label;"
-					 tooltiptext="&NewProject.tooltiptext;"
-					 accesskey="&NewProject.accesskey;"
-					 acceltext="&NewProject.acceltext;"
-			     modifiers="accel"
-			     key="&NewProject.key;"
- 					 xex:oncommand="ehNewProject"
-					 />
-		<broadcaster id="bdcNewProjectTypeSelection"
-					 label="&NewProjectTypeSelection.label;"
-					 tooltiptext="&NewProjectTypeSelection.tooltiptext;"
-					 accesskey="&NewProjectTypeSelection.accesskey;"
-					 acceltext="&NewProjectTypeSelection.acceltext;"
-					 xex:oncommand="ehProjectTypeSelection"
-					 value="New"
-					 />
-		<broadcaster id="bdcPredefinedProject"
-					 label="&PredefinedProject.label;"
-					 tooltiptext="&PredefinedProject.tooltiptext;"
-					 accesskey="&PredefinedProject.accesskey;"
-					 acceltext="&PredefinedProject.acceltext;"
-					 />
-		<broadcaster id="bdcPredefinedProjectTypeSelection"
-					 xex:oncommand="ehProjectTypeSelection"
-					 value="Predefined"
-					 observes="bdcPredefinedProject"
-					 />
-		<broadcaster id="bdcUserProject"
-					 label="&UserProject.label;"
-					 tooltiptext="&UserProject.tooltiptext;"
-					 accesskey="&UserProject.accesskey;"
-					 acceltext="&UserProject.acceltext;"
-			     modifiers="accel"
-			     key="&UserProject.key;"
-           xex:oncommand="ehUserProject"
-					 />
-		<broadcaster id="bdcUserProjectSelection"
-					 label="&UserProjectSelection.label;"
-					 tooltiptext="&UserProjectSelection.tooltiptext;"
-					 accesskey="&UserProjectSelection.accesskey;"
-					 acceltext="&UserProjectSelection.acceltext;"
-					 xex:oncommand="ehUserProjectSelection"
-					 />
-		<broadcaster id="bdcUserProjectTypeSelection"
-					 label="&UserProjectTypeSelection.label;"
-					 tooltiptext="&UserProjectTypeSelection.tooltiptext;"
-					 accesskey="&UserProjectTypeSelection.accesskey;"
-					 acceltext="&UserProjectTypeSelection.acceltext;"
-					 xex:oncommand="ehProjectTypeSelection"
-					 value="User"
-					 />
-		<broadcaster id="bdcCloseProject"
-					 label="&CloseProject.label;"
-					 tooltiptext="&CloseProject.tooltiptext;"
-					 accesskey="&CloseProject.accesskey;"
-					 acceltext="&CloseProject.acceltext;"
-			     modifiers="accel"
-			     key="&CloseProject.key;"
-					 xex:oncommand="ehCloseProject"
-					 xex:observes="shpCloseProject"
-					 />
-		<broadcaster id="bdcApply"
-					 label="&Apply.label;"
-					 tooltiptext="&Apply.tooltiptext;"
-					 accesskey="&Apply.accesskey;"
-					 xex:oncommand="ehApply"
-					 />
-		<broadcaster id="bdcExit"
-					 label="&Exit.label;"
-					 tooltiptext="&Exit.tooltiptext;"
-					 accesskey="&Exit.accesskey;"
-					 acceltext="&Exit.acceltext;"
-			     modifiers="accel"
-			     key="&Exit.key;"
-					 xex:oncommand="ehExit"
-					 />
-		<broadcaster id="bdcAbout"
-					 label="&About.label;"
-					 tooltiptext="&About.tooltiptext;"
-    			 key="&Version.key;"
-     			 modifiers="accel shift"
-					 xex:oncommand="ehAbout"
-					 />
-		<broadcaster id="bdcWebSite"
-					 label="&WebSite.label;"
-					 tooltiptext="WwebSite.tooltiptext;"
-					 xex:oncommand="ehWebSite"
-					 />
-		<broadcaster id="bdcDebug"
-			     modifiers="accel shift"
-			     key="&Debug.key;"
-			     xex:oncommand="ehDebug"
-			 />
+	<broadcasterset id="bcsShapes"/>
+	<broadcasterset><!-- 'dsp...' -->
+		<broadcaster
+			id="dspProjectType"
+			label="&ProjectType.label;"
+			tooltiptext="&ProjectType.tooltiptext;"
+			/>
+		<broadcaster
+			id="dspNewProject"
+			label="&NewProject.label;"
+			tooltiptext="&NewProject.tooltiptext;"
+			accesskey="&NewProject.accesskey;"
+			acceltext="&NewProject.acceltext;"
+			modifiers="accel"
+			key="&NewProject.key;"
+			/>
+		<broadcaster
+			id="dspNewProjectTypeSelection"
+			label="&NewProjectTypeSelection.label;"
+			tooltiptext="&NewProjectTypeSelection.tooltiptext;"
+			accesskey="&NewProjectTypeSelection.accesskey;"
+			acceltext="&NewProjectTypeSelection.acceltext;"
+			/>
+		<broadcaster
+			id="dspPredefinedProject"
+			label="&PredefinedProject.label;"
+			tooltiptext="&PredefinedProject.tooltiptext;"
+			accesskey="&PredefinedProject.accesskey;"
+			acceltext="&PredefinedProject.acceltext;"
+			/>
+		<broadcaster
+			id="dspPredefinedProjectTypeSelection"
+			observes="shpPredefinedProject"
+			/>
+		<broadcaster
+			id="dspUserProject"
+			label="&UserProject.label;"
+			tooltiptext="&UserProject.tooltiptext;"
+			accesskey="&UserProject.accesskey;"
+			acceltext="&UserProject.acceltext;"
+			modifiers="accel"
+			key="&UserProject.key;"
+			/>
+		<broadcaster
+			id="dspUserProjectSelection"
+			label="&UserProjectSelection.label;"
+			tooltiptext="&UserProjectSelection.tooltiptext;"
+			accesskey="&UserProjectSelection.accesskey;"
+			acceltext="&UserProjectSelection.acceltext;"
+			/>
+		<broadcaster
+			id="dspUserProjectTypeSelection"
+			label="&UserProjectTypeSelection.label;"
+			tooltiptext="&UserProjectTypeSelection.tooltiptext;"
+			accesskey="&UserProjectTypeSelection.accesskey;"
+			acceltext="&UserProjectTypeSelection.acceltext;"
+			/>
+		<broadcaster
+			id="dspCloseProject"
+			label="&CloseProject.label;"
+			tooltiptext="&CloseProject.tooltiptext;"
+			accesskey="&CloseProject.accesskey;"
+			acceltext="&CloseProject.acceltext;"
+			modifiers="accel"
+			key="&CloseProject.key;"
+			xex:observes="shpCloseProject"
+			/>
+		<broadcaster
+			id="dspApply"
+			label="&Apply.label;"
+			tooltiptext="&Apply.tooltiptext;"
+			accesskey="&Apply.accesskey;"
+			/>
+		<broadcaster
+			id="dspExit"
+			label="&Exit.label;"
+			tooltiptext="&Exit.tooltiptext;"
+			accesskey="&Exit.accesskey;"
+			acceltext="&Exit.acceltext;"
+			modifiers="accel"
+			key="&Exit.key;"
+			/>
+		<broadcaster
+			id="dspAbout"
+			label="&About.label;"
+			tooltiptext="&About.tooltiptext;"
+			key="&Version.key;"
+			modifiers="accel shift"
+			/>
+		<broadcaster
+			id="dspWebSite"
+			label="&WebSite.label;"
+			tooltiptext="&WebSite.tooltiptext;"
+			/>
+		<broadcaster
+			id="dspDebug"
+			modifiers="accel shift"
+			key="&Debug.key;"
+			/>
+	</broadcasterset>
+	<broadcasterset><!-- 'bdc...' -->
+		<broadcaster
+			id="bdcNewProject"
+			xex:oncommand="ehNewProject"
+			observes="dspNewProject"
+			/>
+		<broadcaster
+			id="bdcNewProjectTypeSelection"
+			value="New"
+			xex:oncommand="ehProjectTypeSelection"
+			observes="dspNewProjectTypeSelection"
+			/>
+		<broadcaster
+			id="bdcPredefinedProjectTypeSelection"
+			value="Predefined"
+			xex:oncommand="ehProjectTypeSelection"
+			observes="dspPredefinedProject"
+			/>
+		<broadcaster
+			id="bdcUserProject"
+			xex:oncommand="ehUserProject"
+			observes="dspUserProject"
+			/>
+		<broadcaster
+			id="bdcUserProjectSelection"
+			xex:oncommand="ehUserProjectSelection"
+			observes="dspUserProjectSelection"
+			/>
+		<broadcaster
+			id="bdcUserProjectTypeSelection"
+			value="User"
+			xex:oncommand="ehProjectTypeSelection"
+			observes="dspUserProjectTypeSelection"
+			/>
+		<broadcaster
+			id="bdcCloseProject"
+			xex:oncommand="ehCloseProject"
+			observes="dspCloseProject"
+			/>
+		<broadcaster
+			id="bdcApply"
+			xex:oncommand="ehApply"
+			observes="dspApply"
+			/>
+		<broadcaster
+			id="bdcExit"
+			xex:oncommand="ehExit"
+			observes="dspExit"
+			/>
+		<broadcaster
+			id="bdcAbout"
+			xex:oncommand="ehAbout"
+			observes="dspAbout"
+			/>
+		<broadcaster
+			id="bdcWebSite"
+			xex:oncommand="ehWebSite"
+			observes="dspWebSite"
+			/>
+		<broadcaster
+			id="bdcDebug"
+			xex:oncommand="ehDebug"
+			observes="dspDebug"
+				/>
 	</broadcasterset>
 	<keyset>
 		<key observes="bdcAbout"/>
@@ -148,14 +210,13 @@
 		<key observes="bdcExit"/>
 	</keyset>
 	<menubar>
-		<menu label="&File.label;"
-			  accesskey="&File.accesskey;">
+		<menu label="&File.label;" accesskey="&File.accesskey;">
 			<menupopup>
 				<menuitem observes="bdcNewProject"/>
 				<menuitem observes="bdcUserProject"/>
-        <menu id="mnuPredefinedProject" acceltext="">
-            <observes element="bdcPredefinedProject" attribute="label"/>
-        </menu>
+				<menu id="mnuPredefinedProject" acceltext="">
+					<observes element="dspPredefinedProject" attribute="label"/>
+				</menu>
 				<menuitem observes="bdcCloseProject"/>
 				<menuseparator/>
 				<menuitem observes="bdcExit"/>
@@ -168,41 +229,26 @@
 			</menupopup>
 		</menu>
 	</menubar>
-	<deck id="dckMain"
-		  flex="1"
-		  >
-		<box id="vewHome"
-			 flex="1"
-			 pack="center"
-			 align="center"
-			 >
+	<deck id="dckMain" flex="1">
+		<box id="vewHome" flex="1" pack="center" align="center">
 			<groupbox>
 				<vbox pack="center">
 					<groupbox orient="horizontal">
 						<caption label="&ProjectType.label;"/>
-						<menulist id="mnlProjectType"
-								  observes="bdcProjectType">
+						<menulist id="mnlProjectType" observes="dspProjectType">
 							<menupopup>
-								<menuitem id="mniNewProject"
-										  observes="bdcNewProjectTypeSelection"
-										  />
-								<menuitem id="mniPredefinedProject"
-										  observes="bdcPredefinedProjectTypeSelection"
-										  />
-								<menuitem id="mniUserProject"
-										  observes="bdcUserProjectTypeSelection"
-										  />
+								<menuitem id="mniNewProject" observes="bdcNewProjectTypeSelection"/>
+								<menuitem id="mniPredefinedProject" observes="bdcPredefinedProjectTypeSelection"/>
+								<menuitem id="mniUserProject" observes="bdcUserProjectTypeSelection"/>
 							</menupopup>
 						</menulist>
 						<deck id="dckProjectType">
 							<hbox/>
 							<hbox>
-								<menulist id="mnlPredefinedProjectList"
-										  observes="bdcPredefinedProjectList"/>
+								<menulist id="mnlPredefinedProjectList"  observes="bdcPredefinedProjectList"/>
 							</hbox>
 							<hbox>
-								<textbox id="txbUserProjectLocation"
-										 observes="bdcUserProjectLocation"/>
+								<textbox id="txbUserProjectLocation" observes="bdcUserProjectLocation"/>
 								<button observes="bdcUserProjectSelection"/>
 							</hbox>
 						</deck>
@@ -214,12 +260,10 @@
 			</groupbox>
 		</box>
 		<box id="vewSessionForm">
-			<iframe src="SessionForm.xul"
-					flex="1"/>
+			<iframe src="SessionForm.xul" flex="1"/>
 		</box>
 		<box id="vewSessionView">
-			<iframe src="SessionView.xul"
-					flex="1"/>
+			<iframe src="SessionView.xul" flex="1"/>
 		</box>
 	</deck>
 </window>
