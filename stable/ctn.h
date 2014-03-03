@@ -1159,7 +1159,7 @@ namespace ctn {
 #ifdef CTN_DBG
 			Container.FlushTest();
 #endif
-			AStorage.Init();
+//			AStorage.Init();
 			item_base_const__< item_multi_statique__< typename_ t::s >, r >::Init( Container );
 		}
 		const_multi_item &operator =( const const_multi_item &O )

@@ -262,6 +262,7 @@ namespace uys {
 		{
 			_AggregatedStorageDriver.Init( AS );
 			_Driver.plug( _AggregatedStorageDriver );
+			S_.Size = _Driver.Size();
 		}
 		untyped_storage_ &operator =( const untyped_storage_ &US )
 		{
