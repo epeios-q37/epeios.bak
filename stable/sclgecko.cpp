@@ -70,22 +70,19 @@ using namespace sclgecko;
 
 static bso::bool__ IsInitialized_ = false;
 
-static TOL_CBUFFER___ Language_;
-
-#define DEFAULT_LANGUAGE	"en"
-
-static const char *GetLanguage_( void )
-{
-	if ( Language_ == NULL )
-		return DEFAULT_LANGUAGE;
-
-	return Language_;
-}
-
 static void ReportSCLPendingError_( void )
 {
-	if ( sclerror::ReportPendingError( GetLanguage_(), err::hUserDefined ) )
-		ERRRst();
+ERRProlog
+	str::string Translation;
+ERRBegin
+	Translation.Init();
+
+	sclmisc::GetSCLPendingError( Translation );
+
+	cio::CErr << Translation;
+ERRErr
+ERREnd
+ERREpilog
 }
 
 geckoo::steering_callback__ *geckob::GECKOBCreateSteering( geckoo::shared_data__ *Data )

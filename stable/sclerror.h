@@ -74,18 +74,10 @@ namespace sclerror {
 
 	void SetMeaning( const lcl::meaning_ &Meaning );
 
-	bso::bool__ ReportPendingError(
+	bso::bool__ GetPendingError(
 		const char *Language,
-		txf::text_oflow__ &TOFLow = cio::CErr,
+		str::string_ &Translation,
 		err::handling__ ErrHandling = err::h_Default );
-
-	inline bso::bool__ ReportPendingError(
-		const char *Language,
-		err::handling__ ErrHandling  )
-	{
-		return ReportPendingError( Language, cio::CErr, ErrHandling );
-	}
-
 }
 
 /*$END$*/

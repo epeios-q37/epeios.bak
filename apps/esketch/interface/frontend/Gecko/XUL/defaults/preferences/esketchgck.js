@@ -5,4 +5,4 @@ pref("UniversalBrowserWrite", true );
 
 // Following both lines permit to change the locale.
 pref("intl.locale.matchOS", "false");
-pref("general.useragent.locale", "en");
+pref("general.useragent.locale", "fr");

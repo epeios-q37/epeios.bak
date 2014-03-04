@@ -60,9 +60,11 @@ namespace sclmisc {
 		return scllocale::GetTranslation( Meaning, GetLanguage(), Translation );
 	}
 
-	inline bso::bool__ ReportSCLPendingError( void )
+	inline bso::bool__ GetSCLPendingError(
+		str::string_ &Translation,
+		err::handling__ ErrHandling = err::h_Default )
 	{
-		return sclerror::ReportPendingError( GetLanguage() );
+		return sclerror::GetPendingError( GetLanguage(), Translation, ErrHandling );
 	}
 
 	void ReportAndAbort( const lcl::meaning_ &Meaning );

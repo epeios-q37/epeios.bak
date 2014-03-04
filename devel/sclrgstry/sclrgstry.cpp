@@ -156,7 +156,7 @@ ERRBegin
 
 	Context.Init();
 	if ( Registry_.Fill( ProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
-		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
+		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
 	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
 ERRErr

@@ -90,28 +90,21 @@ void sclerror::SetMeaning( const lcl::meaning_ &Meaning )
 	Meaning_ = Meaning;
 }
 
-bso::bool__ sclerror::ReportPendingError(
+bso::bool__ sclerror::GetPendingError(
 	const char *Language,
-	txf::text_oflow__ &TOFlow,
+	str::string_ &Translation,
 	err::handling__ ErrHandling )
 {
 	bso::bool__ PendingErrorAvailable = false;
-ERRProlog
-	str::string Translation;
-ERRBegin
-	Translation.Init();
 
 	if ( IsErrorPending() )
 		PendingErrorAvailable = true;
 
-	if ( PendingErrorAvailable ) {
+	if ( PendingErrorAvailable )
 		scllocale::GetTranslation( GetMeaning(), Language, Translation );
-		TOFlow << Translation;
-	} else if ( ErrHandling != err::hUserDefined )
+	else if ( ErrHandling != err::hUserDefined )
 		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+
 	return PendingErrorAvailable;
 }
 

@@ -393,19 +393,7 @@ namespace xulftk {
 		ERREnd
 		ERREpilog
 		}
-		bso::bool__ FinalizeLaunching( void )
-		{
-			bso::bool__ Defined = false;
-
-			if ( Kernel().Registry().Exists( frdrgy::DefaultProject ) ) {
-				Defined = true;
-			} else
-				GoToHome();
-
-			RefreshUI();
-
-			return Defined;
-		}
+		void FinalizeLaunching( void );
 # if 0 //Old
 		bso::bool__ FinalizeLaunching( void )
 		{

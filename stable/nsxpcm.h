@@ -359,7 +359,11 @@ namespace nsxpcm {
 		nsCString CString;
 
 		Transform( String, CString );
+#if 0	// Old
 		NS_CStringToUTF16( CString, NS_CSTRING_ENCODING_NATIVE_FILESYSTEM , WString );
+# else
+		NS_CStringToUTF16( CString, NS_CSTRING_ENCODING_UTF8 , WString );
+# endif
 //		WString.AssignASCII( String );
 	}
 

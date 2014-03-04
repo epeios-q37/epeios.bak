@@ -9,7 +9,11 @@
     <Translation language="fr">Erreur fichier de configuration : %1.</Translation>
     <Translation language="en">Configuration file error : %1.</Translation>
   </Translations>
-  <Translations message="SCLRGSTRY_ConfigurationLocaleParsingError">
+	<Translations message="SCLRGSTRY_ProjectFileParsingError">
+		<Translation language="fr">Erreur fichier project : %1.</Translation>
+		<Translation language="en">Project file error : %1.</Translation>
+	</Translations>
+	<Translations message="SCLRGSTRY_ConfigurationLocaleParsingError">
     <Translation language="fr">Erreur dans la locale du fichier de configuration : %1.</Translation>
     <Translation language="en">Erreur in the configuration locale : %1.</Translation>
   </Translations>

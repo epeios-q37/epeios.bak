@@ -256,7 +256,7 @@ void nsxpcm::Transform(
 	const nsACString &CString,
 	nsAString &WString )
 {
-#if 0
+#if 1
 	NS_CStringToUTF16(CString, NS_CSTRING_ENCODING_UTF8, WString );
 # else
 	NS_CStringToUTF16(CString, NS_CSTRING_ENCODING_NATIVE_FILESYSTEM, WString );
@@ -267,7 +267,7 @@ void nsxpcm::Transform(
 	const nsAString &WString,
 	nsACString &CString )
 {
-#if 0
+#if 1
 	NS_UTF16ToCString( WString, NS_CSTRING_ENCODING_UTF8, CString );
 #else
 	NS_UTF16ToCString( WString, NS_CSTRING_ENCODING_NATIVE_FILESYSTEM, CString );

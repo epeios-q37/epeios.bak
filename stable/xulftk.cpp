@@ -837,6 +837,23 @@ ERREnd
 ERREpilog
 }
 
+void xulftk::trunk___::FinalizeLaunching( void )
+{
+ERRProlog
+	str::string ProjectFileName;
+ERRBegin
+	ProjectFileName.Init();
+
+	if ( Kernel().Registry().GetValue( frdrgy::DefaultProject, ProjectFileName ) )
+		DefineSession( ProjectFileName );
+	else
+		GoToHome();
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 const str::string_ &xulftk::trunk___::BuildXSLFileName(
 	const char *XSLFileNameAffix,
 	str::string_ &FileName )
