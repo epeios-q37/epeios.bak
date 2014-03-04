@@ -1375,7 +1375,19 @@ ERREpilog
 
 static inline bso::bool__ ReportSCLPendingError_( void )
 {
-	return sclmisc::ReportSCLPendingError();
+	bso::bool__ Exists = false;
+ERRProlog
+	str::string Translation;
+ERRBegin
+	Translation.Init();
+	
+	Exists = sclmisc::GetSCLPendingError( Translation );
+
+	cio::CErr << Translation << txf::nl;
+ERRErr
+ERREnd
+ERREpilog
+	return Exists;
 }
 
 static bso::bool__ main_(

@@ -42,7 +42,7 @@
 # include "fil.h"
 
 # if defined( CPE_MSVC ) || defined ( CPE_MINGW ) || defined ( CPE_CYGWIN )
-#  define FLS_DEFAULT_MAX_FILE_AMOUNT	500
+#  define FLS_DEFAULT_MAX_FILE_AMOUNT	1
 # elif defined ( CPE_LINUX )
 #  define FLS_DEFAULT_MAX_FILE_AMOUNT	800	// Linux, par défaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
 # elif defined ( CPE_XCODE )
