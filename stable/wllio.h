@@ -240,10 +240,11 @@ namespace wllio {
 		}
 		void Flush( void )
 		{
-			if ( _D != WLLIO_UNDEFINED_DESCRIPTOR )
+			/*if ( _D != WLLIO_UNDEFINED_DESCRIPTOR )
 				if ( !IsSTDOUT() && !IsSTDERR() )	// '_commit' n'est pas utilisable sur 'stdout' et 'stderr' (et accessoirement sur 'stdin').
 					if ( _commit( _D ) != 0 )
 						ERRLbr();
+						*/
 		}
 	};
 

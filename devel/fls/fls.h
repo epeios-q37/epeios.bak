@@ -272,7 +272,7 @@ namespace fls {
 				Persistant		:1,
 				// Signale que le nom du fichier a été crée de manière interne
 				Interne			:1;
-				// Loi d'accés à la mémoire.
+				// Mode d'accés à la mémoire.
 				fil::mode__ Mode;
 		} Temoin_;
 		row__ _Row;	// Pour le suivi des 'file handler' ouverts.
@@ -304,7 +304,7 @@ namespace fls {
 		}
 		void _AdjustPhysicalFileSize( void )	// Ajuste la taille physique du fichier à celle supposée.
 		{
-			if ( TailleFichier_ != 0 ) {
+			if ( ( Temoin_.Mode != fil::mReadOnly ) && (  TailleFichier_ != 0 ) ) {
 
 				Flush();	// Pour mettre à jour la taille physique du fichier pour que la méthode 'GetFileSize(...)' retourne la bonne valeur.
 
