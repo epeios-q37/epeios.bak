@@ -56,7 +56,7 @@ uys::state__ lst::WriteToFile_(
 ERRProlog
 	flf::file_oflow___ Flow;
 ERRBegin
-	if ( Flow.Init( FileName ) != tol::rSuccess ) {
+	if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		State = uys::sInconsistent;
 		ERRReturn;
 	}
