@@ -603,7 +603,7 @@ namespace ndbdct {
 			uys::state__ State = _StorageFileManager.Bind();
 
 			if ( uys::IsError( State ) ) {
-				_StorageFileManager.Bind();
+				_StorageFileManager.reset();
 				return State;
 			}
 

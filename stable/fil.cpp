@@ -165,6 +165,8 @@ iop::descriptor__ fil::Open(
 {
 	int D = ::Open_( Nom, Mode );
 
+	int err = errno;
+
 	return D;
 }
 
