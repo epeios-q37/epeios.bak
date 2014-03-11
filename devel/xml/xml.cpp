@@ -1090,6 +1090,8 @@ ERRBegin
 			Stop = !Callback.XMLComment( Value, Dump );
 			break;
 		case t_Error:
+			ERRDta();
+			break;
 		case t_Processed:
 			Stop = true;
 			break;
