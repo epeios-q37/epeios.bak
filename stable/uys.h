@@ -204,7 +204,10 @@ namespace uys {
 			sdr::row_t__ Position,
 			sdr::size__ Amount ) const
 		{
-			if ( ( Position + Amount ) > S_. Size )
+			if ( Position > S_. Size )
+				ERRPrm();
+
+			if ( Amount > ( S_. Size - Position ) )
 				ERRPrm();
 		}
 		void _Recall(
