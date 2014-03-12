@@ -54,6 +54,7 @@ csdleo::callback__ *csdles::CSDLESRetrieveSteering( csdleo::data__ *Data )
 ERRProlog
 	fnm::name___ Directory;
 	TOL_CBUFFER___ Buffer;
+	str::string Error;
 ERRBegin
 	if ( Data == NULL )
 		ERRPrm();
@@ -92,11 +93,13 @@ ERRBegin
 
 	Steering = SCLDAEMONRetrieveSteering( Data->Mode, scllocale::GetLocale() );
 ERRErr
-	if ( cio::IsInitialized() )
-		if ( sclerror::ReportPendingError( GetLanguage(), err::hUserDefined  )) {
-			cio::CErr << txf::nl;
+	if ( cio::IsInitialized() ) {
+		Error.Init();
+		if ( sclerror::GetPendingError( GetLanguage(), Error, err::hUserDefined  )) {
+			cio::CErr << Error << txf::nl;
 			ERRRst();
 		}
+	}
 ERREnd
 	if ( cio::IsInitialized() ) {
 		cio::COut << txf::commit;

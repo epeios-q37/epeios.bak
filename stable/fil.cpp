@@ -163,11 +163,7 @@ iop::descriptor__ fil::Open(
 	const fnm::name___ &Nom,
 	mode__ Mode )
 {
-	int D = ::Open_( Nom, Mode );
-
-	int err = errno;
-
-	return D;
+	return ::Open_( Nom, Mode );
 }
 
 void fil::Close( iop::descriptor__ D )
