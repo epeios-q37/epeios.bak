@@ -86,18 +86,25 @@ namespace dtr {
 		kinship__ _Kinship;
 		r _Position;
 		r _Root;
+		bso::bool__ _GotoParent;	// Indique qu'il faut directement sauter au parent.
 	public:
 		browser__( void )
 		{
 			_Kinship = k_Undefined;
 			_Position = E_NIL;
 			_Root = E_NIL;
+			_GotoParent = false;
 		}
 		//f Initialization wih 'Root' as root.
 		void Init( r Root )
 		{
 			_Kinship = k_Undefined;
 			_Position = _Root = Root;
+			_GotoParent = false;
+		}
+		void GotoParent( void )
+		{
+			_GotoParent = true;
 		}
 		E_RODISCLOSE__( kinship__, Kinship )
 		E_RODISCLOSE__( r, Position )
@@ -105,6 +112,7 @@ namespace dtr {
 		friend class dynamic_tree_<r>;
 	};
 
+# define E_BROWSER__( t )	browser__<t>
 	//c A dynamic tree.
 	template <typename r> class dynamic_tree_
 	{
@@ -318,10 +326,10 @@ namespace dtr {
 				break;
 			case kChild:
 			case kSibling:
-				if ( HasChild( Position ) ) {
+				if ( !Browser._GotoParent && HasChild( Position ) ) {
 					Position = FirstChild( Position );
 					Kinship = kChild;
-				} else if ( HasNextSibling( Position ) ) {
+				} else if ( !Browser._GotoParent && HasNextSibling( Position ) ) {
 					Position = NextSibling( Position );
 					Kinship = kSibling;
 #ifdef DTR_DBG
@@ -332,6 +340,7 @@ namespace dtr {
 					Position = Parent( Position );
 					Kinship = kParent;
 				}
+				Browser._GotoParent = false;
 				break;
 			case kParent:
 				if ( HasNextSibling( Position ) ) {
