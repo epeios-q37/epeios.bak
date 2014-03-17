@@ -1863,7 +1863,7 @@ namespace rgstry {
 		str::uint__ Value = Default;
 		sdr::row__ LocalError = E_NIL;
 
-		Value = str::_GenericUnsignedConversion( RawValue, 0, &LocalError, str::bAuto, Max );
+		Value = str::_UIntConversion( RawValue, 0, &LocalError, str::bAuto, Max );
 
 		if ( ( LocalError != E_NIL ) || ( Value < Min ) ) {
 

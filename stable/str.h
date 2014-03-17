@@ -84,14 +84,29 @@ namespace str {
 
 	class string_;	// Prédéclaration.
 
-	uint__ _GenericUnsignedConversion(
+	bso::u64__ _U64Conversion(
+		const class string_ &String,
+		sdr::row__ Begin,
+		sdr::row__ *ErrP,
+		base__ Base,
+		bso::u64__ Limit );
+
+	bso::s64__ _S64Conversion(
+		const class string_ &String,
+		sdr::row__ Begin,
+		sdr::row__ *ErrP,
+		base__ Base,
+		bso::s64__ PositiveLimit,
+		bso::s64__ NegativeLimit );
+
+	uint__ _UIntConversion(
 		const class string_ &String,
 		sdr::row__ Begin,
 		sdr::row__ *ErrP,
 		base__ Base,
 		uint__ Limit );
 
-	sint__ _GenericSignedConversion(
+	sint__ _SIntConversion(
 		const class string_ &String,
 		sdr::row__ Begin,
 		sdr::row__ *ErrP,
@@ -228,14 +243,14 @@ namespace str {
 			char C,
 			sdr::row__ Start = 0 ) const;
 		// NOTA : Les méthodes 'ToNumber'(...)' facilitent la mise en oeuvre de 'template's.
-#define STR_UNR( name, type, limit )\
+#define STR_UNR( name, type, limit, casing )\
 	type To##name(\
 			sdr::row__ Begin,\
 			sdr::row__ *ErrP,\
 			base__ Base,\
 			type Limit = limit ) const\
 		{\
-			return (type)_GenericUnsignedConversion( *this, Begin, ErrP, Base, Limit );\
+		return (type)_U##casing##Conversion( *this, Begin, ErrP, Base, Limit );\
 		}\
 		type To##name(\
 			sdr::row__ *ErrP = NULL,\
@@ -244,8 +259,8 @@ namespace str {
 		{\
 			return To##name( 0, ErrP, Base, Limit );\
 		}
-#define STR_UN( name, type, limit )\
-		STR_UNR( name, type, limit )\
+#define STR_UN( name, type, limit, casing )\
+		STR_UNR( name, type, limit, casing )\
 		void ToNumber(\
 			type &Number,\
 			sdr::row__ *Error = NULL ) const\
@@ -259,7 +274,7 @@ namespace str {
 		{\
 			Number = To##name( Error, bAuto, Limit );\
 		}
-#define STR_SNR( name, type, positive_limit, negative_limit )\
+#define STR_SNR( name, type, positive_limit, negative_limit, casing )\
 	type To##name(\
 			sdr::row__ Begin,\
 			sdr::row__ *ErrP,\
@@ -267,7 +282,7 @@ namespace str {
 			type PositiveLimit = positive_limit,\
 			type NegativeLimit = negative_limit ) const\
 		{\
-			return (type)_GenericSignedConversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
+		return (type)_S##casing##Conversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}\
 		type To##name(\
 			sdr::row__ *ErrP = NULL,\
@@ -277,8 +292,8 @@ namespace str {
 		{\
 			return To##name( 0, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}
-#define STR_SN( name, type, positive_limit, negative_limit )\
-		STR_SNR( name, type, positive_limit, negative_limit )\
+#define STR_SN( name, type, positive_limit, negative_limit, casing )\
+		STR_SNR( name, type, positive_limit, negative_limit, casing )\
 		void ToNumber(\
 			type &Number,\
 			sdr::row__ *Error = NULL ) const\
@@ -293,18 +308,23 @@ namespace str {
 		{\
 			Number = To##name( Error, bAuto, PositiveLimit, NegativeLimit );\
 		}
-		STR_UNR( UInt, bso::uint__, BSO_UINT_MAX )
-		STR_SNR( SInt, bso::sint__, BSO_SINT_MAX, BSO_SINT_MIN )
+		STR_UNR( UInt, bso::uint__, BSO_UINT_MAX, Int )
+		STR_SNR( SInt, bso::sint__, BSO_SINT_MAX, BSO_SINT_MIN, Int )
 # ifdef CPE_INT64
-		STR_UN( U64, bso::u64__, BSO_U64_MAX )
-		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN )
+		STR_UN( U64, bso::u64__, BSO_U64_MAX, Int )
+		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN, Int )
+# elif defined( CPE_INT32 )
+		STR_UN( U64, bso::u64__, BSO_U64_MAX, 64 )
+		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN, 64 )
+# else
+#  error
 # endif
-		STR_UN( U32, bso::u32__, BSO_U32_MAX )
-		STR_SN( S32, bso::s32__, BSO_S32_MAX, BSO_S32_MIN )
-		STR_UN( U16, bso::u16__, BSO_U16_MAX )
-		STR_SN( S16, bso::s16__, BSO_S16_MAX, BSO_S16_MIN )
-		STR_UN( U8, bso::u8__, BSO_U8_MAX )
-		STR_SN( S8, bso::s8__, BSO_S8_MAX, BSO_S8_MIN )
+		STR_UN( U32, bso::u32__, BSO_U32_MAX, Int )
+		STR_SN( S32, bso::s32__, BSO_S32_MAX, BSO_S32_MIN, Int )
+		STR_UN( U16, bso::u16__, BSO_U16_MAX, Int )
+		STR_SN( S16, bso::s16__, BSO_S16_MAX, BSO_S16_MIN, Int )
+		STR_UN( U8, bso::u8__, BSO_U8_MAX, Int )
+		STR_SN( S8, bso::s8__, BSO_S8_MAX, BSO_S8_MIN, Int )
 		bso::lfloat__ ToLF(
 			sdr::row__ *ErrP,
 			sdr::row__ Begin ) const;

@@ -346,18 +346,18 @@ sdr::row__ string_::Search(
 		return Start;
 }
 
-uint__ str::_GenericUnsignedConversion(
+template <typename uint> static uint GenericUnsignedConversion_(
 	const str::string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
 	base__ BaseFlag,
-	uint__ Limit )
+	uint Limit )
 {
-	uint__ Result = 0;
+	uint Result = 0;
 	sdr::row__ &P = Begin;
 	bso::u8__ C;
 	bso::u8__ Base;
-	uint__ OtherLimit = 0;
+	uint OtherLimit = 0;
 
 	if ( BaseFlag == bAuto )
 		if ( ( ( String.Amount() != 0 ) ) && ( String.Get( P ) == STR_HEXADECIMAL_MARKER ) ) {
@@ -402,13 +402,13 @@ uint__ str::_GenericUnsignedConversion(
 	return Result;
 }
 
-sint__ str::_GenericSignedConversion(
+template <typename sint> sint GenericSignedConversion_(
 	const class string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
 	base__ Base,
-	sint__ PositiveLimit,
-	sint__ NegativeLimit )
+	sint PositiveLimit,
+	sint NegativeLimit )
 {
 	if ( PositiveLimit < 0 )
 		ERRPrm();
@@ -418,7 +418,7 @@ sint__ str::_GenericSignedConversion(
 			*ErrP = *Begin + 1;
 			return 0;
 		} else 
-			return -(sint__)_GenericUnsignedConversion( String, String.Next( Begin ), ErrP, Base, -NegativeLimit );
+			return -(sint)GenericUnsignedConversion_( String, String.Next( Begin ), ErrP, Base, -NegativeLimit );
 	else if ( String.Get( Begin ) == '+' )
 		if ( String.Next( Begin ) == E_NIL ) {
 			if ( ErrP != NULL )
@@ -427,11 +427,54 @@ sint__ str::_GenericSignedConversion(
 				ERRDta();
 			return 0;
 		} else 
-			return (sint__)_GenericUnsignedConversion( String, String.Next( Begin ), ErrP, Base, PositiveLimit );
+			return (sint)GenericUnsignedConversion_( String, String.Next( Begin ), ErrP, Base, PositiveLimit );
 	else 
-		return (sint__)_GenericUnsignedConversion( String, Begin, ErrP, Base, PositiveLimit );
+		return (sint)GenericUnsignedConversion_( String, Begin, ErrP, Base, PositiveLimit );
 }
 
+bso::u64__ str::_U64Conversion(
+	const str::string_ &String,
+	sdr::row__ Begin,
+	sdr::row__ *ErrP,
+	base__ BaseFlag,
+	bso::u64__ Limit )
+{
+	return GenericUnsignedConversion_( String, Begin, ErrP, BaseFlag, Limit );
+}
+
+bso::s64__ str::_S64Conversion(
+	const class string_ &String,
+	sdr::row__ Begin,
+	sdr::row__ *ErrP,
+	base__ Base,
+	bso::s64__ PositiveLimit,
+	bso::s64__ NegativeLimit )
+{
+	return GenericSignedConversion_( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
+}
+
+
+
+uint__ str::_UIntConversion(
+	const str::string_ &String,
+	sdr::row__ Begin,
+	sdr::row__ *ErrP,
+	base__ BaseFlag,
+	uint__ Limit )
+{
+	return GenericUnsignedConversion_( String, Begin, ErrP, BaseFlag, Limit );
+}
+
+sint__ str::_SIntConversion(
+	const class string_ &String,
+	sdr::row__ Begin,
+	sdr::row__ *ErrP,
+	base__ Base,
+	sint__ PositiveLimit,
+	sint__ NegativeLimit )
+{
+	return GenericSignedConversion_( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
+}
 
 bso::lfloat__ string_::ToLF(
 	sdr::row__ *ErrP,
