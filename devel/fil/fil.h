@@ -398,6 +398,36 @@ namespace fil {
 		const fnm::name___ &FileName,
 		err::handling__ ErrorHandling = err::h_Default );	// Crée un fichier de nom 'FileName'.
 
+# ifdef FIL__WIN
+	inline bso::bool__ MakeNormal(
+		const fnm::name___ &FileName,
+		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/répertoire normal.
+	{
+		if ( SetFileAttributesW( FileName.Core(), FILE_ATTRIBUTE_NORMAL ) == 0 )
+			if ( ErrorHandling == err::hThrowException )
+				ERRFwk();
+			else
+				return false;
+
+		return true;
+	}
+
+	inline bso::bool__ MakeSystem(
+		const fnm::name___ &FileName,
+		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/répertoire system.
+															// NOTA : pour que le fichier soit caché lorsque l'option correspondande est activée,
+															// il semblerait qu'il faut en plus mettre l'attribute 'HIDDEN' et 'ARCHIVE'.
+	{
+		if ( SetFileAttributesW( FileName.Core(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE ) == 0 )
+			if ( ErrorHandling == err::hThrowException )
+				ERRFwk();
+			else
+				return false;
+
+		return true;
+	}
+# endif
+
 	enum backup_status__
 	{
 		bsOK,
