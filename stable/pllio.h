@@ -67,7 +67,7 @@ extern class ttr_tutor &PLLIOTutor;
 #include <sys/stat.h>
 
 namespace pllio {
-	using bso::size__;
+	typedef bso::u64__ size__;
 
 	typedef int	descriptor__;
 
