@@ -145,7 +145,7 @@ namespace fls {
 			reset();
 		}
 		tol::report__ Init(
-			const char *FileName,
+			const fnm::name___ &Name,
 			fil::mode__ Mode,
 			err::handling__ ErrorHandling = err::h_Default )
 		{
@@ -155,7 +155,7 @@ namespace fls {
 			_Mutex = mtx::Create( mtx::mProtecting );
 #endif
 
-			_D = fil::Open( FileName, Mode );
+			_D = fil::Open( Name, Mode );
 
 			if ( _D == IOP_UNDEFINED_DESCRIPTOR ) {
 				switch ( ErrorHandling ) {
@@ -259,7 +259,7 @@ namespace fls {
 	private:
 		_file___ File_;
 		// nom du fichier
-		char *Nom_;
+		fnm::name___ _Name;
 		// taille du fichier
 		sdr::size__ TailleFichier_;	// 'sdr::size__' et non 'fil::size__', car considéré comme un 'storage', et donc soumis à ses limites.
 		struct {
@@ -288,7 +288,7 @@ namespace fls {
 
 			if ( !Temoin_.Ouvert )
 			{
-				Success = File_.Init( Nom_, Temoin_.Mode, ErrorHandling ) == tol::rSuccess;
+				Success = File_.Init( _Name, Temoin_.Mode, ErrorHandling ) == tol::rSuccess;
 
 				if ( Success )
 					Temoin_.Ouvert = 1;
@@ -308,7 +308,7 @@ namespace fls {
 
 				Flush();	// Pour mettre à jour la taille physique du fichier pour que la méthode 'GetFileSize(...)' retourne la bonne valeur.
 
-				if ( !fil::Exists( Nom_ ) || ( TailleFichier_ > fil::GetSize( Nom_ ) ) ) {
+				if ( !fil::Exists( _Name ) || ( TailleFichier_ > fil::GetSize( _Name ) ) ) {
 					sdr::datum__ Datum = 0;
 					
 					Open_( true );
@@ -391,8 +391,8 @@ namespace fls {
 */		}
 		void Allocate( bso::size__ Capacite )
 		{
-			if ( ( TailleFichier_ == 0 ) && fil::Exists( Nom_ ) ) {
-				fil::size__ RawFileSize = fil::GetSize( Nom_ );
+			if ( ( TailleFichier_ == 0 ) && fil::Exists( _Name ) ) {
+				fil::size__ RawFileSize = fil::GetSize( _Name );
 
 				if ( RawFileSize > SDR_SIZE_MAX )
 					ERRDta();
@@ -419,16 +419,14 @@ namespace fls {
 				if ( _Row != E_NIL )
 					_Unregister( _Row, _ID );
 
-				if ( Nom_ )
+				if ( _Name.Size() != 0  )
 				{
 					if ( !Temoin_.Persistant )
-						remove( Nom_ );
-
-					free( Nom_ );
+						fil::Remove( _Name );
 				}
 			}
 
-			Nom_ = NULL;
+			_Name.reset( P );
 			Temoin_.Ouvert = false;
 			Temoin_.Manuel = true;
 			Temoin_.Persistant = false;
@@ -441,18 +439,15 @@ namespace fls {
 		}
 		void Init(
 			id__ ID,
-			const char *NomFichier = NULL,
+			const fnm::name___ &Name,
 			fil::mode__ Mode = fil::mReadWrite,
 			fls::creation Creation = fls::cFirstUse )
 		{
-			if ( NomFichier )
+			if ( Name.Size() != 0 )
 			{
 				reset();
 
-				if ( ( Nom_ = (char *)malloc( strlen( NomFichier ) + 1 ) ) == NULL )
-					ERRAlc();
-
-				strcpy( Nom_, NomFichier );
+				_Name.Init( Name );
 
 				Temoin_.Interne = false;
 
@@ -465,11 +460,12 @@ namespace fls {
 			{
 				reset();
 
-				if ( ( Nom_ = (char *)malloc( L_tmpnam ) ) == NULL )
-					ERRAlc();
-
-				if ( tmpnam( Nom_ ) == NULL )
+				char Buffer[L_tmpnam];
+								
+				if ( tmpnam( Buffer ) == NULL )
 					ERRSys();
+
+				_Name.Init( Buffer );
 
 				Temoin_.Interne = true;
 
@@ -541,24 +537,24 @@ namespace fls {
 		{
 			ReleaseFile();
 
-			if ( ( Nom_ != NULL ) && fil::Exists( Nom_ ) )
-				if ( remove( Nom_ ) != 0 )
+			if ( ( _Name.Size() != 0 ) && fil::Exists( _Name ) )
+				if ( !fil::Remove( _Name ) )
 					ERRLbr();
 
 			TailleFichier_ = 0;
 		}
-		const char *GetFileName( void ) const
+		const fnm::name___ &GetFileName( void ) const
 		{
-			return Nom_;
+			return _Name;
 		}
 		bso::bool__ Exists( void ) const
 		{
-			return fil::Exists( Nom_ );
+			return fil::Exists( _Name );
 		}
 		time_t TimeStamp( void ) const
 		{
 			if ( Exists() )
-				return fil::GetLastModificationTime( Nom_ );
+				return fil::GetLastModificationTime( _Name );
 			else
 				return 0;
 		}
@@ -570,7 +566,7 @@ namespace fls {
 			return File_.Size();
 #	else
 			if ( Exists() )
-				return fil::GetSize( Nom_ );
+				return fil::GetSize( _Name );
 			else
 				return 0;
 #	endif
@@ -646,7 +642,7 @@ namespace fls {
 		//f Initialize using 'Filename' as file, open it in mode 'Mode'.
 		void Init(
 			id__ ID,
-			const char *FileName = NULL,
+			const fnm::name___ &FileName = NULL,
 			fil::mode__ Mode = fil::mReadWrite,
 			fls::creation Creation = fls::cFirstUse )
 		{

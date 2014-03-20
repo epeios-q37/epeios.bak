@@ -434,7 +434,7 @@ namespace uys {
 	{
 	public:
 		void Init( 
-			const char *FileName,
+			const fnm::name___ &FileName,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )
@@ -458,7 +458,7 @@ namespace uys {
 		}
 		state__ State( void ) const
 		{
-			if ( GetFileName() == NULL )
+			if ( GetFileName().Size() == 0 )
 				return sInconsistent;
 			else if ( Exists() )
 				return sExists;

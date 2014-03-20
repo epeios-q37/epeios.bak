@@ -485,8 +485,8 @@ namespace ias {
 			reset();
 		}
 		void Init( 
-			const char *DescriptorsFileName,
-			const char *AStorageFileName,
+			const fnm::name___ &DescriptorsFileName,
+			const fnm::name___ &AStorageFileName,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )

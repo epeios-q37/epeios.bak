@@ -114,10 +114,13 @@ namespace fnm
 		}
 		bso::size__ Size( void ) const
 		{
+			if ( _Core == NULL )
+				return 0;
+			else
 # ifdef FNM__WIN
-			return wcslen( _Core );
+				return wcslen( _Core );
 # elif defined( FNM__POSIX )
-			return strlen( _Core );
+				return strlen( _Core );
 # else
 #  error
 # endif

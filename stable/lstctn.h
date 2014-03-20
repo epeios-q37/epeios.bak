@@ -190,10 +190,10 @@ namespace lstctn {
 			reset();
 		}
 		void Init(
-			const char *ContainerStaticsFileName,
-			const char *ContainerDynamicsFileName,
-			const char *ContainerMultimemoryFileName,
-			const char *ListFileName,
+			const fnm::name___ &ContainerStaticsFileName,
+			const fnm::name___ &ContainerDynamicsFileName,
+			const fnm::name___ &ContainerMultimemoryFileName,
+			const fnm::name___ &ListFileName,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )

@@ -346,9 +346,9 @@ namespace ctn {
 			reset();
 		}
 		void Init( 
-			const char *StaticsFileName,
-			const char *DynamicsDescriptorsFileName,
-			const char *DynamicsMultimemoryFileName,
+			const fnm::name___ &StaticsFileName,
+			const fnm::name___ &DynamicsDescriptorsFileName,
+			const fnm::name___ &DynamicsMultimemoryFileName,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )
