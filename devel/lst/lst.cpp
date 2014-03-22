@@ -27,6 +27,25 @@
 				  /*******************************************/
 
 #include "flf.h"
+#include "str.h"
+
+void lst::list_file_manager___::Init(
+	const str::string_ &LocalizedFileAffix,
+	fil::mode__ Mode,
+	bso::bool__ Persistent )
+{
+ERRProlog
+	str::string FileName;
+ERRBegin
+	FileName.Init( LocalizedFileAffix );
+	FileName.Append( "eli" );
+
+	Init( (fnm::name___)FileName, Mode, Persistent );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 static inline void Save_(
 	sdr::row__ Row,

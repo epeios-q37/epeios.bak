@@ -360,6 +360,10 @@ namespace lst {
 			_Mode = Mode;
 			_Persistent = Persistent;
 		}
+		void Init(
+			const str::string_ &LocalizedFileAffix,
+			fil::mode__ Mode,
+			bso::bool__ Persistent );
 		fil::mode__ Mode( fil::mode__ Mode )
 		{
 			tol::Swap( Mode, _Mode );
