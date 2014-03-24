@@ -681,13 +681,29 @@ ERRProlog
 	str::string Path;
 	str::string Value;
 	sdr::row__ Error = E_NIL;
+	str::string Name;
 ERRBegin
 	Id.Init();
 
 	if ( GetId_( Flag, Id ).Amount() == 0 ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLTOOL_NAME "_UnknownFlag" );
-		Meaning.AddTag( Flag.Name );
+
+		Name.Init();
+		switch ( Flag.Stamp() ) {
+		case sShort:
+			Name.Append( '-' );
+			break;
+		case sLong:
+			Name.Append( "--" );
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+		Name.Append( Flag.Name );
+		Meaning.AddTag( Name );
+
 		sclerror::SetMeaning( Meaning );
 		ERRAbort();
 	}
@@ -744,13 +760,29 @@ ERRProlog
 	str::strings Tags;
 	str::string Path;
 	sdr::row__ Error = E_NIL;
+	str::string Name;
 ERRBegin
 	Id.Init();
 
 	if ( GetId_( Option, Id ).Amount() == 0 ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLTOOL_NAME "_UnknownOption" );
-		Meaning.AddTag( Option.Name );
+
+		Name.Init();
+		switch ( Option.Stamp() ) {
+		case sShort:
+			Name.Append( '-' );
+			break;
+		case sLong:
+			Name.Append( "--" );
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+		Name.Append( Option.Name );
+		Meaning.AddTag( Name );
+
 		sclerror::SetMeaning( Meaning );
 		ERRAbort();
 	}

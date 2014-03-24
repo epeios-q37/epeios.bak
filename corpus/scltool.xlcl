@@ -14,8 +14,8 @@
     <Translation language="en">'%1' : bad command.</Translation>
   </Translations>
   <Translations text="SCLTOOL_UnknownFlag">
-    <Translation language="fr">Fanion '%1' inconnu.</Translation>
-    <Translation language="en">Unknown '%1' flag.</Translation>
+    <Translation language="fr">'%1' inconnu.</Translation>
+    <Translation language="en">'%1' unknown.</Translation>
   </Translations>
   <Translations text="SCLTOOL_UnknownOption">
     <Translation language="fr">Option '%1' inconnue.</Translation>
