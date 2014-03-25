@@ -44,7 +44,8 @@
 #include "nsIDirectoryService.h"
 #include "nsIFormHistory.h"
 #include "nsIDOMNodeList.h"
-#include "nsIDOMNamedNodeMap.h"
+#include "nsIDOMMozNamedAttrMap.h"
+//#include "nsDOMAttributeMap.h"
 #include "nsIDOMAttr.h"
 #include "nsITreeColumns.h"
 
@@ -759,15 +760,7 @@ ERRBegin
 	} else if ( ( _retval != nsIFilePicker::returnOK ) && ( _retval != nsIFilePicker::returnReplace ) )
 		ERRLbr();
 
-#if defined( NSXPCM_GECKO_API_V1 )
-	nsILocalFile *File;
-#elif defined( NSXPCM_GECKO_API_V2 )
-	nsILocalFile *File;
-#elif defined( NSXPCM_GECKO_API_V3 )
 	nsIFile *File;
-#else
-# error
-#endif
 
 	if ( ( Error = FilePicker->GetFile( &File ) ) != NS_OK )
 		ERRLbr();
@@ -1617,13 +1610,13 @@ ERREpilog
 
 static void AttachIfConcerned_(
 	nsIDOMNode *Node,
-	nsIDOMNamedNodeMap *Attributes,
+	nsIDOMMozNamedAttrMap *Attributes,
 	const char *Id,
 	event_handler__ &EventHandler,
 	const char *NameSpace )
 {
 	PRUint32 Amount;
-	nsIDOMNode *AttributeNode = NULL;
+	nsIDOMAttr *AttributeNode = NULL;
 	event__ Event = e_Undefined;
 	
 	T( Attributes->GetLength( &Amount ) );
@@ -1644,12 +1637,12 @@ void nsxpcm::AttachEventHandler(
 {
 ERRProlog
 	nsxpcm::browser__ Browser;
-	nsIDOMNamedNodeMap *Attributes = NULL;
+	nsIDOMMozNamedAttrMap *Attributes = NULL;
 ERRBegin
 	Browser.Init( Node );
 
 	while ( Node != NULL ) {
-		T( Node->GetAttributes( &Attributes ) );
+		T( GetElement( Node )->GetAttributes( &Attributes ) );
 
 		if ( Attributes != NULL )
 			AttachIfConcerned_( Node, Attributes, Id, EventHandler, NameSpace );
@@ -1696,11 +1689,11 @@ ERREpilog
 bso::bool__ GetRelevantBroadcasterId_(
 	const str::string_ &CustomizedObserverAttributeName,
 	nsIDOMNode *Node,
-	nsIDOMNamedNodeMap *Attributes,
+	nsIDOMMozNamedAttrMap *Attributes,
 	str::string_ &ObserverId )
 {
 	PRUint32 Amount;
-	nsIDOMNode *AttributeNode = NULL;
+	nsIDOMAttr *AttributeNode = NULL;
 	event__ Event = e_Undefined;
 	bso::bool__ Relevant = false;
 	
@@ -1735,7 +1728,7 @@ void nsxpcm::RefreshObservers(
 {
 ERRProlog
 	nsxpcm::browser__ Browser;
-	nsIDOMNamedNodeMap *Attributes = NULL;
+	nsIDOMMozNamedAttrMap *Attributes = NULL;
 	str::string CustomizedObserverAttributeName;
 	str::string ObserverId;
 ERRBegin
@@ -1746,7 +1739,7 @@ ERRBegin
 	Browser.Init( Node );
 
 	while ( Node != NULL ) {
-		Node->GetAttributes( &Attributes ); 
+		GetElement( Node )->GetAttributes( &Attributes ); 
 
 		if ( Attributes != NULL ) {
 			ObserverId.Init();
@@ -1820,14 +1813,12 @@ NS_IMETHODIMP nsxpcm::tree_view__::SetSelection(nsITreeSelection* aSelection)
   return NS_OK;
 }
 
-NS_IMETHODIMP nsxpcm::tree_view__::GetRowProperties(PRInt32 aIndex,
-                             nsISupportsArray* aProperties)
+NS_IMETHODIMP nsxpcm::tree_view__::GetRowProperties(int32_t index, nsAString & _retval)
 {
   return NS_OK;
 }
 
-NS_IMETHODIMP nsxpcm::tree_view__::GetCellProperties(PRInt32 aRow, nsITreeColumn* aCol,
-                              nsISupportsArray* aProperties)
+NS_IMETHODIMP nsxpcm::tree_view__::GetCellProperties(int32_t row, nsITreeColumn *col, nsAString & _retval)
 {
 #if 0
   PRUint32 dirCount;
@@ -1841,8 +1832,7 @@ NS_IMETHODIMP nsxpcm::tree_view__::GetCellProperties(PRInt32 aRow, nsITreeColumn
   return NS_OK;
 }
 
-NS_IMETHODIMP nsxpcm::tree_view__::GetColumnProperties(nsITreeColumn* aCol,
-                                nsISupportsArray* aProperties)
+NS_IMETHODIMP nsxpcm::tree_view__::GetColumnProperties(nsITreeColumn *col, nsAString & _retval)
 {
   return NS_OK;
 }
@@ -2115,16 +2105,10 @@ NS_IMETHODIMP nsxpcm::autocomplete_result___::RemoveValueAt(PRInt32 rowIndex, NS
     return NS_ERROR_NOT_IMPLEMENTED;
 }
 
-#if defined( NSXPCM_GECKO_API_V1 )
-#elif defined( NSXPCM_GECKO_API_V2 )
-#elif defined( NSXPCM_GECKO_API_V3 )
 NS_IMETHODIMP nsxpcm::autocomplete_result___::GetTypeAheadResult(bool *aTypeAheadResult)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
-#else
-# error
-#endif
 
 
 /* Fin 'textbox' 'atutocomplete'. */
@@ -2253,15 +2237,7 @@ static bso::bool__ _GetXSLStylesheet(
 
 	CreateInstance( NS_XMLHTTPREQUEST_CONTRACTID, HTTPRequest );
 
-#if defined( NSXPCM_GECKO_API_V1 )
 	Result = HTTPRequest->Open( Method, URL, false, Empty, Empty );
-#elif defined( NSXPCM_GECKO_API_V2 )
-	Result = HTTPRequest->Open( Method, URL, false, Empty, Empty );
-#elif defined( NSXPCM_GECKO_API_V3 )
-	Result = HTTPRequest->OpenRequest( Method, URL, false, Empty, Empty );
-#else
-# error
-#endif
 
 	if ( Result != NS_OK )
 		ERRLbr();

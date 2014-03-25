@@ -58,22 +58,6 @@
 
 # define NSXPCM__DEFAULT_GECKO_API_VERSION	2
 
-# ifdef E_GECKO_API_VERSION
-#  define NSXPCM__GECKO_API_VERSION	E_GECKO_API_VERSION
-# else
-#  define NSXPCM__GECKO_API_VERSION	NSXPCM__DEFAULT_GECKO_API_VERSION
-# endif
-
-# if NSXPCM__GECKO_API_VERSION == 1
-#  define NSXPCM_GECKO_API_V1
-# elif NSXPCM__GECKO_API_VERSION == 2
-#  define NSXPCM_GECKO_API_V2
-# elif NSXPCM__GECKO_API_VERSION == 3
-#  define NSXPCM_GECKO_API_V3
-# else
-#  error "Unknwon Gecko API version :"
-# endif
-
 # ifndef CPE_GECKO
 #  error "The NSXPCM library can only be used in a 'Gecko' copmonent :"
 # endif
@@ -88,6 +72,7 @@
 # include "nsITreeView.h"
 # include "nsITreeContentView.h"
 # include "nsITreeSelection.h"
+# include "nsIBoxObject.h"
 # include "nsIListBoxObject.h"
 # include "nsDirectoryServiceDefs.h"
 # include "nsIDOMDocument.h"
@@ -102,20 +87,12 @@
 # include "nsIDOMXULButtonElement.h"
 # include "nsIDOMXULTreeElement.h"
 # include "nsIDOMXULDescriptionElement.h"
-# if defined( NSXPCM_GECKO_API_V1 )
-#  include "nsIDOMWindow.h"
-# elif defined( NSXPCM_GECKO_API_V2 )
-#  include "nsIDOMWindow.h"
-# elif defined ( NSXPCM_GECKO_API_V3 )
-#  include "nsIDOMWindowInternal.h"
-# else
-#  error
-# endif
+# include "nsIDOMWindow.h"
 # include "nsIDOMXULLabelElement.h"
 # include "nsIDOMMutationEvent.h"
 # include "nsIDOMKeyEvent.h" 
 # include "nsIDOMEventTarget.h"
-# include "nsIDOMNSHTMLElement.h"
+// # include "nsIDOMNSHTMLElement.h"
 # include "nsIAutoCompleteResult.h"
 
 #include "nsIXULWindow.h"
@@ -128,15 +105,7 @@
 # include "nsServiceManagerUtils.h"
 # include "nsIInterfaceRequestor.h"
 # include "nsIDOMEventListener.h"
-# if defined( NSXPCM_GECKO_API_V1 )
-#  include "mozilla/ModuleUtils.h"
-# elif defined( NSXPCM_GECKO_API_V2 )
-#  include "mozilla/ModuleUtils.h"
-# elif defined( NSXPCM_GECKO_API_V3 )
-#  include "nsIGenericFactory.h"
-# else
-#  error
-# endif
+# include "mozilla/ModuleUtils.h"
 # include "nsIDOMHTMLAnchorElement.h"
 # include "nsIDOMDocumentFragment.h"
 # include "nsICommandLine.h" // Situé dans 'toolkitcomps'.
@@ -152,16 +121,7 @@
 #  define NSXPCM__ENABLE_FORMHISTORY
 # endif
 
-# if defined( NSXPCM_GECKO_API_V1 )
-#  define NSXPCM__BOOL	PRBool
-# elif defined( NSXPCM_GECKO_API_V2 )
-#  define NSXPCM__BOOL	PRBool
-# elif defined( NSXPCM_GECKO_API_V3 )
 #  define NSXPCM__BOOL	bool
-# else
-#  error
-# endif
-
 
 # ifdef NSXPCM_FBL
 #  define NSXPCM__FBL
@@ -553,10 +513,10 @@ namespace nsxpcm {
 		nsISupports *Element,
 		str::string_ &InnerHTML )
 	{
-		nsIDOMNSHTMLElement *HTMLElement = NULL;
+		nsIDOMHTMLElement *HTMLElement = NULL;
 		nsString Raw;
 
-		HTMLElement = QueryInterface<nsIDOMNSHTMLElement>( Element );
+		HTMLElement = QueryInterface<nsIDOMHTMLElement>( Element );
 
 		HTMLElement->GetInnerHTML( Raw );
 
@@ -1018,15 +978,7 @@ namespace nsxpcm {
 		bso::bool__ Deep,
 		nsIDOMNode **Clone )
 	{
-# if defined( NSXPCM_GECKO_API_V1 )
-		T( Node->CloneNode( Deep, Clone ) );
-# elif defined( NSXPCM_GECKO_API_V2 )
-		T( Node->CloneNode( Deep, Clone ) );
-# elif defined( NSXPCM_GECKO_API_V3 )
 		T( Node->CloneNode( Deep, 0, Clone ) );
-# else
-#  error
-# endif
 	}
 
 	inline void ReplaceChild(
@@ -1236,6 +1188,7 @@ namespace nsxpcm {
 		}
 		// Retourne le prochain noeud, ou 'NULL' si tous ont été lus.
 		nsIDOMNode *GetNext( void );
+		nsIDOMElement *GetNextAsElement( void );
 	};
 
 /*
@@ -1319,15 +1272,7 @@ namespace nsxpcm {
 
 	inline nsIDOMWindowInternal* GetOpener( nsIDOMWindowInternal *Window )
 	{
-# if defined( NSXPCM_GECKO_API_V1 )
 		T( Window->GetOpener( (nsIDOMWindow **)&Window ) );
-# elif defined( NSXPCM_GECKO_API_V2 )
-		T( Window->GetOpener( (nsIDOMWindow **)&Window ) );
-# elif defined( NSXPCM_GECKO_API_V3 )
-		T( Window->GetOpener( &Window ) );
-# else
-#  error
-# endif
 
 		return Window;
 	}
@@ -1338,6 +1283,11 @@ namespace nsxpcm {
 	}
 
 	nsIDOMWindowInternal* GetRoot( nsIDOMWindow *Window );	// Retourne la fenêtre racine de l'application.
+
+	inline nsIDOMElement *GetElement( nsISupports *Node )
+	{
+		return QueryInterface<nsIDOMElement>( Node );
+	}
 
 	inline nsIDOMElement *GetElement( nsIDOMDocument *Document )
 	{
@@ -1472,7 +1422,7 @@ namespace nsxpcm {
 
 	inline bso::u8__ GetKeyModifiers( nsIDOMKeyEvent *Event )
 	{
-		PRBool Bool;
+		NSXPCM__BOOL Bool;
 
 		return NSXPCM_KMT( Alt ) | NSXPCM_KMT( Shift ) | NSXPCM_KMT( Ctrl ) | NSXPCM_KMT( Meta );
 	}

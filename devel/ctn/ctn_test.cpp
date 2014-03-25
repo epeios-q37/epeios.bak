@@ -26,14 +26,49 @@
 #include "err.h"
 #include "cio.h"
 
+#include "str.h"
+
 using cio::CIn;
 using cio::COut;
 using cio::CErr;
 
+typedef str::string_ datum_;
+E_AUTO( datum );
+
+typedef ctn::E_MCONTAINER_( datum_ ) data_;
+E_AUTO( data );
+
+typedef ctn::E_CONTAINER_( data_ ) data_cluster_;
+E_AUTO( data_cluster );
+
 void Generic( int argc, char *argv[] )
 {
 ERRProlog
+	datum Datum;
+	data Data;
+	data_cluster DataCluster;
 ERRBegin
+	Datum.Init( "coucou" );
+
+	Data.Init();
+
+	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	Data.Append( Datum );
+
+	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	DataCluster.Init();
+
+	DataCluster.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	DataCluster.Append( Data );
+
+	DataCluster.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
 ERRErr
 ERREnd
 ERREpilog
@@ -41,12 +76,14 @@ ERREpilog
 
 int main( int argc, char *argv[] )
 {
+	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
 ERRFBegin
 	COut << "Test of library " << CTN_NAME << ' ' << __DATE__" "__TIME__"\n";
 
+	Generic( argc, argv );
 ERRFErr
 ERRFEnd
 ERRFEpilog
-	return ERRExitValue;
+	return ExitValue;
 }
