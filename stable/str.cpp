@@ -418,7 +418,7 @@ template <typename sint> sint GenericSignedConversion_(
 			*ErrP = *Begin + 1;
 			return 0;
 		} else 
-			return -(sint)GenericUnsignedConversion_( String, String.Next( Begin ), ErrP, Base, -NegativeLimit );
+			return -(sint)GenericUnsignedConversion_( String, String.Next( Begin ), ErrP, Base, ( -NegativeLimit < 0 ? -1-NegativeLimit : -NegativeLimit ) );
 	else if ( String.Get( Begin ) == '+' )
 		if ( String.Next( Begin ) == E_NIL ) {
 			if ( ErrP != NULL )

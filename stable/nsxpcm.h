@@ -33,6 +33,8 @@
 
 // from nsXPCOM
 
+# include "mozilla/Char16.h"	// Pour éviter l'erreur : "'char16_t' : redefinition; different basic types".
+
 # include "cpe.h"
 # include "err.h"
 # include "flw.h"
@@ -41,6 +43,8 @@
 # include "lstbch.h"
 # include "lcl.h"
 # include "cpe.h"
+
+# undef system
 
 # ifdef CPE_MSVC
 #  define XP_WIN
@@ -52,11 +56,9 @@
 #  error
 # endif
 
-# define MOZ_NO_MOZALLOC
+// # define MOZ_NO_MOZALLOC
 
 # include "xpcom-config.h"
-
-# define NSXPCM__DEFAULT_GECKO_API_VERSION	2
 
 # ifndef CPE_GECKO
 #  error "The NSXPCM library can only be used in a 'Gecko' copmonent :"
@@ -72,6 +74,7 @@
 # include "nsITreeView.h"
 # include "nsITreeContentView.h"
 # include "nsITreeSelection.h"
+# include "nsITreeBoxObject.h"
 # include "nsIBoxObject.h"
 # include "nsIListBoxObject.h"
 # include "nsDirectoryServiceDefs.h"
