@@ -152,7 +152,7 @@ namespace ags {
 	- Par 'Size', on entend : 
 		- pour les fragments occupés ('used'), la taille disponible pour les données, et non pas la taille totale occupée par le fragment,
 		- pour les fragments libres ('free'), la taille totale du fragment.
-	- Un descripteur ('descriptor__') pointe sur le début des données. Les métadonnées sont situées juste avant. Seul les fragment occupés ('used') ont un descripteur.
+	- Un descripteur ('descriptor__') pointe sur le début des données. Les métadonnées sont situées juste avant. Seuls les fragment occupés ('used') ont un descripteur.
 	- Une 'Value' est une donnée brute, sans ajustement, telle que stockée.
 	*/		
 
@@ -776,6 +776,13 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			return GetPriorMetaData( Pointer, Status, Header, Size );
 		}
+		size__ _GetPriorMetaData(
+			descriptor__ Descriptor,
+			header__ &Header,
+			size__ &Size ) const
+		{
+			return _GetPriorMetaData( *Descriptor, sUsed, Header, Size );
+		}
 		size__ _GetPriorSize(
 			sdr::row_t__ Row,
 			status__ Status ) const
@@ -786,6 +793,10 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			_GetPriorMetaData( Row, Status, Header, Size );
 
 			return Size;
+		}
+		size__ _GetPriorSize( descriptor__ Descriptor ) const
+		{
+			return _GetPriorSize( *Descriptor, sUsed );
 		}
 		void _Get(
 			sdr::row_t__ Row,
@@ -897,7 +908,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		size__ _GetSize( descriptor__ Descriptor ) const
 		{
-			return _GetPriorSize( *Descriptor, sUsed );
+			return _GetPriorSize( Descriptor );
 		}
 		bso::bool__ _IsLast( sdr::row_t__ Row ) const
 		{
@@ -1058,12 +1069,38 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			return Descriptor;
 		}
-		void _Free( descriptor__ Descriptor )
+		sdr::row_t__ _GetFragmentRow( descriptor__ Descriptor ) const	// Retourne la position à laquelle débute le fragemnt correspondant à 'Descriptor'.
+		{
+			header__ Header;
+			size__ Size = 0;
+
+			return *Descriptor - _GetPriorMetaData( Descriptor, Header, Size );
+		}
+		bso::bool__ _IsLast( descriptor__ Descriptor )	const	// Retourne 'true' si le fragment correspondant est le dernier de tous les fragments.
+		{
+			return _IsLast( _GetFragmentRow( Descriptor ) );
+		}
+		bso::bool__ IsLastUsed( descriptor__ Descriptor )	const	/* Retourne 'true' si le fragment correspondant est le dernier de tous les fragments,
+																	ou n'est suivi que d'un fragment libre qui est, lui, le dernier de tous les fragments. */
+		{
+			if ( !_IsLast( Descriptor ) ) {
+			header__ Header;
+			size__ Size;
+			sdr::size__ XHeaderLength = _GetPriorMetaData( Descriptor, Header, Size );
+				_GetMetaData( SuccessorRow, SuccessorHeader, SuccessorSize );
+
+
+		}
+		sdr::size__ _GetResultingFreeFragmentSizeIfFreed(
+			descriptor__ Descriptor,
+			sdr::row_t__ &Row ) const	/* Retourne la taille du fragment, en fusionnant avec les éventuels fragments libres et précédants et suivants,
+										   si 'Descriptor' est libèré. Retourne le 'Row' sur le début du fragment. */
 		{
 			header__ Header;
 			size__ Size;
-			sdr::size__ XHeaderLength = _GetPriorMetaData( *Descriptor, sUsed, Header, Size );
-			sdr::row_t__ Row = *Descriptor - XHeaderLength;
+			sdr::size__ XHeaderLength = _GetPriorMetaData( Descriptor, Header, Size );
+
+			Row = *Descriptor - XHeaderLength;
 
 			Size += XHeaderLength;
 
@@ -1092,6 +1129,40 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 					S_.Free.Init();
 			}
 
+			return Size;
+		}
+		sdr::size__ _GetResultingFreeFragmentSizeIfFreed( descriptor__ Descriptor ) const
+		{
+			sdr::row_t__ Row = E_NIL;
+
+			return _GetResultingFreeFragmentSizeIfFreed( Descriptor, Row );
+		}
+		descriptor__ _Reallocate(
+			descriptor__ OldDescriptor,
+			sdr::size__ NewSize )
+		{
+			descriptor__ NewDescriptor = E_NIL;
+			sdr::size__ NewFragmentSize = _GetResultingFreeFragmentSizeIfFreed( OldDescriptor );
+			xsize__ XSize;
+
+			XSize.Init( NewSize, sUsed );
+
+			if ( XSize.FragmentSize() > NewFragmentSize ) {
+				sdr::size__ OldSize = _GetSize( OldDescriptor );
+
+				if ( OldSize > NewSize )
+					OldSize = NewSize;
+
+				Storage.Store( Storage, OldSize, *NewDescriptor, *OldDescriptor );
+
+				_Free( OldDescriptor );
+			}
+		}
+		void _Free( descriptor__ Descriptor )
+		{
+			sdr::row_t__ Row = E_NIL;
+			size__ Size = _GetResultingFreeFragmentSizeIfFreed( Descriptor, Row );
+			
 			_SetAsFreeFragment( Row, Size, ( Row == 0 ? _TailFragmentStatus() : sUsed ) );
 
 			if ( _IsLast( Row ) )
