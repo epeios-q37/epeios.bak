@@ -1166,12 +1166,13 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			sdr::size__ NewSize )
 		{
 			descriptor__ NewDescriptor = E_NIL;
-			sdr::size__ NewFragmentSize = _GetResultingFreeFragmentSizeIfFreed( OldDescriptor );
+			sdr::size__ AvailableFragmentSize = _GetResultingFreeFragmentSizeIfFreed( OldDescriptor );
 			xsize__ XSize;
 
 			XSize.Init( NewSize, sUsed );
 
-			if ( ( XSize.FragmentSize() < NewFragmentSize ) || !_IsLastUsed( OldDescriptor ) ) {
+			if ( XSize.FragmentSize() >= AvailableFragmentSize )  {
+				if ( !_IsLastUsed( OldDescriptor ) ) {
 					sdr::size__ OldSize = _GetSize( OldDescriptor );
 
 					NewDescriptor = _Allocate( NewSize );
@@ -1191,10 +1192,13 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 						OldRow = *OldDescriptor - OldXHeaderLength,
 						NewRow = E_NIL;
 
-					if ( IsPredecessorFree( OldHeader ) )
+					if ( IsPredecessorFree( OldHeader ) && ( OldRow != 0 ) )
 						NewRow = OldRow - _GetPriorSize( OldRow, sFree );
 					else
 						NewRow = OldRow;
+
+					if ( S_.Free.Row == NewRow )
+						S_.Free.Init();
 
 					NewXHeader.Init( NewSize, sUsed, sUsed );
 
@@ -1207,9 +1211,48 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 					_WriteHeadMetaData( NewRow, NewXHeader );
 
 					_UpdateFirstFragmentPredecessorStatus( sUsed );
+				}
+			} else {
+				header__ OldHeader;
+				size__ OldSize;
+				sdr::size__ OldXHeaderLength = _GetPriorMetaData( OldDescriptor, OldHeader, OldSize );
+				xheader__ NewXHeader;
+				sdr::row_t__
+					OldRow = *OldDescriptor - OldXHeaderLength,
+					NewRow = E_NIL;
 
-					if ( S_.Free.Row == NewRow )
-						S_.Free.Init();
+				if ( ( *OldDescriptor + OldSize ) == S_.Free.Row )
+					S_.Free.Init();
+
+				if ( IsPredecessorFree( OldHeader ) && ( OldRow != 0 ) )
+					NewRow = OldRow - _GetPriorSize( OldRow, sFree );
+				else
+					NewRow = OldRow;
+
+				if ( S_.Free.Row == NewRow )
+					S_.Free.Init();
+
+				NewXHeader.Init( NewSize, sUsed, NewRow == 0 ? _TailFragmentStatus() : sUsed );
+
+				NewDescriptor = NewRow + NewXHeader.MetaDataSize();
+
+				Storage.Store( Storage, OldSize > NewSize ? NewSize : OldSize, *NewDescriptor, *OldDescriptor );
+
+				_WriteHeadMetaData( NewRow, NewXHeader );
+
+				if ( AvailableFragmentSize > NewXHeader.FragmentSize() )  {
+					sdr::row_t__ FreeSuccessorRow = NewRow + NewXHeader.FragmentSize();
+					size__ FreeSuccessorSize = AvailableFragmentSize - NewXHeader.FragmentSize();
+
+					_SetAsFreeFragment( FreeSuccessorRow, FreeSuccessorSize, sUsed );
+
+					if ( ( NewRow + AvailableFragmentSize ) < Storage.Size() )
+						_UpdatePredecessorStatus( NewRow + AvailableFragmentSize, sFree );
+
+					if ( S_.Free.Size < FreeSuccessorSize )
+						S_.Free.Init( FreeSuccessorRow, FreeSuccessorSize );
+				} else
+					ERRFwk();
 			}
 
 			return NewDescriptor;
