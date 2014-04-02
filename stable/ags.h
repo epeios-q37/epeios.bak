@@ -330,6 +330,7 @@ namespace ags {
 
 	inline void Display(
 		header__ Header,
+		status__ PStatus,
 		txf::text_oflow__ &Flow )
 	{
 		Display( Status( Header ), Flow );
@@ -346,6 +347,12 @@ namespace ags {
 		Display( PredecessorStatus( Header ), Flow );
 
 		Flow << ')';
+
+		if ( PredecessorStatus( Header ) != PStatus ) 
+		{
+			Flow << txf::commit;
+			ERRFwk();
+		}
 	}
 
 	inline void MarkAsFree( header__ &Header )
@@ -581,19 +588,7 @@ namespace ags {
 		}
 		size__ MetaDataSize( void ) const
 		{
-			switch ( _Status ) {
-			case sFree:
-				return 0;
-				break;
-			case sUsed:
-				return _XSize.BufferSize() + AGS_HEADER_SIZE;
-				break;
-			default:
-				ERRPrm();
-				break;
-			}
-
-			return 0;	// Pour éviter un 'warning'.
+			return _XSize.BufferSize() + AGS_HEADER_SIZE;
 		}
 		status__ Status( void ) const
 		{
@@ -1244,7 +1239,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				if ( S_.Free.Row == NewRow )
 					S_.Free.Init();
 
-				NewXHeader.Init( NewSize, sUsed, NewRow == 0 ? _TailFragmentStatus() : sUsed );
+				NewXHeader.Init( NewSize, sUsed, NewRow == 0 ? ( !_IsLast( OldDescriptor ) ? _TailFragmentStatus() : sFree ) : sUsed );
 
 				NewDescriptor = NewRow + NewXHeader.MetaDataSize();
 
@@ -1273,8 +1268,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			sdr::row_t__ Row = E_NIL;
 			size__ Size = _GetResultingFreeFragmentSizeIfFreed( Descriptor, Row );
-			
-			_SetAsFreeFragment( Row, Size, ( Row == 0 ? _TailFragmentStatus() : sUsed ) );
+
+			_SetAsFreeFragment( Row, Size, ( Row == 0 ? ( !_IsLast( Descriptor ) ? _TailFragmentStatus() : sFree ) : sUsed ) );
 
 			if ( _IsLast( Row ) )
 				_UpdateFirstFragmentPredecessorStatus( sFree );
@@ -1287,20 +1282,24 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		void _Display(
 			sdr::row_t__ Row,
+			status__ PStatus,
 			txf::text_oflow__ &Flow ) const
 		{
 			header__ Header;
-			sdr::size__ Size;
+			sdr::size__ Size, XHeaderLength;
 
 			Flow << Row << ' ';
 
-			_GetMetaData( Row, Header, Size );
+			_GetMetaData( Row, Header, Size, XHeaderLength );
 				
 			_Get( Row, Header );
 
-			Display( Header, Flow );
+			Display( Header, PStatus, Flow );
 
 			Flow << " : "<<  Size;
+
+			if ( IsUsed( Header ) )
+				Flow << '+' << XHeaderLength;
 		}
 	public:
 		uys::untyped_storage_ Storage;

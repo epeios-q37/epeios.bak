@@ -25,19 +25,110 @@
 
 #include "err.h"
 #include "cio.h"
+#include "ctn.h"
+#include "str.h"
+
 
 using cio::CIn;
 using cio::COut;
 using cio::CErr;
 
-void Generic( int argc, char *argv[] )
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+#define DS	Storage.DisplayStructure( COut );COut << txf::commit
+
+void Test1( void )
 {
 ERRProlog
+	ags::E_ASTORAGE Storage;
+	ags::descriptor__ D1, D2, D3, D4, D5;
 ERRBegin
+	Storage.Init();
+	DS;
+
+	D1 = Storage.Allocate( 2 );
+	DS;
+	D2 = Storage.Allocate( 2000 );
+	DS;
+	D3 = Storage.Allocate( 3000 );
+	DS;
+	D4 = Storage.Allocate( 4000 );
+	DS;
+	D5 = Storage.Allocate( 5000 );
+	DS;
+	D3 = Storage.Reallocate( D3, 4000 );
+	DS;
+	D2 = Storage.Reallocate( D2, 2500 );
+	DS;
+	Storage.Free( D2 );
+	DS;
+	Storage.Free( D4 );
+	DS;
 ERRErr
 ERREnd
 ERREpilog
 }
+
+typedef ctn::E_MCONTAINER_( str::string_ ) strings_;
+E_AUTO( strings );
+
+sdr::row__ Locate(
+	const str::string_ &Name,
+	const strings_ &Strings )
+{
+	ctn::E_CMITEM( str::string_ ) String;
+	sdr::row__ Row = Strings.First();
+
+	String.Init( Strings );
+
+	while ( ( Row!= E_NIL ) && ( String( Row ) != Name ) )
+		Row = Strings.Next( Row );
+
+	if ( Row == E_NIL )
+		ERRFwk();
+
+	return Row;
+}
+
+
+void Test2( void )
+{
+ERRProlog
+	ags::E_ASTORAGE Storage;
+	strings Strings1, Strings2;
+ERRBegin
+	Storage.Init();
+	Strings1.plug( Storage );
+	Strings2.plug( Storage );
+
+	Strings1.Init();
+	Strings2.Init();
+
+	Strings1.Append( str::string( "toto" ) );
+	DS;
+	Strings2.Append( str::string( "toto" ) );
+	DS;
+
+	Strings1.Append( str::string( "tata" ) );
+	DS;
+	Strings2.Append( str::string( "tata" ) );
+	DS;
+
+	Strings1.Append( str::string( "titi" ) );
+	DS;
+	Strings2.Append( str::string( "titi" ) );
+	DS;
+
+	Strings1.Remove( Locate( str::string( "toto" ), Strings1 ) );
+	DS;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 
 int main( int argc, char *argv[] )
 {
@@ -46,7 +137,7 @@ ERRFProlog
 ERRFBegin
 	COut << "Test of library " << AGS_NAME << ' ' << __DATE__" "__TIME__"\n";
 
-	Generic( argc, argv );
+	Test2();
 ERRFErr
 	ExitValue = EXIT_FAILURE;
 ERRFEnd

@@ -41,7 +41,7 @@ E_AUTO( data );
 typedef ctn::E_CONTAINER_( data_ ) data_cluster_;
 E_AUTO( data_cluster );
 
-void Generic( int argc, char *argv[] )
+void Test1( int argc, char *argv[] )
 {
 ERRProlog
 	datum Datum;
@@ -74,6 +74,47 @@ ERREnd
 ERREpilog
 }
 
+void Test2( int argc, char *argv[] )
+{
+ERRProlog
+	datum Datum;
+	data Data;
+ERRBegin
+	Datum.Init( "123456" );
+
+	Data.Init();
+
+	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	Data.Append( Datum );
+
+	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	Data.Append( Datum );
+
+	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	Data.Store( Datum, Data.First() );
+
+	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	Datum.Init( "12345" );
+	Data.Store( Datum, Data.First() );
+
+	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
+	cio::COut << txf::nl;
+
+	cio::COut << Data( 0 ) << txf::pad;
+	cio::COut << Data( 1 ) << txf::nl << txf::commit;
+ERRErr
+ERREnd
+ERREpilog
+}
+
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
@@ -81,7 +122,7 @@ ERRFProlog
 ERRFBegin
 	COut << "Test of library " << CTN_NAME << ' ' << __DATE__" "__TIME__"\n";
 
-	Generic( argc, argv );
+	Test2( argc, argv );
 ERRFErr
 ERRFEnd
 ERRFEpilog

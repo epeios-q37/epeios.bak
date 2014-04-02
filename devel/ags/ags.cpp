@@ -68,16 +68,26 @@ void aggregated_storage_driver__::SDRStore(
 void ags::aggregated_storage_::DisplayStructure( txf::text_oflow__ &Flow ) const
 {
 	sdr::row_t__ Row = 0;
+	header__ Header;
+
+	status__ PStatus = s_Undefined;
+
+	if ( _Size() != 0 )
+		PStatus = _TailFragmentStatus();
 
 	while ( Row < _Size() ) {
-		_Display( Row, Flow );
+		_Display( Row, PStatus, Flow );
+
+		_Get( Row, Header );
+		PStatus = Status( Header );
 
 		Row += _GetFragmentSize( Row );
 
-		Flow << txf::tab << txf::commit;
+		Flow << txf::tab;
+
 	}
 
-	Flow << txf::nl;
+	Flow << '(' << Storage.Size() << ')' << txf::nl;
 }
 
 
