@@ -1135,32 +1135,32 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 										   si 'Descriptor' est libèré. Retourne le 'Row' sur le début du fragment. */
 		{
 			header__ Header;
-			size__ Size;
-			sdr::size__ XHeaderLength = _GetPriorMetaData( Descriptor, Header, Size );
+			size__ FragmentSize;
+			sdr::size__ XHeaderLength = _GetPriorMetaData( Descriptor, Header, FragmentSize );
 
 			Row = *Descriptor - XHeaderLength;
 
-			Size += XHeaderLength;
+			FragmentSize += XHeaderLength;
 
 			if ( !_IsLast( Row ) ) {
-				sdr::row_t__ SuccessorRow = Row + Size;
+				sdr::row_t__ SuccessorRow = Row + FragmentSize;
 				header__ SuccessorHeader;
 				size__ SuccessorSize = 0;
 
 				_GetMetaData( SuccessorRow, SuccessorHeader, SuccessorSize );
 
 				if ( IsFree( SuccessorHeader ) )
-					Size += SuccessorSize;
+					FragmentSize += SuccessorSize;
 			}
 
 			if ( ( Row != 0 ) && IsPredecessorFree( Header ) ) {
 				size__ PredecessorSize = _GetPriorSize( Row, sFree );
 
-				Size += PredecessorSize;
+				FragmentSize += PredecessorSize;
 				Row -= PredecessorSize;
 			}
 
-			return Size;
+			return FragmentSize;
 		}
 		sdr::size__ _GetResultingFreeFragmentSizeIfFreed( descriptor__ Descriptor ) const
 		{
@@ -1184,10 +1184,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 					NewDescriptor = _Allocate( NewSize );
 
-					if ( OldSize > NewSize )
-						OldSize = NewSize;
-
-					Storage.Store( Storage, OldSize, *NewDescriptor, *OldDescriptor );
+					Storage.Store( Storage, OldSize > NewSize ? NewSize : OldSize, *NewDescriptor, *OldDescriptor );
 
 					_Free( OldDescriptor );
 				} else {
@@ -1198,6 +1195,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 					sdr::row_t__
 						OldRow = *OldDescriptor - OldXHeaderLength,
 						NewRow = E_NIL;
+
+					if ( ( OldRow + OldSize + OldXHeaderLength ) == S_.Free.Row )
+						S_.Free.Init();
 
 					if ( IsPredecessorFree( OldHeader ) && ( OldRow != 0 ) )
 						NewRow = OldRow - _GetPriorSize( OldRow, sFree );
@@ -1269,7 +1269,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			sdr::row_t__ Row = E_NIL;
 			size__ Size = _GetResultingFreeFragmentSizeIfFreed( Descriptor, Row );
 
-			_SetAsFreeFragment( Row, Size, ( Row == 0 ? ( !_IsLast( Descriptor ) ? _TailFragmentStatus() : sFree ) : sUsed ) );
+			_SetAsFreeFragment( Row, Size, ( Row == 0 ? ( _IsLast( Descriptor ) ? sFree : _TailFragmentStatus() ) : sUsed ) );
 
 			if ( _IsLast( Row ) )
 				_UpdateFirstFragmentPredecessorStatus( sFree );
