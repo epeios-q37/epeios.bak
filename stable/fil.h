@@ -357,7 +357,7 @@ namespace fil {
 
 		if ( !SetFileTime( Handle, (LPFILETIME) NULL, (LPFILETIME) NULL, &ft ) )
 			ERRLbr();
-# else
+# elif defined( FIL__POSIX )
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
@@ -371,6 +371,8 @@ namespace fil {
 		ERRErr
 		ERREnd
 		ERREpilog
+# else
+#  error
 # endif
 	}
 
@@ -378,8 +380,10 @@ namespace fil {
 	{
 # ifdef FIL__WIN
 		return _wremove( FileName.Core() ) == 0;
-# else
+# elif defined ( FIL__POSIX )
 		return remove( FileName.Core() ) == 0;
+# else
+#  error
 # endif
 	}
 
@@ -389,8 +393,23 @@ namespace fil {
 	{
 # ifdef FIL__WIN
 		return _wrename( FileName.Core(), NewFileName.Core() ) == 0;
-# else
+# elif defined ( FIL__POSIX )
 		return rename( FileName.Core(), NewFileName.Core() ) == 0;
+# else
+#  error
+# endif
+	}
+
+	inline bso::bool__ Move(
+		const fnm::name___ &Existing,
+		const fnm::name___ &New )
+	{
+# ifdef FIL__WIN
+		return MoveFileW( Existing.Core(), New.Core() ) != 0;
+# elif defined ( FIL__POSIX )
+		return rename( Existing.Core(), New.Core() ) == 0;
+# else
+#  error
 # endif
 	}
 
