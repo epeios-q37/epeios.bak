@@ -53,22 +53,23 @@ ERRBegin
 	Data.Init();
 
 	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::nl;
+	cio::COut << txf::commit << txf::nl;
 
 	Data.Append( Datum );
+//	Data.Append( Datum );
 
 	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::nl;
+	cio::COut << txf::commit << txf::nl;
 
 	DataCluster.Init();
 
 	DataCluster.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::nl;
+	cio::COut << txf::commit << txf::nl;
 
 	DataCluster.Append( Data );
 
 	DataCluster.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::nl;
+	cio::COut << txf::commit << txf::nl;
 ERRErr
 ERREnd
 ERREpilog
@@ -122,9 +123,11 @@ ERRFProlog
 ERRFBegin
 	COut << "Test of library " << CTN_NAME << ' ' << __DATE__" "__TIME__"\n";
 
-	Test2( argc, argv );
+	Test1( argc, argv );
 ERRFErr
 ERRFEnd
+	cio::COut << txf::commit;
+	cio::CErr << txf::commit;
 ERRFEpilog
 	return ExitValue;
 }

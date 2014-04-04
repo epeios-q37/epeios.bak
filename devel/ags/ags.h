@@ -871,7 +871,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			_UpdatePredecessorStatus( 0, Status );
 		}
-		size__ _GetTailFreeSize( void ) const
+		size__ _GetTailFreeFragmentSize( void ) const
 		{
 			if ( _IsTailFragmentFree() )
 				return _GetPriorSize( _Size(), sFree );
@@ -880,10 +880,10 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		sdr::row_t__ _GetTailFreeFragment( void ) const
 		{
-			if ( _GetTailFreeSize() == 0 )
+			if ( _GetTailFreeFragmentSize() == 0 )
 				return E_NIL;
 			else
-				return _Size() - _GetTailFreeSize();
+				return _Size() - _GetTailFreeFragmentSize();
 		}
 		size__ _GetLongSize(
 			sdr::row_t__ Row,
@@ -1022,7 +1022,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			status__ PredecessorStatus,
 			bso::bool__ &UsingTail )
 		{
-			size__ TailAvailableSize = _GetTailFreeSize();
+			size__ TailAvailableSize = _GetTailFreeFragmentSize();
 			sdr::row_t__ Row = _Size() - TailAvailableSize;	// On stocke dans une variable, car '_Size()' est modifié par 'Allocate(...)'.
 
 			UsingTail = TailAvailableSize != 0;
@@ -1074,7 +1074,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			XSize.Init( Size, sUsed );
 
 			if ( ( Row = _GetUsableFreeFragmentIfAvailable( XSize.FragmentSize() ) ) == E_NIL )
-				if ( _GetTailFreeSize() >= XSize.FragmentSize() )
+				if ( _GetTailFreeFragmentSize() >= XSize.FragmentSize() )
 					Row = _GetTailFreeFragment();
 
 			if ( Row != E_NIL ) {
@@ -1318,7 +1318,15 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		aggregated_storage_ &operator =( const aggregated_storage_ &AS )
 		{
-			Storage = AS.Storage;
+			sdr::size__ UsedSize = AS.Storage.Size() - AS._GetTailFreeFragmentSize();
+
+			Storage.Allocate( UsedSize );
+
+			if ( UsedSize != 0 ) {
+				Storage.Store( AS.Storage, UsedSize, 0, 0 );
+				_UpdateFirstFragmentPredecessorStatus( sUsed );
+			}
+
 			S_.Free = AS.S_.Free;
 
 			return *this;
@@ -1339,29 +1347,24 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			if ( Storage.Size() != 0 )
 				_SetAsFreeFragment( 0, Storage.Size(), sFree );
 		}
-# if 0	// Obsolète ? Si réactivé, vérifié l'absence de bug.
 		void Preallocate( sdr::size__ Size )
 		{
-			if ( _UnderlyingSize() > Size )
+			if ( _Size() > Size )
 				ERRPrm();
-			else if ( _UnderlyingSize() != Size ) {
-				sdr::row_t__ Row = _UnderlyingSize();
+			else if ( _Size() != Size ) {
+				sdr::row_t__ Row = _GetTailFreeFragment();
+				sdr::size__ TailFreeFragmentSize = Size - _Size() + _GetTailFreeFragmentSize();
 
-				Size -= _UnderlyingSize();
+				if ( Row == E_NIL )
+					Row = _Size(); 
 
-				Storage.Allocate( _UnderlyingSize() + Size );
+				Storage.Allocate( Size );
 
-				if ( ( Row != 0 ) && ( _GetTailFreeSize() != 0 ) ) {
-					Row = _GetTailFreeFragment();
-					Size += _GetTailFreeSize();
-				}
-
-				_SetAsFreeFragment( Row, Size, Row == 0 ? sFree : _TailFragmentStatus() );
+				_SetAsFreeFragment( Row, TailFreeFragmentSize, Row == 0 ? sFree : sUsed );
 
 				_UpdateFirstFragmentPredecessorStatus( sFree );
 			}
 		}
-# endif
 		descriptor__ Allocate( size__ Size )
 		{
 			if ( Size == 0 )
