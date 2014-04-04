@@ -1355,6 +1355,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				sdr::row_t__ Row = _GetTailFreeFragment();
 				sdr::size__ TailFreeFragmentSize = Size - _Size() + _GetTailFreeFragmentSize();
 
+				Storage.Init();
+
 				if ( Row == E_NIL )
 					Row = _Size(); 
 
