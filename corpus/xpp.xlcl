@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: xpp.xlcl,v 1.14 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:expand href="xml.xlcl"/>"
+	<xpp:expand href="xml.xlcl"/>
 	<Translations text="XPP_ErrorAtLineColumn">
 		<!-- One of the 2 generic text displayed before error description. -->
 		<Translation language="fr">%3 (ligne %1, colonne %2)</Translation>
