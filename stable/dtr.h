@@ -322,7 +322,8 @@ namespace dtr {
 				if ( HasChild( Position ) ) {
 					Position = FirstChild( Position );
 					Kinship = kChild;
-				}
+				} else if ( Position == Root )
+					Position = E_NIL;
 				break;
 			case kChild:
 			case kSibling:
@@ -343,7 +344,10 @@ namespace dtr {
 				Browser._GotoParent = false;
 				break;
 			case kParent:
-				if ( HasNextSibling( Position ) ) {
+				if ( Position == Root ) {
+					Position = E_NIL;
+					Kinship = k_Undefined;
+				} else if ( HasNextSibling( Position ) ) {
 					Position = NextSibling( Position );
 					Kinship = kSibling;
 #ifdef DTR_DBG
@@ -359,12 +363,6 @@ namespace dtr {
 				ERRFwk();
 				break;
 			}
-
-			if ( Position == Root ) {
-				Position = E_NIL;
-				Kinship = k_Undefined;
-			}
-
 
 			return Position;
 		}
