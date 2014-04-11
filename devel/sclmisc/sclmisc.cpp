@@ -420,6 +420,33 @@ ERREnd
 ERREpilog
 }
 
+txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileName )
+{
+	_FileName.Init( FileName );
+
+	if ( _FileName.Size() == 0 ) {
+		_BackedUp = false;
+		return cio::COut;
+	} else {
+		sclmisc::CreateBackupFile( _FileName );
+		_BackedUp = true;
+
+		if ( _Flow.Init( _FileName ) != tol::rSuccess )
+			sclmisc::ReportFileOpeningErrorAndAbort( _FileName );
+
+		_TFlow.Init( _Flow );
+
+		return _TFlow;
+	}
+}
+
+void sclmisc::text_oflow_rack___::HandleError( void )
+{
+	if ( _BackedUp )
+		sclmisc::RecoverBackupFile( _FileName );
+}
+
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
