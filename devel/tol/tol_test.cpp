@@ -30,6 +30,8 @@ using cio::CIn;
 using cio::COut;
 using cio::CErr;
 
+E_CVDEF( int, coucou, 8 );
+
 void Generic( int argc, char *argv[] )
 {
 ERRProlog

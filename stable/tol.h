@@ -72,7 +72,7 @@
 #	error "Unknown compiler"
 #endif
 
-#include "err.h"
+# include "err.h"
 
 # include "bso.h"
 
@@ -87,6 +87,14 @@ namespace tol
 		r_Undefined,
 	};
 }
+
+// Définition d'une constante par valeur.
+# define E_CVDEF( type, name, value )\
+	static const type name = value
+
+// Définition d'une constante par référence.
+# define E_CRDEF( type, name, value )\
+	E_CVDEF( type, &name, value )
 
 
 #ifdef CPE__VC

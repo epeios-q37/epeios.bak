@@ -75,6 +75,22 @@ namespace bso {
 		return false;	// Pour éviter un 'warning'.
 	}
 
+# define BSO__DEF( type, name, value )\
+	static const type##__ &name = value
+
+# define BSO__MIN_MAX_DEF( type, name, affix )\
+	BSO__DEF( type, name##Min, affix##_MIN );\
+	BSO__DEF( type, name##Max, affix##_MAX );
+
+# define BSO__INT_MIN_MAX_BDEF( type, name, s_affix, u_affix)\
+	BSO__MIN_MAX_DEF( s##type, S##name, s_affix );\
+	BSO__DEF( u##type, U##name##Max, u_affix##_MAX );\
+	BSO__DEF( u##type, U##name##Min, 0 )
+
+# define BSO__INT_MIN_MAX_DEF( type, affix )\
+	BSO__INT_MIN_MAX_BDEF( type, type, affix, U##affix)
+
+
 	//d Maximal value of a 'sbyte__'.
 	#define BSO_S8_MAX		SCHAR_MAX
 	//d Minimal value of a 'sbyte__'.
@@ -95,6 +111,8 @@ namespace bso {
 
 	//t Unsigned byte.
 	typedef unsigned char u8__;
+
+	BSO__INT_MIN_MAX_BDEF( 8, 8, SCHAR, UCHAR );
 
 
 	//d Maximal value of a 'sshort__'.
@@ -118,6 +136,8 @@ namespace bso {
 	//t Unsigned short
 	typedef unsigned short u16__;
 
+	BSO__INT_MIN_MAX_DEF( 16, SHRT );
+
 
 	//d Maximal value of a 'slong__'.
 	#define BSO_S32_MAX		LONG_MAX
@@ -140,6 +160,8 @@ namespace bso {
 	//t Unsigned long.
 	typedef unsigned long u32__;
 
+	BSO__INT_MIN_MAX_DEF( 32, LONG );
+
 
 	//d Maximal value of a 'sllong__'.
 	#define BSO_S64_MAX		LLONG_MAX
@@ -161,6 +183,9 @@ namespace bso {
 	//t Unsigned long.
 	typedef unsigned long long u64__;
 
+	BSO__INT_MIN_MAX_DEF( 64, LLONG );
+
+
 # define BSO_SIZE_MAX	((size_t)-1)
 
 # if 0
@@ -180,15 +205,18 @@ namespace bso {
 	typedef float sfloat__;
 # define BSO_SFLOAT_MIN	FLT_MIN
 # define BSO_SFLOAT_MAX	FLT_MAX
+	BSO__MIN_MAX_DEF( sfloat, SFLoat, FLT );
 
 	//t Middle-sized float.
 	typedef double float__;
 # define BSO_FLOAT_MIN	DBL_MIN
 # define BSO_FLOAT_MAX	DBL_MAX
+	BSO__MIN_MAX_DEF( float, Float, DBL );
 
 	typedef long double lfloat__;
 # define BSO_LFLOAT_MIN	LDBL_MIN
 # define BSO_LFLOAT_MAX	LDBL_MAX
+	BSO__MIN_MAX_DEF( lfloat, LFloat, LDBL );
 
 	//t Character
 	typedef char char__;
@@ -222,11 +250,15 @@ namespace bso {
 // 'natural unsigned integer'
 # ifdef CPE_INT64
 	typedef u64__ uint__;
+	static const uint__ &UIntMin = U64Min;
+	static const uint__ &UIntMax = U64Max;
 #  define BSO_UINT_MAX		BSO_U64_MAX
 #  define BSO_UINT_MIN		BSO_U64_MIN
 //#  define BSO_UINT_SIZE		BSO_U64_SIZE
 # elif defined CPE_INT32
 	typedef u32__ uint__;
+	static const uint__ &UIntMin = U32Min;
+	static const uint__ &UIntMax = U32Max;
 #  define BSO_UINT_MAX		BSO_U32_MAX
 #  define BSO_UINT_MIN		BSO_U32_MIN
 //#  define BSO_UINT_SIZE		BSO_U32_SIZE
@@ -302,14 +334,19 @@ namespace bso {
 	}
 #endif
 
+
 // 'natural signed integer'
 # ifdef CPE_INT64
 	typedef s64__ sint__;
+	static const sint__ &SIntMin = S64Min;
+	static const sint__ &SIntMax = S64Max;
 #  define BSO_SINT_MAX		BSO_S64_MAX
 #  define BSO_SINT_MIN		BSO_S64_MIN
 //#  define BSO_SINT_SIZE		BSO_S64_SIZE
 # elif defined CPE_INT32
 	typedef s32__ sint__;
+	static const sint__ &SIntMin = S32Min;
+	static const sint__ &SIntMax = S32Max;
 #  define BSO_SINT_MAX		BSO_S32_MAX
 #  define BSO_SINT_MIN		BSO_S32_MIN
 //#  define BSO_SINT_SIZE		BSO_S32_SIZE
@@ -319,6 +356,8 @@ namespace bso {
 
 	// Entier générique, comme facilité.
 	typedef uint__ int__;
+	static const int__ &IntMin = UIntMin;
+	static const int__ &IntMax = UIntMax;
 # define BSO_INT_MAX		BSO_UINT_MAX
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
