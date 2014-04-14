@@ -89,13 +89,15 @@ namespace tol
 }
 
 // Définition d'une constante par valeur.
-# define E_CVDEF( type, name, value )\
+# define E_CDEF( type, name, value )\
 	static const type name = value
 
+// Pose problème d'ordre d'initialisation. La variable pointe sur NULL au départ est n'est correctement itiailisé que plus tard.
+# if 0
 // Définition d'une constante par référence.
 # define E_CRDEF( type, name, value )\
 	E_CVDEF( type, &name, value )
-
+# endif
 
 #ifdef CPE__VC
 #	ifdef CPE__WARNING_SUPPRESSION_ENABLED

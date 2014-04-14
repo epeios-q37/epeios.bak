@@ -68,23 +68,24 @@ extern class ttr_tutor &STSFSMTutor;
 # include "ctn.h"
 # include "str.h"
 
-# define STSFSM_NO_CARD	255
-// Par défaut, cette valeur signifie qu'une 'card' n'est pas rattachée à une entrée. Dans ce cas 'Cards( 255 ) n'existe pas.
-// Si les 255 entrée de la table sont utilisée et pointe tous sur des 'card's inutilisée, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
-
-# define STSFSM_UNDEFINED_ID	INT_MAX
-
 namespace stsfsm {
 
 	E_ROW( crow__ );	// 'Card Row'.
 
 	typedef bch::E_BUNCH_( crow__ ) crows_;
 
+	typedef int id__;
+	E_CDEF( id__, UndefinedId, INT_MAX );
+
+	// Par défaut, cette valeur signifie qu'une 'card' n'est pas rattachée à une entrée. Dans ce cas 'Cards( 255 ) n'existe pas.
+	// Si les 255 entrée de la table sont utilisée et pointe tous sur des 'card's inutilisée, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
+	E_CDEF( int, NoCard, 255 );
+
 	class card_ {
 	private:
 		void _ResetTable( void )
 		{
-			memset( S_.Table, STSFSM_NO_CARD, sizeof( S_.Table ) );
+			memset( S_.Table, NoCard, sizeof( S_.Table ) );
 		}
 		bso::u8__ _T( bso::u8__ C ) const
 		{
@@ -101,7 +102,7 @@ namespace stsfsm {
 		}
 	public:
 		struct s {
-			int Id;
+			id__ Id;
 			bso::u8__ Table[256];
 			crows_::s Cards;
 		} &S_;
@@ -112,7 +113,7 @@ namespace stsfsm {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.Id = STSFSM_UNDEFINED_ID;
+			S_.Id = UndefinedId;
 			_ResetTable();
 			Cards.reset( P );
 		}
@@ -134,14 +135,14 @@ namespace stsfsm {
 		}
 		void Init( void )
 		{
-			S_.Id = STSFSM_UNDEFINED_ID;
+			S_.Id = UndefinedId;
 			_ResetTable();
 			Cards.Init();
 		}
 		crow__ Get( bso::u8__ C ) const
 		{
-			if ( _T( C ) == STSFSM_NO_CARD )
-				if ( !Cards.Exists( STSFSM_NO_CARD ) )
+			if ( _T( C ) == NoCard )
+				if ( !Cards.Exists( NoCard ) )
 					return E_NIL;
 
 			return Cards( _T( C ) );
@@ -155,7 +156,7 @@ namespace stsfsm {
 
 			_SetT( C, Cards.Append( Row ) );
 		}
-		E_RWDISCLOSE_( int, Id );
+		E_RWDISCLOSE_( id__, Id );
 	};
 
 	typedef ctn::E_MCONTAINERt_( card_, crow__ ) automat_;
@@ -163,12 +164,12 @@ namespace stsfsm {
 
 	void Add(
 		const str::string_ &Tag,
-		int Id,
+		id__ Id,
 		automat_ &Automat );
 
 	inline void Add(
 		const char *Tag,
-		int Id,
+		id__ Id,
 		automat_ &Automat )
 	{
 		return Add( str::string( Tag ), Id, Automat );
@@ -177,7 +178,7 @@ namespace stsfsm {
 	inline void Add(
 		const char *Tag,
 		sdr::size__ Length,
-		int Id,
+		id__ Id,
 		automat_ &Automat )
 	{
 		return Add( str::string( Tag, Length ), Id, Automat );
@@ -216,7 +217,7 @@ namespace stsfsm {
 			_Current = E_NIL;
 		}
 		status__ Handle( bso::u8__ C );
-		int GetId( void ) const
+		id__ GetId( void ) const
 		{
 			ctn::E_CMITEMt( card_, crow__ ) Card;
 			
@@ -229,6 +230,56 @@ namespace stsfsm {
 		}
 	};
 
+	template <typename type> inline void FillAutomat(
+		automat_ &Automat,
+		type Limit,
+		const char *(* GetLabel)( type ) )
+	{
+		int i = 0;
+
+		while ( i < Limit ) {
+			Add( GetLabel( (type)i ), i, Automat );
+
+			i++;
+		}
+	}
+
+	template <typename type, typename version> inline void FillAutomat(
+		version Version,
+		automat_ &Automat,
+		type Limit,
+		const char *(* GetLabel)( version, type ) )
+	{
+		int i = 0;
+
+		while ( i < Limit ) {
+			Add( GetLabel( Version, (type)i ), i, Automat );
+
+			i++;
+		}
+	}
+
+	id__ GetId_(
+		const str::string_ &Pattern,
+		const automat_ &Automat );
+
+	template <typename type> inline type GetId(
+		const str::string_ &Pattern,
+		const automat_ &Automat,
+		type UndefinedValue,
+		type Amount )
+	{
+		id__ Id = GetId_( Pattern, Automat );
+
+		if ( Id == UndefinedId )
+			return UndefinedValue;
+		else if ( Id >= (id__)Amount )
+			ERRFwk();
+		else
+			return (type)Id;
+
+		return UndefinedValue;	// Pour éviter un 'warning'.
+	}
 }
 
 /*$END$*/

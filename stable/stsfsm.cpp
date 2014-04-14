@@ -59,7 +59,7 @@ using namespace stsfsm;
 
 void stsfsm::Add(
 	const str::string_ &Tag,
-	int Id,
+	id__ Id,
 	automat_ &Automat )
 {
 	sdr::row__ Row = Tag.First();
@@ -92,7 +92,7 @@ void stsfsm::Add(
 	if ( Current == E_NIL )
 		ERRFwk();
 
-	if ( Automat( Current ).GetId() != STSFSM_UNDEFINED_ID )
+	if ( Automat( Current ).GetId() != UndefinedId	)
 		ERRFwk();
 
 	Automat( Current ).SetId( Id );
@@ -120,10 +120,50 @@ status__ stsfsm::parser__::Handle( bso::u8__ C )
 
 	_Current = Next;
 
-	if ( Card( _Current ).GetId() == STSFSM_UNDEFINED_ID )
+	if ( Card( _Current ).GetId() == UndefinedId )
 		return sPending;
 	else
 		return sMatch;
+}
+
+id__ stsfsm::GetId_(
+	const str::string_ &Pattern,
+	const automat_ &Automat )
+{
+	id__ Id = UndefinedId;
+ERRProlog
+	parser__ Parser;
+	sdr::row__ Row = E_NIL;
+	bso::bool__ Match = false;
+ERRBegin
+	Row = Pattern.First();
+	Parser.Init( Automat );
+
+	while ( Row != E_NIL ) {
+		switch ( Parser.Handle( Pattern( Row ) ) ) {
+		case sLost:
+			ERRReturn;
+			break;
+		case sMatch:
+			Match = true;
+			break;
+		case sPending:
+			Match = false;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		Row = Pattern.Next( Row );
+	}
+
+	if ( Match )
+		Id = Parser.GetId();
+ERRErr
+ERREnd
+ERREpilog
+	return Id;
 }
 
 

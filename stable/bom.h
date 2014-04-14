@@ -128,7 +128,7 @@ namespace bom {
 		while ( !Feeder.IsEmpty() && ( Parser.Handle( Feeder.Get() ) != stsfsm::sLost ) )
 			Size++;
 
-		if ( Parser.GetId() == STSFSM_UNDEFINED_ID ) {
+		if ( Parser.GetId() == stsfsm::UndefinedId ) {
 			Size = 0;
 			return bom_UnknownOrNone;
 		} else

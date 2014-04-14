@@ -493,7 +493,6 @@ namespace xtf {
 		//f True if at end of text.
 		bso::bool__ EndOfFlow( error__ &Error )	// Si erreur, 'ErrorMeaning' est initialisé, sinon reste vide.
 		{ 
-
 			if ( _Error == e_NoError ) {
 				if ( _UTF.Size != 0 )
 					return false;
