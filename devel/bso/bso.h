@@ -335,18 +335,21 @@ namespace bso {
 #endif
 
 
+// Non utilisation de 'E_DEF', car l'incusion de 'tol.h' pose problème...
 // 'natural signed integer'
 # ifdef CPE_INT64
 	typedef s64__ sint__;
-	static const sint__ &SIntMin = S64Min;
-	static const sint__ &SIntMax = S64Max;
+	E_CDEF( sint__ SIntMin, S64Min );
+	E_CDEF( sint__ SIntMax, S64Max );
+	static const sint__ SIntMin = S64Min;
+	static const sint__ SIntMax = S64Max;
 #  define BSO_SINT_MAX		BSO_S64_MAX
 #  define BSO_SINT_MIN		BSO_S64_MIN
 //#  define BSO_SINT_SIZE		BSO_S64_SIZE
 # elif defined CPE_INT32
 	typedef s32__ sint__;
-	static const sint__ &SIntMin = S32Min;
-	static const sint__ &SIntMax = S32Max;
+	static const sint__ SIntMin = S32Min;
+	static const sint__ SIntMax = S32Max;
 #  define BSO_SINT_MAX		BSO_S32_MAX
 #  define BSO_SINT_MIN		BSO_S32_MIN
 //#  define BSO_SINT_SIZE		BSO_S32_SIZE
@@ -356,8 +359,8 @@ namespace bso {
 
 	// Entier générique, comme facilité.
 	typedef uint__ int__;
-	static const int__ &IntMin = UIntMin;
-	static const int__ &IntMax = UIntMax;
+	static const int__ IntMin = UIntMin;
+	static const int__ IntMax = UIntMax;
 # define BSO_INT_MAX		BSO_UINT_MAX
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE

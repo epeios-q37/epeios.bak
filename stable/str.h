@@ -567,6 +567,59 @@ namespace str {
 		string_ &String,
 		bso::bool__ dontHandleAccent = false );
 
+	template <typename t, typename b_t> inline void Append(
+		t Value,
+		str::strings_ &Values )
+	{
+		b_t Buffer;
+
+		Values.Append( str::string( bso::Convert( Value, Buffer ) ) );
+	}
+
+	template <typename t> inline void AppendInt(
+		t Value,
+		str::strings_ &Values )
+	{
+		Append<t, bso::integer_buffer__>( Value, Values );
+	}
+
+	template <typename t> inline void AppendInteger(
+		t Value,
+		str::strings_ &Values )
+	{
+		Append<t, bso::float_buffer__>( Value, Values );
+	}
+
+# ifdef CPE_INT32
+	inline void Append(
+		bso::u64__ Value,
+		str::strings_ &Values )
+	{
+		AppendInt( Value, Values );
+	}
+
+	inline void Append(
+		bso::s64__ Value,
+		str::strings_ &Values )
+	{
+		AppendInt( Value, Values );
+	}
+# endif
+
+	inline void Append(
+		bso::uint__ Value,
+		str::strings_ &Values )
+	{
+		AppendInt( Value, Values );
+	}
+
+	inline void Append(
+		bso::sint__ Value,
+		str::strings_ &Values )
+	{
+		AppendInt( Value, Values );
+	}
+
 	// '%1', '%2'... (en supposant '%' comme marqueur).
 	void ReplaceShortTag(
 		str::string_ &String,
