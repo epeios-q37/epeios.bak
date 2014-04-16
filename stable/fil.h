@@ -340,27 +340,37 @@ namespace fil {
 	}
 
 	// Modifie la date de modification d'un fichier à la date courante.
-	inline void Touch( const fnm::name___ &FileName )
+	// Modifie la date de modification d'un fichier à la date courante.
+	inline bso::bool__ Touch( const fnm::name___ &FileName )
 	{
+		bso::bool__ Success = false;
+	ERRProlog
 # ifdef FIL__WIN
 		FILETIME ft;
 		SYSTEMTIME st;
-		HANDLE Handle = CreateFileW( FileName.Core(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		HANDLE Handle = INVALID_HANDLE_VALUE;
+	ERRBegin
+		Handle = CreateFileW( FileName.Core(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
-		if ( Handle ==  INVALID_HANDLE_VALUE )
-			ERRLbr();
+		if ( Handle == INVALID_HANDLE_VALUE )
+			ERRReturn;
 		
 		GetSystemTime( &st );
 
 		if ( !SystemTimeToFileTime( &st, &ft ) )
-			ERRSys();
+			ERRReturn;
 
 		if ( !SetFileTime( Handle, (LPFILETIME) NULL, (LPFILETIME) NULL, &ft ) )
-			ERRLbr();
+			ERRReturn;
+
+		Success = true;
+	ERRErr
+	ERREnd
+		if ( Handle != INVALID_HANDLE_VALUE )
+			CloseHandle( Handle );
 # elif defined( FIL__POSIX )
-		ERRProlog
-			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		TOL_CBUFFER___ Buffer;
+	ERRBegin
 		/*
 		NOTA : Le code ci-dessous fonctionne AUSSI sous Windows, mais SEULEMENT lorsque lancé à partir d'une console DOS,
 		Lorsque lancé à partir d'une console 'Cygwin', il y a un décalage d'une heure (dépendant de l'heure d'hiver/été ?).
@@ -368,12 +378,60 @@ namespace fil {
 
 		if ( utime( FileName.UTF8( Buffer ), NULL ) != 0 )
 			ERRLbr();
-		ERRErr
-		ERREnd
-		ERREpilog
+
+		Success = true;
+	ERRErr
+	ERREnd
 # else
 #  error
 # endif
+	ERREpilog
+		return Success;
+	}
+
+	inline bso::bool__ AssignSameTimes(
+		const fnm::name___ &SourceFileName,
+		const fnm::name___ &TargetFileName )
+	{
+		bso::bool__ Success = false;
+	ERRProlog
+# ifdef FIL__WIN
+		HANDLE
+			Source = INVALID_HANDLE_VALUE,
+			Target = INVALID_HANDLE_VALUE;
+		FILETIME Creation, Access, Write;
+	ERRBegin
+		Source = CreateFileW( SourceFileName.Core(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+
+		if ( Source == INVALID_HANDLE_VALUE )
+			ERRReturn;
+
+		Target = CreateFileW( TargetFileName.Core(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+
+		if ( Target == INVALID_HANDLE_VALUE )
+			ERRReturn;
+
+		if ( !GetFileTime( Source, &Creation, &Access, &Write ) )
+			ERRReturn;
+
+		if ( !SetFileTime( Target, &Creation, &Access, &Write ) )
+			ERRReturn;
+
+		Success = true;
+	ERRErr
+	ERREnd
+		if ( Source != INVALID_HANDLE_VALUE )
+			CloseHandle( Source );
+
+		if ( Target != INVALID_HANDLE_VALUE )
+			CloseHandle( Target );
+# elif defined( FIL__POSIX )
+# else
+#  error
+# endif
+	ERREpilog
+		return Success;
+
 	}
 
 	inline bso::bool__ Remove( const fnm::name___ &FileName )
@@ -412,6 +470,54 @@ namespace fil {
 #  error
 # endif
 	}
+
+	inline bso::bool__ Copy(
+		const fnm::name___ &SourceFileName,
+		const fnm::name___ &TargetFileName )
+	{
+# ifdef FIL__WIN
+		return CopyFileW( SourceFileName.Core(), TargetFileName.Core(), false ) != 0;
+# elif defined( FIL__POSIX )
+		bso::bool__ Success = false;
+	ERRProlog
+		int Source = FIL_UNDEFINED_DESCRIPTOR;
+		int Target = FIL_UNDEFINED_DESCRIPTOR;
+		char Buffer[BUFSIZ];
+		size_t Size = 0;
+	ERRBegin
+		Source = Open( SourceFileName, mReadOnly );
+
+		if ( Source == FIL_UNDEFINED_DESCRIPTOR )
+			ERRReturn;
+
+		Target = Open( TargetFileName, mRemove);
+
+		if ( Target == FIL_UNDEFINED_DESCRIPTOR )
+			ERRReturn;
+
+		while ( ( Size = read( Source, Buffer, sizeof( Buffer ) ) ) > 0 )  {
+			if ( write( Target, Buffer, Size ) == -1 )
+				ERRReturn;
+		}
+
+		if ( Size == -1 )
+			ERRReturn;
+
+		Success = true;
+	ERRErr
+	ERREnd
+		if ( Source != FIL_UNDEFINED_DESCRIPTOR )
+			close( Source );
+
+		if ( Target != FIL_UNDEFINED_DESCRIPTOR )
+			close( Target );		
+	ERREpilog
+		return Success;
+# else
+#  error
+# endif
+	}
+
 
 	bso::bool__ Create(
 		const fnm::name___ &FileName,
