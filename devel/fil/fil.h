@@ -389,51 +389,6 @@ namespace fil {
 		return Success;
 	}
 
-	inline bso::bool__ AssignSameTimes(
-		const fnm::name___ &SourceFileName,
-		const fnm::name___ &TargetFileName )
-	{
-		bso::bool__ Success = false;
-	ERRProlog
-# ifdef FIL__WIN
-		HANDLE
-			Source = INVALID_HANDLE_VALUE,
-			Target = INVALID_HANDLE_VALUE;
-		FILETIME Creation, Access, Write;
-	ERRBegin
-		Source = CreateFileW( SourceFileName.Core(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
-
-		if ( Source == INVALID_HANDLE_VALUE )
-			ERRReturn;
-
-		Target = CreateFileW( TargetFileName.Core(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
-
-		if ( Target == INVALID_HANDLE_VALUE )
-			ERRReturn;
-
-		if ( !GetFileTime( Source, &Creation, &Access, &Write ) )
-			ERRReturn;
-
-		if ( !SetFileTime( Target, &Creation, &Access, &Write ) )
-			ERRReturn;
-
-		Success = true;
-	ERRErr
-	ERREnd
-		if ( Source != INVALID_HANDLE_VALUE )
-			CloseHandle( Source );
-
-		if ( Target != INVALID_HANDLE_VALUE )
-			CloseHandle( Target );
-# elif defined( FIL__POSIX )
-# else
-#  error
-# endif
-	ERREpilog
-		return Success;
-
-	}
-
 	inline bso::bool__ Remove( const fnm::name___ &FileName )
 	{
 # ifdef FIL__WIN
@@ -471,11 +426,75 @@ namespace fil {
 # endif
 	}
 
+	inline bso::bool__ AssignSameTimes_(
+		const fnm::name___ &SourceFileName,
+		const fnm::name___ &TargetFileName )
+	{
+		bso::bool__ Success = false;
+	ERRProlog
+# ifdef FIL__WIN
+		HANDLE
+			Source = INVALID_HANDLE_VALUE,
+			Target = INVALID_HANDLE_VALUE;
+		FILETIME Creation, Access, Write;
+	ERRBegin
+		Source = CreateFileW( SourceFileName.Core(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+
+		if ( Source == INVALID_HANDLE_VALUE )
+			ERRReturn;
+
+		Target = CreateFileW( TargetFileName.Core(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+
+		if ( Target == INVALID_HANDLE_VALUE )
+			ERRReturn;
+
+		if ( !GetFileTime( Source, &Creation, &Access, &Write ) )
+			ERRReturn;
+
+		if ( !SetFileTime( Target, &Creation, &Access, &Write ) )
+			ERRReturn;
+
+		Success = true;
+	ERRErr
+	ERREnd
+		if ( Source != INVALID_HANDLE_VALUE )
+			CloseHandle( Source );
+
+		if ( Target != INVALID_HANDLE_VALUE )
+			CloseHandle( Target );
+# elif defined( FIL__POSIX )
+		utimbuf TimeBuf;
+		info__ Info;
+		TOL_CBUFFER___ Buffer;
+	ERRBegin
+		Info.Init();
+	
+		if ( GetInfo( SourceFileName, Info ) != eNone )
+			ERRReturn;
+
+		TimeBuf.actime = Info.Time.Access;
+		TimeBuf.modtime = Info.Time.Modification;
+
+		if ( utime( TargetFileName.UTF8( Buffer ), &TimeBuf ) != 0 )
+			ERRReturn;
+
+		Success = true;
+	ERRErr
+	ERREnd
+# else
+#  error
+# endif
+	ERREpilog
+		return Success;
+
+	}
+
 	inline bso::bool__ Copy(
 		const fnm::name___ &SourceFileName,
 		const fnm::name___ &TargetFileName )
 	{
 # ifdef FIL__WIN
+		// NOTA : le fichier copié avec la fonction ci-dessous possède les mêmes horodatages, on s'arrange donc pour avoir le même résultat sous POSIX.
 		return CopyFileW( SourceFileName.Core(), TargetFileName.Core(), false ) != 0;
 # elif defined( FIL__POSIX )
 		bso::bool__ Success = false;
@@ -503,7 +522,8 @@ namespace fil {
 		if ( Size == -1 )
 			ERRReturn;
 
-		Success = true;
+		// NOTA : le fichier copié avec la version Windows de cette fonction possède les mêmes horodatages, on s'arrange donc pour avoir le même résultat sous POSIX.
+		Success = AssignSameTimes_( SourceFileName, TargetFileName );
 	ERRErr
 	ERREnd
 		if ( Source != FIL_UNDEFINED_DESCRIPTOR )

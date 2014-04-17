@@ -335,12 +335,10 @@ namespace bso {
 #endif
 
 
-// Non utilisation de 'E_DEF', car l'incusion de 'tol.h' pose problème...
+// Non utilisation de 'E_CDEF', car l'incusion de 'tol.h' pose problème.
 // 'natural signed integer'
 # ifdef CPE_INT64
 	typedef s64__ sint__;
-	E_CDEF( sint__ SIntMin, S64Min );
-	E_CDEF( sint__ SIntMax, S64Max );
 	static const sint__ SIntMin = S64Min;
 	static const sint__ SIntMax = S64Max;
 #  define BSO_SINT_MAX		BSO_S64_MAX
