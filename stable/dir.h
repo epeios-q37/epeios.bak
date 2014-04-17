@@ -130,9 +130,7 @@ namespace dir {
 #endif
 	}
 
-	inline state__ CreateDir(
-		const fnm::name___ &Path,
-		err::handling__ ErrHandling = err::h_Default )
+	inline state__ CreateDir( const fnm::name___ &Path )
 	{
 #ifdef DIR__WIN
 		switch ( _wmkdir( Path.Core() ) ) {
@@ -145,8 +143,6 @@ namespace dir {
 			return sOK;
 			break;
 		case -1:
-			if ( ErrHandling == err::hThrowException )
-				ERRFwk();
 			return HandleError();
 			break;
 		default:
