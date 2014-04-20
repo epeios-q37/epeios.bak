@@ -116,18 +116,18 @@ namespace xulfbs {
 	class _wp_core__
 	{
 	private:
-		nsIDOMDocument *_Document;
+		nsIDOMWindow *_Window;
 		nsIDOMElement *_Broadcasters;
 	protected:
 		virtual const char *XULFBSRefresh( xml::writer_ &Digest ) = 0;	// Retourne l'affixe du fichier XSL.
 		const char *Refresh(
-			nsIDOMDocument *&Document,
+			nsIDOMWindow *&Window,
 			nsIDOMElement *&Broadcasters,
 			xml::writer_ &Digest )
 		{
 			Digest.PushTag( "States" );
 
-			Document = _Document;
+			Window = _Window;
 			Broadcasters = _Broadcasters;
 
 			const char *XSLFileNameAffix = XULFBSRefresh( Digest );
@@ -139,19 +139,19 @@ namespace xulfbs {
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Document = NULL;
+			_Window = NULL;
 			_Broadcasters = NULL;
 		}
 		E_CVDTOR( _wp_core__ );
 		void Init( void )
 		{
-			_Document = NULL;
+			_Window = NULL;
 			_Broadcasters = NULL;
 		}
-		void Attach( nsIDOMDocument *Document )
+		void Attach( nsIDOMWindow *Window )
 		{
-			_Document = Document;
-			_Broadcasters = nsxpcm::GetElementById( Document, "bcsShapes" );
+			_Window = Window;
+			_Broadcasters = nsxpcm::GetElementById( nsxpcm::GetDocument( Window ), "bcsShapes" );
 		}
 	};
 
@@ -161,12 +161,12 @@ namespace xulfbs {
 	{
 	protected:
 		virtual void XULWDGRefresh(
-			nsIDOMDocument *&Document,
+			nsIDOMWindow *&Window,
 			nsIDOMElement *&Broadcasters,
 			xml::writer_ &Digest,
 			str::string_ &XSLFileName )
 		{
-			Trunk().BuildXSLFileName( _wp_core__::Refresh( Document, Broadcasters, Digest ), XSLFileName );
+			Trunk().BuildXSLFileName( _wp_core__::Refresh( Window, Broadcasters, Digest ), XSLFileName );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -183,7 +183,7 @@ namespace xulfbs {
 		void Attach( nsIDOMWindow *Window )
 		{
 			wp::Attach( nsxpcm::supports__( Window ) );
-			_wp_core__::Attach( nsxpcm::GetDocument( Window )  );
+			_wp_core__::Attach( Window );
 		}
 		void Refresh( void )
 		{

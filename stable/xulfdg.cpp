@@ -125,11 +125,11 @@ static void Attach_(
 }
 
 #define A( name )\
-	nsxpcm::AttachEventHandler( Document, "eh" #name, name );
+	nsxpcm::AttachEventHandler( Element, "eh" #name, name );
 
 void xulfdg::event_handlers__::Attach( nsIDOMWindow *Window )
 {
-	nsIDOMDocument *Document = nsxpcm::GetDocument( Window );
+	nsIDOMElement *Element = nsxpcm::GetElement( Window );
 
 	A( JSConsole );
 	A( DOMInspector );

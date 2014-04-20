@@ -112,7 +112,7 @@ static void FillWidget_(
 	const char *DefaultXSLRootPath,
 	nsIDOMNode *Node,
 	const char *XSLFileNameAffix,
-	nsIDOMDocument *Document )
+	nsIDOMWindow *Window )
 {
 ERRProlog
 	nsIDOMDocumentFragment *Fragment;
@@ -123,7 +123,7 @@ ERRBegin
 
 	FileName.Init();
 	Buffer.Init();
-	Fragment = nsxpcm::XSLTransformByFileName( XML, fnm::BuildFileName( DefaultXSLRootPath, XSLFileNameAffix, ".xsl", FileName ).UTF8( Buffer ), Document, nsxpcm::xslt_parameters() );
+	Fragment = nsxpcm::XSLTransformByFileName( XML, fnm::BuildFileName( DefaultXSLRootPath, XSLFileNameAffix, ".xsl", FileName ).UTF8( Buffer ), Window, nsxpcm::xslt_parameters() );
 
 	nsxpcm::AppendChild( Node, Fragment );
 ERRErr
@@ -134,7 +134,7 @@ ERREpilog
 
 static void FillPredefinedProjectsMenu_(
 	trunk___ &Trunk,
-	nsIDOMDocument *Document )
+	nsIDOMWindow *Window )
 {
 ERRProlog
 	str::string PredefinedProjects;
@@ -145,8 +145,8 @@ ERRBegin
 
 	Trunk.UI().LogQuietly( PredefinedProjects );
 
-	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnuPredefinedProject, "PredefinedProjectsMenu", Document );
-	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnlPredefinedProjectList, "PredefinedProjectsMenuList", Document );
+	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnuPredefinedProject, "PredefinedProjectsMenu", Window );
+	FillWidget_( PredefinedProjects, Trunk.DefaultXSLRootPath(), Trunk.UI().Main().Widgets.mnlPredefinedProjectList, "PredefinedProjectsMenuList", Window );
 
 	nsxpcm::SetSelectedItem( Trunk.UI().Main().Widgets.mnlPredefinedProjectList );
 
@@ -181,7 +181,7 @@ void xulfmn::_main_core__::Attach( nsIDOMWindow *Window )
 
 	Trunk().UI().EventHandlers.M.Attach( Window );
 
-	FillPredefinedProjectsMenu_( Trunk(), nsxpcm::GetDocument( Window ) );	// N'a à être fait qu'une seule fois.
+	FillPredefinedProjectsMenu_( Trunk(), Window );	// N'a à être fait qu'une seule fois.
 
 	Trunk().UI().EventHandlers.M.Exit.Add( Window, nsxpcm::efClose ); // Parce que 'xex:onclose=...' est inopérant sur 'window'.
 }

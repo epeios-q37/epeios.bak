@@ -462,15 +462,15 @@ ERREpilog
 }
 
 void nsxpcm::SetSelectedItem(
-	nsIDOMNode *Node,
+	nsIDOMElement *Element,
 	bso::bool__ SelectFirstOneIfE_NIL )
 {
 ERRProlog
 	str::string Value;
 	browser__ Browser;
-	nsIDOMNode *Current = Node, *Selected = NULL;
+	nsIDOMElement *Current = Element, *Selected = NULL;
 ERRBegin
-	Browser.Init( Node );
+	Browser.Init( Element );
 
 	while ( ( Current != NULL ) && ( Selected == NULL ) ) {
 		Value.Init();
@@ -483,10 +483,10 @@ ERRBegin
 		Current = Browser.GetNext();
 	}
 
-	SetSelectedItem( Node, Selected );
+	SetSelectedItem( Element, Selected );
 
 	if ( ( Selected == NULL ) && ( SelectFirstOneIfE_NIL ) )
-		nsxpcm::SetSelectedIndex( Node, 0 );
+		nsxpcm::SetSelectedIndex( Element, 0 );
 	
 ERRErr
 ERREnd
@@ -1630,7 +1630,7 @@ static void AttachIfConcerned_(
 }
 
 void nsxpcm::AttachEventHandler(
-	nsIDOMNode *Node,
+	nsIDOMElement *Element,
 	const char *Id,
 	event_handler__ &EventHandler,
 	const char *NameSpace )
@@ -1638,8 +1638,11 @@ void nsxpcm::AttachEventHandler(
 ERRProlog
 	nsxpcm::browser__ Browser;
 	nsIDOMMozNamedAttrMap *Attributes = NULL;
+	nsIDOMNode *Node = NULL;
 ERRBegin
-	Browser.Init( Node );
+	Node = Element;
+
+	Browser.Init( Element );
 
 	while ( Node != NULL ) {
 		T( GetElement( Node )->GetAttributes( &Attributes ) );
@@ -1723,7 +1726,7 @@ static inline void RefreshObserver_(
 */
 
 void nsxpcm::RefreshObservers(
-	nsIDOMNode *Node,
+	nsIDOMElement *Element,
 	const char *NameSpace )
 {
 ERRProlog
@@ -1736,19 +1739,19 @@ ERRBegin
 	CustomizedObserverAttributeName.Append( NameSpace );
 	CustomizedObserverAttributeName.Append( ":observes" );
 
-	Browser.Init( Node );
+	Browser.Init( Element );
 
-	while ( Node != NULL ) {
-		GetElement( Node )->GetAttributes( &Attributes ); 
+	while ( Element != NULL ) {
+		Element->GetAttributes( &Attributes ); 
 
 		if ( Attributes != NULL ) {
 			ObserverId.Init();
 
-			if ( GetRelevantBroadcasterId_( CustomizedObserverAttributeName, Node, Attributes, ObserverId ) )
-				RefreshObserver_( Node, ObserverId );
+			if ( GetRelevantBroadcasterId_( CustomizedObserverAttributeName, Element, Attributes, ObserverId ) )
+				RefreshObserver_( Element, ObserverId );
 		}
 
-		Node = Browser.GetNext();
+		Element = Browser.GetNext();
 	}
 ERRErr
 ERREnd
@@ -2137,7 +2140,7 @@ ERREpilog
 nsIDOMDocumentFragment *nsxpcm::XSLTransform(
 	nsIDOMDocument *XMLDocument,
 	nsIDOMDocument *XSLStylesheet,
-	nsIDOMDocument *Owner,
+	nsIDOMWindow *Owner,
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
@@ -2176,7 +2179,7 @@ ERRBegin
 	}
 
 
-	Result = Processor->TransformToFragment( XMLDocument, Owner, &Fragment );
+	Result = Processor->TransformToFragment( XMLDocument, GetDocument( Owner ), &Fragment );
 
 	if ( Result != NS_OK )
 		ERRLbr();
@@ -2258,7 +2261,7 @@ static bso::bool__ _GetXSLStylesheet(
 nsIDOMDocumentFragment *nsxpcm::XSLTransformByContent(
 	const str::string_ &XMLString,
 	const str::string_ &XSLString,
-	nsIDOMDocument *Owner,
+	nsIDOMWindow *Owner,
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
@@ -2282,7 +2285,7 @@ ERREpilog
 static nsIDOMDocumentFragment *XSLTransformProvidingChromeXSLFileName_(
 	const str::string_ &XMLString,
 	const str::string_ &XSLFileName,
-	nsIDOMDocument *Owner,
+	nsIDOMWindow *Owner,
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
@@ -2338,7 +2341,7 @@ ERREpilog
 static inline nsIDOMDocumentFragment *XSLTransformProvidingXSLContent_(
 	const str::string_ &XMLContent,
 	const str::string_ &XSLFileName,
-	nsIDOMDocument *Owner,
+	nsIDOMWindow *Owner,
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
@@ -2358,7 +2361,7 @@ ERREpilog
 nsIDOMDocumentFragment *nsxpcm::XSLTransformByFileName(
 	const str::string_ &XMLContent,
 	const str::string_ &XSLFileName,
-	nsIDOMDocument *Owner,
+	nsIDOMWindow *Owner,
 	const xslt_parameters_ &Parameters )
 {
 	if ( ( XSLFileName.Amount() > 9 ) && ( !str::Compare( XSLFileName, str::string ("chrome://" ), 0, 0, 9 ) ) )
@@ -2367,7 +2370,7 @@ nsIDOMDocumentFragment *nsxpcm::XSLTransformByFileName(
 		return XSLTransformProvidingXSLContent_( XMLContent, XSLFileName, Owner, Parameters );
 }
 
-nsIDOMNode *browser__::GetNext( void )
+nsIDOMElement *browser__::GetNext( void )
 {
 	if ( _Current != NULL ) {
 		if ( _Current == _Root )
@@ -2388,7 +2391,10 @@ nsIDOMNode *browser__::GetNext( void )
 		}
 	}
 
-	return _Current;
+	if ( _Current != NULL )
+		return GetElement( _Current );
+	else
+		return NULL;
 }
 
 void nsxpcm::LaunchURI( const str::string_ &RawURI )

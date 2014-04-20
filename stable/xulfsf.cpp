@@ -236,7 +236,7 @@ ERRBegin
 
 	FileName.Init();
 	Buffer.Init();
-	Fragment = nsxpcm::XSLTransformByFileName( PredefinedBackends, fnm::BuildFileName( Trunk.DefaultXSLRootPath(), "PredefinedBackendMenuList", ".xsl", FileName ).UTF8( Buffer ), Trunk.UI().SessionForm().Document(), nsxpcm::xslt_parameters() );
+	Fragment = nsxpcm::XSLTransformByFileName( PredefinedBackends, fnm::BuildFileName( Trunk.DefaultXSLRootPath(), "PredefinedBackendMenuList", ".xsl", FileName ).UTF8( Buffer ), Trunk.UI().SessionForm().Window(), nsxpcm::xslt_parameters() );
 
 	nsxpcm::AppendChild( Trunk.UI().SessionForm().Widgets.mnlPredefinedBackend, Fragment );
 

@@ -70,7 +70,7 @@ void xulfsv::_session_view_core__::Attach( nsIDOMWindow *Window )
 {
 	Widgets.Attach( Window );
 
-	Trunk().UI().EventHandlers.SF.Attach( Window );
+	Trunk().UI().EventHandlers.SV.Attach( Window );
 }
 
 

@@ -934,7 +934,7 @@ namespace nsxpcm {
 	}
 
 	void SetSelectedItem(	// Cherche parmis les enfants de 'Node' le premier élément ayant l'attribut 'xex:selected' à 'true' et le sélectionne.
-		nsIDOMNode *Node,
+		nsIDOMElement *Element,
 		bso::bool__ SelectFirstOneIfE_NIL = true );	// Lorsque à 'true', si aucun 'item' n'est marqué comme sélectionné, sélectionne le premier.
 
 	inline nsIDOMXULSelectControlItemElement *GetSelectedItem( nsIDOMXULSelectControlElement *Element )
@@ -959,13 +959,13 @@ namespace nsxpcm {
 	}
 
 	inline void SetSelectedItem(
-		nsIDOMNode *Node,
-		nsIDOMNode *Item )
+		nsIDOMElement *Element,
+		nsIDOMElement *Item )
 	{
 		if ( Item != NULL )
-			SetSelectedItem( QueryInterface<nsIDOMXULSelectControlElement>( Node ), QueryInterface<nsIDOMXULSelectControlItemElement>( Item ) );
+			SetSelectedItem( QueryInterface<nsIDOMXULSelectControlElement>( Element ), QueryInterface<nsIDOMXULSelectControlItemElement>( Item ) );
 		else
-			SetSelectedItem( QueryInterface<nsIDOMXULSelectControlElement>( Node ), NULL );
+			SetSelectedItem( QueryInterface<nsIDOMXULSelectControlElement>( Element ), NULL );
 	}
 
 	inline const str::string_ &GetId(
@@ -1178,7 +1178,7 @@ namespace nsxpcm {
 		{
 			reset();
 		}
-		void Init( nsIDOMNode *Root )
+		void Init( nsIDOMElement *Root )
 		{
 			reset();
 
@@ -1190,8 +1190,7 @@ namespace nsxpcm {
 																// posant alors problème pour pour 'GetNext()'.
 		}
 		// Retourne le prochain noeud, ou 'NULL' si tous ont été lus.
-		nsIDOMNode *GetNext( void );
-		nsIDOMElement *GetNextAsElement( void );
+		nsIDOMElement *GetNext( void );
 	};
 
 /*
@@ -1657,13 +1656,13 @@ namespace nsxpcm {
 	};
 
 	void AttachEventHandler(
-		nsIDOMNode *Node,
+		nsIDOMElement *Element,
 		const char *Id,
 		event_handler__ &EventHandler,
 		const char *NameSpace = NSCPM__XUL_EXTENSION_DEFAULT_NAMESPACE );	// Gestion des attributs relatifs aux évènements (ex. : 'xex:oncommand').
 
 	void RefreshObservers(
-		nsIDOMNode *Node,
+		nsIDOMElement *Element,
 		const char *NameSpace = NSCPM__XUL_EXTENSION_DEFAULT_NAMESPACE );	// Gestion des 'xex:observes'.
 
 	struct supports__ 
@@ -2000,7 +1999,7 @@ namespace nsxpcm {
 		{\
 			nsxpcm::SetSelectedItem( GetWidget(), Item );\
 		}\
-		void SetSelectedItem( nsIDOMNode *Item )\
+		void SetSelectedItem( nsIDOMElement *Item )\
 		{\
 			nsxpcm::SetSelectedItem( GetWidget(), Item );\
 		}\
@@ -2981,19 +2980,19 @@ namespace nsxpcm {
 	nsIDOMDocumentFragment *XSLTransform(
 		nsIDOMDocument *XMLDocument,
 		nsIDOMDocument *XSLTStylesheet,
-		nsIDOMDocument *Owner,
+		nsIDOMWindow *Owner,
 		const xslt_parameters_ &Parameters );
 
 	nsIDOMDocumentFragment *XSLTransformByContent(
 		const str::string_ &XMLString,	// Doit être du XML valide.
 		const str::string_ &XSLString,	// Doit être du XSL valide.
-		nsIDOMDocument *Owner,
+		nsIDOMWindow *Owner,
 		const xslt_parameters_ &Parameters );
 
 	nsIDOMDocumentFragment *XSLTransformByFileName(
 		const str::string_ &XMLString,	// Doit être du XML valide.
 		const str::string_ &XSLFileName,	// Doit être du XSL valide.
-		nsIDOMDocument *Owner,
+		nsIDOMWindow *Owner,
 		const xslt_parameters_ &Parameters );
 
 	bso::bool__ GetDirectory(

@@ -397,24 +397,7 @@ using namespace nsxpcm;
 NS_IMPL_ISUPPORTS1(egeckocom___, EIGeckoCOM)
 NS_GENERIC_FACTORY_CONSTRUCTOR(egeckocom___)
 
-#if defined( NSXPCM_GECKO_API_V1 )
-static nsModuleComponentInfo components[] =
-{
-    {
-       EGECKOCOM_CLASSNAME, 
-       EGECKOCOM_CID,
-       EGECKOCOM_CONTRACTID,
-       egeckocomConstructor,
-    },
-	NSXPCM_COMPONENTS,
-};
-
-NS_IMPL_NSGETMODULE("EGeckoCOMModule", components) 
-
-
-#elif  defined( NSXPCM_GECKO_API_V2 )
 # include "mozilla/ModuleUtils.h"
-
 
 //NS_GENERIC_FACTORY_CONSTRUCTOR(event_listener)
 
@@ -481,10 +464,6 @@ static const mozilla::Module EEventListenerModule = {
 // The following line implements the one-and-only "NSModule" symbol exported from this
 // shared library.
 NSMODULE_DEFN(EGeckoCOMModule) = &EGeckoCOMModule;
-#else
-# error
-#endif
-
 
 static class cdtor__ {
 public:

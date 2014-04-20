@@ -256,11 +256,11 @@ void xulfeh::sf::cancel__::NSXPCMOnEvent( nsxpcm::event__ Event )
 }
 
 #define A( name )\
-	nsxpcm::AttachEventHandler( Document, "eh" #name, name );
+	nsxpcm::AttachEventHandler( Element, "eh" #name, name );
 
 void xulfeh::event_handlers__::m__::Attach( nsIDOMWindow *Window )
 {
-	nsIDOMNode *Document = nsxpcm::GetDocument( Window );
+	nsIDOMElement *Element = nsxpcm::GetElement( Window );
 
 	A( About );
 	A( Apply );
@@ -276,7 +276,7 @@ void xulfeh::event_handlers__::m__::Attach( nsIDOMWindow *Window )
 
 void xulfeh::event_handlers__::sf__::Attach( nsIDOMWindow *Window )
 {
-	nsIDOMNode *Document = nsxpcm::GetDocument( Window );
+	nsIDOMElement *Element = nsxpcm::GetElement( Window );
 
 	A( Apply );
 	A( BackendTypeSelection );

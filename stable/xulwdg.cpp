@@ -60,16 +60,16 @@ using namespace xulwdg;
 static void UpdateAccessibility_(
 	const str::string_ &XMLDigest,
 	nsIDOMElement *Broadcasters,
-	nsIDOMDocument *Document,
+	nsIDOMWindow *Window,
 	const str::string_ &XSLFileName )
 {
 	nsxpcm::RemoveChildren( Broadcasters );
 
-	nsIDOMDocumentFragment *Fragment = nsxpcm::XSLTransformByFileName( XMLDigest, XSLFileName, Document, nsxpcm::xslt_parameters() );
+	nsIDOMDocumentFragment *Fragment = nsxpcm::XSLTransformByFileName( XMLDigest, XSLFileName, Window, nsxpcm::xslt_parameters() );
 	
 	nsxpcm::AppendChild( Broadcasters, Fragment );
 
-	nsxpcm::RefreshObservers( Document );
+	nsxpcm::RefreshObservers( nsxpcm::GetElement( Window ) );
 }
 
 
@@ -81,7 +81,7 @@ ERRProlog
 	flx::E_STRING_OFLOW___ Flow;
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
-	nsIDOMDocument *Document = NULL;
+	nsIDOMWindow *Window = NULL;
 	nsIDOMElement *Broadcasters = NULL;
 ERRBegin
 	XSLFileName.Init();
@@ -89,13 +89,13 @@ ERRBegin
 	Flow.Init( XMLDigest );
 	TFlow.Init( Flow );
 	Writer.Init( TFlow, xml::oIndent, xml::e_Default );
-	XULWDGRefresh( Document, Broadcasters, Writer, XSLFileName );
+	XULWDGRefresh( Window, Broadcasters, Writer, XSLFileName );
 
 	Writer.reset();
 	TFlow.reset();
 	Flow.reset();
 
-	UpdateAccessibility_( XMLDigest, Broadcasters, Document, XSLFileName );
+	UpdateAccessibility_( XMLDigest, Broadcasters, Window, XSLFileName );
 
 	nsxpcm::Log( XMLDigest );
 	nsxpcm::Log( XSLFileName );

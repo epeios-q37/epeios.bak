@@ -165,7 +165,7 @@ namespace xulwdg {
 	{
 	protected:
 		virtual void XULWDGRefresh(
-			nsIDOMDocument *&Document,
+			nsIDOMWindow *&Window,
 			nsIDOMElement *&Broadcasters,
 			xml::writer_ &Digest,
 			str::string_ &XSLFileName ) = 0;
