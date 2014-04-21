@@ -242,6 +242,9 @@ ifeq ("$(os)","$(GNULinux)")
 	target=lib$(name).so
 	lo += -shared
 	co += -fPIC
+	co += -std=c++0x
+	co += -D__STDC_LIMIT_MACROS
+    
 endif
 
 #############################
@@ -308,7 +311,7 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\""(Version)"\"
+copt += -DVERSION=\""20140120"\"
 copt += -DCOPYRIGHT_YEARS=\""2012 - 2004"\"
 
 ifndef EPEIOS_SRC
@@ -318,7 +321,7 @@ else
 endif
 
     
-src += :"$(gdk)/include"
+src += :"$(gdk)/include":"$(gdk)/include/nspr"
       
 ox = o
 ds = :

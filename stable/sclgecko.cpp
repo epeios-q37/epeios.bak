@@ -150,14 +150,14 @@ ERREpilog
 }
 
 static inline void GetValue_(
-	rgstry::tentry__ &Entry,
+	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
 	sclrgstry::GetValue( Entry, Value );
 }
 
 static inline void GetValues_(
-	rgstry::tentry__ &Entry,
+	const rgstry::tentry__ &Entry,
 	rgstry::values_ &Values )
 {
 	sclrgstry::GetRegistry().GetValues( Entry, Values );

@@ -166,7 +166,7 @@ namespace xulfbs {
 			xml::writer_ &Digest,
 			str::string_ &XSLFileName )
 		{
-			Trunk().BuildXSLFileName( _wp_core__::Refresh( Window, Broadcasters, Digest ), XSLFileName );
+			wp::Trunk().BuildXSLFileName( _wp_core__::Refresh( Window, Broadcasters, Digest ), XSLFileName );
 		}
 	public:
 		void reset( bso::bool__ P = true )

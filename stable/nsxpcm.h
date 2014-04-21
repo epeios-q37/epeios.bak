@@ -46,7 +46,7 @@
 
 # undef system
 
-# ifdef CPE_MSVC
+# if defined( CPE_MSVC ) || defined( CPE_CYGWIN ) || defined( CPE_MINGW )
 #  define XP_WIN
 # elif defined ( CPE_LINUX )
 #  define XP_UNIX
@@ -2597,7 +2597,7 @@ namespace nsxpcm {
 		return FileOpenDialogBox( ParentWindow, Title, "xprj", fpmfXPRJ, Locale, Language, FileName );
 	}
 
-# if defined( CPE_MSVC ) || defined( CPE_CYGWIN )
+# if defined( CPE_MSVC ) || defined( CPE_CYGWIN ) || defined( CPE_MINGW )
 #  define NSXPCM__DYNAMIC_LIBRARY_EXTENSION "dll"
 # elif defined( CPE_LINUX )
 #  define NSXPCM__DYNAMIC_LIBRARY_EXTENSION "so"
