@@ -303,6 +303,9 @@ ifeq ("$(os)","$(MacOS)")
 	target=lib$(name).dylib
 	lo += -shared
 	co += -fPIC
+	co += -std=c++0x
+	co += -D__STDC_LIMIT_MACROS
+    
 
 endif
 
