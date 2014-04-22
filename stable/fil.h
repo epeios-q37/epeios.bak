@@ -279,7 +279,7 @@ namespace fil {
 			break;
 		case eNoEnt:
 			break;
-		case ENOTDIR:
+		case eNotDir:
 			break;
 		case eLoop:
 			break;
