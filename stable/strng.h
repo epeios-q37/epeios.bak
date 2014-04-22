@@ -66,10 +66,12 @@ extern class ttr_tutor &STRNGTutor;
 pose problème avec la bibliothèque 'FLS' sous MacOS. */
 
 # ifdef CPE_XCODE
+# include <unistd.h>
 namespace strng {
 # endif
 # include <string.h>
 # ifdef CPE_XCODE
+using ::ssize_t;
 }
 
 using strng::memchr;
@@ -83,6 +85,7 @@ using strng::ssize_t;
 using strng::strcat;
 using strng::strchr;
 using strng::strcmp;
+using strng::strncmp;
 using strng::strcpy;
 using strng::strerror;
 using strng::strlen;
