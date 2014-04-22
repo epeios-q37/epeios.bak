@@ -305,6 +305,10 @@ ifeq ("$(os)","$(MacOS)")
 	co += -fPIC
 	co += -std=c++0x
 	co += -D__STDC_LIMIT_MACROS
+	lo += -L$(gdk)/lib
+	lo += -framework XUL
+	lo += -lxpcomglue
+	lo += -lmozalloc
     
 
 endif
