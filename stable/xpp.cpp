@@ -901,7 +901,7 @@ ERRBegin
 	case cmOverriden:
 		Status = _HandleCypherOverride( Value, Parser );
 		break;
-	case et_Undefined:
+	case cm_Undefined:
 		// 'Status' initialisé par 'etCypherModeAndValue_(...)'.
 		break;
 	default:

@@ -148,9 +148,7 @@ namespace xulfsf {
 		}
 	};
 
-	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::_page__<trunk>, page__ );
-	}
+	template <typename trunk> E_TTCLONE__( xulfbs::_page__<trunk>, page__ );
 
 	template <typename trunk> struct session_form__
 	: public _session_form_core__,

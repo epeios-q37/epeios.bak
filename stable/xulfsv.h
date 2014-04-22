@@ -108,9 +108,7 @@ namespace xulfsv {
 		void Attach( nsIDOMWindow *Window );
 	};
 
-	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::_page__<trunk>, page__ );
-	}
+	template <typename trunk> E_TTCLONE__( xulfbs::_page__<trunk>, page__ );
 
 	template <typename trunk> struct session_view__
 	: public _session_view_core__,

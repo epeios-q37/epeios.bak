@@ -84,10 +84,8 @@ namespace xulfbs {
 		xulftk::trunk___ &Trunk,
 		const char *Message );
 
-	namespace {
-		template <typename trunk> E_TTCLONE__( xulwdg::event_handler__<trunk>, _event_handler__ );
-		template <typename trunk> E_TTCLONE__( xulwdg::tree__<trunk>, _tree__ );
-	}
+	template <typename trunk> E_TTCLONE__( xulwdg::event_handler__<trunk>, _event_handler__ );
+	template <typename trunk> E_TTCLONE__( xulwdg::tree__<trunk>, _tree__ );
 
 # define XULFBS__WN( widget, name )\
 	typedef xulwdg::widget##__ name##__;

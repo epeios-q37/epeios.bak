@@ -150,9 +150,7 @@ namespace xulfmn {
 		}
 	};
 	
-	namespace {
-		template <typename trunk> E_TTCLONE__( xulfbs::_window__<trunk>, window__ );
-	}
+	template <typename trunk> E_TTCLONE__( xulfbs::_window__<trunk>, window__ );
 
 	template <typename trunk> struct main__
 	: public _main_core__,
