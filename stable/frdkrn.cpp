@@ -182,7 +182,7 @@ ERREpilog
 #define BACKEND_EXTENDED_TYPE_DAEMON		"Daemon"
 #define BACKEND_EXTENDED_TYPE_PREDEFINED	"Predefined"
 
-inline backend_extended_type__ frdkrn::GetBackendExtendedType( const str::string_ &RawType )
+backend_extended_type__ frdkrn::GetBackendExtendedType( const str::string_ &RawType )
 {
 	if ( RawType == BACKEND_EXTENDED_TYPE_EMBEDDED )
 		return bxtEmbedded;
