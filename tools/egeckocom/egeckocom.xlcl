@@ -2,8 +2,9 @@
 <!-- $Id: egeckocom.xlcl,v 1.6 2013/07/18 19:46:26 csimon Exp $ -->
 <Locales xmlns="http://zeusw.org/epeios/lcl" xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="egeckocom">
-    <xpp:set name="epeios" env-var="EPEIOS_XLCL"/>
-    <xpp:expand value-of="epeios"/>
+    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
+    <xpp:expand value-of="epeios.shortcuts"/>
+	<xpp:expand select="epeios.xlcl"/>
     <Translations message="UnableToRegisterElement">
 			<Translation language="fr">Impossible d'enregistrer l'élément d'identifiant '%2' (%1)</Translation>
 			<Translation language="en">Unable to register element '%2' (%1)</Translation>

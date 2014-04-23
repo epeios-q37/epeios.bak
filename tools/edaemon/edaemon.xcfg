@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="edaemon">
-    <xpp:set name="epeios" env-var="EPEIOS_XCFG"/>
-    <xpp:expand value-of="epeios"/>
+    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
+    <xpp:expand value-of="epeios.shortcuts"/>
+	<xpp:expand select="epeios.xcfg"/>
     <Parameters>
 		  <Language>en</Language>
       <Command>Process</Command>

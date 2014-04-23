@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="edbpck">
-    <xpp:set name="epeios" env-var="EPEIOS_XCFG"/>
-    <xpp:expand value-of="epeios"/>
+    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
+    <xpp:expand value-of="epeios.shortcuts"/>
+	<xpp:expand select="epeios.xcfg"/>
     <Parameters>
 		  <Language>fr</Language>
       <Command>Process</Command>

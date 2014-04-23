@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="esketch">
-    <xpp:set name="epeios" env-var="EPEIOS_XLCL"/>
-    <xpp:expand value-of="epeios"/>
+    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
+    <xpp:expand value-of="epeios.shortcuts"/>
+	<xpp:expand select="epeios.xlcl"/>
     <Translations text="ProgramDescription">
 		  <Translation language="fr">Mettre ici la description du programme en français !</Translation>
 		  <Translation language="en">Put here the english description of the program !</Translation>
