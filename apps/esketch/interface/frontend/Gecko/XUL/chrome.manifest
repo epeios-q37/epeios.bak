@@ -21,6 +21,6 @@ overlay  chrome://inspector/content/commandOverlay.xul chrome://inspector/conten
 
 interfaces components/egeckocom.xpt
 binary-component components/egeckocom.dll ABI=WINNT_x86-msvc
-binary-component components/egeckocom.so ABI=Linux_x86-gcc3
+binary-component components/libegeckocom.so ABI=Linux_x86_64-gcc3
 binary-component components/egeckocom.dylib ABI=Darwin_x86-gcc3
 
