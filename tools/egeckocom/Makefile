@@ -228,7 +228,18 @@ ifeq ("$(os)","$(GNULinux)")
 	
 	mods += $(pmods)
 	
-	libs += -lpthread -ldl -lrt
+   	llo += -L$(gdk)/lib
+   	llo += -L$(gdk)/bin
+	llo += -lxul
+	llo += -lxpcomglue_s
+	llo += -lmozalloc
+	llo += -lnss3
+	llo += -lnspr4
+	llo +=  -Wl,-rpath-link,$(gdk)/bin
+#	lo += $(llo)
+
+	
+	libs += $(llo) -lpthread -ldl -lrt 
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -244,10 +255,6 @@ ifeq ("$(os)","$(GNULinux)")
 	co += -fPIC
 	co += -std=c++0x
 	co += -D__STDC_LIMIT_MACROS
-    	lo += -L$(gdk)/lib
-	lo += -lxul
-	lo += -lxpcomglue
-	lo += -lmozalloc
 
 endif
 
