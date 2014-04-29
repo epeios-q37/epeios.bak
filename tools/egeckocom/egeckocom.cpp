@@ -68,6 +68,9 @@ static flx::E_STRING_OFLOW_DRIVER___ CErrDriver_;
 #define MESSAGE_RETRIEVE_FAILURE		"RetrieveFailure"
 #define MESSAGE_UNABLE_TO_HANDLE_PSEUDO_EVENT	"UnableToHandlePseudoEvent"
 
+#define LOG utime( "LOG : " __FILE__ " " E_STRING( __LINE__ ), NULL )
+
+
 class egeckocom___
 : public EIGeckoCOM
 {
@@ -165,16 +168,22 @@ ERREpilog
 
 const char *GetConfigurationDirectory_( TOL_CBUFFER___ &Buffer )
 {
+	LOG;
 ERRProlog
 	str::string Directory;
 ERRBegin
+	LOG;
 	Directory.Init();
+	LOG;
 
 	nsxpcm::GetInstallationDirectory( Directory );
+	LOG;
 
 	Directory.Append( "/components" );
+	LOG;
 
 	Directory.Convert( Buffer );
+	LOG;
 ERRErr
 ERREnd
 ERREpilog
@@ -186,7 +195,9 @@ static void Initialize_( void )
 ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
+LOG;
 	sclmisc::Initialize( GetConfigurationDirectory_( Buffer ) );
+LOG;
 ERRErr
 ERREnd
 ERREpilog
@@ -202,24 +213,37 @@ RP
 	TOL_CBUFFER___ Buffer, LocationBuffer;
 	str::string ConfigurationDirectory, Identification;
 RB
+	LOG;
+
 	nsCOMPtr<nsxpcm::clh__>CLH;
+
+	LOG;
 
 	nsxpcm::GetService( CLH_CONTRACTID, CLH );
 
-//	_LanguageBuffer.Init();
+	LOG;
 
 	if ( ( _LanguageBuffer.Malloc( strlen( Language ) + 1 ) ) == NULL )
 		ERRAlc();
 
+	LOG;
+
+
 	strcpy( _LanguageBuffer, Language );
+
+LOG;
 
 	if ( !IsInitialized_ ) {
 		Initialize_();
 		IsInitialized_ = true;
 	}
 
+LOG;
+
 	RawLibraryName.Init();
 	GetComponent_( ComponentId, RawLibraryName );
+
+LOG;
 
 	mtx::Lock( Mutex_ );
 
@@ -241,6 +265,8 @@ RB
 	_Location.Init();
 	_Data.Init( Identification.Convert( _IdentificationBuffer ), _LanguageBuffer, &fnm::GetLocation( CorrectedLibraryName.Convert( Buffer ), _Location ) );
 
+LOG;
+
 	if ( !_Wrapper.Init( Buffer, &_Data, err::hUserDefined ) ) {
 		if ( CErrString_.Amount() == 0 ) {
 			ErrorMeaning.SetValue( MESSAGE_UNABLE_TO_OPEN_COMPONENT );
@@ -250,9 +276,16 @@ RB
 		ERRFree();
 	}
 
+LOG;
+
 	CurrentSteering_ = &_Wrapper.GetSteering();
 
+LOG;
+
 	CurrentSteering_->PreRegistration();
+
+LOG;
+
 RR
 	CurrentSteering_ = NULL;
 
@@ -384,6 +417,7 @@ RE
 
 egeckocom___::egeckocom___( void )
 {
+	LOG;
 }
 
 egeckocom___::~egeckocom___( void )

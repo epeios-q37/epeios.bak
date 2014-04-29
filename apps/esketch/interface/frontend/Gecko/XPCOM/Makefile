@@ -242,7 +242,7 @@ ifeq ("$(os)","$(GNULinux)")
 	
 	mods += $(pmods)
 	
-	libs += -lpthread -ldl -lrt
+	libs += -L$(gdk)/lib -lxpcomglue -lpthread -ldl -lrt 
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
