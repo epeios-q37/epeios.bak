@@ -48,6 +48,9 @@ state__ dir::HandleError( void )
 	case EFAULT:
 		ERRFwk();
 		break;
+	case ENOTEMPTY:
+		return sNotEmpty;
+		break;
 	default:
 		ERRSys();
 		break;

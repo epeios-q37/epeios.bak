@@ -79,6 +79,7 @@ namespace dir {
 		sExists,		// Le répertoire existe déjà.
 		sBadPath,		// Le chemin fournit n'est pas correct.
 		sInadequatePath,	// Un élment du chemin n'existe pas ou n'est pas un répertoire adapté (fichier, mauvais droits, ...).
+		sNotEmpty,		// Dans le cas d'une effacement, ke répertoire a effacé n'estr pas vide.
 		s_amount,
 		s_Undefined
 	};
