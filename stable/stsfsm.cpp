@@ -111,7 +111,7 @@ status__ stsfsm::parser__::Handle( bso::u8__ C )
 		_Current = _A().First();
 
 	if ( _Current == E_NIL )
-		ERRFwk();
+		return sLost;	// L'automate est vide.
 
 	Next = Card( _Current ).Get( C );
 
