@@ -479,7 +479,7 @@ namespace lst {
 			FileManager.reset();
 		else {
 			FileManager.Set( List.Locations );
-			List.Locations.SetFirstUnused( FirstUnused );
+			List.Locations.Init( FirstUnused );
 		}
 
 		return State;
