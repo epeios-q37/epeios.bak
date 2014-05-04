@@ -52,31 +52,33 @@ namespace aem {
 
 	using sdr::size__;
 
-	inline bso::bool__ _IsFitted( size__ RawExtent )
+	E_TMIMIC__( sdr::size__, shadow__ );	// Type permettant de gèrer l''extent' ainsi que les pas d'allocation.
+
+	inline bso::bool__ _IsFitted( shadow__ Shadow )
 	{
-		return RawExtent == 0;
+		return Shadow == 0;
 	}
 
-	inline bso::bool__ _IsFixed( size__ RawExtent )
+	inline bso::bool__ _IsFixed( shadow__ Shadow )
 	{
-		return ( RawExtent & (size__)1 ) == 1;
+		return ( *Shadow & (size__)1 ) == 1;
 	}
 
-	inline bso::bool__ _IsStepped( size__ RawExtent )
+	inline bso::bool__ _IsStepped( shadow__ Shadow )
 	{
-		return !_IsFitted( RawExtent) && !_IsFixed( RawExtent );
+		return !_IsFitted( Shadow ) && !_IsFixed( Shadow );
 	}
 
-	inline bso::bool__ _IsUsable( size__ RawExtent )
+	inline bso::bool__ _IsUsable( shadow__ Shadow )
 	{
 		return
-			_IsFitted( RawExtent )
-			|| _IsFixed( RawExtent )
-			|| ( _IsStepped( RawExtent ) && ( ( RawExtent & 2 ) == 0 ) );
+			_IsFitted( Shadow )
+			|| _IsFixed( Shadow )
+			|| ( _IsStepped( Shadow ) && ( ( *Shadow & 2 ) == 0 ) );
 	}
 
 	// La première allocation ne se fera que sur la moitié du palier (Ex. : pour un paliier de 4, le première allocation se fera sur 2, puis 6, puis 10...).
-	inline size__ _GetStepCorrespondingExtentForUnusableState( size__ Step )
+	inline shadow__ _GetStepCorrespondingShadowForUnusableState( size__ Step )
 	{
 		bso::uint__ Counter = 0;
 
@@ -101,17 +103,17 @@ namespace aem {
 		return Step & ~((size__)1);
 	}
 
-	inline size__ _ConvertSteppedExtentFromUnusableToUsableState( size__ RawExtent )
+	inline shadow__ _ConvertSteppedShadowFromUnusableToUsableState( shadow__ Shadow )
 	{
-		if ( !_IsStepped( RawExtent ) )
+		if ( !_IsStepped( Shadow ) )
 			ERRFwk();
 
-		return RawExtent + 2;
+		return *Shadow + 2;
 	}
 
-	inline size__ _GetStepCorrespondingExtentForUsableState( size__ Step )
+	inline shadow__ _GetStepCorrespondingShadowForUsableState( size__ Step )
 	{
-		return _ConvertSteppedExtentFromUnusableToUsableState( _GetStepCorrespondingExtentForUnusableState( Step ) );
+		return _ConvertSteppedShadowFromUnusableToUsableState( _GetStepCorrespondingShadowForUnusableState( Step ) );
 	}
 
 	inline bso::uint__ _GetMostRightNonZeroBytePosition( size__ Value )
@@ -163,16 +165,16 @@ namespace aem {
 		return ~( (~((size__)0) << OnesAmount ) );
 	}
 
-	// Si 'Extent'  == '00...0100', retourne '00...000011'.
-	inline size__ _GetStepMask( size__ Extent )
+	// Si 'Shadow'  == '00...0100', retourne '00...000011'.
+	inline size__ _GetStepMask( shadow__ Shadow )
 	{
-		if ( !_IsStepped( Extent ) )
+		if ( !_IsStepped( Shadow ) )
 			ERRFwk();
 
-		if ( !_IsUsable( Extent ) )
+		if ( !_IsUsable( Shadow ) )
 			ERRFwk();
 
-		size__ Position = _GetMostRightOnePosition( Extent );
+		size__ Position = _GetMostRightOnePosition( *Shadow );
 
 		if ( Position == 0 )
 			ERRFwk();
@@ -192,46 +194,45 @@ namespace aem {
 
 	inline size__ _GetExtent(
 		size__ Amount,
-		size__ RawExtent )
+		shadow__ Shadow )
 	{
-# ifdef AEM_DBG
-		if ( !_IsUsable( RawExtent ) )
-			ERRFwk();
-# endif
-		return ( _IsFitted( RawExtent ) ? Amount : RawExtent );
+		if ( !_IsUsable( Shadow ) )
+			return 0;
+		else
+			return ( _IsFitted( Shadow ) ? Amount : *Shadow );
 	}
 	
-	inline void _MarkAsFitted( size__ &RawExtent )
+	inline void _MarkAsFitted( shadow__ &Shadow )
 	{
-		RawExtent = 0;
+		Shadow = 0;
 	}
 
 	template <typename row> class _amount_extent_manager_
 	{
 	private:
-		size__ _GetRawExtent( void ) const
+		shadow__ _GetShadow( void ) const
 		{
-			return S_.Extent;
+			return S_.Shadow;
 		}
 		size__ _GetStepMask( void ) const
 		{
-			return aem::_GetStepMask( _GetRawExtent() );
+			return aem::_GetStepMask( _GetShadow() );
 		}
 		bso::bool__ _IsFitted( void ) const
 		{
-			return aem::_IsFitted( _GetRawExtent() );
+			return aem::_IsFitted( _GetShadow() );
 		}
 		void _MarkAsFitted( void )
 		{
-			aem::_MarkAsFitted( S_.Extent );
+			aem::_MarkAsFitted( S_.Shadow );
 		}
 		bso::bool__ _IsFixed( void ) const
 		{
-			return aem::_IsFixed( _GetRawExtent() );
+			return aem::_IsFixed( _GetShadow() );
 		}
 		bso::bool__ _IsStepped( void ) const
 		{
-			return aem::_IsStepped( _GetRawExtent() );
+			return aem::_IsStepped( _GetShadow() );
 		}
 		size__ _GetAmount( void ) const
 		{
@@ -239,11 +240,11 @@ namespace aem {
 		}
 		bso::bool__ _IsUsable( void ) const
 		{
-			return aem::_IsUsable( _GetRawExtent() );
+			return aem::_IsUsable( _GetShadow() );
 		}
 		size__ _GetExtent( void ) const
 		{
-			return aem::_GetExtent( _GetAmount(), _GetRawExtent() );
+			return aem::_GetExtent( _GetAmount(), _GetShadow() );
 		}
 		bso::bool__ _IsBigEnough( sdr::size__ Amount ) const
 		{
@@ -252,7 +253,7 @@ namespace aem {
 				ERRFwk();
 # endif
 			// En n'utilisant pas '_GetExtent(...)', on gagne un peu de temps.
-			return ( _GetRawExtent() >= Amount )
+			return ( *_GetShadow() >= Amount )
 				   || ( _IsFitted() && ( _GetAmount() >= Amount ) );
 		}
 		bso::bool__ _FittedHandle( size__ Amount )
@@ -287,7 +288,7 @@ namespace aem {
 				if ( Amount == 0 )
 					return false;
 				else {
-					S_.Extent = _ConvertSteppedExtentFromUnusableToUsableState( _GetRawExtent() );
+					S_.Shadow = _ConvertSteppedShadowFromUnusableToUsableState( _GetShadow() );
 					Force = true;
 				}
 
@@ -296,10 +297,10 @@ namespace aem {
 			S_.Amount = Amount;
 
 			if ( _IsInStepLimit( Amount, StepMask ) ) {
-				size__ NewExtent = ( ( Amount + StepMask ) & ~StepMask ) | ( StepMask + 1 );
+				shadow__ NewShadow = ( ( Amount + StepMask ) & ~StepMask ) | ( StepMask + 1 );
 
-				if ( ( NewExtent != _GetExtent() ) || Force ) {
-					Amount = S_.Extent = NewExtent;
+				if ( ( NewShadow != _GetShadow() ) || Force ) {
+					Amount = *(S_.Shadow = NewShadow);
 					return true;
 				} else
 					return false;
@@ -312,7 +313,7 @@ namespace aem {
 			if ( _GetAmount() > Amount )
 				ERRFwk();
 
-			S_.Extent = Amount |= 1;
+			S_.Shadow = Amount |= 1;
 
 			return true;
 		}
@@ -322,17 +323,17 @@ namespace aem {
 				_MarkAsFitted();
 				return false;
 			} else if ( _IsUsable() ) {
-				size__ Extent = _GetStepCorrespondingExtentForUsableState( Step );
+				shadow__ Shadow = _GetStepCorrespondingShadowForUsableState( Step );
 
-				if ( Extent < _GetExtent() ) {
-					Step = S_.Extent = Extent;
+				if ( *Shadow < _GetExtent() ) {
+					Step = *(S_.Shadow = Shadow);
 					return false;
 				} else {
-					S_.Extent = Extent;
+					S_.Shadow = Shadow;
 					return true;
 				}
 			} else {
-				S_.Extent = _GetStepCorrespondingExtentForUnusableState( Step );
+				S_.Shadow = _GetStepCorrespondingShadowForUnusableState( Step );
 				return false;
 			}
 		}
@@ -386,9 +387,8 @@ namespace aem {
 		}
 	public:
 		struct s {
-			size__
-				Amount,
-				Extent;
+			size__ Amount;
+			shadow__ Shadow;	// Contient de quoi déduire l''extent', ainsi que la gestion des pas d'allocation.
 		} &S_;
 		_amount_extent_manager_( s &S )
 		: S_( S )
@@ -396,7 +396,7 @@ namespace aem {
 		void reset( bso::bool__ = true )
 		{
 			S_.Amount = 0;
-			S_.Extent = _GetStepCorrespondingExtentForUnusableState( AEM_DEFAULT_STEP );
+			S_.Shadow = _GetStepCorrespondingShadowForUnusableState( AEM_DEFAULT_STEP );
 		}
 		_amount_extent_manager_ &operator =( const _amount_extent_manager_ &AEM )
 		{
