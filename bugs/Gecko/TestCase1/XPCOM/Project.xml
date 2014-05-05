@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+  <xpp:bloc><!-- User definitions -->
+	<xpp:define name="Version">
+		<xpp:bloc>201400505</xpp:bloc>
+	</xpp:define>
+    <xpp:define name="CopyrightYears">
+      <xpp:bloc>2004</xpp:bloc>
+    </xpp:define>
+  </xpp:bloc>
+  <xpp:set name="Credits" value="Epeios"/>
+  <xpp:set name="_OutputType" value="DynamicLibrary"/>
+  <xpp:set name="_Gecko" value="yes"/>
+  <xpp:set name="_UserPostBuild" value="yes"/>
+  <xpp:set name="_UserFiles" value="yes"/>
+  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <About>
+    <Program>geckobug1</Program>
+    <Software>GeckoBug1</Software>
+	<UUID>c985635c-6ed1-42c9-9e8b-62adbc6cd9d9</UUID>
+  </About>
+  <Modules/>
+  <Files>
+	  <File>CHANGELOG.txt</File><!-- Défini ici, en conjonction avec '_UserFiles=yes', sinon placé en '..'. -->
+	  <File>GeckoBug1.idl</File>
+	  <File Path="../XUL/chrome/geckobug1/content/">Main.xul</File>
+  </Files>
+  <SourceDirs>
+  </SourceDirs>
+  <PreprocessorDefinitions>
+  </PreprocessorDefinitions>
+  <Oddities>
+	<PostBuildEvent>
+		<Command>copy $(TargetPath) $(ProjectDir)..\XUL\components &amp; copy $(ProjectDir)$(TargetName).xpt $(ProjectDir)..\XUL\components</Command>
+	</PostBuildEvent>
+  </Oddities>
+</Project>
