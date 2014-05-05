@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!--
+	'Main.xul' by Claude SIMON (http://zeusw.org/).
+
+	 This file is part of 'GeckoBug1' software.
+
+	'GeckoBug1' is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	'GeckoBug1' is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--<!DOCTYPE window SYSTEM "chrome://esketchgck/locale/Main.dtd">-->
+<!--<!DOCTYPE window SYSTEM "../locale/fr/Main.dtd">-->
+
+<window	id="wdwMain"
+		title="GeckoBug1"
+		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		onload=""
+		onunload=""
+		height="800"
+		width="800"
+>
+<!-- NOTA :'xex:onclose="..."' doesn't work on a 'window' element ... -->
+
+	<script type="text/javascript">geckobug1 = Components.classes["@zeusw.org/geckobug1;1"].createInstance().QueryInterface(Components.interfaces.IGeckoBug1);geckobug1.Test();</script>
+</window>

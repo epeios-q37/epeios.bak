@@ -1,0 +1,7 @@
+content	geckobug1			chrome/geckobug1/content/
+
+interfaces components/geckobug1.xpt
+binary-component components/geckobug1.dll ABI=WINNT_x86-msvc
+binary-component components/libgeckobug1.so ABI=Linux_x86_64-gcc3
+binary-component components/geckobug1.dylib ABI=Darwin_x86-gcc3
+
