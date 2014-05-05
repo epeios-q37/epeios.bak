@@ -42,7 +42,9 @@
     <Module>registry</Module>
   </Modules>
   <Files>
-	  <File>CHANGELOG.txt</File><!-- Défini ici, en conjonction avec '_UserFiles=yes', sinon placé en '..'. -->
+	  <File>CHANGELOG.txt</File>
+	  <!-- Défini ici, en conjonction avec '_UserFiles=yes', sinon placé en '..'. -->
+	  <File>egeckocom.idl</File>
   </Files>
   <SourceDirs>
   </SourceDirs>

@@ -428,10 +428,10 @@ egeckocom___::~egeckocom___( void )
 
 using namespace nsxpcm;
 
+# include "mozilla/ModuleUtils.h"
+
 NS_IMPL_ISUPPORTS1(egeckocom___, EIGeckoCOM)
 NS_GENERIC_FACTORY_CONSTRUCTOR(egeckocom___)
-
-# include "mozilla/ModuleUtils.h"
 
 //NS_GENERIC_FACTORY_CONSTRUCTOR(event_listener)
 
