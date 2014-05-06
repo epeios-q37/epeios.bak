@@ -38,6 +38,7 @@
 
 #define E__STRING(x) #x
 #define E_STRING(x) E__STRING(x)
+// The use of 'utime()' allows to see what happens using 'strace' under Linux and 'dtruss' under MacOS'.
 #define LOG utime( "LOG : " __FILE__ " " E_STRING( __LINE__ ), NULL )
 
 #include "xpcom-config.h"
@@ -60,9 +61,6 @@ public:
   NS_DECL_IGECKOBUG1
 
   geckobug1__();
-private:
-protected:
-  /* additional members */
 };
 
 #include "nsServiceManagerUtils.h"
@@ -80,9 +78,9 @@ template <typename t> inline t *GetService_(
 	Service = do_GetService( ContractID, &Error );
 
 	if ( Error == NS_OK )
-		LOG;
+		LOG;	// Under Windows, in both cases (see 'Main.xul'), we go through here, indicating that the call succeeds.
 	else if ( Error == NS_ERROR_NOT_INITIALIZED )
-		LOG;
+		LOG;	// Under Linux and MacOS, in both cases (see 'Main.xul'), we go through here, indicating that the call fails with the 'NS_ERROR_NOT_INITIALIZED' error.
 	else {
 		char Buffer[100];
 		sprintf( Buffer, "%x", Error );
@@ -99,6 +97,7 @@ NS_IMETHODIMP geckobug1__::Test( void )
 
 	nsCOMPtr<nsIDirectoryServiceProvider> DirectoryServiceProvider;
 
+	// It also have the same issue with other valid CID as "@mozilla.org/file/directory_service;1".
 	if ( GetService_( "@mozilla.org/file/directory_service;1", DirectoryServiceProvider ) != NULL )
 		LOG;
 	else
@@ -124,34 +123,18 @@ geckobug1__::~geckobug1__( void )
 NS_IMPL_ISUPPORTS1(geckobug1__, IGeckoBug1)
 NS_GENERIC_FACTORY_CONSTRUCTOR(geckobug1__)
 
-//NS_GENERIC_FACTORY_CONSTRUCTOR(event_listener)
-
-// The following line defines a kNS_SAMPLE_CID CID variable.
 NS_DEFINE_NAMED_CID(GECKOBUG1_CID);
 
-// Build a table of ClassIDs (CIDs) which are implemented by this module. CIDs
-// should be completely unique UUIDs.
-// each entry has the form { CID, service, factoryproc, constructorproc }
-// where factoryproc is usually NULL.
 static const mozilla::Module::CIDEntry kGeckoBug1CIDs[] = {
     { &kGECKOBUG1_CID, false, NULL, geckobug1__Constructor },
     { NULL }
 };
 
-// Build a table which maps contract IDs to CIDs.
-// A contract is a string which identifies a particular set of functionality. In some
-// cases an extension component may override the contract ID of a builtin gecko component
-// to modify or extend functionality.
 static const mozilla::Module::ContractIDEntry kGeckoBug1Contracts[] = {
     { GECKOBUG1_CONTRACTID, &kGECKOBUG1_CID },
     { NULL }
 };
 
-// Category entries are category/key/value triples which can be used
-// to register contract ID as content handlers or to observe certain
-// notifications. Most modules do not need to register any category
-// entries: this is just a sample of how you'd do it.
-// @see nsICategoryManager for information on retrieving category data.
 static const mozilla::Module::CategoryEntry kGeckoBug1Categories[] = {
     { NULL }
 };
@@ -163,10 +146,9 @@ static const mozilla::Module GeckoBug1Module = {
     kGeckoBug1Categories
 };
 
-// The following line implements the one-and-only "NSModule" symbol exported from this
-// shared library.
 NSMODULE_DEFN(GeckoBug1Module) = &GeckoBug1Module;
 
+// To verify if the component is loaded or not.
 class auto__ {
 public:
 	auto__( void )

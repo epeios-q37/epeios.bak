@@ -22,15 +22,14 @@
 <!--<!DOCTYPE window SYSTEM "chrome://esketchgck/locale/Main.dtd">-->
 <!--<!DOCTYPE window SYSTEM "../locale/fr/Main.dtd">-->
 
+<!-- Both 'geckobug1.Test()' (line 30 and line 64) works correctly under Windows, but not under MacOS and Linux -->
+
 <window	id="wdwMain"
 		title="GeckoBug1"
 		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-		onload=""
-		onunload=""
-		height="800"
-		width="800"
+		onload="geckobug1.Test();"
+		height="400"
+		width="400"
 >
-<!-- NOTA :'xex:onclose="..."' doesn't work on a 'window' element ... -->
-
-	<script type="text/javascript">geckobug1 = Components.classes["@zeusw.org/geckobug1;1"].createInstance().QueryInterface(Components.interfaces.IGeckoBug1);geckobug1.Test();</script>
+	<script type="text/javascript">geckobug1 = Components.classes['@zeusw.org/geckobug1;1'].createInstance().QueryInterface(Components.interfaces.IGeckoBug1);geckobug1.Test();</script>
 </window>
