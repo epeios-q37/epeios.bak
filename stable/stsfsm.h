@@ -162,12 +162,12 @@ namespace stsfsm {
 	typedef ctn::E_MCONTAINERt_( card_, crow__ ) automat_;
 	E_AUTO( automat );
 
-	void Add(
+	id__ Add(
 		const str::string_ &Tag,
 		id__ Id,
 		automat_ &Automat );
 
-	inline void Add(
+	inline id__ Add(
 		const char *Tag,
 		id__ Id,
 		automat_ &Automat )
@@ -175,7 +175,7 @@ namespace stsfsm {
 		return Add( str::string( Tag ), Id, Automat );
 	}
 
-	inline void Add(
+	inline id__ Add(
 		const char *Tag,
 		sdr::size__ Length,
 		id__ Id,
@@ -238,7 +238,8 @@ namespace stsfsm {
 		int i = 0;
 
 		while ( i < Limit ) {
-			Add( GetLabel( (type)i ), i, Automat );
+			if ( Add( GetLabel( (type)i ), i, Automat ) != UndefinedId )
+				ERRFwk();
 
 			i++;
 		}
@@ -253,7 +254,8 @@ namespace stsfsm {
 		int i = 0;
 
 		while ( i < Limit ) {
-			Add( GetLabel( Version, (type)i ), i, Automat );
+			if ( Add( GetLabel( Version, (type)i ), i, Automat ) != UndefinedId )
+				ERRFwk();
 
 			i++;
 		}

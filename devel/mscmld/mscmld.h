@@ -574,6 +574,29 @@ namespace mscmld {
 		const signatures_ &Signatures,
 		notes_ &Notes );
 
+	E_CDEF( bso::u8__, AnacrousisUndefinedBase, 0 );
+
+	class anacrousis__ {
+	public:
+		bso::u8__ Base;	// 0: Undefined1: noire, 2: croche, 3: double-croche, ...
+		bso::u8__ Amount;
+		void reset( bso::bool__ = true )
+		{
+			Base = AnacrousisUndefinedBase;
+			Amount = 0;
+		}
+		E_CDTOR( anacrousis__);
+		void Init( void )
+		{
+			Base = 1;
+			Amount = 0;
+		}
+		bso::bool__ IsValid( void ) const
+		{
+			return Base != AnacrousisUndefinedBase;
+		}
+	};
+
 	class melody_ 
 	: public notes_
 	{
@@ -581,7 +604,7 @@ namespace mscmld {
 		struct s
 		: public notes_::s
 		{
-			duration__ Anacrousis;
+			anacrousis__ Anacrousis;
 		} &S_;
 		melody_( s &S )
 		: S_( S ),
@@ -611,10 +634,10 @@ namespace mscmld {
 		void Init( void )
 		{
 			notes_::Init();
-			S_.Anacrousis.reset();
+			S_.Anacrousis.Init();
 		}
 		bso::bool__ MarkAsAnacrousis( err::handling__ Handling = err::h_Default );	// Marque les notes déjà introduite en tant qu'anacrouse.
-		E_RODISCLOSE_( duration__, Anacrousis );
+		E_RODISCLOSE_( anacrousis__, Anacrousis );
 	};
 
 	E_AUTO( melody );
@@ -656,6 +679,8 @@ namespace mscmld {
 		psMissingDuration,
 		psMissingDurationBase,
 		psMissingDurationModifier,
+		psMissingAnacrousisBase,
+		psMissingAnacrousisAmount,
 		ps_amount,
 		ps_Undefined
 	};

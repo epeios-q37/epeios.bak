@@ -180,11 +180,8 @@
 		<xsl:call-template name="Calc2power">
 			<xsl:with-param name="Indice" select="number(@Base)-1"/>
 		</xsl:call-template>
-		<xsl:if test="@Modifier">
-			<xsl:call-template name="dot">
-				<xsl:with-param name="Amount" select="@Modifier"/>
-			</xsl:call-template>
-		</xsl:if>
+		<xsl:text> * </xsl:text>
+		<xsl:value-of select="@Amount"/>
 		<xsl:text>&nl;</xsl:text>
 	</xsl:template>
 	<xsl:template match="Bar">

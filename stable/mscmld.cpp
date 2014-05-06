@@ -40,6 +40,8 @@ using namespace mscmld;
 #define TIME_TAG							"Time"
 
 #define ANACROUSIS_TAG						"Anacrousis"
+E_CDEF( char *, AnacrousisBaseAttribute_, "Base" );
+E_CDEF( char *, AnacrousisAmountAttribute_, "Amount" );
 
 
 #define NOTE_TAG							"Note"
@@ -512,6 +514,45 @@ ERREpilog
 	return BarComplete;
 }
 
+#define C( n )\
+		case 1 << n:\
+			Anacrousis.Base = n+1;\
+			break
+
+static void Convert_(
+	const mthfrc::fraction_ &RawDuration,
+	anacrousis__ &Anacrousis )
+{
+ERRProlog
+	mthfrc::fraction Duration;
+ERRBegin
+	Duration.Init( RawDuration );
+
+	Duration.Simplify();
+
+	switch ( Duration.D.GetU32() ) {
+		C( 0 );
+		C( 1 );
+		C( 2 );
+		C( 3 );
+		C( 4 );
+		C( 5 );
+		C( 6 );
+		C( 7 );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	if ( Duration.N.GetU32() >= bso::U8Max )
+		ERRFwk();
+
+	Anacrousis.Amount = (bso::u8__)Duration.N.GetU32();
+ERRErr
+ERREnd
+ERREpilog
+}
+
 bso::bool__ mscmld::melody_::MarkAsAnacrousis( err::handling__ Handling )
 {
 	bso::bool__ Success = false;
@@ -550,9 +591,8 @@ ERRBegin
 		Note = Total - Remaining;
 
 		Note.Simplify();
-
-		
-		S_.Anacrousis = FindDuration_( Note, false );
+	
+		Convert_( Note, S_.Anacrousis );
 	}
 
 	Success = true;
@@ -597,7 +637,7 @@ static void WriteXML_(
 	Writer.PopTag();
 }
 
-static void WriteXMLCoreAttributes_(
+static void WriteXMLDurationCoreAttributes_(
 	const duration__ &Duration,
 	xml::writer_ &Writer )
 {
@@ -616,7 +656,7 @@ static void WriteXML_(
 {
 	Writer.PushTag( DURATION_TAG );
 
-	WriteXMLCoreAttributes_( Duration, Writer );
+	WriteXMLDurationCoreAttributes_( Duration, Writer );
 
 	if ( PreviousDuration.Base != 0 )
 		Writer.PutAttribute( "TiedToPrevious", ( PreviousDuration.TiedToNext ? "yes" : "no" ) );
@@ -800,9 +840,10 @@ ERRBegin
 
 	Row = Melody.First();
 
-	if ( Melody.Anacrousis().IsValid() ) {
+	if ( ( Melody.Anacrousis().IsValid() ) && (Melody.Anacrousis().Amount != 0 ) ) {
 		Writer.PushTag( ANACROUSIS_TAG );
-		WriteXMLCoreAttributes_( Melody.Anacrousis(), Writer );
+		xml::PutAttribute( AnacrousisBaseAttribute_, Melody.Anacrousis().Base, Writer );
+		xml::PutAttribute( AnacrousisAmountAttribute_, Melody.Anacrousis().Amount, Writer );
 		Writer.PopTag();
 		HandleAnacrousis = true;
 	}
@@ -838,8 +879,11 @@ ERRBegin
 
 			if ( HandleAnacrousis ) {
 				Buffer.Init( BarFraction );
-				NoteFraction.Init();
-				GetFraction_( Melody.Anacrousis(), NoteFraction );
+
+				if ( !Melody.Anacrousis().IsValid() )
+					ERRFwk();
+
+				NoteFraction.Init( Melody.Anacrousis().Amount, 1 << ( Melody.Anacrousis().Base - 1 ) );
 				Adjust_( Buffer, NoteFraction, &BarHandlingError );
 				Adjust_( BarFraction, Buffer, &BarHandlingError );
 				HandleAnacrousis = false;
@@ -1592,9 +1636,69 @@ static parse_status__ ParseTuplet_(
 static parse_status__ ParseAnacrousis_(
 	xml::parser___ &Parser,
 	const signature__ &Signature,
-	melody_ &Melody ) 
+	anacrousis__ &Anacrousis ) 
 {
-	return ParseDuration_( ANACROUSIS_TAG, Parser, tuplet__(), Melody.S_.Anacrousis );
+	parse_status__ Status = psOK;
+	bso::bool__ Continue = true;
+	bso::u8__
+		Base = AnacrousisUndefinedBase,
+		Amount = 0;
+	sdr::row__ Error = E_NIL;
+
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			Status = psUnexpectedTag;
+			break;
+		case xml::tAttribute:
+			if ( Parser.AttributeName() == AnacrousisBaseAttribute_ ) {
+				if ( Base != AnacrousisUndefinedBase )
+					Status = psAlreadyDefined;
+				else
+					Base = Parser.Value().ToU8( &Error );
+
+				if ( (Error != E_NIL) || ( Base == AnacrousisUndefinedBase ) )
+					Status = psBadValue;
+			} else if ( Parser.AttributeName() == AnacrousisAmountAttribute_ ) {
+				if ( Amount != 0 )
+					Status = psAlreadyDefined;
+				else
+					Amount = Parser.Value().ToU8( &Error );
+
+				if ( ( Error != E_NIL ) || ( Amount == 0 ) )
+					Status = psBadValue;
+			} else 
+				Status = psUnexpectedAttribute;
+		case xml::tValue:
+			Status = psUnexpectedValue;
+			break;
+		case xml::tEndTag:
+			if ( Parser.TagName() != ANACROUSIS_TAG )
+				ERRFwk();
+
+			if ( Base == AnacrousisUndefinedBase )
+				Status = psMissingAnacrousisBase;
+			else if ( Amount = 0 )
+				Status = psMissingAnacrousisAmount;
+			else {
+				Anacrousis.Base = Base;
+				Anacrousis.Amount = Amount;
+
+			}
+
+
+			Continue = false;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		if ( Status != psOK )
+			Continue = false;
+	}
+
+	return Status;
 }
 
 
@@ -1621,7 +1725,7 @@ static parse_status__ Parse_(
 			else if ( Parser.TagName() == TUPLET_TAG )
 				Status = ParseTuplet_( Parser, Signature, Melody );
 			else if ( Parser.TagName() == ANACROUSIS_TAG )
-				Status = ParseAnacrousis_( Parser, Signature, Melody );
+				Status = ParseAnacrousis_( Parser, Signature, Melody.S_.Anacrousis );
 			else
 				Status = psUnexpectedTag;
 

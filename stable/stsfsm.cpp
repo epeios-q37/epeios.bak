@@ -57,7 +57,7 @@ public:
 
 using namespace stsfsm;
 
-void stsfsm::Add(
+int stsfsm::Add(
 	const str::string_ &Tag,
 	id__ Id,
 	automat_ &Automat )
@@ -93,11 +93,13 @@ void stsfsm::Add(
 		ERRFwk();
 
 	if ( Automat( Current ).GetId() != UndefinedId	)
-		ERRFwk();
+		return Automat( Current ).GetId();
 
 	Automat( Current ).SetId( Id );
 
 	Automat.Flush();
+
+	return UndefinedId;
 }
 
 status__ stsfsm::parser__::Handle( bso::u8__ C )
