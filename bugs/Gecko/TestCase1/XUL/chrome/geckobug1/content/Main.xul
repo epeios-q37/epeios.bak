@@ -22,7 +22,7 @@
 <!--<!DOCTYPE window SYSTEM "chrome://esketchgck/locale/Main.dtd">-->
 <!--<!DOCTYPE window SYSTEM "../locale/fr/Main.dtd">-->
 
-<!-- Both 'geckobug1.Test()' (line 30 and line 64) works correctly under Windows, but not under MacOS and Linux -->
+<!-- Both 'geckobug1.Test()' (line 30 and line 34) works correctly under Windows, but not under MacOS and Linux -->
 
 <window	id="wdwMain"
 		title="GeckoBug1"

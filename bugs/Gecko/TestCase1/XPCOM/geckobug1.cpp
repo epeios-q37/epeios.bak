@@ -97,7 +97,7 @@ NS_IMETHODIMP geckobug1__::Test( void )
 
 	nsCOMPtr<nsIDirectoryServiceProvider> DirectoryServiceProvider;
 
-	// It also have the same issue with other valid CID as "@mozilla.org/file/directory_service;1".
+	// It also has the same issue with other valid CID as "@mozilla.org/file/directory_service;1".
 	if ( GetService_( "@mozilla.org/file/directory_service;1", DirectoryServiceProvider ) != NULL )
 		LOG;
 	else
