@@ -251,7 +251,7 @@
 		<xsl:if test="$AbsD&gt;3">
 			<xsl:variable name="AbsO">
 				<xsl:call-template name="Div12">
-					<xsl:with-param name="Num" select="$AbsC - 1"/>
+					<xsl:with-param name="Num" select="$AbsD - 1"/>
 				</xsl:call-template>
 			</xsl:variable>
 			<!--xsl:text>&nl;!!!!!!!!!!&nl;</xsl:text>

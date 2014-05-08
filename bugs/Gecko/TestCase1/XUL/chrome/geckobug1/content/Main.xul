@@ -32,4 +32,5 @@
 		width="400"
 >
 	<script type="text/javascript">geckobug1 = Components.classes['@zeusw.org/geckobug1;1'].createInstance().QueryInterface(Components.interfaces.IGeckoBug1);geckobug1.Test();</script>
+	<button label="test" oncommand="geckobug1.Test();"/>
 </window>

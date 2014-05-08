@@ -402,7 +402,7 @@ template <typename uint> static uint GenericUnsignedConversion_(
 	return Result;
 }
 
-template <typename sint> sint GenericSignedConversion_(
+template <typename sint, typename uint> sint GenericSignedConversion_(
 	const class string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
@@ -413,12 +413,15 @@ template <typename sint> sint GenericSignedConversion_(
 	if ( PositiveLimit < 0 )
 		ERRPrm();
 
+	if ( NegativeLimit > 0 )
+		ERRPrm();
+
 	if ( String.Get( Begin ) == '-' )
 		if ( String.Next( Begin ) == E_NIL ) {
 			*ErrP = *Begin + 1;
 			return 0;
 		} else 
-			return -(sint)GenericUnsignedConversion_( String, String.Next( Begin ), ErrP, Base, ( -NegativeLimit < 0 ? -1-NegativeLimit : -NegativeLimit ) );
+			return -(sint)GenericUnsignedConversion_<uint>( String, String.Next( Begin ), ErrP, Base, -NegativeLimit );
 	else if ( String.Get( Begin ) == '+' )
 		if ( String.Next( Begin ) == E_NIL ) {
 			if ( ErrP != NULL )
@@ -450,7 +453,7 @@ bso::s64__ str::_S64Conversion(
 	bso::s64__ PositiveLimit,
 	bso::s64__ NegativeLimit )
 {
-	return GenericSignedConversion_( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
+	return GenericSignedConversion_<bso::s64__, bso::u64__>( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
 }
 
 
@@ -473,7 +476,7 @@ sint__ str::_SIntConversion(
 	sint__ PositiveLimit,
 	sint__ NegativeLimit )
 {
-	return GenericSignedConversion_( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
+	return GenericSignedConversion_<sint__, uint__>( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
 }
 
 bso::lfloat__ string_::ToLF(
