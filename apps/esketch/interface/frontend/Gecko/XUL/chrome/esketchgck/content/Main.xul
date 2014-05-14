@@ -27,16 +27,15 @@
 		xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		xmlns:html="http://www.w3.org/1999/xhtml"
 		xmlns:xex="http://zeusw.org/epeios/xex"
-		onload_="register();stop();"
+		onload="register();stop();"
 		onunload="terminate();"
-		onload="create( 'esketchgck', '&Language;' );"
 		persist="height width screenX screenY Annex"
 >
 <!-- NOTA :'xex:onclose="..."' doesn't work on a 'window' element ... -->
 
 	<script type="text/javascript"
 			src="egeckocom.js"/>
-	<script type="text/javascript"></script>
+	<script type="text/javascript">create( 'esketchgck', '&Language;' );</script>
 	<broadcasterset id="bcsShapes"/>
 	<broadcasterset><!-- 'dsp...' -->
 		<broadcaster

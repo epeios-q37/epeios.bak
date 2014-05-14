@@ -47,34 +47,6 @@ namespace bso {
 	//t Boolean.
 	typedef bool bool__;
 
-	enum extended_boolean__ {
-		xbFalse,
-		xbNo = xbFalse,
-		xbTrue,
-		xbYes = xbTrue,
-		xb_amount,
-		xb_Undefined
-	};
-
-	typedef extended_boolean__ xbool__;
-
-	inline bso::bool__ Convert( xbool__ XBool )
-	{
-		switch ( XBool ) {
-		case xbFalse:
-			return false;
-			break;
-		case xbTrue:
-			return true;
-			break;
-		default:
-			ERRFwk();
-			break;
-		}
-
-		return false;	// Pour éviter un 'warning'.
-	}
-
 # define BSO__DEF( type, name, value )\
 	static const type##__ &name = value
 

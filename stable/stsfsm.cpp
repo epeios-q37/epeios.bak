@@ -57,7 +57,7 @@ public:
 
 using namespace stsfsm;
 
-int stsfsm::Add(
+id__ stsfsm::Add(
 	const str::string_ &Tag,
 	id__ Id,
 	automat_ &Automat )
@@ -127,6 +127,28 @@ status__ stsfsm::parser__::Handle( bso::u8__ C )
 	else
 		return sMatch;
 }
+
+status__ stsfsm::parser__::Handle(
+	const str::string_ &Pattern,
+	sdr::row__ &LostPosition )
+{
+	status__ Status = s_Undefined;
+	sdr::row__ Row = Pattern.First();
+
+	while ( ( Row != E_NIL ) && ( ( Status = Handle( Pattern( Row ) ) ) != sLost ) )
+		Row = Pattern.Next( Row );
+
+	if ( Row != E_NIL ) {
+		if ( Status != sLost )
+			ERRFwk();
+		else if ( &LostPosition != NULL )
+			LostPosition = Row;
+	} else if ( Status != sLost )
+		ERRFwk();
+
+	return Status;
+}
+
 
 id__ stsfsm::GetId_(
 	const str::string_ &Pattern,

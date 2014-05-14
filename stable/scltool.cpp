@@ -27,6 +27,7 @@
 				  /*******************************************/
 
 #include "cio.h"
+#include "tagsbs.h"
 
 #include "sclrgstry.h"
 #include "scllocale.h"
@@ -1035,14 +1036,14 @@ ERREpilog
 }
 
 
-typedef str::replace_callback__ _callback__;
+typedef tagsbs::callback__ _callback__;
 
 namespace {
 	class callback__
 	: public _callback__
 	{
 	protected:
-		bso::bool__ STRGetTagValue(
+		bso::bool__ TAGSBSGetTagValue(
 			const str::string_ &Tag,
 			str::string_ &Value )
 		{
@@ -1118,7 +1119,7 @@ ERRBegin
 	if ( Usage.Amount() != 0 ) {
 		Callback.Init();
 
-		if ( !str::ReplaceLongTags( Usage, Callback, '%' ) )
+		if ( tagsbs::SubstituteLongTags( Usage, Callback, '%' ) != E_NIL )
 			ERRFwk();
 
 		cio::COut << ' ' << Usage;

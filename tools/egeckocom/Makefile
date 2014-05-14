@@ -228,7 +228,7 @@ ifeq ("$(os)","$(GNULinux)")
 	
 	mods += $(pmods)
 	
-	libs += -L$(gdk)/lib -lxpcomglue -lpthread -ldl -lrt 
+	libs += -lpthread -ldl -lrt
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -244,7 +244,8 @@ ifeq ("$(os)","$(GNULinux)")
 	co += -fPIC
 	co += -std=c++0x
 	co += -D__STDC_LIMIT_MACROS
-
+	libs += -L$(gdk)/lib -lxpcomglue -lpthread -ldl -lrt 
+	
 endif
 
 #############################

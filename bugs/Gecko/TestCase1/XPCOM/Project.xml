@@ -22,8 +22,9 @@
   <Modules/>
   <Files>
 	  <File>CHANGELOG.txt</File><!-- Défini ici, en conjonction avec '_UserFiles=yes', sinon placé en '..'. -->
-	  <File>GeckoBug1.idl</File>
+	  <File>geckobug1.idl</File>
 	  <File Path="../XUL/chrome/geckobug1/content/">Main.xul</File>
+	  <File Path="../XUL/">geckobug1.ini</File>
   </Files>
   <SourceDirs>
   </SourceDirs>

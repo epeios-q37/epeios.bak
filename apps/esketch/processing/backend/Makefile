@@ -38,14 +38,17 @@ mods += ids iof iop lst lstbch
 mods += lstctn mns que sdr stk 
 mods += str strng tol ttr txf 
 mods += tys uys utf xtf cio 
-mods += llio bom cdgb64 fil fnm 
-mods += lcl rgstry stsfsm xml xpp 
+mods += tht llio bom cdgb64 fil 
+mods += fnm lcl rgstry stsfsm xml 
+mods += xpp 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += sclbacknd 
-mods += fblber fblbkd fblbrd fblbrr fblcmd 
-mods += fblcst fbltyp 
-mods += csdleo csdles 
-mods += registry wrpexample wrpunbound 
+mods += fblber fblbkd fblbrd fblbrq fblbrr 
+mods += fblbur fblcmd fblcst fbltyp fblovl 
+mods += csdleo csdles csdscb 
+mods += sktfbc sktinf sktxmp 
+mods += wrpexample wrpunbound 
+mods += common registry 
 
 pmods += pllio 
 
@@ -128,9 +131,9 @@ endif
 #############################
 	
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -225,6 +228,8 @@ ifeq ("$(os)","$(GNULinux)")
 	co += -DGNULINUX
 	
 	mods += $(pmods)
+	
+	libs += -lpthread -ldl -lrt
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -243,9 +248,9 @@ endif
 #############################
 		
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -253,6 +258,8 @@ ifeq ("$(os)","$(Linux)")
 	
 	mods += $(pmods)
 
+	libs += -lpthread -ldl -lrt
+	
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
 		lo += -m32
@@ -325,7 +332,7 @@ lo += -o $(target) $(objs)
 objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(target): $(objs)
-	$(CXX) $(LDFLAGS) $(lo) $(libs)
+	$(CXX) $(lo) $(libs) $(LDFLAGS)
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

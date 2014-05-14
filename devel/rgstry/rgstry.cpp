@@ -31,6 +31,7 @@
 #include "fnm.h"
 #include "lcl.h"
 #include "crptgr.h"
+#include "tagsbs.h"
 
 using namespace rgstry;
 
@@ -1685,7 +1686,7 @@ ERRProlog
 ERRBegin
 	Buffer.Init( _Path );
 
-	str::ReplaceShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
+	tagsbs::SubstituteShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
 
 	Path.Append( Buffer );
 ERRErr

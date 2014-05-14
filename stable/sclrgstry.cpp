@@ -30,6 +30,7 @@
 #include "lcl.h"
 #include "dir.h"
 #include "fnm.h"
+#include "tagsbs.h"
 
 #include "sclerror.h"
 #include "sclmisc.h"
@@ -150,13 +151,13 @@ ERRProlog
 	bso::bool__ Missing = false;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
-	str::ReplaceShortTag( Path, 1, str::string( Target ), '%' );
+	tagsbs::SubstituteShortTag( Path, 1, str::string( Target ), '%' );
 
 	EraseProject();
 
 	Context.Init();
 	if ( Registry_.Fill( ProjectLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
-		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
+		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
 	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
 ERRErr
@@ -258,9 +259,9 @@ ERREpilog
 	return Buffer;
 }
 
-static bso::xbool__ GetBoolean_( const str::string_ &Value )
+static tol::extended_boolean__ GetBoolean_( const str::string_ &Value )
 {
-	bso::xbool__ Boolean = bso::xb_Undefined;
+	tol::xbool__ Boolean = tol::xb_Undefined;
 ERRProlog
 	str::string Buffer;
 ERRBegin
@@ -268,9 +269,9 @@ ERRBegin
 	str::ToLower( Buffer );
 
 	if ( ( Buffer == "true" ) || ( Buffer == "yes" ) )
-		Boolean = bso::xbTrue;
+		Boolean = tol::xbTrue;
 	else if ( ( Buffer == "false" ) || ( Buffer == "no" ) )
-		Boolean = bso::xbFalse;
+		Boolean = tol::xbFalse;
 ERRErr
 ERREnd
 ERREpilog
@@ -289,13 +290,13 @@ ERRBegin
 
 	if ( GetValue( Entry, Value ) ) {
 		switch ( GetBoolean_( Value ) ) {
-		case bso::xbFalse:
+		case tol::xbFalse:
 			Result = false;
 			break;
-		case bso::xbTrue:
+		case tol::xbTrue:
 			Result = true;
 			break;
-		case bso::xb_Undefined:
+		case tol::xb_Undefined:
 			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 			break;
 		default:
@@ -318,13 +319,13 @@ ERRBegin
 	Value.Init();
 
 	switch ( GetBoolean_( GetMandatoryValue( Entry, Value ) ) ) {
-	case bso::xbFalse:
+	case tol::xbFalse:
 		Result = false;
 		break;
-	case bso::xbTrue:
+	case tol::xbTrue:
 		Result = true;
 		break;
-	case bso::xb_Undefined:
+	case tol::xb_Undefined:
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 		break;
 	default:

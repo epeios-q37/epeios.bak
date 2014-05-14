@@ -74,8 +74,9 @@ namespace stsfsm {
 
 	typedef bch::E_BUNCH_( crow__ ) crows_;
 
-	typedef int id__;
-	E_CDEF( id__, UndefinedId, INT_MAX );
+	typedef bso::uint__ id__;
+	E_CDEF( id__, UndefinedId, BSO_UINT_MAX );
+	E_CDEF( id__, IdMax, UndefinedId - 1 );
 
 	// Par défaut, cette valeur signifie qu'une 'card' n'est pas rattachée à une entrée. Dans ce cas 'Cards( 255 ) n'existe pas.
 	// Si les 255 entrée de la table sont utilisée et pointe tous sur des 'card's inutilisée, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
@@ -217,6 +218,9 @@ namespace stsfsm {
 			_Current = E_NIL;
 		}
 		status__ Handle( bso::u8__ C );
+		status__ Handle(
+			const str::string_ &Pattern,
+			sdr::row__ &LostPosition = *(sdr::row__ *)NULL );	// 'LostPosition' contient la position du caractère fautif lorsque la valeur retournée == 'sLost'.
 		id__ GetId( void ) const
 		{
 			ctn::E_CMITEMt( card_, crow__ ) Card;

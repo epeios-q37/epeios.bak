@@ -26,6 +26,8 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
+#include "tagsbs.h"
+
 using namespace lcl;
 
 static inline vrow__ NewValue_(
@@ -376,7 +378,7 @@ ERRBegin
 	Tags.Init();
 	GetTags_( Basic.Tags, Core, Language, Locale, Tags );
 
-	str::ReplaceShortTags( Intermediate, Tags, LCL_TAG_MARKER_C );
+	tagsbs::SubstituteShortTags( Intermediate, Tags, LCL_TAG_MARKER_C );
 
 	Translation = Intermediate;
 ERRErr

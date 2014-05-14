@@ -42,7 +42,7 @@ using cio::CIn;
 
 #define NAME "expp"
 
-const char *scltool::TargetName = NAME;
+const char *sclmisc::SCLMISCTargetName = NAME;
 
 #define DEFAULT_NAMESPACE	XPP__PREPROCESSOR_DEFAULT_NAMESPACE
 
@@ -264,7 +264,7 @@ ERREnd
 ERREpilog
 }
 
-void scltool::Main( const str::string_ &Command )
+void scltool::SCLTOOLMain( const str::string_ &Command )
 {
 ERRProlog
 	str::string Translation;
@@ -277,7 +277,7 @@ ERRBegin
 		PrintHeader_();
 	else if ( Command == "License" ) {
 		Translation.Init();
-		scltool::GetTranslation( "License", Translation );
+		sclmisc::GetTranslation( "License", Translation );
 		cio::COut << Translation << txf::nl;
 	}
 	else

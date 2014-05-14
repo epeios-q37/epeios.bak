@@ -35,7 +35,7 @@
 # define STF( name )\
 	inline const str::string_ &Get##name##Translation( str::string_ &Translation )\
 	{\
-		return scllocale::GetTranslation( Label( t##name ), scltool::GetLanguage(), Translation );\
+		return sclmisc::GetTranslation( Label( t##name ), Translation );\
 	}
 
 // 'Simple Meaning Function'. To get the translation of messages which do not need parameters.

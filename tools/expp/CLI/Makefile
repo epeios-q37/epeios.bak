@@ -3,7 +3,7 @@
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
-#	Copyright (C) 2007, 2008, 2010-2013 Claude SIMON.
+#	Copyright (C) 2007, 2008, 2010-2014 Claude SIMON.
 #
 #	This file is part of 'expp'.
 #
@@ -293,7 +293,7 @@ all: $(target)
 	rm -f *.o
 
 copt += -DVERSION=\""20131017"\"
-copt += -DCOPYRIGHT_YEARS=\""2007, 2008, 2010-2013"\"
+copt += -DCOPYRIGHT_YEARS=\""2007, 2008, 2010-2014"\"
 
 ifndef EPEIOS_SRC
 	src += :src

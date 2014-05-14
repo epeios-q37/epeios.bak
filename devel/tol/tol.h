@@ -76,6 +76,11 @@
 
 # include "bso.h"
 
+namespace sdr {
+	struct row_t__;
+	struct row__;
+}
+
 namespace tol
 {
 	typedef char buffer__[20];
@@ -86,7 +91,104 @@ namespace tol
 		r_amount,
 		r_Undefined,
 	};
+
+	enum extended_boolean__ {
+		xbFalse,
+		xbNo = xbFalse,
+		xbTrue,
+		xbYes = xbTrue,
+		xb_amount,
+		xb_Undefined
+	};
+
+	class xbool__ {
+	private:
+		extended_boolean__ _Boolean;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			_Boolean = xb_Undefined;
+		}
+		~xbool__( void )
+		{
+			reset( true );
+		}
+		xbool__( extended_boolean__ Boolean = xb_Undefined )
+		{
+			reset( false );
+			_Boolean = Boolean;
+		}
+		void Init( void )
+		{
+			_Boolean = xb_Undefined;
+		}
+		operator extended_boolean__( void ) const
+		{
+			return _Boolean;
+		}
+		extended_boolean__ operator *( void ) const
+		{
+			return _Boolean;
+		}
+		operator bso::bool__( void ) const
+		{
+			switch ( _Boolean ) {
+			case xbFalse:
+				return false;
+				break;
+			case xbTrue:
+				return true;
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
+
+			return false;	// Pour éviter un 'warning'.
+		}
+	};
+
+	// NOTA : 'E_NIL' pas encore connu, d'où utilisation de '-1'.
+	template <typename r> class extended_row__	// Pour les fonctions renvoyant un 'Row' dont une value difféérent de 'E_NIL' représente une erreur.
+	{
+	private:
+		r _Row;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			_Row = -1;
+		}
+		extended_row__( r Row = -1 )
+		{
+			reset( false );
+			_Row = Row;
+		}
+		~extended_row__( void )
+		{
+			reset( true );
+		}
+		void Init( void )
+		{
+			_Row = -1;
+		}
+		operator bool( void ) const
+		{
+			return _Row == -1;
+		}
+		operator r( void ) const
+		{
+			return _Row;
+		}
+		operator sdr::row_t__( void ) const
+		{
+			return *_Row;
+		}
+	};
 }
+
+# define E_XROWt( type )	extended_row__<type>
+
+# define E_XROW	E_XROWt( sdr::row__ )
 
 // Définition d'une constante par valeur.
 # define E_CDEF( type, name, value )\
@@ -899,10 +1001,6 @@ pour parvenir au même résultat que 'E_XNAVt(...)'. */
 // PRédéclaration.
 namespace ags {
 	class aggregated_storage_;
-}
-
-namespace sdr {
-	struct row__;
 }
 
 namespace tol {

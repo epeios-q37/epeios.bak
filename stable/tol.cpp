@@ -40,7 +40,7 @@ using namespace tol;
 	uint32_t tol::_Denom = 0;
 #endif
 
-static bso::xbool__ SystemCommandIsAvailable_ = bso::xb_Undefined;
+static xbool__ SystemCommandIsAvailable_ = xb_Undefined;
 
 /*
 int system( const char * )
@@ -53,14 +53,14 @@ int system( const char * )
 
 inline bso::bool__ tol::IsSystemCommandAvailable( void )
 {
-	switch ( SystemCommandIsAvailable_ ) {
-	case bso::xbTrue:
+	switch ( *SystemCommandIsAvailable_ ) {
+	case xbTrue:
 		return true;
 		break;
-	case bso::xbFalse:
+	case xbFalse:
 		return false;
 		break;
-	case bso::xb_Undefined:
+	case xb_Undefined:
 		ERRFwk();
 		break;
 	default:
@@ -197,9 +197,9 @@ static inline void ExitOnSignal_( void )
 static inline void SetSystemCommandAvailabitity_( void )
 {
 	if ( system( NULL ) != 0 )
-		SystemCommandIsAvailable_ = bso::xbTrue;
+		SystemCommandIsAvailable_ = xbTrue;
 	else
-		SystemCommandIsAvailable_ = bso::xbFalse;
+		SystemCommandIsAvailable_ = xbFalse;
 }
 
 /* Although in theory this class is inaccessible to the different modules,
