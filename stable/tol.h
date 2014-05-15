@@ -77,7 +77,6 @@
 # include "bso.h"
 
 namespace sdr {
-	struct row_t__;
 	struct row__;
 }
 
@@ -178,10 +177,6 @@ namespace tol
 		operator r( void ) const
 		{
 			return _Row;
-		}
-		operator sdr::row_t( void ) const
-		{
-			return *_Row;
 		}
 	};
 }

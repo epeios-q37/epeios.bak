@@ -1119,7 +1119,7 @@ ERRBegin
 	if ( Usage.Amount() != 0 ) {
 		Callback.Init();
 
-		if ( tagsbs::SubstituteLongTags( Usage, Callback, '%' ) != E_NIL )
+		if ( !tagsbs::SubstituteLongTags( Usage, Callback, '%' ) )
 			ERRFwk();
 
 		cio::COut << ' ' << Usage;
