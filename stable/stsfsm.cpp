@@ -143,7 +143,7 @@ status__ stsfsm::parser__::Handle(
 			ERRFwk();
 		else if ( &LostPosition != NULL )
 			LostPosition = Row;
-	} else if ( Status != sLost )
+	} else if ( Status == sLost )
 		ERRFwk();
 
 	return Status;

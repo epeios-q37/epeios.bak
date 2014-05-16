@@ -220,9 +220,8 @@ tol::E_XROW tagsbs::SubstituteLongTags(
 	callback__ &Callback,
 	char Marker )
 {
-	bso::bool__ Success = false;
-ERRProlog
 	sdr::row__ Row = E_NIL;
+ERRProlog
 	str::string Tag, Value;
 ERRBegin
 	Row = String.First();
@@ -244,12 +243,10 @@ ERRBegin
 		} else
 			Row = String.Next( Row );
 	}
-
-	Success = true;
 ERRErr
 ERREnd
 ERREpilog
-	return Success;
+	return Row;
 }
 
 static void FillAutomat_(
@@ -327,7 +324,7 @@ tol::E_XROW tagsbs::SubstituteLongTags(
 	const str::strings_ &Values,
 	char TagMarker )
 {
-	sdr::row__ ErrorRow = E_NIL;
+	sdr::row__ Row = E_NIL;
 ERRProlog
 	callback___ Callback;
 ERRBegin
@@ -338,11 +335,11 @@ ERRBegin
 
 	FillAutomat_( Tags, Callback.Automat );
 
-	ErrorRow = SubstituteLongTags( String, Callback, TagMarker );
+	Row = SubstituteLongTags( String, Callback, TagMarker );
 ERRErr
 ERREnd
 ERREpilog
-	return ErrorRow;
+	return Row;
 }
 
 
