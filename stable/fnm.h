@@ -36,6 +36,7 @@
 # include "cpe.h"
 # include "tol.h"
 # include "strng.h"
+# include "ntvstr.h"
 
 # if defined( CPE_POSIX )
 #  define FNM__POSIX
@@ -45,88 +46,11 @@
 #  error "Unknown target !"
 # endif
 
-// Pour éviter d'avoir à inclure 'str.h'
-namespace str {
-	class string_;
-}
-
 namespace fnm
 {
-# ifdef FNM__POSIX
-	typedef bso::char__ base__;
-# elif defined( FNM__WIN )
-	typedef wchar_t base__;
-# endif
-
-	typedef tol::E_BUFFER___( base__ ) core___;
-
-	typedef tol::E_BUFFER___( bso::char__ ) buffer___;
-
-	class name___
-	{
-	private:
-		core___ _Core;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_Core.reset( P );
-		}
-		E_CDTOR( name___ );
-		name___( const char *Name )
-		{
-			reset( false );
-
-			Init( Name );
-		}
-		name___( const str::string_ &Name )
-		{
-			reset( false );
-			Init( Name );
-		}
-		name___ &operator =( const name___ &N );
-		void Init( void )
-		{
-			// _Core.Init();	// C'est un buffer, donc pas d'initialisation.
-			_Core.Malloc( 1 );
-			*_Core = 0;
-		}
-		void Init( const bso::char__ *Name );
-		void Init( const str::string_ &Name );
-		void Init( const name___ &Name )
-		{
-			Init();
-
-			operator =( Name );
-		}
-		void Forget( void )
-		{
-			_Core.Forget();
-		}
-		const bso::char__ *UTF8( TOL_CBUFFER___ &Buffer ) const;
-		const str::string_ &UTF8( str::string_ &Buffer ) const;
-		const core___ &Core( void ) const
-		{
-			return _Core;
-		}
-		core___ &Core( void )
-		{
-			return _Core;
-		}
-		bso::size__ Size( void ) const
-		{
-			if ( _Core == NULL )
-				return 0;
-			else
-# ifdef FNM__WIN
-				return wcslen( _Core );
-# elif defined( FNM__POSIX )
-				return strlen( _Core );
-# else
-#  error
-# endif
-		}
-	};
-
+	using ntvstr::base__;
+	using ntvstr::core___;
+	typedef ntvstr::nstring___ name___;
 
 	//e Different type of file name.
 	enum type__ {
