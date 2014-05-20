@@ -88,11 +88,11 @@ void ntvstr::nstring___::Init( const bso::char__ *String )
 			ERRLbr();
 	}
 # elif defined( NTVSTR__POSIX )
-	bso::size__ Size = strlen_( Name );
+	bso::size__ Size = strlen_( String );
 
 	_Core.Malloc( Size + 1 );
 
-	strcpy_( _Core, Name );
+	strcpy_( _Core, String );
 # else
 #  error
 # endif
