@@ -80,6 +80,10 @@ namespace sdr {
 	struct row__;
 }
 
+namespace ntvstr {
+	class nstring___;
+}
+
 namespace tol
 {
 	typedef char buffer__[20];
@@ -623,7 +627,7 @@ namespace tol {
 
 	bso::bool__ IsSystemCommandAvailable( void );
 
-	int System( const char *Command );
+	int System( const ntvstr::nstring___ &Command );
 
 	//f Return the current date.
 	const char *Date( buffer__ &Buffer );

@@ -62,7 +62,7 @@ namespace ntvstr {
 # elif defined( NTVSTR__WIN )
 	typedef wchar_t base__;
 	E_CDEF( unsigned int, UTF8, CP_UTF8 );
-	E_CDEF( unsigned int, Native, CP_ACP );
+	E_CDEF( unsigned int, Native, CP_OEMCP );
 # else
 #  error
 # endif

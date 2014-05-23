@@ -73,15 +73,21 @@ inline bso::bool__ tol::IsSystemCommandAvailable( void )
 
 #undef system
 
-int tol::System( const char *Command )
+int tol::System( const ntvstr::nstring___ &Command )
 {
-	if ( Command == NULL )
+	if ( Command.Size() == 0 )
 		return system( NULL );
 
 	if ( !IsSystemCommandAvailable() )
 		ERRSys();
 
-	int Result = system( Command );
+#ifdef TOL__WIN
+	int Result = _wsystem( Command.Core() );
+#elif defined( TOL__POSIX )
+	int Result = system( Command.Core() );
+#else
+# error
+#endif
 
 	if ( Result == -1 )
 		ERRSys();
