@@ -270,6 +270,7 @@ static void FillAutomat_(
 
 typedef callback__ _callback__;
 
+/// 'namespace {...}' parce que sinon VC++ 12 se mélange les pinceaux...
 namespace {
 	class callback___
 	: public _callback__
