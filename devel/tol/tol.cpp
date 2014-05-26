@@ -28,6 +28,8 @@
 
 #include "fil.h"
 
+#include "str.h"
+
 using namespace tol;
 
 /*
@@ -81,10 +83,24 @@ int tol::System( const ntvstr::nstring___ &Command )
 	if ( !IsSystemCommandAvailable() )
 		ERRSys();
 
+	int Result = EXIT_FAILURE;
+
 #ifdef TOL__WIN
-	int Result = _wsystem( Command.Core() );
+ERRProlog
+	str::string ModifiedCommand;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	// '_wsystem()' lance en fait "cmd /c ...". Or; lorsque cette commande reçoit un paramètre commençant par '"' (hors espaces),
+	// et avec plus d'un jeu de '"', elle en enlève certains (void "cmd /?"). Placer 'echo >NUL && ' en tête de paramètre résoud ce problème...
+	ModifiedCommand.Init("echo >NUL && ");
+	ModifiedCommand.Append( Command.UTF8( Buffer ) );
+
+	Result = _wsystem( ntvstr::nstring___( ModifiedCommand ).Core() );
+ERRErr
+ERREnd
+ERREpilog
 #elif defined( TOL__POSIX )
-	int Result = system( Command.Core() );
+	Result = system( Command.Core() );
 #else
 # error
 #endif

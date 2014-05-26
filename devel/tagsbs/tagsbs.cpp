@@ -270,53 +270,55 @@ static void FillAutomat_(
 
 typedef callback__ _callback__;
 
-class callback___
-: public _callback__
-{
-protected:
-	virtual bso::bool__ TAGSBSGetTagValue(
-		const str::string_ &Tag,
-		str::string_ &Value )
+namespace {
+	class callback___
+	: public _callback__
 	{
-		stsfsm::parser__ Parser;
-		sdr::row__ Row = E_NIL;
+	protected:
+		virtual bso::bool__ TAGSBSGetTagValue(
+			const str::string_ &Tag,
+			str::string_ &Value )
+		{
+			stsfsm::parser__ Parser;
+			sdr::row__ Row = E_NIL;
 
-		Parser.Init( Automat );
+			Parser.Init( Automat );
 
-		if ( Parser.Handle( Tag ) != stsfsm::sMatch ) {
-			BadTag = Tag;
-			return false;
+			if ( Parser.Handle( Tag ) != stsfsm::sMatch ) {
+				BadTag = Tag;
+				return false;
+			}
+
+			Row = Parser.GetId();
+
+			if ( !Values->Exists( Row ) )
+				ERRFwk();
+
+			Values->Recall( Row, Value );
+
+			return true;
 		}
-
-		Row = Parser.GetId();
-
-		if ( !Values->Exists( Row ) )
-			ERRFwk();
-
-		Values->Recall( Row, Value );
-
-		return true;
-	}
-public:
-	stsfsm::automat Automat;
-	const str::strings_ *Values;
-	str::string BadTag;
-	void reset( bso::bool__ P = true )
-	{
-		_callback__::reset( P );
-		Automat.reset( P );
-		Values = NULL;
-		BadTag.reset( P );
-	}
-	E_CVDTOR( callback___ );
-	void Init( const str::strings_ &Values )
-	{
-		_callback__::Init();
-		Automat.Init();
-		this->Values = &Values;
-		BadTag.Init();
-	}
-};
+	public:
+		stsfsm::automat Automat;
+		const str::strings_ *Values;
+		str::string BadTag;
+		void reset( bso::bool__ P = true )
+		{
+			_callback__::reset( P );
+			Automat.reset( P );
+			Values = NULL;
+			BadTag.reset( P );
+		}
+		E_CVDTOR( callback___ );
+		void Init( const str::strings_ &Values )
+		{
+			_callback__::Init();
+			Automat.Init();
+			this->Values = &Values;
+			BadTag.Init();
+		}
+	};
+}
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &String,
