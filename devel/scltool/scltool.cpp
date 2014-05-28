@@ -1036,7 +1036,7 @@ ERREpilog
 }
 
 
-typedef tagsbs::callback__ _callback__;
+typedef tagsbs::long_tags_callback__ _callback__;
 
 namespace {
 	class callback__

@@ -43,6 +43,8 @@
 # include "xpp.h"
 # include "stk.h"
 # include "fnm.h"
+# include "tagsbs.h"
+
 
 # define RGSTRY__TAG_MARKER_S	"$"
 # define RGSTRY__TAG_MARKER_C	'$'
@@ -193,6 +195,11 @@ namespace rgstry {
 		const entry___ *_Parent;
 		const char *_RawPath;
 		mutable str::string _Path;
+	protected:
+		virtual tagsbs::short_tags_callback__ &RGSTRYGetTagSubstitutionCallback( void ) const
+		{
+			return *(tagsbs::short_tags_callback__ *)NULL;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -206,6 +213,10 @@ namespace rgstry {
 		{
 			reset( false );
 			Init( Path, Parent );
+		}
+		virtual ~entry___( void )
+		{
+			reset();
 		}
 		void Init(
 			const char *Path = NULL,	// Non dupliqué !
@@ -258,6 +269,11 @@ namespace rgstry {
 		{
 			reset();
 		}
+		void Init( void )
+		{
+			_Entry = NULL;
+			_Tags = NULL;
+		}
 		void Init(
 			const entry___ &Entry,
 			const tags_ &Tags = *(const tags_ *)NULL )
@@ -286,6 +302,10 @@ namespace rgstry {
 
 			_Tags.reset( P );
 		}
+		tentry___( void )
+		{
+			reset( false );
+		}
 		tentry___(
 			const entry___ &Entry,
 			const str::string_ &Tag )
@@ -301,6 +321,16 @@ namespace rgstry {
 			reset( false );
 
 			Init( Entry, Tag );
+		}
+		~tentry___( void )
+		{
+			reset();
+		}
+		void Init( void )
+		{
+			_Tags.Init();
+
+			tentry__::Init();
 		}
 		void Init(
 			const entry___ &Entry,

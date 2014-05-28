@@ -42,19 +42,51 @@
 namespace tagsbs {
 	E_CDEF( char, DefaultTagMarker, '%' );
 
+	typedef bso::u8__ indice__;
+
 	// '%1', '%2'... (en supposant '%' comme marqueur).
 	void SubstituteShortTag(
 		str::string_ &String,
-		bso::u8__ Indice,
+		indice__ Indice,
 		const str::string_ &Value,
 		char TagMarker = DefaultTagMarker );
 
-	void SubstituteShortTags(
+	class short_tags_callback__
+	{
+	protected:
+		virtual bso::bool__ TAGSBSGetTagValue(
+			indice__ Indice,
+			str::string_ &Value ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( short_tags_callback__ )
+		void Init( void )
+		{
+			// Standadisation.
+		}
+		const bso::bool__ GetTagValue(
+			indice__ Indice,
+			str::string_ &Value )
+		{
+			return TAGSBSGetTagValue( Indice, Value );
+		}
+	};
+
+	// Si retourne 0, pas d'erreur, sinon indice du tag posant problème.
+	indice__ SubstituteShortTags(
+		str::string_ &String,
+		short_tags_callback__ &Callback,
+		char TagMarker = DefaultTagMarker );
+
+	indice__ SubstituteShortTags(
 		str::string_ &String,
 		const str::strings_ &Values,
 		char TagMarker = DefaultTagMarker );
 
-	class callback__
+	class long_tags_callback__
 	{
 	protected:
 		virtual bso::bool__ TAGSBSGetTagValue(
@@ -65,7 +97,7 @@ namespace tagsbs {
 		{
 			// Standardisation.
 		}
-		E_CVDTOR( callback__ )
+		E_CVDTOR( long_tags_callback__ )
 		void Init( void )
 		{
 			// Standadisation.
@@ -81,7 +113,7 @@ namespace tagsbs {
 	// '%TagName%", en prenant '%' comme marqueur.
 	tol::E_XROW SubstituteLongTags(
 		str::string_ &String,
-		callback__ &Callback,
+		long_tags_callback__ &Callback,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
 
 	tol::E_XROW SubstituteLongTags(

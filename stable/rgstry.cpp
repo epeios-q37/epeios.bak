@@ -31,7 +31,6 @@
 #include "fnm.h"
 #include "lcl.h"
 #include "crptgr.h"
-#include "tagsbs.h"
 
 using namespace rgstry;
 
@@ -1683,10 +1682,17 @@ const str::string_ &rgstry::entry___::_GetPath(
 {
 ERRProlog
 	str::string Buffer;
+	tagsbs::short_tags_callback__ *TagSubstitutionCallback = NULL;
 ERRBegin
 	Buffer.Init( _Path );
 
-	tagsbs::SubstituteShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
+	if ( Tags.Amount() == 0 )
+		TagSubstitutionCallback = &RGSTRYGetTagSubstitutionCallback();
+
+	if ( TagSubstitutionCallback == NULL )
+		tagsbs::SubstituteShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
+	else
+		tagsbs::SubstituteShortTags( Buffer, *TagSubstitutionCallback, RGSTRY__TAG_MARKER_C );
 
 	Path.Append( Buffer );
 ERRErr

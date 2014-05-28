@@ -30,36 +30,79 @@
 
 using namespace tagsbs;
 
+void tagsbs::SubstituteShortTag(
+	str::string_ &String,
+	indice__ Indice,
+	const str::string_ &Value,
+	const char TagMarker )
+{
+ERRProlog
+	str::strings Values;
+	indice__ Counter = 1;
+	bso::integer_buffer__ Buffer;
+	str::string Tag;
+ERRBegin
+	if ( ( Indice == 0 ) || ( Indice > 9 ) )
+		ERRPrm();
+
+	Values.Init();
+
+	while ( Counter != Indice ) {
+		Tag.Init();
+		Tag.Append( TagMarker );
+		Tag.Append( bso::Convert( Counter, Buffer ) );
+
+		Values.Append( Tag );
+
+		Counter++;
+	}
+
+	Values.Append( Value );
+
+	SubstituteShortTags( String, Values, TagMarker );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+E_CDEF( indice__, Limit, 9 );
+
 // Remplace le tag d'indice '0' par la liste des valeurs.
 static void Replace0Tag_(
 	str::string_ &Message,
-	const str::strings_ &Values,
+	short_tags_callback__ &Callback,
 	const char TagMarker )
 {
 ERRProlog
 	str::string MergedValues;
-	ctn::E_CMITEM( str::string_ ) Value;
-	sdr::row__ Row = E_NIL;
+	str::string Value;
 	str::string Tag;
+	indice__ Indice = 0;
+	sdr::row__ Row = E_NIL;
 ERRBegin
-	Value.Init( Values );
-
-	Row = Values.First();
 
 	MergedValues.Init( " (" );
 
-	if ( Row != E_NIL ) {
+	Value.Init();
+
+	while ( ( Indice <= Limit ) && ( !Callback.GetTagValue( Indice, Value ) ) )
+		Indice++;
+
+	if ( Indice <= Limit ) {
 		MergedValues.Append( '\'' );
-		MergedValues.Append( Value( Row ) );
+		MergedValues.Append( Value );
 		MergedValues.Append( '\'' );
-		Row = Values.Next( Row );
+		Indice++;
 	}
 
-	while ( Row != E_NIL ) {
-		MergedValues.Append( " ,'" );
-		MergedValues.Append( Value( Row ) );
-		MergedValues.Append( '\'' );
-		Row = Values.Next( Row );
+	while ( Indice <= Limit ) {
+		if ( Callback.GetTagValue(Indice, Value) ) {
+			MergedValues.Append( " ,'" );
+			MergedValues.Append( Value );
+			MergedValues.Append( '\'' );
+		}
+
+		Indice++;
 	}
 
 	MergedValues.Append( ") " );
@@ -86,43 +129,44 @@ ERREnd
 ERREpilog
 }
 
-void tagsbs::SubstituteShortTags(
+indice__ tagsbs::SubstituteShortTags(
 	str::string_ &String,
-	const str::strings_ &Values,
-	const char TagMarker )
+	short_tags_callback__ &Callback,
+	char TagMarker )
 {
+	indice__ IndiceError = 0;
 ERRProlog
-	ctn::E_CMITEM( str::string_ ) Value;
-	bso::u8__ Indice = 1;
-	sdr::row__ Row = E_NIL, SearchRow = E_NIL;
-	str::string Tag;
+	indice__ Indice = 1;
+	sdr::row__ SearchRow = E_NIL;
+	str::string Tag, Value;
 	bso::integer_buffer__ Buffer;
+	bso::bool__ ValueExists = false;
 ERRBegin
-	if ( Values.Amount() > 9 )
-		ERRLmt();
+	Replace0Tag_( String, Callback, TagMarker );
 
-	Replace0Tag_( String, Values, TagMarker );
-
-	Value.Init( Values );
-
-	Row = Values.First();
-
-	while ( Row != E_NIL ) {
+	while ( Indice <= Limit ) {
 		Tag.Init();
 		Tag.Append( TagMarker );
 		Tag.Append( bso::Convert( Indice, Buffer ) );
 
+		Value.Init();
+
+		ValueExists = Callback.GetTagValue( Indice, Value );
+
 		SearchRow = String.Search( Tag );
 
 		while ( SearchRow != E_NIL ) {
+			if ( !ValueExists ) {
+				IndiceError = Indice;
+				ERRReturn;
+			}
+
 			String.Remove( SearchRow, Tag.Amount() );
 
-			String.Insert( Value( Row ), SearchRow );
+			String.Insert( Value, SearchRow );
 
 			SearchRow = String.Search( Tag, SearchRow );
 		}
-
-		Row = Values.Next( Row );
 
 		Indice++;
 	}
@@ -144,41 +188,54 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
+	return IndiceError;
 }
 
-void tagsbs::SubstituteShortTag(
+/// 'namespace {...}' parce que sinon VC++ 12 se mélange les pinceaux...
+namespace {
+	class shorts_callback___
+	: public short_tags_callback__
+	{
+	protected:
+		virtual bso::bool__ TAGSBSGetTagValue(
+			indice__ Indice,
+			str::string_ &Value )
+		{
+			sdr::row__ Row = Indice - 1;
+
+			if ( !Values->Exists( Row ) )
+				return false;
+
+			Values->Recall( Row, Value );
+
+			return true;
+		}
+	public:
+		const str::strings_ *Values;
+		void reset( bso::bool__ P = true )
+		{
+			short_tags_callback__::reset( P );
+			Values = NULL;
+		}
+		E_CVDTOR( shorts_callback___ );
+		void Init( const str::strings_ &Values )
+		{
+			short_tags_callback__::Init();
+			this->Values = &Values;
+		}
+	};
+}
+
+indice__ tagsbs::SubstituteShortTags(
 	str::string_ &String,
-	bso::u8__ Indice,
-	const str::string_ &Value,
+	const str::strings_ &Values,
 	const char TagMarker )
 {
-ERRProlog
-	str::strings Values;
-	bso::u8__ Counter = 1;
-	bso::integer_buffer__ Buffer;
-	str::string Tag;
-ERRBegin
-	if ( ( Indice == 0 ) || ( Indice > 9 ) )
-		ERRPrm();
+	shorts_callback___ Callback;
 
-	Values.Init();
+	Callback.Init( Values );
 
-	while ( Counter != Indice ) {
-		Tag.Init();
-		Tag.Append( TagMarker );
-		Tag.Append( bso::Convert( Counter, Buffer ) );
-
-		Values.Append( Tag );
-
-		Counter++;
-	}
-
-	Values.Append( Value );
-
-	SubstituteShortTags( String, Values, TagMarker );
-ERRErr
-ERREnd
-ERREpilog
+	return SubstituteShortTags( String, Callback, TagMarker );
 }
 
 static bso::bool__ GetTag_(
@@ -217,7 +274,7 @@ static bso::bool__ GetTag_(
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &String,
-	callback__ &Callback,
+	long_tags_callback__ &Callback,
 	char Marker )
 {
 	sdr::row__ Row = E_NIL;
@@ -268,12 +325,10 @@ static void FillAutomat_(
 	}
 }
 
-typedef callback__ _callback__;
-
 /// 'namespace {...}' parce que sinon VC++ 12 se mélange les pinceaux...
 namespace {
-	class callback___
-	: public _callback__
+	class longs_callback___
+	: public long_tags_callback__
 	{
 	protected:
 		virtual bso::bool__ TAGSBSGetTagValue(
@@ -305,21 +360,23 @@ namespace {
 		str::string BadTag;
 		void reset( bso::bool__ P = true )
 		{
-			_callback__::reset( P );
+			long_tags_callback__::reset( P );
 			Automat.reset( P );
 			Values = NULL;
 			BadTag.reset( P );
 		}
-		E_CVDTOR( callback___ );
+		E_CVDTOR( longs_callback___ );
 		void Init( const str::strings_ &Values )
 		{
-			_callback__::Init();
+			long_tags_callback__::Init();
 			Automat.Init();
 			this->Values = &Values;
 			BadTag.Init();
 		}
 	};
 }
+
+
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &String,
@@ -329,7 +386,7 @@ tol::E_XROW tagsbs::SubstituteLongTags(
 {
 	sdr::row__ Row = E_NIL;
 ERRProlog
-	callback___ Callback;
+	longs_callback___ Callback;
 ERRBegin
 	if ( Tags.Amount() != Values.Amount() )
 		ERRFwk();
