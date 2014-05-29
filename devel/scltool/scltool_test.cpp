@@ -38,8 +38,11 @@ void scltool::SCLTOOLMain( const str::string_ &Command )
 ERRProlog
 	str::string Argument;
 ERRBegin
+	cio::COut << txf::tab << "----- Configuration -----" << txf::nl;
 	sclrgstry::GetRegistry().Dump( sclrgstry::GetConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Project -----" << txf::nl;
 	sclrgstry::GetRegistry().Dump( sclrgstry::GetProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Setup -----" << txf::nl;
 	sclrgstry::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;

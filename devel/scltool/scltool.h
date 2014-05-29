@@ -44,12 +44,15 @@
 # include "sclrgstry.h"
 
 namespace scltool {
+
+# if 0	// Oboslete ?
 	enum command {
 		cHelp,
 		cVersion,
 		cLicense,
 		c_amount
 	};
+# endif
 
 	// A définir par l'utilisateur.
 	void SCLTOOLMain( const str::string_ &Command );

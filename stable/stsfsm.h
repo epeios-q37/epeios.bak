@@ -236,12 +236,12 @@ namespace stsfsm {
 
 	template <typename type> inline void FillAutomat(
 		automat_ &Automat,
-		type Limit,
+		type Amount,
 		const char *(* GetLabel)( type ) )
 	{
 		int i = 0;
 
-		while ( i < Limit ) {
+		while ( i < Amount ) {
 			if ( Add( GetLabel( (type)i ), i, Automat ) != UndefinedId )
 				ERRFwk();
 
@@ -252,12 +252,12 @@ namespace stsfsm {
 	template <typename type, typename version> inline void FillAutomat(
 		version Version,
 		automat_ &Automat,
-		type Limit,
+		type Amount,
 		const char *(* GetLabel)( version, type ) )
 	{
 		int i = 0;
 
-		while ( i < Limit ) {
+		while ( i < Amount ) {
 			if ( Add( GetLabel( Version, (type)i ), i, Automat ) != UndefinedId )
 				ERRFwk();
 
