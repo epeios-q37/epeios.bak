@@ -192,7 +192,7 @@ ERRBegin
 	if ( sclrgstry::GetValue( sclrgstry::Language, Language ) )
 		Language.Convert( Language_ );
 
-	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format());
+	LoadLocale_( sclrgstry::GetConfigurationRegistryLevel(), scllocale::tConfiguration, RegistryFlow.Format());
 ERRErr
 ERREnd
 ERREpilog
@@ -354,9 +354,9 @@ ERREnd
 ERREpilog
 }
 
-void sclmisc::EraseProject( void )
+void sclmisc::EraseProjectRegistry( void )
 {
-	sclrgstry::EraseProject();
+	sclrgstry::EraseProjectRegistry();
 	scllocale::EraseLocale( scllocale::tProject );
 }
 
@@ -367,7 +367,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tConfiguration, utf::f_Default );
+	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tConfiguration, utf::f_Default );
 }
 
 

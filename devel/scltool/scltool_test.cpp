@@ -39,21 +39,16 @@ ERRProlog
 	rgstry::row__ Row = E_NIL;
 	rgstry::level__ Level = E_NIL;
 ERRBegin
-	cio::COut << txf::tab << "----- Configuration -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( sclrgstry::GetConfigurationLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
-	cio::COut << txf::tab << "----- Project -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( sclrgstry::GetProjectLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
-	cio::COut << txf::tab << "----- Setup -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Configuration registry -----" << txf::nl;
+	sclrgstry::GetRegistry().Dump( sclrgstry::GetConfigurationRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Project registry -----" << txf::nl;
+	sclrgstry::GetRegistry().Dump( sclrgstry::GetProjectRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Setup registry -----" << txf::nl;
+	sclrgstry::GetRegistry().Dump( scltool::GetSetupRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Arguments registry -----" << txf::nl;
+	sclrgstry::GetRegistry().Dump( scltool::GetArgumentsRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;
-
-	Row = sclrgstry::GetRegistry().Search(rgstry::entry___( "Layouts/Layout[id=\"toto\"]" ), Level );
-
-	sclrgstry::GetRegistry().Dump( Level, Row, false, xml::oIndent, xml::e_Default, cio::COut );
-
-
-	Row = Row;
 ERRErr
 ERREnd
 ERREpilog

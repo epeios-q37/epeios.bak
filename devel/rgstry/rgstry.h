@@ -1387,6 +1387,7 @@ namespace rgstry {
 # endif
 	E_ROW( level__ );
 #	define RGSTRY_UNDEFINED_LEVEL	E_NIL
+	E_CDEF( level__, UndefinedLevel, E_NIL );
 
 	struct _entry__ {
 		row__ Root;

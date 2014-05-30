@@ -39,11 +39,21 @@ using namespace scltool;
 using cio::COut;
 using scllocale::GetLocale;
 
-static rgstry::level__ RegistrySetupLevel_ = RGSTRY_UNDEFINED_LEVEL;
+static rgstry::level__ SetupRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Registry remplit par l'éventuel 'Setups/Setup' sélectionné (présent dans le fichier de configuration ou de projet).
+static rgstry::level__ ArgumentsRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Registry remplit par les arguments présent en ligne de commande.
 
-rgstry::level__ scltool::GetRegistrySetupLevel( void )
+static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
+
+str::string ParametersTag_;	// Voir tout en bas.
+
+rgstry::level__ scltool::GetSetupRegistryLevel( void )
 {
-	return RegistrySetupLevel_;
+	return SetupRegistryLevel_;
+}
+
+rgstry::level__ scltool::GetArgumentsRegistryLevel( void )
+{
+	return ArgumentsRegistryLevel_;
 }
 
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
@@ -652,7 +662,13 @@ static const str::string_ &GetPath_(
 	const str::string_ &Id,
 	str::string_ &Path )
 {
-	return GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
+	GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
+
+	if ( Path.Amount() != 0  )
+		if ( Path(Path.First()) != '/' )
+			Path.Insert( ParametersTag_ );	
+
+	return Path;
 }
 
 static const str::string_ &GetValue_(
@@ -669,9 +685,7 @@ static const str::string_ &GetCommand_( str::string_ &Command )
 	return Command;
 }
 
-#define COMMAND_PATH	"Parameters/Command"
-
-static void FillSetupRegistry_(
+static void FillRegistry_(
 	sdr::row__,	// Pas utile.
 	const flag_ &Flag )
 {
@@ -682,7 +696,7 @@ ERRProlog
 	str::string Path;
 	str::string Value;
 	sdr::row__ Error = E_NIL;
-	str::string Name;
+	str::string Name, EntryPath;
 ERRBegin
 	Id.Init();
 
@@ -714,7 +728,7 @@ ERRBegin
 
 #if 1
 	if ( Path.Amount() == 0 )	// Il s'agit d'une commande.
-		Path = COMMAND_PATH;
+		Command_.GetPath( Path );
 
 #else // Obsolete
 	if ( Path.Amount() == 0 ) {
@@ -751,7 +765,7 @@ ERREnd
 ERREpilog
 }
 
-static void FillSetupRegistry_(
+static void FillRegistry_(
 	sdr::row__,	// Pas utile.
 	const option_ &Option )
 {
@@ -813,7 +827,7 @@ ERREnd
 ERREpilog
 }
 
-static void FillSetupRegistry_(
+static void FillRegistry_(
 	sdr::row__ Index,
 	const argument_ &Argument )
 {
@@ -858,7 +872,7 @@ ERREnd
 ERREpilog
 }
 
-template <typename c, typename i> static void FillSetupRegistry_(const c &Conteneur)
+template <typename c, typename i> static void FillRegistry_(const c &Conteneur)
 {
 	i Item;
 	sdr::row__ Row = Conteneur.First();
@@ -866,24 +880,24 @@ template <typename c, typename i> static void FillSetupRegistry_(const c &Conten
 	Item.Init( Conteneur );
 
 	while ( Row != E_NIL ) {
-		FillSetupRegistry_( Row, Item( Row ) );
+		FillRegistry_( Row, Item( Row ) );
 
 		Row = Conteneur.Next( Row );
 	}
 }
 
-static void FillSetupRegistry_(
+static void FillRegistry_(
 	flags_ &Flags,
 	options_ &Options,
 	arguments_ &Arguments )
 {
-	FillSetupRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags );
-	FillSetupRegistry_<options_, ctn::E_CITEM( option_ )>( Options );
-	FillSetupRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( Arguments);
+	FillRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags );
+	FillRegistry_<options_, ctn::E_CITEM( option_ )>( Options );
+	FillRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( Arguments);
 }
 
-#define ARGUMENTS	"_/Arguments"
-#define RAW	ARGUMENTS "/Raw"
+#define CLI_ARGUMENTS	"_/CLIArguments"
+#define RAW	CLI_ARGUMENTS "/Raw"
 #define RAW_ARGUMENT	RAW "/Argument"
 #define INDICE_ATTRIBUTE	"indice"
 
@@ -908,7 +922,7 @@ static void PutIndice_(
 
 #define AMOUNT_ATTRIBUTE	"Amount"
 
-static void DumpInSetupRegistry_(
+static void DumpInRegistry_(
 	int argc,
 	const char **argv )
 {
@@ -930,10 +944,10 @@ ERREnd
 ERREpilog
 }
 
-#define ARGUMENT_FLAGS	ARGUMENTS "/Flags"
+#define ARGUMENT_FLAGS	CLI_ARGUMENTS "/Flags"
 #define ARGUMENT_FLAG	ARGUMENT_FLAGS "/Flag"
 
-static void DumpInSetupRegistry_(
+static void DumpInRegistry_(
 	bso::int__ Indice,
 	const flag_ &Flag )
 {
@@ -948,10 +962,10 @@ ERREnd
 ERREpilog
 }
 
-#define ARGUMENT_OPTIONS	ARGUMENTS "/Options"
+#define ARGUMENT_OPTIONS	CLI_ARGUMENTS "/Options"
 #define ARGUMENT_OPTION		ARGUMENT_OPTIONS "/Option"
 
-static void DumpInSetupRegistry_(
+static void DumpInRegistry_(
 	bso::int__ Indice,
 	const option_ &Option )
 {
@@ -970,10 +984,10 @@ ERREnd
 ERREpilog
 }
 
-#define ARGUMENT_FREES	ARGUMENTS "/Frees"
+#define ARGUMENT_FREES	CLI_ARGUMENTS "/Frees"
 #define ARGUMENT_FREE	ARGUMENT_FREES "/Free"
 
-static void DumpInSetupRegistry_(
+static void DumpInRegistry_(
 	bso::int__ Indice,
 	const argument_ &Argument )
 {
@@ -1311,8 +1325,10 @@ static void PrintUsage_( void )
 ERRProlog
 	str::strings Ids, Commands, Flags, Options, Frees;
 	str::string  ProgramDescription;
+	str::string EntryPath;
 ERRBegin
-	sclrgstry::GetRegistry().Delete( "Parameters/Command", RegistrySetupLevel_ );	// Pour pouvoir récupèrer la valeur correspondant à ce 'PAth' tel qu'éventuellement défini dans le fichier de configuration.
+	EntryPath.Init();
+	sclrgstry::GetRegistry().Delete( Command_.GetPath( EntryPath ), ArgumentsRegistryLevel_ );	// Pour pouvoir récupèrer la valeur correspondant à ce 'Path' tel qu'éventuellement défini dans le fichier de configuration.
 
 	Ids.Init();
 	sclrgstry::GetValues( ArgumentId_, Ids );
@@ -1341,7 +1357,7 @@ ERREnd
 ERREpilog
 }
 
-template <typename c, typename i> static void DumpInSetupRegistry_(
+template <typename c, typename i> static void DumpInRegistry_(
 	const char *Prefix,
 	const c &Conteneur )
 {
@@ -1359,7 +1375,7 @@ ERRBegin
 	Item.Init( Conteneur );
 
 	while ( Row != E_NIL ) {
-		DumpInSetupRegistry_( *Row, Item( Row ) );
+		DumpInRegistry_( *Row, Item( Row ) );
 
 		Row = Conteneur.Next( Row );
 	}
@@ -1369,21 +1385,21 @@ ERREpilog
 }
 
 
-static void DumpInSetupRegistry_(
+static void DumpInRegistry_(
 	int argc,
 	const char **argv,
 	const flags_ &Flags,
 	const options_ &Options,
 	const arguments_ &Arguments )
 {
-	DumpInSetupRegistry_( argc, argv );
+	DumpInRegistry_( argc, argv );
 
-	DumpInSetupRegistry_<flags_, ctn::E_CMITEM( flag_ )>( ARGUMENT_FLAGS, Flags );
-	DumpInSetupRegistry_<options_, ctn::E_CITEM( option_ )>( ARGUMENT_OPTIONS, Options );
-	DumpInSetupRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( ARGUMENT_FREES, Arguments );
+	DumpInRegistry_<flags_, ctn::E_CMITEM( flag_ )>( ARGUMENT_FLAGS, Flags );
+	DumpInRegistry_<options_, ctn::E_CITEM( option_ )>( ARGUMENT_OPTIONS, Options );
+	DumpInRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( ARGUMENT_FREES, Arguments );
 }
 
-static void FillSetupRegistry_(
+static void FillRegistry_(
 	int argc,
 	const char **argv )
 {
@@ -1398,9 +1414,9 @@ ERRBegin
 
 	Fill_( argc, argv, Flags, Options, Arguments );
 
-	FillSetupRegistry_( Flags, Options, Arguments );
+	FillRegistry_( Flags, Options, Arguments );
 
-	DumpInSetupRegistry_( argc, argv, Flags, Options, Arguments );
+	DumpInRegistry_( argc, argv, Flags, Options, Arguments );
 ERRErr
 ERREnd
 ERREpilog
@@ -1432,12 +1448,19 @@ ERRProlog
 	str::string ProjectFileName;
 	str::string Command;
 	str::string ProjectId;
+	str::string SetupId;
 ERRBegin
 	sclmisc::Initialize( NULL );
 
-	RegistrySetupLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
+	SetupRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
+	ArgumentsRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Arguments" ) );
 
-	FillSetupRegistry_( argc, argv );
+	FillRegistry_( argc, argv );
+
+	SetupId.Init();
+	sclrgstry::GetOptionalValue( Setup_, SetupId );
+
+	sclrgstry::FillRegistryWithSetup( sclrgstry::GetRegistry(), SetupRegistryLevel_, SetupId );
 
 	ProjectFileName.Init();
 	sclrgstry::GetValue( ProjectFileName_, ProjectFileName );
@@ -1508,6 +1531,9 @@ class scltoolpersonnalization
 public:
 	scltoolpersonnalization( void )
 	{
+		ParametersTag_.Init();
+		sclrgstry::Parameters.GetPath( ParametersTag_ );
+		ParametersTag_.Append('/' );
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

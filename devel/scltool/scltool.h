@@ -57,7 +57,9 @@ namespace scltool {
 	// A définir par l'utilisateur.
 	void SCLTOOLMain( const str::string_ &Command );
 
-	rgstry::level__ GetRegistrySetupLevel( void );
+	rgstry::level__ GetSetupRegistryLevel( void );
+
+	rgstry::level__ GetArgumentsRegistryLevel( void );
 }
 
 				  /********************************************/

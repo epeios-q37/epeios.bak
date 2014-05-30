@@ -87,7 +87,7 @@ namespace sclmisc {
 
 	void Initialize( const fnm::name___ &SuggestedDirectory );
 
-	void EraseProject( void );
+	void EraseProjectRegistry( void );
 
 	void LoadProject(
 		const fnm::name___ &FileName,

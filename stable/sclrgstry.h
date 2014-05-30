@@ -47,8 +47,8 @@ namespace sclrgstry {
 
 	registry_ &GetRegistry( void );
 
-	rgstry::level__ GetConfigurationLevel( void );
-	rgstry::level__ GetProjectLevel( void );
+	rgstry::level__ GetConfigurationRegistryLevel( void );
+	rgstry::level__ GetProjectRegistryLevel( void );
 
 	extern rgstry::entry___ Parameters;
 	extern rgstry::entry___ Definitions;
@@ -65,12 +65,24 @@ namespace sclrgstry {
 		const char *Directory,
 		const char *RootPath );
 
-	void EraseProject( void );
+	void EraseProjectRegistry( void );
 
 	void LoadProject(
 		const fnm::name___ &FileName,
 		const char *Target,
 		str::string_ &Id );
+
+	void FillRegistryWithSetup(
+		rgstry::multi_level_registry_ &Registry,
+		rgstry::level__ Level,	// 'level' de le 'setup registry'.
+		const str::string_ &SetupId );	// Remplit la section 'Parameters' de la 'registry' avec le conten du 'Setup' d'identifiant 'SetupId'.
+
+	inline void FillRegistryWithSetup(
+		rgstry::multi_level_registry_ &Registry,
+		rgstry::level__ Level )	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' par défaut ('Parameters/@DefaultSetup').
+	{
+		FillRegistryWithSetup( Registry, Level, str::string() );
+	}
 
 	void ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry );
 
