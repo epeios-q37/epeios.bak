@@ -142,7 +142,7 @@ row__ rgstry::registry_::_Search(
 }
 
 row__ rgstry::registry_::_Search(
-	const name_ &KeyName,
+	const name_ &TagName,
 	const name_ &AttributeName,
 	const value_ &AttributeValue,
 	row__ Row,
@@ -150,16 +150,16 @@ row__ rgstry::registry_::_Search(
 {
 	row__ ResultRow = E_NIL;
 
-	if ( KeyName.Amount() != 0 ) {
-		// .../KeyName...
+	if ( TagName.Amount() != 0 ) {
+		// .../TagName...
 
-		ResultRow = _SearchKey( KeyName, Row, Cursor );
+		ResultRow = _SearchTag( TagName, Row, Cursor );
 
 		if ( ( ResultRow != E_NIL ) && ( AttributeName.Amount() != 0 ) ) {
-			// .../KeyName[@AttributeName='AttributeValue']/...
+			// .../TagName[@AttributeName='AttributeValue']/...
 
 			while ( ( ResultRow != E_NIL ) && ( !_AttributeExists( AttributeName, AttributeValue, ResultRow ) ) ) {
-				ResultRow = _SearchKey( KeyName, Row, Cursor );
+				ResultRow = _SearchTag( TagName, Row, Cursor );
 			}
 		}
 	} else {
@@ -201,7 +201,7 @@ const str::string_ &rgstry::registry_::GetCompleteName(
 }
 
 enum state__ {
-	sKeyName,
+	sTagName,
 	sAttributeName,
 	sAttributeValue,
 	s_amount,
@@ -218,7 +218,7 @@ ERRProlog
 	state__ State = ::s_Undefined;
 	bso::char__ C;
 	path_item Item;
-	bso::bool__ KeyNameAsAttribute = false;
+	bso::bool__ TagNameAsAttribute = false;
 	bso::bool__ AttributeMarkerFound = false;
 ERRBegin
 	Row = PathString.First();
@@ -227,43 +227,43 @@ ERRBegin
 
 	Continue = Row != E_NIL;
 
-	State = sKeyName;
+	State = sTagName;
 
 	while ( Continue ) {
 		C = PathString( Row );
 		switch ( State ) {
-		case sKeyName:
+		case sTagName:
 			switch ( C ) {
 			case '=':
 			case '"':
 				Continue = false;
 				break;
 			case '[':
-				if ( KeyNameAsAttribute )
+				if ( TagNameAsAttribute )
 					Continue = false;
-				else if ( Item.KeyName.Amount() == 0 )
+				else if ( Item.TagName.Amount() == 0 )
 					Continue = false;
 				State = sAttributeName;
 				Item.AttributeName.Init();
 				AttributeMarkerFound = false;
 				break;
 			case '/':
-				if ( KeyNameAsAttribute )
+				if ( TagNameAsAttribute )
 					Continue = false;
-				else if ( Item.KeyName.Amount() == 0 )
+				else if ( Item.TagName.Amount() == 0 )
 					Continue = false;
 				else
 					Path.Append( Item );
 				Item.Init();
 				break;
 			case '@':
-				if ( Item.KeyName.Amount() != 0 )
+				if ( Item.TagName.Amount() != 0 )
 					Continue = false;
 				else
-					KeyNameAsAttribute = true;
+					TagNameAsAttribute = true;
 				break;
 			default:
-				Item.KeyName.Append( C );
+				Item.TagName.Append( C );
 				break;
 			}
 			break;
@@ -316,7 +316,7 @@ ERRBegin
 						Continue = false;
 					Path.Append( Item );
 					Item.Init();
-					State = sKeyName;
+					State = sTagName;
 					break;
 				default:
 					Item.AttributeValue.Append( C );
@@ -335,10 +335,10 @@ ERRBegin
 			Continue = false;
 	}
 
-	if ( Item.KeyName.Amount() != 0 ) {
-		if ( KeyNameAsAttribute ) {
-			Item.AttributeName = Item.KeyName;
-			Item.KeyName.Init();
+	if ( Item.TagName.Amount() != 0 ) {
+		if ( TagNameAsAttribute ) {
+			Item.AttributeName = Item.TagName;
+			Item.TagName.Init();
 		}
 
 		Path.Append( Item );
@@ -551,7 +551,7 @@ namespace {
 			if ( _Current == E_NIL )
 				_Current = _Registry.CreateRegistry( str::string( "_root" ) );
 		
-			_Current = _Registry.AddKey( TagName, _Current );
+			_Current = _Registry.AddTag( TagName, _Current );
 
 			if ( _Target == E_NIL )
 				_Target = _Current;
@@ -1500,13 +1500,14 @@ ERREpilog
 
 row__ rgstry::multi_level_registry_::Search(
 	const str::string_ &PathString,
+	level__ &Level,
 	sdr::row__ *PathErrorRow ) const
 {
 	row__ Row = E_NIL;
 ERRProlog
-	level__ Level = E_NIL;
 	path Path;
 ERRBegin
+	Level = E_NIL;
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
@@ -1517,7 +1518,8 @@ ERRBegin
 	while ( ( Level != E_NIL ) && ( Row == E_NIL ) ) {
 		Row = Search( Level, Path );
 
-		Level = Entries.Previous( Level );
+		if ( Row == E_NIL )
+			Level = Entries.Previous( Level );
 	}
 ERRErr
 ERREnd
@@ -1527,6 +1529,7 @@ ERREpilog
 
 row__ rgstry::multi_level_registry_::Search(
 	const tentry__ &Entry,
+	level__ &Level,
 	sdr::row__ *PathErrorRow ) const
 {
 	row__ Row = E_NIL;
@@ -1536,7 +1539,7 @@ ERRBegin
 	Path.Init();
 	Entry.GetPath( Path );
 
-	Row = Search( Path, PathErrorRow );
+	Row = Search( Path, Level, PathErrorRow );
 ERRErr
 ERREnd
 ERREpilog

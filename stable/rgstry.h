@@ -73,31 +73,31 @@ namespace rgstry {
 	class path_item_ {
 	public:
 		struct s {
-			name_::s KeyName, AttributeName;
+			name_::s TagName, AttributeName;
 			value_::s AttributeValue;
 		};
-		name_ KeyName, AttributeName;
+		name_ TagName, AttributeName;
 		value_ AttributeValue;
 		path_item_( s &S )
-		: KeyName( S.KeyName ),
+		: TagName( S.TagName ),
 		  AttributeName( S.AttributeName ),
 		  AttributeValue( S.AttributeValue )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			KeyName.reset( P );
+			TagName.reset( P );
 			AttributeName.reset( P );
 			AttributeValue.reset( P);
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
-			KeyName.plug( AS );
+			TagName.plug( AS );
 			AttributeName.plug( AS );
 			AttributeValue.plug( AS );
 		}
 		path_item_ &operator =( const path_item_ &PI )
 		{
-			KeyName = PI.KeyName;
+			TagName = PI.TagName;
 			AttributeName = PI.AttributeName;
 			AttributeValue = PI.AttributeValue;
 
@@ -105,7 +105,7 @@ namespace rgstry {
 		}
 		void Init( void )
 		{
-			KeyName.Init();
+			TagName.Init();
 			AttributeName.Init();
 			AttributeValue.Init();
 		}
@@ -352,7 +352,7 @@ namespace rgstry {
 	// Nature du noeud.
 	enum nature__ 
 	{
-		nKey,
+		nTag,
 		nAttribute,
 		n_amount,
 		n_Undefined
@@ -500,20 +500,20 @@ namespace rgstry {
 
 			return _Search( Nature, Name, _GetNode( Row, Buffer ).Children, Cursor );
 		}
-		row__ _SearchKey(
+		row__ _SearchTag(
 			const name_ &Name,
 			row__ Row,
 			cursor__ &Cursor ) const
 		{
-			return _Search( nKey, Name, Row, Cursor );
+			return _Search( nTag, Name, Row, Cursor );
 		}
-		row__ _SearchKey(
+		row__ _SearchTag(
 			const name_ &Name,
 			row__ Row ) const
 		{
 			cursor__ Cursor = E_NIL;
 
-			return _Search( nKey, Name, Row, Cursor );
+			return _Search( nTag, Name, Row, Cursor );
 		}
 		row__ _SearchAttribute(
 			const name_ &Name,
@@ -560,7 +560,7 @@ namespace rgstry {
 			return _SearchAttribute( Name, Value, Row ) != E_NIL;
 		}
 		row__ _Search(
-			const name_ &KeyName,
+			const name_ &TagName,
 			const name_ &AttributeName,
 			const value_ &AttributeValue,
 			row__ Row,
@@ -570,7 +570,7 @@ namespace rgstry {
 			row__ Row,
 			cursor__ &Cursor ) const
 		{
-			return _Search( Item.KeyName, Item.AttributeName, Item.AttributeValue, Row, Cursor );
+			return _Search( Item.TagName, Item.AttributeName, Item.AttributeValue, Row, Cursor );
 		}
 		row__ _Search(
 			const path_item_ &Item,
@@ -616,11 +616,11 @@ namespace rgstry {
 
 			return Row;
 		}
-		row__ _CreateKey(
+		row__ _CreateTag(
 			const name_ &Name,
 			row__ Row = E_NIL )
 		{
-			return _CreateWithFlush( nKey, Name, value(), Row );
+			return _CreateWithFlush( nTag, Name, value(), Row );
 		}
 		row__ _Add( 
 			nature__ Nature,
@@ -636,11 +636,11 @@ namespace rgstry {
 
 			return NewRow;
 		}
-		row__ _AddKey(
+		row__ _AddTag(
 			const name_ &Name,
 			row__ Row )
 		{
-			return _Add( nKey, Name, value(), Row );
+			return _Add( nTag, Name, value(), Row );
 		}
 		row__ _AddAttribute(
 			const name_ &Name,
@@ -653,8 +653,8 @@ namespace rgstry {
 			const path_item_ &Item,
 			row__ Row )
 		{
-			if ( Item.KeyName.Amount() != 0 ) {
-				Row = _AddKey( Item.KeyName, Row );
+			if ( Item.TagName.Amount() != 0 ) {
+				Row = _AddTag( Item.TagName, Row );
 
 				if ( Item.AttributeName.Amount() != 0 )
 					_AddAttribute( Item.AttributeName, Item.AttributeValue, Row );
@@ -733,11 +733,11 @@ namespace rgstry {
 
 			Nodes.Flush();
 		}
-		row__ AddKey(
+		row__ AddTag(
 			const name_ &Name,
 			row__ Row )
 		{
-			return _AddKey( Name, Row );
+			return _AddTag( Name, Row );
 		}
 		row__ AddAttribute(
 			const name_ &Name,
@@ -931,7 +931,13 @@ namespace rgstry {
 			row__ Row,
 			str::string_ &Name,
 			const char *Separator = ":" ) const;
-		row__ SearchAtribute( 
+		row__ SearchTag(
+			const name_ &Name,
+			row__ Row ) const
+		{
+			return _SearchTag( Name, Row );
+		}
+		row__ SearchAttribute( 
 			const name_ &Name,
 			row__ Row ) const
 		{
@@ -978,7 +984,7 @@ namespace rgstry {
 			sdr::row__ *PathErrorRow = NULL );
 		row__ CreateRegistry( const name_ &Name )
 		{
-			return _CreateKey( Name );
+			return _CreateTag( Name );
 		}
 		bso::bool__ Exists(
 			const path_ &Path,
@@ -1760,9 +1766,11 @@ namespace rgstry {
 		}
 		row__ Search(
 			const str::string_ &PathString,
+			level__ &Level,	// Valeur retournée != 'E_NIL', contient le 'level' de la registry contenant l'entrée.
 			sdr::row__ *PathErrorRow = NULL ) const;
 		row__ Search(
 			const tentry__ &Entry,
+			level__ &Level,	// Valeur retournée != 'E_NIL', contient le 'level' de la registry contenant l'entrée.
 			sdr::row__ *PathErrorRow = NULL ) const;
 		bso::bool__ Exists(
 			level__ Level,
@@ -1781,13 +1789,15 @@ namespace rgstry {
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			return Search( PathString, PathErrorRow ) != E_NIL;
+			level__ Dummy = E_NIL;
+			return Search( PathString, Dummy, PathErrorRow ) != E_NIL;
 		}
 		bso::bool__ Exists(
 			const tentry__ &Entry,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			return Search( Entry, PathErrorRow ) != E_NIL;
+			level__ Dummy = E_NIL;
+			return Search( Entry, Dummy, PathErrorRow ) != E_NIL;
 		}
 		status__ Fill(
 			level__ Level,
@@ -1861,19 +1871,21 @@ namespace rgstry {
 		}
 		sdr::size__ Dump(
 			level__ Level,
-			bso::bool__ RootToo,
+			row__ Node,	// Si == 'E_NIL', on part de la racine.
+			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{
-			return _GetRegistry( Level ).Dump( _GetRoot( Level ), RootToo, Writer );
+			return _GetRegistry( Level ).Dump( Node == E_NIL ? _GetRoot( Level ) : Node, NodeToo, Writer );
 		}
 		sdr::size__ Dump(
 			level__ Level,
-			bso::bool__ RootToo,
+			row__ Node,	// Si == 'E_NIL', on part de la racine.
+			bso::bool__ NodeToo,
 			xml::outfit__ Outfit,
 			xml::encoding__ Encoding,
 			txf::text_oflow__ &TFlow ) const
 		{
-			return _GetRegistry( Level ).Dump( _GetRoot( Level ), RootToo, Outfit, Encoding, TFlow );
+			return _GetRegistry( Level ).Dump( Node == E_NIL ? _GetRoot( Level ) : Node, NodeToo, Outfit, Encoding, TFlow );
 		}
 		time_t TimeStamp( level__ Level ) const
 		{

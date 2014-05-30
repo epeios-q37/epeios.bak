@@ -36,16 +36,24 @@ const char *sclmisc::SCLMISCTargetName = "TEST";
 void scltool::SCLTOOLMain( const str::string_ &Command )
 {
 ERRProlog
-	str::string Argument;
+	rgstry::row__ Row = E_NIL;
+	rgstry::level__ Level = E_NIL;
 ERRBegin
 	cio::COut << txf::tab << "----- Configuration -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( sclrgstry::GetConfigurationLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	sclrgstry::GetRegistry().Dump( sclrgstry::GetConfigurationLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Project -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( sclrgstry::GetProjectLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	sclrgstry::GetRegistry().Dump( sclrgstry::GetProjectLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Setup -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), true, xml::oIndent, xml::e_Default, cio::COut );
+	sclrgstry::GetRegistry().Dump( scltool::GetRegistrySetupLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;
+
+	Row = sclrgstry::GetRegistry().Search(rgstry::entry___( "Layouts/Layout[id=\"toto\"]" ), Level );
+
+	sclrgstry::GetRegistry().Dump( Level, Row, false, xml::oIndent, xml::e_Default, cio::COut );
+
+
+	Row = Row;
 ERRErr
 ERREnd
 ERREpilog
