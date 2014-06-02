@@ -54,6 +54,8 @@ namespace scltool {
 	};
 # endif
 
+	void ReportIfNoSetupId( void );
+
 	// A définir par l'utilisateur.
 	void SCLTOOLMain( const str::string_ &Command );
 

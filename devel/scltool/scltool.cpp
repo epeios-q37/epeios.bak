@@ -44,6 +44,13 @@ static rgstry::level__ ArgumentsRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Regi
 
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
+void scltool::ReportIfNoSetupId( void )
+{
+	if ( !sclrgstry::GetRegistry().Exists( Setup_  ) )
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
+}
+
+
 str::string ParametersTag_;	// Voir tout en bas.
 
 rgstry::level__ scltool::GetSetupRegistryLevel( void )
