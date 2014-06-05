@@ -125,19 +125,21 @@ namespace frdrgy {
 	private:
 		sdr::size__ _DumpRegistry(
 			rgstry::level__ Level,
-			bso::bool__ RootToo,
+			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.
+			bso::bool__ NodeToo,
 			xml::outfit__ Outfit,
 			xml::encoding__ Encoding,
 			txf::text_oflow__ &TFlow ) const
 		{
-			return _registry_::Dump( Level, RootToo, Outfit, Encoding, TFlow );
+			return _registry_::Dump( Level, Node, NodeToo, Outfit, Encoding, TFlow );
 		}
 		sdr::size__ _DumpRegistry(
 			rgstry::level__ Level,
-			bso::bool__ RootToo,
+			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.
+			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{
-			return _registry_::Dump( Level, RootToo, Writer );
+			return _registry_::Dump( Level, Node, NodeToo, Writer );
 		}
 	public:
 		struct s
@@ -175,10 +177,11 @@ namespace frdrgy {
 			S_.Setup= _registry_::PushEmbeddedLevel( rgstry::name( "Setup" ) );
 		}
 		void DumpSetup(
-			bso::bool__ RootToo,
+			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.
+			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{
-			_DumpRegistry( S_.Setup, RootToo, Writer );
+			_DumpRegistry( S_.Setup, Node, NodeToo, Writer );
 		}
 		rgstry::status__ FillSetup(
 			const char *FileName,

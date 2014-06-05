@@ -570,7 +570,7 @@ ERRBegin
 	Writer.PutAttribute( "target", TargetName );
 	Writer.PutAttribute( "id", Id );
 
-	_R().Dump( _R().TopLevel(), false, Writer );
+	_R().Dump( _R().TopLevel(), E_NIL, false, Writer );
 	
 	Recap = r_OK;
 ERRErr

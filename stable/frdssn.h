@@ -158,7 +158,7 @@ namespace frdssn {
 			if ( !IsOpen() )
 				ERRFwk();
 
-			_Registry.DumpSetup( true, Writer);
+			_Registry.DumpSetup( E_NIL, true, Writer);
 
 			return r_OK;
 		}

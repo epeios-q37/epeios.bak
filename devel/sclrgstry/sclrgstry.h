@@ -39,6 +39,7 @@
 # include "rgstry.h"
 
 namespace sclrgstry {
+	using rgstry::level__;
 
 	using rgstry::tags_;
 	using rgstry::tags;
@@ -73,68 +74,81 @@ namespace sclrgstry {
 		str::string_ &Id );
 
 	void FillRegistryWithSetup(
-		rgstry::multi_level_registry_ &Registry,
-		rgstry::level__ Level,	// 'level' de le 'setup registry'.
+		registry_ &Registry,
+		level__ Level,	// 'level' de le 'setup registry'.
 		const str::string_ &SetupId );	// Remplit la section 'Parameters' de la 'registry' avec le conten du 'Setup' d'identifiant 'SetupId'.
 
 	inline void FillRegistryWithSetup(
-		rgstry::multi_level_registry_ &Registry,
-		rgstry::level__ Level )	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' par défaut ('Parameters/@DefaultSetup').
+		registry_ &Registry,
+		level__ Level )	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' par défaut ('Parameters/@DefaultSetup').
 	{
 		FillRegistryWithSetup( Registry, Level, str::string() );
 	}
 
 	void ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry );
 
-	bso::bool__ GetValue(
-		const rgstry::tentry__ &Entry,
-		str::string_ &Value );
-
 	void SetValue(
+		registry_ &Registry,
 		const str::string_ &Value,
 		const rgstry::tentry__ &Entry );
 
 	void SetValue(
+		registry_ &Registry,
 		const str::string_ &Path,
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL );
 
+	bso::bool__ BGetValue(
+		const registry_ &Registry,
+		const rgstry::tentry__ &Entry,
+		str::string_ &Value );
+
 	bso::bool__ GetValues(
+		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		str::strings_ &Values );
 
-	const str::string_ &GetOptionalValue(
+	const str::string_ &OGetValue(
+		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value,
 		bso::bool__ *Missing = NULL );
 
-	const char *GetOptionalValue(
+	const char *OGetValue(
+		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer,
 		bso::bool__ *Missing = NULL );
 
-	const str::string_ &GetMandatoryValue(
+	const str::string_ &MGetValue(
+		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value );
 
-	const char *GetMandatoryValue(
+	const char *MGetValue(
+		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer );
 
-	bso::bool__ GetBoolean(
+	bso::bool__ BGetBoolean(
+		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
 		bso::bool__ DefaultValue = false );
 
-	bso::bool__ GetMandatoryBoolean( const rgstry::tentry___ &Entry );
+	bso::bool__ MGetBoolean(
+		const registry_ &Registry,
+		const rgstry::tentry___ &Entry );
 
 # define SCLRGSTRY__UN( type, name, limit )\
-	type GetMandatory##name(\
-	const rgstry::tentry__ &Entry,\
-	type Limit = limit );\
-	type Get##name(\
-	const rgstry::tentry__ &Entry,\
-	type DefaultValue,\
-	type Limit = limit );
+	type MGet##name(\
+		const registry_ &Registry,\
+		const rgstry::tentry__ &Entry,\
+		type Limit = limit );\
+	type OGet##name(\
+		const registry_ &Registry,\
+		const rgstry::tentry__ &Entry,\
+		type DefaultValue,\
+		type Limit = limit );
 
 	SCLRGSTRY__UN( bso::uint__, UInt, BSO_UINT_MAX )
 # ifdef BSO__64BITS_ENABLED
@@ -145,15 +159,17 @@ namespace sclrgstry {
 	SCLRGSTRY__UN( bso::u8__, U8, BSO_U8_MAX )
 
 # define SCLRGSTRY__SN( type, name, min, max )\
-	type GetMandatory##name(\
-	const rgstry::tentry__ &Entry,\
-	type Min = min,\
-	type Max = max );\
-	type Get##name(\
-	const rgstry::tentry__ &Entry,\
-	type DefaultValue,\
-	type Min = min,\
-	type Max = max );
+	type MGet##name(\
+		const registry_ &Registry,\
+		const rgstry::tentry__ &Entry,\
+		type Min = min,\
+		type Max = max );\
+	type OGet##name(\
+		const registry_ &Registry,\
+		const rgstry::tentry__ &Entry,\
+		type DefaultValue,\
+		type Min = min,\
+		type Max = max );
 
 	SCLRGSTRY__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
 # ifdef BSO__64BITS_ENABLED
@@ -165,32 +181,35 @@ namespace sclrgstry {
 
 		// To define function retrieving mandatory registry value.
 # define SCLRGSTRY_MV( name, entry )\
-	inline const char *name(\
-	STR_BUFFER___ &Buffer )\
+		const registry_ &Registry,\
+		inline const char *name(\
+		STR_BUFFER___ &Buffer )\
 	{\
-	return GetMandatoryValue( entry, Buffer );\
+		return MGetValue( Registry, entry, Buffer );\
 	}\
 	inline const str::string_ &name(\
-	str::string_ &Value )\
+		const registry_ &Registry,\
+		str::string_ &Value )\
 	{\
-	return GetMandatoryValue( entry, Value );\
+		return MGetValue( Registry, entry, Value );\
 	}
 
 		// To define function retrieving optional registry value.
 # define SCLRGSTRY_OV( name, entry )\
 	inline const char *name(\
-	STR_BUFFER___ &Buffer,\
-	bso::bool__ *Missing = NULL )\
+		const registry_ &Registry,\
+		STR_BUFFER___ &Buffer,\
+		bso::bool__ *Missing = NULL )\
 	{\
-	return GetOptionalValue( entry, Buffer, Missing );\
+		return OGetValue( Registry, entry, Buffer, Missing );\
 	}\
 	inline const str::string_ &name(\
-	str::string_ &Value,\
-	bso::bool__ *Missing = NULL )\
+		const registry_ &Registry,\
+		str::string_ &Value,\
+		bso::bool__ *Missing = NULL )\
 	{\
-	return GetOptionalValue( entry, Value, Missing );\
+		return OGetValue( Registry, entry, Value, Missing );\
 	}
-
 }
 
 				  /********************************************/

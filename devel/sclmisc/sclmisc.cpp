@@ -189,7 +189,7 @@ ERRBegin
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
 
 	Language.Init();
-	if ( sclrgstry::GetValue( sclrgstry::Language, Language ) )
+	if ( sclrgstry::BGetValue( sclrgstry::GetRegistry(), sclrgstry::Language, Language ) )
 		Language.Convert( Language_ );
 
 	LoadLocale_( sclrgstry::GetConfigurationRegistryLevel(), scllocale::tConfiguration, RegistryFlow.Format());

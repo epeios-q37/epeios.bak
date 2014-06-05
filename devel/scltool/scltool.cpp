@@ -97,14 +97,14 @@ static const str::string_ &GetLongTaggedArguemntId_(
 	str::string_ &Name,
 	str::string_ &Id )
 {
-	return sclrgstry::GetMandatoryValue( rgstry::tentry___( LongTaggedArgumentId_, Name ), Id );
+	return MGetValue( rgstry::tentry___( LongTaggedArgumentId_, Name ), Id );
 }
 
 static const str::string_ &GetShortTaggedArguemntId_(
 	str::string_ &Name,
 	str::string_ &Id )
 {
-	return sclrgstry::GetMandatoryValue( rgstry::tentry___( ShortTaggedArgumentId_, Name ), Id );
+	return MGetValue( rgstry::tentry___( ShortTaggedArgumentId_, Name ), Id );
 }
 
 enum stamp__ {
@@ -458,7 +458,7 @@ ERRBegin
 	Tags.Append( Name );
 
 	Path.Init();
-	sclrgstry::GetValue( rgstry::tentry__( Entry, Tags ), Id );
+	OGetValue( rgstry::tentry__( Entry, Tags ), Id );
 ERRErr
 ERREnd
 ERREpilog
@@ -504,7 +504,7 @@ ERRBegin
 	Tags.Init();
 	Tags.Append( Id );
 
-	sclrgstry::GetValue( rgstry::tentry__( Entry, Tags ), Value );
+	OGetValue( rgstry::tentry__( Entry, Tags ), Value );
 ERRErr
 ERREnd
 ERREpilog
@@ -687,7 +687,7 @@ static const str::string_ &GetValue_(
 
 static const str::string_ &GetCommand_( str::string_ &Command )
 {
-	sclrgstry::GetValue( Command_, Command );
+	OGetValue( Command_, Command );
 
 	return Command;
 }
@@ -758,7 +758,7 @@ ERRBegin
 		ERRAbort();
 	}
 
-	sclrgstry::SetValue( Path, Value, &Error );
+	SetValue( Path, Value, &Error );
 
 	if ( Error != E_NIL ) {
 		Meaning.Init();
@@ -820,7 +820,7 @@ ERRBegin
 		ERRAbort();
 	}
 
-	sclrgstry::SetValue( Path, Option.Value, &Error );
+	SetValue( Path, Option.Value, &Error );
 
 	if ( Error != E_NIL ) {
 		Meaning.Init();
@@ -849,14 +849,14 @@ ERRBegin
 	Id.Init();
 
 	Command.Init();
-	sclrgstry::GetMandatoryValue( Command_, Command );
+	MGetValue( Command_, Command );
 
 	Tags.Init();
 	Tags.Append( Command );
 	Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
 
 	Id.Init();
-	if ( !sclrgstry::GetValue( rgstry::tentry__( IndexTaggedArgumentLinkTarget_, Tags ), Id ) )
+	if ( !BGetValue( rgstry::tentry__( IndexTaggedArgumentLinkTarget_, Tags ), Id ) )
 		sclmisc::ReportAndAbort( SCLTOOL_NAME "_BadAmountOfArguments" );
 		
 
@@ -870,7 +870,7 @@ ERRBegin
 	if ( Path.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLTOOL_NAME "_NoPathForArgument", Id );
 
-	sclrgstry::SetValue( Path, Argument, &Error );
+	SetValue( Path, Argument, &Error );
 
 	if (Error != E_NIL)
 		sclmisc::ReportAndAbort( SCLTOOL_NAME "_BadPathForArgument", Id );
@@ -938,13 +938,13 @@ ERRProlog
 	int i = 0;
 	str::string Path;
 ERRBegin
-	sclrgstry::SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
+	SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
 
 	while ( i < argc ) {
 		Path.Init();
 		PutIndice_( RAW_ARGUMENT, i, "", Path );
 
-		sclrgstry::SetValue( Path, str::string( argv[i++] ) );
+		SetValue( Path, str::string( argv[i++] ) );
 	}
 ERRErr
 ERREnd
@@ -963,7 +963,7 @@ ERRProlog
 ERRBegin
 	Path.Init();
 	PutIndice_( ARGUMENT_FLAG, Indice, "", Path );
-	sclrgstry::SetValue( Path, Flag.Name );
+	SetValue( Path, Flag.Name );
 ERRErr
 ERREnd
 ERREpilog
@@ -981,11 +981,11 @@ ERRProlog
 ERRBegin
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Name", Path );
-	sclrgstry::SetValue( Path, Option.Name );
+	SetValue( Path, Option.Name );
 
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Value", Path );
-	sclrgstry::SetValue( Path, Option.Value );
+	SetValue( Path, Option.Value );
 ERRErr
 ERREnd
 ERREpilog
@@ -1003,7 +1003,7 @@ ERRProlog
 ERRBegin
 	Path.Init();
 	PutIndice_( ARGUMENT_FREE, Indice, "", Path );
-	sclrgstry::SetValue( Path, Argument );
+	SetValue( Path, Argument );
 ERRErr
 ERREnd
 ERREpilog
@@ -1202,7 +1202,7 @@ ERRBegin
 	cio::COut << "('" << GetPath_( Id, Path ) << '\'';
 
 	Value.Init();
-	sclrgstry::GetValue( rgstry::entry___( Path.Convert( Buffer ) ), Value );
+	OGetValue( rgstry::entry___( Path.Convert( Buffer ) ), Value );
 
 	if ( Value.Amount() != 0 )
 		cio::COut << "(='" << Value << "')";
@@ -1338,7 +1338,7 @@ ERRBegin
 	sclrgstry::GetRegistry().Delete( Command_.GetPath( EntryPath ), ArgumentsRegistryLevel_ );	// Pour pouvoir récupèrer la valeur correspondant à ce 'Path' tel qu'éventuellement défini dans le fichier de configuration.
 
 	Ids.Init();
-	sclrgstry::GetValues( ArgumentId_, Ids );
+	GetValues( ArgumentId_, Ids );
 
 	Commands.Init();
 	Flags.Init();
@@ -1377,7 +1377,7 @@ ERRBegin
 	Path.Init( Prefix );
 	Path.Append( "/@" AMOUNT_ATTRIBUTE );
 
-	sclrgstry::SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
+	SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
 
 	Item.Init( Conteneur );
 
@@ -1465,12 +1465,12 @@ ERRBegin
 	FillRegistry_( argc, argv );
 
 	SetupId.Init();
-	sclrgstry::GetOptionalValue( Setup_, SetupId );
+	OGetValue( Setup_, SetupId );
 
 	sclrgstry::FillRegistryWithSetup( sclrgstry::GetRegistry(), SetupRegistryLevel_, SetupId );
 
 	ProjectFileName.Init();
-	sclrgstry::GetValue( ProjectFileName_, ProjectFileName );
+	OGetValue( ProjectFileName_, ProjectFileName );
 
 	ProjectId.Init();
 
@@ -1479,7 +1479,7 @@ ERRBegin
 
 	Command.Init();
 
-	if ( sclrgstry::GetMandatoryValue( Command_, Command ) == "Usage" )
+	if ( MGetValue( Command_, Command ) == "Usage" )
 		PrintUsage_();
 	else
 		SCLTOOLMain( Command );

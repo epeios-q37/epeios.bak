@@ -29,10 +29,11 @@
 #include "ssnmng.h"
 
 #include "sclcgi.h"
+#include "sclmisc.h"
 
 #define NAME	SKTINF_LC_AFFIX	"cgi"
 
-const char *scldaemon::TargetName = NAME;
+const char *sclmisc::SCLMISCTargetName = NAME;
 
 using frdsessn::session___;
 
@@ -111,7 +112,7 @@ public:
 	void Init( void )
 	{
 		_ReportingFunctions.Init( _Kernel );
-		_Kernel.Init( sclrgstry::GetRegistry(), sclrgstry::GetRoot(), scllocale::GetLocale(), sclcgi::GetLanguage(), _ReportingFunctions );
+		_Kernel.Init( sclrgstry::GetRegistry(), scllocale::GetLocale(), sclcgi::GetLanguage(), _ReportingFunctions );
 		_steering_callback__::Init();
 	}
 };

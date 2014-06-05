@@ -121,7 +121,7 @@ public:
 	}
 };
 
-csdleo::callback__ *scldaemon::RetrieveSteering(
+csdleo::callback__ *scldaemon::SCLDAEMONRetrieveSteering(
 	csdleo::mode__ Mode,
 	const lcl::locale_ &Locale )
 {
@@ -148,7 +148,7 @@ ERREpilog
 	return Gate;
 }
 
-void scldaemon::ReleaseSteering( csdleo::callback__ *Steering )
+void scldaemon::SCLDAEMONReleaseSteering( csdleo::callback__ *Steering )
 {
 	delete Steering;
 }
