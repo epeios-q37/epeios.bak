@@ -28,7 +28,7 @@
 
 using namespace csdles;
 
-static bch::E_BUNCH( csdleo::callback__ *) Steerings_;
+static bch::E_BUNCH( csdleo::callback__ *) Callbacks_;
 
 #ifdef CPE_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
@@ -38,8 +38,8 @@ static bch::E_BUNCH( csdleo::callback__ *) Steerings_;
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( CSDLEO_RETRIEVE_STEERING_FUNCTION_NAME, csdleo::retrieve_steering );
-DEF( CSDLEO_RELEASE_STEERING_FUNCTION_NAME, csdleo::release_steering );
+DEF( CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME, csdleo::retrieve_callback );
+DEF( CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME, csdleo::release_callback );
 
 #if 0
 #ifdef CPE_WIN
@@ -70,19 +70,19 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 static void Terminate_( void )
 {
-	sdr::row__ Row = Steerings_.First();
-	csdleo::callback__ *Steering = NULL;
+	sdr::row__ Row = Callbacks_.First();
+	csdleo::callback__ *Callback = NULL;
 
 	while ( Row != E_NIL ) {
 
-		Steering = Steerings_( Row );
+		Callback = Callbacks_( Row );
 
-		if ( Steering != NULL )
-			delete Steering;
+		if ( Callback != NULL )
+			delete Callback;
 
-		Steerings_.Store( NULL, Row );
+		Callbacks_.Store( NULL, Row );
 
-		Row = Steerings_.Next( Row );
+		Row = Callbacks_.Next( Row );
 	}
 }
 
@@ -91,9 +91,9 @@ static void ExitFunction_( void )
 	Terminate_();
 }
 
-csdleo::callback__ *CSDLEORetrieveSteering( csdleo::shared_data__ *Data )
+csdleo::callback__ *CSDLEORetrieveCallback( csdleo::shared_data__ *Data )
 {
-	csdleo::callback__ *Steering = NULL;
+	csdleo::callback__ *Callback = NULL;
 ERRFProlog
 	flw::standalone_oflow__<> OFlow;
 	txf::text_oflow__ TOFlow;
@@ -110,10 +110,10 @@ ERRFBegin
 	if ( Data->Control != Data->ControlComputing() )
 		ERRChk();
 
-	Steering = csdles::CSDLESRetrieveSteering( Data );
+	Callback = csdles::CSDLESRetrieveCallback( Data );
 
-	if ( Steering != NULL )
-		Steerings_.Append( Steering );
+	if ( Callback != NULL )
+		Callbacks_.Append( Callback );
 ERRFErr
 	OFlow.Init( *Data->CErr, FLW_AMOUNT_MAX );
 	TOFlow.Init( OFlow );
@@ -122,12 +122,12 @@ ERRFErr
 	ERRRst();
 ERRFEnd
 ERRFEpilog
-	return Steering;
+	return Callback;
 }
 
-void CSDLEOReleaseSteering( csdleo::callback__ *Steering )
+void CSDLEOReleaseCallback( csdleo::callback__ *Callback )
 {
-	csdles::CSDLESReleaseSteering( Steering );
+	csdles::CSDLESReleaseCallback( Callback );
 }
 
 
@@ -141,7 +141,7 @@ public:
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
-		Steerings_.Init();
+		Callbacks_.Init();
 	}
 	~csdlespersonnalization( void )
 	{

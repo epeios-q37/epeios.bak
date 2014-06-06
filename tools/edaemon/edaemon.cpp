@@ -299,10 +299,10 @@ ERRBegin
 
 	switch ( ConnectionType ) {
 	case mctStraight:
-		UseStraightConnections_( Core_->GetSteering(), ModuleFileName, Port );
+		UseStraightConnections_( Core_->GetCallback(), ModuleFileName, Port );
 		break;
 	case mctSwitched:
-		UseSwitchingConnections_( Core_->GetSteering(), LogFileName, LogFileHandling, ModuleFileName, Port );
+		UseSwitchingConnections_( Core_->GetCallback(), LogFileName, LogFileHandling, ModuleFileName, Port );
 		break;
 	default:
 		ERRFwk();

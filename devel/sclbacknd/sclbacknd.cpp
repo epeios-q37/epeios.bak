@@ -43,11 +43,9 @@
 
 using namespace sclbacknd;
 
-csdleo::callback__ *scldaemon::SCLDAEMONRetrieveSteering(
-	csdleo::mode__ CSDMode,
-	const lcl::locale_ &Locale )
+scldaemon::callback__ *scldaemon::SCLDAEMONNewCallback( csdleo::mode__ CSDMode )
 {
-	sclbacknd::callback__ *Steering = NULL;
+	sclbacknd::callback__ *Callback = NULL;
 ERRProlog
 	fblbur::mode__ FBLMode = fblbur::m_Undefined;
 ERRBegin
@@ -63,27 +61,19 @@ ERRBegin
 		break;
 	}
 
-	Steering = SCLBACKNDNew(  FBLMode, Locale );
+	Callback = SCLBACKNDNewCallback(  FBLMode );
 ERRErr
-	if ( Steering != NULL )
-		delete Steering;
+	if ( Callback != NULL )
+		delete Callback;
 
-	Steering = NULL;
+	Callback = NULL;
 
 	ERRRst();	// Erreur interceptée pour éviter se propagation.
 				// L'erreur est signalée par la valeur retournéee 'NULL'.
 ERREnd
 ERREpilog
-	return Steering;
+	return Callback;
 }
-
-void scldaemon::SCLDAEMONReleaseSteering( csdleo::callback__ *Steering )
-{
-	if ( Steering != NULL )
-		delete Steering;
-}
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

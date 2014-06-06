@@ -153,7 +153,7 @@ static inline void GetValue_(
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
-	sclrgstry::GetValue( Entry, Value );
+	sclrgstry::BGetValue( sclrgstry::GetRegistry(), Entry, Value );
 }
 
 static inline void GetValues_(

@@ -40,8 +40,8 @@
 
 # include "csdscb.h"
 
-# define CSDLEO_RETRIEVE_STEERING_FUNCTION_NAME		CSDLEORetrieveSteering
-# define CSDLEO_RELEASE_STEERING_FUNCTION_NAME		CSDLEOReleaseSteering
+# define CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME		CSDLEORetrieveCallback
+# define CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME		CSDLEOReleaseCallback
 
 /*
 NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
@@ -143,8 +143,8 @@ namespace csdleo {
 	};
 #pragma pack( pop )
 
-	typedef csdleo::callback__ *(retrieve_steering)( shared_data__ * );
-	typedef void (release_steering)( csdleo::callback__ * );
+	typedef csdleo::callback__ *(retrieve_callback)( shared_data__ * );
+	typedef void (release_callback)( csdleo::callback__ * );
 }
 
 				  /********************************************/

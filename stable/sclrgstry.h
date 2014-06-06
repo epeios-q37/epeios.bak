@@ -183,7 +183,7 @@ namespace sclrgstry {
 # define SCLRGSTRY_MV( name, entry )\
 		const registry_ &Registry,\
 		inline const char *name(\
-		STR_BUFFER___ &Buffer )\
+		TOL_CBUFFER___ &Buffer )\
 	{\
 		return MGetValue( Registry, entry, Buffer );\
 	}\
@@ -198,7 +198,7 @@ namespace sclrgstry {
 # define SCLRGSTRY_OV( name, entry )\
 	inline const char *name(\
 		const registry_ &Registry,\
-		STR_BUFFER___ &Buffer,\
+		TOL_CBUFFER___ &Buffer,\
 		bso::bool__ *Missing = NULL )\
 	{\
 		return OGetValue( Registry, entry, Buffer, Missing );\

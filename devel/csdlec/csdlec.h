@@ -276,23 +276,23 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 	{
 	private:
 		dlbrry::dynamic_library___ _Library;
-		csdleo::callback__ *_Steering;
-		bso::bool__ _RetrieveSteering( csdleo::shared_data__ *Data );
-		bso::bool__ _ReleaseSteering( void );
+		csdleo::callback__ *_Callback;
+		bso::bool__ _RetrieveCallback( csdleo::shared_data__ *Data );
+		bso::bool__ _ReleaseCallback( void );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
 				if ( _Library.IsInitialized() ) {
-					if ( _Steering != NULL )
-						if ( !_ReleaseSteering() ) {
+					if ( _Callback != NULL )
+						if ( !_ReleaseCallback() ) {
 							_Library.reset();
 							ERRSys();
 						}
 				}
 			}
 
-			_Steering = NULL;
+			_Callback = NULL;
 			_Library.reset( P );
 		}
 		library_embedded_client_core__( void )
@@ -309,14 +309,14 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 			err::handling__ ERRHandling = err::h_Default );
 		bso::bool__ IsInitialized( void ) const
 		{
-			return _Steering != NULL;
+			return _Callback != NULL;
 		}
-		csdleo::callback__ &GetSteering( void ) const
+		csdleo::callback__ &GetCallback( void ) const
 		{
 			if ( !IsInitialized() )
 				ERRFwk();
 
-			return *_Steering;
+			return *_Callback;
 		}
 	};
 
@@ -326,7 +326,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 	public:
 		void Init( library_embedded_client_core__ &Core )
 		{
-			_client_server_ioflow___::Init( Core.GetSteering() );
+			_client_server_ioflow___::Init( Core.GetCallback() );
 		}
 	};
 

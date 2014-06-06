@@ -56,7 +56,6 @@ public:
 	E_CVDTOR( backend___ );
 	void Init(
 		fblbur::mode__ Mode,
-		const lcl::locale_ &Locale,
 		const char *ClientOrigin )
 	{
 		_Data.Init();
@@ -66,7 +65,6 @@ public:
 			API_VERSION,
 			ClientOrigin,
 			SKTINF_LC_AFFIX,
-			Locale,
 			BACKEND_NAME " " VERSION,
 			COPYRIGHT,
 			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION,
@@ -86,7 +84,6 @@ class callback___
 protected:
 	virtual _backend___ *SCLBACKNDNew( 
 		fblbur::mode__ Mode,
-		const lcl::locale_ &Locale,
 		const char *Origin )
 	{
 		backend___ *Backend = NULL;
@@ -95,7 +92,7 @@ protected:
 		if ( ( Backend = new backend___ ) == NULL )
 			ERRAlc();
 
-		Backend->Init( Mode, Locale, Origin );
+		Backend->Init( Mode, Origin );
 	ERRErr
 		if ( Backend != NULL )
 			delete Backend;
@@ -116,17 +113,13 @@ public:
 		}
 	}
 	E_CVDTOR( callback___ )
-	void Init(
-		fblbur::mode__ Mode,
-		const lcl::locale_ &Locale )
+	void Init( fblbur::mode__ Mode )
 	{
-		_callback___::Init( Mode, Locale );
+		_callback___::Init( Mode );
 	}
 };
 
-_callback___ *sclbacknd::SCLBACKNDNew(
-	fblbur::mode__ Mode,
-	const lcl::locale_ &Locale )
+_callback___ *sclbacknd::SCLBACKNDNewCallback( fblbur::mode__ Mode )
 {
 	callback___ *Callback = NULL;
 ERRProlog
@@ -134,7 +127,7 @@ ERRBegin
 	if ( ( Callback = new callback___ ) == NULL )
 		ERRAlc();
 
-	Callback->Init( Mode, Locale );
+	Callback->Init( Mode );
 ERRErr
 	if ( Callback != NULL )
 		delete Callback;

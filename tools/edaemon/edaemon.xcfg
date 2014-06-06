@@ -15,7 +15,7 @@
       <Arguments>
         <xpp:expand select="Arguments"/>
         <Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process"/>
-        <Argument id="ProjectArgument" Path="Parameters/ProjectFileName"/>
+        <Argument id="ProjectArgument" Path="ProjectFileName"/>
         <Layouts>
           <Layout command="Process">
             <Link index="0" Target="ProjectArgument"/>

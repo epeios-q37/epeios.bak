@@ -42,15 +42,9 @@ using namespace scldaemon;
 
 static bso::bool__ IsInitialized_ = false;
 
-const char *scldaemon::GetLanguage( void )
+csdleo::callback__ *csdles::CSDLESRetrieveCallback( csdleo::data__ *Data )
 {
-	return "en";	// A modifier.
-}
-
-
-csdleo::callback__ *csdles::CSDLESRetrieveSteering( csdleo::data__ *Data )
-{
-	csdleo::callback__ *Steering = NULL;
+	csdleo::callback__ *Callback = NULL;
 ERRProlog
 	fnm::name___ Directory;
 	TOL_CBUFFER___ Buffer;
@@ -91,11 +85,11 @@ ERRBegin
 	}
 */
 
-	Steering = SCLDAEMONRetrieveSteering( Data->Mode, scllocale::GetLocale() );
+	Callback = SCLDAEMONNewCallback( Data->Mode );
 ERRErr
 	if ( cio::IsInitialized() ) {
 		Error.Init();
-		if ( sclerror::GetPendingError( GetLanguage(), Error, err::hUserDefined  )) {
+		if ( sclerror::GetPendingError( sclmisc::GetLanguage(), Error, err::hUserDefined  )) {
 			cio::CErr << Error << txf::nl;
 			ERRRst();
 		}
@@ -106,12 +100,13 @@ ERREnd
 		cio::CErr << txf::commit;
 	}
 ERREpilog
-	return Steering;
+	return Callback;
 }
 
-void csdles::CSDLESReleaseSteering( csdleo::callback__ *Steering )
+void csdles::CSDLESReleaseCallback( csdleo::callback__ *Callback )
 {
-	SCLDAEMONReleaseSteering( Steering );
+	if ( Callback != NULL  )
+		delete Callback;
 }
 
 void scldaemon::DisplayModuleClosingMessage( void )
@@ -121,7 +116,7 @@ ERRProlog
 ERRBegin
 	Translation.Init();
 
-	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosing", GetLanguage(), Translation ) << txf::nl;
+	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosing", sclmisc::GetLanguage(), Translation ) << txf::nl;
 ERRErr
 ERREnd
 ERREpilog
@@ -135,7 +130,7 @@ ERRProlog
 ERRBegin
 	Translation.Init();
 
-	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosed", GetLanguage(), Translation ) << txf::nl;
+	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosed", sclmisc::GetLanguage(), Translation ) << txf::nl;
 ERRErr
 ERREnd
 ERREpilog

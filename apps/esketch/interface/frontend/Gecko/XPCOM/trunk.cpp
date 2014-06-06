@@ -48,7 +48,7 @@ ERRBegin
 	if ( ProjectFileName.Size() != 0 )
 		sclmisc::LoadProject( ProjectFileName, ProjectId );
 	else {
-		sclmisc::EraseProject();
+		sclmisc::EraseProjectRegistry();
 		ProjectId.Append( bso::Convert( tol::EpochTime( true ), Buffer ) );
 	}
 

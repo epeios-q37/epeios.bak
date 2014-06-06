@@ -185,28 +185,28 @@ namespace scltool {
 		// To define function retrieving mandatory registry value.
 # define SCLTOOL_MV( name, entry )\
 	inline const char *name(\
-		STR_BUFFER___ &Buffer )\
+		TOL_CBUFFER___ &Buffer )\
 	{\
-		return MGetValue( entry, Buffer );\
+		return scltool::MGetValue( entry, Buffer );\
 	}\
 	inline const str::string_ &name( str::string_ &Value )\
 	{\
-		return MGetValue( entry, Value );\
+		return scltool::MGetValue( entry, Value );\
 	}
 
 		// To define function retrieving optional registry value.
 # define SCLTOOL_OV( name, entry )\
 	inline const char *name(\
-		STR_BUFFER___ &Buffer,\
+		TOL_CBUFFER___ &Buffer,\
 		bso::bool__ *Missing = NULL )\
 	{\
-		return OGetValue( entry, Buffer, Missing );\
+		return scltool::OGetValue( entry, Buffer, Missing );\
 	}\
 	inline const str::string_ &name(\
 		str::string_ &Value,\
 		bso::bool__ *Missing = NULL )\
 	{\
-		return OGetValue( entry, Value, Missing );\
+		return scltool::OGetValue( entry, Value, Missing );\
 	}
 
 }

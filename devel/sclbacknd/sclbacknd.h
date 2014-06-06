@@ -42,6 +42,7 @@
 # include "fblbur.h"
 
 # include "scldaemon.h"
+# include "scllocale.h"
 
 namespace sclbacknd {
 
@@ -49,18 +50,26 @@ namespace sclbacknd {
 	class callback__;
 
 	typedef fblbkd::backend___	_backend___;
+	typedef scldaemon::daemon___ _daemon___;
 
 	struct backend___ 
-	: public _backend___
+	: public _backend___,
+	  public _daemon___
 	{
 	private:
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
 		flx::void_oflow_driver___ _VoidFlowDriver;
 		void *_UP;
+	protected:
+		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow )
+		{
+			return Handle( Flow, _UP, _RequestLogFunctions );
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_backend___::reset( P );
+			_daemon___::reset( P );
 			_RequestLogFunctions.reset( P );
 			_VoidFlowDriver.reset( P );
 			_UP = NULL;
@@ -71,55 +80,37 @@ namespace sclbacknd {
 			const char *APIVersion,
 			const char *ClientOrigin,
 			const char *BackendLabel,
-			const lcl::locale_ &Locale,
 			const char *BackendInformations,
 			const char *BackendCopyright,
 			const char *SoftwareInformations,
 			void *UP )
 		{
-			_backend___::Init( Mode, APIVersion, ClientOrigin, BackendLabel, Locale, BackendInformations, BackendCopyright, SoftwareInformations );
+			_backend___::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations );
+			_daemon___::Init();
 			_VoidFlowDriver.Init( fdr::tsDisabled );
 			_RequestLogFunctions.Init( _VoidFlowDriver );
 			_UP = UP;
 		}
-		friend class sclbacknd::callback__;
 		void *UP( void ) const
 		{
 			return _UP;
 		}
 	};
 
-	typedef csdscb::callback__ _callback__;
+	typedef scldaemon::callback__ _callback__;
 
 	class callback__
 	: public _callback__
 	{
 	private:
 		fblbur::mode__ _Mode;
-		const lcl::locale_ *_Locale;
-		virtual void *CSDSCBPreProcess( const char *Origin )
-		{
-			return SCLBACKNDNew( _Mode, *_Locale, Origin );
-		}
-		virtual csdscb::action__ CSDSCBProcess(
-			flw::ioflow__ &Flow,
-			void *UP )
-		{
-			backend___ &Backend = *(backend___ *)UP;
-
-			if ( Backend.Handle( Flow, Backend.UP(), Backend._RequestLogFunctions ) )
-				return csdscb::aContinue;
-			else
-				return csdscb::aStop;
-		}
-		virtual void CSDSCBPostProcess( void *UP )
-		{
-			delete (backend___ *)UP;
-		}
 	protected:
+		virtual scldaemon::daemon___ *SCLDAEMONNew(	const char *Origin )
+		{
+			return SCLBACKNDNew( _Mode, Origin );
+		}
 		virtual backend___ *SCLBACKNDNew(
 			fblbur::mode__ Mode,
-			const lcl::locale_ &Locale,
 			const char *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
@@ -127,24 +118,17 @@ namespace sclbacknd {
 			_callback__::reset( P );
 
 			_Mode = fblbur::m_Undefined;
-			_Locale = NULL;
 		}
 		E_CVDTOR( callback__ );
-		void Init(
-			fblbur::mode__ Mode,
-			const lcl::locale_ &Locale )
+		void Init( fblbur::mode__ Mode )
 		{
 			_callback__::Init();
 
 			_Mode = Mode;
-			_Locale = &Locale;
 		}
 	};
 
-	callback__ *SCLBACKNDNew( 
-		fblbur::mode__ Mode,
-		const lcl::locale_ &Locale );	// A surcharger.
-
+	callback__ *SCLBACKNDNewCallback( fblbur::mode__ Mode );	// A surcharger.
 }
 
 				  /********************************************/

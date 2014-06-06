@@ -40,7 +40,7 @@ bso::bool__ csdlec::library_embedded_client_core__::Init(
 	reset();
 
 	if ( _Library.Init( LibraryName, ERRHandling ) )
-		if ( _RetrieveSteering( &SharedData ) )
+		if ( _RetrieveCallback( &SharedData ) )
 			return true;
 		else
 			reset();	// Sinon le bibliothèque n'est pas déchargée correctement à la fermeture de l'application.
@@ -52,39 +52,39 @@ bso::bool__ csdlec::library_embedded_client_core__::Init(
 }
 
 
-extern "C" typedef csdleo::retrieve_steering retrieve_steering;
+extern "C" typedef csdleo::retrieve_callback retrieve_callback;
 
-bso::bool__ csdlec::library_embedded_client_core__::_RetrieveSteering( csdleo::shared_data__ *Data )
+bso::bool__ csdlec::library_embedded_client_core__::_RetrieveCallback( csdleo::shared_data__ *Data )
 {
-	retrieve_steering *RetrieveSteering = dlbrry::GetFunction<retrieve_steering *>( E_STRING( CSDLEO_RETRIEVE_STEERING_FUNCTION_NAME ), _Library );
+	retrieve_callback *RetrieveCallback = dlbrry::GetFunction<retrieve_callback *>( E_STRING( CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME ), _Library );
 
-	if ( RetrieveSteering == NULL )
+	if ( RetrieveCallback == NULL )
 		return false;
 
-	if ( _Steering != NULL )
+	if ( _Callback != NULL )
 		ERRFwk();
 
-	if ( ( _Steering = RetrieveSteering( Data ) ) == NULL )
+	if ( ( _Callback = RetrieveCallback( Data ) ) == NULL )
 		return false;
 
 	return true;
 }
 
-extern "C" typedef csdleo::release_steering release_steering;
+extern "C" typedef csdleo::release_callback release_callback;
 
-bso::bool__ csdlec::library_embedded_client_core__::_ReleaseSteering( void )
+bso::bool__ csdlec::library_embedded_client_core__::_ReleaseCallback( void )
 {
-	release_steering *ReleaseSteering = dlbrry::GetFunction<release_steering *>( E_STRING( CSDLEO_RELEASE_STEERING_FUNCTION_NAME ), _Library );
+	release_callback *ReleaseCallback = dlbrry::GetFunction<release_callback *>( E_STRING( CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME ), _Library );
 
-	if ( ReleaseSteering == NULL )
+	if ( ReleaseCallback == NULL )
 		return false;
 
-	if ( _Steering == NULL )
+	if ( _Callback == NULL )
 		ERRFwk();
 
-	ReleaseSteering( _Steering );
+	ReleaseCallback( _Callback );
 
-	_Steering = NULL;
+	_Callback = NULL;
 
 	return true;
 }

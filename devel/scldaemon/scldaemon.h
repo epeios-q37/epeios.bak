@@ -38,16 +38,74 @@
 
 # include "csdleo.h"
 
+# include "sclrgstry.h"
+
 namespace scldaemon {
-	const char *GetLanguage( void );
+	class daemon___
+	{
+	private:
+		rgstry::multi_level_registry _Registry;
+	protected:
+		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) = 0;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_Registry.reset( P );
+		}
+		E_CVDTOR( daemon___ );
+		void Init( void )
+		{
+			_Registry.Init();
+			_Registry.Push( sclrgstry::GetRegistry() );
+		}
+		bso::bool__ Process( flw::ioflow__ &Flow )
+		{
+			return SCLDAEMONProcess( Flow );
+		}
+	};
+
+	typedef csdscb::callback__ _callback__;
+
+	class callback__
+	: public _callback__
+	{
+	private:
+		virtual void *CSDSCBPreProcess( const char *Origin )
+		{
+			return SCLDAEMONNew( Origin );
+		}
+		virtual csdscb::action__ CSDSCBProcess(
+			flw::ioflow__ &Flow,
+			void *UP )
+		{
+			daemon___ &Daemon = *(daemon___ *)UP;
+
+			if ( Daemon.Process( Flow ) )
+				return csdscb::aContinue;
+			else
+				return csdscb::aStop;
+		}
+		virtual void CSDSCBPostProcess( void *UP )
+		{
+			delete (daemon___ *)UP;
+		}
+	protected:
+		virtual daemon___ *SCLDAEMONNew( const char *Origin ) = 0;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_callback__::reset( P );
+		}
+		E_CVDTOR( callback__ );
+		void Init( void )
+		{
+			_callback__::Init();
+		}
+	};
+
 
 	// A définir par l'utilisateur.
-	csdleo::callback__ *SCLDAEMONRetrieveSteering(
-		csdleo::mode__ Mode,
-		const lcl::locale_ &Locale );	// To overload !
-
-	// A définir par l'utilisateur.
-	void SCLDAEMONReleaseSteering( csdleo::callback__ *Steering );	// To overload.
+	callback__ *SCLDAEMONNewCallback( csdleo::mode__ Mode );	// To overload !
 
 	void DisplayModuleClosingMessage( void );
 
