@@ -17,10 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: example.h,v 1.5 2009/10/04 16:59:50 csimon Exp $
-
-// BaCKend MaNGER
-
 #ifndef COMMON__INC
 # define COMMON__INC
 
@@ -29,19 +25,30 @@
 
 # include "fblbkd.h"
 
+#include "sclbacknd.h"
+
 namespace common {
-	class data___
+	typedef sclbacknd::backend___ _backend___;
+
+	class stuff___	// 'xbackend' ('eXtended' 'backend') : 'backend' qui hérite du 'backend' de base.
 	{
+	private:
+		_backend___ *XBackend_;
 	public:
 		void reset( bso::bool__ = true )
 		{
+			XBackend_ = NULL;
 		}
-		E_CVDTOR( data___ );
-		void Init( void )
+		E_CVDTOR( stuff___ );
+		void Init( _backend___ &XBackend )
 		{
+			XBackend_ = &XBackend;
+		}
+		_backend___ &XBackend( void ) const
+		{
+			return *XBackend_;
 		}
 	};
 }
-
 
 #endif

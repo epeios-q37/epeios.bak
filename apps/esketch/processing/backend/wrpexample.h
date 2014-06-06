@@ -51,7 +51,7 @@ namespace wrpexample {
 			void *UP );
 		static void NOTIFY(
 			fblbkd::untyped_module &Module,
-			common::data___ &Data );
+			common::stuff___ &Stuff );
 		static const char *PREFIX;
 		static const char *NAME;
 //		static void RAW_MESSAGES( lcl::strings_ &Messages );

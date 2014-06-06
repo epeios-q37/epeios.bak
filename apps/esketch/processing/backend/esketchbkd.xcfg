@@ -2,6 +2,8 @@
 <!-- $Id$ -->
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="esketchbkd">
-		<Language>en</Language>
+		<Parameters>
+			<Language>en</Language>
+		</Parameters>
 	</Configuration>
 </Configurations>

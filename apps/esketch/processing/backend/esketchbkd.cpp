@@ -45,20 +45,20 @@ class backend___
 : public _backend___
 {
 private:
-	FBLBKD_RAM_MODULE( wrpexample::myobject_, common::data___ ) MyObject;
-	common::data___ _Data;
+	FBLBKD_RAM_MODULE( wrpexample::myobject_, common::stuff___ ) MyObject;
+	common::stuff___ _Stuff;
 public:
 	void reset( bso::bool__ P = true )
 	{
 		_backend___::reset( P );
-		_Data.reset();
+		_Stuff.reset();
 	}
 	E_CVDTOR( backend___ );
 	void Init(
 		fblbur::mode__ Mode,
 		const char *ClientOrigin )
 	{
-		_Data.Init();
+		_Stuff.Init( *this );
 
 		_backend___::Init(
 			Mode,
@@ -68,11 +68,11 @@ public:
 			BACKEND_NAME " " VERSION,
 			COPYRIGHT,
 			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION,
-			&_Data );
+			&_Stuff );
 
-		wrpunbound::Inform( *this, _Data );
+		wrpunbound::Inform( *this, _Stuff );
 
-		MyObject.Init( _Data );
+		MyObject.Init( _Stuff );
 		Add( MyObject );
 	}
 };

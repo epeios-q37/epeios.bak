@@ -28,7 +28,7 @@
 
 using namespace wrpexample;
 using namespace sktxmp;
-using common::data___;
+using common::stuff___;
 
 const char *wrpexample::myobject_::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
 const char *wrpexample::myobject_::NAME = WRPEXAMPLE_MYOBJECT_NAME;
@@ -75,7 +75,7 @@ static const char *GetMessage_(
 	_myobject_ &MyObject,\
 	fblbkd::backend___ &Backend,\
 	fblbkd::request__ &Request,\
-	data___ &Data )\
+	stuff___ &Stuff )\
 
 typedef void (* f_manager ) ARGS;
 
@@ -105,7 +105,7 @@ void wrpexample::myobject_::HANDLE(
 	fblbkd::request__ &Request,
 	void *UP )
 {
-	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(data___ *)UP );
+	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(stuff___ *)UP );
 }
 
 #define REPORT( v )	Report_( ( v ), Backend, Request )
@@ -140,7 +140,7 @@ ERREpilog
 
 void wrpexample::myobject_::NOTIFY(
 	fblbkd::untyped_module &Module,
-	common::data___ &Data )
+	common::stuff___ &Data )
 {
 	Module.Add( D( Test ),
 		fblbkd::cEnd,

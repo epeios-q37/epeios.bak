@@ -43,11 +43,11 @@
         <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
         <Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
         <!-- Fanaux : 'Path', mais pas de 'Value'. -->
-        <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Parameters/Flag" Value="TestFlag"/>
+        <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
         <!-- Options : 'Path' ET 'Value'. -->
-        <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Parameters/Option" Label="TestOptionLabel"/>
+        <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
         <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-        <Argument id="TestArgument" Description="TestArgumentDescription" Path="Parameters/Argument" Label="TestArgumentLabel"/>
+        <Argument id="TestArgument" Description="TestArgumentDescription" Path="Argument" Label="TestArgumentLabel"/>
         <!-- Affectations des arguments libres-->
         <Layouts>
           <Layout command="test">

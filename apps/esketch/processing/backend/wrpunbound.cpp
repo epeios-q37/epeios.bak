@@ -25,7 +25,7 @@
 
 using namespace wrpunbound;
 
-using common::data___;
+using common::stuff___;
 
 enum message__ {
 	mTestMessage,
@@ -63,17 +63,21 @@ static const char *GetRawMessage_( message__ MessageId )
 		fblbkd::command__,\
 		fblbkd::request__ &Request,\
 		bso::bool__ &,\
-		void *)
+		void *UP )
+
+#define STUFF common::stuff___ &Stuff = *(common::stuff___ *)UP
+#define XBACKEND	STUFF;sclbacknd::backend___ &XBackend = Stuff.XBackend()
 
 DEC( Test )
 {
+	XBACKEND;
 }
 
 #define D( name )	SKTINF_UC_SHORT #name, ::name
 
 void wrpunbound::Inform(
 	fblbkd::backend___ &Backend,
-	data___ &Data )
+	stuff___ &Stuff )
 {
 	Backend.Add( D( Test ),
 		fblbkd::cEnd,

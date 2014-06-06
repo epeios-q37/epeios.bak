@@ -62,16 +62,25 @@ static void PrintHeader_( void )
 
 /* End of the part which handles command line arguments. */
 
+static void Test_( void )
+{
+	cio::COut << "Test" << txf::nl;
+}
+
+#define C( name )\
+	else if ( Command == #name )\
+		name##_()
+		
+
 void scltool::SCLTOOLMain( const str::string_ &Command )
 {
 ERRProlog
 ERRBegin
-	if ( Command == "Test" )
-		cio::COut << "Test" << txf::nl;
-	else if ( Command == "Version" )
+	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense();
+	C( Test );
 	else
 		ERRFwk();
 ERRErr
