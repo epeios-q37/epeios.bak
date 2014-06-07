@@ -309,7 +309,6 @@ recap__ frdkrn::kernel___::_Connect(
 	const char *RemoteHostServiceOrLocalLibraryPath,
 	const compatibility_informations__ &CompatibilityInformations,
 	csducl::type__ Type,
-	frdkrn::reporting_functions__ &ReportingFunctions,
 	const char *Language, 
 	error_set___ &ErrorSet,
 	csdsnc::log_functions__ &LogFunctions )
@@ -335,7 +334,7 @@ ERRBegin
 		ERRReturn;
 	}
 
-	if ( !_Frontend.Init( Language, CompatibilityInformations, _ClientCore, ReportingFunctions, ErrorSet.IncompatibilityInformations ) ) {
+	if ( !_Frontend.Init( Language, CompatibilityInformations, _ClientCore, *_ReportingFunctions, ErrorSet.IncompatibilityInformations ) ) {
 		Recap = rIncompatibleBackend;
 		ERRReturn;
 	}
@@ -355,7 +354,6 @@ recap__ frdkrn::kernel___::_Connect(
 	const str::string_ &RemoteHostServiceOrLocalLibraryPath,
 	const compatibility_informations__ &CompatibilityInformations,
 	csducl::type__ Type,
-	frdkrn::reporting_functions__ &ReportingFunctions,
 	const char *Language,
 	error_set___ &ErrorSet,
 	csdsnc::log_functions__ &LogFunctions )
@@ -364,7 +362,7 @@ recap__ frdkrn::kernel___::_Connect(
 ERRProlog
 	TOL_CBUFFER___ RemoteHostServiceOrLocalLibraryPathBuffer;
 ERRBegin
-	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, ReportingFunctions, Language, ErrorSet, LogFunctions );
+	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, ErrorSet, LogFunctions );
 ERRErr
 ERREnd
 ERREpilog
@@ -446,7 +444,6 @@ csducl::type__ frdkrn::GetBackendTypeAndLocation(
 
 recap__ frdkrn::kernel___::_Connect(
 	const compatibility_informations__ &CompatibilityInformations,
-	reporting_functions__ &ReportingFunctions,
 	const char *Language,
 	error_set___ &ErrorSet,
 	csdsnc::log_functions__ &LogFunctions )
@@ -461,7 +458,7 @@ ERRBegin
 	switch ( Type = GetBackendTypeAndLocation( _R(), Location ) ) {
 	case csducl::tLibrary:
 	case csducl::tDaemon:
-		Recap = _Connect( Location, CompatibilityInformations, Type, ReportingFunctions, Language, ErrorSet, LogFunctions );
+		Recap = _Connect( Location, CompatibilityInformations, Type, Language, ErrorSet, LogFunctions );
 		break;
 	case csducl::t_Undefined:
 		Recap = rNoOrBadBackendDefinition;
@@ -660,9 +657,7 @@ ERREpilog
 #endif
 
 
-status__ frdkrn::kernel___::LaunchProject(
-	const compatibility_informations__ &CompatibilityInformations,
-	reporting_functions__ &ReportingFunctions )
+status__ frdkrn::kernel___::Launch( const compatibility_informations__ &CompatibilityInformations )
 {
 	status__ Status = s_Undefined;
 ERRProlog
@@ -671,9 +666,9 @@ ERRProlog
 ERRBegin
 	ErrorSet.Init();
 
-	if ( ( Recap = LaunchProject( CompatibilityInformations, *_ReportingFunctions, ErrorSet ) ) != r_OK ) {
-		_Meaning.Init();
-		frdkrn::GetMeaning( Recap, ErrorSet, _Meaning );
+	if ( ( Recap = Launch( CompatibilityInformations, ErrorSet ) ) != r_OK ) {
+		_ErrorMeaning.Init();
+		frdkrn::GetMeaning( Recap, ErrorSet, _ErrorMeaning );
 		Status = sError;
 		ERRReturn;
 	} else
@@ -713,8 +708,8 @@ ERRBegin
 	ErrorSet.Init();
 
 	if ( ( Recap = SaveProject( FileName, TargetName, Id, ErrorSet ) ) != r_OK ) {
-		_Meaning.Init();
-		frdkrn::GetMeaning( Recap, ErrorSet, _Meaning );
+		_ErrorMeaning.Init();
+		frdkrn::GetMeaning( Recap, ErrorSet, _ErrorMeaning );
 		Status = sError;
 		ERRReturn;
 	} else

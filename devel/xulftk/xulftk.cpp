@@ -181,7 +181,7 @@ ERRProlog
 ERRBegin
 	Translation.Init();
 
-	Kernel().GetTranslatedMeaning( Translation );
+	Kernel().GetErrorMeaningTranslation( Translation );
 
 	switch( Status ) {
 	case frdkrn::sOK:
@@ -685,7 +685,7 @@ ERRBegin
 	Kernel().Registry().SetValue( frdrgy::Backend, Value );
 	frdkrn::SetBackendExtendedType( Kernel().Registry(), Type );
 
-	Handle_( Kernel().LaunchProject( CompatibilityInformations, DefaultReportingFunctions() ) );
+	Handle_( Kernel().Launch( CompatibilityInformations ) );
 
 	Setups.Init();
 

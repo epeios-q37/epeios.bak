@@ -130,7 +130,7 @@ namespace frdkrn {
 	enum status__ {
 		sOK,
 		sError,		// Il y aune erreur, l'action en cours doit être interrompue (Lancer 'ERRAbort()').
-		sWarning,		// Il y a eu un prblème, mais l'action peut être poursuivie.
+		sWarning,		// Il y a eu un problème, mais l'action peut être poursuivie.
 		s_amount,
 		s_Undefined
 	};
@@ -240,7 +240,7 @@ namespace frdkrn {
 		frdfrd::frontend___ _Frontend;
 		lcl::locale _Locale;
 		const char *_Language;	// Langue d'administration.
-		lcl::meaning _Meaning;
+		lcl::meaning _ErrorMeaning;
 		time_t _ProjectOriginalTimeStamp;	// Horodatage de la créationn du chargement du projet ou de sa dernière sauvegarde. Si == 0, pas de projet en cours d'utilisation.
 		time_t _ProjectModificationTimeStamp;	// Horodatage de la dernière modification du projet.
 		reporting_functions__ *_ReportingFunctions;
@@ -263,7 +263,6 @@ namespace frdkrn {
 			const str::string_ &RemoteHostServiceOrLocalLibraryPath,
 			const compatibility_informations__ &CompatibilityInformations,
 			csducl::type__ Type,
-			reporting_functions__ &ReportingFunctions,
 			const char *Language,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions );
@@ -295,13 +294,11 @@ namespace frdkrn {
 			const char *RemoteHostServiceOrLocalLibraryPath,
 			const compatibility_informations__ &CompatibilityInformations,
 			csducl::type__ Type,
-			reporting_functions__ &ReportingFunctions,
 			const char *Language,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
 		recap__ _Connect( // Try to connect using registry content.
 			const compatibility_informations__ &CompatibilityInformations,
-			reporting_functions__ &ReportingFunctions,
 			const char *Language,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
@@ -318,7 +315,7 @@ namespace frdkrn {
 			_ClientCore.reset( P );
 			_Locale.reset( P );
 			_Language = NULL;
-			_Meaning.reset( P );
+			_ErrorMeaning.reset( P );
 			_ProjectOriginalTimeStamp = 0;
 			_ProjectModificationTimeStamp = 0;
 			_ReportingFunctions = NULL;
@@ -334,7 +331,7 @@ namespace frdkrn {
 
 //			_RegistryProjectLevel = RGSTRY_UNDEFINED_LEVEL;
 
-			_Meaning.Init();
+			_ErrorMeaning.Init();
 
 			_Locale.Init();
 			_Locale.Push( Locale );
@@ -428,15 +425,14 @@ namespace frdkrn {
 			_RegistryProjectLevel = _Registry.PushEmbeddedLevel( str::string( "Project" ) );
 		}
 #endif
-		recap__ LaunchProject(
+		recap__ Launch(
 			const compatibility_informations__ &CompatibilityInformations,
-			reporting_functions__ &ReportingFunctions,
 			error_set___ &ErrorSet )	// Les paramètres de connection sont récupèrés de la 'registry'.
 		{
 			recap__ Recap = r_OK;
 			
 			if ( GetBackendExtendedType( Registry() ) != bxtNone )
-				Recap = _Connect( CompatibilityInformations, ReportingFunctions, Language(), ErrorSet );
+				Recap = _Connect( CompatibilityInformations, Language(), ErrorSet );
 
 			if ( Recap == r_OK ) {
 				_ProjectOriginalTimeStamp = time( NULL );
@@ -452,9 +448,7 @@ namespace frdkrn {
 			const xpp::criterions___ &Criterions,
 			str::string_ &Id );
 # endif
-		status__ LaunchProject(
-			const compatibility_informations__ &CompatibilityInformations,
-			reporting_functions__ &ReportingFunctions );
+		status__ Launch( const compatibility_informations__ &CompatibilityInformations );
 		time_t ProjectTimeStamp( void ) const
 		{
 			return _R().TimeStamp( _R().TopLevel() );
@@ -484,10 +478,10 @@ namespace frdkrn {
 		{
 			return _ProjectOriginalTimeStamp < ProjectModificationTimeStamp();
 		}
-		E_RWDISCLOSE__( lcl::meaning_ , Meaning );
-		const str::string_ &GetTranslatedMeaning( str::string_ &Translation ) const
+		E_RWDISCLOSE__( lcl::meaning_ , ErrorMeaning );
+		const str::string_ &GetErrorMeaningTranslation( str::string_ &Translation ) const
 		{
-			return Locale().GetTranslation( Meaning(), Language(), Translation );
+			return Locale().GetTranslation( ErrorMeaning(), Language(), Translation );
 		}
 		const str::string_ &GetTranslation(
 			const char *Message,
