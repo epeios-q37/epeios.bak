@@ -110,7 +110,6 @@
 # define MTX__COUNTER_OVERFLOW_VALUE	BSO_S16_MIN
 
 namespace mtx {
-
 #ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
 	typedef LONG counter_t__;
 	typedef counter_t__ counter__;
@@ -321,6 +320,7 @@ namespace mtx {
 		}
 	} *handler__;
 
+	E_CDEF( handler__, UndefinedHandler, NULL );
 
 	//f Return a new mutex handler.
 	inline handler__ Create( bso::bool__ Disabled = false )	// Si True, utilisation dans un contexte mono-thread.

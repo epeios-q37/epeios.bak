@@ -565,8 +565,7 @@ namespace fblbkd {
 	: public module<t,user>
 	{
 	private:
-		t T_;
-		st ST_;
+		t *T_;
 		bso::bool__ Created_;
 	protected:
 		virtual index__ FBLBKDNew( void )
@@ -583,16 +582,15 @@ namespace fblbkd {
 		}
 		virtual void *FBLBKDObject( index__ Index )
 		{
-			return T_.OBJECT();
+			return T_->OBJECT();
 		}
 	public:
 		void reset( bool P = true )
 		{
-			T_.reset( P );
+			T_ = NULL;
 			Created_ = false;
 		}
 		shared_module( void )
-		: T_( ST_ )
 		{
 			reset( false );
 		}
@@ -601,11 +599,14 @@ namespace fblbkd {
 			reset( true );
 		}
 		// Initialisation.
-		void Init( user &User )
+		void Init(
+			user &User,
+			t &Object )
 		{
 			reset();
 			module<t,user>::Init( User );
 			Created_ = false;
+			T_ = &Object;
 		}
 	};
 

@@ -273,7 +273,7 @@ namespace stsfsm {
 		const str::string_ &Pattern,
 		const automat_ &Automat,
 		type UndefinedValue,
-		type Amount )
+		bso::uint__ Amount )
 	{
 		id__ Id = GetId_( Pattern, Automat );
 
