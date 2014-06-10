@@ -1,27 +1,42 @@
-<?xml version="1.0" encoding="iso-8859-15"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="edaemon">
-    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
-    <xpp:expand value-of="epeios.shortcuts"/>
-	<xpp:expand select="epeios.xcfg"/>
-    <Parameters>
-		  <Language>en</Language>
-      <Command>Process</Command>
-    </Parameters>
-    <Definitions>
-      <Locale>
-        <xpp:expand select="Locale"/>
-      </Locale>>
-      <Arguments>
-        <xpp:expand select="Arguments"/>
-        <Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process"/>
-        <Argument id="ProjectArgument" Path="ProjectFileName"/>
-        <Layouts>
-          <Layout command="Process">
-            <Link index="0" Target="ProjectArgument"/>
-          </Layout>
-        </Layouts>
-      </Arguments>
-    </Definitions>
-  </Configuration>
+		<xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
+		<xpp:expand value-of="epeios.shortcuts"/>
+		<xpp:expand select="epeios.xcfg"/>
+		<Parameters>
+			<Language>fr</Language>
+			<Command>Process</Command>
+		</Parameters>
+		<Definitions>
+			<Locale>
+				<xpp:expand select="Locale"/>
+				<xpp:cdata>
+					<Translations text="ProcessCommandDescription">
+						<Translation language="fr">Lance un 'daemon'.</Translation>
+						<Translation language="en">Launch a daemon.</Translation>
+					</Translations>
+					<!-- Arguments -->
+					<Translations text="ProjectFileNameArgumentDescription">
+						<Translation language="fr">Nom du fichier projet.</Translation>
+						<Translation language="en">Project fiel name.</Translation>
+					</Translations>
+					<Translations text="ProjectFileNameArgumentLabel">
+						<Translation language="fr">projet</Translation>
+						<Translation language="en">project</Translation>
+					</Translations>
+				</xpp:cdata>
+			</Locale>
+			<Arguments>
+				<xpp:expand select="Arguments"/>
+				<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%ProjectFileNameArgument%]"/>
+				<Argument id="ProjectFileNameArgument" Description="ProjectFileNameArgumentDescription" Label="ProjectFileNameArgumentLabel" Path="ProjectFileName"/>
+				<Layouts>
+					<Layout command="Process">
+						<Link index="0" Target="ProjectFileNameArgument"/>
+					</Layout>
+				</Layouts>
+			</Arguments>
+		</Definitions>
+	</Configuration>
 </Configurations>

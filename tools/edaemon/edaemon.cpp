@@ -367,12 +367,9 @@ static void ExitFunction_( void )
 static void Go_( void )
 {
 ERRProlog
-	str::string ProjectFileName;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	atexit( ExitFunction_ );
-
-	ProjectFileName.Init();
 
 	Go_( registry::GetModuleLogFileName( Buffer ), GetLogFileHandling_() );
 ERRErr

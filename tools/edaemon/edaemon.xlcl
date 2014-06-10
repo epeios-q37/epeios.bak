@@ -5,8 +5,8 @@
     <xpp:expand value-of="epeios.shortcuts"/>
 	<xpp:expand select="epeios.xlcl"/>
     <Translations text="ProgramDescription">
-      <Translation language="fr">Daemoniseur</Translation>
-      <Translation language="en">Daemonizer</Translation>
+      <Translation language="fr">'Daemoniseur'.</Translation>
+      <Translation language="en">Daemonizer.</Translation>
     </Translations>
     <Translations text="ModuleError">
       <Translation language="fr">Erreur module : %1</Translation>
