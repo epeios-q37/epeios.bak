@@ -33,6 +33,8 @@
 
 // Frontend/Backend Layout BacKenD
 
+# include "err.h"// Frontend/Backend Layout BacKenD
+
 # include "err.h"
 # include "flw.h"
 # include "lcl.h"
@@ -342,19 +344,42 @@ namespace fblbkd {
 			const cast__ *Casts,
 			const void *UP )
 		{
-			sdr::row__ P = Descriptions.Add( Name, Casts );
+			sdr::row__ Row = Descriptions.Add( Name, Casts );
 			
-			if ( UPs.Append( UP ) != P )
+			if ( UPs.Append( UP ) != Row )
 				ERRFwk();
 				
-			return P;
+			return Row;
 		}			
 		sdr::row__ Add(
 			const char *Name,
 			const void *UP,
+			cast__ Cast,
+			va_list VL )
+		{
+			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
+			
+			if ( UPs.Append( UP ) != Row )
+				ERRFwk();
+				
+			return Row;
+		}			
+		sdr::row__ Add(
+			const char *Name,
+			const void *UP,
+			cast__ Cast,
 			... )
 		{
-			return Add( Name, (cast__ *)(&UP + 1), UP );
+			sdr::row__ Row = E_NIL;
+			va_list VL;
+
+			va_start( VL, Cast );
+
+			Row = Add( Name, UP, Cast, VL );
+
+			va_end( VL );
+
+			return Row;
 		}
 		friend class backend___;
 		friend class master_module;
@@ -893,10 +918,27 @@ namespace fblbkd {
 		sdr::row__ Add(
 			const char *Name,
 			function__ FP,
-			cast__ Cast,	// Added to avoid confusion with function above.
+			cast__ Cast,
+			va_list VL )
+		{
+			return Master_.Add( Name, (void *)FP, Cast, VL );
+		}
+		sdr::row__ Add(
+			const char *Name,
+			function__ FP,
+			cast__ Cast,	// Added to avoid confusion with method above.
 			... )
 		{
-			return Add( Name, FP, &Cast );
+			sdr::row__ Row = E_NIL;
+			va_list VL;
+
+			va_start( VL, Cast );
+
+			Row = Add( Name, FP, Cast, VL );
+
+			va_end( VL );
+
+			return Row;
 		}
 		const char *GetBackendLabel( void ) const
 		{

@@ -55,6 +55,8 @@ public:
 				  /*******************************************/
 /*$BEGIN$*/
 
+#include "cpe.h"
+
 using namespace fblbrd;
 
 void fblbrd::description_::Init(
@@ -79,7 +81,41 @@ void fblbrd::description_::Init(
 		this->Casts.Append( Cast );
 	}
 
-	i=i;
+#ifdef RQM_DBG
+	if ( Array != 0 )
+		ERRc();
+#endif
+
+}
+
+#ifdef CPE_GCC
+typedef int va_t__;
+#else
+typedef cast__ va_t__;
+#endif
+
+
+void fblbrd::description_::Init(
+	const char *Name,
+	cast__ Cast,
+	va_list VL )
+{
+	this->Name.Init();
+	this->Casts.Init();
+
+	this->Name = Name;
+
+	while ( Cast != cEnd )
+	{
+		this->Casts.Append( Cast );
+		Cast = (cast__)va_arg( VL, va_t__ );
+	}
+
+	this->Casts.Append( cEnd );
+
+	while ( ( Cast = (cast__)va_arg( VL, va_t__ ) ) != cEnd ) {
+		this->Casts.Append( Cast );
+	}
 
 #ifdef RQM_DBG
 	if ( Array != 0 )

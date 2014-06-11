@@ -56,10 +56,10 @@ wmods += wllio
 ##############################
 
 # Generates debugging data.
-CXXFLAGS += -g
+#CXXFLAGS += -g
 
 # General optimization.
-#CXXFLAGS += -O
+CXXFLAGS += -O
 
 # To use with gprof
 #CXXFLAGS += -pg

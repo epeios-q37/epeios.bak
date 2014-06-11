@@ -60,6 +60,8 @@ extern class ttr_tutor &FBLBRDTutor;
 
 /*$BEGIN$*/
 
+# include <stdarg.h>
+
 #include "err.h"
 #include "flw.h"
 #include "ctn.h" 
@@ -123,6 +125,23 @@ namespace fblbrd {
 		void Init(
 			const char *Name,
 			const cast__ *Casts );
+		void Init(
+			const char *Name,
+			cast__ Cast,	// This parameter was added to avoid ambiguity with some other method.
+			va_list Casts );
+		void Init(
+			const char *Name,
+			cast__ Cast,
+			... )
+		{
+			va_list VL;
+
+			va_start( VL, Name );
+
+			Init( Name, Cast, VL );
+
+			va_end( VL );
+		}
 		//f Initialization with name 'Name'. The casts would be given using 'New()'.
 		void Init( const char *Name )
 		{
@@ -186,6 +205,33 @@ namespace fblbrd {
 			Description.Init( Name, Casts );
 			
 			return Add( Description );
+		}
+		sdr::row__ Add(
+			const char *Name,
+			cast__ Cast,
+			va_list VL )
+		{
+			description Description;
+
+			Description.Init( Name, Cast, VL );
+			
+			return Add( Description );
+		}
+		sdr::row__ Add(
+			const char *Name,
+			cast__ Cast,
+			... )
+		{
+			sdr::row__ Row = E_NIL;
+			va_list VL;
+
+			va_start( VL, Name );
+
+			Row = Add( Name, Cast, VL);
+
+			va_end( VL );
+
+			return Row;
 		}
 		/*f Return the position of the description 'Description'. */
 		sdr::row__ Position( const description_ &Description ) const;

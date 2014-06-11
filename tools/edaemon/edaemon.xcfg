@@ -29,7 +29,7 @@
 			</Locale>
 			<Arguments>
 				<xpp:expand select="Arguments"/>
-				<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%ProjectFileNameArgument%]"/>
+				<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="%ProjectFileNameArgument%"/>
 				<Argument id="ProjectFileNameArgument" Description="ProjectFileNameArgumentDescription" Label="ProjectFileNameArgumentLabel" Path="ProjectFileName"/>
 				<Layouts>
 					<Layout command="Process">
