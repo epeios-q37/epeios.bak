@@ -2,8 +2,8 @@
 <!-- $Id: fblovl.xlcl,v 1.2 2013/07/18 19:46:19 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Translations text="FBLOVL_SoftwareError">
-		<Translation language="fr">Erreur logicielle</Translation>
-		<Translation language="en">Software error</Translation>
+		<Translation language="fr">Erreur logicielle : %1</Translation>
+		<Translation language="en">Software error : %1</Translation>
 	</Translations>
 	<Translations text="FBLOVL_RequestError">
 		<Translation language="fr">Erreur requête : %1</Translation>

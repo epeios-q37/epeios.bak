@@ -140,7 +140,7 @@ command__ fblfrd::frontend___::GetBackendDefaultCommand_()
 
 namespace {
 	template <typename type> void FillCasts_(
-		const fblcst::cast *Source,
+		const fblcst::cast__ *Source,
 		bch::E_BUNCH_( type ) &Dest )
 	{
 		int i = 0;

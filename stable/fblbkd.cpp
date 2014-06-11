@@ -100,9 +100,9 @@ void fblbkd::untyped_module::_Clean( void )
 
 
 namespace {
-	cast GetCastID_( const str::string_ &Name )
+	cast__ GetCastID_( const str::string_ &Name )
 	{
-		cast C = c_Unknow;
+		cast__ C = c_Unknow;
 	ERRProlog
 		TOL_CBUFFER___ N;
 	ERRBegin

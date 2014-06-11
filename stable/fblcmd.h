@@ -93,7 +93,7 @@ namespace fblcmd {
 	extern const char *CommandsNames[c_amount];
 
 	//o Commands parameters.
-	extern const cast *CommandsParameters[c_amount];
+	extern const cast__ *CommandsParameters[c_amount];
 
 
 }

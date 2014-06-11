@@ -71,12 +71,12 @@ namespace fblfph {
 	protected:
 		virtual void FBLFPHPreProcess( void ) = 0;
 		virtual void FBLFPHIn(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Flow ) = 0;
 		virtual void FBLFPHOut(
 			flw::ioflow__ &Flow,
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer ) = 0;
 		virtual void FBLFPHPostProcess( flw::ioflow__ &Flow ) = 0;
 	public:
@@ -101,7 +101,7 @@ namespace fblfph {
 			FBLFPHPreProcess();
 		}
 		void In(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Flow )
 		{
@@ -109,7 +109,7 @@ namespace fblfph {
 		}
 		void Out(
 			flw::ioflow__ &Flow,
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer )
 		{
 			FBLFPHOut( Flow, Cast, Pointer );

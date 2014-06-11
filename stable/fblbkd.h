@@ -339,7 +339,7 @@ namespace fblbkd {
 		}
 		sdr::row__ Add(
 			const char *Name,
-			const cast *Casts,
+			const cast__ *Casts,
 			const void *UP )
 		{
 			sdr::row__ P = Descriptions.Add( Name, Casts );
@@ -354,7 +354,7 @@ namespace fblbkd {
 			const void *UP,
 			... )
 		{
-			return Add( Name, (cast *)(&UP + 1), UP );
+			return Add( Name, (cast__ *)(&UP + 1), UP );
 		}
 		friend class backend___;
 		friend class master_module;
@@ -886,14 +886,14 @@ namespace fblbkd {
 		sdr::row__ Add(
 			const char *Name,
 			function__ FP,
-			const cast *Casts )
+			const cast__ *Casts )
 		{
 			return Master_.Add( Name, Casts, (void *)FP );
 		}
 		sdr::row__ Add(
 			const char *Name,
 			function__ FP,
-			cast Cast,	// Added to avoid confusion with function above.
+			cast__ Cast,	// Added to avoid confusion with function above.
 			... )
 		{
 			return Add( Name, FP, &Cast );

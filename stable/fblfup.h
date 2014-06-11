@@ -96,7 +96,7 @@ namespace fblfup {
 			}
 		}
 		virtual void FBLFPHIn(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Flow )
 		{
@@ -114,7 +114,7 @@ namespace fblfup {
 		}
 		virtual void FBLFPHOut(
 			flw::ioflow__ &Flow,
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer )
 		{
 			switch ( _Mode ) {

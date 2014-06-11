@@ -59,10 +59,10 @@ using namespace fblbrd;
 
 void fblbrd::description_::Init(
 	const char *Name,
-	const cast *Casts )
+	const cast__ *Casts )
 {
 	int i = 0;
-	cast Cast = c_Unknow;
+	cast__ Cast = c_Unknow;
 
 	this->Name.Init();
 	this->Casts.Init();
@@ -78,6 +78,8 @@ void fblbrd::description_::Init(
 	while ( ( Cast = Casts[i++] ) != cEnd ) {
 		this->Casts.Append( Cast );
 	}
+
+	i=i;
 
 #ifdef RQM_DBG
 	if ( Array != 0 )

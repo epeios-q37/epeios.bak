@@ -65,7 +65,7 @@ using namespace fblfrp;
 
 
 void fblfrp::remote_parameters_base__::In(
-	fblcst::cast Cast,
+	fblcst::cast__ Cast,
 	const void *Pointer,
 	flw::ioflow__ &Flow )
 {
@@ -114,7 +114,7 @@ void fblfrp::remote_parameters_base__::In(
 
 void fblfrp::remote_parameters_base__::Out(
 		flw::ioflow__ &Flow,
-		fblcst::cast Cast,
+		fblcst::cast__ Cast,
 		void *Pointer )
 {
 	Data.Append( datum__( Cast, Pointer ) );

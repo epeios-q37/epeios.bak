@@ -76,7 +76,7 @@ namespace fblbrr {
 			Content = NULL;
 			Cast = fblcst::c_Unknow;
 		}
-		parameter___( cast Cast = c_Unknow )
+		parameter___( cast__ Cast = c_Unknow )
 		{
 			reset( false );
 

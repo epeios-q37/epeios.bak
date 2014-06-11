@@ -122,7 +122,7 @@ namespace fblbrd {
 		and 1 of the end of returned values casts. */
 		void Init(
 			const char *Name,
-			const cast *Casts );
+			const cast__ *Casts );
 		//f Initialization with name 'Name'. The casts would be given using 'New()'.
 		void Init( const char *Name )
 		{
@@ -132,9 +132,9 @@ namespace fblbrd {
 			this->Name = Name;
 		}
 		//f Append 'Cast'.
-		void Append( fblcst::cast Cast )
+		void Append( fblcst::cast__ Cast )
 		{
-			Casts.Append( (cast__)Cast );
+			Casts.Append( Cast );
 		}
 	};
 
@@ -179,7 +179,7 @@ namespace fblbrd {
 		return the position where request description added. */
 		sdr::row__ Add(
 			const char *Name,
-			const cast *Casts )
+			const cast__ *Casts )
 		{
 			description Description;
 

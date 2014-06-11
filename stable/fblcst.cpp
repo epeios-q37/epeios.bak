@@ -98,7 +98,7 @@ const char *fblcst::CastsNames[c_amount] = {
 	"ObjectsReferences",
 };
 
-cast fblcst::GetID( const char *CastName )
+cast__ fblcst::GetID( const char *CastName )
 {
 	int i = 0;
 
@@ -108,7 +108,7 @@ cast fblcst::GetID( const char *CastName )
 	if ( i >= c_amount )
 		i = c_Unknow;
 
-	return (cast)i;
+	return (cast__)i;
 }
 
 
@@ -121,6 +121,8 @@ class fblcstpersonnalization
 public:
 	fblcstpersonnalization( void )
 	{
+		if ( c_amount > bso::S8Max )
+			ERRChk();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

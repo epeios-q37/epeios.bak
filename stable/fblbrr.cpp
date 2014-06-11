@@ -64,7 +64,7 @@ using namespace fblbrr;
 
 static parameter___ Create_(
 	flw::iflow__ &Flow,
-	cast Cast )
+	cast__ Cast )
 {
 	parameter___ Parameter;
 
@@ -122,7 +122,7 @@ static parameter___ Create_(
 
 static parameter___ _CreateAndGet(
 	flw::iflow__ &Flow,
-	cast Cast )
+	cast__ Cast )
 {
 	parameter___ Parameter;
 
@@ -236,7 +236,7 @@ void fblbrr::remote_request_functions___::_CreateAll(
 		if ( Flow.Get() != Casts( Row ) )
 			ERRDta();
 
-		if ( _Parameters.Append( _CreateAndGet( Flow, (cast)Casts( Row ) ) ) != Row )
+		if ( _Parameters.Append( _CreateAndGet( Flow, (cast__)Casts( Row ) ) ) != Row )
 			ERRFwk();
 
 		Row = Casts.Next( Row );
@@ -251,7 +251,7 @@ void fblbrr::remote_request_functions___::_CreateAll(
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		if ( _Parameters.Append( Create_( Flow, (cast)Casts( Row ) ) ) != Row )
+		if ( _Parameters.Append( Create_( Flow, (cast__)Casts( Row ) ) ) != Row )
 			ERRFwk();
 
 		Row = Casts.Next( Row );
@@ -367,7 +367,7 @@ void fblbrr::remote_request_functions___::FBLBRQPush(
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		Push_( Flow, _Parameters( Row ), (cast)Casts( Row ) );
+		Push_( Flow, _Parameters( Row ), (cast__)Casts( Row ) );
 
 		Row = Casts.Next( Row );
 	}

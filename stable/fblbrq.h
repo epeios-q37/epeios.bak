@@ -164,7 +164,7 @@ namespace fblbrq {
 		// At true if all the answer be sent.
 		bso::bool__ Closed_;
 		// Cast buffer.
-		cast Cast_;
+		cast__ Cast_;
 		// At true if the request parsed.
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
@@ -202,7 +202,7 @@ namespace fblbrq {
 		{
 			_F().Push( Flow, Casts );
 		}
-		void Test_( cast Cast )
+		void Test_( cast__ Cast )
 		{
 			if ( Position_ == E_NIL )
 				Position_ = Casts_.First();
@@ -212,11 +212,11 @@ namespace fblbrq {
 			if ( Casts_.Get( Position_ ) != Cast )
 				ERRFwk();
 		}
-		void TestInput_( cast Cast )
+		void TestInput_( cast__ Cast )
 		{
 			Test_( Cast );
 		}
-		void TestOutput_( cast Cast )
+		void TestOutput_( cast__ Cast )
 		{
 			if ( !Parsed_ ) {
 				Test_( cEnd );

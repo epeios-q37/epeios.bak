@@ -238,13 +238,13 @@ namespace fblfrd {
 			_ParametersHandlingFunctions->PreProcess();
 		}
 		void _In(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer )
 		{
 			_ParametersHandlingFunctions->In( Cast, Pointer, *Channel_ );
 		}
 		void _Out(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer )
 		{
 			_ParametersHandlingFunctions->Out( *Channel_, Cast, Pointer );
@@ -286,7 +286,7 @@ namespace fblfrd {
 		{
 			PushHeader( FBLFRD_MASTER_OBJECT, Commands_[Command] );
 		}
-		void TestInput_( fblcst::cast Cast )
+		void TestInput_( fblcst::cast__ Cast )
 		{
 			Channel_->Put( Cast );
 		}

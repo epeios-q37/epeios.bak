@@ -67,7 +67,7 @@ extern class ttr_tutor &FBLCSTTutor;
 
 namespace fblcst {
 	//e casts.
-	enum cast {
+	enum cast__ {
 		//i End of request or end of parameters list.
 		cEnd = 0,
 		//i Object ('bso::u16__')'.
@@ -150,7 +150,7 @@ namespace fblcst {
 		c_Unknow,
 	};	// A modification must be reflected by 'CastsNames'.
 
-	typedef fbltyp::id8_t__ cast__;
+//	typedef fbltyp::id8_t__ cast__;
 	typedef fbltyp::id8s_t_ casts_;
 	typedef fbltyp::id8s_t casts;
 
@@ -159,7 +159,7 @@ namespace fblcst {
 	extern const char *CastsNames[c_amount];
 
 	//f Get id from cast named 'CastName'.
-	cast GetID( const char *CastName );
+	cast__ GetID( const char *CastName );
 }
 
 /*$END$*/

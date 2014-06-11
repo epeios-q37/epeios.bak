@@ -83,7 +83,7 @@ namespace fblfep {
 			// Nothing to do.
 		}
 		void In(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Flow )
 		{
@@ -93,7 +93,7 @@ namespace fblfep {
 		}
 		void Out(
 			flw::ioflow__ &Flow,
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer )
 		{
 			Flow.Put( Cast );
@@ -119,7 +119,7 @@ namespace fblfep {
 			_Base.PreProcess();
 		}
 		virtual void FBLFRDIn(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Flow )
 		{
@@ -127,7 +127,7 @@ namespace fblfep {
 		}
 		virtual void FBLFRDOut(
 			flw::ioflow__ &Flow,
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer )
 		{
 			_Base.Out( Flow, Cast, Pointer );

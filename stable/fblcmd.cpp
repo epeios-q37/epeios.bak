@@ -77,51 +77,51 @@ const char *fblcmd::CommandsNames[c_amount] = {
 	"_SetLanguage$1"
 };
 
-static const cast ThrowUError[] = {
+static const cast__ ThrowUError[] = {
 	cEnd,
 	cEnd };
-static const cast ThrowIError[] = {
+static const cast__ ThrowIError[] = {
 	cEnd,
 	cEnd };
-static const cast TestNotification[] = {
+static const cast__ TestNotification[] = {
 		cString,	// Un message devant être retourné comme notification.
 	cEnd,
 	cEnd };
-static const cast GetNewObject[] = {
+static const cast__ GetNewObject[] = {
 		cId16,		// The type of the new object.
 	cEnd,
 		cObject,	// The asked object.
 	cEnd };
-static const cast GetType[] = {
+static const cast__ GetType[] = {
 		cString,	// The name of the type.
 	cEnd,
 		cId16,		// The type asked.
 	cEnd };
-static const cast GetCommand[] = {
+static const cast__ GetCommand[] = {
 		cId16,		// The object type.
 		cString,	// The command name.
 		cId8s,	// The casts of the command.
 	cEnd,
 		cId16,	// The asked command.
 	cEnd };
-static const cast GetCommands[] = {
+static const cast__ GetCommands[] = {
 		cId16,		// The object type.
 		cCommandsDetails,	// The wanted commands caracteristics.
 	cEnd,
 		cId16s,		// The asked commands.
 	cEnd };
-static const cast GetTypeAndCommands[] = {
+static const cast__ GetTypeAndCommands[] = {
 		cString,	// The name of the type.
 		cCommandsDetails,		// The wanted commands caracteristics.
 	cEnd,
 		cId16,		// The asked type.
 		cId16s,		// The asked commands.
 	cEnd };
-static const cast RemoveObject[] = {
+static const cast__ RemoveObject[] = {
 		cObject,	// The object to remove.
 	cEnd,
 	cEnd };
-static const cast About[] = {
+static const cast__ About[] = {
 	cEnd,
 		cString,	// Version du protocol.
 		cString,	// libellé de la cible.
@@ -130,35 +130,35 @@ static const cast About[] = {
 		cString,	// Informations de copyright sur le 'backend'.
 		cString,	// Informations au sujet du 'software'.
 	cEnd };
-static const cast Disconnect[] = {
+static const cast__ Disconnect[] = {
 	cEnd,
 	cEnd };
-static const cast GetTypesIDAndPrefixAndName[] = {
+static const cast__ GetTypesIDAndPrefixAndName[] = {
 	cEnd,
 		cXItem16s,	// The types ID, prefix and name.
 	cEnd };
-static const cast GetCommandsIDAndName[] = {
+static const cast__ GetCommandsIDAndName[] = {
 		cId16,		// Type of objects from which you want the commands name.
 	cEnd,
 		cItem16s,	// The ids and names of the commands.
 	cEnd };
-static const cast GetParameters[] = {
+static const cast__ GetParameters[] = {
 		cId16,		// Type of objects from which you want the parameters.
 		cId16,	// Command of objects from which you want the parameters.
 	cEnd,
 		cId8s,	// The parameters of the commands.
 	cEnd };
-static const cast GetLanguage[] = {
+static const cast__ GetLanguage[] = {
 	cEnd,
 		cString,	// Language label.
 	cEnd };
-static const cast SetLanguage[] = {
+static const cast__ SetLanguage[] = {
 		cString,	// Language label.
 	cEnd,
 	cEnd };
 
 
-const cast *fblcmd::CommandsParameters[c_amount] = {
+const cast__ *fblcmd::CommandsParameters[c_amount] = {
 	ThrowUError,
 	ThrowIError,
 	TestNotification,

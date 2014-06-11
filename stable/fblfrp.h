@@ -71,10 +71,10 @@ extern class ttr_tutor &FBLFRPTutor;
 namespace fblfrp {
 
 	struct datum__ {
-		fblcst::cast Cast;
+		fblcst::cast__ Cast;
 		void *Pointer;
 		datum__( 
-			fblcst::cast Cast = fblcst::c_Unknow,
+			fblcst::cast__ Cast = fblcst::c_Unknow,
 			void *Pointer = NULL )
 		{
 			this->Cast = Cast;
@@ -100,12 +100,12 @@ namespace fblfrp {
 			Data.Init();
 		}
 		void In(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Flow );
 		void Out(
 			flw::ioflow__ &Flow,
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer );
 		void PostProcess( flw::ioflow__ &Flow );
 	};
@@ -123,7 +123,7 @@ namespace fblfrp {
 			_Base.PreProcess();
 		}
 		virtual void FBLFPHIn(
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Flow )
 		{
@@ -131,7 +131,7 @@ namespace fblfrp {
 		}
 		virtual void FBLFPHOut(
 			flw::ioflow__ &Flow,
-			fblcst::cast Cast,
+			fblcst::cast__ Cast,
 			void *Pointer )
 		{
 			_Base.Out( Flow, Cast, Pointer );
