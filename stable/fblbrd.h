@@ -136,7 +136,7 @@ namespace fblbrd {
 		{
 			va_list VL;
 
-			va_start( VL, Name );
+			va_start( VL, Cast );
 
 			Init( Name, Cast, VL );
 
@@ -225,7 +225,7 @@ namespace fblbrd {
 			sdr::row__ Row = E_NIL;
 			va_list VL;
 
-			va_start( VL, Name );
+			va_start( VL, Cast );
 
 			Row = Add( Name, Cast, VL);
 
