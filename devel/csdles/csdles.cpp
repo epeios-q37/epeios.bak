@@ -127,7 +127,12 @@ ERRFEpilog
 
 void CSDLEOReleaseCallback( csdleo::callback__ *Callback )
 {
-	csdles::CSDLESReleaseCallback( Callback );
+	sdr::row__ Row = Callbacks_.Search( Callback );
+
+	if ( Row != E_NIL ) {
+		csdles::CSDLESReleaseCallback( Callback );
+		Callbacks_.Store( NULL, Row );
+	}
 }
 
 
