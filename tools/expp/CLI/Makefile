@@ -35,11 +35,12 @@ mods += cpe crptgr ctn dir dte
 mods += dtfbsc dtfptb epsmsc err fdr 
 mods += flf fls flw flx ias 
 mods += ids iof iop lst lstbch 
-mods += lstctn mns que sdr stk 
-mods += str strng tol ttr txf 
-mods += tys uys utf xtf cio 
-mods += bom cdgb64 fil fnm lcl 
-mods += rgstry stsfsm xml xpp clnarg 
+mods += lstctn mns ntvstr que sdr 
+mods += stk str strng tagsbs tol 
+mods += ttr txf tys uys utf 
+mods += xtf cio bom cdgb64 fil 
+mods += fnm lcl rgstry stsfsm xml 
+mods += xpp clnarg 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += locale registry 
 

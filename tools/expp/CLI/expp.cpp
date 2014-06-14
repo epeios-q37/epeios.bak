@@ -170,20 +170,20 @@ ERRProlog
 	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
 ERRBegin
 	Source.Init();
-	sclrgstry::GetValue( registry::Source, Source );
+	scltool::OGetValue( registry::Source, Source );
 
 	Destination.Init();
-	sclrgstry::GetValue( registry::Destination, Destination );
+	scltool::OGetValue( registry::Destination, Destination );
 
 	NameSpace.Init();
-	sclrgstry::GetValue( registry::NameSpace, NameSpace );
+	scltool::OGetValue( registry::NameSpace, NameSpace );
 
 	Process_(
 		Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL,
 		Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL,
 		NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) : NULL,
-		sclrgstry::GetBoolean( registry::Preserve ),
-		sclrgstry::GetBoolean( registry::Indentation, true ) );
+		scltool::BGetBoolean( registry::Preserve ),
+		scltool::BGetBoolean( registry::Indentation, true ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -247,16 +247,16 @@ ERRProlog
 	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
 ERRBegin
 	Source.Init();
-	sclrgstry::GetValue( registry::Source, Source );
+	scltool::OGetValue( registry::Source, Source );
 
 	Destination.Init();
-	sclrgstry::GetValue( registry::Destination, Destination );
+	scltool::OGetValue( registry::Destination, Destination );
 
 	NameSpace.Init();
-	sclrgstry::GetValue( registry::NameSpace, NameSpace );
+	scltool::OGetValue( registry::NameSpace, NameSpace );
 
 	Indentation.Init();
-	sclrgstry::GetValue( registry::Indentation, Indentation );
+	scltool::OGetValue( registry::Indentation, Indentation );
 
 	Encrypt_( Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL, Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL, NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) :  NULL, Indentation == "Yes" );
 ERRErr

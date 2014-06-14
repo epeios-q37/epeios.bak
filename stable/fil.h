@@ -192,12 +192,12 @@ namespace fil {
 				Access;
 			void reset( bso::bool__ = true )
 			{
-				Creation, Modification, Access = 0;
+				Creation = Modification = Access = 0;
 			}
 			E_CDTOR( time__ );
 			void Init( void )
 			{
-				Creation, Modification, Access = 0;
+				Creation = Modification = Access = 0;
 			}
 		} Time;
 		void reset( bso::bool__ P = true )
