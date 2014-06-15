@@ -284,13 +284,14 @@ namespace aem {
 			if ( _IsFitted() || _IsFixed() )
 				ERRFwk();
 
-			if ( !_IsUsable() )	// Nota : danse ce cas, 'S_.Amount' == 0;
-				if ( Amount == 0 )
+			if ( !_IsUsable() )	{	// Nota : danse ce cas, 'S_.Amount' == 0;
+				if ( Amount == 0 ) {
 					return false;
-				else {
+				} else {
 					S_.Shadow = _ConvertSteppedShadowFromUnusableToUsableState( _GetShadow() );
 					Force = true;
 				}
+			}
 
 			size__ StepMask = _GetStepMask();
 

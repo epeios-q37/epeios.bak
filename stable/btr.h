@@ -653,11 +653,12 @@ namespace btr {
 			if ( D != E_NIL )
 				Cut( D );
 
-			if ( P != E_NIL )
+			if ( P != E_NIL ) {
 				if ( IsLeftFlag )
 					BecomeLeft( B, P );
 				else
 					BecomeRight( B, P );
+			}
 
 			BecomeRight( E, B );
 
@@ -692,11 +693,12 @@ namespace btr {
 			if ( D != E_NIL )
 				Cut( D );
 
-			if ( P != E_NIL )
+			if ( P != E_NIL ) {
 				if ( IsLeftFlag )
 					BecomeLeft( E, P );
 				else
 					BecomeRight( E, P );
+			}
 
 			BecomeLeft( B, E );
 
@@ -887,13 +889,6 @@ namespace btr {
 		{
 			return Nodes.ParentOfFirstRightNode( *Node );
 		}
-	/*	// Ecrit dans 'Flot' l'arbre de racine l'élément à 'Position'.
-		void EcrireDansFlot(
-			flo_sortie_portable_ &Flot,
-			r Position ) const;
-		/* Lecture de l'abre contenu dans 'Flot'. La valeur retournée correspond à
-		la position de la racine. */
-		//	r LireDeFlot( flo_entree_portable_ &Flot );
 		//f Print to 'OFfow' the structure of the tree whith root 'Root'.
 		void PrintStructure(
 			r Root,

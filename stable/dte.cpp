@@ -238,11 +238,12 @@ raw_date__ dte::date__::_Convert(
 	}
 
 
-	if ( Year < 100 )
+	if ( Year < 100 ) {
 		if ( Year >= DTE_DEFAULT_DECENNIA_LIMIT )
 			Year += 1900;
 		else
 			Year += 2000;
+	}
 
 	return _Convert( Day, Month, Year );
 }
@@ -262,7 +263,7 @@ const char *dte::date__::ASCII(
 			sprintf( Buffer.Data, "%02i/%02i/%i", (int)Month(), (int)Day(), (int)Year() );
 			break;
 		case fYYYYMMDD:
-			sprintf( Buffer.Data, "%i-02i-%02i", (int)Year(), (int)Month(), (int)Day() );
+			sprintf( Buffer.Data, "%i-%02i-%02i", (int)Year(), (int)Month(), (int)Day() );
 			break;
 		default:
 			ERRPrm();

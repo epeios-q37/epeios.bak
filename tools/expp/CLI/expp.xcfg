@@ -66,13 +66,13 @@
         <Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="[%NameSpaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%SourceArgument% [%DestinationArgument%]]"/>
         <Argument id="EncryptCommand" Description="EncryptCommandDescription" long="encrypt" Value="Encrypt" Usage="[%NameSpaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%SourceArgument% [%DestinationArgument%]]"/>
         <!-- Fanaux : 'Path', mais pas de 'Value'. -->
-        <Argument id="NoIndentationFlag" Description="NoIndentationFlagDescription" long="no-indent" Path="Parameters/Indentation" Value="No"/>
-        <Argument id="PreserveFlag" Description="PreserveFlagDescription" long="preserve" Path="Parameters/Preserve" Value="Yes"/>
+        <Argument id="NoIndentationFlag" Description="NoIndentationFlagDescription" long="no-indent" Path="Indentation" Value="No"/>
+        <Argument id="PreserveFlag" Description="PreserveFlagDescription" long="preserve" Path="Preserve" Value="Yes"/>
         <!-- Options : 'Path' ET 'Value'. -->
-        <Argument id="NameSpaceOption" Description="NameSpaceOptionDescription" long="namespace" short="n" Path="Parameters/NameSpace" Label="NameSpaceOptionLabel"/>
+        <Argument id="NameSpaceOption" Description="NameSpaceOptionDescription" long="namespace" short="n" Path="NameSpace" Label="NameSpaceOptionLabel"/>
         <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-        <Argument id="SourceArgument" Description="SourceArgumentDescription" Path="Parameters/Source" Label="SourceArgumentLabel"/>
-        <Argument id="DestinationArgument" Description="DestinationArgumentDescription" Path="Parameters/Destination" Label="DestinationArgumentLabel"/>
+        <Argument id="SourceArgument" Description="SourceArgumentDescription" Path="Source" Label="SourceArgumentLabel"/>
+        <Argument id="DestinationArgument" Description="DestinationArgumentDescription" Path="Destination" Label="DestinationArgumentLabel"/>
         <!-- Affectations des arguments libres-->
         <Layouts>
           <Layout command="Process">

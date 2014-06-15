@@ -253,18 +253,20 @@ namespace utf {
 				ERRPrm();
 
 			if ( _Format == f_Guess ) {
-				if ( ( Format != fUTF_8 ) && ( Format != fANSI ) )
+				if ( (Format != fUTF_8) && (Format != fANSI) ) {
 					if ( ERRHandling != err::hUserDefined )
 						ERRFwk();
 					else
 						return false;
+				}
 
 				_Format = Format;
-			} else if ( _Format != Format )
+			} else if ( _Format != Format ) {
 				if ( ERRHandling != err::hUserDefined )
 					ERRFwk();
 				else
 					return false;
+			}
 
 			return true;
 		}

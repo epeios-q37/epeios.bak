@@ -454,7 +454,8 @@ namespace mtx {
 			else if ( mtx::TryToLock( _Handler ) ) {
 				_State = sLocked;
 				return true;
-			}
+			} else
+				return false;
 		}
 		void Lock( void )
 		{

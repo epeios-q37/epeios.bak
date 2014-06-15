@@ -99,7 +99,7 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-#elif defined( TOL__POSIX )
+#elif defined( TOL__POSIX ) || defined( TOL__MAC )
 	Result = system( Command.Core() );
 #else
 # error
