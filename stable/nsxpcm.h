@@ -377,8 +377,6 @@ namespace nsxpcm {
 
 		Service = do_GetService( ContractID, &Error );
 
-		utime( bso::Convert( (bso::uint__)Error ), NULL );
-
 		T( Error );
 
 		return Service;

@@ -136,7 +136,7 @@ static bso::bool__ GetValue_(
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
-	return registry::GetValue( Entry, Value );
+	return registry::BGetValue( sclrgstry::GetRegistry(), Entry, Value );
 }
 
 static const str::string_ &GetMandatoryValue_(

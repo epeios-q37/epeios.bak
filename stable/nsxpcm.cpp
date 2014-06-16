@@ -1992,17 +1992,17 @@ NS_IMETHODIMP nsxpcm::tree_view__::SetCellText(PRInt32 aRow, nsITreeColumn* aCol
   return NS_OK;
 }
 
-NS_IMETHODIMP nsxpcm::tree_view__::PerformAction(const PRUnichar* aAction)
+NS_IMETHODIMP nsxpcm::tree_view__::PerformAction(const char16_t* aAction)
 {
   return NS_OK;
 }
 
-NS_IMETHODIMP nsxpcm::tree_view__::PerformActionOnRow(const PRUnichar* aAction, PRInt32 aRow)
+NS_IMETHODIMP nsxpcm::tree_view__::PerformActionOnRow(const char16_t* aAction, PRInt32 aRow)
 {
   return NS_OK;
 }
 
-NS_IMETHODIMP nsxpcm::tree_view__::PerformActionOnCell(const PRUnichar* aAction, PRInt32 aRow,
+NS_IMETHODIMP nsxpcm::tree_view__::PerformActionOnCell(const char16_t* aAction, PRInt32 aRow,
                                 nsITreeColumn* aCol)
 {
   return NS_OK;
