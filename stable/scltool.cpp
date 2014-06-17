@@ -1538,8 +1538,7 @@ class scltoolpersonnalization
 public:
 	scltoolpersonnalization( void )
 	{
-		ParametersTag_.Init();
-		sclrgstry::Parameters.GetPath( ParametersTag_ );
+		ParametersTag_.Init( sclrgstry::ParametersTag );
 		ParametersTag_.Append('/' );
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */

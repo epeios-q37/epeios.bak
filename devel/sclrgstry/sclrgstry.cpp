@@ -44,7 +44,7 @@ static rgstry::multi_level_registry BaseRegistry_;
 static rgstry::level__ ConfigurationRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;
 static rgstry::level__ ProjectRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;
 
-rgstry::entry___ sclrgstry::Parameters( "Parameters" );
+rgstry::entry___ sclrgstry::Parameters( ParametersTag );
 
 rgstry::entry___ sclrgstry::Definitions( "Definitions" );
 
@@ -545,11 +545,6 @@ SN( S64, bso::s64__ )
 SN( S32, bso::s32__ )
 SN( S16, bso::s16__ )
 SN( S8, bso::s8__ )
-
-
-
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
