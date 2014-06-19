@@ -95,7 +95,7 @@ namespace fblbrq {
 		return *(fbltyp::type *)_Put( Position_, c##name );\
 	}\
 
-	struct functions__
+	struct callbacks__
 	{
 	protected:
 		virtual const void *FBLBRQGet(
@@ -104,6 +104,10 @@ namespace fblbrq {
 		virtual void *FBLBRQPut(
 			sdr::row__ Row,
 			cast__ Cast ) = 0;
+		virtual flw::iflow__ &FBLBRQGetFlow( sdr::row__ Row ) = 0;
+		virtual void FBLBRQPutFlow(
+			sdr::row__ Row,
+			flw::iflow__ &Flow ) = 0;
 		virtual void FBLBRQPop(
 			flw::iflow__ &Flow,
 			const casts_ &Casts ) = 0;
@@ -115,11 +119,11 @@ namespace fblbrq {
 		{
 			// Standardisation.
 		}
-		functions__( void )
+		callbacks__( void )
 		{
 			reset( false );
 		}
-		~functions__( void )
+		~callbacks__( void )
 		{
 			reset();
 		}
@@ -139,6 +143,16 @@ namespace fblbrq {
 		{
 			return FBLBRQPut( Row, Cast );
 		}
+		flw::iflow__ &GetFlow( sdr::row__ Row )
+		{
+			return FBLBRQGetFlow( Row );
+		}
+		void PutFlow(
+			sdr::row__ Row,
+			flw::iflow__ &Flow )
+		{
+			FBLBRQPutFlow( Row, Flow );
+		}
 		void Pop(
 			flw::iflow__ &Flow,
 			const casts_ &Casts )
@@ -157,7 +171,7 @@ namespace fblbrq {
 	class request__
 	{
 	private:
-		functions__ *_Functions;
+		callbacks__ *_Callbacks;
 		casts Casts_;
 		// Position in the Description_;
 		sdr::row__ Position_;
@@ -169,38 +183,38 @@ namespace fblbrq {
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
 		flw::ioflow__ *Channel_;
-		functions__ &_F( void )
+		callbacks__ &_C( void )
 		{
 # ifdef FBLBRQ_DBG
-			if ( _Functions == NULL )
+			if ( _Callbacks == NULL )
 				ERRFwk();
 # endif
 
-			return *_Functions;
+			return *_Callbacks;
 		}
 		const void *_Get(
 			sdr::row__ Row,
 			cast__ Cast )
 		{
-			return _F().Get( Row, Cast );
+			return _C().Get( Row, Cast );
 		}
 		const void *_Put(
 			sdr::row__ Row,
 			cast__ Cast )
 		{
-			return _F().Put( Row, Cast );
+			return _C().Put( Row, Cast );
 		}
 		void _Pop(
 			flw::iflow__ &Flow,
 			const casts_ &Casts )
 		{
-				_F().Pop( Flow, Casts );
+			_C().Pop( Flow, Casts );
 		}
 		void _Push(
 			flw::oflow__ &Flow,
 			const casts_ &Casts )
 		{
-			_F().Push( Flow, Casts );
+			_C().Push( Flow, Casts );
 		}
 		void Test_( cast__ Cast )
 		{
@@ -231,7 +245,7 @@ namespace fblbrq {
 	public:
 		void reset( bool P = true )
 		{
-			_Functions = NULL;
+			_Callbacks = NULL;
 			Casts_.reset( P );
 
 			Position_ = E_NIL;
@@ -251,11 +265,11 @@ namespace fblbrq {
 		}
 		//f Initialization with 'Channel' to parse/answer the request.
 		void Init(
-			functions__ &Functions,
+			callbacks__ &Callbacks,
 			flw::ioflow__ &Channel )
 		{
 			reset();
-			_Functions = &Functions;
+			_Callbacks = &Callbacks;
 			Channel_ = &Channel;
 			Closed_ = false;
 			Casts_.Init();
@@ -305,6 +319,16 @@ namespace fblbrq {
 		FBLBRQ_M( XItem32s, xitem32s_t_ )
 		FBLBRQ_M( CommandsDetails, commands_details_ )
 		FBLBRQ_M( ObjectsReferences, objects_references_ )
+		flw::iflow__ &FlowIn( void )
+		{
+			TestInput_( cFlow );
+			return _C().GetFlow( Position_ );
+		}
+		void FlowOut( flw::iflow__ &Flow )
+		{
+			TestOutput_( cFlow );
+			_C().PutFlow( Position_, Flow );
+		}
 		//f Tell that the request is complete (parsed and answered).
 		void Complete( void )
 		{

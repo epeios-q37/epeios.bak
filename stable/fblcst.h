@@ -144,6 +144,8 @@ namespace fblcst {
 		cCommandsDetails,
 		//i Array of object types and identifiers. ( 'SET_( { bso::u16__, bso::u16__ } )' ).
 		cObjectsReferences,
+		//i Flux généric. Doit être placé en dernier de laiste des paramètres entrants et/ou sortants.
+		cFlow,
 		//i Amount of casts.
 		c_amount,
 		//i Not a cast, but signalize an invalid cast.

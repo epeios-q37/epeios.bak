@@ -67,7 +67,7 @@ extern class ttr_tutor &FBLBRRTutor;
 namespace fblbrr {
 	using namespace fblbrq;
 
-	struct parameter___
+	struct parameter__
 	{
 		void *Content;
 		cast__ Cast;
@@ -76,13 +76,13 @@ namespace fblbrr {
 			Content = NULL;
 			Cast = fblcst::c_Unknow;
 		}
-		parameter___( cast__ Cast = c_Unknow )
+		parameter__( cast__ Cast = c_Unknow )
 		{
 			reset( false );
 
 			this->Cast = Cast;
 		}
-		~parameter___( void )
+		~parameter__( void )
 		{
 			reset();
 		}
@@ -97,12 +97,12 @@ namespace fblbrr {
 		}
 	};
 
-	typedef bch::E_BUNCH_( parameter___ ) parameters_;
+	typedef bch::E_BUNCH_( parameter__ ) parameters_;
 	E_AUTO( parameters );
 
 
 	class remote_request_functions___
-	: public functions__
+	: public callbacks__
 	{
 	private:
 		parameters _Parameters;
@@ -110,7 +110,7 @@ namespace fblbrr {
 			sdr::row__ Row,
 			cast__ Cast )
 		{
-			parameter___ Parameter = _Parameters( Row );
+			parameter__ Parameter = _Parameters( Row );
 
 			if ( Parameter.Cast != Cast )
 				ERRPrm();
@@ -134,6 +134,21 @@ namespace fblbrr {
 		{
 			return _Get( Row, Cast );
 		}
+		flw::iflow__ &FBLBRQGetFlow( sdr::row__ Row )
+		{
+			return *(flw::iflow__ *)( Row, cFlow );
+		}
+		void FBLBRQPutFlow(
+			sdr::row__ Row,
+			flw::iflow__ &Flow )
+		{
+			parameter__ Parameter;
+
+			Parameter.Init( &Flow, cFlow );
+
+			if ( _Parameters.Append( Parameter) != Row )
+				ERRFwk();
+		}
 		virtual void FBLBRQPop(
 			flw::iflow__ &Flow,
 			const casts_ &Casts )
@@ -153,7 +168,7 @@ namespace fblbrr {
 			if ( P )
 				_DeleteAll();
 
-			functions__::reset( P );
+			callbacks__::reset( P );
 			_Parameters.reset( P );
 		}
 		remote_request_functions___( void ) 
@@ -169,7 +184,7 @@ namespace fblbrr {
 			reset();
 
 			_Parameters.Init();
-			functions__::Init();
+			callbacks__::Init();
 		}
 	};
 }

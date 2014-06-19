@@ -317,7 +317,7 @@ namespace flw {
 	class oflow__	/* Bien que cette classe ai un destructeur, elle est suffixée par '__', d'une part pour simplifier
 					son utilisation (comme déclaration de paramètre d'une fonction) et, d'autre part,
 					parce qu'elle ne sera jamais instanciée telle quelle, mais toujours héritée (bien que ce ne
-					soit pas obligatoire d'un point de vue C++, car ce n'est pas une focntion abstraite).*/
+					soit pas obligatoire d'un point de vue C++, car ce n'est pas une classe abstraite).*/
 	{
 	private:
 		fdr::oflow_driver_base___ *_Driver;

@@ -69,7 +69,7 @@ namespace fblber {
 	using namespace fblbrq;
 
 	class embed_request_functions___
-	: public functions__
+	: public callbacks__
 	{
 	protected:
 		virtual const void *FBLBRQGet(
@@ -83,6 +83,17 @@ namespace fblber {
 			cast__ Cast )
 		{
 			return Repository_( Row );
+		}
+		flw::iflow__ &FBLBRQGetFlow( sdr::row__ Row )
+		{
+			return *(flw::iflow__ *)Repository_( Row );
+		}
+		virtual void FBLBRQPutFlow(
+			sdr::row__ Row,
+			flw::iflow__ &IFlow )
+		{
+			if ( Row != Repository_.Append( &IFlow ) )
+				ERRFwk();
 		}
 		virtual void FBLBRQPop(
 			flw::iflow__ &Flow,
@@ -105,13 +116,13 @@ namespace fblber {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			functions__::reset( P );
+			callbacks__::reset( P );
 			Repository_.reset( P );
 		}
 		void Init( void )
 		{
 			Repository_.Init();
-			functions__::Init();
+			callbacks__::Init();
 		}
 	};
 }

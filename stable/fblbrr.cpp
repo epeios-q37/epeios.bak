@@ -62,11 +62,11 @@ using namespace fblbrr;
 		Parameter.Init( fbltyp::New##name(), c##name );\
 		break;
 
-static parameter___ Create_(
+static parameter__ Create_(
 	flw::iflow__ &Flow,
 	cast__ Cast )
 {
-	parameter___ Parameter;
+	parameter__ Parameter;
 
 	switch ( Cast ) {
 	CC( Object )
@@ -120,11 +120,11 @@ static parameter___ Create_(
 		break;
 
 
-static parameter___ _CreateAndGet(
+static parameter__ _CreateAndGet(
 	flw::iflow__ &Flow,
 	cast__ Cast )
 {
-	parameter___ Parameter;
+	parameter__ Parameter;
 
 	switch ( Cast ) {
 	CCAG( Object, object__)
@@ -176,7 +176,7 @@ static parameter___ _CreateAndGet(
 	fbltyp::Delete##name( (fbltyp::type *)Parameter.Content );\
 		break;
 
-static void Delete_( const parameter___ &Parameter )
+static void Delete_( const parameter__ &Parameter )
 {
 	switch ( Parameter.Cast ) {
 	CD( Object, object__)
@@ -245,7 +245,7 @@ void fblbrr::remote_request_functions___::_CreateAll(
 	if ( Row == E_NIL )
 		ERRFwk();
 
-	if ( _Parameters.Append( parameter___( cEnd ) ) != Row )
+	if ( _Parameters.Append( parameter__( cEnd ) ) != Row )
 		ERRFwk();
 
 	Row = Casts.Next( Row );
@@ -293,7 +293,7 @@ void fblbrr::remote_request_functions___::_DeleteAll( void )
 
 static void Push_(
 	flw::oflow__ &Flow,
-	const parameter___ &Parameter,
+	const parameter__ &Parameter,
 	cast__ Cast )
 {
 	if ( Parameter.Cast != Cast )
