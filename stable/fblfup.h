@@ -98,14 +98,14 @@ namespace fblfup {
 		virtual void FBLFPHIn(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Flow )
+			flw::ioflow__ &Channel )
 		{
 			switch ( _Mode ) {
 			case mEmbedded:
-				_Embedded.In( Cast, Pointer, Flow );
+				_Embedded.In( Cast, Pointer, Channel );
 				break;
 			case mRemote:
-				_Remote.In( Cast, Pointer, Flow );
+				_Remote.In( Cast, Pointer, Channel );
 				break;
 			default:
 				ERRFwk();
@@ -113,16 +113,48 @@ namespace fblfup {
 			}
 		}
 		virtual void FBLFPHOut(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
 			switch ( _Mode ) {
 			case mEmbedded:
-				_Embedded.Out( Flow, Cast, Pointer );
+				_Embedded.Out( Channel, Cast, Pointer );
 				break;
 			case mRemote:
-				_Remote.Out( Flow, Cast, Pointer );
+				_Remote.Out( Channel, Cast, Pointer );
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
+		}
+		virtual void FBLFPHFlowIn(
+			flw::iflow__ &Flow,
+			flw::ioflow__ &Channel )
+		{
+			switch ( _Mode ) {
+			case mEmbedded:
+				_Embedded.FlowIn( Flow, Channel );
+				break;
+			case mRemote:
+				_Remote.FlowIn( Flow, Channel );
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
+		}
+		virtual void FBLFPHFlowOut(
+			flw::ioflow__ &Channel,
+			flw::iflow__ *&Flow )
+		{
+			switch ( _Mode ) {
+			case mEmbedded:
+				_Embedded.FlowOut( Channel, Flow );
+				break;
+			case mRemote:
+				_Remote.FlowOut( Channel, Flow );
 				break;
 			default:
 				ERRFwk();

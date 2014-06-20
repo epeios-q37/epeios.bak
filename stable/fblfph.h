@@ -73,11 +73,17 @@ namespace fblfph {
 		virtual void FBLFPHIn(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Flow ) = 0;
+			flw::ioflow__ &Channel ) = 0;
 		virtual void FBLFPHOut(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
 			void *Pointer ) = 0;
+		virtual void FBLFPHFlowIn(
+			flw::iflow__ &Flow,
+			flw::ioflow__ &Channel ) = 0;
+		virtual void FBLFPHFlowOut(
+			flw::ioflow__ &Channel,
+			flw::iflow__ *&Flow ) = 0;
 		virtual void FBLFPHPostProcess( flw::ioflow__ &Flow ) = 0;
 	public:
 		void reset( bso::bool__ = true )
@@ -103,16 +109,37 @@ namespace fblfph {
 		void In(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Flow )
+			flw::ioflow__ &Channel )
 		{
-			FBLFPHIn( Cast, Pointer, Flow );
+
+			Channel.Put( Cast );
+
+			FBLFPHIn( Cast, Pointer, Channel );
 		}
 		void Out(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
-			FBLFPHOut( Flow, Cast, Pointer );
+			Channel.Put( Cast );
+
+			FBLFPHOut( Channel, Cast, Pointer );
+		}
+		void FlowIn(
+			flw::iflow__ &Flow,
+			flw::ioflow__ &Channel )
+		{
+			Channel.Put( fblcst::cFlow );
+
+			Channel.Put( 0 );	// Fin de requête (traitemeent spécial des 'flow's).
+
+			FBLFPHFlowIn( Flow, Channel );
+		}
+		void FlowOut(
+			flw::ioflow__ &Channel,
+			flw::iflow__ *&Flow )
+		{
+			FBLFPHFlowOut( Channel, Flow );
 		}
 		void PostProcess( flw::ioflow__ &Flow )
 		{

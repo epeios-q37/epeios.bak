@@ -65,6 +65,7 @@ void fblbrd::description_::Init(
 {
 	int i = 0;
 	cast__ Cast = c_Unknow;
+	bso::bool__ FlowCastDetected = false;
 
 	this->Name.Init();
 	this->Casts.Init();
@@ -74,10 +75,25 @@ void fblbrd::description_::Init(
 	do
 	{
 		Cast = Casts[i++];
+
+		if ( FlowCastDetected ) {
+			if ( Cast != cEnd )
+				ERRPrm();
+		} else if ( Cast == cFlow )
+			FlowCastDetected = true;
+
 		this->Casts.Append( Cast );
 	} while ( Cast != cEnd );
 
+	FlowCastDetected = false;
+
 	while ( ( Cast = Casts[i++] ) != cEnd ) {
+
+		if ( FlowCastDetected )
+				ERRPrm();
+		else if ( Cast == cFlow )
+			FlowCastDetected = true;
+
 		this->Casts.Append( Cast );
 	}
 
@@ -100,6 +116,8 @@ void fblbrd::description_::Init(
 	cast__ Cast,
 	va_list VL )
 {
+	bso::bool__ FlowCastDetected = false;
+
 	this->Name.Init();
 	this->Casts.Init();
 
@@ -107,13 +125,26 @@ void fblbrd::description_::Init(
 
 	while ( Cast != cEnd )
 	{
+		if ( FlowCastDetected )
+				ERRPrm();
+		else if ( Cast == cFlow )
+			FlowCastDetected = true;
+
 		this->Casts.Append( Cast );
 		Cast = (cast__)va_arg( VL, va_t__ );
 	}
 
 	this->Casts.Append( cEnd );
 
+	FlowCastDetected = false;
+
 	while ( ( Cast = (cast__)va_arg( VL, va_t__ ) ) != cEnd ) {
+
+		if ( FlowCastDetected )
+				ERRPrm();
+		else if ( Cast == cFlow )
+			FlowCastDetected = true;
+
 		this->Casts.Append( Cast );
 	}
 

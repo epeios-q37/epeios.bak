@@ -371,13 +371,33 @@ This header file contains then the API to access to the backend to which 'getbkd
 		</xsl:choose>
 	</xsl:template>
 	<xsl:template match="In/Parameter" mode="function">
-		<xsl:text>&tab;&tab;&tab;const fblfrd::</xsl:text>
+		<xsl:text>&tab;&tab;&tab;</xsl:text>
+		<xsl:choose>
+			<xsl:when test="Name='flow'"/>
+			<xsl:otherwise>
+				<xsl:text>const </xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:text>fblfrd::</xsl:text>
 		<xsl:value-of select="Type"/>
 		<xsl:value-of select="Name"/>
 		<xsl:choose>
-			<xsl:when test="@Type='Static'">__</xsl:when>
-			<xsl:when test="@Type='Bunch'">_</xsl:when>
-			<xsl:when test="@Type='Container'">_</xsl:when>
+			<xsl:when test="@Type='Static'">
+				<xsl:text>__</xsl:text>
+			</xsl:when>
+			<xsl:when test="@Type='Bunch'">
+				<xsl:text>_</xsl:text>
+			</xsl:when>
+			<xsl:when test="@Type='Container'">
+				<xsl:text>_</xsl:text>
+			</xsl:when>
+			<xsl:when test="@Type='Other'">
+				<xsl:choose>
+					<xsl:when test="Name='flow'">
+						<xsl:text>__</xsl:text>
+					</xsl:when>
+				</xsl:choose>
+			</xsl:when>
 		</xsl:choose>
 		<xsl:text> &amp;In</xsl:text>
 		<xsl:value-of select="@Discriminator"/>
@@ -403,8 +423,21 @@ This header file contains then the API to access to the backend to which 'getbkd
 			<xsl:when test="@Type='Container'">
 				<xsl:text>_</xsl:text>
 			</xsl:when>
+			<xsl:when test="@Type='Other'">
+				<xsl:choose>
+					<xsl:when test="Name='flow'">
+						<xsl:text>__</xsl:text>
+					</xsl:when>
+				</xsl:choose>
+			</xsl:when>
 		</xsl:choose>
-		<xsl:text> &amp;Out</xsl:text>
+		<xsl:text> </xsl:text>
+		<xsl:choose>
+			<xsl:when test="Name='flow'">
+				<xsl:text>*</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+		<xsl:text>&amp;Out</xsl:text>
 		<xsl:value-of select="@Discriminator"/>
 		<xsl:choose>
 			<xsl:when test="@Position='Last'">
@@ -495,7 +528,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 			<xsl:when test="$Name='sint'">SInt</xsl:when>
 			<xsl:when test="$Name='sints'">SInts</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="translate(substring($Name,1,1),'obicsbx','OBICSBX')"/>
+				<xsl:value-of select="translate(substring($Name,1,1),'fobicsbx','FOBICSBX')"/>
 				<xsl:value-of select="substring($Name,2)"/>
 			</xsl:otherwise>
 		</xsl:choose>

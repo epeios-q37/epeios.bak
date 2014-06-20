@@ -102,11 +102,17 @@ namespace fblfrp {
 		void In(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Flow );
+			flw::ioflow__ &Channel );
 		void Out(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
 			void *Pointer );
+		void FlowIn(
+			flw::iflow__ &Flow,
+			flw::ioflow__ &Channel );
+		void FlowOut(
+			flw::ioflow__ &Channel,
+			flw::iflow__ *&Flow );
 		void PostProcess( flw::ioflow__ &Flow );
 	};
 

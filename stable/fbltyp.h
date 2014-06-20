@@ -393,6 +393,7 @@ namespace fbltyp {
 	typedef ctn::E_CONTAINER( command_detail_ ) commands_details;
 	typedef bch::E_BUNCH_( object_reference__ ) objects_references_;
 	typedef bch::E_BUNCH( object_reference__ ) objects_references;
+	typedef flw::iflow__ flow__;
 
 	template <typename type> inline void _StraightPut(
 		type Value,

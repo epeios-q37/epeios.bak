@@ -59,15 +59,14 @@ using namespace fblfrp;
 
 #define CIN( name, type )\
 	case fblcst::c##name:\
-	Flow.Put( fblcst::c##name );\
-	fbltyp::Put##name( *( const fbltyp::type *)Pointer, Flow );\
+	fbltyp::Put##name( *( const fbltyp::type *)Pointer, Channel );\
 	break;
 
 
 void fblfrp::remote_parameters_base__::In(
 	fblcst::cast__ Cast,
 	const void *Pointer,
-	flw::ioflow__ &Flow )
+	flw::ioflow__ &Channel )
 {
 	switch ( Cast ) {
 	CIN( Object, object__)
@@ -113,12 +112,28 @@ void fblfrp::remote_parameters_base__::In(
 }
 
 void fblfrp::remote_parameters_base__::Out(
-		flw::ioflow__ &Flow,
+		flw::ioflow__ &Channel,
 		fblcst::cast__ Cast,
 		void *Pointer )
 {
 	Data.Append( datum__( Cast, Pointer ) );
 }
+
+void fblfrp::remote_parameters_base__::FlowIn(
+	flw::iflow__ &Flow,
+	flw::ioflow__ &Channel )
+{
+	while ( !Flow.EndOfFlow() )
+		Channel.Put(Flow.Get() );
+}
+
+void fblfrp::remote_parameters_base__::FlowOut(
+	flw::ioflow__ &Channel,
+	flw::iflow__ *&Flow )
+{
+	Flow = &Channel;
+}
+
 
 #define COUT( name, type )\
 	case fblcst::c##name:\

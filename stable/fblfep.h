@@ -85,20 +85,32 @@ namespace fblfep {
 		void In(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Flow )
+			flw::ioflow__ &Channel )
 		{
-			Flow.Put( Cast );
-
-			flw::Put( Pointer, Flow );
+			flw::Put( Pointer, Channel );
 		}
 		void Out(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
-			Flow.Put( Cast );
+			flw::Put( Pointer, Channel );
+		}
+		void FlowIn(
+			flw::iflow__ &Flow,
+			flw::ioflow__ &Channel )
+		{
+			Channel.Put( fblcst::cFlow );
 
-			flw::Put( Pointer, Flow );
+			flw::Put( &Flow, Channel );
+		}
+		void FlowOut(
+			flw::ioflow__ &Channel,
+			flw::iflow__ *&Flow )
+		{
+			Channel.Put( fblcst::cFlow );
+
+			flw::Put( &Flow, Channel );
 		}
 		void PostProcess( flw::ioflow__ & )
 		{
@@ -121,16 +133,28 @@ namespace fblfep {
 		virtual void FBLFRDIn(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Flow )
+			flw::ioflow__ &Channel )
 		{
-			_Base.In( Cast, Pointer, Flow );
+			_Base.In( Cast, Pointer, Channel );
 		}
 		virtual void FBLFRDOut(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
-			_Base.Out( Flow, Cast, Pointer );
+			_Base.Out( Channel, Cast, Pointer );
+		}
+		virtual void FBLFRDFlowIn(
+			flw::iflow__ &Flow,
+			flw::ioflow__ &Channel )
+		{
+			_Base.FlowIn( Flow, Channel );
+		}
+		virtual void FBLFRDOut(
+			flw::ioflow__ &Channel,
+			flw::iflow__ *&Flow )
+		{
+			_Base.FlowOut( Channel, Flow );
 		}
 		virtual void FBLFRDPostProcess( flw::ioflow__ &Flow )
 		{

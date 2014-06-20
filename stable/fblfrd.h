@@ -233,6 +233,7 @@ namespace fblfrd {
 	private:
 		fblfph::parameters_handling_functions__ *_ParametersHandlingFunctions;
 		reporting_functions__ *_ReportingFunctions;
+		bso::bool__ _FlowInParameters;	// A vrai si paramètre de type 'flow' présent.
 		void _PreProcess( void )
 		{
 			_ParametersHandlingFunctions->PreProcess();
@@ -248,6 +249,14 @@ namespace fblfrd {
 			void *Pointer )
 		{
 			_ParametersHandlingFunctions->Out( *Channel_, Cast, Pointer );
+		}
+		void _FlowIn( flw::iflow__ &Flow )
+		{
+			_ParametersHandlingFunctions->FlowIn( Flow, *Channel_ );
+		}
+		void _FlowOut( flw::iflow__ *&Flow )
+		{
+			_ParametersHandlingFunctions->FlowOut( *Channel_, Flow );
 		}
 		void _PostProcess( flw::ioflow__ &Flow )
 		{
@@ -334,6 +343,7 @@ namespace fblfrd {
 			_ParametersHandlingFunctions = NULL;
 			_ReportingFunctions = NULL;
 			Channel_ = NULL;
+			_FlowInParameters = false;
 		}
 		E_CVDTOR( frontend___ );
 		//f Initialization with 'Channel' to parse/answer the request.
@@ -358,6 +368,7 @@ namespace fblfrd {
 			Channel_ = &Channel;
 			_ParametersHandlingFunctions = &ParametersHandlingFunctions;
 			_ReportingFunctions = &ReportingFunctions;
+			_FlowInParameters = false;
 
 			RetrieveBackendCommands_();
 		ERRErr
@@ -411,9 +422,20 @@ namespace fblfrd {
 		FBLFRD_M( XItem32s, xitem32s_ )
 		FBLFRD_M( CommandsDetails, commands_details_ )
 		FBLFRD_M( ObjectsReferences, objects_references_ )
+		void FlowIn( flw::iflow__ &Flow )
+		{
+			_FlowIn( Flow );
+		}
+		void FlowOut( flw::iflow__ *&Flow )
+		{
+			_FlowOut( Flow );
+		}
 		void EndOfInParameters( void )
 		{
-			Channel_->Put( 0 );	// End of request
+			if ( !_FlowInParameters )
+				Channel_->Put( 0 );	// End of request
+			else
+				_FlowInParameters = false;
 		}
 		//f Send the request.
 		fblovl::reply__ Handle( void )

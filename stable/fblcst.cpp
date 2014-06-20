@@ -96,6 +96,7 @@ const char *fblcst::CastsNames[c_amount] = {
 	"XItems",
 	"CommandsDetails",
 	"ObjectsReferences",
+	"Flow",
 };
 
 cast__ fblcst::GetID( const char *CastName )
