@@ -212,31 +212,21 @@ void err::Final( void )
 		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
 ERRProlog
-# ifdef CPE_MT
-	cio::cout___ COut;
-	cio::cerr___ CErr;
-# else
-	static txf::text_oflow__ &COut = cio::COut;
-	static txf::text_oflow__ &CErr = cio::CErr;
-# endif
 ERRBegin
 	if ( cio::IsInitialized() ) {
-# ifdef CPE_MT
-		COut.Init();
-		CErr.Init();
-# endif
 		if ( cio::Target() == cio::tConsole ) {
-			COut << txf::commit;
-			CErr << txf::nl << txf::tab;
+			cio::COut << txf::commit;
+			cio::CErr << txf::nl << txf::tab;
 		}
 
-		CErr << "{ " << Message << " }";
+		cio::CErr << "{ " << Message << " }";
 
 		if ( cio::Target() == cio::tConsole )
-			CErr << txf::nl;
+			cio::CErr << txf::nl;
 
-		CErr << txf::commit;
-	}
+		cio::CErr << txf::commit;
+	} else
+		ERRFwk();
 ERRErr
 ERREnd
 ERREpilog

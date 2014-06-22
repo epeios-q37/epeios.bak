@@ -54,9 +54,9 @@ ERRBegin
 		ERRPrm();
 		
 	if ( !cio::IsInitialized() ) {
-		cio::COutDriver.Init( *Data->COut, fdr::ts_Default );
-		cio::CErrDriver.Init( *Data->CErr, fdr::ts_Default );
-		cio::CInDriver.Init( flx::VoidIFlowDriver, fdr::ts_Default );
+		cio::COutF.Init( *Data->COut );
+		cio::CErrF.Init( *Data->CErr );
+		cio::CInF.Init( flx::VoidIFlowDriver );
 
 		cio::Initialize( cio::tUser );
 	}

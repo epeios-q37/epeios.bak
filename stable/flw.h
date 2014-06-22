@@ -83,7 +83,7 @@ extern class ttr_tutor &FLWTutor;
 #	endif
 #endif
 
-# define FLW_AMOUNT_MAX ((bso::size__)-1)
+# define FLW_AMOUNT_MAX BSO_SIZE_MAX
 
 namespace flw {
 	using fdr::datum__;

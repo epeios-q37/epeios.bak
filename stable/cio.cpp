@@ -65,9 +65,15 @@ static flx::void_oflow_driver___ _VOutDriver;
 static flx::void_oflow_driver___ _VErrDriver;
 static flx::void_iflow_driver___ _VInDriver;
 
-static iof::io_oflow_driver___ _COutDriver;
-static iof::io_oflow_driver___ _CErrDriver;
-static iof::io_iflow_driver___ _CInDriver;
+static iof::io_oflow_driver___ _SOutDriver;
+static iof::io_oflow_driver___ _SErrDriver;
+static iof::io_iflow_driver___ _SInDriver;
+
+cof___ cio::COutF, cio::CErrF;
+cif__ cio::CInF;
+
+txf::text_oflow__ cio::COut, cio::CErr;
+txf::text_iflow__ cio::CIn;
 
 #if defined( CPE_WIN )
 #	include <io.h>
@@ -81,14 +87,6 @@ iop::descriptor__ cio::cind = stdin, cio::coutd = stdout, cio::cerrd = stderr;
 #else
 #	error "Unkonw I/O enviroment !"
 #endif
-
-flx::relay_oflow_driver___ cio::COutDriver;
-flx::relay_oflow_driver___ cio::CErrDriver;
-flx::relay_iflow_driver___ cio::CInDriver;
-
-cout___ cio::COut;
-cerr___ cio::CErr;
-cin___ cio::CIn;
 
 void cio::Initialize( target__ Target )
 {
@@ -104,28 +102,28 @@ void cio::Initialize( target__ Target )
 		if ( _setmode( _fileno( stderr ), _O_BINARY ) == -1 )
 			ERRLbr();
 #endif
-		_COutDriver.Init( COutDescriptor, fdr::ts_Default );
-		_CInDriver.Init( CInDescriptor, fdr::ts_Default );
-		_CErrDriver.Init( CErrDescriptor, fdr::ts_Default );
+		_SOutDriver.Init( COutDescriptor, fdr::ts_Default );
+		_SInDriver.Init( CInDescriptor, fdr::ts_Default );
+		_SErrDriver.Init( CErrDescriptor, fdr::ts_Default );
 
-		COutDriver.Init( _COutDriver, fdr::ts_Default );
-		CInDriver.Init( _CInDriver, fdr::ts_Default );
-		CErrDriver.Init( _CErrDriver, fdr::ts_Default );
+		COutF.Init( _SOutDriver );
+		CInF.Init( _SInDriver );
+		CErrF.Init( _SErrDriver );
 
 		break;
 	case tVoid:
-		COutDriver.Init( _VOutDriver, fdr::ts_Default );
-		CInDriver.Init( _VInDriver, fdr::ts_Default );
-		CErrDriver.Init( _VErrDriver, fdr::ts_Default );
+		COutF.Init( _VOutDriver );
+		CInF.Init( _VInDriver );
+		CErrF.Init( _VErrDriver );
 		break;
 	case tUser:
-		if ( !COutDriver.IsInitialized() )
+		if ( !COutF.IsInitialized() )
 			ERRFwk();
 
-		if ( !CInDriver.IsInitialized() )
+		if ( !CInF.IsInitialized() )
 			ERRFwk();
 
-		if ( !CErrDriver.IsInitialized() )
+		if ( !CErrF.IsInitialized() )
 			ERRFwk();
 
 		break;
@@ -134,9 +132,9 @@ void cio::Initialize( target__ Target )
 		break;
 	}
 
-	cio::COut.Init();
-	cio::CErr.Init();
-	cio::CIn.Init();
+	cio::COut.Init( COutF );
+	cio::CErr.Init( CErrF );
+	cio::CIn.Init( CInF );
 
 	::Target_ = Target;
 }

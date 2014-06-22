@@ -1526,6 +1526,7 @@ ERRFErr
 ERRFEnd	
 	cio::COut.Commit();
 	cio::CErr.Commit();
+	cio::CIn.Dismiss();
 ERRFEpilog
 	return ExitValue;
 }

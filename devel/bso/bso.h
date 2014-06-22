@@ -159,6 +159,7 @@ namespace bso {
 
 
 # define BSO_SIZE_MAX	((size_t)-1)
+// # define BSO_SIZE_MAX	SIZE_MAX
 
 # if 0
 # ifdef CPE_INT64

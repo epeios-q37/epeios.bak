@@ -99,6 +99,10 @@ namespace txf {
 		{
 			return _F().ReadUpTo( Nombre, Tampon );
 		}
+		void _Dismiss( void )
+		{
+			_F().Dismiss();
+		}
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -236,6 +240,10 @@ namespace txf {
 		datum__ Get( void )
 		{
 			return Lire_();
+		}
+		void Dismiss( void )
+		{
+			_Dismiss();
 		}
 		flw::iflow__ &Flow( void ) const
 		{

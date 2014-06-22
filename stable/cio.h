@@ -76,133 +76,68 @@ namespace cio {
 
 	extern iop::descriptor__ CInDescriptor, COutDescriptor, CErrDescriptor;
 
-	// 'Thread-safe'.
-	extern flx::relay_oflow_driver___ COutDriver;
-	extern flx::relay_oflow_driver___ CErrDriver;
-	extern flx::relay_iflow_driver___ CInDriver;
-
-	class coutf___
+	class cof___
 	: public flw::oflow__
 	{
 	private:
 		flw::datum__ _Cache[IOP__BUFFER_SIZE];
 	public:
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init(
+			fdr::oflow_driver_base___ &Driver,
+			flw::size__ AmountMax = FLW_AMOUNT_MAX )
 		{
-			oflow__::Init( COutDriver, _Cache, sizeof( _Cache ), AmountMax );
+			oflow__::Init( Driver, _Cache, sizeof( _Cache ), AmountMax );
 		}
-	};
-
-	class cout___
-	: public txf::text_oflow__
-	{
-	private:
-		coutf___ _CoutF;
-	public:
-		void reset( bso::bool__ P = true )
+		void Init(
+			fdr::oflow_driver_base___ &,
+			fdr::thread_safety__ )
+				// Une ancienne version de cette bibliothèque avait une méthode avec ces paramètres. Un appel à cette méthode appelait la méthode ci-dessus, ce qui provoque une erreur.
+				// Cette méthode a donc été mise en palce pour détecter et corrger ce cas de figure...
 		{
-			text_oflow__::reset( P );
-			_CoutF.reset( P );
-		}
-		cout___( void )
-		{
-			reset( false );
-		}
-		~cout___( void )
-		{
-			reset();
-		}
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
-		{
-			_CoutF.Init( AmountMax );
-			text_oflow__::Init( _CoutF );
+			ERRPrm();
 		}
 	};
 
 
-	class cerrf___
-	: public flw::oflow__
-	{
-	private:
-		flw::datum__ _Cache[IOP__BUFFER_SIZE];
-	public:
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
-		{
-			oflow__::Init( CErrDriver, _Cache, sizeof( _Cache ), AmountMax ) ;
-		}
-	};
-
-	class cerr___
-	: public txf::text_oflow__
-	{
-	private:
-		cerrf___ _CerrF;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			text_oflow__::reset( P );
-			_CerrF.reset( P );
-		}
-		cerr___( void )
-		{
-			reset( false );
-		}
-		~cerr___( void )
-		{
-			reset();
-		}
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
-		{
-			_CerrF.Init( AmountMax );
-			text_oflow__::Init( _CerrF );
-		}
-	};
-
-	class cinf___
+	class cif__
 	: public flw::iflow__
 	{
 	public:
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init(
+			fdr::iflow_driver_base___ &Driver,
+			flw::size__ AmountMax = FLW_AMOUNT_MAX )
 		{
-			iflow__::Init( CInDriver, AmountMax );
+			iflow__::Init( Driver, AmountMax );
+		}
+		void Init(
+			fdr::oflow_driver_base___ &Driver,
+			fdr::thread_safety__ )	// A cause d'une 
+		{
+			ERRPrm();
+		}
+		void Init(
+			fdr::iflow_driver_base___ &,
+			fdr::thread_safety__ )
+				// Une ancienne version de cette bibliothèque avait une méthode avec ces paramètres. Un appel à cette méthode appelait la méthode ci-dessus, ce qui provoque une erreur.
+				// Cette méthode a donc été mise en palce pour détecter et corrger ce cas de figure...
+		{
+			ERRPrm();
 		}
 	};
 
-	class cin___
-	: public txf::text_iflow__
-	{
-	private:
-		cinf___ _CinF;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			text_iflow__::reset( P );
-			_CinF.reset( P );
-		}
-		cin___( void )
-		{
-			reset( false );
-		}
-		~cin___( void )
-		{
-			reset();
-		}
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
-		{
-			_CinF.Init( AmountMax );
-			text_iflow__::Init( _CinF );
-		}
-	};
+	// 'thread safe'.
+	extern cof___ COutF, CErrF;
+	extern cif__ CInF;
 
-	// 'thread Unsafe'.
-	extern cout___ COut;
-	extern cerr___ CErr;
-	extern cin___ CIn;
+
+	// 'thread unsafe'.
+	extern txf::text_oflow__ COut, CErr;
+	extern txf::text_iflow__ CIn;
 
 	enum target__
 	{
 		tConsole,	// Lecture/écriture de/dans la console.
-		tVoid,		// Lecture/écriture de/dans rien (utile pour les service Windows.
+		tVoid,		// Lecture/écriture de/dans rien (utile pour les service Windows).
 		tUser,		// Lecture/écriture de/dans des dispositifs fournis par l'utilisateur (qui doit initialiser 'C(Out|In|Err)Driver').
 		t_amount,
 		t_Undefined,
