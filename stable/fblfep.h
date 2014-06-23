@@ -100,16 +100,12 @@ namespace fblfep {
 			flw::iflow__ &Flow,
 			flw::ioflow__ &Channel )
 		{
-			Channel.Put( fblcst::cFlow );
-
 			flw::Put( &Flow, Channel );
 		}
 		void FlowOut(
 			flw::ioflow__ &Channel,
 			flw::iflow__ *&Flow )
 		{
-			Channel.Put( fblcst::cFlow );
-
 			flw::Put( &Flow, Channel );
 		}
 		void PostProcess( flw::ioflow__ & )
@@ -126,7 +122,7 @@ namespace fblfep {
 	private:
 		embedded_parameters_base__ _Base;
 	protected:
-		virtual void FBLFRDPoreProcess( void )
+		virtual void FBLFRDPreProcess( void )
 		{
 			_Base.PreProcess();
 		}

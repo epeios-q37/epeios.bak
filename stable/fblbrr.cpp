@@ -62,9 +62,7 @@ using namespace fblbrr;
 		Parameter.Init( fbltyp::New##name(), c##name );\
 		break;
 
-static parameter__ Create_(
-	flw::iflow__ &Flow,
-	cast__ Cast )
+static parameter__ Create_( cast__ Cast )
 {
 	parameter__ Parameter;
 
@@ -115,7 +113,7 @@ static parameter__ Create_(
 
 #define CCAG( name, type )\
 	case c##name:\
-		Parameter = Create_( Flow, c##name );\
+		Parameter = Create_( c##name );\
 		fbltyp::Get##name( Flow, *(fbltyp::type *)Parameter.Content );\
 		break;
 
@@ -248,10 +246,16 @@ void fblbrr::remote_request_functions___::_CreateAll(
 	if ( _Parameters.Append( parameter__( cEnd ) ) != Row )
 		ERRFwk();
 
+	if ( Flow.Get() != cEnd )
+		ERRDta();
+
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		if ( _Parameters.Append( Create_( Flow, (cast__)Casts( Row ) ) ) != Row )
+		if ( Flow.Get() != Casts( Row ) )
+			ERRDta();
+
+		if ( _Parameters.Append( Create_( (cast__)Casts( Row ) ) ) != Row )
 			ERRFwk();
 
 		Row = Casts.Next( Row );

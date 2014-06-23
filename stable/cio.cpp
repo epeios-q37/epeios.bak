@@ -65,9 +65,9 @@ static flx::void_oflow_driver___ _VOutDriver;
 static flx::void_oflow_driver___ _VErrDriver;
 static flx::void_iflow_driver___ _VInDriver;
 
-static iof::io_oflow_driver___ _SOutDriver;
-static iof::io_oflow_driver___ _SErrDriver;
-static iof::io_iflow_driver___ _SInDriver;
+iof::io_oflow_driver___ cio::SOutDriver;
+iof::io_oflow_driver___ cio::SErrDriver;
+iof::io_iflow_driver___ cio::SInDriver;
 
 cof___ cio::COutF, cio::CErrF;
 cif__ cio::CInF;
@@ -102,13 +102,13 @@ void cio::Initialize( target__ Target )
 		if ( _setmode( _fileno( stderr ), _O_BINARY ) == -1 )
 			ERRLbr();
 #endif
-		_SOutDriver.Init( COutDescriptor, fdr::ts_Default );
-		_SInDriver.Init( CInDescriptor, fdr::ts_Default );
-		_SErrDriver.Init( CErrDescriptor, fdr::ts_Default );
+		SOutDriver.Init( COutDescriptor, fdr::ts_Default );
+		SInDriver.Init( CInDescriptor, fdr::ts_Default );
+		SErrDriver.Init( CErrDescriptor, fdr::ts_Default );
 
-		COutF.Init( _SOutDriver );
-		CInF.Init( _SInDriver );
-		CErrF.Init( _SErrDriver );
+		COutF.Init( SOutDriver );
+		CInF.Init( SInDriver );
+		CErrF.Init( SErrDriver );
 
 		break;
 	case tVoid:

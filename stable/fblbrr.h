@@ -74,9 +74,9 @@ namespace fblbrr {
 		void reset( bso::bool__ = true )
 		{
 			Content = NULL;
-			Cast = fblcst::c_Unknow;
+			Cast = c_Undefined;
 		}
-		parameter__( cast__ Cast = c_Unknow )
+		parameter__( cast__ Cast = c_Undefined )
 		{
 			reset( false );
 
@@ -155,9 +155,10 @@ namespace fblbrr {
 		{
 			_Parameters.Init();
 			_CreateAll( Flow, Casts );
-
+			/*
 			if ( Flow.Get() != fblcst::cEnd )
 				ERRFwk();
+				*/
 		}
 		virtual void FBLBRQPush(
 			flw::oflow__ &Flow,

@@ -107,7 +107,7 @@ cast__ fblcst::GetID( const char *CastName )
 		i++;
 
 	if ( i >= c_amount )
-		i = c_Unknow;
+		i = c_Undefined;
 
 	return (cast__)i;
 }

@@ -90,10 +90,9 @@ namespace fblber {
 		}
 		virtual void FBLBRQPutFlow(
 			sdr::row__ Row,
-			flw::iflow__ &IFlow )
+			flw::iflow__ &Flow )
 		{
-			if ( Row != Repository_.Append( &IFlow ) )
-				ERRFwk();
+			*(flw::iflow__ **)Repository_( Row ) = &Flow;
 		}
 		virtual void FBLBRQPop(
 			flw::iflow__ &Flow,

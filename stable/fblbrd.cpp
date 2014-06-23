@@ -64,7 +64,7 @@ void fblbrd::description_::Init(
 	const cast__ *Casts )
 {
 	int i = 0;
-	cast__ Cast = c_Unknow;
+	cast__ Cast = c_Undefined;
 	bso::bool__ FlowCastDetected = false;
 
 	this->Name.Init();

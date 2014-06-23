@@ -284,7 +284,7 @@ ERRBegin
 	SharedLocale.Init();
 	SharedRegistry.Init();
 
-	LibraryData.Init( csdleo::mRemote, cio::COutDriver, cio::CErrDriver, false, (void *)ModuleFileName );
+	LibraryData.Init( csdleo::mRemote, cio::SOutDriver, cio::SErrDriver, false, (void *)ModuleFileName );
 
 	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();

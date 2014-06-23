@@ -424,7 +424,12 @@ namespace fblfrd {
 		FBLFRD_M( ObjectsReferences, objects_references_ )
 		void FlowIn( flw::iflow__ &Flow )
 		{
-			_FlowIn( Flow );
+			if ( _FlowInParameters )
+				ERRFwk();
+
+			_FlowInParameters = true;
+
+			_FlowIn( Flow );	// NOTA : Place le 'cast' signalant la fin d'une requête. Un paramètre de type 'flow' doit toujours être me dernier des paramètres.
 		}
 		void FlowOut( flw::iflow__ *&Flow )
 		{

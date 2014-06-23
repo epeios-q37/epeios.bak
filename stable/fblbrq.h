@@ -250,7 +250,7 @@ namespace fblbrq {
 
 			Position_ = E_NIL;
 			Closed_ = true;
-			Cast_ = c_Unknow;
+			Cast_ = c_Undefined;
 			Parsed_ = false;
 
 			Channel_ = NULL;
@@ -279,7 +279,7 @@ namespace fblbrq {
 		{
 			Position_ = E_NIL;
 			Closed_ = false;
-			Cast_ = c_Unknow;
+			Cast_ = c_Undefined;
 			Parsed_ = false;
 			Casts_ = Casts;
 

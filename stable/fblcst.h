@@ -149,7 +149,7 @@ namespace fblcst {
 		//i Amount of casts.
 		c_amount,
 		//i Not a cast, but signalize an invalid cast.
-		c_Unknow,
+		c_Undefined,
 	};	// A modification must be reflected by 'CastsNames'.
 
 //	typedef fbltyp::id8_t__ cast__;

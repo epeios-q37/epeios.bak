@@ -71,17 +71,26 @@ void fblber::embed_request_functions___::_GetAll(
 	const casts_ &Casts )
 {
 	sdr::row__ Row = E_NIL;
+	cast__ Cast = c_Undefined;
+	bso::bool__ FlowParameterDetected = false;
 
 	Row = Casts.First();
 
 	while ( ( Row != E_NIL )
-		    && ( Casts( Row ) != cEnd ) ) {
+		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
 
-		if ( Flow.Get() != Casts( Row ) )
+		if ( FlowParameterDetected )
 			ERRFwk();
 
-		if ( Repository_.Append( GetPointer_( Flow ) ) != Row )
+		if ( Flow.Get() != Cast )
 			ERRFwk();
+
+		if ( Cast == cFlow ) {
+			FlowParameterDetected = true;
+		} else {
+			if ( Repository_.Append( GetPointer_( Flow ) ) != Row )
+				ERRFwk();
+		}
 
 		Row = Casts.Next( Row );
 	}
@@ -92,14 +101,27 @@ void fblber::embed_request_functions___::_GetAll(
 	if ( Flow.Get() != fblcst::cEnd )
 		ERRFwk();
 
+	if ( FlowParameterDetected ) {
+		if ( Repository_.Append( GetPointer_( Flow ) ) != Casts.Previous( Row ) )
+			ERRFwk();
+
+		FlowParameterDetected= false;
+	}
+
 	if ( Repository_.Append( (void *)NULL ) != Row )
 		ERRFwk();
 
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		if ( Flow.Get() != Casts( Row ) )
+		if ( ( Cast = (cast__)Flow.Get() ) != Casts( Row ) )
 			ERRFwk();
+
+		if ( FlowParameterDetected )
+			ERRFwk();
+
+		if ( Cast == cFlow )
+			FlowParameterDetected = true;
 
 		if ( Repository_.Append( GetPointer_( Flow ) ) != Row )
 			ERRFwk();

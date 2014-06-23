@@ -74,7 +74,7 @@ namespace fblfrp {
 		fblcst::cast__ Cast;
 		void *Pointer;
 		datum__( 
-			fblcst::cast__ Cast = fblcst::c_Unknow,
+			fblcst::cast__ Cast = fblcst::c_Undefined,
 			void *Pointer = NULL )
 		{
 			this->Cast = Cast;

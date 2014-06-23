@@ -76,6 +76,10 @@ namespace cio {
 
 	extern iop::descriptor__ CInDescriptor, COutDescriptor, CErrDescriptor;
 
+	extern iof::io_oflow_driver___ SOutDriver;
+	extern 	iof::io_oflow_driver___ SErrDriver;
+	extern iof::io_iflow_driver___ SInDriver;
+
 	class cof___
 	: public flw::oflow__
 	{

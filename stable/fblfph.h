@@ -139,6 +139,8 @@ namespace fblfph {
 			flw::ioflow__ &Channel,
 			flw::iflow__ *&Flow )
 		{
+			Channel.Put( fblcst::cFlow );
+
 			FBLFPHFlowOut( Channel, Flow );
 		}
 		void PostProcess( flw::ioflow__ &Flow )
