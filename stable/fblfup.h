@@ -71,10 +71,10 @@ extern class ttr_tutor &FBLFUPTutor;
 namespace fblfup {
 	using namespace fblovl;
 
-	typedef fblfph::parameters_handling_functions__ _parameters_handling_functions__;
+	typedef fblfph::callbacks__ _callbacks__;
 
-	class universal_parameters__
-	: public _parameters_handling_functions__
+	class universal_callbacks__
+	: public _callbacks__
 	{
 	private:
 		fblfep::embedded_parameters_base__ _Embedded;
@@ -180,10 +180,10 @@ namespace fblfup {
 		{
 			_Embedded.reset( P );
 			_Remote.reset( P );
-			_parameters_handling_functions__::reset( P );
+			_callbacks__::reset( P );
 			_Mode = m_Undefined;
 		}
-		E_CVDTOR( universal_parameters__ );
+		E_CVDTOR( universal_callbacks__ );
 		void Init( mode__ Mode )
 		{
 			reset();
@@ -202,7 +202,7 @@ namespace fblfup {
 
 			_Mode = Mode;
 
-			_parameters_handling_functions__::Init();
+			_callbacks__::Init();
 		}
 	};
 

@@ -77,14 +77,14 @@ namespace fblbur {
 	: public _request__
 	{
 	private:
-		fblber::embed_request_functions___ _Embed;
-		fblbrr::remote_request_functions___ _Remote;
+		fblber::embedded_callbacks___ _Embedded;
+		fblbrr::remote_callbacks___ _Remote;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_request__::reset( P );
 
-			_Embed.reset( P );
+			_Embedded.reset( P );
 			_Remote.reset( P );
 		}
 		universal_request___( void )
@@ -103,8 +103,8 @@ namespace fblbur {
 
 			switch ( Mode ) {
 			case mEmbedded:
-				_Embed.Init();
-				_request__::Init( _Embed, Flow );
+				_Embedded.Init();
+				_request__::Init( _Embedded, Flow );
 				break;
 			case mRemote:
 				_Remote.Init();

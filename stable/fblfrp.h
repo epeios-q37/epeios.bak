@@ -116,10 +116,10 @@ namespace fblfrp {
 		void PostProcess( flw::ioflow__ &Flow );
 	};
 
-	typedef fblfph::parameters_handling_functions__ _parameters_handling_functions__;
+	typedef fblfph::callbacks__ _callbacks__;
 
-	class remote_parameters__
-	: public _parameters_handling_functions__
+	class remote_callbacks__
+	: public _callbacks__
 	{
 	private:
 		remote_parameters_base__ _Base;
@@ -150,13 +150,13 @@ namespace fblfrp {
 		void reset( bso::bool__ P = true )
 		{
 			_Base.reset( P );
-			_parameters_handling_functions__::reset( P );
+			_callbacks__::reset( P );
 		}
-		E_CVDTOR( remote_parameters__ );
+		E_CVDTOR( remote_callbacks__ );
 		void Init( flw::ioflow__ &Flow )
 		{
 			_Base.Init();
-			_parameters_handling_functions__::Init();
+			_callbacks__::Init();
 		}
 	};
 

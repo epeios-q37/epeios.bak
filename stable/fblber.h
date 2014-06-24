@@ -68,7 +68,7 @@ extern class ttr_tutor &FBLBERTutor;
 namespace fblber {
 	using namespace fblbrq;
 
-	class embed_request_functions___
+	class embedded_callbacks___
 	: public callbacks__
 	{
 	protected:
@@ -94,24 +94,25 @@ namespace fblber {
 		{
 			*(flw::iflow__ **)Repository_( Row ) = &Flow;
 		}
-		virtual void FBLBRQPop(
+		virtual void FBLBRQPopIn(
+			sdr::row__ CRow,
 			flw::iflow__ &Flow,
-			const casts_ &Casts )
-		{
-			Repository_.Init();
-			_GetAll( Flow, Casts );
-		}
+			cast__ Cast );
+		virtual void FBLBRQPopInEnd(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow );
+		virtual void FBLBRQPopOut(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow,
+			cast__ Cast );
 		virtual void FBLBRQPush(
-			flw::oflow__ &Flow,
-			const casts_ &Casts )
+			const casts_ &Casts,
+			flw::oflow__ &Flow )
 		{
-			// Rien à faire ...
+			// Rien à faise.
 		}
 	private:
 		bch::E_BUNCH( void *)Repository_;
-		void _GetAll(
-			flw::iflow__ &Flow,
-			const casts_ &Casts );
 	public:
 		void reset( bso::bool__ P = true )
 		{

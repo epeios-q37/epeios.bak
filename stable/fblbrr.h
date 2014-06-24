@@ -101,7 +101,7 @@ namespace fblbrr {
 	E_AUTO( parameters );
 
 
-	class remote_request_functions___
+	class remote_callbacks___
 	: public callbacks__
 	{
 	private:
@@ -117,10 +117,6 @@ namespace fblbrr {
 
 			return Parameter.Content;
 		}
-		void _CreateAll(
-			flw::iflow__ &Flow,
-			const casts_ &Casts );
-		void _DeleteAll( void );
 	protected:
 		virtual const void *FBLBRQGet(
 			sdr::row__ Row,
@@ -149,34 +145,31 @@ namespace fblbrr {
 			if ( _Parameters.Append( Parameter) != Row )
 				ERRFwk();
 		}
-		virtual void FBLBRQPop(
+		virtual void FBLBRQPopIn(
+			sdr::row__ CRow,
 			flw::iflow__ &Flow,
-			const casts_ &Casts )
-		{
-			_Parameters.Init();
-			_CreateAll( Flow, Casts );
-			/*
-			if ( Flow.Get() != fblcst::cEnd )
-				ERRFwk();
-				*/
-		}
+			cast__ Cast );
+		virtual void FBLBRQPopInEnd(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow );
+		virtual void FBLBRQPopOut(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow,
+			cast__ Cast );
 		virtual void FBLBRQPush(
-			flw::oflow__ &Flow,
-			const casts_ &Casts );
+			const casts_ &Casts,
+			flw::oflow__ &Flow );
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				_DeleteAll();
-
 			callbacks__::reset( P );
 			_Parameters.reset( P );
 		}
-		remote_request_functions___( void ) 
+		remote_callbacks___( void ) 
 		{
 			reset( false );
 		}
-		virtual ~remote_request_functions___( void ) 
+		virtual ~remote_callbacks___( void ) 
 		{
 			reset();
 		}

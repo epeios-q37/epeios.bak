@@ -231,36 +231,36 @@ namespace fblfrd {
 	class frontend___
 	{
 	private:
-		fblfph::parameters_handling_functions__ *_ParametersHandlingFunctions;
+		fblfph::callbacks__ *_ParametersCallbacks;
 		reporting_functions__ *_ReportingFunctions;
 		bso::bool__ _FlowInParameters;	// A vrai si paramètre de type 'flow' présent.
 		void _PreProcess( void )
 		{
-			_ParametersHandlingFunctions->PreProcess();
+			_ParametersCallbacks->PreProcess();
 		}
 		void _In(
 			fblcst::cast__ Cast,
 			const void *Pointer )
 		{
-			_ParametersHandlingFunctions->In( Cast, Pointer, *Channel_ );
+			_ParametersCallbacks->In( Cast, Pointer, *Channel_ );
 		}
 		void _Out(
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
-			_ParametersHandlingFunctions->Out( *Channel_, Cast, Pointer );
+			_ParametersCallbacks->Out( *Channel_, Cast, Pointer );
 		}
 		void _FlowIn( flw::iflow__ &Flow )
 		{
-			_ParametersHandlingFunctions->FlowIn( Flow, *Channel_ );
+			_ParametersCallbacks->FlowIn( Flow, *Channel_ );
 		}
 		void _FlowOut( flw::iflow__ *&Flow )
 		{
-			_ParametersHandlingFunctions->FlowOut( *Channel_, Flow );
+			_ParametersCallbacks->FlowOut( *Channel_, Flow );
 		}
 		void _PostProcess( flw::ioflow__ &Flow )
 		{
-			_ParametersHandlingFunctions->PostProcess( Flow );
+			_ParametersCallbacks->PostProcess( Flow );
 		}
 		void _ReportError(
 			fblovl::reply__ Reply,
@@ -340,7 +340,7 @@ namespace fblfrd {
 					Disconnect();
 			}
 				
-			_ParametersHandlingFunctions = NULL;
+			_ParametersCallbacks = NULL;
 			_ReportingFunctions = NULL;
 			Channel_ = NULL;
 			_FlowInParameters = false;
@@ -351,7 +351,7 @@ namespace fblfrd {
 			const char *Language,
 			const compatibility_informations__ &CompatibilityInformations,
 			flw::ioflow__ &Channel,
-			fblfph::parameters_handling_functions__ &ParametersHandlingFunctions,
+			fblfph::callbacks__ &ParametersCallbacks,
 			reporting_functions__ &ReportingFunctions,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
@@ -366,7 +366,7 @@ namespace fblfrd {
 			}
 
 			Channel_ = &Channel;
-			_ParametersHandlingFunctions = &ParametersHandlingFunctions;
+			_ParametersCallbacks = &ParametersCallbacks;
 			_ReportingFunctions = &ReportingFunctions;
 			_FlowInParameters = false;
 
@@ -731,12 +731,12 @@ namespace fblfrd {
 	: public frontend___
 	{
 	private:
-		fblfup::universal_parameters__ _ParametersHandling;
+		fblfup::universal_callbacks__ _ParametersCallbacks;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			frontend___::reset( P );
-			_ParametersHandling.reset( P );
+			_ParametersCallbacks.reset( P );
 		}
 		E_CVDTOR( universal_frontend___ );
 		bso::bool__ Init(
@@ -747,9 +747,9 @@ namespace fblfrd {
 			fblfrd::reporting_functions__ &ReportingFunctions,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
-			_ParametersHandling.Init( Mode );
+			_ParametersCallbacks.Init( Mode );
 
-			return frontend___::Init( Language, CompatibilityInformations, Flow, _ParametersHandling, ReportingFunctions, IncompatibilityInformations  );
+			return frontend___::Init( Language, CompatibilityInformations, Flow, _ParametersCallbacks, ReportingFunctions, IncompatibilityInformations  );
 		}
 	};
 }

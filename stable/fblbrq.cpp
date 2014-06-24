@@ -57,6 +57,66 @@ public:
 
 using namespace fblbrq;
 
+void fblbrq::request__::_Pop(
+	flw::iflow__ &Flow,
+	const casts_ &Casts )
+{
+	sdr::row__ Row = E_NIL;
+	cast__ Cast = c_Undefined;
+	bso::bool__ FlowParameterDetected = false;
+
+	Row = Casts.First();
+
+	while ( ( Row != E_NIL )
+		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
+
+		if ( FlowParameterDetected )
+			ERRFwk();
+
+		if ( Flow.Get() != Cast )
+			ERRFwk();
+
+		if ( Cast == cFlow ) {
+			FlowParameterDetected = true;
+		} else {
+			_C().PopIn( Row, Flow, Cast );
+		}
+
+		Row = Casts.Next( Row );
+	}
+
+	if ( Row == E_NIL )
+		ERRFwk();
+
+	if ( Flow.Get() != fblcst::cEnd )
+		ERRFwk();
+
+	if ( FlowParameterDetected ) {
+		_C().PopIn( Casts.Previous( Row ), Flow, cFlow );
+
+		FlowParameterDetected= false;
+	}
+
+	_C().PopInEnd( Row, Flow);
+
+	Row = Casts.Next( Row );
+
+	while ( Row != E_NIL ) {
+		if ( ( Cast = (cast__)Flow.Get() ) != Casts( Row ) )
+			ERRFwk();
+
+		if ( FlowParameterDetected )
+			ERRFwk();
+
+		if ( Cast == cFlow )
+			FlowParameterDetected = true;
+
+		_C().PopOut( Row, Flow, Cast );
+
+		Row = Casts.Next( Row );
+	}
+}
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 

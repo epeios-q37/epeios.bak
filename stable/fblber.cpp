@@ -66,7 +66,8 @@ static inline void *GetPointer_( flw::iflow__ &Flow )
 	return P;
 }
 
-void fblber::embed_request_functions___::_GetAll(
+# if 0
+void fblber::embedded_callbacks___::_GetAll(
 	flw::iflow__ &Flow,
 	const casts_ &Casts )
 {
@@ -128,6 +129,33 @@ void fblber::embed_request_functions___::_GetAll(
 
 		Row = Casts.Next( Row );
 	}
+}
+#endif
+
+void fblber::embedded_callbacks___::FBLBRQPopIn(
+	sdr::row__ CRow,
+	flw::iflow__ &Flow,
+	cast__ Cast )
+{
+	if ( Repository_.Append( GetPointer_( Flow ) ) != CRow )
+		ERRFwk();
+}
+
+void fblber::embedded_callbacks___::FBLBRQPopInEnd(
+	sdr::row__ CRow,
+	flw::iflow__ &Flow )
+{
+	if ( Repository_.Append( (void *)NULL ) != CRow )
+		ERRFwk();
+}
+
+void fblber::embedded_callbacks___::FBLBRQPopOut(
+	sdr::row__ CRow,
+	flw::iflow__ &Flow,
+	cast__ Cast )
+{
+	if ( Repository_.Append( GetPointer_( Flow ) ) != CRow )
+		ERRFwk();
 }
 
 /* Although in theory this class is inaccessible to the different modules,

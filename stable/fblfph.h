@@ -66,7 +66,7 @@ extern class ttr_tutor &FBLFPHTutor;
 # include "flw.h"
 
 namespace fblfph {
-	struct parameters_handling_functions__
+	struct callbacks__
 	{
 	protected:
 		virtual void FBLFPHPreProcess( void ) = 0;
@@ -90,11 +90,11 @@ namespace fblfph {
 		{
 			// A des fins de standadisation.
 		}
-		parameters_handling_functions__( void )
+		callbacks__( void )
 		{
 			reset( false );
 		}
-		virtual ~parameters_handling_functions__( void )
+		virtual ~callbacks__( void )
 		{
 			reset();
 		}

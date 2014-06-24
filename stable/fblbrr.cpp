@@ -161,6 +161,9 @@ static parameter__ _CreateAndGet(
 	CCAG( XItems, xitems )
 	CCAG( CommandsDetails, commands_details )
 	CCAG( ObjectsReferences, objects_references )
+	case cFlow:
+		Parameter.Init( &Flow, Cast );
+		break;
 	default:
 		ERRPrm();
 		break;
@@ -171,11 +174,19 @@ static parameter__ _CreateAndGet(
 
 #define CD( name, type )\
 	case c##name:\
-	fbltyp::Delete##name( (fbltyp::type *)Parameter.Content );\
+		fbltyp::Delete##name( (fbltyp::type *)Parameter.Content );\
 		break;
 
-static void Delete_( const parameter__ &Parameter )
+static void Delete_(
+	const parameter__ &Parameter,
+	cast__ Cast )
 {
+	if ( Parameter.Cast != Cast )
+		ERRPrm();
+
+	if ( Parameter.Content == NULL )
+		ERRFwk();
+
 	switch ( Parameter.Cast ) {
 	CD( Object, object__)
 	CD( Boolean, boolean__ )
@@ -220,82 +231,41 @@ static void Delete_( const parameter__ &Parameter )
 }
 
 
-void fblbrr::remote_request_functions___::_CreateAll(
+void fblbrr::remote_callbacks___::FBLBRQPopIn(
+	sdr::row__ CRow,
 	flw::iflow__ &Flow,
-	const casts_ &Casts )
+	cast__ Cast )
 {
-	sdr::row__ Row = E_NIL;
-
-	Row = Casts.First();
-
-	while ( ( Row != E_NIL )
-		    && ( Casts( Row ) != cEnd ) ) {
-
-		if ( Flow.Get() != Casts( Row ) )
-			ERRDta();
-
-		if ( _Parameters.Append( _CreateAndGet( Flow, (cast__)Casts( Row ) ) ) != Row )
-			ERRFwk();
-
-		Row = Casts.Next( Row );
-	}
-
-	if ( Row == E_NIL )
+	if ( _Parameters.Append( _CreateAndGet( Flow, Cast ) ) != CRow )
 		ERRFwk();
-
-	if ( _Parameters.Append( parameter__( cEnd ) ) != Row )
-		ERRFwk();
-
-	if ( Flow.Get() != cEnd )
-		ERRDta();
-
-	Row = Casts.Next( Row );
-
-	while ( Row != E_NIL ) {
-		if ( Flow.Get() != Casts( Row ) )
-			ERRDta();
-
-		if ( _Parameters.Append( Create_( (cast__)Casts( Row ) ) ) != Row )
-			ERRFwk();
-
-		Row = Casts.Next( Row );
-	}
 }
 
-void fblbrr::remote_request_functions___::_DeleteAll( void )
+void fblbrr::remote_callbacks___::FBLBRQPopInEnd(
+	sdr::row__ CRow,
+	flw::iflow__ &Flow )
 {
-	sdr::row__ Row = _Parameters.First();
-
-	if ( Row == E_NIL )
-		return;
-
-	while ( ( Row != E_NIL )
-		    && ( _Parameters( Row ).Cast != cEnd ) ) {
-		Delete_( _Parameters( Row ) );
-
-		Row =  _Parameters.Next( Row );
-	}
-
-	if ( Row == E_NIL )
+	if ( _Parameters.Append( parameter__( cEnd ) ) != CRow )
 		ERRFwk();
+}
 
-	Row =  _Parameters.Next( Row );
-
-	while ( Row != E_NIL ) {
-		Delete_( _Parameters( Row ) );
-
-		Row = _Parameters.Next( Row );
-	}
+void fblbrr::remote_callbacks___::FBLBRQPopOut(
+	sdr::row__ CRow,
+	flw::iflow__ &Flow,
+	cast__ Cast )
+{
+	if ( _Parameters.Append( Create_( Cast ) ) != CRow )
+		ERRFwk();
 }
 
 #define CP( name, type )\
 	case c##name:\
 		Flow.Put( Parameter.Cast );\
 		fbltyp::Put##name( *(fbltyp::type *)Parameter.Content, Flow );\
+		Delete_( Parameter, Cast );\
 		break;
 
 
-static void Push_(
+static void PushAndDelete_(
 	flw::oflow__ &Flow,
 	const parameter__ &Parameter,
 	cast__ Cast )
@@ -346,22 +316,16 @@ static void Push_(
 	}
 }
 
-
-void fblbrr::remote_request_functions___::FBLBRQPush(
-	flw::oflow__ &Flow,
-	const casts_ &Casts )
+void fblbrr::remote_callbacks___::FBLBRQPush(
+	const casts_ &Casts,
+	flw::oflow__ &Flow )
 {
-#ifdef BKDRRM_DBG
-	if ( Casts.Amount() != Repository_.Amount() )
-		ERRu();
-#endif
-
+	cast__ Cast = c_Undefined;
 	sdr::row__ Row = Casts.First();
 
 	while ( ( Row != E_NIL )
-		    && ( Casts( Row ) != cEnd ) ) {
-		if ( _Parameters( Row ).Cast != Casts( Row ) )
-			ERRFwk();
+		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
+		Delete_(_Parameters( Row ), Cast );
 		Row = Casts.Next( Row );
 	}
 
@@ -371,13 +335,11 @@ void fblbrr::remote_request_functions___::FBLBRQPush(
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		Push_( Flow, _Parameters( Row ), (cast__)Casts( Row ) );
+		PushAndDelete_( Flow, _Parameters( Row ), (cast__)Casts( Row ) );
 
 		Row = Casts.Next( Row );
 	}
 }
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

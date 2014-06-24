@@ -114,10 +114,10 @@ namespace fblfep {
 		}
 	};
 
-	typedef fblfph::parameters_handling_functions__ _parameters_handling_functions__;
+	typedef fblfph::callbacks__ _callbacks__;
 
-	struct embedded_parameters__
-	: public _parameters_handling_functions__
+	struct embedded_callbacks__
+	: public _callbacks__
 	{
 	private:
 		embedded_parameters_base__ _Base;
@@ -160,13 +160,13 @@ namespace fblfep {
 		void reset( bso::bool__ P = true )
 		{
 			_Base.reset( P );
-			_parameters_handling_functions__::reset( P );
+			_callbacks__::reset( P );
 		}
-		E_CVDTOR( embedded_parameters__ );
+		E_CVDTOR( embedded_callbacks__ );
 		void Init( void )
 		{
 			_Base.Init();
-			_parameters_handling_functions__::Init();
+			_callbacks__::Init();
 		}
 	};
 }

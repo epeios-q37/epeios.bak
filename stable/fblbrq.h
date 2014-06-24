@@ -108,12 +108,20 @@ namespace fblbrq {
 		virtual void FBLBRQPutFlow(
 			sdr::row__ Row,
 			flw::iflow__ &Flow ) = 0;
-		virtual void FBLBRQPop(
+		virtual void FBLBRQPopIn(
+			sdr::row__ CRow,	// Cast row.
 			flw::iflow__ &Flow,
-			const casts_ &Casts ) = 0;
+			cast__ Cast ) = 0;
+		virtual void FBLBRQPopInEnd(
+			sdr::row__ CRow,	// Cast row.
+			flw::iflow__ &Flow ) = 0;
+		virtual void FBLBRQPopOut(
+			sdr::row__ CRow,	// Cast row.
+			flw::iflow__ &Flow,
+			cast__ Cast ) = 0;
 		virtual void FBLBRQPush(
-			flw::oflow__ &Flow,
-			const casts_ &Casts ) = 0;
+			const casts_ &Casts,
+			flw::oflow__ &Flow ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -153,17 +161,31 @@ namespace fblbrq {
 		{
 			FBLBRQPutFlow( Row, Flow );
 		}
-		void Pop(
+		void PopIn(
+			sdr::row__ CRow,
 			flw::iflow__ &Flow,
-			const casts_ &Casts )
+			cast__ Cast )
 		{
-			FBLBRQPop( Flow, Casts );
+			FBLBRQPopIn( CRow, Flow, Cast );
+		}
+		void PopInEnd(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow )
+		{
+			FBLBRQPopInEnd( CRow, Flow );
+		}
+		void PopOut(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow,
+			cast__ Cast )
+		{
+			FBLBRQPopOut( CRow, Flow, Cast );
 		}
 		void Push(
-			flw::oflow__ &Flow,
-			const casts_ &Casts )
+			const casts_ &Casts,
+			flw::oflow__ &Flow )
 		{
-			 FBLBRQPush( Flow, Casts );
+			FBLBRQPush( Casts, Flow );
 		}
 	};
 
@@ -206,15 +228,12 @@ namespace fblbrq {
 		}
 		void _Pop(
 			flw::iflow__ &Flow,
-			const casts_ &Casts )
-		{
-			_C().Pop( Flow, Casts );
-		}
+			const casts_ &Casts );
 		void _Push(
-			flw::oflow__ &Flow,
-			const casts_ &Casts )
+			const casts_ &Casts,
+			flw::oflow__ &Flow )
 		{
-			_C().Push( Flow, Casts );
+			_C().Push( Casts, Flow );
 		}
 		void Test_( cast__ Cast )
 		{
@@ -345,7 +364,7 @@ namespace fblbrq {
 					
 				Channel_->Put( 0 );	// Empty explanation message.
 
-				_Push( *Channel_, Casts_ );
+				_Push( Casts_, *Channel_ );
 
 				if ( Casts_.Last() != Position_  )
 					ERRFwk();
