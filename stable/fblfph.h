@@ -111,9 +111,6 @@ namespace fblfph {
 			const void *Pointer,
 			flw::ioflow__ &Channel )
 		{
-
-			Channel.Put( Cast );
-
 			FBLFPHIn( Cast, Pointer, Channel );
 		}
 		void Out(
@@ -121,26 +118,18 @@ namespace fblfph {
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
-			Channel.Put( Cast );
-
 			FBLFPHOut( Channel, Cast, Pointer );
 		}
 		void FlowIn(
 			flw::iflow__ &Flow,
 			flw::ioflow__ &Channel )
 		{
-			Channel.Put( fblcst::cFlow );
-
-			Channel.Put( 0 );	// Fin de requête (traitemeent spécial des 'flow's).
-
 			FBLFPHFlowIn( Flow, Channel );
 		}
 		void FlowOut(
 			flw::ioflow__ &Channel,
 			flw::iflow__ *&Flow )
 		{
-			Channel.Put( fblcst::cFlow );
-
 			FBLFPHFlowOut( Channel, Flow );
 		}
 		void PostProcess( flw::ioflow__ &Flow )

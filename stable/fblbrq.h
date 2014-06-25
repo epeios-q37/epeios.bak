@@ -98,16 +98,6 @@ namespace fblbrq {
 	struct callbacks__
 	{
 	protected:
-		virtual const void *FBLBRQGet(
-			sdr::row__ Row,
-			cast__ Cast ) = 0;
-		virtual void *FBLBRQPut(
-			sdr::row__ Row,
-			cast__ Cast ) = 0;
-		virtual flw::iflow__ &FBLBRQGetFlow( sdr::row__ Row ) = 0;
-		virtual void FBLBRQPutFlow(
-			sdr::row__ Row,
-			flw::iflow__ &Flow ) = 0;
 		virtual void FBLBRQPopIn(
 			sdr::row__ CRow,	// Cast row.
 			flw::iflow__ &Flow,
@@ -122,6 +112,16 @@ namespace fblbrq {
 		virtual void FBLBRQPush(
 			const casts_ &Casts,
 			flw::oflow__ &Flow ) = 0;
+		virtual const void *FBLBRQGet(
+			sdr::row__ Row,
+			cast__ Cast ) = 0;
+		virtual void *FBLBRQPut(
+			sdr::row__ Row,
+			cast__ Cast ) = 0;
+		virtual flw::iflow__ &FBLBRQGetFlow( sdr::row__ Row ) = 0;
+		virtual void FBLBRQPutFlow(
+			sdr::row__ Row,
+			flw::iflow__ &Flow ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -205,6 +205,7 @@ namespace fblbrq {
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
 		flw::ioflow__ *Channel_;
+		flw::iflow__ *_FlowOutParameter;	// Pointeur sur le 'flow' de sortie, si existant.
 		callbacks__ &_C( void )
 		{
 # ifdef FBLBRQ_DBG
@@ -273,6 +274,7 @@ namespace fblbrq {
 			Parsed_ = false;
 
 			Channel_ = NULL;
+			_FlowOutParameter = NULL;
 		}
 		request__( void )
 		{
@@ -292,6 +294,7 @@ namespace fblbrq {
 			Channel_ = &Channel;
 			Closed_ = false;
 			Casts_.Init();
+			_FlowOutParameter = NULL;
 		}
 		//f Initialization with 'Channel' to parse/answer the request.
 		void Prepare( const casts_ &Casts )
@@ -345,8 +348,12 @@ namespace fblbrq {
 		}
 		void FlowOut( flw::iflow__ &Flow )
 		{
+			if ( _FlowOutParameter != NULL )
+				ERRFwk();
+
 			TestOutput_( cFlow );
-			_C().PutFlow( Position_, Flow );
+
+			_FlowOutParameter = &Flow;
 		}
 		//f Tell that the request is complete (parsed and answered).
 		void Complete( void )
@@ -371,6 +378,13 @@ namespace fblbrq {
 			}
 
 			fbltyp::PutId8( cEnd, *Channel_ );
+
+			if ( _FlowOutParameter != NULL ) {
+				while ( !_FlowOutParameter->EndOfFlow() )
+					Channel_->Put(_FlowOutParameter->Get() );
+
+				_FlowOutParameter = NULL;
+			}
 
 			Closed_ = true;
 

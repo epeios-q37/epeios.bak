@@ -233,7 +233,7 @@ namespace fblfrd {
 	private:
 		fblfph::callbacks__ *_ParametersCallbacks;
 		reporting_functions__ *_ReportingFunctions;
-		bso::bool__ _FlowInParameters;	// A vrai si paramètre de type 'flow' présent.
+		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramètre d'entrée.
 		void _PreProcess( void )
 		{
 			_ParametersCallbacks->PreProcess();
@@ -242,20 +242,24 @@ namespace fblfrd {
 			fblcst::cast__ Cast,
 			const void *Pointer )
 		{
+			Channel_->Put( Cast );
 			_ParametersCallbacks->In( Cast, Pointer, *Channel_ );
 		}
 		void _Out(
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
+			Channel_->Put( Cast );
 			_ParametersCallbacks->Out( *Channel_, Cast, Pointer );
 		}
 		void _FlowIn( flw::iflow__ &Flow )
 		{
+			// Est, en fait, appelé une fois que toutes la requête est construite, indépendemment de sa position effective.
 			_ParametersCallbacks->FlowIn( Flow, *Channel_ );
 		}
 		void _FlowOut( flw::iflow__ *&Flow )
 		{
+			Channel_->Put( fblcst::cFlow );
 			_ParametersCallbacks->FlowOut( *Channel_, Flow );
 		}
 		void _PostProcess( flw::ioflow__ &Flow )
@@ -343,7 +347,7 @@ namespace fblfrd {
 			_ParametersCallbacks = NULL;
 			_ReportingFunctions = NULL;
 			Channel_ = NULL;
-			_FlowInParameters = false;
+			_FlowInParameter = NULL;
 		}
 		E_CVDTOR( frontend___ );
 		//f Initialization with 'Channel' to parse/answer the request.
@@ -368,7 +372,7 @@ namespace fblfrd {
 			Channel_ = &Channel;
 			_ParametersCallbacks = &ParametersCallbacks;
 			_ReportingFunctions = &ReportingFunctions;
-			_FlowInParameters = false;
+			_FlowInParameter = NULL;
 
 			RetrieveBackendCommands_();
 		ERRErr
@@ -424,12 +428,14 @@ namespace fblfrd {
 		FBLFRD_M( ObjectsReferences, objects_references_ )
 		void FlowIn( flw::iflow__ &Flow )
 		{
-			if ( _FlowInParameters )
+			if ( _FlowInParameter != NULL)
 				ERRFwk();
 
-			_FlowInParameters = true;
+			Channel_->Put( fblcst::cFlow );
 
-			_FlowIn( Flow );	// NOTA : Place le 'cast' signalant la fin d'une requête. Un paramètre de type 'flow' doit toujours être me dernier des paramètres.
+			_FlowInParameter = &Flow;
+
+			// Le passage du contenu du paraèmtre se fera ultèrieurement, en fin de requête.
 		}
 		void FlowOut( flw::iflow__ *&Flow )
 		{
@@ -437,14 +443,16 @@ namespace fblfrd {
 		}
 		void EndOfInParameters( void )
 		{
-			if ( !_FlowInParameters )
-				Channel_->Put( 0 );	// End of request
-			else
-				_FlowInParameters = false;
+			Channel_->Put( 0 );	// End of request
 		}
 		//f Send the request.
 		fblovl::reply__ Handle( void )
 		{
+			if ( _FlowInParameter != NULL ) {
+				_FlowIn( *_FlowInParameter );
+				_FlowInParameter = NULL;
+			}
+
 			fblovl::reply__  Reply = _Send();
 
 			if ( Reply == fblovl::rOK )

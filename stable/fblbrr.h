@@ -118,6 +118,20 @@ namespace fblbrr {
 			return Parameter.Content;
 		}
 	protected:
+		virtual void FBLBRQPopIn(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow,
+			cast__ Cast );
+		virtual void FBLBRQPopInEnd(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow );
+		virtual void FBLBRQPopOut(
+			sdr::row__ CRow,
+			flw::iflow__ &Flow,
+			cast__ Cast );
+		virtual void FBLBRQPush(
+			const casts_ &Casts,
+			flw::oflow__ &Flow );
 		virtual const void *FBLBRQGet(
 			sdr::row__ Row,
 			cast__ Cast )
@@ -145,20 +159,6 @@ namespace fblbrr {
 			if ( _Parameters.Append( Parameter) != Row )
 				ERRFwk();
 		}
-		virtual void FBLBRQPopIn(
-			sdr::row__ CRow,
-			flw::iflow__ &Flow,
-			cast__ Cast );
-		virtual void FBLBRQPopInEnd(
-			sdr::row__ CRow,
-			flw::iflow__ &Flow );
-		virtual void FBLBRQPopOut(
-			sdr::row__ CRow,
-			flw::iflow__ &Flow,
-			cast__ Cast );
-		virtual void FBLBRQPush(
-			const casts_ &Casts,
-			flw::oflow__ &Flow );
 	public:
 		void reset( bso::bool__ P = true )
 		{
