@@ -353,6 +353,8 @@ namespace fblbrq {
 
 			TestOutput_( cFlow );
 
+			_C().PutFlow( Position_, Flow );
+
 			_FlowOutParameter = &Flow;
 		}
 		//f Tell that the request is complete (parsed and answered).
@@ -373,18 +375,18 @@ namespace fblbrq {
 
 				_Push( Casts_, *Channel_ );
 
+				if ( _FlowOutParameter != NULL ) {
+					_C().PutFlow( E_NIL, *_FlowOutParameter );
+					_FlowOutParameter = NULL;
+				}
+
+
 				if ( Casts_.Last() != Position_  )
 					ERRFwk();
 			}
 
 			fbltyp::PutId8( cEnd, *Channel_ );
 
-			if ( _FlowOutParameter != NULL ) {
-				while ( !_FlowOutParameter->EndOfFlow() )
-					Channel_->Put(_FlowOutParameter->Get() );
-
-				_FlowOutParameter = NULL;
-			}
 
 			Closed_ = true;
 

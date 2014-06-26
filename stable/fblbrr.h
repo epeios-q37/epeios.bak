@@ -146,18 +146,20 @@ namespace fblbrr {
 		}
 		flw::iflow__ &FBLBRQGetFlow( sdr::row__ Row )
 		{
-			return *(flw::iflow__ *)( Row, cFlow );
+			return *(flw::iflow__ *)_Get( Row, cFlow );
 		}
 		void FBLBRQPutFlow(
 			sdr::row__ Row,
 			flw::iflow__ &Flow )
 		{
-			parameter__ Parameter;
+			if ( Row != E_NIL ) {
+				parameter__ Parameter;
 
-			Parameter.Init( &Flow, cFlow );
+				Parameter.Init( &Flow, cFlow );
 
-			if ( _Parameters.Append( Parameter) != Row )
-				ERRFwk();
+				if ( _Parameters.Append( Parameter) != Row )
+					ERRFwk();
+			}
 		}
 	public:
 		void reset( bso::bool__ P = true )

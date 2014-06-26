@@ -79,6 +79,7 @@ namespace fblfph {
 			fblcst::cast__ Cast,
 			void *Pointer ) = 0;
 		virtual void FBLFPHFlowIn(
+			bso::bool__ FirstCall,
 			flw::iflow__ &Flow,
 			flw::ioflow__ &Channel ) = 0;
 		virtual void FBLFPHFlowOut(
@@ -121,10 +122,11 @@ namespace fblfph {
 			FBLFPHOut( Channel, Cast, Pointer );
 		}
 		void FlowIn(
+			bso::bool__ FirstCall,
 			flw::iflow__ &Flow,
 			flw::ioflow__ &Channel )
 		{
-			FBLFPHFlowIn( Flow, Channel );
+			FBLFPHFlowIn( FirstCall, Flow, Channel );
 		}
 		void FlowOut(
 			flw::ioflow__ &Channel,

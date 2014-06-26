@@ -63,7 +63,7 @@ using namespace fblfrp;
 	break;
 
 
-void fblfrp::remote_parameters_base__::In(
+void fblfrp::remote_callbacks__::FBLFPHIn(
 	fblcst::cast__ Cast,
 	const void *Pointer,
 	flw::ioflow__ &Channel )
@@ -111,23 +111,25 @@ void fblfrp::remote_parameters_base__::In(
 	}
 }
 
-void fblfrp::remote_parameters_base__::Out(
-		flw::ioflow__ &Channel,
-		fblcst::cast__ Cast,
-		void *Pointer )
+void fblfrp::remote_callbacks__::FBLFPHOut(
+	flw::ioflow__ &Channel,
+	fblcst::cast__ Cast,
+	void *Pointer )
 {
-	Data.Append( datum__( Cast, Pointer ) );
+	_Data.Append( datum__( Cast, Pointer ) );
 }
 
-void fblfrp::remote_parameters_base__::FlowIn(
+void fblfrp::remote_callbacks__::FBLFPHFlowIn(
+	bso::bool__ FirstCall,
 	flw::iflow__ &Flow,
 	flw::ioflow__ &Channel )
 {
-	while ( !Flow.EndOfFlow() )
-		Channel.Put(Flow.Get() );
+	if ( !FirstCall )
+		while ( !Flow.EndOfFlow() )
+			Channel.Put(Flow.Get() );
 }
 
-void fblfrp::remote_parameters_base__::FlowOut(
+void fblfrp::remote_callbacks__::FBLFPHFlowOut(
 	flw::ioflow__ &Channel,
 	flw::iflow__ *&Flow )
 {
@@ -189,15 +191,15 @@ void Pop_(
 	}
 }
 
-void fblfrp::remote_parameters_base__::PostProcess( flw::ioflow__ &Flow )
+void fblfrp::remote_callbacks__::FBLFPHPostProcess( flw::ioflow__ &Flow )
 {
-	sdr::row__ Row = Data.First();
+	sdr::row__ Row = _Data.First();
 	datum__ Datum;
 
 	while ( Row != E_NIL ) {
-		Pop_( Data( Row ), Flow );
+		Pop_( _Data( Row ), Flow );
 
-		Row = Data.Next( Row );
+		Row = _Data.Next( Row );
 	}
 }
 

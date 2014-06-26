@@ -253,8 +253,9 @@ void fblbrr::remote_callbacks___::FBLBRQPopOut(
 	flw::iflow__ &Flow,
 	cast__ Cast )
 {
-	if ( _Parameters.Append( Create_( Cast ) ) != CRow )
-		ERRFwk();
+	if ( Cast != cFlow )	// Pour 'Cast == cFlow', '_Parameters' sera mis à jour ultèrieurement.
+		if ( _Parameters.Append( Create_( Cast ) ) != CRow )
+			ERRFwk();
 }
 
 #define CP( name, type )\
@@ -310,6 +311,13 @@ static void PushAndDelete_(
 	CP( XItems, xitems )
 	CP( CommandsDetails, commands_details )
 	CP( ObjectsReferences, objects_references )
+	case cFlow:
+	{
+		flw::iflow__ &PFlow = *(flw::iflow__ *)Parameter.Content;
+		while ( !PFlow.EndOfFlow() )
+			Flow.Put(PFlow.Get() );
+		break;
+	}
 	default:
 		ERRPrm();
 		break;

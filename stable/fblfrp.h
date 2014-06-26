@@ -82,84 +82,47 @@ namespace fblfrp {
 		}
 	};
 
-	class remote_parameters_base__
-	{
-	public:
-		bch::E_BUNCH__( datum__, FBLFRP__OUT_PARAMETERS_AMOUNT_MAX ) Data;
-		void reset( bso::bool__ = true )
-		{
-			// Standardization.
-		}
-		E_CVDTOR( remote_parameters_base__ );
-		void Init( void )
-		{
-			Data.Init();
-		}
-		void PreProcess( void )
-		{
-			Data.Init();
-		}
-		void In(
-			fblcst::cast__ Cast,
-			const void *Pointer,
-			flw::ioflow__ &Channel );
-		void Out(
-			flw::ioflow__ &Channel,
-			fblcst::cast__ Cast,
-			void *Pointer );
-		void FlowIn(
-			flw::iflow__ &Flow,
-			flw::ioflow__ &Channel );
-		void FlowOut(
-			flw::ioflow__ &Channel,
-			flw::iflow__ *&Flow );
-		void PostProcess( flw::ioflow__ &Flow );
-	};
-
 	typedef fblfph::callbacks__ _callbacks__;
 
 	class remote_callbacks__
 	: public _callbacks__
 	{
 	private:
-		remote_parameters_base__ _Base;
+		bch::E_BUNCH__( datum__, FBLFRP__OUT_PARAMETERS_AMOUNT_MAX ) _Data;
 	protected:
-		void FBLFRDPreProcess( void )
+		virtual void FBLFPHPreProcess( void )
 		{
-			_Base.PreProcess();
+			_Data.Init();
 		}
 		virtual void FBLFPHIn(
 			fblcst::cast__ Cast,
 			const void *Pointer,
-			flw::ioflow__ &Flow )
-		{
-			_Base.In( Cast, Pointer, Flow );
-		}
+			flw::ioflow__ &Channel );
 		virtual void FBLFPHOut(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
-			void *Pointer )
-		{
-			_Base.Out( Flow, Cast, Pointer );
-		}
-		void FBLFPHPostProcess( flw::ioflow__ &Flow )
-		{
-			_Base.PostProcess( Flow );
-		}
+			void *Pointer );
+		virtual void FBLFPHFlowIn(
+			bso::bool__ FirstCall,
+			flw::iflow__ &Flow,
+			flw::ioflow__ &Channel );
+		virtual void FBLFPHFlowOut(
+			flw::ioflow__ &Channel,
+			flw::iflow__ *&Flow );
+		virtual void FBLFPHPostProcess( flw::ioflow__ &Flow );
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Base.reset( P );
+			_Data.reset( P );
 			_callbacks__::reset( P );
 		}
 		E_CVDTOR( remote_callbacks__ );
-		void Init( flw::ioflow__ &Flow )
+		void Init( void )
 		{
-			_Base.Init();
+			_Data.Init();
 			_callbacks__::Init();
 		}
 	};
-
 }
 
 /*$END$*/

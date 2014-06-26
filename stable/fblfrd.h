@@ -55,7 +55,7 @@ extern class ttr_tutor &FBLFRDTutor;
 				  /*******************************************/
 
 /* Addendum to the automatic documentation generation part. */
-//D Frontend/Backend Layout FrontEnD 
+//D Frontend/Backend Layout FRrontenD 
 /* End addendum to automatic documentation generation part. */
 
 /*$BEGIN$*/
@@ -68,7 +68,8 @@ extern class ttr_tutor &FBLFRDTutor;
 # include "fblovl.h"
 # include "fblcmd.h"
 # include "fblfph.h"
-# include "fblfup.h"
+# include "fblfrp.h"
+# include "fblfep.h"
 
 # define FBLFRD_UNDEFINED_CAST		255
 # define FBLFRD_UNDEFINED_TYPE		65535
@@ -252,10 +253,11 @@ namespace fblfrd {
 			Channel_->Put( Cast );
 			_ParametersCallbacks->Out( *Channel_, Cast, Pointer );
 		}
-		void _FlowIn( flw::iflow__ &Flow )
+		void _FlowIn(
+			bso::bool__ FirstCall,
+			flw::iflow__ &Flow )
 		{
-			// Est, en fait, appelé une fois que toutes la requête est construite, indépendemment de sa position effective.
-			_ParametersCallbacks->FlowIn( Flow, *Channel_ );
+			_ParametersCallbacks->FlowIn( FirstCall, Flow, *Channel_ );
 		}
 		void _FlowOut( flw::iflow__ *&Flow )
 		{
@@ -433,6 +435,8 @@ namespace fblfrd {
 
 			Channel_->Put( fblcst::cFlow );
 
+			_FlowIn( true, Flow );
+
 			_FlowInParameter = &Flow;
 
 			// Le passage du contenu du paraèmtre se fera ultèrieurement, en fin de requête.
@@ -449,7 +453,7 @@ namespace fblfrd {
 		fblovl::reply__ Handle( void )
 		{
 			if ( _FlowInParameter != NULL ) {
-				_FlowIn( *_FlowInParameter );
+				_FlowIn( false, *_FlowInParameter );
 				_FlowInParameter = NULL;
 			}
 
@@ -739,12 +743,14 @@ namespace fblfrd {
 	: public frontend___
 	{
 	private:
-		fblfup::universal_callbacks__ _ParametersCallbacks;
+		fblfrp::remote_callbacks__ _RemoteCallbacks;
+		fblfep::embedded_callbacks__ _EmbeddedCallbacks;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			frontend___::reset( P );
-			_ParametersCallbacks.reset( P );
+			_RemoteCallbacks.reset( P );
+			_EmbeddedCallbacks.reset( P );
 		}
 		E_CVDTOR( universal_frontend___ );
 		bso::bool__ Init(
@@ -755,9 +761,23 @@ namespace fblfrd {
 			fblfrd::reporting_functions__ &ReportingFunctions,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
-			_ParametersCallbacks.Init( Mode );
+			fblfph::callbacks__ *Callbacks = NULL;
 
-			return frontend___::Init( Language, CompatibilityInformations, Flow, _ParametersCallbacks, ReportingFunctions, IncompatibilityInformations  );
+			switch ( Mode ) {
+			case fblovl::mRemote:
+				_RemoteCallbacks.Init();
+				Callbacks = &_RemoteCallbacks;
+				break;
+			case fblovl::mEmbedded:
+				_EmbeddedCallbacks.Init();
+				Callbacks = &_EmbeddedCallbacks;
+				break;
+			default:
+				ERRPrm();
+				break;
+			}
+
+			return frontend___::Init( Language, CompatibilityInformations, Flow, *Callbacks, ReportingFunctions, IncompatibilityInformations  );
 		}
 	};
 }

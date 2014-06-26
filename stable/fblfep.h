@@ -66,109 +66,61 @@ extern class ttr_tutor &FBLFEPTutor;
 # include "flw.h"
 
 namespace fblfep {
-	class embedded_parameters_base__
-	{
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardization.
-		}
-		E_CVDTOR( embedded_parameters_base__ );
-		void Init( void )
-		{
-			// Standardization.
-		}
-		void PreProcess( void )
-		{
-			// Nothing to do.
-		}
-		void In(
-			fblcst::cast__ Cast,
-			const void *Pointer,
-			flw::ioflow__ &Channel )
-		{
-			flw::Put( Pointer, Channel );
-		}
-		void Out(
-			flw::ioflow__ &Channel,
-			fblcst::cast__ Cast,
-			void *Pointer )
-		{
-			flw::Put( Pointer, Channel );
-		}
-		void FlowIn(
-			flw::iflow__ &Flow,
-			flw::ioflow__ &Channel )
-		{
-			flw::Put( &Flow, Channel );
-		}
-		void FlowOut(
-			flw::ioflow__ &Channel,
-			flw::iflow__ *&Flow )
-		{
-			flw::Put( &Flow, Channel );
-		}
-		void PostProcess( flw::ioflow__ & )
-		{
-			// Nothing to do.
-		}
-	};
-
 	typedef fblfph::callbacks__ _callbacks__;
 
-	struct embedded_callbacks__
+	class embedded_callbacks__
 	: public _callbacks__
 	{
-	private:
-		embedded_parameters_base__ _Base;
 	protected:
-		virtual void FBLFRDPreProcess( void )
+		virtual void FBLFPHPreProcess( void )
 		{
-			_Base.PreProcess();
+			// Nothing to do.
 		}
-		virtual void FBLFRDIn(
+		virtual void FBLFPHIn(
 			fblcst::cast__ Cast,
 			const void *Pointer,
 			flw::ioflow__ &Channel )
 		{
-			_Base.In( Cast, Pointer, Channel );
+			flw::Put( Pointer, Channel );
 		}
-		virtual void FBLFRDOut(
+		virtual void FBLFPHOut(
 			flw::ioflow__ &Channel,
 			fblcst::cast__ Cast,
 			void *Pointer )
 		{
-			_Base.Out( Channel, Cast, Pointer );
+			flw::Put( Pointer, Channel );
 		}
-		virtual void FBLFRDFlowIn(
+		virtual void FBLFPHFlowIn(
+			bso::bool__ FirstCall,
 			flw::iflow__ &Flow,
 			flw::ioflow__ &Channel )
 		{
-			_Base.FlowIn( Flow, Channel );
+			if ( !FirstCall )
+				flw::Put( &Flow, Channel );
 		}
-		virtual void FBLFRDOut(
+		virtual void FBLFPHFlowOut(
 			flw::ioflow__ &Channel,
 			flw::iflow__ *&Flow )
 		{
-			_Base.FlowOut( Channel, Flow );
+			flw::Put( &Flow, Channel );
 		}
-		virtual void FBLFRDPostProcess( flw::ioflow__ &Flow )
+		virtual void FBLFPHPostProcess( flw::ioflow__ & )
 		{
-			_Base.PostProcess( Flow );
+			// Nothing to do.
 		}
+
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Base.reset( P );
 			_callbacks__::reset( P );
 		}
 		E_CVDTOR( embedded_callbacks__ );
 		void Init( void )
 		{
-			_Base.Init();
 			_callbacks__::Init();
 		}
 	};
+
 }
 
 /*$END$*/

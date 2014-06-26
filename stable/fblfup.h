@@ -60,6 +60,8 @@ extern class ttr_tutor &FBLFUPTutor;
 
 /*$BEGIN$*/
 
+# error "Obsolete !"
+
 # include "fblfep.h"
 # include "fblfrp.h"
 # include "fblfph.h"
@@ -130,6 +132,7 @@ namespace fblfup {
 			}
 		}
 		virtual void FBLFPHFlowIn(
+			bso::bool__ FirstCall,
 			flw::iflow__ &Flow,
 			flw::ioflow__ &Channel )
 		{
