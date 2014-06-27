@@ -125,16 +125,18 @@ void fblfrp::remote_callbacks___::FBLFPHFlowIn(
 	flw::ioflow__ &Channel )
 {
 ERRProlog
-	flx::sizes_embedded_iflow_relay_driver___ RFlowDriver;
-	flw::standalone_iflow__<> RFlow;
+	flx::sizes_embedded_oflow_relay_driver___ RFlowDriver;
+	flw::standalone_oflow__<> RFlow;
 ERRBegin
 	if ( !FirstCall ) {
-		RFlowDriver.Init( Flow, fdr::tsDisabled );
+		RFlowDriver.Init( Channel, fdr::tsDisabled );
 
 		RFlow.Init( RFlowDriver );
 
-		while ( !RFlow.EndOfFlow() )
-			Channel.Put( RFlow.Get() );
+		while ( !Flow.EndOfFlow() )
+			RFlow.Put( Flow.Get() );
+
+		RFlow.Commit();
 	}
 ERRErr
 ERREnd
@@ -145,10 +147,12 @@ void fblfrp::remote_callbacks___::FBLFPHFlowOut(
 	flw::ioflow__ &Channel,
 	flw::iflow__ *&Flow )
 {
-	_OFlowDriver.Init( Channel, fdr::tsDisabled );
-	_OFlow.Init( _OFlowDriver );
+	_Data.Append( datum__( fblcst::cFlow, NULL ) );
 
-	Flow = &_OFlow;
+	_IFlowDriver.Init( Channel, fdr::tsDisabled );
+	_IFlow.Init( _IFlowDriver );
+
+	Flow = &_IFlow;
 }
 
 
@@ -200,6 +204,10 @@ void Pop_(
 	COUT( XItems, xitems_ )
 	COUT( CommandsDetails, commands_details_ )
 	COUT( ObjectsReferences, objects_references_ )
+	case fblcst::cFlow:
+		if ( Flow.Get() != Datum.Cast )
+			ERRDta();
+		break;
 	default:
 		ERRPrm();
 		break;

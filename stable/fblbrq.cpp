@@ -76,11 +76,7 @@ void fblbrq::request__::_Pop(
 		if ( Flow.Get() != Cast )
 			ERRFwk();
 
-		if ( Cast == cFlow ) {
-			FlowParameterDetected = true;
-		} else {
-			_C().PopIn( Row, Flow, Cast );
-		}
+		_C().PopIn( Row, Flow, Cast );
 
 		Row = Casts.Next( Row );
 	}
@@ -90,12 +86,6 @@ void fblbrq::request__::_Pop(
 
 	if ( Flow.Get() != fblcst::cEnd )
 		ERRFwk();
-
-	if ( FlowParameterDetected ) {
-		_C().PopIn( Casts.Previous( Row ), Flow, cFlow );
-
-		FlowParameterDetected= false;
-	}
 
 	_C().PopInEnd( Row, Flow);
 

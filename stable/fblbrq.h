@@ -110,8 +110,19 @@ namespace fblbrq {
 			flw::iflow__ &Flow,
 			cast__ Cast ) = 0;
 		virtual void FBLBRQPush(
+			bso::bool__ FirstCall,
 			const casts_ &Casts,
 			flw::oflow__ &Flow ) = 0;
+		virtual int FBLBRQPush(
+			const casts_ &Casts,
+			flw::oflow__ &Flow)
+		{
+			ERRFwk();
+
+			return 0;
+
+			// Pour détecter et éliminer cette méthode obsolete.
+		}
 		virtual const void *FBLBRQGet(
 			sdr::row__ Row,
 			cast__ Cast ) = 0;
@@ -182,10 +193,11 @@ namespace fblbrq {
 			FBLBRQPopOut( CRow, Flow, Cast );
 		}
 		void Push(
+			bso::bool__ FirstCall,
 			const casts_ &Casts,
 			flw::oflow__ &Flow )
 		{
-			FBLBRQPush( Casts, Flow );
+			FBLBRQPush( FirstCall, Casts, Flow );
 		}
 	};
 
@@ -205,7 +217,6 @@ namespace fblbrq {
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
 		flw::ioflow__ *Channel_;
-		flw::iflow__ *_FlowOutParameter;	// Pointeur sur le 'flow' de sortie, si existant.
 		callbacks__ &_C( void )
 		{
 # ifdef FBLBRQ_DBG
@@ -231,10 +242,11 @@ namespace fblbrq {
 			flw::iflow__ &Flow,
 			const casts_ &Casts );
 		void _Push(
+			bso::bool__ FirstCall,
 			const casts_ &Casts,
 			flw::oflow__ &Flow )
 		{
-			_C().Push( Casts, Flow );
+			_C().Push( FirstCall, Casts, Flow );
 		}
 		void Test_( cast__ Cast )
 		{
@@ -274,7 +286,6 @@ namespace fblbrq {
 			Parsed_ = false;
 
 			Channel_ = NULL;
-			_FlowOutParameter = NULL;
 		}
 		request__( void )
 		{
@@ -294,7 +305,6 @@ namespace fblbrq {
 			Channel_ = &Channel;
 			Closed_ = false;
 			Casts_.Init();
-			_FlowOutParameter = NULL;
 		}
 		//f Initialization with 'Channel' to parse/answer the request.
 		void Prepare( const casts_ &Casts )
@@ -348,14 +358,9 @@ namespace fblbrq {
 		}
 		void FlowOut( flw::iflow__ &Flow )
 		{
-			if ( _FlowOutParameter != NULL )
-				ERRFwk();
-
 			TestOutput_( cFlow );
 
 			_C().PutFlow( Position_, Flow );
-
-			_FlowOutParameter = &Flow;
 		}
 		//f Tell that the request is complete (parsed and answered).
 		void Complete( void )
@@ -373,13 +378,7 @@ namespace fblbrq {
 					
 				Channel_->Put( 0 );	// Empty explanation message.
 
-				_Push( Casts_, *Channel_ );
-
-				if ( _FlowOutParameter != NULL ) {
-					_C().PutFlow( E_NIL, *_FlowOutParameter );
-					_FlowOutParameter = NULL;
-				}
-
+				_Push( true, Casts_, *Channel_ );
 
 				if ( Casts_.Last() != Position_  )
 					ERRFwk();
@@ -387,6 +386,9 @@ namespace fblbrq {
 
 			fbltyp::PutId8( cEnd, *Channel_ );
 
+			if ( Casts_.Amount() != 0 ) /* If == 0, it means that the request was handled
+								   by handling DIRECTLY the underlying flows. */
+				_Push( false, Casts_, *Channel_ );
 
 			Closed_ = true;
 

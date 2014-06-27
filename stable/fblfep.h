@@ -95,7 +95,7 @@ namespace fblfep {
 			flw::iflow__ &Flow,
 			flw::ioflow__ &Channel )
 		{
-			if ( !FirstCall )
+			if ( FirstCall )
 				flw::Put( &Flow, Channel );
 		}
 		virtual void FBLFPHFlowOut(
@@ -108,7 +108,6 @@ namespace fblfep {
 		{
 			// Nothing to do.
 		}
-
 	public:
 		void reset( bso::bool__ P = true )
 		{

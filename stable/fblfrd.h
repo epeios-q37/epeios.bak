@@ -235,6 +235,7 @@ namespace fblfrd {
 		fblfph::callbacks__ *_ParametersCallbacks;
 		reporting_functions__ *_ReportingFunctions;
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramètre d'entrée.
+		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramètre flow dans les paramètres de sortie.
 		void _PreProcess( void )
 		{
 			_ParametersCallbacks->PreProcess();
@@ -350,6 +351,7 @@ namespace fblfrd {
 			_ReportingFunctions = NULL;
 			Channel_ = NULL;
 			_FlowInParameter = NULL;
+			_FlowOutParameter = false;
 		}
 		E_CVDTOR( frontend___ );
 		//f Initialization with 'Channel' to parse/answer the request.
@@ -375,6 +377,7 @@ namespace fblfrd {
 			_ParametersCallbacks = &ParametersCallbacks;
 			_ReportingFunctions = &ReportingFunctions;
 			_FlowInParameter = NULL;
+			_FlowOutParameter = false;
 
 			RetrieveBackendCommands_();
 		ERRErr
@@ -443,7 +446,12 @@ namespace fblfrd {
 		}
 		void FlowOut( flw::iflow__ *&Flow )
 		{
+			if ( _FlowOutParameter )
+				ERRFwk();
+
 			_FlowOut( Flow );
+
+			_FlowOutParameter = true;
 		}
 		void EndOfInParameters( void )
 		{
@@ -465,7 +473,11 @@ namespace fblfrd {
 			if ( Channel_->Get() != fblcst::cEnd )
 				ERRDta();
 
-			Channel_->Dismiss();
+# error
+			if ( !_FlowOutParameter )
+				Channel_->Dismiss();
+
+			_FlowOutParameter = false;
 
 			return Reply;
 		}

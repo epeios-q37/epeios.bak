@@ -92,7 +92,6 @@ namespace fblber {
 			sdr::row__ Row,
 			flw::iflow__ &Flow )
 		{
-			if ( Row == E_NIL )
 			*(flw::iflow__ **)Repository_( Repository_.Last() ) = &Flow;
 		}
 		virtual void FBLBRQPopIn(
@@ -107,6 +106,7 @@ namespace fblber {
 			flw::iflow__ &Flow,
 			cast__ Cast );
 		virtual void FBLBRQPush(
+			bso::bool__,
 			const casts_ &Casts,
 			flw::oflow__ &Flow )
 		{

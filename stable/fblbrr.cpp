@@ -161,9 +161,6 @@ static parameter__ _CreateAndGet(
 	CCAG( XItems, xitems )
 	CCAG( CommandsDetails, commands_details )
 	CCAG( ObjectsReferences, objects_references )
-	case cFlow:
-		Parameter.Init( &Flow, Cast );
-		break;
 	default:
 		ERRPrm();
 		break;
@@ -224,6 +221,8 @@ static void Delete_(
 	CD( XItems, xitems )
 	CD( CommandsDetails, commands_details )
 	CD( ObjectsReferences, objects_references )
+	case cFlow:
+		break;	// 'Parameter.Content' contient '&IFlow', et pas un objet crée par un 'new', donc il n'ya arien a effacer.
 	default:
 		ERRPrm();
 		break;
@@ -233,10 +232,19 @@ static void Delete_(
 
 void fblbrr::remote_callbacks___::FBLBRQPopIn(
 	sdr::row__ CRow,
-	flw::iflow__ &Flow,
+	flw::iflow__ &Channel,
 	cast__ Cast )
 {
-	if ( _Parameters.Append( _CreateAndGet( Flow, Cast ) ) != CRow )
+	parameter__ Parameter;
+
+	if ( Cast == cFlow ) {
+		_IFlowDriver.Init( Channel, fdr::tsDisabled );
+		_IFlow.Init( _IFlowDriver );
+		Parameter.Init( &_IFlow, Cast );
+	} else
+		Parameter = _CreateAndGet( Channel, Cast );
+
+	if ( _Parameters.Append( Parameter ) != CRow )
 		ERRFwk();
 }
 
@@ -260,14 +268,17 @@ void fblbrr::remote_callbacks___::FBLBRQPopOut(
 
 #define CP( name, type )\
 	case c##name:\
-		Flow.Put( Parameter.Cast );\
-		fbltyp::Put##name( *(fbltyp::type *)Parameter.Content, Flow );\
-		Delete_( Parameter, Cast );\
+		if ( FirstCall ) {\
+			Channel.Put( Parameter.Cast );\
+			fbltyp::Put##name( *(fbltyp::type *)Parameter.Content, Channel );\
+			Delete_( Parameter, Cast );\
+		}\
 		break;
 
 
 static void PushAndDelete_(
-	flw::oflow__ &Flow,
+	bso::bool__ FirstCall,
+	flw::oflow__ &Channel,
 	const parameter__ &Parameter,
 	cast__ Cast )
 {
@@ -313,11 +324,28 @@ static void PushAndDelete_(
 	CP( ObjectsReferences, objects_references )
 	case cFlow:
 	{
+	ERRProlog
+		flx::sizes_embedded_oflow_relay_driver___ RFlowDriver;
+		flw::standalone_oflow__<> RFlow;
 		flw::iflow__ &PFlow = *(flw::iflow__ *)Parameter.Content;
-		while ( !PFlow.EndOfFlow() )
-			Flow.Put(PFlow.Get() );
-		break;
+	ERRBegin
+		if ( FirstCall ) 
+			Channel.Put( Cast );
+		else {
+			RFlowDriver.Init( Channel, fdr::tsDisabled );
+
+			RFlow.Init( RFlowDriver );
+
+			while ( !PFlow.EndOfFlow() )
+				RFlow.Put( PFlow.Get() );
+
+			RFlow.Commit();
+		}
+	ERRErr
+	ERREnd
+	ERREpilog
 	}
+		break;
 	default:
 		ERRPrm();
 		break;
@@ -325,6 +353,7 @@ static void PushAndDelete_(
 }
 
 void fblbrr::remote_callbacks___::FBLBRQPush(
+	bso::bool__ FirstCall,
 	const casts_ &Casts,
 	flw::oflow__ &Flow )
 {
@@ -333,7 +362,8 @@ void fblbrr::remote_callbacks___::FBLBRQPush(
 
 	while ( ( Row != E_NIL )
 		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
-		Delete_(_Parameters( Row ), Cast );
+		if ( FirstCall )
+			Delete_(_Parameters( Row ), Cast );
 		Row = Casts.Next( Row );
 	}
 
@@ -343,7 +373,7 @@ void fblbrr::remote_callbacks___::FBLBRQPush(
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		PushAndDelete_( Flow, _Parameters( Row ), (cast__)Casts( Row ) );
+		PushAndDelete_( FirstCall, Flow, _Parameters( Row ), (cast__)Casts( Row ) );
 
 		Row = Casts.Next( Row );
 	}

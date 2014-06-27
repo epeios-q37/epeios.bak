@@ -62,7 +62,9 @@ extern class ttr_tutor &FBLBRRTutor;
 
 # include "err.h"
 # include "flw.h"
+# include "flx.h"
 # include "fblbrq.h"
+
 
 namespace fblbrr {
 	using namespace fblbrq;
@@ -106,6 +108,8 @@ namespace fblbrr {
 	{
 	private:
 		parameters _Parameters;
+		flx::sizes_embedded_iflow_relay_driver___ _IFlowDriver;
+		flw::standalone_iflow__<> _IFlow;
 		void *_Get(
 			sdr::row__ Row,
 			cast__ Cast )
@@ -130,6 +134,7 @@ namespace fblbrr {
 			flw::iflow__ &Flow,
 			cast__ Cast );
 		virtual void FBLBRQPush(
+			bso::bool__ FirstCall,
 			const casts_ &Casts,
 			flw::oflow__ &Flow );
 		virtual const void *FBLBRQGet(
@@ -152,20 +157,20 @@ namespace fblbrr {
 			sdr::row__ Row,
 			flw::iflow__ &Flow )
 		{
-			if ( Row != E_NIL ) {
-				parameter__ Parameter;
+			parameter__ Parameter;
 
-				Parameter.Init( &Flow, cFlow );
+			Parameter.Init( &Flow, cFlow );
 
-				if ( _Parameters.Append( Parameter) != Row )
-					ERRFwk();
-			}
+			if ( _Parameters.Append( Parameter) != Row )
+				ERRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			callbacks__::reset( P );
 			_Parameters.reset( P );
+			_IFlow.reset( P );
+			_IFlowDriver.reset( P );
 		}
 		remote_callbacks___( void ) 
 		{
@@ -181,6 +186,7 @@ namespace fblbrr {
 
 			_Parameters.Init();
 			callbacks__::Init();
+			// '_IFlow(Driver)' initialisé seulement lorsque utilisé.
 		}
 	};
 }

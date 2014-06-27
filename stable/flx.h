@@ -696,6 +696,7 @@ namespace flx {
 	private:
 		flw::oflow__ *_Flow;
 		fdr::size__ _EmbeddedSizeRemainder;
+		bso::bool__ _PendingCommit;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::datum__ *Buffer,
@@ -718,10 +719,15 @@ namespace flx {
 
 			_EmbeddedSizeRemainder -= Size;
 
+			_PendingCommit = true;
+
 			return Size;
 		}
 		virtual void FDRCommit( void )
 		{
+			if ( !_PendingCommit )	// Pour éviter qu'un 'commit( suite à un 'reset()' réecrive un '0'.
+				return;
+
 			if ( _Flow == NULL )
 				ERRFwk();
 
@@ -730,7 +736,9 @@ namespace flx {
 
 			dtfptb::VPut( (bso::u8__)0, *_Flow );
 
-			_Flow->Commit();
+			_PendingCommit = false;
+
+			//	_Flow->Commit();	// Le 'flow' est enclavé dans un autre flot ; c'est ce dernier qui devra faire le 'commit'.
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -738,6 +746,7 @@ namespace flx {
 			fdr::oflow_driver___<>::reset( P );
 			_Flow = NULL;
 			_EmbeddedSizeRemainder = 0;
+			_PendingCommit = false;
 		}
 		E_CVDTOR( sizes_embedded_oflow_relay_driver___)
 		void Init(
@@ -746,6 +755,7 @@ namespace flx {
 		{
 			_Flow = &Flow;
 			_EmbeddedSizeRemainder = 0;
+			_PendingCommit = false;
 			fdr::oflow_driver___<>::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const
@@ -795,7 +805,7 @@ namespace flx {
 			if ( _EmbeddedSizeRemainder != 0 )
 				ERRDta();
 
-			_Flow->Dismiss();
+			//	_Flow->Dismmiss();	// Le 'flow' est enclavé dans un autre flot ; c'est ce dernier qui devra faire le 'dissmiss'.
 		}
 	public:
 		void reset( bso::bool__ P = true )
