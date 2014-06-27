@@ -586,7 +586,7 @@ namespace flx {
 		}
 	};
 
-	// ATTENTION : n'est pas 'therad-safe'.
+	// ATTENTION : n'est pas 'thread-safe'.
 	extern void_iflow__ VoidIFlow;
 
 	// 'driver' qui relaye un autre 'driver'.
@@ -686,6 +686,136 @@ namespace flx {
 		bso::bool__ IsInitialized( void ) const
 		{
 			return _Driver != NULL;
+		}
+	};	
+
+	// 'driver' qui relaye un 'oflow', mais dont la taille est 'encodée' dans le flux.
+	class sizes_embedded_oflow_relay_driver___
+	: public fdr::oflow_driver___<>
+	{
+	private:
+		flw::oflow__ *_Flow;
+		fdr::size__ _EmbeddedSizeRemainder;
+	protected:
+		virtual fdr::size__ FDRWrite(
+			const fdr::datum__ *Buffer,
+			fdr::size__ Maximum )
+		{
+			fdr::size__ &Size = Maximum;
+
+			if ( _Flow == NULL )
+				ERRFwk();
+
+			if ( _EmbeddedSizeRemainder == 0 ) {
+				_EmbeddedSizeRemainder = Size;
+				dtfptb::VPut( _EmbeddedSizeRemainder, *_Flow );
+			}
+
+			Size = _Flow->WriteUpTo(Buffer, ( Size > _EmbeddedSizeRemainder ? _EmbeddedSizeRemainder : Size ) );
+
+			if ( Size == 0 )
+				ERRDta();
+
+			_EmbeddedSizeRemainder -= Size;
+
+			return Size;
+		}
+		virtual void FDRCommit( void )
+		{
+			if ( _Flow == NULL )
+				ERRFwk();
+
+			if ( _EmbeddedSizeRemainder != 0 )
+				ERRDta();
+
+			dtfptb::VPut( (bso::u8__)0, *_Flow );
+
+			_Flow->Commit();
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			fdr::oflow_driver___<>::reset( P );
+			_Flow = NULL;
+			_EmbeddedSizeRemainder = 0;
+		}
+		E_CVDTOR( sizes_embedded_oflow_relay_driver___)
+		void Init(
+			flw::oflow__ &Flow,
+			fdr::thread_safety__ ThreadSafety )
+		{
+			_Flow = &Flow;
+			_EmbeddedSizeRemainder = 0;
+			fdr::oflow_driver___<>::Init( ThreadSafety );
+		}
+		bso::bool__ IsInitialized( void ) const
+		{
+			return _Flow != NULL;
+		}
+	};
+
+
+	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encodée' dans le flux.
+	class sizes_embedded_iflow_relay_driver___
+	: public fdr::iflow_driver___<>
+	{
+	private:
+		flw::iflow__ *_Flow;
+		fdr::size__ _EmbeddedSizeRemainder;
+	protected:
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::datum__ *Buffer )
+		{
+			fdr::size__ &Size = Maximum;
+
+			if ( _Flow == NULL )
+				ERRFwk();
+
+			if ( _EmbeddedSizeRemainder == 0 )
+				dtfptb::VGet( *_Flow, _EmbeddedSizeRemainder );
+
+			if ( _EmbeddedSizeRemainder == 0 )
+				return 0;
+
+			Size = _Flow->ReadUpTo( ( Size > _EmbeddedSizeRemainder ? _EmbeddedSizeRemainder : Size ), Buffer );
+
+			if ( Size == 0 )
+				ERRDta();
+
+			_EmbeddedSizeRemainder -= Size;
+
+			return Size;
+		}
+		virtual void FDRDismiss( void )
+		{
+			if ( _Flow == NULL )
+				ERRFwk();
+
+			if ( _EmbeddedSizeRemainder != 0 )
+				ERRDta();
+
+			_Flow->Dismiss();
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			fdr::iflow_driver___<>::reset( P );
+			_Flow = NULL;
+			_EmbeddedSizeRemainder = 0;
+		}
+		E_CVDTOR( sizes_embedded_iflow_relay_driver___)
+		void Init(
+			flw::iflow__ &Flow,
+			fdr::thread_safety__ ThreadSafety )
+		{
+			_Flow = &Flow;
+			_EmbeddedSizeRemainder = 0;
+			fdr::iflow_driver___<>::Init( ThreadSafety );
+		}
+		bso::bool__ IsInitialized( void ) const
+		{
+			return _Flow != NULL;
 		}
 	};	
 

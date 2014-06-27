@@ -65,6 +65,7 @@ extern class ttr_tutor &FBLFRPTutor;
 # include "err.h"
 # include "flw.h"
 # include "tol.h"
+# include "flx.h"
 
 # define FBLFRP__OUT_PARAMETERS_AMOUNT_MAX		20	// Le nombre maximum de paramètres en sortie.
 
@@ -84,11 +85,13 @@ namespace fblfrp {
 
 	typedef fblfph::callbacks__ _callbacks__;
 
-	class remote_callbacks__
+	class remote_callbacks___
 	: public _callbacks__
 	{
 	private:
 		bch::E_BUNCH__( datum__, FBLFRP__OUT_PARAMETERS_AMOUNT_MAX ) _Data;
+		flx::sizes_embedded_oflow_relay_driver___ _IFlowDriver;
+		flw::standalone_oflow__<> _IFlow;
 	protected:
 		virtual void FBLFPHPreProcess( void )
 		{
@@ -116,7 +119,7 @@ namespace fblfrp {
 			_Data.reset( P );
 			_callbacks__::reset( P );
 		}
-		E_CVDTOR( remote_callbacks__ );
+		E_CVDTOR( remote_callbacks___ );
 		void Init( void )
 		{
 			_Data.Init();

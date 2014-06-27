@@ -743,7 +743,7 @@ namespace fblfrd {
 	: public frontend___
 	{
 	private:
-		fblfrp::remote_callbacks__ _RemoteCallbacks;
+		fblfrp::remote_callbacks___ _RemoteCallbacks;
 		fblfep::embedded_callbacks__ _EmbeddedCallbacks;
 	public:
 		void reset( bso::bool__ P = true )

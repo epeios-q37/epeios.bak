@@ -282,7 +282,7 @@ namespace flw {
 	};
 
 
-	// Uniquement pour avoir une symétrie par rapport à 'standalone_iflow__'.
+	// Uniquement pour avoir une symétrie par rapport à 'standalone_oflow__'.
 	template <int Dummy = 0> class standalone_iflow__
 	: public iflow__
 	{
@@ -291,6 +291,12 @@ namespace flw {
 		{
 			if ( Dummy != 0 )	
 				ERRPrm();	// 'Dummy' n'étant pas utilisé, rien ne sert de modifier sa valeur.
+		}
+		void Init(
+			fdr::iflow_driver_base___ &Driver,
+			size__ AmountMax = FDR_SIZE_MAX )
+		{
+			iflow__::Init( Driver, AmountMax );
 		}
 	};
 
@@ -548,7 +554,7 @@ namespace flw {
 	public:
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
-			size__ AmountMax )
+			size__ AmountMax = FDR_SIZE_MAX )
 		{
 			oflow__::Init( Driver, _Cache, sizeof( _Cache ), AmountMax );
 		}
@@ -634,7 +640,7 @@ namespace flw {
 		}
 		void Init(
 			fdr::ioflow_driver_base___ &Driver,
-			size__ AmountMax )
+			size__ AmountMax = FDR_SIZE_MAX )
 		{
 			ioflow__::Init( Driver, AmountMax, _OutputCache, sizeof( _OutputCache ), AmountMax );
 		}

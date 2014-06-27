@@ -63,7 +63,7 @@ using namespace fblfrp;
 	break;
 
 
-void fblfrp::remote_callbacks__::FBLFPHIn(
+void fblfrp::remote_callbacks___::FBLFPHIn(
 	fblcst::cast__ Cast,
 	const void *Pointer,
 	flw::ioflow__ &Channel )
@@ -111,7 +111,7 @@ void fblfrp::remote_callbacks__::FBLFPHIn(
 	}
 }
 
-void fblfrp::remote_callbacks__::FBLFPHOut(
+void fblfrp::remote_callbacks___::FBLFPHOut(
 	flw::ioflow__ &Channel,
 	fblcst::cast__ Cast,
 	void *Pointer )
@@ -119,21 +119,36 @@ void fblfrp::remote_callbacks__::FBLFPHOut(
 	_Data.Append( datum__( Cast, Pointer ) );
 }
 
-void fblfrp::remote_callbacks__::FBLFPHFlowIn(
+void fblfrp::remote_callbacks___::FBLFPHFlowIn(
 	bso::bool__ FirstCall,
 	flw::iflow__ &Flow,
 	flw::ioflow__ &Channel )
 {
-	if ( !FirstCall )
-		while ( !Flow.EndOfFlow() )
-			Channel.Put(Flow.Get() );
+ERRProlog
+	flx::sizes_embedded_iflow_relay_driver___ RFlowDriver;
+	flw::standalone_iflow__<> RFlow;
+ERRBegin
+	if ( !FirstCall ) {
+		RFlowDriver.Init( Flow, fdr::tsDisabled );
+
+		RFlow.Init( RFlowDriver );
+
+		while ( !RFlow.EndOfFlow() )
+			Channel.Put( RFlow.Get() );
+	}
+ERRErr
+ERREnd
+ERREpilog
 }
 
-void fblfrp::remote_callbacks__::FBLFPHFlowOut(
+void fblfrp::remote_callbacks___::FBLFPHFlowOut(
 	flw::ioflow__ &Channel,
 	flw::iflow__ *&Flow )
 {
-	Flow = &Channel;
+	_OFlowDriver.Init( Channel, fdr::tsDisabled );
+	_OFlow.Init( _OFlowDriver );
+
+	Flow = &_OFlow;
 }
 
 
@@ -191,7 +206,7 @@ void Pop_(
 	}
 }
 
-void fblfrp::remote_callbacks__::FBLFPHPostProcess( flw::ioflow__ &Flow )
+void fblfrp::remote_callbacks___::FBLFPHPostProcess( flw::ioflow__ &Flow )
 {
 	sdr::row__ Row = _Data.First();
 	datum__ Datum;
