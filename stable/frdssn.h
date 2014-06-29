@@ -76,9 +76,32 @@ namespace frdssn {
 		const char *_Language;
 		frdrgy::registry _Registry; 
 		lcl::meaning _Meaning;
+		bso::bool__ _IsOpen( void ) const
+		{
+			return _Language != NULL;
+		}
+		void _Test( void ) const
+		{
+			if ( !_IsOpen() )
+				ERRFwk();
+		}
+		const frdkrn::kernel___ &_K( void ) const
+		{
+			if ( _Kernel == NULL )
+				ERRFwk();
+
+			return *_Kernel;
+		}
+		frdkrn::kernel___ &_K( void )
+		{
+			if ( _Kernel == NULL )
+				ERRFwk();
+
+			return *_Kernel;
+		}
 	protected:
-		virtual void FRDSSNOpenSession( const char *Language ) = 0;
-		virtual void FRDSSNCloseSession( void ) = 0;
+		virtual void FRDSSNOpen( const char *Language ) = 0;
+		virtual void FRDSSNClose( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -95,68 +118,55 @@ namespace frdssn {
 			_Meaning.Init();
 			_Language = NULL;
 		}
-		void OpenSession( const char *Language )
+		void Open( const char *Language )
 		{
 			_Registry.Init( _Kernel->Registry() );
 			_Language = Language;
-			FRDSSNOpenSession( Language );
+			FRDSSNOpen( Language );
 		}
-		void CloseSession( void )
+		void Close( void )
 		{
 			_Registry.reset();
 			_Language = NULL;
-			FRDSSNCloseSession();
+			FRDSSNClose();
 		}
-/*		const frdkrn::kernel___ &Kernel( void ) const
+		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramètres de sortie est un 'flow', dés que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
 		{
-			if ( _Kernel == NULL )
-				ERRFwk();
+			_Test();
 
-			return *_Kernel;
+			_K().DismissRequest();
 		}
-		frdkrn::kernel___ &Kernel( void )
+		const frdrgy::registry_ &Registry( void ) const
 		{
-			if ( _Kernel == NULL )
-				ERRFwk();
-
-			return *_Kernel;
-		}
-*/		const frdrgy::registry_ &Registry( void ) const
-		{
-			if ( !IsOpen() )
-				ERRFwk();
+			_Test();
 
 			return _Registry;
 		}
 		frdrgy::registry_ &Registry( void )
 		{
-			if ( !IsOpen() )
-				ERRFwk();
+			_Test();
 
 			return _Registry;
 		}
 		const lcl::locale_ &Locale( void ) const
 		{
-			if ( !IsOpen() )
-				ERRFwk();
+			_Test();
 
-			return _Kernel->Locale();
+			return _K().Locale();
 		}
 		bso::bool__ IsOpen( void ) const
 		{
-			return _Language != NULL;
+			return _IsOpen();
 		}
 		const char *Language( void ) const
 		{
-			if ( !IsOpen() )
-				ERRFwk();
+			_Test();
 
 			return _Language;
 		}
 		recap__ DumpSetupRegistry( xml::writer_ &Writer ) const
 		{
-			if ( !IsOpen() )
-				ERRFwk();
+			_Test();
 
 			_Registry.DumpSetup( E_NIL, true, Writer);
 

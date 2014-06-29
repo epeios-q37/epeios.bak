@@ -275,7 +275,7 @@ static str::string_ &AppendTargetAttributePathItem_(
 	return Target;
 }
 
-void frdkrn::reporting_functions__::FBLFRDReport(
+void frdkrn::reporting_callbacks__::FBLFRDReport(
 	fblovl::reply__ Reply,
 	const char *Message )
 {
@@ -334,7 +334,7 @@ ERRBegin
 		ERRReturn;
 	}
 
-	if ( !_Frontend.Init( Language, CompatibilityInformations, _ClientCore, *_ReportingFunctions, ErrorSet.IncompatibilityInformations ) ) {
+	if ( !_Frontend.Init( Language, CompatibilityInformations, _ClientCore, *_ReportingCallbacks, ErrorSet.IncompatibilityInformations ) ) {
 		Recap = rIncompatibleBackend;
 		ERRReturn;
 	}

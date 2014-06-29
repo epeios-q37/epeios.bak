@@ -196,10 +196,10 @@ namespace frdkrn {
 		const char *Affix,
 		str::string_ &FileName );
 
-	typedef fblfrd::reporting_functions__ _backend_error_reporting_functions__;
+	typedef fblfrd::reporting_callbacks__ _backend_error_reporting_callbacks__;
 
-	class reporting_functions__
-	: public _backend_error_reporting_functions__
+	class reporting_callbacks__
+	: public _backend_error_reporting_callbacks__
 	{
 	private:
 		const class kernel___ *_Kernel;
@@ -212,13 +212,13 @@ namespace frdkrn {
 	public:
 		void reset ( bso::bool__ P = true )
 		{
-			_backend_error_reporting_functions__::reset( P );
+			_backend_error_reporting_callbacks__::reset( P );
 			_Kernel = NULL;
 		}
-		E_VDTOR( reporting_functions__ )
+		E_VDTOR( reporting_callbacks__ )
 		void Init( const class kernel___ &Kernel )
 		{
-			_backend_error_reporting_functions__::Init();
+			_backend_error_reporting_callbacks__::Init();
 			_Kernel = &Kernel;
 		}
 		void Report( const str::string_ &Message )
@@ -243,7 +243,7 @@ namespace frdkrn {
 		lcl::meaning _ErrorMeaning;
 		time_t _ProjectOriginalTimeStamp;	// Horodatage de la créationn du chargement du projet ou de sa dernière sauvegarde. Si == 0, pas de projet en cours d'utilisation.
 		time_t _ProjectModificationTimeStamp;	// Horodatage de la dernière modification du projet.
-		reporting_functions__ *_ReportingFunctions;
+		reporting_callbacks__ *_ReportingCallbacks;
 		registry_ &_R( void )
 		{
 			if ( _Registry == NULL )
@@ -318,14 +318,14 @@ namespace frdkrn {
 			_ErrorMeaning.reset( P );
 			_ProjectOriginalTimeStamp = 0;
 			_ProjectModificationTimeStamp = 0;
-			_ReportingFunctions = NULL;
+			_ReportingCallbacks = NULL;
 		}
 		E_CVDTOR( kernel___ );
 		status__ Init(
 			registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
-			reporting_functions__ &ReportingFunctions )
+			reporting_callbacks__ &ReportingCallbacks )
 		{
 			_Registry = &Registry;
 
@@ -339,7 +339,7 @@ namespace frdkrn {
 			_Language = Language;
 
 			_ProjectOriginalTimeStamp = 0;
-			_ReportingFunctions = &ReportingFunctions;
+			_ReportingCallbacks = &ReportingCallbacks;
 			// L'initialisation de '_Frontend' et '_ClientCore' se fait à la connection.
 
 			return sOK;
@@ -350,6 +350,10 @@ namespace frdkrn {
 				ERRFwk();
 
 			return _Frontend;
+		}
+		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramètres de sortie est un 'flow', dés que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
+		{
+			Frontend().Dismiss();
 		}
 		registry_ &Registry( void )
 		{
@@ -381,14 +385,14 @@ namespace frdkrn {
 		ERRProlog
 			str::string Translation;
 		ERRBegin
-			if( _ReportingFunctions == NULL )
+			if( _ReportingCallbacks == NULL )
 				ERRFwk();
 
 			Translation.Init();
 
 			Locale().GetTranslation( Meaning, Language(), Translation );
 
-			_ReportingFunctions->Report( Translation );
+			_ReportingCallbacks->Report( Translation );
 		ERRErr
 		ERREnd
 		ERREpilog
@@ -398,14 +402,14 @@ namespace frdkrn {
 		ERRProlog
 			str::string Translation;
 		ERRBegin
-			if( _ReportingFunctions == NULL )
+			if( _ReportingCallbacks == NULL )
 				ERRFwk();
 
 			Translation.Init();
 
 			Locale().GetTranslation( Meaning, Language(), Translation );
 
-			_ReportingFunctions->Notify( Translation );
+			_ReportingCallbacks->Notify( Translation );
 		ERRErr
 		ERREnd
 		ERREpilog

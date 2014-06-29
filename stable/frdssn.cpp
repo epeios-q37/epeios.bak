@@ -66,8 +66,7 @@ recap__ frdssn::session___::FillSetupRegistry(
 ERRProlog
 	TOL_CBUFFER___ FileNameBuffer, PathBuffer;
 ERRBegin
-	if ( !IsOpen() )
-		ERRFwk();
+	_Test();
 
 	switch ( _Registry.FillSetup( SettingsXFlow, Criterions, FRDKRN_SETUP_LABEL, ErrorSet.Context ) ) {
 	case rgstry::sOK:

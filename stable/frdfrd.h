@@ -91,7 +91,7 @@ namespace frdfrd {
 			const char *Language,
 			const compatibility_informations__ &CompatibilityInformations,
 			csducl::universal_client_core &ClientCore,
-			fblfrd::reporting_functions__ &ReportingFunctions,
+			fblfrd::reporting_callbacks__ &ReportingCallbacks,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
 			fblfrd::mode__ Mode = fblfrd::m_Undefined;
@@ -110,7 +110,7 @@ namespace frdfrd {
 				break;
 			}
 
-			return _frontend___::Init( Language, CompatibilityInformations, _Flow, Mode, ReportingFunctions, IncompatibilityInformations );
+			return _frontend___::Init( Language, CompatibilityInformations, _Flow, Mode, ReportingCallbacks, IncompatibilityInformations );
 		}
 	};
 
