@@ -872,14 +872,16 @@ ERRBegin
 	} else
 		Master_.Handle( (index__)0, Request, &MasterData, LogFunctions );
 
-ERRErr
-	const char *ErrMsg = err::Message( ErrorBuffer );
-
-	ERRRst();
-
-	Request.ReportSoftwareError( ErrMsg );
-ERREnd
 	Request.Complete();
+ERRErr
+	if ( ERRType != err::t_Abort ) {	// Les erreurs de type 't_Abort' doivent être traités en amont.
+		const char *ErrMsg = err::Message( ErrorBuffer );
+
+		ERRRst();
+
+		Request.ReportSoftwareError( ErrMsg );
+	}
+ERREnd
 ERREpilog
 	return !MasterData.Deconnexion;
 }

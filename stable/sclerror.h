@@ -66,7 +66,7 @@ extern class ttr_tutor &SCLERRORTutor;
 # include "cio.h"
 
 namespace sclerror {
-	const lcl::meaning_ &GetMeaning( void );
+	const lcl::meaning_ &GetMeaning( lcl::meaning_ &Meaning );
 
 	bso::bool__ IsErrorPending( void );
 

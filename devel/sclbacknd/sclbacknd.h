@@ -41,8 +41,11 @@
 # include "fblbkd.h"
 # include "fblbur.h"
 
+# include "lcl.h"
+
 # include "scldaemon.h"
 # include "scllocale.h"
+# include "sclerror.h"
 
 namespace sclbacknd {
 
@@ -63,7 +66,29 @@ namespace sclbacknd {
 	protected:
 		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow )
 		{
-			return Handle( Flow, _UP, _RequestLogFunctions );
+			bso::bool__ Continue = true;
+		ERRProlog
+		ERRBegin
+			Continue = Handle( Flow, _UP, _RequestLogFunctions );
+		ERRErr
+			if ( ERRType == err::t_Abort )
+			{
+				ERRRst();
+			ERRProlog
+				str::string Translation;
+				TOL_CBUFFER___ Buffer;
+			ERRBegin
+				Translation.Init();
+				sclerror::GetPendingError( Language(), Translation );
+
+				fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
+			ERRErr
+			ERREnd
+			ERREpilog
+			}
+		ERREnd
+		ERREpilog
+			return Continue;
 		}
 	public:
 		void reset( bso::bool__ P = true )

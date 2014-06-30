@@ -83,6 +83,27 @@ extern class ttr_tutor &FBLBRQTutor;
 namespace fblbrq {
 	using namespace fblcst;
 
+	inline void Report(
+		fblovl::reply__ Reply,
+		const char *Message,
+		flw::oflow__ &Channel )
+	{
+		flw::Put( (flw::datum__)Reply, Channel );
+
+		if ( Reply == fblovl::rOK )
+				ERRPrm();
+
+		if ( ( Message == NULL ) || ( Message[0] == 0 ) )
+			ERRFwk();
+
+		flw::PutString( Message, Channel );
+
+		Channel.Put( 0 );
+
+		Channel.Commit();
+	}
+
+
 # define FBLBRQ_M( name, type )\
 	const fbltyp::type &name##In( void )\
 	{\
@@ -401,20 +422,9 @@ namespace fblbrq {
 			fblovl::reply__ Reply,
 			const char *Message )
 		{
-			flw::Put( (flw::datum__)Reply, *Channel_ );
-
-			if ( Reply == fblovl::rOK )
-					ERRPrm();
-
-			if ( ( Message == NULL ) || ( Message[0] == 0 ) )
-				ERRFwk();
-
-			flw::PutString( Message, *Channel_ );
-			Channel_->Put( 0 );
+			fblbrq::Report( Reply, Message, *Channel_ );
 
 			Closed_ = true;
-
-			Channel_->Commit();
 		}
 		void ReportSoftwareError( const char *Message )	// 'User error'.
 		{

@@ -59,6 +59,11 @@ namespace scltool {
 	// A définir par l'utilisateur.
 	void SCLTOOLMain( const str::string_ &Command );
 
+	inline sclrgstry::registry_ &GetRegistry( void )
+	{
+		return sclrgstry::GetRegistry();
+	}
+
 	rgstry::level__ GetSetupRegistryLevel( void );
 
 	rgstry::level__ GetArgumentsRegistryLevel( void );
@@ -67,7 +72,7 @@ namespace scltool {
 		const str::string_ &Value,
 		const rgstry::tentry__ &Entry )
 	{
-		return sclrgstry::SetValue(sclrgstry::GetRegistry(), Value, Entry );
+		return sclrgstry::SetValue(GetRegistry(), Value, Entry );
 	}
 
 	inline void SetValue(
@@ -75,21 +80,21 @@ namespace scltool {
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL )
 	{
-		return sclrgstry::SetValue(sclrgstry::GetRegistry(), Path, Value, Error );
+		return sclrgstry::SetValue(GetRegistry(), Path, Value, Error );
 	}
 
 	inline bso::bool__ BGetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )
 	{
-		return sclrgstry::BGetValue( sclrgstry::GetRegistry(), Entry, Value );
+		return sclrgstry::BGetValue( GetRegistry(), Entry, Value );
 	}
 
 	inline bso::bool__ GetValues(
 		const rgstry::tentry__ &Entry,
 		str::strings_ &Values )
 	{
-		return sclrgstry::GetValues( sclrgstry::GetRegistry(), Entry, Values );
+		return sclrgstry::GetValues( GetRegistry(), Entry, Values );
 	}
 
 	inline const str::string_ &OGetValue(
@@ -97,7 +102,7 @@ namespace scltool {
 		str::string_ &Value,
 		bso::bool__ *Missing = NULL )
 	{
-		return sclrgstry::OGetValue( sclrgstry::GetRegistry(), Entry, Value, Missing );
+		return sclrgstry::OGetValue( GetRegistry(), Entry, Value, Missing );
 	}
 
 	inline const char *OGetValue(
@@ -105,33 +110,33 @@ namespace scltool {
 		TOL_CBUFFER___ &Buffer,
 		bso::bool__ *Missing = NULL )
 	{
-		return sclrgstry::OGetValue( sclrgstry::GetRegistry(), Entry, Buffer, Missing );
+		return sclrgstry::OGetValue( GetRegistry(), Entry, Buffer, Missing );
 	}
 
 	inline const str::string_ &MGetValue(
 		const rgstry::tentry__ &Entry,
 		str::string_ &Value )
 	{
-		return sclrgstry::MGetValue( sclrgstry::GetRegistry(), Entry, Value );
+		return sclrgstry::MGetValue( GetRegistry(), Entry, Value );
 	}
 
 	inline const char *MGetValue(
 		const rgstry::tentry__ &Entry,
 		TOL_CBUFFER___ &Buffer )
 	{
-		return sclrgstry::MGetValue( sclrgstry::GetRegistry(), Entry, Buffer );
+		return sclrgstry::MGetValue( GetRegistry(), Entry, Buffer );
 	}
 
 	inline bso::bool__ BGetBoolean(
 		const rgstry::tentry__ &Entry,
 		bso::bool__ DefaultValue = false )
 	{
-		return sclrgstry::BGetBoolean( sclrgstry::GetRegistry(), Entry, DefaultValue );
+		return sclrgstry::BGetBoolean( GetRegistry(), Entry, DefaultValue );
 	}
 
 	inline bso::bool__ MGetBoolean( const rgstry::tentry___ &Entry )
 	{
-		return sclrgstry::MGetBoolean( sclrgstry::GetRegistry(), Entry );
+		return sclrgstry::MGetBoolean( GetRegistry(), Entry );
 	}
 
 # define SCLTOOL__UN( type, name, limit )\
@@ -139,14 +144,14 @@ namespace scltool {
 		const rgstry::tentry__ &Entry,\
 		type Limit = limit )\
 	{\
-		return sclrgstry::MGet##name( sclrgstry::GetRegistry(), Entry, Limit );\
+		return sclrgstry::MGet##name( GetRegistry(), Entry, Limit );\
 	}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type DefaultValue,\
 		type Limit = limit )\
 	{\
-		return sclrgstry::OGet##name( sclrgstry::GetRegistry(), Entry, DefaultValue, Limit );\
+		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Limit );\
 	}
 
 	SCLTOOL__UN( bso::uint__, UInt, BSO_UINT_MAX )
@@ -163,7 +168,7 @@ namespace scltool {
 		type Min = min,\
 		type Max = max )\
 	{\
-		return sclrgstry::MGet##name( sclrgstry::GetRegistry(), Entry, Min, Max );\
+		return sclrgstry::MGet##name( GetRegistry(), Entry, Min, Max );\
 	}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
@@ -171,7 +176,7 @@ namespace scltool {
 		type Min = min,\
 		type Max = max )\
 	{\
-		return sclrgstry::OGet##name( sclrgstry::GetRegistry(), Entry, DefaultValue, Min, Max );\
+		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Min, Max );\
 	}
 
 	SCLTOOL__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
