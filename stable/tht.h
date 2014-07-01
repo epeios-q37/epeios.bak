@@ -105,7 +105,7 @@ namespace tht {
 	}
 
 
-	//f Suspend te current foe 'Delay' milliseconds.
+	//f Suspend the current thred for 'Delay' milliseconds.
 	void Suspend( unsigned long Delay );
 
 	//f Wait 'Seconds' seconds.
