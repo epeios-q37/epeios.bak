@@ -59,6 +59,35 @@ public:
 
 using namespace csducl;
 
+static stsfsm::automat Automat_;
+
+static void FillAutomat_( void )
+{
+	stsfsm::FillAutomat( Automat_, t_amount, GetLabel );
+}
+
+type__ csducl::GuessType( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, Automat_, t_Undefined, t_amount );
+}
+
+const char *csducl::GetLabel( type__ Type )
+{
+	switch ( Type ) {
+	case tDaemon:
+		return "Daemon";
+		break;
+	case tEmbedded:
+		return "Embedded";
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
 bso::bool__ csducl::universal_client_core::Init(
 	const char *Backend,
 	csdlec::library_data__ &LibraryData,
@@ -74,7 +103,7 @@ bso::bool__ csducl::universal_client_core::Init(
 	case tDaemon:
 		Success = _DaemonAccess.Init( Backend, Log, PingDelay );
 		break;
-	case tLibrary:
+	case tEmbedded:
 		Success = _LibraryAccess.Init( Backend, LibraryData, err::hUserDefined );
 		break;
 	default:
@@ -97,6 +126,8 @@ class csduclpersonnalization
 public:
 	csduclpersonnalization( void )
 	{
+		Automat_.Init();
+		FillAutomat_();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

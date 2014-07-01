@@ -70,10 +70,14 @@ extern class ttr_tutor &CSDUCLTutor;
 namespace csducl {
 	enum type__ {
 		tDaemon,
-		tLibrary,
+		tEmbedded,
 		t_amount,
 		t_Undefined
 	};
+
+	const char *GetLabel( type__ Type );
+
+	type__ GuessType( const str::string_ &Pattern );
 
 	class universal_client_core
 	{
@@ -122,7 +126,7 @@ namespace csducl {
 			case tDaemon:
 				return _DaemonFlow;
 				break;
-			case tLibrary:
+			case tEmbedded:
 				return _LibraryFlow;
 				break;
 			default:
@@ -182,7 +186,7 @@ namespace csducl {
 			case tDaemon:
 				_DaemonFlow.Init( Core._DaemonAccess );
 				break;
-			case tLibrary:
+			case tEmbedded:
 				_LibraryFlow.Init( Core._LibraryAccess );
 				break;
 			default:

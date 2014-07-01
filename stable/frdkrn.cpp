@@ -136,6 +136,7 @@ ERREnd
 ERREpilog
 }
 
+#if 0
 #define PROJECT_TYPE_NEW		"New"
 #define PROJECT_TYPE_PREDEFINED	"Predefined"
 #define PROJECT_TYPE_USER		"User"
@@ -274,7 +275,7 @@ static str::string_ &AppendTargetAttributePathItem_(
 
 	return Target;
 }
-
+#endif
 void frdkrn::reporting_callbacks__::FBLFRDReport(
 	fblovl::reply__ Reply,
 	const char *Message )
@@ -369,6 +370,8 @@ ERREpilog
 	return Recap;
 }
 
+#if 0
+
 static csducl::type__ GetPredefinedBackendTypeAndLocation_(
 	const registry_ &Registry,
 	str::string_ &Location )
@@ -440,8 +443,9 @@ csducl::type__ frdkrn::GetBackendTypeAndLocation(
 
 	return Type;
 }
+#endif
 
-
+#if 0
 recap__ frdkrn::kernel___::_Connect(
 	const compatibility_informations__ &CompatibilityInformations,
 	const char *Language,
@@ -472,6 +476,7 @@ ERREnd
 ERREpilog
 	return Recap;
 }
+#endif
 
 static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
 {
@@ -657,7 +662,9 @@ ERREpilog
 #endif
 
 
-status__ frdkrn::kernel___::Launch( const compatibility_informations__ &CompatibilityInformations )
+status__ frdkrn::kernel___::Launch(
+	const backend_features___ &BackendFeatures,
+	const compatibility_informations__ &CompatibilityInformations )
 {
 	status__ Status = s_Undefined;
 ERRProlog
@@ -666,7 +673,7 @@ ERRProlog
 ERRBegin
 	ErrorSet.Init();
 
-	if ( ( Recap = Launch( CompatibilityInformations, ErrorSet ) ) != r_OK ) {
+	if ( ( Recap = Launch( BackendFeatures, CompatibilityInformations, ErrorSet ) ) != r_OK ) {
 		_ErrorMeaning.Init();
 		frdkrn::GetMeaning( Recap, ErrorSet, _ErrorMeaning );
 		Status = sError;

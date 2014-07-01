@@ -75,8 +75,10 @@ namespace frdkrn {
 	using namespace frdfrd;
 
 	typedef rgstry::multi_level_registry_ registry_;
-	typedef rgstry::multi_level_registry registry;
 
+
+#if 0	// A transborder dans 'sclfrntnd'.
+	typedef rgstry::multi_level_registry registry;
 	enum project_type__
 	{
 		ptNew,
@@ -116,6 +118,10 @@ namespace frdkrn {
 		const registry_ &Registry,
 		str::string_ &Location );
 
+# endif
+
+
+
 	class log_functions__
 	: public csdsnc::log_functions__
 	{
@@ -127,6 +133,23 @@ namespace frdkrn {
 		{}
 	};
 
+	struct backend_features___
+	{
+	public:
+		str::string Location;
+		csducl::type__ Type;
+		void reset( bso::bool__ P = true )
+		{
+			Location.reset( P );
+			Type = csducl::t_Undefined;
+		}
+		E_CDTOR( backend_features___ )
+		void Init( void )
+		{
+			Location.Init();
+			Type = csducl::t_Undefined;
+		}
+	};
 	enum status__ {
 		sOK,
 		sError,		// Il y aune erreur, l'action en cours doit être interrompue (Lancer 'ERRAbort()').
@@ -265,7 +288,7 @@ namespace frdkrn {
 			csducl::type__ Type,
 			const char *Language,
 			error_set___ &ErrorSet,
-			csdsnc::log_functions__ &LogFunctions );
+			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
 		void _CloseConnection( void )
 		{
 			if ( !IsConnected() )
@@ -297,11 +320,13 @@ namespace frdkrn {
 			const char *Language,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
+# if 0
 		recap__ _Connect( // Try to connect using registry content.
 			const compatibility_informations__ &CompatibilityInformations,
 			const char *Language,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
+# endif
 		virtual void FRDKRNConnection( fblfrd::frontend___ &Frontend ) = 0;	// Appelé lors aprés connection au 'backend'.
 		virtual void FRDKRNDisconnection( void ) = 0;	// Appelé avant déconnexion du 'backend'.
 	public:
@@ -430,13 +455,14 @@ namespace frdkrn {
 		}
 #endif
 		recap__ Launch(
+			const backend_features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations,
 			error_set___ &ErrorSet )	// Les paramètres de connection sont récupèrés de la 'registry'.
 		{
 			recap__ Recap = r_OK;
 			
-			if ( GetBackendExtendedType( Registry() ) != bxtNone )
-				Recap = _Connect( CompatibilityInformations, Language(), ErrorSet );
+			if ( BackendFeatures.Type != csducl::t_Undefined )
+				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, Language(), ErrorSet );
 
 			if ( Recap == r_OK ) {
 				_ProjectOriginalTimeStamp = time( NULL );
@@ -452,7 +478,9 @@ namespace frdkrn {
 			const xpp::criterions___ &Criterions,
 			str::string_ &Id );
 # endif
-		status__ Launch( const compatibility_informations__ &CompatibilityInformations );
+		status__ Launch(
+			const backend_features___ &BackendFeatures,
+			const compatibility_informations__ &CompatibilityInformations );
 		time_t ProjectTimeStamp( void ) const
 		{
 			return _R().TimeStamp( _R().TopLevel() );
