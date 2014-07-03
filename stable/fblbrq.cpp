@@ -63,15 +63,11 @@ void fblbrq::request__::_Pop(
 {
 	sdr::row__ Row = E_NIL;
 	cast__ Cast = c_Undefined;
-	bso::bool__ FlowParameterDetected = false;
 
 	Row = Casts.First();
 
 	while ( ( Row != E_NIL )
 		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
-
-		if ( FlowParameterDetected )
-			ERRFwk();
 
 		if ( Flow.Get() != Cast )
 			ERRFwk();
@@ -94,12 +90,6 @@ void fblbrq::request__::_Pop(
 	while ( Row != E_NIL ) {
 		if ( ( Cast = (cast__)Flow.Get() ) != Casts( Row ) )
 			ERRFwk();
-
-		if ( FlowParameterDetected )
-			ERRFwk();
-
-		if ( Cast == cFlow )
-			FlowParameterDetected = true;
 
 		_C().PopOut( Row, Flow, Cast );
 

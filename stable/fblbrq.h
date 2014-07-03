@@ -107,6 +107,8 @@ namespace fblbrq {
 # define FBLBRQ_M( name, type )\
 	const fbltyp::type &name##In( void )\
 	{\
+		if ( _DismissPending )\
+			ERRFwk();\
 		TestInput_( c##name );\
 		return *(const fbltyp::type *)_Get( Position_, c##name );\
 	}\
@@ -238,6 +240,7 @@ namespace fblbrq {
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
 		flw::ioflow__ *Channel_;
+		bso::bool__ _DismissPending;	// Pour gèrer la présence d'un flux dans les paramètres entrants.
 		callbacks__ &_C( void )
 		{
 # ifdef FBLBRQ_DBG
@@ -305,6 +308,7 @@ namespace fblbrq {
 			Closed_ = true;
 			Cast_ = c_Undefined;
 			Parsed_ = false;
+			_DismissPending = false;
 
 			Channel_ = NULL;
 		}
@@ -326,6 +330,7 @@ namespace fblbrq {
 			Channel_ = &Channel;
 			Closed_ = false;
 			Casts_.Init();
+			_DismissPending = false;
 		}
 		//f Initialization with 'Channel' to parse/answer the request.
 		void Prepare( const casts_ &Casts )
@@ -375,6 +380,9 @@ namespace fblbrq {
 		flw::iflow__ &FlowIn( void )
 		{
 			TestInput_( cFlow );
+
+			_DismissPending = true;
+
 			return _C().GetFlow( Position_ );
 		}
 		void FlowOut( flw::iflow__ &Flow )
@@ -389,7 +397,8 @@ namespace fblbrq {
 			if ( Closed_ )
 				return;
 
-			Channel_->Dismiss();
+			if ( !_DismissPending )
+				Channel_->Dismiss();
 				
 			if ( Casts_.Amount() != 0 ) /* If == 0, it means that the request was handled
 								   by handling DIRECTLY the underlying flows. */
