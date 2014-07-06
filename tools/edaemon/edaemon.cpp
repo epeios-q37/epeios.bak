@@ -277,7 +277,7 @@ ERRProlog
 	lcl::locale SharedLocale;
 	rgstry::registry SharedRegistry;
 	csdlec::library_data__ LibraryData;
-	lcl::meaning Meaning;
+	lcl::meaning Meaning, MeaningBuffer;
 	str::string Translation;
 	err::buffer__ ErrBuffer;
 ERRBegin
@@ -314,9 +314,10 @@ ERRErr
 	Meaning.SetValue( ModuleFileName );
 
 	if ( ERRType >= err::t_amount ) {
-		if ( sclerror::IsErrorPending() )
-			Meaning.AddTag( sclerror::GetMeaning() );
-		else {
+		if ( sclerror::IsErrorPending() ) {
+			MeaningBuffer.Init();
+			Meaning.AddTag( sclerror::GetMeaning( MeaningBuffer ) );
+		} else {
 			Translation.Init();
 			Meaning.AddTag( sclmisc::GetTranslation( "UnkonwnError", Translation ) );
 		}

@@ -745,6 +745,8 @@ namespace fblbkd {
 		TOL_CBUFFER___ _ExtendedBackendInformations;
 		TOL_CBUFFER___ _BackendCopyright;
 		TOL_CBUFFER___ _SoftwareInformations;
+		fblber::embedded_callbacks___ _Embedded;
+		fblbrr::remote_callbacks___ _Remote;
 		// Retourne le module correspondant à 'IdType'.
 		untyped_module &Module_( type__ IdType ) const
 		{
@@ -786,10 +788,12 @@ namespace fblbkd {
 		bch::E_BUNCH( untyped_module * ) Modules;
 		//o The relation between modules an index.
 		links Links;
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
 			_CompatibilityTested = false;
 			_Mode = fblbur::m_Undefined;
+			_Embedded.reset( P );
+			_Remote.reset( P );
 		}
 		E_CVDTOR( backend___ );
 		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
@@ -831,6 +835,9 @@ namespace fblbkd {
 			_Locale = &Locale;
 
 			str::string( FBLBKD__DEFAULT_LANGUAGE ).Convert( _Language );
+
+			_Embedded.Init();
+			_Remote.Init();
 		ERRErr
 		ERREnd
 		ERREpilog

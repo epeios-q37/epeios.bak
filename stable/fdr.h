@@ -67,7 +67,7 @@ extern class ttr_tutor &FDRTutor;
 #ifdef FDR_THREAD_SAFE
 #	define FDR__TS
 #elif !defined( FDR_THREAD_UNSAFE )
-#	ifdef CPE__MT
+#	ifdef CPE_MT
 #		define FDR__TS
 #	endif
 #endif
@@ -75,7 +75,7 @@ extern class ttr_tutor &FDRTutor;
 #ifdef FDR__TS
 #	include "mtx.h"
 #	define FDR_NO_MUTEX	MTX_INVALID_HANDLER
-	typedef mtx::mutex_handler__ mutex__;
+	typedef mtx::handler__ mutex__;
 #else
 	typedef void *mutex__;
 #	define FDR_NO_MUTEX	NULL
@@ -126,7 +126,7 @@ namespace fdr {
 	inline void Test_( mutex__ Mutex )
 	{
 		if ( Mutex == FDR_NO_MUTEX )
-			ERRc();
+			ERRFwk();
 	}
 #endif
 
@@ -135,7 +135,7 @@ namespace fdr {
 		switch ( ThreadSafety ) {
 		case tsEnabled:
 #ifdef FDR__TS
-			return mtx::Create( mtx::mProtecting );
+			return mtx::Create();
 #else
 			ERRPrm();
 #endif
@@ -168,6 +168,15 @@ namespace fdr {
 #endif
 	}
 
+	inline bso::bool__ TryToLock_( mutex__ Mutex )
+	{
+#ifdef FDR__TS
+		if ( Mutex != FDR_NO_MUTEX )
+			return mtx::TryToLock(  Mutex );
+#endif
+		return true;
+	}
+
 	inline void Unlock_( mutex__ Mutex )
 	{
 #ifdef FDR__TS
@@ -185,19 +194,11 @@ namespace fdr {
 		return false;
 	}
 
-	inline bso::bool__ IsOwner_( mutex__ Mutex )
-	{
-#ifdef FDR__TS
-		if ( Mutex != FDR_NO_MUTEX )
-			return mtx::IsOwner( Mutex );
-#endif
-		return true;
-	}
-
 	class iflow_driver_base___
 	{
 	private:
 		mutex__ _Mutex;	// Mutex pour protèger la ressource.
+		tht::thread_id__ _ThreadId;
 		datum__ *_Cache;
 		size__ _Size;	// Si == '0', signale 'EOF' atteint.
 		size__ _Available;
@@ -327,17 +328,38 @@ namespace fdr {
 		}
 		void _Lock( void )
 		{
-			Lock_( _Mutex );
+#ifdef FDR__TS
+			if ( _Mutex != mtx::UndefinedHandler ) {
+				if ( TryToLock_(_Mutex) ) {
+					if ( _ThreadId != THT_UNDEFINED_THREAD_ID )
+						ERRFwk();
+
+					_ThreadId = tht::GetTID();
+				} else if ( _ThreadId != tht::GetTID() ) {
+					Lock_( _Mutex );
+					_ThreadId = tht::GetTID();
+				}
+			}
+# else
+			Lock_( Mutex );
+# endif		
 		}
 		void _Unlock( void )
 		{
-			if ( IsLocked_( _Mutex ) ) {
-#ifdef FDR_DBG
-				if ( !IsOwner_( _Mutex ) )
-					ERRFwk();
-#endif
-				Unlock_( _Mutex );
+#ifdef FDR__TS
+			if ( _Mutex != mtx::UndefinedHandler ) {
+				if ( IsLocked_( _Mutex ) ) {
+					if ( _ThreadId != tht::GetTID() )
+						ERRFwk();
+
+					Unlock_( _Mutex );
+
+					_ThreadId = THT_UNDEFINED_THREAD_ID;
+				}
 			}
+# else
+			Unlock_( Mutex );
+# endif
 		}
 	protected:
 		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donnée n'est disponibe.
@@ -356,6 +378,7 @@ namespace fdr {
 			_Cache = NULL;
 			_Size = _Available = _Position = 0;
 			_Mutex = FDR_NO_MUTEX;
+			_ThreadId = THT_UNDEFINED_THREAD_ID;
 		}
 		iflow_driver_base___( void )
 		{
@@ -381,6 +404,7 @@ namespace fdr {
 
 			_Available = _Position = 0;
 			_Mutex = Create_( ThreadSafety );
+			_ThreadId = THT_UNDEFINED_THREAD_ID;
 		}
 		void Dismiss( void )
 		{
@@ -485,20 +509,42 @@ namespace fdr {
 	{
 	private:
 		mutex__ _Mutex;	// Mutex pour protèger la ressource.
+		tht::thread_id__ _ThreadId;
 		bso::bool__ _Initialized;	// Pour éviter des 'pure virtual function call'.
 		void _Lock( void )
 		{
-			Lock_( _Mutex );
+#ifdef FDR__TS
+			if ( _Mutex != mtx::UndefinedHandler ) {
+				if ( TryToLock_(_Mutex) ) {
+					if ( _ThreadId != THT_UNDEFINED_THREAD_ID )
+						ERRFwk();
+
+					_ThreadId = tht::GetTID();
+				} else if ( _ThreadId != tht::GetTID() ) {
+					Lock_( _Mutex );
+					_ThreadId = tht::GetTID();
+				}
+			}
+# else
+			Lock_( Mutex );
+# endif		
 		}
 		void _Unlock( void )
 		{
-			if ( IsLocked_( _Mutex ) ) {
-#ifdef FDR_DBG
-				if ( !IsOwner_( _Mutex ) )
-					ERRFwk();
-#endif
-				Unlock_( _Mutex );
+#ifdef FDR__TS
+			if ( _Mutex != mtx::UndefinedHandler ) {
+				if ( IsLocked_( _Mutex ) ) {
+					if ( _ThreadId != tht::GetTID() )
+						ERRFwk();
+
+					Unlock_( _Mutex );
+
+					_ThreadId = THT_UNDEFINED_THREAD_ID;
+				}
 			}
+# else
+			Unlock_( Mutex );
+# endif
 		}
 	protected:
 		// Retourne le nombre d'octets effectivement écrits. Ne retourne '0' que si plus aucune donnée ne peut être écrite.
@@ -516,6 +562,7 @@ namespace fdr {
 
 			_Mutex = FDR_NO_MUTEX;
 			_Initialized = false;
+			_ThreadId = THT_UNDEFINED_THREAD_ID;
 		}
 		oflow_driver_base___( void )
 		{
@@ -531,6 +578,7 @@ namespace fdr {
 
 			_Mutex = Create_( ThreadSafety );
 			_Initialized = true;
+			_ThreadId = THT_UNDEFINED_THREAD_ID;
 		}
 		void Commit( void )
 		{

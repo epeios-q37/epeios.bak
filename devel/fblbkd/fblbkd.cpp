@@ -855,12 +855,28 @@ bso::bool__ backend___::_HandleRequest(
 ERRProlog
 	object__ O;
 	err::buffer__ ErrorBuffer;
-	fblbur::universal_request___ Request;
+	fblbrq::request__ Request;
+	fblbrq::callbacks__ *Callbacks = NULL;
 ERRBegin
 	MasterData.Deconnexion = false;
 	MasterData.UP = PU;
 
-	Request.Init( _Mode, FrontendFlow );
+	switch ( _Mode ) {
+	case fblovl::mEmbedded:
+		_Embedded.Init();
+		Callbacks = &_Embedded;
+		break;
+	case fblovl::mRemote:
+		_Remote.Init();
+		Callbacks = &_Remote;
+		break;
+	default:
+		ERRPrm();
+		break;
+	}
+
+
+	Request.Init( *Callbacks, FrontendFlow );
 
 	flw::Get( Request.Input(), O );
 
