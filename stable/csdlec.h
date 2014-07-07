@@ -231,7 +231,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 			}
 			void Init( void )
 			{
-				Driver.Init( fdr::tsEnabled );	// 'Thread safety' activée, car, même si le client est mono-tâche, le 'backend', lui, peut e^tre multi-tâche.
+				Driver.Init( fdr::ts_Default );
 				Flow.Init( Driver, Cache, sizeof( Cache ), FLW_AMOUNT_MAX );
 			}
 		} _Backend;
@@ -267,7 +267,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 
 			_Backend.Init();
 
-			_Driver.Init(Callback, _Backend.Flow, fdr::tsEnabled );	// 'Thread safety' activée, car, même si le client est mono-tâche, le 'backend', lui, peut e^tre multi-tâche.
+			_Driver.Init(Callback, _Backend.Flow, fdr::ts_Default );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), FLW_AMOUNT_MAX );
 		}
 	};

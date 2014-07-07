@@ -60,9 +60,10 @@ extern class ttr_tutor &FDRTutor;
 
 /*$BEGIN$*/
 
-#include "err.h"
-#include "bso.h"
-#include "strng.h"
+# include "err.h"
+# include "bso.h"
+# include "strng.h"
+# include "tht.h"
 
 #ifdef FDR_THREAD_SAFE
 #	define FDR__TS
@@ -341,7 +342,7 @@ namespace fdr {
 				}
 			}
 # else
-			Lock_( Mutex );
+			Lock_( _Mutex );
 # endif		
 		}
 		void _Unlock( void )
@@ -358,7 +359,7 @@ namespace fdr {
 				}
 			}
 # else
-			Unlock_( Mutex );
+			Unlock_( _Mutex );
 # endif
 		}
 	protected:
@@ -526,7 +527,7 @@ namespace fdr {
 				}
 			}
 # else
-			Lock_( Mutex );
+			Lock_( _Mutex );
 # endif		
 		}
 		void _Unlock( void )
@@ -543,7 +544,7 @@ namespace fdr {
 				}
 			}
 # else
-			Unlock_( Mutex );
+			Unlock_( _Mutex );
 # endif
 		}
 	protected:

@@ -77,8 +77,8 @@ const char *csducl::GetLabel( type__ Type )
 	case tDaemon:
 		return "Daemon";
 		break;
-	case tEmbedded:
-		return "Embedded";
+	case tPlugin:
+		return "Plug-in";
 		break;
 	default:
 		ERRFwk();
@@ -103,7 +103,7 @@ bso::bool__ csducl::universal_client_core::Init(
 	case tDaemon:
 		Success = _DaemonAccess.Init( Backend, Log, PingDelay );
 		break;
-	case tEmbedded:
+	case tPlugin:
 		Success = _LibraryAccess.Init( Backend, LibraryData, err::hUserDefined );
 		break;
 	default:

@@ -70,7 +70,7 @@ extern class ttr_tutor &CSDUCLTutor;
 namespace csducl {
 	enum type__ {
 		tDaemon,
-		tEmbedded,
+		tPlugin,
 		t_amount,
 		t_Undefined
 	};
@@ -126,7 +126,7 @@ namespace csducl {
 			case tDaemon:
 				return _DaemonFlow;
 				break;
-			case tEmbedded:
+			case tPlugin:
 				return _LibraryFlow;
 				break;
 			default:
@@ -186,7 +186,7 @@ namespace csducl {
 			case tDaemon:
 				_DaemonFlow.Init( Core._DaemonAccess );
 				break;
-			case tEmbedded:
+			case tPlugin:
 				_LibraryFlow.Init( Core._LibraryAccess );
 				break;
 			default:
