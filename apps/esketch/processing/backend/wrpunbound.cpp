@@ -66,7 +66,7 @@ static const char *GetRawMessage_( message__ MessageId )
 		void *UP )
 
 #define STUFF common::stuff___ &Stuff = *(common::stuff___ *)UP
-#define XBACKEND	STUFF;sclbacknd::backend___ &XBackend = Stuff.XBackend()
+#define XBACKEND	STUFF;common::xbackend___ &XBackend = Stuff.XBackend()
 
 DEC( Test )
 {

@@ -28,25 +28,28 @@
 #include "sclbacknd.h"
 
 namespace common {
-	typedef sclbacknd::backend___ _backend___;
+	typedef sclbacknd::backend___ xbackend___;	// // 'xbackend' ('eXtended' 'backend').
 
-	class stuff___	// 'xbackend' ('eXtended' 'backend') : 'backend' qui hérite du 'backend' de base.
+	class stuff___	// Contient les données propres à chaque 'backend', chaque connection (virtuelle) ayant son propre backend.
 	{
 	private:
-		_backend___ *XBackend_;
+		xbackend___ *_XBackend;
 	public:
 		void reset( bso::bool__ = true )
 		{
-			XBackend_ = NULL;
+			_XBackend = NULL;
 		}
 		E_CVDTOR( stuff___ );
-		void Init( _backend___ &XBackend )
+		void Init( xbackend___ &XBackend )
 		{
-			XBackend_ = &XBackend;
+			_XBackend = &XBackend;
 		}
-		_backend___ &XBackend( void ) const
+		xbackend___ &XBackend( void ) const
 		{
-			return *XBackend_;
+			if ( _XBackend == NULL )
+				ERRFwk();
+
+			return *_XBackend;
 		}
 	};
 }
