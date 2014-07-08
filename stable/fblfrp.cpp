@@ -136,6 +136,8 @@ ERRBegin
 		while ( !Flow.EndOfFlow() )
 			RFlow.Put( Flow.Get() );
 
+		Flow.Dismiss();
+
 		RFlow.Commit();
 	}
 ERRErr
@@ -149,7 +151,7 @@ void fblfrp::remote_callbacks___::FBLFPHFlowOut(
 {
 	_Data.Append( datum__( fblcst::cFlow, NULL ) );
 
-	_IFlowDriver.Init( Channel, fdr::tsDisabled );
+	_IFlowDriver.Init( Channel, flx::dhPropagate, fdr::tsDisabled );
 	_IFlow.Init( _IFlowDriver );
 
 	Flow = &_IFlow;

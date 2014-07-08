@@ -764,6 +764,13 @@ namespace flx {
 		}
 	};
 
+	enum dismiss_handling__ {
+		dhPropagate,	// 'Dismiss()' est propagé au flux embarqué.
+		dhHold,		// 'Dismiss()' n'est PAS propagé au flux embarqué. 
+		dh_amount,
+		dh_Undefined
+	};
+
 
 	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encodée' dans le flux.
 	class sizes_embedded_iflow_relay_driver___
@@ -772,6 +779,19 @@ namespace flx {
 	private:
 		flw::iflow__ *_Flow;
 		fdr::size__ _EmbeddedSizeRemainder;
+		dismiss_handling__ _DismissHandling;
+		bso::bool__ _AllRed;
+		void _Purge( void )
+		{
+			do {
+				while ( _EmbeddedSizeRemainder != 0 ) {
+					_Flow->Get();
+					_EmbeddedSizeRemainder--;
+				}
+
+				dtfptb::VGet( *_Flow, _EmbeddedSizeRemainder );
+			} while ( _EmbeddedSizeRemainder != 0 );
+		}
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -785,8 +805,11 @@ namespace flx {
 			if ( _EmbeddedSizeRemainder == 0 )
 				dtfptb::VGet( *_Flow, _EmbeddedSizeRemainder );
 
-			if ( _EmbeddedSizeRemainder == 0 )
+			if ( _EmbeddedSizeRemainder == 0 ) {
+				_AllRed = true;
 				return 0;
+			} else
+				_AllRed = false;
 
 			Size = _Flow->ReadUpTo( ( Size > _EmbeddedSizeRemainder ? _EmbeddedSizeRemainder : Size ), Buffer );
 
@@ -802,10 +825,13 @@ namespace flx {
 			if ( _Flow == NULL )
 				ERRFwk();
 
-			if ( _EmbeddedSizeRemainder != 0 )
-				ERRDta();
+			if ( !_AllRed )
+				_Purge();
 
-			//	_Flow->Dismmiss();	// Le 'flow' est enclavé dans un autre flot ; c'est ce dernier qui devra faire le 'dissmiss'.
+			_AllRed = true;
+
+			if ( _DismissHandling == dhPropagate )
+				_Flow->Dismiss();
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -813,15 +839,20 @@ namespace flx {
 			fdr::iflow_driver___<>::reset( P );
 			_Flow = NULL;
 			_EmbeddedSizeRemainder = 0;
+			_DismissHandling = dh_Undefined;
+			_AllRed = false;
 		}
 		E_CVDTOR( sizes_embedded_iflow_relay_driver___)
 		void Init(
 			flw::iflow__ &Flow,
+			dismiss_handling__ DismissHandling,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Flow = &Flow;
 			_EmbeddedSizeRemainder = 0;
+			_DismissHandling = DismissHandling,
 			fdr::iflow_driver___<>::Init( ThreadSafety );
+			_AllRed = true;
 		}
 		bso::bool__ IsInitialized( void ) const
 		{

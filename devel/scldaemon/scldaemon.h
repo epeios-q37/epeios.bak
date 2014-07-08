@@ -40,6 +40,12 @@
 
 # include "sclrgstry.h"
 
+# ifndef SCLDAEMON_DISABLE_ERROR_DETECTION
+#  ifdef E_DEBUG
+#   define SCLDAEMON__ERROR_DETECTION_ENABLED
+#  endif
+# endif
+
 namespace scldaemon {
 	class daemon___
 	{
@@ -104,10 +110,26 @@ namespace scldaemon {
 			else
 				return csdscb::aStop;
 		}
+# if 0
 		virtual void CSDSCBPostProcess( void *UP )
 		{
 			delete (daemon___ *)UP;
 		}
+#else
+		virtual void CSDSCBPostProcess( void *UP )
+		{
+		ERRProlog
+		ERRBegin
+			delete (daemon___ *)UP;
+		ERRErr
+# ifdef SCLDAEMON__ERROR_DETECTION_ENABLED
+			strcpy( NULL, "Une erreur ne devrait pas se produire ; s'il y en a malgrés tout une, cette ligne permet de la détecter facilement avec le debugger." );	// Lire le contenu du paramètre.
+# endif
+			ERRRst();
+		ERREnd
+		ERREpilog
+		}
+#endif
 	protected:
 		virtual daemon___ *SCLDAEMONNew( const char *Origin ) = 0;
 	public:

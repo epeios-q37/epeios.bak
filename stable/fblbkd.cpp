@@ -645,6 +645,8 @@ static void Disconnect_(
 	void * )
 {
 	Deconnexion = true;
+
+	Requete.Complete();
 }
 
 // Return the current language.

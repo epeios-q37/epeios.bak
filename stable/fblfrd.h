@@ -677,7 +677,7 @@ namespace fblfrd {
 			StringOut( Software );
 
 			_Handle();
-		}
+		} 
 		//f Disconnection.
 		void Disconnect( void )
 		{

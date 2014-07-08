@@ -238,7 +238,7 @@ void fblbrr::remote_callbacks___::FBLBRQPopIn(
 	parameter__ Parameter;
 
 	if ( Cast == cFlow ) {
-		_IFlowDriver.Init( Channel, fdr::tsDisabled );
+		_IFlowDriver.Init( Channel, flx::dhPropagate, fdr::tsDisabled );
 		_IFlow.Init( _IFlowDriver );
 		Parameter.Init( &_IFlow, Cast );
 	} else
