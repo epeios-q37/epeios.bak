@@ -99,7 +99,7 @@ namespace frdfrd {
 			_Flow.Init( ClientCore );
 
 			switch ( ClientCore.GetType() ) {
-			case csducl::tEmbedded:
+			case csducl::tPlugin:
 				Mode = fblfrd::mEmbedded;
 				break;
 			case csducl::tDaemon:
