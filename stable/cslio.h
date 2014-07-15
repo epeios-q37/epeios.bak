@@ -63,6 +63,7 @@ extern class ttr_tutor &CSLIOTutor;
 #include "err.h"
 #include "bso.h"
 #include <stdio.h>
+#include "tol.h"
 
 namespace cslio {
 	typedef size_t	amount__;
@@ -70,6 +71,7 @@ namespace cslio {
 	typedef FILE *descriptor__;
 
 #define CSLIO_UNDEFINED_DESCRIPTOR	NULL
+	E_CDEF( descriptor__, UndefinedDescriptor, NULL );
 
 	class io_core__ {
 	protected:
@@ -78,7 +80,7 @@ namespace cslio {
 		{
 #ifdef CSLIO_DBG
 			if ( _D == CSLIO_UNDEFINED_DESCRIPTOR )
-				ERRu();
+				ERRPrm();
 #endif
 		}
 	public:
@@ -105,14 +107,14 @@ namespace cslio {
 			_Test();
 
 			if ( fseek( _D, Offset, SEEK_SET ) != 0 )
-				ERRx();
+				ERRFwk();
 		}
 		long Size( void )
 		{
 			_Test();
 
 			if ( fseek( _D, 0, SEEK_END ) != 0 )
-				ERRx();
+				ERRFwk();
 
 			return ftell( _D );
 		}

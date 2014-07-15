@@ -66,6 +66,7 @@ extern class ttr_tutor &FLXTutor;
 # include "bso.h"
 # include "bch.h"
 # include "cpe.h"
+# include "cslio.h"
 
 # ifdef CPE__MT
 #  define FLX__MT
@@ -564,7 +565,7 @@ namespace flx {
 
 	// 'flow' qui ne lit rien.
 	class void_iflow__
-	: public flw::iflow__
+	: public _iflow__
 	{
 	private:
 	public:
@@ -591,7 +592,7 @@ namespace flx {
 
 	// 'driver' qui relaye un autre 'driver'.
 	class relay_oflow_driver___
-	: public fdr::oflow_driver___<>
+	: public _oflow_driver___
 	{
 	private:
 		fdr::oflow_driver_base___ *_Driver;
@@ -615,7 +616,7 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			fdr::oflow_driver___<>::reset( P );
+			_oflow_driver___::reset( P );
 			_Driver = NULL;
 		}
 		relay_oflow_driver___( void )
@@ -631,7 +632,7 @@ namespace flx {
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Driver = &Driver;
-			fdr::oflow_driver___<>::Init( ThreadSafety );
+			_oflow_driver___::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -641,7 +642,7 @@ namespace flx {
 
 	// 'driver' qui relaye un autre 'driver'.
 	class relay_iflow_driver___
-	: public fdr::iflow_driver___<>
+	: public _iflow_driver___<>
 	{
 	private:
 		fdr::iflow_driver_base___ *_Driver;
@@ -665,7 +666,7 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			fdr::iflow_driver___<>::reset( P );
+			_iflow_driver___<>::reset( P );
 			_Driver = NULL;
 		}
 		relay_iflow_driver___( void )
@@ -681,7 +682,7 @@ namespace flx {
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Driver = &Driver;
-			fdr::iflow_driver___<>::Init( ThreadSafety );
+			_iflow_driver___<>::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -691,10 +692,10 @@ namespace flx {
 
 	// 'driver' qui relaye un 'oflow', mais dont la taille est 'encodée' dans le flux.
 	class sizes_embedded_oflow_relay_driver___
-	: public fdr::oflow_driver___<>
+	: public _oflow_driver___
 	{
 	private:
-		flw::oflow__ *_Flow;
+		_oflow__ *_Flow;
 		fdr::size__ _EmbeddedSizeRemainder;
 		bso::bool__ _PendingCommit;
 	protected:
@@ -743,20 +744,20 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			fdr::oflow_driver___<>::reset( P );
+			_oflow_driver___::reset( P );
 			_Flow = NULL;
 			_EmbeddedSizeRemainder = 0;
 			_PendingCommit = false;
 		}
 		E_CVDTOR( sizes_embedded_oflow_relay_driver___)
 		void Init(
-			flw::oflow__ &Flow,
+			_oflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Flow = &Flow;
 			_EmbeddedSizeRemainder = 0;
 			_PendingCommit = false;
-			fdr::oflow_driver___<>::Init( ThreadSafety );
+			_oflow_driver___::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -774,10 +775,10 @@ namespace flx {
 
 	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encodée' dans le flux.
 	class sizes_embedded_iflow_relay_driver___
-	: public fdr::iflow_driver___<>
+	: public _iflow_driver___<>
 	{
 	private:
-		flw::iflow__ *_Flow;
+		_iflow__ *_Flow;
 		fdr::size__ _EmbeddedSizeRemainder;
 		dismiss_handling__ _DismissHandling;
 		bso::bool__ _AllRed;
@@ -836,7 +837,7 @@ namespace flx {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			fdr::iflow_driver___<>::reset( P );
+			_iflow_driver___<>::reset( P );
 			_Flow = NULL;
 			_EmbeddedSizeRemainder = 0;
 			_DismissHandling = dh_Undefined;
@@ -844,14 +845,14 @@ namespace flx {
 		}
 		E_CVDTOR( sizes_embedded_iflow_relay_driver___)
 		void Init(
-			flw::iflow__ &Flow,
+			_iflow__ &Flow,
 			dismiss_handling__ DismissHandling,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Flow = &Flow;
 			_EmbeddedSizeRemainder = 0;
 			_DismissHandling = DismissHandling,
-			fdr::iflow_driver___<>::Init( ThreadSafety );
+			_iflow_driver___<>::Init( ThreadSafety );
 			_AllRed = true;
 		}
 		bso::bool__ IsInitialized( void ) const
@@ -973,6 +974,176 @@ namespace flx {
 #  endif
 
 # endif
+
+		cslio::descriptor__ _Open(
+			const char *Commande,
+			const char *Mode )
+		{
+# ifdef CPE_WIN
+			return _popen( Commande, Mode );
+# elif CPE_POSIX
+			return popen( Commande, Mode );
+# else
+#  error
+#endif
+		}
+		void _Close( cslio::descriptor__ Descriptor )
+		{
+# ifdef CPE_WIN
+			_pclose( Descriptor );
+# elif CPE_POSIX
+			pclose( Descriptor );
+# else
+#  error
+#endif
+		}
+
+	template <typename io> class _exec_driver___
+	{
+	private:
+		cslio::descriptor__ _Descriptor;
+		io _IO;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_IO.reset( P );
+
+			if ( P ) 
+				if ( _Descriptor != cslio::UndefinedDescriptor )
+					_Close( _Descriptor );
+
+			_Descriptor = cslio::UndefinedDescriptor;
+				
+		}
+		E_CVDTOR( _exec_driver___ );
+		bso::bool__ Init(
+			const char *Commande,
+			const char *Mode )
+		{
+			if ( _Descriptor != cslio::UndefinedDescriptor )
+				_Close( _Descriptor );
+
+			_Descriptor = _Open(Commande, Mode );
+
+			if ( _Descriptor == cslio::UndefinedDescriptor )
+				return false;
+
+			_IO.Init( _Descriptor );
+
+			return true;
+		}
+		io IO( void )
+		{
+			return _IO;
+		}
+	};
+
+	template <typename flow, typename driver> class _exec_flow___
+	: public flow
+	{
+	private:
+		driver _Driver;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			flow::reset( P );
+			_Driver.reset( P );
+		}
+		E_CDTOR( _exec_flow___ );
+		bso::bool__ Init( const char *Commande )
+		{
+			iflow::Init( _Driver, fdr::tsDisabled );
+
+			return _Driver.Init( Commande );
+		}
+	};
+
+
+
+	// Lance une commande dans le shell et récupère les données écrites par la commande.
+	class exec_iflow_driver__
+	: public _iflow_driver___<>,
+	  public _exec_driver___<cslio::standard_input__>
+	{
+	protected:
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::datum__ *Buffer )
+		{
+			if ( IO().OnEOF() )
+				return 0;
+
+			Maximum = IO().Read( Maximum, Buffer );
+
+			if ( Maximum == 0 )
+				if ( !IO().OnEOF() )
+					ERRDta();
+
+			return Maximum;
+
+		}
+		virtual void FDRDismiss( void )
+		{
+			// Nothing to do.
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_iflow_driver___::reset( P );
+			_exec_driver___::reset( P );
+				
+		}
+		E_CVDTOR( exec_iflow_driver__ );
+		bso::bool__ Init(
+			const char *Commande,
+			fdr::thread_safety__ ThreadSafety )
+		{
+			_iflow_driver___<>::Init( ThreadSafety );
+			return _exec_driver___::Init(Commande, "r" );
+		}
+	};
+
+
+	typedef cslio::standard_output__ _output__;
+
+	// Lance une commande dans le shell en lui passant des données.
+	class exec_oflow_driver__
+	: public _oflow_driver___,
+	  public _exec_driver___<cslio::standard_output__>
+	{
+	protected:
+		virtual fdr::size__ FDRWrite(
+			const fdr::datum__ *Buffer,
+			fdr::size__ Maximum )
+		{
+			if ( IO().Write( Buffer, Maximum ) != Maximum )
+				ERRDta();
+
+			return Maximum;
+		}
+		virtual void FDRCommit( void )
+		{
+			IO().Flush();
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_oflow_driver___::reset( P );
+			_exec_driver___::reset( P );
+		}
+		E_CVDTOR( exec_oflow_driver__ );
+		bso::bool__ Init(
+			const char *Commande,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			_oflow_driver___::Init( ThreadSafety );
+			return _exec_driver___::Init(Commande, "w" );
+		}
+	};
+
+	typedef _exec_flow___<flw::standalone_iflow__<>, exec_iflow_driver__> exec_iflow__;
+
+	typedef _exec_flow___<flw::standalone_oflow__<>, exec_oflow_driver__> exec_oflow__;
 }
 
 /*$END$*/
