@@ -975,6 +975,11 @@ namespace flx {
 
 # endif
 
+	template <typename io> class _exec_driver___
+	{
+	private:
+		cslio::descriptor__ _Descriptor;
+		io _IO;
 		cslio::descriptor__ _Open(
 			const char *Commande,
 			const char *Mode )
@@ -997,12 +1002,6 @@ namespace flx {
 #  error
 #endif
 		}
-
-	template <typename io> class _exec_driver___
-	{
-	private:
-		cslio::descriptor__ _Descriptor;
-		io _IO;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -1037,28 +1036,6 @@ namespace flx {
 			return _IO;
 		}
 	};
-
-	template <typename flow, typename driver> class _exec_flow___
-	: public flow
-	{
-	private:
-		driver _Driver;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			flow::reset( P );
-			_Driver.reset( P );
-		}
-		E_CDTOR( _exec_flow___ );
-		bso::bool__ Init( const char *Commande )
-		{
-			iflow::Init( _Driver, fdr::tsDisabled );
-
-			return _Driver.Init( Commande );
-		}
-	};
-
-
 
 	// Lance une commande dans le shell et récupère les données écrites par la commande.
 	class exec_iflow_driver__
@@ -1099,7 +1076,7 @@ namespace flx {
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_iflow_driver___<>::Init( ThreadSafety );
-			return _exec_driver___::Init(Commande, "r" );
+			return _exec_driver___::Init(Commande, "rb" );
 		}
 	};
 
@@ -1137,7 +1114,27 @@ namespace flx {
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			_oflow_driver___::Init( ThreadSafety );
-			return _exec_driver___::Init(Commande, "w" );
+			return _exec_driver___::Init(Commande, "wb" );
+		}
+	};
+
+	template <typename flow, typename driver> class _exec_flow___
+	: public flow
+	{
+	private:
+		driver _Driver;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			flow::reset( P );
+			_Driver.reset( P );
+		}
+		E_CDTOR( _exec_flow___ );
+		bso::bool__ Init( const char *Commande )
+		{
+			flow::Init( _Driver );
+
+			return _Driver.Init( Commande, fdr::tsDisabled );
 		}
 	};
 
