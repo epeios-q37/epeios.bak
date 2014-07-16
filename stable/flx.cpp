@@ -78,7 +78,7 @@ ERRBegin
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
-	Descriptor = _wpopen( Command.Core(), Mode.Core() );
+	Descriptor = _wpopen( ntvstr::nstring___( ModifiedCommand ).Core(), Mode.Core() );
 ERRErr
 ERREnd
 ERREpilog
