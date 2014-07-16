@@ -55,11 +55,41 @@ public:
 				  /*******************************************/
 /*$BEGIN$*/
 
+#include "str.h"
+
 flx::void_oflow_driver___ flx::VoidOFlowDriver;
 flx::void_oflow__ flx::VoidOFlow;
 
 flx::void_iflow_driver___ flx::VoidIFlowDriver;
 flx::void_iflow__ flx::VoidIFlow;
+
+cslio::descriptor__ flx::_POpen(
+	const ntvstr::nstring___ &Command,
+	const ntvstr::nstring___ &Mode )
+{
+	cslio::descriptor__ Descriptor = cslio::UndefinedDescriptor;
+# ifdef CPE_WIN
+ERRProlog
+	str::string ModifiedCommand;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	// '_popen()' lance en fait "cmd /c ...". Or; lorsque cette commande reçoit un paramètre commençant par '"' (hors espaces),
+	// et avec plus d'un jeu de '"', elle en enlève certains (void "cmd /?"). Placer 'echo >NUL && ' en tête de paramètre résoud ce problème...
+	ModifiedCommand.Init("echo >NUL && ");
+	ModifiedCommand.Append( Command.UTF8( Buffer ) );
+
+	Descriptor = _wpopen( Command.Core(), Mode.Core() );
+ERRErr
+ERREnd
+ERREpilog
+# elif CPE_POSIX
+	Descriptor = popen( Command.Core(), Mode.Core() );
+# else
+#  error
+#endif
+	return Descriptor;
+}
+
 
 
 /* Although in theory this class is inaccessible to the different modules,

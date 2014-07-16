@@ -975,24 +975,11 @@ namespace flx {
 
 # endif
 
-	template <typename io> class _exec_driver___
-	{
-	private:
-		cslio::descriptor__ _Descriptor;
-		io _IO;
-		cslio::descriptor__ _Open(
-			const char *Commande,
-			const char *Mode )
-		{
-# ifdef CPE_WIN
-			return _popen( Commande, Mode );
-# elif CPE_POSIX
-			return popen( Commande, Mode );
-# else
-#  error
-#endif
-		}
-		void _Close( cslio::descriptor__ Descriptor )
+	cslio::descriptor__ _POpen(
+		const ntvstr::nstring___ &Command,
+		const ntvstr::nstring___ &Mode );
+
+	inline void _PClose( cslio::descriptor__ Descriptor )
 		{
 # ifdef CPE_WIN
 			_pclose( Descriptor );
@@ -1002,6 +989,12 @@ namespace flx {
 #  error
 #endif
 		}
+
+	template <typename io> class _exec_driver___
+	{
+	private:
+		cslio::descriptor__ _Descriptor;
+		io _IO;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -1009,20 +1002,20 @@ namespace flx {
 
 			if ( P ) 
 				if ( _Descriptor != cslio::UndefinedDescriptor )
-					_Close( _Descriptor );
+					_PClose( _Descriptor );
 
 			_Descriptor = cslio::UndefinedDescriptor;
 				
 		}
 		E_CVDTOR( _exec_driver___ );
 		bso::bool__ Init(
-			const char *Commande,
-			const char *Mode )
+			const ntvstr::nstring___ &Command,
+			const ntvstr::nstring___ &Mode )
 		{
 			if ( _Descriptor != cslio::UndefinedDescriptor )
-				_Close( _Descriptor );
+				_PClose( _Descriptor );
 
-			_Descriptor = _Open(Commande, Mode );
+			_Descriptor = _POpen(Command, Mode );
 
 			if ( _Descriptor == cslio::UndefinedDescriptor )
 				return false;
@@ -1072,11 +1065,11 @@ namespace flx {
 		}
 		E_CVDTOR( exec_iflow_driver__ );
 		bso::bool__ Init(
-			const char *Commande,
+			const ntvstr::nstring___ &Command,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_iflow_driver___<>::Init( ThreadSafety );
-			return _exec_driver___::Init(Commande, "rb" );
+			return _exec_driver___::Init(Command, "rb" );
 		}
 	};
 
@@ -1110,11 +1103,11 @@ namespace flx {
 		}
 		E_CVDTOR( exec_oflow_driver__ );
 		bso::bool__ Init(
-			const char *Commande,
+			const ntvstr::nstring___ &Command,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			_oflow_driver___::Init( ThreadSafety );
-			return _exec_driver___::Init(Commande, "wb" );
+			return _exec_driver___::Init(Command, "wb" );
 		}
 	};
 
@@ -1130,11 +1123,11 @@ namespace flx {
 			_Driver.reset( P );
 		}
 		E_CDTOR( _exec_flow___ );
-		bso::bool__ Init( const char *Commande )
+		bso::bool__ Init( const ntvstr::nstring___ &Command )
 		{
 			flow::Init( _Driver );
 
-			return _Driver.Init( Commande, fdr::tsDisabled );
+			return _Driver.Init( Command, fdr::tsDisabled );
 		}
 	};
 
