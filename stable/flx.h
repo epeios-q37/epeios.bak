@@ -983,7 +983,7 @@ namespace flx {
 		{
 # ifdef CPE_WIN
 			_pclose( Descriptor );
-# elif CPE_POSIX
+# elif defined( CPE_POSIX )
 			pclose( Descriptor );
 # else
 #  error
@@ -1031,7 +1031,7 @@ namespace flx {
 	};
 
 	// Lance une commande dans le shell et récupère les données écrites par la commande.
-	class exec_iflow_driver__
+	class exec_iflow_driver___
 	: public _iflow_driver___<>,
 	  public _exec_driver___<cslio::standard_input__>
 	{
@@ -1063,7 +1063,7 @@ namespace flx {
 			_exec_driver___::reset( P );
 				
 		}
-		E_CVDTOR( exec_iflow_driver__ );
+		E_CVDTOR( exec_iflow_driver___ );
 		bso::bool__ Init(
 			const ntvstr::nstring___ &Command,
 			fdr::thread_safety__ ThreadSafety )
@@ -1077,7 +1077,7 @@ namespace flx {
 	typedef cslio::standard_output__ _output__;
 
 	// Lance une commande dans le shell en lui passant des données.
-	class exec_oflow_driver__
+	class exec_oflow_driver___
 	: public _oflow_driver___,
 	  public _exec_driver___<cslio::standard_output__>
 	{
@@ -1101,7 +1101,7 @@ namespace flx {
 			_oflow_driver___::reset( P );
 			_exec_driver___::reset( P );
 		}
-		E_CVDTOR( exec_oflow_driver__ );
+		E_CVDTOR( exec_oflow_driver___ );
 		bso::bool__ Init(
 			const ntvstr::nstring___ &Command,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
@@ -1109,6 +1109,49 @@ namespace flx {
 			_oflow_driver___::Init( ThreadSafety );
 			return _exec_driver___::Init(Command, "wb" );
 		}
+	};
+
+	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> E_TTCLONE__( fdr::ioflow_driver___<cache_size>, _ioflow_driver___ );
+
+	class exec_ioflow_driver___
+	: public _ioflow_driver___<>
+	{
+	private:
+		HANDLE _In, _Out;
+	protected:
+		virtual fdr::size__ FDRWrite(
+			const fdr::datum__ *Buffer,
+			fdr::size__ Maximum );
+		virtual void FDRCommit( void )
+		{
+
+		}
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::datum__ *Buffer );
+		virtual void FDRDismiss( void )
+		{
+			// Nothing to do.
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			if ( P ) {
+				if ( _Out != NULL )
+					CloseHandle( _Out );
+				if ( _In != NULL )
+					CloseHandle( _In );
+			}
+
+			_Out = NULL;
+			_In = NULL;
+
+			_ioflow_driver___::reset( P );
+		}
+		E_CDTOR( exec_ioflow_driver___ );
+		bso::bool__ Init(
+			const ntvstr::nstring___ &Command,
+			fdr::thread_safety__ ThreadSafety );
 	};
 
 	template <typename flow, typename driver> class _exec_flow___
@@ -1131,9 +1174,9 @@ namespace flx {
 		}
 	};
 
-	typedef _exec_flow___<flw::standalone_iflow__<>, exec_iflow_driver__> exec_iflow__;
+	typedef _exec_flow___<flw::standalone_iflow__<>, exec_iflow_driver___> exec_iflow__;
 
-	typedef _exec_flow___<flw::standalone_oflow__<>, exec_oflow_driver__> exec_oflow__;
+	typedef _exec_flow___<flw::standalone_oflow__<>, exec_oflow_driver___> exec_oflow__;
 }
 
 /*$END$*/

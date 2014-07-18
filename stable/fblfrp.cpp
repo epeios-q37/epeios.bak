@@ -133,8 +133,7 @@ ERRBegin
 
 		RFlow.Init( RFlowDriver );
 
-		while ( !Flow.EndOfFlow() )
-			RFlow.Put( Flow.Get() );
+		flw::Copy( Flow, RFlow );
 
 		Flow.Dismiss();
 

@@ -162,6 +162,7 @@ ERREpilog
 	return Amount;
 }
 
+#if 0
 void flw::Copy(
 	iflow__ &IFlow,
 	size__ Amount,
@@ -180,6 +181,7 @@ void flw::Copy(
 		Amount -= Size;
 	}
 }
+#endif
 
 
 /* Although in theory this class is inaccessible to the different modules,

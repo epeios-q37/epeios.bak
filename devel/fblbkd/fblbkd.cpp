@@ -522,18 +522,20 @@ static void FillCommands_(
 {
 ERRProlog
 	id16_t__ Command;
-	sdr::row__ Position = CommandsDetails.First();
-	ctn::E_CITEM( command_detail_ ) CommandDetail;
+	sdr::row__ Position = E_NIL;
 	description Description;
+	ctn::E_CITEM( command_detail_ ) CommandDetail;
 ERRBegin
 	CommandDetail.Init( CommandsDetails );
+
+	Position = CommandsDetails.First();
 
 	while( Position != E_NIL )
 	{
 		Description.Init();
 
-		Description.Name = CommandDetail( Position ).Name;
 		Description.Casts = CommandDetail( Position ).Casts;
+		Description.Name = CommandDetail( Position ).Name;
 
 		if ( ( Command = Backend.Command( Type, Description ) ) == FBLBKD_INVALID_COMMAND )
 			ERRFwk();

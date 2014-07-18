@@ -402,7 +402,7 @@ namespace sck {
 		{
 			reset();
 
-			_Driver.Init( Socket, fdr::tsEnabled, TimeOut );
+			_Driver.Init( Socket, fdr::ts_Default, TimeOut );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
 		}
 		socket__ Socket( void ) const

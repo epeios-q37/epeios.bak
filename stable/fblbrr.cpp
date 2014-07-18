@@ -336,8 +336,7 @@ static void PushAndDelete_(
 
 			RFlow.Init( RFlowDriver );
 
-			while ( !PFlow.EndOfFlow() )
-				RFlow.Put( PFlow.Get() );
+			flw::Copy( PFlow, RFlow );
 
 			RFlow.Commit();
 		}

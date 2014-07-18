@@ -646,11 +646,24 @@ namespace flw {
 		}
 	};
 
+
+# if 0
 	// Copie 'Amount' octets de 'IFlow' dans 'OFlow'.
 	void Copy(
 		iflow__ &IFlow,
 		size__ Amount,
 		oflow__ &OFlow );
+# endif
+
+	template <int BufferSize = 1024> inline void Copy(
+		iflow__ &IFlow,
+		oflow__ &OFlow )
+	{
+		fdr::datum__ Buffer[BufferSize];
+
+		while ( !IFlow.EndOfFlow() )
+			OFlow.Write( Buffer, IFlow.ReadUpTo( BufferSize, Buffer ) );
+	}
 
 }
 
