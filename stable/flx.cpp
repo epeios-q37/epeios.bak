@@ -56,6 +56,7 @@ public:
 /*$BEGIN$*/
 
 #include "str.h"
+#include "mtk.h"
 
 flx::void_oflow_driver___ flx::VoidOFlowDriver;
 flx::void_oflow__ flx::VoidOFlow;
@@ -90,10 +91,36 @@ ERREpilog
 	return Descriptor;
 }
 
+struct data__ {
+	const ntvstr::nstring___ *Command;
+	HANDLE *In, *Out, *Err;
+	mtx::handler__ Mutex;
+	bso::bool__ Success;
+	void reset( bso::bool__ P = true )
+	{
+		if ( P )
+			if ( Mutex != mtx::UndefinedHandler )
+				mtx::Delete( Mutex );
+		Mutex = NULL;
+		Command = NULL;
+		In = Out = Err = NULL;
+		Success = false;
+	}
+	E_CDTOR( data__ );
+	void Init( void )
+	{
+		reset();
+
+		Mutex = mtx::Create();
+	}
+
+};
+
 static bso::bool__ POpen2_(
 	const ntvstr::nstring___ &Command,
 	HANDLE &In,
-	HANDLE &Out )
+	HANDLE &Out,
+	HANDLE &Err )
 {
 PROCESS_INFORMATION	piProcessInfo;
 	SECURITY_ATTRIBUTES sa_attr; 
@@ -143,16 +170,34 @@ PROCESS_INFORMATION	piProcessInfo;
 	siStartupInfo.dwFlags   |= STARTF_USESTDHANDLES;
  
 	// Launch the process.
-	if  ( !CreateProcessW( NULL,
-							     Command.Core(),0,0,FALSE,
-								 CREATE_DEFAULT_ERROR_MODE,0,0,                              
-								 &siStartupInfo, &piProcessInfo ) )
+	if ( !CreateProcessW( NULL,
+		Command.Core(), 0, 0, TRUE,
+		0, 0, 0,
+		&siStartupInfo, &piProcessInfo ) )
+	{
+		int Error = GetLastError();
 		return false;
+	}
 
-	In = siStartupInfo.hStdInput;
-	Out = siStartupInfo.hStdOutput;
+//   WaitForSingleObject( piProcessInfo.hProcess, INFINITE );
+
+	In = hChildStdinWr;
+	Out = hChildStdoutRd;
+	Err = hChildStderrRd;
+
+	CloseHandle( piProcessInfo.hProcess );
+	CloseHandle( piProcessInfo.hThread );
 
 	return true;
+}
+
+void POpen2Thread_( void *PU )
+{
+	data__ &Data = *(data__ *)PU;
+
+	Data.Success = POpen2_( *Data.Command, *Data.In, *Data.Out, *Data.Err );
+
+	mtx::Unlock( Data.Mutex );
 }
 
 sdr::size__ flx::exec_ioflow_driver___::FDRRead(
@@ -160,8 +205,11 @@ sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 	sdr::datum__ *Buffer )
 {
 	DWORD Red = 0;
-
-	if ( !ReadFile( _In, Buffer, Amount, &Red, NULL ) )
+	/*
+	if ( !ReadFile( _Err, Buffer, Amount, &Red, NULL ) )
+		ERRDta();
+*/
+	if ( !ReadFile( _Out, Buffer, Amount, &Red, NULL ) )
 		ERRDta();
 
 	return Red;	// Si == 0, 'EOF' atteint.
@@ -173,7 +221,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 {
 	DWORD Written = 0;
 
-	if ( !WriteFile( _Out, Buffer, Amount, &Written, NULL ) )
+	if ( !WriteFile( _In, Buffer, Amount, &Written, NULL ) )
 		ERRDta();
 
 	if ( Written == 0 )	// Ne devrait pas arriver.
@@ -186,11 +234,25 @@ bso::bool__ flx::exec_ioflow_driver___::Init(
 	const ntvstr::nstring___ &Command,
 	fdr::thread_safety__ ThreadSafety )
 {
+	data__ Data;
 	reset();
 
 	_ioflow_driver___::Init( ThreadSafety );
 
-	return POpen2_( Command, _In, _Out );
+	Data.Init();
+	Data.Command = &Command;
+	Data.In = &_In;
+	Data.Out = &_Out;
+	Data.Err = &_Err;
+
+	mtk::Launch( POpen2Thread_, &Data );
+
+	mtx::Lock( Data.Mutex );	// Dévérouillé par 'POpen2Thread.
+	mtx::Lock( Data.Mutex );
+	mtx::Unlock( Data.Mutex );
+
+	return Data.Success;
+
 }
 
 

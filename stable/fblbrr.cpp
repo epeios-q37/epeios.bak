@@ -238,8 +238,7 @@ void fblbrr::remote_callbacks___::FBLBRQPopIn(
 	parameter__ Parameter;
 
 	if ( Cast == cFlow ) {
-		_IFlowDriver.Init( Channel, flx::dhPropagate, fdr::tsDisabled );
-		_IFlow.Init( _IFlowDriver );
+		_IFlow.Init( Channel );
 		Parameter.Init( &_IFlow, Cast );
 	} else
 		Parameter = _CreateAndGet( Channel, Cast );
@@ -325,20 +324,17 @@ static void PushAndDelete_(
 	case cFlow:
 	{
 	ERRProlog
-		flx::sizes_embedded_oflow_relay_driver___ RFlowDriver;
-		flw::standalone_oflow__<> RFlow;
+		flx::size_embedded_oflow___ SEFlow;
 		flw::iflow__ &PFlow = *(flw::iflow__ *)Parameter.Content;
 	ERRBegin
 		if ( FirstCall ) 
 			Channel.Put( Cast );
 		else {
-			RFlowDriver.Init( Channel, fdr::tsDisabled );
+			SEFlow.Init( Channel );
 
-			RFlow.Init( RFlowDriver );
+			flw::Copy( PFlow, SEFlow );
 
-			flw::Copy( PFlow, RFlow );
-
-			RFlow.Commit();
+			SEFlow.Commit();
 		}
 	ERRErr
 	ERREnd

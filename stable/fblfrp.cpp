@@ -125,19 +125,16 @@ void fblfrp::remote_callbacks___::FBLFPHFlowIn(
 	flw::ioflow__ &Channel )
 {
 ERRProlog
-	flx::sizes_embedded_oflow_relay_driver___ RFlowDriver;
-	flw::standalone_oflow__<> RFlow;
+	flx::size_embedded_oflow___ SEFlow;
 ERRBegin
 	if ( !FirstCall ) {
-		RFlowDriver.Init( Channel, fdr::tsDisabled );
+		SEFlow.Init( Channel );
 
-		RFlow.Init( RFlowDriver );
-
-		flw::Copy( Flow, RFlow );
+		flw::Copy( Flow, SEFlow );
 
 		Flow.Dismiss();
 
-		RFlow.Commit();
+		SEFlow.Commit();
 	}
 ERRErr
 ERREnd
@@ -150,8 +147,7 @@ void fblfrp::remote_callbacks___::FBLFPHFlowOut(
 {
 	_Data.Append( datum__( fblcst::cFlow, NULL ) );
 
-	_IFlowDriver.Init( Channel, flx::dhPropagate, fdr::tsDisabled );
-	_IFlow.Init( _IFlowDriver );
+	_IFlow.Init( Channel );
 
 	Flow = &_IFlow;
 }

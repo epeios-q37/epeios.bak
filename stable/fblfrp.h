@@ -90,8 +90,7 @@ namespace fblfrp {
 	{
 	private:
 		bch::E_BUNCH__( datum__, FBLFRP__OUT_PARAMETERS_AMOUNT_MAX ) _Data;
-		flx::sizes_embedded_iflow_relay_driver___ _IFlowDriver;
-		flw::standalone_iflow__<> _IFlow;
+		flx::size_embedded_iflow___ _IFlow;
 	protected:
 		virtual void FBLFPHPreProcess( void )
 		{
@@ -119,14 +118,13 @@ namespace fblfrp {
 			_Data.reset( P );
 			_callbacks__::reset( P );
 			_IFlow.reset( P );
-			_IFlowDriver.reset( P );
 		}
 		E_CVDTOR( remote_callbacks___ );
 		void Init( void )
 		{
 			_Data.Init();
 			_callbacks__::Init();
-			// '_IFlow(Driver)' initialisé seulement lorsque utilisé.
+			// '_IFlow' initialisé seulement lorsque utilisé.
 		}
 	};
 }

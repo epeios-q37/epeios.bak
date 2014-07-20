@@ -108,8 +108,7 @@ namespace fblbrr {
 	{
 	private:
 		parameters _Parameters;
-		flx::sizes_embedded_iflow_relay_driver___ _IFlowDriver;
-		flw::standalone_iflow__<> _IFlow;
+		flx::size_embedded_iflow___ _IFlow;
 		void *_Get(
 			sdr::row__ Row,
 			cast__ Cast )
@@ -170,7 +169,6 @@ namespace fblbrr {
 			callbacks__::reset( P );
 			_Parameters.reset( P );
 			_IFlow.reset( P );
-			_IFlowDriver.reset( P );
 		}
 		remote_callbacks___( void ) 
 		{

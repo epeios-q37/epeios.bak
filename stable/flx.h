@@ -163,7 +163,7 @@ namespace flx {
 		}
 	};
 
-	typedef flw::iflow__ _iflow__;
+	typedef flw::standalone_iflow__<> _iflow__;
 
 	//c Buffer as a standard input flow.
 	class buffer_iflow___
@@ -256,7 +256,7 @@ namespace flx {
 		}
 	};
 
-	typedef flw::oflow__ _oflow__;
+	typedef flw::standalone_oflow__<>  _oflow__;
 
 	//c Buffer as a standard ouput flow.driver
 	class buffer_oflow___
@@ -441,7 +441,6 @@ namespace flx {
 	{
 	private:
 		bunch_oflow_driver___<bunch_, so__> _Driver;
-		flw::datum__ _Cache[FLX_BUNCH_BUFFER_SIZE];
 	public:
 		bunch_oflow___( )
 		{
@@ -464,7 +463,7 @@ namespace flx {
 			reset();
 
 			_Driver.Init( Bunch, fdr::tsDisabled );
-			_oflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
+			_oflow__::Init( _Driver, AmountMax );
 		}
 	};
 
@@ -510,9 +509,6 @@ namespace flx {
 	class void_oflow__
 	: public _oflow__
 	{
-	private:
-			// The cache.
-		flw::datum__ _Cache[FLX_VOID_BUFFER_SIZE];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -528,7 +524,7 @@ namespace flx {
 		}
 		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
 		{
-			_oflow__::Init( VoidOFlowDriver, _Cache, sizeof( _Cache ), AmountMax );
+			_oflow__::Init( VoidOFlowDriver, AmountMax );
 		}
 	};
 
@@ -691,11 +687,11 @@ namespace flx {
 	};	
 
 	// 'driver' qui relaye un 'oflow', mais dont la taille est 'encodée' dans le flux.
-	class sizes_embedded_oflow_relay_driver___
+	class size_embedded_oflow_driver___
 	: public _oflow_driver___
 	{
 	private:
-		_oflow__ *_Flow;
+		flw::oflow__ *_Flow;
 		fdr::size__ _EmbeddedSizeRemainder;
 		bso::bool__ _PendingCommit;
 	protected:
@@ -749,9 +745,9 @@ namespace flx {
 			_EmbeddedSizeRemainder = 0;
 			_PendingCommit = false;
 		}
-		E_CVDTOR( sizes_embedded_oflow_relay_driver___)
+		E_CVDTOR( size_embedded_oflow_driver___)
 		void Init(
-			_oflow__ &Flow,
+			flw::oflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Flow = &Flow;
@@ -769,16 +765,17 @@ namespace flx {
 		dhPropagate,	// 'Dismiss()' est propagé au flux embarqué.
 		dhHold,		// 'Dismiss()' n'est PAS propagé au flux embarqué. 
 		dh_amount,
-		dh_Undefined
+		dh_Undefined,
+		dh_Default = dhPropagate
 	};
 
 
 	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encodée' dans le flux.
-	class sizes_embedded_iflow_relay_driver___
+	class size_embedded_iflow_driver___
 	: public _iflow_driver___<>
 	{
 	private:
-		_iflow__ *_Flow;
+		flw::iflow__ *_Flow;
 		fdr::size__ _EmbeddedSizeRemainder;
 		dismiss_handling__ _DismissHandling;
 		bso::bool__ _AllRed;
@@ -843,11 +840,11 @@ namespace flx {
 			_DismissHandling = dh_Undefined;
 			_AllRed = false;
 		}
-		E_CVDTOR( sizes_embedded_iflow_relay_driver___)
+		E_CVDTOR( size_embedded_iflow_driver___)
 		void Init(
-			_iflow__ &Flow,
-			dismiss_handling__ DismissHandling,
-			fdr::thread_safety__ ThreadSafety )
+			flw::iflow__ &Flow,
+			fdr::thread_safety__ ThreadSafety,
+			dismiss_handling__ DismissHandling = dh_Default )
 		{
 			_Flow = &Flow;
 			_EmbeddedSizeRemainder = 0;
@@ -860,6 +857,29 @@ namespace flx {
 			return _Flow != NULL;
 		}
 	};	
+
+	template <typename flow, typename sflow, typename driver> class _sizes_embbeded_flow___
+	: public sflow
+	{
+	private:
+		driver _Driver;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			sflow::reset( P );
+			_Driver.reset( P );
+		}
+		E_CDTOR( _sizes_embbeded_flow___ );
+		void Init( flow &Flow )
+		{
+			sflow::Init( _Driver );
+			_Driver.Init( Flow, fdr::tsDisabled );
+		}
+	};
+
+	typedef _sizes_embbeded_flow___<flw::iflow__, _iflow__, size_embedded_iflow_driver___> size_embedded_iflow___;
+	typedef _sizes_embbeded_flow___<flw::oflow__, _oflow__, size_embedded_oflow_driver___> size_embedded_oflow___;
+
 
 # ifdef FLX__MT
 
@@ -1117,14 +1137,17 @@ namespace flx {
 	: public _ioflow_driver___<>
 	{
 	private:
-		HANDLE _In, _Out;
+		HANDLE _In, _Out, _Err;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::datum__ *Buffer,
 			fdr::size__ Maximum );
 		virtual void FDRCommit( void )
 		{
+			if ( _In != NULL )
+				CloseHandle( _In );
 
+			_In = NULL;
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -1137,14 +1160,15 @@ namespace flx {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( _Out != NULL )
-					CloseHandle( _Out );
 				if ( _In != NULL )
 					CloseHandle( _In );
+				if ( _Out != NULL )
+					CloseHandle( _Out );
+				if ( _Err != NULL )
+					CloseHandle( _Err );
 			}
 
-			_Out = NULL;
-			_In = NULL;
+			_In = _Out = _Err = NULL;
 
 			_ioflow_driver___::reset( P );
 		}
