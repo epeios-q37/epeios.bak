@@ -63,7 +63,6 @@ extern class ttr_tutor &FDRTutor;
 # include "err.h"
 # include "bso.h"
 # include "strng.h"
-# include "tht.h"
 
 #ifdef FDR_THREAD_SAFE
 #	define FDR__TS
@@ -90,6 +89,13 @@ extern class ttr_tutor &FDRTutor;
 
 # define FDR_SIZE_MAX	BSO_SIZE_MAX
 
+
+// predeclaration
+namespace flw
+{
+	class iflow__;
+	class oflow__;
+}
 
 namespace fdr {
 		//t Amount of data.
@@ -195,11 +201,80 @@ namespace fdr {
 		return false;
 	}
 
-	class iflow_driver_base___
+	template <typename flow> class _flow_driver_base__
 	{
 	private:
 		mutex__ _Mutex;	// Mutex pour protèger la ressource.
-		tht::thread_id__ _ThreadId;
+		const flow *_User;
+	protected:
+		void Lock( const flow *User )
+		{
+#ifdef FDR__TS
+			if ( _Mutex != mtx::UndefinedHandler ) {
+				if ( TryToLock_(_Mutex) ) {
+					if ( _User != NULL )
+						ERRFwk();
+
+					_User = User;
+				} else if ( _User != User ) {
+					Lock_( _Mutex );
+					_User = User;
+				}
+			}
+# else
+			Lock_( _Mutex );
+# endif		
+		}
+		void Unlock( const flow *User )
+		{
+#ifdef FDR__TS
+			if ( _Mutex != mtx::UndefinedHandler ) {
+				if ( IsLocked_( _Mutex ) ) {
+					if ( ( _User != User) && ( User != NULL ) )
+						ERRFwk();
+
+					Unlock_( _Mutex );
+
+					_User = NULL;
+				}
+			}
+# else
+			Unlock_( _Mutex );
+# endif
+		}
+		void Init( thread_safety__ ThreadSafety )
+		{
+			reset();
+
+			_Mutex = Create_( ThreadSafety );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			if ( P )
+				Delete_( _Mutex );
+
+			_User = NULL;
+			_Mutex = NULL;
+		}
+		~_flow_driver_base__( void )
+		{
+			reset();
+		}
+		_flow_driver_base__( void )
+		{
+			reset( false );
+		}
+		bso::bool__ IsLocked( void )
+		{
+			return IsLocked_( _Mutex );
+		}
+	};
+
+	class iflow_driver_base___
+	: public _flow_driver_base__<flw::iflow__>
+	{
+	private:
 		datum__ *_Cache;
 		size__ _Size;	// Si == '0', signale 'EOF' atteint.
 		size__ _Available;
@@ -327,41 +402,6 @@ namespace fdr {
 			else
 				return _FillCache( 0 ) == 0;
 		}
-		void _Lock( void )
-		{
-#ifdef FDR__TS
-			if ( _Mutex != mtx::UndefinedHandler ) {
-				if ( TryToLock_(_Mutex) ) {
-					if ( _ThreadId != THT_UNDEFINED_THREAD_ID )
-						ERRFwk();
-
-					_ThreadId = tht::GetTID();
-				} else if ( _ThreadId != tht::GetTID() ) {
-					Lock_( _Mutex );
-					_ThreadId = tht::GetTID();
-				}
-			}
-# else
-			Lock_( _Mutex );
-# endif		
-		}
-		void _Unlock( void )
-		{
-#ifdef FDR__TS
-			if ( _Mutex != mtx::UndefinedHandler ) {
-				if ( IsLocked_( _Mutex ) ) {
-					if ( _ThreadId != tht::GetTID() )
-						ERRFwk();
-
-					Unlock_( _Mutex );
-
-					_ThreadId = THT_UNDEFINED_THREAD_ID;
-				}
-			}
-# else
-			Unlock_( _Mutex );
-# endif
-		}
 	protected:
 		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donnée n'est disponibe.
 		virtual size__ FDRRead(
@@ -372,14 +412,12 @@ namespace fdr {
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Dismiss();
-				Delete_( _Mutex );
+				Dismiss( NULL );
 			}
 
 			_Cache = NULL;
 			_Size = _Available = _Position = 0;
-			_Mutex = FDR_NO_MUTEX;
-			_ThreadId = THT_UNDEFINED_THREAD_ID;
+			_flow_driver_base__::reset( P );
 		}
 		iflow_driver_base___( void )
 		{
@@ -404,17 +442,17 @@ namespace fdr {
 			_Size = Size;
 
 			_Available = _Position = 0;
-			_Mutex = Create_( ThreadSafety );
-			_ThreadId = THT_UNDEFINED_THREAD_ID;
+			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Dismiss( void )
+		void Dismiss( flw::iflow__ *User )
 		{
 			if ( _Cache != NULL ) {
 				FDRDismiss();
-				_Unlock();
+				Unlock( User );
 			}
 		}
 		size__ Read(
+			const flw::iflow__ *User,
 			size__ Wanted,
 			datum__ *Buffer,
 			behavior__ Behavior )
@@ -423,7 +461,7 @@ namespace fdr {
 			if ( Wanted < 1 )
 				ERRPrm();
 #endif
-			_Lock();
+			Lock( User );
 
 			if ( _EOF() )
 				return 0;
@@ -459,14 +497,6 @@ namespace fdr {
 
 			return 0;	// Pour éviter un 'warning'.
 		}
-		bso::bool__ IsLocked( void )
-		{
-			return IsLocked_( _Mutex );
-		}
-		bso::bool__ IFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
-		{
-			return IsLocked();
-		}
 		bso::bool__ IsCacheEmpty( bso::size__ &Available ) const
 		{
 			if ( &Available != NULL )
@@ -474,11 +504,15 @@ namespace fdr {
 
 			return _Available == 0;
 		}
-		bso::bool__ EndOfFlow( void )
+		bso::bool__ EndOfFlow( const flw::iflow__ *User )
 		{
-			_Lock();
+			Lock( User );
 
 			return _EOF();
+		}
+		bso::bool__ IFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
+		{
+			return IsLocked();
 		}
 	};
 
@@ -507,46 +541,10 @@ namespace fdr {
 	};
 
 	class oflow_driver_base___
+	: public _flow_driver_base__<flw::oflow__>
 	{
 	private:
-		mutex__ _Mutex;	// Mutex pour protèger la ressource.
-		tht::thread_id__ _ThreadId;
 		bso::bool__ _Initialized;	// Pour éviter des 'pure virtual function call'.
-		void _Lock( void )
-		{
-#ifdef FDR__TS
-			if ( _Mutex != mtx::UndefinedHandler ) {
-				if ( TryToLock_(_Mutex) ) {
-					if ( _ThreadId != THT_UNDEFINED_THREAD_ID )
-						ERRFwk();
-
-					_ThreadId = tht::GetTID();
-				} else if ( _ThreadId != tht::GetTID() ) {
-					Lock_( _Mutex );
-					_ThreadId = tht::GetTID();
-				}
-			}
-# else
-			Lock_( _Mutex );
-# endif		
-		}
-		void _Unlock( void )
-		{
-#ifdef FDR__TS
-			if ( _Mutex != mtx::UndefinedHandler ) {
-				if ( IsLocked_( _Mutex ) ) {
-					if ( _ThreadId != tht::GetTID() )
-						ERRFwk();
-
-					Unlock_( _Mutex );
-
-					_ThreadId = THT_UNDEFINED_THREAD_ID;
-				}
-			}
-# else
-			Unlock_( _Mutex );
-# endif
-		}
 	protected:
 		// Retourne le nombre d'octets effectivement écrits. Ne retourne '0' que si plus aucune donnée ne peut être écrite.
 		virtual size__ FDRWrite(
@@ -557,13 +555,11 @@ namespace fdr {
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Commit();
-				Delete_( _Mutex );
+				Commit( NULL );
 			}
 
-			_Mutex = FDR_NO_MUTEX;
 			_Initialized = false;
-			_ThreadId = THT_UNDEFINED_THREAD_ID;
+			_flow_driver_base__::reset( P );
 		}
 		oflow_driver_base___( void )
 		{
@@ -577,27 +573,23 @@ namespace fdr {
 		{
 			reset();
 
-			_Mutex = Create_( ThreadSafety );
 			_Initialized = true;
-			_ThreadId = THT_UNDEFINED_THREAD_ID;
+			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Commit( void )
+		void Commit( const flw::oflow__ *User  )
 		{
 			if ( _Initialized ) {
 				FDRCommit();
-				_Unlock();
+				Unlock( User );
 			}
 		}
 		size__ Write(
+			const flw::oflow__ *User,
 			const datum__ *Buffer,
 			size__ Maximum )
 		{
-			_Lock();
+			Lock( User );
 			return FDRWrite( Buffer, Maximum );
-		}
-		bso::bool__ IsLocked( void )
-		{
-			return IsLocked_( _Mutex );
 		}
 		bso::bool__ OFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{

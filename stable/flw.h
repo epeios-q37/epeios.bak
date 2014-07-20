@@ -162,7 +162,7 @@ namespace flw {
 # endif
 		void _Dismiss( void )
 		{
-			_D().Dismiss();
+			_D().Dismiss( this );
 			_Red = 0;
 		}
 	public:
@@ -204,25 +204,25 @@ namespace flw {
 			size__ Amount,
 			void *Buffer )
 		{
-			return _D().Read( Amount, (datum__ *)Buffer, fdr::bNonBlocking );
+			return _D().Read( this, Amount, (datum__ *)Buffer, fdr::bNonBlocking );
 		}
 		//f Place 'Amount' bytes in 'Buffer'.
 		void Read(
 			size__ Amount,
 			void *Buffer )
 		{
-			if ( _D().Read( Amount, (datum__ *)Buffer, fdr::bBlocking ) != Amount )
+			if ( _D().Read( this, Amount, (datum__ *)Buffer, fdr::bBlocking ) != Amount )
 				ERRDta();
 		}
 		bso::bool__ EndOfFlow( void )
 		{
-			return _D().EndOfFlow();
+			return _D().EndOfFlow( this );
 		}
 		size__ View(
 			size__ Size,
 			datum__ *Datum )
 		{
-			return _D().Read( Size, Datum, fdr::bKeep );
+      			return _D().Read( this, Size, Datum, fdr::bKeep );
 		}
 		datum__ View( void )
 		{
@@ -237,7 +237,7 @@ namespace flw {
 		{
 			datum__ C;
 
-			if ( _D().Read( 1, &C, fdr::bBlocking ) != 1 )
+			if ( _D().Read( this, 1, &C, fdr::bBlocking ) != 1 )
 				ERRDta();
 
 			return C;
@@ -349,11 +349,11 @@ namespace flw {
 			size__ Wanted,
 			size__ Minimum )
 		{
-			size__ PonctualAmount = _D().Write( Buffer, Wanted );
+			size__ PonctualAmount = _D().Write( this, Buffer, Wanted );
 			size__ CumulativeAmount = PonctualAmount;
 
 			while ( ( PonctualAmount != 0 ) && ( Minimum > CumulativeAmount ) ) {
-				PonctualAmount = _D().Write( Buffer + CumulativeAmount, Wanted - CumulativeAmount );
+				PonctualAmount = _D().Write( this, Buffer + CumulativeAmount, Wanted - CumulativeAmount );
 				CumulativeAmount += PonctualAmount;
 			}
 
@@ -407,7 +407,7 @@ namespace flw {
 		void _Commit( void )
 		{
 			_DumpCache();
-			_D().Commit();
+			_D().Commit( this );
 
 			_Written = 0;
 		}

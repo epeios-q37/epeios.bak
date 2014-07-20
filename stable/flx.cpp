@@ -56,7 +56,6 @@ public:
 /*$BEGIN$*/
 
 #include "str.h"
-#include "mtk.h"
 
 flx::void_oflow_driver___ flx::VoidOFlowDriver;
 flx::void_oflow__ flx::VoidOFlow;
@@ -90,31 +89,6 @@ ERREpilog
 #endif
 	return Descriptor;
 }
-
-struct data__ {
-	const ntvstr::nstring___ *Command;
-	HANDLE *In, *Out, *Err;
-	mtx::handler__ Mutex;
-	bso::bool__ Success;
-	void reset( bso::bool__ P = true )
-	{
-		if ( P )
-			if ( Mutex != mtx::UndefinedHandler )
-				mtx::Delete( Mutex );
-		Mutex = NULL;
-		Command = NULL;
-		In = Out = Err = NULL;
-		Success = false;
-	}
-	E_CDTOR( data__ );
-	void Init( void )
-	{
-		reset();
-
-		Mutex = mtx::Create();
-	}
-
-};
 
 static bso::bool__ POpen2_(
 	const ntvstr::nstring___ &Command,
@@ -191,15 +165,6 @@ PROCESS_INFORMATION	piProcessInfo;
 	return true;
 }
 
-void POpen2Thread_( void *PU )
-{
-	data__ &Data = *(data__ *)PU;
-
-	Data.Success = POpen2_( *Data.Command, *Data.In, *Data.Out, *Data.Err );
-
-	mtx::Unlock( Data.Mutex );
-}
-
 sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 	sdr::size__ Amount,
 	sdr::datum__ *Buffer )
@@ -234,25 +199,11 @@ bso::bool__ flx::exec_ioflow_driver___::Init(
 	const ntvstr::nstring___ &Command,
 	fdr::thread_safety__ ThreadSafety )
 {
-	data__ Data;
 	reset();
 
 	_ioflow_driver___::Init( ThreadSafety );
 
-	Data.Init();
-	Data.Command = &Command;
-	Data.In = &_In;
-	Data.Out = &_Out;
-	Data.Err = &_Err;
-
-	mtk::Launch( POpen2Thread_, &Data );
-
-	mtx::Lock( Data.Mutex );	// Dévérouillé par 'POpen2Thread.
-	mtx::Lock( Data.Mutex );
-	mtx::Unlock( Data.Mutex );
-
-	return Data.Success;
-
+	return POpen2_( Command, _In, _Out, _Err );
 }
 
 

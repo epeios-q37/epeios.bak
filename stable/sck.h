@@ -293,6 +293,7 @@ namespace sck {
 		duration__ _TimeOut;	// En secondes.
 		bso::bool__ _Error;
 		time_t _EpochTimeStamp;	// Horodatage de la dernière activité (lecture ou écriture);
+		const flw::ioflow__ *_User;
 		void _Touch( void )
 		{
 			_EpochTimeStamp = tol::EpochTime( false );
@@ -335,7 +336,7 @@ namespace sck {
 		{
 			if ( P ) {
 				if ( _Socket != SCK_INVALID_SOCKET ) {
-					_ioflow_driver___::Commit();
+					_ioflow_driver___::Commit( _User );
 					Close( _Socket );
 				}
 			}
@@ -346,6 +347,7 @@ namespace sck {
 			_TimeOut = SCK_INFINITE;
 			_Error = false;
 			_EpochTimeStamp = 0;
+			_User = NULL;
 		}
 		socket_ioflow_driver___( void )
 		{
@@ -358,6 +360,7 @@ namespace sck {
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
 		void Init(
 			socket__ Socket,
+			const flw::ioflow__ *User,
 			fdr::thread_safety__ ThreadSafety,
 			duration__ TimeOut = SCK__DEFAULT_TIMEOUT )	// En secondes.
 		{
@@ -367,6 +370,7 @@ namespace sck {
 
 			_Socket = Socket;
 			_TimeOut = TimeOut;
+			_User = User;
 			_Touch();	// On suppose qu'il n'y a pas une trop longue attente entre la création de la socket et l'appel à cette méthode ...
 		}
 		E_RODISCLOSE__( socket__, Socket )
@@ -402,7 +406,7 @@ namespace sck {
 		{
 			reset();
 
-			_Driver.Init( Socket, fdr::ts_Default, TimeOut );
+			_Driver.Init( Socket, this, fdr::ts_Default, TimeOut );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
 		}
 		socket__ Socket( void ) const

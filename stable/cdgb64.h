@@ -202,7 +202,7 @@ namespace cdgb64 {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				Commit();
+				Commit( _Flow );
 
 			_oflow_driver___::reset( P );
 			_Amount = CDGB64__PROCESSED;
@@ -220,7 +220,7 @@ namespace cdgb64 {
 			flw::oflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			Commit();
+			Commit( _Flow );
 
 			_Amount = CDGB64__PROCESSED;
 			_Flow = &Flow;
