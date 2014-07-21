@@ -121,7 +121,7 @@ extern class ttr_tutor &SCKTutor;
 #endif
 
 //d Max data amount of concurrent write and read.
-#define SCK__DEFAULT_AMOUNT	( 100 * 1024 * 1024 )
+#define SCK__DEFAULT_AMOUNT	FLW_AMOUNT_MAX
 
 namespace sck {
 	using flw::datum__;
