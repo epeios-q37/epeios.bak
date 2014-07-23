@@ -64,6 +64,7 @@ extern class ttr_tutor &PLLIOTutor;
 #include "flw.h"
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <sys/stat.h>
 
 namespace pllio {

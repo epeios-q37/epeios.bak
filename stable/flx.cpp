@@ -90,6 +90,7 @@ ERREpilog
 	return Descriptor;
 }
 
+# ifdef CPE_WIN
 static bso::bool__ POpen2_(
 	const ntvstr::nstring___ &Command,
 	HANDLE &In,
@@ -165,18 +166,58 @@ PROCESS_INFORMATION	piProcessInfo;
 	return true;
 }
 
+#elif defined( CPE_POSIX )
+static bso::bool__ POpen2_(
+	const ntvstr::nstring___ &Command,
+	int &In,
+	int &Out,
+	int &Err )
+{
+    pid_t p;
+    int pipe_stdin[2], pipe_stdout[2], pipe_stderr[2];
+
+    if(pipe(pipe_stdin)) return false;
+    if(pipe(pipe_stdout)) return false;
+    if(pipe(pipe_stderr)) return false;
+
+    p = fork();
+    if(p < 0) return false; /* Fork failed */
+    if(p == 0) { /* child */
+        close(pipe_stdin[1]);
+        dup2(pipe_stdin[0], 0);
+        close(pipe_stdout[0]);
+        dup2(pipe_stdout[1], 1);
+        close(pipe_stderr[0]);
+        dup2(pipe_stderr[1], 2);
+        execl("/bin/sh", "sh", "-c", (const char *)Command.Core(), NULL);
+        perror("execl"); exit(99);
+    }
+    In = pipe_stdin[1];
+    Out = pipe_stdout[0];
+    Err = pipe_stderr[0];
+    return true; 
+}
+#else
+# error
+#endif
+
 sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 	sdr::size__ Amount,
 	sdr::datum__ *Buffer )
 {
+# ifdef CPE_WIN
 	DWORD Red = 0;
-	/*
-	if ( !ReadFile( _Err, Buffer, Amount, &Red, NULL ) )
-		ERRDta();
-*/
+
 	if ( !ReadFile( _Out, Buffer, Amount, &Red, NULL ) )
 		ERRDta();
+#elif defined( CPE_POSIX )
+	ssize_t Red = 0;
 
+	if ( ( Red = read( _Out, Buffer, Amount ) ) == -1 )
+		ERRDta();
+#else
+# error
+#endif
 	return Red;	// Si == 0, 'EOF' atteint.
 }
 
@@ -184,6 +225,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 	const sdr::datum__ *Buffer,
 	sdr::size__ Amount )
 {
+# ifdef CPE_WIN
 	DWORD Written = 0;
 
 	if ( !WriteFile( _In, Buffer, Amount, &Written, NULL ) )
@@ -191,6 +233,15 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 
 	if ( Written == 0 )	// Ne devrait pas arriver.
 		ERRDta();
+#elif defined( CPE_POSIX )
+	ssize_t Written = 0;
+
+
+	if ( (Written = write( _Out, Buffer, Amount ) ) == -1 )
+		ERRDta();
+#else
+# error
+#endif
 
 	return Written;
 }

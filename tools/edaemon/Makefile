@@ -162,7 +162,7 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -DCYGWIN
+	co += -std=gnu++11 -DCYGWIN
 	
 	LDFLAGS += -static
 
@@ -220,6 +220,7 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 
+	co += -std=gnu++11
 	co += -DGNULINUX
 	
 	mods += $(pmods)
@@ -298,7 +299,7 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\""20140612"\"
+copt += -DVERSION=\""20140716"\"
 copt += -DCOPYRIGHT_YEARS=\""2013, 2014"\"
 
 ifndef EPEIOS_SRC

@@ -1141,21 +1141,41 @@ namespace flx {
 
 	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> E_TTCLONE__( fdr::ioflow_driver___<cache_size>, _ioflow_driver___ );
 
+# ifdef CPE_WIN
+	typedef  HANDLE pipe_descriptor__;
+	E_CDEF( pipe_descriptor__, UndefinedPipeDescriptor, NULL );
+# elif defined CPE_POSIX
+	typedef int pipe_descriptor__;
+	E_CDEF( pipe_descriptor__, UndefinedPipeDescriptor, -1 );
+# else
+#  error
+# endif
+
 	class exec_ioflow_driver___
 	: public _ioflow_driver___<>
 	{
 	private:
-		HANDLE _In, _Out, _Err;
+		pipe_descriptor__ _In, _Out, _Err;
+		void Close_( pipe_descriptor__ Descriptor )
+		{
+# ifdef CPE_WIN
+			CloseHandle( Descriptor );
+# elif defined( CPE_POSIX )
+			close( Descriptor );
+# else
+#  error
+# endif
+		}
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::datum__ *Buffer,
 			fdr::size__ Maximum );
 		virtual void FDRCommit( void )
 		{
-			if ( _In != NULL )
-				CloseHandle( _In );
+			if ( _In != UndefinedPipeDescriptor )
+				Close_( _In );
 
-			_In = NULL;
+			_In = UndefinedPipeDescriptor;
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -1168,15 +1188,15 @@ namespace flx {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( _In != NULL )
-					CloseHandle( _In );
-				if ( _Out != NULL )
-					CloseHandle( _Out );
-				if ( _Err != NULL )
-					CloseHandle( _Err );
+				if ( _In != UndefinedPipeDescriptor )
+					Close_( _In );
+				if ( _Out != UndefinedPipeDescriptor )
+					Close_( _Out );
+				if ( _Err != UndefinedPipeDescriptor )
+					Close_( _Err );
 			}
 
-			_In = _Out = _Err = NULL;
+			_In = _Out = _Err = UndefinedPipeDescriptor;
 
 			_ioflow_driver___::reset( P );
 		}

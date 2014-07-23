@@ -122,8 +122,10 @@ namespace scldaemon {
 		ERRBegin
 			delete (daemon___ *)UP;
 		ERRErr
-# ifdef SCLDAEMON__ERROR_DETECTION_ENABLED
+# ifndef CPE_POSIX
+#  ifdef SCLDAEMON__ERROR_DETECTION_ENABLED
 			strcpy( NULL, "Une erreur ne devrait pas se produire ; s'il y en a malgrés tout une, cette ligne permet de la détecter facilement avec le debugger." );	// Lire le contenu du paramètre.
+#  endif
 # endif
 			ERRRst();
 		ERREnd
