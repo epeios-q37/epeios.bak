@@ -1058,6 +1058,17 @@ namespace flx {
 		}
 	};
 
+# ifdef CPE_WIN
+	E_CDEF(char *, _ReadMode, "rb" );
+	E_CDEF(char *, _WriteMode, "wb" );
+# elif defined( CPE_POSIX )
+	E_CDEF(char *, _ReadMode, "r" );
+	E_CDEF(char *, _WriteMode, "w" );
+# else
+#  error
+#endif
+	
+
 	// Lance une commande dans le shell et récupère les données écrites par la commande.
 	class exec_iflow_driver___
 	: public _iflow_driver___<>,
@@ -1097,7 +1108,7 @@ namespace flx {
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_iflow_driver___<>::Init( ThreadSafety );
-			return _exec_driver___::Init(Command, "rb" );
+			return _exec_driver___::Init(Command, _ReadMode );
 		}
 	};
 
@@ -1135,7 +1146,7 @@ namespace flx {
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			_oflow_driver___::Init( ThreadSafety );
-			return _exec_driver___::Init(Command, "wb" );
+			return _exec_driver___::Init(Command, _WriteMode );
 		}
 	};
 

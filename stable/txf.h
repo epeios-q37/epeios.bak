@@ -333,17 +333,17 @@ namespace txf {
 
 			return *this;
 		}
-		text_oflow__ &operator <<( unsigned long long E )
+		text_oflow__ &operator <<( unsigned long long int E )
 		{
-			char C[21];
+			char C[(CHAR_BIT*sizeof(E)/3)+3];
 
 			sprintf( C, "%llu", E );
 
 			return operator <<( C );
 		}
-		text_oflow__ &operator <<( unsigned long E )
+		text_oflow__ &operator <<( unsigned long int E )
 		{
-			char C[11];
+			char C[(CHAR_BIT*sizeof(E)/3)+3];
 
 			sprintf( C, "%lu", E );
 
@@ -365,17 +365,17 @@ namespace txf {
 		{
 			return operator <<( (unsigned long) E );
 		}
-		text_oflow__ &operator <<( signed long long E )
+		text_oflow__ &operator <<( signed long long int E )
 		{
-			char C[22];
+			char C[(CHAR_BIT*sizeof(E)/3)+3];
 
 			sprintf( C, "%lli", E );
 
 			return operator <<( C );
 		}
-		text_oflow__ &operator <<( signed long E )
+		text_oflow__ &operator <<( signed long int E )
 		{
-			char C[12];
+			char C[(CHAR_BIT*sizeof(E)/3)+3];
 
 			sprintf( C, "%li", E );
 

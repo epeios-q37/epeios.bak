@@ -92,15 +92,18 @@ ERREpilog
 
 # ifdef CPE_WIN
 static bso::bool__ POpen2_(
-	const ntvstr::nstring___ &Command,
+	const ntvstr::nstring___ &ConstCommand,
 	HANDLE &In,
 	HANDLE &Out,
 	HANDLE &Err )
 {
-PROCESS_INFORMATION	piProcessInfo;
+	bso::bool__ Success = false;
+ERRProlog
+	PROCESS_INFORMATION	piProcessInfo;
 	SECURITY_ATTRIBUTES sa_attr; 
 	HANDLE hChildStdinRd, hChildStdinWr, hChildStdoutRd, hChildStdoutWr, hChildStderrRd, hChildStderrWr;
- 
+	ntvstr::nstring___ Command;
+ERRBegin
 	// Set the bInheritHandle flag so pipe handles are inherited. 
 	sa_attr.nLength              = sizeof( SECURITY_ATTRIBUTES ); 
 	sa_attr.bInheritHandle       = TRUE; 
@@ -126,33 +129,32 @@ PROCESS_INFORMATION	piProcessInfo;
  
  
 	// Create a pipe for the child process's STDIN. 
-       if ( !CreatePipe( &hChildStdinRd, &hChildStdinWr, &sa_attr, 0 ) )
-		   ERRSys();
+    if ( !CreatePipe( &hChildStdinRd, &hChildStdinWr, &sa_attr, 0 ) )
+		ERRSys();
 
 	// Ensure that the write handle to the child process's pipe for STDIN is not inherited. 
-       if ( !SetHandleInformation( hChildStdinWr, HANDLE_FLAG_INHERIT, 0 ) )
-		   ERRSys();
+    if ( !SetHandleInformation( hChildStdinWr, HANDLE_FLAG_INHERIT, 0 ) )
+		ERRSys();
  
  
 	// Startup information.
 	STARTUPINFOW  siStartupInfo;
-//	FWK_System::bzero( (FWK_Byte *) &siStartupInfo, sizeof( siStartupInfo ) );
 	ZeroMemory( &siStartupInfo, sizeof(STARTUPINFOW) );
 	siStartupInfo.cb         = sizeof( STARTUPINFOW ); 
 	siStartupInfo.hStdError  = hChildStderrWr;
 	siStartupInfo.hStdOutput = hChildStdoutWr;
 	siStartupInfo.hStdInput  = hChildStdinRd;
 	siStartupInfo.dwFlags   |= STARTF_USESTDHANDLES;
+
+	Command.Init( ConstCommand );	/* On passe par 'Command', car 'CreateProcessW(...)' est suceptible de modifier le contenu de son second paramètre ;
+									   on ne peut donc pas lui passer directement 'ConstCommand', qui est 'const' (voir doc. 'CreateProcessW(...)'. */
  
 	// Launch the process.
 	if ( !CreateProcessW( NULL,
 		Command.Core(), 0, 0, TRUE,
 		0, 0, 0,
 		&siStartupInfo, &piProcessInfo ) )
-	{
-		int Error = GetLastError();
-		return false;
-	}
+		ERRReturn;
 
 //   WaitForSingleObject( piProcessInfo.hProcess, INFINITE );
 
@@ -163,10 +165,15 @@ PROCESS_INFORMATION	piProcessInfo;
 	CloseHandle( piProcessInfo.hProcess );
 	CloseHandle( piProcessInfo.hThread );
 
-	return true;
+	Success = true;
+ERRErr
+ERREnd
+ERREpilog
+	return Success;
 }
 
 #elif defined( CPE_POSIX )
+
 static bso::bool__ POpen2_(
 	const ntvstr::nstring___ &Command,
 	int &In,
@@ -182,16 +189,20 @@ static bso::bool__ POpen2_(
 
     p = fork();
     if(p < 0) return false; /* Fork failed */
+
     if(p == 0) { /* child */
+
         close(pipe_stdin[1]);
         dup2(pipe_stdin[0], 0);
         close(pipe_stdout[0]);
         dup2(pipe_stdout[1], 1);
         close(pipe_stderr[0]);
         dup2(pipe_stderr[1], 2);
-        execl("/bin/sh", "sh", "-c", (const char *)Command.Core(), NULL);
+        execl("/bin/sh", "sh", "-c", (const char *)Command.Core(), (const char *)NULL);
+
         perror("execl"); exit(99);
     }
+
     In = pipe_stdin[1];
     Out = pipe_stdout[0];
     Err = pipe_stderr[0];
@@ -237,7 +248,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 	ssize_t Written = 0;
 
 
-	if ( (Written = write( _Out, Buffer, Amount ) ) == -1 )
+	if ( (Written = write( _In, Buffer, Amount ) ) == -1 )
 		ERRDta();
 #else
 # error
