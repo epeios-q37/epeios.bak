@@ -60,18 +60,18 @@ extern class ttr_tutor &MSCMDDTutor;
 
 /*$BEGIN$*/
 
-#include "err.h"
-#include "flw.h"
-#include "cpe.h"
-#include "str.h"
-#include "ctn.h"
-#include "lcl.h"
+# include "err.h"
+# include "flw.h"
+# include "cpe.h"
+# include "str.h"
+# include "ctn.h"
+# include "lcl.h"
 
-#	ifdef CPE__MS
-#		define MSCMDD__WINDOWS
-#	elif defined( CPE__LINUX )
-#		define MSCMDD__ALSA
-#	endif
+# ifdef CPE_WIN
+#  define MSCMDD__WINDOWS
+# elif defined( CPE_LINUX )
+#  define MSCMDD__ALSA
+# endif
 
 #ifdef MSCMDD__WINDOWS
 #  include <Windows.h>
@@ -111,7 +111,7 @@ namespace mscmdd {
 			if ( P )
 				if ( _Handle != NULL )
 					if ( midiOutClose( _Handle ) != MMSYSERR_NOERROR )
-						ERRf();
+						ERRFwk();
 
 			_Handle = NULL;
 		}
@@ -131,7 +131,7 @@ namespace mscmdd {
 
 			if ( midiOutOpen( &_Handle, Device, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR ) {
 				if ( ErrorHandling != err::hUserDefined )
-					ERRf();
+					ERRDta();
 				else
 					return false;
 			}
@@ -153,20 +153,20 @@ namespace mscmdd {
 
 #ifdef MSCMDD_DBG
 			if ( _Handle == NULL )
-				ERRu();
+				ERRFwk();
 #endif
 			/* Prepare the buffer and MIDIHDR */
 			if ( midiOutPrepareHeader( _Handle,  &midiHdr, sizeof(MIDIHDR)) != MMSYSERR_NOERROR )
-				ERRf();
+				ERRFwk();
 
 			if ( midiOutLongMsg( _Handle, &midiHdr, sizeof(MIDIHDR ) ) != MMSYSERR_NOERROR )
-				ERRf();
+				ERRFwk();
 
 			while ( ( Err = midiOutUnprepareHeader( _Handle, &midiHdr, sizeof(MIDIHDR ) ) ) == MIDIERR_STILLPLAYING )
 			{}
 
 			if ( Err != MMSYSERR_NOERROR )
-				ERRf();
+				ERRFwk();
 
 			return Maximum;
 		}
@@ -307,7 +307,7 @@ namespace mscmdd {
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
 		bso::bool__ Init(
 			int DeviceId,
-			flw::size__ AmountMax = FLW_SIZE_MAX,
+			flw::size__ AmountMax = FLW_AMOUNT_MAX,
 			err::handling__ ErrHandle = err::h_Default )
 		{
 			_oflow__::Init( _Driver, AmountMax );
@@ -318,7 +318,7 @@ namespace mscmdd {
 			int DeviceId,
 			err::handling__ ErrHandle )
 		{
-			return Init( DeviceId, FLW_SIZE_MAX, ErrHandle );
+			return Init( DeviceId, FLW_AMOUNT_MAX, ErrHandle );
 		}
 	};
 
@@ -326,9 +326,9 @@ namespace mscmdd {
 	struct _data___
 	{
 	public:
-		mtx::mutex_handler__ Access;	// Pour protèger l'accés aus données de cet structure.
-		mtx::mutex_handler__ Full;		// Pour faire attendre le producteur si 'Buffer' est plein.
-		mtx::mutex_handler__ Empty;		// Pout faire attendre le consommateur si 'Buffer' est vide.
+		mtx::handler__ Access;	// Pour protèger l'accés aus données de cet structure.
+		mtx::handler__ Full;		// Pour faire attendre le producteur si 'Buffer' est plein.
+		mtx::handler__ Empty;		// Pout faire attendre le consommateur si 'Buffer' est vide.
 		fdr::datum__ *Buffer;
 		fdr::size__ Size, Available, Position;
 		bso::bool__ Purge;	// Lorsque à 'true', purge l'ensemble des données MIDI.
@@ -345,7 +345,7 @@ namespace mscmdd {
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
-			ERRc();
+			ERRFwk();
 #endif
 		return ( ( Data.Available + Data.Position ) == Data.Size );
 	}
@@ -354,7 +354,7 @@ namespace mscmdd {
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
-			ERRc();
+			ERRFwk();
 #endif
 		return ( Data.Available == 0 );
 	}
@@ -363,7 +363,7 @@ namespace mscmdd {
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
-			ERRc();
+			ERRFwk();
 #endif
 		return ( Data.Size - ( Data.Available + Data.Position ) );
 	}
@@ -383,7 +383,7 @@ namespace mscmdd {
 			_Data.Purge = true;
 
 			if ( midiInReset( _Handle ) != MMSYSERR_NOERROR )
-				ERRf();
+				ERRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -392,7 +392,7 @@ namespace mscmdd {
 				if ( _Data.Buffer != NULL ) {
 					if ( _Started )
 						if ( midiInStop( _Handle ) != MMSYSERR_NOERROR )
-						ERRf();
+						ERRFwk();
 
 					_Purge();
 
@@ -425,7 +425,7 @@ namespace mscmdd {
 		{
 			if ( !_Started ) {
 				if ( midiInStart( _Handle ) != MMSYSERR_NOERROR )
-					ERRf();
+					ERRFwk();
 				_Started = true;
 			}
 		}
@@ -433,7 +433,7 @@ namespace mscmdd {
 		{
 			if ( _Started ) {
 				if ( midiInStop( _Handle ) != MMSYSERR_NOERROR )
-					ERRf();
+					ERRFwk();
 				_Started = false;
 			}
 
@@ -590,7 +590,7 @@ namespace mscmdd {
 		}
 		bso::bool__ Init(
 			int Device,
-			flw::size__ AmountMax = FLW_SIZE_MAX,
+			flw::size__ AmountMax = FLW_AMOUNT_MAX,
 			err::handling__ ErrHandle = err::h_Default )
 		{
 			_iflow__::Init( _Driver, AmountMax );
@@ -601,7 +601,7 @@ namespace mscmdd {
 			int Device,
 			err::handling__ ErrHandle )
 		{
-			return Init( Device, FLW_SIZE_MAX, ErrHandle );
+			return Init( Device, FLW_AMOUNT_MAX, ErrHandle );
 		}
 		void Start( void )
 		{
@@ -623,16 +623,6 @@ namespace mscmdd {
 	};
 
 	const char *Label( status__ Status );
-
-	inline const str::string_ &GetTranslation(
-		status__ Status,
-		const lcl::rack__ &LocaleRack,
-		str::string_ &Translation  )
-	{
-		LocaleRack.GetTranslation( Label( Status ), "MSCMDD_", Translation );
-
-		return Translation;
-	}
 
 	typedef fdr::ioflow_driver___<MSCMDD__INPUT_CACHE_SIZE> _ioflow_driver___;
 
@@ -720,7 +710,7 @@ namespace mscmdd {
 			int DeviceIn,
 			int DeviceOut,
 			err::handling__ ErrorHandling = err::h_Default,
-			bso::size__ AmountMax = FLW_SIZE_MAX  )
+			bso::size__ AmountMax = FLW_AMOUNT_MAX  )
 		{
 			status__ Status = _Driver.Init( DeviceIn, DeviceOut, ErrorHandling );
 
@@ -737,11 +727,11 @@ namespace mscmdd {
 	typedef str::string_	name_;
 	typedef str::string		name;
 
-	typedef ctn::E_XMCONTAINER_( name_ ) names_;
+	typedef ctn::E_MCONTAINER_( name_ ) names_;
 	E_AUTO( names )
 
-	bso::ulong__ GetMidiInDevicesNames( names_ &Names );
-	bso::ulong__ GetMidiOutDevicesNames( names_ &Names );
+	bso::uint__ GetMidiInDevicesNames( names_ &Names );
+	bso::uint__ GetMidiOutDevicesNames( names_ &Names );
 
 	enum way__ {
 		wIn,
@@ -750,7 +740,7 @@ namespace mscmdd {
 		w_Undefined
 	};
 
-	inline bso::ulong__ GetMidiDevicesNames(
+	inline bso::uint__ GetMidiDevicesNames(
 		way__ Way,
 		names_ &Names )
 	{
@@ -762,7 +752,7 @@ namespace mscmdd {
 			return GetMidiOutDevicesNames( Names );
 			break;
 		default:
-			ERRu();
+			ERRFwk();
 			break;
 		}
 
