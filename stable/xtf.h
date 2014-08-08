@@ -65,7 +65,7 @@ extern class ttr_tutor &XTFTutor;
 # include "err.h"
 # include "bso.h"
 # include "str.h"
-# include "bom.h"
+# include "bomhdl.h"
 # include "utf.h"
 
 //d The default cell separator.
@@ -106,7 +106,7 @@ namespace xtf {
 			break;
 		}
 
-		return NULL;	// Pour éviter un 'Warning'.
+		return NULL;	// Pour Ã©viter un 'Warning'.
 	}
 
 	struct utf__
@@ -222,7 +222,7 @@ namespace xtf {
 	private:
 		// L'entree de base.
 		flw::iflow__ *_Flow;
-		// Position du prochain caractère.
+		// Position du prochain caractÃ¨re.
 		pos__ _Position;
 		// '0' if no EOL char encountered, or the value of the EOL char ('\r' or '\n').
 		bso::char__ _EOL;
@@ -247,22 +247,22 @@ namespace xtf {
 			_Position.Line++;
 			_Position.Column = 0;
 		}
-		bom::byte_order_marker__ _GetBOM( void )
+        bomhdl::byte_order_marker__ _GetBOM( void )
 		{
 # if 0
 			fdr::datum__ BOMBuffer[BOM_SIZE_MAX];
 			fdr::size__ Size = _F().View( sizeof( BOMBuffer ), BOMBuffer );
-			bom::byte_order_marker__ BOM = bom::DetectBOM( BOMBuffer, Size );	// Si != 'bom::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
+            bomhdl::byte_order_marker__ BOM = bomhdl::DetectBOM( BOMBuffer, Size );	// Si != 'bomhdl::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
 
-			if ( BOM != bom::bom_UnknownOrNone )
+            if ( BOM != bomhdl::bom_UnknownOrNone )
 				_F().Skip( Size );
 
 			return BOM;
 # else
 			fdr::size__ Size = 0;
-			bom::byte_order_marker__ BOM = bom::DetectBOM( _Feeder, Size );	// Si != 'bom::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
+            bomhdl::byte_order_marker__ BOM = bomhdl::DetectBOM( _Feeder, Size );	// Si != 'bomhdl::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
 
-			if ( BOM != bom::bom_UnknownOrNone )
+            if ( BOM != bomhdl::bom_UnknownOrNone )
 				_F().Skip( Size );
 
 			return BOM;
@@ -270,56 +270,56 @@ namespace xtf {
 		}
 		utf::format__ _HandleFormat(
 			utf::format__ ExpectedFormat,
-			bom::byte_order_marker__ BOM )
+            bomhdl::byte_order_marker__ BOM )
 		{
 			switch ( ExpectedFormat ) {
 			case utf::f_Guess:
-				if ( BOM == bom::bomUTF_8 )
+                if ( BOM == bomhdl::bomUTF_8 )
 					ExpectedFormat = utf::fUTF_8;
-				else if ( BOM != bom::bom_UnknownOrNone ) {
+                else if ( BOM != bomhdl::bom_UnknownOrNone ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fANSI:
-				if ( BOM != bom::bom_UnknownOrNone )
+                if ( BOM != bomhdl::bom_UnknownOrNone )
 				{
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_8:
-				if ( ( BOM != bom::bom_UnknownOrNone ) && ( BOM != bom::bomUTF_8 ) ) {
+                if ( ( BOM != bomhdl::bom_UnknownOrNone ) && ( BOM != bomhdl::bomUTF_8 ) ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_16_BE:
-				if ( BOM != bom::bomUTF_16_BE ) {
+                if ( BOM != bomhdl::bomUTF_16_BE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_16_LE:
-				if ( BOM != bom::bomUTF_16_LE ) {
+                if ( BOM != bomhdl::bomUTF_16_LE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_32_BE:
-				if ( BOM != bom::bomUTF_32_BE ) {
+                if ( BOM != bomhdl::bomUTF_32_BE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			case utf::fUTF_32_LE:
-				if ( BOM != bom::bomUTF_32_LE ) {
+                if ( BOM != bomhdl::bomUTF_32_LE ) {
 					_Error = eUnexpectedEncoding;
 					ExpectedFormat = utf::f_Undefined;
 				}
 				break;
 			default:
-				ERRPrm();	// Les autres formats ne sont pas accpétés et filtrés en amont.
+				ERRPrm();	// Les autres formats ne sont pas accpÃ©tÃ©s et filtrÃ©s en amont.
 				break;
 			}
 
@@ -372,7 +372,7 @@ namespace xtf {
 			Init( IFlow, Format, Position );
 		}
 		//f Initialization with 'Flow'..
-		bom::byte_order_marker__ Init(
+        bomhdl::byte_order_marker__ Init(
 			flw::iflow__ &IFlow,
 			utf::format__ Format,
 			pos__ Position = pos__( 1, 0 ) )
@@ -386,7 +386,7 @@ namespace xtf {
 			_Feeder.Init( IFlow );
 			_UTF.Init();
 
-			bom::byte_order_marker__ BOM = _GetBOM();
+            bomhdl::byte_order_marker__ BOM = _GetBOM();
 
 			if ( ( Format = _HandleFormat( Format, BOM ) ) != utf::f_Undefined )
 				if ( !_UTFHandler.Init( Format ) )
@@ -491,7 +491,7 @@ namespace xtf {
 			return C;
 		}
 		//f True if at end of text.
-		bso::bool__ EndOfFlow( error__ &Error )	// Si erreur, 'ErrorMeaning' est initialisé, sinon reste vide.
+		bso::bool__ EndOfFlow( error__ &Error )	// Si erreur, 'ErrorMeaning' est initialisÃ©, sinon reste vide.
 		{ 
 			if ( _Error == e_NoError ) {
 				if ( _UTF.Size != 0 )

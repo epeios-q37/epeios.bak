@@ -1,6 +1,6 @@
 /*
-	'bom' library by Claude SIMON (csimon at zeusw dot org)
-	Requires the 'bom' header file ('bom.h').
+	'bomhdl' library by Claude SIMON (csimon at zeusw dot org)
+	Requires the 'bomhdl' header file ('bomhdl.h').
 	Copyright (C) 20132004 Claude SIMON.
 
 	This file is part of the Epeios (http://zeusw.org/epeios/) project.
@@ -24,30 +24,9 @@
 */
 
 
+#define BOMHDL__COMPILATION
 
-//	$Id: bom.cpp,v 1.5 2013/07/18 19:46:21 csimon Exp $
-
-#define BOM__COMPILATION
-
-#include "bom.h"
-
-class bomtutor
-: public ttr_tutor
-{
-public:
-	bomtutor( void )
-	: ttr_tutor( BOM_NAME )
-	{
-#ifdef BOM_DBG
-		Version = BOM_VERSION "\b\bD $";
-#else
-		Version = BOM_VERSION;
-#endif
-		Owner = BOM_OWNER;
-		Date = "$Date: 2013/07/18 19:46:21 $";
-	}
-	virtual ~bomtutor( void ){}
-};
+#include "bomhdl.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
@@ -59,37 +38,37 @@ public:
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-using namespace bom;
+using namespace bomhdl;
 
 static stsfsm::automat Automat_;
 
 // #define M( m ) { m, sizeof( m ) - 1 }
 #define M( m ) bom__( m, sizeof( m ) - 1 )
 
-// doit relèter l'ordre des déclarations dans 'byte_order_marker__'.
+// doit relÃ¨ter l'ordre des dÃ©clarations dans 'byte_order_marker__'.
 static bom__ BOMS_[bom_amount] =
 {
-	M( BOM_UTF_32_BE ),
-	M( BOM_UTF_32_LE ),
-	M( BOM_UTF_8 ),
-	M( BOM_UTF_16_BE ),
-	M( BOM_UTF_16_LE ),
+    M( UTF_32_BE ),
+    M( UTF_32_LE ),
+    M( UTF_8 ),
+    M( UTF_16_BE ),
+    M( UTF_16_LE ),
 };
 
-#define ADD( name )	stsfsm::Add( BOM_##name, BOMS_[bom##name].Size, bom##name, Automat_ )
+#define ADD( name )	stsfsm::Add( name, BOMS_[bom##name].Size, bom##name, Automat_ )
 
 static void FillAutomat_( void )
 {
 	Automat_.Init();
 
-	ADD( UTF_32_BE );
-	ADD( UTF_32_LE );
-	ADD( UTF_16_BE );
-	ADD( UTF_16_LE );
-	ADD( UTF_8 );
+    ADD( UTF_32_BE );
+    ADD( UTF_32_LE );
+    ADD( UTF_16_BE );
+    ADD( UTF_16_LE );
+    ADD( UTF_8 );
 }
 
-void bom::InitializeParser( stsfsm::parser__ &Parser )
+void bomhdl::InitializeParser( stsfsm::parser__ &Parser )
 {
 	Parser.Init( Automat_ );
 }
@@ -97,7 +76,7 @@ void bom::InitializeParser( stsfsm::parser__ &Parser )
 static bso::bool__ Match_(
 	const bom__ &Bom,
 	const fdr::datum__ *Buffer,
-	fdr::size__ &Size )	// Si retourne 'true', "Size' est modifié pour contenir la taille du 'BOM'.
+	fdr::size__ &Size )	// Si retourne 'true', "Size' est modifiÃ© pour contenir la taille du 'BOM'.
 {
 	if ( ( Size >= Bom.Size ) && ( memcmp( Bom.Data, Buffer, Bom.Size ) == 0 ) ) {
 		Size = Bom.Size;
@@ -137,12 +116,12 @@ struct feeder__ {
 };
 
 
-byte_order_marker__ bom::DetectBOM(
+byte_order_marker__ bomhdl::DetectBOM(
 	const fdr::datum__ *Buffer,
 	fdr::size__ &Size )
 {
 	if ( Size == 0 )
-		return bom::bom_UnknownOrNone;
+        return bomhdl::bom_UnknownOrNone;
 
 	feeder__ Feeder;
 
@@ -156,7 +135,7 @@ byte_order_marker__ bom::DetectBOM(
 }
 
 
-const bom__ &bom::GetBOM( byte_order_marker__ BOM )
+const bom__ &bomhdl::GetBOM( byte_order_marker__ BOM )
 {
 	if ( BOM > bom_amount )
 		ERRPrm();
@@ -166,7 +145,6 @@ const bom__ &bom::GetBOM( byte_order_marker__ BOM )
 }
 
 class bompersonnalization
-: public bomtutor
 {
 public:
 	bompersonnalization( void )
@@ -196,5 +174,3 @@ public:
 // 'static' by GNU C++.
 
 static bompersonnalization Tutor;
-
-ttr_tutor &BOMTutor = Tutor;

@@ -1,5 +1,5 @@
 /*
-	Header for the 'bom' library by Claude SIMON (csimon at zeusw dot org)
+	Header for the 'bomhdl' library by Claude SIMON (csimon at zeusw dot org)
 	Copyright (C) 20132004 Claude SIMON.
 
 	This file is part of the Epeios (http://zeusw.org/epeios/) project.
@@ -22,23 +22,15 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: bom.h,v 1.4 2013/07/18 19:46:21 csimon Exp $
+#ifndef BOMHDL__INC
+#define BOMHDL__INC
 
-#ifndef BOM__INC
-#define BOM__INC
+#define BOMHDL_NAME		"BOMHDL"
 
-#define BOM_NAME		"BOM"
+#define BOMHDL_OWNER		"Claude SIMON"
 
-#define	BOM_VERSION	"$Revision: 1.4 $"
-
-#define BOM_OWNER		"Claude SIMON"
-
-#include "ttr.h"
-
-extern class ttr_tutor &BOMTutor;
-
-#if defined( E_DEBUG ) && !defined( BOM_NODBG )
-#define BOM_DBG
+#if defined( E_DEBUG ) && !defined( BOMHDL_NODBG )
+#define BOMHDL_DBG
 #endif
 
 /* Begin of automatic documentation generation part. */
@@ -65,15 +57,24 @@ extern class ttr_tutor &BOMTutor;
 # include "tol.h"
 # include "stsfsm.h"
 
-# define BOM_SIZE_MAX	4
+# if 0
+#  define BOMHDL_SIZE_MAX	4
 
-# define BOM_UTF_32_BE "\x00\x00\xFE\xFF"
-# define BOM_UTF_32_LE	"\xFF\xFE\x00\x00"
-# define BOM_UTF_16_BE "\xFE\xFF"
-# define BOM_UTF_16_LE	"\xFF\xFE"
-# define BOM_UTF_8		"\xEF\xBB\xBF"
+#  define BOM_UTF_32_BE "\x00\x00\xFE\xFF"
+#  define BOM_UTF_32_LE	"\xFF\xFE\x00\x00"
+#  define BOM_UTF_16_BE "\xFE\xFF"
+#  define BOM_UTF_16_LE	"\xFF\xFE"
+#  define BOM_UTF_8		"\xEF\xBB\xBF"
+# endif
 
-namespace bom {
+namespace bomhdl {
+	E_CDEF( bso::size__, SizeMax, 4 );
+	
+    E_CDEF( char *, UTF_32_BE, "\x00\x00\xFE\xFF" );
+    E_CDEF( char *, UTF_32_LE, "\xFF\xFE\x00\x00" );
+    E_CDEF( char *, UTF_16_BE, "\xFE\xFF" );
+    E_CDEF( char *, UTF_16_LE,"\xFF\xFE" );
+    E_CDEF( char *, UTF_8, "\xEF\xBB\xBF" );
 
 	struct bom__ {
 		const char *Data;
@@ -98,7 +99,7 @@ namespace bom {
 	};
 
 	enum byte_order_marker__ {
-		// Important ! Doivent se succèder par ordre de taille décroissant.
+		// Important ! Doivent se succÃ¨der par ordre de taille dÃ©croissant.
 		bom_First,
 		bomUTF_32_BE = bom_First,
 		bomUTF_32_LE,
@@ -138,7 +139,7 @@ namespace bom {
 
 	byte_order_marker__ DetectBOM(
 		const fdr::datum__ *Buffer,
-		fdr::size__ &Size );	// 'Size' est modifié pour contenir la taille du 'BOM'.
+		fdr::size__ &Size );	// 'Size' est modifiÃ© pour contenir la taille du 'BOM'.
 
 	const bom__ &GetBOM( byte_order_marker__ BOM );
 
