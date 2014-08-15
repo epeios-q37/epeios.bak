@@ -36,19 +36,12 @@ using namespace sclwebkit;
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( WBCLLBCK_RETRIEVE_CALLBACK_FUNCTION_NAME, wbcllbck::retrieve_callback );
-DEF( WBCLLBCK_RELEASE_CALLBACK_FUNCTION_NAME, wbcllbck::release_callback );
+DEF( WKCLLBCK_LAUNCH_FUNCTION_NAME, wkcllbck::launch );
 
-wbcllbck::callback__*WBCLLBCKRetrieveCallback( void )
+void WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
 {
-	return SCLWEBKITRetrieveCallback();
+	sclwebkit::SCLWEBKITLaunch( Data.Callback() );
 }
-
-void WBCLLBCKReleaseCallback( wbcllbck::callback__ *Callback )
-{
-	return SCLWEBKITReleaseCallback( Callback );
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

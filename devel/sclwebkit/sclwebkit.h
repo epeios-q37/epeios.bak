@@ -35,13 +35,10 @@
 
 # include "err.h"
 # include "flw.h"
-# include "wbcllbck.h"
+# include "wkcllbck.h"
 
 namespace sclwebkit {
-	using wbcllbck::callback__;
-
-	callback__ *SCLWEBKITRetrieveCallback( void );	// A surcharger.
-	void SCLWEBKITReleaseCallback( callback__ * );	// A surcharger.
+	void SCLWEBKITLaunch( wkcllbck::callback__ &Callback );	// A surcharger.
 }
 
 				  /********************************************/

@@ -1,7 +1,7 @@
 /*
-	'wbcllbak.cpp' by Claude SIMON (http://zeusw.org/).
+	'wkcllbck.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'wbcllbak' is part of the Epeios framework.
+	'wkcllbck' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,29 +17,29 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define WBCLLBAK__COMPILATION
+#define WKCLLBCK__COMPILATION
 
-#include "wbcllbak.h"
+#include "wkcllbck.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-using namespace wbcllbak;
+using namespace wkcllbck;
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-class wbcllbakpersonnalization
+class wkcllbckpersonnalization
 {
 public:
-	wbcllbakpersonnalization( void )
+	wkcllbckpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
-	~wbcllbakpersonnalization( void )
+	~wkcllbckpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
@@ -52,4 +52,4 @@ public:
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static wbcllbakpersonnalization Tutor;
+static wkcllbckpersonnalization Tutor;

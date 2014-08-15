@@ -1,7 +1,7 @@
 /*
-	'wbcllbak.h' by Claude SIMON (http://zeusw.org/).
+	'sclwebkit.h' by Claude SIMON (http://zeusw.org/).
 
-	'wbcllbak' is part of the Epeios framework.
+	'sclwebkit' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WBCLLBAK__INC
-# define WBCLLBAK__INC
+#ifndef SCLWEBKIT__INC
+# define SCLWEBKIT__INC
 
-# define WBCLLBAK_NAME		"WBCLLBAK"
+# define SCLWEBKIT_NAME		"SCLWEBKIT"
 
-# if defined( E_DEBUG ) && !defined( WBCLLBAK_NODBG )
-#  define WBCLLBAK_DBG
+# if defined( E_DEBUG ) && !defined( SCLWEBKIT_NODBG )
+#  define SCLWEBKIT_DBG
 # endif
 
 /******************************************************************************/
@@ -31,28 +31,14 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// WebKit CaLLBacK
+// SoCLe WEBKIT
 
 # include "err.h"
 # include "flw.h"
-# include "tol.h"
+# include "wkcllbck.h"
 
-namespace wbcllbak {
-
-	class callback__ {
-	protected:
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standadisation.
-		}
-		E_CVDTOR( callback__ );
-		void Init( void )
-		{
-			// Standadisation.
-		}
-	};
-
+namespace sclwebkit {
+	void SCLWEBKITLaunch( wkcllbck::callback__ &Callback );	// A surcharger.
 }
 
 				  /********************************************/

@@ -73,13 +73,13 @@ using namespace dlbrry;
 #	error
 #endif
 
-bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const char *LibraryName )
+bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::nstring___ &Name )
 {
 	if ( _LibraryHandler != NULL )
 		ERRFwk();
 
 #ifdef TARGET_WIN
-	if ( ( _LibraryHandler = LoadLibrary( LibraryName ) ) == NULL )
+	if ( ( _LibraryHandler = LoadLibraryW( Name.Core() ) ) == NULL )
 		return false;
 #elif defined( TARGET_POSIX )
 	if ( ( _LibraryHandler = dlopen( LibraryName, RTLD_LAZY ) ) == NULL ) {

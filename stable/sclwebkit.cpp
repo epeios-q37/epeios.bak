@@ -1,7 +1,7 @@
 /*
-	'wbcllbck.h' by Claude SIMON (http://zeusw.org/).
+	'sclwebkit.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'wbcllbck' is part of the Epeios framework.
+	'sclwebkit' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,54 +17,54 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WBCLLBCK__INC
-# define WBCLLBCK__INC
+#define SCLWEBKIT__COMPILATION
 
-# define WBCLLBCK_NAME		"WBCLLBCK"
-
-# if defined( E_DEBUG ) && !defined( WBCLLBCK_NODBG )
-#  define WBCLLBCK_DBG
-# endif
+#include "sclwebkit.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// WebKit CaLLBaCK
+using namespace sclwebkit;
 
-# include "err.h"
-# include "flw.h"
-# include "tol.h"
+#ifdef CPE_WIN
+# define FUNCTION_SPEC __declspec(dllexport)
+#else
+#define FUNCTION_SPEC
+# endif
 
-# define WBCLLBCK_RETRIEVE_CALLBACK_FUNCTION_NAME		WBCLLBCKRetrieveCallback
-# define WBCLLBCK_RELEASE_CALLBACK_FUNCTION_NAME		WBCLLBCKReleaseCallback
+#define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
+DEF( WKCLLBCK_LAUNCH_FUNCTION_NAME, wkcllbck::launch );
 
-namespace wbcllbck {
-
-	class callback__ {
-	protected:
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standadisation.
-		}
-		E_CVDTOR( callback__ );
-		void Init( void )
-		{
-			// Standadisation.
-		}
-	};
-
-	typedef callback__ *(retrieve_callback)( void );
-	typedef void (release_callback)( callback__ * );
-
+void WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
+{
+	sclwebkit::SCLWEBKITLaunch( Data.Callback() );
 }
+
+/* Although in theory this class is inaccessible to the different modules,
+it is necessary to personalize it, or certain compiler would not work properly */
+
+class sclwebkitpersonnalization
+{
+public:
+	sclwebkitpersonnalization( void )
+	{
+		/* place here the actions concerning this library
+		to be realized at the launching of the application  */
+	}
+	~sclwebkitpersonnalization( void )
+	{
+		/* place here the actions concerning this library
+		to be realized at the ending of the application  */
+	}
+};
+
 
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-#endif
+static sclwebkitpersonnalization Tutor;

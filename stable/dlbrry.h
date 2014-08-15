@@ -63,6 +63,7 @@ extern class ttr_tutor &DLBRRYTutor;
 # include "err.h"
 # include "flw.h"
 # include "tol.h"
+# include "ntvstr.h"
 
 # define DLBRRY_UNDEFINED	NULL
 
@@ -73,7 +74,7 @@ namespace dlbrry {
 	{
 	private:
 		library_handler__  _LibraryHandler;
-		bso::bool__ _LoadLibrary( const char *LibraryName );
+		bso::bool__ _LoadLibrary( const ntvstr::nstring___ &Name );
 		bso::bool__ _UnloadLibrary( void  );
 	public:
 		void reset( bso::bool__ P = true )

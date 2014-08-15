@@ -1,7 +1,7 @@
 /*
-	'wbcllbak_test.cpp' by Claude SIMON (http://zeusw.org/).
+	'wkcllbck_test.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'wbcllbak_test.cpp' is part of the Epeios framework.
+	'wkcllbck_test.cpp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "wbcllbak.h"
+#include "wkcllbck.h"
 
 #include "err.h"
 #include "cio.h"
@@ -44,7 +44,7 @@ int main( int argc, char *argv[] )
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
 ERRFBegin
-	COut << "Test of library " << WBCLLBAK_NAME << ' ' << __DATE__" "__TIME__"\n";
+	COut << "Test of library " << WKCLLBCK_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
 ERRFErr
