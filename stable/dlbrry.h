@@ -97,7 +97,7 @@ namespace dlbrry {
 			reset();
 		}
 		bso::bool__ Init(
-			const char *LibraryName,
+            const ntvstr::nstring___ &LibraryName,
 			err::handling__ ERRHandling = err::h_Default )
 		{
 			reset();

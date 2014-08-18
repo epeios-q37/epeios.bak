@@ -76,7 +76,6 @@ namespace stsfsm {
 
 	typedef bso::uint__ id__;
 	E_CDEF( id__, UndefinedId, BSO_UINT_MAX );
-	E_CDEF( id__, IdMax, UndefinedId - 1 );
 
 	// Par défaut, cette valeur signifie qu'une 'card' n'est pas rattachée à une entrée. Dans ce cas 'Cards( 255 ) n'existe pas.
 	// Si les 255 entrée de la table sont utilisée et pointe tous sur des 'card's inutilisée, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
@@ -265,7 +264,7 @@ namespace stsfsm {
 		}
 	}
 
-	id__ GetId_(
+	id__ GetId(
 		const str::string_ &Pattern,
 		const automat_ &Automat );
 
@@ -275,7 +274,7 @@ namespace stsfsm {
 		type UndefinedValue,
 		bso::uint__ Amount )
 	{
-		id__ Id = GetId_( Pattern, Automat );
+		id__ Id = GetId( Pattern, Automat );
 
 		if ( Id == UndefinedId )
 			return UndefinedValue;

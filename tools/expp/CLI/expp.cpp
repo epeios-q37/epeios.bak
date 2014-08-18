@@ -85,17 +85,17 @@ ERRProlog
 	xpp::context___ Context;
 	xtf::extended_text_iflow__ XFlow;
 	lcl::meaning Meaning;
-	bom::byte_order_marker__ BOM;
-	bom::bom__ BOMContent;
+	bomhdl::byte_order_marker__ BOM;
+	bomhdl::bom__ BOMContent;
 ERRBegin
 	Context.Init();
 
 	BOM = XFlow.Init( IFlow, utf::f_Default );
 
-	if ( BOM != bom::bom_UnknownOrNone ) {
+	if ( BOM != bomhdl::bom_UnknownOrNone ) {
 		BOMContent.Init();
 
-		BOMContent = bom::GetBOM( BOM );
+		BOMContent = bomhdl::GetBOM( BOM );
 		OFlow.Put( (const fdr::datum__ *)BOMContent.Data, BOMContent.Size );
 	}
 

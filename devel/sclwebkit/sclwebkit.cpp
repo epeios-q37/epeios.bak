@@ -38,9 +38,9 @@ using namespace sclwebkit;
 
 DEF( WKCLLBCK_LAUNCH_FUNCTION_NAME, wkcllbck::launch );
 
-void WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
+wkcllbck::downstream_callback__ *WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
 {
-	sclwebkit::SCLWEBKITLaunch( Data.Callback() );
+	return sclwebkit::SCLWEBKITLaunch( Data.Callback() );
 }
 
 /* Although in theory this class is inaccessible to the different modules,

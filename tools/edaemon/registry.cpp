@@ -25,8 +25,7 @@
 
 using namespace registry;
 
-static entry___ Definitions_( "Definitions" );
-static entry___ Module_( "Module", Definitions_ );
+static entry___ Module_( "Module", sclrgstry::Parameters );
 
 static entry___ ModuleLog_( "Log", Module_ );
 entry___ registry::ModuleLogFileName( "FileName", ModuleLog_ );

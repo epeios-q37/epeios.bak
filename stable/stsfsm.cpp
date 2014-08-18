@@ -150,7 +150,7 @@ status__ stsfsm::parser__::Handle(
 }
 
 
-id__ stsfsm::GetId_(
+id__ stsfsm::GetId(
 	const str::string_ &Pattern,
 	const automat_ &Automat )
 {

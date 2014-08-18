@@ -316,9 +316,6 @@ static void FillAutomat_(
 	Tag.Init( Tags );
 
 	while ( Row != E_NIL ) {
-		if ( *Row >= stsfsm::IdMax )
-			ERRFwk();
-
 		stsfsm::Add( Tag( Row ), *Row, Automat );
 
 		Row = Tags.Next( Row );

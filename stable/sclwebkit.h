@@ -38,7 +38,7 @@
 # include "wkcllbck.h"
 
 namespace sclwebkit {
-	void SCLWEBKITLaunch( wkcllbck::callback__ &Callback );	// A surcharger.
+	wkcllbck::downstream_callback__ *SCLWEBKITLaunch( wkcllbck::upstream_callback__ &Callback );	// A surcharger.
 }
 
 				  /********************************************/
