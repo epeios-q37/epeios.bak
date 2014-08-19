@@ -65,6 +65,28 @@ ERREnd
 ERREpilog
 }
 
+void tagsbs::SubstituteLongTag(
+	str::string_ &String,
+	const str::string_ &Tag,
+	const str::string_ &Value,
+	char TagMarker )
+{
+ERRProlog
+	str::strings Tags, Values;
+ERRBegin
+	Tags.Init();
+	Tags.Append( Tag ) ;
+
+	Values.Init();
+	Values.Append( Value );
+
+	SubstituteLongTags( String, Tags, Values, TagMarker );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 E_CDEF( indice__, Limit, 9 );
 
 // Remplace le tag d'indice '0' par la liste des valeurs.
@@ -372,8 +394,6 @@ namespace {
 		}
 	};
 }
-
-
 
 tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &String,

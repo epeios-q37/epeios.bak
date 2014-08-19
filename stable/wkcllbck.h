@@ -139,7 +139,7 @@ namespace wkcllbck {
 
 	class upstream_callback__ {
 	protected:
-		virtual void WKCLLBCKSetXML( const str::string_ &XML ) = 0;
+		virtual void WKCLLBCKSetPage( const str::string_ &HTML ) = 0;
 		virtual void WKCLLBCKExecuteJavascript( const str::string_ &Javascript ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
@@ -151,9 +151,9 @@ namespace wkcllbck {
 		{
 			//Standardisation.
 		}
-		void SetXML( const str::string_ &XML )
+		void SetPage( const str::string_ &HTML )
 		{
-			WKCLLBCKSetXML( XML );
+			WKCLLBCKSetPage( HTML );
 		}
 		void ExecuteJavascript( const str::string_ &Script )
 		{

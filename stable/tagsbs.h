@@ -51,6 +51,12 @@ namespace tagsbs {
 		const str::string_ &Value,
 		char TagMarker = DefaultTagMarker );
 
+	void SubstituteLongTag(
+		str::string_ &String,
+		const str::string_ &Tag,
+		const str::string_ &Value,
+		char TagMarker = DefaultTagMarker );
+
 	class short_tags_callback__
 	{
 	protected:
