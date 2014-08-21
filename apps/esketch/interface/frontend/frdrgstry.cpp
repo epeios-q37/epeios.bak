@@ -20,9 +20,14 @@
 // $Id: frdrgstry.cpp,v 1.1 2012/12/04 15:46:27 csimon Exp $
 
 #include "frdrgstry.h"
+#include "sclrgstry.h"
 
 #include "flf.h"
 #include "fnm.h"
 
 using namespace frdrgstry;
+
+static entry___ HTML_( "HTMLPages", sclrgstry::Parameters );
+
+entry___ frdrgstry::HTMLMainPage("Main", HTML_ );
 

@@ -446,6 +446,42 @@ void sclmisc::text_oflow_rack___::HandleError( void )
 		sclmisc::RecoverBackupFile( _FileName );
 }
 
+void sclmisc::Load(
+	const fnm::name___ &FileName,
+	str::string_ &String )
+{
+ERRProlog
+	flf::file_iflow___ Flow;
+ERRBegin
+	if ( !Flow.Init(FileName) )
+		ReportFileOpeningErrorAndAbort( FileName );
+
+	String.FillWith( Flow );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void sclmisc::Load(
+	const rgstry::entry___ &Entry,
+	const sclrgstry::registry_ &Registry,
+	str::string_ &String )
+{
+ERRProlog
+	str::string FileName;
+ERRBegin
+	FileName.Init();
+
+	sclrgstry::MGetValue( Registry, Entry, FileName );
+
+	Load( FileName, String );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

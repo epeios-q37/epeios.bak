@@ -187,6 +187,8 @@ namespace str {
 
 			return *this;
 		}
+		void FillWith( flw::iflow__ &Flow );
+		void Dump( flw::oflow__ &Flow ) const;
 		//f Convert 'Amount' characters at 'Position' from string to a 'char *'.
 		const char *Convert(
 			sdr::row__ Position,
@@ -584,7 +586,7 @@ namespace str {
 		Append<t, bso::integer_buffer__>( Value, Values );
 	}
 
-	template <typename t> inline void AppendInteger(
+	template <typename t> inline void AppendFloat(
 		t Value,
 		str::strings_ &Values )
 	{

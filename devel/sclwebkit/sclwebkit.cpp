@@ -26,6 +26,9 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
+#include "flf.h"
+#include "sclmisc.h"
+
 using namespace sclwebkit;
 
 #ifdef CPE_WIN
@@ -33,6 +36,13 @@ using namespace sclwebkit;
 #else
 #define FUNCTION_SPEC
 # endif
+
+void sclwebkit::Load(
+	const rgstry::entry___ &FileName,
+	str::string_ &String )
+{
+	sclmisc::Load( FileName, sclrgstry::GetRegistry(), String );
+}
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 

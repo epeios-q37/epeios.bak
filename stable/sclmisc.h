@@ -39,6 +39,7 @@
 # include "rgstry.h"
 # include "scllocale.h"
 # include "sclerror.h"
+# include "sclrgstry.h"
 
 namespace sclmisc {
 
@@ -103,7 +104,7 @@ namespace sclmisc {
 
 	void ReportFileOpeningErrorAndAbort( const fnm::name___ &FileName );
 
-	// Facilite la gestion des fichiers de sorties optionel (si nom de fichier fourni, donne un flux texte vers ce fichier, sinon le fluc texte de la sortie standard).
+	// Facilite la gestion des fichiers de sorties optionel (si nom de fichier fourni, donne un flux texte vers ce fichier, sinon le flux texte de la sortie standard).
 	class text_oflow_rack___ {
 	private:
 		fnm::name___ _FileName;
@@ -123,7 +124,14 @@ namespace sclmisc {
 		void HandleError( void );	// A appeler à partir de 'ERRErr'.
 	};
 
+	void Load(
+		const fnm::name___ &FileName,
+		str::string_ &String );
 
+	void Load(
+		const rgstry::entry___ &FileName,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &String );
 }
 
 				  /********************************************/

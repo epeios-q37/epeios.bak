@@ -196,6 +196,27 @@ string_ &str::ToLower(
 	return String;
 }
 
+void str::string_::FillWith( flw::iflow__ &Flow )
+{
+	char Buffer[1000];
+
+	while ( !Flow.EndOfFlow() )
+		Append(Buffer, Flow.ReadUpTo( sizeof( Buffer ), Buffer ) );
+}
+
+// A optimiser en utilsant un 'buffer'.
+void str::string_::Dump( flw::oflow__ &Flow ) const
+{
+	sdr::row__ Row = First();
+
+	while ( Row != E_NIL ) {
+		Flow.Put( Get( Row ) );
+
+		Row = Next( Row );
+	}
+}
+
+
 // Convertit la chaine 'char *' et rajoute un 0. Le pointeur retourné doit être libèré par un 'free'.
 const char *string_::Convert(
 	sdr::row__ Position,

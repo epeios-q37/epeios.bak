@@ -27,6 +27,10 @@
 namespace frdrgstry {
 	using frdrgy::registry_;
 	E_AUTO( registry );
+
+	using rgstry::entry___;
+	
+	extern entry___ HTMLMainPage;
 }
 
 #endif

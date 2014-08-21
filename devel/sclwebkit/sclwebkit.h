@@ -36,8 +36,14 @@
 # include "err.h"
 # include "flw.h"
 # include "wkcllbck.h"
+# include "sclrgstry.h"
 
 namespace sclwebkit {
+
+	void Load(
+		const rgstry::entry___ &FileName,
+		str::string_ &String );
+
 	wkcllbck::downstream_callback__ *SCLWEBKITLaunch( wkcllbck::upstream_callback__ &Callback );	// A surcharger.
 }
 
