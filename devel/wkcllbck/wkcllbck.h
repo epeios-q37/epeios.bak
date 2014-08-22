@@ -140,9 +140,9 @@ namespace wkcllbck {
 	class upstream_callback__ {
 	protected:
 		virtual void WKCLLBCKSetChildren(
-			const str::string_ &Id,
-			const str::string_ &XML,
-			const str::string_ &XSL ) = 0;
+			const char *Id,
+			const char *XML,
+			const char *XSL ) = 0;
 		virtual void WKCLLBCKExecuteJavascript( const str::string_ &Javascript ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
@@ -155,12 +155,20 @@ namespace wkcllbck {
 			//Standardisation.
 		}
 		void SetChildren(
-			const str::string_ &Id,
-			const str::string_ &XML,
-			const str::string_ &XSL )
+			const char *Id,
+			const char *XML,
+			const char *XSL )
 		{
 			WKCLLBCKSetChildren( Id, XML, XSL );
 		}
+		void SetChildren(
+			const char *Id,
+			const str::string_ &XML,
+			const str::string_ &XSL );
+		void SetChildren(
+			const str::string_ &Id,
+			const str::string_ &XML,
+			const str::string_ &XSL );
 		void ExecuteJavascript( const str::string_ &Script )
 		{
 			WKCLLBCKExecuteJavascript( Script );

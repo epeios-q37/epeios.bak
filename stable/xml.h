@@ -515,10 +515,10 @@ namespace xml {
 	{
 		switch ( Encoding ) {
 		case eISO_8859_1:
-			return "ISO-8859-1";
+			return "iso-8859-1";
 			break;
 		case eUTF_8:
-			return "UTF-8";
+			return "utf-8";
 			break;
 		case e_None:
 			return NULL;

@@ -30,7 +30,7 @@ namespace frdrgstry {
 
 	using rgstry::entry___;
 	
-	extern entry___ HTMLMainPage;
+	extern entry___ XSLPageMain;
 }
 
 #endif

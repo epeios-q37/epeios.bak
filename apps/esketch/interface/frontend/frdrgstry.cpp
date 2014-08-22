@@ -27,7 +27,7 @@
 
 using namespace frdrgstry;
 
-static entry___ HTML_( "HTMLPages", sclrgstry::Parameters );
+static entry___ XSLFiles_( "XSLFiles", sclrgstry::Parameters );
 
-entry___ frdrgstry::HTMLMainPage("Main", HTML_ );
+entry___ frdrgstry::XSLPageMain("Main", XSLFiles_ );
 
