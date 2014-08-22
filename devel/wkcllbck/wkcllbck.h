@@ -143,7 +143,17 @@ namespace wkcllbck {
 			const char *Id,
 			const char *XML,
 			const char *XSL ) = 0;
-		virtual void WKCLLBCKExecuteJavascript( const str::string_ &Javascript ) = 0;
+		virtual void WKCLLBCKExecuteJavascript(
+			const char *Javascript,
+			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void WKCLLBCKGetAttributeValue(
+			const char *ElementId,
+			const char *AttributeName,
+			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual const char *WKCLLBCKGetPropertyValue(
+			const char *ElementId,
+			const char *PropertyName,
+			TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -169,39 +179,41 @@ namespace wkcllbck {
 			const str::string_ &Id,
 			const str::string_ &XML,
 			const str::string_ &XSL );
-		void ExecuteJavascript( const str::string_ &Script )
+		const char *ExecuteJavascript(
+			const char *Script,
+			TOL_CBUFFER___ &Buffer )
 		{
-			WKCLLBCKExecuteJavascript( Script );
+			WKCLLBCKExecuteJavascript( Script, Buffer );
+
+			return Buffer;
+		}
+		const char *GetAttributeValue(
+			const char *ElementId,
+			const char *AttributeName,
+			TOL_CBUFFER___ &Buffer )
+		{
+			WKCLLBCKGetAttributeValue( ElementId, AttributeName, Buffer );
+
+			return Buffer;
+		}
+		const char *GetPropertyValue(
+			const char *ElementId,
+			const char *PropertyName,
+			TOL_CBUFFER___ &Buffer )
+		{
+			WKCLLBCKGetPropertyValue( ElementId, PropertyName, Buffer );
+
+			return Buffer;
 		}
 	};
 
 	/*
-		Pas vraiment un 'callback' ; le contenu des méthodes virtuelles est connu à ce pont-ci (void classe suivante),
-		mais c'est pour s'assurer que les objets crées en aval soient manipulés en aval.
-		Le compilateur amont ou ses options peuvent ne pas être les mêmes qu'en aval.
+		Pas vraiment un 'callback' ; le contenu des méthodes virtuelles est connu à ce point-ci,
+		et ne seront jamais surchargées par un classe mère, mais c'est pour s'assurer que les objets
+		crées en aval soient manipulés en aval, le compilateur amont ou ses options pouvant ne pas
+		être les mêmes qu'en aval.
 	*/
 	class downstream_callback__
-	{
-	protected:
-		virtual void WKCLLBCKLaunch( const char *ActionName ) = 0;
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standadisation.
-		}
-		E_CVDTOR( downstream_callback__ )
-		void Init( void )
-		{
-			// Standadisation.
-		}
-		void Launch( const char *ActionName )
-		{
-			WKCLLBCKLaunch( ActionName );
-		}
-	};
-
-	class standalone_downstream_callback__
-	: public downstream_callback__
 	{
 	private:
 		const actions_ *_Actions;
@@ -226,13 +238,15 @@ namespace wkcllbck {
 		void reset( bso::bool__ P = true )
 		{
 			_Actions = NULL;
-			downstream_callback__::reset( P );
 		}
-		E_CVDTOR( standalone_downstream_callback__ )
+		E_CVDTOR( downstream_callback__ )
 		void Init( const actions_ &Actions )
 		{
 			_Actions = &Actions;
-			downstream_callback__::Init();
+		}
+		void Launch( const char *ActionName )
+		{
+			WKCLLBCKLaunch( ActionName );
 		}
 	};
 

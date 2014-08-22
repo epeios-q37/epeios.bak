@@ -1182,13 +1182,19 @@ namespace tol {
 # define E_DPOINTER___( t )	delete_pointer___<t>
 
 # define TOL__ERRP	err::handling__ ErrHandling = err::h_Default
+	/*
+		Les méthodes 'virtual' ne sont pas destinées à être surchargée par une quelconque classe mère, mais à éviter des problèmes lorsque cet objet est partagé entre une application et une bibliothèque dynamique.
+		En effet, un pointeur alloué dans une bibliothèque dynamique peut poser problème s'il est désalloué dans l'application, et inversement. En utilisant des méthodes virtuelles pour l'allocation et le désallocation
+		proprement dites, cela permet de s'assurer que l'allocation et la désallocation est toujours faite du coté de celui qui instancié l'objet, quelque soit le coté duquel est lancée la méthode en appelent l'une ou l'autre
+		des méthodes virtuelles.
+	*/
 
 	template <typename t> class buffer___ // Gestion d'un 'buffer' d'objets de type 't' de taille dynamique. Sa taille ne diminue jamais.
 	{
 	private:
 		t *_Pointer;
 		bso::size__ _Size;
-		bso::bool__ _Allocate(
+		virtual bso::bool__ _Allocate(
 			bso::size__ Size,
 			err::handling__ ErrHandling )
 		{
@@ -1208,12 +1214,16 @@ namespace tol {
 
 			return true;
 		}
+		virtual void _Free( void *P )
+		{
+			free( _Pointer );
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
 				if ( _Pointer != NULL )
-					free( _Pointer );
+					_Free( _Pointer );
 
 			_Pointer = NULL;
 			_Size = 0;
