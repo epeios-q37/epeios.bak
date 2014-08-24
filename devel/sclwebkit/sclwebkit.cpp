@@ -48,9 +48,13 @@ void sclwebkit::Load(
 
 DEF( WKCLLBCK_LAUNCH_FUNCTION_NAME, wkcllbck::launch );
 
+static wkagent::agent__ _Agent;
+
 wkcllbck::downstream_callback__ *WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
 {
-	return sclwebkit::SCLWEBKITLaunch( Data.Callback() );
+	::_Agent.Init( Data.Callback() );
+
+	return sclwebkit::SCLWEBKITLaunch( ::_Agent );
 }
 
 /* Although in theory this class is inaccessible to the different modules,

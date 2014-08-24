@@ -46,32 +46,35 @@
 
 # define WKCLLBCK_LAUNCH_FUNCTION_NAME		WKCLLBCKLaunch
 
-namespace wkcllbck {
-	// Prédéclaration.
-	class upstream_callback__;
+// Prédéclaration.
+namespace wkagent {
+	class agent__;
+}
 
+
+namespace wkcllbck {
 	class action_callback__
 	{
 	private:
-		upstream_callback__ *_Callback;
+		wkagent::agent__ *_Agent;
 	protected:
-		upstream_callback__ &C( void )
+		wkagent::agent__ &A( void )
 		{
-			if ( _Callback == NULL )
+			if ( _Agent == NULL )
 				ERRFwk();
 
-			return *_Callback;
+			return *_Agent;
 		}
 		virtual void WKCLLBCKExecute( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Callback = NULL;
+			_Agent = NULL;
 		}
 		E_CVDTOR( action_callback__ );
-		void Init( upstream_callback__ &Callback )
+		void Init( wkagent::agent__ &Agent )
 		{
-			_Callback = &Callback;
+			_Agent = &Agent;
 		}
 		void Execute( void )
 		{
@@ -146,14 +149,17 @@ namespace wkcllbck {
 		virtual void WKCLLBCKExecuteJavascript(
 			const char *Javascript,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void WKCLLBCKGetAttributeValue(
-			const char *ElementId,
-			const char *AttributeName,
+		virtual void WKCLLBCKSet(
+			const char *Id,
+			const char *Name,
+			const char *Value ) = 0;
+		virtual void WKCLLBCKGet(
+			const char *Id,
+			const char *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual const char *WKCLLBCKGetPropertyValue(
-			const char *ElementId,
-			const char *PropertyName,
-			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void WKCLLBCKRemove(
+			const char *Id,
+			const char *Name ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -171,14 +177,6 @@ namespace wkcllbck {
 		{
 			WKCLLBCKSetChildren( Id, XML, XSL );
 		}
-		void SetChildren(
-			const char *Id,
-			const str::string_ &XML,
-			const str::string_ &XSL );
-		void SetChildren(
-			const str::string_ &Id,
-			const str::string_ &XML,
-			const str::string_ &XSL );
 		const char *ExecuteJavascript(
 			const char *Script,
 			TOL_CBUFFER___ &Buffer )
@@ -187,23 +185,27 @@ namespace wkcllbck {
 
 			return Buffer;
 		}
-		const char *GetAttributeValue(
-			const char *ElementId,
-			const char *AttributeName,
+		const char *Get(
+			const char *Id,
+			const char *Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			WKCLLBCKGetAttributeValue( ElementId, AttributeName, Buffer );
+			WKCLLBCKGet( Id, Name, Buffer );
 
 			return Buffer;
 		}
-		const char *GetPropertyValue(
-			const char *ElementId,
-			const char *PropertyName,
-			TOL_CBUFFER___ &Buffer )
+		void Set(
+			const char *Id,
+			const char *Name,
+			const char *Value )
 		{
-			WKCLLBCKGetPropertyValue( ElementId, PropertyName, Buffer );
-
-			return Buffer;
+			WKCLLBCKSet( Id, Name, Value );
+		}
+		void Remove(
+			const char *Id,
+			const char *Name )
+		{
+			WKCLLBCKRemove( Id, Name );
 		}
 	};
 

@@ -35,7 +35,7 @@
 
 # include "err.h"
 # include "flw.h"
-# include "wkcllbck.h"
+# include "wkagent.h"
 # include "sclrgstry.h"
 
 namespace sclwebkit {
@@ -44,7 +44,7 @@ namespace sclwebkit {
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
 
-	wkcllbck::downstream_callback__ *SCLWEBKITLaunch( wkcllbck::upstream_callback__ &Callback );	// A surcharger.
+	wkcllbck::downstream_callback__ *SCLWEBKITLaunch( wkagent::agent__ &Agent );	// A surcharger.
 }
 
 				  /********************************************/

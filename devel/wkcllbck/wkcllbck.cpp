@@ -28,35 +28,6 @@
 
 using namespace wkcllbck;
 
-void wkcllbck::upstream_callback__::SetChildren(
-	const char *Id,
-	const str::string_ &XML,
-	const str::string_ &XSL )
-{
-ERRProlog
-	TOL_CBUFFER___ BXML, BXSL;
-ERRBegin
-	SetChildren( Id, XML.Convert(BXML), XSL.Convert( BXSL ) );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void wkcllbck::upstream_callback__::SetChildren(
-	const str::string_ &Id,
-	const str::string_ &XML,
-	const str::string_ &XSL )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	SetChildren( Id.Convert( Buffer), XML, XSL );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
