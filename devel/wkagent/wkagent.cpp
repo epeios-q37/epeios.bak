@@ -28,7 +28,7 @@
 
 using namespace wkagent;
 
-const char *wkagent::agent__::GetSelectValue(
+const char *wkagent::agent___::GetSelectValue(
 	const char *Id,
 	TOL_CBUFFER___ &Buffer  )
 {
@@ -48,7 +48,7 @@ ERREpilog
 }
 
 
-void wkagent::agent__::SetChildren(
+void wkagent::agent___::SetChildren(
 	const char *Id,
 	const str::string_ &XML,
 	const str::string_ &XSL )
@@ -62,7 +62,7 @@ ERREnd
 ERREpilog
 }
 
-void wkagent::agent__::SetChildren(
+void wkagent::agent___::SetChildren(
 	const str::string_ &Id,
 	const str::string_ &XML,
 	const str::string_ &XSL )

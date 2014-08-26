@@ -39,7 +39,7 @@
 #include "wkcllbck.h"
 
 namespace wkagent {
-	class agent__ {
+	class agent___ {
 	private:
 		wkcllbck::upstream_callback__ *_Callback;
 		wkcllbck::upstream_callback__ &_C( void ) const
@@ -49,15 +49,33 @@ namespace wkagent {
 
 			return *_Callback;
 		}
+		wkcllbck::actions _Actions;
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
 			_Callback = NULL;
+			_Actions.reset( P );
 		}
-		E_CDTOR( agent__ );
+		E_CDTOR( agent___ );
 		void Init( wkcllbck::upstream_callback__ &Callback )
 		{
 			_Callback = &Callback;
+			_Actions.Init();
+		}
+		const wkcllbck::actions_ &Actions( void ) const
+		{
+			return _Actions;
+		}
+		void EmptyActions( void )
+		{
+			_Actions.Init();
+		}
+		void AddAction(
+			const char *Name,
+			wkcllbck::action_callback__ &Callback )
+		{
+			if ( !_Actions.Add( Name, Callback ) )
+				ERRFwk();
 		}
 		const char *ExecuteJavascript(
 			const char *Script,

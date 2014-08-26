@@ -48,7 +48,7 @@
 
 // Prédéclaration.
 namespace wkagent {
-	class agent__;
+	class agent___;
 }
 
 
@@ -56,9 +56,9 @@ namespace wkcllbck {
 	class action_callback__
 	{
 	private:
-		wkagent::agent__ *_Agent;
+		wkagent::agent___ *_Agent;
 	protected:
-		wkagent::agent__ &A( void )
+		wkagent::agent___ &A( void )
 		{
 			if ( _Agent == NULL )
 				ERRFwk();
@@ -72,10 +72,9 @@ namespace wkcllbck {
 			_Agent = NULL;
 		}
 		E_CVDTOR( action_callback__ );
-		void Init( wkagent::agent__ &Agent )
-		{
-			_Agent = &Agent;
-		}
+		void Init(
+			const char *Name,
+			wkagent::agent___ &Agent );
 		void Execute( void )
 		{
 			WKCLLBCKExecute();

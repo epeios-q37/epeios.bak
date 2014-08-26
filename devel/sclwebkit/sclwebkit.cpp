@@ -28,6 +28,7 @@
 
 #include "flf.h"
 #include "sclmisc.h"
+#include "wkagent.h"
 
 using namespace sclwebkit;
 
@@ -48,13 +49,70 @@ void sclwebkit::Load(
 
 DEF( WKCLLBCK_LAUNCH_FUNCTION_NAME, wkcllbck::launch );
 
-static wkagent::agent__ _Agent;
+typedef wkcllbck::downstream_callback__ _dcallback__;
+
+class dcallback___
+: public _dcallback__
+{
+private:
+	wkagent::agent___ _Agent;
+	callback__ *_Callback;
+public:
+	void reset( bso::bool__ P = true )
+	{
+		if ( P )
+			if ( _Callback != NULL )
+				delete _Callback;
+
+		_dcallback__::reset( P );
+		_Agent.reset( P );
+		_Callback = NULL;
+	}
+	E_CVDTOR( dcallback___ );
+	void Init(
+		wkcllbck::upstream_callback__ &UCallback,
+		callback__ &Callback )
+	{
+		_Agent.Init( UCallback );
+		_dcallback__::Init( _Agent.Actions() );
+		_Callback = &Callback;
+	}
+	wkagent::agent___ &Agent( void )
+	{
+		return _Agent;
+	}
+};
 
 wkcllbck::downstream_callback__ *WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
 {
-	::_Agent.Init( Data.Callback() );
+	dcallback___ *DCallback = NULL;
+ERRProlog
+	callback__ *Callback;
+ERRBegin
+	DCallback = new dcallback___;
 
-	return sclwebkit::SCLWEBKITLaunch( ::_Agent );
+	if ( DCallback == NULL )
+		ERRAlc();
+
+	Callback = sclwebkit::SCLWEBKITLaunch( DCallback->Agent() );
+
+	if ( Callback == NULL )
+		ERRFwk();
+
+	DCallback->Init( Data.Callback(), *Callback  );
+
+	Callback->StartAction().Execute();
+ERRErr
+	if ( DCallback != NULL )
+		delete DCallback;
+
+	DCallback = NULL;
+
+	if ( Callback !=  NULL )
+		delete Callback;
+ERREnd
+ERREpilog
+	return DCallback;
 }
 
 /* Although in theory this class is inaccessible to the different modules,
