@@ -38,6 +38,22 @@ using namespace sclwebkit;
 #define FUNCTION_SPEC
 # endif
 
+void sclwebkit::callback__::Start( wkagent::agent___ &Agent )
+{
+ERRProlog
+	str::string XML, XSL;
+ERRBegin
+	XML.Init();
+	XSL.Init();
+
+	SCLWEBKITStart( Agent, XML, XSL );
+
+	Agent.SetChildren(	"html", XML, XSL );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 void sclwebkit::Load(
 	const rgstry::entry___ &FileName,
 	str::string_ &String )
@@ -94,14 +110,14 @@ ERRBegin
 	if ( DCallback == NULL )
 		ERRAlc();
 
-	Callback = sclwebkit::SCLWEBKITLaunch( DCallback->Agent() );
+	Callback = sclwebkit::SCLWEBKITRetrieveCallback();
 
 	if ( Callback == NULL )
 		ERRFwk();
 
 	DCallback->Init( Data.Callback(), *Callback  );
 
-	Callback->StartAction().Execute();
+	Callback->Start( DCallback->Agent() );
 ERRErr
 	if ( DCallback != NULL )
 		delete DCallback;

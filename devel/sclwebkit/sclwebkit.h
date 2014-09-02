@@ -44,32 +44,29 @@ namespace sclwebkit {
 	// L'utilisateur met dans la classe mère ses propres objets et l'instancie par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
 	class callback__
 	{
-	private:
-		action__ *_StartAction;	// Action à lancer au lancement du programme.
+	protected:
+		virtual void SCLWEBKITStart(
+			wkagent::agent___ &Agent,
+			str::string_ &XML,
+			str::string_ &XSL ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_StartAction = NULL;
+			// Standardisation.
 		}
 		E_CVDTOR( callback__ )
-		void Init( action__ &StartAction )
+		void Init( void )
 		{
-			_StartAction = &StartAction;
+			// Standadisation.
 		}
-		action__ &StartAction( void ) const
-		{
-			if ( _StartAction == NULL )
-				ERRFwk();
-
-			return *_StartAction;
-		}
+		void Start( wkagent::agent___ &Agent );
 	};
 
 	void Load(
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
 
-	callback__ *SCLWEBKITLaunch( wkagent::agent___ &Agent );	// A surcharger.
+	callback__ *SCLWEBKITRetrieveCallback( void );	// A surcharger.
 }
 
 				  /********************************************/
