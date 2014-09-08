@@ -1,7 +1,7 @@
 /*
-	'wkcllbck.h' by Claude SIMON (http://zeusw.org/).
+	'xhtmlcbk.h' by Claude SIMON (http://zeusw.org/).
 
-	'wkcllbck' is part of the Epeios framework.
+	'xhtmlcbk' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WKCLLBCK__INC
-# define WKCLLBCK__INC
+#ifndef XHTMLCBK__INC
+# define XHTMLCBK__INC
 
-# define WKCLLBCK_NAME		"WKCLLBCK"
+# define XHTMLCBK_NAME		"XHTMLCBK"
 
-# if defined( E_DEBUG ) && !defined( WKCLLBCK_NODBG )
-#  define WKCLLBCK_DBG
+# if defined( E_DEBUG ) && !defined( XHTMLCBK_NODBG )
+#  define XHTMLCBK_DBG
 # endif
 
 /******************************************************************************/
@@ -31,24 +31,23 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// WebKit CaLLBaCKs
-
-# error "Obsolete ! Use 'xht...' libraries instead."
+// XHTML CallBacKs
 
 # include "err.h"
 # include "flw.h"
-# include "str.h"
+# include "tol.h"
+# include "sdr.h"
+# include "bch.h"
 # include "stsfsm.h"
-# include "ids.h"
 
-# define WKCLLBCK_SHARED_DATA_VERSION_NUMBER	"1"
+# define XHTMLCBK_SHARED_DATA_VERSION_NUMBER	"1"
 
-# define WKCLLBCK_SHARED_DATA_VERSION	WKCLLBCK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
+# define XHTMLCBK_SHARED_DATA_VERSION	XHTMLCBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
+
+# define XHTMLCBK_LAUNCH_FUNCTION_NAME		XHTMLCBKLaunch
 
 
-# define WKCLLBCK_LAUNCH_FUNCTION_NAME		WKCLLBCKLaunch
-
-namespace wkcllbck {
+namespace xhtmlcbk {
 	class action_callback__
 	{
 		virtual void WKCLLBCKExecute( void ) = 0;
@@ -196,10 +195,10 @@ namespace wkcllbck {
 	};
 
 	/*
-		Pas vraiment un 'callback' ; le contenu des mÃ©thodes virtuelles est connu Ã  ce point-ci,
-		et ne seront jamais surchargÃ©es par un classe mÃ¨re, mais c'est pour s'assurer que les objets
-		crÃ©es en aval soient manipulÃ©s en aval, le compilateur amont ou ses options pouvant ne pas
-		Ãªtre les mÃªmes qu'en aval.
+		Pas vraiment un 'callback' ; le contenu des méthodes virtuelles est connu à ce point-ci,
+		et ne seront jamais surchargées par un classe mère, mais c'est pour s'assurer que les objets
+		crées en aval soient manipulés en aval, le compilateur amont ou ses options pouvant ne pas
+		être les mêmes qu'en aval.
 	*/
 	class downstream_callback__
 	{
@@ -215,7 +214,7 @@ namespace wkcllbck {
 	protected:
 		virtual void WKCLLBCKLaunch( const char *ActionName )
 		{
-			wkcllbck::action_callback__ *Action = _A().Get( str::string(  ActionName ) );
+			xhtmlcbk::action_callback__ *Action = _A().Get( str::string(  ActionName ) );
 
 			if ( Action == NULL )
 				ERRFwk();
@@ -239,12 +238,12 @@ namespace wkcllbck {
 	};
 
 #pragma pack( push, 1)
-		// NOTA : Si modifiÃ©, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+		// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
 	{
 	private:
-		const char *_Version;	// Toujours en premiÃ¨re position.
-		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, Ã  des fins de test primaire de compatibilitÃ©.
+		const char *_Version;	// Toujours en première position.
+		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
 		upstream_callback__ *_Callback;
 	public:
 		void reset( bso::bool__ = true )
@@ -256,7 +255,7 @@ namespace wkcllbck {
 		E_CDTOR( shared_data__ );
 		void Init( upstream_callback__ &Callback )
 		{
-			_Version = WKCLLBCK_SHARED_DATA_VERSION;
+			_Version = XHTMLCBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_Callback = &Callback;
 		}
@@ -272,7 +271,6 @@ namespace wkcllbck {
 			return *_Callback;
 		}
 	};
-
 #pragma pack( pop )
 
 	typedef downstream_callback__ *(launch)( const shared_data__ &Data );

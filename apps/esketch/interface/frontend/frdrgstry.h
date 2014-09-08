@@ -31,6 +31,7 @@ namespace frdrgstry {
 	using rgstry::entry___;
 	
 	extern entry___ XSLPageMain;
+	extern entry___ XSLPageSessionForm;
 }
 
 #endif

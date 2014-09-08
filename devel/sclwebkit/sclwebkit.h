@@ -33,17 +33,57 @@
 
 // SoCLe WEBKIT
 
+# error "Obsolete ! Use 'sclxhtml' library instead."
+
+
 # include "err.h"
 # include "flw.h"
 # include "wkagent.h"
 # include "sclrgstry.h"
 
 namespace sclwebkit {
-	typedef wkcllbck::action_callback__ action__;
+
+	typedef wkcllbck::action_callback__ _action_callback__;
+
+	template <typename callback > class action__
+	: public _action_callback__
+	{
+	private:
+		callback *_Callback;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_action_callback__::reset( P );
+			_Callback = NULL;
+		}
+		E_CVDTOR( action__ );
+		void Init(
+			const char *Name,
+			callback &Callback )
+		{
+			_action_callback__::Init();
+			_Callback = &Callback;
+
+			C().A().AddAction( Name, *this );
+		}
+		callback &C( void ) const
+		{
+			if ( _Callback == NULL )
+				ERRFwk();
+
+			return *_Callback;
+		}
+		wkagent::agent___ &A( void ) const
+		{
+			return C().A();
+		}
+	};
 
 	// L'utilisateur met dans la classe mère ses propres objets et l'instancie par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
 	class callback__
 	{
+	private:
+		wkagent::agent___ *_Agent;
 	protected:
 		virtual void SCLWEBKITStart(
 			wkagent::agent___ &Agent,
@@ -52,21 +92,28 @@ namespace sclwebkit {
 	public:
 		void reset( bso::bool__ = true )
 		{
-			// Standardisation.
+			_Agent = NULL;
 		}
 		E_CVDTOR( callback__ )
-		void Init( void )
+		void Init( wkagent::agent___ &Agent )
 		{
-			// Standadisation.
+			_Agent = &Agent;
 		}
-		void Start( wkagent::agent___ &Agent );
+		void Start( void );
+		wkagent::agent___ &A( void ) const
+		{
+			if ( _Agent == NULL )
+				ERRFwk();
+
+			return *_Agent;
+		}
 	};
 
 	void Load(
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
 
-	callback__ *SCLWEBKITRetrieveCallback( void );	// A surcharger.
+	callback__ *SCLWEBKITRetrieveCallback( wkagent::agent___ &Agent );	// A surcharger.
 }
 
 				  /********************************************/

@@ -1,7 +1,7 @@
 /*
-	'wkagent.h' by Claude SIMON (http://zeusw.org/).
+	'xhtagent.h' by Claude SIMON (http://zeusw.org/).
 
-	'wkagent' is part of the Epeios framework.
+	'xhtagent' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WKAGENT__INC
-# define WKAGENT__INC
+#ifndef XHTAGENT__INC
+# define XHTAGENT__INC
 
-# define WKAGENT_NAME		"WKAGENT"
+# define XHTAGENT_NAME		"XHTAGENT"
 
-# if defined( E_DEBUG ) && !defined( WKAGENT_NODBG )
-#  define WKAGENT_DBG
+# if defined( E_DEBUG ) && !defined( XHTAGENT_NODBG )
+#  define XHTAGENT_DBG
 # endif
 
 /******************************************************************************/
@@ -31,27 +31,25 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// WebKit AGENT
+// XHT(ML) AGENT
 
-# error "Obsolete ! Use 'xht...' libraries instead."
+# include "xhtmlcbk.h"
 
 # include "err.h"
 # include "flw.h"
 
-#include "wkcllbck.h"
-
-namespace wkagent {
+namespace xhtagent {
 	class agent___ {
 	private:
-		wkcllbck::upstream_callback__ *_Callback;
-		wkcllbck::upstream_callback__ &_C( void ) const
+		xhtmlcbk::upstream_callback__ *_Callback;
+		xhtmlcbk::upstream_callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
 				ERRFwk();
 
 			return *_Callback;
 		}
-		wkcllbck::actions _Actions;
+		xhtmlcbk::actions _Actions;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -59,12 +57,12 @@ namespace wkagent {
 			_Actions.reset( P );
 		}
 		E_CDTOR( agent___ );
-		void Init( wkcllbck::upstream_callback__ &Callback )
+		void Init( xhtmlcbk::upstream_callback__ &Callback )
 		{
 			_Callback = &Callback;
 			_Actions.Init();
 		}
-		const wkcllbck::actions_ &Actions( void ) const
+		const xhtmlcbk::actions_ &Actions( void ) const
 		{
 			return _Actions;
 		}
@@ -74,7 +72,7 @@ namespace wkagent {
 		}
 		void AddAction(
 			const char *Name,
-			wkcllbck::action_callback__ &Callback )
+			xhtmlcbk::action_callback__ &Callback )
 		{
 			if ( !_Actions.Add( Name, Callback ) )
 				ERRFwk();

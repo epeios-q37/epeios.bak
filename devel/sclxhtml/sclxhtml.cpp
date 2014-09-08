@@ -1,7 +1,7 @@
 /*
-	'sclwebkit.cpp' by Claude SIMON (http://zeusw.org/).
+	'sclxhtml.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'sclwebkit' is part of the Epeios framework.
+	'sclxhtml' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,20 +17,18 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define SCLWEBKIT__COMPILATION
+#define SCLXHTML__COMPILATION
 
-#include "sclwebkit.h"
+#include "sclxhtml.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-#include "flf.h"
 #include "sclmisc.h"
-#include "wkagent.h"
 
-using namespace sclwebkit;
+using namespace sclxhtml;
 
 #ifdef CPE_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
@@ -38,7 +36,7 @@ using namespace sclwebkit;
 #define FUNCTION_SPEC
 # endif
 
-void sclwebkit::callback__::Start( void )
+void sclxhtml::callback__::Start( void )
 {
 ERRProlog
 	str::string XML, XSL;
@@ -46,15 +44,15 @@ ERRBegin
 	XML.Init();
 	XSL.Init();
 
-	SCLWEBKITStart( A(), XML, XSL );
+	SCLXHTMLStart( A(), XML, XSL );
 
-	A().SetChildren(	"html", XML, XSL );
+	A().SetChildren( "html", XML, XSL );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-void sclwebkit::Load(
+void sclxhtml::Load(
 	const rgstry::entry___ &FileName,
 	str::string_ &String )
 {
@@ -63,15 +61,15 @@ void sclwebkit::Load(
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( WKCLLBCK_LAUNCH_FUNCTION_NAME, wkcllbck::launch );
+DEF( XHTMLCBK_LAUNCH_FUNCTION_NAME, xhtmlcbk::launch );
 
-typedef wkcllbck::downstream_callback__ _dcallback__;
+typedef xhtmlcbk::downstream_callback__ _dcallback__;
 
 class dcallback___
 : public _dcallback__
 {
 private:
-	wkagent::agent___ _Agent;
+	xhtagent::agent___ _Agent;
 	callback__ *_Callback;
 public:
 	void reset( bso::bool__ P = true )
@@ -86,20 +84,20 @@ public:
 	}
 	E_CVDTOR( dcallback___ );
 	void Init(
-		wkcllbck::upstream_callback__ &UCallback,
+		xhtmlcbk::upstream_callback__ &UCallback,
 		callback__ &Callback )
 	{
 		_Agent.Init( UCallback );
 		_dcallback__::Init( _Agent.Actions() );
 		_Callback = &Callback;
 	}
-	wkagent::agent___ &Agent( void )
+	xhtagent::agent___ &Agent( void )
 	{
 		return _Agent;
 	}
 };
 
-wkcllbck::downstream_callback__ *WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
+xhtmlcbk::downstream_callback__ *XHTMLCBKLaunch( const xhtmlcbk::shared_data__ &Data )
 {
 	dcallback___ *DCallback = NULL;
 ERRProlog
@@ -110,7 +108,7 @@ ERRBegin
 	if ( DCallback == NULL )
 		ERRAlc();
 
-	Callback = sclwebkit::SCLWEBKITRetrieveCallback( DCallback->Agent() );
+	Callback = sclxhtml::SCLXHTMLRetrieveCallback( DCallback->Agent() );
 
 	if ( Callback == NULL )
 		ERRFwk();
@@ -131,18 +129,19 @@ ERREpilog
 	return DCallback;
 }
 
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-class sclwebkitpersonnalization
+class sclxhtmlpersonnalization
 {
 public:
-	sclwebkitpersonnalization( void )
+	sclxhtmlpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
-	~sclwebkitpersonnalization( void )
+	~sclxhtmlpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
@@ -155,4 +154,4 @@ public:
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static sclwebkitpersonnalization Tutor;
+static sclxhtmlpersonnalization Tutor;

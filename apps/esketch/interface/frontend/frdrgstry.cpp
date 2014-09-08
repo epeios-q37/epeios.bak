@@ -30,4 +30,5 @@ using namespace frdrgstry;
 static entry___ XSLFiles_( "XSLFiles", sclrgstry::Parameters );
 
 entry___ frdrgstry::XSLPageMain("Main", XSLFiles_ );
+entry___ frdrgstry::XSLPageSessionForm("SessionForm", XSLFiles_ );
 

@@ -1,7 +1,7 @@
 /*
-	'sclwebkit.h' by Claude SIMON (http://zeusw.org/).
+	'sclxhtml.h' by Claude SIMON (http://zeusw.org/).
 
-	'sclwebkit' is part of the Epeios framework.
+	'sclxhtml' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCLWEBKIT__INC
-# define SCLWEBKIT__INC
+#ifndef SCLXHTML__INC
+# define SCLXHTML__INC
 
-# define SCLWEBKIT_NAME		"SCLWEBKIT"
+# define SCLXHTML_NAME		"SCLXHTML"
 
-# if defined( E_DEBUG ) && !defined( SCLWEBKIT_NODBG )
-#  define SCLWEBKIT_DBG
+# if defined( E_DEBUG ) && !defined( SCLXHTML_NODBG )
+#  define SCLXHTML_DBG
 # endif
 
 /******************************************************************************/
@@ -31,19 +31,16 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// SoCLe WEBKIT
+// SoCLe XHTML
 
-# error "Obsolete ! Use 'sclxhtml' library instead."
-
+# include "xhtagent.h"
 
 # include "err.h"
 # include "flw.h"
-# include "wkagent.h"
-# include "sclrgstry.h"
+# include "rgstry.h"
 
-namespace sclwebkit {
-
-	typedef wkcllbck::action_callback__ _action_callback__;
+namespace sclxhtml {
+	typedef xhtmlcbk::action_callback__ _action_callback__;
 
 	template <typename callback > class action__
 	: public _action_callback__
@@ -73,7 +70,7 @@ namespace sclwebkit {
 
 			return *_Callback;
 		}
-		wkagent::agent___ &A( void ) const
+		xhtagent::agent___ &A( void ) const
 		{
 			return C().A();
 		}
@@ -83,10 +80,10 @@ namespace sclwebkit {
 	class callback__
 	{
 	private:
-		wkagent::agent___ *_Agent;
+		xhtagent::agent___ *_Agent;
 	protected:
-		virtual void SCLWEBKITStart(
-			wkagent::agent___ &Agent,
+		virtual void SCLXHTMLStart(
+			xhtagent::agent___ &Agent,
 			str::string_ &XML,
 			str::string_ &XSL ) = 0;
 	public:
@@ -95,12 +92,12 @@ namespace sclwebkit {
 			_Agent = NULL;
 		}
 		E_CVDTOR( callback__ )
-		void Init( wkagent::agent___ &Agent )
+		void Init( xhtagent::agent___ &Agent )
 		{
 			_Agent = &Agent;
 		}
 		void Start( void );
-		wkagent::agent___ &A( void ) const
+		xhtagent::agent___ &A( void ) const
 		{
 			if ( _Agent == NULL )
 				ERRFwk();
@@ -113,7 +110,8 @@ namespace sclwebkit {
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
 
-	callback__ *SCLWEBKITRetrieveCallback( wkagent::agent___ &Agent );	// A surcharger.
+	callback__ *SCLXHTMLRetrieveCallback( xhtagent::agent___ &Agent );	// A surcharger.
+
 }
 
 				  /********************************************/

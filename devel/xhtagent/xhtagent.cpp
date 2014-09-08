@@ -1,7 +1,7 @@
 /*
-	'wkagent.cpp' by Claude SIMON (http://zeusw.org/).
+	'xhtagent.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'wkagent' is part of the Epeios framework.
+	'xhtagent' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,18 +17,18 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define WKAGENT__COMPILATION
+#define XHTAGENT__COMPILATION
 
-#include "wkagent.h"
+#include "xhtagent.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-using namespace wkagent;
+using namespace xhtagent;
 
-void wkagent::agent___::ExecuteJavascript( const char *Script )
+void xhtagent::agent___::ExecuteJavascript( const char *Script )
 {
 ERRProlog
 	TOL_CBUFFER___ Buffer;
@@ -40,7 +40,7 @@ ERREpilog
 }
 
 
-const char *wkagent::agent___::GetSelectValue(
+const char *xhtagent::agent___::GetSelectValue(
 	const char *Id,
 	TOL_CBUFFER___ &Buffer  )
 {
@@ -60,7 +60,7 @@ ERREpilog
 }
 
 
-void wkagent::agent___::SetChildren(
+void xhtagent::agent___::SetChildren(
 	const char *Id,
 	const str::string_ &XML,
 	const str::string_ &XSL )
@@ -74,7 +74,7 @@ ERREnd
 ERREpilog
 }
 
-void wkagent::agent___::SetChildren(
+void xhtagent::agent___::SetChildren(
 	const str::string_ &Id,
 	const str::string_ &XML,
 	const str::string_ &XSL )
@@ -88,19 +88,18 @@ ERREnd
 ERREpilog
 }
 
-
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-class wkagentpersonnalization
+class xhtagentpersonnalization
 {
 public:
-	wkagentpersonnalization( void )
+	xhtagentpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
-	~wkagentpersonnalization( void )
+	~xhtagentpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
@@ -113,4 +112,4 @@ public:
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static wkagentpersonnalization Tutor;
+static xhtagentpersonnalization Tutor;

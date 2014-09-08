@@ -33,6 +33,8 @@
 
 // WebKit CaLLBaCKs
 
+# error "Obsolete ! Use 'xht...' libraries instead."
+
 # include "err.h"
 # include "flw.h"
 # include "str.h"
@@ -46,35 +48,20 @@
 
 # define WKCLLBCK_LAUNCH_FUNCTION_NAME		WKCLLBCKLaunch
 
-// Prédéclaration.
-namespace wkagent {
-	class agent___;
-}
-
-
 namespace wkcllbck {
 	class action_callback__
 	{
-	private:
-		wkagent::agent___ *_Agent;
-	protected:
-		wkagent::agent___ &A( void )
-		{
-			if ( _Agent == NULL )
-				ERRFwk();
-
-			return *_Agent;
-		}
 		virtual void WKCLLBCKExecute( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Agent = NULL;
+			// Standardisation.
 		}
 		E_CVDTOR( action_callback__ );
-		void Init(
-			const char *Name,
-			wkagent::agent___ &Agent );
+		void Init( void )
+		{
+			// Standardisation.
+		}
 		void Execute( void )
 		{
 			WKCLLBCKExecute();

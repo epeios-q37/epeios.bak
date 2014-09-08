@@ -30,16 +30,6 @@
 
 using namespace wkcllbck;
 
-void wkcllbck::action_callback__::Init(
-	const char *Name,
-	wkagent::agent___ &Agent )
-{
-	_Agent = &Agent;
-
-	if ( Name != NULL )
-		Agent.AddAction( Name, *this );
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

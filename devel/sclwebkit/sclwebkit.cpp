@@ -38,7 +38,7 @@ using namespace sclwebkit;
 #define FUNCTION_SPEC
 # endif
 
-void sclwebkit::callback__::Start( wkagent::agent___ &Agent )
+void sclwebkit::callback__::Start( void )
 {
 ERRProlog
 	str::string XML, XSL;
@@ -46,9 +46,9 @@ ERRBegin
 	XML.Init();
 	XSL.Init();
 
-	SCLWEBKITStart( Agent, XML, XSL );
+	SCLWEBKITStart( A(), XML, XSL );
 
-	Agent.SetChildren(	"html", XML, XSL );
+	A().SetChildren(	"html", XML, XSL );
 ERRErr
 ERREnd
 ERREpilog
@@ -110,14 +110,14 @@ ERRBegin
 	if ( DCallback == NULL )
 		ERRAlc();
 
-	Callback = sclwebkit::SCLWEBKITRetrieveCallback();
+	Callback = sclwebkit::SCLWEBKITRetrieveCallback( DCallback->Agent() );
 
 	if ( Callback == NULL )
 		ERRFwk();
 
 	DCallback->Init( Data.Callback(), *Callback  );
 
-	Callback->Start( DCallback->Agent() );
+	Callback->Start();
 ERRErr
 	if ( DCallback != NULL )
 		delete DCallback;
