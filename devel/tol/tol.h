@@ -152,7 +152,7 @@ namespace tol
 	};
 
 	// NOTA : 'E_NIL' pas encore connu, d'où utilisation de '-1'.
-	template <typename r> class extended_row__	// Pour les fonctions renvoyant un 'Row' dont une value difféérent de 'E_NIL' représente une erreur.
+	template <typename r> class extended_row__	// Pour les fonctions renvoyant un 'Row' dont une valeur différente de 'E_NIL' représente une erreur.
 	{
 	private:
 		r _Row;
