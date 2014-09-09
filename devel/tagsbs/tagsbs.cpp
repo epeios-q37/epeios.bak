@@ -27,15 +27,20 @@
 				  /*******************************************/
 
 #include "uys.h"
+#include "flx.h"
 
 using namespace tagsbs;
 
-void tagsbs::SubstituteShortTag(
-	str::string_ &String,
+E_CDEF( indice__, Limit, 9 );
+
+bso::bool__ tagsbs::SubstituteShortTag(
+	flw::iflow__ &IFlow,
 	indice__ Indice,
 	const str::string_ &Value,
-	const char TagMarker )
+	flw::oflow__ &OFlow,
+	char TagMarker )
 {
+	bso::bool__ Success = false;
 ERRProlog
 	str::strings Values;
 	indice__ Counter = 1;
@@ -47,30 +52,58 @@ ERRBegin
 
 	Values.Init();
 
-	while ( Counter != Indice ) {
-		Tag.Init();
-		Tag.Append( TagMarker );
-		Tag.Append( bso::Convert( Counter, Buffer ) );
+	Tag.Init();
+	Tag.Append( TagMarker);
+	Tag.Append('0' );
 
-		Values.Append( Tag );
+	while ( Counter <= Limit ) {
+		if ( Counter != Indice ) {
+			Tag.Store( Counter + '0', Tag.Last() );
+			Values.Append( Tag );
+		} else
+			Values.Append( Value );
 
 		Counter++;
 	}
 
-	Values.Append( Value );
-
-	SubstituteShortTags( String, Values, TagMarker );
+	Success = SubstituteShortTags( IFlow, Values, OFlow, TagMarker );
 ERRErr
 ERREnd
 ERREpilog
+	return Success;
 }
 
-void tagsbs::SubstituteLongTag(
-	str::string_ &String,
+tol::E_XROW tagsbs::SubstituteShortTag(
+	const str::string_ &String,
+	indice__ Indice,
+	const str::string_ &Value,
+	str::string_ &Result,
+	const char TagMarker )
+{
+	sdr::row__ Row = E_NIL;
+ERRProlog
+	flx::E_STRING_IFLOW__ IFlow;
+	flx::E_STRING_OFLOW___ OFlow;
+ERRBegin
+	IFlow.Init( String );
+	OFlow.Init( Result );
+
+	if ( !SubstituteShortTag( IFlow, Indice, Value, OFlow, TagMarker ) )
+		Row = IFlow.AmountRed();
+ERRErr
+ERREnd
+ERREpilog
+	return Row;
+}
+
+tol::E_XROW tagsbs::SubstituteLongTag(
+	const str::string_ &String,
 	const str::string_ &Tag,
 	const str::string_ &Value,
+	str::string_ &Result,
 	char TagMarker )
 {
+	sdr::row__ Row = E_NIL;
 ERRProlog
 	str::strings Tags, Values;
 ERRBegin
@@ -80,30 +113,22 @@ ERRBegin
 	Values.Init();
 	Values.Append( Value );
 
-	SubstituteLongTags( String, Tags, Values, TagMarker );
+	Row = SubstituteLongTags( String, Tags, Values, Result, TagMarker );
 ERRErr
 ERREnd
 ERREpilog
+	return Row;
 }
 
-
-E_CDEF( indice__, Limit, 9 );
-
-// Remplace le tag d'indice '0' par la liste des valeurs.
-static void Replace0Tag_(
-	str::string_ &Message,
+static void MergeValues_(
 	short_tags_callback__ &Callback,
-	const char TagMarker )
+	str::string_ &MergedValues )
 {
 ERRProlog
-	str::string MergedValues;
 	str::string Value;
-	str::string Tag;
 	indice__ Indice = 0;
-	sdr::row__ Row = E_NIL;
 ERRBegin
-
-	MergedValues.Init( " (" );
+	MergedValues.Append( " (" );
 
 	Value.Init();
 
@@ -128,89 +153,80 @@ ERRBegin
 	}
 
 	MergedValues.Append( ") " );
-
-	Tag.Init();
-	Tag.Append( TagMarker );
-	Tag.Append( '0' );
-	
-	Row = Message.Search( Tag );
-
-	while ( Row != E_NIL ) {
-		Message.Remove( Row, Tag.Amount() );
-
-		Message.Insert( MergedValues, Row );
-
-		Row = Message.Next( Row, MergedValues.Amount() );
-
-		if ( Row != E_NIL )
-			Row = Message.Search( Tag, Row );
-	}
-
 ERRErr
 ERREnd
 ERREpilog
 }
 
-indice__ tagsbs::SubstituteShortTags(
-	str::string_ &String,
+bso::bool__ tagsbs::SubstituteShortTags(
+	flw::iflow__ &IFlow,
 	short_tags_callback__ &Callback,
+	flw::oflow__ &OFlow,
 	char TagMarker )
 {
-	indice__ IndiceError = 0;
+	bso::bool__ Success = false;
 ERRProlog
-	indice__ Indice = 1;
-	sdr::row__ SearchRow = E_NIL;
-	str::string Tag, Value;
-	bso::integer_buffer__ Buffer;
-	bso::bool__ ValueExists = false;
+	str::string Tag, Value, MergedValues;
+	bso::char__ C = 0;
 ERRBegin
-	Replace0Tag_( String, Callback, TagMarker );
+	MergedValues.Init();	
+	MergeValues_( Callback, MergedValues );
 
-	while ( Indice <= Limit ) {
-		Tag.Init();
-		Tag.Append( TagMarker );
-		Tag.Append( bso::Convert( Indice, Buffer ) );
+	while ( !IFlow.EndOfFlow() ) {
+		if ( IFlow.View() == TagMarker ) {
+			IFlow.Skip();
 
-		Value.Init();
+			if ( !IFlow.EndOfFlow() ) {
+				if ( isdigit( C = IFlow.Get() ) ) {
+					C -= '0';
 
-		ValueExists = Callback.GetTagValue( Indice, Value );
-
-		SearchRow = String.Search( Tag );
-
-		while ( SearchRow != E_NIL ) {
-			if ( !ValueExists ) {
-				IndiceError = Indice;
+					if ( C == 0 )
+						MergedValues.WriteToFlow( OFlow, false );
+					else {
+						Value.Init();
+						if ( !Callback.GetTagValue( C, Value ) )
+							ERRReturn;
+						Value.WriteToFlow( OFlow, false );
+					}
+				} else if ( C == '%' )  {
+					OFlow.Put('%' );
+				} else  {
+					ERRReturn;
+				}
+			} else {
 				ERRReturn;
 			}
-
-			String.Remove( SearchRow, Tag.Amount() );
-
-			String.Insert( Value, SearchRow );
-
-			SearchRow = String.Search( Tag, SearchRow );
-		}
-
-		Indice++;
+		} else
+			OFlow.Put( IFlow.Get() );
 	}
 
-	Tag.Init();
-	Tag.Append( TagMarker );
-	Tag.Append( TagMarker );
-
-	SearchRow = String.Search( Tag );
-
-	while ( SearchRow != E_NIL ) {
-		String.Remove( SearchRow, Tag.Amount() );
-
-		String.Insert( TagMarker, SearchRow );
-
-		SearchRow = String.Search( Tag, SearchRow );
-	}
-
+	Success = true;
 ERRErr
 ERREnd
 ERREpilog
-	return IndiceError;
+	return Success;
+}
+
+tol::E_XROW tagsbs::SubstituteShortTags(
+	const str::string_ &String,
+	short_tags_callback__ &Callback,
+	str::string_ &Result,
+	char TagMarker )
+{
+	sdr::row__ Row = E_NIL;
+ERRProlog
+	flx::E_STRING_IFLOW__ IFlow;
+	flx::E_STRING_OFLOW___ OFlow;
+ERRBegin
+	IFlow.Init( String );
+	OFlow.Init( Result );
+
+	if ( !SubstituteShortTags( IFlow, Callback, OFlow, TagMarker ) )
+		Row = IFlow.AmountRed();
+ERRErr
+ERREnd
+ERREpilog
+	return Row;
 }
 
 /// 'namespace {...}' parce que sinon VC++ 12 se mélange les pinceaux...
@@ -248,80 +264,99 @@ namespace {
 	};
 }
 
-indice__ tagsbs::SubstituteShortTags(
-	str::string_ &String,
+tol::E_XROW tagsbs::SubstituteShortTags(
+	const str::string_ &String,
 	const str::strings_ &Values,
+	str::string_ &Result,
 	const char TagMarker )
 {
 	shorts_callback___ Callback;
 
 	Callback.Init( Values );
 
-	return SubstituteShortTags( String, Callback, TagMarker );
+	return SubstituteShortTags( String, Callback, Result, TagMarker );
 }
 
 static bso::bool__ GetTag_(
-	const str::string_ &Target,
-	sdr::row__ Row,
+	flw::iflow__ &Flow,
 	str::string_ &Tag,
 	char Marker )
 {
-	if ( Row == E_NIL )
+	if ( Flow.EndOfFlow() )
 		ERRFwk();
 
-	if ( Target( Row ) != Marker )
+	if ( Flow.Get() != Marker )
 		ERRFwk();
 
-	Row = Target.Next( Row );
-
-	if ( Row == E_NIL )
+	if ( Flow.EndOfFlow() )
 		ERRFwk();
 
-	if ( Target( Row ) == Marker ) {
-		Row = Target.Next( Row );
+	if ( Flow.View() == Marker ) {
+		Flow.Skip();
 		return false;
 	}
 
 	do {
-		Tag.Append( Target( Row ) );
+		Tag.Append( Flow.Get() );
+	} while ( !Flow.EndOfFlow() && ( Flow.View() != Marker ) );
 
-		Row = Target.Next( Row );
-	} while ( ( Row != E_NIL ) && ( Target( Row ) != Marker ) );
-
-	if ( Row == E_NIL )
+	if ( Flow.EndOfFlow() )
 		ERRFwk();
+
+	Flow.Skip();
 
 	return true;
 }
 
-tol::E_XROW tagsbs::SubstituteLongTags(
-	str::string_ &String,
+bso::bool__ tagsbs::SubstituteLongTags(
+	flw::iflow__ &IFlow,
 	long_tags_callback__ &Callback,
+	flw::oflow__ &OFlow,
 	char Marker )
 {
-	sdr::row__ Row = E_NIL;
+	bso::bool__ Success = false;
 ERRProlog
 	str::string Tag, Value;
 ERRBegin
-	Row = String.First();
-
-	while ( Row != E_NIL ) {
-		if ( String( Row ) == '%' ) {
+	while ( !IFlow.EndOfFlow() ) {
+		if ( IFlow.View() == Marker ) {
 			Tag.Init();
-			if ( GetTag_( String, Row, Tag, Marker ) ) {
-				String.Remove( Row, Tag.Amount() + 2 );
+			if ( GetTag_( IFlow, Tag, Marker ) ) {
+
 				Value.Init();
 				if ( !Callback.GetTagValue( Tag, Value ) )
 					ERRReturn;
 
-				String.Insert( Value, Row );
-
-				Row = String.Next( Row, Value.Amount() );
+				Value.WriteToFlow( OFlow, false );
 			} else
-				String.Remove( Row );
+				OFlow.Put( Marker );
 		} else
-			Row = String.Next( Row );
+			OFlow.Put( IFlow.Get() );
 	}
+
+	Success = true;
+ERRErr
+ERREnd
+ERREpilog
+	return Success;
+}
+
+tol::E_XROW tagsbs::SubstituteLongTags(
+	const str::string_ &String,
+	long_tags_callback__ &Callback,
+	str::string_ &Result,
+	char TagMarker )
+{
+	sdr::row__ Row = E_NIL;
+ERRProlog
+	flx::E_STRING_IFLOW__ IFlow;
+	flx::E_STRING_OFLOW___ OFlow;
+ERRBegin
+	IFlow.Init( String );
+	OFlow.Init( Result );
+
+	if ( !SubstituteLongTags( IFlow, Callback, OFlow, TagMarker ) )
+		Row = IFlow.AmountRed();
 ERRErr
 ERREnd
 ERREpilog
@@ -395,10 +430,37 @@ namespace {
 	};
 }
 
-tol::E_XROW tagsbs::SubstituteLongTags(
-	str::string_ &String,
+bso::bool__ tagsbs::SubstituteLongTags(
+	flw::iflow__ &IFlow,
 	const str::strings_ &Tags,
 	const str::strings_ &Values,
+	flw::oflow__ &OFlow,
+	char TagMarker )
+{
+	bso::bool__ Success = false;
+ERRProlog
+	longs_callback___ Callback;
+ERRBegin
+	if ( Tags.Amount() != Values.Amount() )
+		ERRFwk();
+
+	Callback.Init( Values );
+
+	FillAutomat_( Tags, Callback.Automat );
+
+	Success = SubstituteLongTags( IFlow, Callback, OFlow, TagMarker );
+ERRErr
+ERREnd
+ERREpilog
+	return Success;
+}
+
+
+tol::E_XROW tagsbs::SubstituteLongTags(
+	const str::string_ &String,
+	const str::strings_ &Tags,
+	const str::strings_ &Values,
+	str::string_ &Result,
 	char TagMarker )
 {
 	sdr::row__ Row = E_NIL;
@@ -412,7 +474,7 @@ ERRBegin
 
 	FillAutomat_( Tags, Callback.Automat );
 
-	Row = SubstituteLongTags( String, Callback, TagMarker );
+	Row = SubstituteLongTags( String, Callback, Result, TagMarker );
 ERRErr
 ERREnd
 ERREpilog

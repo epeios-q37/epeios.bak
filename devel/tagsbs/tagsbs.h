@@ -45,16 +45,33 @@ namespace tagsbs {
 	typedef bso::u8__ indice__;
 
 	// '%1', '%2'... (en supposant '%' comme marqueur).
-	void SubstituteShortTag(
-		str::string_ &String,
+	bso::bool__ SubstituteShortTag(
+		flw::iflow__ &IFlow,
 		indice__ Indice,
 		const str::string_ &Value,
+		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker );
 
-	void SubstituteLongTag(
-		str::string_ &String,
+	// '%1', '%2'... (en supposant '%' comme marqueur).
+	tol::E_XROW SubstituteShortTag(
+		const str::string_ &String,
+		indice__ Indice,
+		const str::string_ &Value,
+		str::string_ &Result,
+		char TagMarker = DefaultTagMarker );
+
+	bso::bool__ SubstituteLongTag(
+		flw::iflow__ &IFlow,
 		const str::string_ &Tag,
 		const str::string_ &Value,
+		flw::oflow__ &OFlow,
+		char TagMarker = DefaultTagMarker );
+
+	tol::E_XROW SubstituteLongTag(
+		const str::string_ &String,
+		const str::string_ &Tag,
+		const str::string_ &Value,
+		str::string_ &Result,
 		char TagMarker = DefaultTagMarker );
 
 	class short_tags_callback__
@@ -81,15 +98,28 @@ namespace tagsbs {
 		}
 	};
 
-	// Si retourne 0, pas d'erreur, sinon indice du tag posant problème.
-	indice__ SubstituteShortTags(
-		str::string_ &String,
+	bso::bool__ SubstituteShortTags(
+		flw::iflow__ &IFlow,
 		short_tags_callback__ &Callback,
+		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker );
 
-	indice__ SubstituteShortTags(
-		str::string_ &String,
+	tol::E_XROW  SubstituteShortTags(
+		const str::string_ &String,
+		short_tags_callback__ &Callback,
+		str::string_ &Result,
+		char TagMarker = DefaultTagMarker );
+
+	bso::bool__ SubstituteShortTags(
+		flw::iflow__ &IFlow,
 		const str::strings_ &Values,
+		flw::oflow__ &OFlow,
+		char TagMarker = DefaultTagMarker );
+
+	tol::E_XROW  SubstituteShortTags(
+		const str::string_ &String,
+		const str::strings_ &Values,
+		str::string_ &Result,
 		char TagMarker = DefaultTagMarker );
 
 	class long_tags_callback__
@@ -117,15 +147,31 @@ namespace tagsbs {
 	};
 
 	// '%TagName%", en prenant '%' comme marqueur.
-	tol::E_XROW SubstituteLongTags(
-		str::string_ &String,
+	bso::bool__ SubstituteLongTags(
+		flw::iflow__ &IFlow,
 		long_tags_callback__ &Callback,
+		flw::oflow__ &OFlow,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
 
+	// '%TagName%", en prenant '%' comme marqueur.
 	tol::E_XROW SubstituteLongTags(
-		str::string_ &String,
+		const str::string_ &String,
+		long_tags_callback__ &Callback,
+		str::string_ &Result,
+		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+
+	bso::bool__ SubstituteLongTags(
+		flw::iflow__ &IFlow,
 		const str::strings_ &Tags,
 		const str::strings_ &Values,
+		flw::oflow__ &OFlow,
+		char TagMarker = DefaultTagMarker);// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+
+	tol::E_XROW SubstituteLongTags(
+		const str::string_ &String,
+		const str::strings_ &Tags,
+		const str::strings_ &Values,
+		str::string_ &Result,
 		char TagMarker = DefaultTagMarker);// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
 }
 
