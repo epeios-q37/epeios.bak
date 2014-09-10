@@ -60,6 +60,12 @@ namespace tagsbs {
 		str::string_ &Result,
 		char TagMarker = DefaultTagMarker );
 
+	tol::E_XROW SubstituteShortTag(
+		str::string_ &String,
+		indice__ Indice,
+		const str::string_ &Value,
+		char TagMarker = DefaultTagMarker );
+
 	bso::bool__ SubstituteLongTag(
 		flw::iflow__ &IFlow,
 		const str::string_ &Tag,
@@ -72,6 +78,12 @@ namespace tagsbs {
 		const str::string_ &Tag,
 		const str::string_ &Value,
 		str::string_ &Result,
+		char TagMarker = DefaultTagMarker );
+
+	tol::E_XROW SubstituteLongTag(
+		str::string_ &String,
+		const str::string_ &Tag,
+		const str::string_ &Value,
 		char TagMarker = DefaultTagMarker );
 
 	class short_tags_callback__
@@ -110,6 +122,11 @@ namespace tagsbs {
 		str::string_ &Result,
 		char TagMarker = DefaultTagMarker );
 
+	tol::E_XROW  SubstituteShortTags(
+		str::string_ &String,
+		short_tags_callback__ &Callback,
+		char TagMarker = DefaultTagMarker );
+
 	bso::bool__ SubstituteShortTags(
 		flw::iflow__ &IFlow,
 		const str::strings_ &Values,
@@ -120,6 +137,11 @@ namespace tagsbs {
 		const str::string_ &String,
 		const str::strings_ &Values,
 		str::string_ &Result,
+		char TagMarker = DefaultTagMarker );
+
+	tol::E_XROW  SubstituteShortTags(
+		str::string_ &String,
+		const str::strings_ &Values,
 		char TagMarker = DefaultTagMarker );
 
 	class long_tags_callback__
@@ -160,6 +182,11 @@ namespace tagsbs {
 		str::string_ &Result,
 		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
 
+	tol::E_XROW SubstituteLongTags(
+		str::string_ &String,
+		long_tags_callback__ &Callback,
+		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+
 	bso::bool__ SubstituteLongTags(
 		flw::iflow__ &IFlow,
 		const str::strings_ &Tags,
@@ -172,6 +199,12 @@ namespace tagsbs {
 		const str::strings_ &Tags,
 		const str::strings_ &Values,
 		str::string_ &Result,
+		char TagMarker = DefaultTagMarker);// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+
+	tol::E_XROW SubstituteLongTags(
+		str::string_ &String,
+		const str::strings_ &Tags,
+		const str::strings_ &Values,
 		char TagMarker = DefaultTagMarker);// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
 }
 

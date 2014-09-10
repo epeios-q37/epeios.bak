@@ -1692,10 +1692,10 @@ ERRBegin
 	if ( Tags.Amount() == 0 )
 		TagSubstitutionCallback = &RGSTRYGetTagSubstitutionCallback();
 
-	if ( TagSubstitutionCallback == NULL )
-		tagsbs::SubstituteShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
-	else
+	if ( TagSubstitutionCallback != NULL )
 		tagsbs::SubstituteShortTags( Buffer, *TagSubstitutionCallback, RGSTRY__TAG_MARKER_C );
+	else if ( Tags.Amount() != 0  )
+		tagsbs::SubstituteShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
 
 	Path.Append( Buffer );
 ERRErr

@@ -59,6 +59,16 @@ void sclxhtml::Load(
 	sclmisc::Load( FileName, sclrgstry::GetRegistry(), String );
 }
 
+void sclxhtml::LoadAndTranslateTags(
+	const rgstry::entry___ &FileName,
+	const char *Language,
+	str::string_ &String,
+	char Marker )
+{
+	sclmisc::LoadAndTranslateTags( FileName, sclrgstry::GetRegistry(), Language, String, Marker );
+}
+
+
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
 DEF( XHTMLCBK_LAUNCH_FUNCTION_NAME, xhtmlcbk::launch );

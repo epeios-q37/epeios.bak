@@ -462,6 +462,17 @@ ERREnd
 ERREpilog
 }
 
+void sclmisc::LoadAndTranslateTags(
+	const fnm::name___ &FileName,
+	const char *Language,
+	str::string_ &String,
+	char Marker )
+{
+	Load( FileName, String );
+
+	scllocale::TranslateTags( String, Language, Marker );
+}
+
 void sclmisc::Load(
 	const rgstry::entry___ &Entry,
 	const sclrgstry::registry_ &Registry,
@@ -479,6 +490,19 @@ ERRErr
 ERREnd
 ERREpilog
 }
+
+void sclmisc::LoadAndTranslateTags(
+	const rgstry::entry___ &FileName,
+	const sclrgstry::registry_ &Registry,
+	const char *Language,
+	str::string_ &String,
+	char Marker )
+{
+	Load( FileName, Registry, String );
+
+	scllocale::TranslateTags( String, Language, Marker );
+}
+
 
 
 

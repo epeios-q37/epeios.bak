@@ -40,6 +40,8 @@
 
 namespace scllocale {
 
+	E_CDEF(char, DefaultMarker, '%' );
+
 	const lcl::locale_ &GetLocale( void );
 
 	enum target__ {
@@ -73,6 +75,11 @@ namespace scllocale {
 	{
 		return GetLocale().GetTranslation( Meaning, Language, Translation );
 	}
+
+	void TranslateTags(
+		str::string_ &String,
+		const char *Language,
+		char Marker = DefaultMarker );
 }
 
 				  /********************************************/

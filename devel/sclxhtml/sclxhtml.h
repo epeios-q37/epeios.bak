@@ -38,6 +38,7 @@
 # include "err.h"
 # include "flw.h"
 # include "rgstry.h"
+# include "scllocale.h"
 
 namespace sclxhtml {
 	typedef xhtmlcbk::action_callback__ _action_callback__;
@@ -109,6 +110,12 @@ namespace sclxhtml {
 	void Load(
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
+
+	void LoadAndTranslateTags(
+		const rgstry::entry___ &FileName,
+		const char *LAnguage,
+		str::string_ &String,
+		char Marker = scllocale::DefaultMarker );
 
 	callback__ *SCLXHTMLRetrieveCallback( xhtagent::agent___ &Agent );	// A surcharger.
 
