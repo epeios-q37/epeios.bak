@@ -135,13 +135,18 @@ ERREpilog
 
 static void LoadLocale_(
 	scllocale::target__ Target,
-	const str::string_ &Locale,
+	const str::string_ &NakedLocale,
 	utf::format__ Format )
 {
 ERRProlog
+	str::string Locale;
 	flx::E_STRING_IFLOW__ Flow;
 	xtf::extended_text_iflow__ XFlow;
 ERRBegin
+	Locale.Init("<Locale>");
+	Locale.Append( NakedLocale );
+	Locale.Append( "</Locale>" );
+
 	Flow.Init( Locale );
 	XFlow.Init( Flow, Format );
 	
@@ -152,22 +157,35 @@ ERREpilog
 }
 
 static void LoadLocale_(
+	scllocale::target__ Target,
+	const str::strings_ &SubLocales,
+	utf::format__ Format )
+{
+	ctn::E_CMITEM( str::string_ ) Locale;
+	sdr::row__ Row = SubLocales.First();
+
+	Locale.Init( SubLocales );
+
+	while ( Row != E_NIL ) {
+		LoadLocale_( Target, Locale( Row ), Format );
+
+		Row = SubLocales.Next( Row );
+	}
+}
+
+static void LoadLocale_(
 	rgstry::level__ Level,
 	scllocale::target__ Target,
 	utf::format__ Format )
 {
 ERRProlog
-	str::string Locale;
+	str::strings SubLocales;
 ERRBegin
-	Locale.Init();
+	SubLocales.Init();
 
-	sclrgstry::GetRegistry().GetValue( Level, sclrgstry::Locale, Locale );
+	sclrgstry::GetRegistry().GetValues( Level, sclrgstry::Locale, SubLocales );
 
-	if ( Locale.Amount() != 0 ) {
-		Locale.Insert( "<Locale>" );
-		Locale.Append( "</Locale>" );
-		LoadLocale_( Target, Locale, Format );
-	}
+	LoadLocale_( Target, SubLocales, Format );
 ERRErr
 ERREnd
 ERREpilog

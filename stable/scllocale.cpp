@@ -101,7 +101,7 @@ static void Load_(
 ERRProlog
 	rgstry::context___ Context;
 ERRBegin
-	Locale_.Erase( Level );
+//	Locale_.Erase( Level );
 
 	Context.Init();
 	if ( Locale_.Fill( Level, Flow, xpp::criterions___( str::string( Directory ) ), RootPath, Context ) != rgstry::sOK )

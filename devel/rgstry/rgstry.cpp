@@ -1198,7 +1198,7 @@ ERREpilog
 bso::bool__ rgstry::multi_level_registry_::GetValue(
 	const str::string_ &PathString,
 	value_ &Value,
-	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Found = false;
 ERRProlog
@@ -1225,16 +1225,19 @@ ERREpilog
 
 bso::bool__ rgstry::multi_level_registry_::GetValue(
 	const tentry__ &Entry,
-	str::string_ &Value,
-	sdr::row__ *PathErrorRow ) const
+	str::string_ &Value ) const
 {
 	bso::bool__ Found = false;
 ERRProlog
 	str::string Path;
+	sdr::row__ PathErrorRow = E_NIL;
 ERRBegin
 	Path.Init();
 
-	Found = GetValue( Entry.GetPath( Path ), Value, PathErrorRow );
+	Found = GetValue( Entry.GetPath( Path ), Value, &PathErrorRow );
+
+	if ( PathErrorRow != E_NIL )
+		ERRPrm();
 ERRErr
 ERREnd
 ERREpilog
@@ -1244,16 +1247,19 @@ ERREpilog
 bso::bool__ rgstry::multi_level_registry_::GetValue(
 	level__ Level,
 	const tentry__ &Entry,
-	str::string_ &Value,
-	sdr::row__ *PathErrorRow ) const
+	str::string_ &Value ) const
 {
 	bso::bool__ Found = false;
 ERRProlog
 	str::string Path;
+	sdr::row__ PathErrorRow = E_NIL;
 ERRBegin
 	Path.Init();
 
-	Found = GetValue( Level, Entry.GetPath( Path ), Value, PathErrorRow );
+	Found = GetValue( Level, Entry.GetPath( Path ), Value, &PathErrorRow );
+
+	if ( PathErrorRow != E_NIL )
+		ERRPrm();
 ERRErr
 ERREnd
 ERREpilog
@@ -1331,24 +1337,47 @@ ERREpilog
 
 bso::bool__ rgstry::multi_level_registry_::GetValues(
 	const tentry__ &Entry,
-	values_ &Values,
-	sdr::row__ *PathErrorRow ) const
+	values_ &Values ) const
 {
 	bso::bool__ Found = false;
 ERRProlog
 	str::string Path;
+	sdr::row__ PathErrorRow = E_NIL;
 ERRBegin
 	Path.Init();
 	Entry.GetPath( Path );
 
-	Found = GetValues( Path, Values, PathErrorRow );
+	Found = GetValues( Path, Values, &PathErrorRow );
+
+	if ( PathErrorRow != E_NIL )
+		ERRPrm();
 ERRErr
 ERREnd
 ERREpilog
 	return Found;
 }
 
+bso::bool__ rgstry::multi_level_registry_::GetValues(
+	level__ Level,
+	const tentry__ &Entry,
+	values_ &Values ) const
+{
+	bso::bool__ Found = false;
+ERRProlog
+	str::string Path;
+	sdr::row__ PathErrorRow = E_NIL;
+ERRBegin
+	Path.Init();
 
+	Found = GetValues( Level, Entry.GetPath( Path ), Values, &PathErrorRow );
+
+	if ( PathErrorRow != E_NIL )
+		ERRPrm();
+ERRErr
+ERREnd
+ERREpilog
+	return Found;
+}
 
 bso::bool__ rgstry::multi_level_registry_::SetValue(
 	const str::string_ &PathString,

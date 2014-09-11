@@ -1629,13 +1629,11 @@ namespace rgstry {
 		}
 		bso::bool__ GetValue(
 			const tentry__ &Entry,
-			str::string_ &Value,
-			sdr::row__ *PathErrorRow = NULL ) const;
+			str::string_ &Value ) const;
 		bso::bool__ GetValue(
 			level__ Level,
 			const tentry__ &Entry,
-			str::string_ &Value,
-			sdr::row__ *PathErrorRow = NULL ) const;
+			str::string_ &Value ) const;
 #if 0
 		bso::bool__ GetValue(
 			const entry___ &Entry,
@@ -1675,8 +1673,11 @@ namespace rgstry {
 		}
 		bso::bool__ GetValues(
 			const tentry__ &Entry,
-			values_ &Values,
-			sdr::row__ *PathErrorRow = NULL ) const;
+			values_ &Values ) const;
+		bso::bool__ GetValues(
+			level__ Level,
+			const tentry__ &Entry,
+			values_ &Values ) const;
 		void SetValue(
 			level__ Level,
 			const str::string_ &PathString,
@@ -1932,15 +1933,14 @@ namespace rgstry {
 		str::uint__ Value = Default;
 	ERRProlog
 		str::string RawValue;
-		sdr::row__ PathError = E_NIL;
 		bso::bool__ ConversionError = false;
 	ERRBegin
 		RawValue.Init();
 
-		if ( Registry.GetValue( Path, RawValue, &PathError ) )
+		if ( Registry.GetValue( Path, RawValue ) )
 			Value = _GetUnsigned( RawValue, Default, &ConversionError, Min, Max );
 
-		if ( ( PathError != E_NIL ) || ConversionError ) {
+		if ( ConversionError ) {
 
 			Value = Default;
 
