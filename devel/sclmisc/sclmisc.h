@@ -145,6 +145,13 @@ namespace sclmisc {
 		const char *Language,
 		str::string_ &String,
 		char Marker = scllocale::DefaultMarker );
+
+	void LoadXMLAndTranslateTags(
+		const rgstry::entry___ &FileName,
+		const sclrgstry::registry_ &Registry,
+		const char *Language,
+		str::string_ &String,
+		char Marker = scllocale::DefaultMarker );
 }
 
 				  /********************************************/

@@ -28,13 +28,13 @@
 
 using namespace xhtfmn;
 
-void xhtfmn::actions__::SelectProjectType( xhtagent::agent___ &Agent )
+void xhtfmn::event_handlers__::HandleProjectTypeSelection( xhtagent::agent___ &Agent )
 {
 ERRProlog
 	TOL_CBUFFER___ Buffer1, Buffer2;
 	str::string Script, Value;
 ERRBegin
-	Value.Init( Agent.GetSelectValue( "ProjectSelection", Buffer1 ) );
+	Value.Init( Agent.GetSelectValue( "ProjectTypeSelection", Buffer1 ) );
 
 	if ( Value == "PredefinedProject" )
 		Agent.Show( "PredefinedProjects" );
@@ -50,7 +50,7 @@ ERREnd
 ERREpilog
 }
 
-void xhtfmn::actions__::Apply( xml::writer_ &Writer )
+void xhtfmn::event_handlers__::HandleSubmission( xml::writer_ &Writer )
 {
 }
 

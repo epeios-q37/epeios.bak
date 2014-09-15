@@ -48,82 +48,82 @@
 
 
 namespace xhtmlcbk {
-	class action_callback__
+	class event_handler__
 	{
-		virtual void WKCLLBCKExecute( void ) = 0;
+		virtual void XHTLCBKHandle( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
 			// Standardisation.
 		}
-		E_CVDTOR( action_callback__ );
+		E_CVDTOR( event_handler__ );
 		void Init( void )
 		{
 			// Standardisation.
 		}
-		void Execute( void )
+		void Handle( void )
 		{
-			WKCLLBCKExecute();
+			XHTLCBKHandle();
 		}
 	};
 
-	E_ROW( arow__ );	// Action row;
+	E_ROW( hrow__ );	// (event) handler row;
 
-	typedef bch::E_BUNCHt_( action_callback__ *, arow__ ) _actions_;
+	typedef bch::E_BUNCHt_( event_handler__ *, hrow__ ) _handlers_;
 
-	class actions_
+	class event_handlers_
 	{
 	public:
 		struct s {
 			stsfsm::automat_::s Automat;
-			_actions_::s Actions;
+			_handlers_::s Handlers;
 		};
 		stsfsm::automat_ Automat;
-		_actions_ Actions;
-		actions_( s &S )
+		_handlers_ Handlers;
+		event_handlers_( s &S )
 		: Automat( S.Automat ),
-		  Actions( S.Actions )
+		  Handlers( S.Handlers )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			Automat.reset( P );
-			Actions.reset( P );
+			Handlers.reset( P );
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
 			Automat.plug( AS );
-			Actions.plug( AS );
+			Handlers.plug( AS );
 		}
-		actions_ &operator =(const actions_ &A)
+		event_handlers_ &operator =(const event_handlers_ &EH)
 		{
-			Automat = A.Automat;
-			Actions = A.Actions;
+			Automat = EH.Automat;
+			Handlers = EH.Handlers;
 
 			return *this;
 		}
 		void Init( void )
 		{
 			Automat.Init();
-			Actions.Init();
+			Handlers.Init();
 		}
 		bso::bool__ Add(
 			const char *Name,
-			action_callback__ &Callback )
+			event_handler__ &Handler )
 		{
-			return stsfsm::Add( Name, *Actions.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
+			return stsfsm::Add( Name, *Handlers.Append( &Handler ), Automat ) == stsfsm::UndefinedId;
 		}
-		action_callback__ *Get( const str::string_ &Name ) const
+		event_handler__ *Get( const str::string_ &Name ) const
 		{
-			arow__ Row = stsfsm::GetId( Name, Automat );
+			hrow__ Row = stsfsm::GetId( Name, Automat );
 
 			if ( Row == E_NIL )
 				return NULL;
 
-			return Actions( Row );
+			return Handlers( Row );
 		}
 	};
 
-	E_AUTO( actions );
+	E_AUTO( event_handlers );
 
 	class upstream_callback__ {
 	protected:
@@ -203,37 +203,37 @@ namespace xhtmlcbk {
 	class downstream_callback__
 	{
 	private:
-		const actions_ *_Actions;
-		const actions_ &_A( void ) const
+		const event_handlers_ *_Handlers;
+		const event_handlers_ &_H( void ) const
 		{
-			if ( _Actions ==  NULL )
+			if ( _Handlers ==  NULL )
 				ERRFwk();
 
-			return *_Actions;
+			return *_Handlers;
 		}
 	protected:
-		virtual void WKCLLBCKLaunch( const char *ActionName )
+		virtual void WKCLLBCKHandle( const char *EventName )
 		{
-			xhtmlcbk::action_callback__ *Action = _A().Get( str::string(  ActionName ) );
+			xhtmlcbk::event_handler__ *Handler = _H().Get( str::string(  EventName ) );
 
-			if ( Action == NULL )
+			if ( Handler == NULL )
 				ERRFwk();
 
-			Action->Execute();
+			Handler->Handle();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Actions = NULL;
+			_Handlers = NULL;
 		}
 		E_CVDTOR( downstream_callback__ )
-		void Init( const actions_ &Actions )
+		void Init( const event_handlers_ &Handlers)
 		{
-			_Actions = &Actions;
+			_Handlers = &Handlers;
 		}
-		void Launch( const char *ActionName )
+		void Handle( const char *EventName )
 		{
-			WKCLLBCKLaunch( ActionName );
+			WKCLLBCKHandle( EventName );
 		}
 	};
 

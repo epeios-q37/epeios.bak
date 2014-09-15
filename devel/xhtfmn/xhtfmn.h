@@ -41,23 +41,23 @@
 
 namespace xhtfmn {
 
-	typedef xhtfbs::action__ _action__;
+	typedef xhtfbs::event_handler__ _event_handler__;
 
-	class actions__
-	: protected _action__
+	class event_handlers__
+	: protected _event_handler__
 	{
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_action__::reset( P );
+			_event_handler__::reset( P );
 		}
-		E_CVDTOR( actions__ );
+		E_CVDTOR( event_handlers__ );
 		void Init( void )
 		{
-			_action__::Init();
+			_event_handler__::Init();
 		}
-		void SelectProjectType( xhtagent::agent___ &Agent );
-		void Apply( xml::writer_ &Writer );
+		void HandleProjectTypeSelection( xhtagent::agent___ &Agent );
+		void HandleSubmission( xml::writer_ &Writer );
 	};
 
 }

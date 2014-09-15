@@ -1016,8 +1016,8 @@ ERREpilog
 }
 
 status__ xpp::_extended_parser___::_InitWithFile(
-	const str::string_ &FileName,
-	const str::string_ &Directory,
+	const fnm::name___ &FileName,
+	const fnm::name___ &Directory,
 	const str::string_ &CypherKey,
 	bso::bool__ Preserve,
 	utf::format__ Format )
@@ -1030,7 +1030,7 @@ ERRProlog
 	fnm::name___ Location;
 ERRBegin
 	LocalizedFileName.Init();
-	fnm::BuildFileName( fnm::name___( Directory ), fnm::name___( FileName ), fnm::name___( "" ), LocalizedFileName );
+	fnm::BuildFileName( Directory, FileName, "", LocalizedFileName );
 
 	if ( _FFlow.Init( fnm::CorrectLocation( LocalizedFileName ), fil::mReadOnly, err::hUserDefined ) != tol::rSuccess ) {
 		Status = sUnableToOpenFile;
@@ -1058,9 +1058,9 @@ ERREpilog
 
 status__ xpp::_extended_parser___::_InitWithContent(
 	const str::string_ &Content,
-	const str::string_ &NameOfTheCurrentFile,
+	const fnm::name___ &NameOfTheCurrentFile,
 	const xtf::pos__ &Position,
-	const str::string_ &Directory,
+	const fnm::name___ &Directory,
 	const str::string_ &CypherKey,
 	bso::bool__ Preserve,
 	utf::format__ Format )
@@ -1086,9 +1086,9 @@ ERREpilog
 
 status__ xpp::_extended_parser___::_InitCypher(
 	flw::iflow__ &Flow,
-	const str::string_ &FileName,
+	const fnm::name___ &FileName,
 	const xtf::pos__ &Position,
-	const str::string_ &Directory,
+	const fnm::name___ &Directory,
 	const str::string_ &CypherKey,
 	bso::bool__ Preserve,
 	utf::format__ Format )
@@ -1733,6 +1733,31 @@ ERREnd
 ERREpilog
 	return Status;
 }
+
+void xpp::Process(
+	const str::string_ &In,
+	xml::outfit__ Outfit,
+	str::string_ &Out,
+	criterions___ &Criterions )
+{
+ERRProlog
+	flx::E_STRING_IFLOW__ IFlow;
+	xtf::extended_text_iflow__ XFlow;
+	flx::E_STRING_OFLOW___ OFlow;
+	txf::text_oflow__ TFlow;
+ERRBegin
+	IFlow.Init( In );
+	XFlow.Init( IFlow, utf::f_Guess );
+	OFlow.Init( Out );
+	TFlow.Init( OFlow );
+
+	xpp::Process( XFlow, xml::oIndent, TFlow );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

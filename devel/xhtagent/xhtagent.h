@@ -49,32 +49,32 @@ namespace xhtagent {
 
 			return *_Callback;
 		}
-		xhtmlcbk::actions _Actions;
+		xhtmlcbk::event_handlers _Handlers;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Callback = NULL;
-			_Actions.reset( P );
+			_Handlers.reset( P );
 		}
 		E_CDTOR( agent___ );
 		void Init( xhtmlcbk::upstream_callback__ &Callback )
 		{
 			_Callback = &Callback;
-			_Actions.Init();
+			_Handlers.Init();
 		}
-		const xhtmlcbk::actions_ &Actions( void ) const
+		const xhtmlcbk::event_handlers_ &Handlers( void ) const
 		{
-			return _Actions;
+			return _Handlers;
 		}
-		void EmptyActions( void )
+		void RemoveEventHandlers( void )
 		{
-			_Actions.Init();
+			_Handlers.Init();
 		}
-		void AddAction(
-			const char *Name,
-			xhtmlcbk::action_callback__ &Callback )
+		void AddEventHandler(
+			const char *EventName,
+			xhtmlcbk::event_handler__ &Handler )
 		{
-			if ( !_Actions.Add( Name, Callback ) )
+			if ( !_Handlers.Add( EventName, Handler ) )
 				ERRFwk();
 		}
 		const char *ExecuteJavascript(

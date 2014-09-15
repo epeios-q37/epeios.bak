@@ -294,21 +294,29 @@ namespace xpp {
 		bso::bool__ Store(
 			const str::string_ &Name,
 			xtf::pos__ Position,
-			const str::string_ &FileName,
+			const fnm::name___ &FileName,
 			const str::string_ &Content )
 		{
-			bso::bool__ AlreadyExists = Delete( Name );
-			_rrow__ Row = Names.Append( Name );
+			bso::bool__ AlreadyExists = false;
+		ERRProlog
+			str::string Buffer;
+			_rrow__ Row = E_NIL;
+		ERRBegin
+			AlreadyExists = Delete( Name );
+
+			Row = Names.Append( Name );
 
 			if ( Row != Positions.Append( Position ) )
 				ERRFwk();
 
-			if ( Row != FileNames.Append( FileName ) )
+			if ( Row != FileNames.Append(FileName.UTF8( Buffer ) ) )
 				ERRFwk();
 
 			if ( Row != Contents.Append( Content ) )
 				ERRFwk();
-
+		ERRErr
+		ERREnd
+		ERREpilog
 			return AlreadyExists;
 		}
 		bso::bool__ Get(
@@ -436,8 +444,8 @@ namespace xpp {
 		_repository_ &_Repository;
 		_variables_ &_Variables;
 		_qualified_preprocessor_directives___ &_Directives;
-		str::string _LocalizedFileName;	// Si le 'parser' sert à l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
-		str::string _Directory;
+		fnm::name___ _LocalizedFileName;	// Si le 'parser' sert à l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
+		fnm::name___ _Directory;
 		str::string _CypherKey;
 		bso::bool__ _Preserve;
 		bso::bool__ _IgnorePreprocessingInstruction;
@@ -446,24 +454,24 @@ namespace xpp {
 		plevel__ _PreservationLevel;
 		status__ _HandleDefineDirective( _extended_parser___ *&Parser );
 		status__ _InitWithFile(
-			const str::string_ &FileName,
-			const str::string_ &Directory,
+			const fnm::name___ &FileName,
+			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve,
 			utf::format__ Format );
 		status__ _InitWithContent(
 			const str::string_ &Content,
-			const str::string_ &NameOfTheCurrentFile,
+			const fnm::name___ &NameOfTheCurrentFile,
 			const xtf::pos__ &Position,
-			const str::string_ &Directory,
+			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve,
 			utf::format__ Format );
 		status__ _InitCypher(
 			flw::iflow__ &Flow,
-			const str::string_ &FileName,
+			const fnm::name___ &FileName,
 			const xtf::pos__ &Position,
-			const str::string_ &Directory,
+			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve,
 			utf::format__ Format );
@@ -530,8 +538,8 @@ namespace xpp {
 		}
 		status__ Init(
 			xtf::extended_text_iflow__ &XFlow,
-			const str::string_ &LocalizedFileName,	// Si 'XFlow' est rattaché à un fichier, le nom de ce fichier (utile pour la gestion d'erreurs).
-			const str::string_ &Directory,
+			const fnm::name___ &LocalizedFileName,	// Si 'XFlow' est rattaché à un fichier, le nom de ce fichier (utile pour la gestion d'erreurs).
+			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve )
 		{
@@ -573,7 +581,7 @@ namespace xpp {
 		{
 			return _Parser.SetFormat( Format );
 		}
-		E_RODISCLOSE__( str::string_, LocalizedFileName );
+		E_RODISCLOSE__( fnm::name___, LocalizedFileName );
 	};
 
 	typedef stk::E_BSTACK_(_extended_parser___ *) _xparser_stack_;
@@ -596,8 +604,9 @@ namespace xpp {
 
 	struct criterions___
 	{
+		fnm::name___
+			Directory;
 		str::string
-			Directory,
 			CypherKey,
 			Namespace;
 		bso::bool__ Preserve;
@@ -617,7 +626,7 @@ namespace xpp {
 			reset();
 		}
 		criterions___( 
-			const str::string_ &Directory,
+			const fnm::name___ &Directory,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false )
@@ -627,7 +636,7 @@ namespace xpp {
 			Init( Directory, CypherKey, Namespace, Preserve );
 		}
 		void Init( 
-			const str::string_ &Directory,
+			const fnm::name___ &Directory,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string(),
 			bso::bool__ Preserve = false )
@@ -858,7 +867,7 @@ namespace xpp {
 		xtf::extended_text_iflow__ &XFlow,
 		xml::writer_ &Writer )
 	{
-		return Process( XFlow, str::string(), Writer );
+		return Process( XFlow, criterions___(), Writer );
 	}
 
 	inline status__ Process(
@@ -866,9 +875,14 @@ namespace xpp {
 		xml::outfit__ Outfit,
 		txf::text_oflow__ &OFlow )
 	{
-		return Process( XFlow, str::string(), Outfit, OFlow );
+		return Process( XFlow, criterions___(), Outfit, OFlow );
 	}
 
+	void Process(
+		const str::string_ &In,
+		xml::outfit__ Outfit,
+		str::string_ &Out,
+		criterions___ &Criterions = criterions___() );
 }
 
 				  /********************************************/

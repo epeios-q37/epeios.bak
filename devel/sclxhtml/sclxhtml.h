@@ -39,30 +39,31 @@
 # include "flw.h"
 # include "rgstry.h"
 # include "scllocale.h"
+# include "sclmisc.h"
 
 namespace sclxhtml {
-	typedef xhtmlcbk::action_callback__ _action_callback__;
+	typedef xhtmlcbk::event_handler__ _event_handler__;
 
-	template <typename callback > class action__
-	: public _action_callback__
+	template <typename callback > class event_handler__
+	: public _event_handler__
 	{
 	private:
 		callback *_Callback;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_action_callback__::reset( P );
+			_event_handler__::reset( P );
 			_Callback = NULL;
 		}
-		E_CVDTOR( action__ );
+		E_CVDTOR( event_handler__ );
 		void Init(
-			const char *Name,
+			const char *EventName,
 			callback &Callback )
 		{
-			_action_callback__::Init();
+			_event_handler__::Init();
 			_Callback = &Callback;
 
-			C().A().AddAction( Name, *this );
+			C().A().AddEventHandler( EventName, *this );
 		}
 		callback &C( void ) const
 		{
@@ -111,11 +112,13 @@ namespace sclxhtml {
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
 
-	void LoadAndTranslateTags(
+	inline void LoadAndTranslateTags(
 		const rgstry::entry___ &FileName,
-		const char *LAnguage,
-		str::string_ &String,
-		char Marker = scllocale::DefaultMarker );
+		const char *Language,
+		str::string_ &String )
+	{
+		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), Language, String, '$' );
+	}
 
 	callback__ *SCLXHTMLRetrieveCallback( xhtagent::agent___ &Agent );	// A surcharger.
 

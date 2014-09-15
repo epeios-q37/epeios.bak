@@ -59,15 +59,15 @@ void sclxhtml::Load(
 	sclmisc::Load( FileName, sclrgstry::GetRegistry(), String );
 }
 
+/*
 void sclxhtml::LoadAndTranslateTags(
 	const rgstry::entry___ &FileName,
 	const char *Language,
-	str::string_ &String,
-	char Marker )
+	str::string_ &String )
 {
-	sclmisc::LoadAndTranslateTags( FileName, sclrgstry::GetRegistry(), Language, String, Marker );
+	sclmisc::LoadAndTranslateTags( FileName, sclrgstry::GetRegistry(), Language, String, '$' );
 }
-
+*/
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
@@ -98,7 +98,7 @@ public:
 		callback__ &Callback )
 	{
 		_Agent.Init( UCallback );
-		_dcallback__::Init( _Agent.Actions() );
+		_dcallback__::Init( _Agent.Handlers() );
 		_Callback = &Callback;
 	}
 	xhtagent::agent___ &Agent( void )

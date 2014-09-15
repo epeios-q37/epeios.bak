@@ -44,13 +44,14 @@
 
 namespace xhtfbs {
 
-	class action__
+	class event_handler__
 	{
 	public:
 		void reset( bso::bool__ = true )
 		{
 			//Standardisation.
 		}
+		E_CVDTOR( event_handler__ )
 		void Init( void )
 		{
 			// Standadisation;

@@ -187,8 +187,19 @@ void scllocale::TranslateTags(
 	Callback.Init( Marker, Language );
 
 	tagsbs::SubstituteLongTags( String, Callback, Marker );
+}
 
+void scllocale::TranslateTags(
+	const str::string_ &In,
+	const char *Language,
+	str::string_ &Out,
+	char Marker )
+{
+	callback__ Callback;
 
+	Callback.Init( Marker, Language );
+
+	tagsbs::SubstituteLongTags( In, Callback, Out, Marker );
 }
 
 

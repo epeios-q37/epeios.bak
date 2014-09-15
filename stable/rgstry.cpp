@@ -1630,7 +1630,7 @@ ERRBegin
 
 	XFlow.Init( FFlow, utf::f_Default );
 
-	if ( Criterions.Directory.Amount() != 0 )
+	if ( Criterions.Directory.Size() != 0 )
 		ERRPrm();
 
 	Location.Init();

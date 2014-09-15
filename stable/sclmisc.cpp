@@ -495,6 +495,19 @@ void sclmisc::LoadAndTranslateTags(
 	scllocale::TranslateTags( String, Language, Marker );
 }
 
+static void Load_(
+	const rgstry::entry___ &Entry,
+	const sclrgstry::registry_ &Registry,
+	str::string_ &String,
+	str::string_ &FileName )
+{
+	sclrgstry::MGetValue( Registry, Entry, FileName );
+
+	Load( FileName, String );
+}
+
+
+
 void sclmisc::Load(
 	const rgstry::entry___ &Entry,
 	const sclrgstry::registry_ &Registry,
@@ -505,9 +518,7 @@ ERRProlog
 ERRBegin
 	FileName.Init();
 
-	sclrgstry::MGetValue( Registry, Entry, FileName );
-
-	Load( FileName, String );
+	Load_( Entry, Registry, String, FileName );
 ERRErr
 ERREnd
 ERREpilog
@@ -523,6 +534,32 @@ void sclmisc::LoadAndTranslateTags(
 	Load( FileName, Registry, String );
 
 	scllocale::TranslateTags( String, Language, Marker );
+}
+
+void sclmisc::LoadXMLAndTranslateTags(
+	const rgstry::entry___ &FileNameEntry,
+	const sclrgstry::registry_ &Registry,
+	const char *Language,
+	str::string_ &String,
+	char Marker )
+{
+ERRProlog
+	str::string FileName, Unprocessed, Untranslated;
+	fnm::name___ FileNameLocation;
+ERRBegin
+	FileName.Init();
+	Unprocessed.Init();
+	Load_( FileNameEntry, Registry, Unprocessed, FileName );
+
+	fnm::GetLocation( FileName, FileNameLocation );
+
+	Untranslated.Init();
+	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation ) );
+
+	scllocale::TranslateTags( Untranslated, Language, String, Marker );
+ERRErr
+ERREnd
+ERREpilog
 }
 
 

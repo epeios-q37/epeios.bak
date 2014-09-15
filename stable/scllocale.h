@@ -80,6 +80,12 @@ namespace scllocale {
 		str::string_ &String,
 		const char *Language,
 		char Marker = DefaultMarker );
+
+	void TranslateTags(
+		const str::string_ &In,
+		const char *Language,
+		str::string_ &Out,
+		char Marker = DefaultMarker );
 }
 
 				  /********************************************/
