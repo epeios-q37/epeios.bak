@@ -1,7 +1,7 @@
 /*
-	'xhtfmn.h' by Claude SIMON (http://zeusw.org/).
+	'xhtfsf.h' by Claude SIMON (http://zeusw.org/).
 
-	'xhtfmn' is part of the Epeios framework.
+	'xhtfsf' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XHTFMN__INC
-# define XHTFMN__INC
+#ifndef XHTFSF__INC
+# define XHTFSF__INC
 
-# define XHTFMN_NAME		"XHTFMN"
+# define XHTFSF_NAME		"XHTFSF"
 
-# if defined( E_DEBUG ) && !defined( XHTFMN_NODBG )
-#  define XHTFMN_DBG
+# if defined( E_DEBUG ) && !defined( XHTFSF_NODBG )
+#  define XHTFSF_DBG
 # endif
 
 /******************************************************************************/
@@ -31,15 +31,14 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// XHT(ML) Frontend MaiN
+// XHT(ML) Frontend Session Form
 
 # include "xhtfbs.h"
 
 # include "err.h"
 # include "flw.h"
-# include "xml.h"
 
-namespace xhtfmn {
+namespace xhtfsf {
 
 	typedef xhtfbs::event_handler__ _event_handler__;
 
@@ -58,14 +57,9 @@ namespace xhtfmn {
 		{
 			_event_handler__::Init();
 		}
-		void HandleProjectTypeSelection( xhtagent::agent___ &Agent );
-		void HandleSubmission(
-			const rgstry::multi_level_registry_ &Registry,
-			const lcl::locale_ &Locale,
-			const char *Language,
-			xml::writer_ &Writer );
+		void HandleBackendTypeSelection( xhtagent::agent___ &Agent );
+		void HandleSubmission( xml::writer_ &Writer );
 	};
-
 }
 
 				  /********************************************/

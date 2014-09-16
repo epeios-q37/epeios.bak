@@ -1751,7 +1751,7 @@ ERRBegin
 	OFlow.Init( Out );
 	TFlow.Init( OFlow );
 
-	xpp::Process( XFlow, xml::oIndent, TFlow );
+	xpp::Process( XFlow, Criterions, xml::oIndent, TFlow );
 ERRErr
 ERREnd
 ERREpilog

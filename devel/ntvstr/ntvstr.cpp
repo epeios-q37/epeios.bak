@@ -50,7 +50,7 @@ using namespace ntvstr;
 
 nstring___ &ntvstr::nstring___::operator =( const nstring___ &NS )
 {
-	bso::size__ Size = strlen_( NS._Core );
+	bso::size__ Size = ( NS._Core == NULL ? 0 : strlen_( NS._Core ) );
 
 	_Core.Malloc( Size + 1 );
 

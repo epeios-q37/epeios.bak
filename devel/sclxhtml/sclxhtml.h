@@ -84,10 +84,7 @@ namespace sclxhtml {
 	private:
 		xhtagent::agent___ *_Agent;
 	protected:
-		virtual void SCLXHTMLStart(
-			xhtagent::agent___ &Agent,
-			str::string_ &XML,
-			str::string_ &XSL ) = 0;
+		virtual void SCLXHTMLStart( xhtagent::agent___ &Agent ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{

@@ -44,9 +44,7 @@ ERRBegin
 	XML.Init();
 	XSL.Init();
 
-	SCLXHTMLStart( A(), XML, XSL );
-
-	A().SetChildren( "html", XML, XSL );
+	SCLXHTMLStart( A() );
 ERRErr
 ERREnd
 ERREpilog

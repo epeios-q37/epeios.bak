@@ -1,7 +1,7 @@
 /*
-	'xhtfmn.cpp' by Claude SIMON (http://zeusw.org/).
+	'xhtfsf.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'xhtfmn' is part of the Epeios framework.
+	'xhtfsf' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,76 +17,66 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define XHTFMN__COMPILATION
+#define XHTFSF__COMPILATION
 
-#include "xhtfmn.h"
+#include "xhtfsf.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-#include "frdkrn.h"
+using namespace xhtfsf;
 
-using namespace xhtfmn;
-
-void xhtfmn::SetAccessibility( xhtagent::agent___ &Agent )
+void xhtfsf::SetAccessibility( xhtagent::agent___ &Agent )
 {
 ERRProlog
 	TOL_CBUFFER___ Buffer1, Buffer2;
 	str::string Script, Value;
 ERRBegin
-	Value.Init( Agent.GetSelectValue( "ProjectTypeSelection", Buffer1 ) );
+	Value.Init( Agent.GetSelectValue( "BackendTypeSelection", Buffer1 ) );
 
-	if ( Value == "PredefinedProject" )
-		Agent.Show( "PredefinedProjects" );
+	if ( Value == "EmbeddedBackend" )
+		Agent.Show( "EmbeddedBackend" );
 	else
-		Agent.Hide( "PredefinedProjects" );
+		Agent.Hide( "EmbeddedBackend" );
 
-	if ( Value == "UserProject" )
-		Agent.Show( "UserProject" );
+	if ( Value == "DaemonBackend" )
+		Agent.Show( "DaemonBackend" );
 	else
-		Agent.Hide( "UserProject" );
+		Agent.Hide( "DaemonBackend" );
+
+	if ( Value == "PredefinedBackend" )
+		Agent.Show( "PredefinedBackends" );
+	else
+		Agent.Hide( "PredefinedBackends" );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-void xhtfmn::event_handlers__::HandleProjectTypeSelection( xhtagent::agent___ &Agent )
+void xhtfsf::event_handlers__::HandleBackendTypeSelection( xhtagent::agent___ &Agent )
 {
 	SetAccessibility( Agent );
 }
 
-void xhtfmn::event_handlers__::HandleSubmission(
-	const rgstry::multi_level_registry_ &Registry,
-	const lcl::locale_ &Locale,
-	const char *Language,
-	xml::writer_ &Writer )
+void xhtfsf::event_handlers__::HandleSubmission( xml::writer_ &Writer )
 {
-	Writer.PushTag("PredefinedBackends");
-
-	frdkrn::GetPredefinedBackends( Registry, Locale, Language, Writer );
-
-	Writer.PopTag();
 }
-
-
-
-
 
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-class xhtfmnpersonnalization
+class xhtfsfpersonnalization
 {
 public:
-	xhtfmnpersonnalization( void )
+	xhtfsfpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
-	~xhtfmnpersonnalization( void )
+	~xhtfsfpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
@@ -99,4 +89,4 @@ public:
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static xhtfmnpersonnalization Tutor;
+static xhtfsfpersonnalization Tutor;

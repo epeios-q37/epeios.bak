@@ -44,6 +44,32 @@
 
 namespace xhtfbs {
 
+	class xml_rack___
+	{
+	private:
+		flx::E_STRING_OFLOW___ _Flow;
+		txf::text_oflow__ _TFlow;
+		xml::writer _Writer;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_Writer.reset( P );
+			_TFlow.reset( P );
+			_Flow.reset( P );
+		}
+		E_CDTOR( xml_rack___ );
+		void Init( str::string_ &Target )
+		{
+			_Flow.Init( Target );
+			_TFlow.Init( _Flow );
+			_Writer.Init( _TFlow, xml::oIndent, xml::e_Default );
+		}
+		xml::writer_ &operator()( void )
+		{
+			return _Writer;
+		}
+	};
+
 	class event_handler__
 	{
 	public:

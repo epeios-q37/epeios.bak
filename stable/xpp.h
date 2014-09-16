@@ -309,6 +309,8 @@ namespace xpp {
 			if ( Row != Positions.Append( Position ) )
 				ERRFwk();
 
+			Buffer.Init();
+
 			if ( Row != FileNames.Append(FileName.UTF8( Buffer ) ) )
 				ERRFwk();
 
