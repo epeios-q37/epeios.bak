@@ -42,7 +42,7 @@
 # include "sclmisc.h"
 
 namespace sclxhtml {
-	typedef xhtmlcbk::event_handler__ _event_handler__;
+	typedef xhtcllbk::event_handler__ _event_handler__;
 
 	template <typename callback > class event_handler__
 	: public _event_handler__
@@ -109,7 +109,7 @@ namespace sclxhtml {
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
 
-	inline void LoadAndTranslateTags(
+	inline void LoadXSLAndTranslateTags(
 		const rgstry::entry___ &FileName,
 		const char *Language,
 		str::string_ &String )

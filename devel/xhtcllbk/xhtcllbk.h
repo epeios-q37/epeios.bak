@@ -1,7 +1,7 @@
 /*
-	'xhtmlcbk.h' by Claude SIMON (http://zeusw.org/).
+	'xhtcllbk.h' by Claude SIMON (http://zeusw.org/).
 
-	'xhtmlcbk' is part of the Epeios framework.
+	'xhtcllbk' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XHTMLCBK__INC
-# define XHTMLCBK__INC
+#ifndef XHTCLLBK__INC
+# define XHTCLLBK__INC
 
-# define XHTMLCBK_NAME		"XHTMLCBK"
+# define XHTCLLBK_NAME		"XHTCLLBK"
 
-# if defined( E_DEBUG ) && !defined( XHTMLCBK_NODBG )
-#  define XHTMLCBK_DBG
+# if defined( E_DEBUG ) && !defined( XHTCLLBK_NODBG )
+#  define XHTCLLBK_DBG
 # endif
 
 /******************************************************************************/
@@ -31,9 +31,7 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// XHTML CallBacKs
-
-# error "Obsolete ! Use 'xhtcllbk' instead."
+// XHT(ML) CaLLBacK
 
 # include "err.h"
 # include "flw.h"
@@ -42,17 +40,17 @@
 # include "bch.h"
 # include "stsfsm.h"
 
-# define XHTMLCBK_SHARED_DATA_VERSION_NUMBER	"1"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"1"
 
-# define XHTMLCBK_SHARED_DATA_VERSION	XHTMLCBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
+# define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
-# define XHTMLCBK_LAUNCH_FUNCTION_NAME		XHTMLCBKLaunch
+# define XHTCLLBK_RETRIEVE_FUNCTION_NAME		XHTCLLBKRetrieve
 
 
-namespace xhtmlcbk {
+namespace xhtcllbk {
 	class event_handler__
 	{
-		virtual void XHTLCBKHandle( void ) = 0;
+		virtual void XHTCLLBKHandle( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -65,7 +63,7 @@ namespace xhtmlcbk {
 		}
 		void Handle( void )
 		{
-			XHTLCBKHandle();
+			XHTCLLBKHandle();
 		}
 	};
 
@@ -129,22 +127,22 @@ namespace xhtmlcbk {
 
 	class upstream_callback__ {
 	protected:
-		virtual void WKCLLBCKSetChildren(
+		virtual void XHTCLLBKSetChildren(
 			const char *Id,
 			const char *XML,
 			const char *XSL ) = 0;
-		virtual void WKCLLBCKExecuteJavascript(
+		virtual void XHTCLLBKExecuteJavascript(
 			const char *Javascript,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void WKCLLBCKSet(
+		virtual void XHTCLLBKSet(
 			const char *Id,
 			const char *Name,
 			const char *Value ) = 0;
-		virtual void WKCLLBCKGet(
+		virtual void XHTCLLBKGet(
 			const char *Id,
 			const char *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void WKCLLBCKRemove(
+		virtual void XHTCLLBKRemove(
 			const char *Id,
 			const char *Name ) = 0;
 	public:
@@ -162,13 +160,13 @@ namespace xhtmlcbk {
 			const char *XML,
 			const char *XSL )
 		{
-			WKCLLBCKSetChildren( Id, XML, XSL );
+			XHTCLLBKSetChildren( Id, XML, XSL );
 		}
 		const char *ExecuteJavascript(
 			const char *Script,
 			TOL_CBUFFER___ &Buffer )
 		{
-			WKCLLBCKExecuteJavascript( Script, Buffer );
+			XHTCLLBKExecuteJavascript( Script, Buffer );
 
 			return Buffer;
 		}
@@ -177,7 +175,7 @@ namespace xhtmlcbk {
 			const char *Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			WKCLLBCKGet( Id, Name, Buffer );
+			XHTCLLBKGet( Id, Name, Buffer );
 
 			return Buffer;
 		}
@@ -186,22 +184,16 @@ namespace xhtmlcbk {
 			const char *Name,
 			const char *Value )
 		{
-			WKCLLBCKSet( Id, Name, Value );
+			XHTCLLBKSet( Id, Name, Value );
 		}
 		void Remove(
 			const char *Id,
 			const char *Name )
 		{
-			WKCLLBCKRemove( Id, Name );
+			XHTCLLBKRemove( Id, Name );
 		}
 	};
 
-	/*
-		Pas vraiment un 'callback' ; le contenu des méthodes virtuelles est connu à ce point-ci,
-		et ne seront jamais surchargées par un classe mère, mais c'est pour s'assurer que les objets
-		crées en aval soient manipulés en aval, le compilateur amont ou ses options pouvant ne pas
-		être les mêmes qu'en aval.
-	*/
 	class downstream_callback__
 	{
 	private:
@@ -214,15 +206,8 @@ namespace xhtmlcbk {
 			return *_Handlers;
 		}
 	protected:
-		virtual void WKCLLBCKHandle( const char *EventName )
-		{
-			xhtmlcbk::event_handler__ *Handler = _H().Get( str::string(  EventName ) );
-
-			if ( Handler == NULL )
-				ERRFwk();
-
-			Handler->Handle();
-		}
+		virtual void XHTCLLBKStart( void ) = 0;
+		virtual const char *XHTCLLBKLanguage( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -233,9 +218,29 @@ namespace xhtmlcbk {
 		{
 			_Handlers = &Handlers;
 		}
-		void Handle( const char *EventName )
+		void Start( void )
 		{
-			WKCLLBCKHandle( EventName );
+			return XHTCLLBKStart();
+		}
+		const char *Language( void )
+		{
+			return XHTCLLBKLanguage();
+		}
+		/*
+			Déclaré en 'vritual' pour s'assurer que cette méthode est bien exécutée dans le même contexte
+			que lors de la création de l'instance de cet objet. Cet objet est destiné à être instancié à partir
+			d'une bilbiothèque dynamique, mais la méthode ci-dessous est destinée à être lancée par l'exécutable
+			ayant chargé la	bibliothèque. Or, le compilateur utilisé en amont peut ne pas être le même/ne pas
+			avoir été lancé avec les mêmes options que le compilateur aval.
+		*/
+		virtual void Handle( const char *EventName )
+		{
+			event_handler__ *Handler = _H().Get( str::string(  EventName ) );
+
+			if ( Handler == NULL )
+				ERRFwk();
+
+			Handler->Handle();
 		}
 	};
 
@@ -257,7 +262,7 @@ namespace xhtmlcbk {
 		E_CDTOR( shared_data__ );
 		void Init( upstream_callback__ &Callback )
 		{
-			_Version = XHTMLCBK_SHARED_DATA_VERSION;
+			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_Callback = &Callback;
 		}
@@ -275,7 +280,8 @@ namespace xhtmlcbk {
 	};
 #pragma pack( pop )
 
-	typedef downstream_callback__ *(launch)( const shared_data__ &Data );
+	typedef downstream_callback__ *(retrieve)( const shared_data__ &Data );
+
 }
 
 				  /********************************************/

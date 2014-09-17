@@ -30,6 +30,8 @@
 
 using namespace sclxhtml;
 
+static bso::bool__ IsInitialized_ = false;
+
 #ifdef CPE_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
@@ -69,9 +71,9 @@ void sclxhtml::LoadAndTranslateTags(
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( XHTMLCBK_LAUNCH_FUNCTION_NAME, xhtmlcbk::launch );
+DEF( XHTCLLBK_RETRIEVE_FUNCTION_NAME, xhtcllbk::retrieve );
 
-typedef xhtmlcbk::downstream_callback__ _dcallback__;
+typedef xhtcllbk::downstream_callback__ _dcallback__;
 
 class dcallback___
 : public _dcallback__
@@ -79,6 +81,18 @@ class dcallback___
 private:
 	xhtagent::agent___ _Agent;
 	callback__ *_Callback;
+protected:
+	virtual void XHTCLLBKStart( void )
+	{
+		if ( _Callback == NULL )
+			ERRFwk();
+
+		_Callback->Start();
+	}
+	virtual const char *XHTCLLBKLanguage( void )
+	{
+		return sclmisc::GetLanguage();
+	}
 public:
 	void reset( bso::bool__ P = true )
 	{
@@ -92,7 +106,7 @@ public:
 	}
 	E_CVDTOR( dcallback___ );
 	void Init(
-		xhtmlcbk::upstream_callback__ &UCallback,
+		xhtcllbk::upstream_callback__ &UCallback,
 		callback__ &Callback )
 	{
 		_Agent.Init( UCallback );
@@ -105,7 +119,7 @@ public:
 	}
 };
 
-xhtmlcbk::downstream_callback__ *XHTMLCBKLaunch( const xhtmlcbk::shared_data__ &Data )
+xhtcllbk::downstream_callback__ *XHTCLLBKRetrieve( const xhtcllbk::shared_data__ &Data )
 {
 	dcallback___ *DCallback = NULL;
 ERRProlog
@@ -122,8 +136,6 @@ ERRBegin
 		ERRFwk();
 
 	DCallback->Init( Data.Callback(), *Callback  );
-
-	Callback->Start();
 ERRErr
 	if ( DCallback != NULL )
 		delete DCallback;
@@ -146,6 +158,11 @@ class sclxhtmlpersonnalization
 public:
 	sclxhtmlpersonnalization( void )
 	{
+		if ( !::IsInitialized_ )	{
+			sclmisc::Initialize( NULL );
+
+			::IsInitialized_ = true;
+		}
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

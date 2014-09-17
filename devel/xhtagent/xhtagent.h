@@ -33,7 +33,7 @@
 
 // XHT(ML) AGENT
 
-# include "xhtmlcbk.h"
+# include "xhtcllbk.h"
 
 # include "err.h"
 # include "flw.h"
@@ -41,15 +41,15 @@
 namespace xhtagent {
 	class agent___ {
 	private:
-		xhtmlcbk::upstream_callback__ *_Callback;
-		xhtmlcbk::upstream_callback__ &_C( void ) const
+		xhtcllbk::upstream_callback__ *_Callback;
+		xhtcllbk::upstream_callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
 				ERRFwk();
 
 			return *_Callback;
 		}
-		xhtmlcbk::event_handlers _Handlers;
+		xhtcllbk::event_handlers _Handlers;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -57,12 +57,12 @@ namespace xhtagent {
 			_Handlers.reset( P );
 		}
 		E_CDTOR( agent___ );
-		void Init( xhtmlcbk::upstream_callback__ &Callback )
+		void Init( xhtcllbk::upstream_callback__ &Callback )
 		{
 			_Callback = &Callback;
 			_Handlers.Init();
 		}
-		const xhtmlcbk::event_handlers_ &Handlers( void ) const
+		const xhtcllbk::event_handlers_ &Handlers( void ) const
 		{
 			return _Handlers;
 		}
@@ -72,7 +72,7 @@ namespace xhtagent {
 		}
 		void AddEventHandler(
 			const char *EventName,
-			xhtmlcbk::event_handler__ &Handler )
+			xhtcllbk::event_handler__ &Handler )
 		{
 			if ( !_Handlers.Add( EventName, Handler ) )
 				ERRFwk();
