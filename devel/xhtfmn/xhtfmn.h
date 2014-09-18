@@ -60,6 +60,7 @@ namespace xhtfmn {
 		}
 		void HandleProjectTypeSelection( xhtagent::agent___ &Agent );
 		void HandleSubmission(
+			xhtagent::agent___ &Agent,
 			const rgstry::multi_level_registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,

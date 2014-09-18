@@ -30,23 +30,44 @@
 
 using namespace xhtfmn;
 
+E_CDEF( const char *, PredefinedProject, "PredefinedProject" );
+E_CDEF( const char *, UserProject, "UserProject" );
+
+static xhtfbs::project_type__ GetProjectType_( xhtagent::agent___ &Agent )
+{
+	xhtfbs::project_type__ ProjectType = xhtfbs::pt_Undefined;
+ERRProlog
+	str::string Value;
+ERRBegin
+	Value.Init();
+	ProjectType = xhtfbs::GetProjectType( Agent.GetSelectValue( "ProjectType", Value ) );
+ERRErr
+ERREnd
+ERREpilog
+	return ProjectType;
+}
+
 void xhtfmn::SetAccessibility( xhtagent::agent___ &Agent )
 {
 ERRProlog
-	TOL_CBUFFER___ Buffer1, Buffer2;
-	str::string Script, Value;
+	bso::bool__ Predefined = false, User = false;
 ERRBegin
-	Value.Init( Agent.GetSelectValue( "ProjectTypeSelection", Buffer1 ) );
+	switch ( GetProjectType_( Agent ) ) {
+	case xhtfbs::ptNew:
+		break;
+	case xhtfbs::ptPredefined:
+		Predefined = true;
+		break;
+	case xhtfbs::ptUser:
+		User = true;
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
 
-	if ( Value == "PredefinedProject" )
-		Agent.Show( "PredefinedProjects" );
-	else
-		Agent.Hide( "PredefinedProjects" );
-
-	if ( Value == "UserProject" )
-		Agent.Show( "UserProject" );
-	else
-		Agent.Hide( "UserProject" );
+	Agent.Show( PredefinedProject, Predefined );
+	Agent.Show( UserProject, User );
 ERRErr
 ERREnd
 ERREpilog
@@ -57,17 +78,49 @@ void xhtfmn::event_handlers__::HandleProjectTypeSelection( xhtagent::agent___ &A
 	SetAccessibility( Agent );
 }
 
+static const str::string_ &GetPredefinedProject_(
+	xhtagent::agent___ &Agent,
+	str::string &Buffer )
+{
+	return Agent.GetSelectValue( PredefinedProject, Buffer );
+}
+
 void xhtfmn::event_handlers__::HandleSubmission(
+	xhtagent::agent___ &Agent,
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
 	xml::writer_ &Writer )
 {
-	Writer.PushTag("PredefinedBackends");
+ERRProlog
+	str::string ProjectFileName;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	ProjectFileName.Init();
+	switch ( GetProjectType_( Agent ) ) {
+	case xhtfbs::ptNew:
+		break;
+	case xhtfbs::ptPredefined:
+		Agent.GetSelectValue( PredefinedProject, ProjectFileName );
+		break;
+	case xhtfbs::ptUser:
+		ProjectFileName.Append( Agent.Get( UserProject, "value", Buffer ) );
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	Agent.Alert( ProjectFileName );
+
+	Writer.PushTag( "PredefinedBackends" );
 
 	frdkrn::GetPredefinedBackends( Registry, Locale, Language, Writer );
 
 	Writer.PopTag();
+ERRErr
+ERREnd
+ERREpilog
 }
 
 

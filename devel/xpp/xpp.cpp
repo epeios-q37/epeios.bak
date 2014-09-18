@@ -1738,7 +1738,7 @@ void xpp::Process(
 	const str::string_ &In,
 	xml::outfit__ Outfit,
 	str::string_ &Out,
-	criterions___ &Criterions )
+	const criterions___ &Criterions )
 {
 ERRProlog
 	flx::E_STRING_IFLOW__ IFlow;

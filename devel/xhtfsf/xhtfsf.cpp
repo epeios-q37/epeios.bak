@@ -31,25 +31,28 @@ using namespace xhtfsf;
 void xhtfsf::SetAccessibility( xhtagent::agent___ &Agent )
 {
 ERRProlog
-	TOL_CBUFFER___ Buffer1, Buffer2;
-	str::string Script, Value;
+	str::string Value;
+	bso::bool__ Daemon = false, Embedded = false, Predefined = false;
 ERRBegin
-	Value.Init( Agent.GetSelectValue( "BackendTypeSelection", Buffer1 ) );
+	Value.Init();
+	switch ( xhtfbs::GetBackendType( Agent.GetSelectValue( "BackendTypeSelection", Value ) ) ) {
+	case xhtfbs::btDaemon:
+		Daemon = true;
+		break;
+	case xhtfbs::btEmbedded:
+		Embedded = true;
+		break;
+	case xhtfbs::btPredefined:
+		Predefined = true;
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
 
-	if ( Value == "EmbeddedBackend" )
-		Agent.Show( "EmbeddedBackend" );
-	else
-		Agent.Hide( "EmbeddedBackend" );
-
-	if ( Value == "DaemonBackend" )
-		Agent.Show( "DaemonBackend" );
-	else
-		Agent.Hide( "DaemonBackend" );
-
-	if ( Value == "PredefinedBackend" )
-		Agent.Show( "PredefinedBackends" );
-	else
-		Agent.Hide( "PredefinedBackends" );
+	Agent.Show( "EmbeddedBackend", Embedded );
+	Agent.Show( "DaemonBackend", Daemon );
+	Agent.Show( "PredefinedBackends", Predefined );
 ERRErr
 ERREnd
 ERREpilog

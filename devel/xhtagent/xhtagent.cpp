@@ -28,6 +28,43 @@
 
 using namespace xhtagent;
 
+static void EscapeQuotes_(
+        const str::string_ &Source,
+        str::string_ &Target )
+{
+    sdr::row__ Row = Source.First();
+
+    while ( Row != E_NIL ) {
+        if( Source( Row ) == '"' )
+            Target.Append( '\\');
+
+        Target.Append( Source( Row ) );
+
+        Row = Source.Next( Row );
+    }
+}
+
+void xhtagent::agent___::Set(
+	const char *Id,
+	const char *Name,
+	const char *Value )
+{
+ERRProlog
+	str::string RawValue, EscapedValue;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	RawValue.Init( Value );
+	EscapedValue.Init();
+
+	EscapeQuotes_( RawValue, EscapedValue );
+
+	_C().Set( Id, Name, EscapedValue.Convert( Buffer ) );;
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 void xhtagent::agent___::ExecuteJavascript( const char *Script )
 {
 ERRProlog
@@ -38,7 +75,6 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
 
 const char *xhtagent::agent___::GetSelectValue(
 	const char *Id,
@@ -59,6 +95,19 @@ ERREpilog
 	return Buffer;
 }
 
+const str::string_ &xhtagent::agent___::GetSelectValue(
+	const char *Id,
+	str::string_ &Buffer )
+{
+ERRProlog
+	TOL_CBUFFER___ CBuffer;
+ERRBegin
+	Buffer.Append( GetSelectValue( Id, CBuffer ) );
+ERRErr
+ERREnd
+ERREpilog
+	return Buffer;
+}
 
 void xhtagent::agent___::SetChildren(
 	const char *Id,
@@ -83,6 +132,22 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	SetChildren( Id.Convert( Buffer), XML, XSL );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xhtagent::agent___::Alert( const str::string_ &Message )
+{
+ERRProlog
+	str::string Script;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	Script.Init( "alert(\"" );
+	EscapeQuotes_( Message, Script );
+	Script.Append("\");" );
+
+	ExecuteJavascript( Script.Convert( Buffer ) );
 ERRErr
 ERREnd
 ERREpilog

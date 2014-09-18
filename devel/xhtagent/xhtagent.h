@@ -87,9 +87,13 @@ namespace xhtagent {
 		void Set(
 			const char *Id,
 			const char *Name,
-			const char *Value )
+			const char *Value );
+		const char *Get(
+			const char *Id,
+			const char *Name,
+			TOL_CBUFFER___ &Buffer )
 		{
-			_C().Set( Id, Name, Value );
+			return _C().Get( Id, Name, Buffer );
 		}
 		void Remove(
 			const char *Id,
@@ -127,9 +131,14 @@ namespace xhtagent {
 		{
 			Show( Id, !Value );
 		}
+		// Retournent la valeur de l'item ('OPTION') actuellement sélectionné du 'SELECT' d'identifiant 'Id'.
 		const char *GetSelectValue(
 			const char *Id,
-			TOL_CBUFFER___ &Buffer );	// Retourne la valeur de l'item ('OPTION') actuellement sélectionné du 'SELECT' d'identifiant 'Id'.
+			TOL_CBUFFER___ &Buffer );	
+		const str::string_ &GetSelectValue(
+			const char *Id,
+			str::string_ &Buffer );
+		void Alert( const str::string_ &Message );
 	};
 }
 

@@ -884,7 +884,7 @@ namespace xpp {
 		const str::string_ &In,
 		xml::outfit__ Outfit,
 		str::string_ &Out,
-		criterions___ &Criterions = criterions___() );
+		const criterions___ &Criterions = criterions___() );
 }
 
 				  /********************************************/

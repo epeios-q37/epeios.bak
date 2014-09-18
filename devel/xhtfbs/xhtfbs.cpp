@@ -30,6 +30,72 @@
 
 using namespace xhtfbs;
 
+#define C( name ) case pt##name: return #name; break
+
+const char *xhtfbs::GetLabel( project_type__ ProjectType )
+{
+	switch ( ProjectType ) {
+	C( New );
+	C( Predefined );
+	C( User );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+static stsfsm::automat ProjectAutomat_;
+
+static void FillProjectAutomat_( void )
+{
+	ProjectAutomat_.Init();
+	stsfsm::FillAutomat( ProjectAutomat_, pt_amount, GetLabel );
+}
+
+project_type__ xhtfbs::GetProjectType( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, ProjectAutomat_, pt_Undefined, pt_amount );
+}
+
+#undef C
+
+#define C( name ) case bt##name: return #name; break
+
+const char *xhtfbs::GetLabel( backend_type__ BackendType )
+{
+	switch ( BackendType ) {
+	C( Daemon );
+	C( Embedded );
+	C( Predefined );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+static stsfsm::automat BackendAutomat_;
+
+static void FillBackendAutomat_( void )
+{
+	BackendAutomat_.Init();
+	stsfsm::FillAutomat( BackendAutomat_, bt_amount, GetLabel );
+}
+
+backend_type__ xhtfbs::GetBackendType( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, BackendAutomat_, bt_Undefined, bt_amount );
+}
+
+static void FillAutomats_( void )
+{
+	FillProjectAutomat_();
+	FillBackendAutomat_();
+}
+
 void xhtfbs::Start(
 	const rgstry::multi_level_registry_ &Registry,
 	const lcl::locale_ &Locale,
@@ -42,8 +108,6 @@ void xhtfbs::Start(
 	Writer.PopTag();
 }
 
-
-
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
@@ -54,6 +118,8 @@ public:
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
+
+		FillAutomats_();
 	}
 	~xhtfbspersonnalization( void )
 	{
