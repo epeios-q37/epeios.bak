@@ -600,6 +600,11 @@ namespace frdkrn {
 		const char *Language,
 		xml::writer_ &Writer );
 
+	str::string_ &GetProjectFileName(
+		const str::string_ &Id,
+		const registry_ &Registry,
+		str::string_ &FileName );
+
 }
 
 /*$END$*/

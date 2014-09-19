@@ -45,28 +45,9 @@ namespace xhtfmn {
 
 	void SetAccessibility( xhtagent::agent___ &Agent );
 
-	class event_handlers__
-	: protected _event_handler__
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_event_handler__::reset( P );
-		}
-		E_CVDTOR( event_handlers__ );
-		void Init( void )
-		{
-			_event_handler__::Init();
-		}
-		void HandleProjectTypeSelection( xhtagent::agent___ &Agent );
-		void HandleSubmission(
-			xhtagent::agent___ &Agent,
-			const rgstry::multi_level_registry_ &Registry,
-			const lcl::locale_ &Locale,
-			const char *Language,
-			xml::writer_ &Writer );
-	};
-
+	xhtfbs::project_type__ GetProjectFeatures(
+		xhtagent::agent___ &Agent,
+		str::string_ &ProjectFeature );
 }
 
 				  /********************************************/

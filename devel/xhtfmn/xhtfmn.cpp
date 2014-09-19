@@ -30,8 +30,9 @@
 
 using namespace xhtfmn;
 
-E_CDEF( const char *, PredefinedProject, "PredefinedProject" );
-E_CDEF( const char *, UserProject, "UserProject" );
+E_CDEF( char *, PredefinedProject, "PredefinedProject" );
+E_CDEF( char *, UserProject, "UserProject" );
+
 
 static xhtfbs::project_type__ GetProjectType_( xhtagent::agent___ &Agent )
 {
@@ -73,11 +74,6 @@ ERREnd
 ERREpilog
 }
 
-void xhtfmn::event_handlers__::HandleProjectTypeSelection( xhtagent::agent___ &Agent )
-{
-	SetAccessibility( Agent );
-}
-
 static const str::string_ &GetPredefinedProject_(
 	xhtagent::agent___ &Agent,
 	str::string &Buffer )
@@ -85,48 +81,32 @@ static const str::string_ &GetPredefinedProject_(
 	return Agent.GetSelectValue( PredefinedProject, Buffer );
 }
 
-void xhtfmn::event_handlers__::HandleSubmission(
+xhtfbs::project_type__ xhtfmn::GetProjectFeatures(
 	xhtagent::agent___ &Agent,
-	const rgstry::multi_level_registry_ &Registry,
-	const lcl::locale_ &Locale,
-	const char *Language,
-	xml::writer_ &Writer )
+	str::string_ &ProjectFeature )
 {
+	xhtfbs::project_type__ ProjectType = xhtfbs::pt_Undefined;
 ERRProlog
-	str::string ProjectFileName;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	ProjectFileName.Init();
 	switch ( GetProjectType_( Agent ) ) {
 	case xhtfbs::ptNew:
 		break;
 	case xhtfbs::ptPredefined:
-		Agent.GetSelectValue( PredefinedProject, ProjectFileName );
+		Agent.GetSelectValue( PredefinedProject, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
-		ProjectFileName.Append( Agent.Get( UserProject, "value", Buffer ) );
+		ProjectFeature.Append( Agent.Get( UserProject, "value", Buffer ) );
 		break;
 	default:
 		ERRFwk();
 		break;
 	}
-
-	Agent.Alert( ProjectFileName );
-
-	Writer.PushTag( "PredefinedBackends" );
-
-	frdkrn::GetPredefinedBackends( Registry, Locale, Language, Writer );
-
-	Writer.PopTag();
 ERRErr
 ERREnd
 ERREpilog
+	return ProjectType;
 }
-
-
-
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

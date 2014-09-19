@@ -40,6 +40,7 @@
 # include "rgstry.h"
 # include "scllocale.h"
 # include "sclmisc.h"
+# include "xhtfmn.h"
 
 namespace sclxhtml {
 	typedef xhtcllbk::event_handler__ _event_handler__;
@@ -105,20 +106,24 @@ namespace sclxhtml {
 		}
 	};
 
+
+
 	void Load(
 		const rgstry::entry___ &FileName,
 		str::string_ &String );
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::entry___ &FileName,
-		const char *Language,
 		str::string_ &String )
 	{
-		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), Language, String, '$' );
+		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), sclmisc::GetLanguage(), String, '$' );
 	}
 
-	callback__ *SCLXHTMLRetrieveCallback( xhtagent::agent___ &Agent );	// A surcharger.
+	void MainHandleSubmission(
+		xhtagent::agent___ &Agent,
+		xml::writer_ &Writer );
 
+	callback__ *SCLXHTMLRetrieveCallback( xhtagent::agent___ &Agent );	// A surcharger.
 }
 
 				  /********************************************/

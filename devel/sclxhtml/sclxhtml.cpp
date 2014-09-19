@@ -28,6 +28,8 @@
 
 #include "sclmisc.h"
 
+#include "frdkrn.h"
+
 using namespace sclxhtml;
 
 static bso::bool__ IsInitialized_ = false;
@@ -148,6 +150,77 @@ ERREnd
 ERREpilog
 	return DCallback;
 }
+
+static void LoadProject_( const str::string_ &FileName )
+{
+ERRProlog
+	str::string Id;
+ERRBegin
+Id.Init();
+	sclmisc::LoadProject( FileName, Id );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void LoadPredefinedProject_( const str::string_ &Id )
+{
+ERRProlog
+	str::string ProjectFileName;
+ERRBegin
+	if ( Id.Amount() == 0 )
+		sclmisc::ReportAndAbort( SCLXHTML_NAME "_EmptyPredefinedProjectId" );
+
+	ProjectFileName.Init();
+
+	frdkrn::GetProjectFileName(Id, sclrgstry::GetRegistry(), ProjectFileName );
+
+	if ( ProjectFileName.Amount() == 0 )
+		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
+
+	LoadProject_( ProjectFileName );
+ERRErr
+ERREnd
+ERREpilog
+
+
+}
+
+void sclxhtml::MainHandleSubmission(
+	xhtagent::agent___ &Agent,
+	xml::writer_ &Writer )
+{
+ERRProlog
+	str::string ProjectFeature;
+ERRBegin
+	ProjectFeature.Init();
+	switch ( xhtfmn::GetProjectFeatures(Agent, ProjectFeature ) ) {
+	case xhtfbs::ptNew:
+		sclrgstry::EraseProjectRegistry();
+		break;
+	case xhtfbs::ptPredefined:
+		LoadPredefinedProject_( ProjectFeature );
+		break;
+	case xhtfbs::ptUser:
+		if ( ProjectFeature.Amount() == 0 )
+			sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
+		LoadProject_( ProjectFeature );
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	Writer.PushTag( "PredefinedBackends" );
+
+	frdkrn::GetPredefinedBackends( sclrgstry::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+
+	Writer.PopTag();
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 
 /* Although in theory this class is inaccessible to the different modules,
