@@ -96,18 +96,6 @@ static void FillAutomats_( void )
 	FillBackendAutomat_();
 }
 
-void xhtfbs::Start(
-	const rgstry::multi_level_registry_ &Registry,
-	const lcl::locale_ &Locale,
-	const char *Language,
-	xml::writer_ &Writer )
-{
-	Writer.PushTag("PredefinedProjects");
-	frdkrn::GetPredefinedProjects( Registry, Locale, Language, Writer );
-
-	Writer.PopTag();
-}
-
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 

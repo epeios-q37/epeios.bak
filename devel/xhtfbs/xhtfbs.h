@@ -84,12 +84,6 @@ namespace xhtfbs {
 		}
 	};
 
-	void Start(
-		const rgstry::multi_level_registry_ &Registry,
-		const lcl::locale_ &Locale,
-		const char *Language,
-		xml::writer_ &Writer );
-
 	enum project_type__ {
 		ptNew,
 		ptPredefined,

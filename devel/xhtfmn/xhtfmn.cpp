@@ -89,7 +89,7 @@ xhtfbs::project_type__ xhtfmn::GetProjectFeatures(
 ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	switch ( GetProjectType_( Agent ) ) {
+	switch ( ProjectType = GetProjectType_( Agent ) ) {
 	case xhtfbs::ptNew:
 		break;
 	case xhtfbs::ptPredefined:

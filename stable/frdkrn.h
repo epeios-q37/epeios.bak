@@ -588,23 +588,6 @@ namespace frdkrn {
 		return Value.ToU8();
 	}
 
-	void GetPredefinedProjects(
-		const registry_ &Registry,
-		const lcl::locale_ &Locale,
-		const char *Language,
-		xml::writer_ &Writer );
-
-	void GetPredefinedBackends(
-		const registry_ &Registry,
-		const lcl::locale_ &Locale,
-		const char *Language,
-		xml::writer_ &Writer );
-
-	str::string_ &GetProjectFileName(
-		const str::string_ &Id,
-		const registry_ &Registry,
-		str::string_ &FileName );
-
 }
 
 /*$END$*/

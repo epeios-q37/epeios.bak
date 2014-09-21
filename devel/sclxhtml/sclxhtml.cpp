@@ -27,6 +27,7 @@
 				  /*******************************************/
 
 #include "sclmisc.h"
+#include "sclfrntnd.h"
 
 #include "frdkrn.h"
 
@@ -151,19 +152,25 @@ ERREpilog
 	return DCallback;
 }
 
-static void LoadProject_( const str::string_ &FileName )
+static void LoadProject_(
+	xhtagent::agent___ &Agent,
+	const str::string_ &FileName )
 {
 ERRProlog
 	str::string Id;
 ERRBegin
-Id.Init();
+	Agent.Alert( FileName );
+
+	Id.Init();
 	sclmisc::LoadProject( FileName, Id );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-static void LoadPredefinedProject_( const str::string_ &Id )
+static void LoadPredefinedProject_( 
+	xhtagent::agent___ &Agent,
+	const str::string_ &Id )
 {
 ERRProlog
 	str::string ProjectFileName;
@@ -173,12 +180,12 @@ ERRBegin
 
 	ProjectFileName.Init();
 
-	frdkrn::GetProjectFileName(Id, sclrgstry::GetRegistry(), ProjectFileName );
+	sclfrntnd::GetProjectFileName( Id, ProjectFileName );
 
 	if ( ProjectFileName.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
 
-	LoadProject_( ProjectFileName );
+	LoadProject_( Agent, ProjectFileName );
 ERRErr
 ERREnd
 ERREpilog
@@ -199,12 +206,12 @@ ERRBegin
 		sclrgstry::EraseProjectRegistry();
 		break;
 	case xhtfbs::ptPredefined:
-		LoadPredefinedProject_( ProjectFeature );
+		LoadPredefinedProject_( Agent, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
 		if ( ProjectFeature.Amount() == 0 )
 			sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
-		LoadProject_( ProjectFeature );
+		LoadProject_( Agent, ProjectFeature );
 		break;
 	default:
 		ERRFwk();
@@ -213,7 +220,7 @@ ERRBegin
 
 	Writer.PushTag( "PredefinedBackends" );
 
-	frdkrn::GetPredefinedBackends( sclrgstry::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+	sclfrntnd::GetPredefinedBackends( Writer );
 
 	Writer.PopTag();
 ERRErr
