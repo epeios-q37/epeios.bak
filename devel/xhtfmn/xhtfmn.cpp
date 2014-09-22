@@ -96,7 +96,7 @@ ERRBegin
 		Agent.GetSelectValue( PredefinedProject, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
-		ProjectFeature.Append( Agent.Get( UserProject, "value", Buffer ) );
+		ProjectFeature.Append( Agent.Get( UserProject, "files", Buffer ) );
 		break;
 	default:
 		ERRFwk();

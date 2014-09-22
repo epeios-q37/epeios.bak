@@ -129,6 +129,16 @@ namespace lstbch {
 		{
 			list_<row, row_t>::Delete( Row );
 		}
+		row Search( type Object ) const
+		{
+			row__ Row = bunch_<type, row>::Search( Object );
+
+			if ( Row != E_NIL )
+				if ( !list_<row, row_t>::Exists( Row ) )
+					Row = E_NIL;
+
+			return Row;
+		}
 		//f Create new entry and return its row.
 		row New( void )
 		{

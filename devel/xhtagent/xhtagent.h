@@ -139,6 +139,10 @@ namespace xhtagent {
 			const char *Id,
 			str::string_ &Buffer );
 		void Alert( const str::string_ &Message );
+		void Alert( const char *Message )
+		{
+			Alert( str::string( Message ) );
+		}
 	};
 }
 

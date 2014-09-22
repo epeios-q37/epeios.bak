@@ -50,6 +50,38 @@ namespace sclxhtml {
 	{
 	private:
 		callback *_Callback;
+	protected:
+		virtual void SCLXHTMLHandle( void ) = 0;
+		virtual void XHTCLLBKHandle( void )
+		{
+		ERRProlog
+			str::string Message;
+			err::buffer__ Buffer;
+		ERRBegin
+			SCLXHTMLHandle();
+		ERRErr
+			switch ( ERRType ) {
+			case err::t_Abort:
+				Message.Init();
+				if ( sclerror::GetPendingError(sclmisc::GetLanguage(), Message) ) {
+					A().Alert( Message );
+					sclerror::ResetPendingError();
+				} else
+					A().Alert("?");
+				break;
+			case err::t_Free:
+			case err::t_Return:
+				A().Alert( "???" );
+				break;
+			default:
+				A().Alert( err::Message( Buffer ) );
+				break;
+			}
+
+			ERRRst();
+		ERREnd
+		ERREpilog
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{

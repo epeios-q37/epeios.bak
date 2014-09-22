@@ -50,6 +50,7 @@
 namespace xhtcllbk {
 	class event_handler__
 	{
+	protected:
 		virtual void XHTCLLBKHandle( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )

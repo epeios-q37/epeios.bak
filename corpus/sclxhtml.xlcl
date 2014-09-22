@@ -5,9 +5,9 @@
 		<Translation language="fr">Identifiant de projet prédéfini vide.</Translation>
 		<Translation language="en">Empty predefined project id.</Translation>
 	</Translations>
-  <Translations text="SCLXHTML_NoProjectFileName">
+  <Translations text="SCLXHTML_NoProjectFileSelected">
     <Translation language="fr">Fichier de projet non spécifié.</Translation>
-    <Translation language="en">No project file name.</Translation>
+    <Translation language="en">No specified project file.</Translation>
   </Translations>
 	<Translations text="SCLXHTML_NoOrBadProjectFileNameInPredefinedProject">
 		<Translation language="fr">Pas de, ou mauvais nom de fichier projet défini dans le project prédefini d'identifiant '%1'.</Translation>
