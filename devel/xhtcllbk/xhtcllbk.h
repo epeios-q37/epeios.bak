@@ -146,6 +146,9 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKRemove(
 			const char *Id,
 			const char *Name ) = 0;
+		virtual void XHTCLLBKGetFileContent(
+			const char *Id,	// Identifiant de la balise '<input type="file"...
+			TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -192,6 +195,14 @@ namespace xhtcllbk {
 			const char *Name )
 		{
 			XHTCLLBKRemove( Id, Name );
+		}
+		const char *GetFileContent(
+			const char *Id,	// Identifiant de la balise '<input type="file"...
+			TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKGetFileContent( Id, Buffer );
+
+			return Buffer;
 		}
 	};
 

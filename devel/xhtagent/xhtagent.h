@@ -84,10 +84,6 @@ namespace xhtagent {
 			return _C().ExecuteJavascript( Script, Buffer );
 		}
 		void ExecuteJavascript( const char *Script );
-		void Set(
-			const char *Id,
-			const char *Name,
-			const char *Value );
 		const char *Get(
 			const char *Id,
 			const char *Name,
@@ -95,6 +91,19 @@ namespace xhtagent {
 		{
 			return _C().Get( Id, Name, Buffer );
 		}
+		const char *GetFileContent(
+			const char *Id,
+			TOL_CBUFFER___ &Buffer )
+		{
+			if ( str::string( Get(Id, "files.length", Buffer ) ).ToUInt() == 0 )
+				return NULL;
+
+			return _C().GetFileContent( Id, Buffer );
+		}
+		void Set(
+			const char *Id,
+			const char *Name,
+			const char *Value );
 		void Remove(
 			const char *Id,
 			const char *Name )

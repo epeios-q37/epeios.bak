@@ -209,9 +209,10 @@ ERRBegin
 		LoadPredefinedProject_( Agent, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
-		if ( ProjectFeature.Amount() == 0 )
-			sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
-		LoadProject_( Agent, ProjectFeature );
+		Agent.Alert("User defined project detected !!!");
+		break;
+	case xhtfbs::pt_Undefined:
+		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
 		break;
 	default:
 		ERRFwk();
@@ -227,8 +228,6 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

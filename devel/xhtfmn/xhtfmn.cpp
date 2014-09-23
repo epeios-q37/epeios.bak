@@ -96,7 +96,10 @@ ERRBegin
 		Agent.GetSelectValue( PredefinedProject, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
-		ProjectFeature.Append( Agent.Get( UserProject, "files", Buffer ) );
+		if ( Agent.GetFileContent( UserProject, Buffer ) == NULL )
+			ProjectType = xhtfbs::pt_Undefined;
+
+		ProjectFeature.Append( Buffer );
 		break;
 	default:
 		ERRFwk();
