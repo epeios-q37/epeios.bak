@@ -202,7 +202,7 @@ namespace mtx {
 	}
 
 
-	inline void _Inc( counter__ &Counter )	// Incrémente 'Counter'.
+	inline void _Inc( counter__ &Counter )	// IncrÃ©mente 'Counter'.
 	{
 #ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
 		InterlockedIncrement( &Counter );
@@ -223,14 +223,14 @@ namespace mtx {
 #endif
 	}
 
-	inline bso::bool__ _DecAndTest( counter__ &Counter )	// Décrémente 'Counter'.et retourne 'true' si à zéro.
+	inline bso::bool__ _DecAndTest( counter__ &Counter )	// DÃ©crÃ©mente 'Counter'.et retourne 'true' si Ã  zÃ©ro.
 	{
 #ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
 		return InterlockedDecrement( &Counter ) == 0;
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 		return atomic_dec_and_test( &Counter );
 #elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
-//		return OSAtomicDecrement32( &Counter ) == 1;	// Il existe un autre 'OSAtomic.h', dans lequel 'OSAtomicDecrement(|8|16|64)(...)'. retourne la valeur AVANT décrémentation.
+//		return OSAtomicDecrement32( &Counter ) == 1;	// Il existe un autre 'OSAtomic.h', dans lequel 'OSAtomicDecrement(|8|16|64)(...)'. retourne la valeur AVANT dÃ©crÃ©mentation.
 														// Cependant, celui-ci n'a pas de fonction 'OSAtomicDecrement32'(...)".
 		return OSAtomicDecrement32( &Counter ) == 0;
 #elif defined( MTX__USE_PTHREAD_MUTEX )
@@ -252,7 +252,7 @@ namespace mtx {
 	typedef struct _mutex__ {
 		counter__ Counter;
 #ifdef MTX__CONTROL
-		void Release( bso::bool__ Destroy )	// 'Destruction' à vrai si appelé par le destructeur.
+		void Release( bso::bool__ Destroy )	// 'Destruction' Ã  vrai si appelÃ© par le destructeur.
 		{
 			_Set( Counter, MTX__RELEASED_MUTEX_COUNTER_VALUE, Destroy );
 		}
@@ -318,14 +318,14 @@ namespace mtx {
 			Release( true );
 #endif
 		}
-	} *handler__;
+	} *handler___;
 
-	E_CDEF( handler__, UndefinedHandler, NULL );
+	E_CDEF( handler___, UndefinedHandler, NULL );
 
 	//f Return a new mutex handler.
-	inline handler__ Create( bso::bool__ Disabled = false )	// Si True, utilisation dans un contexte mono-thread.
+	inline handler___ Create( bso::bool__ Disabled = false )	// Si True, utilisation dans un contexte mono-thread.
 	{
-		handler__ Handler;
+		handler___ Handler;
 		
 		if ( ( Handler = new _mutex__( Disabled ) ) == NULL )
 			ERRAlc();
@@ -333,7 +333,7 @@ namespace mtx {
 		return Handler;
 	}
 
-	inline bso::bool__ IsLocked( handler__ Handler )
+	inline bso::bool__ IsLocked( handler___ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -343,7 +343,7 @@ namespace mtx {
 	}
 
 
-	inline bso::bool__ TryToLock( handler__ Handler)
+	inline bso::bool__ TryToLock( handler___ Handler)
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -353,17 +353,17 @@ namespace mtx {
 	}
 
 	// Wait until mutex unlocked.
-	inline void WaitUntilUnlocked_( handler__ Handler )
+	inline void WaitUntilUnlocked_( handler___ Handler )
 	{
 		while( !TryToLock( Handler ) )
 		{
 			tol::InitializeRandomGenerator();
-			tht::Defer( ( (bso::uint__)tht::GetTID() + rand() ) % 5 + 1 ); // 'rand() donne-t'il la même suite dans des coeurs différents ?
+			tht::Defer( ( (bso::uint__)tht::GetTID() + rand() ) % 5 + 1 ); // 'rand() donne-t'il la mÃªme suite dans des coeurs diffÃ©rents ?
 		}
 	}
 
 	// Lock 'Handler'. Blocks until lock succeed.
-	inline void Lock( handler__ Handler )
+	inline void Lock( handler___ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -374,7 +374,7 @@ namespace mtx {
 	}
 
 	//f Unlock 'Handler'.
-	inline void Unlock( handler__ Handler )
+	inline void Unlock( handler___ Handler )
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
@@ -385,7 +385,7 @@ namespace mtx {
 
 	//f Delete the mutex of handler 'Handler'.
 	inline void Delete(
-		handler__ Handler,
+		handler___ Handler,
 		bso::bool__ EvenIfLocked = false )
 	{
 #ifdef MTX_DBG
@@ -409,7 +409,7 @@ namespace mtx {
 	{
 	private:
 		state__ _State;
-		handler__ _Handler;
+		handler___ _Handler;
 		void _Test( void )
 		{
 # ifdef MTX_DBG
@@ -437,7 +437,7 @@ namespace mtx {
 
 		}
 		E_CDTOR( mutex___ );
-		void Init( handler__ Handler )
+		void Init( handler___ Handler )
 		{
 			_UnlockIfInitializedAndLocked();
 			

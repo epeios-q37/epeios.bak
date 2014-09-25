@@ -75,7 +75,7 @@ extern class ttr_tutor &FDRTutor;
 #ifdef FDR__TS
 #	include "mtx.h"
 #	define FDR_NO_MUTEX	MTX_INVALID_HANDLER
-	typedef mtx::handler__ mutex__;
+	typedef mtx::handler___ mutex__;
 #else
 	typedef void *mutex__;
 #	define FDR_NO_MUTEX	NULL

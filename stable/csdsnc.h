@@ -85,7 +85,7 @@ extern class ttr_tutor &CSDSNCTutor;
 namespace csdsnc {
 	using namespace csdsnb;
 #ifdef CSDSNC__MT
-	typedef mtx::handler__	mutex__;
+	typedef mtx::handler___	mutex__;
 #	define CSDSNC_NO_MUTEX			MTX_INVALID_HANDLER
 #else
 	typedef void *mutex__;

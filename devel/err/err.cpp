@@ -37,7 +37,7 @@ err_ err::ERR;
 #ifdef ERR__THREAD_SAFE
 #	include "mtx.h"
 #	include "mtk.h"
-static mtx::handler__ MutexHandler_ = MTX_INVALID_HANDLER;
+static mtx::handler___ MutexHandler_ = mtx::UndefinedHandler;
 static mtk::thread_id__ ThreadID_;
 #endif
 
@@ -212,31 +212,21 @@ void err::Final( void )
 		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
 ERRProlog
-# ifdef CPE_MT
-	cio::cout___ COut;
-	cio::cerr___ CErr;
-# else
-	static txf::text_oflow__ &COut = cio::COut;
-	static txf::text_oflow__ &CErr = cio::CErr;
-# endif
 ERRBegin
 	if ( cio::IsInitialized() ) {
-# ifdef CPE_MT
-		COut.Init();
-		CErr.Init();
-# endif
 		if ( cio::Target() == cio::tConsole ) {
-			COut << txf::commit;
-			CErr << txf::nl << txf::tab;
+			cio::COut << txf::commit;
+			cio::CErr << txf::nl << txf::tab;
 		}
 
-		CErr << "{ " << Message << " }";
+		cio::CErr << "{ " << Message << " }";
 
 		if ( cio::Target() == cio::tConsole )
-			CErr << txf::nl;
+			cio::CErr << txf::nl;
 
-		CErr << txf::commit;
-	}
+		cio::CErr << txf::commit;
+	} else
+		ERRFwk();
 ERRErr
 ERREnd
 ERREpilog

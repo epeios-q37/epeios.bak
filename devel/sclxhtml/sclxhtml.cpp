@@ -210,6 +210,8 @@ ERRBegin
 		break;
 	case xhtfbs::ptUser:
 		Agent.Alert("User defined project detected !!!");
+		ProjectFeature.Truncate( 10 );
+		Agent.Alert( ProjectFeature );
 		break;
 	case xhtfbs::pt_Undefined:
 		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );

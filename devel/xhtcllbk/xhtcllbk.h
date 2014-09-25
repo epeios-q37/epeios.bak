@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 	'xhtcllbk.h' by Claude SIMON (http://zeusw.org/).
 
 	'xhtcllbk' is part of the Epeios framework.
@@ -146,9 +146,11 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKRemove(
 			const char *Id,
 			const char *Name ) = 0;
-		virtual void XHTCLLBKGetFileContent(
-			const char *Id,	// Identifiant de la balise '<input type="file"...
-			TOL_CBUFFER___ &Buffer ) = 0;
+		// Les deux commandes doivent Ãªtre appelÃ©e l'une aprÃ©s l'autre. La premiÃ¨re lance le chargement d'un fichier, la seconde permet de rÃ©cupÃ¨rer son contenu.
+		// Ceci est rendu nÃ©cessaire car le chargement se fait de maniÃ¨re asynchrone, mais ne dÃ©bute rÃ©ellement que lorsque le gestionnaire d'Ã©vÃ¨nement ayant
+		// lancÃ© le chergement rend la main (utilisation de 'FileReader').
+		virtual void XHTCLLBKLaunchFileLoading( const char *Id ) = 0;	// Identifiant de la balise '<input type="file"...
+		virtual void XHTCLLBKGetFileContent( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -196,11 +198,13 @@ namespace xhtcllbk {
 		{
 			XHTCLLBKRemove( Id, Name );
 		}
-		const char *GetFileContent(
-			const char *Id,	// Identifiant de la balise '<input type="file"...
-			TOL_CBUFFER___ &Buffer )
+		void LaunchFileLoading( const char *Id )
 		{
-			XHTCLLBKGetFileContent( Id, Buffer );
+			XHTCLLBKLaunchFileLoading( Id );
+		}
+		const char *GetFileContent( TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKGetFileContent( Buffer );
 
 			return Buffer;
 		}
@@ -239,11 +243,11 @@ namespace xhtcllbk {
 			return XHTCLLBKLanguage();
 		}
 		/*
-			Déclaré en 'vritual' pour s'assurer que cette méthode est bien exécutée dans le même contexte
-			que lors de la création de l'instance de cet objet. Cet objet est destiné à être instancié à partir
-			d'une bilbiothèque dynamique, mais la méthode ci-dessous est destinée à être lancée par l'exécutable
-			ayant chargé la	bibliothèque. Or, le compilateur utilisé en amont peut ne pas être le même/ne pas
-			avoir été lancé avec les mêmes options que le compilateur aval.
+			DÃ©clarÃ© en 'vritual' pour s'assurer que cette mÃ©thode est bien exÃ©cutÃ©e dans le mÃªme contexte
+			que lors de la crÃ©ation de l'instance de cet objet. Cet objet est destinÃ© Ã  Ãªtre instanciÃ© Ã  partir
+			d'une bilbiothÃ¨que dynamique, mais la mÃ©thode ci-dessous est destinÃ©e Ã  Ãªtre lancÃ©e par l'exÃ©cutable
+			ayant chargÃ© la	bibliothÃ¨que. Or, le compilateur utilisÃ© en amont peut ne pas Ãªtre le mÃªme/ne pas
+			avoir Ã©tÃ© lancÃ© avec les mÃªmes options que le compilateur aval.
 		*/
 		virtual void Handle( const char *EventName )
 		{
@@ -257,12 +261,12 @@ namespace xhtcllbk {
 	};
 
 #pragma pack( push, 1)
-		// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+		// NOTA : Si modifiÃ©, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
 	{
 	private:
-		const char *_Version;	// Toujours en première position.
-		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		const char *_Version;	// Toujours en premiÃ¨re position.
+		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, Ã  des fins de test primaire de compatibilitÃ©.
 		upstream_callback__ *_Callback;
 	public:
 		void reset( bso::bool__ = true )

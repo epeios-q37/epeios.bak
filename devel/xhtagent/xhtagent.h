@@ -98,7 +98,9 @@ namespace xhtagent {
 			if ( str::string( Get(Id, "files.length", Buffer ) ).ToUInt() == 0 )
 				return NULL;
 
-			return _C().GetFileContent( Id, Buffer );
+			_C().LaunchFileLoading( Id );
+
+			return _C().GetFileContent( Buffer );
 		}
 		void Set(
 			const char *Id,

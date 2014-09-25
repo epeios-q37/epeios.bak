@@ -176,13 +176,13 @@ ERREpilog
 namespace {
 	struct common__ {
 		// Lock to ensure that data was red before reusing them.
-		mtx::handler__ Data;
+		mtx::handler___ Data;
 		// Lock for new thread to block caller.
-		mtx::handler__ Thread;
+		mtx::handler___ Thread;
 		// Lock for thread launcher to block new created thread.
-		mtx::handler__ Store;
+		mtx::handler___ Store;
 		// Lock to handle concurrent calls to 'LauncAndKeep()'.
-		mtx::handler__ Exclusion;
+		mtx::handler___ Exclusion;
 		bso::bool__ Continue;
 		void *UP;
 		bso::uint__ Amount;

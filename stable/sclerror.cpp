@@ -67,7 +67,7 @@ using namespace sclerror;
 # include "tht.h"
 # include "mtx.h"
 
-static  mtx::handler__ Mutex_ = mtx::UndefinedHandler;
+static  mtx::handler___ Mutex_ = mtx::UndefinedHandler;
 
 typedef tht::thread_id__ tid__;
 
