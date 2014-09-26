@@ -151,7 +151,11 @@ namespace sclxhtml {
 		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), sclmisc::GetLanguage(), String, '$' );
 	}
 
-	void MainHandleSubmission(
+	// Si retourne 'true', alors la finalisation peut être lancée à la suite, sinon elle doit être lancée à partir du gestionnaire prenant en charge le chargement du fichier projet.
+	bso::bool__ StartMainSubmission( xhtagent::agent___ &Agent );
+
+	void FinalizeMainSubmission(
+		bso::bool__ Delayed,	// !(operateur 'not') ce qui est retourné par 'StartMainSubmission'.
 		xhtagent::agent___ &Agent,
 		xml::writer_ &Writer );
 

@@ -91,6 +91,10 @@ namespace sclmisc {
 	void EraseProjectRegistry( void );
 
 	void LoadProject(
+		flw::iflow__ &Flow,
+		str::string_ &Id );
+
+	void LoadProject(
 		const fnm::name___ &FileName,
 		str::string_ &Id );
 

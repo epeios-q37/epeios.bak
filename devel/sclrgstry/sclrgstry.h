@@ -71,6 +71,11 @@ namespace sclrgstry {
 	void EraseProjectRegistry( void );
 
 	void LoadProject(
+		flw::iflow__ &Flow,
+		const char *Target,
+		str::string_ &Id );
+
+	void LoadProject(
 		const fnm::name___ &FileName,
 		const char *Target,
 		str::string_ &Id );

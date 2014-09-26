@@ -142,7 +142,7 @@ void sclrgstry::EraseProjectRegistry( void )
 #define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
 
 void sclrgstry::LoadProject(
-	const fnm::name___ &FileName,
+	flw::iflow__ &Flow,
 	const char *Target,
 	str::string_ &Id )
 {
@@ -151,17 +151,38 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
 	bso::bool__ Missing = false;
+	xtf::extended_text_iflow__ XFlow;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
 	tagsbs::SubstituteShortTag( Path, 1, str::string( Target ), '%' );
 
 	EraseProjectRegistry();
 
+	XFlow.Init( Flow, utf::f_Guess );
 	Context.Init();
-	if ( BaseRegistry_.Fill( ProjectRegistryLevel_, FileName, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
+	if ( BaseRegistry_.Fill( ProjectRegistryLevel_, XFlow, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
 	BaseRegistry_.GetValue( ProjectRegistryLevel_, rgstry::entry___( "@Id" ), Id );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+
+void sclrgstry::LoadProject(
+	const fnm::name___ &FileName,
+	const char *Target,
+	str::string_ &Id )
+{
+ERRProlog
+	flf::file_iflow___ Flow;
+ERRBegin
+	if ( !Flow.Init( FileName, err::hUserDefined ) )
+		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
+
+	LoadProject( Flow, Target, Id );
 ERRErr
 ERREnd
 ERREpilog

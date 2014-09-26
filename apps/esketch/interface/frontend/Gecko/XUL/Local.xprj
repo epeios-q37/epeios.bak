@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-15"?>
 <Projects xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<Project target="esketch" id="Local">
+	<Project target="esketchxht" id="Local">
 		<Parameters>
       <Locale>
         <xpp:cdata>

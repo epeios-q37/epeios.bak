@@ -189,14 +189,11 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-
-
 }
 
-void sclxhtml::MainHandleSubmission(
-	xhtagent::agent___ &Agent,
-	xml::writer_ &Writer )
+bso::bool__ sclxhtml::StartMainSubmission( xhtagent::agent___ &Agent )
 {
+	bso::bool__ DelayFinalization = false;
 ERRProlog
 	str::string ProjectFeature;
 ERRBegin
@@ -209,9 +206,8 @@ ERRBegin
 		LoadPredefinedProject_( Agent, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
-		Agent.Alert("User defined project detected !!!");
-		ProjectFeature.Truncate( 10 );
-		Agent.Alert( ProjectFeature );
+		DelayFinalization = true;
+		// Le fichier projet sera chargé ultèrieurement, du fait que le chargement par javascript se fait de manière 'asynchrone'.
 		break;
 	case xhtfbs::pt_Undefined:
 		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
@@ -220,15 +216,42 @@ ERRBegin
 		ERRFwk();
 		break;
 	}
+ERRErr
+ERREnd
+ERREpilog
+	return !DelayFinalization;
+}
+
+static void HandleUserProjectFile_( xhtagent::agent___ &Agent )
+{
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+	str::string FileContent, Id;
+	flx::E_STRING_IFLOW__ Flow;
+ERRBegin
+	FileContent.Init( Agent.GetFileContent( Buffer ) );
+	Flow.Init( FileContent );;
+
+	Id.Init();
+	sclmisc::LoadProject( Flow, Id );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void sclxhtml::FinalizeMainSubmission(
+	bso::bool__ Delayed,
+	xhtagent::agent___ &Agent,
+	xml::writer_ &Writer )
+{
+	if ( Delayed )
+		HandleUserProjectFile_( Agent );
 
 	Writer.PushTag( "PredefinedBackends" );
 
 	sclfrntnd::GetPredefinedBackends( Writer );
 
 	Writer.PopTag();
-ERRErr
-ERREnd
-ERREpilog
 }
 
 /* Although in theory this class is inaccessible to the different modules,

@@ -91,15 +91,25 @@ namespace xhtagent {
 		{
 			return _C().Get( Id, Name, Buffer );
 		}
-		const char *GetFileContent(
-			const char *Id,
-			TOL_CBUFFER___ &Buffer )
+		bso::bool__ LaunchFileLoading( const char *Id )
 		{
-			if ( str::string( Get(Id, "files.length", Buffer ) ).ToUInt() == 0 )
-				return NULL;
+			bso::bool__ Success = false;
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			if ( str::string(Get(Id, "files.length", Buffer)).ToUInt() == 0 )
+				ERRReturn;
 
 			_C().LaunchFileLoading( Id );
 
+			Success = true;
+		ERRErr
+		ERREnd
+		ERREpilog
+			return Success;
+		}
+		const char *GetFileContent( TOL_CBUFFER___ &Buffer )
+		{
 			return _C().GetFileContent( Buffer );
 		}
 		void Set(

@@ -382,6 +382,14 @@ void sclmisc::EraseProjectRegistry( void )
 	scllocale::EraseLocale( scllocale::tProject );
 }
 
+void sclmisc::LoadProject(
+	flw::iflow__ &Flow,
+	str::string_ &Id )
+{
+	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Id );
+
+	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tConfiguration, utf::f_Default );
+}
 
 void sclmisc::LoadProject(
 	const fnm::name___ &FileName,
@@ -391,7 +399,6 @@ void sclmisc::LoadProject(
 
 	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tConfiguration, utf::f_Default );
 }
-
 
 void sclmisc::CreateBackupFile(
 	const fnm::name___ &FileName,
