@@ -69,6 +69,13 @@ ERRBegin
 
 	Agent.Show( PredefinedProject, Predefined );
 	Agent.Show( UserProject, User );
+	if ( Predefined || User )
+		Agent.Remove( "ProjectDefinition", "style" );
+	else {
+		Agent.ExecuteJavascript("document.getElementById( 'ProjectDefinition' ).setAttribute( 'style', 'border: 0px red solid;' );");
+		Agent.Set( "ProjectDefinition", "style", "border: 1px green solid;" );
+		Agent.Set( "ProjectDefinition", "style.border", "1px green solid" );
+	}
 ERRErr
 ERREnd
 ERREpilog

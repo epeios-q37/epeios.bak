@@ -134,7 +134,6 @@ ERREpilog
 }
 
 static void MergeLocale_(
-	scllocale::target__ Target,
 	const str::strings_ &SubLocales,
 	utf::format__ Format,
 	str::string_ &MergedLocale )
@@ -185,7 +184,7 @@ ERRBegin
 	MergedLocale.Init();
 	MergedLocale.Append("<Locale>");
 
-	MergeLocale_( Target, SubLocales, Format, MergedLocale );
+	MergeLocale_( SubLocales, Format, MergedLocale );
 
 	MergedLocale.Append( "</Locale>" );
 
@@ -388,7 +387,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tConfiguration, utf::f_Default );
+	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tProject, utf::f_Default );
 }
 
 void sclmisc::LoadProject(
@@ -397,7 +396,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tConfiguration, utf::f_Default );
+	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tProject, utf::f_Default );
 }
 
 void sclmisc::CreateBackupFile(
