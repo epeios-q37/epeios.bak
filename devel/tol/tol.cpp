@@ -77,7 +77,7 @@ inline bso::bool__ tol::IsSystemCommandAvailable( void )
 
 int tol::System( const ntvstr::nstring___ &Command )
 {
-	if ( Command.Size() == 0 )
+	if ( Command.IsEmpty() )
 		return system( NULL );
 
 	if ( !IsSystemCommandAvailable() )

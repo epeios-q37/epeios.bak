@@ -242,6 +242,9 @@ ERRProlog
 	str::string LocaleRootPath, RegistryRootPath;
 	TOL_CBUFFER___ LocaleBuffer, RegistryBuffer;
 ERRBegin
+	if ( !cio::IsInitialized() )
+		ERRFwk();
+
 	LocaleRootPath.Init();
 	BuildRootPath_( "Locale", SCLMISCTargetName, LocaleRootPath );
 
@@ -325,7 +328,7 @@ ERRBegin
 	if ( !InitializeFlow_( LOCALE_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
 		Meaning.Init();
 		Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu être lu.
-		Meaning.AddTag( "Unable to open locale file" );	// Ceci remaplacera le '%0' ci-dessus.
+		Meaning.AddTag( "Unable to open locale file" );	// Ceci remplacera le '%0' ci-dessus.
 		ReportAndAbort( Meaning );
 	}
 ERRErr
@@ -361,6 +364,9 @@ ERRProlog
 	str::string LocaleDirectory, ConfigurationDirectory;
 	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
 ERRBegin
+	if ( !cio::IsInitialized() )
+		ERRFwk();
+
 	LocaleDirectory.Init();
 	InitializeLocaleFlow_( SuggestedDirectory, LocaleFlow, LocaleDirectory );
 	LocaleXFlow.Init( LocaleFlow, utf::f_Default );
@@ -452,7 +458,7 @@ txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileNa
 {
 	_FileName.Init( FileName );
 
-	if ( _FileName.Size() == 0 ) {
+	if ( _FileName.IsEmpty() ) {
 		_BackedUp = false;
 		return cio::COut;
 	} else {

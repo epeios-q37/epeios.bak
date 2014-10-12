@@ -458,7 +458,7 @@ namespace uys {
 		}
 		state__ State( void ) const
 		{
-			if ( GetFileName().Size() == 0 )
+			if ( GetFileName().Amount() == 0 )
 				return sInconsistent;
 			else if ( Exists() )
 				return sExists;

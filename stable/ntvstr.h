@@ -71,7 +71,7 @@ namespace ntvstr {
 
 	typedef tol::E_BUFFER___( bso::char__ ) buffer___;
 
-	// 'NAtive string' ; 'string' utilisant en interne l'encodage natif. LEs 'str::string_' passés en paramètres sont encodés en 'UTF-8'.
+	// 'Native string' ; 'string' utilisant en interne l'encodage natif. LEs 'str::string_' passés en paramètres sont encodés en 'UTF-8'.
 	class nstring___
 	{
 	private:
@@ -94,12 +94,23 @@ namespace ntvstr {
 
 			Init( String );
 		}
+		nstring___( const base__ *String )
+		{
+			reset( false );
+
+			Init( String );
+		}
 		nstring___( const str::string_ &String )
 		{
 			reset( false );
 			Init( String );
 		}
-		nstring___ &operator =( const nstring___ &NS );
+		nstring___ &operator =( const nstring___ &NS)
+		{
+			Init( NS.Core() );
+
+			return *this;
+		}
 		void Init( void )
 		{
 			// _Core.Init();	// C'est un buffer, donc pas d'initialisation.
@@ -107,6 +118,7 @@ namespace ntvstr {
 			*_Core = 0;
 		}
 		void Init( const bso::char__ *String );
+		void Init( const base__ *String );
 		void Init( const str::string_ &String );
 		void Init( const nstring___ &String )
 		{
@@ -142,7 +154,7 @@ namespace ntvstr {
 		{
 			return _Core;
 		}
-		bso::size__ Size( void ) const
+		bso::size__ Amount( void ) const
 		{
 			if ( _Core == NULL )
 				return 0;
@@ -154,6 +166,10 @@ namespace ntvstr {
 # else
 #  error
 # endif
+		}
+		bso::bool__ IsEmpty( void ) const
+		{
+			return Amount() == 0;
 		}
 	};
 

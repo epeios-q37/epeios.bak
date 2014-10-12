@@ -48,20 +48,6 @@ using namespace ntvstr;
 # error
 #endif
 
-nstring___ &ntvstr::nstring___::operator =( const nstring___ &NS )
-{
-	bso::size__ Size = ( NS._Core == NULL ? 0 : strlen_( NS._Core ) );
-
-	_Core.Malloc( Size + 1 );
-
-	if ( Size != 0 )
-		strcpy_( _Core, NS._Core );
-	else
-		*_Core = 0;
-
-	return *this;
-}
-
 void ntvstr::nstring___::Init( const bso::char__ *String )
 {
 	if ( String == NULL )
@@ -98,6 +84,17 @@ void ntvstr::nstring___::Init( const bso::char__ *String )
 # endif
 }
 
+void ntvstr::nstring___::Init( const base__ *String )
+{
+	bso::size__ Size = ( String == NULL ? 0 : strlen_( String ) );
+
+	_Core.Malloc( Size + 1 );
+
+	if ( Size != 0 )
+		strcpy_( _Core, String );
+	else
+		*_Core = 0;
+}
 
 void ntvstr::nstring___::Init( const str::string_ &String )
 {

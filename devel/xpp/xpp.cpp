@@ -122,7 +122,7 @@ ERRProlog
 	TOL_CBUFFER___ CBuffer;
 	bso::integer_buffer__ IBuffer;
 ERRBegin
-	if ( Coordinates.FileName.Size() != 0 ) {
+	if ( !Coordinates.FileName.IsEmpty() ) {
 		Meaning.SetValue( XPP_NAME "_ErrorInFileAtLineColumn" );
 		Meaning.AddTag( Coordinates.FileName.UTF8( CBuffer ) );
 	} else

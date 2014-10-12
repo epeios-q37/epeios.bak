@@ -197,7 +197,7 @@ const fnm::name___ &fil::GetBackupFileName(
 	const fnm::name___ &FileName,
 	fnm::name___ &Buffer )
 {
-	return fnm::BuildFileName( NULL, FileName, FIL__BACKUP_FILE_EXTENSION, Buffer );
+	return fnm::BuildFileName( (const char *)NULL, FileName, FIL__BACKUP_FILE_EXTENSION, Buffer );
 }
 
 #define CASE( m )\

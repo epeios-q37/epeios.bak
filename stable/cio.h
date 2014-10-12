@@ -66,12 +66,6 @@ extern class ttr_tutor &CIOTutor;
 # include "cpe.h"
 # include "flx.h"
 
-# ifndef E_NO_CIO_AUTOMATIC_INITIALIZATION	// Utilise dans le cadre d'un service Windows.
-# ifndef CPE_LIBRARY
-#  define CIO__AUTOMATIC_INITIALIZATION 	// Si modifié, modifier 'WINTOL' en conséquence !
-#  endif
-# endif
-
 namespace cio {
 
 	extern iop::descriptor__ CInDescriptor, COutDescriptor, CErrDescriptor;
@@ -115,15 +109,16 @@ namespace cio {
 		}
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
-			fdr::thread_safety__ )	// A cause d'une 
+			fdr::thread_safety__ )
+				// Une ancienne version de cette bibliothèque avait une méthode avec ces paramètres. Un appel à cette méthode appelait la méthode ci-dessus, ce qui provoque une erreur.
+				// Cette méthode a donc été mise en place pour détecter et corrger ce cas de figure...
 		{
 			ERRPrm();
 		}
 		void Init(
 			fdr::iflow_driver_base___ &,
 			fdr::thread_safety__ )
-				// Une ancienne version de cette bibliothèque avait une méthode avec ces paramètres. Un appel à cette méthode appelait la méthode ci-dessus, ce qui provoque une erreur.
-				// Cette méthode a donc été mise en palce pour détecter et corrger ce cas de figure...
+				// Idem que ci-dessus.
 		{
 			ERRPrm();
 		}

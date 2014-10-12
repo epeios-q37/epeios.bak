@@ -153,9 +153,6 @@ class ciopersonnalization
 public:
 	ciopersonnalization( void )
 	{
-#ifdef CIO__AUTOMATIC_INITIALIZATION
-		cio::Initialize( t_Default );
-#endif
 	/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

@@ -419,7 +419,7 @@ namespace fls {
 				if ( _Row != E_NIL )
 					_Unregister( _Row, _ID );
 
-				if ( _Name.Size() != 0  )
+				if ( _Name.Amount() != 0  )
 				{
 					if ( !Temoin_.Persistant )
 						fil::Remove( _Name );
@@ -443,7 +443,7 @@ namespace fls {
 			fil::mode__ Mode = fil::mReadWrite,
 			fls::creation Creation = fls::cFirstUse )
 		{
-			if ( Name.Size() != 0 )
+			if ( Name.Amount() != 0 )
 			{
 				reset();
 
@@ -537,7 +537,7 @@ namespace fls {
 		{
 			ReleaseFile();
 
-			if ( ( _Name.Size() != 0 ) && fil::Exists( _Name ) )
+			if ( ( _Name.Amount() != 0 ) && fil::Exists( _Name ) )
 				if ( !fil::Remove( _Name ) )
 					ERRLbr();
 
@@ -642,7 +642,7 @@ namespace fls {
 		//f Initialize using 'Filename' as file, open it in mode 'Mode'.
 		void Init(
 			id__ ID,
-			const fnm::name___ &FileName = NULL,
+			const fnm::name___ &FileName = (char *)NULL,
 			fil::mode__ Mode = fil::mReadWrite,
 			fls::creation Creation = fls::cFirstUse )
 		{

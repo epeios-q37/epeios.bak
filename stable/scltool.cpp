@@ -428,21 +428,27 @@ bso::bool__ Fill_(
 
 void Fill_(
 	int argc,
-	const char **argv,
+	ntvstr::base__ *argv[],
+	bso::bool__ FirstIsCommand,
 	flags_ &Flags,
 	options_ &Options,
 	arguments_ &Arguments )
 {
-	int Current = 1;
+ERRProlog
+	int Current = ( FirstIsCommand ? 1 : 0 );
 	bso::bool__ FreeArgumentsOnly = false;
-
+	TOL_CBUFFER___ Buffer;
+ERRBegin
 	while ( ( Current < argc ) && ( !FreeArgumentsOnly ) )
 	{
-		FreeArgumentsOnly = Fill_( argv[Current++], Flags, Options, Arguments );
+		FreeArgumentsOnly = Fill_( ntvstr::nstring___( argv[Current++] ).UTF8( Buffer ), Flags, Options, Arguments );
 	}
 
 	while ( Current < argc )
-		Arguments.Append( str::string( argv[Current++] ) );
+		Arguments.Append( str::string( ntvstr::nstring___( argv[Current++] ).UTF8( Buffer ) ) );
+ERRErr
+ERREnd
+ERREpilog
 }
 
 static const str::string_ &GetId_(
@@ -931,20 +937,21 @@ static void PutIndice_(
 
 static void DumpInRegistry_(
 	int argc,
-	const char **argv )
+	ntvstr::base__ *argv[] )
 {
 ERRProlog
-	bso::integer_buffer__ Buffer;
+	bso::integer_buffer__ IBuffer;
 	int i = 0;
 	str::string Path;
+	TOL_CBUFFER___ SBuffer;
 ERRBegin
-	SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, Buffer ) ) );
+	SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, IBuffer ) ) );
 
 	while ( i < argc ) {
 		Path.Init();
 		PutIndice_( RAW_ARGUMENT, i, "", Path );
 
-		SetValue( Path, str::string( argv[i++] ) );
+		SetValue( Path, str::string( ntvstr::nstring___( argv[i++] ).UTF8( SBuffer ) ) );
 	}
 ERRErr
 ERREnd
@@ -1394,7 +1401,7 @@ ERREpilog
 
 static void DumpInRegistry_(
 	int argc,
-	const char **argv,
+	ntvstr::base__ *argv[],
 	const flags_ &Flags,
 	const options_ &Options,
 	const arguments_ &Arguments )
@@ -1408,7 +1415,8 @@ static void DumpInRegistry_(
 
 static void FillRegistry_(
 	int argc,
-	const char **argv )
+	ntvstr::base__ *argv[],
+	bso::bool__ FirstIsCommand )
 {
 ERRProlog
 	flags Flags;
@@ -1419,7 +1427,7 @@ ERRBegin
 	Options.Init();
 	Arguments.Init();
 
-	Fill_( argc, argv, Flags, Options, Arguments );
+	Fill_( argc, argv, FirstIsCommand, Flags, Options, Arguments );
 
 	FillRegistry_( Flags, Options, Arguments );
 
@@ -1448,7 +1456,8 @@ ERREpilog
 
 static bso::bool__ main_(
 	int argc,
-	const char *argv[] )
+	ntvstr::base__ *argv[],
+	bso::bool__ FirstIsCommand )
 {
 	bso::bool__ Success = false;
 ERRProlog
@@ -1457,12 +1466,12 @@ ERRProlog
 	str::string ProjectId;
 	str::string SetupId;
 ERRBegin
-	sclmisc::Initialize( NULL );
+	sclmisc::Initialize( (const char *)NULL );
 
 	SetupRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
 	ArgumentsRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Arguments" ) );
 
-	FillRegistry_( argc, argv );
+	FillRegistry_( argc, argv, FirstIsCommand );
 
 	SetupId.Init();
 	OGetValue( Setup_, SetupId );
@@ -1513,14 +1522,21 @@ ERREpilog
 	return Success;
 }
 
-int main(
+
+#ifdef CPE_WIN
+
+// Windows va utiliser soit 'wmain' soit 'wWinMain' (et ignorer l'autre) selon la valeur de 'SubSystem'.
+
+int wmain(
 	int argc,
-	const char *argv[] )
+	wchar_t *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
 ERRFBegin
-	if ( !main_( argc, argv ) )
+	cio::Initialize( cio::t_Default );
+
+	if ( !main_( argc, argv, true ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd	
@@ -1530,6 +1546,81 @@ ERRFEnd
 ERRFEpilog
 	return ExitValue;
 }
+
+int WINAPI wWinMain(
+	HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	PWSTR pCmdLine,
+	int nCmdShow)
+{
+	int ExitValue = EXIT_SUCCESS;
+ERRFProlog
+	int argc = 0;
+	LPWSTR *argv = NULL;
+	str::string SOut, SErr;
+	flx::bunch_oflow_driver___<str::string_, bso::char__> FOut, FErr;
+	flx::void_iflow_driver___ FIn;
+ERRFBegin
+	argv = CommandLineToArgvW( GetCommandLineW(), &argc );
+
+	SOut.Init();
+	FOut.Init( SOut, fdr::ts_Default );
+	cio::COutF.Init( FOut );
+
+	SErr.Init();
+	FErr.Init( SErr, fdr::ts_Default );
+	cio::CErrF.Init( FErr );
+
+	FIn.Init( fdr::ts_Default );
+	cio::CInF.Init( FIn );
+
+	cio::Initialize( cio::tUser );
+
+	if ( !main_( argc, argv, true ) )
+		ExitValue = EXIT_FAILURE;
+ERRFErr
+ERRFEnd
+	if ( argv != NULL )
+		LocalFree( argv );
+
+	cio::COut.reset();
+	cio::CErr.reset();
+	cio::CIn.reset();
+
+	FOut.reset();
+	FErr.reset();
+	FIn.reset();
+
+	if ( SOut.Amount() )
+		MessageBoxW( NULL, ntvstr::nstring___( SOut ).Core(), ntvstr::nstring___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
+
+	if ( SErr.Amount() )
+		MessageBoxW( NULL, ntvstr::nstring___( SErr ).Core(), ntvstr::nstring___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
+ERRFEpilog
+	return ExitValue;
+}
+
+#else
+int main(
+	int argc,
+	char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+ERRFProlog
+ERRFBegin
+	cio::Initialize( cio::t_Default );
+
+	if ( !main_( argc, argv, true ) )
+		ExitValue = EXIT_FAILURE;
+ERRFErr
+ERRFEnd	
+	cio::COut.Commit();
+	cio::CErr.Commit();
+	cio::CIn.Dismiss();
+ERRFEpilog
+	return ExitValue;
+}
+#endif
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

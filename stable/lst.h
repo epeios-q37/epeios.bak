@@ -54,7 +54,7 @@ namespace lst {
 		const fnm::name___ &FileName,
 		time_t ReferenceTimeStamp )
 	{
-		if ( !FileName.Size()  )
+		if ( !FileName.Amount()  )
 			return uys::sInconsistent;
 
 		if ( !fil::Exists( FileName ) )
@@ -417,7 +417,7 @@ namespace lst {
 		}
 		void Drop( void )
 		{
-			if ( ( _Store == NULL ) || !_FileName.Size() )
+			if ( ( _Store == NULL ) || !_FileName.Amount() )
 				ERRFwk();
 
 			if ( fil::Exists( _FileName ) )

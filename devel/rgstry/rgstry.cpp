@@ -1630,7 +1630,7 @@ ERRBegin
 
 	XFlow.Init( FFlow, utf::f_Default );
 
-	if ( Criterions.Directory.Size() != 0 )
+	if ( !Criterions.Directory.IsEmpty() )
 		ERRPrm();
 
 	Location.Init();
@@ -1638,7 +1638,7 @@ ERRBegin
 	Status = FillRegistry( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, RegistryRoot, Context );
 
 	if ( Status == sParseError )
-		if ( Context.Coordinates.FileName.Size() == 0 )
+		if ( Context.Coordinates.FileName.IsEmpty() )
 			Context.Coordinates.FileName = FileName;
 ERRErr
 ERREnd
