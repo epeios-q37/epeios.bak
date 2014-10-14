@@ -429,13 +429,12 @@ bso::bool__ Fill_(
 void Fill_(
 	int argc,
 	ntvstr::base__ *argv[],
-	bso::bool__ FirstIsCommand,
 	flags_ &Flags,
 	options_ &Options,
 	arguments_ &Arguments )
 {
 ERRProlog
-	int Current = ( FirstIsCommand ? 1 : 0 );
+	int Current = 1;
 	bso::bool__ FreeArgumentsOnly = false;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
@@ -1415,8 +1414,7 @@ static void DumpInRegistry_(
 
 static void FillRegistry_(
 	int argc,
-	ntvstr::base__ *argv[],
-	bso::bool__ FirstIsCommand )
+	ntvstr::base__ *argv[] )
 {
 ERRProlog
 	flags Flags;
@@ -1427,7 +1425,7 @@ ERRBegin
 	Options.Init();
 	Arguments.Init();
 
-	Fill_( argc, argv, FirstIsCommand, Flags, Options, Arguments );
+	Fill_( argc, argv, Flags, Options, Arguments );
 
 	FillRegistry_( Flags, Options, Arguments );
 
@@ -1457,7 +1455,7 @@ ERREpilog
 static bso::bool__ main_(
 	int argc,
 	ntvstr::base__ *argv[],
-	bso::bool__ FirstIsCommand )
+	const oddities__ &Oddities )
 {
 	bso::bool__ Success = false;
 ERRProlog
@@ -1471,7 +1469,9 @@ ERRBegin
 	SetupRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
 	ArgumentsRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Arguments" ) );
 
-	FillRegistry_( argc, argv, FirstIsCommand );
+//	argc = 1;
+
+	FillRegistry_( argc, argv );
 
 	SetupId.Init();
 	OGetValue( Setup_, SetupId );
@@ -1491,7 +1491,7 @@ ERRBegin
 	if ( MGetValue( Command_, Command ) == "Usage" )
 		PrintUsage_();
 	else
-		SCLTOOLMain( Command );
+		SCLTOOLMain( Command, Oddities );
 ERRErr
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {
@@ -1533,10 +1533,11 @@ int wmain(
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
+	oddities__ Oddities;
 ERRFBegin
 	cio::Initialize( cio::t_Default );
 
-	if ( !main_( argc, argv, true ) )
+	if ( !main_( argc, argv, Oddities ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd	
@@ -1560,6 +1561,7 @@ ERRFProlog
 	str::string SOut, SErr;
 	flx::bunch_oflow_driver___<str::string_, bso::char__> FOut, FErr;
 	flx::void_iflow_driver___ FIn;
+	oddities__ Oddities;
 ERRFBegin
 	argv = CommandLineToArgvW( GetCommandLineW(), &argc );
 
@@ -1576,7 +1578,12 @@ ERRFBegin
 
 	cio::Initialize( cio::tUser );
 
-	if ( !main_( argc, argv, true ) )
+	Oddities.hInstance = hInstance;
+	Oddities.hPrevInstance = hPrevInstance;
+	Oddities.nCmdShow = nCmdShow;
+	Oddities.pCmdLine = pCmdLine;
+
+	if ( !main_( argc, argv, Oddities ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd

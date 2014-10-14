@@ -54,10 +54,21 @@ namespace scltool {
 	};
 # endif
 
+# ifdef CPE_WIN
+	struct oddities__ {
+		HINSTANCE hInstance;
+		HINSTANCE hPrevInstance;
+		PWSTR pCmdLine;
+		int nCmdShow;
+	};
+# endif
+
 	void ReportIfNoSetupId( void );
 
 	// A définir par l'utilisateur.
-	void SCLTOOLMain( const str::string_ &Command );
+	void SCLTOOLMain(
+		const str::string_ &Command,
+		const oddities__ &Oddities );
 
 	inline sclrgstry::registry_ &GetRegistry( void )
 	{
