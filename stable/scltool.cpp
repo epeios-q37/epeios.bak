@@ -39,6 +39,9 @@ using namespace scltool;
 using cio::COut;
 using scllocale::GetLocale;
 
+bso::bool__ scltool::IgnoreCLIArgs = false;
+
+
 static rgstry::level__ SetupRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Registry remplit par l'éventuel 'Setups/Setup' sélectionné (présent dans le fichier de configuration ou de projet).
 static rgstry::level__ ArgumentsRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Registry remplit par les arguments présent en ligne de commande.
 
@@ -1469,7 +1472,8 @@ ERRBegin
 	SetupRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
 	ArgumentsRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Arguments" ) );
 
-//	argc = 1;
+	if ( IgnoreCLIArgs )
+		argc = 1;
 
 	FillRegistry_( argc, argv );
 

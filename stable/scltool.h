@@ -225,6 +225,7 @@ namespace scltool {
 		return scltool::OGetValue( entry, Value, Missing );\
 	}
 
+	extern bso::bool__ IgnoreCLIArgs;
 }
 
 				  /********************************************/
