@@ -158,6 +158,7 @@ public:
 	}
 	~ciopersonnalization( void )
 	{
+		Target_ == t_Undefined;
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
 	}

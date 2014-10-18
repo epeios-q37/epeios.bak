@@ -1472,8 +1472,11 @@ ERRBegin
 	SetupRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
 	ArgumentsRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Arguments" ) );
 
-	if ( IgnoreCLIArgs )
+	if ( IgnoreCLIArgs ) {
 		argc = 1;
+//		while ( argc == 1 );
+	}
+			
 
 	FillRegistry_( argc, argv );
 
