@@ -72,7 +72,9 @@ static void Test_( void )
 		name##_()
 		
 
-void scltool::SCLTOOLMain( const str::string_ &Command )
+void scltool::SCLTOOLMain(
+	const str::string_ &Command,
+	const scltool::oddities__ &Oddities )
 {
 ERRProlog
 ERRBegin
