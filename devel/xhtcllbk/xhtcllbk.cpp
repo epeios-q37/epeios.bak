@@ -53,3 +53,19 @@ public:
 /******************************************************************************/
 
 static xhtcllbkpersonnalization Tutor;
+
+void xhtcllbk::EscapeQuotes(
+    const str::string_ &Source,
+    str::string_ &Target )
+{
+    sdr::row__ Row = Source.First();
+
+    while ( Row != E_NIL ) {
+        if( Source( Row ) == '"' )
+            Target.Append( '\\');
+
+        Target.Append( Source( Row ) );
+
+        Row = Source.Next( Row );
+    }
+}

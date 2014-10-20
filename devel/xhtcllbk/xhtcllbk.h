@@ -132,9 +132,7 @@ namespace xhtcllbk {
 			const char *Id,
 			const char *XML,
 			const char *XSL ) = 0;
-		virtual void XHTCLLBKExecuteJavascript(
-			const char *Javascript,
-			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XHTCLLBKExecuteJavascript( const char *Script ) = 0;
 		virtual void XHTCLLBKSet(
 			const char *Id,
 			const char *Name,
@@ -146,11 +144,6 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKRemove(
 			const char *Id,
 			const char *Name ) = 0;
-		// Les deux commandes doivent être appelée l'une aprés l'autre. La première lance le chargement d'un fichier, la seconde permet de récupèrer son contenu.
-		// Ceci est rendu nécessaire car le chargement se fait de manière asynchrone, mais ne débute réellement que lorsque le gestionnaire d'évènement ayant
-		// lancé le chergement rend la main (utilisation de 'FileReader').
-		virtual void XHTCLLBKLaunchFileLoading( const char *Id ) = 0;	// Identifiant de la balise '<input type="file"...
-		virtual void XHTCLLBKGetFileContent( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -168,13 +161,9 @@ namespace xhtcllbk {
 		{
 			XHTCLLBKSetChildren( Id, XML, XSL );
 		}
-		const char *ExecuteJavascript(
-			const char *Script,
-			TOL_CBUFFER___ &Buffer )
+		void ExecuteJavascript( const char *Script )
 		{
-			XHTCLLBKExecuteJavascript( Script, Buffer );
-
-			return Buffer;
+			XHTCLLBKExecuteJavascript( Script );
 		}
 		const char *Get(
 			const char *Id,
@@ -197,16 +186,6 @@ namespace xhtcllbk {
 			const char *Name )
 		{
 			XHTCLLBKRemove( Id, Name );
-		}
-		void LaunchFileLoading( const char *Id )
-		{
-			XHTCLLBKLaunchFileLoading( Id );
-		}
-		const char *GetFileContent( TOL_CBUFFER___ &Buffer )
-		{
-			XHTCLLBKGetFileContent( Buffer );
-
-			return Buffer;
 		}
 	};
 
@@ -297,6 +276,11 @@ namespace xhtcllbk {
 #pragma pack( pop )
 
 	typedef downstream_callback__ *(retrieve)( const shared_data__ &Data );
+
+	void EscapeQuotes(
+		const str::string_ &Source,
+		str::string_ &Target );
+
 
 }
 
