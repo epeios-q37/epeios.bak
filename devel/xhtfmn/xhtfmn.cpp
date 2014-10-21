@@ -103,8 +103,8 @@ ERRBegin
 		Agent.GetSelectValue( PredefinedProject, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
-		if ( !Agent.LaunchFileLoading( UserProject ) )
-			ProjectType = xhtfbs::pt_Undefined;
+/*		if ( !Agent.LaunchFileLoading( UserProject ) )
+			ProjectType = xhtfbs::pt_Undefined;*/
 		// Le contenu du fichier proprement dit sera chargé ultèrieurement.
 		break;
 	default:

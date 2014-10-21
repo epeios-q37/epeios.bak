@@ -32,16 +32,7 @@ static void EscapeQuotes_(
         const str::string_ &Source,
         str::string_ &Target )
 {
-    sdr::row__ Row = Source.First();
-
-    while ( Row != E_NIL ) {
-        if( Source( Row ) == '"' )
-            Target.Append( '\\');
-
-        Target.Append( Source( Row ) );
-
-        Row = Source.Next( Row );
-    }
+	xhtcllbk::EscapeQuotes( Source, Target );
 }
 
 void xhtagent::agent___::Set(
@@ -59,18 +50,6 @@ ERRBegin
 	EscapeQuotes_( RawValue, EscapedValue );
 
 	_C().Set( Id, Name, EscapedValue.Convert( Buffer ) );;
-ERRErr
-ERREnd
-ERREpilog
-}
-
-
-void xhtagent::agent___::ExecuteJavascript( const char *Script )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	ExecuteJavascript( Script, Buffer );
 ERRErr
 ERREnd
 ERREpilog

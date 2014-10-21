@@ -77,40 +77,16 @@ namespace xhtagent {
 			if ( !_Handlers.Add( EventName, Handler ) )
 				ERRFwk();
 		}
-		const char *ExecuteJavascript(
-			const char *Script,
-			TOL_CBUFFER___ &Buffer )
+		void ExecuteJavascript( const char *Script )
 		{
-			return _C().ExecuteJavascript( Script, Buffer );
+			return _C().ExecuteJavascript( Script );
 		}
-		void ExecuteJavascript( const char *Script );
 		const char *Get(
 			const char *Id,
 			const char *Name,
 			TOL_CBUFFER___ &Buffer )
 		{
 			return _C().Get( Id, Name, Buffer );
-		}
-		bso::bool__ LaunchFileLoading( const char *Id )
-		{
-			bso::bool__ Success = false;
-		ERRProlog
-			TOL_CBUFFER___ Buffer;
-		ERRBegin
-			if ( str::string(Get(Id, "files.length", Buffer)).ToUInt() == 0 )
-				ERRReturn;
-
-			_C().LaunchFileLoading( Id );
-
-			Success = true;
-		ERRErr
-		ERREnd
-		ERREpilog
-			return Success;
-		}
-		const char *GetFileContent( TOL_CBUFFER___ &Buffer )
-		{
-			return _C().GetFileContent( Buffer );
 		}
 		void Set(
 			const char *Id,

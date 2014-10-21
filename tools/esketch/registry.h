@@ -1,6 +1,6 @@
 /*
 	Header for the 'registry' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
-	Part of th 'esketch' tool.
+	Part of the 'esketch' tool.
 	Copyright (C) 2011 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
 	This file is part of the Epeios project (http://zeusw.org/epeios/).

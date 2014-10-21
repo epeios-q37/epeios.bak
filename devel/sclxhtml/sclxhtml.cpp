@@ -222,31 +222,15 @@ ERREpilog
 	return !DelayFinalization;
 }
 
-static void HandleUserProjectFile_( xhtagent::agent___ &Agent )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-	str::string FileContent, Id;
-	flx::E_STRING_IFLOW__ Flow;
-ERRBegin
-	FileContent.Init( Agent.GetFileContent( Buffer ) );
-	Flow.Init( FileContent );;
-
-	Id.Init();
-	sclmisc::LoadProject( Flow, Id );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 void sclxhtml::FinalizeMainSubmission(
 	bso::bool__ Delayed,
 	xhtagent::agent___ &Agent,
 	xml::writer_ &Writer )
 {
+	/*
 	if ( Delayed )
 		HandleUserProjectFile_( Agent );
-
+		*/
 	Writer.PushTag( "PredefinedBackends" );
 
 	sclfrntnd::GetPredefinedBackends( Writer );
@@ -262,8 +246,10 @@ class sclxhtmlpersonnalization
 public:
 	sclxhtmlpersonnalization( void )
 	{
-		if ( !::IsInitialized_ )	{
-			sclmisc::Initialize( NULL );
+		if ( !::IsInitialized_ )
+		{
+			cio::Initialize( cio::tVoid );
+			sclmisc::Initialize( (const char *)NULL );
 
 			::IsInitialized_ = true;
 		}
