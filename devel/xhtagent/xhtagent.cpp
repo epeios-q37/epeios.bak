@@ -35,26 +35,6 @@ static void EscapeQuotes_(
 	xhtcllbk::EscapeQuotes( Source, Target );
 }
 
-void xhtagent::agent___::Set(
-	const char *Id,
-	const char *Name,
-	const char *Value )
-{
-ERRProlog
-	str::string RawValue, EscapedValue;
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	RawValue.Init( Value );
-	EscapedValue.Init();
-
-	EscapeQuotes_( RawValue, EscapedValue );
-
-	_C().Set( Id, Name, EscapedValue.Convert( Buffer ) );;
-ERRErr
-ERREnd
-ERREpilog
-}
-
 const char *xhtagent::agent___::GetSelectValue(
 	const char *Id,
 	TOL_CBUFFER___ &Buffer  )
@@ -88,45 +68,16 @@ ERREpilog
 	return Buffer;
 }
 
-void xhtagent::agent___::SetChildren(
-	const char *Id,
-	const str::string_ &XML,
-	const str::string_ &XSL )
-{
-ERRProlog
-	TOL_CBUFFER___ BXML, BXSL;
-ERRBegin
-	SetChildren( Id, XML.Convert(BXML), XSL.Convert( BXSL ) );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void xhtagent::agent___::SetChildren(
-	const str::string_ &Id,
-	const str::string_ &XML,
-	const str::string_ &XSL )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	SetChildren( Id.Convert( Buffer), XML, XSL );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 void xhtagent::agent___::Alert( const str::string_ &Message )
 {
 ERRProlog
 	str::string Script;
-	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Script.Init( "alert(\"" );
 	EscapeQuotes_( Message, Script );
 	Script.Append("\");" );
 
-	ExecuteJavascript( Script.Convert( Buffer ) );
+	ExecuteJavascript( Script );
 ERRErr
 ERREnd
 ERREpilog

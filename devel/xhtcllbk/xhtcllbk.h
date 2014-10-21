@@ -129,21 +129,21 @@ namespace xhtcllbk {
 	class upstream_callback__ {
 	protected:
 		virtual void XHTCLLBKSetChildren(
-			const char *Id,
-			const char *XML,
-			const char *XSL ) = 0;
-		virtual void XHTCLLBKExecuteJavascript( const char *Script ) = 0;
+			const ntvstr::base__ *Id,
+			const ntvstr::base__ *XML,
+			const ntvstr::base__ *XSL ) = 0;
+		virtual void XHTCLLBKExecuteJavascript( const ntvstr::base__ *Script ) = 0;
 		virtual void XHTCLLBKSet(
-			const char *Id,
-			const char *Name,
-			const char *Value ) = 0;
+			const ntvstr::base__ *Id,
+			const ntvstr::base__ *Name,
+			const ntvstr::base__ *Value ) = 0;
 		virtual void XHTCLLBKGet(
-			const char *Id,
-			const char *Name,
+			const ntvstr::base__ *Id,
+			const ntvstr::base__ *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKRemove(
-			const char *Id,
-			const char *Name ) = 0;
+			const ntvstr::base__ *Id,
+			const ntvstr::base__ *Name ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -155,37 +155,37 @@ namespace xhtcllbk {
 			//Standardisation.
 		}
 		void SetChildren(
-			const char *Id,
-			const char *XML,
-			const char *XSL )
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &XML,
+			const ntvstr::nstring___ &XSL )
 		{
-			XHTCLLBKSetChildren( Id, XML, XSL );
+			XHTCLLBKSetChildren( Id.Core(), XML.Core(), XSL.Core() );
 		}
-		void ExecuteJavascript( const char *Script )
+		void ExecuteJavascript( const ntvstr::nstring___ &Script )
 		{
-			XHTCLLBKExecuteJavascript( Script );
+			XHTCLLBKExecuteJavascript( Script.Core() );
 		}
 		const char *Get(
-			const char *Id,
-			const char *Name,
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGet( Id, Name, Buffer );
+			XHTCLLBKGet( Id.Core(), Name.Core(), Buffer );
 
 			return Buffer;
 		}
 		void Set(
-			const char *Id,
-			const char *Name,
-			const char *Value )
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &Name,
+			const ntvstr::nstring___ &Value )
 		{
-			XHTCLLBKSet( Id, Name, Value );
+			XHTCLLBKSet( Id.Core(), Name.Core(), Value.Core() );
 		}
 		void Remove(
-			const char *Id,
-			const char *Name )
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &Name )
 		{
-			XHTCLLBKRemove( Id, Name );
+			XHTCLLBKRemove( Id.Core(), Name.Core() );
 		}
 	};
 

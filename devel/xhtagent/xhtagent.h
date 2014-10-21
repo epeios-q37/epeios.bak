@@ -77,44 +77,39 @@ namespace xhtagent {
 			if ( !_Handlers.Add( EventName, Handler ) )
 				ERRFwk();
 		}
-		void ExecuteJavascript( const char *Script )
+		void ExecuteJavascript( const ntvstr::nstring___ &Script )
 		{
 			return _C().ExecuteJavascript( Script );
 		}
 		const char *Get(
-			const char *Id,
-			const char *Name,
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
 			return _C().Get( Id, Name, Buffer );
 		}
 		void Set(
-			const char *Id,
-			const char *Name,
-			const char *Value );
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &Name,
+			const ntvstr::nstring___ &Value )
+		{
+			_C().Set( Id, Name, Value );
+		}
 		void Remove(
-			const char *Id,
-			const char *Name )
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &Name )
 		{
 			_C().Remove( Id, Name );
 		}
 		void SetChildren(
-			const char *Id,
-			const char *XML,
-			const char *XSL )
+			const ntvstr::nstring___ &Id,
+			const ntvstr::nstring___ &XML,
+			const ntvstr::nstring___ &XSL )
 		{
 			_C().SetChildren( Id, XML, XSL );
 		}
-		void SetChildren(
-			const char *Id,
-			const str::string_ &XML,
-			const str::string_ &XSL );
-		void SetChildren(
-			const str::string_ &Id,
-			const str::string_ &XML,
-			const str::string_ &XSL );
 		void Show(
-			const char *Id,
+			const ntvstr::nstring___ &Id,
 			bso::bool__ Value = true )
 		{
 			if ( Value  )
@@ -123,7 +118,7 @@ namespace xhtagent {
 				Set( Id, "hidden", "hidden" );
 		}
 		void Hide(
-			const char *Id,
+			const ntvstr::nstring___ &Id,
 			bso::bool__ Value = true )
 		{
 			Show( Id, !Value );

@@ -61,10 +61,20 @@ void xhtcllbk::EscapeQuotes(
     sdr::row__ Row = Source.First();
 
     while ( Row != E_NIL ) {
-        if( Source( Row ) == '"' )
-            Target.Append( '\\');
-
-        Target.Append( Source( Row ) );
+		switch ( Source( Row ) ) {
+		case '"':
+			Target.Append("\\\"");
+			break;
+		case 10:
+			Target.Append( "\\n" );
+			break;
+		case 13:
+			Target.Append( "\\r" );
+			break;
+		default:
+	        Target.Append( Source( Row ) );
+			break;
+		}
 
         Row = Source.Next( Row );
     }
