@@ -132,7 +132,9 @@ namespace xhtcllbk {
 			const ntvstr::base__ *Id,
 			const ntvstr::base__ *XML,
 			const ntvstr::base__ *XSL ) = 0;
-		virtual void XHTCLLBKExecuteJavascript( const ntvstr::base__ *Script ) = 0;
+		virtual void XHTCLLBKExecuteJavascript(
+			const ntvstr::base__ *Script,
+			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSet(
 			const ntvstr::base__ *Id,
 			const ntvstr::base__ *Name,
@@ -161,9 +163,23 @@ namespace xhtcllbk {
 		{
 			XHTCLLBKSetChildren( Id.Core(), XML.Core(), XSL.Core() );
 		}
+		const char *ExecuteJavascript(
+			const ntvstr::nstring___ &Script,
+			TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKExecuteJavascript( Script.Core(), Buffer );
+
+			return Buffer;
+		}
 		void ExecuteJavascript( const ntvstr::nstring___ &Script )
 		{
-			XHTCLLBKExecuteJavascript( Script.Core() );
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			ExecuteJavascript( Script, Buffer );
+		ERRErr
+		ERREnd
+		ERREpilog
 		}
 		const char *Get(
 			const ntvstr::nstring___ &Id,
