@@ -43,16 +43,7 @@ static bso::bool__ IsInitialized_ = false;
 
 void sclxhtml::callback__::Start( void )
 {
-ERRProlog
-	str::string XML, XSL;
-ERRBegin
-	XML.Init();
-	XSL.Init();
-
 	SCLXHTMLStart( A() );
-ERRErr
-ERREnd
-ERREpilog
 }
 
 void sclxhtml::Load(
@@ -191,9 +182,10 @@ ERREnd
 ERREpilog
 }
 
-bso::bool__ sclxhtml::StartMainSubmission( xhtagent::agent___ &Agent )
+void sclxhtml::MainSubmission(
+	xhtagent::agent___ &Agent,
+	xml::writer_ &Writer )
 {
-	bso::bool__ DelayFinalization = false;
 ERRProlog
 	str::string ProjectFeature;
 ERRBegin
@@ -206,8 +198,6 @@ ERRBegin
 		LoadPredefinedProject_( Agent, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
-		DelayFinalization = true;
-		// Le fichier projet sera chargé ultèrieurement, du fait que le chargement par javascript se fait de manière 'asynchrone'.
 		break;
 	case xhtfbs::pt_Undefined:
 		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
@@ -216,26 +206,15 @@ ERRBegin
 		ERRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
-	return !DelayFinalization;
-}
 
-void sclxhtml::FinalizeMainSubmission(
-	bso::bool__ Delayed,
-	xhtagent::agent___ &Agent,
-	xml::writer_ &Writer )
-{
-	/*
-	if ( Delayed )
-		HandleUserProjectFile_( Agent );
-		*/
 	Writer.PushTag( "PredefinedBackends" );
 
 	sclfrntnd::GetPredefinedBackends( Writer );
 
 	Writer.PopTag();
+ERRErr
+ERREnd
+ERREpilog
 }
 
 /* Although in theory this class is inaccessible to the different modules,
