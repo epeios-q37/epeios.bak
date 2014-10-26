@@ -244,6 +244,7 @@ namespace xhtcllbk {
 			ayant chargé la	bibliothèque. Or, le compilateur utilisé en amont peut ne pas être le même/ne pas
 			avoir été lancé avec les mêmes options que le compilateur aval.
 		*/
+		// 'const char *' pour avoir une strucutre de données simple, car donnée passée entre codes compilés séparément.
 		virtual void Handle( const char *EventName )
 		{
 			event_handler__ *Handler = _H().Get( str::string(  EventName ) );
