@@ -108,6 +108,12 @@ namespace xhtagent {
 		{
 			_C().SetChildren( Id, XML, XSL );
 		}
+		void SetPaddings(
+			const ntvstr::nstring___ &XML,
+			const ntvstr::nstring___ &XSL )
+		{
+			_C().SetPaddings( XML, XSL );
+		}
 		void Show(
 			const ntvstr::nstring___ &Id,
 			bso::bool__ Value = true )

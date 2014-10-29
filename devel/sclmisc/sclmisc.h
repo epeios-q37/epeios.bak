@@ -139,19 +139,19 @@ namespace sclmisc {
 		char Marker = scllocale::DefaultMarker );
 
 	void Load(
-		const rgstry::entry___ &FileName,
+		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &String );
 
 	void LoadAndTranslateTags(
-		const rgstry::entry___ &FileName,
+		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		const char *Language,
 		str::string_ &String,
 		char Marker = scllocale::DefaultMarker );
 
 	void LoadXMLAndTranslateTags(
-		const rgstry::entry___ &FileName,
+		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		const char *Language,
 		str::string_ &String,

@@ -48,37 +48,28 @@ ERREpilog
 	return ProjectType;
 }
 
-void xhtfmn::SetAccessibility( xhtagent::agent___ &Agent )
+void xhtfmn::GetContext(
+	xhtagent::agent___ &Agent,
+	xml::writer_ &Writer)
 {
-ERRProlog
-	bso::bool__ Predefined = false, User = false;
-ERRBegin
+	Writer.PushTag( "ProjectType ");
+
 	switch ( GetProjectType_( Agent ) ) {
 	case xhtfbs::ptNew:
+		Writer.PutValue( "New" );
 		break;
 	case xhtfbs::ptPredefined:
-		Predefined = true;
+		Writer.PutValue( "Predefined" );
 		break;
 	case xhtfbs::ptUser:
-		User = true;
+		Writer.PutValue( "User" );
 		break;
 	default:
 		ERRFwk();
 		break;
 	}
 
-	Agent.Show( PredefinedProject, Predefined );
-	Agent.Show( UserProject, User );
-	if ( Predefined || User )
-		Agent.Remove( "ProjectDefinition", "style" );
-	else {
-		Agent.ExecuteJavascript("document.getElementById( 'ProjectDefinition' ).setAttribute( 'style', 'border: 0px red solid;' );");
-		Agent.Set( "ProjectDefinition", "style", "border: 1px green solid;" );
-		Agent.Set( "ProjectDefinition", "style.border", "1px green solid" );
-	}
-ERRErr
-ERREnd
-ERREpilog
+	Writer.PopTag();
 }
 
 static const str::string_ &GetPredefinedProject_(

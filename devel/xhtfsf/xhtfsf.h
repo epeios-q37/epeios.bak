@@ -42,7 +42,9 @@ namespace xhtfsf {
 
 	typedef xhtfbs::event_handler__ _event_handler__;
 
-	void SetAccessibility( xhtagent::agent___ &Agent );
+	void GetContext(
+		xhtagent::agent___ &Agent,
+		xml::writer_ &Writer );
 
 	class event_handlers__
 	: protected _event_handler__
@@ -57,8 +59,6 @@ namespace xhtfsf {
 		{
 			_event_handler__::Init();
 		}
-		void HandleBackendTypeSelection( xhtagent::agent___ &Agent );
-		void HandleSubmission( xml::writer_ &Writer );
 	};
 }
 

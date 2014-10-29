@@ -27,8 +27,10 @@
 
 using namespace frdrgstry;
 
-static entry___ XSLFiles_( "XSLFiles", sclrgstry::Parameters );
+static entry___ XSLFilesSet_( "XSLFilesSet", sclrgstry::Parameters );
+static entry___ FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
+static entry___ TaggedXSLFiles(RGSTRY_TAGGING_ATTRIBUTE("target"), FreeXSLFiles_ );
 
-entry___ frdrgstry::XSLPageMain("Main", XSLFiles_ );
-entry___ frdrgstry::XSLPageSessionForm("SessionForm", XSLFiles_ );
+entry___ frdrgstry::XSLContentFile("Content", TaggedXSLFiles );
+entry___ frdrgstry::XSLPaddingsFile("Paddings", TaggedXSLFiles );
 

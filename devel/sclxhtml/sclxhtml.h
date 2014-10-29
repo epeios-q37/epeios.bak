@@ -138,14 +138,12 @@ namespace sclxhtml {
 		}
 	};
 
-
-
 	void Load(
-		const rgstry::entry___ &FileName,
+		const rgstry::tentry__ &FileName,
 		str::string_ &String );
 
 	inline void LoadXSLAndTranslateTags(
-		const rgstry::entry___ &FileName,
+		const rgstry::tentry__ &FileName,
 		str::string_ &String )
 	{
 		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), sclmisc::GetLanguage(), String, '$' );

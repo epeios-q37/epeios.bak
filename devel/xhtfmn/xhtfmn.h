@@ -43,7 +43,10 @@ namespace xhtfmn {
 
 	typedef xhtfbs::event_handler__ _event_handler__;
 
-	void SetAccessibility( xhtagent::agent___ &Agent );
+	void GetContext(
+		xhtagent::agent___ &Agent,
+		xml::writer_ &Writer );
+
 
 	xhtfbs::project_type__ GetProjectFeatures(
 		xhtagent::agent___ &Agent,

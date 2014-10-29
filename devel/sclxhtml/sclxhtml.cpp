@@ -47,7 +47,7 @@ void sclxhtml::callback__::Start( void )
 }
 
 void sclxhtml::Load(
-	const rgstry::entry___ &FileName,
+	const rgstry::tentry__ &FileName,
 	str::string_ &String )
 {
 	sclmisc::Load( FileName, sclrgstry::GetRegistry(), String );

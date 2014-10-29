@@ -240,7 +240,8 @@ static status__ GetCData_(
 				Continue = false;
 			} else
 				Content.Append( "]]" );
-		}
+		} else
+			Content.Append( ']' );
 	}
 
 	return sOK;

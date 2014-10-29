@@ -264,7 +264,9 @@ ERREnd
 ERREpilog
 }
 
-void scltool::SCLTOOLMain( const str::string_ &Command )
+void scltool::SCLTOOLMain(
+	const str::string_ &Command,
+	const scltool::oddities__ &Oddities )
 {
 ERRProlog
 	str::string Translation;

@@ -28,45 +28,34 @@
 
 using namespace xhtfsf;
 
-void xhtfsf::SetAccessibility( xhtagent::agent___ &Agent )
+void xhtfsf::GetContext(
+	xhtagent::agent___ &Agent,
+	xml::writer_ &Writer )
 {
 ERRProlog
 	str::string Value;
-	bso::bool__ Daemon = false, Embedded = false, Predefined = false;
 ERRBegin
+	Writer.PushTag( "BackendType" );
+
 	Value.Init();
 	switch ( xhtfbs::GetBackendType( Agent.GetSelectValue( "BackendTypeSelection", Value ) ) ) {
 	case xhtfbs::btDaemon:
-		Daemon = true;
+		Writer.PutValue( "Daemon" );
 		break;
 	case xhtfbs::btEmbedded:
-		Embedded = true;
+		Writer.PutValue( "Embedded" );
 		break;
 	case xhtfbs::btPredefined:
-		Predefined = true;
+		Writer.PutValue( "Predefined" );
 		break;
 	default:
 		ERRFwk();
 		break;
 	}
-
-	Agent.Show( "EmbeddedBackend", Embedded );
-	Agent.Show( "DaemonBackend", Daemon );
-	Agent.Show( "PredefinedBackends", Predefined );
 ERRErr
 ERREnd
 ERREpilog
 }
-
-void xhtfsf::event_handlers__::HandleBackendTypeSelection( xhtagent::agent___ &Agent )
-{
-	SetAccessibility( Agent );
-}
-
-void xhtfsf::event_handlers__::HandleSubmission( xml::writer_ &Writer )
-{
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

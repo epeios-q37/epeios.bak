@@ -64,6 +64,10 @@ namespace xhtfbs {
 			_TFlow.Init( _Flow );
 			_Writer.Init( _TFlow, xml::oIndent, xml::e_Default );
 		}
+		operator xml::writer_ &()
+		{
+			return _Writer;
+		}
 		xml::writer_ &operator()( void )
 		{
 			return _Writer;

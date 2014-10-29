@@ -508,7 +508,7 @@ void sclmisc::LoadAndTranslateTags(
 }
 
 static void Load_(
-	const rgstry::entry___ &Entry,
+	const rgstry::tentry__ &Entry,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &String,
 	str::string_ &FileName )
@@ -521,7 +521,7 @@ static void Load_(
 
 
 void sclmisc::Load(
-	const rgstry::entry___ &Entry,
+	const rgstry::tentry__ &Entry,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &String )
 {
@@ -537,7 +537,7 @@ ERREpilog
 }
 
 void sclmisc::LoadAndTranslateTags(
-	const rgstry::entry___ &FileName,
+	const rgstry::tentry__ &FileName,
 	const sclrgstry::registry_ &Registry,
 	const char *Language,
 	str::string_ &String,
@@ -549,7 +549,7 @@ void sclmisc::LoadAndTranslateTags(
 }
 
 void sclmisc::LoadXMLAndTranslateTags(
-	const rgstry::entry___ &FileNameEntry,
+	const rgstry::tentry__ &FileNameEntry,
 	const sclrgstry::registry_ &Registry,
 	const char *Language,
 	str::string_ &String,

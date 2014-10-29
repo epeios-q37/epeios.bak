@@ -30,8 +30,8 @@ namespace frdrgstry {
 
 	using rgstry::entry___;
 	
-	extern entry___ XSLPageMain;
-	extern entry___ XSLPageSessionForm;
+	extern entry___ XSLContentFile;
+	extern entry___ XSLPaddingsFile;
 }
 
 #endif

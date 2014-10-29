@@ -132,6 +132,9 @@ namespace xhtcllbk {
 			const ntvstr::base__ *Id,
 			const ntvstr::base__ *XML,
 			const ntvstr::base__ *XSL ) = 0;
+		virtual void XHTCLLBKSetPaddings(
+			const ntvstr::base__ *XML,
+			const ntvstr::base__ *XSL ) = 0;
 		virtual void XHTCLLBKExecuteJavascript(
 			const ntvstr::base__ *Script,
 			TOL_CBUFFER___ &Buffer ) = 0;
@@ -162,6 +165,12 @@ namespace xhtcllbk {
 			const ntvstr::nstring___ &XSL )
 		{
 			XHTCLLBKSetChildren( Id.Core(), XML.Core(), XSL.Core() );
+		}
+		void SetPaddings(
+			const ntvstr::nstring___ &XML,
+			const ntvstr::nstring___ &XSL )
+		{
+			XHTCLLBKSetPaddings( XML.Core(), XSL.Core() );
 		}
 		const char *ExecuteJavascript(
 			const ntvstr::nstring___ &Script,
