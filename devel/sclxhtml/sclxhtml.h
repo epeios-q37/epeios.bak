@@ -144,9 +144,10 @@ namespace sclxhtml {
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		str::string_ &String )
+		str::string_ &String,
+		bso::char__ Marker = '#' )
 	{
-		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), sclmisc::GetLanguage(), String, '$' );
+		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), sclmisc::GetLanguage(), String, Marker );
 	}
 
 	void MainSubmission(
