@@ -39,6 +39,7 @@
 # include "sdr.h"
 # include "bch.h"
 # include "stsfsm.h"
+# include "xtf.h"
 
 # define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"1"
 
@@ -306,6 +307,17 @@ namespace xhtcllbk {
 	void EscapeQuotes(
 		const str::string_ &Source,
 		str::string_ &Target );
+
+	typedef ctn::E_CONTAINER_( str::strings_ ) table_;
+	E_AUTO( table );
+
+	bso::bool__ Fill(
+		xtf::extended_text_iflow__ &Flow,
+		table_ &Table,
+		bso::char__ EntrySeparator = '|',
+		bso::char__ FieldSeparator = '#',
+		bso::char__ EscapeChar = '\\' );
+
 
 
 }

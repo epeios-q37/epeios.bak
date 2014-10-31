@@ -79,3 +79,71 @@ void xhtcllbk::EscapeQuotes(
         Row = Source.Next( Row );
     }
 }
+
+bso::bool__ xhtcllbk::Fill(
+	xtf::extended_text_iflow__ &Flow,
+	table_ &Table,
+	bso::char__ EntrySeparator,
+	bso::char__ FieldSeparator,
+	bso::char__ EscapeChar )
+{
+	bso::bool__ Success = false;
+ERRProlog
+	str::string String;
+	str::strings Strings;
+	xtf::error__ Error = xtf::e_Undefined;
+	bso::char__ C;
+	xtf::utf__ UTF;
+	bso::bool__ Escaping = false;
+ERRBegin
+	String.Init();
+	Strings.Init();
+
+	while ( !Flow.EndOfFlow( Error ) ) {
+		UTF.Init();
+		C = Flow.Get( UTF );
+
+		if ( C == EscapeChar ) {
+			if ( Escaping )
+				String.Append( EscapeChar );
+			Escaping = !Escaping;
+		} else if ( C == EntrySeparator ) {
+			if ( Escaping ) {
+				String.Append( EntrySeparator );
+				Escaping = false;
+			} else {
+				Strings.Append( String );
+				String.Init();
+			}
+		} else if ( C == FieldSeparator ) {
+			if ( Escaping ) {
+				String.Append( FieldSeparator );
+				Escaping = false;
+			} else {
+				Strings.Append( String );
+				String.Init();
+				Table.Append( Strings );
+				Strings.Init();
+			}
+		} else if ( Escaping )
+			ERRReturn;
+		else
+			String.Append( (bso::char__ *)UTF.Data, UTF.Size );
+	}
+
+	if ( !Escaping )
+		if ( Error == xtf::e_NoError ) {
+			if ( String.Amount() )
+				Strings.Append( String );
+
+			if ( Strings.Amount() )
+				Table.Append( Strings );
+
+			Success = true;
+		}
+ERRErr
+ERREnd
+ERREpilog
+	return Success;
+}
+
