@@ -86,7 +86,7 @@ namespace xtf {
 		eEncodingDiscrepancy,
 		e_amount,
 		e_Undefined,
-		e_NoError
+		e_NoError = e_Undefined
 	};
 
 	inline const char *GetLabel( error__ Error )

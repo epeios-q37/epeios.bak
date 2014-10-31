@@ -150,6 +150,9 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKRemove(
 			const ntvstr::base__ *Id,
 			const ntvstr::base__ *Name ) = 0;
+		virtual void XHTCLLBKGetSelectValue(
+			const ntvstr::base__ *Id,
+			TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -212,6 +215,14 @@ namespace xhtcllbk {
 			const ntvstr::nstring___ &Name )
 		{
 			XHTCLLBKRemove( Id.Core(), Name.Core() );
+		}
+		const char *GetSelectValue(
+			const ntvstr::nstring___ &Id,
+			TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKGetSelectValue( Id.Core(), Buffer );
+
+			return Buffer;
 		}
 	};
 
@@ -309,15 +320,24 @@ namespace xhtcllbk {
 		str::string_ &Target );
 
 	typedef ctn::E_CONTAINER_( str::strings_ ) table_;
+
 	E_AUTO( table );
+
+	E_CDEF( char, DefaultEntrySeparator, '|' );
+	E_CDEF( char, DefaultFieldSeparator, '%' );
+	E_CDEF( char, DefaultEscapeChar, '\\' );
 
 	bso::bool__ Fill(
 		xtf::extended_text_iflow__ &Flow,
 		table_ &Table,
-		bso::char__ EntrySeparator = '|',
-		bso::char__ FieldSeparator = '#',
-		bso::char__ EscapeChar = '\\' );
+		bso::char__ EntrySeparator = DefaultEntrySeparator,
+		bso::char__ FieldSeparator = DefaultFieldSeparator,
+		bso::char__ EscapeChar = DefaultEscapeChar );
 
+	void EscapeEscapeChar(
+		const str::string_ &Source,
+		str::string_ &Target,
+		bso::char__ EscapeChar = DefaultEscapeChar );
 
 
 }

@@ -62,6 +62,9 @@ void xhtcllbk::EscapeQuotes(
 
     while ( Row != E_NIL ) {
 		switch ( Source( Row ) ) {
+		case '\\':
+			Target.Append("\\\\");
+			break;
 		case '"':
 			Target.Append("\\\"");
 			break;
@@ -146,4 +149,23 @@ ERREnd
 ERREpilog
 	return Success;
 }
+
+void xhtcllbk::EscapeEscapeChar(
+	const str::string_ &Source,
+	str::string_ &Target,
+	bso::char__ EscapeChar )
+{
+    sdr::row__ Row = Source.First();
+
+    while ( Row != E_NIL ) {
+		if ( Source(Row) == '\\' )
+			Target.Append('\\' );
+
+        Target.Append( Source( Row ) );
+
+		Row = Source.Next( Row );
+    }
+}
+
+
 

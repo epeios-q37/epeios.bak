@@ -28,32 +28,6 @@
 
 using namespace xhtagent;
 
-static void EscapeQuotes_(
-        const str::string_ &Source,
-        str::string_ &Target )
-{
-	xhtcllbk::EscapeQuotes( Source, Target );
-}
-
-const char *xhtagent::agent___::GetSelectValue(
-	const char *Id,
-	TOL_CBUFFER___ &Buffer  )
-{
-ERRProlog
-	TOL_CBUFFER___ LocalBuffer;
-	str::string Name;
-ERRBegin
-	Name.Init( "options[" );
-	Name.Append( _C().Get( Id, "selectedIndex", LocalBuffer ) );
-	Name.Append( "].value" );
-
-	_C().Get( Id, Name.Convert( LocalBuffer ), Buffer );
-ERRErr
-ERREnd
-ERREpilog
-	return Buffer;
-}
-
 const str::string_ &xhtagent::agent___::GetSelectValue(
 	const char *Id,
 	str::string_ &Buffer )
@@ -74,7 +48,7 @@ ERRProlog
 	str::string Script;
 ERRBegin
 	Script.Init( "alert(\"" );
-	EscapeQuotes_( Message, Script );
+	Script.Append( Message );
 	Script.Append("\");" );
 
 	ExecuteJavascript( Script );

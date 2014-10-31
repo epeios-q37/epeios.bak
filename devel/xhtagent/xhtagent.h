@@ -101,6 +101,15 @@ namespace xhtagent {
 		{
 			_C().Remove( Id, Name );
 		}
+		const char *GetSelectValue(
+			const ntvstr::nstring___ &Id,
+			TOL_CBUFFER___ &Buffer )
+		{
+			return _C().GetSelectValue( Id, Buffer );
+		}
+		const str::string_ &GetSelectValue(
+			const char *Id,
+			str::string_ &Buffer );
 		void SetChildren(
 			const ntvstr::nstring___ &Id,
 			const ntvstr::nstring___ &XML,
@@ -129,13 +138,6 @@ namespace xhtagent {
 		{
 			Show( Id, !Value );
 		}
-		// Retournent la valeur de l'item ('OPTION') actuellement sélectionné du 'SELECT' d'identifiant 'Id'.
-		const char *GetSelectValue(
-			const char *Id,
-			TOL_CBUFFER___ &Buffer );	
-		const str::string_ &GetSelectValue(
-			const char *Id,
-			str::string_ &Buffer );
 		void Alert( const str::string_ &Message );
 		void Alert( const char *Message )
 		{
