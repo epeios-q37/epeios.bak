@@ -40,6 +40,7 @@
 # include "bch.h"
 # include "stsfsm.h"
 # include "xtf.h"
+# include "strmrg.h"
 
 # define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"1"
 
@@ -313,32 +314,47 @@ namespace xhtcllbk {
 	};
 #pragma pack( pop )
 
-	typedef downstream_callback__ *(retrieve)( const shared_data__ &Data );
-
-	void EscapeQuotes(
-		const str::string_ &Source,
-		str::string_ &Target );
-
-	typedef ctn::E_CONTAINER_( str::strings_ ) table_;
-
-	E_AUTO( table );
-
 	E_CDEF( char, DefaultEntrySeparator, '|' );
 	E_CDEF( char, DefaultFieldSeparator, '%' );
 	E_CDEF( char, DefaultEscapeChar, '\\' );
 
-	bso::bool__ Fill(
-		xtf::extended_text_iflow__ &Flow,
-		table_ &Table,
-		bso::char__ EntrySeparator = DefaultEntrySeparator,
-		bso::char__ FieldSeparator = DefaultFieldSeparator,
-		bso::char__ EscapeChar = DefaultEscapeChar );
-
-	void EscapeEscapeChar(
+	void Escape(
 		const str::string_ &Source,
 		str::string_ &Target,
 		bso::char__ EscapeChar = DefaultEscapeChar );
+#if 0
+	void Unescape(
+		const str::string_ &Source,
+		str::string_ &Target,
+		bso::char__ EscapeChar = DefaultEscapeChar );
+#endif
+	typedef downstream_callback__ *(retrieve)( const shared_data__ &Data );
 
+	typedef strmrg::table_ params_;
+	E_AUTO( params );
+
+	inline bso::bool__ Split(
+		const str::string_ &Input,
+		params_ &Params,
+		bso::char__ EntrySeparator = DefaultEntrySeparator,
+		bso::char__ FieldSeparator = DefaultFieldSeparator,
+		bso::char__ EscapeChar = DefaultEscapeChar )
+	{
+		return strmrg::Split( Input, Params, EntrySeparator, FieldSeparator, EscapeChar );
+	}
+
+	inline void Merge(
+		const params_ &Params,
+		str::string_ &Target,
+		bso::char__ EntrySeparator = DefaultEntrySeparator,
+		bso::char__ FieldSeparator = DefaultFieldSeparator,
+		bso::char__ EscapeChar = DefaultEscapeChar )
+	{
+		return strmrg::Merge( Params, Target, EntrySeparator, FieldSeparator, EscapeChar );
+	}
+
+
+	using strmrg::retriever__;
 
 }
 

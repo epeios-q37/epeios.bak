@@ -48,7 +48,7 @@ ERRProlog
 	str::string Script;
 ERRBegin
 	Script.Init( "alert(\"" );
-	Script.Append( Message );
+	xhtcllbk::Escape( Message, Script );
 	Script.Append("\");" );
 
 	ExecuteJavascript( Script );
