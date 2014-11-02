@@ -955,22 +955,27 @@ namespace ctn {
 
 			basic_container_< item_mono_statique__< typename_ t::s >, r >::Allocate( Size, E.ctn_S_, Mode );	// pas de E.xxx::ctn_S_ car G++ V2.90.29 n'aime pas
 		}
-		void Insert(
+		void InsertAt(
 			const t &Object,
-			r Row,
+			r Row = 0,
 			aem::mode__ Mode = aem::m_Default )
 		{
 #ifdef CTN_DBG
 			if ( !IsFlushed() )
 				ERRFwk();
 #endif
-			E_CMITEMt( t, r ) E;
+			if ( ( amount_extent_manager_<r>::Amount( )== 0 ) 
+				  && ( ( Row == 0) || ( Row == E_NIL ) ) )
+				Append( Object, Mode );
+			else {
+				E_CMITEMt( t, r ) E;
 
-			basic_container_< item_mono_statique__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
+				basic_container_< item_mono_statique__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
 
-			operator()( Row ) = Object;
+				operator()( Row ) = Object;
 
-			Flush();
+				Flush();
+			}
 		}
 		mono_container_ &operator =( const mono_container_ &C )
 		{
@@ -980,9 +985,11 @@ namespace ctn {
 
 			return *this;
 		}
-		r Append( const t &Object )
+		r Append(
+			const t &Object,
+			aem::mode__ Mode = aem::m_Default )
 		{
-			r P = New();
+			r P = New( Mode );
 
 			operator()( P ) = Object;
 
@@ -992,13 +999,19 @@ namespace ctn {
 		}
 
 		//f Create a new object and return its position.
-		r New( sdr::size__ Size = 1 )
+		r New(
+			sdr::size__ Size = 1,
+			aem::mode__ Mode = aem::m_Default )
 		{
 			sdr::row_t__ P = this->Amount();
 
-			Allocate( P + Size );
+			Allocate( P + Size, Mode );
 
 			return P;
+		}
+		r New( aem::mode__ Mode )
+		{
+			return New( 1, Mode );
 		}
 		//f Remove 'Amount' entries from 'Position'.
 		void Remove(
@@ -1304,22 +1317,27 @@ namespace ctn {
 
 			basic_container_< item_multi_statique__< typename_ t::s >, r >::Allocate( Capacity, E.ctn_S_, Mode );// pas de E.xxx::ctn_S_ car G++ V2.90.29 n'aime pas
 		}
-		void Insert(
+		void InsertAt(
 			const t &Object,
-			r Row,
+			r Row = 0,
 			aem::mode__ Mode = aem::m_Default )
 		{
+			if ( ( amount_extent_manager_<r>::Amount( )== 0 ) 
+				 && ( ( Row == 0) || ( Row == E_NIL ) ) )
+				Append( Object, Mode );
+			else {
 #ifdef CTN_DBG
-			if ( !IsFlushed() )
-				ERRFwk();
+				if ( !IsFlushed() )
+					ERRFwk();
 #endif
-			E_CITEMt( t, r ) E;
+				E_CITEMt( t, r ) E;
 
-			basic_container_< item_multi_statique__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
+				basic_container_< item_multi_statique__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
 
-			operator()( Row ) = Object;
+				operator()( Row ) = Object;
 
-			Flush();
+				Flush();
+			}
 		}
 		multi_container_ &operator =( const multi_container_ &C )
 		{
@@ -1330,17 +1348,25 @@ namespace ctn {
 			return *this;
 		}
 		//f Create a new object and return its position.
-		r New( sdr::size__ Size = 1 )
+		r New(
+			sdr::size__ Size = 1,
+			aem::mode__ Mode = aem::m_Default )
 		{
 			sdr::row_t__ P = this->Amount();
 
-			Allocate( P + Size );
+			Allocate( P + Size, Mode );
 
 			return P;
 		}
-		r Append( const t &Object )
+		r New( aem::mode__ Mode )
 		{
-			r P = New();
+			return New( 1, Mode );
+		}
+		r Append(
+			const t &Object,
+			aem::mode__ Mode = aem::m_Default )
+		{
+			r P = New( Mode );
 
 			operator()( P ) = Object;
 

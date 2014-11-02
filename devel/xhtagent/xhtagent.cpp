@@ -28,6 +28,29 @@
 
 using namespace xhtagent;
 
+void xhtagent::agent___::SetString(
+	const nstring___ &Id,
+	const nstring___ &Name,
+	const str::string_ &RawValue )
+{
+ERRProlog
+	str::string Value;
+ERRBegin
+	Value.Init();
+
+	xhtcllbk::Escape( RawValue, Value );
+
+	Value.InsertAt( '"' );
+	Value.Append( '"' );
+
+	_C().SetProperty(Id, Name, Value );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+
 const str::string_ &xhtagent::agent___::GetSelectValue(
 	const char *Id,
 	str::string_ &Buffer )

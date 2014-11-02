@@ -75,7 +75,7 @@ inline bso::bool__ tol::IsSystemCommandAvailable( void )
 
 #undef system
 
-int tol::System( const ntvstr::nstring___ &Command )
+int tol::System( const ntvstr::string___ &Command )
 {
 	if ( Command.IsEmpty() )
 		return system( NULL );
@@ -95,7 +95,7 @@ ERRBegin
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
-	Result = _wsystem( ntvstr::nstring___( ModifiedCommand ).Core() );
+	Result = _wsystem( ntvstr::string___( ModifiedCommand ).Core() );
 ERRErr
 ERREnd
 ERREpilog

@@ -56,23 +56,23 @@ namespace str {
 
 namespace ntvstr {
 # ifdef NTVSTR__POSIX
-	typedef bso::char__ base__;
+	typedef bso::char__ char__;
 	E_CDEF( unsigned int, UTF8, 0 );
 	E_CDEF( unsigned int, Native, 0 );
 # elif defined( NTVSTR__WIN )
-	typedef wchar_t base__;
+	typedef wchar_t char__;
 	E_CDEF( unsigned int, UTF8, CP_UTF8 );
 	E_CDEF( unsigned int, Native, CP_OEMCP );
 # else
 #  error
 # endif
 
-	typedef tol::E_BUFFER___( base__ ) core___;
+	typedef tol::E_BUFFER___( char__ ) core___;
 
 	typedef tol::E_BUFFER___( bso::char__ ) buffer___;
 
 	// 'Native string' ; 'string' utilisant en interne l'encodage natif. LEs 'str::string_' passés en paramètres sont encodés en 'UTF-8'.
-	class nstring___
+	class string___
 	{
 	private:
 		core___ _Core;
@@ -87,27 +87,27 @@ namespace ntvstr {
 		{
 			_Core.reset( P );
 		}
-		E_CDTOR( nstring___ );
-		nstring___( const char *String )
+		E_CDTOR( string___ );
+		string___( const char *String )
 		{
 			reset( false );
 
 			Init( String );
 		}
-		nstring___( const base__ *String )
+		string___( const char__ *String )
 		{
 			reset( false );
 
 			Init( String );
 		}
-		nstring___( const str::string_ &String )
+		string___( const str::string_ &String )
 		{
 			reset( false );
 			Init( String );
 		}
-		nstring___ &operator =( const nstring___ &NS)
+		string___ &operator =( const string___ &S)
 		{
-			Init( NS.Core() );
+			Init( S.Core() );
 
 			return *this;
 		}
@@ -118,9 +118,9 @@ namespace ntvstr {
 			*_Core = 0;
 		}
 		void Init( const bso::char__ *String );
-		void Init( const base__ *String );
+		void Init( const char__ *String );
 		void Init( const str::string_ &String );
-		void Init( const nstring___ &String )
+		void Init( const string___ &String )
 		{
 			Init();
 

@@ -92,7 +92,7 @@ namespace dir {
 	inline const fnm::name___ &GetSelfPath( fnm::name___ &Path )
 	{
 #ifdef DIR__WIN 
-		fnm::base__ FileName[MAX_PATH];
+		fnm::nchar__ FileName[MAX_PATH];
 		DWORD Size = GetModuleFileNameW( NULL, FileName, sizeof( FileName ) );
 		return fnm::GetLocation( FileName, Path );
 #endif
@@ -225,7 +225,7 @@ namespace dir {
 # ifdef DIR__WIN
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		fnm::core___ &Buffer = Handle.Name.Core();
+		fnm::ncore___ &Buffer = Handle.Name.Core();
 
 		Handle.Name.Init();
 
@@ -285,7 +285,7 @@ namespace dir {
 #  endif
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		fnm::core___ &Buffer = Handle.Name.Core();
+		fnm::ncore___ &Buffer = Handle.Name.Core();
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )

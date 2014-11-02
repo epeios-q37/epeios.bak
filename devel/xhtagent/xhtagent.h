@@ -39,6 +39,9 @@
 # include "flw.h"
 
 namespace xhtagent {
+
+	typedef ntvstr::string___ nstring___;
+
 	class agent___ {
 	private:
 		xhtcllbk::upstream_callback__ *_Callback;
@@ -77,32 +80,36 @@ namespace xhtagent {
 			if ( !_Handlers.Add( EventName, Handler ) )
 				ERRFwk();
 		}
-		void ExecuteJavascript( const ntvstr::nstring___ &Script )
+		void ExecuteJavascript( const nstring___ &Script )
 		{
 			return _C().ExecuteJavascript( Script );
 		}
-		const char *Get(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &Name,
+		const char *GetAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().Get( Id, Name, Buffer );
+			return _C().GetAttribute( Id, Name, Buffer );
 		}
-		void Set(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &Name,
-			const ntvstr::nstring___ &Value )
+		void SetString(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			const str::string_ &Value );
+		void SetAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			const nstring___ &Value )
 		{
-			_C().Set( Id, Name, Value );
+			_C().SetAttribute( Id, Name, Value );
 		}
-		void Remove(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &Name )
+		void RemoveAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name )
 		{
-			_C().Remove( Id, Name );
+			_C().RemoveAttribute( Id, Name );
 		}
 		const char *GetSelectValue(
-			const ntvstr::nstring___ &Id,
+			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
 			return _C().GetSelectValue( Id, Buffer );
@@ -111,29 +118,29 @@ namespace xhtagent {
 			const char *Id,
 			str::string_ &Buffer );
 		void SetChildren(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &XML,
-			const ntvstr::nstring___ &XSL )
+			const nstring___ &Id,
+			const nstring___ &XML,
+			const nstring___ &XSL )
 		{
 			_C().SetChildren( Id, XML, XSL );
 		}
 		void SetPaddings(
-			const ntvstr::nstring___ &XML,
-			const ntvstr::nstring___ &XSL )
+			const nstring___ &XML,
+			const nstring___ &XSL )
 		{
 			_C().SetPaddings( XML, XSL );
 		}
 		void Show(
-			const ntvstr::nstring___ &Id,
+			const nstring___ &Id,
 			bso::bool__ Value = true )
 		{
 			if ( Value  )
-				Remove( Id, "hidden" );
+				RemoveAttribute( Id, "hidden" );
 			else
-				Set( Id, "hidden", "hidden" );
+				SetAttribute( Id, "hidden", "hidden" );
 		}
 		void Hide(
-			const ntvstr::nstring___ &Id,
+			const nstring___ &Id,
 			bso::bool__ Value = true )
 		{
 			Show( Id, !Value );

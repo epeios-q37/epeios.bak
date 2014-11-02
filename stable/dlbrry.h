@@ -74,7 +74,7 @@ namespace dlbrry {
 	{
 	private:
 		library_handler__  _LibraryHandler;
-		bso::bool__ _LoadLibrary( const ntvstr::nstring___ &Name );
+		bso::bool__ _LoadLibrary( const ntvstr::string___ &Name );
 		bso::bool__ _UnloadLibrary( void  );
 	public:
 		void reset( bso::bool__ P = true )
@@ -97,7 +97,7 @@ namespace dlbrry {
 			reset();
 		}
 		bso::bool__ Init(
-            const ntvstr::nstring___ &LibraryName,
+            const ntvstr::string___ &LibraryName,
 			err::handling__ ERRHandling = err::h_Default )
 		{
 			reset();

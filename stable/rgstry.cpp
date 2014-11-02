@@ -191,8 +191,8 @@ const str::string_ &rgstry::registry_::GetCompleteName(
 	}
 
 	while ( Row != E_NIL ) {
-		Name.Insert( Separator, 0 );
-		Name.Insert( Buffer( Row ).Name, 0 );
+		Name.InsertAt( Separator );
+		Name.InsertAt( Buffer( Row ).Name );
 
 		Row = Buffer( Row ).ParentRow();
 	}

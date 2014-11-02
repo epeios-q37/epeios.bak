@@ -75,9 +75,9 @@ const char *fnm::Description( fnm::type__ Type )
 # error
 #endif
 
-inline static fnm::type__ Type_( const base__ *Name )
+inline static fnm::type__ Type_( const nchar__ *Name )
 {
-	const base__ *Repere = NULL;
+	const nchar__ *Repere = NULL;
 
 	if ( *Name == 0 )
 		return fnm::tEmpty;
@@ -112,15 +112,15 @@ fnm::type__ fnm::Type( const name___ &Name )
 }
 
 const name___ &fnm::BuildFileName(
-	const base__ *Dir,
-	const base__ *Affix,
-	const base__ *Ext,
+	const nchar__ *Dir,
+	const nchar__ *Affix,
+	const nchar__ *Ext,
 	name___ &Name )
 {
 ERRProlog
 	size_t DirSize = 0, AffixSize = 0, ExtSize = 0;
 ERRBegin
-	core___ &Core = Name.Core();
+	ncore___ &Core = Name.Core();
 
 	if ( Type_( Affix ) == tAbsolute )
 		Dir = NULL;
@@ -194,7 +194,7 @@ ERREpilog
 }
 
 const name___ &fnm::_Set(
-	const base__ *Core,
+	const nchar__ *Core,
 	name___ &Name )
 {
 	if ( Core == NULL )
@@ -210,9 +210,9 @@ const name___ &fnm::_Set(
 	return Name;
 }
 
-const base__ *fnm::GetFileName( const base__ *Name )
+const nchar__ *fnm::GetFileName( const nchar__ *Name )
 {
-	const base__ *Repere;
+	const nchar__ *Repere;
 
 #ifdef FNM_DBG
 	if ( *Name == 0 )
@@ -231,7 +231,7 @@ const base__ *fnm::GetFileName( const base__ *Name )
 	return Repere;
 }
 
-const base__ *fnm::GetExtension( const base__ *Name )
+const nchar__ *fnm::GetExtension( const nchar__ *Name )
 {
 	return strrchr_( GetFileName( Name ), '.' );
 }
@@ -307,7 +307,7 @@ ERREpilog
 
 const name___ &fnm::CorrectLocation( name___ &Location )
 {
-	base__ *R = Location.Core();
+	nchar__ *R = Location.Core();
 
 	R = strchr_( Location.Core(), '\\' );
 
@@ -320,7 +320,7 @@ const name___ &fnm::CorrectLocation( name___ &Location )
 }
 
 const name___ &fnm::GetLocation(
-	const base__ *Name,
+	const nchar__ *Name,
 	name___ &Location )
 {
 	size_t L = GetFileName( Name ) - Name;
@@ -328,7 +328,7 @@ const name___ &fnm::GetLocation(
 	if ( L != 0 ) {
 		 Location.Core().Malloc( L + 1 );
 
-		memcpy( Location.Core(), Name, L * sizeof( base__) );
+		memcpy( Location.Core(), Name, L * sizeof( nchar__) );
 
 		Location.Core()[L] = 0;
 	} else
@@ -338,10 +338,10 @@ const name___ &fnm::GetLocation(
 }
 
 const name___ &fnm::GetAffix(
-	const base__ *Name,
+	const nchar__ *Name,
 	name___ &Affix )
 {
-	const base__ *Repere = NULL;
+	const nchar__ *Repere = NULL;
 
 	Repere = GetFileName( Name );
 

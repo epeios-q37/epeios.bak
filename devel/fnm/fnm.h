@@ -48,9 +48,9 @@
 
 namespace fnm
 {
-	using ntvstr::base__;
-	using ntvstr::core___;
-	typedef ntvstr::nstring___ name___;
+	typedef ntvstr::char__ nchar__;
+	typedef ntvstr::core___ ncore___;
+	typedef ntvstr::string___ name___;
 
 	//e Different type of file name.
 	enum type__ {
@@ -86,9 +86,9 @@ namespace fnm
 	const char *Description( type__ Type );
 
 	const name___ &BuildFileName(
-		const base__ *Dir,
-		const base__ *Affix,
-		const base__ *Ext,
+		const nchar__ *Dir,
+		const nchar__ *Affix,
+		const nchar__ *Ext,
 		name___ &Name );
 
 	inline const name___ &BuildFileName(
@@ -100,10 +100,10 @@ namespace fnm
 		return BuildFileName( Dir.Core(), Affix.Core(), Ext.Core(), Name );
 	}
 
-	const base__ *GetFileName( const base__ *LocalizedName );
+	const nchar__ *GetFileName( const nchar__ *LocalizedName );
 
 	const name___ &_Set(
-		const base__ *Core,
+		const nchar__ *Core,
 		name___ &Name );
 
 	inline const name___ &GetFileName(
@@ -113,7 +113,7 @@ namespace fnm
 		return _Set( GetFileName( LocalizedName.Core() ), Name );
 	}
 
-	const base__ *GetExtension( const base__ *Name );
+	const nchar__ *GetExtension( const nchar__ *Name );
 
 	inline const name___ &GetExtension(
 		const name___ &Name,
@@ -123,7 +123,7 @@ namespace fnm
 	}
 
 	const name___ &GetLocation(
-		const base__ *Name,
+		const nchar__ *Name,
 		name___ &Location );
 
 	inline const name___ &GetLocation(
@@ -134,7 +134,7 @@ namespace fnm
 	}
 
 	const name___ &GetAffix(
-		const base__ *Base,
+		const nchar__ *Base,
 		name___ &Affix );
 
 	inline const name___ &GetAffix(

@@ -48,7 +48,7 @@ using namespace ntvstr;
 # error
 #endif
 
-void ntvstr::nstring___::Init( const bso::char__ *String )
+void ntvstr::string___::Init( const bso::char__ *String )
 {
 	if ( String == NULL )
 		String = "";
@@ -84,7 +84,7 @@ void ntvstr::nstring___::Init( const bso::char__ *String )
 # endif
 }
 
-void ntvstr::nstring___::Init( const base__ *String )
+void ntvstr::string___::Init( const char__ *String )
 {
 	bso::size__ Size = ( String == NULL ? 0 : strlen_( String ) );
 
@@ -96,7 +96,7 @@ void ntvstr::nstring___::Init( const base__ *String )
 		*_Core = 0;
 }
 
-void ntvstr::nstring___::Init( const str::string_ &String )
+void ntvstr::string___::Init( const str::string_ &String )
 {
 ERRProlog
 	TOL_CBUFFER___ Buffer;
@@ -107,7 +107,7 @@ ERREnd
 ERREpilog
 }
 
-const bso::char__ *ntvstr::nstring___::_Convert(
+const bso::char__ *ntvstr::string___::_Convert(
 	unsigned int CodePage,
 	TOL_CBUFFER___ &Buffer ) const
 {
@@ -142,7 +142,7 @@ const bso::char__ *ntvstr::nstring___::_Convert(
 	return Buffer;
 }
 
-const str::string_ &ntvstr::nstring___::_Convert(
+const str::string_ &ntvstr::string___::_Convert(
 	unsigned int CodePage,
 	str::string_ &SBuffer ) const
 {

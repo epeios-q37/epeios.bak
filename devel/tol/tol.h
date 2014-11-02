@@ -81,7 +81,7 @@ namespace sdr {
 }
 
 namespace ntvstr {
-	class nstring___;
+	class string___;
 }
 
 namespace tol
@@ -627,7 +627,7 @@ namespace tol {
 
 	bso::bool__ IsSystemCommandAvailable( void );
 
-	int System( const ntvstr::nstring___ &Command );
+	int System( const ntvstr::string___ &Command );
 
 	//f Return the current date.
 	const char *Date( buffer__ &Buffer );

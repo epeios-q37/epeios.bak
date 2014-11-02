@@ -1004,8 +1004,8 @@ namespace flx {
 # endif
 
 	cslio::descriptor__ _POpen(
-		const ntvstr::nstring___ &Command,
-		const ntvstr::nstring___ &Mode );
+		const ntvstr::string___ &Command,
+		const ntvstr::string___ &Mode );
 
 	inline void _PClose( cslio::descriptor__ Descriptor )
 		{
@@ -1037,8 +1037,8 @@ namespace flx {
 		}
 		E_CVDTOR( _exec_driver___ );
 		bso::bool__ Init(
-			const ntvstr::nstring___ &Command,
-			const ntvstr::nstring___ &Mode )
+			const ntvstr::string___ &Command,
+			const ntvstr::string___ &Mode )
 		{
 			if ( _Descriptor != cslio::UndefinedDescriptor )
 				_PClose( _Descriptor );
@@ -1104,7 +1104,7 @@ namespace flx {
 		}
 		E_CVDTOR( exec_iflow_driver___ );
 		bso::bool__ Init(
-			const ntvstr::nstring___ &Command,
+			const ntvstr::string___ &Command,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_iflow_driver___<>::Init( ThreadSafety );
@@ -1142,7 +1142,7 @@ namespace flx {
 		}
 		E_CVDTOR( exec_oflow_driver___ );
 		bso::bool__ Init(
-			const ntvstr::nstring___ &Command,
+			const ntvstr::string___ &Command,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			_oflow_driver___::Init( ThreadSafety );
@@ -1213,7 +1213,7 @@ namespace flx {
 		}
 		E_CDTOR( exec_ioflow_driver___ );
 		bso::bool__ Init(
-			const ntvstr::nstring___ &Command,
+			const ntvstr::string___ &Command,
 			fdr::thread_safety__ ThreadSafety );
 	};
 
@@ -1229,7 +1229,7 @@ namespace flx {
 			_Driver.reset( P );
 		}
 		E_CDTOR( _exec_flow___ );
-		bso::bool__ Init( const ntvstr::nstring___ &Command )
+		bso::bool__ Init( const ntvstr::string___ &Command )
 		{
 			flow::Init( _Driver );
 

@@ -1122,33 +1122,33 @@ ERRBegin
 			if ( !DelimiterOnly ) {
 				Buffer.Init( "&apos;" );
 				Target.Remove( Position );
-				Target.Insert( Buffer, Position );
+				Target.InsertAt( Buffer, Position );
 			}
 			break;
 		case '"':
 			Buffer.Init( "&quot;" );
 			Target.Remove( Position );
-			Target.Insert( Buffer, Position );
+			Target.InsertAt( Buffer, Position );
 			break;
 		case '<':
 			if ( !DelimiterOnly ) {
 				Buffer.Init( "&lt;" );
 				Target.Remove( Position );
-				Target.Insert( Buffer, Position );
+				Target.InsertAt( Buffer, Position );
 			}
 			break;
 		case '>':
 			if ( !DelimiterOnly ) {
 				Buffer.Init( "&gt;" );
 				Target.Remove( Position );
-				Target.Insert( Buffer, Position );
+				Target.InsertAt( Buffer, Position );
 			}
 			break;
 		case '&':
 			if ( !DelimiterOnly ) {
 				Buffer.Init( "&amp;" );
 				Target.Remove( Position );
-				Target.Insert( Buffer, Position );
+				Target.InsertAt( Buffer, Position );
 			}
 			break;
 		default:

@@ -431,7 +431,7 @@ bso::bool__ Fill_(
 
 void Fill_(
 	int argc,
-	ntvstr::base__ *argv[],
+	ntvstr::char__ *argv[],
 	flags_ &Flags,
 	options_ &Options,
 	arguments_ &Arguments )
@@ -443,11 +443,11 @@ ERRProlog
 ERRBegin
 	while ( ( Current < argc ) && ( !FreeArgumentsOnly ) )
 	{
-		FreeArgumentsOnly = Fill_( ntvstr::nstring___( argv[Current++] ).UTF8( Buffer ), Flags, Options, Arguments );
+		FreeArgumentsOnly = Fill_( ntvstr::string___( argv[Current++] ).UTF8( Buffer ), Flags, Options, Arguments );
 	}
 
 	while ( Current < argc )
-		Arguments.Append( str::string( ntvstr::nstring___( argv[Current++] ).UTF8( Buffer ) ) );
+		Arguments.Append( str::string( ntvstr::string___( argv[Current++] ).UTF8( Buffer ) ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -681,7 +681,7 @@ static const str::string_ &GetPath_(
 
 	if ( Path.Amount() != 0  )
 		if ( Path(Path.First()) != '/' )
-			Path.Insert( ParametersTag_ );	
+			Path.InsertAt( ParametersTag_ );	
 
 	return Path;
 }
@@ -939,7 +939,7 @@ static void PutIndice_(
 
 static void DumpInRegistry_(
 	int argc,
-	ntvstr::base__ *argv[] )
+	ntvstr::char__ *argv[] )
 {
 ERRProlog
 	bso::integer_buffer__ IBuffer;
@@ -953,7 +953,7 @@ ERRBegin
 		Path.Init();
 		PutIndice_( RAW_ARGUMENT, i, "", Path );
 
-		SetValue( Path, str::string( ntvstr::nstring___( argv[i++] ).UTF8( SBuffer ) ) );
+		SetValue( Path, str::string( ntvstr::string___( argv[i++] ).UTF8( SBuffer ) ) );
 	}
 ERRErr
 ERREnd
@@ -1403,7 +1403,7 @@ ERREpilog
 
 static void DumpInRegistry_(
 	int argc,
-	ntvstr::base__ *argv[],
+	ntvstr::char__ *argv[],
 	const flags_ &Flags,
 	const options_ &Options,
 	const arguments_ &Arguments )
@@ -1417,7 +1417,7 @@ static void DumpInRegistry_(
 
 static void FillRegistry_(
 	int argc,
-	ntvstr::base__ *argv[] )
+	ntvstr::char__ *argv[] )
 {
 ERRProlog
 	flags Flags;
@@ -1457,7 +1457,7 @@ ERREpilog
 
 static bso::bool__ main_(
 	int argc,
-	ntvstr::base__ *argv[],
+	ntvstr::char__ *argv[],
 	const oddities__ &Oddities )
 {
 	bso::bool__ Success = false;
@@ -1606,10 +1606,10 @@ ERRFEnd
 	FIn.reset();
 
 	if ( SOut.Amount() )
-		MessageBoxW( NULL, ntvstr::nstring___( SOut ).Core(), ntvstr::nstring___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
+		MessageBoxW( NULL, ntvstr::string___( SOut ).Core(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
 
 	if ( SErr.Amount() )
-		MessageBoxW( NULL, ntvstr::nstring___( SErr ).Core(), ntvstr::nstring___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
+		MessageBoxW( NULL, ntvstr::string___( SErr ).Core(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
 ERRFEpilog
 	return ExitValue;
 }

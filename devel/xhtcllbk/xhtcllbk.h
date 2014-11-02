@@ -48,8 +48,17 @@
 
 # define XHTCLLBK_RETRIEVE_FUNCTION_NAME		XHTCLLBKRetrieve
 
+# define XHTCLLBK_ATRIIBUTE_PREFIX	"data-q37-"
 
 namespace xhtcllbk {
+	E_CDEF( char *, EventAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "event" );
+	E_CDEF( char *, PaddingAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "padding" );
+	E_CDEF( char *, ParamsAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "params" );
+	E_CDEF( char *, ResultAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "result" );
+
+	typedef ntvstr::char__ nchar__;
+	typedef ntvstr::string___ nstring___;
+
 	class event_handler__
 	{
 	protected:
@@ -131,28 +140,36 @@ namespace xhtcllbk {
 	class upstream_callback__ {
 	protected:
 		virtual void XHTCLLBKSetChildren(
-			const ntvstr::base__ *Id,
-			const ntvstr::base__ *XML,
-			const ntvstr::base__ *XSL ) = 0;
+			const nchar__ *Id,
+			const nchar__ *XML,
+			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetPaddings(
-			const ntvstr::base__ *XML,
-			const ntvstr::base__ *XSL ) = 0;
+			const nchar__ *XML,
+			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKExecuteJavascript(
-			const ntvstr::base__ *Script,
+			const nchar__ *Script,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKSet(
-			const ntvstr::base__ *Id,
-			const ntvstr::base__ *Name,
-			const ntvstr::base__ *Value ) = 0;
-		virtual void XHTCLLBKGet(
-			const ntvstr::base__ *Id,
-			const ntvstr::base__ *Name,
+		virtual void XHTCLLBKSetProperty(
+			const nchar__ *Id,
+			const nchar__ *Name,
+			const nchar__ *Value ) = 0;
+		virtual void XHTCLLBKGetProperty(
+			const nchar__ *Id,
+			const nchar__ *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKRemove(
-			const ntvstr::base__ *Id,
-			const ntvstr::base__ *Name ) = 0;
+		virtual void XHTCLLBKSetAttribute(
+			const nchar__ *Id,
+			const nchar__ *Name,
+			const nchar__ *Value ) = 0;
+		virtual void XHTCLLBKGetAttribute(
+			const nchar__ *Id,
+			const nchar__ *Name,
+			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XHTCLLBKRemoveAttribute(
+			const nchar__ *Id,
+			const nchar__ *Name ) = 0;
 		virtual void XHTCLLBKGetSelectValue(
-			const ntvstr::base__ *Id,
+			const nchar__ *Id,
 			TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
@@ -165,27 +182,27 @@ namespace xhtcllbk {
 			//Standardisation.
 		}
 		void SetChildren(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &XML,
-			const ntvstr::nstring___ &XSL )
+			const nstring___ &Id,
+			const nstring___ &XML,
+			const nstring___ &XSL )
 		{
 			XHTCLLBKSetChildren( Id.Core(), XML.Core(), XSL.Core() );
 		}
 		void SetPaddings(
-			const ntvstr::nstring___ &XML,
-			const ntvstr::nstring___ &XSL )
+			const nstring___ &XML,
+			const nstring___ &XSL )
 		{
 			XHTCLLBKSetPaddings( XML.Core(), XSL.Core() );
 		}
 		const char *ExecuteJavascript(
-			const ntvstr::nstring___ &Script,
+			const nstring___ &Script,
 			TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKExecuteJavascript( Script.Core(), Buffer );
 
 			return Buffer;
 		}
-		void ExecuteJavascript( const ntvstr::nstring___ &Script )
+		void ExecuteJavascript( const nstring___ &Script )
 		{
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
@@ -195,30 +212,46 @@ namespace xhtcllbk {
 		ERREnd
 		ERREpilog
 		}
-		const char *Get(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &Name,
+		const char *GetProperty(
+			const nstring___ &Id,
+			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGet( Id.Core(), Name.Core(), Buffer );
+			XHTCLLBKGetProperty( Id.Core(), Name.Core(), Buffer );
 
 			return Buffer;
 		}
-		void Set(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &Name,
-			const ntvstr::nstring___ &Value )
+		void SetProperty(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			const nstring___ &Value )
 		{
-			XHTCLLBKSet( Id.Core(), Name.Core(), Value.Core() );
+			XHTCLLBKSetProperty( Id.Core(), Name.Core(), Value.Core() );
 		}
-		void Remove(
-			const ntvstr::nstring___ &Id,
-			const ntvstr::nstring___ &Name )
+		const char *GetAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKRemove( Id.Core(), Name.Core() );
+			XHTCLLBKGetAttribute( Id.Core(), Name.Core(), Buffer );
+
+			return Buffer;
+		}
+		void SetAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			const nstring___ &Value )
+		{
+			XHTCLLBKSetAttribute( Id.Core(), Name.Core(), Value.Core() );
+		}
+		void RemoveAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name )
+		{
+			XHTCLLBKRemoveAttribute( Id.Core(), Name.Core() );
 		}
 		const char *GetSelectValue(
-			const ntvstr::nstring___ &Id,
+			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKGetSelectValue( Id.Core(), Buffer );

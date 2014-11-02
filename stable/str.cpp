@@ -322,7 +322,7 @@ bso::bool__ string_::Replace(
 	if ( Row != E_NIL ) {
 		Remove( Row, 1 );
 
-		Insert( Value, Row );
+		InsertAt( Value, Row );
 
 		return true;
 	} else

@@ -64,7 +64,7 @@ namespace bch {
 			mmr::Store( *this, mng::Amount() - Position - Quantite, Position + Quantite, Position );
 		}
 		// Insere à 'PosDest' 'Quantite' objets situé à partir de 'PosSource' de 'Source'.
-		void Inserer_(
+		void InsertAt_(
 			const mmr &Source,
 			sdr::size__ Quantite,
 			sdr::row_t__ PosSource,
@@ -74,7 +74,7 @@ namespace bch {
 			mmr::Store( Source, Quantite, PosDest, PosSource );
 		}
 		// Insere 'Quantite' objets de 'Objets' à 'Position'.
-		void Inserer_(
+		void InsertAt_(
 			const type *Objets,
 			sdr::size__ Quantite,
 			sdr::row_t__ Position )
@@ -337,43 +337,81 @@ namespace bch {
 #endif
 			Crop( *Last - *First + 1, First );
 		}
-		//f Insert at 'RowDest' 'Amount' objects from 'Source' at 'RowSource'.
-		void Insert(
+		void InsertAt(
 			const mmr &Source,
 			sdr::size__ Amount,
 			row RowSource,
-			row RowDest = 0 )
-		{
-			Inserer_( Source, Amount, RowSource, RowDest );
-		}
-		//f Insert 'Bunch' at 'Row'.
-		void Insert(
-			const _bunch &Bunch,
 			row Row = 0 )
 		{
-			Inserer_( Bunch, Bunch.Amount(), 0, *Row );
+			if ( ( mng::Amount() == 0 ) 
+				&& ( ( Row == 0 ) ||( Row == E_NIL ) ) ) 
+				Append( Source, Amount, RowSource );
+			else
+				InsertAt_( Source, Amount, *RowSource, *Row );
+		}
+		void InsertAt(
+			const _bunch &Bunch,
+			row Row = 0)
+		{
+			InsertAt( Bunch, Bunch.Amount(), 0, Row );
 		}
 		//f Insert 'Object' at 'Row'
-		void Insert(
-			const type &Object,
-			row Row = 0 )
-		{
-			Inserer_( &Object, 1, *Row );
-		}
-		//f Insert at 'Row' 'Amount' objects from 'Source'.
-		void Insert(
+		void InsertAt(
 			const type *Source,
 			sdr::size__ Amount,
 			row Row = 0 )
 		{
-			Inserer_( Source, Amount, *Row );
+			if ( ( mng::Amount() == 0 ) 
+				&& ( ( Row == 0 ) || ( Row == E_NIL ) ) ) 
+				Append( Source, Amount );
+			else
+				InsertAt_( Source, Amount, *Row );
 		}
-		//f Insert at 'Row' 'Source'.
-		void Insert(
+		void InsertAt(
+			const type &Object,
+			row Row = 0 )
+		{
+			InsertAt( &Object, 1, Row );
+		}
+		void InsertAt(
 			const type *Source,
 			row Row = 0 )
 		{
-			Inserer_( Source, sh::SizeOf( Source ), *Row );
+			InsertAt( Source, sh::SizeOf( Source ), Row );
+		}
+		void InsertAfter(
+			const mmr &Source,
+			sdr::size__ Amount,
+			row RowSource,
+			row Row )
+		{
+			InsertAt( Source, Amount, RowSource, *Row + 1 );
+		}
+		void InsertAfter(
+			const _bunch &Bunch,
+			row Row )
+		{
+			InsertAt( Bunch, *Row + 1 );
+		}
+		//f Insert 'Object' at 'Row'
+		void InsertAfter(
+			const type *Source,
+			sdr::size__ Amount,
+			row Row )
+		{
+			InsertAt( Source, Amount, *Row + 1 );
+		}
+		void InsertAfter(
+			const type &Object,
+			row Row )
+		{
+			InsertAt( Object, *Row + 1 );
+		}
+		void InsertAfter(
+			const type *Source,
+			row Row )
+		{
+			InsertAt( Source, *Row + 1 );
 		}
 		//f Remove 'Amount' objects at row 'Row'. The size of the set is reduced.
 		void Remove(

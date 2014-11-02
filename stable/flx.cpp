@@ -64,8 +64,8 @@ flx::void_iflow_driver___ flx::VoidIFlowDriver;
 flx::void_iflow__ flx::VoidIFlow;
 
 cslio::descriptor__ flx::_POpen(
-	const ntvstr::nstring___ &Command,
-	const ntvstr::nstring___ &Mode )
+	const ntvstr::string___ &Command,
+	const ntvstr::string___ &Mode )
 {
 	cslio::descriptor__ Descriptor = cslio::UndefinedDescriptor;
 # ifdef CPE_WIN
@@ -78,7 +78,7 @@ ERRBegin
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
-	Descriptor = _wpopen( ntvstr::nstring___( ModifiedCommand ).Core(), Mode.Core() );
+	Descriptor = _wpopen( ntvstr::string___( ModifiedCommand ).Core(), Mode.Core() );
 ERRErr
 ERREnd
 ERREpilog
@@ -92,7 +92,7 @@ ERREpilog
 
 # ifdef CPE_WIN
 static bso::bool__ POpen2_(
-	const ntvstr::nstring___ &ConstCommand,
+	const ntvstr::string___ &ConstCommand,
 	HANDLE &In,
 	HANDLE &Out,
 	HANDLE &Err )
@@ -102,7 +102,7 @@ ERRProlog
 	PROCESS_INFORMATION	piProcessInfo;
 	SECURITY_ATTRIBUTES sa_attr; 
 	HANDLE hChildStdinRd, hChildStdinWr, hChildStdoutRd, hChildStdoutWr, hChildStderrRd, hChildStderrWr;
-	ntvstr::nstring___ Command;
+	ntvstr::string___ Command;
 ERRBegin
 	// Set the bInheritHandle flag so pipe handles are inherited. 
 	sa_attr.nLength              = sizeof( SECURITY_ATTRIBUTES ); 
@@ -258,7 +258,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 }
 
 bso::bool__ flx::exec_ioflow_driver___::Init(
-	const ntvstr::nstring___ &Command,
+	const ntvstr::string___ &Command,
 	fdr::thread_safety__ ThreadSafety )
 {
 	reset();

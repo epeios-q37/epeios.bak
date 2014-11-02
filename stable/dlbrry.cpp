@@ -73,7 +73,7 @@ using namespace dlbrry;
 #	error
 #endif
 
-bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::nstring___ &Name )
+bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &Name )
 {
 	if ( _LibraryHandler != NULL )
 		ERRFwk();
