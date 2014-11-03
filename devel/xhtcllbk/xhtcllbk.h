@@ -81,18 +81,18 @@ namespace xhtcllbk {
 
 	E_ROW( hrow__ );	// (event) handler row;
 
-	typedef bch::E_BUNCHt_( event_handler__ *, hrow__ ) _handlers_;
+	typedef bch::E_BUNCHt_( event_handler__ *, hrow__ ) _event_handlers_;
 
-	class event_handlers_
+	class event_manager_
 	{
 	public:
 		struct s {
 			stsfsm::automat_::s Automat;
-			_handlers_::s Handlers;
+			_event_handlers_::s Handlers;
 		};
 		stsfsm::automat_ Automat;
-		_handlers_ Handlers;
-		event_handlers_( s &S )
+		_event_handlers_ Handlers;
+		event_manager_( s &S )
 		: Automat( S.Automat ),
 		  Handlers( S.Handlers )
 		{}
@@ -106,10 +106,10 @@ namespace xhtcllbk {
 			Automat.plug( AS );
 			Handlers.plug( AS );
 		}
-		event_handlers_ &operator =(const event_handlers_ &EH)
+		event_manager_ &operator =(const event_manager_ &EM)
 		{
-			Automat = EH.Automat;
-			Handlers = EH.Handlers;
+			Automat = EM.Automat;
+			Handlers = EM.Handlers;
 
 			return *this;
 		}
@@ -135,7 +135,7 @@ namespace xhtcllbk {
 		}
 	};
 
-	E_AUTO( event_handlers );
+	E_AUTO( event_manager );
 
 	class upstream_callback__ {
 	protected:
@@ -263,13 +263,13 @@ namespace xhtcllbk {
 	class downstream_callback__
 	{
 	private:
-		const event_handlers_ *_Handlers;
-		const event_handlers_ &_H( void ) const
+		const event_manager_ *_Manager;
+		const event_manager_ &_M( void ) const
 		{
-			if ( _Handlers ==  NULL )
+			if ( _Manager ==  NULL )
 				ERRFwk();
 
-			return *_Handlers;
+			return *_Manager;
 		}
 	protected:
 		virtual void XHTCLLBKStart( void ) = 0;
@@ -277,12 +277,12 @@ namespace xhtcllbk {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Handlers = NULL;
+			_Manager = NULL;
 		}
 		E_CVDTOR( downstream_callback__ )
-		void Init( const event_handlers_ &Handlers)
+		void Init( const event_manager_ &Manager)
 		{
-			_Handlers = &Handlers;
+			_Manager = &Manager;
 		}
 		void Start( void )
 		{
@@ -302,7 +302,7 @@ namespace xhtcllbk {
 		// 'const char *' pour avoir une strucutre de données simple, car donnée passée entre codes compilés séparément.
 		virtual void Handle( const char *EventName )
 		{
-			event_handler__ *Handler = _H().Get( str::string(  EventName ) );
+			event_handler__ *Handler = _M().Get( str::string(  EventName ) );
 
 			if ( Handler == NULL )
 				ERRFwk();

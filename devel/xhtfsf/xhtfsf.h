@@ -43,7 +43,7 @@ namespace xhtfsf {
 	typedef xhtfbs::event_handler__ _event_handler__;
 
 	void GetContext(
-		xhtagent::agent___ &Agent,
+		xhtagent::agent_core___ &Agent,
 		xml::writer_ &Writer );
 
 	class event_handlers__

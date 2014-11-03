@@ -45,7 +45,7 @@
 namespace sclxhtml {
 	typedef xhtcllbk::event_handler__ _event_handler__;
 
-	template <typename callback > class event_handler__
+	template <typename callback, typename agent> class event_handler__
 	: public _event_handler__
 	{
 	private:
@@ -64,17 +64,17 @@ namespace sclxhtml {
 			case err::t_Abort:
 				Message.Init();
 				if ( sclerror::GetPendingError(sclmisc::GetLanguage(), Message) ) {
-					A().Alert( Message );
+					Agent().Alert( Message );
 					sclerror::ResetPendingError();
 				} else
-					A().Alert("?");
+					Agent().Alert("?");
 				break;
 			case err::t_Free:
 			case err::t_Return:
-				A().Alert( "???" );
+				Agent().Alert( "???" );
 				break;
 			default:
-				A().Alert( err::Message( Buffer ) );
+				Agent().Alert( err::Message( Buffer ) );
 				break;
 			}
 
@@ -96,45 +96,70 @@ namespace sclxhtml {
 			_event_handler__::Init();
 			_Callback = &Callback;
 
-			C().A().AddEventHandler( EventName, *this );
+			Agent().AddEventHandler( EventName, *this );
 		}
-		callback &C( void ) const
+		callback &Callback( void ) const
 		{
 			if ( _Callback == NULL )
 				ERRFwk();
 
 			return *_Callback;
 		}
-		xhtagent::agent___ &A( void ) const
+		agent &Agent( void ) const
 		{
-			return C().A();
+			return Callback().Agent();
 		}
 	};
 
 	// L'utilisateur met dans la classe mère ses propres objets et l'instancie par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
-	class callback__
+	class callback_core__
 	{
-	private:
-		xhtagent::agent___ *_Agent;
 	protected:
-		virtual void SCLXHTMLStart( xhtagent::agent___ &Agent ) = 0;
+		virtual void SCLXHTMLStart( void ) = 0;
+		virtual xhtagent::agent_core___ &_A( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Agent = NULL;
+			// Standardisation.
 		}
-		E_CVDTOR( callback__ )
-		void Init( xhtagent::agent___ &Agent )
+		E_CVDTOR( callback_core__ )
+		void Init( void )
 		{
-			_Agent = &Agent;
+			// Standardisation.
 		}
 		void Start( void );
-		xhtagent::agent___ &A( void ) const
+		xhtagent::agent_core___ &AgentCore( void )
 		{
-			if ( _Agent == NULL )
-				ERRFwk();
+			return _A();
+		}
+	};
 
-			return *_Agent;
+	template <typename agent> class callback__
+	: public callback_core__
+	{
+	private:
+		agent _Agent;
+	protected:
+		virtual xhtagent::agent_core___ &_A( void ) override
+		{
+			return _Agent;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			callback_core__::reset( P );
+			_Agent.reset();
+		}
+		E_CVDTOR( callback__ )
+		void Init( xhtcllbk::upstream_callback__ &UCallback )
+		{
+			callback_core__::Init();
+			_Agent.Init( UCallback );
+		}
+		void Start( void );
+		agent &Agent( void )
+		{
+			return _Agent;
 		}
 	};
 
@@ -151,10 +176,10 @@ namespace sclxhtml {
 	}
 
 	void MainSubmission(
-		xhtagent::agent___ &Agent,
+		xhtagent::agent_core___ &Agent,
 		xml::writer_ &Writer );
 
-	callback__ *SCLXHTMLRetrieveCallback( xhtagent::agent___ &Agent );	// A surcharger.
+	callback_core__ *SCLXHTMLRetrieveCallback( xhtcllbk::upstream_callback__ &UCallback );	// A surcharger.
 }
 
 				  /********************************************/

@@ -34,7 +34,7 @@ E_CDEF( char *, PredefinedProject, "PredefinedProject" );
 E_CDEF( char *, UserProject, "UserProject" );
 
 
-static xhtfbs::project_type__ GetProjectType_( xhtagent::agent___ &Agent )
+static xhtfbs::project_type__ GetProjectType_( xhtagent::agent_core___ &Agent )
 {
 	xhtfbs::project_type__ ProjectType = xhtfbs::pt_Undefined;
 ERRProlog
@@ -49,7 +49,7 @@ ERREpilog
 }
 
 void xhtfmn::GetContext(
-	xhtagent::agent___ &Agent,
+	xhtagent::agent_core___ &Agent,
 	xml::writer_ &Writer)
 {
 	Writer.PushTag( "ProjectType ");
@@ -73,14 +73,14 @@ void xhtfmn::GetContext(
 }
 
 static const str::string_ &GetPredefinedProject_(
-	xhtagent::agent___ &Agent,
+	xhtagent::agent_core___ &Agent,
 	str::string &Buffer )
 {
 	return Agent.GetSelectValue( PredefinedProject, Buffer );
 }
 
 xhtfbs::project_type__ xhtfmn::GetProjectFeatures(
-	xhtagent::agent___ &Agent,
+	xhtagent::agent_core___ &Agent,
 	str::string_ &ProjectFeature )
 {
 	xhtfbs::project_type__ ProjectType = xhtfbs::pt_Undefined;

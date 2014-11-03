@@ -29,7 +29,7 @@
 using namespace xhtfsf;
 
 void xhtfsf::GetContext(
-	xhtagent::agent___ &Agent,
+	xhtagent::agent_core___ &Agent,
 	xml::writer_ &Writer )
 {
 ERRProlog
@@ -38,20 +38,7 @@ ERRBegin
 	Writer.PushTag( "BackendType" );
 
 	Value.Init();
-	switch ( xhtfbs::GetBackendType( Agent.GetSelectValue( "BackendTypeSelection", Value ) ) ) {
-	case xhtfbs::btDaemon:
-		Writer.PutValue( "Daemon" );
-		break;
-	case xhtfbs::btEmbedded:
-		Writer.PutValue( "Embedded" );
-		break;
-	case xhtfbs::btPredefined:
-		Writer.PutValue( "Predefined" );
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
+	Writer.PutValue( xhtfbs::GetLabel( xhtfbs::GetBackendType( Agent.GetSelectValue( "BackendTypeSelection", Value ) ) ) );
 ERRErr
 ERREnd
 ERREpilog

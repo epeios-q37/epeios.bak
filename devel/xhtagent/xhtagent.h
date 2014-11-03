@@ -3,19 +3,19 @@
 
 	'xhtagent' is part of the Epeios framework.
 
-    The Epeios framework is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
 	by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	(at your option) any later version.
 
-    The Epeios framework is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
-*/
+	You should have received a copy of the GNU General Public License
+	along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
+	*/
 
 #ifndef XHTAGENT__INC
 # define XHTAGENT__INC
@@ -27,9 +27,9 @@
 # endif
 
 /******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
+/* do not modify anything above this limit */
+/*			  unless specified			 */
+/*******************************************/
 
 // XHT(ML) AGENT
 
@@ -42,7 +42,7 @@ namespace xhtagent {
 
 	typedef ntvstr::string___ nstring___;
 
-	class agent___ {
+	class agent_core___ {
 	private:
 		xhtcllbk::upstream_callback__ *_Callback;
 		xhtcllbk::upstream_callback__ &_C( void ) const
@@ -52,32 +52,32 @@ namespace xhtagent {
 
 			return *_Callback;
 		}
-		xhtcllbk::event_handlers _Handlers;
+		xhtcllbk::event_manager _Manager;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Callback = NULL;
-			_Handlers.reset( P );
+			_Manager.reset( P );
 		}
-		E_CDTOR( agent___ );
+		E_CDTOR( agent_core___ );
 		void Init( xhtcllbk::upstream_callback__ &Callback )
 		{
 			_Callback = &Callback;
-			_Handlers.Init();
+			_Manager.Init();
 		}
-		const xhtcllbk::event_handlers_ &Handlers( void ) const
+		const xhtcllbk::event_manager_ &EventManager( void ) const
 		{
-			return _Handlers;
+			return _Manager;
 		}
-		void RemoveEventHandlers( void )
+		void ClearEventManager( void )
 		{
-			_Handlers.Init();
+			_Manager.Init();
 		}
 		void AddEventHandler(
 			const char *EventName,
 			xhtcllbk::event_handler__ &Handler )
 		{
-			if ( !_Handlers.Add( EventName, Handler ) )
+			if ( !_Manager.Add( EventName, Handler ) )
 				ERRFwk();
 		}
 		void ExecuteJavascript( const nstring___ &Script )
@@ -107,6 +107,12 @@ namespace xhtagent {
 			const nstring___ &Name )
 		{
 			_C().RemoveAttribute( Id, Name );
+		}
+		void SetValue(
+			const nstring___ &Id,
+			const str::string_ &Value )
+		{
+			SetString(Id, "value", Value );
 		}
 		const char *GetSelectValue(
 			const nstring___ &Id,
@@ -150,6 +156,13 @@ namespace xhtagent {
 		{
 			Alert( str::string( Message ) );
 		}
+	};
+
+	template <typename eh> class agent___
+	: public agent_core___
+	{
+	public:
+		eh Handlers;
 	};
 }
 

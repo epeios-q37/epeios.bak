@@ -41,9 +41,9 @@ static bso::bool__ IsInitialized_ = false;
 #define FUNCTION_SPEC
 # endif
 
-void sclxhtml::callback__::Start( void )
+void sclxhtml::callback_core__::Start( void )
 {
-	SCLXHTMLStart( A() );
+	SCLXHTMLStart();
 }
 
 void sclxhtml::Load(
@@ -69,12 +69,12 @@ DEF( XHTCLLBK_RETRIEVE_FUNCTION_NAME, xhtcllbk::retrieve );
 
 typedef xhtcllbk::downstream_callback__ _dcallback__;
 
-class dcallback___
+class dcallback__
 : public _dcallback__
 {
 private:
-	xhtagent::agent___ _Agent;
-	callback__ *_Callback;
+	xhtagent::agent_core___ *_Agent;
+	callback_core__ *_Callback;
 protected:
 	virtual void XHTCLLBKStart( void )
 	{
@@ -95,41 +95,44 @@ public:
 				delete _Callback;
 
 		_dcallback__::reset( P );
-		_Agent.reset( P );
+		_Agent = NULL;
 		_Callback = NULL;
 	}
-	E_CVDTOR( dcallback___ );
+	E_CVDTOR( dcallback__ );
 	void Init(
-		xhtcllbk::upstream_callback__ &UCallback,
-		callback__ &Callback )
+		xhtagent::agent_core___ &Agent,
+		callback_core__ &Callback )
 	{
-		_Agent.Init( UCallback );
-		_dcallback__::Init( _Agent.Handlers() );
+		_Agent = &Agent;
+		_dcallback__::Init( Agent.EventManager() );
 		_Callback = &Callback;
 	}
-	xhtagent::agent___ &Agent( void )
+	xhtagent::agent_core___ &Agent( void )
 	{
-		return _Agent;
+		if ( _Agent == NULL )
+			ERRFwk();
+
+		return *_Agent;
 	}
 };
 
 xhtcllbk::downstream_callback__ *XHTCLLBKRetrieve( const xhtcllbk::shared_data__ &Data )
 {
-	dcallback___ *DCallback = NULL;
+	dcallback__ *DCallback = NULL;
 ERRProlog
-	callback__ *Callback;
+	callback_core__ *Callback;
 ERRBegin
-	DCallback = new dcallback___;
+	DCallback = new dcallback__;
 
 	if ( DCallback == NULL )
 		ERRAlc();
 
-	Callback = sclxhtml::SCLXHTMLRetrieveCallback( DCallback->Agent() );
+	Callback = sclxhtml::SCLXHTMLRetrieveCallback( Data.Callback() );
 
 	if ( Callback == NULL )
 		ERRFwk();
 
-	DCallback->Init( Data.Callback(), *Callback  );
+	DCallback->Init( Callback->AgentCore(), *Callback  );
 ERRErr
 	if ( DCallback != NULL )
 		delete DCallback;
@@ -144,7 +147,7 @@ ERREpilog
 }
 
 static void LoadProject_(
-	xhtagent::agent___ &Agent,
+	xhtagent::agent_core___ &Agent,
 	const str::string_ &FileName )
 {
 ERRProlog
@@ -160,7 +163,7 @@ ERREpilog
 }
 
 static void LoadPredefinedProject_( 
-	xhtagent::agent___ &Agent,
+	xhtagent::agent_core___ &Agent,
 	const str::string_ &Id )
 {
 ERRProlog
@@ -183,7 +186,7 @@ ERREpilog
 }
 
 void sclxhtml::MainSubmission(
-	xhtagent::agent___ &Agent,
+	xhtagent::agent_core___ &Agent,
 	xml::writer_ &Writer )
 {
 ERRProlog

@@ -44,12 +44,12 @@ namespace xhtfmn {
 	typedef xhtfbs::event_handler__ _event_handler__;
 
 	void GetContext(
-		xhtagent::agent___ &Agent,
+		xhtagent::agent_core___ &Agent,
 		xml::writer_ &Writer );
 
 
 	xhtfbs::project_type__ GetProjectFeatures(
-		xhtagent::agent___ &Agent,
+		xhtagent::agent_core___ &Agent,
 		str::string_ &ProjectFeature );
 }
 
