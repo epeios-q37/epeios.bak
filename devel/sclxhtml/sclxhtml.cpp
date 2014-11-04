@@ -185,9 +185,7 @@ ERREnd
 ERREpilog
 }
 
-void sclxhtml::MainSubmission(
-	xhtagent::agent_core___ &Agent,
-	xml::writer_ &Writer )
+void sclxhtml::MainSubmission( xhtagent::agent_core___ &Agent )
 {
 ERRProlog
 	str::string ProjectFeature;
@@ -201,20 +199,16 @@ ERRBegin
 		LoadPredefinedProject_( Agent, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
+		if ( ProjectFeature.Amount() == 0  )
+			sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
 		break;
 	case xhtfbs::pt_Undefined:
-		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
+		ERRFwk();
 		break;
 	default:
 		ERRFwk();
 		break;
 	}
-
-	Writer.PushTag( "PredefinedBackends" );
-
-	sclfrntnd::GetPredefinedBackends( Writer );
-
-	Writer.PopTag();
 ERRErr
 ERREnd
 ERREpilog

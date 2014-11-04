@@ -43,13 +43,11 @@ ERRBegin
 	Value.InsertAt( '"' );
 	Value.Append( '"' );
 
-	_C().SetProperty(Id, Name, Value );
+	_C().SetProperty( Id, Name, Value );
 ERRErr
 ERREnd
 ERREpilog
 }
-
-
 
 const str::string_ &xhtagent::agent_core___::GetSelectValue(
 	const char *Id,

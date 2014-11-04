@@ -91,10 +91,6 @@ namespace xhtagent {
 		{
 			return _C().GetAttribute( Id, Name, Buffer );
 		}
-		void SetString(
-			const nstring___ &Id,
-			const nstring___ &Name,
-			const str::string_ &Value );
 		void SetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
@@ -108,11 +104,28 @@ namespace xhtagent {
 		{
 			_C().RemoveAttribute( Id, Name );
 		}
+		void SetString(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			const str::string_ &Value );
+		const char *GetString(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			TOL_CBUFFER___ &Buffer )
+		{
+			return _C().GetProperty( Id, Name, Buffer );
+		}
 		void SetValue(
 			const nstring___ &Id,
 			const str::string_ &Value )
 		{
 			SetString(Id, "value", Value );
+		}
+		const char * GetValue(
+			const nstring___ &Id,
+			TOL_CBUFFER___ &Buffer )
+		{
+			return GetString(Id, "value", Buffer );
 		}
 		const char *GetSelectValue(
 			const nstring___ &Id,

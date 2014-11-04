@@ -30,8 +30,6 @@
 
 using namespace xhtfmn;
 
-E_CDEF( char *, PredefinedProject, "PredefinedProject" );
-E_CDEF( char *, UserProject, "UserProject" );
 
 
 static xhtfbs::project_type__ GetProjectType_( xhtagent::agent_core___ &Agent )
@@ -41,7 +39,7 @@ ERRProlog
 	str::string Value;
 ERRBegin
 	Value.Init();
-	ProjectType = xhtfbs::GetProjectType( Agent.GetSelectValue( "ProjectType", Value ) );
+	ProjectType = xhtfbs::GetProjectType( Agent.GetSelectValue( ProjectTypeId, Value ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -54,20 +52,7 @@ void xhtfmn::GetContext(
 {
 	Writer.PushTag( "ProjectType ");
 
-	switch ( GetProjectType_( Agent ) ) {
-	case xhtfbs::ptNew:
-		Writer.PutValue( "New" );
-		break;
-	case xhtfbs::ptPredefined:
-		Writer.PutValue( "Predefined" );
-		break;
-	case xhtfbs::ptUser:
-		Writer.PutValue( "User" );
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
+	Writer.PutValue( xhtfbs::GetLabel( GetProjectType_( Agent ) ) );
 
 	Writer.PopTag();
 }
@@ -76,7 +61,7 @@ static const str::string_ &GetPredefinedProject_(
 	xhtagent::agent_core___ &Agent,
 	str::string &Buffer )
 {
-	return Agent.GetSelectValue( PredefinedProject, Buffer );
+	return Agent.GetSelectValue( PredefinedProjectId, Buffer );
 }
 
 xhtfbs::project_type__ xhtfmn::GetProjectFeatures(
@@ -91,12 +76,10 @@ ERRBegin
 	case xhtfbs::ptNew:
 		break;
 	case xhtfbs::ptPredefined:
-		Agent.GetSelectValue( PredefinedProject, ProjectFeature );
+		ProjectFeature.Append( Agent.GetSelectValue( PredefinedProjectId, Buffer ) );
 		break;
 	case xhtfbs::ptUser:
-/*		if ( !Agent.LaunchFileLoading( UserProject ) )
-			ProjectType = xhtfbs::pt_Undefined;*/
-		// Le contenu du fichier proprement dit sera chargé ultèrieurement.
+		ProjectFeature.Append( Agent.GetValue( UserProjectId, Buffer ) );
 		break;
 	default:
 		ERRFwk();

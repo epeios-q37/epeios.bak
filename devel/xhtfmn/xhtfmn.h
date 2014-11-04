@@ -43,6 +43,11 @@ namespace xhtfmn {
 
 	typedef xhtfbs::event_handler__ _event_handler__;
 
+	E_CDEF( char *, ProjectTypeId, "ProjectType" );
+	E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
+	E_CDEF( char *, UserProjectId, "UserProject" );
+
+
 	void GetContext(
 		xhtagent::agent_core___ &Agent,
 		xml::writer_ &Writer );

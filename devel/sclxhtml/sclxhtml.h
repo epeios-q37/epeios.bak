@@ -175,9 +175,7 @@ namespace sclxhtml {
 		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), sclmisc::GetLanguage(), String, Marker );
 	}
 
-	void MainSubmission(
-		xhtagent::agent_core___ &Agent,
-		xml::writer_ &Writer );
+	void MainSubmission( xhtagent::agent_core___ &Agent );
 
 	callback_core__ *SCLXHTMLRetrieveCallback( xhtcllbk::upstream_callback__ &UCallback );	// A surcharger.
 }
