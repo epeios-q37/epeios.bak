@@ -28,20 +28,36 @@
 
 using namespace xhtfsf;
 
+void xhtfsf::GetContent(
+	xhtagent::agent_core___ &Agent,
+	xml::writer_ &Writer)
+{
+	// Rien à fournir.
+}
+
+static xhtfbs::backend_type__ GetBackendType_( xhtagent::agent_core___ &Agent )
+{
+	xhtfbs::backend_type__ BackendType = xhtfbs::bt_Undefined;
+ERRProlog
+	str::string Value;
+ERRBegin
+	Value.Init();
+	BackendType = xhtfbs::GetBackendType( Agent.GetSelectValue( BackendTypeId, Value ) );
+ERRErr
+ERREnd
+ERREpilog
+	return BackendType;
+}
+
 void xhtfsf::GetContext(
 	xhtagent::agent_core___ &Agent,
 	xml::writer_ &Writer )
 {
-ERRProlog
-	str::string Value;
-ERRBegin
 	Writer.PushTag( "BackendType" );
 
-	Value.Init();
-	Writer.PutValue( xhtfbs::GetLabel( xhtfbs::GetBackendType( Agent.GetSelectValue( "BackendTypeSelection", Value ) ) ) );
-ERRErr
-ERREnd
-ERREpilog
+	Writer.PutValue( xhtfbs::GetLabel( GetBackendType_( Agent ) ) );
+
+	Writer.PopTag();
 }
 
 /* Although in theory this class is inaccessible to the different modules,

@@ -183,7 +183,9 @@ ERREpilog
 
 void sclfrntnd::GetPredefinedProjects( xml::writer_ &Writer )
 {
+	Writer.PushTag( "PredefinedProjects" );
 	GetPredefinedProjects_( sclrgstry::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+	Writer.PopTag();
 }
 
 static const str::string_ &GetProjectFileName_(
@@ -284,7 +286,9 @@ ERREpilog
 
 void sclfrntnd::GetPredefinedBackends( xml::writer_ &Writer )
 {
+	Writer.PushTag( "PredefinedBackends" );
 	GetPredefinedBackends_(sclrgstry::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+	Writer.PopTag();
 }
 
 

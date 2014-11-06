@@ -40,7 +40,14 @@
 
 namespace xhtfsf {
 
+	E_CDEF( char *, BackendTypeId, "BackendType" );
+
+
 	typedef xhtfbs::event_handler__ _event_handler__;
+
+	void GetContent(
+		xhtagent::agent_core___ &Agent,
+		xml::writer_ &Writer );
 
 	void GetContext(
 		xhtagent::agent_core___ &Agent,

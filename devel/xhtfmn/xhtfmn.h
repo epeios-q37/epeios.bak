@@ -48,6 +48,10 @@ namespace xhtfmn {
 	E_CDEF( char *, UserProjectId, "UserProject" );
 
 
+	void GetContent(
+		xhtagent::agent_core___ &Agent,
+		xml::writer_ &Writer );
+
 	void GetContext(
 		xhtagent::agent_core___ &Agent,
 		xml::writer_ &Writer );

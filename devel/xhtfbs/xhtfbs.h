@@ -44,7 +44,10 @@
 
 namespace xhtfbs {
 
-	class xml_rack___
+	E_CDEF( char *, ContentTagName, "Content" );
+	E_CDEF( char *, ContextTagName, "Context" );
+
+	class generic_rack___
 	{
 	private:
 		flx::E_STRING_OFLOW___ _Flow;
@@ -57,12 +60,18 @@ namespace xhtfbs {
 			_TFlow.reset( P );
 			_Flow.reset( P );
 		}
-		E_CDTOR( xml_rack___ );
-		void Init( str::string_ &Target )
+		E_CDTOR( generic_rack___ );
+		void Init(
+			const char *RootTagName,
+			const char *SubRootTagName,
+			str::string_ &Target )
 		{
 			_Flow.Init( Target );
 			_TFlow.Init( _Flow );
 			_Writer.Init( _TFlow, xml::oIndent, xml::e_Default );
+			_Writer.PushTag( RootTagName );
+			_Writer.PutAttribute("Enviroment", CPE_ENVIROMENT_LABEL );
+			_Writer.PushTag( SubRootTagName );
 		}
 		operator xml::writer_ &()
 		{
@@ -73,6 +82,45 @@ namespace xhtfbs {
 			return _Writer;
 		}
 	};
+
+	class content_rack___
+	: public generic_rack___
+	{
+	public:
+		void Init(
+			const char *RootTagName,
+			str::string_ &Target )
+		{
+			generic_rack___::Init( RootTagName, ContentTagName, Target );
+		}
+	};
+
+	class context_rack___
+	: public generic_rack___
+	{
+	public:
+		void Init(
+			const char *RootTagName,
+			str::string_ &Target )
+		{
+			generic_rack___::Init( RootTagName, ContextTagName, Target );
+		}
+	};
+
+# define XHTFBS_RACK( RootTagName, Type )\
+	class Type##_rack___\
+	: public xhtfbs::Type##_rack___\
+	{\
+	public:\
+		void Init( str::string_ &Target )\
+		{\
+			xhtfbs::Type##_rack___::Init( RootTagName, Target );\
+		}\
+	}
+
+# define XHTFBS_RACKS( RootTagName)\
+	XHTFBS_RACK( RootTagName, content );\
+	XHTFBS_RACK( RootTagName, context )
 
 	class event_handler__
 	{
