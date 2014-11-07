@@ -134,9 +134,9 @@ namespace dir {
 	inline state__ CreateDir( const fnm::name___ &Path )
 	{
 #ifdef DIR__WIN
-		switch ( _wmkdir( Path.Core() ) ) {
+		switch ( _wmkdir( Path.Internal() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( mkdir( Path.Core(), 0777 ) ) {
+		switch ( mkdir( Path.Internal(), 0777 ) ) {
 #else
 #	error
 #endif
@@ -157,9 +157,9 @@ namespace dir {
 	inline state__ DropDir( const fnm::name___ &Path )
 	{
 #ifdef DIR__WIN
-		switch ( _wrmdir( Path.Core() ) ) {
+		switch ( _wrmdir( Path.Internal() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( rmdir( Path.Core() ) ) {
+		switch ( rmdir( Path.Internal() ) ) {
 #else
 #	error
 #endif
@@ -180,9 +180,9 @@ namespace dir {
 	inline state__ ChangeDir( const fnm::name___ &Path )
 	{
 #ifdef DIR__WIN
-		switch ( _wchdir( Path.Core() ) ) {
+		switch ( _wchdir( Path.Internal() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( chdir( Path.Core() ) ) {
+		switch ( chdir( Path.Internal() ) ) {
 #else
 #	error
 #endif
@@ -225,12 +225,12 @@ namespace dir {
 # ifdef DIR__WIN
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		fnm::ncore___ &Buffer = Handle.Name.Core();
+		fnm::ncore___ &Buffer = Handle.Name.ExposedInternal();
 
 		Handle.Name.Init();
 
-		Buffer.Malloc( wcslen( Path.Core() ) + 1 );
-		wcscpy( Buffer, Path.Core() );
+		Buffer.Malloc( wcslen( Path.Internal() ) + 1 );
+		wcscpy( Buffer, Path.Internal() );
 
 		if ( *Buffer ) {
 			Buffer.Realloc( wcslen( Buffer ) + 2 );
@@ -285,7 +285,7 @@ namespace dir {
 #  endif
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		fnm::ncore___ &Buffer = Handle.Name.Core();
+		fnm::ncore___ &Buffer = Handle.Name.ExposedInternal();
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )

@@ -108,7 +108,7 @@ inline static fnm::type__ Type_( const nchar__ *Name )
 
 fnm::type__ fnm::Type( const name___ &Name )
 {
-	return Type_( Name.Core() );
+	return Type_( Name.Internal() );
 }
 
 const name___ &fnm::BuildFileName(
@@ -120,7 +120,7 @@ const name___ &fnm::BuildFileName(
 ERRProlog
 	size_t DirSize = 0, AffixSize = 0, ExtSize = 0;
 ERRBegin
-	ncore___ &Core = Name.Core();
+	ncore___ &Core = Name.ExposedInternal();
 
 	if ( Type_( Affix ) == tAbsolute )
 		Dir = NULL;
@@ -193,6 +193,7 @@ ERREpilog
 	return Name;
 }
 
+# if 0
 const name___ &fnm::_Set(
 	const nchar__ *Core,
 	name___ &Name )
@@ -209,6 +210,7 @@ const name___ &fnm::_Set(
 
 	return Name;
 }
+# endif
 
 const nchar__ *fnm::GetFileName( const nchar__ *Name )
 {
@@ -307,9 +309,9 @@ ERREpilog
 
 const name___ &fnm::CorrectLocation( name___ &Location )
 {
-	nchar__ *R = Location.Core();
+	nchar__ *R = Location.Internal();
 
-	R = strchr_( Location.Core(), '\\' );
+	R = strchr_( Location.Internal(), '\\' );
 
 	while( R != NULL ) {
 		*R = '/';
@@ -326,11 +328,11 @@ const name___ &fnm::GetLocation(
 	size_t L = GetFileName( Name ) - Name;
 
 	if ( L != 0 ) {
-		 Location.Core().Malloc( L + 1 );
+		 Location.ExposedInternal().Malloc( L + 1 );
 
-		memcpy( Location.Core(), Name, L * sizeof( nchar__) );
+		memcpy( Location.Internal(), Name, L * sizeof( nchar__) );
 
-		Location.Core()[L] = 0;
+		Location.ExposedInternal()[L] = 0;
 	} else
 		Location.Init();
 
@@ -345,12 +347,12 @@ const name___ &fnm::GetAffix(
 
 	Repere = GetFileName( Name );
 
-	Affix.Core().Malloc( strlen_( Repere ) + 1 );
+	Affix.ExposedInternal().Malloc( strlen_( Repere ) + 1 );
 
-	strcpy_( Affix.Core(), Repere );
+	strcpy_( Affix.Internal(), Repere );
 
-	if ( strchr_( Affix.Core(), '.' ) )
-		*strchr_( Affix.Core(), '.' ) = 0;
+	if ( strchr_( Affix.Internal(), '.' ) )
+		*strchr_( Affix.Internal(), '.' ) = 0;
 
 	return Affix;
 }

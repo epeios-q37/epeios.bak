@@ -95,7 +95,7 @@ ERRBegin
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
-	Result = _wsystem( ntvstr::string___( ModifiedCommand ).Core() );
+	Result = _wsystem( ntvstr::string___( ModifiedCommand ).Internal() );
 ERRErr
 ERREnd
 ERREpilog

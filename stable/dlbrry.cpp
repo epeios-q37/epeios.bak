@@ -79,7 +79,7 @@ bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &N
 		ERRFwk();
 
 #ifdef TARGET_WIN
-	if ( ( _LibraryHandler = LoadLibraryW( Name.Core() ) ) == NULL )
+	if ( ( _LibraryHandler = LoadLibraryW( Name.Internal() ) ) == NULL )
 		return false;
 #elif defined( TARGET_POSIX )
 	if ( ( _LibraryHandler = dlopen( LibraryName, RTLD_LAZY ) ) == NULL ) {

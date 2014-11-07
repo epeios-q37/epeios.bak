@@ -186,19 +186,19 @@ namespace xhtcllbk {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetChildren( Id.Core(), XML.Core(), XSL.Core() );
+			XHTCLLBKSetChildren( Id.Internal(), XML.Internal(), XSL.Internal() );
 		}
 		void SetPaddings(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetPaddings( XML.Core(), XSL.Core() );
+			XHTCLLBKSetPaddings( XML.Internal(), XSL.Internal() );
 		}
 		const char *ExecuteJavascript(
 			const nstring___ &Script,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKExecuteJavascript( Script.Core(), Buffer );
+			XHTCLLBKExecuteJavascript( Script.Internal(), Buffer );
 
 			return Buffer;
 		}
@@ -217,7 +217,7 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetProperty( Id.Core(), Name.Core(), Buffer );
+			XHTCLLBKGetProperty( Id.Internal(), Name.Internal(), Buffer );
 
 			return Buffer;
 		}
@@ -226,14 +226,14 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetProperty( Id.Core(), Name.Core(), Value.Core() );
+			XHTCLLBKSetProperty( Id.Internal(), Name.Internal(), Value.Internal() );
 		}
 		const char *GetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetAttribute( Id.Core(), Name.Core(), Buffer );
+			XHTCLLBKGetAttribute( Id.Internal(), Name.Internal(), Buffer );
 
 			return Buffer;
 		}
@@ -242,19 +242,19 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetAttribute( Id.Core(), Name.Core(), Value.Core() );
+			XHTCLLBKSetAttribute( Id.Internal(), Name.Internal(), Value.Internal() );
 		}
 		void RemoveAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			XHTCLLBKRemoveAttribute( Id.Core(), Name.Core() );
+			XHTCLLBKRemoveAttribute( Id.Internal(), Name.Internal() );
 		}
 		const char *GetSelectValue(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetSelectValue( Id.Core(), Buffer );
+			XHTCLLBKGetSelectValue( Id.Internal(), Buffer );
 
 			return Buffer;
 		}

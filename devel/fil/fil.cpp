@@ -105,7 +105,7 @@ static inline iop::descriptor__ Open_(
 		break;
 	}
 
-	return _wopen( Name.Core(), Flags, PMode );
+	return _wopen( Name.Internal(), Flags, PMode );
 }
 
 static void Close_( iop::descriptor__ D )
@@ -143,7 +143,7 @@ static inline iop::descriptor__ Open_(
 		break;
 	}
 
-	return open( Name.Core(), Flags, 0666 );	/* rw-rw-rw- */
+	return open( Name.Internal(), Flags, 0666 );	/* rw-rw-rw- */
 }
 
 static void Close_( iop::descriptor__ D )

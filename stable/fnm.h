@@ -97,20 +97,22 @@ namespace fnm
 		const name___ &Ext,
 		name___ &Name )
 	{
-		return BuildFileName( Dir.Core(), Affix.Core(), Ext.Core(), Name );
+		return BuildFileName( Dir.Internal(), Affix.Internal(), Ext.Internal(), Name );
 	}
 
 	const nchar__ *GetFileName( const nchar__ *LocalizedName );
 
+# if 0
 	const name___ &_Set(
 		const nchar__ *Core,
 		name___ &Name );
+# endif
 
 	inline const name___ &GetFileName(
 		const name___ &LocalizedName,
 		name___ &Name )
 	{
-		return _Set( GetFileName( LocalizedName.Core() ), Name );
+		return Name = GetFileName( LocalizedName.Internal() );
 	}
 
 	const nchar__ *GetExtension( const nchar__ *Name );
@@ -119,7 +121,7 @@ namespace fnm
 		const name___ &Name,
 		name___ &Extension )
 	{
-		return _Set( GetExtension( Name.Core() ), Extension );
+		return Extension = GetExtension( Name.Internal() );
 	}
 
 	const name___ &GetLocation(
@@ -130,7 +132,7 @@ namespace fnm
 		const name___ &Name,
 		name___ &Location )
 	{
-		return GetLocation( Name.Core(), Location );
+		return GetLocation( Name.Internal(), Location );
 	}
 
 	const name___ &GetAffix(
@@ -141,7 +143,7 @@ namespace fnm
 		const name___ &Name,
 		name___ &Affix )
 	{
-		return GetAffix( Name.Core(), Affix );
+		return GetAffix( Name.Internal(), Affix );
 	}
 
 #if 0	// Obsolete ?

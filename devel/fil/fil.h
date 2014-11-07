@@ -223,7 +223,7 @@ namespace fil {
 	{
 		errno = 0;
 
-		if ( FIL__STATF( FileName.Core(), &Stat ) != 0 )
+		if ( FIL__STATF( FileName.Internal(), &Stat ) != 0 )
 			return _ConvertErrNo( errno );
 
 		return eNone;
@@ -350,7 +350,7 @@ namespace fil {
 		SYSTEMTIME st;
 		HANDLE Handle = INVALID_HANDLE_VALUE;
 	ERRBegin
-		Handle = CreateFileW( FileName.Core(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		Handle = CreateFileW( FileName.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Handle == INVALID_HANDLE_VALUE )
 			ERRReturn;
@@ -392,9 +392,9 @@ namespace fil {
 	inline bso::bool__ Remove( const fnm::name___ &FileName )
 	{
 # ifdef FIL__WIN
-		return _wremove( FileName.Core() ) == 0;
+		return _wremove( FileName.Internal() ) == 0;
 # elif defined ( FIL__POSIX )
-		return remove( FileName.Core() ) == 0;
+		return remove( FileName.Internal() ) == 0;
 # else
 #  error
 # endif
@@ -405,9 +405,9 @@ namespace fil {
 		const fnm::name___ &NewFileName )
 	{
 # ifdef FIL__WIN
-		return _wrename( FileName.Core(), NewFileName.Core() ) == 0;
+		return _wrename( FileName.Internal(), NewFileName.Internal() ) == 0;
 # elif defined ( FIL__POSIX )
-		return rename( FileName.Core(), NewFileName.Core() ) == 0;
+		return rename( FileName.Internal(), NewFileName.Internal() ) == 0;
 # else
 #  error
 # endif
@@ -418,9 +418,9 @@ namespace fil {
 		const fnm::name___ &New )
 	{
 # ifdef FIL__WIN
-		return MoveFileW( Existing.Core(), New.Core() ) != 0;
+		return MoveFileW( Existing.Internal(), New.Internal() ) != 0;
 # elif defined ( FIL__POSIX )
-		return rename( Existing.Core(), New.Core() ) == 0;
+		return rename( Existing.Internal(), New.Internal() ) == 0;
 # else
 #  error
 # endif
@@ -438,12 +438,12 @@ namespace fil {
 			Target = INVALID_HANDLE_VALUE;
 		FILETIME Creation, Access, Write;
 	ERRBegin
-		Source = CreateFileW( SourceFileName.Core(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		Source = CreateFileW( SourceFileName.Internal(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Source == INVALID_HANDLE_VALUE )
 			ERRReturn;
 
-		Target = CreateFileW( TargetFileName.Core(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		Target = CreateFileW( TargetFileName.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Target == INVALID_HANDLE_VALUE )
 			ERRReturn;
@@ -495,7 +495,7 @@ namespace fil {
 	{
 # ifdef FIL__WIN
 		// NOTA : le fichier copié avec la fonction ci-dessous possède les mêmes horodatages, on s'arrange donc pour avoir le même résultat sous POSIX.
-		return CopyFileW( SourceFileName.Core(), TargetFileName.Core(), false ) != 0;
+		return CopyFileW( SourceFileName.Internal(), TargetFileName.Internal(), false ) != 0;
 # elif defined( FIL__POSIX )
 		bso::bool__ Success = false;
 	ERRProlog
@@ -548,7 +548,7 @@ namespace fil {
 		const fnm::name___ &FileName,
 		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/répertoire normal.
 	{
-		if ( SetFileAttributesW( FileName.Core(), FILE_ATTRIBUTE_NORMAL ) == 0 )
+		if ( SetFileAttributesW( FileName.Internal(), FILE_ATTRIBUTE_NORMAL ) == 0 )
 			if ( ErrorHandling == err::hThrowException )
 				ERRFwk();
 			else
@@ -563,7 +563,7 @@ namespace fil {
 															// NOTA : pour que le fichier soit caché lorsque l'option correspondande est activée,
 															// il semblerait qu'il faut en plus mettre l'attribute 'HIDDEN' et 'ARCHIVE'.
 	{
-		if ( SetFileAttributesW( FileName.Core(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE ) == 0 )
+		if ( SetFileAttributesW( FileName.Internal(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE ) == 0 )
 			if ( ErrorHandling == err::hThrowException )
 				ERRFwk();
 			else

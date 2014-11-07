@@ -1606,10 +1606,10 @@ ERRFEnd
 	FIn.reset();
 
 	if ( SOut.Amount() )
-		MessageBoxW( NULL, ntvstr::string___( SOut ).Core(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
+		MessageBoxW( NULL, ntvstr::string___( SOut ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK );
 
 	if ( SErr.Amount() )
-		MessageBoxW( NULL, ntvstr::string___( SErr ).Core(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Core(), MB_OK );
+		MessageBoxW( NULL, ntvstr::string___( SErr ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK );
 ERRFEpilog
 	return ExitValue;
 }

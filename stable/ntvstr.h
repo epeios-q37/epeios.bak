@@ -58,11 +58,11 @@ namespace ntvstr {
 # ifdef NTVSTR__POSIX
 	typedef bso::char__ char__;
 	E_CDEF( unsigned int, UTF8, 0 );
-	E_CDEF( unsigned int, Native, 0 );
+	E_CDEF( unsigned int, System, 0 );
 # elif defined( NTVSTR__WIN )
 	typedef wchar_t char__;
 	E_CDEF( unsigned int, UTF8, CP_UTF8 );
-	E_CDEF( unsigned int, Native, CP_OEMCP );
+	E_CDEF( unsigned int, System, CP_OEMCP );
 # else
 #  error
 # endif
@@ -107,7 +107,7 @@ namespace ntvstr {
 		}
 		string___ &operator =( const string___ &S)
 		{
-			Init( S.Core() );
+			Init( S.Internal() );
 
 			return *this;
 		}
@@ -138,19 +138,19 @@ namespace ntvstr {
 		{
 			return _Convert( ntvstr::UTF8, Buffer );
 		}
-		const bso::char__ *NativeEncoding( TOL_CBUFFER___ &Buffer ) const
+		const bso::char__ *SystemEncoding( TOL_CBUFFER___ &Buffer ) const
 		{
-			return _Convert( ntvstr::Native, Buffer );
+			return _Convert( ntvstr::System, Buffer );
 		}
-		const str::string_ &NativeEncoding( str::string_ &Buffer ) const
+		const str::string_ &SystemEncoding( str::string_ &Buffer ) const
 		{
-			return _Convert( ntvstr::Native, Buffer );
+			return _Convert( ntvstr::System, Buffer );
 		}
-		const core___ &Core( void ) const
+		const core___ &Internal( void ) const
 		{
 			return _Core;
 		}
-		core___ &Core( void )
+		core___ &ExposedInternal( void )
 		{
 			return _Core;
 		}
@@ -173,12 +173,18 @@ namespace ntvstr {
 		}
 	};
 
-
-	template <typename b> inline const bso::char__ *ToNativeEncoding(
-		const str::string_ &String,
+	template <typename s, typename b> inline const bso::char__ *ToSystemEncoding(
+		const s &String,
 		b &Buffer )
 	{
-		return nstring___( String ).NativeEncoding( Buffer );
+		return string___( String ).SystemEncoding( Buffer );
+	}
+
+	template <typename s, typename b> inline const bso::char__ *ToUTF8(
+		const s &String,
+		b &Buffer )
+	{
+		return string___( String ).UTF8( Buffer );
 	}
 }
 

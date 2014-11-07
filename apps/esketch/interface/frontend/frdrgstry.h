@@ -24,14 +24,13 @@
 
 # include "frdrgy.h"
 
+# include "sclrgstry.h"
+
 namespace frdrgstry {
 	using frdrgy::registry_;
 	E_AUTO( registry );
 
 	using rgstry::entry___;
-	
-	extern entry___ XSLContentFile;
-	extern entry___ XSLPaddingsFile;
 }
 
 #endif

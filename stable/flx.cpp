@@ -78,7 +78,7 @@ ERRBegin
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
-	Descriptor = _wpopen( ntvstr::string___( ModifiedCommand ).Core(), Mode.Core() );
+	Descriptor = _wpopen( ntvstr::string___( ModifiedCommand ).Internal(), Mode.Internal() );
 ERRErr
 ERREnd
 ERREpilog
@@ -151,7 +151,7 @@ ERRBegin
  
 	// Launch the process.
 	if ( !CreateProcessW( NULL,
-		Command.Core(), 0, 0, TRUE,
+		Command.Internal(), 0, 0, TRUE,
 		0, 0, 0,
 		&siStartupInfo, &piProcessInfo ) )
 		ERRReturn;

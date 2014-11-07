@@ -19,18 +19,10 @@
 
 // $Id: frdrgstry.cpp,v 1.1 2012/12/04 15:46:27 csimon Exp $
 
-#include "frdrgstry.h"
 #include "sclrgstry.h"
 
 #include "flf.h"
 #include "fnm.h"
 
-using namespace frdrgstry;
-
-static entry___ XSLFilesSet_( "XSLFilesSet", sclrgstry::Parameters );
-static entry___ FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
-static entry___ TaggedXSLFiles(RGSTRY_TAGGING_ATTRIBUTE("target"), FreeXSLFiles_ );
-
-entry___ frdrgstry::XSLContentFile("Content", TaggedXSLFiles );
-entry___ frdrgstry::XSLPaddingsFile("Paddings", TaggedXSLFiles );
+using namespace sclrgstry;
 
