@@ -88,12 +88,14 @@ namespace ntvstr {
 			_Core.reset( P );
 		}
 		E_CDTOR( string___ );
+# ifndef NTVSTR__POSIX
 		string___( const char *String )
 		{
 			reset( false );
 
 			Init( String );
 		}
+# endif
 		string___( const char__ *String )
 		{
 			reset( false );
@@ -118,7 +120,9 @@ namespace ntvstr {
 			*_Core = 0;
 		}
 		void Init( const bso::char__ *String );
+# ifndef NTVSTR__POSIX
 		void Init( const char__ *String );
+# endif
 		void Init( const str::string_ &String );
 		void Init( const string___ &String )
 		{

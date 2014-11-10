@@ -57,25 +57,7 @@
 # include "tol.h"
 # include "stsfsm.h"
 
-# if 0
-#  define BOMHDL_SIZE_MAX	4
-
-#  define BOM_UTF_32_BE "\x00\x00\xFE\xFF"
-#  define BOM_UTF_32_LE	"\xFF\xFE\x00\x00"
-#  define BOM_UTF_16_BE "\xFE\xFF"
-#  define BOM_UTF_16_LE	"\xFF\xFE"
-#  define BOM_UTF_8		"\xEF\xBB\xBF"
-# endif
-
 namespace bomhdl {
-	E_CDEF( bso::size__, SizeMax, 4 );
-	
-    E_CDEF( char *, UTF_32_BE, "\x00\x00\xFE\xFF" );
-    E_CDEF( char *, UTF_32_LE, "\xFF\xFE\x00\x00" );
-    E_CDEF( char *, UTF_16_BE, "\xFE\xFF" );
-    E_CDEF( char *, UTF_16_LE,"\xFF\xFE" );
-    E_CDEF( char *, UTF_8, "\xEF\xBB\xBF" );
-
 	struct bom__ {
 		const char *Data;
 		fdr::size__ Size;

@@ -39,17 +39,22 @@ using namespace scltool;
 using cio::COut;
 using scllocale::GetLocale;
 
+static sclrgstry::session_registry Registry_;
+
+sclrgstry::registry_ &scltool::GetRegistry( void )
+{
+	return Registry_;
+}
+
 bso::bool__ scltool::IgnoreCLIArgs = false;
 
-
-static rgstry::level__ SetupRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Registry remplit par l'éventuel 'Setups/Setup' sélectionné (présent dans le fichier de configuration ou de projet).
 static rgstry::level__ ArgumentsRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Registry remplit par les arguments présent en ligne de commande.
 
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
 void scltool::ReportIfNoSetupId( void )
 {
-	if ( !sclrgstry::GetRegistry().Exists( Setup_  ) )
+	if ( !Registry_.Exists( Setup_  ) )
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
 }
 
@@ -58,7 +63,7 @@ str::string ParametersTag_;	// Voir tout en bas.
 
 rgstry::level__ scltool::GetSetupRegistryLevel( void )
 {
-	return SetupRegistryLevel_;
+	return Registry_.GetSetupLevel();
 }
 
 rgstry::level__ scltool::GetArgumentsRegistryLevel( void )
@@ -1344,7 +1349,7 @@ ERRProlog
 	str::string EntryPath;
 ERRBegin
 	EntryPath.Init();
-	sclrgstry::GetRegistry().Delete( Command_.GetPath( EntryPath ), ArgumentsRegistryLevel_ );	// Pour pouvoir récupèrer la valeur correspondant à ce 'Path' tel qu'éventuellement défini dans le fichier de configuration.
+	Registry_.Delete( Command_.GetPath( EntryPath ), ArgumentsRegistryLevel_ );	// Pour pouvoir récupèrer la valeur correspondant à ce 'Path' tel qu'éventuellement défini dans le fichier de configuration.
 
 	Ids.Init();
 	GetValues( ArgumentId_, Ids );
@@ -1455,10 +1460,7 @@ ERREpilog
 	return Exists;
 }
 
-static bso::bool__ main_(
-	int argc,
-	ntvstr::char__ *argv[],
-	const oddities__ &Oddities )
+static bso::bool__ main_( const oddities__ &Oddities )
 {
 	bso::bool__ Success = false;
 ERRProlog
@@ -1469,21 +1471,14 @@ ERRProlog
 ERRBegin
 	sclmisc::Initialize( (const char *)NULL );
 
-	SetupRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Setup" ) );
-	ArgumentsRegistryLevel_ = sclrgstry::GetRegistry().PushEmbeddedLevel( str::string( "Arguments" ) );
-
-	if ( IgnoreCLIArgs ) {
-		argc = 1;
-//		while ( argc == 1 );
-	}
-			
-
-	FillRegistry_( argc, argv );
-
 	SetupId.Init();
 	OGetValue( Setup_, SetupId );
 
-	sclrgstry::FillRegistryWithSetup( sclrgstry::GetRegistry(), SetupRegistryLevel_, SetupId );
+	Registry_.Init( SetupId );
+
+	ArgumentsRegistryLevel_ = Registry_.PushEmbeddedLevel( str::string( "Arguments" ) );
+
+	FillRegistry_( IgnoreCLIArgs ? 1 : Oddities.argc, Oddities.argv );
 
 	ProjectFileName.Init();
 	OGetValue( ProjectFileName_, ProjectFileName );
@@ -1542,9 +1537,12 @@ int wmain(
 ERRFProlog
 	oddities__ Oddities;
 ERRFBegin
+	Oddities.argc = argc;
+	Oddities.argv = argv;
+
 	cio::Initialize( cio::t_Default );
 
-	if ( !main_( argc, argv, Oddities ) )
+	if ( !main_( Oddities ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd	
@@ -1563,14 +1561,12 @@ int WINAPI wWinMain(
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
-	int argc = 0;
-	LPWSTR *argv = NULL;
 	str::string SOut, SErr;
 	flx::bunch_oflow_driver___<str::string_, bso::char__> FOut, FErr;
 	flx::void_iflow_driver___ FIn;
 	oddities__ Oddities;
 ERRFBegin
-	argv = CommandLineToArgvW( GetCommandLineW(), &argc );
+	Oddities.argv = CommandLineToArgvW( GetCommandLineW(), &Oddities.argc );
 
 	SOut.Init();
 	FOut.Init( SOut, fdr::ts_Default );
@@ -1590,12 +1586,12 @@ ERRFBegin
 	Oddities.nCmdShow = nCmdShow;
 	Oddities.pCmdLine = pCmdLine;
 
-	if ( !main_( argc, argv, Oddities ) )
+	if ( !main_( Oddities ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd
-	if ( argv != NULL )
-		LocalFree( argv );
+	if ( Oddities.argv != NULL )
+		LocalFree( Oddities.argv );
 
 	cio::COut.reset();
 	cio::CErr.reset();
@@ -1621,10 +1617,14 @@ int main(
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
+	oddities__ Oddities;
 ERRFBegin
+	Oddities.argv = argv;
+	Oddities.argc = argc;
+
 	cio::Initialize( cio::t_Default );
 
-	if ( !main_( argc, argv, true ) )
+	if ( !main_( Oddities ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd	

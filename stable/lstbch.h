@@ -131,7 +131,7 @@ namespace lstbch {
 		}
 		row Search( type Object ) const
 		{
-			row__ Row = bunch_<type, row>::Search( Object );
+			row Row = bunch_<type, row>::Search( Object );
 
 			if ( Row != E_NIL )
 				if ( !list_<row, row_t>::Exists( Row ) )

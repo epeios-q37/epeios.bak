@@ -66,7 +66,7 @@ static void PrintHeader_( void )
 {
 	COut << NAME " V" VERSION << " (" APP_URL ")" << txf::nl;
 	COut << COPYRIGHT << txf::nl;
-	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
 

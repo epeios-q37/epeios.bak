@@ -179,7 +179,7 @@ ERRProlog
 ERRBegin
 	SubLocales.Init();
 
-	sclrgstry::GetRegistry().GetValues( Level, sclrgstry::Locale, SubLocales );
+	sclrgstry::GetCommonRegistry().GetValues( Level, sclrgstry::Locale, SubLocales );
 
 	MergedLocale.Init();
 	MergedLocale.Append("<Locale>");
@@ -210,7 +210,7 @@ ERRBegin
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
 
 	Language.Init();
-	if ( sclrgstry::BGetValue( sclrgstry::GetRegistry(), sclrgstry::Language, Language ) )
+	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par défaut.
 		Language.Convert( Language_ );
 
 	LoadLocale_( sclrgstry::GetConfigurationRegistryLevel(), scllocale::tConfiguration, RegistryFlow.Format());
@@ -539,25 +539,36 @@ ERREpilog
 void sclmisc::LoadAndTranslateTags(
 	const rgstry::tentry__ &FileName,
 	const sclrgstry::registry_ &Registry,
-	const char *Language,
 	str::string_ &String,
+	const char *Language,
 	char Marker )
 {
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+ERRBegin
 	Load( FileName, Registry, String );
 
+	if ( Language == NULL )
+		Language = sclrgstry::GetLanguage( Registry, Buffer );
+
 	scllocale::TranslateTags( String, Language, Marker );
+ERRErr
+ERREnd
+ERREpilog
+
 }
 
 void sclmisc::LoadXMLAndTranslateTags(
 	const rgstry::tentry__ &FileNameEntry,
 	const sclrgstry::registry_ &Registry,
-	const char *Language,
 	str::string_ &String,
+	const char *Language,
 	char Marker )
 {
 ERRProlog
 	str::string FileName, Unprocessed, Untranslated;
 	fnm::name___ FileNameLocation;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	FileName.Init();
 	Unprocessed.Init();
@@ -567,6 +578,9 @@ ERRBegin
 
 	Untranslated.Init();
 	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation ) );
+
+	if ( Language == NULL )
+		Language = sclrgstry::GetLanguage( Registry, Buffer );
 
 	scllocale::TranslateTags( Untranslated, Language, String, Marker );
 ERRErr

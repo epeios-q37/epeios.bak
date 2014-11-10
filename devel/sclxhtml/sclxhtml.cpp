@@ -46,23 +46,6 @@ void sclxhtml::callback_core__::Start( void )
 	SCLXHTMLStart();
 }
 
-void sclxhtml::Load(
-	const rgstry::tentry__ &FileName,
-	str::string_ &String )
-{
-	sclmisc::Load( FileName, sclrgstry::GetRegistry(), String );
-}
-
-/*
-void sclxhtml::LoadAndTranslateTags(
-	const rgstry::entry___ &FileName,
-	const char *Language,
-	str::string_ &String )
-{
-	sclmisc::LoadAndTranslateTags( FileName, sclrgstry::GetRegistry(), Language, String, '$' );
-}
-*/
-
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
 DEF( XHTCLLBK_RETRIEVE_FUNCTION_NAME, xhtcllbk::retrieve );
@@ -163,6 +146,7 @@ ERREpilog
 }
 
 static void LoadPredefinedProject_( 
+	const sclrgstry::registry_ &Registry,
 	xhtagent::agent_core___ &Agent,
 	const str::string_ &Id )
 {
@@ -174,7 +158,7 @@ ERRBegin
 
 	ProjectFileName.Init();
 
-	sclfrntnd::GetProjectFileName( Id, ProjectFileName );
+	sclfrntnd::GetProjectFileName( Registry, Id, ProjectFileName );
 
 	if ( ProjectFileName.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
@@ -185,7 +169,9 @@ ERREnd
 ERREpilog
 }
 
-void sclxhtml::MainSubmission( xhtagent::agent_core___ &Agent )
+void sclxhtml::MainSubmission(
+	const sclrgstry::registry_ &Registry,
+	xhtagent::agent_core___ &Agent )
 {
 ERRProlog
 	str::string ProjectFeature;
@@ -196,7 +182,7 @@ ERRBegin
 		sclrgstry::EraseProjectRegistry();
 		break;
 	case xhtfbs::ptPredefined:
-		LoadPredefinedProject_( Agent, ProjectFeature );
+		LoadPredefinedProject_( Registry, Agent, ProjectFeature );
 		break;
 	case xhtfbs::ptUser:
 		if ( ProjectFeature.Amount() == 0  )

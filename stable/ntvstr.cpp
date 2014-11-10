@@ -48,13 +48,13 @@ using namespace ntvstr;
 # error
 #endif
 
+# ifdef NTVSTR__WIN
 void ntvstr::string___::Init( const bso::char__ *String )
 {
 	if ( String == NULL )
 		String = "";
 
 	Init();
-# ifdef NTVSTR__WIN
 	if ( _Core.Size() > INT_MAX )
 		ERRFwk();
 
@@ -73,16 +73,8 @@ void ntvstr::string___::Init( const bso::char__ *String )
 		if ( !MultiByteToWideChar( CP_UTF8, 0, String, -1, _Core, CoreSize )  )
 			ERRLbr();
 	}
-# elif defined( NTVSTR__POSIX )
-	bso::size__ Size = strlen_( String );
-
-	_Core.Malloc( Size + 1 );
-
-	strcpy_( _Core, String );
-# else
-#  error
-# endif
 }
+# endif
 
 void ntvstr::string___::Init( const char__ *String )
 {

@@ -27,7 +27,6 @@
 				  /*******************************************/
 
 #include "scllocale.h"
-#include "sclrgstry.h"
 #include "sclmisc.h"
 
 using namespace sclfrntnd;
@@ -181,10 +180,12 @@ ERREnd
 ERREpilog
 }
 
-void sclfrntnd::GetPredefinedProjects( xml::writer_ &Writer )
+void sclfrntnd::GetPredefinedProjects(
+	const sclrgstry::registry_ &Registry,
+	xml::writer_ &Writer )
 {
 	Writer.PushTag( "PredefinedProjects" );
-	GetPredefinedProjects_( sclrgstry::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+	GetPredefinedProjects_( Registry, scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
 	Writer.PopTag();
 }
 
@@ -207,10 +208,11 @@ ERREpilog
 }
 
 const str::string_ &sclfrntnd::GetProjectFileName(
+	const sclrgstry::registry_ &Registry,
 	const str::string_ &Id,
 	str::string_ &Location )
 {
-	return GetProjectFileName_( Id, sclrgstry::GetRegistry(), Location );
+	return GetProjectFileName_( Id, Registry, Location );
 }
 
 static void GetPredefinedBackend_(
@@ -284,10 +286,12 @@ ERREnd
 ERREpilog
 }
 
-void sclfrntnd::GetPredefinedBackends( xml::writer_ &Writer )
+void sclfrntnd::GetPredefinedBackends(
+		const sclrgstry::registry_ &Registry,
+	xml::writer_ &Writer )
 {
 	Writer.PushTag( "PredefinedBackends" );
-	GetPredefinedBackends_(sclrgstry::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+	GetPredefinedBackends_( Registry, scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
 	Writer.PopTag();
 }
 

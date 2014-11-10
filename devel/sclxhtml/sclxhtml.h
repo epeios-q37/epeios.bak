@@ -163,19 +163,18 @@ namespace sclxhtml {
 		}
 	};
 
-	void Load(
-		const rgstry::tentry__ &FileName,
-		str::string_ &String );
-
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
+		sclrgstry::registry_ &Registry,
 		str::string_ &String,
 		bso::char__ Marker = '#' )
 	{
-		sclmisc::LoadXMLAndTranslateTags( FileName, sclrgstry::GetRegistry(), sclmisc::GetLanguage(), String, Marker );
+		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
 	}
 
-	void MainSubmission( xhtagent::agent_core___ &Agent );
+	void MainSubmission(
+		const sclrgstry::registry_ &Registry,
+		xhtagent::agent_core___ &Agent );
 
 	callback_core__ *SCLXHTMLRetrieveCallback( xhtcllbk::upstream_callback__ &UCallback );	// A surcharger.
 }

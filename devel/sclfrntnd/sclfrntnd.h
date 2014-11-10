@@ -35,6 +35,8 @@
 
 # include "frdkrn.h"
 
+# include "sclrgstry.h"
+
 # include "err.h"
 # include "flw.h"
 # include "xml.h"
@@ -48,11 +50,16 @@ namespace sclfrntnd {
 		frdkrn::kernel___ &Kernel,
 		const char *Message );
 
-	void GetPredefinedProjects( xml::writer_ &Writer );
+	void GetPredefinedProjects(
+		const sclrgstry::registry_ &Registry,
+		xml::writer_ &Writer );
 
-	void GetPredefinedBackends( xml::writer_ &Writer );
+	void GetPredefinedBackends(
+		const sclrgstry::registry_ &Registry,
+		xml::writer_ &Writer );
 
 	const str::string_ &GetProjectFileName(
+		const sclrgstry::registry_ &Registry,
 		const str::string_ &Id,
 		str::string_ &FileName );
 }

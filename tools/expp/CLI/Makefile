@@ -1,5 +1,5 @@
 # 'expp' Project
-#    by Claude SIMON (http://zeusw.org/intl/contact.html).
+#    by Claude SIMON (http://q37.info/contact.html).
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
@@ -38,7 +38,7 @@ mods += ids iof iop lst lstbch
 mods += lstctn mns ntvstr que sdr 
 mods += stk str strng tagsbs tol 
 mods += ttr txf tys uys utf 
-mods += xtf cio bom cdgb64 fil 
+mods += xtf cio bomhdl cdgb64 fil 
 mods += fnm lcl rgstry stsfsm xml 
 mods += xpp clnarg 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
@@ -157,7 +157,7 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -DCYGWIN
+	co += -std=gnu++11 -DCYGWIN
 	
 	LDFLAGS += -static
 
@@ -215,6 +215,7 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 
+	co += -std=gnu++11
 	co += -DGNULINUX
 	
 	mods += $(pmods)
@@ -293,7 +294,7 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -DVERSION=\""20131017"\"
+copt += -DVERSION=\""20140717"\"
 copt += -DCOPYRIGHT_YEARS=\""2007, 2008, 2010-2014"\"
 
 ifndef EPEIOS_SRC

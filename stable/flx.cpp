@@ -83,7 +83,7 @@ ERRErr
 ERREnd
 ERREpilog
 # elif defined( CPE_POSIX )
-	Descriptor = popen( Command.Core(), Mode.Core() );
+	Descriptor = popen( Command.Internal(), Mode.Internal() );
 # else
 #  error
 #endif
@@ -151,7 +151,7 @@ ERRBegin
  
 	// Launch the process.
 	if ( !CreateProcessW( NULL,
-		Command.Internal(), 0, 0, TRUE,
+		Command.ExposedInternal(), 0, 0, TRUE,
 		0, 0, 0,
 		&siStartupInfo, &piProcessInfo ) )
 		ERRReturn;
@@ -175,7 +175,7 @@ ERREpilog
 #elif defined( CPE_POSIX )
 
 static bso::bool__ POpen2_(
-	const ntvstr::nstring___ &Command,
+	const ntvstr::string___ &Command,
 	int &In,
 	int &Out,
 	int &Err )
@@ -198,7 +198,7 @@ static bso::bool__ POpen2_(
         dup2(pipe_stdout[1], 1);
         close(pipe_stderr[0]);
         dup2(pipe_stderr[1], 2);
-        execl("/bin/sh", "sh", "-c", (const char *)Command.Core(), (const char *)NULL);
+        execl("/bin/sh", "sh", "-c", (const char *)Command.Internal(), (const char *)NULL);
 
         perror("execl"); exit(99);
     }
@@ -219,7 +219,10 @@ sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 # ifdef CPE_WIN
 	DWORD Red = 0;
 
-	if ( !ReadFile( _Out, Buffer, Amount, &Red, NULL ) )
+	if( Amount > MAXDWORD )
+		Amount = MAXDWORD;
+
+	if ( !ReadFile( _Out, Buffer, (DWORD)Amount, &Red, NULL ) )
 		ERRDta();
 #elif defined( CPE_POSIX )
 	ssize_t Red = 0;
@@ -239,7 +242,10 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 # ifdef CPE_WIN
 	DWORD Written = 0;
 
-	if ( !WriteFile( _In, Buffer, Amount, &Written, NULL ) )
+	if( Amount > MAXDWORD )
+		Amount = MAXDWORD;
+
+	if ( !WriteFile( _In, Buffer, (DWORD)Amount, &Written, NULL ) )
 		ERRDta();
 
 	if ( Written == 0 )	// Ne devrait pas arriver.

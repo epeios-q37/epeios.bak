@@ -63,7 +63,7 @@ extern class ttr_tutor &EPSMSCTutor;
 # include "cio.h"
 
 //d The epeios site URL.
-# define EPSMSC_EPEIOS_URL	"http://zeusw.org/epeios/"
+# define EPSMSC_EPEIOS_URL	"http://q37.info/"
 
 //d The gnu URL.
 # define EPSMSC_GNU_URL	"http://www.gnu.org/"
@@ -73,7 +73,7 @@ extern class ttr_tutor &EPSMSCTutor;
 #define EPSMSC_EPEIOS_LINK	"<A HREF=\"" EPSMSC_EPEIOS_URL "\">Epeios project</A>"
 # endif
 
-# define EPSMSC_APP_URL( name ) "http://zeusw.org/intl/" name "/"
+# define EPSMSC_APP_URL( name ) EPSMSC_EPEIOS_URL name "/"
 
 //m The hypertext link to the software named 'Name'.
 # define EPSMSC_APP_LINK( name )\
@@ -97,10 +97,10 @@ extern class ttr_tutor &EPSMSCTutor;
 //d GNU (http://www.gnu.org) Text.
 #define EPSMSC_GNU_PROJECT_AFFILIATION "\tThis program is part of the GNU project, released\n\tunder the aegis of GNU (" EPSMSC_GNU_URL ").\n\tIt uses Epeios (" EPSMSC_EPEIOS_URL ") technologies."
 
-//d Epeios (http://zeusw.org/epeios/) text.
+//d Epeios (http://q37.info/epeios/) text.
 #define EPSMSC_EPEIOS_PROJECT_AFFILIATION "This program is part of the Epeios project (" EPSMSC_EPEIOS_URL ")." 
 
-//d Epeios (http://zeusw.org/epeios/) framework.
+//d Epeios (http://q37.info/epeios/) framework.
 #define EPSMSC_EPEIOS_FRAMEWORK_DEPENDENCE "Relies massively on the Epeios framework (" EPSMSC_EPEIOS_URL ")." 
 # endif
 

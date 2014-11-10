@@ -146,16 +146,35 @@ namespace sclmisc {
 	void LoadAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		const char *Language,
 		str::string_ &String,
+		const char *Language = NULL,
 		char Marker = scllocale::DefaultMarker );
+
+	inline void LoadAndTranslateTags(
+		const rgstry::tentry__ &FileName,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &String,
+		char Marker )
+	{
+		LoadAndTranslateTags( FileName, Registry, String, NULL, Marker );
+	}
 
 	void LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
-		const char *Language,
 		str::string_ &String,
+		const char *Language = NULL,
 		char Marker = scllocale::DefaultMarker );
+
+	inline void LoadXMLAndTranslateTags(
+		const rgstry::tentry__ &FileName,
+		const sclrgstry::registry_ &Registry,
+		str::string_ &String,
+		char Marker )
+	{
+		LoadXMLAndTranslateTags( FileName, Registry, String, NULL, Marker );
+	}
+
 }
 
 				  /********************************************/

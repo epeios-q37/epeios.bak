@@ -48,7 +48,11 @@ namespace sclrgstry {
 
 	E_CDEF(char *, ParametersTag, "Parameters" );
 
+#if 0
 	registry_ &GetRegistry( void );
+# endif
+
+	registry_ &GetCommonRegistry( void );
 
 	rgstry::level__ GetConfigurationRegistryLevel( void );
 	rgstry::level__ GetProjectRegistryLevel( void );
@@ -62,6 +66,10 @@ namespace sclrgstry {
 
 	using rgstry::value;
 	using rgstry::value_;
+
+	const char *GetLanguage(
+		const registry_ &Registry,
+		TOL_CBUFFER___ &Buffer );
 
 	void LoadConfiguration(
 		xtf::extended_text_iflow__ &Flow,
@@ -80,10 +88,46 @@ namespace sclrgstry {
 		const char *Target,
 		str::string_ &Id );
 
+	class session_registry_
+	: public registry_
+	{
+	public:
+		struct s
+		: public registry_::s
+		{
+			rgstry::level__ SetupLevel;
+		} &S_;
+		session_registry_( s &S )
+		: S_( S ),
+		  registry_( S )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			registry_::reset( P );
+			S_.SetupLevel = rgstry::UndefinedLevel;
+		}
+		void plug( ags::E_ASTORAGE_ &AS )
+		{
+			registry_::plug( AS );
+		}
+		session_registry_ &operator =( const session_registry_ &SR )
+		{
+			registry_::operator=( *this );
+			S_.SetupLevel = SR.S_.SetupLevel;
+
+			return *this;
+		}
+		void Init( const str::string_ &SetupId );
+		E_RODISCLOSE_( rgstry::level__, SetupLevel );
+	};
+
+	E_AUTO( session_registry );
+
+# if 0
 	void FillRegistryWithSetup(
 		registry_ &Registry,
 		level__ Level,	// 'level' de le 'setup registry'.
-		const str::string_ &SetupId );	// Remplit la section 'Parameters' de la 'registry' avec le conten du 'Setup' d'identifiant 'SetupId'.
+		const str::string_ &SetupId );	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' d'identifiant 'SetupId'.
 
 	inline void FillRegistryWithSetup(
 		registry_ &Registry,
@@ -91,6 +135,7 @@ namespace sclrgstry {
 	{
 		FillRegistryWithSetup( Registry, Level, str::string() );
 	}
+# endif
 
 	void ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry );
 

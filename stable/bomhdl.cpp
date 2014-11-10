@@ -40,10 +40,19 @@ it is necessary to personalize it, or certain compiler would not work properly *
 
 using namespace bomhdl;
 
+// Pas de 'E_CDEF(...), car sinon on ne peut facielemtn déterminer la taille, à cause de '\0' contenu dans les 'BOM's.
+
+#define UTF_32_BE "\x00\x00\xFE\xFF"
+#define UTF_32_LE	"\xFF\xFE\x00\x00"
+#define UTF_16_BE "\xFE\xFF"
+#define UTF_16_LE	"\xFF\xFE"
+#define UTF_8		"\xEF\xBB\xBF"
+
+
 static stsfsm::automat Automat_;
 
-// #define M( m ) { m, sizeof( m ) - 1 }
-#define M( m ) bom__( m, sizeof( m ) - 1 )
+#define M( m ) { m, sizeof( m ) - 1 }
+// #define M( m ) bom__( m, strlen( m ) - 1 )
 
 // doit relèter l'ordre des déclarations dans 'byte_order_marker__'.
 static bom__ BOMS_[bom_amount] =

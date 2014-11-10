@@ -54,14 +54,18 @@ namespace scltool {
 	};
 # endif
 
-# ifdef CPE_WIN
 	struct oddities__ {
+# ifdef CPE_WIN
 		HINSTANCE hInstance;
 		HINSTANCE hPrevInstance;
 		PWSTR pCmdLine;
 		int nCmdShow;
-	};
+		LPWSTR *argv;
+# else
+		ntvstr::char__ **argv;
 # endif
+		int argc;
+	};
 
 	void ReportIfNoSetupId( void );
 
@@ -70,13 +74,9 @@ namespace scltool {
 		const str::string_ &Command,
 		const oddities__ &Oddities );
 
-	inline sclrgstry::registry_ &GetRegistry( void )
-	{
-		return sclrgstry::GetRegistry();
-	}
+	inline sclrgstry::registry_ &GetRegistry( void );
 
 	rgstry::level__ GetSetupRegistryLevel( void );
-
 	rgstry::level__ GetArgumentsRegistryLevel( void );
 
 	inline void SetValue(
