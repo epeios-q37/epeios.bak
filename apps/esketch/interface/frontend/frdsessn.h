@@ -51,11 +51,11 @@ namespace frdsessn {
 			return *_Kernel;
 		}
 	protected:
-		virtual void FRDSSNOpenSession( const char *Language )
+		virtual void FRDSSNOpen( const char *Language ) override
 		{
 			_Object.Init( _Kernel->MyObject );
 		}
-		virtual void FRDSSNCloseSession( void )
+		virtual void FRDSSNClose( void ) override
 		{
 			_Object.reset();
 		}

@@ -73,7 +73,7 @@ namespace frdkernl {
 			reset();
 		}
 		status__ Init(
-			rgstry::multi_level_registry_ &Registry,
+			const rgstry::multi_level_registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
 			frdkrn::reporting_callbacks__ &ReportingCallbacks )

@@ -257,7 +257,7 @@ namespace frdkrn {
 	class kernel___
 	{
 	private:
-		registry_ *_Registry;	// Configuration and project registry.
+		const registry_ *_Registry;	// Configuration and project registry.
 		csducl::universal_client_core _ClientCore;
 //		rgstry::level__ _RegistryProjectLevel;	// Old.
 		frdfrd::frontend___ _Frontend;
@@ -267,6 +267,7 @@ namespace frdkrn {
 		time_t _ProjectOriginalTimeStamp;	// Horodatage de la créationn du chargement du projet ou de sa dernière sauvegarde. Si == 0, pas de projet en cours d'utilisation.
 		time_t _ProjectModificationTimeStamp;	// Horodatage de la dernière modification du projet.
 		reporting_callbacks__ *_ReportingCallbacks;
+# if 0
 		registry_ &_R( void )
 		{
 			if ( _Registry == NULL )
@@ -274,6 +275,7 @@ namespace frdkrn {
 
 			return *_Registry;
 		}
+# endif
 		const registry_ &_R( void ) const
 		{
 			if ( _Registry == NULL )
@@ -347,7 +349,7 @@ namespace frdkrn {
 		}
 		E_CVDTOR( kernel___ );
 		status__ Init(
-			registry_ &Registry,
+			const registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
 			reporting_callbacks__ &ReportingCallbacks )
@@ -380,10 +382,12 @@ namespace frdkrn {
 		{
 			Frontend().Dismiss();
 		}
+# if 0
 		registry_ &Registry( void )
 		{
 			return _R();
 		}
+# endif
 		const registry_ &Registry( void ) const
 		{
 			return _R();

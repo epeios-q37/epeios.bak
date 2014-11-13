@@ -42,7 +42,7 @@
 # include "xtf.h"
 # include "strmrg.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"1"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"2"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -58,6 +58,10 @@ namespace xhtcllbk {
 
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
+
+	E_ROW( token__ );
+
+	E_CDEF( token__, UndefinedToken, sdr::NIL );
 
 	class event_handler__
 	{
@@ -140,35 +144,44 @@ namespace xhtcllbk {
 	class upstream_callback__ {
 	protected:
 		virtual void XHTCLLBKSetChildren(
+			token__ token,
 			const nchar__ *Id,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetPaddings(
+			token__ token,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKExecuteJavascript(
+			token__ token,
 			const nchar__ *Script,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetProperty(
+			token__ token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			const nchar__ *Value ) = 0;
 		virtual void XHTCLLBKGetProperty(
+			token__ token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetAttribute(
+			token__ token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			const nchar__ *Value ) = 0;
 		virtual void XHTCLLBKGetAttribute(
+			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKRemoveAttribute(
+			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name ) = 0;
 		virtual void XHTCLLBKGetSelectValue(
+			token__ Token,
 			const nchar__ *Id,
 			TOL_CBUFFER___ &Buffer ) = 0;
 	public:
@@ -182,79 +195,90 @@ namespace xhtcllbk {
 			//Standardisation.
 		}
 		void SetChildren(
+			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetChildren( Id.Internal(), XML.Internal(), XSL.Internal() );
+			XHTCLLBKSetChildren( Token, Id.Internal(), XML.Internal(), XSL.Internal() );
 		}
 		void SetPaddings(
+			token__ Token,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetPaddings( XML.Internal(), XSL.Internal() );
+			XHTCLLBKSetPaddings( Token, XML.Internal(), XSL.Internal() );
 		}
 		const char *ExecuteJavascript(
+			token__ Token,
 			const nstring___ &Script,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKExecuteJavascript( Script.Internal(), Buffer );
+			XHTCLLBKExecuteJavascript( Token, Script.Internal(), Buffer );
 
 			return Buffer;
 		}
-		void ExecuteJavascript( const nstring___ &Script )
+		void ExecuteJavascript(
+			token__ Token,
+			const nstring___ &Script )
 		{
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
-			ExecuteJavascript( Script, Buffer );
+			ExecuteJavascript( Token, Script, Buffer );
 		ERRErr
 		ERREnd
 		ERREpilog
 		}
 		const char *GetProperty(
+			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetProperty( Id.Internal(), Name.Internal(), Buffer );
+			XHTCLLBKGetProperty( Token, Id.Internal(), Name.Internal(), Buffer );
 
 			return Buffer;
 		}
 		void SetProperty(
+			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetProperty( Id.Internal(), Name.Internal(), Value.Internal() );
+			XHTCLLBKSetProperty( Token, Id.Internal(), Name.Internal(), Value.Internal() );
 		}
 		const char *GetAttribute(
+			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetAttribute( Id.Internal(), Name.Internal(), Buffer );
+			XHTCLLBKGetAttribute( Token, Id.Internal(), Name.Internal(), Buffer );
 
 			return Buffer;
 		}
 		void SetAttribute(
+			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetAttribute( Id.Internal(), Name.Internal(), Value.Internal() );
+			XHTCLLBKSetAttribute( Token, Id.Internal(), Name.Internal(), Value.Internal() );
 		}
 		void RemoveAttribute(
+			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			XHTCLLBKRemoveAttribute( Id.Internal(), Name.Internal() );
+			XHTCLLBKRemoveAttribute( Token, Id.Internal(), Name.Internal() );
 		}
 		const char *GetSelectValue(
+			token__ Token,
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetSelectValue( Id.Internal(), Buffer );
+			XHTCLLBKGetSelectValue( Token, Id.Internal(), Buffer );
 
 			return Buffer;
 		}
@@ -318,19 +342,24 @@ namespace xhtcllbk {
 	private:
 		const char *_Version;	// Toujours en première position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		token__ _Token;
 		upstream_callback__ *_Callback;
 	public:
 		void reset( bso::bool__ = true )
 		{
 			_Version = NULL;
 			_Control = 0;
+			_Token = UndefinedToken;
 			_Callback = NULL;
 		}
 		E_CDTOR( shared_data__ );
-		void Init( upstream_callback__ &Callback )
+		void Init(
+			token__ Token,
+			upstream_callback__ &Callback )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
+			_Token = Token;
 			_Callback = &Callback;
 		}
 		size_t ControlComputing( void )
@@ -344,6 +373,7 @@ namespace xhtcllbk {
 
 			return *_Callback;
 		}
+		E_RODISCLOSE__( token__, Token );
 	};
 #pragma pack( pop )
 

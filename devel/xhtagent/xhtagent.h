@@ -42,8 +42,14 @@ namespace xhtagent {
 
 	typedef ntvstr::string___ nstring___;
 
+	namespace {
+		using xhtcllbk::token__;
+		using xhtcllbk::UndefinedToken;
+	}
+
 	class agent_core___ {
 	private:
+		token__ _Token;
 		xhtcllbk::upstream_callback__ *_Callback;
 		xhtcllbk::upstream_callback__ &_C( void ) const
 		{
@@ -56,12 +62,16 @@ namespace xhtagent {
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			_Token = UndefinedToken;
 			_Callback = NULL;
 			_Manager.reset( P );
 		}
 		E_CDTOR( agent_core___ );
-		void Init( xhtcllbk::upstream_callback__ &Callback )
+		void Init(
+			token__ Token,
+			xhtcllbk::upstream_callback__ &Callback )
 		{
+			_Token = Token;
 			_Callback = &Callback;
 			_Manager.Init();
 		}
@@ -82,27 +92,27 @@ namespace xhtagent {
 		}
 		void ExecuteJavascript( const nstring___ &Script )
 		{
-			return _C().ExecuteJavascript( Script );
+			return _C().ExecuteJavascript( _Token, Script );
 		}
 		const char *GetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetAttribute( Id, Name, Buffer );
+			return _C().GetAttribute( _Token, Id, Name, Buffer );
 		}
 		void SetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			_C().SetAttribute( Id, Name, Value );
+			_C().SetAttribute( _Token, Id, Name, Value );
 		}
 		void RemoveAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			_C().RemoveAttribute( Id, Name );
+			_C().RemoveAttribute( _Token, Id, Name );
 		}
 		void SetString(
 			const nstring___ &Id,
@@ -113,25 +123,25 @@ namespace xhtagent {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetProperty( Id, Name, Buffer );
+			return _C().GetProperty( _Token, Id, Name, Buffer );
 		}
 		void SetValue(
 			const nstring___ &Id,
 			const str::string_ &Value )
 		{
-			SetString(Id, "value", Value );
+			SetString( Id, "value", Value );
 		}
 		const char * GetValue(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return GetString(Id, "value", Buffer );
+			return GetString( Id, "value", Buffer );
 		}
 		const char *GetSelectValue(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetSelectValue( Id, Buffer );
+			return _C().GetSelectValue( _Token, Id, Buffer );
 		}
 		const str::string_ &GetSelectValue(
 			const char *Id,
@@ -141,13 +151,13 @@ namespace xhtagent {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().SetChildren( Id, XML, XSL );
+			_C().SetChildren( _Token, Id, XML, XSL );
 		}
 		void SetPaddings(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().SetPaddings( XML, XSL );
+			_C().SetPaddings( _Token, XML, XSL );
 		}
 		void Show(
 			const nstring___ &Id,

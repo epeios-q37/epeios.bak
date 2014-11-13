@@ -70,10 +70,10 @@ extern class ttr_tutor &SDRTutor;
 # define SDR__DSIZE_SIZE_MAX ( ( ( 8 * sizeof( sdr::size__ ) ) / 7 ) + 1 )
 
 namespace sdr {
-
-	//t The position in a storage.
 	typedef bso::size__	row_t__;
 	E_TMIMIC__( row_t__, row__ );
+
+	E_CDEF( sdr::row_t__, NIL, E_NIL );
 
 # if 0
 	typedef bso::p_size__	p_row_t__;

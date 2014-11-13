@@ -35,13 +35,19 @@ using namespace sclxhtml;
 
 static bso::bool__ IsInitialized_ = false;
 
+const sclrgstry::registry_ &sclxhtml::GetRegistry( void )
+{
+	return sclrgstry::GetCommonRegistry();
+}
+
+
 #ifdef CPE_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
 #define FUNCTION_SPEC
 # endif
 
-void sclxhtml::callback_core__::Start( void )
+void sclxhtml::callback_core___::Start( void )
 {
 	SCLXHTMLStart();
 }
@@ -57,7 +63,7 @@ class dcallback__
 {
 private:
 	xhtagent::agent_core___ *_Agent;
-	callback_core__ *_Callback;
+	callback_core___ *_Callback;
 protected:
 	virtual void XHTCLLBKStart( void )
 	{
@@ -84,7 +90,7 @@ public:
 	E_CVDTOR( dcallback__ );
 	void Init(
 		xhtagent::agent_core___ &Agent,
-		callback_core__ &Callback )
+		callback_core___ &Callback )
 	{
 		_Agent = &Agent;
 		_dcallback__::Init( Agent.EventManager() );
@@ -103,14 +109,14 @@ xhtcllbk::downstream_callback__ *XHTCLLBKRetrieve( const xhtcllbk::shared_data__
 {
 	dcallback__ *DCallback = NULL;
 ERRProlog
-	callback_core__ *Callback;
+	callback_core___ *Callback;
 ERRBegin
 	DCallback = new dcallback__;
 
 	if ( DCallback == NULL )
 		ERRAlc();
 
-	Callback = sclxhtml::SCLXHTMLRetrieveCallback( Data.Callback() );
+	Callback = sclxhtml::SCLXHTMLRetrieveCallback( Data.Token(), Data.Callback() );
 
 	if ( Callback == NULL )
 		ERRFwk();

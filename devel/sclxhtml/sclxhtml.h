@@ -41,8 +41,11 @@
 # include "scllocale.h"
 # include "sclmisc.h"
 # include "xhtfmn.h"
+# include "frdssn.h"
 
 namespace sclxhtml {
+	const sclrgstry::registry_ &GetRegistry( void );
+
 	typedef xhtcllbk::event_handler__ _event_handler__;
 
 	template <typename callback, typename agent> class event_handler__
@@ -111,19 +114,18 @@ namespace sclxhtml {
 		}
 	};
 
-	// L'utilisateur met dans la classe mère ses propres objets et l'instancie par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
-	class callback_core__
+	class callback_core___
 	{
 	protected:
 		virtual void SCLXHTMLStart( void ) = 0;
 		virtual xhtagent::agent_core___ &_A( void ) = 0;
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
-			// Standardisation.
+			// Standadisation.
 		}
-		E_CVDTOR( callback_core__ )
-		void Init( void )
+		E_CVDTOR( callback_core___ )
+		void Init( frdkrn::kernel___ &Kernel )
 		{
 			// Standardisation.
 		}
@@ -134,38 +136,41 @@ namespace sclxhtml {
 		}
 	};
 
-	template <typename agent> class callback__
-	: public callback_core__
+	// L'utilisateur met dans la classe mère ses propres objets et l'instancie par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
+	template <typename agent, typename kernel> class callback___
+	: public callback_core___,
+	  public agent
 	{
-	private:
-		agent _Agent;
 	protected:
 		virtual xhtagent::agent_core___ &_A( void ) override
 		{
-			return _Agent;
+			return *this;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			callback_core__::reset( P );
-			_Agent.reset();
+			callback_core___::reset( P );
+			agent::reset( P );
 		}
-		E_CVDTOR( callback__ )
-		void Init( xhtcllbk::upstream_callback__ &UCallback )
+		E_CVDTOR( callback___ )
+		void Init(
+			xhtcllbk::token__ Token,
+			kernel &Kernel,
+			xhtcllbk::upstream_callback__ &UCallback )
 		{
-			callback_core__::Init();
-			_Agent.Init( UCallback );
+			callback_core___::Init( Kernel );
+			agent::Init( Token, UCallback, Kernel );
 		}
 		void Start( void );
 		agent &Agent( void )
 		{
-			return _Agent;
+			return *this;
 		}
 	};
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		sclrgstry::registry_ &Registry,
+		const sclrgstry::registry_ &Registry,
 		str::string_ &String,
 		bso::char__ Marker = '#' )
 	{
@@ -176,7 +181,9 @@ namespace sclxhtml {
 		const sclrgstry::registry_ &Registry,
 		xhtagent::agent_core___ &Agent );
 
-	callback_core__ *SCLXHTMLRetrieveCallback( xhtcllbk::upstream_callback__ &UCallback );	// A surcharger.
+	callback_core___ *SCLXHTMLRetrieveCallback(
+		xhtcllbk::token__ Token,
+		xhtcllbk::upstream_callback__ &UCallback );	// A surcharger.
 }
 
 				  /********************************************/

@@ -43,7 +43,7 @@ ERRBegin
 	Value.InsertAt( '"' );
 	Value.Append( '"' );
 
-	_C().SetProperty( Id, Name, Value );
+	_C().SetProperty( _Token, Id, Name, Value );
 ERRErr
 ERREnd
 ERREpilog
