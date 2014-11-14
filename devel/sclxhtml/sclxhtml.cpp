@@ -47,92 +47,92 @@ const sclrgstry::registry_ &sclxhtml::GetRegistry( void )
 #define FUNCTION_SPEC
 # endif
 
-void sclxhtml::callback_core___::Start( void )
-{
-	SCLXHTMLStart();
-}
-
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
 DEF( XHTCLLBK_RETRIEVE_FUNCTION_NAME, xhtcllbk::retrieve );
 
-typedef xhtcllbk::downstream_callback__ _dcallback__;
+// Bien que définit dans un '.cpp', et propre à ce '.cpp', VC++ se mélange les pinceaux avec le 'callback__' définit dans 'scllocale.cpp', d'où le 'namespace'.
+namespace {
+	typedef xhtcllbk::downstream_callback__ _callback__;
 
-class dcallback__
-: public _dcallback__
-{
-private:
-	xhtagent::agent_core___ *_Agent;
-	callback_core___ *_Callback;
-protected:
-	virtual void XHTCLLBKStart( void )
+	class callback__
+	: public _callback__
 	{
-		if ( _Callback == NULL )
-			ERRFwk();
+	private:
+		session_core___ *_Session;
+	protected:
+		virtual void XHTCLLBKStart( void )
+		{
+			if ( _Session == NULL )
+				ERRFwk();
 
-		_Callback->Start();
-	}
-	virtual const char *XHTCLLBKLanguage( void )
-	{
-		return sclmisc::GetLanguage();
-	}
-public:
-	void reset( bso::bool__ P = true )
-	{
-		if ( P )
-			if ( _Callback != NULL )
-				delete _Callback;
+			_Session->Start();
+		}
+		virtual const char *XHTCLLBKLanguage( void )
+		{
+			return sclmisc::GetLanguage();
+		}
+		session_core___ &_S( void )
+		{
+			if ( _Session == NULL )
+				ERRFwk();
 
-		_dcallback__::reset( P );
-		_Agent = NULL;
-		_Callback = NULL;
-	}
-	E_CVDTOR( dcallback__ );
-	void Init(
-		xhtagent::agent_core___ &Agent,
-		callback_core___ &Callback )
-	{
-		_Agent = &Agent;
-		_dcallback__::Init( Agent.EventManager() );
-		_Callback = &Callback;
-	}
-	xhtagent::agent_core___ &Agent( void )
-	{
-		if ( _Agent == NULL )
-			ERRFwk();
+			return *_Session;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			if ( P )
+				if ( _Session != NULL )
+					delete _Session;
 
-		return *_Agent;
-	}
-};
+			_callback__::reset( P );
+			_Session = NULL;
+		}
+		E_CVDTOR( callback__ );
+		void Init( session_core___ &Session )
+		{
+			_Session = &Session;
+			_callback__::Init( Agent().EventManager() );
+		}
+		xhtagent::agent_core___ &Agent( void )
+		{
+			return _S().AgentCore();
+		}
+	};
+}
 
 xhtcllbk::downstream_callback__ *XHTCLLBKRetrieve( const xhtcllbk::shared_data__ &Data )
 {
-	dcallback__ *DCallback = NULL;
+	callback__ *Callback = NULL;
 ERRProlog
-	callback_core___ *Callback;
+	session_core___ *Session = NULL;
 ERRBegin
-	DCallback = new dcallback__;
 
-	if ( DCallback == NULL )
-		ERRAlc();
+	SCLXHTMLOnLoading();
 
-	Callback = sclxhtml::SCLXHTMLRetrieveCallback( Data.Token(), Data.Callback() );
+	Callback = new callback__;
 
 	if ( Callback == NULL )
+		ERRAlc();
+
+	Session = sclxhtml::SCLXHTMLNewSession( Data.Token(), Data.Callback() );
+
+	if ( Session == NULL )
 		ERRFwk();
 
-	DCallback->Init( Callback->AgentCore(), *Callback  );
+	Callback->Init( *Session  );
 ERRErr
-	if ( DCallback != NULL )
-		delete DCallback;
-
-	DCallback = NULL;
-
-	if ( Callback !=  NULL )
+	if ( Callback != NULL )
 		delete Callback;
+
+	Callback = NULL;
+
+	if ( Session !=  NULL )
+		delete Session;
 ERREnd
 ERREpilog
-	return DCallback;
+	return Callback;
 }
 
 static void LoadProject_(

@@ -48,11 +48,11 @@ namespace sclxhtml {
 
 	typedef xhtcllbk::event_handler__ _event_handler__;
 
-	template <typename callback, typename agent> class event_handler__
+	template <typename session> class event_handler__
 	: public _event_handler__
 	{
 	private:
-		callback *_Callback;
+		session *_Session;
 	protected:
 		virtual void SCLXHTMLHandle( void ) = 0;
 		virtual void XHTCLLBKHandle( void )
@@ -67,17 +67,17 @@ namespace sclxhtml {
 			case err::t_Abort:
 				Message.Init();
 				if ( sclerror::GetPendingError(sclmisc::GetLanguage(), Message) ) {
-					Agent().Alert( Message );
+					Session().Alert( Message );
 					sclerror::ResetPendingError();
 				} else
-					Agent().Alert("?");
+					Session().Alert("?");
 				break;
 			case err::t_Free:
 			case err::t_Return:
-				Agent().Alert( "???" );
+				Session().Alert( "???" );
 				break;
 			default:
-				Agent().Alert( err::Message( Buffer ) );
+				Session().Alert( err::Message( Buffer ) );
 				break;
 			}
 
@@ -89,32 +89,34 @@ namespace sclxhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_event_handler__::reset( P );
-			_Callback = NULL;
+			_Session = NULL;
 		}
 		E_CVDTOR( event_handler__ );
 		void Init(
 			const char *EventName,
-			callback &Callback )
+			session &Session )
 		{
 			_event_handler__::Init();
-			_Callback = &Callback;
+			_Session = &Session;
 
-			Agent().AddEventHandler( EventName, *this );
+			this->Session().AddEventHandler( EventName, *this );
 		}
-		callback &Callback( void ) const
+		session &Session( void ) const
 		{
-			if ( _Callback == NULL )
+			if ( _Session == NULL )
 				ERRFwk();
 
-			return *_Callback;
+			return *_Session;
 		}
+		/*
 		agent &Agent( void ) const
 		{
 			return Callback().Agent();
 		}
+		*/
 	};
 
-	class callback_core___
+	class session_core___
 	{
 	protected:
 		virtual void SCLXHTMLStart( void ) = 0;
@@ -122,24 +124,28 @@ namespace sclxhtml {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			// Standadisation.
+			// Standardisation.
 		}
-		E_CVDTOR( callback_core___ )
-		void Init( frdkrn::kernel___ &Kernel )
+		E_CVDTOR( session_core___ )
+		void Init( void )
 		{
 			// Standardisation.
 		}
-		void Start( void );
+		void Start( void )
+		{
+			SCLXHTMLStart();
+		}
 		xhtagent::agent_core___ &AgentCore( void )
 		{
 			return _A();
 		}
 	};
 
-	// L'utilisateur met dans la classe mère ses propres objets et l'instancie par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
-	template <typename agent, typename kernel> class callback___
-	: public callback_core___,
-	  public agent
+	// L'utilisateur met dans le type 'session' ses propres objets et instancie le tout par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
+	template <typename agent, typename session, typename kernel> class session___
+	: public session_core___,
+	  public agent,
+	  public session
 	{
 	protected:
 		virtual xhtagent::agent_core___ &_A( void ) override
@@ -149,22 +155,18 @@ namespace sclxhtml {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			callback_core___::reset( P );
+			session_core___::reset( P );
 			agent::reset( P );
 		}
-		E_CVDTOR( callback___ )
+		E_CVDTOR( session___ )
 		void Init(
 			xhtcllbk::token__ Token,
 			kernel &Kernel,
 			xhtcllbk::upstream_callback__ &UCallback )
 		{
-			callback_core___::Init( Kernel );
-			agent::Init( Token, UCallback, Kernel );
-		}
-		void Start( void );
-		agent &Agent( void )
-		{
-			return *this;
+			session_core___::Init();
+			agent::Init( Token, UCallback );
+			session::Init( Kernel );
 		}
 	};
 
@@ -181,9 +183,11 @@ namespace sclxhtml {
 		const sclrgstry::registry_ &Registry,
 		xhtagent::agent_core___ &Agent );
 
-	callback_core___ *SCLXHTMLRetrieveCallback(
+	void SCLXHTMLOnLoading( void );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
+
+	session_core___ *SCLXHTMLNewSession(
 		xhtcllbk::token__ Token,
-		xhtcllbk::upstream_callback__ &UCallback );	// A surcharger.
+		xhtcllbk::upstream_callback__ &Callback );	// A surcharger.
 }
 
 				  /********************************************/

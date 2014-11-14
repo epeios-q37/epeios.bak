@@ -35,7 +35,9 @@
 
 using namespace scllocale;
 
-using lcl::level__;
+namespace {
+	using lcl::level__;
+}
 
 static lcl::locale Locale_;
 
@@ -137,45 +139,48 @@ void scllocale::LoadLocale(
 	return Load_( GetLevel_( Target ), Flow, Directory, RootPath, ErrorLabel );
 }
 
-typedef tagsbs::long_tags_callback__ _callback__;
+// Bien que définit dans un '.cpp', et propre à ce '.cpp', VC++ se mélange les pinceaux avec le 'callback__' définit dans 'sclxhtml.cpp', d'où le 'namespace'.
+namespace {
+	typedef tagsbs::long_tags_callback__ _callback__;
 
-class callback__
-: public _callback__
-{
-private:
-	char _Marker;
-	const char *_Language;
-protected:
-	virtual bso::bool__ TAGSBSGetTagValue(
-		const str::string_ &Tag,
-		str::string_ &Value )
+	class callback__
+	: public _callback__
 	{
-	ERRProlog
-		TOL_CBUFFER___ Buffer;
-	ERRBegin
-		Locale_.GetTranslation( Tag.Convert(Buffer), _Language, Value );
-	ERRErr
-	ERREnd
-	ERREpilog
-		return true;
-	}
-public:
-	void reset( bso::bool__ P = true )
-	{
-		_Marker = 0;
-		_Language = NULL;
-		_callback__::reset( P );
-	}
-	E_CVDTOR( callback__ );
-	void Init(
-		char Marker,
-		const char *Language )
-	{
-		_Marker = Marker;
-		_Language = Language;
-		_callback__::Init();
-	}
-};
+	private:
+		char _Marker;
+		const char *_Language;
+	protected:
+		virtual bso::bool__ TAGSBSGetTagValue(
+			const str::string_ &Tag,
+			str::string_ &Value ) override
+		{
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			Locale_.GetTranslation( Tag.Convert(Buffer), _Language, Value );
+		ERRErr
+		ERREnd
+		ERREpilog
+			return true;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_Marker = 0;
+			_Language = NULL;
+			_callback__::reset( P );
+		}
+		E_CVDTOR( callback__ );
+		void Init(
+			char Marker,
+			const char *Language )
+		{
+			_Marker = Marker;
+			_Language = Language;
+			_callback__::Init();
+		}
+	};
+}
 
 void scllocale::TranslateTags(
 	str::string_ &String,
