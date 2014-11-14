@@ -446,8 +446,7 @@ ERRProlog
 	bso::bool__ FreeArgumentsOnly = false;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	while ( ( Current < argc ) && ( !FreeArgumentsOnly ) )
-	{
+	while ( ( Current < argc ) && ( !FreeArgumentsOnly ) ) {
 		FreeArgumentsOnly = Fill_( ntvstr::string___( argv[Current++] ).UTF8( Buffer ), Flags, Options, Arguments );
 	}
 
@@ -478,21 +477,27 @@ ERREpilog
 	return Id;
 }
 
+E_CDEF(bso::char__, Sharp_, '#' );
+
 static const str::string_ &GetId_(
 	const str::string_ &Name,
 	stamp__ Stamp,
 	str::string_ &Id )
 {
-	switch ( Stamp ) {
-	case sShort:
-		GetId_( Name, ShortTaggedArgumentId_, Id );
-		break;
-	case sLong:
-		GetId_( Name, LongTaggedArgumentId_, Id );
-		break;
-	default:
-		ERRFwk();
-		break;
+	if ( Name(Name.First()) != Sharp_ ) {
+		switch ( Stamp ) {
+		case sShort:
+			GetId_( Name, ShortTaggedArgumentId_, Id );
+			break;
+		case sLong:
+			GetId_( Name, LongTaggedArgumentId_, Id );
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+	} else {
+		Id.Append( Name );
 	}
 
 	return Id;
@@ -682,11 +687,17 @@ static const str::string_ &GetPath_(
 	const str::string_ &Id,
 	str::string_ &Path )
 {
-	GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
+	if ( Id( Id.First() ) != Sharp_ ) {
+		GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
 
-	if ( Path.Amount() != 0  )
-		if ( Path(Path.First()) != '/' )
-			Path.InsertAt( ParametersTag_ );	
+		if ( Path.Amount() != 0  )
+			if ( Path(Path.First()) != '/' )
+				Path.InsertAt( ParametersTag_ );	
+	}
+	else {
+		Path.Append( ParametersTag_ );
+		Path.Append(Id, Id.Next(Id.First() ) );
+	}
 
 	return Path;
 }

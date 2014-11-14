@@ -33,20 +33,22 @@ using cio::CErr;
 
 const char *sclmisc::SCLMISCTargetName = "TEST";
 
-void scltool::SCLTOOLMain( const str::string_ &Command )
+void scltool::SCLTOOLMain(
+	const str::string_ &Command,
+	const scltool::oddities__ &Oddities )
 {
 ERRProlog
 	rgstry::row__ Row = E_NIL;
 	rgstry::level__ Level = E_NIL;
 ERRBegin
 	cio::COut << txf::tab << "----- Configuration registry -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( sclrgstry::GetConfigurationRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( sclrgstry::GetConfigurationRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Project registry -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( sclrgstry::GetProjectRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( sclrgstry::GetProjectRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Setup registry -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( scltool::GetSetupRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( scltool::GetSetupRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Arguments registry -----" << txf::nl;
-	sclrgstry::GetRegistry().Dump( scltool::GetArgumentsRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( scltool::GetArgumentsRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;
 ERRErr
