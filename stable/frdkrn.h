@@ -138,16 +138,19 @@ namespace frdkrn {
 	public:
 		str::string Location;
 		csducl::type__ Type;
+		bso::uint__ PingDelay;
 		void reset( bso::bool__ P = true )
 		{
 			Location.reset( P );
 			Type = csducl::t_Undefined;
+			PingDelay = 0;
 		}
 		E_CDTOR( backend_features___ )
-		void Init( void )
+		void Init( bso::uint__ PingDelay )
 		{
 			Location.Init();
 			Type = csducl::t_Undefined;
+			this->PingDelay = PingDelay;
 		}
 	};
 	enum status__ {
@@ -289,6 +292,7 @@ namespace frdkrn {
 			const compatibility_informations__ &CompatibilityInformations,
 			csducl::type__ Type,
 			const char *Language,
+			bso::uint__ PingDelay,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
 		void _CloseConnection( void )
@@ -320,6 +324,7 @@ namespace frdkrn {
 			const compatibility_informations__ &CompatibilityInformations,
 			csducl::type__ Type,
 			const char *Language,
+			bso::uint__ PingDelay,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
 # if 0
@@ -466,7 +471,7 @@ namespace frdkrn {
 			recap__ Recap = r_OK;
 			
 			if ( BackendFeatures.Type != csducl::t_Undefined )
-				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, Language(), ErrorSet );
+				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, Language(), BackendFeatures.PingDelay, ErrorSet );
 
 			if ( Recap == r_OK ) {
 				_ProjectOriginalTimeStamp = time( NULL );
@@ -575,7 +580,9 @@ namespace frdkrn {
 		apm_Undefined
 	};
 
-	authentication_prompt_mode__ GetAuthenticationPromptMode( const registry_ &Registry );
+	const char *GetLabel( authentication_prompt_mode__ Mode );
+
+	authentication_prompt_mode__ GetAuthenticationPromptMode( const str::string_ &Pattern );
 
 	inline fblfrd::id32__ _ExtractId32( const str::string_ &Value )
 	{

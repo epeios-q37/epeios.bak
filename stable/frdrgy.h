@@ -74,7 +74,7 @@ extern class ttr_tutor &FRDRGYTutor;
 # define FRDRGY_PROFILES_PATH	"Profiles" FRDRGY_PATH_SEPARATOR
 
 namespace frdrgy {
-
+# if 0
 	extern rgstry::entry___ Parameters;
 	extern rgstry::entry___ Layouts;
 	extern rgstry::entry___ Definitions;
@@ -116,6 +116,8 @@ namespace frdrgy {
 			static const char *UserProfile;
 		};
 	};
+
+# endif
 
 	typedef rgstry::multi_level_registry_ _registry_;
 
@@ -220,6 +222,8 @@ namespace frdrgy {
 
 	// typedef rgstry::overloaded_unique_registry___ registry___;
 
+# if 0
+
 	inline bso::bool__ GetValue(
 		const char *Path,
 		const _registry_ &Registry,
@@ -252,6 +256,7 @@ namespace frdrgy {
 
 		SetProfileValue( Path, Registry, str::string( bso::Convert( Id, Buffer ) ) );
 	}
+# endif
 
 }
 

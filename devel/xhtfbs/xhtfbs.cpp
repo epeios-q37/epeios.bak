@@ -51,7 +51,7 @@ static stsfsm::automat ProjectAutomat_;
 static void FillProjectAutomat_( void )
 {
 	ProjectAutomat_.Init();
-	stsfsm::FillAutomat( ProjectAutomat_, pt_amount, GetLabel );
+	stsfsm::Fill( ProjectAutomat_, pt_amount, GetLabel );
 }
 
 project_type__ xhtfbs::GetProjectType( const str::string_ &Pattern )
@@ -82,7 +82,7 @@ static stsfsm::automat BackendAutomat_;
 static void FillBackendAutomat_( void )
 {
 	BackendAutomat_.Init();
-	stsfsm::FillAutomat( BackendAutomat_, bt_amount, GetLabel );
+	stsfsm::Fill( BackendAutomat_, bt_amount, GetLabel );
 }
 
 backend_type__ xhtfbs::GetBackendType( const str::string_ &Pattern )

@@ -57,6 +57,8 @@ public:
 
 using namespace frdrgy;
 
+# if 0
+
 rgstry::entry___ frdrgy::Parameters( "Parameters" );
 rgstry::entry___ frdrgy::Definitions( "Definitions" );
 rgstry::entry___ frdrgy::Layouts( "Layouts" );
@@ -249,6 +251,8 @@ ERRErr
 ERREnd
 ERREpilog
 }
+
+#endif
 
 
 /* Although in theory this class is inaccessible to the different modules,

@@ -50,11 +50,24 @@ namespace sclfrntnd {
 		frdkrn::kernel___ &Kernel,
 		const char *Message );
 
-	void GetPredefinedProjects(
+	// Action à effectuer sur le projet par défaut.
+	enum action__ {
+		aNone,		// Aucune action ; l'utilisateur peut sélectionner un autre type de projet, qui sera chargé manuellement.
+		aLoad,		// Le project soit être chargé, mais pas lancé.
+		aLaunch,	// Le project doit être chargé et lancé.
+		a_amount,
+		a_Undefined
+	};
+
+	const char *GetLabel( action__ Action );
+
+	action__ GetAction( const str::string_ &Label );
+
+	action__ GetProjectsFeatures(
 		const sclrgstry::registry_ &Registry,
 		xml::writer_ &Writer );
 
-	void GetPredefinedBackends(
+	void GetBackendsFeatures(
 		const sclrgstry::registry_ &Registry,
 		xml::writer_ &Writer );
 

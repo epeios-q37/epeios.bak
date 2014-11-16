@@ -59,16 +59,17 @@ public:
 
 using namespace csducl;
 
-static stsfsm::automat Automat_;
+static stsfsm::automat TypeAutomat_;
 
-static void FillAutomat_( void )
+static void FillTypeAutomat_( void )
 {
-	stsfsm::FillAutomat( Automat_, t_amount, GetLabel );
+	TypeAutomat_.Init();
+	stsfsm::Fill( TypeAutomat_, t_amount, GetLabel );
 }
 
-type__ csducl::GuessType( const str::string_ &Pattern )
+type__ csducl::GetType( const str::string_ &Pattern )
 {
-	return stsfsm::GetId( Pattern, Automat_, t_Undefined, t_amount );
+	return stsfsm::GetId( Pattern, TypeAutomat_, t_Undefined, t_amount );
 }
 
 const char *csducl::GetLabel( type__ Type )
@@ -116,6 +117,10 @@ bso::bool__ csducl::universal_client_core::Init(
 	return Success;
 }
 
+static void FillAutomats_( void )
+{
+	FillTypeAutomat_();
+}
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
@@ -126,8 +131,7 @@ class csduclpersonnalization
 public:
 	csduclpersonnalization( void )
 	{
-		Automat_.Init();
-		FillAutomat_();
+		FillAutomats_();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

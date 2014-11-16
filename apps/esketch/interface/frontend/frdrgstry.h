@@ -22,12 +22,12 @@
 #ifndef FRDRGSTRY__INC
 # define FRDRGSTRY__INC
 
-# include "frdrgy.h"
+// # include "frdrgy.h"
 
 # include "sclrgstry.h"
 
 namespace frdrgstry {
-	using frdrgy::registry_;
+	using sclrgstry::registry_;
 	E_AUTO( registry );
 
 	using rgstry::entry___;

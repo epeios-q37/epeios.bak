@@ -27,7 +27,6 @@
 				  /*******************************************/
 
 #include "sclmisc.h"
-#include "sclfrntnd.h"
 
 #include "frdkrn.h"
 
@@ -142,7 +141,7 @@ static void LoadProject_(
 ERRProlog
 	str::string Id;
 ERRBegin
-	Agent.Alert( FileName );
+//	Agent.Alert( FileName );
 
 	Id.Init();
 	sclmisc::LoadProject( FileName, Id );
@@ -193,6 +192,7 @@ ERRBegin
 	case xhtfbs::ptUser:
 		if ( ProjectFeature.Amount() == 0  )
 			sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
+		LoadProject_( Agent, ProjectFeature );
 		break;
 	case xhtfbs::pt_Undefined:
 		ERRFwk();

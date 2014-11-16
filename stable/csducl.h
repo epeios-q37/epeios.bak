@@ -77,7 +77,7 @@ namespace csducl {
 
 	const char *GetLabel( type__ Type );
 
-	type__ GuessType( const str::string_ &Pattern );
+	type__ GetType( const str::string_ &Pattern );
 
 	class universal_client_core
 	{

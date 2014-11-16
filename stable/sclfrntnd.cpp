@@ -33,6 +33,8 @@ using namespace sclfrntnd;
 
 using sclrgstry::registry_;
 
+static rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );
+static rgstry::entry___ ProjectAction_("@Action", DefaultProjectType_ );
 static rgstry::entry___ PredefinedProjects_( "PredefinedProjects", sclrgstry::Parameters );
 static rgstry::entry___ DefaultPredefinedProject_( "@Default", PredefinedProjects_ );
 static rgstry::entry___ FreePredefinedProject_( "PredefinedProject", PredefinedProjects_ ); 
@@ -51,6 +53,7 @@ static rgstry::entry___ AuthenticationMode_( "@Mode", Authentication_ );
 static rgstry::entry___ AuthenticationLogin_( "Login", Authentication_ );
 static rgstry::entry___ AuthenticationPassword_( "Password", Authentication_ );
 
+static rgstry::entry___ DefaultBackendType_("DefaultBackendType", sclrgstry::Parameters );
 static rgstry::entry___ PredefinedBackends_( "PredefinedBackends", sclrgstry::Parameters );
 static rgstry::entry___ DefaultPredefinedBackend_( "@Default", PredefinedBackends_ );
 static rgstry::entry___ FreePredefinedBackend_( "PredefinedBackend", PredefinedBackends_ ); 
@@ -61,6 +64,35 @@ static rgstry::entry___ PredefinedBackendType_( "@Type", PredefinedBackend_ );
 
 static rgstry::entry___ Internals_( "Internals" );
 static rgstry::entry___ ProjectId_( "ProjectId", Internals_ );
+
+stsfsm::automat ActionAutomat_;
+
+static void FillActionAutomat_( void )
+{
+	ActionAutomat_.Init();
+	stsfsm::Fill( ActionAutomat_, a_amount, GetLabel );
+}
+
+#define A( name )	case a##name : return #name; break
+
+const char *sclfrntnd::GetLabel( action__ Action )
+{
+	switch ( Action ) {
+	A( None );
+	A( Load );
+	A( Launch );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return NULL;	// To avoid a 'warning'.
+}
+
+action__ sclfrntnd::GetAction( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, ActionAutomat_, a_Undefined, a_amount );
+}
 
 static const lcl::meaning_ &GetMeaning_(
 	const char *Message,
@@ -109,7 +141,8 @@ ERREnd
 ERREpilog
 }
 
-static void GetPredefinedProject_(
+static void GetPredefinedItem_(
+	const rgstry::entry___ &Alias,
 	const str::string_ &Id,
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
@@ -126,7 +159,7 @@ ERRBegin
 	Tags.Append( Id );
 
 	Value.Init();
-	Registry.GetValue( rgstry::tentry__( PredefinedProjectAlias_, Tags ), Value );
+	sclrgstry::MGetValue( Registry, rgstry::tentry__( Alias, Tags ), Value );
 
 	Translation.Init();
 	Locale.GetTranslation( Value.Convert( Buffer ), Language, Translation );
@@ -137,8 +170,11 @@ ERREnd
 ERREpilog
 }
 
-static void GetPredefinedProjects_(
+static void GetPredefinedItems_(
+	const char *Tag,
+	const rgstry::entry___ &AliasEntry,
 	const rgstry::values_ &Ids,
+	const str::string_ &DefaultProjectId,
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
@@ -150,10 +186,13 @@ static void GetPredefinedProjects_(
 	Id.Init( Ids );
 
 	while ( Row != E_NIL ) {
-		Writer.PushTag( "PredefinedProject" );
+		Writer.PushTag( Tag );
 		Writer.PutAttribute( "id", Id( Row ) );
 
-		GetPredefinedProject_( Id( Row ), Registry, Locale, Language, Writer );
+		if ( DefaultProjectId == Id( Row ) )
+			Writer.PutAttribute("Selected", "true" );
+
+		GetPredefinedItem_( AliasEntry, Id( Row ), Registry, Locale, Language, Writer );
 
 		Writer.PopTag();
 
@@ -161,7 +200,11 @@ static void GetPredefinedProjects_(
 	}
 }
 
-static void GetPredefinedProjects_(
+static void GetPredefinedItems_(
+	const char *Tag,
+	const rgstry::entry___ &IdEntry,
+	const rgstry::entry___ &DefaultEntry,
+	const rgstry::entry___ &AliasEntry,
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
@@ -169,24 +212,97 @@ static void GetPredefinedProjects_(
 {
 ERRProlog
 	rgstry::values Ids;
+	str::string DefaultId;
 ERRBegin
+	DefaultId.Init();
+	sclrgstry::OGetValue( Registry, DefaultEntry, DefaultId );
+
 	Ids.Init();
+	sclrgstry::GetValues( Registry, IdEntry, Ids );
 
-	Registry.GetValues( PredefinedProjectId_, Ids );
-
-	GetPredefinedProjects_( Ids, Registry, Locale, Language, Writer );
+	GetPredefinedItems_( Tag, AliasEntry, Ids, DefaultId, Registry, Locale, Language, Writer );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-void sclfrntnd::GetPredefinedProjects(
+static void GetFeatures_(
+	const char *ItemsTag,
+	const char *ItemTag,
+	const char *DefaultTypeTag,
+	const rgstry::entry___ &DefaultTypeEntry,
+	const rgstry::entry___ &IdEntry,
+	const rgstry::entry___ &DefaultEntry,
+	const rgstry::entry___ &AliasEntry,
 	const sclrgstry::registry_ &Registry,
 	xml::writer_ &Writer )
 {
-	Writer.PushTag( "PredefinedProjects" );
-	GetPredefinedProjects_( Registry, scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+ERRProlog
+	str::string DefaultType;
+ERRBegin
+	DefaultType.Init();
+	sclrgstry::OGetValue( Registry, DefaultTypeEntry, DefaultType );
+
+	if ( DefaultType.Amount() != 0 ) {
+		Writer.PushTag( DefaultTypeTag );
+		Writer.PutValue( DefaultType );
+		Writer.PopTag();
+	}
+
+	Writer.PushTag( ItemsTag );
+	GetPredefinedItems_( ItemTag, IdEntry, DefaultEntry, AliasEntry, Registry, scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
 	Writer.PopTag();
+ERRErr
+ERREnd
+ERREpilog
+}
+
+action__ sclfrntnd::GetProjectsFeatures(
+	const sclrgstry::registry_ &Registry,
+	xml::writer_ &Writer )
+{
+	action__ Action = aNone;
+ERRProlog
+	str::string Pattern;
+ERRBegin
+	Pattern.Init();
+	sclrgstry::OGetValue( Registry, ProjectAction_, Pattern );
+
+	if ( Pattern.Amount() != 0 )
+		if ( ( Action = GetAction( Pattern ) ) == a_Undefined )
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( ProjectAction_ );
+
+	GetFeatures_( "PredefinedProjects", "PredefinedProject", "DefaultProjectType", DefaultProjectType_, PredefinedProjectId_, DefaultPredefinedProject_, PredefinedProjectAlias_, Registry, Writer );
+ERRErr
+ERREnd
+ERREpilog
+	return Action;
+}
+
+void sclfrntnd::GetBackendsFeatures(
+	const sclrgstry::registry_ &Registry,
+	xml::writer_ &Writer )
+{
+ERRProlog
+	str::string Backend, Type;
+ERRBegin
+	Backend.Init();
+	sclrgstry::OGetValue( Registry, Backend_, Backend );
+
+	if ( Backend.Amount() != 0 ) {
+		Type.Init();
+		sclrgstry::MGetValue( Registry, BackendType_, Type );
+
+		Writer.PushTag( "Backend" );
+		Writer.PutAttribute( "Type", Type );
+		Writer.PutValue( Backend );
+		Writer.PopTag();
+	}
+
+	GetFeatures_( "PredefinedBackends", "PredefinedBackend", "DefaultBackendType", DefaultBackendType_, PredefinedBackendId_, DefaultPredefinedBackend_, PredefinedBackendAlias_, Registry, Writer );
+ERRErr
+ERREnd
+ERREpilog
 }
 
 static const str::string_ &GetProjectFileName_(
@@ -215,86 +331,10 @@ const str::string_ &sclfrntnd::GetProjectFileName(
 	return GetProjectFileName_( Id, Registry, Location );
 }
 
-static void GetPredefinedBackend_(
-	const str::string_ &Id,
-	const registry_ &Registry,
-	const lcl::locale_ &Locale,
-	const char *Language,
-	xml::writer_ &Writer )
+static void FillAutomats_( void )
 {
-ERRProlog
-	str::string Value;
-	str::string Translation;
-	rgstry::tags Tags;
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	Tags.Init();
-	Tags.Append( Id );
-
-	Value.Init();
-	Registry.GetValue( rgstry::tentry__( PredefinedBackendAlias_, Tags ), Value );
-
-	Translation.Init();
-	Locale.GetTranslation( Value.Convert( Buffer ), Language, Translation );
-
-	Writer.PutAttribute( "Alias", Translation );
-ERRErr
-ERREnd
-ERREpilog
+	FillActionAutomat_();
 }
-
-static void GetPredefinedBackends_(
-	const rgstry::values_ &Ids,
-	const registry_ &Registry,
-	const lcl::locale_ &Locale,
-	const char *Language,
-	xml::writer_ &Writer )
-{
-	ctn::E_CMITEM( rgstry::value_ ) Id;
-	sdr::row__ Row = Ids.First();
-
-	Id.Init( Ids );
-
-	while ( Row != E_NIL ) {
-		Writer.PushTag( "PredefinedBackend" );
-		Writer.PutAttribute( "id", Id( Row ) );
-
-		GetPredefinedBackend_( Id( Row ), Registry, Locale, Language, Writer );
-
-		Writer.PopTag();
-
-		Row = Ids.Next( Row );
-	}
-}
-
-static void GetPredefinedBackends_(
-	const registry_ &Registry,
-	const lcl::locale_ &Locale,
-	const char *Language,
-	xml::writer_ &Writer )
-{
-ERRProlog
-	rgstry::values Ids;
-ERRBegin
-	Ids.Init();
-
-	Registry.GetValues( PredefinedBackendId_, Ids );
-
-	GetPredefinedBackends_( Ids, Registry, Locale, Language, Writer );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void sclfrntnd::GetPredefinedBackends(
-		const sclrgstry::registry_ &Registry,
-	xml::writer_ &Writer )
-{
-	Writer.PushTag( "PredefinedBackends" );
-	GetPredefinedBackends_( Registry, scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
-	Writer.PopTag();
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
@@ -304,6 +344,7 @@ class sclfrntndpersonnalization
 public:
 	sclfrntndpersonnalization( void )
 	{
+		FillAutomats_();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

@@ -301,16 +301,19 @@ ERREpilog
 }
 
 
+#if 0
 static inline bso::uint__ GetBackendPingDelay_( const registry_ &Registry )
 {
 	return rgstry::GetUInt( Registry, frdrgy::BackendPingDelay, 0 );
 }
+#endif
 
 recap__ frdkrn::kernel___::_Connect(
 	const char *RemoteHostServiceOrLocalLibraryPath,
 	const compatibility_informations__ &CompatibilityInformations,
 	csducl::type__ Type,
 	const char *Language, 
+	bso::uint__ PingDelay,
 	error_set___ &ErrorSet,
 	csdsnc::log_functions__ &LogFunctions )
 {
@@ -319,7 +322,7 @@ ERRProlog
 	flx::E_STRING_OFLOW_DRIVER___ OFlowDriver;
 	csdlec::library_data__ LibraryData;
 	csdleo::mode__ Mode = csdleo::m_Undefined;
-	str::string PingDelay, Buffer;
+	str::string Buffer;
 ERRBegin
 	OFlowDriver.Init( ErrorSet.Misc, fdr::ts_Default );
 	LibraryData.Init( csdleo::mEmbedded, flx::VoidOFlowDriver, flx::VoidOFlowDriver, false, (void *)RemoteHostServiceOrLocalLibraryPath );
@@ -328,7 +331,7 @@ ERRBegin
 
 	Buffer.Init();
 
-	if ( !_ClientCore.Init( RemoteHostServiceOrLocalLibraryPath, LibraryData, LogFunctions, Type, GetBackendPingDelay_( Registry() ) ) ) {
+	if ( !_ClientCore.Init( RemoteHostServiceOrLocalLibraryPath, LibraryData, LogFunctions, Type, PingDelay ) ) {
 		OFlowDriver.reset();	// Pour vider les caches.
 		if ( ErrorSet.Misc.Amount() != 0 )
 			Recap = rBackendError;
@@ -358,6 +361,7 @@ recap__ frdkrn::kernel___::_Connect(
 	const compatibility_informations__ &CompatibilityInformations,
 	csducl::type__ Type,
 	const char *Language,
+	bso::uint__ PingDelay,
 	error_set___ &ErrorSet,
 	csdsnc::log_functions__ &LogFunctions )
 {
@@ -365,7 +369,7 @@ recap__ frdkrn::kernel___::_Connect(
 ERRProlog
 	TOL_CBUFFER___ RemoteHostServiceOrLocalLibraryPathBuffer;
 ERRBegin
-	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, ErrorSet, LogFunctions );
+	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, PingDelay, ErrorSet, LogFunctions );
 ERRErr
 ERREnd
 ERREpilog
@@ -729,32 +733,40 @@ ERREpilog
 	return Status;
 }
 
-authentication_prompt_mode__ frdkrn::GetAuthenticationPromptMode( const registry_ &Registry )
-{
-	authentication_prompt_mode__ Mode = apm_Undefined;
-ERRProlog
-	rgstry::value Value;
-ERRBegin
-	Value.Init();
+static stsfsm::automat AuthenticationAutomat_;
 
-	if ( !Registry.GetValue( frdrgy::AuthenticationMode , Value ) )
-		Mode = apmNone;
-	else {
-		if ( Value == "None" )
-			Mode = apmNone;
-		else if ( Value =="Auto" )
-			Mode = apmAuto;
-		else if ( Value == "Empty" )
-			Mode = apmEmpty;
-		else if ( Value == "Partial" )
-			Mode = apmPartial;
-		else if ( Value == "Full" )
-			Mode = apmFull;
+void InitAuthenticationAutomat_( void )
+{
+	AuthenticationAutomat_.Init();
+	stsfsm::Fill( AuthenticationAutomat_, apm_amount, GetLabel );
+}
+
+#define APM( name )	case apm##name : return #name; break
+
+const char *frdkrn::GetLabel( authentication_prompt_mode__ Mode )
+{
+	switch ( Mode ) {
+		APM( None );
+		APM( Auto );
+		APM( Empty );
+		APM( Partial );
+		APM( Full );
+	default:
+		ERRFwk();
+		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
-	return Mode;
+
+	return NULL;	// To avoid a 'warning'.
+}
+
+authentication_prompt_mode__ frdkrn::GetAuthenticationPromptMode( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, AuthenticationAutomat_, apm_Undefined, apm_amount );
+}
+
+static void InitAutomats_( void )
+{
+	InitAuthenticationAutomat_();
 }
 
 /* Although in theory this class is inaccessible to the different modules,
@@ -768,6 +780,8 @@ public:
 	{
 		if ( FRDKRN__R_AMOUNT != r_amount )
 			ERRChk();	// 
+
+		InitAutomats_();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

@@ -233,7 +233,7 @@ namespace stsfsm {
 		}
 	};
 
-	template <typename type> inline void FillAutomat(
+	template <typename type> inline void Fill(
 		automat_ &Automat,
 		type Amount,
 		const char *(* GetLabel)( type ) )
@@ -248,7 +248,7 @@ namespace stsfsm {
 		}
 	}
 
-	template <typename type, typename version> inline void FillAutomat(
+	template <typename type, typename version> inline void Fill(
 		version Version,
 		automat_ &Automat,
 		type Amount,

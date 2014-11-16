@@ -35,6 +35,8 @@
 
 # include "xhtagent.h"
 
+# include "sclfrntnd.h"
+
 # include "err.h"
 # include "flw.h"
 # include "rgstry.h"
