@@ -42,7 +42,6 @@
 # include "rgstry.h"
 # include "scllocale.h"
 # include "sclmisc.h"
-# include "xhtfmn.h"
 # include "frdssn.h"
 
 namespace sclxhtml {
@@ -181,9 +180,12 @@ namespace sclxhtml {
 		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
 	}
 
-	void MainSubmission(
-		const sclrgstry::registry_ &Registry,
-		xhtagent::agent_core___ &Agent );
+	void MainSubmission( xhtagent::agent_core___ &Agent );
+
+	void SessionFormSubmission(
+		frdkrn::kernel___ &Kernel,
+		xhtagent::agent_core___ &Agent,
+		const frdkrn::compatibility_informations__ &CompatibilityInformations );
 
 	void SCLXHTMLOnLoading( void );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
 

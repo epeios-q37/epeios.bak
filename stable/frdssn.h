@@ -164,19 +164,19 @@ namespace frdssn {
 
 			return _Language;
 		}
-		recap__ DumpSetupRegistry( xml::writer_ &Writer ) const
+		recap__ DumpSessionRegistry( xml::writer_ &Writer ) const
 		{
 			_Test();
 
-			_Registry.DumpSetup( E_NIL, true, Writer);
+			_Registry.DumpSession( E_NIL, true, Writer);
 
 			return r_OK;
 		}
-		recap__ FillSetupRegistry(
+		recap__ FillSessionRegistry(
 			xtf::extended_text_iflow__ &SetupXFlow,
 			const xpp::criterions___ &Criterions,
 			error_set___ &ErrorSet );
-		status__ FillSetupRegistry(
+		status__ FillSessionRegistry(
 			xtf::extended_text_iflow__ &SetupXFlow,
 			const xpp::criterions___ &Criterions );
 	};

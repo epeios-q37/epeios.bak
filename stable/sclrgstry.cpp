@@ -268,14 +268,19 @@ ERREnd
 ERREpilog
 }
 
-void sclrgstry::session_registry_::Init( const str::string_ &SetupId )
+void sclrgstry::setup_registry_::Init( void )
 {
 	registry_::Init();
 	registry_::Push( Registry_ );
 
-	S_.SetupLevel = registry_::PushEmbeddedLevel( rgstry::name( "Setup" ) );
+	S_.Setup = registry_::PushEmbeddedLevel( rgstry::name( "Setup" ) );
+}
 
-	FillRegistryWithSetup_( *this, S_.SetupLevel, SetupId );
+void sclrgstry::setup_registry_::Init( const str::string_ &SetupId )
+{
+	Init();
+
+	FillRegistryWithSetup_( *this, S_.Setup, SetupId );
 }
 
 bso::bool__ sclrgstry::BGetValue(

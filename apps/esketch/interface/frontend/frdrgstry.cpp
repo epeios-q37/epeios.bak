@@ -19,10 +19,10 @@
 
 // $Id: frdrgstry.cpp,v 1.1 2012/12/04 15:46:27 csimon Exp $
 
-#include "sclrgstry.h"
+#include "frdrgstry.h"
 
 #include "flf.h"
 #include "fnm.h"
 
-using namespace sclrgstry;
+using namespace frdrgstry;
 

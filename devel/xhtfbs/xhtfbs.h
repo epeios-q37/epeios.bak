@@ -35,6 +35,8 @@
 
 # include "xhtagent.h"
 
+# include "frdbse.h"
+
 # include "rgstry.h"
 
 # include "lcl.h"
@@ -135,31 +137,6 @@ namespace xhtfbs {
 			// Standadisation;
 		}
 	};
-
-	enum project_type__ {
-		ptNew,
-		ptPredefined,
-		ptUser,
-		pt_amount,
-		pt_Undefined
-	};
-
-	const char *GetLabel( project_type__ ProjectType );
-
-	project_type__ GetProjectType( const str::string_ &Pattern );
-
-	enum backend_type__ {
-		btDaemon,
-		btEmbedded,
-		btPredefined,
-		bt_amount,
-		bt_Undefined
-	};
-
-	const char *GetLabel( backend_type__ BackendType );
-
-	backend_type__ GetBackendType( const str::string_ &Pattern );
-
 }
 
 				  /********************************************/

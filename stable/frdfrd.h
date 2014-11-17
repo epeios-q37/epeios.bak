@@ -60,6 +60,8 @@ extern class ttr_tutor &FRDFRDTutor;
 
 /*$BEGIN$*/
 
+# include "frdbse.h"
+
 # include "fblfrd.h"
 
 # include "csducl.h"

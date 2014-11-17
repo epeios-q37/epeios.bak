@@ -39,7 +39,7 @@ using namespace scltool;
 using cio::COut;
 using scllocale::GetLocale;
 
-static sclrgstry::session_registry Registry_;
+static sclrgstry::setup_registry Registry_;
 
 sclrgstry::registry_ &scltool::GetRegistry( void )
 {
@@ -63,7 +63,7 @@ str::string ParametersTag_;	// Voir tout en bas.
 
 rgstry::level__ scltool::GetSetupRegistryLevel( void )
 {
-	return Registry_.GetSetupLevel();
+	return Registry_.GetSetup();
 }
 
 rgstry::level__ scltool::GetArgumentsRegistryLevel( void )

@@ -147,7 +147,7 @@ namespace frdrgy {
 		struct s
 		: public _registry_::s
 		{
-			rgstry::level__ Setup;
+			rgstry::level__ Session;
 		} &S_;
 		registry_( s &S )
 		: S_( S ),
@@ -157,7 +157,7 @@ namespace frdrgy {
 		{
 			_registry_::reset( P );
 
-			S_.Setup = RGSTRY_UNDEFINED_LEVEL;
+			S_.Session = rgstry::UndefinedLevel;
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
@@ -167,7 +167,7 @@ namespace frdrgy {
 		{
 			_registry_::operator =( R );
 
-			S_.Setup = R.S_.Setup;
+			S_.Session = R.S_.Session;
 
 			return *this;
 		}
@@ -176,44 +176,44 @@ namespace frdrgy {
 			_registry_::Init();
 
 			_registry_::Push( Registry );
-			S_.Setup= _registry_::PushEmbeddedLevel( rgstry::name( "Setup" ) );
+			S_.Session= _registry_::PushEmbeddedLevel( rgstry::name( "Session" ) );
 		}
-		void DumpSetup(
+		void DumpSession(
 			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{
-			_DumpRegistry( S_.Setup, Node, NodeToo, Writer );
+			_DumpRegistry( S_.Session, Node, NodeToo, Writer );
 		}
-		rgstry::status__ FillSetup(
+		rgstry::status__ FillSession(
 			const char *FileName,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath,
 			rgstry::context___ &Context )
 		{
-			return _registry_::Fill( S_.Setup, FileName, Criterions, RootPath, Context );
+			return _registry_::Fill( S_.Session, FileName, Criterions, RootPath, Context );
 		}
-		rgstry::status__ FillSetup(
+		rgstry::status__ FillSession(
 			xtf::extended_text_iflow__ &XFlow,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath,
 			rgstry::context___ &Context )
 		{
-			return _registry_::Fill( S_.Setup, XFlow, Criterions, RootPath, Context );
+			return _registry_::Fill( S_.Session, XFlow, Criterions, RootPath, Context );
 		}
-		void CreateSetupPath( const str::string_ &Path )
+		void CreateSessionPath( const str::string_ &Path )
 		{
-			_registry_::Create( S_.Setup, Path );
+			_registry_::Create( S_.Session, Path );
 		}
-		time_t SetupTimeStamp( void ) const
+		time_t SessionTimeStamp( void ) const
 		{
-			return TimeStamp( S_.Setup );
+			return TimeStamp( S_.Session );
 		}
-		bso::bool__ GetSetupValue(
+		bso::bool__ GetSessionValue(
 			const str::string_ &Path,
 			str::string_ &Value ) const
 		{
-			return _registry_::GetValue( S_.Setup, Path, Value );
+			return _registry_::GetValue( S_.Session, Path, Value );
 		}
 	};
 

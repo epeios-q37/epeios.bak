@@ -35,12 +35,17 @@
 
 # include "xhtfbs.h"
 
+# include "frdkrn.h"
+
 # include "err.h"
 # include "flw.h"
 
 namespace xhtfsf {
 
 	E_CDEF( char *, BackendTypeId, "BackendType" );
+	E_CDEF( char *, DaemonBackendId, "DameonBackend" );
+	E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
+	E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
 
 
 	typedef xhtfbs::event_handler__ _event_handler__;
@@ -67,6 +72,11 @@ namespace xhtfsf {
 			_event_handler__::Init();
 		}
 	};
+
+	frdbse::backend_type__ GetBackendFeatures(
+		xhtagent::agent_core___ &Agent,
+		str::string_ &Feature );
+
 }
 
 				  /********************************************/

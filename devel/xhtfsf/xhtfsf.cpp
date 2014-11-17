@@ -35,14 +35,14 @@ void xhtfsf::GetContent(
 	// Rien à fournir.
 }
 
-static xhtfbs::backend_type__ GetBackendType_( xhtagent::agent_core___ &Agent )
+static frdbse::backend_type__ GetBackendType_( xhtagent::agent_core___ &Agent )
 {
-	xhtfbs::backend_type__ BackendType = xhtfbs::bt_Undefined;
+	frdbse::backend_type__ BackendType = frdbse::bt_Undefined;
 ERRProlog
 	str::string Value;
 ERRBegin
 	Value.Init();
-	BackendType = xhtfbs::GetBackendType( Agent.GetSelectValue( BackendTypeId, Value ) );
+	BackendType = frdbse::GetBackendType( Agent.GetSelectValue( BackendTypeId, Value ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -55,10 +55,39 @@ void xhtfsf::GetContext(
 {
 	Writer.PushTag( "BackendType" );
 
-	Writer.PutValue( xhtfbs::GetLabel( GetBackendType_( Agent ) ) );
+	Writer.PutValue( frdbse::GetLabel( GetBackendType_( Agent ) ) );
 
 	Writer.PopTag();
 }
+
+frdbse::backend_type__ xhtfsf::GetBackendFeatures(
+	xhtagent::agent_core___ &Agent,
+	str::string_ &Feature )
+{
+	frdbse::backend_type__ Type = frdbse::bt_Undefined;
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	switch ( Type = GetBackendType_( Agent ) ) {
+	case frdbse::btDaemon:
+		Feature.Append( Agent.GetValue( DaemonBackendId, Buffer ) );
+		break;
+	case frdbse::btEmbedded:
+		Feature.Append( Agent.GetValue( EmbeddedBackendId, Buffer ) );
+		break;
+	case frdbse::btPredefined:
+		Feature.Append( Agent.GetValue( PredefinedBackendId, Buffer ) );
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+ERRErr
+ERREnd
+ERREpilog
+	return Type;
+}
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

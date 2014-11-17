@@ -88,40 +88,41 @@ namespace sclrgstry {
 		const char *Target,
 		str::string_ &Id );
 
-	class session_registry_
+	class setup_registry_
 	: public registry_
 	{
 	public:
 		struct s
 		: public registry_::s
 		{
-			rgstry::level__ SetupLevel;
+			rgstry::level__ Setup;
 		} &S_;
-		session_registry_( s &S )
+		setup_registry_( s &S )
 		: S_( S ),
 		  registry_( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			registry_::reset( P );
-			S_.SetupLevel = rgstry::UndefinedLevel;
+			S_.Setup = rgstry::UndefinedLevel;
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
 			registry_::plug( AS );
 		}
-		session_registry_ &operator =( const session_registry_ &SR )
+		setup_registry_ &operator =( const setup_registry_ &SR )
 		{
 			registry_::operator=( *this );
-			S_.SetupLevel = SR.S_.SetupLevel;
+			S_.Setup = SR.S_.Setup;
 
 			return *this;
 		}
+		void Init( void );
 		void Init( const str::string_ &SetupId );
-		E_RODISCLOSE_( rgstry::level__, SetupLevel );
+		E_RODISCLOSE_( rgstry::level__, Setup );
 	};
 
-	E_AUTO( session_registry );
+	E_AUTO( setup_registry );
 
 # if 0
 	void FillRegistryWithSetup(

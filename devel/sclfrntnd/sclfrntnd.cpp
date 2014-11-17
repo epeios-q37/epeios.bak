@@ -305,31 +305,134 @@ ERREnd
 ERREpilog
 }
 
-static const str::string_ &GetProjectFileName_(
-	const str::string_ &Id,
-	const registry_ &Registry,
-	str::string_ &Location )
+bso::uint__ sclfrntnd::GetBackendPingDelay( void )
+{
+	return sclrgstry::OGetUInt(sclrgstry::GetCommonRegistry(), BackendPingDelay_, 0 );
+}
+
+static void LoadProject_( const str::string_ &FileName )
 {
 ERRProlog
-	rgstry::tags Tags;
+	str::string Id;
 ERRBegin
-	Tags.Init();
-	Tags.Append( Id );
-
-	Registry.GetValue( rgstry::tentry__( PredefinedProject_, Tags ), Location );
+	Id.Init();
+	sclmisc::LoadProject( FileName, Id );
 ERRErr
 ERREnd
 ERREpilog
-	return Location;
 }
 
-const str::string_ &sclfrntnd::GetProjectFileName(
-	const sclrgstry::registry_ &Registry,
-	const str::string_ &Id,
-	str::string_ &Location )
+static void LoadPredefinedProject_( const str::string_ &Id )
 {
-	return GetProjectFileName_( Id, Registry, Location );
+ERRProlog
+	str::string ProjectFileName;
+ERRBegin
+	if ( Id.Amount() == 0 )
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_EmptyPredefinedProjectId" );
+
+	ProjectFileName.Init();
+	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( PredefinedProject_, Id ), ProjectFileName );
+
+	if ( ProjectFileName.Amount() == 0 )
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
+
+	LoadProject_( ProjectFileName );
+ERRErr
+ERREnd
+ERREpilog
 }
+
+void sclfrntnd::LoadProject(
+	frdbse::project_type__ ProjectType,
+	const str::string_ &ProjectFeature )
+{
+	switch ( ProjectType ) {
+	case frdbse::ptNew:
+		sclrgstry::EraseProjectRegistry();
+		break;
+	case frdbse::ptPredefined:
+		LoadPredefinedProject_( ProjectFeature );
+		break;
+	case frdbse::ptUser:
+		if ( ProjectFeature.Amount() == 0  )
+			sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoProjectFileSelected" );
+		LoadProject_( ProjectFeature );
+		break;
+	case frdbse::pt_Undefined:
+		ERRFwk();
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+}
+
+static void GetPredefinedBackendFeatures_(
+	const str::string_ &Id,
+	frdkrn::backend_features___ &Features )
+{
+ERRProlog
+	str::string Buffer;
+	rgstry::tentry___ BackendTypeEntry;
+ERRBegin
+	BackendTypeEntry.Init( PredefinedBackendType_, Id );
+
+	Buffer.Init();
+	switch ( frdbse::GetBackendType(sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), BackendTypeEntry, Buffer ) ) ) {
+	case frdbse::btDaemon:
+		Features.Type = csducl::tDaemon;
+		break;
+	case frdbse::btEmbedded:
+		Features.Type = csducl::tPlugin;
+		break;
+	default:
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( BackendTypeEntry );
+		break;
+	}
+
+	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( PredefinedBackend_, Id ), Features.Location );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void sclfrntnd::Connect(
+	frdkrn::kernel___ &Kernel,
+	frdbse::backend_type__ BackendType,
+	const str::string_ &BackendFeature,
+	const frdkrn::compatibility_informations__ &CompatibilityInformations )
+{
+ERRProlog
+	frdkrn::backend_features___ Features;
+ERRBegin
+	Features.Init( GetBackendPingDelay() );
+
+	switch ( BackendType ) {
+	case frdbse::btDaemon:
+		Features.Type = csducl::tDaemon;
+		Features.Location = BackendFeature;
+		break;
+	case frdbse::btEmbedded:
+		Features.Type = csducl::tPlugin;
+		Features.Location = BackendFeature;
+		break;
+	case frdbse::btPredefined:
+		GetPredefinedBackendFeatures_( BackendFeature, Features );
+		break;
+	case frdbse::pt_Undefined:
+		ERRFwk();
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
+
+	Kernel.Launch( Features, CompatibilityInformations );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 static void FillAutomats_( void )
 {

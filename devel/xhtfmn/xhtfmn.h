@@ -57,7 +57,7 @@ namespace xhtfmn {
 		xml::writer_ &Writer );
 
 
-	xhtfbs::project_type__ GetProjectFeatures(
+	frdbse::project_type__ GetProjectFeatures(
 		xhtagent::agent_core___ &Agent,
 		str::string_ &ProjectFeature );
 }

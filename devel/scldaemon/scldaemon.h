@@ -50,22 +50,18 @@ namespace scldaemon {
 	class daemon___
 	{
 	private:
-		rgstry::multi_level_registry _Registry;
-		rgstry::level__ _RegistrySetupLevel;
+		sclrgstry::session_registry _Registry;
 	protected:
 		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Registry.reset( P );
-			_RegistrySetupLevel = rgstry::UndefinedLevel;
 		}
 		E_CVDTOR( daemon___ );
 		void Init( void )
 		{
 			_Registry.Init();
-			_Registry.Push( sclrgstry::GetRegistry() );
-			_RegistrySetupLevel = _Registry.PushEmbeddedLevel( str::string( "Setup" ) );
 		}
 		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
@@ -77,11 +73,11 @@ namespace scldaemon {
 		}
 		rgstry::level__ GetRegistrySetupLevel( void ) const
 		{
-			return _RegistrySetupLevel;
+			return _Registry.GetSetupLevel();
 		}
 		void FillRegistryWithSetup( const str::string_ &SetupId )
 		{
-			sclrgstry::FillRegistryWithSetup( _Registry, _RegistrySetupLevel, SetupId );
+			_Registry.Init( SetupId );
 		}
 		bso::bool__ Process( flw::ioflow__ &Flow )
 		{

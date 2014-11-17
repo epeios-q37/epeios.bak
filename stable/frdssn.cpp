@@ -57,7 +57,7 @@ public:
 
 using namespace frdssn;
 
-recap__ frdssn::session___::FillSetupRegistry(
+recap__ frdssn::session___::FillSessionRegistry(
 	xtf::extended_text_iflow__ &SettingsXFlow,
 	const xpp::criterions___ &Criterions,
 	error_set___ &ErrorSet )
@@ -68,7 +68,7 @@ ERRProlog
 ERRBegin
 	_Test();
 
-	switch ( _Registry.FillSetup( SettingsXFlow, Criterions, FRDKRN_SETUP_LABEL, ErrorSet.Context ) ) {
+	switch ( _Registry.FillSession( SettingsXFlow, Criterions, FRDKRN_SESSION_LABEL, ErrorSet.Context ) ) {
 	case rgstry::sOK:
 		break;
 	case rgstry::sUnableToFindRootPath:
@@ -87,7 +87,7 @@ ERREpilog
 	return Recap;
 }
 
-status__ frdssn::session___::FillSetupRegistry(
+status__ frdssn::session___::FillSessionRegistry(
 	xtf::extended_text_iflow__ &SettingsXFlow,
 	const xpp::criterions___ &Criterions )
 {
@@ -98,7 +98,7 @@ ERRProlog
 ERRBegin
 	ErrorSet.Init();
 
-	if ( ( Recap = FillSetupRegistry( SettingsXFlow, Criterions, ErrorSet ) ) != r_OK ) {
+	if ( ( Recap = FillSessionRegistry( SettingsXFlow, Criterions, ErrorSet ) ) != r_OK ) {
 		_Meaning.Init();
 		frdkrn::GetMeaning( Recap, ErrorSet, _Meaning );
 		Status = sWarning;

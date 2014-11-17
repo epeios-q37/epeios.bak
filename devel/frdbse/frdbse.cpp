@@ -1,7 +1,7 @@
 /*
-	'xhtfmn.cpp' by Claude SIMON (http://zeusw.org/).
+	'frdbse.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'xhtfmn' is part of the Epeios framework.
+	'frdbse' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,90 +17,98 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define XHTFMN__COMPILATION
+#define FRDBSE__COMPILATION
 
-#include "xhtfmn.h"
+#include "frdbse.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-#include "frdkrn.h"
+#include "stsfsm.h"
 
-using namespace xhtfmn;
+using namespace frdbse;
 
-void xhtfmn::GetContent(
-	xhtagent::agent_core___ &Agent,
-	xml::writer_ &Writer)
+#define C( name ) case pt##name: return #name; break
+
+const char *frdbse::GetLabel( project_type__ ProjectType )
 {
-	// Rien à fournir.
-}
-
-static frdbse::project_type__ GetProjectType_( xhtagent::agent_core___ &Agent )
-{
-	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
-	str::string Value;
-ERRBegin
-	Value.Init();
-	ProjectType = frdbse::GetProjectType( Agent.GetSelectValue( ProjectTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
-	return ProjectType;
-}
-
-void xhtfmn::GetContext(
-	xhtagent::agent_core___ &Agent,
-	xml::writer_ &Writer)
-{
-	Writer.PushTag( "ProjectType ");
-
-	Writer.PutValue( frdbse::GetLabel( GetProjectType_( Agent ) ) );
-
-	Writer.PopTag();
-}
-
-frdbse::project_type__ xhtfmn::GetProjectFeatures(
-	xhtagent::agent_core___ &Agent,
-	str::string_ &ProjectFeature )
-{
-	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	switch ( ProjectType = GetProjectType_( Agent ) ) {
-	case frdbse::ptNew:
-		break;
-	case frdbse::ptPredefined:
-		ProjectFeature.Append( Agent.GetSelectValue( PredefinedProjectId, Buffer ) );
-		break;
-	case frdbse::ptUser:
-		ProjectFeature.Append( Agent.GetValue( UserProjectId, Buffer ) );
-		break;
+	switch ( ProjectType ) {
+	C( New );
+	C( Predefined );
+	C( User );
 	default:
 		ERRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
-	return ProjectType;
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+static stsfsm::automat ProjectAutomat_;
+
+static void FillProjectAutomat_( void )
+{
+	ProjectAutomat_.Init();
+	stsfsm::Fill( ProjectAutomat_, pt_amount, GetLabel );
+}
+
+project_type__ frdbse::GetProjectType( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, ProjectAutomat_, pt_Undefined, pt_amount );
+}
+
+#undef C
+
+#define C( name ) case bt##name: return #name; break
+
+const char *frdbse::GetLabel( backend_type__ BackendType )
+{
+	switch ( BackendType ) {
+	C( Daemon );
+	C( Embedded );
+	C( Predefined );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+static stsfsm::automat BackendAutomat_;
+
+static void FillBackendAutomat_( void )
+{
+	BackendAutomat_.Init();
+	stsfsm::Fill( BackendAutomat_, bt_amount, GetLabel );
+}
+
+backend_type__ frdbse::GetBackendType( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, BackendAutomat_, bt_Undefined, bt_amount );
+}
+
+static void FillAutomats_( void )
+{
+	FillProjectAutomat_();
+	FillBackendAutomat_();
 }
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-class xhtfmnpersonnalization
+class frdbsepersonnalization
 {
 public:
-	xhtfmnpersonnalization( void )
+	frdbsepersonnalization( void )
 	{
+		FillAutomats_();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
-	~xhtfmnpersonnalization( void )
+	~frdbsepersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
@@ -113,4 +121,4 @@ public:
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static xhtfmnpersonnalization Tutor;
+static frdbsepersonnalization Tutor;

@@ -1,7 +1,7 @@
 /*
-	'xhtfbs.cpp' by Claude SIMON (http://zeusw.org/).
+	'frdbse.h' by Claude SIMON (http://zeusw.org/).
 
-	'xhtfbs' is part of the Epeios framework.
+	'frdbse' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,42 +17,56 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define XHTFBS__COMPILATION
+#ifndef FRDBSE__INC
+# define FRDBSE__INC
 
-#include "xhtfbs.h"
+# define FRDBSE_NAME		"FRDBSE"
+
+# if defined( E_DEBUG ) && !defined( FRDBSE_NODBG )
+#  define FRDBSE_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-#include "frdkrn.h"
+// FRonteNd BaSE
 
-using namespace xhtfbs;
+# include "err.h"
+# include "flw.h"
+# include "str.h"
 
+namespace frdbse {
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
+	enum project_type__ {
+		ptNew,
+		ptPredefined,
+		ptUser,
+		pt_amount,
+		pt_Undefined
+	};
 
-class xhtfbspersonnalization
-{
-public:
-	xhtfbspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xhtfbspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
+	const char *GetLabel( project_type__ ProjectType );
 
+	project_type__ GetProjectType( const str::string_ &Pattern );
+
+	enum backend_type__ {
+		btDaemon,
+		btEmbedded,
+		btPredefined,
+		bt_amount,
+		bt_Undefined
+	};
+
+	const char *GetLabel( backend_type__ BackendType );
+
+	backend_type__ GetBackendType( const str::string_ &Pattern );
+}
 
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static xhtfbspersonnalization Tutor;
+#endif

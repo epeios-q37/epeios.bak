@@ -42,6 +42,7 @@
 # include "xml.h"
 
 namespace sclfrntnd {
+
 	void Report(
 		frdkrn::kernel___ &Kernel,
 		const char *Message );
@@ -71,10 +72,18 @@ namespace sclfrntnd {
 		const sclrgstry::registry_ &Registry,
 		xml::writer_ &Writer );
 
-	const str::string_ &GetProjectFileName(
-		const sclrgstry::registry_ &Registry,
-		const str::string_ &Id,
-		str::string_ &FileName );
+	bso::uint__ GetBackendPingDelay( void );
+
+	void LoadProject(
+		frdbse::project_type__ ProjectType,
+		const str::string_ &ProjectFeature );
+
+	void Connect(
+		frdkrn::kernel___ &Kernel,
+		frdbse::backend_type__ BackendType,
+		const str::string_ &BackendFeature,
+		const frdkrn::compatibility_informations__ &CompatibilityInformations );
+
 }
 
 				  /********************************************/

@@ -30,6 +30,10 @@
 
 #include "frdkrn.h"
 
+# include "xhtfmn.h"
+# include "xhtfsf.h"
+
+
 using namespace sclxhtml;
 
 static bso::bool__ IsInitialized_ = false;
@@ -134,77 +138,33 @@ ERREpilog
 	return Callback;
 }
 
-static void LoadProject_(
-	xhtagent::agent_core___ &Agent,
-	const str::string_ &FileName )
-{
-ERRProlog
-	str::string Id;
-ERRBegin
-//	Agent.Alert( FileName );
-
-	Id.Init();
-	sclmisc::LoadProject( FileName, Id );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void LoadPredefinedProject_( 
-	const sclrgstry::registry_ &Registry,
-	xhtagent::agent_core___ &Agent,
-	const str::string_ &Id )
-{
-ERRProlog
-	str::string ProjectFileName;
-ERRBegin
-	if ( Id.Amount() == 0 )
-		sclmisc::ReportAndAbort( SCLXHTML_NAME "_EmptyPredefinedProjectId" );
-
-	ProjectFileName.Init();
-
-	sclfrntnd::GetProjectFileName( Registry, Id, ProjectFileName );
-
-	if ( ProjectFileName.Amount() == 0 )
-		sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
-
-	LoadProject_( Agent, ProjectFileName );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-void sclxhtml::MainSubmission(
-	const sclrgstry::registry_ &Registry,
-	xhtagent::agent_core___ &Agent )
+void sclxhtml::MainSubmission( xhtagent::agent_core___ &Agent )
 {
 ERRProlog
 	str::string ProjectFeature;
 ERRBegin
 	ProjectFeature.Init();
-	switch ( xhtfmn::GetProjectFeatures(Agent, ProjectFeature ) ) {
-	case xhtfbs::ptNew:
-		sclrgstry::EraseProjectRegistry();
-		break;
-	case xhtfbs::ptPredefined:
-		LoadPredefinedProject_( Registry, Agent, ProjectFeature );
-		break;
-	case xhtfbs::ptUser:
-		if ( ProjectFeature.Amount() == 0  )
-			sclmisc::ReportAndAbort( SCLXHTML_NAME "_NoProjectFileSelected" );
-		LoadProject_( Agent, ProjectFeature );
-		break;
-	case xhtfbs::pt_Undefined:
-		ERRFwk();
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
+	sclfrntnd::LoadProject( xhtfmn::GetProjectFeatures( Agent, ProjectFeature ), ProjectFeature );
 ERRErr
 ERREnd
 ERREpilog
 }
+
+void sclxhtml::SessionFormSubmission(
+	frdkrn::kernel___ &Kernel,
+	xhtagent::agent_core___ &Agent,
+	const frdkrn::compatibility_informations__ &CompatibilityInformations )
+{
+ERRProlog
+	str::string BackendFeature;
+ERRBegin
+	BackendFeature.Init();
+	sclfrntnd::Connect( Kernel, xhtfsf::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

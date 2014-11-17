@@ -69,7 +69,7 @@ extern class ttr_tutor &FRDKRNTutor;
 
 #define FRDKRN_CONFIGURATION_FILE_EXTENSION	"xcfg"
 
-# define FRDKRN_SETUP_LABEL "Setup"
+# define FRDKRN_SESSION_LABEL "Session"
 
 namespace frdkrn {
 	using namespace frdfrd;
