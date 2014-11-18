@@ -54,8 +54,10 @@ namespace sclrgstry {
 
 	registry_ &GetCommonRegistry( void );
 
-	rgstry::level__ GetConfigurationRegistryLevel( void );
-	rgstry::level__ GetProjectRegistryLevel( void );
+	rgstry::level__ GetConfigurationLevel( void );
+	rgstry::level__ GetProjectLevel( void );
+	rgstry::level__ GetSetupLevel( void );
+	rgstry::level__ GetArgumentsLevel( void );
 
 	extern rgstry::entry___ Parameters;
 	extern rgstry::entry___ Definitions;
@@ -88,41 +90,13 @@ namespace sclrgstry {
 		const char *Target,
 		str::string_ &Id );
 
-	class setup_registry_
-	: public registry_
-	{
-	public:
-		struct s
-		: public registry_::s
-		{
-			rgstry::level__ Setup;
-		} &S_;
-		setup_registry_( s &S )
-		: S_( S ),
-		  registry_( S )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			registry_::reset( P );
-			S_.Setup = rgstry::UndefinedLevel;
-		}
-		void plug( ags::E_ASTORAGE_ &AS )
-		{
-			registry_::plug( AS );
-		}
-		setup_registry_ &operator =( const setup_registry_ &SR )
-		{
-			registry_::operator=( *this );
-			S_.Setup = SR.S_.Setup;
+	void EraseSetupRegistry( void );
 
-			return *this;
-		}
-		void Init( void );
-		void Init( const str::string_ &SetupId );
-		E_RODISCLOSE_( rgstry::level__, Setup );
-	};
+	void FillSetupRegistry( const str::string_ &Id );
 
-	E_AUTO( setup_registry );
+	void FillSetupRegistry( void );
+
+	void ReportIfNoSetupId( void );
 
 # if 0
 	void FillRegistryWithSetup(

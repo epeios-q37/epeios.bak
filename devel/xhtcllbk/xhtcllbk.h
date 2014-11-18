@@ -143,6 +143,9 @@ namespace xhtcllbk {
 
 	class upstream_callback__ {
 	protected:
+		virtual void XHTCLLBKGetLanguage(
+			token__ Token,
+			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetChildren(
 			token__ token,
 			const nchar__ *Id,
@@ -193,6 +196,14 @@ namespace xhtcllbk {
 		void Init( void )
 		{
 			//Standardisation.
+		}
+		const char *GetLanguage(
+			token__ Token,
+			TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKGetLanguage( Token, Buffer );
+
+			return Buffer;
 		}
 		void SetChildren(
 			token__ Token,

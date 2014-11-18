@@ -1531,22 +1531,28 @@ namespace rgstry {
 
 			Entries.Store( Entry, Level );
 		}
-		level__ PushImportedLevel(
+		level__ PushImported(
 			const registry_ &Registry,
 			row__ Root )
 		{
 			return _RawPushLevel( _entry__( Root, Registry ) );
 		}
-		level__ PushEmbeddedLevel( const name_ &Name = name() )
+		level__ PushEmbedded( const name_ &Name = name() )
 		{
 			return _RawPushLevel( _entry__( EmbeddedRegistry.CreateRegistry( Name ) ) );
 		}
-		void Push( const multi_level_registry_ &Registry )
+		void PushImported(
+			const multi_level_registry_ &Registry,
+			level__ Level )
+		{
+			PushImported( Registry.GetRegistry( Level ), Registry.GetRoot( Level ) );
+		}
+		void PushImported( const multi_level_registry_ &Registry )
 		{
 			level__ Level = Registry.First();
 
-			while ( Level != RGSTRY_UNDEFINED_LEVEL ) {
-				PushImportedLevel( Registry.GetRegistry( Level ), Registry.GetRoot( Level ) );
+			while ( Level != UndefinedLevel ) {
+				PushImported( Registry, Level );
 
 				Level = Registry.Next( Level );
 			}

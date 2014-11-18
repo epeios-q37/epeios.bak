@@ -152,14 +152,18 @@ ERREpilog
 
 void sclxhtml::SessionFormSubmission(
 	frdkrn::kernel___ &Kernel,
+	frdssn::session___ &Session,
 	xhtagent::agent_core___ &Agent,
 	const frdkrn::compatibility_informations__ &CompatibilityInformations )
 {
 ERRProlog
 	str::string BackendFeature;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	BackendFeature.Init();
 	sclfrntnd::Connect( Kernel, xhtfsf::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
+
+	Session.Open( Agent.GetLanguage( Buffer ) );
 ERRErr
 ERREnd
 ERREpilog

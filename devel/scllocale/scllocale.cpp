@@ -218,9 +218,9 @@ public:
 	{
 		Locale_.Init();
 
-		SoftwareLevel_ = Locale_.PushEmbeddedLevel( rgstry::name( "Software" ) );
-		ConfigurationLevel_ = Locale_.PushEmbeddedLevel( rgstry::name( "Configuration" ) );
-		ProjectLevel_ = Locale_.PushEmbeddedLevel( rgstry::name( "Project" ) );
+		SoftwareLevel_ = Locale_.PushEmbedded( rgstry::name( "Software" ) );
+		ConfigurationLevel_ = Locale_.PushEmbedded( rgstry::name( "Configuration" ) );
+		ProjectLevel_ = Locale_.PushEmbedded( rgstry::name( "Project" ) );
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 }

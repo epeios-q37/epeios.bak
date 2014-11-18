@@ -39,36 +39,33 @@ using namespace scltool;
 using cio::COut;
 using scllocale::GetLocale;
 
-static sclrgstry::setup_registry Registry_;
-
 sclrgstry::registry_ &scltool::GetRegistry( void )
 {
-	return Registry_;
+	return sclrgstry::GetCommonRegistry();
 }
 
 bso::bool__ scltool::IgnoreCLIArgs = false;
 
-static rgstry::level__ ArgumentsRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;	// Registry remplit par les arguments présent en ligne de commande.
-
-static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
-
-void scltool::ReportIfNoSetupId( void )
-{
-	if ( !Registry_.Exists( Setup_  ) )
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
-}
-
-
 str::string ParametersTag_;	// Voir tout en bas.
 
-rgstry::level__ scltool::GetSetupRegistryLevel( void )
+rgstry::level__ scltool::GetRegistryConfigurationLevel( void )
 {
-	return Registry_.GetSetup();
+	return sclrgstry::GetConfigurationLevel();
 }
 
-rgstry::level__ scltool::GetArgumentsRegistryLevel( void )
+rgstry::level__ scltool::GetRegistryProjectLevel( void )
 {
-	return ArgumentsRegistryLevel_;
+	return sclrgstry::GetProjectLevel();
+}
+
+rgstry::level__ scltool::GetRegistrySetupLevel( void )
+{
+	return sclrgstry::GetSetupLevel();
+}
+
+rgstry::level__ scltool::GetRegistryArgumentsLevel( void )
+{
+	return sclrgstry::GetArgumentsLevel();
 }
 
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
@@ -1360,7 +1357,7 @@ ERRProlog
 	str::string EntryPath;
 ERRBegin
 	EntryPath.Init();
-	Registry_.Delete( Command_.GetPath( EntryPath ), ArgumentsRegistryLevel_ );	// Pour pouvoir récupèrer la valeur correspondant à ce 'Path' tel qu'éventuellement défini dans le fichier de configuration.
+	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetArgumentsLevel() );	// Pour pouvoir récupèrer la valeur correspondant à ce 'Path' tel qu'éventuellement défini dans le fichier de configuration.
 
 	Ids.Init();
 	GetValues( ArgumentId_, Ids );
@@ -1478,16 +1475,8 @@ ERRProlog
 	str::string ProjectFileName;
 	str::string Command;
 	str::string ProjectId;
-	str::string SetupId;
 ERRBegin
 	sclmisc::Initialize( (const char *)NULL );
-
-	SetupId.Init();
-	OGetValue( Setup_, SetupId );
-
-	Registry_.Init( SetupId );
-
-	ArgumentsRegistryLevel_ = Registry_.PushEmbeddedLevel( str::string( "Arguments" ) );
 
 	FillRegistry_( IgnoreCLIArgs ? 1 : Oddities.argc, Oddities.argv );
 
@@ -1498,6 +1487,8 @@ ERRBegin
 
 	if ( ProjectFileName.Amount() != 0 )
 		sclmisc::LoadProject( ProjectFileName, ProjectId );
+
+	sclrgstry::FillSetupRegistry();
 
 	Command.Init();
 

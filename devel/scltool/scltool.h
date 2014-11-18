@@ -67,8 +67,6 @@ namespace scltool {
 		int argc;
 	};
 
-	void ReportIfNoSetupId( void );
-
 	// A définir par l'utilisateur.
 	void SCLTOOLMain(
 		const str::string_ &Command,
@@ -76,8 +74,10 @@ namespace scltool {
 
 	inline sclrgstry::registry_ &GetRegistry( void );
 
-	rgstry::level__ GetSetupRegistryLevel( void );
-	rgstry::level__ GetArgumentsRegistryLevel( void );
+	rgstry::level__ GetRegistryConfigurationLevel( void );
+	rgstry::level__ GetRegistryProjectLevel( void );
+	rgstry::level__ GetRegistrySetupLevel( void );
+	rgstry::level__ GetRegistryArgumentsLevel( void );
 
 	inline void SetValue(
 		const str::string_ &Value,

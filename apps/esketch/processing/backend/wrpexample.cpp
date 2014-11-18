@@ -136,12 +136,35 @@ ERREnd
 ERREpilog
 }
 
+DEC( ToUC )
+{
+	message__ Message = m_OK;
+ERRProlog
+	str::string String;
+ERRBegin
+	String.Init(Request.StringIn() );
+
+	str::ToUpper( String );
+
+	Request.StringOut() = String;
+ERRErr
+ERREnd
+	HANDLE( Message );
+ERREpilog
+}
+
 #define D( name )	#name, (void *)exported##name
 
 void wrpexample::myobject_::NOTIFY(
 	fblbkd::untyped_module &Module,
 	common::stuff___ &Data )
 {
+	Module.Add( D( ToUC ),
+			fblbkd::cString,
+		fblbkd::cEnd,
+			fblbkd::cString,
+		fblbkd::cEnd );
+
 	Module.Add( D( Test ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );

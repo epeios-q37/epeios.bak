@@ -43,7 +43,7 @@
 namespace xhtfsf {
 
 	E_CDEF( char *, BackendTypeId, "BackendType" );
-	E_CDEF( char *, DaemonBackendId, "DameonBackend" );
+	E_CDEF( char *, DaemonBackendId, "DaemonBackend" );
 	E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
 	E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
 

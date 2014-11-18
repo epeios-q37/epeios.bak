@@ -41,8 +41,10 @@ using namespace sclrgstry;
 
 static rgstry::multi_level_registry Registry_;
 
-static rgstry::level__ ConfigurationRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;
-static rgstry::level__ ProjectRegistryLevel_ = RGSTRY_UNDEFINED_LEVEL;
+static rgstry::level__ ConfigurationLevel_ = rgstry::UndefinedLevel;
+static rgstry::level__ ProjectLevel_ = rgstry::UndefinedLevel;
+static rgstry::level__ SetupLevel_ = rgstry::UndefinedLevel;
+static rgstry::level__ ArgumentsLevel_ = rgstry::UndefinedLevel;
 
 rgstry::entry___ sclrgstry::Parameters( ParametersTag );
 
@@ -54,19 +56,31 @@ rgstry::entry___ sclrgstry::Locale( "Locale", Definitions );
 
 static rgstry::entry___ DefaultSetup_( "@DefaultSetup", Parameters );
 
+static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
+
 registry_ &sclrgstry::GetCommonRegistry( void )
 {
 	return Registry_;
 }
 
-rgstry::level__ sclrgstry::GetConfigurationRegistryLevel( void )
+rgstry::level__ sclrgstry::GetConfigurationLevel( void )
 {
-	return ConfigurationRegistryLevel_;
+	return ConfigurationLevel_;
 }
 
-rgstry::level__ sclrgstry::GetProjectRegistryLevel( void )
+rgstry::level__ sclrgstry::GetProjectLevel( void )
 {
-	return ProjectRegistryLevel_;
+	return ProjectLevel_;
+}
+
+rgstry::level__ sclrgstry::GetSetupLevel( void )
+{
+	return SetupLevel_;
+}
+
+rgstry::level__ sclrgstry::GetArgumentsLevel( void )
+{
+	return ArgumentsLevel_;
 }
 
 const char *sclrgstry::GetLanguage(
@@ -87,9 +101,9 @@ static rgstry::status__ FillConfigurationRegistry_(
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	Registry_.Erase( ConfigurationRegistryLevel_ );
+	Registry_.Erase( ConfigurationLevel_ );
 
-	return Registry_.Fill( ConfigurationRegistryLevel_, Flow, xpp::criterions___( str::string( Directory ) ), RootPath );
+	return Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( str::string( Directory ) ), RootPath );
 }
 
 
@@ -135,7 +149,7 @@ void sclrgstry::LoadConfiguration(
 ERRProlog
 	rgstry::context___ Context;
 ERRBegin
-	Registry_.Erase( ConfigurationRegistryLevel_ );
+	Registry_.Erase( ConfigurationLevel_ );
 
 	Context.Init();
 	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK )
@@ -147,9 +161,8 @@ ERREpilog
 
 void sclrgstry::EraseProjectRegistry( void )
 {
-	Registry_.Erase( ProjectRegistryLevel_ );
+	Registry_.Erase( ProjectLevel_ );
 }
-
 
 #define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
 
@@ -172,16 +185,14 @@ ERRBegin
 
 	XFlow.Init( Flow, utf::f_Guess );
 	Context.Init();
-	if ( Registry_.Fill( ProjectRegistryLevel_, XFlow, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
+	if ( Registry_.Fill( ProjectLevel_, XFlow, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
-	Registry_.GetValue( ProjectRegistryLevel_, rgstry::entry___( "@Id" ), Id );
+	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
 ERRErr
 ERREnd
 ERREpilog
 }
-
-
 
 void sclrgstry::LoadProject(
 	const fnm::name___ &FileName,
@@ -198,6 +209,11 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
+}
+
+void sclrgstry::EraseSetupRegistry( void )
+{
+	Registry_.Erase( SetupLevel_ );
 }
 
 static const str::string_ &GetSelectedSetupContent_(
@@ -268,19 +284,29 @@ ERREnd
 ERREpilog
 }
 
-void sclrgstry::setup_registry_::Init( void )
+void sclrgstry::FillSetupRegistry( const str::string_ &Id )
 {
-	registry_::Init();
-	registry_::Push( Registry_ );
-
-	S_.Setup = registry_::PushEmbeddedLevel( rgstry::name( "Setup" ) );
+	FillRegistryWithSetup_( Registry_, SetupLevel_, Id );
 }
 
-void sclrgstry::setup_registry_::Init( const str::string_ &SetupId )
+void sclrgstry::FillSetupRegistry( void )
 {
-	Init();
+ERRProlog
+	str::string Id;
+ERRBegin
+	Id.Init();
+	OGetValue( Registry_, Setup_, Id );
 
-	FillRegistryWithSetup_( *this, S_.Setup, SetupId );
+	FillSetupRegistry( Id );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void sclrgstry::ReportIfNoSetupId( void )
+{
+	if ( !Registry_.Exists( Setup_  ) )
+		ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
 }
 
 bso::bool__ sclrgstry::BGetValue(
@@ -604,8 +630,10 @@ public:
 	{
 		Registry_.Init();
 
-		ConfigurationRegistryLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Configuration" ) );
-		ProjectRegistryLevel_ = Registry_.PushEmbeddedLevel( rgstry::name( "Project" ) );
+		ConfigurationLevel_ = Registry_.PushEmbedded( rgstry::name( "Configuration" ) );
+		ProjectLevel_ = Registry_.PushEmbedded( rgstry::name( "Project" ) );
+		SetupLevel_ = Registry_.PushEmbedded( rgstry::name( "Setup" ) );
+		ArgumentsLevel_ = Registry_.PushEmbedded( rgstry::name( "Arguments" ) );
 
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */

@@ -175,8 +175,8 @@ namespace frdrgy {
 		{
 			_registry_::Init();
 
-			_registry_::Push( Registry );
-			S_.Session= _registry_::PushEmbeddedLevel( rgstry::name( "Session" ) );
+			_registry_::PushImported( Registry );
+			S_.Session= _registry_::PushEmbedded( rgstry::name( "Session" ) );
 		}
 		void DumpSession(
 			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.

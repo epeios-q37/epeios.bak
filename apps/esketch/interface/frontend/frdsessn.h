@@ -53,7 +53,7 @@ namespace frdsessn {
 	protected:
 		virtual void FRDSSNOpen( const char *Language ) override
 		{
-			_Object.Init( _Kernel->MyObject );
+			_Object.Init( _K().MyObject );
 		}
 		virtual void FRDSSNClose( void ) override
 		{
@@ -70,6 +70,18 @@ namespace frdsessn {
 		{
 			_Kernel = &Kernel;
 			_session___::Init( Kernel );
+		}
+		str::string_ &ToUpper( str::string_ &String )
+		{
+			str::string Result;
+
+			Result.Init();
+
+			_Object.ToUC( String, Result );
+
+			String = Result;
+
+			return String;
 		}
 	};
 }

@@ -781,7 +781,7 @@ bso::bool__ fblbkd::backend___::_TestCompatibility(
 {
 	bso::bool__ Success = true;
 ERRProlog
-	char RemoteBackendLabel[10];
+	char RemoteBackendLabel[20];
 	char Language[10];
 	char RemoteProtocolVersion[10];
 	char RemoteAPIVersion[10];

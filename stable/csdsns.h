@@ -124,10 +124,10 @@ ERREpilog
 		struct s
 		{
 			user_pointers_::s UPs;
-			mtx::handler__ Mutex;
+			mtx::handler___ Mutex;
 			struct log__ {
 				log_functions__ *Functions;
-				mtx::handler__ Mutex;
+				mtx::handler___ Mutex;
 			} Log;
 		} &S_;
 		user_pointers_ UPs;
@@ -138,13 +138,13 @@ ERREpilog
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( S_.Mutex != MTX_INVALID_HANDLER )
+				if ( S_.Mutex != mtx::UndefinedHandler )
 					mtx::Delete( S_.Mutex );
 			}
 
 			UPs.reset( P );
-			S_.Mutex = MTX_INVALID_HANDLER;
-			S_.Log.Mutex = MTX_INVALID_HANDLER;
+			S_.Mutex = mtx::UndefinedHandler;
+			S_.Log.Mutex = mtx::UndefinedHandler;
 			S_.Log.Functions = NULL;
 
 		}

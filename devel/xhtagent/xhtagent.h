@@ -90,6 +90,10 @@ namespace xhtagent {
 			if ( !_Manager.Add( EventName, Handler ) )
 				ERRFwk();
 		}
+		const char *GetLanguage( TOL_CBUFFER___ &Buffer )
+		{
+			return _C().GetLanguage( _Token, Buffer );
+		}
 		void ExecuteJavascript( const nstring___ &Script )
 		{
 			return _C().ExecuteJavascript( _Token, Script );

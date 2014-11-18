@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd (Version) (Build : Oct 31 2013 11:45:16 MSVC_IA-32)
+	API from : esketchbkd (Version) (Build : Nov 18 2014 10:33:34 MSVC_IA-32)
 
-	This file was generated using eGetAPI 20131021 (Build Oct 31 2013 11:23:15 MSVC_IA-32)
+	This file was generated using eGetAPI 20140119 (Build Nov 18 2014 10:25:47 MSVC_IA-32)
 */
 
 #ifndef ESKETCH__INC
@@ -78,7 +78,7 @@ namespace esketch {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[1];
+		fblfrd::command__ _Commands[2];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -93,6 +93,7 @@ namespace esketch {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8_t__ Parameters[] = {
+				21, 0, 21, 
 				0, 
 			};
 
@@ -103,14 +104,19 @@ namespace esketch {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
+			CommandDetail.Name = "ToUC";;
+			CommandDetail.Casts.Append( Parameters + 0, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "Test";;
-			CommandDetail.Casts.Append( Parameters + 0, 1 );
+			CommandDetail.Casts.Append( Parameters + 3, 1 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 1, _Commands );
+			Commands.Recall( 0, 2, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -159,9 +165,22 @@ namespace esketch {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ Test( void ) const
+		fblovl::reply__ ToUC( 
+			const fblfrd::string_ &In1,
+			fblfrd::string_ &Out1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
+			Common_->Frontend().StringIn( In1 );
+
+			Common_->Frontend().EndOfInParameters();
+
+			Common_->Frontend().StringOut( Out1 );
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ Test( void ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 
 			Common_->Frontend().EndOfInParameters();
 

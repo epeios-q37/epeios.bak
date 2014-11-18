@@ -184,6 +184,7 @@ namespace sclxhtml {
 
 	void SessionFormSubmission(
 		frdkrn::kernel___ &Kernel,
+		frdssn::session___ &Session,
 		xhtagent::agent_core___ &Agent,
 		const frdkrn::compatibility_informations__ &CompatibilityInformations );
 

@@ -366,7 +366,7 @@ namespace frdkrn {
 			_ErrorMeaning.Init();
 
 			_Locale.Init();
-			_Locale.Push( Locale );
+			_Locale.PushImported( Locale );
 
 			_Language = Language;
 

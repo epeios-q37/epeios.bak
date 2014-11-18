@@ -213,7 +213,7 @@ ERRBegin
 	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par défaut.
 		Language.Convert( Language_ );
 
-	LoadLocale_( sclrgstry::GetConfigurationRegistryLevel(), scllocale::tConfiguration, RegistryFlow.Format());
+	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format());
 ERRErr
 ERREnd
 ERREpilog
@@ -393,7 +393,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tProject, utf::f_Default );
+	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tProject, utf::f_Default );
 }
 
 void sclmisc::LoadProject(
@@ -402,7 +402,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetProjectRegistryLevel(), scllocale::tProject, utf::f_Default );
+	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tProject, utf::f_Default );
 }
 
 void sclmisc::CreateBackupFile(

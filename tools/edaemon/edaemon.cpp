@@ -372,13 +372,19 @@ ERRProlog
 ERRBegin
 	atexit( ExitFunction_ );
 
+//	scltool::GetRegistry().Dump( sclrgstry::GetProjectLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+
+	cio::COut.Commit();
+
 	Go_( registry::GetModuleLogFileName( Buffer ), GetLogFileHandling_() );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-void scltool::SCLTOOLMain( const str::string_ &Command )
+void scltool::SCLTOOLMain(
+	const str::string_ &Command,
+	const scltool::oddities__ &Oddities )
 {
 ERRProlog
 ERRBegin

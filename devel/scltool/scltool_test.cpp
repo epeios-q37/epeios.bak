@@ -42,13 +42,13 @@ ERRProlog
 	rgstry::level__ Level = E_NIL;
 ERRBegin
 	cio::COut << txf::tab << "----- Configuration registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( sclrgstry::GetConfigurationRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( GetRegistryConfigurationLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Project registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( sclrgstry::GetProjectRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( GetRegistryProjectLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Setup registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( scltool::GetSetupRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( GetRegistrySetupLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Arguments registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( scltool::GetArgumentsRegistryLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	scltool::GetRegistry().Dump( GetRegistryArgumentsLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;
 ERRErr
