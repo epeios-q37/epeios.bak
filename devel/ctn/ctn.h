@@ -63,20 +63,16 @@ namespace ctn {
 			sdr::size__ Size,
 			aem::mode__ Mode )
 		{
-#ifdef CTN_DBG
 			FlushTest();
-#endif
+
 			Dynamics.Allocate( Size, Mode );
 
 			if ( amount_extent_manager_<r>::Handle( Size, Mode ) ) {
 				Statics.Allocate( Size );
 			}
 		}
-
-#ifdef CTN_DBG
 	protected:
 		virtual bso::bool__ IsFlushed( void ) const = 0;
-#endif
 	public:
 		//r All the static parts.
 		tys::E_STORAGEt_( st, r ) Statics;
@@ -108,10 +104,9 @@ namespace ctn {
 		}
 		basic_container_ &operator =( const basic_container_ &O )
 		{
-#ifdef CTN_DBG
 			FlushTest();
 			O.FlushTest();
-#endif
+
 			size__ Size = O.Amount();
 
 			Dynamics.Copy( O.Dynamics, Size );
@@ -136,14 +131,14 @@ namespace ctn {
 			Statics.read( IFlow );
 		}
 #endif
-#ifdef CTN_DBG
 		//f Debug feature. If the container is not flushed, throw an error.
 		void FlushTest( void ) const
 		{
+# ifdef CTN_DBG
 			if ( !IsFlushed() )
 				ERRFwk();
+# endif
 		}
-#endif
 		void SubInit( sdr::size__ Size )	// Obsolete ?
 		{
 			amount_extent_manager_<r>::Init();
@@ -152,9 +147,8 @@ namespace ctn {
 		//f Initialization.
 		void Init( void )
 		{
-#ifdef CTN_DBG
 			FlushTest();
-#endif
+
 			Dynamics.Init();
 			Statics.Init();
 
@@ -184,9 +178,8 @@ namespace ctn {
 			const st &ST,
 			aem::mode__ Mode )
 		{
-#ifdef CTN_DBG
 			FlushTest();
-#endif
+
 			sdr::size__ AncCap;
 			sdr::size__ Amount = Size;
 
@@ -196,10 +189,9 @@ namespace ctn {
 
 			if ( AncCap < Size )
 			{
-#ifdef CTN_DBG
 				if ( &ST == NULL )
 					ERRFwk();
-#endif
+
 				if ( ( Size - AncCap ) > 1 )
 					Statics.Store( ST, AncCap, Size - AncCap );
 				else
@@ -222,10 +214,10 @@ namespace ctn {
 			sdr::size__ Size,
 			aem::mode__ Mode )
 		{
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( Size > amount_extent_manager_<r>::Amount() )
 				ERRFwk();
-#endif
+# endif
 			Allocate( Size, *(st *)NULL, Mode );	// 'NULL' because this parameter is used only when size increased.
 		}
 		// Comme 'ecrire()', sauf pour la multimémoire, qui contient la partie dynamique.
@@ -247,9 +239,8 @@ namespace ctn {
 #if 0
 		void Adjust( void )
 		{
-#ifdef CTN_DBG
 			FlushTest();
-#endif
+
 			sdr::size__ Extent = this->Extent();
 
 			if ( amount_extent_manager_<r>::Force( Size ) ) {
@@ -264,9 +255,8 @@ namespace ctn {
 			sdr::size__ Amount,
 			aem::mode__ Mode )
 		{
-#ifdef CTN_DBG
 			FlushTest();
-#endif
+
 			sdr::size__ CurrentAmount = amount_extent_manager_<r>::Amount();
 			sdr::size__ NewAmount = CurrentAmount - Amount;
 
@@ -280,10 +270,10 @@ namespace ctn {
 			sdr::size__ Amount = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
-	#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( Amount > this->Amount() )
 				ERRPrm();
-	#endif
+# endif
 			DecreaseTo( this->Amount() - Amount, Mode );
 		}
 		//f Remove objects all objects beginning at 'Row'.
@@ -291,10 +281,10 @@ namespace ctn {
 			r Row,
 			aem::mode__ Mode = aem::m_Default )
 		{
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( !Exists( Row ) )
 				ERRFwk();
-#endif
+# endif
 			DecreaseTo( amount_extent_manager_<r>::Amount() - *Row, Mode );
 		}
 		//f Remove all objects but 'Amount()' objects from 'Row'. The size of the bunch is readjusted.
@@ -415,10 +405,10 @@ namespace ctn {
 		}
 		bso::bool__ IsPersistent( void ) const
 		{
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( _Statics.IsPersistent() != _Dynamics.IsPersistent() )
 				ERRFwk();
-#endif
+# endif
 			return _Statics.IsPersistent();
 		}
 		void Drop( void )
@@ -502,10 +492,10 @@ namespace ctn {
 		void Vider_( void )
 		{
 			if ( !Vide_() ) {
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 				if ( Conteneur_ == NULL )
 				ERRFwk();
-#endif
+# endif
 				Conteneur_->Statics.Store( ctn_S_, *Pilote_.Index() );
 			}
 
@@ -553,26 +543,25 @@ namespace ctn {
 		// Rattache au conteneur 'Conteneur'.
 		void Init( basic_container_<st,r> *Conteneur )
 		{
-#ifdef CTN_DBG
 			Conteneur->FlushTest();
-#endif
+
 			Conteneur_ = Conteneur;
 			Pilote_.Init( Conteneur->Dynamics );
 		}
 		//* Cale l'élément sur l'élément du conteneur à la position 'Position'
 		void Set( r Position )
 		{
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( Position == E_NIL )
 				ERRPrm();
-#endif
+# endif
 			if ( Pilote_.Index() != *Position )
 			{
 				Vider_();
-	#ifdef CTN_DBG
+# ifdef CTN_DBG
 				if ( Conteneur_ == NULL )
 					ERRFwk();
-	#endif
+# endif
 				Conteneur_->Statics.Recall( Position, ctn_S_ );
 				Pilote_.Index( *Position );
 			}
@@ -650,26 +639,25 @@ namespace ctn {
 	*/	// Rattache au conteneur 'Conteneur'.
 		void Init( const basic_container_<st,r> &Conteneur )
 		{
-#ifdef CTN_DBG
 			Conteneur.FlushTest();
-#endif
+
 			Conteneur_ = &Conteneur;
 			Pilote_.Init( Conteneur.Dynamics );
 		}
 		//* Cale l'élément sur l'élément du conteneur à la position 'Position'
 		void Set( r Position )
 		{
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( Position == E_NIL )
 				ERRPrm();
-#endif
+# endif
 			if ( *Pilote_.Index() != *Position )
 			{
 				Vider_();
-	#ifdef CTN_DBG
+# ifdef CTN_DBG
 				if ( Conteneur_ == NULL )
 					ERRFwk();
-	#endif
+# endif
 				Conteneur_->Statics.Recall( Position, ctn_S_ );
 				Pilote_.Index( *Position );
 			}
@@ -747,18 +735,16 @@ namespace ctn {
 		//f Return the object at current position.
 		t &operator()( void )
 		{
-#ifdef CTN_DBG
 			if ( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::IsFlushed() )
 				ERRFwk();
-#endif
+
 			return Objet_;
 		}
 		const t &operator()( void ) const
 		{
-#ifdef CTN_DBG
 			if ( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::IsFlushed() )
 				ERRFwk();
-#endif
+
 			return Objet_;
 		}
 	};
@@ -805,27 +791,26 @@ namespace ctn {
 		}
 		t &operator()( void )
 		{
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( item_base_const__< item_mono_statique__< typename_ t::s >, r >::IsEmpty() )
 				ERRFwk();
-#endif
+# endif
 			return Objet_;
 		}
 		//f Return the object at current position.
 		const t &operator()( void ) const
 		{
-#ifdef CTN_DBG
+# ifdef CTN_DBG
 			if ( item_base_const__< item_mono_statique__< typename_ t::s >, r >::IsEmpty() )
 				ERRFwk();
-#endif
+# endif
 			return Objet_;
 		}
 		//f Initialization with container 'Container'.
 		void Init(const mono_container_< t , r > &Container )
 		{
-#ifdef CTN_DBG
 			Container.FlushTest();
-#endif
+
 			item_base_const__< item_mono_statique__< typename_ t::s >, r >::Init( Container );
 		}
 	};
@@ -900,7 +885,7 @@ namespace ctn {
 			Ponctuel_.Flush();
 		}
 		//f Return true if the container with its item, false otherwise.
-		bso::bool__ IsFlushed( void ) const
+		bso::bool__ IsFlushed( void ) const override
 		{
 			return Ponctuel_.IsFlushed();
 		}
@@ -910,10 +895,8 @@ namespace ctn {
 			r Position,
 			E_CMITEMt( t, r ) &Item ) const
 		{
-#ifdef CTN_DBG
-			if ( !IsFlushed() )
-				ERRFwk();
-#endif
+			FlushTest();
+
 			Item.Init( *this );
 
 			return Item( Position );
@@ -960,10 +943,9 @@ namespace ctn {
 			r Row = 0,
 			aem::mode__ Mode = aem::m_Default )
 		{
-#ifdef CTN_DBG
 			if ( !IsFlushed() )
 				ERRFwk();
-#endif
+
 			if ( ( amount_extent_manager_<r>::Amount( )== 0 ) 
 				  && ( ( Row == 0) || ( Row == E_NIL ) ) )
 				Append( Object, Mode );
@@ -1019,10 +1001,8 @@ namespace ctn {
 			sdr::size__ Amount = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
-#ifdef CTN_DBG
-			if ( !IsFlushed() )
-				ERRFwk();
-#endif
+			FlushTest();
+
 			basic_container_< item_mono_statique__< typename_ t::s >, r >::Remove( Position, Amount, Mode );
 		}
 		r Index( void ) const
@@ -1098,9 +1078,8 @@ namespace ctn {
 		//f Initialize with container 'Container', in mode 'Mode'.
 		void Init( basic_container_< item_multi_statique__< typename t::s >, r > &Container )
 		{
-#ifdef CTN_DBG
 			Container.FlushTest();
-#endif
+
 			AStorage.Init();
 			item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::Init( Container );
 		}
@@ -1116,18 +1095,16 @@ namespace ctn {
 		}
 		t &operator()( void )
 		{
-#ifdef CTN_DBG
 			if ( item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::IsFlushed() )
 				ERRFwk();
-#endif
+
 			return Objet_;
 		}
 		const t &operator()( void ) const
 		{
-#ifdef CTN_DBG
 			if ( item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::IsFlushed() )
 				ERRFwk();
-#endif
+
 			return Objet_;
 		}
 	};
@@ -1169,9 +1146,8 @@ namespace ctn {
 		//f Initializing with container 'Container'.
 		void Init( const basic_container_< item_multi_statique__<typename t::s>, r > &Container )
 		{
-#ifdef CTN_DBG
 			Container.FlushTest();
-#endif
+
 //			AStorage.Init();
 			item_base_const__< item_multi_statique__< typename_ t::s >, r >::Init( Container );
 		}
@@ -1262,7 +1238,7 @@ namespace ctn {
 			Ponctuel_.Flush();
 		}
 		//f Return true if the container with its item, false otherwise.
-		bso::bool__ IsFlushed( void ) const
+		bso::bool__ IsFlushed( void ) const override
 		{
 			return Ponctuel_.IsFlushed();
 		}
@@ -1272,10 +1248,9 @@ namespace ctn {
 			r Position,
 			E_CITEMt( t, r ) &Item ) const
 		{
-#ifdef CTN_DBG
 			if ( !IsFlushed() )
 				ERRFwk();
-#endif
+
 			Item.Init( *this );
 
 			return Item( Position );
@@ -1326,10 +1301,9 @@ namespace ctn {
 				 && ( ( Row == 0) || ( Row == E_NIL ) ) )
 				Append( Object, Mode );
 			else {
-#ifdef CTN_DBG
 				if ( !IsFlushed() )
 					ERRFwk();
-#endif
+
 				E_CITEMt( t, r ) E;
 
 				basic_container_< item_multi_statique__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
@@ -1380,10 +1354,9 @@ namespace ctn {
 			sdr::size__ Amount = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
-#ifdef CTN_DBG
 			if ( !IsFlushed() )
 				ERRFwk();
-#endif
+
 			basic_container_< item_multi_statique__< typename_ t::s >, r >::Remove( Position, Amount, Mode );
 		}
 		r Index( void ) const

@@ -44,7 +44,7 @@ sclrgstry::registry_ &scltool::GetRegistry( void )
 	return sclrgstry::GetCommonRegistry();
 }
 
-bso::bool__ scltool::IgnoreCLIArgs = false;
+bso::bool__ scltool::IgnoreUnknownArguments = false;
 
 str::string ParametersTag_;	// Voir tout en bas.
 
@@ -474,14 +474,14 @@ ERREpilog
 	return Id;
 }
 
-E_CDEF(bso::char__, Sharp_, '#' );
+E_CDEF(bso::char__, ExplicitOptionMarker_, '#' );	// Marqueur d'une option dans laquelle on précise explicitement le chemin.
 
 static const str::string_ &GetId_(
 	const str::string_ &Name,
 	stamp__ Stamp,
 	str::string_ &Id )
 {
-	if ( Name(Name.First()) != Sharp_ ) {
+	if ( Name(Name.First()) != ExplicitOptionMarker_ ) {
 		switch ( Stamp ) {
 		case sShort:
 			GetId_( Name, ShortTaggedArgumentId_, Id );
@@ -682,9 +682,10 @@ ERREpilog
 
 static const str::string_ &GetPath_(
 	const str::string_ &Id,
-	str::string_ &Path )
+	str::string_ &Path,
+	bso::bool__ Short )	// Si à 'true', retourne la version raccourcie.
 {
-	if ( Id( Id.First() ) != Sharp_ ) {
+	if ( Id( Id.First() ) != ExplicitOptionMarker_ ) {
 		GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
 
 		if ( Path.Amount() != 0  )
@@ -715,7 +716,8 @@ static const str::string_ &GetCommand_( str::string_ &Command )
 
 static void FillRegistry_(
 	sdr::row__,	// Pas utile.
-	const flag_ &Flag )
+	const flag_ &Flag,
+	bso::bool__ IgnoreUnknownArguments )
 {
 ERRProlog
 	str::string Id;
@@ -729,30 +731,34 @@ ERRBegin
 	Id.Init();
 
 	if ( GetId_( Flag, Id ).Amount() == 0 ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLTOOL_NAME "_UnknownFlag" );
+		if ( IgnoreUnknownArguments )
+			ERRReturn;
+		else {
+			Meaning.Init();
+			Meaning.SetValue( SCLTOOL_NAME "_UnknownFlag" );
 
-		Name.Init();
-		switch ( Flag.Stamp() ) {
-		case sShort:
-			Name.Append( '-' );
-			break;
-		case sLong:
-			Name.Append( "--" );
-			break;
-		default:
-			ERRFwk();
-			break;
+			Name.Init();
+			switch ( Flag.Stamp() ) {
+			case sShort:
+				Name.Append( '-' );
+				break;
+			case sLong:
+				Name.Append( "--" );
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
+			Name.Append( Flag.Name );
+			Meaning.AddTag( Name );
+
+			sclerror::SetMeaning( Meaning );
+			ERRAbort();
 		}
-		Name.Append( Flag.Name );
-		Meaning.AddTag( Name );
-
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
 	}
 
 	Path.Init();
-	GetPath_( Id, Path );
+	GetPath_( Id, Path, false );
 
 #if 1
 	if ( Path.Amount() == 0 )	// Il s'agit d'une commande.
@@ -795,7 +801,8 @@ ERREpilog
 
 static void FillRegistry_(
 	sdr::row__,	// Pas utile.
-	const option_ &Option )
+	const option_ &Option,
+	bso::bool__ IgnoreUnknownArguments )
 {
 ERRProlog
 	str::string Id;
@@ -808,30 +815,34 @@ ERRBegin
 	Id.Init();
 
 	if ( GetId_( Option, Id ).Amount() == 0 ) {
-		Meaning.Init();
-		Meaning.SetValue( SCLTOOL_NAME "_UnknownOption" );
+		if ( IgnoreUnknownArguments )
+			ERRReturn;
+		else {
+			Meaning.Init();
+			Meaning.SetValue( SCLTOOL_NAME "_UnknownOption" );
 
-		Name.Init();
-		switch ( Option.Stamp() ) {
-		case sShort:
-			Name.Append( '-' );
-			break;
-		case sLong:
-			Name.Append( "--" );
-			break;
-		default:
-			ERRFwk();
-			break;
+			Name.Init();
+			switch ( Option.Stamp() ) {
+			case sShort:
+				Name.Append( '-' );
+				break;
+			case sLong:
+				Name.Append( "--" );
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
+			Name.Append( Option.Name );
+			Meaning.AddTag( Name );
+
+			sclerror::SetMeaning( Meaning );
+			ERRAbort();
 		}
-		Name.Append( Option.Name );
-		Meaning.AddTag( Name );
-
-		sclerror::SetMeaning( Meaning );
-		ERRAbort();
 	}
 
 	Path.Init();
-	GetPath_( Id, Path );
+	GetPath_( Id, Path, false );
 
 	if ( Path.Amount() == 0 ) {
 		Meaning.Init();
@@ -857,7 +868,8 @@ ERREpilog
 
 static void FillRegistry_(
 	sdr::row__ Index,
-	const argument_ &Argument )
+	const argument_ &Argument,
+	bso::bool__ IgnoreUnknownArguments )
 {
 ERRProlog
 	str::string Id;
@@ -867,6 +879,9 @@ ERRProlog
 	sdr::row__ Error = E_NIL;
 	bso::integer_buffer__ Buffer;
 ERRBegin
+	if ( IgnoreUnknownArguments )
+		ERRReturn;
+
 	Id.Init();
 
 	Command.Init();
@@ -886,7 +901,7 @@ ERRBegin
 	Tags.Append( Id );
 
 	Path.Init();
-	GetPath_( Id, Path );
+	GetPath_( Id, Path, false );
 
 	if ( Path.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLTOOL_NAME "_NoPathForArgument", Id );
@@ -900,7 +915,9 @@ ERREnd
 ERREpilog
 }
 
-template <typename c, typename i> static void FillRegistry_(const c &Conteneur)
+template <typename c, typename i> static void FillRegistry_(
+	const c &Conteneur,
+	bso::bool__ IgnoreUnknownArguments )
 {
 	i Item;
 	sdr::row__ Row = Conteneur.First();
@@ -908,7 +925,7 @@ template <typename c, typename i> static void FillRegistry_(const c &Conteneur)
 	Item.Init( Conteneur );
 
 	while ( Row != E_NIL ) {
-		FillRegistry_( Row, Item( Row ) );
+		FillRegistry_( Row, Item( Row ), IgnoreUnknownArguments );
 
 		Row = Conteneur.Next( Row );
 	}
@@ -917,11 +934,12 @@ template <typename c, typename i> static void FillRegistry_(const c &Conteneur)
 static void FillRegistry_(
 	flags_ &Flags,
 	options_ &Options,
-	arguments_ &Arguments )
+	arguments_ &Arguments,
+	bso::bool__ IgnoreUnknownArguments )
 {
-	FillRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags );
-	FillRegistry_<options_, ctn::E_CITEM( option_ )>( Options );
-	FillRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( Arguments);
+	FillRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags, IgnoreUnknownArguments );
+	FillRegistry_<options_, ctn::E_CITEM( option_ )>( Options, IgnoreUnknownArguments );
+	FillRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( Arguments, IgnoreUnknownArguments );
 }
 
 #define CLI_ARGUMENTS	"_/CLIArguments"
@@ -1052,7 +1070,7 @@ ERRProlog
 	str::string Dummy;
 ERRBegin
 	Dummy.Init();
-	GetPath_( Id, Dummy );
+	GetPath_( Id, Dummy, false );
 
 	if ( Dummy.Amount() == 0 )
 		Type = tCommand;
@@ -1192,7 +1210,7 @@ ERRBegin
 	cio::COut << GetShortLong_( Id, ShortLong ) << ' ';
 
 	Path.Init();
-	cio::COut << "('" << GetPath_( Id, Path ) << '\'';
+	cio::COut << "('" << GetPath_( Id, Path, true ) << '\'';
 
 	Value.Init();
 	cio::COut << "='" << GetValue_( Id, Value ) << "')";
@@ -1221,7 +1239,7 @@ ERRBegin
 	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
 
 	Path.Init();
-	cio::COut << "('" << GetPath_( Id, Path ) << '\'';
+	cio::COut << "('" << GetPath_( Id, Path, true ) << '\'';
 
 	Value.Init();
 	OGetValue( rgstry::entry___( Path.Convert( Buffer ) ), Value );
@@ -1252,7 +1270,7 @@ ERRBegin
 	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
 
 	Path.Init();
-	cio::COut << "('" << GetPath_( Id, Path ) << "')";
+	cio::COut << "('" << GetPath_( Id, Path, true ) << "')";
 
 	cio::COut << ':' << txf::nl;
 
@@ -1430,7 +1448,8 @@ static void DumpInRegistry_(
 
 static void FillRegistry_(
 	int argc,
-	ntvstr::char__ *argv[] )
+	ntvstr::char__ *argv[],
+	bso::bool__ IgnoreUnknownArguments )
 {
 ERRProlog
 	flags Flags;
@@ -1443,7 +1462,7 @@ ERRBegin
 
 	Fill_( argc, argv, Flags, Options, Arguments );
 
-	FillRegistry_( Flags, Options, Arguments );
+	FillRegistry_( Flags, Options, Arguments, IgnoreUnknownArguments );
 
 	DumpInRegistry_( argc, argv, Flags, Options, Arguments );
 ERRErr
@@ -1478,7 +1497,7 @@ ERRProlog
 ERRBegin
 	sclmisc::Initialize( (const char *)NULL );
 
-	FillRegistry_( IgnoreCLIArgs ? 1 : Oddities.argc, Oddities.argv );
+	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
 	ProjectFileName.Init();
 	OGetValue( ProjectFileName_, ProjectFileName );

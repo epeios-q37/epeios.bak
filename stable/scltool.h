@@ -225,7 +225,7 @@ namespace scltool {
 		return scltool::OGetValue( entry, Value, Missing );\
 	}
 
-	extern bso::bool__ IgnoreCLIArgs;
+	extern bso::bool__ IgnoreUnknownArguments;	// A 'false' par défaut, mais peut être modifié par l'utilisateur (p. ex. dans l'utilisation de 'CEF').
 }
 
 				  /********************************************/
