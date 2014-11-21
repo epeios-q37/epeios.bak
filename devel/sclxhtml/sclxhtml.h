@@ -55,14 +55,14 @@ namespace sclxhtml {
 	private:
 		session *_Session;
 	protected:
-		virtual void SCLXHTMLHandle( void ) = 0;
-		virtual void XHTCLLBKHandle( void )
+		virtual void SCLXHTMLHandle( const char *Id ) = 0;
+		virtual void XHTCLLBKHandle( const char *Id )
 		{
 		ERRProlog
 			str::string Message;
 			err::buffer__ Buffer;
 		ERRBegin
-			SCLXHTMLHandle();
+			SCLXHTMLHandle( Id );
 		ERRErr
 			switch ( ERRType ) {
 			case err::t_Abort:

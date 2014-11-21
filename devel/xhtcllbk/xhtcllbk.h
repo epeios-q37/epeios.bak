@@ -66,7 +66,7 @@ namespace xhtcllbk {
 	class event_handler__
 	{
 	protected:
-		virtual void XHTCLLBKHandle( void ) = 0;
+		virtual void XHTCLLBKHandle( const char *Id ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -77,9 +77,9 @@ namespace xhtcllbk {
 		{
 			// Standardisation.
 		}
-		void Handle( void )
+		void Handle( const char *Id )
 		{
-			XHTCLLBKHandle();
+			XHTCLLBKHandle( Id );
 		}
 	};
 
@@ -335,14 +335,16 @@ namespace xhtcllbk {
 			avoir été lancé avec les mêmes options que le compilateur aval.
 		*/
 		// 'const char *' pour avoir une strucutre de données simple, car donnée passée entre codes compilés séparément.
-		virtual void Handle( const char *EventName )
+		virtual void Handle(
+			const char *EventName,
+			const char *Id )
 		{
 			event_handler__ *Handler = _M().Get( str::string(  EventName ) );
 
 			if ( Handler == NULL )
 				ERRFwk();
 
-			Handler->Handle();
+			Handler->Handle( Id );
 		}
 	};
 
