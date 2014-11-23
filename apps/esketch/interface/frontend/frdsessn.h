@@ -83,6 +83,10 @@ namespace frdsessn {
 
 			return String;
 		}
+		frdkernl::kernel___ Kernel( void )
+		{
+			return _K();
+		}
 	};
 }
 

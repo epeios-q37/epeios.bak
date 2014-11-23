@@ -76,11 +76,12 @@ namespace frdkernl {
 			const rgstry::multi_level_registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
-			frdkrn::reporting_callbacks__ &ReportingCallbacks )
+			frdkrn::reporting_callbacks__ &ReportingCallbacks,
+			const char *LauncherIdentification )
 		{
 			// Les autres objets sont initialisés lors de la connection.
 
-			return _kernel___::Init( Registry, Locale, Language, ReportingCallbacks );
+			return _kernel___::Init( Registry, Locale, Language, ReportingCallbacks, LauncherIdentification );
 		}
 		void Report( const char *Message )
 		{

@@ -60,18 +60,12 @@ static void Merge_(
 
 	String.Init( Strings );
 
-	if ( Row != E_NIL ) {
-		Put_( String( Row ), Flow, Pattern );
-
-		Row = Strings.Next( Row );
-	}
-
 	while ( Row != E_NIL ) {
-		Flow << Pattern[0];	// Séparateur d'entrées.
-
 		Put_( String( Row ), Flow, Pattern );
 
 		Row = Strings.Next( Row );
+
+		Flow << Pattern[0];	// Séparateur d'entrées.
 	}
 }
 
@@ -102,18 +96,12 @@ void strmrg::Merge(
 
 	Strings.Init( Table );
 
-	if ( Row != E_NIL ) {
-		Merge_( Strings( Row ), Flow, Pattern );
-
-		Row = Table.Next( Row );
-	}
-
 	while ( Row != E_NIL ) {
-		Flow << FieldSeparator;
-
 		Merge_( Strings( Row ), Flow, Pattern );
 
 		Row = Table.Next( Row );
+
+		Flow << FieldSeparator;
 	}
 }
 

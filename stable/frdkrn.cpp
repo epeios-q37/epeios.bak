@@ -90,6 +90,113 @@ const char *frdkrn::GetLabel( recap__ Recap )
 	return NULL;	// Pour éviter un 'warning'.
 }
 
+static void GetAuthorText_(
+	const char *Name,
+	const char *Contact,
+	const lcl::locale_ &Locale,
+	const char *Language,
+	str::string_ &Text )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+	Meaning.SetValue( FRDKRN_NAME "_AuthorText" );
+	Meaning.AddTag( Name );
+	Meaning.AddTag( Contact );
+
+	Locale.GetTranslation( Meaning, Language, Text );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void GetAffiliationText_(
+	const char *Name,
+	const char *URL,
+	const lcl::locale_ &Locale,
+	const char *Language,
+	str::string_ &Text )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+	Meaning.SetValue( FRDKRN_NAME "_AffiliatedSoftwareText" );
+	Meaning.AddTag( Name );
+	Meaning.AddTag( URL );
+
+	Locale.GetTranslation( Meaning, Language, Text );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+const str::string_ &frdkrn::GetAboutText(
+	const char *BuildInformations,
+	const char *AppName,
+	const char *Version,
+	const char *AuthorName,
+	const char *AuthorContact,
+	const char *Copyright,
+	const char *SoftwareDetails,
+	const char *SoftwareURL,
+	kernel___ &Kernel,
+	str::string_ &Text )
+{
+ERRProlog
+	str::string AuthorText, ProjectAffiliationText, SoftwareAffiliationText, ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
+ERRBegin
+	Text.Append( AppName );
+	Text.Append( ' ' );
+	Text.Append( Version );
+	Text.Append( " Build " __DATE__ " " __TIME__ );
+	Text.Append( " (" );
+	Text.Append( BuildInformations );
+	Text.Append( ")\n\t" );
+
+	AuthorText.Init();
+	GetAuthorText_( AuthorName, AuthorContact, Kernel.Locale(), Kernel.Language(), AuthorText );
+	Text.Append( AuthorText );
+
+	Text.Append( "\nCopyright " );
+	Text.Append( Copyright );
+
+//	Text.Append( "\n\n\t\t" );
+	SoftwareAffiliationText.Init();
+	GetAffiliationText_( SoftwareDetails, SoftwareURL, Kernel.Locale(), Kernel.Language(), SoftwareAffiliationText );
+	Text.Append( SoftwareAffiliationText );
+	Text.Append( '.' );
+
+	Text.Append( "\n\n(" );
+	Text.Append( Kernel.LauncherIdentification() );
+	Text.Append( ")" );
+
+
+	if ( Kernel.IsConnected() ) {
+		Text.Append( '\n' );
+		Text.Append( '\n' );
+
+		ProtocolVersion.Init();
+		BackendLabel.Init();
+		APIVersion.Init();
+		BackendInformations.Init();
+		BackendCopyright.Init();
+		SoftwareInformations.Init();
+
+		Kernel.AboutBackend( ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
+
+		Text.Append( "Backend : " );
+		Text.Append( BackendInformations );
+		Text.Append( " (" );
+		Text.Append( SoftwareInformations );
+		Text.Append( ')' );
+	}
+ERRErr
+ERREnd
+ERREpilog
+	return Text;
+}
 
 #if FRDKRN__R_AMOUNT != 9
 # error "'report__' modified !"

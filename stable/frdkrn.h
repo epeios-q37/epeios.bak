@@ -76,52 +76,6 @@ namespace frdkrn {
 
 	typedef rgstry::multi_level_registry_ registry_;
 
-
-#if 0	// A transborder dans 'sclfrntnd'.
-	typedef rgstry::multi_level_registry registry;
-	enum project_type__
-	{
-		ptNew,
-		ptPredefined,
-		ptUser,
-		pt_amount,
-		pt_Undefined
-	};
-
-	project_type__ GetProjectType(
-		const str::string_ &Label,
-		err::handling__ ErrHandling = err::h_Default );
-
-	const str::string_ & GetPredefinedProjectLocation(
-		const str::string_ &Id,
-		const registry_ &Registry,
-		str::string_ &Location );
-
-	enum backend_extended_type__ {
-		bxtNone,	// Non utilisation de 'backend'.
-		bxtPredefined,
-		bxtDaemon,
-		bxtEmbedded,
-		bxt_amount,
-		bxt_Undefined
-	};
-
-	backend_extended_type__ GetBackendExtendedType( const str::string_ &RawType );
-
-	backend_extended_type__ GetBackendExtendedType( const registry_ &Registry );
-
-	void SetBackendExtendedType(
-		registry_ &Registry,
-		backend_extended_type__ Type );
-
-	csducl::type__ GetBackendTypeAndLocation(
-		const registry_ &Registry,
-		str::string_ &Location );
-
-# endif
-
-
-
 	class log_functions__
 	: public csdsnc::log_functions__
 	{
@@ -270,6 +224,7 @@ namespace frdkrn {
 		time_t _ProjectOriginalTimeStamp;	// Horodatage de la créationn du chargement du projet ou de sa dernière sauvegarde. Si == 0, pas de projet en cours d'utilisation.
 		time_t _ProjectModificationTimeStamp;	// Horodatage de la dernière modification du projet.
 		reporting_callbacks__ *_ReportingCallbacks;
+		const char *_LauncherIdentification;
 # if 0
 		registry_ &_R( void )
 		{
@@ -351,13 +306,15 @@ namespace frdkrn {
 			_ProjectOriginalTimeStamp = 0;
 			_ProjectModificationTimeStamp = 0;
 			_ReportingCallbacks = NULL;
+			_LauncherIdentification = NULL;
 		}
 		E_CVDTOR( kernel___ );
 		status__ Init(
 			const registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
-			reporting_callbacks__ &ReportingCallbacks )
+			reporting_callbacks__ &ReportingCallbacks,
+			const char *LauncherIdentification )	//  PAS dupliqué !
 		{
 			_Registry = &Registry;
 
@@ -372,9 +329,18 @@ namespace frdkrn {
 
 			_ProjectOriginalTimeStamp = 0;
 			_ReportingCallbacks = &ReportingCallbacks;
+			_LauncherIdentification = LauncherIdentification;
 			// L'initialisation de '_Frontend' et '_ClientCore' se fait à la connection.
 
+
 			return sOK;
+		}
+		const char *LauncherIdentification( void ) const
+		{
+			if(  _LauncherIdentification == NULL )
+				ERRFwk();
+
+			return _LauncherIdentification;
 		}
 		fblfrd::frontend___ &Frontend( void )
 		{
@@ -568,6 +534,18 @@ namespace frdkrn {
 			return _R().GetValue( str::string( Path ), Value );
 		}
 	};
+
+	const str::string_ &GetAboutText(
+		const char *BuildInformations,
+		const char *AppName,
+		const char *Version,
+		const char *AuthorName,
+		const char *AuthorContact,
+		const char *Copyright,
+		const char *SoftwareDetails,
+		const char *SoftwareURL,
+		kernel___ &Kernel,
+		str::string_ &Text );
 
 	enum authentication_prompt_mode__ 
 	{

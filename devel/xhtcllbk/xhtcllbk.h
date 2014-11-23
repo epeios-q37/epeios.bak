@@ -42,7 +42,7 @@
 # include "xtf.h"
 # include "strmrg.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"2"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"3"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -357,6 +357,7 @@ namespace xhtcllbk {
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
 		token__ _Token;
 		upstream_callback__ *_Callback;
+		const char *_LauncherIdentification;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -368,12 +369,14 @@ namespace xhtcllbk {
 		E_CDTOR( shared_data__ );
 		void Init(
 			token__ Token,
-			upstream_callback__ &Callback )
+			upstream_callback__ &Callback,
+			const char *LauncherIndetification )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_Token = Token;
 			_Callback = &Callback;
+			_LauncherIdentification = LauncherIndetification;
 		}
 		size_t ControlComputing( void )
 		{
@@ -385,6 +388,13 @@ namespace xhtcllbk {
 				ERRFwk();
 
 			return *_Callback;
+		}
+		const char *LauncherIdentification( void ) const
+		{
+			if ( _LauncherIdentification == NULL )
+				ERRFwk();
+
+			return _LauncherIdentification;
 		}
 		E_RODISCLOSE__( token__, Token );
 	};

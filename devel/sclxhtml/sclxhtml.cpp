@@ -112,7 +112,7 @@ ERRProlog
 	session_core___ *Session = NULL;
 ERRBegin
 
-	SCLXHTMLOnLoading();
+	SCLXHTMLOnLoading( Data.LauncherIdentification() );
 
 	Callback = new callback__;
 

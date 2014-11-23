@@ -188,7 +188,7 @@ namespace sclxhtml {
 		xhtagent::agent_core___ &Agent,
 		const frdkrn::compatibility_informations__ &CompatibilityInformations );
 
-	void SCLXHTMLOnLoading( void );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
+	void SCLXHTMLOnLoading( const char *LauncherIdentification );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
 
 	session_core___ *SCLXHTMLNewSession(
 		xhtcllbk::token__ Token,

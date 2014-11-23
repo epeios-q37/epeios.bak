@@ -37,7 +37,16 @@
 		<Translation language="fr">Impossible d'ouvrir le fichier '%1'.</Translation>
 		<Translation language="en">Unable to open file '%1'.</Translation>
 	</Translations>
-	<!--
+	  <Translations text="FRDKRN_AuthorText">
+    <Translation language="fr">par %1 (%2)</Translation>
+    <Translation language="en">by %1 (%2)</Translation>
+  </Translations>
+    <Translations text="FRDKRN_AffiliatedSoftwareText">
+    <Translation language="fr">Fait partie de %1 (%2)</Translation>
+    <Translation language="en">Part of %1 (%2)</Translation>
+  </Translations>
+
+<!--
 	<Translations text="FRDKRN_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
