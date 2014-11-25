@@ -28,5 +28,3 @@
 using namespace fbltyp;
 
 using namespace frdkernl;
-using xml::writer_;
-

@@ -178,6 +178,9 @@ namespace xhtagent {
 		{
 			Show( Id, !Value );
 		}
+		void Alert(
+			const str::string_ &XML,
+			const str::string_ &XSL );
 		void Alert( const str::string_ &Message );
 		void Alert( const char *Message )
 		{

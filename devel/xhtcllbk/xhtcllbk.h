@@ -146,31 +146,36 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKGetLanguage(
 			token__ Token,
 			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XHTCLLBKExecuteJavascript(
+			token__ Token,
+			const nchar__ *Script,
+			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XHTCLLBKOpenDialog(
+			token__ Token,
+			const nchar__ *XML,
+			const nchar__ *XSL,
+			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetChildren(
-			token__ token,
+			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetPaddings(
-			token__ token,
+			token__ Token,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
-		virtual void XHTCLLBKExecuteJavascript(
-			token__ token,
-			const nchar__ *Script,
-			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetProperty(
-			token__ token,
+			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			const nchar__ *Value ) = 0;
 		virtual void XHTCLLBKGetProperty(
-			token__ token,
+			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetAttribute(
-			token__ token,
+			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			const nchar__ *Value ) = 0;
@@ -205,6 +210,25 @@ namespace xhtcllbk {
 
 			return Buffer;
 		}
+		const char *ExecuteJavascript(
+			token__ Token,
+			const nstring___ &Script,
+			TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKExecuteJavascript( Token, Script.Internal(), Buffer );
+
+			return Buffer;
+		}
+		const char *OpenDialog(
+			token__ Token,
+			const nstring___ &XML,
+			const nstring___ &XSL,
+			TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKOpenDialog( Token, XML.Internal(), XSL.Internal(), Buffer );
+
+			return Buffer;
+		}
 		void SetChildren(
 			token__ Token,
 			const nstring___ &Id,
@@ -219,15 +243,6 @@ namespace xhtcllbk {
 			const nstring___ &XSL )
 		{
 			XHTCLLBKSetPaddings( Token, XML.Internal(), XSL.Internal() );
-		}
-		const char *ExecuteJavascript(
-			token__ Token,
-			const nstring___ &Script,
-			TOL_CBUFFER___ &Buffer )
-		{
-			XHTCLLBKExecuteJavascript( Token, Script.Internal(), Buffer );
-
-			return Buffer;
 		}
 		void ExecuteJavascript(
 			token__ Token,

@@ -63,20 +63,45 @@ ERREpilog
 	return Buffer;
 }
 
-void xhtagent::agent_core___::Alert( const str::string_ &Message )
+void xhtagent::agent_core___::Alert(
+	const str::string_ &RawXML,
+	const str::string_ &RawXSL )
 {
 ERRProlog
-	str::string Script;
+	str::string XML, XSL;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
-	Script.Init( "vex.dialog.alert(\"<div>" );
-	xhtcllbk::Escape( Message, Script );
-	Script.Append("<br/>toto</div>\");" );
+	XML.Init();
+	xhtcllbk::Escape( RawXML, XML );
 
-	ExecuteJavascript( Script );
+	XSL.Init();
+	xhtcllbk::Escape( RawXSL, XSL );
+
+	_C().OpenDialog( _Token, RawXML, RawXSL, Buffer );
 ERRErr
 ERREnd
 ERREpilog
 }
+
+void xhtagent::agent_core___::Alert( const str::string_ &Message )
+{
+ERRProlog
+	str::string XML, XSL;
+ERRBegin
+	// A remplacer par du code utilisant 'xml::writer', pour gèrer l'échappement des caractères.
+	XML.Init("<Content>");
+	XML.Append( Message );
+	XML.Append("</Content>");
+
+	XSL.Init( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"	xmlns=\"http://www.w3.org/1999/xhtml\">" );
+	XSL.Append("<xsl:output method=\"xml\" encoding=\"UTF-8\"/><xsl:template match=\"/\"><span><xsl:value-of select=\".\"></span></xsl:template></xsl:stylesheet>");
+
+	Alert( XML, XSL );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
