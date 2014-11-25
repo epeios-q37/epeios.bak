@@ -68,9 +68,9 @@ void xhtagent::agent_core___::Alert( const str::string_ &Message )
 ERRProlog
 	str::string Script;
 ERRBegin
-	Script.Init( "alert(\"" );
+	Script.Init( "vex.dialog.alert(\"<div>" );
 	xhtcllbk::Escape( Message, Script );
-	Script.Append("\");" );
+	Script.Append("<br/>toto</div>\");" );
 
 	ExecuteJavascript( Script );
 ERRErr

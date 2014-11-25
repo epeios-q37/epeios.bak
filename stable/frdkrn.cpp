@@ -162,7 +162,7 @@ ERRBegin
 	Text.Append( "\nCopyright " );
 	Text.Append( Copyright );
 
-//	Text.Append( "\n\n\t\t" );
+	Text.Append( "\n\n\t\t" );
 	SoftwareAffiliationText.Init();
 	GetAffiliationText_( SoftwareDetails, SoftwareURL, Kernel.Locale(), Kernel.Language(), SoftwareAffiliationText );
 	Text.Append( SoftwareAffiliationText );
