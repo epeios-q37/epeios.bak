@@ -26,6 +26,9 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
+#include "xml.h"
+#include "flx.h"
+
 using namespace xhtagent;
 
 void xhtagent::agent_core___::SetString(
@@ -83,16 +86,32 @@ ERREnd
 ERREpilog
 }
 
+static void SetXML_(
+	const str::string_ &Message,
+	str::string_ &XML )
+{
+ERRProlog
+	flx::E_STRING_TOFLOW___ STOFlow;
+	xml::writer Writer;
+ERRBegin
+	STOFlow.Init( XML );
+	Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
+
+	Writer.PutValue( Message, "Content" );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 void xhtagent::agent_core___::Alert( const str::string_ &Message )
 {
 ERRProlog
 	str::string XML, XSL;
 ERRBegin
-	// A remplacer par du code utilisant 'xml::writer', pour gèrer l'échappement des caractères.
-	XML.Init("<Content>");
-	XML.Append( Message );
-	XML.Append("</Content>");
+	XML.Init();
 
+	SetXML_( Message, XML );
+	
 	XSL.Init( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"	xmlns=\"http://www.w3.org/1999/xhtml\">" );
 	XSL.Append("<xsl:output method=\"xml\" encoding=\"UTF-8\"/><xsl:template match=\"/\"><span><xsl:value-of select=\".\"></span></xsl:template></xsl:stylesheet>");
 

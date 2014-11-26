@@ -52,14 +52,12 @@ namespace xhtfbs {
 	class generic_rack___
 	{
 	private:
-		flx::E_STRING_OFLOW___ _Flow;
-		txf::text_oflow__ _TFlow;
+		flx::E_STRING_TOFLOW___ _Flow;
 		xml::writer _Writer;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Writer.reset( P );
-			_TFlow.reset( P );
 			_Flow.reset( P );
 		}
 		E_CDTOR( generic_rack___ );
@@ -69,8 +67,7 @@ namespace xhtfbs {
 			str::string_ &Target )
 		{
 			_Flow.Init( Target );
-			_TFlow.Init( _Flow );
-			_Writer.Init( _TFlow, xml::oIndent, xml::e_Default );
+			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
 			_Writer.PushTag( RootTagName );
 			_Writer.PutAttribute("Enviroment", CPE_ENVIROMENT_LABEL );
 			_Writer.PushTag( SubRootTagName );

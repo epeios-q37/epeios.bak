@@ -67,6 +67,7 @@ extern class ttr_tutor &FLXTutor;
 # include "bch.h"
 # include "cpe.h"
 # include "cslio.h"
+# include "str.h"
 
 # ifdef CPE__MT
 #  define FLX__MT
@@ -385,6 +386,32 @@ namespace flx {
 
 # define E_STRING_IFLOW__	bunch_iflow__<str::string_, bso::char__>
 
+	namespace {
+		typedef txf::text_iflow__ _tiflow__;
+	}
+
+	class string_text_iflow__
+	: public _tiflow__
+	{
+	private:
+		E_STRING_IFLOW__ _Flow;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_Flow.reset( P );
+			_tiflow__::reset( P );
+		}
+		E_CVDTOR( string_text_iflow__ );
+		void Init( str::string_ &Target )
+		{
+			_Flow.Init( Target );
+			_tiflow__::Init( _Flow );
+		}
+	};
+
+# define E_STRING_TOFLOW___	string_text_oflow___
+
+
 	//c A bunch as output flow.driver.
 	template < typename bunch_, typename so__> class bunch_oflow_driver___
 	: public _oflow_driver___
@@ -468,6 +495,31 @@ namespace flx {
 	};
 
 # define E_STRING_OFLOW___	bunch_oflow___<str::string_, bso::char__>
+
+	namespace {
+		typedef txf::text_oflow__ _toflow__;
+	}
+
+	class string_text_oflow___
+	: public _toflow__
+	{
+	private:
+		E_STRING_OFLOW___ _Flow;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_Flow.reset( P );
+			_toflow__::reset( P );
+		}
+		E_CVDTOR( string_text_oflow___ );
+		void Init( str::string_ &Target )
+		{
+			_Flow.Init( Target );
+			_toflow__::Init( _Flow );
+		}
+	};
+
+# define E_STRING_TOFLOW___	string_text_oflow___
 
 	typedef fdr::oflow_driver___<> _oflow_driver___;
 
