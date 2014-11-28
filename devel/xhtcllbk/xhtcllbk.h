@@ -42,7 +42,7 @@
 # include "xtf.h"
 # include "strmrg.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"3"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"4"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -324,6 +324,7 @@ namespace xhtcllbk {
 	protected:
 		virtual void XHTCLLBKStart( void ) = 0;
 		virtual const char *XHTCLLBKLanguage( void ) = 0;
+		virtual bso::bool__ XHTCLLBKOnClose( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -337,6 +338,10 @@ namespace xhtcllbk {
 		void Start( void )
 		{
 			return XHTCLLBKStart();
+		}
+		bso::bool__ OnClose( void )
+		{
+			return XHTCLLBKOnClose();
 		}
 		const char *Language( void )
 		{

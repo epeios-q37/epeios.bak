@@ -163,7 +163,8 @@ ERRBegin
 				String.Append( FieldSeparator );
 				Escaping = false;
 			} else {
-				Strings.Append( String );
+				if ( String.Amount() )
+					Strings.Append( String );
 				String.Init();
 				Table.Append( Strings );
 				Strings.Init();

@@ -1487,9 +1487,9 @@ ERREpilog
 	return Exists;
 }
 
-static bso::bool__ main_( const oddities__ &Oddities )
+static int main_( const oddities__ &Oddities )
 {
-	bso::bool__ Success = false;
+	int ExitValue = EXIT_SUCCESS;
 ERRProlog
 	str::string ProjectFileName;
 	str::string Command;
@@ -1514,12 +1514,13 @@ ERRBegin
 	if ( MGetValue( Command_, Command ) == "Usage" )
 		PrintUsage_();
 	else
-		SCLTOOLMain( Command, Oddities );
+		ExitValue = SCLTOOLMain( Command, Oddities );
 ERRErr
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {
 		case err::t_Abort:
-			Success = !ReportSCLPendingError_();
+			if ( ReportSCLPendingError_() )
+				ExitValue = EXIT_FAILURE;
 			ERRRst();
 			break;
 		case err::t_Free:
@@ -1542,7 +1543,7 @@ ERRErr
 	}
 ERREnd
 ERREpilog
-	return Success;
+	return ExitValue;
 }
 
 
@@ -1563,8 +1564,7 @@ ERRFBegin
 
 	cio::Initialize( cio::t_Default );
 
-	if ( !main_( Oddities ) )
-		ExitValue = EXIT_FAILURE;
+	ExitValue = main_( Oddities );
 ERRFErr
 ERRFEnd	
 	cio::COut.Commit();
@@ -1607,8 +1607,7 @@ ERRFBegin
 	Oddities.nCmdShow = nCmdShow;
 	Oddities.pCmdLine = pCmdLine;
 
-	if ( !main_( Oddities ) )
-		ExitValue = EXIT_FAILURE;
+	ExitValue = main_( Oddities );
 ERRFErr
 ERRFEnd
 	if ( Oddities.argv != NULL )

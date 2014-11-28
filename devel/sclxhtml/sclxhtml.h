@@ -121,6 +121,7 @@ namespace sclxhtml {
 	{
 	protected:
 		virtual void SCLXHTMLStart( void ) = 0;
+		virtual bso::bool__ SCLXHTMLOnClose( void ) = 0;
 		virtual xhtagent::agent_core___ &_A( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
@@ -135,6 +136,10 @@ namespace sclxhtml {
 		void Start( void )
 		{
 			SCLXHTMLStart();
+		}
+		bso::bool__ OnClose( void )
+		{
+			return SCLXHTMLOnClose();
 		}
 		xhtagent::agent_core___ &AgentCore( void )
 		{

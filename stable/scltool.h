@@ -68,7 +68,7 @@ namespace scltool {
 	};
 
 	// A définir par l'utilisateur.
-	void SCLTOOLMain(
+	int SCLTOOLMain(
 		const str::string_ &Command,
 		const oddities__ &Oddities );
 

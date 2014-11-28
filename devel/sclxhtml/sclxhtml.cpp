@@ -64,23 +64,24 @@ namespace {
 	private:
 		session_core___ *_Session;
 	protected:
-		virtual void XHTCLLBKStart( void )
-		{
-			if ( _Session == NULL )
-				ERRFwk();
-
-			_Session->Start();
-		}
-		virtual const char *XHTCLLBKLanguage( void )
-		{
-			return sclmisc::GetLanguage();
-		}
 		session_core___ &_S( void )
 		{
 			if ( _Session == NULL )
 				ERRFwk();
 
 			return *_Session;
+		}
+		virtual void XHTCLLBKStart( void ) override
+		{
+			_S().Start();
+		}
+		virtual bso::bool__ XHTCLLBKOnClose( void ) override
+		{
+			return _S().OnClose();
+		}
+		virtual const char *XHTCLLBKLanguage( void ) override
+		{
+			return sclmisc::GetLanguage();
 		}
 	public:
 		void reset( bso::bool__ P = true )
