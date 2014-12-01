@@ -22,11 +22,11 @@
 // SKeTch BaSiCs
 
 #ifndef SKTBSC__INC
-#define SKTBSC__INC
+# define SKTBSC__INC
 
-#include "bso.h"
-#include "err.h"
-#include "str.h"
+# include "bso.h"
+# include "err.h"
+# include "str.h"
 
 namespace sktbsc {
 

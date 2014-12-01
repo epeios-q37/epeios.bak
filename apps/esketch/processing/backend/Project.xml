@@ -34,8 +34,9 @@
     <Modules Group="SKT" Path="../">
       <Module Path="../../">sktfbc</Module>
       <Module Path="../../">sktinf</Module>
-      <Module>sktxmp</Module>
-    </Modules>
+		<Module>sktbsc</Module>
+		<Module>sktxmp</Module>
+	</Modules>
     <Module>common</Module>
     <Module>registry</Module>
     <Modules Group="WRP">

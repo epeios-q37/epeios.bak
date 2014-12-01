@@ -20,7 +20,7 @@
 // SKeTch eXaMPle
 
 #ifndef SKTXMP__INC
-#define SKTXMP__INC
+# define SKTXMP__INC
 
 # ifdef XXX_DBG
 #	define SKTXMP__DBG

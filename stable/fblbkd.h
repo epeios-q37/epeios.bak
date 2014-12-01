@@ -821,7 +821,7 @@ namespace fblbkd {
 			str::string( BackendLabel ).Convert( _BackendLabel );
 
 			Buffer.Init( BackendInformations );
-			Buffer.Append( " Build : " __DATE__ " " __TIME__ " - " ); 
+			Buffer.Append( " Build " __DATE__ " " __TIME__ " - " ); 
 			Buffer.Append( cpe::GetDescription() );
 			Buffer.Convert( _ExtendedBackendInformations );
 
