@@ -386,14 +386,17 @@ namespace fbltyp {
 	FBLTYP_XITEM( id, xitem )
 	FBLTYP_XITEMS( xitem )
 	/* Both below declaration are not part of the protocol. */
-	typedef fbltyp::detail_<id8_t__, sdr::row__>	command_detail_	;
-	typedef fbltyp::detail<id8_t__, sdr::row__>	command_detail;
+	typedef fbltyp::detail_<id8__, sdr::row__>	command_detail_	;
+	typedef fbltyp::detail<id8__, sdr::row__>	command_detail;
 	/**/
 	typedef ctn::E_CONTAINER_( command_detail_ ) commands_details_;
 	typedef ctn::E_CONTAINER( command_detail_ ) commands_details;
 	typedef bch::E_BUNCH_( object_reference__ ) objects_references_;
 	typedef bch::E_BUNCH( object_reference__ ) objects_references;
 	typedef flw::iflow__ flow__;
+
+	E_CDEF( id8__, UndefinedId8, FBLTYP_UNDEFINED_ID8 );
+
 
 	template <typename type> inline void _StraightPut(
 		type Value,

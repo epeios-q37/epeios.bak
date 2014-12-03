@@ -340,7 +340,7 @@ namespace {
 		command_detail_ &CD )
 	{
 		IFlow >> CD.Name;
-		GetSet_<bch::E_BUNCH_( id8_t__ ), id8_t__>( IFlow, CD.Casts );
+		GetSet_<bch::E_BUNCH_( id8__ ), id8__>( IFlow, CD.Casts );
 	}
 
 	template <typename t> inline void Put_(

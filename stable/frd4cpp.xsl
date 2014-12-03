@@ -196,7 +196,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:text>&tab;&tab;&tab;fblfrd::command_detail CommandDetail;&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;fblfrd::id16s Commands;&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
-		<xsl:text>&tab;&tab;&tab;fblfrd::id8_t__ Parameters[] = {&nl;</xsl:text>
+		<xsl:text>&tab;&tab;&tab;fblfrd::id8__ Parameters[] = {&nl;</xsl:text>
 		<xsl:apply-templates select="Commands" mode="data"/>
 		<xsl:text>&tab;&tab;&tab;};&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>

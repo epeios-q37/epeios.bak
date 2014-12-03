@@ -67,7 +67,7 @@ void fblbrq::request__::_Pop(
 	Row = Casts.First();
 
 	while ( ( Row != E_NIL )
-		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
+		    && ( ( Cast = (cast__)*Casts( Row ) ) != cEnd ) ) {
 
 		if ( Flow.Get() != Cast )
 			ERRFwk();
@@ -88,7 +88,7 @@ void fblbrq::request__::_Pop(
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		if ( ( Cast = (cast__)Flow.Get() ) != Casts( Row ) )
+		if ( ( Cast = (cast__)Flow.Get() ) != *Casts( Row ) )
 			ERRFwk();
 
 		_C().PopOut( Row, Flow, Cast );

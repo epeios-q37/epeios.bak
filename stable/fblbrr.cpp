@@ -356,7 +356,7 @@ void fblbrr::remote_callbacks___::FBLBRQPush(
 	sdr::row__ Row = Casts.First();
 
 	while ( ( Row != E_NIL )
-		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
+		    && ( ( Cast = (cast__)*Casts( Row ) ) != cEnd ) ) {
 		if ( FirstCall )
 			Delete_(_Parameters( Row ), Cast );
 		Row = Casts.Next( Row );
@@ -368,7 +368,7 @@ void fblbrr::remote_callbacks___::FBLBRQPush(
 	Row = Casts.Next( Row );
 
 	while ( Row != E_NIL ) {
-		PushAndDelete_( FirstCall, Flow, _Parameters( Row ), (cast__)Casts( Row ) );
+		PushAndDelete_( FirstCall, Flow, _Parameters( Row ), (cast__)*Casts( Row ) );
 
 		Row = Casts.Next( Row );
 	}

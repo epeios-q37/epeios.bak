@@ -212,11 +212,11 @@ static void GetTypesIDAndPrefixAndName_(
 	void * )
 {
 ERRProlog
-	xitem16_t XItem;
+	xitem16 XItem;
 	sdr::row__ P;
 	type__ Type;
 ERRBegin
-	xitem16s_t_ &XItems = Requete.XItem16sOut();
+	xitem16s_ &XItems = Requete.XItem16sOut();
 
 	P = Backend.Modules.First();
 
@@ -250,12 +250,12 @@ static void WriteCommandsIDAndName_(
 	request__ &Requete )
 {
 ERRProlog
-	item16_t Item;
+	item16 Item;
 	ctn::E_CITEM( description_ ) Description;
 	sdr::row__ P;
 	command__ Command;
 ERRBegin
-	item16s_t_ &Items = Requete.Item16sOut();
+	item16s_ &Items = Requete.Item16sOut();
 
 	P = Descriptions.First();
 

@@ -153,8 +153,8 @@ namespace fblcst {
 	};	// A modification must be reflected by 'CastsNames'.
 
 //	typedef fbltyp::id8_t__ cast__;
-	typedef fbltyp::id8s_t_ casts_;
-	typedef fbltyp::id8s_t casts;
+	typedef fbltyp::id8s_ casts_;
+	typedef fbltyp::id8s casts;
 
 
 	//o The casts names.

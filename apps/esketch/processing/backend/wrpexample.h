@@ -1,5 +1,5 @@
 /*
-	'wrpunbound.h' by Claude SIMON (http://zeusw.org/).
+	'wrpexample.h' by Claude SIMON (http://zeusw.org/).
 
 	 This file is part of 'eSketch' software.
 

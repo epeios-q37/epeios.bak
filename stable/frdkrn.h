@@ -76,6 +76,95 @@ namespace frdkrn {
 
 	typedef rgstry::multi_level_registry_ registry_;
 
+	template <typename t, t uv = (t)-1> class il_	// id, template.
+	{
+	public:
+		struct s {
+			t Id;
+			str::string_::s Label;
+		} &S_;
+		str::string_ Label;
+		il_( s &S )
+		: S_( S ),
+		  Label( S.Label )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			S_.Id = uv;
+			Label.reset( P );
+		}
+		void plug( ags::E_ASTORAGE_ &AS )
+		{
+			Label.plug( AS );
+		}
+		il_ &operator =(const il_ &IL)
+		{
+			S_.Id = IL.S_.Id;
+			Label = IL.Label;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			S_.Id = uv;
+			Label.Init();
+		}
+		void Init(
+			t Id,
+			const str::string_ &Label )
+		{
+			S_.Id = Id;
+			this->Label.Init( Label );
+		}
+		E_RODISCLOSE_( t, Id );
+	};
+
+	template <typename t, t uv = (t)-1> class ilw_	// id, template, wording. 'uv':: undefined value.
+	: public il_<t,uv>
+	{
+	public:
+		struct s
+		: public il_::s
+		{
+			str::string_::s Wording;
+		};
+		str::string_ Wording;
+		ilw_( s &S )
+		: il_( S ),
+		  Wording( S.Wording )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			il_::reset( P );
+			Wording.reset( P );
+		}
+		void plug( ags::E_ASTORAGE_ &AS )
+		{
+			il_::plug( AS );
+			Wording.plug( AS );
+		}
+		ilw_ &operator =(const ilw_ &ILW)
+		{
+			il_::operator = ( ILW );
+			Wording = ILW.Wording;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			il_::Init();
+			Wording.Init();
+		}
+		void Init(
+			t Id,
+			const str::string_ &Label,
+			const str::string_ &Wording )
+		{
+			il_::Init( Id, Label );
+			this->Wording.Init( Wording );
+		}
+	};
+
 	class log_functions__
 	: public csdsnc::log_functions__
 	{
