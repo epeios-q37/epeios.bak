@@ -79,7 +79,7 @@ namespace xhtagent {
 		{
 			return _Manager;
 		}
-		void ClearEventManager( void )
+		void ResetEventManager( void )
 		{
 			_Manager.Init();
 		}

@@ -148,12 +148,15 @@ namespace sclxhtml {
 	};
 
 	// L'utilisateur met dans le type 'session' ses propres objets et instancie le tout par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
-	template <typename agent, typename session, typename kernel> class session___
+	template <typename agent, typename session, typename kernel, typename frame, frame UndefinedFrame > class session___
 	: public session_core___,
 	  public agent,
 	  public session
 	{
+	private:
+		frame _Frame;	// Current frame;
 	protected:
+		virtual void SCLXHTMLRefresh( frame Frame  ) = 0;
 		virtual xhtagent::agent_core___ &_A( void ) override
 		{
 			return *this;
@@ -163,6 +166,7 @@ namespace sclxhtml {
 		{
 			session_core___::reset( P );
 			agent::reset( P );
+			_Frame= UndefinedFrame;
 		}
 		E_CVDTOR( session___ )
 		void Init(
@@ -173,6 +177,19 @@ namespace sclxhtml {
 			session_core___::Init();
 			agent::Init( Token, UCallback );
 			session::Init( Kernel );
+			_Frame = UndefinedFrame;
+		}
+		void SetEvents( frame Frame )
+		{
+			ResetEventManager();
+			Handlers.Init( *this, Frame );
+			_Frame = Frame;
+		}
+		void Refresh( void )
+		{
+			if ( _Frame == UndefinedFrame )
+				ERRFwk();
+			SCLXHTMLRefresh( _Frame );
 		}
 	};
 
