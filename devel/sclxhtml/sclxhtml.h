@@ -161,6 +161,11 @@ namespace sclxhtml {
 		{
 			return *this;
 		}
+		void SwitchTo( frame Frame )
+		{
+			ResetEventManager();
+			_Frame = Frame;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -178,12 +183,6 @@ namespace sclxhtml {
 			agent::Init( Token, UCallback );
 			session::Init( Kernel );
 			_Frame = UndefinedFrame;
-		}
-		void SetEvents( frame Frame )
-		{
-			ResetEventManager();
-			Handlers.Init( *this, Frame );
-			_Frame = Frame;
 		}
 		void Refresh( void )
 		{

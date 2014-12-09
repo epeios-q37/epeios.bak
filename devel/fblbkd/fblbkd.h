@@ -247,14 +247,7 @@ namespace fblbkd {
 			UPs.reset( P );
 			Indexes.reset( P );
 		}
-		untyped_module( void )
-		{
-			reset( false );
-		}
-		~untyped_module( void )
-		{
-			reset();
-		}
+		E_CDTOR( untyped_module );
 		//f Give the index of a new object.
 		index__ New( void )
 		{
@@ -429,10 +422,10 @@ namespace fblbkd {
 			index__ Index,
 			fblbrq::request__ &Requete,
 			void *PU,
-			log_functions__ &LogFunctions )
+			log_functions__ &LogFunctions ) override
 		{
 			Traiter_( *(t *)untyped_module::Object( Index ), Index, Requete, PU, LogFunctions );
-		}
+		} 
 	public:
 		//f Initialization.
 		void Init( user &User )
@@ -442,25 +435,30 @@ namespace fblbkd {
 			t::NOTIFY( *this, User );
 		}
 	};
+
+	namespace {
+		typedef lst::E_LIST_ _list_;
+		E_AUTO( _list );
+	}
 	
 	//c A module with object stored in RAM.
 	template <class t, class st, class user> class ram_module
 	: public module<t,user>,
-	  private lst::E_LIST
+	  private _list
 	{
 	private:
-		const lst::E_LIST_ &_List( void ) const
+		const _list_ &_List( void ) const
 		{
 			return *this;
 		}
-		lst::E_LIST_ &_List( void )
+		_list_ &_List( void )
 		{
 			return *this;
 		}
 	protected:
 		virtual void LSTAllocate(
 			sdr::size__ Size,
-			aem::mode__ Mode )
+			aem::mode__ Mode ) override
 		{
 #ifdef FBLBKD_DBG
 			if ( Mode != aem::m_Default )
@@ -468,7 +466,7 @@ namespace fblbkd {
 #endif
 			Objets.Allocate( Size, aem::mFitted );
 		}
-		virtual index__ FBLBKDNew( void )
+		virtual index__ FBLBKDNew( void ) override
 		{
 			st *S = NULL;
 			t *Pointeur = NULL;
@@ -490,7 +488,7 @@ namespace fblbkd {
 
 			return Index;
 		}
-		virtual void FBLBKDDelete( index__ Index )
+		virtual void FBLBKDDelete( index__ Index ) override
 		{
 			t *Object = Objets( Index );
 
@@ -500,7 +498,7 @@ namespace fblbkd {
 
 			_List().Delete( Index );
 		}
-		virtual void *FBLBKDObject( index__ Index )
+		virtual void *FBLBKDObject( index__ Index ) override
 		{
 			if ( *Index >= Objets.Amount() )
 				ERRPrm();
@@ -510,6 +508,13 @@ namespace fblbkd {
 	public:
 		//r The pointer object.
 		bch::E_BUNCH( t * ) Objets;
+		void reset( bso::bool__ P = true )
+		{
+			Objets.reset( P );
+			module::reset( P );
+			_list::reset( P );
+		}
+		E_CDTOR( ram_module );
 		//f Initialization.
 		void Init( user &User )
 		{
@@ -567,14 +572,7 @@ namespace fblbkd {
 			Objets.reset( P );
 			_List().reset( P );
 		}
-		standard_module( void )
-		{
-			reset( false );
-		}
-		~standard_module( void )
-		{
-			reset( true );
-		}
+		E_CDTOR( standard_module );
 		// Initialisation.
 		void Init( user &User )
 		{
@@ -615,14 +613,7 @@ namespace fblbkd {
 			T_ = NULL;
 			Created_ = false;
 		}
-		shared_module( void )
-		{
-			reset( false );
-		}
-		~shared_module( void )
-		{
-			reset( true );
-		}
+		E_CDTOR( shared_module )
 		// Initialisation.
 		void Init(
 			user &User,
@@ -669,13 +660,13 @@ namespace fblbkd {
 	};
 
 	//t To by-pass a visual C++ bug.
-	typedef lst::E_LISTtx( object__, object_t__ ) _list;
+	typedef lst::E_LISTtx( object__, object_t__ ) _listx;
 	typedef tys::E_STORAGEt( link__, object__ ) _storage;
 
 	// Classe de gestion des liens entre module et objets.
 	class links
 	: private _storage,
-	  public _list
+	  public _listx
 	{
 	protected:
 		void LSTAllocate(
@@ -688,7 +679,7 @@ namespace fblbkd {
 		// Initialisation.
 		void Init( void )
 		{
-			_list::Init();
+			_listx::Init();
 			_storage::Init();
 		}
 		object__ New(
@@ -698,7 +689,7 @@ namespace fblbkd {
 			link__ Lien;
 			object__ P;
 			
-			P = _list::New();
+			P = _listx::New();
 
 			if ( *P > FBLBKD_TYPE_MAX )
 				ERRLmt();
@@ -712,7 +703,7 @@ namespace fblbkd {
 		}
 		void Delete( object__ IdObjet )
 		{
-			_list::Delete( IdObjet );
+			_listx::Delete( IdObjet );
 		}
 		type__ Type( object__ IdObjet ) const
 		{
@@ -724,7 +715,7 @@ namespace fblbkd {
 		}
 		sdr::size__ Amount( void ) const
 		{
-			return _list::Amount();
+			return _listx::Amount();
 		}
 	};
 

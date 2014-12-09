@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: sktfbc.h,v 1.1 2012/12/04 15:45:25 csimon Exp $
-
 // eSKeTch Backend/Frontend Common
 // Sometimes, for optimization purpose, frontend has to to make some tasks normally achieved by the backend.
 // This is the place where to put common objects and functions.

@@ -110,6 +110,17 @@ void wrpexample::myobject_::HANDLE(
 
 #define REPORT( v )	Report_( ( v ), Backend, Request )
 
+inline static void Return_(
+	message__ &M,
+	message__ m )
+{
+	M = m;
+	ERRReturn;
+}
+
+#define RETURN( message )\
+	Return_( Message, m##message )\
+
 static void Handle_(
 	message__ Message,
 	const fblbkd::backend___ &Backend,

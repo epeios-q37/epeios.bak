@@ -51,7 +51,8 @@ public:
 	void reset( bso::bool__ P = true )
 	{
 		_backend___::reset( P );
-		_Stuff.reset();
+		_Stuff.reset( P );
+		MyObject.reset( P );
 	}
 	E_CVDTOR( backend___ );
 	void Init(

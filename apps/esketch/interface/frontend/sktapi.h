@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd (Version) (Build : Nov 18 2014 10:33:34 MSVC_IA-32)
+	API from : esketchbkd (Version) Build Dec  7 2014 08:46:16 - MSVC_IA-32
 
-	This file was generated using eGetAPI 20140119 (Build Nov 18 2014 10:25:47 MSVC_IA-32)
+	This file was generated using eGetAPI 20140119 (Build Nov 19 2014 07:28:00 MSVC_IA-32)
 */
 
 #ifndef ESKETCH__INC
@@ -39,7 +39,7 @@ namespace esketch {
 			fblfrd::command_detail CommandDetail;
 			fblfrd::id16s Commands;
 
-			fblfrd::id8_t__ Parameters[] = {
+			fblfrd::id8__ Parameters[] = {
 				0, 
 			};
 
@@ -92,7 +92,7 @@ namespace esketch {
 			fblfrd::command_detail CommandDetail;
 			fblfrd::id16s Commands;
 
-			fblfrd::id8_t__ Parameters[] = {
+			fblfrd::id8__ Parameters[] = {
 				21, 0, 21, 
 				0, 
 			};
