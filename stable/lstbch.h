@@ -114,6 +114,12 @@ namespace lstbch {
 			list_<row, row_t>::Init();
 			bunch_<type, row>::Init();
 		}
+		void Allocate(
+			sdr::size__ Size,
+			aem::mode__ Mode = aem::m_Default )
+		{
+			list_<row, row_t>::Allocate( Size, Mode );
+		}
 		E_NAVt( list_<E_COVER2(row,row_t)>::, row )
 		//f Add 'Object' and return its row.
 		row Add( const type &Object )
