@@ -64,14 +64,7 @@ namespace frdkernl {
 			Statics.reset( P );
 			MyObject.reset( P );
 		}
-		kernel___( void )
-		{
-			reset( false );
-		}
-		~kernel___( void )
-		{
-			reset();
-		}
+		E_CDTOR( kernel___ );
 		status__ Init(
 			const rgstry::multi_level_registry_ &Registry,
 			const lcl::locale_ &Locale,
