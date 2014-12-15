@@ -69,6 +69,7 @@ namespace xhtfbs {
 			_Flow.Init( Target );
 			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
 			_Writer.PushTag( RootTagName );
+			_Writer.PutAttribute("TimeStamp", tol::DateAndTime() );
 			_Writer.PutAttribute("Enviroment", CPE_ENVIROMENT_LABEL );
 			_Writer.PushTag( SubRootTagName );
 		}

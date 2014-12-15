@@ -76,7 +76,7 @@ namespace frdkrn {
 
 	typedef rgstry::multi_level_registry_ registry_;
 
-	template <typename t, t uv = (t)-1> class il_	// id, template.
+	template <typename t> class il_	// id, template.
 	{
 	public:
 		struct s {
@@ -90,7 +90,7 @@ namespace frdkrn {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.Id = uv;
+			S_.Id = t(-1);
 			Label.reset( P );
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
@@ -119,8 +119,8 @@ namespace frdkrn {
 		E_RODISCLOSE_( t, Id );
 	};
 
-	template <typename t, t uv = (t)-1> class ilw_	// id, template, wording. 'uv':: undefined value.
-	: public il_<t,uv>
+	template <typename t> class ilw_	// id, template, wording.
+	: public il_<t>
 	{
 	public:
 		struct s
