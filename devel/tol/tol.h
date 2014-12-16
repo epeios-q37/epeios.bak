@@ -387,10 +387,13 @@ public:\
 //d Create a new type for a row named 'Type'.
 # define E_ROW( Type )	E_TMIMIC__( sdr::row_t__, Type )
 
-/* Permet de transformer 2 arguments en 1; si un argument d'une macro
-a besoin de contenir une virgule, cette macro est là pour ça
-'E_COVER2( a, b )' donne 'a, b' */
-# define E_COVER2(a, b)	a, b
+/* Permet de transformer n arguments en 1; si un argument d'une macro
+a besoin de contenir une virgule, cette macro est là pour ça.
+ex. : 'E_COVER2( a, b )' donne 'a, b' */
+# define E_COVER2(a, b)			a, b
+# define E_COVER3(a, b, c)		a, b, c
+# define E_COVER4(a, b, c, d)	a, b, c, d
+
 
 /* Permet de convertir un entier en chaîne (l'encadre par des '"').
 Utile pour afficher le numéro de ligne dans un #pragma message (...). */
