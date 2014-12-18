@@ -42,7 +42,7 @@
 # include "xtf.h"
 # include "strmrg.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"4"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"5"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -59,137 +59,45 @@ namespace xhtcllbk {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
-	E_ROW( token__ );
-
-	E_CDEF( token__, UndefinedToken, sdr::NIL );
-
-	class event_handler__
-	{
-	protected:
-		virtual void XHTCLLBKHandle( const char *Id ) = 0;
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( event_handler__ );
-		void Init( void )
-		{
-			// Standardisation.
-		}
-		void Handle( const char *Id )
-		{
-			XHTCLLBKHandle( Id );
-		}
-	};
-
-	E_ROW( hrow__ );	// (event) handler row;
-
-	typedef bch::E_BUNCHt_( event_handler__ *, hrow__ ) _event_handlers_;
-
-	class event_manager_
-	{
-	public:
-		struct s {
-			stsfsm::automat_::s Automat;
-			_event_handlers_::s Handlers;
-		};
-		stsfsm::automat_ Automat;
-		_event_handlers_ Handlers;
-		event_manager_( s &S )
-		: Automat( S.Automat ),
-		  Handlers( S.Handlers )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			Automat.reset( P );
-			Handlers.reset( P );
-		}
-		void plug( ags::E_ASTORAGE_ &AS )
-		{
-			Automat.plug( AS );
-			Handlers.plug( AS );
-		}
-		event_manager_ &operator =(const event_manager_ &EM)
-		{
-			Automat = EM.Automat;
-			Handlers = EM.Handlers;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			Automat.Init();
-			Handlers.Init();
-		}
-		bso::bool__ Add(
-			const char *Name,
-			event_handler__ &Handler )
-		{
-			return stsfsm::Add( Name, *Handlers.Append( &Handler ), Automat ) == stsfsm::UndefinedId;
-		}
-		event_handler__ *Get( const str::string_ &Name ) const
-		{
-			hrow__ Row = stsfsm::GetId( Name, Automat );
-
-			if ( Row == E_NIL )
-				return NULL;
-
-			return Handlers( Row );
-		}
-	};
-
-	E_AUTO( event_manager );
 
 	class upstream_callback__ {
 	protected:
 		virtual void XHTCLLBKGetLanguage(
-			token__ Token,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKExecuteJavascript(
-			token__ Token,
 			const nchar__ *Script,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKOpenDialog(
-			token__ Token,
 			const nchar__ *XML,
 			const nchar__ *XSL,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetChildren(
-			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetPaddings(
-			token__ Token,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetProperty(
-			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			const nchar__ *Value ) = 0;
 		virtual void XHTCLLBKGetProperty(
-			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetAttribute(
-			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			const nchar__ *Value ) = 0;
 		virtual void XHTCLLBKGetAttribute(
-			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKRemoveAttribute(
-			token__ Token,
 			const nchar__ *Id,
 			const nchar__ *Name ) = 0;
 		virtual void XHTCLLBKGetSelectValue(
-			token__ Token,
 			const nchar__ *Id,
 			TOL_CBUFFER___ &Buffer ) = 0;
 	public:
@@ -202,150 +110,157 @@ namespace xhtcllbk {
 		{
 			//Standardisation.
 		}
-		const char *GetLanguage(
-			token__ Token,
-			TOL_CBUFFER___ &Buffer )
+		const char *GetLanguage( TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetLanguage( Token, Buffer );
+			XHTCLLBKGetLanguage( Buffer );
 
 			return Buffer;
 		}
 		const char *ExecuteJavascript(
-			token__ Token,
 			const nstring___ &Script,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKExecuteJavascript( Token, Script.Internal(), Buffer );
+			XHTCLLBKExecuteJavascript( Script.Internal(), Buffer );
 
 			return Buffer;
 		}
 		const char *OpenDialog(
-			token__ Token,
 			const nstring___ &XML,
 			const nstring___ &XSL,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKOpenDialog( Token, XML.Internal(), XSL.Internal(), Buffer );
+			XHTCLLBKOpenDialog( XML.Internal(), XSL.Internal(), Buffer );
 
 			return Buffer;
 		}
 		void SetChildren(
-			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetChildren( Token, Id.Internal(), XML.Internal(), XSL.Internal() );
+			XHTCLLBKSetChildren( Id.Internal(), XML.Internal(), XSL.Internal() );
 		}
 		void SetPaddings(
-			token__ Token,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetPaddings( Token, XML.Internal(), XSL.Internal() );
+			XHTCLLBKSetPaddings( XML.Internal(), XSL.Internal() );
 		}
-		void ExecuteJavascript(
-			token__ Token,
-			const nstring___ &Script )
+		void ExecuteJavascript( const nstring___ &Script )
 		{
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
-			ExecuteJavascript( Token, Script, Buffer );
+			ExecuteJavascript( Script, Buffer );
 		ERRErr
 		ERREnd
 		ERREpilog
 		}
 		const char *GetProperty(
-			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetProperty( Token, Id.Internal(), Name.Internal(), Buffer );
+			XHTCLLBKGetProperty(Id.Internal(), Name.Internal(), Buffer );
 
 			return Buffer;
 		}
 		void SetProperty(
-			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetProperty( Token, Id.Internal(), Name.Internal(), Value.Internal() );
+			XHTCLLBKSetProperty( Id.Internal(), Name.Internal(), Value.Internal() );
 		}
 		const char *GetAttribute(
-			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetAttribute( Token, Id.Internal(), Name.Internal(), Buffer );
+			XHTCLLBKGetAttribute( Id.Internal(), Name.Internal(), Buffer );
 
 			return Buffer;
 		}
 		void SetAttribute(
-			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetAttribute( Token, Id.Internal(), Name.Internal(), Value.Internal() );
+			XHTCLLBKSetAttribute( Id.Internal(), Name.Internal(), Value.Internal() );
 		}
 		void RemoveAttribute(
-			token__ Token,
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			XHTCLLBKRemoveAttribute( Token, Id.Internal(), Name.Internal() );
+			XHTCLLBKRemoveAttribute( Id.Internal(), Name.Internal() );
 		}
 		const char *GetSelectValue(
-			token__ Token,
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetSelectValue( Token, Id.Internal(), Buffer );
+			XHTCLLBKGetSelectValue( Id.Internal(), Buffer );
 
 			return Buffer;
 		}
 	};
 
+	class instance_callback__
+	{
+	protected:
+		virtual void XHTCLLBKHandle(
+			const char *Id,
+			const char *Event ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( instance_callback__ );
+		void Init( void )
+		{
+			// Standardisation.
+		}
+		void Handle(
+			const char *Id,
+			const char *Event )
+		{
+			return XHTCLLBKHandle( Id, Event );
+		}
+	};
+
 	class downstream_callback__
 	{
-	private:
-		const event_manager_ *_Manager;
-		const event_manager_ &_M( void ) const
-		{
-			if ( _Manager ==  NULL )
-				ERRFwk();
-
-			return *_Manager;
-		}
 	protected:
-		virtual void XHTCLLBKStart( void ) = 0;
+		virtual void XHTCLLBKOnLoad( const char *Launcher ) = 0;
 		virtual const char *XHTCLLBKLanguage( void ) = 0;
-		virtual bso::bool__ XHTCLLBKOnClose( void ) = 0;
+		virtual instance_callback__ *XHTCLLBKNew( upstream_callback__ &Callback ) = 0;
+		// Destruction by destructor member.
+		virtual void XHTCLLBKOnUnload( void ) = 0;
 	public:
-		void reset( bso::bool__ P = true )
+		void reset( bso::bool__ = true )
 		{
-			_Manager = NULL;
+			// Standardisation.
 		}
-		E_CVDTOR( downstream_callback__ )
-		void Init( const event_manager_ &Manager)
+		E_CVDTOR( downstream_callback__ );
+		void Init( void )
 		{
-			_Manager = &Manager;
+			// Standardisation.
 		}
-		void Start( void )
+		void OnLoad( const char *Launcher )
 		{
-			return XHTCLLBKStart();
-		}
-		bso::bool__ OnClose( void )
-		{
-			return XHTCLLBKOnClose();
+			return XHTCLLBKOnLoad( Launcher );
 		}
 		const char *Language( void )
 		{
 			return XHTCLLBKLanguage();
+		}
+		instance_callback__ *New( upstream_callback__ &Callback )
+		{
+			return XHTCLLBKNew( Callback );
+		}
+		void OnUnload( void )
+		{
+			return XHTCLLBKOnUnload();
 		}
 		/*
 			Déclaré en 'vritual' pour s'assurer que cette méthode est bien exécutée dans le même contexte
@@ -355,6 +270,7 @@ namespace xhtcllbk {
 			avoir été lancé avec les mêmes options que le compilateur aval.
 		*/
 		// 'const char *' pour avoir une strucutre de données simple, car donnée passée entre codes compilés séparément.
+		/*
 		virtual void Handle(
 			const char *EventName,
 			const char *Id )
@@ -366,6 +282,7 @@ namespace xhtcllbk {
 
 			Handler->Handle( Id );
 		}
+		*/
 	};
 
 #pragma pack( push, 1)
@@ -375,7 +292,6 @@ namespace xhtcllbk {
 	private:
 		const char *_Version;	// Toujours en première position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
-		token__ _Token;
 		upstream_callback__ *_Callback;
 		const char *_LauncherIdentification;
 	public:
@@ -383,18 +299,15 @@ namespace xhtcllbk {
 		{
 			_Version = NULL;
 			_Control = 0;
-			_Token = UndefinedToken;
 			_Callback = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			token__ Token,
 			upstream_callback__ &Callback,
 			const char *LauncherIndetification )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
-			_Token = Token;
 			_Callback = &Callback;
 			_LauncherIdentification = LauncherIndetification;
 		}
@@ -416,7 +329,6 @@ namespace xhtcllbk {
 
 			return _LauncherIdentification;
 		}
-		E_RODISCLOSE__( token__, Token );
 	};
 #pragma pack( pop )
 

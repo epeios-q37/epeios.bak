@@ -131,7 +131,7 @@ namespace fblfrd {
 		typedef fbltyp::id16__ command__;
 		typedef fbltyp::id16__ type__;
 
-	class reporting_callbacks__
+	class reporting_callback__
 	{
 	protected:
 		virtual void FBLFRDReport(
@@ -142,7 +142,7 @@ namespace fblfrd {
 		{
 			// Standardisation.
 		}
-		E_CDTOR( reporting_callbacks__ )
+		E_CDTOR( reporting_callback__ )
 		void Init( void )
 		{
 			// Standardisation.
@@ -233,7 +233,7 @@ namespace fblfrd {
 	{
 	private:
 		fblfph::callbacks__ *_ParametersCallbacks;
-		reporting_callbacks__ *_ReportingCallbacks;
+		reporting_callback__ *_ReportingCallback;
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramètre d'entrée.
 		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramètre flow dans les paramètres de sortie.
 		bso::bool__ _DismissPending;
@@ -286,10 +286,10 @@ namespace fblfrd {
 			fblovl::reply__ Reply,
 			const char *Message )
 		{
-			if ( _ReportingCallbacks == NULL )
+			if ( _ReportingCallback == NULL )
 				ERRFwk();
 
-			_ReportingCallbacks->Report( Reply, Message );
+			_ReportingCallback->Report( Reply, Message );
 		}
 		id16__ Commands_[fblcmd::c_amount];
 		char Message_[100];
@@ -361,7 +361,7 @@ namespace fblfrd {
 			}
 				
 			_ParametersCallbacks = NULL;
-			_ReportingCallbacks = NULL;
+			_ReportingCallback = NULL;
 			Channel_ = NULL;
 			_FlowInParameter = NULL;
 			_FlowOutParameter = false;
@@ -374,7 +374,7 @@ namespace fblfrd {
 			const compatibility_informations__ &CompatibilityInformations,
 			flw::ioflow__ &Channel,
 			fblfph::callbacks__ &ParametersCallbacks,
-			reporting_callbacks__ &ReportingCallbacks,
+			reporting_callback__ &ReportingCallback,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
 			bso::bool__ Success = true;
@@ -389,7 +389,7 @@ namespace fblfrd {
 
 			Channel_ = &Channel;
 			_ParametersCallbacks = &ParametersCallbacks;
-			_ReportingCallbacks = &ReportingCallbacks;
+			_ReportingCallback = &ReportingCallback;
 			_FlowInParameter = NULL;
 			_FlowOutParameter = false;
 			_DismissPending = false;
@@ -804,7 +804,7 @@ namespace fblfrd {
 			const compatibility_informations__ &CompatibilityInformations,
 			flw::ioflow__ &Flow,
 			fblovl::mode__ Mode,
-			fblfrd::reporting_callbacks__ &ReportingCallbacks,
+			fblfrd::reporting_callback__ &ReportingCallback,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
 			fblfph::callbacks__ *Callbacks = NULL;
@@ -823,7 +823,7 @@ namespace fblfrd {
 				break;
 			}
 
-			return frontend___::Init( Language, CompatibilityInformations, Flow, *Callbacks, ReportingCallbacks, IncompatibilityInformations  );
+			return frontend___::Init( Language, CompatibilityInformations, Flow, *Callbacks, ReportingCallback, IncompatibilityInformations  );
 		}
 	};
 }

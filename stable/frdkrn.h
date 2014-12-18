@@ -265,10 +265,10 @@ namespace frdkrn {
 		const char *Affix,
 		str::string_ &FileName );
 
-	typedef fblfrd::reporting_callbacks__ _backend_error_reporting_callbacks__;
+	typedef fblfrd::reporting_callback__ _reporting_callback__;
 
-	class reporting_callbacks__
-	: public _backend_error_reporting_callbacks__
+	class reporting_callback__
+	: public _reporting_callback__
 	{
 	private:
 		const class kernel___ *_Kernel;
@@ -277,26 +277,21 @@ namespace frdkrn {
 			fblovl::reply__ Reply,
 			const char *Message );
 		virtual void FRDKRNReport( const str::string_ &Message ) = 0;
-		virtual void FRDKRNNotify( const str::string_ &Message ) = 0;
 	public:
 		void reset ( bso::bool__ P = true )
 		{
-			_backend_error_reporting_callbacks__::reset( P );
+			_reporting_callback__::reset( P );
 			_Kernel = NULL;
 		}
-		E_VDTOR( reporting_callbacks__ )
+		E_VDTOR( reporting_callback__ )
 		void Init( const class kernel___ &Kernel )
 		{
-			_backend_error_reporting_callbacks__::Init();
+			_reporting_callback__::Init();
 			_Kernel = &Kernel;
 		}
 		void Report( const str::string_ &Message )
 		{
 			FRDKRNReport( Message );
-		}
-		void Notify( const str::string_ &Message )
-		{
-			FRDKRNNotify( Message );
 		}
 	};
 
@@ -312,7 +307,7 @@ namespace frdkrn {
 		lcl::meaning _ErrorMeaning;
 		time_t _ProjectOriginalTimeStamp;	// Horodatage de la créationn du chargement du projet ou de sa dernière sauvegarde. Si == 0, pas de projet en cours d'utilisation.
 		time_t _ProjectModificationTimeStamp;	// Horodatage de la dernière modification du projet.
-		reporting_callbacks__ *_ReportingCallbacks;
+		reporting_callback__ *_ReportingCallback;
 		const char *_LauncherIdentification;
 # if 0
 		registry_ &_R( void )
@@ -394,7 +389,7 @@ namespace frdkrn {
 			_ErrorMeaning.reset( P );
 			_ProjectOriginalTimeStamp = 0;
 			_ProjectModificationTimeStamp = 0;
-			_ReportingCallbacks = NULL;
+			_ReportingCallback = NULL;
 			_LauncherIdentification = NULL;
 		}
 		E_CVDTOR( kernel___ );
@@ -402,7 +397,7 @@ namespace frdkrn {
 			const registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
-			reporting_callbacks__ &ReportingCallbacks,
+			reporting_callback__ &ReportingCallback,
 			const char *LauncherIdentification )	//  PAS dupliqué !
 		{
 			_Registry = &Registry;
@@ -417,7 +412,7 @@ namespace frdkrn {
 			_Language = Language;
 
 			_ProjectOriginalTimeStamp = 0;
-			_ReportingCallbacks = &ReportingCallbacks;
+			_ReportingCallback = &ReportingCallback;
 			_LauncherIdentification = LauncherIdentification;
 			// L'initialisation de '_Frontend' et '_ClientCore' se fait à la connection.
 
@@ -474,31 +469,14 @@ namespace frdkrn {
 		ERRProlog
 			str::string Translation;
 		ERRBegin
-			if( _ReportingCallbacks == NULL )
+			if( _ReportingCallback == NULL )
 				ERRFwk();
 
 			Translation.Init();
 
 			Locale().GetTranslation( Meaning, Language(), Translation );
 
-			_ReportingCallbacks->Report( Translation );
-		ERRErr
-		ERREnd
-		ERREpilog
-		}
-		void Notify( const lcl::meaning_ &Meaning ) const
-		{
-		ERRProlog
-			str::string Translation;
-		ERRBegin
-			if( _ReportingCallbacks == NULL )
-				ERRFwk();
-
-			Translation.Init();
-
-			Locale().GetTranslation( Meaning, Language(), Translation );
-
-			_ReportingCallbacks->Notify( Translation );
+			_ReportingCallback->Report( Translation );
 		ERRErr
 		ERREnd
 		ERREpilog

@@ -122,14 +122,14 @@ namespace xhtfbs {
 	XHTFBS_RACK( RootTagName, content );\
 	XHTFBS_RACK( RootTagName, context )
 
-	class event_handler__
+	class event_callback__
 	{
 	public:
 		void reset( bso::bool__ = true )
 		{
 			//Standardisation.
 		}
-		E_CVDTOR( event_handler__ )
+		E_CVDTOR( event_callback__ )
 		void Init( void )
 		{
 			// Standadisation;

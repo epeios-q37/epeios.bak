@@ -33,16 +33,24 @@
 # include "xhtfmn.h"
 # include "xhtfsf.h"
 
-
 using namespace sclxhtml;
 
 static bso::bool__ IsInitialized_ = false;
+
+static const char *Launcher_ = NULL;
 
 const sclrgstry::registry_ &sclxhtml::GetRegistry( void )
 {
 	return sclrgstry::GetCommonRegistry();
 }
 
+const char *sclxhtml::GetLauncher( void )
+{
+	if ( Launcher_ == NULL )
+		ERRFwk();
+
+	return Launcher_;
+}
 
 #ifdef CPE_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
@@ -56,84 +64,60 @@ DEF( XHTCLLBK_RETRIEVE_FUNCTION_NAME, xhtcllbk::retrieve );
 
 // Bien que définit dans un '.cpp', et propre à ce '.cpp', VC++ se mélange les pinceaux avec le 'callback__' définit dans 'scllocale.cpp', d'où le 'namespace'.
 namespace {
-	typedef xhtcllbk::downstream_callback__ _callback__;
 
-	class callback__
-	: public _callback__
+	typedef xhtcllbk::downstream_callback__ _downstream_callback__;
+
+	class downstream_callback__
+	: public _downstream_callback__
 	{
-	private:
-		session_core___ *_Session;
 	protected:
-		session_core___ &_S( void )
+		virtual void XHTCLLBKOnLoad( const char *Launcher ) override
 		{
-			if ( _Session == NULL )
-				ERRFwk();
-
-			return *_Session;
-		}
-		virtual void XHTCLLBKStart( void ) override
-		{
-			_S().Start();
-		}
-		virtual bso::bool__ XHTCLLBKOnClose( void ) override
-		{
-			return _S().OnClose();
+			Launcher_ = Launcher;
+			SCLXHTMLOnLoad();
 		}
 		virtual const char *XHTCLLBKLanguage( void ) override
 		{
 			return sclmisc::GetLanguage();
 		}
+		virtual xhtcllbk::instance_callback__ *XHTCLLBKNew( xhtcllbk::upstream_callback__ &Callback ) override
+		{
+			return SCLXHTMLNew( Callback );
+		}
+		// Destruction by destructor member.
+		virtual void XHTCLLBKOnUnload( void ) override
+		{
+			SCLXHTMLOnUnload();
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				if ( _Session != NULL )
-					delete _Session;
-
-			_callback__::reset( P );
-			_Session = NULL;
+			_downstream_callback__::reset( P );
 		}
-		E_CVDTOR( callback__ );
-		void Init( session_core___ &Session )
+		E_CVDTOR( downstream_callback__ );
+		void Init( void )
 		{
-			_Session = &Session;
-			_callback__::Init( Agent().EventManager() );
-		}
-		xhtagent::agent_core___ &Agent( void )
-		{
-			return _S().AgentCore();
+			_downstream_callback__::Init();
 		}
 	};
 }
 
 xhtcllbk::downstream_callback__ *XHTCLLBKRetrieve( const xhtcllbk::shared_data__ &Data )
 {
-	callback__ *Callback = NULL;
+	downstream_callback__ *Callback = NULL;
 ERRProlog
-	session_core___ *Session = NULL;
 ERRBegin
-
-	SCLXHTMLOnLoading( Data.LauncherIdentification() );
-
-	Callback = new callback__;
+	Callback = new downstream_callback__;
 
 	if ( Callback == NULL )
 		ERRAlc();
 
-	Session = sclxhtml::SCLXHTMLNewSession( Data.Token(), Data.Callback() );
-
-	if ( Session == NULL )
-		ERRFwk();
-
-	Callback->Init( *Session  );
+	Callback->Init();
 ERRErr
 	if ( Callback != NULL )
 		delete Callback;
 
 	Callback = NULL;
-
-	if ( Session !=  NULL )
-		delete Session;
 ERREnd
 ERREpilog
 	return Callback;

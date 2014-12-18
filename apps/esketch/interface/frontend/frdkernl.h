@@ -69,20 +69,16 @@ namespace frdkernl {
 			const rgstry::multi_level_registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
-			frdkrn::reporting_callbacks__ &ReportingCallbacks,
+			frdkrn::reporting_callback__ &ReportingCallback,
 			const char *LauncherIdentification )
 		{
 			// Les autres objets sont initialisés lors de la connection.
 
-			return _kernel___::Init( Registry, Locale, Language, ReportingCallbacks, LauncherIdentification );
+			return _kernel___::Init( Registry, Locale, Language, ReportingCallback, LauncherIdentification );
 		}
 		void Report( const char *Message )
 		{
 			sclfrntnd::Report( *this, Message );
-		}
-		void Notify( const char *Message )
-		{
-			sclfrntnd::Notify( *this, Message );
 		}
 	};
 

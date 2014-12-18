@@ -28,9 +28,11 @@
 
 namespace frdsessn {
 
-	typedef frdssn::session___ _session___;
+	namespace {
+		typedef frdssn::session___ _session___;
+	}
 
-	class session___
+	class user___
 	: public _session___
 	{
 	private:
@@ -65,7 +67,7 @@ namespace frdsessn {
 			_Kernel = NULL;
 			_session___::reset( P );
 		}
-		E_CVDTOR( session___ );
+		E_CVDTOR( user___ );
 		void Init( frdkernl::kernel___ &Kernel )
 		{
 			_Kernel = &Kernel;

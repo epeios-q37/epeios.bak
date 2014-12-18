@@ -126,21 +126,6 @@ ERREnd
 ERREpilog
 }
 
-void sclfrntnd::Notify(
-	frdkrn::kernel___ &Kernel,
-	const char *Message )
-{
-ERRProlog
-	lcl::meaning Meaning;
-ERRBegin
-	Meaning.Init();
-
-	Kernel.Notify( GetMeaning_( Message, Meaning ) );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 static void GetPredefinedItem_(
 	const rgstry::entry___ &Alias,
 	const str::string_ &Id,

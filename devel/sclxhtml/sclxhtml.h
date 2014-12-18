@@ -47,14 +47,107 @@
 namespace sclxhtml {
 	const sclrgstry::registry_ &GetRegistry( void );
 
-	typedef xhtcllbk::event_handler__ _event_handler__;
+	const char *GetLauncher( void );
 
-	template <typename session> class event_handler__
-	: public _event_handler__
+	namespace {
+		class _event_callback__
+		{
+		protected:
+			virtual void SCLXHTMLHandle( const char *Id ) = 0;
+		public:
+			void reset( bso::bool__ = true )
+			{
+				// Standardisation.
+			}
+			E_CVDTOR( _event_callback__ );
+			void Init( void )
+			{
+				// Standardisation.
+			}
+			void Handle( const char *Id )
+			{
+				SCLXHTMLHandle( Id );
+			}
+		};
+
+		E_ROW( crow__ );	// (event) handler row;
+
+		typedef bch::E_BUNCHt_( _event_callback__ *, crow__ ) _event_callbacks_;
+
+		class event_handler_
+		{
+		private:
+			_event_callback__ *_Get( const str::string_ &Name ) const
+			{
+				crow__ Row = stsfsm::GetId( Name, Automat );
+
+				if ( Row == E_NIL )
+					return NULL;
+
+				return Callbacks( Row );
+			}
+		public:
+			struct s {
+				stsfsm::automat_::s Automat;
+				_event_callbacks_::s Callbacks;
+			};
+			stsfsm::automat_ Automat;
+			_event_callbacks_ Callbacks;
+			event_handler_( s &S )
+			: Automat( S.Automat ),
+			  Callbacks( S.Callbacks )
+			{}
+			void reset( bso::bool__ P = true )
+			{
+				Automat.reset( P );
+				Callbacks.reset( P );
+			}
+			void plug( ags::E_ASTORAGE_ &AS )
+			{
+				Automat.plug( AS );
+				Callbacks.plug( AS );
+			}
+			event_handler_ &operator =(const event_handler_ &EM)
+			{
+				Automat = EM.Automat;
+				Callbacks = EM.Callbacks;
+
+				return *this;
+			}
+			void Init( void )
+			{
+				Automat.Init();
+				Callbacks.Init();
+			}
+			bso::bool__ Add(
+				const char *Name,
+				_event_callback__ &Callback )
+			{
+				return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
+			}
+			void Handle(
+				const char *Id,
+				const char *Event )
+			{
+				_event_callback__ *Callback = _Get( str::string(  Event ) );
+
+				if ( Callback == NULL )
+					ERRFwk();
+
+				Callback->Handle( Id );
+			}
+		};
+
+		E_AUTO( event_handler );
+	}
+
+	template <typename instance> class event_callback__
+	: public _event_callback__
 	{
 	private:
-		session *_Session;
+		instance *_Instance;
 	protected:
+# if 0
 		virtual void SCLXHTMLHandle( const char *Id ) = 0;
 		virtual void XHTCLLBKHandle( const char *Id )
 		{
@@ -86,28 +179,29 @@ namespace sclxhtml {
 		ERREnd
 		ERREpilog
 		}
+# endif
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_event_handler__::reset( P );
-			_Session = NULL;
+			_event_callback__::reset( P );
+			_Instance = NULL;
 		}
-		E_CVDTOR( event_handler__ );
+		E_CVDTOR( event_callback__ );
 		void Init(
 			const char *EventName,
-			session &Session )
+			instance &Instance )
 		{
-			_event_handler__::Init();
-			_Session = &Session;
+			_event_callback__::Init();
+			_Instance = &Instance;
 
-			this->Session().AddEventHandler( EventName, *this );
+			this->Instance().AddEventCallback( EventName, *this );
 		}
-		session &Session( void ) const
+		instance &Instance( void ) const
 		{
-			if ( _Session == NULL )
+			if ( _Instance == NULL )
 				ERRFwk();
 
-			return *_Session;
+			return *_Instance;
 		}
 		/*
 		agent &Agent( void ) const
@@ -116,6 +210,50 @@ namespace sclxhtml {
 		}
 		*/
 	};
+
+# if 0
+	namespace {
+		typedef frdkrn::reporting_callback__ _reporting_callback__;
+	}
+
+	class reporting_callback__
+	: public _reporting_callback__
+	{
+	private:
+		xhtagent::agent_core___ *_Agent;
+		xhtagent::agent_core___ &_A( void ) const
+		{
+			if ( _Agent == NULL )
+				ERRFwk();
+
+			return *_Agent;
+		}
+	protected:
+		virtual void FRDKRNReport( const str::string_ &Message ) override
+		{
+			_A().Alert( Message );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_reporting_callback__::reset( P );
+			_Agent = NULL;
+		}
+		E_CVDTOR( reporting_callback__ );
+		void Init(
+			frdkrn::kernel___ &Kernel,
+			xhtagent::agent_core___ &Agent )
+		{
+			_Agent = &Agent;
+			_reporting_callback__::Init( Kernel );
+		}
+	};
+
+	frdkrn::kernel___ *SCLXHTMLNewKernel( void );	// A surcharger.
+
+	session_core___ *SCLXHTMLNewSession(
+		xhtcllbk::token__ Token,
+		xhtcllbk::upstream_callback__ &Callback );	// A surcharger.
 
 	class session_core___
 	{
@@ -147,13 +285,62 @@ namespace sclxhtml {
 		}
 	};
 
-	// L'utilisateur met dans le type 'session' ses propres objets et instancie le tout par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
-	template <typename agent, typename session, typename kernel, typename frame, frame UndefinedFrame > class session___
-	: public session_core___,
-	  public agent,
-	  public session
+# endif
+
+
+	namespace {
+		typedef xhtcllbk::instance_callback__ _instance_callback__;
+	}
+
+	class instance_callback___
+	: public _instance_callback__
 	{
 	private:
+		event_handler _Handler;
+	protected:
+		virtual void XHTCLLBKHandle(
+			const char *Id,
+			const char *Event ) override
+		{
+			_Handler.Handle( Id, Event );
+		}
+		virtual xhtagent::agent_core___ &_A( void ) = 0;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_instance_callback__::reset( P );
+			_Handler.reset( P );
+		}
+		E_CVDTOR( instance_callback___ );
+		void Init( void )
+		{
+			_Handler.Init();
+			_instance_callback__::Init();
+		}
+		void ResetEventHandler( void )
+		{
+			_Handler.Init();
+		}
+		void AddEventCallback(
+			const char *Event,
+			_event_callback__ &Callback )
+		{
+			_Handler.Add( Event, Callback );
+		}
+		xhtagent::agent_core___ &AgentCore( void )
+		{
+			return _A();
+		}
+	};
+
+	// L'utilisateur met dans le type 'instance' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
+	template <typename agent, typename instance, typename kernel, typename frame, frame UndefinedFrame > class instance___
+	: public instance_callback___,
+	  public agent,
+	  public instance
+	{
+	private:
+		kernel _Kernel;
 		frame _Frame;	// Current frame;
 	protected:
 		virtual void SCLXHTMLRefresh( frame Frame  ) = 0;
@@ -163,25 +350,28 @@ namespace sclxhtml {
 		}
 		void SwitchTo( frame Frame )
 		{
-			ResetEventManager();
+			ResetEventHandler();
 			_Frame = Frame;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			session_core___::reset( P );
+			instance_callback___::reset( P );
 			agent::reset( P );
+			instance::reset( P );
+			_Kernel.reset( P );
 			_Frame= UndefinedFrame;
 		}
-		E_CVDTOR( session___ )
+		E_CVDTOR( instance___ )
 		void Init(
-			xhtcllbk::token__ Token,
-			kernel &Kernel,
-			xhtcllbk::upstream_callback__ &UCallback )
+			const char *Launcher,
+			xhtcllbk::upstream_callback__ &Callback )
 		{
-			session_core___::Init();
-			agent::Init( Token, UCallback );
-			session::Init( Kernel );
+#error "S'occuper du reporting callback. !""
+			_Kernel.Init( sclxhtml::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), *(frdkrn::reporting_callback__ *)NULL, Launcher );
+			instance_callback___::Init();
+			agent::Init( Callback );
+			instance::Init( _Kernel );
 			_Frame = UndefinedFrame;
 		}
 		void Refresh( void )
@@ -190,7 +380,17 @@ namespace sclxhtml {
 				ERRFwk();
 			SCLXHTMLRefresh( _Frame );
 		}
+		kernel &Kernel( void )
+		{
+			return _Kernel;
+		}
 	};
+
+	void SCLXHTMLOnLoad( void );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
+
+	instance_callback___ *SCLXHTMLNew( xhtcllbk::upstream_callback__ &Callback );
+
+	void SCLXHTMLOnUnload( void );	// A surcharger. Lancé lorsque la bibliothèque est déchargée.
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
@@ -208,12 +408,6 @@ namespace sclxhtml {
 		frdssn::session___ &Session,
 		xhtagent::agent_core___ &Agent,
 		const frdkrn::compatibility_informations__ &CompatibilityInformations );
-
-	void SCLXHTMLOnLoading( const char *LauncherIdentification );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
-
-	session_core___ *SCLXHTMLNewSession(
-		xhtcllbk::token__ Token,
-		xhtcllbk::upstream_callback__ &Callback );	// A surcharger.
 }
 
 				  /********************************************/

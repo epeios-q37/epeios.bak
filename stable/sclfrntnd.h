@@ -47,10 +47,6 @@ namespace sclfrntnd {
 		frdkrn::kernel___ &Kernel,
 		const char *Message );
 
-	void Notify(
-		frdkrn::kernel___ &Kernel,
-		const char *Message );
-
 	// Action à effectuer sur le projet par défaut.
 	enum action__ {
 		aNone,		// Aucune action ; l'utilisateur peut sélectionner un autre type de projet, qui sera chargé manuellement.

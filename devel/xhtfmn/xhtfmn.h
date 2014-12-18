@@ -41,12 +41,25 @@
 
 namespace xhtfmn {
 
-	typedef xhtfbs::event_handler__ _event_handler__;
+	typedef xhtfbs::event_callback__ _event_callback__;
 
 	E_CDEF( char *, ProjectTypeId, "ProjectType" );
 	E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
 	E_CDEF( char *, UserProjectId, "UserProject" );
 
+	class event_callbacks__
+	{
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( event_callbacks__ );
+		void Init( void )
+		{
+			// Standardisation.
+		}
+	};
 
 	void GetContent(
 		xhtagent::agent_core___ &Agent,

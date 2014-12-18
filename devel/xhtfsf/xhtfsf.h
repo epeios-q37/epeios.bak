@@ -48,7 +48,21 @@ namespace xhtfsf {
 	E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
 
 
-	typedef xhtfbs::event_handler__ _event_handler__;
+	typedef xhtfbs::event_callback__ _event_callback__;
+
+	class event_callbacks__
+	{
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( event_callbacks__ );
+		void Init( void )
+		{
+			// Standardisation.
+		}
+	};
 
 	void GetContent(
 		xhtagent::agent_core___ &Agent,
@@ -57,21 +71,6 @@ namespace xhtfsf {
 	void GetContext(
 		xhtagent::agent_core___ &Agent,
 		xml::writer_ &Writer );
-
-	class event_handlers__
-	: protected _event_handler__
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_event_handler__::reset( P );
-		}
-		E_CVDTOR( event_handlers__ );
-		void Init( void )
-		{
-			_event_handler__::Init();
-		}
-	};
 
 	frdbse::backend_type__ GetBackendFeatures(
 		xhtagent::agent_core___ &Agent,

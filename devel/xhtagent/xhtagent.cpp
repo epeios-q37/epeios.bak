@@ -46,7 +46,7 @@ ERRBegin
 	Value.InsertAt( '"' );
 	Value.Append( '"' );
 
-	_C().SetProperty( _Token, Id, Name, Value );
+	_C().SetProperty( Id, Name, Value );
 ERRErr
 ERREnd
 ERREpilog
@@ -80,7 +80,7 @@ ERRBegin
 	XSL.Init();
 	xhtcllbk::Escape( RawXSL, XSL );
 
-	_C().OpenDialog( _Token, RawXML, RawXSL, Buffer );
+	_C().OpenDialog( RawXML, RawXSL, Buffer );
 ERRErr
 ERREnd
 ERREpilog
