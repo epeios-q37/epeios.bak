@@ -80,7 +80,7 @@ namespace {
 		{
 			return sclmisc::GetLanguage();
 		}
-		virtual xhtcllbk::instance_callback__ *XHTCLLBKNew( xhtcllbk::upstream_callback__ &Callback ) override
+		virtual xhtcllbk::session_callback__ *XHTCLLBKNew( xhtcllbk::upstream_callback__ &Callback ) override
 		{
 			return SCLXHTMLNew( Callback );
 		}

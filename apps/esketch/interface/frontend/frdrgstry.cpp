@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: frdrgstry.cpp,v 1.1 2012/12/04 15:46:27 csimon Exp $
-
 #include "frdrgstry.h"
 
 #include "flf.h"

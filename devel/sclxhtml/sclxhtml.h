@@ -141,11 +141,11 @@ namespace sclxhtml {
 		E_AUTO( event_handler );
 	}
 
-	template <typename instance> class event_callback__
+	template <typename session> class event_callback__
 	: public _event_callback__
 	{
 	private:
-		instance *_Instance;
+		session *_Session;
 	protected:
 # if 0
 		virtual void SCLXHTMLHandle( const char *Id ) = 0;
@@ -184,24 +184,24 @@ namespace sclxhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_event_callback__::reset( P );
-			_Instance = NULL;
+			_Session = NULL;
 		}
 		E_CVDTOR( event_callback__ );
 		void Init(
 			const char *EventName,
-			instance &Instance )
+			session &Session )
 		{
 			_event_callback__::Init();
-			_Instance = &Instance;
+			_Session = &Session;
 
-			this->Instance().AddEventCallback( EventName, *this );
+			this->Session().AddEventCallback( EventName, *this );
 		}
-		instance &Instance( void ) const
+		session &Session( void ) const
 		{
-			if ( _Instance == NULL )
+			if ( _Session == NULL )
 				ERRFwk();
 
-			return *_Instance;
+			return *_Session;
 		}
 		/*
 		agent &Agent( void ) const
@@ -289,11 +289,11 @@ namespace sclxhtml {
 
 
 	namespace {
-		typedef xhtcllbk::instance_callback__ _instance_callback__;
+		typedef xhtcllbk::session_callback__ _session_callback__;
 	}
 
-	class instance_callback___
-	: public _instance_callback__
+	class session_callback___
+	: public _session_callback__
 	{
 	private:
 		event_handler _Handler;
@@ -308,14 +308,14 @@ namespace sclxhtml {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_instance_callback__::reset( P );
+			_session_callback__::reset( P );
 			_Handler.reset( P );
 		}
-		E_CVDTOR( instance_callback___ );
+		E_CVDTOR( session_callback___ );
 		void Init( void )
 		{
 			_Handler.Init();
-			_instance_callback__::Init();
+			_session_callback__::Init();
 		}
 		void ResetEventHandler( void )
 		{
@@ -333,16 +333,65 @@ namespace sclxhtml {
 		}
 	};
 
-	// L'utilisateur met dans le type 'instance' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
-	template <typename agent, typename instance, typename kernel, typename frame, frame UndefinedFrame > class instance___
-	: public instance_callback___,
+	namespace {
+		typedef frdssn::session___ _session___;
+
+		typedef frdkrn::reporting_callback__ _reporting_callback__;
+
+		template <typename agent> class reporting_callback__
+		: public _reporting_callback__
+		{
+		private:
+			agent *_Agent;
+			agent &_A( void )
+			{
+				if ( _Agent == NULL )
+					ERRFwk();
+
+				return *_Agent;
+			}
+		protected:
+			virtual void FRDKRNReport( const str::string_ &Message ) override
+			{
+				_A().Alert( Message );
+			}
+		public:
+			void reset( bso::bool__ P = true )
+			{
+				_reporting_callback__::reset( P );
+				_Agent = NULL;
+			}
+			E_CVDTOR( reporting_callback__ );
+			void Init(
+				frdkrn::kernel___ &Kernel,
+				agent &Agent )
+			{
+				_reporting_callback__::Init( Kernel );
+				_Agent = &Agent;
+			}
+		};
+	}
+
+	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
+	template <typename agent, typename instances, typename kernel, typename frame, frame UndefinedFrame > class session___
+	: public session_callback___,
 	  public agent,
-	  public instance
+	  public instances,
+	  public _session___
 	{
 	private:
 		kernel _Kernel;
 		frame _Frame;	// Current frame;
+		reporting_callback__<agent> _ReportingCallback;
 	protected:
+		virtual void FRDSSNOpen( const char *Language ) override
+		{
+			instances::Init( _Kernel );
+		}
+		virtual void FRDSSNClose( void ) override
+		{
+			instances::reset();
+		}
 		virtual void SCLXHTMLRefresh( frame Frame  ) = 0;
 		virtual xhtagent::agent_core___ &_A( void ) override
 		{
@@ -356,22 +405,25 @@ namespace sclxhtml {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			instance_callback___::reset( P );
+			session_callback___::reset( P );
 			agent::reset( P );
-			instance::reset( P );
+			instances::reset( P );
+			_session___::reset( P );
 			_Kernel.reset( P );
 			_Frame= UndefinedFrame;
+			_ReportingCallback.reset( P );
 		}
-		E_CVDTOR( instance___ )
+		E_CVDTOR( session___ )
 		void Init(
 			const char *Launcher,
 			xhtcllbk::upstream_callback__ &Callback )
 		{
-#error "S'occuper du reporting callback. !""
-			_Kernel.Init( sclxhtml::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), *(frdkrn::reporting_callback__ *)NULL, Launcher );
-			instance_callback___::Init();
+			_ReportingCallback.Init( _Kernel, *this );
+			_Kernel.Init( sclxhtml::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), _ReportingCallback, Launcher );
+			session_callback___::Init();
 			agent::Init( Callback );
-			instance::Init( _Kernel );
+//			instances::Init( _Kernel );	// Lancé lors de l'ouverture de la session (vord 'FRDSSNOpen(...)').
+			_session___::Init( _Kernel );
 			_Frame = UndefinedFrame;
 		}
 		void Refresh( void )
@@ -388,7 +440,7 @@ namespace sclxhtml {
 
 	void SCLXHTMLOnLoad( void );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
 
-	instance_callback___ *SCLXHTMLNew( xhtcllbk::upstream_callback__ &Callback );
+	session_callback___ *SCLXHTMLNew( xhtcllbk::upstream_callback__ &Callback );
 
 	void SCLXHTMLOnUnload( void );	// A surcharger. Lancé lorsque la bibliothèque est déchargée.
 

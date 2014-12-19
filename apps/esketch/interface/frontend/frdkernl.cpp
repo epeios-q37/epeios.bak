@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: frdkernl.cpp,v 1.3 2013/04/09 17:57:20 csimon Exp $
-
 #include "frdkernl.h"
 #include "flf.h"
 #include "flx.h"

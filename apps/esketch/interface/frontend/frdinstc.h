@@ -17,23 +17,16 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: frdrgstry.h,v 1.2 2013/02/06 09:08:11 csimon Exp $
+// FRontenD INSTanCes
 
 #ifndef FRDINSTC__INC
 # define FRDINSTC__INC
 
 # include "frdkernl.h"
 
-# include "frdssn.h"
-
-namespace frdsessn {
-
-	namespace {
-		typedef frdssn::session___ _session___;
-	}
+namespace frdinstc {
 
 	class user___
-	: public _session___
 	{
 	private:
 		frdkernl::kernel___ *_Kernel;
@@ -52,26 +45,15 @@ namespace frdsessn {
 
 			return *_Kernel;
 		}
-	protected:
-		virtual void FRDSSNOpen( const char *Language ) override
-		{
-			_Object.Init( _K().MyObject );
-		}
-		virtual void FRDSSNClose( void ) override
-		{
-			_Object.reset();
-		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Kernel = NULL;
-			_session___::reset( P );
+			_Object.reset( P );
 		}
 		E_CVDTOR( user___ );
 		void Init( frdkernl::kernel___ &Kernel )
 		{
-			_Kernel = &Kernel;
-			_session___::Init( Kernel );
+			_Object.Init( Kernel.MyObject );
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{

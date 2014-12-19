@@ -204,7 +204,7 @@ namespace xhtcllbk {
 		}
 	};
 
-	class instance_callback__
+	class session_callback__
 	{
 	protected:
 		virtual void XHTCLLBKHandle(
@@ -215,7 +215,7 @@ namespace xhtcllbk {
 		{
 			// Standardisation.
 		}
-		E_CVDTOR( instance_callback__ );
+		E_CVDTOR( session_callback__ );
 		void Init( void )
 		{
 			// Standardisation.
@@ -233,7 +233,7 @@ namespace xhtcllbk {
 	protected:
 		virtual void XHTCLLBKOnLoad( const char *Launcher ) = 0;
 		virtual const char *XHTCLLBKLanguage( void ) = 0;
-		virtual instance_callback__ *XHTCLLBKNew( upstream_callback__ &Callback ) = 0;
+		virtual session_callback__ *XHTCLLBKNew( upstream_callback__ &Callback ) = 0;
 		// Destruction by destructor member.
 		virtual void XHTCLLBKOnUnload( void ) = 0;
 	public:
@@ -254,7 +254,7 @@ namespace xhtcllbk {
 		{
 			return XHTCLLBKLanguage();
 		}
-		instance_callback__ *New( upstream_callback__ &Callback )
+		session_callback__ *New( upstream_callback__ &Callback )
 		{
 			return XHTCLLBKNew( Callback );
 		}

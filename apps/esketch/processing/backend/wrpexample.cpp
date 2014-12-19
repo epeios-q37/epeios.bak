@@ -79,6 +79,17 @@ static const char *GetMessage_(
 
 typedef void (* f_manager ) ARGS;
 
+void wrpexample::myobject_::HANDLE(
+	fblbkd::backend___ &Backend,
+	fblbkd::untyped_module &Module,
+	fblbkd::index__ Index,
+	fblbkd::command__ Command,
+	fblbkd::request__ &Request,
+	void *UP )
+{
+	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(stuff___ *)UP );
+}
+
 static void Report_(
 	message__ Message,
 	const fblbkd::backend___ &Backend,
@@ -95,17 +106,6 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-}
-
-void wrpexample::myobject_::HANDLE(
-	fblbkd::backend___ &Backend,
-	fblbkd::untyped_module &Module,
-	fblbkd::index__ Index,
-	fblbkd::command__ Command,
-	fblbkd::request__ &Request,
-	void *UP )
-{
-	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(stuff___ *)UP );
 }
 
 #define REPORT( v )	Report_( ( v ), Backend, Request )

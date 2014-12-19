@@ -1,5 +1,5 @@
 /*
-	'frdsessn.cpp' by Claude SIMON (http://zeusw.org/).
+	'frdinstc.cpp' by Claude SIMON (http://zeusw.org/).
 
 	 This file is part of 'eSketch' software.
 
@@ -17,12 +17,10 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: frdrgstry.cpp,v 1.1 2012/12/04 15:46:27 csimon Exp $
-
-#include "frdsessn.h"
+#include "frdinstc.h"
 
 #include "flf.h"
 #include "fnm.h"
 
-using namespace frdsessn;
+using namespace frdinstc;
 

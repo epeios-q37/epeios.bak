@@ -17,12 +17,8 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: frdrgstry.h,v 1.2 2013/02/06 09:08:11 csimon Exp $
-
 #ifndef FRDRGSTRY__INC
 # define FRDRGSTRY__INC
-
-// # include "frdrgy.h"
 
 # include "sclrgstry.h"
 

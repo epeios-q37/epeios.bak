@@ -37,7 +37,7 @@ enum message__ {
 
 #define CASE( i )	\
 	case m##i:\
-		Message = SKTINF_UC_AFFIX #i;\
+		Message = SKTINF_UC_AFFIX "_" #i;\
 		break
 
 static const char *GetRawMessage_( message__ MessageId )
@@ -68,9 +68,70 @@ static const char *GetRawMessage_( message__ MessageId )
 #define STUFF common::stuff___ &Stuff = *(common::stuff___ *)UP
 #define XBACKEND	STUFF;common::xbackend___ &XBackend = Stuff.XBackend()
 
+static void Report_(
+	message__ Message,
+	const fblbkd::backend___ &Backend,
+	fblbrq::request__ &Request )
+{
+ERRProlog
+	str::string Translation;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	Translation.Init();
+
+	Backend.Locale().GetTranslation( GetRawMessage_( Message ), Backend.Language(), Translation );
+	Request.ReportRequestError( Translation.Convert( Buffer ) );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+#define REPORT( v )	Report_( ( v ), Backend, Request )
+
+inline static void Return_(
+	message__ &M,
+	message__ m )
+{
+	M = m;
+	ERRReturn;
+}
+
+#define RETURN( message )\
+	Return_( Message, m##message )\
+
+static void Handle_(
+	message__ Message,
+	const fblbkd::backend___ &Backend,
+	fblbrq::request__ &Request )
+{
+	if ( Message != m_OK )
+		REPORT( Message );
+}
+
+#define HANDLE( f )	Handle_( ( f ), Backend, Request )
+
+#define DEC( name )\
+	static inline void name(\
+		fblbkd::backend___ &Backend,\
+		fblbkd::untyped_module &,\
+		fblbkd::index__,\
+		fblbkd::command__,\
+		fblbkd::request__ &Request,\
+		bso::bool__ &,\
+		void *UP )
+
 DEC( Test )
 {
+	message__ Message = m_OK;
+ERRProlog
+ERRBegin
 	XBACKEND;
+
+	Message = mTestMessage;
+ERRErr
+ERREnd
+	HANDLE( Message );
+ERREpilog
 }
 
 #define D( name )	SKTINF_UC_SHORT #name, ::name

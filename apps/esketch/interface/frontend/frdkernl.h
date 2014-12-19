@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: frdkernl.h,v 1.3 2013/06/18 09:36:02 csimon Exp $
-
 #ifndef FRDKERNL__INC
 # define FRDKERNL__INC
 
@@ -79,6 +77,10 @@ namespace frdkernl {
 		void Report( const char *Message )
 		{
 			sclfrntnd::Report( *this, Message );
+		}
+		void TestMessage( void )
+		{
+			Statics.SKTTest();
 		}
 	};
 

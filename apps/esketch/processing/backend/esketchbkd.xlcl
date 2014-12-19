@@ -5,7 +5,11 @@
     <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
     <xpp:expand value-of="epeios.shortcuts"/>
 	<xpp:expand select="epeios.xlcl"/>
-    <!--
+	<Translations text="ESKETCH_TestMessage">
+		<Translation language="fr">Message de test</Translation>
+		<Translation language="en">Test message</Translation>
+	</Translations>
+		<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
