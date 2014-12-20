@@ -48,13 +48,13 @@
 
 # define XHTCLLBK_RETRIEVE_FUNCTION_NAME		XHTCLLBKRetrieve
 
-# define XHTCLLBK_ATRIIBUTE_PREFIX	"data-q37-"
+# define XHTCLLBK_ATTRIBUTE_NAMESPACE	"xhx:"
 
 namespace xhtcllbk {
-	E_CDEF( char *, EventAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "event" );
-	E_CDEF( char *, PaddingAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "padding" );
-	E_CDEF( char *, ParamsAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "params" );
-	E_CDEF( char *, ResultAttribute, XHTCLLBK_ATRIIBUTE_PREFIX "result" );
+	E_CDEF( char *, EventAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "event" );
+	E_CDEF( char *, PaddingAttribute, ATTRIBUTE_NAMESPACE "padding" );
+	E_CDEF( char *, ParamsAttribute, ATTRIBUTE_NAMESPACE "params" );
+	E_CDEF( char *, ResultAttribute, ATTRIBUTE_NAMESPACE "result" );
 
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
