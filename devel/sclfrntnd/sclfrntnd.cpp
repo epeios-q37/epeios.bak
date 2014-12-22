@@ -412,7 +412,9 @@ ERRBegin
 		break;
 	}
 
-	Kernel.Launch( Features, CompatibilityInformations );
+	if ( Kernel.Launch(Features, CompatibilityInformations) != frdkrn::sOK ) {
+		sclmisc::ReportAndAbort( Kernel.ErrorMeaning() );
+	}
 ERRErr
 ERREnd
 ERREpilog

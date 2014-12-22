@@ -52,9 +52,13 @@
 
 namespace xhtcllbk {
 	E_CDEF( char *, EventAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "event" );
-	E_CDEF( char *, PaddingAttribute, ATTRIBUTE_NAMESPACE "padding" );
-	E_CDEF( char *, ParamsAttribute, ATTRIBUTE_NAMESPACE "params" );
-	E_CDEF( char *, ResultAttribute, ATTRIBUTE_NAMESPACE "result" );
+	E_CDEF( char *, PaddingAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "padding" );
+	E_CDEF( char *, ResultAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "result" );
+
+	E_CDEF( char *, KeyTag, XHTCLLBK_ATTRIBUTE_NAMESPACE "key" );
+	E_CDEF( char *, KeyTagKeyAttribute, "key" );
+	E_CDEF( char *, KeyTagModifiersAttribute, "modifiers" );
+	E_CDEF( char *, KeyTagEventAttribute, "event" );
 
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
@@ -332,14 +336,10 @@ namespace xhtcllbk {
 	};
 #pragma pack( pop )
 
-	E_CDEF( char, DefaultEntrySeparator, '|' );
-	E_CDEF( char, DefaultFieldSeparator, '%' );
-	E_CDEF( char, DefaultEscapeChar, '\\' );
-
 	void Escape(
 		const str::string_ &Source,
 		str::string_ &Target,
-		bso::char__ EscapeChar = DefaultEscapeChar );
+		bso::char__ EscapeChar = strmrg::DefaultEscapeToken );
 #if 0
 	void Unescape(
 		const str::string_ &Source,
@@ -353,22 +353,16 @@ namespace xhtcllbk {
 
 	inline bso::bool__ Split(
 		const str::string_ &Input,
-		params_ &Params,
-		bso::char__ EntrySeparator = DefaultEntrySeparator,
-		bso::char__ FieldSeparator = DefaultFieldSeparator,
-		bso::char__ EscapeChar = DefaultEscapeChar )
+		params_ &Params )
 	{
-		return strmrg::Split( Input, Params, EntrySeparator, FieldSeparator, EscapeChar );
+		return strmrg::Split( Input, Params );
 	}
 
 	inline void Merge(
 		const params_ &Params,
-		str::string_ &Target,
-		bso::char__ EntrySeparator = DefaultEntrySeparator,
-		bso::char__ FieldSeparator = DefaultFieldSeparator,
-		bso::char__ EscapeChar = DefaultEscapeChar )
+		str::string_ &Target )
 	{
-		return strmrg::Merge( Params, Target, EntrySeparator, FieldSeparator, EscapeChar );
+		return strmrg::Merge( Params, Target );
 	}
 
 

@@ -88,6 +88,32 @@ ERREpilog
 	return Type;
 }
 
+void xhtfsf::HandleEmbeddedBackendSelection(
+	xhtagent::agent_core___ &Agent,
+	const char *Id )
+{
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+	str::string FileName;
+	xhtcllbk::params Params;
+	xhtcllbk::retriever__ Retriever;
+ERRBegin
+	Params.Init();
+	xhtcllbk::Split( str::string( Agent.GetAttribute( Id, xhtcllbk::ResultAttribute, Buffer ) ), Params );
+
+	Retriever.Init( Params );
+
+	FileName.Init();
+	Retriever.GetString( FileName );
+
+	if ( FileName.Amount() != 0 )
+		Agent.SetValue( EmbeddedBackendId, FileName );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

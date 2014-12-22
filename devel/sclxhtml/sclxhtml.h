@@ -302,7 +302,33 @@ namespace sclxhtml {
 			const char *Id,
 			const char *Event ) override
 		{
+		ERRProlog
+			str::string Message;
+			err::buffer__ Buffer;
+		ERRBegin
 			_Handler.Handle( Id, Event );
+		ERRErr
+			switch ( ERRType ) {
+			case err::t_Abort:
+				Message.Init();
+				if ( sclerror::GetPendingError(sclmisc::GetLanguage(), Message) ) {
+					_A().Alert( Message );
+					sclerror::ResetPendingError();
+				} else
+					_A().Alert("?");
+				break;
+			case err::t_Free:
+			case err::t_Return:
+				_A().Alert( "???" );
+				break;
+			default:
+				_A().Alert( err::Message( Buffer ) );
+				break;
+			}
+
+			ERRRst();
+		ERREnd
+		ERREpilog
 		}
 		virtual xhtagent::agent_core___ &_A( void ) = 0;
 	public:

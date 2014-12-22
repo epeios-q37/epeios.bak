@@ -528,11 +528,11 @@ template <typename t> static bso::bool__ GetSignedNumber_(
 	t &Value )
 {
 	bso::bool__ Present = false;
-	ERRProlog
-		str::string RawValue;
+ERRProlog
+	str::string RawValue;
 	sdr::row__ Error = E_NIL;
-	ERRBegin
-		RawValue.Init();
+ERRBegin
+	RawValue.Init();
 
 	if ( !( Present = BGetValue( Registry, Entry, RawValue ) ) )
 		ERRReturn;
@@ -541,10 +541,10 @@ template <typename t> static bso::bool__ GetSignedNumber_(
 
 	if ( Error != E_NIL )
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-	ERRErr
-		ERREnd
-		ERREpilog
-		return Present;
+ERRErr
+ERREnd
+ERREpilog
+	return Present;
 }
 
 #define UN( name, type )\

@@ -69,10 +69,13 @@ namespace xhtfmn {
 		xhtagent::agent_core___ &Agent,
 		xml::writer_ &Writer );
 
-
 	frdbse::project_type__ GetProjectFeatures(
 		xhtagent::agent_core___ &Agent,
 		str::string_ &ProjectFeature );
+
+	void HandleUserProjectSelection(
+		xhtagent::agent_core___ &Agent,
+		const char *Id );
 }
 
 				  /********************************************/

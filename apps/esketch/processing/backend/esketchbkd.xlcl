@@ -6,8 +6,8 @@
     <xpp:expand value-of="epeios.shortcuts"/>
 	<xpp:expand select="epeios.xlcl"/>
 	<Translations text="ESKETCH_TestMessage">
-		<Translation language="fr">Message de test</Translation>
-		<Translation language="en">Test message</Translation>
+		<Translation language="fr">Message d'erreur de test</Translation>
+		<Translation language="en">Test error message</Translation>
 	</Translations>
 		<!--
 	<Translations text="">
