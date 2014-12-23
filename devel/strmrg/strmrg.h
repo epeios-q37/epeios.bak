@@ -305,7 +305,8 @@ namespace strmrg {
 		}
 		row__ Append( const str::string_ &String );
 		row__ Append( const table_ &Table );
-		row__ Append( const str::strings_ &Strings );	// ATTENTION : Crée une seule entrée avec tous les strings, et pas autant d'entrée que de string.
+		row__ AppendMono( const str::strings_ &Strings );	// ATTENTION : Crée une seule entrée avec tous les strings, et pas autant d'entrée que de string.
+		void AppendMulti( const str::strings_ &Strings );	// ATTENTION : Ajoute autant d'entrée que de 'Strings'.
 		void GetTable(
 			row__ Row, 
 			table_ &Table ) const;
@@ -438,18 +439,7 @@ namespace strmrg {
 		{
 			Init( Table.Items, Table.Main );
 		}
-		void GetString( str::string_ &Target )
-		{
-			ctn::E_CITEMt( _item_, _irow__ ) Item;
-			Item.Init( _I() );
-
-			if ( !Item( _R()( _Row ) ).ContainsString() )
-				ERRFwk();
-
-			Target.Append(Item().String );
-
-			_Row = _R().Next( _Row );
-		}
+		void GetString( str::string_ &Target );
 		void GetTable( table_ &Table )
 		{
 			ctn::E_CITEMt( _item_, _irow__ ) Item;

@@ -310,7 +310,7 @@ ERREpilog
 	return Row;
 }
 
-row__ strmrg::table_::Append( const str::strings_ &Strings )
+row__ strmrg::table_::AppendMono( const str::strings_ &Strings )
 {
 	row__ Row = E_NIL;
 ERRProlog
@@ -334,6 +334,26 @@ ERRErr
 ERREnd
 ERREpilog
 	return Row;
+}
+
+void strmrg::table_::AppendMulti( const str::strings_ &Strings )
+{
+ERRProlog
+	ctn::E_CMITEM( str::string_ ) String;
+	sdr::row__ Row = Strings.First();
+ERRBegin
+	Row = Strings.First();
+
+	String.Init( Strings );
+
+	while ( Row != E_NIL ) {
+		Append( String( Row ) );
+
+		Row = Strings.Next( Row );
+	}
+ERRErr
+ERREnd
+ERREpilog
 }
 
 void strmrg::table_::GetTable(
@@ -501,6 +521,24 @@ bso::bool__ strmrg::Split(
 	return Split( XFlow, Table, Tokens );
 }
 
+void strmrg::retriever__::GetString( str::string_ &String )
+{
+ERRProlog
+	str::strings Strings;
+ERRBegin
+	Strings.Init();
+
+	GetStrings( Strings );
+
+	if ( Strings.Amount() != 1 )
+		ERRFwk();
+
+	Strings.Recall(Strings.First(), String );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 static void GetStrings_(
 	const _irows_ &Rows,
 	const _items_ &Items,
@@ -536,14 +574,15 @@ static void GetStrings_(
 void strmrg::retriever__::GetStrings( str::strings_ &Strings )
 {
 	ctn::E_CITEMt( _item_, _irow__ ) Item;
-
 	Item.Init( _I() );
 
-	GetStrings_( Item(_R()( _Row ) ), _I(), Strings );
+	if ( Item( _R()( _Row ) ).ContainsString() )
+		Strings.Append( Item().String );
+	else
+		GetStrings_( Item(_R()( _Row ) ), _I(), Strings );
 
 	_Row = _R().Next( _Row );
 }
-
 
 #endif
 

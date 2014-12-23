@@ -51,7 +51,8 @@
 # define XHTCLLBK_ATTRIBUTE_NAMESPACE	"xhx:"
 
 namespace xhtcllbk {
-	E_CDEF( char *, EventAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "event" );
+	E_CDEF( char *, OnEventAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "onevent" );
+	E_CDEF( char *, OnEventsAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "onevents" );
 	E_CDEF( char *, PaddingAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "padding" );
 	E_CDEF( char *, ResultAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "result" );
 
@@ -211,9 +212,9 @@ namespace xhtcllbk {
 	class session_callback__
 	{
 	protected:
-		virtual void XHTCLLBKHandle(
+		virtual void XHTCLLBKLaunch(
 			const char *Id,
-			const char *Event ) = 0;
+			const char *Action ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -224,11 +225,11 @@ namespace xhtcllbk {
 		{
 			// Standardisation.
 		}
-		void Handle(
+		void Launch(
 			const char *Id,
-			const char *Event )
+			const char *Action )
 		{
-			return XHTCLLBKHandle( Id, Event );
+			return XHTCLLBKLaunch( Id, Action );
 		}
 	};
 

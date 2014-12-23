@@ -50,36 +50,36 @@ namespace sclxhtml {
 	const char *GetLauncher( void );
 
 	namespace {
-		class _event_callback__
+		class _action_callback__
 		{
 		protected:
-			virtual void SCLXHTMLHandle( const char *Id ) = 0;
+			virtual void SCLXHTMLLaunch( const char *Id ) = 0;
 		public:
 			void reset( bso::bool__ = true )
 			{
 				// Standardisation.
 			}
-			E_CVDTOR( _event_callback__ );
+			E_CVDTOR( _action_callback__ );
 			void Init( void )
 			{
 				// Standardisation.
 			}
-			void Handle( const char *Id )
+			void Launch( const char *Id )
 			{
-				SCLXHTMLHandle( Id );
+				SCLXHTMLLaunch( Id );
 			}
 		};
 
-		E_ROW( crow__ );	// (event) handler row;
+		E_ROW( crow__ );	// callback row;
 
-		typedef bch::E_BUNCHt_( _event_callback__ *, crow__ ) _event_callbacks_;
+		typedef bch::E_BUNCHt_( _action_callback__ *, crow__ ) _action_callbacks_;
 
-		class event_handler_
+		class action_handler_
 		{
 		private:
-			_event_callback__ *_Get( const str::string_ &Name ) const
+			_action_callback__ *_Get( const str::string_ &Action ) const
 			{
-				crow__ Row = stsfsm::GetId( Name, Automat );
+				crow__ Row = stsfsm::GetId( Action, Automat );
 
 				if ( Row == E_NIL )
 					return NULL;
@@ -89,11 +89,11 @@ namespace sclxhtml {
 		public:
 			struct s {
 				stsfsm::automat_::s Automat;
-				_event_callbacks_::s Callbacks;
+				_action_callbacks_::s Callbacks;
 			};
 			stsfsm::automat_ Automat;
-			_event_callbacks_ Callbacks;
-			event_handler_( s &S )
+			_action_callbacks_ Callbacks;
+			action_handler_( s &S )
 			: Automat( S.Automat ),
 			  Callbacks( S.Callbacks )
 			{}
@@ -107,10 +107,10 @@ namespace sclxhtml {
 				Automat.plug( AS );
 				Callbacks.plug( AS );
 			}
-			event_handler_ &operator =(const event_handler_ &EM)
+			action_handler_ &operator =(const action_handler_ &AH )
 			{
-				Automat = EM.Automat;
-				Callbacks = EM.Callbacks;
+				Automat = AH.Automat;
+				Callbacks = AH.Callbacks;
 
 				return *this;
 			}
@@ -121,28 +121,28 @@ namespace sclxhtml {
 			}
 			bso::bool__ Add(
 				const char *Name,
-				_event_callback__ &Callback )
+				_action_callback__ &Callback )
 			{
 				return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
 			}
-			void Handle(
+			void Launch(
 				const char *Id,
-				const char *Event )
+				const char *Action )
 			{
-				_event_callback__ *Callback = _Get( str::string(  Event ) );
+				_action_callback__ *Callback = _Get( str::string(  Action ) );
 
 				if ( Callback == NULL )
 					ERRFwk();
 
-				Callback->Handle( Id );
+				Callback->Launch( Id );
 			}
 		};
 
-		E_AUTO( event_handler );
+		E_AUTO( action_handler );
 	}
 
-	template <typename session> class event_callback__
-	: public _event_callback__
+	template <typename session> class action_callback__
+	: public _action_callback__
 	{
 	private:
 		session *_Session;
@@ -183,18 +183,18 @@ namespace sclxhtml {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_event_callback__::reset( P );
+			_action_callback__::reset( P );
 			_Session = NULL;
 		}
-		E_CVDTOR( event_callback__ );
+		E_CVDTOR( action_callback__ );
 		void Init(
-			const char *EventName,
+			const char *ActionName,
 			session &Session )
 		{
-			_event_callback__::Init();
+			_action_callback__::Init();
 			_Session = &Session;
 
-			this->Session().AddEventCallback( EventName, *this );
+			this->Session().AddActionCallback( ActionName, *this );
 		}
 		session &Session( void ) const
 		{
@@ -296,17 +296,17 @@ namespace sclxhtml {
 	: public _session_callback__
 	{
 	private:
-		event_handler _Handler;
+		action_handler _Handler;
 	protected:
-		virtual void XHTCLLBKHandle(
+		virtual void XHTCLLBKLaunch(
 			const char *Id,
-			const char *Event ) override
+			const char *Action ) override
 		{
 		ERRProlog
 			str::string Message;
 			err::buffer__ Buffer;
 		ERRBegin
-			_Handler.Handle( Id, Event );
+			_Handler.Launch( Id, Action );
 		ERRErr
 			switch ( ERRType ) {
 			case err::t_Abort:
@@ -347,11 +347,11 @@ namespace sclxhtml {
 		{
 			_Handler.Init();
 		}
-		void AddEventCallback(
-			const char *Event,
-			_event_callback__ &Callback )
+		void AddActionCallback(
+			const char *ActionName,
+			_action_callback__ &Callback )
 		{
-			_Handler.Add( Event, Callback );
+			_Handler.Add( ActionName, Callback );
 		}
 		xhtagent::agent_core___ &AgentCore( void )
 		{
