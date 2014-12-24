@@ -31,6 +31,7 @@ namespace frdinstc {
 	private:
 		frdkernl::kernel___ *_Kernel;
 		esketch::skt_myobject___ _Object;
+		bso::bool__ _TestButtonIsVisible;
 		const frdkernl::kernel___ &_K( void ) const
 		{
 			if ( _Kernel == NULL )
@@ -49,11 +50,13 @@ namespace frdinstc {
 		void reset( bso::bool__ P = true )
 		{
 			_Object.reset( P );
+			_TestButtonIsVisible = false;
 		}
 		E_CVDTOR( user___ );
 		void Init( frdkernl::kernel___ &Kernel )
 		{
 			_Object.Init( Kernel.MyObject );
+			_TestButtonIsVisible = false;
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -71,6 +74,7 @@ namespace frdinstc {
 		{
 			return _K();
 		}
+		E_RWDISCLOSE__( bso::bool__, TestButtonIsVisible );
 	};
 }
 

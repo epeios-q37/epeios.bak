@@ -445,6 +445,14 @@ ERREnd
 ERREpilog
 }
 
+enum trace__ {
+	tOther,
+	tTable,
+	tEscape,
+	t_amount,
+	t_Undefined
+};
+
 bso::bool__ strmrg::Split(
 	xtf::extended_text_iflow__ &Flow,
 	table_ &Table,
@@ -454,7 +462,7 @@ bso::bool__ strmrg::Split(
 ERRProlog
 	str::string String;
 	table SubTable;
-	bso::bool__ WasEscape = false;
+	trace__ Trace = t_Undefined;
 	xtf::utf__ UTF;
 	bso::char__ C = 0;
 	xtf::error__ Error = xtf::e_Undefined;
@@ -464,14 +472,16 @@ ERRBegin
 	while ( !Flow.EndOfFlow( Error ) ) {
 		UTF.Init();
 		C = Flow.Get( UTF );
-		if ( WasEscape ) {
+		if ( Trace == tEscape ) {
 			String.Append( (bso::char__ *)UTF.Data, UTF.Size );
-			WasEscape = false;
+			Trace = tOther;
 		} else {
 			if ( C == Tokens.Escape ) {
-				WasEscape = true;
+				Trace = tEscape;
 			} else if ( C == Tokens.Separator ) {
-				Table.Append( String );
+				if ( ( String.Amount() != 0 ) || ( Trace != tTable ) )
+					Table.Append( String );
+				Trace = tOther;
 				String.Init();
 			} else if ( C == Tokens.Begin ) {
 				if ( String.Amount() != 0 ) {
@@ -485,17 +495,19 @@ ERRBegin
 					ERRFwk();
 				}
 				Table.Append( SubTable );
+				Trace = tTable;
 			} else if ( C == Tokens.End ) {
 				if ( String.Amount() != 0 )
 					Table.Append( String );
 				ERRReturn;
 			} else {
 				String.Append( (bso::char__ *)UTF.Data, UTF.Size );
+				Trace = tOther;
 			}
 		}
 	}
 
-	if ( ( Error == xtf::e_NoError ) && ( !WasEscape ) ) {
+	if ( ( Error == xtf::e_NoError ) && ( Trace != tEscape ) ) {
 		if ( String.Amount() != 0 )
 			Table.Append( String );
 	} else
