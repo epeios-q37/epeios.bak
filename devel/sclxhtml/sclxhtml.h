@@ -479,9 +479,9 @@ namespace sclxhtml {
 		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
 	}
 
-	void MainSubmission( xhtagent::agent_core___ &Agent );
+	void LoadProject( xhtagent::agent_core___ &Agent );
 
-	void SessionFormSubmission(
+	void LaunchProject(
 		frdkrn::kernel___ &Kernel,
 		frdssn::session___ &Session,
 		xhtagent::agent_core___ &Agent,

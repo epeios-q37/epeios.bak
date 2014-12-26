@@ -73,7 +73,7 @@ namespace xhtfmn {
 		xhtagent::agent_core___ &Agent,
 		str::string_ &ProjectFeature );
 
-	void HandleUserProjectSelection(
+	void DisplaySelectedProjectFileName(
 		xhtagent::agent_core___ &Agent,
 		const char *Id );
 }

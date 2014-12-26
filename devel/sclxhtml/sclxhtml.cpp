@@ -123,7 +123,7 @@ ERREpilog
 	return Callback;
 }
 
-void sclxhtml::MainSubmission( xhtagent::agent_core___ &Agent )
+void sclxhtml::LoadProject( xhtagent::agent_core___ &Agent )
 {
 ERRProlog
 	str::string ProjectFeature;
@@ -135,7 +135,7 @@ ERREnd
 ERREpilog
 }
 
-void sclxhtml::SessionFormSubmission(
+void sclxhtml::LaunchProject(
 	frdkrn::kernel___ &Kernel,
 	frdssn::session___ &Session,
 	xhtagent::agent_core___ &Agent,

@@ -76,7 +76,7 @@ namespace xhtfsf {
 		xhtagent::agent_core___ &Agent,
 		str::string_ &Feature );
 
-	void HandleEmbeddedBackendSelection(
+	void DisplaySelectedEmbeddedBackendFileName(
 		xhtagent::agent_core___ &Agent,
 		const char *Id );
 }

@@ -88,7 +88,7 @@ ERREpilog
 	return Type;
 }
 
-void xhtfsf::HandleEmbeddedBackendSelection(
+void xhtfsf::DisplaySelectedEmbeddedBackendFileName(
 	xhtagent::agent_core___ &Agent,
 	const char *Id )
 {

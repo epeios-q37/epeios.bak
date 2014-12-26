@@ -89,7 +89,7 @@ ERREpilog
 	return ProjectType;
 }
 
-void xhtfmn::HandleUserProjectSelection(
+void xhtfmn::DisplaySelectedProjectFileName(
 	xhtagent::agent_core___ &Agent,
 	const char *Id )
 {
