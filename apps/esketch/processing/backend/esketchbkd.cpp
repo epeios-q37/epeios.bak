@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: esketchbkd.cpp,v 1.10 2009/09/23 17:47:42 csimon Exp $
-
 #include "sclbacknd.h"
 #include "sclmisc.h"
 

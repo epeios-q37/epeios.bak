@@ -35,8 +35,8 @@
 # define SKTINF_SOFTWARE_URL				SKTINF_WEBSITE_URL
 
 # define SKTINF_AUTHOR_NAME					"Claude SIMON"
-# define SKTINF_AUTHOR_CONTACT				"http://q37.info/contact"
+# define SKTINF_AUTHOR_CONTACT				"http://q37.info/contact/"
 # define SKTINF_OWNER_NAME					"Claude SIMON"
-# define SKTINF_OWNER_CONTACT				"http://q37.info/contact"
+# define SKTINF_OWNER_CONTACT				"http://q37.info/contact/"
 
 #endif

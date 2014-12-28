@@ -632,6 +632,8 @@ namespace tol {
 
 	int System( const ntvstr::string___ &Command );
 
+	void Launch( const ntvstr::string___ &Document );	// Ouvre un document (au sens large ; peut p. ex. être également une URL).
+
 	//f Return the current date.
 	const char *Date( buffer__ &Buffer );
 

@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: mbdbsc.h,v 1.13 2009/10/07 10:12:50 csimon Exp $
-
 // SKeTch BaSiCs
 
 #ifndef SKTBSC__INC

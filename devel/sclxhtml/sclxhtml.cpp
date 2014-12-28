@@ -105,21 +105,29 @@ namespace {
 xhtcllbk::downstream_callback__ *XHTCLLBKRetrieve( const xhtcllbk::shared_data__ &Data )
 {
 	downstream_callback__ *Callback = NULL;
-ERRProlog
-ERRBegin
+ERRFProlog
+ERRFBegin
+	cio::CInF.Init( flx::VoidIFlowDriver );
+	cio::COutF.Init( flx::VoidOFlowDriver );
+	cio::CErrF.Init( Data.OFlowDriver() );
+
+	cio::Initialize( cio::tUser );
+
+	sclmisc::Initialize( (const char *)NULL );
+
 	Callback = new downstream_callback__;
 
 	if ( Callback == NULL )
 		ERRAlc();
 
 	Callback->Init();
-ERRErr
+ERRFErr
 	if ( Callback != NULL )
 		delete Callback;
 
 	Callback = NULL;
-ERREnd
-ERREpilog
+ERRFEnd
+ERRFEpilog
 	return Callback;
 }
 
@@ -163,6 +171,7 @@ class sclxhtmlpersonnalization
 public:
 	sclxhtmlpersonnalization( void )
 	{
+#if 0
 		if ( !::IsInitialized_ )
 		{
 			cio::Initialize( cio::tVoid );
@@ -170,6 +179,7 @@ public:
 
 			::IsInitialized_ = true;
 		}
+#endif
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

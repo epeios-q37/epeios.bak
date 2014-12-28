@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: example.h,v 1.5 2009/10/04 16:59:50 csimon Exp $
-
 #ifndef WRPUNBOUND__INC
 # define WRPUNBOUND__INC
 

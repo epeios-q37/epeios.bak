@@ -113,6 +113,39 @@ ERREpilog
 
 }
 
+#if defined ( CPE_LINUX )
+# define LAUNCH_COMMAND	"xdg-open"
+#elif defined( XCODE )
+# define LAUNCH_COMMAND	"open"
+#elif defined( CPE_MSVC )
+# define LAUNCH_COMMAND	"start \"\"" // Les "" dans la commande sont nécessité par 'start', car si l'argument est passé entre "", 'start' considère cela comme le titre de la fenêtre.
+#elif defined( CPE_ANDROID )
+# error
+#endif
+
+void tol::Launch( const ntvstr::string___ &Document )
+{
+ERRProlog
+	str::string Command, Buffer;
+ERRBegin
+#ifdef CPE_ANDROID
+	ERRFwk();
+#else
+	Command.Init( LAUNCH_COMMAND " \"" );
+	
+	Buffer.Init();
+	Command.Append( Document.UTF8( Buffer ) );
+
+	Command.Append( '"' );
+
+	System( Command );
+#endif
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 #ifdef TOL__WIN		
 LARGE_INTEGER	tol::_TickFrequence;
 #else

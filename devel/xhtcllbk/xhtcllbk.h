@@ -38,11 +38,11 @@
 # include "tol.h"
 # include "sdr.h"
 # include "bch.h"
-# include "stsfsm.h"
 # include "xtf.h"
 # include "strmrg.h"
+# include "iof.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"5"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"6"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -299,6 +299,7 @@ namespace xhtcllbk {
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
 		upstream_callback__ *_Callback;
 		const char *_LauncherIdentification;
+		fdr::oflow_driver_base___ *_OFlowDriver;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -309,16 +310,18 @@ namespace xhtcllbk {
 		E_CDTOR( shared_data__ );
 		void Init(
 			upstream_callback__ &Callback,
-			const char *LauncherIndetification )
+			const char *LauncherIndetification,
+			fdr::oflow_driver_base___ &OFlowDriver )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_Callback = &Callback;
 			_LauncherIdentification = LauncherIndetification;
+			_OFlowDriver = &OFlowDriver;
 		}
 		size_t ControlComputing( void )
 		{
-			return sizeof( fdr::oflow_driver___<> );
+			return sizeof( shared_data__ );
 		}
 		upstream_callback__ &Callback( void ) const
 		{
@@ -333,6 +336,13 @@ namespace xhtcllbk {
 				ERRFwk();
 
 			return _LauncherIdentification;
+		}
+		fdr::oflow_driver_base___ &OFlowDriver( void ) const
+		{
+			if ( _OFlowDriver == NULL )
+				ERRFwk();
+
+			return *_OFlowDriver;
 		}
 	};
 #pragma pack( pop )

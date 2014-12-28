@@ -48,13 +48,17 @@ namespace frdinstc {
 		}
 	public:
 		void reset( bso::bool__ P = true )
-		{
+		{	
+			_Kernel = NULL;
+
 			_Object.reset( P );
 			_TestButtonIsVisible = false;
 		}
 		E_CVDTOR( user___ );
 		void Init( frdkernl::kernel___ &Kernel )
 		{
+			_Kernel = &Kernel;
+
 			_Object.Init( Kernel.MyObject );
 			_TestButtonIsVisible = false;
 		}
