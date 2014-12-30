@@ -1194,16 +1194,16 @@ namespace tol {
 		des méthodes virtuelles.
 	*/
 
-	template <typename t> class buffer___ // Gestion d'un 'buffer' d'objets de type 't' de taille dynamique. Sa taille ne diminue jamais.
+	template <typename t> class buffer___ // Gestion d'un 'buffer' d'objets de type 't' de taille dynamique. Sa taille ne diminue jamais, et ne peut donc PAS servir pour savoir le nombre d'octets significatifs qu'il contient.
 	{
 	private:
 		t *_Pointer;
-		bso::size__ _Size;
+		bso::size__ _Extent;
 		virtual bso::bool__ _Allocate(
 			bso::size__ Size,
 			err::handling__ ErrHandling )
 		{
-			if ( _Size < Size ) {
+			if ( _Extent < Size ) {
 				void *P = realloc( _Pointer, Size * sizeof( t ) );
 
 				if ( P == NULL ) {
@@ -1214,7 +1214,7 @@ namespace tol {
 				} else 
 					_Pointer = (t *)P;
 
-				_Size = Size;
+				_Extent = Size;
 			}
 
 			return true;
@@ -1231,7 +1231,7 @@ namespace tol {
 					_Free( _Pointer );
 
 			_Pointer = NULL;
-			_Size = 0;
+			_Extent = 0;
 		}
 		buffer___( void )
 		{
@@ -1279,9 +1279,9 @@ namespace tol {
 
 			return _Pointer;
 		}
-		bso::size__ Size( void ) const
+		bso::size__ Extent( void ) const	// ATTENTION : n'est PAS le nombre d'octets significatifs !
 		{
-			return _Size;
+			return _Extent;
 		}
 		operator t*( void ) const
 		{

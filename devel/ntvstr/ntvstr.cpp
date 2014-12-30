@@ -55,22 +55,20 @@ void ntvstr::string___::Init( const bso::char__ *String )
 		String = "";
 
 	Init();
-	if ( _Core.Size() > INT_MAX )
-		ERRFwk();
 
-	// Nécessaire pour les architctures 64 bits (sous Windwos 'int' a une taille de 32 bits, et 'size_t', 64), certaines focntions Windows prentant un 'int'.
-	int CoreSize = (int)_Core.Size();
+	// Nécessaire pour les architectures 64 bits (sous Windwos 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
+	int CoreExtent = ( _Core.Extent() > INT_MAX ? INT_MAX : (int)_Core.Extent() );
 
-	if ( CoreSize == 0 )
-		_Core.Malloc( CoreSize = MultiByteToWideChar( CP_UTF8, 0, String, -1, NULL, 0 ) );
+	if ( CoreExtent == 0 )
+		_Core.Malloc( CoreExtent = MultiByteToWideChar( CP_UTF8, 0, String, -1, NULL, 0 ) );
 
-	if ( !MultiByteToWideChar( CP_UTF8, 0, String, -1, _Core, CoreSize )  ) {
+	if ( !MultiByteToWideChar( CP_UTF8, 0, String, -1, _Core, CoreExtent )  ) {
 		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
 			ERRLbr();
 
-		_Core.Malloc( CoreSize = MultiByteToWideChar( CP_UTF8, 0, String, -1, NULL, 0 ) );
+		_Core.Malloc( CoreExtent = MultiByteToWideChar( CP_UTF8, 0, String, -1, NULL, 0 ) );
 
-		if ( !MultiByteToWideChar( CP_UTF8, 0, String, -1, _Core, CoreSize )  )
+		if ( !MultiByteToWideChar( CP_UTF8, 0, String, -1, _Core, CoreExtent )  )
 			ERRLbr();
 	}
 }
@@ -104,22 +102,19 @@ const bso::char__ *ntvstr::string___::_Convert(
 	TOL_CBUFFER___ &Buffer ) const
 {
 # ifdef NTVSTR__WIN
-	if ( Buffer.Size() > INT_MAX )
-		ERRLmt();
+	// Nécessaire pour les architectures 64 bits (sous Windows, 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
+	int BufferExtent = ( Buffer.Extent() > INT_MAX ? INT_MAX : (int)Buffer.Extent() );
 
-	// Nécessaire pour les architctures 64 bits (sous Windwos 'int' a une taille de 32 bits, et 'size_t', 64), certaines focntions Windows prentant un 'int'.
-	int BufferSize = (int)Buffer.Size();
+	if ( BufferExtent == 0 )
+		Buffer.Malloc( BufferExtent = WideCharToMultiByte( CodePage, 0, _Core, -1, NULL, 0, NULL, NULL ) );
 
-	if ( BufferSize == 0 )
-		Buffer.Malloc( BufferSize = WideCharToMultiByte( CodePage, 0, _Core, -1, NULL, 0, NULL, NULL ) );
-
-	if ( !WideCharToMultiByte( CodePage, 0, _Core, -1, Buffer, BufferSize, NULL, NULL )  ) {
+	if ( !WideCharToMultiByte( CodePage, 0, _Core, -1, Buffer, BufferExtent, NULL, NULL )  ) {
 		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
 			ERRLbr();
 
-		Buffer.Malloc( BufferSize = WideCharToMultiByte( CodePage, 0, _Core, -1, NULL, 0, NULL, NULL ) );
+		Buffer.Malloc( BufferExtent = WideCharToMultiByte( CodePage, 0, _Core, -1, NULL, 0, NULL, NULL ) );
 
-		if ( !WideCharToMultiByte( CodePage, 0, _Core, -1, Buffer, BufferSize, NULL, NULL ) )
+		if ( !WideCharToMultiByte( CodePage, 0, _Core, -1, Buffer, BufferExtent, NULL, NULL ) )
 			ERRLbr();
 	}
 # elif defined( NTVSTR__POSIX )

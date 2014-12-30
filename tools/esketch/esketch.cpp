@@ -42,16 +42,14 @@ using cio::CIn;
 # define NAME_MC			"eSketch"
 # define NAME_UC			"ESKETCH"
 # define NAME_LC			"esketch"
-# define WEBSITE_URL		"http://zeusw.org/intl/"
+# define WEBSITE_URL		"http://q37.info/"
 # define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT	"http://zeusw.org/intl/contact.html"
-# define OWNER_NAME		"Claude SIMON"
-# define OWNER_CONTACT	"http://zeusw.org/intl/contact.html"
-# define COPYRIGHT		COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+# define AUTHOR_CONTACT		"http://q37.info/contact/"
+# define OWNER_NAME			"Claude SIMON"
+# define OWNER_CONTACT		"http://q37.info/contact/"
+# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 # define END
-
-/* Beginning of the part which handles command line arguments. */
 
 static void PrintHeader_( void )
 {
@@ -59,8 +57,6 @@ static void PrintHeader_( void )
 	COut << "Copyright " COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
-
-/* End of the part which handles command line arguments. */
 
 static void Test_( void )
 {
@@ -72,10 +68,11 @@ static void Test_( void )
 		name##_()
 		
 
-void scltool::SCLTOOLMain(
+int scltool::SCLTOOLMain(
 	const str::string_ &Command,
 	const scltool::oddities__ &Oddities )
 {
+	int ExitValue = EXIT_FAILURE;
 ERRProlog
 ERRBegin
 	if ( Command == "Version" )
@@ -85,9 +82,12 @@ ERRBegin
 	C( Test );
 	else
 		ERRFwk();
+
+	ExitValue = EXIT_SUCCESS;
 ERRErr
 ERREnd
 ERREpilog
+	return ExitValue;
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
