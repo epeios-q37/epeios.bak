@@ -1,7 +1,7 @@
 /*
-	'xhtfsf.h' by Claude SIMON (http://zeusw.org/).
+	'xhtprolog.h' by Claude SIMON (http://zeusw.org/).
 
-	'xhtfsf' is part of the Epeios framework.
+	'xhtprolog' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XHTFSF__INC
-# define XHTFSF__INC
+#ifndef XHTPROLOG__INC
+# define XHTPROLOG__INC
 
-# define XHTFSF_NAME		"XHTFSF"
+# define XHTPROLOG_NAME		"XHTPROLOG"
 
-# if defined( E_DEBUG ) && !defined( XHTFSF_NODBG )
-#  define XHTFSF_DBG
+# if defined( E_DEBUG ) && !defined( XHTPROLOG_NODBG )
+#  define XHTPROLOG_DBG
 # endif
 
 /******************************************************************************/
@@ -31,55 +31,37 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// XHT(ML) Frontend Session Form
+// XHT(ML) PROLOG
 
-# error "Obsolete ! User 'xhtlogin' instead !"
+# include "xhtbase.h"
+# include "xhtagent.h"
 
-# include "xhtfbs.h"
-
-# include "frdkrn.h"
+# include "frdbse.h"
 
 # include "err.h"
 # include "flw.h"
 
-namespace xhtfsf {
+namespace xhtprolog {
+	typedef xhtbase::event_callback__ _event_callback__;
 
-	E_CDEF( char *, BackendTypeId, "BackendType" );
-	E_CDEF( char *, DaemonBackendId, "DaemonBackend" );
-	E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
-	E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
-
-
-	typedef xhtfbs::event_callback__ _event_callback__;
-
-	class event_callbacks__
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( event_callbacks__ );
-		void Init( void )
-		{
-			// Standardisation.
-		}
-	};
+	E_CDEF( char *, ProjectTypeId, "ProjectType" );
+	E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
+	E_CDEF( char *, UserProjectId, "UserProject" );
 
 	void GetContent(
-		xhtagent::agent_core___ &Agent,
+		xhtagent::agent___ &Agent,
 		xml::writer_ &Writer );
 
 	void GetContext(
-		xhtagent::agent_core___ &Agent,
+		xhtagent::agent___ &Agent,
 		xml::writer_ &Writer );
 
-	frdbse::backend_type__ GetBackendFeatures(
-		xhtagent::agent_core___ &Agent,
-		str::string_ &Feature );
+	frdbse::project_type__ GetProjectFeatures(
+		xhtagent::agent___ &Agent,
+		str::string_ &ProjectFeature );
 
-	void DisplaySelectedEmbeddedBackendFileName(
-		xhtagent::agent_core___ &Agent,
+	void DisplaySelectedProjectFileName(
+		xhtagent::agent___ &Agent,
 		const char *Id );
 }
 

@@ -33,6 +33,8 @@
 
 // XHT(ML) Frontend MaiN
 
+# error "Obsolete ! USe 'xhtprolog' instead !"
+
 # include "xhtfbs.h"
 
 # include "err.h"

@@ -30,8 +30,8 @@
 
 #include "frdkrn.h"
 
-# include "xhtfmn.h"
-# include "xhtfsf.h"
+# include "xhtprolog.h"
+# include "xhtlogin.h"
 
 using namespace sclxhtml;
 
@@ -131,13 +131,13 @@ ERRFEpilog
 	return Callback;
 }
 
-void sclxhtml::LoadProject( xhtagent::agent_core___ &Agent )
+void sclxhtml::LoadProject( xhtagent::agent___ &Agent )
 {
 ERRProlog
 	str::string ProjectFeature;
 ERRBegin
 	ProjectFeature.Init();
-	sclfrntnd::LoadProject( xhtfmn::GetProjectFeatures( Agent, ProjectFeature ), ProjectFeature );
+	sclfrntnd::LoadProject( xhtprolog::GetProjectFeatures( Agent, ProjectFeature ), ProjectFeature );
 ERRErr
 ERREnd
 ERREpilog
@@ -146,7 +146,7 @@ ERREpilog
 void sclxhtml::LaunchProject(
 	frdkrn::kernel___ &Kernel,
 	frdssn::session___ &Session,
-	xhtagent::agent_core___ &Agent,
+	xhtagent::agent___ &Agent,
 	const frdkrn::compatibility_informations__ &CompatibilityInformations )
 {
 ERRProlog
@@ -154,7 +154,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	BackendFeature.Init();
-	sclfrntnd::Connect( Kernel, xhtfsf::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
+	sclfrntnd::Connect( Kernel, xhtlogin::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
 
 	Session.Open( Agent.GetLanguage( Buffer ) );
 ERRErr

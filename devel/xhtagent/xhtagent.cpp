@@ -31,7 +31,7 @@
 
 using namespace xhtagent;
 
-void xhtagent::agent_core___::SetString(
+void xhtagent::agent___::SetString(
 	const nstring___ &Id,
 	const nstring___ &Name,
 	const str::string_ &RawValue )
@@ -52,7 +52,7 @@ ERREnd
 ERREpilog
 }
 
-const str::string_ &xhtagent::agent_core___::GetSelectValue(
+const str::string_ &xhtagent::agent___::GetSelectValue(
 	const char *Id,
 	str::string_ &Buffer )
 {
@@ -66,7 +66,7 @@ ERREpilog
 	return Buffer;
 }
 
-void xhtagent::agent_core___::Alert(
+void xhtagent::agent___::Alert(
 	const str::string_ &RawXML,
 	const str::string_ &RawXSL )
 {
@@ -103,7 +103,7 @@ ERREnd
 ERREpilog
 }
 
-void xhtagent::agent_core___::Alert( const str::string_ &Message )
+void xhtagent::agent___::Alert( const str::string_ &Message )
 {
 ERRProlog
 	str::string XML, XSL;

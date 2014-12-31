@@ -42,7 +42,7 @@ namespace xhtagent {
 
 	typedef ntvstr::string___ nstring___;
 
-	class agent_core___ {
+	class agent___ {
 	private:
 		xhtcllbk::upstream_callback__ *_Callback;
 		xhtcllbk::upstream_callback__ &_C( void ) const
@@ -57,7 +57,7 @@ namespace xhtagent {
 		{
 			_Callback = NULL;
 		}
-		E_CDTOR( agent_core___ );
+		E_CDTOR( agent___ );
 		void Init( xhtcllbk::upstream_callback__ &Callback )
 		{
 			_Callback = &Callback;
@@ -158,13 +158,6 @@ namespace xhtagent {
 		{
 			Alert( str::string( Message ) );
 		}
-	};
-
-	template <typename event_callbacks> class agent___
-	: public agent_core___
-	{
-	public:
-		event_callbacks Callbacks;
 	};
 }
 

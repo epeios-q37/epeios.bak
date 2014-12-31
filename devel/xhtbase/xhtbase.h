@@ -1,7 +1,7 @@
 /*
-	'xhtfbs.h' by Claude SIMON (http://zeusw.org/).
+	'xhtbase.h' by Claude SIMON (http://zeusw.org/).
 
-	'xhtfbs' is part of the Epeios framework.
+	'xhtbase' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XHTFBS__INC
-# define XHTFBS__INC
+#ifndef XHTBASE__INC
+# define XHTBASE__INC
 
-# define XHTFBS_NAME		"XHTFBS"
+# define XHTBASE_NAME		"XHTBASE"
 
-# if defined( E_DEBUG ) && !defined( XHTFBS_NODBG )
-#  define XHTFBS_DBG
+# if defined( E_DEBUG ) && !defined( XHTBASE_NODBG )
+#  define XHTBASE_DBG
 # endif
 
 /******************************************************************************/
@@ -31,22 +31,15 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-// XHT(ML) Frontend Base
+// XHT(ML) BASE
 
-# error "Obsolete ! Use 'xhtbase' instead !"
-
-# include "xhtagent.h"
-
-# include "frdbse.h"
-
-# include "rgstry.h"
-
-# include "lcl.h"
 # include "err.h"
 # include "flw.h"
+# include "tol.h"
+# include "flx.h"
 # include "xml.h"
 
-namespace xhtfbs {
+namespace xhtbase {
 
 	E_CDEF( char *, ContentTagName, "Content" );
 	E_CDEF( char *, ContextTagName, "Context" );
@@ -109,20 +102,20 @@ namespace xhtfbs {
 		}
 	};
 
-# define XHTFBS_RACK( RootTagName, Type )\
+# define XHTBASE_RACK( RootTagName, Type )\
 	class Type##_rack___\
-	: public xhtfbs::Type##_rack___\
+	: public xhtbase::Type##_rack___\
 	{\
 	public:\
 		void Init( str::string_ &Target )\
 		{\
-			xhtfbs::Type##_rack___::Init( RootTagName, Target );\
+			xhtbase::Type##_rack___::Init( RootTagName, Target );\
 		}\
 	}
 
-# define XHTFBS_RACKS( RootTagName)\
-	XHTFBS_RACK( RootTagName, content );\
-	XHTFBS_RACK( RootTagName, context )
+# define XHTBASE_RACKS( RootTagName)\
+	XHTBASE_RACK( RootTagName, content );\
+	XHTBASE_RACK( RootTagName, context )
 
 	class event_callback__
 	{
@@ -137,6 +130,7 @@ namespace xhtfbs {
 			// Standadisation;
 		}
 	};
+
 }
 
 				  /********************************************/
