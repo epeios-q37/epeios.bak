@@ -293,6 +293,15 @@ namespace lcl {
 			const char *Language,
 			str::string_ &Translation ) const;
 		const str::string_ &GetTranslation(
+			const str::string_ &Text,
+			const char *Language,
+			str::string_ &Translation ) const	// Version simplifiée.
+		{
+			_GetTranslation( Text, Language, Translation );
+
+			return Translation ;
+		}
+		const str::string_ &GetTranslation(
 			const char *Text,
 			const char *Language,
 			str::string_ &Translation ) const	// Version simplifiée.

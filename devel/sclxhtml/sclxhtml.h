@@ -280,7 +280,7 @@ namespace sclxhtml {
 	}
 
 	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
-	template <typename instances, typename kernel, typename frame, frame UndefinedFrame > class session___
+	template <typename instances, typename kernel, typename page, page UndefinedPage > class session___
 	: public session_callback___,
 	  public _agent___,
 	  public instances,
@@ -288,7 +288,7 @@ namespace sclxhtml {
 	{
 	private:
 		kernel _Kernel;
-		frame _Frame;	// Current frame;
+		page _Page;	// Current page;
 		reporting_callback__ _ReportingCallback;
 	protected:
 		virtual void FRDSSNOpen( const char *Language ) override
@@ -299,7 +299,7 @@ namespace sclxhtml {
 		{
 			instances::reset();
 		}
-		virtual void SCLXHTMLRefresh( frame Frame  ) = 0;
+		virtual void SCLXHTMLRefresh( page Page  ) = 0;
 		virtual xhtagent::agent___ &_A( void ) override
 		{
 			return *this;
@@ -312,7 +312,7 @@ namespace sclxhtml {
 			instances::reset( P );
 			_session___::reset( P );
 			_Kernel.reset( P );
-			_Frame= UndefinedFrame;
+			_Page= UndefinedPage;
 			_ReportingCallback.reset( P );
 		}
 		E_CVDTOR( session___ )
@@ -326,19 +326,19 @@ namespace sclxhtml {
 			_agent___::Init( Callback );
 //			instances::Init( _Kernel );	// Lancé lors de l'ouverture de la session (vord 'FRDSSNOpen(...)').
 			_session___::Init( _Kernel );
-			_Frame = UndefinedFrame;
+			_Page = UndefinedPage;
 		}
 		void Refresh( void )
 		{
-			if ( _Frame == UndefinedFrame )
+			if ( _Page == UndefinedPage )
 				ERRFwk();
 			else
-				SCLXHTMLRefresh( _Frame );
+				SCLXHTMLRefresh( _Page );
 		}
-		void SwitchTo( frame Frame = UndefinedFrame )
+		void SwitchTo( page Page = UndefinedPage )
 		{
-			if ( Frame != UndefinedFrame )
-				_Frame = Frame;
+			if ( Page != UndefinedPage )
+				_Page = Page;
 			else
 				ERRFwk();
 		}
@@ -353,10 +353,6 @@ namespace sclxhtml {
 	session_callback___ *SCLXHTMLNew( xhtcllbk::upstream_callback__ &Callback );
 
 	void SCLXHTMLOnUnload( void );	// A surcharger. Lancé lorsque la bibliothèque est déchargée.
-
-	template <typename session, typename frame> void SCLXHTMLShow(
-		frame &Frame,
-		session &Session );	// A surcharger.
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
