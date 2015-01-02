@@ -109,8 +109,6 @@ ERREpilog
 		ERRSys();
 
 	return Result;
-
-
 }
 
 #if defined ( CPE_LINUX )

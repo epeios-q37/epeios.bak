@@ -353,6 +353,22 @@ namespace str {
 		}
 	};
 
+	template <typename type> inline void ToEnum(
+		const str::string_ &String,
+		type &Number )
+	{
+		String.ToNumber( *(bso::enum__ *)&Number );
+	}
+
+	template <typename type> inline type ToEnum( const str::string_ &String )
+	{
+		type Number;
+
+		String.ToNumber( *(bso::enum__ *)&Number );
+
+		return Number;
+	}
+
 	//f Put all the caracters of 'String' on 'Ostream', and put a 'NULL' character.
 	flw::oflow__ &operator <<(
 		flw::oflow__ &OStream,

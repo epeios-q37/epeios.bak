@@ -336,6 +336,9 @@ namespace bso {
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
 
+	// Type de base d'un enum (Utilisé par E_ENUM(...).
+	typedef bso::u8__ enum__;
+
 	//c A sign ( -(1) +(1) 0 ).
 	class sign__
 	{
