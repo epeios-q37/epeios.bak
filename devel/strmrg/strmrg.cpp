@@ -30,193 +30,13 @@
 
 using namespace strmrg;
 
-#if 0 // OLD
-
-typedef bso::char__ pattern__[4];
-
-static void Put_(
-	const str::string_ &String,
-	flw::oflow__ &Flow,
-	const pattern__ &Pattern )
-{
-	bso::char__ C = 0;
-	sdr::row__ Row = String.First();
-
-	while ( Row != E_NIL ) {
-		if ( strchr( Pattern, C = String( Row ) ) != NULL )
-			Flow << Pattern[2];	// Caractère d'échappement.
-
-		Flow << C;
-
-		Row = String.Next( Row );
-	}
-}
-
-static void Merge_(
-	const str::strings_ &Strings,
-	flw::oflow__ &Flow,
-	const pattern__ &Pattern )
-{
-	ctn::E_CMITEM( str::string_ ) String;
-	sdr::row__ Row = Strings.First();
-
-	String.Init( Strings );
-
-	while ( Row != E_NIL ) {
-		Put_( String( Row ), Flow, Pattern );
-
-		Row = Strings.Next( Row );
-
-		Flow << Pattern[0];	// Séparateur d'entrées.
-	}
-}
-
-static void Fill_(
-	pattern__ &Pattern,
-	char EntrySeparator,
-	char FieldSeparator,
-	char EscapeChar )
-{
-	Pattern[0] = EntrySeparator;
-	Pattern[1] = FieldSeparator;
-	Pattern[2] = EscapeChar;
-	Pattern[3] = 0;
-}
-
-void strmrg::Merge(
-	const table_ &Table,
-	flw::oflow__ &Flow,
-	char EntrySeparator,
-	char FieldSeparator,
-	char EscapeChar )
-{
-	ctn::E_CITEM( str::strings_ ) Strings;
-	sdr::row__ Row = Table.First();
-	pattern__ Pattern;
-
-	Fill_( Pattern, EntrySeparator, FieldSeparator, EscapeChar );
-
-	Strings.Init( Table );
-
-	while ( Row != E_NIL ) {
-		Merge_( Strings( Row ), Flow, Pattern );
-
-		Row = Table.Next( Row );
-
-		Flow << FieldSeparator;
-	}
-}
-
-void strmrg::Merge(
-	const table_ &Table,
-	str::string_ &String,
-	char EntrySeparator,
-	char FieldSeparator,
-	char EscapeChar )
-{
-ERRProlog
-	flx::E_STRING_OFLOW___ Flow;
-ERRBegin
-	Flow.Init( String );
-
-	Merge( Table, Flow, EntrySeparator, FieldSeparator, EscapeChar );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-bso::bool__ strmrg::Split(
-	xtf::extended_text_iflow__ &Flow,
-	table_ &Table,
-	char EntrySeparator,
-	char FieldSeparator,
-	char EscapeChar )
-{
-	bso::bool__ Success = false;
-ERRProlog
-	str::string String;
-	str::strings Strings;
-	xtf::error__ Error = xtf::e_Undefined;
-	bso::char__ C;
-	xtf::utf__ UTF;
-	bso::bool__ Escaping = false;
-ERRBegin
-	String.Init();
-	Strings.Init();
-
-	while ( !Flow.EndOfFlow( Error ) ) {
-		UTF.Init();
-		C = Flow.Get( UTF );
-
-		if ( C == EscapeChar ) {
-			if ( Escaping )
-				String.Append( EscapeChar );
-			Escaping = !Escaping;
-		} else if ( C == EntrySeparator ) {
-			if ( Escaping ) {
-				String.Append( EntrySeparator );
-				Escaping = false;
-			} else {
-				Strings.Append( String );
-				String.Init();
-			}
-		} else if ( C == FieldSeparator ) {
-			if ( Escaping ) {
-				String.Append( FieldSeparator );
-				Escaping = false;
-			} else {
-				if ( String.Amount() )
-					Strings.Append( String );
-				String.Init();
-				Table.Append( Strings );
-				Strings.Init();
-			}
-		} else if ( Escaping )
-			ERRReturn;
-		else
-			String.Append( (bso::char__ *)UTF.Data, UTF.Size );
-	}
-
-	if ( !Escaping )
-		if ( Error == xtf::e_NoError ) {
-			if ( String.Amount() )
-				Strings.Append( String );
-
-			if ( Strings.Amount() )
-				Table.Append( Strings );
-
-			Success = true;
-		}
-ERRErr
-ERREnd
-ERREpilog
-	return Success;
-}
-
-bso::bool__ strmrg::Split(
-	const str::string_ &String,
-	table_ &Table,
-	char EntrySeparator,
-	char FieldSeparator,
-	char EscapeChar )
-{
-	flx::E_STRING_IFLOW__ SFlow;
-	xtf::extended_text_iflow__ XFlow;
-
-	SFlow.Init( String );
-	XFlow.Init( SFlow, utf::f_Guess );
-
-	return Split( XFlow, Table, EntrySeparator, FieldSeparator, EscapeChar );
-}
-#else // NEW
-
 row__ strmrg::table_::Append( const str::string_ &String )
 {
 	row__ Row = E_NIL;
 ERRProlog
 	_item Item;
 ERRBegin
-	Item.Init( String );
+	Item.Init( Strings.Append( String ) );
 
 	Row = Main.Append( Items.Append( Item ) );
 ERRErr
@@ -226,27 +46,32 @@ ERREpilog
 }
 
 // Prédéclaration.
-
 static void Append_(
 	const _irows_ &SourceRows,
 	const _items_ &SourceItems,
+	const _strings_ &SourceStrings,
 	_irows_ &TargetRows,
-	_items_ &TargetItems );
+	_items_ &TargetItems,
+	_strings_ &TargetStrings );
 
 static _irow__ Append_(
 	const _item_ &SourceItem,
 	const _items_ &SourceItems,
-	_items_ &TargetItems )
+	const _strings_ &SourceStrings,
+	_items_ &TargetItems,
+	_strings_ &TargetStrings )
 {
 	_irow__ Row = E_NIL;
 ERRProlog
 	_item Item;
+	ctn::E_CMITEMt( _string_ , _srow__ ) SourceString;
 ERRBegin
 	if ( SourceItem.ContainsString() ) {	// Positionne 'SourceItem()' pour la suite !
-		Item.Init( SourceItem.String );
+		SourceString.Init( SourceStrings );
+		Item.Init( TargetStrings.Append( SourceString( SourceItem.String() ) ) );
 	} else {
 		Item.Init();
-		Append_( SourceItem.Items, SourceItems, Item.Items, TargetItems );
+		Append_( SourceItem.Items, SourceItems, SourceStrings, Item.Items, TargetItems, TargetStrings );
 	}
 
 	Row = TargetItems.Append( Item ) ;
@@ -259,28 +84,32 @@ ERREpilog
 static _irow__ Append_(
 	_irow__ SourceRow,
 	const _items_ &SourceItems,
-	_items_ &TargetItems )
+	const _strings_ &SourceStrings,
+	_items_ &TargetItems,
+	_strings_ &TargetStrings )
 {
-	ctn::E_CITEMt( _item_, _irow__ ) SourceItem;
+	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
 
 	SourceItem.Init( SourceItems );
 
-	return Append_(SourceItem( SourceRow ), SourceItems, TargetItems );
+	return Append_( SourceItem( SourceRow ), SourceItems, SourceStrings, TargetItems, TargetStrings );
 }
 
 static void Append_(
 	const _irows_ &SourceRows,
 	const _items_ &SourceItems,
+	const _strings_ &SourceStrings,
 	_irows_ &TargetRows,
-	_items_ &TargetItems )	// Récursif !
+	_items_ &TargetItems,
+	_strings_ &TargetStrings )	// Récursif (paaaaas bien) !
 {
-	ctn::E_CITEMt( _item_, _irow__ ) SourceItem;
+	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
 	row__ Row = SourceRows.First();
 
 	SourceItem.Init( SourceItems );
 
 	while ( Row != E_NIL ) {
-		TargetRows.Append( Append_( SourceRows( Row ), SourceItems, TargetItems ) );
+		TargetRows.Append( Append_( SourceRows( Row ), SourceItems, SourceStrings, TargetItems, TargetStrings ) );
 
 		Row = SourceRows.Next( Row );
 	}
@@ -291,16 +120,18 @@ row__ strmrg::table_::Append( const table_ &Table )
 	row__ Row = E_NIL;
 ERRProlog
 	_item Item;
-	ctn::E_CITEMt( _item_, _irow__ ) SourceItem;
+	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
+	ctn::E_CMITEMt( _string_, _srow__ ) SourceString;
 ERRBegin
 	SourceItem.Init( Table.Items );
 
-	if ( (Table.Amount() == 1) && ( SourceItem( Table.Main( Table.Main.First() ) ).ContainsString() ) )
-		Row = Append( SourceItem().String );
-	else {
+	if ( (Table.Amount() == 1) && (SourceItem(Table.Main(Table.Main.First())).ContainsString()) ) {
+		SourceString.Init( Strings );
+		Row = Append( SourceString( SourceItem().String() ) );
+	} else {
 		Item.Init();
 
-		Append_( Table.Main, Table.Items, Item.Items, Items );
+		Append_( Table.Main, Table.Items, Table.Strings, Item.Items, Items, Strings );
 
 		Row = Main.Append( Items.Append( Item ) );
 	}
@@ -360,21 +191,25 @@ void strmrg::table_::GetTable(
 	row__ Row,
 	table_ &Table ) const
 {
-	ctn::E_CITEMt( _item_, _irow__ ) Item;
+	ctn::E_CMITEMt( _item_, _irow__ ) Item;
 	Item.Init( Items );
 
-	Append_( Item( Main( Row ) ).Items, Items, Table.Main, Table.Items );
+	Append_( Item( Main( Row ) ).Items, Items, Strings, Table.Main, Table.Items, Table.Strings );
 }
 
 void strmrg::GetTable(
 	const _item_ &Item,
 	const _items_ &Items,
+	const _strings_ &Strings,
 	table_ &Table )
 {
-	if ( Item.ContainsString() )
-		Table.Append( Item.String );
-	else
-		Append_( Item.Items, Items, Table.Main, Table.Items );
+	ctn::E_CMITEMt( _string_, _srow__ ) String;
+
+	if ( Item.ContainsString() ) {
+		String.Init( Strings );
+		Table.Append( String( Item.String() ) );
+	} else
+		Append_( Item.Items, Items, Strings, Table.Main, Table.Items, Table.Strings );
 }
 
 static void Put_(
@@ -399,21 +234,26 @@ static void Put_(
 static void Merge_(
 	const _irows_ &Rows,
 	const _items_ &Items,
+	const _strings_ &Strings,
 	const tokens__ &Tokens,
-	flw::oflow__ &Flow )	// Récursif !
+	flw::oflow__ &Flow )	// Récursif (paaas bien !) !
 {
-	ctn::E_CITEMt( _item_, _irow__ ) Item;
+	ctn::E_CMITEMt( _item_, _irow__ ) Item;
+	ctn::E_CMITEMt( _string_, _srow__ ) String;
+
 	row__ Row = Rows.First();
 	Item.Init( Items );
+	String.Init( Strings );
 
 	while ( Row != E_NIL ) {
 		if ( Item( Rows ( Row ) ).ContainsString() ) {	// Positionne 'Item' pour la suite !
-			Put_( Item().String, Tokens, Flow );
+
+			Put_( String( Item().String() ), Tokens, Flow );
 
 			Flow << Tokens.Separator;
 		} else {
 			Flow << Tokens.Begin;
-			Merge_( Item().Items, Items, Tokens, Flow );
+			Merge_( Item().Items, Items, Strings, Tokens, Flow );
 			Flow << Tokens.End;
 		}
 
@@ -426,7 +266,7 @@ void strmrg::Merge(
 	flw::oflow__ &Flow,
 	const tokens__ &Tokens )
 {
-	Merge_( Table.Main, Table.Items, Tokens, Flow );
+	Merge_( Table.Main, Table.Items, Table.Strings, Tokens, Flow );
 }
 
 void strmrg::Merge(
@@ -554,18 +394,21 @@ ERREpilog
 static void GetStrings_(
 	const _irows_ &Rows,
 	const _items_ &Items,
-	str::strings_ &Strings )
+	const _strings_ &Strings,
+	str::strings_ &Result )
 {
-	ctn::E_CITEMt( _item_, _irow__ ) Item;
+	ctn::E_CMITEMt( _item_, _irow__ ) Item;
+	ctn::E_CMITEMt( _string_, _srow__ ) String;
 	row__ Row = Rows.First();
 
 	Item.Init( Items );
+	String.Init( Strings );
 
 	while ( Row != E_NIL ) {
 		if ( !Item(Rows( Row ) ).ContainsString() )
 			ERRFwk();
 
-		Strings.Append(Item().String );
+		Result.Append( String( Item().String() ) );
 
 		Row = Rows.Next( Row );
 	}
@@ -574,33 +417,34 @@ static void GetStrings_(
 static void GetStrings_(
 	const _item_ &Item,
 	const _items_ &Items,
-	str::strings_ &Strings )
+	const _strings_ &Strings,
+	str::strings_ &Result )
 {
+	ctn::E_CMITEMt( _string_, _srow__ ) String;
+	String.Init( Strings );
+
 	if ( Item.ContainsString() )
-		Strings.Append( Item.String );
+		Result.Append( String( Item.String() ) );
 	else {
-		GetStrings_( Item.Items, Items, Strings );
+		GetStrings_( Item.Items, Items, Strings, Result );
 	}
 }
 
-void strmrg::retriever__::GetStrings( str::strings_ &Strings )
+void strmrg::retriever__::GetStrings( str::strings_ &Result )
 {
-	ctn::E_CITEMt( _item_, _irow__ ) Item;
-	Item.Init( _I() );
+	ctn::E_CMITEMt( _item_, _irow__ ) Item;
+	ctn::E_CMITEMt( _string_, _srow__ ) String;
 
-	if ( Item( _R()( _Row ) ).ContainsString() )
-		Strings.Append( Item().String );
+	Item.Init( _I() );
+	String.Init( _S() );
+
+	if ( Item( _R()( _Row ) ).ContainsString() )	// Positionne 'Item()'.
+		Result.Append( String( Item().String() ) );
 	else
-		GetStrings_( Item(_R()( _Row ) ), _I(), Strings );
+		GetStrings_( Item(_R()( _Row ) ), _I(), _S(), Result );
 
 	_Row = _R().Next( _Row );
 }
-
-#endif
-
-
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

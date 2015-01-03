@@ -44,142 +44,7 @@
 # include "xtf.h"
 
 
-namespace strmrg {
-# if 0	// Old
-	typedef ctn::E_CONTAINER_( str::strings_ ) table_;
-
-	E_AUTO( table );
-
-	void Merge(
-		const table_ &Table,
-		flw::oflow__ &Flow,
-		char EntrySeparator,
-		char FieldSeparator,
-		char EscapeChar );
-
-	void Merge(
-		const table_ &Table,
-		str::string_ &String,
-		char EntrySeparator,
-		char FieldSeparator,
-		char EscapeChar );
-
-	bso::bool__ Split(
-		xtf::extended_text_iflow__ &Flow,
-		table_ &Table,
-		char EntrySeparator,
-		char FieldSeparator,
-		char EscapeChar );
-
-	bso::bool__ Split(
-		const str::string_ &String,
-		table_ &Table,
-		char EntrySeparator,
-		char FieldSeparator,
-		char EscapeChar );
-
-	// Dans tous les cas, sauf pour 'aStrings', on peut appeler 'GetString()' et 'GetStrings()'.
-	enum availability__ {
-		aNone,		// Pas d'autres paramètres disponible.
-		aEmpty,		// Le prochain paramètre est vide.
-		aString,	// Le prochain paramètre est un 'string'.
-		aStrings,	// Le prochain paramètre est un 'strings' (ne peut ête récupèré que par 'GetStrings()'.
-		a_amount,
-		a_Undefined
-	};
-
-	class retriever__ {
-	private:
-		const table_ *_Table;
-		sdr::row__ _Row;
-		const table_ &_T( void ) const
-		{
-			if ( _Table == NULL )
-				ERRFwk();
-
-			return *_Table;
-		}
-	public:
-		void reset( bso::bool__ = true )
-		{
-			_Table = NULL;
-			_Row = E_NIL;
-		}
-		E_CDTOR( retriever__ );
-		void Init( const table_ &Table )
-		{
-			_Table = &Table;
-			_Row = Table.First();
-		}
-		void GetString( str::string_ &Target )
-		{
-			ctn::E_CITEM( str::strings_ ) Strings;
-			ctn::E_CMITEM( str::string_ ) String;
-
-			if ( _Row != E_NIL ) {
-				Strings.Init(_T() );
-
-				switch ( Strings( _Row ).Amount() ) {
-				case 0:
-					break;
-				case 1:
-					String.Init(Strings() );
-					Target = String(Strings().First() );
-					break;
-				default:
-					ERRFwk();
-					break;
-				}
-
-				_Row = _T().Next( _Row );
-			}
-		}
-		void GetStrings( str::strings_ &Target )
-		{
-			ctn::E_CITEM( str::strings_ ) Strings;
-
-			if ( _Row != E_NIL ) {
-				Strings.Init(_T() );
-
-				Target = Strings( _Row );
-
-				_Row = _T().Next( _Row );
-			}
-		}
-		availability__ Availability( void ) const
-		{
-			availability__ Availability = a_Undefined;
-
-			if ( _Row == E_NIL )
-				Availability = aNone;
-			else {
-				ctn::E_CITEM( str::strings_ ) Strings;
-				ctn::E_CMITEM( str::string_ ) String;
-
-				Strings.Init( _T() );
-
-				switch ( Strings( _Row ).Amount() ) {
-				case 0:
-					Availability = aEmpty;
-					break;
-				case 1:
-					String.Init(Strings() );
-
-					if ( String( Strings().First() ).Amount() == 0 )
-						Availability = aEmpty;
-					else
-						Availability = aString;
-					break;
-				default:
-					Availability = aStrings;
-					break;
-				}
-			}
-
-			return Availability;
-		}
-	};
-# else // New
+namespace strmrg { 
 	E_ROW( row__ );
 
 	E_ROW( _irow__ );	// Item row.
@@ -187,6 +52,11 @@ namespace strmrg {
 # if 0	// Sinon VC++ perd les pédales lors de l'édition de liens...
 	namespace {
 # endif
+		E_ROW( _srow__);
+		typedef str::string_ _string_;
+		typedef ctn::E_MCONTAINERt_( _string_, _srow__ ) _strings_;
+		E_AUTO( _strings );
+
 		typedef bch::E_BUNCHt_( _irow__, row__ ) _irows_;
 		E_AUTO( _irows );
 
@@ -197,73 +67,63 @@ namespace strmrg {
 		{
 		public:
 			struct s {
-				str::string_::s String;
+				_srow__ String;
 				_irows_::s Items;
-			};
-			str::string_ String;
+			} &S_;
 			_irows_ Items;
 			_item_( s &S )
-			: String( S.String ),
-			  Items( S.Items )	// Si vide, l'item conteient une chaîne vide.
+			: S_( S ),
+			  Items( S.Items )
 			{}
 			void reset( bso::bool__ P = true )
 			{
-				String.reset( P );
+				S_.String = E_NIL;
 				Items.reset( P );
+			}
+			void plug( sdr::E_SDRIVER__ &SD )
+			{
+				Items.plug( SD );
 			}
 			void plug( ags::E_ASTORAGE_ &AS )
 			{
-				String.plug( AS );
 				Items.plug( AS );
 			}
 			_item_ &operator =( const _item_ &I )
 			{
-				String = I.String;
+				S_.String = I.S_.String;
 				Items = I.Items;
 
 				return *this;
 			}
-			void Init( void )
+			void Init( _srow__ String = E_NIL )
 			{
-				String.Init();
-				Items.Init();
-			}
-			void Init( const str::string_ &String )
-			{
-				if ( ( this->String.Amount() != 0 ) || ( Items.Amount() != 0 ) )
+				if ( ( S_.String != E_NIL ) || ( Items.Amount() != 0 ) )
 					ERRFwk();
 
-				this->String.Init( String );
+				S_.String = String;
 				Items.Init();
 			}
+			E_RODISCLOSE_( _srow__, String );
 			void Append( _irow__ Item )
 			{
-				if ( ( String.Amount() != 0 ) )
+				if ( S_.String != E_NIL )
 					ERRFwk();
 
 				Items.Append( Item );
-
 			}
 			bso::bool__ ContainsItems( void ) const
 			{
-				if ( Items.Amount() != 0 ) {
-					if ( String.Amount() != 0 )
-						ERRFwk();
-
-					return true;
-				} else
-					return false;
-
+				return Items.Amount() != 0;
 			}
 			bso::bool__ ContainsString( void ) const
 			{
-				return !ContainsItems();
+				return S_.String != E_NIL;
 			}
 		};
 
 		E_AUTO( _item );
 
-		typedef ctn::E_CONTAINERt_( _item_, _irow__ ) _items_;
+		typedef ctn::E_MCONTAINERt_( _item_, _irow__ ) _items_;
 		E_AUTO( _items );
 # if 0
 	}
@@ -272,27 +132,33 @@ namespace strmrg {
 	{
 	public:
 		struct s {
+			_strings_::s Strings;
 			_items_::s Items;
 			_table_::s Main;
 		};
+		_strings_ Strings;
 		_items_ Items;
 		_table_ Main;
 		table_( s &S )
-		: Items( S.Items ),
+		: Strings( S.Strings ),
+		  Items( S.Items ),
 		  Main( S.Main )
 		{}
 		void reset( bso::bool__ P = true )
 		{
+			Strings.reset( P );
 			Items.reset( P );
 			Main.reset( P );
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
+			Strings.plug( AS );
 			Items.plug( AS );
 			Main.plug( AS );
 		}
 		table_ &operator =(const table_ &T)
 		{
+			Strings = T.Strings;
 			Items = T.Items;
 			Main = T.Main;
 
@@ -300,6 +166,7 @@ namespace strmrg {
 		}
 		void Init( void )
 		{
+			Strings.Init();
 			Items.Init();
 			Main.Init();
 		}
@@ -316,6 +183,7 @@ namespace strmrg {
 	void GetTable(
 		const _item_ &Item,
 		const _items_ &Items,
+		const _strings_ &Strings,
 		table_ &Table );
 
 	E_CDEF(char, DefaultSeparatorToken, '|');
@@ -401,9 +269,17 @@ namespace strmrg {
 
 	class retriever__ {
 	private:
+		const _strings_ *_Strings;
 		const _items_ *_Items;
 		const _irows_ *_Rows;
 		row__ _Row;
+		const _strings_ &_S( void ) const
+		{
+			if ( _Strings == NULL )
+				ERRFwk();
+
+			return *_Strings;
+		}
 		const _items_ &_I( void ) const
 		{
 			if ( _Items == NULL )
@@ -421,15 +297,18 @@ namespace strmrg {
 	public:
 		void reset( bso::bool__ = true )
 		{
+			_Strings = NULL;
 			_Items = NULL;
 			_Rows = NULL;
 			_Row = E_NIL;
 		}
 		E_CDTOR( retriever__ );
 		void Init(
+			const _strings_ &Strings,
 			const _items_ &Items,
 			const _irows_ &Rows )
 		{
+			_Strings = &Strings;
 			_Items = &Items;
 			_Rows = &Rows;
 
@@ -437,15 +316,15 @@ namespace strmrg {
 		}
 		void Init( const table_ &Table )
 		{
-			Init( Table.Items, Table.Main );
+			Init( Table.Strings, Table.Items, Table.Main );
 		}
 		void GetString( str::string_ &Target );
 		void GetTable( table_ &Table )
 		{
-			ctn::E_CITEMt( _item_, _irow__ ) Item;
+			ctn::E_CMITEMt( _item_, _irow__ ) Item;
 			Item.Init( _I() );
 
-			strmrg::GetTable( Item( _R()( _Row ) ), _I(), Table );
+			strmrg::GetTable( Item( _R()( _Row ) ), _I(), _S(), Table );
 
 			_Row = _R().Next( _Row );
 		}
@@ -458,23 +337,20 @@ namespace strmrg {
 			if ( _Row == E_NIL )
 				Availability = aNone;
 			else {
-					ctn::E_CITEMt( _item_, _irow__ ) Item;
-					Item.Init( _I() );
+				ctn::E_CMITEMt( _item_, _irow__ ) Item;
+				Item.Init( _I() );
 
-					if ( Item(_R()( _Row ) ).ContainsString() )
-						if ( Item().String.Amount() == 0 )
-							Availability = aEmpty;
-						else
-							Availability = aString;
-					else
-						Availability = aTable;
+				if ( Item( _R()( _Row ) ).ContainsString() )	// Positionne 'Item()'.
+					Availability = aString;
+				else if ( Item().ContainsItems() )
+					Availability = aTable;
+				else
+					Availability = aEmpty;
 			}
 
 			return Availability;
 		}
 	};
-
-# endif
 }
 
 				  /********************************************/
