@@ -396,6 +396,7 @@ namespace fbltyp {
 	typedef flw::iflow__ flow__;
 
 	E_CDEF( id8__, UndefinedId8, FBLTYP_UNDEFINED_ID8 );
+	E_CDEF( id__, UndefinedId, FBLTYP_UNDEFINED_ID );
 
 
 	template <typename type> inline void _StraightPut(

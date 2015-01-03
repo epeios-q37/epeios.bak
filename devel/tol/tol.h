@@ -330,12 +330,14 @@ public:\
 	}\
 };
 
+// Pour conserver une certaine cohérence avec la suite.
+# define E_TCLONE__( type, alias )	typedef type alias
 
 // Pour les objets dynamiques, similaire à 'typedef type alias', mais
 // avec création de la version instanciable et de la version '_'.
 # define E_TCLONE( type, alias )\
 	typedef type##_ alias##_;\
-	typedef type alias;
+	typedef type alias
 
 
 // Similaire à 'typedef type alias', mais permet la mise en oeuvre de 'template'.
