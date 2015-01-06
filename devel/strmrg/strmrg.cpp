@@ -126,7 +126,7 @@ ERRBegin
 	SourceItem.Init( Table.Items );
 
 	if ( (Table.Amount() == 1) && (SourceItem(Table.Main(Table.Main.First())).ContainsString()) ) {
-		SourceString.Init( Strings );
+		SourceString.Init( Table.Strings );
 		Row = Append( SourceString( SourceItem().String() ) );
 	} else {
 		Item.Init();

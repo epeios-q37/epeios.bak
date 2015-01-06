@@ -57,16 +57,16 @@ namespace xhtbase {
 		}
 		E_CDTOR( generic_rack___ );
 		void Init(
+			const char *Generator,
 			const char *RootTagName,
-			const char *SubRootTagName,
 			str::string_ &Target )
 		{
 			_Flow.Init( Target );
 			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
 			_Writer.PushTag( RootTagName );
+			_Writer.PutAttribute("Generator", Generator );
 			_Writer.PutAttribute("TimeStamp", tol::DateAndTime() );
 			_Writer.PutAttribute("Enviroment", CPE_ENVIROMENT_LABEL );
-			_Writer.PushTag( SubRootTagName );
 		}
 		operator xml::writer_ &()
 		{
@@ -83,10 +83,10 @@ namespace xhtbase {
 	{
 	public:
 		void Init(
-			const char *RootTagName,
+			const char *Generator,
 			str::string_ &Target )
 		{
-			generic_rack___::Init( RootTagName, ContentTagName, Target );
+			generic_rack___::Init( Generator, ContentTagName, Target );
 		}
 	};
 
@@ -95,27 +95,27 @@ namespace xhtbase {
 	{
 	public:
 		void Init(
-			const char *RootTagName,
+			const char *Generator,
 			str::string_ &Target )
 		{
-			generic_rack___::Init( RootTagName, ContextTagName, Target );
+			generic_rack___::Init( Generator, ContextTagName, Target );
 		}
 	};
 
-# define XHTBASE_RACK( RootTagName, Type )\
+# define XHTBASE_RACK( Generator, Type )\
 	class Type##_rack___\
 	: public xhtbase::Type##_rack___\
 	{\
 	public:\
 		void Init( str::string_ &Target )\
 		{\
-			xhtbase::Type##_rack___::Init( RootTagName, Target );\
+			xhtbase::Type##_rack___::Init( Generator, Target );\
 		}\
 	}
 
-# define XHTBASE_RACKS( RootTagName)\
-	XHTBASE_RACK( RootTagName, content );\
-	XHTBASE_RACK( RootTagName, context )
+# define XHTBASE_RACKS( Generator )\
+	XHTBASE_RACK( Generator, content );\
+	XHTBASE_RACK( Generator, context )
 
 	class event_callback__
 	{
