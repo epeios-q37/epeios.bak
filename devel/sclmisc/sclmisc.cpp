@@ -38,20 +38,20 @@
 
 using namespace sclmisc;
 
-static TOL_CBUFFER___ Language_;
+static TOL_CBUFFER___ BaseLanguage_;	// De base, le language d'admnistration (lu à partir du fichier de configuration), pouvant devenir language utiliateur selon le contexte.
 
-#define DEFAULT_LANGUAGE	"en"
+#define DEFAULT_BASE_LANGUAGE	"en"
 
 #define CONFIGURATION_DEFAULT_FILENAME_SUFFIX ".xcfg"
 
 #define LOCALE_DEFAULT_FILENAME_SUFFIX ".xlcl"
 
-const char *sclmisc::GetLanguage( void )
+const char *sclmisc::GetBaseLanguage( void )
 {
-	if ( Language_ == NULL )
-		return DEFAULT_LANGUAGE;
+	if ( BaseLanguage_ == NULL )
+		return DEFAULT_BASE_LANGUAGE;
 
-	return Language_;
+	return BaseLanguage_;
 }
 
 void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
@@ -211,7 +211,7 @@ ERRBegin
 
 	Language.Init();
 	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par défaut.
-		Language.Convert( Language_ );
+		Language.Convert( BaseLanguage_ );
 
 	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format());
 ERRErr
@@ -540,7 +540,6 @@ void sclmisc::LoadAndTranslateTags(
 	const rgstry::tentry__ &FileName,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &String,
-	const char *Language,
 	char Marker )
 {
 ERRProlog
@@ -548,10 +547,7 @@ ERRProlog
 ERRBegin
 	Load( FileName, Registry, String );
 
-	if ( Language == NULL )
-		Language = sclrgstry::GetLanguage( Registry, Buffer );
-
-	scllocale::TranslateTags( String, Language, Marker );
+	scllocale::TranslateTags( String, sclrgstry::GetLanguage_( Registry, Buffer ), Marker );
 ERRErr
 ERREnd
 ERREpilog
@@ -562,7 +558,6 @@ void sclmisc::LoadXMLAndTranslateTags(
 	const rgstry::tentry__ &FileNameEntry,
 	const sclrgstry::registry_ &Registry,
 	str::string_ &String,
-	const char *Language,
 	char Marker )
 {
 ERRProlog
@@ -579,10 +574,7 @@ ERRBegin
 	Untranslated.Init();
 	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation ) );
 
-	if ( Language == NULL )
-		Language = sclrgstry::GetLanguage( Registry, Buffer );
-
-	scllocale::TranslateTags( Untranslated, Language, String, Marker );
+	scllocale::TranslateTags( Untranslated, sclrgstry::GetLanguage_( Registry, Buffer ), String, Marker );
 ERRErr
 ERREnd
 ERREpilog

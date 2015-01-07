@@ -73,16 +73,12 @@ namespace frdssn {
 	{
 	private:
 		frdkrn::kernel___ *_Kernel;
-		const char *_Language;
 		frdrgy::registry _Registry; 
 		lcl::meaning _Meaning;
-		bso::bool__ _IsOpen( void ) const
-		{
-			return _Language != NULL;
-		}
+		bso::bool__ _IsOpen;
 		void _Test( void ) const
 		{
-			if ( !_IsOpen() )
+			if ( !_IsOpen )
 				ERRFwk();
 		}
 		const frdkrn::kernel___ &_K( void ) const
@@ -106,29 +102,31 @@ namespace frdssn {
 		void reset( bso::bool__ P = true )
 		{
 			_Kernel = NULL;
-			_Language = NULL;
 			_Registry.reset( P );
 			_Meaning.reset( P );
+			_IsOpen = false;
 		}
 		E_CVDTOR( session___ );
 		void Init( frdkrn::kernel___ &Kernel )
 		{
 			_Kernel = &Kernel;
-			_Registry.Init( Kernel.Registry() );
+			_Registry.Init();
 			_Meaning.Init();
-			_Language = NULL;
+			_IsOpen = false;
 		}
-		void Open( const char *Language )
+		void Open(
+			const rgstry::multi_level_registry_ &Registry,
+			const char *Language )
 		{
-			_Registry.Init( _Kernel->Registry() );
-			_Language = Language;
+			_Registry.Init( Registry );
 			FRDSSNOpen( Language );
+			_IsOpen = true;
 		}
 		void Close( void )
 		{
 			_Registry.reset();
-			_Language = NULL;
 			FRDSSNClose();
+			_IsOpen = false;
 		}
 		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramètres de sortie est un 'flow', dés que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
 		{
@@ -156,13 +154,7 @@ namespace frdssn {
 		}
 		bso::bool__ IsOpen( void ) const
 		{
-			return _IsOpen();
-		}
-		const char *Language( void ) const
-		{
-			_Test();
-
-			return _Language;
+			return _IsOpen;
 		}
 		recap__ DumpSessionRegistry( xml::writer_ &Writer ) const
 		{

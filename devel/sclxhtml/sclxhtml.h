@@ -180,6 +180,7 @@ namespace sclxhtml {
 	{
 	private:
 		action_handler _Handler;
+		const char *_Language;
 	protected:
 		virtual void XHTCLLBKLaunch(
 			const char *Id,
@@ -187,16 +188,16 @@ namespace sclxhtml {
 		{
 		ERRProlog
 			str::string Message;
-			err::buffer__ Buffer;
+			err::buffer__ ErrBuffer;
 		ERRBegin
 			_Handler.Launch( Id, Action );
 		ERRErr
 			switch ( ERRType ) {
 			case err::t_Abort:
 				Message.Init();
-				if ( sclerror::GetPendingError(sclmisc::GetLanguage(), Message) ) {
-					_A().Alert( Message );
+				if ( sclerror::GetPendingErrorTranslation( _Language, Message) ) {
 					sclerror::ResetPendingError();
+					_A().Alert( Message );
 				} else
 					_A().Alert("?");
 				break;
@@ -205,7 +206,7 @@ namespace sclxhtml {
 				_A().Alert( "???" );
 				break;
 			default:
-				_A().Alert( err::Message( Buffer ) );
+				_A().Alert( err::Message( ErrBuffer ) );
 				break;
 			}
 
@@ -219,12 +220,14 @@ namespace sclxhtml {
 		{
 			_session_callback__::reset( P );
 			_Handler.reset( P );
+			_Language = NULL;
 		}
 		E_CVDTOR( session_callback___ );
-		void Init( void )
+		void Init( const char *Language )
 		{
 			_Handler.Init();
 			_session_callback__::Init();
+			_Language = Language;
 		}
 		void AddActionCallback(
 			const char *ActionName,
@@ -318,11 +321,12 @@ namespace sclxhtml {
 		E_CVDTOR( session___ )
 		void Init(
 			const char *Launcher,
+			const char *Language,
 			xhtcllbk::upstream_callback__ &Callback )
 		{
 			_ReportingCallback.Init( _Kernel, *this );
-			_Kernel.Init( sclxhtml::GetRegistry(), scllocale::GetLocale(), sclmisc::GetLanguage(), _ReportingCallback, Launcher );
-			session_callback___::Init();
+			_Kernel.Init( scllocale::GetLocale(), Language, _ReportingCallback, Launcher );
+			session_callback___::Init( Language );
 			_agent___::Init( Callback );
 //			instances::Init( _Kernel );	// Lancé lors de l'ouverture de la session (vord 'FRDSSNOpen(...)').
 			_session___::Init( _Kernel );
@@ -350,7 +354,9 @@ namespace sclxhtml {
 
 	void SCLXHTMLOnLoad( void );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
 
-	session_callback___ *SCLXHTMLNew( xhtcllbk::upstream_callback__ &Callback );
+	session_callback___ *SCLXHTMLNew(
+		const char *Language,
+		xhtcllbk::upstream_callback__ &Callback );
 
 	void SCLXHTMLOnUnload( void );	// A surcharger. Lancé lorsque la bibliothèque est déchargée.
 

@@ -298,7 +298,6 @@ namespace frdkrn {
 	class kernel___
 	{
 	private:
-		const registry_ *_Registry;	// Configuration and project registry.
 		csducl::universal_client_core _ClientCore;
 //		rgstry::level__ _RegistryProjectLevel;	// Old.
 		frdfrd::frontend___ _Frontend;
@@ -318,13 +317,6 @@ namespace frdkrn {
 			return *_Registry;
 		}
 # endif
-		const registry_ &_R( void ) const
-		{
-			if ( _Registry == NULL )
-				ERRFwk();
-
-			return *_Registry;
-		}
 		status__ _LoadProjectLocale( void );
 		recap__ _Connect(
 			const str::string_ &RemoteHostServiceOrLocalLibraryPath,
@@ -345,19 +337,6 @@ namespace frdkrn {
 			_ClientCore.reset();
 		}
 	protected:
-# if 0	// Old.
-		recap__ _FillProjectRegistry(
-			const fnm::name___ &FileName,
-			const char *TargetName,
-			const xpp::criterions___ &Criterions,
-			str::string_ &Id,
-			error_set___ &ErrorSet );
-# endif
-		recap__ _DumpProjectRegistry(
-			const fnm::name___ &FileName,
-			const char *TargetName,
-			const str::string_ &Id,
-			error_set___ &ErrorSet );
 		recap__ _Connect(
 			const char *RemoteHostServiceOrLocalLibraryPath,
 			const compatibility_informations__ &CompatibilityInformations,
@@ -366,13 +345,6 @@ namespace frdkrn {
 			bso::uint__ PingDelay,
 			error_set___ &ErrorSet,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
-# if 0
-		recap__ _Connect( // Try to connect using registry content.
-			const compatibility_informations__ &CompatibilityInformations,
-			const char *Language,
-			error_set___ &ErrorSet,
-			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
-# endif
 		virtual void FRDKRNConnection( fblfrd::frontend___ &Frontend ) = 0;	// Appelé lors aprés connection au 'backend'.
 		virtual void FRDKRNDisconnection( void ) = 0;	// Appelé avant déconnexion du 'backend'.
 	public:
@@ -381,7 +353,6 @@ namespace frdkrn {
 			if ( P )
 				CloseProject();
 
-			_Registry = NULL;
 			_Frontend.reset( P );
 			_ClientCore.reset( P );
 			_Locale.reset( P );
@@ -394,16 +365,11 @@ namespace frdkrn {
 		}
 		E_CVDTOR( kernel___ );
 		status__ Init(
-			const registry_ &Registry,
 			const lcl::locale_ &Locale,
 			const char *Language,
 			reporting_callback__ &ReportingCallback,
 			const char *LauncherIdentification )	//  PAS dupliqué !
 		{
-			_Registry = &Registry;
-
-//			_RegistryProjectLevel = RGSTRY_UNDEFINED_LEVEL;
-
 			_ErrorMeaning.Init();
 
 			_Locale.Init();
@@ -437,22 +403,6 @@ namespace frdkrn {
 		{
 			Frontend().Dismiss();
 		}
-# if 0
-		registry_ &Registry( void )
-		{
-			return _R();
-		}
-# endif
-		const registry_ &Registry( void ) const
-		{
-			return _R();
-		}
-# if 0
-		registry_ &Registry( void )
-		{
-			return _Registry;
-		}
-# endif
 		const lcl::locale_ &Locale( void ) const
 		{
 			return _Locale;
@@ -523,19 +473,6 @@ namespace frdkrn {
 		status__ Launch(
 			const backend_features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations );
-		time_t ProjectTimeStamp( void ) const
-		{
-			return _R().TimeStamp( _R().TopLevel() );
-		}
-		recap__ SaveProject(
-			const str::string_ &FileName,
-			const char *TargetName,
-			const str::string_ &Id, 
-			error_set___ &ErrorSet );
-		status__ SaveProject(
-			const str::string_ &FileName,
-			const char *TargetName,
-			const str::string_ &Id );
 		void Touch( void )
 		{
 			_ProjectModificationTimeStamp = time( NULL );
@@ -593,12 +530,6 @@ namespace frdkrn {
 		bso::bool__ IsConnected( void ) const
 		{
 			return _Frontend.IsConnected();
-		}
-		bso::bool__ GetRegistryValue(
-			const char *Path,
-			str::string_ &Value )
-		{
-			return _R().GetValue( str::string( Path ), Value );
 		}
 	};
 

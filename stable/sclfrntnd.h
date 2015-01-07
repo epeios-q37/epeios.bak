@@ -61,11 +61,11 @@ namespace sclfrntnd {
 	action__ GetAction( const str::string_ &Label );
 
 	action__ GetProjectsFeatures(
-		const sclrgstry::registry_ &Registry,
+		const char *Language,
 		xml::writer_ &Writer );
 
 	void GetBackendsFeatures(
-		const sclrgstry::registry_ &Registry,
+		const char *Language,
 		xml::writer_ &Writer );
 
 	bso::uint__ GetBackendPingDelay( void );

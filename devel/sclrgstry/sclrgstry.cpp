@@ -83,14 +83,14 @@ rgstry::level__ sclrgstry::GetArgumentsLevel( void )
 	return ArgumentsLevel_;
 }
 
-const char *sclrgstry::GetLanguage(
+const char *sclrgstry::GetLanguage_(
 	const registry_ &Registry,
 	TOL_CBUFFER___ &Buffer )
 {
 	sclrgstry::OGetValue( Registry, Language, Buffer );
 
 	if ( Buffer == NULL )
-		return sclmisc::GetLanguage();
+		return sclmisc::GetBaseLanguage();
 	else
 		return Buffer;
 }

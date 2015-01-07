@@ -171,9 +171,13 @@ namespace frdrgy {
 
 			return *this;
 		}
-		void Init( const rgstry::multi_level_registry_ &Registry )
+		void Init( void )
 		{
 			_registry_::Init();
+		}
+		void Init( const rgstry::multi_level_registry_ &Registry )
+		{
+			Init();
 
 			_registry_::PushImported( Registry );
 			S_.Session= _registry_::PushEmbedded( rgstry::name( "Session" ) );

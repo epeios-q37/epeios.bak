@@ -78,11 +78,15 @@ namespace {
 		}
 		virtual const char *XHTCLLBKLanguage( void ) override
 		{
-			return sclmisc::GetLanguage();
+			ERRLmt();
+			return NULL;
+//			return sclmisc::GetLanguage();
 		}
-		virtual xhtcllbk::session_callback__ *XHTCLLBKNew( xhtcllbk::upstream_callback__ &Callback ) override
+		virtual xhtcllbk::session_callback__ *XHTCLLBKNew(
+			const char *Language,
+			xhtcllbk::upstream_callback__ &Callback ) override
 		{
-			return SCLXHTMLNew( Callback );
+			return SCLXHTMLNew( Language, Callback );
 		}
 		// Destruction by destructor member.
 		virtual void XHTCLLBKOnUnload( void ) override
@@ -156,7 +160,7 @@ ERRBegin
 	BackendFeature.Init();
 	sclfrntnd::Connect( Kernel, xhtlogin::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
 
-	Session.Open( Agent.GetLanguage( Buffer ) );
+	Session.Open( sclrgstry::GetCommonRegistry(), Agent.GetLanguage( Buffer ) );
 ERRErr
 ERREnd
 ERREpilog

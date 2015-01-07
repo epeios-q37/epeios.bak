@@ -68,10 +68,11 @@ ERREpilog
 
 void xhtagent::agent___::Alert(
 	const str::string_ &RawXML,
-	const str::string_ &RawXSL )
+	const str::string_ &RawXSL,
+	const str::string_ &RawTitle )
 {
 ERRProlog
-	str::string XML, XSL;
+	str::string XML, XSL, Title;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	XML.Init();
@@ -80,7 +81,10 @@ ERRBegin
 	XSL.Init();
 	xhtcllbk::Escape( RawXSL, XSL );
 
-	_C().OpenDialog( RawXML, RawXSL, Buffer );
+	Title.Init();
+	xhtcllbk::Escape( RawTitle, Title );
+
+	_C().OpenDialog( RawXML, RawXSL, Title, Buffer );
 ERRErr
 ERREnd
 ERREpilog

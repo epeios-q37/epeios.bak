@@ -45,27 +45,27 @@ namespace sclmisc {
 
 	extern const char *SCLMISCTargetName;	// A définir par l'utilisateur.
 
-	const char *GetLanguage( void );
+	const char *GetBaseLanguage( void );	// Language d'administration, pouvant être language utilsateur selon contexte.
 
-	inline const str::string_ &GetTranslation(
+	inline const str::string_ &GetBaseTranslation(
 		const char *Text,
 		str::string_ &Translation )
 	{
-		return scllocale::GetTranslation( Text, GetLanguage(), Translation );
+		return scllocale::GetTranslation( Text, GetBaseLanguage(), Translation );
 	}
 
-	inline const str::string_ &GetTranslation(
+	inline const str::string_ &GetBaseTranslation(
 		const lcl::meaning_ &Meaning,
 		str::string_ &Translation )
 	{
-		return scllocale::GetTranslation( Meaning, GetLanguage(), Translation );
+		return scllocale::GetTranslation( Meaning, GetBaseLanguage(), Translation );
 	}
 
-	inline bso::bool__ GetSCLPendingError(
+	inline bso::bool__ GetSCLBasePendingErrorTranslation(
 		str::string_ &Translation,
 		err::handling__ ErrHandling = err::h_Default )
 	{
-		return sclerror::GetPendingError( GetLanguage(), Translation, ErrHandling );
+		return sclerror::GetPendingErrorTranslation( GetBaseLanguage(), Translation, ErrHandling );
 	}
 
 	void ReportAndAbort( const lcl::meaning_ &Meaning );
@@ -147,34 +147,13 @@ namespace sclmisc {
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &String,
-		const char *Language = NULL,
 		char Marker = scllocale::DefaultMarker );
-
-	inline void LoadAndTranslateTags(
-		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
-		char Marker )
-	{
-		LoadAndTranslateTags( FileName, Registry, String, NULL, Marker );
-	}
 
 	void LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
 		const sclrgstry::registry_ &Registry,
 		str::string_ &String,
-		const char *Language = NULL,
 		char Marker = scllocale::DefaultMarker );
-
-	inline void LoadXMLAndTranslateTags(
-		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
-		str::string_ &String,
-		char Marker )
-	{
-		LoadXMLAndTranslateTags( FileName, Registry, String, NULL, Marker );
-	}
-
 }
 
 				  /********************************************/

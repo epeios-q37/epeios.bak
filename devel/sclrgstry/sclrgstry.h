@@ -69,7 +69,7 @@ namespace sclrgstry {
 	using rgstry::value;
 	using rgstry::value_;
 
-	const char *GetLanguage(
+	const char *GetLanguage_(
 		const registry_ &Registry,
 		TOL_CBUFFER___ &Buffer );
 

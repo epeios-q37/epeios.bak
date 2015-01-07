@@ -217,7 +217,7 @@ void sclerror::SetMeaning( const lcl::meaning_ &Meaning )
 #endif
 }
 
-bso::bool__ sclerror::GetPendingError(
+bso::bool__ sclerror::GetPendingErrorTranslation(
 	const char *Language,
 	str::string_ &Translation,
 	err::handling__ ErrHandling )

@@ -219,14 +219,14 @@ static void GetFeatures_(
 	const rgstry::entry___ &IdEntry,
 	const rgstry::entry___ &DefaultEntry,
 	const rgstry::entry___ &AliasEntry,
-	const sclrgstry::registry_ &Registry,
+	const char *Language,
 	xml::writer_ &Writer )
 {
 ERRProlog
 	str::string DefaultType;
 ERRBegin
 	DefaultType.Init();
-	sclrgstry::OGetValue( Registry, DefaultTypeEntry, DefaultType );
+	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), DefaultTypeEntry, DefaultType );
 
 	if ( DefaultType.Amount() != 0 ) {
 		Writer.PushTag( DefaultTypeTag );
@@ -235,7 +235,7 @@ ERRBegin
 	}
 
 	Writer.PushTag( ItemsTag );
-	GetPredefinedItems_( ItemTag, IdEntry, DefaultEntry, AliasEntry, Registry, scllocale::GetLocale(), sclmisc::GetLanguage(), Writer );
+	GetPredefinedItems_( ItemTag, IdEntry, DefaultEntry, AliasEntry, sclrgstry::GetCommonRegistry(), scllocale::GetLocale(), Language, Writer );
 	Writer.PopTag();
 ERRErr
 ERREnd
@@ -243,7 +243,7 @@ ERREpilog
 }
 
 action__ sclfrntnd::GetProjectsFeatures(
-	const sclrgstry::registry_ &Registry,
+	const char *Language,
 	xml::writer_ &Writer )
 {
 	action__ Action = aNone;
@@ -251,13 +251,13 @@ ERRProlog
 	str::string Pattern;
 ERRBegin
 	Pattern.Init();
-	sclrgstry::OGetValue( Registry, ProjectAction_, Pattern );
+	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), ProjectAction_, Pattern );
 
 	if ( Pattern.Amount() != 0 )
 		if ( ( Action = GetAction( Pattern ) ) == a_Undefined )
 			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( ProjectAction_ );
 
-	GetFeatures_( "PredefinedProjects", "PredefinedProject", "DefaultProjectType", DefaultProjectType_, PredefinedProjectId_, DefaultPredefinedProject_, PredefinedProjectAlias_, Registry, Writer );
+	GetFeatures_( "PredefinedProjects", "PredefinedProject", "DefaultProjectType", DefaultProjectType_, PredefinedProjectId_, DefaultPredefinedProject_, PredefinedProjectAlias_, Language, Writer );
 ERRErr
 ERREnd
 ERREpilog
@@ -265,18 +265,18 @@ ERREpilog
 }
 
 void sclfrntnd::GetBackendsFeatures(
-	const sclrgstry::registry_ &Registry,
+	const char *Language,
 	xml::writer_ &Writer )
 {
 ERRProlog
 	str::string Backend, Type;
 ERRBegin
 	Backend.Init();
-	sclrgstry::OGetValue( Registry, Backend_, Backend );
+	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), Backend_, Backend );
 
 	if ( Backend.Amount() != 0 ) {
 		Type.Init();
-		sclrgstry::MGetValue( Registry, BackendType_, Type );
+		sclrgstry::MGetValue( sclrgstry::GetCommonRegistry(), BackendType_, Type );
 
 		Writer.PushTag( "Backend" );
 		Writer.PutAttribute( "Type", Type );
@@ -284,7 +284,7 @@ ERRBegin
 		Writer.PopTag();
 	}
 
-	GetFeatures_( "PredefinedBackends", "PredefinedBackend", "DefaultBackendType", DefaultBackendType_, PredefinedBackendId_, DefaultPredefinedBackend_, PredefinedBackendAlias_, Registry, Writer );
+	GetFeatures_( "PredefinedBackends", "PredefinedBackend", "DefaultBackendType", DefaultBackendType_, PredefinedBackendId_, DefaultPredefinedBackend_, PredefinedBackendAlias_, Language, Writer );
 ERRErr
 ERREnd
 ERREpilog

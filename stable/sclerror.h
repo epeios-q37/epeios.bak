@@ -74,7 +74,7 @@ namespace sclerror {
 
 	void SetMeaning( const lcl::meaning_ &Meaning );
 
-	bso::bool__ GetPendingError(
+	bso::bool__ GetPendingErrorTranslation(
 		const char *Language,
 		str::string_ &Translation,
 		err::handling__ ErrHandling = err::h_Default );

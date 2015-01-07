@@ -75,6 +75,7 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKOpenDialog(
 			const nchar__ *XML,
 			const nchar__ *XSL,
+			const nchar__ *Title,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKSetChildren(
 			const nchar__ *Id,
@@ -132,9 +133,10 @@ namespace xhtcllbk {
 		const char *OpenDialog(
 			const nstring___ &XML,
 			const nstring___ &XSL,
+			const nstring___ &Title,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKOpenDialog( XML.Internal(), XSL.Internal(), Buffer );
+			XHTCLLBKOpenDialog( XML.Internal(), XSL.Internal(), Title.Internal(), Buffer );
 
 			return Buffer;
 		}
@@ -238,7 +240,9 @@ namespace xhtcllbk {
 	protected:
 		virtual void XHTCLLBKOnLoad( const char *Launcher ) = 0;
 		virtual const char *XHTCLLBKLanguage( void ) = 0;
-		virtual session_callback__ *XHTCLLBKNew( upstream_callback__ &Callback ) = 0;
+		virtual session_callback__ *XHTCLLBKNew(
+			const char *Language,
+			upstream_callback__ &Callback ) = 0;
 		// Destruction by destructor member.
 		virtual void XHTCLLBKOnUnload( void ) = 0;
 	public:
@@ -259,9 +263,11 @@ namespace xhtcllbk {
 		{
 			return XHTCLLBKLanguage();
 		}
-		session_callback__ *New( upstream_callback__ &Callback )
+		session_callback__ *New(
+			const char *Language,
+			upstream_callback__ &Callback )
 		{
-			return XHTCLLBKNew( Callback );
+			return XHTCLLBKNew( Language,  Callback );
 		}
 		void OnUnload( void )
 		{

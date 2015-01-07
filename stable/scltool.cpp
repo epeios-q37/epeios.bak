@@ -565,7 +565,7 @@ ERRBegin
 	Label.Init();
 	GetLabel_( Id, Label );
 
-	sclmisc::GetTranslation( Label.Convert( Buffer ),Translation );
+	sclmisc::GetBaseTranslation( Label.Convert( Buffer ),Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -583,7 +583,7 @@ ERRBegin
 	Description.Init();
 	GetDescription_( Id, Description );
 
-	sclmisc::GetTranslation( Description.Convert( Buffer ),Translation );
+	sclmisc::GetBaseTranslation( Description.Convert( Buffer ),Translation );
 ERRErr
 ERREnd
 ERREpilog
@@ -1387,7 +1387,7 @@ ERRBegin
 	IdentifyArguments_( Ids, Commands, Flags, Options, Frees );
 
 	ProgramDescription.Init();
-	COut << sclmisc::GetTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
+	COut << sclmisc::GetBaseTranslation( "ProgramDescription", ProgramDescription ) << txf::nl << txf::nl;
 
 	PrintUsage_( tCommand, Commands );
 
@@ -1478,7 +1478,7 @@ ERRProlog
 ERRBegin
 	Translation.Init();
 	
-	Exists = sclmisc::GetSCLPendingError( Translation );
+	Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation );
 
 	cio::CErr << Translation << txf::nl;
 ERRErr
