@@ -111,21 +111,6 @@ ERREpilog
 	return Meaning;
 }
 
-void sclfrntnd::Report(
-	frdkrn::kernel___ &Kernel,
-	const char *Message )
-{
-ERRProlog
-	lcl::meaning Meaning;
-ERRBegin
-	Meaning.Init();
-
-	Kernel.Report( GetMeaning_( Message, Meaning ) );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 static void GetPredefinedItem_(
 	const rgstry::entry___ &Alias,
 	const str::string_ &Id,
@@ -382,6 +367,7 @@ ERREpilog
 }
 
 void sclfrntnd::Connect(
+	const char *Language,
 	frdkrn::kernel___ &Kernel,
 	frdbse::backend_type__ BackendType,
 	const str::string_ &BackendFeature,
@@ -390,7 +376,7 @@ void sclfrntnd::Connect(
 ERRProlog
 	frdkrn::backend_features___ Features;
 ERRBegin
-	Features.Init( GetBackendPingDelay() );
+	Features.Init( Language, GetBackendPingDelay() );
 
 	switch ( BackendType ) {
 	case frdbse::btDaemon:

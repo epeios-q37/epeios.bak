@@ -129,6 +129,12 @@ namespace xhtagent {
 		{
 			_C().SetChildren( Id, XML, XSL );
 		}
+		void SetDocument(
+			const nstring___ &XML,
+			const nstring___ &XSL )
+		{
+			SetChildren( "", XML, XSL );
+		}
 		void SetPaddings(
 			const nstring___ &XML,
 			const nstring___ &XSL )

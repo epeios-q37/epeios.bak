@@ -76,17 +76,20 @@ namespace {
 			Launcher_ = Launcher;
 			SCLXHTMLOnLoad();
 		}
-		virtual const char *XHTCLLBKLanguage( void ) override
+		virtual void XHTCLLBKBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
-			ERRLmt();
-			return NULL;
-//			return sclmisc::GetLanguage();
+			const char *Language = sclmisc::GetBaseLanguage();
+
+			if ( Language == NULL )
+				ERRFwk();
+
+			Buffer.Malloc(strlen( Language) + 1 );
+
+			strcpy( Buffer, Language );
 		}
-		virtual xhtcllbk::session_callback__ *XHTCLLBKNew(
-			const char *Language,
-			xhtcllbk::upstream_callback__ &Callback ) override
+		virtual xhtcllbk::session_callback__ *XHTCLLBKNew( xhtcllbk::upstream_callback__ &Callback ) override
 		{
-			return SCLXHTMLNew( Language, Callback );
+			return SCLXHTMLNew( Callback );
 		}
 		// Destruction by destructor member.
 		virtual void XHTCLLBKOnUnload( void ) override
@@ -148,6 +151,7 @@ ERREpilog
 }
 
 void sclxhtml::LaunchProject(
+	const char *Language,
 	frdkrn::kernel___ &Kernel,
 	frdssn::session___ &Session,
 	xhtagent::agent___ &Agent,
@@ -155,12 +159,11 @@ void sclxhtml::LaunchProject(
 {
 ERRProlog
 	str::string BackendFeature;
-	TOL_CBUFFER___ Buffer;
 ERRBegin
 	BackendFeature.Init();
-	sclfrntnd::Connect( Kernel, xhtlogin::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
+	sclfrntnd::Connect( Language, Kernel, xhtlogin::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
 
-	Session.Open( sclrgstry::GetCommonRegistry(), Agent.GetLanguage( Buffer ) );
+	Session.Open( Language, sclrgstry::GetCommonRegistry() );
 ERRErr
 ERREnd
 ERREpilog

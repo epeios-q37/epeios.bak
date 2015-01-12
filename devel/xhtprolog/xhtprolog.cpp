@@ -103,7 +103,9 @@ ERRBegin
 	Retriever.Init( Params );
 
 	FileName.Init();
-	Retriever.GetString( FileName );
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
 		Agent.SetValue( UserProjectId, FileName );

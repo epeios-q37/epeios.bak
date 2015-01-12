@@ -99,8 +99,8 @@ ERRBegin
 	ErrorSet.Init();
 
 	if ( ( Recap = FillSessionRegistry( SettingsXFlow, Criterions, ErrorSet ) ) != r_OK ) {
-		_Meaning.Init();
-		frdkrn::GetMeaning( Recap, ErrorSet, _Meaning );
+//		_Meaning.Init();
+	//	frdkrn::GetMeaning( Recap, ErrorSet, _Meaning );
 		Status = sWarning;
 		ERRReturn;
 	} else

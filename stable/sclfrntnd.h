@@ -43,10 +43,6 @@
 
 namespace sclfrntnd {
 
-	void Report(
-		frdkrn::kernel___ &Kernel,
-		const char *Message );
-
 	// Action à effectuer sur le projet par défaut.
 	enum action__ {
 		aNone,		// Aucune action ; l'utilisateur peut sélectionner un autre type de projet, qui sera chargé manuellement.
@@ -75,6 +71,7 @@ namespace sclfrntnd {
 		const str::string_ &ProjectFeature );
 
 	void Connect(
+		const char *Language,
 		frdkrn::kernel___ &Kernel,
 		frdbse::backend_type__ BackendType,
 		const str::string_ &BackendFeature,

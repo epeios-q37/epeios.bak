@@ -36,6 +36,7 @@
 # include "err.h"
 # include "flw.h"
 # include "str.h"
+# include "lcl.h"
 
 namespace frdbse {
 

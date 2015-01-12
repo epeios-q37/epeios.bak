@@ -74,7 +74,6 @@ namespace frdssn {
 	private:
 		frdkrn::kernel___ *_Kernel;
 		frdrgy::registry _Registry; 
-		lcl::meaning _Meaning;
 		bso::bool__ _IsOpen;
 		void _Test( void ) const
 		{
@@ -98,12 +97,12 @@ namespace frdssn {
 	protected:
 		virtual void FRDSSNOpen( const char *Language ) = 0;
 		virtual void FRDSSNClose( void ) = 0;
+		virtual const char *FRDSSNLanguage( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Kernel = NULL;
 			_Registry.reset( P );
-			_Meaning.reset( P );
 			_IsOpen = false;
 		}
 		E_CVDTOR( session___ );
@@ -111,22 +110,33 @@ namespace frdssn {
 		{
 			_Kernel = &Kernel;
 			_Registry.Init();
-			_Meaning.Init();
 			_IsOpen = false;
 		}
 		void Open(
-			const rgstry::multi_level_registry_ &Registry,
-			const char *Language )
+			const char *Language,
+			const rgstry::multi_level_registry_ &Registry )
 		{
+ERRProlog
+ERRBegin
 			_Registry.Init( Registry );
+			_IsOpen = true;	// Pour autoriser l'accés à la registry dans 'FRDSSNnOpen.
 			FRDSSNOpen( Language );
-			_IsOpen = true;
+ERRErr
+			_IsOpen = false;
+			_Registry.reset();
+ERREnd
+ERREpilog
+
 		}
 		void Close( void )
 		{
 			_Registry.reset();
 			FRDSSNClose();
 			_IsOpen = false;
+		}
+		const char *Language( TOL_CBUFFER___ &Buffer )
+		{
+			return FRDSSNLanguage( Buffer );
 		}
 		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramètres de sortie est un 'flow', dés que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
 		{
@@ -145,12 +155,6 @@ namespace frdssn {
 			_Test();
 
 			return _Registry;
-		}
-		const lcl::locale_ &Locale( void ) const
-		{
-			_Test();
-
-			return _K().Locale();
 		}
 		bso::bool__ IsOpen( void ) const
 		{

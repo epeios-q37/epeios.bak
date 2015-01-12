@@ -89,7 +89,7 @@ ERRBegin
 ERRErr
 	if ( cio::IsInitialized() ) {
 		Error.Init();
-		if ( sclerror::GetPendingError( sclmisc::GetLanguage(), Error, err::hUserDefined  )) {
+		if ( sclerror::GetPendingErrorTranslation( sclmisc::GetBaseLanguage(), Error, err::hUserDefined  )) {
 			cio::CErr << Error << txf::nl;
 			ERRRst();
 		}
@@ -116,7 +116,7 @@ ERRProlog
 ERRBegin
 	Translation.Init();
 
-	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosing", sclmisc::GetLanguage(), Translation ) << txf::nl;
+	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosing", sclmisc::GetBaseLanguage(), Translation ) << txf::nl;
 ERRErr
 ERREnd
 ERREpilog
@@ -130,7 +130,7 @@ ERRProlog
 ERRBegin
 	Translation.Init();
 
-	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosed", sclmisc::GetLanguage(), Translation ) << txf::nl;
+	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosed", sclmisc::GetBaseLanguage(), Translation ) << txf::nl;
 ERRErr
 ERREnd
 ERREpilog

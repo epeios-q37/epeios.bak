@@ -53,6 +53,7 @@
 namespace xhtcllbk {
 	E_CDEF( char *, OnEventAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "onevent" );
 	E_CDEF( char *, OnEventsAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "onevents" );
+	E_CDEF( char *, JQueryAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "jquery");
 	E_CDEF( char *, PaddingAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "padding" );
 	E_CDEF( char *, ResultAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "result" );
 
@@ -63,6 +64,8 @@ namespace xhtcllbk {
 
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
+
+
 
 
 	class upstream_callback__ {
@@ -239,10 +242,8 @@ namespace xhtcllbk {
 	{
 	protected:
 		virtual void XHTCLLBKOnLoad( const char *Launcher ) = 0;
-		virtual const char *XHTCLLBKLanguage( void ) = 0;
-		virtual session_callback__ *XHTCLLBKNew(
-			const char *Language,
-			upstream_callback__ &Callback ) = 0;
+		virtual void XHTCLLBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual session_callback__ *XHTCLLBKNew( upstream_callback__ &Callback ) = 0;
 		// Destruction by destructor member.
 		virtual void XHTCLLBKOnUnload( void ) = 0;
 	public:
@@ -259,15 +260,15 @@ namespace xhtcllbk {
 		{
 			return XHTCLLBKOnLoad( Launcher );
 		}
-		const char *Language( void )
+		const char *BaseLanguage( TOL_CBUFFER___ &Buffer )
 		{
-			return XHTCLLBKLanguage();
+			XHTCLLBKBaseLanguage( Buffer );
+
+			return Buffer;
 		}
-		session_callback__ *New(
-			const char *Language,
-			upstream_callback__ &Callback )
+		session_callback__ *New( upstream_callback__ &Callback )
 		{
-			return XHTCLLBKNew( Language,  Callback );
+			return XHTCLLBKNew( Callback );
 		}
 		void OnUnload( void )
 		{

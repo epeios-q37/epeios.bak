@@ -79,7 +79,7 @@ namespace sclbacknd {
 				TOL_CBUFFER___ Buffer;
 			ERRBegin
 				Translation.Init();
-				sclerror::GetPendingError( Language(), Translation );
+				sclerror::GetPendingErrorTranslation( Language(), Translation );
 
 				fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
 			ERRErr

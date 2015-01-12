@@ -181,6 +181,13 @@ namespace sclxhtml {
 	private:
 		action_handler _Handler;
 		const char *_Language;
+		const char *_L( void ) const
+		{
+			if ( _Language == NULL )
+				ERRFwk();
+
+			return _Language;
+		}
 	protected:
 		virtual void XHTCLLBKLaunch(
 			const char *Id,
@@ -195,7 +202,7 @@ namespace sclxhtml {
 			switch ( ERRType ) {
 			case err::t_Abort:
 				Message.Init();
-				if ( sclerror::GetPendingErrorTranslation( _Language, Message) ) {
+				if ( sclerror::GetPendingErrorTranslation( _L(), Message) ) {
 					sclerror::ResetPendingError();
 					_A().Alert( Message );
 				} else
@@ -223,10 +230,14 @@ namespace sclxhtml {
 			_Language = NULL;
 		}
 		E_CVDTOR( session_callback___ );
-		void Init( const char *Language )
+		void Init( void )
 		{
 			_Handler.Init();
 			_session_callback__::Init();
+			_Language = NULL;
+		}
+		void SetLanguage( const char *Language )
+		{
 			_Language = Language;
 		}
 		void AddActionCallback(
@@ -273,10 +284,10 @@ namespace sclxhtml {
 			}
 			E_CVDTOR( reporting_callback__ );
 			void Init(
-				frdkrn::kernel___ &Kernel,
+				const char *Language,
 				_agent___ &Agent )
 			{
-				_reporting_callback__::Init( Kernel );
+				_reporting_callback__::Init( scllocale::GetLocale(), Language );
 				_Agent = &Agent;
 			}
 		};
@@ -292,15 +303,26 @@ namespace sclxhtml {
 	private:
 		kernel _Kernel;
 		page _Page;	// Current page;
+		const char *_Launcher;
 		reporting_callback__ _ReportingCallback;
 	protected:
 		virtual void FRDSSNOpen( const char *Language ) override
 		{
+			_ReportingCallback.Init( Language, *this );
+			session_callback___::SetLanguage( Language );
 			instances::Init( _Kernel );
+			_session___::Registry().SetValue(sclrgstry::Language, str::string( Language ) );
 		}
 		virtual void FRDSSNClose( void ) override
 		{
 			instances::reset();
+		}
+		virtual const char *FRDSSNLanguage( TOL_CBUFFER___ &Buffer ) override
+		{
+			if ( _session___::IsOpen() )
+				return sclrgstry::GetLanguage_(_session___::Registry(), Buffer );
+			else
+				return _agent___::GetLanguage( Buffer );
 		}
 		virtual void SCLXHTMLRefresh( page Page  ) = 0;
 		virtual xhtagent::agent___ &_A( void ) override
@@ -316,21 +338,22 @@ namespace sclxhtml {
 			_session___::reset( P );
 			_Kernel.reset( P );
 			_Page= UndefinedPage;
+			_Launcher = NULL;
 			_ReportingCallback.reset( P );
 		}
 		E_CVDTOR( session___ )
 		void Init(
 			const char *Launcher,
-			const char *Language,
 			xhtcllbk::upstream_callback__ &Callback )
 		{
-			_ReportingCallback.Init( _Kernel, *this );
-			_Kernel.Init( scllocale::GetLocale(), Language, _ReportingCallback, Launcher );
-			session_callback___::Init( Language );
 			_agent___::Init( Callback );
-//			instances::Init( _Kernel );	// Lancé lors de l'ouverture de la session (vord 'FRDSSNOpen(...)').
+			_Kernel.Init( _ReportingCallback );
 			_session___::Init( _Kernel );
+			session_callback___::Init();
 			_Page = UndefinedPage;
+			_Launcher = Launcher;
+
+			// Le reste est initialisé lors de l'ouverure de session (voir 'FRDSSNOpen()'.
 		}
 		void Refresh( void )
 		{
@@ -350,13 +373,18 @@ namespace sclxhtml {
 		{
 			return _Kernel;
 		}
+		const char *Launcher( void ) const
+		{
+			if ( _Launcher == NULL )
+				ERRFwk();
+
+			return _Launcher;
+		}
 	};
 
 	void SCLXHTMLOnLoad( void );	// A surcharger. Lancé lorsque la bibliothèque est chargée.
 
-	session_callback___ *SCLXHTMLNew(
-		const char *Language,
-		xhtcllbk::upstream_callback__ &Callback );
+	session_callback___ *SCLXHTMLNew( xhtcllbk::upstream_callback__ &Callback );
 
 	void SCLXHTMLOnUnload( void );	// A surcharger. Lancé lorsque la bibliothèque est déchargée.
 
@@ -372,6 +400,7 @@ namespace sclxhtml {
 	void LoadProject( xhtagent::agent___ &Agent );
 
 	void LaunchProject(
+		const char *Language,
 		frdkrn::kernel___ &Kernel,
 		frdssn::session___ &Session,
 		xhtagent::agent___ &Agent,

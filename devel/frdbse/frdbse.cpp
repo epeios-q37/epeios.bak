@@ -90,6 +90,48 @@ backend_type__ frdbse::GetBackendType( const str::string_ &Pattern )
 	return stsfsm::GetId( Pattern, BackendAutomat_, bt_Undefined, bt_amount );
 }
 
+static void GetAuthorText_(
+	const char *Name,
+	const char *Contact,
+	const lcl::locale_ &Locale,
+	const char *Language,
+	str::string_ &Text )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+	Meaning.SetValue( FRDBSE_NAME "_AuthorText" );
+	Meaning.AddTag( Name );
+	Meaning.AddTag( Contact );
+
+	Locale.GetTranslation( Meaning, Language, Text );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void GetAffiliationText_(
+	const char *Name,
+	const char *URL,
+	const lcl::locale_ &Locale,
+	const char *Language,
+	str::string_ &Text )
+{
+ERRProlog
+	lcl::meaning Meaning;
+ERRBegin
+	Meaning.Init();
+	Meaning.SetValue( FRDBSE_NAME "_AffiliatedSoftwareText" );
+	Meaning.AddTag( Name );
+	Meaning.AddTag( URL );
+
+	Locale.GetTranslation( Meaning, Language, Text );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 static void FillAutomats_( void )
 {
 	FillProjectAutomat_();

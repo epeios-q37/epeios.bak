@@ -179,18 +179,23 @@ namespace frdkrn {
 	struct backend_features___
 	{
 	public:
+		const char *Language;
 		str::string Location;
 		csducl::type__ Type;
 		bso::uint__ PingDelay;
 		void reset( bso::bool__ P = true )
 		{
+			Language = NULL;
 			Location.reset( P );
 			Type = csducl::t_Undefined;
 			PingDelay = 0;
 		}
 		E_CDTOR( backend_features___ )
-		void Init( bso::uint__ PingDelay )
+		void Init(
+			const char *Language,
+			bso::uint__ PingDelay )
 		{
+			this->Language = Language;
 			Location.Init();
 			Type = csducl::t_Undefined;
 			this->PingDelay = PingDelay;
@@ -271,7 +276,8 @@ namespace frdkrn {
 	: public _reporting_callback__
 	{
 	private:
-		const class kernel___ *_Kernel;
+		const lcl::locale_ *_Locale;
+		const char *_Language;
 	protected:
 		void FBLFRDReport(
 			fblovl::reply__ Reply,
@@ -281,13 +287,17 @@ namespace frdkrn {
 		void reset ( bso::bool__ P = true )
 		{
 			_reporting_callback__::reset( P );
-			_Kernel = NULL;
+			_Locale = NULL;
+			_Language = NULL;
 		}
 		E_VDTOR( reporting_callback__ )
-		void Init( const class kernel___ &Kernel )
+		void Init(
+			const lcl::locale_ &Locale,
+			const char *Language )
 		{
 			_reporting_callback__::Init();
-			_Kernel = &Kernel;
+			_Locale = &Locale;
+			_Language = Language;
 		}
 		void Report( const str::string_ &Message )
 		{
@@ -299,15 +309,9 @@ namespace frdkrn {
 	{
 	private:
 		csducl::universal_client_core _ClientCore;
-//		rgstry::level__ _RegistryProjectLevel;	// Old.
 		frdfrd::frontend___ _Frontend;
-		lcl::locale _Locale;
-		const char *_Language;	// Langue d'administration.
 		lcl::meaning _ErrorMeaning;
-		time_t _ProjectOriginalTimeStamp;	// Horodatage de la créationn du chargement du projet ou de sa dernière sauvegarde. Si == 0, pas de projet en cours d'utilisation.
-		time_t _ProjectModificationTimeStamp;	// Horodatage de la dernière modification du projet.
 		reporting_callback__ *_ReportingCallback;
-		const char *_LauncherIdentification;
 # if 0
 		registry_ &_R( void )
 		{
@@ -350,47 +354,19 @@ namespace frdkrn {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				CloseProject();
-
 			_Frontend.reset( P );
 			_ClientCore.reset( P );
-			_Locale.reset( P );
-			_Language = NULL;
 			_ErrorMeaning.reset( P );
-			_ProjectOriginalTimeStamp = 0;
-			_ProjectModificationTimeStamp = 0;
 			_ReportingCallback = NULL;
-			_LauncherIdentification = NULL;
 		}
 		E_CVDTOR( kernel___ );
-		status__ Init(
-			const lcl::locale_ &Locale,
-			const char *Language,
-			reporting_callback__ &ReportingCallback,
-			const char *LauncherIdentification )	//  PAS dupliqué !
+		status__ Init( reporting_callback__ &ReportingCallback )	//  PAS dupliqué !
 		{
 			_ErrorMeaning.Init();
-
-			_Locale.Init();
-			_Locale.PushImported( Locale );
-
-			_Language = Language;
-
-			_ProjectOriginalTimeStamp = 0;
 			_ReportingCallback = &ReportingCallback;
-			_LauncherIdentification = LauncherIdentification;
 			// L'initialisation de '_Frontend' et '_ClientCore' se fait à la connection.
 
-
 			return sOK;
-		}
-		const char *LauncherIdentification( void ) const
-		{
-			if(  _LauncherIdentification == NULL )
-				ERRFwk();
-
-			return _LauncherIdentification;
 		}
 		fblfrd::frontend___ &Frontend( void )
 		{
@@ -403,49 +379,6 @@ namespace frdkrn {
 		{
 			Frontend().Dismiss();
 		}
-		const lcl::locale_ &Locale( void ) const
-		{
-			return _Locale;
-		}
-		const char *Language( void ) const
-		{
-			if ( _Language == NULL )
-				ERRFwk();
-
-			return _Language;
-		}
-		void Report( const lcl::meaning_ &Meaning ) const
-		{
-		ERRProlog
-			str::string Translation;
-		ERRBegin
-			if( _ReportingCallback == NULL )
-				ERRFwk();
-
-			Translation.Init();
-
-			Locale().GetTranslation( Meaning, Language(), Translation );
-
-			_ReportingCallback->Report( Translation );
-		ERRErr
-		ERREnd
-		ERREpilog
-		}
-#if 0
-		recap__ LoadProject(
-			const str::string_ &FileName,
-			const char *TargetName,
-			const xpp::criterions___ &Criterions,
-			str::string_ &Id,
-			error_set___ &ErrorSet )	// Ne réalise qu'une mise à jour de la registry avec le contenu du projet. Ne réalise pas de connection.
-		{
-			return _FillProjectRegistry( FileName, TargetName, Criterions, Id, ErrorSet );
-		}
-		void CreateNewProject( void )
-		{
-			_RegistryProjectLevel = _Registry.PushEmbeddedLevel( str::string( "Project" ) );
-		}
-#endif
 		recap__ Launch(
 			const backend_features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations,
@@ -454,12 +387,7 @@ namespace frdkrn {
 			recap__ Recap = r_OK;
 			
 			if ( BackendFeatures.Type != csducl::t_Undefined )
-				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, Language(), BackendFeatures.PingDelay, ErrorSet );
-
-			if ( Recap == r_OK ) {
-				_ProjectOriginalTimeStamp = time( NULL );
-				_ProjectModificationTimeStamp = 0;
-			}
+				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, BackendFeatures.Language, BackendFeatures.PingDelay, ErrorSet );
 
 			return Recap;
 		}
@@ -473,33 +401,7 @@ namespace frdkrn {
 		status__ Launch(
 			const backend_features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations );
-		void Touch( void )
-		{
-			_ProjectModificationTimeStamp = time( NULL );
-		}
-		time_t ProjectModificationTimeStamp( void ) const
-		{
-			return _ProjectModificationTimeStamp;
-		}
-		bso::bool__ IsProjectInProgress( void ) const
-		{
-			return _ProjectOriginalTimeStamp != 0;
-		}
-		bso::bool__ IsProjectModified( void ) const
-		{
-			return _ProjectOriginalTimeStamp < ProjectModificationTimeStamp();
-		}
 		E_RWDISCLOSE__( lcl::meaning_ , ErrorMeaning );
-		const str::string_ &GetErrorMeaningTranslation( str::string_ &Translation ) const
-		{
-			return Locale().GetTranslation( ErrorMeaning(), Language(), Translation );
-		}
-		const str::string_ &GetTranslation(
-			const char *Message,
-			str::string_ &Translation ) const
-		{
-			return Locale().GetTranslation( Message, Language(), Translation );
-		}
 		void AboutBackend(
 			str::string_ &ProtocolVersion,
 			str::string_ &BackendLabel,
@@ -517,33 +419,11 @@ namespace frdkrn {
 
 			_Frontend.ThrowERRFwk();
 		}
-		status__ CloseProject( void )
-		{
-			if ( IsConnected() ) {
-				_CloseConnection();
-			}
-
-			_ProjectOriginalTimeStamp =	_ProjectModificationTimeStamp = 0;
-
-			return sOK;
-		}
 		bso::bool__ IsConnected( void ) const
 		{
 			return _Frontend.IsConnected();
 		}
 	};
-
-	const str::string_ &GetAboutText(
-		const char *BuildInformations,
-		const char *AppName,
-		const char *Version,
-		const char *AuthorName,
-		const char *AuthorContact,
-		const char *Copyright,
-		const char *SoftwareDetails,
-		const char *SoftwareURL,
-		kernel___ &Kernel,
-		str::string_ &Text );
 
 	enum authentication_prompt_mode__ 
 	{

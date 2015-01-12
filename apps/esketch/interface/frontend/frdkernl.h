@@ -63,20 +63,11 @@ namespace frdkernl {
 			MyObject.reset( P );
 		}
 		E_CDTOR( kernel___ );
-		status__ Init(
-			const rgstry::multi_level_registry_ &Registry,
-			const lcl::locale_ &Locale,
-			const char *Language,
-			frdkrn::reporting_callback__ &ReportingCallback,
-			const char *LauncherIdentification )
+		status__ Init( frdkrn::reporting_callback__ &ReportingCallback )
 		{
 			// Les autres objets sont initialisés lors de la connection.
 
-			return _kernel___::Init( Registry, Locale, Language, ReportingCallback, LauncherIdentification );
-		}
-		void Report( const char *Message )
-		{
-			sclfrntnd::Report( *this, Message );
+			return _kernel___::Init( ReportingCallback );
 		}
 		void TestMessage( void )
 		{
