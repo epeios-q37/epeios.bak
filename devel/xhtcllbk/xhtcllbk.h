@@ -48,25 +48,9 @@
 
 # define XHTCLLBK_RETRIEVE_FUNCTION_NAME		XHTCLLBKRetrieve
 
-# define XHTCLLBK_ATTRIBUTE_NAMESPACE	"xhx:"
-
 namespace xhtcllbk {
-	E_CDEF( char *, OnEventAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "onevent" );
-	E_CDEF( char *, OnEventsAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "onevents" );
-	E_CDEF( char *, JQueryAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "jquery");
-	E_CDEF( char *, PaddingAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "padding" );
-	E_CDEF( char *, ResultAttribute, XHTCLLBK_ATTRIBUTE_NAMESPACE "result" );
-
-	E_CDEF( char *, KeyTag, XHTCLLBK_ATTRIBUTE_NAMESPACE "key" );
-	E_CDEF( char *, KeyTagKeyAttribute, "key" );
-	E_CDEF( char *, KeyTagModifiersAttribute, "modifiers" );
-	E_CDEF( char *, KeyTagEventAttribute, "event" );
-
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
-
-
-
 
 	class upstream_callback__ {
 	protected:
@@ -102,6 +86,9 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKGetAttribute(
 			const nchar__ *Id,
 			const nchar__ *Name,
+			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XHTCLLBKGetResultAttribute(
+			const nchar__ *Id,
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKRemoveAttribute(
 			const nchar__ *Id,
@@ -197,6 +184,14 @@ namespace xhtcllbk {
 			const nstring___ &Value )
 		{
 			XHTCLLBKSetAttribute( Id.Internal(), Name.Internal(), Value.Internal() );
+		}
+		const char *GetResultAttribute(
+			const nstring___ &Id,
+			TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKGetResultAttribute( Id.Internal(), Buffer );
+
+			return Buffer;
 		}
 		void RemoveAttribute(
 			const nstring___ &Id,

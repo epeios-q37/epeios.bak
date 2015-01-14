@@ -84,6 +84,12 @@ namespace xhtagent {
 		{
 			_C().SetAttribute( Id, Name, Value );
 		}
+		const char *GetResultAttribute(
+			const nstring___ &Id,
+			TOL_CBUFFER___ &Buffer )
+		{
+			return _C().GetResultAttribute( Id, Buffer );
+		}
 		void RemoveAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name )
@@ -133,7 +139,7 @@ namespace xhtagent {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			SetChildren( "", XML, XSL );
+			SetChildren( (const char *)NULL, XML, XSL );
 		}
 		void SetPaddings(
 			const nstring___ &XML,

@@ -115,9 +115,7 @@ namespace ntvstr {
 		}
 		void Init( void )
 		{
-			// _Core.Init();	// C'est un buffer, donc pas d'initialisation.
-			_Core.Malloc( 1 );
-			*_Core = 0;
+			_Core.reset();
 		}
 		void Init( const bso::char__ *String );
 # ifndef NTVSTR__POSIX

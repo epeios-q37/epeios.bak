@@ -98,7 +98,7 @@ ERRProlog
 	xhtcllbk::retriever__ Retriever;
 ERRBegin
 	Params.Init();
-	xhtcllbk::Split( str::string( Agent.GetAttribute( Id, xhtcllbk::ResultAttribute, Buffer ) ), Params );
+	xhtcllbk::Split( str::string( Agent.GetResultAttribute( Id, Buffer ) ), Params );
 
 	Retriever.Init( Params );
 

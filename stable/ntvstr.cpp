@@ -51,8 +51,10 @@ using namespace ntvstr;
 # ifdef NTVSTR__WIN
 void ntvstr::string___::Init( const bso::char__ *String )
 {
-	if ( String == NULL )
-		String = "";
+	if ( String == NULL ) {
+		_Core.reset();
+		return;
+	}
 
 	Init();
 
@@ -76,7 +78,12 @@ void ntvstr::string___::Init( const bso::char__ *String )
 
 void ntvstr::string___::Init( const char__ *String )
 {
-	bso::size__ Size = ( String == NULL ? 0 : strlen_( String ) );
+	if ( String == NULL ) {
+		_Core.reset();
+		return;
+	}
+
+	bso::size__ Size = strlen_( String );
 
 	_Core.Malloc( Size + 1 );
 
@@ -101,6 +108,11 @@ const bso::char__ *ntvstr::string___::_Convert(
 	unsigned int CodePage,
 	TOL_CBUFFER___ &Buffer ) const
 {
+	if ( _Core == NULL ) {
+		Buffer.reset();
+		return Buffer;
+	}
+
 # ifdef NTVSTR__WIN
 	// Nécessaire pour les architectures 64 bits (sous Windows, 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
 	int BufferExtent = ( Buffer.Extent() > INT_MAX ? INT_MAX : (int)Buffer.Extent() );
