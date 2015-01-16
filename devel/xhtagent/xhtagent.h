@@ -141,11 +141,11 @@ namespace xhtagent {
 		{
 			SetChildren( (const char *)NULL, XML, XSL );
 		}
-		void SetPaddings(
+		void SetCasting(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().SetPaddings( XML, XSL );
+			_C().SetCasting( XML, XSL );
 		}
 		void Show(
 			const nstring___ &Id,

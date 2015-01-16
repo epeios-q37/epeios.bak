@@ -68,7 +68,7 @@ namespace xhtcllbk {
 			const nchar__ *Id,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
-		virtual void XHTCLLBKSetPaddings(
+		virtual void XHTCLLBKSetCasting(
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetProperty(
@@ -137,11 +137,11 @@ namespace xhtcllbk {
 		{
 			XHTCLLBKSetChildren( Id.Internal(), XML.Internal(), XSL.Internal() );
 		}
-		void SetPaddings(
+		void SetCasting(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetPaddings( XML.Internal(), XSL.Internal() );
+			XHTCLLBKSetCasting( XML.Internal(), XSL.Internal() );
 		}
 		void ExecuteJavascript( const nstring___ &Script )
 		{
