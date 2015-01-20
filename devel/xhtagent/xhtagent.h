@@ -77,6 +77,20 @@ namespace xhtagent {
 		{
 			return _C().GetAttribute( Id, Name, Buffer );
 		}
+		const str::string_ &GetAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			str::string_ &Value )
+		{
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			Value.Append( GetAttribute( Id, Name, Buffer ) );
+		ERRErr
+		ERREnd
+		ERREpilog
+			return Value;
+		}
 		void SetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
@@ -89,6 +103,19 @@ namespace xhtagent {
 			TOL_CBUFFER___ &Buffer )
 		{
 			return _C().GetResultAttribute( Id, Buffer );
+		}
+		const str::string_ &GetResultAttribute(
+			const nstring___ &Id,
+			str::string_ &Value )
+		{
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			Value.Append( GetResultAttribute( Id, Buffer ) );
+		ERRErr
+		ERREnd
+		ERREpilog
+			return Value;
 		}
 		void RemoveAttribute(
 			const nstring___ &Id,
@@ -113,11 +140,24 @@ namespace xhtagent {
 		{
 			SetString( Id, "value", Value );
 		}
-		const char * GetValue(
+		const char *GetValue(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
 			return GetString( Id, "value", Buffer );
+		}
+		const str::string_ &GetValue(
+			const nstring___ &Id,
+			str::string_ &Value )
+		{
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			Value.Append( GetValue( Id, Buffer ) );
+		ERRErr
+		ERREnd
+		ERREpilog
+			return Value;
 		}
 		const char *GetSelectValue(
 			const nstring___ &Id,
@@ -126,8 +166,18 @@ namespace xhtagent {
 			return _C().GetSelectValue( Id, Buffer );
 		}
 		const str::string_ &GetSelectValue(
-			const char *Id,
-			str::string_ &Buffer );
+			const nstring___ &Id,
+			str::string_ &Value )
+		{
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			Value.Append( GetSelectValue( Id, Buffer ) );
+		ERRErr
+		ERREnd
+		ERREpilog
+			return Value;
+		}
 		void SetChildren(
 			const nstring___ &Id,
 			const nstring___ &XML,

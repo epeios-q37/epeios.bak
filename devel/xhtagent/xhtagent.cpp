@@ -41,7 +41,7 @@ ERRProlog
 ERRBegin
 	Value.Init();
 
-	xhtcllbk::Escape( RawValue, Value );
+	xhtcllbk::Escape( RawValue, Value, '"' );
 
 	Value.InsertAt( '"' );
 	Value.Append( '"' );
@@ -50,20 +50,6 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-}
-
-const str::string_ &xhtagent::agent___::GetSelectValue(
-	const char *Id,
-	str::string_ &Buffer )
-{
-ERRProlog
-	TOL_CBUFFER___ CBuffer;
-ERRBegin
-	Buffer.Append( GetSelectValue( Id, CBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
-	return Buffer;
 }
 
 void xhtagent::agent___::Alert(
@@ -76,13 +62,13 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	XML.Init();
-	xhtcllbk::Escape( RawXML, XML );
+	xhtcllbk::Escape( RawXML, XML, '"' );
 
 	XSL.Init();
-	xhtcllbk::Escape( RawXSL, XSL );
+	xhtcllbk::Escape( RawXSL, XSL, '"' );
 
 	Title.Init();
-	xhtcllbk::Escape( RawTitle, Title );
+	xhtcllbk::Escape( RawTitle, Title, '"' );
 
 	_C().OpenDialog( RawXML, RawXSL, Title, Buffer );
 ERRErr

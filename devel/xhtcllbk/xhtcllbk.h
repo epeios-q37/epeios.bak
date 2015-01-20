@@ -269,27 +269,6 @@ namespace xhtcllbk {
 		{
 			return XHTCLLBKOnUnload();
 		}
-		/*
-			Déclaré en 'vritual' pour s'assurer que cette méthode est bien exécutée dans le même contexte
-			que lors de la création de l'instance de cet objet. Cet objet est destiné à être instancié à partir
-			d'une bilbiothèque dynamique, mais la méthode ci-dessous est destinée à être lancée par l'exécutable
-			ayant chargé la	bibliothèque. Or, le compilateur utilisé en amont peut ne pas être le même/ne pas
-			avoir été lancé avec les mêmes options que le compilateur aval.
-		*/
-		// 'const char *' pour avoir une strucutre de données simple, car donnée passée entre codes compilés séparément.
-		/*
-		virtual void Handle(
-			const char *EventName,
-			const char *Id )
-		{
-			event_handler__ *Handler = _M().Get( str::string(  EventName ) );
-
-			if ( Handler == NULL )
-				ERRFwk();
-
-			Handler->Handle( Id );
-		}
-		*/
 	};
 
 #pragma pack( push, 1)
@@ -352,6 +331,7 @@ namespace xhtcllbk {
 	void Escape(
 		const str::string_ &Source,
 		str::string_ &Target,
+		bso::char__ Delimiter,	// Devrait être '\'', '"' ou 0. Si 0, échappe '\'' et '\"', sinon échappe 'Delimiter'.
 		bso::char__ EscapeChar = strmrg::DefaultEscapeToken );
 #if 0
 	void Unescape(

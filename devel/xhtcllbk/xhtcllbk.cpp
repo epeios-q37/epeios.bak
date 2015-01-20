@@ -32,7 +32,8 @@ using namespace xhtcllbk;
 void xhtcllbk::Escape(
     const str::string_ &Source,
     str::string_ &Target,
-	char EscapeChar )
+	bso::char__ Delimiter,
+	bso::char__ EscapeChar )
 {
     sdr::row__ Row = Source.First();
 	bso::char__ C = 0;
@@ -78,19 +79,14 @@ void xhtcllbk::Escape(
 			break;
 #endif
 		case '\'':
-			Target.Append( EscapeChar );
-			Target.Append( '\'' );
-			break;
 		case '"':
-			Target.Append( EscapeChar );
-			Target.Append( '"' );
+			if ( ( Delimiter == C ) || ( Delimiter == 0 ) )
+				Target.Append( EscapeChar );
+
+			Target.Append( C );
 			break;
 		default:
-			if ( C == EscapeChar ) {
-				Target.Append( EscapeChar );
-				Target.Append( EscapeChar );
-			} else
-				Target.Append( Source( Row ) );
+			Target.Append( Source( Row ) );
 			break;
 		}
 
