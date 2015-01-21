@@ -70,6 +70,30 @@ namespace sclxhtml {
 			}
 		};
 
+		class _prelaunch_callback__
+		{
+		protected:
+			virtual bso::bool__ SCLXHTMLPreLaunch(
+				const char *Id,
+				const char *Action ) = 0;
+		public:
+			void reset( bso::bool__ = true )
+			{
+				// Standardisation.
+			}
+			E_CVDTOR( _prelaunch_callback__ );
+			void Init( void )
+			{
+				// Standardisation.
+			}
+			bso::bool__ PreLaunch(
+				const char *Id,
+				const char *Action )
+			{
+				return SCLXHTMLPreLaunch( Id, Action );
+			}
+		};
+
 		E_ROW( crow__ );	// callback row;
 
 		typedef bch::E_BUNCHt_( _action_callback__ *, crow__ ) _action_callbacks_;
@@ -77,6 +101,14 @@ namespace sclxhtml {
 		class action_handler_
 		{
 		private:
+			_prelaunch_callback__ *_PreLaunchCallback;
+			_prelaunch_callback__ &_PL( void )
+			{
+				if ( _PreLaunchCallback == NULL )
+					ERRFwk();
+
+				return *_PreLaunchCallback;
+			}
 			_action_callback__ *_Get( const str::string_ &Action ) const
 			{
 				crow__ Row = stsfsm::GetId( Action, Automat );
@@ -114,8 +146,9 @@ namespace sclxhtml {
 
 				return *this;
 			}
-			void Init( void )
+			void Init( _prelaunch_callback__ &Callback )
 			{
+				_PreLaunchCallback = &Callback;
 				Automat.Init();
 				Callbacks.Init();
 			}
@@ -129,12 +162,14 @@ namespace sclxhtml {
 				const char *Id,
 				const char *Action )
 			{
-				_action_callback__ *Callback = _Get( str::string(  Action ) );
+				if ( _PL().PreLaunch(Id, Action) ) {
+					_action_callback__ *Callback = _Get( str::string(  Action ) );
 
-				if ( Callback == NULL )
-					ERRFwk();
+					if ( Callback == NULL )
+						ERRFwk();
 
-				Callback->Launch( Id );
+					Callback->Launch( Id );
+				}
 			}
 		};
 
@@ -161,6 +196,32 @@ namespace sclxhtml {
 			_Session = &Session;
 
 			this->Session().AddActionCallback( ActionName, *this );
+		}
+		session &Session( void ) const
+		{
+			if ( _Session == NULL )
+				ERRFwk();
+
+			return *_Session;
+		}
+	};
+
+	template <typename session> class prelaunch_callback__
+	: public _prelaunch_callback__
+	{
+	private:
+		session *_Session;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_prelaunch_callback__::reset( P );
+			_Session = NULL;
+		}
+		E_CVDTOR( prelaunch_callback__ );
+		void Init( session &Session )
+		{
+			_prelaunch_callback__::Init();
+			_Session = &Session;
 		}
 		session &Session( void ) const
 		{
@@ -230,9 +291,9 @@ namespace sclxhtml {
 			_Language = NULL;
 		}
 		E_CVDTOR( session_callback___ );
-		void Init( void )
+		void Init( _prelaunch_callback__ &Callback )
 		{
-			_Handler.Init();
+			_Handler.Init( Callback);
 			_session_callback__::Init();
 			_Language = NULL;
 		}
@@ -344,12 +405,13 @@ namespace sclxhtml {
 		E_CVDTOR( session___ )
 		void Init(
 			const char *Launcher,
-			xhtcllbk::upstream_callback__ &Callback )
+			xhtcllbk::upstream_callback__ &Callback,
+			_prelaunch_callback__ &PreLaunchCallback )
 		{
 			_agent___::Init( Callback );
 			_Kernel.Init( _ReportingCallback );
 			_session___::Init( _Kernel );
-			session_callback___::Init();
+			session_callback___::Init( PreLaunchCallback );
 			_Page = UndefinedPage;
 			_Launcher = Launcher;
 

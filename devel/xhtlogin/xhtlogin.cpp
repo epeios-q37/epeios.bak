@@ -42,7 +42,7 @@ ERRProlog
 	str::string Value;
 ERRBegin
 	Value.Init();
-	BackendType = frdbse::GetBackendType( Agent.GetSelectValue( BackendTypeId, Value ) );
+	BackendType = frdbse::GetBackendType( Agent.GetContent( BackendTypeId, Value ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -70,13 +70,13 @@ ERRProlog
 ERRBegin
 	switch ( Type = GetBackendType_( Agent ) ) {
 	case frdbse::btDaemon:
-		Feature.Append( Agent.GetValue( DaemonBackendId, Buffer ) );
+		Feature.Append( Agent.GetContent( DaemonBackendId, Buffer ) );
 		break;
 	case frdbse::btEmbedded:
-		Feature.Append( Agent.GetValue( EmbeddedBackendId, Buffer ) );
+		Feature.Append( Agent.GetContent( EmbeddedBackendId, Buffer ) );
 		break;
 	case frdbse::btPredefined:
-		Feature.Append( Agent.GetValue( PredefinedBackendId, Buffer ) );
+		Feature.Append( Agent.GetContent( PredefinedBackendId, Buffer ) );
 		break;
 	default:
 		ERRFwk();
@@ -109,7 +109,7 @@ ERRBegin
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Agent.SetValue( EmbeddedBackendId, FileName );
+		Agent.SetContent( EmbeddedBackendId, FileName );
 ERRErr
 ERREnd
 ERREpilog

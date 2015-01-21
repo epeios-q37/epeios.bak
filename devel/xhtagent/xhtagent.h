@@ -134,45 +134,26 @@ namespace xhtagent {
 		{
 			return _C().GetProperty( Id, Name, Buffer );
 		}
-		void SetValue(
+		void SetContent(
 			const nstring___ &Id,
 			const str::string_ &Value )
 		{
-			SetString( Id, "value", Value );
+			_C().SetContent( Id, Value );
 		}
-		const char *GetValue(
+		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return GetString( Id, "value", Buffer );
+			return _C().GetContent( Id, Buffer );
 		}
-		const str::string_ &GetValue(
+		const str::string_ &GetContent(
 			const nstring___ &Id,
 			str::string_ &Value )
 		{
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
-			Value.Append( GetValue( Id, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
-			return Value;
-		}
-		const char *GetSelectValue(
-			const nstring___ &Id,
-			TOL_CBUFFER___ &Buffer )
-		{
-			return _C().GetSelectValue( Id, Buffer );
-		}
-		const str::string_ &GetSelectValue(
-			const nstring___ &Id,
-			str::string_ &Value )
-		{
-		ERRProlog
-			TOL_CBUFFER___ Buffer;
-		ERRBegin
-			Value.Append( GetSelectValue( Id, Buffer ) );
+			Value.Append( GetContent( Id, Buffer ) );
 		ERRErr
 		ERREnd
 		ERREpilog

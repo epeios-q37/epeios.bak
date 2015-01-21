@@ -93,9 +93,12 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKRemoveAttribute(
 			const nchar__ *Id,
 			const nchar__ *Name ) = 0;
-		virtual void XHTCLLBKGetSelectValue(
+		virtual void XHTCLLBKGetContent(
 			const nchar__ *Id,
 			TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XHTCLLBKSetContent(
+			const nchar__ *Id,
+			const nchar__ *Value ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -158,7 +161,7 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetProperty(Id.Internal(), Name.Internal(), Buffer );
+			XHTCLLBKGetProperty( Id.Internal(), Name.Internal(), Buffer );
 
 			return Buffer;
 		}
@@ -199,13 +202,19 @@ namespace xhtcllbk {
 		{
 			XHTCLLBKRemoveAttribute( Id.Internal(), Name.Internal() );
 		}
-		const char *GetSelectValue(
+		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetSelectValue( Id.Internal(), Buffer );
+			XHTCLLBKGetContent( Id.Internal(), Buffer );
 
 			return Buffer;
+		}
+		void SetContent(
+			const nstring___ &Id,
+			const nstring___ &Value )
+		{
+			XHTCLLBKSetContent( Id.Internal(), Value.Internal() );
 		}
 	};
 

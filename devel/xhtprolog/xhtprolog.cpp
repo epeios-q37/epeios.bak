@@ -42,7 +42,7 @@ ERRProlog
 	str::string Value;
 ERRBegin
 	Value.Init();
-	ProjectType = frdbse::GetProjectType( Agent.GetSelectValue( ProjectTypeId, Value ) );
+	ProjectType = frdbse::GetProjectType( Agent.GetContent( ProjectTypeId, Value ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -72,10 +72,10 @@ ERRBegin
 	case frdbse::ptNew:
 		break;
 	case frdbse::ptPredefined:
-		ProjectFeature.Append( Agent.GetSelectValue( PredefinedProjectId, Buffer ) );
+		ProjectFeature.Append( Agent.GetContent( PredefinedProjectId, Buffer ) );
 		break;
 	case frdbse::ptUser:
-		ProjectFeature.Append( Agent.GetValue( UserProjectId, Buffer ) );
+		ProjectFeature.Append( Agent.GetContent( UserProjectId, Buffer ) );
 		break;
 	default:
 		ERRFwk();
@@ -108,7 +108,7 @@ ERRBegin
 		Retriever.GetString( FileName );
 
 	if ( FileName.Amount() != 0 )
-		Agent.SetValue( UserProjectId, FileName );
+		Agent.SetContent( UserProjectId, FileName );
 ERRErr
 ERREnd
 ERREpilog
