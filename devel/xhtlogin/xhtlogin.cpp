@@ -95,13 +95,13 @@ void xhtlogin::DisplaySelectedEmbeddedBackendFileName(
 ERRProlog
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
-	xhtcllbk::params Params;
+	xhtcllbk::args Args;
 	xhtcllbk::retriever__ Retriever;
 ERRBegin
-	Params.Init();
-	xhtcllbk::Split( str::string( Agent.GetResultAttribute( Id, Buffer ) ), Params );
+	Args.Init();
+	xhtcllbk::Split( str::string( Agent.GetResultAttribute( Id, Buffer ) ), Args );
 
-	Retriever.Init( Params );
+	Retriever.Init( Args );
 
 	FileName.Init();
 

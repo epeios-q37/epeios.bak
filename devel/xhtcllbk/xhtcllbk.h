@@ -350,23 +350,11 @@ namespace xhtcllbk {
 #endif
 	typedef downstream_callback__ *(retrieve)( const shared_data__ &Data );
 
-	typedef strmrg::table_ params_;
-	E_AUTO( params );
+	typedef strmrg::table_ args_;
+	E_AUTO( args );
 
-	inline bso::bool__ Split(
-		const str::string_ &Input,
-		params_ &Params )
-	{
-		return strmrg::Split( Input, Params );
-	}
-
-	inline void Merge(
-		const params_ &Params,
-		str::string_ &Target )
-	{
-		return strmrg::Merge( Params, Target );
-	}
-
+	using strmrg::Split;
+	using strmrg::Merge;
 
 	using strmrg::retriever__;
 

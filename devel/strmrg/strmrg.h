@@ -328,6 +328,10 @@ namespace strmrg {
 
 			_Row = _R().Next( _Row );
 		}
+		void Skip( void )
+		{
+			_Row = _R().Next( _Row );
+		}
 		// Ne retourne que le contenu d'une seule entrée. L'entrée en cours doit être un 'string', ou une table ne contenant que des 'string's, sinon erreur.
 		void GetStrings( str::strings_ &Strings );
 		availability__ Availability( void ) const
