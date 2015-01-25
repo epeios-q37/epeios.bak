@@ -100,7 +100,11 @@ namespace err {
 # endif
 		// Type of error.
 		static err::type Type;
-		void Handler(
+		void Set(
+			const char *File = NULL,
+			int Line = 0,
+			err::type Type = err_::Type );
+		void SetAndLaunch(
 			const char *File = NULL,
 			int Line = 0,
 			err::type Type = err_::Type );
@@ -128,7 +132,7 @@ namespace err {
 	}
 # endif
 
-# define ERRCommon( T )	err::ERR.Handler( __FILE__, __LINE__, T )
+# define ERRCommon( T )	err::ERR.SetAndLaunch( __FILE__, __LINE__, T )
 
 # define ERRAlc()	ERRCommon( err::tAllocation )
 # define ERRSys()	ERRCommon( err::tSystem )

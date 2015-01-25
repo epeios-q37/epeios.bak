@@ -138,6 +138,40 @@ ERRFEpilog
 	return Callback;
 }
 
+void sclxhtml::session_callback___::XHTCLLBKLaunch(
+	const char *Id,
+	const char *Action )
+{
+ERRProlog
+	str::string Message;
+	err::buffer__ ErrBuffer;
+ERRBegin
+	if ( _PreLaunch( Id, Action ) )
+		_Handler.Launch( Id, Action );
+ERRErr
+	switch ( ERRType ) {
+	case err::t_Abort:
+		Message.Init();
+		if ( sclerror::GetPendingErrorTranslation( _L(), Message) ) {
+			sclerror::ResetPendingError();
+			_A().Alert( Message );
+		} else
+			_A().Alert("?");
+		break;
+	case err::t_Free:
+	case err::t_Return:
+		_A().Alert( "???" );
+		break;
+	default:
+		_A().Alert( err::Message( ErrBuffer ) );
+		break;
+	}
+
+	ERRRst();
+ERREnd
+ERREpilog
+}
+
 void sclxhtml::LoadProject( xhtagent::agent___ &Agent )
 {
 ERRProlog

@@ -101,14 +101,6 @@ namespace sclxhtml {
 		class action_handler_
 		{
 		private:
-			_prelaunch_callback__ *_PreLaunchCallback;
-			_prelaunch_callback__ &_PL( void )
-			{
-				if ( _PreLaunchCallback == NULL )
-					ERRFwk();
-
-				return *_PreLaunchCallback;
-			}
 			_action_callback__ *_Get( const str::string_ &Action ) const
 			{
 				crow__ Row = stsfsm::GetId( Action, Automat );
@@ -146,9 +138,8 @@ namespace sclxhtml {
 
 				return *this;
 			}
-			void Init( _prelaunch_callback__ &Callback )
+			void Init( void )
 			{
-				_PreLaunchCallback = &Callback;
 				Automat.Init();
 				Callbacks.Init();
 			}
@@ -162,14 +153,12 @@ namespace sclxhtml {
 				const char *Id,
 				const char *Action )
 			{
-				if ( _PL().PreLaunch(Id, Action) ) {
-					_action_callback__ *Callback = _Get( str::string(  Action ) );
+				_action_callback__ *Callback = _Get( str::string(  Action ) );
 
-					if ( Callback == NULL )
-						ERRFwk();
+				if ( Callback == NULL )
+					ERRFwk();
 
-					Callback->Launch( Id );
-				}
+				Callback->Launch( Id );
 			}
 		};
 
@@ -249,52 +238,39 @@ namespace sclxhtml {
 
 			return _Language;
 		}
+		_prelaunch_callback__ *_Callback;
+		_prelaunch_callback__ &_C( void )
+		{
+			if ( _Callback == NULL )
+				ERRFwk();
+
+			return *_Callback;
+		}
+		bso::bool__ _PreLaunch(
+			const char *Id,
+			const char *Action )
+		{
+			return _C().PreLaunch(Id, Action);
+		}
 	protected:
 		virtual void XHTCLLBKLaunch(
 			const char *Id,
-			const char *Action ) override
-		{
-		ERRProlog
-			str::string Message;
-			err::buffer__ ErrBuffer;
-		ERRBegin
-			_Handler.Launch( Id, Action );
-		ERRErr
-			switch ( ERRType ) {
-			case err::t_Abort:
-				Message.Init();
-				if ( sclerror::GetPendingErrorTranslation( _L(), Message) ) {
-					sclerror::ResetPendingError();
-					_A().Alert( Message );
-				} else
-					_A().Alert("?");
-				break;
-			case err::t_Free:
-			case err::t_Return:
-				_A().Alert( "???" );
-				break;
-			default:
-				_A().Alert( err::Message( ErrBuffer ) );
-				break;
-			}
-
-			ERRRst();
-		ERREnd
-		ERREpilog
-		}
+			const char *Action ) override;
 		virtual xhtagent::agent___ &_A( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_session_callback__::reset( P );
 			_Handler.reset( P );
+			_Callback = NULL;
 			_Language = NULL;
 		}
 		E_CVDTOR( session_callback___ );
 		void Init( _prelaunch_callback__ &Callback )
 		{
-			_Handler.Init( Callback);
+			_Handler.Init();
 			_session_callback__::Init();
+			_Callback = &Callback;
 			_Language = NULL;
 		}
 		void SetLanguage( const char *Language )

@@ -160,7 +160,7 @@ const char *err::Message(
 
 
 // Handler par défaut.
-void err_::Handler(
+void err_::Set(
 	const char *Fichier,
 	int Ligne,
 	err::type Type )
@@ -194,12 +194,17 @@ not the 'ERR' library, thus the using of 'E_DEBUG' and not 'ERR_DBG'. */
 	else
 		this->Type = ( this->Type == Type ? Type : this->Type );	// Silly too, because same goal.
 #endif
+}
+
+void err_::SetAndLaunch(
+	const char *Fichier,
+	int Ligne,
+	err::type Type )
+{
+	Set( Fichier, Ligne, Type );
 
 	ERRT();
 }
-	/* handler de traitement d'erreur; 'Fichier' contient le nom du fichier,
-	'Ligne' le numéro de ligne, 'Type', le type de l'erreur */
-
 
 void err::Final( void )
 {
