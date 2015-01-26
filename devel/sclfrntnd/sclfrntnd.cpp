@@ -35,7 +35,7 @@ using sclrgstry::registry_;
 
 static rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );
 static rgstry::entry___ ProjectAction_("@Action", DefaultProjectType_ );
-static rgstry::entry___ PredefinedProjects_( "PredefinedProjects", sclrgstry::Parameters );
+static rgstry::entry___ PredefinedProjects_( "PredefinedProjects", sclrgstry::Definitions );
 static rgstry::entry___ DefaultPredefinedProject_( "@Default", PredefinedProjects_ );
 static rgstry::entry___ FreePredefinedProject_( "PredefinedProject", PredefinedProjects_ ); 
 static rgstry::entry___ PredefinedProjectId_( "@id", FreePredefinedProject_ );
@@ -54,7 +54,7 @@ static rgstry::entry___ AuthenticationLogin_( "Login", Authentication_ );
 static rgstry::entry___ AuthenticationPassword_( "Password", Authentication_ );
 
 static rgstry::entry___ DefaultBackendType_("DefaultBackendType", sclrgstry::Parameters );
-static rgstry::entry___ PredefinedBackends_( "PredefinedBackends", sclrgstry::Parameters );
+static rgstry::entry___ PredefinedBackends_( "PredefinedBackends", sclrgstry::Definitions );
 static rgstry::entry___ DefaultPredefinedBackend_( "@Default", PredefinedBackends_ );
 static rgstry::entry___ FreePredefinedBackend_( "PredefinedBackend", PredefinedBackends_ ); 
 static rgstry::entry___ PredefinedBackendId_( "@id", FreePredefinedBackend_ );

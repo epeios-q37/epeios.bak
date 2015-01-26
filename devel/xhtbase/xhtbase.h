@@ -44,6 +44,26 @@ namespace xhtbase {
 	E_CDEF( char *, ContentTagName, "Content" );
 	E_CDEF( char *, ContextTagName, "Context" );
 
+	class corpus_callback__
+	{
+	protected:
+		virtual void XHTBASEDump( xml::writer_ &Writer ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			//Standardisation.
+		}
+		E_CVDTOR( corpus_callback__ )
+		void Init( void )
+		{
+			//Standardisation.
+		}
+		void Dump( xml::writer_ &Writer )
+		{
+			XHTBASEDump( Writer );
+		}
+	};
+
 	class generic_rack___
 	{
 	private:
@@ -58,15 +78,24 @@ namespace xhtbase {
 		E_CDTOR( generic_rack___ );
 		void Init(
 			const char *Generator,
-			const char *RootTagName,
-			str::string_ &Target )
+			const char *View,
+			const char *Background,
+			str::string_ &Target,
+			corpus_callback__ &Callback )
 		{
 			_Flow.Init( Target );
 			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
-			_Writer.PushTag( RootTagName );
+			_Writer.PushTag( "RichFrontEnd" );
+			_Writer.PutAttribute("View", View );
+			_Writer.PutAttribute("Background", Background );
 			_Writer.PutAttribute("Generator", Generator );
 			_Writer.PutAttribute("TimeStamp", tol::DateAndTime() );
 			_Writer.PutAttribute("Enviroment", CPE_ENVIROMENT_LABEL );
+			_Writer.PutAttribute("Architecture", CPE_ARCHITECTURE_LABEL );
+			_Writer.PushTag( "Corpus" );
+			Callback.Dump( _Writer );
+			_Writer.PopTag();
+			_Writer.PushTag( Background );
 		}
 		operator xml::writer_ &()
 		{
@@ -84,9 +113,11 @@ namespace xhtbase {
 	public:
 		void Init(
 			const char *Generator,
-			str::string_ &Target )
+			const char *View,
+			str::string_ &Target,
+			corpus_callback__ &Callback )
 		{
-			generic_rack___::Init( Generator, ContentTagName, Target );
+			generic_rack___::Init( Generator, View, ContentTagName, Target, Callback );
 		}
 	};
 
@@ -96,22 +127,27 @@ namespace xhtbase {
 	public:
 		void Init(
 			const char *Generator,
-			str::string_ &Target )
+			const char *View,
+			str::string_ &Target,
+			corpus_callback__ &Callback )
 		{
-			generic_rack___::Init( Generator, ContextTagName, Target );
+			generic_rack___::Init( Generator, View, ContextTagName, Target, Callback );
 		}
 	};
 
 # define XHTBASE_RACK( Generator, Type )\
-	class Type##_rack___\
+	class _##Type##_rack___\
 	: public xhtbase::Type##_rack___\
 	{\
 	public:\
-		void Init( str::string_ &Target )\
+		void Init(\
+			const char *View,\
+			str::string_ &Target,\
+			xhtbase::corpus_callback__ &Callback )\
 		{\
-			xhtbase::Type##_rack___::Init( Generator, Target );\
+			xhtbase::Type##_rack___::Init( Generator, View, Target, Callback );\
 		}\
-	}
+	};
 
 # define XHTBASE_RACKS( Generator )\
 	XHTBASE_RACK( Generator, content );\
