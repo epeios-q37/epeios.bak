@@ -202,6 +202,7 @@ namespace xhtagent {
 		{
 			Alert( str::string( Message ) );
 		}
+		void Log( const str::string_ &Message );
 	};
 }
 

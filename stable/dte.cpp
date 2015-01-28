@@ -250,27 +250,27 @@ raw_date__ dte::date__::_Convert(
 
 const char *dte::date__::ASCII(
 	format__ Format,
-	date_buffer__ &Buffer ) const
+	buffer__ &Buffer ) const
 {
-	if ( RawDate_ == DTE_INVALID_DATE )
-		sprintf( Buffer.Data, "invalid" );
+	if ( Raw_ == DTE_INVALID_DATE )
+		sprintf( Buffer, "invalid" );
 	else
 		switch( Format ) {
 		case fDDMMYYYY:
-			sprintf( Buffer.Data, "%02i/%02i/%i", (int)Day(), (int)Month(), (int)Year() );
+			sprintf( Buffer, "%02i/%02i/%i", (int)Day(), (int)Month(), (int)Year() );
 			break;
 		case fMMDDYYYY:
-			sprintf( Buffer.Data, "%02i/%02i/%i", (int)Month(), (int)Day(), (int)Year() );
+			sprintf( Buffer, "%02i/%02i/%i", (int)Month(), (int)Day(), (int)Year() );
 			break;
 		case fYYYYMMDD:
-			sprintf( Buffer.Data, "%i-%02i-%02i", (int)Year(), (int)Month(), (int)Day() );
+			sprintf( Buffer, "%i-%02i-%02i", (int)Year(), (int)Month(), (int)Day() );
 			break;
 		default:
 			ERRPrm();
 			break;
 		}
 
-	return Buffer.Data;
+	return Buffer;
 }
 
 date__ dte::Now( void )

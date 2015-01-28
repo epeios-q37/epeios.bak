@@ -99,16 +99,8 @@ namespace dte {
 	//t Type of the day.
 	typedef bso::u8__ day__;
 
+	typedef char buffer__[11];
 
-	struct date_buffer__
-	{
-		char Data[11];
-		date_buffer__( void )
-		{
-			Data[0] = 0;
-		}
-	};
-	
 	enum format__ {
 		fDDMMYYYY,	// à la française ('25/11/2003').
 		fMMDDYYYY,	// à l'anglaise ('11/25/2003').
@@ -160,7 +152,7 @@ namespace dte {
 	//c A date.
 	class date__ {
 		// The raw date. See '.cpp' for structure.
-		raw_date__ RawDate_;
+		raw_date__ Raw_;
 		/* Convert 'Date' (in 'yyyymmdd' format) into internal format.
 		Return 'STXDTE_INVALID_DATE' if date not valid, or the converted date */
 		raw_date__ _Convert(
@@ -175,7 +167,7 @@ namespace dte {
 		// Return the core date.
 		bso::u32__ _Core( raw_date__ Date ) const
 		{
-			return ( RawDate_ & DTE_CORE_MASK) >> DTE_CORE_SHIFT;
+			return ( Raw_ & DTE_CORE_MASK) >> DTE_CORE_SHIFT;
 		}
 		// Return the year of 'RawDate'.
 		year__ _Year( raw_date__ RawDate ) const
@@ -208,13 +200,13 @@ namespace dte {
 	 public:
 		void reset( bso::bool__ = true )
 		{
-			RawDate_ = DTE_INVALID_DATE;
+			Raw_ = DTE_INVALID_DATE;
 		}
 		date__( bso::u32__ Date = DTE_INVALID_DATE )
 		{
 			reset( false );
 
-			RawDate_ = _Convert( Date );
+			Raw_ = _Convert( Date );
 		}
 		date__(
 			const char *Date,
@@ -223,7 +215,7 @@ namespace dte {
 		{
 			reset( false );
 
-			RawDate_ = _Convert( Date, Format );
+			Raw_ = _Convert( Date, Format );
 
 			if ( ( End != NULL ) && ( *End == NULL ) )
 				*End = Date;
@@ -235,24 +227,24 @@ namespace dte {
 		{
 			reset( false );
 
-			RawDate_ = _Convert( Day, Month, Year );
+			Raw_ = _Convert( Day, Month, Year );
 		}
 		//f Initialization with date 'Date'.
 		void Init( bso::u32__ Date = DTE_INVALID_DATE )
 		{
 			reset();
 
-			RawDate_ = _Convert( Date );
+			Raw_ = _Convert( Date );
 		}
 		//f Initialization with date 'Date'.
 		bso::bool__ Init(
 			const char *Date,
 			format__ Format,
-			const char **End = NULL )	// N'est éventuellement modifié que si '*End== NULL'.
+			const char **End = NULL )	// N'est éventuellement modifié que si '*End == NULL'.
 		{
 			reset();
 
-			RawDate_ = _Convert( Date, Format );
+			Raw_ = _Convert( Date, Format );
 
 			if ( ( End != NULL ) && ( *End == NULL ) )
 				*End = Date;
@@ -267,35 +259,35 @@ namespace dte {
 		{
 			reset();
 
-			RawDate_ = _Convert( Day, Month, Year );
+			Raw_ = _Convert( Day, Month, Year );
 		}
 		//f Return the date in raw format.
 		operator unsigned long( void ) const
 		{
-			return RawDate_;
+			return Raw_;
 		}
 		//f Return simplified raw date 'yyyymmdd'.
 		unsigned long GetSimplifiedRawDate( void ) const
 		{
-			return _Year( RawDate_ ) * 10000 + _Month( RawDate_ ) * 100 + _Day( RawDate_ );
+			return _Year( Raw_ ) * 10000 + _Month( Raw_ ) * 100 + _Day( Raw_ );
 		}
 		year__ Year( raw_date__ Date = DTE_INVALID_DATE ) const
 		{
-			return _Year( Date == DTE_INVALID_DATE ? RawDate_ : Date );
+			return _Year( Date == DTE_INVALID_DATE ? Raw_ : Date );
 		}
 		month__ Month( raw_date__ Date = DTE_INVALID_DATE ) const
 		{
-			return _Month( Date == DTE_INVALID_DATE ? RawDate_ : Date );
+			return _Month( Date == DTE_INVALID_DATE ? Raw_ : Date );
 		}
 		day__ Day( raw_date__ Date = DTE_INVALID_DATE ) const
 		{
-			return _Day( Date == DTE_INVALID_DATE ? RawDate_ : Date );
+			return _Day( Date == DTE_INVALID_DATE ? Raw_ : Date );
 		}
 		//f Return the date in ASCII ('dd/mm/yyyy') and put in 'Result' if != 'NULL'.
 		const char *ASCII(
 			format__ Format,
-			date_buffer__ &Buffer ) const;
-#ifndef CPE__MT
+			buffer__ &Buffer ) const;
+#ifndef CPE_MT
 		const char *ASCII( format__ Format ) const
 		{
 			static date_buffer__ Buffer;
@@ -308,7 +300,7 @@ namespace dte {
 			month__ Month,
 			year__ Year )
 		{
-			RawDate_ = _Convert( Day, Month, Year );
+			Raw_ = _Convert( Day, Month, Year );
 		}
 		//f Add 'Amount' Month.
 		void AddMonth( bso::u32__ Amount = 1 )
@@ -321,7 +313,7 @@ namespace dte {
 				DeltaMonth -= 12;
 			}
 
-			RawDate_ = _Convert( this->Day(), (month__)( Month() + DeltaMonth ), (year__)( Year() + DeltaYear ) );
+			Raw_ = _Convert( this->Day(), (month__)( Month() + DeltaMonth ), (year__)( Year() + DeltaYear ) );
 		}
 		void SubMonth( bso::u32__ Amount = 1 )
 		{
@@ -333,12 +325,12 @@ namespace dte {
 				DeltaMonth -= 12;
 			}
 
-			RawDate_ = _Convert( this->Day(), (month__)( Month() - DeltaMonth ), (year__)( Year() - DeltaYear ) );
+			Raw_ = _Convert( this->Day(), (month__)( Month() - DeltaMonth ), (year__)( Year() - DeltaYear ) );
 		}
 		//f Return true if the date is valid, false otherwise.
 		bso::bool__ IsValid( void ) const
 		{
-			return RawDate_ != DTE_INVALID_DATE;
+			return Raw_ != DTE_INVALID_DATE;
 		}
 		//f Return true if date is in a leap year, false otherwise.
 		bso::bool__ IsLeapYear( year__ Year = 0 ) const
@@ -421,7 +413,7 @@ namespace dte {
 		txf::text_oflow__ &Flow,
 		date__ Date )
 	{
-		date_buffer__ Buffer;
+		buffer__ Buffer;
 
 		return Flow << Date.ASCII( fDDMMYYYY, Buffer );
 	}

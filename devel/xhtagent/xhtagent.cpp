@@ -111,6 +111,23 @@ ERREnd
 ERREpilog
 }
 
+void xhtagent::agent___::Log( const str::string_ &Message )
+{
+ERRProlog
+	str::string Script;
+ERRBegin
+	Script.Init( "console.log('" );
+
+	Script.Append( Message );
+
+	Script.Append( "');" );
+
+	ExecuteJavascript( Script );
+ERRErr
+ERREnd
+ERREpilog
+}
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
