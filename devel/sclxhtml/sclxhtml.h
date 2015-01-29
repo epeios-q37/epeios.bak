@@ -156,7 +156,7 @@ namespace sclxhtml {
 				_action_callback__ *Callback = _Get( str::string(  Action ) );
 
 				if ( Callback == NULL )
-					ERRFwk();
+					ERRFwk();	// L'action affectée à un évènement n'existe pas. Contrôler le fichier '.xsl'.
 
 				Callback->Launch( Id );
 			}

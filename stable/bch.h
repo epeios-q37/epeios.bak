@@ -96,6 +96,10 @@ namespace bch {
 			if ( Quantity > mng::Amount() )
 				Allouer_( Quantity, aem::m_Default );
 		}
+		bso::bool__ _AppendInsteadOfInsert(	row Row )
+		{
+			return ( ( Row == E_NIL ) || ( ( mng::Amount() == 0 ) && ( Row == 0 ) ) );
+		}
 	public:
 		struct s
 		: public mmr::s,
@@ -343,8 +347,7 @@ namespace bch {
 			row RowSource,
 			row Row = 0 )
 		{
-			if ( ( mng::Amount() == 0 ) 
-				&& ( ( Row == 0 ) ||( Row == E_NIL ) ) ) 
+			if ( _AppendInsteadOfInsert( Row ) )
 				Append( Source, Amount, RowSource );
 			else
 				InsertAt_( Source, Amount, *RowSource, *Row );
@@ -361,8 +364,7 @@ namespace bch {
 			sdr::size__ Amount,
 			row Row = 0 )
 		{
-			if ( ( mng::Amount() == 0 ) 
-				&& ( ( Row == 0 ) || ( Row == E_NIL ) ) ) 
+			if ( _AppendInsteadOfInsert( Row ) )
 				Append( Source, Amount );
 			else
 				InsertAt_( Source, Amount, *Row );

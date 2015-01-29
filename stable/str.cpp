@@ -477,8 +477,6 @@ bso::s64__ str::_S64Conversion(
 	return GenericSignedConversion_<bso::s64__, bso::u64__>( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
 }
 
-
-
 uint__ str::_UIntConversion(
 	const str::string_ &String,
 	sdr::row__ Begin,

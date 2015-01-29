@@ -73,6 +73,18 @@ namespace ctn {
 		}
 	protected:
 		virtual bso::bool__ IsFlushed( void ) const = 0;
+		void Insert(
+			const st &ST,
+			r Row,
+			aem::mode__ Mode )
+		{
+			_Allocate( amount_extent_manager_<r>::Amount() + 1, Mode );
+
+			Statics.Store( Statics, amount_extent_manager_<r>::Amount() - 1 - *Row, *Row + 1, Row );
+			Dynamics.Shift( *Row );
+			
+			Statics.Store( ST, Row );
+		}
 	public:
 		//r All the static parts.
 		tys::E_STORAGEt_( st, r ) Statics;
@@ -197,18 +209,6 @@ namespace ctn {
 				else
 					Statics.Store( ST, AncCap );
 			}
-		}
-		void Insert(
-			const st &ST,
-			r Row,
-			aem::mode__ Mode )
-		{
-			_Allocate( amount_extent_manager_<r>::Amount() + 1, Mode );
-
-			Statics.Store( Statics, amount_extent_manager_<r>::Amount() - 1 - *Row, *Row + 1, Row );
-			Dynamics.Shift( *Row );
-			
-			Statics.Store( ST, Row );
 		}
 		void DecreaseTo(
 			sdr::size__ Size,
@@ -837,6 +837,10 @@ namespace ctn {
 	{
 	private:
 		E_MITEMt( t, r ) Ponctuel_;
+		bso::bool__ _AppendInsteadOfInsert(	r Row )
+		{
+			return ( ( Row == E_NIL ) || ( ( amount_extent_manager_<r>::Amount() == 0 ) && ( Row == 0 ) ) );
+		}
 	public:
 		struct s
 		: public basic_container_< item_mono_statique__<typename t::s>, r >::s
@@ -946,8 +950,7 @@ namespace ctn {
 			if ( !IsFlushed() )
 				ERRFwk();
 
-			if ( ( amount_extent_manager_<r>::Amount( )== 0 ) 
-				  && ( ( Row == 0) || ( Row == E_NIL ) ) )
+			if ( _AppendInsteadOfInsert( Row ) )
 				Append( Object, Mode );
 			else {
 				E_CMITEMt( t, r ) E;
@@ -1297,8 +1300,7 @@ namespace ctn {
 			r Row = 0,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			if ( ( amount_extent_manager_<r>::Amount( )== 0 ) 
-				 && ( ( Row == 0) || ( Row == E_NIL ) ) )
+			if ( _AppendInsteadOfInsert( Row ) )
 				Append( Object, Mode );
 			else {
 				if ( !IsFlushed() )
