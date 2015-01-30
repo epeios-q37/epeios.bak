@@ -173,10 +173,17 @@ namespace xhtagent {
 			SetChildren( (const char *)NULL, XML, XSL );
 		}
 		void SetCasting(
+			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().SetCasting( XML, XSL );
+			_C().SetCasting( Id, XML, XSL );
+		}
+		void SetDocumentCasting(
+			const nstring___ &XML,
+			const nstring___ &XSL )
+		{
+			_C().SetCasting( (const char *)NULL, XML, XSL );
 		}
 		void Show(
 			const nstring___ &Id,

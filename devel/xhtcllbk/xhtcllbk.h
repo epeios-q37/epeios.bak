@@ -104,6 +104,7 @@ namespace xhtcllbk {
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetCasting(
+			const nchar__ *Id,
 			const nchar__ *XML,
 			const nchar__ *XSL ) = 0;
 		virtual void XHTCLLBKSetProperty(
@@ -184,10 +185,11 @@ namespace xhtcllbk {
 			_TestErr();
 		}
 		void SetCasting(
+			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetCasting( XML.Internal(), XSL.Internal() );
+			XHTCLLBKSetCasting( Id.Internal(), XML.Internal(), XSL.Internal() );
 
 			_TestErr();
 		}
