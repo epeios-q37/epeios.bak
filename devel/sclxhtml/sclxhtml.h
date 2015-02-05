@@ -53,7 +53,7 @@ namespace sclxhtml {
 		class _action_callback__
 		{
 		protected:
-			virtual void SCLXHTMLLaunch( const char *Id ) = 0;
+			virtual bso::bool__ SCLXHTMLLaunch( const char *Id ) = 0;
 		public:
 			void reset( bso::bool__ = true )
 			{
@@ -64,9 +64,9 @@ namespace sclxhtml {
 			{
 				// Standardisation.
 			}
-			void Launch( const char *Id )
+			bso::bool__ Launch( const char *Id )
 			{
-				SCLXHTMLLaunch( Id );
+				return SCLXHTMLLaunch( Id );
 			}
 		};
 
@@ -149,7 +149,7 @@ namespace sclxhtml {
 			{
 				return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
 			}
-			void Launch(
+			bso::bool__ Launch(
 				const char *Id,
 				const char *Action )
 			{
@@ -158,7 +158,7 @@ namespace sclxhtml {
 				if ( Callback == NULL )
 					ERRFwk();	// L'action affectée à un évènement n'existe pas. Contrôler le fichier '.xsl'.
 
-				Callback->Launch( Id );
+				return Callback->Launch( Id );
 			}
 		};
 
@@ -253,9 +253,9 @@ namespace sclxhtml {
 			return _C().PreLaunch(Id, Action);
 		}
 	protected:
-		virtual void XHTCLLBKLaunch(
+		virtual bso::bool__ XHTCLLBKLaunch(
 			const char *Id,
-			const char *Action ) override;
+			const char *Action ) override;	// Retourne 'true' si l'action a été correctement traitée (et que la propagation de l'évènement à l'orgine de cette action doit être arrêtée).
 		virtual xhtagent::agent___ &_A( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )

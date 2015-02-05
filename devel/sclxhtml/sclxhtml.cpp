@@ -138,16 +138,17 @@ ERRFEpilog
 	return Callback;
 }
 
-void sclxhtml::session_callback___::XHTCLLBKLaunch(
+bso::bool__ sclxhtml::session_callback___::XHTCLLBKLaunch(
 	const char *Id,
 	const char *Action )
 {
+	bso::bool__ Success = true;
 ERRProlog
 	str::string Message;
 	err::buffer__ ErrBuffer;
 ERRBegin
 	if ( _PreLaunch( Id, Action ) )
-		_Handler.Launch( Id, Action );
+		Success = _Handler.Launch( Id, Action );
 ERRErr
 	switch ( ERRType ) {
 	case err::t_Abort:
@@ -170,6 +171,7 @@ ERRErr
 	ERRRst();
 ERREnd
 ERREpilog
+	return Success;
 }
 
 void sclxhtml::LoadProject( xhtagent::agent___ &Agent )

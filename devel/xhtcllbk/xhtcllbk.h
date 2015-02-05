@@ -284,9 +284,9 @@ namespace xhtcllbk {
 	class session_callback__
 	{
 	protected:
-		virtual void XHTCLLBKLaunch(
+		virtual bso::bool__ XHTCLLBKLaunch(
 			const char *Id,
-			const char *Action ) = 0;
+			const char *Action ) = 0;	// Return 'true' if the event propagation had to be stopped.
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -297,7 +297,7 @@ namespace xhtcllbk {
 		{
 			// Standardisation.
 		}
-		void Launch(
+		bso::bool__ Launch(
 			const char *Id,
 			const char *Action )
 		{
