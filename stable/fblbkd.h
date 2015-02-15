@@ -876,8 +876,13 @@ namespace fblbkd {
 			return Module_( Object );
 		}
 		//f Return a pointer to the 'Object' object.
-		const void *Object( object__ Object ) const
+		const void *Object(
+			object__ Object,
+			const char *Name ) const
 		{
+			if ( strcmp( Module_(Object).Name(), Name ) )
+				ERRFwk();
+
 			return Module_( Object ).Object( Links.Index( Object ) );
 		}
 		//f Give a new object.
