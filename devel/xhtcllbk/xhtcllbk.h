@@ -52,6 +52,25 @@ namespace xhtcllbk {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
+	enum function__ {		// Paramètres. 'Buffer' est un 'TOL_CBUFFER___' destiné à receuillir la valeur de retour.
+		fAlert,				// XML, XSL, Title.
+		fConfirm,			// XML, XSL, Title, Buffer.
+		fSetChildren,		// Id, XML, XSL.
+		fSetCasting,		// Id, XML, XSL.
+		fSetProperty,		// Id, Name, Value.
+		fGetProperty,		// Id, Name, Buffer.
+		fSetAttribute,		// Id, Name, Value.
+		fGetAttribute,		// Id, Name, Buffer.
+		fRemoveAttribute,	// Id, Name.
+		fGetResult,			// Id, Buffer.
+		fSetContent,		// Id, Value.
+		fGetContent,		// Id, Buffer.
+		f_amount,
+		f_Undefined
+	};
+
+	const char *GetLabel( function__ Function );
+
 	class upstream_callback__ {
 	private:
 		// Tout ce qui esgt 'Err' sert à transfèrer les rapports d'erreurs entre bibliothèque dynamiques.
@@ -75,6 +94,9 @@ namespace xhtcllbk {
 			}
 		}
 	protected:
+		virtual void XHTCLLBKLaunch(
+			function__ Function,
+			...	) = 0;
 		void TransferError( )
 		{
 			if ( _ErrType != err::t_Undefined )
@@ -94,47 +116,6 @@ namespace xhtcllbk {
 		virtual void XHTCLLBKExecuteJavascript(
 			const nchar__ *Script,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKOpenDialog(
-			const nchar__ *XML,
-			const nchar__ *XSL,
-			const nchar__ *Title,
-			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKSetChildren(
-			const nchar__ *Id,
-			const nchar__ *XML,
-			const nchar__ *XSL ) = 0;
-		virtual void XHTCLLBKSetCasting(
-			const nchar__ *Id,
-			const nchar__ *XML,
-			const nchar__ *XSL ) = 0;
-		virtual void XHTCLLBKSetProperty(
-			const nchar__ *Id,
-			const nchar__ *Name,
-			const nchar__ *Value ) = 0;
-		virtual void XHTCLLBKGetProperty(
-			const nchar__ *Id,
-			const nchar__ *Name,
-			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKSetAttribute(
-			const nchar__ *Id,
-			const nchar__ *Name,
-			const nchar__ *Value ) = 0;
-		virtual void XHTCLLBKGetAttribute(
-			const nchar__ *Id,
-			const nchar__ *Name,
-			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKGetResultAttribute(
-			const nchar__ *Id,
-			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKRemoveAttribute(
-			const nchar__ *Id,
-			const nchar__ *Name ) = 0;
-		virtual void XHTCLLBKGetContent(
-			const nchar__ *Id,
-			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XHTCLLBKSetContent(
-			const nchar__ *Id,
-			const nchar__ *Value ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -163,24 +144,31 @@ namespace xhtcllbk {
 
 			return Buffer;
 		}
-		const char *OpenDialog(
+		void Alert(
+			const nstring___ &XML,
+			const nstring___ &XSL,
+			const nstring___ &Title )
+		{
+			XHTCLLBKLaunch( fAlert, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
+
+			_TestErr();
+		}
+		void Confirm(
 			const nstring___ &XML,
 			const nstring___ &XSL,
 			const nstring___ &Title,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKOpenDialog( XML.Internal(), XSL.Internal(), Title.Internal(), Buffer );
+			XHTCLLBKLaunch( fConfirm, XML.Internal()(), XSL.Internal()(), Title.Internal()(), &Buffer );
 
 			_TestErr();
-
-			return Buffer;
 		}
 		void SetChildren(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetChildren( Id.Internal(), XML.Internal(), XSL.Internal() );
+			XHTCLLBKLaunch( fSetChildren, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
 
 			_TestErr();
 		}
@@ -189,7 +177,7 @@ namespace xhtcllbk {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKSetCasting( Id.Internal(), XML.Internal(), XSL.Internal() );
+			XHTCLLBKLaunch( fSetCasting, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
 
 			_TestErr();
 		}
@@ -198,7 +186,7 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetProperty( Id.Internal(), Name.Internal(), Buffer );
+			XHTCLLBKLaunch( fGetProperty, Id.Internal()(), Name.Internal()(), &Buffer );
 
 			_TestErr();
 
@@ -209,7 +197,7 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetProperty( Id.Internal(), Name.Internal(), Value.Internal() );
+			XHTCLLBKLaunch( fSetProperty, Id.Internal()(), Name.Internal()(), Value.Internal()() );
 
 			_TestErr();
 		}
@@ -218,7 +206,7 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetAttribute( Id.Internal(), Name.Internal(), Buffer );
+			XHTCLLBKLaunch( fGetAttribute, Id.Internal()(), Name.Internal()(), &Buffer );
 
 			_TestErr();
 
@@ -229,15 +217,15 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetAttribute( Id.Internal(), Name.Internal(), Value.Internal() );
+			XHTCLLBKLaunch( fSetAttribute, Id.Internal()(), Name.Internal()(), Value.Internal()() );
 
 			_TestErr();
 		}
-		const char *GetResultAttribute(
+		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetResultAttribute( Id.Internal(), Buffer );
+			XHTCLLBKLaunch( fGetResult, Id.Internal()(), &Buffer );
 
 			_TestErr();
 
@@ -247,7 +235,7 @@ namespace xhtcllbk {
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			XHTCLLBKRemoveAttribute( Id.Internal(), Name.Internal() );
+			XHTCLLBKLaunch( fRemoveAttribute, Id.Internal()(), Name.Internal()() );
 
 			_TestErr();
 		}
@@ -255,7 +243,7 @@ namespace xhtcllbk {
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKGetContent( Id.Internal(), Buffer );
+			XHTCLLBKLaunch( fGetContent, Id.Internal()(), &Buffer );
 
 			_TestErr();
 
@@ -265,7 +253,7 @@ namespace xhtcllbk {
 			const nstring___ &Id,
 			const nstring___ &Value )
 		{
-			XHTCLLBKSetContent( Id.Internal(), Value.Internal() );
+			XHTCLLBKLaunch( fSetContent, Id.Internal()(), Value.Internal()() );
 
 			_TestErr();
 		}

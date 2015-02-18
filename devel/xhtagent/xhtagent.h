@@ -98,20 +98,20 @@ namespace xhtagent {
 		{
 			_C().SetAttribute( Id, Name, Value );
 		}
-		const char *GetResultAttribute(
+		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetResultAttribute( Id, Buffer );
+			return _C().GetResult( Id, Buffer );
 		}
-		const str::string_ &GetResultAttribute(
+		const str::string_ &GetResult(
 			const nstring___ &Id,
 			str::string_ &Value )
 		{
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
-			Value.Append( GetResultAttribute( Id, Buffer ) );
+			Value.Append( GetResult( Id, Buffer ) );
 		ERRErr
 		ERREnd
 		ERREpilog
@@ -208,6 +208,15 @@ namespace xhtagent {
 		void Alert( const char *Message )
 		{
 			Alert( str::string( Message ) );
+		}
+		bso::bool__ Confirm(
+			const str::string_ &XML,
+			const str::string_ &XSL,
+			const str::string_ &Title = str::string() );
+		bso::bool__ Confirm( const str::string_ &Message );
+		bso::bool__ Confirm( const char *Message )
+		{
+			return Confirm( str::string( Message ) );
 		}
 		void Log( const str::string_ &Message );
 	};

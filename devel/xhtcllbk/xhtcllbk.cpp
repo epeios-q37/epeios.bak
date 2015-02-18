@@ -28,6 +28,34 @@
 
 using namespace xhtcllbk;
 
+#define C( name )\
+	case f##name:\
+	return #name;\
+	break
+
+
+const char *xhtcllbk::GetLabel( function__ Function )
+{
+	switch ( Function ) {
+	C( Alert );
+	C( Confirm );
+	C( SetChildren );
+	C( SetCasting );
+	C( SetProperty );
+	C( GetProperty );
+	C( SetAttribute );
+	C( GetAttribute );
+	C( RemoveAttribute );
+	C( GetResult );
+	C( SetContent );
+	C( GetContent );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
 
 void xhtcllbk::Escape(
     const str::string_ &Source,

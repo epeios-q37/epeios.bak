@@ -59,6 +59,30 @@ void xhtagent::agent___::Alert(
 {
 ERRProlog
 	str::string XML, XSL, Title;
+ERRBegin
+	XML.Init();
+	xhtcllbk::Escape( RawXML, XML, '"' );
+
+	XSL.Init();
+	xhtcllbk::Escape( RawXSL, XSL, '"' );
+
+	Title.Init();
+	xhtcllbk::Escape( RawTitle, Title, '"' );
+
+	_C().Alert( RawXML, RawXSL, Title );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+bso::bool__ xhtagent::agent___::Confirm(
+	const str::string_ &RawXML,
+	const str::string_ &RawXSL,
+	const str::string_ &RawTitle )
+{
+	bso::bool__ Confirmed = false;
+ERRProlog
+	str::string XML, XSL, Title;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	XML.Init();
@@ -70,10 +94,13 @@ ERRBegin
 	Title.Init();
 	xhtcllbk::Escape( RawTitle, Title, '"' );
 
-	_C().OpenDialog( RawXML, RawXSL, Title, Buffer );
+	_C().Confirm( RawXML, RawXSL, Title, Buffer );
+
+	Confirmed = !strcmp("true", Buffer );
 ERRErr
 ERREnd
 ERREpilog
+	return Confirmed;
 }
 
 static void SetXML_(
@@ -109,6 +136,26 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
+}
+
+bso::bool__ xhtagent::agent___::Confirm( const str::string_ &Message )
+{
+	bso::bool__ Confirmed = false;
+ERRProlog
+	str::string XML, XSL;
+ERRBegin
+	XML.Init();
+
+	SetXML_( Message, XML );
+	
+	XSL.Init( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsl:stylesheet version=\"2.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"	xmlns=\"http://www.w3.org/1999/xhtml\">" );
+	XSL.Append("<xsl:output method=\"xml\" encoding=\"UTF-8\"/><xsl:template match=\"/\"><span><xsl:value-of select=\".\"></span></xsl:template></xsl:stylesheet>");
+
+	Confirmed = Confirm( XML, XSL );
+ERRErr
+ERREnd
+ERREpilog
+	return Confirmed;
 }
 
 void xhtagent::agent___::Log( const str::string_ &Message )

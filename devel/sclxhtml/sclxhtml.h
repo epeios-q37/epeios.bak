@@ -49,27 +49,36 @@ namespace sclxhtml {
 
 	const char *GetLauncher( void );
 
-	namespace {
-		class _action_callback__
+	class core_action_callback__
+	{
+	private:
+		const char *_Name;
+	protected:
+		virtual bso::bool__ SCLXHTMLLaunch( const char *Id ) = 0;
+	public:
+		void reset( bso::bool__ = true )
 		{
-		protected:
-			virtual bso::bool__ SCLXHTMLLaunch( const char *Id ) = 0;
-		public:
-			void reset( bso::bool__ = true )
-			{
-				// Standardisation.
-			}
-			E_CVDTOR( _action_callback__ );
-			void Init( void )
-			{
-				// Standardisation.
-			}
-			bso::bool__ Launch( const char *Id )
-			{
-				return SCLXHTMLLaunch( Id );
-			}
-		};
+			_Name = NULL;
+		}
+		E_CVDTOR( core_action_callback__ );
+		void Init( const char *Name )
+		{
+			_Name = Name;
+		}
+		bso::bool__ Launch( const char *Id )
+		{
+			return SCLXHTMLLaunch( Id );
+		}
+		const char *Name( void ) const
+		{
+			if ( _Name == NULL )
+				ERRFwk();
 
+			return _Name;
+		}
+	};
+
+	namespace {
 		class _prelaunch_callback__
 		{
 		protected:
@@ -96,12 +105,12 @@ namespace sclxhtml {
 
 		E_ROW( crow__ );	// callback row;
 
-		typedef bch::E_BUNCHt_( _action_callback__ *, crow__ ) _action_callbacks_;
+		typedef bch::E_BUNCHt_( core_action_callback__ *, crow__ ) core_action_callbacks_;
 
 		class action_handler_
 		{
 		private:
-			_action_callback__ *_Get( const str::string_ &Action ) const
+			core_action_callback__ *_Get( const str::string_ &Action ) const
 			{
 				crow__ Row = stsfsm::GetId( Action, Automat );
 
@@ -113,10 +122,10 @@ namespace sclxhtml {
 		public:
 			struct s {
 				stsfsm::automat_::s Automat;
-				_action_callbacks_::s Callbacks;
+				core_action_callbacks_::s Callbacks;
 			};
 			stsfsm::automat_ Automat;
-			_action_callbacks_ Callbacks;
+			core_action_callbacks_ Callbacks;
 			action_handler_( s &S )
 			: Automat( S.Automat ),
 			  Callbacks( S.Callbacks )
@@ -145,7 +154,7 @@ namespace sclxhtml {
 			}
 			bso::bool__ Add(
 				const char *Name,
-				_action_callback__ &Callback )
+				core_action_callback__ &Callback )
 			{
 				return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
 			}
@@ -153,7 +162,7 @@ namespace sclxhtml {
 				const char *Id,
 				const char *Action )
 			{
-				_action_callback__ *Callback = _Get( str::string(  Action ) );
+				core_action_callback__ *Callback = _Get( str::string(  Action ) );
 
 				if ( Callback == NULL )
 					ERRFwk();	// L'action affectée à un évènement n'existe pas. Contrôler le fichier '.xsl'.
@@ -166,14 +175,14 @@ namespace sclxhtml {
 	}
 
 	template <typename session> class action_callback__
-	: public _action_callback__
+	: public core_action_callback__
 	{
 	private:
 		session *_Session;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_action_callback__::reset( P );
+			core_action_callback__::reset( P );
 			_Session = NULL;
 		}
 		E_CVDTOR( action_callback__ );
@@ -181,7 +190,7 @@ namespace sclxhtml {
 			const char *ActionName,
 			session &Session )
 		{
-			_action_callback__::Init();
+			core_action_callback__::Init( ActionName );
 			_Session = &Session;
 
 			this->Session().AddActionCallback( ActionName, *this );
@@ -279,7 +288,7 @@ namespace sclxhtml {
 		}
 		void AddActionCallback(
 			const char *ActionName,
-			_action_callback__ &Callback )
+			core_action_callback__ &Callback )
 		{
 			_Handler.Add( ActionName, Callback );
 		}
