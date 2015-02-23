@@ -65,6 +65,7 @@ namespace xhtcllbk {
 		fGetResult,			// Id, Buffer.
 		fSetContent,		// Id, Value.
 		fGetContent,		// Id, Buffer.
+		fFocus,				// Id.
 		f_amount,
 		f_Undefined
 	};
@@ -254,6 +255,12 @@ namespace xhtcllbk {
 			const nstring___ &Value )
 		{
 			XHTCLLBKLaunch( fSetContent, Id.Internal()(), Value.Internal()() );
+
+			_TestErr();
+		}
+		void Focus( const nstring___ &Id )
+		{
+			XHTCLLBKLaunch( fFocus, Id.Internal()() );
 
 			_TestErr();
 		}

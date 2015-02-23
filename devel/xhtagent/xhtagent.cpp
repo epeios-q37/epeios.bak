@@ -96,7 +96,7 @@ ERRBegin
 
 	_C().Confirm( RawXML, RawXSL, Title, Buffer );
 
-	Confirmed = !strcmp("true", Buffer );
+	Confirmed = !strcmp( "true", Buffer );
 ERRErr
 ERREnd
 ERREpilog

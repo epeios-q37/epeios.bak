@@ -159,6 +159,10 @@ namespace xhtagent {
 		ERREpilog
 			return Value;
 		}
+		void Focus( const nstring___ &Id )
+		{
+			return _C().Focus( Id );
+		}
 		void SetChildren(
 			const nstring___ &Id,
 			const nstring___ &XML,

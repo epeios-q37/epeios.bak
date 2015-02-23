@@ -49,6 +49,7 @@ const char *xhtcllbk::GetLabel( function__ Function )
 	C( GetResult );
 	C( SetContent );
 	C( GetContent );
+	C( Focus );
 	default:
 		ERRFwk();
 		break;
@@ -114,6 +115,9 @@ void xhtcllbk::Escape(
 			Target.Append( C );
 			break;
 		default:
+			if ( C == EscapeChar )
+				Target.Append( EscapeChar );
+
 			Target.Append( Source( Row ) );
 			break;
 		}
