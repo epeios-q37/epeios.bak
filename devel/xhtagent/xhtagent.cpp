@@ -120,7 +120,7 @@ ERREnd
 ERREpilog
 }
 
-void xhtagent::agent___::Alert( const str::string_ &Message )
+void xhtagent::agent___::RawAlert( const str::string_ &Message )
 {
 ERRProlog
 	str::string XML, XSL;
@@ -138,7 +138,7 @@ ERREnd
 ERREpilog
 }
 
-bso::bool__ xhtagent::agent___::Confirm( const str::string_ &Message )
+bso::bool__ xhtagent::agent___::RawConfirm( const str::string_ &Message )
 {
 	bso::bool__ Confirmed = false;
 ERRProlog

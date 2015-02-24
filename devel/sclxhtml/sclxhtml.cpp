@@ -155,16 +155,16 @@ ERRErr
 		Message.Init();
 		if ( sclerror::GetPendingErrorTranslation( _L(), Message) ) {
 			sclerror::ResetPendingError();
-			_A().Alert( Message );
+			_A().RawAlert( Message );
 		} else
-			_A().Alert("?");
+			_A().RawAlert("?");
 		break;
 	case err::t_Free:
 	case err::t_Return:
-		_A().Alert( "???" );
+		_A().RawAlert( "???" );
 		break;
 	default:
-		_A().Alert( err::Message( ErrBuffer ) );
+		_A().RawAlert( err::Message( ErrBuffer ) );
 		break;
 	}
 

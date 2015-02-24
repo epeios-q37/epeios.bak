@@ -208,19 +208,21 @@ namespace xhtagent {
 			const str::string_ &XML,
 			const str::string_ &XSL,
 			const str::string_ &Title = str::string() );
-		void Alert( const str::string_ &Message );
-		void Alert( const char *Message )
+		// 'Raw...', parce qu'ils affichent le message tel quel, pour éviter une confusion avec les versions affichant les messages traduits.
+		void RawAlert( const str::string_ &Message );
+		void RawAlert( const char *Message )
 		{
-			Alert( str::string( Message ) );
+			RawAlert( str::string( Message ) );
 		}
 		bso::bool__ Confirm(
 			const str::string_ &XML,
 			const str::string_ &XSL,
 			const str::string_ &Title = str::string() );
-		bso::bool__ Confirm( const str::string_ &Message );
-		bso::bool__ Confirm( const char *Message )
+		// 'Raw...', parce qu'ils affichent le message tel quel, pour éviter une confusion avec les versions affichant les messages traduits.
+		bso::bool__ RawConfirm( const str::string_ &Message );
+		bso::bool__ RawConfirm( const char *Message )
 		{
-			return Confirm( str::string( Message ) );
+			return RawConfirm( str::string( Message ) );
 		}
 		void Log( const str::string_ &Message );
 	};

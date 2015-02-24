@@ -320,7 +320,7 @@ namespace sclxhtml {
 		protected:
 			virtual void FRDKRNReport( const str::string_ &Message ) override
 			{
-				_A().Alert( Message );
+				_A().RawAlert( Message );
 			}
 		public:
 			void reset( bso::bool__ P = true )
@@ -426,6 +426,59 @@ namespace sclxhtml {
 				ERRFwk();
 
 			return _Launcher;
+		}
+		const str::string_ &GetTranslation(
+			const char *Message,
+			str::string_ &Translation )
+		{
+		ERRProlog
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
+			scllocale::GetTranslation( Message, Language( Buffer ), Translation );
+		ERRErr
+		ERREnd
+		ERREpilog
+			return Translation;
+		}
+		bso::bool__ Confirm(
+			const str::string_ &XML,
+			const str::string_ &XSL,
+			const str::string_ &Title = str::string() )
+		{
+			return _agent___::Confirm( XML, XSL, Title );
+		}
+		bso::bool__ Confirm( const char *Message )
+		{
+			bso::bool__ OK = false;
+		ERRProlog
+			str::string Translation;
+		ERRBegin
+			Translation.Init();
+
+			OK = RawConfirm( GetTranslation( Message, Translation ) );
+		ERRErr
+		ERREnd
+		ERREpilog
+			return OK;
+		}
+		void Alert(
+			const str::string_ &XML,
+			const str::string_ &XSL,
+			const str::string_ &Title = str::string() )
+		{
+			return _agent___::Alert( XML, XSL, Title );
+		}
+		void Alert( const char *Message )
+		{
+		ERRProlog
+			str::string Translation;
+		ERRBegin
+			Translation.Init();
+
+			RawConfirm( GetTranslation( Message, Translation ) );
+		ERRErr
+		ERREnd
+		ERREpilog
 		}
 	};
 
