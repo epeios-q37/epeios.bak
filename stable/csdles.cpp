@@ -91,7 +91,7 @@ static void ExitFunction_( void )
 	Terminate_();
 }
 
-csdleo::callback__ *CSDLEORetrieveCallback( csdleo::shared_data__ *Data )
+csdleo::callback__ *CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME( csdleo::shared_data__ *Data )
 {
 	csdleo::callback__ *Callback = NULL;
 ERRFProlog
@@ -125,7 +125,7 @@ ERRFEpilog
 	return Callback;
 }
 
-void CSDLEOReleaseCallback( csdleo::callback__ *Callback )
+void CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME( csdleo::callback__ *Callback )
 {
 	sdr::row__ Row = Callbacks_.Search( Callback );
 
