@@ -40,30 +40,35 @@
 
 namespace sclplugin {
 
-	void *SCLPLUGINRetrievePluginCallback( void );
-	void SCLPLUGINReleasePluginCallback( void * );
+	const char *SCLPLUGINPluginIdentification( void );
+	void *SCLPLUGINRetrievePlugin( void );
+	void SCLPLUGINReleasePlugin( void * );
 
 	extern int toto;
 
 }
 
-# define SCLPLUGIN_DEF( callback )\
-	void *sclplugin::SCLPLUGINRetrievePluginCallback( void )\
+# define SCLPLUGIN_DEF( plugin )\
+	const char *sclplugin::SCLPLUGINPluginIdentification( void )\
 	{\
-		callback *Callback = new callback;\
+		return plugin::Identification();\
+	}\
+	void *sclplugin::SCLPLUGINRetrievePlugin( void )\
+	{\
+		plugin *Plugin = new plugin;\
 		\
-		if ( Callback == NULL )\
+		if ( Plugin == NULL )\
 			ERRAlc();\
 		\
-		return Callback;\
+		return Plugin;\
 	}\
 \
-	void sclplugin::SCLPLUGINReleasePluginCallback( void *Callback )\
+	void sclplugin::SCLPLUGINReleasePlugin( void *Plugin )\
 	{\
-		if ( Callback == NULL )\
+		if ( Plugin == NULL )\
 			ERRFwk();\
 		\
-		delete (callback *)Callback;\
+		delete (plugin *)Plugin;\
 	}
 
 				  /********************************************/

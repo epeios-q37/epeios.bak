@@ -59,28 +59,6 @@ public:
 
 using namespace cpe;
 
-static const char *Enviroment_( void )
-{
-	return CPE_ENVIROMENT_LABEL;
-}
-
-static const char *Architecture_( void )
-{
-	return CPE_ARCHITECTURE_LABEL;
-}
-
-const char *cpe::GetDescription( void )
-{
-	static char Buffer[100];
-	Buffer[0] = 0;
-
-	strcat( Buffer, Enviroment_() );
-	strcat( Buffer, "_" );
-	strcat( Buffer, Architecture_() );
-
-	return Buffer;
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

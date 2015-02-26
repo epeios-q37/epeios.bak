@@ -48,7 +48,7 @@ namespace plgn {
 		plugin *_Plugin;
 		void _ReleasePlugin( void )
 		{
-			plgncore::release_plugin_callback *Function = dlbrry::GetFunction<plgncore::release_plugin_callback *>( E_STRING( PLGNCORE_RELEASE_PLUGIN_CALLBACK_FUNCTION_NAME ), _Library );
+			plgncore::release_plugin *Function = dlbrry::GetFunction<plgncore::release_plugin *>( E_STRING( PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME ), _Library );
 
 			if ( Function == NULL )
 				ERRFwk();
@@ -57,6 +57,15 @@ namespace plgn {
 				ERRFwk();
 
 			Function( _Plugin );
+		}
+		bso::bool__ _IsCompatible( void )
+		{
+			plgncore::plugin_identification *Function = dlbrry::GetFunction<plgncore::plugin_identification *>( E_STRING( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME ), _Library );
+
+			if ( Function == NULL )
+				ERRFwk();
+
+			return !strcmp(plugin::Identification(), Function() );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -74,12 +83,18 @@ namespace plgn {
 			const ntvstr::string___ &PluginName,
 			err::handling__ ErrHandling = err::h_Default )
 		{
-			plgncore::retrieve_plugin_callback *Function = NULL;
+			plgncore::retrieve_plugin *Function = NULL;
 
 			if ( !_Library.Init( PluginName, ErrHandling ) )
 				return NULL;
 
-			Function = dlbrry::GetFunction<plgncore::retrieve_plugin_callback *>( E_STRING( PLGNCORE_RETRIEVE_PLUGIN_CALLBACK_FUNCTION_NAME ), _Library );
+			if ( !_IsCompatible() )
+				if ( ErrHandling == err::hThrowException )
+					ERRFwk();
+				else
+					return false;
+
+			Function = dlbrry::GetFunction<plgncore::retrieve_plugin *>( E_STRING( PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME ), _Library );
 
 			if ( Function == NULL )
 				ERRFwk();

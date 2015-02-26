@@ -36,12 +36,14 @@
 # include "err.h"
 # include "flw.h"
 
-# define PLGNCORE_RETRIEVE_PLUGIN_CALLBACK_FUNCTION_NAME	RetrievePluginCallback
-# define PLGNCORE_RELEASE_PLUGIN_CALLBACK_FUNCTION_NAME		ReleasePluginCallback
+# define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME		PluginIdentification
+# define PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME		RetrievePlugin
+# define PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME		ReleasePlugin
 
 namespace plgncore {
-	typedef void *(retrieve_plugin_callback)( void );
-	typedef void (release_plugin_callback)( void *);
+	typedef const char *(plugin_identification)( void );
+	typedef void *(retrieve_plugin)( void );
+	typedef void (release_plugin)( void *);
 }
 
 				  /********************************************/

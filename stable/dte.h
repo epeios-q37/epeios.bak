@@ -290,7 +290,7 @@ namespace dte {
 #ifndef CPE_MT
 		const char *ASCII( format__ Format ) const
 		{
-			static date_buffer__ Buffer;
+			static buffer__ Buffer;
 
 			return ASCII( Format, Buffer );
 		}

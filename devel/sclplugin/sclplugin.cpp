@@ -39,17 +39,23 @@ it is necessary to personalize it, or certain compiler would not work properly *
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( PLGNCORE_RETRIEVE_PLUGIN_CALLBACK_FUNCTION_NAME, plgncore::retrieve_plugin_callback );
-DEF( PLGNCORE_RELEASE_PLUGIN_CALLBACK_FUNCTION_NAME, plgncore::release_plugin_callback );
+DEF( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME, plgncore::plugin_identification );
+DEF( PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME, plgncore::retrieve_plugin );
+DEF( PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME, plgncore::release_plugin );
 
-void *PLGNCORE_RETRIEVE_PLUGIN_CALLBACK_FUNCTION_NAME( void )
+const char *PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME( void )
 {
-	return sclplugin::SCLPLUGINRetrievePluginCallback();
+	return sclplugin::SCLPLUGINPluginIdentification();
 }
 
-void PLGNCORE_RELEASE_PLUGIN_CALLBACK_FUNCTION_NAME( void *Callback )
+void *PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME( void )
 {
-	return sclplugin::SCLPLUGINReleasePluginCallback( Callback );
+	return sclplugin::SCLPLUGINRetrievePlugin();
+}
+
+void PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME( void *Callback )
+{
+	return sclplugin::SCLPLUGINReleasePlugin( Callback );
 }
 
 class sclpluginpersonnalization

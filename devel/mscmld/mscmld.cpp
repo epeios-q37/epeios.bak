@@ -1290,14 +1290,14 @@ static bso::u8__ GetDurationModifier_( const str::string_ &Value )
 	return Modifier;
 }
 
-bso::xbool__ GetTiedFlag_( const str::string_ &Value )
+tol::xbool__ GetTiedFlag_( const str::string_ &Value )
 {
 	if ( Value == NO_VALUE )
-		return bso::xbFalse;
+		return tol::xbFalse;
 	else if ( Value == YES_VALUE )
-		return bso::xbYes;
+		return tol::xbYes;
 	else
-		return bso::xb_Undefined;
+		return tol::xb_Undefined;
 }
 
 
@@ -1312,7 +1312,7 @@ static parse_status__ ParseDuration_(
 	bso::bool__ Continue = true;
 	bso::s8__ Base = MSCMLD_UNDEFINED_DURATION_BASE;
 	bso::u8__ Modifier = MSCMLD_UNDEFINED_DURATION_MODIFIER;
-	bso::xbool__ TiedToNext = bso::xb_Undefined;
+	tol::xbool__ TiedToNext = tol::xb_Undefined;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -1339,12 +1339,12 @@ static parse_status__ ParseDuration_(
 						Status = psBadValue;
 				}
 			} else if ( Parser.AttributeName() == TIED_FLAG_ATTRIBUTE ) {
-				if( TiedToNext != bso::xb_Undefined )
+				if( TiedToNext != tol::xb_Undefined )
 					Status = psAlreadyDefined;
 				else {
 					TiedToNext = GetTiedFlag_( Parser.Value() );
 
-					if ( TiedToNext == bso::xb_Undefined )
+					if ( TiedToNext == tol::xb_Undefined )
 						Status = psBadValue;
 				}
 			}
@@ -1362,13 +1362,13 @@ static parse_status__ ParseDuration_(
 				if ( Modifier == MSCMLD_UNDEFINED_DURATION_MODIFIER )
 					Modifier = 0;
 
-				if ( TiedToNext == bso::xb_Undefined )
-					TiedToNext = bso::xbFalse;
+				if ( TiedToNext == tol::xb_Undefined )
+					TiedToNext = tol::xbFalse;
 
 				if ( Tuplet.IsValid() )
-					Duration.Init( Base, Modifier, Tuplet, bso::Convert( TiedToNext ) );
+					Duration.Init( Base, Modifier, Tuplet, TiedToNext );
 				else
-					Duration.Init( Base, Modifier, bso::Convert( TiedToNext ) );
+					Duration.Init( Base, Modifier, TiedToNext );
 			}
 
 			Continue = false;
