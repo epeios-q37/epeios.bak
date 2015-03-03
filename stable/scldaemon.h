@@ -144,7 +144,9 @@ namespace scldaemon {
 
 
 	// A définir par l'utilisateur.
-	callback__ *SCLDAEMONNewCallback( csdleo::mode__ Mode );	// To overload !
+	callback__ *SCLDAEMONNewCallback(
+		csdleo::mode__ Mode,
+		csdleo::context__ Context );	// To overload !
 
 	void DisplayModuleClosingMessage( void );
 

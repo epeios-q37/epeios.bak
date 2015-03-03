@@ -76,10 +76,10 @@ namespace lck {
 	class lock___
 	{
 	public:
-		mtx::handler__ ReadCounterProtection;
-		mtx::handler__ WritingRequest;
-		mtx::handler__ WritingPermission;
-		mtx::handler__ OverflowProtection;
+		mtx::handler___ ReadCounterProtection;
+		mtx::handler___ WritingRequest;
+		mtx::handler___ WritingPermission;
+		mtx::handler___ OverflowProtection;
 		counter__ ReadCounter;
 		void reset( bso::bool__ P = true )
 		{
@@ -207,7 +207,7 @@ namespace lck {
 			lck::lock___ Lock;
 			bso::bool__ Locked;
 			bso::bool__ ReadWrite;
-			mtx::handler__ Mutex;
+			mtx::handler___ Mutex;
 		} _Core, &_Access;
 		/* Comme la volatibilité de l'objet en lui-même n'est pas interssante, mais uniquement celle de l'objet qu'il contrôle,
 		on utilise '_Access' pour pouvoir mettre toutes les méthodes en 'const'. */
@@ -381,18 +381,25 @@ namespace lck {
 	template <typename object> class read_only_access___
 	{
 	private:
-		control___<object> *Control_;
+		control___<object> *_Control;
 		bso::bool__ _Locked;
+		control___<object> &_C( void ) const
+		{
+			if ( _Control == NULL )
+				ERRFwk();
+
+			return *_Control;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				if ( Control_ != NULL ) {
+				if ( _Control != NULL ) {
 					if ( _Locked )
-						Control_->ReleaseReadOnly();
+						_C().ReleaseReadOnly();
 				}
 
-			Control_ = NULL;
+			_Control = NULL;
 			_Locked = false;
 		}
 		read_only_access___( void )
@@ -407,16 +414,16 @@ namespace lck {
 		{
 			reset();
 
-			Control_ = &Control;
+			_Control = &Control;
 		}
 		const object &operator ()( void )
 		{
 			if ( !_Locked ) {
-				Control_->GetReadOnly();
+				_C().GetReadOnly();
 				_Locked = true;
 			}
 
-			return Control_->GetWithoutLocking();
+			return _C().GetWithoutLocking();
 		}
 		bso::bool__ IsLocked( void ) const
 		{

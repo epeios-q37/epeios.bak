@@ -154,6 +154,160 @@ namespace sclmisc {
 		const sclrgstry::registry_ &Registry,
 		str::string_ &String,
 		char Marker = scllocale::DefaultMarker );
+
+	sclrgstry::registry_ &GetRegistry( void );
+
+	rgstry::level__ GetRegistryConfigurationLevel( void );
+	rgstry::level__ GetRegistryProjectLevel( void );
+	rgstry::level__ GetRegistrySetupLevel( void );
+	rgstry::level__ GetRegistryArgumentsLevel( void );
+
+	inline void SetValue(
+		const str::string_ &Value,
+		const rgstry::tentry__ &Entry )
+	{
+		return sclrgstry::SetValue(GetRegistry(), Value, Entry );
+	}
+
+	inline void SetValue(
+		const str::string_ &Path,
+		const str::string_ &Value,
+		sdr::row__ *Error = NULL )
+	{
+		return sclrgstry::SetValue(GetRegistry(), Path, Value, Error );
+	}
+
+	inline bso::bool__ BGetValue(
+		const rgstry::tentry__ &Entry,
+		str::string_ &Value )
+	{
+		return sclrgstry::BGetValue( GetRegistry(), Entry, Value );
+	}
+
+	inline bso::bool__ GetValues(
+		const rgstry::tentry__ &Entry,
+		str::strings_ &Values )
+	{
+		return sclrgstry::GetValues( GetRegistry(), Entry, Values );
+	}
+
+	inline const str::string_ &OGetValue(
+		const rgstry::tentry__ &Entry,
+		str::string_ &Value,
+		bso::bool__ *Missing = NULL )
+	{
+		return sclrgstry::OGetValue( GetRegistry(), Entry, Value, Missing );
+	}
+
+	inline const char *OGetValue(
+		const rgstry::tentry__ &Entry,
+		TOL_CBUFFER___ &Buffer,
+		bso::bool__ *Missing = NULL )
+	{
+		return sclrgstry::OGetValue( GetRegistry(), Entry, Buffer, Missing );
+	}
+
+	inline const str::string_ &MGetValue(
+		const rgstry::tentry__ &Entry,
+		str::string_ &Value )
+	{
+		return sclrgstry::MGetValue( GetRegistry(), Entry, Value );
+	}
+
+	inline const char *MGetValue(
+		const rgstry::tentry__ &Entry,
+		TOL_CBUFFER___ &Buffer )
+	{
+		return sclrgstry::MGetValue( GetRegistry(), Entry, Buffer );
+	}
+
+	inline bso::bool__ BGetBoolean(
+		const rgstry::tentry__ &Entry,
+		bso::bool__ DefaultValue = false )
+	{
+		return sclrgstry::BGetBoolean( GetRegistry(), Entry, DefaultValue );
+	}
+
+	inline bso::bool__ MGetBoolean( const rgstry::tentry___ &Entry )
+	{
+		return sclrgstry::MGetBoolean( GetRegistry(), Entry );
+	}
+
+# define SCLMISC__UN( type, name, limit )\
+	inline type MGet##name(\
+		const rgstry::tentry__ &Entry,\
+		type Limit = limit )\
+	{\
+		return sclrgstry::MGet##name( GetRegistry(), Entry, Limit );\
+	}\
+	inline type OGet##name(\
+		const rgstry::tentry__ &Entry,\
+		type DefaultValue,\
+		type Limit = limit )\
+	{\
+		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Limit );\
+	}
+
+	SCLMISC__UN( bso::uint__, UInt, BSO_UINT_MAX )
+# ifdef BSO__64BITS_ENABLED
+		SCLRGSTRY__UN( bso::u64__, U64, BSO_U64_MAX )
+# endif
+	SCLMISC__UN( bso::u32__, U32, BSO_U32_MAX )
+	SCLMISC__UN( bso::u16__, U16, BSO_U16_MAX )
+	SCLMISC__UN( bso::u8__, U8, BSO_U8_MAX )
+
+# define SCLMISC__SN( type, name, min, max )\
+	inline type MGet##name(\
+		const rgstry::tentry__ &Entry,\
+		type Min = min,\
+		type Max = max )\
+	{\
+		return sclrgstry::MGet##name( GetRegistry(), Entry, Min, Max );\
+	}\
+	inline type OGet##name(\
+		const rgstry::tentry__ &Entry,\
+		type DefaultValue,\
+		type Min = min,\
+		type Max = max )\
+	{\
+		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Min, Max );\
+	}
+
+	SCLMISC__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
+# ifdef BSO__64BITS_ENABLED
+	SCLRGSTRY__SN( bso::s64__, S64, BSO_S64, BSO_S64_MAX )
+#endif
+	SCLMISC__SN( bso::s32__, S32, BSO_S32_MIN, BSO_S32_MAX )
+	SCLMISC__SN( bso::s16__, S16, BSO_S16_MIN, BSO_S16_MAX )
+	SCLMISC__SN( bso::s8__, S8, BSO_S8_MIN, BSO_S8_MAX )
+
+		// To define function retrieving mandatory registry value.
+# define SCLMISC_MV( name, entry )\
+	inline const char *name(\
+		TOL_CBUFFER___ &Buffer )\
+	{\
+		return sclmisc::MGetValue( entry, Buffer );\
+	}\
+	inline const str::string_ &name( str::string_ &Value )\
+	{\
+		return sclmisc::MGetValue( entry, Value );\
+	}
+
+		// To define function retrieving optional registry value.
+# define SCLMISC_OV( name, entry )\
+	inline const char *name(\
+		TOL_CBUFFER___ &Buffer,\
+		bso::bool__ *Missing = NULL )\
+	{\
+		return sclmisc::OGetValue( entry, Buffer, Missing );\
+	}\
+	inline const str::string_ &name(\
+		str::string_ &Value,\
+		bso::bool__ *Missing = NULL )\
+	{\
+		return sclmisc::OGetValue( entry, Value, Missing );\
+	}
+
 }
 
 				  /********************************************/

@@ -252,7 +252,7 @@ ERRBegin
 			ErrorMeaning.AddTag( LogFileName );
 
 			ErrorTranslation.Init();
-			CErr << sclmisc::GetTranslation( ErrorMeaning, ErrorTranslation ) << txf::nl << txf::commit;
+			CErr << sclmisc::GetBaseTranslation( ErrorMeaning, ErrorTranslation ) << txf::nl << txf::commit;
 			LogFileName = NULL;	// To notify no to use log functions.
 		} else
 			TFlow.Init( FFlow );
@@ -284,7 +284,7 @@ ERRBegin
 	SharedLocale.Init();
 	SharedRegistry.Init();
 
-	LibraryData.Init( csdleo::mRemote, cio::SOutDriver, cio::SErrDriver, false, (void *)ModuleFileName );
+	LibraryData.Init( csdleo::mRemote, cio::SOutDriver, cio::SErrDriver, csdleo::cRegular, (void *)ModuleFileName );
 
 	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();
@@ -319,14 +319,14 @@ ERRErr
 			Meaning.AddTag( sclerror::GetMeaning( MeaningBuffer ) );
 		} else {
 			Translation.Init();
-			Meaning.AddTag( sclmisc::GetTranslation( "UnkonwnError", Translation ) );
+			Meaning.AddTag( sclmisc::GetBaseTranslation( "UnkonwnError", Translation ) );
 		}
 	} else {
 		Meaning.AddTag( err::Message( ErrBuffer ) );
 	}
 
 	Translation.Init();
-	sclmisc::GetTranslation( Meaning, Translation );
+	sclmisc::GetBaseTranslation( Meaning, Translation );
 
 	cio::CErr << Translation << txf::nl << txf::commit;
 ERREnd
@@ -382,10 +382,11 @@ ERREnd
 ERREpilog
 }
 
-void scltool::SCLTOOLMain(
+int scltool::SCLTOOLMain(
 	const str::string_ &Command,
 	const scltool::oddities__ &Oddities )
 {
+	int Exit = EXIT_FAILURE;
 ERRProlog
 ERRBegin
 	if ( Command == "Process" )
@@ -396,9 +397,12 @@ ERRBegin
 		sclmisc::ReportAndAbort( "BadCommand" );
 	else
 		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+
+	Exit = EXIT_SUCCESS;
+	ERRErr
+		ERREnd
+		ERREpilog
+		return Exit;
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

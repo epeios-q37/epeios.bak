@@ -36,37 +36,14 @@
 
 using namespace scltool;
 
+using namespace sclmisc;
+
 using cio::COut;
 using scllocale::GetLocale;
-
-sclrgstry::registry_ &scltool::GetRegistry( void )
-{
-	return sclrgstry::GetCommonRegistry();
-}
 
 bso::bool__ scltool::IgnoreUnknownArguments = false;
 
 str::string ParametersTag_;	// Voir tout en bas.
-
-rgstry::level__ scltool::GetRegistryConfigurationLevel( void )
-{
-	return sclrgstry::GetConfigurationLevel();
-}
-
-rgstry::level__ scltool::GetRegistryProjectLevel( void )
-{
-	return sclrgstry::GetProjectLevel();
-}
-
-rgstry::level__ scltool::GetRegistrySetupLevel( void )
-{
-	return sclrgstry::GetSetupLevel();
-}
-
-rgstry::level__ scltool::GetRegistryArgumentsLevel( void )
-{
-	return sclrgstry::GetArgumentsLevel();
-}
 
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
 static rgstry::entry___ ProjectFileName_( "ProjectFileName", sclrgstry::Parameters );

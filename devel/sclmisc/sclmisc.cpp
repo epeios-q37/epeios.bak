@@ -580,7 +580,30 @@ ERREnd
 ERREpilog
 }
 
+sclrgstry::registry_ &sclmisc::GetRegistry( void )
+{
+	return sclrgstry::GetCommonRegistry();
+}
 
+rgstry::level__ sclmisc::GetRegistryConfigurationLevel( void )
+{
+	return sclrgstry::GetConfigurationLevel();
+}
+
+rgstry::level__ sclmisc::GetRegistryProjectLevel( void )
+{
+	return sclrgstry::GetProjectLevel();
+}
+
+rgstry::level__ sclmisc::GetRegistrySetupLevel( void )
+{
+	return sclrgstry::GetSetupLevel();
+}
+
+rgstry::level__ sclmisc::GetRegistryArgumentsLevel( void )
+{
+	return sclrgstry::GetArgumentsLevel();
+}
 
 
 

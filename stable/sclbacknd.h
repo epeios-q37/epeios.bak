@@ -153,7 +153,9 @@ namespace sclbacknd {
 		}
 	};
 
-	callback__ *SCLBACKNDNewCallback( fblbur::mode__ Mode );	// A surcharger.
+	callback__ *SCLBACKNDNewCallback(
+		fblbur::mode__ Mode,
+		csdleo::context__ Context );	// A surcharger.
 }
 
 				  /********************************************/

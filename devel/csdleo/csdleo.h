@@ -47,7 +47,7 @@
 NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
 */
 
-# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"3"
+# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"4"
 
 # define CSDLEO_SHARED_DATA_VERSION	CSDLEO_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -60,6 +60,15 @@ namespace csdleo {
 		m_amount,
 		m_Undefined
 	};
+
+	enum context__ {
+		cIntrospection,	// Récupération de l'API.
+		cRegular,		// fonctionnement normal
+		c_amount,
+		c_Undefined,
+	};
+
+
 
 #pragma pack( push, 1)
 	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
@@ -89,36 +98,36 @@ namespace csdleo {
 	class data__ {
 	public:
 		mode__ Mode;
-		bso::bool__ DryRun;	// Si à 'true', le 'Server' n'est pas vraiment 'lancé' ; seul ces caractéristiques sont consultées (par 'getbkdapi', par exemple).
+		context__ Context;
 		void *UP;				// A la discrétion de l'utilisateur.
 		fdr::oflow_driver_base___ *COut, *CErr;
 		void reset( bso::bool__ = true )
 		{
 			COut = CErr = NULL;
 			UP = NULL;
-			DryRun = false;
+			Context = c_Undefined;
 		}
 		E_CDTOR( data__ );
 		data__(
 			mode__ Mode,
 			fdr::oflow_driver_base___ &COut,
 			fdr::oflow_driver_base___ &CErr,
-			bso::bool__ DryRun,
+			context__ Context,
 			void *UP = NULL )
 		{
-			Init( Mode, COut, CErr, DryRun, UP );
+			Init( Mode, COut, CErr, Context, UP );
 		}
 		void Init(
 			mode__ Mode,
 			fdr::oflow_driver_base___ &COut,
 			fdr::oflow_driver_base___ &CErr,
-			bso::bool__ DryRun,
+			context__ Context,
 			void *UP = NULL )
 		{
 			this->Mode = Mode;
 			this->COut = &COut;
 			this->CErr = &CErr;
-			this->DryRun = DryRun;
+			this->Context = Context;
 			this->UP = UP;
 		}
 	};
@@ -138,7 +147,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Mode, *Data.COut, *Data.CErr, Data.DryRun, Data.UP );
+			data__::Init( Data.Mode, *Data.COut, *Data.CErr, Data.Context, Data.UP );
 		}
 	};
 #pragma pack( pop )

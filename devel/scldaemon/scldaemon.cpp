@@ -61,13 +61,15 @@ ERRBegin
 		cio::Initialize( cio::tUser );
 	}
 
-	if ( !IsInitialized_ && !Data->DryRun )	{
+	if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
 
 		// Do not work when placed in 'global_cdtor'.
 		Directory.Init();
 		if ( Data->UP != NULL )
 			fnm::GetLocation( (const char *)Data->UP, Directory );
 		sclmisc::Initialize( Directory.UTF8( Buffer ) );
+
+		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryConfigurationLevel(), E_NIL, true, xml::oIndent, xml::encoding__(), cio::COut );
 		IsInitialized_ = true;
 	}
 
@@ -85,7 +87,7 @@ ERRBegin
 	}
 */
 
-	Callback = SCLDAEMONNewCallback( Data->Mode );
+	Callback = SCLDAEMONNewCallback( Data->Mode, Data->Context );
 ERRErr
 	if ( cio::IsInitialized() ) {
 		Error.Init();

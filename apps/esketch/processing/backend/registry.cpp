@@ -21,7 +21,3 @@
 
 using namespace registry;
 
-# define ROOT	""
-
-# define S "/"
-

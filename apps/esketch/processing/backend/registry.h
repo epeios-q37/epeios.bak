@@ -18,9 +18,9 @@
 */
 
 #ifndef REGISTRY__INC
-#define REGISTRY__INC
+# define REGISTRY__INC
 
-#include "sclrgstry.h"
+# include "sclrgstry.h"
 
 namespace registry {
 

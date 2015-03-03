@@ -37,14 +37,14 @@ namespace registry {
 	extern entry___ ModuleLogFileName;
 	extern entry___ ModuleLogMode;
 
-	SCLTOOL_OV( GetModuleLogFileName, ModuleLogFileName );
-	SCLTOOL_OV( GetRawModuleLogMode, ModuleLogMode );
-	SCLTOOL_MV( GetModuleFileName, ModuleFileName );
-	SCLTOOL_MV( GetRawModuleServiceType, ModuleServiceType );
+	SCLMISC_OV( GetModuleLogFileName, ModuleLogFileName );
+	SCLMISC_OV( GetRawModuleLogMode, ModuleLogMode );
+	SCLMISC_MV( GetModuleFileName, ModuleFileName );
+	SCLMISC_MV( GetRawModuleServiceType, ModuleServiceType );
 
 	inline bso::u16__ GetRawModuleService( void )
 	{
-		return scltool::MGetU16( ModuleService );
+		return sclmisc::MGetU16( ModuleService );
 	}
 
 }
