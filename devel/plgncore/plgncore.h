@@ -35,14 +35,56 @@
 
 # include "err.h"
 # include "flw.h"
+# include "tol.h"
 
-# define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME		PluginIdentification
-# define PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME		RetrievePlugin
-# define PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME		ReleasePlugin
+# define PLGNCORE_SHARED_DATA_VERSION	"1"
+
+# define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
+# define PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME			RetrievePlugin
+# define PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME			ReleasePlugin
 
 namespace plgncore {
+#pragma pack( push, 1)
+	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	class data__
+	{
+	public:
+		const char *Version;	// Toujours en première position.
+		bso::size__ ControlValue;
+		const char *Directory;
+		void *UP;				// A la discrétion de l'utilisateur.
+		void reset( bso::bool__ = true )
+		{
+			Version = NULL;
+			Directory = NULL;
+			UP = NULL;
+		}
+		E_CDTOR( data__ );
+		data__(
+			const char *Directory,
+			void *UP = NULL )
+		{
+			Init( Directory, UP );
+		}
+		void Init(
+			const char *Directory,
+			void *UP = NULL )
+		{
+			Version = PLGNCORE_SHARED_DATA_VERSION;
+			ControlValue = Control();
+			this->Directory = Directory;
+			this->UP = UP;
+		}
+		static bso::size__ Control( void )
+		{
+			return sizeof( data__ );
+		}
+
+	};
+#pragma pack( pop )
+
 	typedef const char *(plugin_identification)( void );
-	typedef void *(retrieve_plugin)( void );
+	typedef void *(retrieve_plugin)( const data__ *Data );
 	typedef void (release_plugin)( void *);
 }
 

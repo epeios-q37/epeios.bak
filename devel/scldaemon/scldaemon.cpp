@@ -63,7 +63,7 @@ ERRBegin
 
 	if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
 
-		// Do not work when placed in 'global_cdtor'.
+		// Does not work when placed in 'global_cdtor'.
 		Directory.Init();
 		if ( Data->UP != NULL )
 			fnm::GetLocation( (const char *)Data->UP, Directory );

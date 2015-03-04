@@ -39,6 +39,7 @@
 # include "flw.h"
 
 # include "dlbrry.h"
+# include "fnm.h"
 
 namespace plgn {
 
@@ -80,12 +81,17 @@ namespace plgn {
 		}
 		E_CDTOR( retriever___ );
 		bso::bool__ Init(
-			const ntvstr::string___ &PluginName,
+			const ntvstr::string___ &PluginNameAndLocation,
 			err::handling__ ErrHandling = err::h_Default )
 		{
+		ERRProlog
+			plgncore::data__ Data;
+			fnm::name___ Location;
+			TOL_CBUFFER___ Buffer;
+		ERRBegin
 			plgncore::retrieve_plugin *Function = NULL;
 
-			if ( !_Library.Init( PluginName, ErrHandling ) )
+			if ( !_Library.Init( PluginNameAndLocation, ErrHandling ) )
 				return NULL;
 
 			if ( !_IsCompatible() )
@@ -99,11 +105,18 @@ namespace plgn {
 			if ( Function == NULL )
 				ERRFwk();
 
-			_Plugin = (plugin *)Function();
+			Location.Init();
+			fnm::GetLocation( PluginNameAndLocation, Location );
+
+			Data.Init( Location.UTF8( Buffer ) );
+
+			_Plugin = (plugin *)Function( &Data );
 
 			if ( ( _Plugin == NULL) && ( ErrHandling == err::hThrowException ) )
 				ERRFwk();
-
+		ERRErr
+		ERREnd
+		ERREpilog
 			return _Plugin != NULL;
 		}
 		plugin &Plugin( void )

@@ -206,6 +206,17 @@ namespace dir {
 		WIN32_FIND_DATAW File;
 		HANDLE hSearch;
 		fnm::name___ Name;
+		void reset( bso::bool__ P = true )
+		{
+			hSearch = NULL;
+			Name.reset( P );
+		}
+		E_CDTOR( handle___ );
+		void Init( void )
+		{
+			hSearch = NULL;
+			Name.Init();
+		}
 	};
 
 #elif defined( DIR__POSIX )
@@ -213,6 +224,17 @@ namespace dir {
 		DIR	*Dir;
 		fnm::name___ Name;
 		TOL_CBUFFER___ Buffer;
+		void reset( bso::bool__ P = true )
+		{
+			Dir = NULL;
+			Name.reset( P );
+		}
+		E_CDTOR( handle___ );
+		void Init( void )
+		{
+			Dir = NULL;
+			Name.reset( P );
+		}
 	};
 #else
 #	error

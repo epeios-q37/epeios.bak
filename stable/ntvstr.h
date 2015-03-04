@@ -173,6 +173,10 @@ namespace ntvstr {
 		{
 			return Amount() == 0;
 		}
+		operator const char__*() const
+		{
+			return _Core;
+		}
 	};
 
 	template <typename s, typename b> inline const bso::char__ *ToSystemEncoding(

@@ -249,11 +249,11 @@ namespace str {
 #define STR_UNR( name, type, limit, casing )\
 	type To##name(\
 			sdr::row__ Begin,\
-			sdr::row__ *ErrP,\
-			base__ Base,\
+			sdr::row__ *ErrP = NULL,\
+			base__ Base = bAuto,\
 			type Limit = limit ) const\
 		{\
-		return (type)_U##casing##Conversion( *this, Begin, ErrP, Base, Limit );\
+			return (type)_U##casing##Conversion( *this, Begin, ErrP, Base, Limit );\
 		}\
 		type To##name(\
 			sdr::row__ *ErrP = NULL,\
@@ -264,18 +264,33 @@ namespace str {
 		}
 #define STR_UN( name, type, limit, casing )\
 		STR_UNR( name, type, limit, casing )\
-		void ToNumber(\
-			type &Number,\
-			sdr::row__ *Error = NULL ) const\
+		void ToNumber( \
+			   type &Number, \
+			   sdr::row__ *Error = NULL ) const\
 		{\
-			Number = To##name( Error );\
+			Number = To##name( Error ); \
 		}\
 		void ToNumber(\
-			type Limit,\
 			type &Number,\
+			type Limit,\
 			sdr::row__ *Error = NULL ) const\
 		{\
 			Number = To##name( Error, bAuto, Limit );\
+		}\
+		void ToNumber(\
+			type &Number,\
+			sdr::row__ Begin,\
+			sdr::row__ *Error = NULL ) const\
+		{\
+			Number = To##name( Begin, Error, bAuto, limit );\
+		}\
+		void ToNumber(\
+			type &Number,\
+			type Limit,\
+			sdr::row__ Begin,\
+			sdr::row__ *Error = NULL ) const\
+		{\
+			Number = To##name( Begin, Error, bAuto, Limit );\
 		}
 #define STR_SNR( name, type, positive_limit, negative_limit, casing )\
 	type To##name(\
@@ -285,7 +300,7 @@ namespace str {
 			type PositiveLimit = positive_limit,\
 			type NegativeLimit = negative_limit ) const\
 		{\
-		return (type)_S##casing##Conversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
+			return (type)_S##casing##Conversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}\
 		type To##name(\
 			sdr::row__ *ErrP = NULL,\
@@ -311,6 +326,7 @@ namespace str {
 		{\
 			Number = To##name( Error, bAuto, PositiveLimit, NegativeLimit );\
 		}
+		STR_UNR( Row, sdr::row_t__, SDR_ROW_T_MAX, Int )
 		STR_UNR( UInt, bso::uint__, BSO_UINT_MAX, Int )
 		STR_SNR( SInt, bso::sint__, BSO_SINT_MAX, BSO_SINT_MIN, Int )
 # ifdef CPE_INT64

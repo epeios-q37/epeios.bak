@@ -26,6 +26,8 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
+#include "sclmisc.h"
+
 using namespace sclplugin;
 
 /* Although in theory this class is inaccessible to the different modules,
@@ -48,8 +50,25 @@ const char *PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME( void )
 	return sclplugin::SCLPLUGINPluginIdentification();
 }
 
-void *PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME( void )
+void *PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME( const plgncore::data__ *Data )
 {
+	if ( Data == NULL )
+		ERRFwk();
+
+	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
+		ERRFwk();
+
+	if ( Data->ControlValue != plgncore::data__::Control() )
+		ERRFwk();
+
+	if ( Data->Directory == NULL )
+		ERRFwk();
+
+	if ( !cio::IsInitialized() ) {
+		cio::Initialize( cio::tVoid );
+		sclmisc::Initialize(  Data->Directory );
+	}
+
 	return sclplugin::SCLPLUGINRetrievePlugin();
 }
 
