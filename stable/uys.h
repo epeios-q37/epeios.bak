@@ -347,12 +347,12 @@ namespace uys {
 			sdr::size__ Amount,
 			sdr::row_t__ Position,
 			sdr::row_t__ Offset = 0 );
-		//f Store 'Count' 'Object's of size 'Size' at 'Position'.
-		void Store(
+		// Remplit à partir de 'Position' avec 'Amount' 'Object' de taille 'Size'.
+		void Fill(
 			const sdr::datum__ *Object,
 			sdr::size__ Size,
 			sdr::row_t__ Position,
-			sdr::size__ Count );
+			sdr::size__ Amount );
 		//f Search 'Object' of size 'Size' between 'Begin' and 'End' (excluded) and return its position or 'E_NIL' if non-existant.
 		sdr::row_t__ Search(
 			const sdr::datum__ *Objet,

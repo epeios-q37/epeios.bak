@@ -152,19 +152,16 @@ inline void uys::_Copy(
 	}
 }
 
-
-/* Duplique 'Objet' 'Nombre' fois à partir de 'Position'
-sachant qu'il est de taille 'Taille'. */
-void untyped_storage_::Store(
-	const datum__ *Objet,
-	size__ Taille,
+void untyped_storage_::Fill(
+	const datum__ *Object,
+	size__ Size,
 	row_t__ Position,
-	size__ Nombre )
+	size__ Amount )
 {
-	while ( Nombre-- )
+	while ( Amount-- )
 	{
-		Store( Objet, Taille, Position );
-		Position += Taille;
+		Store( Object, Size, Position );
+		Position += Size;
 	}
 }
 

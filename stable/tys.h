@@ -185,13 +185,13 @@ namespace tys {
 			Store( Get( Position2 ), Position1 );
 			Store( *(t *) O, Position2 );
 		}
-		//f Store at 'Position' 'Amount' objects.
-		void Store(
+		// Remplit à partir de 'Position' avec 'Amount' 'Object'
+		void Fill(
 			const t &Object,
 			r Position,
 			sdr::size__ Amount )
 		{
-			b::Store( (sdr::datum__ *)&Object, sizeof( t ), *Position * sizeof( t ), Amount );
+			b::Fill( (sdr::datum__ *)&Object, sizeof( t ), *Position * sizeof( t ), Amount );
 		}
 		//f Return the position from 'Object' between 'Begin' and 'End' (both included) or 'E_NIL' if non-existant.
 		r Search(

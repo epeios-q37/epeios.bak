@@ -153,7 +153,7 @@ namespace bch {
 			Allouer_( Size, Mode );
 
 			if ( Size > PreviousSize )
-				Store( Object, PreviousSize, Size - PreviousSize );
+				Fill( Object, PreviousSize, Size - PreviousSize );
 		}
 		void PreAllocate( sdr::size__ Size )
 		{
@@ -222,7 +222,7 @@ namespace bch {
 			const type &Object,
 			row Offset = 0 )
 		{
-			mmr::Store( Object, Offset, this->Amount() - *Offset );
+			mmr::Fill( Object, Offset, this->Amount() - *Offset );
 		}
 		void Set( void )
 		{
@@ -456,7 +456,7 @@ namespace bch {
 		{
 			Allocate( *Row + Count );
 
-			mmr::Store( Object, Row, Count );
+			mmr::Fill( Object, Row, Count );
 		}
 		void SetAndAdjust( void )
 		{

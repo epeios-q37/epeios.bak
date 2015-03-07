@@ -205,7 +205,7 @@ namespace ctn {
 					ERRFwk();
 
 				if ( ( Size - AncCap ) > 1 )
-					Statics.Store( ST, AncCap, Size - AncCap );
+					Statics.Fill( ST, AncCap, Size - AncCap );
 				else
 					Statics.Store( ST, AncCap );
 			}
