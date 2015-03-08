@@ -266,7 +266,7 @@ namespace dir {
 
 		if ( hSearch == INVALID_HANDLE_VALUE )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Name.Init();
+				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else {
@@ -286,7 +286,7 @@ namespace dir {
 
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Name.Init();
+				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else
@@ -311,7 +311,7 @@ namespace dir {
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Name.Init();
+				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else {
@@ -327,7 +327,7 @@ namespace dir {
     
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Name.Init();
+				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else
