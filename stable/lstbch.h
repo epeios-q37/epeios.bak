@@ -121,7 +121,6 @@ namespace lstbch {
 			list_<row, row_t>::Allocate( Size, Mode );
 		}
 		E_NAVt( list_<E_COVER2(row,row_t)>::, row )
-		//f Add 'Object' and return its row.
 		row Add( const type &Object )
 		{
 			row Row = list_<row, row_t>::New();
@@ -130,8 +129,16 @@ namespace lstbch {
 
 			return Row;
 		}
+		row Add( const char *Object )
+		{
+			row Row = list_<row, row_t>::New();
+
+			bunch_<type, row>::Store( Object, Row );
+
+			return Row;
+		}
 		//f Delete entry 'Row'.
-		void Delete( row Row )
+		void Remove( row Row )
 		{
 			list_<row, row_t>::Delete( Row );
 		}
@@ -157,11 +164,6 @@ namespace lstbch {
 		}
 		// To avoid the use of herited 'Append' methods.
 		void Append( void ) const
-		{
-			ERRFbd();
-		}
-		// To avoid the use of herited 'Remove' methods.
-		void Remove( void ) const
 		{
 			ERRFbd();
 		}

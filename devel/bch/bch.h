@@ -291,6 +291,15 @@ namespace bch {
 		{
 			return Append( Bunch, Bunch.Amount() - *Position, Position );
 		}
+		// Les méthodes 'Add(...)' sont là pour faciliter interchangeabilité avec les object du module 'lstbch'.
+		row Add( const type *Buffer )
+		{
+			return Append( Buffer );
+		}
+		row Add( const type &Object )
+		{
+			return Append( Object );
+		}
 		type Pop( void )
 		{
 			type Object = mmr::Get( this->Last() );

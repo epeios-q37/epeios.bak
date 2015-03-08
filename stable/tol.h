@@ -395,10 +395,12 @@ public:\
 /* Permet de transformer n arguments en 1; si un argument d'une macro
 a besoin de contenir une virgule, cette macro est là pour ça.
 ex. : 'E_COVER2( a, b )' donne 'a, b' */
-# define E_COVER2(a, b)				a, b
-# define E_COVER3(a, b, c)			a, b, c
-# define E_COVER4(a, b, c, d)		a, b, c, d
-# define E_COVER5(a, b, c, d, e)	a, b, c, d, e
+# define E_COVER2(a, b)					a, b
+# define E_COVER3(a, b, c)				a, b, c
+# define E_COVER4(a, b, c, d)			a, b, c, d
+# define E_COVER5(a, b, c, d, e)		a, b, c, d, e
+# define E_COVER6(a, b, c, d, e, f)		a, b, c, d, e, f
+// A modifier en utilisant les 'variadics macros' ?
 
 
 /* Permet de convertir un entier en chaîne (l'encadre par des '"').

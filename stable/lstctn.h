@@ -114,7 +114,7 @@ namespace lstctn {
 			container::Init();
 		}
 		//f RemoveDelete object at 'Row'.
-		void Delete( row Row )
+		void Remove( row Row )
 		{
 			container::operator()( Row ).reset();
 			container::Flush();
@@ -135,8 +135,8 @@ namespace lstctn {
 		{
 			ERRFbd();
 		}
-		// To avoid the use of herited 'Remove' methods.
-		void Remove( void ) const
+		// To avoid the use of herited 'Delete' methods.
+		void Delete( void ) const
 		{
 			ERRFbd();
 		}

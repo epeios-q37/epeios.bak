@@ -982,7 +982,13 @@ namespace ctn {
 
 			return P;
 		}
-
+		// Pour faciliter l'interchangeabilité avec les object du module 'lstctn'.
+		r Add(
+			const t &Object,
+			aem::mode__ Mode = aem::m_Default )
+		{
+			return Append( Object, Mode );
+		}
 		//f Create a new object and return its position.
 		r New(
 			sdr::size__ Size = 1,
@@ -1349,6 +1355,13 @@ namespace ctn {
 			Flush();
 
 			return P;
+		}
+		// Pour faciliter l'interchangeabilité avec les object du module 'lstctn'.
+		r Add(
+			const t &Object,
+			aem::mode__ Mode = aem::m_Default )
+		{
+			return Append( Object, Mode );
 		}
 		//f Remove 'Amount' entries from 'Position'.
 		void Remove(

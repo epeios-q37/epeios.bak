@@ -629,7 +629,7 @@ namespace {
 
 		_Delete( Node.Children );
 
-		Nodes.Delete( Row );
+		Nodes.Remove( Row );
 	}
 
 	bso::bool__ rgstry::registry_::Exists(
