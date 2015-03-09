@@ -290,6 +290,8 @@ namespace fblfrd {
 				ERRFwk();
 
 			_ReportingCallback->Report( Reply, Message );
+
+			ERRAbort();
 		}
 		id16__ Commands_[fblcmd::c_amount];
 		char Message_[100];
@@ -336,8 +338,6 @@ namespace fblfrd {
 
 				if ( ( !flw::GetString( *Channel_, Message_, sizeof( Message_ ) ) ) )
 					ERRLmt();
-
-				_ReportError( Reply, Message_ );
 			}
 
 			return Reply;
@@ -500,6 +500,9 @@ namespace fblfrd {
 			}
 
 			_FlowOutParameter = false;
+
+			if ( Reply != rOK )
+				_ReportError( Reply, Message_ );
 
 			return Reply;
 		}

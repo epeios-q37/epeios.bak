@@ -47,7 +47,7 @@
 NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
 */
 
-# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"4"
+# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"5"
 
 # define CSDLEO_SHARED_DATA_VERSION	CSDLEO_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -99,6 +99,7 @@ namespace csdleo {
 	public:
 		mode__ Mode;
 		context__ Context;
+		err::err___ *Error;
 		void *UP;				// A la discrétion de l'utilisateur.
 		fdr::oflow_driver_base___ *COut, *CErr;
 		void reset( bso::bool__ = true )
@@ -106,25 +107,29 @@ namespace csdleo {
 			COut = CErr = NULL;
 			UP = NULL;
 			Context = c_Undefined;
+			Error = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
 			mode__ Mode,
+			err::err___ *Error,
 			fdr::oflow_driver_base___ &COut,
 			fdr::oflow_driver_base___ &CErr,
 			context__ Context,
 			void *UP = NULL )
 		{
-			Init( Mode, COut, CErr, Context, UP );
+			Init( Mode, Error, COut, CErr, Context, UP );
 		}
 		void Init(
 			mode__ Mode,
+			err::err___ *Error,
 			fdr::oflow_driver_base___ &COut,
 			fdr::oflow_driver_base___ &CErr,
 			context__ Context,
 			void *UP = NULL )
 		{
 			this->Mode = Mode;
+			this->Error = Error;
 			this->COut = &COut;
 			this->CErr = &CErr;
 			this->Context = Context;
@@ -147,7 +152,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Mode, *Data.COut, *Data.CErr, Data.Context, Data.UP );
+			data__::Init( Data.Mode, Data.Error, *Data.COut, *Data.CErr, Data.Context, Data.UP );
 		}
 	};
 #pragma pack( pop )

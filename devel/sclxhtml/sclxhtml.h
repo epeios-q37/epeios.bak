@@ -362,6 +362,7 @@ namespace sclxhtml {
 		virtual void FRDSSNClose( void ) override
 		{
 			instances::reset();
+			_Kernel.Close();
 		}
 		virtual const char *FRDSSNLanguage( TOL_CBUFFER___ &Buffer ) override
 		{

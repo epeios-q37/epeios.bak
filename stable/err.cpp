@@ -30,31 +30,23 @@
 
 using namespace err;
 
-err_ err::ERR;
-
 #include "cio.h"
 
 #ifdef ERR__THREAD_SAFE
 #	include "mtx.h"
-#	include "mtk.h"
-static mtx::handler___ MutexHandler_ = mtx::UndefinedHandler;
-static mtk::thread_id__ ThreadID_;
 #endif
 
 #include "tol.h"
 
-/* fin du pré-sous-module */
-int err_::Line = 0;
-const char *err_::File = NULL;
-#ifdef ERR__JMPUSE
-jmp_buf *err_::Jump = NULL;
-#endif
-err::type err_::Type = err::t_None;
+// Utilisé durant la phase de chargement du programme.
+static err::err___ FallbackError_( true );
+
+err::err___ *err::ERRError = &FallbackError_;
 
 #ifdef ERR__THREAD_SAFE
 bool err::Concerned( void )
 {
-	return ( ThreadID_ == mtk::GetTID() );
+	return ( ERRError->ThreadID == tht::GetTID() );
 }
 
 void err::Unlock( void )
@@ -65,9 +57,9 @@ void err::Unlock( void )
 		ERRu();
 #endif
 #endif
-	ERR.Type = err::t_None;
+	ERRError->Type = err::t_None;
 
-	mtx::Unlock( MutexHandler_ );
+	mtx::Unlock( ERRError->Mutex );
 }
 #endif
 
@@ -158,9 +150,38 @@ const char *err::Message(
 	return Buffer;
 }
 
+void err___::reset( bool P )
+{
+	Line = 0;
+	File = NULL;
+	Type = err::t_Undefined;
+# ifdef ERR__JMPUSE
+	Jump = NULL;
+# endif
+
+#ifdef ERR__THREAD_SAFE
+	if ( P )
+		if ( Mutex != MTX_INVALID_HANDLER )
+			mtx::Delete( Mutex );
+
+	Mutex = MTX_INVALID_HANDLER;
+	ThreadID = THT_UNDEFINED_THREAD_ID;
+#endif
+}
+
+void err___::Init( void )
+{
+	reset();
+
+#ifdef ERR__THREAD_SAFE
+	Mutex = mtx::Create();
+#endif
+
+	Type = t_None;
+}
 
 // Handler par défaut.
-void err_::Set(
+void err___::Set(
 	const char *Fichier,
 	int Ligne,
 	err::type Type )
@@ -168,14 +189,15 @@ void err_::Set(
 #ifdef ERR__THREAD_SAFE
 	if ( ( !ERRHit() ) || !err::Concerned() )
 	{
-		mtx::Lock( MutexHandler_ );
+		mtx::Lock( Mutex );
 
-		ThreadID_ = mtk::GetTID();
+		ThreadID = tht::GetTID();
 	}
 #endif
 	if ( Fichier && !ERRHit() )
 	{
-		this->Type = Type;
+		if ( Type != t_Undefined )
+			this->Type = Type;
 		this->File = Fichier;
 		this->Line = Ligne;
 	} else if ( !ERRHit() )
@@ -196,7 +218,7 @@ not the 'ERR' library, thus the using of 'E_DEBUG' and not 'ERR_DBG'. */
 #endif
 }
 
-void err_::SetAndLaunch(
+void err___::SetAndLaunch(
 	const char *Fichier,
 	int Ligne,
 	err::type Type )
@@ -209,10 +231,10 @@ void err_::SetAndLaunch(
 void err::Final( void )
 {
 
-	if ( ERR.Type != err::t_Abort ) {
+	if ( ERRError->Type != err::t_Abort ) {
 		buffer__ Buffer;
 
-		const char *Message = err::Message( ERR.File, ERR.Line, ERR.Type, Buffer );
+		const char *Message = err::Message( ERRError->File, ERRError->Line, ERRError->Type, Buffer );
 
 		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
@@ -249,19 +271,24 @@ public:
 	errpersonnalization( void )
 	{
 		/* place here the actions concerning this library
+
 		to be realized at the launching of the application  */
+#if 0
 #ifdef ERR__THREAD_SAFE
-		MutexHandler_ = mtx::Create();
+		Mutex = mtx::Create();
 #endif
 		ERR.Type = err::t_None;
+#endif
 	}
 	~errpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
+#if 0
 #ifdef ERR__THREAD_SAFE
-		if ( MutexHandler_ != MTX_INVALID_HANDLER )
+		if ( Mutex != MTX_INVALID_HANDLER )
 			mtx::Delete( MutexHandler_ );
+#endif
 #endif
 	}
 };

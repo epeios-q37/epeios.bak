@@ -60,7 +60,7 @@ extern class ttr_tutor &THTTutor;
 
 /*$BEGIN$*/
 
-#include "err.h"
+# include "cpe.h"
 
 #if defined( CPE_POSIX )
 #	define THT__POSIX

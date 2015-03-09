@@ -81,12 +81,15 @@ namespace sclmisc {
 		const rgstry::context___ &Context );
 
 	void Initialize(
+		err::err___ *Error,
 		xtf::extended_text_iflow__ &LocaleFlow,
 		const char *LocaleDirectory,
 		xtf::extended_text_iflow__ &RegistryFlow,
 		const char *RegistryDirectory );
 
-	void Initialize( const fnm::name___ &SuggestedDirectory );
+	void Initialize(
+		err::err___ *Error,
+		const fnm::name___ &SuggestedDirectory );
 
 	void EraseProjectRegistry( void );
 

@@ -108,7 +108,7 @@ namespace plgn {
 			Location.Init();
 			fnm::GetLocation( PluginNameAndLocation, Location );
 
-			Data.Init( Location.UTF8( Buffer ) );
+			Data.Init( err::ERRError, Location.UTF8( Buffer ) );
 
 			_Plugin = (plugin *)Function( &Data );
 

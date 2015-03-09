@@ -120,7 +120,7 @@ ERRFBegin
 
 	cio::Initialize( cio::tUser );
 
-	sclmisc::Initialize( (const char *)NULL );
+	sclmisc::Initialize( Data.Error(), (const char *)NULL );
 
 	Callback = new downstream_callback__;
 
@@ -153,11 +153,10 @@ ERRErr
 	switch ( ERRType ) {
 	case err::t_Abort:
 		Message.Init();
-		if ( sclerror::GetPendingErrorTranslation( _L(), Message) ) {
+		if ( sclerror::GetPendingErrorTranslation( _L(), Message, err::hUserDefined ) ) {
 			sclerror::ResetPendingError();
 			_A().RawAlert( Message );
-		} else
-			_A().RawAlert("?");
+		} 
 		break;
 	case err::t_Free:
 	case err::t_Return:

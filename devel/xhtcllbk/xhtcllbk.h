@@ -42,7 +42,7 @@
 # include "strmrg.h"
 # include "iof.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"6"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"7"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -73,45 +73,10 @@ namespace xhtcllbk {
 	const char *GetLabel( function__ Function );
 
 	class upstream_callback__ {
-	private:
-		// Tout ce qui esgt 'Err' sert à transfèrer les rapports d'erreurs entre bibliothèque dynamiques.
-		// Les fonctions virtuelles sont en effet appelées à partir d'une bibliothèque dynamique, mais executées dans une autre,
-		// et comme les données relatives à la gestion des erreurs sont propres à chaque bibliothèque...
-		const char *_ErrFile;
-		int _ErrLine;
-		err::type _ErrType;
-		void _ResetErr( void )
-		{
-			_ErrFile = NULL;
-			_ErrLine = 0;
-			_ErrType = err::t_Undefined;
-		}
-		void _TestErr( void )
-		{
-			if ( _ErrType != err::t_Undefined ) {
-				 err::ERR.Set( _ErrFile, _ErrLine, _ErrType );
-				_ResetErr();
-				ERRT();
-			}
-		}
 	protected:
 		virtual void XHTCLLBKLaunch(
 			function__ Function,
 			...	) = 0;
-		void TransferError( )
-		{
-			if ( _ErrType != err::t_Undefined )
-				ERRFwk();
-
-			if ( err::ERR.Type == err::t_Undefined )
-				ERRFwk();
-
-			_ErrFile = err::ERR.File;
-			_ErrLine = err::ERR.Line;
-			_ErrType = err::ERR.Type;
-
-			ERRRst();
-		}
 		virtual void XHTCLLBKGetLanguage(
 			TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XHTCLLBKExecuteJavascript(
@@ -120,18 +85,16 @@ namespace xhtcllbk {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_ResetErr();
+			// Standardisation.
 		}		
 		E_CVDTOR( upstream_callback__ );
 		void Init( void )
 		{
-			_ResetErr();
+			// Standardisation.
 		}
 		const char *GetLanguage( TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKGetLanguage( Buffer );
-
-			_TestErr();
 
 			return Buffer;
 		}
@@ -141,8 +104,6 @@ namespace xhtcllbk {
 		{
 			XHTCLLBKExecuteJavascript( Script.Internal(), Buffer );
 
-			_TestErr();
-
 			return Buffer;
 		}
 		void Alert(
@@ -151,8 +112,6 @@ namespace xhtcllbk {
 			const nstring___ &Title )
 		{
 			XHTCLLBKLaunch( fAlert, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
-
-			_TestErr();
 		}
 		void Confirm(
 			const nstring___ &XML,
@@ -161,8 +120,6 @@ namespace xhtcllbk {
 			TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKLaunch( fConfirm, XML.Internal()(), XSL.Internal()(), Title.Internal()(), &Buffer );
-
-			_TestErr();
 		}
 		void SetChildren(
 			const nstring___ &Id,
@@ -170,8 +127,6 @@ namespace xhtcllbk {
 			const nstring___ &XSL )
 		{
 			XHTCLLBKLaunch( fSetChildren, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
-
-			_TestErr();
 		}
 		void SetCasting(
 			const nstring___ &Id,
@@ -179,8 +134,6 @@ namespace xhtcllbk {
 			const nstring___ &XSL )
 		{
 			XHTCLLBKLaunch( fSetCasting, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
-
-			_TestErr();
 		}
 		const char *GetProperty(
 			const nstring___ &Id,
@@ -188,8 +141,6 @@ namespace xhtcllbk {
 			TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKLaunch( fGetProperty, Id.Internal()(), Name.Internal()(), &Buffer );
-
-			_TestErr();
 
 			return Buffer;
 		}
@@ -199,8 +150,6 @@ namespace xhtcllbk {
 			const nstring___ &Value )
 		{
 			XHTCLLBKLaunch( fSetProperty, Id.Internal()(), Name.Internal()(), Value.Internal()() );
-
-			_TestErr();
 		}
 		const char *GetAttribute(
 			const nstring___ &Id,
@@ -208,8 +157,6 @@ namespace xhtcllbk {
 			TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKLaunch( fGetAttribute, Id.Internal()(), Name.Internal()(), &Buffer );
-
-			_TestErr();
 
 			return Buffer;
 		}
@@ -219,16 +166,12 @@ namespace xhtcllbk {
 			const nstring___ &Value )
 		{
 			XHTCLLBKLaunch( fSetAttribute, Id.Internal()(), Name.Internal()(), Value.Internal()() );
-
-			_TestErr();
 		}
 		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKLaunch( fGetResult, Id.Internal()(), &Buffer );
-
-			_TestErr();
 
 			return Buffer;
 		}
@@ -237,16 +180,12 @@ namespace xhtcllbk {
 			const nstring___ &Name )
 		{
 			XHTCLLBKLaunch( fRemoveAttribute, Id.Internal()(), Name.Internal()() );
-
-			_TestErr();
 		}
 		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
 			XHTCLLBKLaunch( fGetContent, Id.Internal()(), &Buffer );
-
-			_TestErr();
 
 			return Buffer;
 		}
@@ -255,14 +194,10 @@ namespace xhtcllbk {
 			const nstring___ &Value )
 		{
 			XHTCLLBKLaunch( fSetContent, Id.Internal()(), Value.Internal()() );
-
-			_TestErr();
 		}
 		void Focus( const nstring___ &Id )
 		{
 			XHTCLLBKLaunch( fFocus, Id.Internal()() );
-
-			_TestErr();
 		}
 		void ExecuteJavascript( const nstring___ &Script )
 		{
@@ -345,6 +280,7 @@ namespace xhtcllbk {
 	private:
 		const char *_Version;	// Toujours en première position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		err::err___ *_Error;
 		upstream_callback__ *_Callback;
 		const char *_LauncherIdentification;
 		fdr::oflow_driver_base___ *_OFlowDriver;
@@ -353,16 +289,19 @@ namespace xhtcllbk {
 		{
 			_Version = NULL;
 			_Control = 0;
+			_Error = NULL;
 			_Callback = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
+			err::err___ *Error,
 			upstream_callback__ &Callback,
 			const char *LauncherIndetification,
 			fdr::oflow_driver_base___ &OFlowDriver )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
+			_Error = Error;
 			_Callback = &Callback;
 			_LauncherIdentification = LauncherIndetification;
 			_OFlowDriver = &OFlowDriver;
@@ -370,6 +309,13 @@ namespace xhtcllbk {
 		size_t ControlComputing( void )
 		{
 			return sizeof( shared_data__ );
+		}
+		err::err___ *Error( void ) const
+		{
+			if ( _Error == NULL )
+				ERRFwk();
+
+			return _Error;
 		}
 		upstream_callback__ &Callback( void ) const
 		{

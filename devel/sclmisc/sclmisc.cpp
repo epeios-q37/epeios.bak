@@ -195,6 +195,7 @@ ERREpilog
 }
 
 static void Initialize_(
+	err::err___ *Error,
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleRootPath,
 	const char *LocaleDirectory,
@@ -205,6 +206,8 @@ static void Initialize_(
 ERRProlog
 	str::string Language;
 ERRBegin
+	err::ERRError = Error;
+
 	scllocale::LoadLocale( scllocale::tSoftware, LocaleFlow, LocaleDirectory, LocaleRootPath );
 
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
@@ -233,6 +236,7 @@ static void BuildRootPath_(
 }
 
 void sclmisc::Initialize(
+	err::err___ *Error,
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
@@ -251,7 +255,7 @@ ERRBegin
 	RegistryRootPath.Init();
 	BuildRootPath_( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
-	Initialize_( LocaleFlow, LocaleRootPath.Convert( LocaleBuffer ), LocaleDirectory, RegistryFlow, RegistryRootPath.Convert( RegistryBuffer ), RegistryDirectory );
+	Initialize_( Error, LocaleFlow, LocaleRootPath.Convert( LocaleBuffer ), LocaleDirectory, RegistryFlow, RegistryRootPath.Convert( RegistryBuffer ), RegistryDirectory );
 ERRErr
 ERREnd
 ERREpilog
@@ -356,7 +360,9 @@ ERREpilog
 	return Flow;
 }
 
-void sclmisc::Initialize( const fnm::name___ &SuggestedDirectory )
+void sclmisc::Initialize(
+	err::err___ *Error,
+	const fnm::name___ &SuggestedDirectory )
 {
 ERRProlog
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
@@ -375,7 +381,7 @@ ERRBegin
 	InitializeConfigurationFlow_( SuggestedDirectory, ConfigurationFlow, ConfigurationDirectory );
 	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
-	Initialize( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
+	Initialize( Error, LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
 ERRErr
 ERREnd
 ERREpilog

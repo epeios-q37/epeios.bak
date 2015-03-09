@@ -37,7 +37,7 @@
 # include "flw.h"
 # include "tol.h"
 
-# define PLGNCORE_SHARED_DATA_VERSION	"1"
+# define PLGNCORE_SHARED_DATA_VERSION	"2"
 
 # define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
 # define PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME			RetrievePlugin
@@ -51,27 +51,32 @@ namespace plgncore {
 	public:
 		const char *Version;	// Toujours en première position.
 		bso::size__ ControlValue;
+		err::err___ *Error;
 		const char *Directory;
 		void *UP;				// A la discrétion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
 			Version = NULL;
+			Error = NULL;
 			Directory = NULL;
 			UP = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
+			err::err___ *Error,
 			const char *Directory,
 			void *UP = NULL )
 		{
-			Init( Directory, UP );
+			Init( Error, Directory, UP );
 		}
 		void Init(
+			err::err___ *Error,
 			const char *Directory,
 			void *UP = NULL )
 		{
 			Version = PLGNCORE_SHARED_DATA_VERSION;
 			ControlValue = Control();
+			this->Error = Error;
 			this->Directory = Directory;
 			this->UP = UP;
 		}

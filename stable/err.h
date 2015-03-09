@@ -44,13 +44,22 @@
 #  include <setjmp.h>
 # endif
 
-
-
 # include "cpe.h"
 
 # ifdef CPE_MT
 #  define ERR__THREAD_SAFE
 # endif
+
+# ifdef ERR__THREAD_SAFE
+#  include "tht.h"
+// Prédéclaration.
+namespace mtx {
+	struct _mutex__;
+}
+
+# endif
+
+
 
 
 namespace err {
@@ -84,38 +93,49 @@ namespace err {
 	};
 
 
-	struct err_ {
+	class err___ {
+	public:
 		// line where the error occurs
-		static int Line;
+		int Line;
 		// file where the error occurs
-		static const char *File;
+		const char *File;
+		// Type of error.
+		err::type Type;
 # ifdef ERR__JMPUSE
 		// where to jump
 		static jmp_buf *Jump;
 # endif
-
-# if 0	// Utilisation de 'Majot' à la place.
-		int
-			Error: 1;	// Erreur en cours de traitement (Entre un 'ERRErr' et un 'ERREnd'.
+# ifdef ERR__THREAD_SAFE
+		tht::thread_id__ ThreadID;
+		mtx::_mutex__ *Mutex;
 # endif
-		// Type of error.
-		static err::type Type;
+		void reset( bool P = true );
+		~err___( void )
+		{
+			reset( false );
+		}
+		err___( bool Initialize = false )
+		{
+			reset();
+
+			if ( Initialize )
+				Init();
+		}
+		void Init( void );
 		void Set(
 			const char *File = NULL,
 			int Line = 0,
-			err::type Type = err_::Type );
+			err::type Type = t_Undefined );
 		void SetAndLaunch(
 			const char *File = NULL,
 			int Line = 0,
-			err::type Type = err_::Type );
+			err::type Type = t_Undefined );
 	};
 
+	// A surcharger.
+	extern err___ *ERRError;
+
 	void Final( void );
-
-
-//#ifndef ERR__COMPILATION
-	extern err_ ERR;
-//#endif
 
 # ifdef ERR__THREAD_SAFE
 	// If an error occurs, test if the current thread is concerned.
@@ -128,11 +148,11 @@ namespace err {
 	}
 	inline void Unlock( void )
 	{
-		err::ERR.Type = err::t_None;
+		err::ERRError->Type = err::t_None;
 	}
 # endif
 
-# define ERRCommon( T )	err::ERR.SetAndLaunch( __FILE__, __LINE__, T )
+# define ERRCommon( T )	err::ERRError->SetAndLaunch( __FILE__, __LINE__, T )
 
 # define ERRAlc()	ERRCommon( err::tAllocation )
 # define ERRSys()	ERRCommon( err::tSystem )
@@ -152,23 +172,23 @@ namespace err {
 
 # ifdef ERR__JMPUSE
 //m Throw the handler.
-#  define ERRT()		{longjmp( *err::ERR.Jump, 1 );}
+#  define ERRT()		{longjmp( *err::ERRError->Jump, 1 );}
 # else
-#  define ERRT()		throw( err::ERR )
+#  define ERRT()		throw( *err::ERRError )
 # endif
 
 //d Error type.
-# define ERRType	err::ERR.Type
+# define ERRType	err::ERRError->Type
 
 //d File in which the error was thrown.
-# define ERRFile			err::ERR.File
+# define ERRFile			err::ERRError->File
 
 //d Line where the error was thrown.
-# define ERRLine			err::ERR.Line
+# define ERRLine			err::ERRError->Line
 
 # ifdef ERR__JMPUSE
-#  define ERRGetJ()		err::FGetJ( err::ERR )
-#  define ERRPutJ( J )	err::FSetJ( err::ERR, J )
+#  define ERRGetJ()		err::FGetJ( *err::ERRError )
+#  define ERRPutJ( J )	err::FSetJ( *err::ERRError, J )
 # endif
 
 # ifdef ERR__JMPUSE
@@ -194,7 +214,7 @@ namespace err {
 // précède les déclarations
 #  define ERRBegin	try {
 // précède les instructions proprement dites
-#  define ERRErr		} catch ( err::err_ ) { ERRNoError = false;
+#  define ERRErr		} catch ( err::err___ ) { ERRNoError = false;
 // précède les instructions à effectuer lors d'une erreur
 #  define ERREnd		}
 // précède les instructions à exécuter, erreur ou pas
@@ -216,13 +236,13 @@ namespace err {
 # define ERRFEnd		ERREnd
 
 # ifdef ERR__JMPUSE
-	inline jmp_buf *FGetJ( struct err_ &ERR_ )
+	inline jmp_buf *FGetJ( err___ &ERR_ )
 	{
 		return ERR_.Jump;
 	}
 
 	inline void FSetJ(
-		struct err_ &ERR_,
+		err___ &ERR_,
 		jmp_buf *Jump )
 	{
 		ERR_.Jump = Jump;

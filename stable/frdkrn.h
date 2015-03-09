@@ -391,6 +391,10 @@ namespace frdkrn {
 
 			return Recap;
 		}
+		void Close( void )
+		{
+			_CloseConnection();
+		}
 # if 0	// Old
 		status__ LoadProject(
 			const str::string_ &FileName,

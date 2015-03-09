@@ -67,7 +67,7 @@ ERRBegin
 		Directory.Init();
 		if ( Data->UP != NULL )
 			fnm::GetLocation( (const char *)Data->UP, Directory );
-		sclmisc::Initialize( Directory.UTF8( Buffer ) );
+		sclmisc::Initialize( Data->Error, Directory.UTF8( Buffer ) );
 
 		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryConfigurationLevel(), E_NIL, true, xml::oIndent, xml::encoding__(), cio::COut );
 		IsInitialized_ = true;

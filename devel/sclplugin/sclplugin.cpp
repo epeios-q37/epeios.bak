@@ -66,7 +66,7 @@ void *PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME( const plgncore::data__ *Data )
 
 	if ( !cio::IsInitialized() ) {
 		cio::Initialize( cio::tVoid );
-		sclmisc::Initialize(  Data->Directory );
+		sclmisc::Initialize(  Data->Error, Data->Directory );
 	}
 
 	return sclplugin::SCLPLUGINRetrievePlugin();
