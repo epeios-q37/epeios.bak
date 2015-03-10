@@ -120,7 +120,7 @@ ERRFBegin
 
 	cio::Initialize( cio::tUser );
 
-	sclmisc::Initialize( Data.Error(), (const char *)NULL );
+	sclmisc::Initialize( Data.ERRError(), Data.SCLError(), (const char *)NULL );
 
 	Callback = new downstream_callback__;
 

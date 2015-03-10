@@ -37,6 +37,8 @@
 # include "flw.h"
 # include "tol.h"
 
+# include "sclerror.h"
+
 # define PLGNCORE_SHARED_DATA_VERSION	"2"
 
 # define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
@@ -51,32 +53,37 @@ namespace plgncore {
 	public:
 		const char *Version;	// Toujours en première position.
 		bso::size__ ControlValue;
-		err::err___ *Error;
+		err::err___ *ERRError;
+		sclerror::error___ *SCLError;
 		const char *Directory;
 		void *UP;				// A la discrétion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
 			Version = NULL;
-			Error = NULL;
+			ERRError = NULL;
+			SCLError = NULL;
 			Directory = NULL;
 			UP = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
-			err::err___ *Error,
+			err::err___ *ERRError,
+			sclerror::error___ *SCLError,
 			const char *Directory,
 			void *UP = NULL )
 		{
-			Init( Error, Directory, UP );
+			Init( ERRError, SCLError, Directory, UP );
 		}
 		void Init(
-			err::err___ *Error,
+			err::err___ *ERRError,
+			sclerror::error___ *SCLError,
 			const char *Directory,
 			void *UP = NULL )
 		{
 			Version = PLGNCORE_SHARED_DATA_VERSION;
 			ControlValue = Control();
-			this->Error = Error;
+			this->ERRError = ERRError;
+			this->SCLError = SCLError;
 			this->Directory = Directory;
 			this->UP = UP;
 		}

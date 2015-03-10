@@ -99,37 +99,44 @@ namespace csdleo {
 	public:
 		mode__ Mode;
 		context__ Context;
-		err::err___ *Error;
+		const char *LibraryLocationAndName;
+		err::err___ *ERRError;
 		void *UP;				// A la discrétion de l'utilisateur.
 		fdr::oflow_driver_base___ *COut, *CErr;
 		void reset( bso::bool__ = true )
 		{
-			COut = CErr = NULL;
-			UP = NULL;
+			Mode = m_Undefined;
 			Context = c_Undefined;
-			Error = NULL;
+			LibraryLocationAndName = NULL;
+			ERRError = NULL;
+			UP = NULL;
+			COut = CErr = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
 			mode__ Mode,
-			err::err___ *Error,
+			const char *LibraryLocationAndName,
+			err::err___ *ERRError,
 			fdr::oflow_driver_base___ &COut,
 			fdr::oflow_driver_base___ &CErr,
 			context__ Context,
-			void *UP = NULL )
+			void *UP )
 		{
-			Init( Mode, Error, COut, CErr, Context, UP );
+			reset( false );
+			Init( Mode, LibraryLocationAndName, ERRError, COut, CErr, Context, UP );
 		}
 		void Init(
 			mode__ Mode,
-			err::err___ *Error,
+			const char *LibraryLocationAndName,
+			err::err___ *ERRError,
 			fdr::oflow_driver_base___ &COut,
 			fdr::oflow_driver_base___ &CErr,
 			context__ Context,
-			void *UP = NULL )
+			void *UP )
 		{
 			this->Mode = Mode;
-			this->Error = Error;
+			this->LibraryLocationAndName = LibraryLocationAndName;
+			this->ERRError = ERRError;
 			this->COut = &COut;
 			this->CErr = &CErr;
 			this->Context = Context;
@@ -152,7 +159,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Mode, Data.Error, *Data.COut, *Data.CErr, Data.Context, Data.UP );
+			data__::Init( Data.Mode, Data.LibraryLocationAndName, Data.ERRError, *Data.COut, *Data.CErr, Data.Context, Data.UP );
 		}
 	};
 #pragma pack( pop )

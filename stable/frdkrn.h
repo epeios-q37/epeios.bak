@@ -183,22 +183,26 @@ namespace frdkrn {
 		str::string Location;
 		csducl::type__ Type;
 		bso::uint__ PingDelay;
+		void *UP;
 		void reset( bso::bool__ P = true )
 		{
 			Language = NULL;
 			Location.reset( P );
 			Type = csducl::t_Undefined;
 			PingDelay = 0;
+			UP = NULL;
 		}
 		E_CDTOR( backend_features___ )
 		void Init(
 			const char *Language,
-			bso::uint__ PingDelay )
+			bso::uint__ PingDelay,
+			void *UP )
 		{
 			this->Language = Language;
 			Location.Init();
 			Type = csducl::t_Undefined;
 			this->PingDelay = PingDelay;
+			this->UP = UP;
 		}
 	};
 	enum status__ {
@@ -329,6 +333,7 @@ namespace frdkrn {
 			const char *Language,
 			bso::uint__ PingDelay,
 			error_set___ &ErrorSet,
+			void *UP,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
 		void _CloseConnection( void )
 		{
@@ -348,6 +353,7 @@ namespace frdkrn {
 			const char *Language,
 			bso::uint__ PingDelay,
 			error_set___ &ErrorSet,
+			void *UP,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
 		virtual void FRDKRNConnection( fblfrd::frontend___ &Frontend ) = 0;	// Appelé lors aprés connection au 'backend'.
 		virtual void FRDKRNDisconnection( void ) = 0;	// Appelé avant déconnexion du 'backend'.
@@ -387,7 +393,7 @@ namespace frdkrn {
 			recap__ Recap = r_OK;
 			
 			if ( BackendFeatures.Type != csducl::t_Undefined )
-				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, BackendFeatures.Language, BackendFeatures.PingDelay, ErrorSet );
+				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, BackendFeatures.Language, BackendFeatures.PingDelay, ErrorSet, BackendFeatures.UP );
 
 			return Recap;
 		}

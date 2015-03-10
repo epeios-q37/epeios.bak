@@ -82,7 +82,7 @@ extern class ttr_tutor &THTTutor;
 #	error 
 #endif
 
-#define THT_UNDEFINED_THREAD_ID	0	// Totalement arbitraire, à priori, correspond au thread système, donc ne peut être renvoyé par la focntion 'GetTID()'.
+#define THT_UNDEFINED_THREAD_ID	0	// Totalement arbitraire, à priori, correspond au thread système, donc ne peut être renvoyé par la fonction 'GetTID()'.
 
 
 namespace tht {

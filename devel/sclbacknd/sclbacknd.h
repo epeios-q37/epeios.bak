@@ -81,6 +81,8 @@ namespace sclbacknd {
 				Translation.Init();
 				sclerror::GetPendingErrorTranslation( Language(), Translation );
 
+				sclerror::ResetPendingError();
+
 				fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
 			ERRErr
 			ERREnd

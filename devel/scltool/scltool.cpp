@@ -41,7 +41,8 @@ using namespace sclmisc;
 using cio::COut;
 using scllocale::GetLocale;
 
-static err::err___ Error_;
+static err::err___ ERRError_;
+static sclerror::error___ SCLError_;
 
 bso::bool__ scltool::IgnoreUnknownArguments = false;
 
@@ -1474,7 +1475,7 @@ ERRProlog
 	str::string Command;
 	str::string ProjectId;
 ERRBegin
-	sclmisc::Initialize( &Error_, (const char *)NULL );
+	sclmisc::Initialize( &ERRError_, &SCLError_, (const char *)NULL );
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
@@ -1643,7 +1644,8 @@ class scltoolpersonnalization
 public:
 	scltoolpersonnalization( void )
 	{
-		Error_.Init();
+		ERRError_.Init();
+		SCLError_.Init();
 		ParametersTag_.Init( sclrgstry::ParametersTag );
 		ParametersTag_.Append('/' );
 		/* place here the actions concerning this library

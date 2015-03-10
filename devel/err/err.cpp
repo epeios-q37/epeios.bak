@@ -31,10 +31,7 @@
 using namespace err;
 
 #include "cio.h"
-
-#ifdef ERR__THREAD_SAFE
-#	include "mtx.h"
-#endif
+#include "mtx.h"
 
 #include "tol.h"
 
@@ -43,7 +40,6 @@ static err::err___ FallbackError_( true );
 
 err::err___ *err::ERRError = &FallbackError_;
 
-#ifdef ERR__THREAD_SAFE
 bool err::Concerned( void )
 {
 	return ( ERRError->ThreadID == tht::GetTID() );
@@ -61,7 +57,6 @@ void err::Unlock( void )
 
 	mtx::Unlock( ERRError->Mutex );
 }
-#endif
 
 const char *GetFileName_( const char *Path )
 {
@@ -159,23 +154,19 @@ void err___::reset( bool P )
 	Jump = NULL;
 # endif
 
-#ifdef ERR__THREAD_SAFE
 	if ( P )
 		if ( Mutex != MTX_INVALID_HANDLER )
 			mtx::Delete( Mutex );
 
 	Mutex = MTX_INVALID_HANDLER;
 	ThreadID = THT_UNDEFINED_THREAD_ID;
-#endif
 }
 
 void err___::Init( void )
 {
 	reset();
 
-#ifdef ERR__THREAD_SAFE
 	Mutex = mtx::Create();
-#endif
 
 	Type = t_None;
 }
@@ -186,14 +177,13 @@ void err___::Set(
 	int Ligne,
 	err::type Type )
 {
-#ifdef ERR__THREAD_SAFE
 	if ( ( !ERRHit() ) || !err::Concerned() )
 	{
 		mtx::Lock( Mutex );
 
 		ThreadID = tht::GetTID();
 	}
-#endif
+
 	if ( Fichier && !ERRHit() )
 	{
 		if ( Type != t_Undefined )
@@ -273,23 +263,11 @@ public:
 		/* place here the actions concerning this library
 
 		to be realized at the launching of the application  */
-#if 0
-#ifdef ERR__THREAD_SAFE
-		Mutex = mtx::Create();
-#endif
-		ERR.Type = err::t_None;
-#endif
 	}
 	~errpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
-#if 0
-#ifdef ERR__THREAD_SAFE
-		if ( Mutex != MTX_INVALID_HANDLER )
-			mtx::Delete( MutexHandler_ );
-#endif
-#endif
 	}
 };
 

@@ -41,9 +41,12 @@
 # include "dlbrry.h"
 # include "fnm.h"
 
+# include "sclerror.h"
+
 namespace plgn {
 
-	template <typename plugin> class retriever___ {
+	template <typename plugin> class retriever___
+	{
 	private:
 		dlbrry::dynamic_library___ _Library;
 		plugin *_Plugin;
@@ -108,7 +111,7 @@ namespace plgn {
 			Location.Init();
 			fnm::GetLocation( PluginNameAndLocation, Location );
 
-			Data.Init( err::ERRError, Location.UTF8( Buffer ) );
+			Data.Init( err::ERRError, sclerror::SCLERRORError, Location.UTF8( Buffer ) );
 
 			_Plugin = (plugin *)Function( &Data );
 

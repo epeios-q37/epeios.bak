@@ -64,8 +64,51 @@ extern class ttr_tutor &SCLERRORTutor;
 # include "flw.h"
 # include "lcl.h"
 # include "cio.h"
+# include "cpe.h"
+# include "mtx.h"
+
+#include "scllocale.h"
 
 namespace sclerror {
+
+	namespace {
+		typedef tht::thread_id__ _tid__;
+
+		E_ROW( _row__ );
+	}
+
+	class error___
+	{
+	public:
+		mtx::handler___ Mutex = mtx::UndefinedHandler;
+		lstbch::E_LBUNCHt( _tid__, _row__ ) TIds;
+		ctn::E_CONTAINERt( lcl::meaning_, _row__ ) Meanings;
+		void reset( bso::bool__ P = true )
+		{
+			if ( P )
+				if ( Mutex != mtx::UndefinedHandler )
+					mtx::Delete( Mutex );
+
+			Mutex = mtx::UndefinedHandler;
+			TIds.reset( P );
+			Meanings.reset( P );
+		}
+		E_CDTOR( error___ );
+		void Init( void )
+		{
+			if ( Mutex != mtx::UndefinedHandler )
+				mtx::Delete( Mutex );
+
+			Mutex = mtx::Create();
+
+			TIds.Init();
+			Meanings.Init();
+		}
+	};
+
+	// A surcharger.
+	extern error___ *SCLERRORError;
+
 	const lcl::meaning_ &GetMeaning( lcl::meaning_ &Meaning );
 
 	bso::bool__ IsErrorPending( void );

@@ -318,6 +318,7 @@ recap__ frdkrn::kernel___::_Connect(
 	const char *Language, 
 	bso::uint__ PingDelay,
 	error_set___ &ErrorSet,
+	void *UP,
 	csdsnc::log_functions__ &LogFunctions )
 {
 	recap__ Recap = r_Undefined;
@@ -328,7 +329,7 @@ ERRProlog
 	str::string Buffer;
 ERRBegin
 	OFlowDriver.Init( ErrorSet.Misc, fdr::ts_Default );
-	LibraryData.Init( csdleo::mEmbedded, err::ERRError, flx::VoidOFlowDriver, flx::VoidOFlowDriver, csdleo::cRegular, (void *)RemoteHostServiceOrLocalLibraryPath );
+	LibraryData.Init( csdleo::mEmbedded, RemoteHostServiceOrLocalLibraryPath, err::ERRError, flx::VoidOFlowDriver, flx::VoidOFlowDriver, csdleo::cRegular, UP );
 	// Attention ; les erreurs arrivant dans la bibliothèque lors de son chargement ne sont plus rapportées. A modifier.
 	// Auparavent, c'était 'OFlowDriver' qui était uilisé pour le paramètre 'CErr', mais cela ne focntionnait pas lorsque la bitliothèques était chargée plusieurs fois...
 
@@ -366,13 +367,14 @@ recap__ frdkrn::kernel___::_Connect(
 	const char *Language,
 	bso::uint__ PingDelay,
 	error_set___ &ErrorSet,
+	void *UP,
 	csdsnc::log_functions__ &LogFunctions )
 {
 	recap__ Recap = r_Undefined;
 ERRProlog
 	TOL_CBUFFER___ RemoteHostServiceOrLocalLibraryPathBuffer;
 ERRBegin
-	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, PingDelay, ErrorSet, LogFunctions );
+	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, PingDelay, ErrorSet, UP, LogFunctions );
 ERRErr
 ERREnd
 ERREpilog

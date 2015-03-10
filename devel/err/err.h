@@ -33,6 +33,13 @@
 
 // ERRor
 
+/*
+	NOTA : Quelque soit le mode dans lequel est compilé un exécutable (programme ou bibliothèque dynamique),
+	ce module est TOUJOURS compilé en mode 'thread safe', du fait que, même si un exécutable est 'mono-threading',
+	les bibliothèques dynamiques auxquelles il peut éventuellement recourir ('plugin', p. ex.) peuvent, elles,
+	être 'multi-threading', et comme elles partagent le même objet 'error' ...
+*/
+
 # include <stdio.h>
 #include <stdlib.h>
 
@@ -46,21 +53,11 @@
 
 # include "cpe.h"
 
-# ifdef CPE_MT
-#  define ERR__THREAD_SAFE
-# endif
-
-# ifdef ERR__THREAD_SAFE
 #  include "tht.h"
 // Prédéclaration.
 namespace mtx {
 	struct _mutex__;
 }
-
-# endif
-
-
-
 
 namespace err {
 	typedef char buffer__[150];
@@ -105,10 +102,8 @@ namespace err {
 		// where to jump
 		static jmp_buf *Jump;
 # endif
-# ifdef ERR__THREAD_SAFE
 		tht::thread_id__ ThreadID;
 		mtx::_mutex__ *Mutex;
-# endif
 		void reset( bool P = true );
 		~err___( void )
 		{
@@ -132,25 +127,13 @@ namespace err {
 			err::type Type = t_Undefined );
 	};
 
-	// A surcharger.
 	extern err___ *ERRError;
 
 	void Final( void );
 
-# ifdef ERR__THREAD_SAFE
 	// If an error occurs, test if the current thread is concerned.
 	bool Concerned( void );
 	void Unlock( void );
-# else
-	inline bool Concerned( void )
-	{
-		return true;
-	}
-	inline void Unlock( void )
-	{
-		err::ERRError->Type = err::t_None;
-	}
-# endif
 
 # define ERRCommon( T )	err::ERRError->SetAndLaunch( __FILE__, __LINE__, T )
 

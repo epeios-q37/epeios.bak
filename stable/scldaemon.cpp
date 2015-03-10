@@ -65,9 +65,8 @@ ERRBegin
 
 		// Does not work when placed in 'global_cdtor'.
 		Directory.Init();
-		if ( Data->UP != NULL )
-			fnm::GetLocation( (const char *)Data->UP, Directory );
-		sclmisc::Initialize( Data->Error, Directory.UTF8( Buffer ) );
+		fnm::GetLocation( Data->LibraryLocationAndName, Directory );
+		sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, Directory.UTF8( Buffer ) );
 
 		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryConfigurationLevel(), E_NIL, true, xml::oIndent, xml::encoding__(), cio::COut );
 		IsInitialized_ = true;

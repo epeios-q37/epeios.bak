@@ -41,6 +41,7 @@
 # include "xtf.h"
 # include "strmrg.h"
 # include "iof.h"
+# include "sclerror.h"
 
 # define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"7"
 
@@ -280,7 +281,8 @@ namespace xhtcllbk {
 	private:
 		const char *_Version;	// Toujours en première position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
-		err::err___ *_Error;
+		err::err___ *_ERRError;
+		sclerror::error___ *_SCLError;
 		upstream_callback__ *_Callback;
 		const char *_LauncherIdentification;
 		fdr::oflow_driver_base___ *_OFlowDriver;
@@ -289,19 +291,20 @@ namespace xhtcllbk {
 		{
 			_Version = NULL;
 			_Control = 0;
-			_Error = NULL;
+			_ERRError = NULL;
+			_SCLError = NULL;
 			_Callback = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			err::err___ *Error,
 			upstream_callback__ &Callback,
 			const char *LauncherIndetification,
 			fdr::oflow_driver_base___ &OFlowDriver )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
-			_Error = Error;
+			_ERRError = err::ERRError;
+			_SCLError = sclerror::SCLERRORError;
 			_Callback = &Callback;
 			_LauncherIdentification = LauncherIndetification;
 			_OFlowDriver = &OFlowDriver;
@@ -310,12 +313,19 @@ namespace xhtcllbk {
 		{
 			return sizeof( shared_data__ );
 		}
-		err::err___ *Error( void ) const
+		err::err___ *ERRError( void ) const
 		{
-			if ( _Error == NULL )
+			if ( _ERRError == NULL )
 				ERRFwk();
 
-			return _Error;
+			return _ERRError;
+		}
+		sclerror::error___ *SCLError( void ) const
+		{
+			if ( _SCLError == NULL )
+				ERRFwk();
+
+			return _SCLError;
 		}
 		upstream_callback__ &Callback( void ) const
 		{

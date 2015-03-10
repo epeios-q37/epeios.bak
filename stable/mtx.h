@@ -92,8 +92,14 @@
 #  include <pthread.h>
 # endif
 
-# ifndef CPE_MT
-#  error "This library only useful in multitasking context, in which you are not."
+/*
+	A cause du module 'err', dont l'objet peut être utilisé simumtanément dans un contexte 'single-threaded' et 'mono-threaded'
+	(voir 'NOTA' dans le fichier d'entête de ce module), on est amené à utiliser ce module même dans un contexte 'single-threaded'.
+*/
+# if 0
+#  ifndef CPE_MT
+#   error "This library only useful in multitasking context, in which you are not."
+#  endif
 # endif
 
 # ifndef MTX_NO_CONTROL

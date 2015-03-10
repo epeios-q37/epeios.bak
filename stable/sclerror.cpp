@@ -55,62 +55,44 @@ public:
 				  /*******************************************/
 /*$BEGIN$*/
 
-#include "scllocale.h"
-
 using namespace sclerror;
 
-#ifdef CPE_MT
-# define MT
-#endif
-
-#ifdef MT
-# include "tht.h"
-# include "mtx.h"
-
-static  mtx::handler___ Mutex_ = mtx::UndefinedHandler;
-
-typedef tht::thread_id__ tid__;
-
-E_ROW( row__ );
-
-static lstbch::E_LBUNCHt( tid__, row__ ) TIds_;
-static ctn::E_CONTAINERt( lcl::meaning_, row__ ) Meanings_;
 
 static inline void Lock_( void )
 {
-	mtx::Lock( Mutex_ );
+	mtx::Lock( SCLERRORError->Mutex );
 }
 
 static inline void Unlock_( void )
 {
-	mtx::Unlock( Mutex_ );
+	mtx::Unlock( SCLERRORError->Mutex );
 }
 
-static inline row__  Search_( void )
+static inline _row__  Search_( void )
 {
-	row__ Row = E_NIL;
+	_row__ Row = E_NIL;
 
 	Lock_();
 
-	Row = TIds_.Search( tht::GetTID() );
+	Row = SCLERRORError->TIds.Search( tht::GetTID() );
 
 	Unlock_();
 
 	return Row;
 }
 
-static inline row__  SearchOrCreate_( void )
+static inline _row__  SearchOrCreate_( void )
 {
-	row__ Row = Search_();
+	_row__ Row = Search_();
 
 	if ( Row == E_NIL ) {
 		Lock_();
 
-		Row = TIds_.Add( tht::GetTID() );
+		Row = SCLERRORError->TIds.Add( tht::GetTID() );
 
-		Meanings_.Allocate( TIds_.Extent() );
-		Meanings_( Row ).Init();
-		Meanings_.Flush();
+		SCLERRORError->Meanings.Allocate( SCLERRORError->TIds.Extent() );
+		SCLERRORError->Meanings( Row ).Init();
+		SCLERRORError->Meanings.Flush();
 
 		Unlock_();
 	}
@@ -118,14 +100,14 @@ static inline row__  SearchOrCreate_( void )
 	return Row;
 }
 
-static inline bso::bool__ IsMeaningEmpty_( row__ Row )
+static inline bso::bool__ IsMeaningEmpty_( _row__ Row )
 {
 	bso::bool__ IsEmpty = false;
-	ctn::E_CITEMt( lcl::meaning_, row__ ) Meaning;
+	ctn::E_CITEMt( lcl::meaning_, _row__ ) Meaning;
 
 	Lock_();
 
-	Meaning.Init( Meanings_ );
+	Meaning.Init(SCLERRORError-> Meanings );
 
 	IsEmpty = Meaning(Row).IsEmpty();
 
@@ -134,87 +116,66 @@ static inline bso::bool__ IsMeaningEmpty_( row__ Row )
 	return IsEmpty;
 }
 
-#else
-static lcl::meaning Meaning_;
-#endif
-
-
 bso::bool__ sclerror::IsErrorPending( void )
 {
-#ifdef MT
-	row__ Row = Search_();
+	_row__ Row = Search_();
 
 	if ( Row == E_NIL )
 		return false;
 	else
 		return !IsMeaningEmpty_( Row );
-#else
-	return !Meaning_.IsEmpty();
-#endif
 }
 
 const lcl::meaning_ &sclerror::GetMeaning( lcl::meaning_ &Meaning )
 {
 	if ( !IsErrorPending() )
 		ERRFwk();
-#ifdef MT 
-	row__ Row = Search_();
-	ctn::E_CITEMt( lcl::meaning_, row__ ) MeaningBuffer;
+
+	_row__ Row = Search_();
+	ctn::E_CITEMt( lcl::meaning_, _row__ ) MeaningBuffer;
 
 	Lock_();
 
-	MeaningBuffer.Init( Meanings_ );
+	MeaningBuffer.Init( SCLERRORError->Meanings );
 
 	Meaning = MeaningBuffer( Row );
 
 	Unlock_();
-#else
-	Meaning = Meaning_;
-#endif
+
 	return Meaning;
 }
 
 void sclerror::ResetPendingError( void )
 {
-#ifdef MT
-	row__ Row = SearchOrCreate_();
+	_row__ Row = SearchOrCreate_();
 
 	Lock_();
 
-	Meanings_( Row ).Init();
-	Meanings_.Flush();
+	SCLERRORError->Meanings( Row ).Init();
+	SCLERRORError->Meanings.Flush();
 
-	TIds_.Delete( Row );
+	SCLERRORError->TIds.Delete( Row );
 
 	Unlock_();
-#else
-	Meaning_.Init();
-#endif
 }
 
 void sclerror::SetMeaning( const lcl::meaning_ &Meaning )
 {
 	if ( IsErrorPending() )
 		ERRFwk();
-# ifdef MT
-	row__ Row = SearchOrCreate_();
+
+	_row__ Row = SearchOrCreate_();
 
 	if ( !IsMeaningEmpty_( Row ) )
 		ERRFwk();
 
 	Lock_();
 
-	Meanings_( Row ) = Meaning;
+	SCLERRORError->Meanings( Row ) = Meaning;
 
-	Meanings_.Flush();
+	SCLERRORError->Meanings.Flush();
 
 	Unlock_();
-#else
-	if ( Meaning.IsEmpty() )
-		ERRFwk();
-
-	Meaning_ = Meaning;
-#endif
 }
 
 bso::bool__ sclerror::GetPendingErrorTranslation(
@@ -252,24 +213,11 @@ class sclerrorpersonnalization
 public:
 	sclerrorpersonnalization( void )
 	{
-#ifdef MT
-		Mutex_ = mtx::Create();
-
-		TIds_.Init();
-		Meanings_.Init();
-#else
-		Meaning_.Init();
-#endif
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
 	~sclerrorpersonnalization( void )
 	{
-#ifdef MT
-		if ( Mutex_ != mtx::UndefinedHandler )
-			mtx::Delete( Mutex_ );
-#else
-#endif
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
 	}

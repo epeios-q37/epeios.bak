@@ -38,6 +38,8 @@
 
 using namespace sclmisc;
 
+sclerror::error___ *sclerror::SCLERRORError = NULL;
+
 static TOL_CBUFFER___ BaseLanguage_;	// De base, le language d'admnistration (lu à partir du fichier de configuration), pouvant devenir language utiliateur selon le contexte.
 
 #define DEFAULT_BASE_LANGUAGE	"en"
@@ -195,7 +197,8 @@ ERREpilog
 }
 
 static void Initialize_(
-	err::err___ *Error,
+	err::err___ *ERRError,
+	sclerror::error___ *SCLError,
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleRootPath,
 	const char *LocaleDirectory,
@@ -206,7 +209,8 @@ static void Initialize_(
 ERRProlog
 	str::string Language;
 ERRBegin
-	err::ERRError = Error;
+	err::ERRError = ERRError;
+sclerror::SCLERRORError = SCLError;
 
 	scllocale::LoadLocale( scllocale::tSoftware, LocaleFlow, LocaleDirectory, LocaleRootPath );
 
@@ -236,7 +240,8 @@ static void BuildRootPath_(
 }
 
 void sclmisc::Initialize(
-	err::err___ *Error,
+	err::err___ *ERRError,
+	sclerror::error___ *SCLError,
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
@@ -255,7 +260,7 @@ ERRBegin
 	RegistryRootPath.Init();
 	BuildRootPath_( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
-	Initialize_( Error, LocaleFlow, LocaleRootPath.Convert( LocaleBuffer ), LocaleDirectory, RegistryFlow, RegistryRootPath.Convert( RegistryBuffer ), RegistryDirectory );
+	Initialize_( ERRError, SCLError, LocaleFlow, LocaleRootPath.Convert( LocaleBuffer ), LocaleDirectory, RegistryFlow, RegistryRootPath.Convert( RegistryBuffer ), RegistryDirectory );
 ERRErr
 ERREnd
 ERREpilog
@@ -361,7 +366,8 @@ ERREpilog
 }
 
 void sclmisc::Initialize(
-	err::err___ *Error,
+	err::err___ *ERRError,
+	sclerror::error___ *SCLError,
 	const fnm::name___ &SuggestedDirectory )
 {
 ERRProlog
@@ -381,7 +387,7 @@ ERRBegin
 	InitializeConfigurationFlow_( SuggestedDirectory, ConfigurationFlow, ConfigurationDirectory );
 	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
-	Initialize( Error, LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
+	Initialize( ERRError, SCLError, LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
 ERRErr
 ERREnd
 ERREpilog

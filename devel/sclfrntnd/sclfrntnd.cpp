@@ -376,7 +376,7 @@ void sclfrntnd::Connect(
 ERRProlog
 	frdkrn::backend_features___ Features;
 ERRBegin
-	Features.Init( Language, GetBackendPingDelay() );
+	Features.Init( Language, GetBackendPingDelay(), sclerror::SCLERRORError );
 
 	switch ( BackendType ) {
 	case frdbse::btDaemon:
