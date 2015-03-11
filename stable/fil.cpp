@@ -78,7 +78,7 @@ static void Close_( iop::descriptor__ D )
 # if defined( FIL__WIN )
 
 static inline iop::descriptor__ Open_(
-	const fnm::name___ &Name,
+	const fnm::name___ &Filename,
 	mode__ Mode )
 {
 	int Flags = _O_BINARY;
@@ -105,7 +105,7 @@ static inline iop::descriptor__ Open_(
 		break;
 	}
 
-	return _wopen( Name.Internal(), Flags, PMode );
+	return _wopen( Filename.Internal(), Flags, PMode );
 }
 
 static void Close_( iop::descriptor__ D )
@@ -116,7 +116,7 @@ static void Close_( iop::descriptor__ D )
 
 #	elif defined( FIL__POSIX )
 static inline iop::descriptor__ Open_(
-	const fnm::name___ &Name,
+	const fnm::name___ &Filename,
 	mode__ Mode )
 {
 #ifdef CPE__CYGWIN
@@ -143,7 +143,7 @@ static inline iop::descriptor__ Open_(
 		break;
 	}
 
-	return open( Name.Internal(), Flags, 0666 );	/* rw-rw-rw- */
+	return open( Filename.Internal(), Flags, 0666 );	/* rw-rw-rw- */
 }
 
 static void Close_( iop::descriptor__ D )
@@ -160,10 +160,10 @@ static void Close_( iop::descriptor__ D )
 #endif
 
 iop::descriptor__ fil::Open(
-	const fnm::name___ &Nom,
+	const fnm::name___ &Filename,
 	mode__ Mode )
 {
-	return ::Open_( Nom, Mode );
+	return ::Open_( Filename, Mode );
 }
 
 void fil::Close( iop::descriptor__ D )
@@ -172,14 +172,14 @@ void fil::Close( iop::descriptor__ D )
 }
 
 bso::bool__ fil::Create(
-	const fnm::name___ &FileName,
+	const fnm::name___ &Filename,
 	err::handling__ ErrorHandling )
 {
 	bso::bool__ Success = false;
 ERRProlog
 	iop::descriptor__ Descriptor = IOP_UNDEFINED_DESCRIPTOR;
 ERRBegin
-	Descriptor = fil::Open( FileName, fil::mReadWrite );
+	Descriptor = fil::Open( Filename, fil::mReadWrite );
 
 	Success = ( Descriptor != IOP_UNDEFINED_DESCRIPTOR );
 
@@ -193,11 +193,11 @@ ERREpilog
 	return Success;
 }
 
-const fnm::name___ &fil::GetBackupFileName(
-	const fnm::name___ &FileName,
+const fnm::name___ &fil::GetBackupFilename(
+	const fnm::name___ &Filename,
 	fnm::name___ &Buffer )
 {
-	return fnm::BuildFileName( (const char *)NULL, FileName, FIL__BACKUP_FILE_EXTENSION, Buffer );
+	return fnm::BuildPath( NULL, Filename, FIL__BACKUP_FILE_EXTENSION, Buffer );
 }
 
 #define CASE( m )\
@@ -221,23 +221,23 @@ const char *fil::GetLabel( backup_status__ Status )
 
 void fil::GetMeaning(
 	backup_status__ Status,
-	const fnm::name___ &FileName,
+	const fnm::name___ &Filename,
 	lcl::meaning_ &Meaning )
 {
 ERRProlog
 	TOL_CBUFFER___ Buffer;
-	fnm::name___ BackupFileName;
+	fnm::name___ BackupFilename;
 ERRBegin
 	Meaning.SetValue( GetLabel( Status ) );
 
 	switch ( Status ) {
 	case bsUnableToRename:
 	case bsUnableToDuplicate:
-		Meaning.AddTag( FileName.UTF8( Buffer ) );
+		Meaning.AddTag( Filename.UTF8( Buffer ) );
 		break;
 	case bsUnableToSuppress:
-		BackupFileName.Init();
-		Meaning.AddTag( GetBackupFileName( FileName, BackupFileName ).UTF8( Buffer ) );
+		BackupFilename.Init();
+		Meaning.AddTag( GetBackupFilename( Filename, BackupFilename ).UTF8( Buffer ) );
 		break;
 	default:
 		ERRPrm();
@@ -249,20 +249,20 @@ ERREpilog
 }
 
 backup_status__ fil::CreateBackupFile(
-	const fnm::name___ &FileName,
+	const fnm::name___ &Filename,
 	backup_mode__ Mode,
 	err::handling__ ErrorHandling )
 {
 	backup_status__ Status = bs_Undefined;
 ERRProlog
-	fnm::name___ BackupFileName;
+	fnm::name___ BackupFilename;
 ERRBegin
-	if ( Exists( FileName ) )
+	if ( Exists( Filename ) )
 	{
-		GetBackupFileName( FileName, BackupFileName );
+		GetBackupFilename( Filename, BackupFilename );
 
-		if ( Exists( BackupFileName ) )
-			if ( !Remove( BackupFileName ) ) {
+		if ( Exists( BackupFilename ) )
+			if ( !Remove( BackupFilename ) ) {
 				Status = bsUnableToSuppress;
 				ERRReturn;
 			}
@@ -308,7 +308,7 @@ ERRBegin
 		}
 		else if ( Mode == bmRename )
 		{
-			if ( !Rename( FileName, BackupFileName ) )
+			if ( !Rename( Filename, BackupFilename ) )
 				Status = bsUnableToRename;
 		}
 		else
@@ -348,22 +348,22 @@ const char *fil::GetLabel( recover_status__ Status )
 
 void fil::GetMeaning(
 	recover_status__ Status,
-	const fnm::name___ &FileName,
+	const fnm::name___ &Filename,
 	lcl::meaning_ &Meaning )
 {
 ERRProlog
-	fnm::name___ BackupFileName;
+	fnm::name___ BackupFilename;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Meaning.SetValue( GetLabel( Status ) );
 
 	switch ( Status ) {
 	case rsUnableToRename:
-		BackupFileName.Init();
-		Meaning.AddTag( GetBackupFileName( FileName, BackupFileName ).UTF8( Buffer ) );
+		BackupFilename.Init();
+		Meaning.AddTag( GetBackupFilename( Filename, BackupFilename ).UTF8( Buffer ) );
 		break;
 	case rsUnableToSuppress:
-		Meaning.AddTag(  FileName.UTF8( Buffer ) );
+		Meaning.AddTag(  Filename.UTF8( Buffer ) );
 		break;
 	default:
 		ERRPrm();
@@ -375,25 +375,25 @@ ERREpilog
 }
 
 recover_status__ fil::RecoverBackupFile(
-	const fnm::name___ &FileName,
+	const fnm::name___ &Filename,
 	err::handling__ ErrorHandling )
 {
 	recover_status__ Status = rs_Undefined;
 ERRProlog
-	fnm::name___ BackupFileName;
+	fnm::name___ BackupFilename;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	if ( Exists( FileName ) )
-		if ( !Remove( FileName ) ) {
+	if ( Exists( Filename ) )
+		if ( !Remove( Filename ) ) {
 			Status = rsUnableToSuppress;
 			ERRReturn;
 		}
 
-	BackupFileName.Init();
-	GetBackupFileName( FileName, BackupFileName );
+	BackupFilename.Init();
+	GetBackupFilename( Filename, BackupFilename );
 
-	if ( Exists( BackupFileName ) )
-		if ( !Rename( BackupFileName, FileName ) ) {
+	if ( Exists( BackupFilename ) )
+		if ( !Rename( BackupFilename, Filename ) ) {
 			Status = rsUnableToRename;
 			ERRReturn;
 		}

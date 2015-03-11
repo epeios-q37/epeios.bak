@@ -89,18 +89,18 @@ namespace dir {
 
 	state__ HandleError( void );
 
-	inline const fnm::name___ &GetSelfPath( fnm::name___ &Path )
+	inline const fnm::name___ &GetSelfDir( fnm::name___ &Dir )
 	{
 #ifdef DIR__WIN 
 		fnm::nchar__ FileName[MAX_PATH];
 		DWORD Size = GetModuleFileNameW( NULL, FileName, sizeof( FileName ) );
-		return fnm::GetLocation( FileName, Path );
+		return fnm::GetLocation( FileName, Dir );
 #endif
 #ifdef DIR__POSIX
 # ifdef CPE__MAC
-		char FileName[MAXPATHLEN];
-		uint32_t Size = sizeof( FileName );
-		switch ( _NSGetExecutablePath( FileName, &Size ) ) {
+		char Filename[MAXPATHLEN];
+		uint32_t Size = sizeof( Filename );
+		switch ( _NSGetExecutablePath( Filename, &Size ) ) {
 		case -1 :	// La taille de 'Path' est insuffisante.
 			ERRLmt();
 			break;
@@ -111,32 +111,32 @@ namespace dir {
 			break;
 		}
 
-		return fnm::GetLocation( fnm::name___( FileName ), Path );
+		return fnm::GetLocation( fnm::name___( Filename ), Dir );
 # else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
 		char FileName[PATH_MAX];
-		int Size = readlink( "/proc/self/exe", FileName, sizeof( FileName ) );
+		int Size = readlink( "/proc/self/exe", FileName, sizeof( Filename ) );
 
 		// Valeur d"erreur retournée par 'GetModuleFileName(..)'.
 		// Valeur d'erreur retrounée par 'readlink(...)', mais '0' est normalement une impossibilité.
 		if ( Size <= 0 )
 			ERRSys();
 
-		if ( Size == sizeof( FileName ) )
+		if ( Size == sizeof( Filename ) )
 			ERRLmt();
 
-		FileName[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
+		Filename[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
 
-		return fnm::GetLocation( fnm::name___( FileName ), Path );
+		return fnm::GetLocation( fnm::name___( Filename ), Dir );
 # endif
 #endif
 	}
 
-	inline state__ CreateDir( const fnm::name___ &Path )
+	inline state__ CreateDir( const fnm::name___ &Dir )
 	{
 #ifdef DIR__WIN
-		switch ( _wmkdir( Path.Internal() ) ) {
+		switch ( _wmkdir( Dir.Internal() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( mkdir( Path.Internal(), 0777 ) ) {
+		switch ( mkdir( Dir.Internal(), 0777 ) ) {
 #else
 #	error
 #endif
@@ -154,12 +154,12 @@ namespace dir {
 		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
-	inline state__ DropDir( const fnm::name___ &Path )
+	inline state__ DropDir( const fnm::name___ &Dir )
 	{
 #ifdef DIR__WIN
-		switch ( _wrmdir( Path.Internal() ) ) {
+		switch ( _wrmdir( Dir.Internal() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( rmdir( Path.Internal() ) ) {
+		switch ( rmdir( Dir.Internal() ) ) {
 #else
 #	error
 #endif
@@ -177,12 +177,12 @@ namespace dir {
 		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
-	inline state__ ChangeDir( const fnm::name___ &Path )
+	inline state__ ChangeDir( const fnm::name___ &Dir )
 	{
 #ifdef DIR__WIN
-		switch ( _wchdir( Path.Internal() ) ) {
+		switch ( _wchdir( Dir.Internal() ) ) {
 #elif defined( DIR__POSIX )
-		switch ( chdir( Path.Internal() ) ) {
+		switch ( chdir( Dir.Internal() ) ) {
 #else
 #	error
 #endif
@@ -205,35 +205,35 @@ namespace dir {
 	struct handle___ {
 		WIN32_FIND_DATAW File;
 		HANDLE hSearch;
-		fnm::name___ Name;
+		fnm::name___ Path;
 		void reset( bso::bool__ P = true )
 		{
 			hSearch = NULL;
-			Name.reset( P );
+			Path.reset( P );
 		}
 		E_CDTOR( handle___ );
 		void Init( void )
 		{
 			hSearch = NULL;
-			Name.Init();
+			Path.Init();
 		}
 	};
 
 #elif defined( DIR__POSIX )
 	struct handle___ {
 		DIR	*Dir;
-		fnm::name___ Name;
+		fnm::name___ Path;
 		TOL_CBUFFER___ Buffer;
 		void reset( bso::bool__ P = true )
 		{
 			Dir = NULL;
-			Name.reset( P );
+			Path.reset( P );
 		}
 		E_CDTOR( handle___ );
 		void Init( void )
 		{
 			Dir = NULL;
-			Name.reset( P );
+			Path.reset( P );
 		}
 	};
 #else
@@ -247,9 +247,9 @@ namespace dir {
 # ifdef DIR__WIN
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		fnm::ncore___ &Buffer = Handle.Name.ExposedInternal();
+		fnm::ncore___ &Buffer = Handle.Path.ExposedInternal();
 
-		Handle.Name.Init();
+		Handle.Path.Init();
 
 		Buffer.Malloc( wcslen( Path.Internal() ) + 1 );
 		wcscpy( Buffer, Path.Internal() );
@@ -266,7 +266,7 @@ namespace dir {
 
 		if ( hSearch == INVALID_HANDLE_VALUE )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else {
@@ -286,7 +286,7 @@ namespace dir {
 
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else
@@ -294,7 +294,7 @@ namespace dir {
 # else
 #  error
 # endif
-		return Handle.Name;
+		return Handle.Path;
 	}
 
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
@@ -307,11 +307,11 @@ namespace dir {
 #  endif
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
-		fnm::ncore___ &Buffer = Handle.Name.ExposedInternal();
+		fnm::ncore___ &Buffer = Handle.Path.ExposedInternal();
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else {
@@ -334,7 +334,7 @@ namespace dir {
 			Handle.Name.Init( ent->d_name );
     
 # endif
-		return Handle.Name;
+		return Handle.Path;
 	}
 
 	inline void Close( handle___ &Handle )

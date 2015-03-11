@@ -270,25 +270,25 @@ static bso::bool__ GuessFileName_(
 	const fnm::name___ &Affix,
 	const fnm::name___ &Suffix,
 	const fnm::name___ &SuggestedDirectory,
-	fnm::name___ &FileName )
+	fnm::name___ &Filename )
 {
 	bso::bool__ Success = false;
 ERRProlog
-	fnm::name___ Path;
+	fnm::name___ Dir;
 ERRBegin
-	FileName.Init();
-	fnm::BuildFileName( "", Affix, Suffix, FileName );
+	Filename.Init();
+	fnm::BuildPath( "", Affix, Suffix, Filename );
 
-	if ( !fil::Exists( FileName ) ) {
-		FileName.Init();
-		fnm::BuildFileName( SuggestedDirectory, Affix, Suffix, FileName );
+	if ( !fil::Exists( Filename ) ) {
+		Filename.Init();
+		fnm::BuildPath( SuggestedDirectory, Affix, Suffix, Filename );
 
-		if ( !fil::Exists( FileName ) ) {
-				FileName.Init();
-				Path.Init();
-				fnm::BuildFileName( dir::GetSelfPath( Path ), Affix, Suffix, FileName );
+		if ( !fil::Exists( Filename ) ) {
+				Filename.Init();
+				Dir.Init();
+				fnm::BuildPath( dir::GetSelfDir( Dir ), Affix, Suffix, Filename );
 
-				Success = fil::Exists( FileName );
+				Success = fil::Exists( Filename );
 		} else
 			Success = true;
 	} else

@@ -33,6 +33,16 @@
 
 // File Name Manager
 
+/*
+	Significatins des différents termes :
+	- 'path' pour, de manière générique, un fichier ou un répertoire,
+	- 'directory' (diminutif : 'dir') pour un répertoire,
+	- 'filename' pour un nom de fichier, avec ou sans sa localisation,
+	- 'basename' pour un nom de fichier sans sa localisation, mais avec son éventuellle extension,
+	- 'location' la localisation (la liste des parents) d'un fichier,
+	- 'affix' le 'basename' d'un fichier sans son extension.
+*/
+
 # include "cpe.h"
 # include "tol.h"
 # include "strng.h"
@@ -46,14 +56,14 @@
 #  error "Unknown target !"
 # endif
 
-namespace fnm
-{
+namespace fnm {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::core___ ncore___;
 	typedef ntvstr::string___ name___;
 
-	//e Different type of file name.
-	enum type__ {
+	// Les différents type d'un chemin ('path').
+	enum type__
+	{
 		// ""
 		tEmpty = 1,
 		// "x:\...\nom.suf" or "\...\nom.suf" etc..
@@ -65,54 +75,32 @@ namespace fnm
 		// "nom"
 		tFree,
 		// "d:" or "d:\...\directory\" etc.
-		tPath,
+		tDirectory,
 		t_amount,
 		t_Undefined
 	};
 
-	//f Type of the file name 'FileName'.
-	type__ Type( const name___ &FileName );
-
-
-#if 0	// Obsolete ?
-	#define FNM_BUFFER___	tol::E_BUFFER___( char )
-	#define FNM__P	FNM_BUFFER___ &P
-
-#endif
+	// Type d'un chemin.
+	type__ Type( const name___ &Path );
 
 	/* Remplace '\' par '/'. */
-	const name___ &CorrectLocation( name___ &Name );
+	const name___ &Normalize( name___ &Path );
 
-	const char *Description( type__ Type );
+	const char *GetLabel( type__ Type );
 
-	const name___ &BuildFileName(
-		const nchar__ *Dir,
-		const nchar__ *Affix,
-		const nchar__ *Ext,
-		name___ &Name );
-
-	inline const name___ &BuildFileName(
+	const name___ &BuildPath(
 		const name___ &Dir,
-		const name___ &Affix,
+		const name___ &Path,
 		const name___ &Ext,
-		name___ &Name )
+		name___ &Result );
+
+	const nchar__ *GetBasename( const nchar__ *Filename );
+
+	inline const name___ &GetBasename(
+		const name___ &Filename,
+		name___ &Basename )
 	{
-		return BuildFileName( Dir.Internal(), Affix.Internal(), Ext.Internal(), Name );
-	}
-
-	const nchar__ *GetFileName( const nchar__ *LocalizedName );
-
-# if 0
-	const name___ &_Set(
-		const nchar__ *Core,
-		name___ &Name );
-# endif
-
-	inline const name___ &GetFileName(
-		const name___ &LocalizedName,
-		name___ &Name )
-	{
-		return Name = GetFileName( LocalizedName.Internal() );
+		return Basename = GetBasename( Filename.Internal() );
 	}
 
 	const nchar__ *GetExtension( const nchar__ *Name );
@@ -125,88 +113,31 @@ namespace fnm
 	}
 
 	const name___ &GetLocation(
-		const nchar__ *Name,
+		const nchar__ *Filename,
 		name___ &Location );
 
 	inline const name___ &GetLocation(
-		const name___ &Name,
+		const name___ &Filename,
 		name___ &Location )
 	{
-		return GetLocation( Name.Internal(), Location );
+		return GetLocation( Filename.Internal(), Location );
 	}
 
 	const name___ &GetAffix(
-		const nchar__ *Base,
+		const nchar__ *Filename,
 		name___ &Affix );
 
 	inline const name___ &GetAffix(
-		const name___ &Name,
+		const name___ &Filename,
 		name___ &Affix )
 	{
-		return GetAffix( Name.Internal(), Affix );
+		return GetAffix( Filename.Internal(), Affix );
 	}
-
-#if 0	// Obsolete ?
-
-	/************************************************/
-	/* GESTION DE LA GENERATION D'UN NOM DE FICHIER */
-	/************************************************/
-
-
-	//c Manage 8 character long file name.
-	class file_name_manager
-	//: public utl_PU
-	{
-	private:
-#ifndef CPE__MT
-		/* Return a 8 characters long file name using the 'Base' string (any length)
-		with 'Occurence' (>=0 <=36) the present occurence of a 'Base' based file name */
-		const char *MakeFileName_(
-			const char *base,
-			int Occurence = 0 );
-#endif
-	protected:
-		//v Must return 'true' if the file named 'Name' is the searched file..
-		virtual bool FNMMatch(	const char *Name ) = 0;
-	public:
-		//f Initialization.
-		void Init( void )
-		{
-			// for standadization reason.
-		}
-		/*f Return a 8 characters file name based on the 'Base' string (any lentgh)
-		in 'Directory' with 'Extension' as extension. Use 'TOLFileExists' to define
-		if this file already exists. If 'NULL' is returned, then no file can be
-		generated, because all occurence are already used. */
-#ifndef CPE__MT
-		const char *SearchFileName(
-			const char *Directory,
-			const char *Base,
-			const char *Extension,
-			FNM__P );
-#endif
-	};
-#endif
 }
 
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	const fnm::name___ &Name );
-
-
-#if 0 // Obsolete ?
-
-#ifdef FNM__WIN
-#	define FNM_DIRECTORY_SEPARATOR_STRING	"\\"
-#	define FNM_DIRECTORY_SEPARATOR_CHARACTER	'\\'
-#elif defined( FNM__POSIX )
-#	define FNM_DIRECTORY_SEPARATOR_STRING	"/"
-#	define FNM_DIRECTORY_SEPARATOR_CHARACTER	'/'
-#else
-#	error
-#endif
-
-#endif
 
 				  /********************************************/
 				  /* do not modify anything belove this limit */

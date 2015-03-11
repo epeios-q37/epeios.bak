@@ -99,7 +99,6 @@ namespace ntvstr {
 		string___( const char__ *String )
 		{
 			reset( false );
-
 			Init( String );
 		}
 		string___( const str::string_ &String )
@@ -107,7 +106,16 @@ namespace ntvstr {
 			reset( false );
 			Init( String );
 		}
-		string___ &operator =( const string___ &S)
+		string___( int String )	// Pour traiter le cas ou c'est 'NULL' (assimilé à un int) qui est passé en paramètre.
+		{
+			reset( false );
+
+			if ( String != 0 )
+				ERRFwk();
+
+			Init( (char__ *)NULL );
+		}
+		string___ &operator =( const string___ &S )
 		{
 			Init( S.Internal() );
 

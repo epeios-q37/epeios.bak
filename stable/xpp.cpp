@@ -1026,25 +1026,25 @@ status__ xpp::_extended_parser___::_InitWithFile(
 ERRProlog
 	str::string LocalizedFileNameBuffer;
 	str::string LocationBuffer;
-	fnm::name___ LocalizedFileName;
+	fnm::name___ Path;
 	fnm::name___ Location;
 ERRBegin
-	LocalizedFileName.Init();
-	fnm::BuildFileName( Directory, FileName, "", LocalizedFileName );
+	Path.Init();
+	fnm::BuildPath( Directory, FileName, "", Path );
 
-	if ( _FFlow.Init( fnm::CorrectLocation( LocalizedFileName ), fil::mReadOnly, err::hUserDefined ) != tol::rSuccess ) {
+	if ( _FFlow.Init( fnm::Normalize( Path ), fil::mReadOnly, err::hUserDefined ) != tol::rSuccess ) {
 		Status = sUnableToOpenFile;
 		ERRReturn;
 	}
 
 	_XFlow.Init( _FFlow, Format );
 
-	fnm::GetLocation( LocalizedFileName, Location );
+	fnm::GetLocation( Path, Location );
 
 	LocalizedFileNameBuffer.Init();
 	LocationBuffer.Init();
 
-	if ( ( Status = Init( _XFlow, LocalizedFileName.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve ) ) != sOK )
+	if ( ( Status = Init( _XFlow, Path.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve ) ) != sOK )
 		ERRReturn;
 
 	_IgnorePreprocessingInstruction = true;

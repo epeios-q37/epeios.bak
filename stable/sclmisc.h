@@ -103,7 +103,7 @@ namespace sclmisc {
 		const fnm::name___ &FileName,
 		str::string_ &Id );
 
-	using fil::GetBackupFileName;
+	using fil::GetBackupFilename;
 
 	void CreateBackupFile(
 		const fnm::name___ &FileName,

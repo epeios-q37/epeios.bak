@@ -33,7 +33,7 @@
 
 using namespace fnm;
 
-const char *fnm::Description( fnm::type__ Type )
+const char *fnm::GetLabel( fnm::type__ Type )
 {
 	switch ( Type ) {
 	case fnm::tEmpty:
@@ -46,8 +46,8 @@ const char *fnm::Description( fnm::type__ Type )
 		return "Suffixed";
 	case fnm::tFree:
 		return "Free";
-	case fnm::tPath:
-		return "Path";
+	case fnm::tDirectory:
+		return "Directory";
 	case fnm::t_Undefined:
 		return "Unknow";
 	default:
@@ -75,24 +75,24 @@ const char *fnm::Description( fnm::type__ Type )
 # error
 #endif
 
-inline static fnm::type__ Type_( const nchar__ *Name )
+inline static fnm::type__ Type_( const nchar__ *Path )
 {
 	const nchar__ *Repere = NULL;
 
-	if ( *Name == 0 )
+	if ( *Path == 0 )
 		return fnm::tEmpty;
 
-	if ( ( Name[strlen_( Name )-1] == ':' )
-			|| ( Name[strlen_( Name )-1] == '/' )
-			|| ( Name[strlen_( Name )-1] == '\\' ) )
-		return fnm::tPath;
+	if ( ( Path[strlen_( Path ) - 1] == ':' )
+		 || ( Path[strlen_( Path ) - 1] == '/' )
+		 || ( Path[strlen_( Path ) - 1] == '\\' ) )
+		 return fnm::tDirectory;
 
-	Repere = strrchr_( Name, ':' );
+	Repere = strrchr_( Path, ':' );
 
 	if ( Repere != NULL )
 		Repere++;
 	else
-		Repere = Name;
+		Repere = Path;
 
 
 	if ( ( *Repere == '/' ) || ( *Repere == '\\' ) )
@@ -100,49 +100,49 @@ inline static fnm::type__ Type_( const nchar__ *Name )
 	else if ( ( strrchr_( Repere, '/' ) != NULL ) || ( ( strrchr_( Repere, '\\' ) != NULL ) ) )
 		return fnm::tRelative;
 
-	if ( Repere < strrchr_( Name, '.' ) )
+	if ( Repere < strrchr_( Path, '.' ) )
 		return fnm::tSuffixed;
 	else 
 		return fnm::tFree;
 }
 
-fnm::type__ fnm::Type( const name___ &Name )
+fnm::type__ fnm::Type( const name___ &Path )
 {
-	return Type_( Name.Internal() );
+	return Type_( Path.Internal() );
 }
 
-const name___ &fnm::BuildFileName(
+static const name___ &BuildPath_(
 	const nchar__ *Dir,
-	const nchar__ *Affix,
+	const nchar__ *Path,
 	const nchar__ *Ext,
-	name___ &Name )
+	name___ &Result )
 {
 ERRProlog
-	size_t DirSize = 0, AffixSize = 0, ExtSize = 0;
+	size_t DirSize = 0, PathSize = 0, ExtSize = 0;
 ERRBegin
-	ncore___ &Core = Name.ExposedInternal();
+	ncore___ &Core = Result.ExposedInternal();
 
-	if ( Type_( Affix ) == tAbsolute )
+	if ( Type_( Path ) == tAbsolute )
 		Dir = NULL;
 
 	if ( Dir )
 		DirSize = strlen_( Dir );
 
-	if ( Affix )
-		AffixSize = strlen_( Affix );
+	if ( Path )
+		PathSize = strlen_( Path );
 
 	if ( Ext )
 		ExtSize = strlen_( Ext );
 
-	Core.Calloc( DirSize + AffixSize + ExtSize + 2 );
+	Core.Calloc( DirSize + PathSize + ExtSize + 2 );
 
-	if ( ( AffixSize == 0 ) && ( ExtSize == 0 ) )
+	if ( ( PathSize == 0 ) && ( ExtSize == 0 ) )
 		ERRReturn;
 
 	if ( DirSize != 0 ) {
 		strcpy_( Core, Dir );
 
-		if ( AffixSize != 0 ) {
+		if ( PathSize != 0 ) {
 			switch( Dir[DirSize-1] ) {
 			case ':':
 			case '/':
@@ -162,10 +162,10 @@ ERRBegin
 			else 
 				Core[DirSize+1] = 0;
 		}
-	} else if ( AffixSize == 0 )
+	} else if ( PathSize == 0 )
 		ERRReturn;
 
-	switch ( Type_( Affix ) ) {
+	switch ( Type_( Path ) ) {
 	case fnm::tEmpty:
 		strcat_( Core, Ext );
 		break;
@@ -173,58 +173,49 @@ ERRBegin
 	case fnm::tRelative:
 	case fnm::tAbsolute:
 	case fnm::tFree:
-		strcat_( Core, Affix );
+		strcat_( Core, Path );
 
 		if ( ExtSize )
 			strcat_( Core, Ext );
 
 		break;
-	case fnm::tPath:
-		strcpy_( Core, Affix );
+	case fnm::tDirectory:
+		strcpy_( Core, Result );
 		break;
 	default:
 		ERRFwk();
 		break;
 	}
 ERRErr
-	Name.Init();
+	Result.Init();
 ERREnd
 ERREpilog
-	return Name;
+	return Result;
 }
 
-# if 0
-const name___ &fnm::_Set(
-	const nchar__ *Core,
-	name___ &Name )
+const name___ &fnm::BuildPath(
+	const name___ &Dir,
+	const name___ &Path,
+	const name___ &Ext,
+	name___ &Result )
 {
-	if ( Core == NULL )
-		ERRFwk();
-
-	Name.Init();
-
-	if ( *Core != 0 ) {
-		Name.Core().Malloc( strlen_( Core ) + 1 );
-		strcpy_( Name.Core(), Core );
-	}
-
-	return Name;
+	return BuildPath_( Dir.Internal(), Path.Internal(), Ext.Internal(), Result );
 }
-# endif
 
-const nchar__ *fnm::GetFileName( const nchar__ *Name )
+
+const nchar__ *fnm::GetBasename( const nchar__ *Filename )
 {
 	const nchar__ *Repere;
 
 #ifdef FNM_DBG
-	if ( *Name == 0 )
+	if ( *Filename == 0 )
 		ERRPrm();
 #endif
 
-	if ( ( ( Repere = strrchr_( Name, '/' ) ) == NULL )
-		&& ( ( Repere = strrchr_( Name, '\\' ) ) == NULL ) )
-		if ( ( Repere = strrchr_( Name, ':' ) ) == NULL )
-			Repere = Name;
+	if ( ( ( Repere = strrchr_( Filename, '/' ) ) == NULL )
+		 && ( ( Repere = strrchr_( Filename, '\\' ) ) == NULL ) )
+		 if ( ( Repere = strrchr_( Filename, ':' ) ) == NULL )
+			 Repere = Filename;
 		else
 			Repere++;
 	else
@@ -235,102 +226,33 @@ const nchar__ *fnm::GetFileName( const nchar__ *Name )
 
 const nchar__ *fnm::GetExtension( const nchar__ *Name )
 {
-	return strrchr_( GetFileName( Name ), '.' );
+	return strrchr_( GetBasename( Name ), '.' );
 }
 
-# if 0 // Obsolete ?
-#ifndef CPE__MT
-const char *fnm::file_name_manager::MakeFileName_(
-	const char *Nom,
-	int Occurence )
+const name___ &fnm::Normalize( name___ &Path )
 {
-	size_t i;
-	static char Resultat[9];
+	nchar__ *R = Path.Internal();
 
-	strcpy( Resultat, "00000000" );
-
-	Resultat[7] = (char)( '0' + Occurence );
-
-	i = strlen( Nom );
-
-	while( i-- )
-	{
-		size_t j = i%7;
-
-		Resultat[j] += Nom[i];
-
-		Resultat[j] &= 0x7f;
-
-		Resultat[j] %= (char)36;
-
-		if ( Resultat[j] > 9 )
-			Resultat[j] += (char)7;
-
-		Resultat[j] += '0';
-	}
-
-	return Resultat;
-}
-
-const char *fnm::file_name_manager::SearchFileName(
-	const char *Repertoire,
-	const char *Parametres,
-	const char *Extension,
-	FNM__P )
-{
-	const char *Nom = NULL;
-ERRProlog
-	int Occurence;
-ERRBegin
-	for ( Occurence = 0; Occurence <= 36; Occurence++ )
-	{
-		Nom = BuildFileName(
-			Repertoire,
-			MakeFileName_( Parametres, Occurence ),
-			Extension,
-			P );
-
-		if ( !fil::FileExists( Nom ) || FNMMatch( Nom ) )
-			break;
-
-		free( (void *)Nom );
-		Nom = NULL;
-	}
-ERRErr
-	P.reset();
-
-	Nom = NULL;
-ERREnd
-ERREpilog
-	return Nom;
-}
-#endif
-#endif
-
-const name___ &fnm::CorrectLocation( name___ &Location )
-{
-	nchar__ *R = Location.Internal();
-
-	R = strchr_( Location.Internal(), '\\' );
+	R = strchr_( Path.Internal(), '\\' );
 
 	while( R != NULL ) {
 		*R = '/';
 		R = strchr_( R+1, '\\' );
 	}
 
-	return Location;
+	return Path;
 }
 
 const name___ &fnm::GetLocation(
-	const nchar__ *Name,
+	const nchar__ *Filename,
 	name___ &Location )
 {
-	size_t L = GetFileName( Name ) - Name;
+	size_t L = GetBasename( Filename ) - Filename;
 
 	if ( L != 0 ) {
 		 Location.ExposedInternal().Malloc( L + 1 );
 
-		memcpy( Location.Internal(), Name, L * sizeof( nchar__) );
+		memcpy( Location.Internal(), Filename, L * sizeof( nchar__) );
 
 		Location.ExposedInternal()[L] = 0;
 	} else
@@ -340,12 +262,12 @@ const name___ &fnm::GetLocation(
 }
 
 const name___ &fnm::GetAffix(
-	const nchar__ *Name,
+	const nchar__ *Filename,
 	name___ &Affix )
 {
 	const nchar__ *Repere = NULL;
 
-	Repere = GetFileName( Name );
+	Repere = GetBasename( Filename );
 
 	Affix.ExposedInternal().Malloc( strlen_( Repere ) + 1 );
 
@@ -370,10 +292,6 @@ ERREnd
 ERREpilog
 	return Flow;
 }
-
-
-
-
 
 /* Although in theory this class is inaccessible to the different modules,
 

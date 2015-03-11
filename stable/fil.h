@@ -108,7 +108,7 @@ namespace fil {
 	};
 
 	iop::descriptor__ Open(
-		const fnm::name___ &Name,
+		const fnm::name___ &Path,
 		mode__ Mode );
 
 	void Close( iop::descriptor__ D );
@@ -218,12 +218,12 @@ namespace fil {
 	};
 
 	inline error__ _Stat(
-		const fnm::name___ &FileName,
+		const fnm::name___ &Path,
 		struct FIL__STATS &Stat )
 	{
 		errno = 0;
 
-		if ( FIL__STATF( FileName.Internal(), &Stat ) != 0 )
+		if ( FIL__STATF( Path.Internal(), &Stat ) != 0 )
 			return _ConvertErrNo( errno );
 
 		return eNone;
@@ -242,12 +242,12 @@ namespace fil {
 	}
 
 	template <typename t> inline error__ GetInfo(
-		const t &FileSpecification,
+		const t &Path,
 		info__ &Info )
 	{
 		struct FIL__STATS Stat;
 
-		error__ Error = _Stat( FileSpecification, Stat );
+		error__ Error = _Stat( Path, Stat );
 
 		if ( Error != eNone )
 			return Error;
@@ -303,45 +303,44 @@ namespace fil {
 	}
 
 	template <typename t> inline const info__ &_GetInfo(
-		const t &FileSpecification,
+		const t &Path,
 		info__ &Info )
 	{
-		if ( GetInfo( FileSpecification, Info ) != eNone )
+		if ( GetInfo( Path, Info ) != eNone )
 			ERRFwk();
 
 		return Info;
 	}
 
-	template <typename t> inline time_t GetLastModificationTime( const t &FileSpecification )
+	template <typename t> inline time_t GetLastModificationTime( const t &Path )
 	{
 		info__ Info;
 
 		Info.Init();
 
-		return _GetInfo( FileSpecification, Info ).Time.Modification;
+		return _GetInfo( Path, Info ).Time.Modification;
 	}
 
-	template <typename t> inline size__ GetSize( const t &FileSpecification )
+	template <typename t> inline size__ GetSize( const t &Path )
 	{
 		info__ Info;
 
 		Info.Init();
 
-		return _GetInfo( FileSpecification, Info ).Size;
+		return _GetInfo( Path, Info ).Size;
 	}
 
-	template <typename t> inline size__ GetType( const t &FileSpecification )
+	template <typename t> inline size__ GetType( const t &Path )
 	{
 		info__ Info;
 
 		Info.Init();
 
-		return _GetInfo( FileSpecification, Info ).Type;
+		return _GetInfo( Path, Info ).Type;
 	}
 
 	// Modifie la date de modification d'un fichier à la date courante.
-	// Modifie la date de modification d'un fichier à la date courante.
-	inline bso::bool__ Touch( const fnm::name___ &FileName )
+	inline bso::bool__ Touch( const fnm::name___ &Filename )
 	{
 		bso::bool__ Success = false;
 	ERRProlog
@@ -350,7 +349,7 @@ namespace fil {
 		SYSTEMTIME st;
 		HANDLE Handle = INVALID_HANDLE_VALUE;
 	ERRBegin
-		Handle = CreateFileW( FileName.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		Handle = CreateFileW( Filename.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Handle == INVALID_HANDLE_VALUE )
 			ERRReturn;
@@ -376,7 +375,7 @@ namespace fil {
 		Lorsque lancé à partir d'une console 'Cygwin', il y a un décalage d'une heure (dépendant de l'heure d'hiver/été ?).
 		*/
 
-		if ( utime( FileName.UTF8( Buffer ), NULL ) != 0 )
+		if ( utime( Filename.UTF8( Buffer ), NULL ) != 0 )
 			ERRLbr();
 
 		Success = true;
@@ -389,25 +388,25 @@ namespace fil {
 		return Success;
 	}
 
-	inline bso::bool__ Remove( const fnm::name___ &FileName )
+	inline bso::bool__ Remove( const fnm::name___ &Filename )
 	{
 # ifdef FIL__WIN
-		return _wremove( FileName.Internal() ) == 0;
+		return _wremove( Filename.Internal() ) == 0;
 # elif defined ( FIL__POSIX )
-		return remove( FileName.Internal() ) == 0;
+		return remove( Filename.Internal() ) == 0;
 # else
 #  error
 # endif
 	}
 
 	inline bso::bool__ Rename(
-		const fnm::name___ &FileName,
-		const fnm::name___ &NewFileName )
+		const fnm::name___ &Filename,
+		const fnm::name___ &NewFilename )
 	{
 # ifdef FIL__WIN
-		return _wrename( FileName.Internal(), NewFileName.Internal() ) == 0;
+		return _wrename( Filename.Internal(), NewFilename.Internal() ) == 0;
 # elif defined ( FIL__POSIX )
-		return rename( FileName.Internal(), NewFileName.Internal() ) == 0;
+		return rename( Filename.Internal(), NewFilename.Internal() ) == 0;
 # else
 #  error
 # endif
@@ -427,8 +426,8 @@ namespace fil {
 	}
 
 	inline bso::bool__ AssignSameTimes_(
-		const fnm::name___ &SourceFileName,
-		const fnm::name___ &TargetFileName )
+		const fnm::name___ &SourceFilename,
+		const fnm::name___ &TargetFilename )
 	{
 		bso::bool__ Success = false;
 	ERRProlog
@@ -438,12 +437,12 @@ namespace fil {
 			Target = INVALID_HANDLE_VALUE;
 		FILETIME Creation, Access, Write;
 	ERRBegin
-		Source = CreateFileW( SourceFileName.Internal(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		Source = CreateFileW( SourceFilename.Internal(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Source == INVALID_HANDLE_VALUE )
 			ERRReturn;
 
-		Target = CreateFileW( TargetFileName.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+		Target = CreateFileW( TargetFilename.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Target == INVALID_HANDLE_VALUE )
 			ERRReturn;
@@ -469,13 +468,13 @@ namespace fil {
 	ERRBegin
 		Info.Init();
 	
-		if ( GetInfo( SourceFileName, Info ) != eNone )
+		if ( GetInfo( SourceFilename, Info ) != eNone )
 			ERRReturn;
 
 		TimeBuf.actime = Info.Time.Access;
 		TimeBuf.modtime = Info.Time.Modification;
 
-		if ( utime( TargetFileName.UTF8( Buffer ), &TimeBuf ) != 0 )
+		if ( utime( TargetFilename.UTF8( Buffer ), &TimeBuf ) != 0 )
 			ERRReturn;
 
 		Success = true;
@@ -490,12 +489,12 @@ namespace fil {
 	}
 
 	inline bso::bool__ Copy(
-		const fnm::name___ &SourceFileName,
-		const fnm::name___ &TargetFileName )
+		const fnm::name___ &SourceFilename,
+		const fnm::name___ &TargetFilename )
 	{
 # ifdef FIL__WIN
 		// NOTA : le fichier copié avec la fonction ci-dessous possède les mêmes horodatages, on s'arrange donc pour avoir le même résultat sous POSIX.
-		return CopyFileW( SourceFileName.Internal(), TargetFileName.Internal(), false ) != 0;
+		return CopyFileW( SourceFilename.Internal(), TargetFilename.Internal(), false ) != 0;
 # elif defined( FIL__POSIX )
 		bso::bool__ Success = false;
 	ERRProlog
@@ -504,12 +503,12 @@ namespace fil {
 		char Buffer[BUFSIZ];
 		size_t Size = 0;
 	ERRBegin
-		Source = Open( SourceFileName, mReadOnly );
+		Source = Open( SourceFilename, mReadOnly );
 
 		if ( Source == FIL_UNDEFINED_DESCRIPTOR )
 			ERRReturn;
 
-		Target = Open( TargetFileName, mRemove);
+		Target = Open( TargetFilename, mRemove);
 
 		if ( Target == FIL_UNDEFINED_DESCRIPTOR )
 			ERRReturn;
@@ -523,7 +522,7 @@ namespace fil {
 			ERRReturn;
 
 		// NOTA : le fichier copié avec la version Windows de cette fonction possède les mêmes horodatages, on s'arrange donc pour avoir le même résultat sous POSIX.
-		Success = AssignSameTimes_( SourceFileName, TargetFileName );
+		Success = AssignSameTimes_( SourceFilename, TargetFilename );
 	ERRErr
 	ERREnd
 		if ( Source != FIL_UNDEFINED_DESCRIPTOR )
@@ -540,15 +539,15 @@ namespace fil {
 
 
 	bso::bool__ Create(
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		err::handling__ ErrorHandling = err::h_Default );	// Crée un fichier de nom 'FileName'.
 
 # ifdef FIL__WIN
 	inline bso::bool__ MakeNormal(
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/répertoire normal.
 	{
-		if ( SetFileAttributesW( FileName.Internal(), FILE_ATTRIBUTE_NORMAL ) == 0 )
+		if ( SetFileAttributesW( Filename.Internal(), FILE_ATTRIBUTE_NORMAL ) == 0 )
 			if ( ErrorHandling == err::hThrowException )
 				ERRFwk();
 			else
@@ -558,12 +557,12 @@ namespace fil {
 	}
 
 	inline bso::bool__ MakeSystem(
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/répertoire system.
 															// NOTA : pour que le fichier soit caché lorsque l'option correspondande est activée,
 															// il semblerait qu'il faut en plus mettre l'attribute 'HIDDEN' et 'ARCHIVE'.
 	{
-		if ( SetFileAttributesW( FileName.Internal(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE ) == 0 )
+		if ( SetFileAttributesW( Filename.Internal(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE ) == 0 )
 			if ( ErrorHandling == err::hThrowException )
 				ERRFwk();
 			else
@@ -587,7 +586,7 @@ namespace fil {
 
 	void GetMeaning(
 		backup_status__ Status,
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		lcl::meaning_ &Meaning );
 
 	//e How handle the backuped file.
@@ -600,12 +599,12 @@ namespace fil {
 		bm_Default = bmRename,
 	};
 
-	const fnm::name___ &GetBackupFileName(
+	const fnm::name___ &GetBackupFilename(
 		const fnm::name___ &FileName,
 		fnm::name___ &Name );
 
 	backup_status__ CreateBackupFile(
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		backup_mode__ Mode,
 		err::handling__ = err::h_Default  );
 
@@ -622,12 +621,11 @@ namespace fil {
 
 	void GetMeaning(
 		recover_status__ Status,
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		lcl::meaning_ &Meaning );
 
-	//f Recover the backup file 'Name' with 'Extension' as extension.
 	recover_status__ RecoverBackupFile(
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		err::handling__ = err::h_Default  );
 }
 				  /********************************************/

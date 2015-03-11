@@ -121,17 +121,21 @@ namespace lstbch {
 			list_<row, row_t>::Allocate( Size, Mode );
 		}
 		E_NAVt( list_<E_COVER2(row,row_t)>::, row )
-		row Add( const type &Object )
+		row Add(
+			const type &Object,
+			row Row = E_NIL )
 		{
-			row Row = list_<row, row_t>::New();
+			Row = list_<row, row_t>::New( Row );
 
 			bunch_<type, row>::Store( Object, Row );
 
 			return Row;
 		}
-		row Add( const char *Object )
+		row Add(
+			const type *Object,
+			row Row = E_NIL )
 		{
-			row Row = list_<row, row_t>::New();
+			Row = list_<row, row_t>::New( Row );
 
 			bunch_<type, row>::Store( Object, Row );
 
