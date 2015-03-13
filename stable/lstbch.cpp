@@ -57,6 +57,27 @@ public:
 
 using namespace lstbch;
 
+void lstbch::hook_filenames___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+ERRProlog
+	fnm::name___ Bunch, List;
+ERRBegin
+	Bunch.Init();
+	fnm::BuildPath( Path, Basename, ".qlbb", Bunch );
+
+	List.Init();
+	fnm::BuildPath( Path, Basename, ".qlbl", List );
+
+	this->Bunch.Init( NULL, Bunch );
+	this->List.Init( NULL, List );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 

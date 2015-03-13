@@ -28,6 +28,27 @@
 
 using namespace ctn;
 
+void ctn::hook_filenames___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+ERRProlog
+	fnm::name___ Statics, Dynamics;
+ERRBegin
+	Statics.Init();
+	fnm::BuildPath( Path, Basename, ".qcs", Statics );
+
+	Dynamics.Init();
+	fnm::BuildPath( Path, Basename, ".qcd", Dynamics );
+
+	this->Statics.Init( NULL, Statics );
+	this->Dynamics.Init( NULL, Dynamics );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 

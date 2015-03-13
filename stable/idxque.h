@@ -138,13 +138,13 @@ namespace idxque {
 
 	E_AUTO1( queue_index )
 
-	typedef que::queue_file_manager___ queue_index_file_manager___;
+	using que::files_hook___;
 
 	template <typename index> uys::state__ Plug(
 		index &Index,
-		queue_index_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		return que::Plug( Index, FileManager );
+		return que::Plug( Index, Hook );
 	}
 
 	

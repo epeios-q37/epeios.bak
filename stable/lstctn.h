@@ -152,124 +152,135 @@ namespace lstctn {
 		}
 	};
 
-	E_AUTO3( list_container )
+	E_AUTO3( list_container );
 
-	template <typename container> E_TTCLONE__( ctn::container_file_manager___<container>, _container_file_manager___ );
+	struct hook_filenames___
+	{
+	public:
+		ctn::hook_filenames___ Container;
+		lst::hook_filenames___ List;
+		void reset( bso::bool__ P = true )
+		{
+			Container.reset( P );
+			List.reset( P );
+		}
+		E_CDTOR( hook_filenames___ );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );
+	};
 
-	template <typename container> class list_container_file_manager___
+	class files_hook___
 	{
 	private:
-		_container_file_manager___<container> _ContainerFileManager;
-		lst::list_file_manager___ _ListFileManager;
+		ctn::files_hook___ _Container;
+		lst::files_hook___ _List;
 		time_t _ContainerTimeStamp( void ) const
 		{
-			return _ContainerFileManager.TimeStamp();
+			return _Container.TimeStamp();
 		}
 		time_t _ListTimeStamp( void ) const
 		{
-			return _ListFileManager.TimeStamp();
+			return _List.TimeStamp();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_ContainerFileManager.ReleaseFiles();	// Sinon le 'Settle()'  ci'dessous ne fonctionne pas correctement.
+			_Container.ReleaseFiles();	// Sinon le 'Settle()'  ci'dessous ne fonctionne pas correctement.
 
 			if ( P ) {
-				Settle();	// Lancé explicitement, car le 'reset(...)' de '_ListFileManager' ne peut lancer son propre 'Settle(...)'.
+				Settle();	// Lancé explicitement, car le 'reset(...)' de '_List' ne peut lancer son propre 'Settle(...)'.
 			}
 
-			_ContainerFileManager.reset( P );
-			_ListFileManager.reset( P );
+			_Container.reset( P );
+			_List.reset( P );
 		}
-		list_container_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~list_container_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
 		void Init(
-			const fnm::name___ &ContainerStaticsFileName,
-			const fnm::name___ &ContainerDynamicsFileName,
-			const fnm::name___ &ContainerMultimemoryFileName,
-			const fnm::name___ &ListFileName,
+			const hook_filenames___ &Filenames,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )
 		{
 			reset();
 
-			_ContainerFileManager.Init( ContainerStaticsFileName, ContainerDynamicsFileName, ContainerMultimemoryFileName, Mode, Persistent, ID );
-			_ListFileManager.Init( ListFileName, Mode, Persistent );
+			_Container.Init( Filenames.Container, Mode, Persistent, ID );
+			_List.Init( Filenames.List, Mode, Persistent );
 		}
 		fil::mode__ Mode( fil::mode__ Mode )
 		{
-			fil::mode__ ModeBuffer = _ContainerFileManager.Mode( Mode );
+			fil::mode__ ModeBuffer = _Container.Mode( Mode );
 
-			if ( ModeBuffer != _ListFileManager.Mode( Mode ) )
+			if ( ModeBuffer != _List.Mode( Mode ) )
 				ERRFwk();
 
 			return ModeBuffer;
 		}
 		fil::mode__ Mode( void ) const
 		{
-			fil::mode__ Mode = _ContainerFileManager.Mode();
+			fil::mode__ Mode = _Container.Mode();
 
-			if ( Mode != _ListFileManager.Mode() )
+			if ( Mode != _List.Mode() )
 				ERRFwk();
 
 			return Mode;
 		}
 		uys::state__ State( void ) const
 		{
-			uys::state__ State = _ContainerFileManager.State();
+			uys::state__ State = _Container.State();
 
 			if ( !uys::IsError( State ) )
-				if ( State != _ListFileManager.State() )
+				if ( State != _List.State() )
 					State = uys::sInconsistent;
 
 			return State;
 		}
 		uys::state__ Bind( void )
 		{
-			uys::state__ State = _ContainerFileManager.Bind();
+			uys::state__ State = _Container.Bind();
 
 			if ( uys::IsError( State ) )
 				return State;
 
-			if ( _ListFileManager.Bind( _ContainerFileManager.TimeStamp() ) != State )
+			if ( _List.Bind( _Container.TimeStamp() ) != State )
 				State = uys::sInconsistent;
 
 			return State;
 		}
 		uys::state__ Settle( void )
 		{
-			uys::state__ State = _ContainerFileManager.Settle();
+			uys::state__ State = _Container.Settle();
 
 			if ( uys::IsError( State ) )
 				return State;
 
-			if ( _ContainerFileManager.IsPersistent() && _ContainerFileManager.Exists() )
-				if ( _ListFileManager.Settle( _ContainerFileManager.TimeStamp() ) != State )
+			if ( _Container.IsPersistent() && _Container.Exists() )
+				if ( _List.Settle( _Container.TimeStamp() ) != State )
 						State = uys::sInconsistent;
 
 			return State;
 		}
 		void Drop( void )
 		{
-			 _ContainerFileManager.Drop();
-			_ListFileManager.Drop();
+			 _Container.Drop();
+			_List.Drop();
 		}
 		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
 		{
-			bso::bool__ Success = _ContainerFileManager.CreateFiles( ErrorHandling );
+			bso::bool__ Success = _Container.CreateFiles( ErrorHandling );
 
 			if ( !Success )
 				return false;
 
 			if ( uys::IsError( Settle() ) ) {
-				_ContainerFileManager.Drop();
+				_Container.Drop();
 				Success = false;
 			}
 
@@ -277,28 +288,8 @@ namespace lstctn {
 		}
 		void ReleaseFiles( void )
 		{
-			_ContainerFileManager.ReleaseFiles();
-			_ListFileManager.ReleaseFiles();
-		}
-		uys::state__ Plug( container &ListContainer )
-		{
-			uys::state__ State = ctn::Plug( ListContainer.Container(), _ContainerFileManager );
-
-			if ( uys::IsError( State ) ) {
-				reset();
-			} else {
-				fil::size__ Size = _ContainerFileManager.StaticsFileManager().FileSize() /  ListContainer.GetStaticsItemSize();
-
-				if ( Size > SDR_SIZE_MAX )
-					ERRDta();
-
-				if ( lst::Plug( ListContainer, _ListFileManager, (sdr::size__)Size, _ContainerFileManager.TimeStamp() ) != State ) {
-					reset();
-					State = uys::sInconsistent;
-				}
-			}
-
-			return State;
+			_Container.ReleaseFiles();
+			_List.ReleaseFiles();
 		}
 		time_t TimeStamp( void ) const
 		{
@@ -312,20 +303,44 @@ namespace lstctn {
 		}
 		bso::bool__ IsPersistent( void ) const
 		{
-			bso::bool__ Is = _ContainerFileManager.IsPersistent();
+			bso::bool__ Is = _Container.IsPersistent();
 
-			if ( Is != _ListFileManager.IsPersistent() )
+			if ( Is != _List.IsPersistent() )
 				ERRFwk();
 
 			return Is;
+		}
+		ctn::files_hook___ &ContainerFilesHook( void )
+		{
+			return _Container;
+		}
+		lst::files_hook___ &ListFilesHook( void )
+		{
+			return _List;
 		}
 	};
 
 	template <typename list_container> inline uys::state__ Plug(
 		list_container &ListContainer,
-		list_container_file_manager___<list_container> &FileManager )
+		files_hook___ &Hook )
 	{
-		return FileManager.Plug( ListContainer );
+		uys::state__ State = ctn::Plug( ListContainer.Container(), Hook.ContainerFilesHook() );
+
+		if ( uys::IsError( State ) ) {
+			Hook.reset();
+		} else {
+			fil::size__ Size = Hook.ContainerFilesHook().StaticsFilesHook().FileSize() / ListContainer.GetStaticsItemSize();
+
+			if ( Size > SDR_SIZE_MAX )
+				ERRDta();
+
+			if ( lst::Plug( ListContainer, Hook.ListFilesHook(), ( sdr::size__ )Size, Hook.ContainerFilesHook().TimeStamp() ) != State ) {
+				Hook.reset();
+				State = uys::sInconsistent;
+			}
+		}
+
+		return State;
 	}
 
 

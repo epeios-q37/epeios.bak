@@ -268,13 +268,15 @@ namespace tys {
 	E_AUTO2( storage )
 
 #ifndef FLM__COMPILATION
-	typedef uys::untyped_storage_file_manager___ storage_file_manager___;
+	using uys::files_hook___;
+
+	using uys::hook_filenames___;
 
 	template <typename storage> inline uys::state__ Plug(
 		storage &Storage,
-		storage_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		return uys::Plug( Storage.GetUnderlyingStorage(), FileManager );
+		return uys::Plug( Storage.GetUnderlyingStorage(), Hook );
 	}
 #endif
 

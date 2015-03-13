@@ -315,36 +315,49 @@ namespace ctn {
 		}
 	};
 
+	struct hook_filenames___
+	{
+	public:
+		tys::hook_filenames___ Statics;
+		ias::hook_filenames___ Dynamics;
+		void reset( bso::bool__ P = true )
+		{
+			Statics.reset( P );
+			Dynamics.reset( P );
+		}
+		E_CDTOR( hook_filenames___ );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );
+	};
 
-	template <typename container> class container_file_manager___
+	class files_hook___
 	{
 	private:
-		tys::storage_file_manager___ _Statics;
-		ias::indexed_aggregated_storage_file_manager___ _Dynamics;
+		tys::files_hook___ _Statics;
+		ias::files_hook___ _Dynamics;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Statics.reset( P );
 			_Dynamics.reset( P );
 		}
-		container_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~container_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
 		void Init( 
-			const fnm::name___ &StaticsFileName,
-			const fnm::name___ &DynamicsDescriptorsFileName,
-			const fnm::name___ &DynamicsMultimemoryFileName,
+			const hook_filenames___ &Filenames,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )
 		{
-			_Statics.Init( StaticsFileName, Mode, Persistent, ID );
-			_Dynamics.Init( DynamicsDescriptorsFileName, DynamicsMultimemoryFileName, Mode, Persistent, ID );
+			_Statics.Init( Filenames.Statics, Mode, Persistent, ID );
+			_Dynamics.Init( Filenames.Dynamics, Mode, Persistent, ID );
 		}
 		uys::state__ State( void ) const
 		{
@@ -416,11 +429,11 @@ namespace ctn {
 			_Statics.Drop();
 			_Dynamics.Drop();
 		}
-		tys::storage_file_manager___ &StaticsFileManager( void )
+		tys::files_hook___ &StaticsFilesHook( void )
 		{
 			return _Statics;
 		}
-		ias::indexed_aggregated_storage_file_manager___ &DynamicsFileManager( void )
+		ias::files_hook___ &DynamicsFilesHook( void )
 		{
 			return _Dynamics;
 		}
@@ -455,22 +468,22 @@ namespace ctn {
 		}
 	};
 
-	template <typename container, typename file_manager> inline uys::state__ Plug(
+	template <typename container> inline uys::state__ Plug(
 		container &Container,
-		file_manager &FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = tys::Plug( Container.Statics, FileManager.StaticsFileManager() );
+		uys::state__ State = tys::Plug( Container.Statics, Hook.StaticsFilesHook() );
 
 		if ( uys::IsError( State ) ) {
-			FileManager.reset();
+			Hook.reset();
 			return State;
 		}
 
 		// Container.SetStepValue( 0 );	// Made by 'SubInit(...)'.
 
 		if ( !uys::IsError( State ) ) {
-			if ( ias::Plug( Container.Dynamics, FileManager.DynamicsFileManager() ) != State ) {
-				FileManager.reset();
+			if ( ias::Plug( Container.Dynamics, Hook.DynamicsFilesHook() ) != State ) {
+				Hook.reset();
 				State = uys::sInconsistent;
 			} else
 				Container.SubInit( Container.Dynamics.Descriptors.Amount() );
@@ -881,6 +894,10 @@ namespace ctn {
 		const t &operator()( void ) const
 		{
 			return Ponctuel_();
+		}
+		void FlushTest( void ) const
+		{
+			basic_container_< item_mono_statique__<typename t::s>, r >::FlushTest();
 		}
 		/*f Call this function after calling one of the two previous function
 		and before calling another function. */

@@ -248,7 +248,7 @@ static const str::string_ &GetFileName_(
 }
 */
 
-void ndbtbl::table_atomized_file_manager___::_InitStatic(
+void ndbtbl::files_hook___::_InitStatic(
 	const str::string_ &BaseFileName,
 	mode__ Mode,
 	fls::id__ ID )
@@ -266,7 +266,7 @@ ERREnd
 ERREpilog
 }
 
-void ndbtbl::table_atomized_file_manager___::_InitDynamic(
+void ndbtbl::files_hook___::_InitDynamic(
 	const str::string_ &BaseFileName,
 	mode__ Mode,
 	fls::id__ ID )

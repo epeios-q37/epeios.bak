@@ -606,15 +606,17 @@ namespace bch {
 	#define E_BUNCH_( Type )	E_BUNCHt_( Type, sdr::row__ )
 
 #ifndef FLS__COMPILATION
-	typedef tys::storage_file_manager___ bunch_file_manager___;
+	using tys::files_hook___;
+
+	using tys::hook_filenames___;
 
 	template <typename bunch> uys::state__ Plug(
 		bunch &Bunch,
-		bunch_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = tys::Plug( Bunch, FileManager );
+		uys::state__ State = tys::Plug( Bunch, Hook );
 
-		Bunch.Allocate( FileManager.Size() / Bunch.GetItemSize(), aem::mFitted );
+		Bunch.Allocate( Hook.Size() / Bunch.GetItemSize(), aem::mFitted );
 
 		return State;
 	}

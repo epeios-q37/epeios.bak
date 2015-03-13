@@ -196,51 +196,39 @@ namespace ndbsct {
 
 	E_AUTO( static_content )
 
-	class static_content_atomized_file_manager___
+	class files_hook___
 	{
 	private:
 		static_content_ *_Content;
 		str::string _BaseFileName;
-		tys::storage_file_manager___ _MemoryFileManager;
-		lst::list_file_manager___ _ListFileManager;
+		tys::files_hook___ _Memory;
+		lst::files_hook___ _List;
 		fil::mode__ _Mode;
-		time_t _GetUnderlyingFilesLastModificationTime( void ) const
-		{
-			time_t TimeStamp = _MemoryFileManager.TimeStamp();
-			// Lors d'une suppression d'un enregistrement le fichier derrière '_MemoryFileManager' n'est pas touché, mais les fichiers accessoires
-			// doivent quand même être sauvés, d'où le code ci-dessous.
-
-			if ( ( _Content != NULL ) &&
-				 ( ( TimeStamp == 0 ) || (  _Content->ModificationEpochTimeStamp() > TimeStamp ) ) )
-				TimeStamp = _Content->ModificationEpochTimeStamp();
-
-			return TimeStamp;
-		}
 		void _ErasePhysically( void )
 		{
-			_MemoryFileManager.Drop();
-			_ListFileManager.Drop();
+			_Memory.Drop();
+			_List.Drop();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_MemoryFileManager.ReleaseFile();	// Pour que les 'TimeStamp' des fichiers soient mis à jour.
+			_Memory.ReleaseFile();	// Pour que les 'TimeStamp' des fichiers soient mis à jour.
 
 			if ( P ) {
-				Settle();	// Lancé explicitement, car le 'reset(...)' de '_ListFileManager' ne peut lancer son propre 'Settle(...)'.
+				Settle();	// Lancé explicitement, car le 'reset(...)' de '_List' ne peut lancer son propre 'Settle(...)'.
 			}
 
-			_MemoryFileManager.reset( P );
-			_ListFileManager.reset( P );
+			_Memory.reset( P );
+			_List.reset( P );
 			_BaseFileName.reset( P );
 			_Mode = fil::m_Undefined;
 			_Content = NULL;
 		}
-		static_content_atomized_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~static_content_atomized_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
@@ -248,6 +236,18 @@ namespace ndbsct {
 			const str::string_ &BaseFileName,
 			fil::mode__ Mode,
 			fls::id__ ID );
+		time_t GetUnderlyingFilesLastModificationTime( void ) const
+		{
+			time_t TimeStamp = _Memory.TimeStamp();
+			// Lors d'une suppression d'un enregistrement le fichier derrière '_Memory' n'est pas touché, mais les fichiers accessoires
+			// doivent quand même être sauvés, d'où le code ci-dessous.
+
+			if ( ( _Content != NULL ) &&
+				 ( ( TimeStamp == 0 ) || ( _Content->ModificationEpochTimeStamp() > TimeStamp ) ) )
+				 TimeStamp = _Content->ModificationEpochTimeStamp();
+
+			return TimeStamp;
+		}
 		void Set( static_content_ &Content )
 		{
 			if ( _Content != NULL )
@@ -257,55 +257,61 @@ namespace ndbsct {
 		}
 		uys::state__ Bind( void )
 		{
-			uys::state__ State = _MemoryFileManager.Bind();
+			uys::state__ State = _Memory.Bind();
 
-			if ( State != _ListFileManager.Bind( _GetUnderlyingFilesLastModificationTime() ) )
+			if ( State != _List.Bind( GetUnderlyingFilesLastModificationTime() ) )
 				return uys::sInconsistent;
 
 			return State;
 		}
 		uys::state__ Settle( void )
 		{
-			uys::state__ State = _MemoryFileManager.Settle();
+			uys::state__ State = _Memory.Settle();
 
 			if ( ( _Content != NULL ) && ( _Content->ModificationEpochTimeStamp() != 0 ) )
-				_ListFileManager.Settle( _GetUnderlyingFilesLastModificationTime() );
+				_List.Settle( GetUnderlyingFilesLastModificationTime() );
 
 			return State;
 		}
 		void ReleaseFiles( void )	// Pour libèrer les 'file handlers'.
 		{
-			_MemoryFileManager.ReleaseFile();
-			_ListFileManager.ReleaseFiles();
+			_Memory.ReleaseFile();
+			_List.ReleaseFiles();
 		}
 		void SwitchMode( fil::mode__ Mode )
 		{
 			if ( Mode != _Mode ) {
-				_MemoryFileManager.Mode( Mode );
+				_Memory.Mode( Mode );
 
 				_Mode = Mode;
 			}
 		}
+		tys::files_hook___ &MemoryFilesHook( void )
+		{
+			return _Memory;
+		}
+		lst::files_hook___ &ListFilesHook( void )
+		{
+			return _List;
+		}
 		E_RODISCLOSE__( str::string_, BaseFileName );
-		friend uys::state__ Plug(
-			static_content_ &Content,
-			static_content_atomized_file_manager___ &FileManager );
+
 	};
 
 	inline uys::state__ Plug(
 		static_content_ &Content,
-		static_content_atomized_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = tys::Plug( Content.Storage, FileManager._MemoryFileManager );
+		uys::state__ State = tys::Plug( Content.Storage, Hook.MemoryFilesHook() );
 
 		if ( uys::IsError( State ) ) {
-			FileManager.reset();
+			Hook.reset();
 		} else {
-			if ( State != lst::Plug( Content, FileManager._ListFileManager, Content.Storage.Size()/Content.Size(), FileManager._GetUnderlyingFilesLastModificationTime() ) ) {
-				FileManager.reset();
+			if ( State != lst::Plug( Content, Hook.ListFilesHook(), Content.Storage.Size()/Content.Size(), Hook.GetUnderlyingFilesLastModificationTime() ) ) {
+				Hook.reset();
 				return uys::sInconsistent;
 			} else 
-				FileManager.Set( Content );
+				Hook.Set( Content );
 		}
 
 		return State;

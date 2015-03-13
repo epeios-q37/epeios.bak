@@ -4,7 +4,23 @@ Meaning of list markers (2nd level):
 - '-' : cosmetic changes. Function/method and/or parameter names change. Functionnality (should) remain unchanged.
 - '*' : functionnality changes.
 
-2015-03-11
+2015-03-13 :
+- GLOBAL :
+	* Adaptation to changes in 'UYS'.
+- NTVSTR :
+	* Change made the 11th active only for Windows, as g++ complains about.
+- TOL :
+	* Introducing 'E_XENUM', which simplifies error handling with 'enum's.
+- UYS :
+	* Using the new 'E_XENUM' from 'TOL'.
+	- Renaming 'file_manager___' to 'file_hook___'
+	* Introducing 'hook_filnames___'.
+
+2015-03-12 :
+- SCLPLUGIN
+	* Removing test feature.
+
+2015-03-11 :
 - GLOBAL :
 	- Généralization of the use of the terms :
 		- 'path' for, in a generic way, a file or a directory.

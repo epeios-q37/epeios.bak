@@ -394,13 +394,13 @@ namespace idxbtr {
 
 	E_AUTO1( tree_index )
 
-	typedef btr::binary_tree_file_manager___ tree_index_file_manager___;
+	using btr::files_hook___;
 
 	template <typename index> uys::state__ Plug(
 		index &Index,
-		tree_index_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		return btr::Plug( Index.BaseTree, FileManager );
+		return btr::Plug( Index.BaseTree, Hook );
 	}
 
 

@@ -263,10 +263,11 @@ namespace idxbtq {
 
 	E_AUTO1( tree_queue_index )
 
-	class index_file_manager___ {
+	class files_hook___
+	{
 	private:
-		idxbtr::tree_index_file_manager___ _TreeFileManager;
-		idxque::queue_index_file_manager___ _QueueFileManager;
+		idxbtr::files_hook___ _Tree;
+		idxque::files_hook___ _Queue;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -274,14 +275,14 @@ namespace idxbtq {
 				Settle();
 			}
 
-			_TreeFileManager.reset( P );
-			_QueueFileManager.reset( P );
+			_Tree.reset( P );
+			_Queue.reset( P );
 		}
-		index_file_manager___( void ) 
+		files_hook___( void ) 
 		{
 			reset( false );
 		}
-		~index_file_manager___( void ) 
+		~files_hook___( void ) 
 		{
 			reset();
 		}
@@ -294,28 +295,28 @@ namespace idxbtq {
 		{
 			reset();
 
-			_TreeFileManager.Init( TreeFileName, Mode, Persistent, ID );
+			_Tree.Init( TreeFileName, Mode, Persistent, ID );
 
-			_QueueFileManager.Init( QueueFileName, Mode, Persistent, ID );
+			_Queue.Init( QueueFileName, Mode, Persistent, ID );
 		}
 		uys::state__ State( void ) const
 		{
-			uys::state__ State = _TreeFileManager.State();
+			uys::state__ State = _Tree.State();
 
 			if ( !uys::IsError( State ) )
-				if ( State != _QueueFileManager.State() )
+				if ( State != _Queue.State() )
 					State = uys::sInconsistent;
 
 			return State;
 		}
 		uys::state__ Bind( void )
 		{
-			uys::state__ State = _TreeFileManager.Bind();
+			uys::state__ State = _Tree.Bind();
 
 			if ( uys::IsError( State ) )
 				return State;
 
-			if ( _QueueFileManager.Bind() != State )
+			if ( _Queue.Bind() != State )
 				State = uys::sInconsistent;
 
 			return State;
@@ -323,12 +324,12 @@ namespace idxbtq {
 		}
 		uys::state__ Settle( void )
 		{
-			uys::state__ State = _TreeFileManager.Settle();
+			uys::state__ State = _Tree.Settle();
 
 			if ( uys::IsError( State ) )
 				return State;
 
-			if ( _QueueFileManager.Settle() != State )
+			if ( _Queue.Settle() != State )
 				State = uys::sInconsistent;
 
 			return State;
@@ -336,60 +337,60 @@ namespace idxbtq {
 		}
 		void ReleaseFiles( void )
 		{
-			_TreeFileManager.ReleaseFile();
-			_QueueFileManager.ReleaseFile();
+			_Tree.ReleaseFile();
+			_Queue.ReleaseFile();
 		}
 		void Mode( fil::mode__ Mode )
 		{
-			_TreeFileManager.Mode( Mode );
-			_QueueFileManager.Mode( Mode );
+			_Tree.Mode( Mode );
+			_Queue.Mode( Mode );
 		}
 		bso::bool__ IsPersistent( void ) const
 		{
-			if ( ( _TreeFileManager.IsPersistent() ) != _QueueFileManager.IsPersistent() )
+			if ( ( _Tree.IsPersistent() ) != _Queue.IsPersistent() )
 				ERRFwk();
 
-			return _TreeFileManager.IsPersistent();
+			return _Tree.IsPersistent();
 		}
 		bso::bool__ Exists( void ) const
 		{
-			bso::bool__ Exists = _TreeFileManager.Exists();
+			bso::bool__ Exists = _Tree.Exists();
 
-			if ( Exists != _QueueFileManager.Exists() )
+			if ( Exists != _Queue.Exists() )
 				ERRFwk();
 
 			return Exists;
 		}
 		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
 		{
-			bso::bool__ Success = _TreeFileManager.CreateFiles( ErrorHandling );
+			bso::bool__ Success = _Tree.CreateFiles( ErrorHandling );
 
 			if ( !Success )
 				return false;
 
-			Success = _QueueFileManager.CreateFiles( ErrorHandling );
+			Success = _Queue.CreateFiles( ErrorHandling );
 
 			return Success;
 		}
 		void Drop( void )
 		{
-			_TreeFileManager.Drop();
-			_QueueFileManager.Drop();
+			_Tree.Drop();
+			_Queue.Drop();
 		}
-		idxbtr::tree_index_file_manager___ &TreeFileManager( void )
+		idxbtr::files_hook___ &TreeFilesHook( void )
 		{
-			return _TreeFileManager;
+			return _Tree;
 		}
-		idxque::queue_index_file_manager___ &QueueFileManager( void )
+		idxque::files_hook___ &QueueFilesHook( void )
 		{
-			return _QueueFileManager;
+			return _Queue;
 		}
 		time_t TimeStamp( void ) const
 		{
 			time_t TreeTimeStamp, QueueTimeStamp;
 
-			TreeTimeStamp = _TreeFileManager.TimeStamp();
-			QueueTimeStamp = _QueueFileManager.TimeStamp();
+			TreeTimeStamp = _Tree.TimeStamp();
+			QueueTimeStamp = _Queue.TimeStamp();
 
 			return ( TreeTimeStamp > QueueTimeStamp ? TreeTimeStamp : QueueTimeStamp );
 		}
@@ -398,17 +399,17 @@ namespace idxbtq {
 
 	template <typename index> uys::state__ Plug(
 		index &Index,
-		index_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = idxbtr::Plug( Index, FileManager.TreeFileManager() );
+		uys::state__ State = idxbtr::Plug( Index, Hook.TreeFilesHook() );
 
 		if ( uys::IsError( State ) ) {
-			FileManager.reset();
+			Hook.reset();
 			return State;
 		}
 
-		if ( State != idxque::Plug( Index, FileManager.QueueFileManager() ) ) {
-			FileManager.reset();
+		if ( State != idxque::Plug( Index, Hook.QueueFilesHook() ) ) {
+			Hook.reset();
 			State = uys::sInconsistent;
 		}
 

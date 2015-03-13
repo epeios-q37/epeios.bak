@@ -132,9 +132,9 @@ ERREnd
 ERREpilog
 }
 
-void ndbdct::dynamic_content_atomized_file_manager___::_SaveAvailables( void ) const
+void ndbdct::files_hook___::_SaveAvailables( void ) const
 {
-	Save_( _Content->Availables, _BaseFileName, AVAILABLES_FILE_NAME_EXTENSION, _GetUnderlyingFilesLastModificationTime() );
+	Save_( _Content->Availables, _BaseFileName, AVAILABLES_FILE_NAME_EXTENSION, GetUnderlyingFilesLastModificationTime() );
 }
 
 static inline void Load_(
@@ -242,12 +242,12 @@ ERREpilog
 	return Success;
 }
 
-bso::bool__ ndbdct::dynamic_content_atomized_file_manager___::_LoadAvailables( void )
+bso::bool__ ndbdct::files_hook___::_LoadAvailables( void )
 {
-	return LoadAvailables_( _BaseFileName, _Content->Availables, _GetUnderlyingFilesLastModificationTime() );
+	return LoadAvailables_( _BaseFileName, _Content->Availables, GetUnderlyingFilesLastModificationTime() );
 }
 
-void ndbdct::dynamic_content_atomized_file_manager___::Init(
+void ndbdct::files_hook___::Init(
 	const str::string_ &BaseFileName,
 	fil::mode__ Mode,
 	fls::id__ ID )
@@ -264,7 +264,7 @@ ERRBegin
 
 	ContentFileName.Init( BaseFileName );
 	ContentFileName.Append( CONTENT_FILE_NAME_EXTENSION );
-	_StorageFileManager.Init( ContentFileName.Convert( ContentFileNameBuffer ), Mode, true, ID );
+	_Storage.Init( ContentFileName.Convert( ContentFileNameBuffer ), Mode, true, ID );
 
 	EntriesBunchFileName.Init( BaseFileName );
 	EntriesBunchFileName.Append( ENTRIES_FILE_NAME_EXTENSION );
@@ -272,7 +272,7 @@ ERRBegin
 	EntriesListFileName.Init( BaseFileName );
 	EntriesListFileName.Append( LIST_FILE_NAME_EXTENSION );
 
-	_EntriesFileManager.Init( EntriesBunchFileName.Convert( EntriesBunchFileNameBuffer) , EntriesListFileName.Convert( EntriesListFileNameBuffer ), Mode, true, ID );
+	_Entries.Init( EntriesBunchFileName.Convert( EntriesBunchFileNameBuffer) , EntriesListFileName.Convert( EntriesListFileNameBuffer ), Mode, true, ID );
 
 	_BaseFileName.Init( BaseFileName );
 	_Mode = Mode;
@@ -306,12 +306,12 @@ ERREpilog
 	return Success;
 }
 
-void ndbdct::dynamic_content_atomized_file_manager___::_ErasePhysically( void )
+void ndbdct::files_hook___::_ErasePhysically( void )
 {
 ERRProlog
 ERRBegin
-	_StorageFileManager.Drop();
-	_EntriesFileManager.Drop();
+	_Storage.Drop();
+	_Entries.Drop();
 
 	ndbbsc::DropFile( _BaseFileName, AVAILABLES_FILE_NAME_EXTENSION );
 ERRErr
@@ -321,27 +321,27 @@ ERREpilog
 
 uys::state__ ndbdct::Plug(
 	dynamic_content_ &Content,
-	dynamic_content_atomized_file_manager___ &FileManager )
+	files_hook___ &Hook )
 {
-	uys::state__ State = tys::Plug( Content.Storage.Memory, FileManager._StorageFileManager );
+	uys::state__ State = tys::Plug( Content.Storage.Memory, Hook.StorageFilesHook() );
 
 	if ( uys::IsError( State ) ) {
-		FileManager.reset();
+		Hook.reset();
 		return State;
 	}
 
-	if ( lstbch::Plug( Content.Entries, FileManager._EntriesFileManager ) != State ) {
-		FileManager.reset();
+	if ( lstbch::Plug( Content.Entries, Hook.EntriesFilesHook() ) != State ) {
+		Hook.reset();
 		return uys::sInconsistent;
 	}
 
-	FileManager.Set( Content );
+	Hook.Set( Content );
 
-	Content.S_.Unallocated = FileManager._StorageFileManager.Size();
+	Content.S_.Unallocated = Hook.StorageFilesHook().Size();
 
 	if ( uys::Exists( State ) )
-		if ( !Test_( FileManager._BaseFileName, AVAILABLES_FILE_NAME_EXTENSION, FileManager._GetUnderlyingFilesLastModificationTime() ) ) {
-			FileManager.reset();
+		if ( !Test_( Hook.BaseFileName(), AVAILABLES_FILE_NAME_EXTENSION, Hook.GetUnderlyingFilesLastModificationTime() ) ) {
+			Hook.reset();
 			State = uys::sInconsistent;
 		}
 

@@ -55,6 +55,8 @@ public:
 				  /*******************************************/
 /*$BEGIN$*/
 
+#include "err.h"
+
 using namespace tht;
 
 #ifdef THT__WIN

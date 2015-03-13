@@ -301,7 +301,7 @@ namespace ndbdct {
 
 	typedef lstbch::E_LBUNCHt_( entry__, rrow__ ) entries_;
 
-	typedef lstbch::list_bunch_file_manager___ entries_file_manager___;
+	typedef lstbch::files_hook___ entries_files_hook___;
 
 	class dynamic_content_
 	{
@@ -539,26 +539,14 @@ namespace ndbdct {
 	E_AUTO( dynamic_content )
 
 	// Content stocké dans des fichiers.
-	class dynamic_content_atomized_file_manager___
+	class files_hook___
 	{
 	private:
 		dynamic_content_ *_Content;
 		str::string _BaseFileName;
-		tys::storage_file_manager___ _StorageFileManager;
-		entries_file_manager___ _EntriesFileManager;
+		tys::files_hook___ _Storage;
+		entries_files_hook___ _Entries;
 		fil::mode__ _Mode;
-		time_t _GetUnderlyingFilesLastModificationTime( void ) const
-		{
-			time_t ContentTimeStamp, EntriesTimeStamp;
-
-			ContentTimeStamp = _StorageFileManager.TimeStamp();
-			EntriesTimeStamp = _EntriesFileManager.TimeStamp();
-
-			if ( ContentTimeStamp > EntriesTimeStamp )
-				return ContentTimeStamp;
-			else
-				return EntriesTimeStamp;
-		}
 		void _SaveAvailables( void ) const;
 		bso::bool__ _LoadAvailables( void );
 		void _ErasePhysically( void );
@@ -566,24 +554,24 @@ namespace ndbdct {
 		void reset( bso::bool__ P = true )
 		{
 			// Nécessaire, sinon le 'Settle(...)' qui suit peut ne pas fonctionner correctement.
-			_StorageFileManager.ReleaseFile();
-			_EntriesFileManager.ReleaseFile();
+			_Storage.ReleaseFile();
+			_Entries.ReleaseFile();
 
 			if ( P ) {
 				Settle();	// Lancé explicitement, pour la sauvegarde des 'availables'.
 			}
 
-			_StorageFileManager.reset( P );
-			_EntriesFileManager.reset( P );
+			_Storage.reset( P );
+			_Entries.reset( P );
 			_Mode = fil::m_Undefined;
 			_BaseFileName.reset( P );
 			_Content = NULL;
 		}
-		dynamic_content_atomized_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~dynamic_content_atomized_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
@@ -591,6 +579,18 @@ namespace ndbdct {
 			const str::string_ &BaseFileName,
 			fil::mode__ Mode,
 			fls::id__ ID );
+		time_t GetUnderlyingFilesLastModificationTime( void ) const
+		{
+			time_t ContentTimeStamp, EntriesTimeStamp;
+
+			ContentTimeStamp = _Storage.TimeStamp();
+			EntriesTimeStamp = _Entries.TimeStamp();
+
+			if ( ContentTimeStamp > EntriesTimeStamp )
+				return ContentTimeStamp;
+			else
+				return EntriesTimeStamp;
+		}
 		void Set( dynamic_content_ &Content )
 		{
 			if ( _Content != NULL )
@@ -600,23 +600,23 @@ namespace ndbdct {
 		}
 		uys::state__ Bind( void )
 		{
-			uys::state__ State = _StorageFileManager.Bind();
+			uys::state__ State = _Storage.Bind();
 
 			if ( uys::IsError( State ) ) {
-				_StorageFileManager.reset();
+				_Storage.reset();
 				return State;
 			}
 
-			if ( _EntriesFileManager.Bind() != State ) {
-				_StorageFileManager.reset();
-				_EntriesFileManager.reset();
+			if ( _Entries.Bind() != State ) {
+				_Storage.reset();
+				_Entries.reset();
 				return uys::sInconsistent;
 			}
 
 			if ( uys::Exists( State ) )
 				if ( !_LoadAvailables() ) {
-					_StorageFileManager.reset();
-					_EntriesFileManager.reset();
+					_Storage.reset();
+					_Entries.reset();
 					State = uys::sInconsistent;
 				}
 
@@ -624,9 +624,9 @@ namespace ndbdct {
 		}
 		uys::state__ Settle( void )
 		{
-			uys::state__ State = _StorageFileManager.Settle();
+			uys::state__ State = _Storage.Settle();
 
-			if ( _EntriesFileManager.Settle() != State )
+			if ( _Entries.Settle() != State )
 				State = uys::sInconsistent;
 
 			if ( (_Content != NULL ) && ( _BaseFileName.Amount() != 0 ) && ( _Content->ModificationEpochTimeStamp() != 0 ) )
@@ -640,14 +640,14 @@ namespace ndbdct {
 		}
 		void CloseFiles( void )	// Pour libèrer les 'file handlers'.
 		{
-			_StorageFileManager.ReleaseFile();
-			_EntriesFileManager.ReleaseFile();
+			_Storage.ReleaseFile();
+			_Entries.ReleaseFile();
 		}
 		void SwitchMode( fil::mode__ Mode )
 		{
 			if ( Mode != _Mode ) {
-				_StorageFileManager.Mode( Mode );
-				_EntriesFileManager.Mode( Mode );
+				_Storage.Mode( Mode );
+				_Entries.Mode( Mode );
 
 				_Mode = Mode;
 			}
@@ -656,14 +656,19 @@ namespace ndbdct {
 		{
 			return _BaseFileName;
 		}
-		friend uys::state__ Plug(
-			dynamic_content_ &Content,
-			dynamic_content_atomized_file_manager___ &FileManager );
+		tys::files_hook___ &StorageFilesHook( void )
+		{
+			return _Storage;
+		}
+		entries_files_hook___ &EntriesFilesHook( void )
+		{
+			return _Entries;
+		}
 	};
 
 	uys::state__ Plug(
 		dynamic_content_ &Content,
-		dynamic_content_atomized_file_manager___ &FileManager );
+		files_hook___ &Hook );
 }
 
 /*$END$*/

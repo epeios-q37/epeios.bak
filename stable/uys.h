@@ -370,13 +370,15 @@ namespace uys {
 		}
 	};
 
-	enum state__ {	// Statut de l'opération de connection.
+	E_ENUM( _state ) {	// Statut de l'opération de connection.
 		sExists,		// le fichier rattaché existe.
 		sAbsent,		// Fichier rattaché absent (ce n'est pas une erreur, cela signifie que des données n'ont pas encore été stockées).
 		sInconsistent,	// Les fichiers sont dans une état incohérent, probablement dû à un arrêt inopiné du logiciel. Utilisé par les bibliothèques en amont.
 		s_amount,
 		s_Undefined
 	};
+
+	E_XENUM( state, s );
 
 #define UYS_STATE_AMOUNT	3
 
@@ -385,7 +387,7 @@ namespace uys {
 #if UYS_STATE_AMOUNT != 3
 #	error "'state__' changed !"
 #endif
-		switch ( State ) {
+		switch ( State() ) {
 		case sExists:
 		case sAbsent:
 			return false;
@@ -409,7 +411,7 @@ namespace uys {
 #if UYS_STATE_AMOUNT != 3
 #	error "'state__' changed !"
 #endif
-		switch ( State ) {
+		switch ( State() ) {
 		case sExists:
 			return true;
 			break;
@@ -429,17 +431,35 @@ namespace uys {
 
 	typedef fls::E_FILE_SDRIVER___ _file_storage_driver___;
 
-	class untyped_storage_file_manager___
+	struct hook_filenames___
+	{
+	public:
+		fnm::name___ Filename;
+		void reset( bso::bool__ P = true )
+		{
+			Filename.reset( P );
+		}
+		E_CDTOR( hook_filenames___ );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename )	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
+		{
+			Filename.Init();
+			fnm::BuildPath( Path, Filename, ".qs", Filename );
+		}
+	};
+		
+	class files_hook___
 	: public _file_storage_driver___
 	{
 	public:
 		void Init( 
-			const fnm::name___ &FileName,
+			const hook_filenames___ &Filenames,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )
 		{
-			_file_storage_driver___::Init( ID, FileName, Mode, fls::cFirstUse );
+			_file_storage_driver___::Init( ID, Filenames.Filename, Mode, fls::cFirstUse );
 
 			if ( Persistent )
 				_file_storage_driver___::Persistent();
@@ -478,18 +498,18 @@ namespace uys {
 		}
 		friend state__ Plug(
 			untyped_storage_ &Storage,
-			untyped_storage_file_manager___ &FileManager );
+			files_hook___ &FilesHook );
 	};
 
 	inline state__ Plug(
 		untyped_storage_ &Storage,
-		untyped_storage_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		state__ State = ( FileManager.Exists() ? sExists : sAbsent );
+		state__ State = ( Hook.Exists() ? sExists : sAbsent );
 
-		Storage.plug( FileManager );
+		Storage.plug( Hook );
 
-		Storage.Allocate( FileManager.Size() );
+		Storage.Allocate( Hook.Size() );
 
 		return State;
 	}
@@ -716,6 +736,14 @@ namespace uys {
 	};
 
 	typedef _storage__< _untyped_storage___>	untyped_storage___;
+}
+
+inline bso::bool__ BoolOp( uys::_state__ State )
+{
+	if ( uys::IsError( State ) )
+		ERRFwk();
+
+	return uys::Exists( State );
 }
 
 # define UYS__HEADER_HANDLED	// A destination de 'AGS'.

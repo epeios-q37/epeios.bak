@@ -57,6 +57,27 @@ public:
 
 using namespace lstctn;
 
+void lstctn::hook_filenames___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+ERRProlog
+	fnm::name___ Container, List;
+ERRBegin
+	Container.Init();
+	fnm::BuildPath( Path, Basename, ".qlcc", Container );
+
+	List.Init();
+	fnm::BuildPath( Path, Basename, ".qlcl", List );
+
+	this->Container.Init( NULL, Container );
+	this->List.Init( NULL, List );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 

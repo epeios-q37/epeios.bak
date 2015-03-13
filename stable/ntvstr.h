@@ -106,6 +106,7 @@ namespace ntvstr {
 			reset( false );
 			Init( String );
 		}
+# ifdef CPE_WIN
 		string___( int String )	// Pour traiter le cas ou c'est 'NULL' (assimilé à un int) qui est passé en paramètre.
 		{
 			reset( false );
@@ -115,6 +116,7 @@ namespace ntvstr {
 
 			Init( (char__ *)NULL );
 		}
+# endif
 		string___ &operator =( const string___ &S )
 		{
 			Init( S.Internal() );

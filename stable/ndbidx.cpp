@@ -630,7 +630,7 @@ ERREpilog
 }
 
 
-void ndbidx::index_atomized_file_manager___::Init(
+void ndbidx::files_hook___::Init(
 	const str::string_ &BaseFileName,
 	bso::bool__ Erase,
 	fil::mode__ Mode,
@@ -650,7 +650,7 @@ ERRBegin
 	QueueFileName.Init( BaseFileName );
 	QueueFileName.Append( QUEUE_FILE_NAME_EXTENSION );
 
-	_FileManager.Init( TreeFileName.Convert( TreeFileNameBuffer ), QueueFileName.Convert( QueueFileNameBuffer ), Mode, true, ID );
+	_Hook.Init( TreeFileName.Convert( TreeFileNameBuffer ), QueueFileName.Convert( QueueFileNameBuffer ), Mode, true, ID );
 
 	_BaseFileName.Init( BaseFileName );
 

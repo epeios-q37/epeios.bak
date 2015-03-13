@@ -76,6 +76,9 @@
 
 # include "bso.h"
 
+# define E_ENUM( name )\
+	enum name##__ : bso::enum__ 
+
 namespace sdr {
 	struct row__;
 }
@@ -183,6 +186,42 @@ namespace tol
 			return _Row;
 		}
 	};
+
+	template <typename type, type Undefined> class extended_enum__
+	{
+	private:
+		type _Value;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			_Value = Undefined;
+		}
+		extended_enum__( type Value = Undefined )
+		{
+			reset();
+			_Value = Value;
+		}
+		~extended_enum__( void )
+		{
+			reset( false );
+		}
+		void Init( void )
+		{
+			_Value = Undefined;
+		}
+		type operator()( void ) const
+		{
+			return _Value;
+		}
+		operator bso::bool__( void ) const
+		{
+			// Cette fonction doit génèrer une erreur lorsque _'Value' représente une valeur indiquant un problème.
+			// Si on ne veut pas qu'une erreur soit génèrée, on utilise l'opérateur '()'.
+			return BoolOp( _Value );
+		}
+	};
+
+# define E_XENUM( name, prefix )	typedef tol::extended_enum__<_##name##__, prefix##_Undefined> name##__
 }
 
 # define E_XROWt( type )	extended_row__<type>
@@ -199,9 +238,6 @@ namespace tol
 # define E_CRDEF( type, name, value )\
 	E_CVDEF( type, &name, value )
 # endif
-
-# define E_ENUM( name )\
-	enum name##__ : bso::enum__ 
 
 #ifdef CPE__VC
 #	ifdef CPE__WARNING_SUPPRESSION_ENABLED
@@ -1310,6 +1346,48 @@ namespace tol {
 # define E_BUFFER___( t )	buffer___<t>
 # define TOL_CBUFFER___ tol::E_BUFFER___( bso::char__ )
 
+}
+
+template <typename type, type Undefined> bso::bool__ operator==(
+	tol::extended_enum__<type, Undefined> Op1,
+	tol::extended_enum__<type, Undefined> Op2 )
+{
+	return Op1() == Op2();
+}
+
+template <typename type, typename _type, type Undefined> bso::bool__ operator==(
+	_type Op1,
+	tol::extended_enum__<type, Undefined> Op2 )
+{
+	return Op1 == Op2();
+}
+
+template <typename type, typename _type, type Undefined> bso::bool__ operator==(
+	tol::extended_enum__<type, Undefined> Op1,
+	_type Op2 )
+{
+	return Op1() == Op2;
+}
+
+template <typename type, type Undefined> bso::bool__ operator!=(
+	tol::extended_enum__<type, Undefined> Op1,
+	tol::extended_enum__<type, Undefined> Op2 )
+{
+	return Op1() != Op2();
+}
+
+template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
+	_type Op1,
+	tol::extended_enum__<type, Undefined> Op2 )
+{
+	return Op1 != Op2();
+}
+
+template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
+	tol::extended_enum__<type, Undefined> Op1,
+	_type Op2 )
+{
+	return Op1() != Op2;
 }
 
 #if 0

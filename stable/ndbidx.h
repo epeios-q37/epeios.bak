@@ -532,16 +532,16 @@ namespace ndbidx {
 
 	E_AUTO( index )
 
-	class index_atomized_file_manager___
+	class files_hook___
 	{
 	private:
 		index_ *_Index;
 		str::string _BaseFileName;
-		idxbtq::index_file_manager___ _FileManager;
+		idxbtq::files_hook___ _Hook;
 		fil::mode__ _Mode;
 		void _ErasePhysically( void )
 		{
-			_FileManager.Drop();
+			_Hook.Drop();
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -550,16 +550,16 @@ namespace ndbidx {
 				Settle();
 			}
 
-			_FileManager.reset( P );
+			_Hook.reset( P );
 			_Mode = fil::m_Undefined;
 			_BaseFileName.reset( P );
 			_Index = NULL;
 		}
-		index_atomized_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~index_atomized_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
@@ -577,7 +577,7 @@ namespace ndbidx {
 		}
 		uys::state__ Bind( void )
 		{
-			uys::state__ State = _FileManager.Bind();
+			uys::state__ State = _Hook.Bind();
 
 			if ( uys::IsError( State ) )
 				return State;
@@ -589,39 +589,37 @@ namespace ndbidx {
 		}
 		uys::state__ Settle( void )
 		{
-			return _FileManager.Settle();
+			return _Hook.Settle();
 		}
 		void CloseFiles( void )
 		{
-			_FileManager.ReleaseFiles();
+			_Hook.ReleaseFiles();
 		}
 		const str::string_ &BaseFileName( void ) const
 		{
 			return _BaseFileName;
 		}
-		friend uys::state__ Plug(
-			index_ &Index,
-			index_atomized_file_manager___	&FileManager );
+		idxbtq::files_hook___ &FilesHook( void )
+		{
+			return _Hook;
+		}
 	};
 
 	inline uys::state__ Plug(
 		index_ &Index,
-		index_atomized_file_manager___	&FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = idxbtq::Plug( Index.DIndex, FileManager._FileManager );
+		uys::state__ State = idxbtq::Plug( Index.DIndex, Hook.FilesHook() );
 
 		if ( uys::IsError( State ) ) {
-			FileManager.reset();
+			Hook.reset();
 			return State;
 		}
 
-		FileManager.Set( Index );
+		Hook.Set( Index );
 
 		return State;
 	}
-
-
-
 }
 
 /*$END$*/

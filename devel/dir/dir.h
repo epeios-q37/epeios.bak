@@ -113,8 +113,8 @@ namespace dir {
 
 		return fnm::GetLocation( fnm::name___( Filename ), Dir );
 # else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
-		char FileName[PATH_MAX];
-		int Size = readlink( "/proc/self/exe", FileName, sizeof( Filename ) );
+		char Filename[PATH_MAX];
+		int Size = readlink( "/proc/self/exe", Filename, sizeof( Filename ) );
 
 		// Valeur d"erreur retournée par 'GetModuleFileName(..)'.
 		// Valeur d'erreur retrounée par 'readlink(...)', mais '0' est normalement une impossibilité.
@@ -233,7 +233,7 @@ namespace dir {
 		void Init( void )
 		{
 			Dir = NULL;
-			Path.reset( P );
+			Path.Init();
 		}
 	};
 #else
@@ -290,7 +290,7 @@ namespace dir {
 			else
 				ERRFwk();
 		else
-			Handle.Name.Init( ent->d_name );
+			Handle.Path.Init( ent->d_name );
 # else
 #  error
 # endif
@@ -327,11 +327,11 @@ namespace dir {
     
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Name.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				ERRFwk();
 		else
-			Handle.Name.Init( ent->d_name );
+			Handle.Path.Init( ent->d_name );
     
 # endif
 		return Handle.Path;

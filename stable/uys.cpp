@@ -55,6 +55,8 @@ public:
 				  /*******************************************/
 /*$BEGIN$*/
 
+#include "str.h"
+
 using namespace uys;
 
 #ifdef UYS_BUFFER_SIZE

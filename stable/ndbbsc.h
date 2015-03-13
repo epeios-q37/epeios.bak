@@ -223,7 +223,7 @@ namespace ndbbsc {
 		{
 			if ( _IsMember( Row ) ) {
 				crow__ CacheRow = List( Row );
-				Container.Delete( CacheRow );
+				Container.Remove( CacheRow );
 				List.Store( E_NIL, Links( CacheRow ) );
 				Links.Store( E_NIL, CacheRow );
 				Queue.Delete( CacheRow );

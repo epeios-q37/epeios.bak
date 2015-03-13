@@ -72,6 +72,28 @@ void indexed_aggregated_storage_::RemoveWithoutReallocating(
 	_Initialize( ActualCapacity - Amount, ActualCapacity );
 }
 
+void ias::hook_filenames___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+ERRProlog
+	fnm::name___ Descriptors, Storage;
+ERRBegin
+	Descriptors.Init();
+	fnm::BuildPath( Path, Basename, ".qas", Descriptors );
+
+	Storage.Init();
+	fnm::BuildPath( Path, Basename, ".qad", Storage );
+
+	this->Descriptors.Init( NULL, Descriptors );
+	this->Storage.Init( NULL, Storage );
+
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

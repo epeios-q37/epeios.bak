@@ -309,23 +309,41 @@ namespace lst {
 	E_AUTO2( list )
 
 
-	#define E_LISTtx( r, r_t )	list<r, r_t>
-	#define E_LISTtx_( r, r_t )	list_<r, r_t>
+#define E_LISTtx( r, r_t )	list<r, r_t>
+#define E_LISTtx_( r, r_t )	list_<r, r_t>
 
-	//d Handle a list of objects.
-	#define E_LISTt( r )	E_LISTtx( r, sdr::row_t__ )
-	#define E_LISTt_( r )	E_LISTtx_( r, sdr::row_t__ )
+		//d Handle a list of objects.
+#define E_LISTt( r )	E_LISTtx( r, sdr::row_t__ )
+#define E_LISTt_( r )	E_LISTtx_( r, sdr::row_t__ )
 
-	#define E_LIST	E_LISTt( sdr::row__ )
-	#define E_LIST_	E_LISTt_( sdr::row__ )
+#define E_LIST	E_LISTt( sdr::row__ )
+#define E_LIST_	E_LISTt_( sdr::row__ )
 
 #ifndef FLM__COMPILATION
 
-	class list_file_manager___
+	struct hook_filenames___
+	{
+	public:
+		fnm::name___ Filename;
+		void reset( bso::bool__ P = true )
+		{
+			Filename.reset( P );
+		}
+		E_CDTOR( hook_filenames___ );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename )	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
+		{
+			Filename.Init();
+			fnm::BuildPath( Path, Filename, ".ql", Filename );
+		}
+	};
+
+	class files_hook___
 	{
 	private:
 		lst::store_ *_Store;
-		fnm::name___ _FileName;
+		fnm::name___ _Filename;
 		fil::mode__ _Mode;	// Ne sert à rien, juste présent à des fins de standardisation.
 		bso::bool__ _Persistent;	// Ne sert à rien, juste présent à des fins de standardisation.
 	public:
@@ -335,27 +353,27 @@ namespace lst {
 			//	Settle();	// Fait en amoont, car il manque le 'TimeStamp()'.
 			}
 
-			_FileName.reset( P );
+			_Filename.reset( P );
 			_Store = NULL;
 			_Mode = fil::m_Undefined;
 			_Persistent = false;
 		}
-		list_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~list_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
 		void Init(
-			const fnm::name___ &FileName,
+			const hook_filenames___ &Filenames,
 			fil::mode__ Mode,
 			bso::bool__ Persistent )
 		{
 			reset();
 
-			_FileName.Init( FileName );
+			_Filename.Init( Filenames.Filename );
 
 			_Mode = Mode;
 			_Persistent = Persistent;
@@ -380,14 +398,14 @@ namespace lst {
 		}
 		uys::state__ State( void ) const
 		{
-			return Test_( _FileName, 0 );
+			return Test_( _Filename, 0 );
 		}
 		uys::state__ Bind( time_t ReferenceTimeStamp )
 		{
-			uys::state__ State = Test_( FileName(), ReferenceTimeStamp );
+			uys::state__ State = Test_( Filename(), ReferenceTimeStamp );
 
 			if ( uys::Exists( State ) )
-				State = ReadFromFile_( FileName(), *_Store );
+				State = ReadFromFile_( Filename(), *_Store );
 
 			return State;
 		}
@@ -399,34 +417,34 @@ namespace lst {
 				return uys::sInconsistent;
 
 			if ( ( ReferenceTimeStamp == 0 )
-				|| ( !fil::Exists( _FileName ) )
-				|| ( fil::GetLastModificationTime( _FileName ) <= ReferenceTimeStamp ) )
-					State = WriteToFile_( *_Store, _FileName );
+				|| ( !fil::Exists( _Filename ) )
+				|| ( fil::GetLastModificationTime( _Filename ) <= ReferenceTimeStamp ) )
+					State = WriteToFile_( *_Store, _Filename );
 			else
 				State = uys::sExists;
 
 			if ( uys::IsError( State ) )
 				return State;
 			
-			while ( fil::GetLastModificationTime( _FileName ) <= ReferenceTimeStamp ) {
+			while ( fil::GetLastModificationTime( _Filename ) <= ReferenceTimeStamp ) {
 				tol::EpochTime( true );	// Permet d'attendre une unité de temps.
-				fil::Touch( _FileName );
+				fil::Touch( _Filename );
 			}
 
 			return State;
 		}
 		void Drop( void )
 		{
-			if ( ( _Store == NULL ) || !_FileName.Amount() )
+			if ( ( _Store == NULL ) || !_Filename.Amount() )
 				ERRFwk();
 
-			if ( fil::Exists( _FileName ) )
-				if ( !fil::Remove( _FileName ) )
+			if ( fil::Exists( _Filename ) )
+				if ( !fil::Remove( _Filename ) )
 					ERRLbr();
 		}
-		const fnm::name___ &FileName( void ) const
+		const fnm::name___ &Filename( void ) const
 		{
-			return _FileName;
+			return _Filename;
 		}
 		void Set( lst::store_ &Store )
 		{
@@ -444,14 +462,14 @@ namespace lst {
 #endif
 		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
 		{
-			if ( fil::Exists( _FileName ) ) {
+			if ( fil::Exists( _Filename ) ) {
 				if ( ErrorHandling == err::hThrowException )
 					ERRFwk();
 				else
 					return false;
 			}
 
-			return fil::Create( _FileName, ErrorHandling );
+			return fil::Create( _Filename, ErrorHandling );
 		}
 		void ReleaseFiles( void )
 		{
@@ -460,7 +478,7 @@ namespace lst {
 		time_t TimeStamp( void ) const
 		{
 			if ( Exists() )
-				return fil::GetLastModificationTime( _FileName );
+				return fil::GetLastModificationTime( _Filename );
 			else
 				return 0;
 		}
@@ -469,16 +487,16 @@ namespace lst {
 
 	template <typename list> uys::state__ Plug(
 		list &List,
-		list_file_manager___ &FileManager,
+		files_hook___ &Hook,
 		sdr::row__ FirstUnused,
 		time_t ReferenceTimeStamp )
 	{
-		uys::state__ State = Test_( FileManager.FileName(), ReferenceTimeStamp );
+		uys::state__ State = Test_( Hook.Filename(), ReferenceTimeStamp );
 
 		if ( uys::IsError( State ) )
-			FileManager.reset();
+			Hook.reset();
 		else {
-			FileManager.Set( List.Locations );
+			Hook.Set( List.Locations );
 			List.Locations.Init( FirstUnused );
 		}
 

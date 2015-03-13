@@ -39,13 +39,10 @@
 # include "flw.h"
 
 namespace sclplugin {
-
+	// Fonctions à surcharger, (la macro ci-dessous le fait).
 	const char *SCLPLUGINPluginIdentification( void );
 	void *SCLPLUGINRetrievePlugin( void );
 	void SCLPLUGINReleasePlugin( void * );
-
-	extern int toto;
-
 }
 
 # define SCLPLUGIN_DEF( plugin )\

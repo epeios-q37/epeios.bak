@@ -409,13 +409,13 @@ namespace que {
 	E_AUTO1( queue )
 
 #ifndef FLS__COMPILATION
-	typedef bch::bunch_file_manager___ queue_file_manager___;
+		using bch::files_hook___;
 
 	template <typename queue> uys::state__ Plug(
 		queue &Queue,
-		queue_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		return bch::Plug( Queue.Links, FileManager );
+		return bch::Plug( Queue.Links, Hook );
 	}
 #endif
 

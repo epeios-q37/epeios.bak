@@ -60,7 +60,7 @@ using namespace ndbsct;
 #define LIST_FILE_NAME_EXTENSION	".edl"
 #define CONTENT_FILE_NAME_EXTENSION		".edc"
 
-void ndbsct::static_content_atomized_file_manager___::Init(
+void ndbsct::files_hook___::Init(
 	const str::string_ &BaseFileName,
 	fil::mode__ Mode,
 	fls::id__ ID )
@@ -77,13 +77,13 @@ ERRBegin
 	FileName.Init( BaseFileName );
 	FileName.Append( CONTENT_FILE_NAME_EXTENSION );
 
-	_MemoryFileManager.Init( FileName.Convert( FileNameBuffer ), Mode, true, ID );
+	_Memory.Init( FileName.Convert( FileNameBuffer ), Mode, true, ID );
 
 
 	FileName.Init( BaseFileName );
 	FileName.Append( LIST_FILE_NAME_EXTENSION );
 
-	_ListFileManager.Init( FileName.Convert( FileNameBuffer ), Mode, true );
+	_List.Init( FileName.Convert( FileNameBuffer ), Mode, true );
 ERRErr
 ERREnd
 ERREpilog

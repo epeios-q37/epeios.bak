@@ -193,76 +193,91 @@ namespace lstbch {
 
 #ifndef FLS__COMPILATION
 
-	class list_bunch_file_manager___
+	struct hook_filenames___
+	{
+	public:
+		bch::hook_filenames___ Bunch;
+		lst::hook_filenames___ List;
+		void reset( bso::bool__ P = true )
+		{
+			Bunch.reset( P );
+			List.reset( P );
+		}
+		E_CDTOR( hook_filenames___ );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );
+	};
+
+	class files_hook___
 	{
 	private:
-		bch::bunch_file_manager___ _BunchFileManager;
-		lst::list_file_manager___ _ListFileManager;
+		bch::files_hook___ _Bunch;
+		lst::files_hook___ _List;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_BunchFileManager.ReleaseFile();	// Sinon le 'Settle()'  ci-dessous ne fonctionne pas correctement.
+			_Bunch.ReleaseFile();	// Sinon le 'Settle()'  ci-dessous ne fonctionne pas correctement.
 
 			if ( P ) {
 				Settle();	// Lancé explicitement, car le 'reset(...)' de '_ListFileManager' ne peut lancer son propre 'Settle(...)'.
 			}
 
-			_BunchFileManager.reset( P );
-			_ListFileManager.reset( P );
+			_Bunch.reset( P );
+			_List.reset( P );
 		}
-		list_bunch_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~list_bunch_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
 		void Init(
-			const char *BunchFileName,
-			const char *ListFileName,
+			const hook_filenames___ &Filenames,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )
 		{
 			reset();
 
-			_BunchFileManager.Init( BunchFileName, Mode, Persistent, ID );
-			_ListFileManager.Init( ListFileName, Mode, Persistent );
+			_Bunch.Init( Filenames.Bunch, Mode, Persistent, ID );
+			_List.Init( Filenames.List, Mode, Persistent );
 
 		}
 		uys::state__ Bind( void )	// A n'appeler qu'aprés un appel à 'Plug(...)'.
 		{
-			uys::state__ State = _BunchFileManager.Bind();
+			uys::state__ State = _Bunch.Bind();
 
 			if ( uys::IsError( State ) )
 				return State;
 			
-			if ( _ListFileManager.Bind( _BunchFileManager.TimeStamp() ) != State )
+			if ( _List.Bind( _Bunch.TimeStamp() ) != State )
 				State = uys::sInconsistent;
 
 			return State;
 		}
 		uys::state__ Settle( void )
 		{
-			uys::state__ State = _BunchFileManager.Settle();
+			uys::state__ State = _Bunch.Settle();
 
-			if ( _BunchFileManager.IsPersistent() && _BunchFileManager.Exists() )
-				if ( _ListFileManager.Settle( _BunchFileManager.TimeStamp() ) != State )
+			if ( _Bunch.IsPersistent() && _Bunch.Exists() )
+				if ( _List.Settle( _Bunch.TimeStamp() ) != State )
 					State = uys::sInconsistent;
 
 			return State;
 		}
 		void Drop( void )
 		{
-			_ListFileManager.Drop();
-			_BunchFileManager.Drop();
+			_List.Drop();
+			_Bunch.Drop();
 		}
 		uys::state__ State( void ) const
 		{
-			uys::state__ State = _BunchFileManager.State();
+			uys::state__ State = _Bunch.State();
 
-			if ( State != _ListFileManager.State() )
+			if ( State != _List.State() )
 				State = uys::sInconsistent;
 
 			return State;
@@ -272,13 +287,13 @@ namespace lstbch {
 #endif
 		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
 		{
-			bso::bool__ Success = _BunchFileManager.CreateFiles( ErrorHandling );
+			bso::bool__ Success = _Bunch.CreateFiles( ErrorHandling );
 
 			if ( !Success )
 				return false;
 
 			if ( uys::IsError( Settle() ) ) {
-				_BunchFileManager.Drop();
+				_Bunch.Drop();
 				Success = false;
 			}
 
@@ -286,8 +301,8 @@ namespace lstbch {
 		}
 		time_t TimeStamp( void ) const
 		{
-			time_t BunchTimeStamp = _BunchFileManager.TimeStamp();
-			time_t ListTimeStamp = _ListFileManager.TimeStamp();
+			time_t BunchTimeStamp = _Bunch.TimeStamp();
+			time_t ListTimeStamp = _List.TimeStamp();
 
 			if ( BunchTimeStamp > ListTimeStamp )
 				return BunchTimeStamp;
@@ -296,43 +311,43 @@ namespace lstbch {
 		}
 		void ReleaseFile( void )
 		{
-			_BunchFileManager.ReleaseFile();
+			_Bunch.ReleaseFile();
 		}
 		void Mode( fil::mode__ Mode )
 		{
-			_BunchFileManager.Mode( Mode );
+			_Bunch.Mode( Mode );
 		}
 		bso::bool__ IsPersistent( void ) const
 		{
-			bso::bool__ Is = _BunchFileManager.IsPersistent();
+			bso::bool__ Is = _Bunch.IsPersistent();
 
-			if ( Is != _ListFileManager.IsPersistent() )
+			if ( Is != _List.IsPersistent() )
 				ERRFwk();
 
 			return Is;
 		}
 		template <typename list_bunch> friend uys::state__ Plug(
 			list_bunch &ListBunch,
-			list_bunch_file_manager___ &FileManager );
+			files_hook___ &Hook );
 	};
 
 
 	template <typename list_bunch> uys::state__ Plug(
 		list_bunch &ListBunch,
-		list_bunch_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = bch::Plug( ListBunch.Bunch(), FileManager._BunchFileManager );
+		uys::state__ State = bch::Plug( ListBunch.Bunch(), Hook._Bunch );
 
 		if ( uys::IsError( State ) )
-			FileManager.reset();
+			Hook.reset();
 		else {
-			fil::size__ Size = FileManager._BunchFileManager.FileSize() / ListBunch.GetItemSize();
+			fil::size__ Size = Hook._Bunch.FileSize() / ListBunch.GetItemSize();
 
 			if ( Size > SDR_SIZE_MAX )
 				ERRDta();
 
-			if ( lst::Plug( ListBunch, FileManager._ListFileManager, (sdr::size__)Size, FileManager._BunchFileManager.TimeStamp() ) != State ) {
-				FileManager.reset();
+			if ( lst::Plug( ListBunch, Hook._List, (sdr::size__)Size, Hook._Bunch.TimeStamp() ) != State ) {
+				Hook.reset();
 				State = uys::sInconsistent;
 			}
 		}

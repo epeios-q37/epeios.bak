@@ -68,9 +68,9 @@ static inline void Unlock_( void )
 	mtx::Unlock( SCLERRORError->Mutex );
 }
 
-static inline _row__  Search_( void )
+static inline row__  Search_( void )
 {
-	_row__ Row = E_NIL;
+	row__ Row = E_NIL;
 
 	Lock_();
 
@@ -81,9 +81,9 @@ static inline _row__  Search_( void )
 	return Row;
 }
 
-static inline _row__  SearchOrCreate_( void )
+static inline row__  SearchOrCreate_( void )
 {
-	_row__ Row = Search_();
+	row__ Row = Search_();
 
 	if ( Row == E_NIL ) {
 		Lock_();
@@ -100,14 +100,14 @@ static inline _row__  SearchOrCreate_( void )
 	return Row;
 }
 
-static inline bso::bool__ IsMeaningEmpty_( _row__ Row )
+static inline bso::bool__ IsMeaningEmpty_( row__ Row )
 {
 	bso::bool__ IsEmpty = false;
-	ctn::E_CITEMt( lcl::meaning_, _row__ ) Meaning;
+	ctn::E_CITEMt( lcl::meaning_, row__ ) Meaning;
 
 	Lock_();
 
-	Meaning.Init(SCLERRORError-> Meanings );
+	Meaning.Init( SCLERRORError-> Meanings );
 
 	IsEmpty = Meaning(Row).IsEmpty();
 
@@ -118,7 +118,7 @@ static inline bso::bool__ IsMeaningEmpty_( _row__ Row )
 
 bso::bool__ sclerror::IsErrorPending( void )
 {
-	_row__ Row = Search_();
+	row__ Row = Search_();
 
 	if ( Row == E_NIL )
 		return false;
@@ -131,8 +131,8 @@ const lcl::meaning_ &sclerror::GetMeaning( lcl::meaning_ &Meaning )
 	if ( !IsErrorPending() )
 		ERRFwk();
 
-	_row__ Row = Search_();
-	ctn::E_CITEMt( lcl::meaning_, _row__ ) MeaningBuffer;
+	row__ Row = Search_();
+	ctn::E_CITEMt( lcl::meaning_, row__ ) MeaningBuffer;
 
 	Lock_();
 
@@ -147,7 +147,7 @@ const lcl::meaning_ &sclerror::GetMeaning( lcl::meaning_ &Meaning )
 
 void sclerror::ResetPendingError( void )
 {
-	_row__ Row = SearchOrCreate_();
+	row__ Row = SearchOrCreate_();
 
 	Lock_();
 
@@ -164,7 +164,7 @@ void sclerror::SetMeaning( const lcl::meaning_ &Meaning )
 	if ( IsErrorPending() )
 		ERRFwk();
 
-	_row__ Row = SearchOrCreate_();
+	row__ Row = SearchOrCreate_();
 
 	if ( !IsMeaningEmpty_( Row ) )
 		ERRFwk();

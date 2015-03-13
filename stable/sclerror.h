@@ -71,18 +71,16 @@ extern class ttr_tutor &SCLERRORTutor;
 
 namespace sclerror {
 
-	namespace {
-		typedef tht::thread_id__ _tid__;
+	typedef tht::thread_id__ tid__;
 
-		E_ROW( _row__ );
-	}
+	E_ROW( row__ );
 
 	class error___
 	{
 	public:
 		mtx::handler___ Mutex = mtx::UndefinedHandler;
-		lstbch::E_LBUNCHt( _tid__, _row__ ) TIds;
-		ctn::E_CONTAINERt( lcl::meaning_, _row__ ) Meanings;
+		lstbch::E_LBUNCHt( tid__, row__ ) TIds;
+		ctn::E_CONTAINERt( lcl::meaning_, row__ ) Meanings;
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )

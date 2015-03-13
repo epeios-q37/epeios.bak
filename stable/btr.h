@@ -917,13 +917,13 @@ namespace btr {
 
 	E_AUTO1( binary_tree )
 
-	typedef bch::bunch_file_manager___ binary_tree_file_manager___;
+		using bch::files_hook___;
 
 	template <typename tree> uys::state__ Plug(
 		tree &Tree,
-		binary_tree_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		return bch::Plug( Tree.Nodes, FileManager );
+		return bch::Plug( Tree.Nodes, Hook );
 	}
 
 

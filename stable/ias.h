@@ -465,40 +465,55 @@ namespace ias {
 
 #ifndef FLS__COMPILATION
 
-	class indexed_aggregated_storage_file_manager___
+	struct hook_filenames___
+	{
+	public:
+		bch::hook_filenames___ Descriptors;
+		ags::hook_filenames___ Storage;
+		void reset( bso::bool__ P = true )
+		{
+			Descriptors.reset( P );
+			Storage.reset( P );
+		}
+		E_CDTOR( hook_filenames___ );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
+	};
+
+	class files_hook___
 	{
 	private:
-		bch::bunch_file_manager___ _Descriptors;
-		ags::aggregated_storage_file_manager___ _AStorage;
+		bch::files_hook___ _Descriptors;
+		ags::files_hook___ _Storage;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Descriptors.reset( P );
-			_AStorage.reset( P );
+			_Storage.reset( P );
 		}
-		indexed_aggregated_storage_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~indexed_aggregated_storage_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
 		void Init( 
-			const fnm::name___ &DescriptorsFileName,
-			const fnm::name___ &AStorageFileName,
+			const hook_filenames___ &Filenames,
 			fil::mode__ Mode,
 			bso::bool__ Persistent,
 			fls::id__ ID )
 		{
-			_Descriptors.Init( DescriptorsFileName, Mode, Persistent, ID );
-			_AStorage.Init( AStorageFileName, Mode, Persistent, ID );
+			_Descriptors.Init( Filenames.Descriptors, Mode, Persistent, ID );
+			_Storage.Init( Filenames.Storage, Mode, Persistent, ID );
 		}
 		fil::mode__ Mode( fil::mode__ Mode )
 		{
 			fil::mode__ ModeBuffer = _Descriptors.Mode( Mode );
 
-			if ( ModeBuffer != _AStorage.Mode( Mode ) )
+			if ( ModeBuffer != _Storage.Mode( Mode ) )
 				ERRPrm();
 
 			return ModeBuffer;
@@ -507,7 +522,7 @@ namespace ias {
 		{
 			fil::mode__ Mode = _Descriptors.Mode();
 
-			if ( Mode != _AStorage.Mode() )
+			if ( Mode != _Storage.Mode() )
 				ERRPrm();
 
 			return Mode;
@@ -517,7 +532,7 @@ namespace ias {
 			uys::state__ State = _Descriptors.State();
 
 			if ( !uys::IsError( State ) )
-				if ( State != _AStorage.State() )
+				if ( State != _Storage.State() )
 					State = uys::sInconsistent;
 
 			return State;
@@ -527,7 +542,7 @@ namespace ias {
 			uys::state__ State = _Descriptors.Bind();
 
 			if ( !uys::IsError( State ) )
-				if ( State != _AStorage.Bind() )
+				if ( State != _Storage.Bind() )
 					State = uys::sInconsistent;
 
 			return State;
@@ -537,7 +552,7 @@ namespace ias {
 			uys::state__ State = _Descriptors.Settle();
 
 			if ( !uys::IsError( State ) )
-				if ( State != _AStorage.Settle() )
+				if ( State != _Storage.Settle() )
 					State = uys::sInconsistent;
 
 			return State;
@@ -545,12 +560,12 @@ namespace ias {
 		void ReleaseFile( void )
 		{
 			_Descriptors.ReleaseFile();
-			_AStorage.ReleaseFile();
+			_Storage.ReleaseFile();
 		}
 		bso::bool__ IsPersistent( void ) const
 		{
 #ifdef IAS_DBG
-			if ( _Descriptors.IsPersistent() != _AStorage.IsPersistent() )
+			if ( _Descriptors.IsPersistent() != _Storage.IsPersistent() )
 				ERRFwk();
 #endif
 			return _Descriptors.IsPersistent();
@@ -558,21 +573,21 @@ namespace ias {
 		void Drop( void )
 		{
 			_Descriptors.Drop();
-			_AStorage.Drop();
+			_Storage.Drop();
 		}
-		tys::storage_file_manager___ &DescriptorsFileManager( void )
+		tys::files_hook___ &DescriptorsFilesHook( void )
 		{
 			return _Descriptors;
 		}
-		ags::aggregated_storage_file_manager___ &AStorageFileManager( void )
+		ags::files_hook___ &StorageFilesHook( void )
 		{
-			return _AStorage;
+			return _Storage;
 		}
 		bso::bool__ Exists( void ) const
 		{
 			bso::bool__ Exists = _Descriptors.Exists();
 
-			if ( Exists != _AStorage.Exists() )
+			if ( Exists != _Storage.Exists() )
 				ERRFwk();
 
 			return Exists;
@@ -582,7 +597,7 @@ namespace ias {
 			time_t DescriptorsTimeStamp, AStorageTimeStamp;
 
 			DescriptorsTimeStamp = _Descriptors.TimeStamp();
-			AStorageTimeStamp = _AStorage.TimeStamp();
+			AStorageTimeStamp = _Storage.TimeStamp();
 
 			return ( DescriptorsTimeStamp > AStorageTimeStamp ? DescriptorsTimeStamp : AStorageTimeStamp );
 		}
@@ -596,7 +611,7 @@ namespace ias {
 			if ( !Success )
 				return false;
 
-			Success = _AStorage.CreateFile( ErrorHandling );
+			Success = _Storage.CreateFile( ErrorHandling );
 
 			return Success;
 		}
@@ -604,16 +619,16 @@ namespace ias {
 
 	inline uys::state__ Plug(
 		indexed_aggregated_storage_ &AStorage,
-		indexed_aggregated_storage_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = bch::Plug( AStorage.Descriptors, FileManager.DescriptorsFileManager() );
+		uys::state__ State = bch::Plug( AStorage.Descriptors, Hook.DescriptorsFilesHook() );
 
 		if ( uys::IsError( State ) )
-			FileManager.reset();
+			Hook.reset();
 		else
-			if ( ags::Plug( AStorage.AStorage, FileManager.AStorageFileManager() ) != State ) {
+			if ( ags::Plug( AStorage.AStorage, Hook.StorageFilesHook() ) != State ) {
 				State = uys::sInconsistent;
-				FileManager.reset();
+				Hook.reset();
 			}
 
 		return State;

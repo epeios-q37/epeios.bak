@@ -395,13 +395,13 @@ namespace ndbtbl {
 
 	E_AUTO( table )
 
-	class table_atomized_file_manager___
+	class files_hook___
 	{
 	private:
 		type__ _Type;
 		// Seulement l'un des deux est utilisé.
-		ndbdct::dynamic_content_atomized_file_manager___ _Dynamic;
-		ndbsct::static_content_atomized_file_manager___ _Static;
+		ndbdct::files_hook___ _Dynamic;
+		ndbsct::files_hook___ _Static;
 		void _InitStatic(
 			const str::string_ &BaseFileName,
 			mode__ Mode,
@@ -417,11 +417,11 @@ namespace ndbtbl {
 			_Dynamic.reset( P );
 			_Static.reset( P );
 		}
-		table_atomized_file_manager___( void )
+		files_hook___( void )
 		{
 			reset( false );
 		}
-		~table_atomized_file_manager___( void )
+		~files_hook___( void )
 		{
 			reset();
 		}
@@ -495,23 +495,28 @@ namespace ndbtbl {
 
 			return _Static.BaseFileName();	// Pour éviter un 'warning'.
 		}
-		friend uys::state__ Plug(
-			table_ &Table,
-			table_atomized_file_manager___ &FileManager );
+		ndbdct::files_hook___ &DynamicFilesHook( void )
+		{
+			return _Dynamic;
+		}
+		ndbsct::files_hook___ &StaticFilesHook( void )
+		{
+			return _Static;
+		}
 	};
 
 	inline uys::state__ Plug(
 		table_ &Table,
-		table_atomized_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
 		uys::state__ State = uys::s_Undefined;
 
 		switch ( Table.Type() ) {
 		case tStatic:
-			State = ndbsct::Plug( Table.Content.Static(), FileManager._Static );
+			State = ndbsct::Plug( Table.Content.Static(), Hook.StaticFilesHook() );
 			break;
 		case tDynamic:
-			State = ndbdct::Plug( Table.Content.Dynamic(), FileManager._Dynamic );
+			State = ndbdct::Plug( Table.Content.Dynamic(), Hook.DynamicFilesHook() );
 			break;
 		default:
 			ERRFwk();

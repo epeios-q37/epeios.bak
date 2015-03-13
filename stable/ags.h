@@ -1429,13 +1429,15 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 	E_AUTO( aggregated_storage )
 
-	typedef uys::untyped_storage_file_manager___ aggregated_storage_file_manager___;
+	using uys::files_hook___;
+
+	using uys::hook_filenames___;
 
 	inline uys::state__ Plug(
 		aggregated_storage_ &AStorage,
-		aggregated_storage_file_manager___ &FileManager )
+		files_hook___ &Hook )
 	{
-		uys::state__ State = uys::Plug( AStorage.Storage, FileManager );
+		uys::state__ State = uys::Plug( AStorage.Storage, Hook );
 
 		if ( !uys::IsError( State ) )
 			AStorage.S_.Free.Init();
