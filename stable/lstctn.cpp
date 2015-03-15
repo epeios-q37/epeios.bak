@@ -65,10 +65,10 @@ ERRProlog
 	fnm::name___ Container, List;
 ERRBegin
 	Container.Init();
-	fnm::BuildPath( Path, Basename, ".qlcc", Container );
+	fnm::BuildPath( Path, Basename, "cc", Container );
 
 	List.Init();
-	fnm::BuildPath( Path, Basename, ".qlcl", List );
+	fnm::BuildPath( Path, Basename, "cl", List );
 
 	this->Container.Init( NULL, Container );
 	this->List.Init( NULL, List );

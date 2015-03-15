@@ -4,9 +4,37 @@ Meaning of list markers (2nd level):
 - '-' : cosmetic changes. Function/method and/or parameter names change. Functionnality (should) remain unchanged.
 - '*' : functionnality changes.
 
+2015-03-15 :
+- CSDLES :
+	* Adaptation to changes  in 'ERR'.
+- ERR :
+	* Removing all réference to 'CIO'. The final error handling had to be handled upstream (through the modified 'ERRFEpilog()' macro).
+- MTK :
+	* A uncaught exception will now terminate the program. All exceptions shoud be caught dowstream.
+- SCLDAEMON :
+	- Removing 'DisplayModuleClos(ing|ed)Message()' functions, to remove reference to 'CIO' (unavailable when the daemon is embedded).
+- SCLMISC :
+	* Removing all dependences to 'CIO'.
+	* Hence, moving 'text_oflow_rack___' to 'SCLTOOL'.
+- SCLTOOL :
+	* Due to changes in 'ERR', the final error message printing is now supplied by this module.
+	* As one of the few (or the only one) to use the 'CIO' module, retrieving 'text_oflow_rack___' from 'SCLMISC'.
+	* Removing forgotten bug tracking feature.
+
+2015-03-14 :
+- CSDLEO :
+	* No more 'C(Out|Err)' in the shared data, as the error handling object are now shared with the dynamic libraries.
+- CSDLES :
+	* Adaptation to changes to 'CSDLEO'.
+	* The errors are no more intercepted, but passed from the dynamic library to the calling code.
+- FLX :
+	* : For the 'void' drivers, by default (can be changed on initialization), an access to it launch an error.
+
 2015-03-13 :
 - GLOBAL :
 	* Adaptation to changes in 'UYS'.
+- FNM :
+	* Handling the 'NULL' case fot 'Type_(...)' function.'
 - NTVSTR :
 	* Change made the 11th active only for Windows, as g++ complains about.
 - TOL :

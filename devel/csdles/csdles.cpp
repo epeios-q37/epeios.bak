@@ -91,13 +91,13 @@ static void ExitFunction_( void )
 	Terminate_();
 }
 
+static inline void DoNothing_( void )
+{}
+
 csdleo::callback__ *CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME( csdleo::shared_data__ *Data )
 {
 	csdleo::callback__ *Callback = NULL;
 ERRFProlog
-	flw::standalone_oflow__<> OFlow;
-	txf::text_oflow__ TOFlow;
-	err::buffer__ Buffer;
 ERRFBegin
 	atexit( ExitFunction_ );
 
@@ -115,13 +115,14 @@ ERRFBegin
 	if ( Callback != NULL )
 		Callbacks_.Append( Callback );
 ERRFErr
-	OFlow.Init( *Data->CErr, FLW_AMOUNT_MAX );
-	TOFlow.Init( OFlow );
-	TOFlow << err::Message( Buffer );
-
 	ERRRst();
+
+	if ( Callback != NULL )
+		csdles::CSDLESReleaseCallback( Callback );
+
+	Callback = NULL;
 ERRFEnd
-ERRFEpilog
+ERRFEpilog(DoNothing_())
 	return Callback;
 }
 

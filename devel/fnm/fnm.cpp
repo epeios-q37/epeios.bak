@@ -79,7 +79,7 @@ inline static fnm::type__ Type_( const nchar__ *Path )
 {
 	const nchar__ *Repere = NULL;
 
-	if ( *Path == 0 )
+	if ( (Path == NULL ) || ( *Path == 0 ) )
 		return fnm::tEmpty;
 
 	if ( ( Path[strlen_( Path ) - 1] == ':' )

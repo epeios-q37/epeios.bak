@@ -247,12 +247,14 @@ namespace {
 		mtx::Delete( Common.Exclusion, true );
 	}
 	
+	// Les 'ERR...' macros, bien que fonctionnelemy inutiles, facilite le débogage.
+	// Les exceptions devraient avoir été traitées en aval.
 	void Launcher_( void * )
 	{
-	ERRFProlog
+	ERRProlog
 		void *RUP;
 		mtk::routine__ Routine;
-	ERRFBegin
+	ERRBegin
 		mtx::Lock( Common.Data );	// To ensure that data are available.
 	
 		do {
@@ -286,9 +288,9 @@ namespace {
 		
 		mtx::Unlock( Common.Store );
 		
-	ERRFErr
-	ERRFEnd
-	ERRFEpilog
+	ERRErr
+	ERREnd
+	ERREpilog
 	}
 }
 

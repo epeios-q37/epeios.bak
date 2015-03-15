@@ -45,7 +45,7 @@
 
 namespace scltool {
 
-# if 0	// Oboslete ?
+# if 0	// Obsolete ?
 	enum command {
 		cHelp,
 		cVersion,
@@ -53,6 +53,26 @@ namespace scltool {
 		c_amount
 	};
 # endif
+	// Facilite la gestion des fichiers de sorties optionel (si nom de fichier fourni, donne un flux texte vers ce fichier, sinon le flux texte de la sortie standard).
+	class text_oflow_rack___
+	{
+	private:
+		fnm::name___ _FileName;
+		bso::bool__ _BackedUp;
+		flf::file_oflow___ _Flow;
+		txf::text_oflow__ _TFlow;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_BackedUp = false;
+			_FileName.reset( P );
+			_TFlow.reset( P );
+			_Flow.reset( P );
+		}
+		E_CDTOR( text_oflow_rack___ );
+		txf::text_oflow__ &Init( const fnm::name___ &FileName );
+		void HandleError( void );	// A appeler à partir de 'ERRErr'.
+	};
 
 	struct oddities__ {
 # ifdef CPE_WIN

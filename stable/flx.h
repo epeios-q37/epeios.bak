@@ -527,31 +527,36 @@ namespace flx {
 	class void_oflow_driver___
 	: public _oflow_driver___
 	{
+	private:
+		bso::bool__ _Allowed;	// Si à 'false', un accés à cet objet provoque une erreur.
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::datum__ *,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
+			if ( !_Allowed )
+				ERRFwk();
+
 			return Maximum;
 		}
-		virtual void FDRCommit()
-		{}
+		virtual void FDRCommit( void ) override
+		{
+			if ( !_Allowed )
+				ERRFwk();
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_oflow_driver___::reset( P );
+			_Allowed = false;
 		}
-		void_oflow_driver___( void )
-		{
-			reset( false );
-		}
-		~void_oflow_driver___( void )
-		{
-			reset();
-		}
-		void Init( fdr::thread_safety__ ThreadSafety )
+		E_CDTOR( void_oflow_driver___ );
+		void Init(
+			fdr::thread_safety__ ThreadSafety,
+			bso::bool__ Allowed = false )
 		{
 			_oflow_driver___::Init( ThreadSafety );
+			_Allowed = Allowed;
 		}
 	};	
 
@@ -588,24 +593,36 @@ namespace flx {
 	class void_iflow_driver___
 	: public _iflow_driver___<>
 	{
+	private:
+		bso::bool__ _Allowed;	// Si à 'false', un accés à cet objet provoque une erreur.
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::datum__ *Buffer )
 		{
+			if ( !_Allowed )
+				ERRFwk();
+
 			return 0;
 		}
 		virtual void FDRDismiss( void )
 		{
+			if ( !_Allowed )
+				ERRFwk();
 		}
 	public:
-		~void_iflow_driver___( void )
+		void reset( bso::bool__ P = true )
 		{
-			reset();
+			_iflow_driver___<>::reset( P );
+			_Allowed = false;
 		}
-		void Init( fdr::thread_safety__ ThreadSafety )
+		E_CDTOR( void_iflow_driver___ );
+		void Init(
+			fdr::thread_safety__ ThreadSafety,
+			bso::bool__ Allowed = false )
 		{
 			fdr::iflow_driver___<>::Init( ThreadSafety );
+			_Allowed = Allowed;
 		}
 	};	
 

@@ -36,10 +36,10 @@ ERRProlog
 	fnm::name___ Statics, Dynamics;
 ERRBegin
 	Statics.Init();
-	fnm::BuildPath( Path, Basename, ".qcs", Statics );
+	fnm::BuildPath( Path, Basename, "cs", Statics );
 
 	Dynamics.Init();
-	fnm::BuildPath( Path, Basename, ".qcd", Dynamics );
+	fnm::BuildPath( Path, Basename, "cd", Dynamics );
 
 	this->Statics.Init( NULL, Statics );
 	this->Dynamics.Init( NULL, Dynamics );
@@ -47,6 +47,7 @@ ERRErr
 ERREnd
 ERREpilog
 }
+
 
 
 /* Although in theory this class is inaccessible to the different modules,

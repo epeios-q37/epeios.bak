@@ -65,10 +65,10 @@ ERRProlog
 	fnm::name___ Bunch, List;
 ERRBegin
 	Bunch.Init();
-	fnm::BuildPath( Path, Basename, ".qlbb", Bunch );
+	fnm::BuildPath( Path, Basename, "bb", Bunch );
 
 	List.Init();
-	fnm::BuildPath( Path, Basename, ".qlbl", List );
+	fnm::BuildPath( Path, Basename, "bl", List );
 
 	this->Bunch.Init( NULL, Bunch );
 	this->List.Init( NULL, List );

@@ -47,7 +47,7 @@
 NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
 */
 
-# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"5"
+# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"6"
 
 # define CSDLEO_SHARED_DATA_VERSION	CSDLEO_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -102,7 +102,6 @@ namespace csdleo {
 		const char *LibraryLocationAndName;
 		err::err___ *ERRError;
 		void *UP;				// A la discrétion de l'utilisateur.
-		fdr::oflow_driver_base___ *COut, *CErr;
 		void reset( bso::bool__ = true )
 		{
 			Mode = m_Undefined;
@@ -110,35 +109,28 @@ namespace csdleo {
 			LibraryLocationAndName = NULL;
 			ERRError = NULL;
 			UP = NULL;
-			COut = CErr = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
 			mode__ Mode,
 			const char *LibraryLocationAndName,
 			err::err___ *ERRError,
-			fdr::oflow_driver_base___ &COut,
-			fdr::oflow_driver_base___ &CErr,
 			context__ Context,
 			void *UP )
 		{
 			reset( false );
-			Init( Mode, LibraryLocationAndName, ERRError, COut, CErr, Context, UP );
+			Init( Mode, LibraryLocationAndName, ERRError, Context, UP );
 		}
 		void Init(
 			mode__ Mode,
 			const char *LibraryLocationAndName,
 			err::err___ *ERRError,
-			fdr::oflow_driver_base___ &COut,
-			fdr::oflow_driver_base___ &CErr,
 			context__ Context,
 			void *UP )
 		{
 			this->Mode = Mode;
 			this->LibraryLocationAndName = LibraryLocationAndName;
 			this->ERRError = ERRError;
-			this->COut = &COut;
-			this->CErr = &CErr;
 			this->Context = Context;
 			this->UP = UP;
 		}
@@ -159,7 +151,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Mode, Data.LibraryLocationAndName, Data.ERRError, *Data.COut, *Data.CErr, Data.Context, Data.UP );
+			data__::Init( Data.Mode, Data.LibraryLocationAndName, Data.ERRError, Data.Context, Data.UP );
 		}
 	};
 #pragma pack( pop )

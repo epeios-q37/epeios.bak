@@ -1526,6 +1526,40 @@ ERREpilog
 	return ExitValue;
 }
 
+static void ErrFinal_( void )
+{
+
+	if ( ERRType != err::t_Abort ) {
+		err::buffer__ Buffer;
+
+		const char *Message = err::Message( Buffer );
+
+		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+
+		ERRProlog
+		ERRBegin
+			if ( cio::IsInitialized() ) {
+				if ( cio::Target() == cio::tConsole ) {
+					cio::COut << txf::commit;
+					cio::CErr << txf::nl << txf::tab;
+				}
+
+				cio::CErr << "{ " << Message << " }";
+
+				if ( cio::Target() == cio::tConsole )
+					cio::CErr << txf::nl;
+
+				cio::CErr << txf::commit;
+			} else
+				ERRFwk();
+		ERRErr
+		ERREnd
+		ERREpilog
+	} else
+		ERRRst();
+}
+
+
 
 #ifdef CPE_WIN
 
@@ -1550,7 +1584,7 @@ ERRFEnd
 	cio::COut.Commit();
 	cio::CErr.Commit();
 	cio::CIn.Dismiss();
-ERRFEpilog
+ERRFEpilog( ErrFinal_() )
 	return ExitValue;
 }
 
@@ -1606,7 +1640,7 @@ ERRFEnd
 
 	if ( SErr.Amount() )
 		MessageBoxW( NULL, ntvstr::string___( SErr ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK );
-ERRFEpilog
+ERRFEpilog( ErrFinal_() )
 	return ExitValue;
 }
 
@@ -1631,10 +1665,37 @@ ERRFEnd
 	cio::COut.Commit();
 	cio::CErr.Commit();
 	cio::CIn.Dismiss();
-ERRFEpilog
+ERRFEpilog( ErrFinal_() )
 	return ExitValue;
 }
 #endif
+
+txf::text_oflow__ &scltool::text_oflow_rack___::Init( const fnm::name___ &FileName )
+{
+	_FileName.Init( FileName );
+
+	if ( _FileName.IsEmpty() ) {
+		_BackedUp = false;
+		return cio::COut;
+	} else {
+		sclmisc::CreateBackupFile( _FileName );
+		_BackedUp = true;
+
+		if ( _Flow.Init( _FileName ) != tol::rSuccess )
+			sclmisc::ReportFileOpeningErrorAndAbort( _FileName );
+
+		_TFlow.Init( _Flow );
+
+		return _TFlow;
+	}
+}
+
+void scltool::text_oflow_rack___::HandleError( void )
+{
+	if ( _BackedUp )
+		sclmisc::RecoverBackupFile( _FileName );
+}
+
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

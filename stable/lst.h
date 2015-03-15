@@ -335,7 +335,7 @@ namespace lst {
 			const fnm::name___ &Basename )	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
 		{
 			Filename.Init();
-			fnm::BuildPath( Path, Filename, ".ql", Filename );
+			fnm::BuildPath( Path, Basename, "l.q37", Filename );
 		}
 	};
 

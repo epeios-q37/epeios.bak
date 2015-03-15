@@ -33,7 +33,6 @@ using namespace scldaemon;
 #include "sclerror.h"
 
 #include "lcl.h"
-#include "cio.h"
 
 #include "csdleo.h"
 #include "csdles.h"
@@ -53,22 +52,12 @@ ERRBegin
 	if ( Data == NULL )
 		ERRPrm();
 		
-	if ( !cio::IsInitialized() ) {
-		cio::COutF.Init( *Data->COut );
-		cio::CErrF.Init( *Data->CErr );
-		cio::CInF.Init( flx::VoidIFlowDriver );
-
-		cio::Initialize( cio::tUser );
-	}
-
 	if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
 
 		// Does not work when placed in 'global_cdtor'.
 		Directory.Init();
 		fnm::GetLocation( Data->LibraryLocationAndName, Directory );
 		sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, Directory.UTF8( Buffer ) );
-
-		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryConfigurationLevel(), E_NIL, true, xml::oIndent, xml::encoding__(), cio::COut );
 		IsInitialized_ = true;
 	}
 
@@ -88,18 +77,7 @@ ERRBegin
 
 	Callback = SCLDAEMONNewCallback( Data->Mode, Data->Context );
 ERRErr
-	if ( cio::IsInitialized() ) {
-		Error.Init();
-		if ( sclerror::GetPendingErrorTranslation( sclmisc::GetBaseLanguage(), Error, err::hUserDefined  )) {
-			cio::CErr << Error << txf::nl;
-			ERRRst();
-		}
-	}
 ERREnd
-	if ( cio::IsInitialized() ) {
-		cio::COut << txf::commit;
-		cio::CErr << txf::commit;
-	}
 ERREpilog
 	return Callback;
 }
@@ -109,34 +87,6 @@ void csdles::CSDLESReleaseCallback( csdleo::callback__ *Callback )
 	if ( Callback != NULL  )
 		delete Callback;
 }
-
-void scldaemon::DisplayModuleClosingMessage( void )
-{
-ERRProlog
-	str::string Translation;
-ERRBegin
-	Translation.Init();
-
-	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosing", sclmisc::GetBaseLanguage(), Translation ) << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-
-
-void scldaemon::DisplayModuleClosedMessage( void )
-{
-ERRProlog
-	str::string Translation;
-ERRBegin
-	Translation.Init();
-
-	cio::COut << scllocale::GetTranslation( SCLDAEMON_NAME "_ModuleClosed", sclmisc::GetBaseLanguage(), Translation ) << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

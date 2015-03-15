@@ -27,7 +27,6 @@
 				  /*******************************************/
 
 #include "str.h"
-#include "cio.h"
 #include "fnm.h"
 #include "dir.h"
 #include "lcl.h"
@@ -39,6 +38,11 @@
 using namespace sclmisc;
 
 sclerror::error___ *sclerror::SCLERRORError = NULL;
+
+bso::bool__ sclmisc::IsInitialized( void )
+{
+	return sclerror::SCLERRORError != NULL;
+}
 
 static TOL_CBUFFER___ BaseLanguage_;	// De base, le language d'admnistration (lu à partir du fichier de configuration), pouvant devenir language utiliateur selon le contexte.
 
@@ -210,7 +214,7 @@ ERRProlog
 	str::string Language;
 ERRBegin
 	err::ERRError = ERRError;
-sclerror::SCLERRORError = SCLError;
+	sclerror::SCLERRORError = SCLError;
 
 	scllocale::LoadLocale( scllocale::tSoftware, LocaleFlow, LocaleDirectory, LocaleRootPath );
 
@@ -251,9 +255,6 @@ ERRProlog
 	str::string LocaleRootPath, RegistryRootPath;
 	TOL_CBUFFER___ LocaleBuffer, RegistryBuffer;
 ERRBegin
-	if ( !cio::IsInitialized() )
-		ERRFwk();
-
 	LocaleRootPath.Init();
 	BuildRootPath_( "Locale", SCLMISCTargetName, LocaleRootPath );
 
@@ -376,9 +377,6 @@ ERRProlog
 	str::string LocaleDirectory, ConfigurationDirectory;
 	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
 ERRBegin
-	if ( !cio::IsInitialized() )
-		ERRFwk();
-
 	LocaleDirectory.Init();
 	InitializeLocaleFlow_( SuggestedDirectory, LocaleFlow, LocaleDirectory );
 	LocaleXFlow.Init( LocaleFlow, utf::f_Default );
@@ -464,32 +462,6 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-}
-
-txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileName )
-{
-	_FileName.Init( FileName );
-
-	if ( _FileName.IsEmpty() ) {
-		_BackedUp = false;
-		return cio::COut;
-	} else {
-		sclmisc::CreateBackupFile( _FileName );
-		_BackedUp = true;
-
-		if ( _Flow.Init( _FileName ) != tol::rSuccess )
-			sclmisc::ReportFileOpeningErrorAndAbort( _FileName );
-
-		_TFlow.Init( _Flow );
-
-		return _TFlow;
-	}
-}
-
-void sclmisc::text_oflow_rack___::HandleError( void )
-{
-	if ( _BackedUp )
-		sclmisc::RecoverBackupFile( _FileName );
 }
 
 void sclmisc::Load(

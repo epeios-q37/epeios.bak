@@ -30,7 +30,6 @@
 
 using namespace err;
 
-#include "cio.h"
 #include "mtx.h"
 
 #include "tol.h"
@@ -217,40 +216,6 @@ void err___::SetAndLaunch(
 
 	ERRT();
 }
-
-void err::Final( void )
-{
-
-	if ( ERRError->Type != err::t_Abort ) {
-		buffer__ Buffer;
-
-		const char *Message = err::Message( ERRError->File, ERRError->Line, ERRError->Type, Buffer );
-
-		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-
-ERRProlog
-ERRBegin
-	if ( cio::IsInitialized() ) {
-		if ( cio::Target() == cio::tConsole ) {
-			cio::COut << txf::commit;
-			cio::CErr << txf::nl << txf::tab;
-		}
-
-		cio::CErr << "{ " << Message << " }";
-
-		if ( cio::Target() == cio::tConsole )
-			cio::CErr << txf::nl;
-
-		cio::CErr << txf::commit;
-	} else
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
-	} else
-		ERRRst();
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */

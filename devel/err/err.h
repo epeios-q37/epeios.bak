@@ -129,8 +129,6 @@ namespace err {
 
 	extern err___ *ERRError;
 
-	void Final( void );
-
 	// If an error occurs, test if the current thread is concerned.
 	bool Concerned( void );
 	void Unlock( void );
@@ -211,12 +209,12 @@ namespace err {
 								ERRRst()
 
 //d End of the error bloc.
-# define ERREpilog	ERRCommonEpilog ERRTestEpilog } else ERRT();  };
-# define ERRFEpilog	ERRCommonEpilog ERRTestEpilog } else err::Final(); };
-# define ERRFProlog	ERRProlog
-# define ERRFBegin	ERRBegin
-# define ERRFErr		ERRErr
-# define ERRFEnd		ERREnd
+# define ERREpilog				ERRCommonEpilog ERRTestEpilog } else ERRT();  };
+# define ERRFEpilog( action )	ERRCommonEpilog ERRTestEpilog } else action; };
+# define ERRFProlog				ERRProlog
+# define ERRFBegin				ERRBegin
+# define ERRFErr				ERRErr
+# define ERRFEnd				ERREnd
 
 # ifdef ERR__JMPUSE
 	inline jmp_buf *FGetJ( err___ &ERR_ )
