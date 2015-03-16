@@ -1611,7 +1611,7 @@ ERRFBegin
 	FErr.Init( SErr, fdr::ts_Default );
 	cio::CErrF.Init( FErr );
 
-	FIn.Init( fdr::ts_Default );
+	FIn.Init( fdr::ts_Default, flx::a_Default );
 	cio::CInF.Init( FIn );
 
 	cio::Initialize( cio::tUser );
@@ -1696,6 +1696,25 @@ void scltool::text_oflow_rack___::HandleError( void )
 		sclmisc::RecoverBackupFile( _FileName );
 }
 
+static inline void signal_( int s )
+{
+	exit( EXIT_SUCCESS );
+}
+
+static inline void ExitOnSignal_( void )
+{
+#if defined( TOL__MAC ) || defined( TOL__POSIX )
+	signal( SIGHUP, signal_ );
+#elif defined( TOL__WIN )
+	signal( SIGBREAK, signal_ );
+#else
+#	error "Undefined target !"
+#endif
+
+	signal( SIGTERM, signal_ );
+	signal( SIGABRT, signal_ );
+	signal( SIGINT, signal_ );	// Documentations about this signal not very clear, but this handles Ctrl-C.
+}
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
@@ -1705,6 +1724,7 @@ class scltoolpersonnalization
 public:
 	scltoolpersonnalization( void )
 	{
+		ExitOnSignal_();
 		ERRError_.Init();
 		SCLError_.Init();
 		ParametersTag_.Init( sclrgstry::ParametersTag );

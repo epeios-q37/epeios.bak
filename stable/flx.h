@@ -519,6 +519,29 @@ namespace flx {
 		}
 	};
 
+	E_ENUM( access )
+	{
+		aAllowed,
+		aForbidden,
+		a_amount,
+		a_Undefined,
+		a_Default = aForbidden,
+	};
+
+	inline void Test_( access__ Access )
+	{
+		switch ( Access ) {
+		case aAllowed:
+			break;
+		case aForbidden:
+			ERRFwk();
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+	}
+
 # define E_STRING_TOFLOW___	string_text_oflow___
 
 	typedef fdr::oflow_driver___<> _oflow_driver___;
@@ -528,35 +551,32 @@ namespace flx {
 	: public _oflow_driver___
 	{
 	private:
-		bso::bool__ _Allowed;	// Si à 'false', un accés à cet objet provoque une erreur.
+		access__ _Access;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::datum__ *,
 			fdr::size__ Maximum ) override
 		{
-			if ( !_Allowed )
-				ERRFwk();
+			Test_( _Access );
 
 			return Maximum;
 		}
 		virtual void FDRCommit( void ) override
 		{
-			if ( !_Allowed )
-				ERRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_oflow_driver___::reset( P );
-			_Allowed = false;
+			_Access = a_Undefined;
 		}
 		E_CDTOR( void_oflow_driver___ );
 		void Init(
 			fdr::thread_safety__ ThreadSafety,
-			bso::bool__ Allowed = false )
+			access__ Access )
 		{
 			_oflow_driver___::Init( ThreadSafety );
-			_Allowed = Allowed;
+			_Access = Access;
 		}
 	};	
 
@@ -594,35 +614,32 @@ namespace flx {
 	: public _iflow_driver___<>
 	{
 	private:
-		bso::bool__ _Allowed;	// Si à 'false', un accés à cet objet provoque une erreur.
+		access__ _Access;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::datum__ *Buffer )
 		{
-			if ( !_Allowed )
-				ERRFwk();
+			Test_( _Access );
 
 			return 0;
 		}
 		virtual void FDRDismiss( void )
 		{
-			if ( !_Allowed )
-				ERRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_iflow_driver___<>::reset( P );
-			_Allowed = false;
+			_Access = a_Undefined;
 		}
 		E_CDTOR( void_iflow_driver___ );
 		void Init(
 			fdr::thread_safety__ ThreadSafety,
-			bso::bool__ Allowed = false )
+			access__ Access )
 		{
 			fdr::iflow_driver___<>::Init( ThreadSafety );
-			_Allowed = Allowed;
+			_Access = Access;
 		}
 	};	
 

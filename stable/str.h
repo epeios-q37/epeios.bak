@@ -319,9 +319,9 @@ namespace str {
 			Number = To##name( Error );\
 		}\
 		void ToNumber(\
+			type &Number,\
 			type PositiveLimit,\
 			type NegativeLimit,\
-			type &Number,\
 			sdr::row__ *Error = NULL ) const\
 		{\
 			Number = To##name( Error, bAuto, PositiveLimit, NegativeLimit );\

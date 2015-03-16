@@ -236,14 +236,14 @@ namespace lstbch {
 		}
 		void Init(
 			const hook_filenames___ &Filenames,
-			fil::mode__ Mode,
-			bso::bool__ Persistent,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
 			fls::id__ ID )
 		{
 			reset();
 
-			_Bunch.Init( Filenames.Bunch, Mode, Persistent, ID );
-			_List.Init( Filenames.List, Mode, Persistent );
+			_Bunch.Init( Filenames.Bunch, Mode, Behavior, ID );
+			_List.Init( Filenames.List, Mode, Behavior );
 
 		}
 		uys::state__ Bind( void )	// A n'appeler qu'aprés un appel à 'Plug(...)'.
@@ -313,7 +313,7 @@ namespace lstbch {
 		{
 			_Bunch.ReleaseFile();
 		}
-		void Mode( fil::mode__ Mode )
+		void Mode( uys::mode__ Mode )
 		{
 			_Bunch.Mode( Mode );
 		}

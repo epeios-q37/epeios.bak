@@ -1,12 +1,53 @@
 CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 Meaning of list markers (2nd level):
-- '-' : cosmetic changes. Function/method and/or parameter names change. Functionnality (should) remain unchanged.
-- '*' : functionnality changes.
+- '-' : Cosmetic changes. Function/method and/or parameter name changes.
+	    Also changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
+		in a broad sense (parameters of a fucntion, a method, or a template...).
+		Functionnalities (should) remain unchanged.
+- '*' : Functionnality changes.
+- '%' : API changes (is superseded by functionnality changes).
+- '#' : Bug fixing.
+
+
+2015-03-16 :
+- CTN, IAS, LST, LSTBCH, LSTCTN :
+	- Adaptation to changes in 'UYS'.
+- CSDBNS :
+	* Adaptation to changes in 'ERR'. Errors are no more intercepted, so the program is terminated when a error occurs.
+	  Not really happy about this behavior, but the errors should be intercepted downstream.
+- FLX :
+	* In 'void _(i|o)flow_driver___', 'Commit()' and 'Dismiss()' are always allowed, as they are automatically called
+	  when the object is deleted.
+	% Use of 'access__' instead of a boolean.
+- FRDKRN :
+	* Adaptation to changes in 'CSDLEO'.
+- SCLBACKND :
+	- Adaptation to changes in 'FLX'.
+- SCLRGSTRY :
+	# : 'GetUnsigneNumber(...)' returns now the correct value.
+	- : Modifying 'GetSigneNumber_(...)' to take account of changes in 'STR'.
+- SCLTOOL :
+	* Retrieving signal handling from 'TOL'.
+- STR :
+	% : Some signed 'ToNumber' functions took limits parameters before the value to retrieve ; this is now modified to be
+	    coherent with similar functions.
+- SCLTOOL :
+	- Adaptation to changes in 'FLX'.
+- SCLXHTML :
+	* Adaptation to changes to 'ERR'.
+	* The errors are no more intercepted, but passed to the calling code.
+	* Removing references to 'CIO'.
+- TOL :
+	* Moving signal handling to 'SCLTOOL'.
+- UYS :
+	- Introducing 'mode__' to use instead 'fil::mode__'.
+	- Introducing 'behavior' to use instead of a boolean.
+
 
 2015-03-15 :
 - CSDLES :
-	* Adaptation to changes  in 'ERR'.
+	* Adaptation to changes in 'ERR'.
 - ERR :
 	* Removing all réference to 'CIO'. The final error handling had to be handled upstream (through the modified 'ERRFEpilog()' macro).
 - MTK :
@@ -21,6 +62,7 @@ Meaning of list markers (2nd level):
 	* As one of the few (or the only one) to use the 'CIO' module, retrieving 'text_oflow_rack___' from 'SCLMISC'.
 	* Removing forgotten bug tracking feature.
 
+
 2015-03-14 :
 - CSDLEO :
 	* No more 'C(Out|Err)' in the shared data, as the error handling object are now shared with the dynamic libraries.
@@ -29,6 +71,7 @@ Meaning of list markers (2nd level):
 	* The errors are no more intercepted, but passed from the dynamic library to the calling code.
 - FLX :
 	* : For the 'void' drivers, by default (can be changed on initialization), an access to it launch an error.
+
 
 2015-03-13 :
 - GLOBAL :
@@ -44,9 +87,11 @@ Meaning of list markers (2nd level):
 	- Renaming 'file_manager___' to 'file_hook___'
 	* Introducing 'hook_filnames___'.
 
+
 2015-03-12 :
 - SCLPLUGIN
 	* Removing test feature.
+
 
 2015-03-11 :
 - GLOBAL :

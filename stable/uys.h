@@ -370,6 +370,56 @@ namespace uys {
 		}
 	};
 
+	E_ENUM( mode )
+	{
+		mReadOnly,
+		mReadWrite,
+		m_amount,
+		m_Undefined
+	};
+
+	inline fil::mode__ Convert_( mode__ Mode )
+	{
+		switch ( Mode ) {
+		case mReadOnly:
+			return fil::mReadOnly;
+			break;
+		case mReadWrite:
+			return fil::mReadWrite;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		return fil::m_Undefined;	// Pour éviter un 'warning'.
+	}
+
+	inline mode__ Convert_( fil::mode__ Mode )
+	{
+		switch ( Mode ) {
+		case fil::mReadOnly:
+			return mReadOnly;
+			break;
+		case fil::mReadWrite:
+			return mReadWrite;
+			break;
+		default:
+			ERRFwk();
+			break;
+		}
+
+		return m_Undefined;	// Pour éviter un 'warning'.
+	}
+
+	E_ENUM( behavior )
+	{
+		bVolatile,
+		bPersistent,
+		b_amount,
+		b_Undefined
+	};
+
 	E_ENUM( _state ) {	// Statut de l'opération de connection.
 		sExists,		// le fichier rattaché existe.
 		sAbsent,		// Fichier rattaché absent (ce n'est pas une erreur, cela signifie que des données n'ont pas encore été stockées).
@@ -455,26 +505,34 @@ namespace uys {
 	public:
 		void Init( 
 			const hook_filenames___ &Filenames,
-			fil::mode__ Mode,
-			bso::bool__ Persistent,
+			mode__ Mode,
+			behavior__ Behavior,
 			fls::id__ ID )
 		{
-			_file_storage_driver___::Init( ID, Filenames.Filename, Mode, fls::cFirstUse );
+			_file_storage_driver___::Init( ID, Filenames.Filename, Convert_( Mode ), fls::cFirstUse );
 
-			if ( Persistent )
+			switch ( Behavior ) {
+			case bVolatile:
+				break;
+			case bPersistent:
 				_file_storage_driver___::Persistent();
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
 		}
 		bso::bool__ CreateFiles( err::handling__ ErrHandling = err::h_Default )
 		{
 			return CreateFile( ErrHandling );
 		}
-		fil::mode__ Mode( fil::mode__ Mode )
+		mode__ Mode( mode__ Mode )
 		{
-			return _file_storage_driver___::Mode( Mode );
+			return Convert_( _file_storage_driver___::Mode( Convert_( Mode ) ) );
 		}
-		fil::mode__ Mode( void ) const
+		mode__ Mode( void ) const
 		{
-			return _file_storage_driver___::Mode();
+			return Convert_( _file_storage_driver___::Mode() );
 		}
 		state__ State( void ) const
 		{
@@ -491,14 +549,11 @@ namespace uys {
 		}
 		state__ Settle( void )
 		{
-			if ( Mode() == fil::mReadWrite )
+			if ( Mode() == mReadWrite )
 				_file_storage_driver___::Flush();
 
 			return State();
 		}
-		friend state__ Plug(
-			untyped_storage_ &Storage,
-			files_hook___ &FilesHook );
 	};
 
 	inline state__ Plug(

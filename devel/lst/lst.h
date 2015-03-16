@@ -344,8 +344,8 @@ namespace lst {
 	private:
 		lst::store_ *_Store;
 		fnm::name___ _Filename;
-		fil::mode__ _Mode;	// Ne sert à rien, juste présent à des fins de standardisation.
-		bso::bool__ _Persistent;	// Ne sert à rien, juste présent à des fins de standardisation.
+		uys::mode__ _Mode;
+		uys::behavior__ _Behavior;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -355,8 +355,8 @@ namespace lst {
 
 			_Filename.reset( P );
 			_Store = NULL;
-			_Mode = fil::m_Undefined;
-			_Persistent = false;
+			_Mode = uys::m_Undefined;
+			_Behavior = uys::b_Undefined;
 		}
 		files_hook___( void )
 		{
@@ -368,33 +368,33 @@ namespace lst {
 		}
 		void Init(
 			const hook_filenames___ &Filenames,
-			fil::mode__ Mode,
-			bso::bool__ Persistent )
+			uys::mode__ Mode,
+			uys::behavior__ Behavior )
 		{
 			reset();
 
 			_Filename.Init( Filenames.Filename );
 
 			_Mode = Mode;
-			_Persistent = Persistent;
+			_Behavior = Behavior;
 		}
 		void Init(
 			const str::string_ &LocalizedFileAffix,
-			fil::mode__ Mode,
-			bso::bool__ Persistent );
-		fil::mode__ Mode( fil::mode__ Mode )
+			uys::mode__ Mode,
+			uys::behavior__ Behavior );
+		uys::mode__ Mode( uys::mode__ Mode )
 		{
 			tol::Swap( Mode, _Mode );
 
 			return Mode;
 		}
-		fil::mode__ Mode( void ) const
+		uys::mode__ Mode( void ) const
 		{
 			return _Mode;
 		}
 		bso::bool__ IsPersistent( void ) const
 		{
-			return _Persistent;
+			return _Behavior == uys::bPersistent;
 		}
 		uys::state__ State( void ) const
 		{

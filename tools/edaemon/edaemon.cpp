@@ -41,6 +41,7 @@
 
 #include "registry.h"
 
+#include <signal.h>
 
 using cio::CErr;
 using cio::COut;
@@ -284,7 +285,7 @@ ERRBegin
 	SharedLocale.Init();
 	SharedRegistry.Init();
 
-	LibraryData.Init( csdleo::mRemote,ModuleFileName, err::ERRError, cio::SOutDriver, cio::SErrDriver, csdleo::cRegular, (void *)ModuleFileName );
+	LibraryData.Init( csdleo::mRemote,ModuleFileName, err::ERRError, csdleo::cRegular, (void *)ModuleFileName );
 
 	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();
@@ -371,8 +372,6 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	atexit( ExitFunction_ );
-
-//	scltool::GetRegistry().Dump( sclrgstry::GetProjectLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut.Commit();
 

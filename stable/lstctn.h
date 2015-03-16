@@ -205,27 +205,27 @@ namespace lstctn {
 		}
 		void Init(
 			const hook_filenames___ &Filenames,
-			fil::mode__ Mode,
-			bso::bool__ Persistent,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
 			fls::id__ ID )
 		{
 			reset();
 
-			_Container.Init( Filenames.Container, Mode, Persistent, ID );
-			_List.Init( Filenames.List, Mode, Persistent );
+			_Container.Init( Filenames.Container, Mode, Behavior, ID );
+			_List.Init( Filenames.List, Mode, Behavior );
 		}
-		fil::mode__ Mode( fil::mode__ Mode )
+		uys::mode__ Mode( uys::mode__ Mode )
 		{
-			fil::mode__ ModeBuffer = _Container.Mode( Mode );
+			uys::mode__ ModeBuffer = _Container.Mode( Mode );
 
 			if ( ModeBuffer != _List.Mode( Mode ) )
 				ERRFwk();
 
 			return ModeBuffer;
 		}
-		fil::mode__ Mode( void ) const
+		uys::mode__ Mode( void ) const
 		{
-			fil::mode__ Mode = _Container.Mode();
+			uys::mode__ Mode = _Container.Mode();
 
 			if ( Mode != _List.Mode() )
 				ERRFwk();

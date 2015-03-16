@@ -284,10 +284,10 @@ class flxpersonnalization
 public:
 	flxpersonnalization( void )
 	{
-		flx::VoidOFlowDriver.Init( fdr::ts_Default );
+		flx::VoidOFlowDriver.Init( fdr::ts_Default, flx::a_Default );
 		flx::VoidOFlow.Init();
 
-		flx::VoidIFlowDriver.Init( fdr::ts_Default );
+		flx::VoidIFlowDriver.Init( fdr::ts_Default, flx::a_Default );
 		flx::VoidIFlow.Init();
 
 		/* place here the actions concerning this library

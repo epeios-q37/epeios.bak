@@ -502,25 +502,25 @@ namespace ias {
 		}
 		void Init( 
 			const hook_filenames___ &Filenames,
-			fil::mode__ Mode,
-			bso::bool__ Persistent,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
 			fls::id__ ID )
 		{
-			_Descriptors.Init( Filenames.Descriptors, Mode, Persistent, ID );
-			_Storage.Init( Filenames.Storage, Mode, Persistent, ID );
+			_Descriptors.Init( Filenames.Descriptors, Mode, Behavior, ID );
+			_Storage.Init( Filenames.Storage, Mode, Behavior, ID );
 		}
-		fil::mode__ Mode( fil::mode__ Mode )
+		uys::mode__ Mode( uys::mode__ Mode )
 		{
-			fil::mode__ ModeBuffer = _Descriptors.Mode( Mode );
+			uys::mode__ ModeBuffer = _Descriptors.Mode( Mode );
 
 			if ( ModeBuffer != _Storage.Mode( Mode ) )
 				ERRPrm();
 
 			return ModeBuffer;
 		}
-		fil::mode__ Mode( void ) const
+		uys::mode__ Mode( void ) const
 		{
-			fil::mode__ Mode = _Descriptors.Mode();
+			uys::mode__ Mode = _Descriptors.Mode();
 
 			if ( Mode != _Storage.Mode() )
 				ERRPrm();

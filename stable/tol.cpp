@@ -227,26 +227,6 @@ bso::size__ tol::GetMemoryUsage( void )
 #	undef CreateFile
 #endif
 
-static inline void signal_( int s )
-{
-	exit( EXIT_SUCCESS );
-}
-
-static inline void ExitOnSignal_( void )
-{
-#if defined( TOL__MAC ) || defined( TOL__POSIX )
-	signal( SIGHUP, signal_ );
-#elif defined( TOL__WIN )
-	signal( SIGBREAK, signal_ );
-#else
-#	error "Undefined target !"
-#endif
-
-	signal( SIGTERM, signal_ );
-	signal( SIGABRT, signal_ );
-	signal( SIGINT, signal_ );	// Documentations about this signal not very clear, but this handles Ctrl-C.
-}
-
 static inline void SetSystemCommandAvailabitity_( void )
 {
 	if ( system( NULL ) != 0 )
@@ -265,7 +245,6 @@ public:
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
-			ExitOnSignal_();
 			SetSystemCommandAvailabitity_();
 #ifdef TOL__WIN		
 		if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )

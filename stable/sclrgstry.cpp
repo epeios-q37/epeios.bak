@@ -501,23 +501,23 @@ template <typename t> static bso::bool__ GetUnsignedNumber_(
 	t &Value )
 {
 	bso::bool__ Present = false;
-	ERRProlog
-		str::string RawValue;
+ERRProlog
+	str::string RawValue;
 	sdr::row__ Error = E_NIL;
-	ERRBegin
-		RawValue.Init();
+ERRBegin
+	RawValue.Init();
 
 	if ( !( Present = BGetValue( Registry, Entry, RawValue ) ) )
 		ERRReturn;
 
-	RawValue.ToNumber( Limit, Value, &Error );
+	RawValue.ToNumber( Value, Limit, &Error );
 
 	if ( Error != E_NIL )
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-	ERRErr
-		ERREnd
-		ERREpilog
-		return Present;
+ERRErr
+ERREnd
+ERREpilog
+	return Present;
 }
 
 template <typename t> static bso::bool__ GetSignedNumber_(
@@ -537,7 +537,7 @@ ERRBegin
 	if ( !( Present = BGetValue( Registry, Entry, RawValue ) ) )
 		ERRReturn;
 
-	RawValue.ToNumber( UpperLimit, LowerLimit, Value, &Error );
+	RawValue.ToNumber( Value, UpperLimit, LowerLimit, &Error );
 
 	if ( Error != E_NIL )
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );

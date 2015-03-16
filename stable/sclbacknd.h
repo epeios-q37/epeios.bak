@@ -114,7 +114,7 @@ namespace sclbacknd {
 		{
 			_backend___::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations );
 			_daemon___::Init();
-			_VoidFlowDriver.Init( fdr::tsDisabled );
+			_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
 			_RequestLogFunctions.Init( _VoidFlowDriver );
 			_UP = UP;
 		}

@@ -352,12 +352,12 @@ namespace ctn {
 		}
 		void Init( 
 			const hook_filenames___ &Filenames,
-			fil::mode__ Mode,
-			bso::bool__ Persistent,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
 			fls::id__ ID )
 		{
-			_Statics.Init( Filenames.Statics, Mode, Persistent, ID );
-			_Dynamics.Init( Filenames.Dynamics, Mode, Persistent, ID );
+			_Statics.Init( Filenames.Statics, Mode, Behavior, ID );
+			_Dynamics.Init( Filenames.Dynamics, Mode, Behavior, ID );
 		}
 		uys::state__ State( void ) const
 		{
@@ -398,18 +398,18 @@ namespace ctn {
 			_Statics.ReleaseFile();
 			_Dynamics.ReleaseFile();
 		}
-		fil::mode__ Mode( void ) const
+		uys::mode__ Mode( void ) const
 		{
-			fil::mode__ Mode = _Statics.Mode();
+			uys::mode__ Mode = _Statics.Mode();
 
 			if ( Mode != _Dynamics.Mode() )
 				ERRPrm();
 
 			return Mode;
 		}
-		fil::mode__ Mode( fil::mode__ Mode )
+		uys::mode__ Mode( uys::mode__ Mode )
 		{
-			fil::mode__ ModeBuffer = _Statics.Mode( Mode );
+			uys::mode__ ModeBuffer = _Statics.Mode( Mode );
 
 			if ( ModeBuffer != _Dynamics.Mode( ModeBuffer ) )
 				ERRFwk();
