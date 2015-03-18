@@ -36,10 +36,10 @@ ERRProlog
 	fnm::name___ Statics, Dynamics;
 ERRBegin
 	Statics.Init();
-	fnm::BuildPath( Path, Basename, "cs", Statics );
+	fnm::BuildPath( Path, Basename, "s", Statics );
 
 	Dynamics.Init();
-	fnm::BuildPath( Path, Basename, "cd", Dynamics );
+	fnm::BuildPath( Path, Basename, "d", Dynamics );
 
 	this->Statics.Init( NULL, Statics );
 	this->Dynamics.Init( NULL, Dynamics );

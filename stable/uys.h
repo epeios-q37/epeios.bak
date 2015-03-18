@@ -495,7 +495,7 @@ namespace uys {
 			const fnm::name___ &Basename )	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
 		{
 			Filename.Init();
-			fnm::BuildPath( Path, Basename, "s.q37", Filename );
+			fnm::BuildPath( Path, Basename, ".q37", Filename );
 		}
 	};
 		

@@ -80,10 +80,10 @@ ERRProlog
 	fnm::name___ Descriptors, Storage;
 ERRBegin
 	Descriptors.Init();
-	fnm::BuildPath( Path, Basename, "ad", Descriptors );
+	fnm::BuildPath( Path, Basename, "d", Descriptors );
 
 	Storage.Init();
-	fnm::BuildPath( Path, Basename, "as", Storage );
+	fnm::BuildPath( Path, Basename, "s", Storage );
 
 	this->Descriptors.Init( NULL, Descriptors );
 	this->Storage.Init( NULL, Storage );
