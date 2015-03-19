@@ -139,13 +139,16 @@ bso::bool__ sclxhtml::session_callback___::XHTCLLBKLaunch(
 	const char *Id,
 	const char *Action )
 {
-	bso::bool__ Success = true;
+	bso::bool__ Success = false;
 ERRProlog
 	str::string Message;
 	err::buffer__ ErrBuffer;
-ERRBegin
-	if ( _PreLaunch( Id, Action ) )
-		Success = _Handler.Launch( Id, Action );
+	ERRBegin
+		if ( _OnBeforeAction( Id, Action ) )
+			if ( !strcmp( Action, xhtcllbk::CloseActionLabel ) )
+				Success = _OnClose();	// Dans ce cas, si 'Success' est à 'false', la fermeture de l'application est suspendue.
+			else
+				Success = _Handler.Launch( Id, Action );
 ERRErr
 	switch ( ERRType ) {
 	case err::t_Abort:

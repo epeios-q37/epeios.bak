@@ -9,6 +9,14 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-03-19
+- XHTCLLBK :
+	- Adding the label of the action corresponding to the closing of a program.
+- SCLXHTML :
+	- '[_]prelaunch_callback__' becomes '[_]action_helper_callback__'
+	% On above call, adding '...OnClose(...)'.
+	- '...Prelaunch(...)' becomes '...OnBeforeAction(...)'.
+
 
 2015-03-16 :
 - CTN, IAS, LST, LSTBCH, LSTCTN :

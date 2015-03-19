@@ -50,6 +50,8 @@
 # define XHTCLLBK_RETRIEVE_FUNCTION_NAME		XHTCLLBKRetrieve
 
 namespace xhtcllbk {
+	E_CDEF( char *, CloseActionLabel, "Q37Close" );
+
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 

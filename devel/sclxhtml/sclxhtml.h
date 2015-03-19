@@ -79,27 +79,32 @@ namespace sclxhtml {
 	};
 
 	namespace {
-		class _prelaunch_callback__
+		class _action_helper_callback__
 		{
 		protected:
-			virtual bso::bool__ SCLXHTMLPreLaunch(
+			virtual bso::bool__ SCLXHTMLOnBeforeAction(
 				const char *Id,
 				const char *Action ) = 0;
+			virtual bso::bool__ SCLXHTMLOnClose( void ) = 0;
 		public:
 			void reset( bso::bool__ = true )
 			{
 				// Standardisation.
 			}
-			E_CVDTOR( _prelaunch_callback__ );
+			E_CVDTOR( _action_helper_callback__ );
 			void Init( void )
 			{
 				// Standardisation.
 			}
-			bso::bool__ PreLaunch(
+			bso::bool__ OnBeforeAction(
 				const char *Id,
 				const char *Action )
 			{
-				return SCLXHTMLPreLaunch( Id, Action );
+				return SCLXHTMLOnBeforeAction( Id, Action );
+			}
+			bso::bool__ OnClose( void )
+			{
+				return SCLXHTMLOnClose();
 			}
 		};
 
@@ -204,21 +209,21 @@ namespace sclxhtml {
 		}
 	};
 
-	template <typename session> class prelaunch_callback__
-	: public _prelaunch_callback__
+	template <typename session> class action_helper_callback__
+	: public _action_helper_callback__
 	{
 	private:
 		session *_Session;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_prelaunch_callback__::reset( P );
+			_action_helper_callback__::reset( P );
 			_Session = NULL;
 		}
-		E_CVDTOR( prelaunch_callback__ );
+		E_CVDTOR( action_helper_callback__ );
 		void Init( session &Session )
 		{
-			_prelaunch_callback__::Init();
+			_action_helper_callback__::Init();
 			_Session = &Session;
 		}
 		session &Session( void ) const
@@ -247,19 +252,23 @@ namespace sclxhtml {
 
 			return _Language;
 		}
-		_prelaunch_callback__ *_Callback;
-		_prelaunch_callback__ &_C( void )
+		_action_helper_callback__ *_Callback;
+		_action_helper_callback__ &_C( void )
 		{
 			if ( _Callback == NULL )
 				ERRFwk();
 
 			return *_Callback;
 		}
-		bso::bool__ _PreLaunch(
+		bso::bool__ _OnBeforeAction(
 			const char *Id,
 			const char *Action )
 		{
-			return _C().PreLaunch(Id, Action);
+			return _C().OnBeforeAction(Id, Action);
+		}
+		bso::bool__ _OnClose( void )
+		{
+			return _C().OnClose();
 		}
 	protected:
 		virtual bso::bool__ XHTCLLBKLaunch(
@@ -275,7 +284,7 @@ namespace sclxhtml {
 			_Language = NULL;
 		}
 		E_CVDTOR( session_callback___ );
-		void Init( _prelaunch_callback__ &Callback )
+		void Init( _action_helper_callback__ &Callback )
 		{
 			_Handler.Init();
 			_session_callback__::Init();
@@ -392,12 +401,12 @@ namespace sclxhtml {
 		void Init(
 			const char *Launcher,
 			xhtcllbk::upstream_callback__ &Callback,
-			_prelaunch_callback__ &PreLaunchCallback )
+			_action_helper_callback__ &ActionHelperCallback )
 		{
 			_agent___::Init( Callback );
 			_Kernel.Init( _ReportingCallback );
 			_session___::Init( _Kernel );
-			session_callback___::Init( PreLaunchCallback );
+			session_callback___::Init( ActionHelperCallback );
 			_Page = UndefinedPage;
 			_Launcher = Launcher;
 
