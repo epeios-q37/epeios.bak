@@ -9,6 +9,11 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-03-20 :
+- SCLMISC, SCLRGSTRY :
+	% Adding plugin features, as a standard way to retrieve a plugin reference from a configuration file.
+
+
 2015-03-19
 - XHTCLLBK :
 	- Adding the label of the action corresponding to the closing of a program.

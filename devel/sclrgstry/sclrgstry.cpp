@@ -54,6 +54,14 @@ rgstry::entry___ sclrgstry::Language( "Language", Parameters );
 
 rgstry::entry___ sclrgstry::Locale( "Locale", Definitions );
 
+static rgstry::entry___ PluginDefinitionsSection_( "PluginSection", sclrgstry::Definitions );
+static rgstry::entry___ PluginDefinitions_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), PluginDefinitionsSection_ );
+rgstry::entry___ sclrgstry::PluginDefinition( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), PluginDefinitions_ );
+
+static rgstry::entry___ PluginParameters_( "Plugins", sclrgstry::Parameters );
+rgstry::entry___ sclrgstry::PluginParameter( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), PluginParameters_ );
+
+
 static rgstry::entry___ DefaultSetup_( "@DefaultSetup", Parameters );
 
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );

@@ -295,6 +295,10 @@ namespace sclmisc {
 		return sclmisc::OGetValue( entry, Value, Missing );\
 	}
 
+	// Façon standard de récupèrer la localisation d'un 'plugin'.
+	const str::string_ &GetPlugin(
+		const char *Target,
+		str::string_ &Plugin );
 }
 
 				  /********************************************/

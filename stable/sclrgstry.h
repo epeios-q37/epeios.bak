@@ -66,6 +66,9 @@ namespace sclrgstry {
 
 	extern rgstry::entry___ Locale;	// Du fichier de configuration uniquement.
 
+	extern rgstry::entry___ PluginDefinition;
+	extern rgstry::entry___ PluginParameter;
+
 	using rgstry::value;
 	using rgstry::value_;
 

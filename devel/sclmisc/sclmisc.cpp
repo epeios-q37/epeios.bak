@@ -589,6 +589,29 @@ rgstry::level__ sclmisc::GetRegistryArgumentsLevel( void )
 	return sclrgstry::GetArgumentsLevel();
 }
 
+const str::string_ &sclmisc::GetPlugin(
+	const char *Target,
+	str::string_ &Plugin )
+{
+ERRProlog
+	rgstry::tags Tags;
+	str::string Id;
+ERRBegin
+	Tags.Init();
+	Tags.Append( str::string( Target ) );
+
+	Id.Init();
+	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::PluginParameter, Target ), Id );
+
+	Tags.Append( Id );
+	sclmisc::MGetValue( rgstry::tentry__( sclrgstry::PluginDefinition, Tags ), Plugin );
+ERRErr
+ERREnd
+ERREpilog
+	return Plugin;
+}
+
+
 
 
 /* Although in theory this class is inaccessible to the different modules,
