@@ -91,13 +91,13 @@ namespace scldaemon {
 	: public _callback__
 	{
 	private:
-		virtual void *CSDSCBPreProcess( const char *Origin )
+		virtual void *CSDSCBPreProcess( const char *Origin ) override
 		{
 			return SCLDAEMONNew( Origin );
 		}
 		virtual csdscb::action__ CSDSCBProcess(
 			flw::ioflow__ &Flow,
-			void *UP )
+			void *UP ) override
 		{
 			daemon___ &Daemon = *(daemon___ *)UP;
 
@@ -106,13 +106,7 @@ namespace scldaemon {
 			else
 				return csdscb::aStop;
 		}
-# if 0
-		virtual void CSDSCBPostProcess( void *UP )
-		{
-			delete (daemon___ *)UP;
-		}
-#else
-		virtual void CSDSCBPostProcess( void *UP )
+		virtual void CSDSCBPostProcess( void *UP ) override
 		{
 		ERRProlog
 		ERRBegin
@@ -127,7 +121,6 @@ namespace scldaemon {
 		ERREnd
 		ERREpilog
 		}
-#endif
 	protected:
 		virtual daemon___ *SCLDAEMONNew( const char *Origin ) = 0;
 	public:

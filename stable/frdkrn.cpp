@@ -329,7 +329,7 @@ ERRProlog
 	str::string Buffer;
 ERRBegin
 	OFlowDriver.Init( ErrorSet.Misc, fdr::ts_Default );
-	LibraryData.Init( csdleo::mEmbedded, RemoteHostServiceOrLocalLibraryPath, err::ERRError, csdleo::cRegular, UP );
+	LibraryData.Init( csdleo::cRegular, RemoteHostServiceOrLocalLibraryPath, err::ERRError, UP );
 	// Attention ; les erreurs arrivant dans la bibliothèque lors de son chargement ne sont plus rapportées. A modifier.
 	// Auparavent, c'était 'OFlowDriver' qui était uilisé pour le paramètre 'CErr', mais cela ne focntionnait pas lorsque la bitliothèques était chargée plusieurs fois...
 

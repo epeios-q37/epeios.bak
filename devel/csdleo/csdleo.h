@@ -41,7 +41,7 @@
 # include "csdscb.h"
 
 # define CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME		CSDLEORetrieveCallback
-# define CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME		CSDLEOReleaseCallback
+// # define CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME		CSDLEOReleaseCallback
 
 /*
 NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
@@ -52,8 +52,7 @@ NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que c
 # define CSDLEO_SHARED_DATA_VERSION	CSDLEO_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
 namespace csdleo {
-	using namespace csdscb;
-
+	
 	enum mode__ {
 		mEmbedded,
 		mRemote,
@@ -67,8 +66,6 @@ namespace csdleo {
 		c_amount,
 		c_Undefined,
 	};
-
-
 
 #pragma pack( push, 1)
 	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
@@ -97,14 +94,12 @@ namespace csdleo {
 	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class data__ {
 	public:
-		mode__ Mode;
 		context__ Context;
 		const char *LibraryLocationAndName;
 		err::err___ *ERRError;
 		void *UP;				// A la discrétion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
-			Mode = m_Undefined;
 			Context = c_Undefined;
 			LibraryLocationAndName = NULL;
 			ERRError = NULL;
@@ -112,26 +107,23 @@ namespace csdleo {
 		}
 		E_CDTOR( data__ );
 		data__(
-			mode__ Mode,
+			context__ Context,
 			const char *LibraryLocationAndName,
 			err::err___ *ERRError,
-			context__ Context,
 			void *UP )
 		{
 			reset( false );
-			Init( Mode, LibraryLocationAndName, ERRError, Context, UP );
+			Init( Context, LibraryLocationAndName, ERRError,UP );
 		}
 		void Init(
-			mode__ Mode,
+			context__ Context,
 			const char *LibraryLocationAndName,
 			err::err___ *ERRError,
-			context__ Context,
 			void *UP )
 		{
-			this->Mode = Mode;
+			this->Context = Context;
 			this->LibraryLocationAndName = LibraryLocationAndName;
 			this->ERRError = ERRError;
-			this->Context = Context;
 			this->UP = UP;
 		}
 	};
@@ -151,13 +143,56 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Mode, Data.LibraryLocationAndName, Data.ERRError, Data.Context, Data.UP );
+			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.ERRError, Data.UP );
 		}
 	};
 #pragma pack( pop )
 
-	typedef csdleo::callback__ *(retrieve_callback)( shared_data__ * );
-	typedef void (release_callback)( csdleo::callback__ * );
+	class callback__
+	{
+	protected:
+		virtual void CSDLEOInitialize(
+			const shared_data__ *Data,
+			... ) = 0;
+		virtual csdscb::callback__ *CSDLEORetrieveCallback(
+			csdleo::mode__ Mode,
+			csdleo::context__ Context ) = 0;
+		virtual void CSDLEOReleaseCallback( csdscb::callback__ *Callback ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( callback__ );
+		void Init( void )
+		{
+			//Standardisaction.
+		}
+		void Initialize(
+			const shared_data__ *Data,
+			const ntvstr::char__ *FirstParameter = NULL,
+			... /* Autres paramètres. Le dernier doit être = 'NULL' */ )
+		{
+			va_list Parameters;
+			va_start( Parameters, FirstParameter );
+
+			CSDLEOInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la méthode appelée.
+			// Il n'existe en tant que paramètre de cette méthode que pour en faciliter la compréhension.
+		}
+		csdscb::callback__ *RetrieveCallback(
+			csdleo::mode__ Mode,
+			csdleo::context__ Context )
+		{
+			return CSDLEORetrieveCallback( Mode, Context );
+		}
+		void ReleaseCallback( csdscb::callback__ *Callback)
+		{
+			CSDLEOReleaseCallback( Callback );
+		}
+	};
+
+	typedef callback__ &(retrieve_callback)( void );
+//	typedef void (release_callback)( csdleo::callback__ * );
 }
 
 				  /********************************************/

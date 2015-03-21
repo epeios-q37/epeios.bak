@@ -49,18 +49,21 @@ namespace plgn {
 	{
 	private:
 		dlbrry::dynamic_library___ _Library;
+		plgncore::callback__ *_Callback;
 		plugin *_Plugin;
-		void _ReleasePlugin( void )
+		plgncore::callback__ &_C( void ) const
 		{
-			plgncore::release_plugin *Function = dlbrry::GetFunction<plgncore::release_plugin *>( E_STRING( PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME ), _Library );
-
-			if ( Function == NULL )
+			if ( _Callback == NULL )
 				ERRFwk();
 
+			return *_Callback;
+		}
+		void _ReleasePlugin( void )
+		{
 			if ( _Plugin == NULL )
 				ERRFwk();
 
-			Function( _Plugin );
+			_C().ReleasePlugin( _Plugin );
 		}
 		bso::bool__ _IsCompatible( void )
 		{
@@ -80,6 +83,7 @@ namespace plgn {
 			}
 
 			_Library.reset( P );
+			_Callback = NULL;
 			_Plugin = NULL;
 		}
 		E_CDTOR( retriever___ );
@@ -91,9 +95,8 @@ namespace plgn {
 			plgncore::data__ Data;
 			fnm::name___ Location;
 			TOL_CBUFFER___ Buffer;
+			plgncore::retrieve_callback *Function = NULL;
 		ERRBegin
-			plgncore::retrieve_plugin *Function = NULL;
-
 			if ( !_Library.Init( PluginNameAndLocation, ErrHandling ) )
 				return NULL;
 
@@ -103,7 +106,7 @@ namespace plgn {
 				else
 					return false;
 
-			Function = dlbrry::GetFunction<plgncore::retrieve_plugin *>( E_STRING( PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME ), _Library );
+			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), _Library );
 
 			if ( Function == NULL )
 				ERRFwk();
@@ -111,9 +114,13 @@ namespace plgn {
 			Location.Init();
 			fnm::GetLocation( PluginNameAndLocation, Location );
 
+			_Callback = &Function();
+
 			Data.Init( err::ERRError, sclerror::SCLERRORError, Location.UTF8( Buffer ) );
 
-			_Plugin = (plugin *)Function( &Data );
+			_C().Initialize( &Data, NULL );
+
+			_Plugin = (plugin *)_C().RetrievePlugin();
 
 			if ( ( _Plugin == NULL) && ( ErrHandling == err::hThrowException ) )
 				ERRFwk();

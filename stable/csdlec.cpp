@@ -61,28 +61,23 @@ bso::bool__ csdlec::library_embedded_client_core__::_RetrieveCallback( csdleo::s
 	if ( RetrieveCallback == NULL )
 		return false;
 
+	csdleo::callback__ &Callback = RetrieveCallback();
+
 	if ( _Callback != NULL )
 		ERRFwk();
 
-	if ( ( _Callback = RetrieveCallback( Data ) ) == NULL )
+	Callback.Initialize( Data, NULL );
+
+	if ( ( _Callback = Callback.RetrieveCallback( csdleo::mEmbedded, Data->Context ) ) == NULL )
 		return false;
 
 	return true;
 }
 
-extern "C" typedef csdleo::release_callback release_callback;
-
 bso::bool__ csdlec::library_embedded_client_core__::_ReleaseCallback( void )
 {
-	release_callback *ReleaseCallback = dlbrry::GetFunction<release_callback *>( E_STRING( CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME ), _Library );
-
-	if ( ReleaseCallback == NULL )
-		return false;
-
-	if ( _Callback == NULL )
-		ERRFwk();
-
-	ReleaseCallback( _Callback );
+	if ( _Callback != NULL )
+		delete _Callback;
 
 	_Callback = NULL;
 

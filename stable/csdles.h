@@ -39,8 +39,8 @@
 # include "csdleo.h"
 
 namespace csdles {
-	csdleo::callback__ *CSDLESRetrieveCallback( csdleo::data__ *Data );	// A surcharger.
-	void CSDLESReleaseCallback( csdleo::callback__ * );	// A surcharger.
+	csdleo::callback__ &CSDLESRetrieveCallback( void );	// A surcharger.
+//	void CSDLESReleaseCallback( csdleo::callback__ * );	// A surcharger.
 }		
 
 				  /********************************************/

@@ -41,51 +41,53 @@ using namespace scldaemon;
 
 static bso::bool__ IsInitialized_ = false;
 
-csdleo::callback__ *csdles::CSDLESRetrieveCallback( csdleo::data__ *Data )
+typedef csdleo::callback__ _callback__;
+
+static class callback__
+: public ::_callback__
 {
-	csdleo::callback__ *Callback = NULL;
-ERRProlog
-	fnm::name___ Directory;
-	TOL_CBUFFER___ Buffer;
-	str::string Error;
-ERRBegin
-	if ( Data == NULL )
-		ERRPrm();
+protected:
+	virtual void CSDLEOInitialize(
+		const csdleo::shared_data__ *Data,
+		... ) override
+	{
+	ERRProlog
+		fnm::name___ Directory;
+		TOL_CBUFFER___ Buffer;
+		str::string Error;
+	ERRBegin
+		if ( Data == NULL )
+			ERRPrm();
 		
-	if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
+		if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
 
-		// Does not work when placed in 'global_cdtor'.
-		Directory.Init();
-		fnm::GetLocation( Data->LibraryLocationAndName, Directory );
-		sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, Directory.UTF8( Buffer ) );
-		IsInitialized_ = true;
+			// Does not work when placed in 'global_cdtor'.
+			Directory.Init();
+			fnm::GetLocation( Data->LibraryLocationAndName, Directory );
+			sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, Directory.UTF8( Buffer ) );
+			IsInitialized_ = true;
+		}
+	ERRErr
+	ERREnd
+	ERREpilog
 	}
-
-/*
-	switch ( Data->Mode ) {
-	case csdleo::mEmbedded:
-		Mode = fblbur::mEmbedded;
-		break;
-	case csdleo::mRemote:
-		Mode = fblbur::mRemote;
-		break;
-	default:
-		ERRFwk();
-		break;
+	virtual csdscb::callback__ *CSDLEORetrieveCallback(
+		csdleo::mode__ Mode,
+		csdleo::context__ Context )  override
+	{
+		return SCLDAEMONNewCallback( Mode, Context );
 	}
-*/
-
-	Callback = SCLDAEMONNewCallback( Data->Mode, Data->Context );
-ERRErr
-ERREnd
-ERREpilog
-	return Callback;
-}
-
-void csdles::CSDLESReleaseCallback( csdleo::callback__ *Callback )
-{
-	if ( Callback != NULL  )
+	virtual void CSDLEOReleaseCallback( csdscb::callback__ *Callback ) override
+	{
 		delete Callback;
+	}
+} _Callback;
+
+csdleo::callback__ &csdles::CSDLESRetrieveCallback( void )
+{
+	_Callback.Init();
+
+	return _Callback;
 }
 
 /* Although in theory this class is inaccessible to the different modules,

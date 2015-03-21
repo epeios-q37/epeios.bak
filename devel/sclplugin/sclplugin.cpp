@@ -42,16 +42,29 @@ it is necessary to personalize it, or certain compiler would not work properly *
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
 DEF( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME, plgncore::plugin_identification );
-DEF( PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME, plgncore::retrieve_plugin );
-DEF( PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME, plgncore::release_plugin );
+DEF( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME, plgncore::retrieve_callback );
 
 const char *PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME( void )
 {
 	return sclplugin::SCLPLUGINPluginIdentification();
 }
 
-void *PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME( const plgncore::data__ *Data )
+static callback__ Callback_;
+
+_callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 {
+	Callback_.Init();
+
+	return Callback_;
+}
+
+void sclplugin::callback__::PLGNCOREInitialize(
+	const plgncore::data__ *Data,
+	... )
+{
+	va_list Parameters;	// NOTA : leur contenu n'est pas encore traité.
+	va_start( Parameters, Data );
+
 	if ( Data == NULL )
 		ERRFwk();
 
@@ -66,13 +79,16 @@ void *PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME( const plgncore::data__ *Data )
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( Data->ERRError, Data->SCLError, Data->Directory );
+}
 
+void *sclplugin::callback__::PLGNCORERetrievePlugin( void )
+{
 	return sclplugin::SCLPLUGINRetrievePlugin();
 }
 
-void PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME( void *Callback )
+void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
 {
-	return sclplugin::SCLPLUGINReleasePlugin( Callback );
+	sclplugin::SCLPLUGINReleasePlugin( Plugin );
 }
 
 class sclpluginpersonnalization

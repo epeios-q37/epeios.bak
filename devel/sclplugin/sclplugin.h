@@ -39,6 +39,29 @@
 # include "flw.h"
 
 namespace sclplugin {
+	typedef plgncore::callback__ _callback__;
+
+	class callback__
+	: public _callback__
+	{
+	protected:
+		virtual void PLGNCOREInitialize(
+			const plgncore::data__ *Data,
+			... /* Autres paramètres. Le dernier doit être = 'NULL' */ ) override;
+		virtual void *PLGNCORERetrievePlugin( void ) override;
+		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_callback__::reset( P );
+		}
+		E_CVDTOR( callback__ );
+		void Init( void )
+		{
+			_callback__::Init();
+		}
+	};
+
 	// Fonctions à surcharger, (la macro ci-dessous le fait).
 	const char *SCLPLUGINPluginIdentification( void );
 	void *SCLPLUGINRetrievePlugin( void );

@@ -42,8 +42,7 @@
 # define PLGNCORE_SHARED_DATA_VERSION	"2"
 
 # define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
-# define PLGNCORE_RETRIEVE_PLUGIN_FUNCTION_NAME			RetrievePlugin
-# define PLGNCORE_RELEASE_PLUGIN_FUNCTION_NAME			ReleasePlugin
+# define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
 
 namespace plgncore {
 #pragma pack( push, 1)
@@ -91,13 +90,50 @@ namespace plgncore {
 		{
 			return sizeof( data__ );
 		}
-
 	};
 #pragma pack( pop )
 
+	class callback__
+	{
+	protected:
+		virtual void PLGNCOREInitialize(
+			const data__ *Data,
+			... ) = 0;
+		virtual void *PLGNCORERetrievePlugin( void ) = 0;
+		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		E_CVDTOR( callback__ );
+		void Init( void )
+		{
+			//Standardisaction.
+		}
+		void Initialize(
+			const data__ *Data,
+			const ntvstr::char__ *FirstParameter = NULL,
+			... /* Autres paramètres. Le dernier doit être = 'NULL' */ )
+		{
+			va_list Parameters;
+			va_start( Parameters, FirstParameter );
+
+			PLGNCOREInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la méthode appelée.
+																// Il n'existe en tant que paramètre de cette méthode que pour en faciliter la compréhension.
+		}
+		void *RetrievePlugin( void )
+		{
+			return PLGNCORERetrievePlugin();
+		}
+		void ReleasePlugin( void *Plugin )
+		{
+			PLGNCOREReleasePlugin( Plugin );
+		}
+	};
+
 	typedef const char *(plugin_identification)( void );
-	typedef void *(retrieve_plugin)( const data__ *Data );
-	typedef void (release_plugin)( void *);
+	typedef callback__ &(retrieve_callback)( void );
 }
 
 				  /********************************************/

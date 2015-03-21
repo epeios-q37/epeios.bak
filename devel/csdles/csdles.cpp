@@ -28,8 +28,6 @@
 
 using namespace csdles;
 
-static bch::E_BUNCH( csdleo::callback__ *) Callbacks_;
-
 #ifdef CPE_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
@@ -39,103 +37,15 @@ static bch::E_BUNCH( csdleo::callback__ *) Callbacks_;
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
 DEF( CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME, csdleo::retrieve_callback );
-DEF( CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME, csdleo::release_callback );
-
-#if 0
-#ifdef CPE_WIN
-
-#include <windows.h>
-
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  ul_reason_for_call, 
-                       LPVOID lpReserved )
-{
-    switch (ul_reason_for_call)
-	{
-		case DLL_PROCESS_ATTACH:
-			break;
-		case DLL_THREAD_ATTACH:
-			break;
-		case DLL_THREAD_DETACH:
-			break;
-		case DLL_PROCESS_DETACH:
-			break;
-		default:
-			break;
-    }
-    return TRUE;
-}
-#endif
-#endif
-
-static void Terminate_( void )
-{
-	sdr::row__ Row = Callbacks_.First();
-	csdleo::callback__ *Callback = NULL;
-
-	while ( Row != E_NIL ) {
-
-		Callback = Callbacks_( Row );
-
-		if ( Callback != NULL )
-			delete Callback;
-
-		Callbacks_.Store( NULL, Row );
-
-		Row = Callbacks_.Next( Row );
-	}
-}
-
-static void ExitFunction_( void )
-{
-	Terminate_();
-}
+// DEF( CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME, csdleo::release_callback );
 
 static inline void DoNothing_( void )
 {}
 
-csdleo::callback__ *CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME( csdleo::shared_data__ *Data )
+csdleo::callback__ &CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 {
-	csdleo::callback__ *Callback = NULL;
-ERRFProlog
-ERRFBegin
-	atexit( ExitFunction_ );
-
-	if ( Data == NULL )
-		ERRPrm();
-
-	if ( strcmp( Data->Version, CSDLEO_SHARED_DATA_VERSION ) )
-		ERRChk();
-
-	if ( Data->Control != Data->ControlComputing() )
-		ERRChk();
-
-	Callback = csdles::CSDLESRetrieveCallback( Data );
-
-	if ( Callback != NULL )
-		Callbacks_.Append( Callback );
-ERRFErr
-	ERRRst();
-
-	if ( Callback != NULL )
-		csdles::CSDLESReleaseCallback( Callback );
-
-	Callback = NULL;
-ERRFEnd
-ERRFEpilog(DoNothing_())
-	return Callback;
+	return csdles::CSDLESRetrieveCallback();
 }
-
-void CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME( csdleo::callback__ *Callback )
-{
-	sdr::row__ Row = Callbacks_.Search( Callback );
-
-	if ( Row != E_NIL ) {
-		csdles::CSDLESReleaseCallback( Callback );
-		Callbacks_.Store( NULL, Row );
-	}
-}
-
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
@@ -147,7 +57,6 @@ public:
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
-		Callbacks_.Init();
 	}
 	~csdlespersonnalization( void )
 	{

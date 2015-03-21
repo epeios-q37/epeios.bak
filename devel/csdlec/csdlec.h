@@ -133,7 +133,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 	: public _passive_generic_driver___
 	{
 	private:
-		csdleo::callback__ *_Callback;
+		csdscb::callback__ *_Callback;
 		void *_UP;
 		flw::ioflow__ *_Flow;
 		bso::bool__ _DataAvailable;
@@ -187,7 +187,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 			reset();
 		}
 		void Init(
-			csdleo::callback__ &Callback,
+			csdscb::callback__ &Callback,
 			flw::ioflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety )
 		{
@@ -255,7 +255,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 			_Master.reset( P );
 			_Slave.reset( P );
 		}
-		void Init( csdleo::callback__ &Callback )
+		void Init( csdscb::callback__ &Callback )
 		{
 			reset();
 /*
@@ -267,7 +267,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 
 			_Backend.Init();
 
-			_Driver.Init(Callback, _Backend.Flow, fdr::ts_Default );
+			_Driver.Init( Callback, _Backend.Flow, fdr::ts_Default );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), FLW_AMOUNT_MAX );
 		}
 	};
@@ -276,7 +276,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 	{
 	private:
 		dlbrry::dynamic_library___ _Library;
-		csdleo::callback__ *_Callback;
+		csdscb::callback__ *_Callback;
 		bso::bool__ _RetrieveCallback( csdleo::shared_data__ *Data );
 		bso::bool__ _ReleaseCallback( void );
 	public:
@@ -311,7 +311,7 @@ une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme s
 		{
 			return _Callback != NULL;
 		}
-		csdleo::callback__ &GetCallback( void ) const
+		csdscb::callback__ &GetCallback( void ) const
 		{
 			if ( !IsInitialized() )
 				ERRFwk();
