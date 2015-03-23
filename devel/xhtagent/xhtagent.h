@@ -44,8 +44,8 @@ namespace xhtagent {
 
 	class agent___ {
 	private:
-		xhtcllbk::upstream_callback__ *_Callback;
-		xhtcllbk::upstream_callback__ &_C( void ) const
+		xhtcllbk::proxy_callback__ *_Callback;
+		xhtcllbk::proxy_callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
 				ERRFwk();
@@ -58,7 +58,7 @@ namespace xhtagent {
 			_Callback = NULL;
 		}
 		E_CDTOR( agent___ );
-		void Init( xhtcllbk::upstream_callback__ &Callback )
+		void Init( xhtcllbk::proxy_callback__ &Callback )
 		{
 			_Callback = &Callback;
 		}

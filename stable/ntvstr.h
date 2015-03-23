@@ -56,7 +56,7 @@ namespace str {
 
 namespace ntvstr {
 # ifdef NTVSTR__POSIX
-	typedef bso::char__ char__;
+	typedef wchar_t char__;
 	E_CDEF( unsigned int, UTF8, 0 );
 	E_CDEF( unsigned int, System, 0 );
 # elif defined( NTVSTR__WIN )
@@ -70,6 +70,18 @@ namespace ntvstr {
 	typedef tol::E_BUFFER___( char__ ) core___;
 
 	typedef tol::E_BUFFER___( bso::char__ ) buffer___;
+
+	// Retourne la taille d'une chaîne de caratères natifs, en tenant compte de son encodage (i.e ne correspond pas nécessairement au nombre d'octets).
+	inline bso::size__ len( const char__ * Str )
+	{
+# ifdef NTVSTR__WIN
+		return wcslen( Str );
+# elif defined( NTVSTR__POSIX )
+		return wcslen( Str );
+# else
+#  error
+# endif
+	}
 
 	// 'Native string' ; 'string' utilisant en interne l'encodage natif. LEs 'str::string_' passés en paramètres sont encodés en 'UTF-8'.
 	class string___
@@ -128,9 +140,7 @@ namespace ntvstr {
 			_Core.reset();
 		}
 		void Init( const bso::char__ *String );
-# ifndef NTVSTR__POSIX
 		void Init( const char__ *String );
-# endif
 		void Init( const str::string_ &String );
 		void Init( const string___ &String )
 		{
@@ -171,13 +181,7 @@ namespace ntvstr {
 			if ( _Core == NULL )
 				return 0;
 			else
-# ifdef NTVSTR__WIN
-				return wcslen( _Core );
-# elif defined( NTVSTR__POSIX )
-				return strlen( _Core );
-# else
-#  error
-# endif
+				return len( _Core );
 		}
 		bso::bool__ IsEmpty( void ) const
 		{

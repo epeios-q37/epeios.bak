@@ -69,9 +69,6 @@ ERRErr
 		delete Callback;
 
 	Callback = NULL;
-
-	ERRRst();	// Erreur interceptée pour éviter se propagation.
-				// L'erreur est signalée par la valeur retournéee 'NULL'.
 ERREnd
 ERREpilog
 	return Callback;

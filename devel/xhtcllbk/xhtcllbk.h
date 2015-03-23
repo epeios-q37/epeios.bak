@@ -43,7 +43,7 @@
 # include "iof.h"
 # include "sclerror.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"7"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"8"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -75,9 +75,9 @@ namespace xhtcllbk {
 
 	const char *GetLabel( function__ Function );
 
-	class upstream_callback__ {
+	class proxy_callback__ {
 	protected:
-		virtual void XHTCLLBKLaunch(
+		virtual void XHTCLLBKProcess(
 			function__ Function,
 			...	) = 0;
 		virtual void XHTCLLBKGetLanguage(
@@ -90,7 +90,7 @@ namespace xhtcllbk {
 		{
 			// Standardisation.
 		}		
-		E_CVDTOR( upstream_callback__ );
+		E_CVDTOR( proxy_callback__ );
 		void Init( void )
 		{
 			// Standardisation.
@@ -114,7 +114,7 @@ namespace xhtcllbk {
 			const nstring___ &XSL,
 			const nstring___ &Title )
 		{
-			XHTCLLBKLaunch( fAlert, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
+			XHTCLLBKProcess( fAlert, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
 		}
 		void Confirm(
 			const nstring___ &XML,
@@ -122,28 +122,28 @@ namespace xhtcllbk {
 			const nstring___ &Title,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKLaunch( fConfirm, XML.Internal()(), XSL.Internal()(), Title.Internal()(), &Buffer );
+			XHTCLLBKProcess( fConfirm, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ), &Buffer );
 		}
 		void SetChildren(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKLaunch( fSetChildren, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
+			XHTCLLBKProcess( fSetChildren, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetCasting(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKLaunch( fSetCasting, Id.Internal()(), XML.Internal()(), XSL.Internal()() );
+			XHTCLLBKProcess( fSetCasting, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKLaunch( fGetProperty, Id.Internal()(), Name.Internal()(), &Buffer );
+			XHTCLLBKProcess( fGetProperty, Id.Internal()( ), Name.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -152,14 +152,14 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKLaunch( fSetProperty, Id.Internal()(), Name.Internal()(), Value.Internal()() );
+			XHTCLLBKProcess( fSetProperty, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKLaunch( fGetAttribute, Id.Internal()(), Name.Internal()(), &Buffer );
+			XHTCLLBKProcess( fGetAttribute, Id.Internal()( ), Name.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -168,13 +168,13 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKLaunch( fSetAttribute, Id.Internal()(), Name.Internal()(), Value.Internal()() );
+			XHTCLLBKProcess( fSetAttribute, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKLaunch( fGetResult, Id.Internal()(), &Buffer );
+			XHTCLLBKProcess( fGetResult, Id.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -182,13 +182,13 @@ namespace xhtcllbk {
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			XHTCLLBKLaunch( fRemoveAttribute, Id.Internal()(), Name.Internal()() );
+			XHTCLLBKProcess( fRemoveAttribute, Id.Internal()( ), Name.Internal()( ) );
 		}
 		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKLaunch( fGetContent, Id.Internal()(), &Buffer );
+			XHTCLLBKProcess( fGetContent, Id.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -196,11 +196,11 @@ namespace xhtcllbk {
 			const nstring___ &Id,
 			const nstring___ &Value )
 		{
-			XHTCLLBKLaunch( fSetContent, Id.Internal()(), Value.Internal()() );
+			XHTCLLBKProcess( fSetContent, Id.Internal()( ), Value.Internal()( ) );
 		}
 		void Focus( const nstring___ &Id )
 		{
-			XHTCLLBKLaunch( fFocus, Id.Internal()() );
+			XHTCLLBKProcess( fFocus, Id.Internal()( ) );
 		}
 		void ExecuteJavascript( const nstring___ &Script )
 		{
@@ -220,6 +220,7 @@ namespace xhtcllbk {
 		virtual bso::bool__ XHTCLLBKLaunch(
 			const char *Id,
 			const char *Action ) = 0;	// Return 'true' if the event propagation had to be stopped.
+		virtual const char *XHTCLLBKLanguage( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -236,43 +237,9 @@ namespace xhtcllbk {
 		{
 			return XHTCLLBKLaunch( Id, Action );
 		}
-	};
-
-	class downstream_callback__
-	{
-	protected:
-		virtual void XHTCLLBKOnLoad( const char *Launcher ) = 0;
-		virtual void XHTCLLBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XHTCLLBKNew( upstream_callback__ &Callback ) = 0;
-		// Destruction by destructor member.
-		virtual void XHTCLLBKOnUnload( void ) = 0;
-	public:
-		void reset( bso::bool__ = true )
+		const char *Language( TOL_CBUFFER___ &Buffer )
 		{
-			// Standardisation.
-		}
-		E_CVDTOR( downstream_callback__ );
-		void Init( void )
-		{
-			// Standardisation.
-		}
-		void OnLoad( const char *Launcher )
-		{
-			return XHTCLLBKOnLoad( Launcher );
-		}
-		const char *BaseLanguage( TOL_CBUFFER___ &Buffer )
-		{
-			XHTCLLBKBaseLanguage( Buffer );
-
-			return Buffer;
-		}
-		session_callback__ *New( upstream_callback__ &Callback )
-		{
-			return XHTCLLBKNew( Callback );
-		}
-		void OnUnload( void )
-		{
-			return XHTCLLBKOnUnload();
+			return XHTCLLBKLanguage( Buffer );
 		}
 	};
 
@@ -285,9 +252,8 @@ namespace xhtcllbk {
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
 		err::err___ *_ERRError;
 		sclerror::error___ *_SCLError;
-		upstream_callback__ *_Callback;
+		proxy_callback__ *_Callback;
 		const char *_LauncherIdentification;
-		fdr::oflow_driver_base___ *_OFlowDriver;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -299,17 +265,15 @@ namespace xhtcllbk {
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			upstream_callback__ &Callback,
-			const char *LauncherIndetification,
-			fdr::oflow_driver_base___ &OFlowDriver )
+			proxy_callback__ &Callback,
+			const char *LauncherIdentification )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_ERRError = err::ERRError;
 			_SCLError = sclerror::SCLERRORError;
 			_Callback = &Callback;
-			_LauncherIdentification = LauncherIndetification;
-			_OFlowDriver = &OFlowDriver;
+			_LauncherIdentification = LauncherIdentification;
 		}
 		size_t ControlComputing( void )
 		{
@@ -329,7 +293,7 @@ namespace xhtcllbk {
 
 			return _SCLError;
 		}
-		upstream_callback__ &Callback( void ) const
+		proxy_callback__ &Callback( void ) const
 		{
 			if ( _Callback == NULL )
 				ERRFwk();
@@ -343,15 +307,42 @@ namespace xhtcllbk {
 
 			return _LauncherIdentification;
 		}
-		fdr::oflow_driver_base___ &OFlowDriver( void ) const
-		{
-			if ( _OFlowDriver == NULL )
-				ERRFwk();
-
-			return *_OFlowDriver;
-		}
 	};
 #pragma pack( pop )
+
+	class callback__
+	{
+	protected:
+		virtual void XHTCLLBKInitialize( const shared_data__ &Data ) = 0;
+		virtual void XHTCLLBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual session_callback__ *XHTCLLBKNew( proxy_callback__ &Callback ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+	}
+		E_CVDTOR( callback__ );
+		void Init( void )
+		{
+			// Standardisation.
+		}
+		void Initialize( const shared_data__ &Data )
+		{
+			return XHTCLLBKInitialize( Data );
+		}
+		const char *BaseLanguage( TOL_CBUFFER___ &Buffer )
+		{
+			XHTCLLBKBaseLanguage( Buffer );
+
+			return Buffer;
+		}
+		session_callback__ *New( proxy_callback__ &Callback )
+		{
+			return XHTCLLBKNew( Callback );
+		}
+	};
+
+	typedef callback__ *(retrieve)( void );
 
 	void Escape(
 		const str::string_ &Source,
@@ -364,7 +355,6 @@ namespace xhtcllbk {
 		str::string_ &Target,
 		bso::char__ EscapeChar = DefaultEscapeChar );
 #endif
-	typedef downstream_callback__ *(retrieve)( const shared_data__ &Data );
 
 	typedef strmrg::table_ args_;
 	E_AUTO( args );

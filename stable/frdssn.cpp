@@ -57,12 +57,12 @@ public:
 
 using namespace frdssn;
 
-recap__ frdssn::session___::FillSessionRegistry(
+bso::bool__ frdssn::session___::FillSessionRegistry(
 	xtf::extended_text_iflow__ &SettingsXFlow,
 	const xpp::criterions___ &Criterions,
 	error_set___ &ErrorSet )
 {
-	recap__ Recap = r_Undefined;
+	bso::bool__ Success = false;
 ERRProlog
 	TOL_CBUFFER___ FileNameBuffer, PathBuffer;
 ERRBegin
@@ -75,40 +75,32 @@ ERRBegin
 		ERRFwk();
 		break;
 	default:
-		Recap = rSetupParsingError;
 		ERRReturn;
 		break;
 	}
 
-	Recap = r_OK;
-ERRErr
-ERREnd
-ERREpilog
-	return Recap;
+	Success = true;
+	ERRErr
+		ERREnd
+		ERREpilog
+		return Success;
 }
 
-status__ frdssn::session___::FillSessionRegistry(
+bso::bool__ frdssn::session___::FillSessionRegistry(
 	xtf::extended_text_iflow__ &SettingsXFlow,
 	const xpp::criterions___ &Criterions )
 {
-	status__ Status = s_Undefined;
+	bso::bool__ Success = false;
 ERRProlog
 	error_set___ ErrorSet;
-	recap__ Recap = r_Undefined;
 ERRBegin
 	ErrorSet.Init();
 
-	if ( ( Recap = FillSessionRegistry( SettingsXFlow, Criterions, ErrorSet ) ) != r_OK ) {
-//		_Meaning.Init();
-	//	frdkrn::GetMeaning( Recap, ErrorSet, _Meaning );
-		Status = sWarning;
-		ERRReturn;
-	} else
-		Status = sOK;
+Success = FillSessionRegistry( SettingsXFlow, Criterions, ErrorSet );
 ERRErr
 ERREnd
 ERREpilog
-	return Status;
+	return Success;
 }
 
 

@@ -106,20 +106,19 @@ namespace frdssn {
 			_IsOpen = false;
 		}
 		E_CVDTOR( session___ );
-		void Init( frdkrn::kernel___ &Kernel )
+		void Init(
+			frdkrn::kernel___ &Kernel,
+			const rgstry::multi_level_registry_ &Registry )
 		{
 			_Kernel = &Kernel;
-			_Registry.Init();
+			_Registry.Init( Registry );
 			_IsOpen = false;
 		}
-		void Open(
-			const char *Language,
-			const rgstry::multi_level_registry_ &Registry )
+		void Open( const char *Language )
 		{
 ERRProlog
 ERRBegin
-			_Registry.Init( Registry );
-			_IsOpen = true;	// Pour autoriser l'accés à la registry dans 'FRDSSNnOpen.
+			_IsOpen = true;
 			FRDSSNOpen( Language );
 ERRErr
 			_IsOpen = false;
@@ -130,8 +129,8 @@ ERREpilog
 		}
 		void Close( void )
 		{
-			_Registry.reset();
-			FRDSSNClose();
+			if ( _IsOpen )
+				FRDSSNClose();
 			_IsOpen = false;
 		}
 		const char *Language( TOL_CBUFFER___ &Buffer )
@@ -146,33 +145,25 @@ ERREpilog
 		}
 		const frdrgy::registry_ &Registry( void ) const
 		{
-			_Test();
-
 			return _Registry;
 		}
 		frdrgy::registry_ &Registry( void )
 		{
-			_Test();
-
 			return _Registry;
 		}
 		bso::bool__ IsOpen( void ) const
 		{
 			return _IsOpen;
 		}
-		recap__ DumpSessionRegistry( xml::writer_ &Writer ) const
+		void DumpSessionRegistry( xml::writer_ &Writer ) const
 		{
-			_Test();
-
 			_Registry.DumpSession( E_NIL, true, Writer);
-
-			return r_OK;
 		}
-		recap__ FillSessionRegistry(
+		bso::bool__ FillSessionRegistry(
 			xtf::extended_text_iflow__ &SetupXFlow,
 			const xpp::criterions___ &Criterions,
 			error_set___ &ErrorSet );
-		status__ FillSessionRegistry(
+		bso::bool__ FillSessionRegistry(
 			xtf::extended_text_iflow__ &SetupXFlow,
 			const xpp::criterions___ &Criterions );
 	};

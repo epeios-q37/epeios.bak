@@ -61,79 +61,6 @@ using namespace frdkrn;
 
 using rgstry::tentry__;
 
-#define CASE( m )\
-	case r##m:\
-	return FRDKRN_NAME "_" #m;\
-	break
-
-const char *frdkrn::GetLabel( recap__ Recap )
-{
-#if FRDKRN__R_AMOUNT != 9
-#	error "'report__' modified !"
-#endif
-
-	switch( Recap ) {
-		CASE( ProjectParsingError );
-		CASE( SetupParsingError );
-		CASE( NoOrBadProjectId );
-		CASE( NoOrBadBackendDefinition );
-		CASE( NoBackendLocation );
-		CASE( UnableToConnect );
-		CASE( IncompatibleBackend );
-		CASE( BackendError );
-		CASE( UnableToOpenFile );
-		default:
-			ERRPrm();
-			break;
-	}
-
-	return NULL;	// Pour éviter un 'warning'.
-}
-
-#if FRDKRN__R_AMOUNT != 9
-# error "'report__' modified !"
-#endif
-
-void frdkrn::GetMeaning(
-	recap__ Recap,
-	const error_set___ &ErrorSet,
-	lcl::meaning_ &Meaning )
-{
-ERRProlog
-	lcl::meaning MeaningBuffer;
-ERRBegin
-	Meaning.SetValue( GetLabel( Recap ) );
-
-	switch ( Recap ) {
-		case rProjectParsingError:
-		case rSetupParsingError:
-			MeaningBuffer.Init();
-			rgstry::GetMeaning( ErrorSet.Context, MeaningBuffer );
-			Meaning.AddTag( MeaningBuffer );
-			break;
-		case rNoOrBadProjectId:
-			Meaning.AddTag( ErrorSet.Misc );
-			break;
-		case rNoOrBadBackendDefinition:
-			break;
-		case rNoBackendLocation:
-			break;
-		case rUnableToConnect:
-		case rIncompatibleBackend:
-		case rBackendError:
-			Meaning.AddTag( ErrorSet.BackendLocation );
-		case rUnableToOpenFile:
-			Meaning.AddTag( ErrorSet.Misc );	// NOTA : Dans certains cas, n'est pas utilisé ('ErrorSet.Misc' vide ET tag correspondant non utilisé pour l'entrée correspondante dans le fichier des locales), mais cela ne dérange pas de le définir quand même.
-			break;
-		default:
-			ERRPrm();
-			break;
-		}
-
-ERRErr
-ERREnd
-ERREpilog
-}
 
 #if 0
 #define PROJECT_TYPE_NEW		"New"
@@ -276,6 +203,7 @@ static str::string_ &AppendTargetAttributePathItem_(
 }
 #endif
 
+#if 0
 void frdkrn::reporting_callback__::FBLFRDReport(
 	fblovl::reply__ Reply,
 	const char *Message )
@@ -302,6 +230,7 @@ ERRErr
 ERREnd
 ERREpilog
 }
+#endif
 
 
 #if 0
@@ -311,7 +240,7 @@ static inline bso::uint__ GetBackendPingDelay_( const registry_ &Registry )
 }
 #endif
 
-recap__ frdkrn::kernel___::_Connect(
+bso::bool__ frdkrn::kernel___::_Connect(
 	const char *RemoteHostServiceOrLocalLibraryPath,
 	const compatibility_informations__ &CompatibilityInformations,
 	csducl::type__ Type,
@@ -321,46 +250,34 @@ recap__ frdkrn::kernel___::_Connect(
 	void *UP,
 	csdsnc::log_functions__ &LogFunctions )
 {
-	recap__ Recap = r_Undefined;
+	bso::bool__ Success = false;
 ERRProlog
-	flx::E_STRING_OFLOW_DRIVER___ OFlowDriver;
 	csdlec::library_data__ LibraryData;
 	csdleo::mode__ Mode = csdleo::m_Undefined;
 	str::string Buffer;
 ERRBegin
-	OFlowDriver.Init( ErrorSet.Misc, fdr::ts_Default );
 	LibraryData.Init( csdleo::cRegular, RemoteHostServiceOrLocalLibraryPath, err::ERRError, UP );
-	// Attention ; les erreurs arrivant dans la bibliothèque lors de son chargement ne sont plus rapportées. A modifier.
-	// Auparavent, c'était 'OFlowDriver' qui était uilisé pour le paramètre 'CErr', mais cela ne focntionnait pas lorsque la bitliothèques était chargée plusieurs fois...
 
 	Buffer.Init();
 
-	if ( !_ClientCore.Init( RemoteHostServiceOrLocalLibraryPath, LibraryData, LogFunctions, Type, PingDelay ) ) {
-		OFlowDriver.reset();	// Pour vider les caches.
-		if ( ErrorSet.Misc.Amount() != 0 )
-			Recap = rBackendError;
-		else
-			Recap = rUnableToConnect;
+	if ( !_ClientCore.Init( RemoteHostServiceOrLocalLibraryPath, LibraryData, LogFunctions, Type, PingDelay ) )
 		ERRReturn;
-	}
 
-	if ( !_Frontend.Init( Language, CompatibilityInformations, _ClientCore, *_ReportingCallback, ErrorSet.IncompatibilityInformations ) ) {
-		Recap = rIncompatibleBackend;
+	if ( !_Frontend.Init( Language, CompatibilityInformations, _ClientCore, *_ReportingCallback, ErrorSet.IncompatibilityInformations ) )
 		ERRReturn;
-	}
 
 	FRDKRNConnection( _Frontend );
 
-	Recap = r_OK;
+	Success = true;
 ERRErr
 ERREnd
-	if ( Recap != r_OK )
+	if ( !Success )
 		ErrorSet.BackendLocation.Init( RemoteHostServiceOrLocalLibraryPath );
 ERREpilog
-	return Recap;
+	return Success;
 }
 
-recap__ frdkrn::kernel___::_Connect(
+bso::bool__ frdkrn::kernel___::_Connect(
 	const str::string_ &RemoteHostServiceOrLocalLibraryPath,
 	const compatibility_informations__ &CompatibilityInformations,
 	csducl::type__ Type,
@@ -370,124 +287,16 @@ recap__ frdkrn::kernel___::_Connect(
 	void *UP,
 	csdsnc::log_functions__ &LogFunctions )
 {
-	recap__ Recap = r_Undefined;
+	bso::bool__ Success = false;
 ERRProlog
 	TOL_CBUFFER___ RemoteHostServiceOrLocalLibraryPathBuffer;
 ERRBegin
-	Recap = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, PingDelay, ErrorSet, UP, LogFunctions );
+	Success = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, PingDelay, ErrorSet, UP, LogFunctions );
 ERRErr
 ERREnd
 ERREpilog
-	return Recap;
+return Success;
 }
-
-#if 0
-
-static csducl::type__ GetPredefinedBackendTypeAndLocation_(
-	const registry_ &Registry,
-	str::string_ &Location )
-{
-	csducl::type__ Type = csducl::t_Undefined;
-ERRProlog
-	str::string Id;
-	str::string RawType;
-	rgstry::tags Tags;
-ERRBegin
-	Id.Init();
-
-	if ( !Registry.GetValue( frdrgy::Backend, Id ) )
-		ERRReturn;
-
-	Tags.Init();
-	Tags.Append( Id );
-
-	RawType.Init();
-	if ( !Registry.GetValue( tentry__( frdrgy::PredefinedBackendType , Tags), RawType ) )
-		ERRReturn;
-
-	if ( !Registry.GetValue( tentry__( frdrgy::PredefinedBackend, Tags ), Location ) )
-		ERRReturn;
-
-	switch ( GetBackendExtendedType( RawType ) ) {
-	case bxtEmbedded:
-		Type = csducl::tLibrary;
-		break;
-	case bxtDaemon:
-		Type = csducl::tDaemon;
-		break;
-	default:
-		ERRReturn;
-		break;
-	}
-
-ERRErr
-ERREnd
-ERREpilog
-	return Type;
-}
-
-csducl::type__ frdkrn::GetBackendTypeAndLocation(
-	const registry_ &Registry,
-	str::string_ &Location )
-{
-	csducl::type__ Type = csducl::t_Undefined;
-
-	switch ( GetBackendExtendedType( Registry ) ) {
-	case bxtEmbedded:
-		Type = csducl::tLibrary;
-		Registry.GetValue( frdrgy::Backend, Location );
-		break;
-	case bxtDaemon:
-		Type = csducl::tDaemon;
-		Registry.GetValue( frdrgy::Backend, Location );
-		break;
-	case bxtPredefined:
-		Type = GetPredefinedBackendTypeAndLocation_( Registry, Location );
-		break;
-	case bxtNone:
-	case bxt_Undefined:
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
-
-	return Type;
-}
-#endif
-
-#if 0
-recap__ frdkrn::kernel___::_Connect(
-	const compatibility_informations__ &CompatibilityInformations,
-	const char *Language,
-	error_set___ &ErrorSet,
-	csdsnc::log_functions__ &LogFunctions )
-{
-	recap__ Recap = r_Undefined;
-ERRProlog
-	str::string Location;
-	csducl::type__ Type = csducl::t_Undefined;
-ERRBegin
-	Location.Init();
-
-	switch ( Type = GetBackendTypeAndLocation( _R(), Location ) ) {
-	case csducl::tLibrary:
-	case csducl::tDaemon:
-		Recap = _Connect( Location, CompatibilityInformations, Type, Language, ErrorSet, LogFunctions );
-		break;
-	case csducl::t_Undefined:
-		Recap = rNoOrBadBackendDefinition;
-		break;
-	default:
-		ERRFwk();
-		break;
-	}
-ERRErr
-ERREnd
-ERREpilog
-	return Recap;
-}
-#endif
 
 static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
 {
@@ -510,28 +319,27 @@ static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
 
 #define PROJECT_ID_RELATIVE_PATH "@id"
 
-status__ frdkrn::kernel___::Launch(
+bso::bool__ frdkrn::kernel___::Launch(
 	const backend_features___ &BackendFeatures,
 	const compatibility_informations__ &CompatibilityInformations )
 {
-	status__ Status = s_Undefined;
+	bso::bool__ Success = false;
 ERRProlog
 	error_set___ ErrorSet;
-	recap__ Recap = r_Undefined;
 ERRBegin
 	ErrorSet.Init();
 
-	if ( ( Recap = Launch( BackendFeatures, CompatibilityInformations, ErrorSet ) ) != r_OK ) {
+	if ( !Launch( BackendFeatures, CompatibilityInformations, ErrorSet ) ) {
 		_ErrorMeaning.Init();
-		frdkrn::GetMeaning( Recap, ErrorSet, _ErrorMeaning );
-		Status = sError;
+		frdkrn::GetMeaning( ErrorSet, _ErrorMeaning );
 		ERRReturn;
-	} else
-		Status = sOK;
+	}
+
+	Success = true;
 ERRErr
 ERREnd
 ERREpilog
-	return Status;
+	return Success;
 }
 
 static stsfsm::automat AuthenticationAutomat_;
@@ -579,9 +387,6 @@ class frdkrnpersonnalization
 public:
 	frdkrnpersonnalization( void )
 	{
-		if ( FRDKRN__R_AMOUNT != r_amount )
-			ERRChk();	// 
-
 		InitAutomats_();
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */

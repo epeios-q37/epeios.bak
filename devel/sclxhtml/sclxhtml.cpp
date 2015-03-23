@@ -58,23 +58,22 @@ const char *sclxhtml::GetLauncher( void )
 #define FUNCTION_SPEC
 # endif
 
-#define DEF( name, function ) extern "C" FUNCTION_SPEC function name
-
-DEF( XHTCLLBK_RETRIEVE_FUNCTION_NAME, xhtcllbk::retrieve );
-
 // Bien que définit dans un '.cpp', et propre à ce '.cpp', VC++ se mélange les pinceaux avec le 'callback__' définit dans 'scllocale.cpp', d'où le 'namespace'.
 namespace {
 
-	typedef xhtcllbk::downstream_callback__ _downstream_callback__;
+	typedef xhtcllbk::callback__ _callback__;
 
-	class downstream_callback__
-	: public _downstream_callback__
+	class callback__
+	: public _callback__
 	{
 	protected:
-		virtual void XHTCLLBKOnLoad( const char *Launcher ) override
+		virtual void XHTCLLBKInitialize( const xhtcllbk::shared_data__ &Data ) override
 		{
-			Launcher_ = Launcher;
-			SCLXHTMLOnLoad();
+
+			if ( Launcher_ == NULL ) {
+				Launcher_ = Data.LauncherIdentification();
+				sclmisc::Initialize( Data.ERRError(), Data.SCLError(), (const char *)NULL );
+			}
 		}
 		virtual void XHTCLLBKBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
@@ -87,24 +86,19 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xhtcllbk::session_callback__ *XHTCLLBKNew( xhtcllbk::upstream_callback__ &Callback ) override
+		virtual xhtcllbk::session_callback__ *XHTCLLBKNew( xhtcllbk::proxy_callback__ &Callback ) override
 		{
 			return SCLXHTMLNew( Callback );
-		}
-		// Destruction by destructor member.
-		virtual void XHTCLLBKOnUnload( void ) override
-		{
-			SCLXHTMLOnUnload();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_downstream_callback__::reset( P );
+			_callback__::reset( P );
 		}
-		E_CVDTOR( downstream_callback__ );
+		E_CVDTOR( callback__ );
 		void Init( void )
 		{
-			_downstream_callback__::Init();
+			_callback__::Init();
 		}
 	};
 }
@@ -112,14 +106,16 @@ namespace {
 static inline void DoNothing_( void )
 {}
 
-xhtcllbk::downstream_callback__ *XHTCLLBKRetrieve( const xhtcllbk::shared_data__ &Data )
+#define DEF( name, function ) extern "C" FUNCTION_SPEC function name
+
+DEF( XHTCLLBK_RETRIEVE_FUNCTION_NAME, xhtcllbk::retrieve );
+
+_callback__ *XHTCLLBKRetrieve( void )
 {
-	downstream_callback__ *Callback = NULL;
+	callback__ *Callback = NULL;
 ERRFProlog
 ERRFBegin
-	sclmisc::Initialize( Data.ERRError(), Data.SCLError(), (const char *)NULL );
-
-	Callback = new downstream_callback__;
+	Callback = new callback__;
 
 	if ( Callback == NULL )
 		ERRAlc();
@@ -135,7 +131,40 @@ ERRFEpilog(DoNothing_())
 	return Callback;
 }
 
-bso::bool__ sclxhtml::session_callback___::XHTCLLBKLaunch(
+void sclxhtml::HandleError(
+	xhtagent::agent___ &Agent,
+	const char *Language )
+{
+ERRProlog
+	str::string Message;
+	err::buffer__ ErrBuffer;
+ERRBegin
+	switch ( ERRType ) {
+	case err::t_Abort:
+		Message.Init();
+		if ( sclerror::GetPendingErrorTranslation( Language, Message, err::hUserDefined ) ) {
+			sclerror::ResetPendingError();
+			Agent.RawAlert( Message );
+		} 
+		break;
+	case err::t_Free:
+	case err::t_Return:
+		Agent.RawAlert( "???" );
+		break;
+	default:
+		Agent.RawAlert( err::Message( ErrBuffer ) );
+		break;
+	}
+
+	ERRRst();
+ERRErr
+ERREnd
+ERREpilog
+}
+
+
+#if 0
+bso::bool__ sclxhtml::session___::XHTCLLBKLaunch(
 	const char *Id,
 	const char *Action )
 {
@@ -143,13 +172,14 @@ bso::bool__ sclxhtml::session_callback___::XHTCLLBKLaunch(
 ERRProlog
 	str::string Message;
 	err::buffer__ ErrBuffer;
-	ERRBegin
+ERRBegin
 		if ( _OnBeforeAction( Id, Action ) )
 			if ( !strcmp( Action, xhtcllbk::CloseActionLabel ) )
 				Success = _OnClose();	// Dans ce cas, si 'Success' est à 'false', la fermeture de l'application est suspendue.
 			else
 				Success = _Handler.Launch( Id, Action );
 ERRErr
+#if 0
 	switch ( ERRType ) {
 	case err::t_Abort:
 		Message.Init();
@@ -168,10 +198,12 @@ ERRErr
 	}
 
 	ERRRst();
+# endif
 ERREnd
 ERREpilog
 	return Success;
 }
+#endif
 
 void sclxhtml::LoadProject( xhtagent::agent___ &Agent )
 {
@@ -198,7 +230,7 @@ ERRBegin
 	BackendFeature.Init();
 	sclfrntnd::Connect( Language, Kernel, xhtlogin::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
 
-	Session.Open( Language, sclrgstry::GetCommonRegistry() );
+	Session.Open( Language );
 ERRErr
 ERREnd
 ERREpilog

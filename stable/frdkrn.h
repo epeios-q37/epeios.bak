@@ -205,33 +205,6 @@ namespace frdkrn {
 			this->UP = UP;
 		}
 	};
-	enum status__ {
-		sOK,
-		sError,		// Il y aune erreur, l'action en cours doit être interrompue (Lancer 'ERRAbort()').
-		sWarning,		// Il y a eu un problème, mais l'action peut être poursuivie.
-		s_amount,
-		s_Undefined
-	};
-
-	// Si modifié, modifier 'GetLabel_(...)' en conséquence ainsi que le '.xlcl' associé.
-	enum recap__ {
-		rProjectParsingError,		// Error during project file handling. See 'ErrorSet' for more details.
-		rSetupParsingError,			// Error during setup data handling. See 'ErrorSet' for more details.
-		rNoOrBadProjectId,
-		rNoOrBadBackendDefinition,
-		rNoBackendLocation,
-		rUnableToConnect,
-		rIncompatibleBackend,
-		rBackendError,
-		rUnableToOpenFile,
-		r_amount,
-		r_Undefined,
-		r_OK,
-	};
-
-#define FRDKRN__R_AMOUNT	9	// Pour détecter les fonctions devant être modifiée si le nombre d'entrée de 'report__' est modifié.
-
-	const char *GetLabel( recap__ Recap );
 
 	struct error_set___
 	{
@@ -264,18 +237,14 @@ namespace frdkrn {
 		return rgstry::GetMeaning( ErrorSet.Context, Meaning );
 	}
 
-	void GetMeaning(
-		recap__ Recap,
-		const error_set___ &ErrorSet,
-		lcl::meaning_ &Meaning );
-
-
 	bso::bool__ GetDefaultConfigurationFileName(
 		const char *Affix,
 		str::string_ &FileName );
 
-	typedef fblfrd::reporting_callback__ _reporting_callback__;
+	typedef fblfrd::reporting_callback__ reporting_callback__;
 
+
+# if  0
 	class reporting_callback__
 	: public _reporting_callback__
 	{
@@ -308,6 +277,7 @@ namespace frdkrn {
 			FRDKRNReport( Message );
 		}
 	};
+# endif
 
 	class kernel___
 	{
@@ -325,8 +295,8 @@ namespace frdkrn {
 			return *_Registry;
 		}
 # endif
-		status__ _LoadProjectLocale( void );
-		recap__ _Connect(
+		bso::bool__ _LoadProjectLocale( void );
+		bso::bool__ _Connect(
 			const str::string_ &RemoteHostServiceOrLocalLibraryPath,
 			const compatibility_informations__ &CompatibilityInformations,
 			csducl::type__ Type,
@@ -346,7 +316,7 @@ namespace frdkrn {
 			_ClientCore.reset();
 		}
 	protected:
-		recap__ _Connect(
+		bso::bool__ _Connect(
 			const char *RemoteHostServiceOrLocalLibraryPath,
 			const compatibility_informations__ &CompatibilityInformations,
 			csducl::type__ Type,
@@ -366,13 +336,13 @@ namespace frdkrn {
 			_ReportingCallback = NULL;
 		}
 		E_CVDTOR( kernel___ );
-		status__ Init( reporting_callback__ &ReportingCallback )	//  PAS dupliqué !
+		bso::bool__ Init( reporting_callback__ &ReportingCallback )	//  PAS dupliqué !
 		{
 			_ErrorMeaning.Init();
 			_ReportingCallback = &ReportingCallback;
 			// L'initialisation de '_Frontend' et '_ClientCore' se fait à la connection.
 
-			return sOK;
+			return true;
 		}
 		fblfrd::frontend___ &Frontend( void )
 		{
@@ -385,17 +355,15 @@ namespace frdkrn {
 		{
 			Frontend().Dismiss();
 		}
-		recap__ Launch(
+		bso::bool__ Launch(
 			const backend_features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations,
 			error_set___ &ErrorSet )	// Les paramètres de connection sont récupèrés de la 'registry'.
 		{
-			recap__ Recap = r_OK;
-			
 			if ( BackendFeatures.Type != csducl::t_Undefined )
-				Recap = _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, BackendFeatures.Language, BackendFeatures.PingDelay, ErrorSet, BackendFeatures.UP );
+				return _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, BackendFeatures.Language, BackendFeatures.PingDelay, ErrorSet, BackendFeatures.UP );
 
-			return Recap;
+			return true;
 		}
 		void Close( void )
 		{
@@ -408,7 +376,7 @@ namespace frdkrn {
 			const xpp::criterions___ &Criterions,
 			str::string_ &Id );
 # endif
-		status__ Launch(
+		bso::bool__ Launch(
 			const backend_features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations );
 		E_RWDISCLOSE__( lcl::meaning_ , ErrorMeaning );
