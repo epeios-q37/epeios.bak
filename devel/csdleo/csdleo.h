@@ -40,6 +40,8 @@
 
 # include "csdscb.h"
 
+# include <stdarg.h>
+
 # define CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME		CSDLEORetrieveCallback
 // # define CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME		CSDLEOReleaseCallback
 

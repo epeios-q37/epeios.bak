@@ -170,20 +170,20 @@ ERRProlog
 	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
 ERRBegin
 	Source.Init();
-	scltool::OGetValue( registry::Source, Source );
+	sclmisc::OGetValue( registry::Source, Source );
 
 	Destination.Init();
-	scltool::OGetValue( registry::Destination, Destination );
+	sclmisc::OGetValue( registry::Destination, Destination );
 
 	NameSpace.Init();
-	scltool::OGetValue( registry::NameSpace, NameSpace );
+	sclmisc::OGetValue( registry::NameSpace, NameSpace );
 
 	Process_(
 		Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL,
 		Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL,
 		NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) : NULL,
-		scltool::BGetBoolean( registry::Preserve ),
-		scltool::BGetBoolean( registry::Indentation, true ) );
+		sclmisc::BGetBoolean( registry::Preserve ),
+		sclmisc::BGetBoolean( registry::Indentation, true ) );
 ERRErr
 ERREnd
 ERREpilog
@@ -247,16 +247,16 @@ ERRProlog
 	TOL_CBUFFER___ SourceBuffer, DestinationBuffer, NameSpaceBuffer;
 ERRBegin
 	Source.Init();
-	scltool::OGetValue( registry::Source, Source );
+	sclmisc::OGetValue( registry::Source, Source );
 
 	Destination.Init();
-	scltool::OGetValue( registry::Destination, Destination );
+	sclmisc::OGetValue( registry::Destination, Destination );
 
 	NameSpace.Init();
-	scltool::OGetValue( registry::NameSpace, NameSpace );
+	sclmisc::OGetValue( registry::NameSpace, NameSpace );
 
 	Indentation.Init();
-	scltool::OGetValue( registry::Indentation, Indentation );
+	sclmisc::OGetValue( registry::Indentation, Indentation );
 
 	Encrypt_( Source.Amount() != 0 ? Source.Convert( SourceBuffer ) : NULL, Destination.Amount() != 0 ? Destination.Convert( DestinationBuffer ) : NULL, NameSpace.Amount() != 0 ? NameSpace.Convert( NameSpaceBuffer ) :  NULL, Indentation == "Yes" );
 ERRErr
@@ -264,10 +264,11 @@ ERREnd
 ERREpilog
 }
 
-void scltool::SCLTOOLMain(
+int scltool::SCLTOOLMain(
 	const str::string_ &Command,
 	const scltool::oddities__ &Oddities )
 {
+	int ExitValue = EXIT_FAILURE;
 ERRProlog
 	str::string Translation;
 ERRBegin
@@ -279,12 +280,16 @@ ERRBegin
 		PrintHeader_();
 	else if ( Command == "License" ) {
 		Translation.Init();
-		sclmisc::GetTranslation( "License", Translation );
+		sclmisc::GetBaseTranslation( "License", Translation );
 		cio::COut << Translation << txf::nl;
 	}
 	else
 		ERRFwk();
+
+	ExitValue = EXIT_SUCCESS;
 ERRErr
 ERREnd
 ERREpilog
+
+	return ExitValue;
 }

@@ -37,7 +37,7 @@ namespace {
 	{
 		mtk__routine R;
 		void *UP;
-		mtx::handler__ MH;
+		mtx::handler___ MH;
 		thread_struct__( void )
 		{
 			R = NULL;
@@ -53,14 +53,14 @@ namespace {
 
 static int32 ThreadFunction_( void *D )
 {
-ERRFProlog
+ERRProlog
 	mtk__thread_struct TS = *((mtk__thread_struct *)D);
-ERRFBegin
+ERRBegin
 	mtx::Unlock( TS.MH );
 	TS.R( TS.UP );
-ERRFErr
-ERRFEnd
-ERRFEpilog
+ERRErr
+ERREnd
+ERREpilog
 	return 0;
 }
 
@@ -101,18 +101,18 @@ ERREpilog
 
 static void *ThreadFunction_( void *D )
 {
-ERRFProlog
+ERRProlog
 	thread_struct__ TS = *((thread_struct__ *)D);
-ERRFBegin
+ERRBegin
 	mtx::Unlock( TS.MH );
 	TS.R( TS.UP );
 #ifdef MTK__THREADS_REMAIN
 	for(;;)
 		TOLYield();
 #endif
-ERRFErr
-ERRFEnd
-ERRFEpilog
+ERRErr
+ERREnd
+ERREpilog
 	return NULL;
 }
 

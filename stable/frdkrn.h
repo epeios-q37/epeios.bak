@@ -104,11 +104,6 @@ namespace frdkrn {
 
 			return *this;
 		}
-		void Init( void )
-		{
-			S_.Id = uv;
-			Label.Init();
-		}
 		void Init(
 			t Id,
 			const str::string_ &Label )
@@ -124,43 +119,38 @@ namespace frdkrn {
 	{
 	public:
 		struct s
-		: public il_::s
+		: public il_<t>::s
 		{
 			str::string_::s Wording;
 		};
 		str::string_ Wording;
 		ilw_( s &S )
-		: il_( S ),
+		: il_<t>( S ),
 		  Wording( S.Wording )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			il_::reset( P );
+			il_<t>::reset( P );
 			Wording.reset( P );
 		}
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
-			il_::plug( AS );
+			il_<t>::plug( AS );
 			Wording.plug( AS );
 		}
 		ilw_ &operator =(const ilw_ &ILW)
 		{
-			il_::operator = ( ILW );
+			il_<t>::operator = ( ILW );
 			Wording = ILW.Wording;
 
 			return *this;
-		}
-		void Init( void )
-		{
-			il_::Init();
-			Wording.Init();
 		}
 		void Init(
 			t Id,
 			const str::string_ &Label,
 			const str::string_ &Wording )
 		{
-			il_::Init( Id, Label );
+			il_<t>::Init( Id, Label );
 			this->Wording.Init( Wording );
 		}
 	};

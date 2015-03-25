@@ -30,14 +30,18 @@
 
 using namespace ntvstr;
 
-#ifdef NTVSTR__POSIX
+#ifdef CPE_POSIX
+#  include <langinfo.h>
+#endif
+
+#ifdef NTVSTR__MBS
 # define strlen_	strlen 
 # define strchr_	strchr
 # define strrchr_	strrchr
 # define strcat_	strcat
 # define strcpy_	strcpy
 # define SLASH	"/"
-#elif defined( NTVSTR__WIN )
+#elif defined( NTVSTR__WCS )
 # define strlen_	wcslen
 # define strchr_	wcschr
 # define strrchr_	wcsrchr
@@ -48,7 +52,7 @@ using namespace ntvstr;
 # error
 #endif
 
-# ifdef NTVSTR__WIN
+#ifndef NTVSTR__MBS
 void ntvstr::string___::Init( const bso::char__ *String )
 {
 	if ( String == NULL ) {
@@ -74,7 +78,7 @@ void ntvstr::string___::Init( const bso::char__ *String )
 			ERRLbr();
 	}
 }
-# endif
+#endif
 
 void ntvstr::string___::Init( const char__ *String )
 {
@@ -113,7 +117,7 @@ const bso::char__ *ntvstr::string___::_Convert(
 		return Buffer;
 	}
 
-# ifdef NTVSTR__WIN
+# ifdef NTVSTR__WCS
 	// Nécessaire pour les architectures 64 bits (sous Windows, 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
 	int BufferExtent = ( Buffer.Extent() > INT_MAX ? INT_MAX : (int)Buffer.Extent() );
 
@@ -129,7 +133,7 @@ const bso::char__ *ntvstr::string___::_Convert(
 		if ( !WideCharToMultiByte( CodePage, 0, _Core, -1, Buffer, BufferExtent, NULL, NULL ) )
 			ERRLbr();
 	}
-# elif defined( NTVSTR__POSIX )
+# elif defined( NTVSTR__MBS )
 	bso::size__ Size = strlen( _Core );
 
 	Buffer.Malloc( Size + 1 );
@@ -163,6 +167,10 @@ class ntvstrpersonnalization
 public:
 	ntvstrpersonnalization( void )
 	{
+#ifdef CPE_POSIX
+		printf( nl_langinfo( CODESET ) );
+#endif
+
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}

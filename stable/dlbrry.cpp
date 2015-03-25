@@ -82,7 +82,7 @@ bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &N
 	if ( ( _LibraryHandler = LoadLibraryW( Name.Internal() ) ) == NULL )
 		return false;
 #elif defined( TARGET_POSIX )
-	if ( ( _LibraryHandler = dlopen( LibraryName, RTLD_LAZY ) ) == NULL ) {
+	if ( ( _LibraryHandler = dlopen( Name, RTLD_LAZY ) ) == NULL ) {
 		const char *Error = dlerror();	// Facilite le débogage.
 		return false;
 	}

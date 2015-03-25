@@ -41,9 +41,9 @@
 # include "strng.h"
 
 # if defined( CPE_POSIX )
-#  define NTVSTR__POSIX
+#  define NTVSTR__MBS	// 'Multi-Byte Strings'
 # elif defined( CPE_WIN )
-#  define NTVSTR__WIN
+#  define NTVSTR__WCS	// 'Wide-Char Strings'
 # else
 #  error "Unknown target !"
 # endif
@@ -55,14 +55,14 @@ namespace str {
 
 
 namespace ntvstr {
-# ifdef NTVSTR__POSIX
-	typedef wchar_t char__;
+# ifdef NTVSTR__MBS
+	typedef char char__;
 	E_CDEF( unsigned int, UTF8, 0 );
 	E_CDEF( unsigned int, System, 0 );
-# elif defined( NTVSTR__WIN )
+# elif defined( NTVSTR__WCS )
 	typedef wchar_t char__;
 	E_CDEF( unsigned int, UTF8, CP_UTF8 );
-	E_CDEF( unsigned int, System, CP_OEMCP );
+	E_CDEF( unsigned int, System, CP_ACP );
 # else
 #  error
 # endif
@@ -71,13 +71,30 @@ namespace ntvstr {
 
 	typedef tol::E_BUFFER___( bso::char__ ) buffer___;
 
-	// Retourne la taille d'une chaîne de caratères natifs, en tenant compte de son encodage (i.e ne correspond pas nécessairement au nombre d'octets).
-	inline bso::size__ len( const char__ * Str )
+	// Retourne la taille d'une chaîne de caractères natifs, en tenant compte de son encodage (ne correspond pas nécessairement au nombre de 'char__').
+	inline bso::size__ Size( const char__ * Str )
 	{
-# ifdef NTVSTR__WIN
+# ifdef NTVSTR__WCS
 		return wcslen( Str );
-# elif defined( NTVSTR__POSIX )
+# elif defined( NTVSTR__MBS )
+		bso::size__ Size = mbstowcs( NULL, Str, 0);
+
+		if ( Size == BSO_SIZE_MAX )
+			ERRFwk();
+
+		return Size;
+# else
+#  error
+# endif
+	}
+
+	// Retourne la taille d'une chaîne de caratères natifs, en 'char__'.
+	inline bso::size__ Amount( const char__ * Str )
+	{
+# ifdef NTVSTR__WCS
 		return wcslen( Str );
+# elif defined( NTVSTR__MBS )
+		return strlen( Str );
 # else
 #  error
 # endif
@@ -100,7 +117,7 @@ namespace ntvstr {
 			_Core.reset( P );
 		}
 		E_CDTOR( string___ );
-# ifndef NTVSTR__POSIX
+# ifndef NTVSTR__MBS
 		string___( const char *String )
 		{
 			reset( false );
@@ -140,7 +157,9 @@ namespace ntvstr {
 			_Core.reset();
 		}
 		void Init( const bso::char__ *String );
+# ifndef NTVSTR__MBS
 		void Init( const char__ *String );
+# endif
 		void Init( const str::string_ &String );
 		void Init( const string___ &String )
 		{
@@ -176,12 +195,21 @@ namespace ntvstr {
 		{
 			return _Core;
 		}
+		// Retourne la taille, en tenant compte de l'encodage (ne correspond pas nécessairement au nombre de 'char__').
+		bso::size__ Size( void ) const
+		{
+			if ( _Core == NULL )
+				return 0;
+			else
+				return ntvstr::Size( _Core );
+		}
+		// Retourne la taille d'une chaîne de caratères natifs, en 'char__'.
 		bso::size__ Amount( void ) const
 		{
 			if ( _Core == NULL )
 				return 0;
 			else
-				return len( _Core );
+				return ntvstr::Amount( _Core );
 		}
 		bso::bool__ IsEmpty( void ) const
 		{

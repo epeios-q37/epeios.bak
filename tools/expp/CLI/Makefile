@@ -1,5 +1,5 @@
 # 'expp' Project
-#    by Claude SIMON (http://q37.info/contact.html).
+#    by Claude SIMON (http://q37.info/contact/).
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
@@ -38,9 +38,9 @@ mods += ids iof iop lst lstbch
 mods += lstctn mns ntvstr que sdr 
 mods += stk str strng tagsbs tol 
 mods += ttr txf tys uys utf 
-mods += xtf cio bomhdl cdgb64 fil 
-mods += fnm lcl rgstry stsfsm xml 
-mods += xpp clnarg 
+mods += xtf cio tht bomhdl cdgb64 
+mods += fil fnm lcl rgstry stsfsm 
+mods += xml xpp clnarg 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += locale registry 
 
