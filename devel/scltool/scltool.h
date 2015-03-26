@@ -78,7 +78,13 @@ namespace scltool {
 # ifdef CPE_WIN
 		HINSTANCE hInstance;
 		HINSTANCE hPrevInstance;
+#  ifdef CPE_MSVC
 		PWSTR pCmdLine;
+#  elif defined( CPE_MINGW )
+		LPSTR lpCmdLine;
+#  else
+#   error
+#  endif
 		int nCmdShow;
 		LPWSTR *argv;
 # else

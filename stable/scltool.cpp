@@ -1563,7 +1563,28 @@ static void ErrFinal_( void )
 
 #ifdef CPE_WIN
 
-// Windows va utiliser soit 'wmain' soit 'wWinMain' (et ignorer l'autre) selon la valeur de 'SubSystem'.
+#undef system	// Défini dans 'tol.h', référencé dans le fichier ci-dessous.
+
+#include <iostream>
+
+static void SetStdOutToNewConsole_( void )
+{
+	int hCrt;
+	FILE *hf;
+
+	AllocConsole();
+	hCrt = _open_osfhandle(
+		(long)GetStdHandle( STD_OUTPUT_HANDLE ),
+		_O_TEXT
+		);
+	hf = _fdopen( hCrt, "w" );
+	*stdout = *hf;
+	setvbuf( stdout, NULL, _IONBF, 0 );
+}
+
+# ifdef CPE_MSVC
+
+// MSVC va utiliser soit 'wmain' soit 'wWinMain' (et ignorer l'autre) selon la valeur de 'SubSystem'.
 
 int wmain(
 	int argc,
@@ -1589,10 +1610,19 @@ ERRFEpilog( ErrFinal_() )
 }
 
 int WINAPI wWinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	PWSTR pCmdLine,
-	int nCmdShow)
+		HINSTANCE hInstance,
+		HINSTANCE hPrevInstance,
+		PWSTR pCmdLine,
+		int nCmdShow )
+# elif defined( CPE_MINGW )
+	int WINAPI WinMain(
+		HINSTANCE hInstance,
+		HINSTANCE hPrevInstance,
+		LPSTR lpCmdLine,
+		int nCmdShow)
+# else
+#  error
+# endif
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
@@ -1619,7 +1649,13 @@ ERRFBegin
 	Oddities.hInstance = hInstance;
 	Oddities.hPrevInstance = hPrevInstance;
 	Oddities.nCmdShow = nCmdShow;
+# ifdef CPE_MSVC
 	Oddities.pCmdLine = pCmdLine;
+# elif defined( CPE_MINGW )
+	Oddities.lpCmdLine = lpCmdLine;
+# else
+# error
+#endif
 
 	ExitValue = main_( Oddities );
 ERRFErr
@@ -1635,11 +1671,24 @@ ERRFEnd
 	FErr.reset();
 	FIn.reset();
 
+#if 0	/// Fait planter 'CEF'.
 	if ( SOut.Amount() )
 		MessageBoxW( NULL, ntvstr::string___( SOut ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK );
 
 	if ( SErr.Amount() )
-		MessageBoxW( NULL, ntvstr::string___( SErr ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK );
+		MessageBoxW( NULL, ntvstr::string___( SErr ).Internal(), ntvstr::string___( sclmisc::SCLMISCTargetName ).Internal(), MB_OK | MB_TASKMODAL );
+#else
+	if ( SOut.Amount() || SErr.Amount() )
+	{
+		SetStdOutToNewConsole_();
+
+		if ( SOut.Amount() )
+			std::wcout << (wchar_t *)ntvstr::string___( SOut ).Internal() << std::endl;
+
+		if ( SErr.Amount() )
+			std::wcout << (wchar_t *)ntvstr::string___( SErr ).Internal() << std::endl;
+	}
+#endif
 ERRFEpilog( ErrFinal_() )
 	return ExitValue;
 }

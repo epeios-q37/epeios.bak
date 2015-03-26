@@ -115,7 +115,7 @@ ERREpilog
 # define LAUNCH_COMMAND	"xdg-open"
 #elif defined( CPE_XCODE )
 # define LAUNCH_COMMAND	"open"
-#elif defined( CPE_MSVC ) || defined( CPE_CYGWIN )
+#elif defined( CPE_WIN ) || defined( CPE_CYGWIN )
 # define LAUNCH_COMMAND	"start \"\"" // Les "" dans la commande sont nécessité par 'start', car si l'argument est passé entre "", 'start' considère cela comme le titre de la fenêtre.
 #elif defined( CPE_ANDROID )
 # error
