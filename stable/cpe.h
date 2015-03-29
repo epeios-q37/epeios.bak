@@ -305,7 +305,7 @@ extern class ttr_tutor &CPETutor;
 #  error "Undefined architecture !"
 # endif
 
-#define CPE_DESCRIPTION	CPE_ENVIROMENT_LABEL "-" CPE_ARCHITECTURE_LABEL
+#define CPE_DESCRIPTION	CPE_ENVIROMENT_LABEL "_" CPE_ARCHITECTURE_LABEL
 
 
 namespace cpe {

@@ -141,7 +141,11 @@ namespace fil {
 		case ENOTDIR:
 			return eNotDir;
 			break;
+# ifdef CPE_MINGW	// 'MinGW' ne connait pas 'ELOOP'.
+		case WSAELOOP:
+# else
 		case ELOOP:
+# endif
 			return eLoop;
 			break;
 		case EFAULT:

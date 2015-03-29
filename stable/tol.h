@@ -50,7 +50,7 @@
 # endif
 # elif defined( CPE_WIN )
 #  define TOL__WIN
-#  include "Windows.h"
+#  include <Windows.h>
 # else
 #  error "Undefined compilation enviroment."
 # endif
@@ -687,7 +687,7 @@ namespace tol {
 	//f Return current date é time.
 	const char *DateAndTime( buffer__ &Buffer );
 
-# ifdef TOL__WIN
+# ifdef CPE_MSVC
 	bso::size__ GetMemoryUsage( void );
 # endif
 

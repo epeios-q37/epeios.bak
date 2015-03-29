@@ -37,7 +37,11 @@ state__ dir::HandleError( void )
 	case EPERM:
 	case EACCES:
 	case EROFS:
+# ifdef CPE_MINGW	// 'MinGW' ne connait pas 'ELOOP'.
+	case WSAELOOP:
+# else
 	case ELOOP:
+# endif
 	case ENAMETOOLONG:
 	case ENOENT:
 		return sInadequatePath;

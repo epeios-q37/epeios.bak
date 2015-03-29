@@ -135,19 +135,14 @@ namespace ntvstr {
 			reset( false );
 			Init( String );
 		}
-# ifdef CPE_MSVC
+# ifdef CPE_WIN
+#  if defined( CPE_X86 ) || defined( CPE_MSVC )
 		string___( int String )	// Pour traiter le cas ou c'est 'NULL' (assimilé à un int) qui est passé en paramètre.
-		{
-			reset( false );
-
-			if ( String != 0 )
-				ERRFwk();
-
-			Init( (char__ *)NULL );
-		}
-# endif
-# ifdef CPE_MINGW
+#  elif defined( CPE_X64 )
 		string___( long long int String )	// Pour traiter le cas ou c'est 'NULL' (assimilé à un long long int) qui est passé en paramètre.
+#  else
+#   error
+#  endif
 		{
 			reset( false );
 

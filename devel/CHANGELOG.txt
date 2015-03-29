@@ -1,13 +1,26 @@
 CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 Meaning of list markers (2nd level):
-- '-' : Cosmetic changes. Function/method and/or parameter name changes.
-	    Also changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
-		in a broad sense (parameters of a fucntion, a method, or a template...).
-		Functionnalities (should) remain unchanged.
+- '-' fFunctionnalities (should) remain unchanged) :
+	- Cosmetic changes. Function/method and/or parameter name changes.
+	- Changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
+	   in a broad sense (parameters of a fucntion, a method, or a template...).
+	- Changes due to fix compiler errors/warnigs.
 - '*' : Functionnality changes.
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
+
+2015-03-29 :
+- FDR
+	% : using a callback rather then defininig virtual methods in '[...]driver_base[...]'.
+
+2015-03-26 :
+- DIR, FIL :
+	- Fixing the 'MinGW' missing 'ELOOP' issue.
+- NTVSTR :
+	- Fixing the conversion from 'NULL' issue under Windows.
+- TOL :
+	- Restricting some stuff to 'MSVC', using libraries not available for 'MinGW'.
 
 2015-03-21 :
 - CSDLEO :

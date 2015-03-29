@@ -1,7 +1,7 @@
 /*
-	'dir.cpp' by Claude SIMON (http://zeusw.org/).
+	'tst.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'dir' is part of the Epeios framework.
+	'tst' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,65 +17,29 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define DIR__COMPILATION
+#define TST__COMPILATION
 
-#include "dir.h"
+#include "tst.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-using namespace dir;
-
-state__ dir::HandleError( void )
-{
-	switch ( errno ) {
-	case EEXIST:
-		return sExists;
-		break;
-	case EPERM:
-	case EACCES:
-	case EROFS:
-# ifdef CPE_MINGW	// 'MinGW' ne connait pas 'ELOOP'.
-	case WSAELOOP:
-# else
-	case ELOOP:
-# endif
-	case ENAMETOOLONG:
-	case ENOENT:
-		return sInadequatePath;
-		break;
-	case ENOTDIR:
-		return sBadPath;
-		break;
-	case EFAULT:
-		ERRFwk();
-		break;
-	case ENOTEMPTY:
-		return sNotEmpty;
-		break;
-	default:
-		ERRSys();
-		break;
-	}
-
-	return s_Undefined;	// Pour éviter un 'warning'.
-}
-
+using namespace tst;
 
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-class dirpersonnalization
+class tstpersonnalization
 {
 public:
-	dirpersonnalization( void )
+	tstpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 	}
-	~dirpersonnalization( void )
+	~tstpersonnalization( void )
 	{
 		/* place here the actions concerning this library
 		to be realized at the ending of the application  */
@@ -88,4 +52,4 @@ public:
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static dirpersonnalization Tutor;
+static tstpersonnalization Tutor;

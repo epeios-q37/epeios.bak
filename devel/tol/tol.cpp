@@ -209,7 +209,7 @@ const char *tol::DateAndTime( buffer__ &Buffer )
 #endif
 }
 
-#ifdef TOL__WIN
+#ifdef CPE_MSVC
 
 #include <crtdbg.h>
 
