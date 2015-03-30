@@ -96,19 +96,19 @@ namespace flw {
 					soit pas obligatoire d'un point de vue C++, car ce n'est pas une fonction abstraite).*/
 	{
 	private:
-		fdr::_iflow_driver_base___ *_Driver;
+		fdr::iflow_driver_base___ *_Driver;
 		// Amount of data red since the last reset.
 		size__ _Red;
 		// Max amount of data alllowed between 2 reset.
 		size__ _AmountMax;
-		fdr::_iflow_driver_base___ &_D( void )
+		fdr::iflow_driver_base___ &_D( void )
 		{
 			if ( _Driver == NULL )
 				ERRFwk();
 
 			return *_Driver;
 		}
-		const fdr::_iflow_driver_base___ &_D( void ) const
+		const fdr::iflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
 				ERRFwk();
@@ -184,7 +184,7 @@ namespace flw {
 			reset();
 		}
 		void Init(
-			fdr::_iflow_driver_base___ &Driver,
+			fdr::iflow_driver_base___ &Driver,
 			size__ AmountMax )
 		{
 			if ( _Red )
@@ -293,7 +293,7 @@ namespace flw {
 				ERRPrm();	// 'Dummy' n'étant pas utilisé, rien ne sert de modifier sa valeur.
 		}
 		void Init(
-			fdr::_iflow_driver_base___ &Driver,
+			fdr::iflow_driver_base___ &Driver,
 			size__ AmountMax = FDR_SIZE_MAX )
 		{
 			iflow__::Init( Driver, AmountMax );
@@ -326,7 +326,7 @@ namespace flw {
 					soit pas obligatoire d'un point de vue C++, car ce n'est pas une classe abstraite).*/
 	{
 	private:
-		fdr::_oflow_driver_base___ *_Driver;
+		fdr::oflow_driver_base___ *_Driver;
 		// The cache.
 		datum__ *_Cache;
 		// The size of the cache.
@@ -337,7 +337,7 @@ namespace flw {
 		size__ _Written;
 		// Max amount of data between 2 synchronizing.
 		size__ _AmountMax;
-		fdr::_oflow_driver_base___ &_D( void )
+		fdr::oflow_driver_base___ &_D( void )
 		{
 			if ( _Driver == NULL )
 				ERRFwk();
@@ -453,7 +453,7 @@ namespace flw {
 			reset();
 		}
 		void Init(
-			fdr::_oflow_driver_base___ &Driver,
+			fdr::oflow_driver_base___ &Driver,
 			datum__ *Cache,
 			size__ Size,
 			size__ AmountMax )
@@ -553,7 +553,7 @@ namespace flw {
 		flw::datum__ _Cache[CacheSize];
 	public:
 		void Init(
-			fdr::_oflow_driver_base___ &Driver,
+			fdr::oflow_driver_base___ &Driver,
 			size__ AmountMax = FDR_SIZE_MAX )
 		{
 			oflow__::Init( Driver, _Cache, sizeof( _Cache ), AmountMax );
@@ -604,7 +604,7 @@ namespace flw {
 			SetAmountMax( AmountMax, AmountMax );
 		}
 		void Init(
-			fdr::_ioflow_driver_base___ &Driver,
+			fdr::ioflow_driver_base___ &Driver,
 			size__ ReadAmountMax,
 			datum__ *OCache,
 			size__ OSize,
@@ -615,7 +615,7 @@ namespace flw {
 
 		}
 		void Init(
-			fdr::_ioflow_driver_base___ &Driver,
+			fdr::ioflow_driver_base___ &Driver,
 			datum__ *Cache,
 			size__ Size,
 			size__ AmountMax )
@@ -632,14 +632,14 @@ namespace flw {
 		flw::datum__ _OutputCache[OutCacheSize];
 	public:
 		void Init(
-			fdr::_ioflow_driver_base___ &Driver,
+			fdr::ioflow_driver_base___ &Driver,
 			size__ ReadAmountMax,
 			size__ WriteAmountMax )
 		{
 			ioflow__::Init( Driver, ReadAmountMax, _OutputCache, sizeof( _OutputCache ), WriteAmountMax );
 		}
 		void Init(
-			fdr::_ioflow_driver_base___ &Driver,
+			fdr::ioflow_driver_base___ &Driver,
 			size__ AmountMax = FDR_SIZE_MAX )
 		{
 			ioflow__::Init( Driver, AmountMax, _OutputCache, sizeof( _OutputCache ), AmountMax );

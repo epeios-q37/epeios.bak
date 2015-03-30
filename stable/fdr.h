@@ -258,66 +258,21 @@ namespace fdr {
 			_User = NULL;
 			_Mutex = NULL;
 		}
-		~_flow_driver_base__( void )
-		{
-			reset();
-		}
-		_flow_driver_base__( void )
-		{
-			reset( false );
-		}
+		E_CVDTOR( _flow_driver_base__ );
 		bso::bool__ IsLocked( void )
 		{
 			return IsLocked_( _Mutex );
 		}
 	};
 
-	class iflow_callback__
-	{
-	protected:
-		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donnée n'est disponibe.
-		virtual size__ FDRRead(
-			size__ Maximum,
-			datum__ *Buffer ) = 0;
-		virtual void FDRDismiss( void ) = 0;
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standadisation.
-		}
-		E_CVDTOR( iflow_callback__ );
-		void Init( void )
-		{
-			// Standadrisation.
-		}
-		size__ Read(
-			size__ Maximum,
-			datum__ *Buffer )
-		{
-			return FDRRead( Maximum, Buffer );
-		}
-		void Dismiss( void )
-		{
-			return FDRDismiss();
-		}
-	};
-
-	class _iflow_driver_base___
+	class iflow_driver_base___
 	: public _flow_driver_base__<flw::iflow__>
 	{
 	private:
-		iflow_callback__ *_Callback;
 		datum__ *_Cache;
 		size__ _Size;	// Si == '0', signale 'EOF' atteint.
 		size__ _Available;
 		size__ _Position;
-		iflow_callback__ &_C( void ) const
-		{
-			if ( _Callback == NULL )
-				ERRFwk();
-
-			return *_Callback;
-		}
 		size__ _Read(
 			size__ Wanted,
 			datum__ *Buffer )	// Si valeur retournée == 0, alors , alors 'EOF' atteint.
@@ -327,7 +282,7 @@ namespace fdr {
 				ERRPrm();
 # endif
 			if ( _Size != 0 )
-				return _C().Read( Wanted, Buffer );
+				return FDRRead( Wanted, Buffer );
 			else
 				return 0;
 		}
@@ -441,6 +396,12 @@ namespace fdr {
 			else
 				return _FillCache( 0 ) == 0;
 		}
+	protected:
+		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donnée n'est disponibe.
+		virtual size__ FDRRead(
+			size__ Maximum,
+			datum__ *Buffer ) = 0;
+		virtual void FDRDismiss( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
@@ -448,14 +409,12 @@ namespace fdr {
 				Dismiss( NULL );
 			}
 
-			_Callback = NULL;
 			_Cache = NULL;
 			_Size = _Available = _Position = 0;
 			_flow_driver_base__::reset( P );
 		}
-		E_CVDTOR( _iflow_driver_base___ );
+		E_CVDTOR( iflow_driver_base___ );
 		void Init(
-			iflow_callback__ &Callback,
 			datum__ *Cache,
 			size__ Size,
 			thread_safety__ ThreadSafety )
@@ -465,7 +424,7 @@ namespace fdr {
 			if ( Cache == NULL )
 				ERRPrm();
 #endif
-			_Callback = &Callback;
+
 			_Cache = Cache;
 			_Size = Size;
 
@@ -475,7 +434,7 @@ namespace fdr {
 		void Dismiss( flw::iflow__ *User )
 		{
 			if ( _Cache != NULL ) {
-				_C().Dismiss();
+				FDRDismiss();
 				Unlock( User );
 			}
 		}
@@ -545,7 +504,7 @@ namespace fdr {
 	};
 
 	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> class iflow_driver___
-	: public _iflow_driver_base___
+	: public iflow_driver_base___
 	{
 	private:
 		datum__ _Cache[cache_size+1];	// '+1' pour gèrer le 'Unget()'.
@@ -554,63 +513,24 @@ namespace fdr {
 		{
 			iflow_driver_base___::reset( P );
 		}
-		iflow_driver___( void )
-		{
-			reset( false );
-		}
-		~iflow_driver___( void )
-		{
-			reset();
-		}
+		E_CVDTOR( iflow_driver___ );
 		void Init( thread_safety__ ThreadSafety )
 		{
 			iflow_driver_base___::Init( _Cache, sizeof( _Cache ), ThreadSafety );
 		}
 	};
 
-	class oflow_callback__
+	class oflow_driver_base___
+	: public _flow_driver_base__<flw::oflow__>
 	{
+	private:
+		bso::bool__ _Initialized;	// Pour éviter des 'pure virtual function call'.
 	protected:
 		// Retourne le nombre d'octets effectivement écrits. Ne retourne '0' que si plus aucune donnée ne peut être écrite.
 		virtual size__ FDRWrite(
 			const datum__ *Buffer,
-			size__ Maximum ) = 0;
+			size__ MAximum ) = 0;
 		virtual void FDRCommit( void ) = 0;
-	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( oflow_callback__ );
-		void Init( void )
-		{
-			// Standardidsation.
-		}
-		size__ Write(
-			const datum__ *Buffer,
-			size__ Maximum )
-		{
-			return FDRWrite( Buffer, Maximum );
-		}
-		void Commit( void )
-		{
-			return FDRCommit();
-		}
-	};
-
-	class _oflow_driver_base___
-	: public _flow_driver_base__<flw::oflow__>
-	{
-	private:
-		oflow_callback__ *_Callback;
-		oflow_callback__ &_C( void )const
-		{
-			if ( _Callback == NULL )
-				ERRFwk();
-
-			return *_Callback;
-		}
-	protected:
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
@@ -618,23 +538,21 @@ namespace fdr {
 				Commit( NULL );
 			}
 
-			_Callback = NULL;
+			_Initialized = false;
 			_flow_driver_base__::reset( P );
 		}
-		E_CVDTOR( _oflow_driver_base___ );
-		void Init(
-			oflow_callback__ &Callback,
-			thread_safety__ ThreadSafety )
+		E_CVDTOR( oflow_driver_base___ );
+		void Init( thread_safety__ ThreadSafety )
 		{
 			reset();
 
-			_Callback = &Callback;
+			_Initialized = true;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
 		void Commit( const flw::oflow__ *User  )
 		{
-			if ( true && ( _Callback != NULL ) ) {	// Pour (temporairement ?) court-circuiter l'algo d'origine à des fins de test...
-				_C().Commit();
+			if ( _Initialized ) {
+				FDRCommit();
 				Unlock( User );
 			}
 		}
@@ -644,7 +562,7 @@ namespace fdr {
 			size__ Maximum )
 		{
 			Lock( User );
-			return _C().Write( Buffer, Maximum );
+			return FDRWrite( Buffer, Maximum );
 		}
 		bso::bool__ OFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{
@@ -664,53 +582,26 @@ namespace fdr {
 
 			oflow_driver_base___::reset( P );
 		}
-		oflow_driver___( void )
-		{
-			reset( false );
-		}
-		~oflow_driver___( void )
-		{
-			reset();
-		}
+		E_CVDTOR( oflow_driver___ );
 	};
 
-	class ioflow_callback__
-	: public iflow_callback__,
-	  public oflow_callback__
+	class ioflow_driver_base___
+	: public iflow_driver_base___,
+	  public oflow_driver_base___
 	{
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			iflow_callback__::reset( P );
-			oflow_callback__::reset( P );
+			iflow_driver_base___::reset( P );
+			oflow_driver_base___::reset( P );
 		}
-		E_CVDTOR( ioflow_callback__ );
-		void Init( void )
-		{
-			iflow_callback__::Init();
-			oflow_callback__::Init();
-		}
-	};
-
-	class _ioflow_driver_base___
-	: public _iflow_driver_base___,
-	  public _oflow_driver_base___
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_iflow_driver_base___::reset( P );
-			_oflow_driver_base___::reset( P );
-		}
-		E_CVDTOR( _ioflow_driver_base___ );
 		void Init(
-			ioflow_callback__ &Callback,
 			datum__ *InputCache,
 			size__ InputCacheSize,
 			thread_safety__ ThreadSafety )
 		{
-			_iflow_driver_base___::Init( Callback, InputCache, InputCacheSize, ThreadSafety );
-			_oflow_driver_base___::Init( Callback, ThreadSafety );
+			iflow_driver_base___::Init( InputCache, InputCacheSize, ThreadSafety );
+			oflow_driver_base___::Init( ThreadSafety );
 		}
 	};
 

@@ -10,9 +10,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+
 2015-03-29 :
-- FDR
-	% : using a callback rather then defininig virtual methods in '[...]driver_base[...]'.
+- FRD :
+	- Replacing destructor/constructor definition by 'E_CVDTOR'.
 
 2015-03-26 :
 - DIR, FIL :
