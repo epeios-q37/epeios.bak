@@ -1064,9 +1064,9 @@ namespace tol {
 		object_( s &S )
 		: S_( S )
 		{}
-		void reset( bool = true )
+		void reset( bool P = true )
 		{
-			// Pour des raisons de standardisation
+			S_.Object.reset( P );
 		}
 		void plug( class ags::aggregated_storage_ & )
 		{
@@ -1078,10 +1078,12 @@ namespace tol {
 
 			return *this;
 		}
+		/*
 		void Init( void )
 		{
 			S_.Object.Init();
 		}
+		*/
 		t &operator()( void )
 		{
 			return S_.Object;

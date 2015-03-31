@@ -10,6 +10,13 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-03-30 :
+- FLX :
+	% : Removing the use of 'FLXUnavailable(...)' from 'buffer_iflow_driver___'. To detect classes which overloaded it,
+	    the returning type is now 'int' instead of 'void'.
+- TOL :
+	% Removing 'Init()' in 'object_', to better take care to initialization of underlying object.
+	* Propagatint 'reset(...)' in 'object_' to underlying object.
 
 2015-03-29 :
 - FRD :

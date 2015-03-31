@@ -106,17 +106,19 @@ namespace flx {
 		// Nombre de caractère pouvant encore être lus.
 		bso::size__ Taille_;
 	protected:
-		//v Is called if there is asked for more data as availble.
-		virtual void FLXUnavailable( void )
+		// Méthode théoriquement inutile. Son type de retour est passé de 'void' à 'int' pour détecter les classes qui la surcharge. Sera supprimé à terme.
+		virtual int FLXUnavailable( void )
 		{
 			ERRFwk();
+
+			return 0;
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::datum__ *Buffer )
 		{
 			if ( !Taille_ )
-				FLXUnavailable();
+				return 0;
 			else
 			{
 				if ( Maximum > Taille_ )
