@@ -45,6 +45,11 @@
 
 namespace plgn {
 
+	struct param__
+	{
+
+	};
+
 	template <typename plugin> class retriever___
 	{
 	private:
@@ -89,7 +94,9 @@ namespace plgn {
 		E_CDTOR( retriever___ );
 		bso::bool__ Init(
 			const ntvstr::string___ &PluginNameAndLocation,
-			err::handling__ ErrHandling = err::h_Default )
+			const rgstry::entry__ &Configuration,
+			const rgstry::entry__ &Locale,
+		err::handling__ ErrHandling = err::h_Default )
 		{
 		ERRProlog
 			plgncore::data__ Data;
@@ -116,7 +123,7 @@ namespace plgn {
 
 			_Callback = &Function();
 
-			Data.Init( err::ERRError, sclerror::SCLERRORError, Location.UTF8( Buffer ) );
+			Data.Init( err::ERRError, sclerror::SCLERRORError, Location.UTF8( Buffer ), Configuration, Locale );
 
 			_C().Initialize( &Data, NULL );
 

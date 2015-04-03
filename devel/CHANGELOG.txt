@@ -10,6 +10,22 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2018-04-03 :
+- GLOBAL:
+	* The content of configuration and locale registries are now passed to the plugin, and no more red from a file.
+- FRDRGY :
+	- Adaptation to changes in 'RGSTRY'.
+- RGSTRY :
+	% All 'Push...()' becomes 'Push()'.
+	* 'Erase(...)' can now be called on a imported level.
+	- 'entry__' becomes 'entry__', because of its use outside of its module.
+	% Changing some method parameters so they use 'entry__'.
+- SCLLOCALE, SCLRGSTRY :
+	- Adaptation to changes in 'RGSTRY'.
+	% Adding the 'Set...(...)' functions.
+- SCLMISC :
+	% Adding 'Initialize(...)' function with 'rgstry::registry_' paramaters.
+
 2015-03-30 :
 - FLX :
 	% : Removing the use of 'FLXUnavailable(...)' from 'buffer_iflow_driver___'. To detect classes which overloaded it,

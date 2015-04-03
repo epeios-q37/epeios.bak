@@ -121,6 +121,20 @@ ERREnd
 ERREpilog
 }
 
+void sclmisc::Initialize(
+	err::err___ *ERRError,
+	sclerror::error___ *SCLError,
+	const rgstry::entry__ &Configuration,
+	const rgstry::entry__ &Locale )
+{
+	err::ERRError = ERRError;
+	sclerror::SCLERRORError = SCLError;
+
+	sclrgstry::SetConfiguration( Configuration );
+	scllocale::SetLocale( scllocale::tMain, Locale );
+}
+
+
 static void GetConfigurationLocaleParsingErrorMeaning_(
 	const rgstry::context___ &Context,
 	lcl::meaning_ &Meaning )
@@ -216,7 +230,7 @@ ERRBegin
 	err::ERRError = ERRError;
 	sclerror::SCLERRORError = SCLError;
 
-	scllocale::LoadLocale( scllocale::tSoftware, LocaleFlow, LocaleDirectory, LocaleRootPath );
+	scllocale::LoadLocale( scllocale::tMain, LocaleFlow, LocaleDirectory, LocaleRootPath );
 
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
 
@@ -224,7 +238,7 @@ ERRBegin
 	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par défaut.
 		Language.Convert( BaseLanguage_ );
 
-	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format());
+	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format() );
 ERRErr
 ERREnd
 ERREpilog
@@ -589,27 +603,62 @@ rgstry::level__ sclmisc::GetRegistryArgumentsLevel( void )
 	return sclrgstry::GetArgumentsLevel();
 }
 
-const str::string_ &sclmisc::GetPlugin(
+static void GetPluginRelatedTags_(
 	const char *Target,
-	str::string_ &Plugin )
+	rgstry::tags_ &Tags )
 {
 ERRProlog
-	rgstry::tags Tags;
 	str::string Id;
 ERRBegin
-	Tags.Init();
 	Tags.Append( str::string( Target ) );
 
 	Id.Init();
 	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::PluginParameter, Target ), Id );
 
 	Tags.Append( Id );
-	sclmisc::MGetValue( rgstry::tentry__( sclrgstry::PluginDefinition, Tags ), Plugin );
 ERRErr
 ERREnd
 ERREpilog
-	return Plugin;
 }
+
+static void GetPluginFeature_(
+	const rgstry::tentry__ &Path,
+	rgstry::entry__ &Entry )
+{
+	rgstry::level__ Level = rgstry::UndefinedLevel;
+
+	Entry.Root = GetRegistry().Search( Path, Level );
+
+	if ( Entry.Root == NULL )
+		ERRFwk();
+
+	Entry.Registry = &GetRegistry().GetRegistry( Level );
+}
+
+const str::string_ &sclmisc::GetPluginFeatures(
+	const char *Target,
+	str::string_ &Filename,
+	rgstry::entry__ &Configuration,
+	rgstry::entry__ &Locale )
+{
+ERRProlog
+	rgstry::tags Tags;
+ERRBegin
+	Tags.Init();
+
+	GetPluginRelatedTags_( Target, Tags );
+
+	sclmisc::MGetValue( rgstry::tentry__( sclrgstry::PluginFilename, Tags ), Filename );
+
+	GetPluginFeature_( rgstry::tentry__( sclrgstry::PluginConfiguration, Tags ), Configuration );
+	GetPluginFeature_( rgstry::tentry__( sclrgstry::PluginLocale, Tags ), Locale );
+	ERRErr
+ERREnd
+ERREpilog
+	return Filename;
+}
+
+
 
 
 

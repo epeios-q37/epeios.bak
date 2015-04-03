@@ -71,7 +71,7 @@ ERREpilog
 static level__ GetLevel_( target__ Target )
 {
 	switch ( Target ) {
-	case tSoftware:
+	case tMain:
 		return SoftwareLevel_;
 		break;
 	case tConfiguration:
@@ -113,6 +113,17 @@ ERREnd
 ERREpilog
 }
 
+void scllocale::SetLocale(
+	target__ Target,
+	const rgstry::entry__ &Entry )
+{
+	rgstry::level__ Level = GetLevel_( Target );
+
+	Locale_.Erase( Level );
+
+	Locale_.Set( Level, Entry );
+}
+
 void scllocale::LoadLocale(
 	target__ Target,
 	xtf::extended_text_iflow__ &Flow,
@@ -122,7 +133,7 @@ void scllocale::LoadLocale(
 	const char *ErrorLabel = NULL;
 
 	switch ( Target ) {
-	case tSoftware:
+	case tMain:
 		ErrorLabel = SCLLOCALE_NAME "_LocaleParsingError";
 		break;
 	case tConfiguration:
@@ -218,9 +229,9 @@ public:
 	{
 		Locale_.Init();
 
-		SoftwareLevel_ = Locale_.PushEmbedded( rgstry::name( "Software" ) );
-		ConfigurationLevel_ = Locale_.PushEmbedded( rgstry::name( "Configuration" ) );
-		ProjectLevel_ = Locale_.PushEmbedded( rgstry::name( "Project" ) );
+		SoftwareLevel_ = Locale_.CreateEmbedded( rgstry::name( "Software" ) );
+		ConfigurationLevel_ = Locale_.CreateEmbedded( rgstry::name( "Configuration" ) );
+		ProjectLevel_ = Locale_.CreateEmbedded( rgstry::name( "Project" ) );
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */
 }

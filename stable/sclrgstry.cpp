@@ -54,12 +54,15 @@ rgstry::entry___ sclrgstry::Language( "Language", Parameters );
 
 rgstry::entry___ sclrgstry::Locale( "Locale", Definitions );
 
-static rgstry::entry___ PluginDefinitionsSection_( "PluginSection", sclrgstry::Definitions );
-static rgstry::entry___ PluginDefinitions_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), PluginDefinitionsSection_ );
-rgstry::entry___ sclrgstry::PluginDefinition( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), PluginDefinitions_ );
-
 static rgstry::entry___ PluginParameters_( "Plugins", sclrgstry::Parameters );
 rgstry::entry___ sclrgstry::PluginParameter( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), PluginParameters_ );
+
+static rgstry::entry___ PluginDefinitionsSection_( "PluginSection", sclrgstry::Definitions );
+static rgstry::entry___ PluginDefinitions_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), PluginDefinitionsSection_ );
+static rgstry::entry___ PluginDefinition_( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), PluginDefinitions_ );
+rgstry::entry___ sclrgstry::PluginFilename( "Filename", PluginDefinition_ );
+rgstry::entry___ sclrgstry::PluginConfiguration( "Configuration", PluginDefinition_ );
+rgstry::entry___ sclrgstry::PluginLocale( "Locale", PluginDefinition_ );
 
 
 static rgstry::entry___ DefaultSetup_( "@DefaultSetup", Parameters );
@@ -109,11 +112,8 @@ static rgstry::status__ FillConfigurationRegistry_(
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	Registry_.Erase( ConfigurationLevel_ );
-
 	return Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( str::string( Directory ) ), RootPath );
 }
-
 
 void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
 {
@@ -149,6 +149,13 @@ ERREnd
 ERREpilog
 }
 
+void sclrgstry::SetConfiguration( const rgstry::entry__ &Entry )
+{
+	Registry_.Erase( ConfigurationLevel_ );
+
+	Registry_.Set( ConfigurationLevel_, Entry );
+}
+
 void sclrgstry::LoadConfiguration(
 	xtf::extended_text_iflow__&Flow,
 	const char *Directory,
@@ -160,6 +167,7 @@ ERRBegin
 	Registry_.Erase( ConfigurationLevel_ );
 
 	Context.Init();
+
 	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
 ERRErr
@@ -638,10 +646,10 @@ public:
 	{
 		Registry_.Init();
 
-		ConfigurationLevel_ = Registry_.PushEmbedded( rgstry::name( "Configuration" ) );
-		ProjectLevel_ = Registry_.PushEmbedded( rgstry::name( "Project" ) );
-		SetupLevel_ = Registry_.PushEmbedded( rgstry::name( "Setup" ) );
-		ArgumentsLevel_ = Registry_.PushEmbedded( rgstry::name( "Arguments" ) );
+		ConfigurationLevel_ = Registry_.CreateEmbedded( rgstry::name( "Configuration" ) );
+		ProjectLevel_ = Registry_.CreateEmbedded( rgstry::name( "Project" ) );
+		SetupLevel_ = Registry_.CreateEmbedded( rgstry::name( "Setup" ) );
+		ArgumentsLevel_ = Registry_.CreateEmbedded( rgstry::name( "Arguments" ) );
 
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */

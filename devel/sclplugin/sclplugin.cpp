@@ -78,7 +78,7 @@ void sclplugin::callback__::PLGNCOREInitialize(
 		ERRFwk();
 
 	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( Data->ERRError, Data->SCLError, Data->Directory );
+		sclmisc::Initialize( Data->ERRError, Data->SCLError, Data->Configuration, Data->Locale );
 }
 
 void *sclplugin::callback__::PLGNCORERetrievePlugin( void )

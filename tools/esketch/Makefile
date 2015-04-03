@@ -1,5 +1,5 @@
 # 'esketch' Project
-#    by Claude SIMON (http://zeusw.org/intl/contact.html).
+#    by Claude SIMON (http://q37.info/contact/).
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
@@ -34,19 +34,17 @@ mods += ags aem bch bitbch bso
 mods += cpe crptgr ctn dir dte 
 mods += dtfbsc dtfptb epsmsc err fdr 
 mods += flf fls flw flx ias 
-mods += ids iof iop llio lst 
-mods += lstbch lstctn mns que sdr 
-mods += stk str strng tol ttr 
-mods += txf tys uys utf xtf 
-mods += cio bom cdgb64 fil fnm 
-mods += lcl rgstry stsfsm xml xpp 
-mods += clnarg 
+mods += ids iof iop lst lstbch 
+mods += lstctn mns ntvstr que sdr 
+mods += stk str strng tagsbs tol 
+mods += ttr txf tys uys utf 
+mods += xtf cio tht bomhdl cdgb64 
+mods += fil fnm lcl rgstry stsfsm 
+mods += xml xpp clnarg 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += registry 
 
-pmods += pllio 
 
-wmods += wllio 
 
 ##############################
 # Common to all environment. #
@@ -62,7 +60,8 @@ CXXFLAGS += -O
 #CXXFLAGS += -pg
 
 ###############################
-	copt += -DE_ST
+	
+copt += -DE_ST
 
 IA_32=x86
 x86_64=x64
@@ -105,7 +104,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+	co += -fpermissive
 endif
 
 #########################
@@ -122,9 +121,9 @@ endif
 #############################
 	
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -156,7 +155,7 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -DCYGWIN
+	co += -std=gnu++11 -DCYGWIN
 	
 	LDFLAGS += -static
 
@@ -186,7 +185,7 @@ endif
 
 ifeq ("$(os)", "$(MinGW)")
 
-	co += -DMSYS
+	co += -DMSYS -std=gnu++11
 	
 	mods += $(wmods)
 
@@ -214,9 +213,12 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 
+	co += -std=gnu++11
 	co += -DGNULINUX
 	
 	mods += $(pmods)
+	
+	libs += -lpthread -ldl -lrt
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -233,9 +235,9 @@ endif
 #############################
 		
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -243,6 +245,8 @@ ifeq ("$(os)","$(Linux)")
 	
 	mods += $(pmods)
 
+	libs += -lpthread -ldl -lrt
+	
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
 		lo += -m32
@@ -288,8 +292,8 @@ endif
 all: $(target)
 	rm -f *.o
 
-copt += -D"VERSION=(Version)"
-copt += -D"COPYRIGHT_YEARS=2013"
+copt += -DVERSION=\""(Version)"\"
+copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
 ifndef EPEIOS_SRC
 	src += :src
@@ -311,7 +315,7 @@ lo += -o $(target) $(objs)
 objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(target): $(objs)
-	$(CXX) $(LDFLAGS) $(lo) $(libs)
+	$(CXX) $(lo) $(libs) $(LDFLAGS)
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

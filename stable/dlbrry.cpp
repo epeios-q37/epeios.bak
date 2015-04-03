@@ -69,6 +69,8 @@ using namespace dlbrry;
 #	include <windows.h>
 #elif defined ( TARGET_POSIX )
 #	include <dlfcn.h>
+#  include "cio.h"
+# include "txf.h"
 #else
 #	error
 #endif
@@ -84,6 +86,7 @@ bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &N
 #elif defined( TARGET_POSIX )
 	if ( ( _LibraryHandler = dlopen( Name, RTLD_LAZY ) ) == NULL ) {
 		const char *Error = dlerror();	// Facilite le débogage.
+		cio::COut << Error << txf::nl << txf::commit;
 		return false;
 	}
 #else

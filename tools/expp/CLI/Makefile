@@ -106,7 +106,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+	co += -fpermissive
 endif
 
 #########################
@@ -187,7 +187,7 @@ endif
 
 ifeq ("$(os)", "$(MinGW)")
 
-	co += -DMSYS
+	co += -DMSYS -std=gnu++11
 	
 	mods += $(wmods)
 

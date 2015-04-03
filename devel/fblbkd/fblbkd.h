@@ -511,7 +511,7 @@ namespace fblbkd {
 		void reset( bso::bool__ P = true )
 		{
 			Objets.reset( P );
-			module::reset( P );
+			module<t, user>::reset( P );
 			_list::reset( P );
 		}
 		E_CDTOR( ram_module );

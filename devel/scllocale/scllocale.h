@@ -45,7 +45,7 @@ namespace scllocale {
 	const lcl::locale_ &GetLocale( void );
 
 	enum target__ {
-		tSoftware,
+		tMain,
 		tConfiguration,
 		tProject,
 		t_amount,
@@ -53,6 +53,10 @@ namespace scllocale {
 	};
 
 	void EraseLocale( target__ Target );
+
+	void SetLocale(
+		target__ Target,
+		const rgstry::entry__ &Entry );
 
 	void LoadLocale(
 		target__ Target,

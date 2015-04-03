@@ -26,6 +26,8 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
+#include <ctype.h>
+
 using namespace tme;
 
 /*
@@ -77,7 +79,7 @@ const char *tme::time__::ASCII(
 
 typedef bso::u16__ item__;
 
-item__ ExtractItem_( const char *&Time )
+static inline item__ ExtractItem_( const char *&Time )
 {
 	item__ Item = 0;
 
@@ -96,7 +98,7 @@ item__ ExtractItem_( const char *&Time )
 	return Item;
 }
 
-static bso::bool__ ExtractItems_(
+static inline bso::bool__ ExtractItems_(
 	const char *&Time,
 	item__ &Hours,
 	item__ &Minutes,

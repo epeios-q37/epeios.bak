@@ -623,33 +623,33 @@ namespace {
 	};
 }
 
-	void rgstry::registry_::_Delete( row__ Row )
-	{
-		const node_ &Node = Nodes( Row );
+void rgstry::registry_::_Delete( row__ Row )
+{
+	const node_ &Node = Nodes( Row );
 
-		_Delete( Node.Children );
+	_Delete( Node.Children );
 
-		Nodes.Remove( Row );
-	}
+	Nodes.Remove( Row );
+}
 
-	bso::bool__ rgstry::registry_::Exists(
-		const str::string_ &PathString,
-		row__ ParentRow,
-		sdr::row__ *PathErrorRow ) const
-	{
-		bso::bool__ Result = false;
-	ERRProlog
-		path Path;
-	ERRBegin
-		Path.Init();
+bso::bool__ rgstry::registry_::Exists(
+	const str::string_ &PathString,
+	row__ ParentRow,
+	sdr::row__ *PathErrorRow ) const
+{
+	bso::bool__ Result = false;
+ERRProlog
+	path Path;
+ERRBegin
+	Path.Init();
 
-		if ( BuildPath_( PathString, Path, PathErrorRow ) )
-			Result = Exists( Path, ParentRow );
-	ERRErr
-	ERREnd
-	ERREpilog
-		return Result;
-	}
+	if ( BuildPath_( PathString, Path, PathErrorRow ) )
+		Result = Exists( Path, ParentRow );
+ERRErr
+ERREnd
+ERREpilog
+	return Result;
+}
 
 void rgstry::registry_::_DumpAttributes(
 	row__ Row,
@@ -1130,32 +1130,6 @@ ERREnd
 ERREpilog
 }
 #endif
-
-void rgstry::multi_level_registry_::Erase( level__ Level )
-{
-ERRProlog
-	name Name;
-	_entry__ Entry;
-	buffer Buffer;
-ERRBegin
-	Entry.Init();
-	Entries.Recall( Level, Entry );
-
-	if ( Entry.Registry != NULL )
-		ERRFwk();
-
-	Name.Init( EmbeddedRegistry.GetValue( Entry.Root, Buffer ) );
-
-	EmbeddedRegistry.Delete( Entry.Root );
-
-	Entry.Root = EmbeddedRegistry.CreateRegistry( Name );
-
-	Entries.Store( Entry, Level );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 
 const value_ &rgstry::multi_level_registry_::GetValue(
 	const str::string_ &PathString,

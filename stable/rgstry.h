@@ -1389,7 +1389,7 @@ namespace rgstry {
 #	define RGSTRY_UNDEFINED_LEVEL	E_NIL
 	E_CDEF( level__, UndefinedLevel, E_NIL );
 
-	struct _entry__ {
+	struct entry__ {
 		row__ Root;
 		const registry_ *Registry;
 		void reset( bso::bool__ = true )
@@ -1404,15 +1404,23 @@ namespace rgstry {
 			this->Root = Root;
 			this->Registry = &Registry;
 		}
-		_entry__(
+		void Init( const entry__ &Entry )
+		{
+			*this = Entry;
+		}
+		entry__(
 			row__ Root = E_NIL,
 			const registry_ &Registry = *(const registry_ *)NULL )
 		{
 			Init( Root, Registry );
 		}
+		bso::bool__ IsEmpty( void ) const
+		{
+			return ( Root == E_NIL ) && ( Registry == NULL );
+		}
 	};
 
-	typedef stk::E_BSTACKt_( _entry__, level__ ) _entries_;
+	typedef stk::E_BSTACKt_( entry__, level__ ) _entries_;
 	typedef stk::E_BSTACKt_( time_t, level__ ) _timestamps_;
 
 	// Registre multi-niveau
@@ -1427,14 +1435,14 @@ namespace rgstry {
 		{
 			level__ Level = TimeStamps.Push( 0 );
 
-			if ( Entries.Push( _entry__() ) != Level )
+			if ( Entries.Push( entry__() ) != Level )
 				ERRFwk();
 
 			_Touch( Level );
 
 			return Level;
 		}
-		level__ _RawPushLevel( const _entry__ &Entry )
+		level__ _RawPushLevel( const entry__ &Entry )
 		{
 			level__ Level = RGSTRY_UNDEFINED_LEVEL;
 
@@ -1442,13 +1450,13 @@ namespace rgstry {
 
 			return Level;
 		}
-		const _entry__ _GetEntry( level__ Level ) const
+		const entry__ _GetEntry( level__ Level ) const
 		{
 			return Entries( Level );
 		}
 		const registry_ &_GetRegistry( level__ Level ) const
 		{
-			_entry__ Entry = _GetEntry( Level );
+			entry__ Entry = _GetEntry( Level );
 
 			if ( Entry.Registry == NULL )
 				return EmbeddedRegistry;
@@ -1457,7 +1465,7 @@ namespace rgstry {
 		}
 		registry_ &_GetRegistry( level__ Level )
 		{
-			_entry__ Entry = _GetEntry( Level );
+			entry__ Entry = _GetEntry( Level );
 
 			if ( Entry.Registry != NULL )
 				ERRFwk();
@@ -1521,43 +1529,64 @@ namespace rgstry {
 		{
 			return _GetRoot( Level );
 		}
+		level__ Create( const entry__ &Entry = entry__() )
+		{
+			return _RawPushLevel( Entry );
+		}
 		void SetRoot(
 			level__ Level,
 			row__ Root )
 		{
-			_entry__ Entry = Entries( Level );
+			entry__ Entry = Entries( Level );
 
 			Entry.Root = Root;
 
 			Entries.Store( Entry, Level );
 		}
-		level__ PushImported(
-			const registry_ &Registry,
-			row__ Root )
+		void Set(
+			level__ Level,
+			const entry__ Entry )
 		{
-			return _RawPushLevel( _entry__( Root, Registry ) );
+			if ( !Entries(Level).IsEmpty() )
+				ERRFwk();
+
+			Entries.Store( Entry, Level );
 		}
-		level__ PushEmbedded( const name_ &Name = name() )
+		level__ Push( const entry__ &Entry )
 		{
-			return _RawPushLevel( _entry__( EmbeddedRegistry.CreateRegistry( Name ) ) );
+			return _RawPushLevel( Entry );
 		}
-		void PushImported(
+		level__ CreateEmbedded( const name_ &Name = name() )
+		{
+			return _RawPushLevel( entry__( EmbeddedRegistry.CreateRegistry( Name ) ) );
+		}
+		void Push(
 			const multi_level_registry_ &Registry,
 			level__ Level )
 		{
-			PushImported( Registry.GetRegistry( Level ), Registry.GetRoot( Level ) );
+			Push( entry__( Registry.GetRoot( Level ), Registry.GetRegistry( Level ) ) );
 		}
-		void PushImported( const multi_level_registry_ &Registry )
+		void Push( const multi_level_registry_ &Registry )
 		{
 			level__ Level = Registry.First();
 
 			while ( Level != UndefinedLevel ) {
-				PushImported( Registry, Level );
+				Push( Registry, Level );
 
 				Level = Registry.Next( Level );
 			}
 		}
-		void Erase( level__ Level );
+		void Erase( level__ Level )
+		{
+			entry__ Entry = Entries( Level );
+
+			if ( Entry.Registry == NULL )
+				EmbeddedRegistry.Delete( Entry.Root );
+
+			Entry.Init();
+
+			Entries.Store( Entry, Level );
+		}
 		level__ Pop( void )
 		{
 			level__ Level = Entries.Last();
@@ -1640,17 +1669,6 @@ namespace rgstry {
 			level__ Level,
 			const tentry__ &Entry,
 			str::string_ &Value ) const;
-#if 0
-		bso::bool__ GetValue(
-			const entry___ &Entry,
-			const tags_ &Tags,
-			str::string_ &Value,
-			sdr::row__ *PathErrorRow = NULL ) const;
-		bso::bool__ GetValue(
-			const entry___ &Entry,
-			str::string_ &Value,
-			sdr::row__ *PathErrorRow = NULL ) const;
-#endif
 		bso::bool__ GetValues(
 			level__ Level,
 			const path_ &Path,
@@ -1819,7 +1837,7 @@ namespace rgstry {
 			
 			Status = FillRegistry( XFlow, Criterions, RootPath, _GetRegistry( Level ), Root, Context ); 
 
-			Entries.Store( _entry__( Root ), Level );
+			Entries.Store( entry__( Root ), Level );
 
 			_Touch( Level );
 
@@ -1836,7 +1854,7 @@ namespace rgstry {
 			
 			Status = FillRegistry( XFlow, Criterions, RootPath, _GetRegistry( Level ), Root ); 
 
-			Entries.Store( _entry__( Root ), Level );
+			Entries.Store( entry__( Root ), Level );
 
 			_Touch( Level );
 
@@ -1854,7 +1872,7 @@ namespace rgstry {
 			
 			Status = FillRegistry( FileName, Criterions, RootPath, _GetRegistry( Level ), Root, Context ); 
 
-			Entries.Store( _entry__( Root ), Level );
+			Entries.Store( entry__( Root ), Level );
 
 			_Touch( Level );
 
@@ -1871,7 +1889,7 @@ namespace rgstry {
 			
 			Status = FillRegistry( FileName, Criterions, RootPath, _GetRegistry( Level ), Root ); 
 
-			Entries.Store( _entry__( Root ), Level );
+			Entries.Store( entry__( Root ), Level );
 
 			_Touch( Level );
 

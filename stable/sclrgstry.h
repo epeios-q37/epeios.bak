@@ -46,7 +46,7 @@ namespace sclrgstry {
 
 	typedef rgstry::multi_level_registry_ registry_;
 
-	E_CDEF(char *, ParametersTag, "Parameters" );
+	E_CDEF( char *, ParametersTag, "Parameters" );
 
 #if 0
 	registry_ &GetRegistry( void );
@@ -66,8 +66,10 @@ namespace sclrgstry {
 
 	extern rgstry::entry___ Locale;	// Du fichier de configuration uniquement.
 
-	extern rgstry::entry___ PluginDefinition;
 	extern rgstry::entry___ PluginParameter;
+	extern rgstry::entry___ PluginFilename;
+	extern rgstry::entry___ PluginConfiguration;
+	extern rgstry::entry___ PluginLocale;
 
 	using rgstry::value;
 	using rgstry::value_;
@@ -75,6 +77,8 @@ namespace sclrgstry {
 	const char *GetLanguage_(
 		const registry_ &Registry,
 		TOL_CBUFFER___ &Buffer );
+
+	void SetConfiguration( const rgstry::entry__ &Entry );
 
 	void LoadConfiguration(
 		xtf::extended_text_iflow__ &Flow,

@@ -268,7 +268,7 @@ ERREpilog
 static csdlec::library_embedded_client_core__ *Core_ = NULL;
 
 static void Go_(
-	const bso::char__ *ModuleFileName,
+	const bso::char__ *ModuleFilename,
 	csdbns::port__ Port,
 	module_connection_type__ ConnectionType,
 	const char *LogFileName,
@@ -285,25 +285,25 @@ ERRBegin
 	SharedLocale.Init();
 	SharedRegistry.Init();
 
-	LibraryData.Init( csdleo::mRemote,ModuleFileName, err::ERRError, csdleo::cRegular, (void *)ModuleFileName );
+	LibraryData.Init( csdleo::cRegular, ModuleFilename, err::ERRError, NULL );
 
 	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();
 
-	if ( !Core_->Init( ModuleFileName, LibraryData, err::hUserDefined ) ) {
+	if ( !Core_->Init( ModuleFilename, LibraryData, err::hUserDefined ) ) {
 		Meaning.Init();
 		Meaning.SetValue( "UnableToLoadModule" );
-		Meaning.AddTag( ModuleFileName );
+		Meaning.AddTag( ModuleFilename );
 		sclerror::SetMeaning( Meaning );
 		ERRAbort();
 	}
 
 	switch ( ConnectionType ) {
 	case mctStraight:
-		UseStraightConnections_( Core_->GetCallback(), ModuleFileName, Port );
+		UseStraightConnections_( Core_->GetCallback(), ModuleFilename, Port );
 		break;
 	case mctSwitched:
-		UseSwitchingConnections_( Core_->GetCallback(), LogFileName, LogFileHandling, ModuleFileName, Port );
+		UseSwitchingConnections_( Core_->GetCallback(), LogFileName, LogFileHandling, ModuleFilename, Port );
 		break;
 	default:
 		ERRFwk();
@@ -312,7 +312,7 @@ ERRBegin
 ERRErr
 	Meaning.Init();
 	Meaning.SetValue( "ModuleError" );
-	Meaning.SetValue( ModuleFileName );
+	Meaning.SetValue( ModuleFilename );
 
 	if ( ERRType >= err::t_amount ) {
 		if ( sclerror::IsErrorPending() ) {

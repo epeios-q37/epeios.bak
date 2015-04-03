@@ -85,6 +85,12 @@ namespace sclmisc {
 	void Initialize(
 		err::err___ *ERRError,
 		sclerror::error___ *SCLError,
+		const rgstry::entry__ &Configuration,
+		const rgstry::entry__ &Locale );
+
+	void Initialize(
+		err::err___ *ERRError,
+		sclerror::error___ *SCLError,
 		xtf::extended_text_iflow__ &LocaleFlow,
 		const char *LocaleDirectory,
 		xtf::extended_text_iflow__ &RegistryFlow,
@@ -153,7 +159,7 @@ namespace sclmisc {
 		const str::string_ &Value,
 		const rgstry::tentry__ &Entry )
 	{
-		return sclrgstry::SetValue(GetRegistry(), Value, Entry );
+		return sclrgstry::SetValue( GetRegistry(), Value, Entry );
 	}
 
 	inline void SetValue(
@@ -161,7 +167,7 @@ namespace sclmisc {
 		const str::string_ &Value,
 		sdr::row__ *Error = NULL )
 	{
-		return sclrgstry::SetValue(GetRegistry(), Path, Value, Error );
+		return sclrgstry::SetValue( GetRegistry(), Path, Value, Error );
 	}
 
 	inline bso::bool__ BGetValue(
@@ -224,84 +230,86 @@ namespace sclmisc {
 	inline type MGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type Limit = limit )\
-	{\
+		{\
 		return sclrgstry::MGet##name( GetRegistry(), Entry, Limit );\
-	}\
+		}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type DefaultValue,\
 		type Limit = limit )\
-	{\
+		{\
 		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Limit );\
-	}
+		}
 
 	SCLMISC__UN( bso::uint__, UInt, BSO_UINT_MAX )
 # ifdef BSO__64BITS_ENABLED
 		SCLRGSTRY__UN( bso::u64__, U64, BSO_U64_MAX )
 # endif
-	SCLMISC__UN( bso::u32__, U32, BSO_U32_MAX )
-	SCLMISC__UN( bso::u16__, U16, BSO_U16_MAX )
-	SCLMISC__UN( bso::u8__, U8, BSO_U8_MAX )
+		SCLMISC__UN( bso::u32__, U32, BSO_U32_MAX )
+		SCLMISC__UN( bso::u16__, U16, BSO_U16_MAX )
+		SCLMISC__UN( bso::u8__, U8, BSO_U8_MAX )
 
 # define SCLMISC__SN( type, name, min, max )\
 	inline type MGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type Min = min,\
 		type Max = max )\
-	{\
+		{\
 		return sclrgstry::MGet##name( GetRegistry(), Entry, Min, Max );\
-	}\
+		}\
 	inline type OGet##name(\
 		const rgstry::tentry__ &Entry,\
 		type DefaultValue,\
 		type Min = min,\
 		type Max = max )\
-	{\
+		{\
 		return sclrgstry::OGet##name( GetRegistry(), Entry, DefaultValue, Min, Max );\
-	}
+		}
 
-	SCLMISC__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
+		SCLMISC__SN( bso::sint__, SInt, BSO_SINT_MIN, BSO_SINT_MAX )
 # ifdef BSO__64BITS_ENABLED
-	SCLRGSTRY__SN( bso::s64__, S64, BSO_S64, BSO_S64_MAX )
+		SCLRGSTRY__SN( bso::s64__, S64, BSO_S64, BSO_S64_MAX )
 #endif
-	SCLMISC__SN( bso::s32__, S32, BSO_S32_MIN, BSO_S32_MAX )
-	SCLMISC__SN( bso::s16__, S16, BSO_S16_MIN, BSO_S16_MAX )
-	SCLMISC__SN( bso::s8__, S8, BSO_S8_MIN, BSO_S8_MAX )
+		SCLMISC__SN( bso::s32__, S32, BSO_S32_MIN, BSO_S32_MAX )
+		SCLMISC__SN( bso::s16__, S16, BSO_S16_MIN, BSO_S16_MAX )
+		SCLMISC__SN( bso::s8__, S8, BSO_S8_MIN, BSO_S8_MAX )
 
 		// To define function retrieving mandatory registry value.
 # define SCLMISC_MV( name, entry )\
 	inline const char *name(\
 		TOL_CBUFFER___ &Buffer )\
-	{\
+		{\
 		return sclmisc::MGetValue( entry, Buffer );\
-	}\
+		}\
 	inline const str::string_ &name( str::string_ &Value )\
-	{\
+		{\
 		return sclmisc::MGetValue( entry, Value );\
-	}
+		}
 
 		// To define function retrieving optional registry value.
 # define SCLMISC_OV( name, entry )\
 	inline const char *name(\
 		TOL_CBUFFER___ &Buffer,\
 		bso::bool__ *Missing = NULL )\
-	{\
+		{\
 		return sclmisc::OGetValue( entry, Buffer, Missing );\
-	}\
+		}\
 	inline const str::string_ &name(\
 		str::string_ &Value,\
 		bso::bool__ *Missing = NULL )\
-	{\
+		{\
 		return sclmisc::OGetValue( entry, Value, Missing );\
-	}
+		}
 
-	// Façon standard de récupèrer la localisation d'un 'plugin'.
-	const str::string_ &GetPlugin(
+	// Façon standard de récupèrer un plugin.
+	const str::string_ &GetPluginFeatures(
 		const char *Target,
-		str::string_ &Plugin );
+		str::string_ &Filename,
+		rgstry::entry__ &Configuration,
+		rgstry::entry__ &Locale );
 }
 
-				  /********************************************/
+			/********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */
 /******************************************************************************/

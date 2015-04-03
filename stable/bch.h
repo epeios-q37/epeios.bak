@@ -153,7 +153,7 @@ namespace bch {
 			Allouer_( Size, Mode );
 
 			if ( Size > PreviousSize )
-				Fill( Object, PreviousSize, Size - PreviousSize );
+				mmr::Fill( Object, PreviousSize, Size - PreviousSize );
 		}
 		void PreAllocate( sdr::size__ Size )
 		{

@@ -168,7 +168,7 @@ public:
 	ntvstrpersonnalization( void )
 	{
 #ifdef CPE_POSIX
-		printf( nl_langinfo( CODESET ) );
+//		printf( nl_langinfo( CODESET ) );
 #endif
 
 		/* place here the actions concerning this library
