@@ -10,7 +10,22 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
-2018-04-03 :
+
+2015-04-07 :
+- DLBRRY :
+	* For 'Linux" and 'Mac OS', to mimic 'Window' behavior, the correct prefix and extension is added to the library filename when missing.
+- PLGN :
+	- Adaptation to chnages in 'PLGNCORE'.
+- PLGNCORE, SCLPLUGIN :
+	* Removing useless 'Directory' entry in 'data__' since the configuration and locale is retrieved from caller.
+- RGSTRY :
+	* An empty level is now valid and correctly handled.
+- SCLFRNTND :
+	* For the predefined items, their values are added in the XML dump.
+- SCLRGSTRY :
+	* The different levels are now created empty, and not embedded (except the arguments one).
+
+2015-04-03 :
 - GLOBAL:
 	* The content of configuration and locale registries are now passed to the plugin, and no more red from a file.
 - FRDRGY :
@@ -24,7 +39,7 @@ Meaning of list markers (2nd level):
 	- Adaptation to changes in 'RGSTRY'.
 	% Adding the 'Set...(...)' functions.
 - SCLMISC :
-	% Adding 'Initialize(...)' function with 'rgstry::registry_' paramaters.
+	% Adding 'Initialize(...)' function with 'rgstry::registry_' parameters.
 
 2015-03-30 :
 - FLX :
@@ -32,7 +47,7 @@ Meaning of list markers (2nd level):
 	    the returning type is now 'int' instead of 'void'.
 - TOL :
 	% Removing 'Init()' in 'object_', to better take care to initialization of underlying object.
-	* Propagatint 'reset(...)' in 'object_' to underlying object.
+	* Propagating 'reset(...)' in 'object_' to underlying object.
 
 2015-03-29 :
 - FRD :
@@ -51,7 +66,7 @@ Meaning of list markers (2nd level):
 	% Adding a '[CSDLEO]Initialize(...)' method to relieve the C API (for the same reason as belove).
 - PLGNCORE, PLNG, SCLPLUGIN
 	% Because the C functions exposed by a dynamic library don't allow interruptions, to simplify error handling,
-	  the API of a dynamic library will be exposed through a (C++) callback (execpt, of course, the function
+	  the API of a dynamic library will be exposed through a (C++) callback (except, of course, the function
 	  which provides this callback).
 - SCLDAEMON :
 	- Adaptation to changes in 'CSDLEO'.

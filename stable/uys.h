@@ -101,10 +101,8 @@ namespace uys {
 	public:
 		void reset( bool P = true )
 		{
-			if ( P )
-			{
-				if ( _Internal )
-				{
+			if ( P ) {
+				if ( _Internal ) {
 					delete _Driver;
 					_Internal = false;
 					_Driver = NULL;
@@ -134,23 +132,21 @@ namespace uys {
 		// Initialization.
 		void Init( void )
 		{
-			if ( _Driver == NULL )
-			{
+			if ( _Driver == NULL ) {
 				if ( ( _Driver = new UYS_DEFAULT_STORAGE_DRIVER( _CVMBuffer ) ) == NULL )
 					ERRAlc();
-				else
-				{
+				else {
 					_Internal = true;
-					((UYS_DEFAULT_STORAGE_DRIVER *)_Driver)->Init();
+					( (UYS_DEFAULT_STORAGE_DRIVER *)_Driver )->Init();
 				}
 			}
 		}
 		sdr::E_SDRIVER__ *Driver( bso::bool__ Ignore = false ) const
 		{
-	#ifdef UYS_DBG
+#ifdef UYS_DBG
 			if ( !Ignore && !_Driver )
 				ERRPrm();
-	#endif
+#endif
 			return _Driver;
 		}
 		void Allocate( sdr::size__ Size )
@@ -204,15 +200,15 @@ namespace uys {
 			sdr::row_t__ Position,
 			sdr::size__ Amount ) const
 		{
-			if ( Position > S_. Size )
+			if ( Position > S_.Size )
 				ERRPrm();
 
-			if ( Amount > ( S_. Size - Position ) )
+			if ( Amount > ( S_.Size - Position ) )
 				ERRPrm();
 		}
 		void _Recall(
 			sdr::row_t__ Position,
-			sdr::size__ Amount, 
+			sdr::size__ Amount,
 			sdr::datum__ *Buffer ) const
 		{
 			_Test( Position, Amount );
@@ -233,7 +229,8 @@ namespace uys {
 			S_.Size = Size;
 		}
 	public:
-		struct s {
+		struct s
+		{
 			sdr::size__ Size;
 			ags::descriptor__ Descriptor;
 		} &S_;
@@ -246,8 +243,8 @@ namespace uys {
 			S_.Size = 0;
 		}
 		untyped_storage_( s &S )
-		: S_( S ),
-		  _AggregatedStorageDriver( S.Descriptor )
+			: S_( S ),
+			_AggregatedStorageDriver( S.Descriptor )
 		{
 			reset( false );
 		}
@@ -255,7 +252,7 @@ namespace uys {
 		{
 			reset();
 		}
-		void plug( sdr::E_SDRIVER__ &Driver  )
+		void plug( sdr::E_SDRIVER__ &Driver )
 		{
 			reset();
 
@@ -373,9 +370,9 @@ namespace uys {
 	E_ENUM( mode )
 	{
 		mReadOnly,
-		mReadWrite,
-		m_amount,
-		m_Undefined
+			mReadWrite,
+			m_amount,
+			m_Undefined
 	};
 
 	inline fil::mode__ Convert_( mode__ Mode )
@@ -415,17 +412,18 @@ namespace uys {
 	E_ENUM( behavior )
 	{
 		bVolatile,
-		bPersistent,
-		b_amount,
-		b_Undefined
+			bPersistent,
+			b_amount,
+			b_Undefined
 	};
 
-	E_ENUM( _state ) {	// Statut de l'opération de connection.
+	E_ENUM( _state )
+	{	// Statut de l'opération de connection.
 		sExists,		// le fichier rattaché existe.
-		sAbsent,		// Fichier rattaché absent (ce n'est pas une erreur, cela signifie que des données n'ont pas encore été stockées).
-		sInconsistent,	// Les fichiers sont dans une état incohérent, probablement dû à un arrêt inopiné du logiciel. Utilisé par les bibliothèques en amont.
-		s_amount,
-		s_Undefined
+			sAbsent,		// Fichier rattaché absent (ce n'est pas une erreur, cela signifie que des données n'ont pas encore été stockées).
+			sInconsistent,	// Les fichiers sont dans une état incohérent, probablement dû à un arrêt inopiné du logiciel. Utilisé par les bibliothèques en amont.
+			s_amount,
+			s_Undefined
 	};
 
 	E_XENUM( state, s );
@@ -479,6 +477,17 @@ namespace uys {
 		return false;	// Pour éviter un 'warning'.
 	}
 
+}
+
+inline bso::bool__ BoolOp( uys::_state__ State )
+{
+	if ( uys::IsError( State ) )
+		ERRFwk();
+
+	return uys::Exists( State );
+}
+
+namespace uys {
 	typedef fls::E_FILE_SDRIVER___ _file_storage_driver___;
 
 	struct hook_filenames___
@@ -791,14 +800,6 @@ namespace uys {
 	};
 
 	typedef _storage__< _untyped_storage___>	untyped_storage___;
-}
-
-inline bso::bool__ BoolOp( uys::_state__ State )
-{
-	if ( uys::IsError( State ) )
-		ERRFwk();
-
-	return uys::Exists( State );
 }
 
 # define UYS__HEADER_HANDLED	// A destination de 'AGS'.

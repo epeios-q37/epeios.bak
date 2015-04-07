@@ -646,10 +646,10 @@ public:
 	{
 		Registry_.Init();
 
-		ConfigurationLevel_ = Registry_.CreateEmbedded( rgstry::name( "Configuration" ) );
-		ProjectLevel_ = Registry_.CreateEmbedded( rgstry::name( "Project" ) );
-		SetupLevel_ = Registry_.CreateEmbedded( rgstry::name( "Setup" ) );
-		ArgumentsLevel_ = Registry_.CreateEmbedded( rgstry::name( "Arguments" ) );
+		ConfigurationLevel_ = Registry_.Create();
+		ProjectLevel_ = Registry_.Create();
+		SetupLevel_ = Registry_.Create();
+		ArgumentsLevel_ = Registry_.CreateEmbedded();
 
 		/* place here the actions concerning this library
 		to be realized at the launching of the application  */

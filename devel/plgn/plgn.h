@@ -96,11 +96,10 @@ namespace plgn {
 			const ntvstr::string___ &PluginNameAndLocation,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
-		err::handling__ ErrHandling = err::h_Default )
+			err::handling__ ErrHandling = err::h_Default )
 		{
 		ERRProlog
 			plgncore::data__ Data;
-			fnm::name___ Location;
 			TOL_CBUFFER___ Buffer;
 			plgncore::retrieve_callback *Function = NULL;
 		ERRBegin
@@ -118,12 +117,9 @@ namespace plgn {
 			if ( Function == NULL )
 				ERRFwk();
 
-			Location.Init();
-			fnm::GetLocation( PluginNameAndLocation, Location );
-
 			_Callback = &Function();
 
-			Data.Init( err::ERRError, sclerror::SCLERRORError, Location.UTF8( Buffer ), Configuration, Locale );
+			Data.Init( err::ERRError, sclerror::SCLERRORError, Configuration, Locale );
 
 			_C().Initialize( &Data, NULL );
 

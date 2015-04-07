@@ -112,7 +112,8 @@ ERREpilog
 }
 
 static void GetPredefinedItem_(
-	const rgstry::entry___ &Alias,
+	const rgstry::entry___ &ValueEntry,
+	const rgstry::entry___ &AliasEntry,
 	const str::string_ &Id,
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
@@ -129,12 +130,17 @@ ERRBegin
 	Tags.Append( Id );
 
 	Value.Init();
-	sclrgstry::MGetValue( Registry, rgstry::tentry__( Alias, Tags ), Value );
+	sclrgstry::MGetValue( Registry, rgstry::tentry__( AliasEntry, Tags ), Value );
 
 	Translation.Init();
 	Locale.GetTranslation( Value.Convert( Buffer ), Language, Translation );
 
 	Writer.PutAttribute( "Alias", Translation );
+
+	Value.Init();
+	sclrgstry::MGetValue( Registry, rgstry::tentry__( ValueEntry, Tags ), Value );
+
+	Writer.PutValue( Value );
 ERRErr
 ERREnd
 ERREpilog
@@ -142,6 +148,7 @@ ERREpilog
 
 static void GetPredefinedItems_(
 	const char *Tag,
+	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
 	const rgstry::values_ &Ids,
 	const str::string_ &DefaultProjectId,
@@ -162,7 +169,7 @@ static void GetPredefinedItems_(
 		if ( DefaultProjectId == Id( Row ) )
 			Writer.PutAttribute("Selected", "true" );
 
-		GetPredefinedItem_( AliasEntry, Id( Row ), Registry, Locale, Language, Writer );
+		GetPredefinedItem_( ValueEntry,  AliasEntry, Id( Row ), Registry, Locale, Language, Writer );
 
 		Writer.PopTag();
 
@@ -174,6 +181,7 @@ static void GetPredefinedItems_(
 	const char *Tag,
 	const rgstry::entry___ &IdEntry,
 	const rgstry::entry___ &DefaultEntry,
+	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
 	const registry_ &Registry,
 	const lcl::locale_ &Locale,
@@ -190,7 +198,7 @@ ERRBegin
 	Ids.Init();
 	sclrgstry::GetValues( Registry, IdEntry, Ids );
 
-	GetPredefinedItems_( Tag, AliasEntry, Ids, DefaultId, Registry, Locale, Language, Writer );
+	GetPredefinedItems_( Tag, ValueEntry, AliasEntry, Ids, DefaultId, Registry, Locale, Language, Writer );
 ERRErr
 ERREnd
 ERREpilog
@@ -203,6 +211,7 @@ static void GetFeatures_(
 	const rgstry::entry___ &DefaultTypeEntry,
 	const rgstry::entry___ &IdEntry,
 	const rgstry::entry___ &DefaultEntry,
+	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
 	const char *Language,
 	xml::writer_ &Writer )
@@ -220,7 +229,7 @@ ERRBegin
 	}
 
 	Writer.PushTag( ItemsTag );
-	GetPredefinedItems_( ItemTag, IdEntry, DefaultEntry, AliasEntry, sclrgstry::GetCommonRegistry(), scllocale::GetLocale(), Language, Writer );
+	GetPredefinedItems_( ItemTag, IdEntry, DefaultEntry, ValueEntry, AliasEntry, sclrgstry::GetCommonRegistry(), scllocale::GetLocale(), Language, Writer );
 	Writer.PopTag();
 ERRErr
 ERREnd
@@ -242,7 +251,7 @@ ERRBegin
 		if ( ( Action = GetAction( Pattern ) ) == a_Undefined )
 			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( ProjectAction_ );
 
-	GetFeatures_( "PredefinedProjects", "PredefinedProject", "DefaultProjectType", DefaultProjectType_, PredefinedProjectId_, DefaultPredefinedProject_, PredefinedProjectAlias_, Language, Writer );
+	GetFeatures_( "PredefinedProjects", "PredefinedProject", "DefaultProjectType", DefaultProjectType_, PredefinedProjectId_, DefaultPredefinedProject_, PredefinedProject_, PredefinedProjectAlias_, Language, Writer );
 ERRErr
 ERREnd
 ERREpilog
@@ -269,7 +278,7 @@ ERRBegin
 		Writer.PopTag();
 	}
 
-	GetFeatures_( "PredefinedBackends", "PredefinedBackend", "DefaultBackendType", DefaultBackendType_, PredefinedBackendId_, DefaultPredefinedBackend_, PredefinedBackendAlias_, Language, Writer );
+	GetFeatures_( "PredefinedBackends", "PredefinedBackend", "DefaultBackendType", DefaultBackendType_, PredefinedBackendId_, DefaultPredefinedBackend_, PredefinedBackend_, PredefinedBackendAlias_, Language, Writer );
 ERRErr
 ERREnd
 ERREpilog

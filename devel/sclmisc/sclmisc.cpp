@@ -629,7 +629,7 @@ static void GetPluginFeature_(
 
 	Entry.Root = GetRegistry().Search( Path, Level );
 
-	if ( Entry.Root == NULL )
+	if ( Entry.Root == E_NIL )
 		ERRFwk();
 
 	Entry.Registry = &GetRegistry().GetRegistry( Level );

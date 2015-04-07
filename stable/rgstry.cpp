@@ -1131,14 +1131,20 @@ ERREpilog
 }
 #endif
 
+static value Empty_;
+
+const value_ &rgstry::Empty_( void )
+{
+	return ::Empty_;
+}
+
 const value_ &rgstry::multi_level_registry_::GetValue(
 	const str::string_ &PathString,
 	bso::bool__ *Missing,
 	buffer &Buffer,
 	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 {
-	static value Empty;
-	const value_ *Result = &Empty;
+	const value_ *Result = &::Empty_;
 ERRProlog
 	level__ Level = E_NIL;
 	path Path;

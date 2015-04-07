@@ -41,7 +41,7 @@
 
 # include <stdarg.h>
 
-# define PLGNCORE_SHARED_DATA_VERSION	"3"
+# define PLGNCORE_SHARED_DATA_VERSION	"4"
 
 # define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
 # define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
@@ -56,7 +56,6 @@ namespace plgncore {
 		bso::size__ ControlValue;
 		err::err___ *ERRError;
 		sclerror::error___ *SCLError;
-		const char *Directory;
 		rgstry::entry__ Configuration;
 		rgstry::entry__ Locale;
 		void *UP;				// A la discrétion de l'utilisateur.
@@ -65,7 +64,6 @@ namespace plgncore {
 			Version = NULL;
 			ERRError = NULL;
 			SCLError = NULL;
-			Directory = NULL;
 			UP = NULL;
 			Configuration.reset( P );
 			Locale.reset( P );
@@ -74,17 +72,15 @@ namespace plgncore {
 		data__(
 			err::err___ *ERRError,
 			sclerror::error___ *SCLError,
-			const char *Directory,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
 			void *UP = NULL )
 		{
-			Init( ERRError, SCLError, Directory, Configuration, Locale, UP );
+			Init( ERRError, SCLError, Configuration, Locale, UP );
 		}
 		void Init(
 			err::err___ *ERRError,
 			sclerror::error___ *SCLError,
-			const char *Directory,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
 			void *UP = NULL )
@@ -93,7 +89,6 @@ namespace plgncore {
 			ControlValue = Control();
 			this->ERRError = ERRError;
 			this->SCLError = SCLError;
-			this->Directory = Directory;
 			this->Configuration.Init( Configuration );
 			this->Locale.Init( Locale );
 			this->UP = UP;

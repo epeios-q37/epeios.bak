@@ -74,9 +74,6 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	if ( Data->ControlValue != plgncore::data__::Control() )
 		ERRFwk();
 
-	if ( Data->Directory == NULL )
-		ERRFwk();
-
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( Data->ERRError, Data->SCLError, Data->Configuration, Data->Locale );
 }
