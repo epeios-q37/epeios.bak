@@ -11,6 +11,15 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 
+2015-04-08 :
+- BSO :
+	# The size of the types were incorrect under Posix in 64 bits.
+	- Use of '[u]int[8|16|32|64]_t'
+- DTE, TME :
+	- Fixing some issues due to the changes in 'BSO'.
+- DTFPTB :
+	- Fixing issue due to changes in 'BSO'.
+
 2015-04-07 :
 - DLBRRY :
 	* For 'Linux" and 'Mac OS', to mimic 'Window' behavior, the correct prefix and extension is added to the library filename when missing.

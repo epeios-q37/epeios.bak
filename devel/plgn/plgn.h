@@ -44,12 +44,6 @@
 # include "sclerror.h"
 
 namespace plgn {
-
-	struct param__
-	{
-
-	};
-
 	template <typename plugin> class retriever___
 	{
 	private:

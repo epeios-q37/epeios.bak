@@ -63,99 +63,48 @@ namespace bso {
 	BSO__INT_MIN_MAX_BDEF( type, type, affix, U##affix)
 
 
-	//d Maximal value of a 'sbyte__'.
-	#define BSO_S8_MAX		SCHAR_MAX
-	//d Minimal value of a 'sbyte__'.
-	#define BSO_S8_MIN		SCHAR_MIN
-	//d Size, in bit, of a 'sbyte__'.
-//	#define BSO_S8_SIZE		1
+	#define BSO_S8_MAX		INT8_MAX
+	#define BSO_S8_MIN		INT8_MIN
+	typedef int8_t	s8__;
 
-	//t Signed byte.
-	typedef signed char	s8__;
-
-
-	//d Maximal value of a 'ubyte__'.
-	#define BSO_U8_MAX		UCHAR_MAX
-	//d Minimal value of a 'ubyte__'.
+	#define BSO_U8_MAX		UINT8_MAX
 	#define BSO_U8_MIN		0
-	//d Size, in bit, of a 'ubyte__'.
-//	#define BSO_U8_SIZE		1
-
-	//t Unsigned byte.
 	typedef unsigned char u8__;
 
-	BSO__INT_MIN_MAX_BDEF( 8, 8, SCHAR, UCHAR );
+	BSO__INT_MIN_MAX_DEF( 8, INT8 );
 
 
-	//d Maximal value of a 'sshort__'.
-	#define BSO_S16_MAX		SHRT_MAX
-	//d Minimal value of a 'sshort__'.
-	#define BSO_S16_MIN		SHRT_MIN
-	//d Size, in bit, of a 'sshort__'.
-//	#define BSO_S16_SIZE	2
+	#define BSO_S16_MAX		INT16_MAX
+	#define BSO_S16_MIN		INT16_MIN
+	typedef int16_t s16__;
 
-	// Signed short.
-	typedef signed short s16__;
-
-	
-	//d Maximal value of a 'ushort__'.
-	#define BSO_U16_MAX		USHRT_MAX
-	//d Minimal value of a 'ushort__'.
+	#define BSO_U16_MAX		UINT16_MAX
 	#define BSO_U16_MIN		0
-	//d Size, in bit, of a 'ushort__'.
-//	#define BSO_U16_SIZE	2
+	typedef uint16_t u16__;
 
-	//t Unsigned short
-	typedef unsigned short u16__;
-
-	BSO__INT_MIN_MAX_DEF( 16, SHRT );
+	BSO__INT_MIN_MAX_DEF( 16, INT16 );
 
 
-	//d Maximal value of a 'slong__'.
-	#define BSO_S32_MAX		LONG_MAX
-	//d Minimal value of a 'slong__'.
-	#define BSO_S32_MIN		LONG_MIN
-	//d Size, in bit, of a 'slong__'.
-//	#define BSO_S32_SIZE	4
+	#define BSO_S32_MAX		INT32_MAX
+	#define BSO_S32_MIN		INT32_MIN
+	typedef int32_t s32__;
 
-	//t Signed long.
-	typedef signed long s32__;
-
-
-	//d Maximal value of a 'ulong__'.
-	#define BSO_U32_MAX	ULONG_MAX
-	//d Minimal value of a 'ulong__'.
+	#define BSO_U32_MAX		UINT32_MAX
 	#define BSO_U32_MIN   0
-	//d Size, in bit, of a 'ulong__'.
-//	#define BSO_U32_SIZE	4
+	typedef uint32_t u32__;
 
-	//t Unsigned long.
-	typedef unsigned long u32__;
-
-	BSO__INT_MIN_MAX_DEF( 32, LONG );
+	BSO__INT_MIN_MAX_DEF( 32, INT32 );
 
 
-	//d Maximal value of a 'sllong__'.
-	#define BSO_S64_MAX		LLONG_MAX
-	//d Minimal value of a 'sllong__'.
-	#define BSO_S64_MIN		LLONG_MIN
-	//d Size, in bit, of a 'slong__'.
-//	#define BSO_S64_SIZE	8
+	#define BSO_S64_MAX		INT64_MAX
+	#define BSO_S64_MIN		INT64_MIN
+	typedef int64_t s64__;
 
-	//t Signed long.
-	typedef signed long long s64__;
-
-	//d Maximal value of a 'ullong__'.
-	#define BSO_U64_MAX		ULLONG_MAX
-	//d Minimal value of a 'ullong__'.
+	#define BSO_U64_MAX		UINT64_MAX
 	#define BSO_U64_MIN		0
-	//d Size, in bit, of a 'ullong__'.
-//	#define BSO_U64_SIZE	8
+	typedef uint64_t u64__;
 
-	//t Unsigned long.
-	typedef unsigned long long u64__;
-
-	BSO__INT_MIN_MAX_DEF( 64, LLONG );
+	BSO__INT_MIN_MAX_DEF( 64, INT64 );
 
 
 # define BSO_SIZE_MAX	((size_t)-1)
@@ -260,7 +209,7 @@ namespace bso {
 		bso::u32__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%lu", Value );
+		sprintf( Buffer.Datum, "%u", Value );
 
 		return Buffer.Datum;
 	}
@@ -393,7 +342,7 @@ namespace bso {
 		s32__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%li", Value );
+		sprintf( Buffer.Datum, "%i", Value );
 
 		return Buffer.Datum;
 	}
@@ -498,7 +447,7 @@ namespace bso {
 	}
 #endif
 
-# if !defined( CPE_INT64 ) && !defined( CPE_XCODE ) // Sinon conflit !
+# if !defined( CPE_INT64 ) && !defined( CPE_XCODE ) && 0 // Sinon conflit ! Obsolete ?
 	inline const char *Convert(
 		size__ Value,
 		integer_buffer__ &Buffer )

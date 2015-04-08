@@ -145,7 +145,7 @@ namespace tme {
 
 			return IsSet();
 		}
-		operator unsigned long( void ) const
+		operator raw_time__( void ) const
 		{
 			return _Raw;
 		}
