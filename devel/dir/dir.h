@@ -59,7 +59,7 @@ extern class ttr_tutor &DIRTutor;
 #	include <windows.h>
 # define DIR_PATH_MAX_SIZE	MAX_PATH
 #elif defined( DIR__POSIX )
-# ifdef CPE__MAC
+# ifdef CPE_XCODE
 #  include <mach-o/dyld.h>
 #  include <sys/param.h>
 # endif
@@ -97,7 +97,7 @@ namespace dir {
 		return fnm::GetLocation( FileName, Dir );
 #endif
 #ifdef DIR__POSIX
-# ifdef CPE__MAC
+# ifdef CPE_XCODE
 		char Filename[MAXPATHLEN];
 		uint32_t Size = sizeof( Filename );
 		switch ( _NSGetExecutablePath( Filename, &Size ) ) {

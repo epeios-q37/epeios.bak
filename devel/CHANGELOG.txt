@@ -13,6 +13,8 @@ Meaning of list markers (2nd level):
 2015-04-09 :
 - BCH, CTN, LSTBCH, LSTCTN, UYS :
 	- Adaptation to chnages in 'FLS'.
+- DIR :
+	# Old 'CPE__MAC' replaced by new 'CPE_XCODE'.
 - DTFPTB :
 	- Fixing 'Xcode' issues.
 - FLS :
