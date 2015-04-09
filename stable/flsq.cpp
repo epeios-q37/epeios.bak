@@ -19,14 +19,14 @@
 
 #define FLS__COMPILATION
 
-#include "fls.h"
+#include "flsq.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-using namespace fls;
+using namespace flsq;
 
 #include "lstbch.h"
 #include "que.h"
@@ -37,7 +37,7 @@ using namespace fls;
 #	include "mtk.h"
 #endif
 
-sdr::size__ fls::MaxFileAmount = FLS__MAX_FILE_AMOUNT;
+sdr::size__ flsq::MaxFileAmount = FLSQ__MAX_FILE_AMOUNT;
 
 #ifdef FLS__MT
 static mtx::mutex_handler__ Mutex_;
@@ -78,7 +78,7 @@ struct _data__ {
 		ToFlush = false;
 #endif
 		File = NULL;
-		ID = FLS_UNDEFINED_ID;
+		ID = Undefined;
 	}
 };
 
@@ -90,9 +90,9 @@ E_AUTO( _ids );
 
 static _ids	IDs_;
 
-id__ fls::GetId( void )
+id__ flsq::GetId( void )
 {
-	id__ ID = FLS_UNDEFINED_ID;
+	id__ ID = Undefined;
 
 	Lock_();
 
@@ -103,7 +103,7 @@ id__ fls::GetId( void )
 	return ID;
 }
 
-void fls::ReleaseId( id__ ID )
+void flsq::ReleaseId( id__ ID )
 {
 	Lock_();
 
@@ -112,7 +112,7 @@ void fls::ReleaseId( id__ ID )
 	Unlock_();
 }
 
-row__ fls::_Register(
+row__ flsq::_Register(
 	file_storage___ &FS,
 	id__ ID )
 {
@@ -137,7 +137,7 @@ row__ fls::_Register(
 	return Row;
 }
 
-void fls::_Unregister(
+void flsq::_Unregister(
 	row__ Row,
 	id__ ID )
 {
@@ -243,7 +243,7 @@ inline static void TouchFlusher_( bso::bool__ ToFlush )	// Indique au 'flusher' 
 }
 
 
-void fls::_ReportFileUsing(
+void flsq::_ReportFileUsing(
 	row__ Row,
 	bso::bool__ ToFlush )
 {
@@ -266,7 +266,7 @@ void fls::_ReportFileUsing(
 
 	if ( Queue_.IsMember( Row ) )
 		Queue_.Delete( Row );
-	else if ( Queue_.Amount() >= FLS__MAX_FILE_AMOUNT ) {
+	else if ( Queue_.Amount() >= FLSQ__MAX_FILE_AMOUNT ) {
 		List_( Queue_.Tail() ).File->ReleaseFile( false );
 		Queue_.Delete( Queue_.Tail() );
 	}
@@ -283,7 +283,7 @@ void fls::_ReportFileUsing(
 	Unlock_();
 }
 
-void fls::_ReportFileClosing( row__ Row )
+void flsq::_ReportFileClosing( row__ Row )
 {
 	Lock_();
 
@@ -321,7 +321,7 @@ static void _Release( const bch::E_BUNCH_( row__ ) &Rows )
 	}
 }
 
-void fls::ReleaseFiles( id__ ID )
+void flsq::ReleaseFiles( id__ ID )
 {
 ERRProlog
 	bch::E_BUNCH( row__ ) Rows;
@@ -340,7 +340,7 @@ ERREpilog
 }
 
 
-void fls::ReleaseInactiveFiles_(
+void flsq::ReleaseInactiveFiles_(
 	time_t Delay,
 	bso::uint__ MaxAmount )
 {
@@ -391,7 +391,7 @@ public:
 		Queue_.Init();
 		IDs_.Init();
 
-		fls::MaxFileAmount = FLS__MAX_FILE_AMOUNT;
+		flsq::MaxFileAmount = FLSQ__MAX_FILE_AMOUNT;
 
 #ifdef FLS__MT
 		Mutex_ = mtx::Create( mtx::mProtecting );

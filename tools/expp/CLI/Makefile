@@ -270,6 +270,7 @@ endif
 
 ifeq ("$(os)","$(MacOS)")
 
+	co += -std=gnu++11
 	co += -DDARWIN
 	
 	mods += $(pmods)

@@ -10,6 +10,19 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-04-09 :
+- BCH, CTN, LSTBCH, LSTCTN, UYS :
+	- Adaptation to chnages in 'FLS'.
+- DTFPTB :
+	- Fixing 'Xcode' issues.
+- FLS :
+	- Renaming to 'FLSQ' due to conflict with 'Xcode' headers.
+- STR, XPP :
+	- Fixing some 'Xcode' issues.
+- STRMRG :
+	# Fixing bad parameter name issues.
+- STRNG
+	* Due to changes to 'FLS', removing the path for 'Xcode'.
 
 2015-04-08 :
 - BSO :

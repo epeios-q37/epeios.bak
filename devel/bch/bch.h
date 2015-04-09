@@ -38,7 +38,7 @@
 # include "tys.h"
 # include "aem.h"
 # include "dtfptb.h"
-# include "fls.h"
+# include "flsq.h"
 
 # ifndef IAS__INC
 #  undef BCH__INC

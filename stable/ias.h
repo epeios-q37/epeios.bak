@@ -504,7 +504,7 @@ namespace ias {
 			const hook_filenames___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			fls::id__ ID )
+			flsq::id__ ID )
 		{
 			_Descriptors.Init( Filenames.Descriptors, Mode, Behavior, ID );
 			_Storage.Init( Filenames.Storage, Mode, Behavior, ID );

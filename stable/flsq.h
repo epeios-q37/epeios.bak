@@ -1,7 +1,7 @@
 /*
-	'fls.h' by Claude SIMON (http://zeusw.org/).
+	'flsq.h' by Claude SIMON (http://zeusw.org/).
 
-	'fls' is part of the Epeios framework.
+	'flsq' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,13 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FLS__INC
-#define FLS__INC
+#ifndef FLSQ__INC
+# define FLSQ__INC
 
-#define FLS_NAME		"FLS"
+# define FLSQ_NAME		"FLSQ"
 
-#if defined( E_DEBUG ) && !defined( FLS_NODBG )
-#define FLS_DBG
+#if defined( E_DEBUG ) && !defined( FLSQ_NODBG )
+#define FLSQ_DBG
 #endif
 
 /******************************************************************************/
@@ -42,33 +42,33 @@
 # include "fil.h"
 
 # if defined( CPE_MSVC ) || defined ( CPE_MINGW ) || defined ( CPE_CYGWIN )
-#  define FLS_DEFAULT_MAX_FILE_AMOUNT	1000
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	1000
 # elif defined ( CPE_LINUX )
-#  define FLS_DEFAULT_MAX_FILE_AMOUNT	800	// Linux, par défaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	800	// Linux, par défaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
 # elif defined ( CPE_XCODE )
-#  define FLS_DEFAULT_MAX_FILE_AMOUNT	200	// Mac, par défaut, ne peut ouvrir que 256 descripteurs (socket comprises).
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	200	// Mac, par défaut, ne peut ouvrir que 256 descripteurs (socket comprises).
 # else
 #  error "Unimplemented target !"
 # endif
 
 
-#ifdef FLS_MAX_FILE_AMOUNT
-#	define FLS__MAX_FILE_AMOUNT	FLS_MAX_FILE_AMOUNT
+#ifdef FLSQ_MAX_FILE_AMOUNT
+#	define FLSQ__MAX_FILE_AMOUNT	FLSQ_MAX_FILE_AMOUNT
 #else
-#	define FLS__MAX_FILE_AMOUNT	FLS_DEFAULT_MAX_FILE_AMOUNT
+#	define FLSQ__MAX_FILE_AMOUNT	FLSQ_DEFAULT_MAX_FILE_AMOUNT
 #endif
 
 
-#ifndef FLS_NO_MT
+#ifndef FLSQ_NO_MT
 #	ifdef CPE__MT
-#		define FLS__MT
+#		define FLSQ__MT
 #	endif
 #endif
 
 
-#ifndef FLS_NO_AUTOFLUSH
-#	ifdef FLS__MT
-#		define FLS__AUTOFLUSH
+#ifndef FLSQ_NO_AUTOFLUSH
+#	ifdef FLSQ__MT
+#		define FLSQ__AUTOFLUSH
 #	endif
 #endif
 
@@ -77,7 +77,7 @@
 # endif
 
 
-namespace fls {
+namespace flsq {
 	extern fdr::size__ MaxFileAmount;
 
 	typedef bso::size__ position__;
@@ -85,7 +85,7 @@ namespace fls {
 
 	// Identifiant sous lequel est regroupé un ensemble de fichiers.
 	E_ROW( id__ );
-	#define FLS_UNDEFINED_ID	E_NIL
+	E_CDEF( id__, Undefined, E_NIL );
 
 	id__ GetId( void );
 
@@ -104,18 +104,18 @@ namespace fls {
 	private:
 		iop::descriptor__ _D;
 		_io__ _Core;
-#ifdef FLS__MT
+#ifdef FLSQ__MT
 		mtx::mutex_handler__ _Mutex;
 #endif
 		void _Lock( void )
 		{
-#ifdef FLS__MT
+#ifdef FLSQ__MT
 			mtx::Lock( _Mutex );
 #endif
 		}
 		void _Unlock( void )
 		{
-#ifdef FLS__MT
+#ifdef FLSQ__MT
 			mtx::Unlock( _Mutex );
 #endif
 		}
@@ -125,14 +125,14 @@ namespace fls {
 			if ( P ) {
 				if ( _D != IOP_UNDEFINED_DESCRIPTOR )
 					fil::Close( _D );
-#ifdef FLS__MT
+#ifdef FLSQ__MT
 				if ( _Mutex != MTX_INVALID_HANDLER )
 					mtx::Delete( _Mutex );
 #endif
 			}
 
 			_D = IOP_UNDEFINED_DESCRIPTOR;
-#ifdef FLS__MT
+#ifdef FLSQ__MT
 			_Mutex = MTX_INVALID_HANDLER;
 #endif
 		}
@@ -151,7 +151,7 @@ namespace fls {
 		{
 			reset();
 
-#ifdef FLS__MT
+#ifdef FLSQ__MT
 			_Mutex = mtx::Create( mtx::mProtecting );
 #endif
 
@@ -434,14 +434,14 @@ namespace fls {
 			Temoin_.Mode = fil::mReadOnly;
 			TailleFichier_ = 0;
 			_Row = E_NIL;
-			_ID = FLS_UNDEFINED_ID;
+			_ID = Undefined;
 			_EpochTimeStamp = 0;
 		}
 		void Init(
 			id__ ID,
 			const fnm::name___ &Name,
 			fil::mode__ Mode = fil::mReadWrite,
-			fls::creation Creation = fls::cFirstUse )
+			flsq::creation Creation = flsq::cFirstUse )
 		{
 			if ( Name.Amount() != 0 )
 			{
@@ -476,12 +476,12 @@ namespace fls {
 
 			Temoin_.Mode = Mode;
 
-			if ( Creation == fls::cNow  )
+			if ( Creation == flsq::cNow  )
 				if ( Mode == fil::mReadWrite )
 					Open_( false );
 				else
 					ERRPrm();
-			else if ( Creation != fls::cFirstUse )
+			else if ( Creation != flsq::cFirstUse )
 				ERRPrm();
 		}
 			// initialise l'objet avec le nom 'NomFichier'; si NULL, création d'un nom
@@ -644,7 +644,7 @@ namespace fls {
 			id__ ID,
 			const fnm::name___ &FileName = (char *)NULL,
 			fil::mode__ Mode = fil::mReadWrite,
-			fls::creation Creation = fls::cFirstUse )
+			flsq::creation Creation = flsq::cFirstUse )
 		{
 			file_storage___::Init( ID, FileName, Mode, Creation );
 			E_SDRIVER__::Init();

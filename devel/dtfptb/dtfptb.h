@@ -123,7 +123,7 @@ namespace dtfptb {
 		return Int = (i)_FGetInt( Flow, sizeof( Int ) );
 	}
 
-# if !defined( CPE_X64 ) && !defined( CPE_XCODE )	// Sinon ambigüité !
+# ifdef CPE_XCODE
 	inline void FPut(
 		bso::size__ Size,
 		flw::oflow__ &Flow )
@@ -156,7 +156,7 @@ namespace dtfptb {
 		bso::sint__ SInt,
 		flw::oflow__ &Flow );
 
-# if !defined( CPE_X64 ) && !defined( CPE_XCODE ) && 0	// Sinon ambigüité ! Obsolete ?
+# ifdef CPE_XCODE
 	inline bso::size__ VGet(
 		flw::iflow__ &Flow,
 		bso::size__ &Size )

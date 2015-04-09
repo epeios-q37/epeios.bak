@@ -194,7 +194,7 @@ namespace strmrg {
 	struct tokens__ {
 		char
 			Separator,	// Caractère séparant les différentes entrées.
-			Begin,		// Caractère marquantr le début d'un gruope.
+			Begin,		// Caractère marquant le début d'un groupe.
 			End,		// Caractère marquant la fin d'un groupe.
 			Escape;		// Caratère d'échappement.
 		void reset( bso::bool__ = true )
@@ -205,22 +205,24 @@ namespace strmrg {
 			Escape = DefaultEscapeToken;
 		}
 		E_CDTOR( tokens__ );
-		tokens__( char Entry )
+		tokens__( char Separator )
 		{
 			reset( false );
 
-			Init( Entry );
+			Init( Separator );
 		}
 		tokens__(
-			char Entry,
-			char Begin,
+			char Separator,
+			char Begin, 
 			char End,
 			char Escape = DefaultEscapeToken )
 		{
-			Init( Entry, Begin, End, Escape );
+			reset( false );
+
+			Init( Separator, Begin, End, Escape );
 		}
 		void Init(
-			char Entry,
+			char Separator,
 			char Begin,
 			char End,
 			char Escape = DefaultEscapeToken )
@@ -230,9 +232,9 @@ namespace strmrg {
 			this->End = End;
 			this->Escape = Escape;
 		}
-		void Init( char Entry )
+		void Init( char Separator )
 		{
-			Init( Entry, DefaultBeginToken, DefaultEndToken );
+			Init( Separator, DefaultBeginToken, DefaultEndToken );
 		}
 	};
 

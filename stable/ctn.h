@@ -354,7 +354,7 @@ namespace ctn {
 			const hook_filenames___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			fls::id__ ID )
+			flsq::id__ ID )
 		{
 			_Statics.Init( Filenames.Statics, Mode, Behavior, ID );
 			_Dynamics.Init( Filenames.Dynamics, Mode, Behavior, ID );

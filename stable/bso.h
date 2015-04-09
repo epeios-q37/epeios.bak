@@ -447,7 +447,7 @@ namespace bso {
 	}
 #endif
 
-# if !defined( CPE_INT64 ) && !defined( CPE_XCODE ) && 0 // Sinon conflit ! Obsolete ?
+# ifdef CPE_XCODE
 	inline const char *Convert(
 		size__ Value,
 		integer_buffer__ &Buffer )
