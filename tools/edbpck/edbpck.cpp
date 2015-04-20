@@ -131,7 +131,7 @@ ERRBegin
 	Tags.Init();
 	Tags.Append( Name );
 
-	Limit = sclrgstry::GetMandatoryUInt( rgstry::tentry__( TaggedRandomLimit, Tags ), RAND_MAX );
+	Limit = sclmisc::MGetUInt( rgstry::tentry__( TaggedRandomLimit, Tags ), RAND_MAX );
 ERRErr
 ERREnd
 ERREpilog
@@ -168,7 +168,7 @@ ERRProlog
 	str::strings Names;
 ERRBegin
 	Names.Init();
-	sclrgstry::GetValues( RandomName, Names );
+	sclmisc::GetValues( RandomName, Names );
 
 	GetRandoms_( Names, Randoms );
 ERRErr
@@ -1487,9 +1487,9 @@ ERRProlog
 ERRBegin
 	if ( ( Command.Amount() != 0 ) && ( OutputFileName.Amount() != 0 ) ) {
 		CompleteCommand.Init( Command );
-		str::ReplaceShortTag( CompleteCommand, 1, OutputFileName, '$' );
-		str::ReplaceShortTag( CompleteCommand, 2, str::string( bso::Convert( Id ) ), '$' );
-		str::ReplaceShortTag( CompleteCommand, 3, Label, '$' );
+		tagsbs::SubstituteShortTag( CompleteCommand, 1, OutputFileName, '$' );
+		tagsbs::SubstituteShortTag( CompleteCommand, 2, str::string( bso::Convert( Id ) ), '$' );
+		tagsbs::SubstituteShortTag( CompleteCommand, 3, Label, '$' );
 		COut << "Launching '" << CompleteCommand << "\'." << txf::nl << txf::commit;
 		if ( tol::System( CompleteCommand.Convert( Buffer ) ) == -1 )
 			ERRLbr();
@@ -1656,18 +1656,18 @@ ERRBegin
 	}
 
 	DataFileName.Init();
-	if ( !sclrgstry::GetValue( registry::Data, DataFileName ) )
+	if ( !sclmisc::BGetValue( registry::Data, DataFileName ) )
 		sclmisc::ReportAndAbort( _( DataFileNotSpecifiedError ) );
 
 	OutputFileName.Init();
-	if ( !sclrgstry::GetValue( Output, OutputFileName ) )
+	if ( !sclmisc::BGetValue( Output, OutputFileName ) )
 		sclmisc::ReportAndAbort( _( OutputFileNotSpecifiedError ) );
 
 	XSLFileName.Init();
-	sclrgstry::GetValue( XSL, XSLFileName );
+	sclmisc::OGetValue( XSL, XSLFileName );
 
 	ContextFileName.Init();
-	if ( !sclrgstry::GetValue( registry::Context, ContextFileName ) )
+	if ( !sclmisc::BGetValue( registry::Context, ContextFileName ) )
 		sclmisc::ReportAndAbort( _( ContextFileNotSpecifiedError ) );
 
 	Context.Init();
@@ -1676,13 +1676,13 @@ ERRBegin
 	Data.Init();
 	RetrieveData_( DataFileName.Convert( Buffer ), Data );
 
-	SessionMaxDuration = sclrgstry::GetUInt( registry::SessionMaxDuration, 0 );
+	SessionMaxDuration = sclmisc::OGetUInt( registry::SessionMaxDuration, 0 );
 
 	Label.Init();
 	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName );
 
 	Command.Init();
-	sclrgstry::GetValue( registry::Command, Command );
+	sclmisc::OGetValue( registry::Command, Command );
 
 	DumpContext_( Context, ContextFileName.Convert( Buffer ) );
 
@@ -1692,16 +1692,19 @@ ERREnd
 ERREpilog
 }
 
-void scltool::SCLTOOLMain( const str::string_ &Command )
+int scltool::SCLTOOLMain(
+	const str::string_ &Command,
+	const oddities__ &Oddities )
 {
 	if ( Command == "Process" )
-		Process_( sclrgstry::GetUInt( registry::Id, UNDEFINED ) );
+		Process_( sclmisc::MGetUInt( registry::Id, UNDEFINED ) );
 	else if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense();
 	else
 		ERRFwk();
+	return EXIT_SUCCESS;
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;

@@ -241,13 +241,13 @@ namespace tsrcpr {
 			bso::bool__ Long );
 	};
 			
-	//c Une définition de type (typedef).
+	//c Une dfinition de type (typedef).
 	class typedef_
 	{
 	public:
 		//o Le nom du type.
 		str::string_ Name;
-		//o Le commentaire associé.
+		//o Le commentaire associ.
 		str::string_ Commentaire;
 		struct s
 		{
@@ -283,7 +283,7 @@ namespace tsrcpr {
 			Commentaire.Init();
 		}
 		/*f Analyse 'Stream' sachant que la doc. se situe dans un commentaire long
-		si 'Long' est à vrai */
+		si 'Long' est  vrai */
 		void Analyze(
 			xtf::extended_text_iflow___ &IStream,
 			bso::bool__ Long );
@@ -311,12 +311,12 @@ namespace tsrcpr {
 	class define_
 	{
 	private:
-		// Analyse des paramètres pour le stream 'Stream'.
+		// Analyse des paramtres pour le stream 'Stream'.
 		void AnalyserArguments_( xtf::extended_text_iflow___ &Flot );
 	public:
 		//o Le nom du define.
 		str::string_ Name;
-		//o Le commentaire associé.
+		//o Le commentaire associ.
 		str::string_ Commentaire;
 		//o Les parametres.
 		table_<str::string_> Arguments;
@@ -360,7 +360,7 @@ namespace tsrcpr {
 			Arguments.Init();
 		}
 		/*f Analyse 'Stream' sachant que la doc. se situe dans un commentaire long
-		si 'Long' est à vrai */
+		si 'Long' est  vrai */
 		void Analyze(
 			xtf::extended_text_iflow___ &Flot,
 			bso::bool__ Long );
@@ -421,7 +421,7 @@ namespace tsrcpr {
 			Alias.Init();
 		}
 		/*f Analyse 'Stream' sachant que la doc. se situe dans un commentaire long
-		si 'Long' est à vrai */
+		si 'Long' est  vrai */
 		void Analyze(
 			xtf::extended_text_iflow___ &Flot,
 			bso::bool__ Long );
@@ -437,7 +437,7 @@ namespace tsrcpr {
 
 
 
-	//c Un paramètre.
+	//c Un paramtre.
 	class parametre_
 	{
 	public:
@@ -452,7 +452,7 @@ namespace tsrcpr {
 		str::string_ Type;
 		//o Le nom.
 		str::string_ Name;
-		//o La valeur par défaut.
+		//o La valeur par dfaut.
 		str::string_ Valeur;
 		parametre_( s &S )
 		: Type( S.Type ),
@@ -512,7 +512,7 @@ namespace tsrcpr {
 		return Flot >> end;
 	}
 	*/
-	//c Un argument de déclaration de template.
+	//c Un argument de dclaration de template.
 	class argument_
 	{
 	public:
@@ -575,11 +575,11 @@ namespace tsrcpr {
 	}
 	*/
 
-	//c Une liste de déclaration de templates
+	//c Une liste de dclaration de templates
 	class template_
 	{
 	public:
-		//o La liste des déclarations de templates.
+		//o La liste des dclarations de templates.
 		table_<argument_> Arguments;
 		struct s
 		{
@@ -621,7 +621,7 @@ namespace tsrcpr {
 	*/
 
 
-	//c Une méthode.
+	//c Une mthode.
 	class methode_
 	{
 	private:
@@ -634,7 +634,7 @@ namespace tsrcpr {
 				Commentaire;
 			table_<parametre_>::s Parametres;
 		};
-		//o Les paramètres.
+		//o Les paramtres.
 		table_<parametre_> Parametres;
 		//o Le type.
 		str::string_ Type;
@@ -662,7 +662,7 @@ namespace tsrcpr {
 			Parametres.Init();
 			Commentaire.Init();
 		}
-		/*f Analyse 'Stream' sachant qu'il est précédé par un commentaire long
+		/*f Analyse 'Stream' sachant qu'il est prcd par un commentaire long
 		si 'Long' == true. */
 		void Analyze(
 			xtf::extended_text_iflow___ &Flot,
@@ -717,9 +717,9 @@ namespace tsrcpr {
 			table_<parametre_>::s Parametres;
 			template_::s Template;
 		};
-		//o La déclaration de template
+		//o La dclaration de template
 		template_ Template;
-		//o Les paramètres.
+		//o Les paramtres.
 		table_<parametre_> Parametres;
 		//o Le type.
 		str::string_ Type;
@@ -750,7 +750,7 @@ namespace tsrcpr {
 			Parametres.Init();
 			Commentaire.Init();
 		}
-		/*f Analyse 'Stream' sachant qu'il est précédé par un commentaire long
+		/*f Analyse 'Stream' sachant qu'il est prcd par un commentaire long
 		si 'Long' == true. */
 		void Analyze(
 			xtf::extended_text_iflow___ &Flot,
@@ -829,7 +829,7 @@ namespace tsrcpr {
 			Name.Init();
 			Commentaire.Init();
 		}
-		/*f Analyse le contenu de 'Stream' sachant qu'il est précéde
+		/*f Analyse le contenu de 'Stream' sachant qu'il est prcde
 		par un commentaire long si 'Long', court sinon. */
 		void Analyze(
 			xtf::extended_text_iflow___ &Flot,
@@ -888,13 +888,13 @@ namespace tsrcpr {
 			template_::s Template;
 			friend class classe_;
 		};
-		//o Les méthodes.
+		//o Les mthodes.
 		table_<methode_> Methodes;
-		//o Les méthodes virtuelles.
+		//o Les mthodes virtuelles.
 		table_<methode_> Virtuels;
 		//o Les objets.
 		table_<objet_> Objets;
-		//o Les objets à accés restreints.
+		//o Les objets  accs restreints.
 		table_<objet_> Restreints;
 		//o Bases classes.
 		table_<str::string_> Bases;
@@ -904,7 +904,7 @@ namespace tsrcpr {
 		str::string_ Name;
 		//o Le type ('struct' ou  'class')
 		str::string_ Type;
-		//o Les déclarations de templates.
+		//o Les dclarations de templates.
 		template_ Template;
 		classe_( s &S )
 		: Methodes( S.Methodes ),
@@ -979,7 +979,7 @@ namespace tsrcpr {
 	E_AUTO( classe )
 
 	/*
-	//f Operateur d"entrée pour 'C'.
+	//f Operateur d"entre pour 'C'.
 	inline flw_ascii_iflow_ &operator >>(
 		flw_ascii_iflow_ &Flot,
 		classe_ &C )
@@ -1113,7 +1113,7 @@ namespace tsrcpr {
 	};
 
 	/*
-	//f Operateur d'entrée pour 'S'.
+	//f Operateur d'entre pour 'S'.
 	inline flw_ascii_iflow_ &operator >>(
 		flw_ascii_iflow_ &Flot,
 		source_ &S )

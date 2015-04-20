@@ -352,7 +352,7 @@ namespace bkdacc {
 
 			RetrieveBackendCommands_();
 		ERRErr
-			Channel_ = NULL;	// Pour éviter toute future tentative de communication avec le backend.
+			Channel_ = NULL;	// Pour viter toute future tentative de communication avec le backend.
 		ERREnd
 		ERREpilog
 			return Success;
@@ -449,7 +449,7 @@ namespace bkdacc {
 
 			return  Handle();	// NOTA : Always to 'true'.
 		}
-		// Génère une erreur utilisateur retournant le messahe 'Message'.
+		// Gnre une erreur utilisateur retournant le messahe 'Message'.
 		bkdrpl::reply__ ThrowUserDefinedError( const string_ &Message )
 		{
 			Internal_( bkdcmd::cThrowUserDefinedError );

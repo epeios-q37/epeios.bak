@@ -213,7 +213,7 @@ namespace bkdmng {
 		const char *Prefix_;
 		// Libelle du type de l'objet, du module.
 		const char *Name_;
-		// L'interface auquel le module est rattaché.
+		// L'interface auquel le module est rattach.
 		class backend *Backend_;
 		void _Clean( void );	// Permet l'effacement correct de chaque objet utilisateur.
 	protected:
@@ -221,7 +221,7 @@ namespace bkdmng {
 		virtual index__ BKDMNGNew( void )
 		{
 			ERRb();
-			return 0;	// Pour éviter un warning.
+			return 0;	// Pour viter un warning.
 		}
 		//v To delete the object with index 'Index'.
 		virtual void BKDMNGDelete( index__ Index )
@@ -232,13 +232,13 @@ namespace bkdmng {
 		virtual void *BKDMNGObject( index__ Index )
 		{
 			ERRb();
-			return NULL;	// Pour éviter un 'warning'
+			return NULL;	// Pour viter un 'warning'
 		}
 #if 0
 		//v To get the raw messages.
 		virtual void BKDMNGGetRawMessages( messages_ &Messages ) = 0;
 #endif
-		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
+		// Fonction appele pour traiter la requte 'Requete' pour l'objet d'index 'Index'.
 		virtual void Handle_(
 			index__ Index,
 			request_manager__ &Requete,
@@ -628,7 +628,7 @@ namespace bkdmng {
 		}
 	};
 
-	// Module maître, qui fait tout le boulot.
+	// Module matre, qui fait tout le boulot.
 	class master_module
 	: public untyped_module
 	{
@@ -649,7 +649,7 @@ namespace bkdmng {
 		//o All raw messages from all modules.
 		messages RawMessages;
 #endif
-		// Initialisation avec rattachement à l'interface 'Backend'.
+		// Initialisation avec rattachement  l'interface 'Backend'.
 		void Init( backend &Backend );
 	};
 
@@ -732,11 +732,11 @@ namespace bkdmng {
 		STR_BUFFER___ _Language;
 		lcl::rack__ _LocaleRack;
 		const char *_TargetLabel;
-		// Informations à propos du 'backend'.
+		// Informations  propos du 'backend'.
 		const char *_BackendInformations;
-		// Information à propos du publicateur (l'exécutable ou la bibliothèque) du 'backend'.
+		// Information  propos du publicateur (l'excutable ou la bibliothque) du 'backend'.
 		const char *_PublisherInformations;
-		// Retourne le module correspondant à 'IdType'.
+		// Retourne le module correspondant  'IdType'.
 		untyped_module &Module_( type__ IdType ) const
 		{
 			if ( IdType != BKDMNG_MASTER_TYPE )
@@ -744,7 +744,7 @@ namespace bkdmng {
 			else
 				return (untyped_module &)Master_;	// Not very happy about this conversion, 
 		}
-		// Retourne le module correspondant à 'IdObjet'.
+		// Retourne le module correspondant  'IdObjet'.
 		untyped_module &Module_( object__ IdObjet ) const
 		{
 			if ( IdObjet != BKDMNG_MASTER_OBJECT )
@@ -752,12 +752,12 @@ namespace bkdmng {
 			else
 				return (untyped_module &)Master_; // Not very happy about this conversion, 
 		}
-		// Retourne le type correpondant à l'objet d'indetificateur 'IdObjet'.
+		// Retourne le type correpondant  l'objet d'indetificateur 'IdObjet'.
 		type__ Type_( object__ IdObjet ) const
 		{
 			return Links.Type( IdObjet );
 		}
-		// Retourne l'indexcorrespondant à l'objet d'identificateur 'IdObjet'.
+		// Retourne l'indexcorrespondant  l'objet d'identificateur 'IdObjet'.
 		index__ Index_( object__ IdObjet ) const
 		{
 			return Links.Index( IdObjet );
@@ -780,17 +780,17 @@ namespace bkdmng {
 			_ClientOrigin = NULL;
 			_APIVersion = NULL;
 		}
-		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas êt emodifié.
+		// '[Backend|Publisher]Informations' ne sont PAS dupliqu. Leur contenu de doit pas t emodifi.
 		bso::bool__ Init(
-			const char *APIVersion,	// NON dupliqué.
+			const char *APIVersion,	// NON dupliqu.
 			const char *MessageLabel,
 			const char *URLLabel,
 			flw::ioflow__ &Flow,
-			const char *ClientOrigin,	// NON dupliqué.
+			const char *ClientOrigin,	// NON dupliqu.
 			const char *TargetLabel,
-			const lcl::locale_ &Locale,	// N'est pas dupliqué !
-			const char *BackendInformations,	// NON dupliqué.
-			const char *PublisherInformations )	// NON dupliqué.
+			const lcl::locale_ &Locale,	// N'est pas dupliqu !
+			const char *BackendInformations,	// NON dupliqu.
+			const char *PublisherInformations )	// NON dupliqu.
 		{
 			Master_.Init( *this );
 

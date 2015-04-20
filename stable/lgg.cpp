@@ -60,11 +60,11 @@ using namespace lgg;
 const char *lgg::LanguageNames[lgg::l_amount] = {
 	"raw",
 	"English",
-	"Français",
+	"Franais",
 	"Deutsch",
-	"Español",
+	"Espaol",
 	"Nederlands",
-	"Português"
+	"Portugus"
  };
 
 const char *lgg::LanguageLabels[lgg::l_amount] = {

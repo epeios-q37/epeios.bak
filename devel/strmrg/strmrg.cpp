@@ -45,7 +45,7 @@ ERREpilog
 	return Row;
 }
 
-// Prédéclaration.
+// Prdclaration.
 static void Append_(
 	const _irows_ &SourceRows,
 	const _items_ &SourceItems,
@@ -101,7 +101,7 @@ static void Append_(
 	const _strings_ &SourceStrings,
 	_irows_ &TargetRows,
 	_items_ &TargetItems,
-	_strings_ &TargetStrings )	// Récursif (paaaaas bien) !
+	_strings_ &TargetStrings )	// Rcursif (paaaaas bien) !
 {
 	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
 	row__ Row = SourceRows.First();
@@ -236,7 +236,7 @@ static void Merge_(
 	const _items_ &Items,
 	const _strings_ &Strings,
 	const tokens__ &Tokens,
-	flw::oflow__ &Flow )	// Récursif (paaas bien !) !
+	flw::oflow__ &Flow )	// Rcursif (paaas bien !) !
 {
 	ctn::E_CMITEMt( _item_, _irow__ ) Item;
 	ctn::E_CMITEMt( _string_, _srow__ ) String;
@@ -296,7 +296,7 @@ enum trace__ {
 bso::bool__ strmrg::Split(
 	xtf::extended_text_iflow__ &Flow,
 	table_ &Table,
-	const tokens__ &Tokens )	// Récursif !
+	const tokens__ &Tokens )	// Rcursif !
 {
 	bso::bool__ Success = true;
 ERRProlog

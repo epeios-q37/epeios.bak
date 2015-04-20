@@ -209,8 +209,8 @@ namespace lck {
 			bso::bool__ ReadWrite;
 			mtx::handler___ Mutex;
 		} _Core, &_Access;
-		/* Comme la volatibilité de l'objet en lui-même n'est pas interssante, mais uniquement celle de l'objet qu'il contrôle,
-		on utilise '_Access' pour pouvoir mettre toutes les méthodes en 'const'. */
+		/* Comme la volatibilit de l'objet en lui-mme n'est pas interssante, mais uniquement celle de l'objet qu'il contrle,
+		on utilise '_Access' pour pouvoir mettre toutes les mthodes en 'const'. */
 		void _Lock( void ) const
 		{
 			mtx::Lock( _Access.Mutex );
@@ -279,10 +279,10 @@ namespace lck {
 		}
 		control___ &operator =( const control___ &C )
 		{
-			// Pour des raisons de standardisation, car cet opérateur n'a pas de sens dans ce contexte.
+			// Pour des raisons de standardisation, car cet oprateur n'a pas de sens dans ce contexte.
 			ERRFbd();
 
-			return *this;	// Pour éviter un 'warning'.
+			return *this;	// Pour viter un 'warning'.
 		}
 		const object &GetReadOnly( void ) const
 		{

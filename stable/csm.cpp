@@ -224,12 +224,12 @@ ERRBegin
 		ERRs();
 	}
 		
-	/* Ce qui est écrit ci-dessous est faux. */
+	/* Ce qui est crit ci-dessous est faux. */
 
-	// Sous Windows, on ne passe jamais par là.
+	// Sous Windows, on ne passe jamais par l.
 
-	// Sous LINUX, on passe par là après déconnection du premier client.
-	// DS sera donc détruit; mais le délai devrait être suffisant pour que
+	// Sous LINUX, on passe par l aprs dconnection du premier client.
+	// DS sera donc dtruit; mais le dlai devrait tre suffisant pour que
 	// les processus 'Serveur_' et 'Client_' ai le temps d'en copier le contenu ...
 ERRErr
 ERREnd

@@ -81,7 +81,7 @@ using namespace dlbrry;
 
 
 # ifdef CPE_XCODE
-#  define PREFIX ""
+#  define PREFIX "lib"
 #  define EXT ".dylib"
 # else
 #  define PREFIX "lib"
@@ -181,7 +181,7 @@ bso::bool__ dlbrry::dynamic_library___::_UnloadLibrary( void  )
 		return false;
 #elif defined( TARGET_POSIX )
 	if ( dlclose( _LibraryHandler ) == -1 ) {
-		const char *Error = dlerror();	// Facilite le débogage.
+		const char *Error = dlerror();	// Facilite le dbogage.
 		return false;
 	}
 #else
@@ -192,7 +192,7 @@ bso::bool__ dlbrry::dynamic_library___::_UnloadLibrary( void  )
 	return true;
 }
 
-// 'MinGW' généère une erreur lorsque '(void *)' est absent, mais pas 'MSVC4'. On suppose donc que la conversion en 'void *' ne pose pas de problème.
+// 'MinGW' gnre une erreur lorsque '(void *)' est absent, mais pas 'MSVC4'. On suppose donc que la conversion en 'void *' ne pose pas de problme.
 #ifdef CPE_WIN
 # ifdef CPE_MINGW
 #  define FCAST	(void *)
@@ -214,7 +214,7 @@ void * dlbrry::dynamic_library___::GetFunction( const char *FunctionName )
 	Function = dlsym( _LibraryHandler, FunctionName );
 
 	if ( Function == NULL )
-		const char *Error = dlerror();	// Facilite le débogage.
+		const char *Error = dlerror();	// Facilite le dbogage.
 #else
 #	error
 #endif

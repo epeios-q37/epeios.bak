@@ -80,12 +80,12 @@ namespace str {
 	enum base__
 	: bso::u8__
 	{
-		bAuto = 0,	// Détermination automatique de la base (suivant le premier caractère).
-		b10 = 10,	// Base décimale.
-		b16 = 16,	// Base hexadécimale.
+		bAuto = 0,	// Dtermination automatique de la base (suivant le premier caractre).
+		b10 = 10,	// Base dcimale.
+		b16 = 16,	// Base hexadcimale.
 	};
 
-	class string_;	// Prédéclaration.
+	class string_;	// Prdclaration.
 
 	bso::u64__ _U64Conversion(
 		const class string_ &String,
@@ -234,7 +234,7 @@ namespace str {
 		void Replace(
 			char Old,
 			char New );
-		// Remplace la 'Position'ième occurence de 'Tag' par 'Value'. Retourne 'true' si succés, 'false' sinon.
+		// Remplace la 'Position'ime occurence de 'Tag' par 'Value'. Retourne 'true' si succs, 'false' sinon.
 		bso::bool__ Replace(
 			char Tag,
 			bso::uint__ Position,
@@ -247,7 +247,7 @@ namespace str {
 		sdr::row__ Search(
 			char C,
 			sdr::row__ Start = 0 ) const;
-		// NOTA : Les méthodes 'ToNumber'(...)' facilitent la mise en oeuvre de 'template's.
+		// NOTA : Les mthodes 'ToNumber'(...)' facilitent la mise en oeuvre de 'template's.
 #define STR_UNR( name, type, limit, casing )\
 	type To##name(\
 			sdr::row__ Begin,\

@@ -70,9 +70,9 @@ namespace amm {
 	/*
 	NOTA :
 	- Par 'FragmentSize', on entend : 
-		- pour les fragments occupés (used), la taille disponible pour les données, et non pas la taille totale occupée par le fragement,
+		- pour les fragments occups (used), la taille disponible pour les donnes, et non pas la taille totale occupe par le fragement,
 		- pour les fragments libres (free), la taille totale du fragment.
-	- Un 'descriptor__' pointe sur le début des données. Les métadonnées sot situés juste avant.
+	- Un 'descriptor__' pointe sur le dbut des donnes. Les mtadonnes sot situs juste avant.
 	*/		
 
 
@@ -87,38 +87,38 @@ namespace amm {
 		/*
 		Statut du fragment : 
 			- 0 : libre (free),
-			- 1 : occupé (used).
+			- 1 : occup (used).
 		*/
 		fpStatus,
 		/*
-		- Pour n'importe quel type de fragment (libre ou occupé), s'il est en première position, statut du fragment en dernière position :
-		- Pour un fragment occupé, s'il n'est pas en première position, statut de son prédecesseur :
+		- Pour n'importe quel type de fragment (libre ou occup), s'il est en premire position, statut du fragment en dernire position :
+		- Pour un fragment occup, s'il n'est pas en premire position, statut de son prdecesseur :
 			- 0 : libre (free),
-			- 1 : occupé (used).
-		Pour un fragment libre, non situé en première position, n'a pas de signification.
+			- 1 : occup (used).
+		Pour un fragment libre, non situ en premire position, n'a pas de signification.
 		*/
 		fpPredecessorStatus,
 		/*
 		Type de la taille d'un fragment :
-			- 0 : court (short) la taille du fragment étant encodé dans les bits restant de l'octet,
-			- 1 : long (large), la taille du fragment étant encodé sur, au maximum, les 2^(valeurs des bits restants de l'octet).
+			- 0 : court (short) la taille du fragment tant encod dans les bits restant de l'octet,
+			- 1 : long (large), la taille du fragment tant encod sur, au maximum, les 2^(valeurs des bits restants de l'octet).
 		*/
 		/*
-			Les 5 bits qui suivent contiennent la taille (-1) du fragment lorsqu'elle est suffisament petit pour y être contenue
+			Les 5 bits qui suivent contiennent la taille (-1) du fragment lorsqu'elle est suffisament petit pour y tre contenue
 			(elle est alors dite 'embedded') et qu'il s'agit d'un fragment libre (free).
 		*/
 		fp_SizeBegin,
 		fp_SizeEnd = 6,
 		/*
 			Type de la taille :
-				- 0 : longue (dynamique, 'long'), elle est stockée dans les octets qui suivent (nombre d'octets variables).
+				- 0 : longue (dynamique, 'long'), elle est stocke dans les octets qui suivent (nombre d'octets variables).
 				- 1 : courte ('short') dans le 'header' (taille - 1).
 
-			Pour des raisons de simplification, lorsque ce bit est à 1 pour un fragment occupé (used), alors la taille de ce fragment est
-			de 1. Lorsque la taille d'un fragment occupé est > 1, alors elle est stockée de manière dynamique.
+			Pour des raisons de simplification, lorsque ce bit est  1 pour un fragment occup (used), alors la taille de ce fragment est
+			de 1. Lorsque la taille d'un fragment occup est > 1, alors elle est stocke de manire dynamique.
 
-			Ce bit sert également de marqueur (lorsqu'il est à 0) pour signaler que l'on est sur l'octet précédent le premier
-			d'une taille dynamique. Le 7ème bit du dernier octet d'une taille dynamique est toujours à 0. Les autres ont leur 7ème bits à 1.
+			Ce bit sert galement de marqueur (lorsqu'il est  0) pour signaler que l'on est sur l'octet prcdent le premier
+			d'une taille dynamique. Le 7me bit du dernier octet d'une taille dynamique est toujours  0. Les autres ont leur 7me bits  1.
 		*/
 		fpSizeType = 7,
 		fp_amount
@@ -325,7 +325,7 @@ namespace amm {
 			break;
 		}
 
-		return 0;	// Pour éviter un 'warning'.
+		return 0;	// Pour viter un 'warning'.
 	}
 
 	inline void SetEmbeddedValue(
@@ -383,7 +383,7 @@ namespace amm {
 				break;
 			}
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		status__ Status( void ) const
 		{
@@ -534,8 +534,8 @@ namespace amm {
 		{
 			Memory.Store( Data, Size, Position );
 		}
-		mdr::row_t__ _GetPriorMetaData(	// Retourne la position du début des méta-données.
-			mdr::row_t__ Row,	// Si pointe sur le début d'un fragment (cas d'un fragment libre), est probablement sans signification.
+		mdr::row_t__ _GetPriorMetaData(	// Retourne la position du dbut des mta-donnes.
+			mdr::row_t__ Row,	// Si pointe sur le dbut d'un fragment (cas d'un fragment libre), est probablement sans signification.
 			header__ &Header,
 			size__ &Size ) const
 		{
@@ -595,7 +595,7 @@ namespace amm {
 		}
 		void _UpdatePredecessorStatus(
 			mdr::row_t__ Row,
-			status__ Status )	// Le statut du prédecesseur du premier fragment reflète en fait le statut du dernier fragment.
+			status__ Status )	// Le statut du prdecesseur du premier fragment reflte en fait le statut du dernier fragment.
 		{
 			header__ Header;
 
@@ -605,7 +605,7 @@ namespace amm {
 
 			_Set( Row, Header );
 		}
-		void _UpdateFirstFragmentPredecessorStatus( status__ Status )	// Le statut du prédecesseur du premier fragment reflète en fait le statut du dernier fragment.
+		void _UpdateFirstFragmentPredecessorStatus( status__ Status )	// Le statut du prdecesseur du premier fragment reflte en fait le statut du dernier fragment.
 		{
 			_UpdatePredecessorStatus( 0, Status );
 		}
@@ -852,7 +852,7 @@ namespace amm {
 		uym::untyped_memory_ Memory;
 		struct s {
 			uym::untyped_memory_::s Memory;
-			tracker__ Free;	// Ne doit pas pointer sur le dernier fragment, même s'il s'agit du seul.
+			tracker__ Free;	// Ne doit pas pointer sur le dernier fragment, mme s'il s'agit du seul.
 		} &S_;
 		aggregate_memory_( s &S )
 		: S_( S ),

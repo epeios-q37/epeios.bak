@@ -1,4 +1,4 @@
-﻿/*
+/*
 	'str' library by Claude SIMON (http://zeusw.org/intl/contact.html)
 	Requires the 'str' header file ('str.h').
 	Copyright (C) 2000-2004 Claude SIMON (http://zeusw.org/intl/contact.html).
@@ -57,7 +57,7 @@ public:
 
 using namespace str;
 
-static const char Table_[] = "AAAAAAãCEEEE¦-+¤DNUUUUOÎOUUUUYÌ¯aaaaaaµceeeeiiiionooooo¸°uuuuy¦y";
+static const char Table_[] = "AAAAAACEEEE-+DNUUUUOOUUUUYaaaaaaceeeeiiiionooooouuuuyy";
 
 static inline int GetAccentFree__( int C )
 {
@@ -217,7 +217,7 @@ void str::string_::Dump( flw::oflow__ &Flow ) const
 }
 
 
-// Convertit la chaine 'char *' et rajoute un 0. Le pointeur retourné doit être libèré par un 'free'.
+// Convertit la chaine 'char *' et rajoute un 0. Le pointeur retourn doit tre libr par un 'free'.
 const char *string_::Convert(
 	sdr::row__ Position,
 	sdr::size__ Quantity,

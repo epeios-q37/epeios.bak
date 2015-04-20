@@ -99,7 +99,7 @@ namespace ndbctt {
 		void _CompleteInitialization( void ) const
 		{
 			if ( _PostInitializationFunction != NULL ) {
-				// On passe par un 'Buffer' pour éviter un appel récursif.
+				// On passe par un 'Buffer' pour viter un appel rcursif.
 				post_initialization_function__ *Buffer = _PostInitializationFunction;
 				_PostInitializationFunction = NULL;
 				Buffer->CompleteInitialization();
@@ -120,7 +120,7 @@ namespace ndbctt {
 			else
 				ERRFwk();
 
-			return t_Undefined;	// Pour éviter un 'warning'.
+			return t_Undefined;	// Pour viter un 'warning'.
 		}
 		bso::bool__ _UseCache( void ) const
 		{
@@ -139,8 +139,8 @@ namespace ndbctt {
 			}
 
 			if ( Size > _Cache.Size() )
-				_Cache.Resize( Size );	/* Normalement fait à l'initialisation ou lors de l'ajout d'un enregistrement,
-										mais donnée pas encore initialisée lors de l'initialisation en mode 'mono-fichier'. */
+				_Cache.Resize( Size );	/* Normalement fait  l'initialisation ou lors de l'ajout d'un enregistrement,
+										mais donne pas encore initialise lors de l'initialisation en mode 'mono-fichier'. */
 
 			return true;
 		}
@@ -302,7 +302,7 @@ namespace ndbctt {
 				break;
 			}
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		rrow__ First( void ) const
 		{
@@ -382,7 +382,7 @@ namespace ndbctt {
 				break;
 			}
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		sdr::size__ Amount( void ) const
 		{
@@ -398,7 +398,7 @@ namespace ndbctt {
 				break;
 			}
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		bso::bool__ Exists( rrow__ Row ) const
 		{

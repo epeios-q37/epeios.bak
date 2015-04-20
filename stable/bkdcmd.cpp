@@ -84,7 +84,7 @@ static const cast ThrowIError[] = {
 	cEnd,
 	cEnd };
 static const cast ThrowUserDefinedError[] = {
-		cString,	// Un message devant être retourné comme message d'erreur utilisateur.
+		cString,	// Un message devant tre retourn comme message d'erreur utilisateur.
 	cEnd,
 	cEnd };
 static const cast GetNewObject[] = {
@@ -124,7 +124,7 @@ static const cast RemoveObject[] = {
 static const cast About[] = {
 	cEnd,
 		cString,	// Version du protocol.
-		cString,	// libellé de la cible.
+		cString,	// libell de la cible.
 		cString,	// Version de l'API.
 		cString,	// Informations au sujet du 'backend'.
 		cString,	// Informations au sujet du 'publisher'.

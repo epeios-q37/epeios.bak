@@ -44,9 +44,9 @@
 # if defined( CPE_MSVC ) || defined ( CPE_MINGW ) || defined ( CPE_CYGWIN )
 #  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	1000
 # elif defined ( CPE_LINUX )
-#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	800	// Linux, par défaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	800	// Linux, par dfaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
 # elif defined ( CPE_XCODE )
-#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	200	// Mac, par défaut, ne peut ouvrir que 256 descripteurs (socket comprises).
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	200	// Mac, par dfaut, ne peut ouvrir que 256 descripteurs (socket comprises).
 # else
 #  error "Unimplemented target !"
 # endif
@@ -81,9 +81,9 @@ namespace flsq {
 	extern fdr::size__ MaxFileAmount;
 
 	typedef bso::size__ position__;
-	// type définissant une position dans la mémoire
+	// type dfinissant une position dans la mmoire
 
-	// Identifiant sous lequel est regroupé un ensemble de fichiers.
+	// Identifiant sous lequel est regroup un ensemble de fichiers.
 	E_ROW( id__ );
 	E_CDEF( id__, Undefined, E_NIL );
 
@@ -261,28 +261,28 @@ namespace flsq {
 		// nom du fichier
 		fnm::name___ _Name;
 		// taille du fichier
-		sdr::size__ TailleFichier_;	// 'sdr::size__' et non 'fil::size__', car considéré comme un 'storage', et donc soumis à ses limites.
+		sdr::size__ TailleFichier_;	// 'sdr::size__' et non 'fil::size__', car considr comme un 'storage', et donc soumis  ses limites.
 		struct {
 			int
 				// signale si le Stream est ouvert ou non
 				Ouvert			:1,
 				// signale que la fermeture du fichier se fait manuellement
 				Manuel  		:1,
-				// Signale que le fichier ne doit pas être détruit à la destruction de l'objet
+				// Signale que le fichier ne doit pas tre dtruit  la destruction de l'objet
 				Persistant		:1,
-				// Signale que le nom du fichier a été crée de manière interne
+				// Signale que le nom du fichier a t cre de manire interne
 				Interne			:1;
-				// Mode d'accés à la mémoire.
+				// Mode d'accs  la mmoire.
 				fil::mode__ Mode;
 		} Temoin_;
 		row__ _Row;	// Pour le suivi des 'file handler' ouverts.
-		// différents témoins
+		// diffrents tmoins
 		time_t _EpochTimeStamp;	// Last access time.
 		id__ _ID;
 	// Fonctions
 		bso::bool__ Open_(
 			bso::bool__ ToFlush,
-			err::handling__ ErrorHandling = err::h_Default )	// Si à 'true', le fichier doit être 'flushé' (accés en écriture).
+			err::handling__ ErrorHandling = err::h_Default )	// Si  'true', le fichier doit tre 'flush' (accs en criture).
 		{
 			bso::bool__ Success = true;
 
@@ -302,11 +302,11 @@ namespace flsq {
 
 			return Success;
 		}
-		void _AdjustPhysicalFileSize( void )	// Ajuste la taille physique du fichier à celle supposée.
+		void _AdjustPhysicalFileSize( void )	// Ajuste la taille physique du fichier  celle suppose.
 		{
 			if ( ( Temoin_.Mode != fil::mReadOnly ) && (  TailleFichier_ != 0 ) ) {
 
-				Flush();	// Pour mettre à jour la taille physique du fichier pour que la méthode 'GetFileSize(...)' retourne la bonne valeur.
+				Flush();	// Pour mettre  jour la taille physique du fichier pour que la mthode 'GetFileSize(...)' retourne la bonne valeur.
 
 				if ( !fil::Exists( _Name ) || ( TailleFichier_ > fil::GetSize( _Name ) ) ) {
 					sdr::datum__ Datum = 0;
@@ -344,10 +344,10 @@ namespace flsq {
 					
 				if ( Amount <= 0 ) {
 					if ( Amount == 0 ) {
-						if ( ( Position + Nombre ) <= TailleFichier_ )	{ /* Lors d'une allocation, la nouvelle taille est notée, mais la taille du fichier n'est pas modifiée
-																		   (gain de temps). Or, certaines bibliothèques ('MMM', par exemple) lisent un emplacement alloué
-																		   avant d'avoir écrit dedans, on considère donc que la quantité, si correcte par rapport à la taille allouée,
-																		   de données demandée est disponible, peu importe le contenu.
+						if ( ( Position + Nombre ) <= TailleFichier_ )	{ /* Lors d'une allocation, la nouvelle taille est note, mais la taille du fichier n'est pas modifie
+																		   (gain de temps). Or, certaines bibliothques ('MMM', par exemple) lisent un emplacement allou
+																		   avant d'avoir crit dedans, on considre donc que la quantit, si correcte par rapport  la taille alloue,
+																		   de donnes demande est disponible, peu importe le contenu.
 																		*/
 							Amount = Nombre;
 						} else
@@ -363,7 +363,7 @@ namespace flsq {
 			if ( !Temoin_.Manuel )
 				ReleaseFile();
 		}
-			/* lit à partir de 'Taille' et place dans 'Tampon' 'Taille' octets
+			/* lit  partir de 'Taille' et place dans 'Tampon' 'Taille' octets
 			retourne le nombre d'octets effectivement lus */
 		void Write(
 			const void *Tampon,
@@ -443,8 +443,7 @@ namespace flsq {
 			fil::mode__ Mode = fil::mReadWrite,
 			flsq::creation Creation = flsq::cFirstUse )
 		{
-			if ( Name.Amount() != 0 )
-			{
+			if ( Name.Amount() != 0 ) {
 				reset();
 
 				_Name.Init( Name );
@@ -455,15 +454,20 @@ namespace flsq {
 
 				_Row = _Register( *this, _ID );
 
-			}
-			else if ( !Temoin_.Interne )
-			{
+			} else if ( !Temoin_.Interne ) {
 				reset();
 
 				char Buffer[L_tmpnam];
-								
+
+# ifdef CPE_XCODE
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+# endif
 				if ( tmpnam( Buffer ) == NULL )
 					ERRSys();
+# ifdef CPE_XCODE
+#  pragma GCC diagnostic pop
+# endif
 
 				_Name.Init( Buffer );
 
@@ -484,7 +488,7 @@ namespace flsq {
 			else if ( Creation != flsq::cFirstUse )
 				ERRPrm();
 		}
-			// initialise l'objet avec le nom 'NomFichier'; si NULL, création d'un nom
+			// initialise l'objet avec le nom 'NomFichier'; si NULL, cration d'un nom
 		void ReleaseFile( bso::bool__ ReportClosing = true )
 		{
 			_AdjustPhysicalFileSize();
@@ -498,7 +502,7 @@ namespace flsq {
 
 			Temoin_.Ouvert = 0;
 		}
-			// libère le File Descriptor
+			// libre le File Descriptor
 		void Manual( void )
 		{
 			Temoin_.Manuel = 1;
@@ -528,7 +532,7 @@ namespace flsq {
 
 			return Mode;
 		}
-		// Retourne le mode d'accés.
+		// Retourne le mode d'accs.
 		fil::mode__ Mode( void ) const
 		{
 			return Temoin_.Mode;
@@ -611,7 +615,7 @@ namespace flsq {
 		{
 			file_storage___::Read( Position, Amount, Buffer );
 		}
-		// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets
+		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets
 		virtual void SDRStore(
 			const sdr::datum__ *Buffer,
 			sdr::size__ Amount,

@@ -82,7 +82,7 @@ namespace tym {
 	: public b
 	{
 	private:
-		// place dans 'Tampon' 'Nomnbre' objets à la position 'Position'
+		// place dans 'Tampon' 'Nomnbre' objets  la position 'Position'
 		void _Recall(
 			mdr::row_t__ Position,
 			mdr::size__ Nombre,
@@ -90,7 +90,7 @@ namespace tym {
 		{
 			b::Recall( Position * sizeof( t ), Nombre * sizeof( t ), (mdr::datum__ *)Tampon );
 		}
-		// écrit 'Taille' objets de 'Tampon' à la position 'Position'
+		// crit 'Taille' objets de 'Tampon'  la position 'Position'
 		void _Store(
 			const t *Tampon,
 			mdr::size__ Nombre,
@@ -98,8 +98,8 @@ namespace tym {
 		{
 			b::Store( (mdr::datum__ *)Tampon, Nombre * sizeof( t ), Position * sizeof( t ) );
 		}
-		/* écrit 'Nombre' objets de 'Source' à partir de 'Position'
-		à la position 'Decalage' */
+		/* crit 'Nombre' objets de 'Source'  partir de 'Position'
+		 la position 'Decalage' */
 		void _Store(
 			const _memory_ &Source,
 			mdr::size__ Quantite,

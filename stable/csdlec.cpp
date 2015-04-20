@@ -43,7 +43,7 @@ bso::bool__ csdlec::library_embedded_client_core__::Init(
 		if ( _RetrieveCallback( &SharedData ) )
 			return true;
 		else
-			reset();	// Sinon le bibliothèque n'est pas déchargée correctement à la fermeture de l'application.
+			reset();	// Sinon le bibliothque n'est pas dcharge correctement  la fermeture de l'application.
 
 	if ( ERRHandling != err::hUserDefined )
 		ERRSys();

@@ -143,7 +143,7 @@ ERRProlog
 	str::string Id;
 	str::string Translation;
 ERRBegin
-	xulfdg::window__::Attach( Window );	// 'xulfdg::' ne devrait pas être nécessaire, mais le mauvais 'Attach()' est appelé par VC++12 si absent...
+	xulfdg::window__::Attach( Window );	// 'xulfdg::' ne devrait pas tre ncessaire, mais le mauvais 'Attach()' est appel par VC++12 si absent...
 
 	Id.Init();
 

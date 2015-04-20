@@ -196,7 +196,7 @@ namespace fblbkd {
 		const char *Prefix_;
 		// Libelle du type de l'objet, du module.
 		const char *Name_;
-		// L'interface auquel le module est rattaché.
+		// L'interface auquel le module est rattach.
 		class backend___ *Backend_;
 		void _Clean( void );	// Permet l'effacement correct de chaque objet utilisateur.
 	protected:
@@ -204,7 +204,7 @@ namespace fblbkd {
 		virtual index__ FBLBKDNew( void )
 		{
 			ERRFwk();
-			return 0;	// Pour éviter un warning.
+			return 0;	// Pour viter un warning.
 		}
 		//v To delete the object with index 'Index'.
 		virtual void FBLBKDDelete( index__ Index )
@@ -215,13 +215,13 @@ namespace fblbkd {
 		virtual void *FBLBKDObject( index__ Index )
 		{
 			ERRFwk();
-			return NULL;	// Pour éviter un 'warning'
+			return NULL;	// Pour viter un 'warning'
 		}
 #if 0
 		//v To get the raw messages.
 		virtual void FBLBKDGetRawMessages( messages_ &Messages ) = 0;
 #endif
-		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
+		// Fonction appele pour traiter la requte 'Requete' pour l'objet d'index 'Index'.
 		virtual void Handle_(
 			index__ Index,
 			request__ &Requete,
@@ -626,7 +626,7 @@ namespace fblbkd {
 		}
 	};
 
-	// Module maître, qui fait tout le boulot.
+	// Module matre, qui fait tout le boulot.
 	class master_module
 	: public untyped_module
 	{
@@ -647,7 +647,7 @@ namespace fblbkd {
 		//o All raw messages from all modules.
 		messages RawMessages;
 #endif
-		// Initialisation avec rattachement à l'interface 'Backend'.
+		// Initialisation avec rattachement  l'interface 'Backend'.
 		void Init( backend___ &Backend );
 	};
 
@@ -732,13 +732,13 @@ namespace fblbkd {
 		TOL_CBUFFER___ _Language;
 		const lcl::locale_ *_Locale;
 		TOL_CBUFFER___ _BackendLabel;
-		// Informations à propos du 'backend'.
+		// Informations  propos du 'backend'.
 		TOL_CBUFFER___ _ExtendedBackendInformations;
 		TOL_CBUFFER___ _BackendCopyright;
 		TOL_CBUFFER___ _SoftwareInformations;
 		fblber::embedded_callbacks___ _Embedded;
 		fblbrr::remote_callbacks___ _Remote;
-		// Retourne le module correspondant à 'IdType'.
+		// Retourne le module correspondant  'IdType'.
 		untyped_module &Module_( type__ IdType ) const
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
@@ -746,7 +746,7 @@ namespace fblbkd {
 			else
 				return (untyped_module &)Master_;	// Not very happy about this conversion, 
 		}
-		// Retourne le module correspondant à 'IdObjet'.
+		// Retourne le module correspondant  'IdObjet'.
 		untyped_module &Module_( object__ IdObjet ) const
 		{
 			if ( IdObjet != FBLBKD_MASTER_OBJECT )
@@ -754,12 +754,12 @@ namespace fblbkd {
 			else
 				return (untyped_module &)Master_; // Not very happy about this conversion, 
 		}
-		// Retourne le type correpondant à l'objet d'indetificateur 'IdObjet'.
+		// Retourne le type correpondant  l'objet d'indetificateur 'IdObjet'.
 		type__ Type_( object__ IdObjet ) const
 		{
 			return Links.Type( IdObjet );
 		}
-		// Retourne l'indexcorrespondant à l'objet d'identificateur 'IdObjet'.
+		// Retourne l'indexcorrespondant  l'objet d'identificateur 'IdObjet'.
 		index__ Index_( object__ IdObjet ) const
 		{
 			return Links.Index( IdObjet );
@@ -787,7 +787,7 @@ namespace fblbkd {
 			_Remote.reset( P );
 		}
 		E_CVDTOR( backend___ );
-		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
+		// '[Backend|Publisher]Informations' ne sont PAS dupliqu. Leur contenu de doit pas tre modifi.
 		void Init(
 			fblbur::mode__ Mode,
 			const char *APIVersion,

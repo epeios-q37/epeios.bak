@@ -93,8 +93,8 @@
 # endif
 
 /*
-	A cause du module 'err', dont l'objet peut être utilisé simumtanément dans un contexte 'single-threaded' et 'mono-threaded'
-	(voir 'NOTA' dans le fichier d'entête de ce module), on est amené à utiliser ce module même dans un contexte 'single-threaded'.
+	A cause du module 'err', dont l'objet peut tre utilis simumtanment dans un contexte 'single-threaded' et 'mono-threaded'
+	(voir 'NOTA' dans le fichier d'entte de ce module), on est amen  utiliser ce module mme dans un contexte 'single-threaded'.
 */
 # if 0
 #  ifndef CPE_MT
@@ -208,7 +208,7 @@ namespace mtx {
 	}
 
 
-	inline void _Inc( counter__ &Counter )	// Incrémente 'Counter'.
+	inline void _Inc( counter__ &Counter )	// Incrmente 'Counter'.
 	{
 #ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
 		InterlockedIncrement( &Counter );
@@ -229,14 +229,14 @@ namespace mtx {
 #endif
 	}
 
-	inline bso::bool__ _DecAndTest( counter__ &Counter )	// Décrémente 'Counter'.et retourne 'true' si à zéro.
+	inline bso::bool__ _DecAndTest( counter__ &Counter )	// Dcrmente 'Counter'.et retourne 'true' si  zro.
 	{
 #ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
 		return InterlockedDecrement( &Counter ) == 0;
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 		return atomic_dec_and_test( &Counter );
 #elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
-//		return OSAtomicDecrement32( &Counter ) == 1;	// Il existe un autre 'OSAtomic.h', dans lequel 'OSAtomicDecrement(|8|16|64)(...)'. retourne la valeur AVANT décrémentation.
+//		return OSAtomicDecrement32( &Counter ) == 1;	// Il existe un autre 'OSAtomic.h', dans lequel 'OSAtomicDecrement(|8|16|64)(...)'. retourne la valeur AVANT dcrmentation.
 														// Cependant, celui-ci n'a pas de fonction 'OSAtomicDecrement32'(...)".
 		return OSAtomicDecrement32( &Counter ) == 0;
 #elif defined( MTX__USE_PTHREAD_MUTEX )
@@ -258,7 +258,7 @@ namespace mtx {
 	typedef struct _mutex__ {
 		counter__ Counter;
 #ifdef MTX__CONTROL
-		void Release( bso::bool__ Destroy )	// 'Destruction' à vrai si appelé par le destructeur.
+		void Release( bso::bool__ Destroy )	// 'Destruction'  vrai si appel par le destructeur.
 		{
 			_Set( Counter, MTX__RELEASED_MUTEX_COUNTER_VALUE, Destroy );
 		}
@@ -364,7 +364,7 @@ namespace mtx {
 		while( !TryToLock( Handler ) )
 		{
 			tol::InitializeRandomGenerator();
-			tht::Defer( ( (bso::uint__)tht::GetTID() + rand() ) % 5 + 1 ); // 'rand() donne-t'il la même suite dans des coeurs différents ?
+			tht::Defer( ( (bso::uint__)tht::GetTID() + rand() ) % 5 + 1 ); // 'rand() donne-t'il la mme suite dans des coeurs diffrents ?
 		}
 	}
 

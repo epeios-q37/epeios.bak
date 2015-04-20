@@ -67,7 +67,7 @@ extern class ttr_tutor &FAMTutor;
 #include "bso.h"
 #include "cpe.h"
 
-// Taille à vide du tas.
+// Taille  vide du tas.
 #ifndef FAM_SIZE
 #define FAM_SIZE	60000UL
 #endif
@@ -80,9 +80,9 @@ namespace fam {
 	class fast_allocation_memory {
 		// Le tas.
 		char Tas_[FAM_SIZE];
-		// La réserve disponible; se situe toujours en fin de tas.
+		// La rserve disponible; se situe toujours en fin de tas.
 		size__ Restant_;
-		/* Retourne la taille pouvant être accordée sur la réserve.
+		/* Retourne la taille pouvant tre accorde sur la rserve.
 		'Optimal', un multiple de 'Min', ou 0 (dans cet ordre). */
 		size__ Taille_(
 			size__ Optimal,

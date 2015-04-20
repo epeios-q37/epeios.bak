@@ -71,7 +71,7 @@ extern class ttr_tutor &DALVIKTutor;
 
 
 namespace dalvik {
-	extern const char *PackageName;	// A définir par l'utilisateur.
+	extern const char *PackageName;	// A dfinir par l'utilisateur.
 
 	inline void SetContentView(
 		const char *ViewResourceName,

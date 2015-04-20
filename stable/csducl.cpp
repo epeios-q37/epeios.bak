@@ -86,7 +86,7 @@ const char *csducl::GetLabel( type__ Type )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 bso::bool__ csducl::universal_client_core::Init(
@@ -94,7 +94,7 @@ bso::bool__ csducl::universal_client_core::Init(
 	csdlec::library_data__ &LibraryData,
 	csdsnc::log_functions__ &Log,
 	type__ Type,
-	bso::uint__ PingDelay )	// Délai maximum d'inactivité entre deux 'ping'.
+	bso::uint__ PingDelay )	// Dlai maximum d'inactivit entre deux 'ping'.
 {
 	reset();
 

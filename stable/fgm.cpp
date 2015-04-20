@@ -10,7 +10,7 @@
 /* end of 'entete.txt' template file */
 /* begin of 'xxx.cpp' template file V2.21 */
 /* 
-	Pour plus de détails, consultez le fichier 'fgm.h'.
+	Pour plus de dtails, consultez le fichier 'fgm.h'.
 	See the 'fgm.h' file  for more details.
 */
 
@@ -40,7 +40,7 @@ public:
 /*$BEGIN$*/
 
 
-// Libere la place occupée par les fragments 'Debut' à 'Fin' inclus.
+// Libere la place occupe par les fragments 'Debut'  'Fin' inclus.
 void fgm_memoire_fragmentee::Liberer_(
 	fgm__indice Debut,
 	fgm__indice Fin )
@@ -57,7 +57,7 @@ void fgm_memoire_fragmentee::Liberer_(
 	}
 }
 
-// Alloue la place nécessaire au fragments 'Debut' à 'Fin'.
+// Alloue la place ncessaire au fragments 'Debut'  'Fin'.
 void fgm_memoire_fragmentee::AllouerFragments_(
 	fgm__indice Debut,
 	fgm__indice Fin )
@@ -73,7 +73,7 @@ void fgm_memoire_fragmentee::AllouerFragments_(
 	}
 }
 
-// Ecrit à 'Position' 'Quantite' octets de 'Tampon'.
+// Ecrit  'Position' 'Quantite' octets de 'Tampon'.
 void fgm_memoire_fragmentee::Lire(
 	unsigned long Position,
 	unsigned long Quantite,
@@ -99,7 +99,7 @@ void fgm_memoire_fragmentee::Lire(
 	}
 }
 
-// Place dans 'Tampon' 'Quantite' octets situés à 'Position'.
+// Place dans 'Tampon' 'Quantite' octets situs  'Position'.
 void fgm_memoire_fragmentee::Ecrire(
 	const char *Tampon,
 	size_t Quantite,

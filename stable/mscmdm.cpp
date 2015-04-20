@@ -679,7 +679,7 @@ size__ mscmdm::GetEventData(
 		break;
 	}
 
-	return 0;	// Pour éviter un 'warning'.
+	return 0;	// Pour viter un 'warning'.
 }
 
 void Write_(

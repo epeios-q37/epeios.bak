@@ -61,10 +61,10 @@ namespace sclrgstry {
 
 	extern rgstry::entry___ Parameters;
 	extern rgstry::entry___ Definitions;
+	extern rgstry::entry___ Locale;
+	extern rgstry::entry___ Arguments;
 
 	extern rgstry::entry___ Language;
-
-	extern rgstry::entry___ Locale;	// Du fichier de configuration uniquement.
 
 	extern rgstry::entry___ PluginParameter;
 	extern rgstry::entry___ PluginFilename;
@@ -93,7 +93,7 @@ namespace sclrgstry {
 		str::string_ &Id );
 
 	void LoadProject(
-		const fnm::name___ &FileName,
+		const fnm::name___ &Filename,
 		const char *Target,
 		str::string_ &Id );
 
@@ -113,7 +113,7 @@ namespace sclrgstry {
 
 	inline void FillRegistryWithSetup(
 		registry_ &Registry,
-		level__ Level )	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' par d�faut ('Parameters/@DefaultSetup').
+		level__ Level )	// Remplit la section 'Parameters' de la 'registry' avec le contenu du 'Setup' par dÃ©faut ('Parameters/@DefaultSetup').
 	{
 		FillRegistryWithSetup( Registry, Level, str::string() );
 	}

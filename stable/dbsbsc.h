@@ -232,10 +232,10 @@ namespace dbsbsc {
 
 	E_AUTO( _cache )
 
-	class file_features_	// Permet d'implémenter certains comportements necessitéz par le stockage des données dans un fichier.
+	class file_features_	// Permet d'implmenter certains comportements necessitz par le stockage des donnes dans un fichier.
 	{
 	protected:
-		virtual void DBSBSCCompleteInitialization( bso::bool__ IgnoreAdditionalFiles ) = 0;// Permet d'éviter certaines opérations coûteuses en temps à l'initialisation.
+		virtual void DBSBSCCompleteInitialization( bso::bool__ IgnoreAdditionalFiles ) = 0;// Permet d'viter certaines oprations coteuses en temps  l'initialisation.
 		virtual void DBSBSCErasePhysically( void ) = 0;
 	public:
 		struct s

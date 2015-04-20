@@ -61,7 +61,7 @@ extern class ttr_tutor &BSTTutor;
 #include "err.h"
 #include "set.h"
 
-/* ATTENTION: si la taille du réceptacle n'est plus de 1 octet, modifier la valeur
+/* ATTENTION: si la taille du rceptacle n'est plus de 1 octet, modifier la valeur
 des #define ci-dessous. */
 #define BST_NB_BITS_RECEPTACLE	8
 //#define BST_NB_BITS_RECEPTACLE	( 8 * sizeof( receptacle__ ) )
@@ -84,17 +84,17 @@ namespace bst {
 		{
 			return (int)( Position % BST_NB_BITS_RECEPTACLE );
 		}
-		// retourne l'offset correpondant à 'Position'
+		// retourne l'offset correpondant  'Position'
 		static POSITION__ Indice_( POSITION__ Position )
 		{
 			return Position / BST_NB_BITS_RECEPTACLE;
 		}
-		// retourne l'indice correspondant à 'Position'
+		// retourne l'indice correspondant  'Position'
 		static bso__ubyte Masque_( POSITION__ Position )
 		{
 			return 1 << Offset_( Position );
 		}
-		// retourne le masque correspondant à 'Position'
+		// retourne le masque correspondant  'Position'
 	public:
 		static bso__bool Lire(
 			POSITION__ Position,
@@ -102,7 +102,7 @@ namespace bst {
 		{
 			return ( Table.Read( Indice_( Position ) ) & Masque_( Position ) ) != 0;
 		}
-		// retourne la valeur du bit à la position 'Position' (>=0)
+		// retourne la valeur du bit  la position 'Position' (>=0)
 		static void Ecrire(
 			bso__bool Valeur,
 			POSITION__ Position,
@@ -110,10 +110,10 @@ namespace bst {
 		{
 			Table.Write( ( Table.Read(Indice_( Position )) & ~Masque_( Position ) ) | ( ( Valeur ? 1 << Offset_( Position ) : 0 ) ), Indice_( Position ) );
 		}
-		// place un bit de valeur 'Valeur' à la position 'Position'
+		// place un bit de valeur 'Valeur'  la position 'Position'
 	};
 
-	// N.B.: le contenu du tableau est inversé bit à bit
+	// N.B.: le contenu du tableau est invers bit  bit
 	//c Bits set.
 	class bits_set_
 	{
@@ -123,22 +123,22 @@ namespace bst {
 		{
 			return functions__<ENSEMBLE(receptacle__)>::Offset( Position() );
 		}
-		// retourne l'offset correpondant à 'Position'
+		// retourne l'offset correpondant  'Position'
 		POSITION__ Indice_( POSITION__ Position )
 		{
 			return functions__<ENSEMBLE(receptacle__)>::Indice( Position() );
 		}
-		// retourne l'indice correspondant à 'Position'
+		// retourne l'indice correspondant  'Position'
 		bso__ubyte Masque_( POSITION__ Position )
 		{
 			return functions__<ENSEMBLE(receptacle__)>::Masque( Position() );
 		}
-		// retourne le masque correspondant à 'Position'
+		// retourne le masque correspondant  'Position'
 	*/	bso__bool Lire_( POSITION__ Position ) const
 		{
 			return functions__<set::SET_(receptacle__)>::Lire( Position, Table );
 		}
-		// retourne la valeur du bit à la position 'Position' (>=0)
+		// retourne la valeur du bit  la position 'Position' (>=0)
 		void Ecrire_(
 			bso__bool Valeur,
 			POSITION__ Position )
@@ -147,7 +147,7 @@ namespace bst {
 
 	//		Table.Ecrire( Indice, (receptacle__)( ( Table.Objet(Indice) & (receptacle__)~( (receptacle__)1 << Offset ) ) | ( !Valeur << Offset ) ) );
 		}
-		// place un bit de valeur 'Valeur' à la position 'Position'
+		// place un bit de valeur 'Valeur'  la position 'Position'
 		void Allouer_( SIZE__ Nombre )
 		{
 			Table.Allocate( ( Nombre - 1 ) / BST_NB_BITS_RECEPTACLE + 1 );
@@ -165,7 +165,7 @@ namespace bst {
 		{
 			Table.Charger( Transfert );
 		}
-		// charge le tableau à partir de 'Fichier' qui est de version 'Version'
+		// charge le tableau  partir de 'Fichier' qui est de version 'Version'
 	*/
 	public:
 		// Tableau contenant les bits.
@@ -433,30 +433,30 @@ namespace bst {
 
 	AUTO( bibits_set )
 
-	/* Stocke dans 'D' 'O1' & 'O2', tous étant de taille 'Taille'.
-	'D' peut être 'O1' ou 'O2'. Usage interne. */
+	/* Stocke dans 'D' 'O1' & 'O2', tous tant de taille 'Taille'.
+	'D' peut tre 'O1' ou 'O2'. Usage interne. */
 	void Et_(
 		const receptacle__ *O1,
 		const receptacle__ *O2,
 		receptacle__ *D,
 		BSIZE__ Taille );
 
-	/* Stocke dans 'D' 'O1' | 'O2', tous étant de taille 'Taille'.
-	'D' peut être 'O1' ou 'O2'. Usage interne. */
+	/* Stocke dans 'D' 'O1' | 'O2', tous tant de taille 'Taille'.
+	'D' peut tre 'O1' ou 'O2'. Usage interne. */
 	void Ou_(
 		const receptacle__ *O1,
 		const receptacle__ *O2,
 		receptacle__ *D,
 		BSIZE__ Taille );
 
-	/* Stocke dans 'D' ~'O' tou deux de taille 'Taille'. 'O' peut être 'D'.
+	/* Stocke dans 'D' ~'O' tou deux de taille 'Taille'. 'O' peut tre 'D'.
 	Usage interne. */
 	void Non_(
 		const receptacle__ *O,              
 		receptacle__ *D,
 		BSIZE__ Taille );
 
-	/* Stocke dans 'D' la comparaison bit à bit de 'O1' et 'O2', tous 2 de taille 'Taille'.
+	/* Stocke dans 'D' la comparaison bit  bit de 'O1' et 'O2', tous 2 de taille 'Taille'.
 	Usage interne. */
 	void Dff_(
 		const receptacle__ *O1,
@@ -464,7 +464,7 @@ namespace bst {
 		receptacle__ *D,
 		BSIZE__ Taille );
 
-	// Retourne le nombre de bits à un dans 'O4.
+	// Retourne le nombre de bits  un dans 'O4.
 	BSIZE__ Compter_(
 		const receptacle__ *O,
 		BSIZE__ Taille );
@@ -481,8 +481,8 @@ namespace bst {
 		POSITION__ Courant );
 
 
-	// N.B.: le contenu du tableau N'EST PAS inversé bit à bit
-	// classe enrichissant un tableau statique de 't' réceptacels de certaines fonctions nécessaires. Usage interne.
+	// N.B.: le contenu du tableau N'EST PAS invers bit  bit
+	// classe enrichissant un tableau statique de 't' rceptacels de certaines fonctions ncessaires. Usage interne.
 	template <int t> class receptacles__
 	{
 	private:
@@ -524,7 +524,7 @@ namespace bst {
 		}
 	};
 
-	/* Place dans 'D', 'O1' & 'O2'. 'D' peut être le même objet que 'O1' ou 'O2'.
+	/* Place dans 'D', 'O1' & 'O2'. 'D' peut tre le mme objet que 'O1' ou 'O2'.
 	Usage interne. */
 	template <class t> inline void Et_(
 		const t &O1,
@@ -534,7 +534,7 @@ namespace bst {
 		BSTEt_( O1.Table_, O2.Table_, D.Table_, D.Taille() );
 	}
 
-	/* Place dans 'D', 'O1' | 'O2'. 'D' peut être le même objet que 'O1' ou 'O2'.
+	/* Place dans 'D', 'O1' | 'O2'. 'D' peut tre le mme objet que 'O1' ou 'O2'.
 	Usage interne. */
 	template <class t> inline void Ou_(
 		const t &O1,
@@ -544,7 +544,7 @@ namespace bst {
 		BSTOu_( O1.Table_, O2.Table_, D.Table_, D.Taille() );
 	}
 
-	// Place dans 'D', ~'O'. 'D' peut être le même objet que 'O'. Usage interne.
+	// Place dans 'D', ~'O'. 'D' peut tre le mme objet que 'O'. Usage interne.
 	template <class t> inline void Non_(
 		const t &O,
 		t &D )
@@ -552,7 +552,7 @@ namespace bst {
 		BSTNon_( O.Table_, D.Table_, D.Taille() );
 	}
 
-	/* Place dans 'D', 'O1' | 'O2'. 'D' peut être le même objet que 'O1' ou 'O2'.
+	/* Place dans 'D', 'O1' | 'O2'. 'D' peut tre le mme objet que 'O1' ou 'O2'.
 	Usage interne. */
 	template <class t> inline void Dff_(
 		const t &O1,
@@ -562,7 +562,7 @@ namespace bst {
 		BSTDff_( O1.Table_, O2.Table_, D.Table_, D.Taille() );
 	}
 
-	// Retourne le nombre de bits à un dans 'O'.
+	// Retourne le nombre de bits  un dans 'O'.
 	template <class t> inline BSIZE__ Compter_( const t &O )
 	{
 		return BSTCompter_( O.Table_, O.Taille() );

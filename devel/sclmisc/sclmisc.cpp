@@ -44,7 +44,7 @@ bso::bool__ sclmisc::IsInitialized( void )
 	return sclerror::SCLERRORError != NULL;
 }
 
-static TOL_CBUFFER___ BaseLanguage_;	// De base, le language d'admnistration (lu à partir du fichier de configuration), pouvant devenir language utiliateur selon le contexte.
+static TOL_CBUFFER___ BaseLanguage_;	// De base, le language d'admnistration (lu  partir du fichier de configuration), pouvant devenir language utiliateur selon le contexte.
 
 #define DEFAULT_BASE_LANGUAGE	"en"
 
@@ -153,6 +153,7 @@ ERREnd
 ERREpilog
 }
 
+# if 0	// Obsolete ?
 static void MergeLocale_(
 	const str::strings_ &SubLocales,
 	utf::format__ Format,
@@ -164,7 +165,7 @@ static void MergeLocale_(
 	SubLocale.Init( SubLocales );
 
 	while ( Row != E_NIL ) {
-		MergedLocale.Append(SubLocale( Row ) );
+		MergedLocale.Append( SubLocale( Row ) );
 
 		Row = SubLocales.Next( Row );
 	}
@@ -175,17 +176,17 @@ static void LoadLocale_(
 	const str::string_ &Locale,
 	utf::format__ Format )
 {
-ERRProlog
-	flx::E_STRING_IFLOW__ Flow;
+	ERRProlog
+		flx::E_STRING_IFLOW__ Flow;
 	xtf::extended_text_iflow__ XFlow;
-ERRBegin
-	Flow.Init( Locale );
+	ERRBegin
+		Flow.Init( Locale );
 	XFlow.Init( Flow, Format );
-	
+
 	scllocale::LoadLocale( Target, XFlow, NULL, "Locale" );
-ERRErr
-ERREnd
-ERREpilog
+	ERRErr
+		ERREnd
+		ERREpilog
 }
 
 static void LoadLocale_(
@@ -213,6 +214,29 @@ ERRErr
 ERREnd
 ERREpilog
 }
+# else
+static void LoadLocale_(
+	rgstry::level__ Level,
+	scllocale::target__ Target,
+	utf::format__ Format )
+{
+ERRProlog
+	rgstry::entry__ Entry;
+	rgstry::row__ Row = E_NIL;
+ERRBegin
+	Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
+
+	if ( Row == E_NIL )
+		ERRFwk();
+
+	Entry.Init( Row, sclrgstry::GetCommonRegistry().GetRegistry( Level ) );
+
+	scllocale::SetLocale( Target, Entry );
+ERRErr
+ERREnd
+ERREpilog
+}
+# endif
 
 static void Initialize_(
 	err::err___ *ERRError,
@@ -235,7 +259,7 @@ ERRBegin
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
 
 	Language.Init();
-	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par défaut.
+	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par dfaut.
 		Language.Convert( BaseLanguage_ );
 
 	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format() );
@@ -351,7 +375,7 @@ ERRProlog
 ERRBegin
 	if ( !InitializeFlow_( LOCALE_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
 		Meaning.Init();
-		Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu être lu.
+		Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu tre lu.
 		Meaning.AddTag( "Unable to open locale file" );	// Ceci remplacera le '%0' ci-dessus.
 		ReportAndAbort( Meaning );
 	}

@@ -143,7 +143,7 @@ static const char *GetBackendExtendedTypeLabel_( backend_extended_type__ Type )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 

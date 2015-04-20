@@ -67,7 +67,7 @@ extern class ttr_tutor &FBLFRPTutor;
 # include "tol.h"
 # include "flx.h"
 
-# define FBLFRP__OUT_PARAMETERS_AMOUNT_MAX		20	// Le nombre maximum de paramètres en sortie.
+# define FBLFRP__OUT_PARAMETERS_AMOUNT_MAX		20	// Le nombre maximum de paramtres en sortie.
 
 namespace fblfrp {
 
@@ -124,7 +124,7 @@ namespace fblfrp {
 		{
 			_Data.Init();
 			_callbacks__::Init();
-			// '_IFlow' initialisé seulement lorsque utilisé.
+			// '_IFlow' initialis seulement lorsque utilis.
 		}
 	};
 }

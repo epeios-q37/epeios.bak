@@ -56,7 +56,7 @@ ERREnd
 ERREpilog
 }
 
-#if 0	// Puyisque l'objet de cette bibliothèque est jutement de prendre en charge le 'main'.
+#if 0	// Puyisque l'objet de cette bibliothque est jutement de prendre en charge le 'main'.
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;

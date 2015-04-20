@@ -47,7 +47,7 @@ namespace sclplugin {
 	protected:
 		virtual void PLGNCOREInitialize(
 			const plgncore::data__ *Data,
-			... /* Autres paramètres. Le dernier doit être = 'NULL' */ ) override;
+			... /* Autres paramtres. Le dernier doit tre = 'NULL' */ ) override;
 		virtual void *PLGNCORERetrievePlugin( void ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
 	public:
@@ -62,7 +62,7 @@ namespace sclplugin {
 		}
 	};
 
-	// Fonctions à surcharger, (la macro ci-dessous le fait).
+	// Fonctions  surcharger, (la macro ci-dessous le fait).
 	const char *SCLPLUGINPluginIdentification( void );
 	void *SCLPLUGINRetrievePlugin( void );
 	void SCLPLUGINReleasePlugin( void * );

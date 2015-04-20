@@ -358,8 +358,8 @@ namespace mscmld {
 
 	struct signature_time__ {
 	private:
-		numerator__ _Numerator;	// Si < 0, le dénominateur (bien le dénominateur) n'est pas censé être affiché.
-		denominator_power__ _DenominatorPower;	// Le dénominateur réel est égal à = 2 ^ abs('DenominatorPower').
+		numerator__ _Numerator;	// Si < 0, le dnominateur (bien le dnominateur) n'est pas cens tre affich.
+		denominator_power__ _DenominatorPower;	// Le dnominateur rel est gal  = 2 ^ abs('DenominatorPower').
 		void _Test( void ) const
 		{
 			if ( !IsValid() )
@@ -636,7 +636,7 @@ namespace mscmld {
 			notes_::Init();
 			S_.Anacrousis.Init();
 		}
-		bso::bool__ MarkAsAnacrousis( err::handling__ Handling = err::h_Default );	// Marque les notes déjà introduite en tant qu'anacrouse.
+		bso::bool__ MarkAsAnacrousis( err::handling__ Handling = err::h_Default );	// Marque les notes dj introduite en tant qu'anacrouse.
 		E_RODISCLOSE_( anacrousis__, Anacrousis );
 	};
 
@@ -688,7 +688,7 @@ namespace mscmld {
 	parse_status__ ParseXML(
 		xml::parser___ &Parser,
 		melody_ &Melody,
-		bso::bool__ WithRoot );	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au rerour on est à l'extérieur de la balise 'Melody'.
+		bso::bool__ WithRoot );	// Si  'true', la prochaine balise est 'Melody', sinon, on est  l'intrieur de 'Melody'. Dans les deux cas, au rerour on est  l'extrieur de la balise 'Melody'.
 
 }
 

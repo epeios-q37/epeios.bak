@@ -160,7 +160,7 @@ const char *mscrmi::Label( type__ Type )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 #undef CASE
@@ -197,7 +197,7 @@ size__ mscrmi::Size( type__ Type )
 		break;
 	}
 
-	return 0;	// Pour éviter un 'warning'.
+	return 0;	// Pour viter un 'warning'.
 }
 
 void mscrmi::GetBlocs(
@@ -386,7 +386,7 @@ const char *mscrmi::Label( parse_status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 
 }
 
@@ -524,7 +524,7 @@ static xaddress__ HandleAddress_(
 	if ( Amount > 8 )
 		return MSCRMI_UNDEFINED_ADDRESS;
 
-	if ( Amount & 1 )	// 'Amount' doit être pair.
+	if ( Amount & 1 )	// 'Amount' doit tre pair.
 		return MSCRMI_UNDEFINED_ADDRESS;
 
 	StencilSize = (bso::ubyte__)( 4 - ( Amount >> 1 ) );
@@ -1075,7 +1075,7 @@ bso::bool__ mscrmi::Append(
 		ERRu();
 
 	if ( ( Value & ~( ~0UL >> ( Size << 3 ) ) ) != 0 )
-		return false;	// 'Value' trop grand par rapport au 'Size' donné.
+		return false;	// 'Value' trop grand par rapport au 'Size' donn.
 
 	switch ( Size ) {
 	case 0:
@@ -1509,7 +1509,7 @@ const char *mscrmi::Label( transmission_status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 #undef CASE

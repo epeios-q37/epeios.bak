@@ -230,7 +230,7 @@ namespace btr {
 		}
 		void BecomeOverridingLeft(
 			sdr::row_t__ Left,
-			sdr::row_t__ Parent )	// Force l'action sans tenir compte de l'affectation des noeuds affectés.
+			sdr::row_t__ Parent )	// Force l'action sans tenir compte de l'affectation des noeuds affects.
 		{
 			_node__ GParent = _nodes_::Get( Parent ), GLeft = _nodes_::Get( Left );
 
@@ -243,7 +243,7 @@ namespace btr {
 		//f 'Right' becomes left child of 'Parent'.
 		void BecomeOverridingRight(
 			sdr::row_t__ Right,
-			sdr::row_t__ Parent )	// Force l'action sans tenir compte de l'affectation des noeuds affectés.
+			sdr::row_t__ Parent )	// Force l'action sans tenir compte de l'affectation des noeuds affects.
 		{
 			_node__ GParent = _nodes_::Get( Parent ), GRight = _nodes_::Get( Right );
 
@@ -264,7 +264,7 @@ namespace btr {
 			if ( GParent.Left != E_NIL )
 				ERRFwk();
 
-			if ( ( GLeft.Parent != E_NIL ) && ( GLeft.Parent != Parent ) )	// Un noeud peut avoir pour fils gauche et droit le même noeud.
+			if ( ( GLeft.Parent != E_NIL ) && ( GLeft.Parent != Parent ) )	// Un noeud peut avoir pour fils gauche et droit le mme noeud.
 				ERRFwk();
 #endif
 
@@ -285,7 +285,7 @@ namespace btr {
 			if ( GParent.Right != E_NIL )
 				ERRFwk();
 
-			if ( ( GRight.Parent != E_NIL ) && ( GRight.Parent != Parent ) ) // Un noeud peut avoir pour fils gauche et droit le même noeud.
+			if ( ( GRight.Parent != E_NIL ) && ( GRight.Parent != Parent ) ) // Un noeud peut avoir pour fils gauche et droit le mme noeud.
 				ERRFwk();
 #endif
 			GParent.Right = Right;
@@ -330,11 +330,11 @@ namespace btr {
 		{
 			return HasLeft( Node ) || HasRight( Node );
 		}
-		// Retourne le premier noeud sans fils gauche à partir de 'Node' en descendant par les fils gauche.
+		// Retourne le premier noeud sans fils gauche  partir de 'Node' en descendant par les fils gauche.
 		sdr::row_t__ SearchMostLeftNode(
 			sdr::row_t__ Node,
 			level__ &Level ) const;
-		// Retourne le premier noeud sans noeid gauche à partir de 'Node' en descendant par les noeuds gauche.
+		// Retourne le premier noeud sans noeid gauche  partir de 'Node' en descendant par les noeuds gauche.
 		sdr::row_t__ SearchMostRightNode(
 			sdr::row_t__ Node,
 			level__ &Level ) const;
@@ -350,7 +350,7 @@ namespace btr {
 		{
 			return HasRight( Node ) && HasLeft( Node );
 		}
-		// Echange 'Node1' avec 'Node2', c'est-à-dire qu'il echangent leur parent, et fils gauche et droit respectif.
+		// Echange 'Node1' avec 'Node2', c'est--dire qu'il echangent leur parent, et fils gauche et droit respectif.
 		void SwapNodes(
 			sdr::row_t__ RN1,
 			sdr::row_t__ RN2 )
@@ -383,7 +383,7 @@ namespace btr {
 		}
 		// Retourne le parent du premier noeud qui est fils en remontant.
 		sdr::row_t__ ParentOfFirstLeftNode( sdr::row_t__ Node ) const;
-		// Retourne le père du premier noeud qui est fille en remontant.
+		// Retourne le pre du premier noeud qui est fille en remontant.
 		sdr::row_t__ ParentOfFirstRightNode( sdr::row_t__ Node ) const;
 	};
 
@@ -577,7 +577,7 @@ namespace btr {
 		}
 		/* Retourne l'oncle de 'Node', ou 'E_NIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
 		le parent et le grand-parent de 'Node', s'ils existent. ATTENTION : 'Parent' et 'GrandParent' ne doivent PAS pointer
-		sur la même variable. */
+		sur la mme variable. */
 		r Uncle(
 			r Node,
 			r &Parent,
@@ -599,7 +599,7 @@ namespace btr {
 
 			return Uncle( Node, Parent, GrandParent );
 		}
-		// Retourne le frère, 's'il existe, de 'Node'. Stocke, s'il existe, le parent de 'Node' dans 'PArent'
+		// Retourne le frre, 's'il existe, de 'Node'. Stocke, s'il existe, le parent de 'Node' dans 'PArent'
 		r Sibling(
 			r Node,
 			r &Parent ) const
@@ -613,7 +613,7 @@ namespace btr {
 			else
 				return E_NIL;
 		}
-		// Echange 'Node1' avec 'Node2', c'est-à-dire qu'il echangent leur parent, et enfants respectifs.
+		// Echange 'Node1' avec 'Node2', c'est--dire qu'il echangent leur parent, et enfants respectifs.
 		void SwapNodes(
 			r Node1,
 			r Node2 )
@@ -627,7 +627,7 @@ namespace btr {
 		{
 			Nodes.SwapTrees( *Node1, *Node2 );
 		}
-		// Rotation à droite avec 'Node' come pivot, qui DOIT avoir un fils gauche. Retourne le remplaçant de 'Node'.
+		// Rotation  droite avec 'Node' come pivot, qui DOIT avoir un fils gauche. Retourne le remplaant de 'Node'.
 		r RotateRight( r Node )
 		{
 			r B, D, &E = Node, P;
@@ -667,7 +667,7 @@ namespace btr {
 
 			return B;
 		}
-		// Rotation à gauche avec 'Node' come pivot, qui DOIT avoir un fils droit.. Retourne le remplaçant de 'Node'.
+		// Rotation  gauche avec 'Node' come pivot, qui DOIT avoir un fils droit.. Retourne le remplaant de 'Node'.
 		r RotateLeft( r Node )
 		{
 			r &B = Node, D, E, P;
@@ -708,7 +708,7 @@ namespace btr {
 			return E;
 		}
 		/* Elague 'Node'; 'Node' devient la racine de l'arbre
-		et perd donc son père. */
+		et perd donc son pre. */
 		//f Cut 'Node'. 'Node' becomes a root.
 		void Cut( r Node )
 		{
@@ -879,12 +879,12 @@ namespace btr {
 		{
 			return Nodes.SearchMostRightNode( *Node, Level );
 		}
-		// Retourne le père du premier noeud qui est fils en remontant.
+		// Retourne le pre du premier noeud qui est fils en remontant.
 		r ParentOfFirstLeftNode( r Node ) const
 		{
 			return Nodes.ParentOfFirstLeftNode( *Node );
 		}
-		// Retourne le père du premier noeud qui est fille en remontant.
+		// Retourne le pre du premier noeud qui est fille en remontant.
 		r ParentOfFirstRightNode( r Node ) const
 		{
 			return Nodes.ParentOfFirstRightNode( *Node );
@@ -896,7 +896,7 @@ namespace btr {
 		{
 			Nodes.PrintStructure( *Root, OFlow );
 		}
-		// Sert à parcourir l'arbre de racine 'Racine'. Retourne le noeud aprés 'Position'.
+		// Sert  parcourir l'arbre de racine 'Racine'. Retourne le noeud aprs 'Position'.
 	/*	r Suivant(
 			r Courant,
 			r Racine ) const
@@ -958,7 +958,7 @@ namespace btr {
 		}
 	};
 
-	// Prédéclaration.
+	// Prdclaration.
 	template <typename r_t, typename nodes> class _nodes_manager_;
 
 	typedef bch::E_BUNCH_( btr::_node__<sdr::row_t__> ) _nodes_;
@@ -1310,7 +1310,7 @@ namespace btr {
 		}
 		/* Retourne l'oncle de 'Node', ou 'E_NIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
 		le parent et le grand-parent de 'Node', s'ils existent. ATTENTION : 'Parent' et 'GrandParent' ne doivent PAS pointer
-		sur la même variable. */
+		sur la mme variable. */
 		r Uncle(
 			r Node,
 			r &Parent,
@@ -1333,7 +1333,7 @@ namespace btr {
 			return Uncle( Node, Parent, GrandParent );
 		}
 		/* Elague 'Node'; 'Node' devient la racine de l'arbre
-		et perd donc son père. */
+		et perd donc son pre. */
 		//f Cut 'Node'. 'Node' becomes a root.
 		void Cut( r Node )
 		{
@@ -1475,7 +1475,7 @@ namespace btr {
 		{
 			return HasParent_( *Node );
 		}
-		// Rotation à droite avec 'Node' come pivot, qui DOIT avoir un fils gauche.
+		// Rotation  droite avec 'Node' come pivot, qui DOIT avoir un fils gauche.
 		void RotateRight( r Node )
 		{
 			r A, B, C, P, D = &Node;
@@ -1520,7 +1520,7 @@ namespace btr {
 			if ( C != E_NIL )
 				BecomeLeft( C, D );
 		}
-		// Rotation à droite avec 'Node' come pivot, qui DOIT avoir un fils droit.
+		// Rotation  droite avec 'Node' come pivot, qui DOIT avoir un fils droit.
 		void RotateRight( r Node )
 		{
 			r E, D, C, P, B = &Node;
@@ -1573,11 +1573,11 @@ namespace btr {
 			return ForceParent_( *Node, *Parent );
 		}
 
-	/*	// Ecrit dans 'Flot' l'arbre de racine l'élément à 'Position'.
+	/*	// Ecrit dans 'Flot' l'arbre de racine l'lment  'Position'.
 		void EcrireDansFlot(
 			flo_sortie_portable_ &Flot,
 			r Position ) const;
-		/* Lecture de l'abre contenu dans 'Flot'. La valeur retournée correspond à
+		/* Lecture de l'abre contenu dans 'Flot'. La valeur retourne correspond 
 		la position de la racine. */
 		//	r LireDeFlot( flo_entree_portable_ &Flot );
 		//f Print to 'OFfow' the structure of the tree whith root 'Root'.
@@ -1587,7 +1587,7 @@ namespace btr {
 		{
 			Nodes.PrintStructure( *Root, OFlow );
 		}
-		// Sert à parcourir l'arbre de racine 'Racine'. Retourne le noeud aprés 'Position'.
+		// Sert  parcourir l'arbre de racine 'Racine'. Retourne le noeud aprs 'Position'.
 	/*	r Suivant(
 			r Courant,
 			r Racine ) const

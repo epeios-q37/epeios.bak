@@ -66,7 +66,7 @@ extern class ttr_tutor &BKDCMDTutor;
 #include "flw.h"
 #include "bkdcst.h"
 
-// Si modification, modifier 'BKDRPL' en conséquence.
+// Si modification, modifier 'BKDRPL' en consquence.
 
 //d Version of the commands.
 // #define BKDCMD_COMMANDS_VERSION	"4"

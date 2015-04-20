@@ -34,7 +34,7 @@ void xhtfmn::GetContent(
 	xhtagent::agent_core___ &Agent,
 	xml::writer_ &Writer)
 {
-	// Rien à fournir.
+	// Rien  fournir.
 }
 
 static frdbse::project_type__ GetProjectType_( xhtagent::agent_core___ &Agent )

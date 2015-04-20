@@ -233,7 +233,7 @@ ERREpilog
 }
 
 
-// Donne la liste des identificateurs et des libellés de types
+// Donne la liste des identificateurs et des libells de types
 static void GetTypesIDAndPrefixAndName_(
 	backend_ &Backend,
 	untyped_module &Module,
@@ -474,7 +474,7 @@ ERREnd
 ERREpilog
 }
 
-// Retourne l'identificateur correspondant à un type donné.
+// Retourne l'identificateur correspondant  un type donn.
 static void GetType_(
 	backend_ &Backend,
 	untyped_module &Module,
@@ -581,7 +581,7 @@ ERREpilog
 
 
 
-// Retourne l'identificateur de type et les identificateurs de commande demandé.
+// Retourne l'identificateur de type et les identificateurs de commande demand.
 static void GetTypeAndCommands_(
 	backend_ &Backend,
 	untyped_module &Module,
@@ -607,7 +607,7 @@ static void GetTypeAndCommands_(
 }
 
 
-// Retourne l'identificateur d'une commande donnée pour un type donné.
+// Retourne l'identificateur d'une commande donne pour un type donn.
 static void GetCommand_(
 	backend_ &Backend,
 	untyped_module &Module,
@@ -646,7 +646,7 @@ ERREpilog
 }
 
 
-// Retourne l'identificateur des commandes demandées pour un type donné.
+// Retourne l'identificateur des commandes demandes pour un type donn.
 static void GetCommands_(
 	backend_ &Backend,
 	untyped_module &Module,
@@ -723,7 +723,7 @@ ERREpilog
 #define ADD( I )	Backend.Add( bkdcmd::CommandsNames[bkdcmd::c##I], ::I##_, bkdcmd::CommandsParameters[bkdcmd::c##I] )
 
 namespace bkdmng {
-	// Initialisation avec rattachement à l'interface 'Frontend'.
+	// Initialisation avec rattachement  l'interface 'Frontend'.
 	void master_module::Init( bkdmng::backend_ &Backend )
 	{
 		untyped_module::Init( NULL, NULL );
@@ -737,7 +737,7 @@ namespace bkdmng {
 		// Throw a throw error (ERRt), for testing purpose.
 		ADD( ThrowIError );
 
-		// Gnération d'une erreur utilsateur.
+		// Gnration d'une erreur utilsateur.
 		ADD( ThrowUserDefinedError );
 
 		// Create a new object.
@@ -831,7 +831,7 @@ ERRBegin
 	Flow.Dismiss();
 
 	if ( RemoteTargetLabel[0] && strcmp( RemoteTargetLabel, _TargetLabel ) )
-		ERRl();	// Pas encore traité.
+		ERRl();	// Pas encore trait.
 
 	if ( strcmp( RemoteProtocolVersion, BKDRPL_PROTOCOL_VERSION )
 		 || ( RemoteAPIVersion[0] && strcmp( RemoteAPIVersion, APIVersion ) ) ) {

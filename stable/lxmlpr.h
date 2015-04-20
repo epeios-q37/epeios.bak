@@ -88,11 +88,11 @@ namespace lxmlpr {
 		xtf::location__ &ErrorLine,
 		xtf::location__ &ErrorColumn );
 
-	void Transform( str::string_ &Target );	// Transformation des caractères spéciaux, comm '<' qui devient '&lt;'.
+	void Transform( str::string_ &Target );	// Transformation des caractres spciaux, comm '<' qui devient '&lt;'.
 
 	inline void Convert(
 		const str::string_ &Source,
-		str::string_ &Target )	// Conversion des caractères spéciaux, comm '<' qui devient '&lt;'.
+		str::string_ &Target )	// Conversion des caractres spciaux, comm '<' qui devient '&lt;'.
 	{
 		Target = Source;
 

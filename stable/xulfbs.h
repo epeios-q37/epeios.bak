@@ -101,15 +101,15 @@ namespace xulfbs {
 	XULFBS__W( menu );
 	XULFBS__W( menuitem );
 	XULFBS__W( menulist );
-	// XULFBS__W( Page );	// Définit explicitement à cause de 'XULFBSRefresh(...)'.
+	// XULFBS__W( Page );	// Dfinit explicitement  cause de 'XULFBSRefresh(...)'.
 	XULFBS__W( radio );
 	XULFBS__W( radiogroup );
 	XULFBS__W( tabs );
 	XULFBS__W( tabpanels );
 	XULFBS__W( textbox );
-	// XULFBS__W( tree );	// Définit explicitement à cause de l'utilisation d'un 'trunk'.
+	// XULFBS__W( tree );	// Dfinit explicitement  cause de l'utilisation d'un 'trunk'.
 	XULFBS__W( widget );
-	// XULFBS__W( window );	// Définit explicitement à cause de 'XULWDGRefresh(...)'.
+	// XULFBS__W( window );	// Dfinit explicitement  cause de 'XULWDGRefresh(...)'.
 
 	class _wp_core__
 	{
@@ -344,7 +344,7 @@ namespace xulfbs {
 # define XULFBS_WIDGET( name )	using xulfbs::name##__;
 # define XULFBS_TWIDGET( trunk, name )	typedef xulfbs::_##name##__<trunk> name##__;
 
-/* Manque 'autocomplete_textbox__', car surchargé dans autre bibliothèque.*/
+/* Manque 'autocomplete_textbox__', car surcharg dans autre bibliothque.*/
 # define XULFBS_ALMOST_ALL_WIDGETS( trunk )\
 	XULFBS_WIDGET( box )\
 	XULFBS_WIDGET( button )\

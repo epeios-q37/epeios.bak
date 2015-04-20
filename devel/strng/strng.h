@@ -62,8 +62,8 @@ extern class ttr_tutor &STRNGTutor;
 
 # include "cpe.h"
 
-/* Cette bibliothèque vise à remplacer <string.h>, car l'inclusion directe de cette dernière
-pose problème avec la bibliothèque 'FLS' sous MacOS. */
+/* Cette bibliothque vise  remplacer <string.h>, car l'inclusion directe de cette dernire
+pose problme avec la bibliothque 'FLS' sous MacOS. */
 
 # if 0	// OLD. Obsolete ?
 # ifdef CPE_XCODE

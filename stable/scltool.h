@@ -71,7 +71,7 @@ namespace scltool {
 		}
 		E_CDTOR( text_oflow_rack___ );
 		txf::text_oflow__ &Init( const fnm::name___ &FileName );
-		void HandleError( void );	// A appeler à partir de 'ERRErr'.
+		void HandleError( void );	// A appeler  partir de 'ERRErr'.
 	};
 
 	struct oddities__ {
@@ -93,12 +93,12 @@ namespace scltool {
 		int argc;
 	};
 
-	// A définir par l'utilisateur.
+	// A dfinir par l'utilisateur.
 	int SCLTOOLMain(
 		const str::string_ &Command,
 		const oddities__ &Oddities );
 
-	extern bso::bool__ IgnoreUnknownArguments;	// A 'false' par défaut, mais peut être modifié par l'utilisateur (p. ex. dans l'utilisation de 'CEF').
+	extern bso::bool__ IgnoreUnknownArguments;	// A 'false' par dfaut, mais peut tre modifi par l'utilisateur (p. ex. dans l'utilisation de 'CEF').
 }
 
 				  /********************************************/

@@ -20,7 +20,7 @@
 // eSKeTch Backend/Frontend Common
 // Sometimes, for optimization purpose, frontend has to to make some tasks normally achieved by the backend.
 // This is the place where to put common objects and functions.
-// (ex. : Gestion liste d'autorité dans 'Gesbib').
+// (ex. : Gestion liste d'autorit dans 'Gesbib').
 
 #ifndef SKTFBC__INC
 # define SKTFBC__INC

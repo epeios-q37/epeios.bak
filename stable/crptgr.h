@@ -237,7 +237,7 @@ namespace crptgr {
 			_Key.Init( Key );
 
 			if ( !_Key.Amount() )
-				_Key.Append( '\0' );	// Pas de décryptage si 'Key' vide.
+				_Key.Append( '\0' );	// Pas de dcryptage si 'Key' vide.
 
 			_Position = 0;
 		}
@@ -267,7 +267,7 @@ namespace crptgr {
 		void Init(
 			flw::iflow__ &Flow,
 			const str::string_ &Key,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )	// 'Key' n'est PAS dupliqué.
+			flw::size__ AmountMax = FLW_AMOUNT_MAX )	// 'Key' n'est PAS dupliqu.
 		{
 			_Driver.Init( Flow, Key, fdr::tsDisabled );
 			_iflow__::Init( _Driver, AmountMax );

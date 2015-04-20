@@ -117,7 +117,7 @@ namespace ssnmng {
 	struct chrono__ {
 		time_t Relative;
 		time_t Absolute;
-		bso::bool__ Immortal;	// A vrai si la session est toujours considèré comme valide, quel que soit sa durée d'existence.
+		bso::bool__ Immortal;	// A vrai si la session est toujours considr comme valide, quel que soit sa dure d'existence.
 	};
 
 	class user_functions__
@@ -285,7 +285,7 @@ namespace ssnmng {
 				Queue.BecomeNext( P, Queue.Tail() );
 			}
 		}
-		//f La session concernée est toujours considèrée comme valide, jusqu'au prochain 'Touch()',
+		//f La session concerne est toujours considre comme valide, jusqu'au prochain 'Touch()',
 		void MarkAsImmortal( row__ P )
 		{
 			chrono__ C = Chronos.Get( P );

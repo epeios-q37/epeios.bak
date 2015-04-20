@@ -220,7 +220,7 @@ const char *nsxpcm::GetLabel( text__ Text )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 
@@ -615,7 +615,7 @@ static inline PRInt16 ConvertType_( file_picker_type__ Type )
 		break;
 	}
 
-	return 0;	// Pour éviter un 'warning'.
+	return 0;	// Pour viter un 'warning'.
 }
 
 static inline void AddFilter_(
@@ -729,10 +729,10 @@ ERRBegin
 
 	if ( ParentWindow == NULL )
 		ERRPrm();
-	/* 'ParentWindow' doit être fourni et ne peut êtr edéduit de 'MAsterWindow', car,
+	/* 'ParentWindow' doit tre fourni et ne peut tr edduit de 'MAsterWindow', car,
 	cette fonction bloquant toute action sur 'ParentWindow', si plusieurs sessions,
-	c'est une mauvaise fenêtre (c'est-à-dire une qui n'a pas initié l'ouverture de
-	sélecteur) qui rique d'être bloquée). */
+	c'est une mauvaise fentre (c'est--dire une qui n'a pas initi l'ouverture de
+	slecteur) qui rique d'tre bloque). */
 
 	if ( ( Error = FilePicker->Init( ParentWindow, WString, ConvertType_( Type ) ) ) != NS_OK )
 		ERRLbr();
@@ -1478,7 +1478,7 @@ ERRProlog
 	event__ Event = e_Undefined;
 	TOL_CBUFFER___ StrBuffer;
 ERRBegin
-	// Sauvegarde pour la gestion d'évènements imbriqués.
+	// Sauvegarde pour la gestion d'vnements imbriqus.
 	nsIDOMEvent *RawEventBuffer = _EventData._RawEvent;
 	nsIDOMMutationEvent *MutationEventBuffer = _EventData._MutationEvent;
 	nsIDOMKeyEvent *KeyEventBuffer = _EventData._KeyEvent;
@@ -1521,7 +1521,7 @@ ERRBegin
 	Success = true;
 ERRErr
 	if ( ERRType == err::t_Abort ) 
-		Success = true;	// L'erreur a été déjà traite (ou va l'être ci-dessous) ; plus la peine de la remonter.
+		Success = true;	// L'erreur a t dj traite (ou va l'tre ci-dessous) ; plus la peine de la remonter.
 //	NSXPCM_ERR( _Window );
 ERREnd
 ERREpilog
@@ -1592,7 +1592,7 @@ ERRBegin
 	Transform( RawName, Name );
 
 	if ( Name == "window" )
-		ERRLmt();	// J'ignore comment, à partir de cet élément, récupèrer un élément sur lequel un gestionnaire d'évènement soit actif.
+		ERRLmt();	// J'ignore comment,  partir de cet lment, rcuprer un lment sur lequel un gestionnaire d'vnement soit actif.
 	else if ( Name == "textbox" ) {
 		// Supports = nsxpcm::QueryInterface<nsIAutoCompleteInput>( Node );
 		// Supports = Popup;
@@ -1720,8 +1720,8 @@ static inline void RefreshObserver_(
 }
 
 /*
-	Comme certains 'broadcasters' sont génèrés dynamiquement, à l'aide d'une transformation 'XSL',
-	il est nécessaire de rafraîchir les attributs 'observes' des éléments qui s'y réfèrenet,
+	Comme certains 'broadcasters' sont gnrs dynamiquement,  l'aide d'une transformation 'XSL',
+	il est ncessaire de rafrachir les attributs 'observes' des lments qui s'y rfrenet,
 	sinon les modifications de seont pas prises en comptes.
 */
 
@@ -1758,7 +1758,7 @@ ERREnd
 ERREpilog
 }
 
-/* Début 'event_listener__' */
+/* Dbut 'event_listener__' */
 
 NS_IMPL_ISUPPORTS1(nsxpcm::event_listener__, nsxpcm::event_listener__ );
 
@@ -1790,7 +1790,7 @@ void nsxpcm::tree__::_SetTreeView( class tree_view_callback__ &Callback )
 	T( GetWidget()->SetView( _TreeView ) );
 }
 
-/* Début 'tree_view__' */
+/* Dbut 'tree_view__' */
 
 NS_IMPL_ISUPPORTS2(nsxpcm::tree_view__, nsxpcm::tree_view__, nsITreeView );
 
@@ -2010,7 +2010,7 @@ NS_IMETHODIMP nsxpcm::tree_view__::PerformActionOnCell(const char16_t* aAction, 
 
 /* Fin 'tree_view' */
 
-/* Début 'textbox' 'autocomplete' */
+/* Dbut 'textbox' 'autocomplete' */
 
 NS_IMPL_ISUPPORTS2 ( nsxpcm::autocomplete_result___, nsxpcm::autocomplete_result___, nsIAutoCompleteResult );
 
@@ -2404,7 +2404,7 @@ void nsxpcm::LaunchURI( const str::string_ &RawURI )
 	nsCString TransformedURI;
 	nsIURI *URI = NULL;
 
-	nsresult Result = NS_OK;	// Uniquement à des fins de débogage.
+	nsresult Result = NS_OK;	// Uniquement  des fins de dbogage.
 
 	CreateInstance( "@mozilla.org/network/io-service;1", IOService );
 	CreateInstance( "@mozilla.org/uriloader/external-protocol-service;1", ExternalProtocolService );

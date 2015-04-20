@@ -41,7 +41,7 @@ namespace lst {
 
 	typedef ids::E_IDS_STORE_( sdr::row__ ) store_;
 
-	// Retourne l'id de la première entrée disponible (hors pile des 'released').
+	// Retourne l'id de la premire entre disponible (hors pile des 'released').
 	uys::state__ WriteToFile_(
 		const store_ &Store,
 		const fnm::name___ &Name );
@@ -90,9 +90,9 @@ namespace lst {
 	template <typename r, typename r_t> class list_
 	{
 	protected:
-		/*v Cette fonction est appelée lors d'allocations dans la liste;
+		/*v Cette fonction est appele lors d'allocations dans la liste;
 		permet de synchroniser la taille de la liste avec d'autres ensembles;
-		'Size' est la capacité allouée. */
+		'Size' est la capacit alloue. */
 		virtual void LSTAllocate(
 			sdr::size__ Size,
 			aem::mode__ Mode ) = 0;
@@ -113,12 +113,12 @@ namespace lst {
 
 			return New;
 		}
-		// Retourne l'élément succédant à 'Element', ou LST_INEXISTANT si inexistant.
+		// Retourne l'lment succdant  'Element', ou LST_INEXISTANT si inexistant.
 		sdr::row_t__ Successeur_( sdr::row_t__ Element ) const
 		{
 			return lst::Successeur_( Element, Extent_(), Locations );
 		}
-		// Retourne l'élément précédent 'Element', ou LST_INEXISTANT si inexistant.
+		// Retourne l'lment prcdent 'Element', ou LST_INEXISTANT si inexistant.
 		sdr::row_t__ Predecesseur_( sdr::row_t__ Element ) const
 		{
 			return lst::Predecesseur_( Element, Locations );
@@ -292,7 +292,7 @@ namespace lst {
 			else
 				return !Locations.IsAvailable( *Entry );
 		}
-		// Ne peut être appelé que lorsqu'il y a aucune entrée libre.
+		// Ne peut tre appel que lorsqu'il y a aucune entre libre.
 		void Allocate(
 			sdr::size__ Size,
 			aem::mode__ Mode = aem::m_Default )
@@ -332,7 +332,7 @@ namespace lst {
 		E_CDTOR( hook_filenames___ );
 		void Init(
 			const fnm::name___ &Path,
-			const fnm::name___ &Basename )	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
+			const fnm::name___ &Basename )	// Peut tre vide ('NULL') si 'Path' contient dj le nom de fichier.
 		{
 			Filename.Init();
 			fnm::BuildPath( Path, Basename, "l.q37", Filename );
@@ -427,7 +427,7 @@ namespace lst {
 				return State;
 			
 			while ( fil::GetLastModificationTime( _Filename ) <= ReferenceTimeStamp ) {
-				tol::EpochTime( true );	// Permet d'attendre une unité de temps.
+				tol::EpochTime( true );	// Permet d'attendre une unit de temps.
 				fil::Touch( _Filename );
 			}
 
@@ -510,7 +510,7 @@ namespace lst {
 	private:
 		// Table de l'occupation de la liste.
 		bitbch::bit_bunch__<t, r> Occupation_;
-		// Nombre d'éléments dans la liste.
+		// Nombre d'lments dans la liste.
 		sdr::size__ Nombre_;
 	public:
 		list__( void )

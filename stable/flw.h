@@ -64,7 +64,7 @@ extern class ttr_tutor &FLWTutor;
 #include "cpe.h"
 #include "fdr.h"
 
-// Non utilisé dabs cette bibliothèque, mais dans des bibliothèques appelantes.
+// Non utilis dabs cette bibliothque, mais dans des bibliothques appelantes.
 #ifndef FLW_INPUT_CACHE_SIZE
 #	define FLW__INPUT_CACHE_SIZE	FDR__DEFAULT_CACHE_SIZE
 #else
@@ -90,9 +90,9 @@ namespace flw {
 	using fdr::size__;
 
 	//c Base input flow.
-	class iflow__	/* Bien que cette classe ai un destructeur, elle est suffixée par '__', d'une part pour simplifier
-					son utilisation (comme déclaration de paramètre d'une fonction) et, d'autre part,
-					parce qu'elle ne sera jamais instanciée telle quelle, mais toujours héritée (bien que ce ne
+	class iflow__	/* Bien que cette classe ai un destructeur, elle est suffixe par '__', d'une part pour simplifier
+					son utilisation (comme dclaration de paramtre d'une fonction) et, d'autre part,
+					parce qu'elle ne sera jamais instancie telle quelle, mais toujours hrite (bien que ce ne
 					soit pas obligatoire d'un point de vue C++, car ce n'est pas une fonction abstraite).*/
 	{
 	private:
@@ -197,9 +197,9 @@ namespace flw {
 		}
 		bso::bool__ IsCacheEmpty( bso::size__ &Available = *(bso::size__ *)NULL ) const
 		{
-			return _D().IsCacheEmpty( Available );
+			return _D().IsCacheEmpty( &Available );
 		}
-		// Si valeur retournée == '0', alors toutes les données ont été lues.
+		// Si valeur retourne == '0', alors toutes les donnes ont t lues.
 		size__ ReadUpTo(
 			size__ Amount,
 			void *Buffer )
@@ -282,7 +282,7 @@ namespace flw {
 	};
 
 
-	// Uniquement pour avoir une symétrie par rapport à 'standalone_oflow__'.
+	// Uniquement pour avoir une symtrie par rapport  'standalone_oflow__'.
 	template <int Dummy = 0> class standalone_iflow__
 	: public iflow__
 	{
@@ -290,7 +290,7 @@ namespace flw {
 		standalone_iflow__( void )
 		{
 			if ( Dummy != 0 )	
-				ERRPrm();	// 'Dummy' n'étant pas utilisé, rien ne sert de modifier sa valeur.
+				ERRPrm();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 		}
 		void Init(
 			fdr::iflow_driver_base___ &Driver,
@@ -320,9 +320,9 @@ namespace flw {
 
 
 	//c Basic output flow.
-	class oflow__	/* Bien que cette classe ai un destructeur, elle est suffixée par '__', d'une part pour simplifier
-					son utilisation (comme déclaration de paramètre d'une fonction) et, d'autre part,
-					parce qu'elle ne sera jamais instanciée telle quelle, mais toujours héritée (bien que ce ne
+	class oflow__	/* Bien que cette classe ai un destructeur, elle est suffixe par '__', d'une part pour simplifier
+					son utilisation (comme dclaration de paramtre d'une fonction) et, d'autre part,
+					parce qu'elle ne sera jamais instancie telle quelle, mais toujours hrite (bien que ce ne
 					soit pas obligatoire d'un point de vue C++, car ce n'est pas une classe abstraite).*/
 	{
 	private:
@@ -509,7 +509,7 @@ namespace flw {
 		{
 			return WriteUpTo( Buffer, Maximum );
 		}
-		datum__ *GetCurrentCacheDatum( bso::bool__ MarkAsUsed )	/* Si 'AsUsed' à vrai, considère le 'datum' retourné comme utilisé. */
+		datum__ *GetCurrentCacheDatum( bso::bool__ MarkAsUsed )	/* Si 'AsUsed'  vrai, considre le 'datum' retourn comme utilis. */
 		{
 			if ( _Free == 0 )
 				_DumpCache();

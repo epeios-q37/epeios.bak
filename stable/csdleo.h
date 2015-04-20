@@ -46,7 +46,7 @@
 // # define CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME		CSDLEOReleaseCallback
 
 /*
-NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
+NOTA : version de la classe 'shared_data__',  mettre  jour  chaque fois que cette dernire est modifie.
 */
 
 # define CSDLEO_SHARED_DATA_VERSION_NUMBER	"6"
@@ -63,19 +63,19 @@ namespace csdleo {
 	};
 
 	enum context__ {
-		cIntrospection,	// Récupération de l'API.
+		cIntrospection,	// Rcupration de l'API.
 		cRegular,		// fonctionnement normal
 		c_amount,
 		c_Undefined,
 	};
 
 #pragma pack( push, 1)
-	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class data_control__
 	{
 	public:
-		const char *Version;	// Toujours en première position.
-		bso::uint__ Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		const char *Version;	// Toujours en premire position.
+		bso::uint__ Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
 		void reset( bso::bool__ = true )
 		{
 			Version = NULL;
@@ -93,13 +93,13 @@ namespace csdleo {
 		}
 	};
 
-	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class data__ {
 	public:
 		context__ Context;
 		const char *LibraryLocationAndName;
 		err::err___ *ERRError;
-		void *UP;				// A la discrétion de l'utilisateur.
+		void *UP;				// A la discrtion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
 			Context = c_Undefined;
@@ -130,7 +130,7 @@ namespace csdleo {
 		}
 	};
 
-	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
 	: public data_control__,
 	  public data__
@@ -173,13 +173,13 @@ namespace csdleo {
 		void Initialize(
 			const shared_data__ *Data,
 			const ntvstr::char__ *FirstParameter = NULL,
-			... /* Autres paramètres. Le dernier doit être = 'NULL' */ )
+			... /* Autres paramtres. Le dernier doit tre = 'NULL' */ )
 		{
 			va_list Parameters;
 			va_start( Parameters, FirstParameter );
 
-			CSDLEOInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la méthode appelée.
-			// Il n'existe en tant que paramètre de cette méthode que pour en faciliter la compréhension.
+			CSDLEOInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la mthode appele.
+			// Il n'existe en tant que paramtre de cette mthode que pour en faciliter la comprhension.
 		}
 		csdscb::callback__ *RetrieveCallback(
 			csdleo::mode__ Mode,

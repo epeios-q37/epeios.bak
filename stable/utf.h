@@ -132,7 +132,7 @@ namespace utf {
 			break;
 		}
 
-		return 0;	// Pour éviter un 'warning'.
+		return 0;	// Pour viter un 'warning'.
 	}
 
 	template <typename feeder> inline bso::u8__ HandleANSI( feeder &Feeder )
@@ -168,7 +168,7 @@ namespace utf {
 			_Format = f_Undefined;
 		}
 		E_CDTOR( utf__ );
-		bso::bool__ Init( format__ Format )	// Retourne 'false' si format non supporté, 'true' sinon.
+		bso::bool__ Init( format__ Format )	// Retourne 'false' si format non support, 'true' sinon.
 		{
 			_Format = Format;
 
@@ -243,7 +243,7 @@ namespace utf {
 				break;
 			}
 
-			return 0;	// Pour éviter iun 'warning'.
+			return 0;	// Pour viter iun 'warning'.
 		}
 		bso::bool__ SetFormat(
 			format__ Format,

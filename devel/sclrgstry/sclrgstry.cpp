@@ -47,12 +47,11 @@ static rgstry::level__ SetupLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ ArgumentsLevel_ = rgstry::UndefinedLevel;
 
 rgstry::entry___ sclrgstry::Parameters( ParametersTag );
-
 rgstry::entry___ sclrgstry::Definitions( "Definitions" );
+rgstry::entry___ sclrgstry::Locale( "Locale" );
+rgstry::entry___ sclrgstry::Arguments( "Arguments" );
 
 rgstry::entry___ sclrgstry::Language( "Language", Parameters );
-
-rgstry::entry___ sclrgstry::Locale( "Locale", Definitions );
 
 static rgstry::entry___ PluginParameters_( "Plugins", sclrgstry::Parameters );
 rgstry::entry___ sclrgstry::PluginParameter( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), PluginParameters_ );
@@ -182,8 +181,8 @@ void sclrgstry::EraseProjectRegistry( void )
 
 #define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
 
-void sclrgstry::LoadProject(
-	flw::iflow__ &Flow,
+template <typename source> static void LoadProject_(
+	source &Source,
 	const char *Target,
 	str::string_ &Id )
 {
@@ -191,17 +190,14 @@ ERRProlog
 	str::string Path;
 	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
-	bso::bool__ Missing = false;
-	xtf::extended_text_iflow__ XFlow;
 ERRBegin
 	Path.Init( PROJECT_ROOT_PATH );
 	tagsbs::SubstituteShortTag( Path, 1, str::string( Target ), '%' );
 
 	EraseProjectRegistry();
 
-	XFlow.Init( Flow, utf::f_Guess );
 	Context.Init();
-	if ( Registry_.Fill( ProjectLevel_, XFlow, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
+	if ( Registry_.Fill( ProjectLevel_, Source, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
 	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
@@ -210,21 +206,30 @@ ERREnd
 ERREpilog
 }
 
+
+
 void sclrgstry::LoadProject(
-	const fnm::name___ &FileName,
+	flw::iflow__ &Flow,
 	const char *Target,
 	str::string_ &Id )
 {
 ERRProlog
-	flf::file_iflow___ Flow;
+	xtf::extended_text_iflow__ XFlow;
 ERRBegin
-	if ( !Flow.Init( FileName, err::hUserDefined ) )
-		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
+	XFlow.Init( Flow, utf::f_Guess );
 
-	LoadProject( Flow, Target, Id );
+	LoadProject_( XFlow, Target, Id );
 ERRErr
 ERREnd
 ERREpilog
+}
+
+void sclrgstry::LoadProject(
+	const fnm::name___ &Filename,
+	const char *Target,
+	str::string_ &Id )
+{
+	LoadProject_( Filename, Target, Id );
 }
 
 void sclrgstry::EraseSetupRegistry( void )

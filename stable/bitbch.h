@@ -38,7 +38,7 @@
 # include "tys.h"
 # include "aem.h"
 
-/* ATTENTION: si la taille du réceptacle n'est plus de 1 octet, modifier la valeur
+/* ATTENTION: si la taille du rceptacle n'est plus de 1 octet, modifier la valeur
 des #define ci-dessous. */
 # define BITBCH__RECEPTACLE_SIZE_IN_BYTES	sizeof( bitbch::receptacle__ )
 
@@ -104,17 +104,17 @@ namespace bitbch {
 		{
 			return (receptacle__)( *Position % BITBCH__RECEPTACLE_SIZE_IN_BITS );
 		}
-		// retourne l'offset correpondant à 'Position'
+		// retourne l'offset correpondant  'Position'
 		static r Indice_( r Position )
 		{
 			return *Position / BITBCH__RECEPTACLE_SIZE_IN_BITS;
 		}
-		// retourne l'indice correspondant à 'Position'
+		// retourne l'indice correspondant  'Position'
 		static bso::u8__ Masque_( r Position )
 		{
 			return (bso::u8__)( 1 << Offset_( Position ) );
 		}
-		// retourne le masque correspondant à 'Position'
+		// retourne le masque correspondant  'Position'
 	public:
 		static bso::bool__ Lire(
 			r Position,
@@ -122,7 +122,7 @@ namespace bitbch {
 		{
 			return ( Table.Get( Indice_( Position ) ) & Masque_( Position ) ) != 0;
 		}
-		// retourne la valeur du bit à la position 'Position' (>=0)
+		// retourne la valeur du bit  la position 'Position' (>=0)
 		static void Ecrire(
 			bso::bool__ Valeur,
 			r Position,
@@ -130,7 +130,7 @@ namespace bitbch {
 		{
 			Table.Store( (receptacle__)( ( Table.Get( Indice_( Position ) ) & ~Masque_( Position ) ) | ( ( Valeur ? 1 << Offset_( Position ) : 0 ) ) ), Indice_( Position ) );
 		}
-		// place un bit de valeur 'Valeur' à la position 'Position'
+		// place un bit de valeur 'Valeur'  la position 'Position'
 	};
 
 
@@ -237,7 +237,7 @@ namespace bitbch {
 		}
 	};
 
-	// N.B.: le contenu du tableau est inversé bit à bit
+	// N.B.: le contenu du tableau est invers bit  bit
 	//c Bits set.
 	template <typename r> class bit_bunch_
 	: public amount_extent_manager_<r>
@@ -251,7 +251,7 @@ namespace bitbch {
 		{
 			return functions__<tys::E_STORAGEt_( receptacle__, r ), r>::Lire( Position, Table );
 		}
-		// retourne la valeur du bit à la position 'Position' (>=0)
+		// retourne la valeur du bit  la position 'Position' (>=0)
 		void Ecrire_(
 			bso::bool__ Valeur,
 			r Position )
@@ -260,7 +260,7 @@ namespace bitbch {
 
 	//		Table.Ecrire( Indice, (receptacle__)( ( Table.Objet(Indice) & (receptacle__)~( (receptacle__)1 << Offset ) ) | ( !Valeur << Offset ) ) );
 		}
-		// place un bit de valeur 'Valeur' à la position 'Position'
+		// place un bit de valeur 'Valeur'  la position 'Position'
 		void Allouer_(
 			sdr::size__ Nombre,
 			aem::mode__ Mode = aem::m_Default )
@@ -358,7 +358,7 @@ namespace bitbch {
 			if ( Value )
 				Pattern = -1;
 
-			Table.Store( Pattern, 0, Convert_( amount_extent_manager_<r>::Amount() ) );
+			Table.Fill( Pattern, 0, Convert_( amount_extent_manager_<r>::Amount() ) );
 		}
 	};
 

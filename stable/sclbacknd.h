@@ -49,7 +49,7 @@
 
 namespace sclbacknd {
 
-	// Prédéclaration.
+	// Prdclaration.
 	class callback__;
 
 	typedef fblbkd::backend___	_backend___;

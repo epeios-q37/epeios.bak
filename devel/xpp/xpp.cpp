@@ -111,7 +111,7 @@ const char *xpp::GetLabel( status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 void xpp::GetMeaning(
@@ -422,7 +422,7 @@ static status__ GetDefineNameAndContent_(
 	return sOK;
 }
 
-status__ xpp::_extended_parser___::_HandleDefineDirective( _extended_parser___ *&Parser )	// 'Parser' est mis à 'NULL', ce qui est normal. 
+status__ xpp::_extended_parser___::_HandleDefineDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal. 
 {
 	status__ Status = s_Undefined;
 ERRProlog
@@ -457,7 +457,7 @@ enum expand_type__ {
 static inline expand_type__ GetExpandTypeAndValue_(
 	parser___ &Parser,
 	str::string_ &Value,
-	status__ &Status )	// Siginfiant seulement si valeur retournée == 'et_Undefined'.
+	status__ &Status )	// Siginfiant seulement si valeur retourne == 'et_Undefined'.
 {
 	expand_type__ Type = et_Undefined;
 ERRProlog
@@ -618,7 +618,7 @@ ERRBegin
 		Status = _HandleVariableExpand( Value, Parser );
 		break;
 	case et_Undefined:
-		// 'Status' initialisé par 'etExpandTypeAndValue_(...)'.
+		// 'Status' initialis par 'etExpandTypeAndValue_(...)'.
 		break;
 	default:
 		ERRFwk();
@@ -701,7 +701,7 @@ static status__ GetSetNameAndValue_(
 	return Status;
 }
 
-status__ xpp::_extended_parser___::_HandleSetDirective( _extended_parser___ *&Parser )	// 'Parser' est mis à 'NULL', ce qui est normal. 
+status__ xpp::_extended_parser___::_HandleSetDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal. 
 {
 	status__ Status = s_Undefined;
 ERRProlog
@@ -828,7 +828,7 @@ enum cypher_mode__
 static inline cypher_mode__ GetCypherModeAndValue_(
 	parser___ &Parser,
 	str::string_ &Value,
-	status__ &Status )	// Siginfiant seulement si valeur retournée == 'et_Undefined'.
+	status__ &Status )	// Siginfiant seulement si valeur retourne == 'et_Undefined'.
 {
 	cypher_mode__ Mode = cm_Undefined;
 ERRProlog
@@ -902,7 +902,7 @@ ERRBegin
 		Status = _HandleCypherOverride( Value, Parser );
 		break;
 	case cm_Undefined:
-		// 'Status' initialisé par 'etCypherModeAndValue_(...)'.
+		// 'Status' initialis par 'etCypherModeAndValue_(...)'.
 		break;
 	default:
 		ERRFwk();
@@ -937,10 +937,10 @@ status__ xpp::_extended_parser___::_HandlePreprocessorDirective(
 		return _HandleDefineDirective( Parser );
 		break;
 	case dBloc:
-		ERRFwk();	// Traité en amont.
+		ERRFwk();	// Trait en amont.
 		break;
 	case dCData:
-		ERRFwk();	// Traité en amont.
+		ERRFwk();	// Trait en amont.
 		break;
 	case dExpand:
 		return _HandleExpandDirective( Parser );
@@ -961,7 +961,7 @@ status__ xpp::_extended_parser___::_HandlePreprocessorDirective(
 
 	ERRFwk();
 
-	return s_Undefined;	// Pour éviter un 'warning'.
+	return s_Undefined;	// Pour viter un 'warning'.
 
 }
 
@@ -1244,7 +1244,7 @@ status__ xpp::_extended_parser___::Handle(
 				case dBloc:
 				case dCData:
 					_Parser.PurgeDumpData();
-					// L'attribut n'est pas répercuté sur le flux de sortie.
+					// L'attribut n'est pas rpercut sur le flux de sortie.
 					break;
 				default:
 					ERRFwk();
@@ -1655,7 +1655,7 @@ ERRBegin
 				Writer.PushTag( Parser.TagName() );
 			break;
 		case xml::tStartTagClosed:
-			// Pour purger le 'Dump' d'un éventuel '>' en attente (gênant lors du relayage d'un commentaire.
+			// Pour purger le 'Dump' d'un ventuel '>' en attente (gnant lors du relayage d'un commentaire.
 			break;
 		case xml::tAttribute:
 		case xml::tSpecialAttribute:
@@ -1669,7 +1669,7 @@ ERRBegin
 			break;
 		case xml::tComment:
 		case xml::tCData:
-			Writer.PutValue( "" );	// Pour mettre un éventuel '>' en attente.
+			Writer.PutValue( "" );	// Pour mettre un ventuel '>' en attente.
 			Writer.GetFlow() << Parser.DumpData();
 			break;
 		case xml::t_Processed:

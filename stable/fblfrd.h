@@ -162,7 +162,7 @@ namespace fblfrd {
 			*APIVersion;
 		void reset( bso::bool__ = true )
 		{
-			BackendLabel = APIVersion = "";	// Bien une chaîne vide, et pas 'NULL'.
+			BackendLabel = APIVersion = "";	// Bien une chane vide, et pas 'NULL'.
 		}
 		compatibility_informations__( void )
 		{
@@ -234,8 +234,8 @@ namespace fblfrd {
 	private:
 		fblfph::callbacks__ *_ParametersCallbacks;
 		reporting_callback__ *_ReportingCallback;
-		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramètre d'entrée.
-		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramètre flow dans les paramètres de sortie.
+		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramtre d'entre.
+		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramtre flow dans les paramtres de sortie.
 		bso::bool__ _DismissPending;
 		void _PreProcess( void )
 		{
@@ -396,7 +396,7 @@ namespace fblfrd {
 
 			RetrieveBackendCommands_();
 		ERRErr
-			Channel_ = NULL;	// Pour éviter toute future tentative de communication avec le backend.
+			Channel_ = NULL;	// Pour viter toute future tentative de communication avec le backend.
 		ERREnd
 		ERREpilog
 			return Success;
@@ -457,7 +457,7 @@ namespace fblfrd {
 
 			_FlowInParameter = &Flow;
 
-			// Le passage du contenu du paraèmtre se fera ultèrieurement, en fin de requête.
+			// Le passage du contenu du paramtre se fera ultrieurement, en fin de requte.
 		}
 		// Lorsque tout le contenu de ce 'Flow' est lu, appeler 'Dismiss()'.
 		void FlowOut( flw::iflow__ *&Flow )
@@ -506,7 +506,7 @@ namespace fblfrd {
 
 			return Reply;
 		}
-		void Dismiss( void )	// A appeler uniquement lorsque l'un des paramètres de sortie est un 'flow', dés que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
+		void Dismiss( void )	// A appeler uniquement lorsque l'un des paramtres de sortie est un 'flow', ds que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
 		{
 			if ( _FlowOutParameter )
 				ERRFwk();

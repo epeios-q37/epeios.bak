@@ -137,7 +137,7 @@ ERREpilog
 		{
 			return FRDSSNLanguage( Buffer );
 		}
-		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramètres de sortie est un 'flow', dés que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
+		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramtres de sortie est un 'flow', ds que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
 		{
 			_Test();
 

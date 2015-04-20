@@ -34,7 +34,7 @@ using namespace err;
 
 #include "tol.h"
 
-// Utilisé durant la phase de chargement du programme.
+// Utilis durant la phase de chargement du programme.
 static err::err___ FallbackError_( true );
 
 err::err___ *err::ERRError = &FallbackError_;
@@ -73,7 +73,7 @@ const char *GetFileName_( const char *Path )
 	return Repere;
 }
 
-// Retourne une chaîne ASCII contenant une brève description de ce qui est passé en paramètre.
+// Retourne une chane ASCII contenant une brve description de ce qui est pass en paramtre.
 const char *err::Message(
 	const char *Fichier,
 	int Ligne,
@@ -170,7 +170,7 @@ void err___::Init( void )
 	Type = t_None;
 }
 
-// Handler par défaut.
+// Handler par dfaut.
 void err___::Set(
 	const char *Fichier,
 	int Ligne,

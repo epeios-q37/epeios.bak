@@ -84,7 +84,7 @@ namespace csdbns {
 		socket__ Socket_;
 		socket_callback__ *_Callback;
 		void *_UP;
-		bso::bool__ _CallbackAvailable( void ) const	// Retourne 'true', si un 'callback' est présent.
+		bso::bool__ _CallbackAvailable( void ) const	// Retourne 'true', si un 'callback' est prsent.
 		{
 			return _Callback != NULL;
 		}
@@ -101,7 +101,7 @@ namespace csdbns {
 					Close( Socket_ );
 
 				if ( _CallbackAvailable() )
-					_Callback->PostProcess( _UP );	// Même si 'UP' != NULL;
+					_Callback->PostProcess( _UP );	// Mme si 'UP' != NULL;
 			}
 
 			Socket_ = SCK_INVALID_SOCKET;

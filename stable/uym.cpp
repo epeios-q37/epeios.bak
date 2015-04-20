@@ -153,7 +153,7 @@ inline void uym::_Copy(
 }
 
 
-/* Duplique 'Objet' 'Nombre' fois à partir de 'Position'
+/* Duplique 'Objet' 'Nombre' fois  partir de 'Position'
 sachant qu'il est de taille 'Taille'. */
 void untyped_memory_::Store(
 	const datum__ *Objet,

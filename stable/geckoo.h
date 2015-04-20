@@ -145,12 +145,12 @@ namespace geckoo {
 	class shared_data__
 	{
 	public:
-		static const char *Version;	// Toujours en première position.
-		static bso::uint__ Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		static const char *Version;	// Toujours en premire position.
+		static bso::uint__ Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
 		const char *LauncherIdentification;
 		const char *Language;
-		const fnm::name___ *Path;	// Chemin d la bibliothèque.
-		void *UP;				// A la discrétion de l'utilisateur.
+		const fnm::name___ *Path;	// Chemin d la bibliothque.
+		void *UP;				// A la discrtion de l'utilisateur.
 		fdr::oflow_driver___<> *COut, *CErr;
 		void reset( bso::bool__ P = true )
 		{

@@ -70,7 +70,7 @@ namespace ias {
 	//t The type of an index in the indexed multimemory.
 	E_ROW( index__ );
 
-	// Prédéclaration.
+	// Prdclaration.
 	class indexed_aggregated_storage_;
 
 	class _indexed_aggregated_storage_driver__
@@ -85,7 +85,7 @@ namespace ias {
 			ERRFwk();
 		}
 		virtual sdr::size__ SDRSize( void ) const;
-		// Déportée.
+		// Dporte.
 		virtual void SDRRecall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
@@ -128,7 +128,7 @@ namespace ias {
 		{
 			return _Index;
 		}
-		// Déportée.
+		// Dporte.
 		friend class indexed_aggregated_storage_driver__;
 	};
 
@@ -138,14 +138,14 @@ namespace ias {
 	{
 	private:
 		indexed_aggregated_storage_ *_AStorage;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 	protected:
-		// Déportée.
+		// Dporte.
 		virtual void SDRStore(
 			const sdr::datum__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position );
-		// Déportée.
+		// Dporte.
 		virtual void SDRAllocate( sdr::size__ Capacity );
 	public:
 		indexed_aggregated_storage_driver__( void )
@@ -168,7 +168,7 @@ namespace ias {
 	{
 	private:
 		const indexed_aggregated_storage_ *AStorage_;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 	public:
 		const_indexed_aggregated_storage_driver__( void )
 		: _indexed_aggregated_storage_driver__( AStorage_ ) {}
@@ -248,7 +248,7 @@ namespace ias {
 		{
 			AStorage.Read( Descriptors(*Index), Position, Taille, Tampon );
 		}
-		// place dans 'Tampon' 'Taille' octets, à partir de 'Position', de l'objet 'Index'
+		// place dans 'Tampon' 'Taille' octets,  partir de 'Position', de l'objet 'Index'
 		void Ecrire_(
 			const sdr::datum__ *Tampon,
 			sdr::size__ Taille,
@@ -257,7 +257,7 @@ namespace ias {
 		{
 			AStorage.Write( Tampon, Taille, Descriptors(*Index), Position );
 		}
-		// écrit à 'Position' de l'objet 'Index' 'Taille' octets de 'Tampon'
+		// crit  'Position' de l'objet 'Index' 'Taille' octets de 'Tampon'
 		void Allouer_(
 			index__ Index,
 			sdr::size__ Nombre )
@@ -282,12 +282,12 @@ namespace ias {
 
 			Descriptors.Store( D, *Index );
 		}
-		// libère la mémoire d'index 'Index'
+		// libre la mmoire d'index 'Index'
 	public:
 		descriptors_ Descriptors;
-		// les différents Descriptors
+		// les diffrents Descriptors
 		ags::aggregated_storage_ AStorage;
-		// la memoire générale
+		// la memoire gnrale
 		struct s
 		{
 			descriptors_::s Descriptors;
@@ -297,7 +297,7 @@ namespace ias {
 		: Descriptors( S.Descriptors ),
 		  AStorage( S.AStorage )
 		{}
-		// préparation
+		// prparation
 		void reset( bool P = true )
 		{
 			Descriptors.reset( P );
@@ -371,7 +371,7 @@ namespace ias {
 		{
 			Descriptors.SetStepped( Step );
 
-			// Pas de '_Initialize(...)' ou de '_Free(...)', car la taille ne change pas (juste éventuellement l''extent').
+			// Pas de '_Initialize(...)' ou de '_Free(...)', car la taille ne change pas (juste ventuellement l''extent').
 		}
 		index__ New( index__ Index = E_NIL )
 		{
@@ -478,7 +478,7 @@ namespace ias {
 		E_CDTOR( hook_filenames___ );
 		void Init(
 			const fnm::name___ &Path,
-			const fnm::name___ &Basename );	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
+			const fnm::name___ &Basename );	// Peut tre vide ('NULL') si 'Path' contient dj le nom de fichier.
 	};
 
 	class files_hook___
@@ -537,7 +537,7 @@ namespace ias {
 
 			return State;
 		}
-		uys::state__ Bind( void )	// A appeler seulement aprés 'Plug(...)'.
+		uys::state__ Bind( void )	// A appeler seulement aprs 'Plug(...)'.
 		{
 			uys::state__ State = _Descriptors.Bind();
 

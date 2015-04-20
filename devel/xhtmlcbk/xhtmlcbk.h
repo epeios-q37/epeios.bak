@@ -197,10 +197,10 @@ namespace xhtmlcbk {
 	};
 
 	/*
-		Pas vraiment un 'callback' ; le contenu des méthodes virtuelles est connu à ce point-ci,
-		et ne seront jamais surchargées par un classe mère, mais c'est pour s'assurer que les objets
-		crées en aval soient manipulés en aval, le compilateur amont ou ses options pouvant ne pas
-		être les mêmes qu'en aval.
+		Pas vraiment un 'callback' ; le contenu des mthodes virtuelles est connu  ce point-ci,
+		et ne seront jamais surcharges par un classe mre, mais c'est pour s'assurer que les objets
+		cres en aval soient manipuls en aval, le compilateur amont ou ses options pouvant ne pas
+		tre les mmes qu'en aval.
 	*/
 	class downstream_callback__
 	{
@@ -240,12 +240,12 @@ namespace xhtmlcbk {
 	};
 
 #pragma pack( push, 1)
-		// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+		// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
 	{
 	private:
-		const char *_Version;	// Toujours en première position.
-		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		const char *_Version;	// Toujours en premire position.
+		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
 		upstream_callback__ *_Callback;
 	public:
 		void reset( bso::bool__ = true )

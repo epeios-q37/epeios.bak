@@ -48,17 +48,17 @@
 
 namespace plgncore {
 #pragma pack( push, 1)
-	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class data__
 	{
 	public:
-		const char *Version;	// Toujours en première position.
+		const char *Version;	// Toujours en premire position.
 		bso::size__ ControlValue;
 		err::err___ *ERRError;
 		sclerror::error___ *SCLError;
 		rgstry::entry__ Configuration;
 		rgstry::entry__ Locale;
-		void *UP;				// A la discrétion de l'utilisateur.
+		void *UP;				// A la discrtion de l'utilisateur.
 		void reset( bso::bool__ P = true )
 		{
 			Version = NULL;
@@ -121,13 +121,13 @@ namespace plgncore {
 		void Initialize(
 			const data__ *Data,
 			const ntvstr::char__ *FirstParameter = NULL,
-			... /* Autres paramètres. Le dernier doit être = 'NULL' */ )
+			... /* Autres paramtres. Le dernier doit tre = 'NULL' */ )
 		{
 			va_list Parameters;
 			va_start( Parameters, FirstParameter );
 
-			PLGNCOREInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la méthode appelée.
-																// Il n'existe en tant que paramètre de cette méthode que pour en faciliter la compréhension.
+			PLGNCOREInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la mthode appele.
+																// Il n'existe en tant que paramtre de cette mthode que pour en faciliter la comprhension.
 		}
 		void *RetrievePlugin( void )
 		{

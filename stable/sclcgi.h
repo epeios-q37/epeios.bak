@@ -95,10 +95,10 @@ namespace sclcgi {
 		}
 	};
 
-	// A définir par l'utilisateur.
+	// A dfinir par l'utilisateur.
 	steering_callback__ *SCLCGICreateSteering( void );	// To overload !
 
-	// A définir par l'utilisateur.
+	// A dfinir par l'utilisateur.
 	void SCLCGIDeleteSteering( steering_callback__ *SteeringCallback );
 
 }

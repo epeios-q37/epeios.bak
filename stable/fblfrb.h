@@ -69,7 +69,7 @@ extern class ttr_tutor &FBLFRBTutor;
 # include "fblcst.h"
 # include "fblfrd.h"
 
-# define FBLFRB__OUT_PARAMETERS_AMOUNT_MAX		20	// Le nombre maximum de paramètres en sortie.
+# define FBLFRB__OUT_PARAMETERS_AMOUNT_MAX		20	// Le nombre maximum de paramtres en sortie.
 
 namespace fblfrb {
 

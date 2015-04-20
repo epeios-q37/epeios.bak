@@ -121,7 +121,7 @@ ERREnd
 ERREpilog
 }
 
-// Permet de stocker les données entièrement en mémoire. NON UTILISABLE_EN_EXPOITATION !
+// Permet de stocker les donnes entirement en mmoire. NON UTILISABLE_EN_EXPOITATION !
 //#define IN_MEMORY
 
 bso::bool__ dbssct::exploded_static_content_::_ConnectToFiles( void )

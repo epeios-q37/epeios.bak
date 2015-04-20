@@ -220,7 +220,7 @@ namespace lstbch {
 			_Bunch.ReleaseFile();	// Sinon le 'Settle()'  ci-dessous ne fonctionne pas correctement.
 
 			if ( P ) {
-				Settle();	// Lancé explicitement, car le 'reset(...)' de '_ListFileManager' ne peut lancer son propre 'Settle(...)'.
+				Settle();	// Lanc explicitement, car le 'reset(...)' de '_ListFileManager' ne peut lancer son propre 'Settle(...)'.
 			}
 
 			_Bunch.reset( P );
@@ -246,7 +246,7 @@ namespace lstbch {
 			_List.Init( Filenames.List, Mode, Behavior );
 
 		}
-		uys::state__ Bind( void )	// A n'appeler qu'aprés un appel à 'Plug(...)'.
+		uys::state__ Bind( void )	// A n'appeler qu'aprs un appel  'Plug(...)'.
 		{
 			uys::state__ State = _Bunch.Bind();
 

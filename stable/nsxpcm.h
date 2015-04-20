@@ -33,7 +33,7 @@
 
 // from nsXPCOM
 
-# include "mozilla/Char16.h"	// Pour éviter l'erreur : "'char16_t' : redefinition; different basic types".
+# include "mozilla/Char16.h"	// Pour viter l'erreur : "'char16_t' : redefinition; different basic types".
 
 # include "cpe.h"
 # include "err.h"
@@ -111,7 +111,7 @@
 # include "mozilla/ModuleUtils.h"
 # include "nsIDOMHTMLAnchorElement.h"
 # include "nsIDOMDocumentFragment.h"
-# include "nsICommandLine.h" // Situé dans 'toolkitcomps'.
+# include "nsICommandLine.h" // Situ dans 'toolkitcomps'.
 
 # include "nsICommandManager.h"
 # include "nsICommandLineHandler.h"
@@ -140,7 +140,7 @@
 #  endif
 # endif
 
-// Permet de 'logger' une erreur et d'éviter qu'elle soit ne remontée à 'XULRunner', qui ne saurait pas quoi en faire. A placer dans 'ERRErr'.
+// Permet de 'logger' une erreur et d'viter qu'elle soit ne remonte  'XULRunner', qui ne saurait pas quoi en faire. A placer dans 'ERRErr'.
 # define NSXPCM_ERR( window )\
 	if ( ERRMajor == err::itn ) {\
 		if ( ERRMinor == err::iExit )\
@@ -167,15 +167,15 @@ namespace nsxpcm {
 	using str::string_;
 	using str::string;
 
-	// Rajoute une fenêtre pour pouvant être utilisé pour faciliter l'utilisation
+	// Rajoute une fentre pour pouvant tre utilis pour faciliter l'utilisation
 	// de certaines fonctions ('GetJSConsole(...)', 'Alert(...)', ...).
 	void AddMasterWindow( nsIDOMWindow *Window );
 
 	// Retire 'Window' de la liste des 'MasterWindow's
 	void RemoveMasterWindow( nsIDOMWindow *Window );
 
-	// Retourne un 'MasterWindows'. 'RealeaseWindow' doit être appelé dés que la 'Window' retournée n'est plus utilisée.
-	// Retourne 'NULL" si pas de fenêtre disponible.
+	// Retourne un 'MasterWindows'. 'RealeaseWindow' doit tre appel ds que la 'Window' retourne n'est plus utilise.
+	// Retourne 'NULL" si pas de fentre disponible.
 	nsIDOMWindowInternal *RetrieveMasterWindow( void );
 
 	void ReleaseMasterWindow( nsIDOMWindow *Window );
@@ -190,7 +190,7 @@ namespace nsxpcm {
 	}
 
 
-	// Si modifié, modifier 'GetTranslation(...)' et le '.xlcl' en conséquence.
+	// Si modifi, modifier 'GetTranslation(...)' et le '.xlcl' en consquence.
 	enum text__ {
 		tXPRJFilterLabel,
 		tDynamicLibraryFilterLabel,
@@ -240,7 +240,7 @@ namespace nsxpcm {
 		EF( Close ),
 		ef_E_NIL = 0,
 		ef_All = ( ( 1 << e_amount ) - 1 ),
-		ef_AllButAnnoying = ef_All & ~efAttributeChange & ~efBlur & ~efFocus	// Pour faciliter le déboguage.
+		ef_AllButAnnoying = ef_All & ~efAttributeChange & ~efBlur & ~efFocus	// Pour faciliter le dboguage.
 	};
 
 #undef EF
@@ -368,7 +368,7 @@ namespace nsxpcm {
 		if ( !_T( f ) )\
 			ERRLbr()
 
-	// 'ContractID' est une chaîne de caratère du genre "@mozilla.org/filepicker;1".
+	// 'ContractID' est une chane de caratre du genre "@mozilla.org/filepicker;1".
 	template <typename t> inline t *GetService(
 		const char *ContractID,
 		nsCOMPtr<t> &Service )
@@ -382,7 +382,7 @@ namespace nsxpcm {
 		return Service;
 	}
 
-	// 'ContractID' est une chaîne de caratère du genre "@mozilla.org/filepicker;1".
+	// 'ContractID' est une chane de caratre du genre "@mozilla.org/filepicker;1".
 	template <typename t> inline t *CreateInstance(
 		const char *ContractID,
 		nsCOMPtr<t> &Instance )
@@ -407,7 +407,7 @@ namespace nsxpcm {
 
 		T( Document->GetElementById( EId, &Element ) );
 
-		if ( Element == NULL )	// Chercher un élément inexistant ne provoque pas d'erreur.
+		if ( Element == NULL )	// Chercher un lment inexistant ne provoque pas d'erreur.
 			ERRFwk();
 
 		return Element;
@@ -424,7 +424,7 @@ namespace nsxpcm {
 
 		T( Document->GetElementById( EId, &Element ) );
 
-		if ( Element == NULL )	// Chercher un élément inexistant ne provoque pas d'erreur.
+		if ( Element == NULL )	// Chercher un lment inexistant ne provoque pas d'erreur.
 			ERRFwk();
 
 		return Element;
@@ -507,7 +507,7 @@ namespace nsxpcm {
 		return QueryInterface<element>( CreateElement( Document, Name ) );
 
 		// Ne pas oulier de tester 'Result' lors de la mise en place de ma version fonctionnelle.
-#else	// Fonctionne, mais présente des risques ...
+#else	// Fonctionne, mais prsente des risques ...
 		return (element *)CreateElement( Document, Name );
 #endif
 	}
@@ -527,7 +527,7 @@ namespace nsxpcm {
 	}
 
 #ifdef NSXPCM_USE_DEPRECATED
-	// 'name' nom du type 'doit correspondre au nom du tag XUL associé); 'Name' pour le fonctions associées.
+	// 'name' nom du type 'doit correspondre au nom du tag XUL associ); 'Name' pour le fonctions associes.
 	#define NSXPCM_DEFINE( element, name, Name )\
 		typedef element name;\
 		typedef element name##_;\
@@ -933,9 +933,9 @@ namespace nsxpcm {
 		nsxpcm::SetAttribute( Node, "selectedIndex", bso::Convert( Index, Buffer ) );
 	}
 
-	void SetSelectedItem(	// Cherche parmis les enfants de 'Node' le premier élément ayant l'attribut 'xex:selected' à 'true' et le sélectionne.
+	void SetSelectedItem(	// Cherche parmis les enfants de 'Node' le premier lment ayant l'attribut 'xex:selected'  'true' et le slectionne.
 		nsIDOMElement *Element,
-		bso::bool__ SelectFirstOneIfE_NIL = true );	// Lorsque à 'true', si aucun 'item' n'est marqué comme sélectionné, sélectionne le premier.
+		bso::bool__ SelectFirstOneIfE_NIL = true );	// Lorsque  'true', si aucun 'item' n'est marqu comme slectionn, slectionne le premier.
 
 	inline nsIDOMXULSelectControlItemElement *GetSelectedItem( nsIDOMXULSelectControlElement *Element )
 	{
@@ -1185,11 +1185,11 @@ namespace nsxpcm {
 			_Current = GetFirstChild( Root );
 
 			if ( _Current != NULL )
-				_Root = _Current = GetParentNode( _Current );	// Bien que, dans ce cas, '_Root' soit le même que 'Root,
-																// ils peuvent ne pas avoir la même valeur,
-																// posant alors problème pour pour 'GetNext()'.
+				_Root = _Current = GetParentNode( _Current );	// Bien que, dans ce cas, '_Root' soit le mme que 'Root,
+																// ils peuvent ne pas avoir la mme valeur,
+																// posant alors problme pour pour 'GetNext()'.
 		}
-		// Retourne le prochain noeud, ou 'NULL' si tous ont été lus.
+		// Retourne le prochain noeud, ou 'NULL' si tous ont t lus.
 		nsIDOMElement *GetNext( void );
 	};
 
@@ -1284,7 +1284,7 @@ namespace nsxpcm {
 		return GetOpener( GetWindowInternal( Window ) );
 	}
 
-	nsIDOMWindowInternal* GetRoot( nsIDOMWindow *Window );	// Retourne la fenêtre racine de l'application.
+	nsIDOMWindowInternal* GetRoot( nsIDOMWindow *Window );	// Retourne la fentre racine de l'application.
 
 	inline nsIDOMElement *GetElement( nsISupports *Node )
 	{
@@ -1553,12 +1553,12 @@ namespace nsxpcm {
 		friend class event_handler__;
 	};
 
-	// ATTENTION : cet objet ne doit PAS être stocké dans un 'bunch' ou un 'container', car il est référencé par son adresse !
+	// ATTENTION : cet objet ne doit PAS tre stock dans un 'bunch' ou un 'container', car il est rfrenc par son adresse !
 	class event_handler__ {
 	private:
 		event_handler__ *_Control;
-		void _Test( bso::bool__ IgnoreInitializationTest );	// Vérifie que l'objet n'a pas été déplacé depuis sa création (voir remarque ci-dessus)
-															// Vérifie également si l'obeta été initialisé (losque 'IgnoreInitializationTest' == 'false' ).
+		void _Test( bso::bool__ IgnoreInitializationTest );	// Vrifie que l'objet n'a pas t dplac depuis sa cration (voir remarque ci-dessus)
+															// Vrifie galement si l'obeta t initialis (losque 'IgnoreInitializationTest' == 'false' ).
 		event_data__ _EventData;
 		void _OnErr( void )
 		{
@@ -1613,10 +1613,10 @@ namespace nsxpcm {
 		{
 			ERRFwk();
 		}
-		virtual void NSXPCMOnErr( const char *Message ) = 0;	// Appelé lors d'un 'ERR...(...)'.
-																/* ATTENTION : si 'Message' == 'NULL', alors les informations relatives à l'erreur ne sont pas disponibles
-																(erreur lancée à partir d'une bibliothèque dynamique, par exemple), et on doit se débrouller pour les récupèrer
-																et faire une remise à 0 de l'erreur. */
+		virtual void NSXPCMOnErr( const char *Message ) = 0;	// Appel lors d'un 'ERR...(...)'.
+																/* ATTENTION : si 'Message' == 'NULL', alors les informations relatives  l'erreur ne sont pas disponibles
+																(erreur lance  partir d'une bibliothque dynamique, par exemple), et on doit se dbrouller pour les rcuprer
+																et faire une remise  0 de l'erreur. */
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -1659,7 +1659,7 @@ namespace nsxpcm {
 		nsIDOMElement *Element,
 		const char *Id,
 		event_handler__ &EventHandler,
-		const char *NameSpace = NSCPM__XUL_EXTENSION_DEFAULT_NAMESPACE );	// Gestion des attributs relatifs aux évènements (ex. : 'xex:oncommand').
+		const char *NameSpace = NSCPM__XUL_EXTENSION_DEFAULT_NAMESPACE );	// Gestion des attributs relatifs aux vnements (ex. : 'xex:oncommand').
 
 	void RefreshObservers(
 		nsIDOMElement *Element,
@@ -1808,7 +1808,7 @@ namespace nsxpcm {
 	typedef bch::E_BUNCH_( widget_core__ * ) widget_cores_;
 	E_AUTO( widget_cores );
 
-	// Supprime (désalloue) tous les éléments stockés dans 'Cores'.
+	// Supprime (dsalloue) tous les lments stocks dans 'Cores'.
 	void Delete( widget_cores_ &Widgets );
 /*
 	void Handle( 
@@ -1820,8 +1820,8 @@ namespace nsxpcm {
 	: public widget_core__
 	{
 	protected:
-		// ATTENTION : selon le stade de construction de l'UI, l'interface demandée peut ne pas être encore disponible.
-		// De ce fait, utilser, dés que possible, 'GetElement()' à la place.
+		// ATTENTION : selon le stade de construction de l'UI, l'interface demande peut ne pas tre encore disponible.
+		// De ce fait, utilser, ds que possible, 'GetElement()'  la place.
 		widget *GetWidget( void )
 		{
 			return QueryInterface<widget>( GetSupports() );
@@ -2013,12 +2013,12 @@ namespace nsxpcm {
 		}
 
 
-	class widget__	// Classe générique.
+	class widget__	// Classe gnrique.
 	: public _widget__<nsIDOMElement>
 	{};
 
 	class button__
-	: public _widget__<nsIDOMElement>	// Devrait normalement être '<nsIButton>', mais l'inclusion de 'nsIButton.h' pose problème.
+	: public _widget__<nsIDOMElement>	// Devrait normalement tre '<nsIButton>', mais l'inclusion de 'nsIButton.h' pose problme.
 	{};
 
 	class textbox__
@@ -2235,7 +2235,7 @@ namespace nsxpcm {
 	: public _widget__<nsIDOMElement>
 	{};
 
-	// NOTA : pas de widget 'tabbox', car il ne sert à rien.
+	// NOTA : pas de widget 'tabbox', car il ne sert  rien.
 
 	class tree__
 	: public _widget__<nsIDOMXULTreeElement>
@@ -2331,8 +2331,8 @@ namespace nsxpcm {
 		{
 			return GetCurrentIndex() != -1;
 		}
-		/* Par défaut (avec 'SkipSelectEvent' à false, un 'ClearSelection' lance un évènement 'select'.
-		Cela peut être évité en mettant 'SkipSelectEvent' à 'true'. */
+		/* Par dfaut (avec 'SkipSelectEvent'  false, un 'ClearSelection' lance un vnement 'select'.
+		Cela peut tre vit en mettant 'SkipSelectEvent'  'true'. */
 #if 0
 		void ClearSelection( bso::bool__ SkipSelectEvent )
 		{
@@ -2355,7 +2355,7 @@ namespace nsxpcm {
 	{};
 
 	class menu__
-	: public _widget__<nsIDOMElement>	// Pas cherché le 'nsI...' correspondant ...
+	: public _widget__<nsIDOMElement>	// Pas cherch le 'nsI...' correspondant ...
 	{};
 
 	class menuitem__
@@ -2480,7 +2480,7 @@ namespace nsxpcm {
 		MF( XPRJ ),
 		MF( DynamicLibrary ),
 		fpmf_E_NIL = 0,
-		fpmf_All = ( ( 1 << fpm_amount ) - 1 )	// Ne pas confondre avec 'fpmfAll', désignat que l'on désire tous les fichiers (filtre '*.*').
+		fpmf_All = ( ( 1 << fpm_amount ) - 1 )	// Ne pas confondre avec 'fpmfAll', dsignat que l'on dsire tous les fichiers (filtre '*.*').
 	};
 	
 #undef MF
@@ -2538,18 +2538,18 @@ namespace nsxpcm {
 		}
 		void AddFilter(
 			const str::string_ &Title,
-			const str::string_ &Mask );	// Pour ajouter un filtre ne faisant pas partie de ceux prédéfinis.
-		/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-		'false' si 'Cancel' a été sélectionné. */
+			const str::string_ &Mask );	// Pour ajouter un filtre ne faisant pas partie de ceux prdfinis.
+		/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+		'false' si 'Cancel' a t slectionn. */
 		bso::bool__ Show(
-			nsIDOMWindow *ParentWindow,	// Cette fonction bloque toute action sur 'ParentWindow', donc pas possibilité d'utiliser 'MasterWindow'.
+			nsIDOMWindow *ParentWindow,	// Cette fonction bloque toute action sur 'ParentWindow', donc pas possibilit d'utiliser 'MasterWindow'.
 			file_picker_type__ Type,
 			const char *DefaultExtension,
 			const lcl::locale_ &Locale,
 			const char *Language,
 			str::string_ &FileName );
 		bso::bool__ Show(
-			nsIDOMWindow *ParentWindow,	// Cette fonction bloque toute action sur 'ParentWindow', donc pas possibilité d'utiliser 'MasterWindow'.
+			nsIDOMWindow *ParentWindow,	// Cette fonction bloque toute action sur 'ParentWindow', donc pas possibilit d'utiliser 'MasterWindow'.
 			file_picker_type__ Type,
 			const lcl::locale_ &Locale,
 			const char *Language,
@@ -2562,10 +2562,10 @@ namespace nsxpcm {
 
 	E_AUTO( file_picker );
 
-	/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+	'false' si 'Cancel' a t slectionn. */
 	bso::bool__ FileOpenDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const char *DefaultExtension,
 		int PredefinedFilters,
@@ -2573,10 +2573,10 @@ namespace nsxpcm {
 		const char *Language,
 		str::string_ &FileName );
 
-	/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+	'false' si 'Cancel' a t slectionn. */
 	inline bso::bool__ HTMLFileOpenDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const lcl::locale_ &Locale,
 		const char *Language,
@@ -2585,10 +2585,10 @@ namespace nsxpcm {
 		return FileOpenDialogBox( ParentWindow, Title, "html", fpmfHTML, Locale, Language, FileName );
 	}
 
-	/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+	'false' si 'Cancel' a t slectionn. */
 	inline bso::bool__ XPRJFileOpenDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const lcl::locale_ &Locale,
 		const char *Language,
@@ -2607,10 +2607,10 @@ namespace nsxpcm {
 #  error "Unknown platform !"
 # endif
 
-	/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+	'false' si 'Cancel' a t slectionn. */
 	inline bso::bool__ DynamicLibraryFileOpenDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const lcl::locale_ &Locale,
 		const char *Language,
@@ -2621,10 +2621,10 @@ namespace nsxpcm {
 
 # undef NSXPCM__EXT
 
-	/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+	'false' si 'Cancel' a t slectionn. */
 	bso::bool__ FileSaveDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const char *DefaultExtension,
 		int PredefinedFilters,
@@ -2632,10 +2632,10 @@ namespace nsxpcm {
 		const char *Language,
 		str::string_ &FileName );
 
-	/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+	'false' si 'Cancel' a t slectionn. */
 	inline bso::bool__ HTMLFileSaveDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const lcl::locale_ &Locale,
 		const char *Language,
@@ -2644,10 +2644,10 @@ namespace nsxpcm {
 		return FileSaveDialogBox( ParentWindow, Title, "html", fpmfHTML, Locale, Language, FileName );
 	}
 
-	/* Retourne 'true' si un fichier a été sélectionné ('FileName' contient alors le fichier),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un fichier a t slectionn ('FileName' contient alors le fichier),
+	'false' si 'Cancel' a t slectionn. */
 	inline bso::bool__ XPRJFileSaveDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const lcl::locale_ &Locale,
 		const char *Language,
@@ -2656,10 +2656,10 @@ namespace nsxpcm {
 		return FileSaveDialogBox( ParentWindow, Title, "xprj", fpmfXPRJ, Locale, Language, FileName );
 	}
 
-	/* Retourne 'true' si un répertoire a été sélectionné ('DirectoryName' contient alors le répetoire),
-	'false' si 'Cancel' a été sélectionné. */
+	/* Retourne 'true' si un rpertoire a t slectionn ('DirectoryName' contient alors le rpetoire),
+	'false' si 'Cancel' a t slectionn. */
 	bso::bool__ DirectorySelectDialogBox(
-		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut être déduit de 'MasterWindow'.
+		nsIDOMWindow *ParentWindow,	// Fonction bloquante, dont 'ParentWindow' ne peut tre dduit de 'MasterWindow'.
 		const str::string_ &Title,
 		const lcl::locale_ &Locale,
 		const char *Language,
@@ -2731,7 +2731,7 @@ namespace nsxpcm {
 				ERRFwk();
 
 		if ( ParentWindow == NULL )
-			ERRFwk();	// Fonction bloquante, donc on ne peut pas prendre 'MasterWindow' (risque de bloquer la fenêtre non initiatrice de l'ouverture de la boîte de dialogue).
+			ERRFwk();	// Fonction bloquante, donc on ne peut pas prendre 'MasterWindow' (risque de bloquer la fentre non initiatrice de l'ouverture de la bote de dialogue).
 
 		T( GetWindowInternal( ParentWindow )->OpenDialog( TransformedURL, TransformedName, NS_LITERAL_STRING( "chrome,extrachrome,menubar,resizable,scrollbars,status,toolbar,modal" ), NULL, WindowBuffer ) );
 	ERRErr
@@ -2801,7 +2801,7 @@ namespace nsxpcm {
 		{
 			if ( P ) {
 				if ( _lpbunch_<type, row>::Amount() != 0 )
-					ERRFwk();	// Car des objets existent qui n'ont pas encore été supprimé ('delete'r).
+					ERRFwk();	// Car des objets existent qui n'ont pas encore t supprim ('delete'r).
 			}
 
 			_lpbunch_<type, row>::reset( P );
@@ -2984,14 +2984,14 @@ namespace nsxpcm {
 		const xslt_parameters_ &Parameters );
 
 	nsIDOMDocumentFragment *XSLTransformByContent(
-		const str::string_ &XMLString,	// Doit être du XML valide.
-		const str::string_ &XSLString,	// Doit être du XSL valide.
+		const str::string_ &XMLString,	// Doit tre du XML valide.
+		const str::string_ &XSLString,	// Doit tre du XSL valide.
 		nsIDOMWindow *Owner,
 		const xslt_parameters_ &Parameters );
 
 	nsIDOMDocumentFragment *XSLTransformByFileName(
-		const str::string_ &XMLString,	// Doit être du XML valide.
-		const str::string_ &XSLFileName,	// Doit être du XSL valide.
+		const str::string_ &XMLString,	// Doit tre du XML valide.
+		const str::string_ &XSLFileName,	// Doit tre du XSL valide.
 		nsIDOMWindow *Owner,
 		const xslt_parameters_ &Parameters );
 
@@ -3028,10 +3028,10 @@ namespace nsxpcm {
 		LaunchURI( str::string( URI ) );
 	}
 
-	void LaunchEmbedFile( const char *File );	// 'File' doit contenir un fichier avec un chemin relatif par rapport à où est situé 'xulrunner.exe'.
+	void LaunchEmbedFile( const char *File );	// 'File' doit contenir un fichier avec un chemin relatif par rapport  o est situ 'xulrunner.exe'.
 
 	// Pour les 'textbox's de type 'autocomplete'.
-	// NOTA : La ligne 'pref("browser.formfill.enable", true);' doit être ajoutée dans le fihcier 'prefs.js'.
+	// NOTA : La ligne 'pref("browser.formfill.enable", true);' doit tre ajoute dans le fihcier 'prefs.js'.
 	void AddFormHistoryEntry(
 		const str::string_ &Entry,	// Valuer de l'attribut 'autocompletesearchparam' dudit 'textbox'.
 		const str::string_ &Value );
@@ -3318,7 +3318,7 @@ NS_DEFINE_STATIC_IID_ACCESSOR(nsxpcm::tree_view__, NSXPCM_TREE_VIEW_IID)
 
 /* Fin partie concernant 'tree_view____' */
 
-/* Début partie concernant 'textbox' 'autocomplete' */
+/* Dbut partie concernant 'textbox' 'autocomplete' */
 
 namespace nsxpcm {
 	class autocomplete_textbox_callback__

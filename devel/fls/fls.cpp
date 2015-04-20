@@ -68,7 +68,7 @@ static inline bso::bool__ IsLocked_( void )
 
 struct _data__ {
 #ifdef FLS__AUTOFLUSH
-	bso::bool__ ToFlush;	// Doit être 'flushé' si à 'true'.
+	bso::bool__ ToFlush;	// Doit tre 'flush' si  'true'.
 #endif
 	file_storage___ *File;
 	id__ ID;
@@ -127,7 +127,7 @@ row__ fls::_Register(
 
 	Row = List_.New();
 
-	if ( Queue_.Amount() < List_.Extent() )	// On teste 'Amount' parce que ce qui est entre 'Amount' et 'Extent' n'est pas initialisé dans la file.
+	if ( Queue_.Amount() < List_.Extent() )	// On teste 'Amount' parce que ce qui est entre 'Amount' et 'Extent' n'est pas initialis dans la file.
 		Queue_.Allocate( List_.Extent() );
 
 	List_.Store( Data, Row );
@@ -228,13 +228,13 @@ inline static void LaunchFlusher_( void )
 		ERRc();
 #endif
 	if ( FlusherData_.Row == E_NIL )
-		mtk::Launch( Flusher_, NULL );	// Le verrou est posé, donc ne fait rien tant que l'appelant n'ôte pas le verrou.
+		mtk::Launch( Flusher_, NULL );	// Le verrou est pos, donc ne fait rien tant que l'appelant n'te pas le verrou.
 
 	FlusherData_.Row = Queue_.Last();
 #endif
 }
 
-inline static void TouchFlusher_( bso::bool__ ToFlush )	// Indique au 'flusher' qu'une écriture à eu lieu.
+inline static void TouchFlusher_( bso::bool__ ToFlush )	// Indique au 'flusher' qu'une criture  eu lieu.
 {
 #ifdef FLS__AUTOFLUSH
 	if ( ToFlush )

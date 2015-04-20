@@ -72,7 +72,7 @@ namespace mscvkp {
 	//t The type of a datum.
 	typedef bso::char__ datum__;
 
-#define MSCVKP_UNDEFINED_DATUM	(bso::char__)0xff	// Dans la norme Midi, '0xff' n'est pas une valeur de donnée autorisée.
+#define MSCVKP_UNDEFINED_DATUM	(bso::char__)0xff	// Dans la norme Midi, '0xff' n'est pas une valeur de donne autorise.
 
 	//t The type of an Address.
 	typedef bso::ulong__ address__;
@@ -323,7 +323,7 @@ namespace mscvkp {
 		return Buffer;
 	}
 
-	// Retourne le nombre d'octets envoyés.
+	// Retourne le nombre d'octets envoys.
 	bso::size__ Send(
 		const data_set_ &DataSet,
 		flw::oflow__ &Flow );

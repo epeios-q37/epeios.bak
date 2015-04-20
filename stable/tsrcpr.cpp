@@ -64,9 +64,9 @@ using namespace tsrcpr;
 enum type
 // type de la doc
 {
-	aucune,	// pas de docs trouvée
-	function_long,	// doc. sur function/méthode dans commentaire long /**/
-	function_court, // doc. sur function/méthode dans commentaire court //
+	aucune,	// pas de docs trouve
+	function_long,	// doc. sur function/mthode dans commentaire long /**/
+	function_court, // doc. sur function/mthode dans commentaire court //
 	classe_long, // doc. sur classe dans commnentaire long /**/
 	classe_court, // doc. sur classe dans commentaire court //
 	objet_long, // doc. sur objet dans commentaire long /**/
@@ -390,8 +390,8 @@ void LireDoc_(
 	bso::bool__ Long,
 	str::string_ &Commentaire )
 // lit la doc. dans 'Flot' et la place dans 'Commentaire';
-// si 'Long', alors la doc est située dans un commentaire long (/**/),
-// sinon elle est située dans un commentaire court(//)
+// si 'Long', alors la doc est situe dans un commentaire long (/**/),
+// sinon elle est situe dans un commentaire court(//)
 {
 	if ( Long )
 		LireDocLong_( Flot, Commentaire );
@@ -562,7 +562,7 @@ static type TrouverDoc_(
 	else
 		ERRu();
 
-	return aucune;	// ne sert qu'à éviter l'apparition d'un warning
+	return aucune;	// ne sert qu' viter l'apparition d'un warning
 }
 
 void tsrcpr::parametre_::Analyze( xtf::extended_text_iflow___ &Flot )
@@ -767,7 +767,7 @@ ERREpilog
 void tsrcpr::methode_::Analyze(
 	xtf::extended_text_iflow___ &Flot,
 	bso::bool__ Long )
-// lit une methode sachant que sa doc. est située
+// lit une methode sachant que sa doc. est situe
 //dans un commentaire long si 'Long', dans un commentaire court sinon
 {
 	int C;
@@ -813,7 +813,7 @@ void tsrcpr::methode_::Analyze(
 void tsrcpr::function_::Analyze(
 	xtf::extended_text_iflow___ &Flot,
 	bso::bool__ Long )
-// lit une methode sachant que sa doc. est située
+// lit une methode sachant que sa doc. est situe
 //dans un commentaire long si 'Long', dans un commentaire court sinon
 {
 	int C;
@@ -985,7 +985,7 @@ ERREpilog
 void tsrcpr::objet_::Analyze(
 	xtf::extended_text_iflow___ &Flot,
 	bso::bool__ Long )
-// lit une methode sachant que sa doc. est située
+// lit une methode sachant que sa doc. est situe
 //dans un commentaire long si 'Long', dans un commentaire court sinon
 {
 	LireDoc_( Flot, Long, Commentaire );
@@ -1120,7 +1120,7 @@ void tsrcpr::enum_::Analyze(
 void tsrcpr::classe_::Analyze(
 	xtf::extended_text_iflow___ &Flot,
 	bso::bool__ Long )
-// lit une methode sachant que sa doc. est située
+// lit une methode sachant que sa doc. est situe
 //dans un commentaire long si 'Long', dans un commentaire court sinon
 {
 	type Type;

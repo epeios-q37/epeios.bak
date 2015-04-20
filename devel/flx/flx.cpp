@@ -73,8 +73,8 @@ ERRProlog
 	str::string ModifiedCommand;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	// '_popen()' lance en fait "cmd /c ...". Or; lorsque cette commande reçoit un paramètre commençant par '"' (hors espaces),
-	// et avec plus d'un jeu de '"', elle en enlève certains (void "cmd /?"). Placer 'echo >NUL && ' en tête de paramètre résoud ce problème...
+	// '_popen()' lance en fait "cmd /c ...". Or; lorsque cette commande reoit un paramtre commenant par '"' (hors espaces),
+	// et avec plus d'un jeu de '"', elle en enlve certains (void "cmd /?"). Placer 'echo >NUL && ' en tte de paramtre rsoud ce problme...
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
@@ -146,7 +146,7 @@ ERRBegin
 	siStartupInfo.hStdInput  = hChildStdinRd;
 	siStartupInfo.dwFlags   |= STARTF_USESTDHANDLES;
 
-	Command.Init( ConstCommand );	/* On passe par 'Command', car 'CreateProcessW(...)' est suceptible de modifier le contenu de son second paramètre ;
+	Command.Init( ConstCommand );	/* On passe par 'Command', car 'CreateProcessW(...)' est suceptible de modifier le contenu de son second paramtre ;
 									   on ne peut donc pas lui passer directement 'ConstCommand', qui est 'const' (voir doc. 'CreateProcessW(...)'. */
  
 	// Launch the process.
@@ -295,7 +295,7 @@ public:
 	}
 	~flxpersonnalization( void )
 	{
-		// Les 4 lignes ci-dessous ne devraient pas être nécessaire, mais si absentes, problême de 'pure virtual function call' (du moins sous VC++10).
+		// Les 4 lignes ci-dessous ne devraient pas tre ncessaire, mais si absentes, problme de 'pure virtual function call' (du moins sous VC++10).
 		flx::VoidIFlow.reset();
 		flx::VoidIFlowDriver.reset();
 

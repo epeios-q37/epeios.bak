@@ -315,7 +315,7 @@ ERREpilog
 }
 
 
-/// 'namespace {...}' parce que sinon VC++ 12 se mélange les pinceaux...
+/// 'namespace {...}' parce que sinon VC++ 12 se mlange les pinceaux...
 namespace {
 	class shorts_callback___
 	: public short_tags_callback__
@@ -519,7 +519,7 @@ static void FillAutomat_(
 	}
 }
 
-/// 'namespace {...}' parce que sinon VC++ 12 se mélange les pinceaux...
+/// 'namespace {...}' parce que sinon VC++ 12 se mlange les pinceaux...
 namespace {
 	class longs_callback___
 	: public long_tags_callback__

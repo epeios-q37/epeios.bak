@@ -70,7 +70,7 @@ namespace mns {
 	{
 		sdr::size__ _Size;
 		sdr::datum__ *&Tampon_;
-			// le contenu de la mémoire
+			// le contenu de la mmoire
 # ifdef MNS_DBG
 		void Test_( void )
 		{
@@ -79,7 +79,7 @@ namespace mns {
 		}
 # endif
 	protected:
-		// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets
+		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets
 		void Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
@@ -91,7 +91,7 @@ namespace mns {
 # endif
 			memcpy( Buffer, Tampon_ + Position, Amount );
 		}
-		// écrit 'Nombre' octets à partir de 'Position' dans 'Tampon'
+		// crit 'Nombre' octets  partir de 'Position' dans 'Tampon'
 		void Store(
 			const sdr::datum__ *Buffer,
 			sdr::size__ Amount,
@@ -140,7 +140,7 @@ namespace mns {
 		void Init( void )
 		{
 			// reset();
-			// Inutile de faire un reset. On réutilise la même mémoire (gain de temps).
+			// Inutile de faire un reset. On rutilise la mme mmoire (gain de temps).
 		}
 		sdr::size__ Size( void ) const
 		{
@@ -164,7 +164,7 @@ namespace mns {
 		{
 			main_storage__::Recall( Position, Amount, Buffer );
 		}
-		// écrit 'Nombre' octets à la position 'Position'
+		// crit 'Nombre' octets  la position 'Position'
 		virtual void SDRStore(
 			const sdr::datum__ *Buffer,
 			sdr::size__ Nombre,

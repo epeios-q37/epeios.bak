@@ -100,13 +100,13 @@ extern class ttr_tutor &UYMTutor;
 */
 
 namespace uym {
-	// Pilote mémoire.
+	// Pilote mmoire.
 	class _memory_driver__
 	{
 	private:
 		// Le pilote.
 		mdr::E_MEMORY_DRIVER__ *_Driver;
-		// Indique si le pilote a été défini de manière interne ou non.
+		// Indique si le pilote a t dfini de manire interne ou non.
 		bso::bool__ _Internal;
 		// Uniquement pour la 'conventional_memory__'.
 		mdr::datum__ *_CVMBuffer;
@@ -180,7 +180,7 @@ namespace uym {
 		}
 		mdr::size__ UnderlyingSize( void )
 		{
-//			_Test();	// Traité ci-dessous.
+//			_Test();	// Trait ci-dessous.
 
 			if ( _Driver != NULL )
 				return _Driver->UnderlyingSize();
@@ -217,9 +217,9 @@ namespace uym {
 	class untyped_memory_
 	{
 	private:
-		// Le pilote mémoire.
+		// Le pilote mmoire.
 		_memory_driver__ _Driver;
-		// l'éventuel pilote de la multimemoire
+		// l'ventuel pilote de la multimemoire
 		mmm::multimemory_driver__ _MultimemoryDriver;
 		void _Test(
 			mdr::row_t__ Position,
@@ -301,7 +301,7 @@ namespace uym {
 		}
 		untyped_memory_ &operator =( const untyped_memory_ & ) const
 		{
-			ERRc();	// Parce que cette opération n'a pas de sens.
+			ERRc();	// Parce que cette opration n'a pas de sens.
 
 			return *(untyped_memory_ *)NULL;
 		}
@@ -400,10 +400,10 @@ namespace uym {
 		E_RWDISCLOSE_( mdr::size__, Size );
 	};
 
-	enum state__ {	// Statut de l'opération de connection.
-		sExists,		// le fichier rattaché existe.
-		sAbsent,		// Fichier rattaché absent (ce n'est pas une erreur, cela signifie que des données n'ont pas encore été stockées).
-		sInconsistent,	// Les fichiers sont dans une état incohérent, probablement dû à un arrêt inopiné du logiciel. Utilisé par les bibliothèques en amont.
+	enum state__ {	// Statut de l'opration de connection.
+		sExists,		// le fichier rattach existe.
+		sAbsent,		// Fichier rattach absent (ce n'est pas une erreur, cela signifie que des donnes n'ont pas encore t stockes).
+		sInconsistent,	// Les fichiers sont dans une tat incohrent, probablement d  un arrt inopin du logiciel. Utilis par les bibliothques en amont.
 		s_amount,
 		s_Undefined
 	};
@@ -454,7 +454,7 @@ namespace uym {
 			break;
 		}
 
-		return false;	// Pour éviter un 'warning'.
+		return false;	// Pour viter un 'warning'.
 	}
 
 	typedef flm::E_FILE_MEMORY_DRIVER___ _file_memory_driver___;

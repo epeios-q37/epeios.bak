@@ -417,8 +417,8 @@ namespace txf {
 		}
 	};
 
-	/* Macro pour la définition d'une fonction de sortie de nom 'Nom'.
-	( Déclaration d'une Fonction pour le txft de Sortie). */
+	/* Macro pour la dfinition d'une fonction de sortie de nom 'Nom'.
+	( Dclaration d'une Fonction pour le txft de Sortie). */
 	#define TXF_DFS( Nom ) inline text_oflow__ & Nom ( text_oflow__ &Flow )
 
 	// Synchronisation (vide les caches).
@@ -452,7 +452,7 @@ namespace txf {
 		return Flow << "    ";
 	}
 
-	// Revient en début de ligne.
+	// Revient en dbut de ligne.
 	TXF_DFS( rfl )
 	{
 		return Flow << '\r';

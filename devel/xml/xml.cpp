@@ -58,7 +58,7 @@ const char *xml::GetLabel( status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 #undef CASE
@@ -97,7 +97,7 @@ static status__ SkipSpaces_( _flow___ &Flow )
 	return sOK;
 }
 
-static status__ HandleProcessingInstruction_( _flow___ &Flow )	// Gère aussi le prologue '<?xml ... ?>'
+static status__ HandleProcessingInstruction_( _flow___ &Flow )	// Gre aussi le prologue '<?xml ... ?>'
 {
 	if ( Flow.Get_() != '?' )
 		ERRDta();
@@ -166,7 +166,7 @@ static status__ GetComment_(
 		if ( Flow.EndOfFlow() )
 			return sUnexpectedEOF;
 
-		Flow.Get_();	// Pour passer le '-' de début de fin de commentaire.
+		Flow.Get_();	// Pour passer le '-' de dbut de fin de commentaire.
 
 		if ( Flow.EndOfFlow() )
 			return sUnexpectedEOF;
@@ -223,7 +223,7 @@ static status__ GetCData_(
 		if ( Flow.EndOfFlow() )
 			return sUnexpectedEOF;
 
-		Flow.Get_();	// Pour passer le ']' de début de fin de 'CDATA'.
+		Flow.Get_();	// Pour passer le ']' de dbut de fin de 'CDATA'.
 
 		if ( Flow.EndOfFlow() )
 			return sUnexpectedEOF;
@@ -512,7 +512,7 @@ static status__ GetAttribute_(
 	status__ Status = s_Undefined;
 
 	if ( GetName_( Flow, Name ) == 0 ) {
-		Flow.Get_();	// Pour ajuster les coordonnées de l'erreur.
+		Flow.Get_();	// Pour ajuster les coordonnes de l'erreur.
 		return sUnexpectedCharacter;
 	}
 
@@ -844,7 +844,7 @@ ERRBegin
 
 
 					} else {
-						_Flow.Get_();	// Pour la mise à jour des coordonnées.
+						_Flow.Get_();	// Pour la mise  jour des coordonnes.
 						RETURN( sUnexpectedCharacter );
 					}
 				} else if ( _Flow.View_() == '>' ) {
@@ -861,7 +861,7 @@ ERRBegin
 
 					_EmptyTag = false;
 				}/* else {
-					_Flow.Get();	// Pour la mise à jour des coordonnées.
+					_Flow.Get();	// Pour la mise  jour des coordonnes.
 					RETURN( sUnexpectedCharacter );
 				}
 */				break;

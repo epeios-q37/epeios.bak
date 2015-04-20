@@ -87,7 +87,7 @@ namespace dbssct {
 	protected:
 		virtual void DBSBSCCompleteInitialization( bso::bool__ )
 		{
-			// Rien à faire.
+			// Rien  faire.
 		}
 		virtual void DBSBSCErasePhysically(  void )
 		{
@@ -111,7 +111,7 @@ namespace dbssct {
 		{
 			storage_::s Storage;
 			_cache_::s Cache;
-			// Taille de l'élément.
+			// Taille de l'lment.
 			epeios::size__ Size;
 			time_t ModificationTimeStamp;
 		} &S_;
@@ -217,7 +217,7 @@ namespace dbssct {
 
 	E_AUTO( static_content )
 
-	// Content stocké dans des fichiers.
+	// Content stock dans des fichiers.
 	class exploded_static_content_
 	: public static_content_
 	{
@@ -255,7 +255,7 @@ namespace dbssct {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.FileManager.ReleaseFile();	// Pour que les 'TimeStamp' des fichiers soient mis à jour.
+			S_.FileManager.ReleaseFile();	// Pour que les 'TimeStamp' des fichiers soient mis  jour.
 
 			if ( P ) {
 				if ( ( RootFileName.Amount() != 0 ) && ( ModificationTimeStamp() != 0 ) )
@@ -269,7 +269,7 @@ namespace dbssct {
 		}
 		void plug( mmm::E_MULTIMEMORY_ & )
 		{
-			ERRu();	// Cette méthode n'a pas de sens dans ce contexte.
+			ERRu();	// Cette mthode n'a pas de sens dans ce contexte.
 		}
 		exploded_static_content_ &operator =( const exploded_static_content_ &XSC )
 		{
@@ -283,11 +283,11 @@ namespace dbssct {
 			mdr::mode__ Mode,
 			bso::bool__ Partial,
 			flm::id__ ID );
-		void WriteLocationsFile( void )	// Met à jour les fichiers.
+		void WriteLocationsFile( void )	// Met  jour les fichiers.
 		{
 			_SaveLocations();
 		}
-		void CloseFiles( void )	// Pour libèrer les 'file handlers'.
+		void CloseFiles( void )	// Pour librer les 'file handlers'.
 		{
 			S_.FileManager.ReleaseFile();
 		}

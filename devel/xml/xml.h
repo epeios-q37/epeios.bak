@@ -41,7 +41,7 @@
 #include "ctn.h"
 #include "cpe.h"
 
-// Prédéclaration.
+// Prdclaration.
 namespace lcl {
 	class meaning_;
 }
@@ -49,7 +49,7 @@ namespace lcl {
 namespace xml {
 	using xtf::pos__;
 
-	// Code d'erreur 'retourné' par 'Parse()'.
+	// Code d'erreur 'retourn' par 'Parse()'.
 	enum status__ {
 		sOK,
 		s_FirstXTFError,
@@ -258,7 +258,7 @@ namespace xml {
 		tComment,
 		tCData,
 		t_amount,
-		t_Processed,	// Tout le flux XML a été traité.
+		t_Processed,	// Tout le flux XML a t trait.
 		t_Error,	// Erreur dans l'analyse du flux XML; voir 'Status'.
 		t_Undefined
 	};
@@ -270,10 +270,10 @@ namespace xml {
 
 #define TF( name )	tf##name = ( 1 << t##name )
 
-	// Permet de n'avoir à traiter que certains 'token's.
+	// Permet de n'avoir  traiter que certains 'token's.
 	enum token_flag__
 	{
-		tfNone = 0,	// Pour n'obtenir que 'tError' et 'tProcessed', qui ne peuvent être ignorés.
+		tfNone = 0,	// Pour n'obtenir que 'tError' et 'tProcessed', qui ne peuvent tre ignors.
 		TF( ProcessingInstruction ),
 		TF( StartTag ),
 		TF( StartTagClosed ),
@@ -294,10 +294,10 @@ namespace xml {
 #ifdef XML__TF_BUFFER
 #	define	TF	XML__TF_BUFFER
 #endif
-	// Traitement des entités ('&...;').
+	// Traitement des entits ('&...;').
 	enum entities_handling__ {
-		ehReplace,	// Les 'entity's sont remplacés par leur caractère correspondant.
-		ehKeep,		// Les 'entity's sont gardés tel quel.
+		ehReplace,	// Les 'entity's sont remplacs par leur caractre correspondant.
+		ehKeep,		// Les 'entity's sont gards tel quel.
 		eh_amount,
 		eh_Undefined,
 		eh_Default = ehReplace,
@@ -309,7 +309,7 @@ namespace xml {
 		_context__ _Context;
 		token__ _Token;
 		stk::E_MCSTACK( str::string_ ) _Tags;
-		bso::bool__ _EmptyTag;	// A 'true' pour '<tag/>', sinon à 'false'.
+		bso::bool__ _EmptyTag;	// A 'true' pour '<tag/>', sinon  'false'.
 		_flow___ _Flow;
 		str::string _TagName;
 		str::string _AttributeName;
@@ -360,10 +360,10 @@ namespace xml {
 		token__ Parse(
 			str::string_ &TagName,
 			str::string_ &AttributeName,
-			str::string_ &Value,	// Contient la valeur d'une balise ('tag') our d'un attribut, en fonction de la valeur retournée ('tTag' ou 'tAttribute').
+			str::string_ &Value,	// Contient la valeur d'une balise ('tag') our d'un attribut, en fonction de la valeur retourne ('tTag' ou 'tAttribute').
 			xml::dump_ &Dump,
 			status__ &Status,
-			int TokenToReport = tfAll )	// 'Status' initialisé seulement si valeur retournée == 'tError'.
+			int TokenToReport = tfAll )	// 'Status' initialis seulement si valeur retourne == 'tError'.
 		{
 			token__ Token = Parse( TokenToReport );
 
@@ -461,17 +461,17 @@ namespace xml {
 		xtf::extended_text_iflow__ &Flow,
 		entities_handling__ EntitiesHandling,
 		callback__ &Callback );
-	// Si valeur retournée == 'false', 'Flow.Line()' et 'Flow.Column()' est positionné là où il y a l'erreur.
+	// Si valeur retourne == 'false', 'Flow.Line()' et 'Flow.Column()' est positionn l o il y a l'erreur.
 
-	// Transformation des caractères spéciaux, comm '<' qui devient '&lt;'.
+	// Transformation des caractres spciaux, comm '<' qui devient '&lt;'.
 	void TransformUsingEntities(
 		str::string_ &Target,
-		bso::bool__ DelimiterOnly );	// Si à true', seul les délimiteurs de valeur d'attributs (''' et '"') sont modifiés.
+		bso::bool__ DelimiterOnly );	// Si  true', seul les dlimiteurs de valeur d'attributs (''' et '"') sont modifis.
 
 	inline void TransformUsingEntities(
 		const str::string_ &Source,
 		bso::bool__ DelimiterOnly,
-		str::string_ &Target )	// Conversion des caractères spéciaux, comme '<' qui devient '&lt;'.
+		str::string_ &Target )	// Conversion des caractres spciaux, comme '<' qui devient '&lt;'.
 	{
 		Target = Source;
 
@@ -488,15 +488,15 @@ namespace xml {
 	// Mise en forme de la sortie.
 	enum outfit__ {
 		oCompact,	// Tout sur une seule ligne.
-		oIndent,	// Indenté.
+		oIndent,	// Indent.
 		o_amount,
 		o_Undefined
 	};	// 
 
-	// Traitement des caractères spéciaux ('<', '&', ...).
+	// Traitement des caractres spciaux ('<', '&', ...).
 	enum special_char_handling__ {
-		schReplace,	// Sont remplacés par les 'entity's dédiés.
-		schKeep,	// Ne sont pas remplacés. Cependant, les '"' sont tout de même remplacé per leur 'entity' correspondante dans les valeurs d'attributs.
+		schReplace,	// Sont remplacs par les 'entity's ddis.
+		schKeep,	// Ne sont pas remplacs. Cependant, les '"' sont tout de mme remplac per leur 'entity' correspondante dans les valeurs d'attributs.
 		sch_amount,
 		sch_Undefined,
 		sch_Default = schReplace
@@ -526,7 +526,7 @@ namespace xml {
 		default:ERRPrm();
 			break;
 		}
-		return NULL;	// Pour éviter un 'Warning'.
+		return NULL;	// Pour viter un 'Warning'.
 	}
 
 	class encoding__
@@ -601,7 +601,7 @@ namespace xml {
 			outfit__ Outfit;
 			special_char_handling__ SpecialCharHandling;
 			bso::bool__ Ignore;
-			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprés chaque écriture. Utile pour le déboguage d'application.
+			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
 		} &S_;
 		stk::E_MCSTACK_( name_ ) Tags;
 		writer_( s &S )
@@ -670,7 +670,7 @@ namespace xml {
 		{
 			return Tags.Last();
 		}
-		mark__ PushTag( const name_ &Name )	// Valeur retournée : voir 'PopTag(...)'.
+		mark__ PushTag( const name_ &Name )	// Valeur retourne : voir 'PopTag(...)'.
 		{
 			mark__ Mark = XML_UNDEFINED_MARK;
 
@@ -693,7 +693,7 @@ namespace xml {
 
 			return Mark;
 		}
-		mark__ PushTag( const char *Name )	// Valeur retournée : voir 'PopTag(...)'.
+		mark__ PushTag( const char *Name )	// Valeur retourne : voir 'PopTag(...)'.
 		{
 			return PushTag( name( Name ) );
 		}
@@ -744,8 +744,8 @@ namespace xml {
 		{
 			PutCData( value( Value ) ) ;
 		}
-		mark__ PopTag( mark__ Mark = XML_UNDEFINED_MARK );	// 'Mark', si utilisé, est retourné par un 'Push(...)' et permet de contrôler si l'on se retrouve bien au même niveau que le 'Push(...)' en question.
-		void Rewind( mark__ Mark );	// Désemile l'arbre jusqu'au niveau de 'Mark'.
+		mark__ PopTag( mark__ Mark = XML_UNDEFINED_MARK );	// 'Mark', si utilis, est retourn par un 'Push(...)' et permet de contrler si l'on se retrouve bien au mme niveau que le 'Push(...)' en question.
+		void Rewind( mark__ Mark );	// Dsemile l'arbre jusqu'au niveau de 'Mark'.
 		txf::text_oflow__ &GetFlow( void )
 		{
 			return *S_.Flow;

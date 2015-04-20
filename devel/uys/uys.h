@@ -87,7 +87,7 @@ namespace uys {
 	private:
 		// Le pilote.
 		sdr::E_SDRIVER__ *_Driver;
-		// Indique si le pilote a été défini de manière interne ou non.
+		// Indique si le pilote a t dfini de manire interne ou non.
 		bso::bool__ _Internal;
 		// Uniquement pour la 'conventional_storage__'.
 		sdr::datum__ *_CVMBuffer;
@@ -192,9 +192,9 @@ namespace uys {
 	class untyped_storage_
 	{
 	private:
-		// Le pilote mémoire.
+		// Le pilote mmoire.
 		_storage_driver__ _Driver;
-		// l'éventuel pilote de la multimemoire
+		// l'ventuel pilote de la multimemoire
 		ags::aggregated_storage_driver__ _AggregatedStorageDriver;
 		inline void _Test(
 			sdr::row_t__ Position,
@@ -344,7 +344,7 @@ namespace uys {
 			sdr::size__ Amount,
 			sdr::row_t__ Position,
 			sdr::row_t__ Offset = 0 );
-		// Remplit à partir de 'Position' avec 'Amount' 'Object' de taille 'Size'.
+		// Remplit  partir de 'Position' avec 'Amount' 'Object' de taille 'Size'.
 		void Fill(
 			const sdr::datum__ *Object,
 			sdr::size__ Size,
@@ -389,7 +389,7 @@ namespace uys {
 			break;
 		}
 
-		return fil::m_Undefined;	// Pour éviter un 'warning'.
+		return fil::m_Undefined;	// Pour viter un 'warning'.
 	}
 
 	inline mode__ Convert_( fil::mode__ Mode )
@@ -406,7 +406,7 @@ namespace uys {
 			break;
 		}
 
-		return m_Undefined;	// Pour éviter un 'warning'.
+		return m_Undefined;	// Pour viter un 'warning'.
 	}
 
 	E_ENUM( behavior )
@@ -418,10 +418,10 @@ namespace uys {
 	};
 
 	E_ENUM( _state )
-	{	// Statut de l'opération de connection.
-		sExists,		// le fichier rattaché existe.
-			sAbsent,		// Fichier rattaché absent (ce n'est pas une erreur, cela signifie que des données n'ont pas encore été stockées).
-			sInconsistent,	// Les fichiers sont dans une état incohérent, probablement dû à un arrêt inopiné du logiciel. Utilisé par les bibliothèques en amont.
+	{	// Statut de l'opration de connection.
+		sExists,		// le fichier rattach existe.
+			sAbsent,		// Fichier rattach absent (ce n'est pas une erreur, cela signifie que des donnes n'ont pas encore t stockes).
+			sInconsistent,	// Les fichiers sont dans une tat incohrent, probablement d  un arrt inopin du logiciel. Utilis par les bibliothques en amont.
 			s_amount,
 			s_Undefined
 	};
@@ -474,7 +474,7 @@ namespace uys {
 			break;
 		}
 
-		return false;	// Pour éviter un 'warning'.
+		return false;	// Pour viter un 'warning'.
 	}
 
 }
@@ -501,7 +501,7 @@ namespace uys {
 		E_CDTOR( hook_filenames___ );
 		void Init(
 			const fnm::name___ &Path,
-			const fnm::name___ &Basename )	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
+			const fnm::name___ &Basename )	// Peut tre vide ('NULL') si 'Path' contient dj le nom de fichier.
 		{
 			Filename.Init();
 			fnm::BuildPath( Path, Basename, ".q37", Filename );

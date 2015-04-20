@@ -104,54 +104,54 @@ namespace xulftk {
 # endif
 		void _ApplySession( const frdkrn::compatibility_informations__ &CompatibilityInformations );
 		void _CancelSession( void );
-		// Demande de confirmation de la fermeture d'une session (projet). Normalement appelé par la redéfintion de 'XULFTKDropSession()' lorsque projet modifié.
+		// Demande de confirmation de la fermeture d'une session (projet). Normalement appel par la redfintion de 'XULFTKDropSession()' lorsque projet modifi.
 		bso::bool__ _DefendSession( void );
 		void _DropSession( void );
-		// Ferme l'application. Normalement appelé par la redéfinition de 'XULFTKExit()'.
+		// Ferme l'application. Normalement appel par la redfinition de 'XULFTKExit()'.
 		void _Exit( void );
 		virtual void XULFTKAboutText(
 			const char *LauncherIdentification,
 			const char *BuildInformations,
 			str::string_ &Text )
 		{
-			ERRFwk();	// Si pas surchargé, alors 'xulfmn::about_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	// Si pas surcharg, alors 'xulfmn::about_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 		virtual void XULFTKSiteURL( str::string_ &URL )
 		{
-			ERRFwk();	// Si pas surchargé, alors 'xulfmn::web_site_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	// Si pas surcharg, alors 'xulfmn::web_site_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 		virtual void XULFTKGoToHome( void ) = 0;
-		virtual void XULFTKDefineSession( const fnm::name___ &ProjectFileName )	// Si la 'Size()' == 0, alors création d'un nouveau projet, sinon chargement du projet en question.
+		virtual void XULFTKDefineSession( const fnm::name___ &ProjectFileName )	// Si la 'Size()' == 0, alors cration d'un nouveau projet, sinon chargement du projet en question.
 		{
-			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 # if 0	// Old
 		virtual void XULFTKDefineSession(
 			const str::string_ &ProjectFileName,
 			const xpp::criterions___ &XMLPreprocessorCriterions )
 		{
-			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 # endif
 		virtual void XULFTKApplySession( void )
 		{
-			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::apply_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::apply_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 		virtual void XULFTKCancelSession( void )
 		{
-			ERRFwk();	//	Si pas surchargé, alors 'xulfsf::cancel_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::cancel_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
-		virtual bso::bool__ XULFTKDropSession( void )	// Retourne 'true' si la session aeffectivement été fermée, 'false' sinon.
+		virtual bso::bool__ XULFTKDropSession( void )	// Retourne 'true' si la session aeffectivement t ferme, 'false' sinon.
 		{
-			ERRFwk();	//	Si pas surchargé, alors 'xulfmn::close_project_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	//	Si pas surcharg, alors 'xulfmn::close_project_eh__::NSXPCMOnEvent()' doit tre redfini.
 
-			return false;	// Pour éviter un 'warning'.
+			return false;	// Pour viter un 'warning'.
 		}
 		virtual bso::bool__ XULFTKExit( void )
 		{
-			ERRFwk();	//	Si pas surchargé, alors 'xulfmn::exit_eh__::NSXPCMOnEvent()' doit être redéfini.
+			ERRFwk();	//	Si pas surcharg, alors 'xulfmn::exit_eh__::NSXPCMOnEvent()' doit tre redfini.
 
-			return true;	// Pour éviter un 'warning'.
+			return true;	// Pour viter un 'warning'.
 		}
 	public:
 		void reset( bso::bool__ = true )
@@ -161,7 +161,7 @@ namespace xulftk {
 		}
 		E_CVDTOR( _user_callback__ );
 		void Init(
-			const char *LauncherIdentification,	// Contenu NON dupliqué !
+			const char *LauncherIdentification,	// Contenu NON dupliqu !
 			trunk___ &Trunk )
 		{
 			_Trunk = &Trunk;
@@ -199,7 +199,7 @@ namespace xulftk {
 		{
 			XULFTKCancelSession();
 		}
-		bso::bool__ DropSession( void )	// Retourne 'true' si la session aeffectivement été fermée, 'false' sinon.
+		bso::bool__ DropSession( void )	// Retourne 'true' si la session aeffectivement t ferme, 'false' sinon.
 		{
 			return XULFTKDropSession();
 		}
@@ -249,18 +249,18 @@ namespace xulftk {
 		void _DefineSession( const str::string_ &ProjectId );	// 'registry' qui contient la configuration de l'application.
 # if 0 // Old
 		void _DefineSession(
-			const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel préremplir le 'SessionForm'.
+			const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel prremplir le 'SessionForm'.
 			const xpp::criterions___ &Criterions );	// 'registry' qui contient la configuration de l'application.
 # endif
-		// Normalement appelée par la redéfintion de 'XULFTKApplySession()'. Charge le projet correspondant au fichier 'FileName'.
+		// Normalement appele par la redfintion de 'XULFTKApplySession()'. Charge le projet correspondant au fichier 'FileName'.
 		void _ApplySession(	const frdkrn::compatibility_informations__ &CompatibilityInformations );
-		// Normalement appelée par la redéfintion de 'XULFTKCacnelSession()', même si ne fait rien (standardisation).
+		// Normalement appele par la redfintion de 'XULFTKCacnelSession()', mme si ne fait rien (standardisation).
 		void _CancelSession( void )
 		{}
-		// Demande de confirmation de la fermeture d'une session (projet). Normalement appelé par la redéfintion de 'XULFTKDropSession()' lorsque projet modifié.
+		// Demande de confirmation de la fermeture d'une session (projet). Normalement appel par la redfintion de 'XULFTKDropSession()' lorsque projet modifi.
 		bso::bool__ _DefendSession( void );
 		void _DropSession( void );
-		// Ferme l'application. Normalement appelé par la redéfinition de 'XULFTKExit()'.
+		// Ferme l'application. Normalement appel par la redfinition de 'XULFTKExit()'.
 		void _Exit( void )
 		{
 			UI().Main().Window()->Close();
@@ -286,8 +286,8 @@ namespace xulftk {
 			reset();
 		}
 		status__ Init(
-			const char *TargetName,	// ATTENTION : pointeur copié, contenu NON dupliqué.
-			const char *DefaultXSLRootPath,	// ATTENTION : pointeur copié, contenu NON dupliqué.
+			const char *TargetName,	// ATTENTION : pointeur copi, contenu NON dupliqu.
+			const char *DefaultXSLRootPath,	// ATTENTION : pointeur copi, contenu NON dupliqu.
 			xulfui::ui___ &UI,
 			frdkrn::kernel___ &Kernel,
 			frdssn::session___ &Session,
@@ -305,7 +305,7 @@ namespace xulftk {
 
 			return frdkrn::sOK;
 		}
-		void XULWDGReport( const char *Message )	// Pseudo méthode virtuelle.
+		void XULWDGReport( const char *Message )	// Pseudo mthode virtuelle.
 		{
 			_UI->LogAndPrompt( Message );
 		}

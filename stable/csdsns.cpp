@@ -43,7 +43,7 @@ const char *csdsns::GetLogLabel( log__ Log )
 		CASE( Delete );
 	default:
 		ERRPrm();
-		return NULL;	// Pour éviter un 'warning'.
+		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
 }

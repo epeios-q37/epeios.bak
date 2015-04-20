@@ -43,11 +43,11 @@
 
 namespace sclfrntnd {
 
-	// Action à effectuer sur le projet par défaut.
+	// Action  effectuer sur le projet par dfaut.
 	enum action__ {
-		aNone,		// Aucune action ; l'utilisateur peut sélectionner un autre type de projet, qui sera chargé manuellement.
-		aLoad,		// Le project soit être chargé, mais pas lancé.
-		aLaunch,	// Le project doit être chargé et lancé.
+		aNone,		// Aucune action ; l'utilisateur peut slectionner un autre type de projet, qui sera charg manuellement.
+		aLoad,		// Le project soit tre charg, mais pas lanc.
+		aLaunch,	// Le project doit tre charg et lanc.
 		a_amount,
 		a_Undefined
 	};

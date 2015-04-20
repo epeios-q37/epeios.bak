@@ -10,7 +10,7 @@
 /* end of 'entete.txt' template file */
 /* begin of 'xxx.cpp' template file V2.6 */
 /* 
-	Pour plus de détails, consultez le fichier 'txmhch.h'.
+	Pour plus de dtails, consultez le fichier 'txmhch.h'.
 	See the 'txmhch.h' file  for more details.
 */
 

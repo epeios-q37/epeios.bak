@@ -236,7 +236,7 @@ ERREpilog
 
 static bso::bool__ IsValid_(
 	const str::string_ &Value,
-	bso::bool__ AlpahaNumericOnly )	// A 'true' si la valeur doit être alpha-numérique, comme un libellé d'attribut, par example.
+	bso::bool__ AlpahaNumericOnly )	// A 'true' si la valeur doit tre alpha-numrique, comme un libell d'attribut, par example.
 {
 	sdr::row__ Row = Value.First();
 
@@ -574,7 +574,7 @@ ERREpilog
 
 #if 0 // Old
 void xulftk::trunk___::_DefineSession(
-	const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel préremplir le 'SessionForm'.
+	const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel prremplir le 'SessionForm'.
 	const xpp::criterions___ &Criterions )
 {
 ERRProlog

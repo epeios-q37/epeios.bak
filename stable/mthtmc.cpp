@@ -304,7 +304,7 @@ static inline bso::ulong__ Round_(
 		}
 	} else if ( Precision > 0 ) {
 
-		// à optimiser !
+		//  optimiser !
 		while ( Precision-- )
 			Remainder *= 10;
 
@@ -335,7 +335,7 @@ static inline bso::ulong__ Round_(
 	return Value;
 }
 
-enum round_target__ {	// Spécification de l'unité concerné par l'arrondissement.
+enum round_target__ {	// Spcification de l'unit concern par l'arrondissement.
 	rtNone,	// Signale pas d'arrondissemnt.
 	rtD,	// Nombre de jours ('Day').
 	rtH,	// Nombre d'heures.
@@ -863,7 +863,7 @@ ERRBegin
 			case 'F':
 				D_( ( Timecode / Period ).GetInteger(), FrameRemainder );
 				break;
-			case 'c':	// Complément.
+			case 'c':	// Complment.
 				TOFlow << ( Timecode - RawTimecode ).GetLongFloat();
 				break;
 			case 'C':

@@ -872,7 +872,7 @@ ERRBegin
 		}
 		
 		if ( BarClosed ) {
-			if ( PreviousNote.IsValid() ) // Si ce n'est pas le cas, c'est que la première note n'a pas encore été traité, et on évite ainsi une 'bar' avant elle.
+			if ( PreviousNote.IsValid() ) // Si ce n'est pas le cas, c'est que la premire note n'a pas encore t trait, et on vite ainsi une 'bar' avant elle.
 				WriteBar = true;
 
 			BarFraction.Init( Note.Signature.Time.Numerator(), Note.Signature.Time.Denominator() );
@@ -1762,7 +1762,7 @@ static parse_status__ Parse_(
 parse_status__ mscmld::ParseXML(
 	xml::parser___ &Parser,
 	melody_ &Melody,
-	bso::bool__ WithRoot )	// Si à 'true', la prochaine balise est 'Melody', sinon, on est à l'intérieur de 'Melody'. Dans les deux cas, au retour on est à l'extérieur de la balise 'Melody'.
+	bso::bool__ WithRoot )	// Si  'true', la prochaine balise est 'Melody', sinon, on est  l'intrieur de 'Melody'. Dans les deux cas, au retour on est  l'extrieur de la balise 'Melody'.
 {
 	if ( WithRoot)
 		ERRVct();

@@ -131,7 +131,7 @@ namespace wkagent {
 		}
 		const char *GetSelectValue(
 			const char *Id,
-			TOL_CBUFFER___ &Buffer );	// Retourne la valeur de l'item ('OPTION') actuellement sélectionné du 'SELECT' d'identifiant 'Id'.
+			TOL_CBUFFER___ &Buffer );	// Retourne la valeur de l'item ('OPTION') actuellement slectionn du 'SELECT' d'identifiant 'Id'.
 	};
 }
 

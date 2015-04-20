@@ -117,9 +117,9 @@ namespace fdr {
 	};
 
 	enum behavior__ {
-		bNonBlocking,	// Au moins un octet est lu, davantage si cela n'entrîne pas de blocage.
-		bBlocking,		// Sauf si 'EOF', le nombre d'octets demandé sera lu, même si blocage.
-		bKeep,			// Sauf si 'EOF', le nombre d'octets demandés sera lu, même si blocage, mais ils restent dans le flux.
+		bNonBlocking,	// Au moins un octet est lu, davantage si cela n'entrne pas de blocage.
+		bBlocking,		// Sauf si 'EOF', le nombre d'octets demand sera lu, mme si blocage.
+		bKeep,			// Sauf si 'EOF', le nombre d'octets demands sera lu, mme si blocage, mais ils restent dans le flux.
 		b_amount,
 		b_Undefined
 	};
@@ -156,7 +156,7 @@ namespace fdr {
 			break;
 		}
 
-		return FDR_NO_MUTEX;	// Pour éviter un 'warning'.
+		return FDR_NO_MUTEX;	// Pour viter un 'warning'.
 	}
 
 
@@ -205,7 +205,7 @@ namespace fdr {
 	template <typename flow> class _flow_driver_base__
 	{
 	private:
-		mutex__ _Mutex;	// Mutex pour protèger la ressource.
+		mutex__ _Mutex;	// Mutex pour protger la ressource.
 		const flow *_User;
 	protected:
 		void Lock( const flow *User )
@@ -275,7 +275,7 @@ namespace fdr {
 		size__ _Position;
 		size__ _Read(
 			size__ Wanted,
-			datum__ *Buffer )	// Si valeur retournée == 0, alors , alors 'EOF' atteint.
+			datum__ *Buffer )	// Si valeur retourne == 0, alors , alors 'EOF' atteint.
 		{
 # ifdef FDR_DBG
 			if ( Wanted == 0 )
@@ -288,7 +288,7 @@ namespace fdr {
 		}
 		size__ _LoopingRead(
 			size__ Wanted,
-			datum__ *Buffer )	// Si valeur retournée différent de 'Wanted', alors 'EOF' atteint.
+			datum__ *Buffer )	// Si valeur retourne diffrent de 'Wanted', alors 'EOF' atteint.
 		{
 			size__ Red = 0, PonctualRed = 0;
 
@@ -297,7 +297,7 @@ namespace fdr {
 
 			return Red;
 		}
-		size__ _FillCache( size__ Size )	// Si != 0, alors on fait le maximum pour lire la quantité demandée. Sinon, on en lit au moins 1, sauf si 'EOF'.
+		size__ _FillCache( size__ Size )	// Si != 0, alors on fait le maximum pour lire la quantit demande. Sinon, on en lit au moins 1, sauf si 'EOF'.
 		{
 #ifdef FDR_DBG
 			if ( _Cache == NULL )
@@ -325,9 +325,9 @@ namespace fdr {
 
 			return _Available;
 		}
-		void _CompleteCache( size__ Size )	// Fait le maximum pour que le cache, avec les données déjà disponibles, contienne la quantité demandée.
+		void _CompleteCache( size__ Size )	// Fait le maximum pour que le cache, avec les donnes dj disponibles, contienne la quantit demande.
 		{
-			if ( _Size == 0 )	// Plus de donnée disponibles.
+			if ( _Size == 0 )	// Plus de donne disponibles.
 				return;
 
 			if ( _Available < Size ) {
@@ -369,7 +369,7 @@ namespace fdr {
 		size__ _ReadThroughCache(
 			size__ Size,
 			datum__ *Buffer,
-			bso::bool__ Force )	// Si == 'true', on fait le maximum pour lire la quantitée demandée.
+			bso::bool__ Force )	// Si == 'true', on fait le maximum pour lire la quantite demande.
 		{
 			size__ Red = _ReadFromCache( Size, Buffer, true );
 
@@ -397,7 +397,7 @@ namespace fdr {
 				return _FillCache( 0 ) == 0;
 		}
 	protected:
-		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donnée n'est disponibe.
+		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donne n'est disponibe.
 		virtual size__ FDRRead(
 			size__ Maximum,
 			datum__ *Buffer ) = 0;
@@ -482,12 +482,12 @@ namespace fdr {
 			}
 
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
-		bso::bool__ IsCacheEmpty( bso::size__ &Available ) const
+		bso::bool__ IsCacheEmpty( bso::size__ *Available = NULL ) const
 		{
-			if ( &Available != NULL )
-				Available = _Available;
+			if ( Available != NULL )
+				*Available = _Available;
 
 			return _Available == 0;
 		}
@@ -507,7 +507,7 @@ namespace fdr {
 	: public iflow_driver_base___
 	{
 	private:
-		datum__ _Cache[cache_size+1];	// '+1' pour gèrer le 'Unget()'.
+		datum__ _Cache[cache_size+1];	// '+1' pour grer le 'Unget()'.
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -524,9 +524,9 @@ namespace fdr {
 	: public _flow_driver_base__<flw::oflow__>
 	{
 	private:
-		bso::bool__ _Initialized;	// Pour éviter des 'pure virtual function call'.
+		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
 	protected:
-		// Retourne le nombre d'octets effectivement écrits. Ne retourne '0' que si plus aucune donnée ne peut être écrite.
+		// Retourne le nombre d'octets effectivement crits. Ne retourne '0' que si plus aucune donne ne peut tre crite.
 		virtual size__ FDRWrite(
 			const datum__ *Buffer,
 			size__ MAximum ) = 0;
@@ -570,7 +570,7 @@ namespace fdr {
 		}
 	};
 
-	// Uniquement pour avoir une symétrie par rapport à 'iflow_driver___'.
+	// Uniquement pour avoir une symtrie par rapport  'iflow_driver___'.
 	template <int Dummy = 0> class oflow_driver___
 	: public oflow_driver_base___
 	{
@@ -578,7 +578,7 @@ namespace fdr {
 		void reset( bso::bool__ P = true )
 		{
 			if ( Dummy != 0 )	
-				ERRPrm();	// 'Dummy' n'étant pas utilisé, rien ne sert de modifier sa valeur.
+				ERRPrm();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 
 			oflow_driver_base___::reset( P );
 		}

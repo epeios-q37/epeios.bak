@@ -229,7 +229,7 @@ namespace cdgb64 {
 		}
 	};
 
-	typedef flw::standalone_oflow__<>	_oflow__;	// NOTA : la taille du cache doit être supérieur ou égal à 3.
+	typedef flw::standalone_oflow__<>	_oflow__;	// NOTA : la taille du cache doit tre suprieur ou gal  3.
 
 	class encoding_oflow___
 	: public _oflow__
@@ -276,8 +276,8 @@ namespace cdgb64 {
 	}
 
 	inline void Decode_(
-		const fdr::datum__ *Source,	// Séquence complète de 4 octets en b64, sans '='.
-		fdr::datum__ *Target )	// Doit avoir la place suffisante pour recevoir la séquence de 3 octets résultante.
+		const fdr::datum__ *Source,	// Squence complte de 4 octets en b64, sans '='.
+		fdr::datum__ *Target )	// Doit avoir la place suffisante pour recevoir la squence de 3 octets rsultante.
 	{
 		Target[0] = Decode_( Source[0] ) | ( Decode_( Source[1] ) << 6 );
 		Target[1] = ( Decode_( Source[1] ) >> 2 ) | ( Decode_( Source[2] ) << 4 );

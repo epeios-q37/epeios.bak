@@ -54,7 +54,7 @@ public:
 /*$BEGIN$*/
 
 #ifdef SPH__CUSTOM
-// Boucle jusqu'à ce que le sémaphore indique la disponibilité.
+// Boucle jusqu' ce que le smaphore indique la disponibilit.
 void sph__semaphore_::AttendreDisponibilite_( void )
 {
 	do

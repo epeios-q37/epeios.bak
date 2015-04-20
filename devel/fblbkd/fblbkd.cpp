@@ -201,7 +201,7 @@ ERREpilog
 }
 
 
-// Donne la liste des identificateurs et des libellés de types
+// Donne la liste des identificateurs et des libells de types
 static void GetTypesIDAndPrefixAndName_(
 	backend___ &Backend,
 	untyped_module &Module,
@@ -442,7 +442,7 @@ ERREnd
 ERREpilog
 }
 
-// Retourne l'identificateur correspondant à un type donné.
+// Retourne l'identificateur correspondant  un type donn.
 static void GetType_(
 	backend___ &Backend,
 	untyped_module &Module,
@@ -551,7 +551,7 @@ ERREpilog
 
 
 
-// Retourne l'identificateur de type et les identificateurs de commande demandé.
+// Retourne l'identificateur de type et les identificateurs de commande demand.
 static void GetTypeAndCommands_(
 	backend___ &Backend,
 	untyped_module &Module,
@@ -577,7 +577,7 @@ static void GetTypeAndCommands_(
 }
 
 
-// Retourne l'identificateur d'une commande donnée pour un type donné.
+// Retourne l'identificateur d'une commande donne pour un type donn.
 static void GetCommand_(
 	backend___ &Backend,
 	untyped_module &Module,
@@ -616,7 +616,7 @@ ERREpilog
 }
 
 
-// Retourne l'identificateur des commandes demandées pour un type donné.
+// Retourne l'identificateur des commandes demandes pour un type donn.
 static void GetCommands_(
 	backend___ &Backend,
 	untyped_module &Module,
@@ -694,7 +694,7 @@ ERREpilog
 
 #define ADD( I )	Backend.Add( fblcmd::CommandsNames[fblcmd::c##I], ::I##_, fblcmd::CommandsParameters[fblcmd::c##I] )
 
-// Initialisation avec rattachement à l'interface 'Frontend'.
+// Initialisation avec rattachement  l'interface 'Frontend'.
 void fblbkd::master_module::Init( fblbkd::backend___ &Backend )
 {
 	untyped_module::Init( NULL, NULL );
@@ -803,7 +803,7 @@ ERRBegin
 	Flow.Dismiss();
 
 	if ( RemoteBackendLabel[0] && strcmp( RemoteBackendLabel, _BackendLabel ) )
-		ERRVct();	// Pas encore traité.
+		ERRVct();	// Pas encore trait.
 
 	if ( strcmp( RemoteProtocolVersion, FBLOVL_PROTOCOL_VERSION )
 		 || ( RemoteAPIVersion[0] && strcmp( RemoteAPIVersion, APIVersion ) ) ) {
@@ -894,7 +894,7 @@ ERRBegin
 
 	Request.Complete();
 ERRErr
-	if ( ERRType != err::t_Abort ) {	// Les erreurs de type 't_Abort' doivent être traités en amont.
+	if ( ERRType != err::t_Abort ) {	// Les erreurs de type 't_Abort' doivent tre traits en amont.
 		const char *ErrMsg = err::Message( ErrorBuffer );
 
 		ERRRst();

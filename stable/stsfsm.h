@@ -77,8 +77,8 @@ namespace stsfsm {
 	typedef bso::uint__ id__;
 	E_CDEF( id__, UndefinedId, BSO_UINT_MAX );
 
-	// Par défaut, cette valeur signifie qu'une 'card' n'est pas rattachée à une entrée. Dans ce cas 'Cards( 255 ) n'existe pas.
-	// Si les 255 entrée de la table sont utilisée et pointe tous sur des 'card's inutilisée, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
+	// Par dfaut, cette valeur signifie qu'une 'card' n'est pas rattache  une entre. Dans ce cas 'Cards( 255 ) n'existe pas.
+	// Si les 255 entre de la table sont utilise et pointe tous sur des 'card's inutilise, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
 	E_CDEF( int, NoCard, 255 );
 
 	class card_ {
@@ -219,7 +219,7 @@ namespace stsfsm {
 		status__ Handle( bso::u8__ C );
 		status__ Handle(
 			const str::string_ &Pattern,
-			sdr::row__ &LostPosition = *(sdr::row__ *)NULL );	// 'LostPosition' contient la position du caractère fautif lorsque la valeur retournée == 'sLost'.
+			sdr::row__ &LostPosition = *(sdr::row__ *)NULL );	// 'LostPosition' contient la position du caractre fautif lorsque la valeur retourne == 'sLost'.
 		id__ GetId( void ) const
 		{
 			ctn::E_CMITEMt( card_, crow__ ) Card;
@@ -283,7 +283,7 @@ namespace stsfsm {
 		else
 			return (type)Id;
 
-		return UndefinedValue;	// Pour éviter un 'warning'.
+		return UndefinedValue;	// Pour viter un 'warning'.
 	}
 }
 

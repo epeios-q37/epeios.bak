@@ -228,7 +228,7 @@ namespace pllio {
 			if ( _D != PLLIO_UNDEFINED_DESCRIPTOR ) {
 				fsync( _D );
 
-//				fdatasync( _D );	// N'existe que sous Linux. Alternative à 'fsync()', sauf que les meta-données (herure de modification, p. ex.) ne sont pas stockées, économisant une écriture disque.
+//				fdatasync( _D );	// N'existe que sous Linux. Alternative  'fsync()', sauf que les meta-donnes (herure de modification, p. ex.) ne sont pas stockes, conomisant une criture disque.
 			}
 		}
 	};

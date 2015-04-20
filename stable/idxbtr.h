@@ -79,8 +79,8 @@ namespace idxbtr {
 	template <typename r> class tree_index_
 	{
 	private:
-		/* Equilibre l'arbre, sachant que l'ordre des éléments est donnée par
-		la file 'File' de tête 'Tete' et que l'on doit utiliser la 'Pilote' si != NULL.
+		/* Equilibre l'arbre, sachant que l'ordre des lments est donne par
+		la file 'File' de tte 'Tete' et que l'on doit utiliser la 'Pilote' si != NULL.
 		Retourne la nouvelle racine de l'arbre. */
 		r Equilibrer_(
 			const que::E_QUEUEt_( r ) &Index,
@@ -206,7 +206,7 @@ namespace idxbtr {
 			if ( BaseTree.HasBothChildren( Node ) ) {
 				r TargetNode = E_NIL;
 
-				if ( *Node & 1 )	// Petit générateur aléatoire.
+				if ( *Node & 1 )	// Petit gnrateur alatoire.
 					TargetNode = _SearchMostLeftNode( BaseTree.Right( Node ) );
 				else
 					TargetNode = _SearchMostRightNode( BaseTree.Left( Node ) );

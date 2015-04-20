@@ -72,7 +72,7 @@ const char *clthvy::GetLogLabel( log__ Log )
 		CASE( Release );
 	default:
 		ERRu();
-		return NULL;	// Pour éviter un 'warning'.
+		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
 }

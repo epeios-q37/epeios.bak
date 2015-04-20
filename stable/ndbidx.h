@@ -112,7 +112,7 @@ namespace ndbidx {
 		}
 	};
 
-	// Pour idiquer le comportement d'un "seek' lorsqu'il tombe sur un élément qu est égal à celui recherché.
+	// Pour idiquer le comportement d'un "seek' lorsqu'il tombe sur un lment qu est gal  celui recherch.
 	enum behavior__ {
 		// On stoppe la recherche.
 		bStop,
@@ -129,7 +129,7 @@ namespace ndbidx {
 	class observer_functions__
 	{
 	private:
-		// Durée entre deux appels en ms.
+		// Dure entre deux appels en ms.
 		bso::uint__ _Delay;
 		bso::uint__ _HandledIndexAmount, _TotalIndexAmount;
 	protected:
@@ -142,14 +142,14 @@ namespace ndbidx {
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Delay = 1000;	// Délai par défaut : 1 s.
+			_Delay = 1000;	// Dlai par dfaut : 1 s.
 			_TotalIndexAmount = _HandledIndexAmount = 0;
 		}
 		observer_functions__( void )
 		{
 			reset( false );
 		}
-		void Init( bso::uint__ Delay = 1000 )	// Délai par défaut : 1 s.
+		void Init( bso::uint__ Delay = 1000 )	// Dlai par dfaut : 1 s.
 		{
 			reset();
 
@@ -211,7 +211,7 @@ namespace ndbidx {
 		void _CompleteInitialization( void ) const
 		{
 			if ( _PostInitializationFunction != NULL ) {
-				// On passe par un 'Buffer' pour éviter un appel récursif.
+				// On passe par un 'Buffer' pour viter un appel rcursif.
 				post_initialization_function__ *Buffer = _PostInitializationFunction;
 				_PostInitializationFunction = NULL;
 				Buffer->CompleteInitialization();
@@ -278,7 +278,7 @@ namespace ndbidx {
 			_ModificationEpochTimeStamp = 0;
 			_PostInitializationFunction = NULL;
 		}
-		E_VDTOR( index_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe héritante.
+		E_VDTOR( index_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe hritante.
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
 			DIndex.plug( AS );
@@ -339,7 +339,7 @@ namespace ndbidx {
 		}
 		bso::u8__ Index(
 			rrow__ Row,
-			extremities__ *Extremities,	// Si à 'true', compare d'abord avec les extrémités. Utilisé pour la réindexation.
+			extremities__ *Extremities,	// Si  'true', compare d'abord avec les extrmits. Utilis pour la rindexation.
 			ndbctt::cache_ &Cache  = *(ndbctt:: cache_ *)NULL );	// Retourne le nombre de noeuds parcourus pour cette indexation.
 		void Delete( rrow__ Row )
 		{
@@ -360,14 +360,14 @@ namespace ndbidx {
 			const datum_ &Datum,
 			behavior__ EqualBehavior,
 			context__ Context,
-			bso::sign__ &Sign ) const;	// Retourne l'élément le plus proche, même si 
+			bso::sign__ &Sign ) const;	// Retourne l'lment le plus proche, mme si 
 		rrow__ StrictSeek(
 			const datum_ &Datum,
 			behavior__ EqualBehavior,
 			context__ Context ) const
 		{
 			bso::sign__ Sign;
-			rrow__ Row = LooseSeek( Datum, EqualBehavior, Context, Sign );	// Procède au '_CompleteIntialization()'.
+			rrow__ Row = LooseSeek( Datum, EqualBehavior, Context, Sign );	// Procde au '_CompleteIntialization()'.
 
 			switch ( Sign ) {
 			case -1:
@@ -400,7 +400,7 @@ namespace ndbidx {
 			rrow__ RecordId,
 			context__ Context ) const
 		{
-			return -Compare( RecordId, Pattern, Context );	// Procède au '_CompleteInitialization()'.
+			return -Compare( RecordId, Pattern, Context );	// Procde au '_CompleteInitialization()'.
 		}
 		bso::sign__ Compare(
 			rrow__ RecordRow1,

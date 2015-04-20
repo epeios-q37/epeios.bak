@@ -54,7 +54,7 @@ const char *fnm::GetLabel( fnm::type__ Type )
 		ERRFwk();
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 #ifdef FNM__POSIX

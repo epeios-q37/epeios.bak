@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Locales xmlns="http://zeusw.org/epeios/xlcl" xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="expp">
-    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
-    <xpp:expand value-of="epeios.shortcuts"/>
-	<xpp:expand select="epeios.xlcl"/>
-    <Translations text="ProgramDescription">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xlcl"/>
+		<Translations text="ProgramDescription">
 			<Translation language="fr">Processeur XML du projet Epeios</Translation>
 			<Translation language="en">Epeios XML preprocessor</Translation>
 		</Translations>

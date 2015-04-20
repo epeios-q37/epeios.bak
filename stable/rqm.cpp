@@ -248,7 +248,7 @@ ERREpilog
 	return Retour;
 }
 
-// Ajoute dans 'Flot' le paramètre 'Valeur' de caste 'Caste'.
+// Ajoute dans 'Flot' le paramtre 'Valeur' de caste 'Caste'.
 void rqm::AddValue(
 	cast Cast,
 	const void *Valeur,
@@ -486,8 +486,8 @@ void rqm::request_manager___::GetValue_(
 	}
 }
 
-/*f Place dans 'Valeur' le contenu du prochain paramètre contenu dans la requête
-sachant qu'il est de caste 'Caste'. Un contrôle est fait sur la caste.*/
+/*f Place dans 'Valeur' le contenu du prochain paramtre contenu dans la requte
+sachant qu'il est de caste 'Caste'. Un contrle est fait sur la caste.*/
 kind rqm::request_manager___::GetValue(
 	cast Cast,
 	void *Valeur )

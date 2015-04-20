@@ -116,7 +116,7 @@ namespace dbsctt {
 			else
 				ERRu();
 
-			return NONE;	// Pour éviter un 'warning'.
+			return NONE;	// Pour viter un 'warning'.
 		}
 		void Erase( rrow__ Row )
 		{
@@ -151,7 +151,7 @@ namespace dbsctt {
 			else
 				ERRu();
 
-			return false;	// Pour éviter un 'warning'.
+			return false;	// Pour viter un 'warning'.
 		}
 		// Retourne 'true' si l'enregistrement existe, faux sinon.
 		bso::bool__ Retrieve(
@@ -167,7 +167,7 @@ namespace dbsctt {
 			else
 				ERRu();
 
-			return false;	// Pour éviter un 'warning'.
+			return false;	// Pour viter un 'warning'.
 		}
 		time_t ModificationTimeStamp( void ) const
 		{
@@ -178,7 +178,7 @@ namespace dbsctt {
 			else
 				ERRu();
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		rrow__ First( void ) const
 		{
@@ -233,7 +233,7 @@ namespace dbsctt {
 			else
 				ERRu();
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		epeios::size__ Amount( void ) const
 		{
@@ -244,7 +244,7 @@ namespace dbsctt {
 			else
 				ERRu();
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		bso::bool__ Exists( rrow__ Row ) const
 		{
@@ -286,7 +286,7 @@ namespace dbsctt {
 			else
 				ERRu();
 
-			return false;	// Pour éviter un 'warning'.
+			return false;	// Pour viter un 'warning'.
 		}
 		void ErasePhysically( void )
 		{

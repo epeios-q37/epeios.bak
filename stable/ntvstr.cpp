@@ -62,7 +62,7 @@ void ntvstr::string___::Init( const bso::char__ *String )
 
 	Init();
 
-	// Nécessaire pour les architectures 64 bits (sous Windwos 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
+	// Ncessaire pour les architectures 64 bits (sous Windwos 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
 	int CoreExtent = ( _Core.Extent() > INT_MAX ? INT_MAX : (int)_Core.Extent() );
 
 	if ( CoreExtent == 0 )
@@ -118,7 +118,7 @@ const bso::char__ *ntvstr::string___::_Convert(
 	}
 
 # ifdef NTVSTR__WCS
-	// Nécessaire pour les architectures 64 bits (sous Windows, 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
+	// Ncessaire pour les architectures 64 bits (sous Windows, 'int' a une taille de 32 bits, et 'size_t', 64), certaines fonctions Windows prenant un 'int'.
 	int BufferExtent = ( Buffer.Extent() > INT_MAX ? INT_MAX : (int)Buffer.Extent() );
 
 	if ( BufferExtent == 0 )

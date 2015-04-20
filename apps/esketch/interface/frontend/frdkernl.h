@@ -65,7 +65,7 @@ namespace frdkernl {
 		E_CDTOR( kernel___ );
 		status__ Init( frdkrn::reporting_callback__ &ReportingCallback )
 		{
-			// Les autres objets sont initialisés lors de la connection.
+			// Les autres objets sont initialiss lors de la connection.
 
 			return _kernel___::Init( ReportingCallback );
 		}

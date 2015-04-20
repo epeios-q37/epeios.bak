@@ -84,7 +84,7 @@ namespace xulfui {
 		xulfdg::debug_dialog__ *_DebugDialog;
 		nsIDOMWindow *_JSConsoleWindow;
 	protected:
-		virtual void XULFUIRefresh( void ) = 0;	// Mise à jour de l'interface.
+		virtual void XULFUIRefresh( void ) = 0;	// Mise  jour de l'interface.
 		virtual xulftk::trunk___ &XULFUITrunk( void ) const = 0;
 	public:
 		_event_handlers__ &EventHandlers;

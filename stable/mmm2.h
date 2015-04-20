@@ -62,8 +62,8 @@ extern class ttr_tutor &MMM2Tutor;
 
 #error Do noy use. Use 'MMM' instead.
 
-/* NOTA : Lorsque le fragment est utilisé, la taille totale est la taille utilisable (taille des données).
-Lorsque le fragment est disponible, c'est la taille total du fragment qui est stockée. */
+/* NOTA : Lorsque le fragment est utilis, la taille totale est la taille utilisable (taille des donnes).
+Lorsque le fragment est disponible, c'est la taille total du fragment qui est stocke. */
 
 #include "err.h"
 #include "flw.h"
@@ -73,16 +73,16 @@ Lorsque le fragment est disponible, c'est la taille total du fragment qui est st
 #include "bch.h"
 #include "stk.h"
 
-// Ce drapeau indique si la taille est stocké dans le fragment. Ne concerne que les fragments libres.
+// Ce drapeau indique si la taille est stock dans le fragment. Ne concerne que les fragments libres.
 #define MMM2_FREE_FRAGMENT_SIZE_FLAG_POSITION	7
 #define MMM2_FREE_FRAGMENT_SIZE_FLAG_MASK ( 1 << MMM2_FREE_FRAGMENT_SIZE_FLAG_POSITION )
 
 
-// Ce drapeau indique si le fragment est lié ou non (donnée réparties sur deux fragments ou non). Ne concerne que les fragments utilisés.
+// Ce drapeau indique si le fragment est li ou non (donne rparties sur deux fragments ou non). Ne concerne que les fragments utiliss.
 #define MMM2_USED_FRAGMENT_LINK_FLAG_POSITION	7
 #define MMM2_USED_FRAGMENT_LINK_FLAG_MASK ( 1 << MMM2_USED_FRAGMENT_LINK_FLAG_POSITION )
 
-// Ce drapeau indique si le fragment précédent est libre ou non. Ne concerne que les fragments utilisés.
+// Ce drapeau indique si le fragment prcdent est libre ou non. Ne concerne que les fragments utiliss.
 #define MMM2_USED_FRAGMENT_FREE_FLAG_POSITION	6
 #define MMM2_USED_FRAGMENT_FREE_FLAG_MASK ( 1 << MMM2_USED_FRAGMENT_FREE_FLAG_POSITION )
 
@@ -95,8 +95,8 @@ Lorsque le fragment est disponible, c'est la taille total du fragment qui est st
 #define MMM2_LINK_SIZE	sizeof( mmm::row__ )
 #define MMM2_ORPHAN_MAX_SIZE	10
 #define MMM2_NORMAL_FREE_FRAGMENT_MIN_SIZE	( 1 + 1 + MMM2_LINK_SIZE + MMM2_LINK_SIZE + MMM2_LINK_SIZE + 1 )
-#define MMM2_HEADER_MAX_LENGTH	( 1+ MMM2_SIZE_BUFFER_MAX_LENGTH + 2 * MMM2_LINK_SIZE  )	// Correspond à la struture d'un 'header' d'un fragment libre,
-																							// ce dernier étant plus grand que le 'header' d'un fragment utilisé.
+#define MMM2_HEADER_MAX_LENGTH	( 1+ MMM2_SIZE_BUFFER_MAX_LENGTH + 2 * MMM2_LINK_SIZE  )	// Correspond  la struture d'un 'header' d'un fragment libre,
+																							// ce dernier tant plus grand que le 'header' d'un fragment utilis.
 #define MMM2_FREE_FRAGMENT_FOOTER_MAX_SIZE	( MMM2_LINK_SIZE + 1 )
 
 namespace mmm {
@@ -123,9 +123,9 @@ namespace mmm {
 			else
 				ERRc();
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
-		// Retourne la taile maximale telle que cette taille + l'indicateur de taille soit inférieur ou égal à 'MaxSize'.
+		// Retourne la taile maximale telle que cette taille + l'indicateur de taille soit infrieur ou gal  'MaxSize'.
 		mdr::size__ _AdjustSize( mdr::size__ MaxSize ) const
 		{
 #ifdef MMM2_DBG
@@ -381,13 +381,13 @@ namespace mmm {
 				_SetRawSize( Size, false, false, Header + 1 );
 
 				if ( Size <= MMM2_ORPHAN_MAX_SIZE )
-					Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur à destination du fragement utilisé qui suit.
+					Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur  destination du fragement utilis qui suit.
 				else {
 					if ( Size < MMM2_NORMAL_FREE_FRAGMENT_MIN_SIZE )
-						Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur à destination du fragement utilisé qui suit.
+						Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur  destination du fragement utilis qui suit.
 					else {
-						Memory.Put( 0xff, *Position + Size - 1 );	// Marqueur à destination du fragement utilisé qui suit.
-						Memory.Store( (const mdr::datum__ *)&Position, MMM2_LINK_SIZE, *Position + Size - 5 );	// Position du début du fragment à destination du fragment utilisé qui suit.
+						Memory.Put( 0xff, *Position + Size - 1 );	// Marqueur  destination du fragement utilis qui suit.
+						Memory.Store( (const mdr::datum__ *)&Position, MMM2_LINK_SIZE, *Position + Size - 5 );	// Position du dbut du fragment  destination du fragment utilis qui suit.
 					}
 					// Bien que 'Header' soit en cours de construction, son contenu est suffisant pour pouvoir l'utiliser.
 					memcpy( Header + _GetFreeFragmentPreviousFreeFragmentPointerRelativePosition( Header ), &PreviousFragmentPosition, MMM2_LINK_SIZE );
@@ -524,7 +524,7 @@ namespace mmm {
 				ERRc();
 #endif
 			if ( S_.FreeFragment == RemovedFragmentPosition )
-				if ( *RemovedFragmentPosition & 1 )	// Petit générateur al&atoire.
+				if ( *RemovedFragmentPosition & 1 )	// Petit gnrateur al&atoire.
 					S_.FreeFragment = _GetFreeFragmentNextFreeFragmentPosition( Header );
 				else
 					S_.FreeFragment = _GetFreeFragmentPreviousFreeFragmentPosition( Header );
@@ -545,7 +545,7 @@ namespace mmm {
 					ERRc();
 #endif
 
-				if ( Previous == Next ) {	// Il ne reste plus q'un fragment libre (non orphelin) ; on ne va pas le faire pointer sur lui-même.
+				if ( Previous == Next ) {	// Il ne reste plus q'un fragment libre (non orphelin) ; on ne va pas le faire pointer sur lui-mme.
 					_SetFreeFragmentNextFreeFragmentPosition( Previous, NONE );
 					_SetFreeFragmentPreviousFreeFragmentPosition( Next, NONE );
 				} else {
@@ -590,7 +590,7 @@ namespace mmm {
 			S_.FreeFragment =  NewFreeFragmentPosition;
 		}
 		void _SetAsFreeFragment(
-			row__ Position,	// 'Position' ne pointe pas nécessairement sur un 'header'.
+			row__ Position,	// 'Position' ne pointe pas ncessairement sur un 'header'.
 			mdr::size__ Size )
 		{
 #ifdef MMM2_DBG
@@ -633,7 +633,7 @@ namespace mmm {
 		row__ _FreeUsedFragment(
 			row__ Position,
 			const mdr::datum__ *Header,
-			mdr::size__ Size )	// Retourne la position du fragment libre ainsi crée.Peut être différent de 'Position' (fusion avec le fragment libre précédent).
+			mdr::size__ Size )	// Retourne la position du fragment libre ainsi cre.Peut tre diffrent de 'Position' (fusion avec le fragment libre prcdent).
 		{
 #ifdef MMM2_DBG
 			if ( Size == 0 )
@@ -670,7 +670,7 @@ namespace mmm {
 		void _MarkAsUsedFragment(
 			row__ Position,
 			mdr::size__ DataSize,
-			row__ Link,	// Si pas lié, est égal à 'NONE'.
+			row__ Link,	// Si pas li, est gal  'NONE'.
 			bso::bool__ FreeFlag )
 		{
 #ifdef MMM2_DBG
@@ -1001,8 +1001,8 @@ namespace mmm {
 			const mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			const mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectis. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectis. */
 		{
 			Memory.Store_(
 				Memory, SourceFirstFragmentSize > TargetFirstFragmentSize ? TargetFirstFragmentSize : SourceFirstFragmentSize,
@@ -1023,8 +1023,8 @@ namespace mmm {
 			const mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			const mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectis. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectis. */
 		{
 			if ( SourceFirstFragmentSize > TargetFirstFragmentSize )
 				Memory.Store_(
@@ -1045,8 +1045,8 @@ namespace mmm {
 			const mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			const mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectis. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectis. */
 		{
 			if ( SourceFirstFragmentSize > TargetFirstFragmentSize )
 				Memory.Store_(
@@ -1068,8 +1068,8 @@ namespace mmm {
 			mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectis. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectis. */
 		{
 			_MoveHead(
 				SourceFirstFragmentRow, SourceFirstFragmentSize,
@@ -1452,7 +1452,7 @@ namespace mmm {
 
 			if ( Size == 0 ) {
 				Free( Descriptor );
-				return NONE; // Pour éviter un 'warning'.
+				return NONE; // Pour viter un 'warning'.
 			}
 
 			mdr::datum__ Header[MMM2_HEADER_MAX_LENGTH];

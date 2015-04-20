@@ -74,7 +74,7 @@ const char *csdsnc::GetLogLabel( log__ Log )
 		CASE( Release );
 	default:
 		ERRPrm();
-		return NULL;	// Pour éviter un 'warning'.
+		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
 }
@@ -129,7 +129,7 @@ static void KeepAlive_( void *UP )
 		}
 	}
 
-	_Unlock( Core.S_.Ping.Mutex );	// Signale que la demande de terminaison a été prise en compte.
+	_Unlock( Core.S_.Ping.Mutex );	// Signale que la demande de terminaison a t prise en compte.
 }
 #endif
 

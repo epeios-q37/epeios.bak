@@ -97,7 +97,7 @@ namespace wintol {
 		{
 			return true;
 		}
-		bso::bool__ Launch( const char *ServiceName );	// Même valeur que celle passée à 'InstallService(...)'.
+		bso::bool__ Launch( const char *ServiceName );	// Mme valeur que celle passe  'InstallService(...)'.
 		// Return 'true' if termination was required.
 		bso::bool__ TestTermination( void );
 		void Process( void )

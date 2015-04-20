@@ -84,8 +84,8 @@ integer mthitg::Divide_(
 		{
 			Inf = Rep;
 			Rep = Inf + ( ( Sup - Inf ) >> 1 );
-				// ( Sup + Inf ) >> 1 ne marche pas (dépassement de capacité)
-				// ni ( Sup >> 1 ) + ( Inf >> 1 ) (perte de précision)
+				// ( Sup + Inf ) >> 1 ne marche pas (dpassement de capacit)
+				// ni ( Sup >> 1 ) + ( Inf >> 1 ) (perte de prcision)
 		}
 		else
 		{

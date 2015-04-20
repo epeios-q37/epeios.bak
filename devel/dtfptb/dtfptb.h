@@ -205,7 +205,7 @@ DTFPTB__M( 64, BSO_U64_MAX, BSO_S64_MIN, BSO_S64_MAX )
 DTFPTB__M( 32, BSO_U32_MAX, BSO_S32_MIN, BSO_S32_MAX )
 DTFPTB__M( 16, BSO_U16_MAX, BSO_S16_MIN, BSO_S16_MAX )
 
-// Pour un octet, on envoit/reçoit l'octet tel quel ; pas besoin de conversion.
+// Pour un octet, on envoit/reoit l'octet tel quel ; pas besoin de conversion.
 // DTFPTB__M( 8, BSO_U8_MAX, BSO_S8_MIN, BSO_S8_MAX )
 	inline void VPut(
 		bso::u8__ Int,

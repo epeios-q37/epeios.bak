@@ -78,33 +78,33 @@ namespace mmm {
 	// nombre de bloc qu'occupe un descripteur
 	#define MMM1_NOMBRE_INDICATEUR	1
 
-	// Position du bit signalant l'occupation du bloc précédent.
+	// Position du bit signalant l'occupation du bloc prcdent.
 	#define MMM1_BIT_OCCUPATION_PREDECESSEUR	30
 
-	// Masque relatif à l'occupation di bloc précédent.
+	// Masque relatif  l'occupation di bloc prcdent.
 	#define MMM1_MASQUE_OCCUPATION_PREDECESSEUR	( 1 << MMM1_BIT_OCCUPATION_PREDECESSEUR )
 
 	// Position du bit signalant l'occupation de la portion.
 	#define MMM1_BIT_OCCUPATION		31
 
-	// Masque relatif à l'occupation d'un bloc.
+	// Masque relatif  l'occupation d'un bloc.
 	#define MMM1_MASQUE_OCCUPATION	( 1 << MMM1_BIT_OCCUPATION )
 
-	// Masque relatif au nombre de bloc occupée par une portion
+	// Masque relatif au nombre de bloc occupe par une portion
 	#define MMM1_MASQUE_NOMBRE	(~( MMM1_MASQUE_OCCUPATION | MMM1_MASQUE_OCCUPATION_PREDECESSEUR ) )
 
-	// type du nombre de blos d'une sous-mémoire.
+	// type du nombre de blos d'une sous-mmoire.
 	typedef mdr::size__ 		nombre__;
 
-	// type d'un indicateur affecté à un bloc de la mutimémoire.
+	// type d'un indicateur affect  un bloc de la mutimmoire.
 	typedef mdr::size__		indicateur__;
 
 	class multimemory_
 	{
 	private:
-		// L'éventuel pilote multimémoire.
+		// L'ventuel pilote multimmoire.
 		multimemory_driver__ PiloteMultimemoire_;
-		// memoire décomposee en plusieurs
+		// memoire dcomposee en plusieurs
 		uym::untyped_memory_ Memoire_;
 	// fonctions
 		// Convertit un nombre en taille.
@@ -120,13 +120,13 @@ namespace mmm {
 			else
 				return ( ( Size - 1 ) / MMM1_TAILLE_BLOC ) + 1;
 		}
-		// Alloue 'Capacité' octets dans la mémoire principale.
+		// Alloue 'Capacit' octets dans la mmoire principale.
 		void AllouerMemoire_( mdr::size__ Size )
 		{
 			Memoire_.Allocate( Size );
 			S_.Capacite = Size;
 		}
-		// Lit de la mémoire.
+		// Lit de la mmoire.
 		void MemoireLire_(
 			mdr::row_t__ Position,
 			mdr::size__ Nombre,
@@ -134,7 +134,7 @@ namespace mmm {
 		{
 			Memoire_.Recall( Position, Nombre, Tampon );
 		}
-		// écrit dans la mémoire.
+		// crit dans la mmoire.
 		void MemoireEcrire_(
 			const mdr::datum__ *Tampon,
 			mdr::size__ Nombre,
@@ -142,7 +142,7 @@ namespace mmm {
 		{
 			Memoire_.Store( Tampon, Nombre, Position );
 		}
-		/* Remplace 'Nombre' octets à la position 'Destination avec autant d'octet de
+		/* Remplace 'Nombre' octets  la position 'Destination avec autant d'octet de
 		la position 'Source'. */
 		void MemoireEcraser_(
 			mdr::row_t__ Destination,
@@ -151,7 +151,7 @@ namespace mmm {
 		{
 			Memoire_.Store_( Memoire_, Taille, Destination, Source );
 		}
-		// Ajuste la taille de la mémoire principale en éliminant la portion de descripteur 'Descripteur'.
+		// Ajuste la taille de la mmoire principale en liminant la portion de descripteur 'Descripteur'.
 		void AjusterMemoireAvantDescripteur_( descriptor__ Descripteur )
 		{
 			AllouerMemoire_( Descripteur - MMM1_TAILLE_INDICATEUR );
@@ -159,8 +159,8 @@ namespace mmm {
 			if ( S_.Libre >= Descripteur )
 				S_.Libre = 0;
 		}
-		/* Ajuste la taille de la mémoire principale sachant que la portion de descripteur
-		'Descripteur' doit être la dernière */
+		/* Ajuste la taille de la mmoire principale sachant que la portion de descripteur
+		'Descripteur' doit tre la dernire */
 		void AjusterMemoireApresDescripteur_( descriptor__ Descripteur )
 		{
 			AllouerMemoire_( Descripteur + Taille_( Descripteur ) );
@@ -178,16 +178,16 @@ namespace mmm {
 							Taille_( Source ) + MMM1_TAILLE_INDICATEUR );
 		}
 		/* Teste la portion libre de descripteur 'Descripteur' par rapport au libre
-		de réserve ( 'Libre_' ) et l'affecte à ce dernier s'il satisfait aux conditions. */
+		de rserve ( 'Libre_' ) et l'affecte  ce dernier s'il satisfait aux conditions. */
 		void TesterEtAffecterLibre_( descriptor__ Descripteur )
 		{
 			if ( !S_.Libre
 				 || ( Nombre_( S_.Libre ) < Nombre_( Descripteur ) ) )
 				S_.Libre = Descripteur;
 		}
-		/* La portion de descripteur 'Descripteur' est étendu par raccourcissment
+		/* La portion de descripteur 'Descripteur' est tendu par raccourcissment
 		de la portion libre sui suit. Si celle-ci devient de taille nulle,
-		elle est éliminée. */
+		elle est limine. */
 		void Etendre_(
 			descriptor__ Descripteur,
 			nombre__ Nombre )
@@ -213,7 +213,7 @@ namespace mmm {
 				EcrireIndicateurLibre_( Successeur_( Descripteur ), NombreLibre );
 			}
 		}
-		// Permute la portion de descripteur 'Descripteur' avec la portion libre qui précède.
+		// Permute la portion de descripteur 'Descripteur' avec la portion libre qui prcde.
 		void Permuter_( descriptor__ Descripteur )
 		{
 			descriptor__ Libre = PredecesseurLibre_( Descripteur );
@@ -231,8 +231,8 @@ namespace mmm {
 			if ( !HorsLimite_( Successeur ) && EstOccupe_( Successeur ) )
 				SignalerPredecesseurLibre_( Successeur );
 		}
-		/* La portion libre qui suit 'Descripteur' est fusionnée avec la portion
-		libre dont elee est elle-même suivi. */
+		/* La portion libre qui suit 'Descripteur' est fusionne avec la portion
+		libre dont elee est elle-mme suivi. */
 		void Fusionner_( descriptor__ Descripteur )
 		{
 			descriptor__ Libre = Successeur_( Descripteur ), LibreS = Successeur_( Libre );
@@ -255,7 +255,7 @@ namespace mmm {
 			EcrireIndicateurLibre_( Successeur_( Descripteur ), NombreLibre );
 		}
 		/* Raccourcit la portion 'Descripteur' pour qu'elle contienne le nombre
-		de bloc 'Nombre' en insérant une portion libre juste aprés. */
+		de bloc 'Nombre' en insrant une portion libre juste aprs. */
 		void Inserer_(
 			descriptor__ Descripteur,
 			nombre__ Nombre )
@@ -275,7 +275,7 @@ namespace mmm {
 			}
 		}
 		/* Ajuste la portion de descripteur 'Descripteur' pour qu'elle contienne le nombre
-		de bloc 'Bloc' etsachant qu'elle est en bout de mémoire (ajustement de la mémoire principale). */
+		de bloc 'Bloc' etsachant qu'elle est en bout de mmoire (ajustement de la mmoire principale). */
 		void Ajuster_(
 			descriptor__ Descripteur,
 			nombre__ Nombre )
@@ -294,7 +294,7 @@ namespace mmm {
 			TesterEtAffecterLibre_( Descripteur );
 		}
 		/* Ecrit l'indicateur pour la portion d'indicateur 'Indicateur' correspondant au nombre
-		'Nombre' et à l'occupation du prdecesseur 'OccupationPredecesseur' */
+		'Nombre' et  l'occupation du prdecesseur 'OccupationPredecesseur' */
 		void EcrireIndicateurOccupe_(
 			descriptor__ Descripteur,
 			nombre__ Nombre,
@@ -304,13 +304,13 @@ namespace mmm {
 
 			MemoireEcrire_( (mdr::datum__ *)&Indicateur, MMM1_TAILLE_INDICATEUR, Descripteur - MMM1_TAILLE_INDICATEUR );
 		}
-		/* Signale à la portion 'Descripteur' (occupée) qu'elle est précédée par une portion
-		occupée */
+		/* Signale  la portion 'Descripteur' (occupe) qu'elle est prcde par une portion
+		occupe */
 		void SignalerPredecesseurOccupe_( descriptor__ Descripteur )
 		{
 			EcrireIndicateurOccupe_( Descripteur, Nombre_( Descripteur ), true );
 		}
-		/* Signale à la portion 'Descripteur' (occupée) qu'elle est précédée par une portion
+		/* Signale  la portion 'Descripteur' (occupe) qu'elle est prcde par une portion
 		libre */
 		void SignalerPredecesseurLibre_( descriptor__ Descripteur )
 		{
@@ -325,17 +325,17 @@ namespace mmm {
 
 			return Indicateur;
 		}
-		// Retourne le nombre de bloc occupée par la portion de descripteur 'Descripteur'.
+		// Retourne le nombre de bloc occupe par la portion de descripteur 'Descripteur'.
 		nombre__ Nombre_( descriptor__ Descripteur ) const
 		{
 			return Indicateur_( Descripteur ) & MMM1_MASQUE_NOMBRE;
 		}
-		// Retourne la capacité de la portion de descripteur 'Descripteur'.
+		// Retourne la capacit de la portion de descripteur 'Descripteur'.
 		mdr::size__ Taille_( descriptor__ Descripteur ) const
 		{
 			return NombreEnTaille_( Nombre_( Descripteur ) );
 		}
-		// Retourne vrai si le bloc de descripteur 'Descripteur' est occupé.
+		// Retourne vrai si le bloc de descripteur 'Descripteur' est occup.
 		bso::bool__ EstOccupe_( descriptor__ Descripteur ) const
 		{
 			return ( Indicateur_( Descripteur ) & MMM1_MASQUE_OCCUPATION ) != 0;
@@ -345,7 +345,7 @@ namespace mmm {
 		{
 			return !( Indicateur_( Descripteur ) & MMM1_MASQUE_OCCUPATION );
 		}
-		// Retourne vrai si le bloc de descripteur 'Descritpeur' est occupé.
+		// Retourne vrai si le bloc de descripteur 'Descritpeur' est occup.
 		bso::bool__ PredecesseurEstOccupe_( descriptor__ Descripteur ) const
 		{
 			return ( Indicateur_( Descripteur ) & MMM1_MASQUE_OCCUPATION_PREDECESSEUR ) != 0;
@@ -371,14 +371,14 @@ namespace mmm {
 		{
 			return IndicateurPredecesseur_( Descripteur ) & MMM1_MASQUE_NOMBRE;
 		}
-		/* Retourne la capacité du predecesseur de la portion de descripteur 'Descripteur'.
+		/* Retourne la capacit du predecesseur de la portion de descripteur 'Descripteur'.
 		N'a de sens que si le predecesseur est libre. */
 		mdr::size__ TaillePredecesseur_( descriptor__ Descripteur ) const
 		{
 			return NombreEnTaille_( NombrePredecesseur_( Descripteur ) );
 		}
 		/* Retourne le descripteur du predecesseur de la portion de descripteur 'Descripteur'.
-		N'a de sens que si le prédecesseur est libre. */
+		N'a de sens que si le prdecesseur est libre. */
 		descriptor__ PredecesseurLibre_( descriptor__ Descripteur ) const
 		{
 			return Descripteur - MMM1_TAILLE_INDICATEUR - TaillePredecesseur_( Descripteur );
@@ -388,12 +388,12 @@ namespace mmm {
 		{
 			return sizeof( indicateur__ );
 		}
-		// retourne vrai si la portion de descripteur 'Descripteur' est la dernière de la multimémoire.
+		// retourne vrai si la portion de descripteur 'Descripteur' est la dernire de la multimmoire.
 		bso::bool__ EstDernier_( descriptor__ Descripteur ) const
 		{
 			return HorsLimite_( Successeur_( Descripteur ) );
 		}
-		// Libère la portion de descripteur 'Descripteur'. Effectue tous les ajustements.
+		// Libre la portion de descripteur 'Descripteur'. Effectue tous les ajustements.
 		void Liberer_( descriptor__ Descripteur )
 		{
 			if( EstDernier_( Descripteur ) )
@@ -438,13 +438,13 @@ namespace mmm {
 		{
 			return Descripteur + Taille_( Descripteur ) + MMM1_TAILLE_INDICATEUR;
 		}
-		// Retourne vrai si le descripteur 'Descripteur' pointe en dehors de la multimémoire.
+		// Retourne vrai si le descripteur 'Descripteur' pointe en dehors de la multimmoire.
 		bso::bool__ HorsLimite_( descriptor__ Descripteur ) const
 		{
 			return Descripteur >= S_.Capacite;
 		}
 		/* Retourne le nombre de blocs disponibles pour la portion 'Descripteur'
-		en tenant compte des éventuels portion libre qui suivent ou qui précèdent. */
+		en tenant compte des ventuels portion libre qui suivent ou qui prcdent. */
 		nombre__ NombreDisponibles_( descriptor__ Descripteur ) const
 		{
 			nombre__ Nombre = Nombre_( Descripteur );
@@ -458,9 +458,9 @@ namespace mmm {
 
 			return Nombre;
 		}
-		// Affiche la structure de la memoire. A des fins de déboguage.
+		// Affiche la structure de la memoire. A des fins de dboguage.
 		void AfficherStructure_( txf::text_oflow__ &Flow ) const;
-		// Retourne un descripteur sur une portion nouvellement allouée.
+		// Retourne un descripteur sur une portion nouvellement alloue.
 		descriptor__ Allouer_( nombre__ Nombre )
 		{
 			descriptor__ Descripteur = 0;
@@ -515,7 +515,7 @@ namespace mmm {
 			bso::ubyte__ MultimemoryDriverAddendum;
 			uym::untyped_memory_::s Memoire_;
 			mdr::size__ Capacite;
-				// Descripteur à essayer lorsque l'on a besoin d'un emplacement libre.
+				// Descripteur  essayer lorsque l'on a besoin d'un emplacement libre.
 			descriptor__ Libre;
 		} &S_;
 		multimemory_( s &S )
@@ -530,7 +530,7 @@ namespace mmm {
 			S_.Capacite = 0;
 			S_.Libre = 0;
 			/* doit contenir une valeur valide
-			(c'est-à-dire comme une de celle après l'initilisation),
+			(c'est--dire comme une de celle aprs l'initilisation),
 			sans quoi la librairie CTN ne fonctionnera plus */
 		}
 		// preparation d'un objet vierge
@@ -673,7 +673,7 @@ namespace mmm {
 		{
 			MemoireEcrire_( Buffer, Amount, Position + Descriptor );
 		}
-		// écrit 'Nombre' octets à la position 'Position'
+		// crit 'Nombre' octets  la position 'Position'
 	/*	descriptor__ Descripteur( mmm__indice_bloc IndiceBloc )
 		{
 			if ( !IndiceBloc )

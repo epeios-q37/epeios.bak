@@ -67,7 +67,7 @@ public:
 
 using namespace scldalvik;
 
-// Pour faciliter le débogage.
+// Pour faciliter le dbogage.
 #if 1
 DVKBSE_EXPOSE_LOG_FUNCTIONS( "SCLDalvik" )
 #define LOC	 DVKBSE_LOC	

@@ -55,7 +55,7 @@ const char *xhtcllbk::GetLabel( function__ Function )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 void xhtcllbk::Escape(

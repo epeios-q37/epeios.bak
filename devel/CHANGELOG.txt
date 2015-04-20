@@ -1,14 +1,47 @@
 CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
+NOTA :
+	- Due to genuine 'Xcode' compiler crashes with files with mixing encoding, all accentuated characters of my french comments were stripped.
+	- Even with correct (ASCII-only) files, the genuine 'Xcode' compiler crashes, so I switched to a 'true' g++ compiler. Therby,
+	  'Xcode' refers to this compiler (except of a few older entries, before 2015-04-14).
+
 Meaning of list markers (2nd level):
-- '-' fFunctionnalities (should) remain unchanged) :
+- '-' (Functionnalities (should) remain unchanged) :
 	- Cosmetic changes. Function/method and/or parameter name changes.
 	- Changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
-	   in a broad sense (parameters of a fucntion, a method, or a template...).
-	- Changes due to fix compiler errors/warnigs.
+	   in a broad sense (parameters of a function, a method, or a template...).
+	- Changes fixing compiler errors/warnings.
 - '*' : Functionnality changes.
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
+
+2015-04-14 :
+- FDR :
+	% Fixing 'Xcode' complainings.
+- FLW :
+	- Adaptation to changes in 'FRD'.
+- SCLRGSTRY :
+	# The location of the file given to 'LoadProject(...)' is now again used as base path for files included by the given project file.
+
+2015-04-13 :
+- GLOBAL :
+	- Fixing file encoding issues which made crash 'Xcode'. NOTA : all non-ASCII characters was stripped.
+
+2015-04-12 :
+- DLBRRY :
+	* When guessing library filename, 'lib' is now also prepend to library affix for 'MacOS'.
+- RGSTRY :
+	% Adding method in 'multi_level_registry_' to find an entry in a given level.
+	% Removing 'PathErrorRow' where not useful.
+- SCLMISC :
+	* The embedded configuration, project,... corresponding locales are now directly pointing to the base registry,
+	  and no more duplicated.
+- SCLRGSTRY :
+	* 'Locale' section is now root sections, and no more 'Definitions' sub-section.
+	% Adding 'Arguments' entry.
+- SCLTOOL :
+	- Using 'Arguments' entry from 'sclrgstry'.
+	* 'Arguments' section is now root section, and no more 'Definitions' sub-section.
 
 2015-04-09 :
 - BCH, CTN, LSTBCH, LSTCTN, UYS :

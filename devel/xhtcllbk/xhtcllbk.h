@@ -1,4 +1,4 @@
-﻿/*
+/*
 	'xhtcllbk.h' by Claude SIMON (http://zeusw.org/).
 
 	'xhtcllbk' is part of the Epeios framework.
@@ -55,7 +55,7 @@ namespace xhtcllbk {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
-	enum function__ {		// Paramètres. 'Buffer' est un 'TOL_CBUFFER___' destiné à receuillir la valeur de retour.
+	enum function__ {		// Paramtres. 'Buffer' est un 'TOL_CBUFFER___' destin  receuillir la valeur de retour.
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title, Buffer.
 		fSetChildren,		// Id, XML, XSL.
@@ -244,12 +244,12 @@ namespace xhtcllbk {
 	};
 
 #pragma pack( push, 1)
-		// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+		// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
 	{
 	private:
-		const char *_Version;	// Toujours en première position.
-		bso::uint__ _Control;	// Une valeur relative au contenu de la structure, à des fins de test primaire de compatibilité.
+		const char *_Version;	// Toujours en premire position.
+		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
 		err::err___ *_ERRError;
 		sclerror::error___ *_SCLError;
 		proxy_callback__ *_Callback;
@@ -347,7 +347,7 @@ namespace xhtcllbk {
 	void Escape(
 		const str::string_ &Source,
 		str::string_ &Target,
-		bso::char__ Delimiter,	// Devrait être '\'', '"' ou 0. Si 0, échappe '\'' et '\"', sinon échappe 'Delimiter'.
+		bso::char__ Delimiter,	// Devrait tre '\'', '"' ou 0. Si 0, chappe '\'' et '\"', sinon chappe 'Delimiter'.
 		bso::char__ EscapeChar = strmrg::DefaultEscapeToken );
 #if 0
 	void Unescape(

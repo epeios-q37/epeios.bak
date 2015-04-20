@@ -216,7 +216,7 @@ const char *fil::GetLabel( backup_status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 void fil::GetMeaning(
@@ -343,7 +343,7 @@ const char *fil::GetLabel( recover_status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 void fil::GetMeaning(

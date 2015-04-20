@@ -33,8 +33,8 @@
 using namespace tol;
 
 /*
-	NOTA : Compilé avec VC++ 2010, lorsque lancé dans une console DOS, 'localtime()' retourne le bon résultat,
-	MAIS, lorsque lancé dans une console 'Cygwin' (1.17.10), le résultat est incorrect (différence d'une heure, peut-être lié à l'heure d'hiver/d'été).
+	NOTA : Compil avec VC++ 2010, lorsque lanc dans une console DOS, 'localtime()' retourne le bon rsultat,
+	MAIS, lorsque lanc dans une console 'Cygwin' (1.17.10), le rsultat est incorrect (diffrence d'une heure, peut-tre li  l'heure d'hiver/d't).
 */
 
 #ifdef TOL__MAC
@@ -49,7 +49,7 @@ int system( const char * )
 {
 	ERRFbd();	// Ppour forcer l'utilisation de 'tol::System(...)'.
 
-	return 0;	// Pour éviter un 'warning'.
+	return 0;	// Pour viter un 'warning'.
 }
 */
 
@@ -70,7 +70,7 @@ inline bso::bool__ tol::IsSystemCommandAvailable( void )
 		break;
 	}
 
-	return false;	// Pour éviter un 'warnong'.
+	return false;	// Pour viter un 'warnong'.
 }
 
 #undef system
@@ -90,8 +90,8 @@ ERRProlog
 	str::string ModifiedCommand;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	// '_wsystem()' lance en fait "cmd /c ...". Or; lorsque cette commande reçoit un paramètre commençant par '"' (hors espaces),
-	// et avec plus d'un jeu de '"', elle en enlève certains (void "cmd /?"). Placer 'echo >NUL && ' en tête de paramètre résoud ce problème...
+	// '_wsystem()' lance en fait "cmd /c ...". Or; lorsque cette commande reoit un paramtre commenant par '"' (hors espaces),
+	// et avec plus d'un jeu de '"', elle en enlve certains (void "cmd /?"). Placer 'echo >NUL && ' en tte de paramtre rsoud ce problme...
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
@@ -116,7 +116,7 @@ ERREpilog
 #elif defined( CPE_XCODE )
 # define LAUNCH_COMMAND	"open"
 #elif defined( CPE_WIN ) || defined( CPE_CYGWIN )
-# define LAUNCH_COMMAND	"start \"\"" // Les "" dans la commande sont nécessité par 'start', car si l'argument est passé entre "", 'start' considère cela comme le titre de la fenêtre.
+# define LAUNCH_COMMAND	"start \"\"" // Les "" dans la commande sont ncessit par 'start', car si l'argument est pass entre "", 'start' considre cela comme le titre de la fentre.
 #elif defined( CPE_ANDROID )
 # error
 #endif
@@ -255,7 +255,7 @@ public:
 		mach_timebase_info(&TimebaseInfo);
 
 #if 0
-		// Test toujours faux, dû au type de 'TimebaseInfo.numer'
+		// Test toujours faux, d au type de 'TimebaseInfo.numer'
 		if ( ( BSO_NUINT_MAX / 1000000 ) < TimebaseInfo.numer )
 			ERRLmt();
 #endif

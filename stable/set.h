@@ -72,7 +72,7 @@ namespace set {
 	  public manager
 	{
 	private:
-		/* Pousse (décalge vers la fin de l'ensemble) les objets à la position
+		/* Pousse (dcalge vers la fin de l'ensemble) les objets  la position
 		'Position' de 'Quantite' positions */
 		void Pousser_(
 			POSITION__ Position,
@@ -81,7 +81,7 @@ namespace set {
 			Allouer_( Amount() + Quantite, false );
 			memory::Write( *this, Amount() - Position - Quantite, Position, Position + Quantite);
 		}
-		// Insere à 'PosDest' 'Quantite' objets situé à partir de 'PosSource' de 'Source'.
+		// Insere  'PosDest' 'Quantite' objets situ  partir de 'PosSource' de 'Source'.
 		void Inserer_(
 			const set_core_ &Source,
 			SIZE__ Quantite,
@@ -91,7 +91,7 @@ namespace set {
 			Pousser_( PosDest, Quantite );
 			memory::Write( Source, Quantite, PosSource, PosDest );
 		}
-		// Insere 'Quantite' objets de 'Objets' à 'Position'.
+		// Insere 'Quantite' objets de 'Objets'  'Position'.
 		void Inserer_(
 			const type *Objets,
 			SIZE__ Quantite,
@@ -101,7 +101,7 @@ namespace set {
 			Pousser_( Position, Quantite );
 			memory::Write( Objets, Quantite, Position );
 		}
-		// Allocation de la place nécessaire à 'Taille' objets.
+		// Allocation de la place ncessaire  'Taille' objets.
 		void Allouer_(
 			SIZE__ Taille,
 			bso__bool Adjust )

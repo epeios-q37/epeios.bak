@@ -119,7 +119,7 @@ ERREpilog
 	return State;
 }
 
-// Retourne l'élément succédant à 'Element', ou LST_INEXISTANT si inexistant.
+// Retourne l'lment succdant  'Element', ou LST_INEXISTANT si inexistant.
 sdr::row_t__ lst::Successeur_(
 	sdr::row_t__ Element,
 	sdr::size__ Amount,
@@ -133,7 +133,7 @@ sdr::row_t__ lst::Successeur_(
 		return Element;
 }
 
-// Retourne l'élément précédent 'Element', ou LST_INEXISTANT si inexistant.
+// Retourne l'lment prcdent 'Element', ou LST_INEXISTANT si inexistant.
 sdr::row_t__ lst::Predecesseur_(
 	sdr::row_t__ Element,
 	const store_ &Libres )

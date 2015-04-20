@@ -110,7 +110,7 @@ namespace fblber {
 			const casts_ &Casts,
 			flw::oflow__ &Flow )
 		{
-			// Rien à faise.
+			// Rien  faise.
 		}
 	private:
 		bch::E_BUNCH( void *)Repository_;

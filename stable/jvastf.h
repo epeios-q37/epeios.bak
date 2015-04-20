@@ -151,7 +151,7 @@ namespace jvastf {
 		}
 		virtual void FDRDismiss( void )
 		{
-			// Rien à faire.
+			// Rien  faire.
 		}
 	public:
 		void reset( bso::bool__ P = true )

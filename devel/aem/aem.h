@@ -41,8 +41,8 @@
 namespace aem {
 	enum mode__ {
 		mFitted,	// Allocation de la taille exacte.
-		mStepped,	// Allocation réelle ('extent') au palier supérieur le plus proche.
-		mOnlyGrowing,	// Allocation au palier supérieur le plus proche, seulement si la taille augmente.
+		mStepped,	// Allocation relle ('extent') au palier suprieur le plus proche.
+		mOnlyGrowing,	// Allocation au palier suprieur le plus proche, seulement si la taille augmente.
 		m_amount,
 		m_Default = mOnlyGrowing,
 		m_Undefined
@@ -52,7 +52,7 @@ namespace aem {
 
 	using sdr::size__;
 
-	E_TMIMIC__( sdr::size__, shadow__ );	// Type permettant de gèrer l''extent' ainsi que les pas d'allocation.
+	E_TMIMIC__( sdr::size__, shadow__ );	// Type permettant de grer l''extent' ainsi que les pas d'allocation.
 
 	inline bso::bool__ _IsFitted( shadow__ Shadow )
 	{
@@ -77,7 +77,7 @@ namespace aem {
 			|| ( _IsStepped( Shadow ) && ( ( *Shadow & 2 ) == 0 ) );
 	}
 
-	// La première allocation ne se fera que sur la moitié du palier (Ex. : pour un paliier de 4, le première allocation se fera sur 2, puis 6, puis 10...).
+	// La premire allocation ne se fera que sur la moiti du palier (Ex. : pour un paliier de 4, le premire allocation se fera sur 2, puis 6, puis 10...).
 	inline shadow__ _GetStepCorrespondingShadowForUnusableState( size__ Step )
 	{
 		bso::uint__ Counter = 0;
@@ -160,7 +160,7 @@ namespace aem {
 		return ( BytePosition * 8 ) + _GetMostRightOnePosition( ((bso::raw__ *)&Value)[BytePosition] );
 	}
 
-	inline size__ _GetMask( bso::size__ OnesAmount )	// Retourne un masque dont les 'OnesAmount' bits les plus à droite sont à 1.
+	inline size__ _GetMask( bso::size__ OnesAmount )	// Retourne un masque dont les 'OnesAmount' bits les plus  droite sont  1.
 	{
 		return ~( (~((size__)0) << OnesAmount ) );
 	}
@@ -182,7 +182,7 @@ namespace aem {
 		return _GetMask( Position - 1 );
 	}
 
-	// Retourne 'true' si l''extent' correspondant à 'Size' peut être encodé, en fonction de 'StepMask',  en mode 'stepped'. Retourne faux sinon, auquel cas on bascule en mode 'fitted'.
+	// Retourne 'true' si l''extent' correspondant  'Size' peut tre encod, en fonction de 'StepMask',  en mode 'stepped'. Retourne faux sinon, auquel cas on bascule en mode 'fitted'.
 	inline bso::bool__ _IsInStepLimit(
 		size__ Amount,
 		size__ StepMask )
@@ -339,8 +339,8 @@ namespace aem {
 			}
 		}
 		bso::bool__ Handle(
-			size__ &Amount,	// Si valeur retournée != 'false', alors allouer 'Amount' (qui peut avoir été modifiée).
-			mode__ Mode = m_Default )	// Si configuré en 'fitted' ou en 'fixed', cette valeur est ignorée.
+			size__ &Amount,	// Si valeur retourne != 'false', alors allouer 'Amount' (qui peut avoir t modifie).
+			mode__ Mode = m_Default )	// Si configur en 'fitted' ou en 'fixed', cette valeur est ignore.
 		{
 			if ( _IsFixed() ) {
 				if ( Amount > _GetExtent() )
@@ -373,7 +373,7 @@ namespace aem {
 				}
 			}
 
-			return false;	// Pour éviter un 'warning'.
+			return false;	// Pour viter un 'warning'.
 		}
 /*		void AwareHandle(
 			size__ Amount,
@@ -389,7 +389,7 @@ namespace aem {
 	public:
 		struct s {
 			size__ Amount;
-			shadow__ Shadow;	// Contient de quoi déduire l''extent', ainsi que la gestion des pas d'allocation.
+			shadow__ Shadow;	// Contient de quoi dduire l''extent', ainsi que la gestion des pas d'allocation.
 		} &S_;
 		_amount_extent_manager_( s &S )
 		: S_( S )
@@ -401,7 +401,7 @@ namespace aem {
 		}
 		_amount_extent_manager_ &operator =( const _amount_extent_manager_ &AEM )
 		{
-			// 'S_.Amount' et 'S_.Extent' sont normallement traités en amont.
+			// 'S_.Amount' et 'S_.Extent' sont normallement traits en amont.
 
 			return *this;
 		}
@@ -520,7 +520,7 @@ namespace aem {
 		}
 		_amount_extent_manager__ &operator =( const _amount_extent_manager__ &AEM )
 		{
-			// 'Amount' normallement déjà traité en amont.
+			// 'Amount' normallement dj trait en amont.
 
 			return *this;
 		}

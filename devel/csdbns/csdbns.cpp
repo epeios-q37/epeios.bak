@@ -163,11 +163,11 @@ ERRBegin
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
 
-			/* Bien que '_UP' et 'Functions' ne soient utilisés que dans cette fonction,
-			ils sont stockés dans l'objet même, pour être disponible lors de l'appel du destructeur.
-			On peut alors appeler le 'PostProcess' de l'utilisateur, lui permettant de détruire
-			correctement l'objet qu'il a crée (référencé par 'UP'), même lors d'un ^C,
-			qui nous éjecte directement de cette fonction, mais provoque quand même un appel du destructeur. */
+			/* Bien que '_UP' et 'Functions' ne soient utiliss que dans cette fonction,
+			ils sont stocks dans l'objet mme, pour tre disponible lors de l'appel du destructeur.
+			On peut alors appeler le 'PostProcess' de l'utilisateur, lui permettant de dtruire
+			correctement l'objet qu'il a cre (rfrenc par 'UP'), mme lors d'un ^C,
+			qui nous jecte directement de cette fonction, mais provoque quand mme un appel du destructeur. */
 
 		_UP = Callback.PreProcess( Socket, UP );
 		_Callback = &Callback;
@@ -193,7 +193,7 @@ ERREnd
 	if ( _CallbackAvailable() ) {
 		Callback.PostProcess( _UP );
 		_UP = NULL;
-		_Callback = NULL;	// Pour empêcher un autre appel au 'PostProcess' lors de l'appel du destructeur.
+		_Callback = NULL;	// Pour empcher un autre appel au 'PostProcess' lors de l'appel du destructeur.
 	}
 
 ERREpilog
@@ -210,8 +210,8 @@ struct socket_data__
 	mtx::handler___ Mutex;
 };
 
-/* Les objets et fonctions qui suivent sont pour permettre aux objets utilisateurs d'être
-détruits correctement même en cas de ^C */
+/* Les objets et fonctions qui suivent sont pour permettre aux objets utilisateurs d'tre
+dtruits correctement mme en cas de ^C */
 
 struct csdbns_repository_item__ {
 	socket_callback__ *Callback;

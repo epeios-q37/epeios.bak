@@ -70,7 +70,7 @@ static inline brow__ NewBasic_(
 static inline brow__ NewBasic_(
 	const _basic_ &SourceBasic,
 	const _core_ &SourceCore,
-	_core_ &NewCore );	// Pré-déclaration
+	_core_ &NewCore );	// Pr-dclaration
 
 static void Duplicate_(
 	const brows_ &Tags,
@@ -291,12 +291,12 @@ void lcl::locale_::_GetTranslation(
 
 	if ( !( Found = _GetTranslationFollowingLanguageThenText( Text, Language, Translation ) ) )
 		if ( !( Found = _GetTranslationFollowingTextThenLanguage( Text, Language, Translation ) ) )
-			if ( !( Found = _GetTranslationFollowingLanguageThenMessage( Text, Language, Translation ) ) )	// Pour des raisons de compatibilité ascendante.
-				Found = _GetTranslationFollowingMessageThenLanguage( Text, Language, Translation );	// Pour des raisons de compatibilité ascendante.
+			if ( !( Found = _GetTranslationFollowingLanguageThenMessage( Text, Language, Translation ) ) )	// Pour des raisons de compatibilit ascendante.
+				Found = _GetTranslationFollowingMessageThenLanguage( Text, Language, Translation );	// Pour des raisons de compatibilit ascendante.
 
 	if ( !Found ) {
 		Translation.Append( Text );
-		Translation.Append( LCL_TAG_MARKER_S "0" );	// Lorsque pas de traduction trouvée, on rajoute le 'marker' remplacé par l'ensemble des paramètres.
+		Translation.Append( LCL_TAG_MARKER_S "0" );	// Lorsque pas de traduction trouve, on rajoute le 'marker' remplac par l'ensemble des paramtres.
 	}
 }
 
@@ -320,7 +320,7 @@ static const str::string_ &GetTranslation_(
 	const _core_ &Core,
 	const char *Language,
 	const locale_ &Locale,
-	str::string_ &Translation );	// Pré-déclaration.
+	str::string_ &Translation );	// Pr-dclaration.
 
 static void GetTags_(
 	const brows_ &InputTags,

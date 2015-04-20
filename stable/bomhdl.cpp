@@ -40,7 +40,7 @@ it is necessary to personalize it, or certain compiler would not work properly *
 
 using namespace bomhdl;
 
-// Pas de 'E_CDEF(...), car sinon on ne peut facielemtn déterminer la taille, à cause de '\0' contenu dans les 'BOM's.
+// Pas de 'E_CDEF(...), car sinon on ne peut facielemtn dterminer la taille,  cause de '\0' contenu dans les 'BOM's.
 
 #define UTF_32_BE "\x00\x00\xFE\xFF"
 #define UTF_32_LE	"\xFF\xFE\x00\x00"
@@ -54,7 +54,7 @@ static stsfsm::automat Automat_;
 #define M( m ) { m, sizeof( m ) - 1 }
 // #define M( m ) bom__( m, strlen( m ) - 1 )
 
-// doit relèter l'ordre des déclarations dans 'byte_order_marker__'.
+// doit relter l'ordre des dclarations dans 'byte_order_marker__'.
 static bom__ BOMS_[bom_amount] =
 {
     M( UTF_32_BE ),
@@ -85,7 +85,7 @@ void bomhdl::InitializeParser( stsfsm::parser__ &Parser )
 static bso::bool__ Match_(
 	const bom__ &Bom,
 	const fdr::datum__ *Buffer,
-	fdr::size__ &Size )	// Si retourne 'true', "Size' est modifié pour contenir la taille du 'BOM'.
+	fdr::size__ &Size )	// Si retourne 'true', "Size' est modifi pour contenir la taille du 'BOM'.
 {
 	if ( ( Size >= Bom.Size ) && ( memcmp( Bom.Data, Buffer, Bom.Size ) == 0 ) ) {
 		Size = Bom.Size;

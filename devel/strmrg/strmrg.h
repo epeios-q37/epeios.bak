@@ -49,7 +49,7 @@ namespace strmrg {
 
 	E_ROW( _irow__ );	// Item row.
 
-# if 0	// Sinon VC++ perd les pédales lors de l'édition de liens...
+# if 0	// Sinon VC++ perd les pdales lors de l'dition de liens...
 	namespace {
 # endif
 		E_ROW( _srow__);
@@ -172,8 +172,8 @@ namespace strmrg {
 		}
 		row__ Append( const str::string_ &String );
 		row__ Append( const table_ &Table );
-		row__ AppendMono( const str::strings_ &Strings );	// ATTENTION : Crée une seule entrée avec tous les strings, et pas autant d'entrée que de string.
-		void AppendMulti( const str::strings_ &Strings );	// ATTENTION : Ajoute autant d'entrée que de 'Strings'.
+		row__ AppendMono( const str::strings_ &Strings );	// ATTENTION : Cre une seule entre avec tous les strings, et pas autant d'entre que de string.
+		void AppendMulti( const str::strings_ &Strings );	// ATTENTION : Ajoute autant d'entre que de 'Strings'.
 		void GetTable(
 			row__ Row, 
 			table_ &Table ) const;
@@ -193,10 +193,10 @@ namespace strmrg {
 
 	struct tokens__ {
 		char
-			Separator,	// Caractère séparant les différentes entrées.
-			Begin,		// Caractère marquant le début d'un groupe.
-			End,		// Caractère marquant la fin d'un groupe.
-			Escape;		// Caratère d'échappement.
+			Separator,	// Caractre sparant les diffrentes entres.
+			Begin,		// Caractre marquant le dbut d'un groupe.
+			End,		// Caractre marquant la fin d'un groupe.
+			Escape;		// Caratre d'chappement.
 		void reset( bso::bool__ = true )
 		{
 			Separator = DefaultSeparatorToken;
@@ -261,10 +261,10 @@ namespace strmrg {
 		const tokens__ &Tokens = tokens__() );
 
 	enum availability__ {
-		aNone,		// Pas d'autres paramètres disponible.
-		aEmpty,		// Le prochain paramètre est vide.
-		aString,	// Le prochain paramètre est un 'string'.
-		aTable,		// Le prochain paramètre est une table.
+		aNone,		// Pas d'autres paramtres disponible.
+		aEmpty,		// Le prochain paramtre est vide.
+		aString,	// Le prochain paramtre est un 'string'.
+		aTable,		// Le prochain paramtre est une table.
 		a_amount,
 		a_Undefined
 	};
@@ -334,7 +334,7 @@ namespace strmrg {
 		{
 			_Row = _R().Next( _Row );
 		}
-		// Ne retourne que le contenu d'une seule entrée. L'entrée en cours doit être un 'string', ou une table ne contenant que des 'string's, sinon erreur.
+		// Ne retourne que le contenu d'une seule entre. L'entre en cours doit tre un 'string', ou une table ne contenant que des 'string's, sinon erreur.
 		void GetStrings( str::strings_ &Strings );
 		availability__ Availability( void ) const
 		{

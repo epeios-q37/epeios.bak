@@ -247,8 +247,8 @@ namespace {
 		mtx::Delete( Common.Exclusion, true );
 	}
 	
-	// Les 'ERR...' macros, bien que fonctionnelemy inutiles, facilite le débogage.
-	// Les exceptions devraient avoir été traitées en aval.
+	// Les 'ERR...' macros, bien que fonctionnelemy inutiles, facilite le dbogage.
+	// Les exceptions devraient avoir t traites en aval.
 	void Launcher_( void * )
 	{
 	ERRProlog

@@ -88,8 +88,8 @@ namespace dbsdct {
 	class storage_
 	{
 	private:
-		/* Retourne le nombre d'octets que l'on peut effectivement écrire sachant que l'on veut écrire un maximum de 
-		'Wanted' octets et qu'un maximum de 'Available' octets sont disponibles, et que l'on veut également y stocker la
+		/* Retourne le nombre d'octets que l'on peut effectivement crire sachant que l'on veut crire un maximum de 
+		'Wanted' octets et qu'un maximum de 'Available' octets sont disponibles, et que l'on veut galement y stocker la
 		taille */
 		size__ _AmountWritable(
 			size__ Wanted,
@@ -132,8 +132,8 @@ namespace dbsdct {
 
 			return Amount;
 		}
-		/* Ajoute 'Data' à la position 'Row', sachant que 'Unallocated' est la position du premier octet non alloué.
-		L'espace necessaire est alloué. Retourne la position du nouveau premier octet non alloué. */
+		/* Ajoute 'Data'  la position 'Row', sachant que 'Unallocated' est la position du premier octet non allou.
+		L'espace necessaire est allou. Retourne la position du nouveau premier octet non allou. */
 		datum_row__ _Store(
 			const datum_ &Data,
 			size__ Offset,
@@ -144,7 +144,7 @@ namespace dbsdct {
 
 			Memory.Allocate( *Unallocated + TotalSize );
 
-			_Store( Data, Offset, Unallocated, TotalSize );	// 'Unallocated' mis à jour par cette méthode.
+			_Store( Data, Offset, Unallocated, TotalSize );	// 'Unallocated' mis  jour par cette mthode.
 
 			return Unallocated;
 		}
@@ -193,19 +193,19 @@ namespace dbsdct {
 		}
 		storage_ operator =( const storage_ &S )
 		{
-			ERRu();	// Impossible de dupliquer : ne connaît pas sa taille.
+			ERRu();	// Impossible de dupliquer : ne connat pas sa taille.
 
-			return *this;	// Pour éviter un 'warning'.
+			return *this;	// Pour viter un 'warning'.
 		}
 		void Init( void )
 		{
 			Memory.Init();
 		}
-		/* Stocke 'Data' à la position 'Row'. sachant qu'il y a 'Available' octets de disponibles à cette position.
-		'Unallocated' est la position du premier octet non alloué. S'il n'y a pas assez de place à 'Row', alors
-		une partie de 'Data' est placé à 'Unavailable' (en allouant l'espace nécessaire), qui est alors modifié
-		pour pointer sur la nouvelle position du premier octet non alloué. Si 'Row', au retour, est != 'NONE',
-		alors il reste 'Available' octets à 'Row'. */
+		/* Stocke 'Data'  la position 'Row'. sachant qu'il y a 'Available' octets de disponibles  cette position.
+		'Unallocated' est la position du premier octet non allou. S'il n'y a pas assez de place  'Row', alors
+		une partie de 'Data' est plac  'Unavailable' (en allouant l'espace ncessaire), qui est alors modifi
+		pour pointer sur la nouvelle position du premier octet non allou. Si 'Row', au retour, est != 'NONE',
+		alors il reste 'Available' octets  'Row'. */
 /*
 		datum_row__ Write(
 			const datum_ &Data,
@@ -248,8 +248,8 @@ namespace dbsdct {
 
 			return Written;
 		}
-		/* Ajoute 'Data' à 'Row', qui est la position du premier octet non alloué. La place nécessaire est allouée et
-		la nouvelle position du premier octet non alloué et retourné. */
+		/* Ajoute 'Data'  'Row', qui est la position du premier octet non allou. La place ncessaire est alloue et
+		la nouvelle position du premier octet non allou et retourn. */
 		datum_row__ Append(
 			const datum_ &Data,
 			size__ Offset,
@@ -269,8 +269,8 @@ namespace dbsdct {
 		{
 			return _GetRawSize( Row, Unallocated );
 		}
-		/* Place un marqueur de taille à 'DataRow' sachant qu'il y a 'Size' octets de disponibles. Retourne le nombre
-		d'octets effectivement disponibles à cette position aprés y avoir placé le marquer de taille. */
+		/* Place un marqueur de taille  'DataRow' sachant qu'il y a 'Size' octets de disponibles. Retourne le nombre
+		d'octets effectivement disponibles  cette position aprs y avoir plac le marquer de taille. */
 		size__ StoreSize(
 			datum_row__ Row,
 			size__ Size )
@@ -302,12 +302,12 @@ namespace dbsdct {
 
 	E_AUTO( storage )
 
-	// Caratéristique d'un emplacement libre.
+	// Caratristique d'un emplacement libre.
 	struct available__
 	{
 		// Position.
 		datum_row__ Row;
-		// Taille brute, c'est-à-dire sans tenir compte de la place occupée par le marqueur de taille.
+		// Taille brute, c'est--dire sans tenir compte de la place occupe par le marqueur de taille.
 		size__ RawSize;
 		available__( void )
 		{
@@ -351,7 +351,7 @@ namespace dbsdct {
 	protected:
 		virtual void DBSBSCCompleteInitialization( bso::bool__ )
 		{
-			// Rien à faire.
+			// Rien  faire.
 		}
 		virtual void DBSBSCErasePhysically( void )
 		{
@@ -462,7 +462,7 @@ namespace dbsdct {
 			availables_::s Availables;
 			entries_::s Entries;
 			_cache_::s Cache;
-			// Position du premier octet non alloué.
+			// Position du premier octet non allou.
 			datum_row__ Unallocated;
 			time_t ModificationTimeStamp;
 		} &S_;
@@ -581,7 +581,7 @@ namespace dbsdct {
 		{
 			ERRl();
 		}
-		// Reconstruit la liste des portions inoccupés dans 'Storage'.
+		// Reconstruit la liste des portions inoccups dans 'Storage'.
 		void _RebuildAvailables( void )
 		{
 			ERRl();
@@ -596,7 +596,7 @@ namespace dbsdct {
 
 	E_AUTO( dynamic_content )
 
-	// Content stocké dans des fichiers.
+	// Content stock dans des fichiers.
 	class exploded_dynamic_content_
 	: public dynamic_content_
 	{
@@ -645,7 +645,7 @@ namespace dbsdct {
 		{
 			S_.StorageFileManager.ReleaseFile();
 			S_.EntriesFileManager.ReleaseFile();
-			// Pour que les 'TimeStamp' des fichiers soient mis à jour.
+			// Pour que les 'TimeStamp' des fichiers soient mis  jour.
 
 			if ( P ) {
 				if ( ( RootFileName.Amount() != 0 ) && ( ModificationTimeStamp() != 0 ) )
@@ -660,7 +660,7 @@ namespace dbsdct {
 		}
 		void plug( mmm::E_MULTIMEMORY_ & )
 		{
-			ERRu();	// Cette méthode n'a pas de sens dans ce contexte.
+			ERRu();	// Cette mthode n'a pas de sens dans ce contexte.
 		}
 		exploded_dynamic_content_ &operator =( const exploded_dynamic_content_ &XDC )
 		{
@@ -673,11 +673,11 @@ namespace dbsdct {
 			mdr::mode__ Mode,
 			bso::bool__ Partial,
 			flm::id__ ID );
-		void WriteLocationsAndAvailablesFiles( void )	// Met à jour les fichiers.
+		void WriteLocationsAndAvailablesFiles( void )	// Met  jour les fichiers.
 		{
 			_SaveLocationsAndAvailables();
 		}
-		void CloseFiles( void )	// Pour libèrer les 'file handlers'.
+		void CloseFiles( void )	// Pour librer les 'file handlers'.
 		{
 			S_.StorageFileManager.ReleaseFile();
 			S_.EntriesFileManager.ReleaseFile();

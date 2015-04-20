@@ -76,7 +76,7 @@ typedef size_t fgm__size;
 
 #define FGM_TAILLE_DEFAUT_FRAGMENT	10000
 
-// Une mémoire fragmentée.
+// Une mmoire fragmente.
 class fgm_memoire_fragmentee
 {
 	// Les pointeurs sur les fragments
@@ -85,18 +85,18 @@ class fgm_memoire_fragmentee
 	fgm__amount Nombre_;
 	// La taille d'un fragment;
 	fgm__size Taille_;
-	// Libere la place occupée par les fragments 'Debut' à 'Fin' inclus.
+	// Libere la place occupe par les fragments 'Debut'  'Fin' inclus.
 	void Liberer_(
 		fgm__indice Debut,
 		fgm__indice Fin );
-	// Preparer (met à NULL) les fragments de 'Debut' à 'Fin'.
+	// Preparer (met  NULL) les fragments de 'Debut'  'Fin'.
 	void Preparer_(
 		fgm__indice Debut,
 		fgm__indice Fin )
 	{
 		memset( Fragments_ + Debut, 0, ( Fin - Debut + 1 ) * sizeof( char * ) );
 	}
-	// Alloue l'espace nécessaire pour contenir 'Quantite' (!= 0) octets.
+	// Alloue l'espace ncessaire pour contenir 'Quantite' (!= 0) octets.
 	void Allouer_( unsigned long Quantite )
 	{
 		unsigned long Necessaire = ( Quantite  - 1U ) / Taille_ + 1U;
@@ -138,7 +138,7 @@ class fgm_memoire_fragmentee
 
 		Fragments_[Nombre_-1] = NouveauFragment;
 	}
-	// Alloue la place nécessaire au fragments 'Debut' à 'Fin'.
+	// Alloue la place ncessaire au fragments 'Debut'  'Fin'.
 	void AllouerFragments_(
 		fgm__indice Debut,
 		fgm__indice Fin );
@@ -184,21 +184,21 @@ public:
 
 		Nombre_ = 1;
 		// simplifie certains tests et permet de s'assurer
-		// qu'il y a unn minimum de mémoire disponible.
+		// qu'il y a unn minimum de mmoire disponible.
 
 		Taille_ = Taille;
 	}
-	// Ecrit à 'Position' 'Quantite' octets de 'Tampon'.
+	// Ecrit  'Position' 'Quantite' octets de 'Tampon'.
 	void Lire(
 		unsigned long Position,
 		unsigned long Quantite,
 		char *Tampon );
-	// Place dans 'Tampon' 'Quantite' octets situés à 'Position'.
+	// Place dans 'Tampon' 'Quantite' octets situs  'Position'.
 	void Ecrire(
 		const char *Tampon,
 		size_t Taille,
 		unsigned long Position );
-	// Alloue la place nécessaire à 'Quantite' octets.
+	// Alloue la place ncessaire  'Quantite' octets.
 	void Allouer( unsigned long Quantite )
 	{
 		if ( !Quantite )
@@ -218,7 +218,7 @@ class fgm_fragmented_memory_driver
   public fgm_memoire_fragmentee
 {
 protected:
-	// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets
+	// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets
 	virtual void MDRRead(
 		mdr__position Position,
 		mdr__bsize Amount,
@@ -226,7 +226,7 @@ protected:
 	{
 		fgm_memoire_fragmentee::Lire( Position, Amount, (char *)Buffer );
 	}
-	// écrit 'Nombre' octets à la position 'Position'
+	// crit 'Nombre' octets  la position 'Position'
 	virtual void MDRWrite(
 		const void *Buffer,
 		mdr__bsize Amount,

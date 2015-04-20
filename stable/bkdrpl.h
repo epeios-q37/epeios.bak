@@ -73,7 +73,7 @@ namespace bkdrpl {
 	enum reply__ {
 		rOK,
 		rBackendError,	// Lorsque survient un 'ERR[x|X](...)'.
-		rUserError,		// Erreur définie par l'utilisateur.
+		rUserError,		// Erreur dfinie par l'utilisateur.
 		r_amount,
 		r_Undefined
 	};

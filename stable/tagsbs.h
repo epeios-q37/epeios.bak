@@ -173,39 +173,39 @@ namespace tagsbs {
 		flw::iflow__ &IFlow,
 		long_tags_callback__ &Callback,
 		flw::oflow__ &OFlow,
-		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'E_NIL', elle indique la position problmatique dans la chane.
 
 	// '%TagName%", en prenant '%' comme marqueur.
 	tol::E_XROW SubstituteLongTags(
 		const str::string_ &String,
 		long_tags_callback__ &Callback,
 		str::string_ &Result,
-		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'E_NIL', elle indique la position problmatique dans la chane.
 
 	tol::E_XROW SubstituteLongTags(
 		str::string_ &String,
 		long_tags_callback__ &Callback,
-		char TagMarker = DefaultTagMarker);	// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+		char TagMarker = DefaultTagMarker);	// Si la valeur retourne != 'E_NIL', elle indique la position problmatique dans la chane.
 
 	bso::bool__ SubstituteLongTags(
 		flw::iflow__ &IFlow,
 		const str::strings_ &Tags,
 		const str::strings_ &Values,
 		flw::oflow__ &OFlow,
-		char TagMarker = DefaultTagMarker);// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'E_NIL', elle indique la position problmatique dans la chane.
 
 	tol::E_XROW SubstituteLongTags(
 		const str::string_ &String,
 		const str::strings_ &Tags,
 		const str::strings_ &Values,
 		str::string_ &Result,
-		char TagMarker = DefaultTagMarker);// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'E_NIL', elle indique la position problmatique dans la chane.
 
 	tol::E_XROW SubstituteLongTags(
 		str::string_ &String,
 		const str::strings_ &Tags,
 		const str::strings_ &Values,
-		char TagMarker = DefaultTagMarker);// Si la valeur retournée != 'E_NIL', elle indique la position problématique dans la chaîne.
+		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'E_NIL', elle indique la position problmatique dans la chane.
 }
 
 				  /********************************************/

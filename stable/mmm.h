@@ -65,7 +65,7 @@ extern class ttr_tutor &MMMTutor;
 #include "err.h"
 #include "flw.h"
 #include "bso.h"
-// #include "uym.h"	// Déporté, parce que inclus 'mmm.h'.
+// #include "uym.h"	// Dport, parce que inclus 'mmm.h'.
 #include "tol.h"
 #include "txf.h"
 #include "flm.h"
@@ -93,16 +93,16 @@ extern class ttr_tutor &MMMTutor;
 
 #define MMM_UNDEFINED_DESCRIPTOR NONE
 
-// Ce drapeau indique si la taille est stocké dans le fragment. Ne concerne que les fragments libres.
+// Ce drapeau indique si la taille est stock dans le fragment. Ne concerne que les fragments libres.
 #define MMM_FREE_FRAGMENT_SIZE_FLAG_POSITION	7
 #define MMM_FREE_FRAGMENT_SIZE_FLAG_MASK ( 1 << MMM_FREE_FRAGMENT_SIZE_FLAG_POSITION )
 
 
-// Ce drapeau indique si le fragment est lié ou non (donnée réparties sur deux fragments ou non). Ne concerne que les fragments utilisés.
+// Ce drapeau indique si le fragment est li ou non (donne rparties sur deux fragments ou non). Ne concerne que les fragments utiliss.
 #define MMM_USED_FRAGMENT_LINK_FLAG_POSITION	7
 #define MMM_USED_FRAGMENT_LINK_FLAG_MASK ( 1 << MMM_USED_FRAGMENT_LINK_FLAG_POSITION )
 
-// Ce drapeau indique si le fragment précédent est libre ou non. Ne concerne que les fragments utilisés.
+// Ce drapeau indique si le fragment prcdent est libre ou non. Ne concerne que les fragments utiliss.
 #define MMM_USED_FRAGMENT_FREE_FLAG_POSITION	6
 #define MMM_USED_FRAGMENT_FREE_FLAG_MASK ( 1 << MMM_USED_FRAGMENT_FREE_FLAG_POSITION )
 
@@ -115,16 +115,16 @@ extern class ttr_tutor &MMMTutor;
 #define MMM_LINK_SIZE	sizeof( mmm::row__ )
 #define MMM_ORPHAN_MAX_SIZE	10
 #define MMM_NORMAL_FREE_FRAGMENT_MIN_SIZE	( 1 + 1 + MMM_LINK_SIZE + MMM_LINK_SIZE + MMM_LINK_SIZE + 1 )
-#define MMM_HEADER_MAX_LENGTH	( 1+ MMM_SIZE_BUFFER_MAX_LENGTH + 2 * MMM_LINK_SIZE  )	// Correspond à la struture d'un 'header' d'un fragment libre,
-																							// ce dernier étant plus grand que le 'header' d'un fragment utilisé.
+#define MMM_HEADER_MAX_LENGTH	( 1+ MMM_SIZE_BUFFER_MAX_LENGTH + 2 * MMM_LINK_SIZE  )	// Correspond  la struture d'un 'header' d'un fragment libre,
+																							// ce dernier tant plus grand que le 'header' d'un fragment utilis.
 #define MMM_FREE_FRAGMENT_FOOTER_MAX_SIZE	( MMM_LINK_SIZE + 1 )
 
 namespace mmm {
-	class multimemory_;	// Prédéclaration.
+	class multimemory_;	// Prdclaration.
 
 	E_ROW( row__ );
 
-	//t Type d'un descripteur de sous-méméoire dans le multimémoire.
+	//t Type d'un descripteur de sous-mmoire dans le multimmoire.
 	typedef mdr::row_t__	descriptor__;
 
 	//c The standard memory driver for the multimemory.
@@ -133,22 +133,22 @@ namespace mmm {
 	{
 	private:
 		descriptor__ &_Descriptor;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 		class multimemory_ *Multimemoire_;
 		bso::ubyte__ &_Addendum;
 		void Liberer_();
 	protected:
 		virtual void MDRAllocate( mdr::size__ Size );
-		// Fonction déportée.
+		// Fonction dporte.
 		virtual mdr::size__ MDRUnderlyingSize( void );
-		// fonction déportée
-		// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
+		// fonction dporte
+		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
 		virtual void MDRRecall(
 			mdr::row_t__ Position,
 			mdr::size__ Amount,
 			mdr::datum__ *Buffer );
-		// fonction déportée
-		// écrit 'Nombre' octets à la position 'Position'
+		// fonction dporte
+		// crit 'Nombre' octets  la position 'Position'
 		virtual void MDRStore(
 			const mdr::datum__ *Buffer,
 			mdr::size__ Amount,
@@ -164,7 +164,7 @@ namespace mmm {
 
 			E_MEMORY_DRIVER__::reset( P );
 
-			// On ne touche ni à '_Descriptor', ni à '_Addendum' car ils sont gèrés extèrieurement (ce sont des références).
+			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		multimemory_driver__(
 			descriptor__ &Descriptor,
@@ -187,7 +187,7 @@ namespace mmm {
 			Multimemoire_ = &Multimemory;
 			E_MEMORY_DRIVER__::Init();
 
-			// On ne touche ni à '_Descriptor', ni à '_Addendum' car ils sont gèrés extèrieurement (ce sont des références).
+			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		//f Return the current descriptor.
 		descriptor__ Descriptor( void ) const
@@ -248,9 +248,9 @@ namespace mmm {
 			else
 				ERRc();
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
-		// Retourne la taile maximale telle que cette taille + l'indicateur de taille soit inférieur ou égal à 'MaxSize'.
+		// Retourne la taile maximale telle que cette taille + l'indicateur de taille soit infrieur ou gal  'MaxSize'.
 		mdr::size__ _AdjustSize( mdr::size__ MaxSize ) const
 		{
 #ifdef MMM_DBG
@@ -506,13 +506,13 @@ namespace mmm {
 				_SetRawSize( Size, false, false, Header + 1 );
 
 				if ( Size <= MMM_ORPHAN_MAX_SIZE )
-					Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur à destination du fragement utilisé qui suit.
+					Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur  destination du fragement utilis qui suit.
 				else {
 					if ( Size < MMM_NORMAL_FREE_FRAGMENT_MIN_SIZE )
-						Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur à destination du fragement utilisé qui suit.
+						Memory.Put( (mdr::datum__)Size, *Position + Size - 1 );	// Marqueur  destination du fragement utilis qui suit.
 					else {
-						Memory.Put( 0xff, *Position + Size - 1 );	// Marqueur à destination du fragement utilisé qui suit.
-						Memory.Store( (const mdr::datum__ *)&Position, MMM_LINK_SIZE, *Position + Size - 5 );	// Position du début du fragment à destination du fragment utilisé qui suit.
+						Memory.Put( 0xff, *Position + Size - 1 );	// Marqueur  destination du fragement utilis qui suit.
+						Memory.Store( (const mdr::datum__ *)&Position, MMM_LINK_SIZE, *Position + Size - 5 );	// Position du dbut du fragment  destination du fragment utilis qui suit.
 					}
 					// Bien que 'Header' soit en cours de construction, son contenu est suffisant pour pouvoir l'utiliser.
 					memcpy( Header + _GetFreeFragmentPreviousFreeFragmentPointerRelativePosition( Header ), &PreviousFragmentPosition, MMM_LINK_SIZE );
@@ -649,7 +649,7 @@ namespace mmm {
 				ERRc();
 #endif
 			if ( S_.FreeFragment == RemovedFragmentPosition )
-				if ( *RemovedFragmentPosition & 1 )	// Petit générateur al&atoire.
+				if ( *RemovedFragmentPosition & 1 )	// Petit gnrateur al&atoire.
 					S_.FreeFragment = _GetFreeFragmentNextFreeFragmentPosition( Header );
 				else
 					S_.FreeFragment = _GetFreeFragmentPreviousFreeFragmentPosition( Header );
@@ -670,7 +670,7 @@ namespace mmm {
 					ERRc();
 #endif
 
-				if ( Previous == Next ) {	// Il ne reste plus q'un fragment libre (non orphelin) ; on ne va pas le faire pointer sur lui-même.
+				if ( Previous == Next ) {	// Il ne reste plus q'un fragment libre (non orphelin) ; on ne va pas le faire pointer sur lui-mme.
 					_SetFreeFragmentNextFreeFragmentPosition( Previous, NONE );
 					_SetFreeFragmentPreviousFreeFragmentPosition( Next, NONE );
 				} else {
@@ -715,7 +715,7 @@ namespace mmm {
 			S_.FreeFragment =  NewFreeFragmentPosition;
 		}
 		void _SetAsFreeFragment(
-			row__ Position,	// 'Position' ne pointe pas nécessairement sur un 'header'.
+			row__ Position,	// 'Position' ne pointe pas ncessairement sur un 'header'.
 			mdr::size__ Size )
 		{
 #ifdef MMM_DBG
@@ -758,7 +758,7 @@ namespace mmm {
 		row__ _FreeUsedFragment(
 			row__ Position,
 			const mdr::datum__ *Header,
-			mdr::size__ Size )	// Retourne la position du fragment libre ainsi crée.Peut être différent de 'Position' (fusion avec le fragment libre précédent).
+			mdr::size__ Size )	// Retourne la position du fragment libre ainsi cre.Peut tre diffrent de 'Position' (fusion avec le fragment libre prcdent).
 		{
 #ifdef MMM_DBG
 			if ( Size == 0 )
@@ -795,7 +795,7 @@ namespace mmm {
 		void _MarkAsUsedFragment(
 			row__ Position,
 			mdr::size__ DataSize,
-			row__ Link,	// Si pas lié, est égal à 'NONE'.
+			row__ Link,	// Si pas li, est gal  'NONE'.
 			bso::bool__ FreeFlag )
 		{
 #ifdef MMM_DBG
@@ -1131,8 +1131,8 @@ namespace mmm {
 			const mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			const mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectis. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectis. */
 		{
 			Memory.Store(
 				Memory, SourceFirstFragmentSize > TargetFirstFragmentSize ? TargetFirstFragmentSize : SourceFirstFragmentSize,
@@ -1153,8 +1153,8 @@ namespace mmm {
 			const mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			const mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectis. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectis. */
 		{
 			if ( SourceFirstFragmentSize > TargetFirstFragmentSize )
 				Memory.Store(
@@ -1175,8 +1175,8 @@ namespace mmm {
 			const mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			const mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectifs. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectifs. */
 		{
 			if ( SourceFirstFragmentSize > TargetFirstFragmentSize )
 				Memory.Store(
@@ -1198,8 +1198,8 @@ namespace mmm {
 			mdr::size__ TargetFirstFragmentSize,
 			row__ TargetSecondFragmentRow,
 			mdr::size__ TargetSecondFragmentSize  )
-			/* ATTENTION : Les différents 'row' pointent directement sur les données des fragment respectifs (aprés l'indicateur de taille),
-			et non pas sur le début des fragments respectifs. */
+			/* ATTENTION : Les diffrents 'row' pointent directement sur les donnes des fragment respectifs (aprs l'indicateur de taille),
+			et non pas sur le dbut des fragments respectifs. */
 		{
 			_MoveHead(
 				SourceFirstFragmentRow, SourceFirstFragmentSize,
@@ -1263,7 +1263,7 @@ namespace mmm {
 			_Move( SourceFirstFragmentRow, SourceFirstFragmentHeader, TargetFirstFragmentRow, TargetFirstFragmentHeader );
 		}
 		void _ExtendUsedFragmentNotFollowedByAnyFragment(
-			row__ Descriptor,	// Le fragment ne doit pas être un 'linked fragment'.
+			row__ Descriptor,	// Le fragment ne doit pas tre un 'linked fragment'.
 			const mdr::datum__ *Header,
 			mdr::size__ DataSize,
 			addendum__ &Addendum,
@@ -1303,10 +1303,10 @@ namespace mmm {
 #endif
 			S_.TailingFreeFragmentPosition = NONE;
 
-//			#pragma message( "Point délicat ici !" )
-//			S_.Size = *Descriptor + _GetUsedFragmentTotalSize( Header );	// Permet l'utilisation de la méthode qui suit.
+//			#pragma message( "Point dlicat ici !" )
+//			S_.Size = *Descriptor + _GetUsedFragmentTotalSize( Header );	// Permet l'utilisation de la mthode qui suit.
 
-			// Le paramètre à 'true' dans l'appel qui suit est la prise en compte de la ligne précédente.
+			// Le paramtre  'true' dans l'appel qui suit est la prise en compte de la ligne prcdente.
 			_ExtendUsedFragmentNotFollowedByAnyFragment( Descriptor, Header, DataSize, Addendum, true );
 		}
 		void _ExtendUsedFragmentFollowedByBigEnoughFreeFragment(
@@ -1588,7 +1588,7 @@ namespace mmm {
 
 			if ( Size == 0 ) {
 				Free( Descriptor );
-				return NONE; // Pour éviter un 'warning'.
+				return NONE; // Pour viter un 'warning'.
 			}
 
 			mdr::datum__ Header[MMM_HEADER_MAX_LENGTH];
@@ -1761,7 +1761,7 @@ namespace mmm {
 		{
 			return _untyped_memory_file_manager___::Mode();
 		}
-		uym::state__ Bind( void )	// A appeler seulement aprés un 'Plug(...)'.
+		uym::state__ Bind( void )	// A appeler seulement aprs un 'Plug(...)'.
 		{
 			uym::state__ State = uym::s_Undefined;
 		ERRProlog
@@ -1860,7 +1860,7 @@ namespace mmm {
 	{
 		Multimemoire_->Read( _Descriptor, Position, Amount, Buffer, _Addendum );
 	}
-	// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
+	// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
 	inline void multimemory_driver__::MDRStore(
 		const mdr::datum__ *Buffer,
 		mdr::size__ Amount,
@@ -1868,7 +1868,7 @@ namespace mmm {
 	{
 		Multimemoire_->Write( Buffer, Amount, _Descriptor, Position, _Addendum );
 	}
-	// écrit 'Nombre' octets à la position 'Position'
+	// crit 'Nombre' octets  la position 'Position'
 
 }
 

@@ -170,7 +170,7 @@ namespace sclxhtml {
 				core_action_callback__ *Callback = _Get( str::string(  Action ) );
 
 				if ( Callback == NULL )
-					ERRFwk();	// L'action affectée à un évènement n'existe pas. Contrôler le fichier '.xsl'.
+					ERRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
 
 				return Callback->Launch( Id );
 			}
@@ -287,7 +287,7 @@ namespace sclxhtml {
 		const char *Language );
 
 
-	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
+	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
 	template <typename instances, typename kernel, typename page, page UndefinedPage > class session___
 	: public _session_callback__,
 	  public _agent___,
@@ -338,7 +338,7 @@ namespace sclxhtml {
 		virtual void SCLXHTMLRefresh( page Page  ) = 0;
 		virtual bso::bool__ XHTCLLBKLaunch(
 			const char *Id,
-			const char *Action ) override	// Retourne 'true' si l'action a été correctement traitée (et que la propagation de l'évènement à l'orgine de cette action doit être arrêtée).
+			const char *Action ) override	// Retourne 'true' si l'action a t correctement traite (et que la propagation de l'vnement  l'orgine de cette action doit tre arrte).
 		{
 			bso::bool__ Success = false;
 		ERRProlog
@@ -346,7 +346,7 @@ namespace sclxhtml {
 		ERRBegin
 			if ( _OnBeforeAction( Id, Action ) )
 				if ( !strcmp( Action, xhtcllbk::CloseActionLabel ) )
-					Success = _OnClose();	// Dans ce cas, si 'Success' est à 'false', la fermeture de l'application est suspendue.
+					Success = _OnClose();	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 				else
 					Success = _Handler.Launch( Id, Action );
 		ERRErr
@@ -388,7 +388,7 @@ namespace sclxhtml {
 			_Page = UndefinedPage;
 			_Launcher = Launcher;
 
-			// Le reste est initialisé lors de l'ouverure de session (voir 'FRDSSNOpen()'.
+			// Le reste est initialis lors de l'ouverure de session (voir 'FRDSSNOpen()'.
 		}
 		void AddActionCallback(
 			const char *ActionName,
@@ -398,7 +398,7 @@ namespace sclxhtml {
 		}
 		const char *Language( TOL_CBUFFER___ &Buffer )
 		{
-			return _session___::Language( Buffer );	// Pour résoudre l'ambiguité.
+			return _session___::Language( Buffer );	// Pour rsoudre l'ambiguit.
 		}
 		void Refresh( void )
 		{

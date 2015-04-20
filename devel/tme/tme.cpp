@@ -31,12 +31,12 @@
 using namespace tme;
 
 /*
-	Une heure est stocké dans 'raw_time__', qui est en entier de 32 bits.
+	Une heure est stock dans 'raw_time__', qui est en entier de 32 bits.
 
 	Voici son encodage (bits de poids faibles vers bits de poids forts).
 
-	0-2 (3)   : réservé à une utilisation future.
-	4-31 (28) : heure en millième de secondes
+	0-2 (3)   : rserv  une utilisation future.
+	4-31 (28) : heure en millime de secondes
 */
 
 const char *tme::time__::ASCII(

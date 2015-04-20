@@ -77,11 +77,11 @@ namespace ndbtbl {
 	using ndbbsc::rrows;
 
 	enum mode__ {
-		// Pas d'indexation, ou diffèrée.
+		// Pas d'indexation, ou diffre.
 		mBulk,
 		// Lecture seule.
 		mReadOnly,
-		// Lecture/écriture.
+		// Lecture/criture.
 		mReadWrite,
 		m_amount,
 		m_Undefined
@@ -105,7 +105,7 @@ namespace ndbtbl {
 			break;
 		}
 
-		return fil::m_Undefined;	// Pour éviter un 'warning'.
+		return fil::m_Undefined;	// Pour viter un 'warning'.
 	}
 
 	typedef bch::E_BUNCH( index_ * ) _indexes;
@@ -211,7 +211,7 @@ namespace ndbtbl {
 				break;
 			default:
 				ERRFwk();
-				return false;	// Pour éviter un warning.
+				return false;	// Pour viter un warning.
 				break;
 			}
 		}
@@ -231,7 +231,7 @@ namespace ndbtbl {
 			Content.reset( P );
 			S_.Mode = m_Undefined;
 		}
-		E_VDTOR( table_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe héritante.
+		E_VDTOR( table_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe hritante.
 		void plug( ags::E_ASTORAGE_ &AS )
 		{
 			Content.plug( AS );
@@ -240,7 +240,7 @@ namespace ndbtbl {
 		{
 			Content = T.Content;
 			
-			// _Indexes = T._Indexes;	// Ne contient que des pointeurs; les indexes correspondant doivent être copiés extèrieurement.
+			// _Indexes = T._Indexes;	// Ne contient que des pointeurs; les indexes correspondant doivent tre copis extrieurement.
 			// S_.Mode = T.S_.Mode;	// N'est pas du contenu.
 
 			return *this;
@@ -326,9 +326,9 @@ namespace ndbtbl {
 		{
 			_Test( mReadWrite );
 
-			/* Si l'on est dans le cas d'un primo-accés à l'index, celui-ci s'appuie sur le premier élément de 'Content()' pour trouver sa racine.
-			Si 'Content()' n'en cotient plus qu'un seul, pour éviter de l'effacer avant initialisation de l'index,
-			on efface l'élément de l'index avant de l'effacer de 'Content()'. */
+			/* Si l'on est dans le cas d'un primo-accs  l'index, celui-ci s'appuie sur le premier lment de 'Content()' pour trouver sa racine.
+			Si 'Content()' n'en cotient plus qu'un seul, pour viter de l'effacer avant initialisation de l'index,
+			on efface l'lment de l'index avant de l'effacer de 'Content()'. */
 
 			if ( !_IsBulk() )
 				_DeleteFromIndexes( RecordRow );
@@ -399,7 +399,7 @@ namespace ndbtbl {
 	{
 	private:
 		type__ _Type;
-		// Seulement l'un des deux est utilisé.
+		// Seulement l'un des deux est utilis.
 		ndbdct::files_hook___ _Dynamic;
 		ndbsct::files_hook___ _Static;
 		void _InitStatic(
@@ -459,7 +459,7 @@ namespace ndbtbl {
 				break;
 			}
 
-			return uys::s_Undefined;	// Pour éviter un 'warning'.
+			return uys::s_Undefined;	// Pour viter un 'warning'.
 		}
 		uys::state__ Settle( void )
 		{
@@ -475,7 +475,7 @@ namespace ndbtbl {
 				break;
 			}
 
-			return uys::s_Undefined;	// Pour éviter un 'warning'.
+			return uys::s_Undefined;	// Pour viter un 'warning'.
 		}
 		const str::string_ &BaseFileName( type__ Type ) const
 		{
@@ -493,7 +493,7 @@ namespace ndbtbl {
 
 			ERRFwk();
 
-			return _Static.BaseFileName();	// Pour éviter un 'warning'.
+			return _Static.BaseFileName();	// Pour viter un 'warning'.
 		}
 		ndbdct::files_hook___ &DynamicFilesHook( void )
 		{

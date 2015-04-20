@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="edbpck">
-    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
-    <xpp:expand value-of="epeios.shortcuts"/>
-	<xpp:expand select="epeios.xlcl"/>
-    <Translations text="ProgramDescription">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xlcl"/>
+		<Translations text="ProgramDescription">
 		  <Translation language="fr">Sélectionne une entrée d'une base de données.</Translation>
 		  <Translation language="en">Pick an entry from a database.</Translation>
 		</Translations>

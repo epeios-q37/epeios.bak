@@ -140,12 +140,12 @@ namespace lstctn {
 		{
 			ERRFbd();
 		}
-		// Pour éviter certains 'castage'.
+		// Pour viter certains 'castage'.
 		const container &Container( void ) const
 		{
 			return *this;
 		}
-		// Pour éviter certains 'castage'.
+		// Pour viter certains 'castage'.
 		container &Container( void )
 		{
 			return *this;
@@ -189,7 +189,7 @@ namespace lstctn {
 			_Container.ReleaseFiles();	// Sinon le 'Settle()'  ci'dessous ne fonctionne pas correctement.
 
 			if ( P ) {
-				Settle();	// Lancé explicitement, car le 'reset(...)' de '_List' ne peut lancer son propre 'Settle(...)'.
+				Settle();	// Lanc explicitement, car le 'reset(...)' de '_List' ne peut lancer son propre 'Settle(...)'.
 			}
 
 			_Container.reset( P );

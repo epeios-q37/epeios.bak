@@ -8,7 +8,7 @@
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Locale">
-		<xpp:cdata>
+		<xpp:bloc>
 			<Translations message="VersionCommandDescription">
 			  <Translation language="fr">Affiche la version du programme.</Translation>
 			  <Translation language="en">Displays the version of the program.</Translation>
@@ -21,6 +21,6 @@
 			  <Translation language="fr">Affiche cette page.</Translation>
 			  <Translation language="en">Displays this page.</Translation>
 			</Translations>
-		</xpp:cdata>
+		</xpp:bloc>
 	</xpp:define>
 </xpp:bloc>

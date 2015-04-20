@@ -32,7 +32,7 @@ void xhtlogin::GetContent(
 	xhtagent::agent___ &Agent,
 	xml::writer_ &Writer)
 {
-	// Rien à fournir.
+	// Rien  fournir.
 }
 
 static frdbse::backend_type__ GetBackendType_( xhtagent::agent___ &Agent )

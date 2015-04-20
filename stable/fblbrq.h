@@ -144,7 +144,7 @@ namespace fblbrq {
 
 			return 0;
 
-			// Pour détecter et éliminer cette méthode obsolete.
+			// Pour dtecter et liminer cette mthode obsolete.
 		}
 		virtual const void *FBLBRQGet(
 			sdr::row__ Row,
@@ -240,7 +240,7 @@ namespace fblbrq {
 		bso::bool__ Parsed_;
 		// The input/output channel for the request.
 		flw::ioflow__ *Channel_;
-		bso::bool__ _DismissPending;	// Pour gèrer la présence d'un flux dans les paramètres entrants.
+		bso::bool__ _DismissPending;	// Pour grer la prsence d'un flux dans les paramtres entrants.
 		callbacks__ &_C( void )
 		{
 # ifdef FBLBRQ_DBG

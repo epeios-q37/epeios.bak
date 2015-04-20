@@ -94,7 +94,7 @@ namespace ndbsct {
 		: public _list_::s
 		{
 			storage_::s Storage;
-			// Taille de l'élément.
+			// Taille de l'lment.
 			sdr::size__ Size;
 			time_t ModificationEpochTimeStamp;
 		} &S_;
@@ -122,7 +122,7 @@ namespace ndbsct {
 				_list_::operator =( SC );
 				Storage.Allocate( SC.Extent() * S_.Size );
 				Storage.Store( SC.Storage, SC.Extent() * S_.Size );
-				//S_.ModificationTimeStamp = SC.S_.ModificationTimeStamp;	// Ecrasé par le '_Touch()' ci-dessous.
+				//S_.ModificationTimeStamp = SC.S_.ModificationTimeStamp;	// Ecras par le '_Touch()' ci-dessous.
 
 				_Touch();
 			}
@@ -212,10 +212,10 @@ namespace ndbsct {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Memory.ReleaseFile();	// Pour que les 'TimeStamp' des fichiers soient mis à jour.
+			_Memory.ReleaseFile();	// Pour que les 'TimeStamp' des fichiers soient mis  jour.
 
 			if ( P ) {
-				Settle();	// Lancé explicitement, car le 'reset(...)' de '_List' ne peut lancer son propre 'Settle(...)'.
+				Settle();	// Lanc explicitement, car le 'reset(...)' de '_List' ne peut lancer son propre 'Settle(...)'.
 			}
 
 			_Memory.reset( P );
@@ -239,8 +239,8 @@ namespace ndbsct {
 		time_t GetUnderlyingFilesLastModificationTime( void ) const
 		{
 			time_t TimeStamp = _Memory.TimeStamp();
-			// Lors d'une suppression d'un enregistrement le fichier derrière '_Memory' n'est pas touché, mais les fichiers accessoires
-			// doivent quand même être sauvés, d'où le code ci-dessous.
+			// Lors d'une suppression d'un enregistrement le fichier derrire '_Memory' n'est pas touch, mais les fichiers accessoires
+			// doivent quand mme tre sauvs, d'o le code ci-dessous.
 
 			if ( ( _Content != NULL ) &&
 				 ( ( TimeStamp == 0 ) || ( _Content->ModificationEpochTimeStamp() > TimeStamp ) ) )
@@ -273,7 +273,7 @@ namespace ndbsct {
 
 			return State;
 		}
-		void ReleaseFiles( void )	// Pour libèrer les 'file handlers'.
+		void ReleaseFiles( void )	// Pour librer les 'file handlers'.
 		{
 			_Memory.ReleaseFile();
 			_List.ReleaseFiles();

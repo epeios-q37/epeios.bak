@@ -43,7 +43,7 @@
 # include "cpe.h"
 # include "fnm.h"
 
-// Prédéclaration, car l'incusion des fichiers d'entête correspondants posent des problèmes dû à l'inclusion circulaire.
+// Prdclaration, car l'incusion des fichiers d'entte correspondants posent des problmes d  l'inclusion circulaire.
 
 namespace str {
 	class string_;
@@ -96,9 +96,9 @@ namespace fil {
 	enum mode__ {
 		//i Ecrase le contenu du fichier.
 		mRemove,
-		//i Ajoute à la fin du fichier.
+		//i Ajoute  la fin du fichier.
 		mAppend,
-		//i Ouvre le fichier ne lecture/écriture.
+		//i Ouvre le fichier ne lecture/criture.
 		mReadWrite,
 		//i Ouvre le fichier en lecture seule.
 		mReadOnly,
@@ -279,7 +279,7 @@ namespace fil {
 			return true;
 			break;
 		case eBadF:
-			ERRSys();	// Normalement, cette erreur ne peut arriver, compte tenu de la fonction utilisée.
+			ERRSys();	// Normalement, cette erreur ne peut arriver, compte tenu de la fonction utilise.
 			break;
 		case eNoEnt:
 			break;
@@ -343,7 +343,7 @@ namespace fil {
 		return _GetInfo( Path, Info ).Type;
 	}
 
-	// Modifie la date de modification d'un fichier à la date courante.
+	// Modifie la date de modification d'un fichier  la date courante.
 	inline bso::bool__ Touch( const fnm::name___ &Filename )
 	{
 		bso::bool__ Success = false;
@@ -375,8 +375,8 @@ namespace fil {
 		TOL_CBUFFER___ Buffer;
 	ERRBegin
 		/*
-		NOTA : Le code ci-dessous fonctionne AUSSI sous Windows, mais SEULEMENT lorsque lancé à partir d'une console DOS,
-		Lorsque lancé à partir d'une console 'Cygwin', il y a un décalage d'une heure (dépendant de l'heure d'hiver/été ?).
+		NOTA : Le code ci-dessous fonctionne AUSSI sous Windows, mais SEULEMENT lorsque lanc  partir d'une console DOS,
+		Lorsque lanc  partir d'une console 'Cygwin', il y a un dcalage d'une heure (dpendant de l'heure d'hiver/t ?).
 		*/
 
 		if ( utime( Filename.UTF8( Buffer ), NULL ) != 0 )
@@ -497,7 +497,7 @@ namespace fil {
 		const fnm::name___ &TargetFilename )
 	{
 # ifdef FIL__WIN
-		// NOTA : le fichier copié avec la fonction ci-dessous possède les mêmes horodatages, on s'arrange donc pour avoir le même résultat sous POSIX.
+		// NOTA : le fichier copi avec la fonction ci-dessous possde les mmes horodatages, on s'arrange donc pour avoir le mme rsultat sous POSIX.
 		return CopyFileW( SourceFilename.Internal(), TargetFilename.Internal(), false ) != 0;
 # elif defined( FIL__POSIX )
 		bso::bool__ Success = false;
@@ -525,7 +525,7 @@ namespace fil {
 		if ( Size == -1 )
 			ERRReturn;
 
-		// NOTA : le fichier copié avec la version Windows de cette fonction possède les mêmes horodatages, on s'arrange donc pour avoir le même résultat sous POSIX.
+		// NOTA : le fichier copi avec la version Windows de cette fonction possde les mmes horodatages, on s'arrange donc pour avoir le mme rsultat sous POSIX.
 		Success = AssignSameTimes_( SourceFilename, TargetFilename );
 	ERRErr
 	ERREnd
@@ -544,12 +544,12 @@ namespace fil {
 
 	bso::bool__ Create(
 		const fnm::name___ &Filename,
-		err::handling__ ErrorHandling = err::h_Default );	// Crée un fichier de nom 'FileName'.
+		err::handling__ ErrorHandling = err::h_Default );	// Cre un fichier de nom 'FileName'.
 
 # ifdef FIL__WIN
 	inline bso::bool__ MakeNormal(
 		const fnm::name___ &Filename,
-		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/répertoire normal.
+		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/rpertoire normal.
 	{
 		if ( SetFileAttributesW( Filename.Internal(), FILE_ATTRIBUTE_NORMAL ) == 0 )
 			if ( ErrorHandling == err::hThrowException )
@@ -562,8 +562,8 @@ namespace fil {
 
 	inline bso::bool__ MakeSystem(
 		const fnm::name___ &Filename,
-		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/répertoire system.
-															// NOTA : pour que le fichier soit caché lorsque l'option correspondande est activée,
+		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/rpertoire system.
+															// NOTA : pour que le fichier soit cach lorsque l'option correspondande est active,
 															// il semblerait qu'il faut en plus mettre l'attribute 'HIDDEN' et 'ARCHIVE'.
 	{
 		if ( SetFileAttributesW( Filename.Internal(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE ) == 0 )

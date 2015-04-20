@@ -315,8 +315,8 @@ namespace frdkrn {
 			error_set___ &ErrorSet,
 			void *UP,
 			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
-		virtual void FRDKRNConnection( fblfrd::frontend___ &Frontend ) = 0;	// Appelé lors aprés connection au 'backend'.
-		virtual void FRDKRNDisconnection( void ) = 0;	// Appelé avant déconnexion du 'backend'.
+		virtual void FRDKRNConnection( fblfrd::frontend___ &Frontend ) = 0;	// Appel lors aprs connection au 'backend'.
+		virtual void FRDKRNDisconnection( void ) = 0;	// Appel avant dconnexion du 'backend'.
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -326,11 +326,11 @@ namespace frdkrn {
 			_ReportingCallback = NULL;
 		}
 		E_CVDTOR( kernel___ );
-		bso::bool__ Init( reporting_callback__ &ReportingCallback )	//  PAS dupliqué !
+		bso::bool__ Init( reporting_callback__ &ReportingCallback )	//  PAS dupliqu !
 		{
 			_ErrorMeaning.Init();
 			_ReportingCallback = &ReportingCallback;
-			// L'initialisation de '_Frontend' et '_ClientCore' se fait à la connection.
+			// L'initialisation de '_Frontend' et '_ClientCore' se fait  la connection.
 
 			return true;
 		}
@@ -341,14 +341,14 @@ namespace frdkrn {
 
 			return _Frontend;
 		}
-		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramètres de sortie est un 'flow', dés que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
+		void DismissRequest( void )	// A appeler uniquement lorsque l'un des paramtres de sortie est un 'flow', ds que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
 		{
 			Frontend().Dismiss();
 		}
 		bso::bool__ Launch(
 			const backend_features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations,
-			error_set___ &ErrorSet )	// Les paramètres de connection sont récupèrés de la 'registry'.
+			error_set___ &ErrorSet )	// Les paramtres de connection sont rcuprs de la 'registry'.
 		{
 			if ( BackendFeatures.Type != csducl::t_Undefined )
 				return _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, BackendFeatures.Language, BackendFeatures.PingDelay, ErrorSet, BackendFeatures.UP );
@@ -395,11 +395,11 @@ namespace frdkrn {
 
 	enum authentication_prompt_mode__ 
 	{
-		apmNone,	// Pas de prompt, 'login' et 'password' envoyés sont vides (droits minimaux).
-		apmAuto,	// Pas de prompt, 'login' et 'password' envoyés sont ceux stockés dans le fichier de configuration.
-		apmEmpty,	// Prompt affiché, avec champs vides.
-		apmPartial,	// Prompt affiché, avec champ 'login' prérenpli.
-		apmFull,	// Prompt affiché, avec champs 'login' et 'password' préremplis.
+		apmNone,	// Pas de prompt, 'login' et 'password' envoys sont vides (droits minimaux).
+		apmAuto,	// Pas de prompt, 'login' et 'password' envoys sont ceux stocks dans le fichier de configuration.
+		apmEmpty,	// Prompt affich, avec champs vides.
+		apmPartial,	// Prompt affich, avec champ 'login' prrenpli.
+		apmFull,	// Prompt affich, avec champs 'login' et 'password' prremplis.
 		apm_amount,
 		apm_Undefined
 	};

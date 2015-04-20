@@ -104,8 +104,8 @@ namespace sdr {
 			ERRFwk();
 			// For read-only storage.
 		}
-		/* Si la mémoire repose sur une mémoire persistante (un fichier, par exemple), retourne la taille de cette mémoire,
-		ou, si non initialisée (fichier absent, par exemple), ou non persistente, retourne 0 */
+		/* Si la mmoire repose sur une mmoire persistante (un fichier, par exemple), retourne la taille de cette mmoire,
+		ou, si non initialise (fichier absent, par exemple), ou non persistente, retourne 0 */
 		virtual size__ SDRSize( void ) const = 0;
 		//v Recall 'Amount' at position 'Position' and put them in 'Buffer'.
 		virtual void SDRRecall(

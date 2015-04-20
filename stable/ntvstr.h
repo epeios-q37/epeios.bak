@@ -48,7 +48,7 @@
 #  error "Unknown target !"
 # endif
 
-// Pour éviter d'avoir à inclure 'str.h'
+// Pour viter d'avoir  inclure 'str.h'
 namespace str {
 	class string_;
 }
@@ -71,7 +71,7 @@ namespace ntvstr {
 
 	typedef tol::E_BUFFER___( bso::char__ ) buffer___;
 
-	// Retourne la taille d'une chaîne de caractères natifs, en tenant compte de son encodage (ne correspond pas nécessairement au nombre de 'char__').
+	// Retourne la taille d'une chane de caractres natifs, en tenant compte de son encodage (ne correspond pas ncessairement au nombre de 'char__').
 	inline bso::size__ Size( const char__ * Str )
 	{
 # ifdef NTVSTR__WCS
@@ -88,7 +88,7 @@ namespace ntvstr {
 # endif
 	}
 
-	// Retourne la taille d'une chaîne de caratères natifs, en 'char__'.
+	// Retourne la taille d'une chane de caratres natifs, en 'char__'.
 	inline bso::size__ Amount( const char__ * Str )
 	{
 # ifdef NTVSTR__WCS
@@ -100,7 +100,7 @@ namespace ntvstr {
 # endif
 	}
 
-	// 'Native string' ; 'string' utilisant en interne l'encodage natif. LEs 'str::string_' passés en paramètres sont encodés en 'UTF-8'.
+	// 'Native string' ; 'string' utilisant en interne l'encodage natif. LEs 'str::string_' passs en paramtres sont encods en 'UTF-8'.
 	class string___
 	{
 	private:
@@ -137,9 +137,9 @@ namespace ntvstr {
 		}
 # ifdef CPE_WIN
 #  if defined( CPE_X86 ) || defined( CPE_MSVC )
-		string___( int String )	// Pour traiter le cas ou c'est 'NULL' (assimilé à un int) qui est passé en paramètre.
+		string___( int String )	// Pour traiter le cas ou c'est 'NULL' (assimil  un int) qui est pass en paramtre.
 #  elif defined( CPE_X64 )
-		string___( long long int String )	// Pour traiter le cas ou c'est 'NULL' (assimilé à un long long int) qui est passé en paramètre.
+		string___( long long int String )	// Pour traiter le cas ou c'est 'NULL' (assimil  un long long int) qui est pass en paramtre.
 #  else
 #   error
 #  endif
@@ -201,7 +201,7 @@ namespace ntvstr {
 		{
 			return _Core;
 		}
-		// Retourne la taille, en tenant compte de l'encodage (ne correspond pas nécessairement au nombre de 'char__').
+		// Retourne la taille, en tenant compte de l'encodage (ne correspond pas ncessairement au nombre de 'char__').
 		bso::size__ Size( void ) const
 		{
 			if ( _Core == NULL )
@@ -209,7 +209,7 @@ namespace ntvstr {
 			else
 				return ntvstr::Size( _Core );
 		}
-		// Retourne la taille d'une chaîne de caratères natifs, en 'char__'.
+		// Retourne la taille d'une chane de caratres natifs, en 'char__'.
 		bso::size__ Amount( void ) const
 		{
 			if ( _Core == NULL )

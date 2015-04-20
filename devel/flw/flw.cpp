@@ -155,8 +155,8 @@ ERRBegin
 	if ( _Written >= _AmountMax )
 		ERRFwk();
 ERRErr
-	_Size = _Free = 0;	// Pour éviter toute nouvelle écriture dans le cache. La prochaine tentative génèrera une erreur.
-	Commit();	// N'écrit rien (à priori) ; juste pour déverouiiler.
+	_Size = _Free = 0;	// Pour viter toute nouvelle criture dans le cache. La prochaine tentative gnrera une erreur.
+	Commit();	// N'crit rien ( priori) ; juste pour dverouiiler.
 ERREnd
 ERREpilog
 	return Amount;

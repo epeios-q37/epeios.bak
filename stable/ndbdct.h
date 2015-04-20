@@ -83,8 +83,8 @@ namespace ndbdct {
 	class storage_
 	{
 	private:
-		/* Retourne le nombre d'octets que l'on peut effectivement écrire sachant que l'on veut écrire un maximum de 
-		'Wanted' octets et qu'un maximum de 'Available' octets sont disponibles, et que l'on veut également y stocker la
+		/* Retourne le nombre d'octets que l'on peut effectivement crire sachant que l'on veut crire un maximum de 
+		'Wanted' octets et qu'un maximum de 'Available' octets sont disponibles, et que l'on veut galement y stocker la
 		taille */
 		size__ _AmountWritable(
 			size__ Wanted,
@@ -127,8 +127,8 @@ namespace ndbdct {
 
 			return Amount;
 		}
-		/* Ajoute 'Data' à la position 'Row', sachant que 'Unallocated' est la position du premier octet non alloué.
-		L'espace necessaire est alloué. Retourne la position du nouveau premier octet non alloué. */
+		/* Ajoute 'Data'  la position 'Row', sachant que 'Unallocated' est la position du premier octet non allou.
+		L'espace necessaire est allou. Retourne la position du nouveau premier octet non allou. */
 		drow__ _Store(
 			const datum_ &Data,
 			size__ Offset,
@@ -139,7 +139,7 @@ namespace ndbdct {
 
 			Memory.Allocate( *Unallocated + TotalSize );
 
-			_Store( Data, Offset, Unallocated, TotalSize );	// 'Unallocated' mis à jour par cette méthode.
+			_Store( Data, Offset, Unallocated, TotalSize );	// 'Unallocated' mis  jour par cette mthode.
 
 			return Unallocated;
 		}
@@ -188,9 +188,9 @@ namespace ndbdct {
 		}
 		storage_ operator =( const storage_ &S )
 		{
-			ERRFwk();	// Impossible de dupliquer : ne connaît pas sa taille.
+			ERRFwk();	// Impossible de dupliquer : ne connat pas sa taille.
 
-			return *this;	// Pour éviter un 'warning'.
+			return *this;	// Pour viter un 'warning'.
 		}
 		void Init( void )
 		{
@@ -212,8 +212,8 @@ namespace ndbdct {
 
 			return Written;
 		}
-		/* Ajoute 'Data' à 'Row', qui est la position du premier octet non alloué. La place nécessaire est allouée et
-		la nouvelle position du premier octet non alloué et retourné. */
+		/* Ajoute 'Data'  'Row', qui est la position du premier octet non allou. La place ncessaire est alloue et
+		la nouvelle position du premier octet non allou et retourn. */
 		drow__ Append(
 			const datum_ &Data,
 			size__ Offset,
@@ -233,8 +233,8 @@ namespace ndbdct {
 		{
 			return _GetRawSize( Row, Unallocated );
 		}
-		/* Place un marqueur de taille à 'DataRow' sachant qu'il y a 'Size' octets de disponibles. Retourne le nombre
-		d'octets effectivement disponibles à cette position aprés y avoir placé le marquer de taille. */
+		/* Place un marqueur de taille  'DataRow' sachant qu'il y a 'Size' octets de disponibles. Retourne le nombre
+		d'octets effectivement disponibles  cette position aprs y avoir plac le marquer de taille. */
 		size__ StoreSize(
 			drow__ Row,
 			size__ Size )
@@ -266,12 +266,12 @@ namespace ndbdct {
 
 	E_AUTO( storage )
 
-	// Caratéristique d'un emplacement libre.
+	// Caratristique d'un emplacement libre.
 	struct available__
 	{
 		// Position.
 		drow__ Row;
-		// Taille brute, c'est-à-dire sans tenir compte de la place occupée par le marqueur de taille.
+		// Taille brute, c'est--dire sans tenir compte de la place occupe par le marqueur de taille.
 		size__ RawSize;
 		available__( void )
 		{
@@ -408,7 +408,7 @@ namespace ndbdct {
 			storage_::s Storage;
 			availables_::s Availables;
 			entries_::s Entries;
-			// Position du premier octet non alloué.
+			// Position du premier octet non allou.
 			drow__ Unallocated;
 			time_t ModificationEpochTimeStamp;
 		} &S_;
@@ -527,7 +527,7 @@ namespace ndbdct {
 		{
 			ERRVct();
 		}
-		// Reconstruit la liste des portions inoccupés dans 'Storage'.
+		// Reconstruit la liste des portions inoccups dans 'Storage'.
 		void RebuildAvailables( void )
 		{
 			ERRVct();
@@ -538,7 +538,7 @@ namespace ndbdct {
 
 	E_AUTO( dynamic_content )
 
-	// Content stocké dans des fichiers.
+	// Content stock dans des fichiers.
 	class files_hook___
 	{
 	private:
@@ -553,12 +553,12 @@ namespace ndbdct {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			// Nécessaire, sinon le 'Settle(...)' qui suit peut ne pas fonctionner correctement.
+			// Ncessaire, sinon le 'Settle(...)' qui suit peut ne pas fonctionner correctement.
 			_Storage.ReleaseFile();
 			_Entries.ReleaseFile();
 
 			if ( P ) {
-				Settle();	// Lancé explicitement, pour la sauvegarde des 'availables'.
+				Settle();	// Lanc explicitement, pour la sauvegarde des 'availables'.
 			}
 
 			_Storage.reset( P );
@@ -634,11 +634,11 @@ namespace ndbdct {
 
 			return State;
 		}
-		void WriteAvailables( void )	// Met à jour les fichiers.
+		void WriteAvailables( void )	// Met  jour les fichiers.
 		{
 			_SaveAvailables();
 		}
-		void CloseFiles( void )	// Pour libèrer les 'file handlers'.
+		void CloseFiles( void )	// Pour librer les 'file handlers'.
 		{
 			_Storage.ReleaseFile();
 			_Entries.ReleaseFile();

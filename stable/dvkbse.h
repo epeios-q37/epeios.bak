@@ -63,7 +63,7 @@ extern class ttr_tutor &DVKBSETutor;
 # include "cpe.h"
 
 # ifdef CPE__VC
-#  error "Non compilable avec VC++. Uitliser un environnement de compilation dédié à Dalvik (Android)'."
+#  error "Non compilable avec VC++. Uitliser un environnement de compilation ddi  Dalvik (Android)'."
 #endif
 
 
@@ -223,7 +223,7 @@ namespace dvkbse {
 	DVKBSE__L( Tag, F, ANDROID_LOG_FATAL )\
 	
 
-// Peut seulement être utilisé aprés un 'DVKBSE_EXPOSE_LOG_FUNCTIONS'.
+// Peut seulement tre utilis aprs un 'DVKBSE_EXPOSE_LOG_FUNCTIONS'.
 # define DVKBSE_LOC	LogD( __LOC__ );
 
 

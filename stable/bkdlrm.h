@@ -97,7 +97,7 @@ namespace bkdlrm {
 			flw::oflow__ &Flow,
 			const casts_ &Casts )
 		{
-			// Rien à faire ...
+			// Rien  faire ...
 		}
 	private:
 		bch::E_BUNCH( void *)Repository_;

@@ -89,8 +89,8 @@ namespace cio {
 		void Init(
 			fdr::oflow_driver_base___ &,
 			fdr::thread_safety__ )
-				// Une ancienne version de cette bibliothèque avait une méthode avec ces paramètres. Un appel à cette méthode appelait la méthode ci-dessus, ce qui provoque une erreur.
-				// Cette méthode a donc été mise en palce pour détecter et corrger ce cas de figure...
+				// Une ancienne version de cette bibliothque avait une mthode avec ces paramtres. Un appel  cette mthode appelait la mthode ci-dessus, ce qui provoque une erreur.
+				// Cette mthode a donc t mise en palce pour dtecter et corrger ce cas de figure...
 		{
 			ERRPrm();
 		}
@@ -110,8 +110,8 @@ namespace cio {
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
 			fdr::thread_safety__ )
-				// Une ancienne version de cette bibliothèque avait une méthode avec ces paramètres. Un appel à cette méthode appelait la méthode ci-dessus, ce qui provoque une erreur.
-				// Cette méthode a donc été mise en place pour détecter et corrger ce cas de figure...
+				// Une ancienne version de cette bibliothque avait une mthode avec ces paramtres. Un appel  cette mthode appelait la mthode ci-dessus, ce qui provoque une erreur.
+				// Cette mthode a donc t mise en place pour dtecter et corrger ce cas de figure...
 		{
 			ERRPrm();
 		}
@@ -135,9 +135,9 @@ namespace cio {
 
 	enum target__
 	{
-		tConsole,	// Lecture/écriture de/dans la console.
-		tVoid,		// Lecture/écriture de/dans rien (utile pour les service Windows).
-		tUser,		// Lecture/écriture de/dans des dispositifs fournis par l'utilisateur (qui doit initialiser 'C(Out|In|Err)Driver').
+		tConsole,	// Lecture/criture de/dans la console.
+		tVoid,		// Lecture/criture de/dans rien (utile pour les service Windows).
+		tUser,		// Lecture/criture de/dans des dispositifs fournis par l'utilisateur (qui doit initialiser 'C(Out|In|Err)Driver').
 		t_amount,
 		t_Undefined,
 		t_Default = tConsole

@@ -33,14 +33,14 @@ copt += -DE_DEBUG
 mods += ags aem bch bitbch bso 
 mods += cpe crptgr ctn dir dte 
 mods += dtfbsc dtfptb epsmsc err fdr 
-mods += flf fls flw flx ias 
+mods += flf flsq flw flx ias 
 mods += ids iof iop lst lstbch 
 mods += lstctn mns ntvstr que sdr 
 mods += stk str strng tagsbs tol 
 mods += ttr txf tys uys utf 
 mods += xtf cio tht bomhdl cdgb64 
 mods += fil fnm lcl rgstry stsfsm 
-mods += xml xpp clnarg 
+mods += xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += registry 
 
@@ -172,7 +172,9 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	target=$(name)
+	target=$(name).exe
+
+	dest=/cygdrive/h/bin/
 
 endif
 
@@ -201,7 +203,9 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	target=$(name)
+	target=$(name).exe
+
+	dest=/h/bin/
 endif
 
 #########################
@@ -230,6 +234,8 @@ ifeq ("$(os)","$(GNULinux)")
 		endif
 	endif
 	target=$(name)
+
+	dest=/home/csimon/bin/
 endif
 
 #############################
@@ -268,6 +274,7 @@ endif
 
 ifeq ("$(os)","$(MacOS)")
 
+	co += -std=gnu++11
 	co += -DDARWIN
 	
 	mods += $(pmods)
@@ -284,6 +291,8 @@ ifeq ("$(os)","$(MacOS)")
 		endif
 	endif
 	target=$(name)
+
+	dest=/Users/csimon/bin/
 
 endif
 
@@ -316,6 +325,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(target): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
+ifdef EPEIOS_SRC
+	mkdir -p $(dest)
+	cp $(target) $(dest)
+endif
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

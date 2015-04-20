@@ -60,7 +60,7 @@ state__ dir::HandleError( void )
 		break;
 	}
 
-	return s_Undefined;	// Pour éviter un 'warning'.
+	return s_Undefined;	// Pour viter un 'warning'.
 }
 
 

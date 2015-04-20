@@ -82,8 +82,8 @@ namespace bst {
 			Ecrire( O.Lire( Position ), Position );
 	}
 	*/
-	/* Stocke dans 'D' 'O1' & 'O2', tous étant de taille 'Taille'.
-	'D' peut être 'O1' ou 'O2'. Usage interne. */
+	/* Stocke dans 'D' 'O1' & 'O2', tous tant de taille 'Taille'.
+	'D' peut tre 'O1' ou 'O2'. Usage interne. */
 	void Et_(
 		const receptacle__ *O1,
 		const receptacle__ *O2,
@@ -94,8 +94,8 @@ namespace bst {
 			D[Taille] = O1[Taille] & O2[Taille];
 	}
 
-	/* Stocke dans 'D' 'O1' | 'O2', tous étant de taille 'Taille'.
-	'D' peut être 'O1' ou 'O2'. Usage interne. */
+	/* Stocke dans 'D' 'O1' | 'O2', tous tant de taille 'Taille'.
+	'D' peut tre 'O1' ou 'O2'. Usage interne. */
 	void Ou_(
 		const receptacle__ *O1,
 		const receptacle__ *O2,
@@ -107,7 +107,7 @@ namespace bst {
 	}
 
 
-	/* Stocke dans 'D' ~'O' tou deux de taille 'Taille'. 'O' peut être 'D'.
+	/* Stocke dans 'D' ~'O' tou deux de taille 'Taille'. 'O' peut tre 'D'.
 	Usage interne. */
 	void Non_(
 		const receptacle__ *O,
@@ -118,8 +118,8 @@ namespace bst {
 			D[Taille] = ~O[Taille];
 	}
 
-	/* Stocke dans 'D' 'O1' ^ 'O2', tous étant de taille 'Taille'.
-	'D' peut être 'O1' ou 'O2'. Usage interne. */
+	/* Stocke dans 'D' 'O1' ^ 'O2', tous tant de taille 'Taille'.
+	'D' peut tre 'O1' ou 'O2'. Usage interne. */
 	void Dff_(
 		const receptacle__ *O1,
 		const receptacle__ *O2,

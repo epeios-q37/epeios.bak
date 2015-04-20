@@ -242,12 +242,12 @@ namespace lcl {
 		void _GetCorrespondingLabels(
 			const strings_ &Labels,
 			strings_ &Wordings ) const;
-		// A des fins de compatibilité ascendente.
+		// A des fins de compatibilit ascendente.
 		bso::bool__ _GetTranslationFollowingLanguageThenMessage(
 			const str::string_ &Text,
 			const char *Language,
 			str::string_ &Translation ) const;
-		// A des fins de compatibilité ascendente.
+		// A des fins de compatibilit ascendente.
 		bso::bool__ _GetTranslationFollowingMessageThenLanguage(
 			const str::string_ &Text,
 			const char *Language,
@@ -295,7 +295,7 @@ namespace lcl {
 		const str::string_ &GetTranslation(
 			const str::string_ &Text,
 			const char *Language,
-			str::string_ &Translation ) const	// Version simplifiée.
+			str::string_ &Translation ) const	// Version simplifie.
 		{
 			_GetTranslation( Text, Language, Translation );
 
@@ -304,7 +304,7 @@ namespace lcl {
 		const str::string_ &GetTranslation(
 			const char *Text,
 			const char *Language,
-			str::string_ &Translation ) const	// Version simplifiée.
+			str::string_ &Translation ) const	// Version simplifie.
 		{
 			_GetTranslation( str::string( Text ), Language, Translation );
 
@@ -314,16 +314,16 @@ namespace lcl {
 
 	E_AUTO( locale );
 
-	// Fonction utilisée dans le cadre de l'internationalisation, qui sert juste à contrôler l'existence du premier paramètre, qui correspond généralement à une entrée d'un 'enum'.
+	// Fonction utilise dans le cadre de l'internationalisation, qui sert juste  contrler l'existence du premier paramtre, qui correspond gnralement  une entre d'un 'enum'.
 	inline const char *Control_(
-		int,	// Sert juste à vérifier l'existence d'une entrée d'un 'enum'.
+		int,	// Sert juste  vrifier l'existence d'une entre d'un 'enum'.
 		const char *Text )
 	{
 		return Text;
 	}
 }
 
-// A utiliser dans une macro '_( name )', qui prédéfini le paramètre 'prefix'.
+// A utiliser dans une macro '_( name )', qui prdfini le paramtre 'prefix'.
 # define LCL_M( prefix, name ) lcl::Control_( prefix##name, #name )
 
 				  /********************************************/

@@ -97,7 +97,7 @@ namespace mdr {
 	//t The type of the datum in a memory.
 	typedef bso::raw__	datum__;
 
-// Prédéclarations.
+// Prdclarations.
 	struct _xsize__;
 	typedef _xsize__ xsize__;
 
@@ -147,8 +147,8 @@ namespace mdr {
 			ERRc();
 			// For read-only memory.
 		}
-		/* Si la mémoire repose sur une mémoire persistante (un fichier, par exemple), retourne la taille de cette mémoire,
-		ou, si non initialisée (fichier absent, par exemple), ou non persistente, retourne 0 */
+		/* Si la mmoire repose sur une mmoire persistante (un fichier, par exemple), retourne la taille de cette mmoire,
+		ou, si non initialise (fichier absent, par exemple), ou non persistente, retourne 0 */
 		virtual size__ MDRUnderlyingSize( void )
 		{
 			return 0;

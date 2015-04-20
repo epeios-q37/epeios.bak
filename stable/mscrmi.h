@@ -81,7 +81,7 @@ namespace mscrmi {
 	E_ROW( row__ );
 
 	typedef bso::ulong__ xaddress__;	// 'eXtended address'.
-										// 0 - 29 : adresse du paramètre.
+										// 0 - 29 : adresse du paramtre.
 										// 30 - 31 : 0, 1, 2 : taille du 'stencil', en mots; 3 la taille du 'stencil' est de 23 bits.
 	typedef bso::ulong__ address__;
 	typedef bso::ulong__ segment__;
@@ -181,7 +181,7 @@ namespace mscrmi {
 #define MSCRMI_MASK( size, pos )	( ( ~0UL >> ( 32 - ( size ) ) ) << ( pos ) )
 
 
-// Un 'stencil' désigne le masque à appliquer sur un 'xaddress__' pour en récupèrer le segment.
+// Un 'stencil' dsigne le masque  appliquer sur un 'xaddress__' pour en rcuprer le segment.
 #define MSCRMI_STENCIL_MASK_LENGTH		2
 #define MSCRMI_STENCIL_MASK_POSITION	( 32 - MSCRMI_STENCIL_MASK_LENGTH )
 #define MSCRMI_STENCIL_MASK				MSCRMI_MASK( MSCRMI_STENCIL_MASK_LENGTH, MSCRMI_STENCIL_MASK_POSITION )
@@ -239,7 +239,7 @@ namespace mscrmi {
 			break;
 		}
 
-		return 0;	// Pour éviter un 'warning'.
+		return 0;	// Pour viter un 'warning'.
 	}
 
 	inline mask__ _Stencil( xaddress__ Address )
@@ -263,18 +263,18 @@ namespace mscrmi {
 	}
 
 	enum type__ {
-		tNibble2,	// Donnée brute, de taille 2 x 4 bits réparties sur 2 octets.
-		tNibble3,	// Donnée brute, de taille 3 x 4 bits réparties sur 3 octets.
-		tNibble4,	// Donnée brute, de taille 4 x 4 bits, répartis sur 4 octets.
-		tOctet,		// Donnée brute, de 7 bits (8 ème bit réservé par le protocole MIDI)
-		tOctet2,	// Donnée brute, de 14 bits (8 ème bit de chaque octet réservé par le protocole MIDI)
-		tOctet3,	// Donnée brute, de 21 bits (8 ème bit de chaque octet réservé par le protocole MIDI)
-		tOctet4,	// Donnée brute, de 28 bits (8 ème bit de chaque octet réservé par le protocole MIDI)
+		tNibble2,	// Donne brute, de taille 2 x 4 bits rparties sur 2 octets.
+		tNibble3,	// Donne brute, de taille 3 x 4 bits rparties sur 3 octets.
+		tNibble4,	// Donne brute, de taille 4 x 4 bits, rpartis sur 4 octets.
+		tOctet,		// Donne brute, de 7 bits (8 me bit rserv par le protocole MIDI)
+		tOctet2,	// Donne brute, de 14 bits (8 me bit de chaque octet rserv par le protocole MIDI)
+		tOctet3,	// Donne brute, de 21 bits (8 me bit de chaque octet rserv par le protocole MIDI)
+		tOctet4,	// Donne brute, de 28 bits (8 me bit de chaque octet rserv par le protocole MIDI)
 		tName,		// Nom, de taille 16 octets.
-		tHBars,		// 'Harmonic Bars' pour des réglages type orgue Hammond.
+		tHBars,		// 'Harmonic Bars' pour des rglages type orgue Hammond.
 		t_amount,
 		t_Undefined,
-		t_Group,	// Signale un groupe de paramètre.
+		t_Group,	// Signale un groupe de paramtre.
 	};
 
 	const char *Label( type__ type );
@@ -361,7 +361,7 @@ namespace mscrmi {
 		struct s
 		: public _parameter_core_::s
 		{
-			row__ GroupRow;	// Position du groupe de paramètres (paramètre de taille nulle) auquel il appartient.
+			row__ GroupRow;	// Position du groupe de paramtres (paramtre de taille nulle) auquel il appartient.
 		} &S_;
 		parameter_( s &S )
 		: S_( S ),
@@ -420,7 +420,7 @@ namespace mscrmi {
 
 	row__ Search(
 		address__ Address,
-		row__ Current,	// Si == 'NONE', on part du premier élément de 'Parameters'.
+		row__ Current,	// Si == 'NONE', on part du premier lment de 'Parameters'.
 		const parameters_ &Parameters );
 
 	void Print(
@@ -495,7 +495,7 @@ namespace mscrmi {
 
 	E_AUTO( midi_implementation );
 
-	// Donnet les blocs d'adresses contigües d'une implémentation MIDI.
+	// Donnet les blocs d'adresses contiges d'une implmentation MIDI.
 	void GetBlocs(
 		const parameters_ &Parameters,
 		blocs_ &Blocs );
@@ -517,7 +517,7 @@ namespace mscrmi {
 
 	enum parse_status__ {
 		psOK,
-		psParserError,	// Une erreur s'est produite durant le 'parsage'. Consulter le 'parser' pour connaître l'erreur.
+		psParserError,	// Une erreur s'est produite durant le 'parsage'. Consulter le 'parser' pour connatre l'erreur.
 		psUnexpectedTag,
 		psAttributeAlreadyDefined,
 		psUnexpectedAttribute,
@@ -564,8 +564,8 @@ namespace mscrmi {
 
 	typedef bso::ubyte__ device_id__;
 
-#	define MSCRMI_UNDEFINED_DEVICE_ID	128		// Une donnée transmise à travers un canal MIDI ne peut être > 127.
-#	define MSCRMI_DEFAULT_DEVICE_ID		0x10	// Réglage d'usine.
+#	define MSCRMI_UNDEFINED_DEVICE_ID	128		// Une donne transmise  travers un canal MIDI ne peut tre > 127.
+#	define MSCRMI_DEFAULT_DEVICE_ID		0x10	// Rglage d'usine.
 
 	struct identity__
 	{

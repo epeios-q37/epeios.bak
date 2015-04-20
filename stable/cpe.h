@@ -83,8 +83,8 @@ extern class ttr_tutor &CPETutor;
 # define CPE_ANDROID_LABEL	"Android"
 
 
-# undef CPE_WIN		// Windows système base API
-# undef CPE_POSIX	// Posix système base API.
+# undef CPE_WIN		// Windows systme base API
+# undef CPE_POSIX	// Posix systme base API.
 
 # undef CPE_VC		// Compilateur VC++
 # undef CPE_VC6		// Compilateur VC++ V6
@@ -94,9 +94,9 @@ extern class ttr_tutor &CPETutor;
 # undef CPE_GCC		// Compilateur GNU C++.
 # undef CPE_GCC3	// Compilateur GNU C++ V3.x
 
-# undef CPE_MT			// Cible multitâche.
+# undef CPE_MT			// Cible multitche.
 # undef CPE_CONSOLE		// Cible console.
-# undef CPE_LIBRARY		// Cible bibliothèque (DLL, .so, ...)
+# undef CPE_LIBRARY		// Cible bibliothque (DLL, .so, ...)
 
 # undef CPE_JAVA	// Cible composant java en code natif.
 # undef CPE_GECKO	// Cible composant Gecko.

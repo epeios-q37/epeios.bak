@@ -72,7 +72,7 @@ namespace mmi {
 	//t The type of an index in the indexed multimemory.
 	E_ROW( index__ );
 
-	// Prédéclaration.
+	// Prdclaration.
 	class indexed_multimemory_;
 
 	class _base_indexed_multimemory_driver__
@@ -93,7 +93,7 @@ namespace mmi {
 			else
 				return 0;
 		}
-		// Déportée.
+		// Dporte.
 		virtual void MDRRecall(
 			mdr::row_t__ Position,
 			mdr::size__ Amount,
@@ -136,7 +136,7 @@ namespace mmi {
 		{
 			return _Index;
 		}
-		// Déportée.
+		// Dporte.
 		mdr::size__ Size( void ) const;
 		friend class indexed_multimemory_driver__;
 	};
@@ -147,14 +147,14 @@ namespace mmi {
 	{
 	private:
 		indexed_multimemory_ *Multimemoire_;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 	protected:
-		// Déportée.
+		// Dporte.
 		virtual void MDRStore(
 			const mdr::datum__ *Buffer,
 			mdr::size__ Amount,
 			mdr::row_t__ Position );
-		// Déportée.
+		// Dporte.
 		virtual void MDRAllocate( mdr::size__ Capacity );
 	public:
 		indexed_multimemory_driver__( void )
@@ -178,7 +178,7 @@ namespace mmi {
 	{
 	private:
 		const indexed_multimemory_ *Multimemoire_;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 	public:
 		const_indexed_multimemory_driver__( void	)
 		: _base_indexed_multimemory_driver__( Multimemoire_ ) {}
@@ -264,7 +264,7 @@ namespace mmi {
 		{
 			Multimemoire.Read( Descripteurs(*Index).Descripteur, Position, Taille, Tampon, Descripteurs(*Index).Addendum );
 		}
-		// place dans 'Tampon' 'Taille' octets, à partir de 'Position', de l'objet 'Index'
+		// place dans 'Tampon' 'Taille' octets,  partir de 'Position', de l'objet 'Index'
 		void Ecrire_(
 			const mdr::datum__ *Tampon,
 			mdr::size__ Taille,
@@ -273,7 +273,7 @@ namespace mmi {
 		{
 			Multimemoire.Write( Tampon, Taille, Descripteurs(*Index).Descripteur, Position, Descripteurs(*Index).Addendum );
 		}
-		// écrit à 'Position' de l'objet 'Index' 'Taille' octets de 'Tampon'
+		// crit  'Position' de l'objet 'Index' 'Taille' octets de 'Tampon'
 		void Allouer_(
 			index__ Index,
 			mdr::size__ Nombre )
@@ -298,12 +298,12 @@ namespace mmi {
 
 			Descripteurs.Store( D, *Index );
 		}
-		// libère la mémoire d'index 'Index'
+		// libre la mmoire d'index 'Index'
 	public:
 		descriptors_ Descripteurs;
-		// les différents descripteurs
+		// les diffrents descripteurs
 		mmm::multimemory_ Multimemoire;
-		// la memoire générale
+		// la memoire gnrale
 		struct s
 		{
 			descriptors_::s Descripteurs;
@@ -313,7 +313,7 @@ namespace mmi {
 		: Descripteurs( S.Descripteurs ),
 		  Multimemoire( S.Multimemoire )
 		{}
-		// préparation
+		// prparation
 		void reset( bool P = true )
 		{
 			Descripteurs.reset( P );
@@ -516,7 +516,7 @@ namespace mmi {
 
 			return State;
 		}
-		uym::state__ Bind( void )	// A appeler seulement aprés 'Plug(...)'.
+		uym::state__ Bind( void )	// A appeler seulement aprs 'Plug(...)'.
 		{
 			uym::state__ State = _Descriptors.Bind();
 

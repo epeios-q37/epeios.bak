@@ -64,9 +64,9 @@ using namespace dbsidx;
 // #define ROOT_FILE_NAME_EXTENSION	".edr"
 
 #define MEMORY_REINDEXATION_LIMIT	10000000
-/* Limite du nombre d'neregistrement au-delà de laquelle on utilise 
-directement l'index sur le disque et non pas une copie temporaire en mémoire
-pour éviter la mise en oeuvre de la mémoire virtuelle. */
+/* Limite du nombre d'neregistrement au-del de laquelle on utilise 
+directement l'index sur le disque et non pas une copie temporaire en mmoire
+pour viter la mise en oeuvre de la mmoire virtuelle. */
 
 #define RECORD_PANEL_SIZE		50000	// Nombre d'enregistrements par tranche.
 
@@ -171,7 +171,7 @@ ERRBegin
 			case bStopIfOneChildMissing:
 				if ( !Seeker.HasLesser() || !Seeker.HasGreater() )
 					Row = NONE;	// Popur sortir de la boucle.
-				else if ( *Row & 1 )	// Petit générateur aléatoire (sans doute inutile ?).
+				else if ( *Row & 1 )	// Petit gnrateur alatoire (sans doute inutile ?).
 					Row = Seeker.SearchLesser();
 				else
 					Row = Seeker.SearchGreater();
@@ -349,7 +349,7 @@ ERRBegin
 			Extremities->Smallest = Row;
 		S_.Root = BaseIndex.BecomeLesser( Row, TargetRow, S_.Root );
 		break;
-	case 0:	// Pas de problème avec la gestion des 'extremities', 
+	case 0:	// Pas de problme avec la gestion des 'extremities', 
 		if ( !BaseIndex.TreeHasLesser( TargetRow ) )
 			S_.Root = BaseIndex.BecomeLesser( Row, TargetRow, S_.Root );
 		else if ( !BaseIndex.TreeHasGreater( TargetRow ) )
@@ -371,7 +371,7 @@ ERRBegin
 
 #ifdef DBSIDX_DBG
 	if ( ( Round > 32 ) || ( ( 2UL << ( Round >> 1 ) ) > _Content( true ).Amount() ) )
-		S_.Root = S_.Root;	// Juste pour pouvoir placer un point d'arrêt.
+		S_.Root = S_.Root;	// Juste pour pouvoir placer un point d'arrt.
 #endif
 
 #ifdef DBSIDX_DBG

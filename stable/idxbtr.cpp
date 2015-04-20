@@ -58,7 +58,7 @@ public:
 namespace idxbtr {
 
 	/* structure de description d'un arbre.
-	Est utilisé lors du rééquilibrage d'un arbre. Usage interne. */
+	Est utilis lors du rquilibrage d'un arbre. Usage interne. */
 	struct desc__
 	{
 		// Racine de l'arbre. N'a pas de fils droit. L'arbre de fils gauche est complet.
@@ -101,8 +101,8 @@ namespace idxbtr {
 		return Root;
 	}
 
-	/* Equilibre l'arbre, sachant que l'ordre des éléments est donnée par
-	la file 'File' de tête 'Tete' et que l'on doit utiliser la pile 'Pile'. */
+	/* Equilibre l'arbre, sachant que l'ordre des lments est donne par
+	la file 'File' de tte 'Tete' et que l'on doit utiliser la pile 'Pile'. */
 	sdr::row_t__ Equilibrer_(
 		E_IBTREE_ &Tree,
 		const que::E_QUEUE_ &File,

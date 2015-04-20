@@ -65,7 +65,7 @@ using nsxpcm::event__;
 void xulfeh::window_eh__::NSXPCMOnEvent( event__ )
 {
 	Trunk().Exit();
-	EventData().EventPreventDefault();	// Si l'application doit effectivement être fermée, ce sera fait par la fonctions précédente; inutile de poursuivre la prodédure de fermeture.
+	EventData().EventPreventDefault();	// Si l'application doit effectivement tre ferme, ce sera fait par la fonctions prcdente; inutile de poursuivre la proddure de fermeture.
 }
 #endif
 
@@ -181,7 +181,7 @@ ERREpilog
 void xulfeh::m::exit__::NSXPCMOnEvent( event__ )
 {
 	Trunk().Exit();
-	EventData().EventPreventDefault();	// Si l'application doit effectivement être fermée, ce sera fait par la fonctions précédente; inutile de poursuivre la prodédure de fermeture.
+	EventData().EventPreventDefault();	// Si l'application doit effectivement tre ferme, ce sera fait par la fonctions prcdente; inutile de poursuivre la proddure de fermeture.
 }
 
 void xulfeh::m::about__::NSXPCMOnEvent( event__ )

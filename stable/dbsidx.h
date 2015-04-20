@@ -108,7 +108,7 @@ namespace dbsidx {
 		}
 	};
 
-	// Pour idiquer le comportement d'un "seek' lorsqu'il tombe sur un élément qu est égal à celui recherché.
+	// Pour idiquer le comportement d'un "seek' lorsqu'il tombe sur un lment qu est gal  celui recherch.
 	enum behavior__ {
 		// On stoppe la recherche.
 		bStop,
@@ -125,7 +125,7 @@ namespace dbsidx {
 		class observer_functions__
 	{
 	private:
-		// Durée entre deuw appels en ms.
+		// Dure entre deuw appels en ms.
 		time_t _Delay;
 		bso::ulong__ _HandledIndexAmount, _TotalIndexAmount;
 	protected:
@@ -138,14 +138,14 @@ namespace dbsidx {
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Delay = 1000;	// Délai par défaut : 1 s.
+			_Delay = 1000;	// Dlai par dfaut : 1 s.
 			_TotalIndexAmount = _HandledIndexAmount = 0;
 		}
 		observer_functions__( void )
 		{
 			reset( false );
 		}
-		void Init( time_t Delay = 1000 )	// Délai par défaut : 1 s.
+		void Init( time_t Delay = 1000 )	// Dlai par dfaut : 1 s.
 		{
 			reset();
 
@@ -178,11 +178,11 @@ namespace dbsidx {
 	protected:
 		virtual void DBSBSCCompleteInitialization( bso::bool__ )
 		{
-			// Rien à faire.
+			// Rien  faire.
 		}
 		virtual void DBSBSCErasePhysically( void )
 		{
-			// Rien à faire.
+			// Rien  faire.
 		}
 	private:
 		bso::sign__ _Seek(
@@ -244,7 +244,7 @@ namespace dbsidx {
 
 			_file_features_::reset( P );
 		}
-		E_VDTOR( index_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe héritante.
+		E_VDTOR( index_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe hritante.
 		void plug( mmm::E_MULTIMEMORY_ &MM )
 		{
 			BaseIndex.plug( MM );
@@ -293,7 +293,7 @@ namespace dbsidx {
 		}
 		bso::ubyte__ Index(
 			rrow__ Row,
-			extremities__ *Extremities,	// Si à 'true', compare d'abord avec les extrémités. Utilisé pour la réindexation.
+			extremities__ *Extremities,	// Si  'true', compare d'abord avec les extrmits. Utilis pour la rindexation.
 			dbsctt::_cache_ &Cache  = *(dbsctt:: _cache_ *)NULL );	// Retourne le nombre de noeuds parcourus pour cette indexation.
 		void Delete( rrow__ Row )
 		{
@@ -309,7 +309,7 @@ namespace dbsidx {
 			const datum_ &Datum,
 			behavior__ EqualBehavior,
 			skip_level__ SkipLevel,
-			bso::sign__ &Sign ) const;	// Retourne l'élément le plus proche, même si 
+			bso::sign__ &Sign ) const;	// Retourne l'lment le plus proche, mme si 
 		rrow__ StrictSeek(
 			const datum_ &Datum,
 			behavior__ EqualBehavior,
@@ -437,7 +437,7 @@ namespace dbsidx {
 
 	E_AUTO( index )
 
-	// 'index' stockés dans des fichiers.
+	// 'index' stocks dans des fichiers.
 
 	class exploded_index_
 	: public index_
@@ -480,7 +480,7 @@ namespace dbsidx {
 		{
 			idxbtq::index_file_manager___ FileManager;
 			str::string_::s RootFileName;
-			bso::bool__ Erase;	// Seulement utile lors d'uen initialisation retardée.
+			bso::bool__ Erase;	// Seulement utile lors d'uen initialisation retarde.
 			mdr::mode__ Mode;
 		} &S_;
 		exploded_index_( s &S )
@@ -506,7 +506,7 @@ namespace dbsidx {
 		}
 		void plug( mmm::E_MULTIMEMORY_ & )
 		{
-			ERRu();	// Cette méthode n'a pas de sens dans ce contexte.
+			ERRu();	// Cette mthode n'a pas de sens dans ce contexte.
 		}
 		exploded_index_ &operator =( const exploded_index_ &XI )
 		{

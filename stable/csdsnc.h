@@ -78,7 +78,7 @@ extern class ttr_tutor &CSDSNCTutor;
 #	include "mtx.h"
 #endif
 
-#define CSDSNC_PING_RESOLUTION	( 2 * 1000 )	// Résolution du délai d'inactivité donnée pour les 'ping's.
+#define CSDSNC_PING_RESOLUTION	( 2 * 1000 )	// Rsolution du dlai d'inactivit donne pour les 'ping's.
 
 #define CSDSNC_DEFAULT_CACHE_SIZE	100
 
@@ -183,8 +183,8 @@ ERREpilog
 				mutex__ Mutex;
 			} Log;
 			struct ping__ {
-				bso::uint__ Delay;	// Délai maximum d'inactivité.
-				mutex__ Mutex;	// Pour signaler et attendre la terminaison du 'thread' dédié au 'ping'.
+				bso::uint__ Delay;	// Dlai maximum d'inactivit.
+				mutex__ Mutex;	// Pour signaler et attendre la terminaison du 'thread' ddi au 'ping'.
 			} Ping;
 			flows_::s Flows;
 		} &S_;
@@ -330,7 +330,7 @@ ERREpilog
 
 			_Log( lRelease, Flow );
 		}
-		void Ping( void );	// Emet un 'ping' sur les connections restée inactives trop longtemps.
+		void Ping( void );	// Emet un 'ping' sur les connections reste inactives trop longtemps.
 	};
 
 	E_AUTO( core );

@@ -1,5 +1,5 @@
 # 'edbpck' Project
-#    by Claude SIMON (http://zeusw.org/intl/contact.html).
+#    by Claude SIMON (http://q37.info/contact/).
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
@@ -33,14 +33,14 @@ copt += -DE_DEBUG
 mods += ags aem bch bitbch bso 
 mods += cpe crptgr ctn dir dte 
 mods += dtfbsc dtfptb epsmsc err fdr 
-mods += flf fls flw flx ias 
+mods += flf flsq flw flx ias 
 mods += ids iof iop lst lstbch 
-mods += lstctn mns que sdr stk 
-mods += str strng tol ttr txf 
-mods += tys uys utf xtf cio 
-mods += bom cdgb64 fil fnm lcl 
-mods += rgstry stsfsm xml xpp clnarg 
-mods += llio 
+mods += lstctn mns ntvstr que sdr 
+mods += stk str strng tagsbs tol 
+mods += ttr txf tys uys utf 
+mods += xtf cio tht bomhdl cdgb64 
+mods += fil fnm lcl rgstry stsfsm 
+mods += xml xpp llio 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += dbpals dbpbsc dbpctx dbprcd dbptbl 
 mods += registry 
@@ -107,7 +107,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+	co += -fpermissive
 endif
 
 #########################
@@ -124,9 +124,9 @@ endif
 #############################
 	
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -158,7 +158,7 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -DCYGWIN
+	co += -std=gnu++11 -DCYGWIN
 	
 	LDFLAGS += -static
 
@@ -175,7 +175,9 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	target=$(name)
+	target=$(name).exe
+
+	dest=/cygdrive/h/bin/
 
 endif
 
@@ -188,7 +190,7 @@ endif
 
 ifeq ("$(os)", "$(MinGW)")
 
-	co += -DMSYS
+	co += -DMSYS -std=gnu++11
 	
 	mods += $(wmods)
 
@@ -204,7 +206,9 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	target=$(name)
+	target=$(name).exe
+
+	dest=/h/bin/
 endif
 
 #########################
@@ -216,9 +220,12 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 
+	co += -std=gnu++11
 	co += -DGNULINUX
 	
 	mods += $(pmods)
+	
+	libs += -lpthread -ldl -lrt
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -230,14 +237,16 @@ ifeq ("$(os)","$(GNULinux)")
 		endif
 	endif
 	target=$(name)
+
+	dest=/home/csimon/bin/
 endif
 
 #############################
 		
 
-#############################
-# For GNU/Linux environment #
-#############################
+#########################
+# For Linux environment #
+#########################
 
 ifeq ("$(os)","$(Linux)")
 
@@ -245,6 +254,8 @@ ifeq ("$(os)","$(Linux)")
 	
 	mods += $(pmods)
 
+	libs += -lpthread -ldl -lrt
+	
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
 		lo += -m32
@@ -266,6 +277,7 @@ endif
 
 ifeq ("$(os)","$(MacOS)")
 
+	co += -std=gnu++11
 	co += -DDARWIN
 	
 	mods += $(pmods)
@@ -282,6 +294,8 @@ ifeq ("$(os)","$(MacOS)")
 		endif
 	endif
 	target=$(name)
+
+	dest=/Users/csimon/bin/
 
 endif
 
@@ -313,7 +327,11 @@ lo += -o $(target) $(objs)
 objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(target): $(objs)
-	$(CXX) $(LDFLAGS) $(lo) $(libs)
+	$(CXX) $(lo) $(libs) $(LDFLAGS)
+ifdef EPEIOS_SRC
+	mkdir -p $(dest)
+	cp $(target) $(dest)
+endif
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

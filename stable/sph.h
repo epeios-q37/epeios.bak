@@ -175,7 +175,7 @@ private:
 #ifdef SPH__CUSTOM
 	// Compteur du nombre de demande.
 	sph__counter *Compteur_;
-	// Retourne vrai si le sémaphore nous a été attribué, faux sinon.
+	// Retourne vrai si le smaphore nous a t attribu, faux sinon.
 	bool AllouerSemaphore_( void )
 	{
 		if ( *Compteur_ != 0 )
@@ -191,7 +191,7 @@ private:
 		else
 			return true;
 	}
-	// Boucle jusqu'à ce que le sémaphore indique la disponibilité.
+	// Boucle jusqu' ce que le smaphore indique la disponibilit.
 	void AttendreDisponibilite_( void );
 #elif defined( SPH__UNIX_LIKE ) || defined( CPE__BEOS )
 	sph__desc Descripteur_;

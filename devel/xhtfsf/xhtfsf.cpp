@@ -32,7 +32,7 @@ void xhtfsf::GetContent(
 	xhtagent::agent_core___ &Agent,
 	xml::writer_ &Writer)
 {
-	// Rien à fournir.
+	// Rien  fournir.
 }
 
 static frdbse::backend_type__ GetBackendType_( xhtagent::agent_core___ &Agent )

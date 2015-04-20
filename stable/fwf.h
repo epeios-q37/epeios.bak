@@ -142,7 +142,7 @@ namespace fwf {
 			break;
 		}
 
-		return FWF_NO_MUTEX;	// Pour éviter un 'warning'.
+		return FWF_NO_MUTEX;	// Pour viter un 'warning'.
 	}
 
 
@@ -191,7 +191,7 @@ namespace fwf {
 	class iflow_functions_base___
 	{
 	private:
-		mutex__ _Mutex;	// Mutex pour protèger la ressource.
+		mutex__ _Mutex;	// Mutex pour protger la ressource.
 		datum__ *_Cache;
 		size__ _Size;
 		size__ _Available;
@@ -220,10 +220,10 @@ namespace fwf {
 				ERRc();
 #endif
 			_Position = 1;
-			_Available = FWFRead( _Size - 1, _Cache + 1 );	// On laisse un octet de libre au début pour un éventuel 'Unget(...)'.
+			_Available = FWFRead( _Size - 1, _Cache + 1 );	// On laisse un octet de libre au dbut pour un ventuel 'Unget(...)'.
 		}
 	protected:
-		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donnée n'est disponibe.
+		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donne n'est disponibe.
 		virtual size__ FWFRead(
 			size__ Maximum,
 			datum__ *Buffer ) = 0;
@@ -309,7 +309,7 @@ namespace fwf {
 				_Position = 1;
 
 			if ( _Position == 0 )
-				ERRu();	// Appeler 'Unget(...)' deux fois de suite (ou seulement avec des 'View(...)' entre) n'est pas conseillé.
+				ERRu();	// Appeler 'Unget(...)' deux fois de suite (ou seulement avec des 'View(...)' entre) n'est pas conseill.
 
 			_Cache[--_Position] = Datum;
 			_Available++;
@@ -328,7 +328,7 @@ namespace fwf {
 	: public iflow_functions_base___
 	{
 	private:
-		datum__ _Cache[cache_size+1];	// '+1' pour gèrer le 'Unget()'.
+		datum__ _Cache[cache_size+1];	// '+1' pour grer le 'Unget()'.
 	public:
 		void Init( thread_safety__ ThreadSafety )
 		{
@@ -339,8 +339,8 @@ namespace fwf {
 	class oflow_functions_base___
 	{
 	private:
-		mutex__ _Mutex;	// Mutex pour protèger la ressource.
-		bso::bool__ _Initialized;	// Pour éviter des 'pure virtual function call'.
+		mutex__ _Mutex;	// Mutex pour protger la ressource.
+		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
 		void _Lock( void )
 		{
 			Lock_( _Mutex );
@@ -356,7 +356,7 @@ namespace fwf {
 			}
 		}
 	protected:
-		// Retourne le nombre d'octets effectivement écrits. Ne retourne '0' que si plus aucune donnée ne peut être écrite.
+		// Retourne le nombre d'octets effectivement crits. Ne retourne '0' que si plus aucune donne ne peut tre crite.
 		virtual size__ FWFWrite(
 			const datum__ *Buffer,
 			size__ MAximum ) = 0;
@@ -411,7 +411,7 @@ namespace fwf {
 		}
 	};
 
-	// Uniquement pour avoir une symétrie par rapport à 'iflow_functions___'.
+	// Uniquement pour avoir une symtrie par rapport  'iflow_functions___'.
 	template <int Dummy = 0> class oflow_functions___
 	: public oflow_functions_base___
 	{
@@ -419,7 +419,7 @@ namespace fwf {
 		oflow_functions___( void )
 		{
 			if ( Dummy != 0 )	
-				ERRu();	// 'Dummy' n'étant pas utilisé, rien ne sert de modifier sa valeur.
+				ERRu();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 		}
 	};
 

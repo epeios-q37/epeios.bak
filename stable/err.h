@@ -34,10 +34,10 @@
 // ERRor
 
 /*
-	NOTA : Quelque soit le mode dans lequel est compilé un exécutable (programme ou bibliothèque dynamique),
-	ce module est TOUJOURS compilé en mode 'thread safe', du fait que, même si un exécutable est 'mono-threading',
-	les bibliothèques dynamiques auxquelles il peut éventuellement recourir ('plugin', p. ex.) peuvent, elles,
-	être 'multi-threading', et comme elles partagent le même objet 'error' ...
+	NOTA : Quelque soit le mode dans lequel est compil un excutable (programme ou bibliothque dynamique),
+	ce module est TOUJOURS compil en mode 'thread safe', du fait que, mme si un excutable est 'mono-threading',
+	les bibliothques dynamiques auxquelles il peut ventuellement recourir ('plugin', p. ex.) peuvent, elles,
+	tre 'multi-threading', et comme elles partagent le mme objet 'error' ...
 */
 
 # include <stdio.h>
@@ -54,7 +54,7 @@
 # include "cpe.h"
 
 #  include "tht.h"
-// Prédéclaration.
+// Prdclaration.
 namespace mtx {
 	struct _mutex__;
 }
@@ -64,26 +64,26 @@ namespace err {
 
 	enum handling__ {
 		hThrowException,	// Une erreur provoque une exception.
-		hUserDefined,		// Le traitement de l'erreur est à la charge de l'utilisateur.
+		hUserDefined,		// Le traitement de l'erreur est  la charge de l'utilisateur.
 		h_amount,
 		h_Undefined,
-		h_Default = hThrowException	// Comportement par défaut.
+		h_Default = hThrowException	// Comportement par dfaut.
 	};
 
 	enum type {
 		tAllocation,	// (ERRAlc) Echec d'une allocation de RAM.
-		tSystem,		// (ERRSys) Dysfonctionnemnt du système (échec d'une opération qui n'aurait pas dû échouer, ou valeur incohérente retournée par une fonction ).
-		tVacant,		// (ERRVct) Appel à une fonctionnalité absente (à priori non encore implémentée).	
-		tLimitation,	// (ERRLmt) Dépassement d'une limite.
-		tData,			// (ERRDta) Incohérence dans le nombre ou le contenu d'un ensemble de données.
-		tFramework,		// (ERRFwk) Incohérence dans l'utilsation faite du 'framework'.
-		tParameters,	// (ERRPrm) Incohérence dans les paramètres passées à une méthode/fonction du 'framework'.
-		tForbidden,		// (ERRFbd) Appel d'une fonctionnalité non autorisée.
-		tLibrary,		// (ERRLbr) Une fonction d'une bibliothèque système a retournée une erreur.
-		tChecker,		// (ERRChk) Un test de contrôle a échoué.
+		tSystem,		// (ERRSys) Dysfonctionnemnt du systme (chec d'une opration qui n'aurait pas d chouer, ou valeur incohrente retourne par une fonction ).
+		tVacant,		// (ERRVct) Appel  une fonctionnalit absente ( priori non encore implmente).	
+		tLimitation,	// (ERRLmt) Dpassement d'une limite.
+		tData,			// (ERRDta) Incohrence dans le nombre ou le contenu d'un ensemble de donnes.
+		tFramework,		// (ERRFwk) Incohrence dans l'utilsation faite du 'framework'.
+		tParameters,	// (ERRPrm) Incohrence dans les paramtres passes  une mthode/fonction du 'framework'.
+		tForbidden,		// (ERRFbd) Appel d'une fonctionnalit non autorise.
+		tLibrary,		// (ERRLbr) Une fonction d'une bibliothque systme a retourne une erreur.
+		tChecker,		// (ERRChk) Un test de contrle a chou.
 		t_amount,
 		t_None,			// Signale l'absence d'erreur.
-		t_Free,			// (ERRFree) Pas une erreur au sens propre. Permet de profiter du mécanisme de gestion d'erreur.
+		t_Free,			// (ERRFree) Pas une erreur au sens propre. Permet de profiter du mcanisme de gestion d'erreur.
 		t_Return,		// Facilite la gestion d'un 'ERRReturn'.
 		t_Abort,		// Facilite la gestion d'un 'ERRAbort()'.
 		t_Undefined
@@ -192,13 +192,13 @@ namespace err {
 # else
 
 #  define ERRProlog	bso::bool__ ERRNoError = true; {
-// précède les déclarations
+// prcde les dclarations
 #  define ERRBegin	try {
-// précède les instructions proprement dites
+// prcde les instructions proprement dites
 #  define ERRErr		} catch ( err::err___ ) { ERRNoError = false;
-// précède les instructions à effectuer lors d'une erreur
+// prcde les instructions  effectuer lors d'une erreur
 #  define ERREnd		}
-// précède les instructions à exécuter, erreur ou pas
+// prcde les instructions  excuter, erreur ou pas
 #  define ERRCommonEpilog	}
 // boucle la partie de traitement d'erreur
 
@@ -249,13 +249,13 @@ namespace err {
 # define ERRHit()	( ERRType != err::t_None )
 
 
-// Similaire à un simple 'return', mais dans une section surveillé ('ERRBegin'...'ERRErr'; un simple 'return' poserait problème dans une telle section).
+// Similaire  un simple 'return', mais dans une section surveill ('ERRBegin'...'ERRErr'; un simple 'return' poserait problme dans une telle section).
 # define ERRReturn		ERRCommon( err::t_Return )
 
-// Interruption de l'action en cours. Utilisé avec un gestionnaire d'interface évennementielle, pour revenir rapîdement à la boucle d'attente.
+// Interruption de l'action en cours. Utilis avec un gestionnaire d'interface vennementielle, pour revenir rapdement  la boucle d'attente.
 # define ERRAbort()		ERRCommon( err::t_Abort )
 
-// Pour profiter du mécanisme de gestion d'erreur, sans qu'il n'y ai réellement une erreur dans le sens de cette bibliothèque.
+// Pour profiter du mcanisme de gestion d'erreur, sans qu'il n'y ai rellement une erreur dans le sens de cette bibliothque.
 # define ERRFree()		ERRCommon( err::t_Free )
 }
 

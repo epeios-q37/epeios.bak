@@ -95,7 +95,7 @@ void tht::Suspend( unsigned long Delay )
 void tht::Defer( void )
 {
 #ifdef THT__WIN
-	Sleep( 0 );	// PAs 0, sinon l'usage CPU monte à 100%
+	Sleep( 0 );	// PAs 0, sinon l'usage CPU monte  100%
 #elif defined( THT__POSIX )
 	if( sched_yield() != 0 )
 		ERRLbr();

@@ -100,9 +100,9 @@ namespace csdebd {
 
 			_Row = _Read.Next( _Row, Maximum );
 
-/* Concernant GESBIB, si l'on enlève le bloc ci-dessous, le logiciel est susceptible de se planter lorsque l'on manipule
-une requête de manière trés intense (bombardage de 'push' 'join'). C'est comme si le 'Dismiss()' n'était pas lancé correctement. */
-// Début bloc.
+/* Concernant GESBIB, si l'on enlve le bloc ci-dessous, le logiciel est susceptible de se planter lorsque l'on manipule
+une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si le 'Dismiss()' n'tait pas lanc correctement. */
+// Dbut bloc.
 			if ( _Row == NONE )
 				_Read.Init();
 // Fin bloc.

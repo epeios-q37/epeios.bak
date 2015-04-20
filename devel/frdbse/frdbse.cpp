@@ -43,7 +43,7 @@ const char *frdbse::GetLabel( project_type__ ProjectType )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 static stsfsm::automat ProjectAutomat_;
@@ -74,7 +74,7 @@ const char *frdbse::GetLabel( backend_type__ BackendType )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 static stsfsm::automat BackendAutomat_;

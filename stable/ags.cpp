@@ -55,7 +55,7 @@ void aggregated_storage_driver__::SDRRecall(
 {
 	_AStorage->Read( _Descriptor, Position, Amount, Buffer );
 }
-// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
+// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
 void aggregated_storage_driver__::SDRStore(
 	const sdr::datum__ *Buffer,
 	sdr::size__ Amount,

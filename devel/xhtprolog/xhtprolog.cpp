@@ -32,7 +32,7 @@ void xhtprolog::GetContent(
 	xhtagent::agent___ &Agent,
 	xml::writer_ &Writer)
 {
-	// Rien à fournir.
+	// Rien  fournir.
 }
 
 static frdbse::project_type__ GetProjectType_( xhtagent::agent___ &Agent )

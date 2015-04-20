@@ -86,9 +86,9 @@ namespace mscmdm {
 
 	using flw::size__;
 
-	// Autres données associées aux évènements.
+	// Autres donnes associes aux vnements.
 	enum extraneous__ {
-		// Pas d'autres données.
+		// Pas d'autres donnes.
 		xNone,
 		// 'Delta time ticks'.
 		xTicks,

@@ -37,7 +37,7 @@
 # include "flw.h"
 # include "sdr.h"
 # include "txf.h"
-// # include "uys.h"	// déporté, parce 'ags.h' est inclus par 'uys.h'.
+// # include "uys.h"	// dport, parce 'ags.h' est inclus par 'uys.h'.
 
 # ifdef UYS__INC
 #  ifndef UYS__HEADER_HANDLED
@@ -72,21 +72,21 @@ namespace ags {
 	{
 	private:
 		descriptor__ &_Descriptor;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 		class aggregated_storage_ *_AStorage;
 		void _Free( void );
 	protected:
 		virtual void SDRAllocate( sdr::size__ Size );
-		// Fonction déportée.
+		// Fonction dporte.
 		virtual sdr::size__ SDRSize( void ) const;
-		// fonction déportée
-		// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
+		// fonction dporte
+		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
 		virtual void SDRRecall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
 			sdr::datum__ *Buffer );
-		// fonction déportée
-		// écrit 'Nombre' octets à la position 'Position'
+		// fonction dporte
+		// crit 'Nombre' octets  la position 'Position'
 		virtual void SDRStore(
 			const sdr::datum__ *Buffer,
 			sdr::size__ Amount,
@@ -102,7 +102,7 @@ namespace ags {
 
 			E_SDRIVER__::reset( P );
 
-			// On ne touche ni à '_Descriptor', ni à '_Addendum' car ils sont gèrés extèrieurement (ce sont des références).
+			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		aggregated_storage_driver__( descriptor__ &Descriptor )
 		: _Descriptor( Descriptor ),
@@ -118,7 +118,7 @@ namespace ags {
 			_AStorage = &AStorage;
 			E_SDRIVER__::Init();
 
-			// On ne touche ni à '_Descriptor', ni à '_Addendum' car ils sont gèrés extèrieurement (ce sont des références).
+			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		descriptor__ Descriptor( void ) const
 		{
@@ -150,10 +150,10 @@ namespace ags {
 	/*
 	NOTA :
 	- Par 'Size', on entend : 
-		- pour les fragments occupés ('used'), la taille disponible pour les données, et non pas la taille totale occupée par le fragment,
+		- pour les fragments occups ('used'), la taille disponible pour les donnes, et non pas la taille totale occupe par le fragment,
 		- pour les fragments libres ('free'), la taille totale du fragment.
-	- Un descripteur ('descriptor__') pointe sur le début des données. Les métadonnées sont situées juste avant. Seuls les fragment occupés ('used') ont un descripteur.
-	- Une 'Value' est une donnée brute, sans ajustement, telle que stockée.
+	- Un descripteur ('descriptor__') pointe sur le dbut des donnes. Les mtadonnes sont situes juste avant. Seuls les fragment occups ('used') ont un descripteur.
+	- Une 'Value' est une donne brute, sans ajustement, telle que stocke.
 	*/		
 
 
@@ -185,34 +185,34 @@ namespace ags {
 		/*
 		Statut du fragment : 
 			- 0 : libre ('free'),
-			- 1 : occupé ('used').
+			- 1 : occup ('used').
 		*/
 		fpStatus,
 		/*
-		- Pour n'importe quel type de fragment (libre ou occupé), s'il est en première position, statut du fragment en dernière position :
-		- Pour un fragment occupé, s'il n'est pas en première position, statut de son prédecesseur :
+		- Pour n'importe quel type de fragment (libre ou occup), s'il est en premire position, statut du fragment en dernire position :
+		- Pour un fragment occup, s'il n'est pas en premire position, statut de son prdecesseur :
 			- 0 : libre ('free'),
-			- 1 : occupé ('used').
-		Pour un fragment libre, non situé en première position, n'a pas de signification (les fragments libres étant toujours fusionnés,
-		le fragment précédent un fragment libre est toujours un fragment occupé).
+			- 1 : occup ('used').
+		Pour un fragment libre, non situ en premire position, n'a pas de signification (les fragments libres tant toujours fusionns,
+		le fragment prcdent un fragment libre est toujours un fragment occup).
 		*/
 		fpPredecessorStatus,
 		/*
-			Les 5 bits qui suivent contiennent la taille (-1) du fragment lorsqu'elle est suffisament petit pour y être contenue
+			Les 5 bits qui suivent contiennent la taille (-1) du fragment lorsqu'elle est suffisament petit pour y tre contenue
 			(elle est alors dite 'embedded') et qu'il s'agit d'un fragment libre (free).
 		*/
 		fp_SizeBegin,
 		fp_SizeEnd = 6,
 		/*
 			Type de la taille :
-				- 0 : longue (dynamique, 'long'), elle est stockée dans les octets qui suivent (nombre d'octets variables).
+				- 0 : longue (dynamique, 'long'), elle est stocke dans les octets qui suivent (nombre d'octets variables).
 				- 1 : courte ('short') dans le 'header' (taille - 1).
 
-			Pour des raisons de simplification, lorsque ce bit est à 1 pour un fragment libre, alors la taille de ce fragment est
-			de 1. Lorsque la taille d'un fragment libre est > 1, alors elle est stockée de manière dynamique.
+			Pour des raisons de simplification, lorsque ce bit est  1 pour un fragment libre, alors la taille de ce fragment est
+			de 1. Lorsque la taille d'un fragment libre est > 1, alors elle est stocke de manire dynamique.
 
-			Ce bit sert également de marqueur (lorsqu'il est à 0) pour signaler que l'on est sur l'octet précédent le premier
-			d'une taille dynamique. Le 7ème bit du dernier octet d'une taille dynamique est toujours à 0. Les autres ont leur 7ème bits à 1.
+			Ce bit sert galement de marqueur (lorsqu'il est  0) pour signaler que l'on est sur l'octet prcdent le premier
+			d'une taille dynamique. Le 7me bit du dernier octet d'une taille dynamique est toujours  0. Les autres ont leur 7me bits  1.
 		*/
 		fpSizeType = 7,
 		fp_amount
@@ -226,7 +226,7 @@ namespace ags {
 	};
 
 # define AGS_HEADER_SIZE			sizeof( ags::header__ )
-# define AGS__HEADER_SIZE			1	// Lorsque cette valeur change, permet de détecter le code qu'il faut modifier.
+# define AGS__HEADER_SIZE			1	// Lorsque cette valeur change, permet de dtecter le code qu'il faut modifier.
 # define AGS_EMBEDDED_VALUE_MAX		( (bso::u8__)~ags::f_All >> ags::fp_SizeBegin )
 # define AGS_SHORT_SIZE_MAX			( AGS_EMBEDDED_VALUE_MAX + 1 )
 # define AGS_LONG_SIZE_SIZE_MAX		sizeof( bso::dint__ )
@@ -325,7 +325,7 @@ namespace ags {
 			break;
 		}
 
-		return 0;	// Pour éviter un 'Warning'.
+		return 0;	// Pour viter un 'Warning'.
 	}
 
 	inline void Display(
@@ -491,7 +491,7 @@ namespace ags {
 			break;
 		}
 
-		return 0;	// Pour éviter un 'warning'.
+		return 0;	// Pour viter un 'warning'.
 	}
 
 	inline value__ ConvertFreeFragmentShortSizeToValue( size__ Size )
@@ -499,7 +499,7 @@ namespace ags {
 		if ( !IsFreeFragmentSizeShortSuitable( Size ) )
 			ERRPrm();
 
-		return 0;	// Pour un fragment libre, seule une taille de 1 peut être convertit en 'short'.
+		return 0;	// Pour un fragment libre, seule une taille de 1 peut tre convertit en 'short'.
 	}
 
 	inline value__ ConvertUsedFragmentShortSizeToValue( size__ Size )
@@ -526,7 +526,7 @@ namespace ags {
 			break;
 		}
 
-		return 0;	// Pour éviter un 'warning'.
+		return 0;	// Pour viter un 'warning'.
 	}
 
 	inline void SetEmbeddedValue(
@@ -584,7 +584,7 @@ namespace ags {
 				break;
 			}
 
-			return 0;	// Pour éviter un 'warning'.
+			return 0;	// Pour viter un 'warning'.
 		}
 		size__ MetaDataSize( void ) const
 		{
@@ -679,7 +679,7 @@ namespace ags {
 		return Buffer + 1;
 	}
 
-	// Caratéristiques d'un fragement libre ('free').
+	// Caratristiques d'un fragement libre ('free').
 	struct tracker__
 	{
 	public:
@@ -711,9 +711,9 @@ namespace ags {
 		}
 	};
 
-	// Récupère les méta-données dont 'Pointer' pointe sur le dernier octet.
+	// Rcupre les mta-donnes dont 'Pointer' pointe sur le dernier octet.
 	// Retourne la taille du 'xheader'.
-	// NOTA : La valeur retournée ainsi que le contenu de 'Header' sont à ignorer lorsque 'Pointer' pointe sur le dernier octet d'un fragment libre ('free').
+	// NOTA : La valeur retourne ainsi que le contenu de 'Header' sont  ignorer lorsque 'Pointer' pointe sur le dernier octet d'un fragment libre ('free').
 	inline size__ GetPriorMetaData(
 		const sdr::datum__ *Pointer,
 		status__ Status,
@@ -745,7 +745,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 	}
 
-	// Permet d'éviter d'avoir à récupèrer le 'header' équivalent à 'Row' de multiple fois.
+	// Permet d'viter d'avoir  rcuprer le 'header' quivalent  'Row' de multiple fois.
 	struct bundle__ {
 		sdr::row_t__ Row;
 		header__ Header;
@@ -782,9 +782,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			Storage.Store( Data, Size, Row );
 		}
-		// Récupère les méta-données placés juste avant 'Row'.
+		// Rcupre les mta-donnes placs juste avant 'Row'.
 		// Retourne la taille du 'xheader'
-		// NOTA : la valeur retournée ainsi que le contenu de 'Header' sont à ignorer lorsque 'Row' pointe juste aprés un fragment libre ('free').
+		// NOTA : la valeur retourne ainsi que le contenu de 'Header' sont  ignorer lorsque 'Row' pointe juste aprs un fragment libre ('free').
 		size__ _GetPriorMetaData(
 			sdr::row_t__ Row,
 			status__ Status,
@@ -857,7 +857,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		void _UpdatePredecessorStatus(
 			sdr::row_t__ Row,
-			status__ Status )	// Le statut du prédecesseur du premier fragment reflète le statut du dernier fragment.
+			status__ Status )	// Le statut du prdecesseur du premier fragment reflte le statut du dernier fragment.
 		{
 			header__ Header;
 
@@ -867,7 +867,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			_Set( Row, Header );
 		}
-		void _UpdateFirstFragmentPredecessorStatus( status__ Status )	// Le statut du prédecesseur du premier fragment reflète le statut du dernier fragment.
+		void _UpdateFirstFragmentPredecessorStatus( status__ Status )	// Le statut du prdecesseur du premier fragment reflte le statut du dernier fragment.
 		{
 			_UpdatePredecessorStatus( 0, Status );
 		}
@@ -970,16 +970,16 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			switch ( XHeader.FragmentSize() ) {
 			default:
-				// On écrit '0' pour que le marqueur précédent le début du 'long size' soit positionné (8ème bit à 0).
+				// On crit '0' pour que le marqueur prcdent le dbut du 'long size' soit positionn (8me bit  0).
 				_Write( (const sdr::datum__ *)"\x0", Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength() - 1, 1 );
 			case 3:
-				// Si l'on saute directement ici, le 8ème bit de l'octet précédent le début du 'long size' est à 0 parce qu'il s'agit du dernier octet d'un entier dynamique.
+				// Si l'on saute directement ici, le 8me bit de l'octet prcdent le dbut du 'long size' est  0 parce qu'il s'agit du dernier octet d'un entier dynamique.
 			case 2:
-				// Si l'on saute directement ici, le 8ème bit de l'octet précédent le début du 'long size' est à 0 parce qu'il s'agit du 'header' (fanion signalant un 'long size' lorsque à 0).
+				// Si l'on saute directement ici, le 8me bit de l'octet prcdent le dbut du 'long size' est  0 parce qu'il s'agit du 'header' (fanion signalant un 'long size' lorsque  0).
 				_Write( XHeader.DSizeBuffer(), Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength(), XHeader.DSizeBufferLength() );
 				break;
 			case 1:
-				// Dans ce cas, compte tenu de la taille du fragment, le 'tail meta data' est constitué du 'header' du 'head meta data'.
+				// Dans ce cas, compte tenu de la taille du fragment, le 'tail meta data' est constitu du 'header' du 'head meta data'.
 				break;
 			case 0:
 				ERRPrm();
@@ -1009,7 +1009,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		void _SetAsFreeFragment(
 			sdr::row_t__ Row,
 			sdr::size__ Size,
-			status__ PredecessorStatus )	// Si 'Row' != 0, alors ce paramètre n'est pas significatif.
+			status__ PredecessorStatus )	// Si 'Row' != 0, alors ce paramtre n'est pas significatif.
 		{
 			xsize__ XSize;
 
@@ -1023,7 +1023,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			bso::bool__ &UsingTail )
 		{
 			size__ TailAvailableSize = _GetTailFreeFragmentSize();
-			sdr::row_t__ Row = _Size() - TailAvailableSize;	// On stocke dans une variable, car '_Size()' est modifié par 'Allocate(...)'.
+			sdr::row_t__ Row = _Size() - TailAvailableSize;	// On stocke dans une variable, car '_Size()' est modifi par 'Allocate(...)'.
 
 			UsingTail = TailAvailableSize != 0;
 
@@ -1078,8 +1078,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 					Row = _GetTailFreeFragment();
 
 			if ( Row != E_NIL ) {
-				Descriptor = _SetUsedFragmentUsingFreeFragment( Row, XSize, ( Row == 0 ? _TailFragmentStatus() : sUsed ), All );	// Le cas où l'on utilise l'intégralité du 'TailFragment' (auquel cas '_TaileFragmentStatus()'
-																																	// va changer de valeur) sera traité ci-dessous, grâce à la valeur de 'All'.		
+				Descriptor = _SetUsedFragmentUsingFreeFragment( Row, XSize, ( Row == 0 ? _TailFragmentStatus() : sUsed ), All );	// Le cas o l'on utilise l'intgralit du 'TailFragment' (auquel cas '_TaileFragmentStatus()'
+																																	// va changer de valeur) sera trait ci-dessous, grce  la valeur de 'All'.		
 			} else { 
 				if ( ( Row = _GetTailFreeFragment() ) == E_NIL )
 					Row = _Size();
@@ -1095,7 +1095,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			return Descriptor;
 		}
-		sdr::row_t__ _GetFragmentRow( descriptor__ Descriptor ) const	// Retourne la position à laquelle débute le fragemnt correspondant à 'Descriptor'.
+		sdr::row_t__ _GetFragmentRow( descriptor__ Descriptor ) const	// Retourne la position  laquelle dbute le fragemnt correspondant  'Descriptor'.
 		{
 			header__ Header;
 			size__ Size = 0;
@@ -1131,8 +1131,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		sdr::size__ _GetResultingFreeFragmentSizeIfFreed(
 			descriptor__ Descriptor,
-			sdr::row_t__ &Row ) const	/* Retourne la taille du fragment, en fusionnant avec les éventuels fragments libres et précédants et suivants,
-										   si 'Descriptor' est libèré. Retourne le 'Row' sur le début du fragment. */
+			sdr::row_t__ &Row ) const	/* Retourne la taille du fragment, en fusionnant avec les ventuels fragments libres et prcdants et suivants,
+										   si 'Descriptor' est libr. Retourne le 'Row' sur le dbut du fragment. */
 		{
 			header__ Header;
 			size__ FragmentSize;
@@ -1305,7 +1305,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		uys::untyped_storage_ Storage;
 		struct s {
 			uys::untyped_storage_::s Storage;
-			tracker__ Free;	// Ne doit pas pointer sur le dernier fragment, même s'il s'agit du seul.
+			tracker__ Free;	// Ne doit pas pointer sur le dernier fragment, mme s'il s'agit du seul.
 		} &S_;
 		aggregated_storage_( s &S )
 		: S_( S ),
@@ -1389,7 +1389,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				Free( Descriptor );
 			else if ( Descriptor == E_NIL )
 				NewDescriptor = Allocate( Size );
-			else if ( false ) {	// Mettre à 'true' dans le cas ou '_Reallocate()' ci-dessous bug.
+			else if ( false ) {	// Mettre  'true' dans le cas ou '_Reallocate()' ci-dessous bug.
 				size__ OldSize = _GetSize( Descriptor );
 				NewDescriptor = _Allocate( Size );
 

@@ -71,16 +71,16 @@ using xulftk::trunk___;
 
 enum backend_selection_mode__
 {
-	bsmBasic,		// Sélection dans une liste seulement.
-	bsmAdvanced,	// + possibilité de sasir adresse:port pour un 'daemon'.
-	bsmExpert,		// + possibilité de sélctionné une bibliothèque dynamique.
+	bsmBasic,		// Slection dans une liste seulement.
+	bsmAdvanced,	// + possibilit de sasir adresse:port pour un 'daemon'.
+	bsmExpert,		// + possibilit de slctionn une bibliothque dynamique.
 	bsm_amount,
 	bsm_Undefined
 };
 
 static backend_selection_mode__ GetBackendSelectionMode_( const rgstry::multi_level_registry_ &Registry )
 {
-	backend_selection_mode__ Mode = bsmBasic;	// Mode par défaut.
+	backend_selection_mode__ Mode = bsmBasic;	// Mode par dfaut.
 ERRProlog
 	str::string RawMode;
 ERRBegin

@@ -1840,13 +1840,15 @@ namespace rgstry {
 				return _GetRegistry( Level ).Search( PathString, _GetRoot( Level ), PathErrorRow );
 		}
 		row__ Search(
+			level__ Level,
+			const tentry__ &Entry ) const;
+		row__ Search(
 			const str::string_ &PathString,
 			level__ &Level,	// Valeur retournée != 'E_NIL', contient le 'level' de la registry contenant l'entrée.
 			sdr::row__ *PathErrorRow = NULL ) const;
 		row__ Search(
 			const tentry__ &Entry,
-			level__ &Level,	// Valeur retournée != 'E_NIL', contient le 'level' de la registry contenant l'entrée.
-			sdr::row__ *PathErrorRow = NULL ) const;
+			level__ &Level ) const;	// Valeur retournée != 'E_NIL', contient le 'level' de la registry contenant l'entrée.
 		bso::bool__ Exists(
 			level__ Level,
 			const path_ &Path ) const
@@ -1867,12 +1869,10 @@ namespace rgstry {
 			level__ Dummy = E_NIL;
 			return Search( PathString, Dummy, PathErrorRow ) != E_NIL;
 		}
-		bso::bool__ Exists(
-			const tentry__ &Entry,
-			sdr::row__ *PathErrorRow = NULL ) const
+		bso::bool__ Exists(	const tentry__ &Entry ) const
 		{
 			level__ Dummy = E_NIL;
-			return Search( Entry, Dummy, PathErrorRow ) != E_NIL;
+			return Search( Entry, Dummy ) != E_NIL;
 		}
 		status__ Fill(
 			level__ Level,

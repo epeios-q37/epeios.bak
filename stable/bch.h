@@ -54,7 +54,7 @@ namespace bch {
 	  public mng
 	{
 	private:
-		/* Pousse (décalge vers la fin de l'ensemble) les objets à la position
+		/* Pousse (dcalge vers la fin de l'ensemble) les objets  la position
 		'Position' de 'Quantite' positions */
 		void Pousser_(
 			sdr::row_t__ Position,
@@ -63,7 +63,7 @@ namespace bch {
 			Allouer_( mng::Amount() + Quantite, aem::m_Default );
 			mmr::Store( *this, mng::Amount() - Position - Quantite, Position + Quantite, Position );
 		}
-		// Insere à 'PosDest' 'Quantite' objets situé à partir de 'PosSource' de 'Source'.
+		// Insere  'PosDest' 'Quantite' objets situ  partir de 'PosSource' de 'Source'.
 		void InsertAt_(
 			const mmr &Source,
 			sdr::size__ Quantite,
@@ -73,7 +73,7 @@ namespace bch {
 			Pousser_( PosDest, Quantite );
 			mmr::Store( Source, Quantite, PosDest, PosSource );
 		}
-		// Insere 'Quantite' objets de 'Objets' à 'Position'.
+		// Insere 'Quantite' objets de 'Objets'  'Position'.
 		void InsertAt_(
 			const type *Objets,
 			sdr::size__ Quantite,
@@ -82,7 +82,7 @@ namespace bch {
 			Pousser_( Position, Quantite );
 			mmr::Store( Objets, Quantite, Position );
 		}
-		// Allocation de la place nécessaire à 'Taille' objets.
+		// Allocation de la place ncessaire  'Taille' objets.
 		void Allouer_(
 			sdr::size__ Taille,
 			aem::mode__ Mode )
@@ -217,7 +217,7 @@ namespace bch {
 */
 			StoreAndAjust( Buffer, sh::SizeOf( Buffer ), Offset );
 		}
-		// Remplit tout le conteneur avec 'object' à partir de la position 'offset'.
+		// Remplit tout le conteneur avec 'object'  partir de la position 'offset'.
 		void FillWith(
 			const type &Object,
 			row Offset = 0 )
@@ -226,7 +226,7 @@ namespace bch {
 		}
 		void Set( void )
 		{
-			ERRFbd();	// Replacé par 'FillWith(...)'.
+			ERRFbd();	// Replac par 'FillWith(...)'.
 		}
 		//f Append 'Amount' object from 'Buffer'. Return the position where the objects are put.
 		row Append(
@@ -272,7 +272,7 @@ namespace bch {
 
 			return Position;
 		}
-		// Ajoute le contenu de 'Bunch' de la position 'First' à la position 'Last', toute deux incluses.
+		// Ajoute le contenu de 'Bunch' de la position 'First'  la position 'Last', toute deux incluses.
 		row Append(
 			const mmr &Bunch,
 			row First,
@@ -291,7 +291,7 @@ namespace bch {
 		{
 			return Append( Bunch, Bunch.Amount() - *Position, Position );
 		}
-		// Les méthodes 'Add(...)' sont là pour faciliter interchangeabilité avec les object du module 'lstbch'.
+		// Les mthodes 'Add(...)' sont l pour faciliter interchangeabilit avec les object du module 'lstbch'.
 		row Add( const type *Buffer )
 		{
 			return Append( Buffer );
@@ -469,7 +469,7 @@ namespace bch {
 		}
 		void SetAndAdjust( void )
 		{
-			ERRFbd();	// Remplacé par 'FillWithAndAdjust(...)'.
+			ERRFbd();	// Remplac par 'FillWithAndAdjust(...)'.
 		}
 		//f Return reference to memory.
 		mmr &Memory( void )

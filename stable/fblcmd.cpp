@@ -84,7 +84,7 @@ static const cast__ ThrowIError[] = {
 	cEnd,
 	cEnd };
 static const cast__ TestNotification[] = {
-		cString,	// Un message devant être retourné comme notification.
+		cString,	// Un message devant tre retourn comme notification.
 	cEnd,
 	cEnd };
 static const cast__ GetNewObject[] = {
@@ -124,9 +124,9 @@ static const cast__ RemoveObject[] = {
 static const cast__ About[] = {
 	cEnd,
 		cString,	// Version du protocol.
-		cString,	// libellé de la cible.
+		cString,	// libell de la cible.
 		cString,	// Version de l'API.
-		cString,	// Informations étendues au sujet du 'backend'.
+		cString,	// Informations tendues au sujet du 'backend'.
 		cString,	// Informations de copyright sur le 'backend'.
 		cString,	// Informations au sujet du 'software'.
 	cEnd };

@@ -128,15 +128,15 @@ namespace xulwdg {
 	XULWDG__W( menu );
 	XULWDG__W( menuitem );
 	XULWDG__W( menulist );
-	// XULWDG__W( Page );	// Définit explicitement à cause de 'XULWDGRefresh(...)'.
+	// XULWDG__W( Page );	// Dfinit explicitement  cause de 'XULWDGRefresh(...)'.
 	XULWDG__W( radio );
 	XULWDG__W( radiogroup );
 	XULWDG__W( tabs );
 	XULWDG__W( tabpanels );
 	XULWDG__W( textbox );
-	//	XULWDG__W( tree );	// Définit explictiement ci-dessous à cause de 'Init(...)' de 'nsxpcm::tree__'.
+	//	XULWDG__W( tree );	// Dfinit explictiement ci-dessous  cause de 'Init(...)' de 'nsxpcm::tree__'.
 	XULWDG__W( widget );
-	// XULWDG__W( window );	// Définit explicitement à cause de 'XULWDGRefresh(...)'.
+	// XULWDG__W( window );	// Dfinit explicitement  cause de 'XULWDGRefresh(...)'.
 
 	typedef nsxpcm::tree__ _tree__;
 
@@ -276,7 +276,7 @@ namespace xulwdg {
 
 # define XULWDG_WIDGET( name, target )	typedef xulwdg::name##__<target> name##__;\
 
-/* Manque 'autocomplete_textbox__', car surchargé dans autre bibliothèque.*/
+/* Manque 'autocomplete_textbox__', car surcharg dans autre bibliothque.*/
 # define XULWDG_ALMOST_ALL_WIDGETS( target )\
 	XULWDG_WIDGET( box, target )\
 	XULWDG_WIDGET( button, target )\

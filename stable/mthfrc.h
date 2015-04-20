@@ -151,7 +151,7 @@ namespace mthfrc {
 		{
 			return N.GetLongFloat() / D.GetLongFloat();
 		}
-		const _fraction_ &Simplify( void );	// Défini plus loin.
+		const _fraction_ &Simplify( void );	// Dfini plus loin.
 	};
 
 	E_AUTO2( _fraction )

@@ -91,12 +91,12 @@ namespace mmg
 	};
 
 
-	// Pilote mémoire à usage interne.
+	// Pilote mmoire  usage interne.
 	template <typename st> class merger_memory_driver_
 	: public sdr::E_SDRIVER__
 	{
 	private:
-		// Pointeur sur la partie statique de l'objet à sauver.
+		// Pointeur sur la partie statique de l'objet  sauver.
 		st *Static_;
 	protected:
 		// Alloue 'Capacite' octets.
@@ -205,7 +205,7 @@ namespace mmg
 	template <class st> struct mmg_s
 	{
 		ags::aggregated_storage_::s Memoire;
-		// A vrai si le contenu survit à l'objet.
+		// A vrai si le contenu survit  l'objet.
 		st Object;
 		merger_memory_driver_s__ Driver_;
 		mmg::state State;
@@ -218,14 +218,14 @@ namespace mmg
 	private:
 		t Object;
 	public:
-		// La mémoire qui contient la partie dynamique de l'objet.
+		// La mmoire qui contient la partie dynamique de l'objet.
 		ags::aggregated_storage_ Memoire;
-		// La partie statique de l'objet à persister.
+		// La partie statique de l'objet  persister.
 	/*	struct s
 		: public st
 		{
 			mmm_multimemoire_::s Memoire;
-			// A vrai si le contenu survit à l'objet.
+			// A vrai si le contenu survit  l'objet.
 			fdm__bool Persistant;
 			friend mmg_centralisateur_memoire_;
 		} *S_;
@@ -233,7 +233,7 @@ namespace mmg
 		struct s
 		: public mmg::mmg_s < st > {} &S_;
 	private:
-		// Le pilote gèrant les particularités de cet objet
+		// Le pilote grant les particularits de cet objet
 		mmg::merger_memory_driver_ < st > Driver_;
 	public:
 		memory_merger_( s &S )
@@ -256,7 +256,7 @@ namespace mmg
 			S_.State = mmg::sMortal;
 
 		}
-		//f Utilisation de 'Pilote' comme pilote mémoire.
+		//f Utilisation de 'Pilote' comme pilote mmoire.
 		void plug( sdr::E_SDRIVER__ &SD )
 		{
 			Driver_.plug( SD );

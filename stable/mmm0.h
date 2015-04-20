@@ -62,7 +62,7 @@ extern class ttr_tutor &MMM0Tutor;
 
 #error Do not use. Use 'MMM' instead.
 
-// Ce module contient les définitions communes pour tous les 'mmmX' (X > 0), d'où son namesapce 'mmm'.
+// Ce module contient les dfinitions communes pour tous les 'mmmX' (X > 0), d'o son namesapce 'mmm'.
 
 #include "err.h"
 #include "flw.h"
@@ -81,13 +81,13 @@ extern class ttr_tutor &MMM0Tutor;
 #elif defined( MMM__USE_V2 )
 #	define MMM_UNDEFINED_DESCRIPTOR NONE
 #else
-#	error "No 'MMM' version défined !".
+#	error "No 'MMM' version dfined !".
 #endif
 
 namespace mmm {
-	class multimemory_;	// Prédéclaration.
+	class multimemory_;	// Prdclaration.
 
-	//t Type d'un descripteur de sous-méméoire dans le multimémoire.
+	//t Type d'un descripteur de sous-mmoire dans le multimmoire.
 	typedef mdr::row_t__	descriptor__;
 
 	//c The standard memory driver for the multimemory.
@@ -96,24 +96,24 @@ namespace mmm {
 	{
 	private:
 		descriptor__ &_Descriptor;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 		class multimemory_ *Multimemoire_;
 		bso::ubyte__ &_Addendum;
 		void Liberer_();
 	protected:
-		// fonction déportée
-		// lit à partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
+		// fonction dporte
+		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets;
 		virtual void MDRRecall(
 			mdr::row_t__ Position,
 			mdr::size__ Amount,
 			mdr::datum__ *Buffer );
-		// fonction déportée
-		// écrit 'Nombre' octets à la position 'Position'
+		// fonction dporte
+		// crit 'Nombre' octets  la position 'Position'
 		virtual void MDRStore(
 			const mdr::datum__ *Buffer,
 			mdr::size__ Amount,
 			mdr::row_t__ Position );
-		// fonction déportée
+		// fonction dporte
 		// alloue 'Capacite' octets
 		virtual void MDRAllocate( mdr::size__ Size );
 		virtual void MDRFlush( void );

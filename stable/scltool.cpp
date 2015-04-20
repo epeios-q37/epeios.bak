@@ -51,7 +51,7 @@ str::string ParametersTag_;	// Voir tout en bas.
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
 static rgstry::entry___ ProjectFileName_( "ProjectFileName", sclrgstry::Parameters );
 
-static rgstry::entry___ Arguments_( "Arguments", sclrgstry::Definitions );
+static rgstry::entry___ &Arguments_ = sclrgstry::Arguments;
 #define ARGUMENT_TAG "Argument"
 #define ARGUMENT_ID_ATTRIBUTE "id"
 static rgstry::entry___ ArgumentId_( ARGUMENT_TAG "/@" ARGUMENT_ID_ATTRIBUTE, Arguments_ );
@@ -454,7 +454,7 @@ ERREpilog
 	return Id;
 }
 
-E_CDEF(bso::char__, ExplicitOptionMarker_, '#' );	// Marqueur d'une option dans laquelle on précise explicitement le chemin.
+E_CDEF(bso::char__, ExplicitOptionMarker_, '#' );	// Marqueur d'une option dans laquelle on prcise explicitement le chemin.
 
 static const str::string_ &GetId_(
 	const str::string_ &Name,
@@ -663,7 +663,7 @@ ERREpilog
 static const str::string_ &GetPath_(
 	const str::string_ &Id,
 	str::string_ &Path,
-	bso::bool__ Short )	// Si à 'true', retourne la version raccourcie.
+	bso::bool__ Short )	// Si  'true', retourne la version raccourcie.
 {
 	if ( Id( Id.First() ) != ExplicitOptionMarker_ ) {
 		GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
@@ -1355,7 +1355,7 @@ ERRProlog
 	str::string EntryPath;
 ERRBegin
 	EntryPath.Init();
-	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetArgumentsLevel() );	// Pour pouvoir récupèrer la valeur correspondant à ce 'Path' tel qu'éventuellement défini dans le fichier de configuration.
+	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetArgumentsLevel() );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
 
 	Ids.Init();
 	GetValues( ArgumentId_, Ids );
@@ -1563,7 +1563,7 @@ static void ErrFinal_( void )
 
 #ifdef CPE_WIN
 
-#undef system	// Défini dans 'tol.h', référencé dans le fichier ci-dessous.
+#undef system	// Dfini dans 'tol.h', rfrenc dans le fichier ci-dessous.
 
 #include <iostream>
 

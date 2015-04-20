@@ -81,7 +81,7 @@ namespace bomhdl {
 	};
 
 	enum byte_order_marker__ {
-		// Important ! Doivent se succèder par ordre de taille décroissant.
+		// Important ! Doivent se succder par ordre de taille dcroissant.
 		bom_First,
 		bomUTF_32_BE = bom_First,
 		bomUTF_32_LE,
@@ -121,7 +121,7 @@ namespace bomhdl {
 
 	byte_order_marker__ DetectBOM(
 		const fdr::datum__ *Buffer,
-		fdr::size__ &Size );	// 'Size' est modifié pour contenir la taille du 'BOM'.
+		fdr::size__ &Size );	// 'Size' est modifi pour contenir la taille du 'BOM'.
 
 	const bom__ &GetBOM( byte_order_marker__ BOM );
 

@@ -307,9 +307,9 @@ struct callback__
 : public xml::callback__
 {
 private:
-	bso::bool__ _Ignore;	// A vrai si les attributs/valeur de la balise doivent être ignorés (on n'est pas dans une balise 'Parameter').
-	bso::bool__ _Special;	// La balise doit avoir un traitement spécial (nom d'un registre, par exemple).
-	bso::bool__ _Append;		// La valuer doit être ajoutée dans le 'DataSet' courant, sinon un nouveau doit être crée.
+	bso::bool__ _Ignore;	// A vrai si les attributs/valeur de la balise doivent tre ignors (on n'est pas dans une balise 'Parameter').
+	bso::bool__ _Special;	// La balise doit avoir un traitement spcial (nom d'un registre, par exemple).
+	bso::bool__ _Append;		// La valuer doit tre ajoute dans le 'DataSet' courant, sinon un nouveau doit tre cre.
 	bso::bool__ _IgnoreLabel;	// Address of offset was given, so 'Label' attribute can be ignored.
 	mscvkp::address__ _Address;
 	mscvkp::address__ _Offset;

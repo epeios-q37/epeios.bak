@@ -58,9 +58,9 @@ namespace tme {
 		fH,
 		fHM,
 		fHMS,
-		fHMSd, // dixièmes de secondes (deciseconds)
-		fHMSc, // centièmes de secondes (centiseconds)
-		fHMSm,  // millièmes de secondes (milliseconds)
+		fHMSd, // diximes de secondes (deciseconds)
+		fHMSc, // centimes de secondes (centiseconds)
+		fHMSm,  // millimes de secondes (milliseconds)
 		f_amount,
 		f_Undefined,
 		f_Default = fHMS
@@ -109,7 +109,7 @@ namespace tme {
 		{
 			return ( _Core() / 1000 ) % 60;
 		}
-		ticks__ _T( void ) const // Ticks, millième de secondes.
+		ticks__ _T( void ) const // Ticks, millime de secondes.
 		{
 			return _Core() % 1000;
 		}
@@ -129,7 +129,7 @@ namespace tme {
 		}
 		bso::bool__ Init(
 			const char *Time,
-			const char **End = NULL )	// N'est éventuellement modifié que si '*End == NULL'.
+			const char **End = NULL )	// N'est ventuellement modifi que si '*End == NULL'.
 		{
 			_Raw = tme::Convert( Time, End );
 

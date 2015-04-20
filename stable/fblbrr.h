@@ -184,7 +184,7 @@ namespace fblbrr {
 
 			_Parameters.Init();
 			callbacks__::Init();
-			// '_IFlow(Driver)' initialisé seulement lorsque utilisé.
+			// '_IFlow(Driver)' initialis seulement lorsque utilis.
 		}
 	};
 }

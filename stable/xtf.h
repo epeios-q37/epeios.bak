@@ -106,7 +106,7 @@ namespace xtf {
 			break;
 		}
 
-		return NULL;	// Pour éviter un 'Warning'.
+		return NULL;	// Pour viter un 'Warning'.
 	}
 
 	struct utf__
@@ -222,7 +222,7 @@ namespace xtf {
 	private:
 		// L'entree de base.
 		flw::iflow__ *_Flow;
-		// Position du prochain caractère.
+		// Position du prochain caractre.
 		pos__ _Position;
 		// '0' if no EOL char encountered, or the value of the EOL char ('\r' or '\n').
 		bso::char__ _EOL;
@@ -319,7 +319,7 @@ namespace xtf {
 				}
 				break;
 			default:
-				ERRPrm();	// Les autres formats ne sont pas accpétés et filtrés en amont.
+				ERRPrm();	// Les autres formats ne sont pas accpts et filtrs en amont.
 				break;
 			}
 
@@ -491,7 +491,7 @@ namespace xtf {
 			return C;
 		}
 		//f True if at end of text.
-		bso::bool__ EndOfFlow( error__ &Error )	// Si erreur, 'ErrorMeaning' est initialisé, sinon reste vide.
+		bso::bool__ EndOfFlow( error__ &Error )	// Si erreur, 'ErrorMeaning' est initialis, sinon reste vide.
 		{ 
 			if ( _Error == e_NoError ) {
 				if ( _UTF.Size != 0 )

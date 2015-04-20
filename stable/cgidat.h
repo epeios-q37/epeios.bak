@@ -227,7 +227,7 @@ namespace cgidat {
 		}
 		const content_ &GetContent(
 			content_row__ Row,
-			str::string_ &Content ) const	// Place dans 'Content' le contenu à la position 'Row'. Retourne 'Content'.
+			str::string_ &Content ) const	// Place dans 'Content' le contenu  la position 'Row'. Retourne 'Content'.
 		{
 			Contents.Recall( Row, Content );
 

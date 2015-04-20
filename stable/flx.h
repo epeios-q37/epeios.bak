@@ -101,12 +101,12 @@ namespace flx {
 	: public _iflow_driver___<>
 	{
 	private:
-		// Pointeur sur le prochain caractère à lire.
+		// Pointeur sur le prochain caractre  lire.
 		const fdr::datum__ *Tampon_;
-		// Nombre de caractère pouvant encore être lus.
+		// Nombre de caractre pouvant encore tre lus.
 		bso::size__ Taille_;
 	protected:
-		// Méthode théoriquement inutile. Son type de retour est passé de 'void' à 'int' pour détecter les classes qui la surcharge. Sera supprimé à terme.
+		// Mthode thoriquement inutile. Son type de retour est pass de 'void'  'int' pour dtecter les classes qui la surcharge. Sera supprim  terme.
 		virtual int FLXUnavailable( void )
 		{
 			ERRFwk();
@@ -207,9 +207,9 @@ namespace flx {
 	: public _oflow_driver___
 	{
 	private:
-		// Pointeur sur le prochain caractère à écrire.
+		// Pointeur sur le prochain caractre  crire.
 		fdr::datum__ *Tampon_;
-		// Nombre de caractères pouvant encore être écris.
+		// Nombre de caractres pouvant encore tre cris.
 		bso::size__ Taille_;
 	protected:
 		virtual fdr::size__ FDRWrite(
@@ -548,7 +548,7 @@ namespace flx {
 
 	typedef fdr::oflow_driver___<> _oflow_driver___;
 
-	// 'driver' qui n'écrit dans rien.
+	// 'driver' qui n'crit dans rien.
 	class void_oflow_driver___
 	: public _oflow_driver___
 	{
@@ -584,7 +584,7 @@ namespace flx {
 
 	extern void_oflow_driver___ VoidOFlowDriver;
 
-	// 'flow' qui n'écrit dans rien.
+	// 'flow' qui n'crit dans rien.
 	class void_oflow__
 	: public _oflow__
 	{
@@ -782,7 +782,7 @@ namespace flx {
 		}
 	};	
 
-	// 'driver' qui relaye un 'oflow', mais dont la taille est 'encodée' dans le flux.
+	// 'driver' qui relaye un 'oflow', mais dont la taille est 'encode' dans le flux.
 	class size_embedded_oflow_driver___
 	: public _oflow_driver___
 	{
@@ -818,7 +818,7 @@ namespace flx {
 		}
 		virtual void FDRCommit( void )
 		{
-			if ( !_PendingCommit )	// Pour éviter qu'un 'commit( suite à un 'reset()' réecrive un '0'.
+			if ( !_PendingCommit )	// Pour viter qu'un 'commit( suite  un 'reset()' recrive un '0'.
 				return;
 
 			if ( _Flow == NULL )
@@ -831,7 +831,7 @@ namespace flx {
 
 			_PendingCommit = false;
 
-			//	_Flow->Commit();	// Le 'flow' est enclavé dans un autre flot ; c'est ce dernier qui devra faire le 'commit'.
+			//	_Flow->Commit();	// Le 'flow' est enclav dans un autre flot ; c'est ce dernier qui devra faire le 'commit'.
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -858,15 +858,15 @@ namespace flx {
 	};
 
 	enum dismiss_handling__ {
-		dhPropagate,	// 'Dismiss()' est propagé au flux embarqué.
-		dhHold,		// 'Dismiss()' n'est PAS propagé au flux embarqué. 
+		dhPropagate,	// 'Dismiss()' est propag au flux embarqu.
+		dhHold,		// 'Dismiss()' n'est PAS propag au flux embarqu. 
 		dh_amount,
 		dh_Undefined,
 		dh_Default = dhPropagate
 	};
 
 
-	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encodée' dans le flux.
+	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encode' dans le flux.
 	class size_embedded_iflow_driver___
 	: public _iflow_driver___<>
 	{
@@ -979,8 +979,8 @@ namespace flx {
 
 # ifdef FLX__MT
 
-#  if 0 // Bogué !!!
-	// Permet de lire à partir d'un 'iflow' ce qui est écrit dans un 'oflow'.
+#  if 0 // Bogu !!!
+	// Permet de lire  partir d'un 'iflow' ce qui est crit dans un 'oflow'.
 	class mediator_ioflow_driver___
 	: public fdr::ioflow_driver___<>
 	{
@@ -1157,7 +1157,7 @@ namespace flx {
 #endif
 	
 
-	// Lance une commande dans le shell et récupère les données écrites par la commande.
+	// Lance une commande dans le shell et rcupre les donnes crites par la commande.
 	class exec_iflow_driver___
 	: public _iflow_driver___<>,
 	  public _exec_driver___<cslio::standard_input__>
@@ -1203,7 +1203,7 @@ namespace flx {
 
 	typedef cslio::standard_output__ _output__;
 
-	// Lance une commande dans le shell en lui passant des données.
+	// Lance une commande dans le shell en lui passant des donnes.
 	class exec_oflow_driver___
 	: public _oflow_driver___,
 	  public _exec_driver___<cslio::standard_output__>

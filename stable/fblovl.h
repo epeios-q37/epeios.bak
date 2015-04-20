@@ -74,7 +74,7 @@ namespace fblovl {
 	enum reply__ {
 		rOK,
 		rSoftwareError,	// Lorsque survient un 'ERR[x|X](...)'.
-		rRequestError,	// Lorsque survient un problème lors de l'exécution de la requête.
+		rRequestError,	// Lorsque survient un problme lors de l'excution de la requte.
 		r_amount,
 		r_Undefined
 	};

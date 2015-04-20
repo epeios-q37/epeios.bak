@@ -70,7 +70,7 @@ extern class ttr_tutor &SCLGECKOTutor;
 namespace sclgecko {
 	using namespace sclxslui;
 
-	// A définir par l'utilisateur.
+	// A dfinir par l'utilisateur.
 	xulfui::steering_callback__ *SCLGECKOCreateSteering(
 		const char *LauncherIdentification,
 		const lcl::locale_ &Locale,
@@ -78,8 +78,8 @@ namespace sclgecko {
 		void *UP );	// To overload !
 
 	/*
-	NOTA : La destruction du 'xulfui::steering_callback__' retourné ci-dessus, qui retourne en réalité un pointeur sur une classe surchargeant cette classe,
-	est détruit par cette bibliothèque, le destructeur de 'xulfui::steering_callback__' étant virtuel.
+	NOTA : La destruction du 'xulfui::steering_callback__' retourn ci-dessus, qui retourne en ralit un pointeur sur une classe surchargeant cette classe,
+	est dtruit par cette bibliothque, le destructeur de 'xulfui::steering_callback__' tant virtuel.
 	*/
 
 	void SetElementsAttributesFromRegistry( nsxpcm::window__ &Window );

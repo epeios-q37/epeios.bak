@@ -150,12 +150,12 @@ namespace tol
 				break;
 			}
 
-			return false;	// Pour éviter un 'warning'.
+			return false;	// Pour viter un 'warning'.
 		}
 	};
 
-	// NOTA : 'E_NIL' pas encore connu, d'où utilisation de '-1'.
-	template <typename r> class extended_row__	// Pour les fonctions renvoyant un 'Row' dont une valeur différente de 'E_NIL' représente une erreur.
+	// NOTA : 'E_NIL' pas encore connu, d'o utilisation de '-1'.
+	template <typename r> class extended_row__	// Pour les fonctions renvoyant un 'Row' dont une valeur diffrente de 'E_NIL' reprsente une erreur.
 	{
 	private:
 		r _Row;
@@ -215,8 +215,8 @@ namespace tol
 		}
 		operator bso::bool__( void ) const
 		{
-			// Cette fonction doit génèrer une erreur lorsque _'Value' représente une valeur indiquant un problème.
-			// Si on ne veut pas qu'une erreur soit génèrée, on utilise l'opérateur '()'.
+			// Cette fonction doit gnrer une erreur lorsque _'Value' reprsente une valeur indiquant un problme.
+			// Si on ne veut pas qu'une erreur soit gnre, on utilise l'oprateur '()'.
 			return BoolOp( _Value );
 		}
 	};
@@ -228,13 +228,13 @@ namespace tol
 
 # define E_XROW	E_XROWt( sdr::row__ )
 
-// Définition d'une constante par valeur.
+// Dfinition d'une constante par valeur.
 # define E_CDEF( type, name, value )\
 	static const type name = value
 
-// Pose problème d'ordre d'initialisation. La variable pointe sur NULL au départ est n'est correctement initialisée que plus tard.
+// Pose problme d'ordre d'initialisation. La variable pointe sur NULL au dpart est n'est correctement initialise que plus tard.
 # if 0
-// Définition d'une constante par référence.
+// Dfinition d'une constante par rfrence.
 # define E_CRDEF( type, name, value )\
 	E_CVDEF( type, &name, value )
 # endif
@@ -272,7 +272,7 @@ namespace tol
 			return V_;\
 		}\
 
-// Similaire à un 'typedef type alias', sauf que 'type' et 'alias' ne sont pas interchangeable.
+// Similaire  un 'typedef type alias', sauf que 'type' et 'alias' ne sont pas interchangeable.
 // Uniqumement pour des objets statiques.
 // Utiliiser 'E_TMIMIC( type, alias)' pour des objets dynamiques.
 # define E_TMIMIC__( type, alias )\
@@ -297,7 +297,7 @@ namespace tol
 		}\
 	}
 
-// Similaire à un 'T_MIMIC__( type, alias )', mais sans opérateurs de comparaisons.
+// Similaire  un 'T_MIMIC__( type, alias )', mais sans oprateurs de comparaisons.
 # define E_TRMIMIC__( type, alias )\
 struct alias\
 {\
@@ -305,8 +305,8 @@ struct alias\
 }
 
 
-// Similaire à 'E_TMIMIC__( type, alias)', mais pour des objets dynamiques.
-// La version instanciable et la version '_' sont toutes deux créees.
+// Similaire  'E_TMIMIC__( type, alias)', mais pour des objets dynamiques.
+// La version instanciable et la version '_' sont toutes deux crees.
 # define E_TMIMIC( type, alias )\
 class alias##_\
 : public type##_\
@@ -366,17 +366,17 @@ public:\
 	}\
 };
 
-// Pour conserver une certaine cohérence avec la suite.
+// Pour conserver une certaine cohrence avec la suite.
 # define E_TCLONE__( type, alias )	typedef type alias
 
-// Pour les objets dynamiques, similaire à 'typedef type alias', mais
-// avec création de la version instanciable et de la version '_'.
+// Pour les objets dynamiques, similaire  'typedef type alias', mais
+// avec cration de la version instanciable et de la version '_'.
 # define E_TCLONE( type, alias )\
 	typedef type##_ alias##_;\
 	typedef type alias
 
 
-// Similaire à 'typedef type alias', mais permet la mise en oeuvre de 'template'.
+// Similaire  'typedef type alias', mais permet la mise en oeuvre de 'template'.
 // Pour objets statiques uniquement.
 // Exemple d'utilisation.
 // template <typename r> E_TTCLONE__( tree_seeker__<r>, seeker__ );
@@ -387,7 +387,7 @@ public:\
 	}
 
 
-// Similaire à 'typedef type  alias', mais permet la mise en oeuvre de 'template'.
+// Similaire  'typedef type  alias', mais permet la mise en oeuvre de 'template'.
 // Pour objets dynamiques uniquement.
 // Exemple :
 // template <typename field_ref__> E_TTCLONE( lstctn::E_LXMCONTAINERt_( comparison_item_<field_ref__>, item_row__ ), comparison_items_ );
@@ -405,8 +405,8 @@ public:\
 	}\
 
 
-// Similaire à 'E_TTCLONE_( type ,alias )', mais crée la version instanciable en plus de la version '_'.
-// ATTENTION : 'type' doit être la version AVEC '_', 'alias' la version SANS '_'.
+// Similaire  'E_TTCLONE_( type ,alias )', mais cre la version instanciable en plus de la version '_'.
+// ATTENTION : 'type' doit tre la version AVEC '_', 'alias' la version SANS '_'.
 // Version pour 1 'template".
 // Exemple :
 // template <typename field_ref__> E_TT1CLONE( lstctn::E_LXMCONTAINERt_( comparison_item_<field_ref__>, item_row__ ), comparison_items );
@@ -429,7 +429,7 @@ public:\
 # define E_ROW( Type )	E_TMIMIC__( sdr::row_t__, Type )
 
 /* Permet de transformer n arguments en 1; si un argument d'une macro
-a besoin de contenir une virgule, cette macro est là pour ça.
+a besoin de contenir une virgule, cette macro est l pour a.
 ex. : 'E_COVER2( a, b )' donne 'a, b' */
 # define E_COVER2(a, b)					a, b
 # define E_COVER3(a, b, c)				a, b, c
@@ -439,13 +439,13 @@ ex. : 'E_COVER2( a, b )' donne 'a, b' */
 // A modifier en utilisant les 'variadics macros' ?
 
 
-/* Permet de convertir un entier en chaîne (l'encadre par des '"').
-Utile pour afficher le numéro de ligne dans un #pragma message (...). */
+/* Permet de convertir un entier en chane (l'encadre par des '"').
+Utile pour afficher le numro de ligne dans un #pragma message (...). */
 # define E__STRING(x) #x
 # define E_STRING(x) E__STRING(x)
 
-// Inspiré du site msdn.microsoft.com.
-// Le ' :' à la fin est nécessaire pour que Visual C++ puisse se positionner sur la bonne ligne.
+// Inspir du site msdn.microsoft.com.
+// Le ' :'  la fin est ncessaire pour que Visual C++ puisse se positionner sur la bonne ligne.
 # define __LOC__ __FILE__ "(" E_STRING(__LINE__) ") :"
 
 // Utilisation :
@@ -676,7 +676,7 @@ namespace tol {
 
 	int System( const ntvstr::string___ &Command );
 
-	void Launch( const ntvstr::string___ &Document );	// Ouvre un document (au sens large ; peut p. ex. être également une URL).
+	void Launch( const ntvstr::string___ &Document );	// Ouvre un document (au sens large ; peut p. ex. tre galement une URL).
 
 	//f Return the current date.
 	const char *Date( buffer__ &Buffer );
@@ -684,7 +684,7 @@ namespace tol {
 	//f Return current time.
 	const char *Time( buffer__ &Buffer );
 
-	//f Return current date é time.
+	//f Return current date  time.
 	const char *DateAndTime( buffer__ &Buffer );
 
 # ifdef CPE_MSVC
@@ -721,7 +721,7 @@ namespace tol {
 	typedef bso::u32__ coeff__;
 # define TOL_COEFF_MAX	BSO_U32_MAX
 
-// Horloge de précision. N'est utile que pour comparer 2 
+// Horloge de prcision. N'est utile que pour comparer 2 
 # ifdef TOL__WIN
 	E_TRMIMIC__( LARGE_INTEGER, tick__ );
 	extern LARGE_INTEGER	_TickFrequence;
@@ -874,8 +874,8 @@ namespace tol {
 		return _Diff( Op1, Op2, 1000000000 );
 	}
 
-	inline time_t EpochTime( bso::bool__ Discrimination )	// Mettre 'Discrimination' à 'true' pour être sûr que deux
-													// appels successifs à cette focntion renvoit deux valeurs différentes.
+	inline time_t EpochTime( bso::bool__ Discrimination )	// Mettre 'Discrimination'  'true' pour tre sr que deux
+													// appels successifs  cette focntion renvoit deux valeurs diffrentes.
 	{
 		time_t Time = tol::_Time();
 
@@ -945,9 +945,9 @@ namespace tol {
 	{
 		lconv *LConv = localeconv();
 
-# ifdef CPE_ANDROID	// Pas de membre 'decimal_point' défini dans ce cas...
+# ifdef CPE_ANDROID	// Pas de membre 'decimal_point' dfini dans ce cas...
 		ERRLmt();
-		return 0;	// Pour éviter un 'warning'.
+		return 0;	// Pour viter un 'warning'.
 # else
 		if ( LConv->decimal_point == NULL )
 			ERRSys();
@@ -964,7 +964,7 @@ namespace tol {
 
 	template <typename i> inline void Swap(
 		i &I1,
-		i &I2 )	// Echange le contenu des entiers I1 et I2. Retourne I1 (avant échange).
+		i &I2 )	// Echange le contenu des entiers I1 et I2. Retourne I1 (avant change).
 	{
 		I2 = (i)( I1 ^ I2 );
 		I1 = (i)( I2 ^ I1 );
@@ -1007,9 +1007,9 @@ namespace tol {
 		return Object Exists( P );\
 	}
 	
-/* Lorsque 'Object' contient une virgule, on ne peut utiliser E_XNAVt(...), même en utilisant E_COVER2(...)
-car 'E_XNAVt(...)' fait elle-même appel à une macro. Aussi faudra-t'il explicitement appelé 'E_NAVt(...)' et cette macro-ci
-pour parvenir au même résultat que 'E_XNAVt(...)'. */
+/* Lorsque 'Object' contient une virgule, on ne peut utiliser E_XNAVt(...), mme en utilisant E_COVER2(...)
+car 'E_XNAVt(...)' fait elle-mme appel  une macro. Aussi faudra-t'il explicitement appel 'E_NAVt(...)' et cette macro-ci
+pour parvenir au mme rsultat que 'E_XNAVt(...)'. */
 # define E_NAVXt( Object, Type )\
 	Type First( sdr::size__ Offset ) const\
 	{\
@@ -1046,7 +1046,7 @@ pour parvenir au même résultat que 'E_XNAVt(...)'. */
 # define E_NAVX( Object )	E_NAVXt( Object, sdr::row__ )
 # define E_XNAV( Object )	E_XNAVt( Object, sdr::row__ )
 
-// PRédéclaration.
+// PRdclaration.
 namespace ags {
 	class aggregated_storage_;
 }
@@ -1176,7 +1176,7 @@ namespace tol {
 		}
 	};
 
-	template <typename t> class free_pointer___	// Classe de gestion d'un pointeur devant être désalloué par un 'free'.
+	template <typename t> class free_pointer___	// Classe de gestion d'un pointeur devant tre dsallou par un 'free'.
 	: public _core_pointer___<t>
 	{
 	public:
@@ -1204,7 +1204,7 @@ namespace tol {
 
 # define E_FPOINTER___( t )	free_pointer___<t>
 
-	template <typename t> class delete_pointer___	// Classe de gestion d'un pointeur devant être déalloué par un 'delete'.
+	template <typename t> class delete_pointer___	// Classe de gestion d'un pointeur devant tre dallou par un 'delete'.
 	: public _core_pointer___<t>
 	{
 	public:
@@ -1234,10 +1234,10 @@ namespace tol {
 
 # define TOL__ERRP	err::handling__ ErrHandling = err::h_Default
 	/*
-		Les méthodes 'virtual' ne sont pas destinées à être surchargée par une quelconque classe mère, mais à éviter des problèmes lorsque cet objet est partagé entre une application et une bibliothèque dynamique.
-		En effet, un pointeur alloué dans une bibliothèque dynamique peut poser problème s'il est désalloué dans l'application, et inversement. En utilisant des méthodes virtuelles pour l'allocation et le désallocation
-		proprement dites, cela permet de s'assurer que l'allocation et la désallocation est toujours faite du coté de celui qui instancié l'objet, quelque soit le coté duquel est lancée la méthode en appelent l'une ou l'autre
-		des méthodes virtuelles.
+		Les mthodes 'virtual' ne sont pas destines  tre surcharge par une quelconque classe mre, mais  viter des problmes lorsque cet objet est partag entre une application et une bibliothque dynamique.
+		En effet, un pointeur allou dans une bibliothque dynamique peut poser problme s'il est dsallou dans l'application, et inversement. En utilisant des mthodes virtuelles pour l'allocation et le dsallocation
+		proprement dites, cela permet de s'assurer que l'allocation et la dsallocation est toujours faite du cot de celui qui instanci l'objet, quelque soit le cot duquel est lance la mthode en appelent l'une ou l'autre
+		des mthodes virtuelles.
 	*/
 
 	template <typename t> class buffer___ // Gestion d'un 'buffer' d'objets de type 't' de taille dynamique. Sa taille ne diminue jamais, et ne peut donc PAS servir pour savoir le nombre d'octets significatifs qu'il contient.
@@ -1291,7 +1291,7 @@ namespace tol {
 		{
 			ERRFwk();	// C'est un 'buffer' ; pas d'initailisation.
 		}
-		void Forget( void )	// Evite que le ponteur sous-jacent soit effacé à la destruction de l'objet.
+		void Forget( void )	// Evite que le ponteur sous-jacent soit effac  la destruction de l'objet.
 		{
 			reset( false );
 			
@@ -1403,37 +1403,37 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	}
 #endif
 
-// Déclaration de constructeur standardisé.
+// Dclaration de constructeur standardis.
 # define E_CTORD( name )\
 	name( void )
 
-// Corps ('body') d'un constructeur standardisé.
+// Corps ('body') d'un constructeur standardis.
 # define E_CTORB\
 	{\
 		reset( false );\
 	}\
 
-// Création d'un constructeur standardisé.
+// Cration d'un constructeur standardis.
 # define E_CTOR( name )\
 	E_CTORD( name )\
 	E_CTORB
 
-// Création d'un destructeur standardisé.
+// Cration d'un destructeur standardis.
 # define E_DTOR( name )\
 	~name( void )\
 	{\
 		reset();\
 	}\
 
-// Création d'un destructeur virtuel standardisé.
+// Cration d'un destructeur virtuel standardis.
 # define E_VDTOR( name )	virtual E_DTOR( name )
 
-// Création d'un constructeur et d'un destructeur standardisé.
+// Cration d'un constructeur et d'un destructeur standardis.
 # define E_CDTOR( name )\
 	E_CTOR( name )\
 	E_DTOR( name )
 
-// Création d'un constructeur et d'un destructeur virtuel standardisé.
+// Cration d'un constructeur et d'un destructeur virtuel standardis.
 # define E_CVDTOR( name )\
 	E_CTOR( name )\
 	E_VDTOR( name )

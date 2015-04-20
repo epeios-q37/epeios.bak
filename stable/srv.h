@@ -138,8 +138,8 @@ namespace srv {
 	private:
 		socket__ Socket_;
 		/* Retourne une socket sur une connection. FONCTION BLOQUANTE.
-		Lorsque 'IgnorerErreur' à vrai, toute les erreurs sont ignorées, ceci pour garantir
-		la présence du processus d'écoute. */
+		Lorsque 'IgnorerErreur'  vrai, toute les erreurs sont ignores, ceci pour garantir
+		la prsence du processus d'coute. */
 		socket__ Interroger_( err::handle ErrHandle );
 	public:
 		void reset( bool P = true )

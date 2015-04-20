@@ -51,7 +51,7 @@ const char *rgstry::GetLabel( status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un '<arbibg'.
+	return NULL;	// Pour viter un '<arbibg'.
 
 }
 
@@ -349,7 +349,7 @@ ERREpilog
 	return Row;
 }
 
-// Pour simplifier la mise en oeuvre de 'PathErrorRow' en tant que paramètre optionnel (alors == 'NULL').
+// Pour simplifier la mise en oeuvre de 'PathErrorRow' en tant que paramtre optionnel (alors == 'NULL').
 static inline bso::bool__ BuildPath_(
 	const str::string_ &PathString,
 	path_ &Path,
@@ -773,7 +773,7 @@ const value_ &rgstry::registry_::GetValue(
 	const path_ &Path,
 	row__ Row,
 	bso::bool__ *Missing,
-	buffer &Buffer ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+	buffer &Buffer ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	static value Empty;
 	const value_ *Result = &Empty;
@@ -798,7 +798,7 @@ const value_ &rgstry::registry_::GetValue(
 	row__ Row,
 	bso::bool__ *Missing,
 	buffer &Buffer,
-	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	static value Empty;
 	const value_ *Result = &Empty;
@@ -1006,14 +1006,14 @@ ERRBegin
 		Root = Callback.GetRoot();
 		break;
 	case xml::sUnexpectedEOF:
-//		Root = E_NIL;	// 'Root' peut avoir été in,itilisée par l'utilisateur.
+//		Root = E_NIL;	// 'Root' peut avoir t in,itilise par l'utilisateur.
 		PFlow.GetContext( Context );
 		break;
 	default:
 		if ( xml::IsEncodingRelatedError( Status ) )
 			PFlow.GetContext( Context );
 		else
-			// Puisque l'on passe par le préprocesseur, si une erreur est rencontrée, xml::Parse(...)' ne peut normalement retourner que 'xml::sUndexpectedEOF'.
+			// Puisque l'on passe par le prprocesseur, si une erreur est rencontre, xml::Parse(...)' ne peut normalement retourner que 'xml::sUndexpectedEOF'.
 			ERRFwk();
 		break;
 	}
@@ -1031,7 +1031,7 @@ const value_ &rgstry::overloaded_registry___::GetValue(
 	const str::string_ &PathString,
 	bso::bool__ *Missing,
 	buffer &Buffer,
-	sdr::row__ *PathErrorRow )const // Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+	sdr::row__ *PathErrorRow )const // Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	static value Empty;
 	const value_ *Result = &Empty;
@@ -1142,7 +1142,7 @@ const value_ &rgstry::multi_level_registry_::GetValue(
 	const str::string_ &PathString,
 	bso::bool__ *Missing,
 	buffer &Buffer,
-	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	const value_ *Result = &::Empty_;
 ERRProlog
@@ -1508,6 +1508,25 @@ ERREpilog
 }
 
 row__ rgstry::multi_level_registry_::Search(
+	level__ Level,
+	const tentry__ &Entry ) const
+{
+	row__ Row = E_NIL;
+ERRProlog
+	str::string Path;
+ERRBegin
+	Path.Init();
+	Entry.GetPath( Path );
+
+	Row = Search( Path, Level );
+ERRErr
+ERREnd
+ERREpilog
+	return Row;
+}
+
+
+row__ rgstry::multi_level_registry_::Search(
 	const str::string_ &PathString,
 	level__ &Level,
 	sdr::row__ *PathErrorRow ) const
@@ -1538,17 +1557,20 @@ ERREpilog
 
 row__ rgstry::multi_level_registry_::Search(
 	const tentry__ &Entry,
-	level__ &Level,
-	sdr::row__ *PathErrorRow ) const
+	level__ &Level ) const
 {
 	row__ Row = E_NIL;
 ERRProlog
 	str::string Path;
+	sdr::row__ PathErrorRow = E_NIL;
 ERRBegin
 	Path.Init();
 	Entry.GetPath( Path );
 
-	Row = Search( Path, Level, PathErrorRow );
+	Row = Search( Path, Level, &PathErrorRow );
+
+	if ( PathErrorRow != E_NIL )
+		ERRFwk();
 ERRErr
 ERREnd
 ERREpilog

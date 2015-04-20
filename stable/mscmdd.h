@@ -326,12 +326,12 @@ namespace mscmdd {
 	struct _data___
 	{
 	public:
-		mtx::handler__ Access;	// Pour protèger l'accés aus données de cet structure.
+		mtx::handler__ Access;	// Pour protger l'accs aus donnes de cet structure.
 		mtx::handler__ Full;		// Pour faire attendre le producteur si 'Buffer' est plein.
 		mtx::handler__ Empty;		// Pout faire attendre le consommateur si 'Buffer' est vide.
 		fdr::datum__ *Buffer;
 		fdr::size__ Size, Available, Position;
-		bso::bool__ Purge;	// Lorsque à 'true', purge l'ensemble des données MIDI.
+		bso::bool__ Purge;	// Lorsque  'true', purge l'ensemble des donnes MIDI.
 		void _data__( void )
 		{
 			Access = Full = Empty = MTX_INVALID_HANDLER;
@@ -398,7 +398,7 @@ namespace mscmdd {
 
 					mtx::Delete( _Data.Access );
 					mtx::Delete( _Data.Full );
-					mtx::Delete( _Data.Empty, true );	// Comme toute les données ont été lues, ce mutex est verrouillé, on autorise donc sa destruction même si verrouillé.
+					mtx::Delete( _Data.Empty, true );	// Comme toute les donnes ont t lues, ce mutex est verrouill, on autorise donc sa destruction mme si verrouill.
 
 
 					midiInClose( _Handle );
@@ -567,7 +567,7 @@ namespace mscmdd {
 		}
 	};
 
-	typedef flw::standalone_iflow__<> _iflow__;	// En fait, le 'template' est, et doit être, à 'O' (voir 'flw::standalone_iflow__').
+	typedef flw::standalone_iflow__<> _iflow__;	// En fait, le 'template' est, et doit tre,  'O' (voir 'flw::standalone_iflow__').
 
 	class midi_iflow___
 	: public _iflow__
@@ -756,7 +756,7 @@ namespace mscmdd {
 			break;
 		}
 
-		return 0;	// Pour éviter un 'warning'.
+		return 0;	// Pour viter un 'warning'.
 	}
 
 

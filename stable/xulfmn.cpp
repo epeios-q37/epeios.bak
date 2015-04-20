@@ -150,7 +150,7 @@ ERRBegin
 
 	nsxpcm::SetSelectedItem( Trunk.UI().Main().Widgets.mnlPredefinedProjectList );
 
-	// La sélection de l'item de 'Trunk.UI().Main().Widgets.mnuPredefinedProject'  est réalisé directement en XSL.
+	// La slection de l'item de 'Trunk.UI().Main().Widgets.mnuPredefinedProject'  est ralis directement en XSL.
 ERRErr
 ERREnd
 ERREpilog
@@ -181,9 +181,9 @@ void xulfmn::_main_core__::Attach( nsIDOMWindow *Window )
 
 	Trunk().UI().EventHandlers.M.Attach( Window );
 
-	FillPredefinedProjectsMenu_( Trunk(), Window );	// N'a à être fait qu'une seule fois.
+	FillPredefinedProjectsMenu_( Trunk(), Window );	// N'a  tre fait qu'une seule fois.
 
-	Trunk().UI().EventHandlers.M.Exit.Add( Window, nsxpcm::efClose ); // Parce que 'xex:onclose=...' est inopérant sur 'window'.
+	Trunk().UI().EventHandlers.M.Exit.Add( Window, nsxpcm::efClose ); // Parce que 'xex:onclose=...' est inoprant sur 'window'.
 }
 
 

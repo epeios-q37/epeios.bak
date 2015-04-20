@@ -67,7 +67,7 @@ extern class ttr_tutor &BKDRACTutor;
 #include "bkdacc.h"
 #include "bch.h"
 
-#define BKDRAC_OUT_PARAMETERS_AMOUNT_MAX		20	// Le nombre maximum de paramètres en sortie.
+#define BKDRAC_OUT_PARAMETERS_AMOUNT_MAX		20	// Le nombre maximum de paramtres en sortie.
 
 namespace bkdrac {
 

@@ -83,7 +83,7 @@ namespace mthitg {
 	class integer;
 	class integer_;
 
-	// Prédéclaration.
+	// Prdclaration.
 
 	int Comp_(
 		const integer_ &Op1,

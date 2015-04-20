@@ -125,7 +125,7 @@ namespace ctn {
 			Statics.Allocate( Size );
 			Statics.Store( O.Statics, Size ); 
 
-			// Peu importe la valeur de retour, l'allocation des objets sous-jacent a déjà été traité...
+			// Peu importe la valeur de retour, l'allocation des objets sous-jacent a dj t trait...
 			amount_extent_manager_<r>::Handle( Size, aem::mFitted );
 			amount_extent_manager_<r>::operator =( O );
 
@@ -220,14 +220,14 @@ namespace ctn {
 # endif
 			Allocate( Size, *(st *)NULL, Mode );	// 'NULL' because this parameter is used only when size increased.
 		}
-		// Comme 'ecrire()', sauf pour la multimémoire, qui contient la partie dynamique.
+		// Comme 'ecrire()', sauf pour la multimmoire, qui contient la partie dynamique.
 	/*	void EcrireToutDansFlotSaufPartiesDynamiques( flo_sortie_ &Flot ) const
 		{
 			FLOEcrire( *AStorage.S_, Flot );
 			Dynamique.ecrire( Flot );
 			Statique.ecrire( Flot );
 		}
-		// Comme 'lire()', sauf pour la multimémoire, qui contient la partie dynamique.
+		// Comme 'lire()', sauf pour la multimmoire, qui contient la partie dynamique.
 		void LireToutDeFlotSaufPartiesDynamiques( flo_entree_ &Flot )
 		{
 			FLOLire( Flot, *AStorage.S_ );
@@ -515,16 +515,16 @@ namespace ctn {
 			Pilote_.Index( E_NIL );
 		}
 	protected:
-		// Conteneur auquel est rattaché l'élément.
+		// Conteneur auquel est rattach l'lment.
 	//	ctn_conteneur_base_ < ctn_item_mono < t, st > :: s  > *Conteneur_;
 		basic_container_<st, r> *Conteneur_;
-		/* Pilote permettant l'accés à la partie dynamique des objets contenus
-		dans le conteneur auquel cet élément est rattaché. */
+		/* Pilote permettant l'accs  la partie dynamique des objets contenus
+		dans le conteneur auquel cet lment est rattach. */
 		ias::indexed_aggregated_storage_driver__ Pilote_;
 	public:
 		struct s
 		: public st
-		{} ctn_S_; //pour ne pas risquer d'ambigüité.
+		{} ctn_S_; //pour ne pas risquer d'ambigit.
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
@@ -561,7 +561,7 @@ namespace ctn {
 			Conteneur_ = Conteneur;
 			Pilote_.Init( Conteneur->Dynamics );
 		}
-		//* Cale l'élément sur l'élément du conteneur à la position 'Position'
+		//* Cale l'lment sur l'lment du conteneur  la position 'Position'
 		void Set( r Position )
 		{
 # ifdef CTN_DBG
@@ -579,7 +579,7 @@ namespace ctn {
 				Pilote_.Index( *Position );
 			}
 		}
-		// Synchronise avec l'élément du conteneur (leur contenu devient identique).
+		// Synchronise avec l'lment du conteneur (leur contenu devient identique).
 		void Flush( void )
 		{
 			Vider_();
@@ -617,16 +617,16 @@ namespace ctn {
 			Pilote_.Index( E_NIL );
 		}
 	protected:
-		// Conteneur auquel est rattaché l'élément.
+		// Conteneur auquel est rattach l'lment.
 	//	ctn_conteneur_base_ < ctn_item_mono < t, st > :: s  > *Conteneur_;
 		const basic_container_<st,r> *Conteneur_;
-		/* Pilote permettant l'accés à la partie dynamique des objets contenus
-		dans le conteneur auquel cet élément est rattaché. */
+		/* Pilote permettant l'accs  la partie dynamique des objets contenus
+		dans le conteneur auquel cet lment est rattach. */
 		ias::const_indexed_aggregated_storage_driver__ Pilote_;
 	public:
 		struct s
 		: public st
-		{} ctn_S_; //pour ne pas risquer d'ambigüité.
+		{} ctn_S_; //pour ne pas risquer d'ambigit.
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
@@ -657,7 +657,7 @@ namespace ctn {
 			Conteneur_ = &Conteneur;
 			Pilote_.Init( Conteneur.Dynamics );
 		}
-		//* Cale l'élément sur l'élément du conteneur à la position 'Position'
+		//* Cale l'lment sur l'lment du conteneur  la position 'Position'
 		void Set( r Position )
 		{
 # ifdef CTN_DBG
@@ -675,7 +675,7 @@ namespace ctn {
 				Pilote_.Index( *Position );
 			}
 		}
-		// Synchronise avec l'élément du conteneur (leur contenu devient identique).
+		// Synchronise avec l'lment du conteneur (leur contenu devient identique).
 		void Flush( void )
 		{
 			Vider_();
@@ -999,7 +999,7 @@ namespace ctn {
 
 			return P;
 		}
-		// Pour faciliter l'interchangeabilité avec les object du module 'lstctn'.
+		// Pour faciliter l'interchangeabilit avec les object du module 'lstctn'.
 		r Add(
 			const t &Object,
 			aem::mode__ Mode = aem::m_Default )
@@ -1373,7 +1373,7 @@ namespace ctn {
 
 			return P;
 		}
-		// Pour faciliter l'interchangeabilité avec les object du module 'lstctn'.
+		// Pour faciliter l'interchangeabilit avec les object du module 'lstctn'.
 		r Add(
 			const t &Object,
 			aem::mode__ Mode = aem::m_Default )

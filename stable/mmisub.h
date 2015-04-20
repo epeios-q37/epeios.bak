@@ -67,15 +67,15 @@ extern class ttr_tutor &MMISUBTutor;
 #include "mdr.h"
 #include "epeios.h"
 
-// Ce module est en réalité un sous-module de la bibliothèque 'MMI', d'où le 'namespace' ci-dessous.
-// Facilite l'imbrication avec la bibliothèque 'BCH'.
-// Toutes les méthodes signalées comme 'déportées' sont défini dans le module 'MMM'.
+// Ce module est en ralit un sous-module de la bibliothque 'MMI', d'o le 'namespace' ci-dessous.
+// Facilite l'imbrication avec la bibliothque 'BCH'.
+// Toutes les mthodes signales comme 'dportes' sont dfini dans le module 'MMM'.
 
 namespace mmi {
 	//t The type of an index in the indexed multimemory.
 	E_ROW( index__ );
 
-	// Prédéclaration.
+	// Prdclaration.
 	class indexed_multimemory_;
 
 	class _base_indexed_multimemory_driver__
@@ -85,7 +85,7 @@ namespace mmi {
 		index__ _Index;
 		const indexed_multimemory_ *&Multimemoire_;
 	protected:
-		// Déportée.
+		// Dporte.
 		virtual void MDRRecall(
 			mdr::row_t__ Position,
 			mdr::size__ Amount,
@@ -142,7 +142,7 @@ namespace mmi {
 		{
 			return _Index;
 		}
-		// Déportée.
+		// Dporte.
 		epeios::size__ Size( void ) const;
 		friend class indexed_multimemory_driver__;
 	};
@@ -153,16 +153,16 @@ namespace mmi {
 	{
 	private:
 		indexed_multimemory_ *Multimemoire_;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 	protected:
-		// Déportée.
+		// Dporte.
 		virtual void MDRStore(
 			const epeios::datum__ *Buffer,
 			mdr::size__ Amount,
 			mdr::row_t__ Position );
-		// Déportée.
+		// Dporte.
 		virtual void MDRAllocate( mdr::size__ Capacity );
-		// Déportée.
+		// Dporte.
 		virtual void MDRFlush( void );
 	public:
 		indexed_multimemory_driver__( mdr::size__ &Extent	)
@@ -199,7 +199,7 @@ namespace mmi {
 	{
 	private:
 		const indexed_multimemory_ *Multimemoire_;
-		// memoire à laquelle il a été affecté
+		// memoire  laquelle il a t affect
 	public:
 		const_indexed_multimemory_driver__( mdr::size__ &Extent	)
 		: _base_indexed_multimemory_driver__( Multimemoire_, Extent ) {}

@@ -58,7 +58,7 @@ const char *sclxhtml::GetLauncher( void )
 #define FUNCTION_SPEC
 # endif
 
-// Bien que définit dans un '.cpp', et propre à ce '.cpp', VC++ se mélange les pinceaux avec le 'callback__' définit dans 'scllocale.cpp', d'où le 'namespace'.
+// Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
 
 	typedef xhtcllbk::callback__ _callback__;
@@ -175,7 +175,7 @@ ERRProlog
 ERRBegin
 		if ( _OnBeforeAction( Id, Action ) )
 			if ( !strcmp( Action, xhtcllbk::CloseActionLabel ) )
-				Success = _OnClose();	// Dans ce cas, si 'Success' est à 'false', la fermeture de l'application est suspendue.
+				Success = _OnClose();	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 			else
 				Success = _Handler.Launch( Id, Action );
 ERRErr

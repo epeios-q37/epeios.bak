@@ -73,7 +73,7 @@ namespace tys {
 	: public b
 	{
 	private:
-		// place dans 'Tampon' 'Nomnbre' objets à la position 'Position'
+		// place dans 'Tampon' 'Nomnbre' objets  la position 'Position'
 		void _Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Nombre,
@@ -81,7 +81,7 @@ namespace tys {
 		{
 			b::Recall( Position * sizeof( t ), Nombre * sizeof( t ), (sdr::datum__ *)Tampon );
 		}
-		// écrit 'Taille' objets de 'Tampon' à la position 'Position'
+		// crit 'Taille' objets de 'Tampon'  la position 'Position'
 		void _Store(
 			const t *Tampon,
 			sdr::size__ Nombre,
@@ -89,8 +89,8 @@ namespace tys {
 		{
 			b::Store( (sdr::datum__ *)Tampon, Nombre * sizeof( t ), Position * sizeof( t ) );
 		}
-		/* écrit 'Nombre' objets de 'Source' à partir de 'Position'
-		à la position 'Decalage' */
+		/* crit 'Nombre' objets de 'Source'  partir de 'Position'
+		 la position 'Decalage' */
 		void _Store(
 			const _storage_ &Source,
 			sdr::size__ Quantite,
@@ -185,7 +185,7 @@ namespace tys {
 			Store( Get( Position2 ), Position1 );
 			Store( *(t *) O, Position2 );
 		}
-		// Remplit à partir de 'Position' avec 'Amount' 'Object'
+		// Remplit  partir de 'Position' avec 'Amount' 'Object'
 		void Fill(
 			const t &Object,
 			r Position,

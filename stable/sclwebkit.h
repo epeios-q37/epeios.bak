@@ -79,7 +79,7 @@ namespace sclwebkit {
 		}
 	};
 
-	// L'utilisateur met dans la classe mère ses propres objets et l'instancie par un 'new', et il est assuré qu'un 'delete' sera fait une fois la bibliothèque déchargée.
+	// L'utilisateur met dans la classe mre ses propres objets et l'instancie par un 'new', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
 	class callback__
 	{
 	private:

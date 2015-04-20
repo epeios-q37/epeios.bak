@@ -76,7 +76,7 @@ public:
 	}
 };
 
-// Dans cette classe, on place ce qui est commun à tous les 'backend's.
+// Dans cette classe, on place ce qui est commun  tous les 'backend's.
 class callback___
 : public _callback___
 {

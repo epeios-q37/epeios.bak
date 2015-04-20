@@ -49,7 +49,7 @@ const char *cgimng::GetLogLabel( log__ Log )
 	CASE( Cleaning );
 	default:
 		ERRPrm();
-		return NULL;	// Pour éviter un 'warning'.
+		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
 
@@ -98,7 +98,7 @@ void cgimng::user_functions__::SSNMNGDelete( void *UP )
 		ERRc();
 
 #	else
-#		pragma message ( __LOC__ "bogue toujours non résolu ; contournement temporaire !" )
+#		pragma message ( __LOC__ "bogue toujours non rsolu ; contournement temporaire !" )
 #	endif
 
 #endif
@@ -171,7 +171,7 @@ ERRBegin
 		Data.InUse = true;
 
 		if ( !mtx::TryToLock( Data.Mutex ) ) {
-			Sessions.reset();	// Pour déverouller 'Sessions'.
+			Sessions.reset();	// Pour dverouller 'Sessions'.
 			mtx::Lock( Data.Mutex );
 			Sessions.Init( Sessions_ );	// Pour reverroullier 'Sessions'.
 		}

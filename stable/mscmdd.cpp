@@ -72,7 +72,7 @@ static void Fill_(
 	bso::bool__ Wait = false;
 	bso::size__ AwareAmount = 0;
 
-	if ( Data.Purge )	// Pas de protection; c'est un booléen uniquement accèdé en lecture.
+	if ( Data.Purge )	// Pas de protection; c'est un boolen uniquement accd en lecture.
 		return;
 
 	while ( Amount != 0 ) {
@@ -89,7 +89,7 @@ static void Fill_(
 		memcpy( Data.Buffer + Data.Available + Data.Position, Buffer, AwareAmount );
 
 		if ( _IsEmpty( Data ) )
-			mtx::Unlock( Data.Empty );	// Si 'Data.Buffer' était vide, on signale au consommateur que ce n'est plus le cas.
+			mtx::Unlock( Data.Empty );	// Si 'Data.Buffer' tait vide, on signale au consommateur que ce n'est plus le cas.
 
 		Amount -= AwareAmount;
 		Buffer += AwareAmount;
@@ -206,19 +206,19 @@ fdr::size__ mscmdd::midi_in___::Read(
 
 		mtx::Unlock( _Data.Access );
 
-		mtx::Lock( _Data.Empty );	// On attend si nécessaire que des données soient didponibles.
+		mtx::Lock( _Data.Empty );	// On attend si ncessaire que des donnes soient didponibles.
 		mtx::Unlock( _Data.Empty );
 
 		mtx::Lock( _Data.Access );
 	}
 
-	// Bien que '_Data.Empty' ne soit pas verrouilles à ce point, il peut ne pas y avoir de données disponibles, si toutes les données ont été lues.
+	// Bien que '_Data.Empty' ne soit pas verrouilles  ce point, il peut ne pas y avoir de donnes disponibles, si toutes les donnes ont t lues.
 
 	if ( Maximum > _Data.Available )
 		Maximum = _Data.Available;
 
 	if ( _IsFull( _Data ) )
-		mtx::Unlock( _Data.Full );	// Si '_Data.Buffer' était plein, on signale au producteur que ce n'est plus le cas.
+		mtx::Unlock( _Data.Full );	// Si '_Data.Buffer' tait plein, on signale au producteur que ce n'est plus le cas.
 
 	memcpy( Buffer, _Data.Buffer + _Data.Position, Maximum );
 
@@ -242,7 +242,7 @@ bso::bool__ mscmdd::midi_in___::Init(
 	bso::ubyte__ Amount = sizeof( _Header ) / sizeof( *_Header );
 	reset();
 
-	// '_Data' n'est pas initialisé, mais ce n'est pas grave, car ne sera ps utilisé tant qu'un 'Start' n'aura pas été lancé.
+	// '_Data' n'est pas initialis, mais ce n'est pas grave, car ne sera ps utilis tant qu'un 'Start' n'aura pas t lanc.
 	if ( midiInOpen( &_Handle, Device, (DWORD)MidiInProc_, (DWORD)&_Data, CALLBACK_FUNCTION ) != MMSYSERR_NOERROR ) {
 		if ( ErrHandling != err::hUserDefined )
 			ERRf();
@@ -256,7 +256,7 @@ bso::bool__ mscmdd::midi_in___::Init(
 	_Data.Purge = false;
 	_Data.Buffer = _Cache;
 
-	// '_Data' seulement initialisé maintenant pour signaler la réussite de l'opération d'ouverture.
+	// '_Data' seulement initialis maintenant pour signaler la russite de l'opration d'ouverture.
 
 	while( Amount-- ) {
 		_Header[Amount].lpData = _HeaderBuffer[Amount];
@@ -553,7 +553,7 @@ const char *mscmdd::Label( status__ Status )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 

@@ -44,7 +44,7 @@ void xulfbs::_Report(
 {
 	if ( Message != NULL )
 		Trunk.UI().LogAndPrompt( Message );
-	else {	// L'erreur a été détectée dans un contexte où les informations ka concernant ne sont pas disponibles, d'où traitement ici.
+	else {	// L'erreur a t dtecte dans un contexte o les informations ka concernant ne sont pas disponibles, d'o traitement ici.
 		switch (  ERRType ) {
 		case err::t_Abort:
 			break;

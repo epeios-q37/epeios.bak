@@ -101,9 +101,9 @@ class ttr_tutor
 {
 	friend class ttr_chief;
 private:
-	// Pour le chaînage des différents tuteurs.
+	// Pour le chanage des diffrents tuteurs.
 	ttr_tutor *Next_;
-	// Chaine pour afficher la publicitée
+	// Chaine pour afficher la publicite
 	static char Adv_[TTR_ADV_SIZE_MAX + 1];
 	// True if the chief is ready.
 	static char ChiefReady_;

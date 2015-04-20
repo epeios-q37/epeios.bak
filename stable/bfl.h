@@ -71,7 +71,7 @@ namespace bfl {
 	class bit_iflow__
 	{
 	private:
-		// 'Flow' duquel sont lues les données.
+		// 'Flow' duquel sont lues les donnes.
 		flw::iflow__ &_Flow;
 		datum__ *_Datum;
 		bso::ubyte__ _Counter;
@@ -105,7 +105,7 @@ namespace bfl {
 	class bit_oflow__
 	{
 	private:
-		// 'Flow' dans lequel sont écrites les données.
+		// 'Flow' dans lequel sont crites les donnes.
 		flw::oflow__ &_Flow;
 		datum__ *_Datum;
 		bso::ubyte__ _Counter;

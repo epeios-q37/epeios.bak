@@ -102,13 +102,13 @@ namespace dte {
 	typedef char buffer__[11];
 
 	enum format__ {
-		fDDMMYYYY,	// à la française ('25/11/2003').
-		fMMDDYYYY,	// à l'anglaise ('11/25/2003').
+		fDDMMYYYY,	//  la franaise ('25/11/2003').
+		fMMDDYYYY,	//  l'anglaise ('11/25/2003').
 		fYYYYMMDD,	// informatique ('2003/25/11').
 		f_amount,
 		f_Undefined,
 		f_Unknown,	// Format incommu.
-		f_Ambiguous	// Format indéterminable.
+		f_Ambiguous	// Format indterminable.
 	};
 
 	inline const char *GetLabel( format__ Format )
@@ -125,7 +125,7 @@ namespace dte {
 			break;
 		default:
 			ERRPrm();
-			return NULL;	// Pour éviter un warning.
+			return NULL;	// Pour viter un warning.
 			break;
 		}
 	};
@@ -211,7 +211,7 @@ namespace dte {
 		date__(
 			const char *Date,
 			format__ Format,
-			const char **End = NULL )	// N'est éventuellement modifié que si '*End== NULL'.
+			const char **End = NULL )	// N'est ventuellement modifi que si '*End== NULL'.
 		{
 			reset( false );
 
@@ -240,7 +240,7 @@ namespace dte {
 		bso::bool__ Init(
 			const char *Date,
 			format__ Format,
-			const char **End = NULL )	// N'est éventuellement modifié que si '*End == NULL'.
+			const char **End = NULL )	// N'est ventuellement modifi que si '*End == NULL'.
 		{
 			reset();
 

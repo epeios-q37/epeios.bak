@@ -102,10 +102,10 @@ namespace csducl {
 		}
 		bso::bool__ Init(
 			const char *Backend,
-			csdlec::library_data__ &LibraryData,	// Utilisé uniquement si le backend est une bibliothèque.
+			csdlec::library_data__ &LibraryData,	// Utilis uniquement si le backend est une bibliothque.
 			csdsnc::log_functions__ &Log,
 			type__ Type,
-			bso::uint__ PingDelay );	// Délai maximum d'inactivité entre deux 'ping'.
+			bso::uint__ PingDelay );	// Dlai maximum d'inactivit entre deux 'ping'.
 		type__ GetType( void ) const
 		{
 			return _Type;
@@ -134,7 +134,7 @@ namespace csducl {
 				break;
 			}
 
-			return *(flw::ioflow__ *)NULL;	// Pour éviter un 'warning'.
+			return *(flw::ioflow__ *)NULL;	// Pour viter un 'warning'.
 		}
 	protected:
 		virtual fdr::size__ FDRRead(

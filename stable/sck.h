@@ -80,7 +80,7 @@ extern class ttr_tutor &SCKTutor;
 #	define SCK_SOCKET_ERROR			SOCKET_ERROR
 #	define SCK_ECONNRESET			WSAECONNRESET
 #	define SCK_EWOULDBLOCK			WSAEWOULDBLOCK
-#	define SCK_EAGAIN				WSAEWOULDBLOCK	// Pas de 'WSAEAGAIN', mais mettre ça simplifie certaines lignes.
+#	define SCK_EAGAIN				WSAEWOULDBLOCK	// Pas de 'WSAEAGAIN', mais mettre a simplifie certaines lignes.
 #	define SCK_EINTR				WSAEINTR
 #	define SCK_ENOTSOCK				WSAENOTSOCK
 #elif defined( SCK__POSIX )
@@ -139,16 +139,16 @@ namespace sck {
 
 	typedef bso::u16__	duration__;
 
-	/* NOTA: Les deux déclarations ci-dessous ont été mise en place pour simplifier
-	l'usage des sockets sous Windows. En effet, ce dernier, et lui seul, ne réalise
-	pas automatiquement l'initialisation de la couche réseau. Cette bibliothèque,
+	/* NOTA: Les deux dclarations ci-dessous ont t mise en place pour simplifier
+	l'usage des sockets sous Windows. En effet, ce dernier, et lui seul, ne ralise
+	pas automatiquement l'initialisation de la couche rseau. Cette bibliothque,
 	cependant, propose une fonction permettant d'assurer un comportement identique
-	sur un maximum de sytème. Cette fonction n'est pas utilisée par cette bibliothèque,
-	mais une utilisation pertinente de cette fonction, notamment par les bibliothèques
-	gèrant respectivement les fonctionnalités de serveur et de client, permettront
-	à l'utilisateur de faire abstraction de la contrainte imposée par Windows. */
+	sur un maximum de sytme. Cette fonction n'est pas utilise par cette bibliothque,
+	mais une utilisation pertinente de cette fonction, notamment par les bibliothques
+	grant respectivement les fonctionnalits de serveur et de client, permettront
+	 l'utilisateur de faire abstraction de la contrainte impose par Windows. */
 
-	// Vrai si l'initialisation de la couche réseau a été faite, faux sinon.
+	// Vrai si l'initialisation de la couche rseau a t faite, faux sinon.
 	extern bool Ready_;
 
 	//f Initialize TCP/IP layer.
@@ -292,7 +292,7 @@ namespace sck {
 		socket__ _Socket;
 		duration__ _TimeOut;	// En secondes.
 		bso::bool__ _Error;
-		time_t _EpochTimeStamp;	// Horodatage de la dernière activité (lecture ou écriture);
+		time_t _EpochTimeStamp;	// Horodatage de la dernire activit (lecture ou criture);
 		const flw::ioflow__ *_User;
 		void _Touch( void )
 		{
@@ -371,7 +371,7 @@ namespace sck {
 			_Socket = Socket;
 			_TimeOut = TimeOut;
 			_User = User;
-			_Touch();	// On suppose qu'il n'y a pas une trop longue attente entre la création de la socket et l'appel à cette méthode ...
+			_Touch();	// On suppose qu'il n'y a pas une trop longue attente entre la cration de la socket et l'appel  cette mthode ...
 		}
 		E_RODISCLOSE__( socket__, Socket )
 		E_RODISCLOSE__( time_t, EpochTimeStamp )

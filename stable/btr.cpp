@@ -120,7 +120,7 @@ row_t__ btr::_nodes_manager_::SearchMostLeftNode(
 	return Node;
 }
 
-// Retourne le premier noeud sans fille à partir de 'Position' en descendant par les fille.
+// Retourne le premier noeud sans fille  partir de 'Position' en descendant par les fille.
 row_t__ btr::_nodes_manager_::SearchMostRightNode(
 	row_t__ Node,
 	level__ &Level ) const
@@ -138,7 +138,7 @@ row_t__ btr::_nodes_manager_::SearchMostRightNode(
 	return Node;
 }
 
-// Retourne le père du premier noeud qui est fils en remontant.
+// Retourne le pre du premier noeud qui est fils en remontant.
 row_t__ btr::_nodes_manager_::ParentOfFirstLeftNode( row_t__ Node ) const
 {
 	while( !IsLeft( Node )
@@ -151,7 +151,7 @@ row_t__ btr::_nodes_manager_::ParentOfFirstLeftNode( row_t__ Node ) const
 		return E_NIL;
 }
 
-// Retourne le père du premier noeud qui est fille en remontant.
+// Retourne le pre du premier noeud qui est fille en remontant.
 row_t__ btr::_nodes_manager_::ParentOfFirstRightNode( row_t__ Node ) const
 {
 	while( !IsRight( Node )
@@ -165,7 +165,7 @@ row_t__ btr::_nodes_manager_::ParentOfFirstRightNode( row_t__ Node ) const
 }
 
 
-// Ecrit dans 'Flot' l'arbre de racine l'élément à 'Position'.
+// Ecrit dans 'Flot' l'arbre de racine l'lment  'Position'.
 /*
 void arbre_binaire::EcrireDansFlot(
 	flo_sortie_portable_ &Flot,
@@ -220,7 +220,7 @@ void arbre_binaire::EcrireDansFlot(
 }
 */
 
-/* Lecture de l'abre contenu dans 'Flot'. La valeur retournée correspond à
+/* Lecture de l'abre contenu dans 'Flot'. La valeur retourne correspond 
 la position de la racine. */
 /*
 mbs__position abb_arbre_binaire_::LireDeFlot( flo_entree_portable_ &Flot )
@@ -353,8 +353,8 @@ void btr::_nodes_manager_::PrintStructure(
 	Flot << txf::nl << txf::commit;
 }
 
-/* Remonte l'arbre 'Racine' à partir de 'Depart', dont la présence d'une fille
-n'est pas testée, jusqu'à trouver un aieul avec une fille. */
+/* Remonte l'arbre 'Racine'  partir de 'Depart', dont la prsence d'une fille
+n'est pas teste, jusqu' trouver un aieul avec une fille. */
 /*
 mbs__position abb_arbre_binaire_::TrouverAieulMaleAvecRight_(
 	mbs__position Depart,
@@ -437,7 +437,7 @@ void btr::Prepare(
 }
 
 
-// Ecrit dans 'Flot' l'arbre de racine l'élément à 'Position'.
+// Ecrit dans 'Flot' l'arbre de racine l'lment  'Position'.
 /*
 void arbre_binaire::EcrireDansFlot(
 	flo_sortie_portable_ &Flot,
@@ -492,7 +492,7 @@ void arbre_binaire::EcrireDansFlot(
 }
 */
 
-/* Lecture de l'abre contenu dans 'Flot'. La valeur retournée correspond à
+/* Lecture de l'abre contenu dans 'Flot'. La valeur retourne correspond 
 la position de la racine. */
 /*
 mbs__position abb_arbre_binaire_::LireDeFlot( flo_entree_portable_ &Flot )
@@ -626,8 +626,8 @@ void btr::_nodes_manager_::PrintStructure(
 	Flot << txf::nl << txf::sync;
 }
 */
-/* Remonte l'arbre 'Racine' à partir de 'Depart', dont la présence d'une fille
-n'est pas testée, jusqu'à trouver un aieul avec une fille. */
+/* Remonte l'arbre 'Racine'  partir de 'Depart', dont la prsence d'une fille
+n'est pas teste, jusqu' trouver un aieul avec une fille. */
 /*
 mbs__position abb_arbre_binaire_::TrouverAieulMaleAvecRight_(
 	mbs__position Depart,

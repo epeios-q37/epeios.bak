@@ -71,9 +71,9 @@ namespace iodef {
 		mUnknow,
 		//i Ecrase le contenu du fichier.
 		mRemove,
-		//i Ajoute à la fin du fichier.
+		//i Ajoute  la fin du fichier.
 		mAppend,
-		//i Ouvre le fichier ne lecture/écriture.
+		//i Ouvre le fichier ne lecture/criture.
 		mReadWrite,
 		//i Ouvre le fichier en lecture seule.
 		mReadOnly,

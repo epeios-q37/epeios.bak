@@ -62,7 +62,7 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	const plgncore::data__ *Data,
 	... )
 {
-	va_list Parameters;	// NOTA : leur contenu n'est pas encore traité.
+	va_list Parameters;	// NOTA : leur contenu n'est pas encore trait.
 	va_start( Parameters, Data );
 
 	if ( Data == NULL )

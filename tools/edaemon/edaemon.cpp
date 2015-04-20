@@ -58,7 +58,7 @@ using cio::CIn;
 #define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
 /*
-Ne pas modifier ; utilisé pour la génération automatique.
+Ne pas modifier ; utilis pour la gnration automatique.
 END
 */
 /* Beginning of the part which handles command line arguments. */
@@ -66,9 +66,9 @@ END
 enum exit_value__ {
 	evSuccess = EXIT_SUCCESS,
 	evGenericFailure = EXIT_FAILURE,
-	// Erreur dans les paramètres d'entrée.
+	// Erreur dans les paramtres d'entre.
 	evParameters,
-	// Erreur lors de l'ouverture des fichiers d'entrée ou de sortie.
+	// Erreur lors de l'ouverture des fichiers d'entre ou de sortie.
 	evInputOutput,
 	// Erreur lors du traitement.
 	evProcessing,

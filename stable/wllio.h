@@ -72,7 +72,7 @@ extern class ttr_tutor &WLLIOTutor;
 
 namespace wllio {
 
-	typedef bso::u64__	size__;	// LA taille d'un fichier est toujours codé en 64 bits, même pour une architectue 32 bits.
+	typedef bso::u64__	size__;	// LA taille d'un fichier est toujours cod en 64 bits, mme pour une architectue 32 bits.
 
 	typedef int descriptor__;
 
@@ -92,8 +92,8 @@ namespace wllio {
 		unsigned int _Patch( size__ Amount )
 		{
 			return (unsigned int)( Amount > INT_MAX ? INT_MAX : Amount );
-			// Comme les fonctions ('_reae', '_write_'...) retournent un 'int' pour indiquer le nombre d'octets effectivement trairés,
-			// Je suppose que l'on ne peut faire traité que 'INT_MAX' octets à la fois.
+			// Comme les fonctions ('_reae', '_write_'...) retournent un 'int' pour indiquer le nombre d'octets effectivement trairs,
+			// Je suppose que l'on ne peut faire trait que 'INT_MAX' octets  la fois.
 		}
 	public:
 		void reset( bso::bool__ = true )
@@ -193,7 +193,7 @@ namespace wllio {
 					break;
 				default:
 	#ifdef WLLIO_DBG
-					int Error = errno;	// Pour le débogage.
+					int Error = errno;	// Pour le dbogage.
 	#endif
 					if ( _D == _fileno( stdin ) )	// Si 'stdin'.
 						return false;

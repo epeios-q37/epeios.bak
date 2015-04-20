@@ -75,7 +75,7 @@ const char *fblovl::GetLabel( reply__ Reply )
 		break;
 	}
 
-	return NULL;	// Pour éviter un 'warning'.
+	return NULL;	// Pour viter un 'warning'.
 }
 
 

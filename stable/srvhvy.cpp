@@ -72,7 +72,7 @@ const char *srvhvy::GetLogLabel( log__ Log )
 		CASE( Delete );
 	default:
 		ERRu();
-		return NULL;	// Pour éviter un 'warning'.
+		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
 }

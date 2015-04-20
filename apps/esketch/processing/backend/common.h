@@ -30,7 +30,7 @@
 namespace common {
 	typedef sclbacknd::backend___ xbackend___;	// // 'xbackend' ('eXtended' 'backend').
 
-	class stuff___	// Contient les données propres à chaque 'backend', chaque connection (virtuelle) ayant son propre backend.
+	class stuff___	// Contient les donnes propres  chaque 'backend', chaque connection (virtuelle) ayant son propre backend.
 	{
 	private:
 		xbackend___ *_XBackend;

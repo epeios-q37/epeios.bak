@@ -222,7 +222,7 @@ static void Delete_(
 	CD( CommandsDetails, commands_details )
 	CD( ObjectsReferences, objects_references )
 	case cFlow:
-		break;	// 'Parameter.Content' contient '&IFlow', et pas un objet crée par un 'new', donc il n'ya arien a effacer.
+		break;	// 'Parameter.Content' contient '&IFlow', et pas un objet cre par un 'new', donc il n'ya arien a effacer.
 	default:
 		ERRPrm();
 		break;
@@ -260,7 +260,7 @@ void fblbrr::remote_callbacks___::FBLBRQPopOut(
 	flw::iflow__ &Flow,
 	cast__ Cast )
 {
-	if ( Cast != cFlow )	// Pour 'Cast == cFlow', '_Parameters' sera mis à jour ultèrieurement.
+	if ( Cast != cFlow )	// Pour 'Cast == cFlow', '_Parameters' sera mis  jour ultrieurement.
 		if ( _Parameters.Append( Create_( Cast ) ) != CRow )
 			ERRFwk();
 }

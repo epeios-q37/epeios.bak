@@ -80,7 +80,7 @@ namespace csdscm {
 			flw::ioflow__ &Flow,
 			void *UP ) = 0;
 		virtual void CSDPostProcess( void *UP ) = 0;
-		virtual void CSDExit( void ) = 0;	// Appelé lorsque l'on quitte l'application
+		virtual void CSDExit( void ) = 0;	// Appel lorsque l'on quitte l'application
 												// (facilite la mise en oeuvre en tant que service Windows).
 	public:
 		void reset( bso::bool__ = true )

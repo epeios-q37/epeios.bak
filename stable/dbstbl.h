@@ -84,13 +84,13 @@ namespace dbstbl {
 	using namespace dbsidx;
 
 	enum mode__ {
-		// Pas d'indexation, ou diffèrée.
+		// Pas d'indexation, ou diffre.
 		mBulk,
 		// Lecture seule.
 		mReadOnly,
-		// Lecture/écriture.
+		// Lecture/criture.
 		mReadWrite,
-		// Administrateur : changement de la structure  (création/suppression d'index, p. ex.).
+		// Administrateur : changement de la structure  (cration/suppression d'index, p. ex.).
 		mAdmin,
 		m_amount,
 		m_Undefined
@@ -115,7 +115,7 @@ namespace dbstbl {
 			break;
 		}
 
-		return mdr::m_Undefined;	// Pour éviter un 'warning'.
+		return mdr::m_Undefined;	// Pour viter un 'warning'.
 	}
 
 	typedef bch::E_BUNCH_( index_ * ) _indexes_;
@@ -298,7 +298,7 @@ namespace dbstbl {
 				break;
 			default:
 				ERRu();
-				return false;	// Pour éviter un warning.
+				return false;	// Pour viter un warning.
 				break;
 			}
 		}
@@ -311,10 +311,10 @@ namespace dbstbl {
 			str::string_ ::s Label;
 			_indexes_::s Indexes;
 			dbsctt::content__ *Content;	// On n'utilise pas 'content_', pour pouvoir appliquer
-										// une opération non 'const' dans une méthode 'const'.
+										// une opration non 'const' dans une mthode 'const'.
 			mode__ Mode;
 		} &S_;
-		str::string_ Label;	// Sert d'identifiant discriminat de la table. Utile pour servir de base aux noms de fichiers associées à la table.
+		str::string_ Label;	// Sert d'identifiant discriminat de la table. Utile pour servir de base aux noms de fichiers associes  la table.
 		_indexes_ Indexes;
 		table_( s &S )
 		: S_( S ),
@@ -328,7 +328,7 @@ namespace dbstbl {
 			S_.Content = NULL;
 			S_.Mode = m_Undefined;
 		}
-		E_VDTOR( table_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe héritante.
+		E_VDTOR( table_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe hritante.
 		void plug( mmm::E_MULTIMEMORY_ &MM )
 		{
 			Label.plug( MM );
@@ -533,7 +533,7 @@ namespace dbstbl {
 		{
 			ERRl();
 
-			return *this;	// Pour éviter un warning.
+			return *this;	// Pour viter un warning.
 		}
 		void Init(
 			const str::string_ &Label,
@@ -634,7 +634,7 @@ namespace dbstbl {
 	: public table
 	{
 	private:
-		// Seulement l'un des deux est utilisé.
+		// Seulement l'un des deux est utilis.
 		dbsdct::exploded_dynamic_content _Dynamic;
 		dbssct::exploded_static_content _Static;
 	protected:

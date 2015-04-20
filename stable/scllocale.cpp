@@ -85,7 +85,7 @@ static level__ GetLevel_( target__ Target )
 		break;
 	}
 
-	return *(level__ *)NULL;	// Pour éviter une 'warning'.
+	return *(level__ *)NULL;	// Pour viter une 'warning'.
 }
 
 void scllocale::EraseLocale( target__ Target )
@@ -150,7 +150,7 @@ void scllocale::LoadLocale(
 	return Load_( GetLevel_( Target ), Flow, Directory, RootPath, ErrorLabel );
 }
 
-// Bien que définit dans un '.cpp', et propre à ce '.cpp', VC++ se mélange les pinceaux avec le 'callback__' définit dans 'sclxhtml.cpp', d'où le 'namespace'.
+// Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'sclxhtml.cpp', d'o le 'namespace'.
 namespace {
 	typedef tagsbs::long_tags_callback__ _callback__;
 
