@@ -69,10 +69,9 @@ namespace {
 	protected:
 		virtual void XHTCLLBKInitialize( const xhtcllbk::shared_data__ &Data ) override
 		{
-
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
-				sclmisc::Initialize( Data.ERRError(), Data.SCLError(), (const char *)NULL );
+				sclmisc::Initialize( Data.ERRError(), Data.SCLError(), Data.CIO(), Data.Localization() );
 			}
 		}
 		virtual void XHTCLLBKBaseLanguage( TOL_CBUFFER___ &Buffer ) override

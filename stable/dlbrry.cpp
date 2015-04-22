@@ -164,10 +164,8 @@ bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &N
 	if ( ( _LibraryHandler = LoadLibraryW( Name.Internal() ) ) == NULL )
 		return false;
 #elif defined( TARGET_POSIX )
-	if ( ( _LibraryHandler = PosixLoadLibrary_( Name ) ) == NULL ) {
-		cio::COut << dlerror() << txf::nl << txf::commit;
+	if ( ( _LibraryHandler = PosixLoadLibrary_( Name ) ) == NULL )
 		return false;
-	}
 #else
 #	error
 #endif

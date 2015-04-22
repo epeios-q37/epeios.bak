@@ -36,6 +36,7 @@
 # include "err.h"
 # include "flw.h"
 # include "lcl.h"
+# include "cio.h"
 # include "rgstry.h"
 
 # include "csdscb.h"
@@ -49,7 +50,7 @@
 NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
 */
 
-# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"6"
+# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"7"
 
 # define CSDLEO_SHARED_DATA_VERSION	CSDLEO_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -99,12 +100,14 @@ namespace csdleo {
 		context__ Context;
 		const char *LibraryLocationAndName;
 		err::err___ *ERRError;
+		const cio::set__ *CIO;
 		void *UP;				// A la discrétion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
 			Context = c_Undefined;
 			LibraryLocationAndName = NULL;
 			ERRError = NULL;
+			CIO = NULL;
 			UP = NULL;
 		}
 		E_CDTOR( data__ );
@@ -126,6 +129,7 @@ namespace csdleo {
 			this->Context = Context;
 			this->LibraryLocationAndName = LibraryLocationAndName;
 			this->ERRError = ERRError;
+			this->CIO = &cio::GetCurrentSet();
 			this->UP = UP;
 		}
 	};

@@ -15,6 +15,35 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-04-22 :
+- FLW :
+	% Adding 'Driver(..)' methods.
+	- Some simplification.
+- CIO :
+	% Adding 'set__' object.
+	% Adding 'Initialize(...)' function whixh takes a 'set__'.
+	% '_S(In|Out|Err)OutDriver' are from now on private.
+	- Standardisation of the 'In' ,'Out', 'Err' enumeration order.
+	% Adding functions to retrieve some predefined 'set__'s.
+- CSDLEO :
+	* Adding 'CIO' member in 'shared_data__'.
+- PLGNCORE :
+	* Adding 'CIO' member in 'data__'.
+- SCLMISC :
+	* Adding 'CIO' parameters to 'Initialize(...)' functions.
+- SCLDAEMON, SCLPLUGIN, SCLTOOL, SCLXHTML :
+	- Adaptation to changes in 'SCLMISC'.
+- XHTCLLBK :
+	- Adding '(_)CIO' member in 'shared_data__'.
+
+2015-04-21 :
+- SCLMISC :
+	# No more 'SEGFAULT' on early errors (missing configuration file, for example).
+- SCLXHTML :
+	- Adaptation toi changes in 'XHTCLLBK'.
+- XHTCLLBK :
+	* Adding localization, where to search configuration ans locale file. Useful under Mac OS, where the executable is not necessary on the same place as the dynamic library.
+
 2015-04-14 :
 - FDR :
 	% Fixing 'Xcode' complainings.

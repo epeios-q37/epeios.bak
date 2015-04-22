@@ -101,14 +101,7 @@ namespace flw {
 		size__ _Red;
 		// Max amount of data alllowed between 2 reset.
 		size__ _AmountMax;
-		fdr::iflow_driver_base___ &_D( void )
-		{
-			if ( _Driver == NULL )
-				ERRFwk();
-
-			return *_Driver;
-		}
-		const fdr::iflow_driver_base___ &_D( void ) const
+		fdr::iflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
 				ERRFwk();
@@ -194,6 +187,10 @@ namespace flw {
 			_AmountMax = AmountMax;
 
 			_Red = 0;
+		}
+		fdr::iflow_driver_base___ &Driver( void ) const
+		{
+			return _D();
 		}
 		bso::bool__ IsCacheEmpty( bso::size__ &Available = *(bso::size__ *)NULL ) const
 		{
@@ -337,7 +334,7 @@ namespace flw {
 		size__ _Written;
 		// Max amount of data between 2 synchronizing.
 		size__ _AmountMax;
-		fdr::oflow_driver_base___ &_D( void )
+		fdr::oflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
 				ERRFwk();
@@ -467,6 +464,10 @@ namespace flw {
 			_AmountMax = AmountMax;
 
 			_Written = 0;
+		}
+		fdr::oflow_driver_base___ &Driver( void ) const
+		{
+			return _D();
 		}
 		//f Put up to 'Amount' bytes from 'Buffer'. Return number of bytes written.
 		size__ WriteUpTo(

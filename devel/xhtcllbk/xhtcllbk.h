@@ -43,7 +43,7 @@
 # include "iof.h"
 # include "sclerror.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"8"
+# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"9"
 
 # define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -252,8 +252,10 @@ namespace xhtcllbk {
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
 		err::err___ *_ERRError;
 		sclerror::error___ *_SCLError;
+		const cio::set__ *_CIO;
 		proxy_callback__ *_Callback;
 		const char *_LauncherIdentification;
+		const char *_Localization;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -261,19 +263,25 @@ namespace xhtcllbk {
 			_Control = 0;
 			_ERRError = NULL;
 			_SCLError = NULL;
+			_CIO = NULL;
 			_Callback = NULL;
+			_LauncherIdentification = NULL;
+			_Localization = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
 			proxy_callback__ &Callback,
-			const char *LauncherIdentification )
+			const char *LauncherIdentification,
+			const char *Localization )
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_ERRError = err::ERRError;
 			_SCLError = sclerror::SCLERRORError;
+			_CIO = &cio::GetCurrentSet();
 			_Callback = &Callback;
 			_LauncherIdentification = LauncherIdentification;
+			_Localization = Localization;
 		}
 		size_t ControlComputing( void )
 		{
@@ -306,6 +314,20 @@ namespace xhtcllbk {
 				ERRFwk();
 
 			return _LauncherIdentification;
+		}
+		const char *Localization( void ) const
+		{
+			if ( _Localization == NULL )
+				ERRFwk();
+
+			return _Localization;
+		}
+		const cio::set__ &CIO( void ) const
+		{
+			if ( _CIO == NULL )
+				ERRFwk();
+
+			return *_CIO;
 		}
 	};
 #pragma pack( pop )

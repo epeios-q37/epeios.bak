@@ -85,12 +85,14 @@ namespace sclmisc {
 	void Initialize(
 		err::err___ *ERRError,
 		sclerror::error___ *SCLError,
+		const cio::set__ &CIO,
 		const rgstry::entry__ &Configuration,
 		const rgstry::entry__ &Locale );
 
 	void Initialize(
 		err::err___ *ERRError,
 		sclerror::error___ *SCLError,
+		const cio::set__ &CIO,
 		xtf::extended_text_iflow__ &LocaleFlow,
 		const char *LocaleDirectory,
 		xtf::extended_text_iflow__ &RegistryFlow,
@@ -99,6 +101,7 @@ namespace sclmisc {
 	void Initialize(
 		err::err___ *ERRError,
 		sclerror::error___ *SCLError,
+		const cio::set__ &CIO,
 		const fnm::name___ &SuggestedDirectory );
 
 	void EraseProjectRegistry( void );

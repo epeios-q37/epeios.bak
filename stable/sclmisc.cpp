@@ -121,14 +121,30 @@ ERREnd
 ERREpilog
 }
 
-void sclmisc::Initialize(
+static void Initialize_(
 	err::err___ *ERRError,
 	sclerror::error___ *SCLError,
-	const rgstry::entry__ &Configuration,
-	const rgstry::entry__ &Locale )
+	const cio::set__ &CIO )
 {
 	err::ERRError = ERRError;
 	sclerror::SCLERRORError = SCLError;
+
+	cio::target__ Target = cio::GetTarget( CIO );
+
+	if ( Target != cio::tUser )
+		cio::Initialize( Target );
+	else
+		cio::Initialize( CIO );
+}
+
+void sclmisc::Initialize(
+	err::err___ *ERRError,
+	sclerror::error___ *SCLError,
+	const cio::set__ &CIO,
+	const rgstry::entry__ &Configuration,
+	const rgstry::entry__ &Locale )
+{
+	Initialize_( ERRError, SCLError, CIO );
 
 	sclrgstry::SetConfiguration( Configuration );
 	scllocale::SetLocale( scllocale::tMain, Locale );
@@ -238,36 +254,6 @@ ERREpilog
 }
 # endif
 
-static void Initialize_(
-	err::err___ *ERRError,
-	sclerror::error___ *SCLError,
-	xtf::extended_text_iflow__ &LocaleFlow,
-	const char *LocaleRootPath,
-	const char *LocaleDirectory,
-	xtf::extended_text_iflow__ &RegistryFlow,
-	const char *RegistryRootPath,
-	const char *RegistryDirectory )
-{
-ERRProlog
-	str::string Language;
-ERRBegin
-	err::ERRError = ERRError;
-	sclerror::SCLERRORError = SCLError;
-
-	scllocale::LoadLocale( scllocale::tMain, LocaleFlow, LocaleDirectory, LocaleRootPath );
-
-	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath );
-
-	Language.Init();
-	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par dfaut.
-		Language.Convert( BaseLanguage_ );
-
-	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format() );
-ERRErr
-ERREnd
-ERREpilog
-}
-
 static void BuildRootPath_(
 	const char *Subject,
 	const char *Target,
@@ -281,17 +267,16 @@ static void BuildRootPath_(
 	Path.Append( "\"]" );
 }
 
-void sclmisc::Initialize(
-	err::err___ *ERRError,
-	sclerror::error___ *SCLError,
+static void Initialize_(
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
 	const char *RegistryDirectory )
 {
 ERRProlog
+	str::string Language;
 	str::string LocaleRootPath, RegistryRootPath;
-	TOL_CBUFFER___ LocaleBuffer, RegistryBuffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
 	LocaleRootPath.Init();
 	BuildRootPath_( "Locale", SCLMISCTargetName, LocaleRootPath );
@@ -299,10 +284,32 @@ ERRBegin
 	RegistryRootPath.Init();
 	BuildRootPath_( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
-	Initialize_( ERRError, SCLError, LocaleFlow, LocaleRootPath.Convert( LocaleBuffer ), LocaleDirectory, RegistryFlow, RegistryRootPath.Convert( RegistryBuffer ), RegistryDirectory );
+	scllocale::LoadLocale( scllocale::tMain, LocaleFlow, LocaleDirectory, LocaleRootPath.Convert( Buffer ) );
+
+	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
+
+	Language.Init();
+	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par dfaut.
+		Language.Convert( BaseLanguage_ );
+
+	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format() );
 ERRErr
 ERREnd
 ERREpilog
+}
+
+void sclmisc::Initialize(
+	err::err___ *ERRError,
+	sclerror::error___ *SCLError,
+	const cio::set__ &CIO,
+	xtf::extended_text_iflow__ &LocaleFlow,
+	const char *LocaleDirectory,
+	xtf::extended_text_iflow__ &RegistryFlow,
+	const char *RegistryDirectory )
+{
+	Initialize_( ERRError, SCLError, CIO );
+
+	Initialize_( LocaleFlow, LocaleDirectory, RegistryFlow, RegistryDirectory );
 }
 
 static bso::bool__ GuessFileName_(
@@ -407,6 +414,7 @@ ERREpilog
 void sclmisc::Initialize(
 	err::err___ *ERRError,
 	sclerror::error___ *SCLError,
+	const cio::set__ &CIO,
 	const fnm::name___ &SuggestedDirectory )
 {
 ERRProlog
@@ -415,6 +423,8 @@ ERRProlog
 	str::string LocaleDirectory, ConfigurationDirectory;
 	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
 ERRBegin
+	Initialize_( ERRError, SCLError, CIO );
+
 	LocaleDirectory.Init();
 	InitializeLocaleFlow_( SuggestedDirectory, LocaleFlow, LocaleDirectory );
 	LocaleXFlow.Init( LocaleFlow, utf::f_Default );
@@ -423,7 +433,7 @@ ERRBegin
 	InitializeConfigurationFlow_( SuggestedDirectory, ConfigurationFlow, ConfigurationDirectory );
 	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
-	Initialize( ERRError, SCLError, LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
+	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
 ERRErr
 ERREnd
 ERREpilog

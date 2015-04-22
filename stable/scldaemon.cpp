@@ -64,7 +64,7 @@ protected:
 			// Does not work when placed in 'global_cdtor'.
 			Directory.Init();
 			fnm::GetLocation( Data->LibraryLocationAndName, Directory );
-			sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, Directory.UTF8( Buffer ) );
+			sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, *Data->CIO, Directory.UTF8( Buffer ) );
 			IsInitialized_ = true;
 		}
 	ERRErr

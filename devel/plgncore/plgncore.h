@@ -56,6 +56,7 @@ namespace plgncore {
 		bso::size__ ControlValue;
 		err::err___ *ERRError;
 		sclerror::error___ *SCLError;
+		const cio::set__ *CIO;
 		rgstry::entry__ Configuration;
 		rgstry::entry__ Locale;
 		void *UP;				// A la discrtion de l'utilisateur.
@@ -89,6 +90,7 @@ namespace plgncore {
 			ControlValue = Control();
 			this->ERRError = ERRError;
 			this->SCLError = SCLError;
+			this->CIO = &cio::GetCurrentSet();
 			this->Configuration.Init( Configuration );
 			this->Locale.Init( Locale );
 			this->UP = UP;

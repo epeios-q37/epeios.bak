@@ -1467,7 +1467,9 @@ ERREpilog
 	return Exists;
 }
 
-static int main_( const oddities__ &Oddities )
+static int main_(
+	const oddities__ &Oddities,
+	const cio::set__ &CIO )
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRProlog
@@ -1475,7 +1477,7 @@ ERRProlog
 	str::string Command;
 	str::string ProjectId;
 ERRBegin
-	sclmisc::Initialize( &ERRError_, &SCLError_, (const char *)NULL );
+	sclmisc::Initialize( &ERRError_, &SCLError_, CIO, (const char *)NULL );
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
@@ -1597,9 +1599,7 @@ ERRFBegin
 	Oddities.argc = argc;
 	Oddities.argv = argv;
 
-	cio::Initialize( cio::t_Default );
-
-	ExitValue = main_( Oddities );
+	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 ERRFErr
 ERRFEnd	
 	cio::COut.Commit();
@@ -1629,22 +1629,10 @@ ERRFProlog
 	str::string SOut, SErr;
 	flx::bunch_oflow_driver___<str::string_, bso::char__> FOut, FErr;
 	flx::void_iflow_driver___ FIn;
+	cio::set__ CIO;
 	oddities__ Oddities;
 ERRFBegin
 	Oddities.argv = CommandLineToArgvW( GetCommandLineW(), &Oddities.argc );
-
-	SOut.Init();
-	FOut.Init( SOut, fdr::ts_Default );
-	cio::COutF.Init( FOut );
-
-	SErr.Init();
-	FErr.Init( SErr, fdr::ts_Default );
-	cio::CErrF.Init( FErr );
-
-	FIn.Init( fdr::ts_Default, flx::a_Default );
-	cio::CInF.Init( FIn );
-
-	cio::Initialize( cio::tUser );
 
 	Oddities.hInstance = hInstance;
 	Oddities.hPrevInstance = hPrevInstance;
@@ -1657,7 +1645,17 @@ ERRFBegin
 # error
 #endif
 
-	ExitValue = main_( Oddities );
+	SOut.Init();
+	FOut.Init( SOut, fdr::ts_Default );
+
+	SErr.Init();
+	FErr.Init( SErr, fdr::ts_Default );
+
+	FIn.Init( fdr::ts_Default, flx::a_Default );
+
+	CIO.Init( FIn, FOut, FErr );
+
+	ExitValue = main_( Oddities, CIO );
 ERRFErr
 ERRFEnd
 	if ( Oddities.argv != NULL )
@@ -1705,9 +1703,7 @@ ERRFBegin
 	Oddities.argv = argv;
 	Oddities.argc = argc;
 
-	cio::Initialize( cio::t_Default );
-
-	if ( !main_( Oddities ) )
+	if ( !main_( Oddities, cio::GetSet( cio::t_Default ) ) )
 		ExitValue = EXIT_FAILURE;
 ERRFErr
 ERRFEnd	
