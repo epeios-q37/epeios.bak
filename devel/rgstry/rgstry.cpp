@@ -1721,7 +1721,7 @@ ERRBegin
 	Buffer.Init( _Path );
 
 	if ( Tags.Amount() == 0 )
-		TagSubstitutionCallback = &RGSTRYGetTagSubstitutionCallback();
+		TagSubstitutionCallback = RGSTRYGetTagSubstitutionCallback();
 
 	if ( TagSubstitutionCallback != NULL )
 		tagsbs::SubstituteShortTags( Buffer, *TagSubstitutionCallback, RGSTRY__TAG_MARKER_C );
