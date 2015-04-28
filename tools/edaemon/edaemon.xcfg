@@ -7,7 +7,6 @@
 		<Parameters>
 			<Language>fr</Language>
 			<Command>Process</Command>
-			<ProjectFileName>/Users/csimon/epeios/apps/orgnzq/processing/backend/edaemon.xprj</ProjectFileName>
 		</Parameters>
 		<Definitions>
 		</Definitions>
