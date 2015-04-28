@@ -33,9 +33,6 @@
 
 #define MSCRMI_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSCRMITutor;
 
 #if defined( E_DEBUG ) && !defined( MSCRMI_NODBG )
 #define MSCRMI_DBG

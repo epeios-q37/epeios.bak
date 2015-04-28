@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: wintol.cpp,v 1.11 2013/04/11 19:36:54 csimon Exp $
-
 #define WINTOL__COMPILATION
 
 #include "wintol.h"
-
-class wintoltutor
-: public ttr_tutor
-{
-public:
-	wintoltutor( void )
-	: ttr_tutor( WINTOL_NAME )
-	{
-#ifdef WINTOL_DBG
-		Version = WINTOL_VERSION "\b\bD $";
-#else
-		Version = WINTOL_VERSION;
-#endif
-		Owner = WINTOL_OWNER;
-		Date = "$Date: 2013/04/11 19:36:54 $";
-	}
-	virtual ~wintoltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace wintol;
 #include "tol.h"
@@ -383,34 +355,3 @@ bso::bool__ wintol::service__::TestTermination( void )
 		return false;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class wintolpersonnalization
-: public wintoltutor
-{
-public:
-	wintolpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~wintolpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static wintolpersonnalization Tutor;
-
-ttr_tutor &WINTOLTutor = Tutor;

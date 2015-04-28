@@ -33,10 +33,6 @@
 
 #define SCK_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SCKTutor;
-
 #if defined( E_DEBUG ) && !defined( SCK_NODBG )
 #define SCK_DBG
 #endif

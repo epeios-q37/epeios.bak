@@ -33,9 +33,6 @@
 
 #define IODEF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &IODEFTutor;
 
 #if defined( E_DEBUG ) && !defined( IODEF_NODBG )
 #define IODEF_DBG

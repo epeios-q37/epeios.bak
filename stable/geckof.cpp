@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: geckof.cpp,v 1.10 2013/04/09 17:57:31 csimon Exp $
-
 #define GECKOF__COMPILATION
 
 #include "geckof.h"
-
-class geckoftutor
-: public ttr_tutor
-{
-public:
-	geckoftutor( void )
-	: ttr_tutor( GECKOF_NAME )
-	{
-#ifdef GECKOF_DBG
-		Version = GECKOF_VERSION "\b\bD $";
-#else
-		Version = GECKOF_VERSION;
-#endif
-		Owner = GECKOF_OWNER;
-		Date = "$Date: 2013/04/09 17:57:31 $";
-	}
-	virtual ~geckoftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace geckof;
 
@@ -121,34 +93,3 @@ ERREpilog
 	return Steering;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class geckofpersonnalization
-: public geckoftutor
-{
-public:
-	geckofpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~geckofpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static geckofpersonnalization Tutor;
-
-ttr_tutor &GECKOFTutor = Tutor;

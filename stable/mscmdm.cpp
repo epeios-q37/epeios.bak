@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mscmdm.cpp,v 1.8 2012/09/07 16:18:22 csimon Exp $
-
 #define MSCMDM__COMPILATION
 
 #include "mscmdm.h"
-
-class mscmdmtutor
-: public ttr_tutor
-{
-public:
-	mscmdmtutor( void )
-	: ttr_tutor( MSCMDM_NAME )
-	{
-#ifdef MSCMDM_DBG
-		Version = MSCMDM_VERSION "\b\bD $";
-#else
-		Version = MSCMDM_VERSION;
-#endif
-		Owner = MSCMDM_OWNER;
-		Date = "$Date: 2012/09/07 16:18:22 $";
-	}
-	virtual ~mscmdmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "mscmdf.h"
 
@@ -919,36 +891,3 @@ ERREnd
 ERREpilog
 	return Success;
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mscmdmpersonnalization
-: public mscmdmtutor
-{
-public:
-	mscmdmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscmdmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mscmdmpersonnalization Tutor;
-
-ttr_tutor &MSCMDMTutor = Tutor;

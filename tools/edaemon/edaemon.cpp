@@ -161,7 +161,6 @@ ERREpilog
 static void UseSwitchingConnections_(
 	csdscb::callback__ &Callback,
 	csdsns::log_functions__ &LogFunctions,
-	const bso::char__ *Module,
 	csdbns::port__ Port )
 {
 ERRProlog
@@ -217,11 +216,11 @@ public:
 	}
 };
 
+
 static void UseSwitchingConnections_(
 	csdscb::callback__ &Callback,
 	const char *LogFileName,
 	log_file_handling__ LogFileHandling,
-	const bso::char__ *Module,
 	csdbns::port__ Port )
 {
 ERRProlog
@@ -236,10 +235,10 @@ ERRBegin
 	if ( LogFileName != NULL ) {
 		switch ( LogFileHandling ) {
 		case lfhAppend:
-			fil::mAppend;
+			Mode = fil::mAppend;
 			break;
 		case lfhDrop:
-			fil::mRemove;
+			Mode = fil::mRemove;
 			break;
 		default:
 			if ( LogFileName != NULL )
@@ -259,13 +258,15 @@ ERRBegin
 			TFlow.Init( FFlow );
 	}
 
-	UseSwitchingConnections_( Callback, LogFileName == NULL ? *(csdsns::log_functions__ *)NULL : LogFunctions, Module, Port );
+	UseSwitchingConnections_( Callback, LogFileName == NULL ? *(csdsns::log_functions__ *)NULL : LogFunctions, Port );
 ERRErr
 ERREnd
 ERREpilog
 }
 
 static csdlec::library_embedded_client_core__ *Core_ = NULL;
+
+# define LOC	cio::COut << txf::nl << "------------------------->" << __LOC__ << txf::nl << txf::commit
 
 static void Go_(
 	const bso::char__ *ModuleFilename,
@@ -285,11 +286,12 @@ ERRBegin
 	SharedLocale.Init();
 	SharedRegistry.Init();
 
+	LOC;
 	LibraryData.Init( csdleo::cRegular, ModuleFilename, err::ERRError, NULL );
-
+	LOC;
 	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();
-
+	LOC;
 	if ( !Core_->Init( ModuleFilename, LibraryData, err::hUserDefined ) ) {
 		Meaning.Init();
 		Meaning.SetValue( "UnableToLoadModule" );
@@ -297,13 +299,13 @@ ERRBegin
 		sclerror::SetMeaning( Meaning );
 		ERRAbort();
 	}
-
+	LOC;
 	switch ( ConnectionType ) {
 	case mctStraight:
 		UseStraightConnections_( Core_->GetCallback(), ModuleFilename, Port );
 		break;
 	case mctSwitched:
-		UseSwitchingConnections_( Core_->GetCallback(), LogFileName, LogFileHandling, ModuleFilename, Port );
+		UseSwitchingConnections_( Core_->GetCallback(), LogFileName, LogFileHandling, Port );
 		break;
 	default:
 		ERRFwk();
@@ -398,9 +400,9 @@ ERRBegin
 		ERRFwk();
 
 	Exit = EXIT_SUCCESS;
-	ERRErr
-		ERREnd
-		ERREpilog
+ERRErr
+ERREnd
+ERREpilog
 		return Exit;
 }
 

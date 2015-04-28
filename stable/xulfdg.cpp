@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xulfdg.cpp,v 1.22 2013/06/11 10:32:26 csimon Exp $
-
 #define XULFDG__COMPILATION
 
 #include "xulfdg.h"
-
-class xulfdgtutor
-: public ttr_tutor
-{
-public:
-	xulfdgtutor( void )
-	: ttr_tutor( XULFDG_NAME )
-	{
-#ifdef XULFDG_DBG
-		Version = XULFDG_VERSION "\b\bD $";
-#else
-		Version = XULFDG_VERSION;
-#endif
-		Owner = XULFDG_OWNER;
-		Date = "$Date: 2013/06/11 10:32:26 $";
-	}
-	virtual ~xulfdgtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "xulftk.h"
 
@@ -161,37 +133,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xulfdgpersonnalization
-: public xulfdgtutor
-{
-public:
-	xulfdgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xulfdgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xulfdgpersonnalization Tutor;
-
-ttr_tutor &XULFDGTutor = Tutor;

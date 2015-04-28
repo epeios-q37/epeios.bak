@@ -641,35 +641,12 @@ SN( S32, bso::s32__ )
 SN( S16, bso::s16__ )
 SN( S8, bso::s8__ )
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class sclrgstrypersonnalization
+Q37_GCTOR( sclrgstry )
 {
-public:
-	sclrgstrypersonnalization( void )
-	{
-		Registry_.Init();
+	Registry_.Init();
 
-		ConfigurationLevel_ = Registry_.Create();
-		ProjectLevel_ = Registry_.Create();
-		SetupLevel_ = Registry_.Create();
-		ArgumentsLevel_ = Registry_.CreateEmbedded();
-
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~sclrgstrypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static sclrgstrypersonnalization Tutor;
+	ConfigurationLevel_ = Registry_.Create();
+	ProjectLevel_ = Registry_.Create();
+	SetupLevel_ = Registry_.Create();
+	ArgumentsLevel_ = Registry_.CreateEmbedded();
+}

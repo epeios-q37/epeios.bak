@@ -24,35 +24,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: xmldbs.cpp,v 1.9 2012/11/14 16:06:39 csimon Exp $
-
 #define XMLDBS__COMPILATION
 
 #include "xmldbs.h"
 
-class xmldbstutor
-: public ttr_tutor
-{
-public:
-	xmldbstutor( void )
-	: ttr_tutor( XMLDBS_NAME )
-	{
-#ifdef XMLDBS_DBG
-		Version = XMLDBS_VERSION "\b\bD $";
-#else
-		Version = XMLDBS_VERSION;
-#endif
-		Owner = XMLDBS_OWNER;
-		Date = "$Date: 2012/11/14 16:06:39 $";
-	}
-	virtual ~xmldbstutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace xmldbs;
 
@@ -212,34 +187,3 @@ ERREnd
 ERREpilog
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmldbspersonnalization
-: public xmldbstutor
-{
-public:
-	xmldbspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmldbspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmldbspersonnalization Tutor;
-
-ttr_tutor &XMLDBSTutor = Tutor;

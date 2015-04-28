@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: tagexp.cpp,v 1.16 2010/07/15 18:26:44 csimon Exp $
-
 #define TAGEXP__COMPILATION
 
 #include "tagexp.h"
 
-class tagexptutor
-: public ttr_tutor
-{
-public:
-	tagexptutor( void )
-	: ttr_tutor( TAGEXP_NAME )
-	{
-#ifdef TAGEXP_DBG
-		Version = TAGEXP_VERSION "\b\bD $";
-#else
-		Version = TAGEXP_VERSION;
-#endif
-		Owner = TAGEXP_OWNER;
-		Date = "$Date: 2010/07/15 18:26:44 $";
-	}
-	virtual ~tagexptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "flf.h"
 
@@ -207,36 +180,3 @@ status tagexp::tag_expander_::Expand(
 
 	return Status;
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class tagexppersonnalization
-: public tagexptutor
-{
-public:
-	tagexppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~tagexppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static tagexppersonnalization Tutor;
-
-ttr_tutor &TAGEXPTutor = Tutor;

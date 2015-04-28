@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: csddls.cpp,v 1.9 2012/11/14 16:06:26 csimon Exp $
-
 #define CSDDLS__COMPILATION
 
 #include "csddls.h"
-
-class csddlstutor
-: public ttr_tutor
-{
-public:
-	csddlstutor( void )
-	: ttr_tutor( CSDDLS_NAME )
-	{
-#ifdef CSDDLS_DBG
-		Version = CSDDLS_VERSION "\b\bD $";
-#else
-		Version = CSDDLS_VERSION;
-#endif
-		Owner = CSDDLS_OWNER;
-		Date = "$Date: 2012/11/14 16:06:26 $";
-	}
-	virtual ~csddlstutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace csddls;
 
@@ -87,35 +59,3 @@ csdscm::user_functions__ *CSDDLEntry( void *UP )
 {
 	return csddls::CSDDLSCallback( UP );
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csddlspersonnalization
-: public csddlstutor
-{
-public:
-	csddlspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csddlspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static csddlspersonnalization Tutor;
-
-ttr_tutor &CSDDLSTutor = Tutor;

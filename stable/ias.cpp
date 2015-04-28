@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: ias.cpp,v 1.6 2013/04/15 10:50:51 csimon Exp $
-
 #define IAS__COMPILATION
 
 #include "ias.h"
-
-class iastutor
-: public ttr_tutor
-{
-public:
-	iastutor( void )
-	: ttr_tutor( IAS_NAME )
-	{
-#ifdef IAS_DBG
-		Version = IAS_VERSION "\b\bD $";
-#else
-		Version = IAS_VERSION;
-#endif
-		Owner = IAS_OWNER;
-		Date = "$Date: 2013/04/15 10:50:51 $";
-	}
-	virtual ~iastutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace ias;
 
@@ -93,36 +65,3 @@ ERREnd
 ERREpilog
 }
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class iaspersonnalization
-: public iastutor
-{
-public:
-	iaspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~iaspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static iaspersonnalization Tutor;
-
-ttr_tutor &IASTutor = Tutor;

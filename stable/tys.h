@@ -33,10 +33,6 @@
 
 #define TYS_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TYSTutor;
-
 #if defined( E_DEBUG ) && !defined( TYS_NODBG )
 #define TYS_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define SRV_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SRVTutor;
-
 #if defined( E_DEBUG ) && !defined( SRV_NODBG )
 #define SRV_DBG
 #endif

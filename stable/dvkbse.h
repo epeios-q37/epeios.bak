@@ -33,10 +33,6 @@
 
 #define DVKBSE_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DVKBSETutor;
-
 #if defined( E_DEBUG ) && !defined( DVKBSE_NODBG )
 #define DVKBSE_DBG
 #endif

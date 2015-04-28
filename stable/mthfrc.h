@@ -33,10 +33,6 @@
 
 #define MTHFRC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MTHFRCTutor;
-
 #if defined( E_DEBUG ) && !defined( MTHFRC_NODBG )
 #define MTHFRC_DBG
 #endif

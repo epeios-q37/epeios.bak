@@ -55,10 +55,6 @@ Description:
 #line 14
 #endif
 
-#include "ttr.h"
-
-extern class ttr_tutor &TXMHCHTutor;
-
 #if defined( E_DEBUG ) && !defined( TXMHCH_NODBG )
 #define TXMHCH_DBG 
 #endif

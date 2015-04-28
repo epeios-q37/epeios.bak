@@ -33,10 +33,6 @@
 
 #define XMLVAL_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLVALTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLVAL_NODBG )
 #define XMLVAL_DBG
 #endif

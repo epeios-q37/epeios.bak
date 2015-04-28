@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xulwdg.cpp,v 1.1 2010/10/26 14:59:53 csimon Exp $
-
 #define XULWDG__COMPILATION
 
 #include "xulwdg.h"
-
-class xulwdgtutor
-: public ttr_tutor
-{
-public:
-	xulwdgtutor( void )
-	: ttr_tutor( XULWDG_NAME )
-	{
-#ifdef XULWDG_DBG
-		Version = XULWDG_VERSION "\b\bD $";
-#else
-		Version = XULWDG_VERSION;
-#endif
-		Owner = XULWDG_OWNER;
-		Date = "$Date: 2010/10/26 14:59:53 $";
-	}
-	virtual ~xulwdgtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace xulwdg;
 
@@ -104,34 +76,3 @@ ERREnd
 ERREpilog
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xulwdgpersonnalization
-: public xulwdgtutor
-{
-public:
-	xulwdgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xulwdgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xulwdgpersonnalization Tutor;
-
-ttr_tutor &XULWDGTutor = Tutor;

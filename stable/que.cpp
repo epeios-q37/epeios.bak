@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: que.cpp,v 1.42 2013/04/15 10:50:53 csimon Exp $
-
 #define QUE__COMPILATION
 
 #include "que.h"
-
-class quetutor
-: public ttr_tutor
-{
-public:
-	quetutor( void )
-	: ttr_tutor( QUE_NAME )
-	{
-#ifdef QUE_DBG
-		Version = QUE_VERSION "\b\bD $";
-#else
-		Version = QUE_VERSION;
-#endif
-		Owner = QUE_OWNER;
-		Date = "$Date: 2013/04/15 10:50:53 $";
-	}
-	virtual ~quetutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace que;
 
@@ -91,33 +63,3 @@ void que::Dump_(
 		while ( Begin != E_NIL );
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class quepersonnalization
-: public quetutor
-{
-public:
-	quepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~quepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static quepersonnalization Tutor;
-
-ttr_tutor &QUETutor = Tutor;

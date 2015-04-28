@@ -33,9 +33,6 @@
 
 #define GECKOO_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &GECKOOTutor;
 
 #if defined( E_DEBUG ) && !defined( GECKOO_NODBG )
 #define GECKOO_DBG

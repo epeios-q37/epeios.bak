@@ -33,10 +33,6 @@ Free Software Foundation, Inc.,
 
 #define FBLFEB_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLFEBTutor;
-
 #if defined( E_DEBUG ) && !defined( FBLFEB_NODBG )
 #define FBLFEB_DBG
 #endif

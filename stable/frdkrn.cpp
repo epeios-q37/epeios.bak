@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: frdkrn.cpp,v 1.53 2013/04/22 15:28:01 csimon Exp $
-
 #define FRDKRN__COMPILATION
 
 #include "frdkrn.h"
-
-class frdkrntutor
-: public ttr_tutor
-{
-public:
-	frdkrntutor( void )
-	: ttr_tutor( FRDKRN_NAME )
-	{
-#ifdef FRDKRN_DBG
-		Version = FRDKRN_VERSION "\b\bD $";
-#else
-		Version = FRDKRN_VERSION;
-#endif
-		Owner = FRDKRN_OWNER;
-		Date = "$Date: 2013/04/22 15:28:01 $";
-	}
-	virtual ~frdkrntutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 # include "frdrgy.h"
 
@@ -378,35 +350,7 @@ static void InitAutomats_( void )
 	InitAuthenticationAutomat_();
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class frdkrnpersonnalization
-: public frdkrntutor
+Q37_GCTOR( frdkrn )
 {
-public:
-	frdkrnpersonnalization( void )
-	{
-		InitAutomats_();
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~frdkrnpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static frdkrnpersonnalization Tutor;
-
-ttr_tutor &FRDKRNTutor = Tutor;
+	InitAutomats_();
+}

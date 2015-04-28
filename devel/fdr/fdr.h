@@ -33,10 +33,6 @@
 
 #define FDR_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FDRTutor;
-
 #if defined( E_DEBUG ) && !defined( FDR_NODBG )
 #define FDR_DBG
 #endif

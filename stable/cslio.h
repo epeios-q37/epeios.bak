@@ -33,10 +33,6 @@
 
 #define CSLIO_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CSLIOTutor;
-
 #if defined( E_DEBUG ) && !defined( CSLIO_NODBG )
 #define CSLIO_DBG
 #endif

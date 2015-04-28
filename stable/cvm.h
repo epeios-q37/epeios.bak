@@ -33,10 +33,6 @@
 
 #define CVM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CVMTutor;
-
 #if defined( E_DEBUG ) && !defined( CVM_NODBG )
 #define CVM_DBG
 #endif

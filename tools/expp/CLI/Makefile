@@ -31,16 +31,16 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cpe crptgr ctn dir dte 
-mods += dtfbsc dtfptb epsmsc err fdr 
-mods += flf flsq flw flx ias 
-mods += ids iof iop lst lstbch 
-mods += lstctn mns ntvstr que sdr 
-mods += stk str strng tagsbs tol 
-mods += ttr txf tys uys utf 
-mods += xtf cio tht bomhdl cdgb64 
-mods += fil fnm lcl rgstry stsfsm 
-mods += xml xpp 
+mods += cio cpe crptgr ctn dir 
+mods += dte dtfbsc dtfptb epsmsc err 
+mods += fdr flf flsq flw flx 
+mods += ias ids iof iop lst 
+mods += lstbch lstctn mns ntvstr que 
+mods += sdr stk str strng tagsbs 
+mods += tol txf tys uys utf 
+mods += xtf tht bomhdl cdgb64 fil 
+mods += fnm lcl rgstry stsfsm xml 
+mods += xpp 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += locale registry 
 
@@ -280,8 +280,6 @@ ifeq ("$(os)","$(MacOS)")
 	co += -DDARWIN
 	
 	mods += $(pmods)
-
-	#LDFLAGS += -static	// Doesn't work.
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32

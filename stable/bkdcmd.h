@@ -33,10 +33,6 @@
 
 #define BKDCMD_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDCMDTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDCMD_NODBG )
 #define BKDCMD_DBG
 #endif

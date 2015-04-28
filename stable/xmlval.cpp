@@ -23,68 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xmlval.cpp,v 1.5 2010/07/14 14:54:31 csimon Exp $
-
 #define XMLVAL__COMPILATION
 
 #include "xmlval.h"
 
-class xmlvaltutor
-: public ttr_tutor
-{
-public:
-	xmlvaltutor( void )
-	: ttr_tutor( XMLVAL_NAME )
-	{
-#ifdef XMLVAL_DBG
-		Version = XMLVAL_VERSION "\b\bD $";
-#else
-		Version = XMLVAL_VERSION;
-#endif
-		Owner = XMLVAL_OWNER;
-		Date = "$Date: 2010/07/14 14:54:31 $";
-	}
-	virtual ~xmlvaltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace xmlval;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmlvalpersonnalization
-: public xmlvaltutor
-{
-public:
-	xmlvalpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmlvalpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmlvalpersonnalization Tutor;
-
-ttr_tutor &XMLVALTutor = Tutor;

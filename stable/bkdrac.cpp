@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdrac.cpp,v 1.5 2011/06/11 18:16:00 csimon Exp $
-
 #define BKDRAC__COMPILATION
 
 #include "bkdrac.h"
-
-class bkdractutor
-: public ttr_tutor
-{
-public:
-	bkdractutor( void )
-	: ttr_tutor( BKDRAC_NAME )
-	{
-#ifdef BKDRAC_DBG
-		Version = BKDRAC_VERSION "\b\bD $";
-#else
-		Version = BKDRAC_VERSION;
-#endif
-		Owner = BKDRAC_OWNER;
-		Date = "$Date: 2011/06/11 18:16:00 $";
-	}
-	virtual ~bkdractutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace bkdrac;
 
@@ -177,36 +149,3 @@ void bkdrac::backend_remote_access_base___::PostProcess( flw::ioflow__ &Flow )
 
 	Data.Init();
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdracpersonnalization
-: public bkdractutor
-{
-public:
-	bkdracpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkdracpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdracpersonnalization Tutor;
-
-ttr_tutor &BKDRACTutor = Tutor;

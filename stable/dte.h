@@ -33,10 +33,6 @@
 
 #define DTE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DTETutor;
-
 #if defined( E_DEBUG ) && !defined( DTE_NODBG )
 #define DTE_DBG
 #endif

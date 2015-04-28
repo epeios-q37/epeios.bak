@@ -23,42 +23,11 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mscvkt.cpp,v 1.1 2010/07/16 08:25:54 csimon Exp $
-
 #define MSCVKT__COMPILATION
 
 #include "mscvkt.h"
 
-class mscvkttutor
-: public ttr_tutor
-{
-public:
-	mscvkttutor( void )
-	: ttr_tutor( MSCVKT_NAME )
-	{
-#ifdef MSCVKT_DBG
-		Version = MSCVKT_VERSION "\b\bD $";
-#else
-		Version = MSCVKT_VERSION;
-#endif
-		Owner = MSCVKT_OWNER;
-		Date = "$Date: 2010/07/16 08:25:54 $";
-	}
-	virtual ~mscvkttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace mscvkt;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
 
 row__ mscvkt::tree_::_GetNode(
 	const description__ &Description,
@@ -213,32 +182,3 @@ txf::text_oflow__ operator <<(
 
 	return TFlow;
 }
-
-class mscvktpersonnalization
-: public mscvkttutor
-{
-public:
-	mscvktpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscvktpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mscvktpersonnalization Tutor;
-
-ttr_tutor &MSCVKTTutor = Tutor;

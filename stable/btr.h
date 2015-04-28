@@ -33,10 +33,6 @@
 
 #define BTR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BTRTutor;
-
 #if defined( E_DEBUG ) && !defined( BTR_NODBG )
 #define BTR_DBG
 #endif

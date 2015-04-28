@@ -33,10 +33,6 @@
 
 #define SPP_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SPPTutor;
-
 #if defined( E_DEBUG ) && !defined( SPP_NODBG )
 #define SPP_DBG
 #endif

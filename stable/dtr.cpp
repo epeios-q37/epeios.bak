@@ -23,66 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dtr.cpp,v 1.26 2013/07/25 15:59:14 csimon Exp $
-
 #define DTR__COMPILATION
 
 #include "dtr.h"
 
-class dtrtutor
-: public ttr_tutor
-{
-public:
-	dtrtutor( void )
-	: ttr_tutor( DTR_NAME )
-	{
-#ifdef DTR_DBG
-		Version = DTR_VERSION "\b\bD $";
-#else
-		Version = DTR_VERSION;
-#endif
-		Owner = DTR_OWNER;
-		Date = "$Date: 2013/07/25 15:59:14 $";
-	}
-	virtual ~dtrtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dtrpersonnalization
-: public dtrtutor
-{
-public:
-	dtrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dtrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dtrpersonnalization Tutor;
-
-ttr_tutor &DTRTutor = Tutor;
+using namespace dtr;

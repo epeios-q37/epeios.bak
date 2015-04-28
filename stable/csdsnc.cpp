@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: csdsnc.cpp,v 1.47 2013/07/26 10:45:22 csimon Exp $
-
 #define CSDSNC__COMPILATION
 
 #include "csdsnc.h"
-
-class csdsnctutor
-: public ttr_tutor
-{
-public:
-	csdsnctutor( void )
-	: ttr_tutor( CSDSNC_NAME )
-	{
-#ifdef CSDSNC_DBG
-		Version = CSDSNC_VERSION "\b\bD $";
-#else
-		Version = CSDSNC_VERSION;
-#endif
-		Owner = CSDSNC_OWNER;
-		Date = "$Date: 2013/07/26 10:45:22 $";
-	}
-	virtual ~csdsnctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #ifdef CSDSNC__MT
 #	include "mtk.h"
@@ -154,35 +126,3 @@ void csdsnc::core_::_DeleteFlows( void )
 		delete Flows.Pop();
 	}
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csdsncpersonnalization
-: public csdsnctutor
-{
-public:
-	csdsncpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csdsncpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static csdsncpersonnalization Tutor;
-
-ttr_tutor &CSDSNCTutor = Tutor;

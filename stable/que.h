@@ -33,10 +33,6 @@
 
 #define QUE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &QUETutor;
-
 #if defined( E_DEBUG ) && !defined( QUE_NODBG )
 #define QUE_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define THRSTR_OWNER		"the Epeios project (http://zeusw.org/epeios/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &THRSTRTutor;
-
 #if defined( E_DEBUG ) && !defined( THRSTR_NODBG )
 #define THRSTR_DBG 
 #endif

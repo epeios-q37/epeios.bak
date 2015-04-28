@@ -23,65 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: cvm.cpp,v 1.23 2013/03/14 11:09:19 csimon Exp $
-
 #define CVM__COMPILATION
 
 #include "cvm.h"
 
-class cvmtutor
-: public ttr_tutor
-{
-public:
-	cvmtutor( void )
-	: ttr_tutor( CVM_NAME )
-	{
-#ifdef CVM_DBG
-		Version = CVM_VERSION "\b\bD $";
-#else
-		Version = CVM_VERSION;
-#endif
-		Owner = CVM_OWNER;
-		Date = "$Date: 2013/03/14 11:09:19 $";
-	}
-	virtual ~cvmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class cvmpersonnalization
-: public cvmtutor
-{
-public:
-	cvmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~cvmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static cvmpersonnalization Tutor;
-
-ttr_tutor &CVMTutor = Tutor;
+using namespace cvm;

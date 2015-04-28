@@ -33,9 +33,6 @@
 
 #define LLIO_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &LLIOTutor;
 
 #if defined( E_DEBUG ) && !defined( LLIO_NODBG )
 #define LLIO_DBG

@@ -34,10 +34,6 @@
 
 #define XMLDBS_OWNER		"the Epeios project (http://epeios.org/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLDBSTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLDBS_NODBG )
 #define XMLDBS_DBG 
 #endif

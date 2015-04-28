@@ -33,9 +33,6 @@
 
 #define MNS_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MNSTutor;
 
 #if defined( E_DEBUG ) && !defined( MNS_NODBG )
 #define MNS_DBG

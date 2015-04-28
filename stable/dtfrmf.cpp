@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dtfrmf.cpp,v 1.13 2012/11/14 16:06:27 csimon Exp $
-
 #define DTFRMF__COMPILATION
 
 #include "dtfrmf.h"
-
-class dtfrmftutor
-: public ttr_tutor
-{
-public:
-	dtfrmftutor( void )
-	: ttr_tutor( DTFRMF_NAME )
-	{
-#ifdef DTFRMF_DBG
-		Version = DTFRMF_VERSION "\b\bD $";
-#else
-		Version = DTFRMF_VERSION;
-#endif
-		Owner = DTFRMF_OWNER;
-		Date = "$Date: 2012/11/14 16:06:27 $";
-	}
-	virtual ~dtfrmftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace dtfrmf;
 
@@ -163,38 +135,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dtfrmfpersonnalization
-: public dtfrmftutor
-{
-public:
-	dtfrmfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dtfrmfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dtfrmfpersonnalization Tutor;
-
-ttr_tutor &DTFRMFTutor = Tutor;

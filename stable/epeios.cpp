@@ -23,69 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: epeios.cpp,v 1.14 2012/05/03 09:52:49 csimon Exp $
-
 #define EPEIOS__COMPILATION
 
 #include "epeios.h"
 
-class epeiostutor
-: public ttr_tutor
-{
-public:
-	epeiostutor( void )
-	: ttr_tutor( EPEIOS_NAME )
-	{
-#ifdef EPEIOS_DBG
-		Version = EPEIOS_VERSION "\b\bD $";
-#else
-		Version = EPEIOS_VERSION;
-#endif
-		Owner = EPEIOS_OWNER;
-		Date = "$Date: 2012/05/03 09:52:49 $";
-	}
-	virtual ~epeiostutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 namespace epeios {
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class epeiospersonnalization
-: public epeiostutor
-{
-public:
-	epeiospersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~epeiospersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static epeiospersonnalization Tutor;
-
-ttr_tutor &EPEIOSTutor = Tutor;

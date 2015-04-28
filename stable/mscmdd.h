@@ -33,9 +33,6 @@
 
 #define MSCMDD_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSCMDDTutor;
 
 #if defined( E_DEBUG ) && !defined( MSCMDD_NODBG )
 #define MSCMDD_DBG

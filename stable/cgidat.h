@@ -33,10 +33,6 @@
 
 #define CGIDAT_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CGIDATTutor;
-
 #if defined( E_DEBUG ) && !defined( CGIDAT_NODBG )
 #define CGIDAT_DBG
 #endif

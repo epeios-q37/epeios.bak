@@ -33,9 +33,6 @@
 
 #define MSCCMQ_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSCCMQTutor;
 
 #if defined( E_DEBUG ) && !defined( MSCCMQ_NODBG )
 #define MSCCMQ_DBG

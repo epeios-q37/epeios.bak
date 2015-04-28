@@ -33,10 +33,6 @@
 
 #define IOP_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &IOPTutor;
-
 #if defined( E_DEBUG ) && !defined( IOP_NODBG )
 #define IOP_DBG
 #endif

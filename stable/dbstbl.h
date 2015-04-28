@@ -33,10 +33,6 @@
 
 #define DBSTBL_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DBSTBLTutor;
-
 #if defined( E_DEBUG ) && !defined( DBSTBL_NODBG )
 #define DBSTBL_DBG
 #endif

@@ -34,10 +34,6 @@
 
 #define SMA_OWNER		"the Epeios project (http://zeusw.org/epeios/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SMATutor;
-
 #if defined( E_DEBUG ) && !defined( SMA_NODBG )
 #define SMA_DBG 
 #endif

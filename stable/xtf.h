@@ -33,10 +33,6 @@
 
 #define XTF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XTFTutor;
-
 #if defined( E_DEBUG ) && !defined( XTF_NODBG )
 #define XTF_DBG
 #endif

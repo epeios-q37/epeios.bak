@@ -24,63 +24,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: set.cpp,v 1.5 2012/11/14 16:06:36 csimon Exp $
-
 #define SET__COMPILATION
 
 #include "set.h"
 
-class settutor
-: public ttr_tutor
-{
-public:
-	settutor( void )
-	: ttr_tutor( SET_NAME )
-	{
-#ifdef SET_DBG
-		Version = SET_VERSION "\b\bD $";
-#else
-		Version = SET_VERSION;
-#endif
-		Owner = SET_OWNER;
-		Date = "$Date: 2012/11/14 16:06:36 $";
-	}
-	virtual ~settutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class setpersonnalization
-: public settutor
-{
-public:
-	setpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~setpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static setpersonnalization Tutor;
-
-ttr_tutor &SETTutor = Tutor;
+using namespace set;

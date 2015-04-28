@@ -33,9 +33,6 @@
 
 #define SCLGECKO_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SCLGECKOTutor;
 
 #if defined( E_DEBUG ) && !defined( SCLGECKO_NODBG )
 # define SCLGECKO_DBG

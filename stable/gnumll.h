@@ -33,9 +33,6 @@
 
 #define GNUMLL_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &GNUMLLTutor;
 
 #if defined( E_DEBUG ) && !defined( GNUMLL_NODBG )
 #define GNUMLL_DBG

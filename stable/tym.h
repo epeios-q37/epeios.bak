@@ -33,10 +33,6 @@
 
 #define TYM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TYMTutor;
-
 #if defined( E_DEBUG ) && !defined( TYM_NODBG )
 #define TYM_DBG
 #endif

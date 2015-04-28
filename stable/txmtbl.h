@@ -33,10 +33,6 @@
 
 #define TXMTBL_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TXMTBLTutor;
-
 #if defined( E_DEBUG ) && !defined( TXMTBL_NODBG )
 #define TXMTBL_DBG
 #endif

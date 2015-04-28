@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: csm.cpp,v 1.13 2012/11/14 16:06:26 csimon Exp $
-
 #define CSM__COMPILATION
 
 #include "csm.h"
-
-class csmtutor
-: public ttr_tutor
-{
-public:
-	csmtutor( void )
-	: ttr_tutor( CSM_NAME )
-	{
-#ifdef CSM_DBG
-		Version = CSM_VERSION "\b\bD $";
-#else
-		Version = CSM_VERSION;
-#endif
-		Owner = CSM_OWNER;
-		Date = "$Date: 2012/11/14 16:06:26 $";
-	}
-	virtual ~csmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "spp.h"
 #include "mtk.h"
@@ -297,33 +269,3 @@ void CSMProcess(
 }
 #endif
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class csmpersonnalization
-: public csmtutor
-{
-public:
-	csmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static csmpersonnalization Tutor;
-
-ttr_tutor &CSMTutor = Tutor;

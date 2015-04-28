@@ -33,10 +33,6 @@
 
 #define DTFNTV_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DTFNTVTutor;
-
 #if defined( E_DEBUG ) && !defined( DTFNTV_NODBG )
 #define DTFNTV_DBG
 #endif

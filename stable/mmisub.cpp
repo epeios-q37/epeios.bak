@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mmisub.cpp,v 1.4 2012/11/14 16:06:31 csimon Exp $
-
 #define MMISUB__COMPILATION
 
 #include "mmisub.h"
 
-class mmisubtutor
-: public ttr_tutor
-{
-public:
-	mmisubtutor( void )
-	: ttr_tutor( MMISUB_NAME )
-	{
-#ifdef MMISUB_DBG
-		Version = MMISUB_VERSION "\b\bD $";
-#else
-		Version = MMISUB_VERSION;
-#endif
-		Owner = MMISUB_OWNER;
-		Date = "$Date: 2012/11/14 16:06:31 $";
-	}
-	virtual ~mmisubtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace mmi;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mmisubpersonnalization
-: public mmisubtutor
-{
-public:
-	mmisubpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mmisubpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mmisubpersonnalization Tutor;
-
-ttr_tutor &MMISUBTutor = Tutor;

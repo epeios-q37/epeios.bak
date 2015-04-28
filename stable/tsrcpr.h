@@ -33,10 +33,6 @@
 
 #define TSRCPR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TSRCPRTutor;
-
 #if defined( E_DEBUG ) && !defined( TSRCPR_NODBG )
 #define TSRCPR_DBG
 #endif

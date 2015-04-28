@@ -22,10 +22,6 @@
 
 #define MTK_NAME		"MTK"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MTKTutor;
-
 #if defined( E_DEBUG ) && !defined( MTK_NODBG )
 #define MTK_DBG
 #endif

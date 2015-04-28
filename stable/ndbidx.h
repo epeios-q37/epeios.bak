@@ -33,10 +33,6 @@
 
 #define NDBIDX_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &NDBIDXTutor;
-
 #if defined( E_DEBUG ) && !defined( NDBIDX_NODBG )
 #define NDBIDX_DBG
 #endif

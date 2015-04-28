@@ -33,10 +33,6 @@
 
 #define WINTOL_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &WINTOLTutor;
-
 #if defined( E_DEBUG ) && !defined( WINTOL_NODBG )
 #define WINTOL_DBG
 #endif

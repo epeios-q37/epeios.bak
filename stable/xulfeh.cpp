@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xxx.cpp,v 1.9 2012/11/14 16:06:23 csimon Exp $
-
 #define XULFEH__COMPILATION
 
 #include "xulfeh.h"
 
-class xulfehtutor
-: public ttr_tutor
-{
-public:
-	xulfehtutor( void )
-	: ttr_tutor( XULFEH_NAME )
-	{
-#ifdef XULFEH_DBG
-		Version = XULFEH_VERSION "\b\bD $";
-#else
-		Version = XULFEH_VERSION;
-#endif
-		Owner = XULFEH_OWNER;
-		Date = "$Date: 2012/11/14 16:06:23 $";
-	}
-	virtual ~xulfehtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "xulftk.h"
 
@@ -284,39 +257,3 @@ void xulfeh::event_handlers__::sf__::Attach( nsIDOMWindow *Window )
 	A( EmbeddedBackendSelection );
 }
 
-
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xulfehpersonnalization
-: public xulfehtutor
-{
-public:
-	xulfehpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xulfehpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xulfehpersonnalization Tutor;
-
-ttr_tutor &XULFEHTutor = Tutor;

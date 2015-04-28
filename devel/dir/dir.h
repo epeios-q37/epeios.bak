@@ -22,10 +22,6 @@
 
 #define DIR_NAME		"DIR"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DIRTutor;
-
 #if defined( E_DEBUG ) && !defined( DIR_NODBG )
 #define DIR_DBG
 #endif

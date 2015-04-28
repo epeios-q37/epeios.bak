@@ -23,35 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: fhd.cpp,v 1.4 2012/11/14 16:06:27 csimon Exp $
-
 #define FHD__COMPILATION
 
 #include "fhd.h"
-
-class fhdtutor
-: public ttr_tutor
-{
-public:
-	fhdtutor( void )
-	: ttr_tutor( FHD_NAME )
-	{
-#ifdef FHD_DBG
-		Version = FHD_VERSION " (DBG)";
-#else
-		Version = FHD_VERSION;
-#endif
-		Owner = FHD_OWNER;
-		Date = "$Date: 2012/11/14 16:06:27 $";
-	}
-	virtual ~fhdtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace fhd;
 
@@ -69,35 +43,3 @@ void fhd::oflow_driver___::ForceDumpingOfCache_( bool Synchronisation )
 {
 	while( !DumpCache_( Synchronisation ) );
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fhdpersonnalization
-: public fhdtutor
-{
-public:
-	fhdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fhdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fhdpersonnalization Tutor;
-
-ttr_tutor &FHDTutor = Tutor;

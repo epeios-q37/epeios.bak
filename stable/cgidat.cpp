@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: cgidat.cpp,v 1.4 2013/05/15 14:40:36 csimon Exp $
-
 #define CGIDAT__COMPILATION
 
 #include "cgidat.h"
-
-class cgidattutor
-: public ttr_tutor
-{
-public:
-	cgidattutor( void )
-	: ttr_tutor( CGIDAT_NAME )
-	{
-#ifdef CGIDAT_DBG
-		Version = CGIDAT_VERSION "\b\bD $";
-#else
-		Version = CGIDAT_VERSION;
-#endif
-		Owner = CGIDAT_OWNER;
-		Date = "$Date: 2013/05/15 14:40:36 $";
-	}
-	virtual ~cgidattutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace cgidat;
 
@@ -123,36 +95,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class cgidatpersonnalization
-: public cgidattutor
-{
-public:
-	cgidatpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~cgidatpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static cgidatpersonnalization Tutor;
-
-ttr_tutor &CGIDATTutor = Tutor;

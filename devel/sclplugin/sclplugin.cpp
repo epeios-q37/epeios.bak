@@ -87,26 +87,3 @@ void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
 {
 	sclplugin::SCLPLUGINReleasePlugin( Plugin );
 }
-
-class sclpluginpersonnalization
-{
-public:
-	sclpluginpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~sclpluginpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static sclpluginpersonnalization Tutor;

@@ -33,10 +33,6 @@
 
 #define STSFSM_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &STSFSMTutor;
-
 #if defined( E_DEBUG ) && !defined( STSFSM_NODBG )
 #define STSFSM_DBG
 #endif

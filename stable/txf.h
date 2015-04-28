@@ -33,10 +33,6 @@
 
 #define TXF_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TXFTutor;
-
 #if defined( E_DEBUG ) && !defined( TXF_NODBG )
 #define TXF_DBG
 #endif

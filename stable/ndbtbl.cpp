@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: ndbtbl.cpp,v 1.20 2013/04/15 10:50:53 csimon Exp $
-
 #define NDBTBL__COMPILATION
 
 #include "ndbtbl.h"
-
-class ndbtbltutor
-: public ttr_tutor
-{
-public:
-	ndbtbltutor( void )
-	: ttr_tutor( NDBTBL_NAME )
-	{
-#ifdef NDBTBL_DBG
-		Version = NDBTBL_VERSION "\b\bD $";
-#else
-		Version = NDBTBL_VERSION;
-#endif
-		Owner = NDBTBL_OWNER;
-		Date = "$Date: 2013/04/15 10:50:53 $";
-	}
-	virtual ~ndbtbltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "fnm.h"
 
@@ -283,38 +255,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ndbtblpersonnalization
-: public ndbtbltutor
-{
-public:
-	ndbtblpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ndbtblpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ndbtblpersonnalization Tutor;
-
-ttr_tutor &NDBTBLTutor = Tutor;

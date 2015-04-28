@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xulfsv.cpp,v 1.3 2013/06/11 10:32:27 csimon Exp $
-
 #define XULFSV__COMPILATION
 
 #include "xulfsv.h"
-
-class xulfsvtutor
-: public ttr_tutor
-{
-public:
-	xulfsvtutor( void )
-	: ttr_tutor( XULFSV_NAME )
-	{
-#ifdef XULFSV_DBG
-		Version = XULFSV_VERSION "\b\bD $";
-#else
-		Version = XULFSV_VERSION;
-#endif
-		Owner = XULFSV_OWNER;
-		Date = "$Date: 2013/06/11 10:32:27 $";
-	}
-	virtual ~xulfsvtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "xulftk.h"
 #include "xulfrg.h"
@@ -73,36 +45,3 @@ void xulfsv::_session_view_core__::Attach( nsIDOMWindow *Window )
 	Trunk().UI().EventHandlers.SV.Attach( Window );
 }
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xulfsvpersonnalization
-: public xulfsvtutor
-{
-public:
-	xulfsvpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xulfsvpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xulfsvpersonnalization Tutor;
-
-ttr_tutor &XULFSVTutor = Tutor;

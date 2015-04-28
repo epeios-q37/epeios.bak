@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xmlelm.cpp,v 1.2 2013/07/25 15:59:16 csimon Exp $
-
 #define XMLELM__COMPILATION
 
 #include "xmlelm.h"
-
-class xmlelmtutor
-: public ttr_tutor
-{
-public:
-	xmlelmtutor( void )
-	: ttr_tutor( XMLELM_NAME )
-	{
-#ifdef XMLELM_DBG
-		Version = XMLELM_VERSION "\b\bD $";
-#else
-		Version = XMLELM_VERSION;
-#endif
-		Owner = XMLELM_OWNER;
-		Date = "$Date: 2013/07/25 15:59:16 $";
-	}
-	virtual ~xmlelmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace xmlelm;
 
@@ -288,35 +260,3 @@ ERREnd
 ERREpilog
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmlelmpersonnalization
-: public xmlelmtutor
-{
-public:
-	xmlelmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmlelmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmlelmpersonnalization Tutor;
-
-ttr_tutor &XMLELMTutor = Tutor;

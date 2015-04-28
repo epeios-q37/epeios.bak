@@ -33,10 +33,6 @@
 
 #define DBSIDX_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DBSIDXTutor;
-
 #if defined( E_DEBUG ) && !defined( DBSIDX_NODBG )
 #define DBSIDX_DBG
 #endif

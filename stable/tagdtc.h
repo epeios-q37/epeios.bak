@@ -33,10 +33,6 @@
 
 #define TAGDTC_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TAGDTCTutor;
-
 #if defined( E_DEBUG ) && !defined( TAGDTC_NODBG )
 #define TAGDTC_DBG
 #endif

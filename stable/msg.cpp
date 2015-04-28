@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: msg.cpp,v 1.21 2012/11/14 16:06:31 csimon Exp $
-
 #define MSG__COMPILATION
 
 #include "msg.h"
-
-class msgtutor
-: public ttr_tutor
-{
-public:
-	msgtutor( void )
-	: ttr_tutor( MSG_NAME )
-	{
-#ifdef MSG_DBG
-		Version = MSG_VERSION "\b\bD $";
-#else
-		Version = MSG_VERSION;
-#endif
-		Owner = MSG_OWNER;
-		Date = "$Date: 2012/11/14 16:06:31 $";
-	}
-	virtual ~msgtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace msg;
 
@@ -269,34 +241,3 @@ void msg::i18_messages_::DumpRawMessages( messages_ &Messages ) const
 		Messages.Append( message( _GetRawMessage( i ) ) );
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class msgpersonnalization
-: public msgtutor
-{
-public:
-	msgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~msgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static msgpersonnalization Tutor;
-
-ttr_tutor &MSGTutor = Tutor;

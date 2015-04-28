@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: ltf.cpp,v 1.15 2013/04/11 19:36:50 csimon Exp $
-
 #define LTF__COMPILATION
 
 #include "ltf.h"
 
-class ltftutor
-: public ttr_tutor
-{
-public:
-	ltftutor( void )
-	: ttr_tutor( LTF_NAME )
-	{
-#ifdef LTF_DBG
-		Version = LTF_VERSION "\b\bD $";
-#else
-		Version = LTF_VERSION;
-#endif
-		Owner = LTF_OWNER;
-		Date = "$Date: 2013/04/11 19:36:50 $";
-	}
-	virtual ~ltftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace ltf;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ltfpersonnalization
-: public ltftutor
-{
-public:
-	ltfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ltfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ltfpersonnalization Tutor;
-
-ttr_tutor &LTFTutor = Tutor;

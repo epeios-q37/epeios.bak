@@ -218,34 +218,11 @@ void scllocale::TranslateTags(
 	tagsbs::SubstituteLongTags( In, Callback, Out, Marker );
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class scllocalepersonnalization
+Q37_GCTOR( scllocale )
 {
-public:
-	scllocalepersonnalization( void )
-	{
-		Locale_.Init();
+	Locale_.Init();
 
-		SoftwareLevel_ = Locale_.CreateEmbedded( rgstry::name( "Software" ) );
-		ConfigurationLevel_ = Locale_.CreateEmbedded( rgstry::name( "Configuration" ) );
-		ProjectLevel_ = Locale_.CreateEmbedded( rgstry::name( "Project" ) );
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
+	SoftwareLevel_ = Locale_.CreateEmbedded( rgstry::name( "Software" ) );
+	ConfigurationLevel_ = Locale_.CreateEmbedded( rgstry::name( "Configuration" ) );
+	ProjectLevel_ = Locale_.CreateEmbedded( rgstry::name( "Project" ) );
 }
-	~scllocalepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static scllocalepersonnalization Tutor;

@@ -143,7 +143,6 @@ byte_order_marker__ bomhdl::DetectBOM(
 	return BOM;
 }
 
-
 const bom__ &bomhdl::GetBOM( byte_order_marker__ BOM )
 {
 	if ( BOM > bom_amount )
@@ -153,33 +152,10 @@ const bom__ &bomhdl::GetBOM( byte_order_marker__ BOM )
 	return BOMS_[BOM];
 }
 
-class bompersonnalization
+Q37_GCTOR( bomhdl )
 {
-public:
-	bompersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
+	if ( bom_amount != 5 )
+		ERRChk();
 
-		if ( bom_amount != 5 )
-			ERRChk();
-
-		FillAutomat_();
-	}
-	~bompersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bompersonnalization Tutor;
+	FillAutomat_();
+}

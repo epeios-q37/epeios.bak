@@ -33,10 +33,6 @@
 
 #define CSDBNC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CSDBNCTutor;
-
 #if defined( E_DEBUG ) && !defined( CSDBNC_NODBG )
 #define CSDBNC_DBG
 #endif

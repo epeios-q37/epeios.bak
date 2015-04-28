@@ -33,10 +33,6 @@
 
 #define XMLBSC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLBSCTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLBSC_NODBG )
 #define XMLBSC_DBG
 #endif

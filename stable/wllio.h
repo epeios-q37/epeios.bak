@@ -33,10 +33,6 @@
 
 #define WLLIO_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &WLLIOTutor;
-
 #if defined( E_DEBUG ) && !defined( WLLIO_NODBG )
 #define WLLIO_DBG
 #endif

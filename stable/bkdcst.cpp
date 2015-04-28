@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdcst.cpp,v 1.2 2011/06/11 18:16:00 csimon Exp $
-
 #define BKDCST__COMPILATION
 
 #include "bkdcst.h"
-
-class bkdcsttutor
-: public ttr_tutor
-{
-public:
-	bkdcsttutor( void )
-	: ttr_tutor( BKDCST_NAME )
-	{
-#ifdef BKDCST_DBG
-		Version = BKDCST_VERSION "\b\bD $";
-#else
-		Version = BKDCST_VERSION;
-#endif
-		Owner = BKDCST_OWNER;
-		Date = "$Date: 2011/06/11 18:16:00 $";
-	}
-	virtual ~bkdcsttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace bkdcst;
 
@@ -105,37 +77,3 @@ cast bkdcst::GetID( const char *CastName )
 
 	return (cast)i;
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdcstpersonnalization
-: public bkdcsttutor
-{
-public:
-	bkdcstpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkdcstpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdcstpersonnalization Tutor;
-
-ttr_tutor &BKDCSTTutor = Tutor;

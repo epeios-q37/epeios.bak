@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: flm.cpp,v 1.79 2013/03/14 11:09:19 csimon Exp $
-
 #define FLM__COMPILATION
 
 #include "flm.h"
 
-class flmtutor
-: public ttr_tutor
-{
-public:
-	flmtutor( void )
-	: ttr_tutor( FLM_NAME )
-	{
-#ifdef FLM_DBG
-		Version = FLM_VERSION "\b\bD $";
-#else
-		Version = FLM_VERSION;
-#endif
-		Owner = FLM_OWNER;
-		Date = "$Date: 2013/03/14 11:09:19 $";
-	}
-	virtual ~flmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "lstbch.h"
 #include "que.h"
@@ -409,47 +382,23 @@ void flm::ReleaseAllFiles( void )
 }
 */
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class flmpersonnalization
-: public flmtutor
+Q37_GCTOR( flm )
 {
-public:
-	flmpersonnalization( void )
-	{
-		List_.Init();
-		Queue_.Init();
-		IDs_.Init();
+	List_.Init();
+	Queue_.Init();
+	IDs_.Init();
 
-		flm::MaxFileAmount = FLM__MAX_FILE_AMOUNT;
+	flm::MaxFileAmount = FLM__MAX_FILE_AMOUNT;
 
 #ifdef FLM__MT
-		Mutex_ = mtx::Create( mtx::mProtecting );
+	Mutex_ = mtx::Create( mtx::mProtecting );
 #endif
+}
 
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~flmpersonnalization( void )
-	{
+Q37_GDTOR( flm )
+{
 
 #ifdef MT
-		mtx::Delete( Mutex_ );
+	mtx::Delete( Mutex_ );
 #endif
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static flmpersonnalization Tutor;
-
-ttr_tutor &FLMTutor = Tutor;
+}

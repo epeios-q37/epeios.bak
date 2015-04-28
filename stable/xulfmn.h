@@ -33,10 +33,6 @@
 
 #define XULFMN_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XULFMNTutor;
-
 #if defined( E_DEBUG ) && !defined( XULFMN_NODBG )
 #define XULFMN_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define UYS_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &UYSTutor;
-
 #if defined( E_DEBUG ) && !defined( UYS_NODBG )
 #define UYS_DBG
 #endif

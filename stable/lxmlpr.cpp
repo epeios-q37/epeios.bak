@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: lxmlpr.cpp,v 1.10 2012/11/14 16:06:30 csimon Exp $
-
 #define LXMLPR__COMPILATION
 
 #include "lxmlpr.h"
-
-class lxmlprtutor
-: public ttr_tutor
-{
-public:
-	lxmlprtutor( void )
-	: ttr_tutor( LXMLPR_NAME )
-	{
-#ifdef LXMLPR_DBG
-		Version = LXMLPR_VERSION "\b\bD $";
-#else
-		Version = LXMLPR_VERSION;
-#endif
-		Owner = LXMLPR_OWNER;
-		Date = "$Date: 2012/11/14 16:06:30 $";
-	}
-	virtual ~lxmlprtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace lxmlpr;
 
@@ -475,35 +447,3 @@ ERREnd
 ERREpilog
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class lxmlprpersonnalization
-: public lxmlprtutor
-{
-public:
-	lxmlprpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~lxmlprpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static lxmlprpersonnalization Tutor;
-
-ttr_tutor &LXMLPRTutor = Tutor;

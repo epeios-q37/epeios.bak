@@ -23,35 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: sph.cpp,v 1.4 2012/11/14 16:06:37 csimon Exp $
-
 #define SPH__COMPILATION
 
 #include "sph.h"
-
-class sphtutor
-: public ttr_tutor
-{
-public:
-	sphtutor( void )
-	: ttr_tutor( SPH_NAME )
-	{
-#ifdef SPH_DBG
-		Version = SPH_VERSION " (DBG)";
-#else
-		Version = SPH_VERSION;
-#endif
-		Owner = SPH_OWNER;
-		Date = "$Date: 2012/11/14 16:06:37 $";
-	}
-	virtual ~sphtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #ifdef SPH__CUSTOM
 // Boucle jusqu' ce que le smaphore indique la disponibilit.
@@ -65,35 +39,3 @@ void sph__semaphore_::AttendreDisponibilite_( void )
 }
 #endif
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class sphpersonnalization
-: public sphtutor
-{
-public:
-	sphpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~sphpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static sphpersonnalization Tutor;
-
-ttr_tutor &SPHTutor = Tutor;

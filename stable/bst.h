@@ -34,10 +34,6 @@
 
 #define BST_OWNER		"the Epeios project (http://zeusw.org/epeios/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BSTTutor;
-
 #if defined( E_DEBUG ) && !defined( BST_NODBG )
 #define BST_DBG 
 #endif

@@ -33,10 +33,6 @@
 
 #define FBLBER_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLBERTutor;
-
 #if defined( E_DEBUG ) && !defined( FBLBER_NODBG )
 #define FBLBER_DBG
 #endif

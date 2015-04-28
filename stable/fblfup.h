@@ -33,9 +33,6 @@
 
 #define FBLFUP_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLFUPTutor;
 
 #if defined( E_DEBUG ) && !defined( FBLFUP_NODBG )
 #define FBLFUP_DBG

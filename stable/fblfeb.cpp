@@ -23,69 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fblfeb.cpp,v 1.1 2011/06/11 18:15:59 csimon Exp $
-
 #define FBLFEB__COMPILATION
 
 #include "fblfeb.h"
 
-class fblfebtutor
-: public ttr_tutor
-{
-public:
-	fblfebtutor( void )
-	: ttr_tutor( FBLFEB_NAME )
-	{
-#ifdef FBLFEB_DBG
-		Version = FBLFEB_VERSION "\b\bD $";
-#else
-		Version = FBLFEB_VERSION;
-#endif
-		Owner = FBLFEB_OWNER;
-		Date = "$Date: 2011/06/11 18:15:59 $";
-	}
-	virtual ~fblfebtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace fblfeb;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblfebpersonnalization
-: public fblfebtutor
-{
-public:
-	fblfebpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblfebpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblfebpersonnalization Tutor;
-
-ttr_tutor &FBLFEBTutor = Tutor;
 

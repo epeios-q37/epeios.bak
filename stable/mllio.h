@@ -33,10 +33,6 @@
 
 #define MLLIO_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MLLIOTutor;
-
 #if defined( E_DEBUG ) && !defined( MLLIO_NODBG )
 #define MLLIO_DBG
 #endif

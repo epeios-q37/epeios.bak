@@ -21,11 +21,6 @@
 
 #include "xhtcllbk.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace xhtcllbk;
 
 #define C( name )\
@@ -150,29 +145,3 @@ void xhtcllbk::Unescape(
 	}
 }
 #endif
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xhtcllbkpersonnalization
-{
-public:
-	xhtcllbkpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xhtcllbkpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static xhtcllbkpersonnalization Tutor;

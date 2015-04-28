@@ -26,6 +26,8 @@
 				  /*			  unless specified			 */
 				  /*******************************************/
 
+# include "tol.h"
+
 using namespace bso;
 
 const xint__ &bso::_ConvertToDInt(
@@ -72,37 +74,15 @@ int__ bso::ConvertToInt(
 	return Int;
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bsopersonnalization
+Q37_GCTOR( bso )
 {
-public:
-	bsopersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-		if ( sizeof( size__ ) != sizeof( int__ ) )
-			ERRChk();
+	if ( sizeof( size__ ) != sizeof( int__ ) )
+		ERRChk();
 
-		if ( sizeof( sint__ ) != sizeof( uint__ ) )
-			ERRChk();
+	if ( sizeof( sint__ ) != sizeof( uint__ ) )
+		ERRChk();
 
-		if ( sizeof( int__ ) != sizeof( uint__ ) )
-			ERRChk();
-	}
-	~bsopersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
+	if ( sizeof( int__ ) != sizeof( uint__ ) )
+		ERRChk();
+}
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static bsopersonnalization Tutor;

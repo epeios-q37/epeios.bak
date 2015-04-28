@@ -31,30 +31,6 @@
 
 #include "frdrgy.h"
 
-class frdrgytutor
-: public ttr_tutor
-{
-public:
-	frdrgytutor( void )
-	: ttr_tutor( FRDRGY_NAME )
-	{
-#ifdef FRDRGY_DBG
-		Version = FRDRGY_VERSION "\b\bD $";
-#else
-		Version = FRDRGY_VERSION;
-#endif
-		Owner = FRDRGY_OWNER;
-		Date = "$Date: 2013/04/26 14:43:39 $";
-	}
-	virtual ~frdrgytutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace frdrgy;
 
 # if 0
@@ -254,35 +230,3 @@ ERREpilog
 
 #endif
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class frdrgypersonnalization
-: public frdrgytutor
-{
-public:
-	frdrgypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~frdrgypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static frdrgypersonnalization Tutor;
-
-ttr_tutor &FRDRGYTutor = Tutor;

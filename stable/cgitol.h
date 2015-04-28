@@ -33,10 +33,6 @@
 
 #define CGITOL_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CGITOLTutor;
-
 #if defined( E_DEBUG ) && !defined( CGITOL_NODBG )
 #define CGITOL_DBG
 #endif
@@ -192,11 +188,5 @@ ERREpilog
 	}
 
 }
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

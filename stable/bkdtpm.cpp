@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdtpm.cpp,v 1.3 2012/11/14 16:06:25 csimon Exp $
-
 #define BKDTPM__COMPILATION
 
 #include "bkdtpm.h"
-
-class bkdtpmtutor
-: public ttr_tutor
-{
-public:
-	bkdtpmtutor( void )
-	: ttr_tutor( BKDTPM_NAME )
-	{
-#ifdef BKDTPM_DBG
-		Version = BKDTPM_VERSION "\b\bD $";
-#else
-		Version = BKDTPM_VERSION;
-#endif
-		Owner = BKDTPM_OWNER;
-		Date = "$Date: 2012/11/14 16:06:25 $";
-	}
-	virtual ~bkdtpmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace bkdtpm;
 
@@ -628,34 +600,3 @@ void bkdtpm::GetCommandsDetails(
 	GetContainer_<commands_details_, command_detail>( IFlow, CommandsDetails );
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdtpmpersonnalization
-: public bkdtpmtutor
-{
-public:
-	bkdtpmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkdtpmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdtpmpersonnalization Tutor;
-
-ttr_tutor &BKDTPMTutor = Tutor;

@@ -159,12 +159,8 @@ namespace xml {
 		{
 			reset();
 		}
-		flw::datum__ Get( xtf::utf__ &UTFOut )
+		flw::datum__ Get( xtf::utf__ &UTF )
 		{
-			xtf::utf__ UTF;
-
-			UTF.Init();
-
 			if ( Dump.Data.Amount() == 0 )
 				Dump.Set( _Flow->Position() );
 
@@ -172,31 +168,27 @@ namespace xml {
 
 			Dump.Data.Append( (const bso::char__ *)UTF.Data, UTF.Size );
 
-			if ( &UTFOut != NULL )
-				UTFOut = UTF;
-
 			return C;
 		}
-		flw::datum__ Get_( void )
+		flw::datum__ Get( void )
 		{
-			return Get( *(xtf::utf__ *)NULL );
+			xtf::utf__ Dummy;
+			Dummy.Init();
+
+			return Get( Dummy );
 		}
-		flw::datum__ View( xtf::utf__ &UTFOut )
+		flw::datum__ View( xtf::utf__ &UTF )
 		{
-			xtf::utf__ UTF;
-
-			UTF.Init();
-
 			flw::datum__  C = _Flow->View( UTF );
 
-			if ( &UTFOut != NULL )
-				UTFOut = UTF;
-
 			return C;
 		}
-		flw::datum__ View_( void )
+		flw::datum__ View( void )
 		{
-			return View( *(xtf::utf__ *)NULL );
+			xtf::utf__ Dummy;
+			Dummy.Init();
+
+			return View( Dummy );
 		}
 		bso::bool__ EndOfFlow( void )
 		{

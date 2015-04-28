@@ -23,35 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: prshct.cpp,v 1.4 2012/11/14 16:06:32 csimon Exp $
-
 #define PRSHCT__COMPILATION
-
 #include "prshct.h"
-
-class prshcttutor
-: public ttr_tutor
-{
-public:
-	prshcttutor( void )
-	: ttr_tutor( PRSHCT_NAME )
-	{
-#ifdef PRSHCT_DBG
-		Version = PRSHCT_VERSION " (DBG)";
-#else
-		Version = PRSHCT_VERSION;
-#endif
-		Owner = PRSHCT_OWNER;
-		Date = "$Date: 2012/11/14 16:06:32 $";
-	}
-	virtual ~prshcttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 enum type {
 	tUnknow,
@@ -340,35 +313,3 @@ ERREnd
 ERREpilog
 	return Root;
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class prshctpersonnalization
-: public prshcttutor
-{
-public:
-	prshctpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~prshctpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static prshctpersonnalization Tutor;
-
-ttr_tutor &PRSHCTTutor = Tutor;

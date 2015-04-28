@@ -33,10 +33,6 @@
 
 #define DTFRMF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DTFRMFTutor;
-
 #if defined( E_DEBUG ) && !defined( DTFRMF_NODBG )
 #define DTFRMF_DBG
 #endif

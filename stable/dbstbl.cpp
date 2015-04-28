@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dbstbl.cpp,v 1.47 2012/08/22 15:56:46 csimon Exp $
-
 #define DBSTBL__COMPILATION
 
 #include "dbstbl.h"
-
-class dbstbltutor
-: public ttr_tutor
-{
-public:
-	dbstbltutor( void )
-	: ttr_tutor( DBSTBL_NAME )
-	{
-#ifdef DBSTBL_DBG
-		Version = DBSTBL_VERSION "\b\bD $";
-#else
-		Version = DBSTBL_VERSION;
-#endif
-		Owner = DBSTBL_OWNER;
-		Date = "$Date: 2012/08/22 15:56:46 $";
-	}
-	virtual ~dbstbltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "fnm.h"
 
@@ -796,35 +768,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dbstblpersonnalization
-: public dbstbltutor
-{
-public:
-	dbstblpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dbstblpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dbstblpersonnalization Tutor;
-
-ttr_tutor &DBSTBLTutor = Tutor;

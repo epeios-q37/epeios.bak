@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: gui.cpp,v 1.4 2012/11/14 16:06:29 csimon Exp $
-
 #define GUI__COMPILATION
 
 #include "gui.h"
 
-class guitutor
-: public ttr_tutor
-{
-public:
-	guitutor( void )
-	: ttr_tutor( GUI_NAME )
-	{
-#ifdef GUI_DBG
-		Version = GUI_VERSION "\b\bD $";
-#else
-		Version = GUI_VERSION;
-#endif
-		Owner = GUI_OWNER;
-		Date = "$Date: 2012/11/14 16:06:29 $";
-	}
-	virtual ~guitutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace gui;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class guipersonnalization
-: public guitutor
-{
-public:
-	guipersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~guipersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static guipersonnalization Tutor;
-
-ttr_tutor &GUITutor = Tutor;

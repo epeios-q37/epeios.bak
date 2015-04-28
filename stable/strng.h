@@ -33,10 +33,6 @@
 
 #define STRNG_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &STRNGTutor;
-
 #if defined( E_DEBUG ) && !defined( STRNG_NODBG )
 #define STRNG_DBG
 #endif

@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mmm2.cpp,v 1.40 2012/11/14 16:06:31 csimon Exp $
-
 #define MMM2__COMPILATION
 
 #include "mmm2.h"
-
-class mmm2tutor
-: public ttr_tutor
-{
-public:
-	mmm2tutor( void )
-	: ttr_tutor( MMM2_NAME )
-	{
-#ifdef MMM2_DBG
-		Version = MMM2_VERSION "\b\bD $";
-#else
-		Version = MMM2_VERSION;
-#endif
-		Owner = MMM2_OWNER;
-		Date = "$Date: 2012/11/14 16:06:31 $";
-	}
-	virtual ~mmm2tutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "flf.h"
 
@@ -181,35 +153,3 @@ ERREpilog
 
 
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mmm2personnalization
-: public mmm2tutor
-{
-public:
-	mmm2personnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mmm2personnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mmm2personnalization Tutor;
-
-ttr_tutor &MMM2Tutor = Tutor;

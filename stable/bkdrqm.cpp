@@ -23,68 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdrqm.cpp,v 1.4 2011/06/11 18:16:00 csimon Exp $
-
 #define BKDRQM__COMPILATION
 
 #include "bkdrqm.h"
 
-class bkdrqmtutor
-: public ttr_tutor
-{
-public:
-	bkdrqmtutor( void )
-	: ttr_tutor( BKDRQM_NAME )
-	{
-#ifdef BKDRQM_DBG
-		Version = BKDRQM_VERSION "\b\bD $";
-#else
-		Version = BKDRQM_VERSION;
-#endif
-		Owner = BKDRQM_OWNER;
-		Date = "$Date: 2011/06/11 18:16:00 $";
-	}
-	virtual ~bkdrqmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace bkdrqm;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdrqmpersonnalization
-: public bkdrqmtutor
-{
-public:
-	bkdrqmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkdrqmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdrqmpersonnalization Tutor;
-
-ttr_tutor &BKDRQMTutor = Tutor;

@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fwf.cpp,v 1.17 2012/11/14 16:06:29 csimon Exp $
-
 #define FWF__COMPILATION
 
 #include "fwf.h"
 
-class fwftutor
-: public ttr_tutor
-{
-public:
-	fwftutor( void )
-	: ttr_tutor( FWF_NAME )
-	{
-#ifdef FWF_DBG
-		Version = FWF_VERSION "\b\bD $";
-#else
-		Version = FWF_VERSION;
-#endif
-		Owner = FWF_OWNER;
-		Date = "$Date: 2012/11/14 16:06:29 $";
-	}
-	virtual ~fwftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace fwf;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fwfpersonnalization
-: public fwftutor
-{
-public:
-	fwfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fwfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fwfpersonnalization Tutor;
-
-ttr_tutor &FWFTutor = Tutor;

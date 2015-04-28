@@ -33,10 +33,6 @@
 
 #define SCLERROR_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SCLERRORTutor;
-
 #if defined( E_DEBUG ) && !defined( SCLERROR_NODBG )
 #define SCLERROR_DBG
 #endif

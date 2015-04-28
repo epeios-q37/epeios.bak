@@ -33,10 +33,6 @@
 
 #define TSF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TSFTutor;
-
 #if defined( E_DEBUG ) && !defined( TSF_NODBG )
 #define TSF_DBG
 #endif

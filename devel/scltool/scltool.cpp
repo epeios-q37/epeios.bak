@@ -1761,33 +1761,11 @@ static inline void ExitOnSignal_( void )
 	signal( SIGINT, signal_ );	// Documentations about this signal not very clear, but this handles Ctrl-C.
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class scltoolpersonnalization
+Q37_GCTOR( scltool )
 {
-public:
-	scltoolpersonnalization( void )
-	{
-		ExitOnSignal_();
-		ERRError_.Init();
-		SCLError_.Init();
-		ParametersTag_.Init( sclrgstry::ParametersTag );
-		ParametersTag_.Append('/' );
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~scltoolpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static scltoolpersonnalization Tutor;
+	ExitOnSignal_();
+	ERRError_.Init();
+	SCLError_.Init();
+	ParametersTag_.Init( sclrgstry::ParametersTag );
+	ParametersTag_.Append('/' );
+}

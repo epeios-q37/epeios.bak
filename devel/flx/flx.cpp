@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: flx.cpp,v 1.62 2013/04/05 16:33:35 csimon Exp $
-
 #define FLX__COMPILATION
 
 #include "flx.h"
-
-class flxtutor
-: public ttr_tutor
-{
-public:
-	flxtutor( void )
-	: ttr_tutor( FLX_NAME )
-	{
-#ifdef FLX_DBG
-		Version = FLX_VERSION "\b\bD $";
-#else
-		Version = FLX_VERSION;
-#endif
-		Owner = FLX_OWNER;
-		Date = "$Date: 2013/04/05 16:33:35 $";
-	}
-	virtual ~flxtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "str.h"
 
@@ -274,49 +246,21 @@ bso::bool__ flx::exec_ioflow_driver___::Init(
 	return POpen2_( Command, _In, _Out, _Err );
 }
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class flxpersonnalization
-: public flxtutor
+Q37_GCTOR( flx )
 {
-public:
-	flxpersonnalization( void )
-	{
-		flx::VoidOFlowDriver.Init( fdr::ts_Default, flx::a_Default );
-		flx::VoidOFlow.Init();
+	flx::VoidOFlowDriver.Init( fdr::ts_Default, flx::a_Default );
+	flx::VoidOFlow.Init();
 
-		flx::VoidIFlowDriver.Init( fdr::ts_Default, flx::a_Default );
-		flx::VoidIFlow.Init();
+	flx::VoidIFlowDriver.Init( fdr::ts_Default, flx::a_Default );
+	flx::VoidIFlow.Init();
+}
 
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~flxpersonnalization( void )
-	{
-		// Les 4 lignes ci-dessous ne devraient pas tre ncessaire, mais si absentes, problme de 'pure virtual function call' (du moins sous VC++10).
-		flx::VoidIFlow.reset();
-		flx::VoidIFlowDriver.reset();
+Q37_GDTOR( flx )
+{
+	// Below 4 lines should not be necessary, but if missing, 'pure virtual function call' problem (at least under VC++10).
+	flx::VoidIFlow.reset();
+	flx::VoidIFlowDriver.reset();
 
-		flx::VoidOFlow.reset();
-		flx::VoidOFlowDriver.reset();
-
-
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static flxpersonnalization Tutor;
-
-ttr_tutor &FLXTutor = Tutor;
+	flx::VoidOFlow.reset();
+	flx::VoidOFlowDriver.reset();
+}

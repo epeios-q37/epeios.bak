@@ -33,10 +33,6 @@
 
 #define BKDRAC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDRACTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDRAC_NODBG )
 #define BKDRAC_DBG
 #endif

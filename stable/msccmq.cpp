@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: msccmq.cpp,v 1.1 2010/07/15 10:58:18 csimon Exp $
-
 #define MSCCMQ__COMPILATION
 
 #include "msccmq.h"
-
-class msccmqtutor
-: public ttr_tutor
-{
-public:
-	msccmqtutor( void )
-	: ttr_tutor( MSCCMQ_NAME )
-	{
-#ifdef MSCCMQ_DBG
-		Version = MSCCMQ_VERSION "\b\bD $";
-#else
-		Version = MSCCMQ_VERSION;
-#endif
-		Owner = MSCCMQ_OWNER;
-		Date = "$Date: 2010/07/15 10:58:18 $";
-	}
-	virtual ~msccmqtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "bch.h"
 
@@ -459,39 +431,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class msccmqpersonnalization
-: public msccmqtutor
-{
-public:
-	msccmqpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~msccmqpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static msccmqpersonnalization Tutor;
-
-ttr_tutor &MSCCMQTutor = Tutor;

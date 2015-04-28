@@ -49,18 +49,6 @@ Description:
 #define	FGM_VERSION		"1.0.4"	
 #define FGM_OWNER		"The Epeios Project (www.epeios.org)"	
 
-//  	Substitution is not applied to the rest when emancipated
-
-#include "ttr.h"
-
-extern class ttr_tutor &FGMTutor;
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 #include "err.h"
 #include "flw.h"
 #include "mdr.h"

@@ -23,35 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: pip.cpp,v 1.13 2012/11/14 16:06:32 csimon Exp $
-
 #define PIP__COMPILATION
 
 #include "pip.h"
-
-class piptutor
-: public ttr_tutor
-{
-public:
-	piptutor( void )
-	: ttr_tutor( PIP_NAME )
-	{
-#ifdef PIP_DBG
-		Version = PIP_VERSION "\b\bD $";
-#else
-		Version = PIP_VERSION;
-#endif
-		Owner = PIP_OWNER;
-		Date = "$Date: 2012/11/14 16:06:32 $";
-	}
-	virtual ~piptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace pip;
 
@@ -281,38 +255,10 @@ flw::amount__ pip::slave_bipipe_ioflow___::FLWPut(
 	return ::Put_( Bipipe_->Slave, Buffer, Wanted, Minimum, Synchronization );
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class pippersonnalization
-: public piptutor
+Q37_GCTOR( pip )
 {
-public:
-	pippersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
 #ifdef CPE__UNIX
-		signal( SIGPIPE, SIG_IGN );
+	signal( SIGPIPE, SIG_IGN );
 #endif
+}
 
-	}
-	~pippersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static pippersonnalization Tutor;
-
-ttr_tutor &PIPTutor = Tutor;

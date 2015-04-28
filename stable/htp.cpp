@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: htp.cpp,v 1.13 2010/06/05 16:21:59 csimon Exp $
-
 #define HTP__COMPILATION
 
 #include "htp.h"
-
-class htptutor
-: public ttr_tutor
-{
-public:
-	htptutor( void )
-	: ttr_tutor( HTP_NAME )
-	{
-#ifdef HTP_DBG
-		Version = HTP_VERSION "\b\bD $";
-#else
-		Version = HTP_VERSION;
-#endif
-		Owner = HTP_OWNER;
-		Date = "$Date: 2010/06/05 16:21:59 $";
-	}
-	virtual ~htptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "str.h"
 #include "stdarg.h"
@@ -318,32 +290,3 @@ void htp::Post(
 	Flow << Content;
 }
 
-
-class htppersonnalization
-: public htptutor
-{
-public:
-	htppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~htppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static htppersonnalization Tutor;
-
-ttr_tutor &HTPTutor = Tutor;

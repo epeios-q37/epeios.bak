@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dlbrry.cpp,v 1.8 2013/04/09 08:03:08 csimon Exp $
-
 #define DLBRRY__COMPILATION
 
 #include "dlbrry.h"
-
-class dlbrrytutor
-: public ttr_tutor
-{
-public:
-	dlbrrytutor( void )
-	: ttr_tutor( DLBRRY_NAME )
-	{
-#ifdef DLBRRY_DBG
-		Version = DLBRRY_VERSION "\b\bD $";
-#else
-		Version = DLBRRY_VERSION;
-#endif
-		Owner = DLBRRY_OWNER;
-		Date = "$Date: 2013/04/09 08:03:08 $";
-	}
-	virtual ~dlbrrytutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace dlbrry;
 
@@ -221,38 +193,3 @@ void * dlbrry::dynamic_library___::GetFunction( const char *FunctionName )
 
 	return Function;
 }
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dlbrrypersonnalization
-: public dlbrrytutor
-{
-public:
-	dlbrrypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dlbrrypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dlbrrypersonnalization Tutor;
-
-ttr_tutor &DLBRRYTutor = Tutor;

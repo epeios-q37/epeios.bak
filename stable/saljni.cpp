@@ -21,31 +21,6 @@
 #line 12
 #endif
 
-class saljnitutor
-: public ttr_tutor
-{
-public:
-	saljnitutor( void )
-	: ttr_tutor( SALJNI_NAME )
-	{
-#ifdef SALJNI_DBG
-		Version = SALJNI_VERSION " (DBG)";
-#else
-		Version = SALJNI_VERSION;
-#endif
-		Owner = SALJNI_OWNER;
-		Date = "20/05/2000";
-	}
-	virtual ~saljnitutor( void ){}
-};
-
-//  	Substitution is not applied to the rest.
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 #include <jni.h>	// this comes with the JDK (www.javasoft.com)
 
 flw__flow_ *SALJNIFlow = NULL;
@@ -94,37 +69,3 @@ JNIEXPORT void JNICALL Java_epeios_broker_Local__1Sync
 {
 	SALJNIFlow->Synchronize();
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class saljnipersonnalization
-: public saljnitutor
-{
-public:
-	saljnipersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~saljnipersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static saljnipersonnalization Tutor;
-
-ttr_tutor &SALJNITutor = Tutor;
-
-/* end of 'xxx.cpp' template file */

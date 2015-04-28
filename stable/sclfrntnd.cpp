@@ -421,29 +421,7 @@ static void FillAutomats_( void )
 	FillActionAutomat_();
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class sclfrntndpersonnalization
+Q37_GCTOR( sclfrntnd )
 {
-public:
-	sclfrntndpersonnalization( void )
-	{
-		FillAutomats_();
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~sclfrntndpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static sclfrntndpersonnalization Tutor;
+	FillAutomats_();
+}

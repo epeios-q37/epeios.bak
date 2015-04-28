@@ -33,10 +33,6 @@
 
 #define CCH_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CCHTutor;
-
 #if defined( E_DEBUG ) && !defined( CCH_NODBG )
 #define CCH_DBG
 #endif

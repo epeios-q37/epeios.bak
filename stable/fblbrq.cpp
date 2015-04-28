@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fblbrq.cpp,v 1.12 2013/04/15 10:50:50 csimon Exp $
-
 #define FBLBRQ__COMPILATION
 
 #include "fblbrq.h"
-
-class fblbrqtutor
-: public ttr_tutor
-{
-public:
-	fblbrqtutor( void )
-	: ttr_tutor( FBLBRQ_NAME )
-	{
-#ifdef FBLBRQ_DBG
-		Version = FBLBRQ_VERSION "\b\bD $";
-#else
-		Version = FBLBRQ_VERSION;
-#endif
-		Owner = FBLBRQ_OWNER;
-		Date = "$Date: 2013/04/15 10:50:50 $";
-	}
-	virtual ~fblbrqtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace fblbrq;
 
@@ -96,35 +68,3 @@ void fblbrq::request__::_Pop(
 		Row = Casts.Next( Row );
 	}
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblbrqpersonnalization
-: public fblbrqtutor
-{
-public:
-	fblbrqpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblbrqpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblbrqpersonnalization Tutor;
-
-ttr_tutor &FBLBRQTutor = Tutor;

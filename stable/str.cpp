@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: str.cpp,v 1.78 2013/04/15 10:50:54 csimon Exp $
-
 #define STR__COMPILATION
 
 #include "str.h"
-
-class strtutor
-: public ttr_tutor
-{
-public:
-	strtutor( void )
-	: ttr_tutor( STR_NAME )
-	{
-#ifdef STR_DBG
-		Version = STR_VERSION "\b\bD $";
-#else
-		Version = STR_VERSION;
-#endif
-		Owner = STR_OWNER;
-		Date = "$Date: 2013/04/15 10:50:54 $";
-	}
-	virtual ~strtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace str;
 
@@ -545,34 +517,3 @@ bso::lfloat__ string_::ToLF(
 	else
 		return Result;
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class strpersonnalization
-: public strtutor
-{
-public:
-	strpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~strpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static strpersonnalization Tutor;
-
-ttr_tutor &STRTutor = Tutor;

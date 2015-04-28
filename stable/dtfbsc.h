@@ -33,10 +33,6 @@
 
 #define DTFBSC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DTFBSCTutor;
-
 #if defined( E_DEBUG ) && !defined( DTFBSC_NODBG )
 #define DTFBSC_DBG
 #endif

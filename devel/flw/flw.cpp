@@ -31,30 +31,6 @@
 
 #include "flw.h"
 
-class flwtutor
-: public ttr_tutor
-{
-public:
-	flwtutor( void )
-	: ttr_tutor( FLW_NAME )
-	{
-#ifdef FLW_DBG
-		Version = FLW_VERSION "\b\bD $";
-#else
-		Version = FLW_VERSION;
-#endif
-		Owner = FLW_OWNER;
-		Date = "$Date: 2013/05/02 08:12:41 $";
-	}
-	virtual ~flwtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 #ifdef FLW__IGNORE_SIGPIPE
 #	include <signal.h>
 #endif
@@ -183,37 +159,3 @@ void flw::Copy(
 }
 #endif
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class flwpersonnalization
-: public flwtutor
-{
-public:
-	flwpersonnalization( void )
-	{
-#ifdef FLW__IGNORE_SIGPIPE
-//		signal( SIGPIPE, SIG_IGN );	// Witout this, an 'broken pipe' would terminate the program.
-#endif	
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~flwpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static flwpersonnalization Tutor;
-
-ttr_tutor &FLWTutor = Tutor;

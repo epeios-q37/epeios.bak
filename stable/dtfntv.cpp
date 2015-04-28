@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dtfntv.cpp,v 1.4 2012/11/14 16:06:26 csimon Exp $
-
 #define DTFNTV__COMPILATION
 
 #include "dtfntv.h"
 
-class dtfntvtutor
-: public ttr_tutor
-{
-public:
-	dtfntvtutor( void )
-	: ttr_tutor( DTFNTV_NAME )
-	{
-#ifdef DTFNTV_DBG
-		Version = DTFNTV_VERSION "\b\bD $";
-#else
-		Version = DTFNTV_VERSION;
-#endif
-		Owner = DTFNTV_OWNER;
-		Date = "$Date: 2012/11/14 16:06:26 $";
-	}
-	virtual ~dtfntvtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace dtfntv;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dtfntvpersonnalization
-: public dtfntvtutor
-{
-public:
-	dtfntvpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dtfntvpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dtfntvpersonnalization Tutor;
-
-ttr_tutor &DTFNTVTutor = Tutor;

@@ -24,40 +24,13 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: xmltol.cpp,v 1.5 2012/11/14 16:06:40 csimon Exp $
-
 #define XMLTOL__COMPILATION
 
 #include "xmltol.h"
 
-class xmltoltutor
-: public ttr_tutor
-{
-public:
-	xmltoltutor( void )
-	: ttr_tutor( XMLTOL_NAME )
-	{
-#ifdef XMLTOL_DBG
-		Version = XMLTOL_VERSION "\b\bD $";
-#else
-		Version = XMLTOL_VERSION;
-#endif
-		Owner = XMLTOL_OWNER;
-		Date = "$Date: 2012/11/14 16:06:40 $";
-	}
-	virtual ~xmltoltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 #include "stf.h"
 
 using namespace xmltol;
-
 
 void xmltol::Convert(
 	const xml_document_ &XMLDCM,
@@ -173,34 +146,3 @@ ERREnd
 ERREpilog
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmltolpersonnalization
-: public xmltoltutor
-{
-public:
-	xmltolpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmltolpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmltolpersonnalization Tutor;
-
-ttr_tutor &XMLTOLTutor = Tutor;

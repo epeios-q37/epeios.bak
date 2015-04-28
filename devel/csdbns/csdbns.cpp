@@ -290,7 +290,8 @@ inline static void Clean_( void )
 static void Traiter_( void *PU )
 {
 	::socket_data__ &Data = *(::socket_data__ *)PU;
-ERRFProlog
+ERRProlog
+
 	bso::bool__ Close = true;
 	socket_callback__ &Callback = *Data.Callback;
 	socket__ Socket = Data.Socket;
@@ -299,7 +300,8 @@ ERRFProlog
 	rrow__ Row = E_NIL;
 	csdbns_repository_item__ Item;
 	tol::E_FPOINTER___( char ) Buffer;
-ERRFBegin
+ERRBegin
+
 	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
 		ERRAlc();
 
@@ -321,9 +323,11 @@ ERRFBegin
 		if ( Row != E_NIL )
 			Clean_( Row );
 	ERREpilog
-ERRFErr
-ERRFEnd
-ERRFEpilog
+ERRErr
+	ERRRst();
+# pragma message ( __LOC__ " : Enlever ce ERRRst(). Voir comment corrrectement grer les erreurs.")
+ERREnd
+ERREpilog
 }
 
 void server___::Process(
@@ -409,10 +413,3 @@ public:
 	}
 };
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static csdbnspersonnalization Tutor;

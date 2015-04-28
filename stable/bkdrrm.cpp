@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdrrm.cpp,v 1.2 2011/06/11 18:16:00 csimon Exp $
-
 #define BKDRRM__COMPILATION
 
 #include "bkdrrm.h"
-
-class bkdrrmtutor
-: public ttr_tutor
-{
-public:
-	bkdrrmtutor( void )
-	: ttr_tutor( BKDRRM_NAME )
-	{
-#ifdef BKDRRM_DBG
-		Version = BKDRRM_VERSION "\b\bD $";
-#else
-		Version = BKDRRM_VERSION;
-#endif
-		Owner = BKDRRM_OWNER;
-		Date = "$Date: 2011/06/11 18:16:00 $";
-	}
-	virtual ~bkdrrmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace bkdrrm;
 
@@ -353,36 +325,3 @@ void bkdrrm::remote_request_manager::BKDRQMPush(
 	}
 }
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdrrmpersonnalization
-: public bkdrrmtutor
-{
-public:
-	bkdrrmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkdrrmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdrrmpersonnalization Tutor;
-
-ttr_tutor &BKDRRMTutor = Tutor;

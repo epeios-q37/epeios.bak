@@ -380,43 +380,22 @@ void fls::ReleaseAllFiles( void )
 }
 */
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class flspersonnalization
+Q37_GCTOR( flsq )
 {
-public:
-	flspersonnalization( void )
-	{
-		List_.Init();
-		Queue_.Init();
-		IDs_.Init();
+	List_.Init();
+	Queue_.Init();
+	IDs_.Init();
 
-		flsq::MaxFileAmount = FLSQ__MAX_FILE_AMOUNT;
+	flsq::MaxFileAmount = FLSQ__MAX_FILE_AMOUNT;
 
 #ifdef FLS__MT
-		Mutex_ = mtx::Create( mtx::mProtecting );
+	Mutex_ = mtx::Create( mtx::mProtecting );
 #endif
+}
 
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~flspersonnalization( void )
-	{
-
+Q37_GDTOR( flsq )
+{
 #ifdef MT
-		mtx::Delete( Mutex_ );
+	mtx::Delete( Mutex_ );
 #endif
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static flspersonnalization Tutor;
+}	

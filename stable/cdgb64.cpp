@@ -23,42 +23,11 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: cdgb64.cpp,v 1.12 2013/04/26 14:43:40 csimon Exp $
-
 #define CDGB64__COMPILATION
 
 #include "cdgb64.h"
 
-class cdgb64tutor
-: public ttr_tutor
-{
-public:
-	cdgb64tutor( void )
-	: ttr_tutor( CDGB64_NAME )
-	{
-#ifdef CDGB64_DBG
-		Version = CDGB64_VERSION "\b\bD $";
-#else
-		Version = CDGB64_VERSION;
-#endif
-		Owner = CDGB64_OWNER;
-		Date = "$Date: 2013/04/26 14:43:40 $";
-	}
-	virtual ~cdgb64tutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace cdgb64;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
 
 bso::raw__ *cdgb64::Encode = (bso::raw__ *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
@@ -80,33 +49,3 @@ bso::raw__ *cdgb64::Decode = (bso::raw__ *)
 						"@@@@@@@@@@@@@@@@"
 						"@@@@@@@@@@@@@@@@";
 
-
-
-class cdgb64personnalization
-: public cdgb64tutor
-{
-public:
-	cdgb64personnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~cdgb64personnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static cdgb64personnalization Tutor;
-
-ttr_tutor &CDGB64Tutor = Tutor;

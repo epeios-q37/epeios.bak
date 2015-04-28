@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: tht.cpp,v 1.10 2013/04/06 14:50:47 csimon Exp $
-
 #define THT__COMPILATION
 
 #include "tht.h"
-
-class thttutor
-: public ttr_tutor
-{
-public:
-	thttutor( void )
-	: ttr_tutor( THT_NAME )
-	{
-#ifdef THT_DBG
-		Version = THT_VERSION "\b\bD $";
-#else
-		Version = THT_VERSION;
-#endif
-		Owner = THT_OWNER;
-		Date = "$Date: 2013/04/06 14:50:47 $";
-	}
-	virtual ~thttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "err.h"
 
@@ -104,34 +76,3 @@ void tht::Defer( void )
 #endif
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class thtpersonnalization
-: public thttutor
-{
-public:
-	thtpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~thtpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static thtpersonnalization Tutor;
-
-ttr_tutor &THTTutor = Tutor;

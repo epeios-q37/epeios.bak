@@ -33,10 +33,6 @@
 
 #define XULFKL_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XULFKLTutor;
-
 #if defined( E_DEBUG ) && !defined( XULFKL_NODBG )
 #define XULFKL_DBG
 #endif

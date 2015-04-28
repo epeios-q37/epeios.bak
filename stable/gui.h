@@ -33,9 +33,6 @@
 
 #define GUI_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &GUITutor;
 
 #if defined( E_DEBUG ) && !defined( GUI_NODBG )
 #define GUI_DBG

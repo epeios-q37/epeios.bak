@@ -33,10 +33,6 @@
 
 #define XMLFLR_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLFLRTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLFLR_NODBG )
 #define XMLFLR_DBG
 #endif

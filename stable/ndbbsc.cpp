@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: ndbbsc.cpp,v 1.10 2013/04/15 10:50:52 csimon Exp $
-
 #define NDBBSC__COMPILATION
 
 #include "ndbbsc.h"
 
-class ndbbsctutor
-: public ttr_tutor
-{
-public:
-	ndbbsctutor( void )
-	: ttr_tutor( NDBBSC_NAME )
-	{
-#ifdef NDBBSC_DBG
-		Version = NDBBSC_VERSION "\b\bD $";
-#else
-		Version = NDBBSC_VERSION;
-#endif
-		Owner = NDBBSC_OWNER;
-		Date = "$Date: 2013/04/15 10:50:52 $";
-	}
-	virtual ~ndbbsctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace ndbbsc;
 
@@ -77,35 +50,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ndbbscpersonnalization
-: public ndbbsctutor
-{
-public:
-	ndbbscpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ndbbscpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ndbbscpersonnalization Tutor;
-
-ttr_tutor &NDBBSCTutor = Tutor;

@@ -33,10 +33,6 @@
 
 #define CRPTGR_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CRPTGRTutor;
-
 #if defined( E_DEBUG ) && !defined( CRPTGR_NODBG )
 #define CRPTGR_DBG
 #endif

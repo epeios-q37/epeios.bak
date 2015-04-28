@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xmldoc.cpp,v 1.3 2013/07/25 15:59:15 csimon Exp $
-
 #define XMLDOC__COMPILATION
 
 #include "xmldoc.h"
 
-class xmldoctutor
-: public ttr_tutor
-{
-public:
-	xmldoctutor( void )
-	: ttr_tutor( XMLDOC_NAME )
-	{
-#ifdef XMLDOC_DBG
-		Version = XMLDOC_VERSION "\b\bD $";
-#else
-		Version = XMLDOC_VERSION;
-#endif
-		Owner = XMLDOC_OWNER;
-		Date = "$Date: 2013/07/25 15:59:15 $";
-	}
-	virtual ~xmldoctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace xmldoc;
 
@@ -171,35 +144,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmldocpersonnalization
-: public xmldoctutor
-{
-public:
-	xmldocpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmldocpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmldocpersonnalization Tutor;
-
-ttr_tutor &XMLDOCTutor = Tutor;

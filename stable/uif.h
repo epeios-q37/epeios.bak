@@ -33,10 +33,6 @@
 
 #define UIF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &UIFTutor;
-
 #if defined( E_DEBUG ) && !defined( UIF_NODBG )
 #define UIF_DBG
 #endif

@@ -33,9 +33,6 @@
 
 #define FBLOVL_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLOVLTutor;
 
 #if defined( E_DEBUG ) && !defined( FBLOVL_NODBG )
 #define FBLOVL_DBG

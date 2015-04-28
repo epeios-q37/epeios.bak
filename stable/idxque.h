@@ -33,9 +33,6 @@
 
 #define IDXQUE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &IDXQUETutor;
 
 #if defined( E_DEBUG ) && !defined( IDXQUE_NODBG )
 #define IDXQUE_DBG

@@ -33,9 +33,6 @@
 
 #define MDR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MDRTutor;
 
 #if defined( E_DEBUG ) && !defined( MDR_NODBG )
 #define MDR_DBG

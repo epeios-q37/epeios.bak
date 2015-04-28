@@ -33,9 +33,6 @@
 
 #define MSCMDM_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSCMDMTutor;
 
 #if defined( E_DEBUG ) && !defined( MSCMDM_NODBG )
 #define MSCMDM_DBG

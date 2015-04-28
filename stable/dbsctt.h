@@ -33,10 +33,6 @@
 
 #define DBSCTT_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DBSCTTTutor;
-
 #if defined( E_DEBUG ) && !defined( DBSCTT_NODBG )
 #define DBSCTT_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define CIO_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CIOTutor;
-
 #if defined( E_DEBUG ) && !defined( CIO_NODBG )
 #define CIO_DBG
 #endif

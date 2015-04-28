@@ -31,30 +31,6 @@
 
 #include "cio.h"
 
-class ciotutor
-: public ttr_tutor
-{
-public:
-	ciotutor( void )
-	: ttr_tutor( CIO_NAME )
-	{
-#ifdef CIO_DBG
-		Version = CIO_VERSION "\b\bD $";
-#else
-		Version = CIO_VERSION;
-#endif
-		Owner = CIO_OWNER;
-		Date = "$Date: 2013/04/06 14:50:43 $";
-	}
-	virtual ~ciotutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 #include "flx.h"
 
 using namespace cio;
@@ -207,37 +183,7 @@ target__ cio::Target( void )
 	return ::Target_;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ciopersonnalization
-: public ciotutor
+Q37_GCTOR( cio )
 {
-public:
-	ciopersonnalization( void )
-	{
-	/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-
-		InitializeConsole_();
-	}
-	~ciopersonnalization( void )
-	{
-		Target_ = t_Undefined;
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ciopersonnalization Tutor;
-
-ttr_tutor &CIOTutor = Tutor;
+	InitializeConsole_();
+}

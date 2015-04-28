@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: geckob.cpp,v 1.11 2013/04/09 17:57:31 csimon Exp $
-
 #define GECKOB__COMPILATION
 
 #include "geckob.h"
-
-class geckobtutor
-: public ttr_tutor
-{
-public:
-	geckobtutor( void )
-	: ttr_tutor( GECKOB_NAME )
-	{
-#ifdef GECKOB_DBG
-		Version = GECKOB_VERSION "\b\bD $";
-#else
-		Version = GECKOB_VERSION;
-#endif
-		Owner = GECKOB_OWNER;
-		Date = "$Date: 2013/04/09 17:57:31 $";
-	}
-	virtual ~geckobtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "mtx.h"
 
@@ -154,40 +126,13 @@ void geckob::SetSteering( geckoo::steering_callback__ &Steering )
 	LoneSteering_ = &Steering;
 }
 
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class geckobpersonnalization
-: public geckobtutor
+Q37_GCTOR( geckob )
 {
-public:
-	geckobpersonnalization( void )
-	{
-		Mutex_ = mtx::Create();
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~geckobpersonnalization( void )
-	{
-		if ( Mutex_ != MTX_INVALID_HANDLER )
-			mtx::Delete( Mutex_, true );
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
+	Mutex_ = mtx::Create();
+}
 
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static geckobpersonnalization Tutor;
-
-ttr_tutor &GECKOBTutor = Tutor;
+Q37_GDTOR( geckob )
+{
+	if ( Mutex_ != MTX_INVALID_HANDLER )
+		mtx::Delete( Mutex_, true );
+}

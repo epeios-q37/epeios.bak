@@ -23,65 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: tym.cpp,v 1.48 2013/03/14 11:09:20 csimon Exp $
-
 #define TYM__COMPILATION
 
 #include "tym.h"
 
-class tymtutor
-: public ttr_tutor
-{
-public:
-	tymtutor( void )
-	: ttr_tutor( TYM_NAME )
-	{
-#ifdef TYM_DBG
-		Version = TYM_VERSION "\b\bD $";
-#else
-		Version = TYM_VERSION;
-#endif
-		Owner = TYM_OWNER;
-		Date = "$Date: 2013/03/14 11:09:20 $";
-	}
-	virtual ~tymtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class tympersonnalization
-: public tymtutor
-{
-public:
-	tympersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~tympersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static tympersonnalization Tutor;
-
-ttr_tutor &TYMTutor = Tutor;
+using namespace tym;

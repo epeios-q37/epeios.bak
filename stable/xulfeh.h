@@ -33,10 +33,6 @@
 
 #define XULFEH_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XULFEHTutor;
-
 #if defined( E_DEBUG ) && !defined( XULFEH_NODBG )
 #define XULFEH_DBG
 #endif

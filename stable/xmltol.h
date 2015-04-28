@@ -34,10 +34,6 @@
 
 #define XMLTOL_OWNER		"the Epeios project (http://epeios.org/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLTOLTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLTOL_NODBG )
 #define XMLTOL_DBG 
 #endif

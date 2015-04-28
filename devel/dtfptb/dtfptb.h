@@ -33,10 +33,6 @@
 
 #define DTFPTB_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DTFPTBTutor;
-
 #if defined( E_DEBUG ) && !defined( DTFPTB_NODBG )
 #define DTFPTB_DBG
 #endif

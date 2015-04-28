@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: salcsm.cpp,v 1.13 2012/11/14 16:06:32 csimon Exp $
-
 #define SALCSM__COMPILATION
 
 #include "salcsm.h"
-
-class salcsmtutor
-: public ttr_tutor
-{
-public:
-	salcsmtutor( void )
-	: ttr_tutor( SALCSM_NAME )
-	{
-#ifdef SALCSM_DBG
-		Version = SALCSM_VERSION "\b\bD $";
-#else
-		Version = SALCSM_VERSION;
-#endif
-		Owner = SALCSM_OWNER;
-		Date = "$Date: 2012/11/14 16:06:32 $";
-	}
-	virtual ~salcsmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace salcsm;
 
@@ -177,33 +149,3 @@ flw::ioflow___ &salcsm::manager___::Process( void )
 	return ClientActif_;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class salcsmpersonnalization
-: public salcsmtutor
-{
-public:
-	salcsmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~salcsmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static salcsmpersonnalization Tutor;
-
-ttr_tutor &SALCSMTutor = Tutor;

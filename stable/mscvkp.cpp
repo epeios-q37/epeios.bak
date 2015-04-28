@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mscvkp.cpp,v 1.1 2010/07/16 08:25:54 csimon Exp $
-
 #define MSCVKP__COMPILATION
 
 #include "mscvkp.h"
-
-class mscvkptutor
-: public ttr_tutor
-{
-public:
-	mscvkptutor( void )
-	: ttr_tutor( MSCVKP_NAME )
-	{
-#ifdef MSCVKP_DBG
-		Version = MSCVKP_VERSION "\b\bD $";
-#else
-		Version = MSCVKP_VERSION;
-#endif
-		Owner = MSCVKP_OWNER;
-		Date = "$Date: 2010/07/16 08:25:54 $";
-	}
-	virtual ~mscvkptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "mscmdf.h"
 
@@ -1534,38 +1506,4 @@ ERRBegin
 ERRErr
 ERREnd
 ERREpilog
-
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mscvkppersonnalization
-: public mscvkptutor
-{
-public:
-	mscvkppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscvkppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mscvkppersonnalization Tutor;
-
-ttr_tutor &MSCVKPTutor = Tutor;

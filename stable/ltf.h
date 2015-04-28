@@ -33,9 +33,6 @@
 
 #define LTF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &LTFTutor;
 
 #if defined( E_DEBUG ) && !defined( LTF_NODBG )
 #define LTF_DBG

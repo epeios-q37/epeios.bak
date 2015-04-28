@@ -33,10 +33,6 @@
 
 #define MSCVKT_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSCVKTTutor;
-
 #if defined( E_DEBUG ) && !defined( MSCVKT_NODBG )
 #define MSCVKT_DBG
 #endif

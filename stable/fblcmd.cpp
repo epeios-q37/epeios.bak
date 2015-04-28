@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fblcmd.cpp,v 1.4 2013/04/14 14:37:21 csimon Exp $
-
 #define FBLCMD__COMPILATION
 
 #include "fblcmd.h"
 
-class fblcmdtutor
-: public ttr_tutor
-{
-public:
-	fblcmdtutor( void )
-	: ttr_tutor( FBLCMD_NAME )
-	{
-#ifdef FBLCMD_DBG
-		Version = FBLCMD_VERSION "\b\bD $";
-#else
-		Version = FBLCMD_VERSION;
-#endif
-		Owner = FBLCMD_OWNER;
-		Date = "$Date: 2013/04/14 14:37:21 $";
-	}
-	virtual ~fblcmdtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace fblcmd;
 
@@ -178,35 +151,3 @@ const cast__ *fblcmd::CommandsParameters[c_amount] = {
 	SetLanguage
 };
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblcmdpersonnalization
-: public fblcmdtutor
-{
-public:
-	fblcmdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblcmdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblcmdpersonnalization Tutor;
-
-ttr_tutor &FBLCMDTutor = Tutor;

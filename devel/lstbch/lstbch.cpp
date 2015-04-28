@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: lstbch.cpp,v 1.46 2013/04/06 14:50:46 csimon Exp $
-
 #define LSTBCH__COMPILATION
 
 #include "lstbch.h"
-
-class lstbchtutor
-: public ttr_tutor
-{
-public:
-	lstbchtutor( void )
-	: ttr_tutor( LSTBCH_NAME )
-	{
-#ifdef LSTBCH_DBG
-		Version = LSTBCH_VERSION "\b\bD $";
-#else
-		Version = LSTBCH_VERSION;
-#endif
-		Owner = LSTBCH_OWNER;
-		Date = "$Date: 2013/04/06 14:50:46 $";
-	}
-	virtual ~lstbchtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace lstbch;
 
@@ -76,36 +48,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class lstbchpersonnalization
-: public lstbchtutor
-{
-public:
-	lstbchpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~lstbchpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static lstbchpersonnalization Tutor;
-
-ttr_tutor &LSTBCHTutor = Tutor;

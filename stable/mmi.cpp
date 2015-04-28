@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mmi.cpp,v 1.59 2013/03/15 14:11:53 csimon Exp $
-
 #define MMI__COMPILATION
 
 #include "mmi.h"
 
-class mmitutor
-: public ttr_tutor
-{
-public:
-	mmitutor( void )
-	: ttr_tutor( MMI_NAME )
-	{
-#ifdef MMI_DBG
-		Version = MMI_VERSION "\b\bD $";
-#else
-		Version = MMI_VERSION;
-#endif
-		Owner = MMI_OWNER;
-		Date = "$Date: 2013/03/15 14:11:53 $";
-	}
-	virtual ~mmitutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #define capacite				mdr::size__
 #define multimemoire_indexee	indexed_multimemory_
@@ -87,32 +60,3 @@ namespace mmi {
 
 }
 
-	/* Although in theory this class is inaccessible to the different modules,
-	it is necessary to personalize it, or certain compiler would not work properly */
-	class mmipersonnalization
-	: public mmitutor
-	{
-	public:
-		mmipersonnalization( void )
-		{
-			/* place here the actions concerning this library
-			to be realized at the launching of the application  */
-		}
-		~mmipersonnalization( void )
-		{
-			/* place here the actions concerning this library
-			to be realized at the ending of the application  */
-		}
-	};
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mmipersonnalization Tutor;
-
-ttr_tutor &MMITutor = Tutor;

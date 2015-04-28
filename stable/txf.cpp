@@ -23,66 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: txf.cpp,v 1.48 2013/04/06 15:33:19 csimon Exp $
-
 #define TXF__COMPILATION
 
 #include "txf.h"
 
-class txftutor
-: public ttr_tutor
-{
-public:
-	txftutor( void )
-	: ttr_tutor( TXF_NAME )
-	{
-#ifdef TXF_DBG
-		Version = TXF_VERSION "\b\bD $";
-#else
-		Version = TXF_VERSION;
-#endif
-		Owner = TXF_OWNER;
-		Date = "$Date: 2013/04/06 15:33:19 $";
-	}
-	virtual ~txftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class txfpersonnalization
-: public txftutor
-{
-public:
-	txfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~txfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static txfpersonnalization Tutor;
-
-ttr_tutor &TXFTutor = Tutor;
+using namespace txf;

@@ -33,10 +33,6 @@
 
 #define UTF_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &UTFTutor;
-
 #if defined( E_DEBUG ) && !defined( UTF_NODBG )
 #define UTF_DBG
 #endif

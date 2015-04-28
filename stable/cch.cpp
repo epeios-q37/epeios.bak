@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: cch.cpp,v 1.28 2011/06/15 15:27:23 csimon Exp $
-
 #define CCH__COMPILATION
 
 #include "cch.h"
-
-class cchtutor
-: public ttr_tutor
-{
-public:
-	cchtutor( void )
-	: ttr_tutor( CCH_NAME )
-	{
-#ifdef CCH_DBG
-		Version = CCH_VERSION "\b\bD $";
-#else
-		Version = CCH_VERSION;
-#endif
-		Owner = CCH_OWNER;
-		Date = "$Date: 2011/06/15 15:27:23 $";
-	}
-	virtual ~cchtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace cch;
 
@@ -61,37 +33,9 @@ using namespace cch;
 sma::memory_heap___ cch::Heap;
 #endif
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class cchpersonnalization
-: public cchtutor
+Q37_ECTOR( cch )
 {
-public:
-	cchpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
 #ifdef CCH__USE_SMA_HEAP
-		cch::Heap.Init( CCH__SMA_HEAP_SIZE );
+	cch::Heap.Init( CCH__SMA_HEAP_SIZE );
 #endif
-	}
-	~cchpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static cchpersonnalization Tutor;
-
-ttr_tutor &CCHTutor = Tutor;
+}

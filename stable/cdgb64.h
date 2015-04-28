@@ -33,10 +33,6 @@
 
 #define CDGB64_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CDGB64Tutor;
-
 #if defined( E_DEBUG ) && !defined( CDGB64_NODBG )
 #define CDGB64_DBG
 #endif

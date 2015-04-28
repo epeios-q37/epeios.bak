@@ -33,10 +33,6 @@
 
 #define LGG_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &LGGTutor;
-
 #if defined( E_DEBUG ) && !defined( LGG_NODBG )
 #define LGG_DBG
 #endif

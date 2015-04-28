@@ -33,10 +33,6 @@
 
 #define FBLFPH_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLFPHTutor;
-
 #if defined( E_DEBUG ) && !defined( FBLFPH_NODBG )
 #define FBLFPH_DBG
 #endif

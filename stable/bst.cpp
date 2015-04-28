@@ -24,35 +24,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: bst.cpp,v 1.5 2012/11/14 16:06:25 csimon Exp $
-
 #define BST__COMPILATION
 
 #include "bst.h"
-
-class bsttutor
-: public ttr_tutor
-{
-public:
-	bsttutor( void )
-	: ttr_tutor( BST_NAME )
-	{
-#ifdef BST_DBG
-		Version = BST_VERSION "\b\bD $";
-#else
-		Version = BST_VERSION;
-#endif
-		Owner = BST_OWNER;
-		Date = "$Date: 2012/11/14 16:06:25 $";
-	}
-	virtual ~bsttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 namespace bst {
 
@@ -211,35 +185,3 @@ namespace bst {
 		return Flot;
 	}
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class bstpersonnalization
-: public bsttutor
-{
-public:
-	bstpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bstpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bstpersonnalization Tutor;
-
-ttr_tutor &BSTTutor = Tutor;

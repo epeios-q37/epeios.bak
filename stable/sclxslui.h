@@ -33,10 +33,6 @@
 
 #define SCLXSLUI_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SCLXSLUITutor;
-
 #if defined( E_DEBUG ) && !defined( SCLXSLUI_NODBG )
 #define SCLXSLUI_DBG
 #endif

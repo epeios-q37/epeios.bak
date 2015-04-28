@@ -33,10 +33,6 @@
 
 #define STR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &STRTutor;
-
 #if defined( E_DEBUG ) && !defined( STR_NODBG )
 #define STR_DBG
 #endif

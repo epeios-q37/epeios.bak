@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xxx.cpp,v 1.9 2012/11/14 16:06:23 csimon Exp $
-
 #define FRDSSN__COMPILATION
 
 #include "frdssn.h"
-
-class frdssntutor
-: public ttr_tutor
-{
-public:
-	frdssntutor( void )
-	: ttr_tutor( FRDSSN_NAME )
-	{
-#ifdef FRDSSN_DBG
-		Version = FRDSSN_VERSION "\b\bD $";
-#else
-		Version = FRDSSN_VERSION;
-#endif
-		Owner = FRDSSN_OWNER;
-		Date = "$Date: 2012/11/14 16:06:23 $";
-	}
-	virtual ~frdssntutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace frdssn;
 
@@ -103,35 +75,3 @@ ERREpilog
 	return Success;
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class frdssnpersonnalization
-: public frdssntutor
-{
-public:
-	frdssnpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~frdssnpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static frdssnpersonnalization Tutor;
-
-ttr_tutor &FRDSSNTutor = Tutor;

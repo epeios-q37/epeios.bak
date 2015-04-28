@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdmng.cpp,v 1.15 2011/06/11 18:16:00 csimon Exp $
-
 #define BKDMNG__COMPILATION
 
 #include "bkdmng.h"
-
-class bkdmngtutor
-: public ttr_tutor
-{
-public:
-	bkdmngtutor( void )
-	: ttr_tutor( BKDMNG_NAME )
-	{
-#ifdef BKDMNG_DBG
-		Version = BKDMNG_VERSION "\b\bD $";
-#else
-		Version = BKDMNG_VERSION;
-#endif
-		Owner = BKDMNG_OWNER;
-		Date = "$Date: 2011/06/11 18:16:00 $";
-	}
-	virtual ~bkdmngtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace bkdmng;
 
@@ -927,36 +899,3 @@ ERREpilog
 	}
 #endif
 	
-}
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdmngpersonnalization
-: public bkdmngtutor
-{
-public:
-	bkdmngpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-
-	}
-	~bkdmngpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdmngpersonnalization Tutor;
-
-ttr_tutor &BKDMNGTutor = Tutor;

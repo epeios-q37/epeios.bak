@@ -33,9 +33,6 @@
 
 #define MMM0_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MMM0Tutor;
 
 #if defined( E_DEBUG ) && !defined( MMM0_NODBG )
 #define MMM0_DBG

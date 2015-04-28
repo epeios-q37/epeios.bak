@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkddsc.cpp,v 1.2 2012/11/14 16:06:24 csimon Exp $
-
 #define BKDDSC__COMPILATION
 
 #include "bkddsc.h"
-
-class bkddsctutor
-: public ttr_tutor
-{
-public:
-	bkddsctutor( void )
-	: ttr_tutor( BKDDSC_NAME )
-	{
-#ifdef BKDDSC_DBG
-		Version = BKDDSC_VERSION "\b\bD $";
-#else
-		Version = BKDDSC_VERSION;
-#endif
-		Owner = BKDDSC_OWNER;
-		Date = "$Date: 2012/11/14 16:06:24 $";
-	}
-	virtual ~bkddsctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace bkddsc;
 
@@ -105,36 +77,3 @@ ERREnd
 ERREpilog
 	return Position;
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkddscpersonnalization
-: public bkddsctutor
-{
-public:
-	bkddscpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkddscpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkddscpersonnalization Tutor;
-
-ttr_tutor &BKDDSCTutor = Tutor;

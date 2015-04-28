@@ -33,10 +33,6 @@
 
 #define TXMPGH_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TXMPGHTutor;
-
 #if defined( E_DEBUG ) && !defined( TXMPGH_NODBG )
 #define TXMPGH_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define FLW_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FLWTutor;
-
 #if defined( E_DEBUG ) && !defined( FLW_NODBG )
 #define FLW_DBG
 #endif

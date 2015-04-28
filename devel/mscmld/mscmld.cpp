@@ -1769,32 +1769,3 @@ parse_status__ mscmld::ParseXML(
 
 	return Parse_( Parser, Melody );
 }
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mscmldpersonnalization
-{
-public:
-	mscmldpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscmldpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static mscmldpersonnalization Tutor;

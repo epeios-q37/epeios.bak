@@ -33,10 +33,6 @@
 
 #define SSNMNG_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SSNMNGTutor;
-
 #if defined( E_DEBUG ) && !defined( SSNMNG_NODBG )
 #define SSNMNG_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define FBLCMD_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLCMDTutor;
-
 #if defined( E_DEBUG ) && !defined( FBLCMD_NODBG )
 #define FBLCMD_DBG
 #endif

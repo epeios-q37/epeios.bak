@@ -33,10 +33,6 @@
 
 #define IAS_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &IASTutor;
-
 #if defined( E_DEBUG ) && !defined( IAS_NODBG )
 #define IAS_DBG
 #endif

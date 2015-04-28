@@ -33,9 +33,6 @@
 
 #define FBLTYP_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLTYPTutor;
 
 #if defined( E_DEBUG ) && !defined( FBLTYP_NODBG )
 #define FBLTYP_DBG

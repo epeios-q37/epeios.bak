@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: sclerror.cpp,v 1.6 2013/07/18 19:46:25 csimon Exp $
-
 #define SCLERROR__COMPILATION
 
 #include "sclerror.h"
-
-class sclerrortutor
-: public ttr_tutor
-{
-public:
-	sclerrortutor( void )
-	: ttr_tutor( SCLERROR_NAME )
-	{
-#ifdef SCLERROR_DBG
-		Version = SCLERROR_VERSION "\b\bD $";
-#else
-		Version = SCLERROR_VERSION;
-#endif
-		Owner = SCLERROR_OWNER;
-		Date = "$Date: 2013/07/18 19:46:25 $";
-	}
-	virtual ~sclerrortutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace sclerror;
 
@@ -201,37 +173,3 @@ ERREnd
 ERREpilog
 	return PendingErrorAvailable;
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class sclerrorpersonnalization
-: public sclerrortutor
-{
-public:
-	sclerrorpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~sclerrorpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static sclerrorpersonnalization Tutor;
-
-ttr_tutor &SCLERRORTutor = Tutor;

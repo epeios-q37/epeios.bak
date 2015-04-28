@@ -33,10 +33,6 @@
 
 #define BKDDSC_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDDSCTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDDSC_NODBG )
 #define BKDDSC_DBG
 #endif

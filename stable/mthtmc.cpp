@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mthtmc.cpp,v 1.1 2010/07/15 18:26:44 csimon Exp $
-
 #define MTHTMC__COMPILATION
 
 #include "mthtmc.h"
 
-class mthtmctutor
-: public ttr_tutor
-{
-public:
-	mthtmctutor( void )
-	: ttr_tutor( MTHTMC_NAME )
-	{
-#ifdef MTHTMC_DBG
-		Version = MTHTMC_VERSION "\b\bD $";
-#else
-		Version = MTHTMC_VERSION;
-#endif
-		Owner = MTHTMC_OWNER;
-		Date = "$Date: 2010/07/15 18:26:44 $";
-	}
-	virtual ~mthtmctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "mthitg.h"
 
@@ -969,34 +942,3 @@ ERREpilog
 	return Success;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mthtmcpersonnalization
-: public mthtmctutor
-{
-public:
-	mthtmcpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mthtmcpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mthtmcpersonnalization Tutor;
-
-ttr_tutor &MTHTMCTutor = Tutor;

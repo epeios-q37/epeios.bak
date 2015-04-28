@@ -23,31 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdcmd.cpp,v 1.8 2011/06/11 18:16:00 csimon Exp $
-
 #define BKDCMD__COMPILATION
 
 #include "bkdcmd.h"
-
-class bkdcmdtutor
-: public ttr_tutor
-{
-public:
-	bkdcmdtutor( void )
-	: ttr_tutor( BKDCMD_NAME )
-	{
-#ifdef BKDCMD_DBG
-		Version = BKDCMD_VERSION "\b\bD $";
-#else
-		Version = BKDCMD_VERSION;
-#endif
-		Owner = BKDCMD_OWNER;
-		Date = "$Date: 2011/06/11 18:16:00 $";
-	}
-	virtual ~bkdcmdtutor( void ){}
-};
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
@@ -176,37 +154,3 @@ const cast *bkdcmd::CommandsParameters[bkdcmd::c_amount] = {
 	GetLanguage,
 	SetLanguage
 };
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdcmdpersonnalization
-: public bkdcmdtutor
-{
-public:
-	bkdcmdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkdcmdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdcmdpersonnalization Tutor;
-
-ttr_tutor &BKDCMDTutor = Tutor;

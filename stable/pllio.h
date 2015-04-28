@@ -33,9 +33,6 @@
 
 #define PLLIO_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &PLLIOTutor;
 
 #if defined( E_DEBUG ) && !defined( PLLIO_NODBG )
 #define PLLIO_DBG
@@ -68,7 +65,7 @@ extern class ttr_tutor &PLLIOTutor;
 #include <sys/stat.h>
 
 namespace pllio {
-	typedef bso::u64__ size__;
+	typedef fdr::size__ size__;
 
 	typedef int	descriptor__;
 

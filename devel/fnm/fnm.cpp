@@ -21,11 +21,6 @@
 
 #include "fnm.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "err.h"
 #include "tol.h"
 #include "fil.h"
@@ -54,7 +49,7 @@ const char *fnm::GetLabel( fnm::type__ Type )
 		ERRFwk();
 	}
 
-	return NULL;	// Pour viter un 'warning'.
+	return NULL;	// To avoid a 'warnin'.
 }
 
 #ifdef FNM__POSIX
@@ -292,31 +287,4 @@ ERREnd
 ERREpilog
 	return Flow;
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fnmpersonnalization
-{
-public:
-	fnmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fnmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static fnmpersonnalization Tutor;
 

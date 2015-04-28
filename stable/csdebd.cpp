@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: csdebd.cpp,v 1.16 2011/09/23 11:56:44 csimon Exp $
-
 #define CSDEBD__COMPILATION
 
 #include "csdebd.h"
 
-class csdebdtutor
-: public ttr_tutor
-{
-public:
-	csdebdtutor( void )
-	: ttr_tutor( CSDEBD_NAME )
-	{
-#ifdef CSDEBD_DBG
-		Version = CSDEBD_VERSION "\b\bD $";
-#else
-		Version = CSDEBD_VERSION;
-#endif
-		Owner = CSDEBD_OWNER;
-		Date = "$Date: 2011/09/23 11:56:44 $";
-	}
-	virtual ~csdebdtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace csdebd;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csdebdpersonnalization
-: public csdebdtutor
-{
-public:
-	csdebdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csdebdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static csdebdpersonnalization Tutor;
-
-ttr_tutor &CSDEBDTutor = Tutor;

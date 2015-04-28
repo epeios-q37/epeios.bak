@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: tagdtc.cpp,v 1.11 2012/11/14 16:06:37 csimon Exp $
-
 #define TAGDTC__COMPILATION
 
 #include "tagdtc.h"
-
-class tagdtctutor
-: public ttr_tutor
-{
-public:
-	tagdtctutor( void )
-	: ttr_tutor( TAGDTC_NAME )
-	{
-#ifdef TAGDTC_DBG
-		Version = TAGDTC_VERSION "\b\bD $";
-#else
-		Version = TAGDTC_VERSION;
-#endif
-		Owner = TAGDTC_OWNER;
-		Date = "$Date: 2012/11/14 16:06:37 $";
-	}
-	virtual ~tagdtctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace tagdtc;
 
@@ -157,36 +129,3 @@ epeios::row_t__ tagdtc::tag_detector_::Parse(
 
 	return *Return;
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class tagdtcpersonnalization
-: public tagdtctutor
-{
-public:
-	tagdtcpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~tagdtcpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static tagdtcpersonnalization Tutor;
-
-ttr_tutor &TAGDTCTutor = Tutor;

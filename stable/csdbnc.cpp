@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: csdbnc.cpp,v 1.12 2013/04/09 17:57:27 csimon Exp $
-
 #define CSDBNC__COMPILATION
 
 #include "csdbnc.h"
-
-class csdbnctutor
-: public ttr_tutor
-{
-public:
-	csdbnctutor( void )
-	: ttr_tutor( CSDBNC_NAME )
-	{
-#ifdef CSDBNC_DBG
-		Version = CSDBNC_VERSION "\b\bD $";
-#else
-		Version = CSDBNC_VERSION;
-#endif
-		Owner = CSDBNC_OWNER;
-		Date = "$Date: 2013/04/09 17:57:27 $";
-	}
-	virtual ~csdbnctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace csdbnc;
 
@@ -145,34 +117,3 @@ socket__ csdbnc::Connect(
 	return Desc;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csdbncpersonnalization
-: public csdbnctutor
-{
-public:
-	csdbncpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csdbncpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static csdbncpersonnalization Tutor;
-
-ttr_tutor &CSDBNCTutor = Tutor;

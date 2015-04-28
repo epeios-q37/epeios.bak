@@ -33,10 +33,6 @@
 
 #define BTF_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BTFTutor;
-
 #if defined( E_DEBUG ) && !defined( BTF_NODBG )
 #define BTF_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define BKDRRM_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDRRMTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDRRM_NODBG )
 #define BKDRRM_DBG
 #endif

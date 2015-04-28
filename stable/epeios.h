@@ -33,10 +33,6 @@
 
 #define EPEIOS_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &EPEIOSTutor;
-
 #if defined( E_DEBUG ) && !defined( EPEIOS_NODBG )
 #define EPEIOS_DBG
 #endif

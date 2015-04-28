@@ -23,66 +23,7 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: idxque.cpp,v 1.19 2013/04/11 19:36:49 csimon Exp $
-
 #define IDXQUE__COMPILATION
 
 #include "idxque.h"
 
-class idxquetutor
-: public ttr_tutor
-{
-public:
-	idxquetutor( void )
-	: ttr_tutor( IDXQUE_NAME )
-	{
-#ifdef IDXQUE_DBG
-		Version = IDXQUE_VERSION "\b\bD $";
-#else
-		Version = IDXQUE_VERSION;
-#endif
-		Owner = IDXQUE_OWNER;
-		Date = "$Date: 2013/04/11 19:36:49 $";
-	}
-	virtual ~idxquetutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class idxquepersonnalization
-: public idxquetutor
-{
-public:
-	idxquepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~idxquepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static idxquepersonnalization Tutor;
-
-ttr_tutor &IDXQUETutor = Tutor;

@@ -33,9 +33,6 @@
 
 #define MMI_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MMITutor;
 
 #if defined( E_DEBUG ) && !defined( MMI_NODBG )
 #define MMI_DBG

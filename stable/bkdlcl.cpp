@@ -23,68 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: bkdlcl.cpp,v 1.2 2011/06/11 18:16:00 csimon Exp $
-
 #define BKDLCL__COMPILATION
 
 #include "bkdlcl.h"
 
-class bkdlcltutor
-: public ttr_tutor
-{
-public:
-	bkdlcltutor( void )
-	: ttr_tutor( BKDLCL_NAME )
-	{
-#ifdef BKDLCL_DBG
-		Version = BKDLCL_VERSION "\b\bD $";
-#else
-		Version = BKDLCL_VERSION;
-#endif
-		Owner = BKDLCL_OWNER;
-		Date = "$Date: 2011/06/11 18:16:00 $";
-	}
-	virtual ~bkdlcltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace bkdlcl;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class bkdlclpersonnalization
-: public bkdlcltutor
-{
-public:
-	bkdlclpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~bkdlclpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static bkdlclpersonnalization Tutor;
-
-ttr_tutor &BKDLCLTutor = Tutor;

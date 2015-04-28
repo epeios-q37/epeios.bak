@@ -33,10 +33,6 @@
 
 #define UYM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &UYMTutor;
-
 #if defined( E_DEBUG ) && !defined( UYM_NODBG )
 #define UYM_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define SPH_OWNER		"the Epeios project (http://zeusw.org/epeios/) "
 
-#include "ttr.h"
-
-extern class ttr_tutor &SPHTutor;
-
 #if defined( E_DEBUG ) && !defined( SPH_NODBG )
 #define SPH_DBG 
 #endif

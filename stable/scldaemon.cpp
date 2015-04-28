@@ -89,29 +89,3 @@ csdleo::callback__ &csdles::CSDLESRetrieveCallback( void )
 
 	return _Callback;
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class scldaemonpersonnalization
-{
-public:
-	scldaemonpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~scldaemonpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static scldaemonpersonnalization Tutor;

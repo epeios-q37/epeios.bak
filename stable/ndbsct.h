@@ -33,9 +33,6 @@
 
 #define NDBSCT_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &NDBSCTTutor;
 
 #if defined( E_DEBUG ) && !defined( NDBSCT_NODBG )
 #define NDBSCT_DBG

@@ -33,10 +33,6 @@
 
 #define BKDLAC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDLACTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDLAC_NODBG )
 #define BKDLAC_DBG
 #endif

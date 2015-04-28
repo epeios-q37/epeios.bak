@@ -1,5 +1,5 @@
 # 'edaemon' Project
-#    by Claude SIMON (http://zeusw.org/intl/contact.html).
+#    by Claude SIMON (http://q37.info/contact/).
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
@@ -31,17 +31,17 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cpe crptgr ctn dir dte 
-mods += dtfbsc dtfptb epsmsc err fdr 
-mods += flf fls flw flx ias 
-mods += ids iof iop lst lstbch 
-mods += lstctn mns ntvstr que sdr 
-mods += stk str strng tagsbs tol 
-mods += ttr txf tys uys utf 
-mods += xtf cio bom cdgb64 fil 
+mods += cio cpe crptgr ctn dir 
+mods += dte dtfbsc dtfptb epsmsc err 
+mods += fdr flf flsq flw flx 
+mods += ias ids iof iop lst 
+mods += lstbch lstctn mns ntvstr que 
+mods += sdr stk str strng tagsbs 
+mods += tol txf tys uys utf 
+mods += xtf tht bomhdl cdgb64 fil 
 mods += fnm lcl rgstry stsfsm xml 
-mods += xpp clnarg llio dlbrry mtk 
-mods += mtx sck tht 
+mods += xpp llio dlbrry mtk mtx 
+mods += sck 
 mods += csdbns csdlec csdleo csdscb csdsnb 
 mods += csdsns 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
@@ -111,7 +111,7 @@ endif
 #########################
 
 ifeq ("$(os)", "$(MinGW)")
-
+	co += -fpermissive
 endif
 
 #########################
@@ -179,7 +179,9 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	target=$(name)
+	target=$(name).exe
+
+	dest=/cygdrive/h/bin/
 
 endif
 
@@ -192,7 +194,7 @@ endif
 
 ifeq ("$(os)", "$(MinGW)")
 
-	co += -DMSYS
+	co += -DMSYS -std=gnu++11
 	
 	mods += $(wmods)
 
@@ -208,7 +210,9 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	target=$(name)
+	target=$(name).exe
+
+	dest=/h/bin/
 endif
 
 #########################
@@ -237,6 +241,8 @@ ifeq ("$(os)","$(GNULinux)")
 		endif
 	endif
 	target=$(name)
+
+	dest=/home/csimon/bin/
 endif
 
 #############################
@@ -275,11 +281,10 @@ endif
 
 ifeq ("$(os)","$(MacOS)")
 
+	co += -std=gnu++11
 	co += -DDARWIN
 	
 	mods += $(pmods)
-
-	#LDFLAGS += -static	// Doesn't work.
 
 	ifeq ("$(arch)","$(IA_32)")
 		co += -m32
@@ -292,12 +297,14 @@ ifeq ("$(os)","$(MacOS)")
 	endif
 	target=$(name)
 
+	dest=/Users/csimon/bin/
+
 endif
 
 ##########################
 		
 all: $(target)
-	rm -f *.o
+#	rm -f *.o
 
 copt += -DVERSION=\""20140716"\"
 copt += -DCOPYRIGHT_YEARS=\""2013, 2014"\"
@@ -323,6 +330,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(target): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
+ifdef EPEIOS_SRC
+	mkdir -p $(dest)
+	cp $(target) $(dest)
+endif
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

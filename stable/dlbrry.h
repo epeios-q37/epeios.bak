@@ -33,10 +33,6 @@
 
 #define DLBRRY_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DLBRRYTutor;
-
 #if defined( E_DEBUG ) && !defined( DLBRRY_NODBG )
 #define DLBRRY_DBG
 #endif

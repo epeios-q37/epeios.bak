@@ -33,9 +33,6 @@
 
 #define JVASTF_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &JVASTFTutor;
 
 #if defined( E_DEBUG ) && !defined( JVASTF_NODBG )
 #define JVASTF_DBG

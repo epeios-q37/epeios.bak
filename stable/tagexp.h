@@ -33,10 +33,6 @@
 
 #define TAGEXP_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &TAGEXPTutor;
-
 #if defined( E_DEBUG ) && !defined( TAGEXP_NODBG )
 #define TAGEXP_DBG
 #endif

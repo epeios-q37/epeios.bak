@@ -33,9 +33,6 @@
 
 #define FRDSSN_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FRDSSNTutor;
 
 #if defined( E_DEBUG ) && !defined( FRDSSN_NODBG )
 #define FRDSSN_DBG

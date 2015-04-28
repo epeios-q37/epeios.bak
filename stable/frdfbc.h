@@ -33,9 +33,6 @@
 
 #define FRDFBC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FRDFBCTutor;
 
 #if defined( E_DEBUG ) && !defined( FRDFBC_NODBG )
 #define FRDFBC_DBG

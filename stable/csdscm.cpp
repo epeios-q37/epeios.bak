@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: csdscm.cpp,v 1.9 2011/09/23 11:56:45 csimon Exp $
-
 #define CSDSCM__COMPILATION
 
 #include "csdscm.h"
 
-class csdscmtutor
-: public ttr_tutor
-{
-public:
-	csdscmtutor( void )
-	: ttr_tutor( CSDSCM_NAME )
-	{
-#ifdef CSDSCM_DBG
-		Version = CSDSCM_VERSION "\b\bD $";
-#else
-		Version = CSDSCM_VERSION;
-#endif
-		Owner = CSDSCM_OWNER;
-		Date = "$Date: 2011/09/23 11:56:45 $";
-	}
-	virtual ~csdscmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace csdscm;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csdscmpersonnalization
-: public csdscmtutor
-{
-public:
-	csdscmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csdscmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static csdscmpersonnalization Tutor;
-
-ttr_tutor &CSDSCMTutor = Tutor;

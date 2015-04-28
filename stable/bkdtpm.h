@@ -33,10 +33,6 @@
 
 #define BKDTPM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDTPMTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDTPM_NODBG )
 #define BKDTPM_DBG
 #endif

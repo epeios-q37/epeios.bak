@@ -33,9 +33,6 @@
 
 #define MMISUB_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MMISUBTutor;
 
 #if defined( E_DEBUG ) && !defined( MMISUB_NODBG )
 #define MMISUB_DBG

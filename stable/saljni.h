@@ -55,10 +55,6 @@ Description:
 #line 14
 #endif
 
-#include "ttr.h"
-
-extern class ttr_tutor &SALJNITutor;
-
 #if defined( E_DEBUG ) && !defined( SALJNI_NODBG )
 #define SALJNI_DBG 
 #endif

@@ -33,9 +33,6 @@
 
 #define SHM_OWNER		"the Epeios project (http://zeusw.org/epeios/) "
 
-#include "ttr.h"
-
-extern class ttr_tutor &SHMTutor;
 
 #if defined( E_DEBUG ) && !defined( SHM_NODBG )
 #define SHM_DBG 

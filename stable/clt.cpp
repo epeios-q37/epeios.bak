@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: clt.cpp,v 1.10 2012/11/14 16:06:25 csimon Exp $
-
 #define CLT__COMPILATION
 
 #include "clt.h"
-
-class clttutor
-: public ttr_tutor
-{
-public:
-	clttutor( void )
-	: ttr_tutor( CLT_NAME )
-	{
-#ifdef CLT_DBG
-		Version = CLT_VERSION "\b\bD $";
-#else
-		Version = CLT_VERSION;
-#endif
-		Owner = CLT_OWNER;
-		Date = "$Date: 2012/11/14 16:06:25 $";
-	}
-	virtual ~clttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace clt;
 
@@ -144,35 +116,3 @@ socket__ clt::Connect(
 
 	return Desc;
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class cltpersonnalization
-: public clttutor
-{
-public:
-	cltpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~cltpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static cltpersonnalization Tutor;
-
-ttr_tutor &CLTTutor = Tutor;

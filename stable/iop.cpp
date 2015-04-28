@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: iop.cpp,v 1.10 2013/04/06 15:33:18 csimon Exp $
-
 #define IOP__COMPILATION
 
 #include "iop.h"
 
-class ioptutor
-: public ttr_tutor
-{
-public:
-	ioptutor( void )
-	: ttr_tutor( IOP_NAME )
-	{
-#ifdef IOP_DBG
-		Version = IOP_VERSION "\b\bD $";
-#else
-		Version = IOP_VERSION;
-#endif
-		Owner = IOP_OWNER;
-		Date = "$Date: 2013/04/06 15:33:18 $";
-	}
-	virtual ~ioptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace iop;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ioppersonnalization
-: public ioptutor
-{
-public:
-	ioppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ioppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ioppersonnalization Tutor;
-
-ttr_tutor &IOPTutor = Tutor;

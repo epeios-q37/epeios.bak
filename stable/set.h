@@ -34,10 +34,6 @@
 
 #define SET_OWNER		"the Epeios project (http://zeusw.org/epeios/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SETTutor;
-
 #if defined( E_DEBUG ) && !defined( SET_NODBG )
 #define SET_DBG 
 #endif

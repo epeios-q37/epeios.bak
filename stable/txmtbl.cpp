@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: txmtbl.cpp,v 1.26 2013/06/11 10:32:29 csimon Exp $
-
 #define TXMTBL__COMPILATION
 
 #include "txmtbl.h"
-
-class txmtbltutor
-: public ttr_tutor
-{
-public:
-	txmtbltutor( void )
-	: ttr_tutor( TXMTBL_NAME )
-	{
-#ifdef TXMTBL_DBG
-		Version = TXMTBL_VERSION "\b\bD $";
-#else
-		Version = TXMTBL_VERSION;
-#endif
-		Owner = TXMTBL_OWNER;
-		Date = "$Date: 2013/06/11 10:32:29 $";
-	}
-	virtual ~txmtbltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace txmtbl;
 
@@ -684,36 +656,3 @@ txf::text_oflow__ &operator <<(
 	return Flow;
 }
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class txmtblpersonnalization
-: public txmtbltutor
-{
-public:
-	txmtblpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~txmtblpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static txmtblpersonnalization Tutor;
-
-ttr_tutor &TXMTBLTutor = Tutor;

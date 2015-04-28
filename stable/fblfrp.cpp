@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xxx.cpp,v 1.9 2012/11/14 16:06:23 csimon Exp $
-
 #define FBLFRP__COMPILATION
 
 #include "fblfrp.h"
 
-class fblfrptutor
-: public ttr_tutor
-{
-public:
-	fblfrptutor( void )
-	: ttr_tutor( FBLFRP_NAME )
-	{
-#ifdef FBLFRP_DBG
-		Version = FBLFRP_VERSION "\b\bD $";
-#else
-		Version = FBLFRP_VERSION;
-#endif
-		Owner = FBLFRP_OWNER;
-		Date = "$Date: 2012/11/14 16:06:23 $";
-	}
-	virtual ~fblfrptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace fblfrp;
 
@@ -222,37 +195,3 @@ void fblfrp::remote_callbacks___::FBLFPHPostProcess( flw::ioflow__ &Flow )
 		Row = _Data.Next( Row );
 	}
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblfrppersonnalization
-: public fblfrptutor
-{
-public:
-	fblfrppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblfrppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblfrppersonnalization Tutor;
-
-ttr_tutor &FBLFRPTutor = Tutor;

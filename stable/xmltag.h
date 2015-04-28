@@ -34,10 +34,6 @@
 
 #define XMLTAG_OWNER		"the Epeios project (http://epeios.org/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLTAGTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLTAG_NODBG )
 #define XMLTAG_DBG 
 #endif

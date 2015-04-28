@@ -33,10 +33,6 @@
 
 #define FLX_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FLXTutor;
-
 #if defined( E_DEBUG ) && !defined( FLX_NODBG )
 #define FLX_DBG
 #endif

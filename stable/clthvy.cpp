@@ -31,32 +31,7 @@
 
 #include "clthvy.h"
 
-class clthvytutor
-: public ttr_tutor
-{
-public:
-	clthvytutor( void )
-	: ttr_tutor( CLTHVY_NAME )
-	{
-#ifdef CLTHVY_DBG
-		Version = CLTHVY_VERSION "\b\bD $";
-#else
-		Version = CLTHVY_VERSION;
-#endif
-		Owner = CLTHVY_OWNER;
-		Date = "$Date: 2012/11/14 16:06:25 $";
-	}
-	virtual ~clthvytutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace clthvy;
-
 
 #define CASE( n )\
 	case l##n:\
@@ -84,35 +59,3 @@ void clthvy::core_::_DeleteFlows( void )
 	while ( Flows.Amount() != 0 )
 		delete Flows.Pop();
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class clthvypersonnalization
-: public clthvytutor
-{
-public:
-	clthvypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~clthvypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static clthvypersonnalization Tutor;
-
-ttr_tutor &CLTHVYTutor = Tutor;

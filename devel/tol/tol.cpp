@@ -235,45 +235,23 @@ static inline void SetSystemCommandAvailabitity_( void )
 		SystemCommandIsAvailable_ = xbFalse;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class tolpersonnalization
+Q37_GCTOR( tol )
 {
-public:
-	tolpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-			SetSystemCommandAvailabitity_();
+	SetSystemCommandAvailabitity_();
 #ifdef TOL__WIN		
-		if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )
-			ERRSys();
+	if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )
+		ERRSys();
 #elif defined( TOL__MAC )
-		mach_timebase_info_data_t    TimebaseInfo;
+	mach_timebase_info_data_t    TimebaseInfo;
 
-		mach_timebase_info(&TimebaseInfo);
+	mach_timebase_info(&TimebaseInfo);
 
 #if 0
-		// Test toujours faux, d au type de 'TimebaseInfo.numer'
-		if ( ( BSO_NUINT_MAX / 1000000 ) < TimebaseInfo.numer )
-			ERRLmt();
+	// Test toujours faux, d au type de 'TimebaseInfo.numer'
+	if ( ( BSO_NUINT_MAX / 1000000 ) < TimebaseInfo.numer )
+		ERRLmt();
 #endif
-		tol::_Numer = TimebaseInfo.numer;
-		tol::_Denom = TimebaseInfo.denom;
+	tol::_Numer = TimebaseInfo.numer;
+	tol::_Denom = TimebaseInfo.denom;
 #endif
 }
-	~tolpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static tolpersonnalization Tutor;

@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dbsdct.cpp,v 1.29 2009/11/15 11:30:57 csimon Exp $
-
 #define DBSDCT__COMPILATION
 
 #include "dbsdct.h"
-
-class dbsdcttutor
-: public ttr_tutor
-{
-public:
-	dbsdcttutor( void )
-	: ttr_tutor( DBSDCT_NAME )
-	{
-#ifdef DBSDCT_DBG
-		Version = DBSDCT_VERSION "\b\bD $";
-#else
-		Version = DBSDCT_VERSION;
-#endif
-		Owner = DBSDCT_OWNER;
-		Date = "$Date: 2009/11/15 11:30:57 $";
-	}
-	virtual ~dbsdcttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace dbsdct;
 
@@ -294,35 +266,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dbsdctpersonnalization
-: public dbsdcttutor
-{
-public:
-	dbsdctpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dbsdctpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dbsdctpersonnalization Tutor;
-
-ttr_tutor &DBSDCTTutor = Tutor;

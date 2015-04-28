@@ -33,10 +33,6 @@
 
 #define LCK_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &LCKTutor;
-
 #if defined( E_DEBUG ) && !defined( LCK_NODBG )
 #define LCK_DBG
 #endif

@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: gnumll.cpp,v 1.11 2012/11/14 16:06:29 csimon Exp $
-
 #define GNUMLL__COMPILATION
 
 #include "gnumll.h"
-
-class gnumlltutor
-: public ttr_tutor
-{
-public:
-	gnumlltutor( void )
-	: ttr_tutor( GNUMLL_NAME )
-	{
-#ifdef GNUMLL_DBG
-		Version = GNUMLL_VERSION "\b\bD $";
-#else
-		Version = GNUMLL_VERSION;
-#endif
-		Owner = GNUMLL_OWNER;
-		Date = "$Date: 2012/11/14 16:06:29 $";
-	}
-	virtual ~gnumlltutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 enum tag {
 	tEmailAndName,
@@ -426,33 +398,3 @@ txf::text_oflow__ &operator <<(
 	return F;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class gnumllpersonnalization
-: public gnumlltutor
-{
-public:
-	gnumllpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~gnumllpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static gnumllpersonnalization Tutor;
-
-ttr_tutor &GNUMLLTutor = Tutor;

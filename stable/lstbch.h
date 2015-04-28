@@ -33,10 +33,6 @@
 
 #define LSTBCH_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &LSTBCHTutor;
-
 #if defined( E_DEBUG ) && !defined( LSTBCH_NODBG )
 #define LSTBCH_DBG
 #endif

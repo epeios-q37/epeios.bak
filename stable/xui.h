@@ -33,10 +33,6 @@
 
 #define XUI_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XUITutor;
-
 #if defined( E_DEBUG ) && !defined( XUI_NODBG )
 #define XUI_DBG
 #endif

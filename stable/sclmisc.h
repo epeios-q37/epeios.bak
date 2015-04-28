@@ -43,11 +43,11 @@
 
 namespace sclmisc {
 
-	extern const char *SCLMISCTargetName;	// A définir par l'utilisateur.
+	extern const char *SCLMISCTargetName;	// A dfinir par l'utilisateur.
 
 	bso::bool__ IsInitialized( void );
 
-	const char *GetBaseLanguage( void );	// Language d'administration, pouvant être language utilsateur selon contexte.
+	const char *GetBaseLanguage( void );	// Language d'administration, pouvant tre language utilsateur selon contexte.
 
 	inline const str::string_ &GetBaseTranslation(
 		const char *Text,
@@ -76,7 +76,7 @@ namespace sclmisc {
 
 	void ReportAndAbort(
 		const char *Text,
-		const str::string_ &Tag );	// Pour simplifier le cas où le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
+		const str::string_ &Tag );	// Pour simplifier le cas o le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
 
 	void ReportParsingErrorAndAbort(
 		const char *ErrorLabel,
@@ -304,7 +304,7 @@ namespace sclmisc {
 		return sclmisc::OGetValue( entry, Value, Missing );\
 		}
 
-	// Façon standard de récupèrer un plugin.
+	// Faon standard de rcuprer un plugin.
 	const str::string_ &GetPluginFeatures(
 		const char *Target,
 		str::string_ &Filename,

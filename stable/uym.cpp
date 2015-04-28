@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: uym.cpp,v 1.71 2013/03/14 11:09:21 csimon Exp $
-
 #define UYM__COMPILATION
 
 #include "uym.h"
-
-class uymtutor
-: public ttr_tutor
-{
-public:
-	uymtutor( void )
-	: ttr_tutor( UYM_NAME )
-	{
-#ifdef UYM_DBG
-		Version = UYM_VERSION "\b\bD $";
-#else
-		Version = UYM_VERSION;
-#endif
-		Owner = UYM_OWNER;
-		Date = "$Date: 2013/03/14 11:09:21 $";
-	}
-	virtual ~uymtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace uym;
 
@@ -333,36 +305,9 @@ row__ uym::_Position(
 }
 #endif
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class uympersonnalization
-: public uymtutor
+Q37_GCTOR( uym )
 {
-public:
-	uympersonnalization( void )
-	{
-		if ( UYM_STATE_AMOUNT != s_amount )
-			ERRc();
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~uympersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static uympersonnalization Tutor;
-
-ttr_tutor &UYMTutor = Tutor;
+	if ( UYM_STATE_AMOUNT != s_amount )
+		ERRc();
+}
+	

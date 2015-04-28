@@ -22,10 +22,6 @@
 
 #define FBLFAQ_NAME		"FBLFAQ"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLFAQTutor;
-
 #if defined( E_DEBUG ) && !defined( FBLFAQ_NODBG )
 #define FBLFAQ_DBG
 #endif

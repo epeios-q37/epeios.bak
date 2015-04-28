@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dbsctt.cpp,v 1.18 2009/11/12 18:25:54 csimon Exp $
-
 #define DBSCTT__COMPILATION
 
 #include "dbsctt.h"
 
-class dbsctttutor
-: public ttr_tutor
-{
-public:
-	dbsctttutor( void )
-	: ttr_tutor( DBSCTT_NAME )
-	{
-#ifdef DBSCTT_DBG
-		Version = DBSCTT_VERSION "\b\bD $";
-#else
-		Version = DBSCTT_VERSION;
-#endif
-		Owner = DBSCTT_OWNER;
-		Date = "$Date: 2009/11/12 18:25:54 $";
-	}
-	virtual ~dbsctttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace dbsctt;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dbscttpersonnalization
-: public dbsctttutor
-{
-public:
-	dbscttpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dbscttpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dbscttpersonnalization Tutor;
-
-ttr_tutor &DBSCTTTutor = Tutor;

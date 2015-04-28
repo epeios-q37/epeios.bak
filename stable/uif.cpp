@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: uif.cpp,v 1.6 2012/11/14 16:06:39 csimon Exp $
-
 #define UIF__COMPILATION
 
 #include "uif.h"
-
-class uiftutor
-: public ttr_tutor
-{
-public:
-	uiftutor( void )
-	: ttr_tutor( UIF_NAME )
-	{
-#ifdef UIF_DBG
-		Version = UIF_VERSION "\b\bD $";
-#else
-		Version = UIF_VERSION;
-#endif
-		Owner = UIF_OWNER;
-		Date = "$Date: 2012/11/14 16:06:39 $";
-	}
-	virtual ~uiftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #ifdef CPE__T_MT
 #	include "mtx.h"
@@ -108,42 +80,17 @@ void uif::eMenuItem::_ReleaseId( menu_item_id__ Id )
 	ReleaseId_( *Id );
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class uifpersonnalization
-: public uiftutor
+Q37_GCTOR( uif )
 {
-public:
-	uifpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-
-		Ids_.Init();
+	Ids_.Init();
 #ifdef CPE__T_MT
-		::Mutex_ = mtx::Create();
+	::Mutex_ = mtx::Create();
 #endif
-	}
-	~uifpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
+}
+
+Q37_GDTOR( uif )
+{
 #ifdef CPE__T_MT
-		mtx::Delete( ::Mutex_ );
+	mtx::Delete( ::Mutex_ );
 #endif
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static uifpersonnalization Tutor;
-
-ttr_tutor &UIFTutor = Tutor;
+}

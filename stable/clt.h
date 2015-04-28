@@ -33,10 +33,6 @@
 
 #define CLT_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CLTTutor;
-
 #if defined( E_DEBUG ) && !defined( CLT_NODBG )
 #define CLT_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define FAM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FAMTutor;
-
 #if defined( E_DEBUG ) && !defined( FAM_NODBG )
 #define FAM_DBG
 #endif

@@ -31,24 +31,6 @@
 
 #include "dte.h"
 
-class dtetutor
-: public ttr_tutor
-{
-public:
-	dtetutor( void )
-	: ttr_tutor( DTE_NAME )
-	{
-#ifdef DTE_DBG
-		Version = DTE_VERSION "\b\bD $";
-#else
-		Version = DTE_VERSION;
-#endif
-		Owner = DTE_OWNER;
-		Date = "$Date: 2013/04/11 19:36:48 $";
-	}
-	virtual ~dtetutor( void ){}
-};
-
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
@@ -286,37 +268,3 @@ date__ dte::Now( void )
 
    return Date;
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dtepersonnalization
-: public dtetutor
-{
-public:
-	dtepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dtepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dtepersonnalization Tutor;
-
-ttr_tutor &DTETutor = Tutor;

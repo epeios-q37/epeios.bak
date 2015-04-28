@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: ndbidx.cpp,v 1.30 2013/04/15 10:50:52 csimon Exp $
-
 #define NDBIDX__COMPILATION
 
 #include "ndbidx.h"
-
-class ndbidxtutor
-: public ttr_tutor
-{
-public:
-	ndbidxtutor( void )
-	: ttr_tutor( NDBIDX_NAME )
-	{
-#ifdef NDBIDX_DBG
-		Version = NDBIDX_VERSION "\b\bD $";
-#else
-		Version = NDBIDX_VERSION;
-#endif
-		Owner = NDBIDX_OWNER;
-		Date = "$Date: 2013/04/15 10:50:52 $";
-	}
-	virtual ~ndbidxtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace ndbidx;
 
@@ -663,34 +635,3 @@ ERREnd
 ERREpilog
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ndbidxpersonnalization
-: public ndbidxtutor
-{
-public:
-	ndbidxpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ndbidxpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ndbidxpersonnalization Tutor;
-
-ttr_tutor &NDBIDXTutor = Tutor;

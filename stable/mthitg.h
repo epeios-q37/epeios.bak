@@ -33,10 +33,6 @@
 
 #define MTHITG_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MTHITGTutor;
-
 #if defined( E_DEBUG ) && !defined( MTHITG_NODBG )
 #define MTHITG_DBG
 #endif

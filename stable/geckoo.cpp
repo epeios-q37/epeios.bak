@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: geckoo.cpp,v 1.3 2013/04/05 16:33:29 csimon Exp $
-
 #define GECKOO__COMPILATION
 
 #include "geckoo.h"
-
-class geckootutor
-: public ttr_tutor
-{
-public:
-	geckootutor( void )
-	: ttr_tutor( GECKOO_NAME )
-	{
-#ifdef GECKOO_DBG
-		Version = GECKOO_VERSION "\b\bD $";
-#else
-		Version = GECKOO_VERSION;
-#endif
-		Owner = GECKOO_OWNER;
-		Date = "$Date: 2013/04/05 16:33:29 $";
-	}
-	virtual ~geckootutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace geckoo;
 
@@ -80,37 +52,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class geckoopersonnalization
-: public geckootutor
-{
-public:
-	geckoopersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~geckoopersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static geckoopersonnalization Tutor;
-
-ttr_tutor &GECKOOTutor = Tutor;

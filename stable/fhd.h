@@ -33,9 +33,6 @@
 
 #define FHD_OWNER		"the Epeios project (http://zeusw.org/epeios/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FHDTutor;
 
 #if defined( E_DEBUG ) && !defined( FHD_NODBG )
 #define FHD_DBG 

@@ -33,10 +33,6 @@
 
 #define LXMLPR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &LXMLPRTutor;
-
 #if defined( E_DEBUG ) && !defined( LXMLPR_NODBG )
 #define LXMLPR_DBG
 #endif

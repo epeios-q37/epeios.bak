@@ -33,10 +33,6 @@
 
 #define CSDEBD_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CSDEBDTutor;
-
 #if defined( E_DEBUG ) && !defined( CSDEBD_NODBG )
 #define CSDEBD_DBG
 #endif

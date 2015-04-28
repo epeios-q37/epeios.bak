@@ -33,10 +33,6 @@
 
 #define DVKFEV_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DVKFEVTutor;
-
 #if defined( E_DEBUG ) && !defined( DVKFEV_NODBG )
 #define DVKFEV_DBG
 #endif

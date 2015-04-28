@@ -25,7 +25,6 @@
         <Module>mtk</Module>
         <Module>mtx</Module>
         <Module>sck</Module>
-        <Module>tht</Module>
       </Modules>
       <Modules Group="CSD">
         <Module>csdbns</Module>

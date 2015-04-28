@@ -33,10 +33,6 @@
 
 #define CLTHVY_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CLTHVYTutor;
-
 #if defined( E_DEBUG ) && !defined( CLTHVY_NODBG )
 #define CLTHVY_DBG
 #endif

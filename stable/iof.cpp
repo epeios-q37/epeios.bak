@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: iof.cpp,v 1.29 2013/04/05 16:33:39 csimon Exp $
-
 #define IOF__COMPILATION
 
 #include "iof.h"
 
-class ioftutor
-: public ttr_tutor
-{
-public:
-	ioftutor( void )
-	: ttr_tutor( IOF_NAME )
-	{
-#ifdef IOF_DBG
-		Version = IOF_VERSION "\b\bD $";
-#else
-		Version = IOF_VERSION;
-#endif
-		Owner = IOF_OWNER;
-		Date = "$Date: 2013/04/05 16:33:39 $";
-	}
-	virtual ~ioftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace iof;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class iofpersonnalization
-: public ioftutor
-{
-public:
-	iofpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~iofpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static iofpersonnalization Tutor;
-
-ttr_tutor &IOFTutor = Tutor;

@@ -33,9 +33,6 @@
 
 #define MMG_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MMGTutor;
 
 #if defined( E_DEBUG ) && !defined( MMG_NODBG )
 #define MMG_DBG

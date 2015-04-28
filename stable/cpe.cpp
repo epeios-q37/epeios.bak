@@ -23,70 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: cpe.cpp,v 1.51 2013/07/18 19:46:23 csimon Exp $
-
 #define CPE__COMPILATION
 
 #include "cpe.h"
 
-class cpetutor
-: public ttr_tutor
-{
-public:
-	cpetutor( void )
-	: ttr_tutor( CPE_NAME )
-	{
-#ifdef CPE_DBG
-		Version = CPE_VERSION "\b\bD $";
-#else
-		Version = CPE_VERSION;
-#endif
-		Owner = CPE_OWNER;
-		Date = "$Date: 2013/07/18 19:46:23 $";
-	}
-	virtual ~cpetutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 #include "strng.h"
 
 using namespace cpe;
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class cpepersonnalization
-: public cpetutor
-{
-public:
-	cpepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~cpepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static cpepersonnalization Tutor;
-
-ttr_tutor &CPETutor = Tutor;

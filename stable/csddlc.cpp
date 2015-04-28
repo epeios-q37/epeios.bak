@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: csddlc.cpp,v 1.15 2012/11/14 16:06:26 csimon Exp $
-
 #define CSDDLC__COMPILATION
 
 #include "csddlc.h"
-
-class csddlctutor
-: public ttr_tutor
-{
-public:
-	csddlctutor( void )
-	: ttr_tutor( CSDDLC_NAME )
-	{
-#ifdef CSDDLC_DBG
-		Version = CSDDLC_VERSION "\b\bD $";
-#else
-		Version = CSDDLC_VERSION;
-#endif
-		Owner = CSDDLC_OWNER;
-		Date = "$Date: 2012/11/14 16:06:26 $";
-	}
-	virtual ~csddlctutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "cpe.h"
 
@@ -138,35 +110,3 @@ ERREpilog
 	return Success;
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csddlcpersonnalization
-: public csddlctutor
-{
-public:
-	csddlcpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csddlcpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static csddlcpersonnalization Tutor;
-
-ttr_tutor &CSDDLCTutor = Tutor;

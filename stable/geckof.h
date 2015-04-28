@@ -33,9 +33,6 @@
 
 #define GECKOF_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &GECKOFTutor;
 
 #if defined( E_DEBUG ) && !defined( GECKOF_NODBG )
 #define GECKOF_DBG

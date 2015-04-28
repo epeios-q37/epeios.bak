@@ -33,10 +33,6 @@
 
 #define PIP_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &PIPTutor;
-
 #if defined( E_DEBUG ) && !defined( PIP_NODBG )
 #define PIP_DBG
 #endif

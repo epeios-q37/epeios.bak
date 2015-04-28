@@ -33,10 +33,6 @@
 
 #define MTHTMC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MTHTMCTutor;
-
 #if defined( E_DEBUG ) && !defined( MTHTMC_NODBG )
 #define MTHTMC_DBG
 #endif

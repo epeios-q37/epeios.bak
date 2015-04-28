@@ -33,10 +33,6 @@
 
 #define DTR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DTRTutor;
-
 #if defined( E_DEBUG ) && !defined( DTR_NODBG )
 #define DTR_DBG
 #endif

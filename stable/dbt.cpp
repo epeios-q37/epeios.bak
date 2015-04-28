@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dbt.cpp,v 1.23 2013/04/13 16:21:15 csimon Exp $
-
 #define DBT__COMPILATION
 
 #include "dbt.h"
 
-class dbttutor
-: public ttr_tutor
-{
-public:
-	dbttutor( void )
-	: ttr_tutor( DBT_NAME )
-	{
-#ifdef DBT_DBG
-		Version = DBT_VERSION "\b\bD $";
-#else
-		Version = DBT_VERSION;
-#endif
-		Owner = DBT_OWNER;
-		Date = "$Date: 2013/04/13 16:21:15 $";
-	}
-	virtual ~dbttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace dbt;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dbtpersonnalization
-: public dbttutor
-{
-public:
-	dbtpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dbtpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dbtpersonnalization Tutor;
-
-ttr_tutor &DBTTutor = Tutor;

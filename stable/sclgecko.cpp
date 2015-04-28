@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: sclgecko.cpp,v 1.16 2013/07/18 19:46:22 csimon Exp $
-
 #define SCLGECKO__COMPILATION
 
 #include "sclgecko.h"
-
-class sclgeckotutor
-: public ttr_tutor
-{
-public:
-	sclgeckotutor( void )
-	: ttr_tutor( SCLGECKO_NAME )
-	{
-#ifdef SCLGECKO_DBG
-		Version = SCLGECKO_VERSION "\b\bD $";
-#else
-		Version = SCLGECKO_VERSION;
-#endif
-		Owner = SCLGECKO_OWNER;
-		Date = "$Date: 2013/07/18 19:46:22 $";
-	}
-	virtual ~sclgeckotutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "cio.h"
 
@@ -281,35 +253,3 @@ ERRErr
 ERREnd
 ERREpilog
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class sclgeckopersonnalization
-: public sclgeckotutor
-{
-public:
-	sclgeckopersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~sclgeckopersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static sclgeckopersonnalization Tutor;
-
-ttr_tutor &SCLGECKOTutor = Tutor;

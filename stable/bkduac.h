@@ -33,10 +33,6 @@
 
 #define BKDUAC_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDUACTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDUAC_NODBG )
 #define BKDUAC_DBG
 #endif

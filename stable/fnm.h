@@ -26,15 +26,10 @@
 #  define FNM_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // File Name Manager
 
 /*
-	Significatins des diffrents termes :
+	Significations des diffrents termes :
 	- 'path' pour, de manire gnrique, un fichier ou un rpertoire,
 	- 'directory' (diminutif : 'dir') pour un rpertoire,
 	- 'filename' pour un nom de fichier, avec ou sans sa localisation,
@@ -43,6 +38,7 @@
 	- 'affix' le 'basename' d'un fichier sans son extension.
 */
 
+# include "txf.h"
 # include "cpe.h"
 # include "tol.h"
 # include "strng.h"

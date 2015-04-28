@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mscrmi.cpp,v 1.15 2011/10/04 18:06:56 csimon Exp $
-
 #define MSCRMI__COMPILATION
 
 #include "mscrmi.h"
-
-class mscrmitutor
-: public ttr_tutor
-{
-public:
-	mscrmitutor( void )
-	: ttr_tutor( MSCRMI_NAME )
-	{
-#ifdef MSCRMI_DBG
-		Version = MSCRMI_VERSION "\b\bD $";
-#else
-		Version = MSCRMI_VERSION;
-#endif
-		Owner = MSCRMI_OWNER;
-		Date = "$Date: 2011/10/04 18:06:56 $";
-	}
-	virtual ~mscrmitutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "mscmdm.h"
 
@@ -2175,36 +2147,3 @@ void mscrmi::Send(
 		tht::Suspend( 40 );
 	}
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mscrmipersonnalization
-: public mscrmitutor
-{
-public:
-	mscrmipersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscrmipersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mscrmipersonnalization Tutor;
-
-ttr_tutor &MSCRMITutor = Tutor;

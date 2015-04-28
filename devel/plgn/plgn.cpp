@@ -54,4 +54,4 @@ public:
 				  /*			  unless specified		   	  */
 /******************************************************************************/
 
-static plgnpersonnalization Tutor;
+static plgnpersonnalization n;

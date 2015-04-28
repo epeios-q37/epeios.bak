@@ -33,10 +33,6 @@
 
 #define SALCSM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SALCSMTutor;
-
 #if defined( E_DEBUG ) && !defined( SALCSM_NODBG )
 #define SALCSM_DBG
 #endif

@@ -33,10 +33,6 @@
 
 #define CGIARG_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CGIARGTutor;
-
 #if defined( E_DEBUG ) && !defined( CGIARG_NODBG )
 #define CGIARG_DBG
 #endif

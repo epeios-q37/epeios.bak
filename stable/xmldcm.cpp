@@ -24,35 +24,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: xmldcm.cpp,v 1.7 2012/11/14 16:06:40 csimon Exp $
-
 #define XMLDCM__COMPILATION
 
 #include "xmldcm.h"
 
-class xmldcmtutor
-: public ttr_tutor
-{
-public:
-	xmldcmtutor( void )
-	: ttr_tutor( XMLDCM_NAME )
-	{
-#ifdef XMLDCM_DBG
-		Version = XMLDCM_VERSION "\b\bD $";
-#else
-		Version = XMLDCM_VERSION;
-#endif
-		Owner = XMLDCM_OWNER;
-		Date = "$Date: 2012/11/14 16:06:40 $";
-	}
-	virtual ~xmldcmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace xmldcm;
 
@@ -170,34 +145,3 @@ ERREnd
 ERREpilog
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmldcmpersonnalization
-: public xmldcmtutor
-{
-public:
-	xmldcmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmldcmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmldcmpersonnalization Tutor;
-
-ttr_tutor &XMLDCMTutor = Tutor;

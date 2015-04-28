@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xxx.cpp,v 1.9 2012/11/14 16:06:23 csimon Exp $
-
 #define FBLFUP__COMPILATION
 
 #include "fblfup.h"
 
-class fblfuptutor
-: public ttr_tutor
-{
-public:
-	fblfuptutor( void )
-	: ttr_tutor( FBLFUP_NAME )
-	{
-#ifdef FBLFUP_DBG
-		Version = FBLFUP_VERSION "\b\bD $";
-#else
-		Version = FBLFUP_VERSION;
-#endif
-		Owner = FBLFUP_OWNER;
-		Date = "$Date: 2012/11/14 16:06:23 $";
-	}
-	virtual ~fblfuptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace fblfup;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblfuppersonnalization
-: public fblfuptutor
-{
-public:
-	fblfuppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblfuppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblfuppersonnalization Tutor;
-
-ttr_tutor &FBLFUPTutor = Tutor;

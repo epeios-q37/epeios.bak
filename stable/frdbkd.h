@@ -33,9 +33,6 @@
 
 #define FRDBKD_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FRDBKDTutor;
 
 #if defined( E_DEBUG ) && !defined( FRDBKD_NODBG )
 #define FRDBKD_DBG

@@ -33,10 +33,6 @@
 
 #define XULFUI_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XULFUITutor;
-
 #if defined( E_DEBUG ) && !defined( XULFUI_NODBG )
 #define XULFUI_DBG
 #endif

@@ -34,10 +34,6 @@
 
 #define XMLDCM_OWNER		"the Epeios project (http://epeios.org/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLDCMTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLDCM_NODBG )
 #define XMLDCM_DBG 
 #endif

@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: tys.cpp,v 1.3 2013/04/15 10:50:58 csimon Exp $
-
 #define TYS__COMPILATION
 
 #include "tys.h"
 
-class tystutor
-: public ttr_tutor
-{
-public:
-	tystutor( void )
-	: ttr_tutor( TYS_NAME )
-	{
-#ifdef TYS_DBG
-		Version = TYS_VERSION "\b\bD $";
-#else
-		Version = TYS_VERSION;
-#endif
-		Owner = TYS_OWNER;
-		Date = "$Date: 2013/04/15 10:50:58 $";
-	}
-	virtual ~tystutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace tys;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class tyspersonnalization
-: public tystutor
-{
-public:
-	tyspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~tyspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static tyspersonnalization Tutor;
-
-ttr_tutor &TYSTutor = Tutor;

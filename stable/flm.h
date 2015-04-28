@@ -33,10 +33,6 @@
 
 #define FLM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FLMTutor;
-
 #if defined( E_DEBUG ) && !defined( FLM_NODBG )
 #define FLM_DBG
 #endif

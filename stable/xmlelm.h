@@ -33,10 +33,6 @@
 
 #define XMLELM_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLELMTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLELM_NODBG )
 #define XMLELM_DBG
 #endif

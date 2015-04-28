@@ -23,35 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: spp.cpp,v 1.7 2012/11/14 16:06:37 csimon Exp $
-
 #define SPP__COMPILATION
 
 #include "spp.h"
 
-class spptutor
-: public ttr_tutor
-{
-public:
-	spptutor( void )
-	: ttr_tutor( SPP_NAME )
-	{
-#ifdef SPP_DBG
-		Version = SPP_VERSION "\b\bD $";
-#else
-		Version = SPP_VERSION;
-#endif
-		Owner = SPP_OWNER;
-		Date = "$Date: 2012/11/14 16:06:37 $";
-	}
-	virtual ~spptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace spp;
 
@@ -140,36 +115,3 @@ flw::amount__ spp::slave_shared_bipipe_ioflow___::FLWPut(
 	return ::Put_( Bipipe_->GetSlave(), Buffer, Wanted, Minimum, Synchronization );
 }
 
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class spppersonnalization
-: public spptutor
-{
-public:
-	spppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~spppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static spppersonnalization Tutor;
-
-ttr_tutor &SPPTutor = Tutor;

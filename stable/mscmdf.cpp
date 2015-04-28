@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mscmdf.cpp,v 1.2 2011/02/13 20:52:16 csimon Exp $
-
 #define MSCMDF__COMPILATION
 
 #include "mscmdf.h"
-
-class mscmdftutor
-: public ttr_tutor
-{
-public:
-	mscmdftutor( void )
-	: ttr_tutor( MSCMDF_NAME )
-	{
-#ifdef MSCMDF_DBG
-		Version = MSCMDF_VERSION "\b\bD $";
-#else
-		Version = MSCMDF_VERSION;
-#endif
-		Owner = MSCMDF_OWNER;
-		Date = "$Date: 2011/02/13 20:52:16 $";
-	}
-	virtual ~mscmdftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace mscmdf;
 
@@ -167,33 +139,3 @@ void mscmdf::PutTrackChunkHeader(
 	OFlow.Put( (flw::datum__)( Size & 0xff ) );
 }
 
-
-
-class mscmdfpersonnalization
-: public mscmdftutor
-{
-public:
-	mscmdfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscmdfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mscmdfpersonnalization Tutor;
-
-ttr_tutor &MSCMDFTutor = Tutor;

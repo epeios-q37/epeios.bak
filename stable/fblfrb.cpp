@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fblfrb.cpp,v 1.10 2013/04/15 10:50:35 csimon Exp $
-
 #define FBLFRB__COMPILATION
 
 #include "fblfrb.h"
 
-class fblfrbtutor
-: public ttr_tutor
-{
-public:
-	fblfrbtutor( void )
-	: ttr_tutor( FBLFRB_NAME )
-	{
-#ifdef FBLFRB_DBG
-		Version = FBLFRB_VERSION "\b\bD $";
-#else
-		Version = FBLFRB_VERSION;
-#endif
-		Owner = FBLFRB_OWNER;
-		Date = "$Date: 2013/04/15 10:50:35 $";
-	}
-	virtual ~fblfrbtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace fblfrb;
 
@@ -186,35 +159,3 @@ void fblfrb::backend_remote_access_base___::PostProcess( flw::ioflow__ &Flow )
 	}
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblfrbpersonnalization
-: public fblfrbtutor
-{
-public:
-	fblfrbpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblfrbpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblfrbpersonnalization Tutor;
-
-ttr_tutor &FBLFRBTutor = Tutor;

@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mscmdx.cpp,v 1.3 2012/09/07 16:18:22 csimon Exp $
-
 #define MSCMDX__COMPILATION
 
 #include "mscmdx.h"
-
-class mscmdxtutor
-: public ttr_tutor
-{
-public:
-	mscmdxtutor( void )
-	: ttr_tutor( MSCMDX_NAME )
-	{
-#ifdef MSCMDX_DBG
-		Version = MSCMDX_VERSION "\b\bD $";
-#else
-		Version = MSCMDX_VERSION;
-#endif
-		Owner = MSCMDX_OWNER;
-		Date = "$Date: 2012/09/07 16:18:22 $";
-	}
-	virtual ~mscmdxtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace mscmdx;
 
@@ -703,36 +675,3 @@ ERREpilog
 	return Status;
 }
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mscmdxpersonnalization
-: public mscmdxtutor
-{
-public:
-	mscmdxpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscmdxpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mscmdxpersonnalization Tutor;
-
-ttr_tutor &MSCMDXTutor = Tutor;

@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: ndbdct.cpp,v 1.24 2013/04/15 10:50:52 csimon Exp $
-
 #define NDBDCT__COMPILATION
 
 #include "ndbdct.h"
-
-class ndbdcttutor
-: public ttr_tutor
-{
-public:
-	ndbdcttutor( void )
-	: ttr_tutor( NDBDCT_NAME )
-	{
-#ifdef NDBDCT_DBG
-		Version = NDBDCT_VERSION "\b\bD $";
-#else
-		Version = NDBDCT_VERSION;
-#endif
-		Owner = NDBDCT_OWNER;
-		Date = "$Date: 2013/04/15 10:50:52 $";
-	}
-	virtual ~ndbdcttutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "flf.h"
 
@@ -348,35 +320,3 @@ uys::state__ ndbdct::Plug(
 	return State;
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ndbdctpersonnalization
-: public ndbdcttutor
-{
-public:
-	ndbdctpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ndbdctpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ndbdctpersonnalization Tutor;
-
-ttr_tutor &NDBDCTTutor = Tutor;

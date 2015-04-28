@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: scldalvik.cpp,v 1.6 2012/12/04 15:28:48 csimon Exp $
-
 #define SCLDALVIK__COMPILATION
 
 #include "scldalvik.h"
 
-class scldalviktutor
-: public ttr_tutor
-{
-public:
-	scldalviktutor( void )
-	: ttr_tutor( SCLDALVIK_NAME )
-	{
-#ifdef SCLDALVIK_DBG
-		Version = SCLDALVIK_VERSION "\b\bD $";
-#else
-		Version = SCLDALVIK_VERSION;
-#endif
-		Owner = SCLDALVIK_OWNER;
-		Date = "$Date: 2012/12/04 15:28:48 $";
-	}
-	virtual ~scldalviktutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 #include "str.h"
 #include "cio.h"
 
@@ -278,34 +251,3 @@ extern "C" {
 	}
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class scldalvikpersonnalization
-: public scldalviktutor
-{
-public:
-	scldalvikpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~scldalvikpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static scldalvikpersonnalization Tutor;
-
-ttr_tutor &SCLDALVIKTutor = Tutor;

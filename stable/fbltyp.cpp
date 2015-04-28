@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fbltyp.cpp,v 1.17 2013/04/15 10:50:50 csimon Exp $
-
 #define FBLTYP__COMPILATION
 
 #include "fbltyp.h"
-
-class fbltyptutor
-: public ttr_tutor
-{
-public:
-	fbltyptutor( void )
-	: ttr_tutor( FBLTYP_NAME )
-	{
-#ifdef FBLTYP_DBG
-		Version = FBLTYP_VERSION "\b\bD $";
-#else
-		Version = FBLTYP_VERSION;
-#endif
-		Owner = FBLTYP_OWNER;
-		Date = "$Date: 2013/04/15 10:50:50 $";
-	}
-	virtual ~fbltyptutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace fbltyp;
 
@@ -786,35 +758,3 @@ void fbltyp::GetCommandsDetails(
 	GetContainer_<commands_details_, command_detail>( IFlow, CommandsDetails );
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fbltyppersonnalization
-: public fbltyptutor
-{
-public:
-	fbltyppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fbltyppersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fbltyppersonnalization Tutor;
-
-ttr_tutor &FBLTYPTutor = Tutor;

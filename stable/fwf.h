@@ -33,9 +33,6 @@
 
 #define FWF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FWFTutor;
 
 #if defined( E_DEBUG ) && !defined( FWF_NODBG )
 #define FWF_DBG

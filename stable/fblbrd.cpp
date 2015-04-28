@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fblbrd.cpp,v 1.6 2013/04/15 10:50:50 csimon Exp $
-
 #define FBLBRD__COMPILATION
 
 #include "fblbrd.h"
 
-class fblbrdtutor
-: public ttr_tutor
-{
-public:
-	fblbrdtutor( void )
-	: ttr_tutor( FBLBRD_NAME )
-	{
-#ifdef FBLBRD_DBG
-		Version = FBLBRD_VERSION "\b\bD $";
-#else
-		Version = FBLBRD_VERSION;
-#endif
-		Owner = FBLBRD_OWNER;
-		Date = "$Date: 2013/04/15 10:50:50 $";
-	}
-	virtual ~fblbrdtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "cpe.h"
 
@@ -174,36 +147,3 @@ ERREnd
 ERREpilog
 	return Position;
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblbrdpersonnalization
-: public fblbrdtutor
-{
-public:
-	fblbrdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblbrdpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblbrdpersonnalization Tutor;
-
-ttr_tutor &FBLBRDTutor = Tutor;

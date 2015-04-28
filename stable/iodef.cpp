@@ -23,68 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: iodef.cpp,v 1.5 2012/11/14 16:06:29 csimon Exp $
-
 #define IODEF__COMPILATION
 
 #include "iodef.h"
 
-class iodeftutor
-: public ttr_tutor
-{
-public:
-	iodeftutor( void )
-	: ttr_tutor( IODEF_NAME )
-	{
-#ifdef IODEF_DBG
-		Version = IODEF_VERSION "\b\bD $";
-#else
-		Version = IODEF_VERSION;
-#endif
-		Owner = IODEF_OWNER;
-		Date = "$Date: 2012/11/14 16:06:29 $";
-	}
-	virtual ~iodeftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace iodef;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class iodefpersonnalization
-: public iodeftutor
-{
-public:
-	iodefpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~iodefpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static iodefpersonnalization Tutor;
-
-ttr_tutor &IODEFTutor = Tutor;

@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xtf.cpp,v 1.44 2013/07/18 19:46:26 csimon Exp $
-
 #define XTF__COMPILATION
 
 #include "xtf.h"
-
-class xtftutor
-: public ttr_tutor
-{
-public:
-	xtftutor( void )
-	: ttr_tutor( XTF_NAME )
-	{
-#ifdef XTF_DBG
-		Version = XTF_VERSION "\b\bD $";
-#else
-		Version = XTF_VERSION;
-#endif
-		Owner = XTF_OWNER;
-		Date = "$Date: 2013/07/18 19:46:26 $";
-	}
-	virtual ~xtftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 # include "lcl.h"
 
@@ -115,36 +87,3 @@ bso::bool__  xtf::extended_text_iflow__::GetCell(
 	else
 		return ( C == Separator );
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xtfpersonnalization
-: public xtftutor
-{
-public:
-	xtfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xtfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xtfpersonnalization Tutor;
-
-ttr_tutor &XTFTutor = Tutor;

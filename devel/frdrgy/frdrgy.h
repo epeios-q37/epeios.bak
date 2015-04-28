@@ -33,10 +33,6 @@
 
 #define FRDRGY_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FRDRGYTutor;
-
 #if defined( E_DEBUG ) && !defined( FRDRGY_NODBG )
 #define FRDRGY_DBG
 #endif

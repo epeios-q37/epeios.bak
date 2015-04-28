@@ -28,6 +28,8 @@
 
 using namespace csdlec;
 
+# define LOC	cio::COut << txf::nl << "------------------------->" << __LOC__ << txf::nl << txf::commit
+
 bso::bool__ csdlec::library_embedded_client_core__::Init(
 	const char *LibraryName,
 	library_data__ &Data,
@@ -39,11 +41,20 @@ bso::bool__ csdlec::library_embedded_client_core__::Init(
 
 	reset();
 
-	if ( _Library.Init( LibraryName, ERRHandling ) )
+	LOC;
+
+	if ( _Library.Init(LibraryName, ERRHandling) ) {
+		LOC;
+
 		if ( _RetrieveCallback( &SharedData ) )
 			return true;
 		else
 			reset();	// Sinon le bibliothque n'est pas dcharge correctement  la fermeture de l'application.
+
+		LOC;
+	}
+
+	LOC;
 
 	if ( ERRHandling != err::hUserDefined )
 		ERRSys();
@@ -83,29 +94,3 @@ bso::bool__ csdlec::library_embedded_client_core__::_ReleaseCallback( void )
 
 	return true;
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csdlecpersonnalization
-{
-public:
-	csdlecpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~csdlecpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static csdlecpersonnalization Tutor;

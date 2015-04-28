@@ -33,10 +33,6 @@
 
 #define RQM_OWNER		"the Epeios project (http://zeusw.org/epeios/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &RQMTutor;
-
 #if defined( E_DEBUG ) && !defined( RQM_NODBG )
 #define RQM_DBG 
 #endif

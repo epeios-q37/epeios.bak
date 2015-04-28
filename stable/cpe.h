@@ -33,10 +33,6 @@
 
 #define CPE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CPETutor;
-
 #if defined( E_DEBUG ) && !defined( CPE_NODBG )
 #define CPE_DBG
 #endif

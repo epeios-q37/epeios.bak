@@ -445,29 +445,3 @@ void strmrg::retriever__::GetStrings( str::strings_ &Result )
 
 	_Row = _R().Next( _Row );
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class strmrgpersonnalization
-{
-public:
-	strmrgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~strmrgpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static strmrgpersonnalization Tutor;

@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: btr.cpp,v 1.46 2013/07/18 19:46:23 csimon Exp $
-
 #define BTR__COMPILATION
 
 #include "btr.h"
-
-class btrtutor
-: public ttr_tutor
-{
-public:
-	btrtutor( void )
-	: ttr_tutor( BTR_NAME )
-	{
-#ifdef BTR_DBG
-		Version = BTR_VERSION "\b\bD $";
-#else
-		Version = BTR_VERSION;
-#endif
-		Owner = BTR_OWNER;
-		Date = "$Date: 2013/07/18 19:46:23 $";
-	}
-	virtual ~btrtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "txf.h"
 
@@ -650,34 +622,3 @@ mbs__position abb_arbre_binaire_::TrouverAieulMaleAvecRight_(
 */
 #endif
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class btrpersonnalization
-: public btrtutor
-{
-public:
-	btrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~btrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static btrpersonnalization Tutor;
-
-ttr_tutor &BTRTutor = Tutor;

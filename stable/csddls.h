@@ -33,10 +33,6 @@
 
 #define CSDDLS_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CSDDLSTutor;
-
 #if defined( E_DEBUG ) && !defined( CSDDLS_NODBG )
 #define CSDDLS_DBG
 #endif

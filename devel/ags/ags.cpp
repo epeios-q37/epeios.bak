@@ -90,30 +90,9 @@ void ags::aggregated_storage_::DisplayStructure( txf::text_oflow__ &Flow ) const
 	Flow << '(' << Storage.Size() << ')' << txf::nl;
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class agspersonnalization
+Q37_GCTOR( ags )
 {
-public:
-	agspersonnalization( void )
-	{
-		if ( sizeof( header__ ) != AGS__HEADER_SIZE )
-			ERRChk();
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~agspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
+	if ( sizeof( header__ ) != AGS__HEADER_SIZE )
+		ERRChk();
+}
 
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static agspersonnalization Tutor;

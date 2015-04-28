@@ -33,10 +33,6 @@
 
 #define BTS_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BTSTutor;
-
 #if defined( E_DEBUG ) && !defined( BTS_NODBG )
 #define BTS_DBG
 #endif

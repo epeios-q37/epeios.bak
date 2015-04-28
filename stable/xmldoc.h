@@ -33,10 +33,6 @@
 
 #define XMLDOC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLDOCTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLDOC_NODBG )
 #define XMLDOC_DBG
 #endif

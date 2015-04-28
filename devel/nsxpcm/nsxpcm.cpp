@@ -2738,45 +2738,27 @@ nsIDOMWindowInternal *nsxpcm::GetWindow( nsIDOMDocument *Document )
 	return Window;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class nsxpcmpersonnalization
+Q37_GCTOR( nsxpcm )
 {
-public:
-	nsxpcmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
 #ifdef ENABLE_FORMHISTORY
-		nsxpcm::GetService( "@mozilla.org/satchel/form-history;1", FormHistory_ );
+	nsxpcm::GetService( "@mozilla.org/satchel/form-history;1", FormHistory_ );
 # ifdef CPE__MT
-		FormHistoryMutex_ = mtx::Create( mtx::mOwned );
+	FormHistoryMutex_ = mtx::Create( mtx::mOwned );
 # endif
 #endif
-		MasterWindowMutex_ = mtx::Create();
-		MasterWindows_.Init();
-	}
-	~nsxpcmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
+	MasterWindowMutex_ = mtx::Create();
+	MasterWindows_.Init();
+}
+
+Q37_GDTOR( nsxpcm )
+{
 #ifdef ENABLE_FORMHISTORY
 # ifdef CPE__MT
-		mtx::Delete( FormHistoryMutex_ );
+	mtx::Delete( FormHistoryMutex_ );
 # endif
 #endif
-		mtx::Delete( MasterWindowMutex_ );
+	mtx::Delete( MasterWindowMutex_ );
 
-		if ( ::JSConsoleWindow_ != NULL )
-			Close( JSConsoleWindow_ );
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static nsxpcmpersonnalization Tutor;
+	if ( ::JSConsoleWindow_ != NULL )
+		Close( JSConsoleWindow_ );
+}

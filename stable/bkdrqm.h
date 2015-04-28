@@ -33,10 +33,6 @@
 
 #define BKDRQM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDRQMTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDRQM_NODBG )
 #define BKDRQM_DBG
 #endif

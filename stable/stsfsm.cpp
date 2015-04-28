@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: stsfsm.cpp,v 1.1 2013/07/18 19:46:25 csimon Exp $
-
 #define STSFSM__COMPILATION
 
 #include "stsfsm.h"
-
-class stsfsmtutor
-: public ttr_tutor
-{
-public:
-	stsfsmtutor( void )
-	: ttr_tutor( STSFSM_NAME )
-	{
-#ifdef STSFSM_DBG
-		Version = STSFSM_VERSION "\b\bD $";
-#else
-		Version = STSFSM_VERSION;
-#endif
-		Owner = STSFSM_OWNER;
-		Date = "$Date: 2013/07/18 19:46:25 $";
-	}
-	virtual ~stsfsmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace stsfsm;
 
@@ -189,37 +161,3 @@ ERREnd
 ERREpilog
 	return Id;
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class stsfsmpersonnalization
-: public stsfsmtutor
-{
-public:
-	stsfsmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~stsfsmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static stsfsmpersonnalization Tutor;
-
-ttr_tutor &STSFSMTutor = Tutor;

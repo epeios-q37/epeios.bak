@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: xmlflr.cpp,v 1.2 2013/07/25 15:59:16 csimon Exp $
-
 #define XMLFLR__COMPILATION
 
 #include "xmlflr.h"
 
-class xmlflrtutor
-: public ttr_tutor
-{
-public:
-	xmlflrtutor( void )
-	: ttr_tutor( XMLFLR_NAME )
-	{
-#ifdef XMLFLR_DBG
-		Version = XMLFLR_VERSION "\b\bD $";
-#else
-		Version = XMLFLR_VERSION;
-#endif
-		Owner = XMLFLR_OWNER;
-		Date = "$Date: 2013/07/25 15:59:16 $";
-	}
-	virtual ~xmlflrtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace xmlflr;
 
@@ -132,34 +105,3 @@ ERREnd
 ERREpilog
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmlflrpersonnalization
-: public xmlflrtutor
-{
-public:
-	xmlflrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmlflrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmlflrpersonnalization Tutor;
-
-ttr_tutor &XMLFLRTutor = Tutor;

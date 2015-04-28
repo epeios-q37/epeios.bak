@@ -33,10 +33,6 @@
 
 #define PRSHCT_OWNER		"the Epeios project (http://zeusw.org/epeios/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &PRSHCTTutor;
-
 #if defined( E_DEBUG ) && !defined( PRSHCT_NODBG )
 #define PRSHCT_DBG 
 #endif

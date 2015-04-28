@@ -23,68 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mmm1.cpp,v 1.8 2012/11/14 16:06:31 csimon Exp $
-
 #define MMM1__COMPILATION
 
 #include "mmm1.h"
 
-class mmm1tutor
-: public ttr_tutor
-{
-public:
-	mmm1tutor( void )
-	: ttr_tutor( MMM1_NAME )
-	{
-#ifdef MMM1_DBG
-		Version = MMM1_VERSION "\b\bD $";
-#else
-		Version = MMM1_VERSION;
-#endif
-		Owner = MMM1_OWNER;
-		Date = "$Date: 2012/11/14 16:06:31 $";
-	}
-	virtual ~mmm1tutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace mmm;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mmm1personnalization
-: public mmm1tutor
-{
-public:
-	mmm1personnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mmm1personnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mmm1personnalization Tutor;
-
-ttr_tutor &MMM1Tutor = Tutor;

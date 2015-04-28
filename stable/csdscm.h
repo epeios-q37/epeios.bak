@@ -33,10 +33,6 @@
 
 #define CSDSCM_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &CSDSCMTutor;
-
 #if defined( E_DEBUG ) && !defined( CSDSCM_NODBG )
 #define CSDSCM_DBG
 #endif

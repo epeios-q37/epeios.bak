@@ -334,30 +334,12 @@ void mtk::ForceExit( unsigned long Seconds )
 	Launch( WaitAndExit_, (void *)(intptr_t)Seconds );
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class mtkpersonnalization
+Q37_GCTOR( mtk )
 {
-public:
-	mtkpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-		Create_();
-	}
-	~mtkpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-		Close_();
-	}
-};
+	Create_();
+}
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static mtkpersonnalization Tutor;
+Q37_GDTOR( mtk )
+{
+	Close_();
+}

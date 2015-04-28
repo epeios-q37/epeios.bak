@@ -23,70 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dtflcf.cpp,v 1.6 2012/11/14 16:06:26 csimon Exp $
-
 #define DTFLCF__COMPILATION
 
 #include "dtflcf.h"
 
-class dtflcftutor
-: public ttr_tutor
-{
-public:
-	dtflcftutor( void )
-	: ttr_tutor( DTFLCF_NAME )
-	{
-#ifdef DTFLCF_DBG
-		Version = DTFLCF_VERSION "\b\bD $";
-#else
-		Version = DTFLCF_VERSION;
-#endif
-		Owner = DTFLCF_OWNER;
-		Date = "$Date: 2012/11/14 16:06:26 $";
-	}
-	virtual ~dtflcftutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace dtflcf;
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dtflcfpersonnalization
-: public dtflcftutor
-{
-public:
-	dtflcfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dtflcfpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dtflcfpersonnalization Tutor;
-
-ttr_tutor &DTFLCFTutor = Tutor;

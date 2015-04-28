@@ -33,9 +33,6 @@
 
 #define IOF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &IOFTutor;
 
 #if defined( E_DEBUG ) && !defined( IOF_NODBG )
 #define IOF_DBG

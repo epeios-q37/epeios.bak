@@ -33,9 +33,6 @@
 
 #define IDS_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &IDSTutor;
 
 #if defined( E_DEBUG ) && !defined( IDS_NODBG )
 #define IDS_DBG

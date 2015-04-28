@@ -33,9 +33,6 @@
 
 #define FRDKRN_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FRDKRNTutor;
 
 #if defined( E_DEBUG ) && !defined( FRDKRN_NODBG )
 #define FRDKRN_DBG

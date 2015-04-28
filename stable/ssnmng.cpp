@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: ssnmng.cpp,v 1.33 2013/05/15 14:40:37 csimon Exp $
-
 #define SSNMNG__COMPILATION
 
 #include "ssnmng.h"
-
-class ssnmngtutor
-: public ttr_tutor
-{
-public:
-	ssnmngtutor( void )
-	: ttr_tutor( SSNMNG_NAME )
-	{
-#ifdef SSNMNG_DBG
-		Version = SSNMNG_VERSION "\b\bD $";
-#else
-		Version = SSNMNG_VERSION;
-#endif
-		Owner = SSNMNG_OWNER;
-		Date = "$Date: 2013/05/15 14:40:37 $";
-	}
-	virtual ~ssnmngtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #define DIGITS "azertyuiopmlkjhgfdsqwxcvbnNBVCXWQSDFGHJKLMPOIUYTREZA9876543210"
 
@@ -248,34 +220,3 @@ ERREnd
 ERREpilog
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class ssnmngpersonnalization
-: public ssnmngtutor
-{
-public:
-	ssnmngpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ssnmngpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static ssnmngpersonnalization Tutor;
-
-ttr_tutor &SSNMNGTutor = Tutor;

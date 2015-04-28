@@ -33,10 +33,6 @@
 
 #define STF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &STFTutor;
-
 #if defined( E_DEBUG ) && !defined( STF_NODBG )
 #define STF_DBG
 #endif

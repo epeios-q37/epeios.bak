@@ -33,9 +33,6 @@
 
 #define MSCMDF_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSCMDFTutor;
 
 #if defined( E_DEBUG ) && !defined( MSCMDF_NODBG )
 #define MSCMDF_DBG

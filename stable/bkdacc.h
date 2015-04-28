@@ -33,10 +33,6 @@
 
 #define BKDACC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDACCTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDACC_NODBG )
 #define BKDACC_DBG
 #endif

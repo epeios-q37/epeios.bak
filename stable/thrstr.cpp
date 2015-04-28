@@ -23,35 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: thrstr.cpp,v 1.4 2012/11/14 16:06:38 csimon Exp $
-
 #define THRSTR__COMPILATION
 
 #include "thrstr.h"
-
-class thrstrtutor
-: public ttr_tutor
-{
-public:
-	thrstrtutor( void )
-	: ttr_tutor( THRSTR_NAME )
-	{
-#ifdef THRSTR_DBG
-		Version = THRSTR_VERSION " (DBG)";
-#else
-		Version = THRSTR_VERSION;
-#endif
-		Owner = THRSTR_OWNER;
-		Date = "$Date: 2012/11/14 16:06:38 $";
-	}
-	virtual ~thrstrtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace thrstr;
 
@@ -202,38 +176,3 @@ void thrstr::thread_store___::Launch( void *UP )
 		
 }
 		
-		
-	
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class thrstrpersonnalization
-: public thrstrtutor
-{
-public:
-	thrstrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~thrstrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static thrstrpersonnalization Tutor;
-
-ttr_tutor &THRSTRTutor = Tutor;

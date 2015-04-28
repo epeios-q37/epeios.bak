@@ -33,10 +33,6 @@
 
 #define SDR_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SDRTutor;
-
 #if defined( E_DEBUG ) && !defined( SDR_NODBG )
 #define SDR_DBG
 #endif

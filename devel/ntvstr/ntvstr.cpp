@@ -158,33 +158,3 @@ ERREnd
 ERREpilog
 	return SBuffer;
 }
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class ntvstrpersonnalization
-{
-public:
-	ntvstrpersonnalization( void )
-	{
-#ifdef CPE_POSIX
-//		printf( nl_langinfo( CODESET ) );
-#endif
-
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~ntvstrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static ntvstrpersonnalization Tutor;

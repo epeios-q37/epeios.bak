@@ -18,26 +18,6 @@
 
 #include "fgm.h"
 
-class fgmtutor
-: public ttr_tutor
-{
-public:
-	fgmtutor( void )
-	: ttr_tutor( FGM_NAME )
-	{
-		Version = FGM_VERSION;
-		Owner = FGM_OWNER;
-		Date = "06/03/2000 22:23:42";
-	}
-	virtual ~fgmtutor( void ){}
-};
-
-//  	Substitution is not applied to the rest.
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 
 // Libere la place occupe par les fragments 'Debut'  'Fin' inclus.
@@ -124,40 +104,3 @@ void fgm_memoire_fragmentee::Ecrire(
 		Tampon += QuantDansFrag;
 	}
 }
-
-
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class fgmpersonnalization
-: public fgmtutor
-{
-public:
-	fgmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fgmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-static fgmpersonnalization Tutor;
-
-ttr_tutor &FGMTutor = Tutor;
-
-/* end of 'xxx.cpp' template file */

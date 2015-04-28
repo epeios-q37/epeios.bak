@@ -23,68 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: lck.cpp,v 1.21 2013/04/11 19:36:49 csimon Exp $
-
 #define LCK__COMPILATION
 
 #include "lck.h"
 
-class lcktutor
-: public ttr_tutor
-{
-public:
-	lcktutor( void )
-	: ttr_tutor( LCK_NAME )
-	{
-#ifdef LCK_DBG
-		Version = LCK_VERSION "\b\bD $";
-#else
-		Version = LCK_VERSION;
-#endif
-		Owner = LCK_OWNER;
-		Date = "$Date: 2013/04/11 19:36:49 $";
-	}
-	virtual ~lcktutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 using namespace lck;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class lckpersonnalization
-: public lcktutor
-{
-public:
-	lckpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~lckpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static lckpersonnalization Tutor;
-
-ttr_tutor &LCKTutor = Tutor;

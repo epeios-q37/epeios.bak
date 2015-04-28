@@ -33,10 +33,6 @@
 
 #define DTFLCF_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DTFLCFTutor;
-
 #if defined( E_DEBUG ) && !defined( DTFLCF_NODBG )
 #define DTFLCF_DBG
 #endif

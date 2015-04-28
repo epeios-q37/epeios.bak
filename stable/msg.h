@@ -33,10 +33,6 @@
 
 #define MSG_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSGTutor;
-
 #if defined( E_DEBUG ) && !defined( MSG_NODBG )
 #define MSG_DBG
 #endif

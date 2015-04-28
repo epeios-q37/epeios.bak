@@ -33,10 +33,6 @@
 
 #define EPSMSC_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &EPSMSCTutor;
-
 #if defined( E_DEBUG ) && !defined( EPSMSC_NODBG )
 #define EPSMSC_DBG
 #endif

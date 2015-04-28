@@ -33,10 +33,6 @@
 
 #define FBLBRQ_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &FBLBRQTutor;
-
 #if defined( E_DEBUG ) && !defined( FBLBRQ_NODBG )
 #define FBLBRQ_DBG
 #endif

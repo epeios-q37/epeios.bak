@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: srvhvy.cpp,v 1.10 2012/11/14 16:06:37 csimon Exp $
-
 #define SRVHVY__COMPILATION
 
 #include "srvhvy.h"
-
-class srvhvytutor
-: public ttr_tutor
-{
-public:
-	srvhvytutor( void )
-	: ttr_tutor( SRVHVY_NAME )
-	{
-#ifdef SRVHVY_DBG
-		Version = SRVHVY_VERSION "\b\bD $";
-#else
-		Version = SRVHVY_VERSION;
-#endif
-		Owner = SRVHVY_OWNER;
-		Date = "$Date: 2012/11/14 16:06:37 $";
-	}
-	virtual ~srvhvytutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace srvhvy;
 
@@ -168,36 +140,3 @@ void srvhvy::server___::Process(
 
 	_Server.Process(  Functions );
 }
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class srvhvypersonnalization
-: public srvhvytutor
-{
-public:
-	srvhvypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~srvhvypersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static srvhvypersonnalization Tutor;
-
-ttr_tutor &SRVHVYTutor = Tutor;

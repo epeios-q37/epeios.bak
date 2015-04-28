@@ -138,29 +138,8 @@ static void FillAutomats_( void )
 	FillBackendAutomat_();
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class frdbsepersonnalization
+Q37_GCTOR( frdbse )
 {
-public:
-	frdbsepersonnalization( void )
-	{
-		FillAutomats_();
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~frdbsepersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
+	FillAutomats_();
+}
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static frdbsepersonnalization Tutor;

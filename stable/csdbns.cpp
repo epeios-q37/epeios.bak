@@ -291,6 +291,7 @@ static void Traiter_( void *PU )
 {
 	::socket_data__ &Data = *(::socket_data__ *)PU;
 ERRProlog
+
 	bso::bool__ Close = true;
 	socket_callback__ &Callback = *Data.Callback;
 	socket__ Socket = Data.Socket;
@@ -300,6 +301,7 @@ ERRProlog
 	csdbns_repository_item__ Item;
 	tol::E_FPOINTER___( char ) Buffer;
 ERRBegin
+
 	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
 		ERRAlc();
 
@@ -323,7 +325,7 @@ ERRBegin
 	ERREpilog
 ERRErr
 	ERRRst();
-# pragma message ("Enlever ce ERRRst(). Voir comment corrrectement grer les erreurs.")
+# pragma message ( __LOC__ " : Enlever ce ERRRst(). Voir comment corrrectement grer les erreurs.")
 ERREnd
 ERREpilog
 }
@@ -411,10 +413,3 @@ public:
 	}
 };
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-static csdbnspersonnalization Tutor;

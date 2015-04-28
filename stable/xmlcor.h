@@ -34,10 +34,6 @@
 
 #define XMLCOR_OWNER		"the Epeios project (http://epeios.org/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLCORTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLCOR_NODBG )
 #define XMLCOR_DBG 
 #endif

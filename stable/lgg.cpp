@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: lgg.cpp,v 1.18 2012/11/14 16:06:30 csimon Exp $
-
 #define LGG__COMPILATION
 
 #include "lgg.h"
-
-class lggtutor
-: public ttr_tutor
-{
-public:
-	lggtutor( void )
-	: ttr_tutor( LGG_NAME )
-	{
-#ifdef LGG_DBG
-		Version = LGG_VERSION "\b\bD $";
-#else
-		Version = LGG_VERSION;
-#endif
-		Owner = LGG_OWNER;
-		Date = "$Date: 2012/11/14 16:06:30 $";
-	}
-	virtual ~lggtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace lgg;
 
@@ -103,34 +75,3 @@ language__ lgg::GetLanguageIDWithLabel( const char *Name )
 		return (language__)i;
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class lggpersonnalization
-: public lggtutor
-{
-public:
-	lggpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~lggpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static lggpersonnalization Tutor;
-
-ttr_tutor &LGGTutor = Tutor;

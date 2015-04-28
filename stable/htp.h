@@ -33,9 +33,6 @@
 
 #define HTP_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &HTPTutor;
 
 #if defined( E_DEBUG ) && !defined( HTP_NODBG )
 #define HTP_DBG

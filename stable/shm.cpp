@@ -23,63 +23,8 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: shm.cpp,v 1.4 2012/11/14 16:06:36 csimon Exp $
-
 #define SHM__COMPILATION
 
 #include "shm.h"
 
-class shmtutor
-: public ttr_tutor
-{
-public:
-	shmtutor( void )
-	: ttr_tutor( SHM_NAME )
-	{
-#ifdef SHM_DBG
-		Version = SHM_VERSION " (DBG)";
-#else
-		Version = SHM_VERSION;
-#endif
-		Owner = SHM_OWNER;
-		Date = "$Date: 2012/11/14 16:06:36 $";
-	}
-	virtual ~shmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class shmpersonnalization
-: public shmtutor
-{
-public:
-	shmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~shmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static shmpersonnalization Tutor;
-
-ttr_tutor &SHMTutor = Tutor;
+using namespace shm;

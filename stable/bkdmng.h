@@ -33,10 +33,6 @@
 
 #define BKDMNG_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &BKDMNGTutor;
-
 #if defined( E_DEBUG ) && !defined( BKDMNG_NODBG )
 #define BKDMNG_DBG
 #endif

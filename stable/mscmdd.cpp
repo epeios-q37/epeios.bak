@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: mscmdd.cpp,v 1.16 2012/09/07 16:18:21 csimon Exp $
-
 #define MSCMDD__COMPILATION
 
 #include "mscmdd.h"
-
-class mscmddtutor
-: public ttr_tutor
-{
-public:
-	mscmddtutor( void )
-	: ttr_tutor( MSCMDD_NAME )
-	{
-#ifdef MSCMDD_DBG
-		Version = MSCMDD_VERSION "\b\bD $";
-#else
-		Version = MSCMDD_VERSION;
-#endif
-		Owner = MSCMDD_OWNER;
-		Date = "$Date: 2012/09/07 16:18:21 $";
-	}
-	virtual ~mscmddtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace mscmdd;
 
@@ -555,39 +527,3 @@ const char *mscmdd::Label( status__ Status )
 
 	return NULL;	// Pour viter un 'warning'.
 }
-
-
-
-using namespace mscmdd;
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class mscmddpersonnalization
-: public mscmddtutor
-{
-public:
-	mscmddpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~mscmddpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static mscmddpersonnalization Tutor;
-
-ttr_tutor &MSCMDDTutor = Tutor;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Locales xmlns="http://zeusw.org/epeios/xlcl" xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Locale target="expp">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>

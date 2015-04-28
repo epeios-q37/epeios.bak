@@ -33,9 +33,6 @@
 
 #define MSCMDX_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &MSCMDXTutor;
 
 #if defined( E_DEBUG ) && !defined( MSCMDX_NODBG )
 #define MSCMDX_DBG

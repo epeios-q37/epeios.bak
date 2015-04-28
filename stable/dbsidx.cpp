@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dbsidx.cpp,v 1.59 2009/11/15 11:30:57 csimon Exp $
-
 #define DBSIDX__COMPILATION
 
 #include "dbsidx.h"
-
-class dbsidxtutor
-: public ttr_tutor
-{
-public:
-	dbsidxtutor( void )
-	: ttr_tutor( DBSIDX_NAME )
-	{
-#ifdef DBSIDX_DBG
-		Version = DBSIDX_VERSION "\b\bD $";
-#else
-		Version = DBSIDX_VERSION;
-#endif
-		Owner = DBSIDX_OWNER;
-		Date = "$Date: 2009/11/15 11:30:57 $";
-	}
-	virtual ~dbsidxtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "flf.h"
 
@@ -746,37 +718,3 @@ ERREnd
 ERREpilog
 }
 
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dbsidxpersonnalization
-: public dbsidxtutor
-{
-public:
-	dbsidxpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~dbsidxpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dbsidxpersonnalization Tutor;
-
-ttr_tutor &DBSIDXTutor = Tutor;

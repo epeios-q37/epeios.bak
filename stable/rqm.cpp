@@ -23,35 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: rqm.cpp,v 1.7 2012/11/14 16:06:32 csimon Exp $
-
 #define RQM__COMPILATION
 
 #include "rqm.h"
-
-class rqmtutor
-: public ttr_tutor
-{
-public:
-	rqmtutor( void )
-	: ttr_tutor( RQM_NAME )
-	{
-#ifdef RQM_DBG
-		Version = RQM_VERSION " (DBG)";
-#else
-		Version = RQM_VERSION;
-#endif
-		Owner = RQM_OWNER;
-		Date = "$Date: 2012/11/14 16:06:32 $";
-	}
-	virtual ~rqmtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace rqm;
 
@@ -552,12 +526,11 @@ ERRProlog
 	b_ B;
 	bv_ BV;
 ERRBegin
-
 	Test_( B );
 #if !defined( CPE__VC )
 	/* 'VC++' is the only compiler I know which doesn't pass the following test.
 	For this compiler, it doesn't matter.
-	If another compiler doesn't pass this test, that's very few chance that this
+	If another compiler doesn't pass this test, that's very few chances that this
 	library doesn't work properly, but it can happen. If so, tell me.
 	*/
 	Test_( BV );
@@ -567,44 +540,17 @@ ERREnd
 ERREpilog
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class rqmpersonnalization
-: public rqmtutor
+Q37_GCTOR( rqm )
 {
-public:
-	rqmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
 ERRFProlog
 ERRFBegin
-		/* I assume that the compiler must have a behaviour
-		that is not guaranted by the standard. Than I verify
-		if the compiler has this behaviour. */
-		Test_();
+	/* I assume that the compiler must have a behaviour
+	that is not guaranted by the standard. Than I verify
+	if the compiler has this behaviour. */
+	Test_();
 ERRFErr
 	cout << '\t' << ERRMessage() << '\a' << endl;
 	exit( EXIT_FAILURE );	// Due to the fact that 'main()'.isn't yet called.
 ERRFEnd
 ERRFEpilog
-	}
-	~rqmpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static rqmpersonnalization Tutor;
-
-ttr_tutor &RQMTutor = Tutor;
+}	

@@ -23,31 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: dtfptb.cpp,v 1.24 2013/04/13 16:21:16 csimon Exp $
-
 #define DTFPTB__COMPILATION
 
 #include "dtfptb.h"
-
-class dtfptbtutor
-: public ttr_tutor
-{
-public:
-	dtfptbtutor( void )
-	: ttr_tutor( DTFPTB_NAME )
-	{
-#ifdef DTFPTB_DBG
-		Version = DTFPTB_VERSION "\b\bD $";
-#else
-		Version = DTFPTB_VERSION;
-#endif
-		Owner = DTFPTB_OWNER;
-		Date = "$Date: 2013/04/13 16:21:16 $";
-	}
-	virtual ~dtfptbtutor( void ){}
-};
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
@@ -356,39 +334,9 @@ void dtfptb::_VPutSInt(
 	_PutInt( bso::ConvertToDInt( SInt, XInt ), Flow );
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class dtfptbpersonnalization
-: public dtfptbtutor
+Q37_GCTOR( dtfptb )
 {
-public:
-	dtfptbpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-
-		// Pour des raisons de simplifications, on 'cast' parfois autoritairement un 'bso::size__' en 'bso::int__'.
-		if ( sizeof( bso::size__ ) != sizeof( bso::int__ ) )
-			ERRChk();
-	}
-	~dtfptbpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static dtfptbpersonnalization Tutor;
-
-ttr_tutor &DTFPTBTutor = Tutor;
+	// Pour des raisons de simplifications, on 'cast' parfois autoritairement un 'bso::size__' en 'bso::int__'.
+	if ( sizeof( bso::size__ ) != sizeof( bso::int__ ) )
+		ERRChk();
+}

@@ -33,10 +33,6 @@
 
 #define SCLDALVIK_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &SCLDALVIKTutor;
-
 #if defined( E_DEBUG ) && !defined( SCLDALVIK_NODBG )
 #define SCLDALVIK_DBG
 #endif

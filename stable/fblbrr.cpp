@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fblbrr.cpp,v 1.10 2013/04/15 10:50:50 csimon Exp $
-
 #define FBLBRR__COMPILATION
 
 #include "fblbrr.h"
-
-class fblbrrtutor
-: public ttr_tutor
-{
-public:
-	fblbrrtutor( void )
-	: ttr_tutor( FBLBRR_NAME )
-	{
-#ifdef FBLBRR_DBG
-		Version = FBLBRR_VERSION "\b\bD $";
-#else
-		Version = FBLBRR_VERSION;
-#endif
-		Owner = FBLBRR_OWNER;
-		Date = "$Date: 2013/04/15 10:50:50 $";
-	}
-	virtual ~fblbrrtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace fblbrr;
 
@@ -374,34 +346,3 @@ void fblbrr::remote_callbacks___::FBLBRQPush(
 	}
 }
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class fblbrrpersonnalization
-: public fblbrrtutor
-{
-public:
-	fblbrrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fblbrrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fblbrrpersonnalization Tutor;
-
-ttr_tutor &FBLBRRTutor = Tutor;

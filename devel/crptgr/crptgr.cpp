@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: crptgr.cpp,v 1.8 2013/04/19 19:28:00 csimon Exp $
-
 #define CRPTGR__COMPILATION
 
 #include "crptgr.h"
-
-class crptgrtutor
-: public ttr_tutor
-{
-public:
-	crptgrtutor( void )
-	: ttr_tutor( CRPTGR_NAME )
-	{
-#ifdef CRPTGR_DBG
-		Version = CRPTGR_VERSION "\b\bD $";
-#else
-		Version = CRPTGR_VERSION;
-#endif
-		Owner = CRPTGR_OWNER;
-		Date = "$Date: 2013/04/19 19:28:00 $";
-	}
-	virtual ~crptgrtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "flx.h"
 
@@ -104,37 +76,3 @@ ERREnd
 ERREpilog
 	return Plain;
 }
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class crptgrpersonnalization
-: public crptgrtutor
-{
-public:
-	crptgrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~crptgrpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static crptgrpersonnalization Tutor;
-
-ttr_tutor &CRPTGRTutor = Tutor;

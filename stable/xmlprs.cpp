@@ -24,35 +24,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//	$Id: xmlprs.cpp,v 1.5 2012/11/14 16:06:40 csimon Exp $
-
 #define XMLPRS__COMPILATION
 
 #include "xmlprs.h"
-
-class xmlprstutor
-: public ttr_tutor
-{
-public:
-	xmlprstutor( void )
-	: ttr_tutor( XMLPRS_NAME )
-	{
-#ifdef XMLPRS_DBG
-		Version = XMLPRS_VERSION "\b\bD $";
-#else
-		Version = XMLPRS_VERSION;
-#endif
-		Owner = XMLPRS_OWNER;
-		Date = "$Date: 2012/11/14 16:06:40 $";
-	}
-	virtual ~xmlprstutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "expat.h"
 
@@ -242,39 +216,3 @@ void xmlprs::License( txf::text_oflow___ &Flow )
 	Flow << "in all copies or substantial portions of the Software." << txf::nl;
 }
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class xmlprspersonnalization
-: public xmlprstutor
-{
-public:
-	xmlprspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~xmlprspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-	void TTRMore( txf::text_oflow___ &Flow )
-	{
-		Flow << txf::tab << "'XMLPRS' uses " << XML_ExpatVersion() << txf::nl << txf::tab << "(c) Thai Open Source Software Center Ltd and Clark Cooper." << txf::nl;
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static xmlprspersonnalization Tutor;
-
-ttr_tutor &XMLPRSTutor = Tutor;

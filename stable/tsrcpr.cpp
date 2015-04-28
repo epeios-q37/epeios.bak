@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: tsrcpr.cpp,v 1.18 2012/11/14 16:06:38 csimon Exp $
-
 #define TSRCPR__COMPILATION
 
 #include "tsrcpr.h"
-
-class tsrcprtutor
-: public ttr_tutor
-{
-public:
-	tsrcprtutor( void )
-	: ttr_tutor( TSRCPR_NAME )
-	{
-#ifdef TSRCPR_DBG
-		Version = TSRCPR_VERSION "\b\bD $";
-#else
-		Version = TSRCPR_VERSION;
-#endif
-		Owner = TSRCPR_OWNER;
-		Date = "$Date: 2012/11/14 16:06:38 $";
-	}
-	virtual ~tsrcprtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 using namespace tsrcpr;
 
@@ -1223,38 +1195,3 @@ void tsrcpr::library_::Analyze( xtf::extended_text_iflow___ &Flot )
 			ERRc();
 	}
 }
-
-
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class tsrcprpersonnalization
-: public tsrcprtutor
-{
-public:
-	tsrcprpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~tsrcprpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static tsrcprpersonnalization Tutor;
-
-ttr_tutor &TSRCPRTutor = Tutor;

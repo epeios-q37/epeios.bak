@@ -34,10 +34,6 @@
 
 #define XMLPRS_OWNER		"the Epeios project (http://epeios.org/)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &XMLPRSTutor;
-
 #if defined( E_DEBUG ) && !defined( XMLPRS_NODBG )
 #define XMLPRS_DBG 
 #endif

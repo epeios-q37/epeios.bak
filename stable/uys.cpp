@@ -23,37 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: uys.cpp,v 1.9 2013/04/15 10:50:58 csimon Exp $
-
 #define UYS__COMPILATION
 
 #include "uys.h"
-
-class uystutor
-: public ttr_tutor
-{
-public:
-	uystutor( void )
-	: ttr_tutor( UYS_NAME )
-	{
-#ifdef UYS_DBG
-		Version = UYS_VERSION "\b\bD $";
-#else
-		Version = UYS_VERSION;
-#endif
-		Owner = UYS_OWNER;
-		Date = "$Date: 2013/04/15 10:50:58 $";
-	}
-	virtual ~uystutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 #include "str.h"
 
@@ -332,38 +304,8 @@ row__ uys::_Position(
 }
 #endif
 
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class uyspersonnalization
-: public uystutor
+Q37_GCTOR( uys )
 {
-public:
-	uyspersonnalization( void )
-	{
-		if ( UYS_STATE_AMOUNT != s_amount )
-			ERRChk();
-
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~uyspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static uyspersonnalization Tutor;
-
-ttr_tutor &UYSTutor = Tutor;
+	if ( UYS_STATE_AMOUNT != s_amount )
+		ERRChk();
+}

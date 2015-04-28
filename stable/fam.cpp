@@ -23,67 +23,9 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: fam.cpp,v 1.9 2012/11/14 16:06:27 csimon Exp $
-
 #define FAM__COMPILATION
 
 #include "fam.h"
 
-class famtutor
-: public ttr_tutor
-{
-public:
-	famtutor( void )
-	: ttr_tutor( FAM_NAME )
-	{
-#ifdef FAM_DBG
-		Version = FAM_VERSION "\b\bD $";
-#else
-		Version = FAM_VERSION;
-#endif
-		Owner = FAM_OWNER;
-		Date = "$Date: 2012/11/14 16:06:27 $";
-	}
-	virtual ~famtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
-
 fam::fast_allocation_memory fam::FAM;
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class fampersonnalization
-: public famtutor
-{
-public:
-	fampersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~fampersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static fampersonnalization Tutor;
-
-ttr_tutor &FAMTutor = Tutor;

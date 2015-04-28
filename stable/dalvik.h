@@ -33,10 +33,6 @@
 
 #define DALVIK_OWNER		"Claude SIMON"
 
-#include "ttr.h"
-
-extern class ttr_tutor &DALVIKTutor;
-
 #if defined( E_DEBUG ) && !defined( DALVIK_NODBG )
 #define DALVIK_DBG
 #endif

@@ -23,37 +23,10 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-
-//	$Id: txmpgh.cpp,v 1.9 2012/11/14 16:06:38 csimon Exp $
-
 #define TXMPGH__COMPILATION
 
 #include "txmpgh.h"
 
-class txmpghtutor
-: public ttr_tutor
-{
-public:
-	txmpghtutor( void )
-	: ttr_tutor( TXMPGH_NAME )
-	{
-#ifdef TXMPGH_DBG
-		Version = TXMPGH_VERSION "\b\bD $";
-#else
-		Version = TXMPGH_VERSION;
-#endif
-		Owner = TXMPGH_OWNER;
-		Date = "$Date: 2012/11/14 16:06:38 $";
-	}
-	virtual ~txmpghtutor( void ){}
-};
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-/*$BEGIN$*/
 
 void txmpgh::paragraph_::GetSplitParagraph_( xtf::extended_text_iflow__ &Flow )
 {
@@ -118,35 +91,3 @@ txf::text_oflow__ &operator <<(
 	return F;
 }
 
-
-
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-class txmpghpersonnalization
-: public txmpghtutor
-{
-public:
-	txmpghpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
-	}
-	~txmpghpersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
-	}
-};
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
-// 'static' by GNU C++.
-
-static txmpghpersonnalization Tutor;
-
-ttr_tutor &TXMPGHTutor = Tutor;

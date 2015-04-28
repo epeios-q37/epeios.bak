@@ -33,10 +33,6 @@
 
 #define LSTCTN_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &LSTCTNTutor;
-
 #if defined( E_DEBUG ) && !defined( LSTCTN_NODBG )
 #define LSTCTN_DBG
 #endif

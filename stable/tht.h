@@ -33,10 +33,6 @@
 
 #define THT_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#include "ttr.h"
-
-extern class ttr_tutor &THTTutor;
-
 #if defined( E_DEBUG ) && !defined( THT_NODBG )
 #define THT_DBG
 #endif
