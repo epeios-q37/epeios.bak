@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="ostype" env-var="OSTYPE"/>
+	<xpp:ifeq select="ostype" value="">
+		<xpp:set name="env" value="windows"/>
+	</xpp:ifeq>
+	<xpp:ifeq select="ostype" value="linux-gnu">
+		<xpp:set name="env" value="linux"/>
+	</xpp:ifeq>
+	<xpp:ifeq select="ostype" value="darwin14">
+		<xpp:set name="env" value="mac"/>
+	</xpp:ifeq>
+	<xpp:define name="epeios.xlcl">
+		<xpp:bloc>
+			<xpp:ifeq select="env" value="windows">
+				<xpp:expand href="h:/hg/epeios/corpus/epeios.xlcl"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="linux">
+				<xpp:expand href="/H/hg/epeios/corpus/epeios.xlcl"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="mac">
+				<xpp:expand href="/H/hg/epeios/corpus/epeios.xlcl"/>
+			</xpp:ifeq>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="epeios.xcfg">
+		<xpp:bloc>
+			<xpp:ifeq select="env" value="windows">
+				<xpp:expand href="h:/hg/epeios/corpus/epeios.xcfg"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="linux">
+				<xpp:expand href="/H/hg/epeios/corpus/epeios.xcfg"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="mac">
+				<xpp:expand href="/H/hg/epeios/corpus/epeios.xcfg"/>
+			</xpp:ifeq>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="edaemon.xlcl">
+		<xpp:bloc>
+			<xpp:ifeq select="env" value="windows">
+				<xpp:expand href="h:/hg/epeios/corpus/edaemon.xlcl"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="linux">
+				<xpp:expand href="/H/hg/epeios/corpus/edaemon.xlcl"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="mac">
+				<xpp:expand href="/H/hg/epeios/corpus/edaemon.xlcl"/>
+			</xpp:ifeq>
+		</xpp:bloc>
+	</xpp:define>
+</xpp:bloc>
