@@ -304,7 +304,7 @@ endif
 ##########################
 		
 all: $(target)
-#	rm -f *.o
+	rm -f *.o
 
 copt += -DVERSION=\""20140716"\"
 copt += -DCOPYRIGHT_YEARS=\""2013, 2014"\"

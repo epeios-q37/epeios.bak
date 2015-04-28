@@ -15,6 +15,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-04-28 :
+- GLOBAL :
+	- Fixing clang++ (LLVM) issues.
+
 2015-04-24
 - GLOBAL :
 	- Rewritting global (con|de)structor using '__attribute__((((con|de)structor))' under Mac OS, as dynamic libraries under Mac OS

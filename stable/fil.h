@@ -551,11 +551,12 @@ namespace fil {
 		const fnm::name___ &Filename,
 		err::handling__ ErrorHandling = err::h_Default )	// Pour Windows, rend un fichier/rpertoire normal.
 	{
-		if ( SetFileAttributesW( Filename.Internal(), FILE_ATTRIBUTE_NORMAL ) == 0 )
+		if ( SetFileAttributesW(Filename.Internal(), FILE_ATTRIBUTE_NORMAL) == 0 ) {
 			if ( ErrorHandling == err::hThrowException )
 				ERRFwk();
 			else
 				return false;
+		}
 
 		return true;
 	}
@@ -566,11 +567,12 @@ namespace fil {
 															// NOTA : pour que le fichier soit cach lorsque l'option correspondande est active,
 															// il semblerait qu'il faut en plus mettre l'attribute 'HIDDEN' et 'ARCHIVE'.
 	{
-		if ( SetFileAttributesW( Filename.Internal(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE ) == 0 )
+		if ( SetFileAttributesW(Filename.Internal(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE) == 0 ) {
 			if ( ErrorHandling == err::hThrowException )
 				ERRFwk();
 			else
 				return false;
+		}
 
 		return true;
 	}

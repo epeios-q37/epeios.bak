@@ -528,18 +528,32 @@ namespace bso {
 
 	int__ ConvertToInt(
 		const raw__ *DInt,
-		size__ &Length = *(size__ *)NULL );
+		size__ *Length = NULL );
+
+	inline int__ ConvertToInt(
+		const raw__ *DInt,
+		size__ &Length )
+	{
+		return ConvertToInt( DInt, &Length );
+	}
 
 	inline uint__ ConvertToUInt(
 		const raw__ *DInt,
-		size__ &Length = *(size__ *)NULL )
+		size__ *Length = NULL )
 	{
 		return ConvertToInt( DInt, Length );
 	}
 
+	inline uint__ ConvertToUInt(
+		const raw__ *DInt,
+		size__ &Length  )
+	{
+		return ConvertToUInt( DInt, &Length );
+	}
+
 	inline sint__ ConvertToSInt(
 		const raw__ *DInt,
-		size__ &Length = *(size__ *)NULL )
+		size__ *Length = NULL )
 	{
 		int__ Int = ConvertToInt( DInt, Length );
 		sign__ Sign = ( Int & 1 ? -1 : 1 );
@@ -563,6 +577,14 @@ namespace bso {
 
 		return 0;	// Pour éviter un 'warning'.
 	}
+
+	inline sint__ ConvertToSInt(
+		const raw__ *DInt,
+		size__ &Length )
+	{
+		return ConvertToSInt( DInt, &Length );
+	}
+
 }
 
 				  /********************************************/

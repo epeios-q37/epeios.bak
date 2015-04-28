@@ -64,11 +64,12 @@ bso::bool__ csdbns::listener___::Init(
 		ERRSys();
 #endif
 
-	if( bind( Socket_, (struct sockaddr*)(&nom), sizeof(sockaddr_in) ) )
+	if ( bind(Socket_, (struct sockaddr*)(&nom), sizeof(sockaddr_in)) ) {
 		if ( ErrorHandling == err::hThrowException )
 			ERRSys();
 		else
 			return false;
+	}
 
 	if ( listen( Socket_, Amount ) )
 		ERRSys();
@@ -287,10 +288,43 @@ inline static void Clean_( void )
 	Unlock_();
 }
 
+static void ErrFinal_( void )
+{
+
+	if ( ERRType != err::t_Abort ) {
+		err::buffer__ Buffer;
+
+		const char *Message = err::Message( Buffer );
+
+		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+
+		ERRProlog
+		ERRBegin
+			if ( cio::IsInitialized() ) {
+				if ( cio::Target() == cio::tConsole ) {
+					cio::COut << txf::commit;
+					cio::CErr << txf::nl << txf::tab;
+				}
+
+				cio::CErr << "{ " << Message << " }";
+
+				if ( cio::Target() == cio::tConsole )
+					cio::CErr << txf::nl;
+
+				cio::CErr << txf::commit;
+			} else
+				ERRFwk();
+		ERRErr
+		ERREnd
+		ERREpilog
+	} else
+		ERRRst();
+}
+
 static void Traiter_( void *PU )
 {
 	::socket_data__ &Data = *(::socket_data__ *)PU;
-ERRProlog
+ERRFProlog
 
 	bso::bool__ Close = true;
 	socket_callback__ &Callback = *Data.Callback;
@@ -300,7 +334,7 @@ ERRProlog
 	rrow__ Row = E_NIL;
 	csdbns_repository_item__ Item;
 	tol::E_FPOINTER___( char ) Buffer;
-ERRBegin
+ERRFBegin
 
 	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
 		ERRAlc();
@@ -323,11 +357,9 @@ ERRBegin
 		if ( Row != E_NIL )
 			Clean_( Row );
 	ERREpilog
-ERRErr
-	ERRRst();
-# pragma message ( __LOC__ " : Enlever ce ERRRst(). Voir comment corrrectement grer les erreurs.")
-ERREnd
-ERREpilog
+ERRFErr
+ERRFEnd
+ERRFEpilog( ErrFinal_() )
 }
 
 void server___::Process(

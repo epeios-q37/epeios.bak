@@ -201,9 +201,6 @@ namespace ctn {
 
 			if ( AncCap < Size )
 			{
-				if ( &ST == NULL )
-					ERRFwk();
-
 				if ( ( Size - AncCap ) > 1 )
 					Statics.Fill( ST, AncCap, Size - AncCap );
 				else

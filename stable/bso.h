@@ -145,11 +145,11 @@ namespace bso {
 
 	typedef void *pointer__;
 
-	// Taille maximale ncessaire pour stocker la valeur d'un pointeur en binaire dans une chaine de caractre.
+	// Taille maximale nécessaire pour stocker la valeur d'un pointeur en binaire dans une chaine de caractère.
 	#define BSO_ASCII_CONVERTED_POINTER_MAX_SIZE	( sizeof( bso::pointer__ ) * 8 )
 
 	struct pointer_buffer__ {
-		char Datum[BSO_ASCII_CONVERTED_POINTER_MAX_SIZE];	// '+1' pour stocker le caractre 'NULL' final.
+		char Datum[BSO_ASCII_CONVERTED_POINTER_MAX_SIZE];	// '+1' pour stocker le caractère 'NULL' final.
 	};
 
 	inline const char *Convert(
@@ -162,11 +162,11 @@ namespace bso {
 	}
 
 
-	// Taille maximale ncessaire pour stocker la valeur d'un entirer en dcimal dans une chaine de caractre (+ le signe).
+	// Taille maximale nécessaire pour stocker la valeur d'un entirer en décimal dans une chaine de caractère (+ le signe).
 	#define BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE	( 1 + ( sizeof( bso::pointer__ ) * 8 ) )
 
 	struct integer_buffer__ {
-		char Datum[BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE+1];	// '+1' pour stocker le caractre 'NULL' final.
+		char Datum[BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE+1];	// '+1' pour stocker le caractère 'NULL' final.
 	};
 
 // 'natural unsigned integer'
@@ -257,7 +257,7 @@ namespace bso {
 #endif
 
 
-// Non utilisation de 'E_CDEF', car l'incusion de 'tol.h' pose problme.
+// Non utilisation de 'E_CDEF', car l'incusion de 'tol.h' pose problème.
 // 'natural signed integer'
 # ifdef CPE_INT64
 	typedef s64__ sint__;
@@ -277,7 +277,7 @@ namespace bso {
 #  error "Unknown integer natural size !"
 #endif
 
-	// Entier gnrique, comme facilit.
+	// Entier générique, comme facilité.
 	typedef uint__ int__;
 	static const int__ IntMin = UIntMin;
 	static const int__ IntMax = UIntMax;
@@ -285,7 +285,7 @@ namespace bso {
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
 
-	// Type de base d'un enum (Utilis par E_ENUM(...).
+	// Type de base d'un enum (Utilisé par E_ENUM(...).
 	typedef bso::u8__ enum__;
 
 	//c A sign ( -(1) +(1) 0 ).
@@ -393,7 +393,7 @@ namespace bso {
 	#define BSO_ASCII_CONVERTED_FLOAT_MAX_SIZE	40
 
 	struct float_buffer__ {
-		char Datum[BSO_ASCII_CONVERTED_FLOAT_MAX_SIZE+1];	// '+1' pour stocker le caractre 'NULL' final.
+		char Datum[BSO_ASCII_CONVERTED_FLOAT_MAX_SIZE+1];	// '+1' pour stocker le caractère 'NULL' final.
 	};
 	//f Return 'Value' as string in 'String'.
 	inline const char *Convert(
@@ -473,7 +473,7 @@ namespace bso {
 
 	const struct xint__ &_ConvertToDInt(
 		int__ Int,
-		struct xint__ &XInt );	//Avec '_', pour viter des problmes d'ambigut ('int__' <=> 'uint__').
+		struct xint__ &XInt );	//Avec '_', pour éviter des problèmes d'ambiguïté ('int__' <=> 'uint__').
 
 	struct xint__ {
 	private:
@@ -495,7 +495,7 @@ namespace bso {
 		}
 		void reset( bso::bool__ = true )
 		{
-			// Pour viter l'inclusion de "strng.h", qui pose problme.
+			// Pour éviter l'inclusion de "strng.h", qui pose problème.
 			// memset( _Int, 0, sizeof( _Int ) );
 			_Length = 0;
 		}
@@ -528,18 +528,32 @@ namespace bso {
 
 	int__ ConvertToInt(
 		const raw__ *DInt,
-		size__ &Length = *(size__ *)NULL );
+		size__ *Length = NULL );
+
+	inline int__ ConvertToInt(
+		const raw__ *DInt,
+		size__ &Length )
+	{
+		return ConvertToInt( DInt, &Length );
+	}
 
 	inline uint__ ConvertToUInt(
 		const raw__ *DInt,
-		size__ &Length = *(size__ *)NULL )
+		size__ *Length = NULL )
 	{
 		return ConvertToInt( DInt, Length );
 	}
 
+	inline uint__ ConvertToUInt(
+		const raw__ *DInt,
+		size__ &Length  )
+	{
+		return ConvertToUInt( DInt, &Length );
+	}
+
 	inline sint__ ConvertToSInt(
 		const raw__ *DInt,
-		size__ &Length = *(size__ *)NULL )
+		size__ *Length = NULL )
 	{
 		int__ Int = ConvertToInt( DInt, Length );
 		sign__ Sign = ( Int & 1 ? -1 : 1 );
@@ -561,8 +575,16 @@ namespace bso {
 			break;
 		}
 
-		return 0;	// Pour viter un 'warning'.
+		return 0;	// Pour éviter un 'warning'.
 	}
+
+	inline sint__ ConvertToSInt(
+		const raw__ *DInt,
+		size__ &Length )
+	{
+		return ConvertToSInt( DInt, &Length );
+	}
+
 }
 
 				  /********************************************/

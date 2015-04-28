@@ -56,7 +56,7 @@ const xint__ &bso::_ConvertToDInt(
 
 int__ bso::ConvertToInt(
 	const raw__ *DInt,
-	size__ &Length )
+	size__ *Length )
 {
 	length__ Position = 0;
 	int__ Int = 0;
@@ -68,8 +68,8 @@ int__ bso::ConvertToInt(
 		Int = ( Int << 7 ) + ( DInt[Position] & 0x7f );
 	} while ( DInt[Position++] & 0x80 );
 
-	if ( &Length != NULL )
-		Length = Position;
+	if ( Length != NULL )
+		*Length = Position;
 
 	return Int;
 }

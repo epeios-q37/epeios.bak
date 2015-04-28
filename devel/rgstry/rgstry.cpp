@@ -374,13 +374,13 @@ row__ rgstry::registry_::_Search(
 	const path_ &Path,
 	sdr::row__ PathRow,
 	row__ Row,
-	rows_ &ResultRows ) const
+	rows_ *ResultRows ) const
 {
 	cursor__ CandidateRow = E_NIL;
 	cursor__ Cursor = E_NIL;
 	ctn::E_CITEM( path_item_ ) Item;
 	row__ ResultRow, ChildRow = E_NIL;
-	bso::bool__ All = &ResultRows != NULL;
+	bso::bool__ All = ResultRows != NULL;
 	buffer Buffer;
 
 	Item.Init( Path );
@@ -405,7 +405,7 @@ row__ rgstry::registry_::_Search(
 	} else if ( All ) {
 
 		while ( ChildRow != E_NIL ) {
-			ResultRows.Append( ChildRow );
+			ResultRows->Append( ChildRow );
 
 			ChildRow = _Search( Item( PathRow ), Row, Cursor );
 		}
@@ -422,7 +422,7 @@ row__ rgstry::registry_::_Search(
 	sdr::row__ PathRow = E_NIL, Cursor = E_NIL;
 
 	if ( Path.Amount() != 0 )
-		return _Search( Path, Path.First(), Row, *(rows_ *)NULL );
+		return _Search( Path, Path.First(), Row, NULL );
 	else
 		return E_NIL;
 }
@@ -881,7 +881,7 @@ ERRBegin
 	Buffer.Init( Nodes );
 	ResultRows.Init();
 
-	_Search( Path, Path.First(), Row, ResultRows );
+	_Search( Path, Path.First(), Row, &ResultRows );
 
 	if ( ResultRows.Amount() != 0 ) {
 		Exists = true;

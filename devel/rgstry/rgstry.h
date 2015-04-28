@@ -583,7 +583,7 @@ namespace rgstry {
 			const path_ &Path,
 			sdr::row__ PathRow,
 			row__ Row,
-			rows_ &ResultRows ) const;
+			rows_ *ResultRows ) const;
 		row__ _Search(
 			const path_ &Path,
 			row__ Row ) const;
@@ -1226,39 +1226,41 @@ namespace rgstry {
 		{
 			reset();
 		}
-		row__ Init(
+		void Init(
 			const registry_ &Global,
-			row__ Root,
-			registry_ &Local,	// 'Global' et 'Local' peuvent être identiques.
-			row__ LocalRoot )	// Si égal à E_NIL et 'Local' != 'NULL', est crée et retourné.
+			row__ Root )
 		{
 			buffer Buffer;
 
 			this->Global.Registry = &Global;
 			this->Global.Root = Root;
 
+			Local.Registry = NULL;
+			Local.Root = E_NIL;
+		}
+		row__ Init(
+			const registry_ &Global,
+			row__ Root,
+			registry_ &Local,	// 'Global' et 'Local' peuvent être identiques.
+			row__ LocalRoot )	// Si égal à E_NIL, est crée et retourné.
+		{
+			buffer Buffer;
+
+			Init( Global, Root );
+
 			this->Local.Registry = &Local;
 
-			if ( ( &Local != NULL ) && ( LocalRoot == E_NIL ) )
+			if ( LocalRoot == E_NIL )
 				LocalRoot = Local.CreateRegistry( this->Global.Registry->GetName( Root, Buffer ) );
 
 			return this->Local.Root = LocalRoot;
 
 		}
-		void Init(
-			const registry_ &Global,
-			row__ Root )
-		{
-			Init( Global, Root, *(registry_ *)NULL, E_NIL );
-		}
 		row__ SetLocal(
 			registry_ &Registry,	// Si == 'NULL', on prend le 'Global'.
 			row__ Root )	// Si == 'E_NIL' est crée et retourné.
 		{
-			if ( ( &Global.Registry == NULL ) || ( Global.Root == E_NIL ) )
-				ERRFwk();
-
-			if ( &Registry == NULL )
+			if ( ( Global.Registry == NULL ) || ( Global.Root == E_NIL ) )
 				ERRFwk();
 
 			Local.Registry = &Registry;
@@ -1353,7 +1355,8 @@ namespace rgstry {
 			if ( Root == E_NIL )
 				Root = Global.CreateRegistry( name() );
 
-			_LocalRoot = overloaded_registry___::Init( Global, Root, *(registry_ *)NULL, E_NIL );
+			overloaded_registry___::Init( Global, Root );
+			_LocalRoot = E_NIL;
 
 			return Root;
 		}
