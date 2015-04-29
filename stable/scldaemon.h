@@ -114,7 +114,7 @@ namespace scldaemon {
 		ERRErr
 # ifndef CPE_POSIX
 #  ifdef SCLDAEMON__ERROR_DETECTION_ENABLED
-			strcpy( NULL, "Une erreur ne devrait pas se produire ; s'il y en a malgrs tout une, cette ligne permet de la dtecter facilement avec le debugger." );	// Lire le contenu du paramtre.
+			strcpy( NULL, "Une erreur ne devrait pas se produire ; s'il y en a malgrés tout une, cette ligne permet de la détecter facilement avec le debugger." );	// Lire le contenu du paramètre.
 #  endif
 # endif
 			ERRRst();
@@ -136,7 +136,7 @@ namespace scldaemon {
 	};
 
 
-	// A dfinir par l'utilisateur.
+	// A définir par l'utilisateur.
 	callback__ *SCLDAEMONNewCallback(
 		csdleo::mode__ Mode,
 		csdleo::context__ Context );	// To overload !

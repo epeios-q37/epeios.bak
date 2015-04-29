@@ -1544,7 +1544,7 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	\
 	static discriminator##_q37gdtor discriminator##_Q37gdtor;\
 	\
-	~discriminator##_q37gdtor::discriminator##_q37gdtor( void )
+	discriminator##_q37gdtor::~discriminator##_q37gdtor( void )
 #endif
 
 

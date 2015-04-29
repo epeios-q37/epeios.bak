@@ -1515,9 +1515,9 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	E_RODISCLOSE__( type__, name )\
 	E_WODISCLOSE__( type__, name )
 
-#if defined( CPE__XCODE )
+#if defined( CPE_XCODE ) && defined( Q37_LIBRARY )
 # define Q37_GCTOR( discriminator )\
-	__attribute__( ( constructor ) ) void discriminator##_q37ctor( void )
+	__attribute__( ( constructor ) ) static void discriminator##_q37ctor( void )
 #else
 # define Q37_GCTOR( discriminator )\
 	class discriminator##_q37gctor\
@@ -1531,20 +1531,20 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	discriminator##_q37gctor::discriminator##_q37gctor( void )
 #endif
 
-#if defined( CPE__XCODE )
+#if defined( CPE_XCODE ) && defined( Q37_LIBRARY )
 # define Q37_GDTOR( discriminator )\
-	__attribute__( ( destructor ) ) void discriminator##_q37gdtor( void )
+	__attribute__( ( destructor ) ) static void discriminator##_q37gdtor( void )
 #else
 # define Q37_GDTOR( discriminator )\
 	class discriminator##_q37gdtor\
 	{\
 	public:\
-		discriminator##_q37gdtor( void );\
+		~discriminator##_q37gdtor( void );\
 	};\
 	\
 	static discriminator##_q37gdtor discriminator##_Q37gdtor;\
 	\
-	discriminator##_q37gdtor::discriminator##_q37gdtor( void )
+	discriminator##_q37gdtor::~discriminator##_q37gdtor( void )
 #endif
 
 

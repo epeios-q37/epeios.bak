@@ -39,49 +39,51 @@ using namespace scldaemon;
 
 #include "fnm.h"
 
-static bso::bool__ IsInitialized_ = false;
+namespace {
+	bso::bool__ IsInitialized_ = false;
 
-typedef csdleo::callback__ _callback__;
+	typedef csdleo::callback__ _callback__;
 
-static class callback__
-: public ::_callback__
-{
-protected:
-	virtual void CSDLEOInitialize(
-		const csdleo::shared_data__ *Data,
-		... ) override
+	class callback__
+	: public _callback__
 	{
-	ERRProlog
-		fnm::name___ Directory;
-		TOL_CBUFFER___ Buffer;
-		str::string Error;
-	ERRBegin
-		if ( Data == NULL )
-			ERRPrm();
+	protected:
+		virtual void CSDLEOInitialize(
+			const csdleo::shared_data__ *Data,
+			... ) override
+		{
+		ERRProlog
+			fnm::name___ Directory;
+			TOL_CBUFFER___ Buffer;
+			str::string Error;
+		ERRBegin
+			if ( Data == NULL )
+				ERRPrm();
 		
-		if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
+			if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
 
-			// Does not work when placed in 'global_cdtor'.
-			Directory.Init();
-			fnm::GetLocation( Data->LibraryLocationAndName, Directory );
-			sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, *Data->CIO, Directory.UTF8( Buffer ) );
-			IsInitialized_ = true;
+				// Does not work when placed in 'global_cdtor'.
+				Directory.Init();
+				fnm::GetLocation( Data->LibraryLocationAndName, Directory );
+				sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, *Data->CIO, Directory.UTF8( Buffer ) );
+				IsInitialized_ = true;
+			}
+		ERRErr
+		ERREnd
+		ERREpilog
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
-	}
-	virtual csdscb::callback__ *CSDLEORetrieveCallback(
-		csdleo::mode__ Mode,
-		csdleo::context__ Context )  override
-	{
-		return SCLDAEMONNewCallback( Mode, Context );
-	}
-	virtual void CSDLEOReleaseCallback( csdscb::callback__ *Callback ) override
-	{
-		delete Callback;
-	}
-} _Callback;
+		virtual csdscb::callback__ *CSDLEORetrieveCallback(
+			csdleo::mode__ Mode,
+			csdleo::context__ Context )  override
+		{
+			return SCLDAEMONNewCallback( Mode, Context );
+		}
+		virtual void CSDLEOReleaseCallback( csdscb::callback__ *Callback ) override
+		{
+			delete Callback;
+		}
+	} _Callback;
+}
 
 csdleo::callback__ &csdles::CSDLESRetrieveCallback( void )
 {

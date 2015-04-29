@@ -335,7 +335,6 @@ ERRFProlog
 	csdbns_repository_item__ Item;
 	tol::E_FPOINTER___( char ) Buffer;
 ERRFBegin
-
 	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
 		ERRAlc();
 
@@ -372,7 +371,6 @@ ERRProlog
 	::socket_data__ Data = {NULL, SCK_INVALID_SOCKET, NULL, MTX_INVALID_HANDLER};
 	bso::bool__ Continue = true;
 ERRBegin
-
 	Socket = listener___::GetConnection( IP, ErrorHandling, TimeOut );
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
@@ -416,32 +414,21 @@ ERREpilog
 
 #endif
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
-
-class csdbnspersonnalization
+Q37_GCTOR( csdbns )
 {
-public:
-	csdbnspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the launching of the application  */
 #ifdef CPE_MT
-		Repository_.reset( false );
-		Repository_.Init();
-		Mutex_ = mtx::Create();
+	Repository_.reset( false );
+	Repository_.Init();
+	Mutex_ = mtx::Create();
 #endif
 }
-	~csdbnspersonnalization( void )
-	{
-		/* place here the actions concerning this library
-		to be realized at the ending of the application  */
+
+Q37_GDTOR( csdbns )
+{
 #ifdef CPE_MT
-		Clean_();
+	Clean_();
 
-		if ( Mutex_ != MTX_INVALID_HANDLER )
-			mtx::Delete( Mutex_ );
+	if ( Mutex_ != MTX_INVALID_HANDLER )
+		mtx::Delete( Mutex_ );
 #endif
-	}
-};
-
+}

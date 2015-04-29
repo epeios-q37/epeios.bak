@@ -44,6 +44,5 @@
   </SourceDirs>
   <PreprocessorDefinitions>
 	<PreprocessorDefinition>E_MT</PreprocessorDefinition>
-    <PreprocessorDefinition>CSD_NO_SERVICE_HANDLING</PreprocessorDefinition>
   </PreprocessorDefinitions>
 </Project>

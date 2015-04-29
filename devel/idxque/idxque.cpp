@@ -1,6 +1,6 @@
 /*
-	'idxbtq' library by Claude SIMON (http://zeusw.org/intl/contact.html)
-	Requires the 'idxbtq' header file ('idxbtq.h').
+	'idxque' library by Claude SIMON (http://zeusw.org/intl/contact.html)
+	Requires the 'idxque' header file ('idxque.h').
 	Copyright (C) 2000-2004 Claude SIMON (http://zeusw.org/intl/contact.html).
 
 	This file is part of the Epeios (http://zeusw.org/epeios/) project.
@@ -23,29 +23,7 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#define IDXBTQ__COMPILATION
+#define IDXQUE__COMPILATION
 
-#include "idxbtq.h"
-
-using namespace idxbtq;
-
-void idxbtq::hook_filenames___::Init(
-	const fnm::name___ &Path,
-	const fnm::name___ &Basename )
-{
-ERRProlog
-	fnm::name___ Tree, Queue;
-ERRBegin
-	Tree.Init();
-	fnm::BuildPath( Path, Basename, "t", Tree );
-
-	Queue.Init();
-	fnm::BuildPath( Path, Basename, "q", Queue );
-
-	this->Tree.Init( NULL, Tree );
-	this->Queue.Init( NULL, Queue );
-ERRErr
-ERREnd
-ERREpilog
-}
+#include "idxque.h"
 

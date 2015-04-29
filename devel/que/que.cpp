@@ -1,6 +1,6 @@
 /*
-	'idxbtq' library by Claude SIMON (http://zeusw.org/intl/contact.html)
-	Requires the 'idxbtq' header file ('idxbtq.h').
+	'que' library by Claude SIMON (http://zeusw.org/intl/contact.html)
+	Requires the 'que' header file ('que.h').
 	Copyright (C) 2000-2004 Claude SIMON (http://zeusw.org/intl/contact.html).
 
 	This file is part of the Epeios (http://zeusw.org/epeios/) project.
@@ -23,29 +23,43 @@
            59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#define IDXBTQ__COMPILATION
+#define QUE__COMPILATION
 
-#include "idxbtq.h"
+#include "que.h"
 
-using namespace idxbtq;
+using namespace que;
 
-void idxbtq::hook_filenames___::Init(
-	const fnm::name___ &Path,
-	const fnm::name___ &Basename )
+void que::links_::Initialize(
+	sdr::row_t__ Begin,
+	sdr::row_t__ End )
 {
-ERRProlog
-	fnm::name___ Tree, Queue;
-ERRBegin
-	Tree.Init();
-	fnm::BuildPath( Path, Basename, "t", Tree );
+	que::link__ L;
 
-	Queue.Init();
-	fnm::BuildPath( Path, Basename, "q", Queue );
+	do {
+		Store( L, Begin );
+	} while( Begin++ < End );
+}
 
-	this->Tree.Init( NULL, Tree );
-	this->Queue.Init( NULL, Queue );
-ERRErr
-ERREnd
-ERREpilog
+
+void que::Dump_(
+		const E_QUEUE_ &Queue,
+		E_QSTACK_( sdr::row__ ) &Stack,
+		sdr::row__ Begin,
+		direction Direction )
+{
+	if ( Direction == que::dAscending )
+		do
+		{
+			Stack.Push( Begin );
+			Begin = Queue.Next( Begin );
+		}
+		while ( Begin != E_NIL );
+	else
+		do
+		{
+			Stack.Push( Begin );
+			Begin = Queue.Previous( Begin );
+		}
+		while ( Begin != E_NIL );
 }
 

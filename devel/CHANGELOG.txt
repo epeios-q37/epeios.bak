@@ -1,9 +1,6 @@
 CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
-NOTA :
-	- Due to genuine 'Xcode' compiler crashes with files with mixing encoding, all accentuated characters of my french comments were stripped.
-	- Even with correct (ASCII-only) files, the genuine 'Xcode' compiler crashes, so I switched to a 'true' g++ compiler. Therby,
-	  'Xcode' refers to this compiler (except of a few older entries, before 2015-04-14).
+NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 Meaning of list markers (2nd level):
 - '-' (Functionnalities (should) remain unchanged) :
@@ -14,6 +11,18 @@ Meaning of list markers (2nd level):
 - '*' : Functionnality changes.
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
+
+2015-04-30 :
+- BTR, IDXBTR, IDXQUE, QUE :
+	- Adding references to 'hook'-related items, for more coherency.
+- CSDBNS :
+	- Standardisation of the global constructor/destructor.
+- DHTPROXY :
+	- Creation.
+- IDXBTQ :
+	- Adaptation to the 'hook' system.
+- SCLDAEMON :
+	- Some changes to avoid MSVC to get confused.
 
 2015-04-28 :
 - GLOBAL :
@@ -140,7 +149,7 @@ Meaning of list markers (2nd level):
 
 2015-03-30 :
 - FLX :
-	% : Removing the use of 'FLXUnavailable(...)' from 'buffer_iflow_driver___'. To detect classes which overloaded it,
+	% Removing the use of 'FLXUnavailable(...)' from 'buffer_iflow_driver___'. To detect classes which overloaded it,
 	    the returning type is now 'int' instead of 'void'.
 - TOL :
 	% Removing 'Init()' in 'object_', to better take care to initialization of underlying object.
@@ -198,12 +207,12 @@ Meaning of list markers (2nd level):
 - SCLBACKND :
 	- Adaptation to changes in 'FLX'.
 - SCLRGSTRY :
-	# : 'GetUnsigneNumber(...)' returns now the correct value.
+	# 'GetUnsigneNumber(...)' returns now the correct value.
 	- : Modifying 'GetSigneNumber_(...)' to take account of changes in 'STR'.
 - SCLTOOL :
 	* Retrieving signal handling from 'TOL'.
 - STR :
-	% : Some signed 'ToNumber' functions took limits parameters before the value to retrieve ; this is now modified to be
+	% Some signed 'ToNumber' functions took limits parameters before the value to retrieve ; this is now modified to be
 	    coherent with similar functions.
 - SCLTOOL :
 	- Adaptation to changes in 'FLX'.
@@ -243,7 +252,7 @@ Meaning of list markers (2nd level):
 	* Adaptation to changes to 'CSDLEO'.
 	* The errors are no more intercepted, but passed from the dynamic library to the calling code.
 - FLX :
-	* : For the 'void' drivers, by default (can be changed on initialization), an access to it launch an error.
+	* For the 'void' drivers, by default (can be changed on initialization), an access to it launches an error.
 
 
 2015-03-13 :
@@ -258,7 +267,7 @@ Meaning of list markers (2nd level):
 - UYS :
 	* Using the new 'E_XENUM' from 'TOL'.
 	- Renaming 'file_manager___' to 'file_hook___'
-	* Introducing 'hook_filnames___'.
+	* Introducing 'hook_filenames___'.
 
 
 2015-03-12 :
