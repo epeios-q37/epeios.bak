@@ -1,7 +1,7 @@
 /*
-	'dhtjsbased.h' by Claude SIMON (http://zeusw.org/).
+	'xdhjsp.h' by Claude SIMON (http://zeusw.org/).
 
-	'dhtjsbased' is part of the Epeios framework.
+	'xdhjsp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,28 +17,23 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DHTJSBASED__INC
-# define DHTJSBASED__INC
+#ifndef XDHJSP__INC
+# define XDHJSP__INC
 
-# define DHTJSBASED_NAME		"DHTJSBASED"
+# define XDHJSP_NAME		"XDHJSP"
 
-# if defined( E_DEBUG ) && !defined( DHTJSBASED_NODBG )
-#  define DHTJSBASED_DBG
+# if defined( E_DEBUG ) && !defined( XDHJSP_NODBG )
+#  define XDHJSP_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
-// DHT(ML) JavaScript BASED
+// X(SL) DH(TML) JavaScript Proxy
 
 # include "xdhcbk.h"
 
 # include "err.h"
-# include "flw.h"
 
-namespace dhtjsbased {
+
+namespace xdhjsp {
 
 	E_ENUM( script ) {
 		sDialogAlert,
@@ -46,6 +41,7 @@ namespace dhtjsbased {
 		sDocumentSetter,
 		sChildrenSetter,
 		sCastingDefiner,
+		sCastingHandler,
 		sPropertySetter,
 		sPropertyGetter,
 		sAttributeSetter,
@@ -60,23 +56,61 @@ namespace dhtjsbased {
 		s_Undefined,
 	};
 
+	const str::string_ &GetScript(
+		script__ Script,
+		str::string_ &Buffer );
+
+	namespace script{
+		using rgstry::entry___;
+
+		extern entry___ DocumentSetter;
+		extern entry___ ChildrenSetter;
+		namespace casting {
+			extern entry___ Definer;
+			extern entry___ Handler;
+		}
+		namespace property {
+			extern entry___ Setter;
+			extern entry___ Getter;
+		}
+		namespace attribute {
+			extern entry___ Setter;
+			extern entry___ Getter;
+			extern entry___ Remover;
+		}
+		namespace content {
+			extern entry___ Setter;
+			extern entry___ Getter;
+		}
+		extern entry___ Focusing;
+		namespace dialog {
+			extern entry___ Alert;
+			extern entry___ Confirm;
+		}
+		namespace widget {
+			extern entry___ Instantiation;
+			extern entry___ ContentRetriever;
+			extern entry___ Focusing;
+		}
+	}
+
 	class callback__
 	{
 	protected:
-		virtual void DHTJSBASEDExecute(
+		virtual void XDHJSPExecute(
 			const str::string_ &Script,
 			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void DHTJSBASEDGetScript(
+		virtual void XDHJSPGetScript(
 			script__ Script,
 			str::string_ &Buffer ) = 0;
-		virtual void DHTJSBASEDGetTranslation(
+		virtual void XDHJSPGetTranslation(
 			const char *Message,
 			str::string_ &Buffer ) = 0;
-		virtual void DHTJSBASEDGetRootTagId( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void DHTJSBASEDGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void DHTJSBASEDGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void DHTJSBASEDHandleExtensions( const xdhcbk::nstring___ &Id ) = 0;
-		virtual void DHTJSBASEDHandleCastings( const xdhcbk::nstring___ &Id ) = 0;
+		virtual void XDHJSPGetRootTagId( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XDHJSPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XDHJSPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XDHJSPHandleExtensions( const xdhcbk::nstring___ &Id ) = 0;
+		virtual void XDHJSPHandleCastings( const xdhcbk::nstring___ &Id ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -91,7 +125,7 @@ namespace dhtjsbased {
 			const str::string_ &Script,
 			TOL_CBUFFER___ &Buffer )
 		{
-			DHTJSBASEDExecute( Script, Buffer );
+			XDHJSPExecute( Script, Buffer );
 
 			return Buffer;
 		}
@@ -109,7 +143,7 @@ namespace dhtjsbased {
 			script__ Script,
 			str::string_ &Buffer )
 		{
-			DHTJSBASEDGetScript( Script, Buffer );
+			XDHJSPGetScript( Script, Buffer );
 
 			return Buffer;
 		}
@@ -117,35 +151,35 @@ namespace dhtjsbased {
 			const char *Message,
 			str::string_ &Buffer )
 		{
-			DHTJSBASEDGetTranslation( Message, Buffer );
+			XDHJSPGetTranslation( Message, Buffer );
 
 			return Buffer;
 		}
 		const char *GetRootTagId( TOL_CBUFFER___ &Buffer )
 		{
-			DHTJSBASEDGetRootTagId( Buffer );
+			XDHJSPGetRootTagId( Buffer );
 
 			return Buffer;
 		}
 		const char *GetWidgetAttributeName( TOL_CBUFFER___ &Buffer )
 		{
-			DHTJSBASEDGetWidgetAttributeName( Buffer );
+			XDHJSPGetWidgetAttributeName( Buffer );
 
 			return Buffer;
 		}
 		const char *GetResultAttributeName( TOL_CBUFFER___ &Buffer )
 		{
-			DHTJSBASEDGetResultAttributeName( Buffer );
+			XDHJSPGetResultAttributeName( Buffer );
 
 			return Buffer;
 		}
 		void HandleExtensions( const xdhcbk::nstring___ &Id )
 		{
-			DHTJSBASEDHandleExtensions( Id );
+			XDHJSPHandleExtensions( Id );
 		}
 		void HandleCastings( const xdhcbk::nstring___ &Id )
 		{
-			DHTJSBASEDHandleCastings( Id );
+			XDHJSPHandleCastings( Id );
 		}
 	};
 
@@ -181,11 +215,7 @@ namespace dhtjsbased {
 	};
 
 	
-}
 
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
+}
 
 #endif

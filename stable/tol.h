@@ -1547,6 +1547,26 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	discriminator##_q37gdtor::~discriminator##_q37gdtor( void )
 #endif
 
+// Pointer Method DeFinition.
+#define Q37_PMDF( type, name, variable )\
+	type *name( void ) const\
+	{\
+		if ( variable == NULL )\
+			ERRFwk();\
+\
+		return variable;\
+	}
+
+// Reference Method DeFinition.
+#define Q37_RMDF( type, name, variable )\
+	type &name( void ) const\
+	{\
+		if ( variable == NULL )\
+			ERRFwk();\
+\
+		return *variable;\
+	}
+
 
 				  /********************************************/
 				  /* do not modify anything belove this limit */

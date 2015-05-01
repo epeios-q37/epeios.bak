@@ -1,7 +1,7 @@
 /*
-	'sclxhtml.cpp' by Claude SIMON (http://zeusw.org/).
+	'sclxdhtml.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'sclxhtml' is part of the Epeios framework.
+	'sclxdhtml' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,34 +17,26 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define SCLXHTML__COMPILATION
+#define SCLXDHTML__COMPILATION
 
-#include "sclxhtml.h"
+#include "sclxdhtml.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
+#include "sclfrntnd.h"
 
-#include "sclmisc.h"
+#include "xdhbse.h"
 
-#include "frdkrn.h"
-
-# include "xhtprolog.h"
-# include "xhtlogin.h"
-
-using namespace sclxhtml;
+using namespace sclxdhtml;
 
 static bso::bool__ IsInitialized_ = false;
 
 static const char *Launcher_ = NULL;
 
-const sclrgstry::registry_ &sclxhtml::GetRegistry( void )
+const sclrgstry::registry_ &sclxdhtml::GetRegistry( void )
 {
 	return sclrgstry::GetCommonRegistry();
 }
 
-const char *sclxhtml::GetLauncher( void )
+const char *sclxdhtml::GetLauncher( void )
 {
 	if ( Launcher_ == NULL )
 		ERRFwk();
@@ -92,7 +84,7 @@ namespace {
 		}
 		virtual xdhcbk::session_callback__ *XDHCBKNew( void ) override
 		{
-			return SCLXHTMLNew( _PC() );
+			return SCLXDHTMLNew( _PC() );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -135,8 +127,8 @@ ERRFEpilog(DoNothing_())
 	return Callback;
 }
 
-void sclxhtml::HandleError(
-	xhtagent::agent___ &Agent,
+void sclxdhtml::HandleError(
+	xdhagt::agent___ &Agent,
 	const char *Language )
 {
 ERRProlog
@@ -209,30 +201,30 @@ ERREpilog
 }
 #endif
 
-void sclxhtml::LoadProject( xhtagent::agent___ &Agent )
+void sclxdhtml::LoadProject( xdhagt::agent___ &Agent )
 {
 ERRProlog
 	str::string ProjectFeature;
 ERRBegin
 	ProjectFeature.Init();
-	sclfrntnd::LoadProject( xhtprolog::GetProjectFeatures( Agent, ProjectFeature ), ProjectFeature );
+	sclfrntnd::LoadProject( xdhbse::prolog::GetProjectFeatures( Agent, ProjectFeature ), ProjectFeature );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-void sclxhtml::LaunchProject(
+void sclxdhtml::LaunchProject(
 	const char *Language,
 	frdkrn::kernel___ &Kernel,
 	frdssn::session___ &Session,
-	xhtagent::agent___ &Agent,
+	xdhagt::agent___ &Agent,
 	const frdkrn::compatibility_informations__ &CompatibilityInformations )
 {
 ERRProlog
 	str::string BackendFeature;
 ERRBegin
 	BackendFeature.Init();
-	sclfrntnd::Connect( Language, Kernel, xhtlogin::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
+	sclfrntnd::Connect( Language, Kernel, xdhbse::login::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
 
 	Session.Open( Language );
 ERRErr

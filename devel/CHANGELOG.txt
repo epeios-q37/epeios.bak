@@ -12,6 +12,22 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-05-01 :
+- DHTPROXY :
+	- Removing useless 'proxy__::_ProxyCallback' and related members.
+- TOL 
+	* Adding 'Q37_(P|R)MDF'.
+- XHTCLLBK :
+	- Using 'Q37_(P|R)MDF'.
+	- Removing useless 'proxy_callback__' parameter from 'callback__:(XHTCLLBK)New(...)' method.
+
+2015-04-31 :
+- DHTJSBASED :
+	- Creation.
+- XHTAGENT, XHTCLLBK :
+	% Removing useless 'ExecuteJavascript' and 'GetLanguage' methods.
+	- Adding 'Log(...)' method.
+
 2015-04-30 :
 - BTR, IDXBTR, IDXQUE, QUE :
 	- Adding references to 'hook'-related items, for more coherency.

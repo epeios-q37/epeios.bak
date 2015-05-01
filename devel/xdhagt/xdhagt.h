@@ -1,45 +1,39 @@
 /*
-	'xhtagent.h' by Claude SIMON (http://zeusw.org/).
+	'xdhagt.h' by Claude SIMON (http://zeusw.org/).
 
-	'xhtagent' is part of the Epeios framework.
+	'xdhagt' is part of the Epeios framework.
 
-	The Epeios framework is free software: you can redistribute it and/or
+    The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
 	by the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+    (at your option) any later version.
 
-	The Epeios framework is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    The Epeios framework is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
-	*/
+    You should have received a copy of the GNU General Public License
+    along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
-#ifndef XHTAGENT__INC
-# define XHTAGENT__INC
+#ifndef XDHAGT__INC
+# define XDHAGT__INC
 
-# define XHTAGENT_NAME		"XHTAGENT"
+# define XDHAGT_NAME		"XDHAGT"
 
-# if defined( E_DEBUG ) && !defined( XHTAGENT_NODBG )
-#  define XHTAGENT_DBG
+# if defined( E_DEBUG ) && !defined( XDHAGT_NODBG )
+#  define XDHAGT_DBG
 # endif
 
-/******************************************************************************/
-/* do not modify anything above this limit */
-/*			  unless specified			 */
-/*******************************************/
-
-// XHT(ML) AGENT
+// X(SL)/DH(TML) AGenT
 
 # include "xdhcbk.h"
 
 # include "err.h"
-# include "flw.h"
+# include "ntvstr.h"
 
-namespace xhtagent {
-
+namespace xdhagt {
 	typedef ntvstr::string___ nstring___;
 
 	class agent___ {
@@ -229,10 +223,5 @@ namespace xhtagent {
 		void Log( const str::string_ &RawMessage );
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

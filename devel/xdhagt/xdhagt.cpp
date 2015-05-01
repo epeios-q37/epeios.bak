@@ -1,7 +1,7 @@
 /*
-	'xhtagent.cpp' by Claude SIMON (http://zeusw.org/).
+	'xdhagt.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'xhtagent' is part of the Epeios framework.
+	'xdhagt' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,21 +17,13 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define XHTAGENT__COMPILATION
+#define XDHAGT__COMPILATION
 
-#include "xhtagent.h"
+#include "xdhagt.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
+using namespace xdhagt;
 
-#include "xml.h"
-#include "flx.h"
-
-using namespace xhtagent;
-
-void xhtagent::agent___::SetString(
+void xdhagt::agent___::SetString(
 	const nstring___ &Id,
 	const nstring___ &Name,
 	const str::string_ &RawValue )
@@ -52,7 +44,7 @@ ERREnd
 ERREpilog
 }
 
-void xhtagent::agent___::Alert(
+void xdhagt::agent___::Alert(
 	const str::string_ &RawXML,
 	const str::string_ &RawXSL,
 	const str::string_ &RawTitle )
@@ -75,7 +67,7 @@ ERREnd
 ERREpilog
 }
 
-bso::bool__ xhtagent::agent___::Confirm(
+bso::bool__ xdhagt::agent___::Confirm(
 	const str::string_ &RawXML,
 	const str::string_ &RawXSL,
 	const str::string_ &RawTitle )
@@ -120,7 +112,7 @@ ERREnd
 ERREpilog
 }
 
-void xhtagent::agent___::RawAlert( const str::string_ &Message )
+void xdhagt::agent___::RawAlert( const str::string_ &Message )
 {
 ERRProlog
 	str::string XML, XSL;
@@ -138,7 +130,7 @@ ERREnd
 ERREpilog
 }
 
-bso::bool__ xhtagent::agent___::RawConfirm( const str::string_ &Message )
+bso::bool__ xdhagt::agent___::RawConfirm( const str::string_ &Message )
 {
 	bso::bool__ Confirmed = false;
 ERRProlog
@@ -158,7 +150,7 @@ ERREpilog
 	return Confirmed;
 }
 
-void xhtagent::agent___::Log( const str::string_ &RawMessage )
+void xdhagt::agent___::Log( const str::string_ &RawMessage )
 {
 ERRProlog
 	str::string Message;
@@ -171,3 +163,4 @@ ERRErr
 ERREnd
 ERREpilog
 }
+

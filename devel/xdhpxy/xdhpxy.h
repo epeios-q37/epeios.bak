@@ -1,7 +1,7 @@
 /*
-	'dhtproxy.h' by Claude SIMON (http://zeusw.org/).
+	'xdhpxy.h' by Claude SIMON (http://zeusw.org/).
 
-	'dhtproxy' is part of the Epeios framework.
+	'xdhpxy' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,35 +17,29 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DHTPROXY__INC
-# define DHTPROXY__INC
+#ifndef XDHPXY__INC
+# define XDHPXY__INC
 
-# define DHTPROXY_NAME		"DHTPROXY"
+# define XDHPXY_NAME		"XDHPXY"
 
-# if defined( E_DEBUG ) && !defined( DHTPROXY_NODBG )
-#  define DHTPROXY_DBG
+# if defined( E_DEBUG ) && !defined( XDHPXY_NODBG )
+#  define XDHPXY_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
+// X(SL/ DH(TML) ProXY
 
-// DHT(ML) PROXY
+# include "xdhcbk.h"
 
-# include "xhtcllbk.h"
-
-# include "err.h"
-# include "flw.h"
 # include "dlbrry.h"
+# include "err.h"
 
-namespace dhtproxy {
+namespace xdhpxy {
     class proxy___
     {
     private:
 		dlbrry::dynamic_library___ _Library;
-        xhtcllbk::callback__ *_Callback;
-		xhtcllbk::callback__ &_C( void ) const
+        xdhcbk::callback__ *_Callback;
+		xdhcbk::callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
 				ERRFwk();
@@ -53,7 +47,7 @@ namespace dhtproxy {
 			return *_Callback;
 		}
 	protected:
-		virtual xhtcllbk::proxy_callback__ &DHTPROXYGetProxyCallback( void ) = 0;
+		virtual xdhcbk::proxy_callback__ &XDHPXYGetProxyCallback( void ) = 0;
     public:
         void reset( bso::bool__ P = true )
         {
@@ -64,7 +58,7 @@ namespace dhtproxy {
 		bso::bool__ Init(
 			const str::string_ &ModuleFileName,
 			const char *Identification );
-		xhtcllbk::session_callback__ *GetNewSession( void ) const
+		xdhcbk::session_callback__ *GetNewSession( void ) const
 		{
 			return _C().New();
 		}
@@ -74,11 +68,7 @@ namespace dhtproxy {
 		}
 	};
 
-}
 
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
+}
 
 #endif

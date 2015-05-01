@@ -1,7 +1,7 @@
 /*
-	'xhtcllbk.h' by Claude SIMON (http://zeusw.org/).
+	'xdhcbk.h' by Claude SIMON (http://zeusw.org/).
 
-	'xhtcllbk' is part of the Epeios framework.
+	'xdhcbk' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,39 +17,30 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XHTCLLBK__INC
-# define XHTCLLBK__INC
+#ifndef XDHCBK__INC
+# define XDHCBK__INC
 
-# define XHTCLLBK_NAME		"XHTCLLBK"
+# define XDHCBK_NAME		"XDHCBK"
 
-# if defined( E_DEBUG ) && !defined( XHTCLLBK_NODBG )
-#  define XHTCLLBK_DBG
+# if defined( E_DEBUG ) && !defined( XDHCBK_NODBG )
+#  define XDHCBK_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
-// XHT(ML) CaLLBacK
+// X(SL)/DH(TML) CallBacKs
 
 # include "err.h"
 # include "flw.h"
-# include "tol.h"
-# include "sdr.h"
-# include "bch.h"
-# include "xtf.h"
-# include "strmrg.h"
-# include "iof.h"
+# include "ntvstr.h"
 # include "sclerror.h"
+# include "strmrg.h"
 
-# define XHTCLLBK_SHARED_DATA_VERSION_NUMBER	"9"
+# define XDHCBK_SHARED_DATA_VERSION_NUMBER	"9"
 
-# define XHTCLLBK_SHARED_DATA_VERSION	XHTCLLBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
+# define XDHCBK_SHARED_DATA_VERSION			XDHCBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
-# define XHTCLLBK_RETRIEVE_FUNCTION_NAME		XHTCLLBKRetrieve
+# define XDHCBK_RETRIEVE_FUNCTION_NAME		XDHCBKRetrieve
 
-namespace xhtcllbk {
+namespace xdhcbk {
 	E_CDEF( char *, CloseActionLabel, "Q37Close" );
 
 	typedef ntvstr::char__ nchar__;
@@ -78,7 +69,7 @@ namespace xhtcllbk {
 
 	class proxy_callback__ {
 	protected:
-		virtual void XHTCLLBKProcess(
+		virtual void XDHCBKProcess(
 			function__ Function,
 			...	) = 0;
 	public:
@@ -94,14 +85,14 @@ namespace xhtcllbk {
 		void Log(
 			const nstring___ &Message )
 		{
-			XHTCLLBKProcess( fLog, Message.Internal()() );
+			XDHCBKProcess( fLog, Message.Internal()() );
 		}
 		void Alert(
 			const nstring___ &XML,
 			const nstring___ &XSL,
 			const nstring___ &Title )
 		{
-			XHTCLLBKProcess( fAlert, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
+			XDHCBKProcess( fAlert, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
 		}
 		void Confirm(
 			const nstring___ &XML,
@@ -109,28 +100,28 @@ namespace xhtcllbk {
 			const nstring___ &Title,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKProcess( fConfirm, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ), &Buffer );
+			XDHCBKProcess( fConfirm, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ), &Buffer );
 		}
 		void SetChildren(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKProcess( fSetChildren, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			XDHCBKProcess( fSetChildren, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetCasting(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XHTCLLBKProcess( fSetCasting, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			XDHCBKProcess( fSetCasting, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKProcess( fGetProperty, Id.Internal()( ), Name.Internal()( ), &Buffer );
+			XDHCBKProcess( fGetProperty, Id.Internal()( ), Name.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -139,14 +130,14 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKProcess( fSetProperty, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			XDHCBKProcess( fSetProperty, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKProcess( fGetAttribute, Id.Internal()( ), Name.Internal()( ), &Buffer );
+			XDHCBKProcess( fGetAttribute, Id.Internal()( ), Name.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -155,13 +146,13 @@ namespace xhtcllbk {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XHTCLLBKProcess( fSetAttribute, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			XDHCBKProcess( fSetAttribute, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKProcess( fGetResult, Id.Internal()( ), &Buffer );
+			XDHCBKProcess( fGetResult, Id.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -169,13 +160,13 @@ namespace xhtcllbk {
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			XHTCLLBKProcess( fRemoveAttribute, Id.Internal()( ), Name.Internal()( ) );
+			XDHCBKProcess( fRemoveAttribute, Id.Internal()( ), Name.Internal()( ) );
 		}
 		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKProcess( fGetContent, Id.Internal()( ), &Buffer );
+			XDHCBKProcess( fGetContent, Id.Internal()( ), &Buffer );
 
 			return Buffer;
 		}
@@ -183,11 +174,11 @@ namespace xhtcllbk {
 			const nstring___ &Id,
 			const nstring___ &Value )
 		{
-			XHTCLLBKProcess( fSetContent, Id.Internal()( ), Value.Internal()( ) );
+			XDHCBKProcess( fSetContent, Id.Internal()( ), Value.Internal()( ) );
 		}
 		void Focus( const nstring___ &Id )
 		{
-			XHTCLLBKProcess( fFocus, Id.Internal()( ) );
+			XDHCBKProcess( fFocus, Id.Internal()( ) );
 		}
 # if 0
 		void ExecuteJavascript( const nstring___ &Script )
@@ -206,10 +197,10 @@ namespace xhtcllbk {
 	class session_callback__
 	{
 	protected:
-		virtual bso::bool__ XHTCLLBKLaunch(
+		virtual bso::bool__ XDHCBKLaunch(
 			const char *Id,
 			const char *Action ) = 0;	// Return 'true' if the event propagation had to be stopped.
-		virtual const char *XHTCLLBKLanguage( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual const char *XDHCBKLanguage( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -224,11 +215,11 @@ namespace xhtcllbk {
 			const char *Id,
 			const char *Action )
 		{
-			return XHTCLLBKLaunch( Id, Action );
+			return XDHCBKLaunch( Id, Action );
 		}
 		const char *Language( TOL_CBUFFER___ &Buffer )
 		{
-			return XHTCLLBKLanguage( Buffer );
+			return XDHCBKLanguage( Buffer );
 		}
 	};
 
@@ -263,7 +254,7 @@ namespace xhtcllbk {
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
-			_Version = XHTCLLBK_SHARED_DATA_VERSION;
+			_Version = XDHCBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_ERRError = err::ERRError;
 			_SCLError = sclerror::SCLERRORError;
@@ -288,9 +279,9 @@ namespace xhtcllbk {
 	class callback__
 	{
 	protected:
-		virtual void XHTCLLBKInitialize( const shared_data__ &Data ) = 0;
-		virtual void XHTCLLBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XHTCLLBKNew( void ) = 0;
+		virtual void XDHCBKInitialize( const shared_data__ &Data ) = 0;
+		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual session_callback__ *XDHCBKNew( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -303,17 +294,17 @@ namespace xhtcllbk {
 		}
 		void Initialize( const shared_data__ &Data )
 		{
-			return XHTCLLBKInitialize( Data );
+			return XDHCBKInitialize( Data );
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer )
 		{
-			XHTCLLBKBaseLanguage( Buffer );
+			XDHCBKBaseLanguage( Buffer );
 
 			return Buffer;
 		}
 		session_callback__ *New( void )
 		{
-			return XHTCLLBKNew();
+			return XDHCBKNew();
 		}
 	};
 
@@ -339,11 +330,7 @@ namespace xhtcllbk {
 
 	using strmrg::retriever__;
 
-}
 
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
+}
 
 #endif

@@ -1,7 +1,7 @@
 /*
-	'dhtjsbased.cpp' by Claude SIMON (http://zeusw.org/).
+	'xdhjsp.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'dhtjsbased' is part of the Epeios framework.
+	'xdhjsp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,16 +17,85 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define DHTJSBASED__COMPILATION
+#define XDHJSP__COMPILATION
 
-#include "dhtjsbased.h"
+#include "xdhjsp.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
+#include "sclrgstry.h"
+#include "sclmisc.h"
 
-using namespace dhtjsbased;
+using namespace xdhjsp;
+
+using rgstry::entry___;
+
+static entry___ Scripts_( "Scripts", sclrgstry::Definitions );
+
+static entry___ PropertyScripts_( "Property", Scripts_ );
+entry___ xdhjsp::script::property::Setter( "Setter", PropertyScripts_ );
+entry___ xdhjsp::script::property::Getter( "Getter", PropertyScripts_ );
+
+static entry___ AttributeScripts_( "Attribute", Scripts_ );
+entry___ xdhjsp::script::attribute::Setter( "Setter", AttributeScripts_ );
+entry___ xdhjsp::script::attribute::Getter( "Getter", AttributeScripts_ );
+entry___ xdhjsp::script::attribute::Remover( "Remover", AttributeScripts_ );
+
+static entry___ ContentScripts_( "Content", Scripts_ );
+entry___ xdhjsp::script::content::Setter( "Setter", ContentScripts_ );
+entry___ xdhjsp::script::content::Getter( "Getter", ContentScripts_ );
+
+entry___ xdhjsp::script::DocumentSetter( "DocumentSetter", Scripts_ );
+entry___ xdhjsp::script::ChildrenSetter( "ChildrenSetter", Scripts_ );
+
+static entry___ DialogScripts_( "Dialog", Scripts_ );
+entry___ xdhjsp::script::dialog::Alert( "Alert", DialogScripts_ );
+entry___ xdhjsp::script::dialog::Confirm( "Confirm", DialogScripts_ );
+
+static entry___ WidgetScripts_( "Widget", Scripts_ );
+entry___ xdhjsp::script::widget::Instantiation( "Instantiation", WidgetScripts_ );
+entry___ xdhjsp::script::widget::ContentRetriever( "ContentRetriever", WidgetScripts_ );
+entry___ xdhjsp::script::widget::Focusing( "Focusing", WidgetScripts_ );
+
+static entry___ CastingScripts_( "Casting", Scripts_ );
+entry___ xdhjsp::script::casting::Definer( "Definer", CastingScripts_ );
+entry___ xdhjsp::script::casting::Handler( "Handler", CastingScripts_ );
+
+entry___ xdhjsp::script::Focusing( "Focusing", Scripts_ );
+
+#define C( name, entry )\
+	case xdhjsp::s##name:\
+		sclmisc::MGetValue( script::entry, Buffer );\
+		break
+
+const str::string_ &xdhjsp::GetScript(
+	xdhjsp::script__ Script,
+	str::string_ &Buffer )
+{
+	switch ( Script ) {
+	C( DialogAlert, dialog::Alert );
+	C( DialogConfirm, dialog::Confirm );
+	C( DocumentSetter, DocumentSetter );
+	C( ChildrenSetter, ChildrenSetter );
+	C( CastingDefiner, casting::Definer );
+	C( CastingHandler, casting::Handler );
+	C( PropertySetter, property::Setter );
+	C( PropertyGetter, property::Getter );
+	C( AttributeSetter, attribute::Setter );
+	C( AttributeGetter, attribute::Getter );
+	C( AttributeRemover, attribute::Remover );
+	C( WidgetContentRetriever, widget::ContentRetriever );
+	C( ContentSetter, content::Setter );
+	C( ContentGetter, content::Getter );
+	C( WidgetFocusing, widget::Focusing );
+	C( Focusing, Focusing );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	return Buffer;
+}
+
+
 
 using xdhcbk::nstring___;
 using xdhcbk::nchar__;
@@ -789,7 +858,7 @@ static void Focus_(
 	name##_( _C(), List );\
 	break\
 
-void dhtjsbased::proxy_callback__::XDHCBKProcess(
+void xdhjsp::proxy_callback__::XDHCBKProcess(
 	xdhcbk::function__ Function,
 	... )
 {

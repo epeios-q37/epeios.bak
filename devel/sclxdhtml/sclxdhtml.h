@@ -1,7 +1,7 @@
 /*
-	'sclxhtml.h' by Claude SIMON (http://zeusw.org/).
+	'sclxdhtml.h' by Claude SIMON (http://zeusw.org/).
 
-	'sclxhtml' is part of the Epeios framework.
+	'sclxdhtml' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,34 +17,28 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCLXHTML__INC
-# define SCLXHTML__INC
+#ifndef SCLXDHTML__INC
+# define SCLXDHTML__INC
 
-# define SCLXHTML_NAME		"SCLXHTML"
+# define SCLXDHTML_NAME		"SCLXDHTML"
 
-# if defined( E_DEBUG ) && !defined( SCLXHTML_NODBG )
-#  define SCLXHTML_DBG
+# if defined( E_DEBUG ) && !defined( SCLXDHTML_NODBG )
+#  define SCLXDHTML_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
+// SoCLe X(SL)/DH(TML)
 
-// SoCLe XHTML
+# include "xdhcbk.h"
+# include "xdhagt.h"
 
-# include "xhtagent.h"
-
-# include "sclfrntnd.h"
-
-# include "err.h"
-# include "flw.h"
-# include "rgstry.h"
-# include "scllocale.h"
-# include "sclmisc.h"
 # include "frdssn.h"
 
-namespace sclxhtml {
+# include "sclrgstry.h"
+# include "sclmisc.h"
+
+# include "err.h"
+
+namespace sclxdhtml {
 	const sclrgstry::registry_ &GetRegistry( void );
 
 	const char *GetLauncher( void );
@@ -242,7 +236,7 @@ namespace sclxhtml {
 
 		typedef xdhcbk::session_callback__ _session_callback__;
 
-		typedef xhtagent::agent___ _agent___;
+		typedef xdhagt::agent___ _agent___;
 
 		class reporting_callback__
 		: public _reporting_callback__
@@ -283,7 +277,7 @@ namespace sclxhtml {
 	}
 
 	void HandleError(
-		xhtagent::agent___ &Agent,
+		xdhagt::agent___ &Agent,
 		const char *Language );
 
 
@@ -335,8 +329,8 @@ namespace sclxhtml {
 		{
 			return sclrgstry::GetLanguage_( _session___::Registry(), Buffer );
 		}
-		virtual void SCLXHTMLRefresh( page Page  ) = 0;
-		virtual bso::bool__ XHTCLLBKLaunch(
+		virtual void SCLXDHTMLRefresh( page Page  ) = 0;
+		virtual bso::bool__ XDHCBKLaunch(
 			const char *Id,
 			const char *Action ) override	// Retourne 'true' si l'action a t correctement traite (et que la propagation de l'vnement  l'orgine de cette action doit tre arrte).
 		{
@@ -355,7 +349,7 @@ namespace sclxhtml {
 		ERREpilog
 			return Success;
 		}
-		virtual const char *XHTCLLBKLanguage( TOL_CBUFFER___ &Buffer ) override
+		virtual const char *XDHCBKLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
 			return _session___::Language( Buffer );
 		}
@@ -405,7 +399,7 @@ namespace sclxhtml {
 			if ( _Page == UndefinedPage )
 				ERRFwk();
 			else
-				SCLXHTMLRefresh( _Page );
+				SCLXDHTMLRefresh( _Page );
 		}
 		void SwitchTo( page Page = UndefinedPage )
 		{
@@ -480,7 +474,7 @@ namespace sclxhtml {
 		}
 	};
 
-	xdhcbk::session_callback__ *SCLXHTMLNew( xdhcbk::proxy_callback__ &Callback );
+	xdhcbk::session_callback__ *SCLXDHTMLNew( xdhcbk::proxy_callback__ &Callback );
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
@@ -491,19 +485,14 @@ namespace sclxhtml {
 		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
 	}
 
-	void LoadProject( xhtagent::agent___ &Agent );
+	void LoadProject( xdhagt::agent___ &Agent );
 
 	void LaunchProject(
 		const char *Language,
 		frdkrn::kernel___ &Kernel,
 		frdssn::session___ &Session,
-		xhtagent::agent___ &Agent,
+		xdhagt::agent___ &Agent,
 		const frdkrn::compatibility_informations__ &CompatibilityInformations );
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

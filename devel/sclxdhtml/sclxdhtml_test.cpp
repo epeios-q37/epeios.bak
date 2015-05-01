@@ -1,7 +1,7 @@
 /*
-	'tst.cpp' by Claude SIMON (http://zeusw.org/).
+	'sclxdhtml_test.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'tst' is part of the Epeios framework.
+	'sclxdhtml_test.cpp' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,9 +17,39 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define TST__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "tst.h"
+#include "sclxdhtml.h"
 
-using namespace tst;
+#include "err.h"
+#include "cio.h"
 
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+void Generic( int argc, char *argv[] )
+{
+ERRProlog
+ERRBegin
+ERRErr
+ERREnd
+ERREpilog
+}
+
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+ERRFProlog
+ERRFBegin
+	COut << "Test of library " << SCLXDHTML_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+ERRFErr
+	ExitValue = EXIT_FAILURE;
+ERRFEnd
+ERRFEpilog
+	return ExitValue;
+}
