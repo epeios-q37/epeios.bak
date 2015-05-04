@@ -1567,6 +1567,17 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 		return *variable;\
 	}
 
+// Member and pointer method definitions.
+#define Q37_MPMDF( type, name, variable )\
+	type *variable;\
+	Q37_PMDF( type, name, variable )
+
+// Member and reference method definitions.
+#define Q37_MRMDF( type, name, variable )\
+	type *variable;\
+	Q37_RMDF( type, name, variable )
+
+
 
 				  /********************************************/
 				  /* do not modify anything belove this limit */

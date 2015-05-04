@@ -35,36 +35,44 @@
 
 namespace xdhjsp {
 
-	E_ENUM( script ) {
-		sDialogAlert,
-		sDialogConfirm,
-		sDocumentSetter,
-		sChildrenSetter,
-		sCastingDefiner,
-		sCastingHandler,
-		sPropertySetter,
-		sPropertyGetter,
-		sAttributeSetter,
-		sAttributeGetter,
-		sAttributeRemover,
-		sWidgetContentRetriever,
-		sContentSetter,
-		sContentGetter,
-		sWidgetFocusing,
-		sFocusing,
-		s_amount,
-		s_Undefined,
+	E_ENUM( script_name ) {
+		snLog,
+		snDialogAlert,
+		snDialogConfirm,
+		snAttributeSetter,
+		snAttributeGetter,
+		snAttributeRemover,
+		snPropertySetter,
+		snPropertyGetter,
+		snDocumentSetter,
+		snContentSetter,
+		snContentGetter,
+		snCastingDefiner,
+		snCastingHandler,
+		snChildrenSetter,
+		snWidgetContentRetriever,
+		snWidgetFocusing,
+		snFocusing,
+		sn_amount,
+		sn_Undefined,
 	};
 
-	const str::string_ &GetScript(
-		script__ Script,
+	const str::string_ &GetTaggedScript(
+		script_name__ ScriptName,
 		str::string_ &Buffer );
 
-	namespace script{
+	const str::string_ &GetScript(
+		script_name__ ScriptName,
+		str::string_ *Script,	// Was '&Script', but should not work due 'va_start(...)' restrictions concerning references (but it worked under MSVC).
+		... );
+
+	namespace script {
 		using rgstry::entry___;
 
+		extern entry___ Log;
 		extern entry___ DocumentSetter;
 		extern entry___ ChildrenSetter;
+		extern entry___ Focusing;
 		namespace casting {
 			extern entry___ Definer;
 			extern entry___ Handler;
@@ -82,7 +90,6 @@ namespace xdhjsp {
 			extern entry___ Setter;
 			extern entry___ Getter;
 		}
-		extern entry___ Focusing;
 		namespace dialog {
 			extern entry___ Alert;
 			extern entry___ Confirm;
@@ -99,10 +106,7 @@ namespace xdhjsp {
 	protected:
 		virtual void XDHJSPExecute(
 			const str::string_ &Script,
-			TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XDHJSPGetScript(
-			script__ Script,
-			str::string_ &Buffer ) = 0;
+			TOL_CBUFFER___ *Buffer ) = 0;
 		virtual void XDHJSPGetTranslation(
 			const char *Message,
 			str::string_ &Buffer ) = 0;
@@ -123,29 +127,18 @@ namespace xdhjsp {
 		}
 		const char *Execute(
 			const str::string_ &Script,
-			TOL_CBUFFER___ &Buffer )
+			TOL_CBUFFER___ *Buffer )
 		{
 			XDHJSPExecute( Script, Buffer );
 
-			return Buffer;
+			if ( Buffer != NULL )
+				return *Buffer;
+			else
+				return NULL;
 		}
 		void Execute( const str::string_ &Script )
 		{
-		ERRProlog
-			TOL_CBUFFER___ Buffer;
-		ERRBegin
-			Execute( Script,  Buffer );
-		ERRErr
-		ERREnd
-		ERREpilog
-		}
-		const str::string_ &GetScript(
-			script__ Script,
-			str::string_ &Buffer )
-		{
-			XDHJSPGetScript( Script, Buffer );
-
-			return Buffer;
+			Execute( Script,  NULL );
 		}
 		const str::string_ &GetTranslation(
 			const char *Message,
@@ -183,6 +176,12 @@ namespace xdhjsp {
 		}
 	};
 
+	const char *Execute(
+		callback__ &Callback,
+		script_name__ Script,
+		TOL_CBUFFER___ *Buffer,
+		... );
+
 	typedef xdhcbk::proxy_callback__ _proxy_callback__;
 
 	class proxy_callback__
@@ -200,6 +199,7 @@ namespace xdhjsp {
 	protected:
 		virtual void XDHCBKProcess(
 			xdhcbk::function__ Function,
+			TOL_CBUFFER___ *Result,
 			...	) override; 
 	public:
 		void reset( bso::bool__ P = true )

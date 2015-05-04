@@ -12,6 +12,14 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-05-04 :
+- TOL:
+	* Adding 'Q37_M(P|R)MDF(...)' macros.
+
+2015-05-03 :
+- XDHCBK :
+	% Adding 'Result' parameter to 'callback::XDHCBKProcess(...)'.
+
 2015-05-01 :
 - DHTPROXY :
 	- Removing useless 'proxy__::_ProxyCallback' and related members.

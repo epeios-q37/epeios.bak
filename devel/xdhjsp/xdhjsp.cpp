@@ -59,18 +59,20 @@ static entry___ CastingScripts_( "Casting", Scripts_ );
 entry___ xdhjsp::script::casting::Definer( "Definer", CastingScripts_ );
 entry___ xdhjsp::script::casting::Handler( "Handler", CastingScripts_ );
 
+entry___ xdhjsp::script::Log( "Log", Scripts_ );
 entry___ xdhjsp::script::Focusing( "Focusing", Scripts_ );
 
 #define C( name, entry )\
-	case xdhjsp::s##name:\
+	case sn##name:\
 		sclmisc::MGetValue( script::entry, Buffer );\
 		break
 
-const str::string_ &xdhjsp::GetScript(
-	xdhjsp::script__ Script,
+const str::string_ &xdhjsp::GetTaggedScript(
+	xdhjsp::script_name__ Script,
 	str::string_ &Buffer )
 {
 	switch ( Script ) {
+	C( Log, dialog::Alert );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
 	C( DocumentSetter, DocumentSetter );
@@ -94,8 +96,6 @@ const str::string_ &xdhjsp::GetScript(
 
 	return Buffer;
 }
-
-
 
 using xdhcbk::nstring___;
 using xdhcbk::nchar__;
@@ -126,56 +126,125 @@ ERREnd
 ERREpilog
 }
 
-static void SetProperty_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const nstring___ &Name,
-	const nstring___ &Value )
+static void SubstituteTags_(
+	str::string_ &Script,	// Script with tags. When returning, tags are substitued.
+	va_list ValueList,
+	... )	// The list of the tag name, as 'const char *', with 'NULL' as end marker.
 {
 ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
+	str::strings Names, Values;
+	va_list NameList;
+	const bso::char__ *Name = NULL;
 ERRBegin
-	Script.Init();
-	Callback.GetScript( sPropertySetter, Script );
+	Names.Init();
+	Values.Init();
 
-	TagNames.Init();
-	TagValues.Init();
+	va_start( NameList, ValueList );
 
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Name", Name, TagNames, TagValues );
-	AppendTag_( "Value", Value, TagNames, TagValues );
+	Name = va_arg( NameList, const bso::char__ * );
 
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
+	while ( Name != NULL ) {
+		AppendTag_( Name, va_arg( ValueList, const nchar__ * ), Names, Values );
 
-	Callback.Execute( Script );
+		Name = va_arg( NameList, const bso::char__ * );
+	}
+
+	tagsbs::SubstituteLongTags( Script, Names, Values );
+ERRErr
+ERREnd
+	va_end( NameList );
+ERREpilog
+}
+
+#define D( name )\
+	E_CDEF( char *, name##_, #name )
+
+D( Message );
+D( Id );
+D( Name );
+D( Value );
+D( Method );
+D( XML );
+D( XSL );
+D( Title );
+D( CloseText );
+D( Cast );
+
+#define S( name, ... )\
+	case sn##name:\
+	SubstituteTags_( TaggedScript, List, __VA_ARGS__ );\
+	break\
+
+static void GetScript_(
+	script_name__ ScriptName,
+	str::string_ &Script,
+	va_list List )
+{
+ERRProlog
+	str::string TaggedScript;
+ERRBegin
+	TaggedScript.Init();
+	GetTaggedScript( ScriptName, TaggedScript );
+
+	switch ( ScriptName ) {
+	S( Log, Message_, NULL );
+	S( DialogAlert, XML_, XSL_, Title_, CloseText_, NULL );
+	S( DialogConfirm, XML_, XSL_, Title_, CloseText_, NULL );
+	S( AttributeSetter, Id_, Name_, Value_, NULL  );
+	S( AttributeGetter, Id_, Name_, NULL  );
+	S( AttributeRemover, Id_, Name_, NULL  );
+	S( PropertySetter, Id_, Name_, Value_, NULL );
+	S( PropertyGetter, Id_, Name_, NULL );
+	S( DocumentSetter, Id_, XML_, XSL_, NULL );
+	S( ContentSetter, Id_, Value_, NULL );
+	S( ContentGetter, Id_, NULL );
+	S( CastingDefiner, XML_, XSL_, NULL );
+	S( CastingHandler, Id_, Cast_, NULL );
+	S( ChildrenSetter, Id_, XML_, XSL_, NULL );
+	S( WidgetContentRetriever, Id_, Method_, NULL );
+	S( WidgetFocusing, Id_, Method_, NULL );
+	S( Focusing, Id_, NULL );
+	default:
+		ERRFwk();
+		break;
+	}
+
+	Script.Append( TaggedScript );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-static const char *GetProperty_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const nstring___ &Name,
-	TOL_CBUFFER___ &Buffer )
+const str::string_ &xdhjsp::GetScript(
+	script_name__ ScriptName,
+	str::string_ *Buffer,
+	... )
+{
+ERRProlog
+	va_list List;
+ERRBegin
+	va_start( List, Buffer );
+	
+	GetScript_( ScriptName, *Buffer, List );
+ERRErr
+ERREnd
+	va_end( List );
+ERREpilog
+	return *Buffer;
+}
+
+static const char *Execute_(
+	callback__  &Callback,
+	script_name__ ScriptName,
+	TOL_CBUFFER___ *Buffer,
+	va_list List )
 {
 	const char *Result = NULL;
 ERRProlog
 	str::string Script;
-	str::strings TagNames, TagValues;
-	TOL_CBUFFER___ EscapedBuffer;
 ERRBegin
 	Script.Init();
-	Callback.GetScript( sPropertyGetter, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Name", Name, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
+	GetScript_( ScriptName, Script, List );
 
 	Result = Callback.Execute( Script, Buffer );
 ERRErr
@@ -184,104 +253,24 @@ ERREpilog
 	return Result;
 }
 
-static void SetAttribute_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const nstring___ &Name,
-	const nstring___ &Value )
-{
-ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sAttributeSetter, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Name", Name, TagNames, TagValues );
-	AppendTag_( "Value", Value, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static const char *GetAttribute_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const nstring___ &Name,
-	TOL_CBUFFER___ &Buffer )
+const char *xdhjsp::Execute(
+	callback__  &Callback,
+	script_name__ ScriptName,
+	TOL_CBUFFER___ *Buffer,
+	... )
 {
 	const char *Result = NULL;
 ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-	TOL_CBUFFER___ EscapedBuffer;
+	va_list List;
 ERRBegin
-	Script.Init();
-	Callback.GetScript( sAttributeGetter, Script );
+	va_start( List, Buffer );
 
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Name", Name, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Result = Callback.Execute( Script, Buffer );
+	Result = Execute_( Callback, ScriptName, Buffer, List );
 ERRErr
 ERREnd
+	va_end( List );
 ERREpilog
 	return Result;
-}
-
-static const str::string_ &GetAttribute_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const nstring___ &Name,
-	str::string_ &Value )
-{
-ERRProlog
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	Value.Append( GetAttribute_( Callback, Id, Name, Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
-	return Value;
-}
-
-static void RemoveAttribute_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const nstring___ &Name )
-{
-ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sAttributeRemover, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Name", Name, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
 }
 
 static void GetWidgetFeatures_(
@@ -333,164 +322,41 @@ ERREnd
 ERREpilog
 }
 
-static const char *GetRegularContent_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	TOL_CBUFFER___ &Buffer )
-{
-	const char *Result = NULL;
-ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sContentGetter, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Result = Callback.Execute( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
-	return Result;
-}
-
-static const char *GetWidgetContent_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const str::string_ &Method,
-	TOL_CBUFFER___ &Buffer )
-{
-	const char *Result = NULL;
-ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sWidgetContentRetriever, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Method", Method, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Result = Callback.Execute( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
-	return Result;
-}
-
 static const char *GetContent_(
 	callback__ &Callback,
-	const nstring___ &Id,
-	TOL_CBUFFER___ &Buffer )
+	const nchar__ *Id,
+	TOL_CBUFFER___ *Content )
 {
 	const char *Result = NULL;
 ERRProlog
 	str::string Args, Method;
-	TOL_CBUFFER___ ABuffer;
+	nstring___ WidgetAttributeName;;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
-	Args.Init();
-	GetAttribute_(Callback, Id, Callback.GetWidgetAttributeName( ABuffer ), Args );
+	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
+	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
 
 	Method.Init();
 
-	if ( Args.Amount() != 0 )
+	if ( Args.Amount() != 0 )	// 'true' if the element 'Id' is a widget.
 		GetWidgetContentRetrievingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Result = GetRegularContent_( Callback, Id, Buffer );
+		Result = Execute( Callback, snContentGetter, Content, Id );
 	else
-		Result = GetWidgetContent_( Callback, Id, Method, Buffer );
+		Result = Execute( Callback, snWidgetContentRetriever, Content, Id, Method );
 ERRErr
 ERREnd
 ERREpilog
 	return Result;
 }
 
-static void SetContent_(
+static void GetContent_(
 	callback__ &Callback,
-	const nstring___ &Id,
-	const nstring___ &Value )
+	TOL_CBUFFER___ *Content,
+	va_list List )
 {
-ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sContentSetter, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Value", Value, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void RegularFocusing_(
-	callback__ &Callback,
-	const nstring___ &Id )
-{
-ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sFocusing, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void WidgetFocusing_(
-	callback__ &Callback,
-	const nstring___ &Id,
-	const str::string_ &Method )
-{
-ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sWidgetFocusing, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "Id", Id, TagNames, TagValues );
-	AppendTag_( "Method", Method, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+	GetContent_( Callback, va_arg( List, const nchar__ * ), Content );
 }
 
 static void GetWidgetFocusingMethod_(
@@ -512,14 +378,15 @@ ERREpilog
 
 static void Focus_(
 	callback__ &Callback,
-	const nstring___ &Id )
+	const nchar__ *Id )
 {
 ERRProlog
 	str::string Args, Method;
+	nstring___ WidgetAttributeName;;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	Args.Init();
-	GetAttribute_(Callback, Id, Callback.GetWidgetAttributeName( Buffer ), Args );
+	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
+	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
 
 	Method.Init();
 
@@ -527,114 +394,19 @@ ERRBegin
 		GetWidgetFocusingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		RegularFocusing_( Callback, Id );
+		Execute( Callback, snFocusing, NULL, Id );
 	else
-		WidgetFocusing_( Callback, Id, Method );
+		Execute( Callback, snWidgetFocusing, NULL, Id, Method );
 ERRErr
 ERREnd
 ERREpilog
 }
 
-static void Alert_(
-	callback__ &Callback,
-	const nchar__ *XML,
-	const nchar__ *XSL,
-	const nchar__ *Title )
-{
-ERRProlog
-	str::string Script, CloseText;
-	str::strings TagNames, TagValues;
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sDialogAlert, Script );
-
-	CloseText.Init();
-	Callback.GetTranslation( "CloseText", CloseText );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "XML", XML, TagNames, TagValues );
-	AppendTag_( "XSL", XSL, TagNames, TagValues );
-	AppendTag_( "Title", Title, TagNames, TagValues );
-	AppendTag_( "CloseText", CloseText, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void Alert_(
+static void Focus_(
 	callback__ &Callback,
 	va_list List )
 {
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *XML = va_arg( List, const nchar__ *);
-	const nchar__ *XSL = va_arg( List, const nchar__ *);
-	const nchar__ *Title = va_arg( List, const nchar__ *);
-
-	Alert_( Callback, XML, XSL, Title );
-}
-
-static void Confirm_(
-	callback__ &Callback,
-	const nchar__ *XML,
-	const nchar__ *XSL,
-	const nchar__ *Title,
-	TOL_CBUFFER___ &Buffer )
-{
-ERRProlog
-	str::string Script, CloseText;
-	str::strings TagNames, TagValues;
-	TOL_CBUFFER___ LBuffer;
-	str::string Response;
-ERRBegin
-	Script.Init();
-	Callback.GetScript( sDialogConfirm, Script );
-
-	CloseText.Init();
-	Callback.GetTranslation( "CloseText", CloseText );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "XML", XML, TagNames, TagValues );
-	AppendTag_( "XSL", XSL, TagNames, TagValues );
-	AppendTag_( "Title", Title, TagNames, TagValues );
-	AppendTag_( "CloseText", CloseText, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-#if 1
-	Callback.Execute( Script, Buffer );
-#else
-	Callback.Execute( Script, _F() );
-
-	Response.Init();
-	misc::WaitForResponse( Response );
-
-	Response.Convert( Buffer );
-#endif
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void Confirm_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *XML = va_arg( List, const nchar__ *);
-	const nchar__ *XSL = va_arg( List, const nchar__ * );
-	const nchar__ *Title = va_arg( List, const nchar__ * );
-	TOL_CBUFFER___ &Buffer = *va_arg( List, TOL_CBUFFER___ *);
-
-	Confirm_( Callback, XML, XSL, Title, Buffer );
+	Focus_( Callback, va_arg( List, const nchar__ * ) );
 }
 
 static void SetChildren_(
@@ -644,30 +416,18 @@ static void SetChildren_(
 	const nchar__ *XSL )
 {
 ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
+	script_name__ ScriptName = sn_Undefined;
 	nstring___ RootTagId;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	Script.Init();
-
 	if ( Id == NULL ) {
 		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
 		Id = RootTagId.Internal();
-		Callback.GetScript( sDocumentSetter, Script );
+		ScriptName = snDocumentSetter;
 	} else
-		Callback.GetScript( sChildrenSetter, Script );
+		ScriptName = snChildrenSetter;
 
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "XML", XML, TagNames, TagValues );
-	AppendTag_( "XSL", XSL, TagNames, TagValues );
-	AppendTag_( "Id", Id, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
+	Execute( Callback, ScriptName, NULL, Id, XML, XSL );
 
 	Callback.HandleExtensions( Id );
 ERRErr
@@ -679,13 +439,14 @@ static void SetChildren_(
 	callback__ &Callback,
 	va_list List )
 {
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
 	const nchar__ *Id = va_arg( List, const nchar__ * );
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
 	SetChildren_( Callback, Id, XML, XSL );
 }
+
 
 static void SetCasting_(
 	callback__ &Callback,
@@ -694,23 +455,10 @@ static void SetCasting_(
 	const nchar__ *XSL )
 {
 ERRProlog
-	str::string Script;
-	str::strings TagNames, TagValues;
 	TOL_CBUFFER___ Buffer;
 	nstring___ RootTagId;
 ERRBegin
-	Script.Init();
-	Callback.GetScript( sCastingDefiner, Script );
-
-	TagNames.Init();
-	TagValues.Init();
-
-	AppendTag_( "XML", XML, TagNames, TagValues );
-	AppendTag_( "XSL", XSL, TagNames, TagValues );
-
-	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
-
-	Callback.Execute( Script );
+	Execute( Callback, snCastingDefiner, NULL, XML, XSL );
 
 	if ( Id == NULL ) {
 		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
@@ -727,7 +475,7 @@ static void SetCasting_(
 	callback__ &Callback,
 	va_list List )
 {
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
 	const nchar__ *Id = va_arg( List, const nchar__ * );
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
@@ -735,76 +483,18 @@ static void SetCasting_(
 	SetCasting_( Callback, Id, XML, XSL );
 }
 
-static void SetProperty_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Name = va_arg( List, const nchar__ * );
-	const nchar__ *Value = va_arg( List, const nchar__ * );
-
-	SetProperty_( Callback, Id, Name, Value );
-}
-
-static void GetProperty_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Name = va_arg( List, const nchar__ * );
-	TOL_CBUFFER___ &Buffer = *va_arg( List, TOL_CBUFFER___ *);
-
-	GetProperty_( Callback, Id, Name, Buffer );
-}
-
-static void SetAttribute_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Name = va_arg( List, const nchar__ * );
-	const nchar__ *Value = va_arg( List, const nchar__ * );
-
-	SetAttribute_( Callback, Id, Name, Value );
-}
-
-static void GetAttribute_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Name = va_arg( List, const nchar__ * );
-	TOL_CBUFFER___ &Buffer = *va_arg( List, TOL_CBUFFER___ *);
-
-	GetAttribute_( Callback, Id, Name, Buffer );
-}
-
-static void RemoveAttribute_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Name = va_arg( List, const nchar__ * );
-
-	RemoveAttribute_( Callback, Id, Name );
-}
 
 static void GetResult_(
 	callback__ &Callback,
 	const nchar__ *Id,
-	TOL_CBUFFER___ &Buffer )
+	TOL_CBUFFER___ *Result )
 {
 ERRProlog
 	str::string ResultAttributeName;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
-	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );;
-	GetAttribute_( Callback, Id, ResultAttributeName, Buffer );
+	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );
+	Execute( Callback, snAttributeGetter, Result, Id );
 ERRErr
 ERREnd
 ERREpilog
@@ -812,76 +502,102 @@ ERREpilog
 
 static void GetResult_(
 	callback__ &Callback,
+	TOL_CBUFFER___ *Result,
 	va_list List )
 {
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	TOL_CBUFFER___ &Buffer = *va_arg( List, TOL_CBUFFER___ *);
-
-	GetResult_( Callback,  Id, Buffer );
+	GetResult_( Callback, va_arg( List, const nchar__ * ), Result );
 }
 
-static void GetContent_(
-	callback__ &Callback,
-	va_list List )
+
+script_name__ Convert( xdhcbk::function__ Function )
 {
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	TOL_CBUFFER___ &Buffer = *va_arg( List, TOL_CBUFFER___ *);
+	switch ( Function ) {
+	case xdhcbk::fAlert:
+		return snDialogAlert;
+		break;
+	case xdhcbk::fConfirm:
+		return snDialogConfirm;
+		break;
+	case xdhcbk::fSetChildren:
+		ERRFwk();
+		break;
+	case xdhcbk::fSetCasting:
+		ERRFwk();
+		break;
+	case xdhcbk::fSetProperty:
+		return snPropertySetter;
+		break;
+	case xdhcbk::fGetProperty:
+		return snPropertyGetter;
+		break;
+	case xdhcbk::fSetAttribute:
+		return snAttributeSetter;
+		break;
+	case xdhcbk::fGetAttribute:
+		return snAttributeGetter;
+		break;
+	case xdhcbk::fRemoveAttribute:
+		return snAttributeRemover;
+		break;
+	case xdhcbk::fGetResult:
+		ERRFwk();
+		break;
+	case xdhcbk::fSetContent:
+		return snContentSetter;
+		break;
+	case xdhcbk::fGetContent:
+		ERRFwk();
+		break;
+	case xdhcbk::fFocus:
+		ERRFwk();
+		break;
+	default:
+		ERRFwk();
+		break;
+	}
 
-	GetContent_( Callback, Id, Buffer );
+	return sn_Undefined;	// To avoid a warning.
 }
-
-static void SetContent_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *Value = va_arg( List, const nchar__ * );
-
-	SetContent_( Callback, Id, Value );
-}
-
-static void Focus_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below '_Alert()', it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-
-	Focus_( Callback, Id );
-}
-
-#define F( name )\
-	case xdhcbk::f##name:\
-	name##_( _C(), List );\
-	break\
 
 void xdhjsp::proxy_callback__::XDHCBKProcess(
 	xdhcbk::function__ Function,
+	TOL_CBUFFER___ *Result,
 	... )
 {
 ERRProlog
 	va_list List;
 ERRBegin
-	va_start( List, Function );
+	va_start( List, Result );
+
 	switch ( Function ) {
-	F( Alert );
-	F( Confirm );
-	F( SetChildren );
-	F( SetCasting );
-	F( SetProperty );
-	F( GetProperty );
-	F( SetAttribute );
-	F( GetAttribute );
-	F( RemoveAttribute );
-	F( GetResult );
-	F( SetContent );
-	F( GetContent );
-	F( Focus );
+	case xdhcbk::fAlert:
+	case xdhcbk::fConfirm:
+	case xdhcbk::fSetProperty:
+	case xdhcbk::fGetProperty:
+	case xdhcbk::fSetAttribute:
+	case xdhcbk::fGetAttribute:
+	case xdhcbk::fRemoveAttribute:
+	case xdhcbk::fSetContent:
+		Execute_(_C(), Convert( Function ), Result, List );
+		break;
+	case xdhcbk::fGetResult:
+		GetResult_( _C(), Result, List );
+		break;
+	case xdhcbk::fSetChildren:
+		SetChildren_( _C(), List );
+		break;
+	case xdhcbk::fSetCasting:
+		SetCasting_(_C(), List );
+		break;
+	case xdhcbk::fGetContent:
+		GetContent_(_C(), Result, List );
+		break;
+	case xdhcbk::fFocus:
+		Focus_(_C(), List);
+		break;
 	default:
 		ERRFwk();
+		break;
 	}
 ERRErr
 ERREnd
