@@ -234,6 +234,7 @@ ERREpilog
 }
 
 static const char *Execute_(
+	void *UP,
 	callback__  &Callback,
 	script_name__ ScriptName,
 	TOL_CBUFFER___ *Buffer,
@@ -246,7 +247,7 @@ ERRBegin
 	Script.Init();
 	GetScript_( ScriptName, Script, List );
 
-	Result = Callback.Execute( Script, Buffer );
+	Result = Callback.Execute( UP, Script, Buffer );
 ERRErr
 ERREnd
 ERREpilog
@@ -254,6 +255,7 @@ ERREpilog
 }
 
 const char *xdhjsp::Execute(
+	void *UP,
 	callback__  &Callback,
 	script_name__ ScriptName,
 	TOL_CBUFFER___ *Buffer,
@@ -265,12 +267,48 @@ ERRProlog
 ERRBegin
 	va_start( List, Buffer );
 
-	Result = Execute_( Callback, ScriptName, Buffer, List );
+	Result = Execute_( UP, Callback, ScriptName, Buffer, List );
 ERRErr
 ERREnd
 	va_end( List );
 ERREpilog
 	return Result;
+}
+
+static void AlertConfirm_(
+	void *UP,
+	callback__ &Callback,
+	script_name__ ScriptName,
+	TOL_CBUFFER___ *Result,
+	const nchar__ *XML,
+	const nchar__ *XSL,
+	const nchar__ *Title )
+{
+ERRProlog
+	str::string CloseText;
+ERRBegin
+	CloseText.Init();
+	Callback.GetTranslation("CloseText", CloseText );
+
+	Execute(UP, Callback, ScriptName, Result, XML, XSL, Title, nstring___(CloseText).Internal()() );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+static void AlertConfirm_(
+	void *UP,
+	callback__ &Callback,
+	script_name__ ScriptName,
+	TOL_CBUFFER___ *Result,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+	const nchar__ *Title = va_arg( List, const nchar__ * );
+
+	AlertConfirm_( UP, Callback, ScriptName, Result, XML, XSL, Title );
 }
 
 static void GetWidgetFeatures_(
@@ -322,19 +360,19 @@ ERREnd
 ERREpilog
 }
 
-static const char *GetContent_(
+static void GetContent_(
+	void *UP,
 	callback__ &Callback,
 	const nchar__ *Id,
-	TOL_CBUFFER___ *Content )
+	TOL_CBUFFER___ *Result )
 {
-	const char *Result = NULL;
 ERRProlog
 	str::string Args, Method;
 	nstring___ WidgetAttributeName;;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
+	Args.Init( Execute( UP, Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
 
 	Method.Init();
 
@@ -342,21 +380,21 @@ ERRBegin
 		GetWidgetContentRetrievingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Result = Execute( Callback, snContentGetter, Content, Id );
+		Execute( UP, Callback, snContentGetter, Result, Id );
 	else
-		Result = Execute( Callback, snWidgetContentRetriever, Content, Id, Method );
+		Execute( UP, Callback, snWidgetContentRetriever, Result, Id, Method );
 ERRErr
 ERREnd
 ERREpilog
-	return Result;
 }
 
 static void GetContent_(
+	void *UP,
 	callback__ &Callback,
 	TOL_CBUFFER___ *Content,
 	va_list List )
 {
-	GetContent_( Callback, va_arg( List, const nchar__ * ), Content );
+	GetContent_( UP, Callback, va_arg( List, const nchar__ * ), Content );
 }
 
 static void GetWidgetFocusingMethod_(
@@ -377,6 +415,7 @@ ERREpilog
 }
 
 static void Focus_(
+	void *UP,
 	callback__ &Callback,
 	const nchar__ *Id )
 {
@@ -386,7 +425,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
+	Args.Init( Execute( UP, Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
 
 	Method.Init();
 
@@ -394,22 +433,24 @@ ERRBegin
 		GetWidgetFocusingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, snFocusing, NULL, Id );
+		Execute( UP, Callback, snFocusing, NULL, Id );
 	else
-		Execute( Callback, snWidgetFocusing, NULL, Id, Method );
+		Execute( UP, Callback, snWidgetFocusing, NULL, Id, Method );
 ERRErr
 ERREnd
 ERREpilog
 }
 
 static void Focus_(
+	void *UP,
 	callback__ &Callback,
 	va_list List )
 {
-	Focus_( Callback, va_arg( List, const nchar__ * ) );
+	Focus_( UP, Callback, va_arg( List, const nchar__ * ) );
 }
 
 static void SetChildren_(
+	void *UP,
 	callback__ &Callback,
 	const nchar__ *Id,	// If == NULL, the entire document is replaced.
 	const nchar__ *XML,
@@ -427,7 +468,7 @@ ERRBegin
 	} else
 		ScriptName = snChildrenSetter;
 
-	Execute( Callback, ScriptName, NULL, Id, XML, XSL );
+	Execute( UP, Callback, ScriptName, NULL, Id, XML, XSL );
 
 	Callback.HandleExtensions( Id );
 ERRErr
@@ -436,6 +477,7 @@ ERREpilog
 }
 
 static void SetChildren_(
+	void *UP,
 	callback__ &Callback,
 	va_list List )
 {
@@ -444,11 +486,12 @@ static void SetChildren_(
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	SetChildren_( Callback, Id, XML, XSL );
+	SetChildren_( UP, Callback, Id, XML, XSL );
 }
 
 
 static void SetCasting_(
+	void *UP,
 	callback__ &Callback,
 	const nchar__ *Id,	// If == NULL, the casting is applied to the entire document.
 	const nchar__ *XML,
@@ -458,7 +501,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 	nstring___ RootTagId;
 ERRBegin
-	Execute( Callback, snCastingDefiner, NULL, XML, XSL );
+	Execute( UP, Callback, snCastingDefiner, NULL, XML, XSL );
 
 	if ( Id == NULL ) {
 		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
@@ -472,6 +515,7 @@ ERREpilog
 }
 
 static void SetCasting_(
+	void *UP,
 	callback__ &Callback,
 	va_list List )
 {
@@ -480,11 +524,12 @@ static void SetCasting_(
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	SetCasting_( Callback, Id, XML, XSL );
+	SetCasting_( UP, Callback, Id, XML, XSL );
 }
 
 
 static void GetResult_(
+	void *UP,
 	callback__ &Callback,
 	const nchar__ *Id,
 	TOL_CBUFFER___ *Result )
@@ -494,22 +539,23 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );
-	Execute( Callback, snAttributeGetter, Result, Id );
+	Execute( UP, Callback, snAttributeGetter, Result, Id );
 ERRErr
 ERREnd
 ERREpilog
 }
 
 static void GetResult_(
+	void *UP,
 	callback__ &Callback,
 	TOL_CBUFFER___ *Result,
 	va_list List )
 {
-	GetResult_( Callback, va_arg( List, const nchar__ * ), Result );
+	GetResult_( UP, Callback, va_arg( List, const nchar__ * ), Result );
 }
 
 
-script_name__ Convert( xdhcbk::function__ Function )
+static script_name__ Convert_( xdhcbk::function__ Function )
 {
 	switch ( Function ) {
 	case xdhcbk::fAlert:
@@ -560,6 +606,7 @@ script_name__ Convert( xdhcbk::function__ Function )
 }
 
 void xdhjsp::proxy_callback__::XDHCBKProcess(
+	void *UP,
 	xdhcbk::function__ Function,
 	TOL_CBUFFER___ *Result,
 	... )
@@ -570,30 +617,32 @@ ERRBegin
 	va_start( List, Result );
 
 	switch ( Function ) {
-	case xdhcbk::fAlert:
-	case xdhcbk::fConfirm:
 	case xdhcbk::fSetProperty:
 	case xdhcbk::fGetProperty:
 	case xdhcbk::fSetAttribute:
 	case xdhcbk::fGetAttribute:
 	case xdhcbk::fRemoveAttribute:
 	case xdhcbk::fSetContent:
-		Execute_(_C(), Convert( Function ), Result, List );
+		Execute_( UP, _C(), Convert_( Function ), Result, List );
+		break;
+	case xdhcbk::fAlert:
+	case xdhcbk::fConfirm:
+		AlertConfirm_(UP, _C(), Convert_( Function ), Result, List );
 		break;
 	case xdhcbk::fGetResult:
-		GetResult_( _C(), Result, List );
+		GetResult_( UP, _C(), Result, List );
 		break;
 	case xdhcbk::fSetChildren:
-		SetChildren_( _C(), List );
+		SetChildren_( UP, _C(), List );
 		break;
 	case xdhcbk::fSetCasting:
-		SetCasting_(_C(), List );
+		SetCasting_( UP, _C(), List );
 		break;
 	case xdhcbk::fGetContent:
-		GetContent_(_C(), Result, List );
+		GetContent_( UP, _C(), Result, List );
 		break;
 	case xdhcbk::fFocus:
-		Focus_(_C(), List);
+		Focus_( UP, _C(), List);
 		break;
 	default:
 		ERRFwk();

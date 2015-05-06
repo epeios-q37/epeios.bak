@@ -34,7 +34,7 @@
 # include "sclerror.h"
 # include "strmrg.h"
 
-# define XDHCBK_SHARED_DATA_VERSION_NUMBER	"9"
+# define XDHCBK_SHARED_DATA_VERSION_NUMBER	"10"
 
 # define XDHCBK_SHARED_DATA_VERSION			XDHCBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -70,6 +70,7 @@ namespace xdhcbk {
 	class proxy_callback__ {
 	protected:
 		virtual void XDHCBKProcess(
+			void *UP,
 			function__ Function,
 			TOL_CBUFFER___ *Result,
 			...	) = 0;
@@ -84,102 +85,117 @@ namespace xdhcbk {
 			// Standardisation.
 		}
 		void Log(
+			void *UP,
 			const nstring___ &Message )
 		{
-			XDHCBKProcess( fLog, NULL, Message.Internal()() );
+			XDHCBKProcess( UP, fLog, NULL, Message.Internal()() );
 		}
 		void Alert(
+			void *UP,
 			const nstring___ &XML,
 			const nstring___ &XSL,
 			const nstring___ &Title )
 		{
-			XDHCBKProcess( fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
+			XDHCBKProcess( UP, fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
 		}
 		void Confirm(
+			void *UP,
 			const nstring___ &XML,
 			const nstring___ &XSL,
 			const nstring___ &Title,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XDHCBKProcess( fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ) );
+			XDHCBKProcess( UP, fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ) );
 		}
 		void SetChildren(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XDHCBKProcess( fSetChildren, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			XDHCBKProcess( UP, fSetChildren, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetCasting(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			XDHCBKProcess( fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			XDHCBKProcess( UP, fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		const char *GetProperty(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XDHCBKProcess( fGetProperty, &Buffer, Id.Internal()( ), Name.Internal()( ) );
+			XDHCBKProcess( UP, fGetProperty, &Buffer, Id.Internal()( ), Name.Internal()( ) );
 
 			return Buffer;
 		}
 		void SetProperty(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XDHCBKProcess( fSetProperty, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			XDHCBKProcess( UP, fSetProperty, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetAttribute(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XDHCBKProcess( fGetAttribute, &Buffer, Id.Internal()( ), Name.Internal()( ) );
+			XDHCBKProcess( UP, fGetAttribute, &Buffer, Id.Internal()( ), Name.Internal()( ) );
 
 			return Buffer;
 		}
 		void SetAttribute(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			XDHCBKProcess( fSetAttribute, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			XDHCBKProcess( UP, fSetAttribute, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetResult(
+			void *UP,
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XDHCBKProcess( fGetResult, &Buffer, Id.Internal()( ) );
+			XDHCBKProcess( UP, fGetResult, &Buffer, Id.Internal()( ) );
 
 			return Buffer;
 		}
 		void RemoveAttribute(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			XDHCBKProcess( fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
+			XDHCBKProcess( UP, fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
 		}
 		const char *GetContent(
+			void *UP,
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			XDHCBKProcess( fGetContent, &Buffer, Id.Internal()( ) );
+			XDHCBKProcess( UP, fGetContent, &Buffer, Id.Internal()( ) );
 
 			return Buffer;
 		}
 		void SetContent(
+			void *UP,
 			const nstring___ &Id,
 			const nstring___ &Value )
 		{
-			XDHCBKProcess( fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
+			XDHCBKProcess( UP, fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
 		}
-		void Focus( const nstring___ &Id )
+		void Focus(
+			void *UP,
+			const nstring___ &Id )
 		{
-			XDHCBKProcess( fFocus, NULL, Id.Internal()( ) );
+			XDHCBKProcess( UP, fFocus, NULL, Id.Internal()( ) );
 		}
 # if 0
 		void ExecuteJavascript( const nstring___ &Script )
@@ -282,7 +298,7 @@ namespace xdhcbk {
 	protected:
 		virtual void XDHCBKInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XDHCBKNew( void ) = 0;
+		virtual session_callback__ *XDHCBKNew( void * UP ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -303,9 +319,9 @@ namespace xdhcbk {
 
 			return Buffer;
 		}
-		session_callback__ *New( void )
+		session_callback__ *New( void *UP )
 		{
-			return XDHCBKNew();
+			return XDHCBKNew( UP );
 		}
 	};
 

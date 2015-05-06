@@ -286,12 +286,11 @@ ERRBegin
 	SharedLocale.Init();
 	SharedRegistry.Init();
 
-	LOC;
-	LibraryData.Init( csdleo::cRegular, ModuleFilename, err::ERRError, NULL );
-	LOC;
+	LibraryData.Init( csdleo::cRegular, ModuleFilename, err::ERRError, NULL, csdleo::mRemote );
+
 	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();
-	LOC;
+
 	if ( !Core_->Init( ModuleFilename, LibraryData, err::hUserDefined ) ) {
 		Meaning.Init();
 		Meaning.SetValue( "UnableToLoadModule" );
@@ -299,7 +298,7 @@ ERRBegin
 		sclerror::SetMeaning( Meaning );
 		ERRAbort();
 	}
-	LOC;
+
 	switch ( ConnectionType ) {
 	case mctStraight:
 		UseStraightConnections_( Core_->GetCallback(), ModuleFilename, Port );

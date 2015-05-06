@@ -38,23 +38,21 @@ namespace xdhagt {
 
 	class agent___ {
 	private:
-		xdhcbk::proxy_callback__ *_Callback;
-		xdhcbk::proxy_callback__ &_C( void ) const
-		{
-			if ( _Callback == NULL )
-				ERRFwk();
-
-			return *_Callback;
-		}
+		Q37_MRMDF( xdhcbk::proxy_callback__, _C, _Callback );
+		void *_UP;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Callback = NULL;
+			_UP = NULL;
 		}
 		E_CDTOR( agent___ );
-		void Init( xdhcbk::proxy_callback__ &Callback )
+		void Init(
+			xdhcbk::proxy_callback__ &Callback,
+			void *UP )
 		{
 			_Callback = &Callback;
+			_UP;
 		}
 # if 0
 		const char *GetLanguage( TOL_CBUFFER___ &Buffer )
@@ -71,7 +69,7 @@ namespace xdhagt {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetAttribute( Id, Name, Buffer );
+			return _C().GetAttribute( _UP, Id, Name, Buffer );
 		}
 		const str::string_ &GetAttribute(
 			const nstring___ &Id,
@@ -92,13 +90,13 @@ namespace xdhagt {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			_C().SetAttribute( Id, Name, Value );
+			_C().SetAttribute(_UP, Id, Name, Value );
 		}
 		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetResult( Id, Buffer );
+			return _C().GetResult( _UP, Id, Buffer );
 		}
 		const str::string_ &GetResult(
 			const nstring___ &Id,
@@ -117,7 +115,7 @@ namespace xdhagt {
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			_C().RemoveAttribute( Id, Name );
+			_C().RemoveAttribute( _UP, Id, Name );
 		}
 		void SetString(
 			const nstring___ &Id,
@@ -128,19 +126,19 @@ namespace xdhagt {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetProperty( Id, Name, Buffer );
+			return _C().GetProperty( _UP, Id, Name, Buffer );
 		}
 		void SetContent(
 			const nstring___ &Id,
 			const str::string_ &Value )
 		{
-			_C().SetContent( Id, Value );
+			_C().SetContent( _UP, Id, Value );
 		}
 		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			return _C().GetContent( Id, Buffer );
+			return _C().GetContent( _UP, Id, Buffer );
 		}
 		const str::string_ &GetContent(
 			const nstring___ &Id,
@@ -157,14 +155,14 @@ namespace xdhagt {
 		}
 		void Focus( const nstring___ &Id )
 		{
-			return _C().Focus( Id );
+			return _C().Focus( _UP, Id );
 		}
 		void SetChildren(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().SetChildren( Id, XML, XSL );
+			_C().SetChildren( _UP, Id, XML, XSL );
 		}
 		void SetDocument(
 			const nstring___ &XML,
@@ -177,13 +175,13 @@ namespace xdhagt {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().SetCasting( Id, XML, XSL );
+			_C().SetCasting( _UP, Id, XML, XSL );
 		}
 		void SetDocumentCasting(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().SetCasting( (const char *)NULL, XML, XSL );
+			_C().SetCasting( _UP, (const char *)NULL, XML, XSL );
 		}
 		void Show(
 			const nstring___ &Id,

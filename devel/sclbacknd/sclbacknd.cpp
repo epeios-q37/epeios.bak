@@ -43,9 +43,9 @@
 
 using namespace sclbacknd;
 
-scldaemon::callback__ *scldaemon::SCLDAEMONNewCallback(
-	csdleo::mode__ CSDMode,
-	csdleo::context__ Context )
+scldaemon::callback__ *scldaemon::SCLDAEMONGetCallback( 
+	csdleo::context__ Context,
+	csdleo::mode__ CSDMode )
 {
 	sclbacknd::callback__ *Callback = NULL;
 ERRProlog
@@ -63,7 +63,7 @@ ERRBegin
 		break;
 	}
 
-	Callback = SCLBACKNDNewCallback( FBLMode, Context );
+	Callback = SCLBACKNDGetCallback( Context, FBLMode );
 ERRErr
 	if ( Callback != NULL )
 		delete Callback;

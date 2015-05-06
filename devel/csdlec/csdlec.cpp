@@ -68,7 +68,10 @@ bso::bool__ csdlec::library_embedded_client_core__::_RetrieveCallback( csdleo::s
 
 	Callback.Initialize( Data, NULL );
 
-	if ( ( _Callback = Callback.RetrieveCallback( csdleo::mEmbedded, Data->Context ) ) == NULL )
+	/* 'Mode' parameter should normally always be 'csdleo::mEmbedded' (this module is dedicated to the client
+	which deals with an embedded server), except when used by the 'dmnzq' tool, hence retrieving the value of
+	this parameter from 'Data'. */
+	if ( ( _Callback = Callback.RetrieveCallback( Data->Context, Data->Mode ) ) == NULL )
 		return false;
 
 	return true;

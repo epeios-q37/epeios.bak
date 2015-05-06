@@ -49,35 +49,17 @@
 namespace scldaemon {
 	class daemon___
 	{
-	private:
-//		sclrgstry::setup_registry _Registry;
 	protected:
 		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-//			_Registry.reset( P );
+			// Standardization.
 		}
 		E_CVDTOR( daemon___ );
 		void Init( void )
 		{
-//			_Registry.Init();
-		}
-		const rgstry::multi_level_registry_ &Registry( void ) const
-		{
-//			return _Registry;
-		}
-		rgstry::multi_level_registry_ &Registry( void )
-		{
-//			return _Registry;
-		}
-		rgstry::level__ GetRegistrySetupvel( void ) const
-		{
-//			return _Registry.Setup();
-		}
-		void FillRegistryWithSetup( const str::string_ &SetupId )
-		{
-//			_Registry.Init( SetupId );
+			// Standardization.
 		}
 		bso::bool__ Process( flw::ioflow__ &Flow )
 		{
@@ -135,11 +117,12 @@ namespace scldaemon {
 		}
 	};
 
-
-	// A définir par l'utilisateur.
-	callback__ *SCLDAEMONNewCallback(
-		csdleo::mode__ Mode,
-		csdleo::context__ Context );	// To overload !
+	/* Called once, when the library is loaded. All the 'registry' stuff is already initialized.
+	The same returned callback is used to handle each connection (one callback for all connections,
+	and NOT a callbackper connection). */
+	callback__ *SCLDAEMONGetCallback(
+		csdleo::context__ Context,
+		csdleo::mode__ Mode );	// To overload !
 }
 
 				  /********************************************/

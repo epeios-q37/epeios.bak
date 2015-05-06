@@ -28,8 +28,6 @@
 
 using namespace csdlec;
 
-# define LOC	cio::COut << txf::nl << "------------------------->" << __LOC__ << txf::nl << txf::commit
-
 bso::bool__ csdlec::library_embedded_client_core__::Init(
 	const char *LibraryName,
 	library_data__ &Data,
@@ -41,20 +39,11 @@ bso::bool__ csdlec::library_embedded_client_core__::Init(
 
 	reset();
 
-	LOC;
-
-	if ( _Library.Init(LibraryName, ERRHandling) ) {
-		LOC;
-
+	if ( _Library.Init( LibraryName, ERRHandling ) )
 		if ( _RetrieveCallback( &SharedData ) )
 			return true;
 		else
 			reset();	// Sinon le bibliothque n'est pas dcharge correctement  la fermeture de l'application.
-
-		LOC;
-	}
-
-	LOC;
 
 	if ( ERRHandling != err::hUserDefined )
 		ERRSys();
@@ -79,7 +68,10 @@ bso::bool__ csdlec::library_embedded_client_core__::_RetrieveCallback( csdleo::s
 
 	Callback.Initialize( Data, NULL );
 
-	if ( ( _Callback = Callback.RetrieveCallback( csdleo::mEmbedded, Data->Context ) ) == NULL )
+	/* 'Mode' parameter should normally always be 'csdleo::mEmbedded' (this module is dedicated to the client
+	which deals with an embedded server), except when used by the 'dmnzq' tool, hence retrieving the value of
+	this parameter from 'Data'. */
+	if ( ( _Callback = Callback.RetrieveCallback( Data->Context, Data->Mode ) ) == NULL )
 		return false;
 
 	return true;

@@ -98,6 +98,7 @@ namespace csdleo {
 	class data__ {
 	public:
 		context__ Context;
+		mode__ Mode;
 		const char *LibraryLocationAndName;
 		err::err___ *ERRError;
 		const cio::set__ *CIO;
@@ -105,6 +106,7 @@ namespace csdleo {
 		void reset( bso::bool__ = true )
 		{
 			Context = c_Undefined;
+			Mode = m_Undefined;
 			LibraryLocationAndName = NULL;
 			ERRError = NULL;
 			CIO = NULL;
@@ -115,18 +117,21 @@ namespace csdleo {
 			context__ Context,
 			const char *LibraryLocationAndName,
 			err::err___ *ERRError,
-			void *UP )
+			void *UP,
+			mode__ Mode = mEmbedded )
 		{
 			reset( false );
-			Init( Context, LibraryLocationAndName, ERRError,UP );
+			Init( Context, LibraryLocationAndName, ERRError,UP, Mode );
 		}
 		void Init(
 			context__ Context,
 			const char *LibraryLocationAndName,
 			err::err___ *ERRError,
-			void *UP )
+			void *UP,
+			mode__ Mode = mEmbedded )
 		{
 			this->Context = Context;
+			this->Mode = Mode;
 			this->LibraryLocationAndName = LibraryLocationAndName;
 			this->ERRError = ERRError;
 			this->CIO = &cio::GetCurrentSet();
@@ -149,7 +154,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.ERRError, Data.UP );
+			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.ERRError, Data.UP, Data.Mode );
 		}
 	};
 #pragma pack( pop )
@@ -160,10 +165,10 @@ namespace csdleo {
 		virtual void CSDLEOInitialize(
 			const shared_data__ *Data,
 			... ) = 0;
+		// Returned callback is used to handle all connections !
 		virtual csdscb::callback__ *CSDLEORetrieveCallback(
-			csdleo::mode__ Mode,
-			csdleo::context__ Context ) = 0;
-		virtual void CSDLEOReleaseCallback( csdscb::callback__ *Callback ) = 0;
+			csdleo::context__ Context,
+			csdleo::mode__ Mode ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -186,14 +191,10 @@ namespace csdleo {
 			// Il n'existe en tant que paramètre de cette méthode que pour en faciliter la compréhension.
 		}
 		csdscb::callback__ *RetrieveCallback(
-			csdleo::mode__ Mode,
-			csdleo::context__ Context )
+			csdleo::context__ Context,
+			csdleo::mode__ Mode )
 		{
-			return CSDLEORetrieveCallback( Mode, Context );
-		}
-		void ReleaseCallback( csdscb::callback__ *Callback)
-		{
-			CSDLEOReleaseCallback( Callback );
+			return CSDLEORetrieveCallback( Context, Mode );
 		}
 	};
 

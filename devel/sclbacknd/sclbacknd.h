@@ -155,9 +155,13 @@ namespace sclbacknd {
 		}
 	};
 
-	callback__ *SCLBACKNDNewCallback(
-		fblbur::mode__ Mode,
-		csdleo::context__ Context );	// A surcharger.
+
+	/* See 'SCLDAEMONGetCallback(...)' for more details.
+	The difference is that all 'registry' stuff are already
+	initialized. */
+	callback__ *SCLBACKNDGetCallback(
+		csdleo::context__ Context,
+		fblbur::mode__ Mode );	// To overload.
 }
 
 				  /********************************************/

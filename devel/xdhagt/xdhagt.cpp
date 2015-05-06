@@ -38,7 +38,7 @@ ERRBegin
 	Value.InsertAt( '"' );
 	Value.Append( '"' );
 
-	_C().SetProperty( Id, Name, Value );
+	_C().SetProperty( _UP, Id, Name, Value );
 ERRErr
 ERREnd
 ERREpilog
@@ -61,7 +61,7 @@ ERRBegin
 	Title.Init();
 	xdhcbk::Escape( RawTitle, Title, '"' );
 
-	_C().Alert( RawXML, RawXSL, Title );
+	_C().Alert( _UP, RawXML, RawXSL, Title );
 ERRErr
 ERREnd
 ERREpilog
@@ -86,7 +86,7 @@ ERRBegin
 	Title.Init();
 	xdhcbk::Escape( RawTitle, Title, '"' );
 
-	_C().Confirm( RawXML, RawXSL, Title, Buffer );
+	_C().Confirm( _UP, RawXML, RawXSL, Title, Buffer );
 
 	Confirmed = !strcmp( "true", Buffer );
 ERRErr
@@ -158,7 +158,7 @@ ERRBegin
 	Message.Init();
 	xdhcbk::Escape( RawMessage, Message, '"' );
 
-	_C().Log( Message );
+	_C().Log( _UP, Message );
 ERRErr
 ERREnd
 ERREpilog

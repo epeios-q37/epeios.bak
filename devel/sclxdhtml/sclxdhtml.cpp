@@ -82,9 +82,9 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcbk::session_callback__ *XDHCBKNew( void ) override
+		virtual xdhcbk::session_callback__ *XDHCBKNew( void *UP ) override
 		{
-			return SCLXDHTMLNew( _PC() );
+			return SCLXDHTMLNew( _PC(), UP );
 		}
 	public:
 		void reset( bso::bool__ P = true )

@@ -371,9 +371,10 @@ namespace sclxdhtml {
 		void Init(
 			const char *Launcher,
 			xdhcbk::proxy_callback__ &Callback,
-			_action_helper_callback__ &ActionHelperCallback )
+			_action_helper_callback__ &ActionHelperCallback,
+			void *UP )
 		{
-			_agent___::Init( Callback );
+			_agent___::Init( Callback, UP );
 			_Kernel.Init( _ReportingCallback );
 			_Handler.Init();
 			_session___::Init( _Kernel, sclmisc::GetRegistry() );
@@ -474,7 +475,9 @@ namespace sclxdhtml {
 		}
 	};
 
-	xdhcbk::session_callback__ *SCLXDHTMLNew( xdhcbk::proxy_callback__ &Callback );
+	xdhcbk::session_callback__ *SCLXDHTMLNew(
+		xdhcbk::proxy_callback__ &Callback,
+		void *UP );
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,

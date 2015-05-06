@@ -58,9 +58,9 @@ namespace xdhpxy {
 		bso::bool__ Init(
 			const str::string_ &ModuleFileName,
 			const char *Identification );
-		xdhcbk::session_callback__ *GetNewSession( void ) const
+		xdhcbk::session_callback__ *GetNewSession( void * UP ) const
 		{
-			return _C().New();
+			return _C().New( UP );
 		}
 		const char *GetBaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{

@@ -59,6 +59,9 @@ namespace {
 		ERRBegin
 			if ( Data == NULL )
 				ERRPrm();
+
+			if ( IsInitialized_ )
+				ERRPrm();
 		
 			if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
 
@@ -73,14 +76,10 @@ namespace {
 		ERREpilog
 		}
 		virtual csdscb::callback__ *CSDLEORetrieveCallback(
-			csdleo::mode__ Mode,
-			csdleo::context__ Context )  override
+			csdleo::context__ Context,
+			csdleo::mode__ Mode )  override
 		{
-			return SCLDAEMONNewCallback( Mode, Context );
-		}
-		virtual void CSDLEOReleaseCallback( csdscb::callback__ *Callback ) override
-		{
-			delete Callback;
+			return SCLDAEMONGetCallback( Context, Mode );
 		}
 	} _Callback;
 }

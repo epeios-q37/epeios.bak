@@ -12,6 +12,30 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-05-06
+- CSDLEC :
+	# Fixing bug when in remote mode, by using changes in 'CSDLEO'.
+- CSDLEO :
+	* Removing useless 'callback__::(CSDLEO)ReleaseCallback(...)', as releasing is do by calling the destructor of the concerned 'csdscb::callback__callback__'.
+	* Removing useless 'Context' parameter of 'csdleo::callback__::(CSDLEO)RetrieveCallback(...)'.
+	# Fixing bug when in remote mode, by adding 'data__::Mode', which should be 'mEmbedded', except when used by the 'eDeamon' (name will change soon) tool.
+SCLBACKND :
+	- Adaptation to changes in 'SCLDAEMON'.
+	-'SCLBACKNDNewCallback(...)' -> 'SCLBACKNDGetCallback(...)'.
+SCLDAEMON :
+	- Adaptation to changes in 'CSDLEO'.
+	-'SCLDAEMONNewCallback(...)' -> 'SCLDAEMONGetCallback(...)'.
+
+2015-05-05 :
+- SCLXDHTML, XDHAGT, XDHPXY :
+	- Adapting to changes in 'XDHCBK'.
+- XDHCBK :
+	% Append 'UP' ('User Pointer') parameter globally, which can be different for each 'session_callback__',
+	so it is possible in 'proxy_callback__' to distinguish between each 'session_callback__'.
+- XDHJSP :
+	- Adapting to changes in 'XDHCBK'.
+	# Ficing bug from alert/confirm dialog box.
+
 2015-05-04 :
 - TOL:
 	* Adding 'Q37_M(P|R)MDF(...)' macros.
@@ -193,7 +217,7 @@ Meaning of list markers (2nd level):
 
 2015-03-21 :
 - CSDLEO :
-	% Adding a '[CSDLEO]Initialize(...)' method to relieve the C API (for the same reason as belove).
+	% Adding a '[CSDLEO]Initialize(...)' method to relieve the C API (for the same reason as below).
 - PLGNCORE, PLNG, SCLPLUGIN
 	% Because the C functions exposed by a dynamic library don't allow interruptions, to simplify error handling,
 	  the API of a dynamic library will be exposed through a (C++) callback (except, of course, the function
