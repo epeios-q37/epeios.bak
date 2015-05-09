@@ -105,7 +105,6 @@ namespace xdhjsp {
 	{
 	protected:
 		virtual void XDHJSPExecute(
-			void *UP,
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer ) = 0;
 		virtual void XDHJSPGetTranslation(
@@ -127,22 +126,19 @@ namespace xdhjsp {
 			// Standardization;
 		}
 		const char *Execute(
-			void *UP,
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer )
 		{
-			XDHJSPExecute( UP, Script, Buffer );
+			XDHJSPExecute( Script, Buffer );
 
 			if ( Buffer != NULL )
 				return *Buffer;
 			else
 				return NULL;
 		}
-		void Execute(
-			void *UP,
-			const str::string_ &Script )
+		void Execute( const str::string_ &Script )
 		{
-			Execute( UP, Script,  NULL );
+			Execute( Script,  NULL );
 		}
 		const str::string_ &GetTranslation(
 			const char *Message,
@@ -181,7 +177,6 @@ namespace xdhjsp {
 	};
 
 	const char *Execute(
-		void *UP,
 		callback__ &Callback,
 		script_name__ Script,
 		TOL_CBUFFER___ *Buffer,
@@ -203,7 +198,6 @@ namespace xdhjsp {
 		}
 	protected:
 		virtual void XDHCBKProcess(
-			void *UP,
 			xdhcbk::function__ Function,
 			TOL_CBUFFER___ *Result,
 			...	) override; 

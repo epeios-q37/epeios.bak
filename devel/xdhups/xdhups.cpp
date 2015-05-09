@@ -1,7 +1,7 @@
 /*
-	'xdhpxy.cpp' by Claude SIMON (http://zeusw.org/).
+	'xdhups.cpp' by Claude SIMON (http://zeusw.org/).
 
-	'xdhpxy' is part of the Epeios framework.
+	'xdhups' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,15 +17,15 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define XDHPXY__COMPILATION
+#define XDHUPS__COMPILATION
 
-#include "xdhpxy.h"
+#include "xdhups.h"
 
-using namespace xdhpxy;
+using namespace xdhups;
 
 extern "C" typedef xdhcbk::retrieve retrieve;
 
-bso::bool__ xdhpxy::proxy___::Init(
+bso::bool__ xdhups::agent___::Init(
 	const str::string_ &ModuleFileName,
 	const char *Identification )
 {

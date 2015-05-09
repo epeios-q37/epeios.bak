@@ -23,8 +23,6 @@
 
 #include "sclfrntnd.h"
 
-#include "xdhbse.h"
-
 using namespace sclxdhtml;
 
 static bso::bool__ IsInitialized_ = false;
@@ -53,23 +51,26 @@ const char *sclxdhtml::GetLauncher( void )
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
 
-	typedef xdhcbk::callback__ _callback__;
+	typedef xdhcbk::downstream_callback__ _downstream_callback__;
+	typedef xdhcbk::upstream_callback__ _upstream_callback__;
 
-	class callback__
-	: public _callback__
+	class donwstream_callback_implementation__
+	: public _downstream_callback__
 	{
 	private:
-		xdhcbk::proxy_callback__ *_ProxyCallback;
-		Q37_RMDF( xdhcbk::proxy_callback__, _PC, _ProxyCallback );
+		Q37_MRMDF( xdhcbk::upstream_callback__, _UC, _UpstreamCallback );
 	protected:
 		virtual void XDHCBKInitialize( const xdhcbk::shared_data__ &Data ) override
 		{
+			if ( Launcher_ != NULL )
+				ERRFwk();
+
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
 				sclmisc::Initialize( Data.ERRError(), Data.SCLError(), Data.CIO(), Data.Localization() );
 			}
 
-			_ProxyCallback = Data.Callback();
+			_UpstreamCallback = Data.Callback();
 		}
 		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
@@ -82,19 +83,19 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcbk::session_callback__ *XDHCBKNew( void *UP ) override
+		virtual xdhcbk::session_callback__ *XDHCBKNew( void ) override
 		{
-			return SCLXDHTMLNew( _PC(), UP );
+			return SCLXDHTMLNew( _UC() );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_callback__::reset( P );
+			downstream_callback__::reset( P );
 		}
-		E_CVDTOR( callback__ );
+		E_CVDTOR( donwstream_callback_implementation__ );
 		void Init( void )
 		{
-			_callback__::Init();
+			downstream_callback__::Init();
 		}
 	};
 }
@@ -106,12 +107,12 @@ static inline void DoNothing_( void )
 
 DEF( XDHCBK_RETRIEVE_FUNCTION_NAME, xdhcbk::retrieve );
 
-_callback__ *XDHCBKRetrieve( void )
+xdhcbk::downstream_callback__ *XDHCBKRetrieve( void )
 {
-	callback__ *Callback = NULL;
+	donwstream_callback_implementation__ *Callback = NULL;
 ERRFProlog
 ERRFBegin
-	Callback = new callback__;
+	Callback = new donwstream_callback_implementation__;
 
 	if ( Callback == NULL )
 		ERRAlc();
@@ -128,7 +129,7 @@ ERRFEpilog(DoNothing_())
 }
 
 void sclxdhtml::HandleError(
-	xdhagt::agent___ &Agent,
+	proxy__ &Proxy,
 	const char *Language )
 {
 ERRProlog
@@ -140,15 +141,15 @@ ERRBegin
 		Message.Init();
 		if ( sclerror::GetPendingErrorTranslation( Language, Message, err::hUserDefined ) ) {
 			sclerror::ResetPendingError();
-			Agent.RawAlert( Message );
+			Proxy.Alert( Message );
 		} 
 		break;
 	case err::t_Free:
 	case err::t_Return:
-		Agent.RawAlert( "???" );
+		Proxy.Alert( "???" );
 		break;
 	default:
-		Agent.RawAlert( err::Message( ErrBuffer ) );
+		Proxy.Alert( err::Message( ErrBuffer ) );
 		break;
 	}
 
@@ -201,13 +202,13 @@ ERREpilog
 }
 #endif
 
-void sclxdhtml::LoadProject( xdhagt::agent___ &Agent )
+void sclxdhtml::LoadProject( proxy__ &Proxy )
 {
 ERRProlog
 	str::string ProjectFeature;
 ERRBegin
 	ProjectFeature.Init();
-	sclfrntnd::LoadProject( xdhbse::prolog::GetProjectFeatures( Agent, ProjectFeature ), ProjectFeature );
+	sclfrntnd::LoadProject( xdhdws::prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature );
 ERRErr
 ERREnd
 ERREpilog
@@ -217,14 +218,14 @@ void sclxdhtml::LaunchProject(
 	const char *Language,
 	frdkrn::kernel___ &Kernel,
 	frdssn::session___ &Session,
-	xdhagt::agent___ &Agent,
+	proxy__ &Proxy,
 	const frdkrn::compatibility_informations__ &CompatibilityInformations )
 {
 ERRProlog
 	str::string BackendFeature;
 ERRBegin
 	BackendFeature.Init();
-	sclfrntnd::Connect( Language, Kernel, xdhbse::login::GetBackendFeatures( Agent, BackendFeature ), BackendFeature, CompatibilityInformations );
+	sclfrntnd::Connect( Language, Kernel, xdhdws::login::GetBackendFeatures( Proxy, BackendFeature ), BackendFeature, CompatibilityInformations );
 
 	Session.Open( Language );
 ERRErr

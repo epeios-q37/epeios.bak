@@ -38,21 +38,23 @@ namespace xdhagt {
 
 	class agent___ {
 	private:
-		Q37_MRMDF( xdhcbk::proxy_callback__, _C, _Callback );
+		Q37_MRMDF( xdhcbk::upstream_callback__, _C, _Callback );
 		void *_UP;
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			if ( P )
+				if ( _UP != NULL )
+					_C().Delete( _UP );
+
 			_Callback = NULL;
 			_UP = NULL;
 		}
 		E_CDTOR( agent___ );
-		void Init(
-			xdhcbk::proxy_callback__ &Callback,
-			void *UP )
+		void Init( xdhcbk::upstream_callback__ &Callback )
 		{
 			_Callback = &Callback;
-			_UP;
+			_UP = _C().New();
 		}
 # if 0
 		const char *GetLanguage( TOL_CBUFFER___ &Buffer )

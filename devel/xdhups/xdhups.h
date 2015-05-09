@@ -1,7 +1,7 @@
 /*
-	'xdhpxy.h' by Claude SIMON (http://zeusw.org/).
+	'xdhups.h' by Claude SIMON (http://zeusw.org/).
 
-	'xdhpxy' is part of the Epeios framework.
+	'xdhups' is part of the Epeios framework.
 
     The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as published
@@ -17,24 +17,24 @@
     along with The Epeios framework.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef XDHPXY__INC
-# define XDHPXY__INC
+#ifndef XDHUPS__INC
+# define XDHUPS__INC
 
-# define XDHPXY_NAME		"XDHPXY"
+# define XDHUPS_NAME		"XDHUPS"
 
-# if defined( E_DEBUG ) && !defined( XDHPXY_NODBG )
-#  define XDHPXY_DBG
+# if defined( E_DEBUG ) && !defined( XDHUPS_NODBG )
+#  define XDHUPS_DBG
 # endif
 
-// X(SL/ DH(TML) ProXY
+// X(SL)/DH(TML) UPStream
 
 # include "xdhcbk.h"
 
-# include "dlbrry.h"
 # include "err.h"
+# include "dlbrry.h"
 
-namespace xdhpxy {
-    class proxy___
+namespace xdhups {
+    class agent___
     {
     private:
 		dlbrry::dynamic_library___ _Library;
@@ -47,7 +47,7 @@ namespace xdhpxy {
 			_Library.reset( P );
 			_Callback = NULL;
         }
-        E_CDTOR( proxy___ );
+        E_CDTOR( agent___ );
 		bso::bool__ Init(
 			const str::string_ &ModuleFileName,
 			const char *Identification );
@@ -60,8 +60,6 @@ namespace xdhpxy {
 			return _C().BaseLanguage( Buffer );
 		}
 	};
-
-
 }
 
 #endif

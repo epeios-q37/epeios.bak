@@ -12,6 +12,16 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-05-09 :
+- XDH...
+	* Reorganization of all the 'XDH'-related modules.
+
+2015-05-07 :
+- XDHAGT :
+	- Adaptation to changes in 'XDHCBK'.
+- XDHCBK :
+	% Adding 'upstream_callback__::(XDHCBK)New(...)' and 'upstream_callback__::(XDHCBK)Delete(...)' to handle user pointer.
+
 2015-05-06
 - CSDLEC :
 	# Fixing bug when in remote mode, by using changes in 'CSDLEO'.
@@ -19,12 +29,20 @@ Meaning of list markers (2nd level):
 	* Removing useless 'callback__::(CSDLEO)ReleaseCallback(...)', as releasing is do by calling the destructor of the concerned 'csdscb::callback__callback__'.
 	* Removing useless 'Context' parameter of 'csdleo::callback__::(CSDLEO)RetrieveCallback(...)'.
 	# Fixing bug when in remote mode, by adding 'data__::Mode', which should be 'mEmbedded', except when used by the 'eDeamon' (name will change soon) tool.
-SCLBACKND :
+- SCLBACKND :
 	- Adaptation to changes in 'SCLDAEMON'.
 	-'SCLBACKNDNewCallback(...)' -> 'SCLBACKNDGetCallback(...)'.
-SCLDAEMON :
+- SCLDAEMON :
 	- Adaptation to changes in 'CSDLEO'.
 	-'SCLDAEMONNewCallback(...)' -> 'SCLDAEMONGetCallback(...)'.
+- XDH...
+	* Adaptation to changes in 'XDHCBK'.
+- XDHCBK :
+	- 'proxy_callback__' -> 'upstream_callback__'.
+	- 'session_callback__' -> 'downtream_callback__'.
+	% Merging 'callback__' with 'downstream_callback__'.
+	* A 'session_callback__' was created per session. Now, there is only one callback ('dwonstream_callback__') for all session.
+	  data owned by each session are passed through a user pointer.
 
 2015-05-05 :
 - SCLXDHTML, XDHAGT, XDHPXY :

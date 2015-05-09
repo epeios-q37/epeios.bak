@@ -46,187 +46,21 @@ namespace xdhcbk {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
-	enum function__ {		// Paramtres. 'Buffer' est un 'TOL_CBUFFER___' destin  receuillir la valeur de retour.
-		fLog,				// Message,
-		fAlert,				// XML, XSL, Title.
-		fConfirm,			// XML, XSL, Title, Buffer.
-		fSetChildren,		// Id, XML, XSL.
-		fSetCasting,		// Id, XML, XSL.
-		fSetProperty,		// Id, Name, Value.
-		fGetProperty,		// Id, Name, Buffer.
-		fSetAttribute,		// Id, Name, Value.
-		fGetAttribute,		// Id, Name, Buffer.
-		fRemoveAttribute,	// Id, Name.
-		fGetResult,			// Id, Buffer.
-		fSetContent,		// Id, Value.
-		fGetContent,		// Id, Buffer.
-		fFocus,				// Id.
-		f_amount,
-		f_Undefined
-	};
-
-	const char *GetLabel( function__ Function );
-
-	class proxy_callback__ {
-	protected:
-		virtual void XDHCBKProcess(
-			void *UP,
-			function__ Function,
-			TOL_CBUFFER___ *Result,
-			...	) = 0;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			// Standardisation.
-		}		
-		E_CVDTOR( proxy_callback__ );
-		void Init( void )
-		{
-			// Standardisation.
-		}
-		void Log(
-			void *UP,
-			const nstring___ &Message )
-		{
-			XDHCBKProcess( UP, fLog, NULL, Message.Internal()() );
-		}
-		void Alert(
-			void *UP,
-			const nstring___ &XML,
-			const nstring___ &XSL,
-			const nstring___ &Title )
-		{
-			XDHCBKProcess( UP, fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
-		}
-		void Confirm(
-			void *UP,
-			const nstring___ &XML,
-			const nstring___ &XSL,
-			const nstring___ &Title,
-			TOL_CBUFFER___ &Buffer )
-		{
-			XDHCBKProcess( UP, fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ) );
-		}
-		void SetChildren(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &XML,
-			const nstring___ &XSL )
-		{
-			XDHCBKProcess( UP, fSetChildren, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
-		}
-		void SetCasting(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &XML,
-			const nstring___ &XSL )
-		{
-			XDHCBKProcess( UP, fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
-		}
-		const char *GetProperty(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &Name,
-			TOL_CBUFFER___ &Buffer )
-		{
-			XDHCBKProcess( UP, fGetProperty, &Buffer, Id.Internal()( ), Name.Internal()( ) );
-
-			return Buffer;
-		}
-		void SetProperty(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &Name,
-			const nstring___ &Value )
-		{
-			XDHCBKProcess( UP, fSetProperty, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
-		}
-		const char *GetAttribute(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &Name,
-			TOL_CBUFFER___ &Buffer )
-		{
-			XDHCBKProcess( UP, fGetAttribute, &Buffer, Id.Internal()( ), Name.Internal()( ) );
-
-			return Buffer;
-		}
-		void SetAttribute(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &Name,
-			const nstring___ &Value )
-		{
-			XDHCBKProcess( UP, fSetAttribute, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
-		}
-		const char *GetResult(
-			void *UP,
-			const nstring___ &Id,
-			TOL_CBUFFER___ &Buffer )
-		{
-			XDHCBKProcess( UP, fGetResult, &Buffer, Id.Internal()( ) );
-
-			return Buffer;
-		}
-		void RemoveAttribute(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &Name )
-		{
-			XDHCBKProcess( UP, fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
-		}
-		const char *GetContent(
-			void *UP,
-			const nstring___ &Id,
-			TOL_CBUFFER___ &Buffer )
-		{
-			XDHCBKProcess( UP, fGetContent, &Buffer, Id.Internal()( ) );
-
-			return Buffer;
-		}
-		void SetContent(
-			void *UP,
-			const nstring___ &Id,
-			const nstring___ &Value )
-		{
-			XDHCBKProcess( UP, fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
-		}
-		void Focus(
-			void *UP,
-			const nstring___ &Id )
-		{
-			XDHCBKProcess( UP, fFocus, NULL, Id.Internal()( ) );
-		}
-# if 0
-		void ExecuteJavascript( const nstring___ &Script )
-		{
-		ERRProlog
-			TOL_CBUFFER___ Buffer;
-		ERRBegin
-			ExecuteJavascript( Script, Buffer );
-		ERRErr
-		ERREnd
-		ERREpilog
-		}
-# endif
-	};
-
 	class session_callback__
 	{
 	protected:
 		virtual bso::bool__ XDHCBKLaunch(
 			const char *Id,
 			const char *Action ) = 0;	// Return 'true' if the event propagation had to be stopped.
-		virtual const char *XDHCBKLanguage( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
-			// Standardisation.
+			// Standadization.
 		}
 		E_CVDTOR( session_callback__ );
 		void Init( void )
 		{
-			// Standardisation.
+			// Standardization.
 		}
 		bso::bool__ Launch(
 			const char *Id,
@@ -234,14 +68,80 @@ namespace xdhcbk {
 		{
 			return XDHCBKLaunch( Id, Action );
 		}
-		const char *Language( TOL_CBUFFER___ &Buffer )
+	};
+
+	enum function__ {		// Parameters :
+		fLog,				// Message,
+		fAlert,				// XML, XSL, Title.
+		fConfirm,			// XML, XSL, Title.
+		fSetChildren,		// Id, XML, XSL.
+		fSetCasting,		// Id, XML, XSL.
+		fSetProperty,		// Id, Name, Value.
+		fGetProperty,		// Id, Name.
+		fSetAttribute,		// Id, Name, Value.
+		fGetAttribute,		// Id, Name.
+		fRemoveAttribute,	// Id, Name.
+		fGetResult,			// Id.
+		fSetContent,		// Id, Value.
+		fGetContent,		// Id.
+		fFocus,				// Id.
+		f_amount,
+		f_Undefined
+	};
+
+	const char *GetLabel( function__ Function );
+
+	class proxy_callback__
+	{
+	protected:
+		virtual void XDHCBKProcess(
+			function__ Function,
+			TOL_CBUFFER___ *Result,
+			...	) = 0;
+	public:
+		void reset( bso::bool__ = true )
 		{
-			return XDHCBKLanguage( Buffer );
+			// Standardization.
+		}
+		E_CVDTOR( proxy_callback__ );
+		void Init( void )
+		{
+			// Standardization.
+		}
+		void Process(
+			function__ Function,
+			TOL_CBUFFER___ *Result,
+			...	)
+		{
+			va_list List;
+			va_start( List, Result );
+
+			return XDHCBKProcess( Function, Result, List );
+		}
+	};
+
+
+	class upstream_callback__ {
+	protected:
+		virtual proxy_callback__ *XDHCBKNew( void ) = 0;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			// Standardisation.
+		}		
+		E_CVDTOR( upstream_callback__ );
+		void Init( void )
+		{
+			// Standardisation.
+		}
+		proxy_callback__ *New( void )
+		{
+			return XDHCBKNew();
 		}
 	};
 
 #pragma pack( push, 1)
-		// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : is modified, increment 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
 	{
 	private:
@@ -250,7 +150,7 @@ namespace xdhcbk {
 		err::err___ *_ERRError;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
-		proxy_callback__ *_Callback;
+		upstream_callback__ *_Callback;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 	public:
@@ -267,7 +167,7 @@ namespace xdhcbk {
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			proxy_callback__ &Callback,
+			upstream_callback__ &Callback,
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
@@ -286,25 +186,25 @@ namespace xdhcbk {
 		}
 		Q37_PMDF( err::err___, ERRError, _ERRError );
 		Q37_PMDF( sclerror::error___, SCLError, _SCLError );
-		Q37_PMDF( proxy_callback__, Callback, _Callback );
+		Q37_PMDF( upstream_callback__, Callback, _Callback );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
 		Q37_RMDF( const cio::set__, CIO, _CIO );
 	};
 #pragma pack( pop )
 
-	class callback__
+	class downstream_callback__
 	{
 	protected:
 		virtual void XDHCBKInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XDHCBKNew( void * UP ) = 0;
+		virtual session_callback__ *XDHCBKNew( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
 			// Standardisation.
-	}
-		E_CVDTOR( callback__ );
+		}
+		E_CVDTOR( downstream_callback__ );
 		void Init( void )
 		{
 			// Standardisation.
@@ -319,13 +219,13 @@ namespace xdhcbk {
 
 			return Buffer;
 		}
-		session_callback__ *New( void *UP )
+		session_callback__ *Newn( void )
 		{
-			return XDHCBKNew( UP );
+			return XDHCBKNew();
 		}
 	};
 
-	typedef callback__ *(retrieve)( void );
+	typedef downstream_callback__ *(retrieve)( void );
 
 	void Escape(
 		const str::string_ &Source,
