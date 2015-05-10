@@ -97,7 +97,7 @@ namespace xdhcbk {
 		virtual void XDHCBKProcess(
 			function__ Function,
 			TOL_CBUFFER___ *Result,
-			...	) = 0;
+			va_list List ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -113,30 +113,16 @@ namespace xdhcbk {
 			TOL_CBUFFER___ *Result,
 			...	)
 		{
+		ERRProlog
 			va_list List;
+		ERRBegin
 			va_start( List, Result );
 
-			return XDHCBKProcess( Function, Result, List );
-		}
-	};
-
-
-	class upstream_callback__ {
-	protected:
-		virtual proxy_callback__ *XDHCBKNew( void ) = 0;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			// Standardisation.
-		}		
-		E_CVDTOR( upstream_callback__ );
-		void Init( void )
-		{
-			// Standardisation.
-		}
-		proxy_callback__ *New( void )
-		{
-			return XDHCBKNew();
+			XDHCBKProcess( Function, Result, List );
+		ERRErr
+		ERREnd
+			va_end( List );
+		ERREpilog
 		}
 	};
 
@@ -150,7 +136,6 @@ namespace xdhcbk {
 		err::err___ *_ERRError;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
-		upstream_callback__ *_Callback;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 	public:
@@ -161,13 +146,11 @@ namespace xdhcbk {
 			_ERRError = NULL;
 			_SCLError = NULL;
 			_CIO = NULL;
-			_Callback = NULL;
 			_LauncherIdentification = NULL;
 			_Localization = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			upstream_callback__ &Callback,
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
@@ -176,7 +159,6 @@ namespace xdhcbk {
 			_ERRError = err::ERRError;
 			_SCLError = sclerror::SCLERRORError;
 			_CIO = &cio::GetCurrentSet();
-			_Callback = &Callback;
 			_LauncherIdentification = LauncherIdentification;
 			_Localization = Localization;
 		}
@@ -186,7 +168,6 @@ namespace xdhcbk {
 		}
 		Q37_PMDF( err::err___, ERRError, _ERRError );
 		Q37_PMDF( sclerror::error___, SCLError, _SCLError );
-		Q37_PMDF( upstream_callback__, Callback, _Callback );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
 		Q37_RMDF( const cio::set__, CIO, _CIO );
@@ -198,7 +179,7 @@ namespace xdhcbk {
 	protected:
 		virtual void XDHCBKInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XDHCBKNew( void ) = 0;
+		virtual session_callback__ *XDHCBKNew( proxy_callback__ *ProxyCallback ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -219,9 +200,9 @@ namespace xdhcbk {
 
 			return Buffer;
 		}
-		session_callback__ *Newn( void )
+		session_callback__ *New( proxy_callback__ *ProxyCallback )
 		{
-			return XDHCBKNew();
+			return XDHCBKNew( ProxyCallback );
 		}
 	};
 

@@ -594,13 +594,8 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 void xdhjsp::proxy_callback__::XDHCBKProcess(
 	xdhcbk::function__ Function,
 	TOL_CBUFFER___ *Result,
-	... )
+	va_list List )
 {
-ERRProlog
-	va_list List;
-ERRBegin
-	va_start( List, Result );
-
 	switch ( Function ) {
 	case xdhcbk::fSetProperty:
 	case xdhcbk::fGetProperty:
@@ -633,9 +628,5 @@ ERRBegin
 		ERRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-	va_end( List );
-ERREpilog
 }
 

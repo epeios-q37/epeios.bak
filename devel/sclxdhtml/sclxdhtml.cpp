@@ -52,13 +52,10 @@ const char *sclxdhtml::GetLauncher( void )
 namespace {
 
 	typedef xdhcbk::downstream_callback__ _downstream_callback__;
-	typedef xdhcbk::upstream_callback__ _upstream_callback__;
 
 	class donwstream_callback_implementation__
 	: public _downstream_callback__
 	{
-	private:
-		Q37_MRMDF( xdhcbk::upstream_callback__, _UC, _UpstreamCallback );
 	protected:
 		virtual void XDHCBKInitialize( const xdhcbk::shared_data__ &Data ) override
 		{
@@ -68,9 +65,8 @@ namespace {
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
 				sclmisc::Initialize( Data.ERRError(), Data.SCLError(), Data.CIO(), Data.Localization() );
+				SCLXDHTMLInitialialization();
 			}
-
-			_UpstreamCallback = Data.Callback();
 		}
 		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
@@ -83,9 +79,9 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcbk::session_callback__ *XDHCBKNew( void ) override
+		virtual xdhcbk::session_callback__ *XDHCBKNew( xdhcbk::proxy_callback__ *ProxyCallback ) override
 		{
-			return SCLXDHTMLNew( _UC() );
+			return SCLXDHTMLNew( ProxyCallback );
 		}
 	public:
 		void reset( bso::bool__ P = true )

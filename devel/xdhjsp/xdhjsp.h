@@ -200,7 +200,7 @@ namespace xdhjsp {
 		virtual void XDHCBKProcess(
 			xdhcbk::function__ Function,
 			TOL_CBUFFER___ *Result,
-			...	) override; 
+			va_list List ) override; 
 	public:
 		void reset( bso::bool__ P = true )
 		{

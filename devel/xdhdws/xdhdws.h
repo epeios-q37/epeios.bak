@@ -135,8 +135,8 @@ namespace xdhdws {
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
+			Property.Append( GetProperty( Id, Name, Buffer ) );
 		ERRErr
-			Property.Append(GetProperty( Id, Name, Buffer ) );
 		ERREnd
 		ERREpilog
 			return Property;
@@ -165,8 +165,8 @@ namespace xdhdws {
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
-		ERRErr
 			Attribute.Append( GetAttribute( Id, Name, Buffer ) );
+		ERRErr
 		ERREnd
 		ERREpilog
 			return Attribute;
@@ -193,8 +193,8 @@ namespace xdhdws {
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
-		ERRErr
 			Result.Append( GetResult( Id, Buffer ) );
+		ERRErr
 		ERREnd
 		ERREpilog
 			return Result;
@@ -220,8 +220,8 @@ namespace xdhdws {
 		ERRProlog
 			TOL_CBUFFER___ Buffer;
 		ERRBegin
-		ERRErr
 			Content.Append( GetContent( Id, Buffer ) );
+		ERRErr
 		ERREnd
 		ERREpilog
 			return Content;

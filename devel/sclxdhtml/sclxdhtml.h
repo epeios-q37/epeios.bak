@@ -76,37 +76,6 @@ namespace sclxdhtml {
 	};
 
 	namespace {
-		template <typename session> class _action_helper_callback__
-		{
-		protected:
-			virtual bso::bool__ SCLXHTMLOnBeforeAction(
-				session &Session,
-				const char *Id,
-				const char *Action ) = 0;
-			virtual bso::bool__ SCLXHTMLOnClose( session &Session ) = 0;
-		public:
-			void reset( bso::bool__ = true )
-			{
-				// Standardisation.
-			}
-			E_CVDTOR( _action_helper_callback__ );
-			void Init( void )
-			{
-				// Standardisation.
-			}
-			bso::bool__ OnBeforeAction(
-				session &Session,
-				const char *Id,
-				const char *Action )
-			{
-				return SCLXHTMLOnBeforeAction( Session, Id, Action );
-			}
-			bso::bool__ OnClose( session &Session )
-			{
-				return SCLXHTMLOnClose( Session );
-			}
-		};
-
 		E_ROW( crow__ );	// callback row;
 
 		template <typename session> E_TTCLONE_( bch::E_BUNCHt_( action_callback__<session> *, crow__ ), action_callbacks_ );
@@ -180,28 +149,33 @@ namespace sclxdhtml {
 	}
 
 	template <typename session> class action_helper_callback__
-	: public _action_helper_callback__<session>
 	{
-	private:
-		session *_Session;
+	protected:
+		virtual bso::bool__ SCLXHTMLOnBeforeAction(
+			session &Session,
+			const char *Id,
+			const char *Action ) = 0;
+		virtual bso::bool__ SCLXHTMLOnClose( session &Session ) = 0;
 	public:
-		void reset( bso::bool__ P = true )
+		void reset( bso::bool__ = true )
 		{
-			_action_helper_callback__::reset( P );
-			_Session = NULL;
+			// Standardisation.
 		}
 		E_CVDTOR( action_helper_callback__ );
-		void Init( session &Session )
+		void Init( void )
 		{
-			_action_helper_callback__::Init();
-			_Session = &Session;
+			// Standardisation.
 		}
-		session &Session( void ) const
+		bso::bool__ OnBeforeAction(
+			session &Session,
+			const char *Id,
+			const char *Action )
 		{
-			if ( _Session == NULL )
-				ERRFwk();
-
-			return *_Session;
+			return SCLXHTMLOnBeforeAction( Session, Id, Action );
+		}
+		bso::bool__ OnClose( session &Session )
+		{
+			return SCLXHTMLOnClose( Session );
 		}
 	};
 
@@ -248,14 +222,13 @@ namespace sclxdhtml {
 	/*********** 1 *****************/
 
 	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
-	template <typename core, typename instances, typename kernel, typename page, page UndefinedPage > class session___
+	template <typename instances, typename kernel, typename page, page UndefinedPage > class session___
 	: public _session_callback__,
 	  public proxy__,
 	  public instances,
 	  public _session___
 	{
 	private:
-		Q37_MRMDF(core, _C, _Core );
 		kernel _Kernel;
 		page _Page;	// Current page;
 		reporting_callback__ _ReportingCallback;
@@ -352,8 +325,7 @@ namespace sclxdhtml {
 	{
 	private:
 		action_handler<session> _Handler;
-		Q37_MRMDF( _action_helper_callback__<session>, _AH, _ActionHelperCallback );
-		reporting_callback__ _ReportingCallback;
+		Q37_MRMDF( action_helper_callback__<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
 			const char *Id,
@@ -370,14 +342,10 @@ namespace sclxdhtml {
 		{
 			_Handler.reset( P );
 			_ActionHelperCallback = NULL;
-			_ReportingCallback.reset( P );
 		}
 		E_CVDTOR( core___ )
-		void Init(
-			xdhcbk::proxy_callback__ &Callback,
-			_action_helper_callback__<session> &ActionHelperCallback )
+		void Init( action_helper_callback__<session> &ActionHelperCallback )
 		{
-			_Kernel.Init( _ReportingCallback );
 			_ActionHelperCallback = &ActionHelperCallback;
 			_Handler.Init();
 		}
@@ -443,7 +411,8 @@ namespace sclxdhtml {
 		proxy__ &Proxy,
 		const frdkrn::compatibility_informations__ &CompatibilityInformations );
 
-	xdhcbk::session_callback__ *SCLXDHTMLNew( xdhcbk::upstream_callback__ &Callback );	// To override.
+	void SCLXDHTMLInitialialization( void );	// To overload.
+	xdhcbk::session_callback__ *SCLXDHTMLNew( xdhcbk::proxy_callback__ *ProxyCallback );	// To override.
 
 }
 

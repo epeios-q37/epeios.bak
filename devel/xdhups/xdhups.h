@@ -34,13 +34,42 @@
 # include "dlbrry.h"
 
 namespace xdhups {
+
+	typedef xdhcbk::session_callback__ _session_callback__;
+
+	class session__
+	{
+	private:
+		Q37_MRMDF( xdhcbk::session_callback__, _C, _Callback );
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			if ( P )
+				if ( _Callback != NULL )
+					delete _Callback;
+
+			_Callback = NULL;
+		}
+		E_CVDTOR( session__ );
+		void Init( xdhcbk::session_callback__ *Callback )
+		{
+			reset();
+
+			_Callback = Callback;
+		}
+		bso::bool__ Launch(
+			const char *Id,
+			const char *Action )
+		{
+			return _C().Launch( Id, Action );
+		}
+	};
+
     class agent___
     {
     private:
 		dlbrry::dynamic_library___ _Library;
 		Q37_MRMDF( xdhcbk::downstream_callback__, _C, _Callback );
-	protected:
-		virtual xdhcbk::upstream_callback__ &XDHPXYGetUpstreamCallback( void ) = 0;
     public:
         void reset( bso::bool__ P = true )
         {

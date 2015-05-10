@@ -36,7 +36,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Location.Init();
-	Data.Init( XDHPXYGetUpstreamCallback(), Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ) );
+	Data.Init( Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ) );
 
 	_Library.Init( ModuleFileName );
 
