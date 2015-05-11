@@ -66,38 +66,53 @@ namespace xdhjsp {
 		str::string_ *Script,	// Was '&Script', but should not work due 'va_start(...)' restrictions concerning references (but it worked under MSVC).
 		... );
 
-	namespace script {
+	namespace registry {
 		using rgstry::entry___;
 
-		extern entry___ Log;
-		extern entry___ DocumentSetter;
-		extern entry___ ChildrenSetter;
-		extern entry___ Focusing;
-		namespace casting {
-			extern entry___ Definer;
-			extern entry___ Handler;
+		extern entry___ RootTagId;
+
+		extern entry___ CustomItems;
+
+		namespace custom_item {
+			extern entry___ AttributeNames;
+
+			namespace attribute_name {
+				extern entry___ Widget;
+				extern entry___ Result;
+			}
 		}
-		namespace property {
-			extern entry___ Setter;
-			extern entry___ Getter;
-		}
-		namespace attribute {
-			extern entry___ Setter;
-			extern entry___ Getter;
-			extern entry___ Remover;
-		}
-		namespace content {
-			extern entry___ Setter;
-			extern entry___ Getter;
-		}
-		namespace dialog {
-			extern entry___ Alert;
-			extern entry___ Confirm;
-		}
-		namespace widget {
-			extern entry___ Instantiation;
-			extern entry___ ContentRetriever;
+
+		namespace script {
+			extern entry___ Log;
+			extern entry___ DocumentSetter;
+			extern entry___ ChildrenSetter;
 			extern entry___ Focusing;
+			namespace casting {
+				extern entry___ Definer;
+				extern entry___ Handler;
+			}
+			namespace property {
+				extern entry___ Setter;
+				extern entry___ Getter;
+			}
+			namespace attribute {
+				extern entry___ Setter;
+				extern entry___ Getter;
+				extern entry___ Remover;
+			}
+			namespace content {
+				extern entry___ Setter;
+				extern entry___ Getter;
+			}
+			namespace dialog {
+				extern entry___ Alert;
+				extern entry___ Confirm;
+			}
+			namespace widget {
+				extern entry___ Instantiation;
+				extern entry___ ContentRetriever;
+				extern entry___ Focusing;
+			}
 		}
 	}
 
@@ -188,14 +203,7 @@ namespace xdhjsp {
 	: public _proxy_callback__
 	{
 	private:
-		callback__ *_Callback;
-		callback__ &_C( void ) const
-		{
-			if  ( _Callback == NULL )
-				ERRFwk();
-
-			return *_Callback;
-		}
+		Q37_MRMDF( callback__, _C, _Callback );
 	protected:
 		virtual void XDHCBKProcess(
 			xdhcbk::function__ Function,
@@ -205,6 +213,7 @@ namespace xdhjsp {
 		void reset( bso::bool__ P = true )
 		{
 			_proxy_callback__::reset( P );
+			_Callback = NULL;
 		}
 		E_CVDTOR( proxy_callback__);
 		void Init( callback__ &Callback )

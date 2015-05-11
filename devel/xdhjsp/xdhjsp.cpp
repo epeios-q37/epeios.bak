@@ -28,43 +28,51 @@ using namespace xdhjsp;
 
 using rgstry::entry___;
 
+entry___ registry::RootTagId( "RootTagId", sclrgstry::Definitions );
+
+entry___ registry::CustomItems( "CustomItems", sclrgstry::Definitions );
+
+entry___ registry::custom_item::AttributeNames("AttributeNames", CustomItems );
+entry___ registry::custom_item::attribute_name::Widget( "Widget", AttributeNames );
+entry___ registry::custom_item::attribute_name::Result( "Result", AttributeNames );
+
 static entry___ Scripts_( "Scripts", sclrgstry::Definitions );
 
 static entry___ PropertyScripts_( "Property", Scripts_ );
-entry___ xdhjsp::script::property::Setter( "Setter", PropertyScripts_ );
-entry___ xdhjsp::script::property::Getter( "Getter", PropertyScripts_ );
+entry___ xdhjsp::registry::script::property::Setter( "Setter", PropertyScripts_ );
+entry___ xdhjsp::registry::script::property::Getter( "Getter", PropertyScripts_ );
 
 static entry___ AttributeScripts_( "Attribute", Scripts_ );
-entry___ xdhjsp::script::attribute::Setter( "Setter", AttributeScripts_ );
-entry___ xdhjsp::script::attribute::Getter( "Getter", AttributeScripts_ );
-entry___ xdhjsp::script::attribute::Remover( "Remover", AttributeScripts_ );
+entry___ xdhjsp::registry::script::attribute::Setter( "Setter", AttributeScripts_ );
+entry___ xdhjsp::registry::script::attribute::Getter( "Getter", AttributeScripts_ );
+entry___ xdhjsp::registry::script::attribute::Remover( "Remover", AttributeScripts_ );
 
 static entry___ ContentScripts_( "Content", Scripts_ );
-entry___ xdhjsp::script::content::Setter( "Setter", ContentScripts_ );
-entry___ xdhjsp::script::content::Getter( "Getter", ContentScripts_ );
+entry___ xdhjsp::registry::script::content::Setter( "Setter", ContentScripts_ );
+entry___ xdhjsp::registry::script::content::Getter( "Getter", ContentScripts_ );
 
-entry___ xdhjsp::script::DocumentSetter( "DocumentSetter", Scripts_ );
-entry___ xdhjsp::script::ChildrenSetter( "ChildrenSetter", Scripts_ );
+entry___ xdhjsp::registry::script::DocumentSetter( "DocumentSetter", Scripts_ );
+entry___ xdhjsp::registry::script::ChildrenSetter( "ChildrenSetter", Scripts_ );
 
 static entry___ DialogScripts_( "Dialog", Scripts_ );
-entry___ xdhjsp::script::dialog::Alert( "Alert", DialogScripts_ );
-entry___ xdhjsp::script::dialog::Confirm( "Confirm", DialogScripts_ );
+entry___ xdhjsp::registry::script::dialog::Alert( "Alert", DialogScripts_ );
+entry___ xdhjsp::registry::script::dialog::Confirm( "Confirm", DialogScripts_ );
 
 static entry___ WidgetScripts_( "Widget", Scripts_ );
-entry___ xdhjsp::script::widget::Instantiation( "Instantiation", WidgetScripts_ );
-entry___ xdhjsp::script::widget::ContentRetriever( "ContentRetriever", WidgetScripts_ );
-entry___ xdhjsp::script::widget::Focusing( "Focusing", WidgetScripts_ );
+entry___ xdhjsp::registry::script::widget::Instantiation( "Instantiation", WidgetScripts_ );
+entry___ xdhjsp::registry::script::widget::ContentRetriever( "ContentRetriever", WidgetScripts_ );
+entry___ xdhjsp::registry::script::widget::Focusing( "Focusing", WidgetScripts_ );
 
 static entry___ CastingScripts_( "Casting", Scripts_ );
-entry___ xdhjsp::script::casting::Definer( "Definer", CastingScripts_ );
-entry___ xdhjsp::script::casting::Handler( "Handler", CastingScripts_ );
+entry___ xdhjsp::registry::script::casting::Definer( "Definer", CastingScripts_ );
+entry___ xdhjsp::registry::script::casting::Handler( "Handler", CastingScripts_ );
 
-entry___ xdhjsp::script::Log( "Log", Scripts_ );
-entry___ xdhjsp::script::Focusing( "Focusing", Scripts_ );
+entry___ xdhjsp::registry::script::Log( "Log", Scripts_ );
+entry___ xdhjsp::registry::script::Focusing( "Focusing", Scripts_ );
 
 #define C( name, entry )\
 	case sn##name:\
-		sclmisc::MGetValue( script::entry, Buffer );\
+		sclmisc::MGetValue( registry::script::entry, Buffer );\
 		break
 
 const str::string_ &xdhjsp::GetTaggedScript(

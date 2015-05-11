@@ -286,7 +286,7 @@ ERRBegin
 	SharedLocale.Init();
 	SharedRegistry.Init();
 
-	LibraryData.Init( csdleo::cRegular, ModuleFilename, err::ERRError, NULL, csdleo::mRemote );
+	LibraryData.Init( csdleo::cRegular, ModuleFilename, err::ERRError, sclerror::SCLERRORError, csdleo::mRemote );
 
 	if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 		ERRAlc();

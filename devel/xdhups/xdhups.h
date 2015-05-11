@@ -80,11 +80,11 @@ namespace xdhups {
 		bso::bool__ Init(
 			const str::string_ &ModuleFileName,
 			const char *Identification );
-		xdhcbk::downstream_callback__ &Callback( void ) const
+		xdhcbk::session_callback__ *New( xdhcbk::proxy_callback__ *Callback )
 		{
-			return _C();
+			return _C().New( Callback );
 		}
-		const char *GetBaseLanguage( TOL_CBUFFER___ &Buffer ) const
+		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{
 			return _C().BaseLanguage( Buffer );
 		}
