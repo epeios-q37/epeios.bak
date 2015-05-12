@@ -33,21 +33,129 @@
 
 // SoCLe FRoNTeND
 
-# include "frdkrn.h"
-
 # include "sclrgstry.h"
+
+# include "frdbse.h"
+
+# include "fblfrd.h"
+
+# include "csducl.h"
 
 # include "err.h"
 # include "flw.h"
 # include "xml.h"
 
 namespace sclfrntnd {
+	using csducl::features___;
+
+	class kernel___
+	{
+	private:
+		csducl::universal_client_core _ClientCore;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_ClientCore.reset( P );
+		}
+		E_CVDTOR( kernel___ );
+		bso::bool__ Init(
+			const features___ &Features,
+			csdsnc::log_callback__ *LogCallback = NULL );
+		bso::bool__ Init(
+			const features___ &Features,
+			csdsnc::log_callback__ &LogCallback )
+		{
+			return Init( Features, &LogCallback );
+		}
+		csducl::universal_client_core &Core( void )
+		{
+			return _ClientCore;
+		}
+	};
+
+	using fblfrd::compatibility_informations__;
+
+	using fblfrd::incompatibility_informations_;
+	using fblfrd::incompatibility_informations;
+
+	typedef fblfrd::universal_frontend___ _frontend___;
+
+	class frontend___
+	: public _frontend___
+	{
+	private:
+		csducl::universal_client_ioflow___ _Flow;
+		rgstry::multi_level_registry _Registry;
+		rgstry::level__ _RegistryLevel;
+		bso::bool__ _IsOpen;
+		Q37_MPMDF( const char, _L, _Language );
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_frontend___::reset( P );
+			_Flow.reset( P );
+			_Registry.reset( P );
+			_IsOpen = false;
+			_RegistryLevel = rgstry::UndefinedLevel;
+			_Language = NULL;
+		}
+		E_CVDTOR( frontend___ );
+		void Init(
+			const char *Language,
+			fblfrd::reporting_callback__ &ReportingCallback,
+			const rgstry::multi_level_registry_ &Registry )
+		{
+			// _Flow.Init(...);	// Made on connection.
+			_Registry.Init();
+			_Registry.Push( Registry );
+			_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
+			_IsOpen = false;
+			_Language = Language;
+
+
+			return _frontend___::Init( ReportingCallback );
+		}
+		bso::bool__ Connect(
+			csducl::universal_client_core &ClientCore,
+			const fblfrd::compatibility_informations__ &CompatibilityInformations,
+			fblfrd::incompatibility_informations_ &IncompatibilityInformations )
+		{
+			fblfrd::mode__ Mode = fblfrd::m_Undefined;
+
+			_Flow.Init( ClientCore );
+
+			switch ( ClientCore.GetType() ) {
+			case csducl::tPlugin:
+				Mode = fblfrd::mEmbedded;
+				break;
+			case csducl::tDaemon:
+				Mode = fblfrd::mRemote;
+				break;
+			default:
+				ERRFwk();
+				break;
+			}
+
+			return _frontend___::Connect( _L(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
+		}
+		const rgstry::multi_level_registry_ &Registry( void ) const
+		{
+			return _Registry;
+		}
+		const char *Language( void ) const
+		{
+			return _L();
+		}
+	};
+
+
+
 
 	// Action  effectuer sur le projet par dfaut.
 	enum action__ {
-		aNone,		// Aucune action ; l'utilisateur peut slectionner un autre type de projet, qui sera charg manuellement.
-		aLoad,		// Le project soit tre charg, mais pas lanc.
-		aLaunch,	// Le project doit tre charg et lanc.
+		aNone,		// No action : another project can be choosen, and the selected project is manually loaded and launched.
+		aLoad,		// Project is loaded, but not launched.
+		aLaunch,	// Project is loaded and launched.
 		a_amount,
 		a_Undefined
 	};
@@ -70,12 +178,10 @@ namespace sclfrntnd {
 		frdbse::project_type__ ProjectType,
 		const str::string_ &ProjectFeature );
 
-	void Connect(
-		const char *Language,
-		frdkrn::kernel___ &Kernel,
+	void LaunchProject(
+		kernel___ &Kernel,
 		frdbse::backend_type__ BackendType,
-		const str::string_ &BackendFeature,
-		const frdkrn::compatibility_informations__ &CompatibilityInformations );
+		const str::string_ &BackendFeature );
 
 }
 

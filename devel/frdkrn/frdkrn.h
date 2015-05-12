@@ -73,6 +73,8 @@ namespace frdkrn {
 
 	typedef rgstry::multi_level_registry_ registry_;
 
+# if 0
+
 	template <typename t> class il_	// id, template.
 	{
 	public:
@@ -152,46 +154,34 @@ namespace frdkrn {
 		}
 	};
 
-	class log_functions__
-	: public csdsnc::log_functions__
-	{
-	protected:
-		virtual void CSDSNCLog(
-			csdsnc::log__ Log,
-			const void *Flow,
-			sdr::size__ Amount )
-		{}
-	};
+# endif
 
-	struct backend_features___
+# if 0
+
+	typedef csducl::features___ _features___;
+
+	struct features___
+	: public _features___
 	{
 	public:
 		const char *Language;
-		str::string Location;
-		csducl::type__ Type;
-		bso::uint__ PingDelay;
 		void *UP;
 		void reset( bso::bool__ P = true )
 		{
+			_features___::reset( P );
 			Language = NULL;
-			Location.reset( P );
-			Type = csducl::t_Undefined;
-			PingDelay = 0;
 			UP = NULL;
 		}
-		E_CDTOR( backend_features___ )
-		void Init(
-			const char *Language,
-			bso::uint__ PingDelay,
-			void *UP )
+		E_CDTOR( features___ )
+		void Init( void )
 		{
-			this->Language = Language;
-			Location.Init();
-			Type = csducl::t_Undefined;
-			this->PingDelay = PingDelay;
-			this->UP = UP;
+			_features___::Init();
+			Language = NULL;
+			UP = NULL;
 		}
 	};
+
+# endif
 
 	struct error_set___
 	{
@@ -266,6 +256,8 @@ namespace frdkrn {
 	};
 # endif
 
+# if 0
+
 	class kernel___
 	{
 	private:
@@ -284,14 +276,10 @@ namespace frdkrn {
 # endif
 		bso::bool__ _LoadProjectLocale( void );
 		bso::bool__ _Connect(
-			const str::string_ &RemoteHostServiceOrLocalLibraryPath,
+			const features___ &Features,
 			const compatibility_informations__ &CompatibilityInformations,
-			csducl::type__ Type,
-			const char *Language,
-			bso::uint__ PingDelay,
 			error_set___ &ErrorSet,
-			void *UP,
-			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
+			csdsnc::log_callback__ *LogCallback = NULL );
 		void _CloseConnection( void )
 		{
 			if ( !IsConnected() )
@@ -302,16 +290,6 @@ namespace frdkrn {
 			_Frontend.reset();
 			_ClientCore.reset();
 		}
-	protected:
-		bso::bool__ _Connect(
-			const char *RemoteHostServiceOrLocalLibraryPath,
-			const compatibility_informations__ &CompatibilityInformations,
-			csducl::type__ Type,
-			const char *Language,
-			bso::uint__ PingDelay,
-			error_set___ &ErrorSet,
-			void *UP,
-			csdsnc::log_functions__ &LogFunctions = *(csdsnc::log_functions__ *)NULL );
 		virtual void FRDKRNConnection( fblfrd::frontend___ &Frontend ) = 0;	// Appel lors aprs connection au 'backend'.
 		virtual void FRDKRNDisconnection( void ) = 0;	// Appel avant dconnexion du 'backend'.
 	public:
@@ -343,12 +321,12 @@ namespace frdkrn {
 			Frontend().Dismiss();
 		}
 		bso::bool__ Launch(
-			const backend_features___ &BackendFeatures,
+			const features___ &Features,
 			const compatibility_informations__ &CompatibilityInformations,
 			error_set___ &ErrorSet )	// Les paramtres de connection sont rcuprs de la 'registry'.
 		{
-			if ( BackendFeatures.Type != csducl::t_Undefined )
-				return _Connect( BackendFeatures.Location, CompatibilityInformations, BackendFeatures.Type, BackendFeatures.Language, BackendFeatures.PingDelay, ErrorSet, BackendFeatures.UP );
+			if ( Features.Type != csducl::t_Undefined )
+				return _Connect( Features, CompatibilityInformations, ErrorSet );
 
 			return true;
 		}
@@ -364,7 +342,7 @@ namespace frdkrn {
 			str::string_ &Id );
 # endif
 		bso::bool__ Launch(
-			const backend_features___ &BackendFeatures,
+			const features___ &BackendFeatures,
 			const compatibility_informations__ &CompatibilityInformations );
 		E_RWDISCLOSE__( lcl::meaning_ , ErrorMeaning );
 		void AboutBackend(
@@ -389,6 +367,8 @@ namespace frdkrn {
 			return _Frontend.IsConnected();
 		}
 	};
+
+# endif
 
 	enum authentication_prompt_mode__ 
 	{

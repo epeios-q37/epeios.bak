@@ -30,7 +30,7 @@
 
 # include "xdhdws.h"
 
-# include "frdssn.h"
+# include "sclfrntnd.h"
 
 # include "sclrgstry.h"
 # include "sclmisc.h"
@@ -180,9 +180,7 @@ namespace sclxdhtml {
 	};
 
 	namespace {
-		typedef frdssn::session___ _session___;
-
-		typedef frdkrn::reporting_callback__ _reporting_callback__;
+		typedef fblfrd::reporting_callback__ _reporting_callback__;
 
 		typedef xdhcbk::session_callback__ _session_callback__;
 
@@ -222,69 +220,56 @@ namespace sclxdhtml {
 	/*********** 1 *****************/
 
 	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
-	template <typename instances, typename kernel, typename page, page UndefinedPage > class session___
+	template <typename instances, typename frontend, typename page, page UndefinedPage > class session___
 	: public _session_callback__,
 	  public proxy__,
 	  public instances,
-	  public _session___
+	  public frontend
 	{
 	private:
-		kernel _Kernel;
 		page _Page;	// Current page;
 		reporting_callback__ _ReportingCallback;
-		bso::bool__ _OnBeforeAction(
-			const char *Id,
-			const char *Action )
-		{
-			return _C().OnBeforeAction( Id, Action );
-		}
-		bso::bool__ _OnClose( void )
-		{
-			return _C().OnClose();
-		}
 	protected:
-		virtual void FRDSSNOpen( const char *Language ) override
-		{
-//			_ReportingCallback.Init( Language, *this );
-			_ReportingCallback.Init( *this );
-			instances::Init( _Kernel );
-			_session___::Registry().SetValue(sclrgstry::Language, str::string( Language ) );
-		}
-		virtual void FRDSSNClose( void ) override
-		{
-			instances::reset();
-			_Kernel.Close();
-		}
-		virtual const char *FRDSSNLanguage( TOL_CBUFFER___ &Buffer ) override
-		{
-			return sclrgstry::GetLanguage_( _session___::Registry(), Buffer );
-		}
 		virtual void SCLXDHTMLRefresh( page Page ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_session_callback__::reset( P );
 			instances::reset( P );
-			_session___::reset( P );
-			_Kernel.reset( P );
+			frontend::reset( P );
 			_Page = UndefinedPage;
 			_ReportingCallback.reset( P );
 		}
 		E_CVDTOR( session___ )
-		void Init( xdhcbk::proxy_callback__ *Callback )
+		void Init(
+			const char *Language,
+			xdhcbk::proxy_callback__ *Callback )
 		{
 			proxy__::Init( Callback );
-			_Kernel.Init( _ReportingCallback );
-			_session___::Init( _Kernel, sclmisc::GetRegistry() );
+			_ReportingCallback.Init( *this );
+			frontend::Init( Language, _ReportingCallback, sclmisc::GetRegistry() );
 			_session_callback__::Init();
 			_Page = UndefinedPage;
-
-			// Le reste est initialis lors de l'ouverure de session (voir 'FRDSSNOpen()'.
+			// instances::Init( *this );	// Made on connection.
 		}
+		bso::bool__ Connect(
+			csducl::universal_client_core &ClientCore,
+			const fblfrd::compatibility_informations__ &CompatibilityInformations,
+			fblfrd::incompatibility_informations_ &IncompatibilityInformations )
+		{
+			if ( !frontend::Connect( ClientCore, CompatibilityInformations, IncompatibilityInformations ) )
+				return false;
+
+			instances::Init( *this );	// Made on connection.
+			
+			return true;
+		}
+		/*
 		const char *Language( TOL_CBUFFER___ &Buffer )
 		{
-			return _session___::Language( Buffer );	// Pour rsoudre l'ambiguit.
+			return _frontend___::Language( Buffer );	// Pour rsoudre l'ambiguit.
 		}
+		*/
 		void Refresh( void )
 		{
 			if ( _Page == UndefinedPage )
@@ -298,10 +283,6 @@ namespace sclxdhtml {
 				_Page = Page;
 			else
 				ERRFwk();
-		}
-		kernel &Kernel( void )
-		{
-			return _Kernel;
 		}
 		const str::string_ &GetTranslation(
 			const char *Message,
@@ -370,7 +351,7 @@ namespace sclxdhtml {
 				else
 					Success = _Handler.Launch( Session, Id, Action );
 		ERRErr
-			HandleError( Session, Session.Language( Buffer ) );
+			HandleError( Session, Session.Language() );
 		ERREnd
 		ERREpilog
 			return Success;
@@ -405,14 +386,13 @@ namespace sclxdhtml {
 	void LoadProject( proxy__ &Proxy );
 
 	void LaunchProject(
-		const char *Language,
-		frdkrn::kernel___ &Kernel,
-		frdssn::session___ &Session,
-		proxy__ &Proxy,
-		const frdkrn::compatibility_informations__ &CompatibilityInformations );
+		proxy__ &Proxy ,
+		sclfrntnd::kernel___ &Kernel );
 
 	void SCLXDHTMLInitialialization( void );	// To overload.
-	xdhcbk::session_callback__ *SCLXDHTMLNew( xdhcbk::proxy_callback__ *ProxyCallback );	// To override.
+	xdhcbk::session_callback__ *SCLXDHTMLNew(
+		const char *Language,
+		xdhcbk::proxy_callback__ *ProxyCallback );	// To override.
 
 }
 

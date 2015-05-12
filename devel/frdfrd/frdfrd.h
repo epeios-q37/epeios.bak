@@ -67,6 +67,7 @@
 # include "flw.h"
 
 namespace frdfrd {
+# if 0
 	using fblfrd::compatibility_informations__;
 
 	using fblfrd::incompatibility_informations_;
@@ -112,7 +113,7 @@ namespace frdfrd {
 			return _frontend___::Init( Language, CompatibilityInformations, _Flow, Mode, ReportingCallback, IncompatibilityInformations );
 		}
 	};
-
+# endif
 }
 
 /*$END$*/

@@ -213,29 +213,23 @@ static inline bso::uint__ GetBackendPingDelay_( const registry_ &Registry )
 #endif
 
 bso::bool__ frdkrn::kernel___::_Connect(
-	const char *RemoteHostServiceOrLocalLibraryPath,
+	const features___ &Features,
 	const compatibility_informations__ &CompatibilityInformations,
-	csducl::type__ Type,
-	const char *Language, 
-	bso::uint__ PingDelay,
 	error_set___ &ErrorSet,
-	void *UP,
-	csdsnc::log_functions__ &LogFunctions )
+	csdsnc::log_callback__ *LogCallback )
 {
 	bso::bool__ Success = false;
 ERRProlog
 	csdlec::library_data__ LibraryData;
 	csdleo::mode__ Mode = csdleo::m_Undefined;
-	str::string Buffer;
+	TOL_CBUFFER___ Buffer;
 ERRBegin
-	LibraryData.Init( csdleo::cRegular, RemoteHostServiceOrLocalLibraryPath, err::ERRError, UP );
+	LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::ERRError, Features.UP );
 
-	Buffer.Init();
-
-	if ( !_ClientCore.Init( RemoteHostServiceOrLocalLibraryPath, LibraryData, LogFunctions, Type, PingDelay ) )
+	if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
 		ERRReturn;
 
-	if ( !_Frontend.Init( Language, CompatibilityInformations, _ClientCore, *_ReportingCallback, ErrorSet.IncompatibilityInformations ) )
+	if ( !_Frontend.Init( Features.Language, CompatibilityInformations, _ClientCore, *_ReportingCallback, ErrorSet.IncompatibilityInformations ) )
 		ERRReturn;
 
 	FRDKRNConnection( _Frontend );
@@ -244,30 +238,9 @@ ERRBegin
 ERRErr
 ERREnd
 	if ( !Success )
-		ErrorSet.BackendLocation.Init( RemoteHostServiceOrLocalLibraryPath );
+		ErrorSet.BackendLocation.Init(  Features.Location );
 ERREpilog
 	return Success;
-}
-
-bso::bool__ frdkrn::kernel___::_Connect(
-	const str::string_ &RemoteHostServiceOrLocalLibraryPath,
-	const compatibility_informations__ &CompatibilityInformations,
-	csducl::type__ Type,
-	const char *Language,
-	bso::uint__ PingDelay,
-	error_set___ &ErrorSet,
-	void *UP,
-	csdsnc::log_functions__ &LogFunctions )
-{
-	bso::bool__ Success = false;
-ERRProlog
-	TOL_CBUFFER___ RemoteHostServiceOrLocalLibraryPathBuffer;
-ERRBegin
-	Success = _Connect( RemoteHostServiceOrLocalLibraryPath.Convert( RemoteHostServiceOrLocalLibraryPathBuffer ), CompatibilityInformations, Type, Language, PingDelay, ErrorSet, UP, LogFunctions );
-ERRErr
-ERREnd
-ERREpilog
-return Success;
 }
 
 static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
@@ -292,7 +265,7 @@ static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
 #define PROJECT_ID_RELATIVE_PATH "@id"
 
 bso::bool__ frdkrn::kernel___::Launch(
-	const backend_features___ &BackendFeatures,
+	const features___ &Features,
 	const compatibility_informations__ &CompatibilityInformations )
 {
 	bso::bool__ Success = false;
@@ -301,7 +274,7 @@ ERRProlog
 ERRBegin
 	ErrorSet.Init();
 
-	if ( !Launch( BackendFeatures, CompatibilityInformations, ErrorSet ) ) {
+	if ( !Launch( Features, CompatibilityInformations, ErrorSet ) ) {
 		_ErrorMeaning.Init();
 		frdkrn::GetMeaning( ErrorSet, _ErrorMeaning );
 		ERRReturn;

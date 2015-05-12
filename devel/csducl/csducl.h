@@ -75,6 +75,27 @@ namespace csducl {
 
 	type__ GetType( const str::string_ &Pattern );
 
+	struct features___
+	{
+	public:
+		str::string Location;
+		csducl::type__ Type;
+		bso::uint__ PingDelay;
+		void reset( bso::bool__ P = true )
+		{
+			Location.reset( P );
+			Type = csducl::t_Undefined;
+			PingDelay = 0;
+		}
+		E_CDTOR( features___ )
+		void Init( void )
+		{
+			Location.Init();
+			Type = csducl::t_Undefined;
+			PingDelay = 0;
+		}
+	};
+
 	class universal_client_core
 	{
 	private:
@@ -97,11 +118,16 @@ namespace csducl {
 			reset();
 		}
 		bso::bool__ Init(
-			const char *Backend,
-			csdlec::library_data__ &LibraryData,	// Utilis uniquement si le backend est une bibliothque.
-			csdsnc::log_functions__ &Log,
-			type__ Type,
-			bso::uint__ PingDelay );	// Dlai maximum d'inactivit entre deux 'ping'.
+			const features___ &Features,
+			csdlec::library_data__ &LibraryData,
+			csdsnc::log_callback__ *Log = NULL );
+		bso::bool__ Init(
+			const features___ &Features,
+			csdlec::library_data__ &LibraryData,
+			csdsnc::log_callback__ &Log )
+		{
+			return Init( Features, LibraryData, &Log );
+		}
 		type__ GetType( void ) const
 		{
 			return _Type;

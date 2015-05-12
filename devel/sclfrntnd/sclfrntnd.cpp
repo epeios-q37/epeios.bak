@@ -67,6 +67,30 @@ static rgstry::entry___ ProjectId_( "ProjectId", Internals_ );
 
 stsfsm::automat ActionAutomat_;
 
+bso::bool__ sclfrntnd::kernel___::Init(
+	const features___ &Features,
+	csdsnc::log_callback__ *LogCallback )
+{
+	bso::bool__ Success = false;
+ERRProlog
+	csdlec::library_data__ LibraryData;
+	csdleo::mode__ Mode = csdleo::m_Undefined;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::ERRError, sclerror::SCLERRORError );
+
+	if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
+		ERRReturn;
+
+	Success = true;
+ERRErr
+ERREnd
+ERREpilog
+	return Success;
+}
+
+
+
 static void FillActionAutomat_( void )
 {
 	ActionAutomat_.Init();
@@ -348,7 +372,7 @@ void sclfrntnd::LoadProject(
 
 static void GetPredefinedBackendFeatures_(
 	const str::string_ &Id,
-	frdkrn::backend_features___ &Features )
+	features___ &Features )
 {
 ERRProlog
 	str::string Buffer;
@@ -375,17 +399,17 @@ ERREnd
 ERREpilog
 }
 
-void sclfrntnd::Connect(
-	const char *Language,
-	frdkrn::kernel___ &Kernel,
+void sclfrntnd::LaunchProject(
+	kernel___ &Kernel,
 	frdbse::backend_type__ BackendType,
-	const str::string_ &BackendFeature,
-	const frdkrn::compatibility_informations__ &CompatibilityInformations )
+	const str::string_ &BackendFeature )
 {
 ERRProlog
-	frdkrn::backend_features___ Features;
+	features___ Features;
 ERRBegin
-	Features.Init( Language, GetBackendPingDelay(), sclerror::SCLERRORError );
+	Features.Init();
+
+	Features.PingDelay = GetBackendPingDelay();
 
 	switch ( BackendType ) {
 	case frdbse::btDaemon:
@@ -407,8 +431,8 @@ ERRBegin
 		break;
 	}
 
-	if ( !Kernel.Launch(Features, CompatibilityInformations) ) {
-		sclmisc::ReportAndAbort( Kernel.ErrorMeaning() );
+	if ( !Kernel.Init( Features ) ) {
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Location );
 	}
 ERRErr
 ERREnd

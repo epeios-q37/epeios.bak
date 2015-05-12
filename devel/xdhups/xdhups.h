@@ -70,6 +70,7 @@ namespace xdhups {
     private:
 		dlbrry::dynamic_library___ _Library;
 		Q37_MRMDF( xdhcbk::downstream_callback__, _C, _Callback );
+		TOL_CBUFFER___ Buffer;
     public:
         void reset( bso::bool__ P = true )
         {
@@ -80,9 +81,11 @@ namespace xdhups {
 		bso::bool__ Init(
 			const str::string_ &ModuleFileName,
 			const char *Identification );
-		xdhcbk::session_callback__ *New( xdhcbk::proxy_callback__ *Callback )
+		xdhcbk::session_callback__ *New(
+			const char *Language,
+			xdhcbk::proxy_callback__ *Callback )
 		{
-			return _C().New( Callback );
+			return _C().New( Language, Callback );
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{

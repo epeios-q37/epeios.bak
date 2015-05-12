@@ -13,6 +13,8 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2015-05-11 :
+- GLOBAL :
+	% Reorganization of the client/server modules and the ones which depends on them.
 - XDH...
 	* Reorganization of all the 'XDH'-related modules.
 

@@ -39,7 +39,6 @@
 # include "lcl.h"
 
 namespace frdbse {
-
 	enum project_type__ {
 		ptNew,
 		ptPredefined,
@@ -63,6 +62,85 @@ namespace frdbse {
 	const char *GetLabel( backend_type__ BackendType );
 
 	backend_type__ GetBackendType( const str::string_ &Pattern );
+
+	template <typename t> class il_	// id, label.
+	{
+	public:
+		struct s {
+			t Id;
+			str::string_::s Label;
+		} &S_;
+		str::string_ Label;
+		il_( s &S )
+		: S_( S ),
+		  Label( S.Label )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			S_.Id = t(-1);
+			Label.reset( P );
+		}
+		void plug( ags::E_ASTORAGE_ &AS )
+		{
+			Label.plug( AS );
+		}
+		il_ &operator =(const il_ &IL)
+		{
+			S_.Id = IL.S_.Id;
+			Label = IL.Label;
+
+			return *this;
+		}
+		void Init(
+			t Id,
+			const str::string_ &Label )
+		{
+			S_.Id = Id;
+			this->Label.Init( Label );
+		}
+		E_RODISCLOSE_( t, Id );
+	};
+
+	template <typename t> class ilw_	// id, label, wording.
+	: public il_<t>
+	{
+	public:
+		struct s
+		: public il_<t>::s
+		{
+			str::string_::s Wording;
+		};
+		str::string_ Wording;
+		ilw_( s &S )
+		: il_<t>( S ),
+		  Wording( S.Wording )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			il_<t>::reset( P );
+			Wording.reset( P );
+		}
+		void plug( ags::E_ASTORAGE_ &AS )
+		{
+			il_<t>::plug( AS );
+			Wording.plug( AS );
+		}
+		ilw_ &operator =(const ilw_ &ILW)
+		{
+			il_<t>::operator = ( ILW );
+			Wording = ILW.Wording;
+
+			return *this;
+		}
+		void Init(
+			t Id,
+			const str::string_ &Label,
+			const str::string_ &Wording )
+		{
+			il_<t>::Init( Id, Label );
+			this->Wording.Init( Wording );
+		}
+	};
 }
 
 				  /********************************************/

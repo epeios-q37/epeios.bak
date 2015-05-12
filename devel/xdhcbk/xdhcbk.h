@@ -179,7 +179,9 @@ namespace xdhcbk {
 	protected:
 		virtual void XDHCBKInitialize( const shared_data__ &Data ) = 0;
 		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XDHCBKNew( proxy_callback__ *ProxyCallback ) = 0;
+		virtual session_callback__ *XDHCBKNew(
+			const char *Language,
+			proxy_callback__ *ProxyCallback ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -200,9 +202,11 @@ namespace xdhcbk {
 
 			return Buffer;
 		}
-		session_callback__ *New( proxy_callback__ *ProxyCallback )
+		session_callback__ *New(
+			const char *Language,
+			proxy_callback__ *ProxyCallback )
 		{
-			return XDHCBKNew( ProxyCallback );
+			return XDHCBKNew( Language, ProxyCallback );
 		}
 	};
 

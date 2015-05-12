@@ -79,9 +79,11 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcbk::session_callback__ *XDHCBKNew( xdhcbk::proxy_callback__ *ProxyCallback ) override
+		virtual xdhcbk::session_callback__ *XDHCBKNew(
+			const char *Language,
+			xdhcbk::proxy_callback__ *ProxyCallback ) override
 		{
-			return SCLXDHTMLNew( ProxyCallback );
+			return SCLXDHTMLNew( Language, ProxyCallback );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -211,19 +213,14 @@ ERREpilog
 }
 
 void sclxdhtml::LaunchProject(
-	const char *Language,
-	frdkrn::kernel___ &Kernel,
-	frdssn::session___ &Session,
-	proxy__ &Proxy,
-	const frdkrn::compatibility_informations__ &CompatibilityInformations )
+	 proxy__ &Proxy,
+	sclfrntnd::kernel___ &Kernel )
 {
 ERRProlog
 	str::string BackendFeature;
 ERRBegin
 	BackendFeature.Init();
-	sclfrntnd::Connect( Language, Kernel, xdhdws::login::GetBackendFeatures( Proxy, BackendFeature ), BackendFeature, CompatibilityInformations );
-
-	Session.Open( Language );
+	sclfrntnd::LaunchProject( Kernel, xdhdws::login::GetBackendFeatures( Proxy, BackendFeature ), BackendFeature );
 ERRErr
 ERREnd
 ERREpilog

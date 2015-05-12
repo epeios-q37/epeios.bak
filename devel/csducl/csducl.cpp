@@ -62,30 +62,32 @@ const char *csducl::GetLabel( type__ Type )
 }
 
 bso::bool__ csducl::universal_client_core::Init(
-	const char *Backend,
+	const features___ &Features,
 	csdlec::library_data__ &LibraryData,
-	csdsnc::log_functions__ &Log,
-	type__ Type,
-	bso::uint__ PingDelay )	// Dlai maximum d'inactivit entre deux 'ping'.
+	csdsnc::log_callback__ *Log )
 {
+	bso::bool__ Success = false;
+ERRProlog
+	TOL_CBUFFER___ Buffer;
+ERRBegin
 	reset();
 
-	bso::bool__ Success = false;
-
-	switch ( Type ) {
+	switch ( Features.Type ) {
 	case tDaemon:
-		Success = _DaemonAccess.Init( Backend, Log, PingDelay );
+		Success = _DaemonAccess.Init( Features.Location.Convert( Buffer ), Features.PingDelay, Log );
 		break;
 	case tPlugin:
-		Success = _LibraryAccess.Init( Backend, LibraryData, err::hUserDefined );
+		Success = _LibraryAccess.Init( Features.Location.Convert( Buffer ), LibraryData, err::hUserDefined );
 		break;
 	default:
 		ERRPrm();
 		break;
 	}
 
-	_Type = Type;
-
+	_Type = Features.Type;
+ERRErr
+ERREnd
+ERREpilog
 	return Success;
 }
 
