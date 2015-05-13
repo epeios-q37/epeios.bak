@@ -79,6 +79,7 @@ namespace xdhups {
         }
         E_CDTOR( agent___ );
 		bso::bool__ Init(
+			xdhcbk::mode__ Mode,
 			const str::string_ &ModuleFileName,
 			const char *Identification );
 		xdhcbk::session_callback__ *New(

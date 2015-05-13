@@ -26,6 +26,7 @@ using namespace xdhups;
 extern "C" typedef xdhcbk::retrieve retrieve;
 
 bso::bool__ xdhups::agent___::Init(
+	xdhcbk::mode__ Mode,
 	const str::string_ &ModuleFileName,
 	const char *Identification )
 {
@@ -36,7 +37,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	Location.Init();
-	Data.Init( Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ) );
+	Data.Init( Mode, Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ) );
 
 	_Library.Init( ModuleFileName );
 

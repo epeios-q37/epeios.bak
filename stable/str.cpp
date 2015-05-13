@@ -106,7 +106,7 @@ flw::oflow__ &str::operator <<(
 {
 	Put_( String, OStream );
 
-	OStream.Put( 0 );
+//	OStream.Put( 0 );
 
 	return OStream;
 }

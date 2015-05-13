@@ -65,7 +65,7 @@ namespace {
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
 				sclmisc::Initialize( Data.ERRError(), Data.SCLError(), Data.CIO(), Data.Localization() );
-				SCLXDHTMLInitialialization();
+				SCLXDHTMLInitialization( Data.Mode() );
 			}
 		}
 		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) override

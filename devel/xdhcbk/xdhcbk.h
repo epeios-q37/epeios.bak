@@ -34,7 +34,7 @@
 # include "sclerror.h"
 # include "strmrg.h"
 
-# define XDHCBK_SHARED_DATA_VERSION_NUMBER	"10"
+# define XDHCBK_SHARED_DATA_VERSION_NUMBER	"11"
 
 # define XDHCBK_SHARED_DATA_VERSION			XDHCBK_SHARED_DATA_VERSION_NUMBER "-" CPE_ARCHITECTURE_LABEL
 
@@ -126,6 +126,13 @@ namespace xdhcbk {
 		}
 	};
 
+	E_ENUM( mode ) {
+		mMonoUser,	// One use only. The content project (i.e. he can choose the backend) is defined by the user.
+		mMultiUser,	// Several users. The project to use is (which defines the backend to use) is predefiend in the confifuration file.
+		m_amount,
+		m_Undefined
+	};
+
 #pragma pack( push, 1)
 	// NOTA : is modified, increment 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
@@ -136,6 +143,7 @@ namespace xdhcbk {
 		err::err___ *_ERRError;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
+		mode__ _Mode;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 	public:
@@ -145,12 +153,14 @@ namespace xdhcbk {
 			_Control = 0;
 			_ERRError = NULL;
 			_SCLError = NULL;
+			_Mode = m_Undefined;
 			_CIO = NULL;
 			_LauncherIdentification = NULL;
 			_Localization = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
+			mode__ Mode,
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
@@ -159,6 +169,7 @@ namespace xdhcbk {
 			_ERRError = err::ERRError;
 			_SCLError = sclerror::SCLERRORError;
 			_CIO = &cio::GetCurrentSet();
+			_Mode = Mode;
 			_LauncherIdentification = LauncherIdentification;
 			_Localization = Localization;
 		}
@@ -171,6 +182,7 @@ namespace xdhcbk {
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
 		Q37_RMDF( const cio::set__, CIO, _CIO );
+		E_RODISCLOSE__( mode__, Mode );
 	};
 #pragma pack( pop )
 

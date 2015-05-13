@@ -306,6 +306,7 @@ namespace sclxdhtml {
 	{
 	private:
 		action_handler<session> _Handler;
+		xdhcbk::mode__ _Mode;
 		Q37_MRMDF( action_helper_callback__<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
@@ -322,12 +323,16 @@ namespace sclxdhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_Handler.reset( P );
+			_Mode = xdhcbk::m_Undefined;
 			_ActionHelperCallback = NULL;
 		}
 		E_CVDTOR( core___ )
-		void Init( action_helper_callback__<session> &ActionHelperCallback )
+		void Init(
+			xdhcbk::mode__ Mode,
+			action_helper_callback__<session> &ActionHelperCallback )
 		{
 			_ActionHelperCallback = &ActionHelperCallback;
+			_Mode = Mode;
 			_Handler.Init();
 		}
 		void AddActionCallback(
@@ -369,6 +374,7 @@ namespace sclxdhtml {
 		ERREpilog
 			return Translation;
 		}
+		E_RODISCLOSE__( xdhcbk::mode__, Mode );
 	};
 
 
@@ -389,7 +395,7 @@ namespace sclxdhtml {
 		proxy__ &Proxy ,
 		sclfrntnd::kernel___ &Kernel );
 
-	void SCLXDHTMLInitialialization( void );	// To overload.
+	void SCLXDHTMLInitialization( xdhcbk::mode__ Mode );	// To overload.
 	xdhcbk::session_callback__ *SCLXDHTMLNew(
 		const char *Language,
 		xdhcbk::proxy_callback__ *ProxyCallback );	// To override.
