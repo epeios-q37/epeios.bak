@@ -79,9 +79,13 @@ namespace xdhjsp {
 			namespace attribute_name {
 				extern entry___ Widget;
 				extern entry___ Result;
+				extern entry___ OnEvent;
+				extern entry___ OnEvents;
 			}
 		}
 
+		extern entry___ Scripts;
+		
 		namespace script {
 			extern entry___ Log;
 			extern entry___ DocumentSetter;
