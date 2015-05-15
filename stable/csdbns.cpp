@@ -197,6 +197,10 @@ ERREnd
 		_Callback = NULL;	// Pour empcher un autre appel au 'PostProcess' lors de l'appel du destructeur.
 	}
 
+	if ( Socket != SCK_INVALID_SOCKET )
+		sck::Close( Socket );
+
+
 ERREpilog
 	return Continue;
 }

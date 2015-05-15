@@ -36,16 +36,16 @@
 			</xpp:ifeq>
 		</xpp:bloc>
 	</xpp:define>
-	<xpp:define name="edaemon.xlcl">
+	<xpp:define name="xdhtml.xcfg">
 		<xpp:bloc>
 			<xpp:ifeq select="env" value="windows">
-				<xpp:expand href="h:/hg/epeios/corpus/edaemon.xlcl"/>
+				<xpp:expand href="h:/hg/epeios/corpus/xdhtml.xcfg"/>
 			</xpp:ifeq>
 			<xpp:ifeq select="env" value="linux">
-				<xpp:expand href="/H/hg/epeios/corpus/edaemon.xlcl"/>
+				<xpp:expand href="/H/hg/epeios/corpus/xdhtml.xcfg"/>
 			</xpp:ifeq>
 			<xpp:ifeq select="env" value="mac">
-				<xpp:expand href="/H/hg/epeios/corpus/edaemon.xlcl"/>
+				<xpp:expand href="/H/hg/epeios/corpus/xdhtml.xcfg"/>
 			</xpp:ifeq>
 		</xpp:bloc>
 	</xpp:define>

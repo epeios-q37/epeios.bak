@@ -375,7 +375,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
+	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -385,7 +385,7 @@ ERRBegin
 	if ( Method.Amount() == 0 )
 		Execute( Callback, snContentGetter, Result, Id );
 	else
-		Execute( Callback, snWidgetContentRetriever, Result, Id, Method );
+		Execute( Callback, snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
 ERRErr
 ERREnd
 ERREpilog
@@ -422,11 +422,11 @@ static void Focus_(
 {
 ERRProlog
 	str::string Args, Method;
-	nstring___ WidgetAttributeName;;
+	nstring___ WidgetAttributeName;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()) );
+	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -436,7 +436,7 @@ ERRBegin
 	if ( Method.Amount() == 0 )
 		Execute( Callback, snFocusing, NULL, Id );
 	else
-		Execute( Callback, snWidgetFocusing, NULL, Id, Method );
+		Execute( Callback, snWidgetFocusing, NULL, Id, nstring___( Method ).Internal()() );
 ERRErr
 ERREnd
 ERREpilog
