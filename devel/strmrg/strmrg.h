@@ -171,7 +171,8 @@ namespace strmrg {
 			Main.Init();
 		}
 		row__ Append( const str::string_ &String );
-		row__ Append( const table_ &Table );
+		row__ AppendMono( const table_ &Table );	// 'Table' is stored in one entry.
+		void AppendMulti( const table_ &Table );	// An entry is created for each (first-level) entry of 'Table' 
 		row__ AppendMono( const str::strings_ &Strings );	// ATTENTION : Cre une seule entre avec tous les strings, et pas autant d'entre que de string.
 		void AppendMulti( const str::strings_ &Strings );	// ATTENTION : Ajoute autant d'entre que de 'Strings'.
 		void GetTable(

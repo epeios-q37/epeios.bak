@@ -21,228 +21,16 @@
 
 #include "xdhjsp.h"
 
+#include "xdhjsr.h"
+
 #include "sclrgstry.h"
 #include "sclmisc.h"
 
 using namespace xdhjsp;
 
-using rgstry::entry___;
-
-entry___ xdhjsp::registry::RootTagId( "RootTagId", sclrgstry::Definitions );
-
-entry___ xdhjsp::registry::CustomItems( "CustomItems", sclrgstry::Definitions );
-
-entry___ xdhjsp::registry::custom_item::AttributeNames("AttributeNames", CustomItems );
-entry___ xdhjsp::registry::custom_item::attribute_name::Widget( "Widget", AttributeNames );
-entry___ xdhjsp::registry::custom_item::attribute_name::Result( "Result", AttributeNames );
-entry___ xdhjsp::registry::custom_item::attribute_name::OnEvent( "OnEvent", xdhjsp::registry::custom_item::AttributeNames );
-entry___ xdhjsp::registry::custom_item::attribute_name::OnEvents( "OnEvents", xdhjsp::registry::custom_item::AttributeNames );
-
-
-entry___ xdhjsp::registry::Scripts( "Scripts", sclrgstry::Definitions );
-
-static entry___ PropertyScripts_( "Property", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::property::Setter( "Setter", PropertyScripts_ );
-entry___ xdhjsp::registry::script::property::Getter( "Getter", PropertyScripts_ );
-
-static entry___ AttributeScripts_( "Attribute", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::attribute::Setter( "Setter", AttributeScripts_ );
-entry___ xdhjsp::registry::script::attribute::Getter( "Getter", AttributeScripts_ );
-entry___ xdhjsp::registry::script::attribute::Remover( "Remover", AttributeScripts_ );
-
-static entry___ ContentScripts_( "Content", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::content::Setter( "Setter", ContentScripts_ );
-entry___ xdhjsp::registry::script::content::Getter( "Getter", ContentScripts_ );
-
-entry___ xdhjsp::registry::script::DocumentSetter( "DocumentSetter", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::ChildrenSetter( "ChildrenSetter", xdhjsp::registry::Scripts );
-
-static entry___ DialogScripts_( "Dialog", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::dialog::Alert( "Alert", DialogScripts_ );
-entry___ xdhjsp::registry::script::dialog::Confirm( "Confirm", DialogScripts_ );
-
-static entry___ WidgetScripts_( "Widget", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::widget::Instantiation( "Instantiation", WidgetScripts_ );
-entry___ xdhjsp::registry::script::widget::ContentRetriever( "ContentRetriever", WidgetScripts_ );
-entry___ xdhjsp::registry::script::widget::Focusing( "Focusing", WidgetScripts_ );
-
-static entry___ CastingScripts_( "Casting", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::casting::Definer( "Definer", CastingScripts_ );
-entry___ xdhjsp::registry::script::casting::Handler( "Handler", CastingScripts_ );
-
-entry___ xdhjsp::registry::script::Log( "Log", xdhjsp::registry::Scripts );
-entry___ xdhjsp::registry::script::Focusing( "Focusing", Scripts );
-
-#define C( name, entry )\
-	case sn##name:\
-		sclmisc::MGetValue( registry::script::entry, Buffer );\
-		break
-
-const str::string_ &xdhjsp::GetTaggedScript(
-	xdhjsp::script_name__ Script,
-	str::string_ &Buffer )
-{
-	switch ( Script ) {
-	C( Log, dialog::Alert );
-	C( DialogAlert, dialog::Alert );
-	C( DialogConfirm, dialog::Confirm );
-	C( DocumentSetter, DocumentSetter );
-	C( ChildrenSetter, ChildrenSetter );
-	C( CastingDefiner, casting::Definer );
-	C( CastingHandler, casting::Handler );
-	C( PropertySetter, property::Setter );
-	C( PropertyGetter, property::Getter );
-	C( AttributeSetter, attribute::Setter );
-	C( AttributeGetter, attribute::Getter );
-	C( AttributeRemover, attribute::Remover );
-	C( WidgetContentRetriever, widget::ContentRetriever );
-	C( ContentSetter, content::Setter );
-	C( ContentGetter, content::Getter );
-	C( WidgetFocusing, widget::Focusing );
-	C( Focusing, Focusing );
-	default:
-		ERRFwk();
-		break;
-	}
-
-	return Buffer;
-}
-
 using xdhcbk::nstring___;
 using xdhcbk::nchar__;
-
-static void AppendTag_(
-	const char *Name,
-	const nstring___ &Value,
-	str::strings_ &Names,
-	str::strings_ &Values )
-{
-ERRProlog
-	str::string NameForRawValue;
-	str::string EscapedValue;
-	TOL_CBUFFER___ Buffer;
-ERRBegin
-	Names.Append( str::string( Name ) );
-	EscapedValue.Init();
-	xdhcbk::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
-	Values.Append( EscapedValue );
-
-	NameForRawValue.Init( Name );
-	NameForRawValue.Append( '_' );
-
-	Names.Append( NameForRawValue );
-	Values.Append( str::string( Value.UTF8( Buffer ) ) );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-static void SubstituteTags_(
-	str::string_ &Script,	// Script with tags. When returning, tags are substitued.
-	va_list ValueList,
-	... )	// The list of the tag name, as 'const char *', with 'NULL' as end marker.
-{
-ERRProlog
-	str::strings Names, Values;
-	va_list NameList;
-	const bso::char__ *Name = NULL;
-ERRBegin
-	Names.Init();
-	Values.Init();
-
-	va_start( NameList, ValueList );
-
-	Name = va_arg( NameList, const bso::char__ * );
-
-	while ( Name != NULL ) {
-		AppendTag_( Name, va_arg( ValueList, const nchar__ * ), Names, Values );
-
-		Name = va_arg( NameList, const bso::char__ * );
-	}
-
-	tagsbs::SubstituteLongTags( Script, Names, Values );
-ERRErr
-ERREnd
-	va_end( NameList );
-ERREpilog
-}
-
-#define D( name )\
-	E_CDEF( char *, name##_, #name )
-
-D( Message );
-D( Id );
-D( Name );
-D( Value );
-D( Method );
-D( XML );
-D( XSL );
-D( Title );
-D( CloseText );
-D( Cast );
-
-#define S( name, ... )\
-	case sn##name:\
-	SubstituteTags_( TaggedScript, List, __VA_ARGS__ );\
-	break\
-
-static void GetScript_(
-	script_name__ ScriptName,
-	str::string_ &Script,
-	va_list List )
-{
-ERRProlog
-	str::string TaggedScript;
-ERRBegin
-	TaggedScript.Init();
-	GetTaggedScript( ScriptName, TaggedScript );
-
-	switch ( ScriptName ) {
-	S( Log, Message_, NULL );
-	S( DialogAlert, XML_, XSL_, Title_, CloseText_, NULL );
-	S( DialogConfirm, XML_, XSL_, Title_, CloseText_, NULL );
-	S( AttributeSetter, Id_, Name_, Value_, NULL  );
-	S( AttributeGetter, Id_, Name_, NULL  );
-	S( AttributeRemover, Id_, Name_, NULL  );
-	S( PropertySetter, Id_, Name_, Value_, NULL );
-	S( PropertyGetter, Id_, Name_, NULL );
-	S( DocumentSetter, Id_, XML_, XSL_, NULL );
-	S( ContentSetter, Id_, Value_, NULL );
-	S( ContentGetter, Id_, NULL );
-	S( CastingDefiner, XML_, XSL_, NULL );
-	S( CastingHandler, Id_, Cast_, NULL );
-	S( ChildrenSetter, Id_, XML_, XSL_, NULL );
-	S( WidgetContentRetriever, Id_, Method_, NULL );
-	S( WidgetFocusing, Id_, Method_, NULL );
-	S( Focusing, Id_, NULL );
-	default:
-		ERRFwk();
-		break;
-	}
-
-	Script.Append( TaggedScript );
-ERRErr
-ERREnd
-ERREpilog
-}
-
-const str::string_ &xdhjsp::GetScript(
-	script_name__ ScriptName,
-	str::string_ *Buffer,
-	... )
-{
-ERRProlog
-	va_list List;
-ERRBegin
-	va_start( List, Buffer );
-	
-	GetScript_( ScriptName, *Buffer, List );
-ERRErr
-ERREnd
-	va_end( List );
-ERREpilog
-	return *Buffer;
-}
+using xdhjst::script_name__;
 
 static const char *Execute_(
 	callback__  &Callback,
@@ -255,7 +43,7 @@ ERRProlog
 	str::string Script;
 ERRBegin
 	Script.Init();
-	GetScript_( ScriptName, Script, List );
+	GetScript( ScriptName, Script, List );
 
 	Result = Callback.Execute( Script, Buffer );
 ERRErr
@@ -378,7 +166,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
+	Args.Init( Execute( Callback, xdhjst::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -386,9 +174,9 @@ ERRBegin
 		GetWidgetContentRetrievingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, snContentGetter, Result, Id );
+		Execute( Callback, xdhjst::snContentGetter, Result, Id );
 	else
-		Execute( Callback, snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhjst::snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
 ERRErr
 ERREnd
 ERREpilog
@@ -429,7 +217,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
+	Args.Init( Execute( Callback, xdhjst::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -437,9 +225,9 @@ ERRBegin
 		GetWidgetFocusingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, snFocusing, NULL, Id );
+		Execute( Callback, xdhjst::snFocusing, NULL, Id );
 	else
-		Execute( Callback, snWidgetFocusing, NULL, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhjst::snWidgetFocusing, NULL, Id, nstring___( Method ).Internal()() );
 ERRErr
 ERREnd
 ERREpilog
@@ -459,16 +247,16 @@ static void SetChildren_(
 	const nchar__ *XSL )
 {
 ERRProlog
-	script_name__ ScriptName = sn_Undefined;
+	script_name__ ScriptName = xdhjst::sn_Undefined;
 	nstring___ RootTagId;
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	if ( Id == NULL ) {
 		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
 		Id = RootTagId.Internal();
-		ScriptName = snDocumentSetter;
+		ScriptName = xdhjst::snDocumentSetter;
 	} else
-		ScriptName = snChildrenSetter;
+		ScriptName = xdhjst::snChildrenSetter;
 
 	Execute( Callback, ScriptName, NULL, Id, XML, XSL );
 
@@ -501,7 +289,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 	nstring___ RootTagId;
 ERRBegin
-	Execute( Callback, snCastingDefiner, NULL, XML, XSL );
+	Execute( Callback, xdhjst::snCastingDefiner, NULL, XML, XSL );
 
 	if ( Id == NULL ) {
 		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
@@ -537,7 +325,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 ERRBegin
 	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );
-	Execute( Callback, snAttributeGetter, Result, Id );
+	Execute( Callback, xdhjst::snAttributeGetter, Result, Id );
 ERRErr
 ERREnd
 ERREpilog
@@ -556,10 +344,10 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 {
 	switch ( Function ) {
 	case xdhcbk::fAlert:
-		return snDialogAlert;
+		return xdhjst::snDialogAlert;
 		break;
 	case xdhcbk::fConfirm:
-		return snDialogConfirm;
+		return xdhjst::snDialogConfirm;
 		break;
 	case xdhcbk::fSetChildren:
 		ERRFwk();
@@ -568,25 +356,25 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 		ERRFwk();
 		break;
 	case xdhcbk::fSetProperty:
-		return snPropertySetter;
+		return xdhjst::snPropertySetter;
 		break;
 	case xdhcbk::fGetProperty:
-		return snPropertyGetter;
+		return xdhjst::snPropertyGetter;
 		break;
 	case xdhcbk::fSetAttribute:
-		return snAttributeSetter;
+		return xdhjst::snAttributeSetter;
 		break;
 	case xdhcbk::fGetAttribute:
-		return snAttributeGetter;
+		return xdhjst::snAttributeGetter;
 		break;
 	case xdhcbk::fRemoveAttribute:
-		return snAttributeRemover;
+		return xdhjst::snAttributeRemover;
 		break;
 	case xdhcbk::fGetResult:
 		ERRFwk();
 		break;
 	case xdhcbk::fSetContent:
-		return snContentSetter;
+		return xdhjst::snContentSetter;
 		break;
 	case xdhcbk::fGetContent:
 		ERRFwk();
@@ -599,7 +387,7 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 		break;
 	}
 
-	return sn_Undefined;	// To avoid a warning.
+	return xdhjst::sn_Undefined;	// To avoid a warning.
 }
 
 void xdhjsp::proxy_callback__::XDHCBKProcess(

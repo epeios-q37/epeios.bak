@@ -115,7 +115,7 @@ static void Append_(
 	}
 }
 
-row__ strmrg::table_::Append( const table_ &Table )
+row__ strmrg::table_::AppendMono( const table_ &Table )
 {
 	row__ Row = E_NIL;
 ERRProlog
@@ -141,6 +141,24 @@ ERREpilog
 	return Row;
 }
 
+void strmrg::table_::AppendMulti( const table_ &Table )
+{
+ERRProlog
+	retriever__ Retriever;
+	table SubTable;
+ERRBegin
+	Retriever.Init( Table );
+
+	while ( Retriever.Availability() != aNone ) {
+		SubTable.Init();
+		Retriever.GetTable( SubTable );
+		AppendMono( SubTable );
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
 row__ strmrg::table_::AppendMono( const str::strings_ &Strings )
 {
 	row__ Row = E_NIL;
@@ -160,7 +178,7 @@ ERRBegin
 		SRow = Strings.Next( SRow );
 	}
 
-	Row = Append( Table ); 
+	Row = AppendMono( Table ); 
 ERRErr
 ERREnd
 ERREpilog
@@ -334,7 +352,7 @@ ERRBegin
 					Success = false;
 					ERRFwk();
 				}
-				Table.Append( SubTable );
+				Table.AppendMono( SubTable );
 				Trace = tTable;
 			} else if ( C == Tokens.End ) {
 				if ( String.Amount() != 0 )

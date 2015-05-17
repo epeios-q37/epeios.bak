@@ -26,7 +26,9 @@
 #  define XDHJSP_DBG
 # endif
 
-// X(SL) DH(TML) JavaScript Proxy
+// X(SL)/DH(TML) JavaScript-related Proxy
+
+# include "xdhjst.h"
 
 # include "xdhcbk.h"
 
@@ -34,92 +36,6 @@
 
 
 namespace xdhjsp {
-
-	E_ENUM( script_name ) {
-		snAttributeGetter,
-		snAttributeRemover,
-		snAttributeSetter,
-		snCastingDefiner,
-		snCastingHandler,
-		snChildrenSetter,
-		snContentGetter,
-		snContentSetter,
-		snDialogAlert,
-		snDialogConfirm,
-		snDocumentSetter,
-		snFocusing,
-		snLog,
-		snPropertyGetter,
-		snPropertySetter,
-		snWidgetContentRetriever,
-		snWidgetFocusing,
-		sn_amount,
-		sn_Undefined,
-	};
-
-	const str::string_ &GetTaggedScript(
-		script_name__ ScriptName,
-		str::string_ &Buffer );
-
-	const str::string_ &GetScript(
-		script_name__ ScriptName,
-		str::string_ *Script,	// Was '&Script', but should not work due 'va_start(...)' restrictions concerning references (but it worked under MSVC).
-		... );
-
-	namespace registry {
-		using rgstry::entry___;
-
-		extern entry___ RootTagId;
-
-		extern entry___ CustomItems;
-
-		namespace custom_item {
-			extern entry___ AttributeNames;
-
-			namespace attribute_name {
-				extern entry___ Widget;
-				extern entry___ Result;
-				extern entry___ OnEvent;
-				extern entry___ OnEvents;
-			}
-		}
-
-		extern entry___ Scripts;
-		
-		namespace script {
-			extern entry___ Log;
-			extern entry___ DocumentSetter;
-			extern entry___ ChildrenSetter;
-			extern entry___ Focusing;
-			namespace casting {
-				extern entry___ Definer;
-				extern entry___ Handler;
-			}
-			namespace property {
-				extern entry___ Setter;
-				extern entry___ Getter;
-			}
-			namespace attribute {
-				extern entry___ Setter;
-				extern entry___ Getter;
-				extern entry___ Remover;
-			}
-			namespace content {
-				extern entry___ Setter;
-				extern entry___ Getter;
-			}
-			namespace dialog {
-				extern entry___ Alert;
-				extern entry___ Confirm;
-			}
-			namespace widget {
-				extern entry___ Instantiation;
-				extern entry___ ContentRetriever;
-				extern entry___ Focusing;
-			}
-		}
-	}
-
 	class callback__
 	{
 	protected:
@@ -197,7 +113,7 @@ namespace xdhjsp {
 
 	const char *Execute(
 		callback__ &Callback,
-		script_name__ Script,
+		xdhjst::script_name__ Script,
 		TOL_CBUFFER___ *Buffer,
 		... );
 
