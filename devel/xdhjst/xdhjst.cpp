@@ -434,8 +434,6 @@ sdr::row__ xdhjst::Find(
 }
 
 void xdhjst::GetEventsAbstracts(
-	const str::string_ &Id,
-	const str::string_ &Name,
 	const str::string_ &Events,
 	event_abstracts_ &Abstracts )
 {

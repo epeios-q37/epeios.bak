@@ -233,11 +233,8 @@ namespace xdhjst {
 		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'E_NIL' if not found.
 
 	void GetEventsAbstracts(
-		const str::string_ &Id,
-		const str::string_  &Name,
 		const str::string_ &Events,
 		event_abstracts_ &Abstracts );
-
 
 	namespace scripter {
 		void HandleEventsDigest(
