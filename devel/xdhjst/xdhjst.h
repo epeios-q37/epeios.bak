@@ -236,12 +236,47 @@ namespace xdhjst {
 		const str::string_ &Events,
 		event_abstracts_ &Abstracts );
 
+	void SplitWidgetFeatures(
+		const xdhcbk::args_ &Features,
+		str::string_ &Type,
+		str::string_ &Parameters,
+		str::string_ &ContentRetrievingMethod,
+		str::string_ &FocusingMethod );
+
+	void GetWidgetTypeAndParameters(
+		const xdhcbk::args_ &Features,
+		str::string_ &Type,
+		str::string_ &Parameters );
+
+	void GetWidgetContentRetrievingMethod(
+		const xdhcbk::args_ &Features,
+		str::string_ &Method );
+
+	void GetWidgetFocusingMethod(
+		const xdhcbk::args_ &Features,
+		str::string_ &Method );
+
 	namespace scripter {
 		void HandleEventsDigest(
 			const xdhcbk::args_ &Digest,
 			str::string_ &Script );
 
 		void HandleEventsDigests(
+			const xdhcbk::args_ &Digests,
+			str::string_ &Script );
+
+		void HandleWidgetFeatures(
+			const str::string_ &Id,
+			const xdhcbk::args_ &Features,
+			str::string_ &Script );
+
+		// NOTA : Digest = '(Id|Features)'.
+
+		void HandleWidgetDigest(
+			const xdhcbk::args_ &Digest,
+			str::string_ &Script );
+
+		void HandleWidgetDigests(
 			const xdhcbk::args_ &Digests,
 			str::string_ &Script );
 	}

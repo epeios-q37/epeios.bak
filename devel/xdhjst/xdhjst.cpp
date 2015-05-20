@@ -452,6 +452,175 @@ ERREnd
 ERREpilog
 }
 
+void xdhjst::SplitWidgetFeatures(
+	const xdhcbk::args_ &Features,
+	str::string_ &Type,
+	str::string_ &Parameters,
+	str::string_ &ContentRetrievingMethod,
+	str::string_ &FocusingMethod )
+{
+ERRProlog
+	xdhcbk::retriever__ Retriever;
+ERRBegin
+	Retriever.Init( Features );
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( Type );
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( Parameters );
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( ContentRetrievingMethod );
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( FocusingMethod );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xdhjst::GetWidgetTypeAndParameters(
+	const xdhcbk::args_ &Features,
+	str::string_ &Type,
+	str::string_ &Parameters )
+{
+ERRProlog
+	str::string ContentRetrievingMethod, FocusingMethod;
+ERRBegin
+	ContentRetrievingMethod.Init();
+	FocusingMethod.Init();
+	SplitWidgetFeatures( Features, Type, Parameters, ContentRetrievingMethod, FocusingMethod );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xdhjst::GetWidgetContentRetrievingMethod(
+	const xdhcbk::args_ &Features,
+	str::string_ &Method )
+{
+ERRProlog
+	str::string Type, Parameters, OtherMethod;
+ERRBegin
+	Type.Init();
+	Parameters.Init();
+	OtherMethod.Init();
+
+	SplitWidgetFeatures( Features, Type, Parameters, Method, OtherMethod );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xdhjst::GetWidgetFocusingMethod(
+	const xdhcbk::args_ &Features,
+	str::string_ &Method )
+{
+ERRProlog
+	str::string Type, Parameters, OtherMethod;
+ERRBegin
+	Type.Init();
+	Parameters.Init();
+	OtherMethod.Init();
+
+	SplitWidgetFeatures( Features, Type, Parameters, OtherMethod, Method );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xdhjst::scripter::HandleWidgetFeatures(
+	const str::string_ &Id,
+	const xdhcbk::args_ &Digest,
+	str::string_ &Script )
+{
+ERRProlog
+	str::string SubScript, Type, Parameters;
+	str::strings TagNames, TagValues;
+	TOL_CBUFFER___ Buffer;
+ERRBegin
+	SubScript.Init();
+	sclmisc::MGetValue( xdhjsr::script::widget::Instantiation, SubScript );
+
+	Type.Init();
+	Parameters.Init();
+	GetWidgetTypeAndParameters( Digest, Type, Parameters );
+
+	TagNames.Init();
+	TagValues.Init();
+
+	AppendTag_( "Id", Id, TagNames, TagValues );
+	AppendTag_( "Type", Type, TagNames, TagValues );
+	AppendTag_( "Parameters", Parameters, TagNames, TagValues );
+
+	tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
+
+	Script.Append( SubScript );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xdhjst::scripter::HandleWidgetDigest(
+	const xdhcbk::args_ &Digest,
+	str::string_ &Script )
+{
+ERRProlog
+	xdhcbk::args Features;
+	str::string Id, Type, Parameters, SubScript;
+	str::strings TagNames, TagValues;
+	xdhcbk::retriever__ Retriever;
+ERRBegin
+	Retriever.Init( Digest );
+
+	Id.Init();
+	Retriever.GetString( Id );
+
+	Features.Init();
+	Retriever.GetTable( Features );
+
+	SubScript.Init();
+	sclmisc::MGetValue( xdhjsr::script::widget::Instantiation, SubScript );
+
+	Type.Init();
+	Parameters.Init();
+	GetWidgetTypeAndParameters( Features, Type, Parameters );
+
+	TagNames.Init();
+	TagValues.Init();
+
+	AppendTag_( "Id", Id, TagNames, TagValues );
+	AppendTag_( "Type", Type, TagNames, TagValues );
+	AppendTag_( "Parameters", Parameters, TagNames, TagValues );
+
+	tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
+
+	Script.Append( SubScript );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xdhjst::scripter::HandleWidgetDigests(
+	const xdhcbk::args_ &Digests,
+	str::string_ &Script )
+{
+ERRProlog
+	xdhcbk::retriever__ Retriever;
+	xdhcbk::args Digest;
+ERRBegin
+	Retriever.Init( Digests );
+		
+	while ( Retriever.Availability() != strmrg::aNone ) {
+		Digest.Init();
+		Retriever.GetTable( Digest );
+		scripter::HandleWidgetDigest( Digest, Script );
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
 
 namespace {
 	void SetupEvent_(
@@ -474,7 +643,7 @@ namespace {
 		Script.Append( Id );
 		Script.Append( "\").addEventListener( \"" );
 		Script.Append( Abstract.Event );
-		Script.Append("\", handleEvent );" );
+		Script.Append("\", handleEvent, true );" );
 	ERRErr	
 	ERREnd
 	ERREpilog
