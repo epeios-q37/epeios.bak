@@ -23,23 +23,39 @@
 
 using namespace xdhdws;
 
-static void SetXML_(
-	const nstring___ &Message,
-	str::string_ &XML )
-{
-ERRProlog
-	flx::E_STRING_TOFLOW___ STOFlow;
-	xml::writer Writer;
-	str::string Buffer;
-ERRBegin
-	STOFlow.Init( XML );
-	Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
+namespace {
+	void SetXML_(
+		const nstring___ &Message,
+		str::string_ &XML )
+	{
+	ERRProlog
+		flx::E_STRING_TOFLOW___ STOFlow;
+		xml::writer Writer;
+		str::string Buffer;
+	ERRBegin
+		STOFlow.Init( XML );
+		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
 
-	Buffer.Init();
-	Writer.PutValue( Message.UTF8( Buffer ), "Content" );
-ERRErr
-ERREnd
-ERREpilog
+		Buffer.Init();
+		Writer.PutValue( Message.UTF8( Buffer ), "Content" );
+	ERRErr
+	ERREnd
+	ERREpilog
+	}
+
+	inline void SetXSL_( str::string_ &XSL )
+	{
+		XSL.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+			<xsl:stylesheet version=\"1.0\"\
+			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
+				<xsl:output method=\"text\"\
+					        encoding=\"utf-8\"/>\
+				<xsl:template match=\"/\">\
+					<xsl:value-of select=\"Content\"/>\
+				</xsl:template>\
+			</xsl:stylesheet>\
+		");
+	}
 }
 
 void xdhdws::proxy__::Alert( const nstring___ &Message )
@@ -48,11 +64,10 @@ ERRProlog
 	str::string XML, XSL;
 ERRBegin
 	XML.Init();
-
 	SetXML_( Message, XML );
-	
-	XSL.Init( "<?xml version=\"1.0\" encoding=\"utf-8\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"	xmlns=\"http://www.w3.org/1999/xhtml\">" );
-	XSL.Append("<xsl:output method=\"html\" encoding=\"utf-8\" omit-xml-declaration=\"yes\" standalone=\"no\"/><xsl:template match=\"/\"><span><xsl:value-of select=\".\"></span></xsl:template></xsl:stylesheet>");
+
+	XSL.Init();
+	SetXSL_( XSL );
 
 	Alert( XML, XSL, NULL );
 ERRErr
@@ -67,11 +82,10 @@ ERRProlog
 	str::string XML, XSL;
 ERRBegin
 	XML.Init();
-
 	SetXML_( Message, XML );
 	
-	XSL.Init( "<?xml version=\"1.0\" encoding=\"utf-8\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"	xmlns=\"http://www.w3.org/1999/xhtml\">" );
-	XSL.Append("<xsl:output method=\"html\" encoding=\"utf-8\" omit-xml-declaration=\"yes\" standalone=\"no\"/><xsl:template match=\"/\"><span><xsl:value-of select=\".\"></span></xsl:template></xsl:stylesheet>");
+	XSL.Init();
+	SetXSL_( XSL );
 
 	Confirmed = Confirm( XML, XSL, NULL );
 ERRErr

@@ -279,6 +279,15 @@ namespace xdhjst {
 		void HandleWidgetDigests(
 			const xdhcbk::args_ &Digests,
 			str::string_ &Script );
+
+		void HandleCastsDigest(
+			const xdhcbk::args_ &Digest,
+			str::string_ &Script );
+
+		void HandleCastsDigests(
+			const xdhcbk::args_ &Digests,
+			str::string_ &Script );
+
 	}
 }
 

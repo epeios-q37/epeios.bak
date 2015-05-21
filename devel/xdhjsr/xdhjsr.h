@@ -46,6 +46,8 @@ namespace xdhjsr {
 			extern entry___ Result;
 			extern entry___ OnEvent;
 			extern entry___ OnEvents;
+			extern entry___ Cast;
+			extern entry___ Casts;
 		}
 	}
 

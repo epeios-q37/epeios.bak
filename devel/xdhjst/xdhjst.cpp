@@ -718,6 +718,101 @@ ERREnd
 ERREpilog
 }
 
+namespace{
+	void SetupCast_(
+		const str::string_ &Id,
+		const str::string_ &Cast,
+		str::string_ &Script )
+	{
+	ERRProlog
+		str::string SubScript;
+		str::strings TagNames, TagValues;
+	ERRBegin
+		SubScript.Init();
+		sclmisc::MGetValue( xdhjsr::script::casting::Handler, SubScript );
+
+		TagNames.Init();
+		TagValues.Init();
+
+		AppendTag_("Id", Id, TagNames, TagValues );
+		AppendTag_("Cast", Cast, TagNames, TagValues );
+
+		tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
+
+		Script.Append( SubScript );
+	ERRErr
+	ERREnd
+	ERREpilog
+	}
+
+	void SetupCasts_(
+		const str::string_ &Id,
+		const str::strings_ &Casts,
+		str::string_ &Script )
+	{
+	ERRProlog
+		ctn::E_CMITEM( str::string_ ) Cast;
+		sdr::row__ Row = E_NIL;
+	ERRBegin
+		Cast.Init( Casts );
+		Row = Casts.First();
+	
+		while ( Row != E_NIL ) {
+			SetupCast_(Id, Cast( Row ), Script );
+
+			Row = Casts.Next( Row );
+		}
+	ERRErr
+	ERREnd
+	ERREpilog
+	}
+
+
+}
+
+void xdhjst::scripter::HandleCastsDigest(
+	const xdhcbk::args_ &Digest,
+	str::string_ &Script )
+{
+ERRProlog
+	xdhcbk::retriever__ Retriever;
+	str::string Id;
+	str::strings Casts;
+ERRBegin
+	Retriever.Init( Digest );
+
+	Id.Init();
+	Retriever.GetString( Id );
+
+	Casts.Init();
+	Retriever.GetStrings( Casts );
+
+	SetupCasts_( Id, Casts, Script );
+ERRErr
+ERREnd
+ERREpilog
+}
+
+void xdhjst::scripter::HandleCastsDigests(
+	const xdhcbk::args_ &Digests,
+	str::string_ &Script )
+{
+ERRProlog
+	xdhcbk::retriever__ Retriever;
+	xdhcbk::args Digest;
+ERRBegin
+	Retriever.Init( Digests );
+		
+	while ( Retriever.Availability() != strmrg::aNone ) {
+		Digest.Init();
+		Retriever.GetTable( Digest );
+		scripter::HandleCastsDigest( Digest, Script );
+	}
+ERRErr
+ERREnd
+ERREpilog
+}
+
 Q37_GCTOR( xdhjsp )
 {
 	InitAndFillActionAutomat_();
