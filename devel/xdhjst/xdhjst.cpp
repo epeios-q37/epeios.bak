@@ -629,7 +629,8 @@ namespace {
 		str::string_ &Script )
 	{
 	ERRProlog
-//		misc::cef_string___ EventType;
+		str::string SubScript;
+		str::strings TagNames, TagValues;
 	ERRBegin
 		if ( Abstract.Event == "drop" )
 			scripter::SetAttribute( Id, "ondragover", "event.preventDefault();", Script );
@@ -637,13 +638,18 @@ namespace {
 		if ( Abstract.Event == "dragstart" )
 			scripter::SetAttribute( Id, "draggable", "true", Script );
 
-		//misc::Set( EventType, Handler.Event );
+		SubScript.Init();
+		sclmisc::MGetValue( xdhjsr::script::EventHandler, SubScript );
 
-		Script.Append( "document.getElementById( \"" );
-		Script.Append( Id );
-		Script.Append( "\").addEventListener( \"" );
-		Script.Append( Abstract.Event );
-		Script.Append("\", handleEvent, true );" );
+		TagNames.Init();
+		TagValues.Init();
+
+		AppendTag_("Id", Id, TagNames, TagValues );
+		AppendTag_("Event", Abstract.Event, TagNames, TagValues );
+
+		tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
+
+		Script.Append( SubScript );
 	ERRErr	
 	ERREnd
 	ERREpilog

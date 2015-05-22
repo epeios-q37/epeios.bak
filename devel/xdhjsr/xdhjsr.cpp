@@ -74,3 +74,4 @@ entry___ xdhjsr::script::casting::Handler( "Handler", CastingScripts_ );
 
 entry___ xdhjsr::script::Log( "Log", xdhjsr::Scripts );
 entry___ xdhjsr::script::Focusing( "Focusing", Scripts );
+entry___ xdhjsr::script::EventHandler( "EventHandler", Scripts );
