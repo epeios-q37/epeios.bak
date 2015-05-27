@@ -1,0 +1,5 @@
+***** Changelog for the xppq tool *****
+
+2015-05-27
+	- Was formely known as 'expp'.
+

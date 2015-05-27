@@ -1,2 +1,2 @@
-***** Changelog for the 'eSketch' tool *****
+***** Changelog for the eSketch tool *****
 

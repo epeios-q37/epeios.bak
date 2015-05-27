@@ -1,12 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Locales xmlns:xpp="http://zeusw.org/epeios/xpp">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locales xmlns:xpp="http://q37.info/ns/xpp">
 	<Locale target="esketch">
-    <xpp:set name="epeios.shortcuts" env-var="EPEIOS_SHORTCUTS"/>
-    <xpp:expand value-of="epeios.shortcuts"/>
-	<xpp:expand select="epeios.xlcl"/>
-    <Translations text="ProgramDescription">
-		  <Translation language="fr">Mettre ici la description du programme en français !</Translation>
-		  <Translation language="en">Put here the english description of the program !</Translation>
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xlcl"/>
+		<Translations text="ProgramDescription">
+			<Translation language="fr">Mettre ici la description du programme en français !</Translation>
+			<Translation language="en">Put here the english description of the program !</Translation>
 		</Translations>
 		<!--
 		<Translations text="">
@@ -14,5 +14,5 @@
 		  <Translation language="en"></Translation>
 		</Translations>
 		-->
-  </Locale>
+	</Locale>
 </Locales>
