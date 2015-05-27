@@ -17,28 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LSTBCH__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "lstbch.h"
+#include "ias.h"
 
-using namespace lstbch;
+#include "err.h"
+#include "cio.h"
 
-void lstbch::hook_filenames___::Init(
-	const fnm::name___ &Path,
-	const fnm::name___ &Basename )
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+void Generic( int argc, char *argv[] )
 {
 ERRProlog
-	fnm::name___ Bunch, List;
 ERRBegin
-	Bunch.Init();
-	fnm::BuildPath( Path, Basename, "b", Bunch );
-
-	List.Init();
-	fnm::BuildPath( Path, Basename, "l", List );
-
-	this->Bunch.Init( "", Bunch );
-	this->List.Init( "", List );
 ERRErr
 ERREnd
 ERREpilog
+}
+
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+ERRFProlog
+ERRFBegin
+	COut << "Test of library " << IAS_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+ERRFErr
+	ExitValue = EXIT_FAILURE;
+ERRFEnd
+ERRFEpilog
+	return ExitValue;
 }

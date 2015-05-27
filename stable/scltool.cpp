@@ -1576,7 +1576,7 @@ static void SetStdOutToNewConsole_( void )
 
 	AllocConsole();
 	hCrt = _open_osfhandle(
-		(long)GetStdHandle( STD_OUTPUT_HANDLE ),
+		(intptr_t)GetStdHandle( STD_OUTPUT_HANDLE ),
 		_O_TEXT
 		);
 	hf = _fdopen( hCrt, "w" );

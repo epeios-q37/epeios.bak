@@ -36,8 +36,8 @@ ERRBegin
 	List.Init();
 	fnm::BuildPath( Path, Basename, "l", List );
 
-	this->Container.Init( NULL, Container );
-	this->List.Init( NULL, List );
+	this->Container.Init( "", Container );
+	this->List.Init( "", List );
 ERRErr
 ERREnd
 ERREpilog

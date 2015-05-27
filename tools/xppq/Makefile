@@ -3,7 +3,7 @@
 #
 # Requires GNU make (http://www.gnu.org/software/make/).
 #
-#	Copyright (C) 2013 Claude SIMON.
+#	Copyright (C) 2007, 2008, 2010-2015 Claude SIMON.
 #
 #	This file is part of 'xppq'.
 #
@@ -300,7 +300,7 @@ all: $(target)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2013"\"
+copt += -DCOPYRIGHT_YEARS=\""2007, 2008, 2010-2015"\"
 
 ifndef EPEIOS_SRC
 	src += :src

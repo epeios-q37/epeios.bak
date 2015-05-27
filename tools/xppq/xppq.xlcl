@@ -8,11 +8,19 @@
 			<Translation language="fr">Preprocesseur XML du projet Epeios.</Translation>
 			<Translation language="en">Epeios XML preprocessor.</Translation>
 		</Translations>
+		<Translations text="ProcessingError">
+			<Translation language="fr">Erreur de traitement : %1</Translation>
+			<Translation language="en">Processing error: %1</Translation>
+		</Translations>
+		<Translations text="EncryptionError">
+			<Translation language="fr">Erreur de chiffrement : %1</Translation>
+			<Translation language="en">Encryption error: %1</Translation>
+		</Translations>
 		<!--
 		<Translations text="">
-		  <Translation language="fr"></Translation>
-		  <Translation language="en"></Translation>
+			<Translation language="fr"></Translation>
+			<Translation language="en"></Translation>
 		</Translations>
 		-->
-  </Locale>
+	</Locale>
 </Locales>

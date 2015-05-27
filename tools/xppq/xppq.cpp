@@ -48,8 +48,8 @@ using cio::CIn;
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
-	COut << "Copyright " COPYRIGHT << txf::nl;
-	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+	COut << "Copyright (C) " COPYRIGHT << txf::nl;
+	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
 static void Test_( void )

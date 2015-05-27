@@ -41,8 +41,8 @@ ERRBegin
 	Dynamics.Init();
 	fnm::BuildPath( Path, Basename, "d", Dynamics );
 
-	this->Statics.Init( NULL, Statics );
-	this->Dynamics.Init( NULL, Dynamics );
+	this->Statics.Init( "", Statics );
+	this->Dynamics.Init( "", Dynamics );
 ERRErr
 ERREnd
 ERREpilog

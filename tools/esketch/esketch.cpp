@@ -52,8 +52,8 @@ using cio::CIn;
 static void PrintHeader_( void )
 {
 	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
-	COut << "Copyright " COPYRIGHT << txf::nl;
-	COut << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+	COut << "Copyright (C) " COPYRIGHT << txf::nl;
+	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
 static void Test_( void )
@@ -76,7 +76,7 @@ ERRBegin
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
-		epsmsc::PrintLicense();
+		epsmsc::PrintLicense( NAME_MC );
 	C( Test );
 	else
 		ERRFwk();
