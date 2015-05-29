@@ -19,7 +19,7 @@
 
 #include "registry.h"
 
-#include "locale.h"
+#include "i18n.h"
 
 #include "scltool.h"
 #include "sclerror.h"
@@ -92,7 +92,7 @@ namespace {
 									  Outfit, OFlow,  Context ) ) != xpp::sOK )	{
 			Meaning.Init();
 
-			locale::GetProcessingErrorMeaning( Context, Meaning );
+			i18n::GetProcessingErrorMeaning( Context, Meaning );
 
 			sclerror::SetMeaning( Meaning );
 
@@ -215,7 +215,7 @@ namespace {
 									  ( Destination == NULL ? COut : TOFlow ),  Context ) != xpp::sOK )	{
 			Meaning.Init();
 
-			locale::GetEncryptionErrorMeaning( Context, Meaning );
+			i18n::GetEncryptionErrorMeaning( Context, Meaning );
 
 			sclerror::SetMeaning( Meaning );
 

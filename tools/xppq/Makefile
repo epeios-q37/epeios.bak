@@ -31,20 +31,22 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr ctn dir 
-mods += dte dtfbsc dtfptb epsmsc err 
-mods += fdr flf flsq flw flx 
-mods += ias ids iof iop lst 
-mods += lstbch lstctn mns ntvstr que 
-mods += sdr stk str strng tagsbs 
-mods += tol txf tys uys utf 
-mods += xtf tht bomhdl cdgb64 fil 
-mods += fnm lcl rgstry stsfsm xml 
-mods += xpp 
+mods += cio cpe crptgr cslio ctn 
+mods += dir dte dtfbsc dtfptb epsmsc 
+mods += err fdr flf flsq flw 
+mods += flx ias ids iof iop 
+mods += lst lstbch lstctn mns mtx 
+mods += ntvstr que sdr stk str 
+mods += strng tagsbs tol txf tys 
+mods += uys utf xtf llio tht 
+mods += bomhdl cdgb64 fil fnm lcl 
+mods += rgstry stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
-mods += locale registry 
+mods += i18n registry 
 
+pmods += pllio 
 
+wmods += wllio 
 
 ##############################
 # Common to all environment. #
@@ -155,17 +157,19 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -std=gnu++11 -DCYGWIN
+	co += -std=gnu++11 -DCYGWIN -DUNICODE
 	
 	LDFLAGS += -static
 
 	ifeq ("$(arch)","$(IA_32)")
 		CXX = i686-w64-mingw32-g++
 		mods += $(wmods)
+		lo += -municode
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
 		ifeq ("$(arch)","$(x86_64)")
 			CXX = x86_64-w64-mingw32-g++
 			mods += $(wmods)
+			lo += -municode
 		else
 			mods += $(pmods)
 		endif
@@ -187,7 +191,8 @@ endif
 
 ifeq ("$(os)", "$(MinGW)")
 
-	co += -DMSYS -std=gnu++11
+	co += -DMSYS -std=gnu++11 -DUNICODE
+	lo += -municode
 	
 	mods += $(wmods)
 
@@ -298,12 +303,13 @@ endif
 		
 all: $(target)
 	rm -f *.o
+	strip $(target)
 
-copt += -DVERSION=\""(Version)"\"
+copt += -DVERSION=\""20150529"\"
 copt += -DCOPYRIGHT_YEARS=\""2007, 2008, 2010-2015"\"
 
 ifndef EPEIOS_SRC
-	src += :src
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -333,5 +339,9 @@ endif
 
 clean:
 	rm -rf *.o
+	
+# For maintainer only.
+pack:
+	DVLPack
 
 		

@@ -2,7 +2,7 @@
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
   <xpp:bloc><!-- User definitions -->
 	<xpp:define name="Version">
-		<xpp:bloc>(Version)</xpp:bloc>
+		<xpp:bloc>20150529</xpp:bloc>
 	</xpp:define>
     <xpp:define name="CopyrightYears">
       <xpp:bloc>2007, 2008, 2010-2015</xpp:bloc>
@@ -25,7 +25,7 @@
         <xpp:expand select="SCL"/>
       </Modules>
     </Modules>
-	  <Module>locale</Module>
+	  <Module>i18n</Module>
 	  <Module>registry</Module>
   </Modules>
   <SourceDirs>

@@ -12,6 +12,15 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-05-29 :
+- SCLTOOL :
+	% Simplification allowed by the fact that 'MinGW' is now called with unicode aware options.
+
+2015-05-28 (til...):
+- GLOBAL :
+	- Heavy modifications, due to third-party components, with lot of tries, many of them were reverted, so it was useless and too much time concumming to report them here
+	as I didn't know which of them will be conserved.
+
 2015-05-11 :
 - GLOBAL :
 	% Reorganization of the client/server modules and the ones which depends on them.

@@ -17,8 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SDR__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "sdr.h"
+#include "llio.h"
 
-using namespace sdr;
+#include "err.h"
+#include "cio.h"
+
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+void Generic( int argc, char *argv[] )
+{
+ERRProlog
+ERRBegin
+ERRErr
+ERREnd
+ERREpilog
+}
+
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+ERRFProlog
+ERRFBegin
+	COut << "Test of library " << LLIO_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+ERRFErr
+	ExitValue = EXIT_FAILURE;
+ERRFEnd
+ERRFEpilog
+	return ExitValue;
+}

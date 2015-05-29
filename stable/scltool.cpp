@@ -1584,8 +1584,6 @@ static void SetStdOutToNewConsole_( void )
 	setvbuf( stdout, NULL, _IONBF, 0 );
 }
 
-# ifdef CPE_MSVC
-
 // MSVC va utiliser soit 'wmain' soit 'wWinMain' (et ignorer l'autre) selon la valeur de 'SubSystem'.
 
 int wmain(
@@ -1614,15 +1612,6 @@ int WINAPI wWinMain(
 		HINSTANCE hPrevInstance,
 		PWSTR pCmdLine,
 		int nCmdShow )
-# elif defined( CPE_MINGW )
-	int WINAPI WinMain(
-		HINSTANCE hInstance,
-		HINSTANCE hPrevInstance,
-		LPSTR lpCmdLine,
-		int nCmdShow)
-# else
-#  error
-# endif
 {
 	int ExitValue = EXIT_SUCCESS;
 ERRFProlog
@@ -1637,13 +1626,7 @@ ERRFBegin
 	Oddities.hInstance = hInstance;
 	Oddities.hPrevInstance = hPrevInstance;
 	Oddities.nCmdShow = nCmdShow;
-# ifdef CPE_MSVC
 	Oddities.pCmdLine = pCmdLine;
-# elif defined( CPE_MINGW )
-	Oddities.lpCmdLine = lpCmdLine;
-# else
-# error
-#endif
 
 	SOut.Init();
 	FOut.Init( SOut, fdr::ts_Default );

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "locale.h"
+#include "i18n.h"
 
 #include "scllocale.h"
 
@@ -32,14 +32,14 @@
 #include "sclrgstry.h"
 #include "scltool.h"
 
-using namespace locale;
+using namespace i18n;
 
 #define CASE( l )\
 	case t##l:\
 	return #l;\
 	break
 
-const char *locale::Label( text__ Text )
+const char *i18n::Label( text__ Text )
 {
 #if	LOCALE__TEXT_AMOUNT != 8
 #	error "Amount of 'message__' entries changed ! Update !"
@@ -62,7 +62,7 @@ const char *locale::Label( text__ Text )
 	return NULL;	// To avoir a 'warning'.
 }
 
-const lcl::meaning_ &locale::GetMeaning_(
+const lcl::meaning_ &i18n::GetMeaning_(
 	text__ Text,
 	lcl::meaning_ *Meaning,
 	... )
@@ -110,13 +110,8 @@ ERREpilog
 	return *Meaning;
 }
 
-static struct locale_cdtor {
-	locale_cdtor( void )
-	{
-		if ( LOCALE__TEXT_AMOUNT != t_amount )
-			ERRChk();
-	}
-	~locale_cdtor( void )
-	{
-	}
-} GLOBALCDTor_;
+Q37_GCTOR( i18n )
+{
+	if ( LOCALE__TEXT_AMOUNT != t_amount )
+		ERRChk();
+}

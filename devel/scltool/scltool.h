@@ -36,7 +36,6 @@
 # include "err.h"
 # include "flw.h"
 # include "lcl.h"
-# include "clnarg.h"
 
 # include "sclmisc.h"
 # include "scllocale.h"
@@ -78,13 +77,7 @@ namespace scltool {
 # ifdef CPE_WIN
 		HINSTANCE hInstance;
 		HINSTANCE hPrevInstance;
-#  ifdef CPE_MSVC
 		PWSTR pCmdLine;
-#  elif defined( CPE_MINGW )
-		LPSTR lpCmdLine;
-#  else
-#   error
-#  endif
 		int nCmdShow;
 		LPWSTR *argv;
 # else

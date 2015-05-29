@@ -31,20 +31,22 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr ctn dir 
-mods += dte dtfbsc dtfptb epsmsc err 
-mods += fdr flf flsq flw flx 
-mods += ias ids iof iop lst 
-mods += lstbch lstctn mns ntvstr que 
-mods += sdr stk str strng tagsbs 
-mods += tol txf tys uys utf 
-mods += xtf tht bomhdl cdgb64 fil 
-mods += fnm lcl rgstry stsfsm xml 
-mods += xpp 
+mods += cio cpe crptgr cslio ctn 
+mods += dir dte dtfbsc dtfptb epsmsc 
+mods += err fdr flf flsq flw 
+mods += flx ias ids iof iop 
+mods += lst lstbch lstctn mns mtx 
+mods += ntvstr que sdr stk str 
+mods += strng tagsbs tol txf tys 
+mods += uys utf xtf llio tht 
+mods += bomhdl cdgb64 fil fnm lcl 
+mods += rgstry stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += registry 
 
+pmods += pllio 
 
+wmods += wllio 
 
 ##############################
 # Common to all environment. #
@@ -303,7 +305,7 @@ copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
 ifndef EPEIOS_SRC
-	src += :src
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -333,5 +335,9 @@ endif
 
 clean:
 	rm -rf *.o
+	
+# For maintainer only.
+pack:
+	DVLPack
 
 		
