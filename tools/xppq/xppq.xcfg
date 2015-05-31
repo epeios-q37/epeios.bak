@@ -60,13 +60,13 @@
 		</Locale>
 		<Arguments>
 			<xpp:expand select="Arguments"/>
-			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+			<!-- Commandes : 'Value', mais pas de 'Path' (vaut alors 'Parameters/Command'). -->
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="[%NamespaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%InputArgument% [%OutputArgument%]]"/>
 			<Argument id="EncryptCommand" Description="EncryptCommandDescription" long="encrypt" Value="Encrypt" Usage="[%NamespaceOption%] [%NoIndentationFlag%] [%PreserveFlag%] [%InputArgument% [%OutputArgument%]]"/>
-			<!-- Drapeaux : 'Path', mais pas de 'Value'. -->
+			<!-- Drapeaux : 'Path' ET 'Value'. -->
 			<Argument id="NoIndentationFlag" Description="NoIndentationFlagDescription" long="no-indent" Path="Indentation" Value="No"/>
 			<Argument id="PreserveFlag" Description="PreserveFlagDescription" long="preserve" Path="Preserve" Value="Yes"/>
-			<!-- Options : 'Path' ET 'Value'. -->
+			<!-- Options : 'Path', mais pas de 'Value'. -->
 			<Argument id="NamespaceOption" Description="NamespaceOptionDescription" long="namespace" short="n" Path="Namespace" Label="NamespaceOptionLabel"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
 			<Argument id="InputArgument" Description="InputArgumentDescription" Path="Input" Label="InputArgumentLabel"/>

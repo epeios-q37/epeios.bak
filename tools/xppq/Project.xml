@@ -1,36 +1,45 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
-  <xpp:bloc><!-- User definitions -->
-	<xpp:define name="Version">
-		<xpp:bloc>20150529</xpp:bloc>
-	</xpp:define>
-    <xpp:define name="CopyrightYears">
-      <xpp:bloc>2007, 2008, 2010-2015</xpp:bloc>
-    </xpp:define>
-  <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="Tool"/>
-  </xpp:bloc>
-  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
-  <About>
-    <Program>xppq</Program>
-    <Software>xppq</Software>
-	<UUID>4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe</UUID>
-  </About>
-  <Modules>
-    <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
-      <Modules Group="Core">
-        <xpp:expand select="Core"/>
-      </Modules>
-      <Modules Group="SCL">
-        <xpp:expand select="SCL"/>
-      </Modules>
-    </Modules>
-	  <Module>i18n</Module>
-	  <Module>registry</Module>
-  </Modules>
-  <SourceDirs>
-  </SourceDirs>
-  <PreprocessorDefinitions>
-	<PreprocessorDefinition>E_ST</PreprocessorDefinition>
-  </PreprocessorDefinitions>
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>20150531</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2007-2015</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>xppq</Program>
+		<Software>xppq</Software>
+		<UUID>4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Module>i18n</Module>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+	</SourceDirs>
+	<Files>
+		<Files Group="Doc" Path="Doc/">
+			<File Pack="yes">Compilation.pdf</File>
+			<File Pack="yes">Description.pdf</File>
+			<File Pack="yes">Directives.pdf</File>
+			<File Pack="yes">Manual.pdf</File>
+		</Files>
+	</Files>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
 </Project>

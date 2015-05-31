@@ -1,7 +1,3 @@
-# 'esketch' Project
-#    by Claude SIMON (http://q37.info/contact/).
-#
-# Requires GNU make (http://www.gnu.org/software/make/).
 #
 #	Copyright (C) 2013 Claude SIMON.
 #
@@ -157,17 +153,19 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -std=gnu++11 -DCYGWIN
+	co += -std=gnu++11 -DCYGWIN -DUNICODE
 	
 	LDFLAGS += -static
 
 	ifeq ("$(arch)","$(IA_32)")
 		CXX = i686-w64-mingw32-g++
 		mods += $(wmods)
+		lo += -municode
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
 		ifeq ("$(arch)","$(x86_64)")
 			CXX = x86_64-w64-mingw32-g++
 			mods += $(wmods)
+			lo += -municode
 		else
 			mods += $(pmods)
 		endif
@@ -189,7 +187,8 @@ endif
 
 ifeq ("$(os)", "$(MinGW)")
 
-	co += -DMSYS -std=gnu++11
+	co += -DMSYS -std=gnu++11 -DUNICODE
+	lo += -municode
 	
 	mods += $(wmods)
 
@@ -300,6 +299,7 @@ endif
 		
 all: $(target)
 	rm -f *.o
+	strip $(target)
 
 copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2013"\"
