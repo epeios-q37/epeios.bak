@@ -300,7 +300,7 @@ all: $(target)
 	rm -f *.o
 	strip $(target)
 
-copt += -DVERSION=\""20150531"\"
+copt += -DVERSION=\""20150601"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2015"\"
 
 ifndef EPEIOS_SRC
