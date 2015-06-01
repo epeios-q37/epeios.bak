@@ -1,6 +1,6 @@
 ***** Changelog for the xppq tool *****
 
-2015-05-31 : PUBLICATION !
+2015-06-01 : PUBLICATION !
 
 2015-05-28
 	- 'locale.(h|cpp)' becomes 'i18n(.h|.cpp)' to avoid confusion with the 'locale.h' standard C header.
