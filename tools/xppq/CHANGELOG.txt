@@ -1,5 +1,8 @@
 ***** Changelog for the xppq tool *****
 
+2015-06-04 : PUBLICATION !
+	No changes in the software itself, but only in the content of the packages.
+
 2015-06-01 : PUBLICATION !
 
 2015-05-28
