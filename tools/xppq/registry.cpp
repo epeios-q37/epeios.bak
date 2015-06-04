@@ -1,28 +1,32 @@
 /*
-	Copyright (C) 2007-2015 Claude SIMON (http://q37.info/contact/).
+	'registry' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Part of th 'xxx_app' tool.
+	Copyright (C) 2011 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of xppq.
+	This file is part of the Epeios project (http://zeusw.org/epeios/).
 
-	xppq is free software: you can redistribute it and/or
-	modify it under the terms of the GNU Affero General Public License as
-	published by the Free Software Foundation, either version 3 of the
-	License, or (at your option) any later version.
+    This file is part of 'expp'.
 
-	xppq is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-	Affero General Public License for more details.
+    'expp' is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-	You should have received a copy of the GNU Affero General Public License
-	along with xppq. If not, see <http://www.gnu.org/licenses/>.
+    'expp' is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with 'expp'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "registry.h"
 
-using namespace registry;
+using rgstry::entry___;
 
-entry___ registry::Input( "Input", sclrgstry::Parameters );
-entry___ registry::Output( "Output", sclrgstry::Parameters );
-entry___ registry::Namespace( "Namespace", sclrgstry::Parameters );
+entry___ registry::Source( "Source", sclrgstry::Parameters );
+entry___ registry::Destination( "Destination", sclrgstry::Parameters );
+entry___ registry::NameSpace( "NameSpace", sclrgstry::Parameters );
 entry___ registry::Indentation( "Indentation", sclrgstry::Parameters );
 entry___ registry::Preserve( "Preserve", sclrgstry::Parameters );
