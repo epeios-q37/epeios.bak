@@ -1,28 +1,24 @@
 /*
-	Header for the 'locale' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
-	Part of the 'xxx' tool.
-	Copyright (C) 2011 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2007-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of the Epeios project (http://zeusw.org/epeios/).
+	This file is part of xppq.
 
-    This file is part of 'xxx'.
+	xppq is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
 
-    'xxx' is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	xppq is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
 
-    'xxx' is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	You should have received a copy of the GNU Affero General Public License
+	along with xppq. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-    You should have received a copy of the GNU General Public License
-    along with 'xxx'.  If not, see <http://www.gnu.org/licenses/>.
-*/	
-
-#ifndef LOCALE__INC
-# define LOCALE__INC
+#ifndef I18N__INC
+# define I18N__INC
 
 // # include "xxx.h"
 # include "scllocale.h"
@@ -45,8 +41,7 @@
 		return GetMeaning_( t##name, &Meaning );\
 	}
 
-namespace locale {
-
+namespace i18n {
 	enum text__ {
 		tProcessCommandDescription,
 		tEncryptCommandDescription,
