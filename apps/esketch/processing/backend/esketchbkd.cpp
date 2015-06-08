@@ -89,7 +89,7 @@ protected:
 	qRH
 	qRH
 		if ( ( Backend = new backend___ ) == NULL )
-			ERRAlc();
+			qRAlc();
 
 		Backend->Init( Mode, Origin );
 	qRR
@@ -124,7 +124,7 @@ _callback___ *sclbacknd::SCLBACKNDNewCallback( fblbur::mode__ Mode )
 qRH
 qRH
 	if ( ( Callback = new callback___ ) == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Callback->Init( Mode );
 qRR

@@ -90,7 +90,7 @@ xulfui::steering_callback__ *sclgecko::SCLGECKOCreateSteering(
 qRH
 qRH
 	if ( ( Callback = new callback__ ) == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Callback->Init( LauncherIdentification, sclrgstry::GetRegistry(), Locale, Language );
 qRR

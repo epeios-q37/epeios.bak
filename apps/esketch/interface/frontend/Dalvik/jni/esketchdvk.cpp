@@ -34,7 +34,7 @@ void WriteInWidget_(
 		Id );
 
 	if ( Text == NULL )
-		ERRFwk();
+		qRGnr();
 
 	jvabse::GetMethodID( Env, Text, "setText", "(Ljava/lang/CharSequence;)V" );
 
@@ -44,7 +44,7 @@ void WriteInWidget_(
 	Value.Init();
 
 	if( !sclrgstry::GetRegistry().GetValue( rgstry::entry___( "Test" ), sclrgstry::GetRoot(), Value ) )
-		ERRFwk();
+		qRGnr();
 
 
 	Env->CallVoidMethod(
@@ -103,7 +103,7 @@ dalvik::steering_callback___ *scldalvik::CreateSteering( void )
 	steering_callback___ *Steering = new steering_callback___;
 
 	if ( Steering == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Steering->Init();
 

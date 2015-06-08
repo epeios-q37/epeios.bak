@@ -42,7 +42,7 @@ void ui::ui__::_SwitchTo(
 		ERRPrm();
 		break;
 	default:
-		ERRFwk();
+		qRGnr();
 		break;
 	}
 

@@ -27,7 +27,7 @@ using namespace ui;
 xulftk::trunk___ &ui::ui___::XULFUITrunk( void ) const
 {
 	if ( _Trunk == NULL )
-		ERRFwk();
+		qRGnr();
 
 	return *_Trunk;
 }
@@ -76,7 +76,7 @@ void ui::ui___::_Refresh( void )
 		SessionView.Refresh();
 		break;
 	default:
-		ERRFwk();
+		qRGnr();
 		break;
 	}
 

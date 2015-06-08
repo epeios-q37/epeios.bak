@@ -64,7 +64,7 @@ protected:
 		Session = new session___;
 
 		if ( Session == NULL )
-			ERRAlc();
+			qRAlc();
 
 		Session->Init( _Kernel );
 	qRR
@@ -124,7 +124,7 @@ sclcgi::steering_callback__ *sclcgi::SCLCGICreateSteering( void )
 qRH
 qRH
 	if ( ( SteeringCallback = new ::steering_callback__ ) == NULL )
-		ERRAlc();
+		qRAlc();
 
 	SteeringCallback->Init();
 qRR

@@ -53,7 +53,7 @@ void ui_ssn_frm::backend_type_event_handler__::DVKEVTOnItemSelected(
 		dalvik::Hide( Trunk().UI.SessionForm.Widget.DaemonBackendLocation.Token(), Env, Activity );
 		break;
 	default:
-		ERRFwk();
+		qRGnr();
 		break;
 	}
 }

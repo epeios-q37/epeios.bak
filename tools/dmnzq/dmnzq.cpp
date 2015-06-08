@@ -65,7 +65,7 @@ namespace {
 	{
 	qRH
 		str::string Message;
-	qRH
+	qRB
 		if ( Core_ != NULL ) {
 			Message.Init();
 			COut << sclmisc::GetBaseTranslation( "TerminatingModule", Message ) << txf::nl << txf::commit;
@@ -91,7 +91,7 @@ namespace {
 		log_file_handling__ Handling = lfh_Undefined;
 	qRH
 		str::string Value;
-	qRH
+	qRB
 		Value.Init();
 
 		registry::GetRawModuleLogMode( Value );
@@ -125,7 +125,7 @@ namespace {
 		module_connection_type__ Type = mct_Undefined;
 	qRH
 		str::string Value;
-	qRH
+	qRB
 		Value.Init();
 
 		registry::GetRawModuleServiceType( Value );
@@ -149,7 +149,7 @@ namespace {
 	{
 	qRH
 		csdbns::server___ Server;
-	qRH
+	qRB
 		Server.Init( Port, Callback );
 
 		Server.Process();
@@ -165,7 +165,7 @@ namespace {
 	{
 	qRH
 		csdsns::server___ Server;
-	qRH
+	qRB
 		Server.Init( Port, Callback, LogFunctions );
 
 		Server.Process();
@@ -191,7 +191,7 @@ namespace {
 			tol::buffer__ Buffer;
 
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRGnr();
 
 			*_Flow << '[' << tol::DateAndTime( Buffer ) << "] " << csdsns::GetLogLabel( Log ) << ' ' << Id << '/' << Amount << txf::nl << txf::commit;
 		}
@@ -229,7 +229,7 @@ namespace {
 		fil::mode__ Mode = fil::m_Undefined;
 		lcl::meaning ErrorMeaning;
 		str::string ErrorTranslation;
-	qRH
+	qRB
 
 		if ( LogFileName != NULL ) {
 			switch ( LogFileHandling ) {
@@ -241,7 +241,7 @@ namespace {
 				break;
 			default:
 				if ( LogFileName != NULL )
-				ERRPrm();
+					qRGnr();
 				break;
 			}
 
@@ -277,14 +277,14 @@ namespace {
 		lcl::meaning Meaning, MeaningBuffer;
 		str::string Translation;
 		err::buffer__ ErrBuffer;
-	qRH
+	qRB
 		SharedLocale.Init();
 		SharedRegistry.Init();
 
 		LibraryData.Init( csdleo::cRegular, ModuleFilename, err::qRRor, sclerror::SCLERRORError, csdleo::mRemote );
 
 		if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
-			ERRAlc();
+			qRAlc();
 
 		if ( !Core_->Init( ModuleFilename, LibraryData, err::hUserDefined ) ) {
 			Meaning.Init();
@@ -302,7 +302,7 @@ namespace {
 			UseSwitchingConnections_( Core_->GetCallback(), LogFileName, LogFileHandling, Port );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	qRR
@@ -337,7 +337,7 @@ namespace {
 	qRH
 		str::string ModuleFileName;
 		TOL_CBUFFER___ Buffer;
-	qRH
+	qRB
 		ModuleFileName.Init();
 
 		Process_( registry::GetModuleFileName( ModuleFileName ).Convert( Buffer ), GetService_(), GetModuleConnectionType_(), LogFileName, LogFileHandling );
@@ -350,7 +350,7 @@ namespace {
 	{
 	qRH
 		TOL_CBUFFER___ Buffer;
-	qRH
+	qRB
 		atexit( ExitFunction_ );
 
 		cio::COut.Commit();
@@ -368,14 +368,14 @@ int scltool::SCLTOOLMain(
 {
 	int ExitValue = EXIT_FAILURE;
 qRH
-qRH
+qRB
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( Process );
 	else
-		ERRFwk();
+		qRGnr();
 
 	ExitValue = EXIT_SUCCESS;
 qRR

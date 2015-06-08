@@ -79,7 +79,7 @@ qRH
 		epsmsc::PrintLicense( NAME_MC );
 	C( Test );
 	else
-		ERRFwk();
+		qRGnr();
 
 	ExitValue = EXIT_SUCCESS;
 qRR

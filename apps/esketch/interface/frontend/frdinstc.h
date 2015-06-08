@@ -35,14 +35,14 @@ namespace frdinstc {
 		const frdkernl::kernel___ &_K( void ) const
 		{
 			if ( _Kernel == NULL )
-				ERRFwk();
+				qRGnr();
 
 			return *_Kernel;
 		}
 		frdkernl::kernel___ &_K( void )
 		{
 			if ( _Kernel == NULL )
-				ERRFwk();
+				qRGnr();
 
 			return *_Kernel;
 		}

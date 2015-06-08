@@ -224,7 +224,7 @@ RB
 	LOG;
 
 	if ( ( _LanguageBuffer.Malloc( strlen( Language ) + 1 ) ) == NULL )
-		ERRAlc();
+		qRAlc();
 
 	LOG;
 
@@ -248,7 +248,7 @@ LOG;
 	mtx::Lock( Mutex_ );
 
 	if ( CurrentSteering_ != NULL )
-		ERRFwk();
+		qRGnr();
 
 	CorrectedLibraryName.Init();
 
@@ -339,10 +339,10 @@ RP
 	str::string Id;
 RB
 	if ( !mtx::IsLocked( Mutex_ ) )
-		ERRFwk();
+		qRGnr();
 
 	if ( CurrentSteering_ == NULL )
-		ERRFwk();
+		qRGnr();
 
 	Id.Init();
 
@@ -366,10 +366,10 @@ NS_IMETHODIMP egeckocom___::Stop(
 RP
 RB
 	if ( !mtx::IsLocked( Mutex_ ) )
-		ERRFwk();
+		qRGnr();
 
 	if ( CurrentSteering_ == NULL )
-		ERRFwk();
+		qRGnr();
 
 	CurrentSteering_->PostRegistration();
 

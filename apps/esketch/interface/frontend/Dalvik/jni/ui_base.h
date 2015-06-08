@@ -65,7 +65,7 @@ namespace ui_base {
 		trunk &Trunk( void ) const
 		{
 			if ( _Trunk == NULL )
-				ERRFwk();
+				qRGnr();
 
 			return *_Trunk;
 		}

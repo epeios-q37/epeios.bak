@@ -41,7 +41,7 @@ void ui_main::project_type_event_handler__::DVKEVTOnItemSelected(
 		dalvik::Show( Trunk().UI.Main.Widgets.PredefinedProjectList.Token(), Env, Activity );
 		break;
 	default:
-		ERRFwk();
+		qRGnr();
 		break;
 	}
 

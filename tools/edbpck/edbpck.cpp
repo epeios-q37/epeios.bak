@@ -255,7 +255,7 @@ qRH
 	IFlow.GetContext( Context );
 
 	if ( Context.Status != xpp::sOK )
-		ERRFwk();
+		qRGnr();
 
 	xpp::GetMeaning( Context.Coordinates, Meaning );
 qRR
@@ -575,7 +575,7 @@ qRH
 				if ( RA )
 					ReportInsertionErrorAndExit_( _( RecordLabelWording) , _( RecordAliasWording ), IFlow );
 				else
-					ERRFwk();	// Normally already handled before.
+					qRGnr();	// Normally already handled before.
 			else if ( RA )
 				InsertUsingRecordAlias_( RecordAlias, Aliases.Records, Tables, IFlow, Record );
 			else
@@ -591,7 +591,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -657,7 +657,7 @@ static void ProcessRecord_(
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -733,7 +733,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -761,7 +761,7 @@ qRH
 		switch ( Parser.Parse( xml::tfAttribute | xml::tfStartTagClosed | xml::tfEndTag ) ) {
 		case xml::tAttribute:
 			if ( Parser.TagName() != CONTENT_TAG )
-				ERRFwk();
+				qRGnr();
 
 			if ( Parser.AttributeName() == CONTENT_DEFAULT_RECORD_LABEL_TAG_ATTRIBUTE ) {
 				Assign_( _( DefaultRecordLabelTagWording ), Parser, IFlow, DefaultRecordLabelTag );
@@ -773,7 +773,7 @@ qRH
 				ProcessRecords_( Parser, IFlow, DefaultRecordLabelTag, Aliases, Tables, Table.Records, Table.Skipped() );	// '<ercp:content ...><...' -> '</erpck:content>...'
 				Continue = false;
 			}  else																						        			//                    ^                         ^
-				ERRFwk();
+				qRGnr();
 			break;
 		case xml::tEndTag:
 			Continue = false;	// '</erpck:content>...'
@@ -782,7 +782,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -872,7 +872,7 @@ qRH
 				break;
 			break;
 			default:
-				ERRFwk();
+				qRGnr();
 			}
 			break;
 		case xml::tValue:
@@ -888,7 +888,7 @@ qRH
 				ReportAndExit_( _( IncompleteAliasDefinitionError ), IFlow );
 				break;
 			default:
-				ERRFwk();
+				qRGnr();
 				break;
 			}
 			break;
@@ -896,7 +896,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -934,7 +934,7 @@ qRH
 					Aliases.Tables.Append( TableAlias );
 					break;
 				default:
-					ERRFwk();
+					qRGnr();
 					break;
 				}
 			} else
@@ -947,7 +947,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -986,7 +986,7 @@ qRH
 			break;
 		case xml::tAttribute:
 			if ( Parser.TagName() != TABLE_TAG )
-				ERRFwk();
+				qRGnr();
 
 			if ( Parser.AttributeName() == TABLE_LABEL_ATTRIBUTE ) {
 				Assign_( _( TableLabelWording ), Parser, IFlow, Table.Label );
@@ -1000,7 +1000,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -1042,7 +1042,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -1104,7 +1104,7 @@ qRH
 			ReportAndExit_( IFlow );
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -1127,7 +1127,7 @@ qRH
 	XFlow.Init( IFlow, utf::f_Default );
 
 	if ( xpp::Process( XFlow, Writer ) != xpp::sOK )
-		ERRFwk();
+		qRGnr();
 qRR
 qRT
 qRE
@@ -1492,7 +1492,7 @@ qRH
 		tagsbs::SubstituteShortTag( CompleteCommand, 3, Label, '$' );
 		COut << "Launching '" << CompleteCommand << "\'." << txf::nl << txf::commit;
 		if ( tol::System( CompleteCommand.Convert( Buffer ) ) == -1 )
-			ERRLbr();
+			qRLbr();
 	}
 
 
@@ -1571,21 +1571,21 @@ qRH
 		switch ( Parser.Parse( xml::tfObvious | xml::tfStartTagClosed ) ) {
 		case xml::tStartTag:
 			if ( Parser.TagName() != "Context" )
-				ERRFwk();
+				qRGnr();
 
 			break;
 		case xml::tAttribute:
 			if ( Parser.AttributeName() == "Target" ) {
 				if ( Target.Amount() != 0 )
-					ERRFwk();
+					qRGnr();
 
 				Target = Parser.Value();
 			} else if ( Parser.AttributeName() != "TimeStamp" )
-				ERRFwk();
+				qRGnr();
 			break;
 		case xml::tStartTagClosed:
 			if ( Target != NAME_LC )
-				ERRFwk();
+				qRGnr();
 
 			dbpctx::Retrieve( Parser, Context );
 			break;
@@ -1593,7 +1593,7 @@ qRH
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -1703,7 +1703,7 @@ int scltool::SCLTOOLMain(
 	else if ( Command == "License" )
 		epsmsc::PrintLicense();
 	else
-		ERRFwk();
+		qRGnr();
 	return EXIT_SUCCESS;
 }
 

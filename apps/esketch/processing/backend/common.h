@@ -47,7 +47,7 @@ namespace common {
 		xbackend___ &XBackend( void ) const
 		{
 			if ( _XBackend == NULL )
-				ERRFwk();
+				qRGnr();
 
 			return *_XBackend;
 		}

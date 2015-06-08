@@ -57,24 +57,24 @@ static rrow__ RetrieveRecordId_( xml::parser___ &Parser )
 		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::tAttribute:
 			if ( Parser.AttributeName() != RECORD_ID_ATTRIBUTE_NAME )
-				ERRFwk();
+				qRGnr();
 
 			Id = Parser.Value().ToUInt( &Error );
 
 			if ( Error != qNIL )
-				ERRFwk();
+				qRGnr();
 			break;
 		case xml::tEndTag:
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
 
 	if ( Id == qNIL )
-		ERRFwk();
+		qRGnr();
 
 	return Id;
 }
@@ -95,7 +95,7 @@ static void Retrieve_(
 		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::tStartTag:
 			if ( Parser.TagName() != RECORD_TAG_NAME )
-				ERRFwk();
+				qRGnr();
 
 			Records.Append( RetrieveRecordId_( Parser ) );
 			break;
@@ -103,7 +103,7 @@ static void Retrieve_(
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}
@@ -142,7 +142,7 @@ static void RetrievePool_(
 		switch( Parser.Parse( xml::tfObvious | xml::tfStartTagClosed ) ) {
 		case xml::tStartTag:
 			if ( Parser.TagName() != POOL_TAG_NAME )
-				ERRFwk();
+				qRGnr();
 
 			break;
 		case xml::tAttribute:
@@ -153,7 +153,7 @@ static void RetrievePool_(
 			else if ( Parser.AttributeName() == POOL_TIMESTAMP_ATTRIBUTE_NAME )
 				Context.S_.TimeStamp = Parser.Value().ToUInt();
 			else
-				ERRFwk();
+				qRGnr();
 
 			break;
 		case xml::tStartTagClosed:
@@ -163,7 +163,7 @@ static void RetrievePool_(
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRGnr();
 			break;
 		}
 	}

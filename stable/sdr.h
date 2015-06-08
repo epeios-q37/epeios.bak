@@ -54,7 +54,7 @@
 # include "tol.h"
 # include "strng.h"
 
-# define SDR_INTERNAL_SDRIVER *(sdr::E_SDRIVER__ *)NULL
+# define SDR_INTERNAL_SDRIVER *(qSD__ *)NULL
 
 # define qNIL ( (sdr::row_t__) -1 )
 
