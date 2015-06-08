@@ -30,25 +30,25 @@ static bso::bool__ WriteAttributes_(
 	filler__ &Filler )
 {
 	bso::bool__ HasChild = false;
-ERRProlog
+qRH
 	ctn::E_CMITEMt( value_, vrow__ ) Value;
 	ctn::E_CMITEMt( name_, erow__ ) Name;
-ERRBegin
+qRB
 	Value.Init( Document.Data );
 	Name.Init( Document.Structure );
 
 	Row = Document.Data.FirstChild( Row );
 
-	HasChild = ( Row != E_NIL );
+	HasChild = ( Row != qNIL );
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		if ( Document.Structure.GetOddity( Document.Data.GetOddity( Row ) ) == xmlelm::tAttribute )
 			Filler.PutAttribute( Name( Document.Data.GetOddity( Row ) ), Value( Row ) );
 		Row = Document.Data.NextSibling( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return HasChild;
 }
 
@@ -56,12 +56,12 @@ void xmlflr::filler__::Put(
 	const xmldoc::document_ &Document,
 	vrow__ Root )
 {
-ERRProlog
+qRH
 	dtr::browser__<vrow__> Browser;
 	ctn::E_CMITEMt( value_, vrow__ ) Value;
 	ctn::E_CMITEMt( name_, erow__ ) Name;
 	str::string Result;
-ERRBegin
+qRB
 	Value.Init( Document.Data );
 	Name.Init( Document.Structure );
 
@@ -71,7 +71,7 @@ ERRBegin
 	Browser.Init( Root );
 	Document.Data.Browse( Browser );
 
-	while( Browser.Position() != E_NIL ) {
+	while( Browser.Position() != qNIL ) {
 		switch( Browser.Kinship() ) {
 		case dtr::kChild:
 		case dtr::kSibling:
@@ -86,7 +86,7 @@ ERRBegin
 			PopTag();
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -94,8 +94,8 @@ ERRBegin
 	}
 
 	PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

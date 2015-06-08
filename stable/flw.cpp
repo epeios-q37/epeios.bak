@@ -63,15 +63,15 @@ size__ flw::iflow__::_RawRead(
 	bso::bool__ &CacheIsEmpty )
 {
 	size__ Amount = 0;
-ERRProlog
-ERRBegin
+qRH
+qRB
 
 #ifdef FLW_DBG
 	if ( Wanted < Minimum )
-		ERRPrm();
+		qRFwk();
 
 	if ( Minimum < 1 )
-		ERRPrm();
+		qRFwk();
 #endif
 
 	Amount = _LoopingRawRead( Minimum, Buffer, Wanted, Adjust, CacheIsEmpty );
@@ -80,10 +80,10 @@ ERRBegin
 		_Red += Amount;
 
 	if ( _Red > _AmountMax )
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 	return Amount;
 }
 # endif
@@ -94,41 +94,41 @@ size__ flw::oflow__::_DirectWrite(
 	size__ Minimum )
 {
 	size__ Amount = 0;
-ERRProlog
-ERRBegin
-	if ( ( _Size == 0 ) && ( _Cache != NULL ) )	// There was an error before. See below, in 'ERRErr'.
-		ERRFwk();
+qRH
+qRB
+	if ( ( _Size == 0 ) && ( _Cache != NULL ) )	// There was an error before. See below, in 'qRR'.
+		qRFwk();
 
 #ifdef FLW_DBG
 	if ( Wanted < 1 )
-		ERRPrm();
+		qRFwk();
 
 	if ( Wanted < Minimum )
-		ERRPrm();
+		qRFwk();
 #endif
 
 	Amount = _LoopingWrite( Buffer, Wanted, Minimum );
 
 	if ( Amount == 0 )
-		ERRFwk();
+		qRFwk();
 
 #ifdef FLW_DBG
 		if ( Amount > Wanted )
-			ERRFwk();
+			qRFwk();
 
 		if ( Amount < Minimum )
-			ERRFwk();
+			qRFwk();
 #endif
 
 	_Written += Amount;
 
 	if ( _Written >= _AmountMax )
-		ERRFwk();
-ERRErr
+		qRFwk();
+qRR
 	_Size = _Free = 0;	// Pour viter toute nouvelle criture dans le cache. La prochaine tentative gnrera une erreur.
 	Commit();	// N'crit rien ( priori) ; juste pour dverouiiler.
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Amount;
 }
 

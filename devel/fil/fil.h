@@ -279,7 +279,7 @@ namespace fil {
 			return true;
 			break;
 		case eBadF:
-			ERRSys();	// Normalement, cette erreur ne peut arriver, compte tenu de la fonction utilise.
+			qRSys();	// Normalement, cette erreur ne peut arriver, compte tenu de la fonction utilise.
 			break;
 		case eNoEnt:
 			break;
@@ -288,18 +288,18 @@ namespace fil {
 		case eLoop:
 			break;
 		case eFault:
-			ERRLbr();
+			qRLbr();
 			break;
 		case eAcces:
 			break;
 		case eNoMem:
-			ERRSys();
+			qRSys();
 			break;
 		case eNameTooLong:
-			ERRSys();
+			qRSys();
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -311,7 +311,7 @@ namespace fil {
 		info__ &Info )
 	{
 		if ( GetInfo( Path, Info ) != eNone )
-			ERRFwk();
+			qRFwk();
 
 		return Info;
 	}
@@ -347,48 +347,48 @@ namespace fil {
 	inline bso::bool__ Touch( const fnm::name___ &Filename )
 	{
 		bso::bool__ Success = false;
-	ERRProlog
+	qRH
 # ifdef FIL__WIN
 		FILETIME ft;
 		SYSTEMTIME st;
 		HANDLE Handle = INVALID_HANDLE_VALUE;
-	ERRBegin
+	qRB
 		Handle = CreateFileW( Filename.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Handle == INVALID_HANDLE_VALUE )
-			ERRReturn;
+			qRReturn;
 		
 		GetSystemTime( &st );
 
 		if ( !SystemTimeToFileTime( &st, &ft ) )
-			ERRReturn;
+			qRReturn;
 
 		if ( !SetFileTime( Handle, (LPFILETIME) NULL, (LPFILETIME) NULL, &ft ) )
-			ERRReturn;
+			qRReturn;
 
 		Success = true;
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( Handle != INVALID_HANDLE_VALUE )
 			CloseHandle( Handle );
 # elif defined( FIL__POSIX )
 		TOL_CBUFFER___ Buffer;
-	ERRBegin
+	qRB
 		/*
 		NOTA : Le code ci-dessous fonctionne AUSSI sous Windows, mais SEULEMENT lorsque lanc  partir d'une console DOS,
 		Lorsque lanc  partir d'une console 'Cygwin', il y a un dcalage d'une heure (dpendant de l'heure d'hiver/t ?).
 		*/
 
 		if ( utime( Filename.UTF8( Buffer ), NULL ) != 0 )
-			ERRLbr();
+			qRLbr();
 
 		Success = true;
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 # else
 #  error
 # endif
-	ERREpilog
+	qRE
 		return Success;
 	}
 
@@ -434,32 +434,32 @@ namespace fil {
 		const fnm::name___ &TargetFilename )
 	{
 		bso::bool__ Success = false;
-	ERRProlog
+	qRH
 # ifdef FIL__WIN
 		HANDLE
 			Source = INVALID_HANDLE_VALUE,
 			Target = INVALID_HANDLE_VALUE;
 		FILETIME Creation, Access, Write;
-	ERRBegin
+	qRB
 		Source = CreateFileW( SourceFilename.Internal(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Source == INVALID_HANDLE_VALUE )
-			ERRReturn;
+			qRReturn;
 
 		Target = CreateFileW( TargetFilename.Internal(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 		if ( Target == INVALID_HANDLE_VALUE )
-			ERRReturn;
+			qRReturn;
 
 		if ( !GetFileTime( Source, &Creation, &Access, &Write ) )
-			ERRReturn;
+			qRReturn;
 
 		if ( !SetFileTime( Target, &Creation, &Access, &Write ) )
-			ERRReturn;
+			qRReturn;
 
 		Success = true;
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( Source != INVALID_HANDLE_VALUE )
 			CloseHandle( Source );
 
@@ -469,25 +469,25 @@ namespace fil {
 		utimbuf TimeBuf;
 		info__ Info;
 		TOL_CBUFFER___ Buffer;
-	ERRBegin
+	qRB
 		Info.Init();
 	
 		if ( GetInfo( SourceFilename, Info ) != eNone )
-			ERRReturn;
+			qRReturn;
 
 		TimeBuf.actime = Info.Time.Access;
 		TimeBuf.modtime = Info.Time.Modification;
 
 		if ( utime( TargetFilename.UTF8( Buffer ), &TimeBuf ) != 0 )
-			ERRReturn;
+			qRReturn;
 
 		Success = true;
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 # else
 #  error
 # endif
-	ERREpilog
+	qRE
 		return Success;
 
 	}
@@ -501,40 +501,40 @@ namespace fil {
 		return CopyFileW( SourceFilename.Internal(), TargetFilename.Internal(), false ) != 0;
 # elif defined( FIL__POSIX )
 		bso::bool__ Success = false;
-	ERRProlog
+	qRH
 		int Source = FIL_UNDEFINED_DESCRIPTOR;
 		int Target = FIL_UNDEFINED_DESCRIPTOR;
 		char Buffer[BUFSIZ];
 		size_t Size = 0;
-	ERRBegin
+	qRB
 		Source = Open( SourceFilename, mReadOnly );
 
 		if ( Source == FIL_UNDEFINED_DESCRIPTOR )
-			ERRReturn;
+			qRReturn;
 
 		Target = Open( TargetFilename, mRemove);
 
 		if ( Target == FIL_UNDEFINED_DESCRIPTOR )
-			ERRReturn;
+			qRReturn;
 
 		while ( ( Size = read( Source, Buffer, sizeof( Buffer ) ) ) > 0 )  {
 			if ( write( Target, Buffer, Size ) == -1 )
-				ERRReturn;
+				qRReturn;
 		}
 
 		if ( Size == -1 )
-			ERRReturn;
+			qRReturn;
 
 		// NOTA : le fichier copi avec la version Windows de cette fonction possde les mmes horodatages, on s'arrange donc pour avoir le mme rsultat sous POSIX.
 		Success = AssignSameTimes_( SourceFilename, TargetFilename );
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( Source != FIL_UNDEFINED_DESCRIPTOR )
 			close( Source );
 
 		if ( Target != FIL_UNDEFINED_DESCRIPTOR )
 			close( Target );		
-	ERREpilog
+	qRE
 		return Success;
 # else
 #  error
@@ -553,7 +553,7 @@ namespace fil {
 	{
 		if ( SetFileAttributesW(Filename.Internal(), FILE_ATTRIBUTE_NORMAL) == 0 ) {
 			if ( ErrorHandling == err::hThrowException )
-				ERRFwk();
+				qRFwk();
 			else
 				return false;
 		}
@@ -569,7 +569,7 @@ namespace fil {
 	{
 		if ( SetFileAttributesW(Filename.Internal(), FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE) == 0 ) {
 			if ( ErrorHandling == err::hThrowException )
-				ERRFwk();
+				qRFwk();
 			else
 				return false;
 		}

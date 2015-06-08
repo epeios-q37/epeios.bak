@@ -88,7 +88,7 @@ namespace bts {
 		{
 			Tree_ = NULL;
 
-			Root_, Current_ = E_NIL;
+			Root_, Current_ = qNIL;
 
 			Type_ = tUnknow;
 		}
@@ -110,7 +110,7 @@ namespace bts {
 		{
 			Current_ = Root_;
 
-			if ( Current_ != E_NIL )
+			if ( Current_ != qNIL )
 				if ( Tree_->IsParent( Current_ ) )
 					Type_ = tForward;
 				else
@@ -123,7 +123,7 @@ namespace bts {
 		{
 			Current_ = Root_;
 
-			if ( Current_ != E_NIL )
+			if ( Current_ != qNIL )
 				if ( Tree_->IsParent( Current_ ) )
 					Type_ = tBack;
 				else
@@ -131,10 +131,10 @@ namespace bts {
 
 			return Current_;
 		}
-		//f Return next node, or 'E_NIL' if none.
+		//f Return next node, or 'qNIL' if none.
 		_row__ Next( void )
 		{
-			_row__ Candidate = E_NIL;
+			_row__ Candidate = qNIL;
 
 			switch ( Type_ ) {
 			case tRoot:
@@ -142,7 +142,7 @@ namespace bts {
 				break;
 			case tBack:
 				if ( !Tree_->HasParent( Current_ ) ) {
-					Candidate = E_NIL;
+					Candidate = qNIL;
 					break;
 				} else if ( Tree_->IsRight( Current_ ) ) {
 					Candidate = *Tree_->Parent( Current_ );
@@ -180,7 +180,7 @@ namespace bts {
 
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -193,7 +193,7 @@ namespace bts {
 		{
 			return Current_;
 		}
-		//f Return the type of the node. Significatif only if 'GetCurrent()' != E_NIL.
+		//f Return the type of the node. Significatif only if 'GetCurrent()' != qNIL.
 		type__ GetType( void )
 		{
 			return Type_;
@@ -227,7 +227,7 @@ namespace bts {
 		{
 			return _binary_tree_seeker__::GetCurrent();
 		}
-		//f Return the type of the node. Significatif only if 'GetCurrent()' != E_NIL.
+		//f Return the type of the node. Significatif only if 'GetCurrent()' != qNIL.
 		type__ GetType( void )
 		{
 			return _binary_tree_seeker__::GetType();

@@ -484,7 +484,7 @@ namespace bso {
 		{
 # ifdef BSO_DBG
 			if ( _Length == 0 )
-				ERRFwk();
+				qRFwk();
 # endif
 
 			return _Int + BSO_DINT_SIZE_MAX - _Length;
@@ -565,13 +565,13 @@ namespace bso {
 			return Int;
 			break;
 		case 0:
-			ERRFwk();
+			qRFwk();
 			break;
 		case -1:
 			return -(sint__)Int;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 

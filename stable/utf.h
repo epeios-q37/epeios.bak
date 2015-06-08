@@ -89,7 +89,7 @@ namespace utf {
 		bso::u8__ LeadingByteLast0Position = 0;
 
 		if ( Feeder.IsEmpty() )
-			ERRFwk();	// Erreur.
+			qRFwk();	// Erreur.
 
 		LeadingByteLast0Position = FindFirst0_( Feeder.Get() );
 
@@ -119,7 +119,7 @@ namespace utf {
 			return 0;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -129,7 +129,7 @@ namespace utf {
 	template <typename feeder> inline bso::u8__ HandleANSI( feeder &Feeder )
 	{
 		if ( Feeder.IsEmpty() )
-			ERRFwk();	// Erreur.
+			qRFwk();	// Erreur.
 
 		if ( HandleUTF8( Feeder ) > 1 )
 			return 0;
@@ -175,7 +175,7 @@ namespace utf {
 				return false;
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 
@@ -184,7 +184,7 @@ namespace utf {
 		bso::u8__ Handle( feeder &Feeder )
 		{
 			if ( Feeder.IsEmpty() )
-				ERRFwk();
+				qRFwk();
 
 			switch( _Format ) {
 			case f_Guess:
@@ -208,7 +208,7 @@ namespace utf {
 								UTFSize = 0;
 							break;
 						default:
-							ERRFwk();
+							qRFwk();
 							break;
 						}
 					}
@@ -230,7 +230,7 @@ namespace utf {
 				return HandleUTF8( Feeder );
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 
@@ -241,12 +241,12 @@ namespace utf {
 			err::handling__ ERRHandling = err::h_Default )
 		{
 			if ( Format == f_Guess )
-				ERRPrm();
+				qRFwk();
 
 			if ( _Format == f_Guess ) {
 				if ( (Format != fUTF_8) && (Format != fANSI) ) {
 					if ( ERRHandling != err::hUserDefined )
-						ERRFwk();
+						qRFwk();
 					else
 						return false;
 				}
@@ -254,7 +254,7 @@ namespace utf {
 				_Format = Format;
 			} else if ( _Format != Format ) {
 				if ( ERRHandling != err::hUserDefined )
-					ERRFwk();
+					qRFwk();
 				else
 					return false;
 			}

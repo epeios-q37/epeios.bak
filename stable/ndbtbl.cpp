@@ -29,7 +29,7 @@ void ndbtbl::table_::_InsertInIndexes( rrow__ Row )
 {
 	sdr::row__ IRow = _Indexes.First();
 
-	while ( IRow != E_NIL ) {
+	while ( IRow != qNIL ) {
 		_Indexes( IRow )->Index( Row, NULL );
 
 		IRow = _Indexes.Next( IRow );
@@ -40,7 +40,7 @@ void ndbtbl::table_::_DeleteFromIndexes( rrow__ Row )
 {
 	sdr::row__ IRow = _Indexes.First();
 
-	while ( IRow != E_NIL ) {
+	while ( IRow != qNIL ) {
 /*		if ( !Indexes( IRow )->InitializationCompleted() )
 			Indexes( IRow )->CompleteInitialization();
 */
@@ -60,7 +60,7 @@ void ndbtbl::table_::_ReindexAll( observer_functions__ &Observer )
 		Observer.Set( _Indexes.Amount() );
 	}
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		_Indexes( Row )->Reindex( Observer );
 
 		if ( &Observer )
@@ -74,15 +74,15 @@ void ndbtbl::table_::Retrieve(
 	const rrows_ &Rows,
 	data_ &Data ) const
 {
-ERRProlog
+qRH
 	datum Datum;
-	sdr::row__ Row = E_NIL;
-ERRBegin
+	sdr::row__ Row = qNIL;
+qRB
 	_Test( mReadOnly );
 
 	Row = Rows.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Datum.Init();
 
 		Content().Retrieve( Rows( Row ), Datum );
@@ -91,9 +91,9 @@ ERRBegin
 
 		Row = Rows.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void ndbtbl::table_::Insert(
@@ -107,7 +107,7 @@ void ndbtbl::table_::Insert(
 
 	Datum.Init( Data );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		RecordRows.Append( Insert( Datum( Row ) ) );
 
 		Row = Data.Next( Row );
@@ -119,7 +119,7 @@ void ndbtbl::table_::Update(
 	const rrows_ &RecordRows )
 {
 	if ( Data.Amount() != RecordRows.Amount() )
-		ERRPrm();
+		qRFwk();
 
 	_Test( mReadWrite );
 
@@ -128,7 +128,7 @@ void ndbtbl::table_::Update(
 
 	Datum.Init( Data );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Update( Datum( Row ), RecordRows( Row ) );
 
 		Row = Data.Next( Row );
@@ -141,7 +141,7 @@ void ndbtbl::table_::Delete( const rrows_ &RecordRows )
 
 	sdr::row__ Row = RecordRows.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Delete( RecordRows( Row ) );
 
 		Row = RecordRows.Next( Row );
@@ -153,7 +153,7 @@ void ndbtbl::table_::_ResetAllIndexes( void )
 {
 	sdr::row__ Row = _Indexes.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		_Indexes( Row )->Reset();
 
 		Row = _Indexes.Next( Row );
@@ -168,7 +168,7 @@ void ndbtbl::table_::TestRecordsExistence(
 
 	sdr::row__ Row = RecordRows.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( !RecordExists( RecordRows( Row ) ) )
 			Rows.Append( Row );
 
@@ -183,7 +183,7 @@ bso::bool__ ndbtbl::table_::AreAllIndexesSynchronized( void ) const
 
 	sdr::row__ Row = _Indexes.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( !_Indexes( Row )->IsSynchronized() )
 			return false;
 
@@ -219,17 +219,17 @@ void ndbtbl::files_hook___::_InitStatic(
 	mode__ Mode,
 	fls::id__ ID )
 {
-ERRProlog
+qRH
 	str::string FileName;
-ERRBegin
+qRB
 	FileName.Init();
 
 //	GetFileName_( Path, BaseFileName, FileName );
 
 	_Static.Init( BaseFileName, Convert( Mode ), ID );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void ndbtbl::files_hook___::_InitDynamic(
@@ -237,15 +237,15 @@ void ndbtbl::files_hook___::_InitDynamic(
 	mode__ Mode,
 	fls::id__ ID )
 {
-ERRProlog
+qRH
 	str::string FileName;
-ERRBegin
+qRB
 	FileName.Init();
 
 //	GetFileName_( Path, RootFileName, FileName );
 
 	_Dynamic.Init( BaseFileName, Convert( Mode ), ID );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

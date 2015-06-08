@@ -29,17 +29,17 @@ row__ arguments_::Locate(
 	comparison_method__ Method ) const
 {
 	row__ &P = Begin;
-ERRProlog
+qRH
 	name NameBuffer;
-ERRBegin
+qRB
 	NameBuffer.Init();
 
-	if ( Begin == E_NIL )
+	if ( Begin == qNIL )
 		P = First();
 	else
 		P = Next( Begin );
 
-	while( P != E_NIL ) {
+	while( P != qNIL ) {
 		if ( GetName( P, NameBuffer ).Amount() >= Name.Amount() )
 			if ( str::Compare( NameBuffer, Name, 0, 0, Name.Amount() ) == 0 )
 				if ( Method == cmBegins )
@@ -48,13 +48,13 @@ ERRBegin
 					if ( NameBuffer.Amount() == Name.Amount() ) 
 						break;
 				} else
-					ERRFwk();
+					qRFwk();
 
 		P = Next( P );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return P;
 }
 
@@ -63,17 +63,17 @@ row__ arguments_::Locate(
 	const suffix_ &Suffix,
 	comparison_method__ Method ) const
 {
-	row__ P = E_NIL;
-ERRProlog
+	row__ P = qNIL;
+qRH
 	name NameBuffer;
 	suffix SuffixBuffer;
-ERRBegin
+qRB
 	NameBuffer.Init();
 	SuffixBuffer.Init();
 
 	P = First();
 
-	while( P != E_NIL ) {
+	while( P != qNIL ) {
 		if ( GetName( P, NameBuffer ).Amount() >= Name.Amount() )
 			if ( ( str::Compare( NameBuffer, Name, 0, 0, Name.Amount() ) == 0 )
 				&& ( str::Compare( GetSuffix( P, SuffixBuffer ), Suffix ) == 0 ) )
@@ -83,13 +83,13 @@ ERRBegin
 					if ( NameBuffer.Amount() == Name.Amount() ) 
 						break;
 				} else
-					ERRFwk();
+					qRFwk();
 
 		P = Next( P );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return P;
 }
 
@@ -101,7 +101,7 @@ void arguments_::Parse(
 	row__ P;
 
 	if ( !flw::GetString( Flow, Buffer, sizeof( Buffer ) ) )
-		ERRLmt();
+		qRLmt();
 
 	while( strlen( Buffer ) )
 	{
@@ -117,12 +117,12 @@ void arguments_::Parse(
 			P = Add( Buffer );
 
 		if ( !flw::GetString( Flow, Buffer, sizeof( Buffer ) ) )
-			ERRLmt();
+			qRLmt();
 
 		PutValue( str::string( Buffer ), P );
 
 		if ( !flw::GetString( Flow, Buffer, sizeof( Buffer ) ) )
-			ERRLmt();
+			qRLmt();
 	}
 }
 
@@ -167,10 +167,10 @@ bso::bool__ arguments_::GetValue(
 {
 	row__ P = Locate( Name );
 
-	while( ( P != E_NIL ) && ( GetSuffixPosition( P ) != E_NIL ) )
+	while( ( P != qNIL ) && ( GetSuffixPosition( P ) != qNIL ) )
 		P = Locate( Name, P );
 
-	if ( P != E_NIL ) {
+	if ( P != qNIL ) {
 		GetValue( P, Value );
 		return true;
 	} else
@@ -181,18 +181,18 @@ txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &F,
 	const cgiarg::arguments_ &A )
 {
-ERRProlog
-	cgiarg::row__ P = E_NIL;
+qRH
+	cgiarg::row__ P = qNIL;
 	str::string Buffer;
-ERRBegin
+qRB
 	P = A.First();
 
-	while( P != E_NIL )
+	while( P != qNIL )
 	{
 		Buffer.Init();
 		F << A.GetName( P, Buffer );
 
-		if ( A.GetSuffixPosition( P ) != E_NIL ) {
+		if ( A.GetSuffixPosition( P ) != qNIL ) {
 			Buffer.Init();
 			F << CGIARG_SUFFIX_DELIMITER << A.GetSuffix( P, Buffer );
 		}
@@ -202,9 +202,9 @@ ERRBegin
 
 		P = A.Next( P );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return F;
 }
 

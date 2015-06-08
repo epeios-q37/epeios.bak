@@ -41,13 +41,13 @@ bso::bool__ tagsbs::SubstituteShortTag(
 	char TagMarker )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::strings Values;
 	indice__ Counter = 1;
 	str::string Tag;
-ERRBegin
+qRB
 	if ( ( Indice == 0 ) || ( Indice > 9 ) )
-		ERRPrm();
+		qRFwk();
 
 	Values.Init();
 
@@ -66,9 +66,9 @@ ERRBegin
 	}
 
 	Success = SubstituteShortTags( IFlow, Values, OFlow, TagMarker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -79,19 +79,19 @@ tol::E_XROW tagsbs::SubstituteShortTag(
 	str::string_ &Result,
 	const char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	flx::E_STRING_OFLOW___ OFlow;
-ERRBegin
+qRB
 	IFlow.Init( String );
 	OFlow.Init( Result );
 
 	if ( !SubstituteShortTag( IFlow, Indice, Value, OFlow, TagMarker ) )
 		Row = IFlow.AmountRed();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -101,18 +101,18 @@ tol::E_XROW tagsbs::SubstituteShortTag(
 	const str::string_ &Value,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	str::string Result;
-ERRBegin
+qRB
 	Result.Init();
 	
 	Row = SubstituteShortTag( String, Indice, Value, Result, TagMarker );
 
 	String = Result;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -124,9 +124,9 @@ bso::bool__ tagsbs::SubstituteLongTag(
 	char TagMarker )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::strings Tags, Values;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( Tag ) ;
 
@@ -134,9 +134,9 @@ ERRBegin
 	Values.Append( Value );
 
 	Success = SubstituteLongTags( IFlow, Tags, Values, OFlow, TagMarker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -147,10 +147,10 @@ tol::E_XROW tagsbs::SubstituteLongTag(
 	str::string_ &Result,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	str::strings Tags, Values;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( Tag ) ;
 
@@ -158,9 +158,9 @@ ERRBegin
 	Values.Append( Value );
 
 	Row = SubstituteLongTags( String, Tags, Values, Result, TagMarker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -170,18 +170,18 @@ tol::E_XROW tagsbs::SubstituteLongTag(
 	const str::string_ &Value,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	str::string Result;
-ERRBegin
+qRB
 	Result.Init();
 	
 	Row = SubstituteLongTag( String, Tag, Value, Result, TagMarker );
 
 	String = Result;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -189,10 +189,10 @@ static void MergeValues_(
 	short_tags_callback__ &Callback,
 	str::string_ &MergedValues )
 {
-ERRProlog
+qRH
 	str::string Value;
 	indice__ Indice = 0;
-ERRBegin
+qRB
 	MergedValues.Append( " (" );
 
 	Value.Init();
@@ -218,9 +218,9 @@ ERRBegin
 	}
 
 	MergedValues.Append( ") " );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ tagsbs::SubstituteShortTags(
@@ -230,10 +230,10 @@ bso::bool__ tagsbs::SubstituteShortTags(
 	char TagMarker )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string Tag, Value, MergedValues;
 	bso::char__ C = 0;
-ERRBegin
+qRB
 	MergedValues.Init();	
 	MergeValues_( Callback, MergedValues );
 
@@ -250,25 +250,25 @@ ERRBegin
 					else {
 						Value.Init();
 						if ( !Callback.GetTagValue( C, Value ) )
-							ERRReturn;
+							qRReturn;
 						Value.WriteToFlow( OFlow, false );
 					}
 				} else if ( C == TagMarker )  {
 					OFlow.Put( TagMarker );
 				} else  {
-					ERRReturn;
+					qRReturn;
 				}
 			} else {
-				ERRReturn;
+				qRReturn;
 			}
 		} else
 			OFlow.Put( IFlow.Get() );
 	}
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -278,19 +278,19 @@ tol::E_XROW tagsbs::SubstituteShortTags(
 	str::string_ &Result,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	flx::E_STRING_OFLOW___ OFlow;
-ERRBegin
+qRB
 	IFlow.Init( String );
 	OFlow.Init( Result );
 
 	if ( !SubstituteShortTags( IFlow, Callback, OFlow, TagMarker ) )
 		Row = IFlow.AmountRed();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -299,18 +299,18 @@ tol::E_XROW  tagsbs::SubstituteShortTags(
 	short_tags_callback__ &Callback,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	str::string Result;
-ERRBegin
+qRB
 	Result.Init();
 	
 	Row = SubstituteShortTags( String, Callback, Result, TagMarker );
 
 	String = Result;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -381,18 +381,18 @@ tol::E_XROW  tagsbs::SubstituteShortTags(
 	const str::strings_ &Values,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	str::string Result;
-ERRBegin
+qRB
 	Result.Init();
 	
 	Row = SubstituteShortTags( String, Values, Result, TagMarker );
 
 	String = Result;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -403,13 +403,13 @@ static bso::bool__ GetTag_(
 	char Marker )
 {
 	if ( Flow.EndOfFlow() )
-		ERRFwk();
+		qRFwk();
 
 	if ( Flow.Get() != Marker )
-		ERRFwk();
+		qRFwk();
 
 	if ( Flow.EndOfFlow() )
-		ERRFwk();
+		qRFwk();
 
 	if ( Flow.View() == Marker ) {
 		Flow.Skip();
@@ -421,7 +421,7 @@ static bso::bool__ GetTag_(
 	} while ( !Flow.EndOfFlow() && ( Flow.View() != Marker ) );
 
 	if ( Flow.EndOfFlow() )
-		ERRFwk();
+		qRFwk();
 
 	Flow.Skip();
 
@@ -435,9 +435,9 @@ bso::bool__ tagsbs::SubstituteLongTags(
 	char Marker )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string Tag, Value;
-ERRBegin
+qRB
 	while ( !IFlow.EndOfFlow() ) {
 		if ( IFlow.View() == Marker ) {
 			Tag.Init();
@@ -445,7 +445,7 @@ ERRBegin
 
 				Value.Init();
 				if ( !Callback.GetTagValue( Tag, Value ) )
-					ERRReturn;
+					qRReturn;
 
 				Value.WriteToFlow( OFlow, false );
 			} else
@@ -455,9 +455,9 @@ ERRBegin
 	}
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -467,19 +467,19 @@ tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &Result,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	flx::E_STRING_OFLOW___ OFlow;
-ERRBegin
+qRB
 	IFlow.Init( String );
 	OFlow.Init( Result );
 
 	if ( !SubstituteLongTags( IFlow, Callback, OFlow, TagMarker ) )
 		Row = IFlow.AmountRed();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -488,18 +488,18 @@ tol::E_XROW tagsbs::SubstituteLongTags(
 	long_tags_callback__ &Callback,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	str::string Result;
-ERRBegin
+qRB
 	Result.Init();
 	
 	Row = SubstituteLongTags( String, Callback, Result, TagMarker );
 
 	String = Result;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -512,7 +512,7 @@ static void FillAutomat_(
 
 	Tag.Init( Tags );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		stsfsm::Add( Tag( Row ), *Row, Automat );
 
 		Row = Tags.Next( Row );
@@ -530,7 +530,7 @@ namespace {
 			str::string_ &Value )
 		{
 			stsfsm::parser__ Parser;
-			sdr::row__ Row = E_NIL;
+			sdr::row__ Row = qNIL;
 
 			Parser.Init( Automat );
 
@@ -542,7 +542,7 @@ namespace {
 			Row = Parser.GetId();
 
 			if ( !Values->Exists( Row ) )
-				ERRFwk();
+				qRFwk();
 
 			Values->Recall( Row, Value );
 
@@ -578,20 +578,20 @@ bso::bool__ tagsbs::SubstituteLongTags(
 	char TagMarker )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	longs_callback___ Callback;
-ERRBegin
+qRB
 	if ( Tags.Amount() != Values.Amount() )
-		ERRFwk();
+		qRFwk();
 
 	Callback.Init( Values );
 
 	FillAutomat_( Tags, Callback.Automat );
 
 	Success = SubstituteLongTags( IFlow, Callback, OFlow, TagMarker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -603,21 +603,21 @@ tol::E_XROW tagsbs::SubstituteLongTags(
 	str::string_ &Result,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	longs_callback___ Callback;
-ERRBegin
+qRB
 	if ( Tags.Amount() != Values.Amount() )
-		ERRFwk();
+		qRFwk();
 
 	Callback.Init( Values );
 
 	FillAutomat_( Tags, Callback.Automat );
 
 	Row = SubstituteLongTags( String, Callback, Result, TagMarker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -627,17 +627,17 @@ tol::E_XROW tagsbs::SubstituteLongTags(
 	const str::strings_ &Values,
 	char TagMarker )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	str::string Result;
-ERRBegin
+qRB
 	Result.Init();
 	
 	Row = SubstituteLongTags( String, Tags, Values, Result, TagMarker );
 
 	String = Result;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }

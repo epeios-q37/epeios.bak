@@ -75,20 +75,20 @@ namespace jvastf {
 		JNIEnv *_JEnv( void )
 		{
 			if ( _JNIParam == NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( _JNIParam->Env == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _JNIParam->Env;
 		}
 		jobject _JObject( void )
 		{
 			if ( _JNIParam == NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( _JNIParam->Object == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _JNIParam->Object;
 		}

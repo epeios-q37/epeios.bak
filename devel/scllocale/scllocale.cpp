@@ -54,18 +54,18 @@ static void GetLocaleFileParsingErrorMeaning_(
 	const rgstry::context___ &Context,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	lcl::meaning MeaningBuffer;
-ERRBegin
+qRB
 	Meaning.SetValue( SCLLOCALE_NAME "_LocaleFileParsingError" );
 
 	MeaningBuffer.Init();
 	rgstry::GetMeaning( Context, MeaningBuffer );
 
 	Meaning.AddTag( MeaningBuffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static level__ GetLevel_( target__ Target )
@@ -81,7 +81,7 @@ static level__ GetLevel_( target__ Target )
 		return ProjectLevel_;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -100,17 +100,17 @@ static void Load_(
 	const char *RootPath,
 	const char *ErrorLabel )
 {
-ERRProlog
+qRH
 	rgstry::context___ Context;
-ERRBegin
+qRB
 	Locale_.Erase( Level );
 
 	Context.Init();
 	if ( Locale_.Fill( Level, Flow, xpp::criterions___( str::string( Directory ) ), RootPath, Context ) != rgstry::sOK )
 		sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void scllocale::SetLocale(
@@ -143,7 +143,7 @@ void scllocale::LoadLocale(
 		ErrorLabel = SCLLOCALE_NAME "_ProjectLocaleParsingError";
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -165,13 +165,13 @@ namespace {
 			const str::string_ &Tag,
 			str::string_ &Value ) override
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Locale_.GetTranslation( Tag.Convert(Buffer), _Language, Value );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return true;
 		}
 	public:

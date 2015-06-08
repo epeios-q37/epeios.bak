@@ -159,11 +159,11 @@ namespace fbltyp {
 		{
 			Value.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Value.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Value.plug( AS );
 		}
@@ -220,7 +220,7 @@ namespace fbltyp {
 		{
 			Values.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Values.plug( AS );
 		}
@@ -270,7 +270,7 @@ namespace fbltyp {
 			Name.reset( P );
 			Casts.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Name.plug( AS );
 			Casts.plug( AS );
@@ -423,7 +423,7 @@ namespace fbltyp {
 		type Value,
 		flw::oflow__ &Flow )
 	{
-		_StraightPut( (type)( Value + 1 ), Flow );	// 'E_NIL ('-1') devient 0, donc ne prend qu'un seul octet.
+		_StraightPut( (type)( Value + 1 ), Flow );	// 'qNIL ('-1') devient 0, donc ne prend qu'un seul octet.
 	}
 
 	template <typename type> inline void _AdjustingGet(
@@ -432,7 +432,7 @@ namespace fbltyp {
 	{
 		_StraightGet( Flow, Value );
 
-		Value--;	// '0' devient 'E_NIL' (voir '_AdjustingPut()').
+		Value--;	// '0' devient 'qNIL' (voir '_AdjustingPut()').
 	}
 
 	template <typename type> inline void _AdjustingDGet(
@@ -454,7 +454,7 @@ namespace fbltyp {
 		t *P = new t;
 
 		if ( P == NULL )
-			ERRAlc();
+			qRAlc();
 
 		return P;
 	}

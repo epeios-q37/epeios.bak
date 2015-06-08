@@ -48,9 +48,9 @@ enum backend_selection_mode__
 static backend_selection_mode__ GetBackendSelectionMode_( const rgstry::multi_level_registry_ &Registry )
 {
 	backend_selection_mode__ Mode = bsmBasic;	// Mode par dfaut.
-ERRProlog
+qRH
 	str::string RawMode;
-ERRBegin
+qRB
 	RawMode.Init();
 	
 	if ( Registry.GetValue( xulfrg::BackendSelectionMode, RawMode ) ) {
@@ -63,9 +63,9 @@ ERRBegin
 		else
 			Mode = bsm_Undefined;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Mode;
 }
 
@@ -113,10 +113,10 @@ void HandleAuthenticationSubForm_(
 	xml::writer_ &Digest,
 	widgets__ &Widgets )
 {
-ERRProlog
+qRH
 	str::string Login, Password;
 	bso::bool__ Disable = false;
-ERRBegin
+qRB
 	Login.Init();
 	Password.Init();
 
@@ -127,18 +127,18 @@ ERRBegin
 		break;
 	case frdkrn::apmFull:
 		if ( !Registry.GetValue( frdrgy::AuthenticationPassword, Password ) )
-			ERRDta();
+			qRFwk();
 	case frdkrn::apmPartial:
 		if ( !Registry.GetValue( frdrgy::AuthenticationLogin, Login ) )
-			ERRDta();
+			qRFwk();
 	case frdkrn::apmEmpty:
 		break;
 	case frdkrn::apm_Undefined:
-		ERRLmt();
+		qRLmt();
 		// Affichage d'un message d'erreur normalement.
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -148,9 +148,9 @@ ERRBegin
 	Digest.PushTag( "Authentication" );
 	Digest.PutAttribute( "Available", Disable ? "no" : "yes" );
 	Digest.PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetPredefinedBackends_(
@@ -159,12 +159,12 @@ static void GetPredefinedBackends_(
 	const char *Language,
 	str::string_ &PredefinedBackends )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ OFlow;
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
 	str::string Default;
-ERRBegin
+qRB
 	OFlow.Init( PredefinedBackends );
 	TFlow.Init( OFlow );
 	Writer.Init( TFlow, xml::oIndent, xml::e_Default );
@@ -180,19 +180,19 @@ ERRBegin
 	frdkrn::GetPredefinedBackends( Registry, Locale, Language, Writer );
 
 	Writer.PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void FillPredefinedBackendsWidget_( trunk___ &Trunk )
 {
-ERRProlog
+qRH
 	str::string PredefinedBackends;
 	nsIDOMDocumentFragment *Fragment;
 	fnm::name___ FileName;
 	str::string Buffer;
-ERRBegin
+qRB
 	PredefinedBackends.Init();
 
 	GetPredefinedBackends_( Trunk.Kernel().Registry(), Trunk.Kernel().Locale(), Trunk.Kernel().Language(), PredefinedBackends );
@@ -208,16 +208,16 @@ ERRBegin
 	nsxpcm::AppendChild( Trunk.UI().SessionForm().Widgets.mnlPredefinedBackend, Fragment );
 
 	nsxpcm::SetSelectedItem( Trunk.UI().SessionForm().Widgets.mnlPredefinedBackend );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xulfsf::_session_form_core__::_Refresh( xml::writer_ &Digest )
 {
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	Translation.Init();
 
 	if ( !HideUnusedBackendSelectionMode_( Trunk().Kernel().Registry(), Digest ) )
@@ -241,15 +241,15 @@ ERRBegin
 		Widgets.mnlBackendType.SetSelectedItem( Widgets.mniEmbeddedBackend );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	Widgets.dckBackendType.SetSelectedIndex( _BackendExtendedType );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define A( name ) name.Attach( nsxpcm::supports__( Window, #name ) );

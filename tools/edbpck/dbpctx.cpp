@@ -35,7 +35,7 @@ void Dump_(
 {
 	sdr::row__ Row = Records.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Writer.PushTag( RECORD_TAG_NAME );
 		Writer.PutAttribute( RECORD_ID_ATTRIBUTE_NAME, bso::Convert( *Records.Get( Row ) ) );
 		Writer.PopTag();
@@ -49,9 +49,9 @@ void Dump_(
 //						 ^
 static rrow__ RetrieveRecordId_( xml::parser___ &Parser )
 {
-	rrow__ Id = E_NIL;
+	rrow__ Id = qNIL;
 	bso::bool__ Continue = true;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -61,7 +61,7 @@ static rrow__ RetrieveRecordId_( xml::parser___ &Parser )
 
 			Id = Parser.Value().ToUInt( &Error );
 
-			if ( Error != E_NIL )
+			if ( Error != qNIL )
 				ERRFwk();
 			break;
 		case xml::tEndTag:
@@ -73,7 +73,7 @@ static rrow__ RetrieveRecordId_( xml::parser___ &Parser )
 		}
 	}
 
-	if ( Id == E_NIL )
+	if ( Id == qNIL )
 		ERRFwk();
 
 	return Id;
@@ -88,8 +88,8 @@ static void Retrieve_(
 	rrows_ &Records )
 {
 	bso::bool__ Continue = true;
-	sdr::row__ Error = E_NIL;
-	rrow__ Row = E_NIL;
+	sdr::row__ Error = qNIL;
+	rrow__ Row = qNIL;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -186,7 +186,7 @@ static amount__ Remove_(
 	sdr::row__ Row = Records.Last();
 	amount__ Counter = 0;
 
-	while ( ( Row != E_NIL ) && ( Counter < Amount ) ) {
+	while ( ( Row != qNIL ) && ( Counter < Amount ) ) {
 		if ( *Records( Row ) < TotalAmount ) {
 			Grid.Store( false, Records( Row ) );
 			Counter++;
@@ -200,7 +200,7 @@ static amount__ Remove_(
 
 static rrow__ Pick_( const grid_ &Grid )
 {
-	rrow__ Row = E_NIL;
+	rrow__ Row = qNIL;
 
 	tol::InitializeRandomGenerator();
 
@@ -216,10 +216,10 @@ static void Add_(
 	rrows_ &Target )
 {
 	sdr::row__ Row = Source.First();
-	sdr::row__ Position = E_NIL;
+	sdr::row__ Position = qNIL;
 
-	while ( Row != E_NIL ) {
-		if ( ( Position = ( Target.Search( Source( Row ) ) ) ) != E_NIL )
+	while ( Row != qNIL ) {
+		if ( ( Position = ( Target.Search( Source( Row ) ) ) ) != qNIL )
 			Target.Remove( Position );
 
 		Target.Append( Source ( Row ) );
@@ -243,11 +243,11 @@ rrow__ dbpctx::context_::Pick(
 	amount__ Amount,
 	bso::uint__ Duration )
 {
-	rrow__ Row = E_NIL;
-ERRProlog
+	rrow__ Row = qNIL;
+qRH
 	grid Grid;
 	amount__ Applicaple = 0;
-ERRBegin
+qRH
 	Grid.Init();
 	Grid.Allocate( Amount );
 
@@ -279,9 +279,9 @@ ERRBegin
 	S_.Cycle++;
 
 	S_.TimeStamp = time( NULL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 

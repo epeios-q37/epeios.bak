@@ -56,9 +56,9 @@ void bkddsc::description_::Init(
 epeios::row__ bkddsc::descriptions_::Position( const description_ &Description ) const
 {
 	epeios::row__ Position = E_CONTAINER_( description_ )::First();
-ERRProlog
+qRH
 	E_CITEM( description_ ) D;
-ERRBegin
+qRB
 
 	D.Init( *this );
 
@@ -66,8 +66,8 @@ ERRBegin
 		    && ( ( D( Position ).Name != Description.Name )
 		         || ( D( Position ).Casts != Description.Casts ) ) )
 		Position = E_CONTAINER_( description_ )::Next( Position );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Position;
 }

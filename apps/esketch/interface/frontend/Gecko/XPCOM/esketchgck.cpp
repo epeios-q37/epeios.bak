@@ -87,13 +87,13 @@ xulfui::steering_callback__ *sclgecko::SCLGECKOCreateSteering(
 	void *UP )
 {
 	callback__ *Callback = NULL;
-ERRProlog
-ERRBegin
+qRH
+qRH
 	if ( ( Callback = new callback__ ) == NULL )
 		ERRAlc();
 
 	Callback->Init( LauncherIdentification, sclrgstry::GetRegistry(), Locale, Language );
-ERRErr
+qRR
 	if ( Callback != NULL )
 		delete Callback;
 
@@ -101,7 +101,7 @@ ERRErr
 
 	ERRRst();	// Error catched to avoid that it goes further.
 				// Error reported by the fact that the returned value is 'NULL'.
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Callback;
 }

@@ -83,7 +83,7 @@ static void Duplicate_(
 
 	SourceBasic.Init( SourceCore.Basics );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Basic.Tags.Append( NewBasic_( SourceBasic( Tags( Row ) ), SourceCore, NewCore ) );
 
 		Row = Tags.Next( Row );
@@ -95,11 +95,11 @@ static inline brow__ NewBasic_(
 	const _core_ &SourceCore,
 	_core_ &NewCore )
 {
-	brow__ Row = E_NIL;
-ERRProlog
+	brow__ Row = qNIL;
+qRH
 	ctn::E_CMITEMt( str::string_, vrow__ ) Value;
 	_basic Basic;
-ERRBegin
+qRB
 	Value.Init( SourceCore.Values );
 	Row = NewBasic_( Value( SourceBasic.S_.Value ), SourceBasic.ToTranslate(), NewCore );
 
@@ -111,9 +111,9 @@ ERRBegin
 
 	NewCore.Basics( Row ) = Basic;
 	NewCore.Basics.Flush();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -166,17 +166,17 @@ void lcl::locale_::_GetCorrespondingLabels(
 	const strings_ &Labels,
 	strings_ &Wordings ) const
 {
-ERRProlog
+qRH
 	ctn::E_CMITEM( str::string_ ) Label;
 	str::string Wording;
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 	str::string Path;
-ERRBegin
+qRB
 	Label.Init( Labels );
 
 	Row = Labels.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Path.Init( "Languages/Language[label=\"" );
 		Path.Append( Label( Row ) );
 		Path.Append( "\"]/@Wording" );
@@ -189,9 +189,9 @@ ERRBegin
 
 		Row = Labels.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ lcl::locale_::_GetTranslationFollowingLanguageThenMessage(
@@ -200,9 +200,9 @@ bso::bool__ lcl::locale_::_GetTranslationFollowingLanguageThenMessage(
 	str::string_ &Translation ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init( "Translations[language=\"" );
 	Path.Append( Language );
 	Path.Append( "\"]/Translation[message=\"" );
@@ -210,9 +210,9 @@ ERRBegin
 	Path.Append( "\"]" );
 
 	Found = _registry_::GetValue( Path, Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -222,9 +222,9 @@ bso::bool__ lcl::locale_::_GetTranslationFollowingMessageThenLanguage(
 	str::string_ &Translation ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init( "Translations[message=\"" );
 	Path.Append( Text );
 	Path.Append( "\"]/Translation[language=\"" );
@@ -232,9 +232,9 @@ ERRBegin
 	Path.Append( "\"]" );
 
 	Found = _registry_::GetValue( Path, Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -244,9 +244,9 @@ bso::bool__ lcl::locale_::_GetTranslationFollowingLanguageThenText(
 	str::string_ &Translation ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init( "Translations[language=\"" );
 	Path.Append( Language );
 	Path.Append( "\"]/Translation[text=\"" );
@@ -254,9 +254,9 @@ ERRBegin
 	Path.Append( "\"]" );
 
 	Found = _registry_::GetValue( Path, Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -266,9 +266,9 @@ bso::bool__ lcl::locale_::_GetTranslationFollowingTextThenLanguage(
 	str::string_ &Translation ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init( "Translations[text=\"" );
 	Path.Append( Text );
 	Path.Append( "\"]/Translation[language=\"" );
@@ -276,9 +276,9 @@ ERRBegin
 	Path.Append( "\"]" );
 
 	Found = _registry_::GetValue( Path, Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -305,14 +305,14 @@ void lcl::locale_::GetLanguages(
 	strings_ &Labels,
 	strings_ &Wordings ) const
 {
-	sdr::row__ PathErrorRow = E_NIL;
+	sdr::row__ PathErrorRow = qNIL;
 
 	_registry_::GetValues( str::string( "Languages/Language/@label" ), Labels, &PathErrorRow );
 
 	_GetCorrespondingLabels( Labels, Wordings );
 
-	if ( PathErrorRow != E_NIL )
-		ERRFwk();
+	if ( PathErrorRow != qNIL )
+		qRFwk();
 }
 
 static const str::string_ &GetTranslation_(
@@ -329,16 +329,16 @@ static void GetTags_(
 	const locale_ &Locale,
 	str::strings_ &Tags )
 {
-ERRProlog
+qRH
 	ctn::E_CMITEMt( _basic_, brow__ ) Basic;
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 	str::string Translation;
-ERRBegin
+qRB
 	Row = InputTags.First();
 
 	Basic.Init( Core.Basics );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Translation.Init();
 
 		GetTranslation_( Basic( InputTags( Row ) ), Core, Language, Locale, Translation );
@@ -346,9 +346,9 @@ ERRBegin
 
 		Row = InputTags.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static const str::string_ &GetTranslation_(
@@ -358,13 +358,13 @@ static const str::string_ &GetTranslation_(
 	const locale_ &Locale,
 	str::string_ &Translation )
 {
-ERRProlog
+qRH
 	str::strings Tags;
 	str::string Value, Intermediate;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
-	if ( Basic.S_.Value == E_NIL )
-		ERRReturn;
+qRB
+	if ( Basic.S_.Value == qNIL )
+		qRReturn;
 
 	Value.Init();
 	Core.Values.Recall( Basic.S_.Value, Value );
@@ -381,9 +381,9 @@ ERRBegin
 	tagsbs::SubstituteShortTags( Intermediate, Tags, LCL_TAG_MARKER_C );
 
 	Translation = Intermediate;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Translation;
 }
 
@@ -406,17 +406,17 @@ const char *lcl::locale_::GetTranslation(
 	const char *Language,
 	STR_BUFFER___ &Buffer ) const
 {
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	Translation.Init();
 
 	GetTranslation( Text, Language, Translation );
 
 	Translation.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 */

@@ -68,14 +68,14 @@ namespace {
 		xml::outfit__ Outfit,
 		txf::text_oflow__ &OFlow )
 	{
-	ERRProlog
+	qRH
 		xpp::status__ Status = xpp::s_Undefined;
 		xpp::context___ Context;
 		xtf::extended_text_iflow__ XFlow;
 		lcl::meaning Meaning;
 		bomhdl::byte_order_marker__ BOM;
 		bomhdl::bom__ BOMContent;
-	ERRBegin
+	qRB
 		Context.Init();
 
 		BOM = XFlow.Init( IFlow, utf::f_Default );
@@ -96,12 +96,12 @@ namespace {
 
 			sclerror::SetMeaning( Meaning );
 
-			ERRAbort();
+			qRAbort();
 		}
 
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void Process_(
@@ -111,14 +111,14 @@ namespace {
 		bso::bool__ Preserve,
 		bso::bool__ Indent )
 	{
-	ERRProlog
+	qRH
 		flf::file_oflow___ OFlow;
 		txf::text_oflow__ TOFlow;
 		flf::file_iflow___ IFlow;
 		fnm::name___ Directory;
 		bso::bool__ BackedUp = false;
 		TOL_CBUFFER___ Buffer;
-	ERRBegin
+	qRB
 		Directory.Init();
 
 		if ( Source != NULL ) {
@@ -141,22 +141,22 @@ namespace {
 
 		Process_( Source == NULL ? CIn.Flow() : IFlow, Namespace, Directory.UTF8( Buffer ), Preserve, Indent ? xml::oIndent : xml::oCompact, Destination == NULL ? COut : TOFlow );
 
-	ERRErr
+	qRR
 		if ( BackedUp ) {
 			TOFlow.reset();
 			OFlow.reset();
 			sclmisc::RecoverBackupFile( Destination );
 		}
-	ERREnd
-	ERREpilog
+	qRT
+	qRE
 	}
 
 	void Process_( void )
 	{
-	ERRProlog
+	qRH
 		str::string Input, Output, Namespace;
 		TOL_CBUFFER___ InputBuffer, OutputBuffer, NamespaceBuffer;
-	ERRBegin
+	qRB
 		Input.Init();
 		sclmisc::OGetValue( registry::Input, Input );
 
@@ -172,9 +172,9 @@ namespace {
 			Namespace.Amount() != 0 ? Namespace.Convert( NamespaceBuffer ) : NULL,
 			sclmisc::BGetBoolean( registry::Preserve ),
 			sclmisc::BGetBoolean( registry::Indentation, true ) );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void Encrypt_(
@@ -183,14 +183,14 @@ namespace {
 		const char *Namespace,
 		bso::bool__ Indent )
 	{
-	ERRProlog
+	qRH
 		flf::file_oflow___ OFlow;
 		txf::text_oflow__ TOFlow;
 		flf::file_iflow___ IFlow;
 		bso::bool__ BackedUp = false;
 		xpp::context___ Context;
 		lcl::meaning Meaning;
-	ERRBegin
+	qRB
 		if ( Source != NULL )
 			if ( IFlow.Init( Source, err::hUserDefined ) != tol::rSuccess )
 				sclmisc::ReportFileOpeningErrorAndAbort( Source );
@@ -219,21 +219,21 @@ namespace {
 
 			sclerror::SetMeaning( Meaning );
 
-			ERRAbort();
+			qRAbort();
 		}
-	ERRErr
+	qRR
 		if ( BackedUp )
 			sclmisc::RecoverBackupFile( Destination );
-	ERREnd
-	ERREpilog
+	qRT
+	qRE
 	}
 
 	void Encrypt_( void )
 	{
-	ERRProlog
+	qRH
 		str::string Input, Output, Namespace, Indentation;
 		TOL_CBUFFER___ InputBuffer, OutputBuffer, NamespaceBuffer;
-	ERRBegin
+	qRB
 		Input.Init();
 		sclmisc::OGetValue( registry::Input, Input );
 
@@ -247,9 +247,9 @@ namespace {
 		sclmisc::OGetValue( registry::Indentation, Indentation );
 
 		Encrypt_( Input.Amount() != 0 ? Input.Convert( InputBuffer ) : NULL, Output.Amount() != 0 ? Output.Convert( OutputBuffer ) : NULL, Namespace.Amount() != 0 ? Namespace.Convert( NamespaceBuffer ) :  NULL, Indentation == "Yes" );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -263,8 +263,8 @@ int scltool::SCLTOOLMain(
 	const scltool::oddities__ &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
@@ -272,12 +272,12 @@ ERRBegin
 	C( Process );
 	C( Encrypt );
 	else
-		ERRFwk();
+		qRGnr();
 
 	ExitValue = EXIT_SUCCESS;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ExitValue;
 }
 

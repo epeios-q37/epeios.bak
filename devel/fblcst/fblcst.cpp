@@ -82,5 +82,5 @@ cast__ fblcst::GetID( const char *CastName )
 Q37_GCTOR( fblcst )
 {
 	if ( c_amount > bso::S8Max )
-		ERRChk();
+		qRChk();
 }

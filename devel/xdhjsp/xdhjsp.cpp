@@ -39,16 +39,16 @@ static const char *Execute_(
 	va_list List )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	str::string Script;
-ERRBegin
+qRB
 	Script.Init();
 	GetScript( ScriptName, Script, List );
 
 	Result = Callback.Execute( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -59,16 +59,16 @@ const char *xdhjsp::Execute(
 	... )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	va_list List;
-ERRBegin
+qRB
 	va_start( List, Buffer );
 
 	Result = Execute_( Callback, ScriptName, Buffer, List );
-ERRErr
-ERREnd
+qRR
+qRT
 	va_end( List );
-ERREpilog
+qRE
 	return Result;
 }
 
@@ -80,16 +80,16 @@ static void AlertConfirm_(
 	const nchar__ *XSL,
 	const nchar__ *Title )
 {
-ERRProlog
+qRH
 	str::string CloseText;
-ERRBegin
+qRB
 	CloseText.Init();
 	Callback.GetTranslation("CloseText", CloseText );
 
 	Execute( Callback, ScriptName, Result, XML, XSL, Title, nstring___(CloseText).Internal()() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void AlertConfirm_(
@@ -113,10 +113,10 @@ static void GetWidgetFeatures_(
 	str::string_ &ContentRetrievingMethod,
 	str::string_ &FocusingMethod )
 {
-ERRProlog
+qRH
 	xdhcbk::args Args;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xdhcbk::Split( MergedArgs, Args );
 
@@ -133,26 +133,26 @@ ERRBegin
 
 	if ( Retriever.Availability() != strmrg::aNone )
 		Retriever.GetString( FocusingMethod );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetWidgetContentRetrievingMethod_(
 	const str::string_ &Args,
 	str::string_ &Method )
 {
-ERRProlog
+qRH
 	str::string Type, Parameters, OtherMethod;
-ERRBegin
+qRB
 	Type.Init();
 	Parameters.Init();
 	OtherMethod.Init();
 
 	GetWidgetFeatures_( Args, Type, Parameters, Method, OtherMethod );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetContent_(
@@ -160,11 +160,11 @@ static void GetContent_(
 	const nchar__ *Id,
 	TOL_CBUFFER___ *Result )
 {
-ERRProlog
+qRH
 	str::string Args, Method;
 	nstring___ WidgetAttributeName;;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
 	Args.Init( Execute( Callback, xdhjst::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
@@ -177,9 +177,9 @@ ERRBegin
 		Execute( Callback, xdhjst::snContentGetter, Result, Id );
 	else
 		Execute( Callback, xdhjst::snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetContent_(
@@ -194,28 +194,28 @@ static void GetWidgetFocusingMethod_(
 	const str::string_ &Args,
 	str::string_ &Method )
 {
-ERRProlog
+qRH
 	str::string Type, Parameters, OtherMethod;
-ERRBegin
+qRB
 	Type.Init();
 	Parameters.Init();
 	OtherMethod.Init();
 
 	GetWidgetFeatures_( Args, Type, Parameters, OtherMethod, Method );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Focus_(
 	callback__ &Callback,
 	const nchar__ *Id )
 {
-ERRProlog
+qRH
 	str::string Args, Method;
 	nstring___ WidgetAttributeName;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
 	Args.Init( Execute( Callback, xdhjst::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
@@ -228,9 +228,9 @@ ERRBegin
 		Execute( Callback, xdhjst::snFocusing, NULL, Id );
 	else
 		Execute( Callback, xdhjst::snWidgetFocusing, NULL, Id, nstring___( Method ).Internal()() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Focus_(
@@ -246,11 +246,11 @@ static void SetChildren_(
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
-ERRProlog
+qRH
 	script_name__ ScriptName = xdhjst::sn_Undefined;
 	nstring___ RootTagId;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	if ( Id == NULL ) {
 		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
 		Id = RootTagId.Internal();
@@ -261,9 +261,9 @@ ERRBegin
 	Execute( Callback, ScriptName, NULL, Id, XML, XSL );
 
 	Callback.HandleExtensions( Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void SetChildren_(
@@ -285,10 +285,10 @@ static void SetCasting_(
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	nstring___ RootTagId;
-ERRBegin
+qRB
 	Execute( Callback, xdhjst::snCastingDefiner, NULL, XML, XSL );
 
 	if ( Id == NULL ) {
@@ -297,9 +297,9 @@ ERRBegin
 	}
 
 	Callback.HandleCastings( Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void SetCasting_(
@@ -320,15 +320,15 @@ static void GetResult_(
 	const nchar__ *Id,
 	TOL_CBUFFER___ *Result )
 {
-ERRProlog
+qRH
 	str::string ResultAttributeName;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );
 	Execute( Callback, xdhjst::snAttributeGetter, Result, Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetResult_(
@@ -350,10 +350,10 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 		return xdhjst::snDialogConfirm;
 		break;
 	case xdhcbk::fSetChildren:
-		ERRFwk();
+		qRFwk();
 		break;
 	case xdhcbk::fSetCasting:
-		ERRFwk();
+		qRFwk();
 		break;
 	case xdhcbk::fSetProperty:
 		return xdhjst::snPropertySetter;
@@ -371,19 +371,19 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 		return xdhjst::snAttributeRemover;
 		break;
 	case xdhcbk::fGetResult:
-		ERRFwk();
+		qRFwk();
 		break;
 	case xdhcbk::fSetContent:
 		return xdhjst::snContentSetter;
 		break;
 	case xdhcbk::fGetContent:
-		ERRFwk();
+		qRFwk();
 		break;
 	case xdhcbk::fFocus:
-		ERRFwk();
+		qRFwk();
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -424,7 +424,7 @@ void xdhjsp::proxy_callback__::XDHCBKProcess(
 		Focus_( _C(), List);
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 }

@@ -59,27 +59,27 @@ static void BuildPath_(
 	const str::string_ &Basename,
 	fnm::name___ &Path )
 {
-ERRProlog
+qRH
 	str::string NewBasename;
-ERRBegin
+qRB
 	NewBasename.Init();
 	NewBasename.Init( PREFIX );
 	NewBasename.Append( Basename );
 
 	fnm::BuildPath( Location, NewBasename, EXT, Path );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void BuildCompleteLibraryFileName_(
 	const fnm::name___ &Path,
 	fnm::name___ &NewPath )
 {
-ERRProlog
+qRH
 	str::string Location, Basename, Extension;
 	fnm::name___ Buffer;
-ERRBegin
+qRB
 	Buffer.Init();
 	fnm::GetLocation( Path, Buffer );
 
@@ -98,25 +98,25 @@ ERRBegin
 		NewPath = Path;
 	else
 		BuildPath_( Location, Basename, NewPath );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static library_handler__ PosixLoadLibrary_( const ntvstr::string___ &Name )
 {
 	library_handler__ Handler = NULL;
-ERRProlog
+qRH
 	fnm::name___ Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	BuildCompleteLibraryFileName_( Name, Path );
 
 	Handler = dlopen( Path, RTLD_LAZY );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Handler;
 }
 # endif
@@ -124,7 +124,7 @@ ERREpilog
 bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &Name )
 {
 	if ( _LibraryHandler != NULL )
-		ERRFwk();
+		qRFwk();
 
 #ifdef TARGET_WIN
 	if ( ( _LibraryHandler = LoadLibraryW( Name.Internal() ) ) == NULL )
@@ -140,7 +140,7 @@ bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &N
 bso::bool__ dlbrry::dynamic_library___::_UnloadLibrary( void  )
 {
 	if ( _LibraryHandler == NULL )
-		ERRFwk();
+		qRFwk();
 
 #ifdef TARGET_WIN
 	if ( !FreeLibrary( (HMODULE)_LibraryHandler) )
@@ -172,7 +172,7 @@ void * dlbrry::dynamic_library___::GetFunction( const char *FunctionName )
 	void *Function = NULL;
 
 	if ( !IsInitialized() )
-		ERRFwk();
+		qRFwk();
 
 #ifdef TARGET_WIN
 	Function = FCAST GetProcAddress( (HMODULE)_LibraryHandler, FunctionName );

@@ -114,11 +114,11 @@ namespace txmtbl {
 			string_::reset( P );
 			S_.Location = 0;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			string_::plug( AS );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			string_::plug( SD );
 		}
@@ -193,7 +193,7 @@ namespace txmtbl {
 
 			S_.Location = 0;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			cells_::plug( AS );
 		}
@@ -248,7 +248,7 @@ namespace txmtbl {
 		{
 			sdr::row__ P = cells_::First();
 
-			if ( P != E_NIL )
+			if ( P != qNIL )
 				return RemoveCellsAt( P );
 			else
 				return 0;
@@ -324,7 +324,7 @@ namespace txmtbl {
 		{
 			lines_::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			lines_::plug( AS );
 		}

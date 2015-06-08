@@ -43,11 +43,11 @@
 
 namespace sclmisc {
 
-	extern const char *SCLMISCTargetName;	// A dfinir par l'utilisateur.
+	extern const char *SCLMISCTargetName;	// A définir par l'utilisateur.
 
 	bso::bool__ IsInitialized( void );
 
-	const char *GetBaseLanguage( void );	// Language d'administration, pouvant tre language utilsateur selon contexte.
+	const char *GetBaseLanguage( void );	// Language d'administration, pouvant être language utilsateur selon contexte.
 
 	inline const str::string_ &GetBaseTranslation(
 		const char *Text,
@@ -76,21 +76,21 @@ namespace sclmisc {
 
 	void ReportAndAbort(
 		const char *Text,
-		const str::string_ &Tag );	// Pour simplifier le cas o le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
+		const str::string_ &Tag );	// Pour simplifier le cas où le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
 
 	void ReportParsingErrorAndAbort(
 		const char *ErrorLabel,
 		const rgstry::context___ &Context );
 
 	void Initialize(
-		err::err___ *ERRError,
+		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
 		const rgstry::entry__ &Configuration,
 		const rgstry::entry__ &Locale );
 
 	void Initialize(
-		err::err___ *ERRError,
+		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
 		xtf::extended_text_iflow__ &LocaleFlow,
@@ -99,7 +99,7 @@ namespace sclmisc {
 		const char *RegistryDirectory );
 
 	void Initialize(
-		err::err___ *ERRError,
+		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
 		const fnm::name___ &SuggestedDirectory );
@@ -157,6 +157,21 @@ namespace sclmisc {
 	rgstry::level__ GetRegistryProjectLevel( void );
 	rgstry::level__ GetRegistrySetupLevel( void );
 	rgstry::level__ GetRegistryArgumentsLevel( void );
+
+	inline void AddValue(
+		const str::string_ &Value,
+		const rgstry::tentry__ &Entry )
+	{
+		return sclrgstry::AddValue( GetRegistry(), Value, Entry );
+	}
+
+	inline void AddValue(
+		const str::string_ &Path,
+		const str::string_ &Value,
+		sdr::row__ *Error = NULL )
+	{
+		return sclrgstry::AddValue( GetRegistry(), Path, Value, Error );
+	}
 
 	inline void SetValue(
 		const str::string_ &Value,
@@ -304,7 +319,7 @@ namespace sclmisc {
 		return sclmisc::OGetValue( entry, Value, Missing );\
 		}
 
-	// Faon standard de rcuprer un plugin.
+	// Façon standard de récupèrer un plugin.
 	const str::string_ &GetPluginFeatures(
 		const char *Target,
 		str::string_ &Filename,

@@ -63,7 +63,7 @@ namespace idxbtq {
 			E_IBTREEt_( r )::reset( P );
 			E_IQUEUEt_( r )::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_IBTREEt_( r )::plug( AS );
 			E_IQUEUEt_( r )::plug( AS );
@@ -101,11 +101,11 @@ namespace idxbtq {
 		}
 		void BecomeNext( void )	//Obsolete.
 		{
-			ERRChk();	// 
+			qRChk();	// 
 		}
 		void BecomePrevious( void )	//Obsolete.
 		{
-			ERRChk();	// 
+			qRChk();	// 
 		}
 		//f Put 'Row' as greater then 'Current'. 'Current' must be the result as a search with 'seeker_'.
 		r BecomeGreater(
@@ -135,7 +135,7 @@ namespace idxbtq {
 		//f Balances the tree of the index.
 		r Balance(
 			r Root,
-			sdr::E_SDRIVER__ &SD = SDR_INTERNAL_SDRIVER )
+			qSD__ &SD = SDR_INTERNAL_SDRIVER )
 		{
 			return E_IBTREEt_( r )::Fill( *this, First( Root ), SD );
 		}
@@ -195,7 +195,7 @@ namespace idxbtq {
 		{
 			r Parent = GetTreeParent( Node );
 
-			if ( Parent != E_NIL )
+			if ( Parent != qNIL )
 				return GetTreeLesser( Parent ) == Node;
 			else
 				return false;
@@ -208,7 +208,7 @@ namespace idxbtq {
 		{
 			r Parent = GetTreeParent( Node );
 
-			if ( Parent != E_NIL )
+			if ( Parent != qNIL )
 				return GetTreeGreater( Parent ) == Node;
 			else
 				return false;
@@ -223,11 +223,11 @@ namespace idxbtq {
 		}
 		void HasGreater( void )	// Obsolete.
 		{
-			ERRChk();	
+			qRChk();	
 		}
 		void HasLesser( void )	// Obsolete.
 		{
-			ERRChk();	
+			qRChk();	
 		}
 	};
 
@@ -334,7 +334,7 @@ namespace idxbtq {
 		bso::bool__ IsPersistent( void ) const
 		{
 			if ( ( _Tree.IsPersistent() ) != _Queue.IsPersistent() )
-				ERRFwk();
+				qRFwk();
 
 			return _Tree.IsPersistent();
 		}
@@ -343,7 +343,7 @@ namespace idxbtq {
 			bso::bool__ Exists = _Tree.Exists();
 
 			if ( Exists != _Queue.Exists() )
-				ERRFwk();
+				qRFwk();
 
 			return Exists;
 		}

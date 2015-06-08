@@ -82,7 +82,7 @@ namespace cgidat {
 		content_row__ Value;
 		void reset( bso::bool__ P = true )
 		{
-			Name = Suffix = Value = E_NIL;
+			Name = Suffix = Value = qNIL;
 		}
 		_relationship__( void )
 		{
@@ -120,7 +120,7 @@ namespace cgidat {
 			Relationships.reset( P );
 			Contents.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Relationships.plug( AS );
 			Contents.plug( AS );
@@ -145,9 +145,9 @@ namespace cgidat {
 			const content_ &Value )
 		{
 			_relationship__ Relationship;
-			row__ Row = E_NIL;
+			row__ Row = qNIL;
 
-			if ( ( Row = GetDataWithNameAndSuffix( Name, Suffix ) ) != E_NIL ) {
+			if ( ( Row = GetDataWithNameAndSuffix( Name, Suffix ) ) != qNIL ) {
 				Relationships.Recall( Row, Relationship );
 				Contents.Store( Suffix, Relationship.Suffix );
 				Contents.Store( Value, Relationship.Value );
@@ -206,7 +206,7 @@ namespace cgidat {
 		{
 			row__ Row = GetDataWithNameAndSuffix( Name, Suffix );
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				Delete( Row );
 		}
 		//f Delete datum of 'Name' and 'Suffix'.
@@ -271,13 +271,13 @@ namespace cgidat {
 		const data_ &Data,
 		xmlf &XMLF )
 	{
-ERRProlog
-		row__ Row = E_NIL;
+qRH
+		row__ Row = qNIL;
 		content Content;
-ERRBegin
+qRB
 		Row = Data.First();
 
-		while( Row != E_NIL ) {
+		while( Row != qNIL ) {
 			XMLF.PushTag( "Datum" );
 			Content.Init();
 			XMLF.PutAttribute( "Name", Data.GetContent( Data.GetNameRow( Row ), Content ) );
@@ -289,9 +289,9 @@ ERRBegin
 			Row = Data.Next( Row );
 			XMLF.PopTag();
 		}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	}
 
 	//f Fill 'Data' with 'Args'.

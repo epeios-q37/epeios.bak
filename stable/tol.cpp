@@ -47,7 +47,7 @@ static xbool__ SystemCommandIsAvailable_ = xb_Undefined;
 /*
 int system( const char * )
 {
-	ERRFbd();	// Ppour forcer l'utilisation de 'tol::System(...)'.
+	qRFbd();	// Ppour forcer l'utilisation de 'tol::System(...)'.
 
 	return 0;	// Pour viter un 'warning'.
 }
@@ -63,10 +63,10 @@ inline bso::bool__ tol::IsSystemCommandAvailable( void )
 		return false;
 		break;
 	case xb_Undefined:
-		ERRFwk();
+		qRFwk();
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -81,24 +81,24 @@ int tol::System( const ntvstr::string___ &Command )
 		return system( NULL );
 
 	if ( !IsSystemCommandAvailable() )
-		ERRSys();
+		qRSys();
 
 	int Result = EXIT_FAILURE;
 
 #ifdef TOL__WIN
-ERRProlog
+qRH
 	str::string ModifiedCommand;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	// '_wsystem()' lance en fait "cmd /c ...". Or; lorsque cette commande reoit un paramtre commenant par '"' (hors espaces),
 	// et avec plus d'un jeu de '"', elle en enlve certains (void "cmd /?"). Placer 'echo >NUL && ' en tte de paramtre rsoud ce problme...
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
 	Result = _wsystem( ntvstr::string___( ModifiedCommand ).Internal() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 #elif defined( TOL__POSIX ) || defined( TOL__MAC )
 	Result = system( Command.Internal() );
 #else
@@ -106,7 +106,7 @@ ERREpilog
 #endif
 
 	if ( Result == -1 )
-		ERRSys();
+		qRSys();
 
 	return Result;
 }
@@ -123,11 +123,11 @@ ERREpilog
 
 void tol::Launch( const ntvstr::string___ &Document )
 {
-ERRProlog
+qRH
 	str::string Command, Buffer;
-ERRBegin
+qRB
 #ifdef CPE_ANDROID
-	ERRFwk();
+	qRFwk();
 #else
 	Command.Init( LAUNCH_COMMAND " \"" );
 	
@@ -138,9 +138,9 @@ ERRBegin
 
 	System( Command );
 #endif
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -158,7 +158,7 @@ static const char *PosixCoreDateAndTime_(
    time_now = localtime(&secs_now);
 
    if ( !strftime( Buffer, sizeof( Buffer ), Format, time_now) )
-	ERRLbr();
+	qRLbr();
 
    return Buffer;
 }
@@ -240,7 +240,7 @@ Q37_GCTOR( tol )
 	SetSystemCommandAvailabitity_();
 #ifdef TOL__WIN		
 	if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )
-		ERRSys();
+		qRSys();
 #elif defined( TOL__MAC )
 	mach_timebase_info_data_t    TimebaseInfo;
 
@@ -249,7 +249,7 @@ Q37_GCTOR( tol )
 #if 0
 	// Test toujours faux, d au type de 'TimebaseInfo.numer'
 	if ( ( BSO_NUINT_MAX / 1000000 ) < TimebaseInfo.numer )
-		ERRLmt();
+		qRLmt();
 #endif
 	tol::_Numer = TimebaseInfo.numer;
 	tol::_Denom = TimebaseInfo.denom;

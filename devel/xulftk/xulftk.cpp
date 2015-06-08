@@ -43,18 +43,18 @@ static void GetAuthorText_(
 	const char *Language,
 	str::string_ &Text )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( XULFTK_NAME "_AuthorText" );
 	Meaning.AddTag( Name );
 	Meaning.AddTag( Contact );
 
 	Locale.GetTranslation( Meaning, Language, Text );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetAffiliationText_(
@@ -65,18 +65,18 @@ static void GetAffiliationText_(
 	const char *Language,
 	str::string_ &Text )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( Tag );
 	Meaning.AddTag( Name );
 	Meaning.AddTag( URL );
 
 	Locale.GetTranslation( Meaning, Language, Text );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 const str::string_ &xulftk::BuildAboutText(
@@ -92,9 +92,9 @@ const str::string_ &xulftk::BuildAboutText(
 	xulftk::trunk___ &Trunk,
 	str::string_ &Text )
 {
-ERRProlog
+qRH
 	str::string AuthorText, ProjectAffiliationText, SoftwareAffiliationText, ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
-ERRBegin
+qRB
 	Text.Append( AppName );
 	Text.Append( ' ' );
 	Text.Append( Version );
@@ -140,9 +140,9 @@ ERRBegin
 		Text.Append( SoftwareInformations );
 		Text.Append( ')' );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Text;
 }
 
@@ -150,21 +150,21 @@ ERREpilog
 void xulftk::reporting_functions__::FRDKRNReport( const str::string_ &Message )
 {
 	if ( _Trunk == NULL )
-		ERRFwk();
+		qRFwk();
 
 	_Trunk->UI().LogAndPrompt( Message );
 
-	ERRAbort();
+	qRAbort();
 }
 
 void xulftk::reporting_functions__::FRDKRNNotify( const str::string_ &Message )
 {
 	if ( _Trunk == NULL )
-		ERRFwk();
+		qRFwk();
 
 	_Trunk->UI().Alert( Message );
 
-	ERRAbort();
+	qRAbort();
 }
 
 void xulftk::reporting_functions__::Init( trunk___ &Trunk )
@@ -176,9 +176,9 @@ void xulftk::reporting_functions__::Init( trunk___ &Trunk )
 
 void xulftk::trunk___::Handle_( frdkrn::status__ Status )
 {
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	Translation.Init();
 
 	Kernel().GetErrorMeaningTranslation( Translation );
@@ -191,15 +191,15 @@ ERRBegin
 		break;
 	case frdkrn::sError:
 		_UI->Alert( Translation );
-		ERRAbort();
+		qRAbort();
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 enum annex_type__
@@ -215,9 +215,9 @@ enum annex_type__
 static annex_type__ GetAnnexType_( const rgstry::multi_level_registry_ &Registry )
 {
 	annex_type__ Type = at_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	if ( Registry.GetValue( xulfrg::AnnexTargetType, Value ) ) {
@@ -228,9 +228,9 @@ ERRBegin
 		else if ( Value == "Volatile " )
 			Type = atVolatile;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Type;
 }
 
@@ -246,7 +246,7 @@ static bso::bool__ IsValid_(
 	if ( !AlpahaNumericOnly )
 		return true;
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( !isalnum( Value( Row ) ) && ( Value( Row ) != '_' ) )
 			return false;
 
@@ -265,9 +265,9 @@ static const char *GetAnnexTarget_(
 	TOL_CBUFFER___ &Buffer )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	str::string Target, Translation;
-ERRBegin
+qRB
 	Target.Init();
 
 	Registry.GetValue( xulfrg::AnnexTarget, Target );
@@ -276,13 +276,13 @@ ERRBegin
 		Translation.Init();
 		UI.LogAndPrompt( Locale.GetTranslation( XULFTK_NAME "_MissingOrBadAnnexTarget", Language, Translation ) );
 
-		ERRReturn;
+		qRReturn;
 	}
 
 	Result = Target.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -304,12 +304,12 @@ template <typename bag, typename flow> static flow *GetEmbeddedFlow_(
 	const char *Language )
 {
 	flow *Flow = NULL;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	const char *Target = NULL;
-ERRBegin
+qRB
 	if ( ( Target = GetAnnexTarget_( UI, Registry, Locale, Language, Buffer ) ) == NULL )
-		ERRReturn;
+		qRReturn;
 
 	Bag.Embedded.Init();
 	switch ( Direction ) {
@@ -319,15 +319,15 @@ ERRBegin
 	case dOut:
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
 	Bag.EmbeddedFlow.Init( Bag.Embedded );
 	Flow = &Bag.EmbeddedFlow;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Flow;
 }
 
@@ -339,20 +339,20 @@ template <typename bag, typename flow> static flow *GetFileFlow_(
 	const char *Language )
 {
 	flow *Flow = NULL;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	const char *Target = NULL;
-ERRBegin
+qRB
 	if ( ( Target = GetAnnexTarget_( UI, Registry, Locale, Language, Buffer ) ) == NULL )
-		ERRReturn;
+		qRReturn;
 
 	if ( Bag.FileFlow.Init( Target, err::hUserDefined ) != tol::rSuccess )
 		Flow = &Bag.VoidFlow;
 	else
 		Flow = &Bag.FileFlow;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Flow;
 }
 
@@ -370,9 +370,9 @@ template <typename bag, typename flow> static flow  *GetFlow_(
 	const char *Language )
 {
 	flow *Flow = NULL;
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	switch ( GetAnnexType_( Registry )  ) {
 	case atEmbedded:
 		Flow = GetEmbeddedFlow_<bag, flow>( Direction, Bag, UI, Registry, Locale, Language );
@@ -387,15 +387,15 @@ ERRBegin
 		Translation.Init();
 		UI.LogAndPrompt( Locale.GetTranslation( XULFTK_NAME "_MissingOrBadAnnexTargetType", Language, Translation ) );
 
-		ERRReturn;
+		qRReturn;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Flow;
 }
 
@@ -405,31 +405,31 @@ static void Write_(
 	rgstry::row__ Root,
 	flw::oflow__ &Flow )
 {
-ERRProlog
+qRH
 	txf::text_oflow__ TFlow;
-ERRBegin
+qRB
 	TFlow.Init( Flow );
 	Set.Dump( Root, true, xml::oCompact, xml::e_None, TFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static rgstry::row__ ReadSetups_(
 	flw::iflow__ &Flow,
 	rgstry::registry_ &Setups )
 {
-	rgstry::row__ Root = E_NIL;
-ERRProlog
+	rgstry::row__ Root = qNIL;
+qRH
 	xtf::extended_text_iflow__ XFlow;
-ERRBegin
+qRB
 	XFlow.Init( Flow, utf::f_Default );
 
 	if ( rgstry::FillRegistry( XFlow, xpp::criterions___(), SETUPS_LABEL, Setups, Root ) != rgstry::sOK )
-		Root = E_NIL;
-ERRErr
-ERREnd
-ERREpilog
+		Root = qNIL;
+qRR
+qRT
+qRE
 	return Root;
 }
 
@@ -451,17 +451,17 @@ static bso::bool__ GetSetup_(
 	str::string_ &Setup )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	BuildSetupPath_( Id, Path );
 
 	Success = Setups.GetValue( Path, Root, Setup );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -471,17 +471,17 @@ static void SetSetup_(
 	rgstry::registry_ &Setups,
 	rgstry::row__ Root )
 {
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	BuildSetupPath_( Id, Path );
 
 	Setups.SetValue( Path, Setup, Root );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 struct ibag___ {
@@ -505,42 +505,42 @@ static rgstry::row__ RetrieveSetups_(
 	const char *Language,
 	rgstry::registry_ &Setups )
 {
-	rgstry::row__ Root = E_NIL;
-ERRProlog
+	rgstry::row__ Root = qNIL;
+qRH
 	flw::iflow__ *Flow = NULL;
 	ibag___ Bag;
 	str::string Translation;
-ERRBegin
+qRB
 	Bag.Init();
 	
 	if ( ( Flow = GetFlow_<ibag___,flw::iflow__>( dIn, Bag, UI, Registry, Locale, Language ) ) == NULL ) {
 		Translation.Init();
 		UI.LogAndPrompt( Locale.GetTranslation( XULFTK_NAME "_UnableToRetrieve" SETUPS_LABEL, Language, Translation ) );
-		ERRReturn;
+		qRReturn;
 	}
 
 	if ( Flow->EndOfFlow() ) {
 		Root = Setups.CreateRegistry( str::string( SETUPS_LABEL ) );
-		ERRReturn;
+		qRReturn;
 	}
 
-	if ( ( Root = ReadSetups_( *Flow, Setups ) ) == E_NIL ) {
+	if ( ( Root = ReadSetups_( *Flow, Setups ) ) == qNIL ) {
 		Translation.Init();
 		UI.LogAndPrompt( Locale.GetTranslation( XULFTK_NAME "_UnableToFind" SETUPS_LABEL, Language, Translation) );
-		ERRReturn;
+		qRReturn;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Root;
 }
 
 void xulftk::trunk___::_DefineSession( const str::string_ &ProjectId )
 {
-ERRProlog
+qRH
 	frdkrn::backend_extended_type__ Type = frdkrn::bxt_Undefined;
 	str::string Location;
-ERRBegin
+qRB
 	Kernel().Registry().SetValue( frdrgy::ProjectId, ProjectId );
 
 	Kernel().Registry().GetValue( frdrgy::Backend, Location );
@@ -549,7 +549,7 @@ ERRBegin
 	case frdkrn::bxtNone:
 		break;
 	case frdkrn::bxtPredefined:
-		ERRFwk();
+		qRFwk();
 		break;
 	case frdkrn::bxtDaemon:
 		UI().SessionForm().Widgets.txbDaemonBackend.SetValue( Location );
@@ -561,14 +561,14 @@ ERRBegin
 		Type = frdkrn::bxtNone;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	UI().SessionForm().SetBackendType( Type );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -577,12 +577,12 @@ void xulftk::trunk___::_DefineSession(
 	const str::string_ &ProjectFileName,	// Si non vide, contient le nom du fichier projet avec lequel prremplir le 'SessionForm'.
 	const xpp::criterions___ &Criterions )
 {
-ERRProlog
+qRH
 	frdkrn::backend_extended_type__ Type = frdkrn::bxt_Undefined;
 	str::string Location;
 	str::string ProjectId;
 	bso::integer_buffer__ Buffer;
-ERRBegin
+qRB
 	ProjectId.Init();
 
 	if ( ProjectFileName.Amount() != 0 ) {
@@ -600,7 +600,7 @@ ERRBegin
 	case frdkrn::bxtNone:
 		break;
 	case frdkrn::bxtPredefined:
-		ERRFwk();
+		qRFwk();
 		break;
 	case frdkrn::bxtDaemon:
 		UI().SessionForm().Widgets.txbDaemonBackend.SetValue( Location );
@@ -612,14 +612,14 @@ ERRBegin
 		Type = frdkrn::bxtNone;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	UI().SessionForm().SetBackendType( Type );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 #endif
 
@@ -627,35 +627,35 @@ static const str::string_ &GetProjectId_(
 	trunk___ &Trunk,
 	str::string_ &ProjectId )
 {
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	if ( !Trunk.Kernel().Registry().GetValue( frdrgy::ProjectId, ProjectId ) || (  ProjectId.Amount() == 0 ) ) {
 		Translation.Init();
 		Trunk.UI().LogAndPrompt( Trunk.Kernel().Locale().GetTranslation( XULFTK_NAME "_BadOrNoProjectId", Trunk.Kernel().Language(), Translation) );
 
-		ERRAbort();
+		qRAbort();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectId;
 }
 
 
 void xulftk::trunk___::_ApplySession( const frdkrn::compatibility_informations__ &CompatibilityInformations )
 {
-ERRProlog
+qRH
 	xtf::extended_text_iflow__ XFlow;
 	rgstry::registry Setups;
-	rgstry::row__ Root = E_NIL;
+	rgstry::row__ Root = qNIL;
 	str::string Setup;
 	flx::E_STRING_IFLOW__ Flow;
 	str::string Value;
 	frdkrn::backend_extended_type__ Type = frdkrn::bxt_Undefined;
 	str::string ProjectId;
 	str::string Translation;
-ERRBegin
+qRB
 	Value.Init();
 	UI().SessionForm().Widgets.mnlBackendType.GetValue( Value );
 
@@ -678,7 +678,7 @@ ERRBegin
 	default:
 		Translation.Init();
 		UI().LogAndPrompt( Kernel().Locale().GetTranslation( XULFTK_NAME "_BadOrNoBackendType", Kernel().Language(), Translation ) );
-		ERRAbort();
+		qRAbort();
 		break;
 	}
 
@@ -689,8 +689,8 @@ ERRBegin
 
 	Setups.Init();
 
-	if ( ( Root = RetrieveSetups_( UI(), Kernel().Registry(), Kernel().Locale(), Kernel().Language(), Setups ) ) == E_NIL )
-		ERRAbort();
+	if ( ( Root = RetrieveSetups_( UI(), Kernel().Registry(), Kernel().Locale(), Kernel().Language(), Setups ) ) == qNIL )
+		qRAbort();
 
 	ProjectId.Init();
 	GetProjectId_( *this, ProjectId );
@@ -707,28 +707,28 @@ ERRBegin
 
 		Handle_( Session().FillSetupRegistry( XFlow, xpp::criterions___() ) );
 	}
-ERRErr
+qRR
 	Session().CloseSession();
 	Kernel().CloseProject();
-ERREnd
-ERREpilog
+qRT
+qRE
 }
 
 bso::bool__ xulftk::trunk___::_DefendSession( void )
 {
 	bso::bool__ Confirmed = false;
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	Translation.Init();
 	Translation.Init( Kernel().Locale().GetTranslation( XULFTK_NAME "_ProjectClosingAsking", Kernel().Language(), Translation) );
 	Translation.Append( ' ' );
 	Translation.Append( Kernel().Locale().GetTranslation( XULFTK_NAME "_ProjectClosingWarning", Kernel().Language(), Translation ) );
 
 	Confirmed = UI().Confirm( Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Confirmed;
 }
 
@@ -755,19 +755,19 @@ static bso::bool__ StoreSetups_(
 	const char *Language )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	flw::oflow__ *Flow = NULL;
 	obag___ Bag;
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Bag.Init();
 	
 	if ( ( Flow = GetFlow_<obag___,flw::oflow__>( dOut, Bag, UI, Registry, Locale, Language ) ) == NULL ) {
 		Translation.Init();
 		UI.LogAndPrompt( Locale.GetTranslation( XULFTK_NAME "_UnableToStore" SETUPS_LABEL, Language, Translation ) );
 
-		ERRReturn;
+		qRReturn;
 	}
 
 	Write_( Setups, Root, *Flow );
@@ -777,9 +777,9 @@ ERRBegin
 	UI.SaveAnnex( GetAnnexTarget_( UI, Registry, Locale, Language, Buffer), Bag.Embedded );
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -787,37 +787,37 @@ static void GetSetup_(
 	const frdssn::session___ &Session,
 	str::string_ &Setup )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ Flow;
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
-ERRBegin
+qRB
 	Flow.Init( Setup );
 	TFlow.Init( Flow );
 	Writer.Init( TFlow, xml::oCompact, xml::e_Default );
 
 	Session.DumpSetupRegistry( Writer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
 void xulftk::trunk___::_DropSession( void )
 {
-ERRProlog
+qRH
 	str::string Setup;
 	rgstry::registry Setups;
-	rgstry::row__ Root = E_NIL;
+	rgstry::row__ Root = qNIL;
 	str::string ProjectId;
-ERRBegin
+qRB
 
 	if ( !Kernel().IsProjectInProgress() )
-		ERRReturn;
+		qRReturn;
 
 	Setups.Init();
 
-	if ( ( Root = RetrieveSetups_( UI(), Registry(), Kernel().Locale(), Kernel().Language(), Setups ) ) != E_NIL ) {
+	if ( ( Root = RetrieveSetups_( UI(), Registry(), Kernel().Locale(), Kernel().Language(), Setups ) ) != qNIL ) {
 		Setup.Init();
 		GetSetup_( Session(), Setup );
 
@@ -832,25 +832,25 @@ ERRBegin
 	Session().CloseSession();
 
 	Handle_( Kernel().CloseProject() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xulftk::trunk___::FinalizeLaunching( void )
 {
-ERRProlog
+qRH
 	str::string ProjectFileName;
-ERRBegin
+qRB
 	ProjectFileName.Init();
 
 	if ( Kernel().Registry().GetValue( frdrgy::DefaultProject, ProjectFileName ) )
 		DefineSession( ProjectFileName );
 	else
 		GoToHome();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -858,15 +858,15 @@ const str::string_ &xulftk::trunk___::BuildXSLFileName(
 	const char *XSLFileNameAffix,
 	str::string_ &FileName )
 {
-ERRProlog
+qRH
 	fnm::name___ NBuffer;
 	TOL_CBUFFER___ CBuffer;
-ERRBegin
+qRB
 	NBuffer.Init();
 	FileName.Append( fnm::BuildFileName( DefaultXSLRootPath(), XSLFileNameAffix, ".xsl", NBuffer ).UTF8( CBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return FileName;
 }
 
@@ -874,16 +874,16 @@ const str::string_ &xulftk::trunk___::BuildXSLDigestFileName(
 	const char *XSLFileNameAffix,
 	str::string_ &FileName )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ STRBuffer;
 	str::string Buffer;
-ERRBegin
+qRB
 	Buffer.Init( XSLFileNameAffix );
 	Buffer.Append( "Avaibilities" );
 
 	BuildXSLFileName( Buffer.Convert( STRBuffer ), FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return FileName;
 }

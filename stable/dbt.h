@@ -128,7 +128,7 @@ namespace dbt {
 			Nodes.reset( P );
 			Types.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_LISTt_( irow__ )::plug( AS );
 			E_BTREEt_( irow__ )::plug( AS );
@@ -195,7 +195,7 @@ namespace dbt {
 		{
 #ifdef DBT_DBG
 			if ( !IsInternal( Node ) )
-				ERRFwk();
+				qRFwk();
 #endif
 			return Nodes( Node );
 		}
@@ -204,7 +204,7 @@ namespace dbt {
 		{
 #ifdef DBT_DBG
 			if ( !IsExternal( Node ) )
-				ERRFwk();
+				qRFwk();
 #endif
 			return Nodes( Node );
 		}
@@ -236,7 +236,7 @@ namespace dbt {
 			else if ( IsInternal( Node ) )
 				Internals.Delete( GetInternalRow( Node ) );
 			else
-				ERRFwk();
+				qRFwk();
 
 			E_LISTt_( irow__ )::Delete( Node );
 		}
@@ -279,11 +279,11 @@ namespace dbt {
 			Tree_ = NULL;
 			E_BTREE_FILLERt_( irow__ )::reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			E_BTREE_FILLERt_( irow__ )::plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_BTREE_FILLERt_( irow__ )::plug( AS );
 		}

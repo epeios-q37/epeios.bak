@@ -29,7 +29,7 @@ void xmltol::Convert(
 	const xml_document_ &XMLDCM,
 	xml_database_ &XMLDBS )
 {
-ERRProlog
+qRH
 	dtr::browser__<value_row__> Browser;
 	ctn::E_CMITEMt( tagged_value_, value_row__ ) TaggedValue;
 	ctn::E_CMITEMt( tag_, tag_row__ ) Tag;
@@ -37,7 +37,7 @@ ERRProlog
 	xml_database_filler__ XMLDF;
 	bso::bool__ MakePop = false;
 	bso::bool__ WasPush = false;
-ERRBegin
+qRB
 	Browser.Init( XMLDCM.GetRoot() );
 
 	XMLDBS.Init();
@@ -92,20 +92,20 @@ ERRBegin
 
 		XMLDCM.Browse( Browser );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xmltol::Replace(
 	tags_ &Tags,
 	const xml_database_ &NewTags )
 {
-ERRProlog
+qRH
 	ctn::E_CMITEMt( tagged_value_, value_row__ ) TaggedValue;
 	dtr::browser__< value_row__ > Browser;
 	tag_map TagMap;
-ERRBegin
+qRB
 	TagMap.Init();
 
 	Merge( NewTags.Tags, Tags, TagMap );
@@ -134,8 +134,8 @@ ERRBegin
 	
 	Tags.Sync();
 	
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

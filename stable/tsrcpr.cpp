@@ -109,10 +109,10 @@ static void LireType_(
 	xtf::extended_text_iflow___ &Flot,
 	str::string_ &String )
 {
-ERRProlog
+qRH
 	bso::char__ C;
 	str::string Tampon;
-ERRBegin
+qRB
 	Tampon.Init();
 	
 	SauterBlancs_( Flot );
@@ -236,9 +236,9 @@ ERRBegin
 	}
 	else
 		Flot.Unget( C );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void LireValeur_(
@@ -578,10 +578,10 @@ void tsrcpr::typedef_::Analyze(
 	xtf::extended_text_iflow___ &Flot,
 	bso::bool__ Long )
 {
-ERRProlog
+qRH
 	str::string S;
 	bso::ubyte__ Level = 0;
-ERRBegin
+qRB
 	LireDoc_( Flot, Long, Commentaire );
 
 	S.Init();
@@ -639,9 +639,9 @@ ERRBegin
 	LireIdentificateur_( Flot, Name );
 	
 	Flot.SkipLine();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void tsrcpr::shortcut_::Analyze(
@@ -658,10 +658,10 @@ void tsrcpr::shortcut_::Analyze(
 
 void tsrcpr::define_::AnalyserArguments_( xtf::extended_text_iflow___ &Flot )
 {
-ERRProlog
+qRH
 	volatile int C;
 	str::string S;
-ERRBegin
+qRB
 
 	C = Flot.Get();
 
@@ -687,18 +687,18 @@ ERRBegin
 
 		C = Flot.Get();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void tsrcpr::define_::Analyze(
 	xtf::extended_text_iflow___ &Flot,
 	bso::bool__ Long )
 {
-ERRProlog
+qRH
 	str::string S;
-ERRBegin
+qRB
 
 	LireDoc_( Flot, Long, Commentaire );
 
@@ -724,9 +724,9 @@ ERRBegin
 		AnalyserArguments_( Flot );
 
 	Flot.SkipLine();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 
 }
 
@@ -847,10 +847,10 @@ void tsrcpr::argument_::Analyze( xtf::extended_text_iflow___ &Flot )
 
 void tsrcpr::template_::Analyze( xtf::extended_text_iflow___ &Flot )
 {
-ERRProlog
+qRH
 	int C;
 	tsrcpr::argument T;
-ERRBegin
+qRB
 
 	SauterBlancs_( Flot );
 
@@ -873,18 +873,18 @@ ERRBegin
 
 		C = Flot.Get();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
 void tsrcpr::methode_::AnalyserParametres_( xtf::extended_text_iflow___ &Flot )
 {
-ERRProlog
+qRH
 	volatile int C;
 	tsrcpr::parametre P;
-ERRBegin
+qRB
 
 	C = Flot.Get();
 
@@ -908,17 +908,17 @@ ERRBegin
 
 		C = Flot.Get();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void tsrcpr::function_::AnalyserParametres_( xtf::extended_text_iflow___ &Flot )
 {
-ERRProlog
+qRH
 	bso::char__ C;
 	tsrcpr::parametre P;
-ERRBegin
+qRB
 
 	C = Flot.Get();
 
@@ -942,9 +942,9 @@ ERRBegin
 
 		C = Flot.Get();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -972,18 +972,18 @@ template <class t> void inline AnalyserItem_(
 	xtf::extended_text_iflow___ &Flot,
 	bso::bool__ Long )
 {
-ERRProlog
+qRH
 	ctn::E_ITEM( t ) Element;
-ERRBegin
+qRB
 	tym::row__ P = TI.New();
 
 	Element.Init( TI );
 
 	Element( P ).Init();
 	Element().Analyze( Flot, Long );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void AdjustEndOfBase_( str::string_ &S )
@@ -996,9 +996,9 @@ static void AdjustEndOfBase_( str::string_ &S )
 
 void tsrcpr::classe_::AnalyzeBases_( xtf::extended_text_iflow___ &Flot )
 {
-ERRProlog
+qRH
 	str::string S;
-ERRBegin
+qRB
 	Flot.Get();
 
 	while( Flot.View() != '{' ) {	
@@ -1018,9 +1018,9 @@ ERRBegin
 		SauterBlancs_( Flot );
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 
 }
 

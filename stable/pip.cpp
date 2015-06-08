@@ -49,9 +49,9 @@ pip::amount__ pip::pipe___::Write(
 	bso::bool__ Synchronization )
 {
 	pip::amount__ NombreEcrits;
-ERRProlog
+qRH
 	bso::bool__ Locked = false;
-ERRBegin
+qRB
 	WriteInProgress_ = true;
 #ifdef PIP_DBG
 	if ( ( Pipe_[pip::eWrite] == INVALID_HANDLE_VALUE )
@@ -108,14 +108,14 @@ ERRBegin
 	Available_ -= Amount - NombreEcrits;
 
 	Synchronization_ = Synchronization && ( NombreEcrits == Amount );
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Locked )
 		mtx::Unlock( Mutex_ );
 		
 	WriteInProgress_ = false;
 
-ERREpilog
+qRE
 	return NombreEcrits;
 }
 
@@ -124,9 +124,9 @@ pip::amount__ pip::pipe___::Read(
 	datum__ *Buffer )
 {
 	pip::amount__ NombreLus;
-ERRProlog
+qRH
 	bso::bool__ Locked = false;
-ERRBegin
+qRB
 	ReadInProgress_ = true;
 
 #ifdef PIP_DBG
@@ -147,13 +147,13 @@ ERRBegin
 
 	Available_ -= NombreLus;
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Locked )
 		mtx::Unlock( Mutex_ );
 		
 	ReadInProgress_ = false;
-ERREpilog
+qRE
 	return NombreLus;
 }
 

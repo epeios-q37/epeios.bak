@@ -34,12 +34,12 @@ using cio::CErr;
 
 void Generic( int argc, char *argv[] )
 {
-ERRProlog
+qRH
 	uys::state__ State = uys::s_Undefined;
 	fls::id__ Id = FLS_UNDEFINED_ID;
 	bch::bunch_file_manager___ FM1, FM2;
 	str::string S1, S2;
-ERRBegin
+qRB
 	Id = fls::GetId();
 
 	FM1.Init( "FM1", fil::mReadWrite, true, Id );
@@ -48,10 +48,10 @@ ERRBegin
 	State = bch::Plug( S1, FM1 );
 
 	if ( uys::IsError( State ) )
-		ERRFwk();
+		qRFwk();
 
 	if ( bch::Plug( S2, FM2 ) != State )
-		ERRFwk();
+		qRFwk();
 
 	if ( State == uys::sAbsent ) {
 		cio::COut << "CREATION !!!" << txf::nl << txf::commit;
@@ -85,23 +85,23 @@ ERRBegin
 	cio::COut << S1 << txf::pad;
 	cio::COut << txf::nl << txf::commit;
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Id != FLS_UNDEFINED_ID  )
 		fls::ReleaseId( Id );
-ERREpilog
+qRE
 }
 
 int main( int argc, char *argv[] )
 {
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 Generic( argc, argv );
 
 	COut << "Test of library " << FLS_NAME << ' ' << __DATE__" "__TIME__"\n";
 
-ERRFErr
-ERRFEnd
-ERRFEpilog
+qRFR
+qRFT
+qRFE
 	return 0;
 }

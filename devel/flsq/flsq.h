@@ -85,7 +85,7 @@ namespace flsq {
 
 	// Identifiant sous lequel est regroup un ensemble de fichiers.
 	E_ROW( id__ );
-	E_CDEF( id__, Undefined, E_NIL );
+	E_CDEF( id__, Undefined, qNIL );
 
 	id__ GetId( void );
 
@@ -163,10 +163,10 @@ namespace flsq {
 					return tol::rFailure;
 					break;
 				case err::hThrowException:
-					ERRLbr();
+					qRLbr();
 					break;
 				default:
-					ERRPrm();
+					qRFwk();
 					break;
 				}
 			}
@@ -319,7 +319,7 @@ namespace flsq {
 						if ( !Temoin_.Manuel )
 							ReleaseFile();
 
-						ERRLbr();
+						qRLbr();
 					} else
 						if ( !Temoin_.Manuel )
 							ReleaseFile();
@@ -351,9 +351,9 @@ namespace flsq {
 																		*/
 							Amount = Nombre;
 						} else
-							ERRPrm();
+							qRFwk();
 					} else
-						ERRFwk();
+						qRFwk();
 				}
 					
 				Nombre -= Amount;
@@ -395,7 +395,7 @@ namespace flsq {
 				fil::size__ RawFileSize = fil::GetSize( _Name );
 
 				if ( RawFileSize > SDR_SIZE_MAX )
-					ERRDta();
+					qRFwk();
 
 				TailleFichier_ = (sdr::size__)RawFileSize;
 			}
@@ -416,7 +416,7 @@ namespace flsq {
 			{
 				ReleaseFile();
 
-				if ( _Row != E_NIL )
+				if ( _Row != qNIL )
 					_Unregister( _Row, _ID );
 
 				if ( _Name.Amount() != 0  )
@@ -433,7 +433,7 @@ namespace flsq {
 			Temoin_.Interne = false;
 			Temoin_.Mode = fil::mReadOnly;
 			TailleFichier_ = 0;
-			_Row = E_NIL;
+			_Row = qNIL;
 			_ID = Undefined;
 			_EpochTimeStamp = 0;
 		}
@@ -464,7 +464,7 @@ namespace flsq {
 #  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 # endif
 				if ( tmpnam( Buffer ) == NULL )
-					ERRSys();
+					qRSys();
 # ifdef CPE_XCODE
 #  pragma GCC diagnostic pop
 # endif
@@ -484,9 +484,9 @@ namespace flsq {
 				if ( Mode == fil::mReadWrite )
 					Open_( false );
 				else
-					ERRPrm();
+					qRFwk();
 			else if ( Creation != flsq::cFirstUse )
-				ERRPrm();
+				qRFwk();
 		}
 			// initialise l'objet avec le nom 'NomFichier'; si NULL, cration d'un nom
 		void ReleaseFile( bso::bool__ ReportClosing = true )
@@ -543,7 +543,7 @@ namespace flsq {
 
 			if ( ( _Name.Amount() != 0 ) && fil::Exists( _Name ) )
 				if ( !fil::Remove( _Name ) )
-					ERRLbr();
+					qRLbr();
 
 			TailleFichier_ = 0;
 		}
@@ -591,7 +591,7 @@ namespace flsq {
 
 	//c The standard storage driver which handle a file as storage.
 	class file_storage_driver___
-	: public sdr::E_SDRIVER__,
+	: public qSD__,
 	  public file_storage___
 	{
 	protected:
@@ -604,7 +604,7 @@ namespace flsq {
 			fil::size__ Size = FileSize();
 
 			if ( Size > SDR_SIZE_MAX )
-				ERRDta();
+				qRFwk();
 
 			return (sdr::size__)Size;
 		}
@@ -625,13 +625,13 @@ namespace flsq {
 		}
 	public:
 		file_storage_driver___( void )
-		: E_SDRIVER__(),
+		: qSD__(),
 		  file_storage___()
 		{}
 		void reset( bool P = true )
 		{
 			file_storage___::reset( P );
-			E_SDRIVER__::reset( P );
+			qSD__::reset( P );
 		}
 		//f Return the mode.
 		fil::mode__ Mode( void ) const
@@ -651,11 +651,11 @@ namespace flsq {
 			flsq::creation Creation = flsq::cFirstUse )
 		{
 			file_storage___::Init( ID, FileName, Mode, Creation );
-			E_SDRIVER__::Init();
+			qSD__::Init();
 		}
 	};
 
-	#define E_FILE_SDRIVER___	file_storage_driver___
+	#define E_FILqSD___	file_storage_driver___
 
 	void ReleaseInactiveFiles_(
 		time_t Delay,	// in s.

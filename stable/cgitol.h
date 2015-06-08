@@ -97,7 +97,7 @@ namespace cgitol {
 			Skin.reset( P );
 			Session.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Target.plug( AS );
 			Skin.plug( AS );
@@ -137,19 +137,19 @@ namespace cgitol {
 		const cgiarg::arguments_ &Arguments,
 		xmlf_ &XMLFiller )
 	{
-ERRProlog
-			cgiarg::row__ Row = E_NIL;
+qRH
+			cgiarg::row__ Row = qNIL;
 			cgiarg::name Name;
 			cgiarg::suffix Suffix;
 			cgiarg::value Value;
-ERRBegin
+qRB
 			Row = Arguments.First();
 
-			while( Row != E_NIL ) {
+			while( Row != qNIL ) {
 				XMLFiller.PushTag( "Argument" );
 				Name.Init();
 				XMLFiller.PutAttribute( "Name", Arguments.GetName( Row, Name ) );
-				if ( Arguments.GetSuffixPosition( Row ) != E_NIL ) {
+				if ( Arguments.GetSuffixPosition( Row ) != qNIL ) {
 					Suffix.Init();
 					XMLFiller.PutAttribute( "Suffix", Arguments.GetSuffix( Row, Suffix ) );
 				}
@@ -159,9 +159,9 @@ ERRBegin
 
 				Row = Arguments.Next( Row );
 			}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	}
 
 

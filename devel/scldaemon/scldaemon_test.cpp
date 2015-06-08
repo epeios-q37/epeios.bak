@@ -32,21 +32,21 @@ using cio::CErr;
 
 void Generic( int argc, char *argv[] )
 {
-ERRProlog
-ERRBegin
-ERRErr
-ERREnd
-ERREpilog
+qRH
+qRB
+qRR
+qRT
+qRE
 }
 
 int main( int argc, char *argv[] )
 {
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	COut << "Test of library " << SCLDAEMON_NAME << ' ' << __DATE__" "__TIME__"\n";
 
-ERRFErr
-ERRFEnd
-ERRFEpilog
+qRFR
+qRFT
+qRFE
 	return ERRExitValue;
 }

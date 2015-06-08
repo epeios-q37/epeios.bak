@@ -28,9 +28,9 @@ void xdhagt::agent___::SetString(
 	const nstring___ &Name,
 	const str::string_ &RawValue )
 {
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	xdhcbk::Escape( RawValue, Value, '"' );
@@ -39,9 +39,9 @@ ERRBegin
 	Value.Append( '"' );
 
 	_C().SetProperty( _UP, Id, Name, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhagt::agent___::Alert(
@@ -49,9 +49,9 @@ void xdhagt::agent___::Alert(
 	const str::string_ &RawXSL,
 	const str::string_ &RawTitle )
 {
-ERRProlog
+qRH
 	str::string XML, XSL, Title;
-ERRBegin
+qRB
 	XML.Init();
 	xdhcbk::Escape( RawXML, XML, '"' );
 
@@ -62,9 +62,9 @@ ERRBegin
 	xdhcbk::Escape( RawTitle, Title, '"' );
 
 	_C().Alert( _UP, RawXML, RawXSL, Title );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ xdhagt::agent___::Confirm(
@@ -73,10 +73,10 @@ bso::bool__ xdhagt::agent___::Confirm(
 	const str::string_ &RawTitle )
 {
 	bso::bool__ Confirmed = false;
-ERRProlog
+qRH
 	str::string XML, XSL, Title;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	XML.Init();
 	xdhcbk::Escape( RawXML, XML, '"' );
 
@@ -89,9 +89,9 @@ ERRBegin
 	_C().Confirm( _UP, RawXML, RawXSL, Title, Buffer );
 
 	Confirmed = !strcmp( "true", Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Confirmed;
 }
 
@@ -99,24 +99,24 @@ static void SetXML_(
 	const str::string_ &Message,
 	str::string_ &XML )
 {
-ERRProlog
+qRH
 	flx::E_STRING_TOFLOW___ STOFlow;
 	xml::writer Writer;
-ERRBegin
+qRB
 	STOFlow.Init( XML );
 	Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
 
 	Writer.PutValue( Message, "Content" );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhagt::agent___::RawAlert( const str::string_ &Message )
 {
-ERRProlog
+qRH
 	str::string XML, XSL;
-ERRBegin
+qRB
 	XML.Init();
 
 	SetXML_( Message, XML );
@@ -125,17 +125,17 @@ ERRBegin
 	XSL.Append("<xsl:output method=\"xml\" encoding=\"UTF-8\"/><xsl:template match=\"/\"><span><xsl:value-of select=\".\"></span></xsl:template></xsl:stylesheet>");
 
 	Alert( XML, XSL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ xdhagt::agent___::RawConfirm( const str::string_ &Message )
 {
 	bso::bool__ Confirmed = false;
-ERRProlog
+qRH
 	str::string XML, XSL;
-ERRBegin
+qRB
 	XML.Init();
 
 	SetXML_( Message, XML );
@@ -144,23 +144,23 @@ ERRBegin
 	XSL.Append("<xsl:output method=\"xml\" encoding=\"UTF-8\"/><xsl:template match=\"/\"><span><xsl:value-of select=\".\"></span></xsl:template></xsl:stylesheet>");
 
 	Confirmed = Confirm( XML, XSL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Confirmed;
 }
 
 void xdhagt::agent___::Log( const str::string_ &RawMessage )
 {
-ERRProlog
+qRH
 	str::string Message;
-ERRBegin
+qRB
 	Message.Init();
 	xdhcbk::Escape( RawMessage, Message, '"' );
 
 	_C().Log( _UP, Message );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

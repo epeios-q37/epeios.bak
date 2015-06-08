@@ -132,7 +132,7 @@ namespace sclfrntnd {
 				Mode = fblfrd::mRemote;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 

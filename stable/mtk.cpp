@@ -53,14 +53,14 @@ namespace {
 
 static int32 ThreadFunction_( void *D )
 {
-ERRProlog
+qRH
 	mtk__thread_struct TS = *((mtk__thread_struct *)D);
-ERRBegin
+qRB
 	mtx::Unlock( TS.MH );
 	TS.R( TS.UP );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return 0;
 }
 
@@ -68,11 +68,11 @@ static void LaunchThread_(
 	mtk__routine Routine,
 	void *UP )
 {
-ERRProlog
+qRH
 	thread_id ID;
 	mtk__thread_struct TS;
 	sph__semaphore_ S;
-ERRBegin
+qRB
 	TS.R = Routine;
 	TS.UP = UP;
 	TS.SD = SPHCreate();
@@ -82,37 +82,37 @@ ERRBegin
 	S.Lock();	// Unlocked by 'ThreadFunction'.
 	
 	if ( ( ID = spawn_thread( ThreadFunction_, NULL, suggest_thread_priority(), &TS ) ) < B_OK )
-		ERRSys();
+		qRSys();
 		
 	if ( resume_thread( ID ) != B_OK )
-		ERRSys();
+		qRSys();
 
 	S.Lock();
 	S.Unlock();
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( TS.SD != SPH_INVALID )
 		SPHDelete( TS.SD );
-ERREpilog
+qRE
 }
 
 #	else
 
 static void *ThreadFunction_( void *D )
 {
-ERRProlog
+qRH
 	thread_struct__ TS = *((thread_struct__ *)D);
-ERRBegin
+qRB
 	mtx::Unlock( TS.MH );
 	TS.R( TS.UP );
 #ifdef MTK__THREADS_REMAIN
 	for(;;)
 		TOLYield();
 #endif
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return NULL;
 }
 
@@ -120,10 +120,10 @@ static void LaunchThread_(
 	mtk__routine Routine,
 	void *UP )
 {
-ERRProlog
+qRH
 	pthread_t TID;
 	thread_struct__ TS;
-ERRBegin
+qRB
 	TS.R = Routine;
 	TS.UP = UP;
 	TS.MH = mtx::Create();
@@ -134,21 +134,21 @@ ERRBegin
 	case 0:
 		break;
 	case EAGAIN:
-		ERRSys();
+		qRSys();
 		break;
 	default:
-		ERRSys();
+		qRSys();
 		break;
 	}
 
 	mtx::Lock( TS.MH );
 	mtx::Unlock( TS.MH );
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( TS.MH != MTX_INVALID_HANDLER )
 		mtx::Delete( TS.MH );
-ERREpilog
+qRE
 }
 #	endif
 
@@ -158,19 +158,19 @@ void mtk::LaunchAndKill(
 	mtk__routine Routine,
 	void *UP )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 #ifdef MTK__WIN
 	if ( _beginthread( Routine, 0, UP ) == (unsigned long)-1 )
-		ERRSys();
+		qRSys();
 #elif defined( MTK__POSIX )
 	LaunchThread_( Routine, UP );
 #else
 #	error
 #endif
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 namespace {
@@ -191,9 +191,9 @@ namespace {
 	
 	void Create_( void )
 	{
-	ERRProlog
+	qRH
 		mtx::mutex___ Mutex;
-	ERRBegin
+	qRB
 		Common.Thread = Common.Data = Common.Store = Common.Exclusion = MTX_INVALID_HANDLER;
 
 		Common.Continue = true;
@@ -208,7 +208,7 @@ namespace {
 		mtx::Lock( Common.Thread );
 
 		mtx::Lock( Common.Store );
-	ERRErr
+	qRR
 		if ( Common.Data != MTX_INVALID_HANDLER )
 			mtx::Delete( Common.Data );
 
@@ -220,8 +220,8 @@ namespace {
 			
 		if ( Common.Exclusion != MTX_INVALID_HANDLER )
 			mtx::Delete( Common.Exclusion );
-	ERREnd
-	ERREpilog
+	qRT
+	qRE
 	}
 
 	void Close_( void )
@@ -251,10 +251,10 @@ namespace {
 	// Les exceptions devraient avoir t traites en aval.
 	void Launcher_( void * )
 	{
-	ERRProlog
+	qRH
 		void *RUP;
 		mtk::routine__ Routine;
-	ERRBegin
+	qRB
 		mtx::Lock( Common.Data );	// To ensure that data are available.
 	
 		do {
@@ -270,7 +270,7 @@ namespace {
 			mtx::Lock( Common.Data );	// To ensure that nobody else is accessing data.
 			
 			if ( Common.Amount == BSO_UINT_MAX )
-				ERRLmt();
+				qRLmt();
 				
 			Common.Amount++;// One more thread available.
 			
@@ -288,9 +288,9 @@ namespace {
 		
 		mtx::Unlock( Common.Store );
 		
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 }
 

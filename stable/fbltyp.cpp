@@ -117,7 +117,7 @@ namespace {
 
 		PutSize_( S.Amount(), OFlow );
 
-		while( P != E_NIL ) {
+		while( P != qNIL ) {
 			_Put( S( P ), OFlow );
 			P = S.Next( P );
 		}
@@ -328,7 +328,7 @@ namespace {
 
 		PutSize_( C.Amount(), OFlow );
 
-		while ( P != E_NIL ) {
+		while ( P != qNIL ) {
 			Put_( Item( P ), OFlow );
 			P = C.Next( P );
 		}

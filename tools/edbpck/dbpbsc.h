@@ -32,7 +32,7 @@ namespace dbpbsc {
 
 		Item.Init( Container );
 
-		while ( ( Row != E_NIL ) && ( Item( Row ).Label != Label ) )
+		while ( ( Row != qNIL ) && ( Item( Row ).Label != Label ) )
 			Row = Container.Next( Row );
 
 		return Row;

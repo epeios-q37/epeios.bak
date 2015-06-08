@@ -115,7 +115,7 @@ namespace dte {
 			return "YYYYMMDD";
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			return NULL;	// Pour viter un warning.
 			break;
 		}

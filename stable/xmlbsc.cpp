@@ -32,16 +32,16 @@ static void Init_(
 	const char *Suffix,
 	fls::id__ ID )
 {
-ERRProlog
+qRH
 	fnm::name___ FileName;
 	TOL_CBUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	sprintf( Buffer, "%s%s", Name, Discriminator );
 
 	Driver.Init( ID, fnm::BuildFileName( Directory, Buffer, Suffix, FileName ).UTF8( FileNameBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -51,11 +51,11 @@ void xmlbsc::file_memory_drivers::Init(
 	const char *Directory,
 	const char *Suffix )
 {
-ERRProlog
+qRH
 	char *Buffer = NULL;
-ERRBegin
+qRB
 	if ( ( Buffer = (char *)malloc( strlen( Name ) + 2 ) ) == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Init_( DTree.Tree, Buffer, "T", Name, Directory, Suffix, ID );
 	Init_( DTree.Queue, Buffer, "Q", Name, Directory, Suffix, ID );
@@ -64,9 +64,9 @@ ERRBegin
 	Init_( Container.Dynamics.Descriptors, Buffer, "D", Name, Directory, Suffix, ID );
 	Init_( Container.Dynamics.Multimemory, Buffer, "M", Name, Directory, Suffix, ID );
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Buffer != NULL )
 		free( Buffer );
-ERREpilog
+qRE
 }

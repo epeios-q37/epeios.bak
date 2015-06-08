@@ -98,7 +98,7 @@ namespace frdbkd {
 				Mode = fblfub::mRemote;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -128,7 +128,7 @@ namespace frdbkd {
 		}
 		void ThrowERRFwk( void )
 		{
-			_Backend.ThrowERRFwk();
+			_Backend.ThrowqRFwk();
 		}
 	};
 

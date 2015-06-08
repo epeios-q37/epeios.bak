@@ -225,7 +225,7 @@ namespace xpp {
 
 			NamesItem.Init( Names );
 
-			while ( ( Row!= E_NIL ) && ( NamesItem( Row ) != Name ) )
+			while ( ( Row!= qNIL ) && ( NamesItem( Row ) != Name ) )
 				Row = Names.Next( Row );
 
 			return Row;
@@ -254,7 +254,7 @@ namespace xpp {
 			FileNames.reset( P );
 			Contents.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Names.plug( AS );
 			Positions.plug( AS );
@@ -281,7 +281,7 @@ namespace xpp {
 		{
 			_rrow__ Row = _Locate( Name );
 
-			if ( Row != E_NIL ) {
+			if ( Row != qNIL ) {
 				Names.Remove( Row );
 				Positions.Remove( Row );
 				FileNames.Remove( Row );
@@ -298,27 +298,27 @@ namespace xpp {
 			const str::string_ &Content )
 		{
 			bso::bool__ AlreadyExists = false;
-		ERRProlog
+		qRH
 			str::string Buffer;
-			_rrow__ Row = E_NIL;
-		ERRBegin
+			_rrow__ Row = qNIL;
+		qRB
 			AlreadyExists = Delete( Name );
 
 			Row = Names.Append( Name );
 
 			if ( Row != Positions.Append( Position ) )
-				ERRFwk();
+				qRFwk();
 
 			Buffer.Init();
 
 			if ( Row != FileNames.Append(FileName.UTF8( Buffer ) ) )
-				ERRFwk();
+				qRFwk();
 
 			if ( Row != Contents.Append( Content ) )
-				ERRFwk();
-		ERRErr
-		ERREnd
-		ERREpilog
+				qRFwk();
+		qRR
+		qRT
+		qRE
 			return AlreadyExists;
 		}
 		bso::bool__ Get(
@@ -329,7 +329,7 @@ namespace xpp {
 		{
 			_rrow__ Row = _Locate( Name );
 
-			if ( Row == E_NIL )
+			if ( Row == qNIL )
 				return false;
 
 			Position = Positions.Get( Row );
@@ -356,7 +356,7 @@ namespace xpp {
 
 			NamesItem.Init( Names );
 
-			while ( ( Row != E_NIL ) && ( NamesItem( Row ) != Name ) )
+			while ( ( Row != qNIL ) && ( NamesItem( Row ) != Name ) )
 				Row = Names.Next( Row );
 
 			return Row;
@@ -387,10 +387,10 @@ namespace xpp {
 		{
 			_vrow__ Row = _Locate( Name );
 
-			if ( Row == E_NIL ) {
+			if ( Row == qNIL ) {
 				Row = Names.Append( Name );
 				if ( Row != Values.Append( Value ) )
-				ERRFwk();
+				qRFwk();
 			} else {
 				Values( Row ) = Value;
 				Values.Flush();
@@ -402,18 +402,18 @@ namespace xpp {
 		{
 			_vrow__ Row = _Locate( Name );
 
-			if ( Row != E_NIL ) {
+			if ( Row != qNIL ) {
 				ctn::E_CMITEMt( str::string_, _vrow__ ) ValuesItem;
 				ValuesItem.Init( Values );
 
 				Value.Append( ValuesItem( Row ) );
 			}
 
-			return Row != E_NIL;
+			return Row != qNIL;
 		}
 		bso::bool__ Exists( const str::string_ &Name ) const
 		{
-			return _Locate( Name ) != E_NIL;
+			return _Locate( Name ) != qNIL;
 		}
 		bso::bool__ IsEqual(
 			const str::string_ &Name,
@@ -422,8 +422,8 @@ namespace xpp {
 			ctn::E_CMITEMt( str::string_, _vrow__ ) ValuesItem;
 			_vrow__ Row = _Locate( Name );
 
-			if ( Row == E_NIL )
-				ERRFwk();
+			if ( Row == qNIL )
+				qRFwk();
 
 			ValuesItem.Init( Values );
 
@@ -599,7 +599,7 @@ namespace xpp {
 		_extended_parser___ *Parser = new _extended_parser___( Repository, Variables, Directives );
 
 		if ( Parser == NULL )
-			ERRAlc();
+			qRAlc();
 
 		return Parser;
 	}
@@ -671,7 +671,7 @@ namespace xpp {
 		{
 #ifdef XPP_DBG
 			if ( _CurrentParser == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_CurrentParser;
 		}
@@ -679,7 +679,7 @@ namespace xpp {
 		{
 #ifdef XPP_DBG
 			if ( _CurrentParser == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_CurrentParser;
 		}
@@ -736,7 +736,7 @@ namespace xpp {
 			_CurrentParser = NewParser( _Repository, _Variables, _Directives );
 			_Parsers.Init();
 			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve ) != sOK )
-				ERRFwk();
+				qRFwk();
 			_Status = sOK;
 
 		}
@@ -788,15 +788,15 @@ namespace xpp {
 		const preprocessing_iflow___ &PFlow,
 		lcl::meaning_ &Meaning )
 	{
-	ERRProlog
+	qRH
 		context___ Context;
-	ERRBegin
+	qRB
 		Context.Init();
 
 		GetMeaning( PFlow.GetContext( Context ), Meaning );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	status__ Encrypt(
@@ -833,15 +833,15 @@ namespace xpp {
 		xml::writer_ &Writer )
 	{
 		status__ Status = s_Undefined;
-	ERRProlog
+	qRH
 		context___ Context;
-	ERRBegin
+	qRB
 		Context.Init();
 
 		Status = Process( XFlow, Criterions, Writer, Context );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Status;
 	}
 
@@ -852,15 +852,15 @@ namespace xpp {
 		txf::text_oflow__ &OFlow )
 	{
 		status__ Status = s_Undefined;
-	ERRProlog
+	qRH
 		context___ Context;
-	ERRBegin
+	qRB
 		Context.Init();
 
 		Status =  Process( XFlow, Criterions, Outfit, OFlow, Context );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Status;
 	}
 

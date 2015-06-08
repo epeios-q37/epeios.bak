@@ -40,14 +40,14 @@ void xhtfmn::GetContent(
 static frdbse::project_type__ GetProjectType_( xhtagent::agent_core___ &Agent )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	ProjectType = frdbse::GetProjectType( Agent.GetSelectValue( ProjectTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -67,9 +67,9 @@ frdbse::project_type__ xhtfmn::GetProjectFeatures(
 	str::string_ &ProjectFeature )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( ProjectType = GetProjectType_( Agent ) ) {
 	case frdbse::ptNew:
 		break;
@@ -80,12 +80,12 @@ ERRBegin
 		ProjectFeature.Append( Agent.GetValue( UserProjectId, Buffer ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -93,12 +93,12 @@ void xhtfmn::DisplaySelectedProjectFileName(
 	xhtagent::agent_core___ &Agent,
 	const char *Id )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
 	xhtcllbk::params Params;
 	xhtcllbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Params.Init();
 	xhtcllbk::Split( str::string( Agent.GetAttribute( Id, xhtcllbk::ResultAttribute, Buffer ) ), Params );
 
@@ -109,7 +109,7 @@ ERRBegin
 
 	if ( FileName.Amount() != 0 )
 		Agent.SetValue( UserProjectId, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

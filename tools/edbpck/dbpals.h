@@ -31,14 +31,14 @@ namespace dbpals {
 		{
 			Label.reset( P );
 
-			S_.TableRow = E_NIL;
-			S_.RecordRow = E_NIL;
+			S_.TableRow = qNIL;
+			S_.RecordRow = qNIL;
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Label.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_  &AS )
+		void plug( qAS_  &AS )
 		{
 			Label.plug( AS );
 		}
@@ -94,13 +94,13 @@ namespace dbpals {
 		{
 			Label.reset( P );
 
-			S_.TableRow = E_NIL;
+			S_.TableRow = qNIL;
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Label.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Label.plug( AS );
 		}
@@ -152,7 +152,7 @@ namespace dbpals {
 			Records.reset( P );
 			Tables.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Records.plug( AS );
 			Tables.plug( AS );

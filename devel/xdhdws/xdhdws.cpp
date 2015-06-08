@@ -28,19 +28,19 @@ namespace {
 		const nstring___ &Message,
 		str::string_ &XML )
 	{
-	ERRProlog
+	qRH
 		flx::E_STRING_TOFLOW___ STOFlow;
 		xml::writer Writer;
 		str::string Buffer;
-	ERRBegin
+	qRB
 		STOFlow.Init( XML );
 		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
 
 		Buffer.Init();
 		Writer.PutValue( Message.UTF8( Buffer ), "Content" );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	inline void SetXSL_( str::string_ &XSL )
@@ -60,9 +60,9 @@ namespace {
 
 void xdhdws::proxy__::Alert( const nstring___ &Message )
 {
-ERRProlog
+qRH
 	str::string XML, XSL;
-ERRBegin
+qRB
 	XML.Init();
 	SetXML_( Message, XML );
 
@@ -70,17 +70,17 @@ ERRBegin
 	SetXSL_( XSL );
 
 	Alert( XML, XSL, NULL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ xdhdws::proxy__::Confirm( const nstring___ &Message )
 {
 	bso::bool__ Confirmed = false;
-ERRProlog
+qRH
 	str::string XML, XSL;
-ERRBegin
+qRB
 	XML.Init();
 	SetXML_( Message, XML );
 	
@@ -88,9 +88,9 @@ ERRBegin
 	SetXSL_( XSL );
 
 	Confirmed = Confirm( XML, XSL, NULL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Confirmed;
 }
 
@@ -104,14 +104,14 @@ void xdhdws::prolog::GetContent(
 static frdbse::project_type__ GetProjectType_( proxy__ &Proxy )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	ProjectType = frdbse::GetProjectType( Proxy.GetContent( prolog::ProjectTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -131,9 +131,9 @@ frdbse::project_type__ xdhdws::prolog::GetProjectFeatures(
 	str::string_ &ProjectFeature )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( ProjectType = GetProjectType_( Proxy ) ) {
 	case frdbse::ptNew:
 		break;
@@ -144,12 +144,12 @@ ERRBegin
 		ProjectFeature.Append( Proxy.GetContent( UserProjectId, Buffer ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -157,12 +157,12 @@ void xdhdws::prolog::DisplaySelectedProjectFileName(
 	proxy__ &Proxy,
 	const char *Id )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
 	xdhcbk::args Args;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xdhcbk::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
 
@@ -175,9 +175,9 @@ ERRBegin
 
 	if ( FileName.Amount() != 0 )
 		Proxy.SetContent( UserProjectId, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhdws::login::GetContent(
@@ -190,14 +190,14 @@ void xdhdws::login::GetContent(
 static frdbse::backend_type__ GetBackendType_( proxy__ &Proxy )
 {
 	frdbse::backend_type__ BackendType = frdbse::bt_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	BackendType = frdbse::GetBackendType( Proxy.GetContent( login::BackendTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return BackendType;
 }
 
@@ -217,9 +217,9 @@ frdbse::backend_type__ xdhdws::login::GetBackendFeatures(
 	str::string_ &Feature )
 {
 	frdbse::backend_type__ Type = frdbse::bt_Undefined;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( Type = GetBackendType_( Proxy ) ) {
 	case frdbse::btDaemon:
 		Feature.Append( Proxy.GetContent( DaemonBackendId, Buffer ) );
@@ -231,12 +231,12 @@ ERRBegin
 		Feature.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Type;
 }
 
@@ -244,12 +244,12 @@ void xdhdws::login::DisplaySelectedEmbeddedBackendFileName(
 	proxy__ &Proxy,
 	const char *Id )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
 	xdhcbk::args Args;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xdhcbk::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
 
@@ -262,9 +262,9 @@ ERRBegin
 
 	if ( FileName.Amount() != 0 )
 		Proxy.SetContent( EmbeddedBackendId, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 

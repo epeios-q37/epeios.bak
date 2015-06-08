@@ -164,14 +164,14 @@ namespace csdsnc {
 			const _flow___ *Flow )
 		{
 			if ( S_.Log.Callback != NULL ) {
-ERRProlog
-ERRBegin
+qRH
+qRB
 				_Lock( S_.Log.Mutex );
 				S_.Log.Callback->Log( Log, Flow, Flows.Amount() );
-ERRErr
-ERREnd
+qRR
+qRT
 				_Unlock( S_.Log.Mutex );
-ERREpilog
+qRE
 			}
 		}
 	public:
@@ -225,17 +225,17 @@ ERREpilog
 			S_.Ping.Delay = 0;
 			S_.Ping.Mutex = CSDSNC_NO_MUTEX;
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Flows.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Flows.plug( AS );
 		}
 		core_ &operator =( const core_ &C )
 		{
-			ERRFbd();
+			qRFbd();
 
 			return *this;
 		}
@@ -247,7 +247,7 @@ ERREpilog
 			reset();
 
 			if ( ( S_.HostService = (char *)malloc( strlen( HostService ) + 1 ) ) == NULL )
-				ERRAlc();
+				qRAlc();
 
 			strcpy( S_.HostService, HostService );
 
@@ -283,11 +283,11 @@ ERREpilog
 		_flow___ *Get( err::handling__ ErrorHandling = err::h_Default )
 		{
 			_flow___ *Flow = NULL;
-		ERRProlog
+		qRH
 			log__ Log = l_Undefined;
 			bso::bool__ Locked = false;
 			sck::socket__ Socket = SCK_INVALID_SOCKET;
-		ERRBegin
+		qRB
 			_Lock( S_.MainMutex );
 			Locked = true;
 
@@ -298,12 +298,12 @@ ERREpilog
 				Flow = new _flow___;
 
 				if ( Flow == NULL )
-					ERRAlc();
+					qRAlc();
 
 				if ( ( Socket = csdbnc::Connect( S_.HostService, ErrorHandling ) ) == SCK_INVALID_SOCKET ) {
 					delete Flow;
 					Flow = NULL;
-					ERRReturn;
+					qRReturn;
 				}
 
 				Flow->Init( Socket );
@@ -315,15 +315,15 @@ ERREpilog
 			Locked = false;
 
 			_Log( Log, Flow );
-		ERRErr
+		qRR
 			if ( Flow != NULL ) {
 				delete Flow;
 				Flow = NULL;
 			}
-		ERREnd
+		qRT
 			if ( Locked )
 				_Unlock( S_.MainMutex );
-		ERREpilog
+		qRE
 
 			return Flow;
 		}
@@ -365,7 +365,7 @@ ERREpilog
 		{
 #ifdef CSDSNC_DBG
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 
 			_Flow->Commit();
@@ -373,7 +373,7 @@ ERREpilog
 			if ( _Id == CSDSNB_UNDEFINED )
 				_Id = GetId( *_Flow );
 			else if ( _Flow->Get() != 0 )
-				ERRDta();
+				qRFwk();
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(

@@ -79,33 +79,33 @@ namespace trunk {
 		}
 		void ReportAndAbort( const lcl::meaning_ &Meaning )
 		{
-		ERRProlog
+		qRH
 			str::string Translation;
-		ERRBegin
+		qRH
 			Translation.Init();
 			scllocale::GetTranslation( Meaning, Language(), Translation );
 
 			UI().Alert( Translation );
 
-			ERRAbort();
-		ERRErr
-		ERREnd
-		ERREpilog
+			qRAbort();
+		qRR
+		qRT
+		qRE
 		}
 		void ReportAndAbort( const char *Text )
 		{
-		ERRProlog
+		qRH
 			str::string Translation;
-		ERRBegin
+		qRH
 			Translation.Init();
 			scllocale::GetTranslation( Text, Language(), Translation );
 
 			UI().Alert( Translation );
 
-			ERRAbort();
-		ERRErr
-		ERREnd
-		ERREpilog
+			qRAbort();
+		qRR
+		qRT
+		qRE
 		}
 		void FinalizeGoToHome( void )
 		{

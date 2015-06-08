@@ -53,14 +53,14 @@ namespace plgn {
 		plgncore::callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}
 		void _ReleasePlugin( void )
 		{
 			if ( _Plugin == NULL )
-				ERRFwk();
+				qRFwk();
 
 			_C().ReleasePlugin( _Plugin );
 		}
@@ -69,7 +69,7 @@ namespace plgn {
 			plgncore::plugin_identification *Function = dlbrry::GetFunction<plgncore::plugin_identification *>( E_STRING( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME ), _Library );
 
 			if ( Function == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return !strcmp(plugin::Identification(), Function() );
 		}
@@ -92,44 +92,44 @@ namespace plgn {
 			const rgstry::entry__ &Locale,
 			err::handling__ ErrHandling = err::h_Default )
 		{
-		ERRProlog
+		qRH
 			plgncore::data__ Data;
 			TOL_CBUFFER___ Buffer;
 			plgncore::retrieve_callback *Function = NULL;
-		ERRBegin
+		qRB
 			if ( !_Library.Init( PluginNameAndLocation, ErrHandling ) )
 				return NULL;
 
 			if ( !_IsCompatible() )
 				if ( ErrHandling == err::hThrowException )
-					ERRFwk();
+					qRFwk();
 				else
 					return false;
 
 			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), _Library );
 
 			if ( Function == NULL )
-				ERRFwk();
+				qRFwk();
 
 			_Callback = &Function();
 
-			Data.Init( err::ERRError, sclerror::SCLERRORError, Configuration, Locale );
+			Data.Init( err::qRRor, sclerror::SCLERRORError, Configuration, Locale );
 
 			_C().Initialize( &Data, NULL );
 
 			_Plugin = (plugin *)_C().RetrievePlugin();
 
 			if ( ( _Plugin == NULL) && ( ErrHandling == err::hThrowException ) )
-				ERRFwk();
-		ERRErr
-		ERREnd
-		ERREpilog
+				qRFwk();
+		qRR
+		qRT
+		qRE
 			return _Plugin != NULL;
 		}
 		plugin &Plugin( void )
 		{
 			if ( _Plugin == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Plugin;
 		}

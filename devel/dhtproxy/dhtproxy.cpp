@@ -35,11 +35,11 @@ bso::bool__ dhtproxy::proxy___::Init(
 	const char *Identification )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	xhtcllbk::shared_data__ Data;
 	fnm::name___ Location;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Location.Init();
 	Data.Init( DHTPROXYGetProxyCallback(), Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ) );
 
@@ -48,19 +48,19 @@ ERRBegin
 	retrieve *Retrieve = dlbrry::GetFunction<retrieve *>( E_STRING( XHTCLLBK_RETRIEVE_FUNCTION_NAME ), _Library );
 
 	if ( Retrieve == NULL )
-		ERRReturn;
+		qRReturn;
 
     _Callback = Retrieve();
 
 	if ( _Callback == NULL )
-		ERRFwk();
+		qRFwk();
 
 	_Callback->Initialize( Data );
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 

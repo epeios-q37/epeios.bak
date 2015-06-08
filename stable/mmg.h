@@ -85,7 +85,7 @@ namespace mmg
 
 	// Pilote mmoire  usage interne.
 	template <typename st> class merger_memory_driver_
-	: public sdr::E_SDRIVER__
+	: public qSD__
 	{
 	private:
 		// Pointeur sur la partie statique de l'objet  sauver.
@@ -103,7 +103,7 @@ namespace mmg
 			if ( Size >= sizeof( st ) )
 				Size -= sizeof( st );
 			else if ( Size != 0 )
-				ERRFwk();
+				qRFwk();
 
 			return Size;
 		}
@@ -128,7 +128,7 @@ namespace mmg
 		uys::untyped_storage_ Memory;
 		void reset( bool P = true )
 		{
-			E_SDRIVER__::reset( P );
+			qSD__::reset( P );
 			Memory.reset( P );
 			Static_ = NULL;
 		}
@@ -142,11 +142,11 @@ namespace mmg
 		{
 			reset();
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Memory.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Memory.plug( AS );
 		}
@@ -155,7 +155,7 @@ namespace mmg
 			rule Regle )
 		{
 			Static_ = Static;
-			sdr::E_SDRIVER__::Init();
+			qSD__::Init();
 			Memory.Init();
 
 			if ( Regle == mmg::rCreation )
@@ -166,7 +166,7 @@ namespace mmg
 			else if ( Regle == mmg::rRecovery ) {
 				RecupererStatique();
 			} else
-				ERRPrm();
+				qRFwk();
 		}
 		void StockerStatique( void )
 		{
@@ -188,7 +188,7 @@ namespace mmg
 		void Immortalize( void )
 		{
 			reset( false );
-			plug( *(sdr::E_SDRIVER__ *)NULL );
+			plug( *(qSD__ *)NULL );
 		}
 
 	};
@@ -249,12 +249,12 @@ namespace mmg
 
 		}
 		//f Utilisation de 'Pilote' comme pilote mmoire.
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Driver_.plug( SD );
 			Memoire.plug( Driver_ );	// Notamment pour initialiser correctement le 'size'.
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Driver_.plug( AS );
 			Memoire.plug( Driver_ );
@@ -286,7 +286,7 @@ namespace mmg
 		}
 		memory_merger_ &operator =( const memory_merger_ & )
 		{
-			ERRFwk();
+			qRFwk();
 
 			return *this;	// Only to avoid a warning.
 		}
@@ -386,13 +386,13 @@ namespace mmg
 		{
 			PiloteFichier_.Mode( Mode );
 		}
-		void plug( sdr::E_SDRIVER__ & )
+		void plug( qSD__ & )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		void State( mmg::state )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 	};
 

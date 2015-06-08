@@ -105,7 +105,7 @@ const char *mscmld::GetPitchNameLabel( pitch_name__ Name )
 		return "r";
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -125,7 +125,7 @@ const char *mscmld::GetPitchAccidentalLabel( pitch_accidental__ Accidental )
 		return "Sharp";
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -138,15 +138,15 @@ static mthfrc::fraction_ &GetFraction_(
 	tuplet__ Tuplet,
 	mthfrc::fraction_ &Result )
 {
-ERRProlog
+qRH
 	mthfrc::fraction Dot, Buffer;
-ERRBegin
+qRB
 	if ( Base >= 1 )
 		Result.Init( 1, 1 << ( Base - 1 ) );
 	else if ( Base < 1 )
 		Result.Init( 1 << Base );
 	else
-		ERRFwk();
+		qRFwk();
 
 	Dot.Init();
 	Buffer.Init();
@@ -165,9 +165,9 @@ ERRBegin
 		mthfrc::Div( Result, mthfrc::fraction( Tuplet.Denominator ), Buffer );
 		mthfrc::Mul( Buffer, mthfrc::fraction( Tuplet.Numerator ), Result );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -176,7 +176,7 @@ static inline mthfrc::fraction_ &GetFraction_(
 	mthfrc::fraction_ &Result )
 {
 	if ( Duration.Base == 0 )
-		ERRFwk();
+		qRFwk();
 
 	return GetFraction_( Duration.Base, Duration.Modifier, Duration.Tuplet, Result );
 }
@@ -186,12 +186,12 @@ duration__ FindDuration_(
 	bso::bool__ AlwaysTied )
 {
 	duration__ Duration;
-ERRProlog
+qRH
 	bso::u8__ Base = 0;
 	bso::u8__ Dot = 0;
 	bso::bool__ Continue = true;
 	mthfrc::fraction Candidate, Buffer;
-ERRBegin
+qRB
 	Base = 1;
 	Dot = 2;
 
@@ -210,14 +210,14 @@ ERRBegin
 			case 0:
 				if ( Base == 7 ) {
 					Duration = duration__();
-					ERRReturn;
+					qRReturn;
 				} else {
 					Base++;
 					Dot = 2;
 				}
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			break;
@@ -226,25 +226,25 @@ ERRBegin
 			Buffer.Init();
 			Buffer = Fraction;
 			mthfrc::Sub( Buffer, Candidate, Fraction );
-			ERRReturn;
+			qRReturn;
 			break;
 		case 1:
 			Duration = duration__( Base, Dot, true );
 			Buffer.Init();
 			Buffer = Fraction;
 			mthfrc::Sub( Buffer, Candidate, Fraction );
-			ERRReturn;
+			qRReturn;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Fraction.GetSign() < 0 )
-		ERRFwk();
-ERREpilog
+		qRFwk();
+qRE
 	return Duration;
 }
 
@@ -257,10 +257,10 @@ static void HandleOverflow_(
 	mthfrc::fraction_ &Bar,
 	melody_ &Melody )
 {
-ERRProlog
+qRH
 	mthfrc::fraction Buffer;
 	duration__ Duration;
-ERRBegin
+qRB
 	Buffer.Init();
 
 	Buffer = Note;
@@ -268,13 +268,13 @@ ERRBegin
 	mthfrc::Sub( Buffer, Bar, Note );
 
 	if ( Note.GetSign() != 1 )
-		ERRFwk();
+		qRFwk();
 
 	while ( Bar.GetSign() != 0 ) {
 		Duration = FindDuration_( Bar, true );
 
 		if ( !Duration.IsValid() )
-			ERRLmt();
+			qRLmt();
 
 		Melody.Append( note__( Pitch, Duration, Signature ) );
 	}
@@ -288,36 +288,36 @@ ERRBegin
 	mthfrc::Sub( Buffer, Note, Bar );
 
 	if ( Bar.GetSign() != 1 )
-		ERRLmt();
+		qRLmt();
 
 	while ( Note.GetSign() != 0 ) {
 		Duration = FindDuration_( Note, false );
 
 		if ( !Duration.IsValid() )
-			ERRLmt();
+			qRLmt();
 
 		Melody.Append( note__( Pitch, Duration, Signature ) );
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void mscmld::SplitToMatchBars(
 	const melody_ &Source,
 	melody_ &Target )
 {
-ERRProlog
-	row__ Row = E_NIL;
+qRH
+	row__ Row = qNIL;
 	mthfrc::fraction Bar, Note, Buffer;
 	signature_time__ Time;
-ERRBegin
+qRB
 	Row = Source.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( !Source( Row ).IsValid() )
-			ERRFwk();
+			qRFwk();
 
 		if ( Time != Source( Row ).Signature.Time ) {
 			Time = Source( Row ).Signature.Time;
@@ -347,15 +347,15 @@ ERRBegin
 
 		Row = Source.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static bso::u8__ GetChromaticAbsolute_( const pitch__ &Pitch )
 {
 	if ( ( BSO_U8_MAX / 12 ) < Pitch.Octave )
-		ERRFwk();
+		qRFwk();
 
 	bso::u8__ Absolute = Pitch.Octave * 12;
 
@@ -384,25 +384,25 @@ static bso::u8__ GetChromaticAbsolute_( const pitch__ &Pitch )
 	case pnRest:
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	switch ( Pitch.Accidental ) {
 		case paFlat:
 			if ( Absolute == 0 )
-				ERRFwk();
+				qRFwk();
 			Absolute--;
 			break;
 		case paNatural:
 			break;
 		case paSharp:
 			if ( Absolute == BSO_U8_MAX )
-				ERRFwk();
+				qRFwk();
 			Absolute++;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 	}
 
@@ -418,7 +418,7 @@ bso::u8__ mscmld::pitch__::GetChromatic( void ) const
 static bso::u8__ GetDiatonicAbsolute_( const pitch__ &Pitch )
 {
 	if ( ( BSO_U8_MAX / 7 ) < Pitch.Octave )
-		ERRFwk();
+		qRFwk();
 
 	bso::u8__ Absolute = Pitch.Octave * 7;
 
@@ -447,7 +447,7 @@ static bso::u8__ GetDiatonicAbsolute_( const pitch__ &Pitch )
 	case pnRest:
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -464,7 +464,7 @@ void mscmld::Merge(
 	drow__ DRow = Durations.First();
 	srow__ SRow = Signatures.First();
 
-	while ( ( PRow != E_NIL ) && ( DRow != E_NIL ) && ( SRow != E_NIL ) ) {
+	while ( ( PRow != qNIL ) && ( DRow != qNIL ) && ( SRow != qNIL ) ) {
 		Notes.Append( note__( Pitches( PRow ), Durations( DRow ), Signatures( SRow ) ) );
 
 		PRow = Pitches.Next( PRow );
@@ -479,14 +479,14 @@ static bso::bool__ Adjust_(
 	bso::bool__ *Error )
 {
 	bso::bool__ BarComplete = false;
-ERRProlog
+qRH
 	mthfrc::fraction Buffer;
-ERRBegin
+qRB
 #ifdef DEBUG
 	cio::cout << BarFraction << txf::tab << NoteFraction << txf::tab << txf::sync;
 #endif
 	if ( *Error )
-		ERRReturn;
+		qRReturn;
 
 	switch ( ( BarFraction - NoteFraction ).GetSign() ) {
 	case -1 :
@@ -501,16 +501,16 @@ ERRBegin
 		mthfrc::Sub( Buffer, NoteFraction, BarFraction );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 #ifdef DEBUG
 	cio::cout << BarFraction << txf::nl;
 #endif
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return BarComplete;
 }
 
@@ -523,9 +523,9 @@ static void Convert_(
 	const mthfrc::fraction_ &RawDuration,
 	anacrousis__ &Anacrousis )
 {
-ERRProlog
+qRH
 	mthfrc::fraction Duration;
-ERRBegin
+qRB
 	Duration.Init( RawDuration );
 
 	Duration.Simplify();
@@ -540,30 +540,30 @@ ERRBegin
 		C( 6 );
 		C( 7 );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	if ( Duration.N.GetU32() >= bso::U8Max )
-		ERRFwk();
+		qRFwk();
 
 	Anacrousis.Amount = (bso::u8__)Duration.N.GetU32();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ mscmld::melody_::MarkAsAnacrousis( err::handling__ Handling )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	mthfrc::fraction Total, Remaining, Note;
 	bso::bool__ BarHandlingError = false;
-	row__ Row = E_NIL;
+	row__ Row = qNIL;
 	bso::bool__ BarIsComplete = false;
-ERRBegin
+qRB
 	if ( IsEmpty() )
-		ERRFwk();
+		qRFwk();
 
 	Row = First();
 
@@ -571,12 +571,12 @@ ERRBegin
 
 	Remaining.Init( Total );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( BarIsComplete )
 			if ( Handling == err::hThrowException )
-				ERRFwk();
+				qRFwk();
 			else
-				ERRReturn;
+				qRReturn;
 
 		Note.Init();
 		GetFraction_( Get( Row ).Duration, Note );
@@ -597,9 +597,9 @@ ERRBegin
 
 	Success = true;
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -742,7 +742,7 @@ static void WriteXML_(
 		Accidental = paSharp;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -824,8 +824,8 @@ write_status__ mscmld::WriteXML(
 	xml::writer_ &Writer )
 {
 	write_status__ Status = wsOK;
-ERRProlog
-	row__ Row = E_NIL;
+qRH
+	row__ Row = qNIL;
 	mthfrc::fraction BarFraction, NoteFraction, Buffer;
 	note__ PreviousNote, Note;
 	bso::bool__ BarClosed = true;
@@ -835,7 +835,7 @@ ERRProlog
 	xml::mark__ Mark = XML_UNDEFINED_MARK;
 	bso::bool__ WriteBar = false;
 	bso::bool__ WriteSignature = false;
-ERRBegin
+qRB
 	Mark = Writer.GetMark();
 
 	Row = Melody.First();
@@ -848,9 +848,9 @@ ERRBegin
 		HandleAnacrousis = true;
 	}
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( !Melody( Row ).IsValid() )
-			ERRFwk();
+			qRFwk();
 
 		if ( Note.IsValid() )
 			if ( Note.Pitch.Name != pnRest )
@@ -866,7 +866,7 @@ ERRBegin
 		if ( Note.Signature != PreviousNote.Signature ) {
 			if ( !BarClosed && ( PreviousNote.IsValid() ) ) {
 				Status = wsBarChekError;
-				ERRReturn;
+				qRReturn;
 			}
 			WriteSignature = true;
 		}
@@ -881,7 +881,7 @@ ERRBegin
 				Buffer.Init( BarFraction );
 
 				if ( !Melody.Anacrousis().IsValid() )
-					ERRFwk();
+					qRFwk();
 
 				NoteFraction.Init( Melody.Anacrousis().Amount, 1 << ( Melody.Anacrousis().Base - 1 ) );
 				Adjust_( Buffer, NoteFraction, &BarHandlingError );
@@ -944,12 +944,12 @@ ERRBegin
 
 	if ( Note.Duration.Tuplet.IsValid() )
 		Writer.PopTag( TupletControl );
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Mark != XML_UNDEFINED_MARK )
 		if ( Mark != Writer.GetMark() )
 			Writer.Rewind( Mark );
-ERREpilog
+qRE
 	return Status;
 }
 
@@ -957,11 +957,11 @@ static parse_status__ GetKeyRaw_(
 	const str::string_ &Raw,
 	signature_key__ &Key )
 {
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	Key = Raw.ToS8( &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		return psBadValue;
 	else if ( Key > 7 )
 		return psBadValue;
@@ -995,11 +995,11 @@ static parse_status__ ParseKey_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != KEY_TAG )
-				ERRFwk();
+				qRFwk();
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1014,11 +1014,11 @@ static parse_status__ GetU8(
 	const str::string_ &Value,
 	bso::u8__ &U8 )
 {
-	sdr::row__ Error E_NIL;
+	sdr::row__ Error qNIL;
 
 	U8 = Value.ToU8( &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		return psBadValue;
 
 	return psOK;
@@ -1032,7 +1032,7 @@ static parse_status__ ParseTime_(
 	bso::bool__ Continue = true;
 	bso::s8__ RawNumerator = MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR;
 	bso::u8__ DenominatorPower = MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -1046,7 +1046,7 @@ static parse_status__ ParseTime_(
 
 				RawNumerator = Parser.Value().ToS8( &Error );
 
-				if ( Error != E_NIL )
+				if ( Error != qNIL )
 					Status = psBadValue;
 			} else if ( Parser.AttributeName() == DENOMINATOR_POWER_ATTRIBUTE ) {
 				if ( DenominatorPower != MSCMLD_UNDEFINED_TIME_SIGNATURE_DENOMINATOR_POWER )
@@ -1054,7 +1054,7 @@ static parse_status__ ParseTime_(
 
 				DenominatorPower = Parser.Value().ToU8();
 
-				if ( Error != E_NIL )
+				if ( Error != qNIL )
 					Status = psBadValue;
 			}
 			break;
@@ -1063,7 +1063,7 @@ static parse_status__ ParseTime_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != TIME_TAG )
-				ERRFwk();
+				qRFwk();
 
 			if ( RawNumerator == MSCMLD_UNDEFINED_TIME_SIGNATURE_NUMERATOR )
 				Status = psMissingSignatureTimeRawNumerator;
@@ -1075,7 +1075,7 @@ static parse_status__ ParseTime_(
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 		}
 
 		if ( Status != psOK )
@@ -1090,11 +1090,11 @@ static parse_status__ ParseSignature_(
 	signature__ &Signature )
 {
 	parse_status__ Status = psOK;
-ERRProlog
+qRH
 	signature_key__ Key = MSCMLD_UNDEFINED_KEY_SIGNATURE;
 	signature_time__ Time;
 	bso::bool__ Continue = true;
-ERRBegin
+qRB
 	Initialize( Key );
 	Time.Init();
 
@@ -1122,7 +1122,7 @@ ERRBegin
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != SIGNATURE_TAG )
-				ERRFwk();
+				qRFwk();
 
 			if ( !IsValid( Key ) )
 				Status = psMissingSignatureKey;
@@ -1137,13 +1137,13 @@ ERRBegin
 
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1175,10 +1175,10 @@ static pitch_accidental__ GetPitchAccidental_( const str::string_ &Accidental )
 
 static pitch_octave__ GetPitchOctave_( const str::string_ &Octave )
 {
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 	pitch_octave__ O = Octave.ToU8( &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		O = MSCMLD_UNDEFINED_PITCH_OCTAVE;
 
 	return O;
@@ -1239,7 +1239,7 @@ static parse_status__ ParsePitch_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != PITCH_TAG )
-				ERRFwk();
+				qRFwk();
 
 			if ( Name == pn_Undefined )
 				Status = psMissingPitchName;
@@ -1267,11 +1267,11 @@ static parse_status__ ParsePitch_(
 static bso::s8__ GetDurationBase_( const str::string_ &Value )
 {
 	bso::s8__ Base = MSCMLD_UNDEFINED_DURATION_BASE;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	Base = Value.ToS8( &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		Base = MSCMLD_UNDEFINED_DURATION_BASE;
 
 	return Base;
@@ -1280,11 +1280,11 @@ static bso::s8__ GetDurationBase_( const str::string_ &Value )
 static bso::u8__ GetDurationModifier_( const str::string_ &Value )
 {
 	bso::u8__ Modifier = MSCMLD_UNDEFINED_DURATION_MODIFIER;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	Modifier = Value.ToU8( &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		Modifier = MSCMLD_UNDEFINED_DURATION_BASE;
 
 	return Modifier;
@@ -1354,7 +1354,7 @@ static parse_status__ ParseDuration_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != Tag )
-				ERRFwk();
+				qRFwk();
 
 			if ( Base == MSCMLD_UNDEFINED_DURATION_BASE )
 				Status = psMissingDurationBase;
@@ -1374,7 +1374,7 @@ static parse_status__ ParseDuration_(
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1421,7 +1421,7 @@ static parse_status__ ParseNote_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != NOTE_TAG )
-				ERRFwk();
+				qRFwk();
 
 			if ( !Pitch.IsValid() )
 				Status = psMissingPitch;
@@ -1438,7 +1438,7 @@ static parse_status__ ParseNote_(
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1490,10 +1490,10 @@ static parse_status__ ParseRest_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != REST_TAG )
-				ERRFwk();
+				qRFwk();
 
 			if ( !Pitch.IsValid() )
-				ERRFwk();
+				qRFwk();
 			else if ( !Duration.IsValid() )
 				Status = psMissingDuration;
 			else if ( !Signature.IsValid() )
@@ -1506,7 +1506,7 @@ static parse_status__ ParseRest_(
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1520,11 +1520,11 @@ static parse_status__ ParseRest_(
 static bso::u8__ GetTupletNumerator_( const str::string_ &Value )
 {
 	bso::u8__ Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	Numerator = Value.ToU8( &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		Numerator = MSCMLD_UNDEFINED_TUPLET_NUMERATOR;
 
 	return Numerator;
@@ -1533,11 +1533,11 @@ static bso::u8__ GetTupletNumerator_( const str::string_ &Value )
 static bso::u8__ GetTupletDenominator_( const str::string_ &Value )
 {
 	bso::u8__ Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	Denominator = Value.ToU8( &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		Denominator = MSCMLD_UNDEFINED_TUPLET_DENOMINATOR;
 
 	return Denominator;
@@ -1577,7 +1577,7 @@ static parse_status__ ParseTuplet_(
 			if ( Status == psOK ) {
 
 				if ( !Tuplet.IsValid() )
-					ERRFwk();
+					qRFwk();
 
 				if ( Parser.TagName() == NOTE_TAG )
 					Status = ParseNote_( Parser, Signature, Tuplet, Note );
@@ -1617,12 +1617,12 @@ static parse_status__ ParseTuplet_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != TUPLET_TAG )
-				ERRFwk();
+				qRFwk();
 
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1643,7 +1643,7 @@ static parse_status__ ParseAnacrousis_(
 	bso::u8__
 		Base = AnacrousisUndefinedBase,
 		Amount = 0;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfObvious ) ) {
@@ -1657,7 +1657,7 @@ static parse_status__ ParseAnacrousis_(
 				else
 					Base = Parser.Value().ToU8( &Error );
 
-				if ( (Error != E_NIL) || ( Base == AnacrousisUndefinedBase ) )
+				if ( (Error != qNIL) || ( Base == AnacrousisUndefinedBase ) )
 					Status = psBadValue;
 			} else if ( Parser.AttributeName() == AnacrousisAmountAttribute_ ) {
 				if ( Amount != 0 )
@@ -1665,7 +1665,7 @@ static parse_status__ ParseAnacrousis_(
 				else
 					Amount = Parser.Value().ToU8( &Error );
 
-				if ( ( Error != E_NIL ) || ( Amount == 0 ) )
+				if ( ( Error != qNIL ) || ( Amount == 0 ) )
 					Status = psBadValue;
 			} else 
 				Status = psUnexpectedAttribute;
@@ -1674,7 +1674,7 @@ static parse_status__ ParseAnacrousis_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != ANACROUSIS_TAG )
-				ERRFwk();
+				qRFwk();
 
 			if ( Base == AnacrousisUndefinedBase )
 				Status = psMissingAnacrousisBase;
@@ -1690,7 +1690,7 @@ static parse_status__ ParseAnacrousis_(
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1743,12 +1743,12 @@ static parse_status__ Parse_(
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() != MELODY_TAG )
-				ERRFwk();
+				qRFwk();
 
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1765,7 +1765,7 @@ parse_status__ mscmld::ParseXML(
 	bso::bool__ WithRoot )	// Si  'true', la prochaine balise est 'Melody', sinon, on est  l'intrieur de 'Melody'. Dans les deux cas, au retour on est  l'extrieur de la balise 'Melody'.
 {
 	if ( WithRoot)
-		ERRVct();
+		qRVct();
 
 	return Parse_( Parser, Melody );
 }

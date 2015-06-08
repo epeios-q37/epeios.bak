@@ -83,10 +83,10 @@ namespace aem {
 		bso::uint__ Counter = 0;
 
 		if ( Step <=1 )
-			ERRFwk();
+			qRFwk();
 
 		if ( Step >= ( SDR_SIZE_MAX - 1 ) )
-			ERRFwk();
+			qRFwk();
 
 		Step += 1;
 
@@ -106,7 +106,7 @@ namespace aem {
 	inline shadow__ _ConvertSteppedShadowFromUnusableToUsableState( shadow__ Shadow )
 	{
 		if ( !_IsStepped( Shadow ) )
-			ERRFwk();
+			qRFwk();
 
 		return *Shadow + 2;
 	}
@@ -169,15 +169,15 @@ namespace aem {
 	inline size__ _GetStepMask( shadow__ Shadow )
 	{
 		if ( !_IsStepped( Shadow ) )
-			ERRFwk();
+			qRFwk();
 
 		if ( !_IsUsable( Shadow ) )
-			ERRFwk();
+			qRFwk();
 
 		size__ Position = _GetMostRightOnePosition( *Shadow );
 
 		if ( Position == 0 )
-			ERRFwk();
+			qRFwk();
 
 		return _GetMask( Position - 1 );
 	}
@@ -250,7 +250,7 @@ namespace aem {
 		{
 # ifdef AEM_DBG
 			if ( !_IsUsable() )
-				ERRFwk();
+				qRFwk();
 # endif
 			// En n'utilisant pas '_GetExtent(...)', on gagne un peu de temps.
 			return ( *_GetShadow() >= Amount )
@@ -282,7 +282,7 @@ namespace aem {
 			bso::bool__ Force = false;
 
 			if ( _IsFitted() || _IsFixed() )
-				ERRFwk();
+				qRFwk();
 
 			if ( !_IsUsable() )	{	// Nota : danse ce cas, 'S_.Amount' == 0;
 				if ( Amount == 0 ) {
@@ -312,7 +312,7 @@ namespace aem {
 		bso::bool__ SetFixed( size__ &Amount )
 		{
 			if ( _GetAmount() > Amount )
-				ERRFwk();
+				qRFwk();
 
 			S_.Shadow = Amount |= 1;
 
@@ -344,7 +344,7 @@ namespace aem {
 		{
 			if ( _IsFixed() ) {
 				if ( Amount > _GetExtent() )
-					ERRFwk();
+					qRFwk();
 
 				S_.Amount = Amount;
 
@@ -368,7 +368,7 @@ namespace aem {
 					}
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			}
@@ -380,7 +380,7 @@ namespace aem {
 			mode__ Mode = m_Default )
 		{
 			if ( Handle( Amount, Mode ) )
-				ERRFwk();
+				qRFwk();
 		}
 */		void Init( void )
 		{
@@ -418,13 +418,13 @@ namespace aem {
 			if ( S_.Amount )
 				return 0;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		row First( size__ Offset ) const
 		{
 			row Row = First();
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				Row =  Next( Row, Offset  );
 
 			return Row;
@@ -434,13 +434,13 @@ namespace aem {
 			if ( S_.Amount )
 				return S_.Amount - 1;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		row Last( sdr::size__ Offset ) const
 		{
 			row Row = Last();
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				Row = Previous( Row, Offset  );
 
 			return Row;
@@ -452,7 +452,7 @@ namespace aem {
 			if ( ( *Current += Offset ) < S_.Amount )
 				return Current;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		row Next( row Current ) const
 		{
@@ -465,7 +465,7 @@ namespace aem {
 			if ( *Current >= Offset )
 				return *Current - Offset;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		row Previous( row Current ) const
 		{
@@ -543,13 +543,13 @@ namespace aem {
 			if ( _Amount )
 				return _Amount - 1;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		row Last( sdr::size__ Offset ) const
 		{
 			row Row = Last();
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				Row =  Previous( Row, Offset  );
 
 			return Row;
@@ -560,13 +560,13 @@ namespace aem {
 			if ( _Amount )
 				return 0;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		row First( sdr::size__ Offset ) const
 		{
 			row Row = First();
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				Row = Next( Row, Offset  );
 
 			return Row;
@@ -579,7 +579,7 @@ namespace aem {
 			if ( ( *Current += Offset ) < _Amount )
 				return Current;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		//f Return the position of the object after 'Current' (to the top).
 		row Next( row Current ) const
@@ -594,7 +594,7 @@ namespace aem {
 			if ( *Current >= Offset )
 				return *Current - Offset;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		//f Return the position of the object before 'Current' (to the bottom).
 		row Previous( row Current ) const

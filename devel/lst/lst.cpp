@@ -42,7 +42,7 @@ static void Save_(
 {
 	stk::row__ Row = Bunch.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Save_( Bunch( Row ), Flow );
 
 		Row = Bunch.Next( Row );
@@ -54,20 +54,20 @@ uys::state__ lst::WriteToFile_(
 	const fnm::name___ &FileName )
 {
 	uys::state__ State = uys::s_Undefined;
-ERRProlog
+qRH
 	flf::file_oflow___ Flow;
-ERRBegin
+qRB
 	if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		State = uys::sInconsistent;
-		ERRReturn;
+		qRReturn;
 	}
 
 	Save_( Store.Released, Flow );
 
 	State = uys::sExists;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return State;
 }
 
@@ -96,26 +96,26 @@ uys::state__ lst::ReadFromFile_(
 	store_ &Store )
 {
 	uys::state__ State = uys::s_Undefined;
-ERRProlog
+qRH
 	flf::file_iflow___ Flow;
 	fil::size__ Size = 0;
-ERRBegin
+qRB
 	if ( Flow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		State = uys::sInconsistent;
-		ERRReturn;
+		qRReturn;
 	}
 
 	Size = fil::GetSize( FileName );
 
 	if ( Size > SDR_SIZE_MAX )
-		ERRDta();
+		qRFwk();
 
 	Load_( Flow, (bso::size__)Size / sizeof( sdr::row__ ), Store.Released );
 
 	State = uys::sExists;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return State;
 }
 
@@ -128,7 +128,7 @@ sdr::row_t__ lst::Successeur_(
 	while( ( ++Element < Amount ) && Libres.IsAvailable( Element ) ) {};
 
 	if ( Element >= Amount )
-		return E_NIL;
+		return qNIL;
 	else
 		return Element;
 }
@@ -145,7 +145,7 @@ sdr::row_t__ lst::Predecesseur_(
 	if ( Trouve )
 		return Element;
 	else
-		return E_NIL;
+		return qNIL;
 }
 
 void lst::MarkAsReleased_(

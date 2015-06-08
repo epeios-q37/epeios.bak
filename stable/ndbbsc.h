@@ -94,7 +94,7 @@ namespace ndbbsc {
 		bso::bool__ _IsMember( rrow__ Row ) const
 		{
 			if ( List.Exists( Row ) )
-				return List( Row ) != E_NIL;
+				return List( Row ) != qNIL;
 			else
 				return false;
 		}
@@ -126,7 +126,7 @@ namespace ndbbsc {
 
 			S_.AmountMax = 0;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Container.plug( AS );
 			Queue.plug( AS );
@@ -156,7 +156,7 @@ namespace ndbbsc {
 			Links.Init();
 
 			List.Allocate( Size );
-			List.FillWith( E_NIL );
+			List.FillWith( qNIL );
 
 			S_.AmountMax = AmountMax;
 		}
@@ -165,11 +165,11 @@ namespace ndbbsc {
 			sdr::size__ CurrentSize = List.Amount();
 
 			if ( CurrentSize > Size )
-				ERRPrm();
+				qRFwk();
 			else if ( CurrentSize < Size ) {
 				List.Allocate( Size );
 
-				List.FillWith( E_NIL, CurrentSize );
+				List.FillWith( qNIL, CurrentSize );
 			}
 		}
 		bso::bool__ Retrieve(
@@ -192,13 +192,13 @@ namespace ndbbsc {
 		{
 #ifdef NDBBSC_DBG
 			if ( _IsMember( Row ) )
-				ERRFwk();
+				qRFwk();
 #endif
-			crow__ CacheRow = E_NIL;
+			crow__ CacheRow = qNIL;
 
 			if ( Queue.Amount() >= S_.AmountMax ) {
 				CacheRow = Queue.Tail();
-				List.Store( E_NIL, Links( CacheRow ) );
+				List.Store( qNIL, Links( CacheRow ) );
 			} else {
 				CacheRow = Container.New();
 				Links.Allocate( Container.Extent() );
@@ -215,10 +215,10 @@ namespace ndbbsc {
 			if ( _IsMember( Row ) ) {
 				crow__ CacheRow = List( Row );
 				Container.Remove( CacheRow );
-				List.Store( E_NIL, Links( CacheRow ) );
-				Links.Store( E_NIL, CacheRow );
+				List.Store( qNIL, Links( CacheRow ) );
+				Links.Store( qNIL, CacheRow );
 				Queue.Delete( CacheRow );
-				List.Store( E_NIL, Row );
+				List.Store( qNIL, Row );
 			}
 		}
 		const sdr::size__ Size( void ) const

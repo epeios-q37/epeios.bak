@@ -70,12 +70,12 @@ void ntvstr::string___::Init( const bso::char__ *String )
 
 	if ( !MultiByteToWideChar( CP_UTF8, 0, String, -1, _Core, CoreExtent )  ) {
 		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
-			ERRLbr();
+			qRLbr();
 
 		_Core.Malloc( CoreExtent = MultiByteToWideChar( CP_UTF8, 0, String, -1, NULL, 0 ) );
 
 		if ( !MultiByteToWideChar( CP_UTF8, 0, String, -1, _Core, CoreExtent )  )
-			ERRLbr();
+			qRLbr();
 	}
 }
 #endif
@@ -99,13 +99,13 @@ void ntvstr::string___::Init( const char__ *String )
 
 void ntvstr::string___::Init( const str::string_ &String )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Init( String.Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 const bso::char__ *ntvstr::string___::_Convert(
@@ -126,12 +126,12 @@ const bso::char__ *ntvstr::string___::_Convert(
 
 	if ( !WideCharToMultiByte( CodePage, 0, _Core, -1, Buffer, BufferExtent, NULL, NULL )  ) {
 		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
-			ERRLbr();
+			qRLbr();
 
 		Buffer.Malloc( BufferExtent = WideCharToMultiByte( CodePage, 0, _Core, -1, NULL, 0, NULL, NULL ) );
 
 		if ( !WideCharToMultiByte( CodePage, 0, _Core, -1, Buffer, BufferExtent, NULL, NULL ) )
-			ERRLbr();
+			qRLbr();
 	}
 # elif defined( NTVSTR__MBS )
 	bso::size__ Size = strlen( _Core );
@@ -149,12 +149,12 @@ const str::string_ &ntvstr::string___::_Convert(
 	unsigned int CodePage,
 	str::string_ &SBuffer ) const
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ CBuffer;
-ERRBegin
+qRB
 	SBuffer.Append( _Convert( CodePage, CBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return SBuffer;
 }

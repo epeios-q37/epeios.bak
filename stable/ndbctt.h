@@ -99,7 +99,7 @@ namespace ndbctt {
 		type__ _Test( bso::bool__ CompleteInitializationIfNeeded = true ) const
 		{
 			if ( ( _Static == NULL ) == ( _Dynamic == NULL ) )
-				ERRFwk();
+				qRFwk();
 
 			if ( CompleteInitializationIfNeeded	)
 				_CompleteInitialization();
@@ -109,7 +109,7 @@ namespace ndbctt {
 			else if ( _Dynamic != NULL )
 				return tDynamic;
 			else
-				ERRFwk();
+				qRFwk();
 
 			return t_Undefined;	// Pour viter un 'warning'.
 		}
@@ -125,7 +125,7 @@ namespace ndbctt {
 				Size = _Dynamic->Extent();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -167,7 +167,7 @@ namespace ndbctt {
 			post_initialization_function__ &PostInitializationFunction )
 		{
 			if ( ( _Dynamic != NULL ) || ( _Static != NULL ) )
-				ERRFwk();
+				qRFwk();
 
 			_Dynamic = &Dynamic;
 			_Cache.Init( Dynamic.Extent() );
@@ -179,7 +179,7 @@ namespace ndbctt {
 			post_initialization_function__ &PostInitializationFunction )
 		{
 			if ( ( _Dynamic != NULL ) || ( _Static != NULL ) )
-				ERRFwk();
+				qRFwk();
 
 			_Static = &Static;
 			_Cache.Init( Static.Extent() );
@@ -188,7 +188,7 @@ namespace ndbctt {
 		}
 		rrow__ Store( const datum_ &Datum )
 		{
-			rrow__ Row = E_NIL;
+			rrow__ Row = qNIL;
 			sdr::size__ Size = 0;
 
 			switch ( _Test() ) {
@@ -201,7 +201,7 @@ namespace ndbctt {
 				Size = _Dynamic->Extent();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -222,7 +222,7 @@ namespace ndbctt {
 				_Dynamic->Erase( Row );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -241,7 +241,7 @@ namespace ndbctt {
 				_Dynamic->Store( Datum, Row );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -268,7 +268,7 @@ namespace ndbctt {
 					Exists = _Dynamic->Retrieve( Row, Datum );
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 
@@ -289,7 +289,7 @@ namespace ndbctt {
 				return _Dynamic->ModificationEpochTimeStamp();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -305,11 +305,11 @@ namespace ndbctt {
 				return _Dynamic->First();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
-			return E_NIL;
+			return qNIL;
 		}
 		rrow__ Last( void ) const
 		{
@@ -321,11 +321,11 @@ namespace ndbctt {
 				return _Dynamic->Last();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
-			return E_NIL;
+			return qNIL;
 		}
 		rrow__ Next( rrow__ Row ) const
 		{
@@ -337,11 +337,11 @@ namespace ndbctt {
 				return _Dynamic->Next( Row );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
-			return E_NIL;
+			return qNIL;
 		}
 		rrow__ Previous( rrow__ Row ) const
 		{
@@ -353,11 +353,11 @@ namespace ndbctt {
 				return _Dynamic->Previous( Row );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
-			return E_NIL;
+			return qNIL;
 		}
 		sdr::size__ Extent( void ) const
 		{
@@ -369,7 +369,7 @@ namespace ndbctt {
 				return _Dynamic->Extent();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -385,7 +385,7 @@ namespace ndbctt {
 				return _Dynamic->Amount();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -401,7 +401,7 @@ namespace ndbctt {
 				return _Dynamic->Exists( Row );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -417,7 +417,7 @@ namespace ndbctt {
 				return _Dynamic->IsEmpty();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -451,7 +451,7 @@ namespace ndbctt {
 			_Dynamic.reset( P );
 			_Static.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			_Dynamic.plug( AS );
 			_Static.plug( AS );
@@ -504,28 +504,28 @@ namespace ndbctt {
 		ndbsct::static_content_ &Static( void )
 		{
 			if ( Type() != tStatic )
-				ERRFwk();
+				qRFwk();
 
 			return _Static;
 		}
 		const ndbsct::static_content_ &Static( void ) const
 		{
 			if ( Type() != tStatic )
-				ERRFwk();
+				qRFwk();
 
 			return _Static;
 		}
 		const ndbdct::dynamic_content_ &Dynamic( void ) const
 		{
 			if ( Type() != tDynamic )
-				ERRFwk();
+				qRFwk();
 
 			return _Dynamic;
 		}
 		ndbdct::dynamic_content_ &Dynamic( void )
 		{
 			if ( Type() != tDynamic )
-				ERRFwk();
+				qRFwk();
 
 			return _Dynamic;
 		}
@@ -568,7 +568,7 @@ namespace ndbctt {
 			DContent.reset( P );
 			BContent.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			DContent.plug( AS );
 		}

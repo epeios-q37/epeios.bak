@@ -94,16 +94,16 @@ protected:
 
 #define RP	\
 		nsresult NSResult = NS_OK;\
-	ERRProlog\
+	qRH\
 		lcl::meaning ErrorMeaning;\
 		str::string ErrorTranslation;\
 		err::buffer__ ERRBuffer;
 
-#define RB	ERRBegin\
+#define RB	qRH\
 	ErrorMeaning.Init();
 
 #define RR	\
-	ERRErr
+	qRR
 // BE CAREFUL : the exception can come from the library. In this case, the error data are NOT available. The library has its own 'ERR' library data.
 #define RN\
 		cio::CErr << txf::commit;\
@@ -126,10 +126,10 @@ protected:
 \
 		nsxpcm::Transform( ErrorTranslation, JSErrorMessage );\
 \
-	ERREnd
+	qRT
 
 #define RE	\
-	ERREpilog\
+	qRE\
 	return NSResult;
 
 static bso::bool__ GetValue_(
@@ -153,25 +153,25 @@ static const str::string_ &GetComponent_(
 	const char *ComponentId,
 	str::string_ &Component )
 {
-ERRProlog
+qRH
 	registry::tags Tags;
-ERRBegin
+qRH
 	Tags.Init();
 	Tags.Append( str::string( ComponentId ) );
 
 	GetMandatoryValue_( rgstry::tentry__( registry::TaggedComponent, Tags ), Component );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Component;
 }
 
 const char *GetConfigurationDirectory_( TOL_CBUFFER___ &Buffer )
 {
 	LOG;
-ERRProlog
+qRH
 	str::string Directory;
-ERRBegin
+qRH
 	LOG;
 	Directory.Init();
 	LOG;
@@ -184,23 +184,23 @@ ERRBegin
 
 	Directory.Convert( Buffer );
 	LOG;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
 static void Initialize_( void )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRH
 LOG;
 	sclmisc::Initialize( GetConfigurationDirectory_( Buffer ) );
 LOG;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 NS_IMETHODIMP egeckocom___::Create(
@@ -273,7 +273,7 @@ LOG;
 			ErrorMeaning.AddTag( " F: " __FILE__ "; L: " E_STRING( __LINE__ ) );
 			ErrorMeaning.AddTag( ComponentId );
 		}
-		ERRFree();
+		qRFree();
 	}
 
 LOG;
@@ -311,13 +311,13 @@ RB
 	if ( CurrentSteering_ != NULL ) {
 		ErrorMeaning.SetValue( MESSAGE_BAD_RETRIEVE_CONTEXT );
 		ErrorMeaning.AddTag( " F: " __FILE__ "; L: " E_STRING( __LINE__ ) );
-		ERRFree();
+		qRFree();
 	}
 
 	if ( ( CurrentSteering_ = geckof::RetrieveSteering( LibraryName.Convert( Buffer ), err::hUserDefined ) ) == NULL ) {
 		ErrorMeaning.SetValue( MESSAGE_RETRIEVE_FAILURE );
 		ErrorMeaning.AddTag( " F: " __FILE__ "; L: " E_STRING( __LINE__ ) );
-		ERRFree();
+		qRFree();
 	}
 
 	CurrentSteering_->PreRegistration();
@@ -352,7 +352,7 @@ RB
 		ErrorMeaning.SetValue( MESSAGE_UNABLE_TO_REGISTER_ELEMENT );
 		ErrorMeaning.AddTag( " F: " __FILE__ "; L: " E_STRING( __LINE__ ) );
 		ErrorMeaning.AddTag( Id );
-		ERRFree();
+		qRFree();
 	}
 RR
 RN

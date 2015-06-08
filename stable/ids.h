@@ -85,11 +85,11 @@ namespace ids {
 			Released.reset( P );
 			S_.FirstUnused = 0;
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Released.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Released.plug( AS );
 		}
@@ -123,7 +123,7 @@ namespace ids {
 				ID = (*S_.FirstUnused)++;
 
 				if ( S_.FirstUnused == 0 )
-					ERRLmt();
+					qRLmt();
 
 				Released = false;
 			}
@@ -146,7 +146,7 @@ namespace ids {
 			} else {
 #ifdef IDS_DBG
 				if ( !IsAvailable_( ID ) )
-					ERRPrm();
+					qRFwk();
 #endif
 				Released.Remove( Released.Search( ID ) );
 
@@ -158,7 +158,7 @@ namespace ids {
 		{
 #ifdef IDS_DBG
 			if ( IsAvailable_( ID ) )
-				ERRPrm();
+				qRFwk();
 #endif
 			Released.Push( ID );
 		}

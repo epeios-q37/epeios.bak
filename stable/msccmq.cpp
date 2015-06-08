@@ -401,12 +401,12 @@ void msccmq::Parse(
 	flw::iflow__ &IFlow,
 	melody_ &Melody )
 {
-ERRProlog
+qRH
 	mscmdf::header_chunk__ HeaderChunk;
 	mscmdf::track_chunk_size__ TrackChunkSize;
 //	skip_track_callback__ SkipTrackCallback;
 	callback Callback;
-ERRBegin
+qRB
 	mscmdf::GetHeaderChunk( IFlow, HeaderChunk );
 
 	if ( HeaderChunk.SMFType != 0 )
@@ -421,7 +421,7 @@ ERRBegin
 	mscmdm::Parse( Callback, IFlow, oFile );
 
 	Merge( Callback.Pitches, Callback.Durations, Callback.Signatures, Melody );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

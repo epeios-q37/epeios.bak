@@ -85,11 +85,11 @@ namespace idxque {
 		{
 			E_QUEUEt_( r )::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_QUEUEt_( r )::plug( AS );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			E_QUEUEt_( r )::plug( SD );
 		}

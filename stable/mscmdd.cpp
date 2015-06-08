@@ -76,12 +76,12 @@ static void CALLBACK MidiInProc_(
   DWORD dwParam1,   
   DWORD dwParam2 )
 {
-ERRProlog
+qRH
 	_data___ &Data = *(_data___ *)dwInstance;
 	bso::ubyte__ Event = 0;
 	MIDIHDR *Header = NULL;
 	bso::bool__ Wait = false;
-ERRBegin
+qRB
 	switch( wMsg ) {
 	case MIM_DATA:
 		char Buffer[3];
@@ -132,9 +132,9 @@ ERRBegin
 	}
 
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 fdr::size__ mscmdd::midi_in___::Read(
@@ -275,10 +275,10 @@ static bso::ulong__ GetMIDIDevices_(
 	snd_rawmidi_stream_t Direction )
 {
 	bso::ulong__ Count = 0;
-ERRProlog
+qRH
 	str::string Name;
 	bso::integer_buffer__ Buffer;
-ERRBegin
+qRB
 	int	cardNum;
 
    // Start with first card
@@ -376,9 +376,9 @@ ERRBegin
 	}
 
 	snd_config_update_free_global();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Count;
 }
 
@@ -387,22 +387,22 @@ bso::bool__ mscmdd::GetMIDIInDeviceName(
 	str::string_ &Name )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	strings Names;
 	names Names;
-ERRBegin
+qRB
 	Names.Init();
 	NAmes.Init();
 	
 	 if ( GetMIDIDevices_( Names, NAmes, SND_RAWMIDI_STREAM_INPUT ) <= Device )
-		 ERRReturn;
+		 qRReturn;
 	 
 	 Success = true;
 	 
 	 Name = Names( Device );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	 return Success;
 }
 
@@ -411,22 +411,22 @@ bso::bool__ mscmdd::GetMIDIOutDeviceName(
 	str::string_ &Name )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	strings Names;
 	names NAmes;
-ERRBegin
+qRB
 	Names.Init();
 	NAmes.Init();
 	
 	 if ( GetMIDIDevices_( Names, Names, SND_RAWMIDI_STREAM_OUTPUT ) <= Device )
-		 ERRReturn;
+		 qRReturn;
 	 
 	 Success = true;
 	 
 	 Name = Names( Device );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	 return Success;
 }
 
@@ -437,11 +437,11 @@ bso::ulong__ mscmdd::GetMidiInDevicesNames( names_ &Names )
 {
 	bso::ulong__ Count = 0;
 #ifdef MSCMDD__WINDOWS
-ERRProlog
+qRH
 	MIDIINCAPS InCaps;
 	bso::ulong__ Counter = 0;
 	name Name;
-ERRBegin
+qRB
 	Count =  midiInGetNumDevs();
 
 	while ( Counter < Count ) {
@@ -453,19 +453,19 @@ ERRBegin
 
 		Names.Append( Name );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 #elif defined( MSCMDD__ALSA )
-ERRProlog
+qRH
 	strings Names;
-ERRBegin
+qRB
 	Names.Init();
 	
 	Count = GetMIDIDevices_( Names, Names, SND_RAWMIDI_STREAM_INPUT );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 #endif
 	return Count;
 }
@@ -474,11 +474,11 @@ bso::ulong__ mscmdd::GetMidiOutDevicesNames( names_ &Names )
 {
 	bso::ulong__ Count = 0;
 #ifdef MSCMDD__WINDOWS
-ERRProlog
+qRH
 	MIDIOUTCAPS OutCaps;
 	bso::ulong__ Counter = 0;
 	name Name;
-ERRBegin
+qRB
 	Count =  midiOutGetNumDevs();
 
 	while ( Counter < Count ) {
@@ -490,19 +490,19 @@ ERRBegin
 
 		Names.Append( Name );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 #elif defined( MSCMDD__ALSA )
-ERRProlog
+qRH
 	strings Names;
-ERRBegin
+qRB
 	Names.Init();
 	
 	Count = GetMIDIDevices_( Names, NAmes, SND_RAWMIDI_STREAM_OUTPUT );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 #endif
 	return Count;
 }

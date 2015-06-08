@@ -33,40 +33,41 @@ using cio::CErr;
 
 const char *sclmisc::SCLMISCTargetName = "TEST";
 
-void scltool::SCLTOOLMain(
+int scltool::SCLTOOLMain(
 	const str::string_ &Command,
 	const scltool::oddities__ &Oddities )
 {
-ERRProlog
-	rgstry::row__ Row = E_NIL;
-	rgstry::level__ Level = E_NIL;
-ERRBegin
+qRH
+	rgstry::row__ Row = qNIL;
+	rgstry::level__ Level = qNIL;
+qRB
 	cio::COut << txf::tab << "----- Configuration registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( GetRegistryConfigurationLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryConfigurationLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Project registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( GetRegistryProjectLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryProjectLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Setup registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( GetRegistrySetupLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistrySetupLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
 	cio::COut << txf::tab << "----- Arguments registry -----" << txf::nl;
-	scltool::GetRegistry().Dump( GetRegistryArgumentsLevel(), E_NIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryArgumentsLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
 
 	cio::COut << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
+	return EXIT_SUCCESS;
 }
 
 #if 0	// Puyisque l'objet de cette bibliothque est jutement de prendre en charge le 'main'.
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	COut << "Test of library " << SCLTOOL_NAME << ' ' << __DATE__" "__TIME__"\n";
-ERRFErr
+qRFR
 	ExitValue = EXIT_FAILURE;
-ERRFEnd
-ERRFEpilog
+qRFT
+qRFE
 	return ExitValue;
 }
 #endif

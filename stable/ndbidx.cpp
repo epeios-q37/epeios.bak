@@ -45,35 +45,35 @@ bso::sign__ ndbidx::index_::_Seek(
 	ndbctt::cache_ &Cache ) const
 {
 	bso::sign__ Result = 0;
-ERRProlog
+qRH
 	datum DatumToCompare;
 	idxbtq::E_ISEEKERt__( rrow__ ) Seeker;
-ERRBegin
+qRB
 	_CompleteInitialization();
 
 	Round = 0;
 
-	if ( S_.Root == E_NIL ) {
-		Row = E_NIL;
+	if ( S_.Root == qNIL ) {
+		Row = qNIL;
 
-		ERRReturn;
+		qRReturn;
 	}
 
 	Seeker.Init( _Index(), S_.Root );
 
 	Row = Seeker.GetCurrent();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		DatumToCompare.Init();
 
 		if ( !_Retrieve( Row, DatumToCompare, Cache ) )
-			ERRFwk();
+			qRFwk();
 
 		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, Context ) ) {
 		case 0:
 			switch ( EqualBehavior ) {
 			case bStop:
-				Row = E_NIL;	// Pour sortir de la boucle.
+				Row = qNIL;	// Pour sortir de la boucle.
 				break;
 			case bGreater:
 				Row = Seeker.SearchGreater();
@@ -83,14 +83,14 @@ ERRBegin
 				break;
 			case bStopIfOneChildMissing:
 				if ( !Seeker.HasLesser() || !Seeker.HasGreater() )
-					Row = E_NIL;	// Popur sortir de la boucle.
+					Row = qNIL;	// Popur sortir de la boucle.
 				else if ( *Row & 1 )	// Petit gnrateur alatoire (sans doute inutile ?).
 					Row = Seeker.SearchLesser();
 				else
 					Row = Seeker.SearchGreater();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 			}
 			break;
 		case 1:
@@ -100,7 +100,7 @@ ERRBegin
 			Row = Seeker.SearchLesser();
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -108,9 +108,9 @@ ERRBegin
 	}
 
 	Row = Seeker.GetCurrent();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -121,43 +121,43 @@ rrow__ ndbidx::index_::_SearchStrictGreater(
 	_CompleteInitialization();	
 
 	rrow__ Buffer = _Index().GetTreeGreater( Row );
-	rrow__ Candidate = E_NIL;
+	rrow__ Candidate = qNIL;
 
-	while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) == 0 ) )
+	while ( ( Buffer != qNIL ) && ( Compare( Buffer, Row, Context ) == 0 ) )
 		Buffer = _Index().GetTreeGreater( Buffer );
 
-	if ( Buffer != E_NIL ) {
+	if ( Buffer != qNIL ) {
 		Candidate = Buffer;
 
 		Buffer = _Index().GetTreeLesser( Buffer );
 
-		while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) != 0 ) ) {
+		while ( ( Buffer != qNIL ) && ( Compare( Buffer, Row, Context ) != 0 ) ) {
 			Candidate = Buffer;
 
 			Buffer = _Index().GetTreeLesser( Buffer );
 		}
 
-		if ( Buffer != E_NIL ) {
+		if ( Buffer != qNIL ) {
 			Buffer = _SearchStrictGreater( Buffer, Context );
 
-			if ( Buffer != E_NIL )
+			if ( Buffer != qNIL )
 				Candidate = Buffer;
 		}
 	} else {
 		Buffer = _Index().GetTreeParent( Row );
 
-		if ( Buffer != E_NIL ) {
+		if ( Buffer != qNIL ) {
 
 			if ( _Index().IsTreeGreater( Row ) ) {
-				while ( ( Buffer != E_NIL ) && _Index().IsTreeGreater( Buffer ) )
+				while ( ( Buffer != qNIL ) && _Index().IsTreeGreater( Buffer ) )
 					Buffer = _Index().GetTreeParent( Buffer );
 			} else
 				Buffer = Row;
 
-			if ( Buffer != E_NIL ) {
+			if ( Buffer != qNIL ) {
 				Buffer = _Index().GetTreeParent( Buffer );
 
-				if ( Buffer != E_NIL ) {
+				if ( Buffer != qNIL ) {
 					if ( Compare( Row, Buffer, Context ) != 0 )
 						Candidate = Buffer;
 					else
@@ -177,43 +177,43 @@ rrow__ ndbidx::index_::_SearchStrictLesser(
 	_CompleteInitialization();	
 
 	rrow__ Buffer = _Index().GetTreeLesser( Row );
-	rrow__ Candidate = E_NIL;
+	rrow__ Candidate = qNIL;
 
-	while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) == 0 ) )
+	while ( ( Buffer != qNIL ) && ( Compare( Buffer, Row, Context ) == 0 ) )
 		Buffer = _Index().GetTreeLesser( Buffer );
 
-	if ( Buffer != E_NIL ) {
+	if ( Buffer != qNIL ) {
 		Candidate = Buffer;
 
 		Buffer = _Index().GetTreeGreater( Buffer );
 
-		while ( ( Buffer != E_NIL ) && ( Compare( Buffer, Row, Context ) != 0 ) ) {
+		while ( ( Buffer != qNIL ) && ( Compare( Buffer, Row, Context ) != 0 ) ) {
 			Candidate = Buffer;
 
 			Buffer = _Index().GetTreeGreater( Buffer );
 		}
 
-		if ( Buffer != E_NIL ) {
+		if ( Buffer != qNIL ) {
 			Buffer = _SearchStrictLesser( Buffer, Context );
 
-			if ( Buffer != E_NIL )
+			if ( Buffer != qNIL )
 				Candidate = Buffer;
 		}
 	} else {
 		Buffer = _Index().GetTreeParent( Row );
 
-		if ( Buffer != E_NIL ) {
+		if ( Buffer != qNIL ) {
 
 			if ( _Index().IsTreeLesser( Row ) ) {
-				while ( ( Buffer != E_NIL ) && _Index().IsTreeLesser( Buffer ) )
+				while ( ( Buffer != qNIL ) && _Index().IsTreeLesser( Buffer ) )
 					Buffer = _Index().GetTreeParent( Buffer );
 			} else
 				Buffer = Row;
 
-			if ( Buffer != E_NIL ) {
+			if ( Buffer != qNIL ) {
 				Buffer = _Index().GetTreeParent( Buffer );
 
-				if ( Buffer != E_NIL ) {
+				if ( Buffer != qNIL ) {
 					if ( Compare( Row, Buffer, Context ) != 0 )
 						Candidate = Buffer;
 					else
@@ -233,38 +233,38 @@ bso::u8__ ndbidx::index_::Index(
 	ndbctt::cache_ &Cache )
 {
 	bso::u8__ Round = 0;
-ERRProlog
+qRH
 	datum DatumToCompare;
 	datum Datum;
-	rrow__ TargetRow = E_NIL;
+	rrow__ TargetRow = qNIL;
 	bso::sign__ Result;
 //	tol::buffer__ Buffer;
 //	cio::aware_cout___ cout;
-ERRBegin
+qRB
 	if ( _Bufferized )
-		ERRFwk();
+		qRFwk();
 
 	_CompleteInitialization();
 
 	if ( _Content().Amount() > DIndex.Amount() )
 		DIndex.Allocate( _Content().Amount(), aem::m_Default );
 
-	if ( S_.Root == E_NIL ) {
+	if ( S_.Root == qNIL ) {
 		S_.Root = Row;
 
 		DIndex.BecomeRoot( Row );
 
-		ERRReturn;
+		qRReturn;
 	}
 
 	Datum.Init();
 
 	if ( !_Retrieve( Row, Datum, *(ndbctt::cache_ *)NULL ) )
-		ERRReturn;	// L'enregistrement n'existe pas, on ne va donc pas l'inclure dans l'index.
+		qRReturn;	// L'enregistrement n'existe pas, on ne va donc pas l'inclure dans l'index.
 					// Ce cas ne devrait pas arriv, sauf lorsqu'il y a eu des problmes de corruption corrigs  la main.
 
 	if ( Extremities != NULL ) {
-		if ( Extremities->Smallest == E_NIL )
+		if ( Extremities->Smallest == qNIL )
 			Extremities->Smallest = DIndex.First( S_.Root );
 
 		TargetRow = Extremities->Smallest;
@@ -272,7 +272,7 @@ ERRBegin
 		DatumToCompare.Init();
 
 		if ( !_Retrieve( TargetRow, DatumToCompare, Cache ) )
-			ERRFwk();
+			qRFwk();
 
 		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, cIndexation ) ) {
 		case 0:
@@ -280,16 +280,16 @@ ERRBegin
 		case -1:
 			break;
 		case 1:
-			TargetRow = E_NIL;
+			TargetRow = qNIL;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
 
-	if ( ( TargetRow == E_NIL ) && ( Extremities != NULL ) ) {
-		if ( Extremities->Greatest == E_NIL )
+	if ( ( TargetRow == qNIL ) && ( Extremities != NULL ) ) {
+		if ( Extremities->Greatest == qNIL )
 			Extremities->Greatest = DIndex.Last( S_.Root );
 
 		TargetRow = Extremities->Greatest;
@@ -297,7 +297,7 @@ ERRBegin
 		DatumToCompare.Init();
 
 		if ( !_Retrieve( TargetRow, DatumToCompare, Cache ) )
-			ERRFwk();
+			qRFwk();
 
 		switch ( Result = _SortPointer->Compare( Datum, DatumToCompare, cIndexation ) ) {
 		case 0:
@@ -305,15 +305,15 @@ ERRBegin
 		case 1:
 			break;
 		case -1:
-			TargetRow = E_NIL;
+			TargetRow = qNIL;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	} 
 
-	if ( TargetRow == E_NIL )
+	if ( TargetRow == qNIL )
 		Result = _Seek( Datum, cIndexation, bStopIfOneChildMissing, TargetRow, Round, Cache );
 	else
 		Extremities->Used++;
@@ -333,7 +333,7 @@ ERRBegin
 		else if ( !DIndex.TreeHasGreater( TargetRow ) )
 			S_.Root = DIndex.BecomeGreater( Row, TargetRow, S_.Root );
 		else
-			ERRFwk();
+			qRFwk();
 		break;
 	case 1:
 		if ( ( Extremities != NULL ) && ( Extremities->Greatest == TargetRow ) )
@@ -341,7 +341,7 @@ ERRBegin
 		S_.Root = DIndex.BecomeGreater( Row, TargetRow, S_.Root );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -353,14 +353,14 @@ ERRBegin
 #endif
 
 #ifdef NDBIDX_DBG
-	if ( TargetRow == E_NIL )
-		ERRFwk();
+	if ( TargetRow == qNIL )
+		qRFwk();
 #endif
 
-ERRErr
-ERREnd
+qRR
+qRT
 	_Touch( false );
-ERREpilog
+qRE
 	return Round;
 }
 
@@ -370,19 +370,19 @@ rrow__ ndbidx::index_::LooseSeek(
 	context__ Context,
 	bso::sign__ &Sign ) const
 {
-	rrow__ Row = E_NIL;
+	rrow__ Row = qNIL;
 	bso::u8__ Round;
 
 	_CompleteInitialization();
 
-	if ( S_.Root == E_NIL )
-		return E_NIL;
+	if ( S_.Root == qNIL )
+		return qNIL;
 
 	Sign = _Seek( Datum, Context, EqualBehavior, Row, Round, *(ndbctt::cache_ *)NULL );
 
 #ifdef NDBIDX_DBG
-	if ( Row == E_NIL )
-		ERRFwk();
+	if ( Row == qNIL )
+		qRFwk();
 #endif
 
 	return Row;
@@ -390,14 +390,14 @@ rrow__ ndbidx::index_::LooseSeek(
 
 rrow__ ndbidx::index_::Test( void ) const
 {
-	rrow__ Row = E_NIL;
-ERRProlog
+	rrow__ Row = qNIL;
+qRH
 	datum Datum;
-ERRBegin
+qRB
 	_CompleteInitialization();
 
-	if ( S_.Root == E_NIL )
-		ERRReturn;
+	if ( S_.Root == qNIL )
+		qRReturn;
 
 	Row = First();
 
@@ -407,9 +407,9 @@ ERRBegin
 
 	Row = Next( Row );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( Compare( Row, Datum, cIndexation ) == 1 )
-			ERRReturn;
+			qRReturn;
 
 		Datum.Init();
 
@@ -417,9 +417,9 @@ ERRBegin
 
 		Row = Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -430,20 +430,20 @@ bso::sign__ ndbidx::index_::Compare(
 	context__ Context ) const
 {
 	bso::sign__ Result = 0;
-ERRProlog
+qRH
 	datum Datum;
-ERRBegin
+qRB
 	Datum.Init();
 
 	_CompleteInitialization();
 
 	if ( !_Retrieve( RecordRow, Datum, *(ndbctt::cache_ *)NULL ) )
-		ERRFwk();
+		qRFwk();
 
 	Result = _SortPointer->Compare( Datum, Pattern, Context  );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -453,20 +453,20 @@ bso::sign__ ndbidx::index_::Compare(
 	context__ Context ) const
 {
 	bso::sign__ Result = 0;
-ERRProlog
+qRH
 	datum Pattern;
-ERRBegin
+qRB
 	Pattern.Init();
 
 	_CompleteInitialization();
 
 	if ( !_Retrieve( RecordRow2, Pattern, *(ndbctt::cache_ *)NULL ) )
-		ERRFwk();
+		qRFwk();
 
 	Result = Compare( RecordRow1, Pattern, Context );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -481,7 +481,7 @@ static inline void Reindex_(
 	tol::E_DPOINTER___( extremities__ ) &Extremities,
 	bso::bool__ Randomly )
 {
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 	bso::u8__ Round = 0;
 
 	while ( Rows.Amount() ) {
@@ -513,7 +513,7 @@ static inline void Reindex_(
 
 void ndbidx::index_::Reindex( observer_functions__ &Observer )
 {
-ERRProlog
+qRH
 	const ndbctt::content__ &Content = _Content();
 	sdr::size__ HandledRecordAmount = 0;
 	tol::timer__ Timer;
@@ -523,17 +523,17 @@ ERRProlog
 	tol::E_DPOINTER___( extremities__ ) Extremities;
 	bso::uint__ BalancingCount = 0;
 	bch::E_BUNCH( rrow__ ) Rows;
-	rrow__ Row = E_NIL;
+	rrow__ Row = qNIL;
 	bso::uint__ PanelRecordCounter;
 	bso::uint__ PanelRecordSize;
 	bso::bool__ Randomly = false;
-ERRBegin
+qRB
 	_CompleteInitialization();
 
 	Reset();
 
 	if ( Content.Amount() == 0 )
-		ERRReturn;
+		qRReturn;
 
 	if ( Content.Extent() < MEMORY_REINDEXATION_LIMIT ) {
 		IndexInMemory.Init( *_ContentPointer, SortFunction() );
@@ -560,7 +560,7 @@ ERRBegin
 		Timer.Launch();
 	}
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Rows.Append( Row );
 
 		if ( PanelRecordCounter-- == 0 ) {
@@ -590,9 +590,9 @@ ERRBegin
 
 	if ( UsedIndex != this )
 		this->operator =( *UsedIndex );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -602,12 +602,12 @@ void ndbidx::files_hook___::Init(
 	fil::mode__ Mode,
 	fls::id__ ID )
 {
-ERRProlog
+qRH
 	str::string TreeFileName;
 	TOL_CBUFFER___ TreeFileNameBuffer;
 	str::string QueueFileName;
 	TOL_CBUFFER___ QueueFileNameBuffer;
-ERRBegin
+qRB
 	reset();
 
 	TreeFileName.Init( BaseFileName );
@@ -624,8 +624,8 @@ ERRBegin
 
 	if ( Erase )
 		_ErasePhysically();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

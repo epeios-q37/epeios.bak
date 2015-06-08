@@ -26,9 +26,9 @@ using namespace thrstr;
 thread_store_handler__ thrstr::Create( mtk__routine Routine )
 {
 	thread_store_handler__ Handler = THRSTR_INVALID;
-ERRProlog
+qRH
 	mtx::mutex___ Mutex;
-ERRBegin
+qRB
 	if ( ( Handler = new data ) == NULL )
 		ERRa();
 		
@@ -48,7 +48,7 @@ ERRBegin
 	Mutex.Init( Handler->Store );
 	Mutex.Lock();
 
-ERRErr
+qRR
 	if ( Handler != THRSTR_INVALID ) {
 		if ( Handler->Data != MTX_INVALID )
 			mtx::Delete( Handler->Data );
@@ -62,16 +62,16 @@ ERRErr
 		delete Handler;
 	}
 
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Handler;
 }
 
 void thrstr::Close( thread_store_handler__ Handler )
 {
-ERRProlog
+qRH
 	mtx::mutex___ Data, Thread, Store;
-ERRBegin
+qRB
 	Handler->Continue = false;
 	
 	Data.Init( Handler->Data );
@@ -98,19 +98,19 @@ ERRBegin
 	mtx::Delete( Handler->Store );
 	
 	delete Handler;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 namespace {
 	void Launcher_( void *UP )
 	{
-	ERRProlog
+	qRH
 		thread_store_handler__ &Handler = *(thread_store_handler__ *)&UP;
 		mtx::mutex___ Data, Thread, Store;
 		void *RUP;
-	ERRBegin
+	qRB
 		Data.Init( Handler->Data );
 		Thread.Init( Handler->Thread );
 		Store.Init( Handler->Store );
@@ -146,9 +146,9 @@ namespace {
 		
 		Store.Unlock();
 		
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 }		
 		

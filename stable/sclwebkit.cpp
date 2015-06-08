@@ -35,18 +35,18 @@ using namespace sclwebkit;
 
 void sclwebkit::callback__::Start( void )
 {
-ERRProlog
+qRH
 	str::string XML, XSL;
-ERRBegin
+qRB
 	XML.Init();
 	XSL.Init();
 
 	SCLWEBKITStart( A(), XML, XSL );
 
 	A().SetChildren(	"html", XML, XSL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclwebkit::Load(
@@ -97,23 +97,23 @@ public:
 wkcllbck::downstream_callback__ *WKCLLBCKLaunch( const wkcllbck::shared_data__ &Data )
 {
 	dcallback___ *DCallback = NULL;
-ERRProlog
+qRH
 	callback__ *Callback;
-ERRBegin
+qRB
 	DCallback = new dcallback___;
 
 	if ( DCallback == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Callback = sclwebkit::SCLWEBKITRetrieveCallback( DCallback->Agent() );
 
 	if ( Callback == NULL )
-		ERRFwk();
+		qRFwk();
 
 	DCallback->Init( Data.Callback(), *Callback  );
 
 	Callback->Start();
-ERRErr
+qRR
 	if ( DCallback != NULL )
 		delete DCallback;
 
@@ -121,8 +121,8 @@ ERRErr
 
 	if ( Callback !=  NULL )
 		delete Callback;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return DCallback;
 }
 

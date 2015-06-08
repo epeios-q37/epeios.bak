@@ -71,8 +71,8 @@ int scltool::SCLTOOLMain(
 	const scltool::oddities__ &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
-ERRProlog
-ERRBegin
+qRH
+qRH
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
@@ -82,9 +82,9 @@ ERRBegin
 		ERRFwk();
 
 	ExitValue = EXIT_SUCCESS;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ExitValue;
 }
 

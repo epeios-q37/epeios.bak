@@ -100,7 +100,7 @@ namespace frdfrd {
 				Mode = fblfrd::mRemote;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 

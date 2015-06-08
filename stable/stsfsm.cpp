@@ -29,21 +29,21 @@ id__ stsfsm::Add(
 	automat_ &Automat )
 {
 	sdr::row__ Row = Tag.First();
-	crow__ Current = Automat.First(), Next = E_NIL;
+	crow__ Current = Automat.First(), Next = qNIL;
 
-	if ( Current == E_NIL ) {
+	if ( Current == qNIL ) {
 		Current = Automat.New();
 		Automat( Current ).Init();
 	}
 
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 
 		Next = Automat( Current ).Get( Tag( Row ) );
 
 		Automat.Flush();
 
-		if ( Next == E_NIL ) {
+		if ( Next == qNIL ) {
 			Next = Automat.New();
 			Automat( Next ).Init();
 			Automat( Current ).Set( Tag( Row ), Next );
@@ -55,8 +55,8 @@ id__ stsfsm::Add(
 		Row = Tag.Next( Row );
 	}
 
-	if ( Current == E_NIL )
-		ERRFwk();
+	if ( Current == qNIL )
+		qRFwk();
 
 	if ( Automat( Current ).GetId() != UndefinedId	)
 		return Automat( Current ).GetId();
@@ -71,19 +71,19 @@ id__ stsfsm::Add(
 status__ stsfsm::parser__::Handle( bso::u8__ C )
 {
 	ctn::E_CMITEMt( card_, crow__ ) Card;
-	crow__ Next = E_NIL;
+	crow__ Next = qNIL;
 
 	Card.Init( _A() );
 
-	if ( _Current == E_NIL )
+	if ( _Current == qNIL )
 		_Current = _A().First();
 
-	if ( _Current == E_NIL )
+	if ( _Current == qNIL )
 		return sLost;	// L'automate est vide.
 
 	Next = Card( _Current ).Get( C );
 
-	if ( Next == E_NIL )
+	if ( Next == qNIL )
 		return sLost;
 
 	_Current = Next;
@@ -101,16 +101,16 @@ status__ stsfsm::parser__::_Handle(
 	status__ Status = s_Undefined;
 	sdr::row__ Row = Pattern.First();
 
-	while ( ( Row != E_NIL ) && ( ( Status = Handle( Pattern( Row ) ) ) != sLost ) )
+	while ( ( Row != qNIL ) && ( ( Status = Handle( Pattern( Row ) ) ) != sLost ) )
 		Row = Pattern.Next( Row );
 
-	if ( Row != E_NIL ) {
+	if ( Row != qNIL ) {
 		if ( Status != sLost )
-			ERRFwk();
+			qRFwk();
 		else if ( LostPosition != NULL )
 			*LostPosition = Row;
 	} else if ( Status == sLost )
-		ERRFwk();
+		qRFwk();
 
 	return Status;
 }
@@ -121,18 +121,18 @@ id__ stsfsm::GetId(
 	const automat_ &Automat )
 {
 	id__ Id = UndefinedId;
-ERRProlog
+qRH
 	parser__ Parser;
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 	bso::bool__ Match = false;
-ERRBegin
+qRB
 	Row = Pattern.First();
 	Parser.Init( Automat );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		switch ( Parser.Handle( Pattern( Row ) ) ) {
 		case sLost:
-			ERRReturn;
+			qRReturn;
 			break;
 		case sMatch:
 			Match = true;
@@ -141,7 +141,7 @@ ERRBegin
 			Match = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -150,8 +150,8 @@ ERRBegin
 
 	if ( Match )
 		Id = Parser.GetId();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Id;
 }

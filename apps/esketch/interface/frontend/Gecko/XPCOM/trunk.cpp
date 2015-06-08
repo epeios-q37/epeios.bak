@@ -39,10 +39,10 @@ void trunk::user_callback__::XULFTKAboutText(
 
 void trunk::user_callback__::XULFTKDefineSession( const fnm::name___ &ProjectFileName )
 {
-ERRProlog
+qRH
 	str::string ProjectId;
 	bso::integer_buffer__ Buffer;
-ERRBegin
+qRH
 	ProjectId.Init();
 
 	if ( ProjectFileName.Size() != 0 )
@@ -54,7 +54,7 @@ ERRBegin
 
 	_DefineSession( ProjectId );
 	_T().FinalizeDefineSession();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

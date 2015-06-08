@@ -77,7 +77,7 @@ namespace idxbtr {
 		r Equilibrer_(
 			const que::E_QUEUEt_( r ) &Index,
 			r Premier,
-			sdr::E_SDRIVER__ &Pilote );
+			qSD__ &Pilote );
 		r _Compare(
 			const que::E_QUEUEt_( r ) &Queue,
 			r First ) const;
@@ -106,7 +106,7 @@ namespace idxbtr {
 		{
 			BaseTree.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			BaseTree.plug( AS );
 		}
@@ -171,7 +171,7 @@ namespace idxbtr {
 				else if ( BaseTree.IsRight( Item ) )
 					return BaseTree.ParentOfFirstLeftNode( Item );
 				else
-					return E_NIL;
+					return qNIL;
 		}
 		//f Return the item previous to 'Item'.
 		r Previous( r Position ) const
@@ -184,7 +184,7 @@ namespace idxbtr {
 				else if ( BaseTree.IsLeft( Position ) )
 					return BaseTree.SearchFirstRightFather( Position );
 				else
-					return E_NIL;
+					return qNIL;
 		}
 		sdr::size__ Amount( void ) const
 		{
@@ -196,7 +196,7 @@ namespace idxbtr {
 			r Root )
 		{
 			if ( BaseTree.HasBothChildren( Node ) ) {
-				r TargetNode = E_NIL;
+				r TargetNode = qNIL;
 
 				if ( *Node & 1 )	// Petit gnrateur alatoire.
 					TargetNode = _SearchMostLeftNode( BaseTree.Right( Node ) );
@@ -224,7 +224,7 @@ namespace idxbtr {
 			}
 
 			if ( Root == Node )
-				Root = E_NIL;
+				Root = qNIL;
 
 			return Root;
 		}
@@ -238,45 +238,45 @@ namespace idxbtr {
 			r Fille = BaseTree.Right( Item );
 			r Pere = BaseTree.Parent( Item );
 
-			if ( Fils != E_NIL )
+			if ( Fils != qNIL )
 				BaseTree.Cut( Fils );
 
-			if ( Fille != E_NIL )
+			if ( Fille != qNIL )
 				BaseTree.Cut( Fille );
 
 			if ( BaseTree.IsLeft( Item ) )
 			{
 				BaseTree.Cut( Item );
 
-				if ( Fils != E_NIL )
+				if ( Fils != qNIL )
 				{
 					BaseTree.BecomeLeft( Fils, Pere );
 
-					if ( Fille != E_NIL )
+					if ( Fille != qNIL )
 						BaseTree.BecomeRight( Fille, _SearchMostRightNode( Fils, *(btr::level__ *)NULL ) );
 				}
-				else if ( Fille != E_NIL )
+				else if ( Fille != qNIL )
 					BaseTree.BecomeLeft( Fille, Pere );
 			}
 			else if ( BaseTree.IsRight( Item ) )
 			{
 				BaseTree.Cut( Item );
 
-				if ( Fille != E_NIL )
+				if ( Fille != qNIL )
 				{
 					BaseTree.BecomeRight( Fille, Pere );
 
-					if ( Fils != E_NIL )
+					if ( Fils != qNIL )
 						BaseTree.BecomeLeft( Fils, _SearchMostLeftNode( Fille, *(btr::level__ *)NULL ) );
 				}
-				else if ( Fils != E_NIL )
+				else if ( Fils != qNIL )
 					BaseTree.BecomeRight( Fils, Pere );
 			}
 			else
 			{
-				if ( Fils != E_NIL )
+				if ( Fils != qNIL )
 				{
-					if ( Fille != E_NIL )
+					if ( Fille != qNIL )
 						BaseTree.BecomeRight( Fille, _SearchMostRightNode( Fils, *(btr::level__ *)NULL ) );
 
 					return Fils;
@@ -312,7 +312,7 @@ namespace idxbtr {
 		{
 #ifdef IDXBTR_DBG
 			if ( BaseTree.HasParent( Node ) )
-				ERRFwk();
+				qRFwk();
 #endif
 		}
 		r GetParent( r Node ) const
@@ -325,7 +325,7 @@ namespace idxbtr {
 		}
 		bso::bool__ HasLesser( r Node ) const
 		{
-			return GetLesser( Node ) != E_NIL;
+			return GetLesser( Node ) != qNIL;
 		}
 		r GetGreater( r Node ) const
 		{
@@ -333,7 +333,7 @@ namespace idxbtr {
 		}
 		bso::bool__ HasGreater( r Node ) const
 		{
-			return GetGreater( Node ) != E_NIL;
+			return GetGreater( Node ) != qNIL;
 		}
 		r BecomeGreater(
 			r Row,
@@ -356,7 +356,7 @@ namespace idxbtr {
 		r Fill(
 			const que::E_QUEUEt_( r ) &Queue,
 			r Head,
-			sdr::E_SDRIVER__ &SD = SDR_INTERNAL_SDRIVER )
+			qSD__ &SD = SDR_INTERNAL_SDRIVER )
 		{
 			Init();
 
@@ -381,7 +381,7 @@ namespace idxbtr {
 			tree_index_<sdr::row__> &Tree,
 			const que::E_QUEUE_ &File,
 			sdr::row_t__ Premier,
-			sdr::E_SDRIVER__ &Pilote );
+			qSD__ &Pilote );
 	};
 
 	E_AUTO1( tree_index );
@@ -412,7 +412,7 @@ namespace idxbtr {
 		E_IBTREE_ &Tree,
 		const que::E_QUEUE_ &File,
 		sdr::row_t__ Premier,
-		sdr::E_SDRIVER__ &Pilote );
+		qSD__ &Pilote );
 
 	sdr::row_t__ Compare_(
 		const E_IBTREE_ &Tree,
@@ -422,7 +422,7 @@ namespace idxbtr {
 	template <typename r> inline r tree_index_<r>::Equilibrer_(
 		const que::E_QUEUEt_( r ) &Index,
 		r Premier,
-		sdr::E_SDRIVER__ &Pilote )
+		qSD__ &Pilote )
 	{
 		return idxbtr::Equilibrer_( *(E_IBTREE_ *)this, *(const que::E_QUEUE_ *)&Index, *Premier, Pilote );
 	}
@@ -449,15 +449,15 @@ namespace idxbtr {
 		void _Test( void ) const
 		{
 			if ( Index_== NULL )
-				ERRFwk();
+				qRFwk();
 
-			if ( _Current == E_NIL )
-				ERRFwk();
+			if ( _Current == qNIL )
+				qRFwk();
 		}
 #endif
 		r _Handle( r Row )
 		{
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				_Current = Row;
 
 			return Row;
@@ -465,7 +465,7 @@ namespace idxbtr {
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Current = E_NIL;
+			_Current = qNIL;
 			Index_ = NULL;
 		}
 		tree_seeker__( void )
@@ -501,7 +501,7 @@ namespace idxbtr {
 		}
 		bso::bool__ HasGreater( void ) const
 		{
-			return GetGreater() != E_NIL;
+			return GetGreater() != qNIL;
 		}
 		//f Try to find an element lesser then the current.
 		r GetLesser( void ) const
@@ -517,7 +517,7 @@ namespace idxbtr {
 		}
 		bso::bool__ HasLesser( void ) const
 		{
-			return GetLesser() != E_NIL;
+			return GetLesser() != qNIL;
 		}
 
 		E_RODISCLOSE__( r, Current )

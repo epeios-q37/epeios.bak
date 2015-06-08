@@ -90,7 +90,7 @@ namespace wkcllbck {
 			Automat.reset( P );
 			Actions.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Automat.plug( AS );
 			Actions.plug( AS );
@@ -117,7 +117,7 @@ namespace wkcllbck {
 		{
 			arow__ Row = stsfsm::GetId( Name, Automat );
 
-			if ( Row == E_NIL )
+			if ( Row == qNIL )
 				return NULL;
 
 			return Actions( Row );
@@ -208,7 +208,7 @@ namespace wkcllbck {
 		const actions_ &_A( void ) const
 		{
 			if ( _Actions ==  NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Actions;
 		}
@@ -218,7 +218,7 @@ namespace wkcllbck {
 			wkcllbck::action_callback__ *Action = _A().Get( str::string(  ActionName ) );
 
 			if ( Action == NULL )
-				ERRFwk();
+				qRFwk();
 
 			Action->Execute();
 		}
@@ -267,7 +267,7 @@ namespace wkcllbck {
 		upstream_callback__ &Callback( void ) const
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}

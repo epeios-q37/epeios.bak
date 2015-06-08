@@ -42,9 +42,9 @@ void ias::hook_filenames___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
-ERRProlog
+qRH
 	fnm::name___ Descriptors, Storage;
-ERRBegin
+qRB
 	Descriptors.Init();
 	fnm::BuildPath( Path, Basename, "d", Descriptors );
 
@@ -54,8 +54,8 @@ ERRBegin
 	this->Descriptors.Init( "", Descriptors );
 	this->Storage.Init( "", Storage );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

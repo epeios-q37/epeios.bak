@@ -75,7 +75,7 @@ namespace mthfrc {
 			D.reset( P );
 			N.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			D.plug( AS );
 			N.plug( AS );
@@ -128,7 +128,7 @@ namespace mthfrc {
 				return D.GetSign();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -152,9 +152,9 @@ namespace mthfrc {
 		const _fraction_<t,t_> &Op2,
 		_fraction_<t,t_> &Result )
 	{
-	ERRProlog
+	qRH
 		t N, D;
-	ERRBegin
+	qRB
 		N.Init();
 		Mul( Op1.N, Op2.N, N );
 
@@ -162,9 +162,9 @@ namespace mthfrc {
 		Mul( Op1.D, Op2.D, D );
 
 		Result.Init( N, D );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	template <typename t, typename t_> inline void Div(
@@ -172,9 +172,9 @@ namespace mthfrc {
 		const _fraction_<t,t_> &Op2,
 		_fraction_<t,t_> &Result )
 	{
-	ERRProlog
+	qRH
 		t N, D;
-	ERRBegin
+	qRB
 		N.Init();
 		Mul( Op1.N, Op2.D, N );
 
@@ -182,9 +182,9 @@ namespace mthfrc {
 		Mul( Op1.D, Op2.N, D );
 
 		Result.Init( N, D );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	template <typename t, typename t_> inline void Add(
@@ -192,9 +192,9 @@ namespace mthfrc {
 		const _fraction_<t,t_> &Op2,
 		_fraction_<t,t_> &Result )
 	{
-	ERRProlog
+	qRH
 		t N, D, T1, T2;
-	ERRBegin
+	qRB
 		T1.Init();
 		Mul( Op1.N, Op2.D, T1 );
 
@@ -208,9 +208,9 @@ namespace mthfrc {
 		Mul( Op1.D, Op2.D, D );
 
 		Result.Init( N, D );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	template <typename t, typename t_> inline void Sub(
@@ -218,9 +218,9 @@ namespace mthfrc {
 		const _fraction_<t,t_> &Op2,
 		_fraction_<t,t_> &Result )
 	{
-	ERRProlog
+	qRH
 		t N, D, T1, T2;
-	ERRBegin
+	qRB
 		T1.Init();
 		Mul( Op1.N, Op2.D, T1 );
 
@@ -234,9 +234,9 @@ namespace mthfrc {
 		Mul( Op1.D, Op2.D, D );
 
 		Result.Init( N, D );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	typedef _fraction_<integer, integer_> fraction_;

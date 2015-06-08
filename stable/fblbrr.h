@@ -107,7 +107,7 @@ namespace fblbrr {
 			parameter__ Parameter = _Parameters( Row );
 
 			if ( Parameter.Cast != Cast )
-				ERRPrm();
+				qRFwk();
 
 			return Parameter.Content;
 		}
@@ -152,7 +152,7 @@ namespace fblbrr {
 			Parameter.Init( &Flow, cFlow );
 
 			if ( _Parameters.Append( Parameter) != Row )
-				ERRFwk();
+				qRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )

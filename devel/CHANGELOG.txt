@@ -12,6 +12,27 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-06-08 :
+- GLOBAL : 
+	- Adaptaiton to changes in miscellaneous libraries.
+- AGS :
+	- 'A_STORAGE()' -> 'qAS(_)'.
+- ERR :
+	- Renaming/removing/adding some macros.
+- MTHMTC :
+	- # Fixing misssing '&'.
+- SDR :
+	- 'E_NIL' -> 'qNIL'.
+	- 'E_SDRIVER' ->'qSD__'.
+
+2015-06-07
+- MTHITG, MTHMTC :
+	- Updating.
+- RGSTRY, SCLMISC, SCLRGSTRY, :
+	% Adding the possibility to add a value (i.e. do not write out an existing value) to a registry.
+- SCLTOOL :
+	* With an 'Link' 'index' at "", it now handles undefined amount of arguments.
+
 2015-05-29 :
 - SCLTOOL :
 	% Simplification allowed by the fact that 'MinGW' is now called with unicode aware options.

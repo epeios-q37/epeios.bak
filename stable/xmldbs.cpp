@@ -138,13 +138,13 @@ void xmldbs::WriteXML(
 	const xml_database_ &XMLD,
 	txf::text_oflow___ &Flow )
 {
-ERRProlog
+qRH
 	dtr::browser__<value_row__> Browser;
 	ctn::E_CMITEMt( tagged_value_, value_row__ ) TaggedValue;
 	ctn::E_CMITEMt( tag_, tag_row__ ) Tag;
 	tag_row__ TagRow;
 	bso::bool__ HasChild;
-ERRBegin
+qRB
 	Browser.Init( XMLD.GetRoot() );
 	TaggedValue.Init( XMLD );
 	Tag.Init( XMLD.Tags );
@@ -175,8 +175,8 @@ ERRBegin
 				
 		XMLD.Browse( Browser );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

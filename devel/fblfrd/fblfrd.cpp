@@ -44,12 +44,12 @@ bso::bool__ fblfrd::frontend___::_TestCompatibility(
 		Success = false;
 
 		if ( !flw::GetString( Flow, Buffer, sizeof( Buffer ) ) )
-			ERRDta();
+			qRFwk();
 
 		IncompatibilityInformations.Message.Append( Buffer );
 
 		if ( !flw::GetString( Flow, Buffer, sizeof( Buffer ) ) )
-			ERRDta();
+			qRFwk();
 
 		IncompatibilityInformations.URL.Append( Buffer );
 	}
@@ -97,7 +97,7 @@ command__ fblfrd::frontend___::GetBackendDefaultCommand_()
 	flw::Get( *Channel_, DefaultCommand );
 
 	if ( Channel_->Get() != fblcst::cEnd )
-		ERRDta();
+		qRFwk();
 
 	Channel_->Dismiss();
 
@@ -122,10 +122,10 @@ namespace {
 
 void fblfrd::frontend___::GetGetCommandsCommand_( command__ DefaultCommand )
 {
-ERRProlog
+qRH
 	id8s Casts;
 	fblfrd::string Name;
-ERRBegin
+qRB
 	Casts.Init();
 	Name.Init( fblcmd::CommandsNames[fblcmd::cGetCommands] );
 
@@ -141,19 +141,19 @@ ERRBegin
 	Id16Out( Commands_[fblcmd::cGetCommands] );
 
 	_Handle();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void fblfrd::frontend___::GetBackendCommands_( void )
 {
-ERRProlog
+qRH
 	commands_details CommandsDetails;
 	command_detail CommandDetail;
 	id16s Commands;
 	int i;
-ERRBegin
+qRB
 	CommandsDetails.Init();
 
 	for( i = 0; i < fblcmd::c_amount; i++ ) {
@@ -167,10 +167,10 @@ ERRBegin
 	GetCommands( FBLFRD_MASTER_COMMAND, CommandsDetails, Commands );
 
 	if ( CommandsDetails.Amount() != Commands.Amount() )
-		ERRDta();
+		qRFwk();
 
 	Commands.Recall( 0, Commands.Amount(), Commands_ );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

@@ -89,14 +89,14 @@ namespace xulwdg {
 		const trunk &Trunk( void ) const
 		{
 			if ( _Trunk == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Trunk;
 		}
 		trunk &Trunk( void )
 		{
 			if ( _Trunk == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Trunk;
 		}

@@ -69,7 +69,7 @@ namespace sclxdhtml {
 		const char *Name( void ) const
 		{
 			if ( _Name == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _Name;
 		}
@@ -87,7 +87,7 @@ namespace sclxdhtml {
 			{
 				crow__ Row = stsfsm::GetId( Action, Automat );
 
-				if ( Row == E_NIL )
+				if ( Row == qNIL )
 					return NULL;
 
 				return Callbacks( Row );
@@ -108,7 +108,7 @@ namespace sclxdhtml {
 				Automat.reset( P );
 				Callbacks.reset( P );
 			}
-			void plug( ags::E_ASTORAGE_ &AS )
+			void plug( qAS_ &AS )
 			{
 				Automat.plug( AS );
 				Callbacks.plug( AS );
@@ -139,7 +139,7 @@ namespace sclxdhtml {
 				action_callback__<session> *Callback = _Get( str::string(  Action ) );
 
 				if ( Callback == NULL )
-					ERRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
+					qRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
 
 				return Callback->Launch( Session, Id );
 			}
@@ -273,7 +273,7 @@ namespace sclxdhtml {
 		void Refresh( void )
 		{
 			if ( _Page == UndefinedPage )
-				ERRFwk();
+				qRFwk();
 			else
 				SCLXDHTMLRefresh( _Page );
 		}
@@ -282,19 +282,19 @@ namespace sclxdhtml {
 			if ( Page != UndefinedPage )
 				_Page = Page;
 			else
-				ERRFwk();
+				qRFwk();
 		}
 		const str::string_ &GetTranslation(
 			const char *Message,
 			str::string_ &Translation )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			scllocale::GetTranslation( Message, Language( Buffer ), Translation );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Translation;
 		}
 	};
@@ -347,31 +347,31 @@ namespace sclxdhtml {
 			const char *Action )
 		{
 			bso::bool__ Success = false;
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			if ( _OnBeforeAction( Session, Id, Action ) )
 				if ( !strcmp( Action, xdhcbk::CloseActionLabel ) )
 					Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 				else
 					Success = _Handler.Launch( Session, Id, Action );
-		ERRErr
+		qRR
 			HandleError( Session, Session.Language() );
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 			return Success;
 		}
 		const str::string_ &GetTranslation(
 			const char *Message,
 			str::string_ &Translation )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			scllocale::GetTranslation( Message, Language( Buffer ), Translation );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Translation;
 		}
 		E_RODISCLOSE__( xdhcbk::mode__, Mode );

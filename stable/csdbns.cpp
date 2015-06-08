@@ -61,18 +61,18 @@ bso::bool__ csdbns::listener___::Init(
 
 	if ( setsockopt( Socket_, SOL_SOCKET, SO_REUSEADDR, &Val, sizeof( Val ) ) != 
 0 )
-		ERRSys();
+		qRSys();
 #endif
 
 	if ( bind(Socket_, (struct sockaddr*)(&nom), sizeof(sockaddr_in)) ) {
 		if ( ErrorHandling == err::hThrowException )
-			ERRSys();
+			qRSys();
 		else
 			return false;
 	}
 
 	if ( listen( Socket_, Amount ) )
-		ERRSys();
+		qRSys();
 		
 	return true;
 }
@@ -89,7 +89,7 @@ socket__ csdbns::listener___::_Interroger(
 
 	while( Boucler )
 	{
-ERRProlog
+qRH
 	Socket = SCK_INVALID_SOCKET;
 	timeval TimeOutStruct;
 	struct sockaddr_in SockAddr;
@@ -101,7 +101,7 @@ ERRProlog
 # error
 #endif
 	SockAddrSize = sizeof( SockAddr );
-ERRBegin
+qRB
 		Boucler = false;
 		FD_ZERO( &fds );
 		FD_SET( Socket_, &fds );
@@ -112,38 +112,38 @@ ERRBegin
 		Reponse = select( (int)( Socket_ + 1 ), &fds, 0, 0, TimeOut != SCK_INFINITE ? &TimeOutStruct : NULL );
 
 		if ( Reponse == SCK_SOCKET_ERROR )
-			ERRSys();
+			qRSys();
 		else if ( Reponse > 0 )
 		{
 			if ( ( Socket = accept( Socket_, (sockaddr *)&SockAddr, &SockAddrSize ) ) == SCK_INVALID_SOCKET ) {
 				error__ Error = sck::Error();
 //#ifdef CPE_CONSOLE
 #if 0
-				ERRProlog
+				qRH
 					cio::cerr___ cerr;
 					tol::buffer__ Buffer;
-				ERRBegin
+				qRB
 					cerr << tol::DateAndTime( Buffer ) << " (" << __FILE__ << ", " << (bso::ulong__)__LINE__  << ") : ("  << (bso::ulong__)Error << ") " << sck::ErrorDescription( Error ) << txf::nl << txf::commit;
-				ERRErr
-				ERREnd
-				ERREpilog
+				qRR
+				qRT
+				qRE
 #endif
 				if ( ( Error != SCK_EWOULDBLOCK ) && ( Error != SCK_EAGAIN ) )
-					ERRSys();
+					qRSys();
 			}
 
 			IP = inet_ntoa( SockAddr.sin_addr );
 
 		}
-ERRErr
+qRR
 	if ( ErrorHandling == err::hUserDefined )
 	{
 		ERRRst();
 		Boucler = true;
 	} else if ( ErrorHandling != err::hUserDefined )
-		ERRPrm();
-ERREnd
-ERREpilog
+		qRFwk();
+qRT
+qRE
 	}
 
 	return Socket;
@@ -155,11 +155,11 @@ bso::bool__ csdbns::listener___::Process(
 	sck::duration__ TimeOut )
 {
 	bso::bool__ Continue = true;
-ERRProlog
+qRH
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	action__ Action = a_Undefined;
 	const char *UP = NULL;
-ERRBegin
+qRB
 	Socket = _Interroger( ErrorHandling, TimeOut, UP );
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
@@ -177,20 +177,20 @@ ERRBegin
 
 		switch( Action ) {
 		case aContinue:
-			ERRFwk();
+			qRFwk();
 			break;
 		case aStop:
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
 		Continue = false;
 	}
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( _CallbackAvailable() ) {
 		Callback.PostProcess( _UP );
 		_UP = NULL;
@@ -201,7 +201,7 @@ ERREnd
 		sck::Close( Socket );
 
 
-ERREpilog
+qRE
 	return Continue;
 }
 
@@ -242,7 +242,7 @@ inline static void Unlock_( void )
 
 inline static rrow__ New_( const csdbns_repository_item__ &Item )
 {
-	rrow__ Row = E_NIL;
+	rrow__ Row = qNIL;
 
 	Lock_();
 
@@ -281,7 +281,7 @@ inline static void Clean_( void )
 
 	rrow__ Row = Repository_.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		UnsafeClean_( Row );
 
 		Row = Repository_.Next( Row );
@@ -302,8 +302,8 @@ static void ErrFinal_( void )
 
 		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			if ( cio::IsInitialized() ) {
 				if ( cio::Target() == cio::tConsole ) {
 					cio::COut << txf::commit;
@@ -317,10 +317,10 @@ static void ErrFinal_( void )
 
 				cio::CErr << txf::commit;
 			} else
-				ERRFwk();
-		ERRErr
-		ERREnd
-		ERREpilog
+				qRFwk();
+		qRR
+		qRT
+		qRE
 	} else
 		ERRRst();
 }
@@ -328,25 +328,25 @@ static void ErrFinal_( void )
 static void Traiter_( void *PU )
 {
 	::socket_data__ &Data = *(::socket_data__ *)PU;
-ERRFProlog
+qRFH
 
 	bso::bool__ Close = true;
 	socket_callback__ &Callback = *Data.Callback;
 	socket__ Socket = Data.Socket;
 	void *UP = NULL;
 	action__ Action = a_Undefined;
-	rrow__ Row = E_NIL;
+	rrow__ Row = qNIL;
 	csdbns_repository_item__ Item;
 	tol::E_FPOINTER___( char ) Buffer;
-ERRFBegin
+qRFB
 	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
-		ERRAlc();
+		qRAlc();
 
 	strcpy( Buffer, Data.IP );
 	mtx::Unlock( Data.Mutex );
 
-	ERRProlog
-	ERRBegin
+	qRH
+	qRB
 		UP = Callback.PreProcess( Socket, Buffer );
 
 		Item.Callback = &Callback;
@@ -355,26 +355,26 @@ ERRFBegin
 		Row = New_( Item );
 
 		while ( ( Action = Callback.Process( Socket, UP ) ) == aContinue );
-	ERRErr
-	ERREnd
-		if ( Row != E_NIL )
+	qRR
+	qRT
+		if ( Row != qNIL )
 			Clean_( Row );
-	ERREpilog
-ERRFErr
-ERRFEnd
-ERRFEpilog( ErrFinal_() )
+	qRE
+qRFR
+qRFT
+qRFE( ErrFinal_() )
 }
 
 void server___::Process(
 	sck::duration__ TimeOut,
 	err::handling__ ErrorHandling )
 {
-ERRProlog
+qRH
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	const char *IP = NULL;
 	::socket_data__ Data = {NULL, SCK_INVALID_SOCKET, NULL, MTX_INVALID_HANDLER};
 	bso::bool__ Continue = true;
-ERRBegin
+qRB
 	Socket = listener___::GetConnection( IP, ErrorHandling, TimeOut );
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
@@ -406,14 +406,14 @@ ERRBegin
 		} else
 			Continue = false;
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Socket != SCK_INVALID_SOCKET )
 		sck::Close( Socket );
 
 	if ( Data.Mutex != MTX_INVALID_HANDLER )
 		mtx::Delete( Data.Mutex );
-ERREpilog
+qRE
 }
 
 #endif

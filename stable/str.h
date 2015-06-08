@@ -134,11 +134,11 @@ namespace str {
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &Driver )
+		void plug( qSD__ &Driver )
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::plug( Driver );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::plug( AS );
 		}
@@ -230,11 +230,11 @@ namespace str {
 			char Tag,
 			bso::uint__ Position,
 			const string_ &Value );
-		//f Return the position of the first occurence of 'S', beginning at 'Start'. Return 'E_NIL' if no occurence.
+		//f Return the position of the first occurence of 'S', beginning at 'Start'. Return 'qNIL' if no occurence.
 		sdr::row__ Search(
 			const string_ &S,
 			sdr::row__ Start = 0 ) const;
-		//f Return the position of the first occurence of 'C', beginning at 'Start'. Return 'E_NIL' if no occurence.
+		//f Return the position of the first occurence of 'C', beginning at 'Start'. Return 'qNIL' if no occurence.
 		sdr::row__ Search(
 			char C,
 			sdr::row__ Start = 0 ) const;

@@ -44,7 +44,7 @@ namespace dbprcd {
 			S_.Weight = DEFAULT_WEIGHT;
 			S_.Skip = false;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Label.plug( AS );
 			Content.plug( AS );

@@ -70,7 +70,7 @@ namespace scltool {
 		}
 		E_CDTOR( text_oflow_rack___ );
 		txf::text_oflow__ &Init( const fnm::name___ &FileName );
-		void HandleError( void );	// A appeler  partir de 'ERRErr'.
+		void HandleError( void );	// A appeler  partir de 'qRR'.
 	};
 
 	struct oddities__ {

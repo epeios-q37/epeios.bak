@@ -48,7 +48,7 @@ const char *cgimng::GetLogLabel( log__ Log )
 	CASE( CloseButInUse );
 	CASE( Cleaning );
 	default:
-		ERRPrm();
+		qRFwk();
 		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
@@ -59,21 +59,21 @@ csdleo::action__ cgimng::core_manager::CSDSCBProcess(
 	flw::ioflow__ &Client,
 	void *UP )
 {
-ERRProlog
+qRH
 	cgiarg::arguments CGIArguments;
-ERRBegin
+qRB
 #ifdef CGIMNG_DBG
 	if ( UP != NULL )
-		ERRFwk();
+		qRFwk();
 #endif
 
 	CGIArguments.Init();
 	CGIArguments.Parse( Client );
 
 	UserFunctions_->Handle( CGIArguments, *this, Client );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return csdleo::aStop;
 }
 
@@ -116,18 +116,18 @@ void cgimng::tool___::Create(
 	void *UP,
 	str::string_ &SessionID )
 {
-ERRProlog
-	ssnmng::row__ P = E_NIL;
+qRH
+	ssnmng::row__ P = qNIL;
 	session_id__ SID;
 	lck::read_write_access___<sessions_> Sessions;
 	data__ *Data = NULL;
-ERRBegin
+qRB
 	Sessions.Init( Sessions_ );
 
 	Data = new data__;
 
 	if ( Data == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Data->UP = UP;
 	Data->Mutex = mtx::Create();
@@ -146,9 +146,9 @@ ERRBegin
 	mtx::Lock( Data->Mutex );
 
 	_Log( lCreate, SessionID );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 answer__ cgimng::tool___::GetAndLock(
@@ -156,15 +156,15 @@ answer__ cgimng::tool___::GetAndLock(
 	void *&UP )
 {
 	answer__ Answer = aUndefined;
-ERRProlog
-	ssnmng::row__ P = E_NIL;
+qRH
+	ssnmng::row__ P = qNIL;
 	lck::read_write_access___<sessions_> Sessions;
-ERRBegin
+qRB
 	Sessions.Init( Sessions_ );
 
 	P = Sessions().Search( SessionID );
 
-	if ( P != E_NIL ) {
+	if ( P != qNIL ) {
 
 		data__ &Data =  *(data__ *)Sessions().Pointers( P );
 
@@ -193,27 +193,27 @@ ERRBegin
 		Answer = aUnknow;
 		_Log( lGetButUnknown, SessionID );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Answer;
 }
 
 void cgimng::tool___::Release( const str::string_ &SessionID )
 {
-ERRProlog
-	ssnmng::row__ P = E_NIL;
+qRH
+	ssnmng::row__ P = qNIL;
 	lck::read_write_access___<sessions_> Sessions;
-ERRBegin
+qRB
 	Sessions.Init( Sessions_ );
 
-	if ( ( P = Sessions().Search( SessionID ) ) != E_NIL )	{
+	if ( ( P = Sessions().Search( SessionID ) ) != qNIL )	{
 
 		data__ &Data =  *(data__ *)Sessions().Pointers( P );
 
 #ifdef CGIMNG_DBG
 		if ( !mtx::IsLocked( Data.Mutex ) )
-			ERRFwk();
+			qRFwk();
 #endif
 
 		Sessions().Touch( P );
@@ -224,32 +224,32 @@ ERRBegin
 
 		_Log( lRelease, SessionID );
 	} else
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 }
 
 
 answer__ cgimng::tool___::Close( const str::string_ &SessionID )
 {
 	answer__ Answer = aUndefined;
-ERRProlog
-	ssnmng::row__ P = E_NIL;
+qRH
+	ssnmng::row__ P = qNIL;
 	lck::read_write_access___<sessions_> Sessions;
-ERRBegin
+qRB
 	Sessions.Init( Sessions_ );
 
 	P = Sessions().Search( SessionID );
 
-	if ( P != E_NIL ) {
+	if ( P != qNIL ) {
 
 		data__ &Data =  *(data__ *)Sessions().Pointers( P );
 
 		if ( !mtx::TryToLock( Data.Mutex ) ) {
 			Answer = aLocked;
 			_Log( lCloseButLocked, SessionID );
-			ERRReturn;	// To avoid the below 'mtx::Unlock'.
+			qRReturn;	// To avoid the below 'mtx::Unlock'.
 		} else if ( Data.InUse ) {
 			Answer = aInUse;
 			_Log( lCloseButInUse, SessionID );
@@ -267,17 +267,17 @@ ERRBegin
 		Answer = aUnknow;
 		_Log( lCloseButUnknown, SessionID );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Answer;
 }
 
 void cgimng::tool___::CloseExpired( bso::bool__ Balance )
 {
-ERRProlog
+qRH
 	lck::read_write_access___<sessions_> Sessions;
-ERRBegin
+qRB
 	Sessions.Init( Sessions_ );
 
 	Sessions().CloseExpired();
@@ -286,7 +286,7 @@ ERRBegin
 		Sessions().Balance();
 
 	_Log( lCleaning, str::string() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

@@ -78,7 +78,7 @@ void bitbch::And(
 {
 #ifdef BITBCH_DBG
 	if ( O1.Amount() != O2.Amount() )
-		ERRPrm();
+		qRFwk();
 #endif
 
 	receptacle__ Buffer[3 * BUFFER_SIZE];
@@ -146,7 +146,7 @@ void bitbch::Or(
 {
 #ifdef BITBCH_DBG
 	if ( O1.Amount() != O2.Amount() )
-		ERRPrm();
+		qRFwk();
 #endif
 
 	receptacle__ Buffer[3 * BUFFER_SIZE];
@@ -215,7 +215,7 @@ void bitbch::XOr(
 {
 #ifdef BITBCH_DBG
 	if ( O1.Amount() != O2.Amount() )
-		ERRPrm();
+		qRFwk();
 #endif
 
 	receptacle__ Buffer[3 * BUFFER_SIZE];
@@ -256,7 +256,7 @@ void bitbch::Not(
 	if ( R.Amount() < O.Amount() )
 		R.Allocate( O.Amount() );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		R.Table.Store( ~O.Table( Row ), Row );
 
 		Row++;
@@ -307,7 +307,7 @@ txf::text_oflow__ &operator <<(
 {
 	sdr::row__ Row = Bunch.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		OStream << (unsigned long)Bunch( Row );
 
 		Row = Bunch.Next( Row );

@@ -144,14 +144,14 @@ namespace clthvy {
 			const _flow___ *Flow )
 		{
 			if ( S_.Log.Functions != NULL ) {
-ERRProlog
-ERRBegin
+qRH
+qRB
 				_Lock( S_.Log.Mutex );
 				S_.Log.Functions->Log( Log, Flow, Flows.Amount() );
-ERRErr
-ERREnd
+qRR
+qRT
 				_Unlock( S_.Log.Mutex );
-ERREpilog
+qRE
 			}
 		}
 	public:
@@ -229,10 +229,10 @@ ERREpilog
 		_flow___ *Get( void )
 		{
 			_flow___ *Flow = NULL;
-		ERRProlog
+		qRH
 			log__ Log = l_Undefined;
 			bso::bool__ Locked = false;
-		ERRBegin
+		qRB
 			_Lock( S_.Mutex );
 			Locked = true;
 
@@ -254,11 +254,11 @@ ERREpilog
 			Locked = false;
 
 			_Log( Log, Flow );
-		ERRErr
-		ERREnd
+		qRR
+		qRT
 			if ( Locked )
 				_Unlock( S_.Mutex );
-		ERREpilog
+		qRE
 
 			return Flow;
 		}

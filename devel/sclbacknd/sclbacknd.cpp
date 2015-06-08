@@ -48,9 +48,9 @@ scldaemon::callback__ *scldaemon::SCLDAEMONGetCallback(
 	csdleo::mode__ CSDMode )
 {
 	sclbacknd::callback__ *Callback = NULL;
-ERRProlog
+qRH
 	fblbur::mode__ FBLMode = fblbur::m_Undefined;
-ERRBegin
+qRB
 	switch ( CSDMode ) {
 	case csdleo::mEmbedded:
 		FBLMode = fblbur::mEmbedded;
@@ -59,17 +59,17 @@ ERRBegin
 		FBLMode = fblbur::mRemote;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	Callback = SCLBACKNDGetCallback( Context, FBLMode );
-ERRErr
+qRR
 	if ( Callback != NULL )
 		delete Callback;
 
 	Callback = NULL;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Callback;
 }

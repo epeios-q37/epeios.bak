@@ -94,10 +94,10 @@ void dtfrmf::Encapsulate(
 	const flx::bunch_ &Data,
 	flw::oflow___ &Flow )
 {
-ERRProlog
+qRH
 	flx::bunch_iflow___ IFlow;
 	tym::size__ Size;
-ERRBegin
+qRB
 	IFlow.Init( Data );
 	
 	Size = Data.Amount();
@@ -106,26 +106,26 @@ ERRBegin
 
 	while( Size-- )	// Should be optimized by using a buffer.
 		Flow.Put( IFlow.Get() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void dtfrmf::Decapsulate(
 	flw::iflow___ &Flow,
 	flx::bunch_ &Data )
 {
-ERRProlog
+qRH
 	flx::bunch_oflow___ OFlow;
 	tym::size__ Size;
-ERRBegin
+qRB
 	OFlow.Init( Data );
 
 	Size = GetSize( Flow );
 
 	while( Size-- )	// Should be optimized by using a buffer.
 		OFlow.Put( Flow.Get() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

@@ -37,11 +37,11 @@ static void AppendTag_(
 	str::strings_ &Names,
 	str::strings_ &Values )
 {
-ERRProlog
+qRH
 	str::string NameForRawValue;
 	str::string EscapedValue;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Names.Append( str::string( Name ) );
 	EscapedValue.Init();
 	xdhcbk::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
@@ -52,9 +52,9 @@ ERRBegin
 
 	Names.Append( NameForRawValue );
 	Values.Append( str::string( Value.UTF8( Buffer ) ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void SetProperty_(
@@ -63,10 +63,10 @@ static void SetProperty_(
 	const nstring___ &Name,
 	const nstring___ &Value )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sPropertySetter, Script );
 
@@ -80,9 +80,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static const char *GetProperty_(
@@ -92,11 +92,11 @@ static const char *GetProperty_(
 	TOL_CBUFFER___ &Buffer )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
 	TOL_CBUFFER___ EscapedBuffer;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sPropertyGetter, Script );
 
@@ -109,9 +109,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Result = Callback.Execute( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -121,10 +121,10 @@ static void SetAttribute_(
 	const nstring___ &Name,
 	const nstring___ &Value )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sAttributeSetter, Script );
 
@@ -138,9 +138,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static const char *GetAttribute_(
@@ -150,11 +150,11 @@ static const char *GetAttribute_(
 	TOL_CBUFFER___ &Buffer )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
 	TOL_CBUFFER___ EscapedBuffer;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sAttributeGetter, Script );
 
@@ -167,9 +167,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Result = Callback.Execute( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -179,13 +179,13 @@ static const str::string_ &GetAttribute_(
 	const nstring___ &Name,
 	str::string_ &Value )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Value.Append( GetAttribute_( Callback, Id, Name, Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Value;
 }
 
@@ -194,10 +194,10 @@ static void RemoveAttribute_(
 	const nstring___ &Id,
 	const nstring___ &Name )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sAttributeRemover, Script );
 
@@ -210,9 +210,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetWidgetFeatures_(
@@ -222,10 +222,10 @@ static void GetWidgetFeatures_(
 	str::string_ &ContentRetrievingMethod,
 	str::string_ &FocusingMethod )
 {
-ERRProlog
+qRH
 	xdhcbk::args Args;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xdhcbk::Split( MergedArgs, Args );
 
@@ -242,26 +242,26 @@ ERRBegin
 
 	if ( Retriever.Availability() != strmrg::aNone )
 		Retriever.GetString( FocusingMethod );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetWidgetContentRetrievingMethod_(
 	const str::string_ &Args,
 	str::string_ &Method )
 {
-ERRProlog
+qRH
 	str::string Type, Parameters, OtherMethod;
-ERRBegin
+qRB
 	Type.Init();
 	Parameters.Init();
 	OtherMethod.Init();
 
 	GetWidgetFeatures_( Args, Type, Parameters, Method, OtherMethod );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static const char *GetRegularContent_(
@@ -270,10 +270,10 @@ static const char *GetRegularContent_(
 	TOL_CBUFFER___ &Buffer )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sContentGetter, Script );
 
@@ -285,9 +285,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Result = Callback.Execute( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -298,10 +298,10 @@ static const char *GetWidgetContent_(
 	TOL_CBUFFER___ &Buffer )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sWidgetContentRetriever, Script );
 
@@ -314,9 +314,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Result = Callback.Execute( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -326,10 +326,10 @@ static const char *GetContent_(
 	TOL_CBUFFER___ &Buffer )
 {
 	const char *Result = NULL;
-ERRProlog
+qRH
 	str::string Args, Method;
 	TOL_CBUFFER___ ABuffer;
-ERRBegin
+qRB
 	Args.Init();
 	GetAttribute_(Callback, Id, Callback.GetWidgetAttributeName( ABuffer ), Args );
 
@@ -342,9 +342,9 @@ ERRBegin
 		Result = GetRegularContent_( Callback, Id, Buffer );
 	else
 		Result = GetWidgetContent_( Callback, Id, Method, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -353,10 +353,10 @@ static void SetContent_(
 	const nstring___ &Id,
 	const nstring___ &Value )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sContentSetter, Script );
 
@@ -369,19 +369,19 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void RegularFocusing_(
 	callback__ &Callback,
 	const nstring___ &Id )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sFocusing, Script );
 
@@ -393,9 +393,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void WidgetFocusing_(
@@ -403,10 +403,10 @@ static void WidgetFocusing_(
 	const nstring___ &Id,
 	const str::string_ &Method )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sWidgetFocusing, Script );
 
@@ -419,36 +419,36 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetWidgetFocusingMethod_(
 	const str::string_ &Args,
 	str::string_ &Method )
 {
-ERRProlog
+qRH
 	str::string Type, Parameters, OtherMethod;
-ERRBegin
+qRB
 	Type.Init();
 	Parameters.Init();
 	OtherMethod.Init();
 
 	GetWidgetFeatures_( Args, Type, Parameters, OtherMethod, Method );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Focus_(
 	callback__ &Callback,
 	const nstring___ &Id )
 {
-ERRProlog
+qRH
 	str::string Args, Method;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Args.Init();
 	GetAttribute_(Callback, Id, Callback.GetWidgetAttributeName( Buffer ), Args );
 
@@ -461,9 +461,9 @@ ERRBegin
 		RegularFocusing_( Callback, Id );
 	else
 		WidgetFocusing_( Callback, Id, Method );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Alert_(
@@ -472,11 +472,11 @@ static void Alert_(
 	const nchar__ *XSL,
 	const nchar__ *Title )
 {
-ERRProlog
+qRH
 	str::string Script, CloseText;
 	str::strings TagNames, TagValues;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sDialogAlert, Script );
 
@@ -494,9 +494,9 @@ ERRBegin
 	tagsbs::SubstituteLongTags( Script, TagNames, TagValues );
 
 	Callback.Execute( Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Alert_(
@@ -518,12 +518,12 @@ static void Confirm_(
 	const nchar__ *Title,
 	TOL_CBUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string Script, CloseText;
 	str::strings TagNames, TagValues;
 	TOL_CBUFFER___ LBuffer;
 	str::string Response;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sDialogConfirm, Script );
 
@@ -550,9 +550,9 @@ ERRBegin
 
 	Response.Convert( Buffer );
 #endif
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Confirm_(
@@ -574,12 +574,12 @@ static void SetChildren_(
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
 	nstring___ RootTagId;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Script.Init();
 
 	if ( Id == NULL ) {
@@ -601,9 +601,9 @@ ERRBegin
 	Callback.Execute( Script );
 
 	Callback.HandleExtensions( Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void SetChildren_(
@@ -624,12 +624,12 @@ static void SetCasting_(
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
-ERRProlog
+qRH
 	str::string Script;
 	str::strings TagNames, TagValues;
 	TOL_CBUFFER___ Buffer;
 	nstring___ RootTagId;
-ERRBegin
+qRB
 	Script.Init();
 	Callback.GetScript( sCastingDefiner, Script );
 
@@ -649,9 +649,9 @@ ERRBegin
 	}
 
 	Callback.HandleCastings( Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void SetCasting_(
@@ -730,15 +730,15 @@ static void GetResult_(
 	const nchar__ *Id,
 	TOL_CBUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string ResultAttributeName;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );;
 	GetAttribute_( Callback, Id, ResultAttributeName, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetResult_(
@@ -793,9 +793,9 @@ void dhtjsbased::proxy_callback__::XDHCBKProcess(
 	xdhcbk::function__ Function,
 	... )
 {
-ERRProlog
+qRH
 	va_list List;
-ERRBegin
+qRB
 	va_start( List, Function );
 	switch ( Function ) {
 	F( Alert );
@@ -812,11 +812,11 @@ ERRBegin
 	F( GetContent );
 	F( Focus );
 	default:
-		ERRFwk();
+		qRFwk();
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	va_end( List );
-ERREpilog
+qRE
 }
 

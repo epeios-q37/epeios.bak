@@ -146,7 +146,7 @@ namespace tol
 				return true;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -154,8 +154,8 @@ namespace tol
 		}
 	};
 
-	// NOTA : 'E_NIL' pas encore connu, d'o utilisation de '-1'.
-	template <typename r> class extended_row__	// Pour les fonctions renvoyant un 'Row' dont une valeur diffrente de 'E_NIL' reprsente une erreur.
+	// NOTA : 'qNIL' pas encore connu, d'o utilisation de '-1'.
+	template <typename r> class extended_row__	// Pour les fonctions renvoyant un 'Row' dont une valeur diffrente de 'qNIL' reprsente une erreur.
 	{
 	private:
 		r _Row;
@@ -731,7 +731,7 @@ namespace tol {
 		LARGE_INTEGER Counter;
 
 		if ( QueryPerformanceCounter( &Counter ) == 0 )
-			ERRSys();
+			qRSys();
 
 		return Counter;
 	}
@@ -742,7 +742,7 @@ namespace tol {
 		coeff__ Coeff)
 	{
 		if ( Op1->QuadPart < Op2->QuadPart )
-			ERRPrm();
+			qRFwk();
 
 		LONGLONG Diff = ( Coeff * ( Op1->QuadPart - Op2->QuadPart ) ) / _TickFrequence.QuadPart;
 
@@ -777,12 +777,12 @@ namespace tol {
 		coeff__ Coeff)
 	{
 		if ( *Op1 < *Op2 )
-			ERRPrm();
+			qRFwk();
 
 		uint64_t Elapsed = *Op1 - *Op2;
 
 		if ( ( TOL_DIFF_MAX / _Numer ) < Elapsed )
-			ERRLmt();
+			qRLmt();
 
 		return ( Elapsed * _Numer / _Denom  ) / ( 1000000000 / Coeff );
 	}
@@ -799,7 +799,7 @@ namespace tol {
 		timespec TP;
 
 		if ( clock_gettime( CLOCK_MONOTONIC, &TP ) != 0 )
-			ERRLbr();
+			qRLbr();
 
 		return TP;
 	}
@@ -815,11 +815,11 @@ namespace tol {
 		bso::uint__ Frac = 0;
 
 		if ( Op1->tv_sec < Op2->tv_sec )
-			ERRPrm();
+			qRFwk();
 
 		if( Op1->tv_sec == Op2->tv_sec )
 			if ( Op1->tv_nsec < Op2->tv_nsec )
-				ERRPrm();
+				qRFwk();
 
 		Intermediate->tv_nsec = ( ( CarryFlag ? 1000000000 : 0 ) + Op1->tv_nsec ) - Op2->tv_nsec;
 
@@ -946,17 +946,17 @@ namespace tol {
 		lconv *LConv = localeconv();
 
 # ifdef CPE_ANDROID	// Pas de membre 'decimal_point' dfini dans ce cas...
-		ERRLmt();
+		qRLmt();
 		return 0;	// Pour viter un 'warning'.
 # else
 		if ( LConv->decimal_point == NULL )
-			ERRSys();
+			qRSys();
 
 		if ( LConv->decimal_point[0] == 0 )
-			ERRSys();
+			qRSys();
 
 		if ( LConv->decimal_point[1] != 0 )
-			ERRSys();
+			qRSys();
 
 		return *LConv->decimal_point;
 #endif
@@ -1123,7 +1123,7 @@ namespace tol {
 		}
 		_core_pointer___ &operator =( const _core_pointer___ &Pointer )
 		{
-			ERRFwk();	// Otherwise the same ressource is used twice ; which delete them ?
+			qRFwk();	// Otherwise the same ressource is used twice ; which delete them ?
 
 			return *this;
 		}
@@ -1131,7 +1131,7 @@ namespace tol {
 		{
 #ifdef TOL_DBG
 			if ( P_ != NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 
 			P_ = P;
@@ -1254,7 +1254,7 @@ namespace tol {
 
 				if ( P == NULL ) {
 					if ( ErrHandling == err::hThrowException )
-						ERRAlc();
+						qRAlc();
 
 					return false;
 				} else 
@@ -1289,7 +1289,7 @@ namespace tol {
 		}
 		void Init( void )
 		{
-			ERRFwk();	// C'est un 'buffer' ; pas d'initailisation.
+			qRFwk();	// C'est un 'buffer' ; pas d'initailisation.
 		}
 		void Forget( void )	// Evite que le ponteur sous-jacent soit effac  la destruction de l'objet.
 		{
@@ -1335,7 +1335,7 @@ namespace tol {
 		}
 		buffer___ &operator =( const buffer___ & )
 		{
-			ERRFwk(); 
+			qRFwk(); 
 
 			return *this;
 		}
@@ -1552,7 +1552,7 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	type *name( void ) const\
 	{\
 		if ( variable == NULL )\
-			ERRFwk();\
+			qRFwk();\
 \
 		return variable;\
 	}
@@ -1562,7 +1562,7 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	type &name( void ) const\
 	{\
 		if ( variable == NULL )\
-			ERRFwk();\
+			qRFwk();\
 \
 		return *variable;\
 	}

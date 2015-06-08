@@ -47,7 +47,7 @@ namespace wkagent {
 		wkcllbck::upstream_callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}
@@ -77,7 +77,7 @@ namespace wkagent {
 			wkcllbck::action_callback__ &Callback )
 		{
 			if ( !_Actions.Add( Name, Callback ) )
-				ERRFwk();
+				qRFwk();
 		}
 		const char *ExecuteJavascript(
 			const char *Script,

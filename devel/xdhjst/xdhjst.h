@@ -162,7 +162,7 @@ namespace xdhjst {
 			UserAction.reset( P );
 			Args.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Event.plug( AS );
 			UserAction.plug( AS );
@@ -230,7 +230,7 @@ namespace xdhjst {
 
 	sdr::row__ Find(
 		const str::string_ &Event,
-		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'E_NIL' if not found.
+		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'qNIL' if not found.
 
 	void GetEventsAbstracts(
 		const str::string_ &Events,

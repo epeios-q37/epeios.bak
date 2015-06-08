@@ -48,7 +48,7 @@ namespace mscmld {
 
 		switch ( Value ) {
 		case 0:
-			ERRFwk();
+			qRFwk();
 			break;
 		case 1:
 			return 0;
@@ -75,7 +75,7 @@ namespace mscmld {
 			return 7;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -363,7 +363,7 @@ namespace mscmld {
 		void _Test( void ) const
 		{
 			if ( !IsValid() )
-				ERRFwk();
+				qRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -391,10 +391,10 @@ namespace mscmld {
 			bso::bool__ DenominatorIsHidden = false  )
 		{
 			if ( Numerator > MSCMLD_TIME_SIGNATURE_NUMERATOR_MAX )
-				ERRFwk();
+				qRFwk();
 
 			if ( Numerator == 0 )
-				ERRFwk();
+				qRFwk();
 
 			_Numerator = ( DenominatorIsHidden ? -Numerator : Numerator );
 
@@ -615,11 +615,11 @@ namespace mscmld {
 			notes_::reset( P );
 			S_.Anacrousis.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			notes_::plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			notes_::plug( AS );
 		}

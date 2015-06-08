@@ -50,13 +50,13 @@ state__ dir::HandleError( void )
 		return sBadPath;
 		break;
 	case EFAULT:
-		ERRFwk();
+		qRFwk();
 		break;
 	case ENOTEMPTY:
 		return sNotEmpty;
 		break;
 	default:
-		ERRSys();
+		qRSys();
 		break;
 	}
 

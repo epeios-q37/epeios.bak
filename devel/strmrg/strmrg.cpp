@@ -32,16 +32,16 @@ using namespace strmrg;
 
 row__ strmrg::table_::Append( const str::string_ &String )
 {
-	row__ Row = E_NIL;
-ERRProlog
+	row__ Row = qNIL;
+qRH
 	_item Item;
-ERRBegin
+qRB
 	Item.Init( Strings.Append( String ) );
 
 	Row = Main.Append( Items.Append( Item ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -61,11 +61,11 @@ static _irow__ Append_(
 	_items_ &TargetItems,
 	_strings_ &TargetStrings )
 {
-	_irow__ Row = E_NIL;
-ERRProlog
+	_irow__ Row = qNIL;
+qRH
 	_item Item;
 	ctn::E_CMITEMt( _string_ , _srow__ ) SourceString;
-ERRBegin
+qRB
 	if ( SourceItem.ContainsString() ) {	// Positionne 'SourceItem()' pour la suite !
 		SourceString.Init( SourceStrings );
 		Item.Init( TargetStrings.Append( SourceString( SourceItem.String() ) ) );
@@ -75,9 +75,9 @@ ERRBegin
 	}
 
 	Row = TargetItems.Append( Item ) ;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -108,7 +108,7 @@ static void Append_(
 
 	SourceItem.Init( SourceItems );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		TargetRows.Append( Append_( SourceRows( Row ), SourceItems, SourceStrings, TargetItems, TargetStrings ) );
 
 		Row = SourceRows.Next( Row );
@@ -117,12 +117,12 @@ static void Append_(
 
 row__ strmrg::table_::AppendMono( const table_ &Table )
 {
-	row__ Row = E_NIL;
-ERRProlog
+	row__ Row = qNIL;
+qRH
 	_item Item;
 	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
 	ctn::E_CMITEMt( _string_, _srow__ ) SourceString;
-ERRBegin
+qRB
 	SourceItem.Init( Table.Items );
 
 	if ( (Table.Amount() == 1) && (SourceItem(Table.Main(Table.Main.First())).ContainsString()) ) {
@@ -135,18 +135,18 @@ ERRBegin
 
 		Row = Main.Append( Items.Append( Item ) );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
 void strmrg::table_::AppendMulti( const table_ &Table )
 {
-ERRProlog
+qRH
 	retriever__ Retriever;
 	table SubTable;
-ERRBegin
+qRB
 	Retriever.Init( Table );
 
 	while ( Retriever.Availability() != aNone ) {
@@ -154,55 +154,55 @@ ERRBegin
 		Retriever.GetTable( SubTable );
 		AppendMono( SubTable );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 row__ strmrg::table_::AppendMono( const str::strings_ &Strings )
 {
-	row__ Row = E_NIL;
-ERRProlog
+	row__ Row = qNIL;
+qRH
 	table Table;
 	ctn::E_CMITEM( str::string_ ) String;
-	sdr::row__ SRow = E_NIL;
-ERRBegin
+	sdr::row__ SRow = qNIL;
+qRB
 	Table.Init();
 	SRow = Strings.First();
 
 	String.Init( Strings );
 
-	while ( SRow != E_NIL ) {
+	while ( SRow != qNIL ) {
 		Table.Append( String( SRow ) );
 
 		SRow = Strings.Next( SRow );
 	}
 
 	Row = AppendMono( Table ); 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
 void strmrg::table_::AppendMulti( const str::strings_ &Strings )
 {
-ERRProlog
+qRH
 	ctn::E_CMITEM( str::string_ ) String;
 	sdr::row__ Row = Strings.First();
-ERRBegin
+qRB
 	Row = Strings.First();
 
 	String.Init( Strings );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Append( String( Row ) );
 
 		Row = Strings.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void strmrg::table_::GetTable(
@@ -239,7 +239,7 @@ static void Put_(
 	sdr::row__ Row = String.First();
 	bso::char__ Char = 0;
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( strrchr( Pattern, Char = String( Row ) ) )
 			Flow << Tokens.Escape;
 
@@ -263,7 +263,7 @@ static void Merge_(
 	Item.Init( Items );
 	String.Init( Strings );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( Item( Rows ( Row ) ).ContainsString() ) {	// Positionne 'Item' pour la suite !
 
 			Put_( String( Item().String() ), Tokens, Flow );
@@ -292,15 +292,15 @@ void strmrg::Merge(
 	str::string_ &String,
 	const tokens__ &Tokens )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ Flow;
-ERRBegin
+qRB
 	Flow.Init( String );
 
 	Merge( Table, Flow, Tokens );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 enum trace__ {
@@ -317,14 +317,14 @@ bso::bool__ strmrg::Split(
 	const tokens__ &Tokens )	// Rcursif !
 {
 	bso::bool__ Success = true;
-ERRProlog
+qRH
 	str::string String;
 	table SubTable;
 	trace__ Trace = t_Undefined;
 	xtf::utf__ UTF;
 	bso::char__ C = 0;
 	xtf::error__ Error = xtf::e_Undefined;
-ERRBegin
+qRB
 	String.Init();
 
 	while ( !Flow.EndOfFlow( Error ) ) {
@@ -350,14 +350,14 @@ ERRBegin
 				SubTable.Init();
 				if ( !Split( Flow, SubTable, Tokens ) ) {
 					Success = false;
-					ERRFwk();
+					qRFwk();
 				}
 				Table.AppendMono( SubTable );
 				Trace = tTable;
 			} else if ( C == Tokens.End ) {
 				if ( String.Amount() != 0 )
 					Table.Append( String );
-				ERRReturn;
+				qRReturn;
 			} else {
 				String.Append( (bso::char__ *)UTF.Data, UTF.Size );
 				Trace = tOther;
@@ -371,9 +371,9 @@ ERRBegin
 	} else
 		Success = false;
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -393,20 +393,20 @@ bso::bool__ strmrg::Split(
 
 void strmrg::retriever__::GetString( str::string_ &String )
 {
-ERRProlog
+qRH
 	str::strings Strings;
-ERRBegin
+qRB
 	Strings.Init();
 
 	GetStrings( Strings );
 
 	if ( Strings.Amount() != 1 )
-		ERRFwk();
+		qRFwk();
 
 	Strings.Recall(Strings.First(), String );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetStrings_(
@@ -422,9 +422,9 @@ static void GetStrings_(
 	Item.Init( Items );
 	String.Init( Strings );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( !Item(Rows( Row ) ).ContainsString() )
-			ERRFwk();
+			qRFwk();
 
 		Result.Append( String( Item().String() ) );
 

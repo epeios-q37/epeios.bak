@@ -57,27 +57,27 @@ void xulfdg::dominspector_eh__::NSXPCMOnEvent( event__ )
 
 void xulfdg::frontend_error_eh__::NSXPCMOnEvent( event__ )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	Trunk().UI().DebugDialog().Close();
-	ERRFree();
-ERRErr
-ERREnd
-ERREpilog
+	qRFree();
+qRR
+qRT
+qRE
 }
 
 void xulfdg::backend_error_eh__::NSXPCMOnEvent( event__ )
 {
-ERRProlog
+qRH
 	xulftk::trunk___ *Trunk = NULL;
-ERRBegin
+qRB
 	Trunk = &this->Trunk();	// Trunk() est perdu lors du 'Close()' qui suit.
 
 	Trunk->UI().DebugDialog().Close();
-	Trunk->Kernel().ThrowERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+	Trunk->Kernel().ThrowqRFwk();
+qRR
+qRT
+qRE
 }
 /* UI Registrations */
 
@@ -105,10 +105,10 @@ void xulfdg::event_handlers__::Attach( nsIDOMWindow *Window )
 
 void xulfdg::debug_dialog__::Attach( nsIDOMWindow *Window )
 {
-ERRProlog
+qRH
 	str::string Id;
 	str::string Translation;
-ERRBegin
+qRB
 	xulfdg::window__::Attach( Window );	// 'xulfdg::' ne devrait pas tre ncessaire, mais le mauvais 'Attach()' est appel par VC++12 si absent...
 
 	Id.Init();
@@ -117,13 +117,13 @@ ERRBegin
 		Translation.Init();
 		Trunk().UI().Alert( Trunk().Kernel().GetTranslation( XULFDG_NAME "_IncompatibleDebugDialog", Translation ) );
 		nsxpcm::Close( Window );
-		ERRReturn;
+		qRReturn;
 	}
 
 	EventHandlers.Attach( Window );
 
 	Refresh();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

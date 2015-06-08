@@ -99,7 +99,7 @@ namespace fblbrd {
 
 			return *this;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Name.plug( AS );
 			Casts.plug( AS );
@@ -165,7 +165,7 @@ namespace fblbrd {
 		{
 			E_CONTAINER_( description_ )::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_CONTAINER_( description_ )::plug( AS );
 		}
@@ -213,7 +213,7 @@ namespace fblbrd {
 			cast__ Cast,
 			... )
 		{
-			sdr::row__ Row = E_NIL;
+			sdr::row__ Row = qNIL;
 			va_list VL;
 
 			va_start( VL, Cast );

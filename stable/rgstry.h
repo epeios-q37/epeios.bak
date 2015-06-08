@@ -89,7 +89,7 @@ namespace rgstry {
 			AttributeName.reset( P );
 			AttributeValue.reset( P);
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			TagName.plug( AS );
 			AttributeName.plug( AS );
@@ -128,7 +128,7 @@ namespace rgstry {
 		{
 			_path_items_::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			_path_items_::plug( AS );
 		}
@@ -378,13 +378,13 @@ namespace rgstry {
 		void reset( bso::bool__ P = true )
 		{
 			S_.Nature = n_Undefined;
-			S_.ParentRow = E_NIL;
+			S_.ParentRow = qNIL;
 
 			Name.reset( P );
 			Value.reset( P );
 			Children.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Name.plug( AS );
 			Value.plug( AS );
@@ -413,7 +413,7 @@ namespace rgstry {
 			nature__ Nature,
 			const name_ &Name,
 			const value_ &Value,
-			row__ ParentRow = E_NIL )
+			row__ ParentRow = qNIL )
 		{
 			Init();
 
@@ -428,7 +428,7 @@ namespace rgstry {
 		void Init(
 			nature__ Nature,
 			const name_ &Name,
-			row__ ParentRow = E_NIL )
+			row__ ParentRow = qNIL )
 		{
 			Init( Nature, Name, value(), ParentRow );
 		}
@@ -510,7 +510,7 @@ namespace rgstry {
 			const name_ &Name,
 			row__ Row ) const
 		{
-			cursor__ Cursor = E_NIL;
+			cursor__ Cursor = qNIL;
 
 			return _Search( nTag, Name, Row, Cursor );
 		}
@@ -525,7 +525,7 @@ namespace rgstry {
 			const name_ &Name,
 			row__ Row ) const
 		{
-			cursor__ Cursor = E_NIL;
+			cursor__ Cursor = qNIL;
 
 			return _Search( nAttribute, Name, Row, Cursor );
 		}
@@ -533,7 +533,7 @@ namespace rgstry {
 			const name_ &Name,
 			row__ Row ) const
 		{
-			return _SearchAttribute( Name, Row ) != E_NIL;
+			return _SearchAttribute( Name, Row ) != qNIL;
 		}
 		row__ _SearchAttribute(
 			const name_ &Name,
@@ -542,11 +542,11 @@ namespace rgstry {
 		{
 			Row = _SearchAttribute( Name, Row );
 
-			if ( Row != E_NIL ) {
+			if ( Row != qNIL ) {
 				buffer Buffer;
 
 				if ( _GetValue( Row, Buffer ) != Value )
-					Row = E_NIL;
+					Row = qNIL;
 			}
 
 			return Row;
@@ -556,7 +556,7 @@ namespace rgstry {
 			const value_ &Value,
 			row__ Row ) const
 		{
-			return _SearchAttribute( Name, Value, Row ) != E_NIL;
+			return _SearchAttribute( Name, Value, Row ) != qNIL;
 		}
 		row__ _Search(
 			const name_ &TagName,
@@ -575,7 +575,7 @@ namespace rgstry {
 			const path_item_ &Item,
 			row__ Row ) const
 		{
-			cursor__ Cursor = E_NIL;
+			cursor__ Cursor = qNIL;
 
 			return _Search( Item, Row, Cursor );
 		}
@@ -595,7 +595,7 @@ namespace rgstry {
 			nature__ Nature,
 			const name_ &Name,
 			const value_ &Value,
-			row__ Row = E_NIL )
+			row__ Row = qNIL )
 		{
 			row__ NewRow = Nodes.New();
 
@@ -607,7 +607,7 @@ namespace rgstry {
 			nature__ Nature,
 			const name_ &Name,
 			const value_ &Value,
-			row__ Row = E_NIL )
+			row__ Row = qNIL )
 		{
 			Row = _CreateWithoutFlush( Nature, Name, Value, Row );
 
@@ -617,7 +617,7 @@ namespace rgstry {
 		}
 		row__ _CreateTag(
 			const name_ &Name,
-			row__ Row = E_NIL )
+			row__ Row = qNIL )
 		{
 			return _CreateWithFlush( nTag, Name, value(), Row );
 		}
@@ -659,12 +659,12 @@ namespace rgstry {
 					_AddAttribute( Item.AttributeName, Item.AttributeValue, Row );
 				else
 					if ( Item.AttributeValue.Amount() != 0 )
-						ERRFwk();
+						qRFwk();
 
 			} else if ( Item.AttributeName.Amount() != 0 )
 				Row = _AddAttribute( Item.AttributeName, Item.AttributeValue, Row );
 			else
-				ERRFwk();
+				qRFwk();
 
 			return Row;
 		}
@@ -704,7 +704,7 @@ namespace rgstry {
 		{
 			Nodes.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Nodes.plug( AS );
 		}
@@ -725,8 +725,8 @@ namespace rgstry {
 			Nodes( ParentRow ).Children.Append( Row );
 
 #ifdef RGSTRY_DBG
-			if ( Nodes( Row ).ParentRow() != E_NIL )
-				ERRFwk();
+			if ( Nodes( Row ).ParentRow() != qNIL )
+				qRFwk();
 #endif
 			Nodes( Row ).ParentRow() = ParentRow;
 
@@ -772,10 +772,12 @@ namespace rgstry {
 		}
 		row__ Create(
 			const path_ &Path,
-			row__ Row );
+			row__ Row,
+			bso::bool__ Reuse );	// If at 'true', if the entry exists, reuse it, otherwise ad a  new entry.
 		row__ Create(
 			const str::string_ &PathString,
 			row__ Row,
+			bso::bool__ Reuse,	// If at 'true', if the entry exists, reuse it, otherwise ad a  new entry.
 			sdr::row__ *PathErrorRow = NULL );
 		nature__ GetNature( row__ Row ) const
 		{
@@ -826,7 +828,7 @@ namespace rgstry {
 			const value_ &Value = GetValue( PathString, Row, &Missing, Buffer );
 
 			if ( Missing )
-				ERRFwk();
+				qRFwk();
 
 			return Value;
 		}
@@ -897,13 +899,29 @@ namespace rgstry {
 			const value_ &Value,
 			row__ Row )
 		{
-			Row = Create( Path, Row );
+			Row = Create( Path, Row, true );
+
+			SetValue( Value, Row, false );
+
+			return Row;
+		}
+		row__ AddValue(
+			const path_ &Path,
+			const value_ &Value,
+			row__ Row )
+		{
+			Row = Create( Path, Row, false );
 
 			SetValue( Value, Row, false );
 
 			return Row;
 		}
 		row__ SetValue(
+			const str::string_ &PathString,
+			const value_ &Value,
+			row__ Row,
+			sdr::row__ *PathErrorRow = NULL );
+		row__ AddValue(
 			const str::string_ &PathString,
 			const value_ &Value,
 			row__ Row,
@@ -956,8 +974,8 @@ namespace rgstry {
 			row__ ResultRow = _SearchAttribute( Name, Row );
 
 #ifdef RGSTRY_DBG
-			if ( Row == E_NIL )
-				ERRFwk();
+			if ( Row == qNIL )
+				qRFwk();
 #endif
 			return _GetValue( ResultRow, Buffer );
 		}
@@ -971,7 +989,7 @@ namespace rgstry {
 		{
 			row__ ResultRow = _Search( Path, Row );
 
-			if ( ResultRow != E_NIL ) {
+			if ( ResultRow != qNIL ) {
 				_Delete( ResultRow );
 				return true;
 			} else
@@ -989,7 +1007,7 @@ namespace rgstry {
 			const path_ &Path,
 			row__ Row ) const
 		{
-			return _Search( Path, Row ) != E_NIL;
+			return _Search( Path, Row ) != qNIL;
 		}
 		bso::bool__ Exists(
 			const str::string_ &PathString,
@@ -1027,7 +1045,7 @@ namespace rgstry {
 		void reset( bso::bool__ P = true )
 		{
 			S_.Coord.reset( P );
-			S_.PathErrorRow = E_NIL;
+			S_.PathErrorRow = qNIL;
 			S_.XPPStatus = xpp::s_Undefined;
 
 			S_.Coord.reset( P );
@@ -1070,25 +1088,25 @@ namespace rgstry {
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		registry_ &Registry,
-		row__ &Root,	// Peut être = 'E_NIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
+		row__ &Root,	// Peut être = 'qNIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
 		xpp::context___ &Context );
 
 	inline row__ Parse(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		registry_ &Registry,
-		row__ &Root	) // Peut être = 'E_NIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
+		row__ &Root	) // Peut être = 'qNIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
 	{
-		row__ Row = E_NIL;
-	ERRProlog
+		row__ Row = qNIL;
+	qRH
 		xpp::context___ Context;
-	ERRBegin
+	qRB
 		Context.Init();
 
 		Row = Parse( XFlow, Criterions, Registry, Root, Context );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Row;
 	}
 
@@ -1116,7 +1134,7 @@ namespace rgstry {
 			_context___::reset( P );
 
 			Status = s_Undefined;
-			PathErrorRow = E_NIL;
+			PathErrorRow = qNIL;
 		}
 		context___( void )
 		{
@@ -1133,7 +1151,7 @@ namespace rgstry {
 			_context___::Init();
 
 			Status = s_Undefined;
-			PathErrorRow = E_NIL;
+			PathErrorRow = qNIL;
 		}
 	};
 
@@ -1158,15 +1176,15 @@ namespace rgstry {
 		rgstry::row__ &RegistryRoot )
 	{
 		status__ Status = s_Undefined;
-	ERRProlog
+	qRH
 		context___ Context;
-	ERRBegin
+	qRB
 		Context.Init();
 
 		Status = FillRegistry( XFlow, Criterions, RootPath, Registry, RegistryRoot, Context );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Status;
 	}
 
@@ -1186,15 +1204,15 @@ namespace rgstry {
 		rgstry::row__ &RegistryRoot )
 	{
 		status__ Status = s_Undefined;
-	ERRProlog
+	qRH
 		context___ Context;
-	ERRBegin
+	qRB
 		Context.Init();
 
 		Status = FillRegistry( FileName, Criterions, RootPath, Registry, RegistryRoot, Context );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Status;
 	}
 
@@ -1213,10 +1231,10 @@ namespace rgstry {
 		void reset( bso::bool__ P = true )
 		{
 			Global.Registry = NULL;
-			Global.Root = E_NIL;
+			Global.Root = qNIL;
 
 			Local.Registry = NULL;
-			Local.Root = E_NIL;
+			Local.Root = qNIL;
 		}
 		overloaded_registry___( void )
 		{
@@ -1236,13 +1254,13 @@ namespace rgstry {
 			this->Global.Root = Root;
 
 			Local.Registry = NULL;
-			Local.Root = E_NIL;
+			Local.Root = qNIL;
 		}
 		row__ Init(
 			const registry_ &Global,
 			row__ Root,
 			registry_ &Local,	// 'Global' et 'Local' peuvent être identiques.
-			row__ LocalRoot )	// Si égal à E_NIL, est crée et retourné.
+			row__ LocalRoot )	// Si égal à qNIL, est crée et retourné.
 		{
 			buffer Buffer;
 
@@ -1250,7 +1268,7 @@ namespace rgstry {
 
 			this->Local.Registry = &Local;
 
-			if ( LocalRoot == E_NIL )
+			if ( LocalRoot == qNIL )
 				LocalRoot = Local.CreateRegistry( this->Global.Registry->GetName( Root, Buffer ) );
 
 			return this->Local.Root = LocalRoot;
@@ -1258,14 +1276,14 @@ namespace rgstry {
 		}
 		row__ SetLocal(
 			registry_ &Registry,	// Si == 'NULL', on prend le 'Global'.
-			row__ Root )	// Si == 'E_NIL' est crée et retourné.
+			row__ Root )	// Si == 'qNIL' est crée et retourné.
 		{
-			if ( ( Global.Registry == NULL ) || ( Global.Root == E_NIL ) )
-				ERRFwk();
+			if ( ( Global.Registry == NULL ) || ( Global.Root == qNIL ) )
+				qRFwk();
 
 			Local.Registry = &Registry;
 
-			if ( Root == E_NIL ) {
+			if ( Root == qNIL ) {
 				buffer Buffer;
 
 				Root = Registry.CreateRegistry( this->Global.Registry->GetName( Global.Root, Buffer ) );
@@ -1300,6 +1318,13 @@ namespace rgstry {
 		{
 			Local.Registry->SetValue( PathString, Value, Local.Root, PathErrorRow );
 		}
+		void AddValue(
+			const str::string_ &PathString,
+			const value_ &Value,
+			sdr::row__ *PathErrorRow = NULL )
+		{
+			Local.Registry->AddValue( PathString, Value, Local.Root, PathErrorRow );
+		}
 		void Delete( row__ Row )
 		{
 			Local.Registry->Delete( Row );
@@ -1331,12 +1356,12 @@ namespace rgstry {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( _LocalRoot != E_NIL )
+				if ( _LocalRoot != qNIL )
 					overloaded_registry___::Delete( _LocalRoot );
 			}
 
 			overloaded_registry___::reset( P );
-			_LocalRoot = E_NIL;
+			_LocalRoot = qNIL;
 		}
 		overloaded_unique_registry___( void )
 		{
@@ -1348,26 +1373,26 @@ namespace rgstry {
 		}
 		row__ Init(
 			registry_ &Global,
-			row__ Root )	// Si == 'E_NIL', est crée et retourné.
+			row__ Root )	// Si == 'qNIL', est crée et retourné.
 		{
 			reset();
 
-			if ( Root == E_NIL )
+			if ( Root == qNIL )
 				Root = Global.CreateRegistry( name() );
 
 			overloaded_registry___::Init( Global, Root );
-			_LocalRoot = E_NIL;
+			_LocalRoot = qNIL;
 
 			return Root;
 		}
 		row__ Init(
 			registry_ &Global,
 			row__ Root,
-			row__ LocalRoot ) // Si égal à E_NIL, est crée et retourné.
+			row__ LocalRoot ) // Si égal à qNIL, est crée et retourné.
 		{
 			reset();
 
-			if ( LocalRoot == E_NIL )
+			if ( LocalRoot == qNIL )
 				LocalRoot = _LocalRoot = overloaded_registry___::Init( Global, Root, Global, LocalRoot );
 			else
 				overloaded_registry___::Init( Global, Root, Global, LocalRoot );
@@ -1376,9 +1401,9 @@ namespace rgstry {
 		}
 		row__ SetLocal(
 			registry_ &Registry,
-			row__ Root )	// Si 'Root' == 'E_NIL'
+			row__ Root )	// Si 'Root' == 'qNIL'
 		{
-			if ( Root == E_NIL )
+			if ( Root == qNIL )
 				Root = _LocalRoot = overloaded_registry___::SetLocal( Registry, Root );
 			else
 				overloaded_registry___::SetLocal( Registry, Root );
@@ -1388,19 +1413,19 @@ namespace rgstry {
 	};
 # endif
 	E_ROW( level__ );
-#	define RGSTRY_UNDEFINED_LEVEL	E_NIL
-	E_CDEF( level__, UndefinedLevel, E_NIL );
+#	define RGSTRY_UNDEFINED_LEVEL	qNIL
+	E_CDEF( level__, UndefinedLevel, qNIL );
 
 	struct entry__ {
 		row__ Root;
 		const registry_ *Registry;
 		void reset( bso::bool__ = true )
 		{
-			Root = E_NIL;
+			Root = qNIL;
 			Registry = NULL;
 		}
 		void Init(
-			row__ Root = E_NIL,
+			row__ Root = qNIL,
 			const registry_ &Registry = *(const registry_ *)NULL )
 		{
 			this->Root = Root;
@@ -1411,14 +1436,14 @@ namespace rgstry {
 			*this = Entry;
 		}
 		entry__(
-			row__ Root = E_NIL,
+			row__ Root = qNIL,
 			const registry_ &Registry = *(const registry_ *)NULL )
 		{
 			Init( Root, Registry );
 		}
 		bso::bool__ IsEmpty( void ) const
 		{
-			return ( Root == E_NIL ) && ( Registry == NULL );
+			return ( Root == qNIL ) && ( Registry == NULL );
 		}
 	};
 
@@ -1440,7 +1465,7 @@ namespace rgstry {
 			level__ Level = TimeStamps.Push( 0 );
 
 			if ( Entries.Push( entry__() ) != Level )
-				ERRFwk();
+				qRFwk();
 
 			_Touch( Level );
 
@@ -1476,7 +1501,7 @@ namespace rgstry {
 			entry__ Entry = _GetEntry( Level );
 
 			if ( Entry.Registry != NULL )
-				ERRFwk();
+				qRFwk();
 
 			return EmbeddedRegistry;
 		}
@@ -1504,7 +1529,7 @@ namespace rgstry {
 			Entries.reset( P );
 			TimeStamps.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			EmbeddedRegistry.plug( AS );
 			Entries.plug( AS );
@@ -1528,14 +1553,14 @@ namespace rgstry {
 		const registry_ &GetRegistry( level__ Level ) const
 		{
 			if ( _IsEmpty( Level ) )
-				ERRFwk();
+				qRFwk();
 	
 			return _GetRegistry( Level );
 		}
 		registry_ &GetRegistry( level__ Level )
 		{
 			if ( _IsEmpty( Level ) )
-				ERRFwk();
+				qRFwk();
 
 			return _GetRegistry( Level );
 		}
@@ -1566,7 +1591,7 @@ namespace rgstry {
 			const entry__ Entry )
 		{
 			if ( !Entries(Level).IsEmpty() )
-				ERRFwk();
+				qRFwk();
 
 			Entries.Store( Entry, Level );
 		}
@@ -1627,9 +1652,10 @@ namespace rgstry {
 		}
 		void Create(
 			level__ Level,
-			const str::string_ &Path )
+			const str::string_ &Path, 
+			bso::bool__ Reuse )
 		{
-			_GetRegistry( Level ).Create( Path, _GetRoot( Level ) );
+			_GetRegistry( Level ).Create( Path, _GetRoot( Level ), Reuse );
 		}
 		const value_ &GetValue(
 			level__ Level,
@@ -1748,9 +1774,22 @@ namespace rgstry {
 			sdr::row__ *PathErrorRow = NULL )
 		{
 			if ( _IsEmpty( Level ) )
-				ERRFwk();
+				qRFwk();
 
 			_GetRegistry( Level ).SetValue( PathString, Value, _GetRoot( Level ), PathErrorRow );
+
+			_Touch( Level );
+		}
+		void AddValue(
+			level__ Level,
+			const str::string_ &PathString,
+			const value_ &Value,
+			sdr::row__ *PathErrorRow = NULL )
+		{
+			if ( _IsEmpty( Level ) )
+				qRFwk();
+
+			_GetRegistry( Level ).AddValue( PathString, Value, _GetRoot( Level ), PathErrorRow );
 
 			_Touch( Level );
 		}
@@ -1759,6 +1798,14 @@ namespace rgstry {
 			const value_ &Value,
 			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
 		bso::bool__ SetValue(
+			const tentry__ &Entry,
+			const value_ &Value,
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+		bso::bool__ AddValue(
+			const str::string_ &PathString,
+			const value_ &Value,
+			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
+		bso::bool__ AddValue(
 			const tentry__ &Entry,
 			const value_ &Value,
 			sdr::row__ *PathErrorRow = NULL );	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
@@ -1828,7 +1875,7 @@ namespace rgstry {
 			const path_ &Path ) const
 		{
 			if ( _IsEmpty( Level ) )
-				return E_NIL;
+				return qNIL;
 			else
 				return _GetRegistry( Level ).Search( Path, _GetRoot( Level ) );
 		}
@@ -1838,7 +1885,7 @@ namespace rgstry {
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
 			if ( _IsEmpty( Level ) )
-				return E_NIL;
+				return qNIL;
 			else
 				return _GetRegistry( Level ).Search( PathString, _GetRoot( Level ), PathErrorRow );
 		}
@@ -1847,35 +1894,35 @@ namespace rgstry {
 			const tentry__ &Entry ) const;
 		row__ Search(
 			const str::string_ &PathString,
-			level__ &Level,	// Valeur retournée != 'E_NIL', contient le 'level' de la registry contenant l'entrée.
+			level__ &Level,	// Valeur retournée != 'qNIL', contient le 'level' de la registry contenant l'entrée.
 			sdr::row__ *PathErrorRow = NULL ) const;
 		row__ Search(
 			const tentry__ &Entry,
-			level__ &Level ) const;	// Valeur retournée != 'E_NIL', contient le 'level' de la registry contenant l'entrée.
+			level__ &Level ) const;	// Valeur retournée != 'qNIL', contient le 'level' de la registry contenant l'entrée.
 		bso::bool__ Exists(
 			level__ Level,
 			const path_ &Path ) const
 		{
-			return Search( Level, Path ) != E_NIL;
+			return Search( Level, Path ) != qNIL;
 		}
 		bso::bool__ Exists(
 			level__ Level,
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			return Search( Level, PathString, PathErrorRow ) != E_NIL;
+			return Search( Level, PathString, PathErrorRow ) != qNIL;
 		}
 		bso::bool__ Exists(
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			level__ Dummy = E_NIL;
-			return Search( PathString, Dummy, PathErrorRow ) != E_NIL;
+			level__ Dummy = qNIL;
+			return Search( PathString, Dummy, PathErrorRow ) != qNIL;
 		}
 		bso::bool__ Exists(	const tentry__ &Entry ) const
 		{
-			level__ Dummy = E_NIL;
-			return Search( Entry, Dummy ) != E_NIL;
+			level__ Dummy = qNIL;
+			return Search( Entry, Dummy ) != qNIL;
 		}
 		status__ Fill(
 			level__ Level,
@@ -1949,18 +1996,18 @@ namespace rgstry {
 		}
 		sdr::size__ Dump(
 			level__ Level,
-			row__ Node,	// Si == 'E_NIL', on part de la racine.
+			row__ Node,	// Si == 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{
 			if ( _IsEmpty( Level ) )
 				return 0;
 			else
-				return _GetRegistry( Level ).Dump( Node == E_NIL ? _GetRoot( Level ) : Node, NodeToo, Writer );
+				return _GetRegistry( Level ).Dump( Node == qNIL ? _GetRoot( Level ) : Node, NodeToo, Writer );
 		}
 		sdr::size__ Dump(
 			level__ Level,
-			row__ Node,	// Si == 'E_NIL', on part de la racine.
+			row__ Node,	// Si == 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::outfit__ Outfit,
 			xml::encoding__ Encoding,
@@ -1969,7 +2016,7 @@ namespace rgstry {
 			if ( _IsEmpty( Level ) )
 				return 0;
 			else
-				return _GetRegistry( Level ).Dump( Node == E_NIL ? _GetRoot( Level ) : Node, NodeToo, Outfit, Encoding, TFlow );
+				return _GetRegistry( Level ).Dump( Node == qNIL ? _GetRoot( Level ) : Node, NodeToo, Outfit, Encoding, TFlow );
 		}
 		time_t TimeStamp( level__ Level ) const
 		{
@@ -1987,18 +2034,18 @@ namespace rgstry {
 		str::uint__ Max )
 	{
 		str::uint__ Value = Default;
-		sdr::row__ LocalError = E_NIL;
+		sdr::row__ LocalError = qNIL;
 
 		Value = str::_UIntConversion( RawValue, 0, &LocalError, str::bAuto, Max );
 
-		if ( ( LocalError != E_NIL ) || ( Value < Min ) ) {
+		if ( ( LocalError != qNIL ) || ( Value < Min ) ) {
 
 			Value = Default;
 
 			if ( Error != NULL )
 				*Error = true;
 			else
-				ERRDta();
+				qRFwk();
 		}
 
 		return Value;
@@ -2013,10 +2060,10 @@ namespace rgstry {
 		str::uint__ Max )
 	{
 		str::uint__ Value = Default;
-	ERRProlog
+	qRH
 		str::string RawValue;
 		bso::bool__ ConversionError = false;
-	ERRBegin
+	qRB
 		RawValue.Init();
 
 		if ( Registry.GetValue( Path, RawValue ) )
@@ -2029,11 +2076,11 @@ namespace rgstry {
 			if ( Error != NULL )
 				*Error = true;
 			else
-				ERRDta();
+				qRFwk();
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Value;
 	}
 
@@ -2046,28 +2093,28 @@ namespace rgstry {
 		str::sint__ Max )
 	{
 		str::sint__ Value = Default;
-	ERRProlog
+	qRH
 		str::string RawValue;
-		sdr::row__ GenericError = E_NIL;
-	ERRBegin
+		sdr::row__ GenericError = qNIL;
+	qRB
 		RawValue.Init();
 
 		if ( Registry.GetValue( Path, RawValue, &GenericError ) )
 			Value = str::_SIntConversion( RawValue, 0, &GenericError, str::bAuto, Min, Max );
 
-		if ( ( GenericError != E_NIL ) ) {
+		if ( ( GenericError != qNIL ) ) {
 
 			Value = Default;
 
 			if ( Error != NULL )
 				*Error = true;
 			else
-				ERRDta();
+				qRFwk();
 		}
 
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Value;
 	}
 

@@ -75,7 +75,7 @@ namespace fblfaq {
 	 		Identification.reset( P );
 			Parameters.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Identification .plug( AS );
 			Parameters.plug( AS );
@@ -126,7 +126,7 @@ namespace fblfaq {
 			Name.reset( P );
 			Commands.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Name.plug( AS );
 			Prefix.plug( AS );

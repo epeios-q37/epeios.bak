@@ -80,15 +80,15 @@ namespace xdhdws {
 			const nstring___ &Title )
 		{
 			bso::bool__ Confirmed  = false;
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			_C().Process( xdhcbk::fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ) );
 
 			Confirmed = !strcmp( "true", Buffer );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Confirmed;
 		}
 		bso::bool__ Confirm( const nstring___ &Message );
@@ -132,13 +132,13 @@ namespace xdhdws {
 			const nstring___ &Name,
 			str::string_ &Property )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Property.Append( GetProperty( Id, Name, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Property;
 		}
 		void SetProperty(
@@ -162,13 +162,13 @@ namespace xdhdws {
 			const nstring___ &Name,
 			str::string_ &Attribute )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Attribute.Append( GetAttribute( Id, Name, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Attribute;
 		}
 		void SetAttribute(
@@ -190,13 +190,13 @@ namespace xdhdws {
 			const nstring___ &Id,
 			str::string_ &Result )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Result.Append( GetResult( Id, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Result;
 		}
 		void RemoveAttribute(
@@ -217,13 +217,13 @@ namespace xdhdws {
 			const nstring___ &Id,
 			str::string_ &Content )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Content.Append( GetContent( Id, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Content;
 		}
 		void SetContent(

@@ -33,18 +33,18 @@ const str::string_ &jvabse::Convert(
 	JNIEnv *Env,
 	str::string_ &String )
 {
-ERRProlog
+qRH
 	const char *Buffer = NULL;
-ERRBegin
+qRB
 	if ( ( Buffer = Env->GetStringUTFChars( JString, NULL ) ) == NULL )
-		ERRLbr();
+		qRLbr();
 
 	String.Append( Buffer );
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Buffer != NULL )
 		Env->ReleaseStringUTFChars( JString, Buffer );
-ERREpilog
+qRE
 	return String;
 }
 
@@ -53,16 +53,16 @@ const char *jvabse::Convert(
 	JNIEnv *Env,
 	STR_BUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string String;
-ERRBegin
+qRB
 	String.Init();
 
 	Convert( JString, Env, String );
 
 	String.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }

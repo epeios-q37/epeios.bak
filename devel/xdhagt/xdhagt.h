@@ -78,13 +78,13 @@ namespace xdhagt {
 			const nstring___ &Name,
 			str::string_ &Value )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Value.Append( GetAttribute( Id, Name, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Value;
 		}
 		void SetAttribute(
@@ -104,13 +104,13 @@ namespace xdhagt {
 			const nstring___ &Id,
 			str::string_ &Value )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Value.Append( GetResult( Id, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Value;
 		}
 		void RemoveAttribute(
@@ -146,13 +146,13 @@ namespace xdhagt {
 			const nstring___ &Id,
 			str::string_ &Value )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Value.Append( GetContent( Id, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Value;
 		}
 		void Focus( const nstring___ &Id )

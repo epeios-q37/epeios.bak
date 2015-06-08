@@ -125,7 +125,7 @@ namespace fdr {
 	inline void Test_( mutex__ Mutex )
 	{
 		if ( Mutex == FDR_NO_MUTEX )
-			ERRFwk();
+			qRFwk();
 	}
 #endif
 
@@ -136,14 +136,14 @@ namespace fdr {
 #ifdef FDR__TS
 			return mtx::Create();
 #else
-			ERRPrm();
+			qRFwk();
 #endif
 			break;
 		case tsDisabled:
 			return FDR_NO_MUTEX;
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -205,7 +205,7 @@ namespace fdr {
 			if ( _Mutex != mtx::UndefinedHandler ) {
 				if ( TryToLock_(_Mutex) ) {
 					if ( _User != NULL )
-						ERRFwk();
+						qRFwk();
 
 					_User = User;
 				} else if ( _User != User ) {
@@ -223,7 +223,7 @@ namespace fdr {
 			if ( _Mutex != mtx::UndefinedHandler ) {
 				if ( IsLocked_( _Mutex ) ) {
 					if ( ( _User != User) && ( User != NULL ) )
-						ERRFwk();
+						qRFwk();
 
 					Unlock_( _Mutex );
 
@@ -270,7 +270,7 @@ namespace fdr {
 		{
 # ifdef FDR_DBG
 			if ( Wanted == 0 )
-				ERRPrm();
+				qRFwk();
 # endif
 			if ( _Size != 0 )
 				return FDRRead( Wanted, Buffer );
@@ -292,15 +292,15 @@ namespace fdr {
 		{
 #ifdef FDR_DBG
 			if ( _Cache == NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( _Available != 0 )
-				ERRFwk();
+				qRFwk();
 #endif
 			_Position = 0;
 
 			if ( _Size < Size )
-				ERRPrm();
+				qRFwk();
 
 			if ( Size != 0 ) {
 				_Available = _LoopingRead( Size, _Cache );
@@ -324,7 +324,7 @@ namespace fdr {
 			if ( _Available < Size ) {
 				if ( ( _Size - _Position ) < Size ) {
 					if ( _Size < Size )
-						ERRPrm();
+						qRFwk();
 
 					if ( _Available != 0 )
 						memcpy( _Cache, _Cache + _Position, _Available );
@@ -413,7 +413,7 @@ namespace fdr {
 			reset();
 #ifdef FDR_DBG
 			if ( Cache == NULL )
-				ERRPrm();
+				qRFwk();
 #endif
 
 			_Cache = Cache;
@@ -437,7 +437,7 @@ namespace fdr {
 		{
 #ifdef FDR_DBG
 			if ( Wanted < 1 )
-				ERRPrm();
+				qRFwk();
 #endif
 			Lock( User );
 
@@ -468,7 +468,7 @@ namespace fdr {
 				return _ReadFromCache( Wanted, Buffer, false );
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 
@@ -569,7 +569,7 @@ namespace fdr {
 		void reset( bso::bool__ P = true )
 		{
 			if ( Dummy != 0 )	
-				ERRPrm();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
+				qRFwk();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 
 			oflow_driver_base___::reset( P );
 		}

@@ -47,13 +47,13 @@ void que::Dump_(
 			Stack.Push( Begin );
 			Begin = Queue.Next( Begin );
 		}
-		while ( Begin != E_NIL );
+		while ( Begin != qNIL );
 	else
 		do
 		{
 			Stack.Push( Begin );
 			Begin = Queue.Previous( Begin );
 		}
-		while ( Begin != E_NIL );
+		while ( Begin != qNIL );
 }
 

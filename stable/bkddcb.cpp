@@ -34,11 +34,11 @@ namespace {
 		backend_access___ &Backend,
 		commands_ &Commands )
 	{
-	ERRProlog
+	qRH
 		ctn::E_CMITEM( command_item_ ) Item;
 		epeios::row__ P =NONE;
 		command Command;
-	ERRBegin
+	qRB
 		Item.Init( Items );
 
 		P = Items.First();
@@ -51,9 +51,9 @@ namespace {
 			Commands.Append( Command );
 			P = Items.Next( P );
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void GetCommands_(
@@ -61,17 +61,17 @@ namespace {
 		bkdacc::backend_access___ &Backend,
 		commands_ &Commands )
 	{
-	ERRProlog
+	qRH
 		commands_items Items;
-	ERRBegin
+	qRB
 		Items.Init();
 
 		Backend.GetCommandsIDAndName( Type, Items );
 
 		HandleCommands_( Items, Type, Backend, Commands );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void HandleType_(
@@ -110,11 +110,11 @@ namespace {
 		bkdacc::backend_access___ &Backend,
 		types_ &Types )
 	{
-	ERRProlog
+	qRH
 		ctn::E_CITEM( xitem16_ ) Item;
 		epeios::row__ P = NONE;
 		type Type;
-	ERRBegin
+	qRB
 		Item.Init( Items );
 
 		P = Items.First();
@@ -130,16 +130,16 @@ namespace {
 			Types.Append( Type );
 			P = Items.Next( P );
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void PutMasterType_( types_items_ &Items )
 	{
-	ERRProlog
+	qRH
 		type_item Item;
-	ERRBegin
+	qRB
 		Item.Init();
 
 		Item.Values.Append( str::string( "" ) );
@@ -147,9 +147,9 @@ namespace {
 		Item.ID( BKDTPM_UNDEFINED_ID16 );
 
 		Items.Append( Item );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -157,9 +157,9 @@ void bkddcb::GetDescription(
 	bkdacc::backend_access___ &Backend,
 	types_ &Types )
 {
-ERRProlog
+qRH
 	types_items Items;
-ERRBegin
+qRB
 	Items.Init();
 	
 	PutMasterType_( Items );
@@ -167,7 +167,7 @@ ERRBegin
 	Backend.GetTypesIDAndPrefixAndName( Items );
 	
 	HandleTypes_( Items, Backend, Types );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

@@ -87,7 +87,7 @@ namespace stsfsm {
 			sdr::row__ Row )
 		{
 			if ( *Row > BSO_U8_MAX )
-				ERRFwk();
+				qRFwk();
 
 			S_.Table[C] = (bso::u8__)*Row;
 		}
@@ -108,11 +108,11 @@ namespace stsfsm {
 			_ResetTable();
 			Cards.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Cards.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Cards.plug( AS );
 		}
@@ -134,7 +134,7 @@ namespace stsfsm {
 		{
 			if ( _T( C ) == NoCard )
 				if ( !Cards.Exists( NoCard ) )
-					return E_NIL;
+					return qNIL;
 
 			return Cards( _T( C ) );
 		}
@@ -142,8 +142,8 @@ namespace stsfsm {
 			bso::u8__ C,
 			crow__ Row )
 		{
-			if ( Get( C ) != E_NIL )
-				ERRFwk();
+			if ( Get( C ) != qNIL )
+				qRFwk();
 
 			_SetT( C, Cards.Append( Row ) );
 		}
@@ -191,7 +191,7 @@ namespace stsfsm {
 		const automat_ &_A( void ) const
 		{
 			if ( _Automat == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Automat;
 		}
@@ -202,13 +202,13 @@ namespace stsfsm {
 		void reset( bso::bool__ = true )
 		{
 			_Automat = NULL;
-			_Current = E_NIL;
+			_Current = qNIL;
 		}
 		E_CVDTOR( parser__ );
 		void Init( const automat_ &Automat )
 		{
 			_Automat = &Automat;
-			_Current = E_NIL;
+			_Current = qNIL;
 		}
 		status__ Handle( bso::u8__ C );
 		status__ Handle( const str::string_ &Pattern )
@@ -225,8 +225,8 @@ namespace stsfsm {
 		{
 			ctn::E_CMITEMt( card_, crow__ ) Card;
 			
-			if ( _Current == E_NIL )
-				ERRFwk();
+			if ( _Current == qNIL )
+				qRFwk();
 
 			Card.Init( _A() );
 
@@ -243,7 +243,7 @@ namespace stsfsm {
 
 		while ( i < Amount ) {
 			if ( Add( GetLabel( (type)i ), i, Automat ) != UndefinedId )
-				ERRFwk();
+				qRFwk();
 
 			i++;
 		}
@@ -259,7 +259,7 @@ namespace stsfsm {
 
 		while ( i < Amount ) {
 			if ( Add( GetLabel( Version, (type)i ), i, Automat ) != UndefinedId )
-				ERRFwk();
+				qRFwk();
 
 			i++;
 		}
@@ -280,7 +280,7 @@ namespace stsfsm {
 		if ( Id == UndefinedId )
 			return UndefinedValue;
 		else if ( Id >= (id__)Amount )
-			ERRFwk();
+			qRFwk();
 		else
 			return (type)Id;
 

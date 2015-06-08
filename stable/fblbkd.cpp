@@ -61,7 +61,7 @@ static const char *GetLabel_( message__ MessageId )
 	CASE( BadLanguage );
 	CASE( BackendError );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -74,23 +74,23 @@ static void Report_(
 	const char *Language,
 	request__ &Request )
 {
-ERRProlog
+qRH
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Translation.Init();
 
 	Request.ReportRequestError( Locale.GetTranslation( GetLabel_( Message ), Language, Translation ).Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void fblbkd::untyped_module::_Clean( void )
 {
 	sdr::row__ Row = Indexes.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		FBLBKDDelete( Indexes( Row ) );
 
 		Row = Indexes.Next( Row );
@@ -103,13 +103,13 @@ namespace {
 	cast__ GetCastID_( const str::string_ &Name )
 	{
 		cast__ C = c_Undefined;
-	ERRProlog
+	qRH
 		TOL_CBUFFER___ N;
-	ERRBegin
+	qRB
 		C = fblcst::GetID( Name.Convert( N  ) );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return C;
 	}
 }
@@ -146,10 +146,10 @@ void master_module::Handle_(
 
 		if ( ( Car = Requete.Input().Get() ) != 0 )
 		{
-ERRProlog
+qRH
 			cast__ Cast;
 			str::string S;
-ERRBegin
+qRB
 			Requete.Output().Put( 0 );	// No explanation message;
 		
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(Casts & languages)" ), false );
@@ -171,9 +171,9 @@ ERRBegin
 
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(Casts & languages)" ), true );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 		}
 		else
 		{
@@ -183,10 +183,10 @@ ERREpilog
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(GetCommandCommand)" ), false );
 
 			
-			while ( ( P != E_NIL ) && ( Description( P ).Name != str::string( PrimaryCommandName ) ) )
+			while ( ( P != qNIL ) && ( Description( P ).Name != str::string( PrimaryCommandName ) ) )
 				P = Descriptions.Next( P );
 
-			if ( P != E_NIL )
+			if ( P != qNIL )
 				C = (command__)*P;
 
 			Requete.Output().Put( 0 );	// No explanation message;
@@ -197,7 +197,7 @@ ERREpilog
 		}
 	}
 	else
-		ERRFwk();
+		qRFwk();
 }
 
 
@@ -211,16 +211,16 @@ static void GetTypesIDAndPrefixAndName_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	xitem16 XItem;
 	sdr::row__ P;
 	type__ Type;
-ERRBegin
+qRB
 	xitem16s_ &XItems = Requete.XItem16sOut();
 
 	P = Backend.Modules.First();
 
-	while( P != E_NIL )
+	while( P != qNIL )
 	{
 		XItem.Init();
 
@@ -238,9 +238,9 @@ ERRBegin
 	}
 
 	Requete.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // Give the list of messages.
@@ -249,19 +249,19 @@ static void WriteCommandsIDAndName_(
 	const descriptions_ &Descriptions,
 	request__ &Requete )
 {
-ERRProlog
+qRH
 	item16 Item;
 	ctn::E_CITEM( description_ ) Description;
 	sdr::row__ P;
 	command__ Command;
-ERRBegin
+qRB
 	item16s_ &Items = Requete.Item16sOut();
 
 	P = Descriptions.First();
 
 	Description.Init( Descriptions );
 
-	while( P != E_NIL )
+	while( P != qNIL )
 	{
 		Item.Init();
 
@@ -279,9 +279,9 @@ ERRBegin
 			
 		P = Descriptions.Next( P );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -367,7 +367,7 @@ static void ThrowERRFwk_(
 	bso::bool__ &,
 	void * )
 {
-	ERRFwk();
+	qRFwk();
 
 	Requete.Complete();
 }
@@ -382,7 +382,7 @@ static void ThrowERRFree_(
 	bso::bool__ &,
 	void * )
 {
-	ERRFree();
+	qRFree();
 
 	Requete.Complete();
 }
@@ -396,13 +396,13 @@ static void TestNotification_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Requete.ReportRequestError( Requete.StringIn().Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -416,18 +416,18 @@ static void GetNewObject_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	type__ T = FBLBKD_INVALID_TYPE;
 	TOL_CBUFFER___ Buffer;
 	object__ O;
-ERRBegin
+qRB
 	T = Request.Id16In();
 
 	if ( *T >= Backend.Modules.Amount() )
-		ERRFwk();
+		qRFwk();
 
 	if ( T == FBLBKD_INVALID_TYPE )
-		ERRFwk();
+		qRFwk();
 
 	O = Backend.New( (type__)*T );
 
@@ -437,9 +437,9 @@ ERRBegin
 		Report_( m_UnknowObjectType, Backend.Locale(), Backend.Language(), Request );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // Retourne l'identificateur correspondant  un type donn.
@@ -452,10 +452,10 @@ static void GetType_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	type__ T = FBLBKD_INVALID_TYPE;
-ERRBegin
+qRB
 	const str::string_ &Type = Request.StringIn();
 	T = Backend.Type( Type );
 
@@ -465,9 +465,9 @@ ERRBegin
 		Report_( m_UnknowObjectTypeName, Backend.Locale(), Backend.Language(), Request );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 #if 0
 // Returns all the raw messages.
@@ -480,13 +480,13 @@ static void GetRawMessages_(
 	bso::bool__ &,
 	void * )
 {
-	mdr::row__ Row = E_NIL;
+	mdr::row__ Row = qNIL;
 	strings_ &Messages = Requete.StringsOut();
 	Messages = Backend.GetMasterRawMessages();
 
 	Row = Backend.Modules.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Backend.Modules( Row )->GetRawMessages( Messages );
 
 		Row = Backend.Modules.Next( Row );
@@ -520,17 +520,17 @@ static void FillCommands_(
 	const commands_details_ &CommandsDetails,
 	id16s_t_ &Commands )
 {
-ERRProlog
+qRH
 	id16_t__ Command;
-	sdr::row__ Position = E_NIL;
+	sdr::row__ Position = qNIL;
 	description Description;
 	ctn::E_CITEM( command_detail_ ) CommandDetail;
-ERRBegin
+qRB
 	CommandDetail.Init( CommandsDetails );
 
 	Position = CommandsDetails.First();
 
-	while( Position != E_NIL )
+	while( Position != qNIL )
 	{
 		Description.Init();
 
@@ -538,15 +538,15 @@ ERRBegin
 		Description.Name = CommandDetail( Position ).Name;
 
 		if ( ( Command = Backend.Command( Type, Description ) ) == FBLBKD_INVALID_COMMAND )
-			ERRFwk();
+			qRFwk();
 
 		Commands.Append( Command );
 
 		Position = CommandsDetails.Next( Position );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -567,7 +567,7 @@ static void GetTypeAndCommands_(
 	id16s_t_ &Commands = Requete.Id16sOut();
 
 	if ( ( Type = Backend.Type( Name ) ) == FBLBKD_INVALID_TYPE )
-		ERRFwk();
+		qRFwk();
 
 	Commands.Init();
 
@@ -587,11 +587,11 @@ static void GetCommand_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	description Description;
 	command__ Command;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	type__ Type = Request.Id16In();
 
 	Description.Init();
@@ -610,9 +610,9 @@ ERRBegin
 		Report_( m_UnknowCommandNameOrDescription, Backend.Locale(), Backend.Language(), Request );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -676,9 +676,9 @@ static void SetLanguage_(
 	bso::bool__ &Deconnexion,
 	void * )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	const str::string_ &Language = Request.StringIn();
 
 	if ( Language.Amount() == 0 )
@@ -687,9 +687,9 @@ ERRBegin
 		Backend.SetLanguage( Language.Convert( Buffer ) );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define ADD( I )	Backend.Add( fblcmd::CommandsNames[fblcmd::c##I], ::I##_, fblcmd::CommandsParameters[fblcmd::c##I] )
@@ -762,13 +762,13 @@ type__ fblbkd::backend___::Type( const str::string_ &Name ) const
 {
 	sdr::row__ C = Modules.First();
 
-	while ( ( C != E_NIL ) && ( str::string( Modules(C)->Name() ) != Name )  )
+	while ( ( C != qNIL ) && ( str::string( Modules(C)->Name() ) != Name )  )
 		C = Modules.Next( C );
 
-	if ( C == E_NIL )
+	if ( C == qNIL )
 		C = FBLBKD_INVALID_TYPE;
 	else if ( *C > FBLBKD_INVALID_TYPE )
-		ERRLmt();
+		qRLmt();
 
 	return (type_t__)*C;
 }
@@ -780,30 +780,30 @@ bso::bool__ fblbkd::backend___::_TestCompatibility(
 	const char *URLLabel )
 {
 	bso::bool__ Success = true;
-ERRProlog
+qRH
 	char RemoteBackendLabel[20];
 	char Language[10];
 	char RemoteProtocolVersion[10];
 	char RemoteAPIVersion[10];
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	if ( !flw::GetString( Flow, Language, sizeof( Language ) ) )
-		ERRDta();
+		qRFwk();
 
 	if ( !flw::GetString( Flow, RemoteProtocolVersion, sizeof( RemoteProtocolVersion ) ) )
-		ERRDta();
+		qRFwk();
 
 	if ( !flw::GetString( Flow, RemoteBackendLabel, sizeof( RemoteBackendLabel ) ) )
-		ERRDta();
+		qRFwk();
 
 	if ( !flw::GetString( Flow, RemoteAPIVersion, sizeof( RemoteAPIVersion ) ) )
-		ERRDta();
+		qRFwk();
 
 	Flow.Dismiss();
 
 	if ( RemoteBackendLabel[0] && strcmp( RemoteBackendLabel, _BackendLabel ) )
-		ERRVct();	// Pas encore trait.
+		qRVct();	// Pas encore trait.
 
 	if ( strcmp( RemoteProtocolVersion, FBLOVL_PROTOCOL_VERSION )
 		 || ( RemoteAPIVersion[0] && strcmp( RemoteAPIVersion, APIVersion ) ) ) {
@@ -823,19 +823,19 @@ ERRBegin
 		Flow.Put( 0 );
 
 	Flow.Commit();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
 bso::bool__ fblbkd::backend___::_TestCompatibility( flw::ioflow__ &Flow )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string MessageLabel, URLLabel;
 	TOL_CBUFFER___ MessageLabelBuffer, URLLAbelBuffer;
-ERRBegin
+qRB
 	MessageLabel.Init( _BackendLabel );
 	MessageLabel.Append( "UpdateMessage" );
 
@@ -843,9 +843,9 @@ ERRBegin
 	URLLabel.Append( "UpdateURL" );
 
 	Success = _TestCompatibility( Flow, _APIVersion, MessageLabel.Convert( MessageLabelBuffer ), URLLabel.Convert( URLLAbelBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -856,12 +856,12 @@ bso::bool__ backend___::_HandleRequest(
 	log_functions__ &LogFunctions )
 {
 	master_data__ MasterData;
-ERRProlog
+qRH
 	object__ O;
 	err::buffer__ ErrorBuffer;
 	fblbrq::request__ Request;
 	fblbrq::callbacks__ *Callbacks = NULL;
-ERRBegin
+qRB
 	MasterData.Deconnexion = false;
 	MasterData.UP = PU;
 
@@ -875,7 +875,7 @@ ERRBegin
 		Callbacks = &_Remote;
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -885,7 +885,7 @@ ERRBegin
 	flw::Get( Request.Input(), O );
 
 	if ( ( !Links.Exists( O ) ) && ( O != FBLBKD_MASTER_OBJECT ) )
-		ERRFwk();
+		qRFwk();
 
 	if ( O != FBLBKD_MASTER_OBJECT ) {
 		Module_( O ).Handle( Index_( O ), Request, PU, LogFunctions );
@@ -893,7 +893,7 @@ ERRBegin
 		Master_.Handle( (index__)0, Request, &MasterData, LogFunctions );
 
 	Request.Complete();
-ERRErr
+qRR
 	if ( ERRType != err::t_Abort ) {	// Les erreurs de type 't_Abort' doivent tre traits en amont.
 		const char *ErrMsg = err::Message( ErrorBuffer );
 
@@ -901,8 +901,8 @@ ERRErr
 
 		Request.ReportSoftwareError( ErrMsg );
 	}
-ERREnd
-ERREpilog
+qRT
+qRE
 	return !MasterData.Deconnexion;
 }
 #if 0	
@@ -912,11 +912,11 @@ ERREpilog
 		... )
 	{
 		mdr::row__ P;
-	ERRProlog
+	qRH
 		va_list L;
 		description Description;
 		bkdcst::cast Cast;
-	ERRBegin
+	qRB
 		Description.Init( Name );
 		
 		va_start( L, UP );
@@ -935,9 +935,9 @@ ERREpilog
 		
 		if ( UPs.Add( UP ) != P )
 			ERRc();
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return P;
 	}
 #endif

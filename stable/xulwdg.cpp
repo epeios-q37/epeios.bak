@@ -41,7 +41,7 @@ static void UpdateAccessibility_(
 
 void xulwdg::_wp_core__::Refresh( void )
 {
-ERRProlog
+qRH
 	str::string XMLDigest;
 	str::string XSLFileName;
 	flx::E_STRING_OFLOW___ Flow;
@@ -49,7 +49,7 @@ ERRProlog
 	xml::writer Writer;
 	nsIDOMWindow *Window = NULL;
 	nsIDOMElement *Broadcasters = NULL;
-ERRBegin
+qRB
 	XSLFileName.Init();
 	XMLDigest.Init();
 	Flow.Init( XMLDigest );
@@ -65,8 +65,8 @@ ERRBegin
 
 	nsxpcm::Log( XMLDigest );
 	nsxpcm::Log( XSLFileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

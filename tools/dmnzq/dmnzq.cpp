@@ -63,9 +63,9 @@ namespace {
 
 	void ExitFunction_( void )
 	{
-	ERRProlog
+	qRH
 		str::string Message;
-	ERRBegin
+	qRH
 		if ( Core_ != NULL ) {
 			Message.Init();
 			COut << sclmisc::GetBaseTranslation( "TerminatingModule", Message ) << txf::nl << txf::commit;
@@ -74,9 +74,9 @@ namespace {
 		}
 
 		Core_ = NULL;
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	E_ENUM( log_file_handling ) {
@@ -89,9 +89,9 @@ namespace {
 	log_file_handling__ GetLogFileHandling_( void )
 	{
 		log_file_handling__ Handling = lfh_Undefined;
-	ERRProlog
+	qRH
 		str::string Value;
-	ERRBegin
+	qRH
 		Value.Init();
 
 		registry::GetRawModuleLogMode( Value );
@@ -102,9 +102,9 @@ namespace {
 			Handling = lfhDrop;
 		else
 			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleLogMode );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Handling;
 	}
 
@@ -123,9 +123,9 @@ namespace {
 	module_connection_type__ GetModuleConnectionType_( void )
 	{
 		module_connection_type__ Type = mct_Undefined;
-	ERRProlog
+	qRH
 		str::string Value;
-	ERRBegin
+	qRH
 		Value.Init();
 
 		registry::GetRawModuleServiceType( Value );
@@ -136,9 +136,9 @@ namespace {
 			Type = mctSwitched;
 		else
 			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleServiceType );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Type;
 	}
 
@@ -147,15 +147,15 @@ namespace {
 		const bso::char__ *Module,
 		csdbns::port__ Port )
 	{
-	ERRProlog
+	qRH
 		csdbns::server___ Server;
-	ERRBegin
+	qRH
 		Server.Init( Port, Callback );
 
 		Server.Process();
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void UseSwitchingConnections_(
@@ -163,15 +163,15 @@ namespace {
 		csdsns::log_functions__ &LogFunctions,
 		csdbns::port__ Port )
 	{
-	ERRProlog
+	qRH
 		csdsns::server___ Server;
-	ERRBegin
+	qRH
 		Server.Init( Port, Callback, LogFunctions );
 
 		Server.Process();
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	typedef csdsns::log_functions__ _log_functions__;
@@ -222,14 +222,14 @@ namespace {
 		log_file_handling__ LogFileHandling,
 		csdbns::port__ Port )
 	{
-	ERRProlog
+	qRH
 		flf::file_oflow___ FFlow;
 		txf::text_oflow__ TFlow;
 		log_functions__ LogFunctions;
 		fil::mode__ Mode = fil::m_Undefined;
 		lcl::meaning ErrorMeaning;
 		str::string ErrorTranslation;
-	ERRBegin
+	qRH
 
 		if ( LogFileName != NULL ) {
 			switch ( LogFileHandling ) {
@@ -258,9 +258,9 @@ namespace {
 		}
 
 		UseSwitchingConnections_( Callback, LogFileName == NULL ? *(csdsns::log_functions__ *)NULL : LogFunctions, Port );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void Process_(
@@ -270,18 +270,18 @@ namespace {
 		const char *LogFileName,
 		log_file_handling__ LogFileHandling )
 	{
-	ERRProlog
+	qRH
 		lcl::locale SharedLocale;
 		rgstry::registry SharedRegistry;
 		csdlec::library_data__ LibraryData;
 		lcl::meaning Meaning, MeaningBuffer;
 		str::string Translation;
 		err::buffer__ ErrBuffer;
-	ERRBegin
+	qRH
 		SharedLocale.Init();
 		SharedRegistry.Init();
 
-		LibraryData.Init( csdleo::cRegular, ModuleFilename, err::ERRError, sclerror::SCLERRORError, csdleo::mRemote );
+		LibraryData.Init( csdleo::cRegular, ModuleFilename, err::qRRor, sclerror::SCLERRORError, csdleo::mRemote );
 
 		if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 			ERRAlc();
@@ -291,7 +291,7 @@ namespace {
 			Meaning.SetValue( "UnableToLoadModule" );
 			Meaning.AddTag( ModuleFilename );
 			sclerror::SetMeaning( Meaning );
-			ERRAbort();
+			qRAbort();
 		}
 
 		switch ( ConnectionType ) {
@@ -305,7 +305,7 @@ namespace {
 			ERRFwk();
 			break;
 		}
-	ERRErr
+	qRR
 		Meaning.Init();
 		Meaning.SetValue( "ModuleError" );
 		Meaning.SetValue( ModuleFilename );
@@ -326,39 +326,39 @@ namespace {
 		sclmisc::GetBaseTranslation( Meaning, Translation );
 
 		cio::CErr << Translation << txf::nl << txf::commit;
-	ERREnd
-	ERREpilog
+	qRT
+	qRE
 	}
 
 	void Process_(
 		const char *LogFileName,
 		log_file_handling__ LogFileHandling )
 	{
-	ERRProlog
+	qRH
 		str::string ModuleFileName;
 		TOL_CBUFFER___ Buffer;
-	ERRBegin
+	qRH
 		ModuleFileName.Init();
 
 		Process_( registry::GetModuleFileName( ModuleFileName ).Convert( Buffer ), GetService_(), GetModuleConnectionType_(), LogFileName, LogFileHandling );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void Process_( void )
 	{
-	ERRProlog
+	qRH
 		TOL_CBUFFER___ Buffer;
-	ERRBegin
+	qRH
 		atexit( ExitFunction_ );
 
 		cio::COut.Commit();
 
 		Process_( registry::GetModuleLogFilename( Buffer ), GetLogFileHandling_() );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -367,8 +367,8 @@ int scltool::SCLTOOLMain(
 	const scltool::oddities__ &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
-ERRProlog
-ERRBegin
+qRH
+qRH
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
@@ -378,9 +378,9 @@ ERRBegin
 		ERRFwk();
 
 	ExitValue = EXIT_SUCCESS;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ExitValue;
 }
 

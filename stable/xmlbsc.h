@@ -169,7 +169,7 @@ namespace xmlbsc {
 			E_BUNCHt_( o, r )::reset( P );
 			E_MCONTAINERt_( item_, r )::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_LISTt_( r )::plug( AS );
 			E_DTREEt_( r )::plug( AS );
@@ -292,7 +292,7 @@ namespace xmlbsc {
 		//f Returns true if 'Node' exists, or false if no.
 		bso::bool__ Exists( r Node ) const
 		{
-			return E_DTREEt_( r )::Parent( Node ) != E_NIL;
+			return E_DTREEt_( r )::Parent( Node ) != qNIL;
 		}
 		r First( r Node ) const
 		{

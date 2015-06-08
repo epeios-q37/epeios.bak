@@ -30,24 +30,24 @@ const str::string_ &crptgr::Encrypt(
 	const str::string_ &Key,
 	str::string_ &Crypted )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ SFlow;
 	encrypt_oflow___ EFlow;
-	sdr::row__ Row = E_NIL;
-ERRBegin
+	sdr::row__ Row = qNIL;
+qRB
 	SFlow.Init( Crypted );
 	EFlow.Init( SFlow, Key );
 
 	Row = Plain.First();
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		EFlow.Put( Plain( Row ) );
 
 		Row = Plain.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Crypted;
 }
 
@@ -56,17 +56,17 @@ const str::string_ &crptgr::Decrypt(
 	const str::string_ &Key,
 	str::string_ &Plain )
 {
-ERRProlog
+qRH
 	flx::E_STRING_IFLOW__ SFlow;
 	decrypt_iflow___ DFlow;
-ERRBegin
+qRB
 	SFlow.Init( Crypted );
 	DFlow.Init( SFlow, Key );
 
 	while ( DFlow.AmountRed() != Crypted.Amount() )
 		Plain.Append( DFlow.Get() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Plain;
 }

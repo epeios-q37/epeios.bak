@@ -60,7 +60,7 @@ protected:
 	virtual void FDRCommit( void )
 	{
 		if ( ::TargetName_ == NULL )
-			ERRFwk();
+			qRFwk();
 
 		dvkbse::Log( ANDROID_LOG_ERROR, ::TargetName_, _Buffer );
 		_Buffer.Init();
@@ -129,11 +129,11 @@ static void Initialize_(
 	JNIEnv *Env,
 	jobject Activity )
 {
-ERRProlog
+qRH
 	jvastf::input_stream_iflow___ Configuration, Locale;
 	jclass Raw;
 	jvastf::jni_param__ LocaleParam, ConfigurationParam;
-ERRBegin
+qRB
 	LOC
 	InitializeCIO_();
 	LOC
@@ -145,9 +145,9 @@ ERRBegin
 	LOC
 		sclmisc::Initialize( Locale, utf::f_Guess, Configuration, utf::f_Guess, Target, "", "" );
 	LOC
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static dalvik::steering_callback___ &GetSteering_(
@@ -157,7 +157,7 @@ static dalvik::steering_callback___ &GetSteering_(
 	dalvik::steering_callback___ &Steering = *(dalvik::steering_callback___ *)jvabse::GetLongField( Env, Activity, "steering" );
 
 	if( &Steering == NULL )
-		ERRFwk();
+		qRFwk();
 
 	return Steering;
 }
@@ -170,7 +170,7 @@ static void Main_(
 	dalvik::steering_callback___ *Steering = CreateSteering();
 
 	if ( Steering == NULL )
-		ERRFwk();
+		qRFwk();
 	jvabse::SetLongField( Env, Activity, "steering", (jlong)Steering );
 
 	GetSteering_( Env, Activity ).OnCreate( Env, Activity, Bundle );
@@ -186,12 +186,12 @@ template <typename callback, typename method> static void HandleEvent_(
 	jobject Activity = jvabse::GetObjectField( Env, Listener, "activity", "Landroid/app/Activity;" );
 
 	if ( Activity == NULL )
-		ERRFwk();
+		qRFwk();
 
 	callback &Callback = *(callback *)jvabse::GetLongField( Env, Listener, "callback" );
 
 	if ( &Callback == NULL )
-		ERRFwk();
+		qRFwk();
 
     va_list args;                                                       \
     va_start(args, Method );                                           \

@@ -109,15 +109,15 @@ void mmm::multimemory_::DisplayStructure( txf::text_oflow__ &Flow ) const
 
 void mmm::multimemory_file_manager___::_WriteFreeFragmentPositions( void )
 {
-ERRProlog
+qRH
 	flf::file_oflow___ OFlow;
-ERRBegin
+qRB
 	OFlow.Init( _FreeFragmentPositionFileName );
 
 	flw::Put( _Multimemory->S_.FreeFragment, OFlow );
 	flw::Put( _Multimemory->S_.TailingFreeFragmentPosition, OFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

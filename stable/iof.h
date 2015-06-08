@@ -74,7 +74,7 @@ namespace iof {
 		{
 #ifdef IOF_DBG
 			if ( Buffer == NULL )
-				ERRPrm();
+				qRFwk();
 #endif
 			return (fdr::size__)_output__::Write( Buffer, Maximum );
 		}
@@ -163,7 +163,7 @@ namespace iof {
 		{
 	#ifdef IOF_DBG
 			if( Buffer == NULL )
-				ERRPrm();
+				qRFwk();
 	#endif
 			if ( !OnEOF() )
 				return _input__::Read( Maximum, Buffer );

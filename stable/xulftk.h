@@ -90,7 +90,7 @@ namespace xulftk {
 		trunk___ &_T( void )
 		{
 			if ( _Trunk == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Trunk;
 		}
@@ -114,42 +114,42 @@ namespace xulftk {
 			const char *BuildInformations,
 			str::string_ &Text )
 		{
-			ERRFwk();	// Si pas surcharg, alors 'xulfmn::about_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	// Si pas surcharg, alors 'xulfmn::about_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 		virtual void XULFTKSiteURL( str::string_ &URL )
 		{
-			ERRFwk();	// Si pas surcharg, alors 'xulfmn::web_site_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	// Si pas surcharg, alors 'xulfmn::web_site_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 		virtual void XULFTKGoToHome( void ) = 0;
 		virtual void XULFTKDefineSession( const fnm::name___ &ProjectFileName )	// Si la 'Size()' == 0, alors cration d'un nouveau projet, sinon chargement du projet en question.
 		{
-			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	//	Si pas surcharg, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 # if 0	// Old
 		virtual void XULFTKDefineSession(
 			const str::string_ &ProjectFileName,
 			const xpp::criterions___ &XMLPreprocessorCriterions )
 		{
-			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	//	Si pas surcharg, alors 'xulfsf::open_project_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 # endif
 		virtual void XULFTKApplySession( void )
 		{
-			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::apply_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	//	Si pas surcharg, alors 'xulfsf::apply_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 		virtual void XULFTKCancelSession( void )
 		{
-			ERRFwk();	//	Si pas surcharg, alors 'xulfsf::cancel_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	//	Si pas surcharg, alors 'xulfsf::cancel_eh__::NSXPCMOnEvent()' doit tre redfini.
 		}
 		virtual bso::bool__ XULFTKDropSession( void )	// Retourne 'true' si la session aeffectivement t ferme, 'false' sinon.
 		{
-			ERRFwk();	//	Si pas surcharg, alors 'xulfmn::close_project_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	//	Si pas surcharg, alors 'xulfmn::close_project_eh__::NSXPCMOnEvent()' doit tre redfini.
 
 			return false;	// Pour viter un 'warning'.
 		}
 		virtual bso::bool__ XULFTKExit( void )
 		{
-			ERRFwk();	//	Si pas surcharg, alors 'xulfmn::exit_eh__::NSXPCMOnEvent()' doit tre redfini.
+			qRFwk();	//	Si pas surcharg, alors 'xulfmn::exit_eh__::NSXPCMOnEvent()' doit tre redfini.
 
 			return true;	// Pour viter un 'warning'.
 		}
@@ -240,7 +240,7 @@ namespace xulftk {
 		_user_callback__ &_UF( void )
 		{
 			if ( _UserCallback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_UserCallback;
 		}
@@ -321,7 +321,7 @@ namespace xulftk {
 		{
 #ifdef XULFTK_DBG
 			if ( _UI == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_UI;
 		}
@@ -329,21 +329,21 @@ namespace xulftk {
 		{
 #ifdef XULFTK_DBG
 			if ( _UI == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_UI;
 		}
 		const frdkrn::kernel___ &Kernel( void ) const
 		{
 			if ( _Kernel == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Kernel;
 		}
 		frdkrn::kernel___ &Kernel( void )
 		{
 			if ( _Kernel == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Kernel;
 		}
@@ -351,7 +351,7 @@ namespace xulftk {
 		{
 #ifdef XULFTK_DBG
 			if ( _Session == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_Session;
 		}
@@ -359,7 +359,7 @@ namespace xulftk {
 		{
 #ifdef XULFTK_DBG
 			if ( _Session == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_Session;
 		}
@@ -381,26 +381,26 @@ namespace xulftk {
 		}
 		void About( void )
 		{
-		ERRProlog
+		qRH
 			str::string Text;
-		ERRBegin
+		qRB
 			Text.Init();
 
 			_UF().AboutText( Text ),
 
 			UI().Alert( Text );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 		void FinalizeLaunching( void );
 # if 0 //Old
 		bso::bool__ FinalizeLaunching( void )
 		{
 			bso::bool__ Defined = false;
-		ERRProlog
+		qRH
 			str::string DefaultProjectFileName;
-		ERRBegin
+		qRB
 			DefaultProjectFileName.Init();
 
 			if ( Kernel().Registry().GetValue( frdrgy::DefaultProject, DefaultProjectFileName ) ) {
@@ -411,25 +411,25 @@ namespace xulftk {
 
 			RefreshUI();
 
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Defined;
 		}
 # endif
 		void BrowseWEBSite( void )
 		{
-		ERRProlog
+		qRH
 			str::string URL;
-		ERRBegin
+		qRB
 			URL.Init();
 
 			_UF().SiteURL( URL );
 
 			nsxpcm::LaunchURI( URL );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 		void GoToHome( void )
 		{
@@ -476,23 +476,23 @@ namespace xulftk {
 		bso::bool__ Exit( void )
 		{
 			bso::bool__ Confirmation = false;
-		ERRProlog
+		qRH
 			str::string Translation;
-		ERRBegin
+		qRB
 			Translation.Init();
 			Kernel().Locale().GetTranslation( XULFTK_NAME "_ExitConfirmation", Kernel().Language(), Translation );
 
 			if ( Confirmation = nsxpcm::Confirm( UI().Main().Window(), Translation ) )
 				Confirmation = _UF().Exit();
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Confirmation;
 		}
 		const char *DefaultXSLRootPath( void ) const
 		{
 			if ( _DefaultXSLRootPath == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _DefaultXSLRootPath;
 		}

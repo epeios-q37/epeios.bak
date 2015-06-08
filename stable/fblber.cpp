@@ -37,61 +37,61 @@ void fblber::embedded_callbacks___::_GetAll(
 	flw::iflow__ &Flow,
 	const casts_ &Casts )
 {
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 	cast__ Cast = c_Undefined;
 	bso::bool__ FlowParameterDetected = false;
 
 	Row = Casts.First();
 
-	while ( ( Row != E_NIL )
+	while ( ( Row != qNIL )
 		    && ( ( Cast = (cast__)Casts( Row ) ) != cEnd ) ) {
 
 		if ( FlowParameterDetected )
-			ERRFwk();
+			qRFwk();
 
 		if ( Flow.Get() != Cast )
-			ERRFwk();
+			qRFwk();
 
 		if ( Cast == cFlow ) {
 			FlowParameterDetected = true;
 		} else {
 			if ( Repository_.Append( GetPointer_( Flow ) ) != Row )
-				ERRFwk();
+				qRFwk();
 		}
 
 		Row = Casts.Next( Row );
 	}
 
-	if ( Row == E_NIL )
-		ERRFwk();
+	if ( Row == qNIL )
+		qRFwk();
 
 	if ( Flow.Get() != fblcst::cEnd )
-		ERRFwk();
+		qRFwk();
 
 	if ( FlowParameterDetected ) {
 		if ( Repository_.Append( GetPointer_( Flow ) ) != Casts.Previous( Row ) )
-			ERRFwk();
+			qRFwk();
 
 		FlowParameterDetected= false;
 	}
 
 	if ( Repository_.Append( (void *)NULL ) != Row )
-		ERRFwk();
+		qRFwk();
 
 	Row = Casts.Next( Row );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( ( Cast = (cast__)Flow.Get() ) != Casts( Row ) )
-			ERRFwk();
+			qRFwk();
 
 		if ( FlowParameterDetected )
-			ERRFwk();
+			qRFwk();
 
 		if ( Cast == cFlow )
 			FlowParameterDetected = true;
 
 		if ( Repository_.Append( GetPointer_( Flow ) ) != Row )
-			ERRFwk();
+			qRFwk();
 
 		Row = Casts.Next( Row );
 	}
@@ -104,7 +104,7 @@ void fblber::embedded_callbacks___::FBLBRQPopIn(
 	cast__ Cast )
 {
 	if ( Repository_.Append( GetPointer_( Flow ) ) != CRow )
-		ERRFwk();
+		qRFwk();
 }
 
 void fblber::embedded_callbacks___::FBLBRQPopInEnd(
@@ -112,7 +112,7 @@ void fblber::embedded_callbacks___::FBLBRQPopInEnd(
 	flw::iflow__ &Flow )
 {
 	if ( Repository_.Append( (void *)NULL ) != CRow )
-		ERRFwk();
+		qRFwk();
 }
 
 void fblber::embedded_callbacks___::FBLBRQPopOut(
@@ -121,6 +121,6 @@ void fblber::embedded_callbacks___::FBLBRQPopOut(
 	cast__ Cast )
 {
 	if ( Repository_.Append( GetPointer_( Flow ) ) != CRow )
-		ERRFwk();
+		qRFwk();
 }
 

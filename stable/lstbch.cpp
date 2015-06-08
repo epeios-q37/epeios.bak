@@ -27,9 +27,9 @@ void lstbch::hook_filenames___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
-ERRProlog
+qRH
 	fnm::name___ Bunch, List;
-ERRBegin
+qRB
 	Bunch.Init();
 	fnm::BuildPath( Path, Basename, "b", Bunch );
 
@@ -38,7 +38,7 @@ ERRBegin
 
 	this->Bunch.Init( "", Bunch );
 	this->List.Init( "", List );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

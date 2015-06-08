@@ -59,7 +59,7 @@ static inline iop::descriptor__ Open_(
 		strcat( Flags, "r" );
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -71,7 +71,7 @@ static inline iop::descriptor__ Open_(
 static void Close_( iop::descriptor__ D )
 {
 	if ( fclose( D ) != 0 )
-		ERRLbr();
+		qRLbr();
 }
 
 #elif defined( IOP__USE_LOWLEVEL_IO )
@@ -101,7 +101,7 @@ static inline iop::descriptor__ Open_(
 		Flags |= _O_RDONLY;
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -111,7 +111,7 @@ static inline iop::descriptor__ Open_(
 static void Close_( iop::descriptor__ D )
 {
 	if ( _close( D ) != 0 )
-		ERRLbr();
+		qRLbr();
 }
 
 #	elif defined( FIL__POSIX )
@@ -139,7 +139,7 @@ static inline iop::descriptor__ Open_(
 		Flags |= O_RDONLY;
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -149,7 +149,7 @@ static inline iop::descriptor__ Open_(
 static void Close_( iop::descriptor__ D )
 {
 	if ( close( D ) != 0 )
-		ERRLbr();
+		qRLbr();
 }
 
 #	else
@@ -176,20 +176,20 @@ bso::bool__ fil::Create(
 	err::handling__ ErrorHandling )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	iop::descriptor__ Descriptor = IOP_UNDEFINED_DESCRIPTOR;
-ERRBegin
+qRB
 	Descriptor = fil::Open( Filename, fil::mReadWrite );
 
 	Success = ( Descriptor != IOP_UNDEFINED_DESCRIPTOR );
 
 	if ( !Success && ( ErrorHandling == err::hThrowException ) )
-		ERRLbr();
-ERRErr
-ERREnd
+		qRLbr();
+qRR
+qRT
 	if ( Descriptor != IOP_UNDEFINED_DESCRIPTOR )
 		fil::Close( Descriptor );
-ERREpilog
+qRE
 	return Success;
 }
 
@@ -212,7 +212,7 @@ const char *fil::GetLabel( backup_status__ Status )
 	CASE( UnableToDuplicate );
 	CASE( UnableToSuppress );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -224,10 +224,10 @@ void fil::GetMeaning(
 	const fnm::name___ &Filename,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	fnm::name___ BackupFilename;
-ERRBegin
+qRB
 	Meaning.SetValue( GetLabel( Status ) );
 
 	switch ( Status ) {
@@ -240,12 +240,12 @@ ERRBegin
 		Meaning.AddTag( GetBackupFilename( Filename, BackupFilename ).UTF8( Buffer ) );
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 backup_status__ fil::CreateBackupFile(
@@ -254,9 +254,9 @@ backup_status__ fil::CreateBackupFile(
 	err::handling__ ErrorHandling )
 {
 	backup_status__ Status = bs_Undefined;
-ERRProlog
+qRH
 	fnm::name___ BackupFilename;
-ERRBegin
+qRB
 	if ( Exists( Filename ) )
 	{
 		GetBackupFilename( Filename, BackupFilename );
@@ -264,7 +264,7 @@ ERRBegin
 		if ( Exists( BackupFilename ) )
 			if ( !Remove( BackupFilename ) ) {
 				Status = bsUnableToSuppress;
-				ERRReturn;
+				qRReturn;
 			}
 
 		if ( Mode == bmDuplicate )
@@ -278,7 +278,7 @@ ERRBegin
 			if ( In == NULL )
 			{
 				Status = bsUnableToDuplicate;
-				ERRReturn;
+				qRReturn;
 			}
 
 			Out = fopen(NomFichierSecurite, "w");
@@ -286,7 +286,7 @@ ERRBegin
 			{
 				fclose ( In );
 				Status = bsUnableToDuplicate;
-				ERRReturn;
+				qRReturn;
 			}
 
 			while (! feof( In ) )
@@ -297,14 +297,14 @@ ERRBegin
 					fclose( In );
 					fclose( Out );
 					remove( NomFichierSecurite );
-					ERRReturn;
+					qRReturn;
 				}
 			}
 
 			fclose(Out);
 			fclose(In);
 #endif
-			ERRVct();
+			qRVct();
 		}
 		else if ( Mode == bmRename )
 		{
@@ -312,16 +312,16 @@ ERRBegin
 				Status = bsUnableToRename;
 		}
 		else
-			ERRPrm();
+			qRFwk();
 	}
 
 	Status = bsOK;
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Status != bsOK )
 		if ( ErrorHandling == err::hThrowException )
-			ERRFwk();
-ERREpilog
+			qRFwk();
+qRE
 	return Status;
 }
 
@@ -339,7 +339,7 @@ const char *fil::GetLabel( recover_status__ Status )
 	CASE( UnableToRename );
 	CASE( UnableToSuppress );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -351,10 +351,10 @@ void fil::GetMeaning(
 	const fnm::name___ &Filename,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	fnm::name___ BackupFilename;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Meaning.SetValue( GetLabel( Status ) );
 
 	switch ( Status ) {
@@ -366,12 +366,12 @@ ERRBegin
 		Meaning.AddTag(  Filename.UTF8( Buffer ) );
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 recover_status__ fil::RecoverBackupFile(
@@ -379,14 +379,14 @@ recover_status__ fil::RecoverBackupFile(
 	err::handling__ ErrorHandling )
 {
 	recover_status__ Status = rs_Undefined;
-ERRProlog
+qRH
 	fnm::name___ BackupFilename;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	if ( Exists( Filename ) )
 		if ( !Remove( Filename ) ) {
 			Status = rsUnableToSuppress;
-			ERRReturn;
+			qRReturn;
 		}
 
 	BackupFilename.Init();
@@ -395,16 +395,16 @@ ERRBegin
 	if ( Exists( BackupFilename ) )
 		if ( !Rename( BackupFilename, Filename ) ) {
 			Status = rsUnableToRename;
-			ERRReturn;
+			qRReturn;
 		}
 
 	Status = rsOK;
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Status != rsOK )
 		if ( ErrorHandling == err::hThrowException )
-			ERRFwk();
-ERREpilog
+			qRFwk();
+qRE
 	return Status;
 }

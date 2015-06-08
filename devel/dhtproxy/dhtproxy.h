@@ -48,7 +48,7 @@ namespace dhtproxy {
 		xhtcllbk::callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}

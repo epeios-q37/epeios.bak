@@ -350,14 +350,14 @@ namespace xmldbs {
 			const value_ &Value )
 		{
 			value_row__ ValueRow;
-		ERRProlog
+		qRH
 			tagged_value TaggedValue;
-		ERRBegin
+		qRB
 			TaggedValue.Init( Value, TagRow );
 			ValueRow = XMLC_->BecomeLast( TaggedValue, ValueRow_ );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return ValueRow;
 		}
 		//f Put attribute of name 'Name' and value 'Value'. Return its value row.

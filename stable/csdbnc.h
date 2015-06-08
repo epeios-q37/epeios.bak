@@ -104,7 +104,7 @@ namespace csdbnc {
 
 		if ( P == NULL )
 			if ( ErrorHandling == err::hThrowException )
-				ERRFwk();
+				qRFwk();
 			else
 				return NULL;
 		else

@@ -60,17 +60,17 @@ void ui_main::predefined_project_list_event_handler__::DVKEVTOnItemSelected(
 	jobject View,
 	bso::uint__ Id )
 {
-ERRProlog
+qRH
 	str::string Log;
 	bso::integer_buffer__ Buffer;
-ERRBegin
+qRH
 	Log.Init( "PredefinedProjectList : ");
 	Log.Append( bso::Convert( Id, Buffer ) );
 
 	LogD( Log );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void ui_main::predefined_project_list_event_handler__::DVKEVTOnNothingSelected(

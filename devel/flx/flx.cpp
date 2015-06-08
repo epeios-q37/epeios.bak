@@ -35,19 +35,19 @@ cslio::descriptor__ flx::_POpen(
 {
 	cslio::descriptor__ Descriptor = cslio::UndefinedDescriptor;
 # ifdef CPE_WIN
-ERRProlog
+qRH
 	str::string ModifiedCommand;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	// '_popen()' lance en fait "cmd /c ...". Or; lorsque cette commande reoit un paramtre commenant par '"' (hors espaces),
 	// et avec plus d'un jeu de '"', elle en enlve certains (void "cmd /?"). Placer 'echo >NUL && ' en tte de paramtre rsoud ce problme...
 	ModifiedCommand.Init("echo >NUL && ");
 	ModifiedCommand.Append( Command.UTF8( Buffer ) );
 
 	Descriptor = _wpopen( ntvstr::string___( ModifiedCommand ).Internal(), Mode.Internal() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 # elif defined( CPE_POSIX )
 	Descriptor = popen( Command.Internal(), Mode.Internal() );
 # else
@@ -64,12 +64,12 @@ static bso::bool__ POpen2_(
 	HANDLE &Err )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	PROCESS_INFORMATION	piProcessInfo;
 	SECURITY_ATTRIBUTES sa_attr; 
 	HANDLE hChildStdinRd, hChildStdinWr, hChildStdoutRd, hChildStdoutWr, hChildStderrRd, hChildStderrWr;
 	ntvstr::string___ Command;
-ERRBegin
+qRB
 	// Set the bInheritHandle flag so pipe handles are inherited. 
 	sa_attr.nLength              = sizeof( SECURITY_ATTRIBUTES ); 
 	sa_attr.bInheritHandle       = TRUE; 
@@ -78,29 +78,29 @@ ERRBegin
  
 	// Create a pipe for the child process's STDERR. 
  	if ( !CreatePipe( &hChildStderrRd, &hChildStderrWr, &sa_attr, 0 ) )
-		ERRSys();
+		qRSys();
  
 	// Ensure that the read handle to the child process's pipe for STDOUT is not inherited.
 	if ( !SetHandleInformation( hChildStderrRd, HANDLE_FLAG_INHERIT, 0 ) )
-		ERRSys();
+		qRSys();
  
  
 	// Create a pipe for the child process's STDOUT. 
  	if ( !CreatePipe( &hChildStdoutRd, &hChildStdoutWr, &sa_attr, 0 ) )
-		ERRSys();
+		qRSys();
 		
 	// Ensure that the read handle to the child process's pipe for STDOUT is not inherited.
 	if ( !SetHandleInformation( hChildStdoutRd, HANDLE_FLAG_INHERIT, 0 ) )
-		ERRSys();
+		qRSys();
  
  
 	// Create a pipe for the child process's STDIN. 
     if ( !CreatePipe( &hChildStdinRd, &hChildStdinWr, &sa_attr, 0 ) )
-		ERRSys();
+		qRSys();
 
 	// Ensure that the write handle to the child process's pipe for STDIN is not inherited. 
     if ( !SetHandleInformation( hChildStdinWr, HANDLE_FLAG_INHERIT, 0 ) )
-		ERRSys();
+		qRSys();
  
  
 	// Startup information.
@@ -120,7 +120,7 @@ ERRBegin
 		Command.ExposedInternal(), 0, 0, TRUE,
 		0, 0, 0,
 		&siStartupInfo, &piProcessInfo ) )
-		ERRReturn;
+		qRReturn;
 
 //   WaitForSingleObject( piProcessInfo.hProcess, INFINITE );
 
@@ -132,9 +132,9 @@ ERRBegin
 	CloseHandle( piProcessInfo.hThread );
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -189,12 +189,12 @@ sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 		Amount = MAXDWORD;
 
 	if ( !ReadFile( _Out, Buffer, (DWORD)Amount, &Red, NULL ) )
-		ERRDta();
+		qRFwk();
 #elif defined( CPE_POSIX )
 	ssize_t Red = 0;
 
 	if ( ( Red = read( _Out, Buffer, Amount ) ) == -1 )
-		ERRDta();
+		qRFwk();
 #else
 # error
 #endif
@@ -212,16 +212,16 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 		Amount = MAXDWORD;
 
 	if ( !WriteFile( _In, Buffer, (DWORD)Amount, &Written, NULL ) )
-		ERRDta();
+		qRFwk();
 
 	if ( Written == 0 )	// Ne devrait pas arriver.
-		ERRDta();
+		qRFwk();
 #elif defined( CPE_POSIX )
 	ssize_t Written = 0;
 
 
 	if ( (Written = write( _In, Buffer, Amount ) ) == -1 )
-		ERRDta();
+		qRFwk();
 #else
 # error
 #endif

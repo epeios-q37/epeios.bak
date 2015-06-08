@@ -82,17 +82,17 @@ namespace que {
 		sdr::row_t__ Next;
 		link__( void )
 		{
-			Previous = Next = E_NIL;
+			Previous = Next = qNIL;
 		}
 		// Return 'true' if node has next node, false otherwise.
 		bso::bool__ HasNext( void ) const
 		{
-			return Next != E_NIL;
+			return Next != qNIL;
 		}
 		// Return 'true' if node has previous node, false otherwise.
 		bso::bool__ HasPrevious( void ) const
 		{
-			return Previous != E_NIL;
+			return Previous != qNIL;
 		}
 		// To help swapping. Replace all reference to 'Node1' by 'Node2'.
 		void Replace(
@@ -214,8 +214,8 @@ namespace que {
 		{
 			link__ L = Links( Item );
 
-			if ( ( L.Previous != E_NIL ) || ( L.Next != E_NIL ) )
-				ERRFwk();
+			if ( ( L.Previous != qNIL ) || ( L.Next != qNIL ) )
+				qRFwk();
 		}
 	#endif
 	public:
@@ -232,11 +232,11 @@ namespace que {
 		{
 			Links.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Links.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Links.plug( AS );
 		}
@@ -335,7 +335,7 @@ namespace que {
 			if ( LNode.HasPrevious() )
 				Links.SetNext( LNode.Previous, LNode.Next );
 
-			LNode.Next = LNode.Previous = E_NIL;
+			LNode.Next = LNode.Previous = qNIL;
 
 			Links.Store( LNode, *Node );
 		}
@@ -381,14 +381,14 @@ namespace que {
 
 			link__ L = Links.Get( *Node );
 
-			L.Previous = E_NIL;
+			L.Previous = qNIL;
 
 			Links.Store( L, *Node );
 
-			if ( P != E_NIL ) {
+			if ( P != qNIL ) {
 				L = Links.Get( *P );
 
-				L.Next = E_NIL;
+				L.Next = qNIL;
 
 				Links.Store( L, *P );
 			}
@@ -444,14 +444,14 @@ namespace que {
 	#ifdef QUE_DBG
 		void Test_( void ) const
 		{
-			if ( ( Tail_ == E_NIL ) ||( Head_ == E_NIL ) )
-				ERRFwk();
+			if ( ( Tail_ == qNIL ) ||( Head_ == qNIL ) )
+				qRFwk();
 		}
 	#endif
 	public:
 		void reset( bso::bool__ = true )
 		{
-			Head_ = Tail_ = E_NIL;
+			Head_ = Tail_ = qNIL;
 			Amount_ = 0;
 		}
 		queue_manager__( void )
@@ -469,7 +469,7 @@ namespace que {
 		//f Initialization with queue 'Queue'.
 		void Init( que::E_QUEUEt_( r ) & )
 		{
-			Head_ = Tail_ = E_NIL;
+			Head_ = Tail_ = qNIL;
 			Amount_ = 0;
 		}
 		//f Create the queue with item 'Item'.
@@ -478,8 +478,8 @@ namespace que {
 			que::E_QUEUEt_(r) & )
 		{
 # ifdef QUE_DBG
-			if ( ( Head_ != E_NIL ) || ( Tail_ != E_NIL ) )
-				ERRFwk();
+			if ( ( Head_ != qNIL ) || ( Tail_ != qNIL ) )
+				qRFwk();
 # endif
 			Head_ = Tail_ = Item;
 
@@ -586,8 +586,8 @@ namespace que {
 	#ifdef QUE_DBG
 			Test_();
 
-			if ( Node == E_NIL )
-				ERRPrm();
+			if ( Node == qNIL )
+				qRFwk();
 	#endif
 			return Queue.Next( Node );
 		}
@@ -599,8 +599,8 @@ namespace que {
 	#ifdef QUE_DBG
 			Test_();
 
-			if ( Node == E_NIL )
-				ERRPrm();
+			if ( Node == qNIL )
+				qRFwk();
 	#endif
 			return Queue.Previous( Node );
 		}
@@ -645,11 +645,11 @@ namespace que {
 		: S_( S ),
 		  Queue( S.Queue )
 		{}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Queue.plug( AS );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Queue.plug( SD );
 		}

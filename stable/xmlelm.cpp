@@ -34,7 +34,7 @@ erow__ xmlelm::Search(
 
 	N.Init( ElementTree );
 
-	while ( ( Row != E_NIL )
+	while ( ( Row != qNIL )
 		    && ( ( ElementTree.GetOddity( Row ) != Type )
 			     || ( N( Row ) != Name ) ) )
 		Row = ElementTree.NextSibling( Row );
@@ -55,7 +55,7 @@ static bso::bool__ WriteXMLAttributes_(
 
 	Name.Init( ElementTree );
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		if ( ElementTree.GetOddity( Row ) == tAttribute )
 			Flow << ' ' << Name( Row ) << "=\"\"";
 		else
@@ -89,7 +89,7 @@ static void WriteXMLWithEmptyTag_(
 
 	Browser.Init( Root );
 
-	while ( ElementTree.Browse( Browser ) != E_NIL ) {
+	while ( ElementTree.Browse( Browser ) != qNIL ) {
 		switch( Browser.Kinship() ) {
 		case dtr::kParent:
 			if ( !NoRegularChild )
@@ -130,7 +130,7 @@ static void WriteXMLNoEmptyTag_(
 	txf::text_oflow__ &Flow )
 {
 	dtr::browser__<tag_row__> Browser;
-	tag_row__ Precedent = E_NIL;
+	tag_row__ Precedent = qNIL;
 	ctn::E_CMITEMt( tag_, tag_row__ ) Tag;
 	bso::bool__ NoRegularChild = true;
 	bso::bool__ JustParent = false;
@@ -181,7 +181,7 @@ static void WriteXMLNoEmptyTag_(
 		}
 
 		Precedent = Browser.Position();
-	} while( Tags.Browse( Browser ) != E_NIL );
+	} while( Tags.Browse( Browser ) != qNIL );
 }
 
 void xmltag::WriteXML(
@@ -210,11 +210,11 @@ void xmlelm::Merge(
 	erow__ TRoot,
 	element_map_ &ElementMap )
 {
-ERRProlog
+qRH
 	erow__ TargetRow, IntermediateRow, SourceRow;
 	ctn::E_CMITEMt( name_, erow__ ) Name;
 	dtr::browser__<erow__> Browser;
-ERRBegin
+qRB
 	Name.Init( Source );
 
 	ElementMap.Init();
@@ -225,16 +225,16 @@ ERRBegin
 
 	Browser.Init( SRoot );
 
-	while( ( SourceRow = Browser.Position() ) != E_NIL ) {
+	while( ( SourceRow = Browser.Position() ) != qNIL ) {
 		switch( Browser.Kinship() ) {
 		case dtr::kChild:
-			if ( ( IntermediateRow = Search( Name( SourceRow ), Source.GetOddity( SourceRow ), Target, TargetRow ) ) == E_NIL )
+			if ( ( IntermediateRow = Search( Name( SourceRow ), Source.GetOddity( SourceRow ), Target, TargetRow ) ) == qNIL )
 				IntermediateRow = Target.BecomeLastChild( Name( SourceRow ), Source.GetOddity( SourceRow ), TargetRow );
 			ElementMap.Store( IntermediateRow, SourceRow );
 			TargetRow = IntermediateRow;
 			break;
 		case dtr::kSibling:
-			if ( ( IntermediateRow = Search( Name( SourceRow ), Source.GetOddity( SourceRow ), Target, Target.Parent( TargetRow ) ) ) == E_NIL )
+			if ( ( IntermediateRow = Search( Name( SourceRow ), Source.GetOddity( SourceRow ), Target, Target.Parent( TargetRow ) ) ) == qNIL )
 				IntermediateRow = Target.BecomeNextSibling( Name( SourceRow ), Source.GetOddity( SourceRow ), TargetRow );
 			ElementMap.Store( IntermediateRow, SourceRow );
 			TargetRow = IntermediateRow;
@@ -243,14 +243,14 @@ ERRBegin
 			TargetRow = Target.Parent( TargetRow );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
 		Source.Browse( Browser );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

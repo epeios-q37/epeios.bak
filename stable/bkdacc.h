@@ -328,13 +328,13 @@ namespace bkdacc {
 			str::string_ &URL )
 		{
 			bso::bool__ Success = true;
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			reset();
 
 			if ( !_TestCompatibility( Language, TargetLabel, APIVersion, Channel, Message, URL ) ) {
 				Success = false;
-				ERRReturn;
+				qRReturn;
 			}
 
 			Channel_ = &Channel;
@@ -342,10 +342,10 @@ namespace bkdacc {
 			_ErrorHandlingFunctions = &ErrorHandlingFunctions;
 
 			RetrieveBackendCommands_();
-		ERRErr
+		qRR
 			Channel_ = NULL;	// Pour viter toute future tentative de communication avec le backend.
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 			return Success;
 		}
 		//f Add header with object 'Object' and command 'Command'.

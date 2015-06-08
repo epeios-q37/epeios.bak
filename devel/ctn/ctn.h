@@ -108,7 +108,7 @@ namespace ctn {
 			Statics.reset( P );
 			amount_extent_manager_<r>::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Dynamics.plug( AS );
 			Statics.plug( AS );
@@ -148,7 +148,7 @@ namespace ctn {
 		{
 # ifdef CTN_DBG
 			if ( !IsFlushed() )
-				ERRFwk();
+				qRFwk();
 # endif
 		}
 		void SubInit( sdr::size__ Size )	// Obsolete ?
@@ -213,7 +213,7 @@ namespace ctn {
 		{
 # ifdef CTN_DBG
 			if ( Size > amount_extent_manager_<r>::Amount() )
-				ERRFwk();
+				qRFwk();
 # endif
 			Allocate( Size, *(st *)NULL, Mode );	// 'NULL' because this parameter is used only when size increased.
 		}
@@ -269,7 +269,7 @@ namespace ctn {
 		{
 # ifdef CTN_DBG
 			if ( Amount > this->Amount() )
-				ERRPrm();
+				qRFwk();
 # endif
 			DecreaseTo( this->Amount() - Amount, Mode );
 		}
@@ -280,7 +280,7 @@ namespace ctn {
 		{
 # ifdef CTN_DBG
 			if ( !Exists( Row ) )
-				ERRFwk();
+				qRFwk();
 # endif
 			DecreaseTo( amount_extent_manager_<r>::Amount() - *Row, Mode );
 		}
@@ -302,7 +302,7 @@ namespace ctn {
 		{
 #ifdef BCH_DBG
 			if ( Last < First )
-				ERRPrm();
+				qRFwk();
 #endif
 			Crop( Last - First + 1, First, Mode );
 		}
@@ -400,7 +400,7 @@ namespace ctn {
 			uys::mode__ Mode = _Statics.Mode();
 
 			if ( Mode != _Dynamics.Mode() )
-				ERRPrm();
+				qRFwk();
 
 			return Mode;
 		}
@@ -409,7 +409,7 @@ namespace ctn {
 			uys::mode__ ModeBuffer = _Statics.Mode( Mode );
 
 			if ( ModeBuffer != _Dynamics.Mode( ModeBuffer ) )
-				ERRFwk();
+				qRFwk();
 
 			return ModeBuffer;
 		}
@@ -417,7 +417,7 @@ namespace ctn {
 		{
 # ifdef CTN_DBG
 			if ( _Statics.IsPersistent() != _Dynamics.IsPersistent() )
-				ERRFwk();
+				qRFwk();
 # endif
 			return _Statics.IsPersistent();
 		}
@@ -439,7 +439,7 @@ namespace ctn {
 			bso::bool__ Exists = _Statics.Exists();
 
 			if ( Exists != _Dynamics.Exists() )
-				ERRFwk();
+				qRFwk();
 
 			return Exists;
 		}
@@ -497,19 +497,19 @@ namespace ctn {
 	private:
 		bool Vide_( void ) const
 		{
-			return Pilote_.Index() == E_NIL;
+			return Pilote_.Index() == qNIL;
 		}
 		void Vider_( void )
 		{
 			if ( !Vide_() ) {
 # ifdef CTN_DBG
 				if ( Conteneur_ == NULL )
-				ERRFwk();
+				qRFwk();
 # endif
 				Conteneur_->Statics.Store( ctn_S_, *Pilote_.Index() );
 			}
 
-			Pilote_.Index( E_NIL );
+			Pilote_.Index( qNIL );
 		}
 	protected:
 		// Conteneur auquel est rattach l'lment.
@@ -562,15 +562,15 @@ namespace ctn {
 		void Set( r Position )
 		{
 # ifdef CTN_DBG
-			if ( Position == E_NIL )
-				ERRPrm();
+			if ( Position == qNIL )
+				qRFwk();
 # endif
 			if ( Pilote_.Index() != *Position )
 			{
 				Vider_();
 # ifdef CTN_DBG
 				if ( Conteneur_ == NULL )
-					ERRFwk();
+					qRFwk();
 # endif
 				Conteneur_->Statics.Recall( Position, ctn_S_ );
 				Pilote_.Index( *Position );
@@ -594,7 +594,7 @@ namespace ctn {
 		// Set as flushed, but without flushing the content.
 		void Erase( void )
 		{
-			Pilote_.Index( E_NIL );
+			Pilote_.Index( qNIL );
 		}
 		r Index( void ) const
 		{
@@ -607,11 +607,11 @@ namespace ctn {
 	private:
 		bool Vide_( void ) const
 		{
-			return Pilote_.Index() == E_NIL;
+			return Pilote_.Index() == qNIL;
 		}
 		void Vider_( void )
 		{
-			Pilote_.Index( E_NIL );
+			Pilote_.Index( qNIL );
 		}
 	protected:
 		// Conteneur auquel est rattach l'lment.
@@ -658,15 +658,15 @@ namespace ctn {
 		void Set( r Position )
 		{
 # ifdef CTN_DBG
-			if ( Position == E_NIL )
-				ERRPrm();
+			if ( Position == qNIL )
+				qRFwk();
 # endif
 			if ( *Pilote_.Index() != *Position )
 			{
 				Vider_();
 # ifdef CTN_DBG
 				if ( Conteneur_ == NULL )
-					ERRFwk();
+					qRFwk();
 # endif
 				Conteneur_->Statics.Recall( Position, ctn_S_ );
 				Pilote_.Index( *Position );
@@ -684,7 +684,7 @@ namespace ctn {
 		// Set as flushed, but without flushing the content.
 		void Erase( void )
 		{
-			Pilote_.Index( E_NIL );
+			Pilote_.Index( qNIL );
 		}
 		r Index( void ) const
 		{
@@ -734,7 +734,7 @@ namespace ctn {
 		}
 		volatile_mono_item &operator =( const volatile_mono_item &O )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		//f Return the object at 'Position'.
 		t &operator()( r Position )
@@ -746,14 +746,14 @@ namespace ctn {
 		t &operator()( void )
 		{
 			if ( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::IsFlushed() )
-				ERRFwk();
+				qRFwk();
 
 			return Objet_;
 		}
 		const t &operator()( void ) const
 		{
 			if ( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::IsFlushed() )
-				ERRFwk();
+				qRFwk();
 
 			return Objet_;
 		}
@@ -791,7 +791,7 @@ namespace ctn {
 		}
 		const_mono_item &operator =( const const_mono_item &O )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		//f Return the object at 'Position'.
 		const t &operator()( r Position )
@@ -803,7 +803,7 @@ namespace ctn {
 		{
 # ifdef CTN_DBG
 			if ( item_base_const__< item_mono_statique__< typename_ t::s >, r >::IsEmpty() )
-				ERRFwk();
+				qRFwk();
 # endif
 			return Objet_;
 		}
@@ -812,7 +812,7 @@ namespace ctn {
 		{
 # ifdef CTN_DBG
 			if ( item_base_const__< item_mono_statique__< typename_ t::s >, r >::IsEmpty() )
-				ERRFwk();
+				qRFwk();
 # endif
 			return Objet_;
 		}
@@ -849,7 +849,7 @@ namespace ctn {
 		E_MITEMt( t, r ) Ponctuel_;
 		bso::bool__ _AppendInsteadOfInsert(	r Row )
 		{
-			return ( ( Row == E_NIL ) || ( ( amount_extent_manager_<r>::Amount() == 0 ) && ( Row == 0 ) ) );
+			return ( ( Row == qNIL ) || ( ( amount_extent_manager_<r>::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
 	public:
 		struct s
@@ -962,7 +962,7 @@ namespace ctn {
 			aem::mode__ Mode = aem::m_Default )
 		{
 			if ( !IsFlushed() )
-				ERRFwk();
+				qRFwk();
 
 			if ( _AppendInsteadOfInsert( Row ) )
 				Append( Object, Mode );
@@ -1108,7 +1108,7 @@ namespace ctn {
 		}
 		volatile_multi_item &operator =( const volatile_multi_item &O )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		//f Return the object at 'Position'.
 		t &operator()( r Position )
@@ -1119,14 +1119,14 @@ namespace ctn {
 		t &operator()( void )
 		{
 			if ( item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::IsFlushed() )
-				ERRFwk();
+				qRFwk();
 
 			return Objet_;
 		}
 		const t &operator()( void ) const
 		{
 			if ( item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::IsFlushed() )
-				ERRFwk();
+				qRFwk();
 
 			return Objet_;
 		}
@@ -1176,7 +1176,7 @@ namespace ctn {
 		}
 		const_multi_item &operator =( const const_multi_item &O )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		//f Return the object at 'Position'.
 		const t &operator()( r Position )
@@ -1188,7 +1188,7 @@ namespace ctn {
 		{
 #ifdef CTN_DBG
 			if ( item_base_const__< item_multi_statique__<typename_ t::s>, r >::IsEmpty() )
-				ERRFwk();
+				qRFwk();
 #endif
 			return Objet_;
 		}
@@ -1272,7 +1272,7 @@ namespace ctn {
 			E_CITEMt( t, r ) &Item ) const
 		{
 			if ( !IsFlushed() )
-				ERRFwk();
+				qRFwk();
 
 			Item.Init( *this );
 
@@ -1324,7 +1324,7 @@ namespace ctn {
 				Append( Object, Mode );
 			else {
 				if ( !IsFlushed() )
-					ERRFwk();
+					qRFwk();
 
 				E_CITEMt( t, r ) E;
 
@@ -1384,7 +1384,7 @@ namespace ctn {
 			aem::mode__ Mode = aem::m_Default )
 		{
 			if ( !IsFlushed() )
-				ERRFwk();
+				qRFwk();
 
 			basic_container_< item_multi_statique__< typename_ t::s >, r >::Remove( Position, Amount, Mode );
 		}

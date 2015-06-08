@@ -147,7 +147,7 @@ namespace csducl {
 				return _LibraryFlow;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -207,7 +207,7 @@ namespace csducl {
 				_LibraryFlow.Init( Core._LibraryAccess );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 

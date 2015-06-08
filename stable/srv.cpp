@@ -75,9 +75,9 @@ socket__ srv::listener___::Interroger_( err::handle ErrHandle )
 
 	while( Boucler )
 	{
-ERRProlog
+qRH
 		Socket = SCK_INVALID_SOCKET;
-ERRBegin
+qRB
 		Boucler = false;
 		FD_ZERO( &fds );
 		FD_SET( Socket_, &fds );
@@ -92,7 +92,7 @@ ERRBegin
 				if ( Error() != SCK_EWOULDBLOCK )
 					ERRs();
 		}
-ERRErr
+qRR
 	if ( ErrHandle == err::hSkip )
 	{
 		ERRRst();
@@ -100,8 +100,8 @@ ERRErr
 	}
 	else if ( ErrHandle != err::hUsual )
 		ERRu();
-ERREnd
-ERREpilog
+qRT
+qRE
 	}
 
 	return Socket;
@@ -111,11 +111,11 @@ void srv::listener___::Process(
 	socket_functions__ &Functions,
 	err::handle ErrHandle )
 {
-ERRProlog
+qRH
 	void *UP = NULL;
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	action__ Action = a_Undefined;
-ERRBegin
+qRB
 	Socket = Interroger_( ErrHandle );
 
 	UP = Functions.PreProcess( Socket );
@@ -133,11 +133,11 @@ ERRBegin
 		break;
 	}
 
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( UP != NULL )
 		Functions.PostProcess( UP );
-ERREpilog
+qRE
 }
 
 #ifdef CPE__T_MT
@@ -151,38 +151,38 @@ struct socket_data__
 static void Traiter_( void *PU )
 {
 	::socket_data__ &Data = *(::socket_data__ *)PU;
-ERRFProlog
+qRFH
 	bso::bool__ Close = true;
 	socket_functions__ &Functions = *Data.Functions;
 	socket__ Socket = Data.Socket;
 	void *UP = NULL;
 	action__ Action = a_Undefined;
-ERRFBegin
+qRFB
 	mtx::Unlock( Data.Mutex );
 
-	ERRProlog
-	ERRBegin
+	qRH
+	qRB
 		UP = Functions.PreProcess( Socket );
 
 		while ( ( Action = Functions.Process( Socket, UP ) ) == aContinue );
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( UP != NULL )
 			Functions.PostProcess( UP );
-	ERREpilog
-ERRFErr
-ERRFEnd
-ERRFEpilog
+	qRE
+qRFR
+qRFT
+qRFE
 }
 
 void server___::Process(
 	socket_functions__ &Functions,
 	err::handle ErrHandle )
 {
-ERRProlog
+qRH
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	::socket_data__ Data = {NULL, SCK_INVALID_SOCKET, MTX_INVALID_HANDLER};
-ERRBegin
+qRB
 
 	Socket = listener___::GetConnection( ErrHandle );
 
@@ -208,14 +208,14 @@ ERRBegin
 
 		Data.Socket = Socket;
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Socket != SCK_INVALID_SOCKET )
 		sck::Close( Socket );
 
 	if ( Data.Mutex != MTX_INVALID_HANDLER )
 		mtx::Delete( Data.Mutex );
-ERREpilog
+qRE
 }
 
 
@@ -232,8 +232,8 @@ namespace {
 		virtual void *SRVPreProcess( socket__ Socket )
 		{
 			flow_data__ *Data = NULL;
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			Data = new flow_data__;
 
 			if ( Data == NULL )
@@ -241,12 +241,12 @@ namespace {
 
 			Data->Flow.Init( Socket );
 			Data->UP = Functions->PreProcess( Data->Flow );
-		ERRErr
+		qRR
 			if ( Data != NULL )
 				delete Data;
 			Data = NULL;
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 			return Data;
 		}
 		virtual action__ SRVProcess(

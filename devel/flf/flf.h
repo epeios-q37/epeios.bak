@@ -84,10 +84,10 @@ namespace flf {
 				case err::hUserDefined:
 					break;
 				case err::hThrowException:
-					ERRLbr();
+					qRLbr();
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			} else {
@@ -151,10 +151,10 @@ namespace flf {
 					return tol::rFailure;
 					break;
 				case err::hThrowException:
-					ERRLbr();
+					qRLbr();
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			}
@@ -215,10 +215,10 @@ namespace flf {
 				case err::hUserDefined:
 					break;
 				case err::hThrowException:
-					ERRLbr();
+					qRLbr();
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			} else {
@@ -283,10 +283,10 @@ namespace flf {
 					return tol::rFailure;
 					break;
 				case err::hThrowException:
-					ERRLbr();
+					qRLbr();
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			}

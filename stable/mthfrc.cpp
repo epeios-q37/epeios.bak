@@ -25,16 +25,16 @@ using namespace mthfrc;
 
 void mthfrc::Simplify( fraction_ &Fraction )
 {
-ERRProlog
+qRH
 	integer PGCD;
-ERRBegin
+qRB
 	PGCD.Init();
 
 	mthitg::PGCD( Fraction.N, Fraction.D, PGCD );
 
 	Fraction.N /= PGCD;
 	Fraction.D /= PGCD;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

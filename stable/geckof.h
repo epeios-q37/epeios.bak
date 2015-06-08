@@ -76,7 +76,7 @@ namespace geckof {
 				if ( _Steering != NULL )
 					if ( !_DeleteSteering() ) {
 						_Library.reset();
-						ERRSys();
+						qRSys();
 					}
 
 			}
@@ -104,7 +104,7 @@ namespace geckof {
 					return true;
 
 			if ( ERRHandling != err::hUserDefined )
-				ERRSys();
+				qRSys();
 
 			return false;
 		}
@@ -115,7 +115,7 @@ namespace geckof {
 		geckoo::steering_callback__ &GetSteering( void ) const
 		{
 			if ( !IsInitialized() )
-				ERRFwk();
+				qRFwk();
 
 			return *_Steering;
 		}

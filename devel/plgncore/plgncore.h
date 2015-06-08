@@ -54,7 +54,7 @@ namespace plgncore {
 	public:
 		const char *Version;	// Toujours en premire position.
 		bso::size__ ControlValue;
-		err::err___ *ERRError;
+		err::err___ *qRRor;
 		sclerror::error___ *SCLError;
 		const cio::set__ *CIO;
 		rgstry::entry__ Configuration;
@@ -63,7 +63,7 @@ namespace plgncore {
 		void reset( bso::bool__ P = true )
 		{
 			Version = NULL;
-			ERRError = NULL;
+			qRRor = NULL;
 			SCLError = NULL;
 			UP = NULL;
 			Configuration.reset( P );
@@ -71,16 +71,16 @@ namespace plgncore {
 		}
 		E_CDTOR( data__ );
 		data__(
-			err::err___ *ERRError,
+			err::err___ *qRRor,
 			sclerror::error___ *SCLError,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
 			void *UP = NULL )
 		{
-			Init( ERRError, SCLError, Configuration, Locale, UP );
+			Init( qRRor, SCLError, Configuration, Locale, UP );
 		}
 		void Init(
-			err::err___ *ERRError,
+			err::err___ *qRRor,
 			sclerror::error___ *SCLError,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
@@ -88,7 +88,7 @@ namespace plgncore {
 		{
 			Version = PLGNCORE_SHARED_DATA_VERSION;
 			ControlValue = Control();
-			this->ERRError = ERRError;
+			this->qRRor = qRRor;
 			this->SCLError = SCLError;
 			this->CIO = &cio::GetCurrentSet();
 			this->Configuration.Init( Configuration );

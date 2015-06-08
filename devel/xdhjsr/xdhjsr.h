@@ -57,8 +57,10 @@ namespace xdhjsr {
 		extern entry___ Log;
 		extern entry___ DocumentSetter;
 		extern entry___ ChildrenSetter;
-		extern entry___ Focusing;
+		extern entry___ DraggableSetter;
+		extern entry___ DroppableSetter;
 		extern entry___ EventHandler;
+		extern entry___ Focusing;
 		namespace casting {
 			extern entry___ Definer;
 			extern entry___ Handler;

@@ -74,7 +74,7 @@ namespace pllio {
 		{
 #ifdef PLLIO_DBG
 			if ( _D == PLLIO_UNDEFINED_DESCRIPTOR )
-				ERRFwk();
+				qRFwk();
 #endif
 		}
 	public:
@@ -95,7 +95,7 @@ namespace pllio {
 			_Test();
 
 			if ( lseek( _D, Offset, SEEK_SET ) != Offset )
-				ERRLbr();
+				qRLbr();
 		}
 		long Size( void )
 		{
@@ -104,7 +104,7 @@ namespace pllio {
 			_Test();
 
 			if ( ( Size = lseek( _D, 0, SEEK_END ) ) == -1 )
-				ERRLbr();
+				qRLbr();
 
 			return Size;
 		}
@@ -156,7 +156,7 @@ namespace pllio {
 				Amount = SSIZE_MAX;
 
 			if ( ( Amount = read( _D, Buffer, Amount ) ) == -1 )
-				ERRLbr();
+				qRLbr();
 
 			return Amount;
 		}
@@ -171,10 +171,10 @@ namespace pllio {
 				_Test();
 
 				if ( fstat( _D, &Stat ) != 0 )
-					ERRLbr();
+					qRLbr();
 
 				if ( ( Position = lseek( _D, 0, SEEK_CUR ) ) == -1 )
-					ERRLbr();
+					qRLbr();
 
 				return Position >= Stat.st_size;
 			}
@@ -211,7 +211,7 @@ namespace pllio {
 				Amount = SSIZE_MAX;
 
 			if ( ( Amount = write( _D, Buffer, Amount ) ) == -1 )
-				ERRLbr();
+				qRLbr();
 
 			return Amount;
 		}

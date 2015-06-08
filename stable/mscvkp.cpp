@@ -94,12 +94,12 @@ void mscvkp::Fill(
 	mscmdm::origin__ Origin,
 	data_sets_ &DataSets )
 {
-ERRProlog
+qRH
 	mscmdf::header_chunk__ HeaderChunk;
 	mscmdf::track_chunk_size__ TrackChunkSize;
 	mscmdm::event_header__ EventHeader;
 	mscvkp::data_set DataSet;
-ERRBegin
+qRB
 	mscmdf::GetHeaderChunk( IFlow, HeaderChunk );
 	TrackChunkSize = mscmdf::GetTrackChunkSize( IFlow );
 
@@ -119,9 +119,9 @@ ERRBegin
 		if ( ( EventHeader.EventType != mscmdm::etMeta ) && ( EventHeader.MetaEvent.Event = mscmdm::mtaEndOfTrack ) )
 			ERRf();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -150,10 +150,10 @@ txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &TFlow,
 	const data_set_ &DataSet )
 {
-ERRProlog
+qRH
 	descriptions__ Descriptions;
 	address__ Address;
-ERRBegin
+qRB
 	Address = DataSet.Address();
 
 	epeios::row__ Row = DataSet.First();
@@ -182,9 +182,9 @@ ERRBegin
 		Address++;
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return TFlow;
 }
 	
@@ -1364,10 +1364,10 @@ bso::size__ mscvkp::Send(
 	flw::oflow__ &Flow )
 {
 	bso::size__ Length = 0;
-ERRProlog
+qRH
 	str::string Header;
 	epeios::row__ Row = NONE;
-ERRBegin
+qRB
 
 	Flow.Put( '\xf0' );
 	Length += 1;
@@ -1399,9 +1399,9 @@ ERRBegin
 	Flow.Put( '\xf7' );
 
 	Length += 2;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Length;
 }
 
@@ -1434,10 +1434,10 @@ static void BuildEvent_(
 	mscmdm::delta_time_ticks__ DeltaTimeTicks,
 	mscmdm::event_ &Event )
 {
-ERRProlog
+qRH
 	mscmdm::event_header__ EventHeader;
 	mscmdm::data Data;
-ERRBegin
+qRB
 	EventHeader.DeltaTimeTicks = DeltaTimeTicks;
 	EventHeader.EventType = mscmdm::etSystem;
 	EventHeader.Id = 0xf0;	// 'system exclusive'.
@@ -1452,21 +1452,21 @@ ERRBegin
 //	Data.Append( '\xf7' );	// 'end of system exclusive'.
 
 	Event.Init( EventHeader, Data );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void mscvkp::BuildTrack(
 	const data_sets_ &DataSets,
 	mscmdm::track_ &Track )
 {
-ERRProlog
+qRH
 	epeios::row__ Row = NONE;
 	ctn::E_CMITEM( data_set_ ) DataSet;
 	mscmdm::event Event;
 	bso::ulong__ Length = 0;
-ERRBegin
+qRB
 	Row = DataSets.First();
 
 	DataSet.Init( DataSets );
@@ -1497,7 +1497,7 @@ ERRBegin
 
 		Row = DataSets.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

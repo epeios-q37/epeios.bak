@@ -100,7 +100,7 @@ namespace csdleo {
 		context__ Context;
 		mode__ Mode;
 		const char *LibraryLocationAndName;
-		err::err___ *ERRError;
+		err::err___ *qRRor;
 		const cio::set__ *CIO;
 		void *UP;				// A la discrétion de l'utilisateur.
 		void reset( bso::bool__ = true )
@@ -108,7 +108,7 @@ namespace csdleo {
 			Context = c_Undefined;
 			Mode = m_Undefined;
 			LibraryLocationAndName = NULL;
-			ERRError = NULL;
+			qRRor = NULL;
 			CIO = NULL;
 			UP = NULL;
 		}
@@ -116,24 +116,24 @@ namespace csdleo {
 		data__(
 			context__ Context,
 			const char *LibraryLocationAndName,
-			err::err___ *ERRError,
+			err::err___ *qRRor,
 			void *UP,
 			mode__ Mode = mEmbedded )
 		{
 			reset( false );
-			Init( Context, LibraryLocationAndName, ERRError,UP, Mode );
+			Init( Context, LibraryLocationAndName, qRRor,UP, Mode );
 		}
 		void Init(
 			context__ Context,
 			const char *LibraryLocationAndName,
-			err::err___ *ERRError,
+			err::err___ *qRRor,
 			void *UP,
 			mode__ Mode = mEmbedded )
 		{
 			this->Context = Context;
 			this->Mode = Mode;
 			this->LibraryLocationAndName = LibraryLocationAndName;
-			this->ERRError = ERRError;
+			this->qRRor = qRRor;
 			this->CIO = &cio::GetCurrentSet();
 			this->UP = UP;
 		}
@@ -154,7 +154,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.ERRError, Data.UP, Data.Mode );
+			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.qRRor, Data.UP, Data.Mode );
 		}
 	};
 #pragma pack( pop )

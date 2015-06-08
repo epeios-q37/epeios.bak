@@ -71,21 +71,20 @@ namespace err {
 	};
 
 	enum type {
-		tAllocation,	// (ERRAlc) Echec d'une allocation de RAM.
-		tSystem,		// (ERRSys) Dysfonctionnemnt du système (échec d'une opération qui n'aurait pas dû échouer, ou valeur incohérente retournée par une fonction ).
-		tVacant,		// (ERRVct) Appel à une fonctionnalité absente (à priori non encore implémentée).	
-		tLimitation,	// (ERRLmt) Dépassement d'une limite.
-		tData,			// (ERRDta) Incohérence dans le nombre ou le contenu d'un ensemble de données.
-		tFramework,		// (ERRFwk) Incohérence dans l'utilsation faite du 'framework'.
-		tParameters,	// (ERRPrm) Incohérence dans les paramètres passées à une méthode/fonction du 'framework'.
-		tForbidden,		// (ERRFbd) Appel d'une fonctionnalité non autorisée.
-		tLibrary,		// (ERRLbr) Une fonction d'une bibliothèque système a retournée une erreur.
-		tChecker,		// (ERRChk) Un test de contrôle a échoué.
+		tAllocation,	// (qRAlc) Allocation failure.
+		tSystem,		// (qRSys) System failure : a C/C++ standard or system function failed but should not, or returned a incoherent value.
+		tVacant,		// (qRVct) Call to a vacant function (mainly because it is not implemneted yet).
+		tLimitation,	// (qRLmt) Limitation overflow.
+		tFramework,		// (qRFwk) Misuse of the framework. should not be used outside the framework. Use 'tGeneric' instead.
+		tForbidden,		// (qRFbd) Call to a forbidden function.
+		tLibrary,		// (qRLbr) A C/C++ standard or system library returns an error.
+		tChecker,		// (qRChk) A checking fails.
+		tGeneric,		// (qRGnr) Generic error. Like 'tFramework', but not in the framework.
 		t_amount,
-		t_None,			// Signale l'absence d'erreur.
-		t_Free,			// (ERRFree) Pas une erreur au sens propre. Permet de profiter du mécanisme de gestion d'erreur.
-		t_Return,		// Facilite la gestion d'un 'ERRReturn'.
-		t_Abort,		// Facilite la gestion d'un 'ERRAbort()'.
+		t_None,			// No error.
+		t_Free,			// (ERRFree) Not really an error. Allows the use or ther error mechanism.
+		t_Return,		// Make the handling of 'ERRReturn' easier.
+		t_Abort,		// Make the handling of 'ERRAbort()' easier.
 		t_Undefined
 	};
 
@@ -127,24 +126,25 @@ namespace err {
 			err::type Type = t_Undefined );
 	};
 
-	extern err___ *ERRError;
+	extern err___ *qRRor;
 
 	// If an error occurs, test if the current thread is concerned.
 	bool Concerned( void );
 	void Unlock( void );
 
-# define ERRCommon( T )	err::ERRError->SetAndLaunch( __FILE__, __LINE__, T )
+# define ERRCommon( T )	err::qRRor->SetAndLaunch( __FILE__, __LINE__, T )
 
-# define ERRAlc()	ERRCommon( err::tAllocation )
-# define ERRSys()	ERRCommon( err::tSystem )
-# define ERRVct()	ERRCommon( err::tVacant )
-# define ERRLmt()	ERRCommon( err::tLimitation )
-# define ERRDta()	ERRCommon( err::tData )
-# define ERRFwk()	ERRCommon( err::tFramework )
-# define ERRPrm()	ERRCommon( err::tParameters )
-# define ERRFbd()	ERRCommon( err::tForbidden )
-# define ERRLbr()	ERRCommon( err::tLibrary )
-# define ERRChk()	ERRCommon( err::tChecker )
+# define qRAlc()	ERRCommon( err::tAllocation )
+# define qRSys()	ERRCommon( err::tSystem )
+# define qRVct()	ERRCommon( err::tVacant )
+# define qRLmt()	ERRCommon( err::tLimitation )
+# define qRDta()	ERRCommon( err::tData )
+# define qRFwk()	ERRCommon( err::tFramework )
+# define qRPrm()	ERRCommon( err::tParameters )
+# define qRFbd()	ERRCommon( err::tForbidden )
+# define qRLbr()	ERRCommon( err::tLibrary )
+# define qRChk()	ERRCommon( err::tChecker )
+# define qRGnr()	ERRCommon( err::tGeneric )
 
 
 
@@ -153,68 +153,68 @@ namespace err {
 
 # ifdef ERR__JMPUSE
 //m Throw the handler.
-#  define ERRT()		{longjmp( *err::ERRError->Jump, 1 );}
+#  define ERRT()		{longjmp( *err::qRRor->Jump, 1 );}
 # else
-#  define ERRT()		throw( *err::ERRError )
+#  define ERRT()		throw( *err::qRRor )
 # endif
 
 //d Error type.
-# define ERRType	err::ERRError->Type
+# define ERRType	err::qRRor->Type
 
 //d File in which the error was thrown.
-# define ERRFile			err::ERRError->File
+# define ERRFile			err::qRRor->File
 
 //d Line where the error was thrown.
-# define ERRLine			err::ERRError->Line
+# define ERRLine			err::qRRor->Line
 
 # ifdef ERR__JMPUSE
-#  define ERRGetJ()		err::FGetJ( *err::ERRError )
-#  define ERRPutJ( J )	err::FSetJ( *err::ERRError, J )
+#  define ERRGetJ()		err::FGetJ( *err::qRRor )
+#  define ERRPutJ( J )	err::FSetJ( *err::qRRor, J )
 # endif
 
 # ifdef ERR__JMPUSE
 
-//d Put the declaration after this.
-#  define ERRProlog	bso::bool__ ERRNoError = true; { jmp_buf ERRJmp, *ERROJmp = ERRGetJ();\
+// 'Head' : declarations.
+#  define qRH	bso::bool__ ERRNoError = true; { jmp_buf ERRJmp, *ERROJmp = ERRGetJ();\
 	ERRPutJ( &ERRJmp );
 
-//d Put the instructions to survey after this.
-#  define ERRBegin	if ( !setjmp( ERRJmp ) ) {
+// 'Begin' : section under control.
+#  define qRB	if ( !setjmp( ERRJmp ) ) {
 
-//d Put the instruction to launch if an error occurs.
-#  define ERRErr		} else { ERRPutJ( ERROJmp ); ERRNoError = false;
+// 'Error' : to execute if an error occurs.
+#  define qRR		} else { ERRPutJ( ERROJmp ); ERRNoError = false;
 
-//d Put the instruction to launch, error or not.
-#  define ERREnd		}
+// 'Tail' : to execute, error or not.
+#  define qRT		}
 
-#  define ERRCommonEpilog	ERRPutJ( ERROJmp ); }
+#  define ERRCommonEnd	ERRPutJ( ERROJmp ); }
 
 # else
 
-#  define ERRProlog	bso::bool__ ERRNoError = true; {
+#  define qRH	bso::bool__ ERRNoError = true; {
 // précède les déclarations
-#  define ERRBegin	try {
+#  define qRB	try {
 // précède les instructions proprement dites
-#  define ERRErr		} catch ( err::err___ ) { ERRNoError = false;
+#  define qRR		} catch ( err::err___ ) { ERRNoError = false;
 // précède les instructions à effectuer lors d'une erreur
-#  define ERREnd		}
+#  define qRT		}
 // précède les instructions à exécuter, erreur ou pas
-#  define ERRCommonEpilog	}
+#  define ERRCommonEnd	}
 // boucle la partie de traitement d'erreur
 
 # endif
 
-# define ERRTestEpilog	if ( ERRHit() && !ERRNoError && err::Concerned() ) {\
+# define ERRTestEnd		if ( ERRHit() && !ERRNoError && err::Concerned() ) {\
 							if ( ERRType == err::t_Return ) {\
 								ERRRst()
 
-//d End of the error bloc.
-# define ERREpilog				ERRCommonEpilog ERRTestEpilog } else ERRT();  };
-# define ERRFEpilog( action )	ERRCommonEpilog ERRTestEpilog } else action; };
-# define ERRFProlog				ERRProlog
-# define ERRFBegin				ERRBegin
-# define ERRFErr				ERRErr
-# define ERRFEnd				ERREnd
+// 'End' : end of error handling bloc.
+# define qRE					ERRCommonEnd ERRTestEnd } else ERRT();  };
+# define qRFE( action )			ERRCommonEnd ERRTestEnd } else action; };
+# define qRFH					qRH
+# define qRFB					qRB
+# define qRFR					qRR
+# define qRFT					qRT
 
 # ifdef ERR__JMPUSE
 	inline jmp_buf *FGetJ( err___ &ERR_ )
@@ -249,14 +249,14 @@ namespace err {
 # define ERRHit()	( ERRType != err::t_None )
 
 
-// Similaire à un simple 'return', mais dans une section surveillé ('ERRBegin'...'ERRErr'; un simple 'return' poserait problème dans une telle section).
-# define ERRReturn		ERRCommon( err::t_Return )
+// Similaire à un simple 'return', mais dans une section surveillé ('qRB'...'qRR'; un simple 'return' poserait problème dans une telle section).
+# define qRReturn		ERRCommon( err::t_Return )
 
 // Interruption de l'action en cours. Utilisé avec un gestionnaire d'interface évennementielle, pour revenir rapîdement à la boucle d'attente.
-# define ERRAbort()		ERRCommon( err::t_Abort )
+# define qRAbort()		ERRCommon( err::t_Abort )
 
 // Pour profiter du mécanisme de gestion d'erreur, sans qu'il n'y ai réellement une erreur dans le sens de cette bibliothèque.
-# define ERRFree()		ERRCommon( err::t_Free )
+# define qRFree()		ERRCommon( err::t_Free )
 }
 
 				  /********************************************/

@@ -85,7 +85,7 @@ namespace fblfup {
 				_Remote.PreProcess();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
@@ -102,7 +102,7 @@ namespace fblfup {
 				_Remote.In( Cast, Pointer, Channel );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
@@ -119,7 +119,7 @@ namespace fblfup {
 				_Remote.Out( Channel, Cast, Pointer );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
@@ -136,7 +136,7 @@ namespace fblfup {
 				_Remote.FlowIn( Flow, Channel );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
@@ -152,7 +152,7 @@ namespace fblfup {
 				_Remote.FlowOut( Channel, Flow );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
@@ -166,7 +166,7 @@ namespace fblfup {
 				_Remote.PostProcess( Flow );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
@@ -191,7 +191,7 @@ namespace fblfup {
 				_Remote.Init();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 

@@ -41,7 +41,7 @@ namespace sktxmp {
 		void reset( bso::bool__ P = true )
 		{
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 		}
 		myobject_ &operator =( const myobject_ &M )

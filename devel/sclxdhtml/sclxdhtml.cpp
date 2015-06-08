@@ -37,7 +37,7 @@ const sclrgstry::registry_ &sclxdhtml::GetRegistry( void )
 const char *sclxdhtml::GetLauncher( void )
 {
 	if ( Launcher_ == NULL )
-		ERRFwk();
+		qRFwk();
 
 	return Launcher_;
 }
@@ -60,11 +60,11 @@ namespace {
 		virtual void XDHCBKInitialize( const xdhcbk::shared_data__ &Data ) override
 		{
 			if ( Launcher_ != NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
-				sclmisc::Initialize( Data.ERRError(), Data.SCLError(), Data.CIO(), Data.Localization() );
+				sclmisc::Initialize( Data.qRRor(), Data.SCLError(), Data.CIO(), Data.Localization() );
 				SCLXDHTMLInitialization( Data.Mode() );
 			}
 		}
@@ -73,7 +73,7 @@ namespace {
 			const char *Language = sclmisc::GetBaseLanguage();
 
 			if ( Language == NULL )
-				ERRFwk();
+				qRFwk();
 
 			Buffer.Malloc(strlen( Language) + 1 );
 
@@ -108,21 +108,21 @@ DEF( XDHCBK_RETRIEVE_FUNCTION_NAME, xdhcbk::retrieve );
 xdhcbk::downstream_callback__ *XDHCBKRetrieve( void )
 {
 	donwstream_callback_implementation__ *Callback = NULL;
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	Callback = new donwstream_callback_implementation__;
 
 	if ( Callback == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Callback->Init();
-ERRFErr
+qRFR
 	if ( Callback != NULL )
 		delete Callback;
 
 	Callback = NULL;
-ERRFEnd
-ERRFEpilog(DoNothing_())
+qRFT
+qRFE(DoNothing_())
 	return Callback;
 }
 
@@ -130,10 +130,10 @@ void sclxdhtml::HandleError(
 	proxy__ &Proxy,
 	const char *Language )
 {
-ERRProlog
+qRH
 	str::string Message;
 	err::buffer__ ErrBuffer;
-ERRBegin
+qRB
 	switch ( ERRType ) {
 	case err::t_Abort:
 		Message.Init();
@@ -152,9 +152,9 @@ ERRBegin
 	}
 
 	ERRRst();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -164,16 +164,16 @@ bso::bool__ sclxhtml::session___::XDHCBKXDHCBKLaunch(
 	const char *Action )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string Message;
 	err::buffer__ ErrBuffer;
-ERRBegin
+qRB
 		if ( _OnBeforeAction( Id, Action ) )
 			if ( !strcmp( Action, xdhcbk::CloseActionLabel ) )
 				Success = _OnClose();	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 			else
 				Success = _Handler.Launch( Id, Action );
-ERRErr
+qRR
 #if 0
 	switch ( ERRType ) {
 	case err::t_Abort:
@@ -194,35 +194,35 @@ ERRErr
 
 	ERRRst();
 # endif
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Success;
 }
 #endif
 
 void sclxdhtml::LoadProject( proxy__ &Proxy )
 {
-ERRProlog
+qRH
 	str::string ProjectFeature;
-ERRBegin
+qRB
 	ProjectFeature.Init();
 	sclfrntnd::LoadProject( xdhdws::prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclxdhtml::LaunchProject(
 	 proxy__ &Proxy,
 	sclfrntnd::kernel___ &Kernel )
 {
-ERRProlog
+qRH
 	str::string BackendFeature;
-ERRBegin
+qRB
 	BackendFeature.Init();
 	sclfrntnd::LaunchProject( Kernel, xdhdws::login::GetBackendFeatures( Proxy, BackendFeature ), BackendFeature );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

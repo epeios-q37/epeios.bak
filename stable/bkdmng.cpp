@@ -72,16 +72,16 @@ static void ReportError_(
 	const bkdlcl::rack__ &Rack,
 	request_manager__ &Request )
 {
-ERRProlog
+qRH
 	str::string Translation;
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	Translation.Init();
 
 	Request.ReportError( GetTranslation_( Message, Rack, Translation ).Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void bkdmng::untyped_module::_Clean( void )
@@ -101,13 +101,13 @@ namespace {
 	cast GetCastID_( const str::string_ &Name )
 	{
 		cast C = c_Unknow;
-	ERRProlog
+	qRH
 		STR_BUFFER___ N;
-	ERRBegin
+	qRB
 		C = bkdcst::GetID( Name.Convert( N  ) );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return C;
 	}
 }
@@ -144,10 +144,10 @@ void master_module::Handle_(
 
 		if ( ( Car = Requete.Input().Get() ) != 0 )
 		{
-ERRProlog
+qRH
 			cast__ Cast;
 			str::string S;
-ERRBegin
+qRB
 			Requete.Output().Put( 0 );	// No explanation message;
 		
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(Casts & languages)" ), false );
@@ -169,9 +169,9 @@ ERRBegin
 
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(Casts & languages)" ), true );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 		}
 		else
 		{
@@ -209,11 +209,11 @@ static void GetTypesIDAndPrefixAndName_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	xitem16 XItem;
 	epeios::row__ P;
 	type__ Type;
-ERRBegin
+qRB
 	xitems16_ &XItems = Requete.XItems16Out();
 
 	P = Backend.Modules.First();
@@ -236,9 +236,9 @@ ERRBegin
 	}
 
 	Requete.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // Give the list of messages.
@@ -247,12 +247,12 @@ static void WriteCommandsIDAndName_(
 	const descriptions_ &Descriptions,
 	request_manager__ &Requete )
 {
-ERRProlog
+qRH
 	item16 Item;
 	ctn::E_CITEM( description_ ) Description;
 	epeios::row__ P;
 	command__ Command;
-ERRBegin
+qRB
 	items16_ &Items = Requete.Items16Out();
 
 	P = Descriptions.First();
@@ -277,9 +277,9 @@ ERRBegin
 			
 		P = Descriptions.Next( P );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -394,13 +394,13 @@ static void ThrowUserDefinedError_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	Requete.ReportError( Requete.StringIn().Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -414,11 +414,11 @@ static void GetNewObject_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	type__ T = BKDMNG_INVALID_TYPE;
 	STR_BUFFER___ Buffer;
 	object__ O;
-ERRBegin
+qRB
 	T = *Request.Id16In();
 
 	if ( *T >= Backend.Modules.Amount() )
@@ -435,9 +435,9 @@ ERRBegin
 		ReportError_( m_UnknowObjectType, Backend.LocaleRack(), Request );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // Retourne l'identificateur correspondant  un type donn.
@@ -450,10 +450,10 @@ static void GetType_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	STR_BUFFER___ Buffer;
 	type__ T = BKDMNG_INVALID_TYPE;
-ERRBegin
+qRB
 	const str::string_ &Type = Request.StringIn();
 	T = Backend.Type( Type );
 
@@ -463,9 +463,9 @@ ERRBegin
 		ReportError_( m_UnknowObjectTypeName, Backend.LocaleRack(), Request );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 #if 0
 // Returns all the raw messages.
@@ -518,12 +518,12 @@ static void FillCommands_(
 	const commands_details_ &CommandsDetails,
 	ids16_ &Commands )
 {
-ERRProlog
+qRH
 	id16__ Command;
 	epeios::row__ Position = CommandsDetails.First();
 	ctn::E_CITEM( command_detail_ ) CommandDetail;
 	description Description;
-ERRBegin
+qRB
 	CommandDetail.Init( CommandsDetails );
 
 	while( Position != NONE )
@@ -540,9 +540,9 @@ ERRBegin
 
 		Position = CommandsDetails.Next( Position );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -583,11 +583,11 @@ static void GetCommand_(
 	bso::bool__ &,
 	void * )
 {
-ERRProlog
+qRH
 	description Description;
 	command__ Command;
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	type__ Type = *Request.Id16In();
 
 	Description.Init();
@@ -606,9 +606,9 @@ ERRBegin
 		ReportError_( m_UnknowCommandNameOrDescription, Backend.LocaleRack(), Request );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -670,9 +670,9 @@ static void SetLanguage_(
 	bso::bool__ &Deconnexion,
 	void * )
 {
-ERRProlog
+qRH
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	const str::string_ &Language = Request.StringIn();
 
 	if ( Language.Amount() == 0 )
@@ -681,9 +681,9 @@ ERRBegin
 		Backend.SetLanguage( Language.Convert( Buffer ) );
 
 	Request.Complete();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define ADD( I )	Backend.Add( bkdcmd::CommandsNames[bkdcmd::c##I], ::I##_, bkdcmd::CommandsParameters[bkdcmd::c##I] )
@@ -775,13 +775,13 @@ bso::bool__ bkdmng::backend_::_TestCompatibility(
 	const char *URLLabel )
 {
 	bso::bool__ Success = true;
-ERRProlog
+qRH
 	char RemoteTargetLabel[10];
 	char Language[10];
 	char RemoteProtocolVersion[10];
 	char RemoteAPIVersion[10];
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	if ( !flw::GetString( Flow, Language, sizeof( Language ) ) )
 		ERRf();
 
@@ -815,9 +815,9 @@ ERRBegin
 		Flow.Put( 0 );
 
 	Flow.Commit();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -828,10 +828,10 @@ bso::bool__ backend_::Handle(
 	log_functions__ &LogFunctions )
 {
 	master_data__ MasterData;
-ERRProlog
+qRH
 	object__ O;
 	err::buffer__ ErrorBuffer;
-ERRBegin
+qRB
 	MasterData.Deconnexion = false;
 	MasterData.UP = PU;
 
@@ -845,15 +845,15 @@ ERRBegin
 	} else
 		Master_.Handle( (index__)0, Request, &MasterData, LogFunctions );
 
-ERRErr
+qRR
 	const char *ErrMsg = err::Message( ErrorBuffer );
 
 	ERRRst();
 
 	Request.ReportBackendError(	ErrMsg );
-ERREnd
+qRT
 	Request.Complete();
-ERREpilog
+qRE
 	return !MasterData.Deconnexion;
 }
 #if 0	
@@ -863,11 +863,11 @@ ERREpilog
 		... )
 	{
 		epeios::row__ P;
-	ERRProlog
+	qRH
 		va_list L;
 		description Description;
 		bkdcst::cast Cast;
-	ERRBegin
+	qRB
 		Description.Init( Name );
 		
 		va_start( L, UP );
@@ -886,9 +886,9 @@ ERREpilog
 		
 		if ( UPs.Add( UP ) != P )
 			ERRc();
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return P;
 	}
 #endif

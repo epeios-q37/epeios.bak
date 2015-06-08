@@ -182,15 +182,15 @@ namespace cgimng {
 			const str::string_ &SessionId )
 		{
 			if ( _LogData.Functions != NULL ) {
-			ERRProlog
-			ERRBegin
+			qRH
+			qRB
 				mtx::Lock(_LogData.Mutex );
 				_LogData.Functions->Log( Log, SessionId );
 
-			ERRErr
-			ERREnd
+			qRR
+			qRT
 				mtx::Unlock( _LogData.Mutex );
-			ERREpilog
+			qRE
 			}
 		}
 	public:
@@ -294,7 +294,7 @@ namespace cgimng {
 		{
 #ifdef CGIMNG_DBG
 			if ( UP != NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 		}
 		void CSDSCBExit( void )

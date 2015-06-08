@@ -78,7 +78,7 @@ namespace sclplugin {
 		plugin *Plugin = new plugin;\
 		\
 		if ( Plugin == NULL )\
-			ERRAlc();\
+			qRAlc();\
 		\
 		return Plugin;\
 	}\
@@ -86,7 +86,7 @@ namespace sclplugin {
 	void sclplugin::SCLPLUGINReleasePlugin( void *Plugin )\
 	{\
 		if ( Plugin == NULL )\
-			ERRFwk();\
+			qRFwk();\
 		\
 		delete (plugin *)Plugin;\
 	}

@@ -103,7 +103,7 @@ namespace mscmdd {
 			if ( P )
 				if ( _Handle != NULL )
 					if ( midiOutClose( _Handle ) != MMSYSERR_NOERROR )
-						ERRFwk();
+						qRFwk();
 
 			_Handle = NULL;
 		}
@@ -123,7 +123,7 @@ namespace mscmdd {
 
 			if ( midiOutOpen( &_Handle, Device, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR ) {
 				if ( ErrorHandling != err::hUserDefined )
-					ERRDta();
+					qRFwk();
 				else
 					return false;
 			}
@@ -145,20 +145,20 @@ namespace mscmdd {
 
 #ifdef MSCMDD_DBG
 			if ( _Handle == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			/* Prepare the buffer and MIDIHDR */
 			if ( midiOutPrepareHeader( _Handle,  &midiHdr, sizeof(MIDIHDR)) != MMSYSERR_NOERROR )
-				ERRFwk();
+				qRFwk();
 
 			if ( midiOutLongMsg( _Handle, &midiHdr, sizeof(MIDIHDR ) ) != MMSYSERR_NOERROR )
-				ERRFwk();
+				qRFwk();
 
 			while ( ( Err = midiOutUnprepareHeader( _Handle, &midiHdr, sizeof(MIDIHDR ) ) ) == MIDIERR_STILLPLAYING )
 			{}
 
 			if ( Err != MMSYSERR_NOERROR )
-				ERRFwk();
+				qRFwk();
 
 			return Maximum;
 		}
@@ -199,26 +199,26 @@ namespace mscmdd {
 			err::handling__ ErrorHandling )
 		{
 			bso::bool__ Success = false;
-		ERRProlog
+		qRH
 			str::string Name;
 			STR_BUFFER___ SBuffer;
-		ERRBegin
+		qRB
 			Name.Init( );
 			
 			if ( !GetMIDIOutDeviceName( Device, Name ) )
-				ERRReturn;
+				qRReturn;
 			
 			if ( snd_rawmidi_open( NULL, &_Handle, Name.Convert( SBuffer ), 0 ) < 0 ) {
 				if ( ErrorHandling != err::hUserDefined )
 					ERRf();
 				else
-					ERRReturn;
+					qRReturn;
 			}
 			
 			Success = true;
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Success;
 		}
 		fdr::size__ Write(
@@ -337,7 +337,7 @@ namespace mscmdd {
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
-			ERRFwk();
+			qRFwk();
 #endif
 		return ( ( Data.Available + Data.Position ) == Data.Size );
 	}
@@ -346,7 +346,7 @@ namespace mscmdd {
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
-			ERRFwk();
+			qRFwk();
 #endif
 		return ( Data.Available == 0 );
 	}
@@ -355,7 +355,7 @@ namespace mscmdd {
 	{
 #ifdef MSCMDD_DBG
 		if ( !mtx::IsLocked( Data.Access ) )
-			ERRFwk();
+			qRFwk();
 #endif
 		return ( Data.Size - ( Data.Available + Data.Position ) );
 	}
@@ -375,7 +375,7 @@ namespace mscmdd {
 			_Data.Purge = true;
 
 			if ( midiInReset( _Handle ) != MMSYSERR_NOERROR )
-				ERRFwk();
+				qRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -384,7 +384,7 @@ namespace mscmdd {
 				if ( _Data.Buffer != NULL ) {
 					if ( _Started )
 						if ( midiInStop( _Handle ) != MMSYSERR_NOERROR )
-						ERRFwk();
+						qRFwk();
 
 					_Purge();
 
@@ -417,7 +417,7 @@ namespace mscmdd {
 		{
 			if ( !_Started ) {
 				if ( midiInStart( _Handle ) != MMSYSERR_NOERROR )
-					ERRFwk();
+					qRFwk();
 				_Started = true;
 			}
 		}
@@ -425,7 +425,7 @@ namespace mscmdd {
 		{
 			if ( _Started ) {
 				if ( midiInStop( _Handle ) != MMSYSERR_NOERROR )
-					ERRFwk();
+					qRFwk();
 				_Started = false;
 			}
 
@@ -469,26 +469,26 @@ namespace mscmdd {
 			err::handling__ ErrorHandling )
 		{
 			bso::bool__ Success = false;
-		ERRProlog
+		qRH
 			str::string Name;
 			STR_BUFFER___ SBuffer;
-		ERRBegin
+		qRB
 			Name.Init( );
 			
 			if ( !GetMIDIInDeviceName( Device, Name ) )
-				ERRReturn;
+				qRReturn;
 			
 			if ( snd_rawmidi_open( &_Handle, NULL, Name.Convert( SBuffer ), 0 ) < 0 ) {
 				if ( ErrorHandling != err::hUserDefined )
 					ERRf();
 				else
-					ERRReturn;
+					qRReturn;
 			}
 			
 			Success = true;
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Success;
 		}
 		fdr::size__ Read(
@@ -744,7 +744,7 @@ namespace mscmdd {
 			return GetMidiOutDevicesNames( Names );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 

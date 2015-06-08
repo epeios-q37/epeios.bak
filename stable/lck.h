@@ -214,10 +214,10 @@ namespace lck {
 		{
 #ifdef LCK__DBG
 			if ( !_Access.Locked )
-				ERRFwk();
+				qRFwk();
 
 			if ( _Access.ReadWrite )
-				ERRFwk();
+				qRFwk();
 #endif
 			_Access.Lock.ReadingAchieved();
 
@@ -227,10 +227,10 @@ namespace lck {
 		{
 #ifdef LCK__DBG
 			if ( !_Access.Locked )
-				ERRFwk();
+				qRFwk();
 
 			if ( !_Access.ReadWrite )
-				ERRFwk();
+				qRFwk();
 #endif
 			_Access.Lock.WritingAchieved();
 
@@ -271,7 +271,7 @@ namespace lck {
 		control___ &operator =( const control___ &C )
 		{
 			// Pour des raisons de standardisation, car cet oprateur n'a pas de sens dans ce contexte.
-			ERRFbd();
+			qRFbd();
 
 			return *this;	// Pour viter un 'warning'.
 		}
@@ -280,7 +280,7 @@ namespace lck {
 #ifdef LCK__DBG
 			_Lock();
 			if ( _Access.Locked )
-				ERRFwk();
+				qRFwk();
 			_Unlock();
 #endif
 			_Access.Lock.WaitUntilReadingAllowed();
@@ -311,7 +311,7 @@ namespace lck {
 #ifdef LCK__DBG
 			_Lock();
 			if ( _Access.Locked )
-				ERRFwk();
+				qRFwk();
 			_Unlock();
 #endif
 			_Access.Lock.WaitUntilWritingAllowed();
@@ -377,7 +377,7 @@ namespace lck {
 		control___<object> &_C( void ) const
 		{
 			if ( _Control == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Control;
 		}
@@ -427,7 +427,7 @@ namespace lck {
 				_Locked = false;
 				return true;
 			} else if ( ErrorIfNotLocked )
-				ERRFwk();
+				qRFwk();
 
 			return false;
 		}
@@ -483,7 +483,7 @@ namespace lck {
 				_Locked = false;
 				return true;
 			} else if ( ErrorIfNotLocked )
-				ERRFwk();
+				qRFwk();
 
 			return false;
 		}

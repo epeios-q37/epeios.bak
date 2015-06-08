@@ -52,17 +52,17 @@ static inline const char *GetRidClassName_(
 	JNIEnv *Env,
 	STR_BUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string ClassName;
-ERRBegin
+qRB
 	ClassName.Init();
 
 	GetRidClassName_( PackageName, Env, ClassName );
 
 	ClassName.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
@@ -71,16 +71,16 @@ jclass dvkbse::GetRidClass(
 	JNIEnv *Env )
 {
 	jclass Class = NULL;
-ERRProlog
+qRH
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	Class = Env->FindClass( GetRidClassName_( PackageName, Env, Buffer ) );
 
 	if ( Class == NULL )
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 	return Class;
 }
 
@@ -89,16 +89,16 @@ jclass dvkbse::GetRidClass(
 	JNIEnv *Env )
 {
 	jclass Class = NULL;
-ERRProlog
+qRH
 	STR_BUFFER___ PackageName;
-ERRBegin
+qRB
 	PackageName.Init();
 	jvabse::Convert( JPackageName, Env, PackageName );
 
 	Class = GetRidClass( PackageName, Env );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Class;
 }
 
@@ -118,17 +118,17 @@ static inline const char *GetRlayoutClassName_(
 	JNIEnv *Env,
 	STR_BUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string ClassName;
-ERRBegin
+qRB
 	ClassName.Init();
 
 	GetRlayoutClassName_( PackageName, Env, ClassName );
 
 	ClassName.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
@@ -137,16 +137,16 @@ jclass dvkbse::GetRlayoutClass(
 	JNIEnv *Env )
 {
 	jclass Class = NULL;
-ERRProlog
+qRH
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	Class = Env->FindClass( GetRlayoutClassName_( PackageName, Env, Buffer ) );
 
 	if ( Class == NULL )
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 	return Class;
 }
 
@@ -155,16 +155,16 @@ jclass dvkbse::GetRlayoutClass(
 	JNIEnv *Env )
 {
 	jclass Class = NULL;
-ERRProlog
+qRH
 	STR_BUFFER___ PackageName;
-ERRBegin
+qRB
 	PackageName.Init();
 	jvabse::Convert( JPackageName, Env, PackageName );
 
 	Class = GetRlayoutClass( PackageName, Env );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Class;
 }
 
@@ -185,17 +185,17 @@ static inline const char *GetRrawClassName_(
 	JNIEnv *Env,
 	STR_BUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string ClassName;
-ERRBegin
+qRB
 	ClassName.Init();
 
 	GetRrawClassName_( PackageName, Env, ClassName );
 
 	ClassName.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
@@ -204,16 +204,16 @@ jclass dvkbse::GetRrawClass(
 	JNIEnv *Env )
 {
 	jclass Class = NULL;
-ERRProlog
+qRH
 	STR_BUFFER___ Buffer;
-ERRBegin
+qRB
 	Class = Env->FindClass( GetRrawClassName_( PackageName, Env, Buffer ) );
 
 	if ( Class == NULL )
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 	return Class;
 }
 
@@ -222,16 +222,16 @@ jclass dvkbse::GetRrawClass(
 	JNIEnv *Env )
 {
 	jclass Class = NULL;
-ERRProlog
+qRH
 	STR_BUFFER___ PackageName;
-ERRBegin
+qRB
 	PackageName.Init();
 	jvabse::Convert( JPackageName, Env, PackageName );
 
 	Class = GetRrawClass( PackageName, Env );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Class;
 }
 
@@ -262,15 +262,15 @@ jobject dvkbse::GetRawResourceInputStream(
 	jobject Activity )
 {
 	jobject Object = NULL;
-ERRProlog
+qRH
 	STR_BUFFER___ PackageName;
-ERRBegin
+qRB
 	PackageName.Init();
 	jvabse::Convert( JPackageName, Env, PackageName );
 
 	Object = GetRawResourceInputStream( Name, PackageName, Env, Activity );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Object;
 }

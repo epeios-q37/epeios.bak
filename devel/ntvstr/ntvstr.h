@@ -80,7 +80,7 @@ namespace ntvstr {
 		bso::size__ Size = mbstowcs( NULL, Str, 0);
 
 		if ( Size == BSO_SIZE_MAX )
-			ERRFwk();
+			qRFwk();
 
 		return Size;
 # else
@@ -147,7 +147,7 @@ namespace ntvstr {
 			reset( false );
 
 			if ( String != 0 )
-				ERRFwk();
+				qRFwk();
 
 			Init( (char__ *)NULL );
 		}

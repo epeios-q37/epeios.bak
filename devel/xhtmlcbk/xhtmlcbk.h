@@ -91,7 +91,7 @@ namespace xhtmlcbk {
 			Automat.reset( P );
 			Handlers.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Automat.plug( AS );
 			Handlers.plug( AS );
@@ -118,7 +118,7 @@ namespace xhtmlcbk {
 		{
 			hrow__ Row = stsfsm::GetId( Name, Automat );
 
-			if ( Row == E_NIL )
+			if ( Row == qNIL )
 				return NULL;
 
 			return Handlers( Row );
@@ -209,7 +209,7 @@ namespace xhtmlcbk {
 		const event_handlers_ &_H( void ) const
 		{
 			if ( _Handlers ==  NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Handlers;
 		}
@@ -219,7 +219,7 @@ namespace xhtmlcbk {
 			xhtmlcbk::event_handler__ *Handler = _H().Get( str::string(  EventName ) );
 
 			if ( Handler == NULL )
-				ERRFwk();
+				qRFwk();
 
 			Handler->Handle();
 		}
@@ -268,7 +268,7 @@ namespace xhtmlcbk {
 		upstream_callback__ &Callback( void ) const
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}

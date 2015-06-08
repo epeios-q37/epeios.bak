@@ -40,7 +40,7 @@ namespace dbptbl {
 			S_.Skipped = 0;
 
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Label.plug( AS );
 			Records.plug( AS );

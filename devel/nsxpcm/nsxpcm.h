@@ -140,7 +140,7 @@
 #  endif
 # endif
 
-// Permet de 'logger' une erreur et d'viter qu'elle soit ne remonte  'XULRunner', qui ne saurait pas quoi en faire. A placer dans 'ERRErr'.
+// Permet de 'logger' une erreur et d'viter qu'elle soit ne remonte  'XULRunner', qui ne saurait pas quoi en faire. A placer dans 'qRR'.
 # define NSXPCM_ERR( window )\
 	if ( ERRMajor == err::itn ) {\
 		if ( ERRMinor == err::iExit )\
@@ -238,7 +238,7 @@ namespace nsxpcm {
 		EF( KeyPress ),
 		EF( Load ),
 		EF( Close ),
-		ef_E_NIL = 0,
+		ef_qNIL = 0,
 		ef_All = ( ( 1 << e_amount ) - 1 ),
 		ef_AllButAnnoying = ef_All & ~efAttributeChange & ~efBlur & ~efFocus	// Pour faciliter le dboguage.
 	};
@@ -408,7 +408,7 @@ namespace nsxpcm {
 		T( Document->GetElementById( EId, &Element ) );
 
 		if ( Element == NULL )	// Chercher un lment inexistant ne provoque pas d'erreur.
-			ERRFwk();
+			qRFwk();
 
 		return Element;
 	}
@@ -425,7 +425,7 @@ namespace nsxpcm {
 		T( Document->GetElementById( EId, &Element ) );
 
 		if ( Element == NULL )	// Chercher un lment inexistant ne provoque pas d'erreur.
-			ERRFwk();
+			qRFwk();
 
 		return Element;
 	}
@@ -436,7 +436,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( GenericElement == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		T( GenericElement->QueryInterface( element::GetIID(), (void **)&Element ) );
@@ -451,7 +451,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( GenericElement == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		Requestor = QueryInterface<nsIInterfaceRequestor>( GenericElement );
@@ -487,13 +487,13 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Document == NULL )
-			ERRFwk();
+			qRFwk();
 #endif
 
 		T( Document->CreateElement( WName, &Element ) );
 
 		if ( Element == NULL )
-			ERRSys();
+			qRSys();
 
 		return Element;
 
@@ -567,7 +567,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		T( Node->GetNodeName( RawName ) );
@@ -649,7 +649,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Element == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		
 		T( Element->HasAttribute( WName, &Result ) );
@@ -676,7 +676,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Element == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		
 		T( Element->SetAttribute( WName, WValue ) );
@@ -702,7 +702,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Element == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		
 		T( Element->SetAttribute( EName, EValue ) );
@@ -726,7 +726,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Element == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		
 		T( Element->RemoveAttribute( WName ) );
@@ -812,17 +812,17 @@ namespace nsxpcm {
 		const char *Name )
 	{
 		bso::bool__ State = false;
-	ERRProlog
+	qRH
 		str::string Value;
-	ERRBegin
+	qRB
 		Value.Init();
 		GetAttribute( Element, Name, Value );
 
 		if ( Value == "true" )
 			State = true;
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return State;
 	}
 
@@ -854,7 +854,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Element == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		
 		T( Element->SetValue( WValue ) );
@@ -870,7 +870,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Element == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		
 		T( Element->SetValue( WValue ) );
@@ -907,20 +907,20 @@ namespace nsxpcm {
 	inline bso::s32__ GetSelectedIndexAttribute( nsIDOMNode *Node )
 	{
 		bso::s32__ Index = -1;
-	ERRProlog
+	qRH
 		str::string Value;
-		sdr::row__ Error = E_NIL;
-	ERRBegin
+		sdr::row__ Error = qNIL;
+	qRB
 		Value.Init();
 		nsxpcm::GetAttribute( Node, "selectedIndex", Value );
 
 		Index = Value.ToS32( &Error );
 
-		if ( Error != E_NIL )
-			ERRSys();
-	ERRErr
-	ERREnd
-	ERREpilog
+		if ( Error != qNIL )
+			qRSys();
+	qRR
+	qRT
+	qRE
 		return Index;
 	}
 
@@ -935,7 +935,7 @@ namespace nsxpcm {
 
 	void SetSelectedItem(	// Cherche parmis les enfants de 'Node' le premier lment ayant l'attribut 'xex:selected'  'true' et le slectionne.
 		nsIDOMElement *Element,
-		bso::bool__ SelectFirstOneIfE_NIL = true );	// Lorsque  'true', si aucun 'item' n'est marqu comme slectionn, slectionne le premier.
+		bso::bool__ SelectFirstOneIfqNIL = true );	// Lorsque  'true', si aucun 'item' n'est marqu comme slectionn, slectionne le premier.
 
 	inline nsIDOMXULSelectControlItemElement *GetSelectedItem( nsIDOMXULSelectControlElement *Element )
 	{
@@ -993,13 +993,13 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 
 		if ( OldChild == NULL )
-			ERRPrm();
+			qRFwk();
 
 		if ( NewChild == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		T( Node->ReplaceChild( NewChild, OldChild, &Dummy ) );
 	}
@@ -1012,10 +1012,10 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 
 		if ( Child == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		T( Node->AppendChild( Child, &Dummy ) );
 	}
@@ -1031,13 +1031,13 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 
 		if ( Sibling == NULL )
-			ERRPrm();
+			qRFwk();
 
 		if ( Parent == NULL )
-			ERRFwk();
+			qRFwk();
 #endif
 		T( Parent->InsertBefore( Sibling, Node, &Dummy ) );
 	}
@@ -1048,7 +1048,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRFwk();
+			qRFwk();
 #endif
 
 		T( Node->HasAttributes( &Result ) );
@@ -1062,7 +1062,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		T( Node->GetFirstChild( &Child ) );
@@ -1076,7 +1076,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		T( Node->GetLastChild( &Child ) );
@@ -1090,7 +1090,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		T( Node->GetPreviousSibling( &Child ) );
@@ -1104,7 +1104,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		T( Node->GetNextSibling( &Child ) );
@@ -1118,7 +1118,7 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		T( Node->GetParentNode( &Parent ) );
@@ -1134,10 +1134,10 @@ namespace nsxpcm {
 
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 
 		if ( Child == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		T( Node->RemoveChild( Child, &Dummy ) );
 	}
@@ -1146,7 +1146,7 @@ namespace nsxpcm {
 	{
 #ifdef NSXPCM_DBG
 		if ( Node == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 
 		while ( GetLastChild( Node ) != NULL )
@@ -1371,7 +1371,7 @@ namespace nsxpcm {
 		void Attach( nsIDOMWindowInternal *Window )
 		{
 			if ( _Window != NULL )
-				ERRFwk();
+				qRFwk();
 
 			_Window = Window;
 		}
@@ -1466,7 +1466,7 @@ namespace nsxpcm {
 			_MutationEvent = NULL;
 			_KeyEvent = NULL;
 			_EventImbricationLevel = -1;
-			_EventsToIgnore = ef_E_NIL;
+			_EventsToIgnore = ef_qNIL;
 		}
 		event_data__( void )
 		{
@@ -1483,21 +1483,21 @@ namespace nsxpcm {
 		nsIDOMEvent &RawEvent( void ) const
 		{
 			if ( _RawEvent == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_RawEvent;
 		}
 		nsIDOMMutationEvent &MutationEvent( void )
 		{
 			if ( _MutationEvent == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_MutationEvent;
 		}
 		nsIDOMKeyEvent &KeyEvent( void ) const
 		{
 			if ( _KeyEvent == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_KeyEvent;
 		}
@@ -1573,7 +1573,7 @@ namespace nsxpcm {
 		{
 			switch ( ERRType ) {
 			case err::t_Return:
-				ERRFwk();
+				qRFwk();
 				break;
 			case err::t_Abort:
 				_OnErr();
@@ -1590,13 +1590,13 @@ namespace nsxpcm {
 			event_data__ &Data,
 			event__ Event )
 		{
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			NSXPCMOnEvent( Data, Event );
-		ERRErr
+		qRR
 			_ErrHandling();
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 		}
 	protected:
 		event_data__ &EventData( void )
@@ -1611,7 +1611,7 @@ namespace nsxpcm {
 		}
 		virtual void NSXPCMOnEvent(	event__ Event )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		virtual void NSXPCMOnErr( const char *Message ) = 0;	// Appel lors d'un 'ERR...(...)'.
 																/* ATTENTION : si 'Message' == 'NULL', alors les informations relatives  l'erreur ne sont pas disponibles
@@ -1724,7 +1724,7 @@ namespace nsxpcm {
 		{
 # ifdef NSXPCM_DBG
 			if ( _Supports != NULL )
-				ERRFwk();
+				qRFwk();
 # endif
 			reset();
 
@@ -1767,16 +1767,16 @@ namespace nsxpcm {
 
 	inline void Alert( const char *Text )
 	{
-	ERRProlog
+	qRH
 		nsIDOMWindow *MasterWindow = NULL;
-	ERRBegin
+	qRB
 		if ( ( MasterWindow = RetrieveMasterWindow() ) != NULL )
 			Alert( MasterWindow, Text );
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( MasterWindow != NULL )
 			ReleaseMasterWindow( MasterWindow );
-	ERREpilog
+	qRE
 	}
 
 	void Alert(
@@ -1785,16 +1785,16 @@ namespace nsxpcm {
 
 	inline void Alert( const str::string_ &Text )
 	{
-	ERRProlog
+	qRH
 		nsIDOMWindow *MasterWindow = NULL;
-	ERRBegin
+	qRB
 		if ( ( MasterWindow = RetrieveMasterWindow() ) != NULL )
 			Alert( MasterWindow, Text );
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( MasterWindow != NULL )
 			ReleaseMasterWindow( MasterWindow );
-	ERREpilog
+	qRE
 	}
 
 	bso::bool__ Confirm(
@@ -1915,7 +1915,7 @@ namespace nsxpcm {
 		{
 # ifdef NSXPCM_DBG
 			if ( GetFirstChild( GetElement() ) != GetLastChild( GetElement() ) )
-				ERRFwk();
+				qRFwk();
 # endif
 			if ( GetFirstChild( GetElement() ) == NULL )
 				AppendChild( NewChild );
@@ -2149,7 +2149,7 @@ namespace nsxpcm {
 			T( GetWidget()->GetCurrentItem( &Item ) );
 
 			if ( ( Item == NULL ) && ( ErrorIfInexistant ) )
-				ERRFwk();
+				qRFwk();
 
 			return Item;
 		}
@@ -2250,7 +2250,7 @@ namespace nsxpcm {
 			T( GetWidget()->GetView( &View ) );
 
 			if ( View == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return View;
 		}
@@ -2261,7 +2261,7 @@ namespace nsxpcm {
 			T( _GetView()->GetSelection( &Selection ) );
 
 			if ( Selection == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return Selection;
 		}
@@ -2301,7 +2301,7 @@ namespace nsxpcm {
 			T( _GetContentView()->GetItemAtIndex( GetCurrentIndex(), &Element ) );
 
 			if ( ( Element == NULL ) && ErrorIfInexistent )
-				ERRFwk();
+				qRFwk();
 
 			return Element;
 		}
@@ -2336,7 +2336,7 @@ namespace nsxpcm {
 #if 0
 		void ClearSelection( bso::bool__ SkipSelectEvent )
 		{
-			int Buffer = AddEventsToIgnore( SkipSelectEvent ? efSelect : ef_E_NIL );
+			int Buffer = AddEventsToIgnore( SkipSelectEvent ? efSelect : ef_qNIL );
 
 			T( _GetSelection()->ClearSelection() );
 
@@ -2415,7 +2415,7 @@ namespace nsxpcm {
 			Title.reset( P );
 			Mask.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Title.plug( AS );
 			Mask.plug( AS );
@@ -2479,7 +2479,7 @@ namespace nsxpcm {
 		MF( Apps ),
 		MF( XPRJ ),
 		MF( DynamicLibrary ),
-		fpmf_E_NIL = 0,
+		fpmf_qNIL = 0,
 		fpmf_All = ( ( 1 << fpm_amount ) - 1 )	// Ne pas confondre avec 'fpmfAll', dsignat que l'on dsire tous les fichiers (filtre '*.*').
 	};
 	
@@ -2506,12 +2506,12 @@ namespace nsxpcm {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.PredefinedFilters = fpmf_E_NIL;
+			S_.PredefinedFilters = fpmf_qNIL;
 
 			Title.reset( P );
 			Filters.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Title.plug( AS );
 			Filters.plug( AS );
@@ -2671,10 +2671,10 @@ namespace nsxpcm {
 		const char *Name,
 		nsIDOMWindow **Window = NULL )
 	{
-	ERRProlog
+	qRH
 		nsIDOMWindow **WindowBuffer = NULL, *DummyWindow = NULL, *MasterWindow = NULL;
 		nsString TransformedURL, TransformedName;
-	ERRBegin
+	qRB
 		if ( Window != NULL )
 			WindowBuffer = Window;
 		else
@@ -2688,14 +2688,14 @@ namespace nsxpcm {
 			if ( ( MasterWindow = RetrieveMasterWindow() ) != NULL )
 				ParentWindow = MasterWindow;
 			else
-				ERRFwk();
+				qRFwk();
 
 		T( GetWindowInternal( ParentWindow )->Open( TransformedURL, TransformedName, NS_LITERAL_STRING( "chrome,extrachrome,menubar,resizable,scrollbars,status,toolbar" ), WindowBuffer ) );;
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( MasterWindow != NULL )
 			ReleaseMasterWindow( MasterWindow );
-	ERREpilog
+	qRE
 	}
 
 	inline void OpenWindow(
@@ -2712,10 +2712,10 @@ namespace nsxpcm {
 		const char *Name,
 		nsIDOMWindow **Window = NULL )
 	{
-	ERRProlog
+	qRH
 		nsIDOMWindow **WindowBuffer = NULL, *DummyWindow = NULL, *MasterWindow = NULL;
 		nsString TransformedURL, TransformedName;
-	ERRBegin
+	qRB
 		if ( Window != NULL )
 			WindowBuffer = Window;
 		else
@@ -2728,17 +2728,17 @@ namespace nsxpcm {
 			if ( ( MasterWindow = RetrieveMasterWindow() ) != NULL )
 				ParentWindow = MasterWindow;
 			else
-				ERRFwk();
+				qRFwk();
 
 		if ( ParentWindow == NULL )
-			ERRFwk();	// Fonction bloquante, donc on ne peut pas prendre 'MasterWindow' (risque de bloquer la fentre non initiatrice de l'ouverture de la bote de dialogue).
+			qRFwk();	// Fonction bloquante, donc on ne peut pas prendre 'MasterWindow' (risque de bloquer la fentre non initiatrice de l'ouverture de la bote de dialogue).
 
 		T( GetWindowInternal( ParentWindow )->OpenDialog( TransformedURL, TransformedName, NS_LITERAL_STRING( "chrome,extrachrome,menubar,resizable,scrollbars,status,toolbar,modal" ), NULL, WindowBuffer ) );
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		if ( MasterWindow != NULL )
 			ReleaseMasterWindow( MasterWindow );
-	ERREpilog
+	qRE
 	}
 
 	inline void OpenDialog(
@@ -2801,17 +2801,17 @@ namespace nsxpcm {
 		{
 			if ( P ) {
 				if ( _lpbunch_<type, row>::Amount() != 0 )
-					ERRFwk();	// Car des objets existent qui n'ont pas encore t supprim ('delete'r).
+					qRFwk();	// Car des objets existent qui n'ont pas encore t supprim ('delete'r).
 			}
 
 			_lpbunch_<type, row>::reset( P );
-			S_.Row = E_NIL;
+			S_.Row = qNIL;
 		}
 		repository_( s &S )
 		: S_( S ),
 		  _lpbunch_<type, row>( S )
 		{}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			_lpbunch_<type, row>::plug();
 		}
@@ -2831,32 +2831,32 @@ namespace nsxpcm {
 		{
 			type *UserObject = NULL;
 
-			if ( S_.Row != E_NIL )
-				ERRFwk();
+			if ( S_.Row != qNIL )
+				qRFwk();
 
 			if ( ( UserObject = new type ) == NULL )
-				ERRAlc();
+				qRAlc();
 
 			return S_.Row = Add( UserObject );
 		}
 		void DismissCurrentObject( void )
 		{
-			if ( S_.Row == E_NIL )
-				ERRFwk();
+			if ( S_.Row == qNIL )
+				qRFwk();
 
-			S_.Row = E_NIL;
+			S_.Row = qNIL;
 		}
 		void SetCurrentRow( row Row )
 		{
-			if ( S_.Row != E_NIL )
-				ERRFwk();
+			if ( S_.Row != qNIL )
+				qRFwk();
 
 			S_.Row = Row;
 		}
 		row GetCurrentRow( void ) const
 		{
-			if ( S_.Row == E_NIL )
-				ERRFwk();
+			if ( S_.Row == qNIL )
+				qRFwk();
 
 			return S_.Row;
 		}
@@ -2868,7 +2868,7 @@ namespace nsxpcm {
 		{
 	#ifdef E_DEBUG
 			if ( !Exists( Row ) )
-				ERRFwk();
+				qRFwk();
 	#endif
 			delete Get( Row );
 
@@ -2898,7 +2898,7 @@ namespace nsxpcm {
 			Name.reset( P );
 			Value.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Name.plug( AS );
 			Value.plug( AS );
@@ -2937,7 +2937,7 @@ namespace nsxpcm {
 		{
 			_xslt_parameters_::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			_xslt_parameters_::plug( AS );
 		}
@@ -3008,7 +3008,7 @@ namespace nsxpcm {
 	template <typename type> inline const type &GetWorkingDirectory( type &Directory )
 	{
 		if ( !GetDirectory( NS_OS_CURRENT_WORKING_DIR, Directory, err::hUserDefined ) )
-			ERRSys();
+			qRSys();
 
 		return Directory;
 	}
@@ -3016,7 +3016,7 @@ namespace nsxpcm {
 	template <typename type> inline const type &GetInstallationDirectory( type &Directory )
 	{
 		if ( !GetDirectory( NS_OS_CURRENT_PROCESS_DIR, Directory, err::hUserDefined ) )
-			ERRSys();
+			qRSys();
 
 		return Directory;
 	}
@@ -3209,7 +3209,7 @@ namespace nsxpcm {
 		{
 #ifdef NSXPCM_DBG
 			if ( _EventHandler != NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			reset();
 
@@ -3286,7 +3286,7 @@ namespace nsxpcm {
 		tree_view_callback__ &_C( void )
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}
@@ -3340,7 +3340,7 @@ namespace nsxpcm {
 			bso::uint__ Index,
 			str::string_ &Comment )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		virtual bso::uint__ NSXPCMGetMatchingCount( const str::string_ &Pattern ) = 0;
 	public:
@@ -3397,7 +3397,7 @@ namespace nsxpcm {
 		autocomplete_textbox_callback__ &_C( void )
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}
@@ -3447,12 +3447,12 @@ namespace nsxpcm {
 		nsCOMPtr<nsxpcm::autocomplete_result___> _AutoCompleteResult;
 		void _HandleCallback( nsxpcm::autocomplete_textbox_callback__ &Callback )
 		{
-		ERRProlog
+		qRH
 			str::string SearchParam;
 			bso::pointer_buffer__ Buffer;
-		ERRBegin
+		qRB
 			if ( HasAttribute( "type" )  )
-				ERRFwk();
+				qRFwk();
 
 			SetAttribute( "type", "autocomplete" );
 
@@ -3460,9 +3460,9 @@ namespace nsxpcm {
 			_AutoCompleteResult->Init( Callback );
 			SearchParam.Init( bso::Convert( _AutoCompleteResult, Buffer ) );
 			SetAttribute( "autocompletesearchparam", SearchParam );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 	public:
 		void reset( bso::bool__ P = true )

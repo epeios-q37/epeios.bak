@@ -41,7 +41,7 @@ const char *xulfkl::GetLabel( xulfkl::message__ MessageId )
 	CASE( SelectProjectFile );
 	CASE( ExitConfirmation );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 

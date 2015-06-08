@@ -29,26 +29,26 @@ bso::bool__ frdssn::session___::FillSessionRegistry(
 	error_set___ &ErrorSet )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	TOL_CBUFFER___ FileNameBuffer, PathBuffer;
-ERRBegin
+qRB
 	_Test();
 
 	switch ( _Registry.FillSession( SettingsXFlow, Criterions, FRDKRN_SESSION_LABEL, ErrorSet.Context ) ) {
 	case rgstry::sOK:
 		break;
 	case rgstry::sUnableToFindRootPath:
-		ERRFwk();
+		qRFwk();
 		break;
 	default:
-		ERRReturn;
+		qRReturn;
 		break;
 	}
 
 	Success = true;
-	ERRErr
-		ERREnd
-		ERREpilog
+	qRR
+		qRT
+		qRE
 		return Success;
 }
 
@@ -57,15 +57,15 @@ bso::bool__ frdssn::session___::FillSessionRegistry(
 	const xpp::criterions___ &Criterions )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	error_set___ ErrorSet;
-ERRBegin
+qRB
 	ErrorSet.Init();
 
 Success = FillSessionRegistry( SettingsXFlow, Criterions, ErrorSet );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 

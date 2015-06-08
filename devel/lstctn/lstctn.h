@@ -84,7 +84,7 @@ namespace lstctn {
 			list_<row, row_t>::reset( P );
 			container::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			list_<row, row_t>::plug( AS );
 			container::plug( AS );
@@ -124,12 +124,12 @@ namespace lstctn {
 		// To avoid the use of herited 'Append' methods.
 		void Append( void ) const
 		{
-			ERRFbd();
+			qRFbd();
 		}
 		// To avoid the use of herited 'Delete' methods.
 		void Delete( void ) const
 		{
-			ERRFbd();
+			qRFbd();
 		}
 		// Pour viter certains 'castage'.
 		const container &Container( void ) const
@@ -210,7 +210,7 @@ namespace lstctn {
 			uys::mode__ ModeBuffer = _Container.Mode( Mode );
 
 			if ( ModeBuffer != _List.Mode( Mode ) )
-				ERRFwk();
+				qRFwk();
 
 			return ModeBuffer;
 		}
@@ -219,7 +219,7 @@ namespace lstctn {
 			uys::mode__ Mode = _Container.Mode();
 
 			if ( Mode != _List.Mode() )
-				ERRFwk();
+				qRFwk();
 
 			return Mode;
 		}
@@ -297,7 +297,7 @@ namespace lstctn {
 			bso::bool__ Is = _Container.IsPersistent();
 
 			if ( Is != _List.IsPersistent() )
-				ERRFwk();
+				qRFwk();
 
 			return Is;
 		}
@@ -323,7 +323,7 @@ namespace lstctn {
 			fil::size__ Size = Hook.ContainerFilesHook().StaticsFilesHook().FileSize() / ListContainer.GetStaticsItemSize();
 
 			if ( Size > SDR_SIZE_MAX )
-				ERRDta();
+				qRFwk();
 
 			if ( lst::Plug( ListContainer, Hook.ListFilesHook(), ( sdr::size__ )Size, Hook.ContainerFilesHook().TimeStamp() ) != State ) {
 				Hook.reset();
@@ -390,7 +390,7 @@ namespace lstctn {
 		// To avoid the use of herited 'Append' methods.
 		void Append( void )
 		{
-			ERRFbd();
+			qRFbd();
 		}
 	};
 

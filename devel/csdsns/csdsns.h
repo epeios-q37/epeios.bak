@@ -110,14 +110,14 @@ namespace csdsns {
 			void *UP ) const
 		{
 			if ( S_.Log.Functions != NULL ) {
-ERRProlog
-ERRBegin
+qRH
+qRB
 				mtx::Lock( S_.Log.Mutex );
 				S_.Log.Functions->Log( Log, Id, UP, UPs.Amount() );
-ERRErr
-ERREnd
+qRR
+qRT
 				mtx::Unlock( S_.Log.Mutex );
-ERREpilog
+qRE
 			}
 		}
 	public:
@@ -148,13 +148,13 @@ ERREpilog
 			S_.Log.Functions = NULL;
 
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			UPs.plug( AS );
 		}
 		core_ &operator =( const core_ &C )
 		{
-			ERRFwk();
+			qRFwk();
 
 			return *this;
 		}
@@ -174,7 +174,7 @@ ERREpilog
 			sdr::row__ Row = UPs.New();
 
 			if ( *Row >= BSO_U16_MAX )
-				ERRLmt();
+				qRLmt();
 
 			mtx::Unlock( S_.Mutex );
 
@@ -188,7 +188,7 @@ ERREpilog
 		{
 #ifdef CSDSNS_DBG
 			if ( Id == CSDSNB_UNDEFINED )
-				ERRPrm();
+				qRFwk();
 #endif
 			mtx::Lock( S_.Mutex );
 			UPs.Store( UP, Id );
@@ -270,7 +270,7 @@ ERREpilog
 		{
 #ifdef CSDSNS_DBG
 			if ( UP != NULL )
-				ERRPrm();
+				qRFwk();
 #endif
 			id__ Id = CSDSNB_UNDEFINED;
 			action__ Action = aContinue;
@@ -306,7 +306,7 @@ ERREpilog
 					_Core.Delete( Id );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -315,7 +315,7 @@ ERREpilog
 		virtual void CSDSCBPostProcess( void *UP )
 		{
 			if ( UP != NULL )
-				ERRPrm();
+				qRFwk();
 		}
 	public:
 		void reset( bso::bool__ P = true )

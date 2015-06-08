@@ -72,13 +72,13 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 geckoo::steering_callback__ *GECKOOCreateSteering( geckoo::shared_data__ *Data )
 {
 	if ( Data == NULL )
-		ERRPrm();
+		qRFwk();
 
 	if ( strcmp( Data->Version, GECKOO_OVERLAPPING_VERSION ) )
-		ERRChk();
+		qRChk();
 
 	if ( Data->Control != Data->ControlComputing() )
-		ERRChk();
+		qRChk();
 
 	return geckob::GECKOBCreateSteering( Data );
 }
@@ -88,10 +88,10 @@ geckoo::steering_callback__ *GECKOORetrieveSteering( void )
 	geckoo::steering_callback__ *Steering = NULL;
 
 	if ( !mtx::IsLocked( Mutex_ ) )
-		ERRFwk();
+		qRFwk();
 
 	if ( LoneSteering_ == NULL )
-		ERRFwk();
+		qRFwk();
 
 	Steering = LoneSteering_;
 
@@ -115,7 +115,7 @@ void geckob::SetSteering( geckoo::steering_callback__ &Steering )
 	mtx::Lock( Mutex_ );
 
 	if ( LoneSteering_ != NULL )
-		ERRFwk();
+		qRFwk();
 
 	LoneSteering_ = &Steering;
 }

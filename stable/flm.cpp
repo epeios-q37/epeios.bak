@@ -319,9 +319,9 @@ static void _Release( const bch::E_BUNCH_( row__ ) &Rows )
 
 void flm::ReleaseFiles( id__ ID )
 {
-ERRProlog
+qRH
 	bch::E_BUNCH( row__ ) Rows;
-ERRBegin
+qRB
 	Lock_();
 
 	Rows.Init();
@@ -329,10 +329,10 @@ ERRBegin
 	_Search( ID, Rows );
 
 	_Release( Rows );
-ERRErr
-ERREnd
+qRR
+qRT
 	Unlock_();
-ERREpilog
+qRE
 }
 
 

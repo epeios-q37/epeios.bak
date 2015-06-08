@@ -77,14 +77,14 @@ namespace strmrg {
 			{}
 			void reset( bso::bool__ P = true )
 			{
-				S_.String = E_NIL;
+				S_.String = qNIL;
 				Items.reset( P );
 			}
-			void plug( sdr::E_SDRIVER__ &SD )
+			void plug( qSD__ &SD )
 			{
 				Items.plug( SD );
 			}
-			void plug( ags::E_ASTORAGE_ &AS )
+			void plug( qAS_ &AS )
 			{
 				Items.plug( AS );
 			}
@@ -95,10 +95,10 @@ namespace strmrg {
 
 				return *this;
 			}
-			void Init( _srow__ String = E_NIL )
+			void Init( _srow__ String = qNIL )
 			{
-				if ( ( S_.String != E_NIL ) || ( Items.Amount() != 0 ) )
-					ERRFwk();
+				if ( ( S_.String != qNIL ) || ( Items.Amount() != 0 ) )
+					qRFwk();
 
 				S_.String = String;
 				Items.Init();
@@ -106,8 +106,8 @@ namespace strmrg {
 			E_RODISCLOSE_( _srow__, String );
 			void Append( _irow__ Item )
 			{
-				if ( S_.String != E_NIL )
-					ERRFwk();
+				if ( S_.String != qNIL )
+					qRFwk();
 
 				Items.Append( Item );
 			}
@@ -117,7 +117,7 @@ namespace strmrg {
 			}
 			bso::bool__ ContainsString( void ) const
 			{
-				return S_.String != E_NIL;
+				return S_.String != qNIL;
 			}
 		};
 
@@ -150,7 +150,7 @@ namespace strmrg {
 			Items.reset( P );
 			Main.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Strings.plug( AS );
 			Items.plug( AS );
@@ -279,21 +279,21 @@ namespace strmrg {
 		const _strings_ &_S( void ) const
 		{
 			if ( _Strings == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Strings;
 		}
 		const _items_ &_I( void ) const
 		{
 			if ( _Items == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Items;
 		}
 		const _irows_ &_R( void ) const
 		{
 			if ( _Rows == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Rows;
 		}
@@ -303,7 +303,7 @@ namespace strmrg {
 			_Strings = NULL;
 			_Items = NULL;
 			_Rows = NULL;
-			_Row = E_NIL;
+			_Row = qNIL;
 		}
 		E_CDTOR( retriever__ );
 		void Init(
@@ -341,7 +341,7 @@ namespace strmrg {
 		{
 			availability__ Availability = a_Undefined;
 
-			if ( _Row == E_NIL )
+			if ( _Row == qNIL )
 				Availability = aNone;
 			else {
 				ctn::E_CMITEMt( _item_, _irow__ ) Item;

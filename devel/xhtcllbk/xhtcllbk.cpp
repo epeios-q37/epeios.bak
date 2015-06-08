@@ -46,7 +46,7 @@ const char *xhtcllbk::GetLabel( function__ Function )
 	C( GetContent );
 	C( Focus );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -62,7 +62,7 @@ void xhtcllbk::Escape(
     sdr::row__ Row = Source.First();
 	bso::char__ C = 0;
 
-    while ( Row != E_NIL ) {
+    while ( Row != qNIL ) {
 		switch ( C = Source( Row ) ) {
 #if 0
 		case 7:
@@ -130,7 +130,7 @@ void xhtcllbk::Unescape(
 	bso::char__ C = 0;
 	bso::bool__ Skipped = false;
 
-    while ( Row != E_NIL ) {
+    while ( Row != qNIL ) {
 		if ( ( C = Source( Row ) ) == EscapeChar ) {
 			if ( Skipped )
 				Target.Append( C );

@@ -27,9 +27,9 @@ void idxbtq::hook_filenames___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
-ERRProlog
+qRH
 	fnm::name___ Tree, Queue;
-ERRBegin
+qRB
 	Tree.Init();
 	fnm::BuildPath( Path, Basename, "t", Tree );
 
@@ -38,8 +38,8 @@ ERRBegin
 
 	this->Tree.Init( NULL, Tree );
 	this->Queue.Init( NULL, Queue );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

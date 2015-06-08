@@ -27,35 +27,35 @@ void fblbrq::request__::_Pop(
 	flw::iflow__ &Flow,
 	const casts_ &Casts )
 {
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 	cast__ Cast = c_Undefined;
 
 	Row = Casts.First();
 
-	while ( ( Row != E_NIL )
+	while ( ( Row != qNIL )
 		    && ( ( Cast = (cast__)*Casts( Row ) ) != cEnd ) ) {
 
 		if ( Flow.Get() != Cast )
-			ERRFwk();
+			qRFwk();
 
 		_C().PopIn( Row, Flow, Cast );
 
 		Row = Casts.Next( Row );
 	}
 
-	if ( Row == E_NIL )
-		ERRFwk();
+	if ( Row == qNIL )
+		qRFwk();
 
 	if ( Flow.Get() != fblcst::cEnd )
-		ERRFwk();
+		qRFwk();
 
 	_C().PopInEnd( Row, Flow);
 
 	Row = Casts.Next( Row );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( ( Cast = (cast__)Flow.Get() ) != *Casts( Row ) )
-			ERRFwk();
+			qRFwk();
 
 		_C().PopOut( Row, Flow, Cast );
 

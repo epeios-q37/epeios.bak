@@ -184,7 +184,7 @@ namespace tys {
 		{
 			b::Fill( (sdr::datum__ *)&Object, sizeof( t ), *Position * sizeof( t ), Amount );
 		}
-		//f Return the position from 'Object' between 'Begin' and 'End' (both included) or 'E_NIL' if non-existant.
+		//f Return the position from 'Object' between 'Begin' and 'End' (both included) or 'qNIL' if non-existant.
 		r Search(
 			const t &Object,
 			r Begin,
@@ -192,7 +192,7 @@ namespace tys {
 		{
 			sdr::row_t__ Position;
 
-			if ( ( Position = b::Search( (sdr::datum__ *)&Object, sizeof( t ), *Begin * sizeof( t ), *End * sizeof( t ) ) ) != E_NIL )
+			if ( ( Position = b::Search( (sdr::datum__ *)&Object, sizeof( t ), *Begin * sizeof( t ), *End * sizeof( t ) ) ) != qNIL )
 				Position /= sizeof( t );
 
 			return Position;
@@ -232,11 +232,11 @@ namespace tys {
 		{
 			_storage_< t, uys::untyped_storage_, r >::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			_storage_< t, uys::untyped_storage_, r >::plug( AS );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			_storage_< t, uys::untyped_storage_, r >::plug( SD );
 		}

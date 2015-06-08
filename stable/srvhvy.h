@@ -116,14 +116,14 @@ namespace srvhvy {
 			void *UP ) const
 		{
 			if ( S_.Log.Functions != NULL ) {
-ERRProlog
-ERRBegin
+qRH
+qRB
 				mtx::Lock( S_.Log.Mutex );
 				S_.Log.Functions->Log( Log, Id, UP, UPs.Amount() );
-ERRErr
-ERREnd
+qRR
+qRT
 				mtx::Unlock( S_.Log.Mutex );
-ERREpilog
+qRE
 			}
 		}
 	public:

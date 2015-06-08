@@ -129,10 +129,10 @@ namespace {
 
 void bkdacc::backend_access___::GetGetCommandsCommand_( command__ DefaultCommand )
 {
-ERRProlog
+qRH
 	ids8 Casts;
 	bkdacc::string Name;
-ERRBegin
+qRB
 	Casts.Init();
 	Name.Init( bkdcmd::CommandsNames[bkdcmd::cGetCommands] );
 
@@ -148,19 +148,19 @@ ERRBegin
 	Id16Out( Commands_[bkdcmd::cGetCommands] );
 
 	_Handle();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void bkdacc::backend_access___::GetBackendCommands_( void )
 {
-ERRProlog
+qRH
 	commands_details CommandsDetails;
 	command_detail CommandDetail;
 	ids16 Commands;
 	int i;
-ERRBegin
+qRB
 	CommandsDetails.Init();
 
 	for( i = 0; i < bkdcmd::c_amount; i++ ) {
@@ -174,7 +174,7 @@ ERRBegin
 	GetCommands( BKDACC_MASTER_COMMAND, CommandsDetails, Commands );
 
 	Commands.Recall( 0, Commands.Amount(), Commands_ );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

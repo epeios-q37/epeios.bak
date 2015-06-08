@@ -98,12 +98,12 @@ namespace dir {
 		uint32_t Size = sizeof( Filename );
 		switch ( _NSGetExecutablePath( Filename, &Size ) ) {
 		case -1 :	// La taille de 'Path' est insuffisante.
-			ERRLmt();
+			qRLmt();
 			break;
 		case 0:	// Succés.
 			break;
 		default:
-			ERRSys();
+			qRSys();
 			break;
 		}
 
@@ -115,10 +115,10 @@ namespace dir {
 		// Valeur d"erreur retournée par 'GetModuleFileName(..)'.
 		// Valeur d'erreur retrounée par 'readlink(...)', mais '0' est normalement une impossibilité.
 		if ( Size <= 0 )
-			ERRSys();
+			qRSys();
 
 		if ( Size == sizeof( Filename ) )
-			ERRLmt();
+			qRLmt();
 
 		Filename[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
 
@@ -143,7 +143,7 @@ namespace dir {
 			return HandleError();
 			break;
 		default:
-			ERRSys();
+			qRSys();
 			break;
 		}
 
@@ -166,7 +166,7 @@ namespace dir {
 			return HandleError();
 			break;
 		default:
-			ERRSys();
+			qRSys();
 			break;
 		}
 
@@ -189,7 +189,7 @@ namespace dir {
 			return HandleError();
 			break;
 		default:
-			ERRSys();
+			qRSys();
 			break;
 		}
 
@@ -264,7 +264,7 @@ namespace dir {
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
 				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
-				ERRFwk();
+				qRFwk();
 		else {
 			Buffer.Malloc( wcslen( File.cFileName ) + 1 );
 			wcscpy( Buffer, File.cFileName );
@@ -278,13 +278,13 @@ namespace dir {
 		rep = opendir( Path.UTF8( Handle.Buffer ) );
 
 		if( rep == NULL )
-			ERRFwk();
+			qRFwk();
 
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
 				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
-				ERRFwk();
+				qRFwk();
 		else
 			Handle.Path.Init( ent->d_name );
 # else
@@ -299,7 +299,7 @@ namespace dir {
 # ifdef DIR__WIN
 #  ifdef DIR_DBG
 		if ( Handle.hSearch == INVALID_HANDLE_VALUE )
-			ERRFwk();
+			qRFwk();
 #  endif
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
@@ -309,7 +309,7 @@ namespace dir {
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
 				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
-				ERRFwk();
+				qRFwk();
 		else {
 			Buffer.Malloc( wcslen( File.cFileName ) + 1 );
 			wcscpy( Buffer, File.cFileName );
@@ -325,7 +325,7 @@ namespace dir {
 			if ( errno == 0 )
 				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
-				ERRFwk();
+				qRFwk();
 		else
 			Handle.Path.Init( ent->d_name );
     
@@ -338,17 +338,17 @@ namespace dir {
 # ifdef DIR__WIN
 #  ifdef DIR_DBG
 		if ( Handle.hSearch == INVALID_HANDLE_VALUE )
-			ERRFwk();
+			qRFwk();
 #  endif
 		if ( !FindClose( Handle.hSearch ) )
-			ERRLbr();
+			qRLbr();
 # endif
 		
 # ifdef DIR__POSIX
 		DIR *&rep = Handle.Dir;
     
 		if ( closedir(rep) )
-			ERRLbr();
+			qRLbr();
 
 		rep = NULL;
 # endif

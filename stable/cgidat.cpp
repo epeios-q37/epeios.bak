@@ -43,7 +43,7 @@ row__ data_::GetDataWithName( const content_ &Name ) const
 
 	Content.Init( Contents );
 
-	while( ( Row != E_NIL ) && ( Content( Relationships( Row ).Name ) != Name ) )
+	while( ( Row != qNIL ) && ( Content( Relationships( Row ).Name ) != Name ) )
 		Row = Relationships.Next( Row );
 
 	return Row;
@@ -58,7 +58,7 @@ row__ data_::GetDataWithNameAndSuffix(
 
 	Content.Init( Contents );
 
-	while( ( Row != E_NIL )
+	while( ( Row != qNIL )
 		   && ( ( Content( Relationships( Row ).Name ) != Name )
 			  || ( Content( Relationships( Row ).Suffix ) != Suffix ) ) )
 		Row = Relationships.Next( Row );
@@ -70,13 +70,13 @@ void cgidat::Fill(
 	const cgiarg::arguments_ &Args,
 	data_ &Data )
 {
-ERRProlog
-	cgiarg::row__ Row = E_NIL;
+qRH
+	cgiarg::row__ Row = qNIL;
 	str::string Name, Suffix, Value;
-ERRBegin
+qRB
 	Row = Args.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Name.Init();
 		Suffix.Init();
 		Value.Init();
@@ -85,7 +85,7 @@ ERRBegin
 
 		Row = Args.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

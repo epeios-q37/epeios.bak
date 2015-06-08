@@ -53,7 +53,7 @@ const char *clnarg::GetLabel( message__ Message )
 		CASE( UnexpectedOptionError );
 		CASE( WrongNumberOfArgumentsError );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -92,7 +92,7 @@ void clnarg::GetMeaning(
 		Meaning->AddTag( va_arg( Args, const char *) );
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -114,7 +114,7 @@ template <typename t> static sdr::row__ Search_(
 {
 	sdr::row__ P = Bunch.First();
 
-	while( ( P != E_NIL ) && ( Bunch( P ).Id != Id ) )
+	while( ( P != qNIL ) && ( Bunch( P ).Id != Id ) )
 		P = Bunch.Next( P );
 
 	return P;
@@ -126,10 +126,10 @@ template <typename t> static id__ Search_(
 {
 	sdr::row__ P = Bunch.First();
 
-	while( ( P != E_NIL ) && ( Bunch( P ).Short != C ) )
+	while( ( P != qNIL ) && ( Bunch( P ).Short != C ) )
 		P = Bunch.Next( P );
 
-	if ( P == E_NIL )
+	if ( P == qNIL )
 		return CLNARG_NONE;
 	else
 		return Bunch( P ).Id;
@@ -141,10 +141,10 @@ template <typename t> static id__ Search_(
 {
 	sdr::row__ P = Bunch.First();
 
-	while( ( P != E_NIL ) && ( strcmp( Bunch( P ).Long, String ) ) )
+	while( ( P != qNIL ) && ( strcmp( Bunch( P ).Long, String ) ) )
 		P = Bunch.Next( P );
 
-	if ( P == E_NIL )
+	if ( P == qNIL )
 		return CLNARG_NONE;
 	else
 		return Bunch( P ).Id;
@@ -199,10 +199,10 @@ static bso::bool__ Exists_(
 {
 	sdr::row__ P = Options.First();
 
-	while( ( P != E_NIL ) && ( Options( P ) != Id ) )
+	while( ( P != qNIL ) && ( Options( P ) != Id ) )
 		P = Options.Next( P );
 
-	return P != E_NIL;
+	return P != qNIL;
 }
 
 static inline void Add_(
@@ -275,7 +275,7 @@ const char *clnarg::analyzer___::GetOptions( option_list_ &Options ) const
 			End = true;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -327,7 +327,7 @@ bso::bool__ clnarg::analyzer___::GetArgument_(
 		Cont = false;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -351,19 +351,19 @@ void clnarg::analyzer___::GetArguments(
 	int Option,
 	arguments_ &Arguments )
 {
-ERRProlog
+qRH
 	int i = 1;
 	str::string Argument;
-ERRBegin
+qRB
 	while( ( i < ( ArgC_ - 1 ) ) && GetArgument_( i, (id__)Option, Argument ) ) {
 		if ( Argument.Amount() )
 			Arguments.Append( Argument );
 		Argument.Init();
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void clnarg::analyzer___::GetArguments( arguments_ &Arguments )
@@ -389,7 +389,7 @@ void clnarg::analyzer___::GetArguments( arguments_ &Arguments )
 			End = true;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -418,7 +418,7 @@ static const char *GetLabel_(
 		strcat( Buffer, "--" );
 		
 		if (  strlen( Buffer ) + strlen( Item.Long ) > sizeof( Buffer ) )
-			ERRLmt();
+			qRLmt();
 		
 		strcat( Buffer, Item.Long );
 	}
@@ -434,11 +434,11 @@ static const char *GetLabel_(
 {
 	sdr::row__ P = Items.First();
 	
-	while( ( P != E_NIL ) && ( Items( P ).Id != Id ) )
+	while( ( P != qNIL ) && ( Items( P ).Id != Id ) )
 		P = Items.Next( P );
 		
-	if ( P == E_NIL )
-		ERRFwk();
+	if ( P == qNIL )
+		qRFwk();
 		
 	return  GetLabel_( Items( P ), Id, Separator, Buffer );
 }
@@ -471,7 +471,7 @@ static void HandleView_(
 		Flow << txf::nl << txf::pad << txf::tab;
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 }

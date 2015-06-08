@@ -82,13 +82,13 @@ namespace dvkbse {
 		const char *Tag,
 		const str::string_ &Text )
 	{
-	ERRProlog
+	qRH
 		STR_BUFFER___ Buffer;
-	ERRBegin
+	qRB
 		Log( Priority, Tag, Text.Convert( Buffer ) );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	jclass GetRidClass(
@@ -181,7 +181,7 @@ namespace dvkbse {
 			Id );
 
 		if ( View == NULL )
-			ERRFwk();
+			qRFwk();
 
 		return View;
 	}

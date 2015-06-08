@@ -83,7 +83,7 @@ namespace ndbdct {
 		{
 #ifdef NDBDCT_DBG
 			if ( Available == 0 )
-				ERRPrm();
+				qRFwk();
 #endif
 			if ( Wanted >= Available )
 				Wanted = Available - 1;	// Il faut au moins 1 octet pour stocker la taille.
@@ -169,17 +169,17 @@ namespace ndbdct {
 		{
 			Memory.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Memory.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Memory.plug( AS );
 		}
 		storage_ operator =( const storage_ &S )
 		{
-			ERRFwk();	// Impossible de dupliquer : ne connat pas sa taille.
+			qRFwk();	// Impossible de dupliquer : ne connat pas sa taille.
 
 			return *this;	// Pour viter un 'warning'.
 		}
@@ -199,7 +199,7 @@ namespace ndbdct {
 			Available -= TotalWritten;
 
 			if ( Available == 0 )
-				Row = E_NIL;
+				Row = qNIL;
 
 			return Written;
 		}
@@ -232,7 +232,7 @@ namespace ndbdct {
 		{
 #ifdef NDBDCT_DBG
 			if ( Size == 0 )
-				ERRPrm();
+				qRFwk();
 #endif
 			dtfptb::size_buffer__ SizeBuffer;
 
@@ -266,7 +266,7 @@ namespace ndbdct {
 		size__ RawSize;
 		available__( void )
 		{
-			Row = E_NIL;
+			Row = qNIL;
 			RawSize = 0;
 		}
 		bool operator !=( const available__ &A ) const
@@ -286,7 +286,7 @@ namespace ndbdct {
 		drow__ Tail;
 		entry__( void )
 		{
-			Head = Tail = E_NIL;
+			Head = Tail = qNIL;
 		}
 	};
 
@@ -311,10 +311,10 @@ namespace ndbdct {
 
 			Written = Storage.Store( Data, Offset, Available.Row, Available.RawSize );
 
-			if ( Available.Row != E_NIL ) {
+			if ( Available.Row != qNIL ) {
 #ifdef NDBDCT_DBG
 				if ( Written != ( Data.Amount() - Offset ) )
-					ERRPrm();
+					qRFwk();
 #endif
 				Storage.StoreSize( Available.Row, Available.RawSize );
 				Availables.Push( Available );
@@ -370,13 +370,13 @@ namespace ndbdct {
 		{
 			entry__ Entry = Entries.Get( Row );
 
-			if ( Entry.Tail != E_NIL )
+			if ( Entry.Tail != qNIL )
 				_Erase( Entry.Tail );
 
-			if ( Entry.Head != E_NIL )
+			if ( Entry.Head != qNIL )
 				_Erase( Entry.Head );
 
-			Entry.Head = Entry.Tail = E_NIL;
+			Entry.Head = Entry.Tail = qNIL;
 
 			Entries.Store( Entry, Row );
 		}
@@ -418,7 +418,7 @@ namespace ndbdct {
 			S_.Unallocated = 0;
 			S_.ModificationEpochTimeStamp = 0;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Storage.plug( AS );
 			Availables.plug( AS );
@@ -485,12 +485,12 @@ namespace ndbdct {
 		{
 			entry__ Entry = Entries.Get( Row );
 
-			if ( Entry.Head != E_NIL )
+			if ( Entry.Head != qNIL )
 				_Retrieve( Entry.Head, Datum );
 			else
 				return false;
 
-			if ( Entry.Tail != E_NIL )
+			if ( Entry.Tail != qNIL )
 				_Retrieve( Entry.Tail, Datum );
 
 			return true;
@@ -516,12 +516,12 @@ namespace ndbdct {
 		// Reconstruction de la liste des items disponibles dans 'Entries' (sous-objet 'list_').
 		void RebuildLocations( void )
 		{
-			ERRVct();
+			qRVct();
 		}
 		// Reconstruit la liste des portions inoccups dans 'Storage'.
 		void RebuildAvailables( void )
 		{
-			ERRVct();
+			qRVct();
 		}
 		E_NAVt( Entries., rrow__ )
 		E_RODISCLOSE_( time_t, ModificationEpochTimeStamp );
@@ -585,7 +585,7 @@ namespace ndbdct {
 		void Set( dynamic_content_ &Content )
 		{
 			if ( _Content != NULL )
-				ERRPrm();
+				qRFwk();
 
 			_Content = &Content;
 		}

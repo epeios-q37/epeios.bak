@@ -138,11 +138,11 @@ namespace lst {
 		{
 			Locations.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Locations.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Locations.plug( AS );
 		}
@@ -179,12 +179,12 @@ namespace lst {
 		{
 			return (r_t)Nouveau_( Mode );
 		}
-		//f Return the row of a new entry. Use 'Row' if != 'E_NIL' (restoration purpose).
+		//f Return the row of a new entry. Use 'Row' if != 'qNIL' (restoration purpose).
 		r New(
 			r Row,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			if ( Row != E_NIL ) {
+			if ( Row != qNIL ) {
 				r FirstAvailable = *Locations.GetFirstAvailable();
 
 				if ( Locations.New( *Row ) ) {
@@ -199,7 +199,7 @@ namespace lst {
 			} else
 				return New();
 		}
-		//f Return the first entry if exists, 'E_NIL' if list empty.
+		//f Return the first entry if exists, 'qNIL' if list empty.
 		r First( void ) const
 		{
 			if ( Extent_() )
@@ -208,18 +208,18 @@ namespace lst {
 				else
 					return Successeur_( 0 );
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		r First( sdr::size__ Offset ) const
 		{
 			r Row = First();
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				Row = Next( Row, Offset  );
 
 			return Row;
 		}
-		//f Return the last entry, 'E_NIL' if list empty.
+		//f Return the last entry, 'qNIL' if list empty.
 		r Last( void ) const
 		{
 			if ( Extent_() )
@@ -232,13 +232,13 @@ namespace lst {
 					return Predecesseur_( P );
 			}
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		r Last( sdr::size__ Offset ) const
 		{
 			r Row = Last();
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				Row = Previous( Row, Offset  );
 
 			return Row;
@@ -248,7 +248,7 @@ namespace lst {
 		{
 			return Amount() == 0;
 		}
-		//f Return the entry next to 'Entry', 'E_NIL' if 'Entry' is the last one.
+		//f Return the entry next to 'Entry', 'qNIL' if 'Entry' is the last one.
 		r Next(
 			r Entry,
 			sdr::size__ Offset = 1 ) const
@@ -259,9 +259,9 @@ namespace lst {
 				else
 					return Successeur_( *Entry );
 			else
-				return E_NIL;
+				return qNIL;
 		}
-		//f Return the previous entry of 'Entry', 'E_NIL' if 'Entry' the first one.
+		//f Return the previous entry of 'Entry', 'qNIL' if 'Entry' the first one.
 		r Previous(
 			r Entry,
 			sdr::size__ Offset = 1 ) const
@@ -272,7 +272,7 @@ namespace lst {
 				else
 					return Predecesseur_( *Entry );
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		//f Amount of entries, NOT the extent of the list.
 		sdr::size__ Amount( void ) const
@@ -298,7 +298,7 @@ namespace lst {
 			aem::mode__ Mode = aem::m_Default )
 		{
 			if ( Locations.Amount() != 0 )
-				ERRFwk();
+				qRFwk();
 
 //			Locations.Init( Size );
 
@@ -436,11 +436,11 @@ namespace lst {
 		void Drop( void )
 		{
 			if ( ( _Store == NULL ) || !_Filename.Amount() )
-				ERRFwk();
+				qRFwk();
 
 			if ( fil::Exists( _Filename ) )
 				if ( !fil::Remove( _Filename ) )
-					ERRLbr();
+					qRLbr();
 		}
 		const fnm::name___ &Filename( void ) const
 		{
@@ -449,7 +449,7 @@ namespace lst {
 		void Set( lst::store_ &Store )
 		{
 			if ( _Store != NULL )
-				ERRFwk();
+				qRFwk();
 
 			_Store = &Store;
 		}
@@ -464,7 +464,7 @@ namespace lst {
 		{
 			if ( fil::Exists( _Filename ) ) {
 				if ( ErrorHandling == err::hThrowException )
-					ERRFwk();
+					qRFwk();
 				else
 					return false;
 			}
@@ -518,12 +518,12 @@ namespace lst {
 			Occupation_.Reset( false );
 			Nombre_ = 0;
 		}
-		//f First entry, 'E_NIL' if no entries.
+		//f First entry, 'qNIL' if no entries.
 		r First( void ) const
 		{
 			return Occupation_.First( true );
 		}
-		//f LAsttry, 'E_NIL' if no entries.
+		//f LAsttry, 'qNIL' if no entries.
 		r Last( void ) const
 		{
 			return Occupation_.Last( true );
@@ -541,12 +541,12 @@ namespace lst {
 		//f Return the position of a new entry.
 		r CreateEntry( err::handling__ ErrorHandling = err::h_Default  )
 		{
-			sdr::row_t__ Position = E_NIL;
+			sdr::row_t__ Position = qNIL;
 
 			if ( Nombre_ == t ) 
 			{
 				if ( ErrorHandling == err::hThrowException )
-					ERRFwk();
+					qRFwk();
 			}
 			else
 			{

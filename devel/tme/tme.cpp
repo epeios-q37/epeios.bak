@@ -66,7 +66,7 @@ const char *tme::time__::ASCII(
 		Indice = 12;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -108,7 +108,7 @@ static inline bso::bool__ ExtractItems_(
 	Hours = Minutes = Seconds = Ticks = 0;
 
 	if ( Time == NULL )
-		ERRFwk();
+		qRFwk();
 
 	if ( *Time == 0 )
 		return false;

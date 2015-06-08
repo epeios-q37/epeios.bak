@@ -54,7 +54,7 @@ const char *xml::GetLabel( status__ Status )
 	CASE( EmptyTagName );
 	CASE( MismatchedTag );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -68,10 +68,10 @@ void xml::GetMeaning(
 	const pos__ &Position,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	lcl::meaning MeaningBuffer;
 	bso::integer_buffer__ IBuffer;
-ERRBegin
+qRB
 	Meaning.SetValue( XML_NAME "_ErrorAtLineColumn" );
 
 	MeaningBuffer.Init();
@@ -81,9 +81,9 @@ ERRBegin
 
 	Meaning.AddTag( bso::Convert( Position.Line, IBuffer ) );
 	Meaning.AddTag( bso::Convert( Position.Column, IBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static status__ SkipSpaces_( _flow___ &Flow )
@@ -100,7 +100,7 @@ static status__ SkipSpaces_( _flow___ &Flow )
 static status__ HandleProcessingInstruction_( _flow___ &Flow )	// Gre aussi le prologue '<?xml ... ?>'
 {
 	if ( Flow.Get() != '?' )
-		ERRDta();
+		qRFwk();
 
 	while ( !Flow.EndOfFlow() && ( Flow.Get() != '>' ) );
 
@@ -145,7 +145,7 @@ static status__ GetComment_(
 	bso::bool__ Continue = true;
 
 	if ( Flow.Get() != '-' )
-		ERRDta();
+		qRFwk();
 
 	if ( ( Status = Test_( Flow, '-' ) ) != sOK )
 		return Status;
@@ -197,7 +197,7 @@ static status__ GetCData_(
 	bso::bool__ Continue = true;
 
 	if ( Flow.Get() != '[' )
-		ERRDta();
+		qRFwk();
 
 	if ( ( Status = Test_( Flow, "CDATA[" ) ) != sOK )
 		return Status;
@@ -255,7 +255,7 @@ static status__ GetCommentOrCData_(
 	bso::bool__ Continue = true;
 
 	if ( Flow.Get() != '!' )
-		ERRDta();
+		qRFwk();
 
 	if ( Flow.EndOfFlow() )
 		return sUnexpectedEOF;
@@ -576,21 +576,21 @@ inline static bso::bool__ IsSpecialAttribute_( const str::string_ &Attribute )
 	if ( ( _Status = ( F ) ) != sOK )\
 	{\
 		_Token = t_Error;\
-		ERRReturn;\
+		qRReturn;\
 	}
 
 #define RETURN( V )\
 	{\
 		_Status = V;\
 		_Token = t_Error;\
-		ERRReturn;\
+		qRReturn;\
 	}
 
 token__ xml::parser___::Parse( int TokenToReport )
 {
-ERRProlog
+qRH
 	bso::bool__ OnlySpaces = false, Continue = true, TEOX = true;	// 'TEOX' : Test EOX.
-ERRBegin
+qRB
 
 	_Flow.Purge();
 
@@ -648,7 +648,7 @@ ERRBegin
 				_Context = cTagExpected;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			break;
@@ -721,7 +721,7 @@ ERRBegin
 						RETURN( sUnexpectedCharacter );
 
 					if ( _Tags.IsEmpty() )
-						ERRFwk();
+						qRFwk();
 
 					_TagName.Init();
 
@@ -785,7 +785,7 @@ ERRBegin
 					_Context = cValueExpected;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 			}
 			break;
 		case cAttribute:
@@ -797,7 +797,7 @@ ERRBegin
 				HANDLE( GetAttribute_( _Flow, _EntitiesHandling, _AttributeName, _Value ) );
 
 				if ( _Tags.IsEmpty() )
-					ERRFwk();
+					qRFwk();
 
 				_TagName.Init();
 
@@ -829,7 +829,7 @@ ERRBegin
 						_Flow.Get();
 
 						if ( _Tags.IsEmpty() )
-							ERRFwk();
+							qRFwk();
 
 						_TagName.Init();
 
@@ -898,7 +898,7 @@ ERRBegin
 					_Context = cValueExpected;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			break;
@@ -958,7 +958,7 @@ ERRBegin
 					Continue = false;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			break;
@@ -975,7 +975,7 @@ ERRBegin
 						_TagName.Init();
 
 						if ( _Tags.IsEmpty() )
-							ERRFwk();
+							qRFwk();
 						else
 							_Tags.Top( _TagName );
 
@@ -993,12 +993,12 @@ ERRBegin
 				_Context = cTagExpected;
 			break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
@@ -1008,7 +1008,7 @@ ERRBegin
 			_Token = t_Processed;
 
 	_Status = sOK;
-ERRErr
+qRR
 		if ( ERRType == err::t_Free ) {
 			xtf::error__ Error = xtf::e_NoError;
 
@@ -1018,15 +1018,15 @@ ERRErr
 				ERRRst();
 			}
 		}
-ERREnd
-ERREpilog
+qRT
+qRE
 	return _Token;
 }
 
 void xml::parser___::Skip( void )
 {
 	if ( _Tags.IsEmpty() )
-		ERRFwk();
+		qRFwk();
 
 	sdr::size__ Limit = _Tags.Amount();
 
@@ -1035,13 +1035,13 @@ void xml::parser___::Skip( void )
 		case tEndTag:
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	} while ( _Tags.Amount() > Limit );
 
 	if ( _Tags.Amount() != Limit )
-		ERRFwk();
+		qRFwk();
 }
 
 status__ xml::Parse(
@@ -1050,12 +1050,12 @@ status__ xml::Parse(
 	callback__ &Callback )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	parser___ Parser;
 	str::string TagName, AttributeName, Value;	
 	bso::bool__ Stop = false;
 	xml::dump Dump;
-ERRBegin
+qRB
 	Parser.Init( UserFlow, EntitiesHandling );
 
 	while ( !Stop ) {
@@ -1091,19 +1091,19 @@ ERRBegin
 			Stop = !Callback.XMLComment( Value, Dump );
 			break;
 		case t_Error:
-			ERRDta();
+			qRFwk();
 			break;
 		case t_Processed:
 			Stop = true;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1111,12 +1111,12 @@ void xml::TransformUsingEntities(
 	str::string_ &Target,
 	bso::bool__ DelimiterOnly )
 {
-ERRProlog
+qRH
 	sdr::row__ Position = Target.First();
 	bso::char__ C;
 	str::string Buffer;
-ERRBegin
-	while( Position != E_NIL ) {
+qRB
+	while( Position != qNIL ) {
 		switch ( C = Target( Position ) ) {
 		case '\'':
 			if ( !DelimiterOnly ) {
@@ -1157,9 +1157,9 @@ ERRBegin
 
 		Position = Target.Next( Position );	// Could be dangerous, but actually works.
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xml::writer_::_CloseAllTags( void )
@@ -1176,9 +1176,9 @@ void xml::writer_::_Indent( bso::size__ Amount ) const
 
 void xml::writer_::PutValue( const value_ &Value )
 {
-ERRProlog
+qRH
 	value TransformedValue;
-ERRBegin
+qRB
 	TransformedValue.Init();
 
 	switch ( S_.SpecialCharHandling ) {
@@ -1189,7 +1189,7 @@ ERRBegin
 		TransformedValue = Value;
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 	
@@ -1203,31 +1203,31 @@ ERRBegin
 	S_.TagValueInProgress = true;
 
 	_Commit();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xml::writer_::PutAttribute(
 	const name_ &Name,
 	const value_ &Value )
 {
-ERRProlog
+qRH
 	value TransformedValue;
-ERRBegin
+qRB
 	TransformedValue.Init();
 
 	TransformUsingEntities( Value, S_.SpecialCharHandling == schKeep, TransformedValue );
 
 	if ( !S_.TagNameInProgress )
-		ERRFwk();
+		qRFwk();
 
 	*S_.Flow << ' ' << Name << "=\"" << TransformedValue << '"';
 
 	_Commit();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xml::writer_::PutCData( const value_ &Value )
@@ -1245,17 +1245,17 @@ void xml::writer_::PutCData( const value_ &Value )
 
 mark__ xml::writer_::PopTag( mark__ Mark )
 {
-ERRProlog
+qRH
 	name Name;
-ERRBegin
+qRB
 	if ( Tags.IsEmpty() )
-		ERRFwk();
+		qRFwk();
 
 	Name.Init();
 
 	if ( Mark != Tags.Pop( Name ) )
-		if ( Mark != E_NIL )
-			ERRFwk();
+		if ( Mark != qNIL )
+			qRFwk();
 
 	if ( S_.TagNameInProgress )
 		*S_.Flow << "/>";
@@ -1272,9 +1272,9 @@ ERRBegin
 	S_.TagValueInProgress = false;
 
 	_Commit();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Tags.Last();
 }
 
@@ -1286,5 +1286,5 @@ void xml::writer_::Rewind( mark__ Mark )
 Q37_GCTOR( xml )
 {
 	if ( ( s_FirstNonXTFError - s_FirstXTFError ) != xtf::e_amount )
-		ERRChk();
+		qRChk();
 }

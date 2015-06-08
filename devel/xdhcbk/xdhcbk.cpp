@@ -51,7 +51,7 @@ const char *xdhcbk::GetLabel( function__ Function )
 	C( GetContent );
 	C( Focus );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -67,7 +67,7 @@ void xdhcbk::Escape(
     sdr::row__ Row = Source.First();
 	bso::char__ C = 0;
 
-    while ( Row != E_NIL ) {
+    while ( Row != qNIL ) {
 		switch ( C = Source( Row ) ) {
 #if 0
 		case 7:

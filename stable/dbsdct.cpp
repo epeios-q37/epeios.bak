@@ -62,15 +62,15 @@ template <typename item> static void Save_(
 	const stk::E_BSTACK_( item ) &Bunch,
 	const char *RootFileName )
 {
-ERRProlog
+qRH
 	flf::file_oflow___ Flow;
-ERRBegin
+qRB
 	Flow.Init( RootFileName );
 
 	Save_( Bunch, Flow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 template <typename item> static void Save_(
@@ -79,10 +79,10 @@ template <typename item> static void Save_(
 	const char *Extension,
 	time_t UnderlyingFilesLastModificationTime )
 {
-ERRProlog
+qRH
 	str::string FileName;
 	STR_BUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	FileName.Init( RootFileName );
 	FileName.Append( Extension );
 	Save_( Bunch, FileName.Convert( FileNameBuffer ) );
@@ -91,9 +91,9 @@ ERRBegin
 		tol::Clock( true );
 		fil::TouchFile( FileNameBuffer );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void dbsdct::exploded_dynamic_content_::_SaveLocationsAndAvailables( void ) const
@@ -139,13 +139,13 @@ template <typename item> static bso::bool__ Load_(
 	time_t TimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	flf::file_iflow___ Flow;
 	static flw::datum__ Buffer[sizeof( item )];
-ERRBegin
+qRB
 	if ( Flow.Init( RootFileName, err::hSkip ) == fil::sSuccess ) {
 		if ( fil::GetFileLastModificationTime( RootFileName ) < TimeStamp )
-			ERRReturn;
+			qRReturn;
 
 		memcpy( Buffer, &TestValue, sizeof( item ) );
 
@@ -157,9 +157,9 @@ ERRBegin
 
 		Success = true;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -171,16 +171,16 @@ template <typename item> static bso::bool__ Load_(
 	time_t TimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string FileName;
 	STR_BUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	FileName.Init( RootFileName );
 	FileName.Append( Extension );
 	Success = Load_( FileName.Convert( FileNameBuffer ), Bunch, TestValue, TimeStamp );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -190,14 +190,14 @@ void dbsdct::exploded_dynamic_content_::Init(
 	bso::bool__ Partial,
 	flm::id__ ID )
 {
-ERRProlog
+qRH
 	str::string ContentFileName;
 	STR_BUFFER___ ContentFileNameBuffer;
 	str::string EntriesBunchFileName;
 	STR_BUFFER___ EntriesBunchFileNameBuffer;
 	str::string EntriesListFileName;
 	STR_BUFFER___ EntriesListFileNameBuffer;
-ERRBegin
+qRB
 	reset();
 
 	ContentFileName.Init( RootFileName );
@@ -216,18 +216,18 @@ ERRBegin
 	S_.Mode = Mode;
 
 	dynamic_content_::Init( Partial );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
 bso::bool__ dbsdct::exploded_dynamic_content_::_ConnectToFiles( void )
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	available__ TestAvailable;
-ERRBegin
+qRB
 	Exists = tym::Connect( Storage.Memory, S_.StorageFileManager );
 
 	if ( lstbch::Connect( Entries, S_.EntriesFileManager ) != Exists )
@@ -242,21 +242,21 @@ ERRBegin
 		if ( !Load_<available__>( RootFileName, Availables, TestAvailable, AVAILABLES_FILE_NAME_EXTENSION, _GetUnderlyingFilesLastModificationTime() ) )
 			RebuildAvailables();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
 void dbsdct::exploded_dynamic_content_::_ErasePhysically( void )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	S_.StorageFileManager.Drop();
 	S_.EntriesFileManager.Drop();
 
 	dbsbsc::DropFile( RootFileName, AVAILABLES_FILE_NAME_EXTENSION );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

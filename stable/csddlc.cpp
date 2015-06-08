@@ -72,9 +72,9 @@ bso::bool__ csddlc::dynamic_library_client_core::Init(
 	void *UP )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	f CSDDLGet;
-ERRBegin
+qRB
 	reset();
 
 #ifdef CSDDLC__MS
@@ -96,11 +96,11 @@ ERRBegin
 #endif
 
 	Success = ( _UserFunctions = CSDDLGet( UP ) ) != NULL;
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( !Success )
 		reset();
-ERREpilog
+qRE
 	return Success;
 }
 

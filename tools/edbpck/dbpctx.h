@@ -43,11 +43,11 @@ namespace dbpctx {
 			S_.Session = S_.Cycle = 0;
 			S_.TimeStamp = 0;
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Pool.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Pool.plug( AS );
 		}

@@ -48,12 +48,12 @@ static void GetPredefinedProjects_(
 	const char *Language,
 	str::string_ &PredefinedProjects )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ OFlow;
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
 	str::string Default;
-ERRBegin
+qRB
 	OFlow.Init( PredefinedProjects );
 	TFlow.Init( OFlow );
 	Writer.Init( TFlow, xml::oIndent, xml::e_Default );
@@ -69,9 +69,9 @@ ERRBegin
 	frdkrn::GetPredefinedProjects( Registry, Locale, Language, Writer );
 
 	Writer.PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void FillWidget_(
@@ -81,11 +81,11 @@ static void FillWidget_(
 	const char *XSLFileNameAffix,
 	nsIDOMWindow *Window )
 {
-ERRProlog
+qRH
 	nsIDOMDocumentFragment *Fragment;
 	fnm::name___ FileName;
 	str::string Buffer;
-ERRBegin
+qRB
 	nsxpcm::RemoveChildren( Node );
 
 	FileName.Init();
@@ -93,9 +93,9 @@ ERRBegin
 	Fragment = nsxpcm::XSLTransformByFileName( XML, fnm::BuildFileName( DefaultXSLRootPath, XSLFileNameAffix, ".xsl", FileName ).UTF8( Buffer ), Window, nsxpcm::xslt_parameters() );
 
 	nsxpcm::AppendChild( Node, Fragment );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -103,9 +103,9 @@ static void FillPredefinedProjectsMenu_(
 	trunk___ &Trunk,
 	nsIDOMWindow *Window )
 {
-ERRProlog
+qRH
 	str::string PredefinedProjects;
-ERRBegin
+qRB
 	PredefinedProjects.Init();
 
 	GetPredefinedProjects_( Trunk.Kernel().Registry(), Trunk.Kernel().Locale(), Trunk.Kernel().Language(), PredefinedProjects );
@@ -118,9 +118,9 @@ ERRBegin
 	nsxpcm::SetSelectedItem( Trunk.UI().Main().Widgets.mnlPredefinedProjectList );
 
 	// La slection de l'item de 'Trunk.UI().Main().Widgets.mnuPredefinedProject'  est ralis directement en XSL.
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define A( name )\

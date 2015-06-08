@@ -257,7 +257,7 @@ namespace xulfbs {
 			bso::uint__ Index,
 			str::string_ &Comment )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		virtual bso::uint__ XULFBSGetMatchingCount( const str::string_ &Pattern ) = 0;
 		virtual void XULFBSOnTextEntered( nsIDOMElement *Element ) = 0;
@@ -284,7 +284,7 @@ namespace xulfbs {
 		autocomplete_textbox_callback__ &_C( void )
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}

@@ -50,7 +50,7 @@ static bso::sign__ Search_(
 	bso::sign__ Test;
 	row__ Row = Seeker.GetCurrent();
 
-	while ( ( Row != E_NIL )
+	while ( ( Row != qNIL )
 			&& ( ( Test = Test_( T( Row ).Value(), S ) ) != 0 ) ) {
 		switch( Test ) {
 		case 1:
@@ -60,7 +60,7 @@ static bso::sign__ Search_(
 			Row = Seeker.SearchLesser();
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
@@ -78,11 +78,11 @@ row__ ssnmng::sessions_manager_::New( void *UP )
 
 	do {
 		SessionID.New();
-	} while( Search( SessionID ) != E_NIL );
+	} while( Search( SessionID ) != qNIL );
 
 	Table.Store( SessionID, Row );
 
-	if ( S_.Root == E_NIL ) {
+	if ( S_.Root == qNIL ) {
 		S_.Root = Row;
 		Queue.Create( Row );
 	} else {
@@ -98,7 +98,7 @@ row__ ssnmng::sessions_manager_::New( void *UP )
 			S_.Root = Index.BecomeLesser( Row, Seeker.GetCurrent(), S_.Root );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -107,10 +107,10 @@ row__ ssnmng::sessions_manager_::New( void *UP )
 
 
 	if ( time( &C.Relative ) == -1 )
-		ERRLbr();
+		qRLbr();
 
 	if ( time( &C.Absolute ) == -1 )
-		ERRLbr();
+		qRLbr();
 
 	C.Immortal = false;
 
@@ -121,7 +121,7 @@ row__ ssnmng::sessions_manager_::New( void *UP )
 
 row__ ssnmng::sessions_manager_::Search( const char *SessionID ) const
 {
-	if ( S_.Root != E_NIL )	{
+	if ( S_.Root != qNIL )	{
 		idxbtq::E_ISEEKERt__( row__ ) Seeker;
 
 		Seeker.Init( Index, S_.Root );
@@ -129,10 +129,10 @@ row__ ssnmng::sessions_manager_::Search( const char *SessionID ) const
 		if ( Search_( Table, SessionID, Seeker ) == 0 )
 			return Seeker.GetCurrent();
 		else
-			return E_NIL;
+			return qNIL;
 	}
 
-	return E_NIL;
+	return qNIL;
 }
 
 row__ ssnmng::sessions_manager_::Search( const str::string_ &SessionID ) const
@@ -140,7 +140,7 @@ row__ ssnmng::sessions_manager_::Search( const str::string_ &SessionID ) const
 	char Buffer[SSNMNG_SIZE+1];
 
 	if ( SessionID.Amount() != SSNMNG_SIZE )
-		return E_NIL;
+		return qNIL;
 
 	SessionID.Recall( 0, SSNMNG_SIZE, Buffer );
 
@@ -153,7 +153,7 @@ void ssnmng::sessions_manager_::GetExpired( rows_ &Expired ) const
 {
 	row__ Row = First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( IsExpired( Row ) )
 			Expired.Append( Row );
 
@@ -165,7 +165,7 @@ void ssnmng::sessions_manager_::GetAll( rows_ &Rows ) const
 {
 	row__ Row = First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Rows.Append( Row );
 
 		Row = Next( Row );
@@ -176,7 +176,7 @@ void ssnmng::sessions_manager_::_Close( const rows_ &Rows )
 {
 	sdr::row__ Row = Rows.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Close( Rows( Row ) );
 
 		Row = Rows.Next( Row );
@@ -186,31 +186,31 @@ void ssnmng::sessions_manager_::_Close( const rows_ &Rows )
 
 void ssnmng::sessions_manager_::CloseAll( void )
 {
-ERRProlog
+qRH
 	rows Rows;
-ERRBegin
+qRB
 	Rows.Init();
 
 	GetAll( Rows );
 
 	_Close( Rows );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void ssnmng::sessions_manager_::CloseExpired( void )
 {
-ERRProlog
+qRH
 	rows Rows;
-ERRBegin
+qRB
 	Rows.Init();
 
 	GetExpired( Rows );
 
 	_Close( Rows );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

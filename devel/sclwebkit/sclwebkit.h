@@ -69,7 +69,7 @@ namespace sclwebkit {
 		callback &C( void ) const
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}
@@ -103,7 +103,7 @@ namespace sclwebkit {
 		wkagent::agent___ &A( void ) const
 		{
 			if ( _Agent == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Agent;
 		}

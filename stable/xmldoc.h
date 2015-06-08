@@ -76,7 +76,7 @@ namespace xmldoc {
 			Structure.reset( P );
 			Data.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Structure.plug( AS );
 			Data.plug( AS );

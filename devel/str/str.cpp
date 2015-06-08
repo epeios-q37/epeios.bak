@@ -85,7 +85,7 @@ template <class ostream> static void Put_(
 			OStream.Put( C = (flw::datum__)String.Get( P++ ) );
 
 			if ( C == 0 )
-				ERRDta();
+				qRFwk();
 #else
 			OStream.Put( (flw::datum__)String.Get( P++ ) );
 #endif
@@ -175,7 +175,7 @@ void str::string_::Dump( flw::oflow__ &Flow ) const
 {
 	sdr::row__ Row = First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Flow.Put( Get( Row ) );
 
 		Row = Next( Row );
@@ -189,11 +189,11 @@ const char *string_::Convert(
 	sdr::size__ Quantity,
 	TOL_CBUFFER___ &Buffer ) const
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 #ifdef STR_DBG
 	if ( *Position > Amount() && ( Position != 0 ) )
-		ERRPrm();
+		qRFwk();
 #endif
 
 	if ( Quantity > ( Amount() - *Position ) )
@@ -205,9 +205,9 @@ ERRBegin
 		Recall( Position, Quantity, Buffer );
 
 	Buffer[Quantity] = 0;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
@@ -231,7 +231,7 @@ void string_::StripLeadingCharacter( char Model )
 	sdr::row__ Row = First();
 	sdr::size__ Amount = 0;
 
-	while ( ( Row != E_NIL ) && ( Get( Row ) == Model ) ) {
+	while ( ( Row != qNIL ) && ( Get( Row ) == Model ) ) {
 		Amount++;
 		Row = Next( Row );
 	}
@@ -245,7 +245,7 @@ void string_::StripTailingCharacter( char Model )
 	sdr::row__ Row = Last();
 	sdr::size__ Amount = 0;
 
-	while ( ( Row != E_NIL ) && ( Get( Row ) == Model ) ) {
+	while ( ( Row != qNIL ) && ( Get( Row ) == Model ) ) {
 		Amount++;
 		Row = Previous( Row );
 	}
@@ -278,14 +278,14 @@ bso::bool__ string_::Replace(
 
 #ifdef STR_DBG
 	if ( Position == 0 )
-		ERRPrm();
+		qRFwk();
 #endif
 
-	while ( ( Position-- ) && ( Row != E_NIL ) ) {
+	while ( ( Position-- ) && ( Row != qNIL ) ) {
 		Row = Search( Tag, Row );
 	}
 
-	if ( Row != E_NIL ) {
+	if ( Row != qNIL ) {
 		Remove( Row, 1 );
 
 		InsertAt( Value, Row );
@@ -308,12 +308,12 @@ sdr::row__ string_::Search(
 			(*Start)++;
 
 		if ( *Start > Limit )
-			return E_NIL;
+			return qNIL;
 		else
 			return Start;
 	}
 	else {
-		return E_NIL;
+		return qNIL;
 	}
 }
 
@@ -328,7 +328,7 @@ sdr::row__ string_::Search(
 		(*Start)++;
 
 	if ( *Start >= Limit )
-		return E_NIL;
+		return qNIL;
 	else
 		return Start;
 }
@@ -359,7 +359,7 @@ template <typename uint> static uint GenericUnsignedConversion_(
 	OtherLimit = Limit / Base;
 
 	if ( *P < String.Amount() )
-		while( P != E_NIL ) {
+		while( P != qNIL ) {
 			C = Convert_( String.Get( P ) );
 
 			if ( C >= Base )
@@ -378,11 +378,11 @@ template <typename uint> static uint GenericUnsignedConversion_(
 			P = String.Next( P );
 		}
 
-	if ( P != E_NIL ) {
+	if ( P != qNIL ) {
 		if ( ErrP )
 			*ErrP = P;
 		else
-			ERRDta();
+			qRFwk();
 	}
 
 	return Result;
@@ -397,23 +397,23 @@ template <typename sint, typename uint> sint GenericSignedConversion_(
 	sint NegativeLimit )
 {
 	if ( PositiveLimit < 0 )
-		ERRPrm();
+		qRFwk();
 
 	if ( NegativeLimit > 0 )
-		ERRPrm();
+		qRFwk();
 
 	if ( String.Get( Begin ) == '-' )
-		if ( String.Next( Begin ) == E_NIL ) {
+		if ( String.Next( Begin ) == qNIL ) {
 			*ErrP = *Begin + 1;
 			return 0;
 		} else 
 			return -(sint)GenericUnsignedConversion_<uint>( String, String.Next( Begin ), ErrP, Base, -NegativeLimit );
 	else if ( String.Get( Begin ) == '+' )
-		if ( String.Next( Begin ) == E_NIL ) {
+		if ( String.Next( Begin ) == qNIL ) {
 			if ( ErrP != NULL )
 				*ErrP = *Begin + 1;
 			else
-				ERRDta();
+				qRFwk();
 			return 0;
 		} else 
 			return (sint)GenericUnsignedConversion_( String, String.Next( Begin ), ErrP, Base, PositiveLimit );
@@ -473,7 +473,7 @@ bso::lfloat__ string_::ToLF(
 	unsigned char C;
 
 	if ( *P < Amount() ) {
-		if ( P != E_NIL ) {
+		if ( P != qNIL ) {
 			if ( Get( P ) == '-' ) {
 				Negate = true;
 				P = Next( P );
@@ -482,16 +482,16 @@ bso::lfloat__ string_::ToLF(
 			}
 		}
 
-		while( ( P != E_NIL ) && isdigit( C = Get( P ) ) && ( Result < ( BSO_LFLOAT_MAX / 10 ) ) ) {
+		while( ( P != qNIL ) && isdigit( C = Get( P ) ) && ( Result < ( BSO_LFLOAT_MAX / 10 ) ) ) {
 			Result = Result * 10 + C - '0';
 			P = Next( P );
 		}
 
-		if ( ( P != E_NIL )
+		if ( ( P != qNIL )
 			  && ( ( ( C = Get( P ) ) == '.' ) || ( C == ',' ) ) ) {
 			bso::lfloat__ Factor = .1;
 			P = Next( P );
-			while( ( P != E_NIL ) && isdigit( C = Get( P ) ) ) {
+			while( ( P != qNIL ) && isdigit( C = Get( P ) ) ) {
 				Result += ( C - '0' ) * Factor;
 				Factor /= 10;
 				P = Next( P );
@@ -499,11 +499,11 @@ bso::lfloat__ string_::ToLF(
 		}
 	}
 
-	if ( P != E_NIL ) {
+	if ( P != qNIL ) {
 		if ( ErrP )
 			*ErrP = P;
 		else
-			ERRDta();
+			qRFwk();
 	}
 
 	if ( Negate )

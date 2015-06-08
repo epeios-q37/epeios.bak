@@ -59,7 +59,7 @@
 #   error
 #  endif
 
-# define AGS_UNDEFINED_DESCRIPTOR	( (ags::descriptor__)E_NIL )
+# define AGS_UNDEFINED_DESCRIPTOR	( (ags::descriptor__)qNIL )
 
 namespace ags {
 
@@ -68,7 +68,7 @@ namespace ags {
 	class aggregated_storage_;
 
 	class aggregated_storage_driver__
-	: public sdr::E_SDRIVER__
+	: public qSD__
 	{
 	private:
 		descriptor__ &_Descriptor;
@@ -100,13 +100,13 @@ namespace ags {
 			} else
 				_AStorage = NULL;
 
-			E_SDRIVER__::reset( P );
+			qSD__::reset( P );
 
 			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		aggregated_storage_driver__( descriptor__ &Descriptor )
 		: _Descriptor( Descriptor ),
-		  E_SDRIVER__()
+		  qSD__()
 		{
 			reset( false );
 		}
@@ -116,7 +116,7 @@ namespace ags {
 			reset();
 
 			_AStorage = &AStorage;
-			E_SDRIVER__::Init();
+			qSD__::Init();
 
 			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
@@ -176,7 +176,7 @@ namespace ags {
 			Flow << 'U';
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 	}
@@ -286,7 +286,7 @@ namespace ags {
 	inline value__ GetShortValue( header__ Header )
 	{
 		if ( !IsSizeShort( Header ) )
-			ERRPrm();
+			qRFwk();
 
 		return GetEmbeddedValue( Header );
 	}
@@ -299,7 +299,7 @@ namespace ags {
 	inline size__ ConvertValueToFreeFragmentLongSize( value__ Value )
 	{
 		if ( Value < 1 )
-			ERRPrm();
+			qRFwk();
 
 		return Value;
 	}
@@ -321,7 +321,7 @@ namespace ags {
 			return ConvertValueToUsedFragmentLongSize( Value );
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -340,7 +340,7 @@ namespace ags {
 		else if ( IsSizeShort( Header ) )
 			Flow << 'S';
 		else
-			ERRPrm();
+			qRFwk();
 
 		Flow << '(';
 
@@ -351,7 +351,7 @@ namespace ags {
 		if ( PredecessorStatus( Header ) != PStatus ) 
 		{
 			Flow << txf::commit;
-			ERRFwk();
+			qRFwk();
 		}
 	}
 
@@ -377,7 +377,7 @@ namespace ags {
 			MarkAsUsed( Header );
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 	}
@@ -404,7 +404,7 @@ namespace ags {
 			MarkPredecessorAsUsed( Header );
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 	}
@@ -427,7 +427,7 @@ namespace ags {
 	inline bso::bool__ IsFreeFragmentSizeShortSuitable( size__ Size )
 	{
 		if ( Size == 0 )
-			ERRPrm();
+			qRFwk();
 
 		return Size == 1;
 	}
@@ -435,7 +435,7 @@ namespace ags {
 	inline bso::bool__ IsUsedFragmentSizeShortSuitable( size__ Size )
 	{
 		if ( Size == 0 )
-			ERRPrm();
+			qRFwk();
 
 		return Size <= AGS_SHORT_SIZE_MAX;
 	}
@@ -452,7 +452,7 @@ namespace ags {
 			return IsUsedFragmentSizeShortSuitable( Size );
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -462,7 +462,7 @@ namespace ags {
 	inline value__ ConvertFreeFragmentLongSizeToValue( size__ Size )
 	{
 		if ( IsFreeFragmentSizeShortSuitable( Size ) )
-			ERRPrm();
+			qRFwk();
 
 		return Size;
 	}
@@ -470,7 +470,7 @@ namespace ags {
 	inline value__ ConvertUsedFragmentLongSizeToValue( size__ Size )
 	{
 		if ( IsUsedFragmentSizeShortSuitable( Size ) )
-			ERRPrm();
+			qRFwk();
 
 		return Size - AGS_SHORT_SIZE_MAX - 1;
 	}
@@ -487,7 +487,7 @@ namespace ags {
 			return ConvertUsedFragmentLongSizeToValue( Size );
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -497,7 +497,7 @@ namespace ags {
 	inline value__ ConvertFreeFragmentShortSizeToValue( size__ Size )
 	{
 		if ( !IsFreeFragmentSizeShortSuitable( Size ) )
-			ERRPrm();
+			qRFwk();
 
 		return 0;	// Pour un fragment libre, seule une taille de 1 peut tre convertit en 'short'.
 	}
@@ -505,7 +505,7 @@ namespace ags {
 	inline value__ ConvertUsedFragmentShortSizeToValue( size__ Size )
 	{
 		if ( !IsUsedFragmentSizeShortSuitable( Size ) )
-			ERRPrm();
+			qRFwk();
 
 		return Size - 1;
 	}
@@ -522,7 +522,7 @@ namespace ags {
 			return ConvertUsedFragmentShortSizeToValue( Size );
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -534,7 +534,7 @@ namespace ags {
 		value__ Value )
 	{
 		if ( !CanValueBeEmbedded( Value ) )
-			ERRPrm();
+			qRFwk();
 
 		Header = ( *Header & f_All ) | ( (bso::u8__)Value << fp_SizeBegin );
 	}
@@ -580,7 +580,7 @@ namespace ags {
 				return _XSize.BufferSize() + AGS_HEADER_SIZE + _Size;
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 
@@ -666,7 +666,7 @@ namespace ags {
 		bso::u8__ Counter = AGS_LONG_SIZE_SIZE_MAX + 1;
 
 		if ( *Buffer & fSizeType )
-			ERRPrm();
+			qRFwk();
 
 		do {
 			Buffer--;
@@ -674,7 +674,7 @@ namespace ags {
 		} while ( Counter && ( *Buffer & fSizeType ) );
 
 		if ( Counter == 0 )
-			ERRDta();
+			qRFwk();
 
 		return Buffer + 1;
 	}
@@ -687,7 +687,7 @@ namespace ags {
 		size__ Size;
 		void reset( bso::bool__ = true )
 		{
-			Row = E_NIL;
+			Row = qNIL;
 			Size = 0;
 		}
 		E_CDTOR( tracker__ );
@@ -699,8 +699,8 @@ namespace ags {
 			sdr::row_t__ Row,
 			size__ Size )
 		{
-			if ( ( Row ==  E_NIL ) || ( Size == 0 ) )
-				ERRPrm();
+			if ( ( Row ==  qNIL ) || ( Size == 0 ) )
+				qRFwk();
 
 			this->Row = Row;
 			this->Size = Size;
@@ -731,7 +731,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			Header = (header__)*Pointer;
 			Size = GetShortSize( Header );
 			if ( ags::Status( Header ) != Status )
-				ERRPrm();
+				qRFwk();
 			return AGS_HEADER_SIZE;
 		} else {
 			const sdr::datum__ *LongSizePointer = FindLongSizeBegin( Pointer );
@@ -739,7 +739,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			Header = *--LongSizePointer;
 
 			if ( ( Status == sUsed ) && ( ags::Status( Header ) != sUsed ) )
-				ERRPrm();
+				qRFwk();
 
 			return Pointer - LongSizePointer + 1;
 		}
@@ -751,7 +751,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		header__ Header;
 		void reset( bso::bool__ P = true )
 		{
-			Row = E_NIL;
+			Row = qNIL;
 			Header = 0;
 		}
 		E_CDTOR( bundle__ );
@@ -796,7 +796,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			sdr::datum__ *Pointer = &Buffer[Amount-1];
 
 			if ( Amount == 0 )
-				ERRPrm();
+				qRFwk();
 
 			_Read( Row - Amount, Amount, Buffer );
 
@@ -881,7 +881,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		sdr::row_t__ _GetTailFreeFragment( void ) const
 		{
 			if ( _GetTailFreeFragmentSize() == 0 )
-				return E_NIL;
+				return qNIL;
 			else
 				return _Size() - _GetTailFreeFragmentSize();
 		}
@@ -966,7 +966,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			const xheader__ &XHeader )
 		{
 			if ( XHeader.Status() != sFree )
-				ERRPrm();
+				qRFwk();
 
 			switch ( XHeader.FragmentSize() ) {
 			default:
@@ -982,7 +982,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				// Dans ce cas, compte tenu de la taille du fragment, le 'tail meta data' est constitu du 'header' du 'head meta data'.
 				break;
 			case 0:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 		}
@@ -1028,7 +1028,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			UsingTail = TailAvailableSize != 0;
 
 			if ( TailAvailableSize >= XSize.FragmentSize() )
-				ERRPrm();
+				qRFwk();
 
 			Storage.Allocate( _Size() - TailAvailableSize + XSize.FragmentSize() );
 
@@ -1047,7 +1047,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			if ( AvailableSize > XSize.FragmentSize() )
 				_SetAsFreeFragment( Row + XSize.FragmentSize(), AvailableSize - XSize.FragmentSize(), sUsed );
 			else if ( AvailableSize < XSize.FragmentSize() )
-				ERRPrm();
+				qRFwk();
 			else
 				All = true;
 
@@ -1055,7 +1055,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		sdr::row_t__ _GetUsableFreeFragmentIfAvailable( size__ Size )
 		{
-			sdr::row_t__ Row = E_NIL;
+			sdr::row_t__ Row = qNIL;
 
 			if ( S_.Free.IsSuitable( Size ) ) {
 				Row = S_.Free.Row;
@@ -1067,21 +1067,21 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		descriptor__ _Allocate( sdr::size__ Size )
 		{
 			xsize__ XSize;
-			sdr::row_t__ Row = E_NIL;
-			descriptor__ Descriptor = E_NIL;
+			sdr::row_t__ Row = qNIL;
+			descriptor__ Descriptor = qNIL;
 			bso::bool__ All = false;
 
 			XSize.Init( Size, sUsed );
 
-			if ( ( Row = _GetUsableFreeFragmentIfAvailable( XSize.FragmentSize() ) ) == E_NIL )
+			if ( ( Row = _GetUsableFreeFragmentIfAvailable( XSize.FragmentSize() ) ) == qNIL )
 				if ( _GetTailFreeFragmentSize() >= XSize.FragmentSize() )
 					Row = _GetTailFreeFragment();
 
-			if ( Row != E_NIL ) {
+			if ( Row != qNIL ) {
 				Descriptor = _SetUsedFragmentUsingFreeFragment( Row, XSize, ( Row == 0 ? _TailFragmentStatus() : sUsed ), All );	// Le cas o l'on utilise l'intgralit du 'TailFragment' (auquel cas '_TaileFragmentStatus()'
 																																	// va changer de valeur) sera trait ci-dessous, grce  la valeur de 'All'.		
 			} else { 
-				if ( ( Row = _GetTailFreeFragment() ) == E_NIL )
+				if ( ( Row = _GetTailFreeFragment() ) == qNIL )
 					Row = _Size();
 				Descriptor = _AllocateAndSetUsedFragmentAtTail( XSize, sUsed, All );
 			}
@@ -1118,7 +1118,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				size__
 					Size = 0,
 					SuccessorSize = 0;
-				sdr::row_t__ SuccessorRow = E_NIL;
+				sdr::row_t__ SuccessorRow = qNIL;
 
 				_GetPriorMetaData( Descriptor, Header, Size );
 
@@ -1164,7 +1164,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 		sdr::size__ _GetResultingFreeFragmentSizeIfFreed( descriptor__ Descriptor ) const
 		{
-			sdr::row_t__ Row = E_NIL;
+			sdr::row_t__ Row = qNIL;
 
 			return _GetResultingFreeFragmentSizeIfFreed( Descriptor, Row );
 		}
@@ -1172,7 +1172,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			descriptor__ OldDescriptor,
 			sdr::size__ NewSize )
 		{
-			descriptor__ NewDescriptor = E_NIL;
+			descriptor__ NewDescriptor = qNIL;
 			sdr::size__ AvailableFragmentSize = _GetResultingFreeFragmentSizeIfFreed( OldDescriptor );
 			xsize__ XSize;
 
@@ -1194,7 +1194,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 					xheader__ NewXHeader;
 					sdr::row_t__
 						OldRow = *OldDescriptor - OldXHeaderLength,
-						NewRow = E_NIL;
+						NewRow = qNIL;
 
 					if ( ( OldRow + OldSize + OldXHeaderLength ) == S_.Free.Row )
 						S_.Free.Init();
@@ -1226,7 +1226,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				xheader__ NewXHeader;
 				sdr::row_t__
 					OldRow = *OldDescriptor - OldXHeaderLength,
-					NewRow = E_NIL;
+					NewRow = qNIL;
 
 				if ( ( *OldDescriptor + OldSize ) == S_.Free.Row )
 					S_.Free.Init();
@@ -1259,14 +1259,14 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 					if ( S_.Free.Size < FreeSuccessorSize )
 						S_.Free.Init( FreeSuccessorRow, FreeSuccessorSize );
 				} else
-					ERRFwk();
+					qRFwk();
 			}
 
 			return NewDescriptor;
 		}
 		void _Free( descriptor__ Descriptor )
 		{
-			sdr::row_t__ Row = E_NIL;
+			sdr::row_t__ Row = qNIL;
 			size__ Size = _GetResultingFreeFragmentSizeIfFreed( Descriptor, Row );
 
 			_SetAsFreeFragment( Row, Size, ( Row == 0 ? ( _IsLast( Descriptor ) ? sFree : _TailFragmentStatus() ) : sUsed ) );
@@ -1331,7 +1331,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			return *this;
 		}
-		void plug( sdr::E_SDRIVER__ &MD )
+		void plug( qSD__ &MD )
 		{
 			Storage.plug( MD );
 		}
@@ -1350,14 +1350,14 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		void Preallocate( sdr::size__ Size )
 		{
 			if ( _Size() > Size )
-				ERRPrm();
+				qRFwk();
 			else if ( _Size() != Size ) {
 				sdr::row_t__ Row = _GetTailFreeFragment();
 				sdr::size__ TailFreeFragmentSize = Size - _Size() + _GetTailFreeFragmentSize();
 
 				Storage.Init();
 
-				if ( Row == E_NIL )
+				if ( Row == qNIL )
 					Row = _Size(); 
 
 				Storage.Allocate( Size );
@@ -1370,24 +1370,24 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		descriptor__ Allocate( size__ Size )
 		{
 			if ( Size == 0 )
-				return E_NIL;
+				return qNIL;
 			else
 				return _Allocate( Size );
 		}
 		void Free( descriptor__ Descriptor )
 		{
-			if ( Descriptor != E_NIL ) 
+			if ( Descriptor != qNIL ) 
 				return _Free( Descriptor );
 		}
 		descriptor__ Reallocate(
 			descriptor__ Descriptor,
 			size__ Size )
 		{
-			descriptor__ NewDescriptor = E_NIL;
+			descriptor__ NewDescriptor = qNIL;
 
 			if ( Size == 0 )
 				Free( Descriptor );
-			else if ( Descriptor == E_NIL )
+			else if ( Descriptor == qNIL )
 				NewDescriptor = Allocate( Size );
 			else if ( false ) {	// Mettre  'true' dans le cas ou '_Reallocate()' ci-dessous bug.
 				size__ OldSize = _GetSize( Descriptor );
@@ -1444,8 +1444,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 		return State;
 	}
-# define E_ASTORAGE_	aggregated_storage_
-# define E_ASTORAGE	aggregated_storage
+# define qAS_	ags::aggregated_storage_
+# define qAS	ags::aggregated_storage
 }
 
 #endif

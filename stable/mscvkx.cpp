@@ -56,10 +56,10 @@ static void HandleName_(
 	const mscvkt::tree_ &Tree,
 	writer_ &XML )
 {
-ERRProlog
+qRH
 	str::string Name;
 	bso::bool__ Continue = true;
-ERRBegin
+qRB
 
 	XML.PushTag( PARAMETER );
 	XML.PutAttribute( LABEL, Tree( Browser.Position() ).Description );
@@ -97,9 +97,9 @@ ERRBegin
 
 //	XML.PopTag();
 	
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void HandleBars_(
@@ -107,10 +107,10 @@ static void HandleBars_(
 	const mscvkt::tree_ &Tree,
 	writer_ &XML )
 {
-ERRProlog
+qRH
 	str::string Bars;
 	bso::bool__ Continue = true;
-ERRBegin
+qRB
 
 	XML.PushTag( PARAMETER );
 	XML.PutAttribute( LABEL, Tree( Browser.Position() ).Description );
@@ -147,9 +147,9 @@ ERRBegin
 
 //	XML.PopTag();
 	
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -157,12 +157,12 @@ static void Dump_(
 	const mscvkt::tree_ &Tree,
 	txf::text_oflow__ &Flow )
 {
-ERRProlog
+qRH
 	xml::writer XML;
 	browser__  Browser;
 	mscvkt::row__ Row = NONE;
 	bso::bool__ Skip = false;
-ERRBegin
+qRB
 	XML.Init( Flow, xml::oIndent );
 
 	XML.PushTag( PARAMETERS );
@@ -246,9 +246,9 @@ ERRBegin
 
 	XML.PopTag();
 	
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -256,17 +256,17 @@ void mscvkx::Write(
 	const mscvkp::data_sets_ &DataSets,
 	txf::text_oflow__ &Flow )
 {
-ERRProlog
+qRH
 	mscvkt::tree Tree;
-ERRBegin
+qRB
 	Tree.Init();
 
 	Tree.Add( DataSets );
 
 	Dump_( Tree, Flow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 struct callback__
@@ -373,11 +373,11 @@ private:
 	bso::bool__ _HandleName( const str::string_ &Value )
 	{
 		bso::bool__ Success = false;
-	ERRProlog
+	qRH
 		str::string Name;
-	ERRBegin
+	qRB
 		if ( Value.Amount() > 16 )
-			ERRReturn;
+			qRReturn;
 
 		Name.Init( Value );
 
@@ -399,23 +399,23 @@ private:
 
 		Success = true;
 
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Success;
 	}
 	bso::bool__ _HandleBars( const str::string_ &Value )
 	{
 		bso::bool__ Success = false;
-	ERRProlog
+	qRH
 		str::string Bars;
 		epeios::row__ Row = NONE;
-	ERRBegin
+	qRB
 		if ( mscvkp::IsPedalBar( _Address + _Offset ) ) {
 			if ( Value.Amount() != 2 )
-				ERRReturn;
+				qRReturn;
 		} else if ( Value.Amount() != 9 )
-			ERRReturn;
+			qRReturn;
 
 		Bars.Init();
 
@@ -423,7 +423,7 @@ private:
 
 		while ( Row != NONE ) {
 			if ( ( Value( Row ) < '0' ) || ( Value( Row ) > '8' ) )
-				ERRReturn;
+				qRReturn;
 
 			Bars.Append( Value( Row ) - '0' );
 
@@ -445,9 +445,9 @@ private:
 
 		Success = true;
 
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Success;
 	}
 	bso::bool__ _HandleSpecial( const str::string_ &Value )
@@ -622,11 +622,11 @@ xpp::status__ mscvkx::Parse(
 	str::string_ &GuiltyFileName )
 {
 	xpp::status__ Status = xpp::s_Undefined;
-ERRProlog
+qRH
 	xpp::preprocessing_iflow___ PFlow;
 	callback__ Callback;
 	xtf::extended_text_iflow__ XFlow;
-ERRBegin
+qRB
 	Callback.Init( DataSets );
 
 	PFlow.Init( IFlow, BaseDirectory );
@@ -640,8 +640,8 @@ ERRBegin
 		Status = PFlow.Status();
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }

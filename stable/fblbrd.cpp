@@ -45,7 +45,7 @@ void fblbrd::description_::Init(
 
 		if ( FlowCastDetected ) {
 			if ( Cast != cEnd )
-				ERRPrm();
+				qRFwk();
 		} else if ( Cast == cFlow )
 			FlowCastDetected = true;
 
@@ -57,7 +57,7 @@ void fblbrd::description_::Init(
 	while ( ( Cast = Casts[i++] ) != cEnd ) {
 
 		if ( FlowCastDetected )
-				ERRPrm();
+				qRFwk();
 		else if ( Cast == cFlow )
 			FlowCastDetected = true;
 
@@ -93,7 +93,7 @@ void fblbrd::description_::Init(
 	while ( Cast != cEnd )
 	{
 		if ( FlowCastDetected )
-				ERRPrm();
+				qRFwk();
 		else if ( Cast == cFlow )
 			FlowCastDetected = true;
 
@@ -108,7 +108,7 @@ void fblbrd::description_::Init(
 	while ( ( Cast = (cast__)va_arg( VL, va_t__ ) ) != cEnd ) {
 
 		if ( FlowCastDetected )
-				ERRPrm();
+				qRFwk();
 		else if ( Cast == cFlow )
 			FlowCastDetected = true;
 
@@ -126,18 +126,18 @@ void fblbrd::description_::Init(
 sdr::row__ fblbrd::descriptions_::Position( const description_ &Description ) const
 {
 	sdr::row__ Position = E_CONTAINER_( description_ )::First();
-ERRProlog
+qRH
 	E_CITEM( description_ ) D;
-ERRBegin
+qRB
 
 	D.Init( *this );
 
-	while( ( Position != E_NIL )
+	while( ( Position != qNIL )
 		    && ( ( D( Position ).Name != Description.Name )
 		         || ( D( Position ).Casts != Description.Casts ) ) )
 		Position = E_CONTAINER_( description_ )::Next( Position );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Position;
 }

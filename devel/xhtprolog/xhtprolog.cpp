@@ -38,14 +38,14 @@ void xhtprolog::GetContent(
 static frdbse::project_type__ GetProjectType_( xhtagent::agent___ &Agent )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	ProjectType = frdbse::GetProjectType( Agent.GetContent( ProjectTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -65,9 +65,9 @@ frdbse::project_type__ xhtprolog::GetProjectFeatures(
 	str::string_ &ProjectFeature )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( ProjectType = GetProjectType_( Agent ) ) {
 	case frdbse::ptNew:
 		break;
@@ -78,12 +78,12 @@ ERRBegin
 		ProjectFeature.Append( Agent.GetContent( UserProjectId, Buffer ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -91,12 +91,12 @@ void xhtprolog::DisplaySelectedProjectFileName(
 	xhtagent::agent___ &Agent,
 	const char *Id )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
 	xhtcllbk::args Args;
 	xhtcllbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xhtcllbk::Split( str::string( Agent.GetResult( Id, Buffer ) ), Args );
 
@@ -109,7 +109,7 @@ ERRBegin
 
 	if ( FileName.Amount() != 0 )
 		Agent.SetContent( UserProjectId, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

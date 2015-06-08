@@ -38,24 +38,24 @@ static bso::bool__ IsInitialized_ = false;
 
 static void ReportSCLPendingError_( void )
 {
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	Translation.Init();
 
 	sclmisc::GetSCLPendingError( Translation );
 
 	cio::CErr << Translation;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 geckoo::steering_callback__ *geckob::GECKOBCreateSteering( geckoo::shared_data__ *Data )
 {
 	geckoo::steering_callback__ *Steering = NULL;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	if ( !IsInitialized_ )	{
 		cio::COutDriver.Init( *Data->COut, fdr::ts_Default );
 		cio::CErrDriver.Init( *Data->CErr, fdr::ts_Default );
@@ -69,15 +69,15 @@ ERRBegin
 	}
 
 	Steering = SCLGECKOCreateSteering( Data->LauncherIdentification, scllocale::GetLocale(), Data->Language, Data->UP );
-ERRErr
+qRR
 	if ( ERRType >= err::t_amount )
 		ReportSCLPendingError_();
 
 	Steering = NULL;
-ERREnd
+qRT
 	cio::COut << txf::commit;
 	cio::CErr << txf::commit;
-ERREpilog
+qRE
 	return Steering;
 }
 
@@ -106,13 +106,13 @@ inline static void SetElementAttribute_(
 	const str::string_ &AttributeName,
 	const str::string_ &AttributeValue )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___  Buffer;
-ERRBegin
+qRB
 	nsxpcm::SetAttribute( nsxpcm::GetElementById( Document, ElementId ), AttributeName.Convert( Buffer ), AttributeValue );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static inline void GetValue_(
@@ -135,10 +135,10 @@ inline static void SetElementAttributeFromRegistry_(
 	const str::string_ &ElementId,
 	const str::string_ &AttributeName )
 {
-ERRProlog
+qRH
 	str::string Value;
 	rgstry::tags Tags;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( DocumentId );
 	Tags.Append( ElementId );
@@ -148,9 +148,9 @@ ERRBegin
 	GetValue_( rgstry::tentry__( AttributeValue, Tags ), Value );
 
 	SetElementAttribute_( Document, ElementId, AttributeName, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 inline static void SetElementAttributeFromRegistry_(
@@ -164,7 +164,7 @@ inline static void SetElementAttributeFromRegistry_(
 
 	Name.Init( AttributeNames );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		SetElementAttributeFromRegistry_( Document, DocumentId, ElementId, Name( Row ) );
 
 		Row = AttributeNames.Next( Row );
@@ -176,10 +176,10 @@ inline static void SetElementAttributesFromRegistry_(
 	const str::string_ &DocumentId,
 	const str::string_ &ElementId )
 {
-ERRProlog
+qRH
 	rgstry::values Names;
 	rgstry::tags Tags;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( DocumentId );
 	Tags.Append( ElementId );
@@ -189,9 +189,9 @@ ERRBegin
 	GetValues_( rgstry::tentry__( AttributeName, Tags ), Names );
 
 	SetElementAttributeFromRegistry_( Document, DocumentId, ElementId, Names );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 inline static void SetElementsAttributesFromRegistry_(
@@ -204,7 +204,7 @@ inline static void SetElementsAttributesFromRegistry_(
 
 	Id.Init( ElementIds );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		SetElementAttributesFromRegistry_( Document, DocumentId, Id( Row ) );
 
 		Row = ElementIds.Next( Row );
@@ -215,10 +215,10 @@ inline static void SetElementsAttributesFromRegistry_(
 	nsIDOMDocument *Document,
 	const str::string_ &DocumentId )
 {
-ERRProlog
+qRH
 	rgstry::values Ids;
 	rgstry::tags Tags;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( DocumentId );
 
@@ -227,23 +227,23 @@ ERRBegin
 	GetValues_( rgstry::tentry__( ElementId, Tags ), Ids );
 
 	SetElementsAttributesFromRegistry_( Document, DocumentId, Ids );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclgecko::SetElementsAttributesFromRegistry( nsxpcm::window__ &Window )
 {
-ERRProlog
+qRH
 	str::string Id;
-ERRBegin
+qRB
 	Id.Init();
 
 	Window.GetId( Id );
 
 	SetElementsAttributesFromRegistry_( Window.Document(), Id );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

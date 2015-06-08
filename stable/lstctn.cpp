@@ -27,9 +27,9 @@ void lstctn::hook_filenames___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
-ERRProlog
+qRH
 	fnm::name___ Container, List;
-ERRBegin
+qRB
 	Container.Init();
 	fnm::BuildPath( Path, Basename, "c", Container );
 
@@ -38,7 +38,7 @@ ERRBegin
 
 	this->Container.Init( "", Container );
 	this->List.Init( "", List );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

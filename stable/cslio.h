@@ -71,7 +71,7 @@ namespace cslio {
 		{
 #ifdef CSLIO_DBG
 			if ( _D == CSLIO_UNDEFINED_DESCRIPTOR )
-				ERRPrm();
+				qRFwk();
 #endif
 		}
 	public:
@@ -98,14 +98,14 @@ namespace cslio {
 			_Test();
 
 			if ( fseek( _D, Offset, SEEK_SET ) != 0 )
-				ERRFwk();
+				qRFwk();
 		}
 		long Size( void )
 		{
 			_Test();
 
 			if ( fseek( _D, 0, SEEK_END ) != 0 )
-				ERRFwk();
+				qRFwk();
 
 			return ftell( _D );
 		}

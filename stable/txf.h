@@ -72,7 +72,7 @@ namespace txf {
 		{
 #ifdef TXF_DBG
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_Flow;
 		}
@@ -122,10 +122,10 @@ namespace txf {
 			size__ Pos;
 
 			if ( ( Pos = Lire_( 9, C ) ) > 8 )
-				ERRDta();
+				qRFwk();
 
 			if ( !isxdigit( C[0] ) )
-				ERRDta();
+				qRFwk();
 
 			C[Pos] = 0;
 
@@ -139,10 +139,10 @@ namespace txf {
 			size__ Pos;
 
 			if ( ( Pos = Lire_( 9, C ) ) > 8 )
-				ERRDta();
+				qRFwk();
 
 			if ( !isxdigit( C[0] ) )
-				ERRDta();
+				qRFwk();
 
 			C[Pos] = 0;
 
@@ -157,7 +157,7 @@ namespace txf {
 			operator >>( L );
 
 			if ( L > USHRT_MAX )
-				ERRDta();
+				qRFwk();
 
 			E = (unsigned short)L;
 
@@ -169,17 +169,17 @@ namespace txf {
 			datum__ C = Get();
 
 			if ( ( C != '+' ) && ( C != '-' ) )
-				ERRDta();
+				qRFwk();
 
 			operator >>( L );
 
 			if ( C == '+' )
 				if ( L > LLONG_MAX )
-					ERRDta();
+					qRFwk();
 				else E = (signed long long)L;
 			else
 				if ( L > ((unsigned long long)-(LLONG_MIN + 1 ) + 1UL ) )
-					ERRDta();
+					qRFwk();
 				else
 					E = -(signed long long)L;
 
@@ -191,17 +191,17 @@ namespace txf {
 			datum__ C = Get();
 
 			if ( ( C != '+' ) && ( C != '-' ) )
-				ERRDta();
+				qRFwk();
 
 			operator >>( L );
 
 			if ( C == '+' )
 				if ( L > LONG_MAX )
-					ERRDta();
+					qRFwk();
 				else E = (signed long)L;
 			else
 				if ( L > ((unsigned long)-(LONG_MIN + 1 ) + 1UL ) )
-					ERRDta();
+					qRFwk();
 				else
 					E = -(signed long)L;
 
@@ -214,7 +214,7 @@ namespace txf {
 			operator >>( L );
 
 			if ( ( L > SHRT_MAX ) || ( L < SHRT_MIN ) )
-				ERRDta();
+				qRFwk();
 
 			E = (signed short)L;
 
@@ -253,7 +253,7 @@ namespace txf {
 		{
 #ifdef TXF_DBG
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			return *_Flow;
 		}

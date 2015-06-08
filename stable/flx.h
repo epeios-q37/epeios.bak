@@ -100,7 +100,7 @@ namespace flx {
 		// Mthode thoriquement inutile. Son type de retour est pass de 'void'  'int' pour dtecter les classes qui la surcharge. Sera supprim  terme.
 		virtual int FLXUnavailable( void )
 		{
-			ERRFwk();
+			qRFwk();
 
 			return 0;
 		}
@@ -527,10 +527,10 @@ namespace flx {
 		case aAllowed:
 			break;
 		case aForbidden:
-			ERRFwk();
+			qRFwk();
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
@@ -678,14 +678,14 @@ namespace flx {
 			fdr::size__ Maximum )
 		{
 			if ( _Driver == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _Driver->Write( _User, Buffer, Maximum );
 		}
 		virtual void FDRCommit()
 		{
 			if ( _Driver == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _Driver->Commit( _User );
 		}
@@ -732,14 +732,14 @@ namespace flx {
 			fdr::datum__ *Buffer )
 		{
 			if ( _Driver == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _Driver->Read( _User, Maximum, Buffer, fdr::bNonBlocking );
 		}
 		virtual void FDRDismiss( void )
 		{
 			if ( _Driver == NULL )
-				ERRFwk();
+				qRFwk();
 
 			_Driver->Dismiss( _User );
 		}
@@ -789,7 +789,7 @@ namespace flx {
 			fdr::size__ &Size = Maximum;
 
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( _EmbeddedSizeRemainder == 0 ) {
 				_EmbeddedSizeRemainder = Size;
@@ -799,7 +799,7 @@ namespace flx {
 			Size = _Flow->WriteUpTo(Buffer, ( Size > _EmbeddedSizeRemainder ? _EmbeddedSizeRemainder : Size ) );
 
 			if ( Size == 0 )
-				ERRDta();
+				qRFwk();
 
 			_EmbeddedSizeRemainder -= Size;
 
@@ -813,10 +813,10 @@ namespace flx {
 				return;
 
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( _EmbeddedSizeRemainder != 0 )
-				ERRDta();
+				qRFwk();
 
 			dtfptb::VPut( (bso::u8__)0, *_Flow );
 
@@ -885,7 +885,7 @@ namespace flx {
 			fdr::size__ &Size = Maximum;
 
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( _EmbeddedSizeRemainder == 0 )
 				dtfptb::VGet( *_Flow, _EmbeddedSizeRemainder );
@@ -899,7 +899,7 @@ namespace flx {
 			Size = _Flow->ReadUpTo( ( Size > _EmbeddedSizeRemainder ? _EmbeddedSizeRemainder : Size ), Buffer );
 
 			if ( Size == 0 )
-				ERRDta();
+				qRFwk();
 
 			_EmbeddedSizeRemainder -= Size;
 
@@ -908,7 +908,7 @@ namespace flx {
 		virtual void FDRDismiss( void )
 		{
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 
 			if ( !_AllRed )
 				_Purge();
@@ -1165,7 +1165,7 @@ namespace flx {
 
 			if ( Maximum == 0 )
 				if ( !IO().OnEOF() )
-					ERRDta();
+					qRFwk();
 
 			return Maximum;
 
@@ -1205,7 +1205,7 @@ namespace flx {
 			fdr::size__ Maximum )
 		{
 			if ( IO().Write( Buffer, Maximum ) != Maximum )
-				ERRDta();
+				qRFwk();
 
 			return Maximum;
 		}

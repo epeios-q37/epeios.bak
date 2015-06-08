@@ -73,17 +73,17 @@ static void Report_(
 	const fblbkd::backend___ &Backend,
 	fblbrq::request__ &Request )
 {
-ERRProlog
+qRH
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRH
 	Translation.Init();
 
 	Backend.Locale().GetTranslation( GetRawMessage_( Message ), Backend.Language(), Translation );
 	Request.ReportRequestError( Translation.Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define REPORT( v )	Report_( ( v ), Backend, Request )
@@ -93,7 +93,7 @@ inline static void Return_(
 	message__ m )
 {
 	M = m;
-	ERRReturn;
+	qRReturn;
 }
 
 #define RETURN( message )\
@@ -123,15 +123,15 @@ static void Handle_(
 DEC( Test )
 {
 	message__ Message = m_OK;
-ERRProlog
-ERRBegin
+qRH
+qRH
 	XBACKEND;
 
 	Message = mTestMessage;
-ERRErr
-ERREnd
+qRR
+qRT
 	HANDLE( Message );
-ERREpilog
+qRE
 }
 
 #define D( name )	SKTINF_UC_SHORT #name, ::name

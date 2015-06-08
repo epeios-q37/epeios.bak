@@ -78,17 +78,17 @@ static bso::bool__ ParseTrackChunk_(
 	err::handling__ ErrHandling )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	bso::integer_buffer__ Buffer;
 	mscmdf::track_chunk_size__ TrackChunkSize = 0;
 	mscmdm::event_header__ EventHeader;
 	mscmdm::data Data, EncodedSize;
 	str::string HexBuffer;
-ERRBegin
+qRB
 	TrackChunkSize = mscmdf::GetTrackChunkSize( IFlow, ErrHandling );
 
 	if ( TrackChunkSize == 0 )
-		ERRReturn;
+		qRReturn;
 
 	Writer.PushTag( TRACK_CHUNK_TAG );
 
@@ -149,9 +149,9 @@ ERRBegin
 	} while ( ( EventHeader.EventType != mscmdm::etMeta ) || ( EventHeader.MetaEvent.Event != mscmdm::mtaEndOfTrack ) );
 
 	Writer.PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return true;
 }
 
@@ -294,10 +294,10 @@ protected:
 			const str::string_ &Name,
 			const dump_ &Dump )
 		{
-		ERRProlog
+		qRH
 			mscmdm::event Event;
 			mscmdm::event_header__ EventHeader;
-		ERRBegin
+		qRB
 			if ( Name == EVENT_TAG ) {
 				mscmdm::PartiallyFillEventHeader( _Id, _MetaId, EventHeader );
 
@@ -339,9 +339,9 @@ protected:
 
 				_Tracks.Init();
 			}
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return true;
 		}
 public:
@@ -384,15 +384,15 @@ xml::status__ mscmdx::XMIDToMIDI(
 	flw::oflow__ &OFlow )
 {
 	xml::status__ Status = xml::s_Undefined;
-ERRProlog
+qRH
 	callback Callback;
-ERRBegin
+qRB
 	Callback.Init( OFlow, Extraneous );
 
 	Status = xml::Parse( IFlow, xml::eh_Default, Callback );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -427,13 +427,13 @@ status__ mscmdx::ParseEvent(
 	mscmdm::event_ &Event )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	bso::bool__ TiedEvent = false;
 	mscmdm::data RawData, MetaData;
 	mscmdm::delta_time_ticks__ EventDeltaTimeTicks;
 	mscmdm::event_id__ Id, MetaId;
 	bso::bool__ InProgress = false;
-ERRBegin
+qRB
 	RawData.Init();
 	MetaData.Init();
 
@@ -536,9 +536,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -547,13 +547,13 @@ status__ mscmdx::ParseEvents(
 	mscmdm::events_ &Events )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	bso::bool__ TiedEvent = false;
 	mscmdm::data RawData, MetaData;
 	mscmdm::delta_time_ticks__ EventDeltaTimeTicks;
 	mscmdm::event_id__ Id, MetaId;
 	bso::bool__ InProgress = false;
-ERRBegin
+qRB
 	RawData.Init();
 	MetaData.Init();
 
@@ -610,10 +610,10 @@ ERRBegin
 			break;
 		case xml::tEndTag:
 			if ( Parser.TagName() == EVENT_TAG ) {
-			ERRProlog
+			qRH
 				mscmdm::event Event;
 				mscmdm::event_header__ EventHeader;
-			ERRBegin
+			qRB
 				mscmdm::PartiallyFillEventHeader( Id, MetaId, EventHeader );
 
 				EventHeader.DeltaTimeTicks = EventDeltaTimeTicks;
@@ -642,9 +642,9 @@ ERRBegin
 				MetaData.Init();
 
 				Events.Append( Event );
-			ERRErr
-			ERREnd
-			ERREpilog
+			qRR
+			qRT
+			qRE
 			}
 
 			if ( !InProgress )
@@ -663,9 +663,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 

@@ -140,7 +140,7 @@ byte_order_marker__ bomhdl::DetectBOM(
 const bom__ &bomhdl::GetBOM( byte_order_marker__ BOM )
 {
 	if ( BOM > bom_amount )
-		ERRPrm();
+		qRFwk();
 
 #pragma warning(suppress: 6385)
 	return BOMS_[BOM];
@@ -149,7 +149,7 @@ const bom__ &bomhdl::GetBOM( byte_order_marker__ BOM )
 Q37_GCTOR( bomhdl )
 {
 	if ( bom_amount != 5 )
-		ERRChk();
+		qRChk();
 
 	FillAutomat_();
 }

@@ -55,7 +55,7 @@ const char *i18n::Label( text__ Text )
 	CASE( ProcessingError );
 	CASE( EncryptionError );
 	default:
-		ERRFwk();
+		qRGnr();
 		break;
 	}
 
@@ -70,10 +70,10 @@ const lcl::meaning_ &i18n::GetMeaning_(
 #if	LOCALE__TEXT_AMOUNT != 8
 #	error "Amount of 'message__' entries changed ! Update !"
 #endif
-ERRProlog
+qRH
 	va_list Args;
 	lcl::meaning MeaningBuffer;
-ERRBegin
+qRB
 	va_start( Args, Meaning );
 
 	Meaning->SetValue( Label( Text) );
@@ -101,17 +101,17 @@ ERRBegin
 		Meaning->AddTag( MeaningBuffer );
 		break;
 	default:
-		ERRFwk();
+		qRGnr();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return *Meaning;
 }
 
 Q37_GCTOR( i18n )
 {
 	if ( LOCALE__TEXT_AMOUNT != t_amount )
-		ERRChk();
+		qRChk();
 }

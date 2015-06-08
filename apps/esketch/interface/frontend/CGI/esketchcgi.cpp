@@ -59,21 +59,21 @@ protected:
 	virtual void *SCLCGINewSession( const cgiarg::arguments_ &Arguments )
 	{
 		session___ *Session = NULL;
-	ERRProlog
-	ERRBegin
+	qRH
+	qRH
 		Session = new session___;
 
 		if ( Session == NULL )
 			ERRAlc();
 
 		Session->Init( _Kernel );
-	ERRErr
+	qRR
 		if ( Session != NULL )
 			delete Session;
 
 		Session = NULL;
-	ERREnd
-	ERREpilog
+	qRT
+	qRE
 		return Session;
 	}
 	virtual sclcgi::session_handling__ SCLCGIHandleQuery(
@@ -121,19 +121,19 @@ public:
 sclcgi::steering_callback__ *sclcgi::SCLCGICreateSteering( void )
 {
 	steering_callback__ *SteeringCallback = NULL;
-ERRProlog
-ERRBegin
+qRH
+qRH
 	if ( ( SteeringCallback = new ::steering_callback__ ) == NULL )
 		ERRAlc();
 
 	SteeringCallback->Init();
-ERRErr
+qRR
 	if ( SteeringCallback != NULL )
 		delete SteeringCallback;
 
 	SteeringCallback = NULL;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return SteeringCallback;
 }
 

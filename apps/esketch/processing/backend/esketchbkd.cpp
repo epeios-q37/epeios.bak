@@ -86,19 +86,19 @@ protected:
 		const char *Origin )
 	{
 		backend___ *Backend = NULL;
-	ERRProlog
-	ERRBegin
+	qRH
+	qRH
 		if ( ( Backend = new backend___ ) == NULL )
 			ERRAlc();
 
 		Backend->Init( Mode, Origin );
-	ERRErr
+	qRR
 		if ( Backend != NULL )
 			delete Backend;
 
 		Backend = NULL;
-	ERREnd
-	ERREpilog
+	qRT
+	qRE
 		return Backend;
 	}
 public:
@@ -121,19 +121,19 @@ public:
 _callback___ *sclbacknd::SCLBACKNDNewCallback( fblbur::mode__ Mode )
 {
 	callback___ *Callback = NULL;
-ERRProlog
-ERRBegin
+qRH
+qRH
 	if ( ( Callback = new callback___ ) == NULL )
 		ERRAlc();
 
 	Callback->Init( Mode );
-ERRErr
+qRR
 	if ( Callback != NULL )
 		delete Callback;
 
 	Callback = NULL;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Callback;
 }
 

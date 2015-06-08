@@ -39,7 +39,7 @@ const char *frdbse::GetLabel( project_type__ ProjectType )
 	C( Predefined );
 	C( User );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -70,7 +70,7 @@ const char *frdbse::GetLabel( backend_type__ BackendType )
 	C( Embedded );
 	C( Predefined );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -97,18 +97,18 @@ static void GetAuthorText_(
 	const char *Language,
 	str::string_ &Text )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( FRDBSE_NAME "_AuthorText" );
 	Meaning.AddTag( Name );
 	Meaning.AddTag( Contact );
 
 	Locale.GetTranslation( Meaning, Language, Text );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetAffiliationText_(
@@ -118,18 +118,18 @@ static void GetAffiliationText_(
 	const char *Language,
 	str::string_ &Text )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( FRDBSE_NAME "_AffiliatedSoftwareText" );
 	Meaning.AddTag( Name );
 	Meaning.AddTag( URL );
 
 	Locale.GetTranslation( Meaning, Language, Text );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void FillAutomats_( void )

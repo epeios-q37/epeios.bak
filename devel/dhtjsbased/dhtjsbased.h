@@ -97,13 +97,13 @@ namespace dhtjsbased {
 		}
 		void Execute( const str::string_ &Script )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Execute( Script,  Buffer );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 		const str::string_ &GetScript(
 			script__ Script,
@@ -159,7 +159,7 @@ namespace dhtjsbased {
 		callback__ &_C( void ) const
 		{
 			if  ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}

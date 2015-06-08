@@ -49,7 +49,7 @@ void xulfbs::_Report(
 		case err::t_Abort:
 			break;
 		case err::t_Return:
-			ERRFwk();
+			qRFwk();
 			break;
 		default:
 			_RetrieveErrAndReport( Trunk );

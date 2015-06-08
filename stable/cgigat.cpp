@@ -35,19 +35,19 @@ void cgigat::cgi_gate__::_Process(
 	str::string_ &XML,
 	str::string_ &XSLFileName )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ SFlow;
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
-ERRBegin
+qRB
 	SFlow.Init( XML );
 	TFlow.Init( SFlow );
 	Writer.Init( TFlow, xml::oCompact, xml::e_Default );
 
 	_Process( Arguments, Writer, XSLFileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -56,12 +56,12 @@ csdscb::action__ cgigat::cgi_gate__::CSDSCBProcess(
 	flw::ioflow__ &Flow,
 	void *UP )
 {
-ERRProlog
+qRH
 	cgiarg::arguments Arguments;
 	str::string XML;
 	str::string XSLFileName;
 	txf::text_oflow__ TFlow;
-ERRBegin
+qRB
 	Arguments.Init();
 	Arguments.Parse( Flow );
 
@@ -73,8 +73,8 @@ ERRBegin
 	TFlow.Init( Flow );
 
 	TFlow << XSLFileName << txf::nl << XML << txf::commit;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return csdscb::aStop;	// Pour fermer la connection.
 }

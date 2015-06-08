@@ -87,11 +87,11 @@ public:
 		Name.reset( P );
 		S_.Limit = 0;
 	}
-	void plug( sdr::E_SDRIVER__ &SD )
+	void plug( qSD__ &SD )
 	{
 		Name.plug( SD );
 	}
-	void plug( ags::E_ASTORAGE_ &AS )
+	void plug( qAS_ &AS )
 	{
 		Name.plug( AS );
 	}
@@ -125,16 +125,16 @@ E_AUTO( random_parameters );
 static bso::uint__ GetRandomLimit_( const str::string_ &Name )
 {
 	bso::uint__ Limit = 0;
-ERRProlog
+qRH
 	rgstry::tags Tags;
-ERRBegin
+qRH
 	Tags.Init();
 	Tags.Append( Name );
 
 	Limit = sclmisc::MGetUInt( rgstry::tentry__( TaggedRandomLimit, Tags ), RAND_MAX );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Limit;
 }
 
@@ -142,38 +142,38 @@ static void GetRandoms_(
 	const str::strings_ &Names,
 	random_parameters_ &Randoms )
 {
-ERRProlog
+qRH
 	random_parameter Random;
 	ctn::E_CMITEM( str::string_ ) Name;
-	sdr::row__ Row = E_NIL;
-ERRBegin
+	sdr::row__ Row = qNIL;
+qRH
 	Name.Init( Names );
 
 	Row = Names.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Random.Init( Name( Row ), GetRandomLimit_( Name( Row ) ) );
 		Randoms.Append( Random );
 
 		Row = Names.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetRandoms_( random_parameters_ &Randoms )
 {
-ERRProlog
+qRH
 	str::strings Names;
-ERRBegin
+qRH
 	Names.Init();
 	sclmisc::GetValues( RandomName, Names );
 
 	GetRandoms_( Names, Randoms );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -225,9 +225,9 @@ static bso::bool__ BelongsToNamespace_( const str::string_ &Name )
 
 static void ReportAndExit_( const xpp::preprocessing_iflow___ &IFlow )
 {
-ERRProlog
+qRH
 	lcl::meaning Error, XPPError;
-ERRBegin
+qRH
 	Error.Init();
 	Error.SetValue( "GenericError" );
 
@@ -238,19 +238,19 @@ ERRBegin
 
 	sclerror::SetMeaning( Error );
 
-	ERRAbort();
-ERRErr
-ERREnd
-ERREpilog
+	qRAbort();
+qRR
+qRT
+qRE
 }
 
 static void GetMeaning_(
 	const xpp::preprocessing_iflow___ &IFlow,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	xpp::context___ Context;
-ERRBegin
+qRH
 	Context.Init();
 	IFlow.GetContext( Context );
 
@@ -258,9 +258,9 @@ ERRBegin
 		ERRFwk();
 
 	xpp::GetMeaning( Context.Coordinates, Meaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void ReportAndExit_( 
@@ -268,10 +268,10 @@ static void ReportAndExit_(
 	const xpp::preprocessing_iflow___ &IFlow )
 
 {
-ERRProlog
+qRH
 	lcl::meaning GenericMeaning;
 	lcl::meaning MeaningBuffer;
-ERRBegin
+qRH
 	GenericMeaning.Init();
 	GenericMeaning.SetValue( _( GenericError ) );
 
@@ -284,9 +284,9 @@ ERRBegin
 	GenericMeaning.AddTag( MeaningBuffer );
 
 	sclmisc::ReportAndAbort( GenericMeaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void ReportAndExit_( 
@@ -294,16 +294,16 @@ static void ReportAndExit_(
 	const xpp::preprocessing_iflow___ &IFlow )
 
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRH
 	Meaning.Init();
 	Meaning.SetValue( Error );
 
 	ReportAndExit_( Meaning, IFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void ReportAndExit_(
@@ -311,18 +311,18 @@ static void ReportAndExit_(
 	const xpp::preprocessing_iflow___ &IFlow,
 	const char *Tag )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRH
 	Meaning.Init();
 	Meaning.SetValue( Error );
 
 	Meaning.AddTag( Tag );
 
 	ReportAndExit_( Meaning, IFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void ReportAndExit_(
@@ -331,9 +331,9 @@ static void ReportAndExit_(
 	const char *Tag1,
 	const char *Tag2 )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRH
 	Meaning.Init();
 	Meaning.SetValue( Error );
 
@@ -341,9 +341,9 @@ ERRBegin
 	Meaning.AddTag( Tag2 );
 
 	ReportAndExit_( Meaning, IFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Insert_(
@@ -353,11 +353,11 @@ static void Insert_(
 	record_ &Record )
 
 {
-	rrow__ Row = E_NIL;
+	rrow__ Row = qNIL;
 
 	Row = dbprcd::SearchRecord( RecordLabel, Records );
 
-	if ( Row == E_NIL )
+	if ( Row == qNIL )
 		ReportAndExit_( _( RecordNotFoundError ), IFlow );
 
 	dbprcd::Insert( Row, Records, Record );
@@ -370,11 +370,11 @@ static void InsertUsingRecordAlias_(
 	xpp::preprocessing_iflow___ &IFlow,
 	record_ &Record )
 {
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 
 	Row = FindRecordAlias_( RecordAlias, Aliases );
 
-	if ( Row == E_NIL )
+	if ( Row == qNIL )
 		ReportAndExit_( _( RecordAliasNotFoundError ), IFlow );
 
 	Insert( Row, Aliases, Tables, Record );
@@ -426,11 +426,11 @@ static void InsertUsingTableAlias_(
 	xpp::preprocessing_iflow___ &IFlow,
 	record_ &Record )
 {
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 
 	Row = FindTableAlias_( TableAlias, Aliases );
 
-	if ( Row == E_NIL )
+	if ( Row == qNIL )
 		ReportAndExit_( _( TableAliasNotFoundError ), IFlow );
 
 	Insert_( RecordLabel, Row, Aliases, Tables, IFlow, Record );
@@ -443,12 +443,12 @@ static void InsertUsingLabels_(
 	xpp::preprocessing_iflow___ &IFlow,
 	record_ &Record )
 {
-	trow__ Row = E_NIL;
+	trow__ Row = qNIL;
 	ctn::E_CITEMt( table_, trow__ ) Table;
 
 	Row = SearchTable( TableLabel, Tables );
 
-	if ( Row == E_NIL )
+	if ( Row == qNIL )
 		ReportAndExit_( _( TableNotFoundError ), IFlow );
 
 	Table.Init( Tables );
@@ -462,9 +462,9 @@ static void Assign_(
 	xpp::preprocessing_iflow___ &IFlow,
 	str::string_ &Target )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRH
 	if ( Target.Amount() != 0 ) {
 		Meaning.Init();
 		Meaning.SetValue( _( ItemAlreadyDefinedError ) );
@@ -481,9 +481,9 @@ ERRBegin
 
 	Target = Parser.Value();
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static inline bso::bool__ Test_( const str::string_ &Value )
@@ -496,9 +496,9 @@ static void ReportInsertionErrorAndExit_(
 	const char *Item2Wording,
 	xpp::preprocessing_iflow___ &IFlow )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRH
 	Meaning.Init();
 
 	Meaning.SetValue( _( ItemsDefinedTogetherError ) );
@@ -507,9 +507,9 @@ ERRBegin
 	Meaning.AddTag( Item2Wording );
 
 	ReportAndExit_( Meaning, IFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // '...<erpck:insert ...>...' -> '...</erpck:insert>...'
@@ -521,10 +521,10 @@ static void ProcessInsertion_(
 	const tables_ &Tables,
 	record_ &Record )
 {
-ERRProlog
+qRH
 	str::string TableLabel, RecordLabel, TableAlias, RecordAlias;
 	bso::bool__ Continue = true;
-ERRBegin
+qRH
 	TableLabel.Init();
 	RecordLabel.Init();
 	TableAlias.Init();
@@ -595,9 +595,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // '...<ercp:content ...>...<TAG ...>...' -> '...</TAG>...'
@@ -674,13 +674,13 @@ static void ProcessRecords_(
 	records_ &Records,
 	dbptbl::counter__ &Skipped )
 {
-ERRProlog
+qRH
 	bso::bool__ Continue = true;
 	record Record;
 	weight__ Weight = DEFAULT_WEIGHT;
 	bso::integer_buffer__ Buffer;
 	bso::bool__ Ignore = false;
-ERRBegin
+qRH
 	Record.Init();
 
 	while ( Continue ) {
@@ -690,18 +690,18 @@ ERRBegin
 			break;
 		case xml::tAttribute:
 			if ( Parser.AttributeName() == RECORD_WEIGHT_ATTRIBUTE ) {
-				sdr::row__ Error = E_NIL;
+				sdr::row__ Error = qNIL;
 
 				Weight = Parser.Value().ToU8( &Error );
 
-				if ( Error != E_NIL )
+				if ( Error != qNIL )
 					ReportAndExit_( _( BadAttributeValueError ), IFlow );
 			} else if ( Parser.AttributeName() == RECORD_LABEL_ATTRIBUTE ) {
 				Assign_( _( RecordLabelWording ), Parser, IFlow, Record.Label );
 			} else if ( Parser.AttributeName() == RECORD_HANDLING_ATTRIBUTE ) {
 				if ( Parser.Value() == RECORD_HANDLING_ATTRIBUTE_SKIP_VALUE ) {
 					if ( Skipped == DBPBSC_COUNTER_MAX )
-						ERRLmt();
+						qRLmt();
 					Skipped++;
 
 					Record.Skip() = true;
@@ -737,9 +737,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // '...<erpck::table ...>...<erpck:content ...>...' -> '...</erpck:content>...'
@@ -751,10 +751,10 @@ static void ProcessContent_(
 	const tables_ &Tables,
 	const aliases_ &Aliases )
 {
-ERRProlog
+qRH
 	bso::bool__ Continue = true;
 	str::string DefaultRecordLabelTag;
-ERRBegin
+qRH
 	DefaultRecordLabelTag.Init();
 
 	while ( Continue ) {
@@ -786,9 +786,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 enum alias_type__ {
@@ -808,12 +808,12 @@ static alias_type__ ProcessAlias_(
 	table_alias_ &TableAlias )
 {
 	alias_type__ AliasType = at_Undefined;
-ERRProlog
+qRH
 	bso::bool__ Continue = true;
-	trow__ TableRow = E_NIL;
-	rrow__ RecordRow = E_NIL;
+	trow__ TableRow = qNIL;
+	rrow__ RecordRow = qNIL;
 	str::string TableAliasLabel, TableLabel, RecordLabel, AliasLabel;
-ERRBegin
+qRH
 	TableAliasLabel.Init();
 	TableLabel.Init();
 	RecordLabel.Init();
@@ -844,10 +844,10 @@ ERRBegin
 			break;
 		case xml::tStartTagClosed:
 			if ( TableLabel.Amount() != 0 ) {
-				if ( ( TableRow = SearchTable( TableLabel, Tables ) ) == E_NIL )
+				if ( ( TableRow = SearchTable( TableLabel, Tables ) ) == qNIL )
 					ReportAndExit_( _( TableNotFoundError ), IFlow );
 			} else if ( TableAliasLabel.Amount() != 0 ) {
-				if ( ( TableRow = SearchTable( TableAliasLabel, TableAliases ) ) == E_NIL )
+				if ( ( TableRow = SearchTable( TableAliasLabel, TableAliases ) ) == qNIL )
 					ReportAndExit_( _( TableNotFoundError ), IFlow );
 			} else
 				ReportAndExit_( _( MissingTableReferenceError ), IFlow );
@@ -856,7 +856,7 @@ ERRBegin
 				ReportAndExit_( _( MissingAliasLabelError ), IFlow );
 
 			if ( RecordLabel.Amount() ) {
-				if ( ( RecordRow = SearchRecord( RecordLabel, TableRow, Tables ) ) == E_NIL )
+				if ( ( RecordRow = SearchRecord( RecordLabel, TableRow, Tables ) ) == qNIL )
 					ReportAndExit_( _( RecordNotFoundError ), IFlow );
 
 				AliasType = atRecord;
@@ -900,9 +900,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return AliasType;
 }
 
@@ -914,11 +914,11 @@ ERREpilog
 	const tables_ &Tables,
 	aliases_ &Aliases )
 {
-ERRProlog
+qRH
 	bso::bool__ Continue = true;
 	record_alias RecordAlias;
 	table_alias TableAlias;
-ERRBegin
+qRH
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag ) ) {
 		case xml::tStartTag:
@@ -951,9 +951,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // '...<erpck:data><erpck::table ...>' -> '..</erpck:table>...'
@@ -964,10 +964,10 @@ static void ProcessTable_(
 	table_ &Table,
 	const tables_ &Tables )
 {
-ERRProlog
+qRH
 	bso::bool__ Continue = true;
 	aliases Aliases;
-ERRBegin
+qRH
 	Aliases.Init();
 
 	while ( Continue ) {
@@ -1004,9 +1004,9 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // '...<erpck:data><erpck:table ...>' -> '...</erpck:table>...'
@@ -1016,11 +1016,11 @@ static void ProcessData_(
 	xpp::preprocessing_iflow___ &IFlow,
 	data_ &Data )
 {
-ERRProlog
+qRH
 	bso::bool__ Continue = true;
 	bso::bool__ TableDetected = false;
 	table Table;
-ERRBegin
+qRH
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag ) ) {
 		case xml::tStartTag:
@@ -1046,16 +1046,16 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void RetrieveData_(
 	const char *DataFileName,
 	data_ &Data )
 {
-ERRProlog
+qRH
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
 	xpp::preprocessing_iflow___ IFlow;
@@ -1066,7 +1066,7 @@ ERRProlog
 	TOL_CBUFFER___ Buffer;
 	xtf::extended_text_iflow__ PXFlow;
 	fnm::name___ Location;
-ERRBegin
+qRH
 	if ( FFlow.Init( DataFileName, err::hUserDefined ) != tol::rSuccess )
 		sclmisc::ReportFileOpeningErrorAndAbort( DataFileName );
 
@@ -1110,27 +1110,27 @@ ERRBegin
 	}
 
 	tol::InitializeRandomGenerator();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Display_(
 	const str::string_ &XML,
 	xml::writer_ &Writer )
 {
-ERRProlog
+qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
-ERRBegin
+qRH
 	IFlow.Init( XML );
 	XFlow.Init( IFlow, utf::f_Default );
 
 	if ( xpp::Process( XFlow, Writer ) != xpp::sOK )
 		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Display_(
@@ -1164,7 +1164,7 @@ static void DisplayAll_(
 
 	Record.Init( Records );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Display_( Record( Row ), Writer );
 
 		Row = Records.Next( Row );
@@ -1178,18 +1178,18 @@ counter__ GetSkippedAmount_(
 {
 	counter__ Skipped = 0;
 	sdr::row__ Row = RecordRows.Last();
-	rrow__ RecordRow = E_NIL;
+	rrow__ RecordRow = qNIL;
 	ctn::E_CITEMt( record_, rrow__ ) Record;
 
 	Record.Init( Records );
 
-	while ( ( Row != E_NIL ) && ( SessionAmount-- ) ) {
+	while ( ( Row != qNIL ) && ( SessionAmount-- ) ) {
 		RecordRow = RecordRows( Row );
 
 		if ( Records.Exists( RecordRow ) )
 			if ( Record( RecordRow ).Skip() ) {
 				if ( Skipped == DBPBSC_COUNTER_MAX )
-					ERRLmt();
+					qRLmt();
 				Skipped++;
 			}
 
@@ -1209,13 +1209,13 @@ id__  Display_(
 	dbpctx::context_ &Context,
 	xml::writer_ &Writer )
 {
-ERRProlog
-	rrow__ Row = E_NIL;
+qRH
+	rrow__ Row = qNIL;
 	bso::integer_buffer__ Buffer;
 	ctn::E_CITEMt( record_, rrow__ ) Record;
 	counter__ Counter = 0;
 	lcl::meaning Meaning;
-ERRBegin
+qRH
 	Counter = Records.Amount();	// NOTA : there is at least one record.
 	Record.Init( Records );
 
@@ -1237,7 +1237,7 @@ ERRBegin
 
 			if ( !Counter ) {
 				Writer.PutAttribute( "Amount", "0" );
-				Row = E_NIL;
+				Row = qNIL;
 			} else if ( !Record( Row ).GetSkip() ) {
 				Id = *Row + 1;
 				Writer.PutAttribute( "Amount", "1" );
@@ -1261,12 +1261,12 @@ ERRBegin
 			}
 		}
 
-		if ( Row != E_NIL )
+		if ( Row != qNIL )
 			Display_( Row, Records, Label, Writer );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Id;
 }
 
@@ -1303,7 +1303,7 @@ static void HandleRandoms_(
 	xml::writer_ &Writer )
 {
 	ctn::E_CMITEM( random_parameter_ ) Random;
-	sdr::row__ Row = E_NIL;
+	sdr::row__ Row = qNIL;
 
 	if ( Randoms.Amount() == 0 )
 		return;
@@ -1316,7 +1316,7 @@ static void HandleRandoms_(
 
 	Writer.PushTag( "Parameters" );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		HandleRandom_( Random( Row ), Writer );
 
 		Row = Randoms.Next( Row );
@@ -1334,11 +1334,11 @@ static id__ Display_(
 	dbpctx::context_ &Context,
 	txf::text_oflow__ &Output )
 {
-ERRProlog
+qRH
 	xml::writer Writer;
 	ctn::E_CITEMt( table_, trow__ ) Table;
 	random_parameters Randoms;
-ERRBegin
+qRH
 	Randoms.Init();
 	GetRandoms_( Randoms );
 
@@ -1397,9 +1397,9 @@ ERRBegin
 	Writer.PopTag();
 
 	Writer.PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return  Id;
 }
 
@@ -1412,19 +1412,19 @@ static id__ DisplayWithoutBackup_(
 	dbpctx::context_ &Context,
 	const char *FileName )
 {
-ERRProlog
+qRH
 	flf::file_oflow___ FFlow;
 	txf::text_oflow__ TFlow;
-ERRBegin
+qRH
 	if ( FFlow.Init( FileName ) != tol::rSuccess )
 		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
 
 	TFlow.Init( FFlow );
 
 	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, TFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Id;
 }
 
@@ -1437,19 +1437,19 @@ static id__ Display_(
 	dbpctx::context_ &Context,
 	const char *FileName )
 {
-ERRProlog
+qRH
 	bso::bool__ Backuped = false;
-ERRBegin
+qRH
 	sclmisc::CreateBackupFile( FileName );
 
 	Backuped = true;
 
 	Id = DisplayWithoutBackup_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, FileName );
-ERRErr
+qRR
 	if ( Backuped )
 		sclmisc::RecoverBackupFile( FileName );
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Id;
 }
 
@@ -1462,16 +1462,16 @@ static id__ Display_(
 	dbpctx::context_ &Context,
 	const str::string_ &OutputFileName )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRH
 	if ( OutputFileName.Amount() == 0 )
 		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, COut );
 	else
 		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName.Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Id;
 }
 
@@ -1481,10 +1481,10 @@ void LaunchCommand_(
 	const str::string_ &Label,
 	const str::string_ &OutputFileName )
 {
-ERRProlog
+qRH
 	str::string CompleteCommand;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRH
 	if ( ( Command.Amount() != 0 ) && ( OutputFileName.Amount() != 0 ) ) {
 		CompleteCommand.Init( Command );
 		tagsbs::SubstituteShortTag( CompleteCommand, 1, OutputFileName, '$' );
@@ -1496,9 +1496,9 @@ ERRBegin
 	}
 
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void DumpContext_(
@@ -1518,11 +1518,11 @@ static void DumpContextWithoutBackup_(
 	const dbpctx::context_ &Context,
 	const char *FileName )
 {
-ERRProlog
+qRH
 	flf::file_oflow___ FFlow;
 	txf::text_oflow__ TFlow;
 	xml::writer Writer;
-ERRBegin
+qRH
 	if ( FFlow.Init( FileName ) != tol::rSuccess )
 		sclmisc::ReportFileOpeningErrorAndAbort( FileName );
 
@@ -1531,9 +1531,9 @@ ERRBegin
 	Writer.Init( TFlow, xml::oIndent, xml::eUTF_8 );
 
 	DumpContext_( Context, Writer ); 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -1541,29 +1541,29 @@ static void DumpContext_(
 	const dbpctx::context_ &Context,
 	const char *FileName )
 {
-ERRProlog
+qRH
 	bso::bool__ Backuped = false;
-ERRBegin
+qRH
 	sclmisc::CreateBackupFile( FileName );
 
 	Backuped = true;
 
 	DumpContextWithoutBackup_( Context, FileName );
-ERRErr
+qRR
 	if ( Backuped )
 		sclmisc::RecoverBackupFile( FileName );
-ERREnd
-ERREpilog
+qRT
+qRE
 }
 
 static void RetrieveContext_(
 	xml::parser___ &Parser,							 
 	dbpctx::context_ &Context )
 {
-ERRProlog
+qRH
 	bso::bool__ Continue = true;
 	str::string Target;
-ERRBegin
+qRH
 
 	Target.Init();
 
@@ -1597,23 +1597,23 @@ ERRBegin
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void RetrieveContext_(
 	const char *FileName,
 	dbpctx::context_ &Context )
 {
-ERRProlog
+qRH
 	xml::parser___ Parser;
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
-ERRBegin
+qRH
 	if ( !fil::Exists( FileName ) ) {
 //		COut << "Unable to find context file '" << FileName << "'! It will be created at exit." << txf::nl;
-		ERRReturn;
+		qRReturn;
 	}
 
 	if ( FFlow.Init( FileName ) != tol::rSuccess )
@@ -1624,14 +1624,14 @@ ERRBegin
 	Parser.Init( XFlow, xml::eh_Default );
 
 	RetrieveContext_( Parser, Context );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void Process_( id__ Id )
 {
-ERRProlog
+qRH
 	str::string DataFileName;
 	TOL_CBUFFER___ Buffer;
 	data Data;
@@ -1643,7 +1643,7 @@ ERRProlog
 	bso::uint__ SessionMaxDuration = 0;
 	bso::bool__ Error = false;
 	str::string Label;
-ERRBegin
+qRH
 	switch ( Id ) {
 	case UNDEFINED:
 		Id = 0;
@@ -1687,9 +1687,9 @@ ERRBegin
 	DumpContext_( Context, ContextFileName.Convert( Buffer ) );
 
 	LaunchCommand_( Command, Id, Label, OutputFileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 int scltool::SCLTOOLMain(

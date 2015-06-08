@@ -36,7 +36,7 @@ static inline void Unlock_( void )
 
 static inline row__  Search_( void )
 {
-	row__ Row = E_NIL;
+	row__ Row = qNIL;
 
 	Lock_();
 
@@ -51,7 +51,7 @@ static inline row__  SearchOrCreate_( void )
 {
 	row__ Row = Search_();
 
-	if ( Row == E_NIL ) {
+	if ( Row == qNIL ) {
 		Lock_();
 
 		Row = SCLERRORError->TIds.Add( tht::GetTID() );
@@ -86,7 +86,7 @@ bso::bool__ sclerror::IsErrorPending( void )
 {
 	row__ Row = Search_();
 
-	if ( Row == E_NIL )
+	if ( Row == qNIL )
 		return false;
 	else
 		return !IsMeaningEmpty_( Row );
@@ -95,7 +95,7 @@ bso::bool__ sclerror::IsErrorPending( void )
 const lcl::meaning_ &sclerror::GetMeaning( lcl::meaning_ &Meaning )
 {
 	if ( !IsErrorPending() )
-		ERRFwk();
+		qRFwk();
 
 	row__ Row = Search_();
 	ctn::E_CITEMt( lcl::meaning_, row__ ) MeaningBuffer;
@@ -128,12 +128,12 @@ void sclerror::ResetPendingError( void )
 void sclerror::SetMeaning( const lcl::meaning_ &Meaning )
 {
 	if ( IsErrorPending() )
-		ERRFwk();
+		qRFwk();
 
 	row__ Row = SearchOrCreate_();
 
 	if ( !IsMeaningEmpty_( Row ) )
-		ERRFwk();
+		qRFwk();
 
 	Lock_();
 
@@ -150,9 +150,9 @@ bso::bool__ sclerror::GetPendingErrorTranslation(
 	err::handling__ ErrHandling )
 {
 	bso::bool__ PendingErrorAvailable = false;
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	if ( IsErrorPending() )
 		PendingErrorAvailable = true;
 
@@ -161,9 +161,9 @@ ERRBegin
 		Translation.Init();
 		scllocale::GetTranslation( GetMeaning( Meaning ), Language, Translation );
 	} else if ( ErrHandling != err::hUserDefined )
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 	return PendingErrorAvailable;
 }

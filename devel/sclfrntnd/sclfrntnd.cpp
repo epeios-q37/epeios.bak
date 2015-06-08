@@ -72,20 +72,20 @@ bso::bool__ sclfrntnd::kernel___::Init(
 	csdsnc::log_callback__ *LogCallback )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	csdlec::library_data__ LibraryData;
 	csdleo::mode__ Mode = csdleo::m_Undefined;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
-	LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::ERRError, sclerror::SCLERRORError );
+qRB
+	LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
 
 	if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
-		ERRReturn;
+		qRReturn;
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -106,7 +106,7 @@ const char *sclfrntnd::GetLabel( action__ Action )
 	A( Load );
 	A( Launch );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -122,16 +122,16 @@ static const lcl::meaning_ &GetMeaning_(
 	const char *Message,
 	lcl::meaning &Meaning )
 {
-ERRProlog
+qRH
 	str::string RefinedMessage;
-ERRBegin
+qRB
 	RefinedMessage.Init( "FRD_" );
 	RefinedMessage.Append( Message );
 
 	Meaning.SetValue( RefinedMessage );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Meaning;
 }
 
@@ -144,12 +144,12 @@ static void GetPredefinedItem_(
 	const char *Language,
 	xml::writer_ &Writer )
 {
-ERRProlog
+qRH
 	str::string Value;
 	str::string Translation;
 	rgstry::tags Tags;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( Id );
 
@@ -165,9 +165,9 @@ ERRBegin
 	sclrgstry::MGetValue( Registry, rgstry::tentry__( ValueEntry, Tags ), Value );
 
 	Writer.PutValue( Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetPredefinedItems_(
@@ -186,7 +186,7 @@ static void GetPredefinedItems_(
 
 	Id.Init( Ids );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Writer.PushTag( Tag );
 		Writer.PutAttribute( "id", Id( Row ) );
 
@@ -212,10 +212,10 @@ static void GetPredefinedItems_(
 	const char *Language,
 	xml::writer_ &Writer )
 {
-ERRProlog
+qRH
 	rgstry::values Ids;
 	str::string DefaultId;
-ERRBegin
+qRB
 	DefaultId.Init();
 	sclrgstry::OGetValue( Registry, DefaultEntry, DefaultId );
 
@@ -223,9 +223,9 @@ ERRBegin
 	sclrgstry::GetValues( Registry, IdEntry, Ids );
 
 	GetPredefinedItems_( Tag, ValueEntry, AliasEntry, Ids, DefaultId, Registry, Locale, Language, Writer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetFeatures_(
@@ -240,9 +240,9 @@ static void GetFeatures_(
 	const char *Language,
 	xml::writer_ &Writer )
 {
-ERRProlog
+qRH
 	str::string DefaultType;
-ERRBegin
+qRB
 	DefaultType.Init();
 	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), DefaultTypeEntry, DefaultType );
 
@@ -255,9 +255,9 @@ ERRBegin
 	Writer.PushTag( ItemsTag );
 	GetPredefinedItems_( ItemTag, IdEntry, DefaultEntry, ValueEntry, AliasEntry, sclrgstry::GetCommonRegistry(), scllocale::GetLocale(), Language, Writer );
 	Writer.PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 action__ sclfrntnd::GetProjectsFeatures(
@@ -265,9 +265,9 @@ action__ sclfrntnd::GetProjectsFeatures(
 	xml::writer_ &Writer )
 {
 	action__ Action = aNone;
-ERRProlog
+qRH
 	str::string Pattern;
-ERRBegin
+qRB
 	Pattern.Init();
 	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), ProjectAction_, Pattern );
 
@@ -276,9 +276,9 @@ ERRBegin
 			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( ProjectAction_ );
 
 	GetFeatures_( "PredefinedProjects", "PredefinedProject", "DefaultProjectType", DefaultProjectType_, PredefinedProjectId_, DefaultPredefinedProject_, PredefinedProject_, PredefinedProjectAlias_, Language, Writer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Action;
 }
 
@@ -286,9 +286,9 @@ void sclfrntnd::GetBackendsFeatures(
 	const char *Language,
 	xml::writer_ &Writer )
 {
-ERRProlog
+qRH
 	str::string Backend, Type;
-ERRBegin
+qRB
 	Backend.Init();
 	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), Backend_, Backend );
 
@@ -303,9 +303,9 @@ ERRBegin
 	}
 
 	GetFeatures_( "PredefinedBackends", "PredefinedBackend", "DefaultBackendType", DefaultBackendType_, PredefinedBackendId_, DefaultPredefinedBackend_, PredefinedBackend_, PredefinedBackendAlias_, Language, Writer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::uint__ sclfrntnd::GetBackendPingDelay( void )
@@ -315,21 +315,21 @@ bso::uint__ sclfrntnd::GetBackendPingDelay( void )
 
 static void LoadProject_( const str::string_ &FileName )
 {
-ERRProlog
+qRH
 	str::string Id;
-ERRBegin
+qRB
 	Id.Init();
 	sclmisc::LoadProject( FileName, Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void LoadPredefinedProject_( const str::string_ &Id )
 {
-ERRProlog
+qRH
 	str::string ProjectFileName;
-ERRBegin
+qRB
 	if ( Id.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_EmptyPredefinedProjectId" );
 
@@ -340,9 +340,9 @@ ERRBegin
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
 
 	LoadProject_( ProjectFileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclfrntnd::LoadProject(
@@ -362,10 +362,10 @@ void sclfrntnd::LoadProject(
 		LoadProject_( ProjectFeature );
 		break;
 	case frdbse::pt_Undefined:
-		ERRFwk();
+		qRFwk();
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 }
@@ -374,10 +374,10 @@ static void GetPredefinedBackendFeatures_(
 	const str::string_ &Id,
 	features___ &Features )
 {
-ERRProlog
+qRH
 	str::string Buffer;
 	rgstry::tentry___ BackendTypeEntry;
-ERRBegin
+qRB
 	BackendTypeEntry.Init( PredefinedBackendType_, Id );
 
 	Buffer.Init();
@@ -394,9 +394,9 @@ ERRBegin
 	}
 
 	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( PredefinedBackend_, Id ), Features.Location );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclfrntnd::LaunchProject(
@@ -404,9 +404,9 @@ void sclfrntnd::LaunchProject(
 	frdbse::backend_type__ BackendType,
 	const str::string_ &BackendFeature )
 {
-ERRProlog
+qRH
 	features___ Features;
-ERRBegin
+qRB
 	Features.Init();
 
 	Features.PingDelay = GetBackendPingDelay();
@@ -424,19 +424,19 @@ ERRBegin
 		GetPredefinedBackendFeatures_( BackendFeature, Features );
 		break;
 	case frdbse::pt_Undefined:
-		ERRFwk();
+		qRFwk();
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	if ( !Kernel.Init( Features ) ) {
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Location );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 

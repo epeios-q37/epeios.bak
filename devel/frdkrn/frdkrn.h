@@ -87,7 +87,7 @@ namespace frdkrn {
 			S_.Id = t(-1);
 			Label.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Label.plug( AS );
 		}
@@ -127,7 +127,7 @@ namespace frdkrn {
 			il_<t>::reset( P );
 			Wording.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			il_<t>::plug( AS );
 			Wording.plug( AS );
@@ -264,7 +264,7 @@ namespace frdkrn {
 		registry_ &_R( void )
 		{
 			if ( _Registry == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Registry;
 		}
@@ -278,7 +278,7 @@ namespace frdkrn {
 		void _CloseConnection( void )
 		{
 			if ( !IsConnected() )
-				ERRFwk();
+				qRFwk();
 
 			FRDKRNDisconnection();
 
@@ -307,7 +307,7 @@ namespace frdkrn {
 		fblfrd::frontend___ &Frontend( void )
 		{
 			if ( !_Frontend.IsConnected() )
-				ERRFwk();
+				qRFwk();
 
 			return _Frontend;
 		}
@@ -353,9 +353,9 @@ namespace frdkrn {
 		void ThrowERRFwk( void )
 		{
 			if ( !IsConnected() )
-				ERRFwk();
+				qRFwk();
 
-			_Frontend.ThrowERRFwk();
+			_Frontend.ThrowqRFwk();
 		}
 		bso::bool__ IsConnected( void ) const
 		{

@@ -46,7 +46,7 @@ bso::bool__ csdlec::library_embedded_client_core__::Init(
 			reset();	// Sinon le bibliothque n'est pas dcharge correctement  la fermeture de l'application.
 
 	if ( ERRHandling != err::hUserDefined )
-		ERRSys();
+		qRSys();
 
 	return false;
 }
@@ -64,7 +64,7 @@ bso::bool__ csdlec::library_embedded_client_core__::_RetrieveCallback( csdleo::s
 	csdleo::callback__ &Callback = RetrieveCallback();
 
 	if ( _Callback != NULL )
-		ERRFwk();
+		qRFwk();
 
 	Callback.Initialize( Data, NULL );
 

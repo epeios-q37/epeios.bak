@@ -58,50 +58,50 @@ const char *sclmisc::GetBaseLanguage( void )
 void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
 {
 	sclerror::SetMeaning( Meaning );
-	ERRAbort();
+	qRAbort();
 }
 
 void sclmisc::ReportAndAbort( const char *Text )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	Meaning.Init();
 
 	Meaning.SetValue( Text );
 
 	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::ReportAndAbort(
 	const char *Text,
 	const str::string_ &Tag )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	Meaning.Init();
 
 	Meaning.SetValue( Text );
 	Meaning.AddTag( Tag );
 
 	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::ReportParsingErrorAndAbort(
 	const char *ErrorLabel,
 	const rgstry::context___ &Context )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
 	lcl::meaning MeaningBuffer;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( ErrorLabel );
 
@@ -111,17 +111,17 @@ ERRBegin
 	Meaning.AddTag( MeaningBuffer );
 
 	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Initialize_(
-	err::err___ *ERRError,
+	err::err___ *qRRor,
 	sclerror::error___ *SCLError,
 	const cio::set__ &CIO )
 {
-	err::ERRError = ERRError;
+	err::qRRor = qRRor;
 	sclerror::SCLERRORError = SCLError;
 
 	cio::target__ Target = cio::GetTarget( CIO );
@@ -133,13 +133,13 @@ static void Initialize_(
 }
 
 void sclmisc::Initialize(
-	err::err___ *ERRError,
+	err::err___ *qRRor,
 	sclerror::error___ *SCLError,
 	const cio::set__ &CIO,
 	const rgstry::entry__ &Configuration,
 	const rgstry::entry__ &Locale )
 {
-	Initialize_( ERRError, SCLError, CIO );
+	Initialize_( qRRor, SCLError, CIO );
 
 	sclrgstry::SetConfiguration( Configuration );
 	scllocale::SetLocale( scllocale::tMain, Locale );
@@ -150,18 +150,18 @@ static void GetConfigurationLocaleParsingErrorMeaning_(
 	const rgstry::context___ &Context,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	lcl::meaning MeaningBuffer;
-ERRBegin
+qRB
 	Meaning.SetValue( SCLMISC_NAME "_ConfigurationLocaleParsingError" );
 
 	MeaningBuffer.Init();
 	rgstry::GetMeaning( Context, MeaningBuffer );
 
 	Meaning.AddTag( MeaningBuffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 # if 0	// Obsolete ?
@@ -175,7 +175,7 @@ static void MergeLocale_(
 
 	SubLocale.Init( SubLocales );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		MergedLocale.Append( SubLocale( Row ) );
 
 		Row = SubLocales.Next( Row );
@@ -187,17 +187,17 @@ static void LoadLocale_(
 	const str::string_ &Locale,
 	utf::format__ Format )
 {
-	ERRProlog
+	qRH
 		flx::E_STRING_IFLOW__ Flow;
 	xtf::extended_text_iflow__ XFlow;
-	ERRBegin
+	qRB
 		Flow.Init( Locale );
 	XFlow.Init( Flow, Format );
 
 	scllocale::LoadLocale( Target, XFlow, NULL, "Locale" );
-	ERRErr
-		ERREnd
-		ERREpilog
+	qRR
+		qRT
+		qRE
 }
 
 static void LoadLocale_(
@@ -205,10 +205,10 @@ static void LoadLocale_(
 	scllocale::target__ Target,
 	utf::format__ Format )
 {
-ERRProlog
+qRH
 	str::strings SubLocales;
 	str::string MergedLocale;
-ERRBegin
+qRB
 	SubLocales.Init();
 
 	sclrgstry::GetCommonRegistry().GetValues( Level, sclrgstry::Locale, SubLocales );
@@ -221,9 +221,9 @@ ERRBegin
 	MergedLocale.Append( "</Locale>" );
 
 	LoadLocale_( Target, MergedLocale, Format );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 # else
 static void LoadLocale_(
@@ -231,21 +231,21 @@ static void LoadLocale_(
 	scllocale::target__ Target,
 	utf::format__ Format )
 {
-ERRProlog
+qRH
 	rgstry::entry__ Entry;
-	rgstry::row__ Row = E_NIL;
-ERRBegin
+	rgstry::row__ Row = qNIL;
+qRB
 	Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
 
-	if ( Row == E_NIL )
-		ERRFwk();
+	if ( Row == qNIL )
+		qRFwk();
 
 	Entry.Init( Row, sclrgstry::GetCommonRegistry().GetRegistry( Level ) );
 
 	scllocale::SetLocale( Target, Entry );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 # endif
 
@@ -268,11 +268,11 @@ static void Initialize_(
 	xtf::extended_text_iflow__ &RegistryFlow,
 	const char *RegistryDirectory )
 {
-ERRProlog
+qRH
 	str::string Language;
 	str::string LocaleRootPath, RegistryRootPath;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	LocaleRootPath.Init();
 	BuildRootPath_( "Locale", SCLMISCTargetName, LocaleRootPath );
 
@@ -288,13 +288,13 @@ ERRBegin
 		Language.Convert( BaseLanguage_ );
 
 	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::Initialize(
-	err::err___ *ERRError,
+	err::err___ *qRRor,
 	sclerror::error___ *SCLError,
 	const cio::set__ &CIO,
 	xtf::extended_text_iflow__ &LocaleFlow,
@@ -302,7 +302,7 @@ void sclmisc::Initialize(
 	xtf::extended_text_iflow__ &RegistryFlow,
 	const char *RegistryDirectory )
 {
-	Initialize_( ERRError, SCLError, CIO );
+	Initialize_( qRRor, SCLError, CIO );
 
 	Initialize_( LocaleFlow, LocaleDirectory, RegistryFlow, RegistryDirectory );
 }
@@ -314,9 +314,9 @@ static bso::bool__ GuessFileName_(
 	fnm::name___ &Filename )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	fnm::name___ Dir;
-ERRBegin
+qRB
 	Filename.Init();
 	fnm::BuildPath( "", Affix, Suffix, Filename );
 
@@ -334,9 +334,9 @@ ERRBegin
 			Success = true;
 	} else
 		Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -347,11 +347,11 @@ bso::bool__ InitializeFlow_(
 	str::string_ &Directory )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	fnm::name___ FileName;
 	TOL_CBUFFER___ LocationBuffer;
 	fnm::name___ Location;
-ERRBegin
+qRB
 	FileName.Init();
 	Success = GuessFileName_( SCLMISCTargetName, Suffix, SuggestedDirectory, FileName );
 
@@ -361,9 +361,9 @@ ERRBegin
 
 	Location.Init();
 	Directory.Append( fnm::GetLocation( FileName, Location ).UTF8( LocationBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -372,18 +372,18 @@ static flw::iflow__ &InitializeLocaleFlow_(
 	flf::file_iflow___ &Flow,
 	str::string_ &Directory )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	if ( !InitializeFlow_( LOCALE_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
 		Meaning.Init();
 		Meaning.SetValue( "" );	// Ne sera pas traduit, puisque la locale n'a pas pu tre lu.
 		Meaning.AddTag( "Unable to open locale file" );	// Ceci remplacera le '%0' ci-dessus.
 		ReportAndAbort( Meaning );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Flow;
 }
 
@@ -392,33 +392,33 @@ static flw::iflow__ &InitializeConfigurationFlow_(
 	flf::file_iflow___ &Flow,
 	str::string_ &Directory )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	if ( !InitializeFlow_( CONFIGURATION_DEFAULT_FILENAME_SUFFIX, SuggestedDirectory, Flow, Directory ) ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLMISC_NAME "_UnableToOpenConfigurationFile" );
 		ReportAndAbort( Meaning );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Flow;
 }
 
 void sclmisc::Initialize(
-	err::err___ *ERRError,
+	err::err___ *qRRor,
 	sclerror::error___ *SCLError,
 	const cio::set__ &CIO,
 	const fnm::name___ &SuggestedDirectory )
 {
-ERRProlog
+qRH
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
 	xtf::extended_text_iflow__ LocaleXFlow, ConfigurationXFlow;
 	str::string LocaleDirectory, ConfigurationDirectory;
 	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
-ERRBegin
-	Initialize_( ERRError, SCLError, CIO );
+qRB
+	Initialize_( qRRor, SCLError, CIO );
 
 	LocaleDirectory.Init();
 	InitializeLocaleFlow_( SuggestedDirectory, LocaleFlow, LocaleDirectory );
@@ -429,9 +429,9 @@ ERRBegin
 	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
 	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::EraseProjectRegistry( void )
@@ -462,65 +462,65 @@ void sclmisc::CreateBackupFile(
 	const fnm::name___ &FileName,
 	fil::backup_mode__ Mode )
 {
-ERRProlog
+qRH
 	fil::backup_status__ Status = fil::bs_Undefined;
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	if ( ( Status = fil::CreateBackupFile( FileName, Mode, err::hUserDefined ) )!= fil::bsOK ) {
 		Meaning.Init();
 		fil::GetMeaning( Status, FileName, Meaning );
 		ReportAndAbort( Meaning );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::RecoverBackupFile( const fnm::name___ &FileName )
 {
-ERRProlog
+qRH
 	fil::recover_status__ Status = fil::rs_Undefined;
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	if ( ( Status = fil::RecoverBackupFile( FileName, err::hUserDefined ) )!= fil::rsOK ) {
 		Meaning.Init();
 		fil::GetMeaning( Status, FileName, Meaning );
 		ReportAndAbort( Meaning );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::ReportFileOpeningErrorAndAbort( const fnm::name___ &FileName )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( SCLMISC_NAME "_UnableToOpenFile" );
 	Meaning.AddTag( FileName.UTF8( Buffer ) );
 	ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::Load(
 	const fnm::name___ &FileName,
 	str::string_ &String )
 {
-ERRProlog
+qRH
 	flf::file_iflow___ Flow;
-ERRBegin
+qRB
 	if ( !Flow.Init(FileName) )
 		ReportFileOpeningErrorAndAbort( FileName );
 
 	String.FillWith( Flow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::LoadAndTranslateTags(
@@ -552,15 +552,15 @@ void sclmisc::Load(
 	const sclrgstry::registry_ &Registry,
 	str::string_ &String )
 {
-ERRProlog
+qRH
 	str::string FileName;
-ERRBegin
+qRB
 	FileName.Init();
 
 	Load_( Entry, Registry, String, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclmisc::LoadAndTranslateTags(
@@ -569,15 +569,15 @@ void sclmisc::LoadAndTranslateTags(
 	str::string_ &String,
 	char Marker )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Load( FileName, Registry, String );
 
 	scllocale::TranslateTags( String, sclrgstry::GetLanguage_( Registry, Buffer ), Marker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 
 }
 
@@ -587,11 +587,11 @@ void sclmisc::LoadXMLAndTranslateTags(
 	str::string_ &String,
 	char Marker )
 {
-ERRProlog
+qRH
 	str::string FileName, Unprocessed, Untranslated;
 	fnm::name___ FileNameLocation;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	FileName.Init();
 	Unprocessed.Init();
 	Load_( FileNameEntry, Registry, Unprocessed, FileName );
@@ -602,9 +602,9 @@ ERRBegin
 	xpp::Process( Unprocessed, xml::oIndent, Untranslated, xpp::criterions___( FileNameLocation ) );
 
 	scllocale::TranslateTags( Untranslated, sclrgstry::GetLanguage_( Registry, Buffer ), String, Marker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 sclrgstry::registry_ &sclmisc::GetRegistry( void )
@@ -636,18 +636,18 @@ static void GetPluginRelatedTags_(
 	const char *Target,
 	rgstry::tags_ &Tags )
 {
-ERRProlog
+qRH
 	str::string Id;
-ERRBegin
+qRB
 	Tags.Append( str::string( Target ) );
 
 	Id.Init();
 	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::PluginParameter, Target ), Id );
 
 	Tags.Append( Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetPluginFeature_(
@@ -658,8 +658,8 @@ static void GetPluginFeature_(
 
 	Entry.Root = GetRegistry().Search( Path, Level );
 
-	if ( Entry.Root == E_NIL )
-		ERRFwk();
+	if ( Entry.Root == qNIL )
+		qRFwk();
 
 	Entry.Registry = &GetRegistry().GetRegistry( Level );
 }
@@ -670,9 +670,9 @@ const str::string_ &sclmisc::GetPluginFeatures(
 	rgstry::entry__ &Configuration,
 	rgstry::entry__ &Locale )
 {
-ERRProlog
+qRH
 	rgstry::tags Tags;
-ERRBegin
+qRB
 	Tags.Init();
 
 	GetPluginRelatedTags_( Target, Tags );
@@ -681,8 +681,8 @@ ERRBegin
 
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::PluginConfiguration, Tags ), Configuration );
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::PluginLocale, Tags ), Locale );
-	ERRErr
-ERREnd
-ERREpilog
+	qRR
+qRT
+qRE
 	return Filename;
 }

@@ -37,7 +37,7 @@ const char *fblovl::GetLabel( reply__ Reply )
 	CASE( SoftwareError );
 	CASE( RequestError );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 

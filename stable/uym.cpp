@@ -193,11 +193,11 @@ void untyped_memory_::WriteToFlow(
 	mdr::size__ Quantite,
 	flw::oflow__ &OFlow ) const
 {
-ERRProlog
+qRH
 	datum__ TamponSecurite[BUFFER_SIZE];
 	datum__ *Tampon = TamponSecurite;
 	size__ Taille = sizeof( TamponSecurite );
-ERRBegin
+qRB
 	if ( Quantite > BUFFER_SIZE )
 	{
 		Taille = ( Quantite > BUFFER_SIZE_MAX ? BUFFER_SIZE_MAX : Quantite );
@@ -222,11 +222,11 @@ ERRBegin
 		Quantite -= Taille;
 		Position += Taille;
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( ( Tampon != TamponSecurite ) && ( Tampon != NULL ) )
 		free( Tampon );
-ERREpilog
+qRE
 }
 
 void untyped_memory_::ReadFromFlow(
@@ -234,11 +234,11 @@ void untyped_memory_::ReadFromFlow(
 	mdr::row_t__ Position,
 	mdr::size__ Quantite )
 {
-ERRProlog
+qRH
 	datum__ TamponSecurite[BUFFER_SIZE];
 	datum__ *Tampon = TamponSecurite;
 	size__ Taille = sizeof( TamponSecurite );
-ERRBegin
+qRB
 	if ( Quantite > BUFFER_SIZE )
 	{
 		Taille = ( Quantite > BUFFER_SIZE_MAX ? BUFFER_SIZE_MAX : Quantite );
@@ -263,11 +263,11 @@ ERRBegin
 		Quantite -= Taille;
 		Position += Taille;
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( ( Tampon != TamponSecurite ) && ( Tampon != NULL ) )
 		free( Tampon );
-ERREpilog
+qRE
 }
 
 void uym::_Fill(

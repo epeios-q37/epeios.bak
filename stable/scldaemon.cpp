@@ -52,28 +52,28 @@ namespace {
 			const csdleo::shared_data__ *Data,
 			... ) override
 		{
-		ERRProlog
+		qRH
 			fnm::name___ Directory;
 			TOL_CBUFFER___ Buffer;
 			str::string Error;
-		ERRBegin
+		qRB
 			if ( Data == NULL )
-				ERRPrm();
+				qRFwk();
 
 			if ( IsInitialized_ )
-				ERRPrm();
+				qRFwk();
 		
 			if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
 
 				// Does not work when placed in 'global_cdtor'.
 				Directory.Init();
 				fnm::GetLocation( Data->LibraryLocationAndName, Directory );
-				sclmisc::Initialize( Data->ERRError, (sclerror::error___ *)Data->UP, *Data->CIO, Directory.UTF8( Buffer ) );
+				sclmisc::Initialize( Data->qRRor, (sclerror::error___ *)Data->UP, *Data->CIO, Directory.UTF8( Buffer ) );
 				IsInitialized_ = true;
 			}
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 		virtual csdscb::callback__ *CSDLEORetrieveCallback(
 			csdleo::context__ Context,

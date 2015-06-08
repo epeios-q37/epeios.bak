@@ -28,19 +28,19 @@ void ndbbsc::DropFile(
 	const str::string_ &RootFileName,
 	const char *Extension )
 {
-ERRProlog
+qRH
 	str::string FileName;
 	TOL_CBUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	if ( RootFileName.Amount() != 0 ) {
 		FileName.Init( RootFileName );
 		FileName.Append( Extension );
 
 		if ( fil::Exists( FileName.Convert( FileNameBuffer) ) )
 			if ( remove( FileNameBuffer ) != 0 )
-				ERRLbr();
+				qRLbr();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

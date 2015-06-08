@@ -74,7 +74,7 @@ namespace ltf {
 		txf::text_oflow__ &_TF( void )
 		{
 			if ( _TFlow == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_TFlow;
 		}
@@ -128,7 +128,7 @@ namespace ltf {
 			fdr::thread_safety__ ThreadSafety )
 		{
 			if ( Size > LTF__SIZE_MAX )
-				ERRLmt();
+				qRLmt();
 
 			_TFlow = &TFlow;
 

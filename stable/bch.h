@@ -98,7 +98,7 @@ namespace bch {
 		}
 		bso::bool__ _AppendInsteadOfInsert(	row Row )
 		{
-			return ( ( Row == E_NIL ) || ( ( mng::Amount() == 0 ) && ( Row == 0 ) ) );
+			return ( ( Row == qNIL ) || ( ( mng::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
 	public:
 		struct s
@@ -226,7 +226,7 @@ namespace bch {
 		}
 		void Set( void )
 		{
-			ERRFbd();	// Replac par 'FillWith(...)'.
+			qRFbd();	// Replac par 'FillWith(...)'.
 		}
 		//f Append 'Amount' object from 'Buffer'. Return the position where the objects are put.
 		row Append(
@@ -280,7 +280,7 @@ namespace bch {
 		{
 #ifdef BCH_DBG
 			if ( *First > *Last )
-				ERRPrm();
+				qRFwk();
 #endif
 			return Append( Bunch, *Last - *First + 1, *First );
 		}
@@ -317,7 +317,7 @@ namespace bch {
 		{
 #ifdef BCH_DBG
 			if ( Amount > this->Amount() )
-				ERRFwk();
+				qRFwk();
 #endif
 			Allouer_( this->Amount() - Amount, aem::m_Default );
 		}
@@ -326,7 +326,7 @@ namespace bch {
 		{
 #ifdef BCH_DBG
 			if ( !this->Exists( Row ) )
-				ERRFwk();
+				qRFwk();
 #endif
 			Truncate ( mng::Amount() - *Row );
 		}
@@ -346,7 +346,7 @@ namespace bch {
 		{
 #ifdef BCH_DBG
 			if ( *Last < *First )
-				ERRPrm();
+				qRFwk();
 #endif
 			Crop( *Last - *First + 1, First );
 		}
@@ -469,7 +469,7 @@ namespace bch {
 		}
 		void SetAndAdjust( void )
 		{
-			ERRFbd();	// Remplac par 'FillWithAndAdjust(...)'.
+			qRFbd();	// Remplac par 'FillWithAndAdjust(...)'.
 		}
 		//f Return reference to memory.
 		mmr &Memory( void )
@@ -572,7 +572,7 @@ namespace bch {
 	public:
 		static sdr::size__ SizeOf( void * )
 		{
-			ERRFwk();
+			qRFwk();
 			return 0;	// To avoid a warning.
 		}
 	};
@@ -641,7 +641,7 @@ namespace bch {
 		sdr::datum__ Buffer[sizeof( t )];
 #ifdef BCH_DBG
 		if ( Sorted.Amount() != Unsorted.Amount() )
-			ERRFwk();
+			qRFwk();
 #endif
 		_GetRelations( Sorted, Unsorted, sizeof( t ), Sorted.Amount() * sizeof( t ), Buffer, Relations );
 	}
@@ -766,7 +766,7 @@ namespace bch {
 		{
 			_bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >::Init();
 			if ( _bunch<type, tys::E_STORAGEt___( type, row ), aem, row, sh >::SetStepValue( 0 ) )
-				ERRFwk();
+				qRFwk();
 		}
 	};
 

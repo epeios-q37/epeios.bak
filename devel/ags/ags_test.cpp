@@ -41,10 +41,10 @@ using cio::CErr;
 
 void Test1( void )
 {
-ERRProlog
+qRH
 	ags::E_ASTORAGE Storage;
 	ags::descriptor__ D1, D2, D3, D4, D5;
-ERRBegin
+qRB
 	Storage.Init();
 	DS;
 
@@ -66,9 +66,9 @@ ERRBegin
 	DS;
 	Storage.Free( D4 );
 	DS;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 typedef ctn::E_MCONTAINER_( str::string_ ) strings_;
@@ -83,11 +83,11 @@ sdr::row__ Locate(
 
 	String.Init( Strings );
 
-	while ( ( Row!= E_NIL ) && ( String( Row ) != Name ) )
+	while ( ( Row!= qNIL ) && ( String( Row ) != Name ) )
 		Row = Strings.Next( Row );
 
-	if ( Row == E_NIL )
-		ERRFwk();
+	if ( Row == qNIL )
+		qRFwk();
 
 	return Row;
 }
@@ -95,10 +95,10 @@ sdr::row__ Locate(
 
 void Test2( void )
 {
-ERRProlog
+qRH
 	ags::E_ASTORAGE Storage;
 	strings Strings1, Strings2;
-ERRBegin
+qRB
 	Storage.Init();
 	Strings1.plug( Storage );
 	Strings2.plug( Storage );
@@ -123,9 +123,9 @@ ERRBegin
 
 	Strings1.Remove( Locate( str::string( "toto" ), Strings1 ) );
 	DS;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -133,14 +133,14 @@ ERREpilog
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	COut << "Test of library " << AGS_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Test2();
-ERRFErr
+qRFR
 	ExitValue = EXIT_FAILURE;
-ERRFEnd
-ERRFEpilog
+qRFT
+qRFE
 	return ExitValue;
 }

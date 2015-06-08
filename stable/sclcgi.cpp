@@ -50,7 +50,7 @@ private:
 	steering_callback__ &_Callback( void ) const
 	{
 		if ( _SteeringCallback == NULL )
-			ERRFwk();
+			qRFwk();
 
 		return *_SteeringCallback;
 	}
@@ -64,27 +64,27 @@ protected:
 		xml::writer_ &Writer,
 		str::string_ &XSLFileName )
 	{
-	ERRProlog
+	qRH
 		void *UP = NULL;
-		ssnmng::row__ SessionRow = E_NIL;
-		cgiarg::row__ ArgRow = E_NIL;
+		ssnmng::row__ SessionRow = qNIL;
+		cgiarg::row__ ArgRow = qNIL;
 		str::string RawSession;
 		ssnmng::session_id__ Session;
-	ERRBegin
+	qRB
 		ArgRow = Arguments.Locate( "_session" );
 		RawSession.Init();
 
-		if ( ArgRow == E_NIL )
+		if ( ArgRow == qNIL )
 			SessionRow = _Sessions.New( _Callback().NewSession( Arguments ) );
-		else if ( ( SessionRow = _Sessions.Search( Arguments.GetValue( ArgRow, RawSession ) ) ) == E_NIL )
+		else if ( ( SessionRow = _Sessions.Search( Arguments.GetValue( ArgRow, RawSession ) ) ) == qNIL )
 			_Callback().ReportExpiredSession( Writer, XSLFileName );
 		else if ( _Sessions.IsExpired( SessionRow ) ) {
 			_Sessions.Close( SessionRow );	// Appelle 'sclcgi::SCLCGI::DeleteSession.
 			_Callback().ReportExpiredSession( Writer, XSLFileName );
-			SessionRow = E_NIL;
+			SessionRow = qNIL;
 		}
 
-		if ( SessionRow != E_NIL ) {
+		if ( SessionRow != qNIL ) {
 			Session.Init();
 			_Sessions.SessionID( SessionRow );
 
@@ -95,13 +95,13 @@ protected:
 				_Sessions.Close( SessionRow );	// Appelle 'sclcgi::SCLCGI::DeleteSession.
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 public:
 	void reset( bso::bool__ P = true )
@@ -126,25 +126,25 @@ csdleo::callback__ *scldaemon::SCLDAEMONRetrieveSteering(
 	const lcl::locale_ &Locale )
 {
 	gate__ *Gate = NULL;
-ERRProlog
+qRH
 	steering_callback__ *Callback = NULL;
-ERRBegin
+qRB
 	Callback = SCLCGICreateSteering();
 
 	if ( Callback == NULL )
-		ERRReturn;
+		qRReturn;
 
 	if ( ( Gate = new gate__ ) == NULL )
-		ERRAlc();
+		qRAlc();
 
 	Gate->Init( *Callback );
-ERRErr
+qRR
 	if ( Gate != NULL )
 		delete Gate;
 
 	Gate = NULL;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Gate;
 }
 

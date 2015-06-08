@@ -31,10 +31,10 @@ void geckoo::AddPseudoEventHandler(
 	const char *PseudoEventName,
 	pseudo_event_callback__ &Handler )
 {
-ERRProlog
+qRH
 	str::string Value;
 	bso::pointer_buffer__ Buffer;
-ERRBegin
+qRB
 	Value.Init( "handlePseudoEvent( this, '" );
 
 	Value.Append( bso::Convert( &Handler, Buffer ) );
@@ -42,7 +42,7 @@ ERRBegin
 	Value.Append( "');" );
 
 	nsxpcm::SetAttribute( Node, PseudoEventName, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

@@ -37,10 +37,10 @@ namespace idxbtr {
 		E_IBTREE_ &Tree,
 		sdr::row_t__ Root )
 	{
-	ERRProlog
+	qRH
 		sdr::row__ Current, Head, Temp;
 		que::E_QUEUE Queue;	
-	ERRBegin
+	qRB
 		Queue.Init();
 		Queue.Allocate( Tree.BaseTree.Extent() );
 
@@ -50,7 +50,7 @@ namespace idxbtr {
 
 		Current = Tree.Next( Temp );
 
-		while ( Current != E_NIL )
+		while ( Current != qNIL )
 		{
 			Queue.BecomeNext( Current, Temp );
 
@@ -61,9 +61,9 @@ namespace idxbtr {
 
 		Root = *Tree.Fill( Queue, Head );
 
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Root;
 	}
 
@@ -73,15 +73,15 @@ namespace idxbtr {
 		E_IBTREE_ &Tree,
 		const que::E_QUEUE_ &File,
 		sdr::row_t__ Premier,
-		sdr::E_SDRIVER__ &Pilote )
+		qSD__ &Pilote )
 	{
 		sdr::row_t__ Racine, &Courant = Premier;
-	ERRProlog
+	qRH
 		stk::E_BSTACK( desc__ ) Pile;
 		sdr::size__ Niveau = 0;
 		desc__ Sommet;
 		bso::bool__ Boucler = true;
-	ERRBegin
+	qRB
 
 		if ( &Pilote )
 			Pile.plug( Pilote );
@@ -104,7 +104,7 @@ namespace idxbtr {
 
 			Courant = *File.Next( Courant );
 
-			if ( Courant != E_NIL )
+			if ( Courant != qNIL )
 			{
 				if ( File.HasNext( Courant ) )
 				{
@@ -141,9 +141,9 @@ namespace idxbtr {
 
 			Racine = *Sommet.Racine;
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Racine;
 	}
 }
@@ -155,7 +155,7 @@ sdr::row_t__ idxbtr::Compare_(
 {
 	sdr::row_t__ &Row = First;
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( Queue.Next( Row ) != Tree.Next( Row ) )
 			return Row;
 

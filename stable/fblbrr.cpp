@@ -70,7 +70,7 @@ static parameter__ Create_( cast__ Cast )
 	CC( CommandsDetails )
 	CC( ObjectsReferences )
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -128,7 +128,7 @@ static parameter__ _CreateAndGet(
 	CCAG( CommandsDetails, commands_details )
 	CCAG( ObjectsReferences, objects_references )
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -145,10 +145,10 @@ static void Delete_(
 	cast__ Cast )
 {
 	if ( Parameter.Cast != Cast )
-		ERRPrm();
+		qRFwk();
 
 	if ( Parameter.Content == NULL )
-		ERRFwk();
+		qRFwk();
 
 	switch ( Parameter.Cast ) {
 	CD( Object, object__)
@@ -190,7 +190,7 @@ static void Delete_(
 	case cFlow:
 		break;	// 'Parameter.Content' contient '&IFlow', et pas un objet cre par un 'new', donc il n'ya arien a effacer.
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 }
@@ -210,7 +210,7 @@ void fblbrr::remote_callbacks___::FBLBRQPopIn(
 		Parameter = _CreateAndGet( Channel, Cast );
 
 	if ( _Parameters.Append( Parameter ) != CRow )
-		ERRFwk();
+		qRFwk();
 }
 
 void fblbrr::remote_callbacks___::FBLBRQPopInEnd(
@@ -218,7 +218,7 @@ void fblbrr::remote_callbacks___::FBLBRQPopInEnd(
 	flw::iflow__ &Flow )
 {
 	if ( _Parameters.Append( parameter__( cEnd ) ) != CRow )
-		ERRFwk();
+		qRFwk();
 }
 
 void fblbrr::remote_callbacks___::FBLBRQPopOut(
@@ -228,7 +228,7 @@ void fblbrr::remote_callbacks___::FBLBRQPopOut(
 {
 	if ( Cast != cFlow )	// Pour 'Cast == cFlow', '_Parameters' sera mis  jour ultrieurement.
 		if ( _Parameters.Append( Create_( Cast ) ) != CRow )
-			ERRFwk();
+			qRFwk();
 }
 
 #define CP( name, type )\
@@ -248,7 +248,7 @@ static void PushAndDelete_(
 	cast__ Cast )
 {
 	if ( Parameter.Cast != Cast )
-		ERRPrm();
+		qRFwk();
 
 	switch ( Parameter.Cast ) {
 	CP( Object, object__)
@@ -289,10 +289,10 @@ static void PushAndDelete_(
 	CP( ObjectsReferences, objects_references )
 	case cFlow:
 	{
-	ERRProlog
+	qRH
 		flx::size_embedded_oflow___ SEFlow;
 		flw::iflow__ &PFlow = *(flw::iflow__ *)Parameter.Content;
-	ERRBegin
+	qRB
 		if ( FirstCall ) 
 			Channel.Put( Cast );
 		else {
@@ -302,13 +302,13 @@ static void PushAndDelete_(
 
 			SEFlow.Commit();
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 }
@@ -321,19 +321,19 @@ void fblbrr::remote_callbacks___::FBLBRQPush(
 	cast__ Cast = c_Undefined;
 	sdr::row__ Row = Casts.First();
 
-	while ( ( Row != E_NIL )
+	while ( ( Row != qNIL )
 		    && ( ( Cast = (cast__)*Casts( Row ) ) != cEnd ) ) {
 		if ( FirstCall )
 			Delete_(_Parameters( Row ), Cast );
 		Row = Casts.Next( Row );
 	}
 
-	if ( Row == E_NIL )
-		ERRFwk();
+	if ( Row == qNIL )
+		qRFwk();
 
 	Row = Casts.Next( Row );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		PushAndDelete_( FirstCall, Flow, _Parameters( Row ), (cast__)*Casts( Row ) );
 
 		Row = Casts.Next( Row );

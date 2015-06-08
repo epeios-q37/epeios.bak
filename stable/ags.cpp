@@ -93,6 +93,6 @@ void ags::aggregated_storage_::DisplayStructure( txf::text_oflow__ &Flow ) const
 Q37_GCTOR( ags )
 {
 	if ( sizeof( header__ ) != AGS__HEADER_SIZE )
-		ERRChk();
+		qRChk();
 }
 

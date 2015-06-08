@@ -41,7 +41,7 @@ using namespace sclmisc;
 using cio::COut;
 using scllocale::GetLocale;
 
-static err::err___ ERRError_;
+static err::err___ qRRor_;
 static sclerror::error___ SCLError_;
 
 bso::bool__ scltool::IgnoreUnknownArguments = false;
@@ -116,11 +116,11 @@ public:
 		S_.Stamp = s_Undefined;
 		Name.reset( P );
 	}
-	void plug( sdr::E_SDRIVER__ &SD )
+	void plug( qSD__ &SD )
 	{
 		Name.plug( SD );
 	}
-	void plug( ags::E_ASTORAGE_ &AS )
+	void plug( qAS_ &AS )
 	{
 		Name.plug( AS );
 	}
@@ -172,7 +172,7 @@ public:
 
 		Value.reset( P );
 	}
-	void plug( ags::E_ASTORAGE_ &AS )
+	void plug( qAS_ &AS )
 	{
 		flag_::plug( AS );
 
@@ -228,16 +228,16 @@ E_AUTO( arguments );
 
 static void ReportBadArgumentAndAbort_(	const char *Arg )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( SCLTOOL_NAME "_BadArgument" );
 	Meaning.AddTag( Arg );
 	sclmisc::ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void FillShort_(
@@ -245,10 +245,10 @@ void FillShort_(
 	const char *Last,
 	flags_ &Flags )
 {
-ERRProlog
+qRH
 	const char *Current = First;
 	flag Flag;
-ERRBegin
+qRB
 	while ( Current <= Last ) {
 		Flag.Init( sShort, str::string( Current ) );
 
@@ -256,24 +256,24 @@ ERRBegin
 
 		Current++;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void FillShort_(
 	const char *Arg,
 	options_ &Options )
 {
-ERRProlog
+qRH
 	const char *Equal = NULL, *Last = NULL;
 	option Option;
 	str::string Name, Value;
-ERRBegin
+qRB
 	Equal = strchr( Arg, '=' );
 
 	if ( ( Equal - Arg  ) != 1 )
-		ERRFwk();
+		qRFwk();
 
 	Last = Arg + strlen( Arg );
 
@@ -286,9 +286,9 @@ ERRBegin
 	Option.Init( sShort, Name, Value );
 
 	Options.Append( Option );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void FillShort_( 
@@ -315,26 +315,26 @@ void FillLong_(
 	const char *Arg,
 	flags_ &Flags )
 {
-ERRProlog
+qRH
 	flag Flag;
-ERRBegin
+qRB
 	Flag.Init( sLong, str::string( Arg ) );
 
 	Flags.Append( Flag );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void FillLong_(
 	const char *Arg,
 	options_ &Options )
 {
-ERRProlog
+qRH
 	const char *Equal = NULL, *Last = NULL;
 	option Option;
 	str::string Name, Value;
-ERRBegin
+qRB
 	Equal = strchr( Arg, '=' );
 
 	if ( Equal == Arg  )
@@ -351,9 +351,9 @@ ERRBegin
 	Option.Init( sLong, Name, Value );
 
 	Options.Append( Option );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -381,7 +381,7 @@ bso::bool__ Fill_(
 
 	switch ( Size ) {
 	case 0:
-		ERRDta();
+		qRFwk();
 		break;
 	case 1:
 		Arguments.Append( str::string( Arg ) );
@@ -418,20 +418,20 @@ void Fill_(
 	options_ &Options,
 	arguments_ &Arguments )
 {
-ERRProlog
+qRH
 	int Current = 1;
 	bso::bool__ FreeArgumentsOnly = false;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	while ( ( Current < argc ) && ( !FreeArgumentsOnly ) ) {
 		FreeArgumentsOnly = Fill_( ntvstr::string___( argv[Current++] ).UTF8( Buffer ), Flags, Options, Arguments );
 	}
 
 	while ( Current < argc )
 		Arguments.Append( str::string( ntvstr::string___( argv[Current++] ).UTF8( Buffer ) ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static const str::string_ &GetId_(
@@ -439,18 +439,18 @@ static const str::string_ &GetId_(
 	rgstry::entry___ &Entry,
 	str::string_ &Id )
 {
-ERRProlog
+qRH
 	rgstry::tags Tags;
 	str::string Path;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( Name );
 
 	Path.Init();
 	OGetValue( rgstry::tentry__( Entry, Tags ), Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Id;
 }
 
@@ -470,7 +470,7 @@ static const str::string_ &GetId_(
 			GetId_( Name, LongTaggedArgumentId_, Id );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	} else {
@@ -493,16 +493,16 @@ const str::string_ &GetIdTagged_(
 	rgstry::entry___ &Entry,
 	str::string_ &Value )
 {
-ERRProlog
+qRH
 	str::strings Tags;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( Id );
 
 	OGetValue( rgstry::tentry__( Entry, Tags ), Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Value;
 }
 
@@ -538,17 +538,17 @@ static const str::string_ &GetArgumentLabelTranslation_(
 	const str::string_ &Id,
 	str::string_ &Translation )
 {
-ERRProlog
+qRH
 	str::string Label;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Label.Init();
 	GetLabel_( Id, Label );
 
 	sclmisc::GetBaseTranslation( Label.Convert( Buffer ),Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Translation;
 }
 
@@ -556,17 +556,17 @@ static const str::string_ &GetArgumentDescriptionTranslation_(
 	const str::string_ &Id,
 	str::string_ &Translation )
 {
-ERRProlog
+qRH
 	str::string Description;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Description.Init();
 	GetDescription_( Id, Description );
 
 	sclmisc::GetBaseTranslation( Description.Convert( Buffer ),Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Translation;
 }
 
@@ -574,9 +574,9 @@ static const str::string_ &GetShortLong_(
 	const str::string_ &Id,
 	str::string_ &LongShort )
 {
-ERRProlog
+qRH
 	str::string Long, Short;
-ERRBegin
+qRB
 	Long.Init();
 	GetLong_( Id, Long );
 
@@ -595,9 +595,9 @@ ERRBegin
 		LongShort.Append( Long );
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return LongShort;
 }
 
@@ -629,23 +629,23 @@ static void PrintCommandDescription_(
 	const char *ProgramName,
 	const str::string_ &Id )
 {
-ERRProlog
+qRH
 	str::string Translation, LongShort;
-ERRBegin
+qRB
 	LongShort.Init();
 	cio::COut << ProgramName << " " << GetArgumentShortLong( Id, LongShort ) << txf::nl;
 	Translation.Init();
 	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( Id, Translation ) << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void scltool::PrintDefaultCommandDescriptions( const char *ProgramName )
 {
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	Translation.Init();
 	COut << scllocale::GetLocale().GetTranslation( "ProgramDescription", GetLanguage(), Translation ) << txf::nl;
 	COut << txf::nl;
@@ -654,9 +654,9 @@ ERRBegin
 	PrintCommandDescription_( ProgramName, str::string( "Version" ) );
 	PrintCommandDescription_( ProgramName, str::string( "License" ) );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 #endif
 
@@ -699,20 +699,20 @@ static void FillRegistry_(
 	const flag_ &Flag,
 	bso::bool__ IgnoreUnknownArguments )
 {
-ERRProlog
+qRH
 	str::string Id;
 	lcl::meaning  Meaning;
 	str::strings Tags;
 	str::string Path;
 	str::string Value;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 	str::string Name, EntryPath;
-ERRBegin
+qRB
 	Id.Init();
 
 	if ( GetId_( Flag, Id ).Amount() == 0 ) {
 		if ( IgnoreUnknownArguments )
-			ERRReturn;
+			qRReturn;
 		else {
 			Meaning.Init();
 			Meaning.SetValue( SCLTOOL_NAME "_UnknownFlag" );
@@ -726,14 +726,14 @@ ERRBegin
 				Name.Append( "--" );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			Name.Append( Flag.Name );
 			Meaning.AddTag( Name );
 
 			sclerror::SetMeaning( Meaning );
-			ERRAbort();
+			qRAbort();
 		}
 	}
 
@@ -750,7 +750,7 @@ ERRBegin
 		Meaning.SetValue( SCLTOOL_NAME "_NoPathForFlag" );
 		Meaning.AddTag( Flag.Name );
 		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		qRAbort();
 	}
 #endif
 
@@ -762,21 +762,21 @@ ERRBegin
 		Meaning.SetValue( SCLTOOL_NAME "_NoValueForFlag" );
 		Meaning.AddTag( Flag.Name );
 		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		qRAbort();
 	}
 
 	SetValue( Path, Value, &Error );
 
-	if ( Error != E_NIL ) {
+	if ( Error != qNIL ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLTOOL_NAME "_BadPathForFlag" );
 		Meaning.AddTag( Flag.Name );
 		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		qRAbort();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void FillRegistry_(
@@ -784,19 +784,19 @@ static void FillRegistry_(
 	const option_ &Option,
 	bso::bool__ IgnoreUnknownArguments )
 {
-ERRProlog
+qRH
 	str::string Id;
 	lcl::meaning  Meaning;
 	str::strings Tags;
 	str::string Path;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 	str::string Name;
-ERRBegin
+qRB
 	Id.Init();
 
 	if ( GetId_( Option, Id ).Amount() == 0 ) {
 		if ( IgnoreUnknownArguments )
-			ERRReturn;
+			qRReturn;
 		else {
 			Meaning.Init();
 			Meaning.SetValue( SCLTOOL_NAME "_UnknownOption" );
@@ -810,14 +810,14 @@ ERRBegin
 				Name.Append( "--" );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			Name.Append( Option.Name );
 			Meaning.AddTag( Name );
 
 			sclerror::SetMeaning( Meaning );
-			ERRAbort();
+			qRAbort();
 		}
 	}
 
@@ -829,21 +829,21 @@ ERRBegin
 		Meaning.SetValue( SCLTOOL_NAME "_NoPathForOption" );
 		Meaning.AddTag( Option.Name );
 		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		qRAbort();
 	}
 
 	SetValue( Path, Option.Value, &Error );
 
-	if ( Error != E_NIL ) {
+	if ( Error != qNIL ) {
 		Meaning.Init();
 		Meaning.SetValue( SCLTOOL_NAME "_BadPathForOption" );
 		Meaning.AddTag( Option.Name );
 		sclerror::SetMeaning( Meaning );
-		ERRAbort();
+		qRAbort();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void FillRegistry_(
@@ -851,16 +851,17 @@ static void FillRegistry_(
 	const argument_ &Argument,
 	bso::bool__ IgnoreUnknownArguments )
 {
-ERRProlog
+qRH
 	str::string Id;
 	str::strings Tags;
 	str::string Command;
 	str::string Path;
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 	bso::integer_buffer__ Buffer;
-ERRBegin
+	bso::bool__ AdditionalArg = false;
+qRB
 	if ( IgnoreUnknownArguments )
-		ERRReturn;
+		qRReturn;
 
 	Id.Init();
 
@@ -872,9 +873,15 @@ ERRBegin
 	Tags.Append( str::string( bso::Convert( *Index, Buffer ) ) );
 
 	Id.Init();
-	if ( !BGetValue( rgstry::tentry__( IndexTaggedArgumentLinkTarget_, Tags ), Id ) )
-		sclmisc::ReportAndAbort( SCLTOOL_NAME "_BadAmountOfArguments" );
-		
+	if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id) ) {
+		Tags.Init();
+		Tags.Append( Command );
+		Tags.Append( str::string() );
+		AdditionalArg = true;
+		if ( !BGetValue(rgstry::tentry__(IndexTaggedArgumentLinkTarget_, Tags), Id) ) {
+			sclmisc::ReportAndAbort( SCLTOOL_NAME "_BadAmountOfArguments" );
+		}
+	}
 
 	Tags.Init();
 	Tags.Append( Command );
@@ -886,13 +893,16 @@ ERRBegin
 	if ( Path.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLTOOL_NAME "_NoPathForArgument", Id );
 
-	SetValue( Path, Argument, &Error );
+	if ( AdditionalArg )
+		AddValue( Path, Argument, &Error );
+	else
+		SetValue( Path, Argument, &Error );
 
-	if (Error != E_NIL)
+	if (Error != qNIL)
 		sclmisc::ReportAndAbort( SCLTOOL_NAME "_BadPathForArgument", Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 template <typename c, typename i> static void FillRegistry_(
@@ -904,7 +914,7 @@ template <typename c, typename i> static void FillRegistry_(
 
 	Item.Init( Conteneur );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		FillRegistry_( Row, Item( Row ), IgnoreUnknownArguments );
 
 		Row = Conteneur.Next( Row );
@@ -952,12 +962,12 @@ static void DumpInRegistry_(
 	int argc,
 	ntvstr::char__ *argv[] )
 {
-ERRProlog
+qRH
 	bso::integer_buffer__ IBuffer;
 	int i = 0;
 	str::string Path;
 	TOL_CBUFFER___ SBuffer;
-ERRBegin
+qRB
 	SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( (bso::int__)argc, IBuffer ) ) );
 
 	while ( i < argc ) {
@@ -966,9 +976,9 @@ ERRBegin
 
 		SetValue( Path, str::string( ntvstr::string___( argv[i++] ).UTF8( SBuffer ) ) );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define ARGUMENT_FLAGS	CLI_ARGUMENTS "/Flags"
@@ -978,15 +988,15 @@ static void DumpInRegistry_(
 	bso::int__ Indice,
 	const flag_ &Flag )
 {
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 	PutIndice_( ARGUMENT_FLAG, Indice, "", Path );
 	SetValue( Path, Flag.Name );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define ARGUMENT_OPTIONS	CLI_ARGUMENTS "/Options"
@@ -996,9 +1006,9 @@ static void DumpInRegistry_(
 	bso::int__ Indice,
 	const option_ &Option )
 {
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Name", Path );
 	SetValue( Path, Option.Name );
@@ -1006,9 +1016,9 @@ ERRBegin
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Value", Path );
 	SetValue( Path, Option.Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #define ARGUMENT_FREES	CLI_ARGUMENTS "/Frees"
@@ -1018,15 +1028,15 @@ static void DumpInRegistry_(
 	bso::int__ Indice,
 	const argument_ &Argument )
 {
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 	PutIndice_( ARGUMENT_FREE, Indice, "", Path );
 	SetValue( Path, Argument );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static rgstry::entry___ FreeArguments_( ARGUMENT_FREES );
@@ -1046,9 +1056,9 @@ enum type__ {
 static type__ IdentifyArgument_( const str::string_ &Id )
 {
 	type__ Type = t_Undefined;
-ERRProlog
+qRH
 	str::string Dummy;
-ERRBegin
+qRB
 	Dummy.Init();
 	GetPath_( Id, Dummy, false );
 
@@ -1070,9 +1080,9 @@ ERRBegin
 				Type = tOption;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Type;
 }
 
@@ -1090,7 +1100,7 @@ namespace {
 		{
 			switch ( IdentifyArgument_( Tag ) ) {
 			case tCommand:
-				ERRFwk();
+				qRFwk();
 				break;
 			case tFlag:
 				GetShortLong_( Tag, Value );
@@ -1104,7 +1114,7 @@ namespace {
 				Value.Append( '>' );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -1125,7 +1135,7 @@ namespace {
 
 static void PrintCommandUsage_( const str::string_ &Id )
 {
-ERRProlog
+qRH
 	str::string Dummy, Command;
 	str::string_
 		&Value = Dummy,
@@ -1134,7 +1144,7 @@ ERRProlog
 		&Usage = Dummy;
 	bso::bool__ DefaultOne = false;
 	callback__ Callback;
-ERRBegin
+qRB
 	Value.Init();
 	GetValue_( Id, Value );
 	
@@ -1161,7 +1171,7 @@ ERRBegin
 		Callback.Init();
 
 		if ( !tagsbs::SubstituteLongTags( Usage, Callback, '%' ) )
-			ERRFwk();
+			qRFwk();
 
 		cio::COut << ' ' << Usage;
 	}
@@ -1170,22 +1180,22 @@ ERRBegin
 	Translation.Init();
 	cio::COut << txf::nl << txf::pad << GetArgumentDescriptionTranslation_( Id, Translation );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 
 }
 
 static void PrintFlagUsage_( const str::string_ &Id )
 {
-ERRProlog
+qRH
 	str::string Dummy;
 	str::string_
 		&Value = Dummy,
 		&ShortLong = Dummy,
 		&Translation = Dummy,
 		&Path = Dummy;
-ERRBegin
+qRB
 	ShortLong.Init();
 	cio::COut << GetShortLong_( Id, ShortLong ) << ' ';
 
@@ -1199,22 +1209,22 @@ ERRBegin
 
 	Translation.Init();
 	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( Id, Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 
 }
 
 static void PrintOptionUsage_( const str::string_ &Id )
 {
-ERRProlog
+qRH
 	str::string Dummy, Value;
 	str::string_
 		&Label = Dummy,
 		&Description = Dummy,
 		&Path = Dummy;
 		TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Label.Init();
 	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
 
@@ -1231,21 +1241,21 @@ ERRBegin
 
 	Description.Init();
 	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( Id, Description );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void PrintFreeUsage_( const str::string_ &Id )
 {
-ERRProlog
+qRH
 	str::string Dummy;
 	str::string_
 		&Value = Dummy,
 		&Label = Dummy,
 		&Description = Dummy,
 		&Path = Dummy;
-ERRBegin
+qRB
 	Label.Init();
 	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
 
@@ -1256,9 +1266,9 @@ ERRBegin
 
 	Description.Init();
 	cio::COut << txf::pad << GetArgumentDescriptionTranslation_( Id, Description );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -1280,7 +1290,7 @@ static void PrintUsage_(
 		PrintFreeUsage_( Id );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 }
@@ -1294,7 +1304,7 @@ static void PrintUsage_(
 
 	Id.Init( Ids );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		PrintUsage_( Id( Row ), Type );
 
 		Row = Ids.Next( Row );
@@ -1315,7 +1325,7 @@ static void IdentifyArguments_(
 
 	Id.Init( Ids );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 
 //		cio::COut << Id( Row ) << " : " << txf::commit;
 
@@ -1337,7 +1347,7 @@ static void IdentifyArguments_(
 			Frees.Append( Id( Row ) );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 		
@@ -1349,11 +1359,11 @@ static void IdentifyArguments_(
 
 static void PrintUsage_( void )
 {
-ERRProlog
+qRH
 	str::strings Ids, Commands, Flags, Options, Frees;
 	str::string  ProgramDescription;
 	str::string EntryPath;
-ERRBegin
+qRB
 	EntryPath.Init();
 	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetArgumentsLevel() );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
 
@@ -1379,21 +1389,21 @@ ERRBegin
 	PrintUsage_( tFlag, Flags );
 	PrintUsage_( tOption, Options );
 	PrintUsage_( tFree, Frees );
-	ERRErr
-ERREnd
-ERREpilog
+	qRR
+qRT
+qRE
 }
 
 template <typename c, typename i> static void DumpInRegistry_(
 	const char *Prefix,
 	const c &Conteneur )
 {
-ERRProlog
+qRH
 	i Item;
 	sdr::row__ Row = Conteneur.First();
 	bso::integer_buffer__ Buffer;
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init( Prefix );
 	Path.Append( "/@" AMOUNT_ATTRIBUTE );
 
@@ -1401,14 +1411,14 @@ ERRBegin
 
 	Item.Init( Conteneur );
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		DumpInRegistry_( *Row, Item( Row ) );
 
 		Row = Conteneur.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -1431,11 +1441,11 @@ static void FillRegistry_(
 	ntvstr::char__ *argv[],
 	bso::bool__ IgnoreUnknownArguments )
 {
-ERRProlog
+qRH
 	flags Flags;
 	options Options;
 	arguments Arguments;
-ERRBegin
+qRB
 	Flags.Init();
 	Options.Init();
 	Arguments.Init();
@@ -1445,25 +1455,25 @@ ERRBegin
 	FillRegistry_( Flags, Options, Arguments, IgnoreUnknownArguments );
 
 	DumpInRegistry_( argc, argv, Flags, Options, Arguments );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static inline bso::bool__ ReportSCLPendingError_( void )
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	str::string Translation;
-ERRBegin
+qRB
 	Translation.Init();
 	
 	Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation );
 
 	cio::CErr << Translation << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
@@ -1472,12 +1482,12 @@ static int main_(
 	const cio::set__ &CIO )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRProlog
+qRH
 	str::string ProjectFileName;
 	str::string Command;
 	str::string ProjectId;
-ERRBegin
-	sclmisc::Initialize( &ERRError_, &SCLError_, CIO, (const char *)NULL );
+qRB
+	sclmisc::Initialize( &qRRor_, &SCLError_, CIO, (const char *)NULL );
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
@@ -1497,7 +1507,7 @@ ERRBegin
 		PrintUsage_();
 	else
 		ExitValue = SCLTOOLMain( Command, Oddities );
-ERRErr
+qRR
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {
 		case err::t_Abort:
@@ -1507,24 +1517,24 @@ ERRErr
 			break;
 		case err::t_Free:
 			ERRRst();
-			ERRFwk();
+			qRFwk();
 			break;
 		case err::t_None:
 			ERRRst();
-			ERRFwk();
+			qRFwk();
 			break;
 		case err::t_Return:
 			ERRRst();
-			ERRFwk();
+			qRFwk();
 			break;
 		default:
 			ERRRst();
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
-ERREnd
-ERREpilog
+qRT
+qRE
 	return ExitValue;
 }
 
@@ -1538,8 +1548,8 @@ static void ErrFinal_( void )
 
 		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
 
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			if ( cio::IsInitialized() ) {
 				if ( cio::Target() == cio::tConsole ) {
 					cio::COut << txf::commit;
@@ -1553,10 +1563,10 @@ static void ErrFinal_( void )
 
 				cio::CErr << txf::commit;
 			} else
-				ERRFwk();
-		ERRErr
-		ERREnd
-		ERREpilog
+				qRFwk();
+		qRR
+		qRT
+		qRE
 	} else
 		ERRRst();
 }
@@ -1591,19 +1601,19 @@ int wmain(
 	wchar_t *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
+qRFH
 	oddities__ Oddities;
-ERRFBegin
+qRFB
 	Oddities.argc = argc;
 	Oddities.argv = argv;
 
 	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
-ERRFErr
-ERRFEnd	
+qRFR
+qRFT	
 	cio::COut.Commit();
 	cio::CErr.Commit();
 	cio::CIn.Dismiss();
-ERRFEpilog( ErrFinal_() )
+qRFE( ErrFinal_() )
 	return ExitValue;
 }
 
@@ -1614,13 +1624,13 @@ int WINAPI wWinMain(
 		int nCmdShow )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
+qRFH
 	str::string SOut, SErr;
 	flx::bunch_oflow_driver___<str::string_, bso::char__> FOut, FErr;
 	flx::void_iflow_driver___ FIn;
 	cio::set__ CIO;
 	oddities__ Oddities;
-ERRFBegin
+qRFB
 	Oddities.argv = CommandLineToArgvW( GetCommandLineW(), &Oddities.argc );
 
 	Oddities.hInstance = hInstance;
@@ -1639,8 +1649,8 @@ ERRFBegin
 	CIO.Init( FIn, FOut, FErr );
 
 	ExitValue = main_( Oddities, CIO );
-ERRFErr
-ERRFEnd
+qRFR
+qRFT
 	if ( Oddities.argv != NULL )
 		LocalFree( Oddities.argv );
 
@@ -1670,7 +1680,7 @@ ERRFEnd
 			std::wcout << (wchar_t *)ntvstr::string___( SErr ).Internal() << std::endl;
 	}
 #endif
-ERRFEpilog( ErrFinal_() )
+qRFE( ErrFinal_() )
 	return ExitValue;
 }
 
@@ -1680,20 +1690,20 @@ int main(
 	char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
+qRFH
 	oddities__ Oddities;
-ERRFBegin
+qRFB
 	Oddities.argv = argv;
 	Oddities.argc = argc;
 
 	if ( !main_( Oddities, cio::GetSet( cio::t_Default ) ) )
 		ExitValue = EXIT_FAILURE;
-ERRFErr
-ERRFEnd	
+qRFR
+qRFT	
 	cio::COut.Commit();
 	cio::CErr.Commit();
 	cio::CIn.Dismiss();
-ERRFEpilog( ErrFinal_() )
+qRFE( ErrFinal_() )
 	return ExitValue;
 }
 #endif
@@ -1747,7 +1757,7 @@ static inline void ExitOnSignal_( void )
 Q37_GCTOR( scltool )
 {
 	ExitOnSignal_();
-	ERRError_.Init();
+	qRRor_.Init();
 	SCLError_.Init();
 	ParametersTag_.Init( sclrgstry::ParametersTag );
 	ParametersTag_.Append('/' );

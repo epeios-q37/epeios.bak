@@ -80,11 +80,11 @@ namespace btf {
 			Tree_ = NULL;
 			E_BSTACKt_( r, row__ )::reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			E_BSTACKt_( r, row__ )::plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			E_BSTACKt_( r, row__ )::plug( AS );
 		}
@@ -102,7 +102,7 @@ namespace btf {
 			Tree_ = &Tree;
 			E_BSTACKt_( r, row__ )::Init();
 
-			if ( Root != E_NIL )
+			if ( Root != qNIL )
 				E_BSTACKt_( r, row__ )::Push( Root );
 		}
 		//f Join the 2 nodes at bottom of stack with 'Node', which is pushed in stack.
@@ -110,7 +110,7 @@ namespace btf {
 		{
 #ifdef BTF_DBG
 			if ( E_BSTACKt_( r, row__ )::Amount() < 2 )
-				ERRFwk();
+				qRFwk();
 #endif
 			Tree_->BecomeRight( E_BSTACKt_( r, row__ )::Pop(), Node );
 			Tree_->BecomeLeft( E_BSTACKt_( r, row__ )::Pop(), Node );
@@ -128,12 +128,12 @@ namespace btf {
 			row__ Row = E_BSTACKt_( r, row__ )::First();
 #ifdef BTF_DBG
 			if ( !IsComplete() )
-				ERRFwk();
+				qRFwk();
 #endif
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				return E_BSTACKt_( r, row__ )::Get( Row );
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		//f Return true if a call to 'Join' is possible, false otherwise.
 		bso::bool__ IsJoinable( void ) const
@@ -143,7 +143,7 @@ namespace btf {
 		//f Only for the 'NAVt()' macro from 'TOL' library. Don't use.
 		bso::bool__ Exists( row__ ) const
 		{
-			ERRFwk();
+			qRFwk();
 
 			return false;	// Only to avoid a warning.
 		}

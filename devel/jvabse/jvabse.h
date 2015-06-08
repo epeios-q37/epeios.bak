@@ -49,10 +49,10 @@
 
 # include <jni.h>
 
-# define ERRJProlog	ERRProlog
-# define ERRJBegin	ERRBegin
-# define ERRJErr	ERRErr
-# define ERRJEnd	ERREnd
+# define ERRJProlog	qRH
+# define ERRJBegin	qRB
+# define ERRJErr	qRR
+# define ERRJEnd	qRT
 # define ERRJEpilog	ERRCommonEpilog ERRTestEpilog } else jvabse::ERRFinal( Env ); }
 
 # define JVABSE_EXPORT	extern "C" JNIEXPORT
@@ -98,7 +98,7 @@ namespace jvabse {
 		jclass Class = Env->GetObjectClass( Object );
 
 		if ( Class == NULL )
-			ERRLbr();
+			qRLbr();
 
 		return Class;
 	}
@@ -112,7 +112,7 @@ namespace jvabse {
 		jmethodID MethodID = Env->GetMethodID( Class, Name, Signature );
 
 		if ( MethodID == NULL )
-			ERRLbr();
+			qRLbr();
 
 		return MethodID;
 	}
@@ -135,7 +135,7 @@ namespace jvabse {
 		jmethodID MethodID = Env->GetStaticMethodID( Class, Name, Signature );
 
 		if ( MethodID == NULL )
-			ERRLbr();
+			qRLbr();
 
 		return MethodID;
 	}
@@ -158,7 +158,7 @@ namespace jvabse {
 		jfieldID FieldID = Env->GetFieldID( Class, Name, Signature );
 
 		if ( FieldID == NULL )
-			ERRLbr();
+			qRLbr();
 
 		return FieldID;
 	}
@@ -181,7 +181,7 @@ namespace jvabse {
 		jfieldID FieldID = Env->GetStaticFieldID( Class, Name, Signature );
 
 		if ( FieldID == NULL )
-			ERRLbr();
+			qRLbr();
 
 		return FieldID;
 	}
@@ -227,7 +227,7 @@ namespace jvabse {
 		jobject Field = Env->GetObjectField( Object, GetFieldID( Env, Object, Name, Signature ) );
 
 		if ( Field == NULL )
-			ERRLbr();
+			qRLbr();
 
 		return Field;
 	}
@@ -241,7 +241,7 @@ namespace jvabse {
 		jobject Object = Env->GetStaticObjectField( Class, GetStaticFieldID( Env, Class, Name, Signature ) );;
 
 		if ( Object == NULL )
-			ERRLbr();
+			qRLbr();
 
 		return Object;
 	}
@@ -274,7 +274,7 @@ namespace jvabse {
 		if ( ( Signature == NULL )
 			  || ( Signature[0] == 0 )
 			  ||( Signature[strlen( Signature )-1] != ';' ) )
-			ERRPrm();
+			qRFwk();
 
 		Env->SetObjectField( Object, GetFieldID( Env, Object, Name, Signature ), Value );
 	}

@@ -41,7 +41,7 @@ const xint__ &bso::_ConvertToDInt(
 
 	while ( UInt != 0 ) {
 		if ( Position-- == 0 )
-			ERRDta();
+			qRFwk();
 
 		XInt._Int[Position] = ( UInt & 0x7f ) | 0x80; 
 		UInt >>= 7;
@@ -63,7 +63,7 @@ int__ bso::ConvertToInt(
 
 	do {
 		if ( Int > LIMIT )
-			ERRDta();
+			qRFwk();
 
 		Int = ( Int << 7 ) + ( DInt[Position] & 0x7f );
 	} while ( DInt[Position++] & 0x80 );
@@ -77,12 +77,12 @@ int__ bso::ConvertToInt(
 Q37_GCTOR( bso )
 {
 	if ( sizeof( size__ ) != sizeof( int__ ) )
-		ERRChk();
+		qRChk();
 
 	if ( sizeof( sint__ ) != sizeof( uint__ ) )
-		ERRChk();
+		qRChk();
 
 	if ( sizeof( int__ ) != sizeof( uint__ ) )
-		ERRChk();
+		qRChk();
 }
 

@@ -198,7 +198,7 @@ static bso::raw__ *_GetInt(
 		Counter++;
 
 	if ( Counter >= BSO_DINT_SIZE_MAX )
-		ERRDta();
+		qRFwk();
 
 	return DInt;
 }
@@ -225,7 +225,7 @@ void dtfptb::_FPutInt(
 		M( 5 );
 		M( 4 );
 #else
-		ERRVct();
+		qRVct();
 		break;
 #endif
 	case 4:
@@ -237,7 +237,7 @@ void dtfptb::_FPutInt(
 		M( 0 );
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 }
@@ -259,7 +259,7 @@ bso::int__ dtfptb::_FGetInt(
 		M( 5 );
 		M( 4 );
 #else
-		ERRVct();
+		qRVct();
 		break;
 #endif
 	case 4:
@@ -271,7 +271,7 @@ bso::int__ dtfptb::_FGetInt(
 		M( 0 );
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -288,7 +288,7 @@ bso::uint__ dtfptb::_VGetUInt(
 	bso::uint__ Value = bso::ConvertToUInt( _GetInt( Flow, DInt ) );
 
 	if ( Value > Max )
-		ERRDta();
+		qRFwk();
 
 	return Value;
 }
@@ -302,10 +302,10 @@ bso::sint__ dtfptb::_VGetSInt(
 	bso::sint__ Value = bso::ConvertToSInt( _GetInt( Flow, DInt ) );
 
 	if ( Value < Min )
-		ERRDta();
+		qRFwk();
 
 	if ( Value > Max )
-		ERRDta();
+		qRFwk();
 
 	return Value;
 }
@@ -332,5 +332,5 @@ Q37_GCTOR( dtfptb )
 {
 	// Pour des raisons de simplifications, on 'cast' parfois autoritairement un 'bso::size__' en 'bso::int__'.
 	if ( sizeof( bso::size__ ) != sizeof( bso::int__ ) )
-		ERRChk();
+		qRChk();
 }

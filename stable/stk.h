@@ -72,11 +72,11 @@ namespace stk {
 		{
 			structure::reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			structure::plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			structure::plug( AS );
 		}
@@ -120,7 +120,7 @@ namespace stk {
 		//f Return 'true' if 'Object' exists in the stack, false otherwise.
 		bso::bool__ Exists( const item &Object ) const
 		{
-			return structure::Search( Object, 0, structure::Amount() ) != E_NIL;
+			return structure::Search( Object, 0, structure::Amount() ) != qNIL;
 		}
 		//f Return true if an entry exists for row 'Row'.
 		bso::bool__ Exists( row Row ) const
@@ -132,7 +132,7 @@ namespace stk {
 		{
 #ifdef STK_DBG
 			if ( structure::Amount() == 0 )
-				ERRFwk();
+				qRFwk();
 #endif
 			structure::Recall( structure::Last(), Item );
 		}

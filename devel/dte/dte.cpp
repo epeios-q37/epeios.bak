@@ -110,7 +110,7 @@ static bso::bool__ ExtractItems_(
 	Item3 = 0;
 
 	if ( Date == NULL )
-		ERRFwk();
+		qRFwk();
 
 	if ( *Date == 0 )
 		return false;
@@ -209,7 +209,7 @@ raw_date__ dte::date__::_Convert(
 				return DTE_INVALID_DATE;
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 	}
 
@@ -242,7 +242,7 @@ const char *dte::date__::ASCII(
 			sprintf( Buffer, "%i-%02i-%02i", (int)Year(), (int)Month(), (int)Day() );
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 

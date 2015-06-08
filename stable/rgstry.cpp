@@ -47,7 +47,7 @@ const char *rgstry::GetLabel( status__ Status )
 	CASE( UnableToFindRootPath );
 	CASE( RootPathError );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -59,13 +59,13 @@ void rgstry::GetMeaning(
 	const context___ &Context,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	lcl::meaning MeaningBuffer;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( Context.Status ) {
 	case sOK:
-		ERRFwk();
+		qRFwk();
 		break;
 	case sUnableToOpenFile:
 		Meaning.SetValue( GetLabel( Context.Status ) );
@@ -81,18 +81,18 @@ ERRBegin
 		Meaning.AddTag( MeaningBuffer );
 		break;
 	case sRootPathError:
-		if ( Context.PathErrorRow != E_NIL )
-			ERRFwk();
+		if ( Context.PathErrorRow != qNIL )
+			qRFwk();
 	case sUnableToFindRootPath:
 		Meaning.SetValue( GetLabel( Context.Status ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 row__ rgstry::registry_::_Search(
@@ -104,20 +104,20 @@ row__ rgstry::registry_::_Search(
 
 	sdr::row__ &Row = Cursor;
 	
-	if ( Row == E_NIL )
+	if ( Row == qNIL )
 		Row = NodeRows.First();
 	else
 		Row = NodeRows.Next( Row );
 
 	Buffer.Init( Nodes );
 
-	while ( ( Row != E_NIL ) && ( Buffer( NodeRows( Row ) ).Name != Name ) )
+	while ( ( Row != qNIL ) && ( Buffer( NodeRows( Row ) ).Name != Name ) )
 		Row = NodeRows.Next( Row );
 
-	if ( Row != E_NIL )
+	if ( Row != qNIL )
 		return NodeRows( Row );
 	else
-		return E_NIL;
+		return qNIL;
 
 }
 
@@ -129,13 +129,13 @@ row__ rgstry::registry_::_Search(
 {
 	buffer Buffer;
 
-	row__ Row = E_NIL;
+	row__ Row = qNIL;
 	
 	Buffer.Init( Nodes );
 
 	Row = _Search( Name, NodeRows, Cursor );
 
-	while ( ( Row != E_NIL ) && ( Buffer( Row ).Nature() != Nature ) )
+	while ( ( Row != qNIL ) && ( Buffer( Row ).Nature() != Nature ) )
 		Row = _Search( Name, NodeRows, Cursor );
 
 	return Row;
@@ -148,17 +148,17 @@ row__ rgstry::registry_::_Search(
 	row__ Row,
 	cursor__ &Cursor ) const
 {
-	row__ ResultRow = E_NIL;
+	row__ ResultRow = qNIL;
 
 	if ( TagName.Amount() != 0 ) {
 		// .../TagName...
 
 		ResultRow = _SearchTag( TagName, Row, Cursor );
 
-		if ( ( ResultRow != E_NIL ) && ( AttributeName.Amount() != 0 ) ) {
+		if ( ( ResultRow != qNIL ) && ( AttributeName.Amount() != 0 ) ) {
 			// .../TagName[@AttributeName='AttributeValue']/...
 
-			while ( ( ResultRow != E_NIL ) && ( !_AttributeExists( AttributeName, AttributeValue, ResultRow ) ) ) {
+			while ( ( ResultRow != qNIL ) && ( !_AttributeExists( AttributeName, AttributeValue, ResultRow ) ) ) {
 				ResultRow = _SearchTag( TagName, Row, Cursor );
 			}
 		}
@@ -167,7 +167,7 @@ row__ rgstry::registry_::_Search(
 			// .../@AttributeName...
 #ifdef RGSTRY_DBG
 			if ( AttributeValue.Amount() != 0 )
-				ERRFwk();
+				qRFwk();
 #endif
 				ResultRow = _SearchAttribute( AttributeName, Row, Cursor );
 		}
@@ -185,12 +185,12 @@ const str::string_ &rgstry::registry_::GetCompleteName(
 
 	Buffer.Init( Nodes );
 
-	if ( Row != E_NIL ) {
+	if ( Row != qNIL ) {
 		Name.Append( Buffer( Row ).Name );
 		Row = Buffer( Row ).ParentRow();
 	}
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Name.InsertAt( Separator );
 		Name.InsertAt( Buffer( Row ).Name );
 
@@ -212,20 +212,20 @@ sdr::row__ rgstry::BuildPath(
 	const str::string_ &PathString,
 	path_ &Path )
 {
-	sdr::row__ Row = E_NIL;
-ERRProlog
+	sdr::row__ Row = qNIL;
+qRH
 	bso::bool__ Continue = true;
 	state__ State = ::s_Undefined;
 	bso::char__ C;
 	path_item Item;
 	bso::bool__ TagNameAsAttribute = false;
 	bso::bool__ AttributeMarkerFound = false;
-ERRBegin
+qRB
 	Row = PathString.First();
 
 	Item.Init();
 
-	Continue = Row != E_NIL;
+	Continue = Row != qNIL;
 
 	State = sTagName;
 
@@ -288,7 +288,7 @@ ERRBegin
 						Continue = false;
 					State = sAttributeValue;
 					Item.AttributeValue.Init();
-					if ( ( Row = PathString.Next( Row ) ) == E_NIL )
+					if ( ( Row = PathString.Next( Row ) ) == qNIL )
 						Continue = false;
 					else if ( PathString( Row ) != '"' )
 						Continue = false;
@@ -306,11 +306,11 @@ ERRBegin
 					Continue = false;
 					break;
 */				case '"':
-					if ( ( Row = PathString.Next( Row ) ) == E_NIL )
+					if ( ( Row = PathString.Next( Row ) ) == qNIL )
 						Continue = false;
 					else if ( PathString( Row ) != ']' )
 						Continue = false;
-					else if ( ( Row = PathString.Next( Row ) ) == E_NIL )
+					else if ( ( Row = PathString.Next( Row ) ) == qNIL )
 						Continue = false;
 					else if ( PathString( Row ) != '/' )
 						Continue = false;
@@ -324,14 +324,14 @@ ERRBegin
 				}
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 		}
 
 		if ( Continue )
 			Row = PathString.Next( Row );
 
-		if ( Row == E_NIL )
+		if ( Row == qNIL )
 			Continue = false;
 	}
 
@@ -343,9 +343,9 @@ ERRBegin
 
 		Path.Append( Item );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -357,9 +357,9 @@ static inline bso::bool__ BuildPath_(
 {
 	sdr::row__ PathErrorRowBuffer = BuildPath( PathString, Path );
 
-	if ( PathErrorRowBuffer != E_NIL ) {
+	if ( PathErrorRowBuffer != qNIL ) {
 		if ( PathErrorRow == NULL )
-			ERRDta();
+			qRFwk();
 		else {
 			*PathErrorRow = PathErrorRowBuffer;
 			return false;
@@ -376,10 +376,10 @@ row__ rgstry::registry_::_Search(
 	row__ Row,
 	rows_ *ResultRows ) const
 {
-	cursor__ CandidateRow = E_NIL;
-	cursor__ Cursor = E_NIL;
+	cursor__ CandidateRow = qNIL;
+	cursor__ Cursor = qNIL;
 	ctn::E_CITEM( path_item_ ) Item;
-	row__ ResultRow, ChildRow = E_NIL;
+	row__ ResultRow, ChildRow = qNIL;
 	bso::bool__ All = ResultRows != NULL;
 	buffer Buffer;
 
@@ -390,21 +390,21 @@ row__ rgstry::registry_::_Search(
 
 	if ( PathRow != Path.Last() ) {
 
-		while ( ChildRow != E_NIL )  {
+		while ( ChildRow != qNIL )  {
 			ResultRow = _Search( Path, Path.Next( PathRow ), ChildRow, ResultRows );
 
-			if ( ResultRow != E_NIL ) {
+			if ( ResultRow != qNIL ) {
 				if ( All ) {
 					ChildRow = _Search( Item( PathRow ), Row, Cursor );
 				} else
-					ChildRow = E_NIL;
+					ChildRow = qNIL;
 			} else
 				ChildRow = _Search( Item( PathRow ), Row, Cursor );
 		}
 
 	} else if ( All ) {
 
-		while ( ChildRow != E_NIL ) {
+		while ( ChildRow != qNIL ) {
 			ResultRows->Append( ChildRow );
 
 			ChildRow = _Search( Item( PathRow ), Row, Cursor );
@@ -419,12 +419,12 @@ row__ rgstry::registry_::_Search(
 	const path_ &Path,
 	row__ Row ) const
 {
-	sdr::row__ PathRow = E_NIL, Cursor = E_NIL;
+	sdr::row__ PathRow = qNIL, Cursor = qNIL;
 
 	if ( Path.Amount() != 0 )
 		return _Search( Path, Path.First(), Row, NULL );
 	else
-		return E_NIL;
+		return qNIL;
 }
 
 row__ rgstry::registry_::_Search(
@@ -432,47 +432,51 @@ row__ rgstry::registry_::_Search(
 	row__ Row,
 	sdr::row__ *PathErrorRow ) const
 {
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		Row = E_NIL;
+		Row = qNIL;
 	else
 		Row = _Search( Path, Row );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
 row__ rgstry::registry_::Create(
 	const path_ &Path,
-	row__ Row )
+	row__ Row, 
+	bso::bool__ Reuse )
 {
-	bso::bool__ Exists = true;
+	bso::bool__ Continue = true;
 	ctn::E_CITEM( path_item_ ) Item;
 	sdr::row__ PathRow = Path.First();
-	row__ CandidateRow = E_NIL;
+	row__ CandidateRow = qNIL;
 
 	Item.Init( Path );
 
-	while ( ( PathRow != E_NIL ) && Exists ) {
+	while ( ( PathRow != qNIL ) && Continue ) {
 		CandidateRow = _Search( Item( PathRow ), Row );
 
-		if ( CandidateRow == E_NIL ) {
-			Exists = false;
+		if ( CandidateRow == qNIL ) {
+			Continue = false;
 
 			Row = _Create( Item( PathRow ), Row );
 		} else
 			Row = CandidateRow;
 
 		PathRow = Path.Next( PathRow );
+
+		if ( !Reuse && ( PathRow == Path.Last() ) )
+			Continue = false;
 	}
 
-	while ( PathRow != E_NIL ) {
+	while ( PathRow != qNIL ) {
 		Row = _Create( Item( PathRow ), Row );
 
 		PathRow = Path.Next( PathRow );
@@ -484,24 +488,24 @@ row__ rgstry::registry_::Create(
 row__ rgstry::registry_::Create(
 	const str::string_ &PathString,
 	row__ Row,
+	bso::bool__ Reuse,
 	sdr::row__ *PathErrorRow )
 {
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		Row = E_NIL;
+		Row = qNIL;
 	else
-		Row = Create( Path, Row );
+		Row = Create( Path, Row, Reuse );
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
-
 
 row__ rgstry::registry_::SetValue(
 	const str::string_ &PathString,
@@ -509,19 +513,41 @@ row__ rgstry::registry_::SetValue(
 	row__ Row,
 	sdr::row__ *PathErrorRow )
 {
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
 		Row = SetValue( Path, Value, Row );
 	else
-		Row = E_NIL;
+		Row = qNIL;
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
+	return Row;
+}
+
+row__ rgstry::registry_::AddValue(
+	const str::string_ &PathString,
+	const value_ &Value,
+	row__ Row,
+	sdr::row__ *PathErrorRow )
+{
+qRH
+	path Path;
+qRB
+	Path.Init();
+
+	if ( BuildPath_( PathString, Path, PathErrorRow ) )
+		Row = AddValue( Path, Value, Row );
+	else
+		Row = qNIL;
+
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -548,12 +574,12 @@ namespace {
 			const xml::dump_ &Dump )
 		{
 
-			if ( _Current == E_NIL )
+			if ( _Current == qNIL )
 				_Current = _Registry.CreateRegistry( str::string( "_root" ) );
 		
 			_Current = _Registry.AddTag( TagName, _Current );
 
-			if ( _Target == E_NIL )
+			if ( _Target == qNIL )
 				_Target = _Current;
 
 			return true;
@@ -590,7 +616,7 @@ namespace {
 
 			_Current = _Registry.GetParentRow( _Current );
 
-			if ( _Current == E_NIL )
+			if ( _Current == qNIL )
 				return false;
 
 			return true;
@@ -605,11 +631,11 @@ namespace {
 		callback___( registry_ &Registry )
 		: _Registry( Registry )
 		{
-			_Target = _Current = E_NIL;
+			_Target = _Current = qNIL;
 		}
 		void Init( row__ Root )
 		{
-			_Target = E_NIL;
+			_Target = qNIL;
 			_Current = Root;
 		}
 		row__ GetTarget( void ) const
@@ -638,16 +664,16 @@ bso::bool__ rgstry::registry_::Exists(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Result = false;
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
 		Result = Exists( Path, ParentRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -655,11 +681,11 @@ void rgstry::registry_::_DumpAttributes(
 	row__ Row,
 	xml::writer_ &Writer ) const
 {
-ERRProlog
+qRH
 	buffer Buffer;
 	rows Rows;
-	cursor__ Cursor = E_NIL;
-ERRBegin
+	cursor__ Cursor = qNIL;
+qRB
 	Buffer.Init( Nodes );
 
 	Rows.Init();
@@ -668,15 +694,15 @@ ERRBegin
 
 	Cursor = Rows.First();
 
-	while ( Cursor != E_NIL ){
+	while ( Cursor != qNIL ){
 		if ( Buffer( Rows( Cursor ) ).Nature() == nAttribute )
 			Writer.PutAttribute( Buffer().Name, Buffer().Value );
 
 		Cursor = Rows.Next( Cursor );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 sdr::size__ rgstry::registry_::_Dump(
@@ -686,10 +712,10 @@ sdr::size__ rgstry::registry_::_Dump(
 	buffer &Buffer ) const
 {
 	sdr::size__ ChildAmount = 0;
-ERRProlog
+qRH
 	rows Children;
-	sdr::row__ Row = E_NIL;
-ERRBegin
+	sdr::row__ Row = qNIL;
+qRB
 	Children.Init();
 	Children = Buffer( Root ).Children;
 
@@ -698,7 +724,7 @@ ERRBegin
 	
 	Row = Children.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( Buffer( Children( Row ) ).GetNature() != nAttribute )
 			_Dump( Children( Row ), true, Writer, Buffer );
 
@@ -709,9 +735,9 @@ ERRBegin
 		Writer.PopTag();
 
 	ChildAmount = Children.Amount();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ChildAmount;
 }
 
@@ -722,15 +748,15 @@ sdr::size__ rgstry::registry_::Dump(
 	xml::writer_ &Writer ) const
 {
 	sdr::size__ ChildAmount = 0;
-ERRProlog
+qRH
 	buffer Buffer;
-ERRBegin
+qRB
 	Buffer.Init( Nodes );
 
 	ChildAmount = _Dump( Root, RootToo, Writer, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ChildAmount;
 }
 
@@ -742,18 +768,18 @@ sdr::size__ rgstry::registry_::Dump(
 	txf::text_oflow__ &Flow ) const
 {
 	sdr::size__ ChildAmount = 0;
-ERRProlog
+qRH
 	xml::writer Writer;
 	buffer Buffer;
-ERRBegin
+qRB
 	Buffer.Init( Nodes );
 
 	Writer.Init( Flow, Outfit, Encoding );
 
 	ChildAmount = Dump( Root, RootToo, Writer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ChildAmount;
 }
 
@@ -762,7 +788,7 @@ void rgstry::registry_::_Delete( const rows_ &Rows )
 {
 	sdr::row__ Row = Rows.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		_Delete( Rows( Row ) );
 
 		Row = Rows.Next( Row );
@@ -777,7 +803,7 @@ const value_ &rgstry::registry_::GetValue(
 {
 	static value Empty;
 	const value_ *Result = &Empty;
-	row__ ResultRow = E_NIL;
+	row__ ResultRow = qNIL;
 
 	if ( *Missing )
 		return *Result;
@@ -785,7 +811,7 @@ const value_ &rgstry::registry_::GetValue(
 	Empty.Init();
 	Buffer.Init( Nodes );
 
-	if ( ( ResultRow = _Search( Path, Row ) ) != E_NIL )
+	if ( ( ResultRow = _Search( Path, Row ) ) != qNIL )
 		Result = &Buffer( ResultRow ).Value;
 	else
 		*Missing = true;
@@ -802,22 +828,22 @@ const value_ &rgstry::registry_::GetValue(
 {
 	static value Empty;
 	const value_ *Result = &Empty;
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 	Empty.Init();
 
 	if ( *Missing )
-		ERRReturn;
+		qRReturn;
 
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
 		Result = &GetValue( Path, Row, Missing, Buffer );
 	else
 		*Missing = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return *Result;
 }
 
@@ -829,15 +855,15 @@ const value_ &rgstry::registry_::GetValue(
 	sdr::row__ *PathErrorRow ) const
 {
 	const value_ *Value = NULL;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Value = &GetValue( Entry.GetPath( Path ), Row, Missing, Buffer, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return *Value;
 }
 
@@ -852,17 +878,17 @@ const value_ &rgstry::registry_::GetValue(
 	sdr::row__ *PathErrorRow ) const
 {
 	const value_ *Value = NULL;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Entry.GetPath( Tags, Path );
 
 	Value = &GetValue( Path, Row, Missing, Buffer, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return *Value;
 }
 #endif
@@ -873,11 +899,11 @@ bso::bool__ rgstry::registry_::GetValues(
 	values_ &Values ) const
 {
 	bso::bool__ Exists = false;
-ERRProlog
-	cursor__ Cursor = E_NIL;
+qRH
+	cursor__ Cursor = qNIL;
 	buffer Buffer;
 	rows ResultRows;
-ERRBegin
+qRB
 	Buffer.Init( Nodes );
 	ResultRows.Init();
 
@@ -887,15 +913,15 @@ ERRBegin
 		Exists = true;
 		Cursor = ResultRows.First();
 
-		while ( Cursor != E_NIL ) {
+		while ( Cursor != qNIL ) {
 			Values.Append( Buffer( ResultRows( Cursor ) ).Value );
 
 			Cursor = ResultRows.Next( Cursor );
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
@@ -906,16 +932,16 @@ bso::bool__ rgstry::registry_::GetValues(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
 		Exists = GetValues( Path, ParentRow, Values );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
@@ -926,15 +952,15 @@ bso::bool__ rgstry::registry_::GetValues(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Result = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Result = GetValues( Entry.GetPath( Path ), Row, Values, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -947,17 +973,17 @@ bso::bool__ rgstry::registry_::GetValues(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Result = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Entry.GetPath( Tags, Path );
 
 	Result = GetValues( Path, Row, Values, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 #endif
@@ -968,16 +994,16 @@ bso::bool__ rgstry::registry_::Delete(
 	sdr::row__ *PathErrorRow )
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
 		Exists = Delete( Path, Row );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
@@ -988,13 +1014,13 @@ row__ rgstry::Parse(
 	row__ &Root,
 	xpp::context___ &Context )
 {
-	row__ Target = E_NIL;
-ERRProlog
+	row__ Target = qNIL;
+qRH
 	callback___ Callback( Registry );
 	xpp::preprocessing_iflow___ PFlow;
 	xtf::extended_text_iflow__ PXFlow;
 	xml::status__ Status = xml::s_Undefined;
-ERRBegin
+qRB
 	Callback.Init( Root );
 
 	PFlow.Init( XFlow, xpp::criterions___( Criterions.Directory, Criterions.CypherKey, Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string( DEFAULT_NAMESPACE ) ) );
@@ -1006,7 +1032,7 @@ ERRBegin
 		Root = Callback.GetRoot();
 		break;
 	case xml::sUnexpectedEOF:
-//		Root = E_NIL;	// 'Root' peut avoir t in,itilise par l'utilisateur.
+//		Root = qNIL;	// 'Root' peut avoir t in,itilise par l'utilisateur.
 		PFlow.GetContext( Context );
 		break;
 	default:
@@ -1014,15 +1040,15 @@ ERRBegin
 			PFlow.GetContext( Context );
 		else
 			// Puisque l'on passe par le prprocesseur, si une erreur est rencontre, xml::Parse(...)' ne peut normalement retourner que 'xml::sUndexpectedEOF'.
-			ERRFwk();
+			qRFwk();
 		break;
 	}
 
 	if ( PXFlow.Format() != utf::f_Guess )
 		XFlow.SetFormat( PXFlow.Format() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Target;
 }
 
@@ -1035,19 +1061,19 @@ const value_ &rgstry::overloaded_registry___::GetValue(
 {
 	static value Empty;
 	const value_ *Result = &Empty;
-ERRProlog
-	row__ Row = E_NIL;
+qRH
+	row__ Row = qNIL;
 	path Path;
-ERRBegin
+qRB
 	if ( *Missing )
-		ERRReturn;
+		qRReturn;
 
 	Path.Init();
 	Empty.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) ) {
 		*Missing = true;
-		ERRReturn;
+		qRReturn;
 	}
 
 	if ( Local.Registry != NULL )
@@ -1061,9 +1087,9 @@ ERRBegin
 		if ( Global.Registry != NULL )
 			Result = &Global.Registry->GetValue( Path, Global.Root, Missing, Buffer );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return *Result;
 }
 
@@ -1073,21 +1099,21 @@ bso::bool__ rgstry::overloaded_registry___::GetValues(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		ERRReturn;
+		qRReturn;
 
 	if ( Local.Registry != NULL )
 		Exists = Local.Registry->GetValues( Path, Local.Root, Values );
 
 	Exists = Global.Registry->GetValues( Path, Global.Root, Values ) || Exists;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
@@ -1096,9 +1122,9 @@ bso::bool__ rgstry::overloaded_registry___::Exists(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
@@ -1106,9 +1132,9 @@ ERRBegin
 			Exists = Local.Registry->Exists( Path, Local.Root );
 	
 	Exists = Exists || Global.Registry->Exists( Path, Global.Root );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
@@ -1118,16 +1144,16 @@ void rgstry::overloaded_registry___::Search(
 	row__ &LocalRow,
 	sdr::row__ *PathErrorRow ) const
 {
-ERRProlog
+qRH
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( BuildPath_( RawPath, Path, PathErrorRow ) )
 		Search( Path, GlobalRow, LocalRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 #endif
 
@@ -1145,21 +1171,21 @@ const value_ &rgstry::multi_level_registry_::GetValue(
 	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	const value_ *Result = &::Empty_;
-ERRProlog
-	level__ Level = E_NIL;
+qRH
+	level__ Level = qNIL;
 	path Path;
-ERRBegin
+qRB
 	if ( *Missing )
-		ERRReturn;
+		qRReturn;
 
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		ERRReturn;
+		qRReturn;
 
 	Level = Entries.Last();
 
-	while ( Level != E_NIL ) {
+	while ( Level != qNIL ) {
 		*Missing = false;
 
 		Result = &GetValue( Level, Path, Missing, Buffer );
@@ -1167,11 +1193,11 @@ ERRBegin
 		if ( *Missing  )
 			Level = Entries.Previous( Level );
 		else
-			Level = E_NIL;
+			Level = qNIL;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return *Result;
 }
 
@@ -1181,25 +1207,25 @@ bso::bool__ rgstry::multi_level_registry_::GetValue(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
-	level__ Level = E_NIL;
+qRH
+	level__ Level = qNIL;
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		ERRReturn;
+		qRReturn;
 
 	Level = Entries.Last();
 
-	while ( ( Level != E_NIL ) && ( !Found ) ) {
+	while ( ( Level != qNIL ) && ( !Found ) ) {
 		Found = GetValue( Level, Path, Value );
 
 		Level = Entries.Previous( Level );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -1208,19 +1234,19 @@ bso::bool__ rgstry::multi_level_registry_::GetValue(
 	str::string_ &Value ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-	sdr::row__ PathErrorRow = E_NIL;
-ERRBegin
+	sdr::row__ PathErrorRow = qNIL;
+qRB
 	Path.Init();
 
 	Found = GetValue( Entry.GetPath( Path ), Value, &PathErrorRow );
 
-	if ( PathErrorRow != E_NIL )
-		ERRPrm();
-ERRErr
-ERREnd
-ERREpilog
+	if ( PathErrorRow != qNIL )
+		qRFwk();
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -1230,19 +1256,19 @@ bso::bool__ rgstry::multi_level_registry_::GetValue(
 	str::string_ &Value ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-	sdr::row__ PathErrorRow = E_NIL;
-ERRBegin
+	sdr::row__ PathErrorRow = qNIL;
+qRB
 	Path.Init();
 
 	Found = GetValue( Level, Entry.GetPath( Path ), Value, &PathErrorRow );
 
-	if ( PathErrorRow != E_NIL )
-		ERRPrm();
-ERRErr
-ERREnd
-ERREpilog
+	if ( PathErrorRow != qNIL )
+		qRFwk();
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -1254,17 +1280,17 @@ bso::bool__ rgstry::multi_level_registry_::GetValue(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Entry.GetPath( Tags, Path );
 
 	Found = GetValue( Path, Value, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -1274,15 +1300,15 @@ bso::bool__ rgstry::multi_level_registry_::GetValue(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	tags Tags;
-ERRBegin
+qRB
 	Tags.Init();
 
 	Found = GetValue( Entry, Tags, Value, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 #endif
@@ -1293,25 +1319,25 @@ bso::bool__ rgstry::multi_level_registry_::GetValues(
 	sdr::row__ *PathErrorRow ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
-	level__ Level = E_NIL;
+qRH
+	level__ Level = qNIL;
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		ERRReturn;
+		qRReturn;
 
 	Level = Entries.Last();
 
-	while ( Level != E_NIL ) {
+	while ( Level != qNIL ) {
 		Found |= GetValues( Level, Path, Values );
 
 		Level = Entries.Previous( Level );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -1320,20 +1346,20 @@ bso::bool__ rgstry::multi_level_registry_::GetValues(
 	values_ &Values ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-	sdr::row__ PathErrorRow = E_NIL;
-ERRBegin
+	sdr::row__ PathErrorRow = qNIL;
+qRB
 	Path.Init();
 	Entry.GetPath( Path );
 
 	Found = GetValues( Path, Values, &PathErrorRow );
 
-	if ( PathErrorRow != E_NIL )
-		ERRPrm();
-ERRErr
-ERREnd
-ERREpilog
+	if ( PathErrorRow != qNIL )
+		qRFwk();
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -1343,19 +1369,19 @@ bso::bool__ rgstry::multi_level_registry_::GetValues(
 	values_ &Values ) const
 {
 	bso::bool__ Found = false;
-ERRProlog
+qRH
 	str::string Path;
-	sdr::row__ PathErrorRow = E_NIL;
-ERRBegin
+	sdr::row__ PathErrorRow = qNIL;
+qRB
 	Path.Init();
 
 	Found = GetValues( Level, Entry.GetPath( Path ), Values, &PathErrorRow );
 
-	if ( PathErrorRow != E_NIL )
-		ERRPrm();
-ERRErr
-ERREnd
-ERREpilog
+	if ( PathErrorRow != qNIL )
+		qRFwk();
+qRR
+qRT
+qRE
 	return Found;
 }
 
@@ -1365,27 +1391,27 @@ bso::bool__ rgstry::multi_level_registry_::SetValue(
 	sdr::row__ *PathErrorRow )
 {
 	bso::bool__ Set = false;
-ERRProlog
+qRH
 	value CurrentValue;
-	sdr::row__ LocalPathErrorRow = E_NIL;
-ERRBegin
+	sdr::row__ LocalPathErrorRow = qNIL;
+qRB
 	CurrentValue.Init();
 
 	if ( !GetValue( PathString, CurrentValue, &LocalPathErrorRow ) ) {
-		if ( LocalPathErrorRow != E_NIL ) {
+		if ( LocalPathErrorRow != qNIL ) {
 			*PathErrorRow = LocalPathErrorRow;
-			ERRReturn;
+			qRReturn;
 		}
 	} else 
 		if ( CurrentValue == Value )
-			ERRReturn;
+			qRReturn;
 
 	SetValue( Entries.Last(), PathString, Value, PathErrorRow );
 
 	Set = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Set;
 }
 
@@ -1395,15 +1421,61 @@ bso::bool__ rgstry::multi_level_registry_::SetValue(
 	sdr::row__ *PathErrorRow )
 {
 	bso::bool__ Set = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Set = SetValue( Entry.GetPath( Path ), Value, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
+	return Set;
+}
+
+bso::bool__ rgstry::multi_level_registry_::AddValue(
+	const str::string_ &PathString,
+	const value_ &Value,
+	sdr::row__ *PathErrorRow )
+{
+	bso::bool__ Set = false;
+qRH
+	value CurrentValue;
+	sdr::row__ LocalPathErrorRow = qNIL;
+qRB
+	CurrentValue.Init();
+
+	if ( !GetValue( PathString, CurrentValue, &LocalPathErrorRow ) ) {
+		if ( LocalPathErrorRow != qNIL ) {
+			*PathErrorRow = LocalPathErrorRow;
+			qRReturn;
+		}
+	}
+
+	AddValue( Entries.Last(), PathString, Value, PathErrorRow );
+
+	Set = true;
+qRR
+qRT
+qRE
+	return Set;
+}
+
+bso::bool__ rgstry::multi_level_registry_::AddValue(
+	const tentry__ &Entry,
+	const value_ &Value,
+	sdr::row__ *PathErrorRow )
+{
+	bso::bool__ Set = false;
+qRH
+	str::string Path;
+qRB
+	Path.Init();
+
+	Set = AddValue( Entry.GetPath( Path ), Value, PathErrorRow );
+qRR
+qRT
+qRE
 	return Set;
 }
 
@@ -1415,17 +1487,17 @@ bso::bool__ rgstry::multi_level_registry_::SetValue(
 	sdr::row__ *PathErrorRow )
 {
 	bso::bool__ Set = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Entry.GetPath( Tags, Path );
 
 	Set = SetValue( Path, Value, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Set;
 }
 
@@ -1435,17 +1507,17 @@ bso::bool__ rgstry::multi_level_registry_::SetValue(
 	sdr::row__ *PathErrorRow )
 {
 	bso::bool__ Set = false;
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	Entry.GetPath( Path );
 
 	Set = SetValue( Path, Value, PathErrorRow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Set;
 }
 #endif
@@ -1457,25 +1529,25 @@ bso::bool__ rgstry::multi_level_registry_::Delete(
 	sdr::row__ *PathErrorRow )
 {
 	bso::bool__ Deleted = false;
-ERRProlog
-	level__ Level = E_NIL;
+qRH
+	level__ Level = qNIL;
 	path Path;
-ERRBegin
+qRB
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		ERRReturn;
+		qRReturn;
 
 	Level = Entries.Last();
 
-	while ( Level != E_NIL ) {
+	while ( Level != qNIL ) {
 		Deleted |= Delete( Path, Level );
 
 		Level = Entries.Previous( Level );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Deleted;
 }
 
@@ -1485,10 +1557,10 @@ bso::bool__ rgstry::multi_level_registry_::MoveTo(
 	level__ Level )
 {
 	bso::bool__ Moved = false;
-ERRProlog
+qRH
 	str::string Value;
 	str::string LevelValue;
-ERRBegin
+qRB
 	Value.Init();
 
 	if ( GetValue( Path, Value ) ) {
@@ -1501,9 +1573,9 @@ ERRBegin
 			Moved = true;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Moved;
 }
 
@@ -1511,17 +1583,17 @@ row__ rgstry::multi_level_registry_::Search(
 	level__ Level,
 	const tentry__ &Entry ) const
 {
-	row__ Row = E_NIL;
-ERRProlog
+	row__ Row = qNIL;
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 	Entry.GetPath( Path );
 
 	Row = Search( Path, Level );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -1531,27 +1603,27 @@ row__ rgstry::multi_level_registry_::Search(
 	level__ &Level,
 	sdr::row__ *PathErrorRow ) const
 {
-	row__ Row = E_NIL;
-ERRProlog
+	row__ Row = qNIL;
+qRH
 	path Path;
-ERRBegin
-	Level = E_NIL;
+qRB
+	Level = qNIL;
 	Path.Init();
 
 	if ( !BuildPath_( PathString, Path, PathErrorRow ) )
-		ERRReturn;
+		qRReturn;
 
 	Level = Entries.Last();
 
-	while ( ( Level != E_NIL ) && ( Row == E_NIL ) ) {
+	while ( ( Level != qNIL ) && ( Row == qNIL ) ) {
 		Row = Search( Level, Path );
 
-		if ( Row == E_NIL )
+		if ( Row == qNIL )
 			Level = Entries.Previous( Level );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -1559,21 +1631,21 @@ row__ rgstry::multi_level_registry_::Search(
 	const tentry__ &Entry,
 	level__ &Level ) const
 {
-	row__ Row = E_NIL;
-ERRProlog
+	row__ Row = qNIL;
+qRH
 	str::string Path;
-	sdr::row__ PathErrorRow = E_NIL;
-ERRBegin
+	sdr::row__ PathErrorRow = qNIL;
+qRB
 	Path.Init();
 	Entry.GetPath( Path );
 
 	Row = Search( Path, Level, &PathErrorRow );
 
-	if ( PathErrorRow != E_NIL )
-		ERRFwk();
-ERRErr
-ERREnd
-ERREpilog
+	if ( PathErrorRow != qNIL )
+		qRFwk();
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -1586,15 +1658,15 @@ status__ rgstry::FillRegistry(
 	rgstry::row__ &RegistryRoot,
 	context___ &Context )
 {
-	sdr::row__ PathErrorRow = E_NIL;
-	rgstry::row__ NewRoot = E_NIL;
+	sdr::row__ PathErrorRow = qNIL;
+	rgstry::row__ NewRoot = qNIL;
 
-	if ( rgstry::Parse( XFlow, Criterions, Registry, RegistryRoot, Context ) == E_NIL )
+	if ( rgstry::Parse( XFlow, Criterions, Registry, RegistryRoot, Context ) == qNIL )
 		return Context.Status = sParseError;
 
 	if ( ( RootPath != NULL ) && ( *RootPath ) ) {
-		if ( ( NewRoot = Registry.Search( str::string( RootPath ), RegistryRoot, &PathErrorRow ) ) == E_NIL ) {
-			if ( PathErrorRow != E_NIL ) {
+		if ( ( NewRoot = Registry.Search( str::string( RootPath ), RegistryRoot, &PathErrorRow ) ) == qNIL ) {
+			if ( PathErrorRow != qNIL ) {
 				Context.PathErrorRow = PathErrorRow;
 				return Context.Status = sRootPathError;
 			} else
@@ -1618,22 +1690,22 @@ status__ rgstry::FillRegistry(
 	context___ &Context )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
 	fnm::name___ Location;
 	str::string Buffer;
-ERRBegin
+qRB
 	if ( FFlow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
 		Status = Context.Status = sUnableToOpenFile;
 		Context.Coordinates.FileName = FileName;
-		ERRReturn;
+		qRReturn;
 	}
 
 	XFlow.Init( FFlow, utf::f_Default );
 
 	if ( !Criterions.Directory.IsEmpty() )
-		ERRPrm();
+		qRFwk();
 
 	Location.Init();
 	Buffer.Init();
@@ -1642,9 +1714,9 @@ ERRBegin
 	if ( Status == sParseError )
 		if ( Context.Coordinates.FileName.IsEmpty() )
 			Context.Coordinates.FileName = FileName;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1656,16 +1728,16 @@ static bso::u8__ GetTagAmount_( const str::string_ &String )
 
 	sdr::row__ Row = String.First();
 
-	while ( ( Row != E_NIL ) && ( ( Row = String.Search( RGSTRY__TAG_MARKER_C, Row ) ) != E_NIL ) )
+	while ( ( Row != qNIL ) && ( ( Row = String.Search( RGSTRY__TAG_MARKER_C, Row ) ) != qNIL ) )
 	{
 		Row = String.Next( Row );
 
-		if ( Row == E_NIL )
-			ERRFwk();
+		if ( Row == qNIL )
+			qRFwk();
 
 		if ( String( Row ) != RGSTRY__TAG_MARKER_C ) {
 			if ( Amount == LIMIT )
-				ERRLmt();
+				qRLmt();
 			else
 				Amount++;
 		}
@@ -1689,11 +1761,11 @@ static void HandleTag_(
 
 			if ( *Source != RGSTRY__TAG_MARKER_C ) {
 				if ( Indice > LIMIT )
-					ERRLmt();
+					qRLmt();
 
 				Target.Append( '0' + Indice++ );
 			} else if ( *Source == 0 )
-				ERRDta();
+				qRFwk();
 
 		} 
 
@@ -1714,10 +1786,10 @@ const str::string_ &rgstry::entry___::_GetPath(
 	const tags_ &Tags,
 	str::string_ &Path ) const
 {
-ERRProlog
+qRH
 	str::string Buffer;
 	tagsbs::short_tags_callback__ *TagSubstitutionCallback = NULL;
-ERRBegin
+qRB
 	Buffer.Init( _Path );
 
 	if ( Tags.Amount() == 0 )
@@ -1729,8 +1801,8 @@ ERRBegin
 		tagsbs::SubstituteShortTags( Buffer, Tags, RGSTRY__TAG_MARKER_C );
 
 	Path.Append( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Path;
 }

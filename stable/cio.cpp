@@ -82,13 +82,13 @@ static void InitializeConsole_( void )
 {
 #if defined( CPE_WIN )
 	if ( _setmode( _fileno( stdin ), _O_BINARY ) == -1 )
-		ERRLbr();
+		qRLbr();
 
 	if ( _setmode( _fileno( stdout ), _O_BINARY ) == -1 )
-		ERRLbr();
+		qRLbr();
 
 	if ( _setmode( _fileno( stderr ), _O_BINARY ) == -1 )
-		ERRLbr();
+		qRLbr();
 #endif
 	_SInDriver.Init( CInDescriptor, fdr::ts_Default );
 	_SOutDriver.Init( COutDescriptor, fdr::ts_Default );
@@ -108,7 +108,7 @@ const set__ &cio::GetSet( target__ Target )
 		return GetCurrentSet();
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -140,17 +140,17 @@ void cio::Initialize( target__ Target )
 		break;
 	case tUser:
 		if ( !CInF.IsInitialized() )
-			ERRFwk();
+			qRFwk();
 
 		if ( !COutF.IsInitialized() )
-			ERRFwk();
+			qRFwk();
 
 		if ( !CErrF.IsInitialized() )
-			ERRFwk();
+			qRFwk();
 
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 

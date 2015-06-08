@@ -38,16 +38,16 @@ namespace {
 		frontend___ &Frontend,
 		commands_ &Commands )
 	{
-	ERRProlog
+	qRH
 		ctn::E_CMITEM( command_item_ ) Item;
-		sdr::row__ P =E_NIL;
+		sdr::row__ P =qNIL;
 		command Command;
-	ERRBegin
+	qRB
 		Item.Init( Items );
 
 		P = Items.First();
 
-		while( P != E_NIL ) {
+		while( P != qNIL ) {
 			Command.Init();
 			Command.Identification.Value = Item( P ).Value;
 			Command.Identification.ID( Item( P ).ID() );
@@ -55,9 +55,9 @@ namespace {
 			Commands.Append( Command );
 			P = Items.Next( P );
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void GetCommands_(
@@ -65,24 +65,24 @@ namespace {
 		fblfrd::frontend___ &Frontend,
 		commands_ &Commands )
 	{
-	ERRProlog
+	qRH
 		command_items Items;
-	ERRBegin
+	qRB
 		Items.Init();
 
 		Frontend.GetCommandsIDAndName( Type, Items );
 
 		HandleCommands_( Items, Type, Frontend, Commands );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void HandleType_(
 		const type_item_ &Item,
 		type_ &Type )
 	{
-		sdr::row__ P = E_NIL;
+		sdr::row__ P = qNIL;
 		ctn::E_CMITEM( str::string_ ) Value;
 
 		Value.Init( Item.Values );
@@ -91,22 +91,22 @@ namespace {
 
 		P = Item.Values.First();
 
-		if ( P == E_NIL) 
-			ERRFwk();
+		if ( P == qNIL) 
+			qRFwk();
 
 		Type.Prefix = Value( P );
 
 		P = Item.Values.Next( P );
 
-		if ( P == E_NIL) 
-			ERRFwk();
+		if ( P == qNIL) 
+			qRFwk();
 
 		Type.Name = Value( P );
 
 		P = Item.Values.Next( P );
 
-		if ( P != E_NIL) 
-			ERRFwk();
+		if ( P != qNIL) 
+			qRFwk();
 	}
 
 	void HandleTypes_(
@@ -114,16 +114,16 @@ namespace {
 		fblfrd::frontend___ &Frontend,
 		types_ &Types )
 	{
-	ERRProlog
+	qRH
 		ctn::E_CITEM( xitem16_ ) Item;
-		sdr::row__ P = E_NIL;
+		sdr::row__ P = qNIL;
 		type Type;
-	ERRBegin
+	qRB
 		Item.Init( Items );
 
 		P = Items.First();
 
-		while( P != E_NIL ) {
+		while( P != qNIL ) {
 
 			Type.Init();
 
@@ -134,16 +134,16 @@ namespace {
 			Types.Append( Type );
 			P = Items.Next( P );
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void PutMasterType_( types_items_ &Items )
 	{
-	ERRProlog
+	qRH
 		type_item Item;
-	ERRBegin
+	qRB
 		Item.Init();
 
 		Item.Values.Append( str::string( "" ) );
@@ -151,9 +151,9 @@ namespace {
 		Item.ID( FBLTYP_UNDEFINED_ID16 );
 
 		Items.Append( Item );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -161,9 +161,9 @@ void fblfaq::GetDescription(
 	fblfrd::frontend___ &Frontend,
 	types_ &Types )
 {
-ERRProlog
+qRH
 	types_items Items;
-ERRBegin
+qRB
 	Items.Init();
 	
 	PutMasterType_( Items );
@@ -171,7 +171,7 @@ ERRBegin
 	Frontend.GetTypesIDAndPrefixAndName( Items );
 	
 	HandleTypes_( Items, Frontend, Types );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

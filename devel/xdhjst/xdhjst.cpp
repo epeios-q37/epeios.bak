@@ -57,7 +57,7 @@ const str::string_ &xdhjst::GetTaggedScript(
 	C( WidgetFocusing, widget::Focusing );
 	C( Focusing, Focusing );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -71,11 +71,11 @@ namespace {
 		str::strings_ &Names,
 		str::strings_ &Values )
 	{
-	ERRProlog
+	qRH
 		str::string NameForRawValue;
 		str::string EscapedValue;
 		TOL_CBUFFER___ Buffer;
-	ERRBegin
+	qRB
 		Names.Append( str::string( Name ) );
 		EscapedValue.Init();
 		xdhcbk::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
@@ -86,9 +86,9 @@ namespace {
 
 		Names.Append( NameForRawValue );
 		Values.Append( str::string( Value.UTF8( Buffer ) ) );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void SubstituteTags_(
@@ -96,11 +96,11 @@ namespace {
 		va_list ValueList,
 		... )	// The list of the tag name, as 'const char *', with 'NULL' as end marker.
 	{
-	ERRProlog
+	qRH
 		str::strings Names, Values;
 		va_list NameList;
 		const bso::char__ *Name = NULL;
-	ERRBegin
+	qRB
 		Names.Init();
 		Values.Init();
 
@@ -115,10 +115,10 @@ namespace {
 		}
 
 		tagsbs::SubstituteLongTags( Script, Names, Values );
-	ERRErr
-	ERREnd
+	qRR
+	qRT
 		va_end( NameList );
-	ERREpilog
+	qRE
 	}
 }
 
@@ -146,9 +146,9 @@ void xdhjst::GetScript(
 	str::string_ &Script,
 	va_list List )
 {
-ERRProlog
+qRH
 	str::string TaggedScript;
-ERRBegin
+qRB
 	TaggedScript.Init();
 	GetTaggedScript( ScriptName, TaggedScript );
 
@@ -171,14 +171,14 @@ ERRBegin
 	S( WidgetFocusing, Id_, Method_, NULL );
 	S( Focusing, Id_, NULL );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	Script.Append( TaggedScript );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 const str::string_ &xdhjst::GetScript(
@@ -186,16 +186,16 @@ const str::string_ &xdhjst::GetScript(
 	str::string_ *Buffer,
 	... )
 {
-ERRProlog
+qRH
 	va_list List;
-ERRBegin
+qRB
 	va_start( List, Buffer );
 	
 	GetScript( ScriptName, *Buffer, List );
-ERRErr
-ERREnd
+qRR
+qRT
 	va_end( List );
-ERREpilog
+qRE
 	return *Buffer;
 }
 
@@ -211,14 +211,14 @@ namespace {
 		bso::uint__ Amount )
 	{
 		type Id = UndefinedValue;
-	ERRProlog
+	qRH
 		str::string Buffer;
-	ERRBegin
+	qRB
 		Buffer.Init();
 		Id = stsfsm::GetId( Pattern.UTF8( Buffer ), Automat, UndefinedValue, Amount );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Id;
 	}
 
@@ -243,7 +243,7 @@ const char *xdhjst::GetLabel( action__ Action )
 		A( OpenFiles );
 		A( SaveFile );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -262,12 +262,12 @@ namespace {
 		xdhcbk::args_ &Args )
 	{
 		action__ Action = a_Undefined;
-	ERRProlog
+	qRH
 		xdhcbk::retriever__ Retriever;
 		str::string PredefinedAction;
-	ERRBegin
+	qRB
 		if ( ActionWithParameters.Amount() < 2 )
-			ERRFwk();
+			qRFwk();
 
 		Retriever.Init( ActionWithParameters );
 
@@ -279,9 +279,9 @@ namespace {
 
 		if ( Retriever.Availability() != strmrg::aNone )
 			Retriever.GetTable( Args );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 		return Action;
 	}
 
@@ -303,7 +303,7 @@ namespace {
 			return GetPredefinedAction_( ActionWithParameters, UserAction, Args );
 			break;
 		default:
-			ERRDta();
+			qRFwk();
 			break;
 		}
 
@@ -316,10 +316,10 @@ void xdhjst::Fill(
 	const xdhcbk::args_ &Definition,
 	event_abstract_ &Abstract )
 {
-ERRProlog
+qRH
 	xdhcbk::args ActionWithParameters;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Retriever.Init( Definition );
 
 	switch ( Definition.Amount() ) {
@@ -331,15 +331,15 @@ ERRBegin
 		Abstract.S_.Action = GetAction_( ActionWithParameters, Abstract.UserAction, Abstract.Args );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	if ( Abstract.Event.Amount() == 0 )
 		Abstract.Event = DefaultEvent;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::FillMono(
@@ -347,17 +347,17 @@ void xdhjst::FillMono(
 	const xdhcbk::args_ &Definition,
 	event_abstracts_ &Abstracts )
 {
-ERRProlog
+qRH
 	event_abstract Abstract;
-ERRBegin
+qRB
 	Abstract.Init();
 
 	Fill( DefaultEvent, Definition, Abstract );
 
 	Abstracts.Append( Abstract );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::FillMulti(
@@ -365,10 +365,10 @@ void xdhjst::FillMulti(
 	const xdhcbk::args_ &Definitions,
 	event_abstracts_ &Abstracts )
 {
-ERRProlog
+qRH
 	xdhcbk::args Definition;
 	strmrg::retriever__ Retriever;
-ERRBegin
+qRB
 	Retriever.Init( Definitions );
 
 	while ( Retriever.Availability() != strmrg::aNone ) {
@@ -378,9 +378,9 @@ ERRBegin
 
 		FillMono( DefaultEvent, Definition, Abstracts );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::FillEventAbstracts(
@@ -389,17 +389,17 @@ void xdhjst::FillEventAbstracts(
 	event_abstracts_ &Abstracts )
 
 {
-ERRProlog
+qRH
 	str::string DefaultEvent;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	DefaultEvent.Init();
 	GetTagDefaultEvent( TagName, DefaultEvent );
 
 	FillMulti( DefaultEvent, Events, Abstracts );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ xdhjst::HasEvent(
@@ -411,10 +411,10 @@ bso::bool__ xdhjst::HasEvent(
 
 	Abstract.Init( Abstracts );
 
-	while ( ( Row != E_NIL ) && ( Abstract( Row ).Event != Event ) )
+	while ( ( Row != qNIL ) && ( Abstract( Row ).Event != Event ) )
 		Row = Abstracts.Next( Row );
 
-	return Row != E_NIL;
+	return Row != qNIL;
 }
 
 
@@ -427,7 +427,7 @@ sdr::row__ xdhjst::Find(
 
 	Abstract.Init( Abstracts );
 
-	while ( ( Row != E_NIL ) && ( Abstract( Row ).Event != Event ) )
+	while ( ( Row != qNIL ) && ( Abstract( Row ).Event != Event ) )
 		Row = Abstracts.Next( Row );
 
 	return Row;
@@ -437,19 +437,19 @@ void xdhjst::GetEventsAbstracts(
 	const str::string_ &Events,
 	event_abstracts_ &Abstracts )
 {
-ERRProlog
+qRH
 	str::string Name;
 	xdhcbk::args Definitions;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	if ( Events.Amount() != 0 ) {
 		Definitions.Init();
 		xdhcbk::Split( Events, Definitions );
 		FillEventAbstracts( Name, Definitions, Abstracts );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::SplitWidgetFeatures(
@@ -459,9 +459,9 @@ void xdhjst::SplitWidgetFeatures(
 	str::string_ &ContentRetrievingMethod,
 	str::string_ &FocusingMethod )
 {
-ERRProlog
+qRH
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Retriever.Init( Features );
 
 	if ( Retriever.Availability() != strmrg::aNone )
@@ -475,9 +475,9 @@ ERRBegin
 
 	if ( Retriever.Availability() != strmrg::aNone )
 		Retriever.GetString( FocusingMethod );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::GetWidgetTypeAndParameters(
@@ -485,49 +485,49 @@ void xdhjst::GetWidgetTypeAndParameters(
 	str::string_ &Type,
 	str::string_ &Parameters )
 {
-ERRProlog
+qRH
 	str::string ContentRetrievingMethod, FocusingMethod;
-ERRBegin
+qRB
 	ContentRetrievingMethod.Init();
 	FocusingMethod.Init();
 	SplitWidgetFeatures( Features, Type, Parameters, ContentRetrievingMethod, FocusingMethod );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::GetWidgetContentRetrievingMethod(
 	const xdhcbk::args_ &Features,
 	str::string_ &Method )
 {
-ERRProlog
+qRH
 	str::string Type, Parameters, OtherMethod;
-ERRBegin
+qRB
 	Type.Init();
 	Parameters.Init();
 	OtherMethod.Init();
 
 	SplitWidgetFeatures( Features, Type, Parameters, Method, OtherMethod );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::GetWidgetFocusingMethod(
 	const xdhcbk::args_ &Features,
 	str::string_ &Method )
 {
-ERRProlog
+qRH
 	str::string Type, Parameters, OtherMethod;
-ERRBegin
+qRB
 	Type.Init();
 	Parameters.Init();
 	OtherMethod.Init();
 
 	SplitWidgetFeatures( Features, Type, Parameters, OtherMethod, Method );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::scripter::HandleWidgetFeatures(
@@ -535,11 +535,11 @@ void xdhjst::scripter::HandleWidgetFeatures(
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
 {
-ERRProlog
+qRH
 	str::string SubScript, Type, Parameters;
 	str::strings TagNames, TagValues;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	SubScript.Init();
 	sclmisc::MGetValue( xdhjsr::script::widget::Instantiation, SubScript );
 
@@ -557,21 +557,21 @@ ERRBegin
 	tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
 
 	Script.Append( SubScript );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::scripter::HandleWidgetDigest(
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
 {
-ERRProlog
+qRH
 	xdhcbk::args Features;
 	str::string Id, Type, Parameters, SubScript;
 	str::strings TagNames, TagValues;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Retriever.Init( Digest );
 
 	Id.Init();
@@ -597,19 +597,19 @@ ERRBegin
 	tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
 
 	Script.Append( SubScript );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::scripter::HandleWidgetDigests(
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
 {
-ERRProlog
+qRH
 	xdhcbk::retriever__ Retriever;
 	xdhcbk::args Digest;
-ERRBegin
+qRB
 	Retriever.Init( Digests );
 		
 	while ( Retriever.Availability() != strmrg::aNone ) {
@@ -617,9 +617,9 @@ ERRBegin
 		Retriever.GetTable( Digest );
 		scripter::HandleWidgetDigest( Digest, Script );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 namespace {
@@ -628,31 +628,39 @@ namespace {
 		const str::string_ &Id,
 		str::string_ &Script )
 	{
-	ERRProlog
+	qRH
 		str::string SubScript;
 		str::strings TagNames, TagValues;
-	ERRBegin
-		if ( Abstract.Event == "drop" )
-			scripter::SetAttribute( Id, "ondragover", "event.preventDefault();", Script );
-
-		if ( Abstract.Event == "dragstart" )
-			scripter::SetAttribute( Id, "draggable", "true", Script );
-
-		SubScript.Init();
-		sclmisc::MGetValue( xdhjsr::script::EventHandler, SubScript );
-
+	qRB
 		TagNames.Init();
 		TagValues.Init();
 
 		AppendTag_("Id", Id, TagNames, TagValues );
-		AppendTag_("Event", Abstract.Event, TagNames, TagValues );
 
+		if ( Abstract.Event == "drop" ) {
+			SubScript.Init();
+			sclmisc::MGetValue( xdhjsr::script::DroppableSetter, SubScript );
+			tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
+			Script.Append( SubScript );
+		}
+
+		if ( Abstract.Event == "dragstart" ) {
+			SubScript.Init();
+			sclmisc::MGetValue( xdhjsr::script::DraggableSetter, SubScript );
+			tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
+			Script.Append( SubScript );
+		}
+
+		SubScript.Init();
+		sclmisc::MGetValue( xdhjsr::script::EventHandler, SubScript );
+
+		AppendTag_("Event", Abstract.Event, TagNames, TagValues );
 		tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
 
 		Script.Append( SubScript );
-	ERRErr	
-	ERREnd
-	ERREpilog
+	qRR	
+	qRT
+	qRE
 	}
 
 	void SetupEvents_(
@@ -665,7 +673,7 @@ namespace {
 
 		Abstract.Init( Abstracts );
 
-		while ( Row != E_NIL ) {
+		while ( Row != qNIL ) {
 			SetupEvent_( Abstract( Row ), Id, Script );
 
 			Row = Abstracts.Next( Row) ;
@@ -678,12 +686,12 @@ void xdhjst::scripter::HandleEventsDigest(
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
 {
-ERRProlog
+qRH
 	xdhcbk::retriever__ Retriever;
 	str::string Id, Name;
 	xdhcbk::args Events;
 	event_abstracts Abstracts;
-ERRBegin
+qRB
 	Retriever.Init( Digest );
 
 	Id.Init();
@@ -699,19 +707,19 @@ ERRBegin
 	FillEventAbstracts( Name, Events, Abstracts );
 
 	SetupEvents_( Abstracts, Id, Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::scripter::HandleEventsDigests(
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
 {
-ERRProlog
+qRH
 	xdhcbk::retriever__ Retriever;
 	xdhcbk::args Digest;
-ERRBegin
+qRB
 	Retriever.Init( Digests );
 		
 	while ( Retriever.Availability() != strmrg::aNone ) {
@@ -719,9 +727,9 @@ ERRBegin
 		Retriever.GetTable( Digest );
 		scripter::HandleEventsDigest( Digest, Script );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 namespace{
@@ -730,10 +738,10 @@ namespace{
 		const str::string_ &Cast,
 		str::string_ &Script )
 	{
-	ERRProlog
+	qRH
 		str::string SubScript;
 		str::strings TagNames, TagValues;
-	ERRBegin
+	qRB
 		SubScript.Init();
 		sclmisc::MGetValue( xdhjsr::script::casting::Handler, SubScript );
 
@@ -746,9 +754,9 @@ namespace{
 		tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
 
 		Script.Append( SubScript );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 	void SetupCasts_(
@@ -756,21 +764,21 @@ namespace{
 		const str::strings_ &Casts,
 		str::string_ &Script )
 	{
-	ERRProlog
+	qRH
 		ctn::E_CMITEM( str::string_ ) Cast;
-		sdr::row__ Row = E_NIL;
-	ERRBegin
+		sdr::row__ Row = qNIL;
+	qRB
 		Cast.Init( Casts );
 		Row = Casts.First();
 	
-		while ( Row != E_NIL ) {
+		while ( Row != qNIL ) {
 			SetupCast_(Id, Cast( Row ), Script );
 
 			Row = Casts.Next( Row );
 		}
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 
 
@@ -780,11 +788,11 @@ void xdhjst::scripter::HandleCastsDigest(
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
 {
-ERRProlog
+qRH
 	xdhcbk::retriever__ Retriever;
 	str::string Id;
 	str::strings Casts;
-ERRBegin
+qRB
 	Retriever.Init( Digest );
 
 	Id.Init();
@@ -794,19 +802,19 @@ ERRBegin
 	Retriever.GetStrings( Casts );
 
 	SetupCasts_( Id, Casts, Script );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhjst::scripter::HandleCastsDigests(
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
 {
-ERRProlog
+qRH
 	xdhcbk::retriever__ Retriever;
 	xdhcbk::args Digest;
-ERRBegin
+qRB
 	Retriever.Init( Digests );
 		
 	while ( Retriever.Availability() != strmrg::aNone ) {
@@ -814,9 +822,9 @@ ERRBegin
 		Retriever.GetTable( Digest );
 		scripter::HandleCastsDigest( Digest, Script );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 Q37_GCTOR( xdhjsp )

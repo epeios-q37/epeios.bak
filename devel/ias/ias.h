@@ -65,7 +65,7 @@ namespace ias {
 	class indexed_aggregated_storage_;
 
 	class _indexed_aggregated_storage_driver__
-	: public sdr::E_SDRIVER__
+	: public qSD__
 	{
 	private:
 		index__ _Index;
@@ -73,7 +73,7 @@ namespace ias {
 	protected:
 		virtual void SDRAllocate( sdr::size__ Capacity )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		virtual sdr::size__ SDRSize( void ) const;
 		// Dporte.
@@ -86,7 +86,7 @@ namespace ias {
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 	public:
 		_indexed_aggregated_storage_driver__( const indexed_aggregated_storage_ *&AStorage )
@@ -97,17 +97,17 @@ namespace ias {
 		{}
 		void reset( bool P = true )
 		{
-			E_SDRIVER__::reset( P );
+			qSD__::reset( P );
 
-			_Index = E_NIL;
+			_Index = qNIL;
 			_AStorage = NULL;
 		}
 		//f Initialize with 'Multimemory' multimemory.
 		void Init( void )
 		{
-			E_SDRIVER__::Init();
+			qSD__::Init();
 
-			_Index = E_NIL;
+			_Index = qNIL;
 		}
 		//f The 'Index' memory becomes the memory handled by this memory driver.
 		void Index( index__ Index )
@@ -198,7 +198,7 @@ namespace ias {
 #if 1
 # ifdef IAS_DBG
 			if ( CapaciteCourante >= NouvelleCapacite )
-				ERRFwk();
+				qRFwk();
 # endif
 			descriptor__ Buffer[IAS_BUFFER_SIZE];
 
@@ -225,7 +225,7 @@ namespace ias {
 		{
 # ifdef IAS_DBG
 			if ( CapaciteCourante <= NouvelleCapacite )
-				ERRFwk();
+				qRFwk();
 # endif
 			while ( CapaciteCourante-- > NouvelleCapacite )
 				AStorage.Free( Descriptors.Get( CapaciteCourante ) );
@@ -294,14 +294,14 @@ namespace ias {
 			Descriptors.reset( P );
 			AStorage.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Descriptors.plug( AS );
 			this->AStorage.plug( AS );
 		}
 		indexed_aggregated_storage_ &operator =( const indexed_aggregated_storage_ &IAS )
 		{
-			ERRFwk();
+			qRFwk();
 
 			return *this;
 		}
@@ -364,14 +364,14 @@ namespace ias {
 
 			// Pas de '_Initialize(...)' ou de '_Free(...)', car la taille ne change pas (juste ventuellement l''extent').
 		}
-		index__ New( index__ Index = E_NIL )
+		index__ New( index__ Index = qNIL )
 		{
 			descriptor__ D = AGS_UNDEFINED_DESCRIPTOR;
 
-			if ( Index == E_NIL )
+			if ( Index == qNIL )
 				Index = Descriptors.New();
 			else if ( !Descriptors.Exists( Index ) )
-				ERRPrm();
+				qRFwk();
 
 			Descriptors.Store( D, Index );
 
@@ -416,7 +416,7 @@ namespace ias {
 		{
 			descriptor__ D = Descriptors( *Index );
 
-			if ( D != E_NIL )
+			if ( D != qNIL )
 				return AStorage.Size( D );
 			else
 				return 0;
@@ -505,7 +505,7 @@ namespace ias {
 			uys::mode__ ModeBuffer = _Descriptors.Mode( Mode );
 
 			if ( ModeBuffer != _Storage.Mode( Mode ) )
-				ERRPrm();
+				qRFwk();
 
 			return ModeBuffer;
 		}
@@ -514,7 +514,7 @@ namespace ias {
 			uys::mode__ Mode = _Descriptors.Mode();
 
 			if ( Mode != _Storage.Mode() )
-				ERRPrm();
+				qRFwk();
 
 			return Mode;
 		}
@@ -557,7 +557,7 @@ namespace ias {
 		{
 #ifdef IAS_DBG
 			if ( _Descriptors.IsPersistent() != _Storage.IsPersistent() )
-				ERRFwk();
+				qRFwk();
 #endif
 			return _Descriptors.IsPersistent();
 		}
@@ -579,7 +579,7 @@ namespace ias {
 			bso::bool__ Exists = _Descriptors.Exists();
 
 			if ( Exists != _Storage.Exists() )
-				ERRFwk();
+				qRFwk();
 
 			return Exists;
 		}
@@ -637,7 +637,7 @@ namespace ias {
 
 	inline sdr::size__ _indexed_aggregated_storage_driver__::SDRSize( void ) const
 	{
-		if ( _Index == E_NIL )
+		if ( _Index == qNIL )
 			return 0;
 		else
 			return _AStorage->Size( _Index );

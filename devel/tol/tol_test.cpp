@@ -32,26 +32,26 @@ using cio::CErr;
 
 void Generic( int argc, char *argv[] )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	tol::System("/s \"c:/Program Files/7-Zip/7z.exe\" \"a\"");
 	tol::System("\"c:\\Program Files\\7-Zip\\7z.exe\" \"a\"");
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	COut << "Test of library " << TOL_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
-ERRFErr
+qRFR
 	ExitValue = EXIT_FAILURE;
-ERRFEnd
-ERRFEpilog
+qRFT
+qRFE
 	return ExitValue;
 }

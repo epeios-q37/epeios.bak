@@ -34,47 +34,47 @@ bso::bool__ xulfui::steering_callback__::GECKOORegister(
 	const str::string_ &Id )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	err::buffer__ Buffer;
-ERRBegin
+qRB
 	Success = XULFUIRegister( Window, Id );
-ERRErr
+qRR
 	if ( ERRType != err::t_Abort )
 		nsxpcm::Alert( err::Message( Buffer ) );
 	else
 		Success = true;
 	ERRRst();
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Success;
 }
 
 void xulfui::steering_callback__::GECKOOPreRegistration( void )
 {
-ERRProlog
+qRH
 	err::buffer__ Buffer;
-ERRBegin
+qRB
 	XULFUIPreRegistration();
-ERRErr
+qRR
 	if ( ERRType != err::t_Abort )
 		_Trunk->UI().Alert( err::Message( Buffer ) );
 
 	ERRRst();
-ERREnd
-ERREpilog
+qRT
+qRE
 }
 
 void xulfui::steering_callback__::GECKOOPostRegistration( void )
 {
-ERRProlog
+qRH
 	err::buffer__ Buffer;
-ERRBegin
+qRB
 	XULFUIPostRegistration();
-ERRErr
+qRR
 	if ( ERRType != err::t_Abort )
 		_Trunk->UI().Alert( err::Message( Buffer ) );
 
 	ERRRst();
-ERREnd
-ERREpilog
+qRT
+qRE
 }

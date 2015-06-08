@@ -139,17 +139,17 @@ static void GetValue_(
 	field__ Field,
 	str::string_ &Value )
 {
-ERRProlog
+qRH
 	str::string FieldName;
-ERRBegin
+qRB
 	FieldName.Init( GetFieldLabel_( Field ) );
 
 	FieldName.Append( ": " );
 
 	GetValue_( RawHeader, FieldName, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static bso::ulong__ GetULong_( 
@@ -157,10 +157,10 @@ static bso::ulong__ GetULong_(
 	field__ Field )
 {
 	bso::ulong__ Value = 0;
-ERRProlog
+qRH
 	str::string SValue;
 	epeios::row__ Error = NONE;
-ERRBegin
+qRB
 	SValue.Init();
 
 	GetValue_( RawHeader, Field, SValue );
@@ -169,9 +169,9 @@ ERRBegin
 
 	if ( Error != NONE )
 		ERRu();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Value;
 }
 
@@ -179,10 +179,10 @@ static void FillField_(
 	flw::iflow__ &IFlow,
 	header_ &Header )
 {
-ERRProlog
+qRH
 	str::string RawHeader;
 	const char *Label = NULL;
-ERRBegin
+qRB
 	RawHeader.Init();
 
 	GetHeader_( IFlow, RawHeader );
@@ -191,22 +191,22 @@ ERRBegin
 
 	GetValue_( RawHeader, fLocation, Header.Location );
 	GetValue_( RawHeader, fContentType, Header.ContentType );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void StripHeader_( flw::iflow__ &IFlow )
 {
-ERRProlog
+qRH
 	str::string RawHeader;
-ERRBegin
+qRB
 	RawHeader.Init();
 
 	GetHeader_( IFlow, RawHeader );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 

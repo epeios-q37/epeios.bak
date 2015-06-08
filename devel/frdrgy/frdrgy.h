@@ -118,7 +118,7 @@ namespace frdrgy {
 	private:
 		sdr::size__ _DumpRegistry(
 			rgstry::level__ Level,
-			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.
+			rgstry::row__ Node,	// Si ==' 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::outfit__ Outfit,
 			xml::encoding__ Encoding,
@@ -128,7 +128,7 @@ namespace frdrgy {
 		}
 		sdr::size__ _DumpRegistry(
 			rgstry::level__ Level,
-			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.
+			rgstry::row__ Node,	// Si ==' 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{
@@ -150,7 +150,7 @@ namespace frdrgy {
 
 			S_.Session = rgstry::UndefinedLevel;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			_registry_::plug( AS );
 		}
@@ -174,7 +174,7 @@ namespace frdrgy {
 			S_.Session= _registry_::CreateEmbedded( rgstry::name( "Session" ) );
 		}
 		void DumpSession(
-			rgstry::row__ Node,	// Si ==' 'E_NIL', on part de la racine.
+			rgstry::row__ Node,	// Si ==' 'qNIL', on part de la racine.
 			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{

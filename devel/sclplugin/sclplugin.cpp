@@ -66,16 +66,16 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	va_start( Parameters, Data );
 
 	if ( Data == NULL )
-		ERRFwk();
+		qRFwk();
 
 	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
-		ERRFwk();
+		qRFwk();
 
 	if ( Data->ControlValue != plgncore::data__::Control() )
-		ERRFwk();
+		qRFwk();
 
 	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( Data->ERRError, Data->SCLError, *Data->CIO, Data->Configuration, Data->Locale );
+		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Data->Configuration, Data->Locale );
 }
 
 void *sclplugin::callback__::PLGNCORERetrievePlugin( void )

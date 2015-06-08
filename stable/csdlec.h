@@ -62,11 +62,11 @@ namespace csdlec {
 			fdr::size__ Maximum,
 			fdr::datum__ *Buffer )
 		{
-			if ( _Row == E_NIL )
+			if ( _Row == qNIL )
 				_Row = _Read.First();
 
-			if ( _Row == E_NIL )
-				ERRFwk();
+			if ( _Row == qNIL )
+				qRFwk();
 
 			if ( ( _Read.Amount() - *_Row ) < (sdr::size__)Maximum )
 				Maximum = _Read.Amount() - *_Row;
@@ -78,7 +78,7 @@ namespace csdlec {
 /* Concernant GESBIB, si l'on enlve le bloc ci-dessous, le logiciel est susceptible de se planter lorsque l'on manipule
 une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si le 'Dismiss()' n'tait pas lanc correctement. */
 // Dbut bloc.
-			if ( _Row == E_NIL )
+			if ( _Row == qNIL )
 				_Read.Init();
 // Fin bloc.
 
@@ -87,7 +87,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		virtual void FDRDismiss( void )
 		{
 #ifdef CSDEBD_DBG
-			if ( _Row != E_NIL )
+			if ( _Row != qNIL )
 				ERRu();
 #endif
 			_Read.Init();
@@ -107,7 +107,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		{
 			fdr::ioflow_driver___<>::reset( P );
 
-			_Row = E_NIL;
+			_Row = qNIL;
 		}
 		_passive_generic_driver___(
 			data_ &Read,
@@ -287,7 +287,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 					if ( _Callback != NULL )
 						if ( !_ReleaseCallback() ) {
 							_Library.reset();
-							ERRSys();
+							qRSys();
 						}
 				}
 			}
@@ -314,7 +314,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		csdscb::callback__ &GetCallback( void ) const
 		{
 			if ( !IsInitialized() )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}

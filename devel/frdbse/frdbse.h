@@ -80,7 +80,7 @@ namespace frdbse {
 			S_.Id = t(-1);
 			Label.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Label.plug( AS );
 		}
@@ -120,7 +120,7 @@ namespace frdbse {
 			il_<t>::reset( P );
 			Wording.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			il_<t>::plug( AS );
 			Wording.plug( AS );

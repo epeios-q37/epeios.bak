@@ -28,12 +28,12 @@ void xmlcor::Add(
 	const tag_map_ &TagMap,
 	tagged_values_ &Target )
 {
-ERRProlog
+qRH
 	value_row__ TargetRow;
 	ctn::E_CMITEMt( tagged_value_, value_row__ ) SourceItem, TargetItem;
 	dtr::browser__<value_row__> Browser;
 	tagged_value Buffer;
-ERRBegin
+qRB
 	SourceItem.Init( Source );
 	TargetItem.Init( Target );
 	
@@ -70,9 +70,9 @@ ERRBegin
 		
 		Source.Browse( Browser );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 value_row__ xml_core_::Next(
@@ -110,11 +110,11 @@ value_row__ xml_core_::First(
 
 void xmlcor::Convert( str::string_ &Target )
 {
-ERRProlog
+qRH
 	epeios::row__ Position = Target.First();
 	bso::char__ C;
 	str::string Buffer;
-ERRBegin
+qRB
 	while( Position != NONE ) {
 		switch ( C = Target( Position ) ) {
 		case '"':
@@ -143,7 +143,7 @@ ERRBegin
 		
 		Position = Target.Next( Position );	// Could be dangerous, but actually works.
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

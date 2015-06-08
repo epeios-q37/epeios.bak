@@ -37,7 +37,7 @@ static inline bso::bool__ HandleEscape_(
 	UTF.Init();
 
 	if ( Flow.EndOfFlow( Error ) )
-		ERRDta();
+		qRFwk();
 		
 	switch( C = Flow.Get( UTF ) ) {
 	case 'n':
@@ -71,12 +71,12 @@ static inline bso::bool__ HandleEscape_(
 		break;
 	default:
 		if ( C != Escape )
-			ERRDta();
+			qRFwk();
 		break;
 	}
 
 	if ( Error != xtf::e_NoError )
-		ERRDta();
+		qRFwk();
 	
 	return Retry;
 }
@@ -103,7 +103,7 @@ static inline bso::bool__ IsNotEndOfCell_(
 		} while ( Loop );
 		
 	if ( Error != xtf::e_NoError )
-		ERRDta();
+		qRFwk();
 
 	return !EOX && ( C != Separator ) && ( C != '\n' ) && ( C != '\r' );
 }
@@ -127,7 +127,7 @@ static inline txmtbl::delimiter GetDelimiter_(
 			Flow.Get( UTF );
 
 		if ( Error != xtf::e_NoError )
-			ERRDta();
+			qRFwk();
 
 		return txmtbl::dEOL;
 	}
@@ -137,7 +137,7 @@ static inline txmtbl::delimiter GetDelimiter_(
 			Flow.Get( UTF );
 
 		if ( Error != xtf::e_NoError )
-			ERRDta();
+			qRFwk();
 
 		return txmtbl::dEOL;
 	}
@@ -145,7 +145,7 @@ static inline txmtbl::delimiter GetDelimiter_(
 		return txmtbl::dSeparator;
 	else
 	{
-		ERRFwk();
+		qRFwk();
 		return txmtbl::dUnknow;
 	}
 }
@@ -189,11 +189,11 @@ bso::bool__ txmtbl::GetLine(
 	escape__ Escape )
 {
 	bso::bool__ Result = false;
-ERRProlog
+qRH
 	cell Cell;
 	bso::bool__ Loop;
 	xtf::error__ Error = xtf::e_NoError;
-ERRBegin
+qRB
 	Cell.Init();
 
 	Line.Location( Flow.Position().Line );
@@ -209,10 +209,10 @@ ERRBegin
 	Result = !Flow.EndOfFlow( Error );
 
 	if ( Error != xtf::e_NoError )
-		ERRDta();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 
 	return Result;
 }
@@ -226,16 +226,16 @@ void line_::Erase_( stack_ &Stack )
 amount__ line_::RemoveEmptyCells( void )
 {
 	amount__ Amount = 0;
-ERRProlog
+qRH
 	ctn::E_CMITEM( cell_ ) Cell;
 	sdr::row__ Current = First();
 	stack Stack;
-ERRBegin
+qRB
 	Cell.Init( *this );
 
 	Stack.Init();
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		if ( !Cell( Current ).Amount() )
 		{
@@ -247,9 +247,9 @@ ERRBegin
 	}
 	
 	Erase_( Stack );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Amount;
 }
 
@@ -260,7 +260,7 @@ sdr::row__ line_::FirstNonEmptyCell( void ) const
 
 	Cell.Init( *this );
 
-	while( ( Current != E_NIL ) && !Cell( Current ).Amount() )
+	while( ( Current != qNIL ) && !Cell( Current ).Amount() )
 		Current = Next( Current );
 
 	return Current;
@@ -273,7 +273,7 @@ sdr::row__ line_::LastNonEmptyCell( void ) const
 
 	Cell.Init( *this );
 
-	while( ( Current != E_NIL ) && !Cell( Current ).Amount() )
+	while( ( Current != qNIL ) && !Cell( Current ).Amount() )
 		Current = Previous( Current );
 
 	return Current;
@@ -282,17 +282,17 @@ sdr::row__ line_::LastNonEmptyCell( void ) const
 amount__ line_::RemoveHeadingEmptyCells( void )
 {
 	amount__ Amount = 0;
-ERRProlog
+qRH
 	sdr::row__ Current = FirstNonEmptyCell();
 	stack Stack;
-ERRBegin
+qRB
 	Stack.Init();
 
-	if ( Current != E_NIL )
+	if ( Current != qNIL )
 	{
 		Current = Previous( Current );
 
-		while( Current != E_NIL )
+		while( Current != qNIL )
 		{
 			Stack.Push( Current );
 
@@ -305,27 +305,27 @@ ERRBegin
 	}
 	else if ( this->Amount() )
 		RemoveAllCells();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Amount;
 }
 
 amount__ line_::RemoveTailingEmptyCells( void )
 {
 	amount__ Amount = 0;
-ERRProlog
+qRH
 	sdr::row__ Current = LastNonEmptyCell();
 	stack Stack;
-ERRBegin
+qRB
 
 	Stack.Init();
 
-	if ( Current != E_NIL )
+	if ( Current != qNIL )
 	{
 		Current = Next( Current );
 
-		while( Current != E_NIL )
+		while( Current != qNIL )
 		{
 
 			Stack.Push( Current );
@@ -339,22 +339,22 @@ ERRBegin
 	}
 	else if ( this->Amount() )
 		RemoveAllCells();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Amount;
 }
 
 amount__ line_::RemoveCentralEmptyCells( void )
 {
 	amount__ Amount = 0;
-ERRProlog
+qRH
 	ctn::E_CMITEM( cell_ ) Cell;
 	sdr::row__
 		Current = FirstNonEmptyCell(),
 		Last = LastNonEmptyCell();
 	stack Stack;
-ERRBegin
+qRB
 	Stack.Init();
 
 	Cell.Init( *this );
@@ -376,23 +376,23 @@ ERRBegin
 
 		Erase_( Stack );
 	}
-	else if ( this->Amount() && ( Current == E_NIL ) )
+	else if ( this->Amount() && ( Current == qNIL ) )
 		RemoveAllCells();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Amount;
 }
 
 amount__ line_::RemoveCellsAt( sdr::row__ Position )
 {
 	amount__ Amount = 0;
-ERRProlog
+qRH
 	stack Stack;
-ERRBegin
+qRB
 	Stack.Init();
 
-	while( Position != E_NIL )
+	while( Position != qNIL )
 	{
 		Stack.Push( Position );
 
@@ -402,9 +402,9 @@ ERRBegin
 	}
 
 	Erase_( Stack );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Amount;
 }
 
@@ -422,10 +422,10 @@ amount__ line_::RemoveComment( bso::char__ Marker )
 
 	Cell.Init( *this );
 
-	while( ( Position != E_NIL ) && !IsCommentary_( Cell( Position ), Marker ) )
+	while( ( Position != qNIL ) && !IsCommentary_( Cell( Position ), Marker ) )
 		Position = Next( Position );
 
-	if ( Position != E_NIL )
+	if ( Position != qNIL )
 		return RemoveCellsAt( Position );
 	else
 		return 0;
@@ -442,13 +442,13 @@ txf::text_oflow__ &operator <<(
 
 	Current = Line.First();
 
-	if ( Current != E_NIL )
+	if ( Current != qNIL )
 	{
 		Flow << Cell( Current );
 		Current = Line.Next( Current );
 	}
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		Flow << txf::tab << Cell( Current );
 		Current = Line.Next( Current );
@@ -467,7 +467,7 @@ bso::bool__ txmtbl::GetFirstNonEmptyLine(
 
 	if ( Flow.EndOfFlow( Error ) ) {
 		if ( Error != xtf::e_NoError )
-			ERRDta();
+			qRFwk();
 
 		return false;
 	} else
@@ -482,7 +482,7 @@ bso::bool__ txmtbl::GetFirstNonEmptyLine(
 		} while( !Line.Amount() && !Flow.EndOfFlow( Error ) );
 
 		if ( Error != xtf::e_NoError )
-			ERRDta();
+			qRFwk();
 
 		return Line.Amount() != 0;
 	}
@@ -495,10 +495,10 @@ void txmtbl::GetTable(
 	separator__ Separator,
 	escape__ Escape )
 {
-ERRProlog
+qRH
 	line Line;
 	xtf::error__ Error = xtf::e_NoError;
-ERRBegin
+qRB
 	while( !Flow.EndOfFlow( Error ) )
 	{
 		Line.Init();
@@ -511,10 +511,10 @@ ERRBegin
 	}
 
 	if ( Error != xtf::e_NoError )
-		ERRDta();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 }
 
 void table_::Erase_( stack_ &Stack )
@@ -527,7 +527,7 @@ void table_::RemoveEmptyCells( void )
 {
 	sdr::row__ Current = First();
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		lines_::operator ()( Current ).RemoveEmptyCells();
 
@@ -541,7 +541,7 @@ void table_::RemoveHeadingEmptyCells( void )
 {
 	sdr::row__ Current = First();
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		lines_::operator ()( Current ).RemoveHeadingEmptyCells();
 
@@ -555,7 +555,7 @@ void table_::RemoveTailingEmptyCells( void )
 {
 	sdr::row__ Current = First();
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		lines_::operator ()( Current ).RemoveTailingEmptyCells();
 
@@ -569,7 +569,7 @@ void table_::RemoveCentralEmptyCells( void )
 {
 	sdr::row__ Current = First();
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		lines_::operator()( Current ).RemoveCentralEmptyCells();
 
@@ -583,7 +583,7 @@ void table_::RemoveComments( bso::char__ Marker )
 {
 	sdr::row__ Current = First();
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		lines_::operator()( Current ).RemoveComment( Marker );
 
@@ -596,16 +596,16 @@ void table_::RemoveComments( bso::char__ Marker )
 amount__ table_::RemoveEmptyLines( void )
 {
 	amount__ Amount = 0;
-ERRProlog
+qRH
 	ctn::E_CITEM( line_ ) Line;
 	sdr::row__ Current = First();
 	stack Stack;
-ERRBegin
+qRB
 	Line.Init( *this );
 
 	Stack.Init();
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		if ( !Line( Current ).Amount() )
 		{
@@ -617,9 +617,9 @@ ERRBegin
 	}
 
 	Erase_( Stack );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Amount;
 
 }
@@ -635,13 +635,13 @@ txf::text_oflow__ &operator <<(
 
 	Current = Table.First();
 
-	if ( Current != E_NIL )
+	if ( Current != qNIL )
 	{
 		Flow << Line( Current );
 		Current = Table.Next( Current );
 	}
 
-	while( Current != E_NIL )
+	while( Current != qNIL )
 	{
 		Flow << txf::nl << Line( Current );
 		Current = Table.Next( Current );

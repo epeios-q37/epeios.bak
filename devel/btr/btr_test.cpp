@@ -32,24 +32,24 @@ using cio::CErr;
 
 void Generic( int argc, char *argv[] )
 {
-ERRProlog
-ERRBegin
-ERRErr
-ERREnd
-ERREpilog
+qRH
+qRB
+qRR
+qRT
+qRE
 }
 
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	COut << "Test of library " << BTR_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Generic( argc, argv );
-ERRFErr
+qRFR
 	ExitValue = EXIT_FAILURE;
-ERRFEnd
-ERRFEpilog
+qRFT
+qRFE
 	return ExitValue;
 }

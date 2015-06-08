@@ -116,24 +116,24 @@ static rgstry::status__ FillConfigurationRegistry_(
 
 void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
 {
-ERRProlog
+qRH
 	str::string Path;
-ERRBegin
+qRB
 	Path.Init();
 	sclmisc::ReportAndAbort( SCLRGSTRY_NAME "_BadOrNoValueForEntry", Entry.GetPath( Path ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static inline void ReportFileParsingErrorAndAbort_(
 	const char *ErrorLabel,
 	const rgstry::context___ &Context )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
 	lcl::meaning MeaningBuffer;
-ERRBegin
+qRB
 	Meaning.Init();
 	Meaning.SetValue( ErrorLabel );
 
@@ -143,9 +143,9 @@ ERRBegin
 	Meaning.AddTag( MeaningBuffer );
 
 	sclmisc::ReportAndAbort( Meaning );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclrgstry::SetConfiguration( const rgstry::entry__ &Entry )
@@ -160,18 +160,18 @@ void sclrgstry::LoadConfiguration(
 	const char *Directory,
 	const char *RootPath )
 {
-ERRProlog
+qRH
 	rgstry::context___ Context;
-ERRBegin
+qRB
 	Registry_.Erase( ConfigurationLevel_ );
 
 	Context.Init();
 
 	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclrgstry::EraseProjectRegistry( void )
@@ -186,11 +186,11 @@ template <typename source> static void LoadProject_(
 	const char *Target,
 	str::string_ &Id )
 {
-ERRProlog
+qRH
 	str::string Path;
 	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
-ERRBegin
+qRB
 	Path.Init( PROJECT_ROOT_PATH );
 	tagsbs::SubstituteShortTag( Path, 1, str::string( Target ), '%' );
 
@@ -201,9 +201,9 @@ ERRBegin
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
 	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -213,15 +213,15 @@ void sclrgstry::LoadProject(
 	const char *Target,
 	str::string_ &Id )
 {
-ERRProlog
+qRH
 	xtf::extended_text_iflow__ XFlow;
-ERRBegin
+qRB
 	XFlow.Init( Flow, utf::f_Guess );
 
 	LoadProject_( XFlow, Target, Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclrgstry::LoadProject(
@@ -241,15 +241,15 @@ static const str::string_ &GetSelectedSetupContent_(
 	const str::string_ &SetupId,
 	str::string_ &Content )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ OFlow;
 	txf::text_oflow__ TFlow;
-	rgstry::row__ Row = E_NIL;
+	rgstry::row__ Row = qNIL;
 	rgstry::level__ Level = rgstry::UndefinedLevel;
 	str::string SetupPath;
-ERRBegin
+qRB
 	if ( SetupId.Amount() == 0  )
-		ERRReturn;
+		qRReturn;
 
 	SetupPath.Init( "Setups/Setup[id=\"" );
 	SetupPath.Append( SetupId );
@@ -260,11 +260,11 @@ ERRBegin
 
 	Row = Registry_.Search( SetupPath, Level );
 
-	if ( Row != E_NIL )
+	if ( Row != qNIL )
 		Registry_.Dump( Level, Row, false, xml::oCompact, xml::e_None, TFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Content;
 }
 
@@ -273,12 +273,12 @@ static void FillRegistryWithSetup_(
 	level__ Level,
 	const str::string_ &RawSetupId )
 {
-ERRProlog
+qRH
 	str::string Setup;
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
 	str::string EntryPath, SetupId;
-ERRBegin
+qRB
 	SetupId.Init( RawSetupId );
 
 	if ( SetupId.Amount() == 0 )
@@ -300,9 +300,9 @@ ERRBegin
 	IFlow.Init( Setup );
 	XFlow.Init( IFlow, utf::f_Default );
 	Registry.Fill( Level, XFlow, xpp::criterions___(), NULL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclrgstry::FillSetupRegistry( const str::string_ &Id )
@@ -312,16 +312,16 @@ void sclrgstry::FillSetupRegistry( const str::string_ &Id )
 
 void sclrgstry::FillSetupRegistry( void )
 {
-ERRProlog
+qRH
 	str::string Id;
-ERRBegin
+qRB
 	Id.Init();
 	OGetValue( Registry_, Setup_, Id );
 
 	FillSetupRegistry( Id );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void sclrgstry::ReportIfNoSetupId( void )
@@ -336,6 +336,23 @@ bso::bool__ sclrgstry::BGetValue(
 	str::string_ &Value )
 {
 	return Registry.GetValue( Entry, Value );
+}
+
+void sclrgstry::AddValue(
+	registry_ &Registry,
+	const str::string_ &Value,
+	const rgstry::tentry__ &Entry )
+{
+	Registry.AddValue( Entry, Value );
+}
+
+void sclrgstry::AddValue(
+	registry_ &Registry,
+	const str::string_ &Path,
+	const str::string_ &Value,
+	sdr::row__ *Error )
+{
+	Registry.AddValue( Path, Value, Error );
 }
 
 void sclrgstry::SetValue(
@@ -382,10 +399,10 @@ const char *sclrgstry::OGetValue(
 	TOL_CBUFFER___ &Buffer,
 	bso::bool__ *Missing )
 {
-ERRProlog
+qRH
 	str::string Value;
 	bso::bool__ LocalMissing = false;
-ERRBegin
+qRB
 	Value.Init();
 
 	OGetValue( Registry, Entry, Value, &LocalMissing );
@@ -396,9 +413,9 @@ ERRBegin
 	}
 	else
 		Value.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
@@ -418,26 +435,26 @@ const char *sclrgstry::MGetValue(
 	const rgstry::tentry__ &Entry,
 	TOL_CBUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	MGetValue( Registry, Entry, Value );
 
 	Value.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
 static tol::extended_boolean__ GetBoolean_( const str::string_ &Value )
 {
 	tol::xbool__ Boolean = tol::xb_Undefined;
-ERRProlog
+qRH
 	str::string Buffer;
-ERRBegin
+qRB
 	Buffer.Init( Value );
 	str::ToLower( Buffer );
 
@@ -445,9 +462,9 @@ ERRBegin
 		Boolean = tol::xbTrue;
 	else if ( ( Buffer == "false" ) || ( Buffer == "no" ) )
 		Boolean = tol::xbFalse;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Boolean;
 }
 
@@ -457,9 +474,9 @@ bso::bool__ sclrgstry::BGetBoolean(
 	bso::bool__ DefaultValue )
 {
 	bso::bool__ &Result = DefaultValue;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	if ( BGetValue( Registry, Entry, Value ) ) {
@@ -474,13 +491,13 @@ ERRBegin
 			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -489,9 +506,9 @@ bso::bool__ sclrgstry::MGetBoolean(
 	const rgstry::tentry___ &Entry )
 {
 	bso::bool__ Result = false;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	switch ( GetBoolean_( MGetValue( Registry, Entry, Value ) ) ) {
@@ -505,12 +522,12 @@ ERRBegin
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -522,22 +539,22 @@ template <typename t> static bso::bool__ GetUnsignedNumber_(
 	t &Value )
 {
 	bso::bool__ Present = false;
-ERRProlog
+qRH
 	str::string RawValue;
-	sdr::row__ Error = E_NIL;
-ERRBegin
+	sdr::row__ Error = qNIL;
+qRB
 	RawValue.Init();
 
 	if ( !( Present = BGetValue( Registry, Entry, RawValue ) ) )
-		ERRReturn;
+		qRReturn;
 
 	RawValue.ToNumber( Value, Limit, &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Present;
 }
 
@@ -549,22 +566,22 @@ template <typename t> static bso::bool__ GetSignedNumber_(
 	t &Value )
 {
 	bso::bool__ Present = false;
-ERRProlog
+qRH
 	str::string RawValue;
-	sdr::row__ Error = E_NIL;
-ERRBegin
+	sdr::row__ Error = qNIL;
+qRB
 	RawValue.Init();
 
 	if ( !( Present = BGetValue( Registry, Entry, RawValue ) ) )
-		ERRReturn;
+		qRReturn;
 
 	RawValue.ToNumber( Value, UpperLimit, LowerLimit, &Error );
 
-	if ( Error != E_NIL )
+	if ( Error != qNIL )
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( Entry );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Present;
 }
 

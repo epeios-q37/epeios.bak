@@ -113,10 +113,10 @@ static void ExpatParse_(
 	XML_Parser &Parser,
 	int Length )
 {
-ERRProlog
+qRH
 	txf::data__ *Buffer;
 	txf::amount__ Amount;
-ERRBegin
+qRB
 	if ( ( Buffer = (txf::data__ *)XML_GetBuffer( Parser, Length ) ) == NULL )
 		ERRm();
 
@@ -137,10 +137,10 @@ ERRBegin
 		ERRf();
 
 
-ERRErr
-ERREnd
+qRR
+qRT
 	XML_ParserFree( Parser );
-ERREpilog
+qRE
 }
 
 
@@ -149,10 +149,10 @@ void xmlprs::ParseXML(
 	xmldcm::xml_document_ &XMLD,
 	int Length )
 {
-ERRProlog
+qRH
 	XML_Parser Parser;
 	xml_document_filler__ XMLDF;
-ERRBegin
+qRB
 	XMLDF.Init( XMLD );
 
 	Parser = XML_ParserCreate( NULL );
@@ -163,9 +163,9 @@ ERRBegin
 	XML_SetUserData( Parser, &XMLDF );
 
 	ExpatParse_( Flow, Parser, Length );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xmlprs::ParseXML(
@@ -173,10 +173,10 @@ void xmlprs::ParseXML(
 	xmldbs::xml_database_ &XMLD,
 	int Length )
 {
-ERRProlog
+qRH
 	XML_Parser Parser;
 	xml_database_filler__ XMLDF;
-ERRBegin
+qRB
 	XMLDF.Init( XMLD );
 
 	Parser = XML_ParserCreate( NULL );
@@ -187,9 +187,9 @@ ERRBegin
 	XML_SetUserData( Parser, &XMLDF );
 
 	ExpatParse_( Flow, Parser, Length );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xmlprs::License( txf::text_oflow___ &Flow )

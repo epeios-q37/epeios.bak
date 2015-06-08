@@ -192,13 +192,13 @@ namespace xhtcllbk {
 # if 0
 		void ExecuteJavascript( const nstring___ &Script )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			ExecuteJavascript( Script, Buffer );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 # endif
 	};
@@ -239,7 +239,7 @@ namespace xhtcllbk {
 	private:
 		const char *_Version;	// Toujours en premire position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
-		err::err___ *_ERRError;
+		err::err___ *_qRRor;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
 		proxy_callback__ *_Callback;
@@ -250,7 +250,7 @@ namespace xhtcllbk {
 		{
 			_Version = NULL;
 			_Control = 0;
-			_ERRError = NULL;
+			_qRRor = NULL;
 			_SCLError = NULL;
 			_CIO = NULL;
 			_Callback = NULL;
@@ -265,7 +265,7 @@ namespace xhtcllbk {
 		{
 			_Version = XHTCLLBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
-			_ERRError = err::ERRError;
+			_qRRor = err::qRRor;
 			_SCLError = sclerror::SCLERRORError;
 			_CIO = &cio::GetCurrentSet();
 			_Callback = &Callback;
@@ -276,7 +276,7 @@ namespace xhtcllbk {
 		{
 			return sizeof( shared_data__ );
 		}
-		Q37_PMDF( err::err___, ERRError, _ERRError );
+		Q37_PMDF( err::err___, qRRor, _qRRor );
 		Q37_PMDF( sclerror::error___, SCLError, _SCLError );
 		Q37_PMDF( proxy_callback__, Callback, _Callback );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );

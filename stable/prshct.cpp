@@ -49,16 +49,16 @@ static void GetLine_(
 	xtf::extended_text_iflow___ &IFlow,
 	str_string_ &Line )
 {
-ERRProlog
+qRH
 	txmpgh_paragraph Paragraph;
-ERRBegin
+qRB
 	Paragraph.Init();
 	Paragraph.Parse( IFlow );
 
 	Paragraph.Merge( Line );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Trim_( str_string_ &Line )
@@ -193,14 +193,14 @@ POSITION__ PRSHCTParse(
 	prshct::error &UError )
 {
 	POSITION__ Root = NONE;
-ERRProlog
+qRH
 	str_string Paragraph;
 	POSITION__ P = NONE;
 	level__ Level = 0;
 	txmhch::type Type = txmhch::tNormal;
 	bso__bool ToCreate = false;
 	prshct::error Error = prshct::rOK;
-ERRBegin
+qRB
 
 	while ( !IFlow.EOX() && ( P == NONE ) ) {
 		Paragraph.Init();
@@ -302,8 +302,8 @@ ERRBegin
 
 	if ( &UError ) 
 		UError = Error;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Root;
 }

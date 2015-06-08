@@ -89,10 +89,10 @@ namespace ndbtbl {
 			return fil::mReadOnly;
 			break;
 		case m_Undefined:
-			ERRPrm();
+			qRFwk();
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -118,7 +118,7 @@ namespace ndbtbl {
 		{
 			switch ( Mode ) {
 			case mBulk:
-				ERRPrm();
+				qRFwk();
 				break;
 			case mReadWrite:
 				switch ( S_.Mode ) {
@@ -126,10 +126,10 @@ namespace ndbtbl {
 				case mReadWrite:
 					break;
 				case mReadOnly:
-					ERRFwk();
+					qRFwk();
 					break;
 				default:
-					ERRPrm();
+					qRFwk();
 					break;
 				}
 				break;
@@ -137,18 +137,18 @@ namespace ndbtbl {
 				break;
 				switch ( S_.Mode ) {
 				case mBulk:
-					ERRFwk();
+					qRFwk();
 					break;
 				case mReadWrite:
 				case mReadOnly:
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 		}
@@ -161,10 +161,10 @@ namespace ndbtbl {
 			case mReadWrite:
 				break;
 			case mReadOnly:
-				ERRPrm();
+				qRFwk();
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 		}
@@ -178,7 +178,7 @@ namespace ndbtbl {
 			case mReadOnly:
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 		}
@@ -201,7 +201,7 @@ namespace ndbtbl {
 				return false;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				return false;	// Pour viter un warning.
 				break;
 			}
@@ -223,7 +223,7 @@ namespace ndbtbl {
 			S_.Mode = m_Undefined;
 		}
 		E_VDTOR( table_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe hritante.
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Content.plug( AS );
 		}
@@ -340,18 +340,18 @@ namespace ndbtbl {
 				switch( OldMode ) {
 				case mBulk:
 					if ( !AreAllIndexesSynchronized() )
-						ERRFwk();
+						qRFwk();
 					break;
 				case mReadOnly:
 				case mReadWrite:
 					break;
 				default:
-					ERRPrm();
+					qRFwk();
 					break;
 				}
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 
@@ -432,7 +432,7 @@ namespace ndbtbl {
 				_InitDynamic( BaseFileName, Mode, ID );
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 		}
@@ -446,7 +446,7 @@ namespace ndbtbl {
 				return _Dynamic.Bind();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -462,7 +462,7 @@ namespace ndbtbl {
 				return _Dynamic.Settle();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -478,11 +478,11 @@ namespace ndbtbl {
 				return _Dynamic.BaseFileName();
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 
-			ERRFwk();
+			qRFwk();
 
 			return _Static.BaseFileName();	// Pour viter un 'warning'.
 		}
@@ -510,7 +510,7 @@ namespace ndbtbl {
 			State = ndbdct::Plug( Table.Content.Dynamic(), Hook.DynamicFilesHook() );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 

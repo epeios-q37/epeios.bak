@@ -83,14 +83,14 @@ namespace sclmisc {
 		const rgstry::context___ &Context );
 
 	void Initialize(
-		err::err___ *ERRError,
+		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
 		const rgstry::entry__ &Configuration,
 		const rgstry::entry__ &Locale );
 
 	void Initialize(
-		err::err___ *ERRError,
+		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
 		xtf::extended_text_iflow__ &LocaleFlow,
@@ -99,7 +99,7 @@ namespace sclmisc {
 		const char *RegistryDirectory );
 
 	void Initialize(
-		err::err___ *ERRError,
+		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
 		const fnm::name___ &SuggestedDirectory );
@@ -157,6 +157,21 @@ namespace sclmisc {
 	rgstry::level__ GetRegistryProjectLevel( void );
 	rgstry::level__ GetRegistrySetupLevel( void );
 	rgstry::level__ GetRegistryArgumentsLevel( void );
+
+	inline void AddValue(
+		const str::string_ &Value,
+		const rgstry::tentry__ &Entry )
+	{
+		return sclrgstry::AddValue( GetRegistry(), Value, Entry );
+	}
+
+	inline void AddValue(
+		const str::string_ &Path,
+		const str::string_ &Value,
+		sdr::row__ *Error = NULL )
+	{
+		return sclrgstry::AddValue( GetRegistry(), Path, Value, Error );
+	}
 
 	inline void SetValue(
 		const str::string_ &Value,

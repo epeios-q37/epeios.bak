@@ -121,6 +121,17 @@ namespace sclrgstry {
 
 	void ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry );
 
+	void AddValue(
+		registry_ &Registry,
+		const str::string_ &Value,
+		const rgstry::tentry__ &Entry );
+
+	void AddValue(
+		registry_ &Registry,
+		const str::string_ &Path,
+		const str::string_ &Value,
+		sdr::row__ *Error = NULL );
+
 	void SetValue(
 		registry_ &Registry,
 		const str::string_ &Value,

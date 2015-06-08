@@ -79,7 +79,7 @@ namespace xmlflr {
 		{
 			erow__ Row = xmlelm::Search( Name, Type, _Document->Structure, _CurrentElement );
 
-			if ( Row == E_NIL ) {
+			if ( Row == qNIL ) {
 				Row = _Document->Structure.Create( Name, Type );
 				_Document->Structure.BecomeLastChild( Row, _CurrentElement );
 			}
@@ -90,8 +90,8 @@ namespace xmlflr {
 		void reset( bso::bool__ = true )
 		{
 			_Document = NULL;
-			_CurrentElement = E_NIL;
-			_RootValue = _CurrentValue = E_NIL;
+			_CurrentElement = qNIL;
+			_RootValue = _CurrentValue = qNIL;
 		}
 		filler__( void )
 		{

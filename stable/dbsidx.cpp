@@ -101,16 +101,16 @@ bso::sign__ dbsidx::index_::_Seek(
 	dbsctt::_cache_ &Cache ) const
 {
 	bso::sign__ Result = 0;
-ERRProlog
+qRH
 	datum DatumToCompare;
 	idxbtq::E_ISEEKERt__( rrow__ ) Seeker;
-ERRBegin
+qRB
 	Round = 0;
 
 	if ( S_.Root == NONE ) {
 		Row = NONE;
 
-		ERRReturn;
+		qRReturn;
 	}
 
 	Seeker.Init( BaseIndex, S_.Root );
@@ -161,9 +161,9 @@ ERRBegin
 	}
 
 	Row = Seeker.GetCurrent();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -228,14 +228,14 @@ bso::ubyte__ dbsidx::index_::Index(
 	dbsctt::_cache_ &Cache )
 {
 	bso::ubyte__ Round = 0;
-ERRProlog
+qRH
 	datum DatumToCompare;
 	datum Datum;
 	rrow__ TargetRow = NONE;
 	bso::sign__ Result;
 //	tol::buffer__ Buffer;
 //	cio::aware_cout___ cout;
-ERRBegin
+qRB
 
 	if ( _Content( true ).Extent() > BaseIndex.Extent() )
 		BaseIndex.Allocate( _Content( true ).Extent(), aem::mDefault );
@@ -245,7 +245,7 @@ ERRBegin
 
 		BaseIndex.BecomeRoot( Row );
 
-		ERRReturn;
+		qRReturn;
 	}
 
 	Datum.Init();
@@ -345,10 +345,10 @@ ERRBegin
 		ERRc();
 #endif
 
-ERRErr
-ERREnd
+qRR
+qRT
 	_Touch( false );
-ERREpilog
+qRE
 	return Round;
 }
 
@@ -377,11 +377,11 @@ rrow__ dbsidx::index_::LooseSeek(
 rrow__ dbsidx::index_::Test( void ) const
 {
 	rrow__ Row = NONE;
-ERRProlog
+qRH
 	datum Datum;
-ERRBegin
+qRB
 	if ( S_.Root == NONE )
-		ERRReturn;
+		qRReturn;
 
 	Row = First();
 
@@ -393,7 +393,7 @@ ERRBegin
 
 	while ( Row != NONE ) {
 		if ( Compare( Row, Datum, DBSIDX_NO_SKIP ) == 1 )
-			ERRReturn;
+			qRReturn;
 
 		Datum.Init();
 
@@ -401,9 +401,9 @@ ERRBegin
 
 		Row = Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Row;
 }
 
@@ -414,17 +414,17 @@ bso::sign__ dbsidx::index_::Compare(
 	skip_level__ SkipLevel ) const
 {
 	bso::sign__ Result = 0;
-ERRProlog
+qRH
 	datum Datum;
-ERRBegin
+qRB
 	Datum.Init();
 
 	_Content( true ).Retrieve( RecordRow, Datum, *(dbsctt::_cache_ *)NULL );
 
 	Result = S_.Sort->Compare( Datum, Pattern, SkipLevel  );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -434,17 +434,17 @@ bso::sign__ dbsidx::index_::Compare(
 	skip_level__ SkipLevel ) const
 {
 	bso::sign__ Result = 0;
-ERRProlog
+qRH
 	datum Pattern;
-ERRBegin
+qRB
 	Pattern.Init();
 
 	_Content( true ).Retrieve( RecordRow2, Pattern, *(dbsctt::_cache_ *)NULL );
 
 	Result = Compare( RecordRow1, Pattern, SkipLevel );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result;
 }
 
@@ -459,15 +459,15 @@ static void Save_(
 	rrow__ Row,
 	const char *RootFileName )
 {
-ERRProlog
+qRH
 	flf::file_oflow___ Flow;
-ERRBegin
+qRB
 	Flow.Init( RootFileName );
 
 	Save_( Row, Flow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void Save_(
@@ -476,10 +476,10 @@ static void Save_(
 	const char *Extension,
 	time_t UnderlyingFilesLastModificationTime )
 {
-ERRProlog
+qRH
 	str::string FileName;
 	STR_BUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	FileName.Init( RootFileName );
 	FileName.Append( Extension );
 
@@ -490,9 +490,9 @@ ERRBegin
 		fil::TouchFile( FileNameBuffer );
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 /*
@@ -515,20 +515,20 @@ static bso::bool__ Load_(
 	time_t TimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	flf::file_iflow___ Flow;
-ERRBegin
+qRB
 	if ( Flow.Init( RootFileName, err::hSkip ) == fil::sSuccess ) {
 		if ( fil::GetFileLastModificationTime( RootFileName ) < TimeStamp )
-			ERRReturn;
+			qRReturn;
 
 		Load_( Flow, Row );
 
 		Success = true;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -539,16 +539,16 @@ static bso::bool__ Load_(
 	time_t TimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string FileName;
 	STR_BUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	FileName.Init( RootFileName );
 	FileName.Append( Extension );
 	Success = Load_( FileName.Convert( FileNameBuffer ), Row, TimeStamp );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -562,12 +562,12 @@ void dbsidx::exploded_index_::Init(
 	bso::bool__ Partial,
 	flm::id__ ID )
 {
-ERRProlog
+qRH
 	str::string TreeFileName;
 	STR_BUFFER___ TreeFileNameBuffer;
 	str::string QueueFileName;
 	STR_BUFFER___ QueueFileNameBuffer;
-ERRBegin
+qRB
 	reset();
 
 	TreeFileName.Init( RootFileName );
@@ -584,9 +584,9 @@ ERRBegin
 
 	S_.Mode = Mode;
 	S_.Erase = Erase;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static inline void Reindex_(
@@ -632,7 +632,7 @@ static inline void Reindex_(
 
 void dbsidx::index_::Reindex( observer_functions__ &Observer )
 {
-ERRProlog
+qRH
 	dbsctt::content__ &Content = *S_.Content;
 	mdr::size__ HandledRecordAmount = 0;
 	tol::chrono__ Chrono;
@@ -646,11 +646,11 @@ ERRProlog
 	bso::ulong__ PanelRecordCounter;
 	bso::ulong__ PanelRecordSize;
 	bso::bool__ Randomly = false;
-ERRBegin
+qRB
 	Reset();
 
 	if ( Content.Amount() == 0 )
-		ERRReturn;
+		qRReturn;
 
 	if ( Content.Extent() < MEMORY_REINDEXATION_LIMIT ) {
 		IndexInMemory.Init( Content, SortFunction() );
@@ -707,8 +707,8 @@ ERRBegin
 
 	if ( UsedIndex != this )
 		this->operator =( *UsedIndex );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

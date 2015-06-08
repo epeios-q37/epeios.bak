@@ -52,10 +52,10 @@ static void Client__(
 	flw::ioflow___ &SocketFlow,
 	client_data__ &CD )
 {
-ERRProlog
+qRH
 	void *PU;
 	spp::master_shared_bipipe_ioflow___ Pipe;
-ERRBegin
+qRB
 	Pipe.Init( *CD.Bipipe );
 
 #ifdef CSM_DBG
@@ -66,10 +66,10 @@ ERRBegin
 	PU = CD.Manager->CI( SocketFlow, Pipe );
 
 	while( CD.Manager->CP( SocketFlow, Pipe, PU ) == bContinue ) {};
-ERRErr
-ERREnd
+qRR
+qRT
 	CD.Manager->CE( PU );
-ERREpilog
+qRE
 }
 
 namespace {
@@ -79,12 +79,12 @@ namespace {
 	protected:
 		virtual void SRVProcess( flw::ioflow___ &SocketFlow )
 		{
-		ERRFProlog
-		ERRFBegin
+		qRFH
+		qRFB
 			Client__( SocketFlow, *ClientData );
-		ERRFErr
-		ERRFEnd
-		ERRFEpilog
+		qRFR
+		qRFT
+		qRFE
 		}
 	public:
 		client_data__ *ClientData;
@@ -93,11 +93,11 @@ namespace {
 
 static void Server_( void *P )
 {
-ERRFProlog
+qRFH
 	server_data__ &SD = *(server_data__ *)P;
 	void *PUS = NULL;
 	spp::slave_shared_bipipe_ioflow___ Pipe;
-ERRFBegin
+qRFB
 	mtx::Lock( SD.Mutex );
 	// Unlocked as soon as 'Listener()' managed to bind the socket.
 	
@@ -120,24 +120,24 @@ ERRFBegin
 	} 
 		
 		
-ERRFErr
-ERRFEnd
+qRFR
+qRFT
 	if ( SD.Error )
 		SD.Error = false;
 	else
 		SD.Manager->SE( PUS );
-ERRFEpilog
+qRFE
 }
 
 static bso::bool__ Listener_( void *P )
 {
 	bso::bool__ Success = true;
-ERRProlog
+qRH
 	srv::server___ Server;
 	listener_data__ &LD = *(listener_data__ *)P;
 	internal_functions__ Functions;
 	bso::bool__ BindSucceed = false;
-ERRBegin
+qRB
 	Functions.ClientData = &LD.Client;
 
 	if ( Server.Init( LD.Service, err::hSkip ) ) {
@@ -146,9 +146,9 @@ ERRBegin
 		Server.Process( Functions, LD.Handler );
 	} else
 		Success = false;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -161,11 +161,11 @@ void csm::manager___::Process(
 	srv::service__ Service,
 	err::handle Handle )
 {
-ERRProlog
+qRH
 	spp::shared_bipipe___ SharedBipipe;
 	server_data__ SD = { NULL, NULL, MTX_INVALID_HANDLER, false };
 	listener_data__ LD = {0, err::hUsual, { NULL, NULL }, MTX_INVALID_HANDLER };
-ERRBegin
+qRB
 	SharedBipipe.Init();
 
 	SD.Bipipe = &SharedBipipe;
@@ -197,11 +197,11 @@ ERRBegin
 	// Sous LINUX, on passe par l aprs dconnection du premier client.
 	// DS sera donc dtruit; mais le dlai devrait tre suffisant pour que
 	// les processus 'Serveur_' et 'Client_' ai le temps d'en copier le contenu ...
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( SD.Mutex != MTX_INVALID_HANDLER )
 		mtx::Delete( SD.Mutex );
-ERREpilog
+qRE
 }
 
 #if 0

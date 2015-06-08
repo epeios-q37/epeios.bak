@@ -1755,18 +1755,18 @@ namespace mmm {
 		uym::state__ Bind( void )	// A appeler seulement aprs un 'Plug(...)'.
 		{
 			uym::state__ State = uym::s_Undefined;
-		ERRProlog
+		qRH
 			flf::file_iflow___ IFlow;
-		ERRBegin
+		qRB
 			if ( ( State = _untyped_memory_file_manager___::Bind() ) == uym::sExists ) {
 				IFlow.Init( _FreeFragmentPositionFileName );
 
 				flw::Get( IFlow, _Multimemory->S_.FreeFragment );
 				flw::Get( IFlow, _Multimemory->S_.TailingFreeFragmentPosition );
 			}
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return State;
 		}
 		uym::state__ Settle( void )

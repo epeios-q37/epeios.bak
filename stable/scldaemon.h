@@ -90,18 +90,18 @@ namespace scldaemon {
 		}
 		virtual void CSDSCBPostProcess( void *UP ) override
 		{
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			delete (daemon___ *)UP;
-		ERRErr
+		qRR
 # ifndef CPE_POSIX
 #  ifdef SCLDAEMON__ERROR_DETECTION_ENABLED
 			strcpy( NULL, "Une erreur ne devrait pas se produire ; s'il y en a malgrés tout une, cette ligne permet de la détecter facilement avec le debugger." );	// Lire le contenu du paramètre.
 #  endif
 # endif
 			ERRRst();
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 		}
 	protected:
 		virtual daemon___ *SCLDAEMONNew( const char *Origin ) = 0;

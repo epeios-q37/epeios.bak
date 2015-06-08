@@ -172,21 +172,21 @@ namespace csdbns {
 			const char *IP )
 		{
 			_flow_data__ *Data = NULL;
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			Data = new _flow_data__;
 
 			if ( Data == NULL )
-				ERRAlc();
+				qRAlc();
 
 			Data->Flow.Init( Socket );
 			Data->UP = BaseCallback->PreProcess( IP );
-		ERRErr
+		qRR
 			if ( Data != NULL )
 				delete Data;
 			Data = NULL;
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 			return Data;
 		}
 		virtual action__ CSDBNSProcess(
@@ -204,7 +204,7 @@ namespace csdbns {
 		virtual void CSDBNSPostProcess( void *UP )
 		{
 			if ( UP == NULL )
-				ERRPrm();
+				qRFwk();
 
 			BaseCallback->PostProcess( ((_flow_data__ *)UP)->UP );
 
@@ -244,7 +244,7 @@ namespace csdbns {
 		{
 #ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
-				ERRFwk();
+				qRFwk();
 #endif
 			_SocketCallback = &SocketCallback;
 			
@@ -260,7 +260,7 @@ namespace csdbns {
 		{
 #ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
-				ERRFwk();
+				qRFwk();
 #endif
 			_SocketCallback = &SocketCallback;
 
@@ -274,7 +274,7 @@ namespace csdbns {
 		{
 #ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
-				ERRFwk();
+				qRFwk();
 #endif
 			_Callback.BaseCallback = &Callback;
 
@@ -288,7 +288,7 @@ namespace csdbns {
 		{
 #ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
-				ERRFwk();
+				qRFwk();
 #endif
 			_Callback.BaseCallback = &Callback;
 

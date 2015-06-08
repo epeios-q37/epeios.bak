@@ -73,7 +73,7 @@ namespace btr {
 			Right;
 		void reset( bso::bool__ = true )
 		{
-			Parent = Left = Right = E_NIL;
+			Parent = Left = Right = qNIL;
 		}
 		_node__( void )
 		{
@@ -140,10 +140,10 @@ namespace btr {
 			const _node__ &Node,
 			sdr::row_t__ NewParent )
 		{
-			if ( Node.Left != E_NIL )
+			if ( Node.Left != qNIL )
 				_ChangeParent( Node.Left, NewParent );
 
-			if ( Node.Right != E_NIL )
+			if ( Node.Right != qNIL )
 				_ChangeParent( Node.Right, NewParent );
 		}
 	public:
@@ -172,49 +172,49 @@ namespace btr {
 		{
 			_node__ Buffer = _nodes_::Get( Node );
 
-			Buffer.Parent = E_NIL;
+			Buffer.Parent = qNIL;
 			_nodes_::Store( Buffer, Node );
 		}
 		void EraseLeft( sdr::row_t__ Node )
 		{
 			_node__ Buffer = _nodes_::Get( Node );
 
-			Buffer.Left = E_NIL;
+			Buffer.Left = qNIL;
 			_nodes_::Store( Buffer, Node );
 		}
 		void EraseRight( sdr::row_t__ Node )
 		{
 			_node__ Buffer = _nodes_::Get( Node );
 
-			Buffer.Right = E_NIL;
+			Buffer.Right = qNIL;
 			_nodes_::Store( Buffer, Node );
 		}
 		//f Return true if 'Node' has a father.
 		bso::bool__ HasParent( sdr::row_t__ Node ) const
 		{
-			return _nodes_::Get( Node ).Parent != E_NIL;
+			return _nodes_::Get( Node ).Parent != qNIL;
 		}
 		//f Return true if 'Node' has left chid.
 		bso::bool__ HasLeft( sdr::row_t__ Node ) const
 		{
-			return _nodes_::Get( Node ).Left != E_NIL;
+			return _nodes_::Get( Node ).Left != qNIL;
 		}
 		//f Return true if 'Node' has right chid.
 		bso::bool__ HasRight( sdr::row_t__ Node ) const
 		{
-			return _nodes_::Get( Node ).Right != E_NIL;
+			return _nodes_::Get( Node ).Right != qNIL;
 		}
-		//f Return father of 'Node', or 'E_NIL' if nonde.
+		//f Return father of 'Node', or 'qNIL' if nonde.
 		sdr::row_t__ Parent( sdr::row_t__ Node ) const
 		{
 			return _nodes_::Get( Node ).Parent;
 		}
-		//f Return left child of 'Node', or 'E_NIL' if nonde.
+		//f Return left child of 'Node', or 'qNIL' if nonde.
 		sdr::row_t__ Left( sdr::row_t__ Node ) const
 		{
 			return _nodes_::Get( Node ).Left;
 		}
-		//f Return right child of 'Node', or 'E_NIL' if nonde.
+		//f Return right child of 'Node', or 'qNIL' if nonde.
 		sdr::row_t__ Right( sdr::row_t__ Node ) const
 		{
 			return _nodes_::Get( Node ).Right;
@@ -252,11 +252,11 @@ namespace btr {
 		{
 			_node__ GParent = _nodes_::Get( Parent ), GLeft = _nodes_::Get( Left );
 #ifdef BTR_DBG
-			if ( GParent.Left != E_NIL )
-				ERRFwk();
+			if ( GParent.Left != qNIL )
+				qRFwk();
 
-			if ( ( GLeft.Parent != E_NIL ) && ( GLeft.Parent != Parent ) )	// Un noeud peut avoir pour fils gauche et droit le mme noeud.
-				ERRFwk();
+			if ( ( GLeft.Parent != qNIL ) && ( GLeft.Parent != Parent ) )	// Un noeud peut avoir pour fils gauche et droit le mme noeud.
+				qRFwk();
 #endif
 
 			GParent.Left = Left;
@@ -273,11 +273,11 @@ namespace btr {
 			_node__ GParent = _nodes_::Get( Parent ), GRight = _nodes_::Get( Right );
 
 #ifdef BTR_DBG
-			if ( GParent.Right != E_NIL )
-				ERRFwk();
+			if ( GParent.Right != qNIL )
+				qRFwk();
 
-			if ( ( GRight.Parent != E_NIL ) && ( GRight.Parent != Parent ) ) // Un noeud peut avoir pour fils gauche et droit le mme noeud.
-				ERRFwk();
+			if ( ( GRight.Parent != qNIL ) && ( GRight.Parent != Parent ) ) // Un noeud peut avoir pour fils gauche et droit le mme noeud.
+				qRFwk();
 #endif
 			GParent.Right = Right;
 			GRight.Parent = Parent;
@@ -487,11 +487,11 @@ namespace btr {
 		{
 			Nodes.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Nodes.plug( AS );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Nodes.plug( SD );
 		}
@@ -519,7 +519,7 @@ namespace btr {
 		{
 			r Candidate = Row;
 
-			while ( ( Candidate = Parent( Row ) ) != E_NIL )
+			while ( ( Candidate = Parent( Row ) ) != qNIL )
 				Row = Candidate;
 
 			return Row;
@@ -549,24 +549,24 @@ namespace btr {
 		{
 			return Right_( *Node );
 		}
-		// Retourne le grand-parent de 'Node', ou 'E_NIL' si inexistant. Sotcke dans 'Parent' le parent de 'Node', si existant.
+		// Retourne le grand-parent de 'Node', ou 'qNIL' si inexistant. Sotcke dans 'Parent' le parent de 'Node', si existant.
 		r GrandParent(
 			r Node,
 			r &Parent ) const
 		{
-			if ( ( Parent = this->Parent( Node ) ) != E_NIL )
+			if ( ( Parent = this->Parent( Node ) ) != qNIL )
 				return this->Parent( Parent );
 			else
-				return E_NIL;
+				return qNIL;
 		}
-		// Retourne le grand-parent de 'Node', ou 'E_NIL' si inexistant
+		// Retourne le grand-parent de 'Node', ou 'qNIL' si inexistant
 		r GrandParent( r Node ) const
 		{
 			r Parent;
 
 			return GrandParent( Node, Parent );
 		}
-		/* Retourne l'oncle de 'Node', ou 'E_NIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
+		/* Retourne l'oncle de 'Node', ou 'qNIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
 		le parent et le grand-parent de 'Node', s'ils existent. ATTENTION : 'Parent' et 'GrandParent' ne doivent PAS pointer
 		sur la mme variable. */
 		r Uncle(
@@ -574,15 +574,15 @@ namespace btr {
 			r &Parent,
 			r &GrandParent ) const
 		{
-			if ( ( GrandParent = this->GrandParent( Node, Parent ) ) == E_NIL )
-				return E_NIL;
+			if ( ( GrandParent = this->GrandParent( Node, Parent ) ) == qNIL )
+				return qNIL;
 
 			if ( IsLeft( Parent ) )
 				return Right( GrandParent );
 			else
 				return Left( GrandParent );
 		}
-		/* Retourne l'oncle de 'Node', ou 'E_NIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
+		/* Retourne l'oncle de 'Node', ou 'qNIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
 		le parent et le grand-parent de 'Node', d'ils existent. */
 		r Uncle( r Node ) const
 		{
@@ -602,7 +602,7 @@ namespace btr {
 			else if ( IsRight( Node ) )
 				return Left ( Parent );
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		// Echange 'Node1' avec 'Node2', c'est--dire qu'il echangent leur parent, et enfants respectifs.
 		void SwapNodes(
@@ -626,7 +626,7 @@ namespace btr {
 
 			P = Parent( E );
 
-			if ( P != E_NIL ) {
+			if ( P != qNIL ) {
 				IsLeftFlag = IsLeft( E );
 				Cut( E );
 			}
@@ -634,17 +634,17 @@ namespace btr {
 			B = Left( E );
 
 #ifdef BTR_DBG
-			if ( B == E_NIL )
-				ERRFwk();
+			if ( B == qNIL )
+				qRFwk();
 #endif
 			Cut( B );
 
 			D = Right( B );
 
-			if ( D != E_NIL )
+			if ( D != qNIL )
 				Cut( D );
 
-			if ( P != E_NIL ) {
+			if ( P != qNIL ) {
 				if ( IsLeftFlag )
 					BecomeLeft( B, P );
 				else
@@ -653,7 +653,7 @@ namespace btr {
 
 			BecomeRight( E, B );
 
-			if ( D != E_NIL )
+			if ( D != qNIL )
 				BecomeLeft( D, E );
 
 			return B;
@@ -666,7 +666,7 @@ namespace btr {
 
 			P = Parent( B );
 
-			if ( P != E_NIL ) {
+			if ( P != qNIL ) {
 				IsLeftFlag = IsLeft( B );
 				Cut( B );
 			}
@@ -674,17 +674,17 @@ namespace btr {
 			E = Right( B );
 
 #ifdef BTR_DBG
-			if ( E == E_NIL )
-				ERRFwk();
+			if ( E == qNIL )
+				qRFwk();
 #endif
 			Cut( E );
 
 			D = Left( E );
 
-			if ( D != E_NIL )
+			if ( D != qNIL )
 				Cut( D );
 
-			if ( P != E_NIL ) {
+			if ( P != qNIL ) {
 				if ( IsLeftFlag )
 					BecomeLeft( E, P );
 				else
@@ -693,7 +693,7 @@ namespace btr {
 
 			BecomeLeft( B, E );
 
-			if ( D != E_NIL )
+			if ( D != qNIL )
 				BecomeRight( D, B );
 
 			return E;
@@ -943,7 +943,7 @@ namespace btr {
 			Right;
 		void reset( bso::bool__ = true )
 		{
-			Parent = Left = Right = E_NIL;
+			Parent = Left = Right = qNIL;
 		}
 		_node__( void )
 		{
@@ -1003,7 +1003,7 @@ namespace btr {
 		{
 			_node__<r_t> Buffer = nodes::Get( Node );
 
-			Buffer.Parent = E_NIL;
+			Buffer.Parent = qNIL;
 			nodes::Store( Buffer, Node );
 		}
 		//f Release left child of 'Node'.
@@ -1011,7 +1011,7 @@ namespace btr {
 		{
 			_node__<r_t> Buffer = nodes::Get( Node );
 
-			Buffer.Left = E_NIL;
+			Buffer.Left = qNIL;
 			nodes::Store( Buffer, Node );
 		}
 		//f Release right child of 'Node'.
@@ -1019,35 +1019,35 @@ namespace btr {
 		{
 			_node__<r_t> Buffer = nodes::Get( Node );
 
-			Buffer.Right = E_NIL;
+			Buffer.Right = qNIL;
 			nodes::Store( Buffer, Node );
 		}
 		//f Return true if 'Node' has a father.
 		bso::bool__ HasParent( r_t Node ) const
 		{
-			return nodes::Get( Node ).Parent != E_NIL;
+			return nodes::Get( Node ).Parent != qNIL;
 		}
 		//f Return true if 'Node' has left chid.
 		bso::bool__ HasLeft( r_t Node ) const
 		{
-			return nodes::Get( Node ).Left != E_NIL;
+			return nodes::Get( Node ).Left != qNIL;
 		}
 		//f Return true if 'Node' has right chid.
 		bso::bool__ HasRight( r_t Node ) const
 		{
-			return nodes::Get( Node ).Right != E_NIL;
+			return nodes::Get( Node ).Right != qNIL;
 		}
-		//f Return father of 'Node', or 'E_NIL' if nonde.
+		//f Return father of 'Node', or 'qNIL' if nonde.
 		r_t Parent( r_t Node ) const
 		{
 			return nodes::Get( Node ).Parent;
 		}
-		//f Return left child of 'Node', or 'E_NIL' if nonde.
+		//f Return left child of 'Node', or 'qNIL' if nonde.
 		r_t Left( r_t Node ) const
 		{
 			return nodes::Get( Node ).Left;
 		}
-		//f Return right child of 'Node', or 'E_NIL' if nonde.
+		//f Return right child of 'Node', or 'qNIL' if nonde.
 		r_t Right( r_t Node ) const
 		{
 			return nodes::Get( Node ).Right;
@@ -1284,24 +1284,24 @@ namespace btr {
 		{
 			return Right_( *Node );
 		}
-		// Retourne le grand-parent de 'Node', ou 'E_NIL' si inexistant. Sotcke dans 'Parent' le parent de 'Node', si existant.
+		// Retourne le grand-parent de 'Node', ou 'qNIL' si inexistant. Sotcke dans 'Parent' le parent de 'Node', si existant.
 		r GrandParent(
 			r Node,
 			r &Parent ) const
 		{
-			if ( ( Parent = Parent_( *Node ) ) != E_NIL )
+			if ( ( Parent = Parent_( *Node ) ) != qNIL )
 				return Parent_( Parent );
 			else
-				return E_NIL;
+				return qNIL;
 		}
-		// Retourne le grand-parent de 'Node', ou 'E_NIL' si inexistant
+		// Retourne le grand-parent de 'Node', ou 'qNIL' si inexistant
 		r GrandParent( r Node ) const
 		{
 			r Parent;
 
 			return GranParent( Node, Parent );
 		}
-		/* Retourne l'oncle de 'Node', ou 'E_NIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
+		/* Retourne l'oncle de 'Node', ou 'qNIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
 		le parent et le grand-parent de 'Node', s'ils existent. ATTENTION : 'Parent' et 'GrandParent' ne doivent PAS pointer
 		sur la mme variable. */
 		r Uncle(
@@ -1309,15 +1309,15 @@ namespace btr {
 			r &Parent,
 			r &GrandParent ) const
 		{
-			if ( ( GrandParent = GrandParent( Node, Parent ) ) == E_NIL )
-				return E_NIL;
+			if ( ( GrandParent = GrandParent( Node, Parent ) ) == qNIL )
+				return qNIL;
 
 			if ( IsLeft( Parent, GrandParent ) )
 				return Right( GrandParent );
 			else
 				return Left( GrandParent );
 		}
-		/* Retourne l'oncle de 'Node', ou 'E_NIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
+		/* Retourne l'oncle de 'Node', ou 'qNIL' si inexistant. Stocke dans 'Parent' et 'GrandParent' respectivement 
 		le parent et le grand-parent de 'Node', d'ils existent. */
 		r Uncle( r Node ) const
 		{
@@ -1476,7 +1476,7 @@ namespace btr {
 
 			Parent = Parent( D );
 
-			if ( Parent != E_NIL ) {
+			if ( Parent != qNIL ) {
 				IsLeft = IsLeft( D );
 				Cut( D );
 			}
@@ -1484,8 +1484,8 @@ namespace btr {
 			B = Left( D );
 
 #ifdef BTR_DBG
-			if ( B == E_NIL )
-				ERRFwk();
+			if ( B == qNIL )
+				qRFwk();
 #endif
 
 			A = Left( B );
@@ -1493,13 +1493,13 @@ namespace btr {
 
 			Cut( B );
 
-			if ( A != E_NIL )
+			if ( A != qNIL )
 				Cut( A );
 
-			if ( C != E_NIL )
+			if ( C != qNIL )
 				Cut( C );
 
-			if ( Parent != E_NIL )
+			if ( Parent != qNIL )
 				if ( IsLeft )
 					BecomeLeft( B, Parent );
 				else
@@ -1507,10 +1507,10 @@ namespace btr {
 
 			BecomeRight( D, B );
 
-			if ( A != E_NIL )
+			if ( A != qNIL )
 				BecomeLeft( A, B );
 
-			if ( C != E_NIL )
+			if ( C != qNIL )
 				BecomeLeft( C, D );
 		}
 		// Rotation  droite avec 'Node' come pivot, qui DOIT avoir un fils droit.
@@ -1521,7 +1521,7 @@ namespace btr {
 
 			P = P( B );
 
-			if ( P != E_NIL ) {
+			if ( P != qNIL ) {
 				IsLeft = IsLeft( B );
 				Cut( B );
 			}
@@ -1529,8 +1529,8 @@ namespace btr {
 			D = Right( B );
 
 #ifdef BTR_DBG
-			if ( D == E_NIL )
-				ERRFwk();
+			if ( D == qNIL )
+				qRFwk();
 #endif
 
 			E = Right( D );
@@ -1538,13 +1538,13 @@ namespace btr {
 
 			Cut( D );
 
-			if ( E != E_NIL )
+			if ( E != qNIL )
 				Cut( E );
 
-			if ( C != E_NIL )
+			if ( C != qNIL )
 				Cut( C );
 
-			if ( P != E_NIL )
+			if ( P != qNIL )
 				if ( IsLeft )
 					BecomeLeft( D, Parent );
 				else
@@ -1552,10 +1552,10 @@ namespace btr {
 
 			BecomeLeft( B, D );
 
-			if ( E != E_NIL )
+			if ( E != qNIL )
 				BecomeRight( E, D );
 
-			if ( C != E_NIL )
+			if ( C != qNIL )
 				BecomeRight( C, B );
 		}
 		//f Force the parent from 'Node' to 'Parent'. Return the previous parent.

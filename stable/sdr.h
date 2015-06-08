@@ -56,7 +56,7 @@
 
 # define SDR_INTERNAL_SDRIVER *(sdr::E_SDRIVER__ *)NULL
 
-# define E_NIL ( (sdr::row_t__) -1 )
+# define qNIL ( (sdr::row_t__) -1 )
 
 # define SDR__DSIZE_SIZE_MAX ( ( ( 8 * sizeof( sdr::size__ ) ) / 7 ) + 1 )
 
@@ -64,7 +64,7 @@ namespace sdr {
 	typedef bso::size__	row_t__;
 	E_TMIMIC__( row_t__, row__ );
 
-	E_CDEF( sdr::row_t__, NIL, E_NIL );
+	E_CDEF( sdr::row_t__, NIL, qNIL );
 
 # if 0
 	typedef bso::p_size__	p_row_t__;
@@ -92,7 +92,7 @@ namespace sdr {
 		// Alloue 'Size' octet.
 		virtual void SDRAllocate( size__ Size )
 		{
-			ERRFwk();
+			qRFwk();
 			// For read-only storage.
 		}
 		/* Si la mmoire repose sur une mmoire persistante (un fichier, par exemple), retourne la taille de cette mmoire,
@@ -109,7 +109,7 @@ namespace sdr {
 			size__ Amount,
 			row_t__ Position )
 		{
-			ERRFwk();
+			qRFwk();
 			// For read-only storage.
 		}
 	public:
@@ -150,7 +150,7 @@ namespace sdr {
 		}
 	};
 
-	#define E_SDRIVER__	storage_driver__
+	#define qSD__	sdr::storage_driver__
 }
 
 /*$END$*/

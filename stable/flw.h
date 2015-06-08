@@ -95,7 +95,7 @@ namespace flw {
 		fdr::iflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Driver;
 		}
@@ -117,7 +117,7 @@ namespace flw {
 			bso::bool__ &CacheIsEmpty )
 		{
 			if ( _ReadUpTo( Amount, Buffer, Amount, Adjust, CacheIsEmpty ) != Amount )
-				ERRDta();
+				qRFwk();
 		}
 		// Generic read.
 		size__ _LoopingRawRead(
@@ -200,7 +200,7 @@ namespace flw {
 			void *Buffer )
 		{
 			if ( _D().Read( this, Amount, (datum__ *)Buffer, fdr::bBlocking ) != Amount )
-				ERRDta();
+				qRFwk();
 		}
 		bso::bool__ EndOfFlow( void )
 		{
@@ -217,7 +217,7 @@ namespace flw {
 			datum__ C;
 
 			if ( View( 1, &C ) != 1 )
-				ERRDta();
+				qRFwk();
 
 			return C;
 		}
@@ -226,7 +226,7 @@ namespace flw {
 			datum__ C;
 
 			if ( _D().Read( this, 1, &C, fdr::bBlocking ) != 1 )
-				ERRDta();
+				qRFwk();
 
 			return C;
 		}
@@ -258,7 +258,7 @@ namespace flw {
 		{
 #ifdef FLW_DBG
 			if ( !IsInitialized() )
-				ERRFwk();
+				qRFwk();
 #endif
 
 			return _D().IsLocked();
@@ -278,7 +278,7 @@ namespace flw {
 		standalone_iflow__( void )
 		{
 			if ( Dummy != 0 )	
-				ERRPrm();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
+				qRFwk();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 		}
 		void Init(
 			fdr::iflow_driver_base___ &Driver,
@@ -328,7 +328,7 @@ namespace flw {
 		fdr::oflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Driver;
 		}
@@ -384,7 +384,7 @@ namespace flw {
 		{
 #ifdef FLW_DBG
 			if ( _Size != _Free )
-				ERRFwk();
+				qRFwk();
 #endif
 			if ( Amount > _Size )
 				return _DirectWrite( Buffer, Amount, Amount );
@@ -527,7 +527,7 @@ namespace flw {
 		{
 #ifdef FLW_DBG
 			if ( !IsInitialized() )
-				ERRFwk();
+				qRFwk();
 #endif
 
 			return _Driver->IsLocked();

@@ -42,7 +42,7 @@ const char *csdsns::GetLogLabel( log__ Log )
 		CASE( TestAndGet );
 		CASE( Delete );
 	default:
-		ERRPrm();
+		qRFwk();
 		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
@@ -52,7 +52,7 @@ void csdsns::_callback___::_Clean( void )
 {
 	sdr::row__ Row = _Core.UPs.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		_Callback->PostProcess( _Core.UPs( Row ) );
 
 		Row = _Core.UPs.Next( Row );

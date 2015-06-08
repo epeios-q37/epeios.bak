@@ -46,7 +46,7 @@ const char *fnm::GetLabel( fnm::type__ Type )
 	case fnm::t_Undefined:
 		return "Unknow";
 	default:
-		ERRFwk();
+		qRFwk();
 	}
 
 	return NULL;	// To avoid a 'warnin'.
@@ -112,9 +112,9 @@ static const name___ &BuildPath_(
 	const nchar__ *Ext,
 	name___ &Result )
 {
-ERRProlog
+qRH
 	size_t DirSize = 0, PathSize = 0, ExtSize = 0;
-ERRBegin
+qRB
 	ncore___ &Core = Result.ExposedInternal();
 
 	if ( Type_( Path ) == tAbsolute )
@@ -132,7 +132,7 @@ ERRBegin
 	Core.Calloc( DirSize + PathSize + ExtSize + 2 );
 
 	if ( ( PathSize == 0 ) && ( ExtSize == 0 ) )
-		ERRReturn;
+		qRReturn;
 
 	if ( DirSize != 0 ) {
 		strcpy_( Core, Dir );
@@ -153,12 +153,12 @@ ERRBegin
 					 || ( Core[DirSize] == '\\' ) ) );
 
 			if ( ( Core[DirSize] == ':' ) || ( DirSize == 0 ) )
-				ERRReturn;
+				qRReturn;
 			else 
 				Core[DirSize+1] = 0;
 		}
 	} else if ( PathSize == 0 )
-		ERRReturn;
+		qRReturn;
 
 	switch ( Type_( Path ) ) {
 	case fnm::tEmpty:
@@ -178,13 +178,13 @@ ERRBegin
 		strcpy_( Core, Result );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
+qRR
 	Result.Init();
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Result;
 }
 
@@ -204,7 +204,7 @@ const nchar__ *fnm::GetBasename( const nchar__ *Filename )
 
 #ifdef FNM_DBG
 	if ( *Filename == 0 )
-		ERRPrm();
+		qRFwk();
 #endif
 
 	if ( ( ( Repere = strrchr_( Filename, '/' ) ) == NULL )
@@ -278,13 +278,13 @@ txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	const name___ &Name )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Flow << Name.UTF8( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Flow;
 }
 

@@ -65,7 +65,7 @@ namespace cio {
 		template <typename d> d &_TestAndGet( d* D )
 		{
 			if ( D == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *D;
 		}
@@ -142,7 +142,7 @@ namespace cio {
 				// Une ancienne version de cette bibliothque avait une mthode avec ces paramtres. Un appel  cette mthode appelait la mthode ci-dessus, ce qui provoque une erreur.
 				// Cette mthode a donc t mise en palce pour dtecter et corrger ce cas de figure...
 		{
-			ERRPrm();
+			qRFwk();
 		}
 	};
 
@@ -163,14 +163,14 @@ namespace cio {
 				// Une ancienne version de cette bibliothque avait une mthode avec ces paramtres. Un appel  cette mthode appelait la mthode ci-dessus, ce qui provoque une erreur.
 				// Cette mthode a donc t mise en place pour dtecter et corrger ce cas de figure...
 		{
-			ERRPrm();
+			qRFwk();
 		}
 		void Init(
 			fdr::iflow_driver_base___ &,
 			fdr::thread_safety__ )
 				// Idem que ci-dessus.
 		{
-			ERRPrm();
+			qRFwk();
 		}
 	};
 

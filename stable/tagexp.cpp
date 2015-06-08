@@ -58,11 +58,11 @@ static fil::status__ WriteFile_(
 	err::handle ErrHandle )
 {
 	fil::status__ Return = fil::s_Undefined;
-ERRProlog
+qRH
 	STR_BUFFER___ Name;
 	flf::file_iflow___ File;
 	xtf::extended_text_iflow__ IFlow;
-ERRBegin
+qRB
 	FileName.Convert( Name );
 
 	if ( ( Return = File.Init( Name, ErrHandle ) ) == fil::sSuccess ){
@@ -73,9 +73,9 @@ ERRBegin
 		while( !IFlow.EOX() )
 			OFlow.Put( IFlow.Get() );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 
 	return Return;
 }

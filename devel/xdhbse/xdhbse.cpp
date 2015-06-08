@@ -33,14 +33,14 @@ void xdhbse::prolog::GetContent(
 static frdbse::project_type__ GetProjectType_( xdhagt::agent___ &Agent )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	ProjectType = frdbse::GetProjectType( Agent.GetContent( prolog::ProjectTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -60,9 +60,9 @@ frdbse::project_type__ xdhbse::prolog::GetProjectFeatures(
 	str::string_ &ProjectFeature )
 {
 	frdbse::project_type__ ProjectType = frdbse::pt_Undefined;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( ProjectType = GetProjectType_( Agent ) ) {
 	case frdbse::ptNew:
 		break;
@@ -73,12 +73,12 @@ ERRBegin
 		ProjectFeature.Append( Agent.GetContent( UserProjectId, Buffer ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return ProjectType;
 }
 
@@ -86,12 +86,12 @@ void xdhbse::prolog::DisplaySelectedProjectFileName(
 	xdhagt::agent___ &Agent,
 	const char *Id )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
 	xdhcbk::args Args;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xdhcbk::Split( str::string( Agent.GetResult( Id, Buffer ) ), Args );
 
@@ -104,9 +104,9 @@ ERRBegin
 
 	if ( FileName.Amount() != 0 )
 		Agent.SetContent( UserProjectId, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xdhbse::login::GetContent(
@@ -119,14 +119,14 @@ void xdhbse::login::GetContent(
 static frdbse::backend_type__ GetBackendType_( xdhagt::agent___ &Agent )
 {
 	frdbse::backend_type__ BackendType = frdbse::bt_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	BackendType = frdbse::GetBackendType( Agent.GetContent( login::BackendTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return BackendType;
 }
 
@@ -146,9 +146,9 @@ frdbse::backend_type__ xdhbse::login::GetBackendFeatures(
 	str::string_ &Feature )
 {
 	frdbse::backend_type__ Type = frdbse::bt_Undefined;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( Type = GetBackendType_( Agent ) ) {
 	case frdbse::btDaemon:
 		Feature.Append( Agent.GetContent( DaemonBackendId, Buffer ) );
@@ -160,12 +160,12 @@ ERRBegin
 		Feature.Append( Agent.GetContent( PredefinedBackendId, Buffer ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Type;
 }
 
@@ -173,12 +173,12 @@ void xdhbse::login::DisplaySelectedEmbeddedBackendFileName(
 	xdhagt::agent___ &Agent,
 	const char *Id )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
 	xdhcbk::args Args;
 	xdhcbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xdhcbk::Split( str::string( Agent.GetResult( Id, Buffer ) ), Args );
 
@@ -191,7 +191,7 @@ ERRBegin
 
 	if ( FileName.Amount() != 0 )
 		Agent.SetContent( EmbeddedBackendId, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

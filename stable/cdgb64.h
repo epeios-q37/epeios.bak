@@ -64,7 +64,7 @@ namespace cdgb64 {
 	{
 #ifdef CDGB64_DBG
 		if ( Value > 63 )
-			ERRPrm();
+			qRFwk();
 #endif
 		return Encode[Value];
 	}
@@ -115,7 +115,7 @@ namespace cdgb64 {
 
 				switch ( _Amount ) {
 				case 0:
-					ERRFwk();
+					qRFwk();
 					break;
 				case 1:
 				case 2:
@@ -126,7 +126,7 @@ namespace cdgb64 {
 					_Amount = 0;
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			}
@@ -145,10 +145,10 @@ namespace cdgb64 {
 			if ( Maximum != 0 ) {
 #ifdef CDGB64_DBG
 				if ( Maximum > 3 )
-					ERRPrm();
+					qRFwk();
 
 				if ( _Amount != 0 )
-					ERRFwk();
+					qRFwk();
 #endif
 				memcpy( _Cache, Buffer, Maximum );
 
@@ -250,7 +250,7 @@ namespace cdgb64 {
 
 #ifdef CDGB64_DBG
 			if ( GetCacheSize() < 3 )
-				ERRFwk();
+				qRFwk();
 #endif
 		}
 	};
@@ -261,7 +261,7 @@ namespace cdgb64 {
 	{
 #ifdef CDGB64_DBG
 		if ( Decode[Value] == '@' )
-			ERRFwk();
+			qRFwk();
 #endif
 		return Decode[Value];
 	}
@@ -283,7 +283,7 @@ namespace cdgb64 {
 		fdr::datum__ *Target = Data;
 #ifdef CDGB64_DBG
 		if ( Amount & 3 )	// Si pas un multiple de 4.
-			ERRPrm();
+			qRFwk();
 #endif
 		while ( Amount >= 4 ) {
 			Decode_( Source, Target );
@@ -302,10 +302,10 @@ namespace cdgb64 {
 
 		switch ( Amount ) {
 		case 0:
-			ERRPrm();
+			qRFwk();
 			break;
 		case 1:
-			ERRPrm();
+			qRFwk();
 			break;
 		case 2:
 			Target[2] = 'A';
@@ -313,7 +313,7 @@ namespace cdgb64 {
 			Target[3] = 'A';
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -340,7 +340,7 @@ namespace cdgb64 {
 
 #ifdef CDGB64_DBG
 			if ( Maximum < 4 )
-				ERRPrm();
+				qRFwk();
 #endif
 			Maximum &= ~3UL;	// On veut un multiple de 4.
 
@@ -378,7 +378,7 @@ namespace cdgb64 {
 		{
 #ifdef CDGB64_DBG
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			_Flow->Dismiss();
 		}

@@ -669,9 +669,9 @@ void mscmdm::PutEventHeader(
 	extraneous__ Extraneous,
 	flw::oflow__ &OFlow )
 {
-ERRProlog
+qRH
 	str::string EncodedTicks;
-ERRBegin
+qRB
 	switch ( Extraneous ) {
 	case xNone:
 		if ( Ticks != 0 )
@@ -691,9 +691,9 @@ ERRBegin
 		OFlow.Put( Id );
 
 	Write_( RawData, OFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void mscmdm::PutEvent(
@@ -701,9 +701,9 @@ void mscmdm::PutEvent(
 	extraneous__ Extraneous,
 	flw::oflow__ &OFlow )
 {
-ERRProlog
+qRH
 	data RawData;
-ERRBegin
+qRB
 	RawData.Init();
 
 	if ( Event.EventHeader().EventType == etMeta ) {
@@ -720,9 +720,9 @@ ERRBegin
 	}
 
 	PutEventHeader( Event.EventHeader(), RawData, Extraneous, OFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -848,16 +848,16 @@ bso::bool__ mscmdm::Parse(
 	int Flags )
 {
 	bso::bool__ Success = true;
-ERRProlog
+qRH
 	data Data, PreviousData;
 	event_header__ EventHeader, PreviousEventHeader;
 	bso::bool__ Continue = true;
-ERRBegin
+qRB
 	PreviousData.Init();
 
 	while ( Continue ) {
 		if ( !( Success = GetEventHeader( IFlow, Extraneous, EventHeader ) ) )
-			ERRReturn;
+			qRReturn;
 
 		Data.Init();
 		GetEventData( EventHeader, IFlow, Extraneous, Data );
@@ -880,8 +880,8 @@ ERRBegin
 		PreviousEventHeader = EventHeader;
 		PreviousData = Data;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }

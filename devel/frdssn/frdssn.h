@@ -70,19 +70,19 @@ namespace frdssn {
 		void _Test( void ) const
 		{
 			if ( !_IsOpen )
-				ERRFwk();
+				qRFwk();
 		}
 		const frdkrn::kernel___ &_K( void ) const
 		{
 			if ( _Kernel == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Kernel;
 		}
 		frdkrn::kernel___ &_K( void )
 		{
 			if ( _Kernel == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Kernel;
 		}
@@ -108,15 +108,15 @@ namespace frdssn {
 		}
 		void Open( const char *Language )
 		{
-ERRProlog
-ERRBegin
+qRH
+qRB
 			_IsOpen = true;
 			FRDSSNOpen( Language );
-ERRErr
+qRR
 			_IsOpen = false;
 			_Registry.reset();
-ERREnd
-ERREpilog
+qRT
+qRE
 
 		}
 		void Close( void )
@@ -149,7 +149,7 @@ ERREpilog
 		}
 		void DumpSessionRegistry( xml::writer_ &Writer ) const
 		{
-			_Registry.DumpSession( E_NIL, true, Writer);
+			_Registry.DumpSession( qNIL, true, Writer);
 		}
 		bso::bool__ FillSessionRegistry(
 			xtf::extended_text_iflow__ &SetupXFlow,

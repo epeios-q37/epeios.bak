@@ -177,7 +177,7 @@ namespace bitbch {
 			Current = Table_.Suivant( Value, Current );
 
 			if ( Current >= t )
-				Current = E_NIL;
+				Current = qNIL;
 
 			return Current;
 		}
@@ -225,7 +225,7 @@ namespace bitbch {
 			if ( ++Current < t )
 				return Current;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		//f Return the position of the bit previous to 'Current'.
 		r Down( r Current ) const
@@ -233,7 +233,7 @@ namespace bitbch {
 			if ( Current )
 				return Current - 1 ;
 			else
-				return E_NIL;
+				return qNIL;
 		}
 	};
 
@@ -285,11 +285,11 @@ namespace bitbch {
 			Table.reset( P );
 			amount_extent_manager_<r>::reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Table.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Table.plug( AS );
 		}
@@ -439,7 +439,7 @@ namespace bitbch {
 			T1.reset( P );
 			T2.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			T1.plug( AS );
 			T2.plug( AS );

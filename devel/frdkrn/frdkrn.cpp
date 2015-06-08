@@ -44,9 +44,9 @@ project_type__ frdkrn::GetProjectType(
 	else if ( Label == PROJECT_TYPE_USER )
 		return ptUser;
 	else if ( ErrHandling = err::hThrowException )
-		ERRFwk();
+		qRFwk();
 	else if ( ErrHandling != err::hUserDefined )
-		ERRPrm();
+		qRFwk();
 
 	return pt_Undefined;
 }
@@ -56,16 +56,16 @@ const str::string_ &frdkrn::GetPredefinedProjectLocation(
 	const registry_ &Registry,
 	str::string_ &Location )
 {
-ERRProlog
+qRH
 	rgstry::tags Tags;
-ERRBegin
+qRB
 	Tags.Init();
 	Tags.Append( Id );
 
 	Registry.GetValue( tentry__( frdrgy::PredefinedProject, Tags ), Location );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Location;
 }
 
@@ -105,7 +105,7 @@ static const char *GetBackendExtendedTypeLabel_( backend_extended_type__ Type )
 		return BACKEND_EXTENDED_TYPE_EMBEDDED;
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -116,17 +116,17 @@ static const char *GetBackendExtendedTypeLabel_( backend_extended_type__ Type )
 backend_extended_type__ frdkrn::GetBackendExtendedType(	const registry_ &Registry )
 {
 	backend_extended_type__ Type = bxt_Undefined;
-ERRProlog
+qRH
 	str::string RawType;
-ERRBegin
+qRB
 	RawType.Init();
 
 	Registry.GetValue( frdrgy::BackendType, RawType );
 
 	Type = GetBackendExtendedType( RawType );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Type;
 }
 
@@ -143,17 +143,17 @@ bso::bool__ frdkrn::GetDefaultConfigurationFileName(
 	str::string_ &FileName )
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	FileName.Init( Affix );
 	FileName.Append( '.' );
 	FileName.Append( FRDKRN_CONFIGURATION_FILE_EXTENSION );
 
 	Exists = fil::Exists( FileName.Convert( Buffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
@@ -174,15 +174,15 @@ void frdkrn::reporting_callback__::FBLFRDReport(
 	fblovl::reply__ Reply,
 	const char *Message )
 {
-ERRProlog
+qRH
 	lcl::meaning Meaning;
 	str::string Translation;
-ERRBegin
+qRB
 	if ( _Locale == NULL )
-		ERRFwk();
+		qRFwk();
 
 	if ( _Language = NULL )
-		ERRFwk();
+		qRFwk();
 
 	Meaning.Init();
 	Meaning.SetValue( fblovl::GetLabel( Reply ) );
@@ -192,9 +192,9 @@ ERRBegin
 	_Locale->GetTranslation( Meaning, _Language, Translation );
 
 	this->FRDKRNReport( Translation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 #endif
 
@@ -213,27 +213,27 @@ bso::bool__ frdkrn::kernel___::_Connect(
 	csdsnc::log_callback__ *LogCallback )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	csdlec::library_data__ LibraryData;
 	csdleo::mode__ Mode = csdleo::m_Undefined;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
-	LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::ERRError, Features.UP );
+qRB
+	LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, Features.UP );
 
 	if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
-		ERRReturn;
+		qRReturn;
 
 	if ( !_Frontend.Init( Features.Language, CompatibilityInformations, _ClientCore, *_ReportingCallback, ErrorSet.IncompatibilityInformations ) )
-		ERRReturn;
+		qRReturn;
 
 	FRDKRNConnection( _Frontend );
 
 	Success = true;
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( !Success )
 		ErrorSet.BackendLocation.Init(  Features.Location );
-ERREpilog
+qRE
 	return Success;
 }
 
@@ -244,7 +244,7 @@ static bso::bool__ IsProjectIdValid_( const str::string_ &Id )
 	if ( Id.Amount() == 0 )
 		return false;
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		if ( !isalnum( Id( Row ) ) && ( Id( Row ) != '_' ) )
 			return false;
 
@@ -263,21 +263,21 @@ bso::bool__ frdkrn::kernel___::Launch(
 	const compatibility_informations__ &CompatibilityInformations )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	error_set___ ErrorSet;
-ERRBegin
+qRB
 	ErrorSet.Init();
 
 	if ( !Launch( Features, CompatibilityInformations, ErrorSet ) ) {
 		_ErrorMeaning.Init();
 		frdkrn::GetMeaning( ErrorSet, _ErrorMeaning );
-		ERRReturn;
+		qRReturn;
 	}
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -300,7 +300,7 @@ const char *frdkrn::GetLabel( authentication_prompt_mode__ Mode )
 		APM( Partial );
 		APM( Full );
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 

@@ -51,7 +51,7 @@ template <typename item> static void Save_(
 {
 	stk::row__ Row = Bunch.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Save_( Bunch( Row ), Flow );
 
 		Row = Bunch.Next( Row );
@@ -62,15 +62,15 @@ template <typename item> static void Save_(
 	const stk::E_BSTACK_( item ) &Bunch,
 	const fnm::name___ &FileName )
 {
-ERRProlog
+qRH
 	flf::file_oflow___ Flow;
-ERRBegin
+qRB
 	Flow.Init( FileName );
 
 	Save_( Bunch, Flow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 template <typename item> static void Save_(
@@ -79,9 +79,9 @@ template <typename item> static void Save_(
 	const char *Extension,
 	time_t ReferenceTimeStamp )
 {
-ERRProlog
+qRH
 	str::string FileName;
-ERRBegin
+qRB
 	FileName.Init( BaseFileName );
 	FileName.Append( Extension );
 
@@ -93,9 +93,9 @@ ERRBegin
 		tol::EpochTime( true );
 		fil::Touch( FileName );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void ndbdct::files_hook___::_SaveAvailables( void ) const
@@ -137,12 +137,12 @@ template <typename item> static bso::bool__ Load_(
 	time_t ReferenceTimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	flf::file_iflow___ Flow;
-ERRBegin
+qRB
 	if ( Flow.Init( FileName, err::hUserDefined ) == tol::rSuccess ) {
 		if ( fil::GetLastModificationTime( FileName ) <= ReferenceTimeStamp )
-			ERRReturn;
+			qRReturn;
 
 		Load_( Flow, Bunch );
 
@@ -150,9 +150,9 @@ ERRBegin
 
 		Success = true;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -161,15 +161,15 @@ const char *BuildFileName_(
 	const char *Extension,
 	TOL_CBUFFER___ &Buffer )
 {
-ERRProlog
+qRH
 	str::string FileName;
-ERRBegin
+qRB
 	FileName.Init( BaseFileName );
 	FileName.Append( Extension );
 	FileName.Convert( Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
@@ -182,13 +182,13 @@ template <typename item> static bso::bool__ Load_(
 	time_t TimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Success = Load_( BuildFileName_( BaseFileName, Extension, Buffer ), Bunch, TestValue, TimeStamp );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -198,13 +198,13 @@ static bso::bool__ LoadAvailables_(
 	time_t ReferenceTimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Success = Load_( BuildFileName_( BaseFileName, AVAILABLES_FILE_NAME_EXTENSION, Buffer ), Availables, ReferenceTimeStamp );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -218,14 +218,14 @@ void ndbdct::files_hook___::Init(
 	fil::mode__ Mode,
 	fls::id__ ID )
 {
-ERRProlog
+qRH
 	str::string ContentFileName;
 	TOL_CBUFFER___ ContentFileNameBuffer;
 	str::string EntriesBunchFileName;
 	TOL_CBUFFER___ EntriesBunchFileNameBuffer;
 	str::string EntriesListFileName;
 	TOL_CBUFFER___ EntriesListFileNameBuffer;
-ERRBegin
+qRB
 	reset();
 
 	ContentFileName.Init( BaseFileName );
@@ -242,9 +242,9 @@ ERRBegin
 
 	_BaseFileName.Init( BaseFileName );
 	_Mode = Mode;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ Test_(
@@ -253,36 +253,36 @@ bso::bool__ Test_(
 	time_t TimeStamp )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	const char *FileName = NULL;
-ERRBegin
+qRB
 	FileName = BuildFileName_( BaseFileName, Extension, Buffer );
 
 	if ( !fil::Exists( FileName ) )
-		ERRReturn;
+		qRReturn;
 
 	if ( fil::GetLastModificationTime( FileName ) <= TimeStamp )
-		ERRReturn;
+		qRReturn;
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
 void ndbdct::files_hook___::_ErasePhysically( void )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	_Storage.Drop();
 	_Entries.Drop();
 
 	ndbbsc::DropFile( _BaseFileName, AVAILABLES_FILE_NAME_EXTENSION );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 uys::state__ ndbdct::Plug(

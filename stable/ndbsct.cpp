@@ -31,10 +31,10 @@ void ndbsct::files_hook___::Init(
 	fil::mode__ Mode,
 	fls::id__ ID )
 {
-ERRProlog
+qRH
 	str::string FileName;
 	TOL_CBUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	reset();
 
 	_Mode = Mode;
@@ -50,7 +50,7 @@ ERRBegin
 	FileName.Append( LIST_FILE_NAME_EXTENSION );
 
 	_List.Init( FileName.Convert( FileNameBuffer ), Mode, true );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

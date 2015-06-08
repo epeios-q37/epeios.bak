@@ -74,11 +74,11 @@ bso::uint__ MasterWindowCounter_ = 0;
 
 void nsxpcm::AddMasterWindow( nsIDOMWindow *Window )
 {
-ERRProlog
+qRH
 	bso::bool__ Locked = false;
-ERRBegin
+qRB
 	if ( Window == NULL )
-		ERRPrm();
+		qRFwk();
 
 	mtx::Lock( MasterWindowMutex_ );
 
@@ -88,20 +88,20 @@ ERRBegin
 		MasterWindow_ = Window;
 	else
 		MasterWindows_.Append( Window );
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Locked )
 		mtx::Unlock( MasterWindowMutex_ );
-ERREpilog
+qRE
 }
 
 void nsxpcm::RemoveMasterWindow( nsIDOMWindow *Window )
 {
-ERRProlog
+qRH
 	bso::bool__ Locked = false;
-ERRBegin
+qRB
 	if ( Window == NULL )
-		ERRPrm();
+		qRFwk();
 
 	mtx::Lock( MasterWindowMutex_ );
 
@@ -127,62 +127,62 @@ ERRBegin
 	} else {
 		sdr::row__ Row = MasterWindows_.Search( Window );
 
-		if ( Row == E_NIL )
-			ERRFwk();
+		if ( Row == qNIL )
+			qRFwk();
 
 		MasterWindows_.Remove( Row );
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Locked )
 		mtx::Unlock( MasterWindowMutex_ );
-ERREpilog
+qRE
 }
 
 nsIDOMWindowInternal *nsxpcm::RetrieveMasterWindow( void )
 {
 	nsIDOMWindow *Window = NULL;
-ERRProlog
+qRH
 	bso::bool__ Locked = false;
-ERRBegin
+qRB
 	mtx::Lock( MasterWindowMutex_ );
 	Locked = true;
 
 	if ( MasterWindow_ != NULL ) {
 		if ( MasterWindowCounter_ == BSO_UINT_MAX )
-			ERRLmt();
+			qRLmt();
 
 		Window = MasterWindow_;
 		MasterWindowCounter_++;
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Locked )
 		mtx::Unlock( MasterWindowMutex_ );
-ERREpilog
+qRE
 	return GetWindowInternal( Window );
 }
 
 void nsxpcm::ReleaseMasterWindow( nsIDOMWindow *Window )
 {
-ERRProlog
+qRH
 	bso::bool__ Locked = false;
-ERRBegin
+qRB
 	mtx::Lock( MasterWindowMutex_ );
 	Locked = true;
 
 	if ( MasterWindow_ != Window )
-		ERRPrm();
+		qRFwk();
 
 	if ( MasterWindowCounter_ == 0 )
-		ERRFwk();
+		qRFwk();
 
 	MasterWindowCounter_--;
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( Locked )
 		mtx::Unlock( MasterWindowMutex_ );
-ERREpilog
+qRE
 }
 
 nsIDOMWindowInternal* nsxpcm::GetRoot( nsIDOMWindow *Window )
@@ -216,7 +216,7 @@ const char *nsxpcm::GetLabel( text__ Text )
 		CASE( XPRJFilterLabel );
 		CASE( DynamicLibraryFilterLabel );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -235,12 +235,12 @@ void nsxpcm::Transform(
 	char **JString )
 {
     if ( !JString )
-        ERRPrm();
+        qRFwk();
 	else
 	    *JString = (char*) nsMemory::Clone( String, sizeof(char) * Size );
     
 	if ( !JString )
-		ERRFwk();
+		qRFwk();
 }
 
 void nsxpcm::Transform(
@@ -280,29 +280,29 @@ void nsxpcm::Transform(
 	const nsAString &WString,
 	char **JString )
 {
-ERRProlog
+qRH
 	str::string String;
-ERRBegin
+qRB
 	String.Init();
 
 	Transform( WString, String );
 	Transform( String, JString );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::Transform(
 	const str::string_ &String,
 	char **JString )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Transform( String.Convert( Buffer ), String.Amount() + 1, JString );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::Transform(
@@ -319,13 +319,13 @@ void nsxpcm::TransformW(
 	const str::string_ &String,
 	nsAString &WString )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	WString.Append( (const nsString::char_type *)String.Convert( Buffer ), String.Amount() / sizeof( nsString::char_type ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::Transform(
@@ -363,13 +363,13 @@ void nsxpcm::Transform(
 	const str::string_ &String,
 	nsACString &CString )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Transform( String.Convert( Buffer ), CString );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::Split( 
@@ -377,17 +377,17 @@ void nsxpcm::Split(
 	bso::char__ Separator,
 	strings_ &Splitted )
 {
-ERRProlog
-	sdr::row__ Row = E_NIL;
+qRH
+	sdr::row__ Row = qNIL;
 	string Item;
-ERRBegin
+qRB
 	if ( Joined.Amount() != 0 ) {	
 
 		Item.Init();
 
 		Row = Joined.First();
 
-		while ( Row != E_NIL ) {
+		while ( Row != qNIL ) {
 			if ( Joined( Row ) != Separator )
 				Item.Append( Joined( Row ) );
 			else {
@@ -400,9 +400,9 @@ ERRBegin
 
 		Splitted.Append( Item );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::Split(
@@ -410,15 +410,15 @@ void nsxpcm::Split(
 	bso::char__ Separator,
 	strings_ &Splitted )
 {
-ERRProlog
+qRH
 	string SJoined;
-ERRBegin
+qRB
 	SJoined.Init( Joined );
 
 	Split( SJoined, Separator, Splitted );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::Join(
@@ -431,12 +431,12 @@ void nsxpcm::Join(
 
 	Item.Init( Splitted );
 
-	if ( Row != E_NIL ) {
+	if ( Row != qNIL ) {
 		Joined.Append( Item( Row ) );
 		Row = Splitted.Next( Row );
 	}
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Joined.Append( Separator );
 		Joined.Append( Item( Row ) );
 		Row = Splitted.Next( Row );
@@ -448,28 +448,28 @@ void nsxpcm::JoinAndTransform(
 	bso::char__ Separator,
 	char **JString )
 {
-ERRProlog
+qRH
 	string Joined;
-ERRBegin
+qRB
 	Joined.Init();
 	
 	Join( Splitted, Separator, Joined );
 
 	Transform( Joined, JString );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::SetSelectedItem(
 	nsIDOMElement *Element,
-	bso::bool__ SelectFirstOneIfE_NIL )
+	bso::bool__ SelectFirstOneIfqNIL )
 {
-ERRProlog
+qRH
 	str::string Value;
 	browser__ Browser;
 	nsIDOMElement *Current = Element, *Selected = NULL;
-ERRBegin
+qRB
 	Browser.Init( Element );
 
 	while ( ( Current != NULL ) && ( Selected == NULL ) ) {
@@ -485,21 +485,21 @@ ERRBegin
 
 	SetSelectedItem( Element, Selected );
 
-	if ( ( Selected == NULL ) && ( SelectFirstOneIfE_NIL ) )
+	if ( ( Selected == NULL ) && ( SelectFirstOneIfqNIL ) )
 		nsxpcm::SetSelectedIndex( Element, 0 );
 	
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
 void nsxpcm::listbox__::RemoveContent( void )
 {
-ERRProlog
+qRH
 	str::string Name;
 	nsIDOMNode *Node = NULL, *Next = NULL;
-ERRBegin
+qRB
 	Node = GetFirstChild( GetNode() );
 
 	while ( Node != NULL ) {
@@ -513,18 +513,18 @@ ERRBegin
 		Node = Next;
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 nsIDOMNode *nsxpcm::_FindParent(
 	nsIDOMNode *Node,
 	const str::string_ &NodeName )
 {
-ERRProlog
+qRH
 	str::string Name;
-ERRBegin
+qRB
 	while ( Node != NULL ) {
 		Name.Init();
 
@@ -536,9 +536,9 @@ ERRBegin
 		Node = GetParentNode( Node );
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Node;
 }
 /*
@@ -546,25 +546,25 @@ void nsxpcm::Handle(
 	nsIDOMEvent *Event,
 	const element_cores_ &Cores )
 {
-ERRProlog
+qRH
 	nsIDOMEventTarget *EventTarget = NULL;
 	nsIDOMElement *Element = NULL;
 	nsEmbedString String;
 	str::string S;
-	mdr::row__ Row = E_NIL;
-ERRBegin
+	mdr::row__ Row = qNIL;
+qRB
 	Event->GetTarget( &EventTarget );
 	Element = nsxpcm::QueryInterface<nsIDOMElement>( EventTarget, err::hSkip  );
 
 	if ( Element == NULL )
-		ERRReturn;
+		qRReturn;
 
 	Row = Cores.First();
 
-	while ( ( Row != E_NIL ) && ( Cores( Row )->GetElement() != Element ) )
+	while ( ( Row != qNIL ) && ( Cores( Row )->GetElement() != Element ) )
 		Row = Cores.Next( Row );
 
-	if ( Row == E_NIL )
+	if ( Row == qNIL )
 		ERRu();
 
 	Event->GetType( String );
@@ -574,9 +574,9 @@ ERRBegin
 	nsxpcm::Transform( String, S );
 
 	Cores( Row )->Handle( Event, S );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 */
 
@@ -584,18 +584,18 @@ void nsxpcm::file_picker_::AddFilter(
 	const str::string_ &Title,
 	const str::string_ &Mask )
 {
-ERRProlog
+qRH
 	file_picker_filter FilePickerFilter;
-ERRBegin
+qRB
 	FilePickerFilter.Init();
 
 	FilePickerFilter.Title = Title;
 	FilePickerFilter.Mask = Mask;
 
 	Filters.Append( FilePickerFilter );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static inline PRInt16 ConvertType_( file_picker_type__ Type )
@@ -611,7 +611,7 @@ static inline PRInt16 ConvertType_( file_picker_type__ Type )
 		return nsIFilePicker::modeGetFolder;
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -636,13 +636,13 @@ static inline void AddFilter_(
 	const file_picker_filter_ &Filter,
 	nsIFilePicker *FilePicker )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ TitleBuffer, MaskBuffer;
-ERRBegin
+qRB
 	AddFilter_( Filter.Title.Convert( TitleBuffer ), Filter.Mask.Convert( MaskBuffer ), FilePicker );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -655,7 +655,7 @@ static void AddFilters_(
 
 	Filter.Init( Filters );
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		AddFilter_( Filter( Row ), FilePicker );
 
 		Row = Filters.Next( Row );
@@ -687,10 +687,10 @@ void AddExtraPredefinedFilters_(
 	const char *Language,
 	nsIFilePicker *FilePicker )
 {
-ERRProlog
+qRH
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	if ( Filters & fpmfXPRJ ) {
 		Translation.Init();
 		AddFilter_( Locale.GetTranslation( GetLabel( nsxpcm::tXPRJFilterLabel ), Language, Translation ).Convert( Buffer ), "*.xprj", FilePicker );
@@ -700,9 +700,9 @@ ERRBegin
 		Translation.Init();
 		AddFilter_( Locale.GetTranslation( GetLabel( nsxpcm::tDynamicLibraryFilterLabel ), Language, Translation ).Convert( Buffer ), "*." NSXPCM__DYNAMIC_LIBRARY_EXTENSION, FilePicker );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #undef H
@@ -717,28 +717,28 @@ bso::bool__ nsxpcm::file_picker_::Show(
 	str::string_ &FileName )
 {
 	bso::bool__ FileSelected = false;
-ERRProlog
+qRH
 	nsCOMPtr<nsIFilePicker> FilePicker = NULL;
 	nsresult Error = NS_OK;
 	nsString WString;
 	nsIDOMWindow *MasterWindow = NULL;
-ERRBegin
+qRB
 	CreateInstance( "@mozilla.org/filepicker;1", FilePicker );
 
 	Transform( Title, WString );
 
 	if ( ParentWindow == NULL )
-		ERRPrm();
+		qRFwk();
 	/* 'ParentWindow' doit tre fourni et ne peut tr edduit de 'MAsterWindow', car,
 	cette fonction bloquant toute action sur 'ParentWindow', si plusieurs sessions,
 	c'est une mauvaise fentre (c'est--dire une qui n'a pas initi l'ouverture de
 	slecteur) qui rique d'tre bloque). */
 
 	if ( ( Error = FilePicker->Init( ParentWindow, WString, ConvertType_( Type ) ) ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	if ( ( Error = FilePicker->AppendFilters( ConvertPredefinedFilters_( S_.PredefinedFilters ) ) ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	AddFilters_( Filters, FilePicker );
 
@@ -752,30 +752,30 @@ ERRBegin
 	PRInt16 _retval = 0;
 
 	if ( ( Error = FilePicker->Show( &_retval ) ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	if ( _retval == nsIFilePicker::returnCancel ) {
 		FileSelected = false;
-		ERRReturn;
+		qRReturn;
 	} else if ( ( _retval != nsIFilePicker::returnOK ) && ( _retval != nsIFilePicker::returnReplace ) )
-		ERRLbr();
+		qRLbr();
 
 	nsIFile *File;
 
 	if ( ( Error = FilePicker->GetFile( &File ) ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	if ( ( Error = File->GetPath( WString ) ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	Transform( WString, FileName );
 
 	FileSelected = true;
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( MasterWindow != NULL )
 		ReleaseMasterWindow( MasterWindow );
-ERREpilog
+qRE
 	return FileSelected;
 }
 
@@ -789,11 +789,11 @@ static bso::bool__ FileDialogBox_(
 	str::string_ &Name )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	nsCOMPtr<nsIFilePicker> FilePicker = NULL;
 	nsresult Error = NS_OK;
 	nsEmbedString EString;
-ERRBegin
+qRB
 	CreateInstance( "@mozilla.org/filepicker;1", FilePicker );
 
 	Transform( Title, EString );
@@ -822,7 +822,7 @@ ERRBegin
 
 	if ( _retval == nsIFilePicker::returnCancel ) {
 		Success = false;
-		ERRReturn;
+		qRReturn;
 	} else if ( ( _retval != nsIFilePicker::returnOK ) && ( _retval != nsIFilePicker::returnReplace ) )
 		ERRExt();
 
@@ -837,9 +837,9 @@ ERRBegin
 	nsxpcm::Transform( EString, Name );
 
 	Success = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 #else
@@ -854,17 +854,17 @@ static bso::bool__ FileDialogBox_(
 	str::string_ &FileName )
 {
 	bso::bool__ FileSelected = false;
-ERRProlog
+qRH
 	file_picker FilePicker;
-ERRBegin
+qRB
 	FilePicker.Init( Title );
 
 	FilePicker.SetPredefinedFilter( PredefineFilters );
 
 	FileSelected = FilePicker.Show( ParentWindow, Type, DefaultExtension, Locale, Language, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return FileSelected;
 }
 #endif
@@ -900,14 +900,14 @@ bso::bool__ nsxpcm::DirectorySelectDialogBox(
 	const char *Language,
 	str::string_ &FileName )
 {
-	return FileDialogBox_( ParentWindow, Title, fptFolder, "", fpmf_E_NIL, Locale, Language, FileName );
+	return FileDialogBox_( ParentWindow, Title, fptFolder, "", fpmf_qNIL, Locale, Language, FileName );
 }
 
 void nsxpcm::Delete( widget_cores_ &Widgets )
 {
 	sdr::row__ Row = Widgets.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		delete Widgets( Row );
 
 		Widgets.Store( NULL, Row );
@@ -926,19 +926,19 @@ void nsxpcm::Convert(
 	fblfrd::id32s_ &Ids )
 {
 	sdr::row__ Row = Items.First();
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 	ctn::E_CMITEM( string_ ) Item;
 
 	Item.Init( Items );
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		Ids.Append( Item( Row ).ToU32( &Error ) );
 
 		Row = Items.Next( Row );
 	}
 
-	if ( Error != E_NIL )
-		ERRDta();
+	if ( Error != qNIL )
+		qRFwk();
 }
 
 void nsxpcm::Convert(
@@ -946,19 +946,19 @@ void nsxpcm::Convert(
 	fblfrd::id16s_ &Ids )
 {
 	sdr::row__ Row = Items.First();
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 	ctn::E_CMITEM( string_ ) Item;
 
 	Item.Init( Items );
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		Ids.Append( Item( Row ).ToU16( &Error ) );
 
 		Row = Items.Next( Row );
 	}
 
-	if ( Error != E_NIL )
-		ERRDta();
+	if ( Error != qNIL )
+		qRFwk();
 }
 
 void nsxpcm::Convert(
@@ -966,19 +966,19 @@ void nsxpcm::Convert(
 	fblfrd::id8s_ &Ids )
 {
 	sdr::row__ Row = Items.First();
-	sdr::row__ Error = E_NIL;
+	sdr::row__ Error = qNIL;
 	ctn::E_CMITEM( string_ ) Item;
 
 	Item.Init( Items );
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		Ids.Append( Item( Row ).ToU8( &Error ) );
 
 		Row = Items.Next( Row );
 	}
 
-	if ( Error != E_NIL )
-		ERRDta();
+	if ( Error != qNIL )
+		qRFwk();
 }
 
 void nsxpcm::SplitAndConvert(
@@ -986,17 +986,17 @@ void nsxpcm::SplitAndConvert(
 	bso::char__ Separator,
 	fblfrd::id32s_ &Ids )
 {
-ERRProlog
+qRH
 	strings Splitted;
-ERRBegin
+qRB
 	Splitted.Init();
 
 	Split( Joined, Separator, Splitted );
 
 	Convert( Splitted, Ids );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::SplitAndConvert(
@@ -1004,17 +1004,17 @@ void nsxpcm::SplitAndConvert(
 	bso::char__ Separator,
 	fblfrd::id16s_ &Ids )
 {
-ERRProlog
+qRH
 	strings Splitted;
-ERRBegin
+qRB
 	Splitted.Init();
 
 	Split( Joined, Separator, Splitted );
 
 	Convert( Splitted, Ids );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::SplitAndConvert(
@@ -1022,24 +1022,24 @@ void nsxpcm::SplitAndConvert(
 	bso::char__ Separator,
 	fblfrd::id8s_ &Ids )
 {
-ERRProlog
+qRH
 	strings Splitted;
-ERRBegin
+qRB
 	Splitted.Init();
 
 	Split( Joined, Separator, Splitted );
 
 	Convert( Splitted, Ids );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 template< typename t> inline static const char *Convert_(
 	t Value,
 	bso::integer_buffer__ &Buffer )
 {
-	if ( Value == E_NIL )
+	if ( Value == qNIL )
 		return "";
 	else
 		return bso::Convert( Value, Buffer );
@@ -1054,12 +1054,12 @@ template<typename id__, typename id_t__> static inline void ConvertAndJoin_(
 	sdr::row__ Row = Ids.First();
 	bso::integer_buffer__ Buffer;
 
-	if ( Row != E_NIL ) {
+	if ( Row != qNIL ) {
 		Joined.Append( Convert_( Ids( Row ), Buffer ) );
 		Row = Ids.Next( Row );
 	}
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Joined.Append( Separator );
 		Joined.Append( Convert_( Ids( Row ), Buffer ) );
 		Row = Ids.Next( Row );
@@ -1071,17 +1071,17 @@ template<typename id__, typename id_t__> static inline void ConvertJoinAndTransf
 	bso::char__ Separator,
 	char **JString )
 {
-ERRProlog
+qRH
 	string Joined;
-ERRBegin
+qRB
 	Joined.Init();
 
 	ConvertAndJoin_<id__, id_t__>( Ids, Separator, Joined );
 
 	Transform( Joined, JString );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::ConvertAndJoin(
@@ -1172,12 +1172,12 @@ void nsxpcm::ConvertAndJoin(
 {
 	sdr::row__ Row = Booleans.First();
 
-	if ( Row != E_NIL ) {
+	if ( Row != qNIL ) {
 		Joined.Append( Booleans( Row ) ? "1" : "0" );
 		Row = Booleans.Next( Row );
 	}
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Joined.Append( Separator );
 		Joined.Append( Booleans( Row ) ? "1" : "0" );
 		Row = Booleans.Next( Row );
@@ -1189,17 +1189,17 @@ void nsxpcm::ConvertJoinAndTransform(
 	bso::char__ Separator,
 	char **JString )
 {
-ERRProlog
+qRH
 	string Joined;
-ERRBegin
+qRB
 	Joined.Init();
 
 	ConvertAndJoin( Booleans, Separator, Joined );
 
 	Transform( Joined, JString );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void GetData_(
@@ -1214,8 +1214,8 @@ void GetData_(
 
 	while ( Amount-- ) {
 #ifdef NSXPCM_DBG
-		if ( Row == E_NIL )
-			ERRFwk();
+		if ( Row == qNIL )
+			qRFwk();
 #endif
 		Data.Append( Item( Row ) );
 
@@ -1229,13 +1229,13 @@ void nsxpcm::Split(
 	bso::char__ Separator,
 	fblfrd::xstrings_ &DataCluster )
 {
-ERRProlog
+qRH
 	nsxpcm::strings Amounts;
 	nsxpcm::strings Splitted;
-	sdr::row__ Error = E_NIL;
-	sdr::row__ ARow = E_NIL, SRow = E_NIL;
+	sdr::row__ Error = qNIL;
+	sdr::row__ ARow = qNIL, SRow = qNIL;
 	strings Data;
-ERRBegin
+qRB
 	Splitted.Init();
 	Split( Joined, Separator, Splitted );
 
@@ -1246,7 +1246,7 @@ ERRBegin
 
 	SRow = Splitted.First();
 
-	while ( ARow != E_NIL )
+	while ( ARow != qNIL )
 	{
 		Data.Init();
 
@@ -1254,9 +1254,9 @@ ERRBegin
 
 		ARow = Amounts.Next( ARow );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 #endif
 
@@ -1264,15 +1264,15 @@ template <typename t> static void Alert_(
 	nsIDOMWindow *Window,
 	t Text )
 {
-ERRProlog
+qRH
 	nsString WString;
-ERRBegin
+qRB
 	Transform( Text, WString );
 
 	T( GetWindowInternal( Window )->Alert( WString ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::Alert(
@@ -1294,15 +1294,15 @@ template <typename t> bso::bool__ Confirm_(
 	t Text )
 {
 	NSXPCM__BOOL Answer = 0;
-ERRProlog
+qRH
 	nsString WString;
-ERRBegin
+qRB
 	Transform( Text, WString );
 
 	T( GetWindowInternal( Window )->Confirm( WString, &Answer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Answer != 0;
 }
 
@@ -1323,12 +1323,12 @@ bso::bool__ nsxpcm::Confirm(
 
 void nsxpcm::Log( const str::string_ &Text )
 {
-ERRProlog
+qRH
 	nsString WString;
 	nsCOMPtr<nsIConsoleService> ConsoleService = NULL;
 	str::string StampedText;
 	tol::buffer__ Buffer;
-ERRBegin
+qRB
 	StampedText.Init( "[" );
 	StampedText.Append( tol::DateAndTime( Buffer ) );
 	StampedText.Append( "]\n" );
@@ -1339,22 +1339,22 @@ ERRBegin
 	Transform( StampedText, WString );
 
 	T( ConsoleService->LogStringMessage( WString.get() ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::event_handler__::_Test( bso::bool__ IgnoreInitializationTest )
 {
 	if ( _Control != this )
-		ERRFwk();
+		qRFwk();
 
 	if ( !IgnoreInitializationTest ) {
 		if ( _EventData._EventListener.get() == NULL )
-			ERRFwk();
+			qRFwk();
 
 		if ( !_EventData._EventListener->IsInitialized() )
-			ERRFwk();
+			qRFwk();
 	}
 }
 
@@ -1380,51 +1380,51 @@ void nsxpcm::event_handler__::Add(
 
 	if ( Events & efCommand )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "command" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efInput )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "input" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efChange )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "change" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efClick )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "click" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efDblClick )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "dblclick" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efFocus )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "focus" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efBlur )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "blur" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efSelect )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "select" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efAttributeChange )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "DOMAttrModified" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efKeyPress )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "keypress" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efLoad )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "load" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 
 	if ( Events & efClose )
 		if ( EventTarget->AddEventListener( NS_LITERAL_STRING( "close" ), _EventData._EventListener, false ) != NS_OK )
-			ERRFwk();
+			qRFwk();
 }
 
 static event__ Convert_(
@@ -1472,12 +1472,12 @@ bso::bool__ nsxpcm::event_handler__::Handle( nsIDOMEvent *RawEvent )
 	_Test( false );
 
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	nsString WString;
 	str::string EventString;
 	event__ Event = e_Undefined;
 	TOL_CBUFFER___ StrBuffer;
-ERRBegin
+qRB
 	// Sauvegarde pour la gestion d'vnements imbriqus.
 	nsIDOMEvent *RawEventBuffer = _EventData._RawEvent;
 	nsIDOMMutationEvent *MutationEventBuffer = _EventData._MutationEvent;
@@ -1494,7 +1494,7 @@ ERRBegin
 	Event = Convert_( EventString.Convert( StrBuffer ), false );
 
 	if ( Event == e_Undefined )
-		ERRLmt();
+		qRLmt();
 
 	if ( EventString == "DOMAttrModified" )
 		_EventData._MutationEvent = QueryInterface<nsIDOMMutationEvent>( RawEvent );
@@ -1503,7 +1503,7 @@ ERRBegin
 		_EventData._KeyEvent = QueryInterface<nsIDOMKeyEvent> ( RawEvent );
 
 	if ( _EventData._EventImbricationLevel++ == NSXPCM__EVENT_IMBRICATION_LEVEL_MAX )
-		ERRLmt();
+		qRLmt();
 
 	if ( !( _EventData._EventsToIgnore & ( 1 << Event ) ) )
 /*		if ( _EventHandler != NULL )
@@ -1512,19 +1512,19 @@ ERRBegin
 	*/		_OnEvent( _EventData, Event );
 
 	if ( _EventData._EventImbricationLevel-- < -1 )
-		ERRFwk();
+		qRFwk();
 
 	_EventData._RawEvent = RawEventBuffer;
 	_EventData._MutationEvent = MutationEventBuffer;
 	_EventData._KeyEvent = KeyEventBuffer;
 
 	Success = true;
-ERRErr
+qRR
 	if ( ERRType == err::t_Abort ) 
 		Success = true;	// L'erreur a t dj traite (ou va l'tre ci-dessous) ; plus la peine de la remonter.
 //	NSXPCM_ERR( _Window );
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Success;
 }
 
@@ -1534,12 +1534,12 @@ static event__ GetEventIfConcerned_(
 	const char *NameSpace )
 {
 	event__ Event = e_Undefined;
-ERRProlog
+qRH
 	nsString RawName, RawValue;
 	str::string Name, Value;
 	TOL_CBUFFER___ Buffer;
 	str::string NameSpaceWithSeparator;
-ERRBegin
+qRB
 	nsIDOMAttr *Attribute = nsxpcm::QueryInterface<nsIDOMAttr>( Node );
 
 	T( Attribute->GetName( RawName ) );
@@ -1551,10 +1551,10 @@ ERRBegin
 	NameSpaceWithSeparator.Append( ':' );
 
 	if ( Name.Amount() < NameSpaceWithSeparator.Amount() )
-		ERRReturn;
+		qRReturn;
 
 	if ( str::Compare( Name, NameSpaceWithSeparator, Name.First(), NameSpaceWithSeparator.First(), NameSpaceWithSeparator.Amount() ) != 0 )
-		ERRReturn;
+		qRReturn;
 
 	Name.Remove( Name.First(), NameSpaceWithSeparator.Amount() );
 
@@ -1567,9 +1567,9 @@ ERRBegin
 
 	if ( Value != Id )
 		Event = e_Undefined;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Event;
 }
 
@@ -1579,20 +1579,20 @@ ERREpilog
 static nsISupports *Patch_( nsIDOMNode *Node )
 {
 	nsISupports *Supports = Node;
-ERRProlog
+qRH
 	nsString RawName;
 	str::string Name;
 	nsIDOMDocument *Document = NULL;
 	nsIAutoCompleteController *Controller = NULL;
 	nsIAutoCompletePopup *Popup = NULL;
-ERRBegin
+qRB
 	T( Node->GetNodeName( RawName ) );
 
 	Name.Init();
 	Transform( RawName, Name );
 
 	if ( Name == "window" )
-		ERRLmt();	// J'ignore comment,  partir de cet lment, rcuprer un lment sur lequel un gestionnaire d'vnement soit actif.
+		qRLmt();	// J'ignore comment,  partir de cet lment, rcuprer un lment sur lequel un gestionnaire d'vnement soit actif.
 	else if ( Name == "textbox" ) {
 		// Supports = nsxpcm::QueryInterface<nsIAutoCompleteInput>( Node );
 		// Supports = Popup;
@@ -1602,9 +1602,9 @@ ERRBegin
 /*	else if ( ( Name == "a" ) || ( Name == "A" ) )
 		Supports = nsxpcm::QueryInterface<nsIDOMHTMLAnchorElement>( Node );
 */
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Supports;
 }
 
@@ -1635,11 +1635,11 @@ void nsxpcm::AttachEventHandler(
 	event_handler__ &EventHandler,
 	const char *NameSpace )
 {
-ERRProlog
+qRH
 	nsxpcm::browser__ Browser;
 	nsIDOMMozNamedAttrMap *Attributes = NULL;
 	nsIDOMNode *Node = NULL;
-ERRBegin
+qRB
 	Node = Element;
 
 	Browser.Init( Element );
@@ -1652,9 +1652,9 @@ ERRBegin
 
 		Node = Browser.GetNext();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 bso::bool__ GetRelevantBroadcasterId_(
@@ -1663,11 +1663,11 @@ bso::bool__ GetRelevantBroadcasterId_(
 	str::string_ &ObserverId )
 {
 	bso::bool__ Relevant = false;
-ERRProlog
+qRH
 	nsString RawName, RawValue;
 	str::string Name;
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	nsIDOMAttr *Attribute = nsxpcm::QueryInterface<nsIDOMAttr>( AttributeNode );
 
 	T( Attribute->GetName( RawName ) );
@@ -1676,16 +1676,16 @@ ERRBegin
 	Transform( RawName, Name );
 
 	if ( Name != CustomizedObserverAttributeName )
-		ERRReturn;
+		qRReturn;
 
 	Relevant = true;
 
 	T( Attribute->GetValue( RawValue ) );
 
 	Transform ( RawValue, ObserverId );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Relevant;
 }
 
@@ -1729,12 +1729,12 @@ void nsxpcm::RefreshObservers(
 	nsIDOMElement *Element,
 	const char *NameSpace )
 {
-ERRProlog
+qRH
 	nsxpcm::browser__ Browser;
 	nsIDOMMozNamedAttrMap *Attributes = NULL;
 	str::string CustomizedObserverAttributeName;
 	str::string ObserverId;
-ERRBegin
+qRB
 	CustomizedObserverAttributeName.Init();
 	CustomizedObserverAttributeName.Append( NameSpace );
 	CustomizedObserverAttributeName.Append( ":observes" );
@@ -1753,9 +1753,9 @@ ERRBegin
 
 		Element = Browser.GetNext();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 /* Dbut 'event_listener__' */
@@ -1924,18 +1924,18 @@ NS_IMETHODIMP nsxpcm::tree_view__::GetCellText(
 	nsITreeColumn* aCol,
 	nsAString& aCellText)
 {
- ERRProlog
+ qRH
 	str::string Text;
 	PRInt32 Index = 0;
- ERRBegin
+ qRB
 	 aCol->GetIndex( &Index );
 
 	Text.Init();
 	 _C().GetCellText( aRow, Index, Text );
 	 Transform( Text, aCellText );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
   return NS_OK;
 }
 
@@ -2047,49 +2047,49 @@ NS_IMETHODIMP nsxpcm::autocomplete_result___::GetMatchCount(PRUint32 *aMatchCoun
 
 NS_IMETHODIMP nsxpcm::autocomplete_result___::GetValueAt(PRInt32 index, nsAString & _retval NS_OUTPARAM)
 {
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	_C().GetValue( GetSearchString(), index, Value );
 
 	Transform( Value , _retval );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
     return NS_OK;
 }
 
 NS_IMETHODIMP nsxpcm::autocomplete_result___::GetLabelAt(PRInt32 index, nsAString & _retval NS_OUTPARAM)
 {
-ERRProlog
+qRH
 	str::string Label;
-ERRBegin
+qRB
 	Label.Init();
 
 	_C().GetLabel( GetSearchString(), index, Label );
 
 	Transform( Label , _retval );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
     return NS_OK;
 }
 
 NS_IMETHODIMP nsxpcm::autocomplete_result___::GetCommentAt(PRInt32 index, nsAString & _retval NS_OUTPARAM)
 {
-ERRProlog
+qRH
 	str::string Comment;
-ERRBegin
+qRB
 	Comment.Init();
 
 	_C().GetComment( GetSearchString(), index, Comment );
 
 	Transform( Comment , _retval );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
     return NS_OK;
 }
 
@@ -2122,18 +2122,18 @@ void nsxpcm::xslt_parameters_::Append(
 	const str::string_ &Name,
 	const str::string_ &Value )
 {
-ERRProlog
+qRH
 	xslt_parameter Parameter;
-ERRBegin
+qRB
 	Parameter.Init();
 
 	Parameter.Name = Name;
 	Parameter.Value = Value;
 
 	_xslt_parameters_::Append( Parameter );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -2144,27 +2144,27 @@ nsIDOMDocumentFragment *nsxpcm::XSLTransform(
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
-ERRProlog
+qRH
 	nsCOMPtr<nsIXSLTProcessor> Processor;
 	nsString Name;
 	nsCOMPtr<nsIWritableVariant> Value;
 	TOL_CBUFFER___ NameBuffer;
 	ctn::E_CITEM( xslt_parameter_ ) Parameter;
 	nsresult Result = NS_OK;
-	sdr::row__ Row = E_NIL;
-ERRBegin
+	sdr::row__ Row = qNIL;
+qRB
 	nsxpcm::CreateInstance( "@mozilla.org/document-transformer;1?type=xslt", Processor );
 
 	Result = Processor->ImportStylesheet( XSLStylesheet );
 
 	if ( Result != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	Parameter.Init( Parameters );
 
 	Row = Parameters.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Transform( Parameter( Row ).Name, Name );
 
 		nsxpcm::CreateInstance( NS_VARIANT_CONTRACTID, Value );
@@ -2173,7 +2173,7 @@ ERRBegin
 		Result = Processor->SetParameter( NS_LITERAL_STRING( "" ), Name, Value );
 
 		if ( Result != NS_OK )
-			ERRLbr();
+			qRLbr();
 
 		Row = Parameters.Next( Row );
 	}
@@ -2182,11 +2182,11 @@ ERRBegin
 	Result = Processor->TransformToFragment( XMLDocument, GetDocument( Owner ), &Fragment );
 
 	if ( Result != NS_OK )
-		ERRLbr();
-ERRErr
+		qRLbr();
+qRR
 	Fragment = NULL;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Fragment;
 }
 
@@ -2195,18 +2195,18 @@ static void Preprocess_(
 	const str::string_ &BaseDirectory,
 	str::string_ &ProcessedXMLString )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ SFlow;
 	txf::text_oflow__ TFlow;
-ERRBegin
+qRB
 	SFlow.Init( ProcessedXMLString );
 	TFlow.Init( SFlow );
 
 	if ( xpp::Process( XFlow, BaseDirectory, xml::oCompact, TFlow ) != xpp::sOK )
-		ERRDta();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 }
 
 static bso::bool__ _GetXMLDocument(
@@ -2243,17 +2243,17 @@ static bso::bool__ _GetXSLStylesheet(
 	Result = HTTPRequest->Open( Method, URL, false, Empty, Empty );
 
 	if ( Result != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	Result = HTTPRequest->Send( NULL );
 
 	if ( Result != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	Result = HTTPRequest->GetResponseXML( &XSLStylesheet );
 
 	if ( Result != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	return true;
 }
@@ -2265,20 +2265,20 @@ nsIDOMDocumentFragment *nsxpcm::XSLTransformByContent(
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
-ERRProlog
+qRH
 	nsIDOMDocument *XMLDocument = NULL, *XSLStylesheet = NULL;
-ERRBegin
+qRB
 	if ( !_GetXMLDocument( XMLString, XMLDocument ) )
-		ERRDta();
+		qRFwk();
 
 	if ( !_GetXMLDocument( XSLString, XSLStylesheet ) )
-		ERRDta();
+		qRFwk();
 
 	Fragment = XSLTransform( XMLDocument, XSLStylesheet, Owner, Parameters );
-ERRErr
+qRR
 	Fragment = NULL;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Fragment;
 }
 
@@ -2289,20 +2289,20 @@ static nsIDOMDocumentFragment *XSLTransformProvidingChromeXSLFileName_(
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
-ERRProlog
+qRH
 	nsIDOMDocument *XMLDocument = NULL, *XSLStylesheet = NULL;
-ERRBegin
+qRB
 	if ( !_GetXMLDocument( XMLString, XMLDocument ) )
-		ERRDta();
+		qRFwk();
 
 	if ( !_GetXSLStylesheet( XSLFileName, XSLStylesheet ) )
-		ERRDta();
+		qRFwk();
 
 	Fragment = XSLTransform( XMLDocument, XSLStylesheet, Owner, Parameters );
-ERRErr
+qRR
 	Fragment = NULL;
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Fragment;
 }
 
@@ -2310,7 +2310,7 @@ static inline void Process_(
 	const str::string_ &FileName,
 	str::string_ &Result )
 {
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ SFlow;
 	txf::text_oflow__ TFlow;
 	flf::file_iflow___ FFlow;
@@ -2319,9 +2319,9 @@ ERRProlog
 	TOL_CBUFFER___ FNMBuffer;
 	fnm::name___ Buffer;
 	const char *XSLLocation = NULL;
-ERRBegin
+qRB
 	if ( FFlow.Init( FileName.Convert( STRBuffer ) ) != tol::rSuccess )
-		ERRLmt();	// Devrait normalement faire remonter un message d'erreur explicatif.
+		qRLmt();	// Devrait normalement faire remonter un message d'erreur explicatif.
 
 	XFlow.Init( FFlow, utf::f_Default );
 
@@ -2332,10 +2332,10 @@ ERRBegin
 	TFlow.Init( SFlow );
 
 	if ( xpp::Process( XFlow, str::string( XSLLocation ), xml::oCompact, TFlow ) != xpp::sOK )
-		ERRDta();
-ERRErr
-ERREnd
-ERREpilog
+		qRFwk();
+qRR
+qRT
+qRE
 }
 
 static inline nsIDOMDocumentFragment *XSLTransformProvidingXSLContent_(
@@ -2345,16 +2345,16 @@ static inline nsIDOMDocumentFragment *XSLTransformProvidingXSLContent_(
 	const xslt_parameters_ &Parameters )
 {
 	nsIDOMDocumentFragment *Fragment = NULL;
-ERRProlog
+qRH
 	str::string XSLContent;
-ERRBegin
+qRB
 	XSLContent.Init();
 	Process_( XSLFileName, XSLContent );
 
 	Fragment = nsxpcm::XSLTransformByContent( XMLContent, XSLContent, Owner, Parameters );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Fragment; 
 }
 
@@ -2412,10 +2412,10 @@ void nsxpcm::LaunchURI( const str::string_ &RawURI )
 	Transform( RawURI, TransformedURI );
 
 	if ( ( Result = IOService->NewURI( TransformedURI, NULL, NULL, &URI ) ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	if ( ( Result = ExternalProtocolService->LoadURI( URI, NULL ) ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 }
 
 bso::bool__ nsxpcm::GetDirectory(
@@ -2424,23 +2424,23 @@ bso::bool__ nsxpcm::GetDirectory(
 	err::handling__ ErrHandling )
 {
 	nsresult Result = NS_OK;
-ERRProlog
+qRH
 	nsCOMPtr<nsIDirectoryServiceProvider> DirectoryServiceProvider;
 	nsIFile *File = NULL;
 	NSXPCM__BOOL Persistent = false;
-ERRBegin
+qRB
 	GetService<nsIDirectoryServiceProvider>( "@mozilla.org/file/directory_service;1", DirectoryServiceProvider );
 
 	if ( ( Result = DirectoryServiceProvider->GetFile( Name, &Persistent, &File ) ) != NS_OK )
 		if ( ErrHandling != err::hUserDefined )
-			ERRFwk();
+			qRFwk();
 		else
-			ERRReturn;
+			qRReturn;
 
 	T( File->GetNativePath( Path ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Result == NS_OK;
 }
 
@@ -2465,14 +2465,14 @@ bso::bool__ nsxpcm::GetDirectory(
 
 void nsxpcm::LaunchEmbedFile( const char *RawFile )
 {
-ERRProlog
+qRH
 	nsCOMPtr<nsILocalFile> LocalFile = NULL;
 	nsCString Directory;
 	nsString Transformed;
 	str::string Joined;
 	strings Splitted;
-	sdr::row__ Row = E_NIL;
-ERRBegin
+	sdr::row__ Row = qNIL;
+qRB
 	GetWorkingDirectory( Directory );
 
 	CreateInstance( "@mozilla.org/file/local;1", LocalFile );
@@ -2488,7 +2488,7 @@ ERRBegin
 
 	Row = Splitted.First();
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Transform( Splitted( Row ), Transformed );
 
 		T( LocalFile->AppendRelativePath( Transformed ) );
@@ -2497,9 +2497,9 @@ ERRBegin
 	}
 
 	T( LocalFile->Launch() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void nsxpcm::AddFormHistoryEntry(
@@ -2520,7 +2520,7 @@ void nsxpcm::AddFormHistoryEntry(
 	mtx::Unlock( FormHistoryMutex_ );
 #	endif
 #else
-	ERRLmt();
+	qRLmt();
 #endif
 }
 
@@ -2542,7 +2542,7 @@ void nsxpcm::RemoveFormHistoryEntry(
 	mtx::Unlock( FormHistoryMutex_ );
 #	endif
 #else
-	ERRLmt();
+	qRLmt();
 #endif
 }
 
@@ -2561,7 +2561,7 @@ void nsxpcm::RemoveEntriesForName( const str::string_ &RawName )
 	mtx::Unlock( FormHistoryMutex_ );
 #	endif
 #else
-	ERRLmt();
+	qRLmt();
 #endif
 }
 
@@ -2570,15 +2570,15 @@ bso::u32__ nsxpcm::GetArguments(
 	arguments_ &Arguments )
 {
 	PRInt32 Amount = 0;
-ERRProlog
+qRH
 	PRInt32 Counter = 0;
 	str::string Argument;
 	nsString RawArgument;
-ERRBegin
+qRB
 	T( CommandLine->GetLength( &Amount ) );
 
 	if ( ( Amount < 0 ) || ( Amount > BSO_UINT_MAX ) )
-		ERRSys();
+		qRSys();
 
 	while ( Counter < Amount ) {
 		T( CommandLine->GetArgument( Counter++, RawArgument ) );
@@ -2588,9 +2588,9 @@ ERRBegin
 		Arguments.Append( Argument );
 	}
 		
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return (bso::u32__ )Amount;
 }
 
@@ -2610,10 +2610,10 @@ static void CopyBroadcasterCommand_(
 	nsIDOMDocument *Document,
 	nsIDOMNode *Node )
 {
-ERRProlog
+qRH
 	str::string ObservesAttributeValue;
 	str::string CommandAttributeValue;
-ERRBegin
+qRB
 	ObservesAttributeValue.Init();
 
 	nsxpcm::GetAttribute( Node, "observes", ObservesAttributeValue );
@@ -2626,9 +2626,9 @@ ERRBegin
 			if ( !HasAttribute( Node, "oncommand" ) )
 				nsxpcm::SetAttribute( Node, "command", CommandAttributeValue );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void CopyBroadcasterCommand_(
@@ -2667,7 +2667,7 @@ void nsxpcm::DuplicateBroadcasterCommand( nsIDOMDocument *Document )
 			Ascending = true;
 			Node = GetParentNode( Node );
 		} else
-			ERRFwk();
+			qRFwk();
 	}
 }
 
@@ -2694,7 +2694,7 @@ void nsxpcm::PatchBadCommandBehaviorforKeysetListener( nsIDOMDocument *Document 
 	Transform( "key", Id );
 
 	if ( Document->GetElementsByTagName( Id, &List ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	AddSemiColonCommand_( List );
 }
@@ -2712,7 +2712,7 @@ static nsIDOMWindowInternal *GetWindow_(
 	Transform( TagName, Id );
 
 	if ( Document->GetElementsByTagName( Id, &List ) != NS_OK )
-		ERRLbr();
+		qRLbr();
 
 	T( List->GetLength( &Length ) );
 
@@ -2733,7 +2733,7 @@ nsIDOMWindowInternal *nsxpcm::GetWindow( nsIDOMDocument *Document )
 	if ( ( Window = GetWindow_( Document, "window" ) ) == NULL )
 		if ( ( Window = GetWindow_( Document, "page" ) ) == NULL )
 			if ( ( Window = GetWindow_( Document, "dialog" ) ) == NULL )
-				ERRFwk();
+				qRFwk();
 
 	return Window;
 }

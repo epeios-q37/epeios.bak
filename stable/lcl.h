@@ -74,15 +74,15 @@ namespace lcl {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.Value = E_NIL;
+			S_.Value = qNIL;
 			S_.ToTranslate = false;
 			Tags.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Tags.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Tags.plug( AS );
 		}
@@ -96,7 +96,7 @@ namespace lcl {
 		}
 		void Init( bso::bool__ ToTranslate )
 		{
-			S_.Value = E_NIL;
+			S_.Value = qNIL;
 			S_.ToTranslate = ToTranslate;
 
 			Tags.Init();
@@ -127,7 +127,7 @@ namespace lcl {
 			Values.reset( P );
 			Basics.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Values.plug( AS );
 			Basics.plug( AS );
@@ -150,8 +150,8 @@ namespace lcl {
 	private:
 		_basic_ &_Basic( void )
 		{
-			if ( S_.Basic == E_NIL )
-				ERRFwk();
+			if ( S_.Basic == qNIL )
+				qRFwk();
 
 			return Core.Basics( S_.Basic );
 		}
@@ -165,8 +165,8 @@ namespace lcl {
 		}
 		const _basic_ &_Basic( ctn::E_CMITEMt( _basic_, brow__ ) &Basic ) const
 		{
-			if ( S_.Basic == E_NIL )
-				ERRFwk();
+			if ( S_.Basic == qNIL )
+				qRFwk();
 
 			return _GetBasic( S_.Basic, Basic );
 		}
@@ -182,10 +182,10 @@ namespace lcl {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.Basic = E_NIL;
+			S_.Basic = qNIL;
 			Core.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Core.plug( AS );
 		}
@@ -225,7 +225,7 @@ namespace lcl {
 		{
 			ctn::E_CMITEMt( _basic_, brow__ ) Basic;
 
-			return _Basic( Basic ).S_.Value == E_NIL;
+			return _Basic( Basic ).S_.Value == qNIL;
 		}
 	};
 

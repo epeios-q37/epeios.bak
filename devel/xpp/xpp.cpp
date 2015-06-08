@@ -107,7 +107,7 @@ const char *xpp::GetLabel( status__ Status )
 	CASE( MissingKeyOrFormatAttribute );
 	CASE( CDataNestingForbidden );
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
@@ -118,10 +118,10 @@ void xpp::GetMeaning(
 	const coords___ &Coordinates,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ CBuffer;
 	bso::integer_buffer__ IBuffer;
-ERRBegin
+qRB
 	if ( !Coordinates.FileName.IsEmpty() ) {
 		Meaning.SetValue( XPP_NAME "_ErrorInFileAtLineColumn" );
 		Meaning.AddTag( Coordinates.FileName.UTF8( CBuffer ) );
@@ -130,18 +130,18 @@ ERRBegin
 
 	Meaning.AddTag( bso::Convert( Coordinates.Position.Line, IBuffer ) );
 	Meaning.AddTag( bso::Convert( Coordinates.Position.Column, IBuffer ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xpp::GetMeaning(
 	const context___ &Context,
 	lcl::meaning_ &Meaning )
 {
-ERRProlog
+qRH
 	lcl::meaning MeaningBuffer;
-ERRBegin
+qRB
 	GetMeaning( Context.Coordinates, Meaning );
 
 	MeaningBuffer.Init();
@@ -152,9 +152,9 @@ ERRBegin
 		MeaningBuffer.SetValue( GetLabel( Context.Status ) );
 
 	Meaning.AddTag( MeaningBuffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xpp::_qualified_preprocessor_directives___::Init( const str::string_ &Namespace )
@@ -216,7 +216,7 @@ static inline bso::bool__ BelongsToNamespace_(
 	const str::string_ &NamespaceWithSeparator )
 {
 	if ( Name.Amount() == 0 )
-		ERRPrm();
+		qRFwk();
 
 	if ( Name.Amount() < NamespaceWithSeparator.Amount() )
 		return false;
@@ -286,7 +286,7 @@ static status__ AwaitingToken_(
 
 	switch ( Token = Parser.Parse( xml::tfAllButUseless ) ) {
 		case xml::t_Processed:
-			ERRFwk();
+			qRFwk();
 			break;
 		case xml::t_Error:
 			return Convert_( Parser.Status() );
@@ -324,13 +324,13 @@ void Dump_(
 	const str::string_ &Data,
 	flw::oflow__ &Flow )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Flow.Write( Data.Convert( Buffer ), Data.Amount() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static status__ RetrieveTree_(
@@ -345,7 +345,7 @@ static status__ RetrieveTree_(
 		case xml::tStartTag:
 			Dump_( Parser.DumpData(), Flow );
 			if ( Nesting == BSO_UINT_MAX )
-				ERRLmt();
+				qRLmt();
 			Nesting++;
 			break;
 		case xml::tValue:
@@ -358,7 +358,7 @@ static status__ RetrieveTree_(
 			Dump_( Parser.DumpData(), Flow );
 			switch ( Nesting ) {
 			case 0:
-				ERRFwk();
+				qRFwk();
 				break;
 			case 1:
 				Status = AwaitingToken_( Parser, xml::tEndTag, sTooManyTags );
@@ -372,10 +372,10 @@ static status__ RetrieveTree_(
 			return Convert_( Parser.Status() );
 			break;
 		case xml::t_Processed:
-			ERRFwk();
+			qRFwk();
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
@@ -388,15 +388,15 @@ static status__ RetrieveTree_(
 	str::string_ &Tree )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ Flow;
-ERRBegin
+qRB
 	Flow.Init( Tree );
 
 	Status = RetrieveTree_( Parser, Flow);
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -425,10 +425,10 @@ static status__ GetDefineNameAndContent_(
 status__ xpp::_extended_parser___::_HandleDefineDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal. 
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string Name, Content;
 	xtf::pos__ Position;
-ERRBegin
+qRB
 	Parser = NULL;
 
 	Position = _Parser.GetCurrentPosition();
@@ -437,12 +437,12 @@ ERRBegin
 	Content.Init();
 
 	if ( ( Status = GetDefineNameAndContent_( _Parser, Name, Content ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 	_Repository.Store( Name, Position, _LocalizedFileName, Content );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -460,19 +460,19 @@ static inline expand_type__ GetExpandTypeAndValue_(
 	status__ &Status )	// Siginfiant seulement si valeur retourne == 'et_Undefined'.
 {
 	expand_type__ Type = et_Undefined;
-ERRProlog
+qRH
 	str::string AttributeName;
-ERRBegin
+qRB
 	AttributeName.Init();
 
 	if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingSelectOrHRefAttribute ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 	Value = Parser.Value();
 
 	if ( Value.Amount() == 0 ) {
 		Status = sEmptySelectOrHRefAttributeValue;
-		ERRReturn;
+		qRReturn;
 	}
 
 	if ( Parser.AttributeName() == EXPAND_TAG_HREF_ATTRIBUTE )
@@ -483,12 +483,12 @@ ERRBegin
 		Type = etVariable;
 	else {
 		Status = sUnexpectedAttribute;
-		ERRReturn;
+		qRReturn;
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Type;
 }
 
@@ -497,35 +497,35 @@ status__ xpp::_extended_parser___::_HandleMacroExpand(
 	_extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string FileName;
 	str::string Content;
 	xtf::pos__ Position;
-ERRBegin
+qRB
 	FileName.Init();
 	Content.Init();
 
 	if ( !_Repository.Get( MacroName, Position, FileName, Content ) ) {
 		Status = sUnknownMacro;
-		ERRReturn;
+		qRReturn;
 	}
 
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
 	Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
-ERRErr
+qRR
 	if ( Parser != NULL ) {
 		delete Parser;
 		Parser = NULL;
 	}
-ERREnd
+qRT
 	if ( Status != sOK ) {
 		if ( Parser != NULL ) {
 			delete Parser;
 			Parser = NULL;
 		}
 	}
-ERREpilog
+qRE
 	return Status;
 }
 
@@ -534,24 +534,24 @@ status__ xpp::_extended_parser___::_HandleFileExpand(
 	_extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
 	Status = Parser->_InitWithFile( FileName, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
-ERRErr
+qRR
 	if ( Parser != NULL ) {
 		delete Parser;
 		Parser = NULL;
 	}
-ERREnd
+qRT
 	if ( Status != sOK ) {
 		if ( Parser != NULL ) {
 			delete Parser;
 			Parser = NULL;
 		}
 	}
-ERREpilog
+qRE
 	return Status;
 }
 
@@ -560,10 +560,10 @@ status__ xpp::_extended_parser___::_HandleVariableExpand(
 	_extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string Content;
 	xtf::pos__ Position;
-ERRBegin
+qRB
 	Content.Init();
 
 	Content.Append( '<' );
@@ -582,29 +582,29 @@ ERRBegin
 	else
 		Status = sOK;
 
-ERRErr
+qRR
 	if ( Parser != NULL ) {
 		delete Parser;
 		Parser = NULL;
 	}
-ERREnd
+qRT
 	if ( Status != sOK ) {
 		if ( Parser != NULL ) {
 			delete Parser;
 			Parser = NULL;
 		}
 	}
-ERREpilog
+qRE
 	return Status;
 }
 
 status__ xpp::_extended_parser___::_HandleExpandDirective( _extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	expand_type__ Type = et_Undefined;
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	switch ( GetExpandTypeAndValue_( _Parser, Value, Status ) ) {
@@ -621,7 +621,7 @@ ERRBegin
 		// 'Status' initialis par 'etExpandTypeAndValue_(...)'.
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -633,9 +633,9 @@ ERRBegin
 
 	_Parser.PurgeDumpData();
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -643,13 +643,13 @@ static void GetEnvVar_(
 	const str::string_ &Name,
 	str::string_ &Value )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	Value.Append( getenv( Name.Convert( Buffer ) ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static status__ GetSetNameAndValue_(
@@ -704,16 +704,16 @@ static status__ GetSetNameAndValue_(
 status__ xpp::_extended_parser___::_HandleSetDirective( _extended_parser___ *&Parser )	// 'Parser' est mis  'NULL', ce qui est normal. 
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string Name, Value;
-ERRBegin
+qRB
 	Parser = NULL;
 
 	Name.Init();
 	Value.Init();
 
 	if ( ( Status = GetSetNameAndValue_( _Parser, Name, Value ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 	_Variables.Set( Name, Value );
 
@@ -725,9 +725,9 @@ ERRBegin
 
 	_Parser.PurgeDumpData();
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -770,20 +770,20 @@ static status__ GetIfeqSelectAndValue_(
 status__ xpp::_extended_parser___::_HandleIfeqDirective( _extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string Name, ExpectedValue, TrueValue, Content;
 	xtf::pos__ Position;
-ERRBegin
+qRB
 	Parser = NULL;
 
 	Name.Init();
 	ExpectedValue.Init();
 
 	if ( ( Status = GetIfeqSelectAndValue_( _Parser, Name, ExpectedValue ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 	if ( ( Status = AwaitingToken_( _Parser, xml::tStartTagClosed, sUnexpectedAttribute ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 
 	Content.Init();
@@ -791,7 +791,7 @@ ERRBegin
 	Position = _Parser.GetCurrentPosition();
 
 	if ( ( Status = RetrieveTree_( _Parser, Content ) ) != sOK)
-		ERRReturn;
+		qRReturn;
 
 
 	TrueValue.Init();
@@ -801,19 +801,19 @@ ERRBegin
 
 		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
 	}
-ERRErr
+qRR
 	if ( Parser != NULL ) {
 		delete Parser;
 		Parser = NULL;
 	}
-ERREnd
+qRT
 	if ( Status != sOK ) {
 		if ( Parser != NULL ) {
 			delete Parser;
 			Parser = NULL;
 		}
 	}
-ERREpilog
+qRE
 	return Status;
 }
 
@@ -831,13 +831,13 @@ static inline cypher_mode__ GetCypherModeAndValue_(
 	status__ &Status )	// Siginfiant seulement si valeur retourne == 'et_Undefined'.
 {
 	cypher_mode__ Mode = cm_Undefined;
-ERRProlog
+qRH
 	str::string AttributeName;
-ERRBegin
+qRB
 	AttributeName.Init();
 
 	if ( ( Status = AwaitingToken_( Parser, xml::tAttribute, sMissingKeyOrFormatAttribute ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 	if ( Parser.AttributeName() == CYPHER_TAG_KEY_ATTRIBUTE )
 		Mode = cmOverriden;
@@ -845,13 +845,13 @@ ERRBegin
 		Mode = cmEncrypted;
 	else {
 		Status = sUnexpectedAttribute;
-		ERRReturn;
+		qRReturn;
 	}
 
 	Value = Parser.Value();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Mode;
 }
 
@@ -875,7 +875,7 @@ status__ xpp::_extended_parser___::_HandleCypherOverride(
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
 		if ( _PreservationLevel != 0 )
-			ERRFwk();
+			qRFwk();
 
 		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, _Preserve );
 	}
@@ -885,10 +885,10 @@ status__ xpp::_extended_parser___::_HandleCypherOverride(
 status__ xpp::_extended_parser___::_HandleCypherDirective( _extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	cypher_mode__ Mode = cm_Undefined;
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 
 	switch ( GetCypherModeAndValue_( _Parser, Value, Status ) ) {
@@ -905,7 +905,7 @@ ERRBegin
 		// 'Status' initialis par 'etCypherModeAndValue_(...)'.
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -913,9 +913,9 @@ ERRBegin
 		Status = AwaitingToken_( _Parser, xml::tStartTagClosed, sUnexpectedAttribute );
 
 	_Parser.PurgeDumpData();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -928,7 +928,7 @@ status__ xpp::_extended_parser___::_HandlePreprocessorDirective(
 
 	switch ( Directive ) {
 	case dNone:
-		ERRPrm();
+		qRFwk();
 		break;
 	case dUnknown:
 		return sUnknownDirective;
@@ -937,10 +937,10 @@ status__ xpp::_extended_parser___::_HandlePreprocessorDirective(
 		return _HandleDefineDirective( Parser );
 		break;
 	case dBloc:
-		ERRFwk();	// Trait en amont.
+		qRFwk();	// Trait en amont.
 		break;
 	case dCData:
-		ERRFwk();	// Trait en amont.
+		qRFwk();	// Trait en amont.
 		break;
 	case dExpand:
 		return _HandleExpandDirective( Parser );
@@ -955,11 +955,11 @@ status__ xpp::_extended_parser___::_HandlePreprocessorDirective(
 		return _HandleCypherDirective( Parser );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
-	ERRFwk();
+	qRFwk();
 
 	return s_Undefined;	// Pour viter un 'warning'.
 
@@ -971,7 +971,7 @@ static sdr::row__ ExtractAttributeName_(
 {
 	sdr::row__ Row = Source.First();
 
-	while ( ( Row != E_NIL )
+	while ( ( Row != qNIL )
 		    && ( isalnum( Source( Row ) ) || ( Source( Row ) == ':' ) || ( Source( Row ) == '_' ) ) ) {
 		Value.Append( Source( Row ) );
 		Row = Source.Next( Row );
@@ -986,19 +986,19 @@ status__ xpp::_extended_parser___::_HandleAttributeDirective(
 	str::string_ &Data )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string AttributeName, MacroName;
-	sdr::row__ Row = E_NIL;
-ERRBegin
+	sdr::row__ Row = qNIL;
+qRB
 	AttributeName.Init();
 
 	Row = ExtractAttributeName_( Parameters, AttributeName );
 
-	if ( ( Row == E_NIL )
+	if ( ( Row == qNIL )
 		  || ( AttributeName.Amount() == 0 )
 		  || ( Parameters( Row ) != ',' ) ) {
 		Status = sBadAttributeDefinitionSyntax;
-		ERRReturn;
+		qRReturn;
 	}
 
 	MacroName.Init( Parameters );
@@ -1009,9 +1009,9 @@ ERRBegin
 	Status = this->_HandleMacroExpand( MacroName, Parser );
 
 	_AttributeDefinitionInProgress = true;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1023,18 +1023,18 @@ status__ xpp::_extended_parser___::_InitWithFile(
 	utf::format__ Format )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string LocalizedFileNameBuffer;
 	str::string LocationBuffer;
 	fnm::name___ Path;
 	fnm::name___ Location;
-ERRBegin
+qRB
 	Path.Init();
 	fnm::BuildPath( Directory, FileName, "", Path );
 
 	if ( _FFlow.Init( fnm::Normalize( Path ), fil::mReadOnly, err::hUserDefined ) != tol::rSuccess ) {
 		Status = sUnableToOpenFile;
-		ERRReturn;
+		qRReturn;
 	}
 
 	_XFlow.Init( _FFlow, Format );
@@ -1045,14 +1045,14 @@ ERRBegin
 	LocationBuffer.Init();
 
 	if ( ( Status = Init( _XFlow, Path.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 	_IgnorePreprocessingInstruction = true;
 
 	Status = sOK;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1066,8 +1066,8 @@ status__ xpp::_extended_parser___::_InitWithContent(
 	utf::format__ Format )
 {
 	status__ Status = s_Undefined;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	_MacroContent.Init( Content );
 	_SFlow.Init( _MacroContent );
 //	_SFlow.EOFD( XTF_EOXT );
@@ -1075,12 +1075,12 @@ ERRBegin
 	_XFlow.Init( _SFlow, Format, Position );
 
 	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, Preserve ) ) != sOK )
-		ERRReturn;
+		qRReturn;
 
 	_IgnorePreprocessingInstruction = false;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1098,7 +1098,7 @@ status__ xpp::_extended_parser___::_InitCypher(
 	_XFlow.Init( _Decrypter, Format, Position );
 
 	if ( _PreservationLevel != 0 )
-		ERRFwk();
+		qRFwk();
 
 	return Init( _XFlow, FileName, Directory, CypherKey, Preserve );
 }
@@ -1117,7 +1117,7 @@ static bso::bool__ StripHeadingSpaces_(
 
 static void StripHeadingSpaces_( str::string_ &Data )
 {
-	while ( ( Data.First() != E_NIL ) && ( isspace( Data( Data.First() ) ) ) )
+	while ( ( Data.First() != qNIL ) && ( isspace( Data( Data.First() ) ) ) )
 		Data.Remove( Data.First() );
 }
 
@@ -1156,7 +1156,7 @@ status__ xpp::_extended_parser___::Handle(
 
 			if ( Directive == dCData ) {
 				if ( _CDataNesting == CDATA_NESTING_MAX )
-					ERRLmt();
+					qRLmt();
 
 				if ( _CDataNesting == 0 )
 					Continue = true;
@@ -1173,7 +1173,7 @@ status__ xpp::_extended_parser___::Handle(
 					if ( _PreservationLevel == 0 )
 						Continue = true;
 					else if ( _PreservationLevel == XPP_PLEVEL_MAX )
-						ERRLmt();
+						qRLmt();
 					else {
 						_PreservationLevel++;
 						Status = sOK;
@@ -1230,7 +1230,7 @@ status__ xpp::_extended_parser___::Handle(
 					Status = sUnexpectedAttribute;
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			} else
@@ -1247,7 +1247,7 @@ status__ xpp::_extended_parser___::Handle(
 					// L'attribut n'est pas rpercut sur le flux de sortie.
 					break;
 				default:
-					ERRFwk();
+					qRFwk();
 					break;
 				}
 			}
@@ -1277,7 +1277,7 @@ status__ xpp::_extended_parser___::Handle(
 					Status = sOK;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 			break;
@@ -1291,7 +1291,7 @@ status__ xpp::_extended_parser___::Handle(
 			case dCData:
 				switch ( _CDataNesting ) {
 				case 0:
-					ERRFwk();
+					qRFwk();
 					break;
 				case 1:
 					Continue = true;
@@ -1319,7 +1319,7 @@ status__ xpp::_extended_parser___::Handle(
 					Status = sOK;
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		break;
@@ -1351,7 +1351,7 @@ status__ xpp::_extended_parser___::Handle(
 			Status = Convert_( _Parser.Status() );
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -1398,7 +1398,7 @@ sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 		while ( _Status == s_Pending ) {
 #ifdef XPP_DBG
 			if ( Parser != NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 			if ( _Parsers.Amount() != 0 ) {
 				utf::format__ Format = _CurrentParser->GetFormat();
@@ -1449,13 +1449,13 @@ status__ xpp::Process(
 	context___ &Context )
 {
 	status__ Status = sOK;
-ERRProlog
+qRH
 	preprocessing_iflow___ PFlow;
 	xml::token__ Token = xml::t_Undefined;
 	bso::bool__ Continue = true;
 	xml::parser___ Parser;
 	xtf::extended_text_iflow__ RelayXFlow;
-ERRBegin
+qRB
 	PFlow.Init( XFlow, Criterions );
 	RelayXFlow.Init( PFlow, XFlow.Format() );
 
@@ -1495,16 +1495,16 @@ ERRBegin
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
 
 	if ( RelayXFlow.Format() != utf::f_Guess )
 		XFlow.SetFormat( RelayXFlow.Format() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1515,11 +1515,11 @@ static status__ Encrypt_(
 	xtf::pos__ &Position )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	flx::E_STRING_OFLOW___ Flow;
 	cdgb64::encoding_oflow___ Encoder;
 	crptgr::encrypt_oflow___ Encrypter;
-ERRBegin
+qRB
 	Flow.Init( Target );
 	Encoder.Init( Flow );
 	Encrypter.Init( Encoder, CypherKey );
@@ -1527,9 +1527,9 @@ ERRBegin
 	Status = RetrieveTree_( Parser, Encrypter );
 
 	Position = Parser.GetCurrentPosition();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1541,10 +1541,10 @@ static status__ Encrypt_(
 	xtf::pos__ &Position )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string Tree;
 	_qualified_preprocessor_directives___ Directives;
-ERRBegin
+qRB
 	Directives.Init( Namespace );
 
 	Writer.PushTag( Directives.CypherTag );
@@ -1558,9 +1558,9 @@ ERRBegin
 	Writer.PutValue( Tree );
 
 	Writer.PopTag();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1572,11 +1572,11 @@ static status__ HandleCypherDirective_(
 	xtf::pos__ &Position )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	str::string CypherKey;
 	bso::bool__ CypheringComplete = false;
 	bso::bool__ Continue = true;
-ERRBegin
+qRB
 	CypherKey.Init();
 
 	while ( Continue ) {
@@ -1585,33 +1585,33 @@ ERRBegin
 			if ( Parser.AttributeName() == CYPHER_TAG_KEY_ATTRIBUTE ) {
 				if ( CypherKey.Amount() != 0 ) {
 					Status = sUnexpectedAttribute;
-					ERRReturn;
+					qRReturn;
 				}
 
 				CypherKey = Parser.Value();
 			} else {
 				Status = sUnexpectedAttribute;
-				ERRReturn;
+				qRReturn;
 			}
 			break;
 		case xml::tStartTagClosed:
 			if ( CypherKey.Amount() == 0 ) {
 				Status = sMissingCypherKey;
-				ERRReturn;
+				qRReturn;
 			}
 			if ( ( Status = Encrypt_( Parser, Namespace, CypherKey, Writer, Position ) ) != sOK )
-				ERRReturn;
+				qRReturn;
 			Continue = false;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1623,13 +1623,13 @@ status__ xpp::Encrypt(
 	context___ &Context )
 {
 	status__ Status = s_Undefined;
-ERRProlog
+qRH
 	xtf::extended_text_iflow__ XFlow;
 	xml::token__ Token = xml::t_Undefined;
 	bso::bool__ Continue = true;
 	xml::parser___ Parser;
 	_qualified_preprocessor_directives___ Directives;
-ERRBegin
+qRB
 	Directives.Init( Namespace );
 
 	XFlow.Init( IFlow, Format );
@@ -1649,7 +1649,7 @@ ERRBegin
 			if ( Parser.TagName() == Directives.CypherTag ) {
 				if ( ( Status = HandleCypherDirective_( Namespace, Parser, Writer, Context.Coordinates.Position ) ) != sOK ) {
 					Context.Status = Status;
-					ERRReturn;
+					qRReturn;
 				}
 			} else
 				Writer.PushTag( Parser.TagName() );
@@ -1678,18 +1678,18 @@ ERRBegin
 		case xml::t_Error:
 			Context.Status = Status = _Convert( Parser.Status() );
 			Context.Coordinates.Position = XFlow.Position();
-			ERRReturn;
+			qRReturn;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 	}
 
 	Status = sOK;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1702,15 +1702,15 @@ status__ xpp::Encrypt(
 	context___ &Context )
 {
 	status__ Status = sOK;
-ERRProlog
+qRH
 	xml::writer Writer;
-ERRBegin
+qRB
 	Writer.Init( OFlow, Outfit, xml::e_None, xml::schKeep );
 
 	Status = Encrypt( Namespace, IFlow, Format, Writer, Context );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1723,15 +1723,15 @@ status__ xpp::Process(
 	context___ &Context )
 {
 	status__ Status = sOK;
-ERRProlog
+qRH
 	xml::writer Writer;
-ERRBegin
+qRB
 	Writer.Init( OFlow, Outfit, xml::e_None, xml::schKeep );
 
 	Status = Process( XFlow, Criterions, Writer, Context );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Status;
 }
 
@@ -1741,19 +1741,19 @@ void xpp::Process(
 	str::string_ &Out,
 	const criterions___ &Criterions )
 {
-ERRProlog
+qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
 	flx::E_STRING_OFLOW___ OFlow;
 	txf::text_oflow__ TFlow;
-ERRBegin
+qRB
 	IFlow.Init( In );
 	XFlow.Init( IFlow, utf::f_Guess );
 	OFlow.Init( Out );
 	TFlow.Init( OFlow );
 
 	xpp::Process( XFlow, Criterions, xml::oIndent, TFlow );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

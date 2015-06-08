@@ -34,7 +34,7 @@ void dvkfev::Install(
 	jclass ListenerClass = Env->FindClass( "org/zeusw/dalvik/EpeiosOnClickListener" );
 
 	if ( ListenerClass == NULL )
-		ERRFwk();
+		qRFwk();
 
 	jobject Listener = Env->NewObject(
 			ListenerClass,
@@ -57,7 +57,7 @@ void dvkfev::Install(
 	jclass ListenerClass = Env->FindClass( "org/zeusw/dalvik/EpeiosOnItemSelectedListener" );
 
 	if ( ListenerClass == NULL )
-		ERRFwk();
+		qRFwk();
 
 	jobject Listener = Env->NewObject(
 			ListenerClass,

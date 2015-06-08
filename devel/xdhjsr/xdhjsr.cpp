@@ -59,6 +59,9 @@ entry___ xdhjsr::script::content::Getter( "Getter", ContentScripts_ );
 entry___ xdhjsr::script::DocumentSetter( "DocumentSetter", xdhjsr::Scripts );
 entry___ xdhjsr::script::ChildrenSetter( "ChildrenSetter", xdhjsr::Scripts );
 
+entry___ xdhjsr::script::DraggableSetter( "DraggableSetter", xdhjsr::Scripts );
+entry___ xdhjsr::script::DroppableSetter( "DroppableSetter", xdhjsr::Scripts );
+
 static entry___ DialogScripts_( "Dialog", xdhjsr::Scripts );
 entry___ xdhjsr::script::dialog::Alert( "Alert", DialogScripts_ );
 entry___ xdhjsr::script::dialog::Confirm( "Confirm", DialogScripts_ );

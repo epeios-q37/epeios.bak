@@ -275,14 +275,14 @@ namespace xmlcor {
 			tag_row__ TagRow;
 
 			if ( ( TagRow = XMLC_->Tags.Position( Name, TagRow_, Type ) ) == NONE ) {
-			ERRProlog
+			qRH
 				tag Tag;
-			ERRBegin
+			qRB
 				Tag.Init( Name, Type );
 				TagRow = XMLC_->Tags.BecomeLast( Tag, TagRow_ );
-			ERRErr
-			ERREnd
-			ERREpilog
+			qRR
+			qRT
+			qRE
 			}
 
 			return TagRow;
@@ -355,17 +355,17 @@ namespace xmlcor {
 		const xml_core_ &Source,
 		xml_core_ &Dest )
 	{
-	ERRProlog
+	qRH
 		tag_map TagMap;
-	ERRBegin
+	qRB
 		TagMap.Init();
 	
 		Merge( Source.Tags, Dest.Tags, TagMap );
 	
 		Add( Source, TagMap, Dest );
-	ERRErr
-	ERREnd
-	ERREpilog
+	qRR
+	qRT
+	qRE
 	}
 	
 	/*f Convert special characters contained in 'Target'.

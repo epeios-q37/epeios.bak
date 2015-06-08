@@ -27,10 +27,10 @@ void dbsbsc::DropFile(
 	const str::string_ &RootFileName,
 	const char *Extension )
 {
-ERRProlog
+qRH
 	str::string FileName;
 	STR_BUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	if ( RootFileName.Amount() != 0 ) {
 		FileName.Init( RootFileName );
 		FileName.Append( Extension );
@@ -39,7 +39,7 @@ ERRBegin
 			if ( remove( FileNameBuffer ) != 0 )
 				ERRd();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

@@ -30,13 +30,13 @@ using namespace wkagent;
 
 void wkagent::agent___::ExecuteJavascript( const char *Script )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	ExecuteJavascript( Script, Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -44,18 +44,18 @@ const char *wkagent::agent___::GetSelectValue(
 	const char *Id,
 	TOL_CBUFFER___ &Buffer  )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ LocalBuffer;
 	str::string Name;
-ERRBegin
+qRB
 	Name.Init( "options[" );
 	Name.Append( _C().Get( Id, "selectedIndex", LocalBuffer ) );
 	Name.Append( "].value" );
 
 	_C().Get( Id, Name.Convert( LocalBuffer ), Buffer );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Buffer;
 }
 
@@ -65,13 +65,13 @@ void wkagent::agent___::SetChildren(
 	const str::string_ &XML,
 	const str::string_ &XSL )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ BXML, BXSL;
-ERRBegin
+qRB
 	SetChildren( Id, XML.Convert(BXML), XSL.Convert( BXSL ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void wkagent::agent___::SetChildren(
@@ -79,12 +79,12 @@ void wkagent::agent___::SetChildren(
 	const str::string_ &XML,
 	const str::string_ &XSL )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	SetChildren( Id.Convert( Buffer), XML, XSL );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

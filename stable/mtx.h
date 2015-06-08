@@ -161,16 +161,16 @@ namespace mtx {
 		Counter.Value = Value;
 		if ( Destroy ) {
 			if ( pthread_mutex_destroy( &Counter.Mutex ) )
-				ERRFwk();
+				qRFwk();
 			if ( pthread_mutexattr_destroy( &Counter.MutexAttr ) )
-				ERRFwk();
+				qRFwk();
 		} else {
 			if ( pthread_mutexattr_init( &Counter.MutexAttr ) )
-				ERRFwk();
+				qRFwk();
 			if ( pthread_mutexattr_setpshared( &Counter.MutexAttr, PTHREAD_PROCESS_PRIVATE ) )
-				ERRFwk();
+				qRFwk();
 			if ( pthread_mutex_init( &Counter.Mutex, &Counter.MutexAttr ) )
-				ERRFwk();
+				qRFwk();
 		}
 #elif defined( MTX__NO_ATOMIC_OPERATIONS )
 		Counter = Value;
@@ -190,10 +190,10 @@ namespace mtx {
 #elif defined( MTX__USE_PTHREAD_MUTEX )
 		counter_t__ Buffer;
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
-			ERRFwk();
+			qRFwk();
 		Buffer = Counter.Value;
 		if ( pthread_mutex_unlock( &Counter.Mutex ) )
-			ERRFwk();
+			qRFwk();
 		return Buffer;
 #elif defined( MTX__NO_ATOMIC_OPERATIONS )
 		return Counter;
@@ -218,10 +218,10 @@ namespace mtx {
 		OSAtomicIncrement32( &Counter );
 #elif defined( MTX__USE_PTHREAD_MUTEX )
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
-			ERRFwk();
+			qRFwk();
 		++Counter.Value;
 		if ( pthread_mutex_unlock( &Counter.Mutex ) )
-			ERRFwk();
+			qRFwk();
 #elif defined( MTX__NO_ATOMIC_OPERATIONS )
 		++Counter;
 #else
@@ -242,10 +242,10 @@ namespace mtx {
 #elif defined( MTX__USE_PTHREAD_MUTEX )
 		bso::bool__ Buffer;
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
-			ERRFwk();
+			qRFwk();
 		Buffer = --Counter.Value == 0;
 		if ( pthread_mutex_unlock( &Counter.Mutex ) )
-			ERRFwk();
+			qRFwk();
 		return Buffer;
 #elif defined( MTX__NO_ATOMIC_OPERATIONS )
 		return --Counter == 0;
@@ -275,7 +275,7 @@ namespace mtx {
 		{
 #ifdef MTX__CONTROL
 			if ( IsReleased() )
-				ERRFwk();
+				qRFwk();
 #endif
 			if ( IsDisabled() )
 				return false;
@@ -286,7 +286,7 @@ namespace mtx {
 		{
 #ifdef MTX__CONTROL
 			if ( IsReleased() )
-				ERRFwk();
+				qRFwk();
 #endif
 			if ( IsDisabled() )
 				return true;
@@ -295,7 +295,7 @@ namespace mtx {
 				return false;
 
 			if ( _GetValue( Counter ) == MTX__COUNTER_OVERFLOW_VALUE )
-				ERRLmt();
+				qRLmt();
 
 			if ( _DecAndTest( Counter ) )
 				return true;
@@ -310,7 +310,7 @@ namespace mtx {
 				return;
 
 			if ( !IsLocked() )
-				ERRFwk();
+				qRFwk();
 
 			_Inc( Counter );
 		}
@@ -334,7 +334,7 @@ namespace mtx {
 		handler___ Handler;
 		
 		if ( ( Handler = new _mutex__( Disabled ) ) == NULL )
-			ERRAlc();
+			qRAlc();
 
 		return Handler;
 	}
@@ -343,7 +343,7 @@ namespace mtx {
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		return Handler->IsLocked();
 	}
@@ -353,7 +353,7 @@ namespace mtx {
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		return Handler->TryToLock();
 	}
@@ -373,7 +373,7 @@ namespace mtx {
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		if ( !TryToLock( Handler ) )
 			WaitUntilUnlocked_( Handler );
@@ -384,7 +384,7 @@ namespace mtx {
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
-			ERRPrm();
+			qRFwk();
 #endif
 		Handler->Unlock();
 	}
@@ -396,10 +396,10 @@ namespace mtx {
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
-			ERRPrm();
+			qRFwk();
 
 		if ( Handler->IsLocked() && !EvenIfLocked )
-			ERRPrm();
+			qRFwk();
 #endif
 		delete Handler;
 	}
@@ -420,7 +420,7 @@ namespace mtx {
 		{
 # ifdef MTX_DBG
 			if ( _Handler == MTX__INVALID_HANDLER )
-				ERRFwk();
+				qRFwk();
 # endif
 		}
 		void _UnlockIfInitializedAndLocked( void )
@@ -478,7 +478,7 @@ namespace mtx {
 			_Test();
 
 			if ( _State == sUnlocked )
-				ERRFwk();
+				qRFwk();
 
 			_State = sUnlocked;
 

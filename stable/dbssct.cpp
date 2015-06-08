@@ -36,10 +36,10 @@ static void Save_(
 	const char *Extension,
 	time_t UnderlyingFilesLastModificationTime )
 {
-ERRProlog
+qRH
 	str::string FileName;
 	STR_BUFFER___ FileNameBuffer;
-ERRBegin
+qRB
 	FileName.Init( RootFileName );
 	FileName.Append( Extension );
 	lst::WriteToFile( List, FileName.Convert( FileNameBuffer ), UnderlyingFilesLastModificationTime );
@@ -50,9 +50,9 @@ ERRBegin
 		tol::Touch( FileNameBuffer );
 	}
 */
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void dbssct::exploded_static_content_::_SaveLocations( void ) const
@@ -67,10 +67,10 @@ void dbssct::exploded_static_content_::Init(
 	bso::bool__ Partial,
 	flm::id__ ID )
 {
-ERRProlog
+qRH
 	str::string ContentFileName;
 	tol::E_FPOINTER___( bso::char__ ) ContentFileNameBuffer;
-ERRBegin
+qRB
 	reset();
 
 	this->RootFileName.Init( RootFileName );
@@ -82,9 +82,9 @@ ERRBegin
 	ContentFileName.Append( CONTENT_FILE_NAME_EXTENSION );
 
 	S_.FileManager.Init( ContentFileName.Convert( ContentFileNameBuffer ), Mode, true, ID );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 // Permet de stocker les donnes entirement en mmoire. NON UTILISABLE_EN_EXPOITATION !
@@ -93,7 +93,7 @@ ERREpilog
 bso::bool__ dbssct::exploded_static_content_::_ConnectToFiles( void )
 {
 	bso::bool__ Exists = false;
-ERRProlog
+qRH
 	str::string ContentFileName;
 	STR_BUFFER___ ContentFileNameBuffer;
 	str::string ListFileName;
@@ -101,7 +101,7 @@ ERRProlog
 #ifdef IN_MEMORY
 	tym::E_MEMORY( atom__) Storage;
 #endif
-ERRBegin
+qRB
 	ContentFileName.Init( RootFileName );
 	ContentFileName.Append( CONTENT_FILE_NAME_EXTENSION );
 #ifdef IN_MEMORY
@@ -122,20 +122,20 @@ ERRBegin
 		if ( !lst::ReadFromFile( ListFileName.Convert( ListFileNameBuffer ), fil::GetFileSize( ContentFileName.Convert( ContentFileNameBuffer ) ) / S_.Size, *this, _GetUnderlyingFilesLastModificationTime() ) )
 			RebuildLocations();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Exists;
 }
 
 void dbssct::exploded_static_content_::_ErasePhysically( void )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	S_.FileManager.Drop();
 
 	dbsbsc::DropFile( RootFileName, LIST_FILE_NAME_EXTENSION );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

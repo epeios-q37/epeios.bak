@@ -38,14 +38,14 @@ void xhtlogin::GetContent(
 static frdbse::backend_type__ GetBackendType_( xhtagent::agent___ &Agent )
 {
 	frdbse::backend_type__ BackendType = frdbse::bt_Undefined;
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	BackendType = frdbse::GetBackendType( Agent.GetContent( BackendTypeId, Value ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return BackendType;
 }
 
@@ -65,9 +65,9 @@ frdbse::backend_type__ xhtlogin::GetBackendFeatures(
 	str::string_ &Feature )
 {
 	frdbse::backend_type__ Type = frdbse::bt_Undefined;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	switch ( Type = GetBackendType_( Agent ) ) {
 	case frdbse::btDaemon:
 		Feature.Append( Agent.GetContent( DaemonBackendId, Buffer ) );
@@ -79,12 +79,12 @@ ERRBegin
 		Feature.Append( Agent.GetContent( PredefinedBackendId, Buffer ) );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Type;
 }
 
@@ -92,12 +92,12 @@ void xhtlogin::DisplaySelectedEmbeddedBackendFileName(
 	xhtagent::agent___ &Agent,
 	const char *Id )
 {
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
 	xhtcllbk::args Args;
 	xhtcllbk::retriever__ Retriever;
-ERRBegin
+qRB
 	Args.Init();
 	xhtcllbk::Split( str::string( Agent.GetResult( Id, Buffer ) ), Args );
 
@@ -110,7 +110,7 @@ ERRBegin
 
 	if ( FileName.Amount() != 0 )
 		Agent.SetContent( EmbeddedBackendId, FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

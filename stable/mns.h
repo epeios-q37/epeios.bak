@@ -67,7 +67,7 @@ namespace mns {
 		void Test_( void )
 		{
 			if ( Tampon_ == NULL )
-				ERRFwk();
+				qRFwk();
 		}
 # endif
 	protected:
@@ -102,7 +102,7 @@ namespace mns {
 				sdr::datum__ *Tampon = (sdr::datum__ *)realloc( Tampon_, Size );
 
 				if ( ( Tampon == NULL ) && ( Size != 0 ) )
-					ERRAlc();
+					qRAlc();
 
 				Tampon_ = Tampon;
 				_Size = Size;
@@ -141,7 +141,7 @@ namespace mns {
 	};
 
 	class main_storage_driver__
-	: public sdr::E_SDRIVER__,
+	: public qSD__,
 	  public main_storage__
 	{
 	protected:
@@ -173,10 +173,10 @@ namespace mns {
 		void reset( bool P = true )
 		{
 			main_storage__::reset( P );
-			E_SDRIVER__::reset( P );
+			qSD__::reset( P );
 		}
 		main_storage_driver__( sdr::datum__ *&Buffer )
-		: E_SDRIVER__(),
+		: qSD__(),
 		  main_storage__( Buffer )
 		{
 			reset( false );
@@ -189,7 +189,7 @@ namespace mns {
 		void Init( void )
 		{
 			main_storage__::Init();
-			E_SDRIVER__::Init();
+			qSD__::Init();
 		}
 	};
 

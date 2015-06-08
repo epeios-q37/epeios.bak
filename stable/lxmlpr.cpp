@@ -45,9 +45,9 @@ static void GetPrefixAndName_(
 	str::string_ &Prefix,
 	str::string_ &Name )
 {
-ERRProlog
+qRH
 	str::string Id;
-ERRBegin
+qRB
 	Id.Init();
 
 	GetId_( Flow, Id );
@@ -59,9 +59,9 @@ ERRBegin
 			GetId_( Flow, Name );
 		} else
 			Name = Id;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static bso::bool__ GetValue_(
@@ -183,13 +183,13 @@ bso::bool__ lxmlpr::Parse(
 	xtf::location__ &ErrorColumn )
 {
 	bso::bool__ Success = true;
-ERRProlog
+qRH
 	state__ State = TagExpected;
 	str::string Name, Prefix, Value;
 	tag__ Tag;
 	lstctn::E_LXMCONTAINERt( str::string_, srow__ ) Strings;
 	stk::E_BSTACK( tag__ ) Tags;
-ERRBegin
+qRB
 	Strings.Init();
 	Tags.Init();
 
@@ -337,25 +337,25 @@ ERRBegin
 
 	if ( Tags.Amount() != 0 )
 		ERRI( iBeam );
-ERRErr
+qRR
 	if ( ( ERRMajor == err::itn ) && ( ERRMinor == err::iBeam ) ) {
 		Success = false;
 		ErrorLine = Flow.Line();
 		ErrorColumn = Flow.Column();
 		ERRRst();
 	}
-ERREnd
-ERREpilog
+qRT
+qRE
 	return Success;
 }
 
 void lxmlpr::Transform( str::string_ &Target )
 {
-ERRProlog
+qRH
 	epeios::row__ Position = Target.First();
 	bso::char__ C;
 	str::string Buffer;
-ERRBegin
+qRB
 	while( Position != NONE ) {
 		switch ( C = Target( Position ) ) {
 		case '"':
@@ -384,9 +384,9 @@ ERRBegin
 
 		Position = Target.Next( Position );	// Could be dangerous, but actually works.
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void lxmlpr::writer_::_CloseAllTags( void )
@@ -398,9 +398,9 @@ void lxmlpr::writer_::_CloseAllTags( void )
 
 void lxmlpr::writer_::PutValue( const value_ &Value )
 {
-ERRProlog
+qRH
 	value TransformedValue;
-ERRBegin
+qRB
 	TransformedValue.Init();
 
 	Convert( Value, TransformedValue );
@@ -412,17 +412,17 @@ ERRBegin
 	}
 
 	*S_.Flow << TransformedValue;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
 void lxmlpr::writer_::PopTag( void )
 {
-ERRProlog
+qRH
 	name Name;
-ERRBegin
+qRB
 	if ( Tags.IsEmpty() )
 		ERRu();
 
@@ -436,8 +436,8 @@ ERRBegin
 		*S_.Flow << "</" << Name << ">";
 
 	S_.TagNameInProgress = false;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

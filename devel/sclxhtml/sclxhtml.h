@@ -72,7 +72,7 @@ namespace sclxhtml {
 		const char *Name( void ) const
 		{
 			if ( _Name == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _Name;
 		}
@@ -119,7 +119,7 @@ namespace sclxhtml {
 			{
 				crow__ Row = stsfsm::GetId( Action, Automat );
 
-				if ( Row == E_NIL )
+				if ( Row == qNIL )
 					return NULL;
 
 				return Callbacks( Row );
@@ -140,7 +140,7 @@ namespace sclxhtml {
 				Automat.reset( P );
 				Callbacks.reset( P );
 			}
-			void plug( ags::E_ASTORAGE_ &AS )
+			void plug( qAS_ &AS )
 			{
 				Automat.plug( AS );
 				Callbacks.plug( AS );
@@ -170,7 +170,7 @@ namespace sclxhtml {
 				core_action_callback__ *Callback = _Get( str::string(  Action ) );
 
 				if ( Callback == NULL )
-					ERRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
+					qRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
 
 				return Callback->Launch( Id );
 			}
@@ -203,7 +203,7 @@ namespace sclxhtml {
 		session &Session( void ) const
 		{
 			if ( _Session == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Session;
 		}
@@ -229,7 +229,7 @@ namespace sclxhtml {
 		session &Session( void ) const
 		{
 			if ( _Session == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Session;
 		}
@@ -252,7 +252,7 @@ namespace sclxhtml {
 			_agent___ &_A( void )
 			{
 				if ( _Agent == NULL )
-					ERRFwk();
+					qRFwk();
 
 				return *_Agent;
 			}
@@ -304,7 +304,7 @@ namespace sclxhtml {
 		_action_helper_callback__ &_C( void )
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}
@@ -341,18 +341,18 @@ namespace sclxhtml {
 			const char *Action ) override	// Retourne 'true' si l'action a t correctement traite (et que la propagation de l'vnement  l'orgine de cette action doit tre arrte).
 		{
 			bso::bool__ Success = false;
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			if ( _OnBeforeAction( Id, Action ) )
 				if ( !strcmp( Action, xdhcbk::CloseActionLabel ) )
 					Success = _OnClose();	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 				else
 					Success = _Handler.Launch( Id, Action );
-		ERRErr
+		qRR
 			HandleError( *this, Language( Buffer ) );
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 			return Success;
 		}
 		virtual const char *XHTCLLBKLanguage( TOL_CBUFFER___ &Buffer ) override
@@ -403,7 +403,7 @@ namespace sclxhtml {
 		void Refresh( void )
 		{
 			if ( _Page == UndefinedPage )
-				ERRFwk();
+				qRFwk();
 			else
 				SCLXHTMLRefresh( _Page );
 		}
@@ -412,7 +412,7 @@ namespace sclxhtml {
 			if ( Page != UndefinedPage )
 				_Page = Page;
 			else
-				ERRFwk();
+				qRFwk();
 		}
 		kernel &Kernel( void )
 		{
@@ -421,7 +421,7 @@ namespace sclxhtml {
 		const char *Launcher( void ) const
 		{
 			if ( _Launcher == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return _Launcher;
 		}
@@ -429,13 +429,13 @@ namespace sclxhtml {
 			const char *Message,
 			str::string_ &Translation )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			scllocale::GetTranslation( Message, Language( Buffer ), Translation );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Translation;
 		}
 		bso::bool__ Confirm(
@@ -448,15 +448,15 @@ namespace sclxhtml {
 		bso::bool__ Confirm( const char *Message )
 		{
 			bso::bool__ OK = false;
-		ERRProlog
+		qRH
 			str::string Translation;
-		ERRBegin
+		qRB
 			Translation.Init();
 
 			OK = RawConfirm( GetTranslation( Message, Translation ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return OK;
 		}
 		void Alert(
@@ -468,15 +468,15 @@ namespace sclxhtml {
 		}
 		void Alert( const char *Message )
 		{
-		ERRProlog
+		qRH
 			str::string Translation;
-		ERRBegin
+		qRB
 			Translation.Init();
 
 			RawConfirm( GetTranslation( Message, Translation ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 	};
 

@@ -39,7 +39,7 @@ const char *csdsnc::GetLogLabel( log__ Log )
 		CASE( Retrieval );
 		CASE( Release );
 	default:
-		ERRPrm();
+		qRFwk();
 		return NULL;	// Pour viter un 'warning'.
 		break;
 	}
@@ -55,7 +55,7 @@ static void Ping_(
 			Flow.Commit();
 
 			if ( Flow.Get() != 0 )
-				ERRDta();
+				qRFwk();
 
 			Flow.Dismiss();
 		}
@@ -67,7 +67,7 @@ void csdsnc::core_::Ping( void )
 
 	stk::row__ Row = Flows.First();
 	
-	while ( Row != E_NIL )
+	while ( Row != qNIL )
 	{
 		Ping_( *Flows( Row ), S_.Ping.Delay );
 
@@ -103,12 +103,12 @@ void csdsnc::core_::_KeepAlive( time_t Delay )
 {
 #ifdef CSDSNC__MT
 	if ( Delay <= CSDSNC_PING_RESOLUTION )
-		ERRFwk();
+		qRFwk();
 
 	mtk::Launch( ::KeepAlive_, this );
 #else
 	if ( Delay != 0 )
-		ERRPrm();
+		qRFwk();
 #endif
 }
 

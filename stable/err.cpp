@@ -37,11 +37,11 @@ using namespace err;
 // Utilis durant la phase de chargement du programme.
 static err::err___ FallbackError_( true );
 
-err::err___ *err::ERRError = &FallbackError_;
+err::err___ *err::qRRor = &FallbackError_;
 
 bool err::Concerned( void )
 {
-	return ( ERRError->ThreadID == tht::GetTID() );
+	return ( qRRor->ThreadID == tht::GetTID() );
 }
 
 void err::Unlock( void )
@@ -52,9 +52,9 @@ void err::Unlock( void )
 		ERRu();
 #endif
 #endif
-	ERRError->Type = err::t_None;
+	qRRor->Type = err::t_None;
 
-	mtx::Unlock( ERRError->Mutex );
+	mtx::Unlock( qRRor->Mutex );
 }
 
 const char *GetFileName_( const char *Path )
@@ -103,17 +103,14 @@ const char *err::Message(
 	case err::tLimitation:
 		strcat( Buffer, "LMT" );
 		break;
-	case err::tData:
-		strcat( Buffer, "DTA" );
-		break;
 	case err::tFramework:
 		strcat( Buffer, "FWK" );
 		break;
-	case err::tParameters:
-		strcat( Buffer, "PRM" );
-		break;
 	case err::tForbidden:
 		strcat( Buffer, "FBD" );
+		break;
+	case err::tGeneric:
+		strcat( Buffer, "GNR" );
 		break;
 	case err::tLibrary:
 		strcat( Buffer, "LBR" );
@@ -190,7 +187,7 @@ void err___::Set(
 		this->File = Fichier;
 		this->Line = Ligne;
 	} else if ( !ERRHit() )
-		ERRPrm();
+		qRFwk();
 
 #if 0
 	this->Error = true;

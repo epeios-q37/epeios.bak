@@ -140,7 +140,7 @@ row_t__ untyped_storage_::Search(
 	row_t__ Fin ) const
 {
 	if ( Taille > BUFFER_SIZE )
-		ERRLmt();
+		qRLmt();
 
 	datum__ Tampon[BUFFER_SIZE];
 	bool Trouve = false;
@@ -170,7 +170,7 @@ row_t__ untyped_storage_::Search(
 	if ( Trouve )
 		return Debut;
 	else
-		return E_NIL;
+		return qNIL;
 }
 
 
@@ -192,11 +192,11 @@ void untyped_storage_::WriteToFlow(
 	sdr::size__ Quantite,
 	flw::oflow__ &OFlow ) const
 {
-ERRProlog
+qRH
 	datum__ TamponSecurite[BUFFER_SIZE];
 	datum__ *Tampon = TamponSecurite;
 	size__ Taille = sizeof( TamponSecurite );
-ERRBegin
+qRB
 	if ( Quantite > BUFFER_SIZE )
 	{
 		Taille = ( Quantite > BUFFER_SIZE_MAX ? BUFFER_SIZE_MAX : Quantite );
@@ -221,11 +221,11 @@ ERRBegin
 		Quantite -= Taille;
 		Position += Taille;
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( ( Tampon != TamponSecurite ) && ( Tampon != NULL ) )
 		free( Tampon );
-ERREpilog
+qRE
 }
 
 void untyped_storage_::ReadFromFlow(
@@ -233,11 +233,11 @@ void untyped_storage_::ReadFromFlow(
 	sdr::row_t__ Position,
 	sdr::size__ Quantite )
 {
-ERRProlog
+qRH
 	datum__ TamponSecurite[BUFFER_SIZE];
 	datum__ *Tampon = TamponSecurite;
 	size__ Taille = sizeof( TamponSecurite );
-ERRBegin
+qRB
 	if ( Quantite > BUFFER_SIZE )
 	{
 		Taille = ( Quantite > BUFFER_SIZE_MAX ? BUFFER_SIZE_MAX : Quantite );
@@ -262,11 +262,11 @@ ERRBegin
 		Quantite -= Taille;
 		Position += Taille;
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	if ( ( Tampon != TamponSecurite ) && ( Tampon != NULL ) )
 		free( Tampon );
-ERREpilog
+qRE
 }
 
 void uys::_Fill(
@@ -292,7 +292,7 @@ row__ uys::_Position(
 		Begin += Size;
 
 	if ( Begin > End )
-		return E_NIL;
+		return qNIL;
 	else
 		return Begin;
 }
@@ -301,5 +301,5 @@ row__ uys::_Position(
 Q37_GCTOR( uys )
 {
 	if ( UYS_STATE_AMOUNT != s_amount )
-		ERRChk();
+		qRChk();
 }

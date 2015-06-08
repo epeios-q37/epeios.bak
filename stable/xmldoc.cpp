@@ -33,19 +33,19 @@ static bso::bool__ WriteAttributes_(
 	txf::text_oflow__ &Flow )
 {
 	bso::bool__ HasChild = false;
-ERRProlog
+qRH
 	ctn::E_CMITEMt( value_, vrow__ ) Value;
 	ctn::E_CMITEMt( name_, erow__ ) Name;
 	str::string Result;
-ERRBegin
+qRB
 	Value.Init( Document.Data );
 	Name.Init( Document.Structure );
 
 	Row = Document.Data.FirstChild( Row );
 
-	HasChild = ( Row != E_NIL );
+	HasChild = ( Row != qNIL );
 
-	while( Row != E_NIL ) {
+	while( Row != qNIL ) {
 		if ( Document.Structure.GetOddity( Document.Data.GetOddity( Row ) ) == tAttribute ) {
 			Flow << ' ' << Name( Document.Data.GetOddity( Row ) ) << "=\"";
 
@@ -56,9 +56,9 @@ ERRBegin
 
 		Row = Document.Data.NextSibling( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return HasChild;
 }
 
@@ -67,13 +67,13 @@ void xmldoc::WriteXML(
 	vrow__ Root,
 	txf::text_oflow__ &Flow )
 {
-ERRProlog
+qRH
 	dtr::browser__<vrow__> Browser;
 	ctn::E_CMITEMt( value_, vrow__ ) Value;
 	ctn::E_CMITEMt( name_, erow__ ) Name;
 	bso::bool__ HasChild;
 	str::string Result;
-ERRBegin
+qRB
 	Value.Init( Document.Data );
 	Name.Init( Document.Structure );
 
@@ -92,7 +92,7 @@ ERRBegin
 	Browser.Init( Root );
 	Document.Data.Browse( Browser );
 
-	while( Browser.Position() != E_NIL ) {
+	while( Browser.Position() != qNIL ) {
 		switch( Browser.Kinship() ) {
 		case dtr::kChild:
 		case dtr::kSibling:
@@ -121,7 +121,7 @@ ERRBegin
 #endif
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -134,7 +134,7 @@ ERRBegin
 	Flow << txf::commit;
 #endif
 
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

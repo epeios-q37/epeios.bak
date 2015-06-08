@@ -107,20 +107,20 @@ static bso::bool__ GetProfileValue_(
 	str::string_ &Value )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 str::string WorkPath;
-ERRBegin
+qRB
 	if ( ProfileName.Amount() == 0 )
-		ERRReturn;
+		qRReturn;
 
 	WorkPath.Init( Path );
 
 	WorkPath.Replace( CTAG, 1, ProfileName );
 
 	Success = Registry.GetValue( WorkPath, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -130,28 +130,28 @@ bso::bool__ frdrgy::GetProfileValue(
 	str::string_ &Value )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string ProfileName;
-ERRBegin
+qRB
 	ProfileName.Init();
 
 	if ( GetUserProfileName_( Registry, ProfileName ) )
 		if ( Success = GetProfileValue_( Path, ProfileName, Registry, Value ) )
-			ERRReturn;
+			qRReturn;
 
 	ProfileName.Init();
 
 	if ( GetDefaultProfileName_( Registry, ProfileName ) )
 		if ( Success = GetProfileValue_( Path, ProfileName, Registry, Value ) )
-			ERRReturn;
+			qRReturn;
 
 	ProfileName.Init();
 
 	if ( GetFallbackProfileName_( Registry, ProfileName ) )
 		Success = GetProfileValue_( Path, ProfileName, Registry, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -161,20 +161,20 @@ bso::bool__ frdrgy::GetProfileUIntValue(
 	bso::uint__ &Id )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string Value;
-	sdr::row__ Error = E_NIL;
-ERRBegin
+	sdr::row__ Error = qNIL;
+qRB
 	Value.Init();
 
 	if ( GetProfileValue( Path, Registry, Value ) ) {
 		Id = Value.ToUInt( &Error );
 
-		Success = Error == E_NIL;
+		Success = Error == qNIL;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 
@@ -184,20 +184,20 @@ static void SetProfileValue_(
 	_registry_ &Registry,
 	const str::string_ &Value )
 {
-ERRProlog
+qRH
 str::string WorkPath;
-ERRBegin
+qRB
 	if ( ProfileName.Amount() == 0 )
-		ERRReturn;
+		qRReturn;
 
 	WorkPath.Init( Path );
 
 	WorkPath.Replace( CTAG, 1, ProfileName );
 
 	Registry.SetValue( WorkPath, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void frdrgy::SetProfileValue(
@@ -206,20 +206,20 @@ void frdrgy::SetProfileValue(
 	const str::string_ &Value )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	str::string ProfileName;
-ERRBegin
+qRB
 	ProfileName.Init();
 
 	if ( !GetUserProfileName_( Registry, ProfileName ) )
 		if ( !GetDefaultProfileName_( Registry, ProfileName ) )
 			if ( !GetFallbackProfileName_( Registry, ProfileName ) )
-				ERRReturn;
+				qRReturn;
 
 	SetProfileValue_( Path, ProfileName, Registry, Value );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 #endif

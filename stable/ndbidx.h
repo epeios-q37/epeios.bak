@@ -98,7 +98,7 @@ namespace ndbidx {
 		bso::uint__ Used;
 		extremities__( void )
 		{
-			Smallest = Greatest = E_NIL;
+			Smallest = Greatest = qNIL;
 			Used = 0;
 		}
 	};
@@ -260,7 +260,7 @@ namespace ndbidx {
 		{
 			BIndex.reset( P );
 			DIndex.reset( P );
-			S_.Root = E_NIL;
+			S_.Root = qNIL;
 			_Bufferized = false;
 
 			_SortPointer = NULL;
@@ -270,7 +270,7 @@ namespace ndbidx {
 			_PostInitializationFunction = NULL;
 		}
 		E_VDTOR( index_ )	// Pour qu'un 'delete' sur cette classe appelle le destructeur de la classe hritante.
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			DIndex.plug( AS );
 		}
@@ -298,7 +298,7 @@ namespace ndbidx {
 		{
 			BIndex.Init();
 			DIndex.Init();
-			S_.Root = E_NIL;
+			S_.Root = qNIL;
 
 			_ContentPointer = &Content;
 			_SortPointer = &Sort;
@@ -309,7 +309,7 @@ namespace ndbidx {
 		// Vide l'index.
 		void Reset( void )
 		{
-			S_.Root = E_NIL;
+			S_.Root = qNIL;
 
 			BIndex.Init();
 			DIndex.Init();
@@ -323,7 +323,7 @@ namespace ndbidx {
 			aem::mode__ Mode )
 		{
 			if ( _Bufferized )
-				ERRFwk();
+				qRFwk();
 
 			_CompleteInitialization();
 			DIndex.Allocate( Size, Mode );
@@ -337,11 +337,11 @@ namespace ndbidx {
 			_CompleteInitialization();
 
 #ifdef NDBIDX_DBG
-			if ( S_.Root == E_NIL )
-				ERRFwk();
+			if ( S_.Root == qNIL )
+				qRFwk();
 #endif
 			if ( _Bufferized )
-				ERRFwk();
+				qRFwk();
 
 			S_.Root = DIndex.Delete( Row, S_.Root );
 
@@ -363,7 +363,7 @@ namespace ndbidx {
 			switch ( Sign ) {
 			case -1:
 				if ( EqualBehavior == bStop )
-					Row = E_NIL;
+					Row = qNIL;
 				else
 					Row = Next( Row );
 				break;
@@ -371,12 +371,12 @@ namespace ndbidx {
 				break;
 			case 1:
 				if ( EqualBehavior == bStop )
-					Row = E_NIL;
+					Row = qNIL;
 				else
 					Row = Previous( Row );
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 
@@ -403,8 +403,8 @@ namespace ndbidx {
 
 			rrow__ Candidate = S_.Root = _Content().First();
 
-			if ( Candidate != E_NIL ) 
-				while ( ( Candidate = _Index().GetTreeParent( Candidate ) ) != E_NIL )
+			if ( Candidate != qNIL ) 
+				while ( ( Candidate = _Index().GetTreeParent( Candidate ) ) != qNIL )
 					S_.Root = Candidate;
 
 			return S_.Root;
@@ -413,19 +413,19 @@ namespace ndbidx {
 		{
 			_CompleteInitialization();
 
-			if ( S_.Root != E_NIL )
+			if ( S_.Root != qNIL )
 				return _Index().First( S_.Root );
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		rrow__ Last( void ) const
 		{
 			_CompleteInitialization();
 
-			if ( S_.Root != E_NIL )
+			if ( S_.Root != qNIL )
 				return _Index().Last( S_.Root );
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		rrow__ Next( rrow__ Row ) const
 		{
@@ -441,8 +441,8 @@ namespace ndbidx {
 
 			rrow__ Candidate = Previous( Row );
 
-			if ( Candidate == E_NIL )
-				return E_NIL;
+			if ( Candidate == qNIL )
+				return qNIL;
 			else if ( Compare( Row, Candidate, Context ) != 0 )
 				return Candidate;
 			else
@@ -456,8 +456,8 @@ namespace ndbidx {
 
 			rrow__ Candidate = Next( Row );
 
-			if ( Candidate == E_NIL )
-				return E_NIL;
+			if ( Candidate == qNIL )
+				return qNIL;
 			else if ( Compare( Row, Candidate, Context ) != 0 )
 				return Candidate;
 			else
@@ -490,11 +490,11 @@ namespace ndbidx {
 		void Balance( void )
 		{
 			if ( _Bufferized )
-				ERRFwk();
+				qRFwk();
 
 			_CompleteInitialization();
 
-			if ( S_.Root != E_NIL )
+			if ( S_.Root != qNIL )
 				S_.Root = DIndex.Balance( S_.Root );
 
 			_Touch( false );
@@ -503,10 +503,10 @@ namespace ndbidx {
 		{
 			_CompleteInitialization();
 
-			if ( S_.Root != E_NIL )
+			if ( S_.Root != qNIL )
 				return _Index().Compare( S_.Root );
 			else
-				return E_NIL;
+				return qNIL;
 		}
 		void Bufferize( void )
 		{

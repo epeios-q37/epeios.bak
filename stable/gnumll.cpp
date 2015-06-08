@@ -150,9 +150,9 @@ static void GetGeneralSections_(
 	gnumll::general_sections_ &Generals,
 	xtf::extended_text_iflow__ &Flow )
 {
-ERRProlog
+qRH
 	gnumll::general_section General;
-ERRBegin
+qRB
 
 	do {
 		General.Init();
@@ -164,9 +164,9 @@ ERRBegin
 
 		Generals.Append( General );
 	} while ( Paragraph.Amount() == 1 );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static void GetListSections_(
@@ -174,9 +174,9 @@ static void GetListSections_(
 	gnumll::list_sections_ &Lists,
 	xtf::extended_text_iflow__ &Flow )
 {
-ERRProlog
+qRH
 	gnumll::list_section List;
-ERRBegin
+qRB
 
 	do {
 		List.Init();
@@ -188,9 +188,9 @@ ERRBegin
 		if ( List.Section.Amount() )
 			Lists.Append( List );
 	} while ( !Flow.EOX() );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 static inline void Correct_( gnumll::section_ &Section )
@@ -211,9 +211,9 @@ static inline void WriteEnd_(
 static bso::bool__ Test_( const str::string_ &S )
 {
 	bso::bool__ R = false;
-ERRProlog
+qRH
 	str::string T;
-ERRBegin
+qRB
 	T.Init();
 
 	T = S;
@@ -221,9 +221,9 @@ ERRBegin
 	str::ToUpper( T );
 
 	R = ( T == str::string( "NONE" ) ) || ( T == str::string( "NEVER" ) );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return R;
 }
 
@@ -234,11 +234,11 @@ static void HandleNewsgroup_(
 	str::string_ &NG,
 	str::string_ &NGC )
 {
-ERRProlog
+qRH
 	str::string T;
 	epeios::size__ L;
 	bso::char__ C;
-ERRBegin
+qRB
 	NG.Init();
 	NGC.Init();
 
@@ -269,9 +269,9 @@ ERRBegin
 					(*P)++;
 				}
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -313,9 +313,9 @@ void gnumll::section_header_::Parse( const str::string_ &L )
 
 void gnumll::mailing_lists_::Parse( xtf::extended_text_iflow__ &Flow )
 {
-ERRProlog
+qRH
 txmpgh::paragraph Paragraph;
-ERRBegin
+qRB
 	Paragraph.Init();
 
 	GetHead_( Paragraph, Head, Flow );
@@ -329,9 +329,9 @@ ERRBegin
 		Correct_( Lists( Lists.Last() ).Section );
 		Lists.Flush();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 template <class t> void Print_(

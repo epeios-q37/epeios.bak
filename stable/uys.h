@@ -77,7 +77,7 @@ namespace uys {
 	{
 	private:
 		// Le pilote.
-		sdr::E_SDRIVER__ *_Driver;
+		qSD__ *_Driver;
 		// Indique si le pilote a t dfini de manire interne ou non.
 		bso::bool__ _Internal;
 		// Uniquement pour la 'conventional_storage__'.
@@ -86,7 +86,7 @@ namespace uys {
 		{
 #ifdef UYS_DBG
 			if ( _Driver == NULL )
-				ERRFwk();
+				qRFwk();
 #endif
 		}
 	public:
@@ -114,7 +114,7 @@ namespace uys {
 		{
 			reset( true );
 		}
-		void plug( sdr::E_SDRIVER__ &Driver )
+		void plug( qSD__ &Driver )
 		{
 			reset();
 
@@ -125,18 +125,18 @@ namespace uys {
 		{
 			if ( _Driver == NULL ) {
 				if ( ( _Driver = new UYS_DEFAULT_STORAGE_DRIVER( _CVMBuffer ) ) == NULL )
-					ERRAlc();
+					qRAlc();
 				else {
 					_Internal = true;
 					( (UYS_DEFAULT_STORAGE_DRIVER *)_Driver )->Init();
 				}
 			}
 		}
-		sdr::E_SDRIVER__ *Driver( bso::bool__ Ignore = false ) const
+		qSD__ *Driver( bso::bool__ Ignore = false ) const
 		{
 #ifdef UYS_DBG
 			if ( !Ignore && !_Driver )
-				ERRPrm();
+				qRFwk();
 #endif
 			return _Driver;
 		}
@@ -192,10 +192,10 @@ namespace uys {
 			sdr::size__ Amount ) const
 		{
 			if ( Position > S_.Size )
-				ERRPrm();
+				qRFwk();
 
 			if ( Amount > ( S_.Size - Position ) )
-				ERRPrm();
+				qRFwk();
 		}
 		void _Recall(
 			sdr::row_t__ Position,
@@ -230,7 +230,7 @@ namespace uys {
 			_Driver.reset( P );
 			_AggregatedStorageDriver.reset( P );
 
-			S_.Descriptor = E_NIL;
+			S_.Descriptor = qNIL;
 			S_.Size = 0;
 		}
 		untyped_storage_( s &S )
@@ -243,7 +243,7 @@ namespace uys {
 		{
 			reset();
 		}
-		void plug( sdr::E_SDRIVER__ &Driver )
+		void plug( qSD__ &Driver )
 		{
 			reset();
 
@@ -341,14 +341,14 @@ namespace uys {
 			sdr::size__ Size,
 			sdr::row_t__ Position,
 			sdr::size__ Amount );
-		//f Search 'Object' of size 'Size' between 'Begin' and 'End' (excluded) and return its position or 'E_NIL' if non-existant.
+		//f Search 'Object' of size 'Size' between 'Begin' and 'End' (excluded) and return its position or 'qNIL' if non-existant.
 		sdr::row_t__ Search(
 			const sdr::datum__ *Objet,
 			sdr::size__ Size,
 			sdr::row_t__ Begin,
 			sdr::row_t__ End ) const;
 		//f Return the used storage driver. 'Ignore' is only for 'UYS_DBG' mode and for the 'MMG' library.
-		sdr::E_SDRIVER__ *Driver( bso::bool__ Ignore = false )
+		qSD__ *Driver( bso::bool__ Ignore = false )
 		{
 			return _Driver.Driver( Ignore );
 		}
@@ -376,7 +376,7 @@ namespace uys {
 			return fil::mReadWrite;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -393,7 +393,7 @@ namespace uys {
 			return mReadWrite;
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -435,7 +435,7 @@ namespace uys {
 			return true;
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -445,7 +445,7 @@ namespace uys {
 	inline bso::bool__ Exists( state__ State )
 	{
 		if ( IsError( State ) )
-			ERRPrm();
+			qRFwk();
 
 #if UYS_STATE_AMOUNT != 3
 #	error "'state__' changed !"
@@ -458,10 +458,10 @@ namespace uys {
 			return false;
 			break;
 		case sInconsistent:
-			ERRFwk();
+			qRFwk();
 			break;
 		default:
-			ERRFwk();
+			qRFwk();
 			break;
 		}
 
@@ -473,13 +473,13 @@ namespace uys {
 inline bso::bool__ BoolOp( uys::_state__ State )
 {
 	if ( uys::IsError( State ) )
-		ERRFwk();
+		qRFwk();
 
 	return uys::Exists( State );
 }
 
 namespace uys {
-	typedef flsq::E_FILE_SDRIVER___ _file_storage_driver___;
+	typedef flsq::E_FILqSD___ _file_storage_driver___;
 
 	struct hook_filenames___
 	{
@@ -518,7 +518,7 @@ namespace uys {
 				_file_storage_driver___::Persistent();
 				break;
 			default:
-				ERRFwk();
+				qRFwk();
 				break;
 			}
 		}
@@ -582,8 +582,8 @@ namespace uys {
 
 
 	//d A position take this value if an object cannot be find.
-#ifndef E_NIL
-	#define E_NIL	UYS_UNREACHABLE_POSITION
+#ifndef qNIL
+	#define qNIL	UYS_UNREACHABLE_POSITION
 #endif
 
 	void _Copy(
@@ -702,7 +702,7 @@ namespace uys {
 		{
 			_Store( Object, Size, Count, Position, m::Data_ );
 		}
-		//f Return the position from 'Object' of size 'Size' between 'Begin' and 'End' (excluded) oR 'E_NIL' if non-existant.
+		//f Return the position from 'Object' of size 'Size' between 'Begin' and 'End' (excluded) oR 'qNIL' if non-existant.
 		sdr::row_t__ Search(
 			const sdr::datum__ *Object,
 			sdr::size__ Size,
@@ -739,7 +739,7 @@ namespace uys {
 		void Allocate( sdr::size__ Size )
 		{
 			if ( Size >= size )
-				ERRLmt();
+				qRLmt();
 		}
 	};
 

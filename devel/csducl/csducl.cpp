@@ -48,7 +48,7 @@ const char *csducl::GetLabel( type__ Type )
 		return "Plug-in";
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -61,9 +61,9 @@ bso::bool__ csducl::universal_client_core::Init(
 	csdsnc::log_callback__ *Log )
 {
 	bso::bool__ Success = false;
-ERRProlog
+qRH
 	TOL_CBUFFER___ Buffer;
-ERRBegin
+qRB
 	reset();
 
 	switch ( Features.Type ) {
@@ -74,14 +74,14 @@ ERRBegin
 		Success = _LibraryAccess.Init( Features.Location.Convert( Buffer ), LibraryData, err::hUserDefined );
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 
 	_Type = Features.Type;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Success;
 }
 

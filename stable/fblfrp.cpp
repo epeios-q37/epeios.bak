@@ -73,7 +73,7 @@ void fblfrp::remote_callbacks___::FBLFPHIn(
 	CIN( CommandsDetails, commands_details_ )
 	CIN( ObjectsReferences, objects_references_ )
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 }
@@ -91,9 +91,9 @@ void fblfrp::remote_callbacks___::FBLFPHFlowIn(
 	flw::iflow__ &Flow,
 	flw::ioflow__ &Channel )
 {
-ERRProlog
+qRH
 	flx::size_embedded_oflow___ SEFlow;
-ERRBegin
+qRB
 	if ( !FirstCall ) {
 		SEFlow.Init( Channel );
 
@@ -103,9 +103,9 @@ ERRBegin
 
 		SEFlow.Commit();
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void fblfrp::remote_callbacks___::FBLFPHFlowOut(
@@ -123,7 +123,7 @@ void fblfrp::remote_callbacks___::FBLFPHFlowOut(
 #define COUT( name, type )\
 	case fblcst::c##name:\
 	if ( Flow.Get() != Datum.Cast )\
-		ERRDta();\
+		qRFwk();\
 	fbltyp::Get##name( Flow, *( fbltyp::type *)Datum.Pointer );\
 	break;
 
@@ -170,10 +170,10 @@ void Pop_(
 	COUT( ObjectsReferences, objects_references_ )
 	case fblcst::cFlow:
 		if ( Flow.Get() != Datum.Cast )
-			ERRDta();
+			qRFwk();
 		break;
 	default:
-		ERRPrm();
+		qRFwk();
 		break;
 	}
 }
@@ -183,7 +183,7 @@ void fblfrp::remote_callbacks___::FBLFPHPostProcess( flw::ioflow__ &Flow )
 	sdr::row__ Row = _Data.First();
 	datum__ Datum;
 
-	while ( Row != E_NIL ) {
+	while ( Row != qNIL ) {
 		Pop_( _Data( Row ), Flow );
 
 		Row = _Data.Next( Row );

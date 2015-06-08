@@ -67,13 +67,13 @@ xtf::location__ msg::i18_messages_::LoadMessages_(
 	const messages_ &RawMessages )
 {
 	xtf::location__ Location = 0;
-ERRProlog
+qRH
 	str::string Line;
 	state__ State = sUnknow;
 	int Language = 1;
 	epeios::row__ Row;
 	ctn::E_CMITEM( message_ ) RawMessage;
-ERRBegin
+qRB
 	Row = RawMessages.First();
 	RawMessage.Init( RawMessages );
 
@@ -133,27 +133,27 @@ ERRBegin
 
 	if ( Row != NONE )
 		Location = Flow.Coord().Line;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Location;
 }
 
 xtf::location__ msg::i18_messages_::LoadMessages( xtf::extended_text_iflow__ &Flow )
 {
 	xtf::location__ Location = 0;
-ERRProlog
+qRH
 	messages RawMessages;
-ERRBegin
+qRB
 	RawMessages.Init();
 
 	for ( int i = 0; i < S_.Amount ; i++ )
 		RawMessages.Append( str::string( _GetRawMessage( i ) ) );
 
 	Location = LoadMessages_( Flow, RawMessages );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Location;
 }
 

@@ -50,15 +50,15 @@ tag_row__ xmltag::tags_::Position(
 tag_row__ xmltag::tags_::Init( void )
 {
 	tag_row__ NRef;
-ERRProlog
+qRH
 	tag Tag;
-ERRBegin
+qRB
 	Tag.Init( str::string( "" ), xmltag::tRoot );
 
 	NRef = basic_::Init( Tag );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return NRef;
 }
 
@@ -223,12 +223,12 @@ void xmltag::Merge(
 	tags_ &Target,
 	tag_map_ &TagMap )
 {
-ERRProlog
+qRH
 	tag_row__ TargetRow, IntermediateRow;
 	ctn::E_CMITEMt( tag_, tag_row__ ) SourceItem, TargetItem;
 	dtr::browser__<tag_row__> Browser;
 	tag Buffer;
-ERRBegin
+qRB
 	SourceItem.Init( Source );
 	TargetItem.Init( Target );
 	
@@ -275,7 +275,7 @@ ERRBegin
 		
 		Source.Browse( Browser );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

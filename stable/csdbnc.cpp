@@ -30,7 +30,7 @@ const char *csdbnc::Host(
 	char *P;
 
 	if ( strlen( HostService ) >= CSDBNC_ADDRESS_SIZE_MAX )
-		ERRLmt();
+		qRLmt();
 
 	strcpy( Buffer, HostService );
 
@@ -100,12 +100,12 @@ socket__ csdbnc::Connect(
 				Desc = SCK_INVALID_SOCKET;
 
 		if ( ( Desc == SCK_INVALID_SOCKET ) && ( ErrorHandling == err::hThrowException ) )
-			ERRSys();
+			qRSys();
 	} else {
 		Desc = SCK_INVALID_SOCKET;
 
 		if ( ErrorHandling == err::hThrowException )
-			ERRFwk();
+			qRFwk();
 	}
 
 	return Desc;

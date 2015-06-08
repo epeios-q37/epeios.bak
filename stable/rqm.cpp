@@ -163,17 +163,17 @@ POSITION__ rqm::descriptions_::Add(
 POSITION__ rqm::descriptions_::Position( const char *Name ) const
 {
 	POSITION__ Position = CONTAINER_( description_ )::First();
-ERRProlog
+qRH
 	CITEM( description_ ) Description;
-ERRBegin
+qRB
 
 	Description.Init( *this );
 
 	while( ( Position != NONE ) && ( Description( Position ).Name != str_string( Name ) ) )
 		Position = CONTAINER_( description_ )::Next( Position );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Position;
 }
 #endif
@@ -181,9 +181,9 @@ ERREpilog
 POSITION__ rqm::descriptions_::Position( const description_ &Description ) const
 {
 	POSITION__ Position = CONTAINER_( description_ )::First();
-ERRProlog
+qRH
 	CITEM( description_ ) D;
-ERRBegin
+qRB
 
 	D.Init( *this );
 
@@ -191,9 +191,9 @@ ERRBegin
 		    && ( ( D( Position ).Name != Description.Name )
 		         || ( D( Position ).Casts != Description.Casts ) ) )
 		Position = CONTAINER_( description_ )::Next( Position );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Position;
 }
 
@@ -201,18 +201,18 @@ ERREpilog
 rqm::cast rqm::IdCaste( const str_string_ &Caste )
 {
 	cast Retour = cEnd;
-ERRProlog
+qRH
 	int Id = c_amount;
 	str_string S;
-ERRBegin
+qRB
 	S.Init();
 
 	while( --Id && ( S = CastsNames[Id], S != Caste ) );
 
 	Retour = (cast)Id;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 	return Retour;
 }
 
@@ -516,10 +516,10 @@ template <class t> static inline void Test_( t &T )
 
 static inline void Test_( void )
 {
-ERRProlog
+qRH
 	b_ B;
 	bv_ BV;
-ERRBegin
+qRB
 	Test_( B );
 #if !defined( CPE__VC )
 	/* 'VC++' is the only compiler I know which doesn't pass the following test.
@@ -529,22 +529,22 @@ ERRBegin
 	*/
 	Test_( BV );
 #endif
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 Q37_GCTOR( rqm )
 {
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	/* I assume that the compiler must have a behaviour
 	that is not guaranted by the standard. Than I verify
 	if the compiler has this behaviour. */
 	Test_();
-ERRFErr
+qRFR
 	cout << '\t' << ERRMessage() << '\a' << endl;
 	exit( EXIT_FAILURE );	// Due to the fact that 'main()'.isn't yet called.
-ERRFEnd
-ERRFEpilog
+qRFT
+qRFE
 }	

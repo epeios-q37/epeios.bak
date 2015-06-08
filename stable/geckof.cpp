@@ -33,7 +33,7 @@ bso::bool__ geckof::gecko_wrapper___::_CreateSteering( geckoo::shared_data__ *Da
 		return false;
 
 	if ( _Steering != NULL )
-		ERRFwk();
+		qRFwk();
 
 	if ( ( _Steering = CreateSteering( Data ) ) == NULL )
 		return false;
@@ -51,7 +51,7 @@ bso::bool__ geckof::gecko_wrapper___::_DeleteSteering( void )
 		return false;
 
 	if ( _Steering == NULL )
-		ERRFwk();
+		qRFwk();
 
 	DeleteSteering( _Steering );
 
@@ -67,10 +67,10 @@ geckoo::steering_callback__ *geckof::RetrieveSteering(
 	err::handling__ ERRHandling )
 {
 	geckoo::steering_callback__ *Steering = NULL;
-ERRProlog
+qRH
 	dlbrry::dynamic_library___ Library;
 	retrieve_steering *RetrieveSteering = NULL;
-ERRBegin
+qRB
 
 	if ( Library.Init( LibraryName ) ) {
 		RetrieveSteering = dlbrry::GetFunction<retrieve_steering *>( E_STRING( GECKOO_RETRIEVE_STEERING_FUNCTION_NAME ), Library );
@@ -80,10 +80,10 @@ ERRBegin
 	}
 
 	if ( ( Steering == NULL ) && ( ERRHandling != err::hUserDefined ) )
-		ERRSys();
-ERRErr
-ERREnd
-ERREpilog
+		qRSys();
+qRR
+qRT
+qRE
 	return Steering;
 }
 

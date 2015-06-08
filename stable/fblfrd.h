@@ -198,7 +198,7 @@ namespace fblfrd {
 			Message.reset( P );
 			URL.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Message.plug( AS );
 			URL.plug( AS );
@@ -237,7 +237,7 @@ namespace fblfrd {
 			const void *Pointer )
 		{
 			if ( _DismissPending )
-				ERRFwk();
+				qRFwk();
 
 			Channel_->Put( Cast );
 			_ParametersCallbacks->In( Cast, Pointer, *Channel_ );
@@ -247,7 +247,7 @@ namespace fblfrd {
 			void *Pointer )
 		{
 			if ( _DismissPending )
-				ERRFwk();
+				qRFwk();
 
 			Channel_->Put( Cast );
 			_ParametersCallbacks->Out( *Channel_, Cast, Pointer );
@@ -257,14 +257,14 @@ namespace fblfrd {
 			flw::iflow__ &Flow )
 		{
 			if ( _DismissPending )
-				ERRFwk();
+				qRFwk();
 
 			_ParametersCallbacks->FlowIn( FirstCall, Flow, *Channel_ );
 		}
 		void _FlowOut( flw::iflow__ *&Flow )
 		{
 			if ( _DismissPending )
-				ERRFwk();
+				qRFwk();
 
 			Channel_->Put( fblcst::cFlow );
 			_ParametersCallbacks->FlowOut( *Channel_, Flow );
@@ -278,11 +278,11 @@ namespace fblfrd {
 			const char *Message )
 		{
 			if ( _ReportingCallback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			_ReportingCallback->Report( Reply, Message );
 
-			ERRAbort();
+			qRAbort();
 		}
 		id16__ Commands_[fblcmd::c_amount];
 		char Message_[100];
@@ -296,7 +296,7 @@ namespace fblfrd {
 			command__ DefaultCommand;
 
 			if ( !TestBackendCasts_() )
-				ERRFwk();
+				qRFwk();
 
 			DefaultCommand = GetBackendDefaultCommand_();
 
@@ -315,7 +315,7 @@ namespace fblfrd {
 		void _Handle( void )
 		{
 			if ( Handle() != fblovl::rOK )
-				ERRFwk();
+				qRFwk();
 		}
 		fblovl::reply__ _Send( void )
 		{
@@ -325,10 +325,10 @@ namespace fblfrd {
 
 			if ( ( Reply = (fblovl::reply__)Channel_->Get() ) != fblovl::rOK ) {
 				if ( Reply >= fblovl::r_amount )
-					ERRFwk();
+					qRFwk();
 
 				if ( ( !flw::GetString( *Channel_, Message_, sizeof( Message_ ) ) ) )
-					ERRLmt();
+					qRLmt();
 			}
 
 			return Reply;
@@ -336,7 +336,7 @@ namespace fblfrd {
 		void _SendAndTest( void )
 		{
 			if ( _Send() != fblovl::rOK )
-				ERRFwk();
+				qRFwk();
 		}
 		bso::bool__ _TestCompatibility(
 			const char *Language,
@@ -383,23 +383,23 @@ namespace fblfrd {
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
 			bso::bool__ Success = true;
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			Channel_ = &Channel;
 			_ParametersCallbacks = &ParametersCallbacks;
 
 			if ( !_TestCompatibility( Language, CompatibilityInformations, *Channel_, IncompatibilityInformations ) ) {
 				Success = false;
-				ERRReturn;
+				qRReturn;
 			}
 			
 			RetrieveBackendCommands_();
 
 			FBLFRDOnConnect();
-		ERRErr
+		qRR
 			Channel_ = NULL;	// Pour viter toute future tentative de communication avec le backend.
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 			return Success;
 		}
 		//f Add header with object 'Object' and command 'Command'.
@@ -450,7 +450,7 @@ namespace fblfrd {
 		void FlowIn( flw::iflow__ &Flow )
 		{
 			if ( _FlowInParameter != NULL)
-				ERRFwk();
+				qRFwk();
 
 			Channel_->Put( fblcst::cFlow );
 
@@ -464,7 +464,7 @@ namespace fblfrd {
 		void FlowOut( flw::iflow__ *&Flow )
 		{
 			if ( _FlowOutParameter )
-				ERRFwk();
+				qRFwk();
 
 			_FlowOut( Flow );
 
@@ -488,13 +488,13 @@ namespace fblfrd {
 				_PostProcess( *Channel_ );
 
 			if ( Channel_->Get() != fblcst::cEnd )
-				ERRDta();
+				qRFwk();
 
 			if ( !_FlowOutParameter )
 				Channel_->Dismiss();
 			else {
 				if ( _DismissPending )
-					ERRFwk();
+					qRFwk();
 
 				_DismissPending= true;
 				_FlowOutParameter = false;
@@ -510,10 +510,10 @@ namespace fblfrd {
 		void Dismiss( void )	// A appeler uniquement lorsque l'un des paramtres de sortie est un 'flow', ds que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
 		{
 			if ( _FlowOutParameter )
-				ERRFwk();
+				qRFwk();
 
 			if ( !_DismissPending )
-				ERRFwk();
+				qRFwk();
 
 			Channel_->Dismiss();
 
@@ -784,7 +784,7 @@ namespace fblfrd {
 		frontend___ &Frontend( void ) const
 		{
 			if ( _Frontend == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Frontend;
 		}
@@ -828,7 +828,7 @@ namespace fblfrd {
 				Callbacks = &_EmbeddedCallbacks;
 				break;
 			default:
-				ERRPrm();
+				qRFwk();
 				break;
 			}
 

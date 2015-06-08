@@ -32,9 +32,9 @@ void ctn::hook_filenames___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
-ERRProlog
+qRH
 	fnm::name___ Statics, Dynamics;
-ERRBegin
+qRB
 	Statics.Init();
 	fnm::BuildPath( Path, Basename, "s", Statics );
 
@@ -43,8 +43,8 @@ ERRBegin
 
 	this->Statics.Init( "", Statics );
 	this->Dynamics.Init( "", Dynamics );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 

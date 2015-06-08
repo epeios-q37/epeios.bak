@@ -19,11 +19,11 @@ trow__ dbpals::SearchTable(
 
 	Alias.Init( Aliases );
 
-	if ( ( Row != E_NIL ) && ( Alias( Row ).Label != Label ) )
+	if ( ( Row != qNIL ) && ( Alias( Row ).Label != Label ) )
 		Row = Aliases.Next( Row );
 
-	if ( Row != E_NIL )
+	if ( Row != qNIL )
 		return Alias( Row ).TableRow();
 	else
-		return E_NIL;
+		return qNIL;
 }

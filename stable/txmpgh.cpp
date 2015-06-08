@@ -24,10 +24,10 @@
 
 void txmpgh::paragraph_::GetSplitParagraph_( xtf::extended_text_iflow__ &Flow )
 {
-ERRProlog
+qRH
 	line Line;
 	bso::bool__ Cont = true;
-ERRBegin
+qRB
 
 	do {
 		Line.Init();
@@ -42,9 +42,9 @@ ERRBegin
 		if ( Flow.EOX() )
 			Cont = false;
 	} while (Cont );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void txmpgh::paragraph_::Merge( line_ &Line ) const

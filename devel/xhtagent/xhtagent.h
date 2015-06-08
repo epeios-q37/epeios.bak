@@ -48,7 +48,7 @@ namespace xhtagent {
 		xdhcbk::proxy_callback__ &_C( void ) const
 		{
 			if ( _Callback == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Callback;
 		}
@@ -84,13 +84,13 @@ namespace xhtagent {
 			const nstring___ &Name,
 			str::string_ &Value )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Value.Append( GetAttribute( Id, Name, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Value;
 		}
 		void SetAttribute(
@@ -110,13 +110,13 @@ namespace xhtagent {
 			const nstring___ &Id,
 			str::string_ &Value )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Value.Append( GetResult( Id, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Value;
 		}
 		void RemoveAttribute(
@@ -152,13 +152,13 @@ namespace xhtagent {
 			const nstring___ &Id,
 			str::string_ &Value )
 		{
-		ERRProlog
+		qRH
 			TOL_CBUFFER___ Buffer;
-		ERRBegin
+		qRB
 			Value.Append( GetContent( Id, Buffer ) );
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 			return Value;
 		}
 		void Focus( const nstring___ &Id )

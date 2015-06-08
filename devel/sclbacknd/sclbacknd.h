@@ -67,29 +67,29 @@ namespace sclbacknd {
 		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow )
 		{
 			bso::bool__ Continue = true;
-		ERRProlog
-		ERRBegin
+		qRH
+		qRB
 			Continue = Handle( Flow, _UP, _RequestLogFunctions );
-		ERRErr
+		qRR
 			if ( ERRType == err::t_Abort )
 			{
 				ERRRst();
-			ERRProlog
+			qRH
 				str::string Translation;
 				TOL_CBUFFER___ Buffer;
-			ERRBegin
+			qRB
 				Translation.Init();
 				sclerror::GetPendingErrorTranslation( Language(), Translation );
 
 				sclerror::ResetPendingError();
 
 				fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
-			ERRErr
-			ERREnd
-			ERREpilog
+			qRR
+			qRT
+			qRE
 			}
-		ERREnd
-		ERREpilog
+		qRT
+		qRE
 			return Continue;
 		}
 	public:

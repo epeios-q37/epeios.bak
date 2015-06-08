@@ -113,16 +113,16 @@ namespace xdhcbk {
 			TOL_CBUFFER___ *Result,
 			...	)
 		{
-		ERRProlog
+		qRH
 			va_list List;
-		ERRBegin
+		qRB
 			va_start( List, Result );
 
 			XDHCBKProcess( Function, Result, List );
-		ERRErr
-		ERREnd
+		qRR
+		qRT
 			va_end( List );
-		ERREpilog
+		qRE
 		}
 	};
 
@@ -140,7 +140,7 @@ namespace xdhcbk {
 	private:
 		const char *_Version;	// Toujours en premire position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
-		err::err___ *_ERRError;
+		err::err___ *_qRRor;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
 		mode__ _Mode;
@@ -151,7 +151,7 @@ namespace xdhcbk {
 		{
 			_Version = NULL;
 			_Control = 0;
-			_ERRError = NULL;
+			_qRRor = NULL;
 			_SCLError = NULL;
 			_Mode = m_Undefined;
 			_CIO = NULL;
@@ -166,7 +166,7 @@ namespace xdhcbk {
 		{
 			_Version = XDHCBK_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
-			_ERRError = err::ERRError;
+			_qRRor = err::qRRor;
 			_SCLError = sclerror::SCLERRORError;
 			_CIO = &cio::GetCurrentSet();
 			_Mode = Mode;
@@ -177,7 +177,7 @@ namespace xdhcbk {
 		{
 			return sizeof( shared_data__ );
 		}
-		Q37_PMDF( err::err___, ERRError, _ERRError );
+		Q37_PMDF( err::err___, qRRor, _qRRor );
 		Q37_PMDF( sclerror::error___, SCLError, _SCLError );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );

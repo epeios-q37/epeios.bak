@@ -74,10 +74,10 @@ void dbstbl::table_::Retrieve(
 	const rrows_ &Rows,
 	data_ &Data ) const
 {
-ERRProlog
+qRH
 	datum Datum;
 	epeios::row__ Row = NONE;
-ERRBegin
+qRB
 	_Test( mReadOnly );
 
 	const dbsctt::content__ &Content = _C();
@@ -93,9 +93,9 @@ ERRBegin
 
 		Row = Rows.Next( Row );
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void dbstbl::table_::Insert(
@@ -207,42 +207,42 @@ bso::bool__ dbstbl::table_::AreAllIndexesSynchronized( void ) const
 
 void dbstbl::thread_safe_table_::DBSTBLErasePhysically( void )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	T.ErasePhysically();
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 void dbstbl::thread_safe_table_::AddIndex( index_ &Index )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	T.AddIndex( Index );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 rrow__ dbstbl::thread_safe_table_::Insert( const datum_ &Datum )
 {
 	rrow__ Row = NONE;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	Row = T.Insert( Datum );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 	return Row;
 }
 
@@ -250,10 +250,10 @@ void dbstbl::thread_safe_table_::Insert(
 	const data_ &Data,
 	rrows_ &RecordRows )
 {
-ERRProlog
+qRH
 	ctn::E_CMITEM( datum_ ) Datum;
 	epeios::row__ Row = NONE;
-ERRBegin
+qRB
 	RW
 
 	epeios::row__ Row = Data.First();
@@ -265,35 +265,35 @@ ERRBegin
 
 		Row = Data.Next( Row );
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 void dbstbl::thread_safe_table_::Update(
 	const datum_ &Datum,
 	rrow__ Row )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	T.Update( Datum, Row );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 void dbstbl::thread_safe_table_::Update(
 	const data_ &Data,
 	const rrows_ &RecordRows )
 {
-ERRProlog
+qRH
 	ctn::E_CMITEM( datum_ ) Datum;
 	epeios::row__ Row = NONE;
-ERRBegin
+qRB
 	RW
 
 	if ( Data.Amount() != RecordRows.Amount() )
@@ -308,35 +308,35 @@ ERRBegin
 
 		Row = Data.Next( Row );
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 void dbstbl::thread_safe_table_::Retrieve(
 	rrow__ Row,
 	datum_ &Datum )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	T.Retrieve( Row, Datum );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 }
 
 void dbstbl::thread_safe_table_::Retrieve(
 	const rrows_ &Rows,
 	data_ &Data )
 {
-ERRProlog
+qRH
 	datum Datum;
 	epeios::row__ Row = NONE;
-ERRBegin
+qRB
 	RO
 
 	Row = Rows.First();
@@ -350,30 +350,30 @@ ERRBegin
 
 		Row = Rows.Next( Row );
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 }
 
 void dbstbl::thread_safe_table_::Delete( rrow__ Row )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	T.Delete( Row );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 void dbstbl::thread_safe_table_::Delete( const rrows_ &RecordRows )
 {
-ERRProlog
+qRH
 	epeios::row__ Row = NONE;
-ERRBegin
+qRB
 	RW
 
 	Row = RecordRows.First();
@@ -383,10 +383,10 @@ ERRBegin
 
 		Row = RecordRows.Next( Row );
 	}
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 #if 0
@@ -398,15 +398,15 @@ rrow__ dbstbl::thread_safe_table_::LooseSeek(
 	bso::sign__ &Sign )
 {
 	rrow__ Row = NONE;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Row = T.LooseSeek( Datum, IRow, EqualBehavior, SkipLevel, Sign );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Row;
 }
 
@@ -417,45 +417,45 @@ rrow__ dbstbl::thread_safe_table_::StrictSeek(
 	skip_level__ SkipLevel )
 {
 	rrow__ Row = NONE;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Row = T.StrictSeek( Datum, IRow, EqualBehavior, SkipLevel );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Row;
 }
 
 rrow__ dbstbl::thread_safe_table_::First( irow__ IRow )
 {
 	rrow__ Row = NONE;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Row = T.First( IRow );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Row;
 }
 
 rrow__ dbstbl::thread_safe_table_::Last( irow__ IRow )
 {
 	rrow__ Row = NONE;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Row = T.Last( IRow );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Row;
 }
 
@@ -463,15 +463,15 @@ rrow__ dbstbl::thread_safe_table_::Next(
 	irow__ IRow,
 	rrow__ Row )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Row = T.Next( IRow, Row );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Row;
 }
 
@@ -480,15 +480,15 @@ rrow__ dbstbl::thread_safe_table_::GetStrictGreater(
 	rrow__ Row,
 	skip_level__ SkipLevel )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Row = T.GetStrictGreater( IRow, Row, SkipLevel );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Row;
 }
 
@@ -496,30 +496,30 @@ rrow__ dbstbl::thread_safe_table_::Previous(
 	irow__ IRow,
 	rrow__ Row )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Row = T.Previous( IRow, Row );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Row;
 }
 
 mdr::size__ dbstbl::thread_safe_table_::Amount( void )
 {
 	mdr::size__ Amount;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Amount = T.Amount();
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Amount;
 }
 #endif
@@ -527,59 +527,59 @@ ERREpilog
 mdr::size__ dbstbl::thread_safe_table_::Extent( void )
 {
 	mdr::size__ Extent;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Extent = T.Extent();
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Extent;
 }
 
 dbstbl::mode__ dbstbl::thread_safe_table_::SwitchMode( dbstbl::mode__ Mode )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	Mode = T.SwitchMode( Mode );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 	return Mode;
 }
 
 dbstbl::mode__ dbstbl::thread_safe_table_::Mode( void )
 {
 	mode__ Mode = m_Undefined;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Mode = T.Mode();
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Mode;
 }
 
 bso::bool__ dbstbl::thread_safe_table_::RecordExists( rrow__ RecordRow )
 {
 	bso::bool__ Exists = false;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Exists = T.RecordExists( RecordRow );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Exists;
 }
 
@@ -587,9 +587,9 @@ void dbstbl::thread_safe_table_::TestRecordsExistence(
 	const rrows_ &RecordRows,
 	rows_ &Rows )
 {
-ERRProlog
+qRH
 	epeios::row__ Row = NONE;
-ERRBegin
+qRB
 	RO
 
 	Row = RecordRows.First();
@@ -601,10 +601,10 @@ ERRBegin
 		Row = RecordRows.Next( Row );
 	}
 
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 }
 
 #if 0
@@ -615,30 +615,30 @@ bso::sign__ dbstbl::thread_safe_table_::Compare(
 	skip_level__ SkipLevel )
 {
 	bso::sign__ Result = 0;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Result = T.Compare( RecordRow, Pattern, IndexRow, SkipLevel );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Result;
 }
 
 bso::bool__ dbstbl::thread_safe_table_::IsIndexSynchronized( irow__ IndexRow )
 {
 	bso::bool__ Result = false;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Result = T.IsIndexSynchronized( IndexRow );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Result;
 }
 #endif
@@ -646,15 +646,15 @@ ERREpilog
 bso::bool__ dbstbl::thread_safe_table_::AreAllIndexesSynchronized( void )
 {
 	bso::bool__ Result = false;
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RO
 
 	Result = T.AreAllIndexesSynchronized();
-ERRErr
-ERREnd
+qRR
+qRT
 	RRO
-ERREpilog
+qRE
 	return Result;
 }
 
@@ -663,29 +663,29 @@ void dbstbl::thread_safe_table_::Reindex(
 	irow__ IndexRow,
 	observer_functions__ &Observer )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	T.Reindex( IndexRow, Observer );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 #endif
 
 void dbstbl::thread_safe_table_::ReindexAll( observer_functions__ &Observer )
 {
-ERRProlog
-ERRBegin
+qRH
+qRB
 	RW
 
 	T.ReindexAll( Observer );
-ERRErr
-ERREnd
+qRR
+qRT
 	RRW
-ERREpilog
+qRE
 }
 
 #endif
@@ -717,9 +717,9 @@ void dbstbl::exploded_table::InitStatic(
 	mode__ Mode,
 	flm::id__ ID )
 {
-ERRProlog
+qRH
 	str::string FileName;
-ERRBegin
+qRB
 	FileName.Init();
 
 	GetFileName_( Path, RootFileName, FileName );
@@ -732,9 +732,9 @@ ERRBegin
 	Content.Init( _Static );
 
 	table::Init( RootFileName, Content, Mode );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void dbstbl::exploded_table::InitDynamic(
@@ -743,9 +743,9 @@ void dbstbl::exploded_table::InitDynamic(
 	mode__ Mode,
 	flm::id__ ID )
 {
-ERRProlog
+qRH
 	str::string FileName;
-ERRBegin
+qRB
 	FileName.Init();
 
 	GetFileName_( Path, RootFileName, FileName );
@@ -758,7 +758,7 @@ ERRBegin
 	Content.Init( _Dynamic );
 
 	table::Init( RootFileName, Content, Mode );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }

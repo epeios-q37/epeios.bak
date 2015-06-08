@@ -93,7 +93,7 @@ namespace xtf {
 			return XTF_NAME "_EncodingDiscrepancy";
 			break;
 		default:
-			ERRPrm();
+			qRFwk();
 			break;
 		}
 
@@ -155,7 +155,7 @@ namespace xtf {
 		flw::iflow__ &_F( void )
 		{
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Flow;
 		}
@@ -164,7 +164,7 @@ namespace xtf {
 			bso::size__ NewLength = _Amount + 1;
 
 			if ( NewLength > ( sizeof( _Data ) / sizeof( _Data[0] ) ) )
-				ERRLmt();
+				qRLmt();
 
 			if ( _Length < NewLength ) {
 				if ( ( _Length = _F().View( NewLength, _Data ) ) < NewLength )
@@ -200,7 +200,7 @@ namespace xtf {
 		fdr::datum__ Get( void )
 		{
 			if ( !_FillData() )
-				ERRFwk();
+				qRFwk();
 
 			return _Data[_Amount++];
 		}
@@ -224,7 +224,7 @@ namespace xtf {
 		flw::iflow__ &_F( void ) const
 		{
 			if ( _Flow == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_Flow;
 		}
@@ -310,7 +310,7 @@ namespace xtf {
 				}
 				break;
 			default:
-				ERRPrm();	// Les autres formats ne sont pas accpts et filtrs en amont.
+				qRFwk();	// Les autres formats ne sont pas accpts et filtrs en amont.
 				break;
 			}
 
@@ -333,7 +333,7 @@ namespace xtf {
 
 				if ( _UTF.Size != 0 ) {
 					if ( _F().View( _UTF.Size, _UTF.Data ) != _UTF.Size )
-						ERRFwk();
+						qRFwk();
 
 					_F().Skip( _UTF.Size );
 				} else
@@ -396,7 +396,7 @@ namespace xtf {
 		flw::datum__ Get( utf__ &UTF )
 		{
 			if ( !_PrefetchUTF() )
-				ERRDta();
+				qRFwk();
 
 			UTF = _UTF;
 
@@ -434,7 +434,7 @@ namespace xtf {
 					_NewCharAdjust();
 				}
 			} else
-				ERRFwk();
+				qRFwk();
 
 			return C;
 		}
@@ -467,7 +467,7 @@ namespace xtf {
 			bso::bool__ HandleNL = false )
 		{
 			if ( !_PrefetchUTF() )
-				ERRDta();
+				qRFwk();
 
 			flw::datum__ C = _UTF.Data[0];
 
@@ -481,7 +481,7 @@ namespace xtf {
 //						_F().Skip( _UTF.Size );
 						
 						if ( !_PrefetchUTF() )
-							ERRDta();
+							qRFwk();
 
 						C = _UTF.Data[0];
 				}

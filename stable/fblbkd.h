@@ -69,7 +69,7 @@
 # define FBLBKD_MASTER_COMMAND		FBLBKD_INVALID_COMMAND
 
 //d This is the value of the index returned for a shared object already created.
-# define FBLBKD_SHARED_OBJECT_INDEX	E_NIL
+# define FBLBKD_SHARED_OBJECT_INDEX	qNIL
 
 # if 0
 //d Value for an undefined Id32.
@@ -203,18 +203,18 @@ namespace fblbkd {
 		//v To get the index of a new object.
 		virtual index__ FBLBKDNew( void )
 		{
-			ERRFwk();
+			qRFwk();
 			return 0;	// Pour viter un warning.
 		}
 		//v To delete the object with index 'Index'.
 		virtual void FBLBKDDelete( index__ Index )
 		{
-			ERRFwk();
+			qRFwk();
 		}
 		//v To get a pointer of the object of index 'Index'.
 		virtual void *FBLBKDObject( index__ Index )
 		{
-			ERRFwk();
+			qRFwk();
 			return NULL;	// Pour viter un 'warning'
 		}
 #if 0
@@ -262,8 +262,8 @@ namespace fblbkd {
 		{
 			sdr::row__ Row = Indexes.Search( Index );
 
-			if ( Row == E_NIL )
-				ERRFwk();
+			if ( Row == qNIL )
+				qRFwk();
 
 			Indexes.Remove( Index );
 
@@ -325,10 +325,10 @@ namespace fblbkd {
 		{
 			sdr::row__ P = Descriptions.Position( Description );
 
-			if ( P == E_NIL )
+			if ( P == qNIL )
 				P = FBLBKD_INVALID_COMMAND;
 			else if ( *P > FBLBKD_COMMAND_MAX )
-				ERRLmt();
+				qRLmt();
 
 			return (command__)*P;
 		}
@@ -340,7 +340,7 @@ namespace fblbkd {
 			sdr::row__ Row = Descriptions.Add( Name, Casts );
 			
 			if ( UPs.Append( UP ) != Row )
-				ERRFwk();
+				qRFwk();
 				
 			return Row;
 		}			
@@ -353,7 +353,7 @@ namespace fblbkd {
 			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
 			
 			if ( UPs.Append( UP ) != Row )
-				ERRFwk();
+				qRFwk();
 				
 			return Row;
 		}			
@@ -363,7 +363,7 @@ namespace fblbkd {
 			cast__ Cast,
 			... )
 		{
-			sdr::row__ Row = E_NIL;
+			sdr::row__ Row = qNIL;
 			va_list VL;
 
 			va_start( VL, Cast );
@@ -396,7 +396,7 @@ namespace fblbkd {
 			flw::Get( Requete.Input(), C );
 
 			if ( C > Descriptions.Amount() )
-				ERRFwk();
+				qRFwk();
 
 			Description.Init( Descriptions );
 
@@ -462,7 +462,7 @@ namespace fblbkd {
 		{
 #ifdef FBLBKD_DBG
 			if ( Mode != aem::m_Default )
-				ERRPrm();
+				qRFwk();
 #endif
 			Objets.Allocate( Size, aem::mFitted );
 		}
@@ -472,12 +472,12 @@ namespace fblbkd {
 			t *Pointeur = NULL;
 
 			if ( ( S = new st ) == NULL )
-				ERRAlc();
+				qRAlc();
 
 			if ( ( Pointeur = new t( *S ) ) == NULL )
 			{
 				delete S;
-				ERRAlc();
+				qRAlc();
 			}
 
 			Pointeur->reset( false );
@@ -501,7 +501,7 @@ namespace fblbkd {
 		virtual void *FBLBKDObject( index__ Index ) override
 		{
 			if ( *Index >= Objets.Amount() )
-				ERRPrm();
+				qRFwk();
 
 			return (void *)( Objets( Index )->OBJECT() );
 		}
@@ -559,7 +559,7 @@ namespace fblbkd {
 		virtual void *FBLBKDObject( index__ Index )
 		{
 			if ( *Index >= Objets.Amount() )
-				ERRPrm();
+				qRFwk();
 
 			return (void *)Element_( Index ).OBJECT();
 		}
@@ -692,7 +692,7 @@ namespace fblbkd {
 			P = _listx::New();
 
 			if ( *P > FBLBKD_TYPE_MAX )
-				ERRLmt();
+				qRLmt();
 
 			Lien.Type = IdType;
 			Lien.Index = Index;
@@ -798,9 +798,9 @@ namespace fblbkd {
 			const char *BackendCopyright,
 			const char *SoftwareInformations )
 		{
-		ERRProlog
+		qRH
 			str::string Buffer;
-		ERRBegin
+		qRB
 			Master_.Init( *this );
 
 			Modules.Init();
@@ -828,9 +828,9 @@ namespace fblbkd {
 
 			_Embedded.Init();
 			_Remote.Init();
-		ERRErr
-		ERREnd
-		ERREpilog
+		qRR
+		qRT
+		qRE
 		}
 
 		//f Add 'Module' to the interface.
@@ -881,7 +881,7 @@ namespace fblbkd {
 			const char *Name ) const
 		{
 			if ( strcmp( Module_(Object).Name(), Name ) )
-				ERRFwk();
+				qRFwk();
 
 			return Module_( Object ).Object( Links.Index( Object ) );
 		}
@@ -889,7 +889,7 @@ namespace fblbkd {
 		object__ New( type__ Type )
 		{
 			if ( (unsigned long)Links.Amount() >= (unsigned long)FBLBKD_TYPE_MAX )
-				ERRLmt();
+				qRLmt();
 
 			return Links.New( Type, Module_( Type ).New() );
 		}
@@ -931,7 +931,7 @@ namespace fblbkd {
 			cast__ Cast,	// Added to avoid confusion with method above.
 			... )
 		{
-			sdr::row__ Row = E_NIL;
+			sdr::row__ Row = qNIL;
 			va_list VL;
 
 			va_start( VL, Cast );

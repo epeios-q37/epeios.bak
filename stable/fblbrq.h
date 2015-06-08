@@ -82,10 +82,10 @@ namespace fblbrq {
 		flw::Put( (flw::datum__)Reply, Channel );
 
 		if ( Reply == fblovl::rOK )
-				ERRPrm();
+				qRFwk();
 
 		if ( ( Message == NULL ) || ( Message[0] == 0 ) )
-			ERRFwk();
+			qRFwk();
 
 		flw::PutString( Message, Channel );
 
@@ -99,7 +99,7 @@ namespace fblbrq {
 	const fbltyp::type &name##In( void )\
 	{\
 		if ( _DismissPending )\
-			ERRFwk();\
+			qRFwk();\
 		TestInput_( c##name );\
 		return *(const fbltyp::type *)_Get( Position_, c##name );\
 	}\
@@ -131,7 +131,7 @@ namespace fblbrq {
 			const casts_ &Casts,
 			flw::oflow__ &Flow)
 		{
-			ERRFwk();
+			qRFwk();
 
 			return 0;
 
@@ -236,7 +236,7 @@ namespace fblbrq {
 		{
 # ifdef FBLBRQ_DBG
 			if ( _Callbacks == NULL )
-				ERRFwk();
+				qRFwk();
 # endif
 
 			return *_Callbacks;
@@ -265,13 +265,13 @@ namespace fblbrq {
 		}
 		void Test_( cast__ Cast )
 		{
-			if ( Position_ == E_NIL )
+			if ( Position_ == qNIL )
 				Position_ = Casts_.First();
 			else
 				Position_ = Casts_.Next( Position_ );
 
 			if ( Casts_.Get( Position_ ) != Cast )
-				ERRFwk();
+				qRFwk();
 		}
 		void TestInput_( cast__ Cast )
 		{
@@ -295,7 +295,7 @@ namespace fblbrq {
 			_Callbacks = NULL;
 			Casts_.reset( P );
 
-			Position_ = E_NIL;
+			Position_ = qNIL;
 			Closed_ = true;
 			Cast_ = c_Undefined;
 			Parsed_ = false;
@@ -326,7 +326,7 @@ namespace fblbrq {
 		//f Initialization with 'Channel' to parse/answer the request.
 		void Prepare( const casts_ &Casts )
 		{
-			Position_ = E_NIL;
+			Position_ = qNIL;
 			Closed_ = false;
 			Cast_ = c_Undefined;
 			Parsed_ = false;
@@ -402,7 +402,7 @@ namespace fblbrq {
 				_Push( true, Casts_, *Channel_ );
 
 				if ( Casts_.Last() != Position_  )
-					ERRFwk();
+					qRFwk();
 			}
 
 			fbltyp::PutId8( cEnd, *Channel_ );

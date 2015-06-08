@@ -43,42 +43,42 @@ void xulfeh::m::new_project__::NSXPCMOnEvent( event__ )
 
 void xulfeh::m::user_project__::NSXPCMOnEvent( event__ )
 {
-ERRProlog
+qRH
 	str::string Translation, FileName;
-ERRBegin
+qRB
 	Translation.Init();
 	FileName.Init();
 
 	if ( nsxpcm::XPRJFileOpenDialogBox( Trunk().UI().Main().Window(), Trunk().Kernel().GetTranslation( XULFEH_NAME "_SelectProjectFile", Translation ), Trunk().Kernel().Locale(), Trunk().Kernel().Language(), FileName ) )
 		Trunk().DefineSession( FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xulfeh::m::user_project_selection__::NSXPCMOnEvent( event__ )
 {
-ERRProlog
+qRH
 	str::string Translation, FileName;
-ERRBegin
+qRB
 	Translation.Init();
 	FileName.Init();
 
 	if ( nsxpcm::XPRJFileOpenDialogBox( Trunk().UI().Main().Window(), Trunk().Kernel().GetTranslation( XULFEH_NAME "_SelectProjectFile", Translation ), Trunk().Kernel().Locale(), Trunk().Kernel().Language(), FileName ) )
 		Trunk().UI().Main().Widgets.txbUserProjectLocation.SetValue( FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xulfeh::m::apply__::NSXPCMOnEvent( event__ )
 {
-ERRProlog
+qRH
 	str::string ProjectTypeLabel;
 	str::string PredefinedProjectId;
 	str::string ProjectLocation;
 	str::string Log;
-ERRBegin
+qRB
 	ProjectLocation.Init();
 
 	ProjectTypeLabel.Init();
@@ -96,7 +96,7 @@ ERRBegin
 		Trunk().UI().Main().Widgets.txbUserProjectLocation.GetValue( ProjectLocation );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
@@ -107,9 +107,9 @@ ERRBegin
 	Trunk().UI().LogQuietly( Log );
 
 	Trunk().DefineSession( ProjectLocation );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xulfeh::m::close_project__::NSXPCMOnEvent( event__ )
@@ -119,9 +119,9 @@ void xulfeh::m::close_project__::NSXPCMOnEvent( event__ )
 
 void xulfeh::m::project_type_selection__::NSXPCMOnEvent( event__ )
 {
-ERRProlog
+qRH
 	str::string Value;
-ERRBegin
+qRB
 	Value.Init();
 	nsxpcm::GetAttribute( EventData().GetTarget(), "value", Value );
 
@@ -136,12 +136,12 @@ ERRBegin
 		Trunk().UI().Main().Widgets.dckProjectType.SetSelectedIndex( 2 );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 
@@ -171,10 +171,10 @@ void xulfeh::m::debug__::NSXPCMOnEvent( event__ )
 
 void xulfeh::sf::backend_type_selection__::NSXPCMOnEvent( nsxpcm::event__ Event )
 {
-ERRProlog
+qRH
 	str::string Value;
 	frdkrn::backend_extended_type__ Type = frdkrn::bxt_Undefined;
-ERRBegin
+qRB
 	Value.Init();
 	nsxpcm::GetAttribute( EventData().GetTarget(), "value", Value );
 
@@ -186,30 +186,30 @@ ERRBegin
 		Trunk().UI().SessionForm().SetBackendType( Type );
 		break;
 	default:
-		ERRFwk();
+		qRFwk();
 		break;
 	}
 
 	Trunk().RefreshUI();
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xulfeh::sf::embedded_backend_selection__::NSXPCMOnEvent( nsxpcm::event__ Event )
 {
-ERRProlog
+qRH
 	str::string FileName;
 	str::string Translation;
-ERRBegin
+qRB
 	FileName.Init();
 	Translation.Init();
 
 	if ( nsxpcm::DynamicLibraryFileOpenDialogBox( Trunk().UI().SessionForm().Window(), str::string( Trunk().Kernel().GetTranslation( XULFDG_NAME "_EmbeddedBackendFileSelectionDialogBoxTitle", Translation ) ), Trunk().Kernel().Locale(), Trunk().Kernel().Language(), FileName ) )
 		Trunk().UI().SessionForm().Widgets.txbEmbeddedBackend.SetValue( FileName );
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void xulfeh::sf::apply__::NSXPCMOnEvent( nsxpcm::event__ Event )

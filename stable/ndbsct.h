@@ -103,7 +103,7 @@ namespace ndbsct {
 			S_.Size = 0;
 			S_.ModificationEpochTimeStamp = 0;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			_list_::plug( AS );
 			Storage.plug( AS );
@@ -142,7 +142,7 @@ namespace ndbsct {
 			rrow__ Row )
 		{
 			if ( Datum.Amount() != S_.Size )
-				ERRDta();
+				qRFwk();
 
 			Storage.Store( Datum, S_.Size, *Row * S_.Size );
 
@@ -180,7 +180,7 @@ namespace ndbsct {
 		// Reconstruction de la liste des items disponibles dans 'Entries' (sous-objet 'list_').
 		void RebuildLocations( void )
 		{
-			ERRVct();
+			qRVct();
 		}
 		E_RODISCLOSE_( time_t, ModificationEpochTimeStamp );
 		E_RODISCLOSE_( sdr::size__, Size );
@@ -243,7 +243,7 @@ namespace ndbsct {
 		void Set( static_content_ &Content )
 		{
 			if ( _Content != NULL )
-				ERRPrm();
+				qRFwk();
 
 			_Content = &Content;
 		}

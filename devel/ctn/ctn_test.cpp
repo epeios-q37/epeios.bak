@@ -43,11 +43,11 @@ E_AUTO( data_cluster );
 
 void Test1( int argc, char *argv[] )
 {
-ERRProlog
+qRH
 	datum Datum;
 	data Data;
 	data_cluster DataCluster;
-ERRBegin
+qRB
 	Datum.Init( "coucou" );
 
 	Data.Init();
@@ -70,17 +70,17 @@ ERRBegin
 
 	DataCluster.Dynamics.AStorage.DisplayStructure( cio::COut );
 	cio::COut << txf::commit << txf::nl;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 void Test2( int argc, char *argv[] )
 {
-ERRProlog
+qRH
 	datum Datum;
 	data Data;
-ERRBegin
+qRB
 	Datum.Init( "123456" );
 
 	Data.Init();
@@ -111,23 +111,23 @@ ERRBegin
 
 	cio::COut << Data( 0 ) << txf::pad;
 	cio::COut << Data( 1 ) << txf::nl << txf::commit;
-ERRErr
-ERREnd
-ERREpilog
+qRR
+qRT
+qRE
 }
 
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
-ERRFProlog
-ERRFBegin
+qRFH
+qRFB
 	COut << "Test of library " << CTN_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Test1( argc, argv );
-ERRFErr
-ERRFEnd
+qRFR
+qRFT
 	cio::COut << txf::commit;
 	cio::CErr << txf::commit;
-ERRFEpilog
+qRFE
 	return ExitValue;
 }

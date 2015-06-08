@@ -87,7 +87,7 @@ namespace lstbch {
 			list_<row, row_t>::reset( P );
 			bunch_<type, row>::reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			list_<row, row_t>::plug( AS );
 			bunch_<type, row>::plug( AS );
@@ -114,7 +114,7 @@ namespace lstbch {
 		E_NAVt( list_<E_COVER2(row,row_t)>::, row )
 		row Add(
 			const type &Object,
-			row Row = E_NIL )
+			row Row = qNIL )
 		{
 			Row = list_<row, row_t>::New( Row );
 
@@ -124,7 +124,7 @@ namespace lstbch {
 		}
 		row Add(
 			const type *Object,
-			row Row = E_NIL )
+			row Row = qNIL )
 		{
 			Row = list_<row, row_t>::New( Row );
 
@@ -141,9 +141,9 @@ namespace lstbch {
 		{
 			row Row = bunch_<type, row>::Search( Object );
 
-			if ( Row != E_NIL )
+			if ( Row != qNIL )
 				if ( !list_<row, row_t>::Exists( Row ) )
-					Row = E_NIL;
+					Row = qNIL;
 
 			return Row;
 		}
@@ -160,7 +160,7 @@ namespace lstbch {
 		// To avoid the use of herited 'Append' methods.
 		void Append( void ) const
 		{
-			ERRFbd();
+			qRFbd();
 		}
 		bunch_<type, row> &Bunch( void )
 		{
@@ -313,7 +313,7 @@ namespace lstbch {
 			bso::bool__ Is = _Bunch.IsPersistent();
 
 			if ( Is != _List.IsPersistent() )
-				ERRFwk();
+				qRFwk();
 
 			return Is;
 		}
@@ -335,7 +335,7 @@ namespace lstbch {
 			fil::size__ Size = Hook._Bunch.FileSize() / ListBunch.GetItemSize();
 
 			if ( Size > SDR_SIZE_MAX )
-				ERRDta();
+				qRFwk();
 
 			if ( lst::Plug( ListBunch, Hook._List, (sdr::size__)Size, Hook._Bunch.TimeStamp() ) != State ) {
 				Hook.reset();

@@ -140,7 +140,7 @@ namespace ssnmng {
 		user_functions__ &_UF( void )
 		{
 			if ( _UserFunctions == NULL )
-				ERRFwk();
+				qRFwk();
 
 			return *_UserFunctions;
 		}
@@ -183,7 +183,7 @@ namespace ssnmng {
 		void reset( bool P = true )
 		{
 			S_.Absolute = S_.Relative = 0;
-			S_.Root = E_NIL;
+			S_.Root = qNIL;
 			_UserFunctions = NULL;
 
 			Pointers.reset( P );
@@ -192,7 +192,7 @@ namespace ssnmng {
 			Index.reset( P );
 			Chronos.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Pointers.plug( AS );
 			Queue.plug( AS );
@@ -228,7 +228,7 @@ namespace ssnmng {
 
 			S_.Relative = Relative;
 			S_.Absolute = Absolute;
-			S_.Root = E_NIL;
+			S_.Root = qNIL;
 			_UserFunctions = &UserFunctions;
 		}
 		//f Return the position of a mandatory new session.
@@ -241,14 +241,14 @@ namespace ssnmng {
 			Pointers.Delete( Row );
 			Queue.Delete( Row );
 		}
-		//f Return the position of 'SessionID' or E_NIL if non-existent.
+		//f Return the position of 'SessionID' or qNIL if non-existent.
 		row__ Search( const session_id__ &SessionID ) const
 		{
 			return Search( SessionID.Value() );
 		}
-		//f Return the position of 'SessionID' or E_NIL if non-existent.
+		//f Return the position of 'SessionID' or qNIL if non-existent.
 		row__ Search( const char *SessionID ) const;
-		//f Return the position of 'SessionID' or E_NIL if non-existent.
+		//f Return the position of 'SessionID' or qNIL if non-existent.
 		row__ Search( const str::string_ &SessionID ) const;
 		//f Return the session id. corresponding to 'Position'.
 		session_id__ SessionID( row__ Position )
@@ -261,14 +261,14 @@ namespace ssnmng {
 			chrono__ C = Chronos.Get( P );
 
 			if ( time( &C.Relative ) == -1 )
-				ERRLbr();
+				qRLbr();
 
 			C.Immortal = false;
 
 			Chronos.Store( C, P );
 	#ifdef SSNMNG_DBG
 			if ( Queue.Amount() == 0 )
-				ERRFwk();
+				qRFwk();
 	#endif
 
 			if ( ( Queue.Amount() != 1 ) && ( Queue.Tail() != P ) ) {
@@ -302,7 +302,7 @@ namespace ssnmng {
 		//f Balance the index. 
 		void Balance( void )
 		{
-			if ( S_.Root != E_NIL )
+			if ( S_.Root != qNIL )
 				S_.Root = Index.Balance( S_.Root );
 		}
 		//f Put in 'Expired' the expired sessions.

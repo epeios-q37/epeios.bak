@@ -232,7 +232,7 @@ namespace clnarg {
 			Commands.reset( P );
 			Options.reset( P );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Commands.plug(AS );
 			Options.plug( AS );
@@ -264,7 +264,7 @@ namespace clnarg {
 			command__ Command;
 
 			if ( Id > CLNARG_ID_MAX )
-				ERRLmt();
+				qRLmt();
 			
 			Command.Short = Short;
 			Command.Long = Long;
@@ -286,7 +286,7 @@ namespace clnarg {
 			option__ Option;
 
 			if ( Id > CLNARG_ID_MAX )
-				ERRLmt();
+				qRLmt();
 
 			Option.Long = Long;
 			Option.Short = Short;

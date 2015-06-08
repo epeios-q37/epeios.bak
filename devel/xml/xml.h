@@ -99,11 +99,11 @@ namespace xml {
 
 			S_.Position.reset( P );
 		}
-		void plug( sdr::E_SDRIVER__ &SD )
+		void plug( qSD__ &SD )
 		{
 			Data.plug( SD );
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Data.plug( AS );
 		}
@@ -196,7 +196,7 @@ namespace xml {
 			bso::bool__ EOFlow = _Flow->EndOfFlow( Error );
 
 			if ( EOFlow && ( Error != xtf::e_NoError ) )
-				ERRFree();
+				qRFree();
 
 			return EOFlow;
 		}
@@ -515,7 +515,7 @@ namespace xml {
 		case e_None:
 			return NULL;
 			break;
-		default:ERRPrm();
+		default:qRFwk();
 			break;
 		}
 		return NULL;	// Pour viter un 'Warning'.
@@ -571,7 +571,7 @@ namespace xml {
 
 	E_TMIMIC__( stk::row__, mark__ );
 
-# define XML_UNDEFINED_MARK	((xml::mark__)E_NIL)
+# define XML_UNDEFINED_MARK	((xml::mark__)qNIL)
 
 
 	class writer_
@@ -615,7 +615,7 @@ namespace xml {
 			S_.Ignore = false;
 			S_.AlwaysCommit = false;
 		}
-		void plug( ags::E_ASTORAGE_ &AS )
+		void plug( qAS_ &AS )
 		{
 			Tags.plug( AS );
 		}
@@ -654,7 +654,7 @@ namespace xml {
 				case oCompact:
 					break;
 				default:
-					ERRPrm();
+					qRFwk();
 					break;
 			}
 		}
