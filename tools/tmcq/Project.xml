@@ -2,7 +2,7 @@
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
   <xpp:bloc><!-- User definitions -->
 	<xpp:define name="Version">
-		<xpp:bloc>(Version)</xpp:bloc>
+		<xpp:bloc>20150612</xpp:bloc>
 	</xpp:define>
     <xpp:define name="CopyrightYears">
       <xpp:bloc>2007-2011, 2015</xpp:bloc>
@@ -31,7 +31,14 @@
     <Module>registry</Module>
   </Modules>
 	<Files>
-		<File Pack="true">testsuit</File>
+		<File Pack="yes">testsuit</File>
+		<Files Group="Doc" Path="Doc/">
+			<File Pack="yes">Compilation.pdf</File>
+			<File Pack="yes">Configuration.pdf</File>
+			<File Pack="yes">Details.pdf</File>
+			<File Pack="yes">Description.pdf</File>
+			<File Pack="yes">Manual.pdf</File>
+		</Files>
 	</Files>
   <SourceDirs>
   </SourceDirs>

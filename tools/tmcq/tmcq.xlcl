@@ -46,30 +46,30 @@
 			<Translation language="fr">
 				<![CDATA[
 					Le format de sortie peut contenir les marqueurs suivants :\n
-					- %% : symbol '%',\n
+					- %% : symbole '%',\n
 					- %<[<p>]<t> : arrondissement à la valeur inférieure,\n
 					- %=[<p>]<t> : arrondissement mathématique (arrondissement par défaut),\n
 					- %>[<p>]<t> : arrondissement à la valeur supérieure,\n
-					- %[<f>]D : nombre de jour,\n
+					- %[<f>]D : nombre de jours,\n
 					- %[<f>]d : identique à '%[<f>]D',\n
 					- %[<f>]H : nombre total d'heures,\n
 					- %[<f>]h : nombre d'heures dans le jour,\n
 					- %[<f>]M : nombre total de minutes,\n
-					- %[<f>]m : nombre de minutes danse l'heure,\n
+					- %[<f>]m : nombre de minutes dans l'heure,\n
 					- %[<f>]S : nombre total de secondes,\n
 					- %[<f>]s : nombre de secondes dans la minute,\n
-					- %[<f>]F : nombre totale d'images,\n
+					- %[<f>]F : nombre total d'images,\n
 					- %[<f>]f : nombre d'images dans la seconde,\n
-					- %p : punctuation depending of the output fps designation,\n
-					- %r : remainder as fraction (for testing purpose),\n
-					- %R : remainder as float (for testing purpose).\n
+					- %t : séparateur dépendant du FPS de sortie donné,\n
+					- %r : reste en tant que fraction,\n
+					- %R : reste en tant que réel.\n
 					\n
-					- <p> : rounding precision ('0' to '9', '0' if missing),\n
-					- <t> : rounding target ('d' for days, 'h' for hours, and so on ...),\n
-					- <f> : [<w>][(.|,)[<p>]] ('1' by default). Optional set of following flags :\n
-					\p- <w> : a digit as the minimum amount of digits for the integer part,\n
-					\p- '.' or ',' : the decimal separator to use,\n
-					\p- <p> : a digit as the maximum amount of digits for the fractional part.
+					- <p> ('0' à '9', '0' si absent : precision de l'arrondissement),\n
+					- <t> ('d' : jours, 'h' : heures, etc.) : cible de l'arrondissement,\n
+					- <f> ([<w>][(.|,)[<p>]], '1' par défaut) :\n
+					\p- <w> ('0' à '9') : nombre minimum de chiffres pour la partie entière,\n
+					\p- '.' ou ',' : le séparateur décimal à utiliser,\n
+					\p- <p> ('0' à '9'): nombre maximum de chiffres pour la partie fractionnaire.
 				]]>
 			</Translation>
 			<Translation language="en">
@@ -82,23 +82,23 @@
 					- %[<f>]D : amount of days,\n
 					- %[<f>]d : same as '%[<f>]D',\n
 					- %[<f>]H : total amount of hours,\n
-					- %[<f>]h : hours in the day,\n
+					- %[<f>]h : amount of hours in the day,\n
 					- %[<f>]M : total amount of minutes,\n
-					- %[<f>]m : minutes in the hour,\n
+					- %[<f>]m : amount of minutes in the hour,\n
 					- %[<f>]S : total amount of seconds,\n
-					- %[<f>]s : seconds in the minute,\n
+					- %[<f>]s : amount of seconds in the minute,\n
 					- %[<f>]F : total amount of frames,\n
 					- %[<f>]f : amount of frames in the second,\n
-					- %p : punctuation depending of the output fps designation,\n
-					- %r : remainder as fraction (for testing purpose),\n
-					- %R : remainder as float (for testing purpose).\n
+					- %t : token depending of the output FPS designation,\n
+					- %r : remainder as fraction,\n
+					- %R : remainder as float.\n
 					\n
-					- <p> : rounding precision ('0' to '9', '0' if missing),\n
-					- <t> : rounding target ('d' for days, 'h' for hours, and so on ...),\n
-					- <f> : [<w>][(.|,)[<p>]] ('1' by default). Optional set of following flags :\n
-					\p- <w> : a digit as the minimum amount of digits for the integer part,\n
+					- <p> ('0' to '9', '0' if missing) : rounding precision,\n
+					- <t> ('d' for days, 'h' for hours, and so on ...) : rounding target,\n
+					- <f> ([<w>][(.|,)[<p>]], '1' by default) :\n
+					\p- <w> ('0' to '9') : the minimum amount of digits for the integer part,\n
 					\p- '.' or ',' : the decimal separator to use,\n
-					\p- <p> : a digit as the maximum amount of digits for the fractional part.
+					\p- <p> ('0' to '9') : maximum amount of digits for the fractional part.
 				]]>
 			</Translation>
 		</Translations>

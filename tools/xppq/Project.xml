@@ -34,6 +34,7 @@
 	<Files>
 		<Files Group="Doc" Path="Doc/">
 			<File Pack="yes">Compilation.pdf</File>
+			<File Pack="yes">Configuration.pdf</File>
 			<File Pack="yes">Description.pdf</File>
 			<File Pack="yes">Directives.pdf</File>
 			<File Pack="yes">Manual.pdf</File>

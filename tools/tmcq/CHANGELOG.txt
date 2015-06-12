@@ -1,2 +1,6 @@
 ***** Changelog for tmcq *****
 
+2015-06-12 : PUBLICATION !
+
+2015-06-09
+	- Creation, as replacement of 'etmccde'.
