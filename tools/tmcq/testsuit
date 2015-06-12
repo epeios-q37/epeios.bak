@@ -1,0 +1,120 @@
+#	Copyright (C) 2007-2011, 2015 Claude SIMON (http://q37.info/contact/).
+#
+#	This file is part of tmcq.
+#
+#	tmcq is free software: you can redistribute it and/or
+#	modify it under the terms of the GNU Affero General Public License
+#	published by the Free Software Foundation, either version 3 of the
+#	License, or (at your option) any later version.
+#
+#	tmcq is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#	Affero General Public License for more details.
+#
+#	You should have received a copy of the GNU Affero General Public License
+#	along with tmcq. If not, see <http://www.gnu.org/licenses/>.
+
+# Works only under POSIX-compilant shells.
+echo -n "> ";tmcq 25 "00:00:00.23@24" "23@30"
+echo ": 00:00:01:18"
+echo -n "> ";tmcq 24 00:00:01.50@24
+echo ": 00:00:03:02"
+echo -n "> ";tmcq 25 8:0
+echo ": 00:00:08:00"
+echo -n "> ";tmcq 25 8.0 0:23:12:05
+echo ": 00:23:20:05"
+echo -n "> ";tmcq 50 8:@25
+echo ": 00:00:08:00"
+echo -n "> ";tmcq 50 8:@30
+echo ": 00:00:08:00"
+echo -n "> ";tmcq 50 8.@29d
+echo ": 00:00:08:00"
+echo -n "> ";tmcq 29d 1:0:0:0@25
+echo ": 01:00:00;00"
+echo -n "> ";tmcq 30d 0:8:59:28@30d 0:0:0:1@30d
+echo ": 00:08:59;29"
+echo -n "> ";tmcq 30d 8:59:28@30d 0:0:0:2@30d
+echo ": 00:09:00;02"
+echo -n "> ";tmcq 30d 0:9:59:28@30d 0:0:0:1@30d
+echo ": 00:09:59;29"
+echo -n "> ";tmcq 30d 9:59:28@30d 0:0:0:2@30d
+echo ": 00:10:00;00"
+echo -n "> ";tmcq 25 3@5
+echo ": 00:00:00:15"
+echo -n "> ";tmcq 29d 3@5
+echo ": 00:00:00;18"
+echo -n "> ";tmcq 29d 1@1
+echo ": 00:00:01;00"
+echo -n "> ";tmcq 29n 1:::@25
+echo ": 00:59:56;12"
+echo -n "> ";tmcq "-f=%>F%F" 25 17.116009070@1000000000
+echo ": 428"
+echo -n "> ";tmcq "-f=%>F%F" 25 17.11600907@100000000
+echo ": 428"
+echo -n "> ";tmcq "-f=%>F%F" 25 17.1160090@10000000
+echo ": 428"
+echo -n "> ";tmcq "-f=%>F%F" 25 17.116009@1000000
+echo ": 428"
+echo -n "> ";tmcq "-f=%>F%F" 25 754816@44100
+echo ": 428"
+echo -n "> ";tmcq 25 4294967295@1
+echo ": 1193046:28:15:00"
+echo -n "> ";tmcq 25 171798690@1
+echo ": 47721:51:30:00"
+echo -n "> ";tmcq "-f=%F" 1000 99:59:59.999@1000
+echo ": 359999999"
+echo -n "> ";tmcq "-f=%F" 10000 99:59:59.999@1000
+echo ": 3599999990"
+echo -n "> ";tmcq 25 359999999@1000
+echo ": 100:00:00:00"
+echo -n "> ";tmcq "-f=%F" 25 99:59:59.24
+echo ": 8999999"
+echo -n "> ";tmcq 25 8999999
+echo ": 99:59:59:24"
+echo -n "> ";tmcq 25 223278@44100
+echo ": 00:00:05:02"
+echo -n "> ";tmcq "-f=%>F%F" 25 12.580861678
+echo ": 580861978"
+echo -n "> ";tmcq "-f=%=1F%.1F %>F%F %=F%F %<F%F" 1 4@10
+echo ": 0.4 1 0 0"
+echo -n "> ";tmcq "-f=%=F%F" 29d 1:2:3:4@25
+echo ": 111583"
+echo -n "> ";tmcq "-f=%<F%F" 29d 01:02:03.02@25
+echo ": 111580"
+echo -n "> ";tmcq "-f=%<F%F" 23n 01:02:03.00@25
+echo ": 89262"
+echo -n "> ";tmcq "-f=%.6S" 1000 85:59:67@100
+echo ": 5159.67"
+echo -n "> ";tmcq "-f=%<F%F" 29d 1:2:3:4@25
+echo ": 111583"
+echo -n "> ";tmcq "-f=%<F%F" 29d 01:02:03.02@25
+echo ": 111580"
+echo -n "> ";tmcq 25 00:00:00.23@24 23@30
+echo ": 00:00:01:18"
+echo -n "> ";tmcq 29n 00:00:01.00 25
+echo ": 00:00:01:25"
+echo -n "> ";tmcq 29n 00:00:01.00@25
+echo ": 00:00:01:00"
+echo -n "> ";tmcq 29n 00:00:01.01@25
+echo ": 00:00:01:01"
+echo -n "> ";tmcq 29n 00:00:01.05@25
+echo ": 00:00:01:06"
+echo -n "> ";tmcq 29n "00:00:01.05|25"
+echo ": 00:00:01:06"
+echo -n "> ";tmcq 29n 00:00:01.00 2500
+echo ": 00:01:24:10"
+echo -n "> ";tmcq  "-f=%=3m%.3M %<2m%.2M %=2m%.2M %>2m%.2M" 1 31
+echo ": 0.517 0.51 0.52 0.52"
+echo -n "> ";tmcq  "-f=%=3m%.3M %<2m%.2M %=2m%.2M %>2m%.2M" 1 30
+echo ": 0.5 0.5 0.5 0.5"
+echo -n "> ";tmcq  "-f=%=3m%.3M %<2m%.2M %=2m%.2M %>2m%.2M" 1 29
+echo ": 0.483 0.48 0.48 0.49"
+echo -n "> ";tmcq -f=%F 25 7035@30d
+echo ": 5863"
+echo -n "> ";tmcq "-f=%F %r" 25 7035@30d
+echo ": 5863 -0.0143"
+echo -n "> ";tmcq "-f=%>0F%F %r" 25 7035@30d
+echo ": 5864 0.0257"
+echo -n "> ";tmcq "-f=%<0F%F" 30d 1.7035@10000
+echo ": 51"
