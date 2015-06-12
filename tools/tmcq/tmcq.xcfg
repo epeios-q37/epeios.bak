@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="tmcq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xcfg"/>
+		<Parameters>
+			<Language>en</Language>
+			<Command>Process</Command>
+			<Format>%2H%t%2m%t%2s%t%2f</Format>
+			<Tokens>;:</Tokens>
+			<!-- Default command -->
+		</Parameters>
+		<Definitions>
+			<PredefinedFormats>
+				<PredefinedFormat id="AE">%2H%p%2m%p%2s%p%2f</PredefinedFormat>
+				<PredefinedFormat id="FCP">%2H:%2m:%2s%p%2f</PredefinedFormat>
+			</PredefinedFormats>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="Locale"/>
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Convertit la somme des timecodes.</Translation>
+				<Translation language="en">Converts the sum of the timecodes. </Translation>
+			</Translations>
+			<Translations text="TokensHelpCommandDescription">
+				<Translation language="fr">Affiche la page d'aide sur les marqueurs.</Translation>
+				<Translation language="en">Displays the tokens help page. </Translation>
+			</Translations>
+			<Translations text="FormatHelpCommandDescription">
+				<Translation language="fr">Affiche la page d'aide sur le foramt.</Translation>
+				<Translation language="en">Displays the format help page. </Translation>
+			</Translations>
+			<Translations text="FormatAliasOptionLabel">
+				<Translation language="fr">alias</Translation>
+				<Translation language="en">alias</Translation>
+			</Translations>
+			<Translations text="FormatAliasOptionDescription">
+				<Translation language="fr">Alias de format d'affichage.</Translation>
+				<Translation language="en">Display format alias.</Translation>
+			</Translations>
+			<Translations text="FormatOptionLabel">
+				<Translation language="fr">format</Translation>
+				<Translation language="en">format</Translation>
+			</Translations>
+			<Translations text="FormatOptionDescription">
+				<Translation language="fr">Format d'affichage ; Voir 'tmcq --help-format' pour plus de détails.</Translation>
+				<Translation language="en">Display format ; see 'tmcq --help-format' for more détails.</Translation>
+			</Translations>
+			<Translations text="TokensOptionLabel">
+				<Translation language="fr">marqueurs</Translation>
+				<Translation language="en">tokens</Translation>
+			</Translations>
+			<Translations text="TokensOptionDescription">
+				<Translation language="fr">Marqueurs ; Voir 'tmcq --help-tokens' pour plus de détails.</Translation>
+				<Translation language="en">Tokens ; see 'tmcq --help-tokens' for more détails.</Translation>
+			</Translations>
+			<Translations text="FPSArgumentLabel">
+				<Translation language="fr">FPS</Translation>
+				<Translation language="en">FPS</Translation>
+			</Translations>
+			<Translations text="FPSArgumentDescription">
+				<Translation language="fr">Un entier, '23n', '29(n|d)', '30d', '59(n|d)' ou '60d'.</Translation>
+				<Translation language="en">An integer, '23n', '29(n|d)', '30d', '59(n|d)' or '60d'.</Translation>
+			</Translations>
+			<Translations text="TimecodeArgumentLabel">
+				<Translation language="fr">timecode</Translation>
+				<Translation language="en">timecode</Translation>
+			</Translations>
+			<Translations text="TimecodeArgumentDescription">
+				<Translation language="fr">Timecodes dont la somme est convertie.</Translation>
+				<Translation language="en">Timecodes which sum is converted.</Translation>
+			</Translations>
+			<!--
+			<Translations text="">
+				<Translation language="fr"></Translation>
+				<Translation language="en"></Translation>
+			</Translations>
+			-->
+		</Locale>
+		<Arguments>
+			<xpp:expand select="Arguments"/>
+			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage="[%FormatAliasOption%|%FormatOption%] [%TokensOption%] %FPSArgument% %TimecodeArgument% [%TimecodeArgument% [...]]"/>
+			<Argument id="FormatHelpCommand" Description="FormatHelpCommandDescription" long="help-format" Value="HelpFormat" Usage=""/>
+			<Argument id="TokensHelpCommand" Description="TokensHelpCommandDescription" long="help-tokens" Value="HelpTokens" Usage=""/>
+			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
+			<!-- Options : 'Path' ET 'Value'. -->
+			<Argument id="FormatAliasOption" Description="FormatAliasOptionDescription" long="format-alias" short="F" Path="FormatAlias" Label="FormatAliasOptionLabel"/>
+			<Argument id="FormatOption" Description="FormatOptionDescription" long="format" short="f" Path="Format" Label="FormatOptionLabel"/>
+			<Argument id="TokensOption" Description="TokensOptionDescription" long="tokens" short="t" Path="Tokens" Label="TokensOptionLabel"/>
+			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+			<Argument id="FPSArgument" Description="FPSArgumentDescription" Path="FPS" Label="FPSArgumentLabel"/>
+			<Argument id="TimecodeArgument" Description="TimecodeArgumentDescription" Path="Timecodes/Timecode" Label="TimecodeArgumentLabel"/>
+			<!-- Affectations des arguments libres-->
+			<Layouts>
+				<Layout command="Process">
+					<Link index="0" Target="FPSArgument"/>
+					<Link index="" Target="TimecodeArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>

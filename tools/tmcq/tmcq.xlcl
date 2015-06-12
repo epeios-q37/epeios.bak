@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locales xmlns:xpp="http://q37.info/ns/xpp">
+	<Locale target="tmcq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xlcl"/>
+		<Translations text="ProgramDescription">
+			<Translation language="fr">Convertisseur de timecodes basé sur le framework Epeios.</Translation>
+			<Translation language="en">Timecodes converter based on the Epeios framework.</Translation>
+		</Translations>
+		<Translations text="BadFPS">
+			<Translation language="fr">'%1' inutilisable comme valeur FPS.</Translation>
+			<Translation language="en">'%1' unusable as FPS value.</Translation>
+		</Translations>
+		<Translations text="BadTimecode">
+			<Translation language="fr">'%1' inutilisable comme timecode.</Translation>
+			<Translation language="en">'%1' unusable as timecode.</Translation>
+		</Translations>
+		<Translations text="BadTokens">
+			<Translation language="fr">'%1' est incorrect comme specification de marqueurs.</Translation>
+			<Translation language="en">'%1' is incorrect as tokens specificatiosn.</Translation>
+		</Translations>
+		<Translations text="TooFewArguments">
+			<Translation language="fr">Trop peu d'arguments !</Translation>
+			<Translation language="en">Too few arguments !</Translation>
+		</Translations>
+		<Translations text="TokensHelpMessage">
+			<Translation language="fr">
+				<![CDATA[
+				Les marqueurs sont un ensemble de un à trois caractères. S'il n'est composé que d'un seul caractère,
+				ce dernier est utilisé comme second et troisième caractère. S'il n'y a que deux caractères, le second est
+				utilsé comme troisième caractère. Le premier est utilisé pour les timecodes 'drop-frame', le second
+				pour les timecodes 'non realtime', et le troisième pour les timecodes 'non drop-frame'.
+				]]>
+			</Translation>
+			<Translation language="en">
+				<![CDATA[
+				Tokens are a set of one to three characters. If there is only one character, this one is used as
+				second and third character. If there is only two characters, the second one is used as third one.
+				The first is used for 'drop-frame' timecodes, the second for 'non realtime' timecodes, and the third
+				for 'non drop-frame' timecodes.
+				]]>
+			</Translation>
+		</Translations>
+		<Translations text="FormatHelpMessage">
+			<Translation language="fr">
+				<![CDATA[
+					Le format de sortie peut contenir les marqueurs suivants :\n
+					- %% : symbol '%',\n
+					- %<[<p>]<t> : arrondissement à la valeur inférieure,\n
+					- %=[<p>]<t> : arrondissement mathématique (arrondissement par défaut),\n
+					- %>[<p>]<t> : arrondissement à la valeur supérieure,\n
+					- %[<f>]D : nombre de jour,\n
+					- %[<f>]d : identique à '%[<f>]D',\n
+					- %[<f>]H : nombre total d'heures,\n
+					- %[<f>]h : nombre d'heures dans le jour,\n
+					- %[<f>]M : nombre total de minutes,\n
+					- %[<f>]m : nombre de minutes danse l'heure,\n
+					- %[<f>]S : nombre total de secondes,\n
+					- %[<f>]s : nombre de secondes dans la minute,\n
+					- %[<f>]F : nombre totale d'images,\n
+					- %[<f>]f : nombre d'images dans la seconde,\n
+					- %p : punctuation depending of the output fps designation,\n
+					- %r : remainder as fraction (for testing purpose),\n
+					- %R : remainder as float (for testing purpose).\n
+					\n
+					- <p> : rounding precision ('0' to '9', '0' if missing),\n
+					- <t> : rounding target ('d' for days, 'h' for hours, and so on ...),\n
+					- <f> : [<w>][(.|,)[<p>]] ('1' by default). Optional set of following flags :\n
+					\p- <w> : a digit as the minimum amount of digits for the integer part,\n
+					\p- '.' or ',' : the decimal separator to use,\n
+					\p- <p> : a digit as the maximum amount of digits for the fractional part.
+				]]>
+			</Translation>
+			<Translation language="en">
+				<![CDATA[
+					The output format is a string which can contains following markers :\n
+					- %% : literal '%',\n
+					- %<[<p>]<t> : round down,\n
+					- %=[<p>]<t> : mathematical rounding (default rounding),\n
+					- %>[<p>]<t> : round up,\n
+					- %[<f>]D : amount of days,\n
+					- %[<f>]d : same as '%[<f>]D',\n
+					- %[<f>]H : total amount of hours,\n
+					- %[<f>]h : hours in the day,\n
+					- %[<f>]M : total amount of minutes,\n
+					- %[<f>]m : minutes in the hour,\n
+					- %[<f>]S : total amount of seconds,\n
+					- %[<f>]s : seconds in the minute,\n
+					- %[<f>]F : total amount of frames,\n
+					- %[<f>]f : amount of frames in the second,\n
+					- %p : punctuation depending of the output fps designation,\n
+					- %r : remainder as fraction (for testing purpose),\n
+					- %R : remainder as float (for testing purpose).\n
+					\n
+					- <p> : rounding precision ('0' to '9', '0' if missing),\n
+					- <t> : rounding target ('d' for days, 'h' for hours, and so on ...),\n
+					- <f> : [<w>][(.|,)[<p>]] ('1' by default). Optional set of following flags :\n
+					\p- <w> : a digit as the minimum amount of digits for the integer part,\n
+					\p- '.' or ',' : the decimal separator to use,\n
+					\p- <p> : a digit as the maximum amount of digits for the fractional part.
+				]]>
+			</Translation>
+		</Translations>
+		<!--
+		<Translations text="">
+		  <Translation language="fr"></Translation>
+		  <Translation language="en"></Translation>
+		</Translations>
+		-->
+	</Locale>
+</Locales>

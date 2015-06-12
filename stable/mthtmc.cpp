@@ -33,10 +33,14 @@ static inline base__ ExtractItem_(
 	const str::string_ &String,
 	sdr::row__ &Position )
 {
+	sdr::row__ PositionBuffer = Position;
+
 	if ( Position == qNIL )
 		return 0;
 
-	return String.ToU32( Position, &Position, str::bAuto );
+	Position = qNIL;	// Because if Position == 'qNil', 'ToU32(...)' assumes there was an error on a precedent call, and don't make any conversion.
+
+	return String.ToU32( PositionBuffer, &Position, str::bAuto );
 }
 
 static inline bso::bool__ TestPosition_(
@@ -690,10 +694,7 @@ bso::bool__ mthtmc::Display(
 	const timecode_ &RawTimecode,
 	const xfps_ &XFPS,
 	const str::string_ &Format,
-	bso::char__ NonDropFramePunctuation,
-	bso::char__ DropFramePunctuation,
-	bso::char__ NoRealtimePunctuation,
-	bso::char__ DefaultDecimalSeparator,
+	const tokens__ &Tokens,
 	txf::text_oflow__ &TOFlow )
 {
 	bso::bool__ Success = false;
@@ -706,7 +707,7 @@ qRH
 	bso::u8__ H, M, S, Width = 1, Precision = UNDEFINED_PRECISION;
 	bso::bool__ MarkerPending = false;
 	bso::bool__ RoundingPending = false;
-	bso::char__ &DecimalSeparator = DefaultDecimalSeparator;
+	bso::char__ DecimalSeparator = Tokens.DS;
 	bso::sign__ Rounding = 0;
 	timecode Timecode;
 	period Period;
@@ -830,22 +831,22 @@ qRB
 			case 'F':
 				D_( ( Timecode / Period ).GetInteger(), FrameRemainder );
 				break;
-			case 'c':	// Complment.
+			case 'r':	// Remainder as float.
 				TOFlow << ( Timecode - RawTimecode ).GetLongFloat();
 				break;
-			case 'C':
+			case 'R':	// Remainder as fraction.
 				TOFlow << (Timecode - RawTimecode).Simplify();
 				break;
-			case 'p':
+			case 't':
 				switch ( XFPS.Type() ) {
 				case tDF:
-					TOFlow << DropFramePunctuation;
+					TOFlow << Tokens.DF;
 					break;
 				case tNRT:
-					TOFlow << NoRealtimePunctuation;
+					TOFlow << Tokens.NRT;
 					break;
 				case tNDF:
-					TOFlow << NonDropFramePunctuation;
+					TOFlow << Tokens.NDF;
 					break;
 				default:
 					qRFwk();	// Not 'return false', because a problem with 'XFPS' should be detected before calling this function.

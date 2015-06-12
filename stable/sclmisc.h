@@ -47,6 +47,8 @@ namespace sclmisc {
 
 	bso::bool__ IsInitialized( void );
 
+	void RefreshBaseLanguage( void );	// Set the base langauge (returned by above function) with the content of the registry.
+
 	const char *GetBaseLanguage( void );	// Language d'administration, pouvant être language utilsateur selon contexte.
 
 	inline const str::string_ &GetBaseTranslation(

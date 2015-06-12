@@ -191,7 +191,131 @@ namespace {
 			_callback__::Init();
 		}
 	};
+
+	sdr::row__ SkipLFCRTab_(
+		const str::string_ &In,
+		sdr::row__ Row )
+	{
+		while ( ( Row != qNIL) && ( strchr( "\n\r\t", In( Row ) ) != NULL ) )
+			Row = In.Next( Row );
+
+		if ( Row == qNIL )
+			return In.Last();
+		else
+			return In.Previous( Row );
+	}
+
+	bso::bool__ Normalize_(
+		const str::string_ &In,
+		str::string_ &Out )
+	{
+		bso::bool__ Success = false;
+	qRH
+		sdr::row__ Row = qNIL;
+		bso::char__ C = 0;
+		bso::bool__ Escape = false;
+		flx::E_STRING_TOFLOW___ TFlow;
+	qRB
+		Row = In.First();
+		TFlow.Init( Out );
+
+		while ( Row != qNIL ) {
+			switch ( C = In( Row ) ) {
+			case '\n':
+			case '\r':
+			case '\t':
+				if ( Escape )
+					qRReturn;
+
+				if ( TFlow.Flow().AmountWritten() )
+					TFlow << ' ';
+
+				Row = SkipLFCRTab_( In, Row );
+				break;
+			case 'n':
+			case 'r':
+				if ( Escape )
+					TFlow << txf::nl;
+				else
+					TFlow << C;
+				Escape = false;
+				break;
+			case 't':
+				if ( Escape )
+					TFlow << txf::tab;
+				else
+					TFlow << C;
+				Escape = false;
+				break;
+			case 'p':
+				if ( Escape )
+					TFlow << txf::pad;
+				else
+					TFlow << C;
+				Escape = false;
+				break;
+			case '\\':
+				if ( Escape ) {
+					TFlow << C;
+					Escape = false;
+				} else
+					Escape = true;
+				break;
+			default:
+				if ( Escape )
+					qRReturn;
+				else
+					TFlow << C;
+				break;
+			}
+
+			Row = In.Next( Row );
+		}
+
+		if ( !Escape )
+			Success = true;
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
+
+	template <typename source> const str::string_ &GetTranslation_(
+		const source &Source,
+		const char *Language,
+		str::string_ &Translation )
+	{
+	qRH
+		str::string Intermediate;
+	qRB
+		Intermediate.Init();
+		GetLocale().GetTranslation( Source, Language, Intermediate );
+
+		if ( !Normalize_( Intermediate, Translation ) )
+			qRFwk();
+	qRR
+	qRT
+	qRE
+		return Translation;
+	}
 }
+
+const str::string_ &scllocale::GetTranslation(
+	const char *Text,
+	const char *Language,
+	str::string_ &Translation )
+{
+	return GetTranslation_( Text, Language, Translation );
+}
+
+const str::string_ &scllocale::GetTranslation(
+	const lcl::meaning_ &Meaning,
+	const char *Language,
+	str::string_ &Translation )
+{
+	return GetTranslation_( Meaning, Language, Translation );
+}
+
 
 void scllocale::TranslateTags(
 	str::string_ &String,

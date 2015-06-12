@@ -225,16 +225,52 @@ namespace mthtmc {
 		const xfps_ &DefaultXFPS,
 		timecode_ &Timecode );	// If the 'XFPS' is bot stored in 'String', then 'DefaultXFPS' is used.
 
+	struct tokens__ {
+		char
+			DS,	// Decimal separator
+			NDF,
+			NRT,
+			DF;
+		void reset( bso::bool__ = true )
+		{
+			DS = NDF = NRT = DF = 0;
+		}
+		E_CDTOR( tokens__ );
+		tokens__(
+			char DS,
+			char DF,
+			char NRT = 0,
+			char NDF = 0 )
+		{
+			reset( false );
+
+			Init( DS, DF, NRT, NDF );
+		}
+		void Init(
+			char DS,
+			char DF,
+			char NRT = 0,
+			char NDF = 0 )
+		{
+			this->DS = DS;
+			this->DF = DF;
+			this->NRT = ( NRT == 0 ? this->DF : NRT );
+			this->NDF = ( NDF == 0 ? this->NRT : NDF );
+		}
+		void Init( void )
+		{
+			DS = NDF = NRT = DF = 0;
+		}
+	};
+
+
 
 	//f Return a string representation of 'TCI' following 'Standard' and 'Format'.
 	bso::bool__ Display(
 		const timecode_ &Timecode,
 		const xfps_ &XFPS,
 		const str::string_ &Format,
-		bso::char__ NonDropFramePunctuation,
-		bso::char__ DropFramePunctuation,
-		bso::char__ NoRealtimePunctuation,
-		bso::char__ DefaultDecimalSeparator,
+		const tokens__ &Tokens,
 		txf::text_oflow__ &TFlow );
 
 	 inline void Add(

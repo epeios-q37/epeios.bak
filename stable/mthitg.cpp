@@ -55,7 +55,7 @@ integer mthitg::Divide_(
 		}
 		else
 		{
-			Result = Result * integer( 0x10000L ) + integer( Rep );
+			Result = Result * integer( 0x10000 ) + integer( Rep );
 			return Inter;
 		}
 	}

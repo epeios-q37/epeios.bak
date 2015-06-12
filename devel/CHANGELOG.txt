@@ -12,6 +12,27 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-12 :
+- MTHTMC :
+	- Fixing 'g++' complainings.
+
+2015-06-11 :
+- MTHTMC :
+	% :Introducing 'tokens__'.
+
+2015-06-10 :
+- SCLLOCALE :
+	* A translation now ignores carriage returns, line feed and tabulations. They have to be explicitly set using '\n', '\t' and '\p' (padding, shorter as a tabulation.).
+- SCLMISC :
+	% Adding 'RefreshBaseLanguage().'
+- SCLTOOL :
+	* The base language is now updated with the registry content once the project/command-line arguments/setup-related data are uploaded in the registry.
+	This allows to change the language with the '--#Language=...' option, i.e. without having to modifiy the configuration file.
+
+2015-06-09 :
+- MTHTMC :
+	# timecode with separators are now handled correct.
+
 2015-06-08 :
 - GLOBAL : 
 	- Adaptaiton to changes in miscellaneous libraries.

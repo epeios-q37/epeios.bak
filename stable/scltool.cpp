@@ -1389,7 +1389,7 @@ qRB
 	PrintUsage_( tFlag, Flags );
 	PrintUsage_( tOption, Options );
 	PrintUsage_( tFree, Frees );
-	qRR
+qRR
 qRT
 qRE
 }
@@ -1500,6 +1500,8 @@ qRB
 		sclmisc::LoadProject( ProjectFileName, ProjectId );
 
 	sclrgstry::FillSetupRegistry();
+
+	sclmisc::RefreshBaseLanguage();
 
 	Command.Init();
 

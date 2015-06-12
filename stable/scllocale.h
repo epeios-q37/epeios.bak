@@ -64,21 +64,15 @@ namespace scllocale {
 		const char *Directory,
 		const char *RootPath );
 
-	inline const str::string_ &GetTranslation(
+	const str::string_ &GetTranslation(
 		const char *Text,
 		const char *Language,
-		str::string_ &Translation )
-	{
-		return GetLocale().GetTranslation( Text, Language, Translation );
-	}
+		str::string_ &Translation );
 
-	inline const str::string_ &GetTranslation(
+	const str::string_ &GetTranslation(
 		const lcl::meaning_ &Meaning,
 		const char *Language,
-		str::string_ &Translation )
-	{
-		return GetLocale().GetTranslation( Meaning, Language, Translation );
-	}
+		str::string_ &Translation );
 
 	void TranslateTags(
 		str::string_ &String,

@@ -55,6 +55,21 @@ const char *sclmisc::GetBaseLanguage( void )
 	return BaseLanguage_;
 }
 
+void sclmisc::RefreshBaseLanguage( void )
+{
+qRH
+	str::string Language;
+qRB
+Language.Init();
+
+	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )
+		Language.Convert( BaseLanguage_ );
+qRR
+qRT
+qRE
+}
+
+
 void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
 {
 	sclerror::SetMeaning( Meaning );
@@ -269,7 +284,6 @@ static void Initialize_(
 	const char *RegistryDirectory )
 {
 qRH
-	str::string Language;
 	str::string LocaleRootPath, RegistryRootPath;
 	TOL_CBUFFER___ Buffer;
 qRB
@@ -283,9 +297,7 @@ qRB
 
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
 
-	Language.Init();
-	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )	// Le langage est uniquement celui d'administration, et le langage utilisateur par dfaut.
-		Language.Convert( BaseLanguage_ );
+	RefreshBaseLanguage();
 
 	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format() );
 qRR
