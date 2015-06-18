@@ -424,7 +424,7 @@ namespace txf {
 	{
 #if defined( CPE_S_WIN ) || defined( CPE_S_CYGWIN )
 		return Flow << "\r\n";
-#elif defined( CPE_S_GNULINUX ) || defined( CPE_S_DARWIN )
+#elif defined( CPE_S_UNIX )
 		return Flow << '\n';
 #else
 #	error "Unknow target !"

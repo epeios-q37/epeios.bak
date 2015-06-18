@@ -21,7 +21,7 @@
 
 #include "sck.h"
 
-#ifdef CPE_S_GNULINUX
+#ifdef CPE_S_POSIX
 #	define SCK__IGNORE_SIGPIPE
 #endif
 

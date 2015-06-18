@@ -61,8 +61,10 @@
 
 # ifdef CPE_S_WIN
 #  define MSCMDD__WINDOWS
-# elif defined( CPE_S_GNULINUX )
+# elif defined( CPE_S_LINUX )
 #  define MSCMDD__ALSA
+# else
+#  error
 # endif
 
 #ifdef MSCMDD__WINDOWS

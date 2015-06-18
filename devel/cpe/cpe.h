@@ -69,7 +69,7 @@
 #   define CPE_S_GNULINUX
 #   define CPE_SL "GNU/Linux"
 #  else
-#   error "Unknown Linux-related OS !"
+#   define CPE_SL "Linux"
 #  endif
 # endif
 
@@ -108,6 +108,13 @@
 # include <unistd.h>
 # if defined(_POSIX_VERSION)
 #  define CPE_S_POSIX
+#  ifndef CPE_SL
+#   define CPE_SL "POSIX"
+#  endif
+# else
+#  ifndef CPE_SL
+#   define CPE_SL "Unix"
+#  endif
 # endif
 #endif
 

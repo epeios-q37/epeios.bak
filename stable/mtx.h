@@ -51,32 +51,29 @@
 # ifdef MTX__USE_ATOMIC_OPERATIONS
 #  if defined( CPE_S_WIN )
 #   define MTX__USE_WIN_ATOMIC_OPERATIONS
+#  elif defined ( CPE_S_LINUX )
+#    define MTX__USE_LINUX_ATOMIC_OPERATIONS
+#  elif defined (CPE_S_DARWIN )
+#    define MTX__USE_DARWIN_ATOMIC_OPERATIONS
 #  elif defined( CPE_S_POSIX )
-#   if defined ( CPE_S_GNULINUX )
-#    if ( MTX__USE_ATOMIC_LIB )
-#     define MTX__USE_LINUX_ATOMIC_OPERATIONS
-#    else
-#     define MTX__USE_PTHREAD_MUTEX
-#    endif
-#   elif defined (CPE_S_DARWIN )
-#    define MTX__USE_MAC_ATOMIC_OPERATIONS
-#   else
-#    define MTX__USE_PTHREAD_MUTEX
-#   endif
-#  else
-#   error
+#   define MTX__USE_PTHREAD_MUTEX
 #  endif
-# else
-#  define MTX__NO_ATOMIC_OPERATIONS
 # endif
 
-# ifndef MTX__USE_ATOMIC_OPERATIONS
-#  ifndef MTX_SUPPRESS_NO_ATOMIC_OPERATIONS_WARNING
-#   ifdef CPE_C_MSC
-#    pragma message( "BE CAREFUL : Mutexes do not use atomic operations !" )
-#   elif defined( CPE_C_GCC )
-#    pragma message( "BE CAREFUL : Mutexes do not use atomic operations !"
-#   endif
+# if !defined( MTX__USE_WIN_ATOMIC_OPERATIONS ) && !defined( MTX__USE_LINUX_ATOMIC_OPERATIONS ) && !defined( CPE__USE_DARWIN_ATOMIC_OPERATIONS )
+#  ifdef MTX__USE_PTHREAD_MUTEX
+#   define MTX__MESSAGE	"CAUTION : Mutexes based on pthrad mutexes !!!"
+#  else
+#   define MTX__MESSAGE	"CAUTION : Mutexes NOT based on atomic operations !!!"
+#   define MTX__NO_ATOMIC_OPERATIONS
+#  endif
+# endif
+
+# ifdef MTX__MESSAGE
+#  ifndef MTX_SUPPRESS_WARNING
+#   pragma message( MTX__MESSAGE )
+#  elif defined( CPE_C_GCC )
+#   pragma message MTX__MESSAGE
 #  endif
 # endif
 
@@ -84,7 +81,7 @@
 #  include "asm/atomic.h"
 # endif
 
-# ifdef MTX__USE_MAC_ATOMIC_OPERATIONS
+# ifdef MTX__USE_DARWIN_ATOMIC_OPERATIONS
 #  include <libkern/OSAtomic.h>
 # endif
 
@@ -122,7 +119,7 @@ namespace mtx {
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 	typedef atomic_t	counter_t__;
 	typedef counter_t__ counter__;
-#elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
+#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
 	typedef int32_t	counter_t__;
 	typedef counter_t__ counter__;
 #elif defined ( MTX__USE_PTHREAD_MUTEX )
@@ -155,7 +152,7 @@ namespace mtx {
 		Counter = Value;
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 		atomic_set( &Counter, Value );
-#elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
+#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
 		Counter = Value;
 #elif defined( MTX__USE_PTHREAD_MUTEX )
 		Counter.Value = Value;
@@ -185,7 +182,7 @@ namespace mtx {
 		return Counter;
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 		return atomic_read( &Counter );
-#elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
+#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
 		return Counter;
 #elif defined( MTX__USE_PTHREAD_MUTEX )
 		counter_t__ Buffer;
@@ -214,7 +211,7 @@ namespace mtx {
 		InterlockedIncrement( &Counter );
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 		atomic_inc( &Counter );
-#elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
+#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
 		OSAtomicIncrement32( &Counter );
 #elif defined( MTX__USE_PTHREAD_MUTEX )
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
@@ -235,7 +232,7 @@ namespace mtx {
 		return InterlockedDecrement( &Counter ) == 0;
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 		return atomic_dec_and_test( &Counter );
-#elif defined( MTX__USE_MAC_ATOMIC_OPERATIONS )
+#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
 //		return OSAtomicDecrement32( &Counter ) == 1;	// Il existe un autre 'OSAtomic.h', dans lequel 'OSAtomicDecrement(|8|16|64)(...)'. retourne la valeur AVANT dcrmentation.
 														// Cependant, celui-ci n'a pas de fonction 'OSAtomicDecrement32'(...)".
 		return OSAtomicDecrement32( &Counter ) == 0;

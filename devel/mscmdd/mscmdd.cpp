@@ -78,7 +78,7 @@ static void CALLBACK MidiInProc_(
 {
 qRH
 	_data___ &Data = *(_data___ *)dwInstance;
-	bso::ubyte__ Event = 0;
+	bso::u8__ Event = 0;
 	MIDIHDR *Header = NULL;
 	bso::bool__ Wait = false;
 qRB
@@ -102,7 +102,7 @@ qRB
 				Fill_( Buffer, 3, Data );
 				break;
 			default:
-				ERRc();
+				qRFwk();
 				break;
 			}
 			break;
@@ -110,7 +110,7 @@ qRB
 			Fill_( Buffer, 1, Data );
 			break;
 		default:
-			ERRc();
+			qRFwk();
 			break;
 		}
 		break;
@@ -127,7 +127,7 @@ qRB
 	case MIM_CLOSE:
 		break;
 	default:
-		ERRs();
+		qRSys();
 		break;
 	}
 
@@ -141,7 +141,7 @@ fdr::size__ mscmdd::midi_in___::Read(
 	fdr::size__ Maximum,
 	fdr::datum__ *Buffer )
 {
-	bso::ubyte__ Amount = sizeof( _Header ) / sizeof( *_Header );
+	bso::u8__ Amount = sizeof( _Header ) / sizeof( *_Header );
 
 	while ( Amount-- ) {
 		if( _Header[Amount].dwUser == 0 ) {
@@ -149,15 +149,15 @@ fdr::size__ mscmdd::midi_in___::Read(
 			_Header[Amount].dwUser = _Header[Amount].dwBufferLength = sizeof( _HeaderBuffer ) / sizeof( *_HeaderBuffer );
 
 			if ( midiInUnprepareHeader( _Handle, &_Header[Amount], sizeof( _Header[Amount] ) ) != MMSYSERR_NOERROR )
-				ERRs();
+				qRSys();
 
 			_Header[Amount].dwFlags = 0;
 
 			if ( midiInPrepareHeader( _Handle, &_Header[Amount], sizeof( _Header[Amount] ) ) != MMSYSERR_NOERROR )
-				ERRs();
+				qRSys();
 
 			if ( midiInAddBuffer( _Handle, &_Header[Amount], sizeof( _Header[Amount] ) ) != MMSYSERR_NOERROR )
-				ERRs();
+				qRSys();
 		}
 	}
 
@@ -166,7 +166,7 @@ fdr::size__ mscmdd::midi_in___::Read(
 	if ( _IsEmpty( _Data ) ) {
 		if ( !_Started ) {
 				if ( midiInStart( _Handle ) != MMSYSERR_NOERROR )
-					ERRf();
+					qRFwk();
 			_Started = true;
 		}
 
@@ -205,20 +205,20 @@ bso::bool__ mscmdd::midi_in___::Init(
 	int Device,
 	err::handling__ ErrHandling )
 {
-	bso::ubyte__ Amount = sizeof( _Header ) / sizeof( *_Header );
+	bso::u8__ Amount = sizeof( _Header ) / sizeof( *_Header );
 	reset();
 
 	// '_Data' n'est pas initialis, mais ce n'est pas grave, car ne sera ps utilis tant qu'un 'Start' n'aura pas t lanc.
 	if ( midiInOpen( &_Handle, Device, (DWORD)MidiInProc_, (DWORD)&_Data, CALLBACK_FUNCTION ) != MMSYSERR_NOERROR ) {
 		if ( ErrHandling != err::hUserDefined )
-			ERRf();
+			qRFwk();
 		else
 			return false;
 	}
 
-	_Data.Access = mtx::Create( mtx::mFree );
-	_Data.Full = mtx::Create( mtx::mFree );
-	_Data.Empty = mtx::Create( mtx::mFree );
+	_Data.Access = mtx::Create();
+	_Data.Full = mtx::Create();
+	_Data.Empty = mtx::Create();
 	_Data.Purge = false;
 	_Data.Buffer = _Cache;
 
@@ -230,10 +230,10 @@ bso::bool__ mscmdd::midi_in___::Init(
 		_Header[Amount].dwFlags = 0;
 
 		if ( midiInPrepareHeader( _Handle, &_Header[Amount], sizeof( _Header[Amount] ) ) != MMSYSERR_NOERROR )
-			ERRs();
+			qRSys();
 
 		if ( midiInAddBuffer( _Handle, &_Header[Amount], sizeof( _Header[Amount] ) ) != MMSYSERR_NOERROR )
-			ERRs();
+			qRSys();
 	}
 
 	_Data.Size = sizeof( _Cache ) / sizeof( *_Cache );
@@ -433,13 +433,13 @@ qRE
 #endif
 
 
-bso::ulong__ mscmdd::GetMidiInDevicesNames( names_ &Names )
+bso::u32__ mscmdd::GetMidiInDevicesNames( names_ &Names )
 {
-	bso::ulong__ Count = 0;
+	bso::u32__ Count = 0;
 #ifdef MSCMDD__WINDOWS
 qRH
 	MIDIINCAPS InCaps;
-	bso::ulong__ Counter = 0;
+	bso::u32__ Counter = 0;
 	name Name;
 qRB
 	Count =  midiInGetNumDevs();
@@ -470,13 +470,13 @@ qRE
 	return Count;
 }
 
-bso::ulong__ mscmdd::GetMidiOutDevicesNames( names_ &Names )
+bso::u32__ mscmdd::GetMidiOutDevicesNames( names_ &Names )
 {
-	bso::ulong__ Count = 0;
+	bso::u32__ Count = 0;
 #ifdef MSCMDD__WINDOWS
 qRH
 	MIDIOUTCAPS OutCaps;
-	bso::ulong__ Counter = 0;
+	bso::u32__ Counter = 0;
 	name Name;
 qRB
 	Count =  midiOutGetNumDevs();
@@ -507,7 +507,10 @@ qRE
 	return Count;
 }
 
-#define CASE( label ) LCL_CASE( label, s )
+#define CASE( label )\
+	case s##label:\
+		return "MSCMDD_" #label;\
+		break;
 
 const char *mscmdd::Label( status__ Status )
 {
@@ -515,7 +518,7 @@ const char *mscmdd::Label( status__ Status )
 	CASE( UnableToOpenMIDIInDevice );
 	CASE( UnableToOpenMIDIOutDevice );
 	default:
-		ERRu();
+		qRFwk();
 		break;
 	}
 

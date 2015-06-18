@@ -111,15 +111,12 @@ qRE
 	return Result;
 }
 
-#if defined ( CPE_S_GNULINUX )
+#if defined ( CPE_S_LINUX )
 # define LAUNCH_COMMAND	"xdg-open"
 #elif defined( CPE_S_DARWIN )
 # define LAUNCH_COMMAND	"open"
 #elif defined( CPE_S_WIN ) || defined( CPE_S_CYGWIN )
 # define LAUNCH_COMMAND	"start \"\"" // Les "" dans la commande sont ncessit par 'start', car si l'argument est pass entre "", 'start' considre cela comme le titre de la fentre.
-#elif defined( CPE_S_ANDROID )
-# else
-# error
 #endif
 
 void tol::Launch( const ntvstr::string___ &Document )
@@ -127,7 +124,7 @@ void tol::Launch( const ntvstr::string___ &Document )
 qRH
 	str::string Command, Buffer;
 qRB
-#ifdef CPE_S_ANDROID
+#ifndef LAUNCH_COMMAND
 	qRFwk();
 #else
 	Command.Init( LAUNCH_COMMAND " \"" );
@@ -143,7 +140,6 @@ qRR
 qRT
 qRE
 }
-
 
 #ifdef TOL__WIN		
 LARGE_INTEGER	tol::_TickFrequence;

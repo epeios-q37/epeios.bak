@@ -78,7 +78,7 @@ typedef void (* mtk__routine)(void *);
 # elif defined( E_KEEP_THREADS )
 #  define MTK__KEEP
 # else
-#  ifdef CPE_S_GNULINUX
+#  ifdef MTK__POSIX
 #   define MTK__KEEP
 #  else
 #   define MTK__KILL
