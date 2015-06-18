@@ -66,11 +66,7 @@
 #  error
 # endif
 
-#if defined( CPE_C_MSC ) || defined( CPE_C_GCC )
-#	include <sys/timeb.h>
-#else
-#	error "Unknown compiler"
-#endif
+# include <sys/timeb.h>
 
 # include "err.h"
 
