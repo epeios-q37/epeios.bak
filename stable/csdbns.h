@@ -156,7 +156,7 @@ namespace csdbns {
 			sck::duration__ TimeOut = SCK_INFINITE );
 	};
 
-#ifdef CPE_MT
+#ifdef CPE_F_MT
 
 	struct _flow_data__ {
 		sck::socket_ioflow___ Flow;

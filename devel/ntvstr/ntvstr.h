@@ -40,9 +40,9 @@
 # include "tol.h"
 # include "strng.h"
 
-# if defined( CPE_POSIX )
+# if defined( CPE_S_POSIX )
 #  define NTVSTR__MBS	// 'Multi-Byte Strings'
-# elif defined( CPE_WIN )
+# elif defined( CPE_S_WIN )
 #  define NTVSTR__WCS	// 'Wide-Char Strings'
 # else
 #  error "Unknown target !"
@@ -135,10 +135,10 @@ namespace ntvstr {
 			reset( false );
 			Init( String );
 		}
-# ifdef CPE_WIN
-#  if defined( CPE_X86 ) || defined( CPE_MSVC )
+# ifdef CPE_S_WIN
+#  if defined( CPE_F_32BITS ) || defined( CPE_C_MSC )
 		string___( int String )	// Pour traiter le cas ou c'est 'NULL' (assimil  un int) qui est pass en paramtre.
-#  elif defined( CPE_X64 )
+#  elif defined( CPE_F_64BITS )
 		string___( long long int String )	// Pour traiter le cas ou c'est 'NULL' (assimil  un long long int) qui est pass en paramtre.
 #  else
 #   error

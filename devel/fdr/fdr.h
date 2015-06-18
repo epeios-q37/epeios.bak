@@ -59,7 +59,7 @@
 #ifdef FDR_THREAD_SAFE
 #	define FDR__TS
 #elif !defined( FDR_THREAD_UNSAFE )
-#	ifdef CPE_MT
+#	ifdef CPE_F_MT
 #		define FDR__TS
 #	endif
 #endif

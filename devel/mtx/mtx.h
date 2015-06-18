@@ -49,16 +49,16 @@
 # endif
 
 # ifdef MTX__USE_ATOMIC_OPERATIONS
-#  if defined( CPE_WIN )
+#  if defined( CPE_S_WIN )
 #   define MTX__USE_WIN_ATOMIC_OPERATIONS
-#  elif defined( CPE_POSIX )
-#   if defined ( CPE_LINUX )
+#  elif defined( CPE_S_POSIX )
+#   if defined ( CPE_S_GNULINUX )
 #    if ( MTX__USE_ATOMIC_LIB )
 #     define MTX__USE_LINUX_ATOMIC_OPERATIONS
 #    else
 #     define MTX__USE_PTHREAD_MUTEX
 #    endif
-#   elif defined (CPE_XCODE )
+#   elif defined (CPE_S_DARWIN )
 #    define MTX__USE_MAC_ATOMIC_OPERATIONS
 #   else
 #    define MTX__USE_PTHREAD_MUTEX
@@ -72,9 +72,9 @@
 
 # ifndef MTX__USE_ATOMIC_OPERATIONS
 #  ifndef MTX_SUPPRESS_NO_ATOMIC_OPERATIONS_WARNING
-#   ifdef CPE_VC
+#   ifdef CPE_C_MSC
 #    pragma message( "BE CAREFUL : Mutexes do not use atomic operations !" )
-#   elif defined( CPE_GCC )
+#   elif defined( CPE_C_GCC )
 #    pragma message( "BE CAREFUL : Mutexes do not use atomic operations !"
 #   endif
 #  endif
@@ -97,7 +97,7 @@
 	(voir 'NOTA' dans le fichier d'entte de ce module), on est amen  utiliser ce module mme dans un contexte 'single-threaded'.
 */
 # if 0
-#  ifndef CPE_MT
+#  ifndef CPE_F_MT
 #   error "This library only useful in multitasking context, in which you are not."
 #  endif
 # endif

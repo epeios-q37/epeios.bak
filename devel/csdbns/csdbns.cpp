@@ -28,15 +28,15 @@
 
 using namespace csdbns;
 
-#ifdef CPE_MT
+#include "cio.h"
+
+
+#ifdef CPE_F_MT
 # include "mtx.h"
 # include "mtk.h"
 # include "lstbch.h"
 #endif
 
-#ifdef CPE_CONSOLE
-#	include "cio.h"
-#endif
 
 bso::bool__ csdbns::listener___::Init(
 	port__ Port,
@@ -56,7 +56,7 @@ bso::bool__ csdbns::listener___::Init(
 	nom.sin_addr.s_addr=INADDR_ANY;
 	nom.sin_family=AF_INET;
 
-#if defined( CPE_LINUX ) || defined( CPE_CYGWIN )
+#if defined( CPE_S_POSIX )
 	int Val = ~0;
 
 	if ( setsockopt( Socket_, SOL_SOCKET, SO_REUSEADDR, &Val, sizeof( Val ) ) != 
@@ -117,7 +117,7 @@ qRB
 		{
 			if ( ( Socket = accept( Socket_, (sockaddr *)&SockAddr, &SockAddrSize ) ) == SCK_INVALID_SOCKET ) {
 				error__ Error = sck::Error();
-//#ifdef CPE_CONSOLE
+//#ifdef CPE_F_CONSOLE
 #if 0
 				qRH
 					cio::cerr___ cerr;
@@ -205,7 +205,7 @@ qRE
 	return Continue;
 }
 
-#ifdef CPE_MT
+#ifdef CPE_F_MT
 
 struct socket_data__
 {
@@ -420,7 +420,7 @@ qRE
 
 Q37_GCTOR( csdbns )
 {
-#ifdef CPE_MT
+#ifdef CPE_F_MT
 	Repository_.reset( false );
 	Repository_.Init();
 	Mutex_ = mtx::Create();
@@ -429,7 +429,7 @@ Q37_GCTOR( csdbns )
 
 Q37_GDTOR( csdbns )
 {
-#ifdef CPE_MT
+#ifdef CPE_F_MT
 	Clean_();
 
 	if ( Mutex_ != MTX_INVALID_HANDLER )

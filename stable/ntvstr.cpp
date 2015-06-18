@@ -30,7 +30,7 @@
 
 using namespace ntvstr;
 
-#ifdef CPE_POSIX
+#ifdef CPE_S_POSIX
 #  include <langinfo.h>
 #endif
 

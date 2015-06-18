@@ -28,11 +28,13 @@
 
 using namespace csdles;
 
-#ifdef CPE_WIN
+#ifdef CPE_S_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
+#elif defined( CPE_S_POSIX )
+# define FUNCTION_SPEC
 #else
-#define FUNCTION_SPEC
-# endif
+# error
+#endif
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 

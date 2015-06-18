@@ -119,7 +119,7 @@ static inline iop::descriptor__ Open_(
 	const fnm::name___ &Filename,
 	mode__ Mode )
 {
-#ifdef CPE__CYGWIN
+#ifdef CPE_S_CYGWIN
 	int Flags = O_BINARY;
 #else
 	int Flags = 0;

@@ -41,12 +41,12 @@
 # include "iop.h"
 # include "fil.h"
 
-# if defined( CPE_MSVC ) || defined ( CPE_MINGW ) || defined ( CPE_CYGWIN )
+# if defined( CPE_S_WIN ) || defined ( CPE_S_CYGWIN )
 #  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	1000
-# elif defined ( CPE_LINUX )
-#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	800	// Linux, par dfaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
-# elif defined ( CPE_XCODE )
-#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	200	// Mac, par dfaut, ne peut ouvrir que 256 descripteurs (socket comprises).
+# elif defined ( CPE_S_GNULINUX )
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	800	// GNU/Linux, par dfaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
+# elif defined ( CPE_S_DARWIN )
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	200	// Darwin, par dfaut, ne peut ouvrir que 256 descripteurs (socket comprises).
 # else
 #  error "Unimplemented target !"
 # endif
@@ -60,7 +60,7 @@
 
 
 #ifndef FLSQ_NO_MT
-#	ifdef CPE__MT
+#	ifdef CPE_F_MT
 #		define FLSQ__MT
 #	endif
 #endif
@@ -72,7 +72,7 @@
 #	endif
 #endif
 
-# ifdef CPE__MT
+# ifdef CPE_F_MT
 #  include "mtx.h"
 # endif
 
@@ -105,7 +105,7 @@ namespace flsq {
 		iop::descriptor__ _D;
 		_io__ _Core;
 #ifdef FLSQ__MT
-		mtx::mutex_handler__ _Mutex;
+		mtx::handler___ _Mutex;
 #endif
 		void _Lock( void )
 		{
@@ -152,7 +152,7 @@ namespace flsq {
 			reset();
 
 #ifdef FLSQ__MT
-			_Mutex = mtx::Create( mtx::mProtecting );
+			_Mutex = mtx::Create();
 #endif
 
 			_D = fil::Open( Name, Mode );
@@ -459,13 +459,13 @@ namespace flsq {
 
 				char Buffer[L_tmpnam];
 
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 # endif
 				if ( tmpnam( Buffer ) == NULL )
 					qRSys();
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 #  pragma GCC diagnostic pop
 # endif
 
@@ -575,7 +575,7 @@ namespace flsq {
 				return 0;
 #	endif
 		}
-#ifdef CPE__VC
+#ifdef CPE_C_MSC
 #	undef CreateFile
 #endif
 		bso::bool__ CreateFile( err::handling__ ErrHandle = err::h_Default )

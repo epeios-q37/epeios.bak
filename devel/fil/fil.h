@@ -53,9 +53,9 @@ namespace lcl {
 	class meaning_;
 }
 
-# if defined( CPE_POSIX )
+# if defined( CPE_S_POSIX )
 #  define FIL__POSIX
-# elif defined( CPE_WIN )
+# elif defined( CPE_S_WIN )
 #  define FIL__WIN
 # else
 #  error "Undefined platform !"
@@ -141,7 +141,7 @@ namespace fil {
 		case ENOTDIR:
 			return eNotDir;
 			break;
-# ifdef CPE_MINGW	// 'MinGW' ne connait pas 'ELOOP'.
+# ifdef CPE_C_MINGW	// 'MinGW' ne connait pas 'ELOOP'.
 		case WSAELOOP:
 # else
 		case ELOOP:

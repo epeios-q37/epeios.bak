@@ -72,7 +72,7 @@ int scltool::SCLTOOLMain(
 {
 	int ExitValue = EXIT_FAILURE;
 qRH
-qRH
+qRB
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )

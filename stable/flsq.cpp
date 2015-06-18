@@ -82,10 +82,8 @@ struct _data__ {
 	}
 };
 
-namespace {
-	lstbch::E_LBUNCHt( _data__, row__ ) List_;
-	static que::E_MQUEUEt( row__ ) Queue_;
-}
+static lstbch::E_LBUNCHt( _data__, row__ ) List_;
+static que::E_MQUEUEt( row__ ) Queue_;
 
 typedef ids::E_IDS_STORE_( id__ )	_ids_;
 E_AUTO( _ids );

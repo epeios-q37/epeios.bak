@@ -50,7 +50,7 @@ cof___ cio::COutF, cio::CErrF;
 txf::text_iflow__ cio::CIn;
 txf::text_oflow__ cio::COut, cio::CErr;
 
-#if defined( CPE_WIN )
+#if defined( CPE_S_WIN )
 #	include <io.h>
 #	include <fcntl.h>
 #endif
@@ -80,7 +80,7 @@ const set__ &cio::GetCurrentSet( void )
 
 static void InitializeConsole_( void )
 {
-#if defined( CPE_WIN )
+#if defined( CPE_S_WIN )
 	if ( _setmode( _fileno( stdin ), _O_BINARY ) == -1 )
 		qRLbr();
 

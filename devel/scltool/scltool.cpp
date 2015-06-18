@@ -1575,7 +1575,7 @@ static void ErrFinal_( void )
 
 
 
-#ifdef CPE_WIN
+#ifdef CPE_S_WIN
 
 #undef system	// Dfini dans 'tol.h', rfrenc dans le fichier ci-dessous.
 

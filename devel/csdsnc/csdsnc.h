@@ -61,7 +61,7 @@
 #include "cpe.h"
 #include "ags.h"
 
-#ifdef CPE_MT
+#ifdef CPE_F_MT
 #	define CSDSNC__MT
 #endif
 

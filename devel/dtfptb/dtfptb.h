@@ -24,32 +24,16 @@
 
 #define DTFPTB_NAME		"DTFPTB"
 
-#define	DTFPTB_VERSION	"$Revision: 1.25 $"
-
-#define DTFPTB_OWNER		"Claude SIMON"
-
 #if defined( E_DEBUG ) && !defined( DTFPTB_NODBG )
 #define DTFPTB_DBG
 #endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.25 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/13 16:21:16 $
-
-/* End of automatic documentation generation part. */
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-/* Addendum to the automatic documentation generation part. */
 //D Data TransFert PorTaBle 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
 
 #include "err.h"
 #include "flw.h"
@@ -114,7 +98,7 @@ namespace dtfptb {
 		return Int = (i)_FGetInt( Flow, sizeof( Int ) );
 	}
 
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 	inline void FPut(
 		bso::size__ Size,
 		flw::oflow__ &Flow )
@@ -147,7 +131,7 @@ namespace dtfptb {
 		bso::sint__ SInt,
 		flw::oflow__ &Flow );
 
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 	inline bso::size__ VGet(
 		flw::iflow__ &Flow,
 		bso::size__ &Size )
@@ -190,7 +174,7 @@ namespace dtfptb {
 	}
 
 
-# ifdef CPE_X64
+# if defined( CPE_F_64BITS )
 DTFPTB__M( 64, BSO_U64_MAX, BSO_S64_MIN, BSO_S64_MAX )
 # endif
 DTFPTB__M( 32, BSO_U32_MAX, BSO_S32_MIN, BSO_S32_MAX )

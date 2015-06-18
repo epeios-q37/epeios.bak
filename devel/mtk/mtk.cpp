@@ -47,7 +47,7 @@ namespace {
 	};
 };
 
-#	ifdef CPE__BEOS
+#	ifdef 0	// Was for BeOS. No more handled.
 
 #	include <be/kernel/scheduler.h>
 
@@ -318,8 +318,10 @@ void mtk::LaunchAndKeep(
 }
 
 
-#ifdef CPE__VC6
+# if 0	// Obsolete  ?
+#  ifdef CPE_C_MSC
 typedef unsigned long	intptr_t;
+# endif
 #endif
 
 

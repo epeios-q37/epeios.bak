@@ -18,13 +18,13 @@
 */
 
 #ifndef CTN__INC
-#define CTN__INC
+# define CTN__INC
 
-#define CTN_NAME		"CTN"
+# define CTN_NAME		"CTN"
 
-#if defined( E_DEBUG ) && !defined( CTN_NODBG )
-#define CTN_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( CTN_NODBG )
+#  define CTN_DBG
+# endif
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
@@ -33,19 +33,17 @@
 
 // ConTaiNer (of dynamic objects)
 
-#include "err.h"
-#include "flw.h"
-#include "ias.h"
-#include "cpe.h"
-#include "aem.h"
+# include "err.h"
+# include "flw.h"
+# include "ias.h"
+# include "cpe.h"
+# include "aem.h"
 
 
-#ifdef CPE__VC
-#	ifdef CPE__USE_WORKAROUNDS
-#		define typename_
-#	endif
+#ifdef CPE_C_MSC
+# define typename_
 #else
-#	define	typename_	typename
+# define	typename_	typename
 #endif
 
 namespace ctn {
@@ -831,7 +829,7 @@ namespace ctn {
 	#define E_MITEMt( Type, r )		volatile_mono_item< Type, r >
 	#define E_CMITEMt( Type, r )	const_mono_item< Type, r >
 
-#if defined( CPE__USE_GCC_WORKAROUND ) || defined( CPE__USE_WC_WORKAROUND )
+#if 0	// Was a workaround for some compilers.
 	#define E_MITEM( Type )		volatile_mono_item< Type, sdr::row__ >
 	#define E_CMITEM( Type )	const_mono_item< Type, sdr::row__ >
 #else
@@ -1040,7 +1038,7 @@ namespace ctn {
 	#define E_MCONTAINERt_( Type, r )	mono_container_< Type, r >
 	#define E_MCONTAINERt( Type, r )	mono_container< Type, r >
 
-#if defined( CPE__USE_GCC_WORKAROUND ) || defined( CPE__USE_WC_WORKAROUND )
+#if 0	// Was a workaround for some compilers.
 	#define E_MCONTAINER_( Type )	mono_container_< Type, sdr::row__ >
 	#define E_MCONTAINER( Type )	mono_container< Type, sdr::row__ >
 #else
@@ -1198,7 +1196,7 @@ namespace ctn {
 	#define E_ITEMt( Type, r )		volatile_multi_item< Type, r >
 	#define E_CITEMt( Type,r  )		const_multi_item< Type, r  >
 
-#if defined( CPE__USE_GCC_WORKAROUND ) || defined( CPE__USE_WC_WORKAROUND )
+#if 0 // Was a workaround for some compiler.
 	#define E_ITEM( Type )			volatile_multi_item< Type, sdr::row__ >
 	#define E_CITEM( Type )			const_multi_item< Type, sdr::row__  >
 #else
@@ -1400,7 +1398,7 @@ namespace ctn {
 	#define E_CONTAINERt_( Type, r ) multi_container_< Type, r >
 	#define E_CONTAINERt( Type, r ) multi_container< Type, r >
 
-# if defined( CPE__USE_GCC_WORKAROUND ) || defined( CPE__USE_WC_WORKAROUND )
+# if 0	// Was a workaround for some compilers.
 	#define E_CONTAINER_( Type )	multi_container_< Type, sdr::row__ >
 	#define E_CONTAINER( Type )		multi_container< Type, sdr::row__ >
 # else

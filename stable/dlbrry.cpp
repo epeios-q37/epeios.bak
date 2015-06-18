@@ -23,12 +23,12 @@
 
 using namespace dlbrry;
 
-#if defined( CPE_POSIX )
+#if defined( CPE_S_POSIX )
 #	define TARGET_POSIX
-#elif defined( CPE_WIN )
+#elif defined( CPE_S_WIN )
 #	define TARGET_WIN
 #else
-#	error "Unknown target !"
+#	error
 #endif
 
 #ifdef TARGET_WIN
@@ -46,7 +46,7 @@ using namespace dlbrry;
 #ifdef TARGET_POSIX
 
 
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 #  define PREFIX "lib"
 #  define EXT ".dylib"
 # else
@@ -159,8 +159,8 @@ bso::bool__ dlbrry::dynamic_library___::_UnloadLibrary( void  )
 }
 
 // 'MinGW' gnre une erreur lorsque '(void *)' est absent, mais pas 'MSVC4'. On suppose donc que la conversion en 'void *' ne pose pas de problme.
-#ifdef CPE_WIN
-# ifdef CPE_MINGW
+#ifdef TARGET_WIN
+# ifdef CPE_C_MINGW
 #  define FCAST	(void *)
 # else
 #  define FCAST

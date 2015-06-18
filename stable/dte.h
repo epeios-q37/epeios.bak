@@ -278,7 +278,7 @@ namespace dte {
 		const char *ASCII(
 			format__ Format,
 			buffer__ &Buffer ) const;
-#ifndef CPE_MT
+#ifndef CPE_F_MT
 		const char *ASCII( format__ Format ) const
 		{
 			static buffer__ Buffer;

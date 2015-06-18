@@ -34,7 +34,7 @@ cslio::descriptor__ flx::_POpen(
 	const ntvstr::string___ &Mode )
 {
 	cslio::descriptor__ Descriptor = cslio::UndefinedDescriptor;
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 qRH
 	str::string ModifiedCommand;
 	TOL_CBUFFER___ Buffer;
@@ -48,7 +48,7 @@ qRB
 qRR
 qRT
 qRE
-# elif defined( CPE_POSIX )
+# elif defined( FLX__POSIX )
 	Descriptor = popen( Command.Internal(), Mode.Internal() );
 # else
 #  error
@@ -56,7 +56,7 @@ qRE
 	return Descriptor;
 }
 
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 static bso::bool__ POpen2_(
 	const ntvstr::string___ &ConstCommand,
 	HANDLE &In,
@@ -138,7 +138,7 @@ qRE
 	return Success;
 }
 
-#elif defined( CPE_POSIX )
+#elif defined( FLX__POSIX )
 
 static bso::bool__ POpen2_(
 	const ntvstr::string___ &Command,
@@ -182,7 +182,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 	sdr::size__ Amount,
 	sdr::datum__ *Buffer )
 {
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 	DWORD Red = 0;
 
 	if( Amount > MAXDWORD )
@@ -190,7 +190,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 
 	if ( !ReadFile( _Out, Buffer, (DWORD)Amount, &Red, NULL ) )
 		qRFwk();
-#elif defined( CPE_POSIX )
+#elif defined( FLX__POSIX )
 	ssize_t Red = 0;
 
 	if ( ( Red = read( _Out, Buffer, Amount ) ) == -1 )
@@ -205,7 +205,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 	const sdr::datum__ *Buffer,
 	sdr::size__ Amount )
 {
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 	DWORD Written = 0;
 
 	if( Amount > MAXDWORD )
@@ -216,7 +216,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
 
 	if ( Written == 0 )	// Ne devrait pas arriver.
 		qRFwk();
-#elif defined( CPE_POSIX )
+#elif defined( FLX__POSIX )
 	ssize_t Written = 0;
 
 

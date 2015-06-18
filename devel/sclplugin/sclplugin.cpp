@@ -33,7 +33,7 @@ using namespace sclplugin;
 /* Although in theory this class is inaccessible to the different modules,
 it is necessary to personalize it, or certain compiler would not work properly */
 
-#ifdef CPE_WIN
+#ifdef CPE_S_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
 #define FUNCTION_SPEC

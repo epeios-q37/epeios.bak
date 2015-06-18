@@ -322,10 +322,10 @@ namespace str {
 		STR_UNR( Row, sdr::row_t__, SDR_ROW_T_MAX, Int )
 		STR_UNR( UInt, bso::uint__, BSO_UINT_MAX, Int )
 		STR_SNR( SInt, bso::sint__, BSO_SINT_MAX, BSO_SINT_MIN, Int )
-# ifdef CPE_INT64
+# ifdef CPE_F_64BITS
 		STR_UN( U64, bso::u64__, BSO_U64_MAX, Int )
 		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN, Int )
-# elif defined( CPE_INT32 )
+# elif defined( CPE_F_32BITS )
 		STR_UN( U64, bso::u64__, BSO_U64_MAX, 64 )
 		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN, 64 )
 # else
@@ -346,9 +346,9 @@ namespace str {
 		}
 		void *ToPointer( sdr::row__ *ErrP = NULL )
 		{
-# ifdef CPE_INT64
+# ifdef CPE_F_64BITS
 			return (void *)ToU64( ErrP, str::b16 );
-# elif defined ( CPE_INT32 )
+# elif defined ( CPE_F_32BITS )
 			return (void *)ToU32( ErrP, str::b16 );
 # else
 #  error "Unknown integer natural size !"
@@ -618,7 +618,7 @@ namespace str {
 		Append<t, bso::float_buffer__>( Value, Values );
 	}
 
-# ifdef CPE_INT32
+# ifdef CPE_F_32BITS
 	inline void Append(
 		bso::u64__ Value,
 		str::strings_ &Values )

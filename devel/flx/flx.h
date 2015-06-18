@@ -60,8 +60,16 @@
 # include "cslio.h"
 # include "str.h"
 
-# ifdef CPE__MT
+# ifdef CPE_F_MT
 #  define FLX__MT
+# endif
+
+# ifdef CPE_S_WIN
+#  define FLX__WIN
+# elif defined( CPE_S_POSIX )
+#  define FLX__POSIX
+# else
+#  error
 # endif
 
 # ifdef FLX__MT
@@ -1088,9 +1096,9 @@ namespace flx {
 
 	inline void _PClose( cslio::descriptor__ Descriptor )
 		{
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 			_pclose( Descriptor );
-# elif defined( CPE_POSIX )
+# elif defined( FLX__POSIX )
 			pclose( Descriptor );
 # else
 #  error
@@ -1137,10 +1145,10 @@ namespace flx {
 		}
 	};
 
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 	E_CDEF(char *, _ReadMode, "rb" );
 	E_CDEF(char *, _WriteMode, "wb" );
-# elif defined( CPE_POSIX )
+# elif defined( FLX__POSIX )
 	E_CDEF(char *, _ReadMode, "r" );
 	E_CDEF(char *, _WriteMode, "w" );
 # else
@@ -1231,10 +1239,10 @@ namespace flx {
 
 	template <int cache_size = FDR__DEFAULT_CACHE_SIZE> E_TTCLONE__( fdr::ioflow_driver___<cache_size>, _ioflow_driver___ );
 
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 	typedef  HANDLE pipe_descriptor__;
 	E_CDEF( pipe_descriptor__, UndefinedPipeDescriptor, NULL );
-# elif defined CPE_POSIX
+# elif defined FLX__POSIX
 	typedef int pipe_descriptor__;
 	E_CDEF( pipe_descriptor__, UndefinedPipeDescriptor, -1 );
 # else
@@ -1248,9 +1256,9 @@ namespace flx {
 		pipe_descriptor__ _In, _Out, _Err;
 		void Close_( pipe_descriptor__ Descriptor )
 		{
-# ifdef CPE_WIN
+# ifdef FLX__WIN
 			CloseHandle( Descriptor );
-# elif defined( CPE_POSIX )
+# elif defined( FLX__POSIX )
 			close( Descriptor );
 # else
 #  error

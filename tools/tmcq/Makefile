@@ -322,7 +322,7 @@ all: $(binary)
 	rm -f *.o
 	strip $(binary)
 
-copt += -DVERSION=\""(Version)"\"
+copt += -DVERSION=\""20150612"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2011, 2015"\"
 
 ifndef EPEIOS_SRC

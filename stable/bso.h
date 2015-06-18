@@ -40,6 +40,18 @@
 # include "err.h"
 # include "cpe.h"
 
+# ifdef CPE_F_32BITS
+#  define BSO__32
+# elif defined( CPE_F_64BITS )
+#  define BSO__64
+# else
+#  error
+# endif
+
+# if !defined( BSO__32 ) && !defined( BSO__64 )
+#  error "Undefined size !"
+# endif
+
 namespace bso {
 	//t Basic data, without any basically signification.
 	typedef unsigned char raw__;
@@ -110,16 +122,6 @@ namespace bso {
 # define BSO_SIZE_MAX	((size_t)-1)
 // # define BSO_SIZE_MAX	SIZE_MAX
 
-# if 0
-# ifdef CPE_INT64
-//#  define BSO_SIZE_SIZE	8
-# elif defined (CPE_32BITS )
-//#  define BSO_SIZE_SIZE	4
-# else
-#  error "Undefined architecture bitness !"
-# endif
-# endif
-
 	//t Size of a memory .
 	typedef size_t size__;
 
@@ -170,14 +172,14 @@ namespace bso {
 	};
 
 // 'natural unsigned integer'
-# ifdef CPE_INT64
+# ifdef BSO__64
 	typedef u64__ uint__;
 	static const uint__ &UIntMin = U64Min;
 	static const uint__ &UIntMax = U64Max;
 #  define BSO_UINT_MAX		BSO_U64_MAX
 #  define BSO_UINT_MIN		BSO_U64_MIN
 //#  define BSO_UINT_SIZE		BSO_U64_SIZE
-# elif defined CPE_INT32
+# elif defined( BSO__32 )
 	typedef u32__ uint__;
 	static const uint__ &UIntMin = U32Min;
 	static const uint__ &UIntMax = U32Max;
@@ -185,7 +187,7 @@ namespace bso {
 #  define BSO_UINT_MIN		BSO_U32_MIN
 //#  define BSO_UINT_SIZE		BSO_U32_SIZE
 # else
-#  error "Unknown integer natural size !"
+#  error
 #endif
 
 	inline const char *Convert(
@@ -196,7 +198,7 @@ namespace bso {
 
 		return Buffer.Datum;
 	}
-#  ifndef CPE__MT
+#  ifndef CPE_F_MT
 	inline const char *Convert( u64__ Value )
 	{
 		static integer_buffer__ Buffer;
@@ -214,7 +216,7 @@ namespace bso {
 		return Buffer.Datum;
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( bso::u32__ Value )
 	{
@@ -232,7 +234,7 @@ namespace bso {
 		return Convert( (uint__)Value, Buffer );
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( bso::u16__ Value )
 	{
@@ -248,7 +250,7 @@ namespace bso {
 		return Convert( (uint__)Value, Buffer );
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( bso::u8__ Value )
 	{
@@ -259,22 +261,20 @@ namespace bso {
 
 // Non utilisation de 'E_CDEF', car l'incusion de 'tol.h' pose problème.
 // 'natural signed integer'
-# ifdef CPE_INT64
+# ifdef BSO__64
 	typedef s64__ sint__;
 	static const sint__ SIntMin = S64Min;
 	static const sint__ SIntMax = S64Max;
 #  define BSO_SINT_MAX		BSO_S64_MAX
 #  define BSO_SINT_MIN		BSO_S64_MIN
-//#  define BSO_SINT_SIZE		BSO_S64_SIZE
-# elif defined CPE_INT32
+# elif defined( BSO__32 )
 	typedef s32__ sint__;
 	static const sint__ SIntMin = S32Min;
 	static const sint__ SIntMax = S32Max;
 #  define BSO_SINT_MAX		BSO_S32_MAX
 #  define BSO_SINT_MIN		BSO_S32_MIN
-//#  define BSO_SINT_SIZE		BSO_S32_SIZE
 # else
-#  error "Unknown integer natural size !"
+#  error
 #endif
 
 	// Entier générique, comme facilité.
@@ -327,7 +327,7 @@ namespace bso {
 		return Buffer.Datum;
 	}
 
-# ifndef CPE__MT
+# ifndef CPE_F_MT
 	inline const char *Convert( s64__ Value )
 	{
 		static integer_buffer__ Buffer;
@@ -347,7 +347,7 @@ namespace bso {
 		return Buffer.Datum;
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( bso::s32__ Value )
 	{
@@ -365,7 +365,7 @@ namespace bso {
 		return Convert( (sint__)Value, Buffer );
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( bso::s16__ Value )
 	{
@@ -381,7 +381,7 @@ namespace bso {
 		return Convert( (sint__)Value, Buffer );
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( bso::s8__ Value )
 	{
@@ -405,7 +405,7 @@ namespace bso {
 		return Buffer.Datum;
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( lfloat__ Value )
 	{
@@ -423,7 +423,7 @@ namespace bso {
 		return Convert( (lfloat__)Value, Buffer );
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( float__ Value )
 	{
@@ -439,7 +439,7 @@ namespace bso {
 		return Convert( (lfloat__)Value, Buffer );
 	}
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	//f Return 'Value' as string. Valid only until next call of a 'Convert(..)' function.
 	inline const char *Convert( sfloat__ Value )
 	{
@@ -447,7 +447,7 @@ namespace bso {
 	}
 #endif
 
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 	inline const char *Convert(
 		size__ Value,
 		integer_buffer__ &Buffer )
@@ -455,7 +455,7 @@ namespace bso {
 		return Convert( (uint__)Value, Buffer );
 	}
 
-#  ifndef CPE_MT
+#  ifndef CPE_F_MT
 	inline const char *Convert( size__ Value )
 	{
 		return Convert( (uint__)Value );

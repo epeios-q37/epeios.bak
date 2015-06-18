@@ -284,8 +284,8 @@ namespace xdhdws {
 			_Writer.PutAttribute("Background", Background );
 			_Writer.PutAttribute("Generator", Generator );
 			_Writer.PutAttribute("TimeStamp", tol::DateAndTime() );
-			_Writer.PutAttribute("Enviroment", CPE_ENVIROMENT_LABEL );
-			_Writer.PutAttribute("Architecture", CPE_ARCHITECTURE_LABEL );
+			_Writer.PutAttribute("System", CPE_SL );
+			_Writer.PutAttribute("Architecture", CPE_AL );
 			_Writer.PushTag( "Corpus" );
 			Callback.Dump( _Writer );
 			_Writer.PopTag();

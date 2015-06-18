@@ -15,7 +15,8 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with tmcq. If not, see <http://www.gnu.org/licenses/>.
 
-# Works only under POSIX-compilant shells.
+# Works only under POSIX-compliant shells.
+
 echo -n "> ";tmcq 25 "00:00:00.23@24" "23@30"
 echo ": 00:00:01:18"
 echo -n "> ";tmcq 24 00:00:01.50@24

@@ -99,7 +99,7 @@ qRB
 qRR
 qRT
 qRE
-#elif defined( TOL__POSIX ) || defined( TOL__MAC )
+#elif defined( TOL__POSIX ) || defined( TOL__DARWIN)
 	Result = system( Command.Internal() );
 #else
 # error
@@ -111,13 +111,14 @@ qRE
 	return Result;
 }
 
-#if defined ( CPE_LINUX )
+#if defined ( CPE_S_GNULINUX )
 # define LAUNCH_COMMAND	"xdg-open"
-#elif defined( CPE_XCODE )
+#elif defined( CPE_S_DARWIN )
 # define LAUNCH_COMMAND	"open"
-#elif defined( CPE_WIN ) || defined( CPE_CYGWIN )
+#elif defined( CPE_S_WIN ) || defined( CPE_S_CYGWIN )
 # define LAUNCH_COMMAND	"start \"\"" // Les "" dans la commande sont ncessit par 'start', car si l'argument est pass entre "", 'start' considre cela comme le titre de la fentre.
-#elif defined( CPE_ANDROID )
+#elif defined( CPE_S_ANDROID )
+# else
 # error
 #endif
 
@@ -126,7 +127,7 @@ void tol::Launch( const ntvstr::string___ &Document )
 qRH
 	str::string Command, Buffer;
 qRB
-#ifdef CPE_ANDROID
+#ifdef CPE_S_ANDROID
 	qRFwk();
 #else
 	Command.Init( LAUNCH_COMMAND " \"" );
@@ -209,7 +210,7 @@ const char *tol::DateAndTime( buffer__ &Buffer )
 #endif
 }
 
-#ifdef CPE_MSVC
+#ifdef TOL__WIN
 
 #include <crtdbg.h>
 
@@ -223,7 +224,7 @@ bso::size__ tol::GetMemoryUsage( void )
 
 #endif
 
-#ifdef CPE__VC
+#ifdef CPE_C_MSC
 #	undef CreateFile
 #endif
 
@@ -241,7 +242,7 @@ Q37_GCTOR( tol )
 #ifdef TOL__WIN		
 	if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )
 		qRSys();
-#elif defined( TOL__MAC )
+#elif defined( TOL__DARWIN)
 	mach_timebase_info_data_t    TimebaseInfo;
 
 	mach_timebase_info(&TimebaseInfo);

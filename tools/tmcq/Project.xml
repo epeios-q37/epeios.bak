@@ -1,48 +1,49 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
-  <xpp:bloc><!-- User definitions -->
-	<xpp:define name="Version">
-		<xpp:bloc>20150612</xpp:bloc>
-	</xpp:define>
-    <xpp:define name="CopyrightYears">
-      <xpp:bloc>2007-2011, 2015</xpp:bloc>
-    </xpp:define>
-  <xpp:set name="Credits" value="Epeios"/>
-  <xpp:set name="Type" value="Tool"/>
-  </xpp:bloc>
-  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
-  <About>
-    <Program>tmcq</Program>
-    <Software>tmcq</Software>
-	<UUID>646d0129-91be-47b4-ace8-8c2f84e2affa</UUID>
-  </About>
-  <Modules>
-    <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
-      <Modules Group="Core">
-        <xpp:expand select="Core"/>
-		  <Module>mthfrc</Module>
-		  <Module>mthitg</Module>
-		  <Module>mthtmc</Module>
-	  </Modules>
-      <Modules Group="SCL">
-        <xpp:expand select="SCL"/>
-      </Modules>
-    </Modules>
-    <Module>registry</Module>
-  </Modules>
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>20150612</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2007-2011, 2015</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>tmcq</Program>
+		<Software>tmcq</Software>
+		<UUID>646d0129-91be-47b4-ace8-8c2f84e2affa</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>mthfrc</Module>
+				<Module>mthitg</Module>
+				<Module>mthtmc</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
 	<Files>
 		<File Pack="yes">testsuit</File>
 		<Files Group="Doc" Path="Doc/">
-			<File Pack="yes">Compilation.pdf</File>
-			<File Pack="yes">Configuration.pdf</File>
-			<File Pack="yes">Details.pdf</File>
-			<File Pack="yes">Description.pdf</File>
-			<File Pack="yes">Manual.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/">Compilation.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/">Configuration.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/tmcq/">Details.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/" WikiOddity="IsHome">tmcq.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/tmcq/">Manual.pdf</File>
 		</Files>
 	</Files>
-  <SourceDirs>
-  </SourceDirs>
-  <PreprocessorDefinitions>
-	<PreprocessorDefinition>E_ST</PreprocessorDefinition>
-  </PreprocessorDefinitions>
+	<SourceDirs>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
 </Project>

@@ -20,7 +20,6 @@
     <Modules Group="Epeios" Path="h:/hg/epeios/stable/">
       <Modules Group="Core">
         <xpp:expand select="Core"/>
-        <xpp:expand select="LLIO"/>
       </Modules>
       <Modules Group="SCL">
         <xpp:expand select="SCL"/>

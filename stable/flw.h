@@ -68,7 +68,7 @@
 #	define FLW__OUTPUT_CACHE_SIZE	FLW_OUTPUT_CACHE_SIZE
 #endif
 
-#ifdef CPE__UNIX
+#ifdef CPE_S_UNIX
 #	ifndef FLW_LET_SIGPIPE
 #		define FLW__IGNORE_SIGPIPE
 #	endif

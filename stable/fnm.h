@@ -29,11 +29,11 @@
 // File Name Manager
 
 /*
-	Significations des diffrents termes :
-	- 'path' pour, de manire gnrique, un fichier ou un rpertoire,
-	- 'directory' (diminutif : 'dir') pour un rpertoire,
+	Significations des différents termes :
+	- 'path' pour, de manière générique, un fichier ou un répertoire,
+	- 'directory' (diminutif : 'dir') pour un répertoire,
 	- 'filename' pour un nom de fichier, avec ou sans sa localisation,
-	- 'basename' pour un nom de fichier sans sa localisation, mais avec son ventuellle extension,
+	- 'basename' pour un nom de fichier sans sa localisation, mais avec son éventuellle extension,
 	- 'location' la localisation (la liste des parents) d'un fichier,
 	- 'affix' le 'basename' d'un fichier sans son extension.
 */
@@ -44,9 +44,9 @@
 # include "strng.h"
 # include "ntvstr.h"
 
-# if defined( CPE_POSIX )
+# if defined( CPE_S_POSIX )
 #  define FNM__POSIX
-# elif defined( CPE_WIN )
+# elif defined( CPE_S_WIN )
 #  define FNM__WIN
 # else
 #  error "Unknown target !"
@@ -57,7 +57,7 @@ namespace fnm {
 	typedef ntvstr::core___ ncore___;
 	typedef ntvstr::string___ name___;
 
-	// Les diffrents type d'un chemin ('path').
+	// Les différents type d'un chemin ('path').
 	enum type__
 	{
 		// ""

@@ -42,7 +42,7 @@ const char *sclxdhtml::GetLauncher( void )
 	return Launcher_;
 }
 
-#ifdef CPE_WIN
+#ifdef CPE_S_WIN
 # define FUNCTION_SPEC __declspec(dllexport)
 #else
 #define FUNCTION_SPEC

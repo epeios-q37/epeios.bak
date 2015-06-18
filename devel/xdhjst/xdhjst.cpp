@@ -642,22 +642,20 @@ namespace {
 			sclmisc::MGetValue( xdhjsr::script::DroppableSetter, SubScript );
 			tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
 			Script.Append( SubScript );
-		}
-
-		if ( Abstract.Event == "dragstart" ) {
+		} else if ( Abstract.Event == "dragstart" ) {
 			SubScript.Init();
 			sclmisc::MGetValue( xdhjsr::script::DraggableSetter, SubScript );
 			tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
 			Script.Append( SubScript );
+		} else {
+			SubScript.Init();
+			sclmisc::MGetValue( xdhjsr::script::EventHandler, SubScript );
+
+			AppendTag_("Event", Abstract.Event, TagNames, TagValues );
+			tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
+
+			Script.Append( SubScript );
 		}
-
-		SubScript.Init();
-		sclmisc::MGetValue( xdhjsr::script::EventHandler, SubScript );
-
-		AppendTag_("Event", Abstract.Event, TagNames, TagValues );
-		tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
-
-		Script.Append( SubScript );
 	qRR	
 	qRT
 	qRE

@@ -74,7 +74,7 @@ namespace scltool {
 	};
 
 	struct oddities__ {
-# ifdef CPE_WIN
+# ifdef CPE_S_WIN
 		HINSTANCE hInstance;
 		HINSTANCE hPrevInstance;
 		PWSTR pCmdLine;

@@ -273,7 +273,7 @@ namespace lstbch {
 
 			return State;
 		}
-#ifdef CPE__VC
+#ifdef CPE_C_MSC
 #	undef CreateFile
 #endif
 		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )

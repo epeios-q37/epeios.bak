@@ -44,9 +44,9 @@
 # include "strng.h"
 # include "ntvstr.h"
 
-# if defined( CPE_POSIX )
+# if defined( CPE_S_POSIX )
 #  define FNM__POSIX
-# elif defined( CPE_WIN )
+# elif defined( CPE_S_WIN )
 #  define FNM__WIN
 # else
 #  error "Unknown target !"

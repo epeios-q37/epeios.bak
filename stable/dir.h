@@ -41,12 +41,12 @@
 
 #include <limits.h>
 
-#if defined( CPE_POSIX )
+#if defined( CPE_S_POSIX )
 #	define DIR__POSIX
-#elif defined( CPE_WIN )
+#elif defined( CPE_S_WIN )
 #	define DIR__WIN
 #else
-#	error "Unknown target !"
+#	error
 #endif
 
 
@@ -55,7 +55,7 @@
 #	include <windows.h>
 # define DIR_PATH_MAX_SIZE	MAX_PATH
 #elif defined( DIR__POSIX )
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 #  include <mach-o/dyld.h>
 #  include <sys/param.h>
 # endif
@@ -72,10 +72,10 @@
 namespace dir {
 	enum state__ {
 		sOK,
-		sExists,		// Le rpertoire existe dj.
+		sExists,		// Le répertoire existe déjà.
 		sBadPath,		// Le chemin fournit n'est pas correct.
-		sInadequatePath,	// Un lment du chemin n'existe pas ou n'est pas un rpertoire adapt (fichier, mauvais droits, ...).
-		sNotEmpty,		// Dans le cas d'une effacement, ke rpertoire a effac n'estr pas vide.
+		sInadequatePath,	// Un élment du chemin n'existe pas ou n'est pas un répertoire adapté (fichier, mauvais droits, ...).
+		sNotEmpty,		// Dans le cas d'une effacement, ke répertoire a effacé n'estr pas vide.
 		s_amount,
 		s_Undefined
 	};
@@ -93,14 +93,14 @@ namespace dir {
 		return fnm::GetLocation( FileName, Dir );
 #endif
 #ifdef DIR__POSIX
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 		char Filename[MAXPATHLEN];
 		uint32_t Size = sizeof( Filename );
 		switch ( _NSGetExecutablePath( Filename, &Size ) ) {
 		case -1 :	// La taille de 'Path' est insuffisante.
 			qRLmt();
 			break;
-		case 0:	// Succs.
+		case 0:	// Succés.
 			break;
 		default:
 			qRSys();
@@ -108,12 +108,12 @@ namespace dir {
 		}
 
 		return fnm::GetLocation( fnm::name___( Filename ), Dir );
-# else	// Ne fonctionne peur-tre pas sur tous les sytmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
+# else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
 		char Filename[PATH_MAX];
 		int Size = readlink( "/proc/self/exe", Filename, sizeof( Filename ) );
 
-		// Valeur d"erreur retourne par 'GetModuleFileName(..)'.
-		// Valeur d'erreur retroune par 'readlink(...)', mais '0' est normalement une impossibilit.
+		// Valeur d"erreur retournée par 'GetModuleFileName(..)'.
+		// Valeur d'erreur retrounée par 'readlink(...)', mais '0' est normalement une impossibilité.
 		if ( Size <= 0 )
 			qRSys();
 
@@ -147,7 +147,7 @@ namespace dir {
 			break;
 		}
 
-		return s_Undefined;	// Pour viter un 'warning'.
+		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
 	inline state__ DropDir( const fnm::name___ &Dir )
@@ -170,7 +170,7 @@ namespace dir {
 			break;
 		}
 
-		return s_Undefined;	// Pour viter un 'warning'.
+		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
 	inline state__ ChangeDir( const fnm::name___ &Dir )
@@ -193,7 +193,7 @@ namespace dir {
 			break;
 		}
 
-		return s_Undefined;	// Pour viter un 'warning'.
+		return s_Undefined;	// Pour éviter un 'warning'.
 	}
 
 
@@ -235,7 +235,7 @@ namespace dir {
 #else
 #	error
 #endif
-	// Si retourne chane vide, plus de fichier; si retourne NULL, erreur.
+	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
 	inline const fnm::name___ &GetFirstFile(
 		const fnm::name___ &Path,
 		handle___ &Handle )
@@ -262,7 +262,7 @@ namespace dir {
 
 		if ( hSearch == INVALID_HANDLE_VALUE )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Path.Init( "" );	// Pour mettre la taille  0 (ce qui signale l'absence de fichier, par opposition  'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				qRFwk();
 		else {
@@ -282,7 +282,7 @@ namespace dir {
 
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Path.Init( "" );	// Pour mettre la taille  0 (ce qui signale l'absence de fichier, par opposition  'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				qRFwk();
 		else
@@ -293,7 +293,7 @@ namespace dir {
 		return Handle.Path;
 	}
 
-	// Si retourne chane vide, plus de fichier; si retourne NULL, erreur.
+	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
 	inline const fnm::name___ &GetNextFile( handle___ &Handle )
 	{
 # ifdef DIR__WIN
@@ -307,7 +307,7 @@ namespace dir {
 
 		if ( !FindNextFileW( hSearch, &File ) )
 			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Path.Init( "" );	// Pour mettre la taille  0 (ce qui signale l'absence de fichier, par opposition  'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				qRFwk();
 		else {
@@ -323,7 +323,7 @@ namespace dir {
     
 		if ( ( ent = readdir(rep) ) == NULL )
 			if ( errno == 0 )
-				Handle.Path.Init( "" );	// Pour mettre la taille  0 (ce qui signale l'absence de fichier, par opposition  'Handle.Name' == 'NULL', qui signale une erreur).
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
 			else
 				qRFwk();
 		else

@@ -38,9 +38,9 @@
 # include "errno.h"
 # include "tht.h"
 
-# if defined( CPE_POSIX )
+# if defined( CPE_S_POSIX )
 #  define MTK__POSIX
-# elif defined( CPE_WIN )
+# elif defined( CPE_S_WIN )
 #  define MTK__WIN
 # else
 #  error "Unknown enviroment !"
@@ -63,7 +63,7 @@
 #  error
 # endif
 
-# ifndef CPE_MT
+# ifndef CPE_F_MT
 #  error "Multitasking required, but compilation options don't allow this."
 # endif
 
@@ -78,7 +78,7 @@ typedef void (* mtk__routine)(void *);
 # elif defined( E_KEEP_THREADS )
 #  define MTK__KEEP
 # else
-#  ifdef CPE_LINUX
+#  ifdef CPE_S_GNULINUX
 #   define MTK__KEEP
 #  else
 #   define MTK__KILL

@@ -1,24 +1,19 @@
-# 'edbpck' Project
-#    by Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2013 Claude SIMON (http://q37.info/contact/).
 #
-# Requires GNU make (http://www.gnu.org/software/make/).
+#	This file is part of eDBPck.
 #
-#	Copyright (C) 2013 Claude SIMON.
+#	eDBPck is free software: you can redistribute it and/or
+#	modify it under the terms of the GNU Affero General Public License
+#	published by the Free Software Foundation, either version 3 of the
+#	License, or (at your option) any later version.
 #
-#	This file is part of 'eDBPck'.
+#	eDBPck is distributed in the hope that it will be useful,
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#	Affero General Public License for more details.
 #
-#    'eDBPck' is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    'eDBPck' is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with 'eDBPck'.  If not, see <http://www.gnu.org/licenses/>.
+#	You should have received a copy of the GNU Affero General Public License
+#	along with eDBPck. If not, see <http://www.gnu.org/licenses/>.
 
 name = edbpck
 
@@ -31,16 +26,16 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cpe crptgr ctn dir dte 
-mods += dtfbsc dtfptb epsmsc err fdr 
-mods += flf flsq flw flx ias 
-mods += ids iof iop lst lstbch 
-mods += lstctn mns ntvstr que sdr 
-mods += stk str strng tagsbs tol 
-mods += ttr txf tys uys utf 
-mods += xtf cio tht bomhdl cdgb64 
-mods += fil fnm lcl rgstry stsfsm 
-mods += xml xpp llio 
+mods += cio cpe crptgr cslio ctn 
+mods += dir dte dtfbsc dtfptb epsmsc 
+mods += err fdr flf flsq flw 
+mods += flx ias ids iof iop 
+mods += lst lstbch lstctn mns mtx 
+mods += ntvstr que sdr stk str 
+mods += strng tagsbs tol txf tys 
+mods += uys utf xtf llio tht 
+mods += bomhdl cdgb64 fil fnm lcl 
+mods += rgstry stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
 mods += dbpals dbpbsc dbpctx dbprcd dbptbl 
 mods += registry 
@@ -66,14 +61,18 @@ CXXFLAGS += -O
 	
 copt += -DE_ST
 
+win=win
+win32=win32
+win64=win64
 IA_32=x86
-x86_64=x64
+AMD64=x64
 Cygwin=Cygwin
 MinGW=Msys
 GNULinux=GNU/Linux
 Linux=Linux
 MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
+mach=$(shell uname -m)
   
 
 ##########################
@@ -89,13 +88,10 @@ ifeq ("$(os)","$(Cygwin)")
 # directly the MS CRT, see below.
 
 # Use of the MinGW compiler under Cygwin. 
-# To build 64 bits application.
-# Uses directly the MS CRT.
-	#arch=$(X86_64)
-
-# Use of the MinGW compiler under Cygwin.
-# For 32 bits application using directly the MS CRT.
-	#arch=$(IA_32)
+# To build native binary, i.e. with the MS CRT,
+# without using the Cygwin/POSIX layer,
+# Uncomment follwing line :
+#target=$(win)
 
 endif
 
@@ -158,24 +154,46 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -std=gnu++11 -DCYGWIN
+	co += -std=gnu++11 -DCYGWIN -DUNICODE
 	
 	LDFLAGS += -static
-
-	ifeq ("$(arch)","$(IA_32)")
+	
+	ifeq ("$(target)","$(win)")
+		ifeq ("$(mach)","i686")
+			override target=$(win32)
+		else  # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
+			ifeq ("$(mach)","x86_64")
+				override target=$(win64)
+			endif
+		endif
+	endif
+	
+	ifeq ("$(target)","$(IA_32)")
+		override target=$(win32)
+	else  # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
+		ifeq ("$(target)","$(AMD64)")
+			override target=$(win64)
+		endif
+	endif
+	
+	ifeq ("$(target)","$(win32)")
 		CXX = i686-w64-mingw32-g++
 		mods += $(wmods)
+		lo += -municode
+		co += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(win64)")
 			CXX = x86_64-w64-mingw32-g++
 			mods += $(wmods)
+			lo += -municode
+			co += -m64
 		else
 			mods += $(pmods)
 		endif
     
 	endif
 	
-	target=$(name).exe
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -190,23 +208,24 @@ endif
 
 ifeq ("$(os)", "$(MinGW)")
 
-	co += -DMSYS -std=gnu++11
+	co += -DMSYS -std=gnu++11 -DUNICODE
+	lo += -municode
 	
 	mods += $(wmods)
 
 	LDFLAGS += -static
 
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(arch)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
 
-	target=$(name).exe
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -227,16 +246,16 @@ ifeq ("$(os)","$(GNULinux)")
 	
 	libs += -lpthread -ldl -lrt
 
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
-	target=$(name)
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -256,16 +275,16 @@ ifeq ("$(os)","$(Linux)")
 
 	libs += -lpthread -ldl -lrt
 	
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
-	target=$(name)
+	binary=$(name)
 endif
 
 #############################
@@ -282,18 +301,16 @@ ifeq ("$(os)","$(MacOS)")
 	
 	mods += $(pmods)
 
-	#LDFLAGS += -static	// Doesn't work.
-
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
-	target=$(name)
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 
@@ -301,14 +318,15 @@ endif
 
 ##########################
 		
-all: $(target)
+all: $(binary)
 	rm -f *.o
+	strip $(binary)
 
 copt += -DVERSION=\""20131108"\"
 copt += -DCOPYRIGHT_YEARS=\""2013"\"
 
 ifndef EPEIOS_SRC
-	src += :src
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -322,15 +340,15 @@ vpath %.cpp $(subst $(ds),:,$(src))
 srcd = $(subst $(ds), ,$(src))
 
 co := -c $(co) $(copt) $(subst :, -I,$(src))
-lo += -o $(target) $(objs)
+lo += -o $(binary) $(objs)
 
 objs = $(name).$(ox) $(mods:=.$(ox))
 
-$(target): $(objs)
+$(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
 	mkdir -p $(dest)
-	cp $(target) $(dest)
+	cp $(binary) $(dest)
 endif
 
 %.$(ox): %.cpp
@@ -338,5 +356,9 @@ endif
 
 clean:
 	rm -rf *.o
+	
+# For maintainer only.
+pack:
+	DVLPack
 
 		

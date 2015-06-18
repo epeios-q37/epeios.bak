@@ -219,14 +219,13 @@ void dtfptb::_FPutInt(
 {
 	switch ( Length ) {
 	case 8:
-#ifdef CPE_INT64
+#ifdef CPE_F_64BITS
 		M( 7 );
 		M( 6 );
 		M( 5 );
 		M( 4 );
 #else
-		qRVct();
-		break;
+		qRFwk();
 #endif
 	case 4:
 		M( 3 );
@@ -253,14 +252,13 @@ bso::int__ dtfptb::_FGetInt(
 
 	switch( Length ) {
 	case 8:
-#ifdef CPE_INT64
+#ifdef CPE_F_64BITS
 		M( 7 );
 		M( 6 );
 		M( 5 );
 		M( 4 );
 #else
-		qRVct();
-		break;
+		qRFwk();
 #endif
 	case 4:
 		M( 3 );

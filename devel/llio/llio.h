@@ -35,28 +35,16 @@
 
 #include "cpe.h"
 
-# undef LLIO__USE_MLLIO
 # undef LLIO__USE_PLLIO
 # undef LLIO__USE_WLLIO
 
-#ifdef CPE_VC
+#ifdef CPE_S_WIN
 # define LLLIO__USE_WLLIO
-#elif defined( CPE_LINUX )
+#elif defined( CPE_S_POSIX )
 # define LLLIO__USE_PLLIO
-#elif defined( CPE_CYGWIN )
-# define LLLIO__USE_PLLIO
-#elif defined( CPE_XCODE )
-# define LLLIO__USE_PLLIO
-#elif defined( CPE_MINGW )
-# define LLLIO__USE_WLLIO
-#else
-# error "Undefined platform !"
 #endif
 
-# ifdef LLLIO__USE_MLLIO
-#  include "mllio.h"
-#  define LLIO_UNDEFINED_DESCRIPTOR MLLIO_UNDEFINED_DESCRIPTOR
-# elif defined( LLLIO__USE_PLLIO )
+# if defined( LLLIO__USE_PLLIO )
 #  include "pllio.h"
 #  define LLIO_UNDEFINED_DESCRIPTOR PLLIO_UNDEFINED_DESCRIPTOR
 # elif defined( LLLIO__USE_WLLIO )

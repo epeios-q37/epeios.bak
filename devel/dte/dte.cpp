@@ -17,10 +17,6 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-
-
-//	$Id: dte.cpp,v 1.30 2013/04/11 19:36:48 csimon Exp $
-
 #define DTE__COMPILATION
 
 #include "dte.h"

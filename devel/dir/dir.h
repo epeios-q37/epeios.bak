@@ -41,12 +41,12 @@
 
 #include <limits.h>
 
-#if defined( CPE_POSIX )
+#if defined( CPE_S_POSIX )
 #	define DIR__POSIX
-#elif defined( CPE_WIN )
+#elif defined( CPE_S_WIN )
 #	define DIR__WIN
 #else
-#	error "Unknown target !"
+#	error
 #endif
 
 
@@ -55,7 +55,7 @@
 #	include <windows.h>
 # define DIR_PATH_MAX_SIZE	MAX_PATH
 #elif defined( DIR__POSIX )
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 #  include <mach-o/dyld.h>
 #  include <sys/param.h>
 # endif
@@ -93,7 +93,7 @@ namespace dir {
 		return fnm::GetLocation( FileName, Dir );
 #endif
 #ifdef DIR__POSIX
-# ifdef CPE_XCODE
+# ifdef CPE_S_DARWIN
 		char Filename[MAXPATHLEN];
 		uint32_t Size = sizeof( Filename );
 		switch ( _NSGetExecutablePath( Filename, &Size ) ) {

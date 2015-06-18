@@ -42,13 +42,13 @@
 
 # include "cpe.h"
 
-# ifdef CPE_POSIX
-#  ifdef CPE_XCODE
-#   define TOL__MAC
+# ifdef CPE_S_POSIX
+#  ifdef CPE_S_DARWIN
+#   define TOL__DARWIN
 # else
 #   define TOL__POSIX
 # endif
-# elif defined( CPE_WIN )
+# elif defined( CPE_S_WIN )
 #  define TOL__WIN
 #  include <Windows.h>
 # else
@@ -58,7 +58,7 @@
 
 # ifdef TOL__WIN
 #  include <sys/utime.h>
-# elif defined( TOL__MAC )
+# elif defined( TOL__DARWIN )
 #  include <mach/mach_time.h>
 # elif defined( TOL__POSIX )
 #  include <utime.h>
@@ -66,7 +66,7 @@
 #  error
 # endif
 
-#if defined( CPE_VC ) || defined( CPE_GCC )
+#if defined( CPE_C_MSC ) || defined( CPE_C_GCC )
 #	include <sys/timeb.h>
 #else
 #	error "Unknown compiler"
@@ -239,11 +239,9 @@ namespace tol
 	E_CVDEF( type, &name, value )
 # endif
 
-#ifdef CPE__VC
-#	ifdef CPE__WARNING_SUPPRESSION_ENABLED
-#		pragma warning( disable : 4284 )
-#	endif
-#endif
+# ifdef CPE_C_MSC
+#  pragma warning( disable : 4284 )
+# endif
 
 // Usage interne.
 # define E__TMIMIC__( type ,alias )\
@@ -687,11 +685,11 @@ namespace tol {
 	//f Return current date  time.
 	const char *DateAndTime( buffer__ &Buffer );
 
-# ifdef CPE_MSVC
+# ifdef TOL__WIN
 	bso::size__ GetMemoryUsage( void );
 # endif
 
-#ifndef CPE__MT
+#ifndef CPE_F_MT
 	inline const char *Date( void )
 	{
 		static buffer__ Buffer;
@@ -761,7 +759,7 @@ namespace tol {
 		return T.time;
 	}
 
-# elif  defined( TOL__MAC )
+# elif  defined( TOL__DARWIN)
 	E_TRMIMIC__( uint64_t, tick__ );
 	extern uint64_t _Numer;
 	extern uint32_t _Denom;
@@ -945,7 +943,7 @@ namespace tol {
 	{
 		lconv *LConv = localeconv();
 
-# ifdef CPE_ANDROID	// Pas de membre 'decimal_point' dfini dans ce cas...
+# ifdef CPE_S_ANDROID	// Pas de membre 'decimal_point' dfini dans ce cas...
 		qRLmt();
 		return 0;	// Pour viter un 'warning'.
 # else
@@ -1515,7 +1513,7 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	E_RODISCLOSE__( type__, name )\
 	E_WODISCLOSE__( type__, name )
 
-#if defined( CPE_XCODE ) && defined( Q37_LIBRARY )
+#if 0
 # define Q37_GCTOR( discriminator )\
 	__attribute__( ( constructor ) ) static void discriminator##_q37ctor( void )
 #else
@@ -1531,7 +1529,7 @@ template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
 	discriminator##_q37gctor::discriminator##_q37gctor( void )
 #endif
 
-#if defined( CPE_XCODE ) && defined( Q37_LIBRARY )
+#if 0
 # define Q37_GDTOR( discriminator )\
 	__attribute__( ( destructor ) ) static void discriminator##_q37gdtor( void )
 #else
