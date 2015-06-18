@@ -238,7 +238,7 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 
-	co += -std=gnu++11
+	co += -std=gnu++11 -D_FILE_OFFSET_BITS=64
 	co += -DGNULINUX
 	
 	mods += $(pmods)
@@ -319,7 +319,7 @@ endif
 		
 all: $(binary)
 	rm -f *.o
-	
+	strip $(binary)
 
 copt += -DVERSION=\""20150604"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2015"\"
