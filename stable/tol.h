@@ -45,9 +45,9 @@
 # ifdef CPE_S_POSIX
 #  ifdef CPE_S_DARWIN
 #   define TOL__DARWIN
-# else
+#  else
 #   define TOL__POSIX
-# endif
+#  endif
 # elif defined( CPE_S_WIN )
 #  define TOL__WIN
 #  include <Windows.h>
@@ -755,7 +755,7 @@ namespace tol {
 		return T.time;
 	}
 
-# elif  defined( TOL__DARWIN)
+# elif defined( TOL__DARWIN )
 	E_TRMIMIC__( uint64_t, tick__ );
 	extern uint64_t _Numer;
 	extern uint32_t _Denom;

@@ -37,7 +37,7 @@ using namespace tol;
 	MAIS, lorsque lanc dans une console 'Cygwin' (1.17.10), le rsultat est incorrect (diffrence d'une heure, peut-tre li  l'heure d'hiver/d't).
 */
 
-#ifdef TOL__MAC
+#ifdef TOL__DARWIN
 	uint64_t tol::_Numer = 0;
 	uint32_t tol::_Denom = 0;
 #endif
@@ -246,7 +246,6 @@ Q37_GCTOR( tol )
 	mach_timebase_info_data_t    TimebaseInfo;
 
 	mach_timebase_info(&TimebaseInfo);
-
 #if 0
 	// Test toujours faux, d au type de 'TimebaseInfo.numer'
 	if ( ( BSO_NUINT_MAX / 1000000 ) < TimebaseInfo.numer )
