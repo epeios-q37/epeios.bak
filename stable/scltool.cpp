@@ -1743,9 +1743,9 @@ static inline void signal_( int s )
 
 static inline void ExitOnSignal_( void )
 {
-#if defined( TOL__MAC ) || defined( TOL__POSIX )
+#ifdef CPE_S_POSIX
 	signal( SIGHUP, signal_ );
-#elif defined( TOL__WIN )
+#elif defined( CPE_S_WIN )
 	signal( SIGBREAK, signal_ );
 #else
 #	error "Undefined target !"
