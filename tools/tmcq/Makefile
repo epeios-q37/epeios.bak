@@ -186,7 +186,6 @@ ifeq ("$(os)","$(Cygwin)")
 			lo += -municode -m64
 			co += -m64
 		else
-			co +=  -DMTX_SUPPRESS_PTHREAD_WARNING
 			mods += $(pmods)
 		endif
     

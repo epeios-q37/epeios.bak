@@ -38,57 +38,82 @@
 # include "tht.h"
 # include "tol.h"
 
+//# define MTX_NATIVE		// Use native library.
+//# define MTX_PTHREAD	// Use pthread library.
+//# define MTX_BASIC		// Use basic operations (atomicity NOY guaranted !).
+// By default, the <atomic> library is used.
+
 # ifdef E_MUTEXES_DEFAULT_DELAY
 #  define MTX__DEFAULT_DELAY	E_MUTEXES_DEFAULT_DELAY
 # else
 #  define MTX__DEFAULT_DELAY	1
 # endif
 
-# if !defined( E_MUTEXES_NO_ATOMIC_OPERATIONS )
-#  define MTX__USE_ATOMIC_OPERATIONS
-# endif
-
-# ifdef MTX__USE_ATOMIC_OPERATIONS
+# ifdef MTX_NATIVE
 #  if defined( CPE_S_WIN )
-#   define MTX__USE_WIN_ATOMIC_OPERATIONS
+#   define MTX__WINDOWS
 #  elif defined ( CPE_S_LINUX )
-#    define MTX__USE_LINUX_ATOMIC_OPERATIONS
+#    define MTX__LINUX
 #  elif defined (CPE_S_DARWIN )
-#    define MTX__USE_DARWIN_ATOMIC_OPERATIONS
-#  elif defined( CPE_S_POSIX )
-#   define MTX__USE_PTHREAD_MUTEX
+#    define MTX__DARWIN
+#  else
+#   error
 #  endif
+# elif defined( MTX_PTHREAD )
+#  ifdef CPE_S_POSIX
+#   define MTX__PTHREAD
+#  else
+#   error
+# endif
+# elif defined( MTX_BASIC )
+#  define MTX__BASIC
+# else
+#  define MTX__ATOMIC
 # endif
 
-# if !defined( MTX__USE_WIN_ATOMIC_OPERATIONS ) && !defined( MTX__USE_LINUX_ATOMIC_OPERATIONS ) && !defined( CPE__USE_DARWIN_ATOMIC_OPERATIONS )
-#  ifdef MTX__USE_PTHREAD_MUTEX
-#   ifndef MTX_SUPPRESS_PTHREAD_WARNING
-#    define MTX__MESSAGE	"CAUTION : Mutexes based on pthrad mutexes !!!"
-#  endif
-#  else
-#   define MTX__MESSAGE	"CAUTION : Mutexes NOT based on atomic operations !!!"
-#   define MTX__NO_ATOMIC_OPERATIONS
-#  endif
+# if defined( MTX__WINDOWS ) || defined( MTX__LINUX ) || defined( MTX__DARWIN )
+#  define MTX__MESSAGE	"CAUTION : Mutexes based on native atomic operations !!!"
+# elif defined( MTX__PTHREAD )
+#   define MTX__MESSAGE	"CAUTION : Mutexes based on pthread !!!"
+# elif defined( MTX__BASIC )
+#   define MTX__MESSAGE	"CAUTION : Mutexes based on basic operations !!!"
+# elif !defined( MTX__ATOMIC ) 
+#  error
 # endif
 
 # ifdef MTX__MESSAGE
 #  ifndef MTX_SUPPRESS_WARNING
-#   pragma message( MTX__MESSAGE )
+#   pragma message( __LOC__ MTX__MESSAGE )
 #  elif defined( CPE_C_GCC )
-#   pragma message MTX__MESSAGE
+#   pragma message __LOC__ MTX__MESSAGE
 #  endif
 # endif
 
-# ifdef MTX__USE_LINUX_ATOMIC_OPERATIONS
-#  include "asm/atomic.h"
+# ifdef MTX__ATOMIC
+# elif defined( MTX__DARWIN )
+# elif defined( MTX__LINUX )
+# elif defined( MTX__WINDOWS )
+# elif defined( MTX__PTHREAD )
+# elif defined( MTX__BASIC )
+# else
+#  error
 # endif
 
-# ifdef MTX__USE_DARWIN_ATOMIC_OPERATIONS
+# ifdef MTX__ATOMIC
+#  define MTX__system	system
+#  undef system
+#  include <atomic>
+#  define system MTX__system
+# elif defined( MTX__DARWIN )
 #  include <libkern/OSAtomic.h>
-# endif
-
-# ifdef MTX__USE_PTHREAD_MUTEX
+# elif defined( MTX__LINUX )
+#  include <asm/atomic>
+# elif defined( MTX__WINDOWS )
+# elif defined( MTX__PTHREAD )
 #  include <pthread.h>
+# elif defined( MTX__BASIC )
+# else
+#  error
 # endif
 
 /*
@@ -115,48 +140,54 @@
 # define MTX__COUNTER_OVERFLOW_VALUE	BSO_S16_MIN
 
 namespace mtx {
-#ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
-	typedef LONG counter_t__;
-	typedef counter_t__ counter__;
-#elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
-	typedef atomic_t	counter_t__;
-	typedef counter_t__ counter__;
-#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
+# ifdef MTX__ATOMIC
+	typedef int counter_t__;
+	typedef std::atomic<counter_t__> counter__;
+# elif defined( MTX__DARWIN )
 	typedef int32_t	counter_t__;
 	typedef counter_t__ counter__;
-#elif defined ( MTX__USE_PTHREAD_MUTEX )
+# elif defined( MTX__LINUX )
+	typedef atomic_t	counter_t__;
+	typedef counter_t__ counter__;
+# elif defined( MTX__WINDOWS )
+	typedef LONG counter_t__;
+	typedef counter_t__ counter__;
+# elif defined( MTX__PTHREAD )
 	typedef volatile bso::s16__ counter_t__;
 	struct counter__ {
 		counter_t__ Value;
 		pthread_mutexattr_t MutexAttr;
 		pthread_mutex_t Mutex;
 	};
-#elif defined( MTX__NO_ATOMIC_OPERATIONS )
-	typedef volatile bso::s16__ counter__;
-#else
-#	error "No mutex handling scheme !"
-#endif
+# elif defined( MTX__BASIC )
+	typedef volatile int counter_t__;
+	typedef counter_t__ counter__;
+# else
+#  error
+# endif
 
-#ifdef MTX__CONTROL
-#	define MTX__RELEASED_MUTEX_COUNTER_VALUE	3
-#endif
+# ifdef MTX__CONTROL
+#  define MTX__RELEASED_MUTEX_COUNTER_VALUE	3
+# endif
 
-#define MTX__DISABLED_MUTEX_COUNTER_VALUE	2
-#define MTX__UNLOCKED_MUTEX_COUNTER_VALUE	1
-#define MTX__UNLOCKED_MUTEX_COUNTER_SIGN	MTX__UNLOCKED_MUTEX_COUNTER_VALUE
+# define MTX__DISABLED_MUTEX_COUNTER_VALUE	2
+# define MTX__UNLOCKED_MUTEX_COUNTER_VALUE	1
+# define MTX__UNLOCKED_MUTEX_COUNTER_SIGN	MTX__UNLOCKED_MUTEX_COUNTER_VALUE
 
 	inline void _Set(
 		counter__ &Counter,
 		int Value,
 		bso::bool__ Destroy )
 	{
-#ifdef MTX__USE_WIN_ATOMIC_OPERATIONS
+# ifdef MTX__ATOMIC
+		Counter = ATOMIC_VAR_INIT( Value );
+# elif defined( MTX__DARWIN )
 		Counter = Value;
-#elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
+# elif defined( MTX__LINUX )
 		atomic_set( &Counter, Value );
-#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
+# elif defined( MTX__WINDOWS )
 		Counter = Value;
-#elif defined( MTX__USE_PTHREAD_MUTEX )
+# elif defined( MTX__PTHREAD )
 		Counter.Value = Value;
 		if ( Destroy ) {
 			if ( pthread_mutex_destroy( &Counter.Mutex ) )
@@ -171,22 +202,25 @@ namespace mtx {
 			if ( pthread_mutex_init( &Counter.Mutex, &Counter.MutexAttr ) )
 				qRFwk();
 		}
-#elif defined( MTX__NO_ATOMIC_OPERATIONS )
+# elif defined( MTX__BASIC )
 		Counter = Value;
-#else
-#	error "No mutex handling scheme !"
-#endif
+# else
+#  error
+# endif
 	}
 
 	inline counter_t__ _GetValue( counter__ &Counter )	// Retourne la valeur de 'Counter'.
 	{
-#ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
+
+# ifdef MTX__ATOMIC
+		return std::atomic_load( &Counter );
+# elif defined( MTX__DARWIN )
 		return Counter;
-#elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
+# elif defined( MTX__LINUX )
 		return atomic_read( &Counter );
-#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
+# elif defined( MTX__WINDOWS )
 		return Counter;
-#elif defined( MTX__USE_PTHREAD_MUTEX )
+# elif defined( MTX__PTHREAD )
 		counter_t__ Buffer;
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
 			qRFwk();
@@ -194,11 +228,11 @@ namespace mtx {
 		if ( pthread_mutex_unlock( &Counter.Mutex ) )
 			qRFwk();
 		return Buffer;
-#elif defined( MTX__NO_ATOMIC_OPERATIONS )
+# elif defined( MTX__BASIC )
 		return Counter;
-#else
-#	error "No mutex handling scheme !"
-#endif
+# else
+#  error
+# endif
 	}
 
 	inline bso::sign__ _GetSign( counter__ &Counter )	// Retourne le signe de 'Counter'.
@@ -208,36 +242,40 @@ namespace mtx {
 
 	inline void _Inc( counter__ &Counter )	// Incrmente 'Counter'.
 	{
-#ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
-		InterlockedIncrement( &Counter );
-#elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
-		atomic_inc( &Counter );
-#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
+# ifdef MTX__ATOMIC
+		++Counter;
+# elif defined( MTX__DARWIN )
 		OSAtomicIncrement32( &Counter );
-#elif defined( MTX__USE_PTHREAD_MUTEX )
+# elif defined( MTX__LINUX )
+		atomic_inc( &Counter );
+# elif defined( MTX__WINDOWS )
+		InterlockedIncrement( &Counter );
+# elif defined( MTX__PTHREAD )
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
 			qRFwk();
 		++Counter.Value;
 		if ( pthread_mutex_unlock( &Counter.Mutex ) )
 			qRFwk();
-#elif defined( MTX__NO_ATOMIC_OPERATIONS )
+# elif defined( MTX__BASIC )
 		++Counter;
-#else
-#	error "No mutex handling scheme !"
-#endif
+# else
+#  error
+# endif
 	}
 
 	inline bso::bool__ _DecAndTest( counter__ &Counter )	// Dcrmente 'Counter'.et retourne 'true' si  zro.
 	{
-#ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
-		return InterlockedDecrement( &Counter ) == 0;
-#elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
-		return atomic_dec_and_test( &Counter );
-#elif defined( MTX__USE_DARWIN_ATOMIC_OPERATIONS )
+# ifdef MTX__ATOMIC
+		return --Counter == 0;
+# elif defined( MTX__DARWIN )
 //		return OSAtomicDecrement32( &Counter ) == 1;	// Il existe un autre 'OSAtomic.h', dans lequel 'OSAtomicDecrement(|8|16|64)(...)'. retourne la valeur AVANT dcrmentation.
 														// Cependant, celui-ci n'a pas de fonction 'OSAtomicDecrement32'(...)".
 		return OSAtomicDecrement32( &Counter ) == 0;
-#elif defined( MTX__USE_PTHREAD_MUTEX )
+# elif defined( MTX__LINUX )
+		return atomic_dec_and_test( &Counter );
+# elif defined( MTX__WINDOWS )
+		return InterlockedDecrement( &Counter ) == 0;
+# elif defined( MTX__PTHREAD )
 		bso::bool__ Buffer;
 		if ( pthread_mutex_lock( &Counter.Mutex ) )
 			qRFwk();
@@ -245,11 +283,11 @@ namespace mtx {
 		if ( pthread_mutex_unlock( &Counter.Mutex ) )
 			qRFwk();
 		return Buffer;
-#elif defined( MTX__NO_ATOMIC_OPERATIONS )
+# elif defined( MTX__BASIC )
 		return --Counter == 0;
-#else
-#	error "No mutex handling scheme !"
-#endif
+# else
+#  error
+# endif
 	}
 
 	//t A mutex handler.

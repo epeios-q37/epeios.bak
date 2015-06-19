@@ -15,6 +15,8 @@ Meaning of list markers (2nd level):
 2015-06-19 :
 - GLOBAL :
 	- Adaptation to modifications in 'CPE'.
+- MTX :
+	- Rewritting to use the standard <atomic> library by default.
 
 2015-06-18 :
 - GLOBAL :
