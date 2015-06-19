@@ -60,14 +60,18 @@ CXXFLAGS += -O
 	
 copt += -DE_ST
 
+win=win
+win32=win32
+win64=win64
 IA_32=x86
-x86_64=x64
+AMD64=x64
 Cygwin=Cygwin
 MinGW=Msys
 GNULinux=GNU/Linux
 Linux=Linux
 MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
+mach=$(shell uname -m)
   
 
 ##########################
@@ -83,13 +87,10 @@ ifeq ("$(os)","$(Cygwin)")
 # directly the MS CRT, see below.
 
 # Use of the MinGW compiler under Cygwin. 
-# To build 64 bits application.
-# Uses directly the MS CRT.
-	#arch=$(X86_64)
-
-# Use of the MinGW compiler under Cygwin.
-# For 32 bits application using directly the MS CRT.
-	#arch=$(IA_32)
+# To build native binary, i.e. with the MS CRT,
+# without using the Cygwin/POSIX layer,
+# Uncomment follwing line :
+#target=$(win)
 
 endif
 
@@ -155,23 +156,43 @@ ifeq ("$(os)","$(Cygwin)")
 	co += -std=gnu++11 -DCYGWIN -DUNICODE
 	
 	LDFLAGS += -static
-
-	ifeq ("$(arch)","$(IA_32)")
+	
+	ifeq ("$(target)","$(win)")
+		ifeq ("$(mach)","i686")
+			override target=$(win32)
+		else  # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
+			ifeq ("$(mach)","x86_64")
+				override target=$(win64)
+			endif
+		endif
+	endif
+	
+	ifeq ("$(target)","$(IA_32)")
+		override target=$(win32)
+	else  # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
+		ifeq ("$(target)","$(AMD64)")
+			override target=$(win64)
+		endif
+	endif
+	
+	ifeq ("$(target)","$(win32)")
 		CXX = i686-w64-mingw32-g++
 		mods += $(wmods)
 		lo += -municode
+		co += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(win64)")
 			CXX = x86_64-w64-mingw32-g++
 			mods += $(wmods)
 			lo += -municode
+			co += -m64
 		else
 			mods += $(pmods)
 		endif
     
 	endif
 	
-	target=$(name).exe
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -193,17 +214,17 @@ ifeq ("$(os)", "$(MinGW)")
 
 	LDFLAGS += -static
 
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(arch)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
 
-	target=$(name).exe
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -217,23 +238,23 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 
-	co += -std=gnu++11
+	co += -std=gnu++11 -D_FILE_OFFSET_BITS=64
 	co += -DGNULINUX
 	
 	mods += $(pmods)
 	
 	libs += -lpthread -ldl -lrt
 
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
-	target=$(name)
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -253,16 +274,16 @@ ifeq ("$(os)","$(Linux)")
 
 	libs += -lpthread -ldl -lrt
 	
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
-	target=$(name)
+	binary=$(name)
 endif
 
 #############################
@@ -279,16 +300,16 @@ ifeq ("$(os)","$(MacOS)")
 	
 	mods += $(pmods)
 
-	ifeq ("$(arch)","$(IA_32)")
+	ifeq ("$(target)","$(IA_32)")
 		co += -m32
 		lo += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900).
-		ifeq ("$(arch)","$(x86_64)")
+		ifeq ("$(target)","$(AMD64)")
 			co += -m64
 			lo += -m64
 		endif
 	endif
-	target=$(name)
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 
@@ -296,9 +317,9 @@ endif
 
 ##########################
 		
-all: $(target)
+all: $(binary)
 	rm -f *.o
-	strip $(target)
+	strip $(binary)
 
 copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
@@ -318,15 +339,15 @@ vpath %.cpp $(subst $(ds),:,$(src))
 srcd = $(subst $(ds), ,$(src))
 
 co := -c $(co) $(copt) $(subst :, -I,$(src))
-lo += -o $(target) $(objs)
+lo += -o $(binary) $(objs)
 
 objs = $(name).$(ox) $(mods:=.$(ox))
 
-$(target): $(objs)
+$(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
 	mkdir -p $(dest)
-	cp $(target) $(dest)
+	cp $(binary) $(dest)
 endif
 
 %.$(ox): %.cpp

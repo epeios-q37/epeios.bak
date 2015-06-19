@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-06-19 :
+- GLOBAL :
+	- Adaptation to modifications in 'CPE'.
+
 2015-06-18 :
 - GLOBAL :
 	- Adaptation to modifications in 'CPE'.

@@ -62,7 +62,9 @@
 
 # if !defined( MTX__USE_WIN_ATOMIC_OPERATIONS ) && !defined( MTX__USE_LINUX_ATOMIC_OPERATIONS ) && !defined( CPE__USE_DARWIN_ATOMIC_OPERATIONS )
 #  ifdef MTX__USE_PTHREAD_MUTEX
-#   define MTX__MESSAGE	"CAUTION : Mutexes based on pthrad mutexes !!!"
+#   ifndef MTX_SUPPRESS_PTHREAD_WARNING
+#    define MTX__MESSAGE	"CAUTION : Mutexes based on pthrad mutexes !!!"
+#  endif
 #  else
 #   define MTX__MESSAGE	"CAUTION : Mutexes NOT based on atomic operations !!!"
 #   define MTX__NO_ATOMIC_OPERATIONS
@@ -148,7 +150,7 @@ namespace mtx {
 		int Value,
 		bso::bool__ Destroy )
 	{
-#ifdef	MTX__USE_WIN_ATOMIC_OPERATIONS
+#ifdef MTX__USE_WIN_ATOMIC_OPERATIONS
 		Counter = Value;
 #elif defined( MTX__USE_LINUX_ATOMIC_OPERATIONS )
 		atomic_set( &Counter, Value );
@@ -203,7 +205,6 @@ namespace mtx {
 	{
 		return _GetValue( Counter );
 	}
-
 
 	inline void _Inc( counter__ &Counter )	// Incrmente 'Counter'.
 	{
