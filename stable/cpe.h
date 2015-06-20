@@ -132,7 +132,7 @@
 #   define CPE_A_ARM32
 #   define CPE_F_32BITS
 #  endif
-#  define CPE_AL	"ARMv" _M_ARM 
+#  define CPE_AL	"ARM"
 # endif
 
 #if defined(__x86_64__) || defined(_M_X64)

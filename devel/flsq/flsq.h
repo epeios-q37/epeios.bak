@@ -43,10 +43,10 @@
 
 # if defined( CPE_S_WIN ) || defined ( CPE_S_CYGWIN )
 #  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	1000
-# elif defined ( CPE_S_GNULINUX )
-#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	800	// GNU/Linux, par dfaut, ne peut ouvrir que 1024 descripteurs (socket comprises).
+# elif defined ( CPE_S_UNIX )
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	800	// At least under GNU/Linux, only 1024 descriptors (socket included) are available. Don't know for other unixes.
 # elif defined ( CPE_S_DARWIN )
-#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	200	// Darwin, par dfaut, ne peut ouvrir que 256 descripteurs (socket comprises).
+#  define FLSQ_DEFAULT_MAX_FILE_AMOUNT	200	// Under Darwin, by default, only 200 decriptors available.
 # else
 #  error "Unimplemented target !"
 # endif

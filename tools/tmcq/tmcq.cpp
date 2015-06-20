@@ -38,7 +38,7 @@ using cio::CIn;
 # define NAME_MC			"tmcq"
 # define NAME_LC			"tmcq"
 # define NAME_UC			"TMCQ"
-# define WEBSITE_URL		"http://q37.info/intl/"
+# define WEBSITE_URL		"http://q37.info/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"

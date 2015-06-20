@@ -185,7 +185,6 @@ ifeq ("$(os)","$(Cygwin)")
 			lo += -municode -m64
 			co += -m64
 		else
-			co +=  -DMTX_SUPPRESS_PTHREAD_WARNING
 			mods += $(pmods)
 		endif
     
@@ -318,7 +317,7 @@ all: $(binary)
 	rm -f *.o
 	strip $(binary)
 
-copt += -DVERSION=\""20150604"\"
+copt += -DVERSION=\""20150620"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2015"\"
 
 ifndef EPEIOS_SRC

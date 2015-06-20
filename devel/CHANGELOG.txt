@@ -258,7 +258,7 @@ Meaning of list markers (2nd level):
 
 2015-04-07 :
 - DLBRRY :
-	* For 'Linux" and 'Mac OS', to mimic 'Window' behavior, the correct prefix and extension is added to the library filename when missing.
+	* For 'POSIX' and 'Mac OS', to mimic 'Windows' behavior, the correct prefix and extension is added to the library filename when missing.
 - PLGN :
 	- Adaptation to chnages in 'PLGNCORE'.
 - PLGNCORE, SCLPLUGIN :

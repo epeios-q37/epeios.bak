@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>20150604</xpp:bloc>
+			<xpp:bloc>20150620</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2007-2015</xpp:bloc>
@@ -35,7 +35,7 @@
 		<Files Group="Doc" Path="Doc/">
 			<File Pack="yes">Compilation.pdf</File>
 			<File Pack="yes">Configuration.pdf</File>
-			<File Pack="yes">Description.pdf</File>
+			<File Pack="yes">xppq.pdf</File>
 			<File Pack="yes">Directives.pdf</File>
 			<File Pack="yes">Manual.pdf</File>
 		</Files>
