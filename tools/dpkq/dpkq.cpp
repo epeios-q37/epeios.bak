@@ -169,35 +169,104 @@ using namespace dpktbl;
 typedef tables_	data_;
 E_AUTO( data )
 
-#define NAMESPACE	NAME_LC ":"
+namespace {
+	E_ENUM( item ) {
+		iDataTag,
 
-#define DATA_TAG	NAMESPACE "data"
+		iTableTag,
+		iTableLabelAttribute, 
 
-#define TABLE_TAG				NAMESPACE "table"
-#define TABLE_LABEL_ATTRIBUTE	"label"
+		iAliasesTag,
 
-#define ALIASES_TAG	NAMESPACE "aliases"
+		iAliasTag,
+		iAliasLabelAttribute,
+		iAliasTableLabelAttribute,
+		iAliasTableAliasAttribute,
+		iAliasRecordLabelAttribute,
 
-#define ALIAS_TAG									NAMESPACE "alias"
-#define ALIAS_LABEL_ATTRIBUTE						"label"
-#define ALIAS_TABLE_LABEL_ATTRIBUTE					"TableLabel"
-#define ALIAS_TABLE_ALIAS_ATTRIBUTE					"TableAlias"
-#define ALIAS_RECORD_LABEL_ATTRIBUTE				"RecordLabel"
+		iContentTag,
+		iContentDefaultRecordLabelTagAttribute,
 
-#define CONTENT_TAG									NAMESPACE "content"
-#define CONTENT_DEFAULT_RECORD_LABEL_TAG_ATTRIBUTE	"DefaultRecordLabelTag"
+		iRecordLabelAttribute,
+		iRecordHandlingAttribute,
+		iRecordHandlingAttributeIgnoreValue,
+		iRecordHandlingAttributeSkipValue,
 
-#define RECORD_LABEL_ATTRIBUTE					NAMESPACE "label"
-#define RECORD_WEIGHT_ATTRIBUTE					NAMESPACE "Weight"
-#define RECORD_HANDLING_ATTRIBUTE				NAMESPACE "Handling"
-#define RECORD_HANDLING_ATTRIBUTE_IGNORE_VALUE	"Ignore"
-#define RECORD_HANDLING_ATTRIBUTE_SKIP_VALUE	"Skip"
+		iInsertionTag,
+		iInsertionTableLabelAttribute,
+		iInsertionRecordLabelAttribute,
+		iInsertionTableAliasAttribute,
+		iInsertionRecordAliasAttribute,
 
-#define INSERTION_TAG						NAMESPACE "insert"
-#define INSERTION_TABLE_LABEL_ATTRIBUTE		"TableLabel"
-#define INSERTION_RECORD_LABEL_ATTRIBUTE	"RecordLabel"
-#define INSERTION_TABLE_ALIAS_ATTRIBUTE		"TableAlias"
-#define INSERTION_RECORD_ALIAS_ATTRIBUTE	"RecordAlias"
+		i_amount,
+		i_Undefined
+	};
+
+	stsfsm::automat Automat_;
+	str::string Namespace_;	// With tailing ':' !
+
+	void AddToAutomat_(
+		item__  Item,
+		const char *Value )
+	{
+		stsfsm::Add( Value, Item, Automat_ );
+	}
+
+	void AddToAutomatWithNS_(
+		item__  Item,
+		const char *Value )
+	{
+	qRH
+		str::string ValueWithNS;
+	qRB
+		ValueWithNS.Init( Namespace_ );
+
+		ValueWithNS.Append( Value );
+		
+		stsfsm::Add( ValueWithNS, Item, Automat_ );
+	qRR
+	qRT
+	qRE
+	}
+
+#define A( item, value )	AddToAutomat_( i##item, value )
+#define ANS( item, value )	AddToAutomatWithNS_( i##item, value )
+
+	void FillAutomat_( void )
+	{
+		ANS( DataTag, "data" );
+
+		ANS( TableTag, "table" );
+		A( TableLabelAttribute, "label" );
+
+		ANS( AliasesTag, "aliases" );
+
+		ANS( AliasTag, "alias" );
+		A( AliasLabelAttribute, "label" );
+		A( AliasTableLabelAttribute, "TableLabel" );
+		A( AliasTableAliasAttribute, "TableAlias" );
+		A( AliasRecordLabelAttribute, "RecordLabel" );
+
+		ANS( ContentTag, "content" );
+		A( ContentDefaultRecordLabelTagAttribute, "DefaultRecordLabelTag" );
+
+		ANS( RecordLabelAttribute, "label" );
+		ANS( RecordHandlingAttribute, "Handling" );
+		A( RecordHandlingAttributeIgnoreValue, "Ignore" );
+		A( RecordHandlingAttributeSkipValue, "Skip" );
+
+		ANS( InsertionTag, "insert" );
+		A( InsertionTableLabelAttribute, "TableLabel" );
+		A( InsertionRecordLabelAttribute, "RecordLabel" );
+		A( InsertionTableAliasAttribute, "TableAlias" );
+		A( InsertionRecordAliasAttribute, "RecordAlias" );
+	}
+
+	item__ GetItemId_( const str::string_ &Pattern )
+	{
+		return stsfsm::GetId( Pattern, Automat_, i_Undefined, i_amount );
+	}
+}
 
 #define _( name )	#name
 
@@ -207,8 +276,8 @@ typedef bso::uint__		id__;
 
 static bso::bool__ BelongsToNamespace_( const str::string_ &Name )
 {
-	if ( Name.Amount() > strlen( NAMESPACE ) )
-		return str::Compare( Name, str::string( NAMESPACE ), 0, 0, strlen( NAMESPACE ) ) == 0;
+	if ( Name.Amount() > Namespace_.Amount() )
+		return str::Compare( Name, Namespace_, 0, 0, Namespace_.Amount() ) == 0;
 	else
 		return false;
 }
@@ -299,15 +368,17 @@ qRE
 static void ReportAndExit_(
 	const char *Error,
 	const xpp::preprocessing_iflow___ &IFlow,
-	const char *Tag )
+	item__ Item )
 {
 qRH
 	lcl::meaning Meaning;
 qRB
+#pragma message( __LOC__ "TODO" )
+
 	Meaning.Init();
 	Meaning.SetValue( Error );
 
-	Meaning.AddTag( Tag );
+//	Meaning.AddTag( Tag );
 
 	ReportAndExit_( Meaning, IFlow );
 qRR
@@ -315,11 +386,9 @@ qRT
 qRE
 }
 
-static void ReportAndExit_(
+static void ReportAliasTableAliasAndLabelUsedTogetherAndExit_(
 	const char *Error,
-	const xpp::preprocessing_iflow___ &IFlow,
-	const char *Tag1,
-	const char *Tag2 )
+	const xpp::preprocessing_iflow___ &IFlow )
 {
 qRH
 	lcl::meaning Meaning;
@@ -327,8 +396,7 @@ qRB
 	Meaning.Init();
 	Meaning.SetValue( Error );
 
-	Meaning.AddTag( Tag1 );
-	Meaning.AddTag( Tag2 );
+# pragma message( __LOC__ "TODO" )
 
 	ReportAndExit_( Meaning, IFlow );
 qRR
@@ -526,16 +594,23 @@ qRB
 			ReportAndExit_( _( TagNotAllowedHereError ), IFlow );
 			break;
 		case xml::tAttribute:
-			if ( Parser.AttributeName() == INSERTION_TABLE_LABEL_ATTRIBUTE ) {
+			switch ( GetItemId_( Parser.AttributeName() ) ) {
+			case iInsertionTableLabelAttribute:
 				Assign_( _( TableLabelWording ), Parser, IFlow, TableLabel );
-			} else if ( Parser.AttributeName() == INSERTION_RECORD_LABEL_ATTRIBUTE ) {
+				break;
+			case iInsertionRecordLabelAttribute:
 				Assign_( _( RecordLabelWording ), Parser, IFlow, RecordLabel );
-			} else if ( Parser.AttributeName() == INSERTION_TABLE_ALIAS_ATTRIBUTE ) {
+				break;
+			case iInsertionTableAliasAttribute:
 				Assign_( _( TableAliasWording ), Parser, IFlow, TableAlias );
-			} else if ( Parser.AttributeName() == INSERTION_RECORD_ALIAS_ATTRIBUTE ) {
+				break;
+			case iInsertionRecordAliasAttribute:
 				Assign_( _( RecordAliasWording ), Parser, IFlow, RecordAlias );
-			} else
+				break;
+			default:
 				ReportAndExit_( _( UnknownAttributeError ), IFlow );
+				break;
+			}
 			break;
 		case xml::tEndTag:
 		{
@@ -607,7 +682,7 @@ static void ProcessRecord_(
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfAttribute | xml::tfValue | xml::tfEndTag ) ) {
 		case xml::tStartTag:
 			if ( BelongsToNamespace_( Parser.TagName() ) ) {
-				if ( Parser.TagName() == INSERTION_TAG )
+				if ( GetItemId_( Parser.TagName() ) == iInsertionTag )
 					ProcessInsertion_( Parser, IFlow, Aliases, Tables, Record );	// '...<erpck:insert ...
 				else																//                   ^
 					ReportAndExit_( _( ForbiddenTagError ), IFlow );
@@ -667,7 +742,6 @@ static void ProcessRecords_(
 qRH
 	bso::bool__ Continue = true;
 	record Record;
-	weight__ Weight = DEFAULT_WEIGHT;
 	bso::integer_buffer__ Buffer;
 	bso::bool__ Ignore = false;
 qRB
@@ -679,31 +753,33 @@ qRB
 			Record.Content.Append( Parser.DumpData() );
 			break;
 		case xml::tAttribute:
-			if ( Parser.AttributeName() == RECORD_WEIGHT_ATTRIBUTE ) {
-				sdr::row__ Error = qNIL;
-
-				Weight = Parser.Value().ToU8( &Error );
-
-				if ( Error != qNIL )
-					ReportAndExit_( _( BadAttributeValueError ), IFlow );
-			} else if ( Parser.AttributeName() == RECORD_LABEL_ATTRIBUTE ) {
+			switch ( GetItemId_( Parser.AttributeName() ) ) {
+			case iRecordLabelAttribute:
 				Assign_( _( RecordLabelWording ), Parser, IFlow, Record.Label );
-			} else if ( Parser.AttributeName() == RECORD_HANDLING_ATTRIBUTE ) {
-				if ( Parser.Value() == RECORD_HANDLING_ATTRIBUTE_SKIP_VALUE ) {
+				break;
+			case iRecordHandlingAttribute:
+				switch ( GetItemId_( Parser.Value() ) ) {
+				case iRecordHandlingAttributeSkipValue:
 					if ( Skipped == DPKBSC_COUNTER_MAX )
 						qRLmt();
 					Skipped++;
 
 					Record.Skip() = true;
-				}else if ( Parser.Value() == RECORD_HANDLING_ATTRIBUTE_IGNORE_VALUE )
+					break;
+				case iRecordHandlingAttributeIgnoreValue:
 					Ignore = true;
-				else
+					break;
+				default:
 					ReportAndExit_( _( UnknownAttributeValueError ), IFlow );
-			} else if ( BelongsToNamespace_( Parser.AttributeName() ) ) {
-				ReportAndExit_( _( UnknownAttributeError ), IFlow );
-			} else
-				Record.Content.Append( Parser.DumpData() );
-			break;
+					break;
+				}
+			default:
+				if ( BelongsToNamespace_( Parser.AttributeName() ) )
+					ReportAndExit_( _( UnknownAttributeError ), IFlow );
+				else
+					Record.Content.Append( Parser.DumpData() );
+				break;
+			}
 		case xml::tStartTagClosed:
 			Record.Content.Append( " id=\"" );
 			Record.Content.Append( bso::Convert( Records.Amount() + 1, Buffer ) );
@@ -750,16 +826,16 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfAttribute | xml::tfStartTagClosed | xml::tfEndTag ) ) {
 		case xml::tAttribute:
-			if ( Parser.TagName() != CONTENT_TAG )
+			if ( GetItemId_( Parser.TagName() ) != iContentTag )
 				qRGnr();
 
-			if ( Parser.AttributeName() == CONTENT_DEFAULT_RECORD_LABEL_TAG_ATTRIBUTE ) {
+			if ( GetItemId_( Parser.AttributeName() ) == iContentDefaultRecordLabelTagAttribute ) {
 				Assign_( _( DefaultRecordLabelTagWording ), Parser, IFlow, DefaultRecordLabelTag );
 			} else
 				ReportAndExit_( _( UnknownAttributeError ), IFlow );
 			break;
 		case xml::tStartTagClosed:
-			if ( Parser.TagName() == CONTENT_TAG ) {
+			if ( GetItemId_( Parser.TagName() ) == iContentTag ) {
 				ProcessRecords_( Parser, IFlow, DefaultRecordLabelTag, Aliases, Tables, Table.Records, Table.Skipped() );	// '<ercp:content ...><...' -> '</erpck:content>...'
 				Continue = false;
 			}  else																						        			//                    ^                         ^
@@ -815,22 +891,29 @@ qRB
 			ReportAndExit_( _( TagNotAllowedHereError ), IFlow );
 			break;
 		case xml::tAttribute:
-			if ( Parser.AttributeName() == ALIAS_TABLE_ALIAS_ATTRIBUTE ) {
+			switch ( GetItemId_(Parser.AttributeName() ) ) {
+			case iAliasTableAliasAttribute:
 				if ( TableLabel.Amount() != 0 )
-					ReportAndExit_( _( CanNotBeUsedTogetherError ), IFlow, ALIAS_TABLE_LABEL_ATTRIBUTE,  ALIAS_TABLE_ALIAS_ATTRIBUTE );
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
 
 				Assign_( _( TableAliasWording ), Parser, IFlow, TableAliasLabel );
-			} else if ( Parser.AttributeName() == ALIAS_TABLE_LABEL_ATTRIBUTE ) {
+				break;
+			case iAliasTableLabelAttribute:
 				if ( TableAliasLabel.Amount() != 0 )
-					ReportAndExit_( _( CanNotBeUsedTogetherError ), IFlow, ALIAS_TABLE_LABEL_ATTRIBUTE,  ALIAS_TABLE_ALIAS_ATTRIBUTE );
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
 
 				Assign_( _( TableAliasWording ), Parser, IFlow, TableLabel );
-			} else if ( Parser.AttributeName() == ALIAS_RECORD_LABEL_ATTRIBUTE ) {
+				break;
+			case iAliasRecordLabelAttribute:
 				Assign_( _( RecordLabelWording ), Parser, IFlow, RecordLabel );
-			} else if ( Parser.AttributeName() == ALIAS_LABEL_ATTRIBUTE ) {
+				break;
+			case iAliasLabelAttribute:
 				Assign_( _( AliasLabelWording ), Parser, IFlow, AliasLabel );
-			} else
+				break;
+			default:
 				ReportAndExit_( _( UnknownAttributeError ), IFlow );
+				break;
+			}
 			break;
 		case xml::tStartTagClosed:
 			if ( TableLabel.Amount() != 0 ) {
@@ -912,7 +995,7 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag ) ) {
 		case xml::tStartTag:
-			if ( Parser.TagName() == ALIAS_TAG ) {
+			if ( GetItemId_( Parser.TagName() ) == iAliasTag ) {
 				RecordAlias.Init();
 				TableAlias.Init();
 
@@ -963,24 +1046,28 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfStartTagClosed | xml::tfAttribute | xml::tfEndTag ) ) {
 		case xml::tStartTag:
-			if ( Parser.TagName() == ALIASES_TAG )
+			switch ( GetItemId_( Parser.TagName() ) ) {
+			case iAliasesTag:
 				ProcessAliases_( Parser, IFlow, Tables, Aliases );	// '<erpck:table ...>...<erpck:aliases ...>...'
-			else if ( Parser.TagName() == CONTENT_TAG )			//                                     ^
+				break;
+			case iContentTag:
 				ProcessContent_( Parser, IFlow, Table, Tables, Aliases );	// '<erpck:table ...>...<erpck:content ...>...' -> '...</erpc:content>...'
-			else															//                                     ^                              ^
+				break;
+			default:
 				ReportAndExit_( _( UnknownTagError ), IFlow );
+				break;
+			}
 			break;
 		case xml::tStartTagClosed:
 			if ( Table.Label.Amount() == 0 )
 				ReportAndExit_( _( MissingTableLabelError ), IFlow );
 			break;
 		case xml::tAttribute:
-			if ( Parser.TagName() != TABLE_TAG )
+			if ( GetItemId_( Parser.TagName() ) != iTableTag )
 				qRGnr();
-
-			if ( Parser.AttributeName() == TABLE_LABEL_ATTRIBUTE ) {
+			else if ( GetItemId_( Parser.AttributeName() ) ==  iTableLabelAttribute )
 				Assign_( _( TableLabelWording ), Parser, IFlow, Table.Label );
-			} else
+			else
 				ReportAndExit_( _( UnknownAttributeError ), IFlow );
 			break;
 		case xml::tEndTag:
@@ -1014,17 +1101,17 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag ) ) {
 		case xml::tStartTag:
-			if ( Parser.TagName() == TABLE_TAG ) {
+			if ( GetItemId_( Parser.TagName() ) == iTableTag ) {
 				TableDetected = true;
 				Table.Init();
 				ProcessTable_( Parser, IFlow, Table, Data );	// '...<erpck::table ...><erpck:content>...' -> '....</erpck:table>...'
 				Data.Append( Table );							//                   ^                                             ^
 			} else
-				ReportAndExit_( _( MissingTableTagError ), IFlow, TABLE_TAG );
+				ReportAndExit_( _( MissingTableTagError ), IFlow, iTableTag );
 			break;
 		case xml::tEndTag:
 			if ( !TableDetected ) {
-				ReportAndExit_( _( NoTableTagInDataFileError ), IFlow, TABLE_TAG );
+				ReportAndExit_( _( NoTableTagInDataFileError ), IFlow, iTableTag );
 			} else
 				Continue = false;
 			break;
@@ -1042,7 +1129,7 @@ qRE
 }
 
 static void RetrieveData_(
-	const char *DataFileName,
+	const str::string_ &DataFileName,
 	data_ &Data )
 {
 qRH
@@ -1074,7 +1161,7 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTagClosed |xml::tfAttribute ) ) {
 		case xml::tStartTagClosed:
-			if ( ( Parser.TagName() == DATA_TAG ) ) {
+			if ( ( GetItemId_( Parser.TagName() ) == iDataTag ) ) {
 				ProcessData_( Parser, IFlow, Data );	// '...<erpck:data><erpck:table ...>' -> '...</erpck:table>...'
 				DataDetected = true;					//                 ^                                       ^
 			} else {
@@ -1086,7 +1173,7 @@ qRB
 			break;
 		case xml::t_Processed:
 			if ( !DataDetected )
-				ReportAndExit_( _( NoDataError ), IFlow, DataFileName );
+				sclmisc::ReportAndAbort( _( NoDataError ), DataFileName );
 			else
 				Continue = false;
 			break;
@@ -1233,11 +1320,11 @@ qRB
 				Writer.PutAttribute( "Amount", "1" );
 			}
 
-			Writer.PutAttribute( "SessionAmount", bso::Convert( Context.S_.Session ) );
-			Writer.PutAttribute( "SessionSkippedAmount", bso::Convert( GetSkippedAmount_( Context.S_.Session, Context.Pool, Records ) ) );
+			xml::PutAttribute( "SessionAmount", Context.S_.Session, Writer );
+			xml::PutAttribute( "SessionSkippedAmount", GetSkippedAmount_( Context.S_.Session, Context.Pool, Records ), Writer );
 
-			Writer.PutAttribute( "CycleAmount", bso::Convert( Context.S_.Cycle ) );
-			Writer.PutAttribute( "CycleSkippedAmount", bso::Convert( GetSkippedAmount_( Context.S_.Cycle, Context.Pool, Records ) ) );
+			xml::PutAttribute( "CycleAmount", Context.S_.Cycle, Writer );
+			xml::PutAttribute( "CycleSkippedAmount", GetSkippedAmount_( Context.S_.Cycle, Context.Pool, Records ), Writer );
 
 		} else {
 			if ( Id > Records.Amount() ) {
@@ -1328,6 +1415,7 @@ qRH
 	xml::writer Writer;
 	ctn::E_CITEMt( table_, trow__ ) Table;
 	random_parameters Randoms;
+	str::string NS;
 qRB
 	Randoms.Init();
 	GetRandoms_( Randoms );
@@ -1345,6 +1433,12 @@ qRB
 	Writer.Init( Output, xml::oIndent, xml::e_None );
 
 	Writer.PushTag( "Picking" );
+
+	NS.Init( "xmlns:" );
+	NS.Append( Namespace_ );
+	NS.Truncate();
+
+	Writer.PutAttribute( "xmlns:dpk", "http://q37.info" );
 
 	Writer.PushTag( "Misc" );
 
@@ -1373,7 +1467,7 @@ qRB
 
 	Writer.PushTag( "Session" );
 	Writer.PushTag( "MaxDuration" );
-	Writer.PutValue( bso::Convert( SessionMaxDuration ) );
+	xml::PutValue( SessionMaxDuration, Writer );
 	Writer.PopTag();
 	Writer.PopTag();
 	Writer.PopTag();
@@ -1473,15 +1567,16 @@ void LaunchCommand_(
 {
 qRH
 	str::string CompleteCommand;
-	TOL_CBUFFER___ Buffer;
+	TOL_CBUFFER___ SBuffer;
+	bso::integer_buffer__ IBuffer;
 qRB
 	if ( ( Command.Amount() != 0 ) && ( OutputFileName.Amount() != 0 ) ) {
 		CompleteCommand.Init( Command );
 		tagsbs::SubstituteShortTag( CompleteCommand, 1, OutputFileName, '$' );
-		tagsbs::SubstituteShortTag( CompleteCommand, 2, str::string( bso::Convert( Id ) ), '$' );
+		tagsbs::SubstituteShortTag( CompleteCommand, 2, str::string( bso::Convert( Id, IBuffer ) ), '$' );
 		tagsbs::SubstituteShortTag( CompleteCommand, 3, Label, '$' );
 		COut << "Launching '" << CompleteCommand << "\'." << txf::nl << txf::commit;
-		if ( tol::System( CompleteCommand.Convert( Buffer ) ) == -1 )
+		if ( tol::System( CompleteCommand.Convert( SBuffer ) ) == -1 )
 			qRLbr();
 	}
 
@@ -1495,9 +1590,11 @@ static void DumpContext_(
 	const dpkctx::context_ &Context,
 	xml::writer_ &Writer )
 {
+	tol::buffer__ Buffer;
+
 	Writer.PushTag( "Context" );
 	Writer.PutAttribute( "Target", NAME_LC );
-	Writer.PutAttribute( "TimeStamp", tol::DateAndTime() );
+	Writer.PutAttribute( "TimeStamp", tol::DateAndTime( Buffer ) );
 
 	Dump( Context, Writer );
 
@@ -1506,7 +1603,7 @@ static void DumpContext_(
 
 static void DumpContextWithoutBackup_(
 	const dpkctx::context_ &Context,
-	const char *FileName )
+	const str::string_ &FileName )
 {
 qRH
 	flf::file_oflow___ FFlow;
@@ -1529,7 +1626,7 @@ qRE
 
 static void DumpContext_(
 	const dpkctx::context_ &Context,
-	const char *FileName )
+	const str::string_ &FileName )
 {
 qRH
 	bso::bool__ Backuped = false;
@@ -1593,7 +1690,7 @@ qRE
 }
 
 static void RetrieveContext_(
-	const char *FileName,
+	const str::string_ &FileName,
 	dpkctx::context_ &Context )
 {
 qRH
@@ -1623,7 +1720,6 @@ void Process_( void )
 {
 qRH
 	str::string DataFileName;
-	TOL_CBUFFER___ Buffer;
 	data Data;
 	dpkctx::context Context;
 	str::string OutputFileName;
@@ -1635,6 +1731,13 @@ qRH
 	str::string Label;
 	id__ Id = 0;
 qRB
+	Namespace_.Init();
+	sclmisc::MGetValue( registry::Namespace, Namespace_ );
+	Namespace_.Append( ':' );
+
+	Automat_.Init();
+	FillAutomat_();
+
 	Id = sclmisc::OGetUInt( registry::Id, ALL );
 
 	switch ( Id ) {
@@ -1664,10 +1767,10 @@ qRB
 		sclmisc::ReportAndAbort( _( ContextFileNotSpecifiedError ) );
 
 	Context.Init();
-	RetrieveContext_( ContextFileName.Convert( Buffer ), Context );
+	RetrieveContext_( ContextFileName, Context );
 
 	Data.Init();
-	RetrieveData_( DataFileName.Convert( Buffer ), Data );
+	RetrieveData_( DataFileName, Data );
 
 	SessionMaxDuration = sclmisc::OGetUInt( registry::SessionMaxDuration, 0 );
 
@@ -1675,9 +1778,9 @@ qRB
 	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName );
 
 	Command.Init();
-	sclmisc::OGetValue( registry::Command, Command );
+	sclmisc::OGetValue( registry::Action, Command );
 
-	DumpContext_( Context, ContextFileName.Convert( Buffer ) );
+	DumpContext_( Context, ContextFileName );
 
 	LaunchCommand_( Command, Id, Label, OutputFileName );
 qRR

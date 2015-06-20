@@ -64,7 +64,7 @@ namespace sclerror {
 
 	typedef tht::thread_id__ tid__;
 
-	E_ROW( row__ );
+	qROW( row__ );
 
 	class error___
 	{

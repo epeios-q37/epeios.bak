@@ -92,7 +92,7 @@ Lorsque le fragment est disponible, c'est la taille total du fragment qui est st
 #define MMM2_FREE_FRAGMENT_FOOTER_MAX_SIZE	( MMM2_LINK_SIZE + 1 )
 
 namespace mmm {
-	E_ROW( row__ );
+	qROW( row__ );
 
 	typedef bso::ubyte__ addendum__;
 

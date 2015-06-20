@@ -70,7 +70,7 @@ namespace mscrmi {
 	typedef str::string_ data_;
 	typedef str::string	data;
 
-	E_ROW( row__ );
+	qROW( row__ );
 
 	typedef bso::ulong__ xaddress__;	// 'eXtended address'.
 										// 0 - 29 : adresse du paramtre.

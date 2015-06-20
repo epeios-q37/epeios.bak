@@ -45,14 +45,14 @@
 
 
 namespace strmrg { 
-	E_ROW( row__ );
+	qROW( row__ );
 
-	E_ROW( _irow__ );	// Item row.
+	qROW( _irow__ );	// Item row.
 
 # if 0	// Sinon VC++ perd les pdales lors de l'dition de liens...
 	namespace {
 # endif
-		E_ROW( _srow__);
+		qROW( _srow__);
 		typedef str::string_ _string_;
 		typedef ctn::E_MCONTAINERt_( _string_, _srow__ ) _strings_;
 		E_AUTO( _strings );

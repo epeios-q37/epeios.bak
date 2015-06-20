@@ -72,7 +72,7 @@ namespace dbsdct {
 	using dbsbsc::rrow__;
 	using dbsbsc::_cache_;
 
-	E_ROW( datum_row__ );
+	qROW( datum_row__ );
 
 	typedef tym::memory_<atom__, datum_row__> memory_;
 

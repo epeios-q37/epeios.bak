@@ -61,10 +61,10 @@
 
 namespace cgidat {
 	//t Row.
-	E_ROW( row__ );
+	qROW( row__ );
 
 	//t Content row.
-	E_ROW( content_row__ );
+	qROW( content_row__ );
 
 	//t Content.
 	typedef str::string_	content_;

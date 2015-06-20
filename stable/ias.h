@@ -59,7 +59,7 @@
 namespace ias {
 
 	//t The type of an index in the indexed multimemory.
-	E_ROW( index__ );
+	qROW( index__ );
 
 	// Prdclaration.
 	class indexed_aggregated_storage_;

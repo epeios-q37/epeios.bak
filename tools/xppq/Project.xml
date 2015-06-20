@@ -33,11 +33,11 @@
 	</SourceDirs>
 	<Files>
 		<Files Group="Doc" Path="Doc/">
-			<File Pack="yes">Compilation.pdf</File>
-			<File Pack="yes">Configuration.pdf</File>
-			<File Pack="yes">xppq.pdf</File>
-			<File Pack="yes">Directives.pdf</File>
-			<File Pack="yes">Manual.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/">Compilation.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/">Configuration.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/xppq/">Directives.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/" WikiOddity="IsHome">xppq.pdf</File>
+			<File Pack="yes" WikiDir="computing/epeios/tools/xppq/">Manual.pdf</File>
 		</Files>
 	</Files>
 	<PreprocessorDefinitions>

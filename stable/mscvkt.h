@@ -85,7 +85,7 @@ namespace mscvkt {
 		}
 	};
 
-	E_ROW( row__ );
+	qROW( row__ );
 
 	typedef bch::E_BUNCH__( row__, MSCVKP_LEVEL_MAX ) rows__;
 

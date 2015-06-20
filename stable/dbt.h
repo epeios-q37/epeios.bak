@@ -64,10 +64,10 @@ namespace dbt {
 	using btf::row__;
 
 	//t Row type for an internal node.
-	E_ROW( internal_row__ );	// Node with childrens (always 2).
+	qROW( internal_row__ );	// Node with childrens (always 2).
 
 	//t Row type for an external node.
-	E_ROW( external_row__ );	// Node without children.
+	qROW( external_row__ );	// Node without children.
 
 	enum type__ {
 		internal = 0,	// false

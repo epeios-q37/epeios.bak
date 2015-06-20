@@ -154,7 +154,7 @@ namespace rgstry {
 	typedef ctn::E_MCONTAINER_( value_ )	values_;
 	E_AUTO( values )
 
-	E_ROW( row__ );
+	qROW( row__ );
 	typedef bch::E_BUNCH_( row__ ) rows_;
 	E_AUTO( rows );
 
@@ -1412,7 +1412,7 @@ namespace rgstry {
 		}
 	};
 # endif
-	E_ROW( level__ );
+	qROW( level__ );
 #	define RGSTRY_UNDEFINED_LEVEL	qNIL
 	E_CDEF( level__, UndefinedLevel, qNIL );
 

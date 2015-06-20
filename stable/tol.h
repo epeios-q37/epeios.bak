@@ -420,7 +420,7 @@ public:\
 
 
 //d Create a new type for a row named 'Type'.
-# define E_ROW( Type )	E_TMIMIC__( sdr::row_t__, Type )
+# define qROW( Type )	E_TMIMIC__( sdr::row_t__, Type )
 
 /* Permet de transformer n arguments en 1; si un argument d'une macro
 a besoin de contenir une virgule, cette macro est l pour a.

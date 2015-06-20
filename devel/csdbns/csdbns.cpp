@@ -223,7 +223,7 @@ struct csdbns_repository_item__ {
 	void *UP;
 };
 
-E_ROW( rrow__ );
+qROW( rrow__ );
 
 static lstbch::E_LBUNCHt( csdbns_repository_item__, rrow__ ) Repository_;
 

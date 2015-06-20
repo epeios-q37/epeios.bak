@@ -12,6 +12,12 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-06-20 :
+- TOL
+	% 'E_ROW(...)' -> 'qROW(...)'
+- GLOBAL :
+	- Adaptation to changes in 'TOL'.
+
 2015-06-19 :
 - GLOBAL :
 	- Adaptation to modifications in 'CPE'.

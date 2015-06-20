@@ -74,7 +74,7 @@ namespace xmlelm {
 	typedef item_	name_;
 	typedef item		name;
 
-	E_ROW( erow__ );
+	qROW( erow__ );
 
 	typedef basic_<type__, erow__> element_tree_;
 	E_AUTO( element_tree );

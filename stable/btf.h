@@ -60,7 +60,7 @@ namespace btf {
 
 	using stk::bstack_;
 
-	E_ROW( row__ );
+	qROW( row__ );
 
 	//c Binary tree_filler.
 	template <typename r> class binary_tree_filler_

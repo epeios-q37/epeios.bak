@@ -182,7 +182,7 @@ namespace stk {
 	#define E_BSTACKt_( item, row )	bstack_< item, row >
 	#define E_BSTACKt( item, row )	bstack< item, row >
 
-	E_ROW( row__ );
+	qROW( row__ );
 
 	#define E_BSTACK_( item )	E_BSTACKt_( item, stk::row__ )
 	#define E_BSTACK( item )	E_BSTACKt( item, stk::row__ )

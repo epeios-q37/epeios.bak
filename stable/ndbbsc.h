@@ -59,13 +59,13 @@
 #include "bch.h"
 
 namespace ndbbsc {
-	E_ROW( rrow__ );	// 'Record row'.
+	qROW( rrow__ );	// 'Record row'.
 
 	typedef bch::E_BUNCH_( rrow__ ) rrows_;
 	E_AUTO( rrows );
 
 
-	E_ROW( crow__ );	// 'Cache row'.
+	qROW( crow__ );	// 'Cache row'.
 
 	typedef bso::char__ atom__;
 	typedef str::string_ datum_;

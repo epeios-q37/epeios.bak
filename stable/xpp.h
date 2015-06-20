@@ -213,7 +213,7 @@ namespace xpp {
 		void Init( const str::string_ &Namespace );
 	};
 
-	E_ROW( _rrow__ );	// Repository row.
+	qROW( _rrow__ );	// Repository row.
 
 	class _repository_
 	{
@@ -344,7 +344,7 @@ namespace xpp {
 
 	E_AUTO( _repository )
 
-	E_ROW( _vrow__ );	// Variable row.
+	qROW( _vrow__ );	// Variable row.
 
 	class _variables
 	{

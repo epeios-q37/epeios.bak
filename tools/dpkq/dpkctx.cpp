@@ -50,7 +50,7 @@ void Dump_(
 
 	while ( Row != qNIL ) {
 		Writer.PushTag( RECORD_TAG_NAME );
-		Writer.PutAttribute( RECORD_ID_ATTRIBUTE_NAME, bso::Convert( *Records.Get( Row ) ) );
+		xml::PutAttribute( RECORD_ID_ATTRIBUTE_NAME, *Records.Get( Row ), Writer );
 		Writer.PopTag();
 
 		Row = Records.Next( Row );
@@ -130,9 +130,9 @@ static void Dump_(
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( POOL_TAG_NAME );
-	Writer.PutAttribute( POOL_SESSION_AMOUNT_ATTRIBUTE_NAME, bso::Convert( SessionAmount) );
-	Writer.PutAttribute( POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME, bso::Convert( CycleAmount) );
-	Writer.PutAttribute( POOL_TIMESTAMP_ATTRIBUTE_NAME, bso::Convert( TimeStamp ) );
+	xml::PutAttribute( POOL_SESSION_AMOUNT_ATTRIBUTE_NAME, SessionAmount, Writer );
+	xml::PutAttribute( POOL_CYCLE_AMOUNT_ATTRIBUTE_NAME, CycleAmount, Writer );
+	xml::PutAttribute( POOL_TIMESTAMP_ATTRIBUTE_NAME, TimeStamp, Writer );
 	Dump_( Pool, Writer );
 	Writer.PopTag();
 }

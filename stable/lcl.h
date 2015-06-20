@@ -50,8 +50,8 @@ namespace lcl {
 	using str::strings_;
 	using str::strings;
 
-	E_ROW( vrow__ );	// 'value row'.
-	E_ROW( brow__ );	// 'basic row'.
+	qROW( vrow__ );	// 'value row'.
+	qROW( brow__ );	// 'basic row'.
 
 	typedef ctn::E_MCONTAINERt_( str::string_, vrow__ ) values_;
 	E_AUTO( values );
