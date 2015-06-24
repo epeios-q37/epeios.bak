@@ -49,7 +49,7 @@ bso::bool__ scltool::IgnoreUnknownArguments = false;
 str::string ParametersTag_;	// Voir tout en bas.
 
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
-static rgstry::entry___ ProjectFileName_( "ProjectFileName", sclrgstry::Parameters );
+static rgstry::entry___ ProjectFilename_( "ProjectFilename", sclrgstry::Parameters );
 
 static rgstry::entry___ &Arguments_ = sclrgstry::Arguments;
 #define ARGUMENT_TAG "Argument"
@@ -1483,7 +1483,7 @@ static int main_(
 {
 	int ExitValue = EXIT_SUCCESS;
 qRH
-	str::string ProjectFileName;
+	str::string ProjectFilename;
 	str::string Command;
 	str::string ProjectId;
 qRB
@@ -1491,13 +1491,13 @@ qRB
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
-	ProjectFileName.Init();
-	OGetValue( ProjectFileName_, ProjectFileName );
+	ProjectFilename.Init();
+	OGetValue( ProjectFilename_, ProjectFilename );
 
 	ProjectId.Init();
 
-	if ( ProjectFileName.Amount() != 0 )
-		sclmisc::LoadProject( ProjectFileName, ProjectId );
+	if ( ProjectFilename.Amount() != 0 )
+		sclmisc::LoadProject( ProjectFilename, ProjectId );
 
 	sclrgstry::FillSetupRegistry();
 

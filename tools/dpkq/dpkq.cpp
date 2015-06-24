@@ -170,6 +170,47 @@ typedef tables_	data_;
 E_AUTO( data )
 
 namespace {
+	str::string Namespace_;	// With tailing ':' !
+
+	E_ENUM( disc ) {	// '...riminant'.
+		dNone,	// No discriminant.
+		dTable,
+		dAliases,
+		dAlias,
+		dContent,
+		dRecord,
+		dInsertion,
+		d_amount,
+		d_Undefined
+	};
+
+#define C( disc )\
+	case d##disc:\
+		return #disc;\
+		break;
+
+	inline const char *GetLabel_( disc__ Disc )
+	{
+		switch ( Disc ) {
+		case dNone:
+			return "";
+			break;
+		C( Table );
+		C( Aliases );
+		C( Alias );
+		C( Content );
+		C( Record );
+		C( Insertion );
+		default:
+			qRGnr();
+			break;
+		}
+
+		return NULL;	// To avoid a 'warning'.
+	}
+
+#undef C
+
 	E_ENUM( item ) {
 		iDataTag,
 
@@ -177,6 +218,9 @@ namespace {
 		iTableLabelAttribute, 
 
 		iAliasesTag,
+		iAliasesLabelAttribute,
+		iAliasesTableLabelAttribute,
+		iAliasesTableAliasAttribute,
 
 		iAliasTag,
 		iAliasLabelAttribute,
@@ -202,69 +246,114 @@ namespace {
 		i_Undefined
 	};
 
-	stsfsm::automat Automat_;
-	str::string Namespace_;	// With tailing ':' !
+#define A( item, value, disc )\
+	case i##item:\
+		PrependNamespace = false;\
+		Disc = disc;\
+		return value;\
+		break;
 
-	void AddToAutomat_(
-		item__  Item,
-		const char *Value )
+#define ANS( item, value, disc )\
+	case i##item:\
+		PrependNamespace = true;\
+		Disc = disc;\
+		return value;\
+		break;
+
+	const char *GetBaseLabel_(
+		item__ Item,
+		bso::bool__ &PrependNamespace,
+		disc__ &Disc )
 	{
-		stsfsm::Add( Value, Item, Automat_ );
+		switch ( Item ) {
+		ANS( DataTag, "data", dNone );
+
+		ANS( TableTag, "table", dNone );
+		A( TableLabelAttribute, "label", dTable );
+
+		ANS( AliasesTag, "aliases", dNone );
+		A( AliasesLabelAttribute, "label", dAliases );
+		A( AliasesTableLabelAttribute, "TableLabel", dAliases );
+		A( AliasesTableAliasAttribute, "TableAlias", dAliases );
+
+		ANS( AliasTag, "alias", dNone );
+		A( AliasLabelAttribute, "label", dAlias );
+		A( AliasTableLabelAttribute, "TableLabel", dAlias );
+		A( AliasTableAliasAttribute, "TableAlias", dAlias );
+		A( AliasRecordLabelAttribute, "RecordLabel", dAlias );
+
+		ANS( ContentTag, "content", dNone );
+		A( ContentDefaultRecordLabelTagAttribute, "DefaultRecordLabelTag", dContent );
+
+		ANS( RecordLabelAttribute, "label", dRecord );
+		ANS( RecordHandlingAttribute, "Handling", dRecord );
+		A( RecordHandlingAttributeIgnoreValue, "Ignore", dNone );
+		A( RecordHandlingAttributeSkipValue, "Skip", dNone );
+
+		ANS( InsertionTag, "insert", dNone );
+		A( InsertionTableLabelAttribute, "TableLabel", dInsertion );
+		A( InsertionRecordLabelAttribute, "RecordLabel", dInsertion );
+		A( InsertionTableAliasAttribute, "TableAlias", dInsertion );
+		A( InsertionRecordAliasAttribute, "RecordAlias", dInsertion );
+		default:
+			qRGnr();
+			break;
+		}
+
+		return NULL;	// To avoid a warning.
 	}
 
-	void AddToAutomatWithNS_(
-		item__  Item,
-		const char *Value )
+	const char *GetLabel_( item__ Item )
 	{
+		static TOL_CBUFFER___ Buffer;
 	qRH
-		str::string ValueWithNS;
+		disc__ Disc = d_Undefined;
+		str::string Label;
+		bso::bool__ PrependNamespace = false;
+		const char *BaseLabel = NULL;
 	qRB
-		ValueWithNS.Init( Namespace_ );
+		BaseLabel = GetBaseLabel_( Item, PrependNamespace, Disc );
 
-		ValueWithNS.Append( Value );
-		
-		stsfsm::Add( ValueWithNS, Item, Automat_ );
+		Label.Init( GetLabel_( Disc ) );
+
+		Label.Append('$');
+
+		if ( PrependNamespace )
+			Label.Append( Namespace_ );
+
+		Label.Append( BaseLabel );
+
+		Label.Convert( Buffer );
 	qRR
 	qRT
 	qRE
+		return Buffer;
 	}
 
-#define A( item, value )	AddToAutomat_( i##item, value )
-#define ANS( item, value )	AddToAutomatWithNS_( i##item, value )
+	stsfsm::automat Automat_;
 
 	void FillAutomat_( void )
 	{
-		ANS( DataTag, "data" );
-
-		ANS( TableTag, "table" );
-		A( TableLabelAttribute, "label" );
-
-		ANS( AliasesTag, "aliases" );
-
-		ANS( AliasTag, "alias" );
-		A( AliasLabelAttribute, "label" );
-		A( AliasTableLabelAttribute, "TableLabel" );
-		A( AliasTableAliasAttribute, "TableAlias" );
-		A( AliasRecordLabelAttribute, "RecordLabel" );
-
-		ANS( ContentTag, "content" );
-		A( ContentDefaultRecordLabelTagAttribute, "DefaultRecordLabelTag" );
-
-		ANS( RecordLabelAttribute, "label" );
-		ANS( RecordHandlingAttribute, "Handling" );
-		A( RecordHandlingAttributeIgnoreValue, "Ignore" );
-		A( RecordHandlingAttributeSkipValue, "Skip" );
-
-		ANS( InsertionTag, "insert" );
-		A( InsertionTableLabelAttribute, "TableLabel" );
-		A( InsertionRecordLabelAttribute, "RecordLabel" );
-		A( InsertionTableAliasAttribute, "TableAlias" );
-		A( InsertionRecordAliasAttribute, "RecordAlias" );
+		stsfsm::Fill( Automat_, i_amount, GetLabel_ );
 	}
 
-	item__ GetItemId_( const str::string_ &Pattern )
+	item__ GetItemId_(
+		disc__ Disc,
+		const str::string_ &Pattern )
 	{
-		return stsfsm::GetId( Pattern, Automat_, i_Undefined, i_amount );
+		item__ Item = i_Undefined;
+	qRH
+		str::string NormalizedPattern;
+	qRB
+		NormalizedPattern.Init( GetLabel_( Disc ) );
+		NormalizedPattern.Append( '$' );
+		NormalizedPattern.Append( Pattern );
+
+		Item = stsfsm::GetId( NormalizedPattern, Automat_, i_Undefined, i_amount );
+	qRR
+	qRT
+	qRE
+		return Item;
 	}
 }
 
@@ -430,7 +519,7 @@ static void InsertUsingRecordAlias_(
 {
 	sdr::row__ Row = qNIL;
 
-	Row = FindRecordAlias_( RecordAlias, Aliases );
+	Row = FindAlias( RecordAlias, Aliases );
 
 	if ( Row == qNIL )
 		ReportAndExit_( _( RecordAliasNotFoundError ), IFlow );
@@ -486,7 +575,7 @@ static void InsertUsingTableAlias_(
 {
 	sdr::row__ Row = qNIL;
 
-	Row = FindTableAlias_( TableAlias, Aliases );
+	Row = FindAlias( TableAlias, Aliases );
 
 	if ( Row == qNIL )
 		ReportAndExit_( _( TableAliasNotFoundError ), IFlow );
@@ -594,7 +683,7 @@ qRB
 			ReportAndExit_( _( TagNotAllowedHereError ), IFlow );
 			break;
 		case xml::tAttribute:
-			switch ( GetItemId_( Parser.AttributeName() ) ) {
+			switch ( GetItemId_( dInsertion, Parser.AttributeName() ) ) {
 			case iInsertionTableLabelAttribute:
 				Assign_( _( TableLabelWording ), Parser, IFlow, TableLabel );
 				break;
@@ -682,7 +771,7 @@ static void ProcessRecord_(
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfAttribute | xml::tfValue | xml::tfEndTag ) ) {
 		case xml::tStartTag:
 			if ( BelongsToNamespace_( Parser.TagName() ) ) {
-				if ( GetItemId_( Parser.TagName() ) == iInsertionTag )
+				if ( GetItemId_( dNone, Parser.TagName() ) == iInsertionTag )
 					ProcessInsertion_( Parser, IFlow, Aliases, Tables, Record );	// '...<erpck:insert ...
 				else																//                   ^
 					ReportAndExit_( _( ForbiddenTagError ), IFlow );
@@ -753,12 +842,12 @@ qRB
 			Record.Content.Append( Parser.DumpData() );
 			break;
 		case xml::tAttribute:
-			switch ( GetItemId_( Parser.AttributeName() ) ) {
+			switch ( GetItemId_( dRecord, Parser.AttributeName() ) ) {
 			case iRecordLabelAttribute:
 				Assign_( _( RecordLabelWording ), Parser, IFlow, Record.Label );
 				break;
 			case iRecordHandlingAttribute:
-				switch ( GetItemId_( Parser.Value() ) ) {
+				switch ( GetItemId_( dNone, Parser.Value() ) ) {
 				case iRecordHandlingAttributeSkipValue:
 					if ( Skipped == DPKBSC_COUNTER_MAX )
 						qRLmt();
@@ -773,6 +862,7 @@ qRB
 					ReportAndExit_( _( UnknownAttributeValueError ), IFlow );
 					break;
 				}
+				break;
 			default:
 				if ( BelongsToNamespace_( Parser.AttributeName() ) )
 					ReportAndExit_( _( UnknownAttributeError ), IFlow );
@@ -780,6 +870,7 @@ qRB
 					Record.Content.Append( Parser.DumpData() );
 				break;
 			}
+			break;
 		case xml::tStartTagClosed:
 			Record.Content.Append( " id=\"" );
 			Record.Content.Append( bso::Convert( Records.Amount() + 1, Buffer ) );
@@ -826,16 +917,16 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfAttribute | xml::tfStartTagClosed | xml::tfEndTag ) ) {
 		case xml::tAttribute:
-			if ( GetItemId_( Parser.TagName() ) != iContentTag )
+			if ( GetItemId_( dNone, Parser.TagName() ) != iContentTag )
 				qRGnr();
 
-			if ( GetItemId_( Parser.AttributeName() ) == iContentDefaultRecordLabelTagAttribute ) {
+			if ( GetItemId_( dContent, Parser.AttributeName() ) == iContentDefaultRecordLabelTagAttribute ) {
 				Assign_( _( DefaultRecordLabelTagWording ), Parser, IFlow, DefaultRecordLabelTag );
 			} else
 				ReportAndExit_( _( UnknownAttributeError ), IFlow );
 			break;
 		case xml::tStartTagClosed:
-			if ( GetItemId_( Parser.TagName() ) == iContentTag ) {
+			if ( GetItemId_( dNone, Parser.TagName() ) == iContentTag ) {
 				ProcessRecords_( Parser, IFlow, DefaultRecordLabelTag, Aliases, Tables, Table.Records, Table.Skipped() );	// '<ercp:content ...><...' -> '</erpck:content>...'
 				Continue = false;
 			}  else																						        			//                    ^                         ^
@@ -863,21 +954,23 @@ enum alias_type__ {
 	at_amount,
 	at_Undefined
 };
-// '...<erpck:alias ...>...' -> '...</alias>...'
+// '...<erpck:alias ...>...' -> '...</:alias>...'
 //                  ^                       ^
-static alias_type__ ProcessAlias_(
+static void ProcessAlias_(
 	xml::parser___ &Parser,
 	xpp::preprocessing_iflow___ &IFlow,
 	const table_aliases_ &TableAliases,
 	const tables_ &Tables,
-	record_alias_ &RecordAlias,
-	table_alias_ &TableAlias )
+	trow__ DefaultTableRow,
+	aliases_ &Aliases )
 {
-	alias_type__ AliasType = at_Undefined;
 qRH
 	bso::bool__ Continue = true;
+	alias_type__ AliasType = at_Undefined;
 	trow__ TableRow = qNIL;
 	rrow__ RecordRow = qNIL;
+	record_alias RecordAlias;
+	table_alias TableAlias;
 	str::string TableAliasLabel, TableLabel, RecordLabel, AliasLabel;
 qRB
 	TableAliasLabel.Init();
@@ -885,13 +978,16 @@ qRB
 	RecordLabel.Init();
 	AliasLabel.Init();
 
+	RecordAlias.Init();
+	TableAlias.Init();
+
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfStartTagClosed | xml::tfAttribute | xml::tfValue | xml::tfEndTag ) ) {
 		case xml::tStartTag:
 			ReportAndExit_( _( TagNotAllowedHereError ), IFlow );
 			break;
 		case xml::tAttribute:
-			switch ( GetItemId_(Parser.AttributeName() ) ) {
+			switch ( GetItemId_( dAlias, Parser.AttributeName() ) ) {
 			case iAliasTableAliasAttribute:
 				if ( TableLabel.Amount() != 0 )
 					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
@@ -920,9 +1016,11 @@ qRB
 				if ( ( TableRow = SearchTable( TableLabel, Tables ) ) == qNIL )
 					ReportAndExit_( _( TableNotFoundError ), IFlow );
 			} else if ( TableAliasLabel.Amount() != 0 ) {
-				if ( ( TableRow = SearchTable( TableAliasLabel, TableAliases ) ) == qNIL )
+				if ( ( TableRow = FindTable( TableAliasLabel, TableAliases ) ) == qNIL )
 					ReportAndExit_( _( TableNotFoundError ), IFlow );
-			} else
+			} else if ( DefaultTableRow != qNIL )
+				TableRow = DefaultTableRow;
+			else
 				ReportAndExit_( _( MissingTableReferenceError ), IFlow );
 
 			if ( AliasLabel.Amount() == 0 )
@@ -954,8 +1052,10 @@ qRB
 		case xml::tEndTag:
 			switch ( AliasType ) {
 			case atRecord:
+				Aliases.Records.Append( RecordAlias );
+				break;
 			case atTable:
-				Continue = false;
+				Aliases.Tables.Append( TableAlias );
 				break;
 			case at_Undefined:
 				ReportAndExit_( _( IncompleteAliasDefinitionError ), IFlow );
@@ -964,6 +1064,7 @@ qRB
 				qRGnr();
 				break;
 			}
+			Continue = false;
 			break;
 		case xml::t_Error:
 			ReportAndExit_( IFlow );
@@ -976,7 +1077,88 @@ qRB
 qRR
 qRT
 qRE
-	return AliasType;
+}
+
+static void ProcessGenericAlias_(
+	const records_ &Records,
+	trow__ TableRow,
+	const str::string_ &GenericAliasLabel,
+	const str::strings_ &CommonTags,
+	const str::strings_ &CommonValues,
+	xpp::preprocessing_iflow___ &IFlow,
+	record_aliases_ &Aliases )
+{
+qRH
+	record_alias Alias;
+	ctn::E_CITEMt( record_, rrow__ ) Record;
+	rrow__ Row = qNIL;
+	str::string AliasLabel;
+	str::strings Tags, Values;
+	bso::integer_buffer__ Buffer;
+qRB
+	Tags.Init();
+	Tags = CommonTags;
+
+	Tags.Append(str::string( "RI" ) );
+	Tags.Append( str::string( "RL" ) );
+
+	Row = Records.First();
+	Record.Init( Records );
+
+	while ( Row != qNIL ) {
+		Values.Init();
+		Values = CommonValues;
+
+		Values.Append(str::string(  bso::Convert( *Row + 1, Buffer ) ) );
+		Values.Append( Record( Row ).Label );
+
+		AliasLabel.Init();
+		AliasLabel = GenericAliasLabel;
+
+		if ( !tagsbs::SubstituteLongTags( AliasLabel, Tags, Values ) )
+			ReportAndExit_( _( BadGenericRecordLabelAlias ), IFlow );
+
+		if ( AliasLabel == GenericAliasLabel )
+			ReportAndExit_( _( BadGenericRecordLabelAlias ), IFlow );
+
+		Alias.Init( AliasLabel, TableRow, Row );
+		dpkals::Store( Alias, Aliases );
+
+		Row = Records.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
+static void ProcessGenericAlias_(
+	trow__ TableRow,
+	const str::string_ &GenericAliasLabel,
+	const tables_ &Tables,
+	xpp::preprocessing_iflow___ &IFlow,
+	record_aliases_ &Aliases )
+{
+qRH
+	ctn::E_CITEMt( table_, trow__ ) Table;
+	str::strings Tags, Values;
+	bso::integer_buffer__ Buffer;
+qRB
+	Tags.Init();
+	Values.Init();
+
+	Tags.Append(str::string("TI" ) );
+	Values.Append( str::string( bso::Convert( *TableRow + 1, Buffer ) ) );
+
+	Table.Init( Tables );
+
+	Tags.Append(str::string("TL" ) );
+	Values.Append( Table( TableRow ).Label );
+
+
+	ProcessGenericAlias_( Table( TableRow ).Records, TableRow, GenericAliasLabel, Tags, Values, IFlow, Aliases );
+qRR
+qRT
+qRE
 }
 
  // '<erpck:table ...>...<erpck:aliases ...>...'
@@ -989,31 +1171,59 @@ qRE
 {
 qRH
 	bso::bool__ Continue = true;
-	record_alias RecordAlias;
-	table_alias TableAlias;
+	str::string TableAliasLabel, TableLabel, GenericAliasLabel;
+	trow__ TableRow = qNIL;
 qRB
-	while ( Continue ) {
-		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag ) ) {
-		case xml::tStartTag:
-			if ( GetItemId_( Parser.TagName() ) == iAliasTag ) {
-				RecordAlias.Init();
-				TableAlias.Init();
+	TableAliasLabel.Init();
+	TableLabel.Init();
+	GenericAliasLabel.Init();
 
-				switch ( ProcessAlias_( Parser, IFlow, Aliases.Tables, Tables, RecordAlias, TableAlias ) ) {	// '...<erpck:alias ...>...' -> '...</alias>...'
-				case atRecord:																					//                  ^                       ^
-					Aliases.Records.Append( RecordAlias );
-					break;
-				case atTable:
-					Aliases.Tables.Append( TableAlias );
-					break;
-				default:
-					qRGnr();
-					break;
-				}
-			} else
+	while ( Continue ) {
+		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag | xml::tfAttribute) ) {
+		case xml::tStartTag:
+			if ( GetItemId_( dNone, Parser.TagName() ) == iAliasTag )
+				ProcessAlias_( Parser, IFlow, Aliases.Tables, Tables, TableRow, Aliases );	// '...<erpck:alias ...>...' -> '...</:alias>...'
+			else
 				ReportAndExit_( _( UnknownTagError ), IFlow );
 			break;
+		case xml::tAttribute:
+			switch ( GetItemId_( dAliases, Parser.AttributeName() ) ) {
+			case iAliasesTableAliasAttribute:
+				if ( TableLabel.Amount() != 0 )
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
+
+				Assign_( _( TableAliasWording ), Parser, IFlow, TableAliasLabel );
+
+				if ( ( TableRow = FindTable( TableAliasLabel, Aliases.Tables ) ) == qNIL )
+					ReportAndExit_( _( TableNotFoundError ), IFlow );
+
+				break;
+			case iAliasesTableLabelAttribute:
+				if ( TableAliasLabel.Amount() != 0 )
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
+
+				Assign_( _( TableAliasWording ), Parser, IFlow, TableLabel );
+
+				if ( ( TableRow = SearchTable( TableLabel, Tables ) ) == qNIL )
+					ReportAndExit_( _( TableNotFoundError ), IFlow );
+				break;
+			case iAliasesLabelAttribute:
+				Assign_( _( AliasLabelWording ), Parser, IFlow, GenericAliasLabel );
+				break;
+			default:
+				ReportAndExit_( _( UnknownAttributeError ), IFlow );
+				break;
+			}
+			break;
 		case xml::tEndTag:
+			if ( GenericAliasLabel.Amount() != 0 ) {
+				if ( TableRow == qNIL )
+					ReportAndExit_( _( MissingTableReferenceError ), IFlow );
+
+				ProcessGenericAlias_( TableRow, GenericAliasLabel, Tables, IFlow, Aliases.Records );
+			}
+
+
 			Continue = false;
 			break;
 		case xml::t_Error:
@@ -1046,7 +1256,7 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfStartTagClosed | xml::tfAttribute | xml::tfEndTag ) ) {
 		case xml::tStartTag:
-			switch ( GetItemId_( Parser.TagName() ) ) {
+			switch ( GetItemId_( dNone, Parser.TagName() ) ) {
 			case iAliasesTag:
 				ProcessAliases_( Parser, IFlow, Tables, Aliases );	// '<erpck:table ...>...<erpck:aliases ...>...'
 				break;
@@ -1063,9 +1273,9 @@ qRB
 				ReportAndExit_( _( MissingTableLabelError ), IFlow );
 			break;
 		case xml::tAttribute:
-			if ( GetItemId_( Parser.TagName() ) != iTableTag )
+			if ( GetItemId_( dNone, Parser.TagName() ) != iTableTag )
 				qRGnr();
-			else if ( GetItemId_( Parser.AttributeName() ) ==  iTableLabelAttribute )
+			else if ( GetItemId_( dTable, Parser.AttributeName() ) ==  iTableLabelAttribute )
 				Assign_( _( TableLabelWording ), Parser, IFlow, Table.Label );
 			else
 				ReportAndExit_( _( UnknownAttributeError ), IFlow );
@@ -1101,7 +1311,7 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfEndTag ) ) {
 		case xml::tStartTag:
-			if ( GetItemId_( Parser.TagName() ) == iTableTag ) {
+			if ( GetItemId_( dNone, Parser.TagName() ) == iTableTag ) {
 				TableDetected = true;
 				Table.Init();
 				ProcessTable_( Parser, IFlow, Table, Data );	// '...<erpck::table ...><erpck:content>...' -> '....</erpck:table>...'
@@ -1161,7 +1371,7 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTagClosed |xml::tfAttribute ) ) {
 		case xml::tStartTagClosed:
-			if ( ( GetItemId_( Parser.TagName() ) == iDataTag ) ) {
+			if ( ( GetItemId_( dNone, Parser.TagName() ) == iDataTag ) ) {
 				ProcessData_( Parser, IFlow, Data );	// '...<erpck:data><erpck:table ...>' -> '...</erpck:table>...'
 				DataDetected = true;					//                 ^                                       ^
 			} else {
@@ -1304,10 +1514,6 @@ qRB
 		DisplayAll_( Records, Writer );
 	} else {
 		if ( Id == 0 ) {
-/*
-			tol::InitializeRandomGenerator();
-			Row = Records.First( rand() % Records.Amount() );
-*/
 			do
 				Row = Context.Pick( Records.Amount(), SessionMaxDuration );
 			while ( Record( Row ).GetSkip() && ( --Counter ) );
@@ -1559,24 +1765,24 @@ qRE
 	return Id;
 }
 
-void LaunchCommand_(
-	const str::string_ &Command,
+void LaunchScript_(
+	const str::string_ &Script,
 	id__ Id,
 	const str::string_ &Label,
 	const str::string_ &OutputFileName )
 {
 qRH
-	str::string CompleteCommand;
+	str::string CompleteScript;
 	TOL_CBUFFER___ SBuffer;
 	bso::integer_buffer__ IBuffer;
 qRB
-	if ( ( Command.Amount() != 0 ) && ( OutputFileName.Amount() != 0 ) ) {
-		CompleteCommand.Init( Command );
-		tagsbs::SubstituteShortTag( CompleteCommand, 1, OutputFileName, '$' );
-		tagsbs::SubstituteShortTag( CompleteCommand, 2, str::string( bso::Convert( Id, IBuffer ) ), '$' );
-		tagsbs::SubstituteShortTag( CompleteCommand, 3, Label, '$' );
-		COut << "Launching '" << CompleteCommand << "\'." << txf::nl << txf::commit;
-		if ( tol::System( CompleteCommand.Convert( SBuffer ) ) == -1 )
+	if ( ( Script.Amount() != 0 ) && ( OutputFileName.Amount() != 0 ) ) {
+		CompleteScript.Init( Script );
+		tagsbs::SubstituteShortTag( CompleteScript, 1, OutputFileName, '$' );
+		tagsbs::SubstituteShortTag( CompleteScript, 2, str::string( bso::Convert( Id, IBuffer ) ), '$' );
+		tagsbs::SubstituteShortTag( CompleteScript, 3, Label, '$' );
+		COut << "Launching '" << CompleteScript << "\'." << txf::nl << txf::commit;
+		if ( tol::System( CompleteScript.Convert( SBuffer ) ) == -1 )
 			qRLbr();
 	}
 
@@ -1724,13 +1930,17 @@ qRH
 	dpkctx::context Context;
 	str::string OutputFileName;
 	str::string XSLFileName;
-	str::string Command;
+	str::string Script;
 	str::string ContextFileName;
 	bso::uint__ SessionMaxDuration = 0;
 	bso::bool__ Error = false;
 	str::string Label;
 	id__ Id = 0;
+	unsigned long Test;
+	bso::integer_buffer__ TBuffer;
 qRB
+	bso::Convert( Test, TBuffer );
+
 	Namespace_.Init();
 	sclmisc::MGetValue( registry::Namespace, Namespace_ );
 	Namespace_.Append( ':' );
@@ -1777,12 +1987,12 @@ qRB
 	Label.Init();
 	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName );
 
-	Command.Init();
-	sclmisc::OGetValue( registry::Action, Command );
+	Script.Init();
+	sclmisc::OGetValue( registry::Script, Script );
 
 	DumpContext_( Context, ContextFileName );
 
-	LaunchCommand_( Command, Id, Label, OutputFileName );
+	LaunchScript_( Script, Id, Label, OutputFileName );
 qRR
 qRT
 qRE

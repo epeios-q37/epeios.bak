@@ -12,6 +12,15 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-06-24 :
+- BSO :
+	- Adding specific 'Convert(...)' function from '(unsigned) long', to resolve some ambiguity.
+	- Removing some Darwin-related 'Convert(...)', which should be obsoleted by previous 'Convert(...)'.
+
+2015-06-23 :
+- SCLTOOL :
+	- 'ProjectFileName' ->'ProjectFilename'
+
 2015-06-20 :
 - TOL
 	% 'E_ROW(...)' -> 'qROW(...)'

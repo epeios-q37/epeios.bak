@@ -21,7 +21,7 @@
 
 using namespace dpkals;
 
-trow__ dpkals::SearchTable(
+trow__ dpkals::FindTable(
 	const str::string_ &Label,
 	const table_aliases_ &Aliases )
 {

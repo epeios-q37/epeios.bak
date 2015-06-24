@@ -65,8 +65,6 @@ namespace dpkbsc {
 	{
 		return BaseSearch<container, ctn::E_CMITEMt( item, row ), row >( Label, Container );
 	}
-
-
 };
 
 #endif

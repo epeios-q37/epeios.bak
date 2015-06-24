@@ -259,7 +259,7 @@ rrow__ dpkctx::context_::Pick(
 	rrow__ Row = qNIL;
 qRH
 	grid Grid;
-	amount__ Applicaple = 0;
+	amount__ ToExclude = 0;	// Amount of last picked records to exclude.
 qRB
 	Grid.Init();
 	Grid.Allocate( Amount );
@@ -275,14 +275,17 @@ qRB
 	if ( S_.Cycle >= Amount )
 		S_.Cycle = 0;
 
-	Applicaple = Amount / 3;
+	ToExclude = Amount / 3;
 
-	Applicaple = ( Applicaple > S_.Session ? Applicaple : S_.Session );
+	ToExclude = ( ToExclude > S_.Session ? ToExclude : S_.Session );
 
-	Applicaple = ( Applicaple > S_.Cycle ? Applicaple : S_.Cycle );
+	ToExclude = ( ToExclude > S_.Cycle ? ToExclude : S_.Cycle );
+
+	if ( ( S_.Cycle == 0) && ( S_.Session == 0 ) )
+		ToExclude = 0;
 
 	if ( Pool.Amount() != 0 )
-		Pool.Remove( Pool.First(), Pool.Amount() - Remove_( Pool, Applicaple, Amount, Grid ) );
+		Pool.Remove( Pool.First(), Pool.Amount() - Remove_( Pool, ToExclude, Amount, Grid ) );
 
 	Row = Pick_( Grid );
 

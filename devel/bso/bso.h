@@ -259,6 +259,26 @@ namespace bso {
 #endif
 
 
+# if ULONG_MAX == UINT_MAX
+	inline const char *Convert(
+		unsigned long Value,
+		bso::integer_buffer__ &Buffer )
+	{
+		return Convert( (unsigned int)Value, Buffer );
+	}
+# elif ULONG_MAX == ULLONG_MAX
+	inline const char *Convert(
+		unsigned long Value,
+		bso::integer_buffer__ &Buffer )
+	{
+		return Convert( (unsigned long long)Value, Buffer );
+	}
+# else
+#  error
+# endif
+
+
+
 // Non utilisation de 'E_CDEF', car l'incusion de 'tol.h' pose problème.
 // 'natural signed integer'
 # ifdef BSO__64
@@ -447,6 +467,7 @@ namespace bso {
 	}
 #endif
 
+# if 0
 # ifdef CPE_S_DARWIN
 	inline const char *Convert(
 		size__ Value,
@@ -462,6 +483,26 @@ namespace bso {
 	}
 #  endif
 # endif
+#endif
+
+# if LONG_MAX == INT_MAX
+	inline const char *Convert(
+		long Value,
+		bso::integer_buffer__ &Buffer )
+	{
+		return Convert( (int)Value, Buffer );
+	}
+# elif LONG_MAX == LLONG_MAX
+	inline const char *Convert(
+		long Value,
+		bso::integer_buffer__ &Buffer )
+	{
+		return Convert( (long long)Value, Buffer );
+	}
+# else
+#  error
+# endif
+
 
 
 # define BSO_DINT_SIZE_MAX ( ( ( 8 * sizeof( bso::int__ ) ) / 7 ) + 1 )

@@ -190,21 +190,35 @@ namespace dpkals {
 
 	E_AUTO( aliases )
 
-	inline sdr::row__ FindRecordAlias_(
+	inline sdr::row__ FindAlias(
 		const str::string_ &Label,
 		const record_aliases_ &Aliases )
 	{
 		return SearchInMono<record_aliases_, record_alias_, sdr::row__>( Label, Aliases );
 	}
 
-	inline sdr::row__ FindTableAlias_(
+	inline sdr::row__ FindAlias(
 		const str::string_ &Label,
 		const table_aliases_ &Aliases )
 	{
 		return SearchInMono<table_aliases_, table_alias_, sdr::row__>( Label, Aliases );
 	}
 
-	trow__ SearchTable(
+	inline sdr::row__ Store(
+		const record_alias_ &Alias,
+		record_aliases_ &Aliases )
+	{
+		sdr::row__ Row = FindAlias( Alias.Label, Aliases );
+
+		if ( Row != qNIL )
+			Aliases.Store( Alias, Row );
+		else
+			Row = Aliases.Append( Alias );
+
+		return Row;
+	}
+
+	trow__ FindTable(
 		const str::string_ &Label,
 		const table_aliases_ &Aliases );
 };
