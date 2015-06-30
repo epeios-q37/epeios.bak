@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="dpkq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xcfg"/>
+		<Parameters>
+			<Language>en</Language>
+			<!-- Default command -->
+			<Command>Process</Command>
+			<Namespace>
+				<Label>dpk</Label>
+				<URI>http://q37.info/ns/dpk/</URI>
+			</Namespace>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="Locale"/>
+			<!--Commands-->
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Traite les données.</Translation>
+				<Translation language="en">Process data.</Translation>
+			</Translations>
+			<!-- Flags -->
+			<!-- Options -->
+			<Translations text="NamespaceOptionDescription">
+				<Translation language="fr">Espace de nom à utiliser.</Translation>
+				<Translation language="en">Namespace to use.</Translation>
+			</Translations>
+			<Translations text="NamespaceOptionLabel">
+				<Translation language="fr">ns</Translation>
+				<Translation language="en">ns</Translation>
+			</Translations>
+			<!-- Arguments -->
+			<Translations text="ProjectFilenameArgumentDescription">
+				<Translation language="fr">Nom du fichier projet.</Translation>
+				<Translation language="en">Project file name.</Translation>
+			</Translations>
+			<Translations text="ProjectFilenameArgumentLabel">
+				<Translation language="fr">projet</Translation>
+				<Translation language="en">project</Translation>
+			</Translations>
+			<Translations text="IdArgumentDescription">
+				<Translation language="fr">Identifiant de fiche ('0': toutes; absent: fiche aléatoire).</Translation>
+				<Translation language="en">Record id ('0': all records; missing: random record).</Translation>
+			</Translations>
+			<Translations text="IdArgumentLabel">
+				<Translation language="fr">id</Translation>
+				<Translation language="en">id</Translation>
+			</Translations>
+		</Locale>
+		<Arguments>
+			<xpp:expand select="Arguments"/>
+			<!-- Commands -->
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="[%NamespaceOption%] %ProjectFilenameArgument% [%IdArgument%]"/>
+			<!-- Flags -->
+			<!-- Options -->
+			<Argument id="NamespaceOption" Description="NamespaceOptionDescription" long="namespace" short="n" Path="Namespace/Label" Label="NamespaceOptionLabel"/>
+			<!-- Arguments -->
+			<Argument id="ProjectFilenameArgument" Description="ProjectFilenameArgumentDescription" Label="ProjectFilenameArgumentLabel" Path="ProjectFilename"/>
+			<Argument id="IdArgument" Description="IdArgumentDescription" Label="IdArgumentLabel" Path="Id"/>
+			<Layouts>
+				<Layout command="Process">
+					<Link index="0" Target="ProjectFilenameArgument"/>
+					<Link index="1" Target="IdArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>
