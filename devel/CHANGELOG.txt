@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-06-30
+- BSO :
+	% Fixing g++ complainig about ambiguous 'Convert(...)' functions when compiling in 64 bits.
+
 2015-06-28 :
 - TAGSBS :
 	% Introducing 'tvalues(_)' and related functions.
