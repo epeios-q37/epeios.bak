@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Projects>
+	<Project target="dpkq">
+		<Parameters>
+			<xpp:expand xmlns:xpp="http://q37.info/ns/xpp/" href="common.xprj"/>
+			<Data>Composers.xml</Data>
+			<XSL>Composers.xsl</XSL>
+			<Context>.Composers.xml</Context>
+			<SessionMaxDuration>600</SessionMaxDuration>
+		</Parameters>
+	</Project>
+</Projects>

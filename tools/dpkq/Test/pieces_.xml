@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:dpk="http://q37.info/ns/dpk" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:expand href="collections_.xml"/>
+	<dpk:table label="Pieces">
+		<dpk:aliases label="%RL%" TableLabel="Composers"/>
+		<dpk:aliases label="%RL%" TableLabel="Collections"/>
+		<dpk:aliases label="%RL%" TableLabel="Instrumentations"/>
+		<dpk:content DefaultRecordLabelTag="Title">
+			<Piece dpk:label="AnymoreH">
+				<dpk:insert RecordAlias="Jazz Hammond"/>
+				<Title>Don't Get Around Much Anymore</Title>
+			</Piece>
+			<Piece dpk:label="Arabesque">
+				<dpk:insert RecordAlias="Arabesques"/>
+				<Title>Première arabesque</Title>
+			</Piece>
+			<Piece>
+				<dpk:insert RecordAlias="Lyriques 12"/>
+				<Title>Arietta</Title>
+				<Number Type="Extern">1</Number>
+			</Piece>
+			<Piece dpk:label="BWV565">
+				<dpk:insert RecordAlias="Bach JS"/>
+				<dpk:insert RecordAlias="Classical"/>
+				<Title>Toccata et Fugue en ré mineur</Title>
+				<Opus Catalogue="BWV">565</Opus>
+			</Piece>
+			<Piece dpk:label="BWV593">
+				<dpk:insert RecordAlias="Bach JS"/>
+				<dpk:insert RecordAlias="Classical"></dpk:insert>
+				<Title>Concerto à 2 claviers et pédale</Title>
+				<SubTitle>d'aprés Antonio Vivaldi</SubTitle>
+				<Opus Catalogue="BWV">593</Opus>
+			</Piece>
+			<Piece dpk:label="BWV596">
+				<dpk:insert RecordAlias="Bach JS"/>
+				<dpk:insert RecordAlias="Classical"></dpk:insert>
+				<Title>Concerto à 2 claviers et pédale</Title>
+				<SubTitle>d'aprés Antonio Vivaldi</SubTitle>
+				<Opus Catalogue="BWV">596</Opus>
+			</Piece>
+			<Piece dpk:label="Barcarolle">
+				<dpk:insert RecordAlias="Saisons"/>
+				<Title>Juin</Title>
+				<SubTitle>Barcarolle</SubTitle>
+				<Number Type="Extern">6</Number>
+			</Piece>
+			<Piece dpk:label="Brahms118-3">
+				<dpk:insert RecordAlias="Brahms118"/>
+				<Title>Ballade in G minor</Title>
+				<Number Type="Extern">3</Number>
+				<Comments/>
+			</Piece>
+			<Piece dpk:label="Chopin69-1">
+				<dpk:insert RecordAlias="Chopin69"/>
+				<Title>en la bémol majeur</Title>
+				<Number Type="Extern">1</Number>
+			</Piece>
+			<Piece dpk:label="Choral147" xmlns:xpp="http://zeusw.org/epeios/edbpck">
+				<dpk:insert RecordAlias="Bach JS"/>
+				<dpk:insert RecordAlias="Classical"/>
+				<Title>Cantate n°147 (extrait)</Title>
+				<SubTitle>Réjouis-toi, mon âme</SubTitle>
+			</Piece>
+			<Piece dpk:label="Consolation3">
+				<dpk:insert RecordAlias="Consolations"/>
+				<Title>Lento placido</Title>
+				<Number Type="Extern">3</Number>
+			</Piece>
+			<Piece dpk:label="Fantaisie385g">
+				<dpk:insert RecordAlias="Mozart"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Fantaisie en ré mineur</Title>
+				<Opus Catalogue="KV">397 (385g)</Opus>
+				<Comments>
+				</Comments>
+			</Piece>
+			<Piece dpk:label="FantasyPieces73">
+				<dpk:insert RecordAlias="Schumann"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Fantasiestücke</Title>
+				<Number>73</Number>
+			</Piece>
+			<Piece dpk:label="Golliwog">
+				<dpk:insert RecordAlias="Corner"/>
+				<Title>Golliwog's Cakewalk</Title>
+				<Number Type="Extern">VI</Number>
+			</Piece>
+			<Piece dpk:label="Gradus">
+				<dpk:insert RecordAlias="Corner"/>
+				<Title>Dr Gradus ad Parnassum</Title>
+				<Number Type="Extern">I</Number>
+			</Piece>
+			<Piece dpk:label="Infante">
+				<dpk:insert RecordAlias="Ravel"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Pavane pour une infante défunte</Title>
+			</Piece>
+			<Piece>
+				<dpk:insert RecordAlias="Fantaisies"/>
+				<Title>Intermezzo</Title>
+				<Number Type="Extern">2</Number>
+			</Piece>
+			<Piece dpk:label="Intermezzo4">
+				<dpk:insert RecordAlias="Faschingsschwank"/>
+				<Title>Intermezzo</Title>
+				<Number Type="Extern">IV</Number>
+			</Piece>
+			<Piece dpk:label="IpanemaP">
+				<dpk:insert RecordAlias="Piano bar"/>
+				<Title>The girl from Ipanema</Title>
+			</Piece>
+			<Piece dpk:label="Liebeslieder1">
+				<dpk:insert RecordAlias="Liebeslieder"/>
+				<Number Type="Embed">1</Number>
+			</Piece>
+			<Piece dpk:label="Liebeslieder13">
+				<dpk:insert RecordAlias="Liebeslieder"/>
+				<Number Type="Embed">13</Number>
+			</Piece>
+			<Piece dpk:label="Liebeslieder14">
+				<dpk:insert RecordAlias="Liebeslieder"/>
+				<Number Type="Embed">14</Number>
+			</Piece>
+			<Piece dpk:label="Lin">
+				<dpk:insert RecordAlias="Preludes 1"/>
+				<Title>La fille aux cheveux de lin</Title>
+				<Number Type="Extern">8</Number>
+			</Piece>
+			<Piece dpk:label="LullabyH">
+				<dpk:insert RecordAlias="Jazz Hammond"/>
+				<Title>Lullaby Of Birdland</Title>
+			</Piece>
+			<Piece dpk:label="Mazurka4">
+				<dpk:insert RecordAlias="Mazurkas 4"/>
+				<Title>Mazurka</Title>
+				<Number Type="Embed">4</Number>
+			</Piece>
+			<Piece dpk:label="Menuet">
+				<dpk:insert RecordAlias="Ravel"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Menuet Antique</Title>
+			</Piece>
+			<Piece dpk:label="MistyP">
+				<dpk:insert RecordAlias="Piano bar"/>
+				<Title>Misty</Title>
+			</Piece>
+			<Piece dpk:label="Notturno3">
+				<dpk:insert RecordAlias="Liebesträume"/>
+				<Title>Notturno</Title>
+				<Number Type="Embed">3</Number>
+			</Piece>
+			<Piece dpk:label="Nuptiale">
+				<dpk:insert RecordAlias="Mendelssohn"/>
+				<dpk:insert RecordAlias="Classical"/>
+				<Title>Marche nuptiale</Title>
+			</Piece>
+			<Piece dpk:label="OMS0042">
+				<dpk:insert RecordAlias="Simon"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Concertino n°1 pour piano</Title>
+				<SubTitle>flûte, hautbois et orchestre à cordes</SubTitle>
+			</Piece>
+			<Piece dpk:label="OpusOneH">
+				<dpk:insert RecordAlias="Big Band Hammond"/>
+				<Title>Opus One</Title>
+			</Piece>
+			<Piece dpk:label="Orientale">
+				<dpk:insert RecordAlias="Espagnoles"/>
+				<Title>Danse espagnole</Title>
+				<Number Type="Embed">2</Number>
+				<SubTitle>Orientale</SubTitle>
+			</Piece>
+			<Piece dpk:label="PJazzExercise2">
+				<dpk:insert RecordAlias="PJazzExercises"/>
+				<Title>N° 2</Title>
+			</Piece>
+			<Piece dpk:label="Pathetique">
+				<dpk:insert RecordAlias="Beethoven"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Sonate</Title>
+				<SubTitle>Pathétique</SubTitle>
+				<Number Type="Embed">8</Number>
+				<Opus>13</Opus>
+			</Piece>
+			<Piece>
+				<dpk:insert RecordAlias="Albumblätter"/>
+				<Title>Phantasietanz</Title>
+				<Number Type="Extern">5</Number>
+			</Piece>
+			<Piece dpk:label="Poucet">
+				<dpk:insert RecordAlias="Oye"/>
+				<Title>Petit Poucet</Title>
+			</Piece>
+			<Piece dpk:label="Prelude">
+				<dpk:insert RecordAlias="Ravel"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Prélude</Title>
+			</Piece>
+			<Piece dpk:label="Prelude3_2">
+				<dpk:insert RecordAlias="Rachmaninov"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Prélude en ut # mineur</Title>
+				<Number Type="Embed">2</Number>
+				<Opus>3</Opus>
+			</Piece>
+			<Piece dpk:label="RetJ">
+				<dpk:insert RecordAlias="Prokofiev"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Roméo et Juliette</Title>
+				<SubTitle>Dix pièces pour piano</SubTitle>
+				<Opus>75</Opus>
+			</Piece>
+			<Piece dpk:label="Rialto">
+				<dpk:insert RecordAlias="Gershwin"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Rialto Ripples Rag</Title>
+			</Piece>
+			<Piece dpk:label="Rondo511">
+				<dpk:insert RecordAlias="Mozart"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Rondo in A Minor</Title>
+				<Opus Catalogue="KV">511</Opus>
+			</Piece>
+			<Piece dpk:label="RsP3">
+				<dpk:insert RecordAlias="Romances"/>
+				<Title>Romance sans paroles</Title>
+				<Number Type="Embed">3</Number>
+			</Piece>
+			<Piece dpk:label="SatinDollP">
+				<dpk:insert RecordAlias="Piano bar"/>
+				<Title>Satin Doll</Title>
+				<Comments>
+				</Comments>
+			</Piece>
+			<Piece dpk:label="SentimentalP">
+				<dpk:insert RecordAlias="Piano bar"/>
+				<Title>In a sentimental mood</Title>
+				<Comments>
+				</Comments>
+			</Piece>
+			<Piece dpk:label="Sonate120-1">
+				<dpk:insert RecordAlias="Sonates120"/>
+				<Number Type="Embed">1</Number>
+			</Piece>
+			<Piece dpk:label="Sonate120-2">
+				<dpk:insert RecordAlias="Sonates120"/>
+				<Number Type="Embed">2</Number>
+			</Piece>
+			<Piece dpk:label="Sonatine">
+				<dpk:insert RecordAlias="Ravel"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Sonatine</Title>
+			</Piece>
+			<Piece dpk:label="Suffocation">
+				<dpk:insert RecordAlias="Preludes 28"/>
+				<Title>Prélude</Title>
+				<SubTitle>Suffocation</SubTitle>
+				<Number Type="Embed">4</Number>
+			</Piece>
+			<Piece dpk:label="Valse13">
+				<dpk:insert RecordAlias="Sentimentales"/>
+				<Title>Valse</Title>
+				<Number Type="Embed">13</Number>
+			</Piece>
+			<Piece dpk:label="Widor42">
+				<dpk:insert RecordAlias="Widor"/>
+				<dpk:insert RecordAlias="Classical"></dpk:insert>
+				<Title>Symphonie pour orgue nº 5</Title>
+				<Opus>42</Opus>
+			</Piece>
+		</dpk:content>
+	</dpk:table>
+</xpp:bloc>

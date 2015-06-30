@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:dpk="http://q37.info/ns/dpk" xmlns:xpp="http://q37.info/ns/xpp">
+	<dpk:table label="Composers">
+		<dpk:content DefaultRecordLabelTag="Surname">
+			<!-- Defining a 'dpk:label', because next record have the same 'Surname' value, hence, due to 'DefaultRecordLabelTag' above, would have the same label. -->
+			<Composer dpk:label="Bach JC">
+				<Surname>Bach</Surname>
+				<FirstNames>Johann Christian</FirstNames>
+			</Composer>
+			<!-- About 'dpk:label', see above. -->
+			<Composer dpk:label="Bach JS">
+				<Surname>Bach</Surname>
+				<FirstNames>Johann Sebastian</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Beethoven</Surname>
+				<FirstNames>Ludwig Van</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Brahms</Surname>
+				<FirstNames>Johannes</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Chopin</Surname>
+				<FirstNames>Frédéric</FirstNames>
+			</Composer>
+			<Composer >
+				<Surname>Debussy</Surname>
+				<FirstNames>Claude</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Fauré</Surname>
+				<FirstNames>Gabriel</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Gershwin</Surname>
+				<FirstNames>George</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Granados</Surname>
+				<FirstNames>Enrique</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Grieg</Surname>
+				<FirstNames>Edvard</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Liszt</Surname>
+				<FirstNames>Franz</FirstNames>
+			</Composer>
+			<!-- Defining 'dpk:label', to have a label for this record shorter as the default one. -->
+			<Composer dpk:label="Mendelssohn">
+				<Surname>Mendelssohn Bartholdy</Surname>
+				<FirstNames>Felix</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Mozart</Surname>
+				<FirstNames>Wolfgang Amadeus</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Perterson</Surname>
+				<FirstNames>Oscar</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Prokofiev</Surname>
+				<FirstNames>Sergueï</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Rachmaninov</Surname>
+				<FirstNames>Sergueï</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Ravel</Surname>
+				<FirstNames>Maurice</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Schubert</Surname>
+				<FirstNames>Franz</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Schumann</Surname>
+				<FirstNames>Robert</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Simon</Surname>
+				<FirstNames>Claude</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Tchaïkovski</Surname>
+				<FirstNames>Piotr Ilitch</FirstNames>
+			</Composer>
+			<Composer>
+				<Surname>Widor</Surname>
+				<FirstNames>Charles-Marie</FirstNames>
+			</Composer>
+		</dpk:content>
+	</dpk:table>
+</xpp:bloc>

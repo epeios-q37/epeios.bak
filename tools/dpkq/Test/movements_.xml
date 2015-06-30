@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:dpk="http://q37.info/ns/dpk" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:expand href="pieces_.xml"/>
+	<dpk:table label="Movements">
+		<dpk:aliases label="P %RL%" TableLabel="Pieces"/>
+		<dpk:content DefaultRecordLabelTag="Title">
+			<Movement dpk:label="BWV565T">
+				<dpk:insert RecordAlias="P BWV565"/>
+				<Title>Toccata</Title>
+			</Movement>
+			<Movement dpk:label="BWV565F">
+				<dpk:insert RecordAlias="P BWV565"/>
+				<Title>Fugue</Title>
+			</Movement>
+			<Movement dpk:label="BWV593_1">
+				<dpk:insert RecordAlias="P BWV593"/>
+				<Title>Allegro</Title>
+			</Movement>
+			<Movement dpk:label="BWV596_1">
+				<dpk:insert RecordAlias="P BWV596"/>
+				<Title>(Allegro)</Title>
+			</Movement>
+			<Movement dpk:label="BWV596_3">
+				<dpk:insert RecordAlias="P BWV596"/>
+				<Title>Fugue</Title>
+			</Movement>
+			<Movement dpk:label="FantasyPieces73_1">
+				<dpk:insert RecordAlias="P FantasyPieces73"/>
+				<Title>I. (Zart une mit Ausdruck)</Title>
+			</Movement>
+			<Movement dpk:label="PathetiqueRondo">
+				<dpk:insert RecordAlias="P Pathetique"/>
+				<Title>Rondo</Title>
+			</Movement>
+			<Movement dpk:label="RetJ9">
+				<dpk:insert RecordAlias="P RetJ"/>
+				<Title>Dance of the Girls with Lilies</Title>
+				<Number Type="Extern">9</Number>
+			</Movement>
+			<Movement dpk:label="Sonate120-1-1">
+				<dpk:insert RecordAlias="P Sonate120-1"/>
+				<Title>Allegro appassionato</Title>
+			</Movement>
+			<Movement dpk:label="Sonate120-2-1">
+				<dpk:insert RecordAlias="P Sonate120-2"/>
+				<Title>Allegro amabile</Title>
+			</Movement>
+			<Movement dpk:label="Sonatine2">
+				<dpk:insert RecordAlias="P Sonatine"/>
+				<Title>Mouvement de menuet</Title>
+				<Number Type="Extern">II</Number>
+			</Movement>
+			<Movement dpk:label="Widor42-5">
+				<dpk:insert RecordAlias="P Widor42"/>
+				<Title>Toccata</Title>
+				<Number Type="Extern">5</Number>
+			</Movement>
+		</dpk:content>
+	</dpk:table>
+</xpp:bloc>

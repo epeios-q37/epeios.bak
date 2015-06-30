@@ -206,6 +206,93 @@ namespace tagsbs {
 		const str::strings_ &Tags,
 		const str::strings_ &Values,
 		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
+
+		class tvalues_	// Tagged values.
+	{
+	public:
+		struct s {
+			str::strings_::s
+				Tags,
+				Values;
+		};
+		str::strings_
+			Tags,
+			Values;
+		tvalues_( s &S )
+			: Tags( S.Tags ),
+			  Values( S.Values )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			Tags.reset( P );
+			Values.reset( P );
+		}
+		void plug( qAS_ &AS )
+		{
+			Tags.plug( AS );
+			Values.plug( AS );
+		}
+		tvalues_ &operator =(const tvalues_ &TV)
+		{
+			Tags = TV.Tags;
+			Values = TV.Values;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Tags.Init();
+			Values.Init();
+		}
+		void Append(
+			const str::string_ &Tag,
+			const str::string_ &Value )
+		{
+			if ( Tags.Append( Tag ) != Values.Append( Value ) )
+				qRFwk();
+		}
+		void Append(
+			const char *Tag,
+			const char *Value )
+		{
+			Append(str::string(Tag), str::string( Value ) );
+		}
+		void Append(
+			const char *Tag,
+			const str::string_ &Value )
+		{
+			Append(str::string( Tag ), Value );
+		}
+	};
+
+	E_AUTO( tvalues );
+
+	inline bso::bool__ SubstituteLongTags(
+		flw::iflow__ &IFlow,
+		const tvalues_ &TaggedValues,
+		flw::oflow__ &OFlow,
+		char TagMarker = DefaultTagMarker )
+	{
+		return SubstituteLongTags( IFlow, TaggedValues.Tags, TaggedValues.Values, OFlow, TagMarker );
+	}
+
+	inline tol::E_XROW SubstituteLongTags(
+		const str::string_ &String,
+		const tvalues_ &TaggedValues,
+		str::string_ &Result,
+		char TagMarker = DefaultTagMarker)
+	{
+		return SubstituteLongTags( String, TaggedValues.Tags, TaggedValues.Values, Result, TagMarker );
+	}
+
+	inline tol::E_XROW SubstituteLongTags(
+		str::string_ &String,
+		const tvalues_ &TaggedValues,
+		char TagMarker = DefaultTagMarker)
+	{
+		return SubstituteLongTags( String, TaggedValues.Tags, TaggedValues.Values, TagMarker );
+	}
+
 }
 
 				  /********************************************/

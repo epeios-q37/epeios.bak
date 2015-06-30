@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-06-28 :
+- TAGSBS :
+	% Introducing 'tvalues(_)' and related functions.
+
 2015-06-24 :
 - BSO :
 	- Adding specific 'Convert(...)' function from '(unsigned) long', to resolve some ambiguity.

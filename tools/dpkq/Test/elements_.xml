@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:dpk="http://q37.info/ns/dpk" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:expand href="movements_.xml"/>
+	<dpk:table label="Elements">
+		<dpk:aliases label="P %RL%" TableLabel="Pieces"/>
+		<dpk:aliases label="M %RL%" TableLabel="Movements"/>
+		<dpk:content DefaultRecordLabelTag="Label">
+			<Element>
+				<dpk:insert RecordAlias="P Arabesque"/>
+				<Label>Arabesque</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Arietta"/>
+				<Label>Arietta</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Barcarolle"/>
+				<Label>Barcarolle</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M BWV565T"/>
+				<Label>BWV565T</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M BWV565F"/>
+				<Label>BWV565F</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M BWV596_1"/>
+				<Label>BWV596_1</Label>
+			</Element>
+			<Element dpk:Handling="Skip">
+				<dpk:insert RecordAlias="M BWV596_3"/>
+				<Label>BWV596_3</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Choral147"/>
+				<Label>Choral147</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Fantaisie385g"/>
+				<Label>Fantaisie385g</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Golliwog"/>
+				<Label>Golliwog</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Gradus"/>
+				<Label>Gradus</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Intermezzo"/>
+				<Label>Intermezzo</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Lin"/>
+				<Label>Lin</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Mazurka4"/>
+				<Label>Mazurka4</Label>
+			</Element>
+			<Element dpk:Handling="Skip">
+				<dpk:insert RecordAlias="P Menuet"/>
+				<Label>Menuet</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P OMS0042"/>
+				<Label>OMS0042</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Orientale"/>
+				<Label>Orientale</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Phantasietanz"/>
+				<Label>Phantasietanz</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Prelude"/>
+				<Label>Prelude</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P RsP3"/>
+				<Label>RsP3</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M RetJ9"/>
+				<Label>RetJ9</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P SentimentalP"/>
+				<Label>SentimentalP</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M Sonatine2"/>
+				<Label>Sonatine2</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Suffocation"/>
+				<Label>Suffocation</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Valse13"/>
+				<Label>Valse13</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M PathetiqueRondo"/>
+				<Label>PathetiqueRondo</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Consolation3"/>
+				<Label>Consolation3</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Notturno3"/>
+				<Label>Notturno3</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Infante"/>
+				<Label>Infante</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Nuptiale"/>
+				<Label>Nuptiale</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Rondo511"/>
+				<Label>Rondo511</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Intermezzo4"/>
+				<Label>Intermezzo4</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P MistyP"/>
+				<Label>MistyP</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P SatinDollP"/>
+				<Label>SatinDollP</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Liebeslieder1"/>
+				<Label>Liebeslieder1_P</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Liebeslieder13"/>
+				<Label>Liebeslieder13_S</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Liebeslieder14"/>
+				<Label>Liebeslieder14_S</Label>
+			</Element>
+			<Element  dpk:Handling="Skip">
+				<dpk:insert RecordAlias="M Sonate120-2-1"/>
+				<Label>Sonate120-2-1</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M Sonate120-1-1"/>
+				<Label>Sonate120-1-1</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Prelude3_2"/>
+				<Label>Prelude3_2</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P AnymoreH"/>
+				<Label>AnymoreH</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P IpanemaP"/>
+				<Label>IpanemaP</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P OpusOneH"/>
+				<Label>OpusOneH</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Rialto"/>
+				<Label>Rialto</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Poucet"/>
+				<Label>Poucet_P</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P PJazzExercise2"/>
+				<Label>PJazzExercise2</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M BWV593_1"/>
+				<Label>BWV593_1</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M FantasyPieces73_1"/>
+				<Label>FantasyPieces73_1</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P LullabyH"/>
+				<Label>LullabyH</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Chopin69-1"/>
+				<Label>Chopin69-1</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="M Widor42-5"/>
+				<Label>Widor42-5</Label>
+			</Element>
+			<Element>
+				<dpk:insert RecordAlias="P Brahms118-3"/>
+				<Label>Brahms118-3</Label>
+			</Element>
+		</dpk:content>
+	</dpk:table>
+</xpp:bloc>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:dpk="http://q37.info/ns/dpk/" xmlns:xpp="http://q37.info/ns/xpp">
+	<dpk:table label="Instrumentations">
+		<dpk:content>
+			<Instrumentation dpk:label="2 hands">
+				<Name>Piano two hands</Name>
+			</Instrumentation>
+			<Instrumentation dpk:label="4 hands">
+				<Name>Piano four hands</Name>
+			</Instrumentation>
+			<Instrumentation dpk:label="Classical">
+				<Name>Classical organ</Name>
+			</Instrumentation>
+			<Instrumentation dpk:label="Hammond">
+				<Name>Hammond organ</Name>
+			</Instrumentation>
+		</dpk:content>
+	</dpk:table>
+</xpp:bloc>

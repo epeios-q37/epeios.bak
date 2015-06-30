@@ -17,6 +17,6 @@
     along with dpkq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "dpbrcd.h"
+#include "dpkrcd.h"
 
 using namespace dpkrcd;

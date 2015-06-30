@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:dpk="http://q37.info/ns/dpk" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:expand href="composers_.xml"/>
+	<xpp:expand href="instrumentations_.xml"/>
+	<dpk:table label="Collections">
+		<dpk:aliases label="%RL%" TableLabel="Instrumentations"/>
+		<dpk:aliases label="%RL%" TableLabel="Composers">
+			<dpk:alias label="C" TableLabel="Composers"/>
+		</dpk:aliases>
+		<dpk:content DefaultRecordLabelTag="Title">
+			<Collection dpk:label="Corner">
+				<dpk:insert RecordAlias="Debussy"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Children's Corner</Title>
+			</Collection>
+			<Collection dpk:label="Romances">
+				<dpk:insert TableAlias="C" RecordLabel="Fauré"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>3 Romances sans Paroles</Title>
+				<Opus>17</Opus>
+			</Collection>
+			<Collection dpk:label="Fantaisies">
+				<dpk:insert RecordAlias="Brahms"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>7 Fantaisies</Title>
+				<Opus>116</Opus>
+			</Collection>
+			<Collection dpk:label="Saisons">
+				<dpk:insert RecordAlias="Tchaïkovski"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Les Saisons</Title>
+				<Opus>37a</Opus>
+			</Collection>
+			<Collection dpk:label="Preludes 1">
+				<dpk:insert RecordAlias="Debussy"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Préludes - Premier livre</Title>
+			</Collection>
+			<Collection dpk:label="Lyriques 12">
+				<dpk:insert RecordAlias="Grieg"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Pièces lyriques</Title>
+				<Opus>12</Opus>
+			</Collection>
+			<Collection dpk:label="Arabesques">
+				<dpk:insert RecordAlias="Debussy"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>2 arabesques</Title>
+				<Opus Catalogue="L">66</Opus>
+			</Collection>
+			<Collection>
+				<dpk:insert RecordAlias="Schumann"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Albumblätter</Title>
+				<Opus>124</Opus>
+			</Collection>
+			<Collection dpk:label="Preludes 28">
+				<dpk:insert RecordAlias="Chopin"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>24 préludes</Title>
+				<Opus>28</Opus>
+			</Collection>
+			<Collection dpk:label="Espagnoles">
+				<dpk:insert RecordAlias="Granados"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>12 danses espagnoles</Title>
+			</Collection>
+			<Collection dpk:label="Sentimentales">
+				<dpk:insert RecordAlias="Schubert"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Valses sentimentales</Title>
+				<Opus>50</Opus>
+				<Opus Catalogue="D">779</Opus>
+			</Collection>
+			<Collection>
+				<dpk:insert RecordAlias="Liszt"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Consolations</Title>
+				<Opus Catalogue="S">172</Opus>
+			</Collection>
+			<Collection dpk:label="Mazurkas 4">
+				<dpk:insert RecordAlias="Chopin"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>4 Mazurkas</Title>
+				<Opus>17</Opus>
+			</Collection>
+			<Collection dpk:label="Liebesträume">
+				<dpk:insert RecordAlias="Liszt"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Liebesträume</Title>
+				<Opus Catalogue="S/G">541</Opus>
+			</Collection>
+			<Collection dpk:label="Faschingsschwank">
+				<dpk:insert RecordAlias="Schumann"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Faschingsschwank aus Wien</Title>
+				<Opus>26</Opus>
+			</Collection>
+			<Collection dpk:label="Piano bar">
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Best of piano bar</Title>
+			</Collection>
+			<Collection dpk:label="Liebeslieder">
+				<dpk:insert RecordAlias="Brahms"/>
+				<dpk:insert RecordAlias="4 hands"/>
+				<Title>Liebeslieder Waltzes</Title>
+				<Opus>52a</Opus>
+			</Collection>
+			<Collection dpk:label="Sonates120">
+				<dpk:insert RecordAlias="Brahms"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Sonates pour clarinette et piano</Title>
+				<Opus>120</Opus>
+			</Collection>
+			<Collection dpk:label="Jazz Hammond">
+				<dpk:insert RecordAlias="Hammond"/>
+				<Title>Home Organist Library Volume 7 - Jazz Pieces</Title>
+			</Collection>
+			<Collection dpk:label="Big Band Hammond">
+				<dpk:insert RecordAlias="Hammond"/>
+				<Title>Big Band Specials for Organ</Title>
+			</Collection>
+			<Collection dpk:label="Oye">
+				<dpk:insert RecordAlias="Ravel"/>
+				<dpk:insert RecordAlias="4 hands"/>
+				<Title>Ma mère l'Oye</Title>
+			</Collection>
+			<Collection dpk:label="PJazzExercises">
+				<dpk:insert RecordAlias="Perterson"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Jazz exercises</Title>
+			</Collection>
+			<Collection dpk:label="Chopin69">
+				<dpk:insert RecordAlias="Chopin"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>2 valses</Title>
+				<Opus>69</Opus>
+			</Collection>
+			<Collection dpk:label="Brahms118">
+				<dpk:insert RecordAlias="Brahms"/>
+				<dpk:insert RecordAlias="2 hands"/>
+				<Title>Six pieces for Piano</Title>
+				<Opus>118</Opus>
+			</Collection>
+		</dpk:content>
+	</dpk:table>
+</xpp:bloc>

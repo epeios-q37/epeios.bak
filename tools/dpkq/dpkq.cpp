@@ -41,7 +41,7 @@ using cio::CIn;
 # define NAME_MC			"dpkq"
 # define NAME_LC			"dpkq"
 # define NAME_UC			"DPKQ"
-# define WEBSITE_URL		"http://q37.info/intl/"
+# define WEBSITE_URL		"http://q37.info/computing/epeios/tools/dpkq/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"
@@ -170,7 +170,7 @@ typedef tables_	data_;
 E_AUTO( data )
 
 namespace {
-	str::string Namespace_;	// With tailing ':' !
+	str::string NamespaceLabel_;	// With tailing ':' !
 
 	E_ENUM( disc ) {	// '...riminant'.
 		dNone,	// No discriminant.
@@ -319,7 +319,7 @@ namespace {
 		Label.Append('$');
 
 		if ( PrependNamespace )
-			Label.Append( Namespace_ );
+			Label.Append( NamespaceLabel_ );
 
 		Label.Append( BaseLabel );
 
@@ -365,8 +365,8 @@ typedef bso::uint__		id__;
 
 static bso::bool__ BelongsToNamespace_( const str::string_ &Name )
 {
-	if ( Name.Amount() > Namespace_.Amount() )
-		return str::Compare( Name, Namespace_, 0, 0, Namespace_.Amount() ) == 0;
+	if ( Name.Amount() > NamespaceLabel_.Amount() )
+		return str::Compare( Name, NamespaceLabel_, 0, 0, NamespaceLabel_.Amount() ) == 0;
 	else
 		return false;
 }
@@ -462,12 +462,10 @@ static void ReportAndExit_(
 qRH
 	lcl::meaning Meaning;
 qRB
-#pragma message( __LOC__ "TODO" )
-
 	Meaning.Init();
 	Meaning.SetValue( Error );
 
-//	Meaning.AddTag( Tag );
+	Meaning.AddTag( GetLabel_( Item ) );
 
 	ReportAndExit_( Meaning, IFlow );
 qRR
@@ -475,17 +473,15 @@ qRT
 qRE
 }
 
-static void ReportAliasTableAliasAndLabelUsedTogetherAndExit_(
-	const char *Error,
-	const xpp::preprocessing_iflow___ &IFlow )
+static void ReportAliasTableAliasAndLabelUsedTogetherAndExit_( const xpp::preprocessing_iflow___ &IFlow )
 {
 qRH
 	lcl::meaning Meaning;
 qRB
 	Meaning.Init();
-	Meaning.SetValue( Error );
-
-# pragma message( __LOC__ "TODO" )
+	Meaning.SetValue( _( CanNotBeUsedTogetherError ) );
+	Meaning.AddTag( GetLabel_( iAliasesTableAliasAttribute ) );
+	Meaning.AddTag( GetLabel_( iAliasesTableLabelAttribute ) );
 
 	ReportAndExit_( Meaning, IFlow );
 qRR
@@ -845,6 +841,7 @@ qRB
 			switch ( GetItemId_( dRecord, Parser.AttributeName() ) ) {
 			case iRecordLabelAttribute:
 				Assign_( _( RecordLabelWording ), Parser, IFlow, Record.Label );
+				Record.Content.Append( Parser.DumpData() );
 				break;
 			case iRecordHandlingAttribute:
 				switch ( GetItemId_( dNone, Parser.Value() ) ) {
@@ -854,6 +851,7 @@ qRB
 					Skipped++;
 
 					Record.Skip() = true;
+					Record.Content.Append( Parser.DumpData() );
 					break;
 				case iRecordHandlingAttributeIgnoreValue:
 					Ignore = true;
@@ -990,13 +988,13 @@ qRB
 			switch ( GetItemId_( dAlias, Parser.AttributeName() ) ) {
 			case iAliasTableAliasAttribute:
 				if ( TableLabel.Amount() != 0 )
-					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( IFlow );
 
 				Assign_( _( TableAliasWording ), Parser, IFlow, TableAliasLabel );
 				break;
 			case iAliasTableLabelAttribute:
 				if ( TableAliasLabel.Amount() != 0 )
-					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( IFlow );
 
 				Assign_( _( TableAliasWording ), Parser, IFlow, TableLabel );
 				break;
@@ -1190,7 +1188,7 @@ qRB
 			switch ( GetItemId_( dAliases, Parser.AttributeName() ) ) {
 			case iAliasesTableAliasAttribute:
 				if ( TableLabel.Amount() != 0 )
-					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( IFlow );
 
 				Assign_( _( TableAliasWording ), Parser, IFlow, TableAliasLabel );
 
@@ -1200,7 +1198,7 @@ qRB
 				break;
 			case iAliasesTableLabelAttribute:
 				if ( TableAliasLabel.Amount() != 0 )
-					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( _( CanNotBeUsedTogetherError ), IFlow );
+					ReportAliasTableAliasAndLabelUsedTogetherAndExit_( IFlow );
 
 				Assign_( _( TableAliasWording ), Parser, IFlow, TableLabel );
 
@@ -1558,10 +1556,11 @@ static id__ Display_(
 	const table_ &Table,
 	bso::uint__ SessionMaxDuration,
 	str::string_ &Label,
+	str::string_ &TableLabel,
 	dpkctx::context_ &Context,
 	xml::writer_ &Writer )
 {
-	Writer.PushTag( Table.Label );
+	Writer.PushTag( TableLabel = Table.Label );
 
 	Id = Display_( Id, Table.Skipped(), SessionMaxDuration, Table.Records, Label, Context, Writer );	
 
@@ -1614,6 +1613,7 @@ static id__ Display_(
 	const str::string_ &XSLFileName,
 	bso::uint__ SessionMaxDuration,
 	str::string_ &Label,
+	str::string_ &TableLabel,
 	dpkctx::context_ &Context,
 	txf::text_oflow__ &Output )
 {
@@ -1621,7 +1621,8 @@ qRH
 	xml::writer Writer;
 	ctn::E_CITEMt( table_, trow__ ) Table;
 	random_parameters Randoms;
-	str::string NS;
+	str::string NS, URI;
+	tol::buffer__ Buffer;
 qRB
 	Randoms.Init();
 	GetRandoms_( Randoms );
@@ -1641,12 +1642,17 @@ qRB
 	Writer.PushTag( "Picking" );
 
 	NS.Init( "xmlns:" );
-	NS.Append( Namespace_ );
+	NS.Append( NamespaceLabel_ );
 	NS.Truncate();
 
-	Writer.PutAttribute( "xmlns:dpk", "http://q37.info" );
+	URI.Init();
+	sclmisc::MGetValue( registry::NamespaceURI, URI );
+
+	Writer.PutAttribute( NS, URI );
 
 	Writer.PushTag( "Misc" );
+
+	Writer.PutValue(tol::DateAndTime(Buffer), "TimeStamp" );
 
 	Writer.PushTag( "Generator" );
 
@@ -1658,17 +1664,10 @@ qRB
 	Writer.PutValue( VERSION );
 	Writer.PopTag();
 
-	Writer.PushTag( "Author" );
-
-	Writer.PushTag( "Name" );
-	Writer.PutValue( AUTHOR_NAME );
+	Writer.PushTag( "URL" );
+	Writer.PutValue( WEBSITE_URL );
 	Writer.PopTag();
 
-	Writer.PushTag( "Contact" );
-	Writer.PutValue( AUTHOR_CONTACT );
-	Writer.PopTag();
-
-	Writer.PopTag();
 	Writer.PopTag();
 
 	Writer.PushTag( "Session" );
@@ -1682,7 +1681,7 @@ qRB
 
 	Writer.PushTag( "Data" );
 
-	Id = Display_( Id, Table( Data.Last() ), SessionMaxDuration, Label, Context, Writer );
+	Id = Display_( Id, Table( Data.Last() ), SessionMaxDuration, Label, TableLabel, Context, Writer );
 
 	Writer.PopTag();
 
@@ -1699,6 +1698,7 @@ static id__ DisplayWithoutBackup_(
 	const str::string_ &XSLFileName,
 	bso::uint__ SessionMaxDuration,
 	str::string_ &Label,
+	str::string_ &TableLabel,
 	dpkctx::context_ &Context,
 	const char *FileName )
 {
@@ -1711,7 +1711,7 @@ qRB
 
 	TFlow.Init( FFlow );
 
-	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, TFlow );
+	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, TFlow );
 qRR
 qRT
 qRE
@@ -1724,6 +1724,7 @@ static id__ Display_(
 	const str::string_ &XSLFileName,
 	bso::uint__ SessionMaxDuration,
 	str::string_ &Label,
+	str::string_ &TableLabel,
 	dpkctx::context_ &Context,
 	const char *FileName )
 {
@@ -1734,7 +1735,7 @@ qRB
 
 	Backuped = true;
 
-	Id = DisplayWithoutBackup_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, FileName );
+	Id = DisplayWithoutBackup_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, FileName );
 qRR
 	if ( Backuped )
 		sclmisc::RecoverBackupFile( FileName );
@@ -1749,6 +1750,7 @@ static id__ Display_(
 	const str::string_ &XSLFileName,
 	bso::uint__ SessionMaxDuration,
 	str::string_ &Label,
+	str::string_ &TableLabel,
 	dpkctx::context_ &Context,
 	const str::string_ &OutputFileName )
 {
@@ -1756,37 +1758,45 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	if ( OutputFileName.Amount() == 0 )
-		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, COut );
+		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, COut );
 	else
-		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName.Convert( Buffer ) );
+		Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, TableLabel, Context, OutputFileName.Convert( Buffer ) );
 qRR
 qRT
 qRE
 	return Id;
 }
 
-void LaunchScript_(
-	const str::string_ &Script,
-	id__ Id,
-	const str::string_ &Label,
-	const str::string_ &OutputFileName )
+void LaunchViewer_(
+	id__ RecordId,
+	id__ TableId,
+	const str::string_ &RecordLabel,
+	const str::string_ &TableLabel,
+	const str::string &DataFilename,
+	const str::string &OutputFilename,
+	const str::string_ &XSLFilename )
 {
 qRH
-	str::string CompleteScript;
+	str::string Viewer;
 	TOL_CBUFFER___ SBuffer;
 	bso::integer_buffer__ IBuffer;
+	tagsbs::tvalues TaggedValues;
 qRB
-	if ( ( Script.Amount() != 0 ) && ( OutputFileName.Amount() != 0 ) ) {
-		CompleteScript.Init( Script );
-		tagsbs::SubstituteShortTag( CompleteScript, 1, OutputFileName, '$' );
-		tagsbs::SubstituteShortTag( CompleteScript, 2, str::string( bso::Convert( Id, IBuffer ) ), '$' );
-		tagsbs::SubstituteShortTag( CompleteScript, 3, Label, '$' );
-		COut << "Launching '" << CompleteScript << "\'." << txf::nl << txf::commit;
-		if ( tol::System( CompleteScript.Convert( SBuffer ) ) == -1 )
-			qRLbr();
+	Viewer.Init();
+	sclmisc::OGetValue( registry::Viewer, Viewer );
+
+	if ( ( Viewer.Amount() != 0 ) && ( OutputFilename.Amount() != 0 ) ) {
+		TaggedValues.Init();
+		TaggedValues.Append("RI", bso::Convert( RecordId, IBuffer ) );
+		TaggedValues.Append("RL", RecordLabel );
+		TaggedValues.Append("TI", bso::Convert( TableId, IBuffer ) );
+		TaggedValues.Append("TL", TableLabel);
+		TaggedValues.Append("Data",DataFilename );
+		TaggedValues.Append("XSL",XSLFilename );
+		TaggedValues.Append("Output",OutputFilename );
+		tagsbs::SubstituteLongTags( Viewer, TaggedValues, '$' );
+		tol::System( Viewer.Convert( SBuffer ) );
 	}
-
-
 qRR
 qRT
 qRE
@@ -1925,25 +1935,20 @@ qRE
 void Process_( void )
 {
 qRH
-	str::string DataFileName;
+	str::string DataFilename;
 	data Data;
 	dpkctx::context Context;
-	str::string OutputFileName;
-	str::string XSLFileName;
-	str::string Script;
-	str::string ContextFileName;
+	str::string OutputFilename;
+	str::string XSLFilename;
+	str::string ContextFilename;
 	bso::uint__ SessionMaxDuration = 0;
 	bso::bool__ Error = false;
-	str::string Label;
+	str::string Label, TableLabel;
 	id__ Id = 0;
-	unsigned long Test;
-	bso::integer_buffer__ TBuffer;
 qRB
-	bso::Convert( Test, TBuffer );
-
-	Namespace_.Init();
-	sclmisc::MGetValue( registry::Namespace, Namespace_ );
-	Namespace_.Append( ':' );
+	NamespaceLabel_.Init();
+	sclmisc::MGetValue( registry::NamespaceLabel, NamespaceLabel_ );
+	NamespaceLabel_.Append( ':' );
 
 	Automat_.Init();
 	FillAutomat_();
@@ -1961,38 +1966,36 @@ qRB
 		break;
 	}
 
-	DataFileName.Init();
-	if ( !sclmisc::BGetValue( registry::Data, DataFileName ) )
+	DataFilename.Init();
+	if ( !sclmisc::BGetValue( registry::Data, DataFilename ) )
 		sclmisc::ReportAndAbort( _( DataFileNotSpecifiedError ) );
 
-	OutputFileName.Init();
-	if ( !sclmisc::BGetValue( registry::Output, OutputFileName ) )
+	OutputFilename.Init();
+	if ( !sclmisc::BGetValue( registry::Output, OutputFilename ) )
 		sclmisc::ReportAndAbort( _( OutputFileNotSpecifiedError ) );
 
-	XSLFileName.Init();
-	sclmisc::OGetValue( registry::XSL, XSLFileName );
+	XSLFilename.Init();
+	sclmisc::OGetValue( registry::XSL, XSLFilename );
 
-	ContextFileName.Init();
-	if ( !sclmisc::BGetValue( registry::Context, ContextFileName ) )
+	ContextFilename.Init();
+	if ( !sclmisc::BGetValue( registry::Context, ContextFilename ) )
 		sclmisc::ReportAndAbort( _( ContextFileNotSpecifiedError ) );
 
 	Context.Init();
-	RetrieveContext_( ContextFileName, Context );
+	RetrieveContext_( ContextFilename, Context );
 
 	Data.Init();
-	RetrieveData_( DataFileName, Data );
+	RetrieveData_( DataFilename, Data );
 
 	SessionMaxDuration = sclmisc::OGetUInt( registry::SessionMaxDuration, 0 );
 
 	Label.Init();
-	Id = Display_( Id, Data, XSLFileName, SessionMaxDuration, Label, Context, OutputFileName );
+	TableLabel.Init();
+	Id = Display_( Id, Data, XSLFilename, SessionMaxDuration, Label, TableLabel, Context, OutputFilename );
 
-	Script.Init();
-	sclmisc::OGetValue( registry::Script, Script );
+	DumpContext_( Context, ContextFilename );
 
-	DumpContext_( Context, ContextFileName );
-
-	LaunchScript_( Script, Id, Label, OutputFileName );
+	LaunchViewer_( Id, *Data.Last() + 1, Label, TableLabel, DataFilename, OutputFilename, XSLFilename );
 qRR
 qRT
 qRE
