@@ -267,12 +267,14 @@ namespace bso {
 		return Convert( (unsigned int)Value, Buffer );
 	}
 # elif ULONG_MAX == ULLONG_MAX
+#  ifndef CPE_S_POSIX
 	inline const char *Convert(
 		unsigned long Value,
 		bso::integer_buffer__ &Buffer )
 	{
 		return Convert( (unsigned long long)Value, Buffer );
 	}
+# endif
 # else
 #  error
 # endif
@@ -493,12 +495,15 @@ namespace bso {
 		return Convert( (int)Value, Buffer );
 	}
 # elif LONG_MAX == LLONG_MAX
+#  ifndef CPE_S_POSIX
+
 	inline const char *Convert(
 		long Value,
 		bso::integer_buffer__ &Buffer )
 	{
 		return Convert( (long long)Value, Buffer );
 	}
+#  endif
 # else
 #  error
 # endif
