@@ -267,7 +267,7 @@ namespace bso {
 		return Convert( (unsigned int)Value, Buffer );
 	}
 # elif ULONG_MAX == ULLONG_MAX
-#  ifndef CPE_S_POSIX
+#  if !defined( CPE_S_POSIX ) || defined( CPE_S_DARWIN )
 	inline const char *Convert(
 		unsigned long Value,
 		bso::integer_buffer__ &Buffer )
@@ -495,7 +495,7 @@ namespace bso {
 		return Convert( (int)Value, Buffer );
 	}
 # elif LONG_MAX == LLONG_MAX
-#  ifndef CPE_S_POSIX
+#  if !defined( CPE_S_POSIX ) || defined( CPE_S_DARWIN )
 
 	inline const char *Convert(
 		long Value,

@@ -14,7 +14,7 @@ Meaning of list markers (2nd level):
 
 2015-06-30
 - BSO :
-	% Fixing g++ complainig about ambiguous 'Convert(...)' functions when compiling in 64 bits.
+	% Fixing ambiguous 'Convert(...)' functions problem for POSIX but non-Darwin systems when compiling in 64 bits.
 
 2015-06-28 :
 - TAGSBS :
