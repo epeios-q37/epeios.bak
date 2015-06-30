@@ -69,6 +69,8 @@ namespace dpkctx {
 			S_.Cycle = C.S_.Cycle;
 			S_.Session = C.S_.Session;
 			S_.TimeStamp = C.S_.TimeStamp;
+
+			return *this;
 		}
 		void Init( void )
 		{
