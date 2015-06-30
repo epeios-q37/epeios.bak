@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
 	<Output>Result.xml</Output>
-	<Viewer>echo Rcd: $RI$, '$RL$'; Tbl: $TI$, '$TL$'; D: '$Data$'; O: '$Output$'; XSL: '$XSL$'</Viewer>
+	<Viewer>echo Rcd: $RI$, '$RL$' - Tbl: $TI$, '$TL$' - D: '$Data$' - O: '$Output$' - XSL: '$XSL$'</Viewer>
 </xpp:bloc>
