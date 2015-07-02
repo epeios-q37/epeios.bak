@@ -297,9 +297,3 @@ row__ uys::_Position(
 		return Begin;
 }
 #endif
-
-Q37_GCTOR( uys )
-{
-	if ( UYS_STATE_AMOUNT != s_amount )
-		qRChk();
-}

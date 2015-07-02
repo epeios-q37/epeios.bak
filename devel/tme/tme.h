@@ -105,7 +105,7 @@ namespace tme {
 		{
 			return ( _Core() / ( 1000 * 60 ) ) % 60;
 		}
-		seconds__ _S( void ) const
+		seconds__ S_( void ) const
 		{
 			return ( _Core() / 1000 ) % 60;
 		}
@@ -115,7 +115,7 @@ namespace tme {
 		}
 		void _ASCII( buffer__ &Buffer ) const
 		{
-			sprintf( Buffer, "%02i:%02i:%02i:%03i", _H(), _M(), _S(), _T() );
+			sprintf( Buffer, "%02i:%02i:%02i:%03i", _H(), _M(), S_(), _T() );
 		}
 	public:
 		void reset( bso::bool__ = true )

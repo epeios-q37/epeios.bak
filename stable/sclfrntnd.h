@@ -88,7 +88,7 @@ namespace sclfrntnd {
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistryLevel;
 		bso::bool__ _IsOpen;
-		Q37_MPMDF( const char, _L, _Language );
+		Q37_MPMDF( const char, L_, Language_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -97,7 +97,7 @@ namespace sclfrntnd {
 			_Registry.reset( P );
 			_IsOpen = false;
 			_RegistryLevel = rgstry::UndefinedLevel;
-			_Language = NULL;
+			Language_ = NULL;
 		}
 		E_CVDTOR( frontend___ );
 		void Init(
@@ -110,7 +110,7 @@ namespace sclfrntnd {
 			_Registry.Push( Registry );
 			_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
 			_IsOpen = false;
-			_Language = Language;
+			Language_ = Language;
 
 
 			return _frontend___::Init( ReportingCallback );
@@ -136,7 +136,7 @@ namespace sclfrntnd {
 				break;
 			}
 
-			return _frontend___::Connect( _L(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
+			return _frontend___::Connect( L_(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
 		}
 		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
@@ -144,12 +144,9 @@ namespace sclfrntnd {
 		}
 		const char *Language( void ) const
 		{
-			return _L();
+			return L_();
 		}
 	};
-
-
-
 
 	// Action  effectuer sur le projet par dfaut.
 	enum action__ {

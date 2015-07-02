@@ -454,12 +454,12 @@ void strmrg::retriever__::GetStrings( str::strings_ &Result )
 	ctn::E_CMITEMt( _string_, _srow__ ) String;
 
 	Item.Init( _I() );
-	String.Init( _S() );
+	String.Init( s_() );
 
 	if ( Item( _R()( _Row ) ).ContainsString() )	// Positionne 'Item()'.
 		Result.Append( String( Item().String() ) );
 	else
-		GetStrings_( Item(_R()( _Row ) ), _I(), _S(), Result );
+		GetStrings_( Item(_R()( _Row ) ), _I(), s_(), Result );
 
 	_Row = _R().Next( _Row );
 }

@@ -358,7 +358,7 @@ namespace ctn {
 		{
 			uys::state__ State = _Statics.State();
 
-			if ( !uys::IsError( State ) )
+			if ( !State.IsError() )
 				if ( State != _Dynamics.State() )
 					State = uys::sInconsistent;
 
@@ -368,7 +368,7 @@ namespace ctn {
 		{
 			uys::state__ State = _Statics.Bind();
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 
 			if ( _Dynamics.Bind() != State )
@@ -380,7 +380,7 @@ namespace ctn {
 		{
 			uys::state__ State = _Statics.Settle();
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 
 			if ( _Dynamics.Settle() != State )
@@ -469,14 +469,14 @@ namespace ctn {
 	{
 		uys::state__ State = tys::Plug( Container.Statics, Hook.StaticsFilesHook() );
 
-		if ( uys::IsError( State ) ) {
+		if ( State.IsError() ) {
 			Hook.reset();
 			return State;
 		}
 
 		// Container.SetStepValue( 0 );	// Made by 'SubInit(...)'.
 
-		if ( !uys::IsError( State ) ) {
+		if ( !State.IsError() ) {
 			if ( ias::Plug( Container.Dynamics, Hook.DynamicsFilesHook() ) != State ) {
 				Hook.reset();
 				State = uys::sInconsistent;

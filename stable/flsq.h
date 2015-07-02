@@ -646,7 +646,7 @@ namespace flsq {
 		//f Initialize using 'Filename' as file, open it in mode 'Mode'.
 		void Init(
 			id__ ID,
-			const fnm::name___ &FileName = (char *)NULL,
+			const fnm::name___ &FileName = fnm::name___(),
 			fil::mode__ Mode = fil::mReadWrite,
 			flsq::creation Creation = flsq::cFirstUse )
 		{

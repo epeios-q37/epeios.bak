@@ -45,33 +45,33 @@ namespace xdhdws {
 	class proxy__
 	{
 	private:
-		Q37_MRMDF( xdhcbk::proxy_callback__, _C, _Callback );
+		Q37_MRMDF( xdhcbk::proxy_callback__, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				if ( _Callback != NULL )
-					delete( _Callback );
+				if ( Callback_ != NULL )
+					delete( Callback_ );
 
-			_Callback = NULL;
+			Callback_ = NULL;
 		}
 		E_CDTOR( proxy__ );
 		void Init( xdhcbk::proxy_callback__ *Callback )	// 'Callback' is destroyed by a 'delete' when this object is dsetroyed.
 		{
 			reset();
 
-			_Callback = Callback;
+			Callback_ = Callback;
 		}
 		void Log( const nstring___ &Message )
 		{
-			_C().Process( xdhcbk::fLog, NULL, Message.Internal()() );
+			C_().Process( xdhcbk::fLog, NULL, Message.Internal()() );
 		}
 		void Alert(
 			const nstring___ &XML,
 			const nstring___ &XSL,
 			const nstring___ &Title )
 		{
-			_C().Process( xdhcbk::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
+			C_().Process( xdhcbk::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
 		}
 		void Alert( const nstring___ &Message );
 		bso::bool__ Confirm(
@@ -83,7 +83,7 @@ namespace xdhdws {
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			_C().Process( xdhcbk::fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ) );
+			C_().Process( xdhcbk::fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ) );
 
 			Confirmed = !strcmp( "true", Buffer );
 		qRR
@@ -97,33 +97,33 @@ namespace xdhdws {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().Process( xdhcbk::fSetChildren, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcbk::fSetChildren, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetDocument(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			SetChildren( NULL, XML, XSL );
+			SetChildren( nstring___(), XML, XSL );
 		}
 		void SetCasting(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			_C().Process( xdhcbk::fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcbk::fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetDocumentCasting(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			SetCasting( NULL, XML, XSL );
+			SetCasting( nstring___(), XML, XSL );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			_C().Process( xdhcbk::fGetProperty, &Buffer, Id.Internal()( ), Name.Internal()( ) );
+			C_().Process( xdhcbk::fGetProperty, &Buffer, Id.Internal()( ), Name.Internal()( ) );
 
 			return Buffer;
 		}
@@ -146,14 +146,14 @@ namespace xdhdws {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			_C().Process( xdhcbk::fSetProperty, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			C_().Process( xdhcbk::fSetProperty, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			_C().Process( xdhcbk::fGetAttribute, &Buffer, Id.Internal()( ), Name.Internal()( ) );
+			C_().Process( xdhcbk::fGetAttribute, &Buffer, Id.Internal()( ), Name.Internal()( ) );
 
 			return Buffer;
 		}
@@ -176,13 +176,13 @@ namespace xdhdws {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			_C().Process( xdhcbk::fSetAttribute, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			C_().Process( xdhcbk::fSetAttribute, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			_C().Process( xdhcbk::fGetResult, &Buffer, Id.Internal()( ) );
+			C_().Process( xdhcbk::fGetResult, &Buffer, Id.Internal()( ) );
 
 			return Buffer;
 		}
@@ -203,13 +203,13 @@ namespace xdhdws {
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			_C().Process( xdhcbk::fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
+			C_().Process( xdhcbk::fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
 		}
 		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			_C().Process( xdhcbk::fGetContent, &Buffer, Id.Internal()( ) );
+			C_().Process( xdhcbk::fGetContent, &Buffer, Id.Internal()( ) );
 
 			return Buffer;
 		}
@@ -230,11 +230,11 @@ namespace xdhdws {
 			const nstring___ &Id,
 			const nstring___ &Value )
 		{
-			_C().Process( xdhcbk::fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
+			C_().Process( xdhcbk::fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
 		}
 		void Focus( const nstring___ &Id )
 		{
-			_C().Process( xdhcbk::fFocus, NULL, Id.Internal()( ) );
+			C_().Process( xdhcbk::fFocus, NULL, Id.Internal()( ) );
 		}
 	};
 
@@ -277,13 +277,15 @@ namespace xdhdws {
 			str::string_ &Target,
 			corpus_callback__ &Callback )
 		{
+			tol::buffer__ Buffer;
+
 			_Flow.Init( Target );
 			_Writer.Init( _Flow, xml::oIndent, xml::e_Default );
 			_Writer.PushTag( "RichFrontEnd" );
 			_Writer.PutAttribute("View", View );
 			_Writer.PutAttribute("Background", Background );
 			_Writer.PutAttribute("Generator", Generator );
-			_Writer.PutAttribute("TimeStamp", tol::DateAndTime() );
+			_Writer.PutAttribute("TimeStamp", tol::DateAndTime( Buffer ) );
 			_Writer.PutAttribute("System", CPE_SL );
 			_Writer.PutAttribute("Architecture", CPE_AL );
 			_Writer.PushTag( "Corpus" );

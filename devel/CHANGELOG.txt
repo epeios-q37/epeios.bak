@@ -12,6 +12,19 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-07-01 :
+- UYS :
+	% Adaptating to changes in 'TOL'.
+- GLOBAL :
+	- Fixing '_' beginning identifier issue.
+	- Adaptating to changes in 'UYS'.
+- TOL :
+	% Inntroducing new extended_enum mechanism.
+- XDHCBK :
+	- Adding inclusion of missing <stdarg.h> header.
+- XDHDWS :
+	- Use of the thread-safe version of 'tol::DateAndTime(...)'.
+
 2015-06-30
 - BSO :
 	% Fixing ambiguous 'Convert(...)' functions problem for POSIX but non-Darwin systems when compiling in 64 bits.

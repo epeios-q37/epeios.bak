@@ -200,7 +200,7 @@ namespace fblbrq {
 	class request__
 	{
 	private:
-		callbacks__ *_Callbacks;
+		Q37_MRMDF( callbacks__, C_, Callbacks_ );
 		casts Casts_;
 		// Position in the Description_;
 		sdr::row__ Position_;
@@ -213,26 +213,17 @@ namespace fblbrq {
 		// The input/output channel for the request.
 		flw::ioflow__ *Channel_;
 		bso::bool__ _DismissPending;	// Pour grer la prsence d'un flux dans les paramtres entrants.
-		callbacks__ &_C( void )
-		{
-# ifdef FBLBRQ_DBG
-			if ( _Callbacks == NULL )
-				qRFwk();
-# endif
-
-			return *_Callbacks;
-		}
 		const void *_Get(
 			sdr::row__ Row,
 			cast__ Cast )
 		{
-			return _C().Get( Row, Cast );
+			return C_().Get( Row, Cast );
 		}
 		const void *_Put(
 			sdr::row__ Row,
 			cast__ Cast )
 		{
-			return _C().Put( Row, Cast );
+			return C_().Put( Row, Cast );
 		}
 		void _Pop(
 			flw::iflow__ &Flow,
@@ -242,7 +233,7 @@ namespace fblbrq {
 			const casts_ &Casts,
 			flw::oflow__ &Flow )
 		{
-			_C().Push( FirstCall, Casts, Flow );
+			C_().Push( FirstCall, Casts, Flow );
 		}
 		void Test_( cast__ Cast )
 		{
@@ -273,7 +264,7 @@ namespace fblbrq {
 	public:
 		void reset( bool P = true )
 		{
-			_Callbacks = NULL;
+			Callbacks_ = NULL;
 			Casts_.reset( P );
 
 			Position_ = qNIL;
@@ -298,7 +289,7 @@ namespace fblbrq {
 			flw::ioflow__ &Channel )
 		{
 			reset();
-			_Callbacks = &Callbacks;
+			Callbacks_ = &Callbacks;
 			Channel_ = &Channel;
 			Closed_ = false;
 			Casts_.Init();
@@ -355,13 +346,13 @@ namespace fblbrq {
 
 			_DismissPending = true;
 
-			return _C().GetFlow( Position_ );
+			return C_().GetFlow( Position_ );
 		}
 		void FlowOut( flw::iflow__ &Flow )
 		{
 			TestOutput_( cFlow );
 
-			_C().PutFlow( Position_, Flow );
+			C_().PutFlow( Position_, Flow );
 		}
 		//f Tell that the request is complete (parsed and answered).
 		void Complete( void )

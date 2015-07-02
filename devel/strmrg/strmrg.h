@@ -276,7 +276,7 @@ namespace strmrg {
 		const _items_ *_Items;
 		const _irows_ *_Rows;
 		row__ _Row;
-		const _strings_ &_S( void ) const
+		const _strings_ &s_( void ) const
 		{
 			if ( _Strings == NULL )
 				qRFwk();
@@ -327,7 +327,7 @@ namespace strmrg {
 			ctn::E_CMITEMt( _item_, _irow__ ) Item;
 			Item.Init( _I() );
 
-			strmrg::GetTable( Item( _R()( _Row ) ), _I(), _S(), Table );
+			strmrg::GetTable( Item( _R()( _Row ) ), _I(), s_(), Table );
 
 			_Row = _R().Next( _Row );
 		}

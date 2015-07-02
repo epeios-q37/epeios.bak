@@ -1439,7 +1439,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 	{
 		uys::state__ State = uys::Plug( AStorage.Storage, Hook );
 
-		if ( !uys::IsError( State ) )
+		if ( State.IsError() )
 			AStorage.S_.Free.Init();
 
 		return State;

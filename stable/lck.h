@@ -372,25 +372,18 @@ namespace lck {
 	template <typename object> class read_only_access___
 	{
 	private:
-		control___<object> *_Control;
+		Q37_MRMDF( control___<object>, C_, Control_ );
 		bso::bool__ _Locked;
-		control___<object> &_C( void ) const
-		{
-			if ( _Control == NULL )
-				qRFwk();
-
-			return *_Control;
-		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				if ( _Control != NULL ) {
+				if ( Control_ != NULL ) {
 					if ( _Locked )
-						_C().ReleaseReadOnly();
+						C_().ReleaseReadOnly();
 				}
 
-			_Control = NULL;
+			Control_ = NULL;
 			_Locked = false;
 		}
 		read_only_access___( void )
@@ -405,16 +398,16 @@ namespace lck {
 		{
 			reset();
 
-			_Control = &Control;
+			Control_ = &Control;
 		}
 		const object &operator ()( void )
 		{
 			if ( !_Locked ) {
-				_C().GetReadOnly();
+				C_().GetReadOnly();
 				_Locked = true;
 			}
 
-			return _C().GetWithoutLocking();
+			return C_().GetWithoutLocking();
 		}
 		bso::bool__ IsLocked( void ) const
 		{
@@ -423,7 +416,7 @@ namespace lck {
 		bso::bool__ Release( bso::bool__ ErrorIfNotLocked = true )
 		{
 			if ( _Locked ) {
-				_Control->ReleaseReadOnly();
+				Control_->ReleaseReadOnly();
 				_Locked = false;
 				return true;
 			} else if ( ErrorIfNotLocked )

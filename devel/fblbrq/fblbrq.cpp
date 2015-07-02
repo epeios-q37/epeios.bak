@@ -38,7 +38,7 @@ void fblbrq::request__::_Pop(
 		if ( Flow.Get() != Cast )
 			qRFwk();
 
-		_C().PopIn( Row, Flow, Cast );
+		C_().PopIn( Row, Flow, Cast );
 
 		Row = Casts.Next( Row );
 	}
@@ -49,7 +49,7 @@ void fblbrq::request__::_Pop(
 	if ( Flow.Get() != fblcst::cEnd )
 		qRFwk();
 
-	_C().PopInEnd( Row, Flow);
+	C_().PopInEnd( Row, Flow);
 
 	Row = Casts.Next( Row );
 
@@ -57,7 +57,7 @@ void fblbrq::request__::_Pop(
 		if ( ( Cast = (cast__)Flow.Get() ) != *Casts( Row ) )
 			qRFwk();
 
-		_C().PopOut( Row, Flow, Cast );
+		C_().PopOut( Row, Flow, Cast );
 
 		Row = Casts.Next( Row );
 	}

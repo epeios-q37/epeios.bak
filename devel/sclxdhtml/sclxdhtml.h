@@ -75,78 +75,76 @@ namespace sclxdhtml {
 		}
 	};
 
-	namespace {
-		qROW( crow__ );	// callback row;
+	qROW( crow__ );	// callback row;
 
-		template <typename session> E_TTCLONE_( bch::E_BUNCHt_( action_callback__<session> *, crow__ ), action_callbacks_ );
+	template <typename session> E_TTCLONE_( bch::E_BUNCHt_( action_callback__<session> *, crow__ ), action_callbacks_ );
 
-		template <typename session> class action_handler_
+	template <typename session> class action_handler_
+	{
+	private:
+		action_callback__<session> *_Get( const str::string_ &Action ) const
 		{
-		private:
-			action_callback__<session> *_Get( const str::string_ &Action ) const
-			{
-				crow__ Row = stsfsm::GetId( Action, Automat );
+			crow__ Row = stsfsm::GetId( Action, Automat );
 
-				if ( Row == qNIL )
-					return NULL;
+			if ( Row == qNIL )
+				return NULL;
 
-				return Callbacks( Row );
-			}
-		public:
-			struct s {
-				stsfsm::automat_::s Automat;
-				typename action_callbacks_<session>::s Callbacks;
-			};
-			stsfsm::automat_ Automat;
-			action_callbacks_<session> Callbacks;
-			action_handler_( s &S )
-			: Automat( S.Automat ),
-			  Callbacks( S.Callbacks )
-			{}
-			void reset( bso::bool__ P = true )
-			{
-				Automat.reset( P );
-				Callbacks.reset( P );
-			}
-			void plug( qAS_ &AS )
-			{
-				Automat.plug( AS );
-				Callbacks.plug( AS );
-			}
-			action_handler_ &operator =(const action_handler_ &AH )
-			{
-				Automat = AH.Automat;
-				Callbacks = AH.Callbacks;
-
-				return *this;
-			}
-			void Init( void )
-			{
-				Automat.Init();
-				Callbacks.Init();
-			}
-			bso::bool__ Add(
-				const char *Name,
-				action_callback__<session> &Callback )
-			{
-				return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
-			}
-			bso::bool__ Launch(
-				session &Session,
-				const char *Id,
-				const char *Action )
-			{
-				action_callback__<session> *Callback = _Get( str::string(  Action ) );
-
-				if ( Callback == NULL )
-					qRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
-
-				return Callback->Launch( Session, Id );
-			}
+			return Callbacks( Row );
+		}
+	public:
+		struct s {
+			stsfsm::automat_::s Automat;
+			typename action_callbacks_<session>::s Callbacks;
 		};
+		stsfsm::automat_ Automat;
+		action_callbacks_<session> Callbacks;
+		action_handler_( s &S )
+		: Automat( S.Automat ),
+			Callbacks( S.Callbacks )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			Automat.reset( P );
+			Callbacks.reset( P );
+		}
+		void plug( qAS_ &AS )
+		{
+			Automat.plug( AS );
+			Callbacks.plug( AS );
+		}
+		action_handler_ &operator =(const action_handler_ &AH )
+		{
+			Automat = AH.Automat;
+			Callbacks = AH.Callbacks;
 
-		E_AUTO1( action_handler );
-	}
+			return *this;
+		}
+		void Init( void )
+		{
+			Automat.Init();
+			Callbacks.Init();
+		}
+		bso::bool__ Add(
+			const char *Name,
+			action_callback__<session> &Callback )
+		{
+			return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
+		}
+		bso::bool__ Launch(
+			session &Session,
+			const char *Id,
+			const char *Action )
+		{
+			action_callback__<session> *Callback = _Get( str::string(  Action ) );
+
+			if ( Callback == NULL )
+				qRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
+
+			return Callback->Launch( Session, Id );
+		}
+	};
+
+	E_AUTO1( action_handler );
 
 	template <typename session> class action_helper_callback__
 	{
@@ -179,39 +177,37 @@ namespace sclxdhtml {
 		}
 	};
 
-	namespace {
-		typedef fblfrd::reporting_callback__ _reporting_callback__;
+	typedef fblfrd::reporting_callback__ _reporting_callback__;
 
-		typedef xdhcbk::session_callback__ _session_callback__;
+	typedef xdhcbk::session_callback__ _session_callback__;
 
-		using xdhdws::proxy__;
+	using xdhdws::proxy__;
 
-		class reporting_callback__
-		: public _reporting_callback__
+	class reporting_callback__
+	: public _reporting_callback__
+	{
+	private:
+		Q37_MRMDF( proxy__, P_, Proxy_ );
+	protected:
+		virtual void FBLFRDReport(
+			fblovl::reply__ Reply,
+			const char *Message ) override
 		{
-		private:
-			Q37_MRMDF( proxy__, _P, _Proxy );
-		protected:
-			virtual void FBLFRDReport(
-				fblovl::reply__ Reply,
-				const char *Message ) override
-			{
-				_P().Alert( Message );
-			}
-		public:
-			void reset( bso::bool__ P = true )
-			{
-				_reporting_callback__::reset( P );
-				_Proxy = NULL;
-			}
-			E_CVDTOR( reporting_callback__ );
-			void Init( proxy__ &Proxy )
-			{
-				_reporting_callback__::Init();
-				_Proxy = &Proxy;
-			}
-		};
-	}
+			P_().Alert( Message );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_reporting_callback__::reset( P );
+			Proxy_ = NULL;
+		}
+		E_CVDTOR( reporting_callback__ );
+		void Init( proxy__ &Proxy )
+		{
+			_reporting_callback__::Init();
+			Proxy_ = &Proxy;
+		}
+	};
 
 	void HandleError(
 		proxy__ &Proxy,
@@ -264,12 +260,10 @@ namespace sclxdhtml {
 			
 			return true;
 		}
-		/*
-		const char *Language( TOL_CBUFFER___ &Buffer )
+		const char *Language( void )
 		{
-			return _frontend___::Language( Buffer );	// Pour rsoudre l'ambiguit.
+			return frontend::Language();
 		}
-		*/
 		void Refresh( void )
 		{
 			if ( _Page == UndefinedPage )
@@ -288,14 +282,7 @@ namespace sclxdhtml {
 			const char *Message,
 			str::string_ &Translation )
 		{
-		qRH
-			TOL_CBUFFER___ Buffer;
-		qRB
-			scllocale::GetTranslation( Message, Language( Buffer ), Translation );
-		qRR
-		qRT
-		qRE
-			return Translation;
+			return scllocale::GetTranslation( Message, Language(), Translation );
 		}
 	};
 
@@ -360,19 +347,6 @@ namespace sclxdhtml {
 		qRT
 		qRE
 			return Success;
-		}
-		const str::string_ &GetTranslation(
-			const char *Message,
-			str::string_ &Translation )
-		{
-		qRH
-			TOL_CBUFFER___ Buffer;
-		qRB
-			scllocale::GetTranslation( Message, Language( Buffer ), Translation );
-		qRR
-		qRT
-		qRE
-			return Translation;
 		}
 		E_RODISCLOSE__( xdhcbk::mode__, Mode );
 	};

@@ -411,71 +411,15 @@ namespace uys {
 	E_ENUM( _state )
 	{	// Statut de l'opration de connection.
 		sExists,		// le fichier rattach existe.
-			sAbsent,		// Fichier rattach absent (ce n'est pas une erreur, cela signifie que des donnes n'ont pas encore t stockes).
-			sInconsistent,	// Les fichiers sont dans une tat incohrent, probablement d  un arrt inopin du logiciel. Utilis par les bibliothques en amont.
-			s_amount,
-			s_Undefined
+		s_False,
+		sAbsent = s_False,		// Fichier rattach absent (ce n'est pas une erreur, cela signifie que des donnes n'ont pas encore t stockes).
+		s_Error,
+		sInconsistent = s_Error,	// Les fichiers sont dans une tat incohrent, probablement d  un arrt inopin du logiciel. Utilis par les bibliothques en amont.
+		s_amount,
+		s_Undefined
 	};
 
 	E_XENUM( state, s );
-
-#define UYS_STATE_AMOUNT	3
-
-	inline bso::bool__ IsError( state__ State )
-	{
-#if UYS_STATE_AMOUNT != 3
-#	error "'state__' changed !"
-#endif
-		switch ( State() ) {
-		case sExists:
-		case sAbsent:
-			return false;
-			break;
-		case sInconsistent:
-			return true;
-			break;
-		default:
-			qRFwk();
-			break;
-		}
-
-		return true;	// To avoid a 'warning'.
-	}
-
-	inline bso::bool__ Exists( state__ State )
-	{
-		if ( IsError( State ) )
-			qRFwk();
-
-#if UYS_STATE_AMOUNT != 3
-#	error "'state__' changed !"
-#endif
-		switch ( State() ) {
-		case sExists:
-			return true;
-			break;
-		case sAbsent:
-			return false;
-			break;
-		case sInconsistent:
-			qRFwk();
-			break;
-		default:
-			qRFwk();
-			break;
-		}
-
-		return false;	// Pour viter un 'warning'.
-	}
-
-}
-
-inline bso::bool__ BoolOp( uys::_state__ State )
-{
-	if ( uys::IsError( State ) )
-		qRFwk();
-
-	return uys::Exists( State );
 }
 
 namespace uys {

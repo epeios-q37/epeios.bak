@@ -116,18 +116,19 @@ namespace ntvstr {
 		{
 			_Core.reset( P );
 		}
-		E_CDTOR( string___ );
+		E_DTOR( string___ );
 # ifndef NTVSTR__MBS
-		string___( const char *String )
+		string___( const char__ *String )
 		{
 			reset( false );
 
 			Init( String );
 		}
 # endif
-		string___( const char__ *String )
+		string___( const char *String  = NULL )
 		{
 			reset( false );
+
 			Init( String );
 		}
 		string___( const str::string_ &String )
@@ -135,23 +136,6 @@ namespace ntvstr {
 			reset( false );
 			Init( String );
 		}
-# ifdef CPE_S_WIN
-#  if defined( CPE_F_32BITS ) || defined( CPE_C_MSC )
-		string___( int String )	// Pour traiter le cas ou c'est 'NULL' (assimil  un int) qui est pass en paramtre.
-#  elif defined( CPE_F_64BITS )
-		string___( long long int String )	// Pour traiter le cas ou c'est 'NULL' (assimil  un long long int) qui est pass en paramtre.
-#  else
-#   error
-#  endif
-		{
-			reset( false );
-
-			if ( String != 0 )
-				qRFwk();
-
-			Init( (char__ *)NULL );
-		}
-# endif
 		string___ &operator =( const string___ &S )
 		{
 			Init( S.Internal() );

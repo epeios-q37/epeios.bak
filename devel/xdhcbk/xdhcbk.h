@@ -34,6 +34,8 @@
 # include "sclerror.h"
 # include "strmrg.h"
 
+# include <stdarg.h>
+
 # define XDHCBK_SHARED_DATA_VERSION_NUMBER	"11"
 
 # define XDHCBK_SHARED_DATA_VERSION			XDHCBK_SHARED_DATA_VERSION_NUMBER "-" CPE_AL

@@ -183,10 +183,50 @@ namespace tol
 		}
 	};
 
-	template <typename type, type Undefined> class extended_enum__
+	/*
+		enum example {
+			// First value(s) correspond to true.
+			xA,
+			xB,
+			xC,
+			...
+			x_False,
+			xD = x_False,
+			xE,
+			xF,
+			x_Error,
+			xG = x_Error,
+			xH,
+			xI,
+			...
+			x_amount,
+			x_Undefined
+		}
+	*/
+
+	enum flavor_ {	// new notation.
+		fTrue,
+		fFalse,
+		fError,
+		f_amount,
+		f_Undefined
+	};
+
+	template <typename type, type False, type Error, type Undefined> class extended_enum__
 	{
 	private:
 		type _Value;
+		flavor_ F_( void ) const 
+		{
+			if ( _Value > Undefined )
+				qRFwk();
+			else if ( _Value > Error )
+				return fError;
+			else if ( _Value > False )
+				return fFalse;
+
+			return fTrue;
+		}
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -205,19 +245,29 @@ namespace tol
 		{
 			_Value = Undefined;
 		}
-		type operator()( void ) const
+		type RawValue( void ) const
 		{
 			return _Value;
 		}
+		bso::bool__ IsError( void ) const
+		{
+			return F_() == fError;
+		}
+		bso::bool__ IsFalse( void ) const
+		{
+			return F_() == fFalse;
+		}
+		bso::bool__ IsTrue( void ) const
+		{
+			return F_() == fTrue;
+		}
 		operator bso::bool__( void ) const
 		{
-			// Cette fonction doit gnrer une erreur lorsque _'Value' reprsente une valeur indiquant un problme.
-			// Si on ne veut pas qu'une erreur soit gnre, on utilise l'oprateur '()'.
-			return BoolOp( _Value );
+			return IsTrue();
 		}
 	};
 
-# define E_XENUM( name, prefix )	typedef tol::extended_enum__<_##name##__, prefix##_Undefined> name##__
+# define E_XENUM( name, prefix )	typedef tol::extended_enum__<_##name##__, prefix##_False, prefix##_Error, prefix##_Undefined> name##__
 }
 
 # define E_XROWt( type )	extended_row__<type>
@@ -1344,46 +1394,46 @@ namespace tol {
 
 }
 
-template <typename type, type Undefined> bso::bool__ operator==(
-	tol::extended_enum__<type, Undefined> Op1,
-	tol::extended_enum__<type, Undefined> Op2 )
+template <typename type, type False, type Error, type Undefined> bso::bool__ operator==(
+	tol::extended_enum__<type, False, Error, Undefined> Op1,
+	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
 	return Op1() == Op2();
 }
 
-template <typename type, typename _type, type Undefined> bso::bool__ operator==(
+template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator==(
 	_type Op1,
-	tol::extended_enum__<type, Undefined> Op2 )
+	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
 	return Op1 == Op2();
 }
 
-template <typename type, typename _type, type Undefined> bso::bool__ operator==(
-	tol::extended_enum__<type, Undefined> Op1,
+template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator==(
+	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	_type Op2 )
 {
 	return Op1() == Op2;
 }
 
-template <typename type, type Undefined> bso::bool__ operator!=(
-	tol::extended_enum__<type, Undefined> Op1,
-	tol::extended_enum__<type, Undefined> Op2 )
+template <typename type, type False, type Error, type Undefined> bso::bool__ operator!=(
+	tol::extended_enum__<type, False, Error, Undefined> Op1,
+	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
-	return Op1() != Op2();
+	return Op1.RawValue() != Op2.RawValue();
 }
 
-template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
+template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator!=(
 	_type Op1,
-	tol::extended_enum__<type, Undefined> Op2 )
+	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
 	return Op1 != Op2();
 }
 
-template <typename type, typename _type, type Undefined> bso::bool__ operator!=(
-	tol::extended_enum__<type, Undefined> Op1,
+template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator!=(
+	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	_type Op2 )
 {
-	return Op1() != Op2;
+	return Op1.RawValue() != Op2;
 }
 
 #if 0

@@ -48,21 +48,14 @@ namespace plgn {
 	{
 	private:
 		dlbrry::dynamic_library___ _Library;
-		plgncore::callback__ *_Callback;
+		Q37_MRMDF( plgncore::callback__, C_, Callback_ );
 		plugin *_Plugin;
-		plgncore::callback__ &_C( void ) const
-		{
-			if ( _Callback == NULL )
-				qRFwk();
-
-			return *_Callback;
-		}
 		void _ReleasePlugin( void )
 		{
 			if ( _Plugin == NULL )
 				qRFwk();
 
-			_C().ReleasePlugin( _Plugin );
+			C_().ReleasePlugin( _Plugin );
 		}
 		bso::bool__ _IsCompatible( void )
 		{
@@ -82,7 +75,7 @@ namespace plgn {
 			}
 
 			_Library.reset( P );
-			_Callback = NULL;
+			Callback_ = NULL;
 			_Plugin = NULL;
 		}
 		E_CDTOR( retriever___ );
@@ -111,13 +104,13 @@ namespace plgn {
 			if ( Function == NULL )
 				qRFwk();
 
-			_Callback = &Function();
+			Callback_ = &Function();
 
 			Data.Init( err::qRRor, sclerror::SCLERRORError, Configuration, Locale );
 
-			_C().Initialize( &Data, NULL );
+			C_().Initialize( &Data, NULL );
 
-			_Plugin = (plugin *)_C().RetrievePlugin();
+			_Plugin = (plugin *)C_().RetrievePlugin();
 
 			if ( ( _Plugin == NULL) && ( ErrHandling == err::hThrowException ) )
 				qRFwk();

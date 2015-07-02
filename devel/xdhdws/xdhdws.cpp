@@ -69,7 +69,7 @@ qRB
 	XSL.Init();
 	SetXSL_( XSL );
 
-	Alert( XML, XSL, NULL );
+	Alert( XML, XSL, nstring___());
 qRR
 qRT
 qRE
@@ -87,7 +87,7 @@ qRB
 	XSL.Init();
 	SetXSL_( XSL );
 
-	Confirmed = Confirm( XML, XSL, NULL );
+	Confirmed = Confirm( XML, XSL, nstring___() );
 qRR
 qRT
 qRE

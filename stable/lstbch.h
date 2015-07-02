@@ -241,7 +241,7 @@ namespace lstbch {
 		{
 			uys::state__ State = _Bunch.Bind();
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 			
 			if ( _List.Bind( _Bunch.TimeStamp() ) != State )
@@ -283,7 +283,7 @@ namespace lstbch {
 			if ( !Success )
 				return false;
 
-			if ( uys::IsError( Settle() ) ) {
+			if ( Settle().IsError() ) {
 				_Bunch.Drop();
 				Success = false;
 			}
@@ -329,7 +329,7 @@ namespace lstbch {
 	{
 		uys::state__ State = bch::Plug( ListBunch.Bunch(), Hook._Bunch );
 
-		if ( uys::IsError( State ) )
+		if ( State.IsError() )
 			Hook.reset();
 		else {
 			fil::size__ Size = Hook._Bunch.FileSize() / ListBunch.GetItemSize();

@@ -522,7 +522,7 @@ namespace ias {
 		{
 			uys::state__ State = _Descriptors.State();
 
-			if ( !uys::IsError( State ) )
+			if ( !State.IsError() )
 				if ( State != _Storage.State() )
 					State = uys::sInconsistent;
 
@@ -532,7 +532,7 @@ namespace ias {
 		{
 			uys::state__ State = _Descriptors.Bind();
 
-			if ( !uys::IsError( State ) )
+			if ( !State.IsError() )
 				if ( State != _Storage.Bind() )
 					State = uys::sInconsistent;
 
@@ -542,7 +542,7 @@ namespace ias {
 		{
 			uys::state__ State = _Descriptors.Settle();
 
-			if ( !uys::IsError( State ) )
+			if ( !State.IsError() )
 				if ( State != _Storage.Settle() )
 					State = uys::sInconsistent;
 
@@ -614,7 +614,7 @@ namespace ias {
 	{
 		uys::state__ State = bch::Plug( AStorage.Descriptors, Hook.DescriptorsFilesHook() );
 
-		if ( uys::IsError( State ) )
+		if ( State.IsError() )
 			Hook.reset();
 		else
 			if ( ags::Plug( AStorage.AStorage, Hook.StorageFilesHook() ) != State ) {

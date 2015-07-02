@@ -404,7 +404,7 @@ namespace lst {
 		{
 			uys::state__ State = Test_( Filename(), ReferenceTimeStamp );
 
-			if ( uys::Exists( State ) )
+			if ( State )
 				State = ReadFromFile_( Filename(), *_Store );
 
 			return State;
@@ -423,7 +423,7 @@ namespace lst {
 			else
 				State = uys::sExists;
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 			
 			while ( fil::GetLastModificationTime( _Filename ) <= ReferenceTimeStamp ) {
@@ -455,7 +455,7 @@ namespace lst {
 		}
 		bso::bool__ Exists( void ) const
 		{
-			return uys::Exists( State() );
+			return State();
 		}
 #ifdef CPE_C_MSC
 #	undef CreateFile
@@ -493,7 +493,7 @@ namespace lst {
 	{
 		uys::state__ State = Test_( Hook.Filename(), ReferenceTimeStamp );
 
-		if ( uys::IsError( State ) )
+		if ( State.IsError() )
 			Hook.reset();
 		else {
 			Hook.Set( List.Locations );

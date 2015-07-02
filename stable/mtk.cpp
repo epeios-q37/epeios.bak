@@ -47,7 +47,7 @@ namespace {
 	};
 };
 
-#	ifdef 0	// Was for BeOS. No more handled.
+#	if 0	// Was for BeOS. No more handled.
 
 #	include <be/kernel/scheduler.h>
 

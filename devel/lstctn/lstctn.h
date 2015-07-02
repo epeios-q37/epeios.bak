@@ -227,7 +227,7 @@ namespace lstctn {
 		{
 			uys::state__ State = _Container.State();
 
-			if ( !uys::IsError( State ) )
+			if ( !State.IsError() )
 				if ( State != _List.State() )
 					State = uys::sInconsistent;
 
@@ -237,7 +237,7 @@ namespace lstctn {
 		{
 			uys::state__ State = _Container.Bind();
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 
 			if ( _List.Bind( _Container.TimeStamp() ) != State )
@@ -249,7 +249,7 @@ namespace lstctn {
 		{
 			uys::state__ State = _Container.Settle();
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 
 			if ( _Container.IsPersistent() && _Container.Exists() )
@@ -270,7 +270,7 @@ namespace lstctn {
 			if ( !Success )
 				return false;
 
-			if ( uys::IsError( Settle() ) ) {
+			if ( Settle().IsError() ) {
 				_Container.Drop();
 				Success = false;
 			}
@@ -317,7 +317,7 @@ namespace lstctn {
 	{
 		uys::state__ State = ctn::Plug( ListContainer.Container(), Hook.ContainerFilesHook() );
 
-		if ( uys::IsError( State ) ) {
+		if ( State.IsError() ) {
 			Hook.reset();
 		} else {
 			fil::size__ Size = Hook.ContainerFilesHook().StaticsFilesHook().FileSize() / ListContainer.GetStaticsItemSize();
