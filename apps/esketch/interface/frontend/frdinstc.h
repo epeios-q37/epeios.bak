@@ -22,45 +22,30 @@
 #ifndef FRDINSTC__INC
 # define FRDINSTC__INC
 
-# include "frdkernl.h"
+# include "frdfrntnd.h"
 
 namespace frdinstc {
 
-	class user___
+	using namespace frdfrntnd;
+
+	class _user___
 	{
 	private:
-		frdkernl::kernel___ *_Kernel;
+		Q37_MRMDF( frdfrntnd::frontend___, F_,  Frontend_ );
 		esketch::skt_myobject___ _Object;
-		bso::bool__ _TestButtonIsVisible;
-		const frdkernl::kernel___ &_K( void ) const
-		{
-			if ( _Kernel == NULL )
-				qRGnr();
-
-			return *_Kernel;
-		}
-		frdkernl::kernel___ &_K( void )
-		{
-			if ( _Kernel == NULL )
-				qRGnr();
-
-			return *_Kernel;
-		}
 	public:
 		void reset( bso::bool__ P = true )
 		{	
-			_Kernel = NULL;
+			Frontend_ = NULL;
 
 			_Object.reset( P );
-			_TestButtonIsVisible = false;
 		}
-		E_CVDTOR( user___ );
-		void Init( frdkernl::kernel___ &Kernel )
+		E_CVDTOR( _user___ );
+		void Init( frdfrntnd::frontend___ &Frontend )
 		{
-			_Kernel = &Kernel;
+			Frontend_ = &Frontend;
 
-			_Object.Init( Kernel.MyObject );
-			_TestButtonIsVisible = false;
+			_Object.Init( Frontend.MyObject );
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -74,9 +59,36 @@ namespace frdinstc {
 
 			return String;
 		}
-		frdkernl::kernel___ &Kernel( void )
+		void TestMessage( void )
 		{
-			return _K();
+			F_().TestMessage();
+		}
+	};
+
+	class user___
+	{
+	private:
+		_user___ Core_;
+		bso::bool__ _TestButtonIsVisible;
+	public:
+		void reset( bso::bool__ P = true )
+		{	
+			Core_.reset( P );
+			_TestButtonIsVisible = false;
+		}
+		E_CVDTOR( user___ );
+		void Init( frdfrntnd::frontend___ &Frontend )
+		{
+			Core_.Init( Frontend );
+			_TestButtonIsVisible = false;
+		}
+		str::string_ &ToUpper( str::string_ &String )
+		{
+			return Core_.ToUpper( String );
+		}
+		void TestMessage( void )
+		{
+			Core_.TestMessage();
 		}
 		E_RWDISCLOSE__( bso::bool__, TestButtonIsVisible );
 	};

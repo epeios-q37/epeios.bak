@@ -37,6 +37,8 @@
 
 # include "err.h"
 
+# define SCLXDHTML_DEFAULT_SUFFIX "xdh"
+
 namespace sclxdhtml {
 	const sclrgstry::registry_ &GetRegistry( void );
 

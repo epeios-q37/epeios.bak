@@ -36,8 +36,8 @@ qRB
 	Queue.Init();
 	fnm::BuildPath( Path, Basename, "q", Queue );
 
-	this->Tree.Init( NULL, Tree );
-	this->Queue.Init( NULL, Queue );
+	this->Tree.Init( fnm::name___(), Tree );
+	this->Queue.Init( fnm::name___(), Queue );
 qRR
 qRT
 qRE

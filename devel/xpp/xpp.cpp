@@ -51,6 +51,7 @@ using xml::token__;
 #define CYPHER_TAG_METHOD_ATTRIBUTE	"method"
 
 #define BLOC_TAG_PRESERVE_ATTRIBUTE	"preserve"
+#define BLOC_TAG_MARKER_ATTRIBUTE	"marker"
 
 #define DEFINE_TAG			"define"
 #define EXPAND_TAG			"expand"
@@ -106,6 +107,7 @@ const char *xpp::GetLabel( status__ Status )
 	CASE( MissingCypherKey );
 	CASE( MissingKeyOrFormatAttribute );
 	CASE( CDataNestingForbidden );
+	CASE( UnknownVariable );
 	default:
 		qRFwk();
 		break;
@@ -244,7 +246,7 @@ enum directive__ {
 static inline directive__ GetDirective_(
 	const str::string_ &Name,
 	const _qualified_preprocessor_directives___ &Directives,
-	plevel__ PreservationLevel )
+	level__ PreservationLevel )
 {
 	directive__ Directive = d_Undefined;
 
@@ -492,18 +494,58 @@ qRE
 	return Type;
 }
 
+typedef tagsbs::long_tags_callback__ ltcallback_;
+
+class attribute_value_substitution_callback
+: public ltcallback_
+{
+private:
+	Q37_MRMDF( _variables_, V_, Variables_ );
+protected:
+	virtual bso::bool__ TAGSBSGetTagValue(
+		const str::string_ &Tag,
+		str::string_ &Value ) override
+	{
+		return ( V_().Get( Tag, Value ) );
+	}
+public:
+	void reset( bso::bool__ P = true )
+	{
+		ltcallback_::reset( P );
+		Variables_ = NULL;
+	}
+	E_CVDTOR( attribute_value_substitution_callback );
+	void Init( _variables_ &Variables )
+	{
+		ltcallback_::Init();
+		Variables_ = &Variables;
+	}
+};
+
 status__ xpp::_extended_parser___::_HandleMacroExpand(
-	const str::string_ &MacroName,
+	const str::string_ &RawMacroName,
 	_extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
 qRH
+	str::string MacroName;
 	str::string FileName;
 	str::string Content;
 	xtf::pos__ Position;
+	attribute_value_substitution_callback Callback;
 qRB
 	FileName.Init();
 	Content.Init();
+
+	MacroName.Init();
+	if ( SubstitutionMarker_() != 0 ) {
+		Callback.Init( _Variables );
+		if ( !tagsbs::SubstituteLongTags( RawMacroName, Callback, MacroName, SubstitutionMarker_() ) ) {
+			Status = sUnknownVariable;
+			qRReturn;
+		}
+	} else
+		MacroName = RawMacroName;
 
 	if ( !_Repository.Get( MacroName, Position, FileName, Content ) ) {
 		Status = sUnknownMacro;
@@ -512,7 +554,7 @@ qRB
 
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
-	Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
+	Status = Parser->_InitWithContent( Content, FileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 qRR
 	if ( Parser != NULL ) {
 		delete Parser;
@@ -530,15 +572,28 @@ qRE
 }
 
 status__ xpp::_extended_parser___::_HandleFileExpand(
-	const str::string_ &FileName,
+	const str::string_ &RawFilename,
 	_extended_parser___ *&Parser )
 {
 	status__ Status = s_Undefined;
 qRH
+	str::string Filename;
+	attribute_value_substitution_callback Callback;
 qRB
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
-	Status = Parser->_InitWithFile( FileName, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
+	Filename.Init();
+	if ( SubstitutionMarker_() != 0 ) {
+		Callback.Init( _Variables );
+		if ( !tagsbs::SubstituteLongTags(RawFilename, Callback, Filename, SubstitutionMarker_() ) ) {
+			Status = sUnknownVariable;
+			qRReturn;
+		}
+	} else
+		Filename = RawFilename;
+
+
+	Status = Parser->_InitWithFile( Filename, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 qRR
 	if ( Parser != NULL ) {
 		delete Parser;
@@ -577,7 +632,7 @@ qRB
 
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
-		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
+		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 	}
 	else
 		Status = sOK;
@@ -705,15 +760,26 @@ status__ xpp::_extended_parser___::_HandleSetDirective( _extended_parser___ *&Pa
 {
 	status__ Status = s_Undefined;
 qRH
-	str::string Name, Value;
+	str::string Name, RawValue, Value;
+	attribute_value_substitution_callback Callback;
 qRB
 	Parser = NULL;
 
 	Name.Init();
-	Value.Init();
+	RawValue.Init();
 
-	if ( ( Status = GetSetNameAndValue_( _Parser, Name, Value ) ) != sOK )
+	if ( ( Status = GetSetNameAndValue_( _Parser, Name, RawValue ) ) != sOK )
 		qRReturn;
+
+	Value.Init();
+	if ( SubstitutionMarker_() != 0  ) {
+		Callback.Init( _Variables );
+		if ( !tagsbs::SubstituteLongTags( RawValue, Callback, Value, SubstitutionMarker_() ) ) {
+			Status = sUnknownVariable;
+			qRReturn;
+		}
+	} else
+		Value = RawValue;
 
 	_Variables.Set( Name, Value );
 
@@ -799,7 +865,7 @@ qRB
 	if ( ( _Variables.Get( Name, TrueValue ) ) && ( ExpectedValue == TrueValue ) ) {
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
-		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
+		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 	}
 qRR
 	if ( Parser != NULL ) {
@@ -861,7 +927,7 @@ status__ xpp::_extended_parser___::_HandleCypherDecryption(
 {
 	Parser = NewParser( _Repository, _Variables, _Directives );
 
-	return Parser->_InitCypher( _Parser.Flow().UndelyingFlow(), _LocalizedFileName, Position(), _Directory, _CypherKey, _Preserve, _Parser.GetFormat() );
+	return Parser->_InitCypher( _Parser.Flow().UndelyingFlow(), _LocalizedFileName, Position(), _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 }
 
 status__ xpp::_extended_parser___::_HandleCypherOverride(
@@ -874,10 +940,10 @@ status__ xpp::_extended_parser___::_HandleCypherOverride(
 	else {
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
-		if ( _PreservationLevel != 0 )
+		if ( PreservationLevel_ != 0 )
 			qRFwk();
 
-		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, _Preserve );
+		return Parser->Init( _Parser.Flow(), _LocalizedFileName, _Directory, _CypherKey, Preserve_, SubstitutionMarker_() );
 	}
 }
 
@@ -980,6 +1046,21 @@ static sdr::row__ ExtractAttributeName_(
 	return Row;
 }
 
+status__ xpp::_extended_parser___::HandleAtributeValueSubstitution_(
+	const str::string_ &Source,
+	bso::char__ Marker,
+	str::string_ &Data )
+{
+	attribute_value_substitution_callback Callback;
+
+	Callback.Init( _Variables );
+
+	if ( !tagsbs::SubstituteLongTags( Source, Callback, Data, Marker ) )
+		return sUnknownVariable;
+	else
+		return sOK;
+}
+
 status__ xpp::_extended_parser___::_HandleAttributeDirective(
 	const str::string_ &Parameters,
 	_extended_parser___ *&Parser,
@@ -1020,6 +1101,7 @@ status__ xpp::_extended_parser___::_InitWithFile(
 	const fnm::name___ &Directory,
 	const str::string_ &CypherKey,
 	bso::bool__ Preserve,
+	bso::char__ SubstitutionMarker,
 	utf::format__ Format )
 {
 	status__ Status = s_Undefined;
@@ -1044,7 +1126,7 @@ qRB
 	LocalizedFileNameBuffer.Init();
 	LocationBuffer.Init();
 
-	if ( ( Status = Init( _XFlow, Path.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve ) ) != sOK )
+	if ( ( Status = Init( _XFlow, Path.UTF8( LocalizedFileNameBuffer ), Location.UTF8( LocationBuffer ), CypherKey, Preserve, SubstitutionMarker ) ) != sOK )
 		qRReturn;
 
 	_IgnorePreprocessingInstruction = true;
@@ -1063,6 +1145,7 @@ status__ xpp::_extended_parser___::_InitWithContent(
 	const fnm::name___ &Directory,
 	const str::string_ &CypherKey,
 	bso::bool__ Preserve,
+	bso::char__ SubstitutionMarker,
 	utf::format__ Format )
 {
 	status__ Status = s_Undefined;
@@ -1074,7 +1157,7 @@ qRB
 
 	_XFlow.Init( _SFlow, Format, Position );
 
-	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, Preserve ) ) != sOK )
+	if ( ( Status = Init( _XFlow, NameOfTheCurrentFile, Directory, CypherKey, Preserve, SubstitutionMarker ) ) != sOK )
 		qRReturn;
 
 	_IgnorePreprocessingInstruction = false;
@@ -1091,16 +1174,17 @@ status__ xpp::_extended_parser___::_InitCypher(
 	const fnm::name___ &Directory,
 	const str::string_ &CypherKey,
 	bso::bool__ Preserve,
+	bso::char__ SubstitutionMarker,
 	utf::format__ Format )
 {
 	_Decoder.Init( Flow );
 	_Decrypter.Init( _Decoder, CypherKey );
 	_XFlow.Init( _Decrypter, Format, Position );
 
-	if ( _PreservationLevel != 0 )
+	if ( PreservationLevel_ != 0 )
 		qRFwk();
 
-	return Init( _XFlow, FileName, Directory, CypherKey, Preserve );
+	return Init( _XFlow, FileName, Directory, CypherKey, Preserve, SubstitutionMarker );
 }
 
 
@@ -1132,6 +1216,7 @@ status__ xpp::_extended_parser___::Handle(
 	xml::token__ PreviousToken = xml::t_Undefined;
 	bso::bool__ StripHeadingSpaces = false;
 	directive__ Directive = d_Undefined;
+	bso::bool__ SubstitutionMarkerHandled = false;
 
 	Parser = NULL;
 
@@ -1152,7 +1237,7 @@ status__ xpp::_extended_parser___::Handle(
 				Status = sOK;
 			break;
 		case xml::tStartTag:
-			Directive = GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel );
+			Directive = GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ );
 
 			if ( Directive == dCData ) {
 				if ( _CDataNesting == CDATA_NESTING_MAX )
@@ -1170,12 +1255,12 @@ status__ xpp::_extended_parser___::Handle(
 					Status = sOK;
 					break;
 				case dBloc:
-					if ( _PreservationLevel == 0 )
+					if ( PreservationLevel_ == 0 )
 						Continue = true;
-					else if ( _PreservationLevel == XPP_PLEVEL_MAX )
+					else if ( PreservationLevel_ == XPP_LEVEL_MAX )
 						qRLmt();
 					else {
-						_PreservationLevel++;
+						PreservationLevel_++;
 						Status = sOK;
 					}
 					break;
@@ -1192,11 +1277,18 @@ status__ xpp::_extended_parser___::Handle(
 			break;
 		case xml::tAttribute:
 			if ( _CDataNesting == 0 ) {
-				switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
+				switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 				case dNone:
-					switch ( GetDirective_( _Parser.AttributeName(), _Directives, _PreservationLevel ) ) {
+					switch ( GetDirective_( _Parser.AttributeName(), _Directives, PreservationLevel_ ) ) {
 					case dNone:
-						Status = sOK;
+						if ( SubstitutionMarker_() != 0 ) {
+							_Parser.PurgeDumpData();
+							Data.Append (_Parser.AttributeName() );
+							Data.Append( "=\"") ;
+							Status = HandleAtributeValueSubstitution_( _Parser.Value(), SubstitutionMarker_(), Data );
+							Data.Append('"');
+						} else
+							Status = sOK;
 						break;
 					case dUnknown:
 						Status = sUnknownDirective;
@@ -1212,10 +1304,10 @@ status__ xpp::_extended_parser___::Handle(
 					break;
 				case dBloc:
 					if ( _Parser.AttributeName() == BLOC_TAG_PRESERVE_ATTRIBUTE )
-						if ( _PreservationLevel == 0 ) {
+						if ( PreservationLevel_ == 0 ) {
 							if ( _Parser.Value() == "yes" ) {
-								if ( _Preserve )
-									_PreservationLevel = 1;
+								if ( Preserve_ )
+									PreservationLevel_ = 1;
 								Continue = true;
 							} else if ( _Parser.Value() != "no" )
 								Status = sUnexpectedValue;
@@ -1223,7 +1315,19 @@ status__ xpp::_extended_parser___::Handle(
 								Continue = true;
 						} else
 							Status = sOK;
-					else
+					else if ( _Parser.AttributeName() == BLOC_TAG_MARKER_ATTRIBUTE ) {
+						if ( _Parser.Value().Amount() > 1 )
+							Status = sUnexpectedValue;
+						else  {
+							if ( _Parser.Value().Amount() == 0 )
+								SubstitutionMarkers_.Push( 0 );
+							else
+								SubstitutionMarkers_.Push( _Parser.Value()( _Parser.Value().First() ) );
+
+							SubstitutionMarkerHandled = true;
+							Continue = true;
+						}
+					} else
 						Status = sUnexpectedAttribute;
 					break;
 				case dCData:
@@ -1238,7 +1342,7 @@ status__ xpp::_extended_parser___::Handle(
 			break;
 		case xml::tSpecialAttribute:
 			if ( _CDataNesting == 0 ) {
-				switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
+				switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 				case dNone:
 					break;
 				case dBloc:
@@ -1255,7 +1359,7 @@ status__ xpp::_extended_parser___::Handle(
 			Status = sOK;
 			break;
 		case xml::tStartTagClosed:
-			switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
+			switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 			case dNone:
 				Status = sOK;
 				break;
@@ -1269,12 +1373,17 @@ status__ xpp::_extended_parser___::Handle(
 				StripHeadingSpaces = true;
 				break;
 			case dBloc:
-				if ( _PreservationLevel > 1 )
+				if ( PreservationLevel_ > 1 )
 					Status = sOK;
 				else if ( _CDataNesting == 0 )
 					Continue = true;
 				else
 					Status = sOK;
+
+				if ( !SubstitutionMarkerHandled )
+					SubstitutionMarkers_.Push( SubstitutionMarker_() );
+
+				SubstitutionMarkerHandled = false;
 				break;
 			default:
 				qRFwk();
@@ -1282,7 +1391,7 @@ status__ xpp::_extended_parser___::Handle(
 			}
 			break;
 		case xml::tEndTag:
-			switch ( GetDirective_( _Parser.TagName(), _Directives, _PreservationLevel ) ) {
+			switch ( GetDirective_( _Parser.TagName(), _Directives, PreservationLevel_ ) ) {
 			case dNone:
 				if ( _CDataNesting == 0 )
 					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );
@@ -1304,13 +1413,15 @@ status__ xpp::_extended_parser___::Handle(
 				_CDataNesting--;
 				break;
 			case dBloc:
-				if ( _PreservationLevel != 0 ) {
-					_PreservationLevel--;
-					if ( _PreservationLevel > 0 ) {
+				if ( PreservationLevel_ != 0 ) {
+					PreservationLevel_--;
+					if ( PreservationLevel_ > 0 ) {
 						Status = sOK;
 						break;
 					}
 				}
+
+				SubstitutionMarkers_.Pop();
 			case dCypher:
 				if ( _CDataNesting == 0 ) {
 					StripHeadingSpaces = StripHeadingSpaces_( PreviousToken, _Parser, _Directives.NamespaceWithSeparator );

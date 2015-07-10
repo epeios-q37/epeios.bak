@@ -108,11 +108,15 @@
 		<Translation language="fr">Résultat vide.</Translation>
 		<Translation language="en">Empty result.</Translation>
 	</Translations>
-  <Translations text="XPP_CDataNestingForbidden">
-    <Translation language="fr">Les 'CDATA' ne peuvent pas être imbriqués</Translation>
-    <Translation language="en">Nesting from 'CDATA' are forbidden</Translation>
-  </Translations>
-  <!--
+	  <Translations text="XPP_CDataNestingForbidden">
+		<Translation language="fr">Les 'CDATA' ne peuvent pas être imbriqués</Translation>
+		<Translation language="en">Nesting from 'CDATA' are forbidden</Translation>
+	  </Translations>
+	<Translations text="XPP_UnknownVariable">
+		<Translation language="fr">Variable inconnue</Translation>
+		<Translation language="en">Unknown variable</Translation>
+	</Translations>
+	<!--
 	<Translations text="XPP_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

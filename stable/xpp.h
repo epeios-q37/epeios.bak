@@ -53,11 +53,11 @@
 
 namespace xpp {
 
-	typedef bso::uint__ plevel__;	// Prservation level.
+	typedef bso::uint__ level__;	// Imbrication level.
 
-	#define XPP_PLEVEL_MAX	BSO_UINT_MAX
+	#define XPP_LEVEL_MAX	BSO_UINT_MAX
 
-	// NOTA : Si modifi, modifier 'GetTranslation()' en consquent, ainsi que le contenu du ficher 'xpp.xlcl'.
+	// NOTA : Si modifié, modifier 'GetTranslation()' en conséquent, ainsi que le contenu du ficher 'xpp.xlcl'.
 	enum status__ {
 		sOK = xml::sOK,
 		sNoTagsAllowedHere = xml::s_amount,
@@ -84,6 +84,7 @@ namespace xpp {
 		sMissingKeyOrFormatAttribute,
 		sEmptyResult,
 		sCDataNestingForbidden,
+		sUnknownVariable,
 
 		s_amount,
 		s_Undefined,
@@ -132,7 +133,6 @@ namespace xpp {
 			FileName.Init();
 		}
 	};
-
 
 	struct context___ {
 		status__ Status;
@@ -188,7 +188,7 @@ namespace xpp {
 		str::string CDataTag;
 		str::string CypherTag;
 		str::string AttributeAttribute;	//'<tag xpp:attribute="..." ...>'//
-		str::string XMLNS;	// <... xmlns:xpp="..." ...> ('xpp' ou ce qui a t choisi par l'utilisateur ...).
+		str::string XMLNS;	// <... xmlns:xpp="..." ...> ('xpp' ou ce qui a été choisi par l'utilisateur ...).
 		void reset( bso::bool__ P = true )
 		{
 			NamespaceWithSeparator.reset( P );
@@ -433,6 +433,9 @@ namespace xpp {
 
 	typedef _variables	_variables_;
 
+	typedef bch::E_BUNCH_( bso::char__ ) substitution_markers_;
+	E_AUTO( substitution_markers );
+
 	class _extended_parser___
 	{
 	private:
@@ -446,20 +449,22 @@ namespace xpp {
 		_repository_ &_Repository;
 		_variables_ &_Variables;
 		_qualified_preprocessor_directives___ &_Directives;
-		fnm::name___ _LocalizedFileName;	// Si le 'parser' sert  l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
+		fnm::name___ _LocalizedFileName;	// Si le 'parser' sert à l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
 		fnm::name___ _Directory;
 		str::string _CypherKey;
-		bso::bool__ _Preserve;
+		bso::bool__ Preserve_;
+		level__ PreservationLevel_;
+		substitution_markers SubstitutionMarkers_;
 		bso::bool__ _IgnorePreprocessingInstruction;
 		bso::bool__ _AttributeDefinitionInProgress;
 		bso::uint__ _CDataNesting;
-		plevel__ _PreservationLevel;
 		status__ _HandleDefineDirective( _extended_parser___ *&Parser );
 		status__ _InitWithFile(
 			const fnm::name___ &FileName,
 			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve,
+			bso::char__ SubstitutionMarker,
 			utf::format__ Format );
 		status__ _InitWithContent(
 			const str::string_ &Content,
@@ -468,6 +473,7 @@ namespace xpp {
 			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve,
+			bso::char__ SubstitutionMarker,
 			utf::format__ Format );
 		status__ _InitCypher(
 			flw::iflow__ &Flow,
@@ -476,6 +482,7 @@ namespace xpp {
 			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
 			bso::bool__ Preserve,
+			bso::char__ SubstitutionMarker,
 			utf::format__ Format );
 		status__ _HandleMacroExpand(
 			const str::string_ &MacroName,
@@ -496,6 +503,17 @@ namespace xpp {
 			const str::string_ &CypherKey,
 			_extended_parser___ *&Parser );
 		status__ _HandleCypherDirective( _extended_parser___ *&Parser );
+		bso::char__ SubstitutionMarker_( void ) const
+		{
+			if ( Preserve_ || ( SubstitutionMarkers_.Amount() == 0 ) )
+				return 0;
+			else
+				return SubstitutionMarkers_.Top();
+		}
+		status__ HandleAtributeValueSubstitution_(
+			const str::string_ &Source,
+			bso::char__ Marker,
+			str::string_ &Data );
 		status__ _HandleAttributeDirective(
 			const str::string_ &Parameters,
 			_extended_parser___ *&Parser,
@@ -517,12 +535,13 @@ namespace xpp {
 			_LocalizedFileName.reset( P );
 			_Directory.reset( P );
 			_CypherKey.reset( P );
-			_Preserve = false;
+			Preserve_ = false;
+			PreservationLevel_ = 0;
+			SubstitutionMarkers_.reset( P );
 			_Parser.reset( P );
 			_IgnorePreprocessingInstruction = false;
 			_AttributeDefinitionInProgress = false;
 			_CDataNesting = 0;
-			_PreservationLevel = 0;
 		}
 		_extended_parser___(
 			_repository_ &Repository,
@@ -540,10 +559,11 @@ namespace xpp {
 		}
 		status__ Init(
 			xtf::extended_text_iflow__ &XFlow,
-			const fnm::name___ &LocalizedFileName,	// Si 'XFlow' est rattach  un fichier, le nom de ce fichier (utile pour la gestion d'erreurs).
+			const fnm::name___ &LocalizedFileName,	// Si 'XFlow' est rattaché à un fichier, le nom de ce fichier (utile pour la gestion d'erreurs).
 			const fnm::name___ &Directory,
 			const str::string_ &CypherKey,
-			bso::bool__ Preserve )
+			bso::bool__ Preserve,
+			bso::char__ SubstitutionMarker )
 		{
 			// _Repository.Init();
 			// _Tags.Init();
@@ -555,8 +575,10 @@ namespace xpp {
 			_IgnorePreprocessingInstruction = false;
 			_AttributeDefinitionInProgress = false;
 			_CDataNesting = 0;
-			_PreservationLevel = 0;
-			_Preserve = Preserve;
+			Preserve_= Preserve;
+			PreservationLevel_ = 0;
+			SubstitutionMarkers_.Init();
+			SubstitutionMarkers_.Push( SubstitutionMarker );
 
 			return sOK;
 		}
@@ -612,12 +634,14 @@ namespace xpp {
 			CypherKey,
 			Namespace;
 		bso::bool__ Preserve;
+		bso::char__ SubstitutionTag;
 		void reset( bso::bool__ P = true )
 		{
 			Directory.reset( P);
 			CypherKey.reset( P );
 			Namespace.reset( P );
 			Preserve = false;
+			SubstitutionTag = 0;
 		}
 		criterions___( void )
 		{
@@ -631,22 +655,25 @@ namespace xpp {
 			const fnm::name___ &Directory,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string(),
-			bso::bool__ Preserve = false )
+			bso::bool__ Preserve = false,
+			bso::char__ SubstitutionTag = 0 )
 		{
 			reset( false );
 
-			Init( Directory, CypherKey, Namespace, Preserve );
+			Init( Directory, CypherKey, Namespace, Preserve, SubstitutionTag );
 		}
 		void Init( 
 			const fnm::name___ &Directory,
 			const str::string_ &CypherKey = str::string() ,
 			const str::string_ &Namespace = str::string(),
-			bso::bool__ Preserve = false )
+			bso::bool__ Preserve = false,
+			bso::char__ SubstitutionTag = 0 )
 		{
 			this->Directory.Init( Directory );
 			this->CypherKey.Init( CypherKey );
 			this->Namespace.Init( Namespace );
 			this->Preserve = Preserve;
+			this->SubstitutionTag = SubstitutionTag;
 		}
 		bso::bool__ IsNamespaceDefined( void ) const
 		{
@@ -663,7 +690,7 @@ namespace xpp {
 		_repository _Repository;
 		_variables _Variables;
 		str::string _Data;
-		sdr::size__ _Position;	// Position du premier caractre non lu dans le '_Data'.
+		sdr::size__ _Position;	// Position du premier caractère non lu dans le '_Data'.
 		_xparser_stack _Parsers;
 		_extended_parser___ *_CurrentParser;
 		void _DeleteParsers( void );
@@ -722,7 +749,7 @@ namespace xpp {
 			_DeleteParsers();
 			_Repository.Init();
 			_Variables.Init();
-# if 0	// A priori quivalent  ce qu'il y a dans le '#else', mais VC++ 10 dtruit 'Criterions.Namespace' quand 'Criterions.IsNamespaceDefined()' est vrai. Fonctionne avec 'g++4'.
+# if 0	// A priori équivalent à ce qu'il y a dans le '#else', mais VC++ 10 détruit 'Criterions.Namespace' quand 'Criterions.IsNamespaceDefined()' est vrai. Fonctionne avec 'g++4'.
 			_Directives.Init( Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string( XPP__PREPROCESSOR_DEFAULT_NAMESPACE ) );
 # else
 			if ( Criterions.IsNamespaceDefined() )
@@ -735,7 +762,7 @@ namespace xpp {
 			_iflow_driver___::Init( ThreadSafety );
 			_CurrentParser = NewParser( _Repository, _Variables, _Directives );
 			_Parsers.Init();
-			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve ) != sOK )
+			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve, Criterions.SubstitutionTag ) != sOK )
 				qRFwk();
 			_Status = sOK;
 
@@ -783,7 +810,7 @@ namespace xpp {
 		}
 	};
 
-	// Lorsqu'une erreur s'est produite; information stockes dans 'PFlow'.
+	// Lorsqu'une erreur s'est produite; information stockées dans 'PFlow'.
 	inline void GetMeaning(
 		const preprocessing_iflow___ &PFlow,
 		lcl::meaning_ &Meaning )

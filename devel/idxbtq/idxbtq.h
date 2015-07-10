@@ -289,7 +289,7 @@ namespace idxbtq {
 		{
 			uys::state__ State = _Tree.State();
 
-			if ( !uys::IsError( State ) )
+			if ( !State.IsError() )
 				if ( State != _Queue.State() )
 					State = uys::sInconsistent;
 
@@ -299,7 +299,7 @@ namespace idxbtq {
 		{
 			uys::state__ State = _Tree.Bind();
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 
 			if ( _Queue.Bind() != State )
@@ -312,7 +312,7 @@ namespace idxbtq {
 		{
 			uys::state__ State = _Tree.Settle();
 
-			if ( uys::IsError( State ) )
+			if ( State.IsError() )
 				return State;
 
 			if ( _Queue.Settle() != State )

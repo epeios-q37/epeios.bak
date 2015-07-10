@@ -300,6 +300,10 @@ namespace bch {
 		{
 			return Append( Object );
 		}
+		row Push( const type &Object )
+		{
+			return Append( Object );
+		}
 		type Pop( void )
 		{
 			type Object = mmr::Get( this->Last() );
@@ -308,7 +312,7 @@ namespace bch {
 
 			return Object;
 		}
-		type Top( void )
+		type Top( void ) const
 		{
 			return mmr::Get( this->Last() );
 		}
