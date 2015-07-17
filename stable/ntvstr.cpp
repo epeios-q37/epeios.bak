@@ -114,7 +114,7 @@ const bso::char__ *ntvstr::string___::_Convert(
 {
 	if ( _Core == NULL ) {
 		Buffer.reset();
-		return Buffer;
+		return "";
 	}
 
 # ifdef NTVSTR__WCS

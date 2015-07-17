@@ -1,13 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- For tool-like software (based on 'SCLTOOL'). -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:define name="Arguments">
+	<xpp:define name="TOL_Arguments">
 		<xpp:bloc>
 		  <Argument id="Usage" Description="UsageCommandDescription" long="help" Value="Usage"/>
 		  <Argument id="Version" Description="VersionCommandDescription" long="version" Value="Version"/>
 		  <Argument id="License" Description="LicenseCommandDescription" long="license" Value="License"/>
 		</xpp:bloc>
 	</xpp:define>
-	<xpp:define name="Locale">
+	<xpp:define name="TOL_Locale">
 		<xpp:bloc>
 			<Translations message="VersionCommandDescription">
 			  <Translation language="fr">Affiche la version du programme.</Translation>

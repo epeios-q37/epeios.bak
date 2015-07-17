@@ -434,18 +434,18 @@ sdr::row__ xdhjst::Find(
 }
 
 void xdhjst::GetEventsAbstracts(
+	const str::string_ &TagName,
 	const str::string_ &Events,
 	event_abstracts_ &Abstracts )
 {
 qRH
-	str::string Name;
 	xdhcbk::args Definitions;
 	TOL_CBUFFER___ Buffer;
 qRB
 	if ( Events.Amount() != 0 ) {
 		Definitions.Init();
 		xdhcbk::Split( Events, Definitions );
-		FillEventAbstracts( Name, Definitions, Abstracts );
+		FillEventAbstracts( TagName, Definitions, Abstracts );
 	}
 qRR
 qRT

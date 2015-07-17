@@ -12,6 +12,13 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2017-07-07 :
+- XDHJST :
+	- * : Adding 'TagName' parameters to 'GetEventsAbstract()' function to properly handle the default action.
+
+2015-07-15 :
+- NTVSTR :
+	* The methods returning a 'const bso::char__ *' return now an empty string when core pointer == 'NULL'.
 
 2015-07-10 :
 - XPP :

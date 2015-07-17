@@ -27,14 +27,4 @@
 			<xpp:expand href="$CorpusDir$epeios.xlcl"/>
 		</xpp:bloc>
 	</xpp:define>
-	<xpp:define name="epeios.xcfg">
-		<xpp:bloc marker="$">
-			<xpp:expand href="$CorpusDir$epeios.xcfg"/>
-		</xpp:bloc>
-	</xpp:define>
-	<xpp:define name="xdhtml.xcfg">
-		<xpp:bloc marker="$">
-			<xpp:expand href="$CorpusDir$xdhtml.xcfg"/>
-		</xpp:bloc>
-	</xpp:define>
 </xpp:bloc>

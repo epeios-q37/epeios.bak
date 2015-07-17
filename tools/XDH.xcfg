@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- For tools which deal with XDHTML interfaces -->
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<Definitions>
+		<CustomItems>
+			<AttributeNames>
+				<OnEvent>data-q37-onevent</OnEvent>
+				<OnEvents>data-q37-onevents</OnEvents>
+				<Cast>data-q37-cast</Cast>
+				<Casts>data-q37-casts</Casts>
+				<Widget>data-q37-widget</Widget>
+				<Result>data-q37-result</Result>
+			</AttributeNames>
+		</CustomItems>
+		<Scripts>
+			<Attribute>
+				<Getter>
+					<![CDATA[
+							document.getElementById( "%Id%" ).getAttribute("%Name%");
+						]]>
+				</Getter>
+				<Remover>
+					<![CDATA[
+							document.getElementById( "%Id%" ).removeAttribute( "%Name%" );
+						]]>
+				</Remover>
+				<Setter>
+					<![CDATA[
+							document.getElementById( "%Id%" ).setAttribute("%Name%", "%Value%");
+						]]>
+				</Setter>
+			</Attribute>
+			<Casting>
+				<Definer>
+					<![CDATA[
+							removeCastingChildren();
+							document.getElementById( "q37-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
+						]]>
+				</Definer>
+				<Handler>
+					<![CDATA[
+							handleCast( "%Id%", "%Cast%" );
+						]]>
+				</Handler>
+			</Casting>
+			<Content>
+				<Getter>
+					<![CDATA[
+							getContent( "%Id%" );
+						]]>
+				</Getter>
+				<Setter>
+					<![CDATA[
+							setContent( "%Id%", "%Value%" );
+						]]>
+				</Setter>
+			</Content>
+			<ChildrenSetter>
+				<![CDATA[
+						removeChildren( "%Id%" );
+						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
+					]]>
+			</ChildrenSetter>
+			<Dialog>
+				<Alert>
+					<![CDATA[
+							dialog = document.createElement( "span" );
+							dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
+							$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
+							]]>
+				</Alert>
+				<!-- Ugly. Will try to solve problem with the below alternative. -->
+				<Confirm>
+					<![CDATA[
+							confirm( transformToText( "%XML%", "%XSL%" ).trim() );
+						]]>
+				</Confirm>
+				<!--
+						Below version doesn't work as is because of JS asynchronity,
+						and the fact that the UI is refreshed only when the returning from event handler!
+					-->
+				<!--<Confirm>
+						<![CDATA[
+						var response;
+						( function ()
+						{
+							var defer = $.Deferred();
+							$.Zebra_Dialog(
+								transformToHTML( "%XML%", "%XSL%" ),
+								{
+									type: 'question',
+									'onClose': function(caption) { defer.resolve( caption ); },
+									position: ['left','top'],
+								}
+							);
+							return defer.promise();
+						})().then( function (answer) {
+								unlock( answer );
+						} );
+						]]>
+					</Confirm>-->
+			</Dialog>
+			<!--<DraggableSetter>
+				<![CDATA[
+					var element = document.getElementById( "%Id%" );
+					element.setAttribute( "draggable", "true" );
+					jQuery( element ).draggable(
+						{
+							drag: function( event, ui )
+							{
+								console.log( "Drag" );
+								if ( !drag ) {
+								console.log( "!!!!" );
+								var event = document.createEvent( "HTMLEvents" );
+								event.initEvent("dragstart" );
+								document.getElementById( "%Id%" ).dispatchEvent( event );
+								drag = true;
+								}
+							}
+						}
+					);
+				]]>
+			</DraggableSetter>
+			<DroppableSetter>
+				<![CDATA[
+					var element = document.getElementById( "%Id%" );
+					element.setAttribute( "ondragover", "event.preventDefault();" );
+					jQuery( element ).droppable(
+						{
+							drop: function( event, ui )
+							{
+								console.log( "Drop" );
+								var event = document.createEvent( "HTMLEvents" );
+								event.initEvent("drop" );
+								document.getElementById( "%Id%" ).dispatchEvent( event );
+								drag = false;
+							}
+						}
+					);
+				]]>
+			</DroppableSetter>-->
+			<DraggableSetter>
+				<![CDATA[
+				var element = document.getElementById( "%Id%" );
+//				element.setAttribute( "draggable", "true" );
+				if ( false )
+					interact( element ).draggable(
+						{
+						}
+					)
+					.on( 'dragstart', function( event ) { console.log( 'dragstart' ); event.stopImmediatePropagation(); launchEvent( event.target, "dragstart" ); } )
+					.on( 'dragend', function( event ) { console.log( 'dragend' ); launchEvent( event.target, "dragend" ); } )
+					.on( 'click', function( event ) { console.log( '-->click' );event.stopImmediatePropagation();event.stopPropagation(); } )
+					;
+				]]>
+			</DraggableSetter>
+			<DroppableSetter>
+				<![CDATA[
+				var element = document.getElementById( "%Id%" );
+//				element.setAttribute( "ondragover", "event.preventDefault();" );
+				if ( false )
+					interact( element ).dropzone(
+						{
+						}
+					)
+					.on( 'drop', function( event ) { console.log( 'drop : ' + event.target.id + " ; " + event.relatedTarget.id ); launchEvent( event.target, "drop" );} );
+				]]>
+
+			</DroppableSetter>
+			<DocumentSetter>
+				<![CDATA[
+				document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );"";
+				]]>
+			</DocumentSetter>
+			<EventHandler>
+				<![CDATA[
+						document.getElementById( "%Id%" ).addEventListener( "%Event%", handleEvent );
+					]]>
+			</EventHandler>
+			<!--<EventHandler>
+				<![CDATA[
+//						document.getElementById( "%Id%" ).setAttribute( "on%Event%", "handleEvent( event );" );	// Seems not to work under 'CEF'.
+//						document.getElementById( "%Id%" ).on%Event%=handleEvent;
+						document.getElementById( "%Id%" ).addEventListener( "%Event%", handleEvent );
+					]]>
+			</EventHandler>-->
+			<Focusing>
+				<![CDATA[
+						jQuery(document.getElementById( "%Id%" )).focus();
+					]]>
+			</Focusing>
+			<Log>
+				<![CDATA[
+						console.log( "%Message%" );
+					]]>
+			</Log>
+			<Property>
+				<Getter>
+					<![CDATA[
+							document.getElementById( "%Id%" ).%Name_%;
+						]]>
+				</Getter>
+				<Setter>
+					<![CDATA[
+							document.getElementById( "%Id%" ).%Name_% = %Value_%;
+						]]>
+				</Setter>
+			</Property>
+			<Widget>
+				<Instantiation>
+					<![CDATA[
+						jQuery( document.getElementById( "%Id%") ).%Type_%({%Parameters_%});
+					]]>
+				</Instantiation>
+				<ContentRetriever>
+					<![CDATA[
+							jQuery( document.getElementById( "%Id%") ).%Method_%
+						]]>
+				</ContentRetriever>
+				<Focusing>
+					<![CDATA[
+							jQuery( document.getElementById( "%Id%") ).%Method_%
+						]]>
+				</Focusing>
+			</Widget>
+		</Scripts>
+	</Definitions>
+</xpp:bloc>
