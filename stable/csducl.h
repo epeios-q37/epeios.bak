@@ -17,51 +17,33 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: csducl.h,v 1.37 2013/04/09 17:57:28 csimon Exp $
+// Client-Server Devices Universal CLient 
 
 #ifndef CSDUCL__INC
-#define CSDUCL__INC
+# define CSDUCL__INC
 
-#define CSDUCL_NAME		"CSDUCL"
+# define CSDUCL_NAME		"CSDUCL"
 
-#define	CSDUCL_VERSION	"$Revision: 1.37 $"
+# define	CSDUCL_VERSION	"$Revision: 1.37 $"
 
-#define CSDUCL_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# define CSDUCL_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#if defined( E_DEBUG ) && !defined( CSDUCL_NODBG )
-#define CSDUCL_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( CSDUCL_NODBG )
+#  define CSDUCL_DBG
+# endif
 
-/* Begin of automatic documentation generation part. */
+# include "err.h"
+# include "flw.h"
+# include "csdsnc.h"
+# include "csdlec.h"
 
-//V $Revision: 1.37 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/09 17:57:28 $
-
-/* End of automatic documentation generation part. */
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
-/* Addendum to the automatic documentation generation part. */
-//D Client-Server Devices Universal CLient 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "csdsnc.h"
-#include "csdlec.h"
-
-#define CSDUCL_CACHE_SIZE	1000
+# define CSDUCL_CACHE_SIZE	1000
 
 namespace csducl {
 	enum type__ {
+		tNone,	// Pas de backend.
 		tDaemon,
-		tPlugin,
+		tLibrary,
 		t_amount,
 		t_Undefined
 	};
@@ -140,10 +122,13 @@ namespace csducl {
 		flw::ioflow__ &_Get( void )
 		{
 			switch ( _Core->_Type ) {
+			case tNone:
+				qRFwk();	// Should not be called.
+				break;
 			case tDaemon:
 				return _DaemonFlow;
 				break;
-			case tPlugin:
+			case tLibrary:
 				return _LibraryFlow;
 				break;
 			default:
@@ -203,7 +188,7 @@ namespace csducl {
 			case tDaemon:
 				_DaemonFlow.Init( Core._DaemonAccess );
 				break;
-			case tPlugin:
+			case tLibrary:
 				_LibraryFlow.Init( Core._LibraryAccess );
 				break;
 			default:
@@ -246,11 +231,5 @@ namespace csducl {
 		}
 	};
 }
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

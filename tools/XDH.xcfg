@@ -64,10 +64,10 @@
 			<Dialog>
 				<Alert>
 					<![CDATA[
-							dialog = document.createElement( "span" );
-							dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
-							$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
-							]]>
+						dialog = document.createElement( "span" );
+						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
+						$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
+					]]>
 				</Alert>
 				<!-- Ugly. Will try to solve problem with the below alternative. -->
 				<Confirm>

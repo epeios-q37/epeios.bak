@@ -386,7 +386,7 @@ qRB
 		Features.Type = csducl::tDaemon;
 		break;
 	case frdbse::btEmbedded:
-		Features.Type = csducl::tPlugin;
+		Features.Type = csducl::tLibrary;
 		break;
 	default:
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( BackendTypeEntry );
@@ -417,7 +417,7 @@ qRB
 		Features.Location = BackendFeature;
 		break;
 	case frdbse::btEmbedded:
-		Features.Type = csducl::tPlugin;
+		Features.Type = csducl::tLibrary;
 		Features.Location = BackendFeature;
 		break;
 	case frdbse::btPredefined:

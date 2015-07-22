@@ -125,7 +125,7 @@ namespace sclfrntnd {
 			_Flow.Init( ClientCore );
 
 			switch ( ClientCore.GetType() ) {
-			case csducl::tPlugin:
+			case csducl::tLibrary:
 				Mode = fblfrd::mEmbedded;
 				break;
 			case csducl::tDaemon:

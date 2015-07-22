@@ -126,6 +126,174 @@ qRFE(DoNothing_())
 	return Callback;
 }
 
+namespace {
+	void SetXML_(
+		const ntvstr::string___ &Message,
+		str::string_ &XML )
+	{
+	qRH
+		flx::E_STRING_TOFLOW___ STOFlow;
+		xml::writer Writer;
+		str::string Buffer;
+	qRB
+		STOFlow.Init( XML );
+		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
+
+		Buffer.Init();
+		Writer.PutValue( Message.UTF8( Buffer ), "Content" );
+	qRR
+	qRT
+	qRE
+	}
+
+	inline void SetXSL_( str::string_ &XSL )
+	{
+		XSL.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+			<xsl:stylesheet version=\"1.0\"\
+			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
+				<xsl:output method=\"text\"\
+					        encoding=\"utf-8\"/>\
+				<xsl:template match=\"/\">\
+					<xsl:value-of select=\"Content\"/>\
+				</xsl:template>\
+			</xsl:stylesheet>\
+		");
+	}
+
+	inline void SetXMLAndXSL_(
+		const ntvstr::string___ &Message,
+		str::string_ &XML,
+		str::string_ &XSL )
+	{
+		SetXML_( Message, XML );
+		SetXSL_( XSL );
+	}
+
+}
+
+void sclxdhtml::Alert(
+	const ntvstr::string___ &XML,
+	const ntvstr::string___ &XSL,
+	const ntvstr::string___ &Title,
+	proxy__ &Proxy,
+	const char *Language )
+{
+qRH
+	str::string CloseText;
+qRB
+	CloseText.Init();
+	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
+
+	Proxy.Alert( XML, XSL, Title, CloseText );
+qRR
+qRT
+qRE
+}
+
+void sclxdhtml::Alert(
+	const ntvstr::string___ &Message,
+	const ntvstr::string___ &CloseText,
+	proxy__ &Proxy )
+{
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	XSL.Init();
+
+	SetXMLAndXSL_( Message, XML, XSL );
+
+	Proxy.Alert(XML, XSL, ntvstr::string___(), CloseText );
+qRR
+qRT
+qRE
+}
+
+void sclxdhtml::Alert(
+	const ntvstr::string___ &Message,
+	proxy__ &Proxy,
+	const char *Language )
+{
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	XSL.Init();
+
+	SetXMLAndXSL_( Message, XML, XSL );
+
+	Alert( XML, XSL, ntvstr::string___(), Proxy, Language );
+qRR
+qRT
+qRE
+}
+
+
+bso::bool__ sclxdhtml::Confirm(
+	const ntvstr::string___ &XML,
+	const ntvstr::string___ &XSL,
+	const ntvstr::string___ &Title,
+	proxy__ &Proxy,
+	const char *Language )
+{
+	bso::bool__ Confirmation = false;
+qRH
+	str::string CloseText;
+qRB
+	CloseText.Init();
+	scllocale::GetTranslation( SCLXDHTML_NAME "_CloseText", Language, CloseText );
+
+	Confirmation = Proxy.Confirm( XML, XSL, Title, CloseText );
+qRR
+qRT
+qRE
+	return Confirmation;
+}
+
+bso::bool__ sclxdhtml::Confirm(
+	const ntvstr::string___ &Message,
+	const ntvstr::string___ &CloseText,
+	proxy__ &Proxy )
+{
+	bso::bool__ Confirmation = false;
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	XSL.Init();
+
+	SetXMLAndXSL_( Message, XML, XSL );
+
+	Confirmation = Proxy.Confirm( XML, XSL, ntvstr::string___(), CloseText );
+qRR
+qRT
+qRE
+	return Confirmation;
+}
+
+bso::bool__ sclxdhtml::Confirm(
+	const ntvstr::string___ &Message,
+	proxy__ &Proxy,
+	const char *Language )
+{
+	bso::bool__ Confirmation = false;
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	XSL.Init();
+
+	SetXMLAndXSL_( Message, XML, XSL );
+
+	Confirmation = Confirm( XML, XSL, ntvstr::string___(), Proxy, Language );
+qRR
+qRT
+qRE
+	return Confirmation;
+}
+
+
+
 void sclxdhtml::HandleError(
 	proxy__ &Proxy,
 	const char *Language )
@@ -139,15 +307,15 @@ qRB
 		Message.Init();
 		if ( sclerror::GetPendingErrorTranslation( Language, Message, err::hUserDefined ) ) {
 			sclerror::ResetPendingError();
-			Proxy.Alert( Message );
+			Alert( Message, Proxy, Language );
 		} 
 		break;
 	case err::t_Free:
 	case err::t_Return:
-		Proxy.Alert( "???" );
+		Alert( "???", Proxy, Language );
 		break;
 	default:
-		Proxy.Alert( err::Message( ErrBuffer ) );
+		Alert( err::Message( ErrBuffer ), Proxy, Language );
 		break;
 	}
 

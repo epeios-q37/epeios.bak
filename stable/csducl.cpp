@@ -41,11 +41,14 @@ type__ csducl::GetType( const str::string_ &Pattern )
 const char *csducl::GetLabel( type__ Type )
 {
 	switch ( Type ) {
+	case tNone:
+		return "None";
+		break;
 	case tDaemon:
 		return "Daemon";
 		break;
-	case tPlugin:
-		return "Plug-in";
+	case tLibrary:
+		return "Library";
 		break;
 	default:
 		qRFwk();
@@ -70,7 +73,7 @@ qRB
 	case tDaemon:
 		Success = _DaemonAccess.Init( Features.Location.Convert( Buffer ), Features.PingDelay, Log );
 		break;
-	case tPlugin:
+	case tLibrary:
 		Success = _LibraryAccess.Init( Features.Location.Convert( Buffer ), LibraryData, err::hUserDefined );
 		break;
 	default:

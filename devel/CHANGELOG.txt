@@ -12,9 +12,29 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
-2017-07-07 :
+
+2015-07-21 :
+- CSDUCL :
+	* Adaptation to changes to 'FRDBSE'.
+	% '...Plugin...' -> '...Library...'.
+- FRDBSE :
+	* Adding 'None' type of backend, when no backend is used.
+- SCLFRNTND :
+	- Adaptation to changes in 'CSDUCL'.
+- XDHCBK :
+	% 'XDHCBKLaunch(...)' is now of type 'void' instead of 'bso::bool__'.
+- XDHDWS :
+	- Adaptation to changes in 'FRDBSE'.
+- XDHUPS :
+	- Adaptation to changes in 'XDHCBK'.
+
+2015-07-18 :
+- XDHCBK, XDHJST, XDHDWS :
+	* Moving 'GetDialogBasic()' related functionnalities from 'XDHDWS' to 'XDHCBK' to be available for 'XDHJST'.
+
+2015-07-07 :
 - XDHJST :
-	- * : Adding 'TagName' parameters to 'GetEventsAbstract()' function to properly handle the default action.
+	* : Adding 'TagName' parameters to 'GetEventsAbstract()' function to properly handle the default action.
 
 2015-07-15 :
 - NTVSTR :

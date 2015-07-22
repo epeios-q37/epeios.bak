@@ -87,7 +87,7 @@ protected:
 	{
 		backend___ *Backend = NULL;
 	qRH
-	qRH
+	qRB
 		if ( ( Backend = new backend___ ) == NULL )
 			qRAlc();
 
@@ -105,11 +105,6 @@ public:
 	void reset( bso::bool__ P = true )
 	{
 		_callback___::reset( P );
-
-		if ( P == true ) {
-			scldaemon::DisplayModuleClosingMessage();
-			scldaemon::DisplayModuleClosedMessage();
-		}
 	}
 	E_CVDTOR( callback___ )
 	void Init( fblbur::mode__ Mode )
@@ -118,11 +113,13 @@ public:
 	}
 };
 
-_callback___ *sclbacknd::SCLBACKNDNewCallback( fblbur::mode__ Mode )
+_callback___ *sclbacknd::SCLBACKNDGetCallback(
+	csdleo::context__ Context,
+	fblbur::mode__ Mode )
 {
 	callback___ *Callback = NULL;
 qRH
-qRH
+qRB
 	if ( ( Callback = new callback___ ) == NULL )
 		qRAlc();
 

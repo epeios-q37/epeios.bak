@@ -77,6 +77,16 @@ namespace xdhjst {
 		... );
 
 	namespace scripter {	// Functions generating a script.
+		inline void DialogAlert(
+			const nstring___ &XML,
+			const nstring___ &XSL,
+			const nstring___ &Title,
+			const nstring___ &CloseText,
+			str::string_ &Script )
+		{
+			GetScript( snDialogAlert, &Script, XML.Internal()(), XSL.Internal()(), Title.Internal()(), CloseText.Internal()() );
+		}
+
 		inline void RemoveAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,

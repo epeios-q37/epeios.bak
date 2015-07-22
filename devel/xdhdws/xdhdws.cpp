@@ -23,77 +23,6 @@
 
 using namespace xdhdws;
 
-namespace {
-	void SetXML_(
-		const nstring___ &Message,
-		str::string_ &XML )
-	{
-	qRH
-		flx::E_STRING_TOFLOW___ STOFlow;
-		xml::writer Writer;
-		str::string Buffer;
-	qRB
-		STOFlow.Init( XML );
-		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
-
-		Buffer.Init();
-		Writer.PutValue( Message.UTF8( Buffer ), "Content" );
-	qRR
-	qRT
-	qRE
-	}
-
-	inline void SetXSL_( str::string_ &XSL )
-	{
-		XSL.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
-			<xsl:stylesheet version=\"1.0\"\
-			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
-				<xsl:output method=\"text\"\
-					        encoding=\"utf-8\"/>\
-				<xsl:template match=\"/\">\
-					<xsl:value-of select=\"Content\"/>\
-				</xsl:template>\
-			</xsl:stylesheet>\
-		");
-	}
-}
-
-void xdhdws::proxy__::Alert( const nstring___ &Message )
-{
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	SetXML_( Message, XML );
-
-	XSL.Init();
-	SetXSL_( XSL );
-
-	Alert( XML, XSL, nstring___());
-qRR
-qRT
-qRE
-}
-
-bso::bool__ xdhdws::proxy__::Confirm( const nstring___ &Message )
-{
-	bso::bool__ Confirmed = false;
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	SetXML_( Message, XML );
-	
-	XSL.Init();
-	SetXSL_( XSL );
-
-	Confirmed = Confirm( XML, XSL, nstring___() );
-qRR
-qRT
-qRE
-	return Confirmed;
-}
-
 void xdhdws::prolog::GetContent(
 	proxy__ &Proxy,
 	xml::writer_ &Writer)
@@ -221,6 +150,8 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	switch ( Type = GetBackendType_( Proxy ) ) {
+	case frdbse::btNone:
+		break;
 	case frdbse::btDaemon:
 		Feature.Append( Proxy.GetContent( DaemonBackendId, Buffer ) );
 		break;

@@ -54,7 +54,7 @@ static const char *GetRawMessage_( message__ MessageId )
 	CASE( TestMessage );
 	break;
 	default:
-		ERRPrm();
+		qRGnr();
 		break;
 	}
 
@@ -98,7 +98,7 @@ static void Report_(
 qRH
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
-qRH
+qRB
 	Translation.Init();
 
 	Backend.Locale().GetTranslation( GetRawMessage_( Message ), Backend.Language(), Translation );
@@ -139,7 +139,7 @@ DEC( Test )
 {
 	message__ Message = m_OK;
 qRH
-qRH
+qRB
 	Message = mTestMessage;
 qRR
 qRT
@@ -152,7 +152,7 @@ DEC( ToUC )
 	message__ Message = m_OK;
 qRH
 	str::string String;
-qRH
+qRB
 	String.Init(Request.StringIn() );
 
 	str::ToUpper( String );

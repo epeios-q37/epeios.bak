@@ -199,8 +199,6 @@ qRE
 	return *Buffer;
 }
 
-
-
 namespace {
 	stsfsm::automat ActionAutomat_;
 

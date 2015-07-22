@@ -185,17 +185,53 @@ namespace sclxdhtml {
 
 	using xdhdws::proxy__;
 
+	void Alert(
+		const ntvstr::string___ &XML,
+		const ntvstr::string___ &XSL,
+		const ntvstr::string___ &Title,
+		proxy__ &Proxy,
+		const char *Language );
+
+	void Alert(
+		const ntvstr::string___ &Message,
+		const ntvstr::string___ &CloseText,
+		proxy__ &Proxy );
+
+	void Alert(
+		const ntvstr::string___ &Message,
+		proxy__ &Proxy,
+		const char *Language );
+
+	bso::bool__ Confirm(
+		const ntvstr::string___ &XML,
+		const ntvstr::string___ &XSL,
+		const ntvstr::string___ &Title,
+		proxy__ &Proxy,
+		const char *Language );
+
+	bso::bool__ Confirm(
+		const ntvstr::string___ &Message,
+		const ntvstr::string___ &CloseText,
+		proxy__ &Proxy );
+
+	bso::bool__ Confirm(
+		const ntvstr::string___ &Message,
+		proxy__ &Proxy,
+		const char *Language );
+
+
 	class reporting_callback__
 	: public _reporting_callback__
 	{
 	private:
 		Q37_MRMDF( proxy__, P_, Proxy_ );
+		Q37_MPMDF( const char, L_, Language_ );
 	protected:
 		virtual void FBLFRDReport(
 			fblovl::reply__ Reply,
 			const char *Message ) override
 		{
-			P_().Alert( Message );
+			Alert( Message, P_(), L_() );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -204,10 +240,13 @@ namespace sclxdhtml {
 			Proxy_ = NULL;
 		}
 		E_CVDTOR( reporting_callback__ );
-		void Init( proxy__ &Proxy )
+		void Init(
+			proxy__ &Proxy,
+			const char *Language )
 		{
 			_reporting_callback__::Init();
 			Proxy_ = &Proxy;
+			Language_ = Language;
 		}
 	};
 
@@ -244,7 +283,7 @@ namespace sclxdhtml {
 			xdhcbk::proxy_callback__ *Callback )
 		{
 			proxy__::Init( Callback );
-			_ReportingCallback.Init( *this );
+			_ReportingCallback.Init( *this, Language );
 			frontend::Init( Language, _ReportingCallback, sclmisc::GetRegistry() );
 			_session_callback__::Init();
 			_Page = UndefinedPage;
@@ -285,6 +324,46 @@ namespace sclxdhtml {
 			str::string_ &Translation )
 		{
 			return scllocale::GetTranslation( Message, Language(), Translation );
+		}
+		void Alert(
+			const ntvstr::string___ &Message,
+			const ntvstr::string___ &CloseText = ntvstr::string___() )
+		{
+			if ( CloseText.Amount() == 0 )
+				sclxdhtml::Alert (Message, *this, Language() );
+			else
+				sclxdhtml::Alert( Message, CloseText, *this );
+		}
+		void Alert(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &Title,
+			const ntvstr::string___ &CloseText = ntvstr::string___() )
+		{
+			if ( CloseText.Amount() == 0 )
+				sclxdhtml::Alert( XML, XSL, Title, *this, Language() );
+			else
+				proxy__::Alert( XML, XSL, Title, CloseText );
+		}
+		bso::bool__ Confirm(
+			const ntvstr::string___ &Message,
+			const ntvstr::string___ &CloseText = ntvstr::string___() )
+		{
+			if ( CloseText.Amount() == 0 )
+				return sclxdhtml::Confirm( Message, *this, Language() );
+			else
+				return sclxdhtml::Confirm( Message, CloseText, *this );
+		}
+		bso::bool__ Confirm(
+			const ntvstr::string___ &XML,
+			const ntvstr::string___ &XSL,
+			const ntvstr::string___ &Title,
+			const ntvstr::string___ &CloseText = ntvstr::string___() )
+		{
+			if ( CloseText.Amount() == 0 )
+				return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
+			else
+				return proxy__::Confirm( XML, XSL, Title, CloseText );
 		}
 	};
 

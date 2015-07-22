@@ -53,7 +53,7 @@ namespace xdhcbk {
 	protected:
 		virtual bso::bool__ XDHCBKLaunch(
 			const char *Id,
-			const char *Action ) = 0;	// Return 'true' if the event propagation had to be stopped.
+			const char *Action ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{

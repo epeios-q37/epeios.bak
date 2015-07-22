@@ -66,6 +66,7 @@ project_type__ frdbse::GetProjectType( const str::string_ &Pattern )
 const char *frdbse::GetLabel( backend_type__ BackendType )
 {
 	switch ( BackendType ) {
+	C( None );
 	C( Daemon );
 	C( Embedded );
 	C( Predefined );

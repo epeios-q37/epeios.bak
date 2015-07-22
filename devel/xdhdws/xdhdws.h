@@ -69,21 +69,22 @@ namespace xdhdws {
 		void Alert(
 			const nstring___ &XML,
 			const nstring___ &XSL,
-			const nstring___ &Title )
+			const nstring___ &Title,
+			const nstring___ &CloseText )
 		{
-			C_().Process( xdhcbk::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()() );
+			C_().Process( xdhcbk::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()(), CloseText.Internal()() );
 		}
-		void Alert( const nstring___ &Message );
 		bso::bool__ Confirm(
 			const nstring___ &XML,
 			const nstring___ &XSL,
-			const nstring___ &Title )
+			const nstring___ &Title,
+			const nstring___ &CloseText )
 		{
 			bso::bool__ Confirmed  = false;
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			C_().Process( xdhcbk::fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()( ) );
+			C_().Process( xdhcbk::fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()(), CloseText.Internal()() );
 
 			Confirmed = !strcmp( "true", Buffer );
 		qRR
@@ -91,7 +92,6 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		bso::bool__ Confirm( const nstring___ &Message );
 		void SetChildren(
 			const nstring___ &Id,
 			const nstring___ &XML,

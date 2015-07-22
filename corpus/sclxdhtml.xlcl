@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: sclmisc.xlcl,v 1.3 2013/07/18 19:46:20 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Translations text="SCLXHTML_CloseText">
+		<Translation language="fr">Fermer</Translation>
+		<Translation language="en">Close</Translation>
+	</Translations>
 	<!--
 	<Translations text="SCLXHTML_">
 		<Translation language="fr"></Translation>

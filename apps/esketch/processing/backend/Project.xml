@@ -32,8 +32,8 @@
       </Modules>
     </Modules>
     <Modules Group="SKT" Path="../">
-      <Module Path="../../">sktfbc</Module>
-      <Module Path="../../">sktinf</Module>
+      <Module Path="../">sktfbc</Module>
+      <Module Path="../">sktinf</Module>
 		<Module>sktbsc</Module>
 		<Module>sktxmp</Module>
 	</Modules>

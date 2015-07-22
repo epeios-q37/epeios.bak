@@ -52,6 +52,7 @@ namespace frdbse {
 	project_type__ GetProjectType( const str::string_ &Pattern );
 
 	enum backend_type__ {
+		btNone,	// Use of no backend.
 		btDaemon,
 		btEmbedded,
 		btPredefined,
