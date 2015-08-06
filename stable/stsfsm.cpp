@@ -58,8 +58,13 @@ id__ stsfsm::Add(
 	if ( Current == qNIL )
 		qRFwk();
 
-	if ( Automat( Current ).GetId() != UndefinedId	)
-		return Automat( Current ).GetId();
+	if ( Automat( Current ).GetId() != UndefinedId ) {
+		Id = Automat( Current ).GetId();
+
+		Automat.Flush();
+
+		return Id;
+	}
 
 	Automat( Current ).SetId( Id );
 

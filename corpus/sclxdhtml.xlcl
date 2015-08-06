@@ -5,6 +5,10 @@
 		<Translation language="fr">Fermer</Translation>
 		<Translation language="en">Close</Translation>
 	</Translations>
+	<Translations text="SCLXHTML__NoBackendDeclaration">
+		<Translation language="fr">Déclaration de moteur de traitement absente.</Translation>
+		<Translation language="en">No backend dclaration.</Translation>
+	</Translations>
 	<!--
 	<Translations text="SCLXHTML_">
 		<Translation language="fr"></Translation>

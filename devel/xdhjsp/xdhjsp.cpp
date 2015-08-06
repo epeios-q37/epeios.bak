@@ -325,7 +325,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );
-	Execute( Callback, xdhjst::snAttributeGetter, Result, Id );
+	Execute( Callback, xdhjst::snAttributeGetter, Result, Id, nstring___( ResultAttributeName ).Internal()() );
 qRR
 qRT
 qRE

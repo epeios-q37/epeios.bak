@@ -12,6 +12,21 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-08-04 :
+- XPP :
+	# Use of the correct 'PreservationLevel_' variable to know if variable replacement should be skipped or not.
+
+2015-08-02 :
+- STSFSM :
+	# Add missing flush in 'Add(...)'.
+
+2015-08-01 :
+- SCLRGSTRY, SCLRGSTRY :
+	% 'OGetValue(...)' returns now a value which indicates if the entry exists or no (no more use of the 'Missing' parameter.)
+
+2015-07-23 :
+- RGSTRY :
+	% Adding 'entry___::(Init|entry___)( const entry___ &)'.
 
 2015-07-21 :
 - CSDUCL :

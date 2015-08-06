@@ -44,12 +44,13 @@ using scllocale::GetLocale;
 static err::err___ qRRor_;
 static sclerror::error___ SCLError_;
 
+E_CDEF(bso::char__, ExplicitOptionMarker_, '#' );	// Marker of an option where the path is explicitly gioven.
+
 bso::bool__ scltool::IgnoreUnknownArguments = false;
 
 str::string ParametersTag_;	// Voir tout en bas.
 
 static rgstry::entry___ Command_( "Command", sclrgstry::Parameters );
-static rgstry::entry___ ProjectFilename_( "ProjectFilename", sclrgstry::Parameters );
 
 static rgstry::entry___ &Arguments_ = sclrgstry::Arguments;
 #define ARGUMENT_TAG "Argument"
@@ -340,6 +341,15 @@ qRB
 	if ( Equal == Arg  )
 		ReportBadArgumentAndAbort_( Arg );
 
+	if ( Arg[0] == ExplicitOptionMarker_ ) {
+
+		if ( strchr(Arg, '[' ) )
+			Equal = strchr(Equal + 1, '=' );
+
+		if ( Equal == NULL )
+			ReportBadArgumentAndAbort_( Arg );
+	}
+
 	Last = Arg + strlen( Arg );
 
 	Name.Init();
@@ -453,8 +463,6 @@ qRT
 qRE
 	return Id;
 }
-
-E_CDEF(bso::char__, ExplicitOptionMarker_, '#' );	// Marqueur d'une option dans laquelle on prcise explicitement le chemin.
 
 static const str::string_ &GetId_(
 	const str::string_ &Name,
@@ -662,8 +670,7 @@ qRE
 
 static const str::string_ &GetPath_(
 	const str::string_ &Id,
-	str::string_ &Path,
-	bso::bool__ Short )	// Si  'true', retourne la version raccourcie.
+	str::string_ &Path )
 {
 	if ( Id( Id.First() ) != ExplicitOptionMarker_ ) {
 		GetIdTagged_( Id, IdTaggedArgumentPath_, Path );
@@ -671,10 +678,9 @@ static const str::string_ &GetPath_(
 		if ( Path.Amount() != 0  )
 			if ( Path(Path.First()) != '/' )
 				Path.InsertAt( ParametersTag_ );	
-	}
-	else {
+	} else {
 		Path.Append( ParametersTag_ );
-		Path.Append(Id, Id.Next(Id.First() ) );
+		Path.Append( Id, Id.Next(Id.First() ) );
 	}
 
 	return Path;
@@ -738,7 +744,7 @@ qRB
 	}
 
 	Path.Init();
-	GetPath_( Id, Path, false );
+	GetPath_( Id, Path );
 
 #if 1
 	if ( Path.Amount() == 0 )	// Il s'agit d'une commande.
@@ -822,7 +828,7 @@ qRB
 	}
 
 	Path.Init();
-	GetPath_( Id, Path, false );
+	GetPath_( Id, Path );
 
 	if ( Path.Amount() == 0 ) {
 		Meaning.Init();
@@ -888,7 +894,7 @@ qRB
 	Tags.Append( Id );
 
 	Path.Init();
-	GetPath_( Id, Path, false );
+	GetPath_( Id, Path );
 
 	if ( Path.Amount() == 0 )
 		sclmisc::ReportAndAbort( SCLTOOL_NAME "_NoPathForArgument", Id );
@@ -1060,7 +1066,7 @@ qRH
 	str::string Dummy;
 qRB
 	Dummy.Init();
-	GetPath_( Id, Dummy, false );
+	GetPath_( Id, Dummy );
 
 	if ( Dummy.Amount() == 0 )
 		Type = tCommand;
@@ -1200,7 +1206,7 @@ qRB
 	cio::COut << GetShortLong_( Id, ShortLong ) << ' ';
 
 	Path.Init();
-	cio::COut << "('" << GetPath_( Id, Path, true ) << '\'';
+	cio::COut << "('" << GetPath_( Id, Path ) << '\'';
 
 	Value.Init();
 	cio::COut << "='" << GetValue_( Id, Value ) << "')";
@@ -1229,7 +1235,7 @@ qRB
 	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
 
 	Path.Init();
-	cio::COut << "('" << GetPath_( Id, Path, true ) << '\'';
+	cio::COut << "('" << GetPath_( Id, Path ) << '\'';
 
 	Value.Init();
 	OGetValue( rgstry::entry___( Path.Convert( Buffer ) ), Value );
@@ -1260,7 +1266,7 @@ qRB
 	cio::COut << '<' << GetArgumentLabelTranslation_( Id, Label ) << "> ";
 
 	Path.Init();
-	cio::COut << "('" << GetPath_( Id, Path, true ) << "')";
+	cio::COut << "('" << GetPath_( Id, Path ) << "')";
 
 	cio::COut << ':' << txf::nl;
 
@@ -1483,21 +1489,13 @@ static int main_(
 {
 	int ExitValue = EXIT_SUCCESS;
 qRH
-	str::string ProjectFilename;
 	str::string Command;
-	str::string ProjectId;
 qRB
 	sclmisc::Initialize( &qRRor_, &SCLError_, CIO, (const char *)NULL );
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
-	ProjectFilename.Init();
-	OGetValue( ProjectFilename_, ProjectFilename );
-
-	ProjectId.Init();
-
-	if ( ProjectFilename.Amount() != 0 )
-		sclmisc::LoadProject( ProjectFilename, ProjectId );
+	sclmisc::LoadProject();
 
 	sclrgstry::FillSetupRegistry();
 

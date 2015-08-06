@@ -378,7 +378,7 @@ namespace fblfrd {
 		bso::bool__ Connect(
 			const char *Language,
 			flw::ioflow__ &Channel,
-			fblfph::callbacks__ &ParametersCallbacks,
+			fblfph::callbacks__ *ParametersCallbacks,	// If == NULL, no backend is used, and this object is only used to know that there is no backend connection.
 			const compatibility_informations__ &CompatibilityInformations,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
@@ -386,7 +386,10 @@ namespace fblfrd {
 		qRH
 		qRB
 			Channel_ = &Channel;
-			_ParametersCallbacks = &ParametersCallbacks;
+			_ParametersCallbacks = ParametersCallbacks;
+
+			if ( ParametersCallbacks == NULL )
+				qRReturn;
 
 			if ( !_TestCompatibility( Language, CompatibilityInformations, *Channel_, IncompatibilityInformations ) ) {
 				Success = false;
@@ -819,6 +822,8 @@ namespace fblfrd {
 			fblfph::callbacks__ *Callbacks = NULL;
 
 			switch ( Mode ) {
+			case fblovl::mNone:
+				break;
 			case fblovl::mRemote:
 				_RemoteCallbacks.Init();
 				Callbacks = &_RemoteCallbacks;
@@ -832,7 +837,7 @@ namespace fblfrd {
 				break;
 			}
 
-			return frontend___::Connect( Language, Flow, *Callbacks, CompatibilityInformations, IncompatibilityInformations  );
+			return frontend___::Connect( Language, Flow, Callbacks, CompatibilityInformations, IncompatibilityInformations  );
 		}
 	};
 }

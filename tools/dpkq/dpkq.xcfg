@@ -14,6 +14,12 @@
 			</Namespace>
 		</Parameters>
 		<Definitions>
+			<Projects>
+				<Project id="Collection" Type="Remote">Collections.xprj</Project>
+			</Projects>
+			<Projects>
+				<Project id="Element" Type="Remote">Elements.xprj</Project>
+			</Projects>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
@@ -58,7 +64,7 @@
 			<!-- Options -->
 			<Argument id="NamespaceOption" Description="NamespaceOptionDescription" long="namespace" short="n" Path="Namespace/Label" Label="NamespaceOptionLabel"/>
 			<!-- Arguments -->
-			<Argument id="ProjectFilenameArgument" Description="ProjectFilenameArgumentDescription" Label="ProjectFilenameArgumentLabel" Path="ProjectFilename"/>
+			<Argument id="ProjectFilenameArgument" Description="ProjectFilenameArgumentDescription" Label="ProjectFilenameArgumentLabel" Path="Project[Type=&quot;Remote&quot;]"/>
 			<Argument id="IdArgument" Description="IdArgumentDescription" Label="IdArgumentLabel" Path="Id"/>
 			<Layouts>
 				<Layout command="Process">

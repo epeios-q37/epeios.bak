@@ -33,6 +33,7 @@
 # include "ntvstr.h"
 # include "sclerror.h"
 # include "strmrg.h"
+# include "frdbse.h"
 
 # include <stdarg.h>
 
@@ -128,13 +129,6 @@ namespace xdhcbk {
 		}
 	};
 
-	E_ENUM( mode ) {
-		mMonoUser,	// One use only. The content project (i.e. he can choose the backend) is defined by the user.
-		mMultiUser,	// Several users. The project to use is (which defines the backend to use) is predefiend in the confifuration file.
-		m_amount,
-		m_Undefined
-	};
-
 #pragma pack( push, 1)
 	// NOTA : is modified, increment 'CSDLEO_SHARED_DATA_VERSION' !
 	class shared_data__
@@ -145,7 +139,7 @@ namespace xdhcbk {
 		err::err___ *_qRRor;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
-		mode__ _Mode;
+		frdbse::mode__ _Mode;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 	public:
@@ -155,14 +149,14 @@ namespace xdhcbk {
 			_Control = 0;
 			_qRRor = NULL;
 			_SCLError = NULL;
-			_Mode = m_Undefined;
+			_Mode = frdbse::m_Undefined;
 			_CIO = NULL;
 			_LauncherIdentification = NULL;
 			_Localization = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			mode__ Mode,
+			frdbse::mode__ Mode,
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
@@ -184,7 +178,7 @@ namespace xdhcbk {
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
 		Q37_RMDF( const cio::set__, CIO, _CIO );
-		E_RODISCLOSE__( mode__, Mode );
+		E_RODISCLOSE__( frdbse::mode__, Mode );
 	};
 #pragma pack( pop )
 

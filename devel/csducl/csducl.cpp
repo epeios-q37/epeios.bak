@@ -70,6 +70,9 @@ qRB
 	reset();
 
 	switch ( Features.Type ) {
+	case tNone:
+		Success = true;
+		break;
 	case tDaemon:
 		Success = _DaemonAccess.Init( Features.Location.Convert( Buffer ), Features.PingDelay, Log );
 		break;

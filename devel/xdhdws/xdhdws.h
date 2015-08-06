@@ -286,8 +286,7 @@ namespace xdhdws {
 			_Writer.PutAttribute("Background", Background );
 			_Writer.PutAttribute("Generator", Generator );
 			_Writer.PutAttribute("TimeStamp", tol::DateAndTime( Buffer ) );
-			_Writer.PutAttribute("System", CPE_SL );
-			_Writer.PutAttribute("Architecture", CPE_AL );
+			_Writer.PutAttribute( "OS", cpe::GetOSDigest() );
 			_Writer.PushTag( "Corpus" );
 			Callback.Dump( _Writer );
 			_Writer.PopTag();
@@ -362,52 +361,6 @@ namespace xdhdws {
 			// Standadisation;
 		}
 	};
-
-	namespace prolog {
-		E_CDEF( char *, ProjectTypeId, "ProjectType" );
-		E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
-		E_CDEF( char *, UserProjectId, "UserProject" );
-
-		void GetContent(
-			proxy__ &Proxy,
-			xml::writer_ &Writer );
-
-		void GetContext(
-			proxy__ &Proxy,
-			xml::writer_ &Writer );
-
-		frdbse::project_type__ GetProjectFeatures(
-			proxy__ &Proxy,
-			str::string_ &ProjectFeature );
-
-		void DisplaySelectedProjectFileName(
-			proxy__ &Proxy,
-			const char *Id );
-		}
-
-	namespace login {
-		E_CDEF( char *, BackendTypeId, "BackendType" );
-		E_CDEF( char *, DaemonBackendId, "DaemonBackend" );
-		E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
-		E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
-
-		void GetContent(
-			proxy__ &Proxy,
-			xml::writer_ &Writer );
-
-		void GetContext(
-			proxy__ &Proxy,
-			xml::writer_ &Writer );
-
-		frdbse::backend_type__ GetBackendFeatures(
-			proxy__ &Proxy,
-			str::string_ &Feature );
-
-		void DisplaySelectedEmbeddedBackendFileName(
-			proxy__ &Proxy,
-			const char *Id );
-	}
-
 }
 
 #endif

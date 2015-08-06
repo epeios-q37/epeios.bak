@@ -4,12 +4,12 @@
 	<Definitions>
 		<CustomItems>
 			<AttributeNames>
-				<OnEvent>data-q37-onevent</OnEvent>
-				<OnEvents>data-q37-onevents</OnEvents>
-				<Cast>data-q37-cast</Cast>
-				<Casts>data-q37-casts</Casts>
-				<Widget>data-q37-widget</Widget>
-				<Result>data-q37-result</Result>
+				<OnEvent>data-xdh-onevent</OnEvent>
+				<OnEvents>data-xdh-onevents</OnEvents>
+				<Cast>data-xdh-cast</Cast>
+				<Casts>data-xdh-casts</Casts>
+				<Widget>data-xdh-widget</Widget>
+				<Result>data-xdh-result</Result>
 			</AttributeNames>
 		</CustomItems>
 		<Scripts>
@@ -34,7 +34,7 @@
 				<Definer>
 					<![CDATA[
 							removeCastingChildren();
-							document.getElementById( "q37-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
+							document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
 						]]>
 				</Definer>
 				<Handler>
@@ -64,6 +64,7 @@
 			<Dialog>
 				<Alert>
 					<![CDATA[
+						// console.log( "%XML%" );
 						dialog = document.createElement( "span" );
 						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
 						$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
@@ -169,6 +170,7 @@
 			</DroppableSetter>
 			<DocumentSetter>
 				<![CDATA[
+				console.log( "%XML%" );
 				document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );"";
 				]]>
 			</DocumentSetter>

@@ -49,7 +49,7 @@ namespace sclxdhtml {
 	private:
 		const char *_Name;
 	protected:
-		virtual bso::bool__ SCLXDHTMLLaunch(
+		virtual void SCLXDHTMLLaunch(
 			session &Session,
 			const char *Id ) = 0;
 	public:
@@ -62,7 +62,7 @@ namespace sclxdhtml {
 		{
 			_Name = Name;
 		}
-		bso::bool__ Launch(
+		void Launch(
 			session &Session,
 			const char *Id )
 		{
@@ -132,7 +132,7 @@ namespace sclxdhtml {
 		{
 			return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
 		}
-		bso::bool__ Launch(
+		void Launch(
 			session &Session,
 			const char *Id,
 			const char *Action )
@@ -193,14 +193,14 @@ namespace sclxdhtml {
 		const char *Language );
 
 	void Alert(
-		const ntvstr::string___ &Message,
-		const ntvstr::string___ &CloseText,
-		proxy__ &Proxy );
+		const ntvstr::string___ &RawMessage,
+		const char *Language,
+		proxy__ &Proxy );	// Translates 'Message'.
 
 	void Alert(
 		const ntvstr::string___ &Message,
 		proxy__ &Proxy,
-		const char *Language );
+		const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
 
 	bso::bool__ Confirm(
 		const ntvstr::string___ &XML,
@@ -210,14 +210,14 @@ namespace sclxdhtml {
 		const char *Language );
 
 	bso::bool__ Confirm(
-		const ntvstr::string___ &Message,
-		const ntvstr::string___ &CloseText,
+		const ntvstr::string___ &RawMessage,
+		const char *Language,
 		proxy__ &Proxy );
 
 	bso::bool__ Confirm(
 		const ntvstr::string___ &Message,
 		proxy__ &Proxy,
-		const char *Language );
+		const char *Language );	// Displays 'Message' as is. 'Language' is used for the closing text message.
 
 
 	class reporting_callback__
@@ -254,8 +254,6 @@ namespace sclxdhtml {
 		proxy__ &Proxy,
 		const char *Language );
 
-	/*********** 1 *****************/
-
 	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
 	template <typename instances, typename frontend, typename page, page UndefinedPage > class session___
 	: public _session_callback__,
@@ -290,14 +288,14 @@ namespace sclxdhtml {
 			// instances::Init( *this );	// Made on connection.
 		}
 		bso::bool__ Connect(
-			csducl::universal_client_core &ClientCore,
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
 			fblfrd::incompatibility_informations_ &IncompatibilityInformations )
 		{
-			if ( !frontend::Connect( ClientCore, CompatibilityInformations, IncompatibilityInformations ) )
+			if ( !frontend::Connect( CompatibilityInformations, IncompatibilityInformations ) )
 				return false;
 
-			instances::Init( *this );	// Made on connection.
+			if ( frontend::IsConnected() )
+				instances::Init( *this );
 			
 			return true;
 		}
@@ -325,56 +323,44 @@ namespace sclxdhtml {
 		{
 			return scllocale::GetTranslation( Message, Language(), Translation );
 		}
-		void Alert(
-			const ntvstr::string___ &Message,
-			const ntvstr::string___ &CloseText = ntvstr::string___() )
+		void AlertU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
 		{
-			if ( CloseText.Amount() == 0 )
-				sclxdhtml::Alert (Message, *this, Language() );
-			else
-				sclxdhtml::Alert( Message, CloseText, *this );
+			sclxdhtml::Alert ( Message, *this, Language() );
+		}
+		void AlertT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
+		{
+			sclxdhtml::Alert ( RawMessage, Language(), *this );
 		}
 		void Alert(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
-			const ntvstr::string___ &Title,
-			const ntvstr::string___ &CloseText = ntvstr::string___() )
+			const ntvstr::string___ &Title )
 		{
-			if ( CloseText.Amount() == 0 )
-				sclxdhtml::Alert( XML, XSL, Title, *this, Language() );
-			else
-				proxy__::Alert( XML, XSL, Title, CloseText );
+			sclxdhtml::Alert( XML, XSL, Title, *this, Language() );
 		}
-		bso::bool__ Confirm(
-			const ntvstr::string___ &Message,
-			const ntvstr::string___ &CloseText = ntvstr::string___() )
+		bso::bool__ ConfirmU( const ntvstr::string___ &Message )	// Displays 'Message' as is.
 		{
-			if ( CloseText.Amount() == 0 )
-				return sclxdhtml::Confirm( Message, *this, Language() );
-			else
-				return sclxdhtml::Confirm( Message, CloseText, *this );
+			return sclxdhtml::Confirm( Message, *this, Language() );
+		}
+		bso::bool__ ConfirmT( const ntvstr::string___ &RawMessage )	// Translates 'RawMessage'.
+		{
+			return sclxdhtml::Confirm( RawMessage, Language(), *this );
 		}
 		bso::bool__ Confirm(
 			const ntvstr::string___ &XML,
 			const ntvstr::string___ &XSL,
-			const ntvstr::string___ &Title,
-			const ntvstr::string___ &CloseText = ntvstr::string___() )
+			const ntvstr::string___ &Title )
 		{
-			if ( CloseText.Amount() == 0 )
-				return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
-			else
-				return proxy__::Confirm( XML, XSL, Title, CloseText );
+			return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
 		}
 	};
-
-	/********** 2 ******************/
 
 	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
 	template <typename session> class core___
 	{
 	private:
 		action_handler<session> _Handler;
-		xdhcbk::mode__ _Mode;
+		frdbse::mode__ _Mode;
 		Q37_MRMDF( action_helper_callback__<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
@@ -391,12 +377,12 @@ namespace sclxdhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_Handler.reset( P );
-			_Mode = xdhcbk::m_Undefined;
+			_Mode = frdbse::m_Undefined;
 			_ActionHelperCallback = NULL;
 		}
 		E_CVDTOR( core___ )
 		void Init(
-			xdhcbk::mode__ Mode,
+			frdbse::mode__ Mode,
 			action_helper_callback__<session> &ActionHelperCallback )
 		{
 			_ActionHelperCallback = &ActionHelperCallback;
@@ -414,7 +400,7 @@ namespace sclxdhtml {
 			const char *Id,
 			const char *Action )
 		{
-			bso::bool__ Success = false;
+			bso::bool__ Success = true;
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
@@ -422,14 +408,18 @@ namespace sclxdhtml {
 				if ( !strcmp( Action, xdhcbk::CloseActionLabel ) )
 					Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 				else
+# if 0
 					Success = _Handler.Launch( Session, Id, Action );
+# else
+					_Handler.Launch( Session, Id, Action );
+# endif
 		qRR
 			HandleError( Session, Session.Language() );
 		qRT
 		qRE
 			return Success;
 		}
-		E_RODISCLOSE__( xdhcbk::mode__, Mode );
+		E_RODISCLOSE__( frdbse::mode__, Mode );
 	};
 
 
@@ -444,16 +434,73 @@ namespace sclxdhtml {
 		sclmisc::LoadXMLAndTranslateTags( FileName, Registry, String, Marker );
 	}
 
+	/*
 	void LoadProject( proxy__ &Proxy );
 
 	void LaunchProject(
 		proxy__ &Proxy ,
 		sclfrntnd::kernel___ &Kernel );
+		*/
 
-	void SCLXDHTMLInitialization( xdhcbk::mode__ Mode );	// To overload.
+	void SCLXDHTMLInitialization( frdbse::mode__ Mode );	// To overload.
+
 	xdhcbk::session_callback__ *SCLXDHTMLNew(
 		const char *Language,
 		xdhcbk::proxy_callback__ *ProxyCallback );	// To override.
+
+	inline void Connect(
+		frdbse::backend_type__ BackendType,
+		const str::string_ &BackendFeature )
+	{
+		return sclfrntnd::Connect( BackendType, BackendFeature );
+	}
+
+	namespace prolog {
+		E_CDEF( char *, ProjectTypeId, "ProjectType" );
+		E_CDEF( char *, PredefinedProjectId, "PredefinedProject" );
+		E_CDEF( char *, RemoteProjectId, "RemoteProject" );
+
+		void GetContent(
+			sclfrntnd::frontend___ &Frontend,
+			xml::writer_ &Writer );
+
+		void GetContext(
+			proxy__ &Proxy,
+			xml::writer_ &Writer );
+
+		void DisplaySelectedProjectFilename(
+			proxy__ &Proxy,
+			const char *Id );
+
+		sclmisc::project_type__ GetProjectFeatures(
+			proxy__ &Proxy,
+			str::string_ &Feature );
+
+		void LoadProject( proxy__ &Proxy );
+	}
+
+	namespace login {
+		E_CDEF( char *, BackendTypeId, "BackendType" );
+		E_CDEF( char *, RemoteBackendId, "RemoteBackend" );
+		E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
+		E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
+
+		void GetContent(
+			sclfrntnd::frontend___ &Frontend,
+			xml::writer_ &Writer );
+
+		void GetContext(
+			proxy__ &Proxy,
+			xml::writer_ &Writer );
+
+		frdbse::backend_type__ GetBackendFeatures(
+			proxy__ &Proxy,
+			str::string_ &Feature );
+
+		void DisplaySelectedEmbeddedBackendFilename(
+			proxy__ &Proxy,
+			const char *Id );
+	}
 
 }
 

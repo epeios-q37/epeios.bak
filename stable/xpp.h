@@ -452,7 +452,8 @@ namespace xpp {
 		fnm::name___ _LocalizedFileName;	// Si le 'parser' sert à l'inclusion d'un fichier ('<xpp:expand href="...">), contient le nom du fichier inclut.
 		fnm::name___ _Directory;
 		str::string _CypherKey;
-		bso::bool__ Preserve_;
+		bso::bool__ Preserve_;	// If at true, this means that the 'preserve' attribute in 'bloc' tag should be handled, NOT that we have to preserve
+											// the preprocessor directives (that is the goal of below parameter).
 		level__ PreservationLevel_;
 		substitution_markers SubstitutionMarkers_;
 		bso::bool__ _IgnorePreprocessingInstruction;
@@ -505,7 +506,7 @@ namespace xpp {
 		status__ _HandleCypherDirective( _extended_parser___ *&Parser );
 		bso::char__ SubstitutionMarker_( void ) const
 		{
-			if ( Preserve_ || ( SubstitutionMarkers_.Amount() == 0 ) )
+			if ( ( PreservationLevel_ != 0 ) || ( SubstitutionMarkers_.Amount() == 0 ) )
 				return 0;
 			else
 				return SubstitutionMarkers_.Top();

@@ -316,7 +316,6 @@ endif
 		
 all: $(binary)
 	rm -f *.o
-	strip $(binary)
 
 copt += -DVERSION=\""20150630"\"
 copt += -DCOPYRIGHT_YEARS=\""2010-2015"\"

@@ -31,15 +31,16 @@
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>
-	<Files>
-		<Files Group="Doc" Path="Doc/">
-			<File Pack="yes" WikiDir="computing/epeios/">Compilation.pdf</File>
-			<File Pack="yes" WikiDir="computing/epeios/tools/">Configuration.pdf</File>
-			<File Pack="yes" WikiDir="computing/epeios/tools/xppq/">Directives.pdf</File>
-			<File Pack="yes" WikiDir="computing/epeios/tools/" WikiOddity="IsHome">xppq.pdf</File>
-			<File Pack="yes" WikiDir="computing/epeios/tools/xppq/">Manual.pdf</File>
-		</Files>
-	</Files>
+	<Files/>
+	<Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
+			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
+			<File Dir="computing/epeios/tools/xppq/" Desc="the preprocessor directives">Directives</File>
+			<File Dir="computing/epeios/tools/" Desc="general description of xppq" Oddity="IsHome">xppq</File>
+			<File Dir="computing/epeios/tools/xppq/" Desc="the user manual">Manual</File>
+		</WikiFiles>
+	</Packing>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
 	</PreprocessorDefinitions>

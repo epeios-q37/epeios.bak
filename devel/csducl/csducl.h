@@ -185,6 +185,8 @@ namespace csducl {
 			_Core = &Core;
 
 			switch ( Core._Type ) {
+			case tNone:
+				break;
 			case tDaemon:
 				_DaemonFlow.Init( Core._DaemonAccess );
 				break;

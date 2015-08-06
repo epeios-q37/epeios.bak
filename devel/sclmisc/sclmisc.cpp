@@ -62,7 +62,7 @@ qRH
 qRB
 Language.Init();
 
-	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::Language, Language ) )
+	if ( sclrgstry::BGetValue( sclrgstry::GetCommonRegistry(), sclrgstry::parameter::Language, Language ) )
 		Language.Convert( BaseLanguage_ );
 qRR
 qRT
@@ -452,6 +452,38 @@ void sclmisc::EraseProjectRegistry( void )
 	scllocale::EraseLocale( scllocale::tProject );
 }
 
+#define C( name ) case pt##name: return #name; break
+
+const char *sclmisc::GetLabel( project_type__ ProjectType )
+{
+	switch ( ProjectType ) {
+	C( New );
+	C( Predefined );
+	C( Remote );
+	C( Embedded );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return NULL;	// Pour viter un 'warning'.
+}
+
+static stsfsm::automat ProjectAutomat_;
+
+static void FillProjectAutomat_( void )
+{
+	ProjectAutomat_.Init();
+	stsfsm::Fill( ProjectAutomat_, pt_amount, GetLabel );
+}
+
+project_type__ sclmisc::GetProjectType( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, ProjectAutomat_, pt_Undefined, pt_amount );
+}
+
+
+
 void sclmisc::LoadProject(
 	flw::iflow__ &Flow,
 	str::string_ &Id )
@@ -468,6 +500,93 @@ void sclmisc::LoadProject(
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
 	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tProject, utf::f_Default );
+}
+
+static void LoadProject_( const str::string_ &FileName )
+{
+qRH
+	str::string Id;
+qRB
+	Id.Init();
+	LoadProject( FileName, Id );
+qRR
+qRT
+qRE
+}
+
+static void LoadPredefinedProject_( const str::string_ &Id )
+{
+qRH
+	str::string ProjectFileName;
+qRB
+	if ( Id.Amount() == 0 )
+		sclmisc::ReportAndAbort( SCLMISC_NAME "_EmptyPredefinedProjectId" );
+
+	ProjectFileName.Init();
+	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( sclrgstry::definition::TaggedProject, Id ), ProjectFileName );
+
+	if ( ProjectFileName.Amount() == 0 )
+		sclmisc::ReportAndAbort( SCLMISC_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
+
+	LoadProject_( ProjectFileName );
+qRR
+qRT
+qRE
+}
+
+void sclmisc::LoadProject(
+	project_type__ ProjectType,
+	const str::string_ &ProjectFeature )
+{
+	switch ( ProjectType ) {
+	case ptNew:
+		sclrgstry::EraseProjectRegistry();
+		break;
+	case ptPredefined:
+		LoadPredefinedProject_( ProjectFeature );
+		break;
+	case ptRemote:
+		if ( ProjectFeature.Amount() == 0  )
+			sclmisc::ReportAndAbort( SCLMISC_NAME "_NoProjectFileSelected" );
+		LoadProject_( ProjectFeature );
+		break;
+	case ptEmbedded:
+		qRVct();
+		break;
+	case pt_Undefined:
+		qRFwk();
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+}
+
+
+void sclmisc::LoadProject( void )
+{
+qRH
+	str::string Feature;
+	str::string RawType;
+	project_type__ Type = pt_Undefined;
+qRB
+	Feature.Init();
+	OGetValue( sclrgstry::parameter::project::Feature, Feature );
+
+	if ( Feature.Amount() != 0 ) {
+		RawType.Init();
+		MGetValue( sclrgstry::parameter::project::Type, RawType );
+
+		Type = GetProjectType( RawType );
+
+		if ( Type == pt_Undefined )
+			sclmisc::ReportAndAbort(SCLMISC_NAME "_BadProjectType" );
+
+		LoadProject( Type, Feature );
+	}
+qRR
+qRT
+qRE
 }
 
 void sclmisc::CreateBackupFile(
@@ -654,7 +773,7 @@ qRB
 	Tags.Append( str::string( Target ) );
 
 	Id.Init();
-	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::PluginParameter, Target ), Id );
+	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::Plugin, Target ), Id );
 
 	Tags.Append( Id );
 qRR
@@ -689,12 +808,17 @@ qRB
 
 	GetPluginRelatedTags_( Target, Tags );
 
-	sclmisc::MGetValue( rgstry::tentry__( sclrgstry::PluginFilename, Tags ), Filename );
+	sclmisc::MGetValue( rgstry::tentry__( sclrgstry::definition::plugin::Filename, Tags ), Filename );
 
-	GetPluginFeature_( rgstry::tentry__( sclrgstry::PluginConfiguration, Tags ), Configuration );
-	GetPluginFeature_( rgstry::tentry__( sclrgstry::PluginLocale, Tags ), Locale );
+	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
+	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Locale, Tags ), Locale );
 	qRR
 qRT
 qRE
 	return Filename;
+}
+
+Q37_GCTOR( sclmisc )
+{
+	FillProjectAutomat_();
 }

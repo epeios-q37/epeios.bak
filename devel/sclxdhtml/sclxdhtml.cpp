@@ -65,6 +65,11 @@ namespace {
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
 				sclmisc::Initialize( Data.qRRor(), Data.SCLError(), Data.CIO(), Data.Localization() );
+				sclfrntnd::LoadProject();
+
+				if ( Data.Mode() == frdbse::mMultiUser )
+					sclfrntnd::Connect();
+
 				SCLXDHTMLInitialization( Data.Mode() );
 			}
 		}
@@ -128,19 +133,35 @@ qRFE(DoNothing_())
 
 namespace {
 	void SetXML_(
-		const ntvstr::string___ &Message,
+		const str::string_  &Message,
 		str::string_ &XML )
 	{
 	qRH
 		flx::E_STRING_TOFLOW___ STOFlow;
 		xml::writer Writer;
-		str::string Buffer;
 	qRB
 		STOFlow.Init( XML );
 		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
 
-		Buffer.Init();
-		Writer.PutValue( Message.UTF8( Buffer ), "Content" );
+		Writer.PutValue( Message, "Content" );
+	qRR
+	qRT
+	qRE
+	}
+
+	void SetXML_(
+		const str::string_  &RawMessage,
+		const char *Language,
+		str::string_ &XML )
+	{
+	qRH
+		str::string Message;
+		TOL_CBUFFER___ Buffer;
+	qRB
+		Message.Init();
+		scllocale::GetTranslation( RawMessage.Convert( Buffer ), Language, Message );
+
+		SetXML_( Message, XML );
 	qRR
 	qRT
 	qRE
@@ -162,13 +183,25 @@ namespace {
 
 	inline void SetXMLAndXSL_(
 		const ntvstr::string___ &Message,
+		const char *Language,
 		str::string_ &XML,
 		str::string_ &XSL )
 	{
-		SetXML_( Message, XML );
-		SetXSL_( XSL );
-	}
+	qRH
+		str::string Buffer;
+	qRB
+		Buffer.Init();
 
+		if ( Language == NULL )
+			SetXML_( Message.UTF8( Buffer ), XML );
+		else
+			SetXML_( Message.UTF8( Buffer ), Language, XML );
+
+		SetXSL_( XSL );
+	qRR
+	qRT
+	qRE
+	}
 }
 
 void sclxdhtml::Alert(
@@ -190,23 +223,34 @@ qRT
 qRE
 }
 
+namespace{
+	void Alert_(
+		const ntvstr::string___ &Message,
+		const char *MessageLanguage,	// If != 'NULL', 'Message' is translates, otherwise it is displayed as is.
+		proxy__ &Proxy,
+		const char *CloseTextLanguage )
+	{
+	qRH
+		str::string XML, XSL;
+	qRB
+		XML.Init();
+		XSL.Init();
+
+		SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
+
+		Alert(XML, XSL, ntvstr::string___(), Proxy, CloseTextLanguage );
+	qRR
+	qRT
+	qRE
+	}
+}
+
 void sclxdhtml::Alert(
-	const ntvstr::string___ &Message,
-	const ntvstr::string___ &CloseText,
+	const ntvstr::string___ &RawMessage,
+	const char *Language,
 	proxy__ &Proxy )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	XSL.Init();
-
-	SetXMLAndXSL_( Message, XML, XSL );
-
-	Proxy.Alert(XML, XSL, ntvstr::string___(), CloseText );
-qRR
-qRT
-qRE
+	Alert_( RawMessage, Language, Proxy, Language );
 }
 
 void sclxdhtml::Alert(
@@ -214,20 +258,8 @@ void sclxdhtml::Alert(
 	proxy__ &Proxy,
 	const char *Language )
 {
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	XSL.Init();
-
-	SetXMLAndXSL_( Message, XML, XSL );
-
-	Alert( XML, XSL, ntvstr::string___(), Proxy, Language );
-qRR
-qRT
-qRE
+	Alert_( Message, NULL, Proxy, Language );
 }
-
 
 bso::bool__ sclxdhtml::Confirm(
 	const ntvstr::string___ &XML,
@@ -250,25 +282,36 @@ qRE
 	return Confirmation;
 }
 
+namespace {
+	bso::bool__ Confirm_(
+		const ntvstr::string___ &Message,
+		const char *MessageLanguage,	// If != 'NULL', 'Message' is translates, otherwise it is displayed as is.
+		proxy__ &Proxy,
+		const char *CloseTextLanguage )
+	{
+		bso::bool__ Confirmation = false;
+	qRH
+		str::string XML, XSL;
+	qRB
+		XML.Init();
+		XSL.Init();
+
+		SetXMLAndXSL_( Message, MessageLanguage, XML, XSL );
+
+		Confirmation = Confirm( XML, XSL, ntvstr::string___(), Proxy, CloseTextLanguage );
+	qRR
+	qRT
+	qRE
+		return Confirmation;
+	}
+}
+
 bso::bool__ sclxdhtml::Confirm(
-	const ntvstr::string___ &Message,
-	const ntvstr::string___ &CloseText,
+	const ntvstr::string___ &RawMessage,
+	const char *Language,
 	proxy__ &Proxy )
 {
-	bso::bool__ Confirmation = false;
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	XSL.Init();
-
-	SetXMLAndXSL_( Message, XML, XSL );
-
-	Confirmation = Proxy.Confirm( XML, XSL, ntvstr::string___(), CloseText );
-qRR
-qRT
-qRE
-	return Confirmation;
+	return Confirm_( RawMessage,  Language, Proxy, Language );
 }
 
 bso::bool__ sclxdhtml::Confirm(
@@ -276,23 +319,8 @@ bso::bool__ sclxdhtml::Confirm(
 	proxy__ &Proxy,
 	const char *Language )
 {
-	bso::bool__ Confirmation = false;
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	XSL.Init();
-
-	SetXMLAndXSL_( Message, XML, XSL );
-
-	Confirmation = Confirm( XML, XSL, ntvstr::string___(), Proxy, Language );
-qRR
-qRT
-qRE
-	return Confirmation;
+	return Confirm_( Message,  NULL, Proxy, Language );
 }
-
-
 
 void sclxdhtml::HandleError(
 	proxy__ &Proxy,
@@ -367,19 +395,7 @@ qRE
 	return Success;
 }
 #endif
-
-void sclxdhtml::LoadProject( proxy__ &Proxy )
-{
-qRH
-	str::string ProjectFeature;
-qRB
-	ProjectFeature.Init();
-	sclfrntnd::LoadProject( xdhdws::prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature );
-qRR
-qRT
-qRE
-}
-
+/*
 void sclxdhtml::LaunchProject(
 	 proxy__ &Proxy,
 	sclfrntnd::kernel___ &Kernel )
@@ -389,6 +405,197 @@ qRH
 qRB
 	BackendFeature.Init();
 	sclfrntnd::LaunchProject( Kernel, xdhdws::login::GetBackendFeatures( Proxy, BackendFeature ), BackendFeature );
+qRR
+qRT
+qRE
+}
+
+*/
+void sclxdhtml::prolog::GetContent(
+	sclfrntnd::frontend___ &Frontend,
+	xml::writer_ &Writer)
+{
+	sclfrntnd::GetProjectsFeatures( Frontend.Language(), Writer );
+}
+
+static sclmisc::project_type__ GetProjectType_( proxy__ &Proxy )
+{
+	sclmisc::project_type__ ProjectType = sclmisc::pt_Undefined;
+qRH
+	str::string Value;
+qRB
+	Value.Init();
+	ProjectType = sclmisc::GetProjectType( Proxy.GetContent( prolog::ProjectTypeId, Value ) );
+qRR
+qRT
+qRE
+	return ProjectType;
+}
+
+void sclxdhtml::prolog::GetContext(
+	proxy__ &Proxy,
+	xml::writer_ &Writer)
+{
+	Writer.PushTag( "ProjectType ");
+
+	Writer.PutValue( sclmisc::GetLabel( GetProjectType_( Proxy ) ) );
+
+	Writer.PopTag();
+}
+
+void sclxdhtml::prolog::DisplaySelectedProjectFilename(
+	proxy__ &Proxy,
+	const char *Id )
+{
+qRH
+	TOL_CBUFFER___ Buffer;
+	str::string FileName;
+	xdhcbk::args Args;
+	xdhcbk::retriever__ Retriever;
+qRB
+	Args.Init();
+	xdhcbk::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
+
+	Retriever.Init( Args );
+
+	FileName.Init();
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( FileName );
+
+	if ( FileName.Amount() != 0 )
+		Proxy.SetContent( RemoteProjectId, FileName );
+qRR
+qRT
+qRE
+}
+
+sclmisc::project_type__ sclxdhtml::prolog::GetProjectFeatures(
+	proxy__ &Proxy,
+	str::string_ &Feature )
+{
+	sclmisc::project_type__ Type = sclmisc::pt_Undefined;
+qRH
+	TOL_CBUFFER___ Buffer;
+qRB
+	switch ( Type = GetProjectType_( Proxy ) ) {
+	case sclmisc::ptNew:
+		break;
+	case sclmisc::ptRemote:
+		Feature.Append( Proxy.GetContent( RemoteProjectId, Buffer ) );
+		break;
+	case sclmisc::ptEmbedded:
+		qRVct();	// Not implemented yet.
+		break;
+	case sclmisc::ptPredefined:
+		Feature.Append( Proxy.GetContent( PredefinedProjectId, Buffer ) );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+qRR
+qRT
+qRE
+	return Type;
+}
+
+void sclxdhtml::prolog::LoadProject( proxy__ &Proxy )
+{
+qRH
+	str::string ProjectFeature;
+qRB
+	ProjectFeature.Init();
+	sclfrntnd::LoadProject( prolog::GetProjectFeatures( Proxy, ProjectFeature ), ProjectFeature );
+qRR
+qRT
+qRE
+}
+
+void sclxdhtml::login::GetContent(
+	sclfrntnd::frontend___ &Frontend,
+	xml::writer_ &Writer)
+{
+	sclfrntnd::GetBackendsFeatures(Frontend.Language(), Writer );
+}
+
+static frdbse::backend_type__ GetBackendType_( proxy__ &Proxy )
+{
+	frdbse::backend_type__ BackendType = frdbse::bt_Undefined;
+qRH
+	str::string Value;
+qRB
+	Value.Init();
+	BackendType = frdbse::GetBackendType( Proxy.GetContent( login::BackendTypeId, Value ) );
+qRR
+qRT
+qRE
+	return BackendType;
+}
+
+void sclxdhtml::login::GetContext(
+	proxy__ &Proxy,
+	xml::writer_ &Writer )
+{
+	Writer.PushTag( "BackendType" );
+
+	Writer.PutValue( frdbse::GetLabel( GetBackendType_( Proxy ) ) );
+
+	Writer.PopTag();
+}
+
+frdbse::backend_type__ sclxdhtml::login::GetBackendFeatures(
+	proxy__ &Proxy,
+	str::string_ &Feature )
+{
+	frdbse::backend_type__ Type = frdbse::bt_Undefined;
+qRH
+	TOL_CBUFFER___ Buffer;
+qRB
+	switch ( Type = GetBackendType_( Proxy ) ) {
+	case frdbse::btNone:
+		break;
+	case frdbse::btRemote:
+		Feature.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
+		break;
+	case frdbse::btEmbedded:
+		Feature.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
+		break;
+	case frdbse::btPredefined:
+		Feature.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+qRR
+qRT
+qRE
+	return Type;
+}
+
+void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(
+	proxy__ &Proxy,
+	const char *Id )
+{
+qRH
+	TOL_CBUFFER___ Buffer;
+	str::string FileName;
+	xdhcbk::args Args;
+	xdhcbk::retriever__ Retriever;
+qRB
+	Args.Init();
+	xdhcbk::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
+
+	Retriever.Init( Args );
+
+	FileName.Init();
+
+	if ( Retriever.Availability() != strmrg::aNone )
+		Retriever.GetString( FileName );
+
+	if ( FileName.Amount() != 0 )
+		Proxy.SetContent( EmbeddedBackendId, FileName );
 qRR
 qRT
 qRE

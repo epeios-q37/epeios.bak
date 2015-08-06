@@ -34,23 +34,29 @@
 // ComPilation Enviroment.
 
 // Compiler-related macros.
+
+# define CPE_CL_CLANG	"Clang"
+# define CPE_CL_GCC		"GCC"
+# define CPE_CL_MINGW	"MinGW"
+# define CPE_CL_MSC		"MSC"
+
 # if defined(__clang__)
 #  define CPE_C_CLANG
-#  define CPE_CL	"Clang"
+#  define CPE_CL	CPE_CL_CLANG
 # elif defined(__GNUC__) || defined(__GNUG__)
 #  define CPE_C_GCC
 #  ifdef __MINGW32__
 #   define CPE_C_MINGW
-#   define CPE_CL	"MinGW"
+#   define CPE_CL	CPE_CL_MINGW
 #  elif defined __MINGW64__
 #   define CPE_C_MINGW
-#   define CPE_CL	"MinGW"
+#   define CPE_CL	CPE_CL_MINGW
 #  else
-#   define CPE_CL	"GCC"
+#   define CPE_CL	CME_CL_GCC
 #  endif
 # elif defined(_MSC_VER)
 #  define CPE_C_MSC
-#  define CPE_CL	"MSC"
+#  define CPE_CL	CPE_CL_MSC
 #endif
 
 # ifndef CPE_CL
@@ -58,18 +64,31 @@
 # endif
 
 // OS-related macros.
+# define CPE_SL_ANDROID		"Android"
+# define CPE_SL_GNULINUX	"GNU/Linux"
+# define CPE_SL_LINUX		"Linux"
+# define CPE_SL_IOS			"iOS"
+# define CPE_SL_OSX			"OS_X"
+# define CPE_SL_CYGWIN		"Cygwin"
+# define CPE_SL_WIN32		"Win32"
+# define CPE_SL_WIN64		"Win64"
+# define CPE_SL_POSIX		"Posix"
+# define CPE_SL_UNIX		"Unix"
+# define CPE_SL_DARWIN		"Darwin"
+# define CPE_SL_WIN			"Win"
+
 # ifdef __ANDROID__
 #  define CPE_S_ANDROID
-#  define CPE_SL	"Android"
+#  define CPE_SL	CPE_SL_ANDROID
 # endif
 
 # ifdef __linux__
 #  define CPE_S_LINUX
 #  ifdef __gnu_linux__
 #   define CPE_S_GNULINUX
-#   define CPE_SL "GNU/Linux"
+#   define CPE_SL CPE_SL_GNULINUX
 #  else
-#   define CPE_SL "Linux"
+#   define CPE_SL CPE_SL_LINUX
 #  endif
 # endif
 
@@ -78,29 +97,29 @@
 #  include <TargetConditionals.h>
 #  if TARGET_IPHONE_SIMULATOR == 1
 #   define CPE_S_IOS
-#   define CPE_SL	"iOS"
+#   define CPE_SL	CPE_SL_IOS
 #  elif TARGET_OS_IPHONE == 1
 #   define CPE_S_IOS
-#   define CPE_SL	"iOS"
+#   define CPE_SL	CPE_SL_IOS
 #  elif TARGET_OS_MAC == 1
-#   define CPE_S_IOS
-#   define CPE_SL	"OS_X"
+#   define CPE_S_OSX
+#   define CPE_SL	CPE_SL_OSX
 #  endif
 # endif
 
 # if defined(__CYGWIN__) && !defined(_WIN32)
 #  define CPE_S_CYGWIN
-#  define CPE_SL	"Cygwin"
+#  define CPE_SL	CPE_SL_CYGWIN
 # endif
 
 # if defined(_WIN64)
 #  define CPE_S_WIN
 #  define CPE_S_WIN64
-#  define CPE_SL	"Win64"
+#  define CPE_SL	CPE_SL_WIN64
 # elif defined(_WIN32)
 #  define CPE_S_WIN
 #  define CPE_S_WIN32
-#  define CPE_SL	"Win32"
+#  define CPE_SL	CPE_SL_WIN32
 # endif
 
 # if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
@@ -109,11 +128,11 @@
 # if defined(_POSIX_VERSION)
 #  define CPE_S_POSIX
 #  ifndef CPE_SL
-#   define CPE_SL "POSIX"
+#   define CPE_SL CPE_SL_POSIX
 #  endif
 # else
 #  ifndef CPE_SL
-#   define CPE_SL "Unix"
+#   define CPE_SL CPE_SL_UNIX
 #  endif
 # endif
 #endif
@@ -123,6 +142,10 @@
 # endif
 
 // Architecture-related macros.
+# define CPE_TL_ARM		"ARM"
+# define CPE_TL_IA32	"IA_32"
+# define CPE_TL_AMD64	"AMD64"
+
 # ifdef __arm__
 #  define CPE_A_ARM
 #  ifdef __arch64
@@ -132,17 +155,17 @@
 #   define CPE_A_ARM32
 #   define CPE_F_32BITS
 #  endif
-#  define CPE_AL	"ARM"
+#  define CPE_AL	CPE_TL_ARM
 # endif
 
 #if defined(__x86_64__) || defined(_M_X64)
 #  define CPE_A_AMD64
 #  define CPE_F_64BITS
-#  define CPE_AL	"AMD64"
+#  define CPE_AL	CPE_TL_AMD64
 #elif defined(__i386) || defined(_M_IX86)
 #  define CPE_A_IA32
 #  define CPE_F_32BITS
-#  define CPE_AL	"IA_32"
+#  define CPE_AL	CPE_TL_IA32
 #endif
 
 # ifndef CPE_AL
@@ -174,6 +197,7 @@ namespace cpe {
 		return CPE_DESCRIPTION;
 	}
 
+	const char *GetOSDigest( void );
 }
 
 

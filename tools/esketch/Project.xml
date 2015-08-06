@@ -28,15 +28,15 @@
 		</Modules>
 		<Module>registry</Module>
 	</Modules>
-	<Files>
-		<File Pack="yes">testsuit</File>
-		<Files Group="Doc" Path="Doc/">
-			<File Pack="yes" WikiDir="computing/epeios/">Compilation.pdf</File>
-			<File Pack="yes" WikiDir="computing/epeios/tools/">Configuration.pdf</File>
-			<File Pack="yes" WikiDir="computing/epeios/tools/" WikiOddity="IsHome">esketch.pdf</File>
-			<File Pack="yes" WikiDir="computing/epeios/tools/esketch/">Manual.pdf</File>
-		</Files>
-	</Files>
+	<Files/>
+	<Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
+			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">esketch</File>
+			<File Dir="computing/epeios/tools/esketch/">Manual</File>
+		</WikiFiles>
+	</Packing>
 	<SourceDirs>
 	</SourceDirs>
 	<PreprocessorDefinitions>

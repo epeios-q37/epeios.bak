@@ -74,6 +74,8 @@
 # define CPE_SL_WIN64		"Win64"
 # define CPE_SL_POSIX		"Posix"
 # define CPE_SL_UNIX		"Unix"
+# define CPE_SL_DARWIN		"Darwin"
+# define CPE_SL_WIN			"Win"
 
 # ifdef __ANDROID__
 #  define CPE_S_ANDROID
@@ -195,6 +197,7 @@ namespace cpe {
 		return CPE_DESCRIPTION;
 	}
 
+	const char *GetOSDigest( void );
 }
 
 

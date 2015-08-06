@@ -64,12 +64,38 @@ namespace sclrgstry {
 	extern rgstry::entry___ Locale;
 	extern rgstry::entry___ Arguments;
 
-	extern rgstry::entry___ Language;
+	namespace parameter {
+		extern rgstry::entry___ Language;
 
-	extern rgstry::entry___ PluginParameter;
-	extern rgstry::entry___ PluginFilename;
-	extern rgstry::entry___ PluginConfiguration;
-	extern rgstry::entry___ PluginLocale;
+		extern rgstry::entry___ Project;
+
+		namespace project{
+			extern rgstry::entry___ Type;
+			extern rgstry::entry___ Feature;
+		}
+
+		extern rgstry::entry___ Plugin;
+	}
+
+	namespace definition {
+		extern rgstry::entry___ DefaultProjectId;
+
+		extern rgstry::entry___ Project;
+
+		namespace project {
+			extern rgstry::entry___ Id;
+		}
+
+		extern rgstry::entry___ TaggedProject;
+
+		extern rgstry::entry___ Plugin;
+
+		namespace plugin {
+			extern rgstry::entry___ Filename;
+			extern rgstry::entry___ Configuration;
+			extern rgstry::entry___ Locale;
+		};
+	}
 
 	using rgstry::value;
 	using rgstry::value_;
@@ -153,17 +179,15 @@ namespace sclrgstry {
 		const rgstry::tentry__ &Entry,
 		str::strings_ &Values );
 
-	const str::string_ &OGetValue(
+	bso::bool__ OGetValue(
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
-		str::string_ &Value,
-		bso::bool__ *Missing = NULL );
+		str::string_ &Value );
 
 	const char *OGetValue(
 		const registry_ &Registry,
 		const rgstry::tentry__ &Entry,
-		TOL_CBUFFER___ &Buffer,
-		bso::bool__ *Missing = NULL );
+		TOL_CBUFFER___ &Buffer );	// Returns NULL when entry missing.
 
 	const str::string_ &MGetValue(
 		const registry_ &Registry,

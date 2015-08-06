@@ -33,39 +33,59 @@ using namespace sclfrntnd;
 
 using sclrgstry::registry_;
 
-static rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );
-static rgstry::entry___ ProjectAction_("@Action", DefaultProjectType_ );
-static rgstry::entry___ PredefinedProjects_( "PredefinedProjects", sclrgstry::Definitions );
-static rgstry::entry___ DefaultPredefinedProject_( "@Default", PredefinedProjects_ );
-static rgstry::entry___ FreePredefinedProject_( "PredefinedProject", PredefinedProjects_ ); 
-static rgstry::entry___ PredefinedProjectId_( "@id", FreePredefinedProject_ );
-static rgstry::entry___ PredefinedProject_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), FreePredefinedProject_);
-static rgstry::entry___ PredefinedProjectAlias_( "@Alias", PredefinedProject_ );
+namespace parameter_ {
+	rgstry::entry___ Backend_( "Backend", sclrgstry::Parameters );
 
-static rgstry::entry___ Backend_( "Backend", sclrgstry::Parameters );
-static rgstry::entry___ BackendAccessMode_( "@AccessMode", Backend_ );
-static rgstry::entry___ BackendType_( "@Type", Backend_ );
-static rgstry::entry___ BackendPingDelay_( "PingDelay", Backend_ );
+	namespace backend_ {
+		rgstry::entry___ AccessMode_( "@AccessMode", Backend_ );
+		rgstry::entry___ Type_( "@Type", Backend_ );
+		rgstry::entry___ PingDelay_( "PingDelay", Backend_ );
+	}
 
-static rgstry::entry___ Authentication_( "Authentication", sclrgstry::Parameters );
-static rgstry::entry___ AuthenticationCypherKey_( "@CypherKey", Authentication_ );
-static rgstry::entry___ AuthenticationMode_( "@Mode", Authentication_ );
-static rgstry::entry___ AuthenticationLogin_( "Login", Authentication_ );
-static rgstry::entry___ AuthenticationPassword_( "Password", Authentication_ );
+	rgstry::entry___ Authentication_( "Authentication", sclrgstry::Parameters );
 
-static rgstry::entry___ DefaultBackendType_("DefaultBackendType", sclrgstry::Parameters );
-static rgstry::entry___ PredefinedBackends_( "PredefinedBackends", sclrgstry::Definitions );
-static rgstry::entry___ DefaultPredefinedBackend_( "@Default", PredefinedBackends_ );
-static rgstry::entry___ FreePredefinedBackend_( "PredefinedBackend", PredefinedBackends_ ); 
-static rgstry::entry___ PredefinedBackendId_( "@id", FreePredefinedBackend_ );
-static rgstry::entry___ PredefinedBackend_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), FreePredefinedBackend_);
-static rgstry::entry___ PredefinedBackendAlias_( "@Alias", PredefinedBackend_ );
-static rgstry::entry___ PredefinedBackendType_( "@Type", PredefinedBackend_ );
+	namespace authentication_ {
+		rgstry::entry___ CypherKey_( "@CypherKey", Authentication_ );
+		rgstry::entry___ Mode_( "@Mode", Authentication_ );
+		rgstry::entry___ Login_( "Login", Authentication_ );
+		rgstry::entry___ Password_( "Password", Authentication_ );
+	}
+
+	rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );
+	rgstry::entry___ DefaultBackendType_("DefaultBackendType", sclrgstry::Parameters );
+}
+
+namespace definition_ {
+
+	namespace tagged_project_ {
+		rgstry::entry___ Alias_( "@Alias", sclrgstry::definition::TaggedProject );
+	}
+
+	rgstry::entry___ Backends_( "Backends", sclrgstry::Definitions );
+	rgstry::entry___ DefaultBackendId_( "@Default", Backends_ );
+
+	rgstry::entry___ Backend_( "Backend", Backends_ );
+
+	namespace backend_ {
+		rgstry::entry___ Id_( "@id", Backend_ );
+	}
+
+	rgstry::entry___ TaggedBackend_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), Backend_);
+
+	namespace tagged_backend_ {
+		rgstry::entry___ Alias_( "@Alias", TaggedBackend_ );
+		rgstry::entry___ Type_( "@Type", TaggedBackend_ );
+	}
+}
 
 static rgstry::entry___ Internals_( "Internals" );
 static rgstry::entry___ ProjectId_( "ProjectId", Internals_ );
 
-stsfsm::automat ActionAutomat_;
+namespace {
+	kernel___ Kernel_;
+}
+
+stsfsm::automat PendingActionAutomat_;
 
 bso::bool__ sclfrntnd::kernel___::Init(
 	const features___ &Features,
@@ -89,22 +109,21 @@ qRE
 	return Success;
 }
 
-
-
-static void FillActionAutomat_( void )
+# if 0
+static void FillPendingActionAutomat_( void )
 {
-	ActionAutomat_.Init();
-	stsfsm::Fill( ActionAutomat_, a_amount, GetLabel );
+	PendingActionAutomat_.Init();
+	stsfsm::Fill( PendingActionAutomat_, pa_amount, GetLabel );
 }
 
-#define A( name )	case a##name : return #name; break
+#define A( name )	case pa##name : return #name; break
 
-const char *sclfrntnd::GetLabel( action__ Action )
+const char *sclfrntnd::GetLabel( pending_action__ PendingAction )
 {
-	switch ( Action ) {
+	switch ( PendingAction ) {
 	A( None );
-	A( Load );
-	A( Launch );
+	A( Login );
+	A( Connect );
 	default:
 		qRFwk();
 		break;
@@ -112,11 +131,11 @@ const char *sclfrntnd::GetLabel( action__ Action )
 
 	return NULL;	// To avoid a 'warning'.
 }
-
-action__ sclfrntnd::GetAction( const str::string_ &Pattern )
+pending_action__ sclfrntnd::GetPendingAction( const str::string_ &Pattern )
 {
-	return stsfsm::GetId( Pattern, ActionAutomat_, a_Undefined, a_amount );
+	return stsfsm::GetId( Pattern, PendingActionAutomat_, pa_Undefined, pa_amount );
 }
+#endif
 
 static const lcl::meaning_ &GetMeaning_(
 	const char *Message,
@@ -244,9 +263,8 @@ qRH
 	str::string DefaultType;
 qRB
 	DefaultType.Init();
-	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), DefaultTypeEntry, DefaultType );
 
-	if ( DefaultType.Amount() != 0 ) {
+	if ( sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), DefaultTypeEntry, DefaultType ) ) {
 		Writer.PushTag( DefaultTypeTag );
 		Writer.PutValue( DefaultType );
 		Writer.PopTag();
@@ -260,26 +278,44 @@ qRT
 qRE
 }
 
-action__ sclfrntnd::GetProjectsFeatures(
+bso::bool__ sclfrntnd::frontend___::Connect(
+	const fblfrd::compatibility_informations__ &CompatibilityInformations,
+	fblfrd::incompatibility_informations_ &IncompatibilityInformations )
+{
+	fblfrd::mode__ Mode = fblfrd::m_Undefined;
+
+	switch ( Kernel_.Core().GetType() ) {
+	case csducl::tNone:
+		Mode = fblovl::mNone;
+		break;
+	case csducl::tLibrary:
+		Mode = fblfrd::mEmbedded;
+		break;
+	case csducl::tDaemon:
+		Mode = fblfrd::mRemote;
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+
+	if ( Mode != fblovl::mNone )
+		_Flow.Init( Kernel_.Core() );
+
+	return _frontend___::Connect( L_(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
+}
+
+void sclfrntnd::GetProjectsFeatures(
 	const char *Language,
 	xml::writer_ &Writer )
 {
-	action__ Action = aNone;
 qRH
 	str::string Pattern;
 qRB
-	Pattern.Init();
-	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), ProjectAction_, Pattern );
-
-	if ( Pattern.Amount() != 0 )
-		if ( ( Action = GetAction( Pattern ) ) == a_Undefined )
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( ProjectAction_ );
-
-	GetFeatures_( "PredefinedProjects", "PredefinedProject", "DefaultProjectType", DefaultProjectType_, PredefinedProjectId_, DefaultPredefinedProject_, PredefinedProject_, PredefinedProjectAlias_, Language, Writer );
+	GetFeatures_( "Projects", "Project", "DefaultProjectType", parameter_::DefaultProjectType_, sclrgstry::definition::project::Id, sclrgstry::definition::DefaultProjectId, sclrgstry::definition::TaggedProject, definition_::tagged_project_::Alias_, Language, Writer );
 qRR
 qRT
 qRE
-	return Action;
 }
 
 void sclfrntnd::GetBackendsFeatures(
@@ -290,11 +326,10 @@ qRH
 	str::string Backend, Type;
 qRB
 	Backend.Init();
-	sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), Backend_, Backend );
 
-	if ( Backend.Amount() != 0 ) {
+	if ( sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), parameter_::Backend_, Backend ) ) {
 		Type.Init();
-		sclrgstry::MGetValue( sclrgstry::GetCommonRegistry(), BackendType_, Type );
+		sclrgstry::MGetValue( sclrgstry::GetCommonRegistry(), parameter_::backend_::Type_, Type );
 
 		Writer.PushTag( "Backend" );
 		Writer.PutAttribute( "Type", Type );
@@ -302,7 +337,7 @@ qRB
 		Writer.PopTag();
 	}
 
-	GetFeatures_( "PredefinedBackends", "PredefinedBackend", "DefaultBackendType", DefaultBackendType_, PredefinedBackendId_, DefaultPredefinedBackend_, PredefinedBackend_, PredefinedBackendAlias_, Language, Writer );
+	GetFeatures_( "Backends", "Backend", "DefaultBackendType", parameter_::DefaultBackendType_, definition_::backend_::Id_, definition_::DefaultBackendId_, definition_::Backend_, definition_::tagged_backend_::Alias_, Language, Writer );
 qRR
 qRT
 qRE
@@ -310,67 +345,10 @@ qRE
 
 bso::uint__ sclfrntnd::GetBackendPingDelay( void )
 {
-	return sclrgstry::OGetUInt(sclrgstry::GetCommonRegistry(), BackendPingDelay_, 0 );
+	return sclrgstry::OGetUInt(sclrgstry::GetCommonRegistry(), parameter_::backend_::PingDelay_, 0 );
 }
 
-static void LoadProject_( const str::string_ &FileName )
-{
-qRH
-	str::string Id;
-qRB
-	Id.Init();
-	sclmisc::LoadProject( FileName, Id );
-qRR
-qRT
-qRE
-}
-
-static void LoadPredefinedProject_( const str::string_ &Id )
-{
-qRH
-	str::string ProjectFileName;
-qRB
-	if ( Id.Amount() == 0 )
-		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_EmptyPredefinedProjectId" );
-
-	ProjectFileName.Init();
-	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( PredefinedProject_, Id ), ProjectFileName );
-
-	if ( ProjectFileName.Amount() == 0 )
-		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadProjectFileNameInPredefinedProject", Id );
-
-	LoadProject_( ProjectFileName );
-qRR
-qRT
-qRE
-}
-
-void sclfrntnd::LoadProject(
-	frdbse::project_type__ ProjectType,
-	const str::string_ &ProjectFeature )
-{
-	switch ( ProjectType ) {
-	case frdbse::ptNew:
-		sclrgstry::EraseProjectRegistry();
-		break;
-	case frdbse::ptPredefined:
-		LoadPredefinedProject_( ProjectFeature );
-		break;
-	case frdbse::ptUser:
-		if ( ProjectFeature.Amount() == 0  )
-			sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoProjectFileSelected" );
-		LoadProject_( ProjectFeature );
-		break;
-	case frdbse::pt_Undefined:
-		qRFwk();
-		break;
-	default:
-		qRFwk();
-		break;
-	}
-}
-
-static void GetPredefinedBackendFeatures_(
+static void GetBackendFeatures_(
 	const str::string_ &Id,
 	features___ &Features )
 {
@@ -378,11 +356,11 @@ qRH
 	str::string Buffer;
 	rgstry::tentry___ BackendTypeEntry;
 qRB
-	BackendTypeEntry.Init( PredefinedBackendType_, Id );
+	BackendTypeEntry.Init( definition_::tagged_backend_::Type_, Id );
 
 	Buffer.Init();
 	switch ( frdbse::GetBackendType(sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), BackendTypeEntry, Buffer ) ) ) {
-	case frdbse::btDaemon:
+	case frdbse::btRemote:
 		Features.Type = csducl::tDaemon;
 		break;
 	case frdbse::btEmbedded:
@@ -393,14 +371,13 @@ qRB
 		break;
 	}
 
-	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( PredefinedBackend_, Id ), Features.Location );
+	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::TaggedBackend_, Id ), Features.Location );
 qRR
 qRT
 qRE
 }
 
-void sclfrntnd::LaunchProject(
-	kernel___ &Kernel,
+void sclfrntnd::Connect(
 	frdbse::backend_type__ BackendType,
 	const str::string_ &BackendFeature )
 {
@@ -412,7 +389,10 @@ qRB
 	Features.PingDelay = GetBackendPingDelay();
 
 	switch ( BackendType ) {
-	case frdbse::btDaemon:
+	case frdbse::btNone:
+		Features.Type = csducl::tNone;
+		break;
+	case frdbse::btRemote:
 		Features.Type = csducl::tDaemon;
 		Features.Location = BackendFeature;
 		break;
@@ -421,9 +401,9 @@ qRB
 		Features.Location = BackendFeature;
 		break;
 	case frdbse::btPredefined:
-		GetPredefinedBackendFeatures_( BackendFeature, Features );
+		GetBackendFeatures_( BackendFeature, Features );
 		break;
-	case frdbse::pt_Undefined:
+	case frdbse::bt_Undefined:
 		qRFwk();
 		break;
 	default:
@@ -431,21 +411,55 @@ qRB
 		break;
 	}
 
-	if ( !Kernel.Init( Features ) ) {
+	if ( !Kernel_.Init( Features ) )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Location );
-	}
 qRR
 qRT
 qRE
 }
 
+namespace{
+	bso::bool__ Connect_( void )
+	{
+		bso::bool__ BackendDeclared = false;
+	qRH
+		frdbse::backend_type__ Type = frdbse::bt_Undefined;
+		str::string Feature, RawType;
+	qRB
+		Feature.Init();
 
+		if ( sclmisc::OGetValue( parameter_::Backend_, Feature ) ) {
+			RawType.Init();
+			sclmisc::MGetValue( parameter_::backend_::Type_, RawType );
+
+			if ( ( Type = frdbse::GetBackendType( RawType ) ) == frdbse::bt_Undefined )
+				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadBackendType" );
+
+			BackendDeclared = true;
+
+			Connect( Type, Feature );
+		}
+	qRR
+	qRT
+	qRE
+		return BackendDeclared;
+	}
+}
+
+void sclfrntnd::Connect( void )
+{
+	if ( !Connect_() )
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_MissingBackendDeclaration" );
+}
+
+#if 0
 static void FillAutomats_( void )
 {
-	FillActionAutomat_();
+	FillPendingActionAutomat_();
 }
 
 Q37_GCTOR( sclfrntnd )
 {
 	FillAutomats_();
 }
+#endif

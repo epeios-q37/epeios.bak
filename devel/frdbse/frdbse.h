@@ -39,22 +39,10 @@
 # include "lcl.h"
 
 namespace frdbse {
-	enum project_type__ {
-		ptNew,
-		ptPredefined,
-		ptUser,
-		pt_amount,
-		pt_Undefined
-	};
-
-	const char *GetLabel( project_type__ ProjectType );
-
-	project_type__ GetProjectType( const str::string_ &Pattern );
-
 	enum backend_type__ {
-		btNone,	// Use of no backend.
-		btDaemon,
-		btEmbedded,
+		btNone,		// Use of no backend.
+		btRemote,	// Remote, as a daemon.
+		btEmbedded,	// Embedded, as a library.
 		btPredefined,
 		bt_amount,
 		bt_Undefined
@@ -141,6 +129,13 @@ namespace frdbse {
 			il_<t>::Init( Id, Label );
 			this->Wording.Init( Wording );
 		}
+	};
+
+	E_ENUM( mode ) {
+		mMonoUser,	// One use only. The content project (i.e. he can choose the backend) is defined by the user.
+		mMultiUser,	// Several users. The project to use is (which defines the backend to use) is predefiend in the confifuration file.
+		m_amount,
+		m_Undefined
 	};
 }
 

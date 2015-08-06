@@ -26,7 +26,7 @@ using namespace xdhups;
 extern "C" typedef xdhcbk::retrieve retrieve;
 
 bso::bool__ xdhups::agent___::Init(
-	xdhcbk::mode__ Mode,
+	frdbse::mode__ Mode,
 	const str::string_ &ModuleFileName,
 	const char *Identification )
 {

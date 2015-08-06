@@ -51,18 +51,48 @@ rgstry::entry___ sclrgstry::Definitions( "Definitions" );
 rgstry::entry___ sclrgstry::Locale( "Locale" );
 rgstry::entry___ sclrgstry::Arguments( "Arguments" );
 
-rgstry::entry___ sclrgstry::Language( "Language", Parameters );
+rgstry::entry___ sclrgstry::parameter::Language( "Language", Parameters );
 
-static rgstry::entry___ PluginParameters_( "Plugins", sclrgstry::Parameters );
-rgstry::entry___ sclrgstry::PluginParameter( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), PluginParameters_ );
+# if 0
+	rgstry::entry___ ProjectFeature_( "Project", sclrgstry::Parameters );
+	rgstry::entry___ ProjectType_( "@Type", ProjectFeature_ );
+	rgstry::entry___ ProjectAction_("@Action", ProjectFeature_ );
+	rgstry::entry___ PredefinedProjects_( "PredefinedProjects", sclrgstry::Definitions );
+	rgstry::entry___ DefaultPredefinedProject_( "@Default", PredefinedProjects_ );
+	rgstry::entry___ FreePredefinedProject_( "PredefinedProject", PredefinedProjects_ ); 
+	rgstry::entry___ PredefinedProjectId_( "@id", FreePredefinedProject_ );
+	rgstry::entry___ PredefinedProject_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), FreePredefinedProject_);
+	rgstry::entry___ PredefinedProjectAlias_( "@Alias", PredefinedProject_ );
+# endif
 
-static rgstry::entry___ PluginDefinitionsSection_( "PluginSection", sclrgstry::Definitions );
-static rgstry::entry___ PluginDefinitions_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), PluginDefinitionsSection_ );
-static rgstry::entry___ PluginDefinition_( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), PluginDefinitions_ );
-rgstry::entry___ sclrgstry::PluginFilename( "Filename", PluginDefinition_ );
-rgstry::entry___ sclrgstry::PluginConfiguration( "Configuration", PluginDefinition_ );
-rgstry::entry___ sclrgstry::PluginLocale( "Locale", PluginDefinition_ );
+rgstry::entry___ sclrgstry::parameter::Project("Project", Parameters );
+rgstry::entry___ sclrgstry::parameter::project::Type( "@Type", parameter::Project );
+rgstry::entry___ sclrgstry::parameter::project::Feature( parameter::Project );
 
+namespace definition_ {
+	rgstry::entry___ Projects_( "Projects", sclrgstry::Definitions );
+}
+
+rgstry::entry___ sclrgstry::definition::DefaultProjectId( "Default", definition_::Projects_ );
+rgstry::entry___ sclrgstry::definition::Project( "Project", definition_::Projects_ ); 
+rgstry::entry___ sclrgstry::definition::project::Id( "@id", Project );
+rgstry::entry___ sclrgstry::definition::TaggedProject( RGSTRY_TAGGING_ATTRIBUTE( "id" ), definition::Project );
+
+
+namespace parameter_ {
+	rgstry::entry___ Plugins_( "Plugins", sclrgstry::Parameters );
+}
+
+rgstry::entry___ sclrgstry::parameter::Plugin( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), parameter_::Plugins_ );
+
+namespace definition {
+	static rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclrgstry::Definitions );
+	static rgstry::entry___ Plugin_( RGSTRY_TAGGED_ENTRY( "Plugin", "id" ), Plugins_ );
+}
+
+rgstry::entry___ sclrgstry::definition::plugin::Filename( "Filename", ::definition::Plugin_ );
+rgstry::entry___ sclrgstry::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
+rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
 
 static rgstry::entry___ DefaultSetup_( "@DefaultSetup", Parameters );
 
@@ -97,7 +127,7 @@ const char *sclrgstry::GetLanguage_(
 	const registry_ &Registry,
 	TOL_CBUFFER___ &Buffer )
 {
-	sclrgstry::OGetValue( Registry, Language, Buffer );
+	sclrgstry::OGetValue( Registry, parameter::Language, Buffer );
 
 	if ( Buffer == NULL )
 		return sclmisc::GetBaseLanguage();
@@ -380,43 +410,32 @@ bso::bool__ sclrgstry::GetValues(
 	return Registry.GetValues( Entry, Values );
 }
 
-const str::string_ &sclrgstry::OGetValue(
+bso:: bool__ sclrgstry::OGetValue(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
-	str::string_ &Value,
-	bso::bool__ *Missing )
+	str::string_ &Value )
 {
-	if ( !BGetValue( Registry, Entry, Value ) )
-		if ( Missing != NULL )
-			*Missing = true;
-
-	return Value;
+	return BGetValue( Registry, Entry, Value );
 }
 
 const char *sclrgstry::OGetValue(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
-	TOL_CBUFFER___ &Buffer,
-	bso::bool__ *Missing )
+	TOL_CBUFFER___ &Buffer )
 {
+	const char *ReturnedValue = NULL;
 qRH
 	str::string Value;
-	bso::bool__ LocalMissing = false;
+	bso::bool__ Missing = false;
 qRB
 	Value.Init();
 
-	OGetValue( Registry, Entry, Value, &LocalMissing );
-
-	if ( LocalMissing ) {
-		if ( Missing != NULL )
-			*Missing = true;
-	}
-	else
-		Value.Convert( Buffer );
+	if ( OGetValue( Registry, Entry, Value ) )
+		ReturnedValue = Value.Convert( Buffer );
 qRR
 qRT
 qRE
-	return Buffer;
+	return ReturnedValue;
 }
 
 const str::string_ &sclrgstry::MGetValue(

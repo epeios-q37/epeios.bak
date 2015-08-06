@@ -213,6 +213,11 @@ namespace rgstry {
 			reset( false );
 			Init( Path, Parent );
 		}
+		entry___( const entry___ &Entry )
+		{
+			reset( false );
+			Init( Entry );
+		}
 		virtual ~entry___( void )
 		{
 			reset();
@@ -223,6 +228,13 @@ namespace rgstry {
 		{
 			_Parent = &Parent;
 			_RawPath = Path;
+
+			_Path.Init();
+		}
+		void Init( const entry___ &Entry )
+		{
+			_Parent = Entry._Parent;
+			_RawPath = Entry._RawPath;
 
 			_Path.Init();
 		}

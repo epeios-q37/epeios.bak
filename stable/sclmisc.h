@@ -108,6 +108,19 @@ namespace sclmisc {
 
 	void EraseProjectRegistry( void );
 
+	enum project_type__ {
+		ptNew,			// Empty project.
+		ptPredefined,	// Use of a project defined in the 'Definitions' section in the configuration file.
+		ptRemote,		// Project stored in a file.
+		ptEmbedded,		// The content of the project is embedded in the its declaration (not implemented yet)
+		pt_amount,
+		pt_Undefined
+	};
+
+	const char *GetLabel( project_type__ ProjectType );
+
+	project_type__ GetProjectType( const str::string_ &Pattern );
+
 	void LoadProject(
 		flw::iflow__ &Flow,
 		str::string_ &Id );
@@ -115,6 +128,12 @@ namespace sclmisc {
 	void LoadProject(
 		const fnm::name___ &FileName,
 		str::string_ &Id );
+
+	void LoadProject(
+		project_type__ ProjectType,
+		const str::string_ &ProjectFeature );
+
+	void LoadProject( void );	// Load project, if applies, following configuration file indications.
 
 	using fil::GetBackupFilename;
 
@@ -204,20 +223,18 @@ namespace sclmisc {
 		return sclrgstry::GetValues( GetRegistry(), Entry, Values );
 	}
 
-	inline const str::string_ &OGetValue(
+	inline bso::bool__ OGetValue(
 		const rgstry::tentry__ &Entry,
-		str::string_ &Value,
-		bso::bool__ *Missing = NULL )
+		str::string_ &Value )
 	{
-		return sclrgstry::OGetValue( GetRegistry(), Entry, Value, Missing );
+		return sclrgstry::OGetValue( GetRegistry(), Entry, Value );
 	}
 
 	inline const char *OGetValue(
 		const rgstry::tentry__ &Entry,
-		TOL_CBUFFER___ &Buffer,
-		bso::bool__ *Missing = NULL )
+		TOL_CBUFFER___ &Buffer )	// Returns NULL when entry missing.
 	{
-		return sclrgstry::OGetValue( GetRegistry(), Entry, Buffer, Missing );
+		return sclrgstry::OGetValue( GetRegistry(), Entry, Buffer );
 	}
 
 	inline const str::string_ &MGetValue(

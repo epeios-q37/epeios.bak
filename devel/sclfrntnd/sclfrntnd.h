@@ -34,6 +34,7 @@
 // SoCLe FRoNTeND
 
 # include "sclrgstry.h"
+# include "sclmisc.h"
 
 # include "frdbse.h"
 
@@ -87,7 +88,6 @@ namespace sclfrntnd {
 		csducl::universal_client_ioflow___ _Flow;
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistryLevel;
-		bso::bool__ _IsOpen;
 		Q37_MPMDF( const char, L_, Language_ );
 	public:
 		void reset( bso::bool__ P = true )
@@ -95,7 +95,6 @@ namespace sclfrntnd {
 			_frontend___::reset( P );
 			_Flow.reset( P );
 			_Registry.reset( P );
-			_IsOpen = false;
 			_RegistryLevel = rgstry::UndefinedLevel;
 			Language_ = NULL;
 		}
@@ -109,35 +108,14 @@ namespace sclfrntnd {
 			_Registry.Init();
 			_Registry.Push( Registry );
 			_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
-			_IsOpen = false;
 			Language_ = Language;
 
 
 			return _frontend___::Init( ReportingCallback );
 		}
 		bso::bool__ Connect(
-			csducl::universal_client_core &ClientCore,
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
-			fblfrd::incompatibility_informations_ &IncompatibilityInformations )
-		{
-			fblfrd::mode__ Mode = fblfrd::m_Undefined;
-
-			_Flow.Init( ClientCore );
-
-			switch ( ClientCore.GetType() ) {
-			case csducl::tLibrary:
-				Mode = fblfrd::mEmbedded;
-				break;
-			case csducl::tDaemon:
-				Mode = fblfrd::mRemote;
-				break;
-			default:
-				qRFwk();
-				break;
-			}
-
-			return _frontend___::Connect( L_(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
-		}
+			fblfrd::incompatibility_informations_ &IncompatibilityInformations );
 		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
 			return _Registry;
@@ -148,20 +126,19 @@ namespace sclfrntnd {
 		}
 	};
 
-	// Action  effectuer sur le projet par dfaut.
-	enum action__ {
-		aNone,		// No action : another project can be choosen, and the selected project is manually loaded and launched.
-		aLoad,		// Project is loaded, but not launched.
-		aLaunch,	// Project is loaded and launched.
-		a_amount,
-		a_Undefined
-	};
+	inline void LoadProject(
+		sclmisc::project_type__ Type,
+		const str::string_ &Feature )
+	{
+		sclmisc::LoadProject( Type, Feature );
+	}
 
-	const char *GetLabel( action__ Action );
+	inline void LoadProject( void )
+	{
+		sclmisc::LoadProject();
+	}
 
-	action__ GetAction( const str::string_ &Label );
-
-	action__ GetProjectsFeatures(
+	void GetProjectsFeatures(
 		const char *Language,
 		xml::writer_ &Writer );
 
@@ -171,15 +148,11 @@ namespace sclfrntnd {
 
 	bso::uint__ GetBackendPingDelay( void );
 
-	void LoadProject(
-		frdbse::project_type__ ProjectType,
-		const str::string_ &ProjectFeature );
-
-	void LaunchProject(
-		kernel___ &Kernel,
+	void Connect(
 		frdbse::backend_type__ BackendType,
 		const str::string_ &BackendFeature );
 
+	void Connect( void );
 }
 
 				  /********************************************/

@@ -30,44 +30,13 @@
 
 using namespace frdbse;
 
-#define C( name ) case pt##name: return #name; break
-
-const char *frdbse::GetLabel( project_type__ ProjectType )
-{
-	switch ( ProjectType ) {
-	C( New );
-	C( Predefined );
-	C( User );
-	default:
-		qRFwk();
-		break;
-	}
-
-	return NULL;	// Pour viter un 'warning'.
-}
-
-static stsfsm::automat ProjectAutomat_;
-
-static void FillProjectAutomat_( void )
-{
-	ProjectAutomat_.Init();
-	stsfsm::Fill( ProjectAutomat_, pt_amount, GetLabel );
-}
-
-project_type__ frdbse::GetProjectType( const str::string_ &Pattern )
-{
-	return stsfsm::GetId( Pattern, ProjectAutomat_, pt_Undefined, pt_amount );
-}
-
-#undef C
-
 #define C( name ) case bt##name: return #name; break
 
 const char *frdbse::GetLabel( backend_type__ BackendType )
 {
 	switch ( BackendType ) {
 	C( None );
-	C( Daemon );
+	C( Remote );
 	C( Embedded );
 	C( Predefined );
 	default:
@@ -133,14 +102,8 @@ qRT
 qRE
 }
 
-static void FillAutomats_( void )
-{
-	FillProjectAutomat_();
-	FillBackendAutomat_();
-}
-
 Q37_GCTOR( frdbse )
 {
-	FillAutomats_();
+	FillBackendAutomat_();
 }
 

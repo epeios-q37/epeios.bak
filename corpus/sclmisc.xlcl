@@ -13,7 +13,19 @@
     <Translation language="fr">Echec de l'ouverture du fichier '%1'</Translation>
     <Translation language="en">Unable to open file '%1'</Translation>
   </Translations>
-  <!--
+	<Translations text="SCLMISC_EmptyPredefinedProjectId">
+		<Translation language="fr">Identifiant de projet prédéfini vide.</Translation>
+		<Translation language="en">Empty predefined project id.</Translation>
+	</Translations>
+	<Translations text="SCLMISC_NoOrBadProjectFileNameInPredefinedProject">
+		<Translation language="fr">Pas de, ou mauvais nom de fichier projet défini dans le project prédefini d'identifiant '%1'.</Translation>
+		<Translation language="en">No or bad project file name defined in predefined project of id '%1'.</Translation>
+	</Translations>
+	<Translations text="SCLMISC_NoProjectFileSelected">
+		<Translation language="fr">Fichier de projet non spécifié.</Translation>
+		<Translation language="en">No specified project file.</Translation>
+	</Translations>
+	<!--
 	<Translations text="SCLMISC_">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
