@@ -39,11 +39,12 @@ bso::bool__ csdlec::library_embedded_client_core__::Init(
 
 	reset();
 
-	if ( _Library.Init( LibraryName, ERRHandling ) )
+	if ( _Library.Init(LibraryName, ERRHandling) ) {
 		if ( _RetrieveCallback( &SharedData ) )
 			return true;
 		else
 			reset();	// Sinon le bibliothque n'est pas dcharge correctement  la fermeture de l'application.
+	}
 
 	if ( ERRHandling != err::hUserDefined )
 		qRSys();
