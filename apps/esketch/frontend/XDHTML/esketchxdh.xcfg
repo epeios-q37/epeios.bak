@@ -3,7 +3,7 @@
 	<Configuration target="esketchxdh">
 		<xpp:bloc preserve="yes">
 			<xpp:define name="XSLRoot">
-				<xpp:bloc>/home/csimon/epeios/apps/esketch/frontend/XDHTML/XSL/</xpp:bloc>
+				<xpp:bloc>/Users/csimon/epeios/apps/esketch/frontend/XDHTML/XSL/</xpp:bloc>
 			</xpp:define>
 		</xpp:bloc>
 		<xpp:expand href="../esketchfrd.xcfg"/>
