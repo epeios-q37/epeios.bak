@@ -320,7 +320,7 @@ qRB
 	if ( V8Context->eval( V8Context, CEFString, &V8Value, &V8Exception ) != 1 )
 		qRGnr();
 
-	if ( Buffer != NULL ) 
+	if ( Buffer != NULL ) {
 		if ( !V8Value->is_undefined( V8Value ) ) {
 			if ( V8Value->is_string(V8Value) ) {
 				if ( ( Value = V8Value->get_string_value( V8Value ) ) != NULL ) { // NOTA : if the script returns an empty string, 'Value' is NULL !!!
@@ -340,6 +340,7 @@ qRB
 				Buffer->reset();
 		} else
 			Buffer->reset();
+	}
 qRR
 qRT
 	if ( Value != NULL )
