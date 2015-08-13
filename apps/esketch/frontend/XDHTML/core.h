@@ -18,7 +18,7 @@
 */
 
 #ifndef CORE__INC
-# define CORE_INC
+# define CORE__INC
 
 # include "global.h"
 # include "prolog.h"

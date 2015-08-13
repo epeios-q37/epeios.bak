@@ -18,7 +18,7 @@
 */
 
 #ifndef REGISTRY__INC
-# define REGISTRY_INC
+# define REGISTRY__INC
 
 # include "frdrgstry.h"
 
