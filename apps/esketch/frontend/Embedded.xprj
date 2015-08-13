@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<Projects xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Project target="esketchxdh" id="Local">
+		<Parameters>
+      <Locale>
+        <xpp:cdata>
+          <Locale>
+            <!--
+            <Translations text="">
+              <Translation language="fr"></Translation>
+              <Translation language="en"></Translation>
+              <Translation language="de"></Translation>
+            </Translations>
+            -->
+          </Locale>
+</xpp:cdata>
+        </Locale>
+        		<DefaultBackendType>Embedded</DefaultBackendType>
+      <Backend Type="Embedded">h:/bin/esketchbkd</Backend>
+      <Authentication Mode="Full">
+			  <Login>The login</Login>
+			  <Password>Password</Password>
+		  </Authentication>
+    </Parameters>
+  </Project>
+</Projects>
