@@ -10,19 +10,19 @@
 			<xpp:ifeq select="env" value="windows">
 				<xpp:bloc>
 					<URL>file://H:/hg/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
-					<ModuleFileName>h:/bin/orgnzqxdh.dll</ModuleFileName>
+					<ModuleFilename>h:/bin/orgnzqxdh.dll</ModuleFilename>
 				</xpp:bloc>
 			</xpp:ifeq>
 			<xpp:ifeq select="env" value="linux">
 				<xpp:bloc>
 					<URL>file:///home/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
-					<ModuleFileName>/home/csimon/bin/liborgnzqxdh.so</ModuleFileName>
+					<ModuleFilename>/home/csimon/bin/liborgnzqxdh.so</ModuleFilename>
 				</xpp:bloc>
 			</xpp:ifeq>
 			<xpp:ifeq select="env" value="mac">
 				<xpp:bloc>
 					<URL>file:///Users/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
-					<ModuleFileName>/Users/csimon/bin/liborgnzqxdh.dylib</ModuleFileName>
+					<ModuleFilename>/Users/csimon/bin/liborgnzqxdh.dylib</ModuleFilename>
 				</xpp:bloc>
 			</xpp:ifeq>
 			<Language>en</Language>
