@@ -33,56 +33,58 @@ using namespace cpe;
 
 const char *cpe::GetOSDigest( void )
 {
-	static char Digest[100];
-	Digest[0] = 0;
+	static char Digest[100] = "";
+
+	if ( !Digest[0] ) {
 
 #ifdef CPE_S_ANDROID
-	C( CPE_SL_ANDROID );
+		C( CPE_SL_ANDROID );
 #endif
 
 #ifdef CPE_S_LINUX
-	C( CPE_SL_LINUX );
+		C( CPE_SL_LINUX );
 #endif
 
 #ifdef CPE_S_GNULINUX
-	C( CPE_SL_GNULINUX );
+		C( CPE_SL_GNULINUX );
 #endif
 
 #ifdef CPE_S_DARWIN
-	C( CPE_SL_DARWIN );
+		C( CPE_SL_DARWIN );
 #endif
 
 #ifdef CPE_S_IOS
-	C( CPE_SL_IOS );
+		C( CPE_SL_IOS );
 #endif
 
 #ifdef CPE_S_OSX
-	C( CPE_SL_OSX );
+		C( CPE_SL_OSX );
 #endif
 
 #ifdef CPE_S_CYGWIN
-	C( CPE_S_CYGWIN );
+		C( CPE_SL_CYGWIN );
 #endif
 
 #ifdef CPE_S_WIN
-	C( CPE_SL_WIN );
+		C( CPE_SL_WIN );
 #endif
 
 #ifdef CPE_S_WIN32
-	C( CPE_SL_WIN32);
+		C( CPE_SL_WIN32);
 #endif
 
 #ifdef CPE_S_WIN64
-	C( CPE_SL_WIN64 );
+		C( CPE_SL_WIN64 );
 #endif
 
 #ifdef CPE_S_UNIX
-	C( CPE_SL_UNIX );
+		C( CPE_SL_UNIX );
 #endif
 
 #ifdef CPE_S_POSIX
-	C( CPE_SL_POSIX)
+		C( CPE_SL_POSIX);
 #endif
+	}
 
 	return Digest;
 }

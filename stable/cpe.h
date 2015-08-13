@@ -52,7 +52,7 @@
 #   define CPE_C_MINGW
 #   define CPE_CL	CPE_CL_MINGW
 #  else
-#   define CPE_CL	CME_CL_GCC
+#   define CPE_CL	CPE_CL_GCC
 #  endif
 # elif defined(_MSC_VER)
 #  define CPE_C_MSC

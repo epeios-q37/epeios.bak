@@ -372,9 +372,5 @@ endif
 
 clean:
 	rm -rf *.o
-	
-# For maintainer only.
-pack:
-	DVLPack
 
 		

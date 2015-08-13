@@ -1,7 +1,0 @@
-***** eSketch Gecko frontend changelog *****
-
-REMINDER :
-	- Before publication, merge with the content of ../CHANGELOG.txt.
-	- This file is for both C++ and other Dalvik stuff of the program.
-
-	

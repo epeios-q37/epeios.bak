@@ -325,17 +325,13 @@ namespace sclmisc {
 
 		// To define function retrieving optional registry value.
 # define SCLMISC_OV( name, entry )\
-	inline const char *name(\
-		TOL_CBUFFER___ &Buffer,\
-		bso::bool__ *Missing = NULL )\
+	inline const char *name( TOL_CBUFFER___ &Buffer )\
 		{\
-		return sclmisc::OGetValue( entry, Buffer, Missing );\
+		return sclmisc::OGetValue( entry, Buffer );\
 		}\
-	inline const str::string_ &name(\
-		str::string_ &Value,\
-		bso::bool__ *Missing = NULL )\
+	inline bso::bool__ name( str::string_ &Value )\
 		{\
-		return sclmisc::OGetValue( entry, Value, Missing );\
+		return sclmisc::OGetValue( entry, Value );\
 		}
 
 	// Façon standard de récupèrer un plugin.

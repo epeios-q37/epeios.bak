@@ -13,6 +13,12 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2015-08-04 :
+- CPE :
+	# Fixing Cygwin-related stuff.
+- ERR :
+	% Removing deprecated 'qRPrm()'.
+
+2015-08-04 :
 - XPP :
 	# Use of the correct 'PreservationLevel_' variable to know if variable replacement should be skipped or not.
 

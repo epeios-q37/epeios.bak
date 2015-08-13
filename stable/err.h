@@ -140,7 +140,6 @@ namespace err {
 # define qRLmt()	ERRCommon( err::tLimitation )
 # define qRDta()	ERRCommon( err::tData )
 # define qRFwk()	ERRCommon( err::tFramework )
-# define qRPrm()	ERRCommon( err::tParameters )
 # define qRFbd()	ERRCommon( err::tForbidden )
 # define qRLbr()	ERRCommon( err::tLibrary )
 # define qRChk()	ERRCommon( err::tChecker )
