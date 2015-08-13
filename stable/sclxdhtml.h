@@ -404,7 +404,7 @@ namespace sclxdhtml {
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			if ( _OnBeforeAction( Session, Id, Action ) )
+			if ( _OnBeforeAction(Session, Id, Action) ) {
 				if ( !strcmp( Action, xdhcbk::CloseActionLabel ) )
 					Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 				else
@@ -413,6 +413,7 @@ namespace sclxdhtml {
 # else
 					_Handler.Launch( Session, Id, Action );
 # endif
+			}
 		qRR
 			HandleError( Session, Session.Language() );
 		qRT
