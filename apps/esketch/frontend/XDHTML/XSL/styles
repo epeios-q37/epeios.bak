@@ -1,0 +1,21 @@
+<xpp:bloc>
+	<link rel="stylesheet" href="js/jquery-ui/jquery-ui.css"/>
+	<style type="text/css">
+html, body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.vcenter-out, .hcenter {
+	display: table;
+	height: 100%;
+	margin: auto;
+}
+
+.vcenter-in {
+	display: table-cell;
+	vertical-align: middle;
+}
+</style>
+</xpp:bloc>

@@ -1,0 +1,6 @@
+<xpp:bloc>
+	<xdh-keys>
+		<xdh-key key="a" modifiers="sc" action="About"/>
+		<xdh-key key="r" modifiers="sc" action="Refresh"/>
+	</xdh-keys>
+</xpp:bloc>
