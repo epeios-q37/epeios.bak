@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- For the frontends (based on 'SCLFRNTND'). -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:define name="FRD_Parameters">
+		<xpp:bloc/>
+	</xpp:define>
+	<xpp:define name="FRD_Definitions">
+		<xpp:bloc/>
+	</xpp:define>
+	<xpp:define name="FRD_Locale">
+		<xpp:bloc/>
+	</xpp:define>
+</xpp:bloc>

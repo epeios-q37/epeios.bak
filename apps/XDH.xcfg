@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- For the XDHTML-based interfaces (based on 'SCLXDHTML'). -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:define name="XDH_Locale">
+		<xpp:bloc/>
+	</xpp:define>
+</xpp:bloc>
