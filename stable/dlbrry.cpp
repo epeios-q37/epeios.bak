@@ -113,6 +113,8 @@ qRB
 
 	BuildCompleteLibraryFileName_( Name, Path );
 
+	cio::COut << Path << txf::nl << txf::commit;
+
 	Handler = dlopen( Path, RTLD_LAZY );
 qRR
 qRT

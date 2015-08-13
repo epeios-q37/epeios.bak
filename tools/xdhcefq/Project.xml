@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Version)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2013</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+		<xpp:set name="_CEF" value="yes"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>xdhcefq</Program>
+		<Software>xdhcefq</Software>
+		<UUID>968ea869-90d0-4e03-a4d9-10f4f73d50aa</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>dlbrry</Module>
+				<Module>mtk</Module>
+				<Module>strmrg</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="XDHTML">
+				<Module>xdhcbk</Module>
+				<Modules Group="JS">
+					<Module>xdhjsp</Module>
+					<Module>xdhjsr</Module>
+					<Module>xdhjst</Module>
+					<Module>xdhups</Module>
+				</Modules>
+			</Modules>
+		</Modules>
+		<Module>agent</Module>
+		<Module>browser</Module>
+		<Module>files</Module>
+		<Module>misc</Module>
+		<Module>registry</Module>
+		<Module>render</Module>
+	</Modules>
+	<SourceDirs>
+	</SourceDirs>
+	<Files>
+		<Files PAck="yes" Group="CEF" Path="CEF/">
+			<File>xdhcefq.html</File>
+			<File Path="js/">xdhtml.js</File>
+			<File>xdhcefq.js</File>
+		</Files>
+		<File Path="../">XDH.xcfg</File>
+	</Files>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_MT</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

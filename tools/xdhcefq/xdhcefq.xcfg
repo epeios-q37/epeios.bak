@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="xdhcefq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand href="../TOL.xcfg"/>
+		<xpp:expand href="../XDH.xcfg"/>
+		<Parameters DefaultSetup="Default">
+			<!--ModuleFileName>h:\bin\esketchxht</ModuleFileName-->
+			<xpp:ifeq select="env" value="windows">
+				<xpp:bloc>
+					<URL>file://H:/hg/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
+					<ModuleFileName>h:/bin/orgnzqxdh.dll</ModuleFileName>
+				</xpp:bloc>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="linux">
+				<xpp:bloc>
+					<URL>file:///home/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
+					<ModuleFileName>/home/csimon/bin/liborgnzqxdh.so</ModuleFileName>
+				</xpp:bloc>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="mac">
+				<xpp:bloc>
+					<URL>file:///Users/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
+					<ModuleFileName>/Users/csimon/bin/liborgnzqxdh.dylib</ModuleFileName>
+				</xpp:bloc>
+			</xpp:ifeq>
+			<Language>en</Language>
+			<Command>Launch</Command>
+		</Parameters>
+		<Setups>
+			<Setup id="Default">
+				<CEF>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc/>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>
+							<SingleProcess>true</SingleProcess>
+							<NoSandbox>true</NoSandbox>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>
+							<xpp:expand select="ProcessType"/>
+							<NoSandbox>true</NoSandbox>
+						</xpp:bloc>
+					</xpp:ifeq>
+				</CEF>
+			</Setup>
+		</Setups>
+		<Definitions>
+			<RootTagId>Root</RootTagId>
+			<CustomItems>
+				<Tags>
+					<Key>
+						<Name>xdh-key</Name>
+						<AttributeNames>
+							<Key>key</Key>
+							<Modifiers>modifiers</Modifiers>
+							<Action>action</Action>
+						</AttributeNames>
+					</Key>
+				</Tags>
+			</CustomItems>
+			<Scripts>
+				<!-- Other scripts are in 'xdhtml.xcfg'. -->
+			</Scripts>
+		</Definitions>
+		<Locale>
+			<Translations text="TestCommandDescription">
+				<Translation language="fr">Commande de test.</Translation>
+				<Translation language="en">Test command.</Translation>
+			</Translations>
+			<Translations text="TestFlagDescription">
+				<Translation language="fr">fanion de test.</Translation>
+				<Translation language="en">test flag.</Translation>
+			</Translations>
+			<Translations text="TestOptionDescription">
+				<Translation language="fr">option de test.</Translation>
+				<Translation language="en">test option.</Translation>
+			</Translations>
+			<Translations text="TestOptionLabel">
+				<Translation language="fr">option (fr)</Translation>
+				<Translation language="en">option (en)</Translation>
+			</Translations>
+			<Translations text="TestArgumentDescription">
+				<Translation language="fr">argument de test.</Translation>
+				<Translation language="en">test argument.</Translation>
+			</Translations>
+			<Translations text="TestArgumentLabel">
+				<Translation language="fr">argument (fr)</Translation>
+				<Translation language="en">argument (en)</Translation>
+			</Translations>
+		</Locale>
+		<Arguments>
+			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
+			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
+			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
+			<!-- Options : 'Path' ET 'Value'. -->
+			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Argument" Label="TestArgumentLabel"/>
+			<!-- Affectations des arguments libres-->
+			<Layouts>
+				<Layout command="test">
+					<Link index="0" Target="TestArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>
