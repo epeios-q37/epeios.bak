@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Configuration target="esketchxdh">
+		<xpp:bloc preserve="yes">
+			<xpp:define name="XSLRoot">
+				<xpp:bloc>/home/csimon/epeios/apps/esketch/frontend/XDHTML/XSL/</xpp:bloc>
+			</xpp:define>
+		</xpp:bloc>
+		<xpp:expand href="../esketchfrd.xcfg"/>
+		<xpp:expand href="../../../XDH.xcfg"/>
+		<Parameters>
+			<xpp:expand select="Parameters"/>
+			<Language>fr</Language>
+			<xpp:bloc preserve="yes">
+				<XSLFilesSet>
+					<XSLFiles target="About">
+						<Layout>
+							<xpp:expand select="XSLRoot"/>
+							<xpp:bloc>About.xsl</xpp:bloc>
+						</Layout>
+						<!-- No 'casting' XSL -->
+					</XSLFiles>
+					<XSLFiles target="Prolog">
+						<Layout>
+							<xpp:expand select="XSLRoot"/>
+							<xpp:bloc>PrologLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRoot"/>
+							<xpp:bloc>PrologCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Login">
+						<Layout>
+							<xpp:expand select="XSLRoot"/>
+							<xpp:bloc>LoginLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRoot"/>
+							<xpp:bloc>LoginCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Main">
+						<Layout>
+							<xpp:expand select="XSLRoot"/>
+							<xpp:bloc>MainLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRoot"/>
+							<xpp:bloc>MainCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+				</XSLFilesSet>
+			</xpp:bloc>
+		</Parameters>
+		<Definitions>
+			<xpp:expand select="Definitions"/>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="Locale"/>
+			<xpp:expand select="XDH_Locale"/>
+			<xpp:bloc>
+				<!-- About -->
+				<Translations text="aBy">
+					<Translation language="fr">par</Translation>
+					<Translation language="en">by</Translation>
+				</Translations>
+				<Translations text="aLauncher">
+					<Translation language="fr">Lanceur</Translation>
+					<Translation language="en">Launcher</Translation>
+				</Translations>
+				<Translations text="aBackend">
+					<Translation language="fr">Moteur de traitement</Translation>
+					<Translation language="en">Backend</Translation>
+				</Translations>
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Prolog -->
+				<Translations text="plgProject">
+					<Translation language="fr">Projet</Translation>
+					<Translation language="en">Project</Translation>
+				</Translations>
+				<Translations text="plgProjectToLoad">
+					<Translation language="fr">Projet à charger</Translation>
+					<Translation language="en">Project to load</Translation>
+				</Translations>
+				<Translations text="plgProjectTypes">
+					<Translation language="fr">Types de projet</Translation>
+					<Translation language="en">Project types</Translation>
+				</Translations>
+				<Translations text="plgNewProjectOption">
+					<Translation language="fr">Nouveau</Translation>
+					<Translation language="en">New</Translation>
+				</Translations>
+				<Translations text="plgPredefinedProjectOption">
+					<Translation language="fr">Prédéfini</Translation>
+					<Translation language="en">Predefined</Translation>
+				</Translations>
+				<Translations text="plgUserProjectOption">
+					<Translation language="fr">Utilisateur</Translation>
+					<Translation language="en">User</Translation>
+				</Translations>
+				<Translations text="plgPredefinedProjects">
+					<Translation language="fr">Projets prédéfinis</Translation>
+					<Translation language="en">Predefined projects</Translation>
+				</Translations>
+				<Translations text="plgProjectFile">
+					<Translation language="fr">Fichier</Translation>
+					<Translation language="en">File</Translation>
+				</Translations>
+				<Translations text="plgProjectFileToLoad">
+					<Translation language="fr">Fichier projet à charger</Translation>
+					<Translation language="en">Project file to load</Translation>
+				</Translations>
+				<Translations text="plgBrowse">
+					<Translation language="fr">Parcourir...</Translation>
+					<Translation language="en">Browse...</Translation>
+				</Translations>
+				<Translations text="plgBrowseProjectFiles">
+					<Translation language="fr">Parcourir les fichiers projets</Translation>
+					<Translation language="en">Browse project files</Translation>
+				</Translations>
+				<Translations text="plgSelectProjectFile">
+					<Translation language="fr">Sélectionnez un fichier projet</Translation>
+					<Translation language="en">Select project file</Translation>
+				</Translations>
+				<Translations text="plgOK">
+					<Translation language="fr">OK</Translation>
+					<Translation language="en">OK</Translation>
+				</Translations>
+				<Translations text="plgLoadProject">
+					<Translation language="fr">Charger le projet</Translation>
+					<Translation language="en">Load project</Translation>
+				</Translations>
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Login -->
+				<Translations text="lgnBackend">
+					<Translation language="fr">Moteur de traitement</Translation>
+					<Translation language="en">Backend</Translation>
+				</Translations>
+				<Translations text="lgnBackendType">
+					<Translation language="fr">Types de moteur de traitement</Translation>
+					<Translation language="en">Backend types</Translation>
+				</Translations>
+				<Translations text="lgnBackendToUse">
+					<Translation language="fr">Moteur de traitement à utiliser</Translation>
+					<Translation language="en">Backend to use</Translation>
+				</Translations>
+				<Translations text="lgnRemoteBackendOption">
+					<Translation language="fr">Distant</Translation>
+					<Translation language="en">Remote</Translation>
+				</Translations>
+				<Translations text="lgnEmbeddedBackendOption">
+					<Translation language="fr">Enclavé</Translation>
+					<Translation language="en">Embedded</Translation>
+				</Translations>
+				<Translations text="lgnPredefinedBackendOption">
+					<Translation language="fr">Prédéfini</Translation>
+					<Translation language="en">Predefined</Translation>
+				</Translations>
+				<Translations text="lgnNoBackendOption">
+					<Translation language="fr">Aucun</Translation>
+					<Translation language="en">None</Translation>
+				</Translations>
+				<Translations text="lgnPredefinedBackends">
+					<Translation language="fr">Moteurs de traitement prédéfinis</Translation>
+					<Translation language="en">Predefined backends</Translation>
+				</Translations>
+				<Translations text="lgnEmbeddedBackend">
+					<Translation language="fr">Moteur de traitement enclavé</Translation>
+					<Translation language="en">Embedded backend</Translation>
+				</Translations>
+				<Translations text="lgnEmbeddedBackendToUse">
+					<Translation language="fr">Moteur de traitement enclavé à utiliser</Translation>
+					<Translation language="en">Embedded backend to use</Translation>
+				</Translations>
+				<Translations text="lgnSelectEmbeddedBackend">
+					<Translation language="fr">Sélectionnez un moteur de traitement enclavé</Translation>
+					<Translation language="en">Select an embedded backend</Translation>
+				</Translations>
+				<Translations text="lgnBrowseEmbeddedBackends">
+					<Translation language="fr">Parcourir les moteurs de traitement enclavés</Translation>
+					<Translation language="en">Browse embedded backends</Translation>
+				</Translations>
+				<Translations text="lgnBrowse">
+					<Translation language="fr">Parcourir...</Translation>
+					<Translation language="en">Browse...</Translation>
+				</Translations>
+				<Translations text="lgnRemoteBackendToUse">
+					<Translation language="fr">Moteur de traitement distant à utiliser</Translation>
+					<Translation language="en">Remote backend to use</Translation>
+				</Translations>
+				<Translations text="lgnAddressPort">
+					<Translation language="fr">adresse:port</Translation>
+					<Translation language="en">address:port</Translation>
+				</Translations>
+				<Translations text="lgnOK">
+					<Translation language="fr">OK</Translation>
+					<Translation language="en">OK</Translation>
+				</Translations>
+				<Translations text="lgnConnectToBackend">
+					<Translation language="fr">Se connecter au moteur de traitement</Translation>
+					<Translation language="en">Connect to backend</Translation>
+				</Translations>
+				<Translations text="lgnCancel">
+					<Translation language="fr">Annuler</Translation>
+					<Translation language="en">Cancel</Translation>
+				</Translations>
+				<Translations text="lgnCancelConnection">
+					<Translation language="fr">Annuler la connection au moteur de traitement</Translation>
+					<Translation language="en">Cancel connection to backend</Translation>
+				</Translations>
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Main -->
+				<Translations text="mainConverter">
+					<Translation language="fr">Convertisseur</Translation>
+					<Translation language="en">Convert</Translation>
+				</Translations>
+				<Translations text="mainUCConverter">
+					<Translation language="fr">Convertisseur en majuscule</Translation>
+					<Translation language="en">To upper case converter</Translation>
+				</Translations>
+				<Translations text="mainConvert">
+					<Translation language="fr">Conversion</Translation>
+					<Translation language="en">Convert</Translation>
+				</Translations>
+				<Translations text="mainOK">
+					<Translation language="fr">OK</Translation>
+					<Translation language="en">OK</Translation>
+				</Translations>
+				<Translations text="mainDisplayTestMessage">
+					<Translation language="fr">Afficher message de test.</Translation>
+					<Translation language="en">Display test message.</Translation>
+				</Translations>
+				<Translations text="mainTest">
+					<Translation language="fr">Test</Translation>
+					<Translation language="en">Test</Translation>
+				</Translations>
+				<Translations text="mainHideShowTestButton">
+					<Translation language="fr">Cliquez sur ce texte pour afficher le bouton de test (sortir du cadre le cache).</Translation>
+					<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
+				</Translations>
+			</xpp:bloc>
+		</Locale>
+	</Configuration>
+</Configurations>
