@@ -1,5 +1,0 @@
-***** eSketch backend changelog ****
-
-REMINDER :
-	- Before publication, merge with '../CHANGELOG.txt'.
-	
