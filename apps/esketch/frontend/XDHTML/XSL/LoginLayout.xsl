@@ -53,22 +53,20 @@
 									<!-- if the 'style' attribute is set in the child element, the 'hidden' attribute doesn't work anymore on this child element...-->
 									<fieldset title="#lgnEmbeddedBackendToUse#" data-xdh-cast="EmbeddedBackendCast">
 										<legend>#lgnEmbeddedBackend#</legend>
-										<xpp:bloc>
-											<xsl:variable name="OS" select="../@OS"/>
-											<xsl:variable name="DynamicLibraryExtension">
-												<xsl:choose>
-													<xsl:when test="contains($OS,'Win')">
-														<xsl:text>.dll</xsl:text>
-													</xsl:when>
-													<xsl:when test="contains($OS,'Darwin')">
-														<xsl:text>.dylib</xsl:text>
-													</xsl:when>
-													<xsl:when test="contains($OS,'POSIX')">
-														<xsl:text>.so</xsl:text>
-													</xsl:when>
-												</xsl:choose>
-											</xsl:variable>
-										</xpp:bloc>
+										<xsl:variable name="OS" select="../@OS"/>
+										<xsl:variable name="DynamicLibraryExtension">
+											<xsl:choose>
+												<xsl:when test="contains($OS,'Win')">
+													<xsl:text>.dll</xsl:text>
+												</xsl:when>
+												<xsl:when test="contains($OS,'Darwin')">
+													<xsl:text>.dylib</xsl:text>
+												</xsl:when>
+												<xsl:when test="contains($OS,'POSIX')">
+													<xsl:text>.so</xsl:text>
+												</xsl:when>
+											</xsl:choose>
+										</xsl:variable>
 										<button	title="#lgnBrowseEmbeddedBackends#">
 											<xsl:attribute name="data-xdh-onevent">
 												<xsl:text>(OpenFile|DisplayEmbeddedBackendFilename|(#lgnSelectEmbeddedBackend#|</xsl:text>
@@ -77,7 +75,8 @@
 												<xsl:text>orgnzqbkd</xsl:text>
 												<xsl:value-of select="$DynamicLibraryExtension"/>
 												<xsl:text>))</xsl:text>
-											</xsl:attribute>#lgnBrowse#</button>
+											</xsl:attribute>#lgnBrowse#
+										</button>
 										<input id="EmbeddedBackend" type="text" size="50">
 											<xsl:if test="Backend/@Type='Embedded'">
 												<xsl:attribute name="value">

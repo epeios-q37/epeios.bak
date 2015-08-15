@@ -83,6 +83,12 @@
 		<File>../esketchfrd.xcfg</File>
 		<File>../esketchfrd.xlcl</File>
 	</Files>
+	<Packing>
+		<WikiFiles Group="Doc" Path="Doc/">
+			<File Dir="computing/epeios/apps/esketch" Desc="general description of esketchxdh" Oddity="IsHome">esketchxdh</File>
+			<File Dir="computing/epeios/xdhtml/" Desc="the XDHTML technology" oddity="IsHome">XDHTML</File>
+		</WikiFiles>
+	</Packing>
 	<PreprocessorDefinitions>
 	</PreprocessorDefinitions>
 </Project>

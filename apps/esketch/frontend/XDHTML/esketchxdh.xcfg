@@ -2,8 +2,24 @@
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Configuration target="esketchxdh">
 		<xpp:bloc preserve="yes">
-			<xpp:define name="XSLRoot">
-				<xpp:bloc>/Users/csimon/epeios/apps/esketch/frontend/XDHTML/XSL/</xpp:bloc>
+			<xpp:define name="XSLRootDir">
+				<xpp:bloc>
+					<xpp:expand select="XSLRootDirHeader"/>
+					<xpp:bloc>epeios/apps/esketch/frontend/XDHTML/XSL/</xpp:bloc>
+				</xpp:bloc>
+			</xpp:define>
+			<xpp:define name="XSLRootDirHeader">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>H:/hg/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>/home/csimon/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>Users/csimon/</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
 			</xpp:define>
 		</xpp:bloc>
 		<xpp:expand href="../esketchfrd.xcfg"/>
@@ -15,38 +31,38 @@
 				<XSLFilesSet>
 					<XSLFiles target="About">
 						<Layout>
-							<xpp:expand select="XSLRoot"/>
+							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>About.xsl</xpp:bloc>
 						</Layout>
 						<!-- No 'casting' XSL -->
 					</XSLFiles>
 					<XSLFiles target="Prolog">
 						<Layout>
-							<xpp:expand select="XSLRoot"/>
+							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>PrologLayout.xsl</xpp:bloc>
 						</Layout>
 						<Casting>
-							<xpp:expand select="XSLRoot"/>
+							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>PrologCasting.xsl</xpp:bloc>
 						</Casting>
 					</XSLFiles>
 					<XSLFiles target="Login">
 						<Layout>
-							<xpp:expand select="XSLRoot"/>
+							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>LoginLayout.xsl</xpp:bloc>
 						</Layout>
 						<Casting>
-							<xpp:expand select="XSLRoot"/>
+							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>LoginCasting.xsl</xpp:bloc>
 						</Casting>
 					</XSLFiles>
 					<XSLFiles target="Main">
 						<Layout>
-							<xpp:expand select="XSLRoot"/>
+							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>MainLayout.xsl</xpp:bloc>
 						</Layout>
 						<Casting>
-							<xpp:expand select="XSLRoot"/>
+							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>MainCasting.xsl</xpp:bloc>
 						</Casting>
 					</XSLFiles>

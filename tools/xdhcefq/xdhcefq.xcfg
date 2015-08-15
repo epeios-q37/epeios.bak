@@ -6,23 +6,41 @@
 		<xpp:expand href="../TOL.xcfg"/>
 		<xpp:expand href="../XDH.xcfg"/>
 		<Parameters DefaultSetup="Default">
-			<!--ModuleFileName>h:\bin\esketchxht</ModuleFileName-->
+			<!-- For the package version of the configuration file. Supersed by below definition.-->
+			<xpp:define name="Module">
+				<xpp:bloc>esketch</xpp:bloc>
+			</xpp:define>
+			<xpp:define name="ModuleWithSuffix">
+				<xpp:bloc>
+					<xpp:expand select="Module"/>
+					<xpp:bloc>xdh</xpp:bloc>
+				</xpp:bloc>
+			</xpp:define>
 			<xpp:ifeq select="env" value="windows">
 				<xpp:bloc>
 					<URL>file://H:/hg/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
-					<ModuleFilename>h:/bin/esketchxdh.dll</ModuleFilename>
+					<ModuleFilename>
+						<xpp:bloc>h:/bin/</xpp:bloc>
+						<xpp:expand select="ModuleWithSuffix"/>
+					</ModuleFilename>
 				</xpp:bloc>
 			</xpp:ifeq>
 			<xpp:ifeq select="env" value="linux">
 				<xpp:bloc>
 					<URL>file:///home/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
-					<ModuleFilename>/home/csimon/bin/libesketchxdh.so</ModuleFilename>
+					<ModuleFilename>
+						<xpp:bloc>/home/csimon/</xpp:bloc>
+						<xpp:expand select="ModuleWithSuffix"/>
+					</ModuleFilename>
 				</xpp:bloc>
 			</xpp:ifeq>
 			<xpp:ifeq select="env" value="mac">
 				<xpp:bloc>
 					<URL>file:///Users/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
-					<ModuleFilename>/Users/csimon/bin/libesketchxdh.dylib</ModuleFilename>
+					<ModuleFilename>
+						<xpp:bloc>/Users/csimon/</xpp:bloc>
+						<xpp:expand select="ModuleWithSuffix"/>
+					</ModuleFilename>
 				</xpp:bloc>
 			</xpp:ifeq>
 			<Language>en</Language>
@@ -68,40 +86,26 @@
 			</Scripts>
 		</Definitions>
 		<Locale>
-			<Translations text="TestCommandDescription">
-				<Translation language="fr">Commande de test.</Translation>
-				<Translation language="en">Test command.</Translation>
+			<xpp:expand select="TOL_Locale"/>
+			<Translations text="LaunchCommandDescription">
+				<Translation language="fr">Lancement de l'application.</Translation>
+				<Translation language="en">Launch the application.</Translation>
 			</Translations>
-			<Translations text="TestFlagDescription">
-				<Translation language="fr">fanion de test.</Translation>
-				<Translation language="en">test flag.</Translation>
+			<Translations text="ModuleFilenameArgumentDescription">
+				<Translation language="fr">Nom et chemin de la bibliothèque dynamique correspondant au module XDHTML.</Translation>
+				<Translation language="en">Name and path of the dynamic library corresponding to the XDHTML module.</Translation>
 			</Translations>
-			<Translations text="TestOptionDescription">
-				<Translation language="fr">option de test.</Translation>
-				<Translation language="en">test option.</Translation>
-			</Translations>
-			<Translations text="TestOptionLabel">
-				<Translation language="fr">option (fr)</Translation>
-				<Translation language="en">option (en)</Translation>
-			</Translations>
-			<Translations text="TestArgumentDescription">
-				<Translation language="fr">argument de test.</Translation>
-				<Translation language="en">test argument.</Translation>
-			</Translations>
-			<Translations text="TestArgumentLabel">
-				<Translation language="fr">argument (fr)</Translation>
-				<Translation language="en">argument (en)</Translation>
+			<Translations text="ModuleFilenameArgumentLabel">
+				<Translation language="fr">module</Translation>
+				<Translation language="en">module</Translation>
 			</Translations>
 		</Locale>
 		<Arguments>
+			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
-			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
-			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
-			<!-- Options : 'Path' ET 'Value'. -->
-			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameArgument%"/>
 			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Argument" Label="TestArgumentLabel"/>
+			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="test">

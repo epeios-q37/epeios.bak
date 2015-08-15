@@ -82,8 +82,6 @@ ifeq ("$(os)","$(Cygwin)")
 
 # By default, vanilla Cygwin compiler ('g++') is used.
 # Resulting application uses the Cygwin POSIX Layer.
-# Currently, only 32 bits application can be made.
-# For 64 bits and/or application using
 # directly the MS CRT, see below.
 
 # Use of the MinGW compiler under Cygwin. 
@@ -153,7 +151,7 @@ endif
 
 ifeq ("$(os)","$(Cygwin)")
 
-	co += -std=gnu++11 -DCYGWIN -DUNICODE
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	LDFLAGS += -static
 	
@@ -178,13 +176,13 @@ ifeq ("$(os)","$(Cygwin)")
 	ifeq ("$(target)","$(win32)")
 		CXX = i686-w64-mingw32-g++
 		mods += $(wmods)
-		lo += -municode
+		lo += -municode -m32
 		co += -m32
 	else # 'ifeq' on other line due to GNU 3.80 (Maemo on N900)
 		ifeq ("$(target)","$(win64)")
 			CXX = x86_64-w64-mingw32-g++
 			mods += $(wmods)
-			lo += -municode
+			lo += -municode -m64
 			co += -m64
 		else
 			mods += $(pmods)
@@ -238,8 +236,7 @@ endif
 
 ifeq ("$(os)","$(GNULinux)")
 
-	co += -std=gnu++11 -D_FILE_OFFSET_BITS=64
-	co += -DGNULINUX
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
 	
@@ -268,7 +265,7 @@ endif
 
 ifeq ("$(os)","$(Linux)")
 
-	co += -DLINUX
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
 
@@ -295,8 +292,7 @@ endif
 
 ifeq ("$(os)","$(MacOS)")
 
-	co += -std=gnu++11
-	co += -DDARWIN
+	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
 	
 	mods += $(pmods)
 
@@ -319,7 +315,6 @@ endif
 		
 all: $(binary)
 	rm -f *.o
-	strip $(binary)
 
 copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
@@ -355,9 +350,5 @@ endif
 
 clean:
 	rm -rf *.o
-	
-# For maintainer only.
-pack:
-	DVLPack
 
 		

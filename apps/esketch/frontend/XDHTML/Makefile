@@ -1,4 +1,4 @@
-#	Copyright (C) 2014 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of eSketch.
 #
@@ -62,7 +62,7 @@ wmods += wllio
 #CXXFLAGS += -g
 
 # General optimization.
-#CXXFLAGS += -O
+CXXFLAGS += -O
 
 # To use with gprof
 #CXXFLAGS += -pg
@@ -106,8 +106,6 @@ ifeq ("$(os)","$(Cygwin)")
 # without using the Cygwin/POSIX layer,
 # Uncomment follwing line :
 #target=$(win)
-
-#	lo += -Wl,--add-stdcall-alias
 
 endif
 
@@ -210,8 +208,7 @@ ifeq ("$(os)","$(Cygwin)")
 	endif
 	
 	binary=$(name).dll
-#	lo += -Wl,--kill-at -shared
-	lo +=  -shared
+	lo += -Wl,--kill-at -shared
 	libs += -lws2_32
 
 	dest=/cygdrive/h/bin/
@@ -345,7 +342,7 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2014"\"
+copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios

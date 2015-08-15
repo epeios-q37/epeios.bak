@@ -5,8 +5,8 @@
 		<xpp:expand value-of="q37.xpp"/>
 		<xpp:expand select="epeios.xlcl"/>
 		<Translations text="ProgramDescription">
-			<Translation language="fr">Mettre ici la description du programme en français !</Translation>
-			<Translation language="en">Put here the english description of the program !</Translation>
+			<Translation language="fr">Utilitaire de lancement d'un module XDHTML en tant qu'application native.</Translation>
+			<Translation language="en">Tool launching a XDHTML module as a native application.</Translation>
 		</Translations>
 		<Translations text="CloseText">
 			<Translation language="fr">Fermer</Translation>
