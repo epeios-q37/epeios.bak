@@ -58,7 +58,7 @@ namespace frdfrntnd {
 			Statics.reset( P );
 			MyObject.reset( P );
 		}
-		E_CDTOR( frontend___ );
+		E_CVDTOR( frontend___ );
 		void Init(
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback,

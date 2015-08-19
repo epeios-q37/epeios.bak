@@ -55,7 +55,7 @@ namespace xdhdws {
 
 			Callback_ = NULL;
 		}
-		E_CDTOR( proxy__ );
+		E_CVDTOR( proxy__ );
 		void Init( xdhcbk::proxy_callback__ *Callback )	// 'Callback' is destroyed by a 'delete' when this object is dsetroyed.
 		{
 			reset();

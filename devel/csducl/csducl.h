@@ -212,7 +212,7 @@ namespace csducl {
 		void reset( bso::bool__ P = true )
 		{
 			ioflow__::reset( P );
-			_Driver.reset();
+			_Driver.reset( P );
 		}
 		universal_client_ioflow___( void )
 		{

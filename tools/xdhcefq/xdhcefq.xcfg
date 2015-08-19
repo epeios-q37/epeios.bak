@@ -19,10 +19,10 @@
 			<xpp:ifeq select="env" value="windows">
 				<xpp:bloc>
 					<URL>file://H:/hg/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
-					<ModuleFilename>
+					<!--<ModuleFilename>
 						<xpp:bloc>h:/bin/</xpp:bloc>
 						<xpp:expand select="ModuleWithSuffix"/>
-					</ModuleFilename>
+					</ModuleFilename>-->
 				</xpp:bloc>
 			</xpp:ifeq>
 			<xpp:ifeq select="env" value="linux">
@@ -91,6 +91,15 @@
 				<Translation language="fr">Lancement de l'application.</Translation>
 				<Translation language="en">Launch the application.</Translation>
 			</Translations>
+			<Translations text="ModuleFilenameOptionDescription">
+				<Translation language="fr">Nom et chemin de la bibliothèque dynamique correspondant au module XDHTML.</Translation>
+				<Translation language="en">Name and path of the dynamic library corresponding to the XDHTML module.</Translation>
+			</Translations>
+			<Translations text="ModuleFilenameOptionLabel">
+				<Translation language="fr">module</Translation>
+				<Translation language="en">module</Translation>
+			</Translations>
+			<!-- Both below not (now ?) used. See at end of file. -->
 			<Translations text="ModuleFilenameArgumentDescription">
 				<Translation language="fr">Nom et chemin de la bibliothèque dynamique correspondant au module XDHTML.</Translation>
 				<Translation language="en">Name and path of the dynamic library corresponding to the XDHTML module.</Translation>
@@ -102,16 +111,23 @@
 		</Locale>
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
-			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameArgument%"/>
-			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
+			<!-- Command -->
+			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameOption%"/>
+			<!-- Options -->
+			<Argument id="ModuleFilenameOption" Description="ModuleFilenameOptionDescription" long="module" short="m" Path="ModuleFilename" Label="ModuleFilenameOptionLabel"/>
 			<!-- Affectations des arguments libres-->
+			<!-- No free argument, because it does not work well due to the fact that 'CEF' launch the excutable more times.-->
+
+			<!-- Below definitions would be better, but free arguments don't work well, dur to the fact the 'CEF' relaunch the executable. -->
+			<!--
+			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameArgument%"/>
+			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
 			<Layouts>
-				<Layout command="test">
-					<Link index="0" Target="TestArgument"/>
+				<Layout command="Launch">
+					<Link index="0" Target="ModuleFilenameArgument"/>
 				</Layout>
 			</Layouts>
+			-->
 		</Arguments>
 	</Configuration>
 </Configurations>

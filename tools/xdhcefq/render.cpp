@@ -195,9 +195,9 @@ static void ReportError_(
 {
 qRH
 	str::string ErrorScript;
-err::buffer__ Buffer;
+	err::buffer__ Buffer;
 qRB
-	cio::COut << err::Message( Buffer ) << txf::nl << txf::commit;
+//	cio::COut << err::Message( Buffer ) << txf::nl << txf::commit;
 
 	ErrorScript.Init( "alert('");
 	ErrorScript.Append( Message );
@@ -427,7 +427,7 @@ qRB
 	misc::SendResponse( Response.UTF8( Buffer ) );
 qRR
 qRT
-misc::Clear( &CEFBuffer );
+	misc::Clear( &CEFBuffer );
 qRE
 	return true;
 }

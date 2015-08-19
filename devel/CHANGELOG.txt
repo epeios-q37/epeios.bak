@@ -12,6 +12,19 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-08-18
+- SCLXDHTML :
+	* When no backend, subcomponent initialization are now still called.
+
+2015-08-16
+- CSDUCL :
+	# Add missing parameter.
+- XDHCBK :
+	% 'downstream_callback__' '[...]New(...)' becomes'[...]RetrieveCallback(...)'.
+	* Adding 'downstream_callback__::ReleaseCallback(...). So the 'delete' of an 'session_callback__' is made by the same module ('DLL', f. ex.) as its 'new'.
+- SCLXDHTML, XDHUPS :
+	- Adaptation to changes in 'XDHCBK'.
+
 2015-08-04 :
 - CPE :
 	# Fixing Cygwin-related stuff.

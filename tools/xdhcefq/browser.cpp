@@ -539,12 +539,6 @@ cef_browser_process_handler_t* CEF_CALLBACK browser::GetBrowserProcessHandler( s
 	return &Rack_.BrowserProcessHandler;
 }
 
-namespace {
-	class starter__{
-		public:
-		starter__( void )
-		{
-			SetBrowserProcessHandler_();
-		}
-	} Starter_;
+Q37_GCTOR( browser )		{
+	SetBrowserProcessHandler_();
 }

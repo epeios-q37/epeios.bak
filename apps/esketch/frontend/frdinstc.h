@@ -79,7 +79,9 @@ namespace frdinstc {
 		E_CVDTOR( user___ );
 		void Init( frdfrntnd::frontend___ &Frontend )
 		{
-			Core_.Init( Frontend );
+			if ( Frontend.IsConnected() )
+				Core_.Init( Frontend );
+
 			_TestButtonIsVisible = false;
 		}
 		str::string_ &ToUpper( str::string_ &String )

@@ -44,10 +44,6 @@ namespace xdhups {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				if ( _Callback != NULL )
-					delete _Callback;
-
 			_Callback = NULL;
 		}
 		E_CVDTOR( session__ );
@@ -56,6 +52,10 @@ namespace xdhups {
 			reset();
 
 			_Callback = Callback;
+		}
+		xdhcbk::session_callback__ *Callback( void ) const
+		{
+			return _Callback;
 		}
 		bso::bool__ Launch(
 			const char *Id,
@@ -82,15 +82,19 @@ namespace xdhups {
 			frdbse::mode__ Mode,
 			const str::string_ &ModuleFileName,
 			const char *Identification );
-		xdhcbk::session_callback__ *New(
+		xdhcbk::session_callback__ *RetrieveCallback(
 			const char *Language,
 			xdhcbk::proxy_callback__ *Callback )
 		{
-			return _C().New( Language, Callback );
+			return _C().RetrieveCallback( Language, Callback );
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{
 			return _C().BaseLanguage( Buffer );
+		}
+		void ReleaseCallback( xdhcbk::session_callback__ *Callback )
+		{
+			return _C().ReleaseCallback( Callback );
 		}
 	};
 }

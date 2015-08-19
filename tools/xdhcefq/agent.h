@@ -44,6 +44,11 @@ namespace agent {
 		TOL_CBUFFER___ _LanguageBuffer;
 		void _Release( void )
 		{
+			xdhcbk::session_callback__ *Callback = _Session.Callback();
+
+			if ( Callback != NULL )
+				_agent___::ReleaseCallback( Callback );
+
 			if ( _Browser != NULL  )
 				misc::Release( _Browser );
 

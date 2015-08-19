@@ -702,7 +702,7 @@ qRB
 
 	ProxyCallback->Init( Callback_ );
 
-	_Session.Init( New( Language( _LanguageBuffer ), ProxyCallback ) );
+	_Session.Init( RetrieveCallback( Language( _LanguageBuffer ), ProxyCallback ) );
 qRR
 	if ( ProxyCallback != NULL )
 		delete ProxyCallback;

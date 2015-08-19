@@ -22,6 +22,7 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+				<Module>frdbse</Module>
 				<Module>dlbrry</Module>
 				<Module>mtk</Module>
 				<Module>strmrg</Module>
@@ -60,6 +61,7 @@
 		<WikiFiles Group="Doc" Path="Doc/">
 			<File Dir="computing/epeios/tools/" Desc="general description of xdhcefq" Oddity="IsHome">xdhcefq</File>
 			<File Dir="computing/epeios/tools/xdhcefq/" Desc="the user manual">Manual</File>
+			<File Dir="computing/epeios/" Desc="the XDHTML technology" Oddity="IsHome">XDHTML</File>
 			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
 			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
 		</WikiFiles>

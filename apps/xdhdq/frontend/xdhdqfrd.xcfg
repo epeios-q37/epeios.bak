@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp" >
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand href="../../FRD.xcfg"/>
+	<xpp:define name="Parameters">
+		<xpp:bloc>
+			<xpp:expand select="FRD_Parameters"/>
+			<DefaultProjectType>New</DefaultProjectType>
+			<DefaultBackendType>None</DefaultBackendType>
+			<!-- Has to be defined multi-user mode. Actually not used in mono-user mode, but can be. -->
+			<Backend Type="Predefined">Embedded</Backend>
+			<Authentication Mode="Full">
+				<Login>Hello</Login>
+				<Password>toto</Password>
+			</Authentication>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Definitions">
+		<xpp:bloc>
+			<xpp:expand select="FRD_Definitions"/>
+			<xpp:define name="BinRootDir">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>h:/bin/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>/home/csimon/bin/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+			<Projects Default="Embedded">
+				<xpp:define name="ProjectsRootDir">
+					<xpp:bloc>
+						<xpp:expand select="BinRootDir"/>
+						<xpp:bloc>xdd/Frontend/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<Project id="No" Alias="NoBackendProject">
+					<xpp:expand select="ProjectsRootDir"/>
+					<xpp:bloc>None.xprj</xpp:bloc>
+				</Project>
+				<Project id="LocalHost" Alias="LocalhostBackendProject">
+					<xpp:expand select="ProjectsRootDir"/>
+					<xpp:bloc>Localhost.xprj</xpp:bloc>
+				</Project>
+				<Project id="Embedded" Alias="EmbeddedBackendProject">
+					<xpp:expand select="ProjectsRootDir"/>
+					<xpp:bloc>Embedded.xprj</xpp:bloc>
+				</Project>
+			</Projects>
+			<Backends Default="Embedded">
+				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote">localhost:2000</Backend>
+				<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded">
+					<xpp:expand select="BinRootDir"/>
+					<xpp:bloc>xdhdqbkd</xpp:bloc>
+				</Backend>
+			</Backends>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Locale">
+		<xpp:bloc>
+			<xpp:expand select="FRD_Locale"/>
+			<Translations text="NoBackendProject">
+				<Translation language="fr">sans moteur de traitement</Translation>
+				<Translation language="en">without backend</Translation>
+			</Translations>
+			<Translations text="LocalhostBackendProject">
+				<Translation language="fr">avec moteur de traitement local</Translation>
+				<Translation language="en">with local backend</Translation>
+			</Translations>
+			<Translations text="EmbeddedBackendProject">
+				<Translation language="fr">avec moteur de traitement enclavé</Translation>
+				<Translation language="en">with embedded backend</Translation>
+			</Translations>
+			<Translations text="LocalPredefinedBackend">
+				<Translation language="fr">Moteur de traitement local</Translation>
+				<Translation language="en">Local backend</Translation>
+			</Translations>
+			<Translations text="EmbeddedPredefinedBackend">
+				<Translation language="fr">Moteur de traitement enclavé</Translation>
+				<Translation language="en">Embedded backend</Translation>
+			</Translations>
+		</xpp:bloc>
+	</xpp:define>
+	<Profiles>
+		<Profile name="Default">
+		</Profile>
+		<User>Default</User>
+	</Profiles>
+</xpp:bloc>

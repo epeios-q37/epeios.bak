@@ -24,6 +24,8 @@
 
 #include "core.h"
 
+#include <new.h>
+
 const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 
 
@@ -32,11 +34,19 @@ void sclxdhtml::SCLXDHTMLInitialization( frdbse::mode__ Mode )
 	core::Core.Init( Mode );
 }
 
-xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLNew(
+xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcbk::proxy_callback__ *ProxyCallback )
 {
+#if 0
+	core::session___ *Session = (core::session___ *)malloc( sizeof( core::session___ ) );
+	new(Session) core::session___();
+#else
 	core::session___ *Session = new core::session___;
+#endif
+
+	if ( Session == NULL )
+		qRGnr();
 
 	Session->Init( Language, ProxyCallback );
 
@@ -53,5 +63,13 @@ xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLNew(
 	}
 
 	return Session;
+}
+
+void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcbk::session_callback__ *Callback )
+{
+	if ( Callback == NULL )
+		qRGnr();
+
+	delete Callback;
 }
 

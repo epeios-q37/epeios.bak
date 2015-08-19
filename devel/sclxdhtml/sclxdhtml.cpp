@@ -84,11 +84,15 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcbk::session_callback__ *XDHCBKNew(
+		virtual xdhcbk::session_callback__ *XDHCBKRetrieveCallback(
 			const char *Language,
 			xdhcbk::proxy_callback__ *ProxyCallback ) override
 		{
-			return SCLXDHTMLNew( Language, ProxyCallback );
+			return SCLXDHTMLRetrieveCallback( Language, ProxyCallback );
+		}
+		virtual void XDHCBKReleaseCallback( xdhcbk::session_callback__ *Callback ) override
+		{
+			return SCLXDHTMLReleaseCallback( Callback );
 		}
 	public:
 		void reset( bso::bool__ P = true )

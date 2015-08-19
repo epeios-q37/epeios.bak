@@ -294,8 +294,8 @@ namespace sclxdhtml {
 			if ( !frontend::Connect( CompatibilityInformations, IncompatibilityInformations ) )
 				return false;
 
-			if ( frontend::IsConnected() )
-				instances::Init( *this );
+			// if ( frontend::IsConnected() )	// It's to each subcomponent to decide what to do when not connected.
+			instances::Init( *this );
 			
 			return true;
 		}
@@ -443,11 +443,13 @@ namespace sclxdhtml {
 		sclfrntnd::kernel___ &Kernel );
 		*/
 
-	void SCLXDHTMLInitialization( frdbse::mode__ Mode );	// To overload.
+	void SCLXDHTMLInitialization( frdbse::mode__ Mode );	// To define by user.
 
-	xdhcbk::session_callback__ *SCLXDHTMLNew(
+	xdhcbk::session_callback__ *SCLXDHTMLRetrieveCallback(
 		const char *Language,
-		xdhcbk::proxy_callback__ *ProxyCallback );	// To override.
+		xdhcbk::proxy_callback__ *ProxyCallback );	// To define by user.
+
+	void SCLXDHTMLReleaseCallback( xdhcbk::session_callback__ *Callback );	// To define by user.
 
 	inline void Connect(
 		frdbse::backend_type__ BackendType,

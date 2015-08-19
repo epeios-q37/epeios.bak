@@ -103,6 +103,8 @@ namespace core {
 			const char *Id,
 			const char *Action ) override;
 		virtual void SCLXDHTMLRefresh( page__ Page ) override;
+	public:
+		E_CVDTOR( session___ );
 	};
 
 	typedef sclxdhtml::core___<session___> _core___;

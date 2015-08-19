@@ -1,0 +1,49 @@
+/*
+	'fields.h' by Claude SIMON (http://zeusw.org/).
+
+	 This file is part of 'xdhdq' software.
+
+    'xdhdq' is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    'xdhdq' is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with 'xdhdq'.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef FIELDS__INC
+# define FIELDS__INC
+
+# include "base.h"
+
+namespace fields {
+	BASE_ACD( edit );
+
+	class action_callbacks__
+	{
+	public:
+		BASE_ACU( edit, Edit );
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			BASE_ACR( Edit );
+		}
+		E_CVDTOR( action_callbacks__ );
+		void Init( void )
+		{
+			BASE_ACI( Edit );
+		}
+	};
+
+	void SetLayout( core::session___ &Session );
+
+	void SetCasting( core::session___ &Session );
+}
+
+#endif
