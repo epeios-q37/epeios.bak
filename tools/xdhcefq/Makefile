@@ -1,4 +1,4 @@
-#	Copyright (C) 2013 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of xdhcefq.
 #
@@ -331,8 +331,8 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2013"\"
+copt += -DVERSION=\""20150819"\"
+copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 src += :"$(cef)"	# Had to be here (before the 'src += ...' below),
 					# otherwise 'MinGW' under 'MSYS' does not find some header files...
