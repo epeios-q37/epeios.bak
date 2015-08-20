@@ -262,7 +262,7 @@
 				</Translations>
 				<Translations text="mainSurrenderMessage">
 					<Translation language="fr">Vous avez réussi à cliquer !</Translation>
-					<Translation language="en">You manage to click ! !</Translation>
+					<Translation language="en">You manage to click !</Translation>
 				</Translations>
 			</xpp:bloc>
 			<xpp:bloc>

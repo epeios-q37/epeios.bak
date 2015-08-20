@@ -331,7 +331,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20150819"\"
+copt += -DVERSION=\""20150820"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 src += :"$(cef)"	# Had to be here (before the 'src += ...' below),

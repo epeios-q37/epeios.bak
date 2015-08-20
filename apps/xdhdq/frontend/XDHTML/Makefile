@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20150819"\"
+copt += -DVERSION=\""20150820"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 ifndef EPEIOS_SRC
