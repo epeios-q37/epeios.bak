@@ -50,7 +50,10 @@
 			<Setup id="Default">
 				<CEF>
 					<xpp:ifeq select="env" value="windows">
-						<xpp:bloc/>
+						<xpp:bloc>
+							<ResourcesDirPath>h:/bin/CEF/</ResourcesDirPath>
+							<LocaleDirPath>h:/bin/CEF/locales/</LocaleDirPath>
+						</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="linux">
 						<xpp:bloc>

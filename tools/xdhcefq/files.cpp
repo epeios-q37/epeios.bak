@@ -33,6 +33,7 @@ static class run_file_dialog_callback___
 private:
 	str::string _Id;
 	str::string _UserAction;
+	_cef_browser_host_t *_BrowserHost;
 public:
 	void reset( bso::bool__ P = true )
 	{
@@ -40,16 +41,19 @@ public:
 
 		_Id.reset( P );
 		_UserAction.reset( P );
+		_BrowserHost = NULL;
 	}
 	E_CDTOR( run_file_dialog_callback___ );
 	void Init(
 		const str::string_ &Id,
-		const str::string_ &UserAction )
+		const str::string_ &UserAction,
+		_cef_browser_host_t *BrowserHost )
 	{
 		misc::Set<cef_run_file_dialog_callback_t>( this );
 
 		_Id.Init( Id );
 		_UserAction.Init( UserAction );
+		_BrowserHost = BrowserHost;
 	}
 	const str::string_ &Id( void )
 	{
@@ -58,6 +62,13 @@ public:
 	const str::string_ &UserAction( void )
 	{
 		return _UserAction;
+	}
+	cef_browser_host_t *BrowserHost( void )
+	{
+		if ( _BrowserHost == NULL )
+			qRGnr();
+
+		return _BrowserHost;
 	}
 } RunFileDialogCallback_;
 
@@ -96,17 +107,19 @@ qRE
 }
 
 static void CEF_CALLBACK Cont_(
-	struct _cef_run_file_dialog_callback_t* self,
-	struct _cef_browser_host_t* browser_host,
-	cef_string_list_t file_paths)
+      struct _cef_run_file_dialog_callback_t* self,
+	  int selected_accept_filter,
+      cef_string_list_t file_paths)
 {
 qRH
 	strmrg::table Table, SubTable;
 	str::string Param;
+	cef_browser_host_t *BrowserHost = NULL;
 	cef_browser_t *Browser = NULL;
 qRB
 	run_file_dialog_callback___ &RunFileDialogCallback = *(run_file_dialog_callback___ *)self;
-	Browser = browser_host->get_browser( browser_host );
+	BrowserHost = RunFileDialogCallback.BrowserHost();
+	Browser = BrowserHost->get_browser( BrowserHost );
 
 	Table.Init();
 	Table.Append( RunFileDialogCallback.Id() );
@@ -127,7 +140,7 @@ qRT
 		misc::Release( Browser );
 
 	misc::Release( self );
-	misc::Release( browser_host );
+//	misc::Release( browser_host );
 qRE
 }
 
@@ -149,9 +162,9 @@ qRB
 	if ( BrowserHost == NULL )
 		qRGnr();
 
-	RunFileDialogCallback_.Init( Id, UserAction );
+	RunFileDialogCallback_.Init( Id, UserAction, BrowserHost );
 
-	RunFileDialogCallback_.cont = Cont_;
+	RunFileDialogCallback_.on_file_dialog_dismissed = Cont_;
 
 	List = cef_string_list_alloc();
 
@@ -160,7 +173,7 @@ qRB
 
 	misc::FillList( AcceptTypes, List );
 
-	BrowserHost->run_file_dialog( BrowserHost, FileDialogMode, misc::cef_string___( Title ), misc::cef_string___( DefaultFileName ), List, &RunFileDialogCallback_ );
+	BrowserHost->run_file_dialog( BrowserHost, FileDialogMode, misc::cef_string___( Title ), misc::cef_string___( DefaultFileName ), List, 0, &RunFileDialogCallback_ );
 qRR
 qRT
 	if ( List != NULL )

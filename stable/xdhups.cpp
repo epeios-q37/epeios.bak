@@ -39,19 +39,19 @@ qRB
 	Location.Init();
 	Data.Init( Mode, Identification, fnm::GetLocation( ModuleFileName, Location ).UTF8( Buffer ) );
 
-	_Library.Init( ModuleFileName );
+	Library_.Init( ModuleFileName );
 
-	retrieve *Retrieve = dlbrry::GetFunction<retrieve *>( E_STRING( XDHCBK_RETRIEVE_FUNCTION_NAME ), _Library );
+	retrieve *Retrieve = dlbrry::GetFunction<retrieve *>( E_STRING( XDHCBK_RETRIEVE_FUNCTION_NAME ), Library_ );
 
 	if ( Retrieve == NULL )
 		qRReturn;
 
-    _Callback = Retrieve();
+   Callback_ = Retrieve();
 
-	if ( _Callback == NULL )
+	if ( Callback_ == NULL )
 		qRFwk();
 
-	_Callback->Initialize( Data );
+	Callback_->Initialize( Data );
 
 	Success = true;
 qRR

@@ -146,7 +146,7 @@ const char *misc::GetLabel( render_message__ Message )
 	switch ( Message ) {
 	RM( Start );
 	RM( HandleSelectedFiles );
-	RM( HandleAction );
+//	RM( HandleAction );
 	RM( Close );
 	default:
 		qRGnr();

@@ -25,22 +25,26 @@
 namespace global {
 	BASE_ACD( about );
 	BASE_ACD( refresh );
+	BASE_ACD( test );
 
 	class action_callbacks__
 	{
 	public:
 		BASE_ACU( about, About );
 		BASE_ACU( refresh, Refresh );
+		BASE_ACU( test, Test );
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( About );
 			BASE_ACR( Refresh );
+			BASE_ACR( Test );
 		}
 		E_CVDTOR( action_callbacks__ );
 		void Init( void )
 		{
 			BASE_ACI( About );
 			BASE_ACI( Refresh );
+			BASE_ACI( Test );
 		}
 	};
 }

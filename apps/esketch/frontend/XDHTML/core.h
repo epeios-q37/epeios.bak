@@ -63,7 +63,7 @@ namespace core {
 			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcbk::CloseActionLabel );
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&_Global.About, &_Global.Refresh,
+				&_Global.About, &_Global.Refresh, &_Global.Test,
 				NULL );
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend(

@@ -400,10 +400,11 @@ qRB
 
 	GetStrings( Strings );
 
-	if ( Strings.Amount() != 1 )
+	if ( Strings.Amount() == 1 )
+			Strings.Recall(Strings.First(), String );
+	else if ( Strings.Amount() != 0 )
 		qRFwk();
 
-	Strings.Recall(Strings.First(), String );
 qRR
 qRT
 qRE

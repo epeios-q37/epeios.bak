@@ -173,7 +173,7 @@ qRE
 }
 
 static TOL_CBUFFER___ IdentificationBuffer_;
-
+/*
 static void HandleAction_( cef_list_value_t *ListValue )
 {
 qRH
@@ -188,14 +188,14 @@ qRR
 qRT
 qRE
 }
-
+*/
 static void ReportError_(
 	cef_frame_t *Frame,
 	const char *Message )
 {
 qRH
 	str::string ErrorScript;
-	err::buffer__ Buffer;
+//	err::buffer__ Buffer;
 qRB
 //	cio::COut << err::Message( Buffer ) << txf::nl << txf::commit;
 
@@ -271,9 +271,9 @@ qRB
 	case misc::rmHandleSelectedFiles:
 		HandleSelectedFiles_( ListValue, Frame );
 		break;
-	case misc::rmHandleAction:
+/*	case misc::rmHandleAction:
 		HandleAction_( ListValue );
-		break;
+		break; */
 	case misc::rmClose:
 		HandleClosing_( ListValue, browser );
 		break;
@@ -311,6 +311,89 @@ static void CEF_CALLBACK OnBrowserDestroyed_(
 {
 	Rack_.Agent.reset();
 }
+
+namespace {
+	bso::bool__ IsSet_(
+		const char *Name,
+		_cef_v8value_t *Event )
+	{
+		bso::bool__ IsSet = false;
+	qRH
+		misc::cef_string___ Key;
+		cef_v8value_t *Value;
+	qRB
+		Key.Init( Name );
+		Value = Event->get_value_bykey( Event, Key );
+
+		if ( !Value->is_bool( Value ) )
+			qRGnr();
+
+		IsSet = Value->get_bool_value( Value ) != 0;
+	qRR
+	qRT
+	qRE
+		return IsSet;
+	}
+
+	inline void HandleKeyModifier_(
+		const char *ModifierKeyName,
+		char ModifierShortcut,
+		_cef_v8value_t *Event,
+		str::string_ &Modifiers )
+	{
+		if ( IsSet_( ModifierKeyName, Event ) )
+			Modifiers.Append( ModifierShortcut );
+	}
+
+	inline void GetMainKey_(
+		_cef_v8value_t *Event,
+		str::string_ &Keys )
+	{
+	qRH
+		misc::cef_string___ Key;
+		cef_v8value_t *Value;
+	qRB
+		Key.Init( "keyCode" );
+		Value = Event->get_value_bykey( Event, Key );
+
+		if ( Value == NULL )
+			qRFwk();
+
+		if ( !Value->is_valid( Value ) )
+			qRGnr();
+
+		if ( Value->is_null( Value ) )
+			qRGnr();
+
+		if ( Value->is_undefined( Value ) )
+			qRGnr();
+
+		if ( !Value->is_int( Value ) )
+			qRGnr();
+
+		int32 I = Value->get_int_value( Value );
+
+		Keys.Append( I );
+	qRR
+	qRT
+	qRE
+	}
+
+	void GetKeys_(
+		_cef_v8value_t *Event,
+		str::string_ &Shortcut )
+	{
+		HandleKeyModifier_("metaKey", 'M', Event, Shortcut );
+		HandleKeyModifier_("shiftKey", 'S', Event, Shortcut );
+		HandleKeyModifier_("ctrlKey", 'C', Event, Shortcut );
+		HandleKeyModifier_("altKey", 'A', Event, Shortcut );
+
+		if ( Shortcut.Amount() != 0 )
+			Shortcut.Append( '+' );
+
+		GetMainKey_( Event, Shortcut );
+	}
+}
 	
 // This is the callback for the native 'handleEvent' JS function.
 static int CEF_CALLBACK HandleEvent_(
@@ -336,6 +419,7 @@ qRH
 	str::string IdBuffer;
 	cef_nstring_t CEFBuffer;
 	err::buffer__ ERRBuffer;
+	str::string Keys;
 qRB
 	misc::Set(&CEFBuffer);
 	Key.Init( "id" );
@@ -366,11 +450,16 @@ qRB
 	Global = Context->get_global( Context );
 
 	if ( Global->has_value_bykey(Global, RawId->get_string_value(RawId)) ) {
+		Keys.Init();
+
+		if ( xdhjst::IsKeyEvent( EventName.UTF8( EventNameBuffer ) ) )
+			GetKeys_( RawEvent, Keys );
+
 		IdBuffer.Init();
 #if 0
 		Rack_.Agent.HandleEvent( EventName.UTF8( EventNameBuffer ), Id.UTF8( IdBuffer ) );
 #else
-		if ( Rack_.Agent.HandleEvent( EventName.UTF8( EventNameBuffer ), Id.UTF8( IdBuffer ) ) )
+		if ( Rack_.Agent.HandleEvent( EventName.UTF8( EventNameBuffer ), Keys, Id.UTF8( IdBuffer ) ) )
 			StopPropagation->execute_function( StopPropagation, RawEvent, 0, NULL );
 		else
 			qRLmt();	// The browser-based version always call 'stopPropagation()'.

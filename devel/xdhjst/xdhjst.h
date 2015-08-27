@@ -151,16 +151,19 @@ namespace xdhjst {
 	public:
 		struct s {
 			str::string_::s Event;
+			str::string_::s EventKeys;
 			action__ Action;
 			str::string_::s UserAction;
 			xdhcbk::args_::s Args;
 		} &S_;
 		str::string_ Event;
+		str::string_ EventKeys;	// For key-related events.
 		str::string_ UserAction;
 		xdhcbk::args_ Args;	// Only for NON-user action (i.e. 'Action' != 'a_User').
 		event_abstract_( s &S )
 		: S_( S ),
 		  Event( S.Event ),
+		  EventKeys( S.EventKeys ),
 		  UserAction( S.UserAction ),
 		  Args( S.Args )
 		{}
@@ -169,12 +172,14 @@ namespace xdhjst {
 			S_.Action = a_Undefined;
 
 			Event.reset( P );
+			EventKeys.reset( P );
 			UserAction.reset( P );
 			Args.reset( P );
 		}
 		void plug( qAS_ &AS )
 		{
 			Event.plug( AS );
+			EventKeys.plug( AS );
 			UserAction.plug( AS );
 			Args.plug( AS );
 		}
@@ -183,6 +188,7 @@ namespace xdhjst {
 			S_.Action = EA.S_.Action;
 
 			Event = EA.Event;
+			EventKeys = EA.EventKeys;
 			UserAction = EA.UserAction;
 			Args = EA.Args;
 
@@ -193,6 +199,7 @@ namespace xdhjst {
 			S_.Action = a_Undefined;
 
 			Event.Init();
+			EventKeys.Init();
 			UserAction.Init();
 			Args.Init();
 		}
@@ -240,6 +247,7 @@ namespace xdhjst {
 
 	sdr::row__ Find(
 		const str::string_ &Event,
+		const str::string_ &Keys,	// Only for keyboard-related events.
 		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'qNIL' if not found.
 
 	void GetEventsAbstracts(
@@ -298,8 +306,21 @@ namespace xdhjst {
 		void HandleCastsDigests(
 			const xdhcbk::args_ &Digests,
 			str::string_ &Script );
-
 	}
+
+	inline bso::bool__ IsKeyEvent( const str::string_ &Event )
+	{
+		return  !str::Compare( Event, str::string( "key" ), 0, 0, 3 );
+	}
+
+	inline bso::bool__ IsKeyEvent( const char *Event )
+	{
+		return IsKeyEvent(str::string( Event ) );
+	}
+
+	void BuildKeyShortcut(
+		const str::string_ &Keys,
+		str::string_ &Shortcut );
 }
 
 #endif

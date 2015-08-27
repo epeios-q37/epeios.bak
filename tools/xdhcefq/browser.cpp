@@ -170,6 +170,7 @@ static void BuildShortcut_(
 		Shortcut.Append( tolower( event->unmodified_character + Offset) );
 }
 
+/*
 static int CEF_CALLBACK OnKeyEvent_(
 	struct _cef_keyboard_handler_t* self,
 	struct _cef_browser_t* browser,
@@ -197,11 +198,13 @@ qRR
 qRT
 	misc::Release( self );
 	misc::Release( browser );
-//	misc::Release( event );	No 'base' memeber.
+//	misc::Release( event );	No 'base' member.
 qRE
 	return Handled;
 }
+*/
 
+/*
 static struct _cef_keyboard_handler_t* CEF_CALLBACK GetKeyboardHandler_( struct _cef_client_t* self )
 {
 	misc::Set( &Rack_.KeyboardHandler );
@@ -211,6 +214,7 @@ static struct _cef_keyboard_handler_t* CEF_CALLBACK GetKeyboardHandler_( struct 
 
 	return &Rack_.KeyboardHandler;
 }
+*/
 
 static int CEF_CALLBACK OnBeforePopup_(
 	struct _cef_life_span_handler_t* self,
@@ -218,11 +222,13 @@ static int CEF_CALLBACK OnBeforePopup_(
 	struct _cef_frame_t* frame,
 	const cef_string_t* target_url,
 	const cef_string_t* target_frame_name,
+	cef_window_open_disposition_t target_disposition,
+	int user_gesture,
 	const struct _cef_popup_features_t* popupFeatures,
 	struct _cef_window_info_t* windowInfo,
 	struct _cef_client_t** client,
 	struct _cef_browser_settings_t* settings,
-	int* no_javascript_access )
+	int* no_javascript_access)
 {
 qRH
 	ntvstr::string___ Document;
@@ -511,7 +517,7 @@ qRB
 
 	misc::Set( &Rack_.Client );
 
-	Rack_.Client.get_keyboard_handler = GetKeyboardHandler_;
+//	Rack_.Client.get_keyboard_handler = GetKeyboardHandler_;
 	Rack_.Client.get_life_span_handler = GetLifeSpanHandler_;
 	Rack_.Client.get_load_handler = GetLoadHandler_;
 	Rack_.Client.on_process_message_received = ClientOnProcessMessageReceived_;

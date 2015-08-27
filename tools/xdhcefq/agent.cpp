@@ -698,9 +698,9 @@ qRB
 	if ( ProxyCallback == NULL )
 		qRGnr();
 
-	Callback_.Init( *this );
+	::Callback_.Init( *this );
 
-	ProxyCallback->Init( Callback_ );
+	ProxyCallback->Init( ::Callback_ );
 
 	_Session.Init( RetrieveCallback( Language( _LanguageBuffer ), ProxyCallback ) );
 qRR
@@ -712,6 +712,7 @@ qRE
 
 bso::bool__ agent::agent___::HandleEvent(
 	const char *Event,
+	const str::string_ &Keys,
 	const str::string_ &TargetId )
 {
 	bso::bool__ Stop = true;
@@ -724,13 +725,17 @@ qRB
 	Abstracts.Init();
 	misc::GetEventsAbstracts( TargetId, _F(), Abstracts );
 
-	Row = misc::Find( str::string( Event ), Abstracts );
+	Row = misc::Find( str::string( Event ), Keys, Abstracts );
 
-	if ( Row == qNIL )
-		qRGnr();
+	if ( Row == qNIL ) {
+		if ( !xdhjst::IsKeyEvent( Event ) )
+			qRGnr();
+
+		qRReturn;
+	}
 
 	Abstract.Init( Abstracts );
-	Abstract( Row );	// To set the position of 'Handler'.
+	Abstract( Row );	// To set the position of 'Abstract'.
 
 	if ( misc::IsPredefined( Abstract().Action() ) )
 		HandlePredefinedAction_( Abstract().Action(), Abstract().UserAction, _B(), TargetId, Abstract().Args );

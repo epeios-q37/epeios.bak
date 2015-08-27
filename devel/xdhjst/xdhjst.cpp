@@ -39,7 +39,7 @@ const str::string_ &xdhjst::GetTaggedScript(
 	str::string_ &Buffer )
 {
 	switch ( Script ) {
-	C( Log, dialog::Alert );
+	C( Log, Log );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
 	C( DocumentSetter, DocumentSetter );
@@ -309,6 +309,45 @@ namespace {
 	}
 }
 
+inline void HandleKeyShortcutModifier_(
+	char Char,
+	const str::string_ &Pattern,
+	str::string_ &Shortcut )
+{
+	sdr::row__ CharPos = qNIL, PlusPos = qNIL;
+
+	if ( ( ( CharPos = Pattern.Search(Char) ) != qNIL ) 
+		 && ( ( PlusPos = Pattern.Search( '+' ) ) != qNIL )
+		 && ( *CharPos < *PlusPos ) )
+		Shortcut.Append( Char );
+	else
+		Shortcut.Append( '.' );
+}
+
+void xdhjst::BuildKeyShortcut(
+	const str::string_ &Keys,
+	str::string_ &Shortcut )
+{
+	sdr::row__ PlusPos = Keys.Search( '+' );
+
+	if ( PlusPos != qNIL ) {
+		if ( Keys.Amount() != 1 ) {
+
+			if ( PlusPos == Keys.Last() )
+				qRFwk();
+
+			HandleKeyShortcutModifier_( 'A', Keys, Shortcut );	// Alt
+			HandleKeyShortcutModifier_( 'S', Keys, Shortcut );	// Shift
+			HandleKeyShortcutModifier_( 'C', Keys, Shortcut );	// Control
+			HandleKeyShortcutModifier_( 'M', Keys, Shortcut );	// Meta
+
+			Shortcut.Append( Keys, Keys.Next( PlusPos ) ); 
+		} else // In this case, the shortcut is simply a '+', os the '+' is not the separator next to modifiers.
+			Shortcut.Append( Keys );
+	} else
+		Shortcut.Append( Keys );
+}
+
 void xdhjst::Fill(
 	const str::string_ &DefaultEvent,
 	const xdhcbk::args_ &Definition,
@@ -317,10 +356,17 @@ void xdhjst::Fill(
 qRH
 	xdhcbk::args ActionWithParameters;
 	xdhcbk::retriever__ Retriever;
+	str::string Keys;
+	bso::bool__ RetrieveKeys = false;
+	str::string KeyShortcut;
+	sdr::row__ PlusPos = qNIL;
 qRB
 	Retriever.Init( Definition );
+	Keys.Init();
 
 	switch ( Definition.Amount() ) {
+	case 3:
+		RetrieveKeys = true;
 	case 2:
 		Retriever.GetString( Abstract.Event );
 	case 1:
@@ -333,13 +379,26 @@ qRB
 		break;
 	}
 
+	if ( RetrieveKeys ) {
+		if ( !IsKeyEvent( Abstract.Event ) )
+			qRFwk();
+
+		Keys.Init();
+		Retriever.GetString( Keys );
+
+		KeyShortcut.Init();
+
+		BuildKeyShortcut( Keys, KeyShortcut );
+
+		Abstract.EventKeys = KeyShortcut;
+	}
+
 	if ( Abstract.Event.Amount() == 0 )
 		Abstract.Event = DefaultEvent;
 qRR
 qRT
 qRE
 }
-
 void xdhjst::FillMono(
 	const str::string_ &DefaultEvent,
 	const xdhcbk::args_ &Definition,
@@ -418,16 +477,25 @@ bso::bool__ xdhjst::HasEvent(
 
 sdr::row__ xdhjst::Find(
 	const str::string_ &Event,
+	const str::string_ &Keys,
 	const event_abstracts_ &Abstracts )
 {
+	sdr::row__ Row = qNIL;
+qRH
 	ctn::E_CITEM( event_abstract_ ) Abstract;
-	sdr::row__ Row = Abstracts.First();
+qRB
+	Row = Abstracts.First();
 
 	Abstract.Init( Abstracts );
 
-	while ( ( Row != qNIL ) && ( Abstract( Row ).Event != Event ) )
+	while ( ( Row != qNIL )
+		    && ( ( Abstract( Row ).Event != Event )
+			     || ( IsKeyEvent( Event ) && Abstract( Row ).EventKeys != Keys ) ) )
 		Row = Abstracts.Next( Row );
 
+	qRR
+qRT
+qRE
 	return Row;
 }
 

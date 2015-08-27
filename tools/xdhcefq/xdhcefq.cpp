@@ -116,7 +116,7 @@ void FillSettings_( cef_settings_t &Settings )
 	Settings.locale = Rack_.CEFSettingBuffers.Locale.Init( registry::cef::Locale );
 	Settings.log_file = Rack_.CEFSettingBuffers.LogFile.Init( registry::cef::LogFile );
 //	Settings.no_sandbox = true;
-//	Settings.log_severity = Rack_.CEFSettingBuffers.LogSeverity.Init( registry::CEFLogSeverity );
+//	Settings.log_severity = LOGSEVERITY_VERBOSE;
 }
 
 static int Launch_( const scltool::oddities__ &Oddities )

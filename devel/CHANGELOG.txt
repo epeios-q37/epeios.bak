@@ -12,6 +12,21 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-08-27 :
+- XDHJST :
+	* Adding key-related events handling.
+
+2015-08-25 :
+- XDHJSP :
+	# Adding missing 'Log' features.
+- XDHJSR :
+	# Fixing 'Log'-related features.
+	* Adding key-related events handling.
+
+2015-08-21 :
+- XDHJSP, XDHUPS,
+	- Remplacing heading '_' by a tailing one.'
+
 2015-08-18
 - SCLXDHTML :
 	* When no backend, subcomponent initialization are now still called.

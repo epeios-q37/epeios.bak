@@ -123,7 +123,7 @@ namespace xdhjsp {
 	: public _proxy_callback__
 	{
 	private:
-		Q37_MRMDF( callback__, _C, _Callback );
+		Q37_MRMDF( callback__, C_, Callback_ );
 	protected:
 		virtual void XDHCBKProcess(
 			xdhcbk::function__ Function,
@@ -133,13 +133,13 @@ namespace xdhjsp {
 		void reset( bso::bool__ P = true )
 		{
 			_proxy_callback__::reset( P );
-			_Callback = NULL;
+			Callback_ = NULL;
 		}
 		E_CVDTOR( proxy_callback__);
 		void Init( callback__ &Callback )
 		{
 			_proxy_callback__::Init();
-			_Callback = &Callback;
+			Callback_ = &Callback;
 		}
 	};
 

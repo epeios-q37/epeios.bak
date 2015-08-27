@@ -57,3 +57,19 @@ BASE_AC( global::refresh__ )
 {
 	Session.Refresh();
 }
+
+
+BASE_AC( global::test__ )
+{
+qRH
+	str::string Message;
+qRB
+	Message.Init( "Test : " );
+	Message.Append( Id );
+
+	Session.Log( Message );
+qRR
+qRE
+qRE
+}
+

@@ -6,8 +6,8 @@
 	<xpp:define name="Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
-			<DefaultProjectType>Predefined</DefaultProjectType>
-			<DefaultBackendType>Predefined</DefaultBackendType>
+			<DefaultProjectType>New</DefaultProjectType>
+			<DefaultBackendType>None</DefaultBackendType>
 			<!-- Has to be defined multi-user mode. Actually not used in mono-user mode, but can be. -->
 			<Backend Type="Predefined">Embedded</Backend>
 			<Authentication Mode="Full">

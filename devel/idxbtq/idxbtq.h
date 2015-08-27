@@ -389,7 +389,7 @@ namespace idxbtq {
 	{
 		uys::state__ State = idxbtr::Plug( Index, Hook.TreeFilesHook() );
 
-		if ( uys::IsError( State ) ) {
+		if ( State.IsError() ) {
 			Hook.reset();
 			return State;
 		}

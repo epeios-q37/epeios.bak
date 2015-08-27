@@ -93,7 +93,6 @@
 			<File Dir="computing/epeios/apps/" Desc="general description of xdhdq">xdhdq</File>
 			<File Dir="computing/epeios/" Desc="the XDHTML technology" Oddity="IsHome">XDHTML</File>
 			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
-			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
 		</WikiFiles>
 	</Packing>
 	<PreprocessorDefinitions>

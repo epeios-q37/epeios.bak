@@ -40,42 +40,42 @@ namespace xdhups {
 	class session__
 	{
 	private:
-		Q37_MRMDF( xdhcbk::session_callback__, _C, _Callback );
+		Q37_MRMDF( xdhcbk::session_callback__, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Callback = NULL;
+			Callback_ = NULL;
 		}
 		E_CVDTOR( session__ );
 		void Init( xdhcbk::session_callback__ *Callback )
 		{
 			reset();
 
-			_Callback = Callback;
+			Callback_ = Callback;
 		}
 		xdhcbk::session_callback__ *Callback( void ) const
 		{
-			return _Callback;
+			return Callback_;
 		}
 		bso::bool__ Launch(
 			const char *Id,
 			const char *Action )
 		{
-			return _C().Launch( Id, Action );
+			return C_().Launch( Id, Action );
 		}
 	};
 
     class agent___
     {
     private:
-		dlbrry::dynamic_library___ _Library;
-		Q37_MRMDF( xdhcbk::downstream_callback__, _C, _Callback );
-		TOL_CBUFFER___ Buffer;
+		dlbrry::dynamic_library___ Library_;
+		Q37_MRMDF( xdhcbk::downstream_callback__, C_, Callback_ );
+		TOL_CBUFFER___ Buffer_;
     public:
         void reset( bso::bool__ P = true )
         {
-			_Library.reset( P );
-			_Callback = NULL;
+			Library_.reset( P );
+			Callback_ = NULL;
         }
         E_CDTOR( agent___ );
 		bso::bool__ Init(
@@ -86,15 +86,15 @@ namespace xdhups {
 			const char *Language,
 			xdhcbk::proxy_callback__ *Callback )
 		{
-			return _C().RetrieveCallback( Language, Callback );
+			return C_().RetrieveCallback( Language, Callback );
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer ) const
 		{
-			return _C().BaseLanguage( Buffer );
+			return C_().BaseLanguage( Buffer );
 		}
 		void ReleaseCallback( xdhcbk::session_callback__ *Callback )
 		{
-			return _C().ReleaseCallback( Callback );
+			return C_().ReleaseCallback( Callback );
 		}
 	};
 }

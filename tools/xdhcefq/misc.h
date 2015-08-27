@@ -153,7 +153,7 @@ namespace misc {
 	enum render_message__ {	// Messages  destination du 'render'.
 		rmStart,
 		rmHandleSelectedFiles,	// Gestion des fichiers slectionns.
-		rmHandleAction,
+//		rmHandleAction,
 		rmClose,	// Envoit de la demande de fermeture.
 		rm_amount,
 		rm_Undefined,

@@ -10,7 +10,7 @@
 			<xpp:expand href="styles" />
 			<xpp:expand href="keys" />
 		</head>
-		<body>
+		<body data-xdh-onevents="(keypress|Test|a)(keypress|About|SC+a)">
 			<xsl:apply-templates select="*/Content"/>
 			<xpp:expand href="scripts" />
 		</body>

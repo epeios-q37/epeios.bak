@@ -118,6 +118,7 @@ namespace agent {
 		}
 		bso::bool__ HandleEvent(
 			const char *Event,
+			const str::string_ &Keys,	// Only for keyboard-related events.
 			const str::string_ &TargetId );	// If returned value == 'true', the event bubbling is stopped.
     };
 }

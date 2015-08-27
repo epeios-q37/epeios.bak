@@ -370,6 +370,9 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 	case xdhcbk::fRemoveAttribute:
 		return xdhjst::snAttributeRemover;
 		break;
+	case xdhcbk::fLog:
+		return xdhjst::snLog;
+		break;
 	case xdhcbk::fGetResult:
 		qRFwk();
 		break;
@@ -402,26 +405,27 @@ void xdhjsp::proxy_callback__::XDHCBKProcess(
 	case xdhcbk::fGetAttribute:
 	case xdhcbk::fRemoveAttribute:
 	case xdhcbk::fSetContent:
-		Execute_( _C(), Convert_( Function ), Result, List );
+	case xdhcbk::fLog:
+		Execute_( C_(), Convert_( Function ), Result, List );
 		break;
 	case xdhcbk::fAlert:
 	case xdhcbk::fConfirm:
-		AlertConfirm_( _C(), Convert_( Function ), Result, List );
+		AlertConfirm_( C_(), Convert_( Function ), Result, List );
 		break;
 	case xdhcbk::fGetResult:
-		GetResult_( _C(), Result, List );
+		GetResult_( C_(), Result, List );
 		break;
 	case xdhcbk::fSetChildren:
-		SetChildren_( _C(), List );
+		SetChildren_( C_(), List );
 		break;
 	case xdhcbk::fSetCasting:
-		SetCasting_( _C(), List );
+		SetCasting_( C_(), List );
 		break;
 	case xdhcbk::fGetContent:
-		GetContent_( _C(), Result, List );
+		GetContent_( C_(), Result, List );
 		break;
 	case xdhcbk::fFocus:
-		Focus_( _C(), List);
+		Focus_( C_(), List);
 		break;
 	default:
 		qRFwk();

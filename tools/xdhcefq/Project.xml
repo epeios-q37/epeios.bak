@@ -22,8 +22,8 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-				<Module>frdbse</Module>
 				<Module>dlbrry</Module>
+				<Module>frdbse</Module>
 				<Module>mtk</Module>
 				<Module>strmrg</Module>
 			</Modules>
