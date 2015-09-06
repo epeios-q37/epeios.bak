@@ -64,7 +64,9 @@
 			</div>
 	</xsl:template>
 	<xsl:template match="Backend">
-		<xsl:text>#aBackend# :</xsl:text>
+		<xsl:text>#aBackend# ('</xsl:text>
+		<xsl:value-of select="Location"/>
+		<xsl:text>') :</xsl:text>
 		<br/>
 		<xsl:value-of select="Build"/>
 		<br/>

@@ -73,19 +73,10 @@
 		<Definitions>
 			<RootTagId>Root</RootTagId>
 			<CustomItems>
-				<Tags>
-					<Key>
-						<Name>xdh-key</Name>
-						<AttributeNames>
-							<Key>key</Key>
-							<Modifiers>modifiers</Modifiers>
-							<Action>action</Action>
-						</AttributeNames>
-					</Key>
-				</Tags>
+				<!-- Defined in 'XDH.xcfg'. -->
 			</CustomItems>
 			<Scripts>
-				<!-- Other scripts are in 'xdhtml.xcfg'. -->
+				<!-- Defined in 'XDH.xcfg'. -->
 			</Scripts>
 		</Definitions>
 		<Locale>

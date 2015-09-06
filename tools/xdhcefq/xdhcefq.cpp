@@ -114,8 +114,7 @@ void FillSettings_( cef_settings_t &Settings )
 	Settings.resources_dir_path = Rack_.CEFSettingBuffers.ResourceDirPath.Init( registry::cef::ResourcesDirPath );
 	Settings.locales_dir_path = Rack_.CEFSettingBuffers.LocaleDirPath.Init( registry::cef::LocaleDirPath );
 	Settings.locale = Rack_.CEFSettingBuffers.Locale.Init( registry::cef::Locale );
-	Settings.log_file = Rack_.CEFSettingBuffers.LogFile.Init( registry::cef::LogFile );
-//	Settings.no_sandbox = true;
+//	Settings.log_file = Rack_.CEFSettingBuffers.LogFile.Init( registry::cef::LogFile );
 //	Settings.log_severity = LOGSEVERITY_VERBOSE;
 }
 

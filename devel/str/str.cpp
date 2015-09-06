@@ -98,9 +98,9 @@ flw::oflow__ &str::operator <<(
 	flw::oflow__ &OStream,
 	const string_ &String )
 {
-	Put_( String, OStream );
+	dtfptb::VPut(String.Amount(), OStream );
 
-//	OStream.Put( 0 );
+	Put_( String, OStream );
 
 	return OStream;
 }
@@ -110,10 +110,10 @@ flw::iflow__ &str::operator >>(
 	flw::iflow__ &IStream,
 	string_ &S )
 {
-	char C;
+	sdr::size__ Size = dtfptb::VGet( IStream, Size );
 
-	while( ( C = (char)IStream.Get() ) != 0 )
-		S.Append( C );
+	while( Size-- )
+		S.Append( (char)IStream.Get() );
 
 	return IStream;
 }

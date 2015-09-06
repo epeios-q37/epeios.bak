@@ -73,7 +73,7 @@ namespace scldaemon {
 	: public _callback__
 	{
 	private:
-		virtual void *CSDSCBPreProcess( const char *Origin ) override
+		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
 			return SCLDAEMONNew( Origin );
 		}
@@ -104,7 +104,7 @@ namespace scldaemon {
 		qRE
 		}
 	protected:
-		virtual daemon___ *SCLDAEMONNew( const char *Origin ) = 0;
+		virtual daemon___ *SCLDAEMONNew( const ntvstr::char__ *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{

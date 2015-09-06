@@ -82,32 +82,52 @@ static rgstry::entry___ Internals_( "Internals" );
 static rgstry::entry___ ProjectId_( "ProjectId", Internals_ );
 
 namespace {
-	kernel___ Kernel_;
+
+	class kernel___
+	{
+	private:
+		csducl::universal_client_core___ _ClientCore;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_ClientCore.reset( P );
+		}
+		E_CVDTOR( kernel___ );
+		bso::bool__ Init(
+			const features___ &Features,
+			csdsnc::log_callback__ *LogCallback = NULL )
+		{
+			bso::bool__ Success = false;
+		qRH
+			csdlec::library_data__ LibraryData;
+			csdleo::mode__ Mode = csdleo::m_Undefined;
+			TOL_CBUFFER___ Buffer;
+		qRB
+			LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
+
+			if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
+				qRReturn;
+
+			Success = true;
+		qRR
+		qRT
+		qRE
+			return Success;
+		}
+		bso::bool__ Init(
+			const features___ &Features,
+			csdsnc::log_callback__ &LogCallback )
+		{
+			return Init( Features, &LogCallback );
+		}
+		csducl::universal_client_core___ &Core( void )
+		{
+			return _ClientCore;
+		}
+	} Kernel_;
 }
 
 stsfsm::automat PendingActionAutomat_;
-
-bso::bool__ sclfrntnd::kernel___::Init(
-	const features___ &Features,
-	csdsnc::log_callback__ *LogCallback )
-{
-	bso::bool__ Success = false;
-qRH
-	csdlec::library_data__ LibraryData;
-	csdleo::mode__ Mode = csdleo::m_Undefined;
-	TOL_CBUFFER___ Buffer;
-qRB
-	LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
-
-	if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
-		qRReturn;
-
-	Success = true;
-qRR
-qRT
-qRE
-	return Success;
-}
 
 # if 0
 static void FillPendingActionAutomat_( void )
@@ -451,6 +471,14 @@ void sclfrntnd::Connect( void )
 	if ( !Connect_() )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_MissingBackendDeclaration" );
 }
+
+const str::string_ &sclfrntnd::GetBackendLocation( str::string_ &Location )
+{
+	Location.Append(Kernel_.Core().Location() );
+
+	return Location;
+}
+
 
 #if 0
 static void FillAutomats_( void )

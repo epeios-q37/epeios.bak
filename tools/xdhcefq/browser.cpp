@@ -28,75 +28,6 @@
 #include "render.h"
 
 namespace {
-	qROW( ksrow__ );	// Keyboard Shortcuts row.
-
-	typedef ctn::E_MCONTAINERt_( str::string_, ksrow__ ) ks_events_;
-	E_AUTO( ks_events );
-
-	class keyboard_shortcuts_
-	{
-	public:
-		struct s {
-			ks_events_::s Events;
-			stsfsm::automat_::s Shortcuts;
-		};
-		ks_events_ Events;
-		stsfsm::automat_ Shortcuts;
-		keyboard_shortcuts_( s &S )
-		: Events( S.Events ),
-			Shortcuts( S.Shortcuts )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			Events.reset( P );
-			Shortcuts.reset( P );
-		}
-		void plug( qAS_ &AS )
-		{
-			Events.plug( AS );
-			Shortcuts.plug( AS );
-		}
-		keyboard_shortcuts_ &operator =( const keyboard_shortcuts_ &KS )
-		{
-			Events = KS.Events;
-			Shortcuts = KS.Shortcuts;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			Events.Init();
-			Shortcuts.Init();
-		}
-		void Append(
-			const str::string_ &Sequence,
-			const str::string_ &EventName )
-		{
-			stsfsm::id__ Id = stsfsm::GetId( Sequence, Shortcuts );
-
-			if ( Id == stsfsm::UndefinedId ) {
-				if ( stsfsm::Add( Sequence, *Events.Append( EventName ), Shortcuts ) != stsfsm::UndefinedId )
-					qRFwk();
-			} else 
-				Events.Store( EventName, Id );
-		}
-		bso::bool__ GetEventName(
-			const str::string_ &Sequence,
-			str::string_ &EventName )
-		{
-			stsfsm::id__ Id = stsfsm::GetId( Sequence, Shortcuts );
-
-			if ( Id == stsfsm::UndefinedId )
-				return false;
-			else
-				Events.Recall( Id, EventName );
-
-			return true;
-		}
-	};
-
-	E_AUTO( keyboard_shortcuts );
-
 	static class rack__ {
 		public:
 			cef_browser_process_handler_t BrowserProcessHandler;
@@ -106,7 +37,6 @@ namespace {
 			cef_keyboard_handler_t KeyboardHandler;
 			cef_life_span_handler_t LifeSpanHandler;
 			cef_load_handler_t LoadHandler;
-			keyboard_shortcuts Shortcuts;
 			bso::bool__ ClosePending;	// If 'true', wating for user agreement for clsing;
 			void reset( bso::bool__ P = true )
 			{
@@ -114,7 +44,6 @@ namespace {
 				if ( P )
 					misc::Clear( &WindowInfo.window_name );
 #endif
-				Shortcuts.reset( P );
 				ClosePending = false;
 			}
 			E_CDTOR( rack__ );
@@ -347,55 +276,6 @@ static struct _cef_load_handler_t* CEF_CALLBACK GetLoadHandler_( struct _cef_cli
 	return &Rack_.LoadHandler;
 }
 
-static void CreateKeyboardShortcuts_(
-	const str::strings_ &Shortcuts,
-	const str::strings_ &Events )
-{
-	ctn::E_CMITEM( str::string_ ) Shortcut, Event;
-	sdr::row__ Row = Shortcuts.First();
-
-	if ( Shortcuts.Amount() != Events.Amount() )
-		qRGnr();
-
-	Shortcut.Init( Shortcuts );
-	Event.Init( Events );
-
-//	Rack_.Shortcuts.Init();
-
-	while ( Row != qNIL ) {
-		Rack_.Shortcuts.Append(Shortcut(Row), Event( Row ) );
-
-		Row = Shortcuts.Next( Row );
-	}
-}
-
-static void CreateKeyboardShortcuts_( cef_list_value_t *ListValue )
-{
-qRH
-	xdhcbk::args Args;
-	str::strings Shortcuts, Events;
-	xdhcbk::retriever__ Retriever;
-qRB
-	Args.Init();
-	misc::GetArgs( ListValue, Args );
-
-	Retriever.Init( Args );
-
-	Shortcuts.Init();
-	Retriever.GetStrings( Shortcuts );
-
-	Events.Init();
-	Retriever.GetStrings( Events );
-
-	if ( Args.Amount() != 2 )
-		qRGnr();
-
-	CreateKeyboardShortcuts_( Shortcuts, Events );
-qRR
-qRT
-qRE
-}
-
 static void FileDialog_(
 	cef_list_value_t *ListValue,
 	cef_browser_t *Browser,
@@ -463,9 +343,6 @@ qRB
 		qRGnr();
 
 	switch ( misc::GetClientMessage( Message ) ) {
-	case misc::cmCreateKeyboardShortcuts:
-		CreateKeyboardShortcuts_( ListValue );
-		break;
 	case misc::cmOpenFile:
 		FileDialog_( ListValue, browser, FILE_DIALOG_OPEN );
 		break;
@@ -521,8 +398,6 @@ qRB
 	Rack_.Client.get_life_span_handler = GetLifeSpanHandler_;
 	Rack_.Client.get_load_handler = GetLoadHandler_;
 	Rack_.Client.on_process_message_received = ClientOnProcessMessageReceived_;
-
-	Rack_.Shortcuts.Init();
 
 	cef_browser_host_create_browser( &Rack_.WindowInfo, &Rack_.Client, misc::cef_string___( URL ), &Rack_.BrowserSettings, NULL );
 qRR

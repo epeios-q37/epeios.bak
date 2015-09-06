@@ -33,13 +33,14 @@
 
 // Client-Server Devices Library Embedded Client
 
-#include "err.h"
-#include "flw.h"
-#include "bch.h"
+# include "err.h"
+# include "flw.h"
+# include "bch.h"
+# include "dir.h"
 
 #include "dlbrry.h"
 
-#include "csdleo.h"
+# include "csdleo.h"
 
 # define CSDLEC_CACHE_SIZE	1000
 
@@ -139,7 +140,16 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		bso::bool__ _DataAvailable;
 		void _Create( void )
 		{
-			_UP = _Callback->PreProcess( "(embed)" );
+		qRH
+			fnm::name___ Path;
+		qRB
+			Path.Init();
+			dir::GetSelfPath( Path );
+
+			_UP = _Callback->PreProcess( Path.Internal() );
+		qRR
+		qRT
+		qRE
 		}
 		void _Delete( void )
 		{

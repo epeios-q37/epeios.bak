@@ -29,15 +29,6 @@ entry___ registry::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
 
 entry___ registry::URL("URL", sclrgstry::Parameters );
 
-static entry___ Tags_("Tags", xdhjsr::CustomItems );
-
-static entry___ KeyTag_("Key", Tags_ );
-entry___ registry::custom_item::tag::key::Name("Name", KeyTag_ );
-static entry___ KeyTagAttributeNames_("AttributeNames", KeyTag_ );
-entry___ registry::custom_item::tag::key::attribute_name::Key("Key", KeyTagAttributeNames_ );
-entry___ registry::custom_item::tag::key::attribute_name::Modifiers("Modifiers", KeyTagAttributeNames_ );
-entry___ registry::custom_item::tag::key::attribute_name::Action("Action", KeyTagAttributeNames_ );
-
 static entry___ CEF_( "CEF", Parameters );
 entry___ registry::cef::ProcessType( "ProcessType", CEF_ );
 entry___ registry::cef::SingleProcess( "SingleProcess", CEF_ );

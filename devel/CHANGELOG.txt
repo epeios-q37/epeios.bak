@@ -12,6 +12,32 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-06 :
+- CSDBNS, CSDSNS :
+	- Adaptation to changes in 'CSDSCB'.
+- CSDLEC :
+	* Passes now the executable which embed the server as 'Origin' parameter to server.
+- CSDSCB, FBLBKD, NTVSTR, SCLBACKND, SCLDAEMON  :
+	% '[Client]Origin' parameter is now of type 'ntvstr::char__'.
+- CSDUCL :
+	- 'universal_client_core' -> 'universal_client_core___'
+	* Storing server location in 'universal_client_core___'.
+- DIR :
+	% Adding 'GetSelPath[_](...)' function.
+	- Adapting exsting functions to use above new function.
+- FBLOVL :
+	- Incrementing protocol version due to changes in 'STR'.
+- SCLFRNTND :
+	- Adaptation to changes in 'CSDUCL'.
+	% Moving 'kernel___' from '.h' to '.cpp'.
+	% Adding 'GetBackendLocation(...)' function.
+- STR
+	* The size of the string is embedded in the flow for the '<<' and '>>' operator.
+
+2015-09-04 :
+- SCLRGSTRY :
+	# Fixing default ptoject entry value.
+
 2015-08-27 :
 - XDHJST :
 	* Adding key-related events handling.

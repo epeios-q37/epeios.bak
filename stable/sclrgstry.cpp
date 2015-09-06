@@ -73,7 +73,7 @@ namespace definition_ {
 	rgstry::entry___ Projects_( "Projects", sclrgstry::Definitions );
 }
 
-rgstry::entry___ sclrgstry::definition::DefaultProjectId( "Default", definition_::Projects_ );
+rgstry::entry___ sclrgstry::definition::DefaultProjectId( "@Default", definition_::Projects_ );
 rgstry::entry___ sclrgstry::definition::Project( "Project", definition_::Projects_ ); 
 rgstry::entry___ sclrgstry::definition::project::Id( "@id", Project );
 rgstry::entry___ sclrgstry::definition::TaggedProject( RGSTRY_TAGGING_ATTRIBUTE( "id" ), definition::Project );

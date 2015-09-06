@@ -49,31 +49,6 @@
 namespace sclfrntnd {
 	using csducl::features___;
 
-	class kernel___
-	{
-	private:
-		csducl::universal_client_core _ClientCore;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_ClientCore.reset( P );
-		}
-		E_CVDTOR( kernel___ );
-		bso::bool__ Init(
-			const features___ &Features,
-			csdsnc::log_callback__ *LogCallback = NULL );
-		bso::bool__ Init(
-			const features___ &Features,
-			csdsnc::log_callback__ &LogCallback )
-		{
-			return Init( Features, &LogCallback );
-		}
-		csducl::universal_client_core &Core( void )
-		{
-			return _ClientCore;
-		}
-	};
-
 	using fblfrd::compatibility_informations__;
 
 	using fblfrd::incompatibility_informations_;
@@ -153,6 +128,8 @@ namespace sclfrntnd {
 		const str::string_ &BackendFeature );
 
 	void Connect( void );
+
+	const str::string_ &GetBackendLocation( str::string_ &Location );
 }
 
 				  /********************************************/

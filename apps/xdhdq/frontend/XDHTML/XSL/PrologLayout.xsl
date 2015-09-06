@@ -7,10 +7,8 @@
 	<xsl:template match="/">
 		<head>
 			<xpp:expand href="styles" />
-			<xpp:expand href="keys" />
-			<xpp:expand href="scripts" />
 		</head>
-		<body>
+		<body data-xdh-onevent="keypress|About|CS+a">
 			<xsl:apply-templates select="*/Content"/>
 		</body>
 	</xsl:template>

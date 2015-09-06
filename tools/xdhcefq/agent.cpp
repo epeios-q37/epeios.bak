@@ -144,46 +144,6 @@ namespace {
 		}
 	};
 
-	class ks_inventory___
-	{
-	public:
-		str::strings
-			Shortcuts,
-			Actions;
-		void reset( bso::bool__ P = true )
-		{
-			Shortcuts.reset( P );
-			Actions.reset( P );
-		}
-		E_CDTOR( ks_inventory___ );
-		void Init( void )
-		{
-			Shortcuts.Init();
-			Actions.Init();
-		}
-	};
-
-	void CreateKeyboardShortcuts_(
-		const ks_inventory___ &Inventory,
-		cef_browser_t *Browser )
-	{
-	qRH
-		xdhcbk::args Args;
-	qRB
-		if ( Inventory.Actions.Amount() != Inventory.Shortcuts.Amount() )
-			qRGnr();
-
-		Args.Init();
-
-		Args.AppendMono( Inventory.Shortcuts );
-		Args.AppendMono( Inventory.Actions );
-
-		misc::SendMessage( misc::cmCreateKeyboardShortcuts, Browser, Args );
-	qRR
-	qRT
-	qRE
-	}
-
 	void FillEventsDigest_(
 		const str::string_ &Id,
 		cef_frame_t *Frame,
@@ -230,52 +190,6 @@ namespace {
 	qRE
 	}
 
-	inline void Handle_(
-		char Char,
-		const str::string_ &Pattern,
-		str::string_ &Shortcut )
-	{
-		if ( Pattern.Search( Char ) != qNIL )
-			Shortcut.Append( Char );
-		else
-			Shortcut.Append( '.' );
-	}
-
-	void BuildShortcut_(
-		const str::string_ &Key,
-		const str::string_ &Modifiers,
-		str::string_ &Shortcut )
-	{
-		Handle_( 'a', Modifiers, Shortcut );	// Alt
-		Handle_( 'c', Modifiers, Shortcut );	// Ctrl
-		Handle_( 's', Modifiers, Shortcut );	// Shift
-
-		Shortcut.Append( Key );
-	}
-
-	void SetupKeyboardAction_(
-		cef_domnode_t *Node,
-		ks_inventory___ &Inventory )
-	{
-	qRH
-		str::string Key, Modifiers, Shortcut, Action;
-		TOL_CBUFFER___ ABuffer, RBuffer;
-	qRB
-		Key.Init( misc::MGetAttribute( Node, sclmisc::MGetValue( registry::custom_item::tag::key::attribute_name::Key, RBuffer ), ABuffer ) );
-		Modifiers.Init( misc::OGetAttribute( Node, sclmisc::MGetValue( registry::custom_item::tag::key::attribute_name::Modifiers, RBuffer ), ABuffer ) );
-
-		Shortcut.Init();
-		BuildShortcut_( Key, Modifiers, Shortcut );
-
-		Action.Init( misc::MGetAttribute( Node, sclmisc::MGetValue( registry::custom_item::tag::key::attribute_name::Action, RBuffer ), ABuffer ) );
-
-		if ( Inventory.Shortcuts.Append( Shortcut ) != Inventory.Actions.Append( Action ) )
-			qRGnr();
-	qRR
-	qRT
-	qRE
-	}
-
 	void CEF_CALLBACK LayoutVisit_(
 		struct _cef_domvisitor_t* self,
 		struct _cef_domdocument_t* document )
@@ -286,8 +200,7 @@ namespace {
 		crawler__ Crawler;
 		str::string Name, Script;
 		misc::cef_string___ OnEventAttributeName, OnEventsAttributeName, WidgetAttributeName;
-		str::string KeyTagName, Id;
-		ks_inventory___ Inventory;
+		str::string Id;
 		TOL_CBUFFER___ Buffer;
 		xdhcbk::args EventsDigest, WidgetDigest;
 		cef_frame_t *Frame = NULL;
@@ -297,11 +210,6 @@ namespace {
 		OnEventAttributeName.Init( sclmisc::MGetValue( registry::custom_item::attribute_name::OnEvent, Buffer ) );
 		OnEventsAttributeName.Init( sclmisc::MGetValue( registry::custom_item::attribute_name::OnEvents, Buffer ) );
 		WidgetAttributeName.Init( sclmisc::MGetValue( registry::custom_item::attribute_name::Widget, Buffer ) );
-
-		KeyTagName.Init();
-		sclmisc::MGetValue( registry::custom_item::tag::key::Name, KeyTagName );
-
-		Inventory.Init();
 
 		Crawler.Init( Root = document->get_element_by_id( document, misc::cef_string___( Visitor.Id() ) ) );
 
@@ -322,9 +230,6 @@ namespace {
 
 				}
 			
-				if ( Name == KeyTagName )
-					SetupKeyboardAction_( Node, Inventory );
-
 				if ( Node->has_element_attribute(Node, WidgetAttributeName) ) {
 					WidgetDigest.Init();
 					FillWidgetDigest_( misc::GetOrGenerateId( Node, Id ), Frame, WidgetDigest );
@@ -332,8 +237,6 @@ namespace {
 				}
 			}
 		}
-
-		CreateKeyboardShortcuts_( Inventory, Visitor.Browser() );
 
 		misc::ExecuteJavascript( Script, Frame );
 	qRR

@@ -255,12 +255,12 @@ qRE
 	private:
 		core _Core;
 		callback__ *_Callback;
-		const char *_Origin;
+		ntvstr::string___ _Origin;
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
 	protected:
-		virtual void *CSDSCBPreProcess( const char *Origin )
+		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
-			_Origin = Origin;
+			_Origin.Init( Origin );
 
 			return NULL;
 		}
@@ -325,7 +325,7 @@ qRE
 
 			_Core.reset( P );
 			_Callback = NULL;
-			_Origin = NULL;
+			_Origin.reset( P );
 			callback__::reset( P );
 		}
 		_callback___( void)
@@ -344,6 +344,7 @@ qRE
 
 			_Core.Init( LogFunctions );
 			_Callback = &Callback;
+			_Origin.Init();
 			callback__::Init();
 		}
 	};

@@ -73,10 +73,11 @@ namespace csducl {
 		}
 	};
 
-	class universal_client_core
+	class universal_client_core___
 	{
 	private:
 		type__ _Type;
+		str::string _Location;
 		csdsnc::core _DaemonAccess;
 		csdlec::library_embedded_client_core__ _LibraryAccess;
 	public:
@@ -85,12 +86,13 @@ namespace csducl {
 			_LibraryAccess.reset( P );
 			_DaemonAccess.reset( P );
 			_Type = t_Undefined;
+			_Location.reset( P );
 		}
-		universal_client_core( void )
+		universal_client_core___( void )
 		{
 			reset( false );
 		}
-		~universal_client_core( void )
+		~universal_client_core___( void )
 		{
 			reset();
 		}
@@ -109,6 +111,7 @@ namespace csducl {
 		{
 			return _Type;
 		}
+		E_RODISCLOSE__( str::string_, Location );
 		friend class universal_client_ioflow_driver___;
 	};
 
@@ -118,7 +121,7 @@ namespace csducl {
 	private:
 		csdsnc::client_ioflow___ _DaemonFlow;
 		csdlec::library_embedded_client_ioflow___ _LibraryFlow;
-		universal_client_core *_Core;
+		universal_client_core___ *_Core;
 		flw::ioflow__ &_Get( void )
 		{
 			switch ( _Core->_Type ) {
@@ -177,7 +180,7 @@ namespace csducl {
 			reset();
 		}
 		void Init(
-			universal_client_core &Core,
+			universal_client_core___ &Core,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			reset();
@@ -223,7 +226,7 @@ namespace csducl {
 			reset();
 		}
 		void Init(
-			universal_client_core &Core,
+			universal_client_core___ &Core,
 			flw::size__ AmountMax = FLW_AMOUNT_MAX )
 		{
 			reset();

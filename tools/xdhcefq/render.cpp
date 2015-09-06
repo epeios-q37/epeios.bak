@@ -373,6 +373,11 @@ namespace {
 
 		int32 I = Value->get_int_value( Value );
 
+		if ( isprint( I ) )
+			I = tolower( I );
+		else
+			I += 'a' - 1;
+
 		Keys.Append( I );
 	qRR
 	qRT
@@ -449,7 +454,7 @@ qRB
 	Context = cef_v8context_get_current_context();
 	Global = Context->get_global( Context );
 
-	if ( Global->has_value_bykey(Global, RawId->get_string_value(RawId)) ) {
+	if ( true || Global->has_value_bykey(Global, RawId->get_string_value(RawId)) ) { // Does not find the 'ProjectType' element on the 'Prolog' page. Worked once with a previous version of CEF ...
 		Keys.Init();
 
 		if ( xdhjst::IsKeyEvent( EventName.UTF8( EventNameBuffer ) ) )

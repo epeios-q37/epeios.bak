@@ -55,7 +55,7 @@ public:
 	E_CVDTOR( backend___ );
 	void Init(
 		fblbur::mode__ Mode,
-		const char *ClientOrigin )
+		const ntvstr::char__ *ClientOrigin )
 	{
 		_Stuff.Init( *this );
 
@@ -83,7 +83,7 @@ class callback___
 protected:
 	virtual _backend___ *SCLBACKNDNew( 
 		fblbur::mode__ Mode,
-		const char *Origin )
+		const ntvstr::char__ *Origin ) override
 	{
 		backend___ *Backend = NULL;
 	qRH

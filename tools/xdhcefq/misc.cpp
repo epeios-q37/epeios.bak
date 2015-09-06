@@ -166,7 +166,6 @@ render_message__ misc::GetRenderMessage( const cef_string_t *Pattern )
 const char *misc::GetLabel( client_message__ Message )
 {
 	switch ( Message ) {
-	CM( CreateKeyboardShortcuts );
 	CM( OpenFile );
 	CM( OpenFiles );
 	CM( SaveFile );

@@ -477,16 +477,20 @@ bso::bool__ xdhjst::HasEvent(
 
 sdr::row__ xdhjst::Find(
 	const str::string_ &Event,
-	const str::string_ &Keys,
+	const str::string_ &RawKeys,
 	const event_abstracts_ &Abstracts )
 {
 	sdr::row__ Row = qNIL;
 qRH
 	ctn::E_CITEM( event_abstract_ ) Abstract;
+	str::string Keys;
 qRB
 	Row = Abstracts.First();
 
 	Abstract.Init( Abstracts );
+
+	Keys.Init();
+	BuildKeyShortcut( RawKeys, Keys );
 
 	while ( ( Row != qNIL )
 		    && ( ( Abstract( Row ).Event != Event )

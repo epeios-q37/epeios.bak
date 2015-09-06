@@ -196,7 +196,7 @@ namespace fblbkd {
 		const char *Prefix_;
 		// Libelle du type de l'objet, du module.
 		const char *Name_;
-		// L'interface auquel le module est rattach.
+		// L'interface auquel le module est rattaché.
 		class backend___ *Backend_;
 		void _Clean( void );	// Permet l'effacement correct de chaque objet utilisateur.
 	protected:
@@ -204,7 +204,7 @@ namespace fblbkd {
 		virtual index__ FBLBKDNew( void )
 		{
 			qRFwk();
-			return 0;	// Pour viter un warning.
+			return 0;	// Pour éviter un warning.
 		}
 		//v To delete the object with index 'Index'.
 		virtual void FBLBKDDelete( index__ Index )
@@ -215,13 +215,13 @@ namespace fblbkd {
 		virtual void *FBLBKDObject( index__ Index )
 		{
 			qRFwk();
-			return NULL;	// Pour viter un 'warning'
+			return NULL;	// Pour éviter un 'warning'
 		}
 #if 0
 		//v To get the raw messages.
 		virtual void FBLBKDGetRawMessages( messages_ &Messages ) = 0;
 #endif
-		// Fonction appele pour traiter la requte 'Requete' pour l'objet d'index 'Index'.
+		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
 		virtual void Handle_(
 			index__ Index,
 			request__ &Requete,
@@ -626,7 +626,7 @@ namespace fblbkd {
 		}
 	};
 
-	// Module matre, qui fait tout le boulot.
+	// Module maître, qui fait tout le boulot.
 	class master_module
 	: public untyped_module
 	{
@@ -647,7 +647,7 @@ namespace fblbkd {
 		//o All raw messages from all modules.
 		messages RawMessages;
 #endif
-		// Initialisation avec rattachement  l'interface 'Backend'.
+		// Initialisation avec rattachement à l'interface 'Backend'.
 		void Init( backend___ &Backend );
 	};
 
@@ -732,13 +732,13 @@ namespace fblbkd {
 		TOL_CBUFFER___ _Language;
 		const lcl::locale_ *_Locale;
 		TOL_CBUFFER___ _BackendLabel;
-		// Informations  propos du 'backend'.
+		// Informations à propos du 'backend'.
 		TOL_CBUFFER___ _ExtendedBackendInformations;
 		TOL_CBUFFER___ _BackendCopyright;
 		TOL_CBUFFER___ _SoftwareInformations;
 		fblber::embedded_callbacks___ _Embedded;
 		fblbrr::remote_callbacks___ _Remote;
-		// Retourne le module correspondant  'IdType'.
+		// Retourne le module correspondant à 'IdType'.
 		untyped_module &Module_( type__ IdType ) const
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
@@ -746,7 +746,7 @@ namespace fblbkd {
 			else
 				return (untyped_module &)Master_;	// Not very happy about this conversion, 
 		}
-		// Retourne le module correspondant  'IdObjet'.
+		// Retourne le module correspondant à 'IdObjet'.
 		untyped_module &Module_( object__ IdObjet ) const
 		{
 			if ( IdObjet != FBLBKD_MASTER_OBJECT )
@@ -754,12 +754,12 @@ namespace fblbkd {
 			else
 				return (untyped_module &)Master_; // Not very happy about this conversion, 
 		}
-		// Retourne le type correpondant  l'objet d'indetificateur 'IdObjet'.
+		// Retourne le type correpondant à l'objet d'indetificateur 'IdObjet'.
 		type__ Type_( object__ IdObjet ) const
 		{
 			return Links.Type( IdObjet );
 		}
-		// Retourne l'indexcorrespondant  l'objet d'identificateur 'IdObjet'.
+		// Retourne l'indexcorrespondant à l'objet d'identificateur 'IdObjet'.
 		index__ Index_( object__ IdObjet ) const
 		{
 			return Links.Index( IdObjet );
@@ -787,11 +787,11 @@ namespace fblbkd {
 			_Remote.reset( P );
 		}
 		E_CVDTOR( backend___ );
-		// '[Backend|Publisher]Informations' ne sont PAS dupliqu. Leur contenu de doit pas tre modifi.
+		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
 		void Init(
 			fblbur::mode__ Mode,
 			const char *APIVersion,
-			const char *ClientOrigin,
+			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,
 			const lcl::locale_ &Locale,
 			const char *BackendInformations,
@@ -818,8 +818,7 @@ namespace fblbkd {
 
 			str::string( BackendCopyright ).Convert( _BackendCopyright );
 			str::string( SoftwareInformations ).Convert( _SoftwareInformations );
-
-			str::string( ClientOrigin ).Convert( _ClientOrigin );
+			ntvstr::string___( ClientOrigin ).UTF8( _ClientOrigin );
 			str::string( APIVersion ).Convert( _APIVersion );
 
 			_Locale = &Locale;

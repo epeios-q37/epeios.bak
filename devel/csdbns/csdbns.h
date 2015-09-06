@@ -180,7 +180,7 @@ namespace csdbns {
 				qRAlc();
 
 			Data->Flow.Init( Socket );
-			Data->UP = BaseCallback->PreProcess( IP );
+			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );
 		qRR
 			if ( Data != NULL )
 				delete Data;

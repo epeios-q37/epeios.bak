@@ -71,18 +71,21 @@ static void About_(
 	xml::writer_ &Writer )
 {
 qRH
-	str::string AuthorText, ProjectAffiliationText, SoftwareAffiliationText, ProtocoleVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
+	str::string ProtocolVersion, BackendLocation, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
 qRB
-	ProtocoleVersion.Init();
+	ProtocolVersion.Init();
+	BackendLocation.Init();
 	BackendLabel.Init();
 	APIVersion.Init();
 	BackendInformations.Init();
 	BackendCopyright.Init();
 	SoftwareInformations.Init();
 
-	Frontend.About( ProtocoleVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
+	sclfrntnd::GetBackendLocation( BackendLocation );
+	Frontend.About( ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 
-	V( ProtocoleVersion, ProtocolVersion );
+	V( ProtocolVersion, ProtocolVersion );
+	V( BackendLocation, Location );
 	V( BackendLabel, Label );
 	V( APIVersion, APIVersion );
 	V( BackendInformations, Build );

@@ -10,5 +10,8 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
-- 2015/08/20 : PUBLICATION !
+2015-09-02 :
+	- Adaptation of changes in underlying modules.
+
+2015-08-20 : PUBLICATION !
 

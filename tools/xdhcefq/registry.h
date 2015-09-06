@@ -42,17 +42,6 @@ namespace registry {
 
 	namespace custom_item {
 		using namespace xdhjsr::custom_item;
-
-		namespace tag{
-			namespace key {
-				extern entry___ Name;
-				namespace attribute_name {
-					extern entry___ Key;
-					extern entry___ Modifiers;
-					extern entry___ Action;
-				}
-			}
-		}
 	}
 
 	namespace cef {

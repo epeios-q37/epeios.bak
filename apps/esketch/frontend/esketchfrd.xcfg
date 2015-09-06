@@ -8,7 +8,8 @@
 			<xpp:expand select="FRD_Parameters"/>
 			<DefaultProjectType>New</DefaultProjectType>
 			<DefaultBackendType>None</DefaultBackendType>
-			<!-- Has to be defined multi-user mode. Actually not used in mono-user mode, but can be. -->
+
+			<!-- For multi-user mode. Can be overriden by project file. -->
 			<Backend Type="Predefined">Embedded</Backend>
 			<Authentication Mode="Full">
 				<Login>Hello</Login>

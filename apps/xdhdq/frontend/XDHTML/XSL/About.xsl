@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet	version="2.0"
+<xsl:stylesheet	version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns="http://www.w3.org/1999/xhtml">
 	<xsl:output method="xml" encoding="UTF-8"/>
@@ -58,8 +58,8 @@
 			<!-- No-break space. '&nbsp' is only available in html, not in xhtml. Under Windows, type Alt+0160-->
 			<xsl:text> </xsl:text>
 			<a target="_blank">
-				<xsl:attribute name="href">http://q37.info/</xsl:attribute>
-				<xsl:text>http://q37.info/</xsl:text>
+				<xsl:attribute name="href">http://q37.info/computing/epeios/apps/xdhdq/</xsl:attribute>
+				<xsl:text>http://q37.info/computing/epeios/apps/xdhdq/</xsl:text>
 			</a>
 			</div>
 	</xsl:template>

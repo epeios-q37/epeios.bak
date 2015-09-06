@@ -64,7 +64,7 @@ namespace sclbacknd {
 		flx::void_oflow_driver___ _VoidFlowDriver;
 		void *_UP;
 	protected:
-		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow )
+		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) override
 		{
 			bso::bool__ Continue = true;
 		qRH
@@ -105,7 +105,7 @@ namespace sclbacknd {
 		void Init(
 			fblbur::mode__ Mode,
 			const char *APIVersion,
-			const char *ClientOrigin,
+			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,
 			const char *BackendInformations,
 			const char *BackendCopyright,
@@ -132,13 +132,13 @@ namespace sclbacknd {
 	private:
 		fblbur::mode__ _Mode;
 	protected:
-		virtual scldaemon::daemon___ *SCLDAEMONNew(	const char *Origin )
+		virtual scldaemon::daemon___ *SCLDAEMONNew(	const ntvstr::char__ *Origin ) override
 		{
 			return SCLBACKNDNew( _Mode, Origin );
 		}
 		virtual backend___ *SCLBACKNDNew(
 			fblbur::mode__ Mode,
-			const char *Origin ) = 0;
+			const ntvstr::char__ *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{

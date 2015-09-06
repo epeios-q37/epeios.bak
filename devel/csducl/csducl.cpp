@@ -58,7 +58,7 @@ const char *csducl::GetLabel( type__ Type )
 	return NULL;	// Pour viter un 'warning'.
 }
 
-bso::bool__ csducl::universal_client_core::Init(
+bso::bool__ csducl::universal_client_core___::Init(
 	const features___ &Features,
 	csdlec::library_data__ &LibraryData,
 	csdsnc::log_callback__ *Log )
@@ -85,6 +85,7 @@ qRB
 	}
 
 	_Type = Features.Type;
+	_Location.Init( Features.Location );
 qRR
 qRT
 qRE

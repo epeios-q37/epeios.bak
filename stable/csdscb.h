@@ -36,6 +36,7 @@
 # include "err.h"
 # include "flw.h"
 # include "tol.h"
+# include "ntvstr.h"
 
 namespace csdscb {
 	enum action__ {
@@ -47,7 +48,7 @@ namespace csdscb {
 
 	class callback__ {
 	protected:
-		virtual void *CSDSCBPreProcess( const char *Origin ) = 0;
+		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) = 0;
 		virtual action__ CSDSCBProcess(
 			flw::ioflow__ &Flow,
 			void *UP ) = 0;
@@ -58,7 +59,7 @@ namespace csdscb {
 			// Standardisation.
 		}
 		E_CVDTOR( callback__ );
-		void *PreProcess( const char *Origin )
+		void *PreProcess( const ntvstr::char__ *Origin )
 		{
 			return CSDSCBPreProcess( Origin );
 		}

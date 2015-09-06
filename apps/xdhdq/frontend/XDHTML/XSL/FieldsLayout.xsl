@@ -8,11 +8,9 @@
 	<xsl:template match="/">
 		<head>
 			<xpp:expand href="styles" />
-			<xpp:expand href="keys" />
 		</head>
 		<body>
 			<xsl:apply-templates select="*/Content"/>
-			<xpp:expand href="scripts" />
 		</body>
 	</xsl:template>
 	<xsl:template match="Content">

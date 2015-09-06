@@ -121,7 +121,6 @@ namespace misc {
 		xdhcbk::args_ &Casts );
 
 	enum client_message__ {	// Messages  destination du client.
-		cmCreateKeyboardShortcuts,
 		cmOpenFile,
 		cmOpenFiles,
 		cmSaveFile,

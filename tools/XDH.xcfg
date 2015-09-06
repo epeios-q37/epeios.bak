@@ -33,8 +33,12 @@
 			<Casting>
 				<Definer>
 					<![CDATA[
+							// Edge executes this script in loop !!!
+							console.log( "1 !!!" );
 							removeCastingChildren();
+							console.log( "2 !!!" );
 							document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
+							console.log( "3 !!!" );
 						]]>
 				</Definer>
 				<Handler>
@@ -64,7 +68,7 @@
 			<Dialog>
 				<Alert>
 					<![CDATA[
-						// console.log( "%XML%" );
+						// log( "%XML%" );
 						dialog = document.createElement( "span" );
 						dialog.innerHTML = transformToHTML( "%XML%", "%XSL%" );
 						$(dialog).dialog({modal: true},{title: "%Title%"},{width: "auto"} ,{closeText: "%CloseText%"});
@@ -109,9 +113,9 @@
 						{
 							drag: function( event, ui )
 							{
-								console.log( "Drag" );
+								log( "Drag" );
 								if ( !drag ) {
-								console.log( "!!!!" );
+								log( "!!!!" );
 								var event = document.createEvent( "HTMLEvents" );
 								event.initEvent("dragstart" );
 								document.getElementById( "%Id%" ).dispatchEvent( event );
@@ -130,7 +134,7 @@
 						{
 							drop: function( event, ui )
 							{
-								console.log( "Drop" );
+								log( "Drop" );
 								var event = document.createEvent( "HTMLEvents" );
 								event.initEvent("drop" );
 								document.getElementById( "%Id%" ).dispatchEvent( event );
@@ -149,9 +153,9 @@
 						{
 						}
 					)
-					.on( 'dragstart', function( event ) { console.log( 'dragstart' ); event.stopImmediatePropagation(); launchEvent( event.target, "dragstart" ); } )
-					.on( 'dragend', function( event ) { console.log( 'dragend' ); launchEvent( event.target, "dragend" ); } )
-					.on( 'click', function( event ) { console.log( '-->click' );event.stopImmediatePropagation();event.stopPropagation(); } )
+					.on( 'dragstart', function( event ) { log( 'dragstart' ); event.stopImmediatePropagation(); launchEvent( event.target, "dragstart" ); } )
+					.on( 'dragend', function( event ) { log( 'dragend' ); launchEvent( event.target, "dragend" ); } )
+					.on( 'click', function( event ) { log( '-->click' );event.stopImmediatePropagation();event.stopPropagation(); } )
 					;
 				]]>
 			</DraggableSetter>
@@ -164,13 +168,13 @@
 						{
 						}
 					)
-					.on( 'drop', function( event ) { console.log( 'drop : ' + event.target.id + " ; " + event.relatedTarget.id ); launchEvent( event.target, "drop" );} );
+					.on( 'drop', function( event ) { log( 'drop : ' + event.target.id + " ; " + event.relatedTarget.id ); launchEvent( event.target, "drop" );} );
 				]]>
 
 			</DroppableSetter>
 			<DocumentSetter>
 				<![CDATA[
-				console.log( "%XML%" );
+				log( "%XML%" );
 				document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );"";
 				]]>
 			</DocumentSetter>
@@ -193,7 +197,7 @@
 			</Focusing>
 			<Log>
 				<![CDATA[
-						console.log( "%Message%" );
+						log( "%Message%" );
 					]]>
 			</Log>
 			<Property>

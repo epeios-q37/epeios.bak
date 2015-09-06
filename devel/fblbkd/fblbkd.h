@@ -791,7 +791,7 @@ namespace fblbkd {
 		void Init(
 			fblbur::mode__ Mode,
 			const char *APIVersion,
-			const char *ClientOrigin,
+			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,
 			const lcl::locale_ &Locale,
 			const char *BackendInformations,
@@ -818,8 +818,7 @@ namespace fblbkd {
 
 			str::string( BackendCopyright ).Convert( _BackendCopyright );
 			str::string( SoftwareInformations ).Convert( _SoftwareInformations );
-
-			str::string( ClientOrigin ).Convert( _ClientOrigin );
+			ntvstr::string___( ClientOrigin ).UTF8( _ClientOrigin );
 			str::string( APIVersion ).Convert( _APIVersion );
 
 			_Locale = &Locale;

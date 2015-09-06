@@ -85,17 +85,32 @@ namespace dir {
 
 	state__ HandleError( void );
 
-	inline const fnm::name___ &GetSelfDir( fnm::name___ &Dir )
+# ifdef DIR__WIN 
+#  define DIR__MAX_PATH	(MAX_PATH+1)
+# elif defined( DIR__POSIX )
+#  ifdef CPE_S_DARWIN
+#   define DIR__MAX_PATH	(MAXPATHLEN+1)
+#  else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
+#   define DIR__MAX_PATH	(PATH_MAX+1)
+#  endif
+# else
+#  error
+# endif
+
+	typedef fnm::nchar__ _filename__[DIR__MAX_PATH] ;
+
+	inline const ntvstr::char__ *GetSelfPath_( _filename__ &FileName )
 	{
-#ifdef DIR__WIN 
-		fnm::nchar__ FileName[MAX_PATH];
-		DWORD Size = GetModuleFileNameW( NULL, FileName, sizeof( FileName ) );
-		return fnm::GetLocation( FileName, Dir );
-#endif
-#ifdef DIR__POSIX
-# ifdef CPE_S_DARWIN
-		char Filename[MAXPATHLEN];
-		uint32_t Size = sizeof( Filename );
+# ifdef DIR__WIN 
+		DWORD Size = GetModuleFileNameW( NULL, FileName, DIR__MAX_PATH );
+
+		if ( Size == DIR__MAX_PATH )
+			qRLmt();
+		else if ( Size == 0 )
+			qRSys();
+# elif defined( DIR__POSIX )
+#  ifdef CPE_S_DARWIN
+		uint32_t Size = DIR__MAX_PATH;
 		switch ( _NSGetExecutablePath( Filename, &Size ) ) {
 		case -1 :	// La taille de 'Path' est insuffisante.
 			qRLmt();
@@ -106,25 +121,38 @@ namespace dir {
 			qRSys();
 			break;
 		}
+#  else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
+		int Size = readlink( "/proc/self/exe", Filename, DIR__MAX_PATH );
 
-		return fnm::GetLocation( fnm::name___( Filename ), Dir );
-# else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
-		char Filename[PATH_MAX];
-		int Size = readlink( "/proc/self/exe", Filename, sizeof( Filename ) );
-
-		// Valeur d"erreur retournée par 'GetModuleFileName(..)'.
-		// Valeur d'erreur retrounée par 'readlink(...)', mais '0' est normalement une impossibilité.
 		if ( Size <= 0 )
 			qRSys();
 
-		if ( Size == sizeof( Filename ) )
+		if ( Size == DIR__MAX_PATH )
 			qRLmt();
 
 		Filename[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
-
-		return fnm::GetLocation( fnm::name___( Filename ), Dir );
+#  endif
+# else
+#  error
 # endif
-#endif
+		return FileName;
+	}
+
+	inline const fnm::name___ &GetSelfPath( fnm::name___ &Path )
+	{
+		_filename__ FileName;
+
+		Path.Init( GetSelfPath_( FileName ) );
+
+		return Path;
+	}
+
+
+	inline const fnm::name___ &GetSelfDir( fnm::name___ &Dir )
+	{
+		_filename__ FileName;
+
+		return fnm::GetLocation( GetSelfPath_( FileName ), Dir );
 	}
 
 	inline state__ CreateDir( const fnm::name___ &Dir )
