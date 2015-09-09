@@ -26,6 +26,10 @@ Meaning of list markers (2nd level):
 - FRD, SDR :
 	- Adaptation to changes in 'BSO'.
 	% 'datum__' becomes 'byte__' (in the meaning of 'unit of digital information').
+- PLGN :
+	% Adding 'retriever___::Init()' with alternative parameters.
+- RGSTRY :
+	% Adding 'multi_level_registry_::Convert( const tentry__ &, entry__ &)'.
 
 2015-09-06 :
 - CSDBNS, CSDSNS :

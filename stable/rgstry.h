@@ -2006,6 +2006,25 @@ namespace rgstry {
 
 			return Status;
 		}
+		bso::bool__ Convert(
+			const tentry__ TaggedEntry,
+			entry__ &Entry,
+			err::handling__ ErrHandling = err::h_Default ) const
+		{
+			level__ Level = rgstry::UndefinedLevel;
+
+			Entry.Root = Search( TaggedEntry, Level );
+
+			if ( Entry.Root == qNIL )
+				if ( ErrHandling == err::hUserDefined )
+					return false;
+				else
+					qRFwk();
+
+			Entry.Registry = &GetRegistry( Level );
+
+			return true;
+		}
 		sdr::size__ Dump(
 			level__ Level,
 			row__ Node,	// Si == 'qNIL', on part de la racine.

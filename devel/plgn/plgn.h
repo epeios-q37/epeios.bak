@@ -119,6 +119,36 @@ namespace plgn {
 		qRE
 			return _Plugin != NULL;
 		}
+		bso::bool__ Init(
+			const ntvstr::string___ &PluginNameAndLocation,
+			const rgstry::tentry__ &Configuration,
+			const rgstry::tentry__ &Locale,
+			const rgstry::multi_level_registry_ &Registry,
+			err::handling__ ErrHandling = err::h_Default )
+		{
+			bso::bool__ Success = false;
+		qRH
+			rgstry::entry__ ConfigurationEntry, LocaleEntry;
+		qRB
+			ConfigurationEntry.Init();
+
+			if ( !Registry.Convert( Configuration, ConfigurationEntry, ErrHandling ) )
+				qRReturn;
+
+			LocaleEntry.Init();
+
+			if ( !Registry.Convert( Locale, LocaleEntry, ErrHandling ) )
+				qRReturn;
+
+			if ( !Init( PluginNameAndLocation, ConfigurationEntry, LocaleEntry, ErrHandling ) )
+				qRReturn;
+
+			Success = true;
+		qRR
+		qRT
+		qRE
+			return Success;
+		}
 		plugin &Plugin( void )
 		{
 			if ( _Plugin == NULL )
