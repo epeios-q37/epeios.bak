@@ -140,7 +140,7 @@ namespace fblbkd {
 	: public log_functions__
 	{
 	private:
-		fdr::datum__ _Cache[cache_size];
+		fdr::byte__ _Cache[cache_size];
 		flw::oflow__ _Flow;
 	protected:
 		txf::text_oflow__ TFlow;

@@ -157,7 +157,7 @@ namespace aem {
 
 		BytePosition--;
 
-		return ( BytePosition * 8 ) + _GetMostRightOnePosition( ((bso::raw__ *)&Value)[BytePosition] );
+		return ( BytePosition * 8 ) + _GetMostRightOnePosition( ((bso::byte__ *)&Value)[BytePosition] );
 	}
 
 	inline size__ _GetMask( bso::size__ OnesAmount )	// Retourne un masque dont les 'OnesAmount' bits les plus  droite sont  1.

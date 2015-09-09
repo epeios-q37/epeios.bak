@@ -81,7 +81,7 @@ namespace uys {
 		// Indique si le pilote a t dfini de manire interne ou non.
 		bso::bool__ _Internal;
 		// Uniquement pour la 'conventional_storage__'.
-		sdr::datum__ *_CVMBuffer;
+		sdr::byte__ *_CVMBuffer;
 		void _Test( void ) const
 		{
 #ifdef UYS_DBG
@@ -149,7 +149,7 @@ namespace uys {
 		void Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer ) const
+			sdr::byte__ *Buffer ) const
 		{
 			_Test();
 
@@ -159,7 +159,7 @@ namespace uys {
 				_Driver->Recall( Position, Amount, Buffer );
 		}
 		void Store(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
@@ -200,13 +200,13 @@ namespace uys {
 		void _Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer ) const
+			sdr::byte__ *Buffer ) const
 		{
 			_Test( Position, Amount );
 			_Driver.Recall( Position, Amount, Buffer );
 		}
 		void _Store(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
@@ -288,13 +288,13 @@ namespace uys {
 		void Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer ) const
+			sdr::byte__ *Buffer ) const
 		{
 			_Recall( Position, Amount, Buffer );
 		}
 		//f Store 'Amount' bytes from 'Buffer' at 'Offset'.
 		void Store(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
@@ -303,14 +303,14 @@ namespace uys {
 		//f Put byte at 'Position' in 'Datum'.
 		void Recall(
 			sdr::row_t__ Position,
-			sdr::datum__ &Datum ) const
+			sdr::byte__ &Datum ) const
 		{
 			Recall( Position, 1, &Datum );
 		}
 		//f Return byte at 'Position'.
-		sdr::datum__ Get( sdr::row_t__ Position ) const
+		sdr::byte__ Get( sdr::row_t__ Position ) const
 		{
-			sdr::datum__ D;
+			sdr::byte__ D;
 
 			Recall( Position, D );
 
@@ -318,13 +318,13 @@ namespace uys {
 		}
 		//f Write 'Byte' at 'Position'.
 		void Store(
-			sdr::datum__ Datum,
+			sdr::byte__ Datum,
 			sdr::row_t__ Position )
 		{
 			_Store( &Datum, 1, Position );
 		}
 		void Put(
-			sdr::datum__ Datum,
+			sdr::byte__ Datum,
 			sdr::row_t__ Position )
 		{
 			Store( Datum, Position );
@@ -337,13 +337,13 @@ namespace uys {
 			sdr::row_t__ Offset = 0 );
 		// Remplit  partir de 'Position' avec 'Amount' 'Object' de taille 'Size'.
 		void Fill(
-			const sdr::datum__ *Object,
+			const sdr::byte__ *Object,
 			sdr::size__ Size,
 			sdr::row_t__ Position,
 			sdr::size__ Amount );
 		//f Search 'Object' of size 'Size' between 'Begin' and 'End' (excluded) and return its position or 'qNIL' if non-existant.
 		sdr::row_t__ Search(
-			const sdr::datum__ *Objet,
+			const sdr::byte__ *Objet,
 			sdr::size__ Size,
 			sdr::row_t__ Begin,
 			sdr::row_t__ End ) const;
@@ -536,7 +536,7 @@ namespace uys {
 		class untyped_storage_ &Dest,
 		sdr::row_t__ PosDest,
 		sdr::size__ Quantity,
-		sdr::datum__ *Buffer,
+		sdr::byte__ *Buffer,
 		sdr::size__ BufferSize );
 
 	//f Return 'E1' - 'E2' which begin at 'BeginS1' and 'BeginS2' and have a length of 'Quantity'.
@@ -548,18 +548,18 @@ namespace uys {
 		sdr::size__ Quantity );
 
 	void _Fill(
-		const sdr::datum__ *Object,
+		const sdr::byte__ *Object,
 		sdr::size__ Size,
 		sdr::size__ Count,
 		sdr::row_t__ Position,
-		sdr::datum__ *Data );
+		sdr::byte__ *Data );
 #if 0
 	row__ _Position(
-		const datum__ *Objet,
+		const byte__ *Objet,
 		size__ Size,
 		row__ Begin,
 		row__ End,
-		const datum__ *Data );
+		const byte__ *Data );
 #endif
 
 	template <typename m> class _storage__
@@ -589,32 +589,32 @@ namespace uys {
 		void Recall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer ) const
+			sdr::byte__ *Buffer ) const
 		{
 			memcpy( Buffer, m::Data_ + Position, Amount ); 
 		}
 		//f Write to 'Position' 'Amount' bytes from 'Buffer'.
 		void Store(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
 			memcpy( m::Data_ + Position, Buffer, Amount ); 
 		}
 		//f Return byte at 'Position'.
-		sdr::datum__ Get( sdr::row_t__ Position ) const
+		sdr::byte__ Get( sdr::row_t__ Position ) const
 		{
 			return *m::Data_[Position];
 		}
 		//f Write 'Byte' at 'Position'.
 		void Store(
-			sdr::datum__ Datum,
+			sdr::byte__ Datum,
 			sdr::row_t__ Position )
 		{
 			*m::Data_[Position] = Datum;
 		}
 		void Put(
-			sdr::datum__ Datum,
+			sdr::byte__ Datum,
 			sdr::row_t__ Position )
 		{
 			Store( Datum, Position );
@@ -639,7 +639,7 @@ namespace uys {
 		}
 		//f Fill at 'Position' with 'Object' of size 'Size' 'Count' times.
 		void Store(
-			const sdr::datum__ *Object,
+			const sdr::byte__ *Object,
 			sdr::size__ Size,
 			sdr::row_t__ Position,
 			sdr::size__ Count )
@@ -648,7 +648,7 @@ namespace uys {
 		}
 		//f Return the position from 'Object' of size 'Size' between 'Begin' and 'End' (excluded) oR 'qNIL' if non-existant.
 		sdr::row_t__ Search(
-			const sdr::datum__ *Object,
+			const sdr::byte__ *Object,
 			sdr::size__ Size,
 			sdr::row_t__ Begin,
 			sdr::row_t__ End ) const
@@ -656,7 +656,7 @@ namespace uys {
 			return _Search( Object, Size, Begin, End, m::Data_ );
 		}
 		//f Return the used buffer.
-		const sdr::datum__ *Buffer( void ) const
+		const sdr::byte__ *Buffer( void ) const
 		{
 			return m::Data_;
 		}
@@ -666,7 +666,7 @@ namespace uys {
 	template <int size> class _untyped_storage__
 	{
 	protected:
-		sdr::datum__ Data_[size];
+		sdr::byte__ Data_[size];
 	public:
 		void reset( bso::bool__ = true )
 		{}
@@ -691,7 +691,7 @@ namespace uys {
 	class _untyped_storage___
 	{
 	protected:
-		sdr::datum__ *_Data;
+		sdr::byte__ *_Data;
 	public:
 		struct s {};	// To simplify use in library 'BCH'
 		void reset( bso::bool__ P = true )
@@ -713,7 +713,7 @@ namespace uys {
 		//f Allocation of size 'Size'.
 		void Allocate( sdr::size__ Size )
 		{
-			_Data = (sdr::datum__ *)realloc( _Data, Size );
+			_Data = (sdr::byte__ *)realloc( _Data, Size );
 		}
 		//f Initialization.
 		void Init( void )

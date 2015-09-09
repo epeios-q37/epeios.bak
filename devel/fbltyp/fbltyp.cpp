@@ -71,7 +71,7 @@ static inline void _Get(
 }
 
 static inline void _Put(
-	const bso::raw__ Value,
+	const bso::byte__ Value,
 	flw::oflow__ &Flow )
 {
 	Put( Value, Flow );
@@ -79,7 +79,7 @@ static inline void _Put(
 
 static inline void _Get(
 	flw::iflow__ &Flow,
-	bso::raw__ &Value )
+	bso::byte__ &Value )
 {
 	Get( Flow, Value );
 }
@@ -538,7 +538,7 @@ void fbltyp::GetBinary(
    flw::iflow__ &IFlow,
    binary_ &Binary )
 {
-	GetSet_<binary_, bso::raw__>( IFlow, Binary );
+	GetSet_<binary_, bso::byte__>( IFlow, Binary );
 }
 
 void fbltyp::PutBinaries(

@@ -53,8 +53,8 @@
 # endif
 
 namespace bso {
-	//t Basic data, without any basically signification.
-	typedef unsigned char raw__;
+	// Unit of digital information, without any intrinsec signification.
+	typedef unsigned char byte__;
 
 	//t Boolean.
 	typedef bool bool__;
@@ -512,7 +512,7 @@ namespace bso {
 
 # define BSO_DINT_SIZE_MAX ( ( ( 8 * sizeof( bso::int__ ) ) / 7 ) + 1 )
 
-	typedef raw__ dint__[BSO_DINT_SIZE_MAX];
+	typedef byte__ dint__[BSO_DINT_SIZE_MAX];
 
 	typedef bso::u8__ length__;
 # define SDRM__LENGTH_MAX BSO_UBYTE_MAX
@@ -526,7 +526,7 @@ namespace bso {
 		dint__ _Int;
 		length__ _Length;
 	public:
-		const raw__ *DSizeBuffer( void ) const
+		const byte__ *DSizeBuffer( void ) const
 		{
 # ifdef BSO_DBG
 			if ( _Length == 0 )
@@ -573,32 +573,32 @@ namespace bso {
 	}
 
 	int__ ConvertToInt(
-		const raw__ *DInt,
+		const byte__ *DInt,
 		size__ *Length = NULL );
 
 	inline int__ ConvertToInt(
-		const raw__ *DInt,
+		const byte__ *DInt,
 		size__ &Length )
 	{
 		return ConvertToInt( DInt, &Length );
 	}
 
 	inline uint__ ConvertToUInt(
-		const raw__ *DInt,
+		const byte__ *DInt,
 		size__ *Length = NULL )
 	{
 		return ConvertToInt( DInt, Length );
 	}
 
 	inline uint__ ConvertToUInt(
-		const raw__ *DInt,
+		const byte__ *DInt,
 		size__ &Length  )
 	{
 		return ConvertToUInt( DInt, &Length );
 	}
 
 	inline sint__ ConvertToSInt(
-		const raw__ *DInt,
+		const byte__ *DInt,
 		size__ *Length = NULL )
 	{
 		int__ Int = ConvertToInt( DInt, Length );
@@ -625,7 +625,7 @@ namespace bso {
 	}
 
 	inline sint__ ConvertToSInt(
-		const raw__ *DInt,
+		const byte__ *DInt,
 		size__ &Length )
 	{
 		return ConvertToSInt( DInt, &Length );

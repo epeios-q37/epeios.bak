@@ -17,8 +17,6 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: fdr.h,v 1.18 2013/07/19 14:54:35 csimon Exp $
-
 #ifndef FDR__INC
 #define FDR__INC
 
@@ -32,24 +30,12 @@
 #define FDR_DBG
 #endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.18 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/07/19 14:54:35 $
-
-/* End of automatic documentation generation part. */
-
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-/* Addendum to the automatic documentation generation part. */
 //D Flow DRiver 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
 
 # include "err.h"
 # include "bso.h"
@@ -118,8 +104,8 @@ namespace fdr {
 	//d The max value for a amount.
 #	define FDR_SIZE_MAX			BSO_SIZE_MAX
 
-	//t Type of a datum.
-	typedef unsigned char		datum__;
+	// Unit of digital information, without any intrinsec signification.
+	using bso::byte__;
 
 #ifdef FDR__TS
 	inline void Test_( mutex__ Mutex )
@@ -260,13 +246,13 @@ namespace fdr {
 	: public _flow_driver_base__<flw::iflow__>
 	{
 	private:
-		datum__ *_Cache;
+		byte__ *_Cache;
 		size__ _Size;	// Si == '0', signale 'EOF' atteint.
 		size__ _Available;
 		size__ _Position;
 		size__ _Read(
 			size__ Wanted,
-			datum__ *Buffer )	// Si valeur retourne == 0, alors , alors 'EOF' atteint.
+			byte__ *Buffer )	// Si valeur retourne == 0, alors , alors 'EOF' atteint.
 		{
 # ifdef FDR_DBG
 			if ( Wanted == 0 )
@@ -279,7 +265,7 @@ namespace fdr {
 		}
 		size__ _LoopingRead(
 			size__ Wanted,
-			datum__ *Buffer )	// Si valeur retourne diffrent de 'Wanted', alors 'EOF' atteint.
+			byte__ *Buffer )	// Si valeur retourne diffrent de 'Wanted', alors 'EOF' atteint.
 		{
 			size__ Red = 0, PonctualRed = 0;
 
@@ -340,7 +326,7 @@ namespace fdr {
 		}
 		size__ _ReadFromCache(
 			size__ Size,
-			datum__ *Buffer,
+			byte__ *Buffer,
 			bso::bool__ Adjust )
 		{
 			if ( Size > _Available )
@@ -359,7 +345,7 @@ namespace fdr {
 		}
 		size__ _ReadThroughCache(
 			size__ Size,
-			datum__ *Buffer,
+			byte__ *Buffer,
 			bso::bool__ Force )	// Si == 'true', on fait le maximum pour lire la quantite demande.
 		{
 			size__ Red = _ReadFromCache( Size, Buffer, true );
@@ -391,7 +377,7 @@ namespace fdr {
 		// Retourne le nombre d'octets effectivement lus. Ne retourne '0' que si plus aucune donne n'est disponibe.
 		virtual size__ FDRRead(
 			size__ Maximum,
-			datum__ *Buffer ) = 0;
+			byte__ *Buffer ) = 0;
 		virtual void FDRDismiss( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
@@ -406,7 +392,7 @@ namespace fdr {
 		}
 		E_CVDTOR( iflow_driver_base___ );
 		void Init(
-			datum__ *Cache,
+			byte__ *Cache,
 			size__ Size,
 			thread_safety__ ThreadSafety )
 		{
@@ -432,7 +418,7 @@ namespace fdr {
 		size__ Read(
 			const flw::iflow__ *User,
 			size__ Wanted,
-			datum__ *Buffer,
+			byte__ *Buffer,
 			behavior__ Behavior )
 		{
 #ifdef FDR_DBG
@@ -498,7 +484,7 @@ namespace fdr {
 	: public iflow_driver_base___
 	{
 	private:
-		datum__ _Cache[cache_size+1];	// '+1' pour grer le 'Unget()'.
+		byte__ _Cache[cache_size+1];	// '+1' pour grer le 'Unget()'.
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -519,7 +505,7 @@ namespace fdr {
 	protected:
 		// Retourne le nombre d'octets effectivement crits. Ne retourne '0' que si plus aucune donne ne peut tre crite.
 		virtual size__ FDRWrite(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ MAximum ) = 0;
 		virtual void FDRCommit( void ) = 0;
 	public:
@@ -549,7 +535,7 @@ namespace fdr {
 		}
 		size__ Write(
 			const flw::oflow__ *User,
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Maximum )
 		{
 			Lock( User );
@@ -587,7 +573,7 @@ namespace fdr {
 			oflow_driver_base___::reset( P );
 		}
 		void Init(
-			datum__ *InputCache,
+			byte__ *InputCache,
 			size__ InputCacheSize,
 			thread_safety__ ThreadSafety )
 		{
@@ -600,7 +586,7 @@ namespace fdr {
 	: public ioflow_driver_base___
 	{
 	private:
-		datum__ _InputCache[input_cache_size];
+		byte__ _InputCache[input_cache_size];
 	public:
 		void Init( thread_safety__ ThreadSafety )
 		{
@@ -609,7 +595,6 @@ namespace fdr {
 	};
 }
 
-/*$END$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */

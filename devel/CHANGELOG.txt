@@ -12,6 +12,21 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-09
+- AEM, CDGB64, DTFPTB, FBLTYP :
+	- Adaptation to changes in 'BSO'.
+- AGS, BCH, FLSQ, FLX, IAS, MNS, TYS, UYS, XPP :
+	- Adaptation to changes in 'SDR'.
+- BOMHDL, CRPTGR, CSDSNC, CSDUCL, FBLBKD, FLW, IOF, UTF, XTF :
+	- Adaptation to changes in 'FDR'.
+- BSO :
+	% 'raw__' becomes 'byte__' (in the meaning of 'unit of digital information').
+- CIO, CSDLEC, CSDSNS, DTFBSC, FBLBRQ, FLX, SCK, STR, TXF, XML :
+	- Adaptation to changes in 'FLW'.
+- FRD, SDR :
+	- Adaptation to changes in 'BSO'.
+	% 'datum__' becomes 'byte__' (in the meaning of 'unit of digital information').
+
 2015-09-06 :
 - CSDBNS, CSDSNS :
 	- Adaptation to changes in 'CSDSCB'.

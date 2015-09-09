@@ -75,19 +75,19 @@ template <class ostream> static void Put_(
 	if ( Amount != 0 )
 	{
 #ifdef STR_DBG
-		flw::datum__ C;
+		flw::byte__ C;
 #endif
 		sdr::row_t__ P = 0;
 
 
 		while ( P < Amount ) {
 #ifdef STR_DBG
-			OStream.Put( C = (flw::datum__)String.Get( P++ ) );
+			OStream.Put( C = (flw::byte__)String.Get( P++ ) );
 
 			if ( C == 0 )
 				qRFwk();
 #else
-			OStream.Put( (flw::datum__)String.Get( P++ ) );
+			OStream.Put( (flw::byte__)String.Get( P++ ) );
 #endif
 		}
 	}

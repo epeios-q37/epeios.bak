@@ -193,7 +193,7 @@ void xpp::_qualified_preprocessor_directives___::Init( const str::string_ &Names
 }
 
 static sdr::size__ Fill_(
-	sdr::datum__ *&Buffer,
+	sdr::byte__ *&Buffer,
 	sdr::size__ &Wanted,
 	const str::string_ &Data,
 	sdr::size__ &Position )
@@ -1491,7 +1491,7 @@ void xpp::_preprocessing_iflow_driver___::_DeleteParsers( void )
 
 sdr::size__ xpp::_preprocessing_iflow_driver___::FDRRead(
 	sdr::size__ Maximum,
-	sdr::datum__ *Buffer )
+	sdr::byte__ *Buffer )
 {
 	_extended_parser___ *Parser = NULL;
 	sdr::size__ PonctualRed = Fill_( Buffer, Maximum, _Data, _Position );

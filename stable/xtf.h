@@ -102,7 +102,7 @@ namespace xtf {
 
 	struct utf__
 	{
-		fdr::datum__ Data[5];
+		fdr::byte__ Data[5];
 		bso::u8__ Size;
 		void reset( bso::bool__ = true )
 		{
@@ -151,7 +151,7 @@ namespace xtf {
 		flw::iflow__ *_Flow;
 		bso::size__ _Amount;
 		bso::size__ _Length;
-		fdr::datum__ _Data[10];
+		fdr::byte__ _Data[10];
 		flw::iflow__ &_F( void )
 		{
 			if ( _Flow == NULL )
@@ -197,7 +197,7 @@ namespace xtf {
 			else
 				return !_FillData();
 		}
-		fdr::datum__ Get( void )
+		fdr::byte__ Get( void )
 		{
 			if ( !_FillData() )
 				qRFwk();
@@ -241,7 +241,7 @@ namespace xtf {
         bomhdl::byte_order_marker__ _GetBOM( void )
 		{
 # if 0
-			fdr::datum__ BOMBuffer[BOM_SIZE_MAX];
+			fdr::byte__ BOMBuffer[BOM_SIZE_MAX];
 			fdr::size__ Size = _F().View( sizeof( BOMBuffer ), BOMBuffer );
             bomhdl::byte_order_marker__ BOM = bomhdl::DetectBOM( BOMBuffer, Size );	// Si != 'bomhdl::bom_UnknownOrNone', 'Size' contient au retour la taille du 'BOM'.
 
@@ -344,7 +344,7 @@ namespace xtf {
 		}
 		bso::bool__ _GetCell(
 			str::string_ *Cell,
-			flw::datum__ Separator );
+			flw::byte__ Separator );
 		bso::bool__ _GetLine( str::string_ *Line )
 		{
 			return _GetCell( Line, 0 );
@@ -393,7 +393,7 @@ namespace xtf {
 			return BOM;
 		}
 		//f Extract and return next character in flow.
-		flw::datum__ Get( utf__ &UTF )
+		flw::byte__ Get( utf__ &UTF )
 		{
 			if ( !_PrefetchUTF() )
 				qRFwk();
@@ -404,11 +404,11 @@ namespace xtf {
 
 			_UTF.Init();
 
-			flw::datum__ C = _UTF.Data[0];
+			flw::byte__ C = _UTF.Data[0];
 
 			if ( _EOL == 0 ) {
 				if ( ( C == '\n' ) || ( C == '\r' ) ) {
-					_EOL = (flw::datum__)C;
+					_EOL = (flw::byte__)C;
 					_NewLineAdjust();
 				} else {
 					_NewCharAdjust();
@@ -417,7 +417,7 @@ namespace xtf {
 				if ( C == '\n' ) {
 					_EOL = 0;
 				} else if ( C == '\r' ) {
-					_EOL = (flw::datum__)C;
+					_EOL = (flw::byte__)C;
 					_NewLineAdjust();
 				} else {
 					_EOL = 0;
@@ -427,7 +427,7 @@ namespace xtf {
 				if ( C == '\r' ) {
 					_EOL = 0;
 				} else if ( C == '\n' ) {
-					_EOL = (flw::datum__)C;
+					_EOL = (flw::byte__)C;
 					_NewLineAdjust();
 				} else {
 					_EOL = 0;
@@ -447,7 +447,7 @@ namespace xtf {
 		false otherwise (cell delimited by a new line, for example). */
 		bso::bool__ GetCell(
 			str::string_ &Cell,
-			flw::datum__ Separator = XTF_DEFAULT_CELL_SEPARATOR )
+			flw::byte__ Separator = XTF_DEFAULT_CELL_SEPARATOR )
 		{
 			return _GetCell( &Cell, Separator );
 		}
@@ -462,14 +462,14 @@ namespace xtf {
 			_GetLine( NULL );
 		}
 		//f Return the next character in the flow, but let it in the flow.
-		flw::datum__ View(
+		flw::byte__ View(
 			utf__ &UTF,
 			bso::bool__ HandleNL = false )
 		{
 			if ( !_PrefetchUTF() )
 				qRFwk();
 
-			flw::datum__ C = _UTF.Data[0];
+			flw::byte__ C = _UTF.Data[0];
 
 			if ( HandleNL && _EOL ) {
 

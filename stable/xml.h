@@ -159,31 +159,31 @@ namespace xml {
 		{
 			reset();
 		}
-		flw::datum__ Get( xtf::utf__ &UTF )
+		flw::byte__ Get( xtf::utf__ &UTF )
 		{
 			if ( Dump.Data.Amount() == 0 )
 				Dump.Set( _Flow->Position() );
 
-			flw::datum__ C = _Flow->Get( UTF );
+			flw::byte__ C = _Flow->Get( UTF );
 
 			Dump.Data.Append( (const bso::char__ *)UTF.Data, UTF.Size );
 
 			return C;
 		}
-		flw::datum__ Get( void )
+		flw::byte__ Get( void )
 		{
 			xtf::utf__ Dummy;
 			Dummy.Init();
 
 			return Get( Dummy );
 		}
-		flw::datum__ View( xtf::utf__ &UTF )
+		flw::byte__ View( xtf::utf__ &UTF )
 		{
-			flw::datum__  C = _Flow->View( UTF );
+			flw::byte__  C = _Flow->View( UTF );
 
 			return C;
 		}
-		flw::datum__ View( void )
+		flw::byte__ View( void )
 		{
 			xtf::utf__ Dummy;
 			Dummy.Init();

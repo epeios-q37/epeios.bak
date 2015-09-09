@@ -309,7 +309,7 @@ namespace flsq {
 				Flush();	// Pour mettre  jour la taille physique du fichier pour que la mthode 'GetFileSize(...)' retourne la bonne valeur.
 
 				if ( !fil::Exists( _Name ) || ( TailleFichier_ > fil::GetSize( _Name ) ) ) {
-					sdr::datum__ Datum = 0;
+					sdr::byte__ Datum = 0;
 					
 					Open_( true );
 				
@@ -611,13 +611,13 @@ namespace flsq {
 		virtual void SDRRecall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer )
+			sdr::byte__ *Buffer )
 		{
 			file_storage___::Read( Position, Amount, Buffer );
 		}
 		// lit  partir de 'Position' et place dans 'Tampon' 'Nombre' octets
 		virtual void SDRStore(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{

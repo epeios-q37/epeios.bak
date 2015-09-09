@@ -33,10 +33,10 @@ void xtf::extended_text_iflow__::_SetMeaning( lcl::meaning_ &Meaning )
 
 bso::bool__  xtf::extended_text_iflow__::_GetCell(
 	str::string_ *Cell,
-	flw::datum__ Separator )
+	flw::byte__ Separator )
 {
 	bso::bool__ Cont = true;
-	flw::datum__ C;
+	flw::byte__ C;
 	error__ Error = e_NoError;
 	utf__ UTF;
 

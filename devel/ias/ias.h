@@ -80,9 +80,9 @@ namespace ias {
 		virtual void SDRRecall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer );
+			sdr::byte__ *Buffer );
 		virtual void SDRStore(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position )
 		{
@@ -133,7 +133,7 @@ namespace ias {
 	protected:
 		// Dporte.
 		virtual void SDRStore(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position );
 		// Dporte.
@@ -235,13 +235,13 @@ namespace ias {
 			index__ Index,
 			sdr::row_t__ Position,
 			sdr::size__ Taille,
-			sdr::datum__ *Tampon ) const
+			sdr::byte__ *Tampon ) const
 		{
 			AStorage.Read( Descriptors(*Index), Position, Taille, Tampon );
 		}
 		// place dans 'Tampon' 'Taille' octets,  partir de 'Position', de l'objet 'Index'
 		void Ecrire_(
-			const sdr::datum__ *Tampon,
+			const sdr::byte__ *Tampon,
 			sdr::size__ Taille,
 			index__ Index,
 			sdr::row_t__ Position )
@@ -386,13 +386,13 @@ namespace ias {
 			index__ Index,
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer ) const
+			sdr::byte__ *Buffer ) const
 		{
 			Lire_( Index, Position, Amount, Buffer );
 		}
 		//f Put 'Amount' bytes at 'Position' to the 'Index' memory from 'Buffer'.
 		void Write(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			index__ Index,
 			sdr::row_t__ Position )
@@ -630,7 +630,7 @@ namespace ias {
 	inline void _indexed_aggregated_storage_driver__::SDRRecall(
 		sdr::row_t__ Position,
 		sdr::size__ Amount,
-		sdr::datum__ *Buffer )
+		sdr::byte__ *Buffer )
 	{
 		_AStorage->Read( _Index, Position, Amount, Buffer );
 	}
@@ -644,7 +644,7 @@ namespace ias {
 	}
 
 	inline void indexed_aggregated_storage_driver__::SDRStore(
-		const sdr::datum__ *Buffer,
+		const sdr::byte__ *Buffer,
 		sdr::size__ Amount,
 		sdr::row_t__ Position )
 	{

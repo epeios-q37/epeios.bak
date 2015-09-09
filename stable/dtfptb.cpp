@@ -40,7 +40,7 @@ void dtfptb::OldPutSize(
 	bso::u32__ Size,
 	size_buffer__ &Buffer )
 {
-	bso::raw__ *Pointer = Buffer;
+	bso::byte__ *Pointer = Buffer;
 
 	if ( Size >= M1 )
 	{
@@ -61,16 +61,16 @@ void dtfptb::OldPutSize(
 
 				Size -= M3;
 
-				*(Pointer++) = (bso::raw__)( ( Size & ( 255 << 24 ) ) >> 24 );
+				*(Pointer++) = (bso::byte__)( ( Size & ( 255 << 24 ) ) >> 24 );
 			}
 
-			*(Pointer++) = (bso::raw__)( ( Size & ( 255 << 16 ) ) >> 16 );
+			*(Pointer++) = (bso::byte__)( ( Size & ( 255 << 16 ) ) >> 16 );
 		}
 
-		*(Pointer++) = (bso::raw__)( ( Size & ( 255 << 8 ) ) >> 8 );
+		*(Pointer++) = (bso::byte__)( ( Size & ( 255 << 8 ) ) >> 8 );
 	}
 
-	*(Pointer++) = (bso::raw__)( Size & 255 );
+	*(Pointer++) = (bso::byte__)( Size & 255 );
 }
 
 
@@ -78,7 +78,7 @@ static inline bso::u32__ Put_(
 	bso::u32__ Value,
 	flw::oflow__ &Flow )
 {
-	bso::raw__ Buffer = Value & 0x7F;
+	bso::byte__ Buffer = Value & 0x7F;
 
 	Value >>= 7;
 
@@ -97,30 +97,30 @@ void dtfptb::PutSize(
 {
 	if ( Size >= M1 )
 	{
-		Flow.Put( (flw::datum__)M1 );
+		Flow.Put( (flw::byte__)M1 );
 		Size -= M1;
 
 		if ( Size >= M2 )
 		{
-			Flow.Put( (flw::datum__)M1 );
-			Flow.Put( (flw::datum__)M1 );
+			Flow.Put( (flw::byte__)M1 );
+			Flow.Put( (flw::byte__)M1 );
 			Size -= M2;
 
 			if ( Size >= M3 )
 			{
-				Flow.Put( (flw::datum__)M1 );
-				Flow.Put( (flw::datum__)M1 );
-				Flow.Put( (flw::datum__)M1 );
+				Flow.Put( (flw::byte__)M1 );
+				Flow.Put( (flw::byte__)M1 );
+				Flow.Put( (flw::byte__)M1 );
 
 				Size -= M3;
 
-				Flow.Put( (flw::datum__)( ( Size & ( 255 << 24 ) ) >> 24 ) );
+				Flow.Put( (flw::byte__)( ( Size & ( 255 << 24 ) ) >> 24 ) );
 			}
-			Flow.Put( (flw::datum__)( ( Size & ( 255 << 16 ) ) >> 16 ) );
+			Flow.Put( (flw::byte__)( ( Size & ( 255 << 16 ) ) >> 16 ) );
 		}
-		Flow.Put( (flw::datum__)( ( Size & ( 255 << 8 ) ) >> 8 ) );
+		Flow.Put( (flw::byte__)( ( Size & ( 255 << 8 ) ) >> 8 ) );
 	}
-	Flow.Put( (flw::datum__)( Size & 255 ) );
+	Flow.Put( (flw::byte__)( Size & 255 ) );
 }
 #else
 void dtfptb::OldPutSize(
@@ -142,7 +142,7 @@ bso::u32__ dtfptb::OldGetSize( flw::iflow__ &IFlow )
 
 	if ( Size == M1 )
 	{
-		flw::datum__ Data[4];
+		flw::byte__ Data[4];
 
 		IFlow.Read( 2, Data );
 
@@ -188,9 +188,9 @@ bso::u32__ dtfptb::OldGetSize( const size_buffer__ &Buffer )
 	return Size;
 }
 
-static bso::raw__ *_GetInt(
+static bso::byte__ *_GetInt(
 	flw::iflow__ &Flow,
-	bso::raw__ *DInt )
+	bso::byte__ *DInt )
 {
 	bso::u8__ Counter = 0;
 
@@ -210,7 +210,7 @@ static void _PutInt(
 	Flow.Write( XInt.DSizeBuffer(), XInt.BufferSize() );
 }
 
-#define M( s )	Flow.Put( (flw::datum__)( Int >> ( s * 8 ) ) )
+#define M( s )	Flow.Put( (flw::byte__)( Int >> ( s * 8 ) ) )
 
 void dtfptb::_FPutInt(
 	bso::int__ Int,
@@ -282,7 +282,7 @@ bso::uint__ dtfptb::_VGetUInt(
 	flw::iflow__ &Flow,
 	bso::uint__ Max )
 {
-	bso::raw__ DInt[BSO_DINT_SIZE_MAX];
+	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
 	bso::uint__ Value = bso::ConvertToUInt( _GetInt( Flow, DInt ) );
 
 	if ( Value > Max )
@@ -296,7 +296,7 @@ bso::sint__ dtfptb::_VGetSInt(
 	bso::sint__ Min,
 	bso::sint__ Max )
 {
-	bso::raw__ DInt[BSO_DINT_SIZE_MAX];
+	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
 	bso::sint__ Value = bso::ConvertToSInt( _GetInt( Flow, DInt ) );
 
 	if ( Value < Min )

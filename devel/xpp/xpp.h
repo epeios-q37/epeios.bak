@@ -714,7 +714,7 @@ namespace xpp {
 	protected:
 		virtual sdr::size__ FDRRead(
 			sdr::size__ Maximum,
-			sdr::datum__ *Buffer );
+			sdr::byte__ *Buffer );
 		virtual void FDRDismiss( void )
 		{}
 	public:

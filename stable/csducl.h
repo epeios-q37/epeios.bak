@@ -144,7 +144,7 @@ namespace csducl {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			return _Get().ReadUpTo( Maximum, Buffer );
 		}
@@ -153,7 +153,7 @@ namespace csducl {
 			_Get().Dismiss();
 		}
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			return _Get().WriteUpTo( Buffer, Maximum );
@@ -210,7 +210,7 @@ namespace csducl {
 	{
 	private:
 		universal_client_ioflow_driver___ _Driver;
-		flw::datum__ _Cache[CSDUCL_CACHE_SIZE];
+		flw::byte__ _Cache[CSDUCL_CACHE_SIZE];
 	public:
 		void reset( bso::bool__ P = true )
 		{

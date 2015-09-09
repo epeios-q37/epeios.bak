@@ -48,7 +48,7 @@ namespace csdlec {
 
 	typedef csdleo::data__ library_data__;
 
-	typedef bch::E_BUNCH_( flw::datum__ ) data_;
+	typedef bch::E_BUNCH_( flw::byte__ ) data_;
 	E_AUTO( data )
 
 	class _passive_generic_driver___
@@ -61,7 +61,7 @@ namespace csdlec {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			if ( _Row == qNIL )
 				_Row = _Read.First();
@@ -94,7 +94,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			_Read.Init();
 		}
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			_Write.Append( Buffer, Maximum );
@@ -158,7 +158,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			_DataAvailable = true;
@@ -217,11 +217,11 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	: public flw::ioflow__
 	{
 	private:
-		flw::datum__ _Cache[CSDLEC_CACHE_SIZE];
+		flw::byte__ _Cache[CSDLEC_CACHE_SIZE];
 		_active_generic_driver___ _Driver;
 		data _Master, _Slave;
 		struct backend {
-			flw::datum__ Cache[CSDLEC_CACHE_SIZE];
+			flw::byte__ Cache[CSDLEC_CACHE_SIZE];
 			_passive_generic_driver___ Driver;
 			flw::ioflow__ Flow;
 			void reset( bso::bool__ P = true )

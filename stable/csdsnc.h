@@ -377,7 +377,7 @@ qRE
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			fdr::size__ Amount = 0;
@@ -393,7 +393,7 @@ qRE
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			return _Flow->ReadUpTo( Maximum, Buffer );
 		}
@@ -444,7 +444,7 @@ qRE
 	{
 	private:
 		_driver___ _Driver;
-		flw::datum__ _Cache[CSDSNC_DEFAULT_CACHE_SIZE];
+		flw::byte__ _Cache[CSDSNC_DEFAULT_CACHE_SIZE];
 	public:
 		void reset( bso::bool__ P = true )
 		{

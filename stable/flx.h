@@ -101,7 +101,7 @@ namespace flx {
 	{
 	private:
 		// Pointeur sur le prochain caractre  lire.
-		const fdr::datum__ *Tampon_;
+		const fdr::byte__ *Tampon_;
 		// Nombre de caractre pouvant encore tre lus.
 		bso::size__ Taille_;
 	protected:
@@ -114,7 +114,7 @@ namespace flx {
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			if ( !Taille_ )
 				return 0;
@@ -152,7 +152,7 @@ namespace flx {
 		/*f Initialization with the buffer 'Buffer' of size 'Size'..'Size' is not
 		needed if you are sure that you don't exceed the buffer size. */
 		void Init(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::thread_safety__ ThreadSafety,
 			bso::size__ Size = FLW_AMOUNT_MAX )
 		{
@@ -190,7 +190,7 @@ namespace flx {
 		/*f Initialization with the buffer 'Buffer' of size 'Size'..'Size' is not
 		needed if you are sure that you don't exceed the buffer size. */
 		void Init(
-			const flw::datum__ *Buffer,
+			const flw::byte__ *Buffer,
 			bso::size__ Size = FLW_AMOUNT_MAX,
 			flw::size__ AmountMax = FLW_AMOUNT_MAX )
 		{
@@ -207,12 +207,12 @@ namespace flx {
 	{
 	private:
 		// Pointeur sur le prochain caractre  crire.
-		fdr::datum__ *Tampon_;
+		fdr::byte__ *Tampon_;
 		// Nombre de caractres pouvant encore tre cris.
 		bso::size__ Taille_;
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			if ( Maximum > Taille_ )
@@ -245,7 +245,7 @@ namespace flx {
 		}
 		//f Initialization with 'Buffer' of size 'Size'.
 		void Init(
-			fdr::datum__ *Buffer,
+			fdr::byte__ *Buffer,
 			fdr::thread_safety__ ThreadSafety,
 			bso::size__ Size )
 		{
@@ -267,7 +267,7 @@ namespace flx {
 	private:
 		buffer_oflow_driver___ _Driver;
 		// The cache.
-		flw::datum__ _Cache[FLX_BUFFER_BUFFER_SIZE];
+		flw::byte__ _Cache[FLX_BUFFER_BUFFER_SIZE];
 	public:
 		void reset( bool P = true )
 		{
@@ -284,7 +284,7 @@ namespace flx {
 		}
 		//f Initialization with 'Buffer' of size 'Size'.
 		void Init(
-			flw::datum__ *Buffer,
+			flw::byte__ *Buffer,
 			bso::size__ Size,
 			flw::size__ AmountMax = FLW_AMOUNT_MAX )
 		{
@@ -302,7 +302,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			if ( (fdr::size__)Maximum > ( Bunch_->Amount() - Position_ ) )
 				Maximum = ( Bunch_->Amount() - Position_ );
@@ -419,7 +419,7 @@ namespace flx {
 	{
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			_Bunch->Append( (const so__ *)Buffer, Maximum );
@@ -555,7 +555,7 @@ namespace flx {
 		access__ _Access;
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *,
+			const fdr::byte__ *,
 			fdr::size__ Maximum ) override
 		{
 			Test_( _Access );
@@ -619,7 +619,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			Test_( _Access );
 
@@ -682,7 +682,7 @@ namespace flx {
 		flw::oflow__ *_User;
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			if ( _Driver == NULL )
@@ -737,7 +737,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			if ( _Driver == NULL )
 				qRFwk();
@@ -791,7 +791,7 @@ namespace flx {
 		bso::bool__ _PendingCommit;
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			fdr::size__ &Size = Maximum;
@@ -888,7 +888,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			fdr::size__ &Size = Maximum;
 
@@ -987,12 +987,12 @@ namespace flx {
 		mtx::mutex_handler__ 
 			_Read,
 			_Write;
-		const fdr::datum__ *_Buffer;
+		const fdr::byte__ *_Buffer;
 		fdr::size__ _Size;
 		fdr::size__ _Red;
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			mtx::Lock( _Write );
@@ -1009,7 +1009,7 @@ namespace flx {
 		{}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 
 			mtx::Lock( _Read );
@@ -1164,7 +1164,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			if ( IO().OnEOF() )
 				return 0;
@@ -1209,7 +1209,7 @@ namespace flx {
 	{
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			if ( IO().Write( Buffer, Maximum ) != Maximum )
@@ -1266,7 +1266,7 @@ namespace flx {
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum );
 		virtual void FDRCommit( void )
 		{
@@ -1277,7 +1277,7 @@ namespace flx {
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer );
+			fdr::byte__ *Buffer );
 		virtual void FDRDismiss( void )
 		{
 			// Nothing to do.

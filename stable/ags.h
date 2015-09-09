@@ -84,11 +84,11 @@ namespace ags {
 		virtual void SDRRecall(
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer );
+			sdr::byte__ *Buffer );
 		// fonction dporte
 		// crit 'Nombre' octets  la position 'Position'
 		virtual void SDRStore(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			sdr::row_t__ Position );
 	public:
@@ -236,7 +236,7 @@ namespace ags {
 
 	typedef bso::int__ value__;
 
-	E_TMIMIC__( sdr::datum__, header__ );
+	E_TMIMIC__( sdr::byte__, header__ );
 
 	inline bso::bool__ IsUsed( header__ Header )
 	{
@@ -602,7 +602,7 @@ namespace ags {
 		{
 			return _XSize.BufferSize() == 0;
 		}
-		const sdr::datum__ *DSizeBuffer( void ) const
+		const sdr::byte__ *DSizeBuffer( void ) const
 		{
 			return _XSize.DSizeBuffer();
 		}
@@ -661,7 +661,7 @@ namespace ags {
 	};
 
 
-	inline const sdr::datum__ *FindLongSizeBegin( const sdr::datum__ *Buffer )
+	inline const sdr::byte__ *FindLongSizeBegin( const sdr::byte__ *Buffer )
 	{
 		bso::u8__ Counter = AGS_LONG_SIZE_SIZE_MAX + 1;
 
@@ -715,7 +715,7 @@ namespace ags {
 	// Retourne la taille du 'xheader'.
 	// NOTA : La valeur retourne ainsi que le contenu de 'Header' sont  ignorer lorsque 'Pointer' pointe sur le dernier octet d'un fragment libre ('free').
 	inline size__ GetPriorMetaData(
-		const sdr::datum__ *Pointer,
+		const sdr::byte__ *Pointer,
 		status__ Status,
 		header__ &Header,
 		size__ &Size )
@@ -734,7 +734,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 				qRFwk();
 			return AGS_HEADER_SIZE;
 		} else {
-			const sdr::datum__ *LongSizePointer = FindLongSizeBegin( Pointer );
+			const sdr::byte__ *LongSizePointer = FindLongSizeBegin( Pointer );
 			Size = ConvertValueToLongSize( bso::ConvertToInt( LongSizePointer ), Status );
 			Header = *--LongSizePointer;
 
@@ -771,12 +771,12 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		void _Read(
 			sdr::row_t__ Row,
 			size__ Size,
-			sdr::datum__ *Data ) const
+			sdr::byte__ *Data ) const
 		{
 			Storage.Recall( Row, Size, Data );
 		}
 		void _Write(
-			const sdr::datum__ *Data,
+			const sdr::byte__ *Data,
 			sdr::row_t__ Row,
 			size__ Size )
 		{
@@ -791,9 +791,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			header__ &Header,
 			size__ &Size ) const
 		{
-			sdr::datum__ Buffer[AGS_XHEADER_SIZE_MAX];
+			sdr::byte__ Buffer[AGS_XHEADER_SIZE_MAX];
 			size__ Amount = ( Row < sizeof( Buffer ) ? Row : sizeof( Buffer ) );
-			sdr::datum__ *Pointer = &Buffer[Amount-1];
+			sdr::byte__ *Pointer = &Buffer[Amount-1];
 
 			if ( Amount == 0 )
 				qRFwk();
@@ -893,7 +893,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			bso::dint__ DSize;
 			size__ Limit = _Size() - Row;
 
-			_Read( Row, sizeof( DSize ) > Limit ? Limit : sizeof( DSize ), (sdr::datum__ *)&DSize );
+			_Read( Row, sizeof( DSize ) > Limit ? Limit : sizeof( DSize ), (sdr::byte__ *)&DSize );
 
 			return ConvertValueToLongSize( bso::ConvertToInt( DSize, SizeLength ), Status );
 		}
@@ -971,7 +971,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			switch ( XHeader.FragmentSize() ) {
 			default:
 				// On crit '0' pour que le marqueur prcdent le dbut du 'long size' soit positionn (8me bit  0).
-				_Write( (const sdr::datum__ *)"\x0", Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength() - 1, 1 );
+				_Write( (const sdr::byte__ *)"\x0", Row + XHeader.FragmentSize() - XHeader.DSizeBufferLength() - 1, 1 );
 			case 3:
 				// Si l'on saute directement ici, le 8me bit de l'octet prcdent le dbut du 'long size' est  0 parce qu'il s'agit du dernier octet d'un entier dynamique.
 			case 2:
@@ -1408,12 +1408,12 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 			descriptor__ Descriptor,
 			sdr::row_t__ Position,
 			sdr::size__ Amount,
-			sdr::datum__ *Buffer ) const
+			sdr::byte__ *Buffer ) const
 		{
 			Storage.Recall( *Descriptor + Position, Amount, Buffer );
 		}
 		void Write(
-			const sdr::datum__ *Buffer,
+			const sdr::byte__ *Buffer,
 			sdr::size__ Amount,
 			descriptor__ Descriptor,
 			sdr::row_t__ Position )

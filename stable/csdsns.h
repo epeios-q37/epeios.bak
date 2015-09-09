@@ -286,10 +286,10 @@ qRE
 				_Core.Store( UP, Id );
 				Action = _Callback->Process( Flow, UP );
 			} else if ( Id == CSDSNB_PING ) {
-				Flow.Put( (flw::datum__)0 );
+				Flow.Put( (flw::byte__)0 );
 				Flow.Commit();
 			} else if ( !_Core.TestAndGet( Id, UP ) ) {
-				Flow.Put( (flw::datum__)-1 );
+				Flow.Put( (flw::byte__)-1 );
 				Flow.Commit();
 				Action = aStop;
 			} else {

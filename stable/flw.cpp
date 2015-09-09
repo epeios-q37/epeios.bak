@@ -32,7 +32,7 @@
 using namespace flw;
 
 void flw::oflow__::_Write(
-	const datum__ *Buffer,
+	const byte__ *Buffer,
 	size__ Amount )
 {
 	size__ AmountWritten = _WriteUpTo( Buffer, Amount );
@@ -57,7 +57,7 @@ bool flw::GetString(
 # if 0
 size__ flw::iflow__::_RawRead(
 	size__ Minimum,
-	datum__ *Buffer,
+	byte__ *Buffer,
 	size__ Wanted,
 	bso::bool__ Adjust,
 	bso::bool__ &CacheIsEmpty )
@@ -89,7 +89,7 @@ qRE
 # endif
 
 size__ flw::oflow__::_DirectWrite(
-	const datum__ *Buffer,
+	const byte__ *Buffer,
 	size__ Wanted,
 	size__ Minimum )
 {
@@ -139,7 +139,7 @@ void flw::Copy(
 	oflow__ &OFlow )
 {
 	bso::size__ Size = 4096;
-	datum__ Buffer[4096];
+	byte__ Buffer[4096];
 
 	while ( Amount ) {
 		if ( Amount < Size )

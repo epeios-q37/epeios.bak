@@ -336,10 +336,10 @@ namespace fbltyp {
 	typedef ctn::E_MCONTAINER( string_ )	strings;
 	typedef ctn::E_CONTAINER_( strings_ )	xstrings_;
 	typedef ctn::E_CONTAINER( strings_ )	xstrings;
-	typedef bso::raw__	byte_t__;
+	typedef bso::byte__	byte_t__;
 	typedef byte_t__	byte__;
-	typedef bch::E_BUNCH_( bso::raw__ ) binary_;
-	typedef bch::E_BUNCH( bso::raw__ )	binary;
+	typedef bch::E_BUNCH_( bso::byte__ ) binary_;
+	typedef bch::E_BUNCH( bso::byte__ )	binary;
 	typedef ctn::E_MCONTAINER_( binary_ ) binaries_;
 	typedef ctn::E_MCONTAINER( binary_ ) binaries;
 	FBLTYP_ITEM( id8, item8 )

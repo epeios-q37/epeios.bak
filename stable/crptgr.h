@@ -67,7 +67,7 @@ namespace crptgr {
 		flw::oflow__ *_Flow;
 		str::string _Key;
 		bso::size__ _Position;
-		fdr::datum__ _Encrypt( fdr::datum__ Datum )
+		fdr::byte__ _Encrypt( fdr::byte__ Datum )
 		{
 			if ( _Position == _Key.Amount() )
 				_Position = 0;
@@ -76,7 +76,7 @@ namespace crptgr {
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			fdr::size__ Amount = 0;
@@ -171,7 +171,7 @@ namespace crptgr {
 		flw::iflow__ *_Flow;
 		str::string _Key;
 		bso::size__ _Position;
-		fdr::datum__ _Decrypt( fdr::datum__ Datum )
+		fdr::byte__ _Decrypt( fdr::byte__ Datum )
 		{
 			if ( _Position == _Key.Amount() )
 				_Position = 0;
@@ -181,7 +181,7 @@ namespace crptgr {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			fdr::size__ Amount = 0;
 

@@ -41,14 +41,14 @@ bso::sign__ uys::Compare(
 	size__ Nombre )
 {
 	bso::sign__ Resultat = 0;
-	datum__ Tampon[BUFFER_SIZE * 2];
+	byte__ Tampon[BUFFER_SIZE * 2];
 
 	if ( Nombre )
 	{
 		size__ Taille = Nombre > BUFFER_SIZE ? BUFFER_SIZE : Nombre;
 
-		datum__ *T1 = Tampon;
-		datum__ *T2 = Tampon + BUFFER_SIZE;
+		byte__ *T1 = Tampon;
+		byte__ *T2 = Tampon + BUFFER_SIZE;
 
 		do
 		{
@@ -76,7 +76,7 @@ inline void uys::_Copy(
 	untyped_storage_ &Dest,
 	row_t__ PosDest,
 	size__ Nombre,
-	datum__ *Tampon,
+	byte__ *Tampon,
 	size__ TailleTampon )
 {
 	if ( PosSource >= PosDest )
@@ -121,7 +121,7 @@ inline void uys::_Copy(
 }
 
 void untyped_storage_::Fill(
-	const datum__ *Object,
+	const byte__ *Object,
 	size__ Size,
 	row_t__ Position,
 	size__ Amount )
@@ -134,7 +134,7 @@ void untyped_storage_::Fill(
 }
 
 row_t__ untyped_storage_::Search(
-	const datum__ *Objet,
+	const byte__ *Objet,
 	size__ Taille,
 	row_t__ Debut,
 	row_t__ Fin ) const
@@ -142,7 +142,7 @@ row_t__ untyped_storage_::Search(
 	if ( Taille > BUFFER_SIZE )
 		qRLmt();
 
-	datum__ Tampon[BUFFER_SIZE];
+	byte__ Tampon[BUFFER_SIZE];
 	bool Trouve = false;
 	size__ BufferSize = Taille * ( BUFFER_SIZE / Taille );
 	size__ BufferPosition = 0;
@@ -180,7 +180,7 @@ void untyped_storage_::Store(
 	row_t__ Position,
 	row_t__ Offset )
 {
-	datum__ Buffer[BUFFER_SIZE];
+	byte__ Buffer[BUFFER_SIZE];
 
 	_Copy( Source, Offset, *this, Position, Amount, Buffer, BUFFER_SIZE );
 }
@@ -193,14 +193,14 @@ void untyped_storage_::WriteToFlow(
 	flw::oflow__ &OFlow ) const
 {
 qRH
-	datum__ TamponSecurite[BUFFER_SIZE];
-	datum__ *Tampon = TamponSecurite;
+	byte__ TamponSecurite[BUFFER_SIZE];
+	byte__ *Tampon = TamponSecurite;
 	size__ Taille = sizeof( TamponSecurite );
 qRB
 	if ( Quantite > BUFFER_SIZE )
 	{
 		Taille = ( Quantite > BUFFER_SIZE_MAX ? BUFFER_SIZE_MAX : Quantite );
-		Tampon = (datum__ *)malloc( Taille );
+		Tampon = (byte__ *)malloc( Taille );
 
 		if ( !Tampon )
 		{
@@ -234,14 +234,14 @@ void untyped_storage_::ReadFromFlow(
 	sdr::size__ Quantite )
 {
 qRH
-	datum__ TamponSecurite[BUFFER_SIZE];
-	datum__ *Tampon = TamponSecurite;
+	byte__ TamponSecurite[BUFFER_SIZE];
+	byte__ *Tampon = TamponSecurite;
 	size__ Taille = sizeof( TamponSecurite );
 qRB
 	if ( Quantite > BUFFER_SIZE )
 	{
 		Taille = ( Quantite > BUFFER_SIZE_MAX ? BUFFER_SIZE_MAX : Quantite );
-		Tampon = (datum__ *)malloc( Taille );
+		Tampon = (byte__ *)malloc( Taille );
 
 		if ( !Tampon )
 		{
@@ -270,11 +270,11 @@ qRE
 }
 
 void uys::_Fill(
-	const datum__ *Object,
+	const byte__ *Object,
 	size__ Size,
 	size__ Count,
 	row_t__ Position,
-	datum__ *Data )
+	byte__ *Data )
 {
 	while( Count )
 		memcpy( Data + Size * Count + Position, Object, Size );
@@ -282,11 +282,11 @@ void uys::_Fill(
 
 #if 0
 row__ uys::_Position(
-	const datum__ *Objet,
+	const byte__ *Objet,
 	size__ Size,
 	row__ Begin,
 	row__ End,
-	const datum__ *Data )
+	const byte__ *Data )
 {
 	while( ( Begin < End ) && ( memcmp( Data + Begin, Objet, Size ) ) )
 		Begin += Size;

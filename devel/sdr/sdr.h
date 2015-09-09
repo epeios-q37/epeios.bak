@@ -82,8 +82,8 @@ namespace sdr {
 	#define SDR_P_SIZE_MAX	BSO_P_SIZE_MAX
 # endif
 
-	//t The type of the datum in a storage.
-	typedef bso::raw__	datum__;
+	// Unit of digital information, without any intrinsec signification.
+	using bso::byte__;
 
 	//c Abstract storage driver. Use 'E_STORAGE_DRIVER__' instead directly this class.
 	class storage_driver__
@@ -102,10 +102,10 @@ namespace sdr {
 		virtual void SDRRecall(
 			row_t__ Position,
 			size__ Amount,
-			datum__ *Buffer ) = 0;
+			byte__ *Buffer ) = 0;
 		//v Write 'Amount' bytes from 'Buffer' to storage at position 'Position'.
 		virtual void SDRStore(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Amount,
 			row_t__ Position )
 		{
@@ -132,13 +132,13 @@ namespace sdr {
 		void Recall(
 			row_t__ Position,
 			size__ Amount,
-			datum__ *Buffer )
+			byte__ *Buffer )
 		{
 			SDRRecall( Position, Amount, Buffer );
 		}
 		//f Store 'Amount' bytes from 'Buffer' at position 'Position'.
 		void Store(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Amount,
 			row_t__ Position )
 		{

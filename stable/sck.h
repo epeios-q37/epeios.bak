@@ -97,7 +97,7 @@
 #define SCK__DEFAULT_AMOUNT	FLW_AMOUNT_MAX
 
 namespace sck {
-	using flw::datum__;
+	using flw::byte__;
 #ifdef SCK__WIN
 	typedef SOCKET socket__;
 	typedef char *	cast__;
@@ -268,7 +268,7 @@ namespace sck {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::datum__ *Buffer )
+			fdr::byte__ *Buffer )
 		{
 			if ( ( Maximum = sck::Read( _Socket, ( Maximum ), Buffer, _TimeOut ) ) == SCK_DISCONNECTED )
 				Maximum = 0;
@@ -278,7 +278,7 @@ namespace sck {
 			return Maximum;
 		}
 		virtual fdr::size__ FDRWrite(
-			const fdr::datum__ *Buffer,
+			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			if ( _Error )
@@ -350,7 +350,7 @@ namespace sck {
 	{
 	private:
 		socket_ioflow_driver___ _Driver;
-		flw::datum__ _Cache[2 * SCK_SOCKET_FLOW_BUFFER_SIZE];
+		flw::byte__ _Cache[2 * SCK_SOCKET_FLOW_BUFFER_SIZE];
 	public:
 		void reset( bool P = true )
 		{

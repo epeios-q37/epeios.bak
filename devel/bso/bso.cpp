@@ -55,7 +55,7 @@ const xint__ &bso::_ConvertToDInt(
 #define LIMIT ( BSO_INT_MAX >> 7 )
 
 int__ bso::ConvertToInt(
-	const raw__ *DInt,
+	const byte__ *DInt,
 	size__ *Length )
 {
 	length__ Position = 0;

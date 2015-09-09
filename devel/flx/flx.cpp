@@ -180,7 +180,7 @@ static bso::bool__ POpen2_(
 
 sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 	sdr::size__ Amount,
-	sdr::datum__ *Buffer )
+	sdr::byte__ *Buffer )
 {
 # ifdef FLX__WIN
 	DWORD Red = 0;
@@ -202,7 +202,7 @@ sdr::size__ flx::exec_ioflow_driver___::FDRRead(
 }
 
 sdr::size__ flx::exec_ioflow_driver___::FDRWrite(
-	const sdr::datum__ *Buffer,
+	const sdr::byte__ *Buffer,
 	sdr::size__ Amount )
 {
 # ifdef FLX__WIN

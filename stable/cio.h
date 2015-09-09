@@ -128,7 +128,7 @@ namespace cio {
 	: public flw::oflow__
 	{
 	private:
-		flw::datum__ _Cache[IOP__BUFFER_SIZE];
+		flw::byte__ _Cache[IOP__BUFFER_SIZE];
 	public:
 		void Init(
 			fdr::oflow_driver_base___ &Driver,

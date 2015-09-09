@@ -35,7 +35,7 @@ void bch::_GetRelations(
 	const uys::untyped_storage_ &Unsorted,
 	sdr::size__ Size,
 	sdr::row_t__ Limit,
-	sdr::datum__ *Buffer,
+	sdr::byte__ *Buffer,
 	E_BUNCH_( sdr::row__ ) &Relations )
 {
 	sdr::row_t__ Row = 0;

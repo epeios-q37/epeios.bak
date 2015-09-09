@@ -17,8 +17,6 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: txf.h,v 1.48 2013/04/06 15:33:19 csimon Exp $
-
 #ifndef TXF__INC
 #define TXF__INC
 
@@ -32,24 +30,12 @@
 #define TXF_DBG
 #endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.48 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/06 15:33:19 $
-
-/* End of automatic documentation generation part. */
-
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-/* Addendum to the automatic documentation generation part. */
-//D TeXt Flow 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+// TeXt Flow 
 
 # include <ctype.h>
 # include <limits.h>
@@ -60,7 +46,7 @@
 
 namespace txf {
 	using flw::size__;
-	using flw::datum__;
+	using flw::byte__;
 
 	//c Input text flow.
 	class text_iflow__
@@ -80,13 +66,13 @@ namespace txf {
 		{
 			return _F().EndOfFlow();
 		}
-		datum__ Lire_( void )
+		byte__ Lire_( void )
 		{
 			return _F().Get();
 		}
 		size__ Lire_(
 			size__ Nombre,
-			datum__ *Tampon )
+			byte__ *Tampon )
 		{
 			return _F().ReadUpTo( Nombre, Tampon );
 		}
@@ -118,7 +104,7 @@ namespace txf {
 		}
 		text_iflow__ &operator >>( unsigned long long &E )
 		{
-			datum__ C[9];
+			byte__ C[9];
 			size__ Pos;
 
 			if ( ( Pos = Lire_( 9, C ) ) > 8 )
@@ -135,7 +121,7 @@ namespace txf {
 		}
 		text_iflow__ &operator >>( unsigned long &E )
 		{
-			datum__ C[9];
+			byte__ C[9];
 			size__ Pos;
 
 			if ( ( Pos = Lire_( 9, C ) ) > 8 )
@@ -166,7 +152,7 @@ namespace txf {
 		text_iflow__ &operator >>( signed long long &E )
 		{
 			unsigned long long L;
-			datum__ C = Get();
+			byte__ C = Get();
 
 			if ( ( C != '+' ) && ( C != '-' ) )
 				qRFwk();
@@ -188,7 +174,7 @@ namespace txf {
 		text_iflow__ &operator >>( signed long &E )
 		{
 			unsigned long L;
-			datum__ C = Get();
+			byte__ C = Get();
 
 			if ( ( C != '+' ) && ( C != '-' ) )
 				qRFwk();
@@ -223,12 +209,12 @@ namespace txf {
 		//f Read 'Amount' characters and put them in 'Buffer'.
 		size__ Get(
 			size__ Amount,
-			datum__ *Buffer )
+			byte__ *Buffer )
 		{
 			return Lire_( Amount, Buffer );
 		}
 		//f Return the next character.
-		datum__ Get( void )
+		byte__ Get( void )
 		{
 			return Lire_();
 		}
@@ -257,12 +243,12 @@ namespace txf {
 #endif
 			return *_Flow;
 		}
-		void Ecrire_( datum__ C )
+		void Ecrire_( byte__ C )
 		{
 			_F().Put( C );
 		}
 		void Ecrire_(
-			const datum__ *Tampon,
+			const byte__ *Tampon,
 			size__ Nombre )
 		{
 			_F().Write( Tampon, Nombre );
@@ -302,25 +288,25 @@ namespace txf {
 		}
 		text_oflow__ &operator <<( char C )
 		{
-			Ecrire_( (datum__)C );
+			Ecrire_( (byte__)C );
 
 			return *this;
 		}
 		text_oflow__ &operator <<( signed char C )
 		{
-			Ecrire_( (datum__)C );
+			Ecrire_( (byte__)C );
 
 			return *this;
 		}
 		text_oflow__ &operator <<( unsigned char C )
 		{
-			Ecrire_( (datum__)C );
+			Ecrire_( (byte__)C );
 
 			return *this;
 		}
 		text_oflow__ &operator <<( const char *C )
 		{
-			Ecrire_( (const datum__ *)C, strlen( C ) );
+			Ecrire_( (const byte__ *)C, strlen( C ) );
 
 			return *this;
 		}
@@ -385,13 +371,13 @@ namespace txf {
 			return operator <<( Buffer );
 		}
 		//f Write 'C';
-		void Put( datum__ C )
+		void Put( byte__ C )
 		{
 			Ecrire_( C );
 		}
 		//f Wrtie 'Amount' data from 'Buffer'.
 		void Put(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Amount )
 		{
 			Ecrire_( Buffer, Amount );
@@ -450,7 +436,6 @@ namespace txf {
 	}
 }
 
-/*$END$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */

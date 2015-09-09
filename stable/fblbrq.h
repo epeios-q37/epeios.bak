@@ -60,7 +60,7 @@ namespace fblbrq {
 		const char *Message,
 		flw::oflow__ &Channel )
 	{
-		flw::Put( (flw::datum__)Reply, Channel );
+		flw::Put( (flw::byte__)Reply, Channel );
 
 		if ( Reply == fblovl::rOK )
 				qRFwk();

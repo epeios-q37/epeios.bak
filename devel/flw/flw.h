@@ -77,7 +77,7 @@
 # define FLW_AMOUNT_MAX BSO_SIZE_MAX
 
 namespace flw {
-	using fdr::datum__;
+	using fdr::byte__;
 	using fdr::size__;
 
 	//c Base input flow.
@@ -102,7 +102,7 @@ namespace flw {
 # if 0
 		size__ _ReadUpTo(
 			size__ Amount,
-			datum__ *Buffer,
+			byte__ *Buffer,
 			size__ Minimum,
 			bso::bool__ Adjust,
 			bso::bool__ &CacheIsEmpty )
@@ -112,7 +112,7 @@ namespace flw {
 		// Place 'Amount' bytes in 'Buffer'.
 		void _Read(
 			size__ Amount,
-			datum__ *Buffer,
+			byte__ *Buffer,
 			bso::bool__ Adjust,
 			bso::bool__ &CacheIsEmpty )
 		{
@@ -122,7 +122,7 @@ namespace flw {
 		// Generic read.
 		size__ _LoopingRawRead(
 			size__ Minimum,
-			datum__ *Buffer,
+			byte__ *Buffer,
 			size__ Wanted,
 			bso::bool__ Adjust,
 			bso::bool__ &CacheIsEmpty )
@@ -139,7 +139,7 @@ namespace flw {
 		}
 		size__ _RawRead(
 			size__ Minimum,
-			datum__ *Buffer,
+			byte__ *Buffer,
 			size__ Wanted,
 			bso::bool__ Adjust,
 			bso::bool__ &CacheIsEmpty );
@@ -192,14 +192,14 @@ namespace flw {
 			size__ Amount,
 			void *Buffer )
 		{
-			return _D().Read( this, Amount, (datum__ *)Buffer, fdr::bNonBlocking );
+			return _D().Read( this, Amount, (byte__ *)Buffer, fdr::bNonBlocking );
 		}
 		//f Place 'Amount' bytes in 'Buffer'.
 		void Read(
 			size__ Amount,
 			void *Buffer )
 		{
-			if ( _D().Read( this, Amount, (datum__ *)Buffer, fdr::bBlocking ) != Amount )
+			if ( _D().Read( this, Amount, (byte__ *)Buffer, fdr::bBlocking ) != Amount )
 				qRFwk();
 		}
 		bso::bool__ EndOfFlow( void )
@@ -208,22 +208,22 @@ namespace flw {
 		}
 		size__ View(
 			size__ Size,
-			datum__ *Datum )
+			byte__ *Datum )
 		{
       			return _D().Read( this, Size, Datum, fdr::bKeep );
 		}
-		datum__ View( void )
+		byte__ View( void )
 		{
-			datum__ C;
+			byte__ C;
 
 			if ( View( 1, &C ) != 1 )
 				qRFwk();
 
 			return C;
 		}
-		datum__ Get( void )
+		byte__ Get( void )
 		{
-			datum__ C;
+			byte__ C;
 
 			if ( _D().Read( this, 1, &C, fdr::bBlocking ) != 1 )
 				qRFwk();
@@ -316,7 +316,7 @@ namespace flw {
 	private:
 		fdr::oflow_driver_base___ *_Driver;
 		// The cache.
-		datum__ *_Cache;
+		byte__ *_Cache;
 		// The size of the cache.
 		size__ _Size;
 		// The amount of bytes yet free.
@@ -333,7 +333,7 @@ namespace flw {
 			return *_Driver;
 		}
 		size__ _LoopingWrite(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Wanted,
 			size__ Minimum )
 		{
@@ -350,7 +350,7 @@ namespace flw {
 
 		// Put up to 'Wanted' and a minimum of 'Minimum' bytes from buffer directly into the device.
 		size__ _DirectWrite(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Wanted,
 			size__ Minimum );
 		void _DumpCache( void )
@@ -364,7 +364,7 @@ namespace flw {
 			}
 		}
 		size__ _WriteIntoCache(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Amount )
 		{
 			if ( _Free < Amount )
@@ -379,7 +379,7 @@ namespace flw {
 		/* Put up to 'Amount' bytes from 'Buffer' directly or through the cache.
 		Return amount of bytes written. Cache MUST be EMPTY. */
 		size__ _DirectWriteOrIntoCache(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Amount )
 		{
 #ifdef FLW_DBG
@@ -401,7 +401,7 @@ namespace flw {
 		}
 		// Put up to 'Amount' bytes from 'Buffer'. Return number of bytes written.
 		size__ _WriteUpTo(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Amount )
 		{
 			size__ AmountWritten = _WriteIntoCache( Buffer, Amount );
@@ -415,7 +415,7 @@ namespace flw {
 		}
 		// Put 'Amount' data from 'Buffer'.
 		void _Write(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Amount );
 	public:
 		void reset( bso::bool__ P = true )
@@ -442,7 +442,7 @@ namespace flw {
 		}
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
-			datum__ *Cache,
+			byte__ *Cache,
 			size__ Size,
 			size__ AmountMax )
 		{
@@ -465,17 +465,17 @@ namespace flw {
 			const void *Buffer,
 			size__ Amount )
 		{
-			return _WriteUpTo( (datum__ *)Buffer, Amount );
+			return _WriteUpTo( (byte__ *)Buffer, Amount );
 		}
 		//f Put 'Amount' data from 'Buffer'.
 		void Write(
 			const void *Buffer,
 			size__ Amount )
 		{
-			_Write( (const datum__ *)Buffer, Amount );
+			_Write( (const byte__ *)Buffer, Amount );
 		}
 		//f Put 'C'.
-		void Put( datum__ C )
+		void Put( byte__ C )
 		{
 			_Write( &C, 1 );
 		}
@@ -496,12 +496,12 @@ namespace flw {
 		}
 # if 0
 		size__ WriteRelay(
-			const datum__ *Buffer,
+			const byte__ *Buffer,
 			size__ Maximum )
 		{
 			return WriteUpTo( Buffer, Maximum );
 		}
-		datum__ *GetCurrentCacheDatum( bso::bool__ MarkAsUsed )	/* Si 'AsUsed'  vrai, considre le 'datum' retourn comme utilis. */
+		byte__ *GetCurrentCacheDatum( bso::bool__ MarkAsUsed )	/* Si 'AsUsed'  vrai, considre le 'datum' retourn comme utilis. */
 		{
 			if ( _Free == 0 )
 				_DumpCache();
@@ -542,7 +542,7 @@ namespace flw {
 	: public oflow__
 	{
 	private:
-		flw::datum__ _Cache[CacheSize];
+		flw::byte__ _Cache[CacheSize];
 	public:
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
@@ -598,7 +598,7 @@ namespace flw {
 		void Init(
 			fdr::ioflow_driver_base___ &Driver,
 			size__ ReadAmountMax,
-			datum__ *OCache,
+			byte__ *OCache,
 			size__ OSize,
 			size__ WriteAmountMax )
 		{
@@ -608,7 +608,7 @@ namespace flw {
 		}
 		void Init(
 			fdr::ioflow_driver_base___ &Driver,
-			datum__ *Cache,
+			byte__ *Cache,
 			size__ Size,
 			size__ AmountMax )
 		{
@@ -621,7 +621,7 @@ namespace flw {
 	: public ioflow__
 	{
 	private:
-		flw::datum__ _OutputCache[OutCacheSize];
+		flw::byte__ _OutputCache[OutCacheSize];
 	public:
 		void Init(
 			fdr::ioflow_driver_base___ &Driver,
@@ -651,7 +651,7 @@ namespace flw {
 		iflow__ &IFlow,
 		oflow__ &OFlow )
 	{
-		fdr::datum__ Buffer[BufferSize];
+		fdr::byte__ Buffer[BufferSize];
 
 		while ( !IFlow.EndOfFlow() )
 			OFlow.Write( Buffer, IFlow.ReadUpTo( BufferSize, Buffer ) );
@@ -672,7 +672,7 @@ inline flw::oflow__ &operator <<(
 	flw::oflow__ &OFlow,
 	char Character )
 {
-	OFlow.Put( (flw::datum__)Character );
+	OFlow.Put( (flw::byte__)Character );
 
 	return OFlow;
 }

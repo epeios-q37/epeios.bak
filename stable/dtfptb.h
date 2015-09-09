@@ -42,7 +42,7 @@
 namespace dtfptb {
 	using namespace dtfbsc;
 
-	typedef bso::raw__ size_buffer__[10];
+	typedef bso::byte__ size_buffer__[10];
 
 	#define DTFPTB_L1	255
 	#define DTFPTB_L2	65535

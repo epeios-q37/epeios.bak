@@ -634,7 +634,7 @@ namespace bch {
 		const uys::untyped_storage_ &Unsorted,
 		sdr::size__ Size,
 		sdr::row_t__ Limit,
-		sdr::datum__ *Buffer,
+		sdr::byte__ *Buffer,
 		E_BUNCH_( sdr::row__ ) &Relations );
 
 	template <typename t> inline void GetRelations(
@@ -642,7 +642,7 @@ namespace bch {
 		const bch::E_BUNCH_( t ) &Unsorted,
 		bch::E_BUNCH_( sdr::row__ ) &Relations )
 	{
-		sdr::datum__ Buffer[sizeof( t )];
+		sdr::byte__ Buffer[sizeof( t )];
 #ifdef BCH_DBG
 		if ( Sorted.Amount() != Unsorted.Amount() )
 			qRFwk();
