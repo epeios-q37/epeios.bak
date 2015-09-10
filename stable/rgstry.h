@@ -333,6 +333,42 @@ namespace rgstry {
 
 			Init( Entry, Tag );
 		}
+		tentry___(
+			const entry___ &Entry,
+			const char *Tag1,
+			const str::string_ &Tag2 )
+		{
+			reset( false );
+
+			Init( Entry, Tag1, Tag2 );
+		}
+		tentry___(
+			const entry___ &Entry,
+			const str::string_ &Tag1,
+			const char *Tag2 )
+		{
+			reset( false );
+
+			Init( Entry, Tag1, Tag2 );
+		}
+		tentry___(
+			const entry___ &Entry,
+			const str::string_ &Tag1,
+			const str::string_ &Tag2 )
+		{
+			reset( false );
+
+			Init( Entry, Tag1, Tag2 );
+		}
+		tentry___(
+			const entry___ &Entry,
+			const char *Tag1,
+			const char *Tag2 )
+		{
+			reset( false );
+
+			Init( Entry, Tag1, Tag2 );
+		}
 		~tentry___( void )
 		{
 			reset();
@@ -357,6 +393,50 @@ namespace rgstry {
 			const char *Tag )
 		{
 			Init( Entry, str::string( Tag ) );
+		}
+		void Init(
+			const entry___ &Entry,
+			const str::string_ &Tag1,
+			const str::string_ &Tag2  )
+		{
+			_Tags.Init();
+			_Tags.Append( Tag1 );
+			_Tags.Append( Tag2 );
+
+			tentry__::Init( Entry, _Tags );
+		}
+		void Init(
+			const entry___ &Entry,
+			const char *Tag1,
+			const str::string_ &Tag2  )
+		{
+			_Tags.Init();
+			_Tags.Append( str::string( Tag1 ) );
+			_Tags.Append( Tag2 );
+
+			tentry__::Init( Entry, _Tags );
+		}
+		void Init(
+			const entry___ &Entry,
+			const char *Tag1,
+			const char *Tag2  )
+		{
+			_Tags.Init();
+			_Tags.Append( str::string( Tag1 ) );
+			_Tags.Append( str::string( Tag2 ) );
+
+			tentry__::Init( Entry, _Tags );
+		}
+		void Init(
+			const entry___ &Entry,
+			const str::string_ &Tag1,
+			const char *Tag2  )
+		{
+			_Tags.Init();
+			_Tags.Append( Tag1 );
+			_Tags.Append( str::string( Tag2 ) );
+
+			tentry__::Init( Entry, _Tags );
 		}
 	};
 
