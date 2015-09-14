@@ -340,6 +340,26 @@ namespace sclmisc {
 		str::string_ &Filename,
 		rgstry::entry__ &Configuration,
 		rgstry::entry__ &Locale );
+
+	template <typename retriever> inline void Plug(
+		const char *Target,
+		retriever PluginRetriever )
+	{
+	qRH
+		str::string Filename;
+		rgstry::entry__ Configuration, Locale;
+	qRB
+		Filename.Init();
+		Configuration.Init();
+		Locale.Init();
+
+		GetPluginFeatures( Target, Filename, Configuration, Locale );
+		PluginRetriever.Init( Filename, Configuration, Locale );
+	qRR
+	qRT
+	qRE
+	}
+
 }
 
 			/********************************************/
