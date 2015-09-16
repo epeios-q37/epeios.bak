@@ -33,12 +33,21 @@
 
 // FRonteNd BaSE
 
+# include "fbltyp.h"
+
 # include "err.h"
 # include "flw.h"
 # include "str.h"
 # include "lcl.h"
 
 namespace frdbse {
+	E_ENUM( mode ) {
+		mMonoUser,	// One use only. The content project (i.e. he can choose the backend) is defined by the user.
+		mMultiUser,	// Several users. The project to use is (which defines the backend to use) is predefiend in the confifuration file.
+		m_amount,
+		m_Undefined
+	};
+
 	enum backend_type__ {
 		btNone,		// Use of no backend.
 		btRemote,	// Remote, as a daemon.
@@ -51,6 +60,14 @@ namespace frdbse {
 	const char *GetLabel( backend_type__ BackendType );
 
 	backend_type__ GetBackendType( const str::string_ &Pattern );
+
+# define FRDBSE_I_( name, Name, id, Id  )\
+	typedef fbltyp::id##__	name##_t__;\
+	typedef fbltyp::id##s_	name##s_t_;\
+	E_AUTO( name##s_t );\
+\
+	E_TMIMIC__( name##_t__, name##__ );\
+	E_CDEF( name##__, Undefined##Name, fbltyp::Undefined##Id );\
 
 	template <typename t> class il_	// id, label.
 	{
@@ -68,6 +85,10 @@ namespace frdbse {
 		{
 			S_.Id = t(-1);
 			Label.reset( P );
+		}
+		void plug( qSD__ &SD )
+		{
+			Label.plug( SD );
 		}
 		void plug( qAS_ &AS )
 		{
@@ -89,6 +110,16 @@ namespace frdbse {
 		}
 		E_RODISCLOSE_( t, Id );
 	};
+
+# define FRDBSE_IL( name, Name, id, Id  )\
+	FRDBSE_I_( name, Name, id, Id );\
+\
+	typedef frdbse::il_<name##__> name##_;\
+	E_AUTO( name );\
+\
+	typedef ctn::E_MCONTAINER_( name##_ ) name##s_;\
+	E_AUTO( name##s );
+
 
 	template <typename t> class ilw_	// id, label, wording.
 	: public il_<t>
@@ -131,12 +162,144 @@ namespace frdbse {
 		}
 	};
 
-	E_ENUM( mode ) {
-		mMonoUser,	// One use only. The content project (i.e. he can choose the backend) is defined by the user.
-		mMultiUser,	// Several users. The project to use is (which defines the backend to use) is predefiend in the confifuration file.
-		m_amount,
-		m_Undefined
-	};
+
+# define FRDBSE_ILW( name, Name, id, Id  )\
+	FRDBSE_I_( name, Name, id, Id );\
+\
+	typedef frdbse::ilw_<name##__> name##_;\
+	E_AUTO( name );\
+\
+	typedef ctn::E_CONTAINER_( name##_ ) name##s_;\
+	E_AUTO( name##s );
+
+	template <typename ids_t, typename item, typename items_> inline void Fill(
+		const ids_t &Ids,
+		const fbltyp::strings_ &Labels,
+		items_ &Items )
+	{
+	qRH
+		ctn::E_CMITEM( fbltyp::string_ ) Label;
+		sdr::row__ Row = qNIL;
+		item Item;
+	qRB
+		Row = Ids.First();
+
+		if ( Ids.Amount() != Labels.Amount() )
+			qRGnr();
+
+		Label.Init( Labels );
+
+		while ( Row != qNIL ) {
+			Item.Init( Ids(Row), Label(Row) );
+			Items.Append( Item );
+
+			Row = Ids.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+
+	template <typename ids_t, typename item, typename items_> inline void Fill(
+		const ids_t &Ids,
+		const fbltyp::strings_ &Labels,
+		const fbltyp::strings_ &Wordings,
+		items_ &Items )
+	{
+	qRH
+		ctn::E_CMITEM( fbltyp::string_ ) Label;
+		ctn::E_CMITEM( fbltyp::string_ ) Wording;
+		sdr::row__ Row = qNIL;
+		item Item;
+	qRB
+		Row = Ids.First();
+
+		if ( Ids.Amount() != Labels.Amount() )
+			qRGnr();
+
+		if ( Ids.Amount() != Wordings.Amount() )
+			qRGnr();
+
+		Label.Init( Labels );
+		Wording.Init( Wordings );
+
+		while ( Row != qNIL ) {
+			Item.Init( Ids(Row), Label(Row), Wording( Row ) );
+			Items.Append( Item );
+
+			Row = Ids.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+
+	E_CDEF( char *, AmountAttribute, "Amount" );
+	E_CDEF( char *, IdAttribute, "id" );
+	E_CDEF( char *, LabelAttribute, "label" );
+	E_CDEF( char *, WordingAttribute, "Wording" );
+
+	template <typename id> inline void Dump_(
+		const frdbse::ilw_<id> &Item,
+		xml::writer_ &Writer )
+	{
+		xml::PutAttribute( frdbse::IdAttribute, **Item.Id(), Writer );
+		Writer.PutValue( Item.Label, frdbse::LabelAttribute );
+		Writer.PutValue( Item.Wording, frdbse::WordingAttribute );
+	}
+
+	template <typename id> static void Dump_(
+		const frdbse::il_<id> &Item,
+		xml::writer_ &Writer )
+	{
+		xml::PutAttribute( frdbse::IdAttribute, **Item.Id(), Writer );
+		Writer.PutValue( Item.Label, frdbse::LabelAttribute );
+	}
+
+	template <typename id, typename citem, typename items> static void Dump_(
+		const items &Items,
+		const char *ItemsLabel,
+		const char *ItemLabel,
+		xml::writer_ &Writer )
+	{
+		citem Item;
+		sdr::row__ Row = Items.First();
+
+		Item.Init( Items );
+
+		Writer.PushTag( ItemsLabel );
+		xml::PutAttribute( frdbse::AmountAttribute, Items.Amount(), Writer );
+
+		while ( Row != qNIL ) {
+			Writer.PushTag( ItemLabel );
+
+			Dump_<id>( Item( Row ), Writer );
+
+			Writer.PopTag();
+
+			Row = Items.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+
+	template <typename id> static void Dump(
+		const ctn::E_MCONTAINER_( frdbse::il_<id> ) &Items,
+		const char *ItemsLabel,
+		const char *ItemLabel,
+		xml::writer_ &Writer )
+	{
+		Dump_<id, ctn::E_CMITEM( frdbse::il_<id> ), ctn::E_MCONTAINER_( frdbse::il_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+	}
+
+	template <typename id> static void Dump(
+		const ctn::E_CONTAINER_( frdbse::ilw_<id> ) &Items,
+		const char *ItemsLabel,
+		const char *ItemLabel,
+		xml::writer_ &Writer )
+	{
+		Dump_<id, ctn::E_CITEM( frdbse::ilw_<id> ), ctn::E_CONTAINER_( frdbse::ilw_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+	}
 }
 
 				  /********************************************/

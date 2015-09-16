@@ -66,10 +66,6 @@ namespace frdfrntnd {
 		{
 			_frontend___::Init( Language, ReportingCallback, Registry );
 		}
-		void TestMessage( void )
-		{
-			Statics.SKTTest();
-		}
 	};
 
 }

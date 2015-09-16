@@ -32,6 +32,10 @@ namespace frdinstc {
 	{
 	private:
 		Q37_MRMDF( frdfrntnd::frontend___, F_,  Frontend_ );
+		esketch::statics___ S_( void )
+		{
+			return F_().Statics;
+		}
 		esketch::skt_myobject___ _Object;
 	public:
 		void reset( bso::bool__ P = true )
@@ -61,7 +65,7 @@ namespace frdinstc {
 		}
 		void TestMessage( void )
 		{
-			F_().TestMessage();
+			S_().SKTTest();
 		}
 	};
 

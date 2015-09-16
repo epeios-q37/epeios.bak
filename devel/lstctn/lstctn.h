@@ -126,6 +126,11 @@ namespace lstctn {
 		{
 			qRFbd();
 		}
+		// To avoid the use of herited 'Add' methods.	// Must use 'New' and 'Store'.
+		row Add( void )
+		{
+			qRFbd();
+		}
 		// To avoid the use of herited 'Delete' methods.
 		void Delete( void ) const
 		{

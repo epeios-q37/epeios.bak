@@ -12,6 +12,13 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-16 :
+- FRDBS :
+	* Adding 'Fill(...)' functions.
+	* Adding 'Dump(...)' functions.
+- SCLMISC :
+	# Adding missing '&'.
+
 2015-09-10 :
 - RGSTRY :
 	% Adding some varaints of 'tentry___::tentry___(...)' and 'tentry___::Init(...)' methods.

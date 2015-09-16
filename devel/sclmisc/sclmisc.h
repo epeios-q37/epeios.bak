@@ -343,7 +343,7 @@ namespace sclmisc {
 
 	template <typename retriever> inline void Plug(
 		const char *Target,
-		retriever PluginRetriever )
+		retriever &PluginRetriever )
 	{
 	qRH
 		str::string Filename;
