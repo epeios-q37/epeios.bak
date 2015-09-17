@@ -1,5 +1,5 @@
 /*
-	'login.cpp' by Claude SIMON (http://zeusw.org/).
+	'login.cpp' by Claude SIMON (http://q37.info/contact/).
 
 	 This file is part of 'eSketch' software.
 
@@ -113,10 +113,10 @@ BASE_AC( login::connect__ )
 qRH
 	TOL_CBUFFER___ Buffer;
 	fblfrd::incompatibility_informations IncompatibilityInformations;
-	frdbse::backend_type__ BackendType = frdbse::bt_Undefined;
+	sclfrntnd::backend_type__ BackendType = sclfrntnd::bt_Undefined;
 	str::string BackendFeature;
 qRB
-	if ( core::Core.Mode() == frdbse::mMonoUser ) {
+	if ( core::Core.Mode() == sclfrntnd::mMonoUser ) {
 		BackendFeature.Init();
 		BackendType = sclxdhtml::login::GetBackendFeatures( Session, BackendFeature );
 		sclxdhtml::Connect( BackendType, BackendFeature );

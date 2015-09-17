@@ -360,7 +360,7 @@ namespace sclxdhtml {
 	{
 	private:
 		action_handler<session> _Handler;
-		frdbse::mode__ _Mode;
+		sclfrntnd::mode__ _Mode;
 		Q37_MRMDF( action_helper_callback__<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
@@ -377,12 +377,12 @@ namespace sclxdhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_Handler.reset( P );
-			_Mode = frdbse::m_Undefined;
+			_Mode = sclfrntnd::m_Undefined;
 			_ActionHelperCallback = NULL;
 		}
 		E_CVDTOR( core___ )
 		void Init(
-			frdbse::mode__ Mode,
+			sclfrntnd::mode__ Mode,
 			action_helper_callback__<session> &ActionHelperCallback )
 		{
 			_ActionHelperCallback = &ActionHelperCallback;
@@ -420,7 +420,7 @@ namespace sclxdhtml {
 		qRE
 			return Success;
 		}
-		E_RODISCLOSE__( frdbse::mode__, Mode );
+		E_RODISCLOSE__( sclfrntnd::mode__, Mode );
 	};
 
 
@@ -443,7 +443,7 @@ namespace sclxdhtml {
 		sclfrntnd::kernel___ &Kernel );
 		*/
 
-	void SCLXDHTMLInitialization( frdbse::mode__ Mode );	// To define by user.
+	void SCLXDHTMLInitialization( sclfrntnd::mode__ Mode );	// To define by user.
 
 	xdhcbk::session_callback__ *SCLXDHTMLRetrieveCallback(
 		const char *Language,
@@ -452,7 +452,7 @@ namespace sclxdhtml {
 	void SCLXDHTMLReleaseCallback( xdhcbk::session_callback__ *Callback );	// To define by user.
 
 	inline void Connect(
-		frdbse::backend_type__ BackendType,
+		sclfrntnd::backend_type__ BackendType,
 		const str::string_ &BackendFeature )
 	{
 		return sclfrntnd::Connect( BackendType, BackendFeature );
@@ -496,7 +496,7 @@ namespace sclxdhtml {
 			proxy__ &Proxy,
 			xml::writer_ &Writer );
 
-		frdbse::backend_type__ GetBackendFeatures(
+		sclfrntnd::backend_type__ GetBackendFeatures(
 			proxy__ &Proxy,
 			str::string_ &Feature );
 

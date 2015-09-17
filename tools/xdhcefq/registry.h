@@ -53,6 +53,7 @@ namespace registry {
 		extern entry___ Locale;
 		extern entry___ LogFile;
 		extern entry___ LogSeverity;
+		extern entry___ CachePath;
 	}
 
 	using namespace xdhjsr;

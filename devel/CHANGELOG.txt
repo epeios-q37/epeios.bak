@@ -12,6 +12,12 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-07 :
+- FRDBSE, SCLFRNTND :
+	* Moved the content of 'FRDBSE' into 'SCLFRNTND'. 'FRDBSE' is no mode used.
+- SCLXDHTML, XDHCBK, XDHDWS :
+	- Adaptation to changes in 'FRDBSE'/'SCLFRNTND'.'
+
 2015-09-16 :
 - FRDBS :
 	* Adding 'Fill(...)' functions.
@@ -21,7 +27,7 @@ Meaning of list markers (2nd level):
 
 2015-09-10 :
 - RGSTRY :
-	% Adding some varaints of 'tentry___::tentry___(...)' and 'tentry___::Init(...)' methods.
+	% Adding some variants of 'tentry___::tentry___(...)' and 'tentry___::Init(...)' methods.
 
 2015-09-09
 - AEM, CDGB64, DTFPTB, FBLTYP :

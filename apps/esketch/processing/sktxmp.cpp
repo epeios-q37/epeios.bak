@@ -1,5 +1,5 @@
 /*
-	'sktxmp.cpp' by Claude SIMON (http://zeusw.org/).
+	'sktxmp.cpp' by Claude SIMON (http://q37.info/contact/).
 
 	 This file is part of 'eSketch' software.
 

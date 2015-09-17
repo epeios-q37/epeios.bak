@@ -1,5 +1,5 @@
 /*
-	'ui_base.h' by Claude SIMON (http://zeusw.org/).
+	'ui_base.h' by Claude SIMON (http://q37.info/contact/).
 
 	 This file is part of 'eSketch' software.
 

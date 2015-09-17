@@ -33,6 +33,8 @@
 
 // FRonteNd BaSE
 
+# error "Obsolete ! Content moved into 'SCLFRNTND' !"
+
 # include "fbltyp.h"
 
 # include "err.h"

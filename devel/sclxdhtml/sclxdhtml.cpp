@@ -21,8 +21,6 @@
 
 #include "sclxdhtml.h"
 
-#include "sclfrntnd.h"
-
 using namespace sclxdhtml;
 
 static bso::bool__ IsInitialized_ = false;
@@ -67,7 +65,7 @@ namespace {
 				sclmisc::Initialize( Data.qRRor(), Data.SCLError(), Data.CIO(), Data.Localization() );
 				sclfrntnd::LoadProject();
 
-				if ( Data.Mode() == frdbse::mMultiUser )
+				if ( Data.Mode() == sclfrntnd::mMultiUser )
 					sclfrntnd::Connect();
 
 				SCLXDHTMLInitialization( Data.Mode() );
@@ -523,14 +521,14 @@ void sclxdhtml::login::GetContent(
 	sclfrntnd::GetBackendsFeatures(Frontend.Language(), Writer );
 }
 
-static frdbse::backend_type__ GetBackendType_( proxy__ &Proxy )
+static sclfrntnd::backend_type__ GetBackendType_( proxy__ &Proxy )
 {
-	frdbse::backend_type__ BackendType = frdbse::bt_Undefined;
+	sclfrntnd::backend_type__ BackendType = sclfrntnd::bt_Undefined;
 qRH
 	str::string Value;
 qRB
 	Value.Init();
-	BackendType = frdbse::GetBackendType( Proxy.GetContent( login::BackendTypeId, Value ) );
+	BackendType = sclfrntnd::GetBackendType( Proxy.GetContent( login::BackendTypeId, Value ) );
 qRR
 qRT
 qRE
@@ -543,29 +541,29 @@ void sclxdhtml::login::GetContext(
 {
 	Writer.PushTag( "BackendType" );
 
-	Writer.PutValue( frdbse::GetLabel( GetBackendType_( Proxy ) ) );
+	Writer.PutValue( sclfrntnd::GetLabel( GetBackendType_( Proxy ) ) );
 
 	Writer.PopTag();
 }
 
-frdbse::backend_type__ sclxdhtml::login::GetBackendFeatures(
+sclfrntnd::backend_type__ sclxdhtml::login::GetBackendFeatures(
 	proxy__ &Proxy,
 	str::string_ &Feature )
 {
-	frdbse::backend_type__ Type = frdbse::bt_Undefined;
+	sclfrntnd::backend_type__ Type = sclfrntnd::bt_Undefined;
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	switch ( Type = GetBackendType_( Proxy ) ) {
-	case frdbse::btNone:
+	case sclfrntnd::btNone:
 		break;
-	case frdbse::btRemote:
+	case sclfrntnd::btRemote:
 		Feature.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
 		break;
-	case frdbse::btEmbedded:
+	case sclfrntnd::btEmbedded:
 		Feature.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
 		break;
-	case frdbse::btPredefined:
+	case sclfrntnd::btPredefined:
 		Feature.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
 		break;
 	default:

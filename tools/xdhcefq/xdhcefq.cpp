@@ -75,6 +75,7 @@ struct cef_setting_buffers___
 public:
 	cef_setting_buffer___
 		ResourceDirPath,
+		CachePath,
 		LocaleDirPath,
 		Locale,
 		LogFile,
@@ -82,6 +83,7 @@ public:
 	void reset( bso::bool__ P = true )
 	{
 		ResourceDirPath.reset( P );
+		CachePath.reset( P );
 		LocaleDirPath.reset( P );
 		Locale.reset( P );
 		LogFile.reset( P );
@@ -114,6 +116,7 @@ void FillSettings_( cef_settings_t &Settings )
 	Settings.resources_dir_path = Rack_.CEFSettingBuffers.ResourceDirPath.Init( registry::cef::ResourcesDirPath );
 	Settings.locales_dir_path = Rack_.CEFSettingBuffers.LocaleDirPath.Init( registry::cef::LocaleDirPath );
 	Settings.locale = Rack_.CEFSettingBuffers.Locale.Init( registry::cef::Locale );
+	Settings.cache_path = Rack_.CEFSettingBuffers.CachePath.Init( registry::cef::CachePath );
 //	Settings.log_file = Rack_.CEFSettingBuffers.LogFile.Init( registry::cef::LogFile );
 //	Settings.log_severity = LOGSEVERITY_VERBOSE;
 }

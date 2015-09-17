@@ -41,7 +41,6 @@ mods += csdbnc csdlec csdleo csdscb csdsnb
 mods += csdsnc csducl 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp 
-mods += frdbse 
 mods += sclmisc sclerror scllocale sclrgstry sclxdhtml 
 mods += sclfrntnd 
 mods += xdhcbk xdhdws 

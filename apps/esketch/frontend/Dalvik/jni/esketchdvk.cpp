@@ -12,7 +12,7 @@
 
 #include "trunk.h"
 
-const char *dalvik::PackageName="org/zeusw/" SKTINF_LC_AFFIX;
+const char *dalvik::PackageName="info/q37/" SKTINF_LC_AFFIX;
 
 using namespace jvabse;
 

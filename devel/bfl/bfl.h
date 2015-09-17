@@ -24,32 +24,16 @@
 
 #define BFL_NAME		"BFL"
 
-#define	BFL_VERSION	"$Revision: 1.4 $"
-
-#define BFL_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
 #if defined( E_DEBUG ) && !defined( BFL_NODBG )
 #define BFL_DBG
 #endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.4 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2012/11/14 16:06:24 $
-
-/* End of automatic documentation generation part. */
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-/* Addendum to the automatic documentation generation part. */
 //D Bit FLow 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
 
 #include "err.h"
 #include "flw.h"
@@ -124,8 +108,6 @@ namespace bfl {
 		}
 	};
 }
-
-/*$END$*/
 				  /********************************************/
 				  /* do not modify anything belove this limit */
 				  /*			  unless specified		   	  */

@@ -6,10 +6,10 @@
 	<xpp:define name="Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
-			<DefaultProjectType>New</DefaultProjectType>
+			<DefaultProjectType>Predefined</DefaultProjectType>
 			<DefaultBackendType>None</DefaultBackendType>
 			<!-- For multi-user mode. Can be overriden a by project file. -->
-			<Backend Type="Predefined">Embedded</Backend>
+			<Backend Type="Predefined">None</Backend>
 			<Authentication Mode="Full">
 				<Login>Hello</Login>
 				<Password>toto</Password>
@@ -32,7 +32,7 @@
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>
-			<Projects Default="Embedded">
+			<Projects Default="No">
 				<xpp:define name="ProjectsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="BinRootDir"/>

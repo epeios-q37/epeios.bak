@@ -31,9 +31,9 @@
 # include "err.h"
 # include "flw.h"
 # include "ntvstr.h"
-# include "sclerror.h"
 # include "strmrg.h"
-# include "frdbse.h"
+# include "sclerror.h"
+# include "sclfrntnd.h"
 
 # include <stdarg.h>
 
@@ -139,7 +139,7 @@ namespace xdhcbk {
 		err::err___ *_qRRor;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
-		frdbse::mode__ _Mode;
+		sclfrntnd::mode__ _Mode;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 	public:
@@ -149,14 +149,14 @@ namespace xdhcbk {
 			_Control = 0;
 			_qRRor = NULL;
 			_SCLError = NULL;
-			_Mode = frdbse::m_Undefined;
+			_Mode = sclfrntnd::m_Undefined;
 			_CIO = NULL;
 			_LauncherIdentification = NULL;
 			_Localization = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			frdbse::mode__ Mode,
+			sclfrntnd::mode__ Mode,
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
@@ -178,7 +178,7 @@ namespace xdhcbk {
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
 		Q37_RMDF( const cio::set__, CIO, _CIO );
-		E_RODISCLOSE__( frdbse::mode__, Mode );
+		E_RODISCLOSE__( sclfrntnd::mode__, Mode );
 	};
 #pragma pack( pop )
 

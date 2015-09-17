@@ -67,6 +67,8 @@
 							<NoSandbox>true</NoSandbox>
 						</xpp:bloc>
 					</xpp:ifeq>
+					<!-- Created if inexistent. This entry must exists to have 'console.log()' messages be displayed (see http://www.magpcss.org/ceforum/viewtopic.php?f=6&t=13349). -->
+					<CachePath>H:\temp\CEFCachePath\</CachePath>
 				</CEF>
 			</Setup>
 		</Setups>

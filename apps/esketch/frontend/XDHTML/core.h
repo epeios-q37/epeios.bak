@@ -1,5 +1,5 @@
 /*
-	'core.h' by Claude SIMON (http://zeusw.org/).
+	'core.h' by Claude SIMON (http://q37.info/contact/).
 
 	 This file is part of 'eSketch' software.
 
@@ -122,7 +122,7 @@ namespace core {
 			_ActionHelperCallback.reset( P );
 		}
 		E_CDTOR( core___ );
-		void Init( frdbse::mode__ Mode )
+		void Init( sclfrntnd::mode__ Mode )
 		{
 			_ActionHelperCallback.Init();
 			_core___::Init( Mode, _ActionHelperCallback );

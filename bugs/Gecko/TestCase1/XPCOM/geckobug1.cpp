@@ -1,5 +1,5 @@
 /*
-	'GeckoBug1.cpp' by Claude SIMON (http://zeusw.org/).
+	'GeckoBug1.cpp' by Claude SIMON (http://q37.info/contact/).
 
 	 This file is part of 'eGeckoCOM' software.
 
@@ -47,7 +47,7 @@
 
 #define APP_NAME	"GeckoBug1"
 
-#define GECKOBUG1_CONTRACTID "@zeusw.org/geckobug1;" COMPONENT_VERSION
+#define GECKOBUG1_CONTRACTID "@q37.info/geckobug1;" COMPONENT_VERSION
 #define GECKOBUG1_CLASSNAME "Gecko bug 1"
 #define GECKOBUG1_CID  IGECKOBUG1_IID
 

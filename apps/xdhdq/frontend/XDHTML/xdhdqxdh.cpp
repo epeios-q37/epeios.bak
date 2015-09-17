@@ -1,5 +1,5 @@
 /*
-	'xdhdqxht.cpp' by Claude SIMON (http://zeusw.org/).
+	'xdhdqxht.cpp' by Claude SIMON (http://q37.info/contact/).
 
 	 This file is part of 'xdhdq' software.
 
@@ -27,7 +27,7 @@
 const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 
 
-void sclxdhtml::SCLXDHTMLInitialization( frdbse::mode__ Mode )
+void sclxdhtml::SCLXDHTMLInitialization( sclfrntnd::mode__ Mode )
 {
 	core::Core.Init( Mode );
 }
@@ -49,10 +49,10 @@ xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	Session->Init( Language, ProxyCallback );
 
 	switch ( core::Core.Mode() ) {
-	case frdbse::mMonoUser:
+	case sclfrntnd::mMonoUser:
 		::prolog::SetLayout( *Session );
 		break;
-	case frdbse::mMultiUser:
+	case sclfrntnd::mMultiUser:
 //		login::SetLayout( *Session );
 		break;
 	default:

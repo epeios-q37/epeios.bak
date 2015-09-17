@@ -81,8 +81,41 @@ namespace definition_ {
 static rgstry::entry___ Internals_( "Internals" );
 static rgstry::entry___ ProjectId_( "ProjectId", Internals_ );
 
+#define C( name ) case bt##name: return #name; break
+
+const char *sclfrntnd::GetLabel( backend_type__ BackendType )
+{
+	switch ( BackendType ) {
+	C( None );
+	C( Remote );
+	C( Embedded );
+	C( Predefined );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return NULL;	// Pour viter un 'warning'.
+}
+
 namespace {
 
+	stsfsm::automat BackendAutomat_;
+
+	void FillBackendAutomat_( void )
+	{
+		BackendAutomat_.Init();
+		stsfsm::Fill( BackendAutomat_, bt_amount, GetLabel );
+	}
+}
+
+backend_type__ sclfrntnd::GetBackendType( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, BackendAutomat_, bt_Undefined, bt_amount );
+}
+
+
+namespace {
 	class kernel___
 	{
 	private:
@@ -379,11 +412,11 @@ qRB
 	BackendTypeEntry.Init( definition_::tagged_backend_::Type_, Id );
 
 	Buffer.Init();
-	switch ( frdbse::GetBackendType(sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), BackendTypeEntry, Buffer ) ) ) {
-	case frdbse::btRemote:
+	switch ( GetBackendType(sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), BackendTypeEntry, Buffer ) ) ) {
+	case btRemote:
 		Features.Type = csducl::tDaemon;
 		break;
-	case frdbse::btEmbedded:
+	case btEmbedded:
 		Features.Type = csducl::tLibrary;
 		break;
 	default:
@@ -398,7 +431,7 @@ qRE
 }
 
 void sclfrntnd::Connect(
-	frdbse::backend_type__ BackendType,
+	backend_type__ BackendType,
 	const str::string_ &BackendFeature )
 {
 qRH
@@ -409,21 +442,21 @@ qRB
 	Features.PingDelay = GetBackendPingDelay();
 
 	switch ( BackendType ) {
-	case frdbse::btNone:
+	case btNone:
 		Features.Type = csducl::tNone;
 		break;
-	case frdbse::btRemote:
+	case btRemote:
 		Features.Type = csducl::tDaemon;
 		Features.Location = BackendFeature;
 		break;
-	case frdbse::btEmbedded:
+	case btEmbedded:
 		Features.Type = csducl::tLibrary;
 		Features.Location = BackendFeature;
 		break;
-	case frdbse::btPredefined:
+	case btPredefined:
 		GetBackendFeatures_( BackendFeature, Features );
 		break;
-	case frdbse::bt_Undefined:
+	case bt_Undefined:
 		qRFwk();
 		break;
 	default:
@@ -443,7 +476,7 @@ namespace{
 	{
 		bso::bool__ BackendDeclared = false;
 	qRH
-		frdbse::backend_type__ Type = frdbse::bt_Undefined;
+		backend_type__ Type = bt_Undefined;
 		str::string Feature, RawType;
 	qRB
 		Feature.Init();
@@ -452,7 +485,7 @@ namespace{
 			RawType.Init();
 			sclmisc::MGetValue( parameter_::backend_::Type_, RawType );
 
-			if ( ( Type = frdbse::GetBackendType( RawType ) ) == frdbse::bt_Undefined )
+			if ( ( Type = GetBackendType( RawType ) ) == bt_Undefined )
 				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadBackendType" );
 
 			BackendDeclared = true;
@@ -478,6 +511,12 @@ const str::string_ &sclfrntnd::GetBackendLocation( str::string_ &Location )
 
 	return Location;
 }
+
+Q37_GCTOR( sclfrntnd )
+{
+	FillBackendAutomat_();
+}
+
 
 
 #if 0

@@ -38,5 +38,6 @@ entry___ registry::cef::LocaleDirPath( "LocaleDirPath", CEF_ );
 entry___ registry::cef::Locale( "Locale", CEF_ );
 entry___ registry::cef::LogFile( "LogFile", CEF_ );
 entry___ registry::cef::LogSeverity( "LogSeverity", CEF_ );
-//entry___ registry::CEF( "", CEF_ );
+entry___ registry::cef::CachePath( "CachePath", CEF_ );
+//entry___ registry::cef::( "", CEF_ );
 

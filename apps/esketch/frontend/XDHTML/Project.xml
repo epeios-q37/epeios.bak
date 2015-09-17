@@ -29,9 +29,6 @@
 			<Modules Group="FBL">
 				<xpp:expand select="FBLF"/>
 			</Modules>
-			<Modules Group="FRD">
-				<xpp:expand select="FRD"/>
-			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
