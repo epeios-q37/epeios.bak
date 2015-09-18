@@ -240,9 +240,47 @@ static void Focus_(
 	Focus_( Callback, va_arg( List, const nchar__ * ) );
 }
 
+static void SetFrame_(
+	callback__ &Callback,
+	const nchar__ *Id,	// If == NULL, the script in called from inside the frame, so the corresponding entire document is replaced.
+	const nchar__ *XML,
+	const nchar__ *XSL )
+{
+qRH
+	script_name__ ScriptName = xdhjst::sn_Undefined;
+	nstring___ RootTagId;
+	TOL_CBUFFER___ Buffer;
+qRB
+	if ( Id == NULL ) {
+		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
+		Id = RootTagId.Internal();
+		ScriptName = xdhjst::snDocumentSetter;
+	} else
+		ScriptName = xdhjst::snFrameSetter;
+
+	Execute( Callback, ScriptName, NULL, Id, XML, XSL );
+
+	Callback.HandleExtensions( Id );
+qRR
+qRT
+qRE
+}
+
 static void SetChildren_(
 	callback__ &Callback,
-	const nchar__ *Id,	// If == NULL, the entire document is replaced.
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *Id = va_arg( List, const nchar__ * );
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+
+	SetChildren_( Callback, Id, XML, XSL );
+}
+
+static void SetChildren_(
+	callback__ &Callback,
+	const nchar__ *Id,
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {

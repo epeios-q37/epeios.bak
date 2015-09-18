@@ -39,8 +39,10 @@ const char *xdhcbk::GetLabel( function__ Function )
 	switch ( Function ) {
 	C( Alert );
 	C( Confirm );
-	C( SetChildren );
-	C( SetCasting );
+	C( SetChildren_ );
+	C( SetFrame );
+	C( SetDocument );
+	C( HandleCasting );
 	C( SetProperty );
 	C( GetProperty );
 	C( SetAttribute );

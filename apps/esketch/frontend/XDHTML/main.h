@@ -54,8 +54,6 @@ namespace main {
 	};
 
 	void SetLayout( core::session___ &Session );
-
-	void SetCasting( core::session___ &Session );
 }
 
 #endif

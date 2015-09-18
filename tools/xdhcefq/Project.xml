@@ -23,7 +23,6 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>dlbrry</Module>
-				<Module>frdbse</Module>
 				<Module>mtk</Module>
 				<Module>strmrg</Module>
 			</Modules>

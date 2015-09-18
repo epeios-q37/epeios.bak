@@ -12,6 +12,16 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-18 :
+- XDHCBK :
+	* Adding 'SetDocument' and 'SetFrame' as 'function'.
+	* The 'SetChildren' 'function' do no more act as 'SetDocument' when 'Id' == NULL.
+	* 'SetCasting' -> 'HandleCasting'.
+	* The 'HandleCasting' 'function' applies to a document (the root one or the one corresponding to an iframe)
+	  when 'Id' == NULL, or the 'iframe' of id 'Id' when != NULL.
+- XDHJSP, XDHJSR, XDHJST :
+	* Adaptation to changes on 'XDHCBK'.
+
 2015-09-07 :
 - FRDBSE, SCLFRNTND :
 	* Moved the content of 'FRDBSE' into 'SCLFRNTND'. 'FRDBSE' is no mode used.

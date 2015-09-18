@@ -77,8 +77,10 @@ namespace xdhcbk {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fSetChildren,		// Id, XML, XSL.
-		fSetCasting,		// Id, XML, XSL.
+		fSetChildren_,		// Id, XML, XSL.
+		fSetFrame,			// Id, XML, XSL.
+		fSetDocument,		// XML, XSL.
+		fHandleCasting,		// Id, XML, XSL.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.

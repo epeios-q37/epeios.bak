@@ -55,15 +55,24 @@ namespace xdhjsr {
 		
 	namespace script {
 		extern entry___ Log;
-		extern entry___ DocumentSetter;
-		extern entry___ ChildrenSetter;
+		extern entry___ ChildrenSetter_;
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
 		extern entry___ EventHandler;
 		extern entry___ Focusing;
-		namespace casting {
-			extern entry___ Definer;
-			extern entry___ Handler;
+		namespace document {
+			extern entry___ Setter;
+			namespace casting {
+				extern entry___ Definer;
+				extern entry___ Handler;
+			}
+		}
+		namespace frame {
+			extern entry___ Setter;
+			namespace casting {
+				extern entry___ Definer;
+				extern entry___ Handler;
+			}
 		}
 		namespace property {
 			extern entry___ Setter;

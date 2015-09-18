@@ -23,8 +23,6 @@
 # include "base.h"
 
 namespace main {
-	E_CDEF( char *, FieldsFrameId, "Fields" );
-
 	BASE_ACD( show_facetious_button );
 	BASE_ACD( hide_facetious_button );
 	BASE_ACD( surrender );
@@ -52,8 +50,6 @@ namespace main {
 	};
 
 	void SetLayout( core::session___ &Session );
-
-	void SetCasting( core::session___ &Session );
 }
 
 #endif

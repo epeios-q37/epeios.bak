@@ -46,8 +46,9 @@ mods += sclfrntnd
 mods += xdhcbk xdhdws 
 mods += frdapi frdfrntnd frdrgstry frdinstc 
 mods += xddfbc xddinf 
-mods += base core fields global login 
-mods += main prolog registry 
+mods += login main prolog 
+mods += fields 
+mods += base core global registry 
 
 pmods += pllio 
 

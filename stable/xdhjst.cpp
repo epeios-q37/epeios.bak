@@ -42,10 +42,13 @@ const str::string_ &xdhjst::GetTaggedScript(
 	C( Log, Log );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
-	C( DocumentSetter, DocumentSetter );
-	C( ChildrenSetter, ChildrenSetter );
-	C( CastingDefiner, casting::Definer );
-	C( CastingHandler, casting::Handler );
+	C( ChildrenSetter_, ChildrenSetter_ );
+	C( DocumentSetter, document::Setter );
+	C( DocumentCastingDefiner, document::casting::Definer );
+	C( DocumentCastingHandler, document::casting::Handler );
+	C( FrameSetter, frame::Setter );
+	C( FrameCastingDefiner, frame::casting::Definer );
+	C( FrameCastingHandler, frame::casting::Handler );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -164,9 +167,8 @@ qRB
 	S( DocumentSetter, Id_, XML_, XSL_, NULL );
 	S( ContentSetter, Id_, Value_, NULL );
 	S( ContentGetter, Id_, NULL );
-	S( CastingDefiner, XML_, XSL_, NULL );
-	S( CastingHandler, Id_, Cast_, NULL );
-	S( ChildrenSetter, Id_, XML_, XSL_, NULL );
+	S( ChildrenSetter_, Id_, XML_, XSL_, NULL );
+	S( FrameSetter, Id_, XML_, XSL_, NULL );
 	S( WidgetContentRetriever, Id_, Method_, NULL );
 	S( WidgetFocusing, Id_, Method_, NULL );
 	S( Focusing, Id_, NULL );
@@ -811,13 +813,18 @@ namespace{
 		str::strings TagNames, TagValues;
 	qRB
 		SubScript.Init();
-		sclmisc::MGetValue( xdhjsr::script::casting::Handler, SubScript );
 
 		TagNames.Init();
 		TagValues.Init();
 
-		AppendTag_("Id", Id, TagNames, TagValues );
-		AppendTag_("Cast", Cast, TagNames, TagValues );
+		if ( Id.Amount() == 0 )
+			sclmisc::MGetValue( xdhjsr::script::document::casting::Handler, SubScript );
+		else {
+			AppendTag_("Id", Id, TagNames, TagValues );
+			sclmisc::MGetValue( xdhjsr::script::frame::casting::Handler, SubScript );
+		}
+
+		AppendTag_( "Cast", Cast, TagNames, TagValues );
 
 		tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
 

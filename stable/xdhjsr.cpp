@@ -56,8 +56,19 @@ static entry___ ContentScripts_( "Content", xdhjsr::Scripts );
 entry___ xdhjsr::script::content::Setter( "Setter", ContentScripts_ );
 entry___ xdhjsr::script::content::Getter( "Getter", ContentScripts_ );
 
-entry___ xdhjsr::script::DocumentSetter( "DocumentSetter", xdhjsr::Scripts );
-entry___ xdhjsr::script::ChildrenSetter( "ChildrenSetter", xdhjsr::Scripts );
+entry___ xdhjsr::script::ChildrenSetter_( "ChildrenSetter", xdhjsr::Scripts );
+
+static entry___ DocumentScripts_( "Document", xdhjsr::Scripts );
+entry___ xdhjsr::script::document::Setter("Setter", DocumentScripts_ );
+static entry___ DocumentCastingScripts_( "Casting", DocumentScripts_ );
+entry___ xdhjsr::script::document::casting::Definer("Definer", DocumentCastingScripts_ );
+entry___ xdhjsr::script::document::casting::Handler("Handler", DocumentCastingScripts_ );
+
+static entry___ FrameScripts_( "Frame", xdhjsr::Scripts );
+entry___ xdhjsr::script::frame::Setter("Setter", FrameScripts_ );
+static entry___ FrameCastingScripts_( "Casting", FrameScripts_ );
+entry___ xdhjsr::script::frame::casting::Definer("Definer", FrameCastingScripts_ );
+entry___ xdhjsr::script::frame::casting::Handler("Handler", FrameCastingScripts_ );
 
 entry___ xdhjsr::script::DraggableSetter( "DraggableSetter", xdhjsr::Scripts );
 entry___ xdhjsr::script::DroppableSetter( "DroppableSetter", xdhjsr::Scripts );
@@ -70,10 +81,6 @@ static entry___ WidgetScripts_( "Widget", xdhjsr::Scripts );
 entry___ xdhjsr::script::widget::Instantiation( "Instantiation", WidgetScripts_ );
 entry___ xdhjsr::script::widget::ContentRetriever( "ContentRetriever", WidgetScripts_ );
 entry___ xdhjsr::script::widget::Focusing( "Focusing", WidgetScripts_ );
-
-static entry___ CastingScripts_( "Casting", xdhjsr::Scripts );
-entry___ xdhjsr::script::casting::Definer( "Definer", CastingScripts_ );
-entry___ xdhjsr::script::casting::Handler( "Handler", CastingScripts_ );
 
 entry___ xdhjsr::script::Log( "Log", xdhjsr::Scripts );
 entry___ xdhjsr::script::Focusing( "Focusing", Scripts );

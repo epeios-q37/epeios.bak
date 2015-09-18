@@ -23,45 +23,81 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
-E_CDEF( char *, XSLAffix_, "Fields" );
-
 using namespace frdinstc;
 
-static void GetContent_(
-	const sclrgstry::registry_ &Registry,
-	core::session___ &Session,
-	str::string_ &XML )
-{
-qRH
-	base::content_rack___ Rack;
-	int i = 0;
-qRB
-	Rack.Init( XSLAffix_, XML, Session );
+namespace {
+	E_CDEF( char *, XSLAffix_, "Fields" );
 
-	Rack().PushTag("Fields" );
-
-	if ( Session.User.EditableField() != f_Undefined )
-		Rack().PutAttribute("Editable", GetLabel( Session.User.EditableField() ) );
-
-	i = f_amount;
-
-	while ( i-- ) {
-		Rack().PushTag("Field" );
-
-		Rack().PutAttribute("id", GetLabel( (field__)i ) );
-
-		Rack().PutValue(Session.User.FieldContent((field__ )i) );
-
-		Rack().PopTag();
+	void GetContext_(
+		core::session___ &Session,
+		str::string_ &XML )
+	{
+	qRH
+		base::context_rack___ Rack;
+	qRB
+		Rack.Init( XSLAffix_, XML, Session );
+	qRR
+	qRT
+	qRE
 	}
 
-	Rack().PopTag();
-qRR
-qRT
-qRE
+	void SetCasting_(
+		const char *Id,
+		core::session___ &Session )
+	{
+	qRH
+		str::string XML, XSL;
+	qRB
+		XML.Init();
+		GetContext_( Session,  XML );
+
+		XSL.Init();
+		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+
+		Session.SetCasting( Id, XML, XSL );
+	qRR
+	qRT
+	qRE
+	}
+
+	void GetContent_(
+		const sclrgstry::registry_ &Registry,
+		core::session___ &Session,
+		str::string_ &XML )
+	{
+	qRH
+		base::content_rack___ Rack;
+		int i = 0;
+	qRB
+		Rack.Init( XSLAffix_, XML, Session );
+
+		Rack().PushTag("Fields" );
+
+		if ( Session.User.EditableField() != f_Undefined )
+			Rack().PutAttribute("Editable", GetLabel( Session.User.EditableField() ) );
+
+		i = f_amount;
+
+		while ( i-- ) {
+			Rack().PushTag("Field" );
+
+			Rack().PutAttribute("id", GetLabel( (field__)i ) );
+
+			Rack().PutValue(Session.User.FieldContent((field__ )i) );
+
+			Rack().PopTag();
+		}
+
+		Rack().PopTag();
+	qRR
+	qRT
+	qRE
+	}
 }
 
-void fields::SetLayout( core::session___ &Session )
+void fields::SetLayout(
+	const char *Id,
+	core::session___ &Session )
 {
 qRH
 	str::string XML, XSL;
@@ -72,44 +108,14 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
-	Session.SetChildren( main::FieldsFrameId, XML, XSL );
+	Session.SetChildren( Id, XML, XSL );
 
-	SetCasting( Session );
+	SetCasting_( Id, Session );
 
 	Session.SwitchTo( core::pMain );
 
 	if ( Session.User.EditableField() != f_Undefined )
 		Session.Focus(GetLabel( Session.User.EditableField() ) );
-qRR
-qRT
-qRE
-}
-
-static void GetContext_(
-	core::session___ &Session,
-	str::string_ &XML )
-{
-qRH
-	base::context_rack___ Rack;
-qRB
-	Rack.Init( XSLAffix_, XML, Session );
-qRR
-qRT
-qRE
-}
-
-void fields::SetCasting( core::session___ &Session )
-{
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	GetContext_( Session,  XML );
-
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-	Session.SetCasting( main::FieldsFrameId, XML, XSL );
 qRR
 qRT
 qRE

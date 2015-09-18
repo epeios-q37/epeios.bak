@@ -23,23 +23,63 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
-E_CDEF( char *, XSLAffix_, "Main" );
-
 using namespace frdinstc;
 
-static void GetContent_(
-	const sclrgstry::registry_ &Registry,
-	core::session___ &Session,
-	str::string_ &XML )
-{
-qRH
-	base::content_rack___ Rack;
-	int i = 0;
-qRB
-	Rack.Init( XSLAffix_, XML, Session );
-qRR
-qRT
-qRE
+namespace {
+	E_CDEF( char *, XSLAffix_, "Main" );
+
+	E_CDEF( char *, FieldsFrameId_, "Fields" );
+
+	void GetContext_(
+		core::session___ &Session,
+		str::string_ &XML )
+	{
+	qRH
+		base::context_rack___ Rack;
+		str::string Buffer;
+	qRB
+		Rack.Init( XSLAffix_, XML, Session );
+
+		Rack().PushTag( "Facetious" );
+
+		Buffer.Init();
+		Rack().PutAttribute("Enabled", (Session.User.FacetiousButtonIsVisible() || ( Session.GetProperty( "Freeze", "checked", Buffer ) == "true" ) ? "true" : "false" ) );
+	qRR
+	qRT
+	qRE
+	}
+
+	void SetCasting_( core::session___ &Session )
+	{
+	qRH
+		str::string XML, XSL;
+	qRB
+		XML.Init();
+		GetContext_( Session,  XML );
+
+		XSL.Init();
+		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+
+		Session.SetDocumentCasting( XML, XSL );
+	qRR
+	qRT
+	qRE
+	}
+
+	void GetContent_(
+		const sclrgstry::registry_ &Registry,
+		core::session___ &Session,
+		str::string_ &XML )
+	{
+	qRH
+		base::content_rack___ Rack;
+		int i = 0;
+	qRB
+		Rack.Init( XSLAffix_, XML, Session );
+	qRR
+	qRT
+	qRE
+	}
 }
 
 void main::SetLayout( core::session___ &Session )
@@ -55,47 +95,11 @@ qRB
 
 	Session.SetDocument( XML, XSL );
 
-	SetCasting( Session );
+	SetCasting_( Session );
 
-	fields::SetLayout( Session );
+	fields::SetLayout( FieldsFrameId_, Session );
 
 	Session.SwitchTo( core::pMain );
-qRR
-qRT
-qRE
-}
-
-static void GetContext_(
-	core::session___ &Session,
-	str::string_ &XML )
-{
-qRH
-	base::context_rack___ Rack;
-	str::string Buffer;
-qRB
-	Rack.Init( XSLAffix_, XML, Session );
-
-	Rack().PushTag( "Facetious" );
-
-	Buffer.Init();
-	Rack().PutAttribute("Enabled", (Session.User.FacetiousButtonIsVisible() || ( Session.GetProperty( "Freeze", "checked", Buffer ) == "true" ) ? "true" : "false" ) );
-qRR
-qRT
-qRE
-}
-
-void main::SetCasting( core::session___ &Session )
-{
-qRH
-	str::string XML, XSL;
-qRB
-	XML.Init();
-	GetContext_( Session,  XML );
-
-	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-	Session.SetDocumentCasting( XML, XSL );
 qRR
 qRT
 qRE
@@ -104,13 +108,13 @@ qRE
 BASE_AC( main::show_facetious_button__ )
 {
 	Session.User.FacetiousButtonIsVisible() = true;
-	SetCasting( Session );
+	SetCasting_( Session );
 }
 
 BASE_AC( main::hide_facetious_button__ )
 {
 	Session.User.FacetiousButtonIsVisible() = false;
-	SetCasting(Session );
+	SetCasting_( Session );
 }
 
 BASE_AC( main::surrender__ )

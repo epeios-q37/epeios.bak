@@ -41,9 +41,9 @@ namespace fields {
 		}
 	};
 
-	void SetLayout( core::session___ &Session );
-
-	void SetCasting( core::session___ &Session );
+	void SetLayout(
+		const char *Id,
+		core::session___ &Session );
 }
 
 #endif
