@@ -360,7 +360,7 @@ namespace sclxdhtml {
 	{
 	private:
 		action_handler<session> _Handler;
-		sclfrntnd::mode__ _Mode;
+		xdhcbk::mode__ _Mode;
 		Q37_MRMDF( action_helper_callback__<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
@@ -377,12 +377,12 @@ namespace sclxdhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_Handler.reset( P );
-			_Mode = sclfrntnd::m_Undefined;
+			_Mode = xdhcbk::m_Undefined;
 			_ActionHelperCallback = NULL;
 		}
 		E_CVDTOR( core___ )
 		void Init(
-			sclfrntnd::mode__ Mode,
+			xdhcbk::mode__ Mode,
 			action_helper_callback__<session> &ActionHelperCallback )
 		{
 			_ActionHelperCallback = &ActionHelperCallback;
@@ -420,7 +420,7 @@ namespace sclxdhtml {
 		qRE
 			return Success;
 		}
-		E_RODISCLOSE__( sclfrntnd::mode__, Mode );
+		E_RODISCLOSE__( xdhcbk::mode__, Mode );
 	};
 
 
@@ -443,7 +443,7 @@ namespace sclxdhtml {
 		sclfrntnd::kernel___ &Kernel );
 		*/
 
-	void SCLXDHTMLInitialization( sclfrntnd::mode__ Mode );	// To define by user.
+	void SCLXDHTMLInitialization( xdhcbk::mode__ Mode );	// To define by user.
 
 	xdhcbk::session_callback__ *SCLXDHTMLRetrieveCallback(
 		const char *Language,

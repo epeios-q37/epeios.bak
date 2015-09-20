@@ -164,11 +164,15 @@ qRB
 	S( AttributeRemover, Id_, Name_, NULL  );
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
-	S( DocumentSetter, Id_, XML_, XSL_, NULL );
+	S( DocumentSetter, XML_, XSL_, NULL );
+	S( DocumentCastingDefiner, XML_, XSL_, NULL );
+	S( DocumentCastingHandler, XML_, XSL_, NULL );
 	S( ContentSetter, Id_, Value_, NULL );
 	S( ContentGetter, Id_, NULL );
 	S( ChildrenSetter_, Id_, XML_, XSL_, NULL );
 	S( FrameSetter, Id_, XML_, XSL_, NULL );
+	S( FrameCastingDefiner, Id_, XML_, XSL_, NULL );
+	S( FrameCastingHandler, Id_, XML_, XSL_, NULL );
 	S( WidgetContentRetriever, Id_, Method_, NULL );
 	S( WidgetFocusing, Id_, Method_, NULL );
 	S( Focusing, Id_, NULL );

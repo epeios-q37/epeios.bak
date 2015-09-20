@@ -30,23 +30,6 @@
 						]]>
 				</Setter>
 			</Attribute>
-			<Casting>
-				<Definer>
-					<![CDATA[
-							// Edge executes this script in loop !!!
-							console.log( "1 !!!" );
-							removeCastingChildren();
-							console.log( "2 !!!" );
-							document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
-							console.log( "3 !!!" );
-						]]>
-				</Definer>
-				<Handler>
-					<![CDATA[
-							handleCast( "%Id%", "%Cast%" );
-						]]>
-				</Handler>
-			</Casting>
 			<Content>
 				<Getter>
 					<![CDATA[
@@ -62,7 +45,7 @@
 			<ChildrenSetter>
 				<![CDATA[
 						removeChildren( "%Id%" );
-						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
+						document.getElementById( "%Id%" ).appendChild( transformToFragment( document, "%XML%", "%XSL%" ) );"";
 					]]>
 			</ChildrenSetter>
 			<Dialog>
@@ -172,12 +155,56 @@
 				]]>
 
 			</DroppableSetter>
-			<DocumentSetter>
-				<![CDATA[
-				log( "%XML%" );
-				document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );"";
-				]]>
-			</DocumentSetter>
+			<Document>
+				<Setter>
+					<![CDATA[
+					log( "%XML%" );
+					document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );"";
+					]]>
+				</Setter>
+				<Casting>
+					<Definer>
+						<![CDATA[
+							// Edge executes this script in loop !!!
+							console.log( "1 !!!" );
+							removeCastingChildren( document );
+							console.log( "2 !!!" );
+							document.getElementById( "xdh-castings" ).appendChild( transformToFragment( document, "%XML%", "%XSL%" ) );
+							console.log( "3 !!!" );
+						]]>
+					</Definer>
+					<Handler>
+						<![CDATA[
+							handleCast( document, "%Id%", "%Cast%" );
+						]]>
+					</Handler>
+				</Casting>
+			</Document>
+			<Frame>
+				<Setter>
+					<![CDATA[
+					log( "%XML%" );
+					getElementById( "%Id%" ).contentDocument.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );"";
+					]]>
+				</Setter>
+				<Casting>
+					<Definer>
+						<![CDATA[
+							// Edge executes this script in loop !!!
+							console.log( "1 !!!" );
+							removeCastingChildren( getElementById( "%Id%" ).contentDocument );
+							console.log( "2 !!!" );
+							getElementById( "%Id%" ).contentDocument.getElementById( "xdh-castings" ).appendChild( transformToFragment( getElementById( "%Id%" ).contentDocument, "%XML%", "%XSL%" ) );
+							console.log( "3 !!!" );
+						]]>
+					</Definer>
+					<Handler>
+						<![CDATA[
+							handleCast( document, "%Id%", "%Cast%" );
+						]]>
+					</Handler>
+				</Casting>
+			</Frame>
 			<EventHandler>
 				<![CDATA[
 						document.getElementById( "%Id%" ).addEventListener( "%Event%", handleEvent );

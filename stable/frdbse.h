@@ -45,7 +45,7 @@
 namespace frdbse {
 	E_ENUM( mode ) {
 		mMonoUser,	// One use only. The content project (i.e. he can choose the backend) is defined by the user.
-		mMultiUser,	// Several users. The project to use is (which defines the backend to use) is predefiend in the confifuration file.
+		mMultiUser,	// Several users. The project to use is (which defines the backend to use) is predefiend in the configuration file.
 		m_amount,
 		m_Undefined
 	};

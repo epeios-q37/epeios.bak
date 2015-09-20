@@ -56,13 +56,6 @@ namespace sclfrntnd {
 
 	typedef fblfrd::universal_frontend___ _frontend___;
 
-	E_ENUM( mode ) {
-		mMonoUser,	// One use only. The content of the project (i.e. which backend type to use) is defined by the user.
-		mMultiUser,	// Several users. The project (which defines the backend to use) is predefiend in the configuration file.
-		m_amount,
-		m_Undefined
-	};
-
 	enum backend_type__ {
 		btNone,		// Use of no backend.
 		btRemote,	// Remote, as a daemon.

@@ -12,6 +12,16 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-20
+- XDHCBK, XDJ* :
+	* More changes so what called 'frame' is now an 'iframe' and no more an element's child.
+- SCLFRNTND, XDHCBK:
+	% Moving 'mode__' from 'SCLFRNTND' to 'XDHCBK'.
+- SCLXDHTML, XDHUPS :
+	- Adaptation to changes in underlying modules.
+- XDHDWS :
+	* Adaptation to changes in underlying modules.
+
 2015-09-18 :
 - XDHCBK :
 	* Adding 'SetDocument' and 'SetFrame' as 'function'.

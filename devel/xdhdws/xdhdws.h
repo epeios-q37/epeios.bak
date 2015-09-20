@@ -90,18 +90,32 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		void SetChildren(
+		void SetCastings(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcbk::fSetChildren, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcbk::fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+		}
+		void SetChildren_(
+			const nstring___ &Id,
+			const nstring___ &XML,
+			const nstring___ &XSL )
+		{
+			C_().Process( xdhcbk::fSetChildren_, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+		}
+		void SetFrame(
+			const nstring___ &Id,
+			const nstring___ &XML,
+			const nstring___ &XSL )
+		{
+			C_().Process( xdhcbk::fSetFrame, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetDocument(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			SetChildren( nstring___(), XML, XSL );
+			C_().Process( xdhcbk::fSetDocument, NULL, XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void SetCasting(
 			const nstring___ &Id,

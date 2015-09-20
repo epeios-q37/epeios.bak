@@ -84,7 +84,7 @@ qRH
 	str::string CloseText;
 qRB
 	CloseText.Init();
-	Callback.GetTranslation("CloseText", CloseText );
+	Callback.GetTranslation( "CloseText", CloseText );
 
 	Execute( Callback, ScriptName, Result, XML, XSL, Title, nstring___(CloseText).Internal()() );
 qRR
@@ -240,33 +240,21 @@ static void Focus_(
 	Focus_( Callback, va_arg( List, const nchar__ * ) );
 }
 
-static void SetChildren_(
+static void SetFrame_(
 	callback__ &Callback,
-	const nchar__ *Id,	// If == NULL, the entire document is replaced.
+	const nchar__ *Id,	// If == 'NULL', the script is called from inside the (i)frame, so current document is the frame's one.
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
-qRH
-	script_name__ ScriptName = xdhjst::sn_Undefined;
-	nstring___ RootTagId;
-	TOL_CBUFFER___ Buffer;
-qRB
-	if ( Id == NULL ) {
-		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
-		Id = RootTagId.Internal();
-		ScriptName = xdhjst::snDocumentSetter;
-	} else
-		ScriptName = xdhjst::snChildrenSetter;
-
-	Execute( Callback, ScriptName, NULL, Id, XML, XSL );
+	if ( Id == NULL )
+		Execute( Callback, xdhjst::snDocumentSetter, NULL, XML, XSL );
+	 else
+		Execute( Callback, xdhjst::snFrameSetter, NULL, Id, XML, XSL );
 
 	Callback.HandleExtensions( Id );
-qRR
-qRT
-qRE
 }
 
-static void SetChildren_(
+static void SetFrame_(
 	callback__ &Callback,
 	va_list List )
 {
@@ -275,34 +263,24 @@ static void SetChildren_(
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	SetChildren_( Callback, Id, XML, XSL );
+	SetFrame_( Callback, Id, XML, XSL );
 }
 
-
-static void SetCasting_(
+static void SetCastings_(
 	callback__ &Callback,
-	const nchar__ *Id,	// If == NULL, the casting is applied to the entire document.
+	const nchar__ *Id,	// If == 'NULL', the script is called from inside the frame, so current document is the frame's one. In the other case, 'Id' is the one od the concerned (i)frame.
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
-qRH
-	TOL_CBUFFER___ Buffer;
-	nstring___ RootTagId;
-qRB
-	Execute( Callback, xdhjst::snCastingDefiner, NULL, XML, XSL );
-
-	if ( Id == NULL ) {
-		RootTagId.Init( Callback.GetRootTagId( Buffer ) );
-		Id = RootTagId.Internal();
-	}
+	if ( Id == NULL )
+		Execute( Callback, xdhjst::snDocumentCastingDefiner, NULL, XML, XSL );
+	else
+		Execute( Callback, xdhjst::snFrameCastingDefiner, NULL, Id, XML, XSL );
 
 	Callback.HandleCastings( Id );
-qRR
-qRT
-qRE
 }
 
-static void SetCasting_(
+static void SetCastings_(
 	callback__ &Callback,
 	va_list List )
 {
@@ -311,9 +289,8 @@ static void SetCasting_(
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	SetCasting_( Callback, Id, XML, XSL );
+	SetCastings_( Callback, Id, XML, XSL );
 }
-
 
 static void GetResult_(
 	callback__ &Callback,
@@ -339,20 +316,28 @@ static void GetResult_(
 	GetResult_( Callback, va_arg( List, const nchar__ * ), Result );
 }
 
-
 static script_name__ Convert_( xdhcbk::function__ Function )
 {
 	switch ( Function ) {
+	case xdhcbk::fLog:
+		return xdhjst::snLog;
+		break;
 	case xdhcbk::fAlert:
 		return xdhjst::snDialogAlert;
 		break;
 	case xdhcbk::fConfirm:
 		return xdhjst::snDialogConfirm;
 		break;
-	case xdhcbk::fSetChildren:
+	case xdhcbk::fSetCasting:
 		qRFwk();
 		break;
-	case xdhcbk::fSetCasting:
+	case xdhcbk::fSetChildren_:
+		return xdhjst::snChildrenSetter_;
+		break;
+	case xdhcbk::fSetDocument:
+		return xdhjst::snDocumentSetter;
+		break;
+	case xdhcbk::fSetFrame:
 		qRFwk();
 		break;
 	case xdhcbk::fSetProperty:
@@ -370,16 +355,13 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 	case xdhcbk::fRemoveAttribute:
 		return xdhjst::snAttributeRemover;
 		break;
-	case xdhcbk::fLog:
-		return xdhjst::snLog;
-		break;
-	case xdhcbk::fGetResult:
-		qRFwk();
-		break;
 	case xdhcbk::fSetContent:
 		return xdhjst::snContentSetter;
 		break;
 	case xdhcbk::fGetContent:
+		qRFwk();
+		break;
+	case xdhcbk::fGetResult:
 		qRFwk();
 		break;
 	case xdhcbk::fFocus:
@@ -399,6 +381,8 @@ void xdhjsp::proxy_callback__::XDHCBKProcess(
 	va_list List )
 {
 	switch ( Function ) {
+	case xdhcbk::fSetChildren_:
+	case xdhcbk::fSetDocument:
 	case xdhcbk::fSetProperty:
 	case xdhcbk::fGetProperty:
 	case xdhcbk::fSetAttribute:
@@ -412,14 +396,14 @@ void xdhjsp::proxy_callback__::XDHCBKProcess(
 	case xdhcbk::fConfirm:
 		AlertConfirm_( C_(), Convert_( Function ), Result, List );
 		break;
+	case xdhcbk::fSetCasting:
+		SetCastings_( C_(), List );
+		break;
+	case xdhcbk::fSetFrame:
+		SetFrame_( C_(), List );
+		break;
 	case xdhcbk::fGetResult:
 		GetResult_( C_(), Result, List );
-		break;
-	case xdhcbk::fSetChildren:
-		SetChildren_( C_(), List );
-		break;
-	case xdhcbk::fSetCasting:
-		SetCasting_( C_(), List );
 		break;
 	case xdhcbk::fGetContent:
 		GetContent_( C_(), Result, List );

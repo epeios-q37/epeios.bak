@@ -46,6 +46,13 @@
 namespace xdhcbk {
 	E_CDEF( char *, CloseActionLabel, "Q37Close" );
 
+	E_ENUM( mode ) {
+		mMonoUser,	// One use only. The content of the project (i.e. which backend type to use) is defined by the user.
+		mMultiUser,	// Several users. The project (which defines the backend to use) is predefiend in the configuration file.
+		m_amount,
+		m_Undefined
+	};
+
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 
@@ -77,18 +84,18 @@ namespace xdhcbk {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
+		fSetCasting,		// Id, XML, XSL.
 		fSetChildren_,		// Id, XML, XSL.
-		fSetFrame,			// Id, XML, XSL.
 		fSetDocument,		// XML, XSL.
-		fHandleCasting,		// Id, XML, XSL.
+		fSetFrame,			// Id, XML, XSL.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.
 		fGetAttribute,		// Id, Name.
 		fRemoveAttribute,	// Id, Name.
-		fGetResult,			// Id.
 		fSetContent,		// Id, Value.
 		fGetContent,		// Id.
+		fGetResult,			// Id.
 		fFocus,				// Id.
 		f_amount,
 		f_Undefined
@@ -141,7 +148,7 @@ namespace xdhcbk {
 		err::err___ *_qRRor;
 		sclerror::error___ *_SCLError;
 		const cio::set__ *_CIO;
-		sclfrntnd::mode__ _Mode;
+		mode__ _Mode;
 		const char *_LauncherIdentification;
 		const char *_Localization;
 	public:
@@ -151,14 +158,14 @@ namespace xdhcbk {
 			_Control = 0;
 			_qRRor = NULL;
 			_SCLError = NULL;
-			_Mode = sclfrntnd::m_Undefined;
+			_Mode = m_Undefined;
 			_CIO = NULL;
 			_LauncherIdentification = NULL;
 			_Localization = NULL;
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
-			sclfrntnd::mode__ Mode,
+			mode__ Mode,
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
@@ -180,7 +187,7 @@ namespace xdhcbk {
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
 		Q37_RMDF( const cio::set__, CIO, _CIO );
-		E_RODISCLOSE__( sclfrntnd::mode__, Mode );
+		E_RODISCLOSE__( mode__, Mode );
 	};
 #pragma pack( pop )
 

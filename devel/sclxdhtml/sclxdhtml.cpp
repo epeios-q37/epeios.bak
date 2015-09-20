@@ -65,7 +65,7 @@ namespace {
 				sclmisc::Initialize( Data.qRRor(), Data.SCLError(), Data.CIO(), Data.Localization() );
 				sclfrntnd::LoadProject();
 
-				if ( Data.Mode() == sclfrntnd::mMultiUser )
+				if ( Data.Mode() == xdhcbk::mMultiUser )
 					sclfrntnd::Connect();
 
 				SCLXDHTMLInitialization( Data.Mode() );

@@ -135,7 +135,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	{
 	private:
 		csdscb::callback__ *_Callback;
-		void *_UP;
+		void *UP_;
 		flw::ioflow__ *_Flow;
 		bso::bool__ _DataAvailable;
 		void _Create( void )
@@ -146,15 +146,15 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			Path.Init();
 			dir::GetSelfPath( Path );
 
-			_UP = _Callback->PreProcess( Path.Internal() );
+			UP_ = _Callback->PreProcess( Path.Internal() );
 		qRR
 		qRT
 		qRE
 		}
 		void _Delete( void )
 		{
-			if( _UP != NULL )
-				_Callback->PostProcess( _UP );
+			if( UP_ != NULL )
+				_Callback->PostProcess( UP_ );
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(
@@ -168,7 +168,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		virtual void FDRCommit( void )
 		{
 			if ( _DataAvailable )
-				_Callback->Process( *_Flow, _UP );
+				_Callback->Process( *_Flow, UP_ );
 
 			_DataAvailable = false;
 		}
@@ -181,7 +181,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 				_Delete();
 
 			_Callback = NULL;
-			_UP = NULL;
+			UP_ = NULL;
 			_Flow = NULL;
 			_DataAvailable = false;
 		}

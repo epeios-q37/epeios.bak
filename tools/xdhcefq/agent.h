@@ -91,7 +91,7 @@ namespace agent {
 
 			misc::AddRef( _Browser );
 
-			if ( _agent___::Init( frdbse::mMonoUser, ModuleFileName, Identification ) ) {
+			if ( _agent___::Init( xdhcbk::mMonoUser, ModuleFileName, Identification ) ) {
 				_InitializeSession();
 				return true;
 			} else
