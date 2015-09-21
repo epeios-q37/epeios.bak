@@ -84,10 +84,9 @@ namespace xdhcbk {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fSetCasting,		// Id, XML, XSL.
-		fSetChildren_,		// Id, XML, XSL.
-		fSetDocument,		// XML, XSL.
-		fSetFrame,			// Id, XML, XSL.
+		fFillCasting,		// Id, XML, XSL.	// If 'Id' != 'NULL', it's the id of an 'iframe'.
+		fFillElement,		// Id, XML, XSL.
+		fFillDocument,		// Id, XML, XSL.	// If 'Id' != 'NULL', it's the id of an 'iframe'.
 		fSetProperty,		// Id, Name, Value.
 		fGetProperty,		// Id, Name.
 		fSetAttribute,		// Id, Name, Value.

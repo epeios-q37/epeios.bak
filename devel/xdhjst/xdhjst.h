@@ -44,23 +44,19 @@ namespace xdhjst {
 		snAttributeGetter,
 		snAttributeRemover,
 		snAttributeSetter,
-		snChildrenSetter_,
-		snFrameSetter,
-		snFrameCastingDefiner,
-		snFrameCastingHandler,
+		snElementFiller,
+		snDocumentFiller,
+		snCastingFiller,
 		snContentGetter,
 		snContentSetter,
 		snDialogAlert,
 		snDialogConfirm,
-		snDocumentSetter,
-		snDocumentCastingDefiner,
-		snDocumentCastingHandler,
-		snFocusing,
+		snFocuser,
 		snLog,
 		snPropertyGetter,
 		snPropertySetter,
 		snWidgetContentRetriever,
-		snWidgetFocusing,
+		snWidgetFocuser,
 		sn_amount,
 		sn_Undefined,
 	};
@@ -280,33 +276,40 @@ namespace xdhjst {
 
 	namespace scripter {
 		void HandleEventsDigest(
+			const str::string_ &FrameId,
 			const xdhcbk::args_ &Digest,
 			str::string_ &Script );
 
 		void HandleEventsDigests(
+			const str::string_ &FrameId,
 			const xdhcbk::args_ &Digests,
 			str::string_ &Script );
-
+		/*
 		void HandleWidgetFeatures(
 			const str::string_ &Id,
 			const xdhcbk::args_ &Features,
 			str::string_ &Script );
+		*/
 
 		// NOTA : Digest = '(Id|Features)'.
 
 		void HandleWidgetDigest(
+			const str::string_ &FrameId,
 			const xdhcbk::args_ &Digest,
 			str::string_ &Script );
 
 		void HandleWidgetDigests(
+			const str::string_ &FrameId,
 			const xdhcbk::args_ &Digests,
 			str::string_ &Script );
 
 		void HandleCastsDigest(
+			const str::string_ &FrameId,
 			const xdhcbk::args_ &Digest,
 			str::string_ &Script );
 
 		void HandleCastsDigests(
+			const str::string_ &FrameId,
 			const xdhcbk::args_ &Digests,
 			str::string_ &Script );
 	}

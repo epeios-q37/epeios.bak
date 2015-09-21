@@ -35,6 +35,8 @@ using xdhcbk::nstring___;
 using xdhcbk::nchar__;
 
 namespace {
+
+	/*
 	typedef void (CEF_CALLBACK *visit__)(
 		struct _cef_domvisitor_t* self,
 		struct _cef_domdocument_t* document );
@@ -465,7 +467,7 @@ namespace {
 
 		Frame->visit_dom( Frame, &Visitor );
 	}
-
+*/
 	void HandleFileRelatedPredefinedAction_(
 		misc::client_message__ Message,
 		const str::string_ &UserAction,
@@ -566,6 +568,7 @@ namespace {
 		{
 			sclmisc::MGetValue( registry::custom_item::attribute_name::Result, Buffer );
 		}
+		/*
 		virtual void XDHJSPHandleExtensions( const xdhcbk::nstring___ &Id ) override
 		{
 			HandleExtensions_( Id, _A() );
@@ -574,6 +577,7 @@ namespace {
 		{
 			HandleCastings_(Id, _A() );
 		}
+		*/
 	public:
 		void reset( bso::bool__ P = true )
 		{

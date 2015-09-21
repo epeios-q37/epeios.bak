@@ -42,13 +42,9 @@ const str::string_ &xdhjst::GetTaggedScript(
 	C( Log, Log );
 	C( DialogAlert, dialog::Alert );
 	C( DialogConfirm, dialog::Confirm );
-	C( ChildrenSetter_, ChildrenSetter_ );
-	C( DocumentSetter, document::Setter );
-	C( DocumentCastingDefiner, document::casting::Definer );
-	C( DocumentCastingHandler, document::casting::Handler );
-	C( FrameSetter, frame::Setter );
-	C( FrameCastingDefiner, frame::casting::Definer );
-	C( FrameCastingHandler, frame::casting::Handler );
+	C( ElementFiller, ElementFiller );
+	C( DocumentFiller, DocumentFiller );
+	C( CastingFiller, CastingFiller );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -57,8 +53,8 @@ const str::string_ &xdhjst::GetTaggedScript(
 	C( WidgetContentRetriever, widget::ContentRetriever );
 	C( ContentSetter, content::Setter );
 	C( ContentGetter, content::Getter );
-	C( WidgetFocusing, widget::Focusing );
-	C( Focusing, Focusing );
+	C( WidgetFocuser, widget::Focuser );
+	C( Focuser, Focuser );
 	default:
 		qRFwk();
 		break;
@@ -164,18 +160,14 @@ qRB
 	S( AttributeRemover, Id_, Name_, NULL  );
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
-	S( DocumentSetter, XML_, XSL_, NULL );
-	S( DocumentCastingDefiner, XML_, XSL_, NULL );
-	S( DocumentCastingHandler, XML_, XSL_, NULL );
+	S( ElementFiller, Id_, XML_, XSL_, NULL );
+	S( DocumentFiller, Id_, XML_, XSL_, NULL );
+	S( CastingFiller, Id_, XML_, XSL_, NULL );
 	S( ContentSetter, Id_, Value_, NULL );
 	S( ContentGetter, Id_, NULL );
-	S( ChildrenSetter_, Id_, XML_, XSL_, NULL );
-	S( FrameSetter, Id_, XML_, XSL_, NULL );
-	S( FrameCastingDefiner, Id_, XML_, XSL_, NULL );
-	S( FrameCastingHandler, Id_, XML_, XSL_, NULL );
 	S( WidgetContentRetriever, Id_, Method_, NULL );
-	S( WidgetFocusing, Id_, Method_, NULL );
-	S( Focusing, Id_, NULL );
+	S( WidgetFocuser, Id_, Method_, NULL );
+	S( Focuser, Id_, NULL );
 	default:
 		qRFwk();
 		break;
@@ -605,7 +597,7 @@ qRR
 qRT
 qRE
 }
-
+/*
 void xdhjst::scripter::HandleWidgetFeatures(
 	const str::string_ &Id,
 	const xdhcbk::args_ &Digest,
@@ -617,7 +609,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	SubScript.Init();
-	sclmisc::MGetValue( xdhjsr::script::widget::Instantiation, SubScript );
+	sclmisc::MGetValue( xdhjsr::script::widget::Instantiator, SubScript );
 
 	Type.Init();
 	Parameters.Init();
@@ -637,8 +629,9 @@ qRR
 qRT
 qRE
 }
-
+*/
 void xdhjst::scripter::HandleWidgetDigest(
+	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
 {
@@ -657,7 +650,7 @@ qRB
 	Retriever.GetTable( Features );
 
 	SubScript.Init();
-	sclmisc::MGetValue( xdhjsr::script::widget::Instantiation, SubScript );
+	sclmisc::MGetValue( xdhjsr::script::widget::Instantiator, SubScript );
 
 	Type.Init();
 	Parameters.Init();
@@ -679,6 +672,7 @@ qRE
 }
 
 void xdhjst::scripter::HandleWidgetDigests(
+	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
 {
@@ -691,7 +685,7 @@ qRB
 	while ( Retriever.Availability() != strmrg::aNone ) {
 		Digest.Init();
 		Retriever.GetTable( Digest );
-		scripter::HandleWidgetDigest( Digest, Script );
+		scripter::HandleWidgetDigest( FrameId, Digest, Script );
 	}
 qRR
 qRT
@@ -699,19 +693,35 @@ qRE
 }
 
 namespace {
+	void SetDocumentReferer_(
+		const str::string_ &Id,	// If 'Id' != 'NULL', id ot a frame, otherwise we deal with the current document.
+		str::string_ &Referer )
+	{
+		if ( Id.Amount() == 0 )
+			Referer.Append( "document" );
+		else
+			Referer.Append( "document.getElementById(\"Id\").contentDocument" );
+	}
+
 	void SetupEvent_(
+		const str::string_ &FrameId,
 		const event_abstract_ &Abstract,
-		const str::string_ &Id,
+		const str::string_ &ElementId,
 		str::string_ &Script )
 	{
 	qRH
 		str::string SubScript;
 		str::strings TagNames, TagValues;
+		str::string DocumentReferer;
 	qRB
+		DocumentReferer.Init();
+		SetDocumentReferer_( FrameId, DocumentReferer );
+		AppendTag_( "Document", DocumentReferer, TagNames, TagValues );
+
 		TagNames.Init();
 		TagValues.Init();
 
-		AppendTag_("Id", Id, TagNames, TagValues );
+		AppendTag_("Id", ElementId, TagNames, TagValues );
 
 		if ( Abstract.Event == "drop" ) {
 			SubScript.Init();
@@ -725,7 +735,7 @@ namespace {
 			Script.Append( SubScript );
 		} else {
 			SubScript.Init();
-			sclmisc::MGetValue( xdhjsr::script::EventHandler, SubScript );
+			sclmisc::MGetValue( xdhjsr::script::EventSetter, SubScript );
 
 			AppendTag_("Event", Abstract.Event, TagNames, TagValues );
 			tagsbs::SubstituteLongTags( SubScript, TagNames, TagValues );
@@ -738,8 +748,9 @@ namespace {
 	}
 
 	void SetupEvents_(
+		const str::string_ &FrameId,
 		const event_abstracts_ &Abstracts,
-		const str::string_ &Id,
+		const str::string_ &ElementId,
 		str::string_ &Script )
 	{
 		ctn::E_CITEM( event_abstract_ ) Abstract;
@@ -748,7 +759,7 @@ namespace {
 		Abstract.Init( Abstracts );
 
 		while ( Row != qNIL ) {
-			SetupEvent_( Abstract( Row ), Id, Script );
+			SetupEvent_( FrameId, Abstract( Row ), ElementId, Script );
 
 			Row = Abstracts.Next( Row) ;
 		}
@@ -757,6 +768,7 @@ namespace {
 }
 
 void xdhjst::scripter::HandleEventsDigest(
+	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
 {
@@ -780,13 +792,14 @@ qRB
 	Abstracts.Init();
 	FillEventAbstracts( Name, Events, Abstracts );
 
-	SetupEvents_( Abstracts, Id, Script );
+	SetupEvents_( FrameId, Abstracts, Id, Script );
 qRR
 qRT
 qRE
 }
 
 void xdhjst::scripter::HandleEventsDigests(
+	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
 {
@@ -799,7 +812,7 @@ qRB
 	while ( Retriever.Availability() != strmrg::aNone ) {
 		Digest.Init();
 		Retriever.GetTable( Digest );
-		scripter::HandleEventsDigest( Digest, Script );
+		scripter::HandleEventsDigest( FrameId, Digest, Script );
 	}
 qRR
 qRT
@@ -808,25 +821,27 @@ qRE
 
 namespace{
 	void SetupCast_(
-		const str::string_ &Id,
+		const str::string_ &FrameId,
+		const str::string_ &ElementId,
 		const str::string_ &Cast,
 		str::string_ &Script )
 	{
 	qRH
 		str::string SubScript;
 		str::strings TagNames, TagValues;
+		str::string DocumentReferer;
 	qRB
+		DocumentReferer.Init();
+		SetDocumentReferer_( FrameId, DocumentReferer );
+		AppendTag_( "Document", DocumentReferer, TagNames, TagValues );
+
 		SubScript.Init();
 
 		TagNames.Init();
 		TagValues.Init();
 
-		if ( Id.Amount() == 0 )
-			sclmisc::MGetValue( xdhjsr::script::document::casting::Handler, SubScript );
-		else {
-			AppendTag_("Id", Id, TagNames, TagValues );
-			sclmisc::MGetValue( xdhjsr::script::frame::casting::Handler, SubScript );
-		}
+		AppendTag_("Id", ElementId, TagNames, TagValues );
+		sclmisc::MGetValue( xdhjsr::script::CastHandler, SubScript );
 
 		AppendTag_( "Cast", Cast, TagNames, TagValues );
 
@@ -839,7 +854,8 @@ namespace{
 	}
 
 	void SetupCasts_(
-		const str::string_ &Id,
+		const str::string_ &FrameId,
+		const str::string_ &ElementId,
 		const str::strings_ &Casts,
 		str::string_ &Script )
 	{
@@ -851,7 +867,7 @@ namespace{
 		Row = Casts.First();
 	
 		while ( Row != qNIL ) {
-			SetupCast_(Id, Cast( Row ), Script );
+			SetupCast_( FrameId, ElementId, Cast( Row ), Script );
 
 			Row = Casts.Next( Row );
 		}
@@ -864,6 +880,7 @@ namespace{
 }
 
 void xdhjst::scripter::HandleCastsDigest(
+	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
 {
@@ -880,13 +897,14 @@ qRB
 	Casts.Init();
 	Retriever.GetStrings( Casts );
 
-	SetupCasts_( Id, Casts, Script );
+	SetupCasts_( FrameId, Id, Casts, Script );
 qRR
 qRT
 qRE
 }
 
 void xdhjst::scripter::HandleCastsDigests(
+	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
 {
@@ -899,7 +917,7 @@ qRB
 	while ( Retriever.Availability() != strmrg::aNone ) {
 		Digest.Init();
 		Retriever.GetTable( Digest );
-		scripter::HandleCastsDigest( Digest, Script );
+		scripter::HandleCastsDigest( FrameId, Digest, Script );
 	}
 qRR
 qRT

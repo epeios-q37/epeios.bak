@@ -12,6 +12,13 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-21 :
+- XDHCBK, XDHJSP, 
+	* Handling iframes through document with an id.
+- XDHJSP :
+	* Removing '(XDHJSP)HandleExtensions(...)' and '(XDHJSP)HandleCastings(...)'. Corresponding actions now made
+	  when the document/frame and their casting are set.
+
 2015-09-20
 - XDHCBK, XDJ* :
 	* More changes so what called 'frame' is now an 'iframe' and no more an element's child.

@@ -48,8 +48,6 @@ namespace xdhjsp {
 		virtual void XDHJSPGetRootTagId( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XDHJSPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XDHJSPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XDHJSPHandleExtensions( const xdhcbk::nstring___ &Id ) = 0;
-		virtual void XDHJSPHandleCastings( const xdhcbk::nstring___ &Id ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -100,14 +98,6 @@ namespace xdhjsp {
 			XDHJSPGetResultAttributeName( Buffer );
 
 			return Buffer;
-		}
-		void HandleExtensions( const xdhcbk::nstring___ &Id )
-		{
-			XDHJSPHandleExtensions( Id );
-		}
-		void HandleCastings( const xdhcbk::nstring___ &Id )
-		{
-			XDHJSPHandleCastings( Id );
 		}
 	};
 

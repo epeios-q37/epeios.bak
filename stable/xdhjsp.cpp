@@ -225,9 +225,9 @@ qRB
 		GetWidgetFocusingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, xdhjst::snFocusing, NULL, Id );
+		Execute( Callback, xdhjst::snFocuser, NULL, Id );
 	else
-		Execute( Callback, xdhjst::snWidgetFocusing, NULL, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhjst::snWidgetFocuser, NULL, Id, nstring___( Method ).Internal()() );
 qRR
 qRT
 qRE
@@ -238,58 +238,6 @@ static void Focus_(
 	va_list List )
 {
 	Focus_( Callback, va_arg( List, const nchar__ * ) );
-}
-
-static void SetFrame_(
-	callback__ &Callback,
-	const nchar__ *Id,	// If == 'NULL', the script is called from inside the (i)frame, so current document is the frame's one.
-	const nchar__ *XML,
-	const nchar__ *XSL )
-{
-	if ( Id == NULL )
-		Execute( Callback, xdhjst::snDocumentSetter, NULL, XML, XSL );
-	 else
-		Execute( Callback, xdhjst::snFrameSetter, NULL, Id, XML, XSL );
-
-	Callback.HandleExtensions( Id );
-}
-
-static void SetFrame_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *XML = va_arg( List, const nchar__ * );
-	const nchar__ *XSL = va_arg( List, const nchar__ * );
-
-	SetFrame_( Callback, Id, XML, XSL );
-}
-
-static void SetCastings_(
-	callback__ &Callback,
-	const nchar__ *Id,	// If == 'NULL', the script is called from inside the frame, so current document is the frame's one. In the other case, 'Id' is the one od the concerned (i)frame.
-	const nchar__ *XML,
-	const nchar__ *XSL )
-{
-	if ( Id == NULL )
-		Execute( Callback, xdhjst::snDocumentCastingDefiner, NULL, XML, XSL );
-	else
-		Execute( Callback, xdhjst::snFrameCastingDefiner, NULL, Id, XML, XSL );
-
-	Callback.HandleCastings( Id );
-}
-
-static void SetCastings_(
-	callback__ &Callback,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *Id = va_arg( List, const nchar__ * );
-	const nchar__ *XML = va_arg( List, const nchar__ * );
-	const nchar__ *XSL = va_arg( List, const nchar__ * );
-
-	SetCastings_( Callback, Id, XML, XSL );
 }
 
 static void GetResult_(
@@ -328,17 +276,14 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 	case xdhcbk::fConfirm:
 		return xdhjst::snDialogConfirm;
 		break;
-	case xdhcbk::fSetCasting:
-		qRFwk();
+	case xdhcbk::fFillElement:
+		return xdhjst::snElementFiller;
 		break;
-	case xdhcbk::fSetChildren_:
-		return xdhjst::snChildrenSetter_;
+	case xdhcbk::fFillDocument:
+		return xdhjst::snDocumentFiller;
 		break;
-	case xdhcbk::fSetDocument:
-		return xdhjst::snDocumentSetter;
-		break;
-	case xdhcbk::fSetFrame:
-		qRFwk();
+	case xdhcbk::fFillCasting:
+		return xdhjst::snCastingFiller;
 		break;
 	case xdhcbk::fSetProperty:
 		return xdhjst::snPropertySetter;
@@ -381,8 +326,9 @@ void xdhjsp::proxy_callback__::XDHCBKProcess(
 	va_list List )
 {
 	switch ( Function ) {
-	case xdhcbk::fSetChildren_:
-	case xdhcbk::fSetDocument:
+	case xdhcbk::fFillElement:
+	case xdhcbk::fFillDocument:
+	case xdhcbk::fFillCasting:
 	case xdhcbk::fSetProperty:
 	case xdhcbk::fGetProperty:
 	case xdhcbk::fSetAttribute:
@@ -395,12 +341,6 @@ void xdhjsp::proxy_callback__::XDHCBKProcess(
 	case xdhcbk::fAlert:
 	case xdhcbk::fConfirm:
 		AlertConfirm_( C_(), Convert_( Function ), Result, List );
-		break;
-	case xdhcbk::fSetCasting:
-		SetCastings_( C_(), List );
-		break;
-	case xdhcbk::fSetFrame:
-		SetFrame_( C_(), List );
 		break;
 	case xdhcbk::fGetResult:
 		GetResult_( C_(), Result, List );
