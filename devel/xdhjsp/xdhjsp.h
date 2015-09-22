@@ -45,7 +45,6 @@ namespace xdhjsp {
 		virtual void XDHJSPGetTranslation(
 			const char *Message,
 			str::string_ &Buffer ) = 0;
-		virtual void XDHJSPGetRootTagId( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XDHJSPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XDHJSPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
@@ -78,12 +77,6 @@ namespace xdhjsp {
 			str::string_ &Buffer )
 		{
 			XDHJSPGetTranslation( Message, Buffer );
-
-			return Buffer;
-		}
-		const char *GetRootTagId( TOL_CBUFFER___ &Buffer )
-		{
-			XDHJSPGetRootTagId( Buffer );
 
 			return Buffer;
 		}

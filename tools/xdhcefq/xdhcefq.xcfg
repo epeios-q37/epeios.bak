@@ -73,7 +73,6 @@
 			</Setup>
 		</Setups>
 		<Definitions>
-			<RootTagId>Root</RootTagId>
 			<CustomItems>
 				<!-- Defined in 'XDH.xcfg'. -->
 			</CustomItems>

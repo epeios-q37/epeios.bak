@@ -122,7 +122,7 @@ namespace core {
 			_ActionHelperCallback.reset( P );
 		}
 		E_CDTOR( core___ );
-		void Init( sclfrntnd::mode__ Mode )
+		void Init( xdhcbk::mode__ Mode )
 		{
 			_ActionHelperCallback.Init();
 			_core___::Init( Mode, _ActionHelperCallback );

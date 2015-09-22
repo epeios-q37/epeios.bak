@@ -556,10 +556,6 @@ namespace {
 		qRT
 		qRE
 		}
-		virtual void XDHJSPGetRootTagId( TOL_CBUFFER___ &Buffer ) override
-		{
-			sclmisc::MGetValue( registry::RootTagId, Buffer);
-		}
 		virtual void XDHJSPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
 		{
 			sclmisc::MGetValue( registry::custom_item::attribute_name::Widget, Buffer);

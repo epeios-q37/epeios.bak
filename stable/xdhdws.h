@@ -90,45 +90,38 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		void SetCastings(
+		void FillCasting(
+			const nstring___ &FrameId,
+			const nstring___ &XML,
+			const nstring___ &XSL )
+		{
+			C_().Process( xdhcbk::fFillCasting, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
+		}
+		void FillCasting(
+			const nstring___ &XML,
+			const nstring___ &XSL )
+		{
+			FillCasting( nstring___(), XML, XSL );
+		}
+		void FillElement(
 			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcbk::fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcbk::fFillElement, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void SetChildren_(
-			const nstring___ &Id,
+		void FillDocument(
+			const nstring___ &FrameId,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcbk::fSetChildren_, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcbk::fFillDocument, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void SetFrame(
-			const nstring___ &Id,
+		void FillDocument(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcbk::fSetFrame, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
-		}
-		void SetDocument(
-			const nstring___ &XML,
-			const nstring___ &XSL )
-		{
-			C_().Process( xdhcbk::fSetDocument, NULL, XML.Internal()( ), XSL.Internal()( ) );
-		}
-		void SetCasting(
-			const nstring___ &Id,
-			const nstring___ &XML,
-			const nstring___ &XSL )
-		{
-			C_().Process( xdhcbk::fSetCasting, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
-		}
-		void SetDocumentCasting(
-			const nstring___ &XML,
-			const nstring___ &XSL )
-		{
-			SetCasting( nstring___(), XML, XSL );
+			FillDocument( nstring___(), XML, XSL );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

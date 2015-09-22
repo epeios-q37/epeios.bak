@@ -29,7 +29,7 @@
 const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 
 
-void sclxdhtml::SCLXDHTMLInitialization( sclfrntnd::mode__ Mode )
+void sclxdhtml::SCLXDHTMLInitialization( xdhcbk::mode__ Mode )
 {
 	core::Core.Init( Mode );
 }
@@ -51,10 +51,10 @@ xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	Session->Init( Language, ProxyCallback );
 
 	switch ( core::Core.Mode() ) {
-	case sclfrntnd::mMonoUser:
+	case xdhcbk::mMonoUser:
 		::prolog::SetLayout( *Session );
 		break;
-	case sclfrntnd::mMultiUser:
+	case xdhcbk::mMultiUser:
 //		login::SetLayout( *Session );
 		break;
 	default:

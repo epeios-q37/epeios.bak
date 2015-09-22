@@ -27,18 +27,17 @@ using namespace xdhjsr;
 
 using rgstry::entry___;
 
-entry___ xdhjsr::RootTagId( "RootTagId", sclrgstry::Definitions );
-
 entry___ xdhjsr::CustomItems( "CustomItems", sclrgstry::Definitions );
 
 entry___ xdhjsr::custom_item::AttributeNames("AttributeNames", CustomItems );
 entry___ xdhjsr::custom_item::attribute_name::Widget( "Widget", AttributeNames );
 entry___ xdhjsr::custom_item::attribute_name::Result( "Result", AttributeNames );
+/*
 entry___ xdhjsr::custom_item::attribute_name::OnEvent( "OnEvent", AttributeNames );
 entry___ xdhjsr::custom_item::attribute_name::OnEvents( "OnEvents", AttributeNames );
 entry___ xdhjsr::custom_item::attribute_name::Cast( "Cast", AttributeNames );
 entry___ xdhjsr::custom_item::attribute_name::Casts( "Casts", AttributeNames );
-
+*/
 
 
 entry___ xdhjsr::Scripts( "Scripts", sclrgstry::Definitions );

@@ -100,26 +100,6 @@ namespace misc {
 		cef_frame_t *Frame,
 		TOL_CBUFFER___ &Buffer );
 
-	void GetEvents(
-		const str::string_ &Id,
-		cef_frame_t *Frame,
-		xdhcbk::args_ &Events );
-
-	void GetEvents(
-		const str::string_ &Id,
-		cef_frame_t *Frame,
-		str::string_ &Events );
-
-	void GetEventsAbstracts(
-		const str::string_ &Id,
-		cef_frame_t *Frame,
-		event_abstracts_ &Abstracts );
-
-	void GetCasts(
-		const str::string_ &Id,
-		cef_frame_t *Frame,
-		xdhcbk::args_ &Casts );
-
 	enum client_message__ {	// Messages  destination du client.
 		cmOpenFile,
 		cmOpenFiles,

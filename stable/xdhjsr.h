@@ -34,8 +34,6 @@
 namespace xdhjsr {
 	using rgstry::entry___;
 
-	extern entry___ RootTagId;
-
 	extern entry___ CustomItems;
 
 	namespace custom_item {
@@ -44,10 +42,12 @@ namespace xdhjsr {
 		namespace attribute_name {
 			extern entry___ Widget;
 			extern entry___ Result;
+			/*
 			extern entry___ OnEvent;
 			extern entry___ OnEvents;
 			extern entry___ Cast;
 			extern entry___ Casts;
+			*/
 		}
 	}
 

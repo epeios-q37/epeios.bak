@@ -44,7 +44,7 @@ namespace {
 	qRE
 	}
 
-	void SetCasting_( core::session___ &Session )
+	void FillCasting_( core::session___ &Session )
 	{
 	qRH
 		str::string XML, XSL;
@@ -55,7 +55,7 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
 
-		Session.SetDocumentCasting( XML, XSL );
+		Session.FillCasting( XML, XSL );
 	qRR
 	qRT
 	qRE
@@ -90,9 +90,9 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
 
-	Session.SetDocument( XML, XSL );
+	Session.FillDocument( XML, XSL );
 
-	SetCasting_( Session );
+	FillCasting_( Session );
 
 	Session.SwitchTo( core::pLogin );
 qRR
@@ -102,7 +102,7 @@ qRE
 
 BASE_AC( login::switch_backend_type__ )
 {
-	SetCasting_( Session );
+	FillCasting_( Session );
 }
 
 BASE_AC( login::display_embedded_backend_filename__ )
@@ -118,7 +118,7 @@ qRH
 	sclfrntnd::backend_type__ BackendType = sclfrntnd::bt_Undefined;
 	str::string BackendFeature;
 qRB
-	if ( core::Core.Mode() == sclfrntnd::mMonoUser ) {
+	if ( core::Core.Mode() == xdhcbk::mMonoUser ) {
 		BackendFeature.Init();
 		BackendType = sclxdhtml::login::GetBackendFeatures( Session, BackendFeature );
 		sclxdhtml::Connect( BackendType, BackendFeature );
