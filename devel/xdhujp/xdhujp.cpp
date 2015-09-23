@@ -17,20 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHJSP__COMPILATION
+#define XDHUJP__COMPILATION
 
-#include "xdhjsp.h"
+#include "xdhujp.h"
 
-#include "xdhjsr.h"
+#include "xdhujr.h"
+#include "xdhutl.h"
 
 #include "sclrgstry.h"
 #include "sclmisc.h"
 
-using namespace xdhjsp;
+using namespace xdhujp;
 
-using xdhcbk::nstring___;
-using xdhcbk::nchar__;
-using xdhjst::script_name__;
+using xdhutl::nstring___;
+using xdhutl::nchar__;
+using xdhujt::script_name__;
 
 static const char *Execute_(
 	callback__  &Callback,
@@ -52,7 +53,7 @@ qRE
 	return Result;
 }
 
-const char *xdhjsp::Execute(
+const char *xdhujp::Execute(
 	callback__  &Callback,
 	script_name__ ScriptName,
 	TOL_CBUFFER___ *Buffer,
@@ -106,6 +107,26 @@ static void AlertConfirm_(
 	AlertConfirm_( Callback, ScriptName, Result, XML, XSL, Title );
 }
 
+static void FillDocumentOrCasting_(
+	callback__ &Callback,
+	script_name__ ScriptName,
+	const nchar__ *FrameId,
+	const nchar__ *XML,
+	const nchar__ *XSL )
+{
+qRH
+	TOL_CBUFFER___ Result;
+	str::string Digests;
+	str::string Script;
+qRB
+	Digests.Init( Execute( Callback, ScriptName, &Result, FrameId, XML, XSL ) );
+
+xdhutl::GetEventsAbstracts( )
+qRR
+qRT
+qRE
+}
+
 static void GetWidgetFeatures_(
 	const str::string_ &MergedArgs,
 	str::string_ &Type,
@@ -114,11 +135,11 @@ static void GetWidgetFeatures_(
 	str::string_ &FocusingMethod )
 {
 qRH
-	xdhcbk::args Args;
-	xdhcbk::retriever__ Retriever;
+	xdhcmn::args Args;
+	xdhcmn::retriever__ Retriever;
 qRB
 	Args.Init();
-	xdhcbk::Split( MergedArgs, Args );
+	xdhcmn::Split( MergedArgs, Args );
 
 	Retriever.Init( Args );
 
@@ -166,7 +187,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, xdhjst::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
+	Args.Init( Execute( Callback, xdhujt::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -174,9 +195,9 @@ qRB
 		GetWidgetContentRetrievingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, xdhjst::snContentGetter, Result, Id );
+		Execute( Callback, xdhujt::snContentGetter, Result, Id );
 	else
-		Execute( Callback, xdhjst::snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhujt::snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
 qRR
 qRT
 qRE
@@ -217,7 +238,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, xdhjst::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
+	Args.Init( Execute( Callback, xdhujt::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -225,9 +246,9 @@ qRB
 		GetWidgetFocusingMethod_( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, xdhjst::snFocuser, NULL, Id );
+		Execute( Callback, xdhujt::snFocuser, NULL, Id );
 	else
-		Execute( Callback, xdhjst::snWidgetFocuser, NULL, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhujt::snWidgetFocuser, NULL, Id, nstring___( Method ).Internal()() );
 qRR
 qRT
 qRE
@@ -250,7 +271,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );
-	Execute( Callback, xdhjst::snAttributeGetter, Result, Id, nstring___( ResultAttributeName ).Internal()() );
+	Execute( Callback, xdhujt::snAttributeGetter, Result, Id, nstring___( ResultAttributeName ).Internal()() );
 qRR
 qRT
 qRE
@@ -264,111 +285,91 @@ static void GetResult_(
 	GetResult_( Callback, va_arg( List, const nchar__ * ), Result );
 }
 
-static void FillDocumentOrCasting_(
-	callback__ &Callback,
-	script_name__ ScriptName,
-	const nchar__ *FrameId,
-	const nchar__ *XML,
-	const nchar__ *XSL )
+static script_name__ Convert_( xdhcmn::function__ Function )
 {
-qRH
-	TOL_CBUFFER___ Result;
-	str::string Digests;
-	str::string Script;
-qRB
-	Digests.Init( Execute( Callback, ScriptName, &Result, FrameId, XML, XSL ) );
-
-	xdhjst::scripter::HandleEventsWidgetsDigests( FrameId, Digests, Script );
-qRR
-qRT
-qRE
-}
-
-static void AlertConfirm_(
-	callback__ &Callback,
-	script_name__ ScriptName,
-	va_list List )
-{
-	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *FrameId = va_arg( List, const nchar__ * );
-	const nchar__ *XML = va_arg( List, const nchar__ * );
-	const nchar__ *XSL = va_arg( List, const nchar__ * );
-
-	FillDocumentOrCasting_( Callback, ScriptName, FrameId, XML, XSL );
-}
-
-
-static script_name__ Convert_( xdhcbk::function__ Function )
-{
-	// The 'Function' which have no entry have no 'direct' script and have special handling.
 	switch ( Function ) {
-	case xdhcbk::fLog:
-		return xdhjst::snLog;
+	case xdhcmn::fLog:
+		return xdhujt::snLog;
 		break;
-	case xdhcbk::fAlert:
-		return xdhjst::snDialogAlert;
+	case xdhcmn::fAlert:
+		return xdhujt::snDialogAlert;
 		break;
-	case xdhcbk::fConfirm:
-		return xdhjst::snDialogConfirm;
+	case xdhcmn::fConfirm:
+		return xdhujt::snDialogConfirm;
 		break;
-	case xdhcbk::fFillElement:
-		return xdhjst::snElementFiller;
+	case xdhcmn::fFillElement:
+		return xdhujt::snElementFiller;
 		break;
-	case xdhcbk::fSetProperty:
-		return xdhjst::snPropertySetter;
+	case xdhcmn::fFillDocument:
+		return xdhujt::snDocumentFiller;
 		break;
-	case xdhcbk::fGetProperty:
-		return xdhjst::snPropertyGetter;
+	case xdhcmn::fFillCasting:
+		return xdhujt::snCastingFiller;
 		break;
-	case xdhcbk::fSetAttribute:
-		return xdhjst::snAttributeSetter;
+	case xdhcmn::fSetProperty:
+		return xdhujt::snPropertySetter;
 		break;
-	case xdhcbk::fGetAttribute:
-		return xdhjst::snAttributeGetter;
+	case xdhcmn::fGetProperty:
+		return xdhujt::snPropertyGetter;
 		break;
-	case xdhcbk::fRemoveAttribute:
-		return xdhjst::snAttributeRemover;
+	case xdhcmn::fSetAttribute:
+		return xdhujt::snAttributeSetter;
 		break;
-	case xdhcbk::fSetContent:
-		return xdhjst::snContentSetter;
+	case xdhcmn::fGetAttribute:
+		return xdhujt::snAttributeGetter;
+		break;
+	case xdhcmn::fRemoveAttribute:
+		return xdhujt::snAttributeRemover;
+		break;
+	case xdhcmn::fSetContent:
+		return xdhujt::snContentSetter;
+		break;
+	case xdhcmn::fGetContent:
+		qRFwk();
+		break;
+	case xdhcmn::fGetResult:
+		qRFwk();
+		break;
+	case xdhcmn::fFocus:
+		qRFwk();
 		break;
 	default:
 		qRFwk();
 		break;
 	}
 
-	return xdhjst::sn_Undefined;	// To avoid a warning.
+	return xdhujt::sn_Undefined;	// To avoid a warning.
 }
 
-void xdhjsp::proxy_callback__::XDHCBKProcess(
-	xdhcbk::function__ Function,
+void xdhujp::proxy_callback__::XDHCMNProcess(
+	xdhcmn::function__ Function,
 	TOL_CBUFFER___ *Result,
 	va_list List )
 {
 	switch ( Function ) {
-	case xdhcbk::fFillElement:
-	case xdhcbk::fFillDocument:
-	case xdhcbk::fFillCasting:
-	case xdhcbk::fSetProperty:
-	case xdhcbk::fGetProperty:
-	case xdhcbk::fSetAttribute:
-	case xdhcbk::fGetAttribute:
-	case xdhcbk::fRemoveAttribute:
-	case xdhcbk::fSetContent:
-	case xdhcbk::fLog:
+	case xdhcmn::fFillElement:
+	case xdhcmn::fFillDocument:
+	case xdhcmn::fFillCasting:
+	case xdhcmn::fSetProperty:
+	case xdhcmn::fGetProperty:
+	case xdhcmn::fSetAttribute:
+	case xdhcmn::fGetAttribute:
+	case xdhcmn::fRemoveAttribute:
+	case xdhcmn::fSetContent:
+	case xdhcmn::fLog:
 		Execute_( C_(), Convert_( Function ), Result, List );
 		break;
-	case xdhcbk::fAlert:
-	case xdhcbk::fConfirm:
+	case xdhcmn::fAlert:
+	case xdhcmn::fConfirm:
 		AlertConfirm_( C_(), Convert_( Function ), Result, List );
 		break;
-	case xdhcbk::fGetResult:
+	case xdhcmn::fGetResult:
 		GetResult_( C_(), Result, List );
 		break;
-	case xdhcbk::fGetContent:
+	case xdhcmn::fGetContent:
 		GetContent_( C_(), Result, List );
 		break;
-	case xdhcbk::fFocus:
+	case xdhcmn::fFocus:
 		Focus_( C_(), List);
 		break;
 	default:

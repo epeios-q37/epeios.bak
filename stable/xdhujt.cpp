@@ -17,24 +17,24 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHJST__COMPILATION
+#define XDHUJT__COMPILATION
 
-#include "xdhjst.h"
+#include "xdhujt.h"
 
-#include "xdhjsr.h"
+#include "xdhujr.h"
 
 #include "sclmisc.h"
 
 #include "stsfsm.h"
 
-using namespace xdhjst;
+using namespace xdhujt;
 
 #define C( name, entry )\
 	case sn##name:\
-		sclmisc::MGetValue( xdhjsr::script::entry, Buffer );\
+		sclmisc::MGetValue( xdhujr::script::entry, Buffer );\
 		break
 
-const str::string_ &xdhjst::GetTaggedScript(
+const str::string_ &xdhujt::GetTaggedScript(
 	script_name__ Script,
 	str::string_ &Buffer )
 {
@@ -77,7 +77,7 @@ namespace {
 	qRB
 		Names.Append( str::string( Name ) );
 		EscapedValue.Init();
-		xdhcbk::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
+		xdhcmn::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
 		Values.Append( EscapedValue );
 
 		NameForRawValue.Init( Name );
@@ -140,7 +140,7 @@ D( Cast );
 	SubstituteTags_( TaggedScript, List, __VA_ARGS__ );\
 	break\
 
-void xdhjst::GetScript(
+void xdhujt::GetScript(
 	script_name__ ScriptName,
 	str::string_ &Script,
 	va_list List )
@@ -179,7 +179,7 @@ qRT
 qRE
 }
 
-const str::string_ &xdhjst::GetScript(
+const str::string_ &xdhujt::GetScript(
 	script_name__ ScriptName,
 	str::string_ *Buffer,
 	... )
@@ -197,7 +197,7 @@ qRE
 	return *Buffer;
 }
 /*
-void xdhjst::scripter::HandleWidgetsDigest(
+void xdhujt::scripter::HandleWidgetsDigest(
 	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
@@ -238,7 +238,7 @@ qRT
 qRE
 }
 
-void xdhjst::scripter::HandleWidgetsDigests(
+void xdhujt::scripter::HandleWidgetsDigests(
 	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
@@ -334,7 +334,7 @@ namespace {
 
 }
 
-void xdhjst::scripter::HandleEventsDigest(
+void xdhujt::scripter::HandleEventsDigest(
 	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
@@ -365,7 +365,7 @@ qRT
 qRE
 }
 
-void xdhjst::scripter::HandleEventsDigests(
+void xdhujt::scripter::HandleEventsDigests(
 	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
@@ -386,7 +386,7 @@ qRT
 qRE
 }
 
-void xdhjst::scripter::HandleEventsWidgetsDigests(
+void xdhujt::scripter::HandleEventsWidgetsDigests(
 	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )
@@ -403,14 +403,14 @@ qRB
 	WidgetsDigests.Init();
 	Retriever.GetTable( WidgetsDigests );
 
-	xdhjst::scripter::HandleEventsDigests( FrameId, EventsDigests, Script );
-	xdhjst::scripter::HandleWidgetsDigests( FrameId, WidgetsDigests, Script );
+	xdhujt::scripter::HandleEventsDigests( FrameId, EventsDigests, Script );
+	xdhujt::scripter::HandleWidgetsDigests( FrameId, WidgetsDigests, Script );
 qRR
 qRT
 qRE
 }
 
-void xdhjst::scripter::HandleEventsWidgetsDigests(
+void xdhujt::scripter::HandleEventsWidgetsDigests(
 	const str::string_ &FrameId,
 	const str::string_ &RawDigests,
 	str::string_ &Script )
@@ -488,7 +488,7 @@ namespace{
 
 }
 
-void xdhjst::scripter::HandleCastsDigest(
+void xdhujt::scripter::HandleCastsDigest(
 	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digest,
 	str::string_ &Script )
@@ -512,7 +512,7 @@ qRT
 qRE
 }
 
-void xdhjst::scripter::HandleCastsDigests(
+void xdhujt::scripter::HandleCastsDigests(
 	const str::string_ &FrameId,
 	const xdhcbk::args_ &Digests,
 	str::string_ &Script )

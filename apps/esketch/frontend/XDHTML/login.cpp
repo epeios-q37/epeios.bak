@@ -118,7 +118,7 @@ qRH
 	sclfrntnd::backend_type__ BackendType = sclfrntnd::bt_Undefined;
 	str::string BackendFeature;
 qRB
-	if ( core::Core.Mode() == xdhcbk::mMonoUser ) {
+	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
 		BackendFeature.Init();
 		BackendType = sclxdhtml::login::GetBackendFeatures( Session, BackendFeature );
 		sclxdhtml::Connect( BackendType, BackendFeature );

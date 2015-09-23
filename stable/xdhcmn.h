@@ -17,16 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHCBK__INC
-# define XDHCBK__INC
+#ifndef XDHCMN__INC
+# define XDHCMN__INC
 
-# define XDHCBK_NAME		"XDHCBK"
+# define XDHCMN_NAME		"XDHCMN"
 
-# if defined( E_DEBUG ) && !defined( XDHCBK_NODBG )
-#  define XDHCBK_DBG
+# if defined( E_DEBUG ) && !defined( XDHCMN_NODBG )
+#  define XDHCMN_DBG
 # endif
 
-// X(SL)/DH(TML) CallBacKs
+// X(SL)/DH(TML) CoMmoN
 
 # include "err.h"
 # include "flw.h"
@@ -37,13 +37,13 @@
 
 # include <stdarg.h>
 
-# define XDHCBK_SHARED_DATA_VERSION_NUMBER	"11"
+# define XDHCMN_SHARED_DATA_VERSION_NUMBER	"11"
 
-# define XDHCBK_SHARED_DATA_VERSION			XDHCBK_SHARED_DATA_VERSION_NUMBER "-" CPE_AL
+# define XDHCMN_SHARED_DATA_VERSION			XDHCMN_SHARED_DATA_VERSION_NUMBER "-" CPE_AL
 
-# define XDHCBK_RETRIEVE_FUNCTION_NAME		XDHCBKRetrieve
+# define XDHCMN_RETRIEVE_FUNCTION_NAME		XDHCMNRetrieve
 
-namespace xdhcbk {
+namespace xdhcmn {
 	E_CDEF( char *, CloseActionLabel, "Q37Close" );
 
 	E_ENUM( mode ) {
@@ -53,13 +53,10 @@ namespace xdhcbk {
 		m_Undefined
 	};
 
-	typedef ntvstr::char__ nchar__;
-	typedef ntvstr::string___ nstring___;
-
 	class session_callback__
 	{
 	protected:
-		virtual bso::bool__ XDHCBKLaunch(
+		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) = 0;
 	public:
@@ -76,7 +73,7 @@ namespace xdhcbk {
 			const char *Id,
 			const char *Action )
 		{
-			return XDHCBKLaunch( Id, Action );
+			return XDHCMNLaunch( Id, Action );
 		}
 	};
 
@@ -105,7 +102,7 @@ namespace xdhcbk {
 	class proxy_callback__
 	{
 	protected:
-		virtual void XDHCBKProcess(
+		virtual void XDHCMNProcess(
 			function__ Function,
 			TOL_CBUFFER___ *Result,
 			va_list List ) = 0;
@@ -129,7 +126,7 @@ namespace xdhcbk {
 		qRB
 			va_start( List, Result );
 
-			XDHCBKProcess( Function, Result, List );
+			XDHCMNProcess( Function, Result, List );
 		qRR
 		qRT
 			va_end( List );
@@ -168,7 +165,7 @@ namespace xdhcbk {
 			const char *LauncherIdentification,
 			const char *Localization )
 		{
-			_Version = XDHCBK_SHARED_DATA_VERSION;
+			_Version = XDHCMN_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
 			_qRRor = err::qRRor;
 			_SCLError = sclerror::SCLERRORError;
@@ -193,12 +190,12 @@ namespace xdhcbk {
 	class downstream_callback__
 	{
 	protected:
-		virtual void XDHCBKInitialize( const shared_data__ &Data ) = 0;
-		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual session_callback__ *XDHCBKRetrieveCallback(
+		virtual void XDHCMNInitialize( const shared_data__ &Data ) = 0;
+		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual session_callback__ *XDHCMNRetrieveCallback(
 			const char *Language,
 			proxy_callback__ *ProxyCallback ) = 0;
-		virtual void XDHCBKReleaseCallback( session_callback__ *Callback ) = 0;
+		virtual void XDHCMNReleaseCallback( session_callback__ *Callback ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -211,11 +208,11 @@ namespace xdhcbk {
 		}
 		void Initialize( const shared_data__ &Data )
 		{
-			return XDHCBKInitialize( Data );
+			return XDHCMNInitialize( Data );
 		}
 		const char *BaseLanguage( TOL_CBUFFER___ &Buffer )
 		{
-			XDHCBKBaseLanguage( Buffer );
+			XDHCMNBaseLanguage( Buffer );
 
 			return Buffer;
 		}
@@ -223,11 +220,11 @@ namespace xdhcbk {
 			const char *Language,
 			proxy_callback__ *ProxyCallback )
 		{
-			return XDHCBKRetrieveCallback( Language, ProxyCallback );
+			return XDHCMNRetrieveCallback( Language, ProxyCallback );
 		}
 		void ReleaseCallback( session_callback__ *Callback )
 		{
-			return XDHCBKReleaseCallback( Callback );
+			return XDHCMNReleaseCallback( Callback );
 		}
 	};
 

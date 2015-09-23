@@ -60,7 +60,7 @@ namespace core {
 			_Main.Init();
 			_Global.Init();
 
-			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcbk::CloseActionLabel );
+			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend(
 				&_Global.About, &_Global.Refresh, &_Global.Test,
@@ -99,7 +99,7 @@ namespace core {
 	: public _session___
 	{
 	protected:
-		virtual bso::bool__ XDHCBKLaunch(
+		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override;
 		virtual void SCLXDHTMLRefresh( page__ Page ) override;
@@ -122,7 +122,7 @@ namespace core {
 			_ActionHelperCallback.reset( P );
 		}
 		E_CDTOR( core___ );
-		void Init( xdhcbk::mode__ Mode )
+		void Init( xdhcmn::mode__ Mode )
 		{
 			_ActionHelperCallback.Init();
 			_core___::Init( Mode, _ActionHelperCallback );

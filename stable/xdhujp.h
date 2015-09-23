@@ -17,36 +17,33 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHJSP__INC
-# define XDHJSP__INC
+#ifndef XDHUJP__INC
+# define XDHUJP__INC
 
-# define XDHJSP_NAME		"XDHJSP"
+# define XDHUJP_NAME		"XDHUJP"
 
-# if defined( E_DEBUG ) && !defined( XDHJSP_NODBG )
-#  define XDHJSP_DBG
+# if defined( E_DEBUG ) && !defined( XDHUJP_NODBG )
+#  define XDHUJP_DBG
 # endif
 
-// X(SL)/DH(TML) JavaScript-related Proxy
+// X(SL)/DH(TML) Upstream Javascript-related Proxy
 
-# include "xdhjst.h"
-
-# include "xdhcbk.h"
+# include "xdhujt.h"
 
 # include "err.h"
 
-
-namespace xdhjsp {
+namespace xdhujp {
 	class callback__
 	{
 	protected:
-		virtual void XDHJSPExecute(
+		virtual void XDHUJPExecute(
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer ) = 0;
-		virtual void XDHJSPGetTranslation(
+		virtual void XDHUJPGetTranslation(
 			const char *Message,
 			str::string_ &Buffer ) = 0;
-		virtual void XDHJSPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
-		virtual void XDHJSPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
+		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -61,7 +58,7 @@ namespace xdhjsp {
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer )
 		{
-			XDHJSPExecute( Script, Buffer );
+			XDHUJPExecute( Script, Buffer );
 
 			if ( Buffer != NULL )
 				return *Buffer;
@@ -76,19 +73,19 @@ namespace xdhjsp {
 			const char *Message,
 			str::string_ &Buffer )
 		{
-			XDHJSPGetTranslation( Message, Buffer );
+			XDHUJPGetTranslation( Message, Buffer );
 
 			return Buffer;
 		}
 		const char *GetWidgetAttributeName( TOL_CBUFFER___ &Buffer )
 		{
-			XDHJSPGetWidgetAttributeName( Buffer );
+			XDHUJPGetWidgetAttributeName( Buffer );
 
 			return Buffer;
 		}
 		const char *GetResultAttributeName( TOL_CBUFFER___ &Buffer )
 		{
-			XDHJSPGetResultAttributeName( Buffer );
+			XDHUJPGetResultAttributeName( Buffer );
 
 			return Buffer;
 		}
@@ -96,11 +93,11 @@ namespace xdhjsp {
 
 	const char *Execute(
 		callback__ &Callback,
-		xdhjst::script_name__ Script,
+		xdhujt::script_name__ Script,
 		TOL_CBUFFER___ *Buffer,
 		... );
 
-	typedef xdhcbk::proxy_callback__ _proxy_callback__;
+	typedef xdhcmn::proxy_callback__ _proxy_callback__;
 
 	class proxy_callback__
 	: public _proxy_callback__
@@ -108,8 +105,8 @@ namespace xdhjsp {
 	private:
 		Q37_MRMDF( callback__, C_, Callback_ );
 	protected:
-		virtual void XDHCBKProcess(
-			xdhcbk::function__ Function,
+		virtual void XDHCMNProcess(
+			xdhcmn::function__ Function,
 			TOL_CBUFFER___ *Result,
 			va_list List ) override; 
 	public:

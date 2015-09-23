@@ -17,21 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHJSR__INC
-# define XDHJSR__INC
+#ifndef XDHUJS__INC
+# define XDHUJS__INC
 
-# define XDHJSR_NAME		"XDHJSR"
+# define XDHUJS_NAME		"XDHUJS"
 
-# if defined( E_DEBUG ) && !defined( XDHJSR_NODBG )
-#  define XDHJSR_DBG
+# if defined( E_DEBUG ) && !defined( XDHUJS_NODBG )
+#  define XDHUJS_DBG
 # endif
 
-// X(SL)/DH(TML) JavaScript-related Registry
+// X(SL)/DH(TML) Upstream Javascript-related Registry
 
 # include "err.h"
 # include "rgstry.h"
 
-namespace xdhjsr {
+namespace xdhujr {
 	using rgstry::entry___;
 
 	extern entry___ CustomItems;

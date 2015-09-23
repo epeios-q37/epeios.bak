@@ -39,7 +39,7 @@ qRT
 qRE
 }
 
-bso::bool__ core::session___::XDHCBKLaunch(
+bso::bool__ core::session___::XDHCMNLaunch(
 	const char *Id,
 	const char *Action )
 {

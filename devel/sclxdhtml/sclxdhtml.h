@@ -181,7 +181,7 @@ namespace sclxdhtml {
 
 	typedef fblfrd::reporting_callback__ _reporting_callback__;
 
-	typedef xdhcbk::session_callback__ _session_callback__;
+	typedef xdhcmn::session_callback__ _session_callback__;
 
 	using xdhdws::proxy__;
 
@@ -278,7 +278,7 @@ namespace sclxdhtml {
 		E_CVDTOR( session___ )
 		void Init(
 			const char *Language,
-			xdhcbk::proxy_callback__ *Callback )
+			xdhcmn::proxy_callback__ *Callback )
 		{
 			proxy__::Init( Callback );
 			_ReportingCallback.Init( *this, Language );
@@ -360,7 +360,7 @@ namespace sclxdhtml {
 	{
 	private:
 		action_handler<session> _Handler;
-		xdhcbk::mode__ _Mode;
+		xdhcmn::mode__ _Mode;
 		Q37_MRMDF( action_helper_callback__<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
@@ -377,12 +377,12 @@ namespace sclxdhtml {
 		void reset( bso::bool__ P = true )
 		{
 			_Handler.reset( P );
-			_Mode = xdhcbk::m_Undefined;
+			_Mode = xdhcmn::m_Undefined;
 			_ActionHelperCallback = NULL;
 		}
 		E_CVDTOR( core___ )
 		void Init(
-			xdhcbk::mode__ Mode,
+			xdhcmn::mode__ Mode,
 			action_helper_callback__<session> &ActionHelperCallback )
 		{
 			_ActionHelperCallback = &ActionHelperCallback;
@@ -405,7 +405,7 @@ namespace sclxdhtml {
 			TOL_CBUFFER___ Buffer;
 		qRB
 			if ( _OnBeforeAction(Session, Id, Action) ) {
-				if ( !strcmp( Action, xdhcbk::CloseActionLabel ) )
+				if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
 					Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 				else
 # if 0
@@ -420,7 +420,7 @@ namespace sclxdhtml {
 		qRE
 			return Success;
 		}
-		E_RODISCLOSE__( xdhcbk::mode__, Mode );
+		E_RODISCLOSE__( xdhcmn::mode__, Mode );
 	};
 
 
@@ -443,13 +443,13 @@ namespace sclxdhtml {
 		sclfrntnd::kernel___ &Kernel );
 		*/
 
-	void SCLXDHTMLInitialization( xdhcbk::mode__ Mode );	// To define by user.
+	void SCLXDHTMLInitialization( xdhcmn::mode__ Mode );	// To define by user.
 
-	xdhcbk::session_callback__ *SCLXDHTMLRetrieveCallback(
+	xdhcmn::session_callback__ *SCLXDHTMLRetrieveCallback(
 		const char *Language,
-		xdhcbk::proxy_callback__ *ProxyCallback );	// To define by user.
+		xdhcmn::proxy_callback__ *ProxyCallback );	// To define by user.
 
-	void SCLXDHTMLReleaseCallback( xdhcbk::session_callback__ *Callback );	// To define by user.
+	void SCLXDHTMLReleaseCallback( xdhcmn::session_callback__ *Callback );	// To define by user.
 
 	inline void Connect(
 		sclfrntnd::backend_type__ BackendType,

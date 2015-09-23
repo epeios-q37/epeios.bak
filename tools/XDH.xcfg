@@ -207,7 +207,7 @@
 			<Widget>
 				<Instantiator>
 					<![CDATA[
-						jQuery( document.getElementById( "%Id%") ).%Type_%({%Parameters_%});
+						jQuery( document.getElementById( "%Id%") ). ({%Parameters_%});
 					]]>
 				</Instantiator>
 				<ContentRetriever>

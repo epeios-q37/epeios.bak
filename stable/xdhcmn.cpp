@@ -17,16 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHCBK__COMPILATION
+#define XDHCMN__COMPILATION
 
-#include "xdhcbk.h"
+#include "xdhcmn.h"
 
 /******************************************************************************/
 				  /* do not modify anything above this limit */
 				  /*			  unless specified			 */
 				  /*******************************************/
 
-using namespace xdhcbk;
+using namespace xdhcmn;
 
 #define C( name )\
 	case f##name:\
@@ -34,7 +34,7 @@ using namespace xdhcbk;
 	break
 
 
-const char *xdhcbk::GetLabel( function__ Function )
+const char *xdhcmn::GetLabel( function__ Function )
 {
 	switch ( Function ) {
 	C( Alert );
@@ -59,7 +59,7 @@ const char *xdhcbk::GetLabel( function__ Function )
 	return NULL;	// Pour viter un 'warning'.
 }
 
-void xdhcbk::Escape(
+void xdhcmn::Escape(
     const str::string_ &Source,
     str::string_ &Target,
 	bso::char__ Delimiter,

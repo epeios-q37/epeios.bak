@@ -28,14 +28,14 @@
 
 // X(SL) DH(TML) DowNStream
 
-# include "xdhcbk.h"
+# include "xdhcmn.h"
 
 # include "err.h"
 # include "tol.h"
 
 namespace xdhdws {
-	using xdhcbk::nchar__;
-	using xdhcbk::nstring___;
+	typedef  ntvstr::char__ nchar___;
+	typedef  ntvstr::string___ nstring___;
 
 	E_CDEF( char *, ContentTagName, "Content" );
 	E_CDEF( char *, ContextTagName, "Context" );
@@ -43,7 +43,7 @@ namespace xdhdws {
 	class proxy__
 	{
 	private:
-		Q37_MRMDF( xdhcbk::proxy_callback__, C_, Callback_ );
+		Q37_MRMDF( xdhcmn::proxy_callback__, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -54,7 +54,7 @@ namespace xdhdws {
 			Callback_ = NULL;
 		}
 		E_CVDTOR( proxy__ );
-		void Init( xdhcbk::proxy_callback__ *Callback )	// 'Callback' is destroyed by a 'delete' when this object is dsetroyed.
+		void Init( xdhcmn::proxy_callback__ *Callback )	// 'Callback' is destroyed by a 'delete' when this object is dsetroyed.
 		{
 			reset();
 
@@ -62,7 +62,7 @@ namespace xdhdws {
 		}
 		void Log( const nstring___ &Message )
 		{
-			C_().Process( xdhcbk::fLog, NULL, Message.Internal()() );
+			C_().Process( xdhcmn::fLog, NULL, Message.Internal()() );
 		}
 		void Alert(
 			const nstring___ &XML,
@@ -70,7 +70,7 @@ namespace xdhdws {
 			const nstring___ &Title,
 			const nstring___ &CloseText )
 		{
-			C_().Process( xdhcbk::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()(), CloseText.Internal()() );
+			C_().Process( xdhcmn::fAlert, NULL, XML.Internal()(), XSL.Internal()(), Title.Internal()(), CloseText.Internal()() );
 		}
 		bso::bool__ Confirm(
 			const nstring___ &XML,
@@ -82,7 +82,7 @@ namespace xdhdws {
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			C_().Process( xdhcbk::fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()(), CloseText.Internal()() );
+			C_().Process( xdhcmn::fConfirm, &Buffer, XML.Internal()( ), XSL.Internal()( ), Title.Internal()(), CloseText.Internal()() );
 
 			Confirmed = !strcmp( "true", Buffer );
 		qRR
@@ -95,7 +95,7 @@ namespace xdhdws {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcbk::fFillCasting, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fFillCasting, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void FillCasting(
 			const nstring___ &XML,
@@ -108,14 +108,14 @@ namespace xdhdws {
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcbk::fFillElement, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fFillElement, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void FillDocument(
 			const nstring___ &FrameId,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcbk::fFillDocument, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fFillDocument, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void FillDocument(
 			const nstring___ &XML,
@@ -128,7 +128,7 @@ namespace xdhdws {
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			C_().Process( xdhcbk::fGetProperty, &Buffer, Id.Internal()( ), Name.Internal()( ) );
+			C_().Process( xdhcmn::fGetProperty, &Buffer, Id.Internal()( ), Name.Internal()( ) );
 
 			return Buffer;
 		}
@@ -151,14 +151,14 @@ namespace xdhdws {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			C_().Process( xdhcbk::fSetProperty, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			C_().Process( xdhcmn::fSetProperty, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
 			TOL_CBUFFER___ &Buffer )
 		{
-			C_().Process( xdhcbk::fGetAttribute, &Buffer, Id.Internal()( ), Name.Internal()( ) );
+			C_().Process( xdhcmn::fGetAttribute, &Buffer, Id.Internal()( ), Name.Internal()( ) );
 
 			return Buffer;
 		}
@@ -181,13 +181,13 @@ namespace xdhdws {
 			const nstring___ &Name,
 			const nstring___ &Value )
 		{
-			C_().Process( xdhcbk::fSetAttribute, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
+			C_().Process( xdhcmn::fSetAttribute, NULL, Id.Internal()( ), Name.Internal()( ), Value.Internal()( ) );
 		}
 		const char *GetResult(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			C_().Process( xdhcbk::fGetResult, &Buffer, Id.Internal()( ) );
+			C_().Process( xdhcmn::fGetResult, &Buffer, Id.Internal()( ) );
 
 			return Buffer;
 		}
@@ -208,13 +208,13 @@ namespace xdhdws {
 			const nstring___ &Id,
 			const nstring___ &Name )
 		{
-			C_().Process( xdhcbk::fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
+			C_().Process( xdhcmn::fRemoveAttribute, NULL, Id.Internal()( ), Name.Internal()( ) );
 		}
 		const char *GetContent(
 			const nstring___ &Id,
 			TOL_CBUFFER___ &Buffer )
 		{
-			C_().Process( xdhcbk::fGetContent, &Buffer, Id.Internal()( ) );
+			C_().Process( xdhcmn::fGetContent, &Buffer, Id.Internal()( ) );
 
 			return Buffer;
 		}
@@ -235,11 +235,11 @@ namespace xdhdws {
 			const nstring___ &Id,
 			const nstring___ &Value )
 		{
-			C_().Process( xdhcbk::fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
+			C_().Process( xdhcmn::fSetContent, NULL, Id.Internal()( ), Value.Internal()( ) );
 		}
 		void Focus( const nstring___ &Id )
 		{
-			C_().Process( xdhcbk::fFocus, NULL, Id.Internal()( ) );
+			C_().Process( xdhcmn::fFocus, NULL, Id.Internal()( ) );
 		}
 	};
 

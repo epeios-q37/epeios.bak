@@ -17,26 +17,26 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHJST__INC
-# define XDHJST__INC
+#ifndef XDHUJT__INC
+# define XDHUJT__INC
 
-# define XDHJST_NAME		"XDHJST"
+# define XDHUJT_NAME		"XDHUJT"
 
-# if defined( E_DEBUG ) && !defined( XDHJST_NODBG )
-#  define XDHJST_DBG
+# if defined( E_DEBUG ) && !defined( XDHUJT_NODBG )
+#  define XDHUJT_DBG
 # endif
 
-// X(SL)/DH(TML) JavaScript-related Tools
+// X(SL)/DH(TML) Upstream Javascript-related Tools
 
 # include "err.h"
 
-# include "xdhcbk.h"
+# include "xdhcmn.h"
 
 # include "ntvstr.h"
 # include "ctn.h"
 # include "str.h"
 
-namespace xdhjst {
+namespace xdhujt {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::string___ nstring___;
 

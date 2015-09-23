@@ -49,13 +49,13 @@ const char *sclxdhtml::GetLauncher( void )
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'scllocale.cpp', d'o le 'namespace'.
 namespace {
 
-	typedef xdhcbk::downstream_callback__ _downstream_callback__;
+	typedef xdhcmn::downstream_callback__ _downstream_callback__;
 
 	class donwstream_callback_implementation__
 	: public _downstream_callback__
 	{
 	protected:
-		virtual void XDHCBKInitialize( const xdhcbk::shared_data__ &Data ) override
+		virtual void XDHCMNInitialize( const xdhcmn::shared_data__ &Data ) override
 		{
 			if ( Launcher_ != NULL )
 				qRFwk();
@@ -65,13 +65,13 @@ namespace {
 				sclmisc::Initialize( Data.qRRor(), Data.SCLError(), Data.CIO(), Data.Localization() );
 				sclfrntnd::LoadProject();
 
-				if ( Data.Mode() == xdhcbk::mMultiUser )
+				if ( Data.Mode() == xdhcmn::mMultiUser )
 					sclfrntnd::Connect();
 
 				SCLXDHTMLInitialization( Data.Mode() );
 			}
 		}
-		virtual void XDHCBKBaseLanguage( TOL_CBUFFER___ &Buffer ) override
+		virtual void XDHCMNBaseLanguage( TOL_CBUFFER___ &Buffer ) override
 		{
 			const char *Language = sclmisc::GetBaseLanguage();
 
@@ -82,13 +82,13 @@ namespace {
 
 			strcpy( Buffer, Language );
 		}
-		virtual xdhcbk::session_callback__ *XDHCBKRetrieveCallback(
+		virtual xdhcmn::session_callback__ *XDHCMNRetrieveCallback(
 			const char *Language,
-			xdhcbk::proxy_callback__ *ProxyCallback ) override
+			xdhcmn::proxy_callback__ *ProxyCallback ) override
 		{
 			return SCLXDHTMLRetrieveCallback( Language, ProxyCallback );
 		}
-		virtual void XDHCBKReleaseCallback( xdhcbk::session_callback__ *Callback ) override
+		virtual void XDHCMNReleaseCallback( xdhcmn::session_callback__ *Callback ) override
 		{
 			return SCLXDHTMLReleaseCallback( Callback );
 		}
@@ -110,9 +110,9 @@ static inline void DoNothing_( void )
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( XDHCBK_RETRIEVE_FUNCTION_NAME, xdhcbk::retrieve );
+DEF( XDHCBK_RETRIEVE_FUNCTION_NAME, xdhcmn::retrieve );
 
-xdhcbk::downstream_callback__ *XDHCBKRetrieve( void )
+xdhcmn::downstream_callback__ *XDHCBKRetrieve( void )
 {
 	donwstream_callback_implementation__ *Callback = NULL;
 qRFH
@@ -367,7 +367,7 @@ qRH
 	err::buffer__ ErrBuffer;
 qRB
 		if ( _OnBeforeAction( Id, Action ) )
-			if ( !strcmp( Action, xdhcbk::CloseActionLabel ) )
+			if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
 				Success = _OnClose();	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 			else
 				Success = _Handler.Launch( Id, Action );
@@ -452,11 +452,11 @@ void sclxdhtml::prolog::DisplaySelectedProjectFilename(
 qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
-	xdhcbk::args Args;
-	xdhcbk::retriever__ Retriever;
+	xdhcmn::args Args;
+	xdhcmn::retriever__ Retriever;
 qRB
 	Args.Init();
-	xdhcbk::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
+	xdhcmn::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
 
 	Retriever.Init( Args );
 
@@ -583,11 +583,11 @@ void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(
 qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
-	xdhcbk::args Args;
-	xdhcbk::retriever__ Retriever;
+	xdhcmn::args Args;
+	xdhcmn::retriever__ Retriever;
 qRB
 	Args.Init();
-	xdhcbk::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
+	xdhcmn::Split( str::string( Proxy.GetResult( Id, Buffer ) ), Args );
 
 	Retriever.Init( Args );
 
