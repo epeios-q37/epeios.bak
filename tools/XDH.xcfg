@@ -170,11 +170,11 @@
 					console.log( "3 !!!" );
 				]]>
 			</CastingFiller>
-			<EventHandler>
+			<EventHandlersSetter>
 				<![CDATA[
-						document.getElementById( "%Id%" ).addEventListener( "%Event%", handleEvent );
-					]]>
-			</EventHandler>
+					setEventHandlers( "%Id", %Ids_%, %Events_% );
+				]]>
+			</EventHandlersSetter>
 			<!--<EventHandler>
 				<![CDATA[
 //						document.getElementById( "%Id%" ).setAttribute( "on%Event%", "handleEvent( event );" );	// Seems not to work under 'CEF'.

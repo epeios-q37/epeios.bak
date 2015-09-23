@@ -73,6 +73,6 @@ entry___ xdhjsr::script::widget::Focuser( "Focuser", WidgetScripts_ );
 
 entry___ xdhjsr::script::Log( "Log", xdhjsr::Scripts );
 entry___ xdhjsr::script::Focuser( "Focuser", Scripts );
-entry___ xdhjsr::script::EventSetter( "EventSetter", Scripts );
+entry___ xdhjsr::script::EventHandlerSetter( "EventHandlerSetter", Scripts );
 entry___ xdhjsr::script::CastHandler( "CastHandler", Scripts );
 

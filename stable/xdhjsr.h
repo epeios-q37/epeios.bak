@@ -60,7 +60,7 @@ namespace xdhjsr {
 		extern entry___ CastingFiller;
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
-		extern entry___ EventSetter;
+		extern entry___ EventHandlerSetter;
 		extern entry___ CastHandler;
 		extern entry___ Focuser;
 		namespace property {

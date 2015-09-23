@@ -264,8 +264,44 @@ static void GetResult_(
 	GetResult_( Callback, va_arg( List, const nchar__ * ), Result );
 }
 
+static void FillDocumentOrCasting_(
+	callback__ &Callback,
+	script_name__ ScriptName,
+	const nchar__ *FrameId,
+	const nchar__ *XML,
+	const nchar__ *XSL )
+{
+qRH
+	TOL_CBUFFER___ Result;
+	str::string Digests;
+	str::string Script;
+qRB
+
+	Digests.Init( Execute( Callback, ScriptName, &Result, FrameId, XML, XSL ) );
+
+	xdhjst::scripter::HandleEventsWidgetsDigests( FrameId, Digests, Script );
+qRR
+qRT
+qRE
+}
+
+static void AlertConfirm_(
+	callback__ &Callback,
+	script_name__ ScriptName,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *FrameId = va_arg( List, const nchar__ * );
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+
+	FillDocumentOrCasting_( Callback, ScriptName, FrameId, XML, XSL );
+}
+
+
 static script_name__ Convert_( xdhcbk::function__ Function )
 {
+	// The 'Function' which have no entry have no 'direct' script and have special handling.
 	switch ( Function ) {
 	case xdhcbk::fLog:
 		return xdhjst::snLog;
@@ -278,12 +314,6 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 		break;
 	case xdhcbk::fFillElement:
 		return xdhjst::snElementFiller;
-		break;
-	case xdhcbk::fFillDocument:
-		return xdhjst::snDocumentFiller;
-		break;
-	case xdhcbk::fFillCasting:
-		return xdhjst::snCastingFiller;
 		break;
 	case xdhcbk::fSetProperty:
 		return xdhjst::snPropertySetter;
@@ -302,15 +332,6 @@ static script_name__ Convert_( xdhcbk::function__ Function )
 		break;
 	case xdhcbk::fSetContent:
 		return xdhjst::snContentSetter;
-		break;
-	case xdhcbk::fGetContent:
-		qRFwk();
-		break;
-	case xdhcbk::fGetResult:
-		qRFwk();
-		break;
-	case xdhcbk::fFocus:
-		qRFwk();
 		break;
 	default:
 		qRFwk();
