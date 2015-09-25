@@ -57,6 +57,7 @@ namespace xdhujt {
 		snPropertySetter,
 		snWidgetContentRetriever,
 		snWidgetFocuser,
+		snEventHandlersSetter,
 		sn_amount,
 		sn_Undefined,
 	};

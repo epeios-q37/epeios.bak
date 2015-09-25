@@ -110,9 +110,9 @@ static inline void DoNothing_( void )
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( XDHCBK_RETRIEVE_FUNCTION_NAME, xdhcmn::retrieve );
+DEF( XDHCMN_RETRIEVE_FUNCTION_NAME, xdhcmn::retrieve );
 
-xdhcmn::downstream_callback__ *XDHCBKRetrieve( void )
+xdhcmn::downstream_callback__ *XDHCMNRetrieve( void )
 {
 	donwstream_callback_implementation__ *Callback = NULL;
 qRFH
@@ -452,7 +452,7 @@ void sclxdhtml::prolog::DisplaySelectedProjectFilename(
 qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
-	xdhcmn::args Args;
+	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
 qRB
 	Args.Init();
@@ -583,7 +583,7 @@ void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(
 qRH
 	TOL_CBUFFER___ Buffer;
 	str::string FileName;
-	xdhcmn::args Args;
+	xdhcmn::digest Args;
 	xdhcmn::retriever__ Retriever;
 qRB
 	Args.Init();

@@ -107,53 +107,113 @@ static void AlertConfirm_(
 	AlertConfirm_( Callback, ScriptName, Result, XML, XSL, Title );
 }
 
-static void GetWidgetFeatures_(
-	const str::string_ &MergedArgs,
-	str::string_ &Type,
-	str::string_ &Parameters,
-	str::string_ &ContentRetrievingMethod,
-	str::string_ &FocusingMethod )
+static void HandleEventsDescriptions_(
+	const str::strings_ &Ids,
+	const xdhutl::event_abstracts_ &Abstracts,
+	str::string_ &IdsTag,
+	str::string_ &EventsTag )
 {
 qRH
-	xdhcmn::args Args;
-	xdhcmn::retriever__ Retriever;
+	sdr::row__ Row = qNIL;
+	ctn::E_CMITEM( str::string_ ) Id;
+	ctn::E_CITEM( xdhutl::event_abstract_ ) Abstract;
 qRB
-	Args.Init();
-	xdhcmn::Split( MergedArgs, Args );
+	Row = Ids.First();
+	Id.Init( Ids );
+	Abstract.Init( Abstracts );
 
-	Retriever.Init( Args );
+	IdsTag.Append( "[ " );
+	EventsTag.Append( "[ ");
 
-	if ( Retriever.Availability() != strmrg::aNone )
-		Retriever.GetString( Type );
+	while ( Row != qNIL ) {
+		IdsTag.Append('"');
+		IdsTag.Append(Id( Row) );
+		IdsTag.Append('"');
 
-	if ( Retriever.Availability() != strmrg::aNone )
-		Retriever.GetString( Parameters );
+		EventsTag.Append('"');
+		EventsTag.Append(Abstract( Row ).Event );
+		EventsTag.Append('"');
 
-	if ( Retriever.Availability() != strmrg::aNone )
-		Retriever.GetString( ContentRetrievingMethod );
+		Row = Ids.Next( Row );
 
-	if ( Retriever.Availability() != strmrg::aNone )
-		Retriever.GetString( FocusingMethod );
+		if ( Row != qNIL ) {
+			IdsTag.Append( ", " );
+			EventsTag.Append( ", " );
+		}
+	}
+
+	IdsTag.Append( " ]" );
+	EventsTag.Append( " ]");
+qRR
+qRE
+qRT
+}
+
+static void HandleEventsDescriptions_(
+	callback__ &Callback,
+	const nchar__ *FrameId,
+	const xdhcmn::digest_ &Descriptions )
+{
+qRH
+	str::strings Ids;
+	xdhutl::event_abstracts Abstracts;
+	str::string IdsTag, EventsTag;
+qRB
+	Abstracts.Init();
+	Ids.Init();
+	xdhutl::Fill( Descriptions, Abstracts, Ids );
+
+	IdsTag.Init();
+	EventsTag.Init();
+	HandleEventsDescriptions_( Ids, Abstracts, IdsTag, EventsTag );
+
+	Execute( Callback, xdhujt::snEventHandlersSetter, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( EventsTag ).Internal()() );
 qRR
 qRT
 qRE
 }
 
-static void GetWidgetContentRetrievingMethod_(
-	const str::string_ &Args,
-	str::string_ &Method )
+static void FillDocument_(
+	callback__ &Callback,
+	const nchar__ *FrameId,
+	const nchar__ *XML,
+	const nchar__ *XSL )
 {
 qRH
-	str::string Type, Parameters, OtherMethod;
+	TOL_CBUFFER___ Result;
+	str::string RawDigests;
+	xdhcmn::digest Digests, Events, Widgets;
+	xdhcmn::retriever__ Retriever;
 qRB
-	Type.Init();
-	Parameters.Init();
-	OtherMethod.Init();
+	RawDigests.Init( Execute( Callback, xdhujt::snDocumentFiller, &Result, FrameId, XML, XSL ) );
 
-	GetWidgetFeatures_( Args, Type, Parameters, Method, OtherMethod );
+	Digests.Init();
+	xdhcmn::Split( RawDigests, Digests );
+
+	Retriever.Init( Digests );
+
+	Events.Init();
+	Retriever.GetTable( Events );
+
+	Widgets.Init();
+	Retriever.GetTable( Widgets );
+
+	HandleEventsDescriptions_( Callback, FrameId, Events );
 qRR
 qRT
 qRE
+}
+
+static void FillDocument_(
+	callback__ &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *FrameId = va_arg( List, const nchar__ * );
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+
+	FillDocument_( Callback, FrameId, XML, XSL );
 }
 
 static void GetContent_(
@@ -172,7 +232,7 @@ qRB
 	Method.Init();
 
 	if ( Args.Amount() != 0 )	// 'true' if the element 'Id' is a widget.
-		GetWidgetContentRetrievingMethod_( Args, Method );
+		xdhutl::ExtractWidgetContentRetrievingMethod( Args, Method );
 
 	if ( Method.Amount() == 0 )
 		Execute( Callback, xdhujt::snContentGetter, Result, Id );
@@ -202,7 +262,7 @@ qRB
 	Parameters.Init();
 	OtherMethod.Init();
 
-	GetWidgetFeatures_( Args, Type, Parameters, OtherMethod, Method );
+	xdhutl::ExtractWidgetFeatures( Args, Type, Parameters, OtherMethod, Method );
 qRR
 qRT
 qRE
@@ -328,7 +388,6 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 {
 	switch ( Function ) {
 	case xdhcmn::fFillElement:
-	case xdhcmn::fFillDocument:
 	case xdhcmn::fFillCasting:
 	case xdhcmn::fSetProperty:
 	case xdhcmn::fGetProperty:
@@ -351,6 +410,9 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 		break;
 	case xdhcmn::fFocus:
 		Focus_( C_(), List);
+		break;
+	case xdhcmn::fFillDocument:
+		FillDocument_( C_(), List );
 		break;
 	default:
 		qRFwk();

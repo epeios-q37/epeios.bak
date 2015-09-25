@@ -172,7 +172,7 @@
 			</CastingFiller>
 			<EventHandlersSetter>
 				<![CDATA[
-					setEventHandlers( "%Id", %Ids_%, %Events_% );
+					setEventHandlers( "%Id%", %Ids_%, %Events_% );
 				]]>
 			</EventHandlersSetter>
 			<!--<EventHandler>

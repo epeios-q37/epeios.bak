@@ -79,9 +79,9 @@ action__ xdhutl::GetAction( const nstring___ &Pattern )
 
 namespace {
 	static action__ GetPredefinedAction_(
-		const xdhcmn::args_ &ActionWithParameters,
+		const xdhcmn::digest_ &ActionWithParameters,
 		str::string_ &UserAction,
-		xdhcmn::args_ &Args )
+		xdhcmn::digest_ &Args )
 	{
 		action__ Action = a_Undefined;
 	qRH
@@ -108,9 +108,9 @@ namespace {
 	}
 
 	action__ GetAction_(
-		const xdhcmn::args_ &ActionWithParameters,
+		const xdhcmn::digest_ &ActionWithParameters,
 		str::string_ &UserAction,
-		xdhcmn::args_ &Args )
+		xdhcmn::digest_ &Args )
 	{
 		strmrg::retriever__ Retriever;
 
@@ -174,21 +174,21 @@ void xdhutl::BuildKeyShortcut(
 
 void xdhutl::Fill(
 	const str::string_ &DefaultEvent,
-	const xdhcmn::args_ &Definition,
+	const xdhcmn::digest_ &Description,
 	event_abstract_ &Abstract )
 {
 qRH
-	xdhcmn::args ActionWithParameters;
+	xdhcmn::digest ActionWithParameters;
 	xdhcmn::retriever__ Retriever;
 	str::string Keys;
 	bso::bool__ RetrieveKeys = false;
 	str::string KeyShortcut;
 	sdr::row__ PlusPos = qNIL;
 qRB
-	Retriever.Init( Definition );
+	Retriever.Init( Description );
 	Keys.Init();
 
-	switch ( Definition.Amount() ) {
+	switch ( Description.Amount() ) {
 	case 3:
 		RetrieveKeys = true;
 	case 2:
@@ -225,7 +225,7 @@ qRE
 }
 void xdhutl::FillMono(
 	const str::string_ &DefaultEvent,
-	const xdhcmn::args_ &Definition,
+	const xdhcmn::digest_ &Description,
 	event_abstracts_ &Abstracts )
 {
 qRH
@@ -233,7 +233,7 @@ qRH
 qRB
 	Abstract.Init();
 
-	Fill( DefaultEvent, Definition, Abstract );
+	Fill( DefaultEvent, Description, Abstract );
 
 	Abstracts.Append( Abstract );
 qRR
@@ -243,14 +243,14 @@ qRE
 
 void xdhutl::FillMulti(
 	const str::string_ &DefaultEvent,
-	const xdhcmn::args_ &Definitions,
+	const xdhcmn::digest_ &Descriptions,
 	event_abstracts_ &Abstracts )
 {
 qRH
-	xdhcmn::args Definition;
+	xdhcmn::digest Definition;
 	strmrg::retriever__ Retriever;
 qRB
-	Retriever.Init( Definitions );
+	Retriever.Init( Descriptions );
 
 	while ( Retriever.Availability() != strmrg::aNone ) {
 		Definition.Init();
@@ -264,9 +264,9 @@ qRT
 qRE
 }
 
-void xdhutl::FillEventAbstracts(
+void xdhutl::Fill(
 	const str::string_ &TagName,
-	const xdhcmn::args_ &Events,
+	const xdhcmn::digest_ &Descriptions,
 	event_abstracts_ &Abstracts )
 
 {
@@ -277,13 +277,65 @@ qRB
 	DefaultEvent.Init();
 	GetTagDefaultEvent( TagName, DefaultEvent );
 
-	FillMulti( DefaultEvent, Events, Abstracts );
+	FillMulti( DefaultEvent, Descriptions, Abstracts );
 qRR
 qRT
 qRE
 }
 
-bso::bool__ xdhutl::HasEvent(
+void xdhutl::Fill(
+	const xdhcmn::digest_ &Descriptions,
+	event_abstracts_ &Abstracts,
+	str::string_ &Id )
+{
+qRH
+	xdhcmn::retriever__ Retriever;
+	xdhcmn::digest EventsDescriptions;
+	str::string TagName;
+qRB
+	Retriever.Init( Descriptions );
+
+	Retriever.GetString( Id );
+
+	TagName.Init();
+	Retriever.GetString( TagName );
+
+	EventsDescriptions.Init();
+	Retriever.GetTable( EventsDescriptions );
+
+	Fill( TagName, EventsDescriptions, Abstracts );
+qRR
+qRT
+qRE
+}
+
+void xdhutl::Fill(
+	const xdhcmn::digest_ &Descriptions,
+	event_abstracts_ &Abstracts,
+	str::strings_ &Ids )
+{
+qRH
+	xdhcmn::retriever__ Retriever;
+	xdhcmn::digest SubDescriptions;
+	str::string Id;
+	TOL_CBUFFER___ Buffer;
+qRB
+	Retriever.Init( Descriptions );
+
+	while ( Retriever.Availability() != strmrg::aNone ) {
+		SubDescriptions.Init();
+		Retriever.GetTable( SubDescriptions );
+
+		Id.Init();
+		Fill( SubDescriptions, Abstracts, Id );
+		Ids.Append( Id );
+	}
+qRR
+qRT
+qRE
+}
+
+bso::bool__ xdhutl::Exists(
 	const char *Event,
 	const event_abstracts_ &Abstracts )
 {
@@ -297,7 +349,6 @@ bso::bool__ xdhutl::HasEvent(
 
 	return Row != qNIL;
 }
-
 
 sdr::row__ xdhutl::Find(
 	const str::string_ &Event,
@@ -327,36 +378,21 @@ qRE
 	return Row;
 }
 
-void xdhutl::GetEventsAbstracts(
-	const str::string_ &TagName,
-	const str::string_ &Events,
-	event_abstracts_ &Abstracts )
-{
-qRH
-	xdhcmn::args Definitions;
-	TOL_CBUFFER___ Buffer;
-qRB
-	if ( Events.Amount() != 0 ) {
-		Definitions.Init();
-		xdhcmn::Split( Events, Definitions );
-		FillEventAbstracts( TagName, Definitions, Abstracts );
-	}
-qRR
-qRT
-qRE
-}
-
-void xdhutl::SplitWidgetFeatures(
-	const xdhcmn::args_ &Features,
+void xdhutl::ExtractWidgetFeatures(
+	const str::string_ &Features,
 	str::string_ &Type,
 	str::string_ &Parameters,
 	str::string_ &ContentRetrievingMethod,
 	str::string_ &FocusingMethod )
 {
 qRH
+	xdhcmn::digest Digest;
 	xdhcmn::retriever__ Retriever;
 qRB
-	Retriever.Init( Features );
+	Digest.Init();
+	xdhcmn::Split( Features, Digest );
+
+	Retriever.Init( Digest );
 
 	if ( Retriever.Availability() != strmrg::aNone )
 		Retriever.GetString( Type );
@@ -374,8 +410,8 @@ qRT
 qRE
 }
 
-void xdhutl::GetWidgetTypeAndParameters(
-	const xdhcmn::args_ &Features,
+void xdhutl::ExtractWidgetTypeAndParameters(
+	const str::string_ &Features,
 	str::string_ &Type,
 	str::string_ &Parameters )
 {
@@ -384,14 +420,14 @@ qRH
 qRB
 	ContentRetrievingMethod.Init();
 	FocusingMethod.Init();
-	SplitWidgetFeatures( Features, Type, Parameters, ContentRetrievingMethod, FocusingMethod );
+	ExtractWidgetFeatures( Features, Type, Parameters, ContentRetrievingMethod, FocusingMethod );
 qRR
 qRT
 qRE
 }
 
-void xdhutl::GetWidgetContentRetrievingMethod(
-	const xdhcmn::args_ &Features,
+void xdhutl::ExtractWidgetContentRetrievingMethod(
+	const str::string_ &Features,
 	str::string_ &Method )
 {
 qRH
@@ -401,14 +437,14 @@ qRB
 	Parameters.Init();
 	OtherMethod.Init();
 
-	SplitWidgetFeatures( Features, Type, Parameters, Method, OtherMethod );
+	ExtractWidgetFeatures( Features, Type, Parameters, Method, OtherMethod );
 qRR
 qRT
 qRE
 }
 
-void xdhutl::GetWidgetFocusingMethod(
-	const xdhcmn::args_ &Features,
+void xdhutl::ExtractWidgetFocusingMethod(
+	const str::string_ &Features,
 	str::string_ &Method )
 {
 qRH
@@ -418,7 +454,7 @@ qRB
 	Parameters.Init();
 	OtherMethod.Init();
 
-	SplitWidgetFeatures( Features, Type, Parameters, OtherMethod, Method );
+	ExtractWidgetFeatures( Features, Type, Parameters, OtherMethod, Method );
 qRR
 qRT
 qRE

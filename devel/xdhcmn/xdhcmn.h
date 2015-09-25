@@ -242,8 +242,8 @@ namespace xdhcmn {
 		bso::char__ EscapeChar = DefaultEscapeChar );
 #endif
 
-	typedef strmrg::table_ args_;
-	E_AUTO( args );
+	typedef strmrg::table_ digest_;
+	E_AUTO( digest );
 
 	using strmrg::Split;
 	using strmrg::Merge;

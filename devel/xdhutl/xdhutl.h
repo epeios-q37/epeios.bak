@@ -76,12 +76,12 @@ namespace xdhutl {
 			str::string_::s EventKeys;
 			action__ Action;
 			str::string_::s UserAction;
-			xdhcmn::args_::s Args;
+			xdhcmn::digest_::s Args;
 		} &S_;
 		str::string_ Event;
 		str::string_ EventKeys;	// For key-related events.
 		str::string_ UserAction;
-		xdhcmn::args_ Args;	// Only for NON-user action (i.e. 'Action' != 'a_User').
+		xdhcmn::digest_ Args;	// Only for NON-user action (i.e. 'Action' != 'a_User').
 		event_abstract_( s &S )
 		: S_( S ),
 		  Event( S.Event ),
@@ -145,25 +145,35 @@ namespace xdhutl {
 
 	void Fill(
 		const str::string_ &DefaultEvent,
-		const xdhcmn::args_ &Definition,
-		event_abstract_ &Abstract );
+		const xdhcmn::digest_ &Description,
+		event_abstract_ &Abstract);
 
 	void FillMono(
 		const str::string_ &DefaultEvent,
-		const xdhcmn::args_ &Definition,	// Contains only one event abstract.
+		const xdhcmn::digest_ &Description,
 		event_abstracts_ &Abstracts );
 
 	void FillMulti(
 		const str::string_ &DefaultEvent,
-		const xdhcmn::args_ &Defintions,	// Each entry is a event handler.
+		const xdhcmn::digest_ &Descriptions,
 		event_abstracts_ &Abstracts );
 
-	void FillEventAbstracts(
+	void Fill(
 		const str::string_ &TagName,
-		const xdhcmn::args_ &Events,
+		const xdhcmn::digest_ &Descriptions,
 		event_abstracts_ &Abstracts );
 
-	bso::bool__ HasEvent(
+	void Fill(
+		const xdhcmn::digest_ &Descriptions,
+		event_abstracts_ &Abstracts,
+		str::string_ &Id );
+
+	void Fill(
+		const xdhcmn::digest_ &Descriptions,
+		event_abstracts_ &Abstracts,
+		str::strings_ &Ids );
+
+	bso::bool__ Exists(
 		const char *Event,
 		const event_abstracts_ &Abstracts );
 
@@ -172,29 +182,24 @@ namespace xdhutl {
 		const str::string_ &Keys,	// Only for keyboard-related events.
 		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'qNIL' if not found.
 
-	void GetEventsAbstracts(
-		const str::string_ &TagName,
-		const str::string_ &Events,
-		event_abstracts_ &Abstracts );
-
-	void SplitWidgetFeatures(
-		const xdhcmn::args_ &Features,
+	void ExtractWidgetFeatures(
+		const str::string_ &Features,
 		str::string_ &Type,
 		str::string_ &Parameters,
 		str::string_ &ContentRetrievingMethod,
 		str::string_ &FocusingMethod );
 
-	void GetWidgetTypeAndParameters(
-		const xdhcmn::args_ &Features,
+	void ExtractWidgetTypeAndParameters(
+		const str::string_ &Features,
 		str::string_ &Type,
 		str::string_ &Parameters );
 
-	void GetWidgetContentRetrievingMethod(
-		const xdhcmn::args_ &Features,
+	void ExtractWidgetContentRetrievingMethod(
+		const str::string_ &Features,
 		str::string_ &Method );
 
-	void GetWidgetFocusingMethod(
-		const xdhcmn::args_ &Features,
+	void ExtractWidgetFocusingMethod(
+		const str::string_ &Features,
 		str::string_ &Method );
 
 

@@ -55,6 +55,7 @@ const str::string_ &xdhujt::GetTaggedScript(
 	C( ContentGetter, content::Getter );
 	C( WidgetFocuser, widget::Focuser );
 	C( Focuser, Focuser );
+	C( EventHandlersSetter, EventHandlersSetter );
 	default:
 		qRFwk();
 		break;
@@ -134,6 +135,8 @@ D( XSL );
 D( Title );
 D( CloseText );
 D( Cast );
+D( Ids );
+D( Events );
 
 #define S( name, ... )\
 	case sn##name:\
@@ -168,6 +171,7 @@ qRB
 	S( WidgetContentRetriever, Id_, Method_, NULL );
 	S( WidgetFocuser, Id_, Method_, NULL );
 	S( Focuser, Id_, NULL );
+	S( EventHandlersSetter, Id_, Ids_, Events_, NULL );
 	default:
 		qRFwk();
 		break;
