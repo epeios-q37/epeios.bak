@@ -81,7 +81,7 @@ namespace xdhcmn {
 		fLog,				// Message,
 		fAlert,				// XML, XSL, Title.
 		fConfirm,			// XML, XSL, Title.
-		fFillCasting,		// Id, XML, XSL.	// If 'Id' != 'NULL', it's the id of an 'iframe'.
+		fFillCastings,		// Id, XML, XSL.	// If 'Id' != 'NULL', it's the id of an 'iframe'.
 		fFillElement,		// Id, XML, XSL.
 		fFillDocument,		// Id, XML, XSL.	// If 'Id' != 'NULL', it's the id of an 'iframe'.
 		fSetProperty,		// Id, Name, Value.

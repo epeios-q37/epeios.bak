@@ -55,7 +55,7 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
 
-		Session.FillCasting( XML, XSL );
+		Session.FillCastings( XML, XSL );
 	qRR
 	qRT
 	qRE

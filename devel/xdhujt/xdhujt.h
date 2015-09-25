@@ -46,7 +46,7 @@ namespace xdhujt {
 		snAttributeSetter,
 		snElementFiller,
 		snDocumentFiller,
-		snCastingFiller,
+		snCastingsFiller,
 		snContentGetter,
 		snContentSetter,
 		snDialogAlert,
@@ -58,6 +58,7 @@ namespace xdhujt {
 		snWidgetContentRetriever,
 		snWidgetFocuser,
 		snEventHandlersSetter,
+		snCastsSetter,
 		sn_amount,
 		sn_Undefined,
 	};

@@ -172,7 +172,7 @@ void xdhutl::BuildKeyShortcut(
 		Shortcut.Append( Keys );
 }
 
-void xdhutl::Fill(
+void xdhutl::FillEventAbstract(
 	const str::string_ &DefaultEvent,
 	const xdhcmn::digest_ &Description,
 	event_abstract_ &Abstract )
@@ -223,7 +223,7 @@ qRR
 qRT
 qRE
 }
-void xdhutl::FillMono(
+void xdhutl::FillEventAbstractsMono(
 	const str::string_ &DefaultEvent,
 	const xdhcmn::digest_ &Description,
 	event_abstracts_ &Abstracts )
@@ -233,7 +233,7 @@ qRH
 qRB
 	Abstract.Init();
 
-	Fill( DefaultEvent, Description, Abstract );
+	FillEventAbstract( DefaultEvent, Description, Abstract );
 
 	Abstracts.Append( Abstract );
 qRR
@@ -241,7 +241,7 @@ qRT
 qRE
 }
 
-void xdhutl::FillMulti(
+void xdhutl::FillEventAbstractsMulti(
 	const str::string_ &DefaultEvent,
 	const xdhcmn::digest_ &Descriptions,
 	event_abstracts_ &Abstracts )
@@ -257,14 +257,14 @@ qRB
 
 		Retriever.GetTable( Definition );
 
-		FillMono( DefaultEvent, Definition, Abstracts );
+		FillEventAbstractsMono( DefaultEvent, Definition, Abstracts );
 	}
 qRR
 qRT
 qRE
 }
 
-void xdhutl::Fill(
+void xdhutl::FillEventAbstracts(
 	const str::string_ &TagName,
 	const xdhcmn::digest_ &Descriptions,
 	event_abstracts_ &Abstracts )
@@ -277,16 +277,16 @@ qRB
 	DefaultEvent.Init();
 	GetTagDefaultEvent( TagName, DefaultEvent );
 
-	FillMulti( DefaultEvent, Descriptions, Abstracts );
+	FillEventAbstractsMulti( DefaultEvent, Descriptions, Abstracts );
 qRR
 qRT
 qRE
 }
 
-void xdhutl::Fill(
+void xdhutl::FillEventAbstracts(
 	const xdhcmn::digest_ &Descriptions,
-	event_abstracts_ &Abstracts,
-	str::string_ &Id )
+	str::string_ &Id,
+	event_abstracts_ &Abstracts )
 {
 qRH
 	xdhcmn::retriever__ Retriever;
@@ -303,16 +303,16 @@ qRB
 	EventsDescriptions.Init();
 	Retriever.GetTable( EventsDescriptions );
 
-	Fill( TagName, EventsDescriptions, Abstracts );
+	FillEventAbstracts( TagName, EventsDescriptions, Abstracts );
 qRR
 qRT
 qRE
 }
 
-void xdhutl::Fill(
+void xdhutl::FillEventAbstracts(
 	const xdhcmn::digest_ &Descriptions,
-	event_abstracts_ &Abstracts,
-	str::strings_ &Ids )
+	str::strings_ &Ids,
+	event_abstracts_ &Abstracts )
 {
 qRH
 	xdhcmn::retriever__ Retriever;
@@ -327,7 +327,7 @@ qRB
 		Retriever.GetTable( SubDescriptions );
 
 		Id.Init();
-		Fill( SubDescriptions, Abstracts, Id );
+		FillEventAbstracts( SubDescriptions, Id, Abstracts );
 		Ids.Append( Id );
 	}
 qRR
@@ -460,5 +460,50 @@ qRT
 qRE
 }
 
+void xdhutl::FillCasting(
+	const xdhcmn::digest_ &Description,
+	str::string_ &Id,
+	str::string_ &Casting )
+{
+qRH
+	xdhcmn::retriever__ Retriever;
+qRB
+	Retriever.Init( Description );
 
+	Retriever.GetString( Id );
+	Retriever.GetString( Casting );
+qRR
+qRT
+qRE
+}
+
+
+
+void xdhutl::FillCastings(
+	const xdhcmn::digest_ &Descriptions,
+	str::strings_ &Ids,
+	str::strings_ &Castings )
+{
+qRH
+	xdhcmn::retriever__ Retriever;
+	xdhcmn::digest Description;
+	str::string Id, Casting; 
+qRB
+	Retriever.Init( Descriptions );
+
+	while ( Retriever.Availability() != strmrg::aNone ) {
+		Description.Init();
+		Retriever.GetTable( Description );
+
+		Id.Init();
+		Casting.Init();
+		FillCasting( Description, Id, Casting );
+
+		Ids.Append( Id );
+		Castings.Append( Casting );
+	}
+qRR
+qRT
+qRE
+}
 

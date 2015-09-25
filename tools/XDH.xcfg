@@ -159,7 +159,7 @@
 					handleExtensions( doc );
 				]]>
 			</DocumentFiller>
-			<CastingFiller>
+			<CastingsFiller>
 				<![CDATA[
 					// Edge executes this script in loop !!!
 					var doc = getDocument( "%Id%" );
@@ -168,13 +168,19 @@
 					console.log( "2 !!!" );
 					doc.getElementById( "xdh-castings" ).appendChild( transformToFragment( doc, "%XML%", "%XSL%" ) );
 					console.log( "3 !!!" );
+					handleCastings( doc );
 				]]>
-			</CastingFiller>
+			</CastingsFiller>
 			<EventHandlersSetter>
 				<![CDATA[
 					setEventHandlers( "%Id%", %Ids_%, %Events_% );
 				]]>
 			</EventHandlersSetter>
+			<CastsSetter>
+				<![CDATA[
+					setCasts( "%Id%", %Ids_%, %Casts_% );
+				]]>
+			</CastsSetter>
 			<!--<EventHandler>
 				<![CDATA[
 //						document.getElementById( "%Id%" ).setAttribute( "on%Event%", "handleEvent( event );" );	// Seems not to work under 'CEF'.

@@ -44,7 +44,7 @@ const str::string_ &xdhujt::GetTaggedScript(
 	C( DialogConfirm, dialog::Confirm );
 	C( ElementFiller, ElementFiller );
 	C( DocumentFiller, DocumentFiller );
-	C( CastingFiller, CastingFiller );
+	C( CastingsFiller, CastingsFiller );
 	C( PropertySetter, property::Setter );
 	C( PropertyGetter, property::Getter );
 	C( AttributeSetter, attribute::Setter );
@@ -56,6 +56,7 @@ const str::string_ &xdhujt::GetTaggedScript(
 	C( WidgetFocuser, widget::Focuser );
 	C( Focuser, Focuser );
 	C( EventHandlersSetter, EventHandlersSetter );
+	C( CastsSetter, CastsSetter );
 	default:
 		qRFwk();
 		break;
@@ -137,6 +138,7 @@ D( CloseText );
 D( Cast );
 D( Ids );
 D( Events );
+D( Casts );
 
 #define S( name, ... )\
 	case sn##name:\
@@ -165,13 +167,14 @@ qRB
 	S( PropertyGetter, Id_, Name_, NULL );
 	S( ElementFiller, Id_, XML_, XSL_, NULL );
 	S( DocumentFiller, Id_, XML_, XSL_, NULL );
-	S( CastingFiller, Id_, XML_, XSL_, NULL );
+	S( CastingsFiller, Id_, XML_, XSL_, NULL );
 	S( ContentSetter, Id_, Value_, NULL );
 	S( ContentGetter, Id_, NULL );
 	S( WidgetContentRetriever, Id_, Method_, NULL );
 	S( WidgetFocuser, Id_, Method_, NULL );
 	S( Focuser, Id_, NULL );
 	S( EventHandlersSetter, Id_, Ids_, Events_, NULL );
+	S( CastsSetter, Id_, Ids_, Casts_, NULL );
 	default:
 		qRFwk();
 		break;

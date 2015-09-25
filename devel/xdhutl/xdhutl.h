@@ -143,35 +143,35 @@ namespace xdhutl {
 			Event.Append( "click" );
 	}
 
-	void Fill(
+	void FillEventAbstract(
 		const str::string_ &DefaultEvent,
 		const xdhcmn::digest_ &Description,
 		event_abstract_ &Abstract);
 
-	void FillMono(
+	void FillEventAbstractsMono(
 		const str::string_ &DefaultEvent,
 		const xdhcmn::digest_ &Description,
 		event_abstracts_ &Abstracts );
 
-	void FillMulti(
+	void FillEventAbstractsMulti(
 		const str::string_ &DefaultEvent,
 		const xdhcmn::digest_ &Descriptions,
 		event_abstracts_ &Abstracts );
 
-	void Fill(
+	void FillEventAbstracts(
 		const str::string_ &TagName,
 		const xdhcmn::digest_ &Descriptions,
 		event_abstracts_ &Abstracts );
 
-	void Fill(
+	void FillEventAbstracts(
 		const xdhcmn::digest_ &Descriptions,
-		event_abstracts_ &Abstracts,
-		str::string_ &Id );
+		str::string_ &Id,
+		event_abstracts_ &Abstracts );
 
-	void Fill(
+	void FillEventAbstracts(
 		const xdhcmn::digest_ &Descriptions,
-		event_abstracts_ &Abstracts,
-		str::strings_ &Ids );
+		str::strings_ &Ids,
+		event_abstracts_ &Abstracts );
 
 	bso::bool__ Exists(
 		const char *Event,
@@ -202,7 +202,15 @@ namespace xdhutl {
 		const str::string_ &Features,
 		str::string_ &Method );
 
+	void FillCasting(
+		const xdhcmn::digest_ &Description,
+		str::string_ &Id,
+		str::string_ &Casting );
 
+	void FillCastings(
+		const xdhcmn::digest_ &Descriptions,
+		str::strings_ &Ids,
+		str::strings_ &Castings );
 }
 
 #endif

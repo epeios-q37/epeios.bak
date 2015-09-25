@@ -57,11 +57,11 @@ namespace xdhujr {
 		extern entry___ Log;
 		extern entry___ ElementFiller;
 		extern entry___ DocumentFiller;
-		extern entry___ CastingFiller;
+		extern entry___ CastingsFiller;
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
 		extern entry___ EventHandlersSetter;
-		extern entry___ CastHandler;
+		extern entry___ CastsSetter;
 		extern entry___ Focuser;
 		namespace property {
 			extern entry___ Setter;

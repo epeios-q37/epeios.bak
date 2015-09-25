@@ -90,18 +90,18 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		void FillCasting(
+		void FillCastings(
 			const nstring___ &FrameId,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcmn::fFillCasting, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fFillCastings, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void FillCasting(
+		void FillCastings(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			FillCasting( nstring___(), XML, XSL );
+			FillCastings( nstring___(), XML, XSL );
 		}
 		void FillElement(
 			const nstring___ &Id,

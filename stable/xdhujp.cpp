@@ -107,6 +107,7 @@ static void AlertConfirm_(
 	AlertConfirm_( Callback, ScriptName, Result, XML, XSL, Title );
 }
 
+
 static void HandleEventsDescriptions_(
 	const str::strings_ &Ids,
 	const xdhutl::event_abstracts_ &Abstracts,
@@ -159,9 +160,9 @@ qRH
 	xdhutl::event_abstracts Abstracts;
 	str::string IdsTag, EventsTag;
 qRB
-	Abstracts.Init();
 	Ids.Init();
-	xdhutl::Fill( Descriptions, Abstracts, Ids );
+	Abstracts.Init();
+	xdhutl::FillEventAbstracts( Descriptions, Ids, Abstracts );
 
 	IdsTag.Init();
 	EventsTag.Init();
@@ -215,6 +216,108 @@ static void FillDocument_(
 
 	FillDocument_( Callback, FrameId, XML, XSL );
 }
+
+/**/
+
+static void HandleCastings_(
+	const str::strings_ &Ids,
+	const str::strings_ &Castings,
+	str::string_ &IdsTag,
+	str::string_ &CastingsTag )
+{
+qRH
+	sdr::row__ Row = qNIL;
+	ctn::E_CMITEM( str::string_ ) Id, Casting;
+qRB
+	Row = Ids.First();
+	Id.Init( Ids );
+	Casting.Init( Castings );
+
+	IdsTag.Append( "[ " );
+	CastingsTag.Append( "[ ");
+
+	while ( Row != qNIL ) {
+		IdsTag.Append('"');
+		IdsTag.Append(Id( Row) );
+		IdsTag.Append('"');
+
+		CastingsTag.Append('"');
+		CastingsTag.Append( Casting( Row ) );
+		CastingsTag.Append('"');
+
+		Row = Ids.Next( Row );
+
+		if ( Row != qNIL ) {
+			IdsTag.Append( ", " );
+			CastingsTag.Append( ", " );
+		}
+	}
+
+	IdsTag.Append( " ]" );
+	CastingsTag.Append( " ]");
+qRR
+qRE
+qRT
+}
+
+static void HandleCastings_(
+	callback__ &Callback,
+	const nchar__ *FrameId,
+	const xdhcmn::digest_ &Descriptions )
+{
+qRH
+	str::strings Ids, Castings;
+	str::string IdsTag, CastingsTag;
+qRB
+	Ids.Init();
+	Castings.Init();
+	xdhutl::FillCastings( Descriptions, Ids, Castings );
+
+	IdsTag.Init();
+	CastingsTag.Init();
+	HandleCastings_( Ids, Castings, IdsTag, CastingsTag );
+
+	Execute( Callback, xdhujt::snCastsSetter, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
+qRR
+qRT
+qRE
+}
+
+static void FillCastings_(
+	callback__ &Callback,
+	const nchar__ *FrameId,
+	const nchar__ *XML,
+	const nchar__ *XSL )
+{
+qRH
+	TOL_CBUFFER___ Result;
+	str::string RawDigests;
+	xdhcmn::digest Castings;
+	xdhcmn::retriever__ Retriever;
+qRB
+	RawDigests.Init( Execute( Callback, xdhujt::snCastingsFiller, &Result, FrameId, XML, XSL ) );
+
+	Castings.Init();
+	xdhcmn::Split( RawDigests, Castings );
+
+	HandleCastings_( Callback, FrameId, Castings );
+qRR
+qRT
+qRE
+}
+
+static void FillCastings_(
+	callback__ &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *FrameId = va_arg( List, const nchar__ * );
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+
+	FillCastings_( Callback, FrameId, XML, XSL );
+}
+
 
 static void GetContent_(
 	callback__ &Callback,
@@ -340,12 +443,6 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fFillElement:
 		return xdhujt::snElementFiller;
 		break;
-	case xdhcmn::fFillDocument:
-		return xdhujt::snDocumentFiller;
-		break;
-	case xdhcmn::fFillCasting:
-		return xdhujt::snCastingFiller;
-		break;
 	case xdhcmn::fSetProperty:
 		return xdhujt::snPropertySetter;
 		break;
@@ -373,6 +470,12 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fFocus:
 		qRFwk();
 		break;
+	case xdhcmn::fFillDocument:
+		qRFwk();
+		break;
+	case xdhcmn::fFillCastings:
+		qRFwk();
+		break;
 	default:
 		qRFwk();
 		break;
@@ -388,7 +491,6 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 {
 	switch ( Function ) {
 	case xdhcmn::fFillElement:
-	case xdhcmn::fFillCasting:
 	case xdhcmn::fSetProperty:
 	case xdhcmn::fGetProperty:
 	case xdhcmn::fSetAttribute:
@@ -413,6 +515,9 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 		break;
 	case xdhcmn::fFillDocument:
 		FillDocument_( C_(), List );
+		break;
+	case xdhcmn::fFillCastings:
+		FillCastings_( C_(), List );
 		break;
 	default:
 		qRFwk();

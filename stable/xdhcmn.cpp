@@ -39,7 +39,7 @@ const char *xdhcmn::GetLabel( function__ Function )
 	switch ( Function ) {
 	C( Alert );
 	C( Confirm );
-	C( FillCasting );
+	C( FillCastings );
 	C( FillElement );
 	C( FillDocument );
 	C( SetProperty );
