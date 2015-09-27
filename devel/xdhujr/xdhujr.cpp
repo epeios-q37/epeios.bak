@@ -67,7 +67,6 @@ entry___ xdhujr::script::dialog::Alert( "Alert", DialogScripts_ );
 entry___ xdhujr::script::dialog::Confirm( "Confirm", DialogScripts_ );
 
 static entry___ WidgetScripts_( "Widget", xdhujr::Scripts );
-entry___ xdhujr::script::widget::Instantiator( "Instantiator", WidgetScripts_ );
 entry___ xdhujr::script::widget::ContentRetriever( "ContentRetriever", WidgetScripts_ );
 entry___ xdhujr::script::widget::Focuser( "Focuser", WidgetScripts_ );
 
@@ -75,4 +74,6 @@ entry___ xdhujr::script::Log( "Log", xdhujr::Scripts );
 entry___ xdhujr::script::Focuser( "Focuser", Scripts );
 entry___ xdhujr::script::EventHandlersSetter( "EventHandlersSetter", Scripts );
 entry___ xdhujr::script::CastsSetter( "CastsSetter", Scripts );
+entry___ xdhujr::script::WidgetsInstantiator( "WidgetsInstantiator",Scripts );
+
 

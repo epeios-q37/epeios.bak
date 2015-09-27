@@ -57,6 +57,7 @@ const str::string_ &xdhujt::GetTaggedScript(
 	C( Focuser, Focuser );
 	C( EventHandlersSetter, EventHandlersSetter );
 	C( CastsSetter, CastsSetter );
+	C( WidgetsInstantiator, WidgetsInstantiator );
 	default:
 		qRFwk();
 		break;
@@ -139,6 +140,8 @@ D( Cast );
 D( Ids );
 D( Events );
 D( Casts );
+D( Types );
+D( ParametersSets );
 
 #define S( name, ... )\
 	case sn##name:\
@@ -175,6 +178,7 @@ qRB
 	S( Focuser, Id_, NULL );
 	S( EventHandlersSetter, Id_, Ids_, Events_, NULL );
 	S( CastsSetter, Id_, Ids_, Casts_, NULL );
+	S( WidgetsInstantiator, Id_, Ids_, Types_, ParametersSets_, NULL );
 	default:
 		qRFwk();
 		break;

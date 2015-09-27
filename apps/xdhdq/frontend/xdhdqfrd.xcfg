@@ -9,7 +9,7 @@
 			<DefaultProjectType>Predefined</DefaultProjectType>
 			<DefaultBackendType>None</DefaultBackendType>
 			<!-- For multi-user mode. Can be overriden a by project file. -->
-			<Backend Type="Predefined">None</Backend>
+			<Backend Type="None">None</Backend>
 			<Authentication Mode="Full">
 				<Login>Hello</Login>
 				<Password>toto</Password>
@@ -53,6 +53,7 @@
 				</Project>
 			</Projects>
 			<Backends Default="Embedded">
+				<Backend id="None" Alias="NoBackend" Type="None"/>
 				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote">localhost:2000</Backend>
 				<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded">
 					<xpp:expand select="BinRootDir"/>

@@ -183,24 +183,45 @@ namespace xdhutl {
 		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'qNIL' if not found.
 
 	void ExtractWidgetFeatures(
-		const str::string_ &Features,
+		const xdhcmn::digest_ &Description,
+		str::string_ &Type,
+		str::string_ &Parameters,
+		str::string_ &ContentRetrievingMethod,
+		str::string_ &FocusingMethod );
+
+	void ExtractWidgetFeatures(
+		const str::string_ &Description,
 		str::string_ &Type,
 		str::string_ &Parameters,
 		str::string_ &ContentRetrievingMethod,
 		str::string_ &FocusingMethod );
 
 	void ExtractWidgetTypeAndParameters(
-		const str::string_ &Features,
+		const xdhcmn::digest_ &Description,
 		str::string_ &Type,
 		str::string_ &Parameters );
 
 	void ExtractWidgetContentRetrievingMethod(
-		const str::string_ &Features,
+		const xdhcmn::digest_ &Description,
+		str::string_ &Method );
+
+	void ExtractWidgetContentRetrievingMethod(
+		const str::string_ &Description,
 		str::string_ &Method );
 
 	void ExtractWidgetFocusingMethod(
-		const str::string_ &Features,
+		const xdhcmn::digest_ &Description,
 		str::string_ &Method );
+
+	void ExtractWidgetFocusingMethod(
+		const str::string_ &Description,
+		str::string_ &Method );
+
+	void ExtractWidgetsTypesAndParametersSets(
+		const xdhcmn::digest_ &Descriptions,
+		str::strings_ &Ids,
+		str::strings_ &Types,
+		str::strings_ &ParametersSets );
 
 	void FillCasting(
 		const xdhcmn::digest_ &Description,

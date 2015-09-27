@@ -176,6 +176,11 @@
 					setEventHandlers( "%Id%", %Ids_%, %Events_% );
 				]]>
 			</EventHandlersSetter>
+			<WidgetsInstantiator>
+				<![CDATA[
+					instantiateWidgets( "%Id%", %Ids_%, %Types_%, %ParametersSets_% );
+				]]>
+			</WidgetsInstantiator>
 			<CastsSetter>
 				<![CDATA[
 					setCasts( "%Id%", %Ids_%, %Casts_% );
@@ -188,11 +193,11 @@
 						document.getElementById( "%Id%" ).addEventListener( "%Event%", handleEvent );
 					]]>
 			</EventHandler>-->
-			<Focusing>
+			<Focuser>
 				<![CDATA[
 						jQuery(document.getElementById( "%Id%" )).focus();
 					]]>
-			</Focusing>
+			</Focuser>
 			<Log>
 				<![CDATA[
 						log( "%Message%" );
@@ -211,11 +216,6 @@
 				</Setter>
 			</Property>
 			<Widget>
-				<Instantiator>
-					<![CDATA[
-						jQuery( document.getElementById( "%Id%") ). ({%Parameters_%});
-					]]>
-				</Instantiator>
 				<ContentRetriever>
 					<![CDATA[
 							jQuery( document.getElementById( "%Id%") ).%Method_%

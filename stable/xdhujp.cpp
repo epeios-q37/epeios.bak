@@ -107,8 +107,16 @@ static void AlertConfirm_(
 	AlertConfirm_( Callback, ScriptName, Result, XML, XSL, Title );
 }
 
+static void Append_(
+	const str::string_ &Item,
+	str::string_ &Tag )
+{
+	Tag.Append('"');
+	Tag.Append( Item );
+	Tag.Append('"');
+}
 
-static void HandleEventsDescriptions_(
+static void HandleEvents_(
 	const str::strings_ &Ids,
 	const xdhutl::event_abstracts_ &Abstracts,
 	str::string_ &IdsTag,
@@ -127,13 +135,8 @@ qRB
 	EventsTag.Append( "[ ");
 
 	while ( Row != qNIL ) {
-		IdsTag.Append('"');
-		IdsTag.Append(Id( Row) );
-		IdsTag.Append('"');
-
-		EventsTag.Append('"');
-		EventsTag.Append(Abstract( Row ).Event );
-		EventsTag.Append('"');
+		Append_( Id( Row ), IdsTag );
+		Append_( Abstract( Row ).Event, EventsTag );
 
 		Row = Ids.Next( Row );
 
@@ -150,7 +153,7 @@ qRE
 qRT
 }
 
-static void HandleEventsDescriptions_(
+static void HandleEvents_(
 	callback__ &Callback,
 	const nchar__ *FrameId,
 	const xdhcmn::digest_ &Descriptions )
@@ -166,9 +169,79 @@ qRB
 
 	IdsTag.Init();
 	EventsTag.Init();
-	HandleEventsDescriptions_( Ids, Abstracts, IdsTag, EventsTag );
+	HandleEvents_( Ids, Abstracts, IdsTag, EventsTag );
 
-	Execute( Callback, xdhujt::snEventHandlersSetter, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( EventsTag ).Internal()() );
+	if ( Ids.Amount() != 0  )
+		Execute( Callback, xdhujt::snEventHandlersSetter, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( EventsTag ).Internal()() );
+qRR
+qRT
+qRE
+}
+
+static void HandleWidgets_(
+	const str::strings_ &Ids,
+	const str::strings_ &Types,
+	const str::strings_ &ParametersSets,
+	str::string_ &IdsTag,
+	str::string_ &TypesTag,
+	str::string_ &ParametersSetsTag )
+{
+qRH
+	sdr::row__ Row = qNIL;
+	ctn::E_CMITEM( str::string_ ) Id, Type, Parameters;
+qRB
+	Row = Ids.First();
+	Id.Init( Ids );
+	Type.Init( Types );
+	Parameters.Init( ParametersSets );
+
+	IdsTag.Append( "[ " );
+	TypesTag.Append( "[ ");
+	ParametersSetsTag.Append( "[ ");
+
+	while ( Row != qNIL ) {
+		Append_( Id( Row ), IdsTag );
+		Append_( Type( Row ), TypesTag );
+		Append_( Parameters( Row ), ParametersSetsTag );
+
+		Row = Ids.Next( Row );
+
+		if ( Row != qNIL ) {
+			IdsTag.Append( ", " );
+			TypesTag.Append( ", " );
+			ParametersSetsTag.Append( ", " );
+		}
+	}
+
+	IdsTag.Append( " ]" );
+	TypesTag.Append( " ]");
+	ParametersSetsTag.Append( " ]");
+qRR
+qRE
+qRT
+}
+
+static void HandleWidgets_(
+	callback__ &Callback,
+	const nchar__ *FrameId,
+	const xdhcmn::digest_ &Descriptions )
+{
+qRH
+	str::strings Ids, Types, ParametersSets;
+	str::string IdsTag, TypesTag, ParametersSetsTag;
+qRB
+	Ids.Init();
+	Types.Init();
+	ParametersSets.Init();
+	xdhutl::ExtractWidgetsTypesAndParametersSets( Descriptions, Ids, Types, ParametersSets );
+
+	IdsTag.Init();
+	TypesTag.Init();
+	ParametersSetsTag.Init();
+	HandleWidgets_( Ids, Types, ParametersSets, IdsTag, TypesTag, ParametersSetsTag );
+
+	if ( Ids.Amount() != 0  )
+		Execute( Callback, xdhujt::snWidgetsInstantiator, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( TypesTag ).Internal()(), nstring___( ParametersSetsTag ).Internal()() );
 qRR
 qRT
 qRE
@@ -199,7 +272,9 @@ qRB
 	Widgets.Init();
 	Retriever.GetTable( Widgets );
 
-	HandleEventsDescriptions_( Callback, FrameId, Events );
+	HandleEvents_( Callback, FrameId, Events );
+
+	HandleWidgets_( Callback, FrameId, Widgets );
 qRR
 qRT
 qRE
@@ -216,8 +291,6 @@ static void FillDocument_(
 
 	FillDocument_( Callback, FrameId, XML, XSL );
 }
-
-/**/
 
 static void HandleCastings_(
 	const str::strings_ &Ids,
@@ -354,23 +427,6 @@ static void GetContent_(
 	GetContent_( Callback, va_arg( List, const nchar__ * ), Content );
 }
 
-static void GetWidgetFocusingMethod_(
-	const str::string_ &Args,
-	str::string_ &Method )
-{
-qRH
-	str::string Type, Parameters, OtherMethod;
-qRB
-	Type.Init();
-	Parameters.Init();
-	OtherMethod.Init();
-
-	xdhutl::ExtractWidgetFeatures( Args, Type, Parameters, OtherMethod, Method );
-qRR
-qRT
-qRE
-}
-
 static void Focus_(
 	callback__ &Callback,
 	const nchar__ *Id )
@@ -386,7 +442,7 @@ qRB
 	Method.Init();
 
 	if ( Args.Amount() != 0 )
-		GetWidgetFocusingMethod_( Args, Method );
+		xdhutl::ExtractWidgetFocusingMethod( Args, Method );
 
 	if ( Method.Amount() == 0 )
 		Execute( Callback, xdhujt::snFocuser, NULL, Id );

@@ -27,14 +27,14 @@
 const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 
 
-void sclxdhtml::SCLXDHTMLInitialization( sclfrntnd::mode__ Mode )
+void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
 	core::Core.Init( Mode );
 }
 
-xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
+xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
-	xdhcbk::proxy_callback__ *ProxyCallback )
+	xdhcmn::proxy_callback__ *ProxyCallback )
 {
 #if 0
 	core::session___ *Session = (core::session___ *)malloc( sizeof( core::session___ ) );
@@ -49,10 +49,10 @@ xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	Session->Init( Language, ProxyCallback );
 
 	switch ( core::Core.Mode() ) {
-	case sclfrntnd::mMonoUser:
+	case xdhcmn::mMonoUser:
 		::prolog::SetLayout( *Session );
 		break;
-	case sclfrntnd::mMultiUser:
+	case xdhcmn::mMultiUser:
 //		login::SetLayout( *Session );
 		break;
 	default:
@@ -63,7 +63,7 @@ xdhcbk::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	return Session;
 }
 
-void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcbk::session_callback__ *Callback )
+void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::session_callback__ *Callback )
 {
 	if ( Callback == NULL )
 		qRGnr();

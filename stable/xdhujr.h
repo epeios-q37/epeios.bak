@@ -61,6 +61,7 @@ namespace xdhujr {
 		extern entry___ DraggableSetter;
 		extern entry___ DroppableSetter;
 		extern entry___ EventHandlersSetter;
+		extern entry___ WidgetsInstantiator;
 		extern entry___ CastsSetter;
 		extern entry___ Focuser;
 		namespace property {
@@ -81,7 +82,6 @@ namespace xdhujr {
 			extern entry___ Confirm;
 		}
 		namespace widget {
-			extern entry___ Instantiator;
 			extern entry___ ContentRetriever;
 			extern entry___ Focuser;
 		}

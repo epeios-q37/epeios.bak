@@ -55,7 +55,7 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
 
-		Session.SetDocumentCasting( XML, XSL );
+		Session.FillCastings( XML, XSL );
 	qRR
 	qRT
 	qRE
@@ -90,7 +90,7 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
 
-	Session.SetDocument( XML, XSL );
+	Session.FillDocument( XML, XSL );
 
 	SetCasting_( Session );
 
@@ -118,7 +118,7 @@ qRH
 	sclfrntnd::backend_type__ BackendType = sclfrntnd::bt_Undefined;
 	str::string BackendFeature;
 qRB
-	if ( core::Core.Mode() == sclfrntnd::mMonoUser ) {
+	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
 		BackendFeature.Init();
 		BackendType = sclxdhtml::login::GetBackendFeatures( Session, BackendFeature );
 		sclxdhtml::Connect( BackendType, BackendFeature );

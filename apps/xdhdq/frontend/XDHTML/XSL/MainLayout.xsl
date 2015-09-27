@@ -19,7 +19,7 @@
 				<span>
 					<fieldset>
 						<legend>#mainFieldsLegend#</legend>
-						<span id="Fields"/> 
+						<iframe id="Fields"/> 
 					</fieldset>
 					<fieldset data-xdh-onevents="(mouseenter|HideFacetiousButton)|(mouseleave|ShowFacetiousButton)">
 						<legend>#mainFacetiousButtonLegend#</legend>

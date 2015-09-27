@@ -84,7 +84,7 @@ namespace core {
 	: public _session___
 	{
 	protected:
-		virtual bso::bool__ XDHCBKLaunch(
+		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override;
 		virtual void SCLXDHTMLRefresh( page__ Page ) override;
@@ -107,7 +107,7 @@ namespace core {
 			_ActionHelperCallback.reset( P );
 		}
 		E_CDTOR( core___ );
-		void Init( sclfrntnd::mode__ Mode )
+		void Init( xdhcmn::mode__ Mode )
 		{
 			_ActionHelperCallback.Init();
 			_core___::Init( Mode, _ActionHelperCallback );
