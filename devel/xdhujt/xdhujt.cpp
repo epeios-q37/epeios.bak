@@ -169,16 +169,16 @@ qRB
 	S( PropertySetter, Id_, Name_, Value_, NULL );
 	S( PropertyGetter, Id_, Name_, NULL );
 	S( ElementFiller, Id_, XML_, XSL_, NULL );
-	S( DocumentFiller, Id_, XML_, XSL_, NULL );
+	S( DocumentFiller, XML_, XSL_, NULL );
 	S( CastingsFiller, Id_, XML_, XSL_, NULL );
 	S( ContentSetter, Id_, Value_, NULL );
 	S( ContentGetter, Id_, NULL );
 	S( WidgetContentRetriever, Id_, Method_, NULL );
 	S( WidgetFocuser, Id_, Method_, NULL );
 	S( Focuser, Id_, NULL );
-	S( EventHandlersSetter, Id_, Ids_, Events_, NULL );
-	S( CastsSetter, Id_, Ids_, Casts_, NULL );
-	S( WidgetsInstantiator, Id_, Ids_, Types_, ParametersSets_, NULL );
+	S( EventHandlersSetter, Ids_, Events_, NULL );
+	S( CastsSetter, Ids_, Casts_, NULL );
+	S( WidgetsInstantiator, Ids_, Types_, ParametersSets_, NULL );
 	default:
 		qRFwk();
 		break;

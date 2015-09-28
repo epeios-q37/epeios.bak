@@ -60,7 +60,7 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
 
-		Session.FillCastings( XML, XSL );
+		Session.FillDocumentCastings( XML, XSL );
 	qRR
 	qRT
 	qRE
@@ -121,3 +121,9 @@ BASE_AC( main::surrender__ )
 {
 	Session.AlertT( "mainSurrenderMessage" );
 }
+
+void main::RefreshFields( core::session___ &Session )
+{
+	fields::SetLayout( FieldsFrameId_, Session );
+}
+

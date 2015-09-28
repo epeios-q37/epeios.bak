@@ -90,18 +90,18 @@ namespace xdhdws {
 		qRE
 			return Confirmed;
 		}
-		void FillCastings(
-			const nstring___ &FrameId,
+		void FillDocumentCastings(
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcmn::fFillCastings, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
+			C_().Process( xdhcmn::fFillCastings, NULL, nstring___().Internal()(), XML.Internal()( ), XSL.Internal()( ) );
 		}
-		void FillCastings(
+		void FillElementCastings(
+			const nstring___ &Id,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			FillCastings( nstring___(), XML, XSL );
+			C_().Process( xdhcmn::fFillCastings, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void FillElement(
 			const nstring___ &Id,
@@ -111,17 +111,10 @@ namespace xdhdws {
 			C_().Process( xdhcmn::fFillElement, NULL, Id.Internal()( ), XML.Internal()( ), XSL.Internal()( ) );
 		}
 		void FillDocument(
-			const nstring___ &FrameId,
 			const nstring___ &XML,
 			const nstring___ &XSL )
 		{
-			C_().Process( xdhcmn::fFillDocument, NULL, FrameId.Internal()(), XML.Internal()( ), XSL.Internal()( ) );
-		}
-		void FillDocument(
-			const nstring___ &XML,
-			const nstring___ &XSL )
-		{
-			FillDocument( nstring___(), XML, XSL );
+			C_().Process( xdhcmn::fFillDocument, NULL, XML.Internal()( ), XSL.Internal()( ) );
 		}
 		const char *GetProperty(
 			const nstring___ &Id,

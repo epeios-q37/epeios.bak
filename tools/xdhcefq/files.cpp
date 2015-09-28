@@ -22,7 +22,7 @@
 */
 
 #include "files.h"
-#include "xdhcbk.h"
+#include "xdhcmn.h"
 #include "flx.h"
 
 using misc::nstring___;

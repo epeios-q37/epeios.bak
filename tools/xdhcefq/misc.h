@@ -32,8 +32,8 @@
 # include "bso.h"
 //# include "ntvstr.h"
 # include "str.h"
-# include "xdhjst.h"
-# include "xdhjsp.h"
+# include "xdhutl.h"
+# include "xdhujp.h"
 
 # define MISC_NAME_MC			"xdhcefq"	// X(SL)/DH(TML) with CEF (Chromium Embedded Framework)
 # define MISC_NAME_LC			"xdhcefq"
@@ -70,7 +70,7 @@ void cef_convert_from(
 	cef_nstring_t *To );
 
 namespace misc {
-	using namespace xdhjst;
+	using namespace xdhutl;
 
 	inline cef_frame_t *GetFrame( cef_browser_t *Browser )
 	{

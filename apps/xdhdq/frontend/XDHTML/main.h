@@ -50,6 +50,8 @@ namespace main {
 	};
 
 	void SetLayout( core::session___ &Session );
+
+	void RefreshFields( core::session___ &Session );
 }
 
 #endif

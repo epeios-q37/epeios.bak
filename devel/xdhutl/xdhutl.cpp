@@ -223,6 +223,7 @@ qRR
 qRT
 qRE
 }
+
 void xdhutl::FillEventAbstractsMono(
 	const str::string_ &DefaultEvent,
 	const xdhcmn::digest_ &Description,
@@ -241,11 +242,12 @@ qRT
 qRE
 }
 
-void xdhutl::FillEventAbstractsMulti(
+amount__ xdhutl::FillEventAbstractsMulti(
 	const str::string_ &DefaultEvent,
 	const xdhcmn::digest_ &Descriptions,
 	event_abstracts_ &Abstracts )
 {
+	amount__ Amount = 0;
 qRH
 	xdhcmn::digest Definition;
 	strmrg::retriever__ Retriever;
@@ -253,6 +255,11 @@ qRB
 	Retriever.Init( Descriptions );
 
 	while ( Retriever.Availability() != strmrg::aNone ) {
+		if ( Amount == AmountMax )
+			qRLmt();
+
+		Amount++;
+
 		Definition.Init();
 
 		Retriever.GetTable( Definition );
@@ -262,14 +269,16 @@ qRB
 qRR
 qRT
 qRE
+	return Amount;
 }
 
-void xdhutl::FillEventAbstracts(
+amount__ xdhutl::FillEventAbstracts(
 	const str::string_ &TagName,
 	const xdhcmn::digest_ &Descriptions,
 	event_abstracts_ &Abstracts )
 
 {
+	amount__ Amount = 0;
 qRH
 	str::string DefaultEvent;
 	TOL_CBUFFER___ Buffer;
@@ -277,17 +286,19 @@ qRB
 	DefaultEvent.Init();
 	GetTagDefaultEvent( TagName, DefaultEvent );
 
-	FillEventAbstractsMulti( DefaultEvent, Descriptions, Abstracts );
+	Amount = FillEventAbstractsMulti( DefaultEvent, Descriptions, Abstracts );
 qRR
 qRT
 qRE
+	return Amount;
 }
 
-void xdhutl::FillEventAbstracts(
+amount__ xdhutl::FillEventAbstracts(
 	const xdhcmn::digest_ &Descriptions,
 	str::string_ &Id,
 	event_abstracts_ &Abstracts )
 {
+	amount__ Amount = 0;
 qRH
 	xdhcmn::retriever__ Retriever;
 	xdhcmn::digest EventsDescriptions;
@@ -303,10 +314,11 @@ qRB
 	EventsDescriptions.Init();
 	Retriever.GetTable( EventsDescriptions );
 
-	FillEventAbstracts( TagName, EventsDescriptions, Abstracts );
+	Amount = FillEventAbstracts( TagName, EventsDescriptions, Abstracts );
 qRR
 qRT
 qRE
+	return Amount;
 }
 
 void xdhutl::FillEventAbstracts(
@@ -319,6 +331,7 @@ qRH
 	xdhcmn::digest SubDescriptions;
 	str::string Id;
 	TOL_CBUFFER___ Buffer;
+	amount__ Amount = 0;
 qRB
 	Retriever.Init( Descriptions );
 
@@ -327,8 +340,10 @@ qRB
 		Retriever.GetTable( SubDescriptions );
 
 		Id.Init();
-		FillEventAbstracts( SubDescriptions, Id, Abstracts );
-		Ids.Append( Id );
+		Amount = FillEventAbstracts( SubDescriptions, Id, Abstracts );
+
+		while ( Amount-- )
+			Ids.Append( Id );
 	}
 qRR
 qRT

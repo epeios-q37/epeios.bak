@@ -6,21 +6,7 @@
 				>
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
-		<head>
-			<xpp:expand href="styles" />
-		</head>
-		<body>
-			<xsl:apply-templates select="*/Content"/>
-		</body>
-	</xsl:template>
-	<xsl:template match="Content">
-		<span class="vcenter-out">
-			<span class="vcenter-in">
-				<span>
-					<xsl:apply-templates select="Fields"/>
-				</span>
-			</span>
-		</span>
+		<xsl:apply-templates select="*/Content"/>
 	</xsl:template>
 	<xsl:template match="Fields">
 		<xsl:apply-templates select="Field"/>

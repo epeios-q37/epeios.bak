@@ -41,7 +41,8 @@
 			<ElementFiller>
 				<![CDATA[
 						removeChildren( "%Id%" );
-						document.getElementById( "%Id%" ).appendChild( transformToFragment( document, "%XML%", "%XSL%" ) );"";
+						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
+						fetchEventHandlersAndWidgets( "%Id%" );
 					]]>
 			</ElementFiller>
 			<Dialog>
@@ -153,37 +154,35 @@
 			</DroppableSetter>
 			<DocumentFiller>
 				<![CDATA[
-					var doc = getDocument( "%Id%" );
 					log( "%XML%" );
-					doc.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );
-					handleExtensions( doc );
+					document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );
+					fetchEventHandlersAndWidgets( "" );
 				]]>
 			</DocumentFiller>
 			<CastingsFiller>
 				<![CDATA[
 					// Edge executes this script in loop !!!
-					var doc = getDocument( "%Id%" );
 					console.log( "1 !!!" );
-					removeCastingChildren( doc );
+					removeCastingChildren( document );
 					console.log( "2 !!!" );
-					doc.getElementById( "xdh-castings" ).appendChild( transformToFragment( doc, "%XML%", "%XSL%" ) );
+					document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
 					console.log( "3 !!!" );
-					handleCastings( doc );
+					fetchCastings( "%Id%" );
 				]]>
 			</CastingsFiller>
 			<EventHandlersSetter>
 				<![CDATA[
-					setEventHandlers( "%Id%", %Ids_%, %Events_% );
+					setEventHandlers( %Ids_%, %Events_% );
 				]]>
 			</EventHandlersSetter>
 			<WidgetsInstantiator>
 				<![CDATA[
-					instantiateWidgets( "%Id%", %Ids_%, %Types_%, %ParametersSets_% );
+					instantiateWidgets( %Ids_%, %Types_%, %ParametersSets_% );
 				]]>
 			</WidgetsInstantiator>
 			<CastsSetter>
 				<![CDATA[
-					setCasts( "%Id%", %Ids_%, %Casts_% );
+					setCasts( %Ids_%, %Casts_% );
 				]]>
 			</CastsSetter>
 			<!--<EventHandler>

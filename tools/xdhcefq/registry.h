@@ -24,8 +24,8 @@
 #ifndef REGISTRY__INC
 # define REGISTRY__INC
 
-# include "xdhjsp.h"
-# include "xdhjsr.h"
+# include "xdhujp.h"
+# include "xdhujr.h"
 
 # include "sclrgstry.h"
 
@@ -41,7 +41,7 @@ namespace registry {
 	extern entry___ URL;
 
 	namespace custom_item {
-		using namespace xdhjsr::custom_item;
+		using namespace xdhujr::custom_item;
 	}
 
 	namespace cef {
@@ -56,7 +56,7 @@ namespace registry {
 		extern entry___ CachePath;
 	}
 
-	using namespace xdhjsr;
+	using namespace xdhujr;
 }
 
 #endif

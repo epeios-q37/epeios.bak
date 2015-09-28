@@ -8,6 +8,7 @@
 	<xsl:template match="/">
 		<head>
 			<xpp:expand href="styles" />
+			<title>Main</title>
 		</head>
 		<body data-xdh-onevent="keypress|About|CS+a">
 			<xsl:apply-templates select="*/Content"/>
@@ -19,7 +20,7 @@
 				<span>
 					<fieldset>
 						<legend>#mainFieldsLegend#</legend>
-						<iframe id="Fields"/> 
+						<span id="Fields"/> 
 					</fieldset>
 					<fieldset data-xdh-onevents="(mouseenter|HideFacetiousButton)|(mouseleave|ShowFacetiousButton)">
 						<legend>#mainFacetiousButtonLegend#</legend>

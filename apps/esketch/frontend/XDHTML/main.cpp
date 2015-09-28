@@ -54,7 +54,7 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
 
-		Session.FillCastings( XML, XSL );
+		Session.FillDocumentCastings( XML, XSL );
 	qRR
 	qRT
 	qRE

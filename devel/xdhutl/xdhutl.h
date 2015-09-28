@@ -153,17 +153,22 @@ namespace xdhutl {
 		const xdhcmn::digest_ &Description,
 		event_abstracts_ &Abstracts );
 
-	void FillEventAbstractsMulti(
+	// For the amount of abstracts created.
+	typedef bso::u8__ amount__;
+
+	E_CDEF( amount__, AmountMax, bso::U8Max );
+
+	amount__ FillEventAbstractsMulti(
 		const str::string_ &DefaultEvent,
 		const xdhcmn::digest_ &Descriptions,
 		event_abstracts_ &Abstracts );
 
-	void FillEventAbstracts(
+	amount__ FillEventAbstracts(
 		const str::string_ &TagName,
 		const xdhcmn::digest_ &Descriptions,
 		event_abstracts_ &Abstracts );
 
-	void FillEventAbstracts(
+	amount__ FillEventAbstracts(
 		const xdhcmn::digest_ &Descriptions,
 		str::string_ &Id,
 		event_abstracts_ &Abstracts );

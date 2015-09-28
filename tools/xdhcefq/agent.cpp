@@ -25,7 +25,7 @@
 
 #include "registry.h"
 
-#include "xdhjsp.h"
+#include "xdhujp.h"
 
 #include "scltool.h"
 
@@ -626,7 +626,7 @@ qRH
 	TOL_CBUFFER___ IdBuffer, ActionBuffer;
 qRB
 	Abstracts.Init();
-	misc::GetEventsAbstracts( TargetId, _F(), Abstracts );
+	misc::FillEventsAbstracts( TargetId, _F(), Abstracts );
 
 	Row = misc::Find( str::string( Event ), Keys, Abstracts );
 

@@ -127,6 +127,9 @@ qRH
 	ctn::E_CMITEM( str::string_ ) Id;
 	ctn::E_CITEM( xdhutl::event_abstract_ ) Abstract;
 qRB
+	if ( Ids.Amount() != Abstracts.Amount() )
+		qRFwk();
+
 	Row = Ids.First();
 	Id.Init( Ids );
 	Abstract.Init( Abstracts );
@@ -155,7 +158,6 @@ qRT
 
 static void HandleEvents_(
 	callback__ &Callback,
-	const nchar__ *FrameId,
 	const xdhcmn::digest_ &Descriptions )
 {
 qRH
@@ -167,12 +169,13 @@ qRB
 	Abstracts.Init();
 	xdhutl::FillEventAbstracts( Descriptions, Ids, Abstracts );
 
-	IdsTag.Init();
-	EventsTag.Init();
-	HandleEvents_( Ids, Abstracts, IdsTag, EventsTag );
+	if ( Ids.Amount() != 0 ) {
+		IdsTag.Init();
+		EventsTag.Init();
+		HandleEvents_( Ids, Abstracts, IdsTag, EventsTag );
 
-	if ( Ids.Amount() != 0  )
-		Execute( Callback, xdhujt::snEventHandlersSetter, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( EventsTag ).Internal()() );
+		Execute( Callback, xdhujt::snEventHandlersSetter, NULL,nstring___( IdsTag ).Internal()(), nstring___( EventsTag ).Internal()() );
+	}
 qRR
 qRT
 qRE
@@ -190,6 +193,12 @@ qRH
 	sdr::row__ Row = qNIL;
 	ctn::E_CMITEM( str::string_ ) Id, Type, Parameters;
 qRB
+	if ( Ids.Amount() != Types.Amount() )
+		qRFwk();
+
+	if ( Ids.Amount() != ParametersSets.Amount() )
+		qRFwk();
+
 	Row = Ids.First();
 	Id.Init( Ids );
 	Type.Init( Types );
@@ -223,7 +232,6 @@ qRT
 
 static void HandleWidgets_(
 	callback__ &Callback,
-	const nchar__ *FrameId,
 	const xdhcmn::digest_ &Descriptions )
 {
 qRH
@@ -235,21 +243,22 @@ qRB
 	ParametersSets.Init();
 	xdhutl::ExtractWidgetsTypesAndParametersSets( Descriptions, Ids, Types, ParametersSets );
 
-	IdsTag.Init();
-	TypesTag.Init();
-	ParametersSetsTag.Init();
-	HandleWidgets_( Ids, Types, ParametersSets, IdsTag, TypesTag, ParametersSetsTag );
+	if ( Ids.Amount() != 0 ) {
+		IdsTag.Init();
+		TypesTag.Init();
+		ParametersSetsTag.Init();
+		HandleWidgets_( Ids, Types, ParametersSets, IdsTag, TypesTag, ParametersSetsTag );
 
-	if ( Ids.Amount() != 0  )
-		Execute( Callback, xdhujt::snWidgetsInstantiator, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( TypesTag ).Internal()(), nstring___( ParametersSetsTag ).Internal()() );
+		Execute( Callback, xdhujt::snWidgetsInstantiator, NULL, nstring___( IdsTag ).Internal()(), nstring___( TypesTag ).Internal()(), nstring___( ParametersSetsTag ).Internal()() );
+	}
 qRR
 qRT
 qRE
 }
 
-static void FillDocument_(
+static void FillDocumentOrElement_(
 	callback__ &Callback,
-	const nchar__ *FrameId,
+	const nchar__ *Id,	// If 'Id' != NULL, it's the id of the element to apply to, otherwise it applies to the document.
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
@@ -259,7 +268,10 @@ qRH
 	xdhcmn::digest Digests, Events, Widgets;
 	xdhcmn::retriever__ Retriever;
 qRB
-	RawDigests.Init( Execute( Callback, xdhujt::snDocumentFiller, &Result, FrameId, XML, XSL ) );
+	if ( Id == NULL )
+		RawDigests.Init( Execute( Callback, xdhujt::snDocumentFiller, &Result, XML, XSL ) );
+	else
+		RawDigests.Init( Execute( Callback, xdhujt::snElementFiller, &Result, Id, XML, XSL ) );
 
 	Digests.Init();
 	xdhcmn::Split( RawDigests, Digests );
@@ -272,9 +284,9 @@ qRB
 	Widgets.Init();
 	Retriever.GetTable( Widgets );
 
-	HandleEvents_( Callback, FrameId, Events );
+	HandleEvents_( Callback, Events );
 
-	HandleWidgets_( Callback, FrameId, Widgets );
+	HandleWidgets_( Callback, Widgets );
 qRR
 qRT
 qRE
@@ -285,11 +297,22 @@ static void FillDocument_(
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *FrameId = va_arg( List, const nchar__ * );
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	FillDocument_( Callback, FrameId, XML, XSL );
+	FillDocumentOrElement_( Callback, NULL, XML, XSL );
+}
+
+static void FillElement_(
+	callback__ &Callback,
+	va_list List )
+{
+	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
+	const nchar__ *Id = va_arg( List, const nchar__ * );
+	const nchar__ *XML = va_arg( List, const nchar__ * );
+	const nchar__ *XSL = va_arg( List, const nchar__ * );
+
+	FillDocumentOrElement_( Callback, Id, XML, XSL );
 }
 
 static void HandleCastings_(
@@ -302,6 +325,9 @@ qRH
 	sdr::row__ Row = qNIL;
 	ctn::E_CMITEM( str::string_ ) Id, Casting;
 qRB
+	if ( Ids.Amount() != Castings.Amount() )
+		qRFwk();
+
 	Row = Ids.First();
 	Id.Init( Ids );
 	Casting.Init( Castings );
@@ -335,7 +361,6 @@ qRT
 
 static void HandleCastings_(
 	callback__ &Callback,
-	const nchar__ *FrameId,
 	const xdhcmn::digest_ &Descriptions )
 {
 qRH
@@ -346,11 +371,13 @@ qRB
 	Castings.Init();
 	xdhutl::FillCastings( Descriptions, Ids, Castings );
 
-	IdsTag.Init();
-	CastingsTag.Init();
-	HandleCastings_( Ids, Castings, IdsTag, CastingsTag );
+	if ( Ids.Amount() ) {
+		IdsTag.Init();
+		CastingsTag.Init();
+		HandleCastings_( Ids, Castings, IdsTag, CastingsTag );
 
-	Execute( Callback, xdhujt::snCastsSetter, NULL, FrameId, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
+		Execute( Callback, xdhujt::snCastsSetter, NULL, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
+	}
 qRR
 qRT
 qRE
@@ -358,7 +385,7 @@ qRE
 
 static void FillCastings_(
 	callback__ &Callback,
-	const nchar__ *FrameId,
+	const nchar__ *Id,
 	const nchar__ *XML,
 	const nchar__ *XSL )
 {
@@ -368,12 +395,12 @@ qRH
 	xdhcmn::digest Castings;
 	xdhcmn::retriever__ Retriever;
 qRB
-	RawDigests.Init( Execute( Callback, xdhujt::snCastingsFiller, &Result, FrameId, XML, XSL ) );
+	RawDigests.Init( Execute( Callback, xdhujt::snCastingsFiller, &Result, Id, XML, XSL ) );
 
 	Castings.Init();
 	xdhcmn::Split( RawDigests, Castings );
 
-	HandleCastings_( Callback, FrameId, Castings );
+	HandleCastings_( Callback, Castings );
 qRR
 qRT
 qRE
@@ -384,11 +411,11 @@ static void FillCastings_(
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
-	const nchar__ *FrameId = va_arg( List, const nchar__ * );
+	const nchar__ *Id = va_arg( List, const nchar__ * );
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 
-	FillCastings_( Callback, FrameId, XML, XSL );
+	FillCastings_( Callback, Id, XML, XSL );
 }
 
 
@@ -496,9 +523,6 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fConfirm:
 		return xdhujt::snDialogConfirm;
 		break;
-	case xdhcmn::fFillElement:
-		return xdhujt::snElementFiller;
-		break;
 	case xdhcmn::fSetProperty:
 		return xdhujt::snPropertySetter;
 		break;
@@ -529,6 +553,9 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 	case xdhcmn::fFillDocument:
 		qRFwk();
 		break;
+	case xdhcmn::fFillElement:
+		qRFwk();
+		break;
 	case xdhcmn::fFillCastings:
 		qRFwk();
 		break;
@@ -546,7 +573,6 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 	va_list List )
 {
 	switch ( Function ) {
-	case xdhcmn::fFillElement:
 	case xdhcmn::fSetProperty:
 	case xdhcmn::fGetProperty:
 	case xdhcmn::fSetAttribute:
@@ -571,6 +597,9 @@ void xdhujp::proxy_callback__::XDHCMNProcess(
 		break;
 	case xdhcmn::fFillDocument:
 		FillDocument_( C_(), List );
+		break;
+	case xdhcmn::fFillElement:
+		FillElement_( C_(), List );
 		break;
 	case xdhcmn::fFillCastings:
 		FillCastings_( C_(), List );

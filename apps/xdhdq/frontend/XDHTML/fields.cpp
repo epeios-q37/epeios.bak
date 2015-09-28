@@ -54,7 +54,7 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
 
-		Session.FillCastings( Id, XML, XSL );
+		Session.FillElementCastings( Id, XML, XSL );
 	qRR
 	qRT
 	qRE
@@ -108,7 +108,7 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
-	Session.FillDocument( Id, XML, XSL );
+	Session.FillElement( Id, XML, XSL );
 
 	SetCasting_( Id, Session );
 
@@ -125,6 +125,6 @@ BASE_AC( fields::edit__ )
 {
 	Session.User.EditableField() = GetField( str::string( Id ) );
 
-	SetLayout( NULL, Session );
+	main::RefreshFields( Session );
 }
 
