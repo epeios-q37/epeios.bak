@@ -317,6 +317,12 @@ namespace rgstry {
 		{
 			reset( false );
 		}
+		tentry___( const entry___ &Entry )
+		{
+			reset( false );
+
+			Init( Entry );
+		}
 		tentry___(
 			const entry___ &Entry,
 			const str::string_ &Tag )
@@ -378,6 +384,12 @@ namespace rgstry {
 			_Tags.Init();
 
 			tentry__::Init();
+		}
+		void Init( const entry___ &Entry )
+		{
+			_Tags.Init();
+
+			tentry__::Init( Entry, _Tags );
 		}
 		void Init(
 			const entry___ &Entry,

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Permet d'inclure à l'aide d'un seul fichier l'ensemble des '.xlcl' relatifs aux bibliothèques Epeios -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-<!-- 	<xpp:expand href="clnarg.xlcl"/>
+ 	<xpp:expand href="clnarg.xlcl"/>
 	<xpp:expand href="fil.xlcl"/>
 	<xpp:expand href="fbl.xlcl"/>
 	<xpp:expand href="frd.xlcl"/>
@@ -13,4 +13,4 @@
 	<xpp:expand href="xpp.xlcl"/>
 	<xpp:expand href="xtf.xlcl"/>
 	<xpp:expand href="xulf.xlcl"/>
- --></xpp:bloc>
+</xpp:bloc>

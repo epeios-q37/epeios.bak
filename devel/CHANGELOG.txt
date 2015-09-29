@@ -12,8 +12,16 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-29 :
+- RGSTRY :
+	% Adding 'tentry___[::Init](...)' variant.
+- SCLFRNTND :
+	- The language is now stored/retrieved in/from the registry.
+- XDH...
+	* Misc. changes.
+
 2015-09-24 :
-	- XDHCMN : 'args[)]' -> 'digest[_]'.
+- XDHCMN : 'args[)]' -> 'digest[_]'.
 
 2015-09-23 :
 - SCLXDHTML :

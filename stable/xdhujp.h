@@ -39,9 +39,6 @@ namespace xdhujp {
 		virtual void XDHUJPExecute(
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer ) = 0;
-		virtual void XDHUJPGetTranslation(
-			const char *Message,
-			str::string_ &Buffer ) = 0;
 		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) = 0;
 	public:
@@ -68,14 +65,6 @@ namespace xdhujp {
 		void Execute( const str::string_ &Script )
 		{
 			Execute( Script,  NULL );
-		}
-		const str::string_ &GetTranslation(
-			const char *Message,
-			str::string_ &Buffer )
-		{
-			XDHUJPGetTranslation( Message, Buffer );
-
-			return Buffer;
 		}
 		const char *GetWidgetAttributeName( TOL_CBUFFER___ &Buffer )
 		{

@@ -355,7 +355,7 @@ bso::bool__ sclfrntnd::frontend___::Connect(
 	if ( Mode != fblovl::mNone )
 		_Flow.Init( Kernel_.Core() );
 
-	return _frontend___::Connect( L_(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
+	return _frontend___::Connect( Language(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
 }
 
 void sclfrntnd::GetProjectsFeatures(

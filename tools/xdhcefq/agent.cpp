@@ -533,28 +533,12 @@ namespace {
 		{
 			return _A().Frame();
 		}
-		const char *_L( TOL_CBUFFER___ &Buffer ) const
-		{
-			return _A().Language( Buffer );
-		}
 	protected:
 		virtual void XDHUJPExecute(
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer ) override
 		{
 			misc::ExecuteJavascript( Script, Buffer, _F() );
-		}
-		virtual void XDHUJPGetTranslation(
-			const char *Message,
-			str::string_ &Buffer ) override
-		{
-		qRH
-			TOL_CBUFFER___ LBuffer;
-		qRB
-			scllocale::GetTranslation(Message, _L( LBuffer ), Buffer );;
-		qRR
-		qRT
-		qRE
 		}
 		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
 		{

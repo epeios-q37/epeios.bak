@@ -76,7 +76,7 @@ namespace sclfrntnd {
 		csducl::universal_client_ioflow___ _Flow;
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistryLevel;
-		Q37_MPMDF( const char, L_, Language_ );
+		mutable TOL_CBUFFER___ _Language;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -84,7 +84,7 @@ namespace sclfrntnd {
 			_Flow.reset( P );
 			_Registry.reset( P );
 			_RegistryLevel = rgstry::UndefinedLevel;
-			Language_ = NULL;
+			_Language.reset();
 		}
 		E_CVDTOR( frontend___ );
 		void Init(
@@ -96,8 +96,9 @@ namespace sclfrntnd {
 			_Registry.Init();
 			_Registry.Push( Registry );
 			_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
-			Language_ = Language;
 
+			if ( (Language != NULL) && *Language )
+				sclrgstry::SetValue( _Registry, str::string( Language ), rgstry::tentry___( sclrgstry::parameter::Language ) );
 
 			return _frontend___::Init( ReportingCallback );
 		}
@@ -110,7 +111,7 @@ namespace sclfrntnd {
 		}
 		const char *Language( void ) const
 		{
-			return L_();
+			return sclrgstry::MGetValue( _Registry, rgstry::tentry___( sclrgstry::parameter::Language ), _Language );
 		}
 	};
 

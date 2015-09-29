@@ -77,34 +77,15 @@ static void AlertConfirm_(
 	callback__ &Callback,
 	script_name__ ScriptName,
 	TOL_CBUFFER___ *Result,
-	const nchar__ *XML,
-	const nchar__ *XSL,
-	const nchar__ *Title )
-{
-qRH
-	str::string CloseText;
-qRB
-	CloseText.Init();
-	Callback.GetTranslation( "CloseText", CloseText );
-
-	Execute( Callback, ScriptName, Result, XML, XSL, Title, nstring___(CloseText).Internal()() );
-qRR
-qRT
-qRE
-}
-
-static void AlertConfirm_(
-	callback__ &Callback,
-	script_name__ ScriptName,
-	TOL_CBUFFER___ *Result,
 	va_list List )
 {
 	// NOTA : we use variables, because if we put 'va_arg()' directly as parameter to below function, it's not sure that they are called in the correct order.
 	const nchar__ *XML = va_arg( List, const nchar__ * );
 	const nchar__ *XSL = va_arg( List, const nchar__ * );
 	const nchar__ *Title = va_arg( List, const nchar__ * );
+	const nchar__ *CloseText = va_arg( List, const nchar__ * );
 
-	AlertConfirm_( Callback, ScriptName, Result, XML, XSL, Title );
+	Execute( Callback, ScriptName, Result, XML, XSL, Title, CloseText );
 }
 
 static void Append_(
