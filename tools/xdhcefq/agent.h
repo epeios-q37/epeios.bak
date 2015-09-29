@@ -44,7 +44,7 @@ namespace agent {
 		TOL_CBUFFER___ _LanguageBuffer;
 		void _Release( void )
 		{
-			xdhcbk::session_callback__ *Callback = _Session.Callback();
+			xdhcmn::session_callback__ *Callback = _Session.Callback();
 
 			if ( Callback != NULL )
 				_agent___::ReleaseCallback( Callback );
@@ -91,7 +91,7 @@ namespace agent {
 
 			misc::AddRef( _Browser );
 
-			if ( _agent___::Init( xdhcbk::mMonoUser, ModuleFileName, Identification ) ) {
+			if ( _agent___::Init( xdhcmn::mMonoUser, ModuleFileName, Identification ) ) {
 				_InitializeSession();
 				return true;
 			} else
@@ -116,10 +116,7 @@ namespace agent {
 		{
 			return _Session.Launch( Id, Action );
 		}
-		bso::bool__ HandleEvent(
-			const char *Event,
-			const str::string_ &Keys,	// Only for keyboard-related events.
-			const str::string_ &TargetId );	// If returned value == 'true', the event bubbling is stopped.
+		bso::bool__ HandleEvent( const str::string_ &Digest );	// If returned value == 'true', the event bubbling is stopped.
     };
 }
 

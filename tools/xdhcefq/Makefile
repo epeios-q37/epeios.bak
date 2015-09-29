@@ -38,8 +38,8 @@ mods += bomhdl cdgb64 fil fnm lcl
 mods += rgstry stsfsm xml xpp dlbrry 
 mods += mtk strmrg 
 mods += sclmisc sclerror scllocale sclrgstry scltool 
-mods += xdhjsp xdhjsr xdhjst xdhups 
-mods += xdhcbk 
+mods += xdhujp xdhujr xdhujt 
+mods += xdhcmn xdhups xdhutl 
 mods += agent browser files misc registry 
 mods += render 
 

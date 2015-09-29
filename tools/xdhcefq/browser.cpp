@@ -295,7 +295,7 @@ qRE
 }
 
 static void HandleClosingAnswer_(
-	const xdhcbk::args_ &Args,
+	const xdhcmn::digest_ &Args,
 	cef_browser_t *Browser )
 {
 	strmrg::retriever__ Retriever;
@@ -314,10 +314,10 @@ static void HandleClosingAnswer_(
 	cef_browser_t *Browser )
 {
 qRH
-	xdhcbk::args Args;
+	xdhcmn::digest Args;
 qRB
 	Args.Init();
-	misc::GetArgs( ListValue, Args );
+	misc::Convert( ListValue, Args );
 
 	HandleClosingAnswer_( Args, Browser );
 qRR

@@ -393,6 +393,74 @@ qRE
 	return Row;
 }
 
+const event_abstract_ &xdhutl::FetchEventAbstract(
+	const xdhcmn::digest_ &Digest,
+	str::string_ &Id,
+	event_abstract_ &AbstractBuffer )
+{
+qRH
+	xdhcmn::retriever__ Retriever;
+	str::string  Name, Type, Keys;
+	xdhcmn::digest Events;
+	xdhutl::event_abstracts Abstracts;
+	ctn::E_CITEM( xdhutl::event_abstract_ ) Abstract;
+	sdr::row__ Row = qNIL;
+qRB
+	Retriever.Init( Digest );
+
+	Id.Init();
+	Retriever.GetString( Id );
+
+	Name.Init();
+	Retriever.GetString( Name );
+
+	Type.Init();
+	Retriever.GetString( Type );
+
+	Keys.Init();
+	Retriever.GetString( Keys );
+
+	Events.Init();
+	Retriever.GetTable( Events );
+
+	Abstracts.Init();
+	xdhutl::FillEventAbstracts( Name, Events, Abstracts );
+
+	Row = xdhutl::Find( Type, Keys, Abstracts );
+
+	if ( Row == qNIL ) {
+		if ( !xdhutl::IsKeyEvent( Type ) )
+			qRGnr();
+
+		qRReturn;
+	}
+
+	Abstract.Init( Abstracts );
+	AbstractBuffer = Abstract( Row );	// To set the position of 'Handler'.
+qRR
+qRT
+qRE
+	return AbstractBuffer;
+}
+
+const event_abstract_ &xdhutl::FetchEventAbstract(
+	const str::string_ &RawDigest,
+	str::string_ &Id,
+	event_abstract_ &Abstract )
+{
+qRH
+	xdhcmn::digest Digest;
+qRB
+	Digest.Init();
+	xdhcmn::Split( RawDigest, Digest );
+
+	FetchEventAbstract( Digest, Id, Abstract );
+qRR
+qRT
+qRE
+	return Abstract;
+}
+
 void xdhutl::ExtractWidgetFeatures(
 	const xdhcmn::digest_ &Description,
 	str::string_ &Type,

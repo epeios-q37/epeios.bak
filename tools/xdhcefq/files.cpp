@@ -185,12 +185,12 @@ qRE
 }
 
 static void GetTDT_(
-	const xdhcbk::args_ &Args,
+	const xdhcmn::digest_ &Args,
 	str::string_ &Title,
 	str::string_ &Default,
 	str::strings_ &Types )
 {
-	xdhcbk::retriever__ Retriever;
+	xdhcmn::retriever__ Retriever;
 
 	Retriever.Init( Args );
 
@@ -204,7 +204,7 @@ static void GetTDT_(
 }
 
 static void Get_(
-	const xdhcbk::args_ &Args,
+	const xdhcmn::digest_ &Args,
 	str::string_ &Id,
 	str::string_ &Action,
 	str::string_ &Title,
@@ -212,8 +212,8 @@ static void Get_(
 	str::strings_ &Types )
 {
 qRH
-	xdhcbk::retriever__ Retriever;
-	xdhcbk::args SubArgs;
+	xdhcmn::retriever__ Retriever;
+	xdhcmn::digest SubArgs;
 qRB
 	Retriever.Init( Args );
 
@@ -231,7 +231,7 @@ qRE
 static void FileDialog_(
 	cef_browser_t *Browser,
 	cef_file_dialog_mode_t FileDialogMode,
-	const xdhcbk::args_ &Args )
+	const xdhcmn::digest_ &Args )
 {
 qRH
 	str::string Id, Action, Title, Default;
@@ -257,10 +257,10 @@ static void FileDialog_(
 	const str::string_ &MergedParams )
 {
 qRH
-	xdhcbk::args Args;
+	xdhcmn::digest Args;
 qRB
 	Args.Init();
-	xdhcbk::Split( MergedParams, Args );
+	xdhcmn::Split( MergedParams, Args );
 
 	FileDialog_( Browser, FileDialogMode, Args );
 qRR
@@ -284,12 +284,12 @@ qRE
 }
 
 static void GetIAFN_(
-	const xdhcbk::args_ &Args,
+	const xdhcmn::digest_ &Args,
 	str::string_ &Id,
 	str::string_ &Action,
 	str::strings_ &FileNames )
 {
-	xdhcbk::retriever__ Retriever;
+	xdhcmn::retriever__ Retriever;
 
 	Retriever.Init( Args );
 
@@ -305,10 +305,10 @@ void files::HandleResult(
 	str::strings_ &FileNames )
 {
 qRH
-	xdhcbk::args Args;
+	xdhcmn::digest Args;
 qRB
 	Args.Init();
-	misc::GetArgs( ListValue, Args );
+	misc::Convert( ListValue, Args );
 
 	GetIAFN_( Args, Id, Action, FileNames );
 qRR

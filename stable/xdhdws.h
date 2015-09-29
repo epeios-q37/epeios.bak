@@ -34,8 +34,8 @@
 # include "tol.h"
 
 namespace xdhdws {
-	typedef  ntvstr::char__ nchar___;
-	typedef  ntvstr::string___ nstring___;
+	using xdhcmn::nchar__;
+	using xdhcmn::nstring___;
 
 	E_CDEF( char *, ContentTagName, "Content" );
 	E_CDEF( char *, ContextTagName, "Context" );

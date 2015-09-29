@@ -37,8 +37,8 @@
 # include "str.h"
 
 namespace xdhujt {
-	typedef ntvstr::char__ nchar__;
-	typedef ntvstr::string___ nstring___;
+	using xdhcmn::nchar__;
+	using xdhcmn::nstring___;
 
 	E_ENUM( script_name ) {
 		snAttributeGetter,

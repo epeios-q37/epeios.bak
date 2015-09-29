@@ -30,12 +30,13 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 			<Modules Group="XDHTML">
-				<Module>xdhcbk</Module>
+				<Module>xdhcmn</Module>
+				<Module>xdhups</Module>
+				<Module>xdhutl</Module>
 				<Modules Group="JS">
-					<Module>xdhjsp</Module>
-					<Module>xdhjsr</Module>
-					<Module>xdhjst</Module>
-					<Module>xdhups</Module>
+					<Module>xdhujp</Module>
+					<Module>xdhujr</Module>
+					<Module>xdhujt</Module>
 				</Modules>
 			</Modules>
 		</Modules>

@@ -32,6 +32,8 @@
 
 using namespace misc;
 
+using namespace xdhujt;
+
 static ids::ids_store<sdr::row__> Ids_;	// Pour le gnrateur d'indetifiant d'lment, lorsque l'id n'est pas dfinit par l'utilisateur dans le layout.
 
 static stsfsm::automat RenderAutomat_, ClientAutomat_;
@@ -221,9 +223,9 @@ qRE
 }
 
 
-void misc::GetArgs(
+void misc::Convert(
 	cef_list_value_t *ListValue,
-	xdhcbk::args_ &Args )
+	xdhcmn::digest_ &Digest )
 {
 qRH
 	str::string String;
@@ -231,7 +233,7 @@ qRB
 	String.Init();
 	GetString( ListValue, String );	
 
-	xdhcbk::Split( String, Args );
+	xdhcmn::Split( String, Digest );
 qRR
 qRT
 qRE
@@ -254,8 +256,8 @@ qRT
 qRE
 }
 
-void misc::PutArgs(
-	const xdhcbk::args_ &Args,
+void misc::Convert(
+	const xdhcmn::digest_ &Digest,
 	cef_list_value_t *ListValue )
 {
 qRH
@@ -263,7 +265,7 @@ qRH
 qRB
 	Merged.Init();
 
-	xdhcbk::Merge( Args, Merged );
+	xdhcmn::Merge( Digest, Merged );
 
 	PutString( Merged, ListValue );
 qRR
@@ -369,7 +371,7 @@ qRH
 qRB
 	Names.Append( str::string( Name ) );
 	EscapedValue.Init();
-	xdhcbk::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
+	xdhcmn::Escape( str::string( Value.UTF8( Buffer ) ), EscapedValue, '"' );
 	Values.Append( EscapedValue );
 
 	NameForRawValue.Init( Name );
@@ -709,9 +711,9 @@ void misc::SendMessage(
 void misc::SendMessage(
 	client_message__ RawMessage,
 	cef_browser_t *Browser,
-	const xdhcbk::args_ &Args )
+	const xdhcmn::digest_ &Args )
 {
-	SendMessage_( RawMessage, PID_BROWSER, Browser, Args, PutArgs );
+	SendMessage_( RawMessage, PID_BROWSER, Browser, Args, ConvertD2LV );
 }
 
 void misc::SendMessage(
@@ -725,9 +727,9 @@ void misc::SendMessage(
 void misc::SendMessage(
 	render_message__ RawMessage,
 	cef_browser_t *Browser,
-	const xdhcbk::args_ &Args )
+	const xdhcmn::digest_ &Args )
 {
-	SendMessage_( RawMessage, PID_RENDERER, Browser, Args, PutArgs );
+	SendMessage_( RawMessage, PID_RENDERER, Browser, Args, ConvertD2LV );
 }
 
 static const str::string_ &GetDefaultEvent_(
@@ -741,7 +743,7 @@ qRB
 	Name.Init();
 	GetName( Id, Frame, Name );
 
-	xdhjst::GetTagDefaultEvent( Name, Event );
+	xdhutl::GetTagDefaultEvent( Name, Event );
 qRR
 qRT
 qRE
@@ -754,19 +756,19 @@ namespace {
 		const rgstry::tentry__ &ItemAttributeName,
 		const rgstry::tentry__ &ItemsAttributeName,
 		cef_frame_t *Frame,
-		xdhcbk::args_ &Items )
+		xdhcmn::digest_ &Items )
 	{
 	qRH
 		str::string Value;
 		TOL_CBUFFER___ Buffer;
-		xdhcbk::args OtherItems;
+		xdhcmn::digest OtherItems;
 	qRB
 		Value.Init();
 		OGetAttribute( Id, sclmisc::MGetValue( ItemAttributeName, Buffer ), Frame, Value );
 
 		if ( Value.Amount() != 0 ) {
 			OtherItems.Init();
-			xdhcbk::Split( Value, OtherItems );
+			xdhcmn::Split( Value, OtherItems );
 			Items.AppendMono( OtherItems );
 		}
 
@@ -775,7 +777,7 @@ namespace {
 
 		if ( Value.Amount() != 0 ) {
 			OtherItems.Init();
-			xdhcbk::Split( Value, OtherItems );
+			xdhcmn::Split( Value, OtherItems );
 			Items.AppendMulti( OtherItems );
 		}
 	qRR
@@ -795,7 +797,7 @@ qRB
 	Name.Init();
 	GetName( Id, Frame, Name );
 
-	xdhjst::GetTagDefaultEvent( Name, Event );
+	xdhutl::GetTagDefaultEvent( Name, Event );
 qRR
 qRT
 qRE

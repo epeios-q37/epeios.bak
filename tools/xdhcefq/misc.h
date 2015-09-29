@@ -115,17 +115,25 @@ namespace misc {
 		cef_list_value_t *ListValue,
 		str::string_ &String );
 
-	void GetArgs(
+	void Convert(
 		cef_list_value_t *ListValue,
-		xdhcbk::args_ &Aegs );
+		xdhcmn::digest_ &Digest );
 
 	void PutString(
 		const str::string_ &String,
 		cef_list_value_t *ListValue );
 
-	void PutArgs(
-		const xdhcbk::args_ &Args,
+	void Convert(
+		const xdhcmn::digest_ &Digest,
 		cef_list_value_t *ListValue );
+
+	// Same as above function with somehow weird name to facilitate template deduction.
+	inline void ConvertD2LV(
+		const xdhcmn::digest_ &Digest,
+		cef_list_value_t *ListValue )
+	{
+		Convert( Digest, ListValue );
+	}
 
 	client_message__ GetClientMessage( const cef_string_t *Pattern );
 
@@ -459,7 +467,7 @@ namespace misc {
 	void SendMessage(
 		client_message__ Message,
 		cef_browser_t *Browser,
-		const xdhcbk::args_ &Args );
+		const xdhcmn::digest_ &Args );
 
 	void SendMessage(
 		render_message__ Message,
@@ -469,7 +477,7 @@ namespace misc {
 	void SendMessage(
 		render_message__ Message,
 		cef_browser_t *Browser,
-		const xdhcbk::args_ &Args );
+		const xdhcmn::digest_ &Args );
 
 	cef_v8value_t *GetFunction(
 		cef_v8value_t *Object,

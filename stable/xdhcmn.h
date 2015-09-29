@@ -44,6 +44,10 @@
 # define XDHCMN_RETRIEVE_FUNCTION_NAME		XDHCMNRetrieve
 
 namespace xdhcmn {
+	// NOTA : not used by this module, but by other 'upstream' and 'downtream' 'XDH...' modules.
+	typedef ntvstr::char__ nchar__;
+	typedef ntvstr::string___ nstring___;
+
 	E_CDEF( char *, CloseActionLabel, "Q37Close" );
 
 	E_ENUM( mode ) {

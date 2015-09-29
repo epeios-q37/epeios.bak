@@ -31,8 +31,8 @@
 
 using namespace agent;
 
-using xdhcbk::nstring___;
-using xdhcbk::nchar__;
+using xdhcmn::nstring___;
+using xdhcmn::nchar__;
 
 namespace {
 
@@ -473,10 +473,10 @@ namespace {
 		const str::string_ &UserAction,
 		cef_browser_t *Browser,
 		const str::string_ &TargetId,
-		const xdhcbk::args_ &Args )
+		const xdhcmn::digest_ &Args )
 	{
 	qRH
-		xdhcbk::args MetaArgs;
+		xdhcmn::digest MetaArgs;
 		TOL_CBUFFER___ Buffer;
 	qRB
 		MetaArgs.Init();
@@ -497,7 +497,7 @@ namespace {
 		const str::string_ &UserAction,
 		cef_browser_t *Browser,
 		const str::string_ &TargetId,
-		const xdhcbk::args_ &Args )
+		const xdhcmn::digest_ &Args )
 	{
 		switch ( Action ) {
 		case misc::aOpenFile:
@@ -518,7 +518,7 @@ namespace {
 }
 
 namespace {
-	typedef xdhjsp::callback__ _callback__;
+	typedef xdhujp::callback__ _callback__;
 
 	class callback__
 	: public _callback__
@@ -538,13 +538,13 @@ namespace {
 			return _A().Language( Buffer );
 		}
 	protected:
-		virtual void XDHJSPExecute(
+		virtual void XDHUJPExecute(
 			const str::string_ &Script,
 			TOL_CBUFFER___ *Buffer ) override
 		{
 			misc::ExecuteJavascript( Script, Buffer, _F() );
 		}
-		virtual void XDHJSPGetTranslation(
+		virtual void XDHUJPGetTranslation(
 			const char *Message,
 			str::string_ &Buffer ) override
 		{
@@ -556,11 +556,11 @@ namespace {
 		qRT
 		qRE
 		}
-		virtual void XDHJSPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
+		virtual void XDHUJPGetWidgetAttributeName( TOL_CBUFFER___ &Buffer ) override
 		{
 			sclmisc::MGetValue( registry::custom_item::attribute_name::Widget, Buffer);
 		}
-		virtual void XDHJSPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) override
+		virtual void XDHUJPGetResultAttributeName( TOL_CBUFFER___ &Buffer ) override
 		{
 			sclmisc::MGetValue( registry::custom_item::attribute_name::Result, Buffer );
 		}
@@ -594,9 +594,9 @@ namespace {
 void agent::agent___::_InitializeSession( void )
 {
 qRH
-	xdhjsp::proxy_callback__ *ProxyCallback;
+	xdhujp::proxy_callback__ *ProxyCallback;
 qRB
-	ProxyCallback = new xdhjsp::proxy_callback__;	// Destruction is made by '_Session'.
+	ProxyCallback = new xdhujp::proxy_callback__;	// Destruction is made by '_Session'.
 
 	if ( ProxyCallback == NULL )
 		qRGnr();
@@ -613,37 +613,22 @@ qRT
 qRE
 }
 
-bso::bool__ agent::agent___::HandleEvent(
-	const char *Event,
-	const str::string_ &Keys,
-	const str::string_ &TargetId )
+bso::bool__ agent::agent___::HandleEvent( const str::string_  &Digest )
 {
 	bso::bool__ Stop = true;
 qRH
-	misc::event_abstracts Abstracts;
-	ctn::E_CITEM( misc::event_abstract_ ) Abstract;
-	sdr::row__ Row = qNIL;
+	str::string Id;
+	misc::event_abstract Abstract;
 	TOL_CBUFFER___ IdBuffer, ActionBuffer;
 qRB
-	Abstracts.Init();
-	misc::FillEventsAbstracts( TargetId, _F(), Abstracts );
+	Id.Init();
+	Abstract.Init();
+	misc::FetchEventAbstract( Digest, Id, Abstract );
 
-	Row = misc::Find( str::string( Event ), Keys, Abstracts );
-
-	if ( Row == qNIL ) {
-		if ( !xdhjst::IsKeyEvent( Event ) )
-			qRGnr();
-
-		qRReturn;
-	}
-
-	Abstract.Init( Abstracts );
-	Abstract( Row );	// To set the position of 'Abstract'.
-
-	if ( misc::IsPredefined( Abstract().Action() ) )
-		HandlePredefinedAction_( Abstract().Action(), Abstract().UserAction, _B(), TargetId, Abstract().Args );
-	else if ( Abstract().Action() == misc::a_User )
-		Stop = Launch( TargetId.Convert( IdBuffer ), Abstract().UserAction.Convert( ActionBuffer ) );
+	if ( misc::IsPredefined( Abstract.Action() ) )
+		HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, _B(), Id, Abstract.Args );
+	else if ( Abstract.Action() == misc::a_User )
+		Stop = Launch( Id.Convert( IdBuffer ), Abstract.UserAction.Convert( ActionBuffer ) );
 	else
 		qRGnr();
 qRR

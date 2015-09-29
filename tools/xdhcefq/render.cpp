@@ -74,7 +74,8 @@ namespace {
 		}
 	};
 
-	struct native_function__ {
+	struct native_function__
+	{
 		v8handler__ Handler;
 		cef_v8value_t *Function;
 		void reset( bso::bool__ P = true )
@@ -116,15 +117,13 @@ namespace {
 	static class rack___ {
 		public:
 			render_process_handler__ RenderProcessHandler;
-			native_function__ HandleEvent;
-			native_function__ Unlock;
+			native_function__ LaunchEvent;
 			agent::agent___ Agent;
 			void reset( bso::bool__ P = true )
 			{
 				RenderProcessHandler.reset( P );
 				Agent.reset( P );
-				HandleEvent.reset( P );
-				Unlock.reset( P );
+				LaunchEvent.reset( P );
 			}
 			E_CDTOR( rack___ );
 			// The members are intiialized when required.
@@ -136,12 +135,12 @@ static void Merge_(
 	str::string_ &Result )
 {
 qRH
-	xdhcbk::args Args;
+	xdhcmn::digest Args;
 qRB
 	Args.Init();
 	Args.AppendMulti( Strings );
 
-	xdhcbk::Merge( Args, Result );
+	xdhcmn::Merge( Args, Result );
 qRR
 qRT
 qRE
@@ -213,16 +212,16 @@ static void HandleClosing_(
 	cef_browser_t *Browser )
 {
 qRH
-	xdhcbk::args Args;	// For an eventual future use, as 'ListValue' should be empty...
+	xdhcmn::digest Args;	// For an eventual future use, as 'ListValue' should be empty...
 	str::string Response;
 qRB
 	Args.Init();
-	misc::GetArgs( ListValue, Args );
+	misc::Convert( ListValue, Args );
 
 #if 0
 	Rack_.Agent.Launch( NULL, xdhcbk::CloseActionLabel );
 #else
-	if ( Rack_.Agent.Launch( NULL, xdhcbk::CloseActionLabel ) ) {
+	if ( Rack_.Agent.Launch( NULL, xdhcmn::CloseActionLabel ) ) {
 		Rack_.Agent.reset();
 		Response.Init( "true" );
 	} else
@@ -400,8 +399,8 @@ namespace {
 	}
 }
 	
-// This is the callback for the native 'handleEvent' JS function.
-static int CEF_CALLBACK HandleEvent_(
+// This is the callback for the native 'launchEvent' JS function.
+static int CEF_CALLBACK LaunchEvent_(
 	struct _cef_v8handler_t* self,
 	const cef_string_t* name,
 	struct _cef_v8value_t* object,
@@ -412,64 +411,29 @@ static int CEF_CALLBACK HandleEvent_(
 {
 	bso::bool__ Success = false;
 qRH
-	misc::cef_string___ Key;
-	cef_v8value_t *RawId = NULL;
-	cef_v8value_t *RawEvent = NULL;
-	cef_v8value_t *RawEventName = NULL;
-	cef_v8context_t *Context = NULL;
-	_cef_v8value_t *Global = NULL;
-	cef_v8value_t *StopPropagation = NULL;
-	misc::nstring___ Id, EventName;
-	TOL_CBUFFER___ EventNameBuffer;
-	str::string IdBuffer;
+	cef_v8value_t *RawDigest = NULL;
+//	cef_v8context_t *Context = NULL;
+//	cef_v8value_t *Global = NULL;
+	misc::nstring___ Digest;
 	cef_nstring_t CEFBuffer;
+	str::string Buffer;
 	err::buffer__ ERRBuffer;
-	str::string Keys;
 qRB
 	misc::Set(&CEFBuffer);
-	Key.Init( "id" );
-	RawId = object->get_value_bykey( object, Key );
-	if ( !RawId->is_string( RawId ) )
+
+	RawDigest = arguments[0];
+	if ( !RawDigest->is_string( RawDigest ) )
 		qRGnr();
 
-	RawEvent = arguments[0];
-	if ( !RawEvent->is_object( RawEvent ) )
-		qRGnr();
-
-	Key.Init( "type" );
-	RawEventName = RawEvent->get_value_bykey( RawEvent, Key );
-	if ( !RawEventName->is_string( RawEventName ) )
-		qRGnr();
-
-	cef_convert_from( RawId->get_string_value( RawId ), &CEFBuffer );
-	Id.Init( CEFBuffer.str );
+	cef_convert_from( RawDigest->get_string_value( RawDigest ), &CEFBuffer );
+	Digest.Init( CEFBuffer.str );
 	misc::Clear( &CEFBuffer );
 
-	cef_convert_from( RawEventName->get_string_value( RawEventName ), &CEFBuffer );
-	EventName.Init( CEFBuffer.str );
-	misc::Clear( &CEFBuffer );
+	*retval = cef_v8value_create_bool( 1 );
 
-	StopPropagation = misc::GetFunction( RawEvent, str::string( "stopPropagation" ) );
-
-	Context = cef_v8context_get_current_context();
-	Global = Context->get_global( Context );
-
-	if ( true || Global->has_value_bykey(Global, RawId->get_string_value(RawId)) ) { // Does not find the 'ProjectType' element on the 'Prolog' page. Worked once with a previous version of CEF ...
-		Keys.Init();
-
-		if ( xdhjst::IsKeyEvent( EventName.UTF8( EventNameBuffer ) ) )
-			GetKeys_( RawEvent, Keys );
-
-		IdBuffer.Init();
-#if 0
-		Rack_.Agent.HandleEvent( EventName.UTF8( EventNameBuffer ), Id.UTF8( IdBuffer ) );
-#else
-		if ( Rack_.Agent.HandleEvent( EventName.UTF8( EventNameBuffer ), Keys, Id.UTF8( IdBuffer ) ) )
-			StopPropagation->execute_function( StopPropagation, RawEvent, 0, NULL );
-		else
-			qRLmt();	// The browser-based version always call 'stopPropagation()'.
-#endif
-	}
+	Buffer.Init();
+	if ( !Rack_.Agent.HandleEvent( Digest.UTF8( Buffer ) ) )
+		qRLmt();	// The browser-based version always call 'stopPropagation()'.
 
 	Success = true;
 qRR
@@ -534,18 +498,14 @@ static void CEF_CALLBACK OnContextCreated_(
 {
 qRH
 	cef_v8value_t *Global = NULL;
-	misc::cef_string___ HandleEventFunctionName, UnlockFunctionName;
+	misc::cef_string___ LaunchEventFunctionName;
 qRB
 	if ( frame->is_main(frame) ) {
 		Global = context->get_global( context );
 
-		HandleEventFunctionName.Init( "handleEvent" );
-		Rack_.HandleEvent.Init( HandleEventFunctionName, frame, HandleEvent_ );
-		Global->set_value_bykey( Global, HandleEventFunctionName, Rack_.HandleEvent.Function, V8_PROPERTY_ATTRIBUTE_NONE );
-
-		UnlockFunctionName.Init( "unlock" );
-		Rack_.Unlock.Init( HandleEventFunctionName, frame, Unlock_ );
-		Global->set_value_bykey( Global, UnlockFunctionName, Rack_.Unlock.Function, V8_PROPERTY_ATTRIBUTE_NONE );
+		LaunchEventFunctionName.Init( "launchEvent" );
+		Rack_.LaunchEvent.Init( LaunchEventFunctionName, frame, LaunchEvent_ );
+		Global->set_value_bykey( Global, LaunchEventFunctionName, Rack_.LaunchEvent.Function, V8_PROPERTY_ATTRIBUTE_NONE );
 	}
 qRR
 qRT

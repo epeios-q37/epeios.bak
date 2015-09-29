@@ -33,9 +33,8 @@
 # include "err.h"
 
 namespace xdhutl {
-
-	typedef ntvstr::char__ nchar__;
-	typedef ntvstr::string___ nstring___;
+	using xdhcmn::nchar__;
+	using xdhcmn::nstring___;
 
 	E_ENUM( action ) {
 		aOpenFile,
@@ -186,6 +185,16 @@ namespace xdhutl {
 		const str::string_ &Event,
 		const str::string_ &Keys,	// Only for keyboard-related events.
 		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'qNIL' if not found.
+
+	const event_abstract_ &FetchEventAbstract(
+		const xdhcmn::digest_ &Digest,
+		str::string_ &Id,
+		event_abstract_ &Abstract );
+
+	const event_abstract_ &FetchEventAbstract(
+		const str::string_ &Digest,
+		str::string_ &Id,
+		event_abstract_ &Abstract );
 
 	void ExtractWidgetFeatures(
 		const xdhcmn::digest_ &Description,
