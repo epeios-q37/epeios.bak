@@ -186,15 +186,15 @@ namespace xdhutl {
 		const str::string_ &Keys,	// Only for keyboard-related events.
 		const event_abstracts_ &Abstracts	);	// Returns the 'row' in 'Abstracts' corresponding to 'Event' ; 'qNIL' if not found.
 
-	const event_abstract_ &FetchEventAbstract(
+	bso::bool__ FetchEventAbstract(
 		const xdhcmn::digest_ &Digest,
 		str::string_ &Id,
-		event_abstract_ &Abstract );
+		event_abstract_ &Abstract );	// If false, no digest found because the event is a key-related event but not with recognized key sequence.
 
-	const event_abstract_ &FetchEventAbstract(
+	bso::bool__  FetchEventAbstract(
 		const str::string_ &Digest,
 		str::string_ &Id,
-		event_abstract_ &Abstract );
+		event_abstract_ &Abstract );	// If false, no digest found because the event is a key-related event but not with recognized key sequence.
 
 	void ExtractWidgetFeatures(
 		const xdhcmn::digest_ &Description,

@@ -43,22 +43,22 @@
 					<xpp:expand select="ProjectsRootDir"/>
 					<xpp:bloc>None.xprj</xpp:bloc>
 				</Project>
-				<Project id="LocalHost" Alias="LocalhostBackendProject">
+				<!--<Project id="LocalHost" Alias="LocalhostBackendProject">
 					<xpp:expand select="ProjectsRootDir"/>
 					<xpp:bloc>Localhost.xprj</xpp:bloc>
 				</Project>
 				<Project id="Embedded" Alias="EmbeddedBackendProject">
 					<xpp:expand select="ProjectsRootDir"/>
 					<xpp:bloc>Embedded.xprj</xpp:bloc>
-				</Project>
+				</Project>-->
 			</Projects>
 			<Backends Default="Embedded">
 				<Backend id="None" Alias="NoBackend" Type="None"/>
-				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote">localhost:2000</Backend>
+				<!--<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote">localhost:2000</Backend>
 				<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded">
 					<xpp:expand select="BinRootDir"/>
 					<xpp:bloc>xdhdqbkd</xpp:bloc>
-				</Backend>
+				</Backend>-->
 			</Backends>
 		</xpp:bloc>
 	</xpp:define>
@@ -76,6 +76,10 @@
 			<Translations text="EmbeddedBackendProject">
 				<Translation language="fr">avec moteur de traitement enclavé</Translation>
 				<Translation language="en">with embedded backend</Translation>
+			</Translations>
+			<Translations text="NoBackend">
+				<Translation language="fr">sans moteur de traitement</Translation>
+				<Translation language="en">without backend</Translation>
 			</Translations>
 			<Translations text="LocalPredefinedBackend">
 				<Translation language="fr">Moteur de traitement local</Translation>

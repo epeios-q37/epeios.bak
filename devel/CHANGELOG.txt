@@ -12,11 +12,19 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-09-30 :
+- XDHUTL :
+	% 'FetchEventAbstracts(...)' now returns a boolen to report a key-related event without recognized key sequence.
+
 2015-09-29 :
 - RGSTRY :
 	% Adding 'tentry___[::Init](...)' variant.
 - SCLFRNTND :
 	- The language is now stored/retrieved in/from the registry.
+- XDH...
+	* Misc. changes.
+
+2015-09-... :
 - XDH...
 	* Misc. changes.
 

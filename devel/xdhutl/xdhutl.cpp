@@ -393,11 +393,12 @@ qRE
 	return Row;
 }
 
-const event_abstract_ &xdhutl::FetchEventAbstract(
+bso::bool__ xdhutl::FetchEventAbstract(
 	const xdhcmn::digest_ &Digest,
 	str::string_ &Id,
 	event_abstract_ &AbstractBuffer )
 {
+	bso::bool__ Found = false;
 qRH
 	xdhcmn::retriever__ Retriever;
 	str::string  Name, Type, Keys;
@@ -435,30 +436,33 @@ qRB
 		qRReturn;
 	}
 
+	Found = true;
+
 	Abstract.Init( Abstracts );
 	AbstractBuffer = Abstract( Row );	// To set the position of 'Handler'.
 qRR
 qRT
 qRE
-	return AbstractBuffer;
+	return Found;
 }
 
-const event_abstract_ &xdhutl::FetchEventAbstract(
+bso::bool__ xdhutl::FetchEventAbstract(
 	const str::string_ &RawDigest,
 	str::string_ &Id,
 	event_abstract_ &Abstract )
 {
+	bso::bool__ Found = false;
 qRH
 	xdhcmn::digest Digest;
 qRB
 	Digest.Init();
 	xdhcmn::Split( RawDigest, Digest );
 
-	FetchEventAbstract( Digest, Id, Abstract );
+	Found = FetchEventAbstract( Digest, Id, Abstract );
 qRR
 qRT
 qRE
-	return Abstract;
+	return Found;
 }
 
 void xdhutl::ExtractWidgetFeatures(

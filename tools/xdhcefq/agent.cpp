@@ -607,14 +607,14 @@ qRH
 qRB
 	Id.Init();
 	Abstract.Init();
-	misc::FetchEventAbstract( Digest, Id, Abstract );
-
-	if ( misc::IsPredefined( Abstract.Action() ) )
-		HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, _B(), Id, Abstract.Args );
-	else if ( Abstract.Action() == misc::a_User )
-		Stop = Launch( Id.Convert( IdBuffer ), Abstract.UserAction.Convert( ActionBuffer ) );
-	else
-		qRGnr();
+	if ( misc::FetchEventAbstract(Digest, Id, Abstract) ) {
+		if ( misc::IsPredefined( Abstract.Action() ) )
+			HandlePredefinedAction_( Abstract.Action(), Abstract.UserAction, _B(), Id, Abstract.Args );
+		else if ( Abstract.Action() == misc::a_User )
+			Stop = Launch( Id.Convert( IdBuffer ), Abstract.UserAction.Convert( ActionBuffer ) );
+		else
+			qRGnr();
+	}
 qRR
 qRT
 qRE

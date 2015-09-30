@@ -33,7 +33,6 @@
 # include "ntvstr.h"
 # include "strmrg.h"
 # include "sclerror.h"
-# include "sclfrntnd.h"
 
 # include <stdarg.h>
 
