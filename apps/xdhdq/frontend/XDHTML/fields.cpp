@@ -128,3 +128,8 @@ BASE_AC( fields::edit__ )
 	main::RefreshFields( Session );
 }
 
+BASE_AC( fields::refresh__ )
+{
+	main::RefreshFields( Session );
+}
+

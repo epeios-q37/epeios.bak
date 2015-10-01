@@ -29,7 +29,7 @@
 						</div>
 						<div style="display: inline-bloc;widht=100%">
 							<span >
-								<input id="Freeze" type="checkbox">#mainFreeze#</input>
+								<input id="Freeze" type="checkbox"/>#mainFreeze#
 							</span>
 							<span data-xdh-onevent="mouseenter|HideFacetiousButton">
 								<button data-xdh-onevent="Surrender" data-xdh-cast="FacetiousButtonCasting" title="#mainFacetiousButtonMessage#">#mainFacetiousButtonLabel#</button>

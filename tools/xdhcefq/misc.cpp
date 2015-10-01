@@ -32,8 +32,6 @@
 
 using namespace misc;
 
-using namespace xdhujt;
-
 static ids::ids_store<sdr::row__> Ids_;	// Pour le gnrateur d'indetifiant d'lment, lorsque l'id n'est pas dfinit par l'utilisateur dans le layout.
 
 static stsfsm::automat RenderAutomat_, ClientAutomat_;
@@ -384,59 +382,19 @@ qRT
 qRE
 }
 
-namespace {
-	void SetXML_(
-		const nstring___ &Message,
-		str::string_ &XML )
-	{
-	qRH
-		flx::E_STRING_TOFLOW___ STOFlow;
-		xml::writer Writer;
-		str::string Buffer;
-	qRB
-		STOFlow.Init( XML );
-		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
-
-		Buffer.Init();
-		Writer.PutValue( Message.UTF8( Buffer ), "Content" );
-	qRR
-	qRT
-	qRE
-	}
-
-	inline void SetXSL_( str::string_ &XSL )
-	{
-		XSL.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
-			<xsl:stylesheet version=\"1.0\"\
-			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
-				<xsl:output method=\"text\"\
-					        encoding=\"utf-8\"/>\
-				<xsl:template match=\"/\">\
-					<xsl:value-of select=\"Content\"/>\
-				</xsl:template>\
-			</xsl:stylesheet>\
-		");
-	}
-}
-
-void misc::Alert(
+void misc::Report(
 	const nstring___ &Message,
 	cef_frame_t *Frame )
 {
 qRH
-	str::string Script, XML, XSL, CloseText;
+	str::string Script;
+	str::string Buffer;
 qRB
-	XML.Init();
-	SetXML_( Message, XML );
+	Script.Init( "alert(\"" );
 
-	XSL.Init();
-	SetXSL_( XSL );
-
-	CloseText.Init();
-	sclmisc::GetBaseTranslation( "CloseText", CloseText );
-
-	Script.Init();
-	scripter::DialogAlert( XML, XSL, nstring___(), CloseText, Script );
+	Buffer.Init();
+	xdhcmn::Escape( Message.UTF8( Buffer ), Script, '"' );
+	Script.Append( "\");");
 
 	ExecuteJavascript( Script,Frame );
 qRR
@@ -454,7 +412,7 @@ qRH
 	str::string Script;
 qRB
 	Script.Init();
-	scripter::GetProperty( Id, Name, Script );
+	xdhujs::GetProperty( Id, Name, Script );
 
 	ExecuteJavascript( Script, &Property, Frame );
 qRR
@@ -473,7 +431,7 @@ qRH
 	str::string Script;
 qRB
 	Script.Init();
-	scripter::SetAttribute( Id, Name, Value, Script );
+	xdhujs::SetAttribute( Id, Name, Value, Script );
 
 	ExecuteJavascript( Script, NULL, Frame );
 qRR
@@ -491,7 +449,7 @@ qRH
 	str::string Script;
 qRB
 	Script.Init();
-	scripter::GetAttribute( Id, Name, Script );
+	xdhujs::GetAttribute( Id, Name, Script );
 
 	ExecuteJavascript( Script, &Attribute, Frame );
 qRR
@@ -529,7 +487,7 @@ qRH
 	str::string Script;
 qRB
 	Script.Init();
-	scripter::RemoveAttribute( Id, Name, Script );
+	xdhujs::RemoveAttribute( Id, Name, Script );
 
 	ExecuteJavascript( Script, NULL, Frame );
 qRR
@@ -583,7 +541,7 @@ qRH
 	str::string Script;
 qRB
 	Script.Init();
-	scripter::SetContent( Id, Value, Script );
+	xdhujs::SetContent( Id, Value, Script );
 
 	ExecuteJavascript( Script, NULL, Frame );
 qRR

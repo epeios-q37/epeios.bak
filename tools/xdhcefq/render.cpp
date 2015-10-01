@@ -437,7 +437,7 @@ qRB
 
 	Success = true;
 qRR
-	misc::Alert( err::Message( ERRBuffer ), NULL );
+	misc::Report( err::Message( ERRBuffer ), NULL );
 	ERRRst();
 qRT
 	misc::Clear( &CEFBuffer );

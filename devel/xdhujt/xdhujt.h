@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#error "Obsolete ! Use 'XDHUJS' instead !"
+
 #ifndef XDHUJT__INC
 # define XDHUJT__INC
 
@@ -129,6 +131,10 @@ namespace xdhujt {
 		{
 			GetScript( snPropertyGetter, &Script, Id.Internal()(), Name.Internal()() );
 		}
+
+		void Report(
+			const nstring___ &Message,
+			str::string_ &Script );
 	}
 
 	/*

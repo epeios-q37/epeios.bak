@@ -17,9 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define XDHUJT__COMPILATION
+#define XDHUJS__COMPILATION
 
-#include "xdhujt.h"
+#include "xdhujs.h"
 
 #include "xdhujr.h"
 
@@ -27,14 +27,14 @@
 
 #include "stsfsm.h"
 
-using namespace xdhujt;
+using namespace xdhujs;
 
 #define C( name, entry )\
 	case sn##name:\
 		sclmisc::MGetValue( xdhujr::script::entry, Buffer );\
 		break
 
-const str::string_ &xdhujt::GetTaggedScript(
+const str::string_ &xdhujs::GetTaggedScript(
 	script_name__ Script,
 	str::string_ &Buffer )
 {
@@ -148,7 +148,7 @@ D( ParametersSets );
 	SubstituteTags_( TaggedScript, List, __VA_ARGS__ );\
 	break\
 
-void xdhujt::GetScript(
+void xdhujs::GetScript(
 	script_name__ ScriptName,
 	str::string_ &Script,
 	va_list List )
@@ -190,7 +190,7 @@ qRT
 qRE
 }
 
-const str::string_ &xdhujt::GetScript(
+const str::string_ &xdhujs::GetScript(
 	script_name__ ScriptName,
 	str::string_ *Buffer,
 	... )
@@ -208,60 +208,3 @@ qRE
 	return *Buffer;
 }
 
-namespace {
-	void SetXML_(
-		const nstring___ &Message,
-		str::string_ &XML )
-	{
-	qRH
-		flx::E_STRING_TOFLOW___ STOFlow;
-		xml::writer Writer;
-		str::string Buffer;
-	qRB
-		STOFlow.Init( XML );
-		Writer.Init( STOFlow, xml::oCompact, xml::e_Default );
-
-		Buffer.Init();
-		Writer.PutValue( Message.UTF8( Buffer ), "Content" );
-	qRR
-	qRT
-	qRE
-	}
-
-	inline void SetXSL_( str::string_ &XSL )
-	{
-		XSL.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\
-			<xsl:stylesheet version=\"1.0\"\
-			                xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\
-				<xsl:output method=\"text\"\
-					        encoding=\"utf-8\"/>\
-				<xsl:template match=\"/\">\
-					<xsl:value-of select=\"Content\"/>\
-				</xsl:template>\
-			</xsl:stylesheet>\
-		");
-	}
-}
-
-void xdhujt::scripter::Report(
-	const nstring___ &Message,
-	str::string_ &Script )
-{
-qRH
-	str::string XML, XSL, CloseText;
-qRB
-	XML.Init();
-	SetXML_( Message, XML );
-
-	XSL.Init();
-	SetXSL_( XSL );
-
-	CloseText.Init();
-	sclmisc::GetBaseTranslation( "CloseText", CloseText );
-
-	Script.Init();
-	scripter::DialogAlert( XML, XSL, nstring___(), CloseText, Script );
-qRR
-qRT
-qRE
-}

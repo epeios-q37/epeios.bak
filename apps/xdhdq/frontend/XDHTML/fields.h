@@ -24,20 +24,25 @@
 
 namespace fields {
 	BASE_ACD( edit );
+	BASE_ACD( refresh );
+
 
 	class action_callbacks__
 	{
 	public:
 		BASE_ACU( edit, Edit );
+		BASE_ACU( refresh, Refresh );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( Edit );
+			BASE_ACR( Refresh );
 		}
 		E_CVDTOR( action_callbacks__ );
 		void Init( void )
 		{
 			BASE_ACI( Edit );
+			BASE_ACI( Refresh );
 		}
 	};
 

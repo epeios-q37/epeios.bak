@@ -52,7 +52,6 @@ qRT
 qRE
 }
 
-
 BASE_AC( global::refresh__ )
 {
 	Session.Refresh();

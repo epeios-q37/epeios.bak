@@ -12,7 +12,7 @@
 		<xsl:apply-templates select="Field"/>
 	</xsl:template>
 	<xsl:template match="Field">
-		<fieldset>
+		<fieldset  data-xdh-onevent="focusout|Refresh">
 			<legend data-xdh-onevent="Edit" style="cursor: pointer;">
 				<xsl:attribute name="id">
 					<xsl:value-of select="@id"/>
@@ -23,7 +23,7 @@
 				<xsl:when test="../@Editable=@id">
 					<xsl:choose>
 						<xsl:when test="@id='CKEditor'">
-							<textarea id="EditableEntry" data-xdh-widget="ckeditor|enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,|val\(\)|ckeditor\(\).editor.focus\(\)">
+							<textarea id="EditableEntry"  data-xdh-onevent="focusout|Refresh" data-xdh-widget="ckeditor|enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,|val\(\)|ckeditor\(\).editor.focus\(\)">
 								<xsl:value-of select="."/>
 							</textarea>
 						</xsl:when>

@@ -12,6 +12,12 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-10-01 :
+- XDHUJR :
+	# 'XDHUJS' -> 'XDHUJR'.
+- XDHUJS, XDHUJT :
+	- 'XDHUJT' becomes 'XDHUJS'.
+
 2015-09-30 :
 - XDHUTL :
 	% 'FetchEventAbstracts(...)' now returns a boolen to report a key-related event without recognized key sequence.

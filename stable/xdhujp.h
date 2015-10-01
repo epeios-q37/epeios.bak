@@ -28,8 +28,9 @@
 
 // X(SL)/DH(TML) Upstream Javascript-related Proxy
 
-# include "xdhujt.h"
+# include "xdhujs.h"
 
+# include "str.h"
 # include "err.h"
 
 namespace xdhujp {
@@ -82,7 +83,7 @@ namespace xdhujp {
 
 	const char *Execute(
 		callback__ &Callback,
-		xdhujt::script_name__ Script,
+		xdhujs::script_name__ Script,
 		TOL_CBUFFER___ *Buffer,
 		... );
 

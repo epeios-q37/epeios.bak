@@ -31,7 +31,7 @@ using namespace xdhujp;
 
 using xdhutl::nstring___;
 using xdhutl::nchar__;
-using xdhujt::script_name__;
+using xdhujs::script_name__;
 
 static const char *Execute_(
 	callback__  &Callback,
@@ -155,7 +155,7 @@ qRB
 		EventsTag.Init();
 		HandleEvents_( Ids, Abstracts, IdsTag, EventsTag );
 
-		Execute( Callback, xdhujt::snEventHandlersSetter, NULL,nstring___( IdsTag ).Internal()(), nstring___( EventsTag ).Internal()() );
+		Execute( Callback, xdhujs::snEventHandlersSetter, NULL,nstring___( IdsTag ).Internal()(), nstring___( EventsTag ).Internal()() );
 	}
 qRR
 qRT
@@ -230,7 +230,7 @@ qRB
 		ParametersSetsTag.Init();
 		HandleWidgets_( Ids, Types, ParametersSets, IdsTag, TypesTag, ParametersSetsTag );
 
-		Execute( Callback, xdhujt::snWidgetsInstantiator, NULL, nstring___( IdsTag ).Internal()(), nstring___( TypesTag ).Internal()(), nstring___( ParametersSetsTag ).Internal()() );
+		Execute( Callback, xdhujs::snWidgetsInstantiator, NULL, nstring___( IdsTag ).Internal()(), nstring___( TypesTag ).Internal()(), nstring___( ParametersSetsTag ).Internal()() );
 	}
 qRR
 qRT
@@ -250,9 +250,9 @@ qRH
 	xdhcmn::retriever__ Retriever;
 qRB
 	if ( Id == NULL )
-		RawDigests.Init( Execute( Callback, xdhujt::snDocumentFiller, &Result, XML, XSL ) );
+		RawDigests.Init( Execute( Callback, xdhujs::snDocumentFiller, &Result, XML, XSL ) );
 	else
-		RawDigests.Init( Execute( Callback, xdhujt::snElementFiller, &Result, Id, XML, XSL ) );
+		RawDigests.Init( Execute( Callback, xdhujs::snElementFiller, &Result, Id, XML, XSL ) );
 
 	Digests.Init();
 	xdhcmn::Split( RawDigests, Digests );
@@ -357,7 +357,7 @@ qRB
 		CastingsTag.Init();
 		HandleCastings_( Ids, Castings, IdsTag, CastingsTag );
 
-		Execute( Callback, xdhujt::snCastsSetter, NULL, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
+		Execute( Callback, xdhujs::snCastsSetter, NULL, nstring___( IdsTag ).Internal()(), nstring___( CastingsTag ).Internal()() );
 	}
 qRR
 qRT
@@ -376,7 +376,7 @@ qRH
 	xdhcmn::digest Castings;
 	xdhcmn::retriever__ Retriever;
 qRB
-	RawDigests.Init( Execute( Callback, xdhujt::snCastingsFiller, &Result, Id, XML, XSL ) );
+	RawDigests.Init( Execute( Callback, xdhujs::snCastingsFiller, &Result, Id, XML, XSL ) );
 
 	Castings.Init();
 	xdhcmn::Split( RawDigests, Castings );
@@ -411,7 +411,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, xdhujt::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
+	Args.Init( Execute( Callback, xdhujs::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -419,9 +419,9 @@ qRB
 		xdhutl::ExtractWidgetContentRetrievingMethod( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, xdhujt::snContentGetter, Result, Id );
+		Execute( Callback, xdhujs::snContentGetter, Result, Id );
 	else
-		Execute( Callback, xdhujt::snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhujs::snWidgetContentRetriever, Result, Id, nstring___( Method ).Internal()() );
 qRR
 qRT
 qRE
@@ -445,7 +445,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	WidgetAttributeName.Init( Callback.GetWidgetAttributeName( Buffer ) );
-	Args.Init( Execute( Callback, xdhujt::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
+	Args.Init( Execute( Callback, xdhujs::snAttributeGetter, &Buffer, Id, WidgetAttributeName.Internal()()) );
 
 	Method.Init();
 
@@ -453,9 +453,9 @@ qRB
 		xdhutl::ExtractWidgetFocusingMethod( Args, Method );
 
 	if ( Method.Amount() == 0 )
-		Execute( Callback, xdhujt::snFocuser, NULL, Id );
+		Execute( Callback, xdhujs::snFocuser, NULL, Id );
 	else
-		Execute( Callback, xdhujt::snWidgetFocuser, NULL, Id, nstring___( Method ).Internal()() );
+		Execute( Callback, xdhujs::snWidgetFocuser, NULL, Id, nstring___( Method ).Internal()() );
 qRR
 qRT
 qRE
@@ -478,7 +478,7 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	ResultAttributeName.Init( Callback.GetResultAttributeName( Buffer ) );
-	Execute( Callback, xdhujt::snAttributeGetter, Result, Id, nstring___( ResultAttributeName ).Internal()() );
+	Execute( Callback, xdhujs::snAttributeGetter, Result, Id, nstring___( ResultAttributeName ).Internal()() );
 qRR
 qRT
 qRE
@@ -496,31 +496,31 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 {
 	switch ( Function ) {
 	case xdhcmn::fLog:
-		return xdhujt::snLog;
+		return xdhujs::snLog;
 		break;
 	case xdhcmn::fAlert:
-		return xdhujt::snDialogAlert;
+		return xdhujs::snDialogAlert;
 		break;
 	case xdhcmn::fConfirm:
-		return xdhujt::snDialogConfirm;
+		return xdhujs::snDialogConfirm;
 		break;
 	case xdhcmn::fSetProperty:
-		return xdhujt::snPropertySetter;
+		return xdhujs::snPropertySetter;
 		break;
 	case xdhcmn::fGetProperty:
-		return xdhujt::snPropertyGetter;
+		return xdhujs::snPropertyGetter;
 		break;
 	case xdhcmn::fSetAttribute:
-		return xdhujt::snAttributeSetter;
+		return xdhujs::snAttributeSetter;
 		break;
 	case xdhcmn::fGetAttribute:
-		return xdhujt::snAttributeGetter;
+		return xdhujs::snAttributeGetter;
 		break;
 	case xdhcmn::fRemoveAttribute:
-		return xdhujt::snAttributeRemover;
+		return xdhujs::snAttributeRemover;
 		break;
 	case xdhcmn::fSetContent:
-		return xdhujt::snContentSetter;
+		return xdhujs::snContentSetter;
 		break;
 	case xdhcmn::fGetContent:
 		qRFwk();
@@ -545,7 +545,7 @@ static script_name__ Convert_( xdhcmn::function__ Function )
 		break;
 	}
 
-	return xdhujt::sn_Undefined;	// To avoid a warning.
+	return xdhujs::sn_Undefined;	// To avoid a warning.
 }
 
 void xdhujp::proxy_callback__::XDHCMNProcess(

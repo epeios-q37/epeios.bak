@@ -170,7 +170,7 @@ namespace misc {
 		str::strings_ &Names,
 		str::strings_ &Values );
 
-	void Alert(
+	void Report(
 		const nstring___ &Message,
 		cef_frame_t *Frame );
 

@@ -17,13 +17,13 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef XDHUJS__INC
-# define XDHUJS__INC
+#ifndef XDHUJR__INC
+# define XDHUJR__INC
 
-# define XDHUJS_NAME		"XDHUJS"
+# define XDHUJR_NAME		"XDHUJR"
 
-# if defined( E_DEBUG ) && !defined( XDHUJS_NODBG )
-#  define XDHUJS_DBG
+# if defined( E_DEBUG ) && !defined( XDHUJR_NODBG )
+#  define XDHUJR_DBG
 # endif
 
 // X(SL)/DH(TML) Upstream Javascript-related Registry
