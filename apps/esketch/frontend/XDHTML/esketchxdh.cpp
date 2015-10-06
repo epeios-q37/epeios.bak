@@ -24,10 +24,7 @@
 
 #include "core.h"
 
-#include <new.h>
-
 const char *sclmisc::SCLMISCTargetName = BASE_NAME;
-
 
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {

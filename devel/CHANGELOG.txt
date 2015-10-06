@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-10-06 :
+- DIR :
+	- 'Filename' -> 'FileName'.
+
 2015-10-01 :
 - XDHUJR :
 	# 'XDHUJS' -> 'XDHUJR'.

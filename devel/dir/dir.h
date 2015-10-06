@@ -111,7 +111,7 @@ namespace dir {
 # elif defined( DIR__POSIX )
 #  ifdef CPE_S_DARWIN
 		uint32_t Size = DIR__MAX_PATH;
-		switch ( _NSGetExecutablePath( Filename, &Size ) ) {
+		switch ( _NSGetExecutablePath( FileName, &Size ) ) {
 		case -1 :	// La taille de 'Path' est insuffisante.
 			qRLmt();
 			break;
@@ -122,7 +122,7 @@ namespace dir {
 			break;
 		}
 #  else	// Ne fonctionne peur-être pas sur tous les sytèmes POSIX, mais du moins avec 'GNU/Linux' et 'Cygwin'.
-		int Size = readlink( "/proc/self/exe", Filename, DIR__MAX_PATH );
+		int Size = readlink( "/proc/self/exe", FileName, DIR__MAX_PATH );
 
 		if ( Size <= 0 )
 			qRSys();
@@ -130,7 +130,7 @@ namespace dir {
 		if ( Size == DIR__MAX_PATH )
 			qRLmt();
 
-		Filename[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
+		FileName[Size] = 0;	//'readlink(...) ne rajoute pas le '\0' final.
 #  endif
 # else
 #  error

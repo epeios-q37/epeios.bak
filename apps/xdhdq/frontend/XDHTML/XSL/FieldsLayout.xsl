@@ -12,7 +12,7 @@
 		<xsl:apply-templates select="Field"/>
 	</xsl:template>
 	<xsl:template match="Field">
-		<fieldset  data-xdh-onevent="focusout|Refresh">
+		<fieldset>
 			<legend data-xdh-onevent="Edit" style="cursor: pointer;">
 				<xsl:attribute name="id">
 					<xsl:value-of select="@id"/>
