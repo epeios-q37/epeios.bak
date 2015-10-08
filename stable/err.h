@@ -181,10 +181,10 @@ namespace err {
 #  define qRB	if ( !setjmp( ERRJmp ) ) {
 
 // 'Error' : to execute if an error occurs.
-#  define qRR		} else { ERRPutJ( ERROJmp ); ERRNoError = false;
+#  define qRR		} else { ERRPutJ( ERROJmp ); ERRNoError = false; if ( ERRType != err::t_Return ) {
 
 // 'Tail' : to execute, error or not.
-#  define qRT		}
+#  define qRT		} }
 
 #  define ERRCommonEnd	ERRPutJ( ERROJmp ); }
 
@@ -194,9 +194,9 @@ namespace err {
 // précède les déclarations
 #  define qRB	try {
 // précède les instructions proprement dites
-#  define qRR		} catch ( err::err___ ) { ERRNoError = false;
+#  define qRR		} catch ( err::err___ ) { ERRNoError = false; if ( ERRType != err::t_Return ) {
 // précède les instructions à effectuer lors d'une erreur
-#  define qRT		}
+#  define qRT		} }
 // précède les instructions à exécuter, erreur ou pas
 #  define ERRCommonEnd	}
 // boucle la partie de traitement d'erreur

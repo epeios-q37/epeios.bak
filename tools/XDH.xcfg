@@ -58,7 +58,7 @@
 				<Confirm>
 					<![CDATA[
 							confirm( transformToText( "%XML%", "%XSL%" ).trim() );
-						]]>
+					]]>
 				</Confirm>
 				<!--
 						Below version doesn't work as is because of JS asynchronity,
