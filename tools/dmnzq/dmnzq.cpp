@@ -340,7 +340,7 @@ namespace {
 	qRB
 		ModuleFileName.Init();
 
-		Process_( registry::GetModuleFileName( ModuleFileName ).Convert( Buffer ), GetService_(), GetModuleConnectionType_(), LogFileName, LogFileHandling );
+		Process_( registry::GetModuleFilename( ModuleFileName ).Convert( Buffer ), GetService_(), GetModuleConnectionType_(), LogFileName, LogFileHandling );
 	qRR
 	qRT
 	qRE

@@ -31,14 +31,14 @@ namespace registry {
 	
 	extern entry___ ModuleService;
 	extern entry___ ModuleServiceType;
-	extern entry___ ModuleFileName;
+	extern entry___ ModuleFilename;
 	extern entry___ ModuleLogFilename;
 	extern entry___ ModuleLogMode;
 
 	SCLMISC_OV( GetModuleLogFilename, ModuleLogFilename );
 	SCLMISC_OV( GetRawModuleLogMode, ModuleLogMode );
-	SCLMISC_MV( GetModuleFileName, ModuleFileName );
-	SCLMISC_MV( GetRawModuleServiceType, ModuleServiceType );
+	SCLMISC_MV( GetModuleFilename, ModuleFilename );
+	SCLMISC_MV( GetRawModule_ServiceType, ModuleServiceType );
 
 	inline bso::u16__ GetRawModuleService( void )
 	{

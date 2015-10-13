@@ -27,7 +27,7 @@ static entry___ ModuleLog_( "Log", Module_ );
 entry___ registry::ModuleLogFilename( "Filename", ModuleLog_ );
 entry___ registry::ModuleLogMode( "@Mode", ModuleLog_ );
 
-entry___ registry::ModuleFileName( "Filename", Module_ );
+entry___ registry::ModuleFilename( "Filename", Module_ );
 
 entry___ registry::ModuleService( "Service", Module_ );
 entry___ registry::ModuleServiceType( "@Type", ModuleService );
