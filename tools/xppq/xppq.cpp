@@ -84,7 +84,7 @@ namespace {
 			BOMContent.Init();
 
 			BOMContent = bomhdl::GetBOM( BOM );
-			OFlow.Put( (const fdr::datum__ *)BOMContent.Data, BOMContent.Size );
+			OFlow.Put( (const fdr::byte__ *)BOMContent.Data, BOMContent.Size );
 		}
 
 		if ( ( Status = xpp::Process( XFlow, xpp::criterions___( str::string( Directory == NULL ? (const char *)"" : Directory ), str::string(),

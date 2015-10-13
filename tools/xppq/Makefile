@@ -152,7 +152,8 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	
+	libs += -lws2_32
+
 	LDFLAGS += -static
 	
 	ifeq ("$(target)","$(win)")
