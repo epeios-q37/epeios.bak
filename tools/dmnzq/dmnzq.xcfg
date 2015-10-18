@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="dmnzq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand href="../TOL.xcfg"/>
+		<Parameters>
+			<Language>en</Language>
+			<Command>Process</Command>
+			<!-- Default command -->
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="TOL_Locale"/>
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Lance le daemon correspondant au projet donné.</Translation>
+				<Translation language="en">Launch the daemon corresponding to the given project.</Translation>
+			</Translations>
+			<!-- Arguments -->
+			<Translations text="ProjectFilenameArgumentDescription">
+				<Translation language="fr">Nom du fichier projet.</Translation>
+				<Translation language="en">Project file name.</Translation>
+			</Translations>
+			<Translations text="ProjectFilenameArgumentLabel">
+				<Translation language="fr">projet</Translation>
+				<Translation language="en">project</Translation>
+			</Translations>
+		</Locale>
+		<Arguments>
+			<xpp:expand select="TOL_Arguments"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="%ProjectFilenameArgument%"/>
+			<Argument id="ProjectFilenameArgument" Description="ProjectFilenameArgumentDescription" Label="ProjectFilenameArgumentLabel" Path="Project[Type=&quot;Remote&quot;]"/>
+			<Layouts>
+				<Layout command="Process">
+					<Link index="0" Target="ProjectFilenameArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>
