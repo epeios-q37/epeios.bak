@@ -1,4 +1,4 @@
-xppq is a XML preprocessor based on the Epeios framework and written by Claude SIMON (http://q37.info/contact/).
+xppq is a XML preprocessor based on the Epeios framework and developed by Claude SIMON (http://q37.info/contact/).
 
 See following files in the 'doc' directory :
 - 'COPYING' for the license,

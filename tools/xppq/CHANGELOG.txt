@@ -1,4 +1,4 @@
-CHANGELOG FOR THE XPPQ TOOL.
+CHANGELOG FOR THE xppq TOOL.
 
 Meaning of list markers:
 - '-' (Functionnalities (should) remain unchanged) :

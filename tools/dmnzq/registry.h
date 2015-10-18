@@ -38,7 +38,7 @@ namespace registry {
 	SCLMISC_OV( GetModuleLogFilename, ModuleLogFilename );
 	SCLMISC_OV( GetRawModuleLogMode, ModuleLogMode );
 	SCLMISC_MV( GetModuleFilename, ModuleFilename );
-	SCLMISC_MV( GetRawModule_ServiceType, ModuleServiceType );
+	SCLMISC_MV( GetRawModuleServiceType, ModuleServiceType );
 
 	inline bso::u16__ GetRawModuleService( void )
 	{
