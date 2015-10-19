@@ -31,10 +31,10 @@
 	<Files/>
 	<Packing>
 		<WikiFiles>
-			<File Dir="computing/epeios/">Compilation</File>
-			<File Dir="computing/epeios/tools/">Configuration</File>
 			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">esketch</File>
 			<File Dir="computing/epeios/tools/esketch/">Manual</File>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
 		</WikiFiles>
 	</Packing>
 	<SourceDirs>

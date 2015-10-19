@@ -59,10 +59,10 @@
 	</Files>
 	<Packing>
 		<WikiFiles Group="Doc" Path="Doc/">
-			<File Dir="computing/epeios/tools/" Desc="general description of xdhcefq" Oddity="IsHome">xdhcefq</File>
+			<File Dir="computing/epeios/tools/" Desc="general description of xdhcefq" IsHome="yes">xdhcefq</File>
 			<File Dir="computing/epeios/tools/xdhcefq/" Desc="the user manual">Manual</File>
-			<File Dir="computing/epeios/" Desc="the XDHTML technology" Oddity="IsHome">XDHTML</File>
-			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
+			<File Dir="computing/epeios/" Desc="the XDHTML technology" IsHome="yes">XDHTML</File>
+			<File Dir="computing/epeios/" Desc="general compilation instructions">Compilation</File>
 			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
 		</WikiFiles>
 	</Packing>
