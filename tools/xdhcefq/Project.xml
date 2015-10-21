@@ -59,11 +59,17 @@
 	</Files>
 	<Packing>
 		<WikiFiles Group="Doc" Path="Doc/">
-			<File Dir="computing/epeios/tools/" Desc="general description of xdhcefq" IsHome="yes">xdhcefq</File>
-			<File Dir="computing/epeios/tools/xdhcefq/" Desc="the user manual">Manual</File>
-			<File Dir="computing/epeios/" Desc="the XDHTML technology" IsHome="yes">XDHTML</File>
-			<File Dir="computing/epeios/" Desc="general compilation instructions">Compilation</File>
-			<File Dir="computing/epeios/tools/" Desc="general configuration instructions">Configuration</File>
+			<File Dir="computing/epeios/tools/" Desc="general description of xdhcefq" Name="xdhcefq" IsHome="yes"></File>
+			<File Dir="computing/epeios/tools/xdhcefq/" Desc="the user manual" Name="Manual"></File>
+			<File Dir="computing/epeios/" Desc="the XDHTML technology" IsHome="yes" Name="XDHTML">
+				<Replace Marker="$" Pattern="../../epeios/tools/xdhcefq/home" StandIn="http://q37.info/computing/epeios/tools/xdhcefq/"/>
+				<Replace Marker="$" Pattern="../../epeios/tools/xdhbrwq" StandIn="http://q37.info/computing/epeios/tools/xdhbrwq/"/>
+				<Replace Marker="$" Pattern="../../epeios/tools/xppq/home" StandIn="http://q37.info/computing/epeios/tools/xppq/"/>
+			</File>
+			<File Dir="computing/epeios/" Desc="general compilation instructions" Name="Compilation"></File>
+			<File Dir="computing/epeios/tools/" Desc="general configuration instructions" Name="Configuration">
+				<Replace Marker="$" Pattern="../../epeios/tools/xppq/home" StandIn="http://q37.info/computing/epeios/tools/xppq/home"/>
+			</File>
 		</WikiFiles>
 	</Packing>
 	<PreprocessorDefinitions>
