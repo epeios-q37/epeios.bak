@@ -95,9 +95,9 @@
 	</Files>
 	<Packing>
 		<WikiFiles>
-			<File Dir="computing/epeios/apps/" Desc="general description of xdhdq">xdhdq</File>
-			<File Dir="computing/epeios/" Desc="the XDHTML technology" Oddity="IsHome">XDHTML</File>
-			<File Dir="computing/epeios/" Desc="compilation instructions">Compilation</File>
+			<File Dir="computing/epeios/apps/xdhdq/" Desc="the xdhdq application's xdhtml frontend" Name="xdhdqxdh">
+				<Replace Marker="$" Pattern="jhgja href=&quot;../" StandIn="a href=&quot;"/>
+			</File>
 		</WikiFiles>
 	</Packing>
 	<PreprocessorDefinitions>

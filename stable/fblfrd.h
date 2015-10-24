@@ -385,11 +385,19 @@ namespace fblfrd {
 			bso::bool__ Success = true;
 		qRH
 		qRB
-			Channel_ = &Channel;
+			if ( Channel_ != NULL )
+				qRFwk();
+
+			if ( _ParametersCallbacks != NULL )
+				qRFwk();
+
 			_ParametersCallbacks = ParametersCallbacks;
 
 			if ( ParametersCallbacks == NULL )
 				qRReturn;
+
+			Channel_ = &Channel;
+
 
 			if ( !_TestCompatibility( Language, CompatibilityInformations, *Channel_, IncompatibilityInformations ) ) {
 				Success = false;
