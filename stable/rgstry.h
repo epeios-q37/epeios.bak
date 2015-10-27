@@ -2107,11 +2107,12 @@ namespace rgstry {
 
 			Entry.Root = Search( TaggedEntry, Level );
 
-			if ( Entry.Root == qNIL )
+			if ( Entry.Root == qNIL ) {
 				if ( ErrHandling == err::hUserDefined )
 					return false;
 				else
 					qRFwk();
+			}
 
 			Entry.Registry = &GetRegistry( Level );
 

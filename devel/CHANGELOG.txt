@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-10-27 :
+- RGSTRY :
+	- Handle complaining of LLVM.
+
 2015-10-07 :
 - ERR :
 	# : Skip the 'qRR' for a 't_Return' error type.
