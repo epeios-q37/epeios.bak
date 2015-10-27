@@ -58,13 +58,15 @@
 		<File Path="../">XDH.xcfg</File>
 	</Files>
 	<Packing>
-		<WikiFiles Group="Doc" Path="Doc/">
+		<!-- No documentation, as this tool has not is own package -->
+		<WikiFiles/>
+		<!--WikiFiles Group="Doc" Path="Doc/">
 			<File Dir="computing/epeios/tools/" Desc="general description of xdhcefq" Name="xdhcefq" IsHome="yes"></File>
 			<File Dir="computing/epeios/tools/xdhcefq/" Desc="the user manual" Name="Manual"></File>
 			<xpp:expand select="WikiXDHTML"/>
 			<xpp:expand select="WikiCompilation"/>
 			<xpp:expand select="WikiConfiguration"/>
-		</WikiFiles>
+		</WikiFiles-->
 	</Packing>
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_MT</PreprocessorDefinition>

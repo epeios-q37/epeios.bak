@@ -94,11 +94,8 @@
 		<File>../xdhdqfrd.xlcl</File>
 	</Files>
 	<Packing>
-		<WikiFiles>
-			<File Dir="computing/epeios/apps/xdhdq/" Desc="the xdhdq application's xdhtml frontend" Name="xdhdqxdh">
-				<Replace Marker="$" Pattern="jhgja href=&quot;../" StandIn="a href=&quot;"/>
-			</File>
-		</WikiFiles>
+		<!-- No documentation, as this tool has not is own package -->
+		<WikiFiles/>
 	</Packing>
 	<PreprocessorDefinitions>
 	</PreprocessorDefinitions>
