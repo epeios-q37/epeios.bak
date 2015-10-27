@@ -4,7 +4,7 @@ Files in this directory are directly red by the httpd server ; the 'xdhbrwq' too
 
 FOR THE MAINTAINER :
 
-Créer un lien ('mklink /j') en tant qu'administrateur à partir du répertoire 'htdocs' de l'installation d'Apache vers ce répertoire.
+CrÃ©er un lien ('mklink /j') en tant qu'administrateur Ã  partir du rÃ©pertoire 'htdocs' de l'installation d'Apache vers ce rÃ©pertoire.
 Ex : 'C:\Program Files (x86)\Apache Software Foundation\Apache2.2\htdocs>mklink /j xdh h:\hg\epeios\tools\xdhbrwq\httpd\htdocs'
 
-Le répertoire 'js' est un 'mklink /j' vers le répertoire de même nom dans 'corpus'.
+Le rÃ©pertoire 'js' est un 'mklink /j' vers le rÃ©pertoire de mÃªme nom dans 'corpus'.
