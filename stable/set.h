@@ -39,11 +39,6 @@
 //R $Date: 2012/11/14 16:06:36 $
 
 /* End of automatic documentation generation part. */
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 /*$BEGIN$*/
 
 #error Oboslete. Use library 'BCH' instead.
@@ -420,9 +415,4 @@ namespace set {
 
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

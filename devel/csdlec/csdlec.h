@@ -26,11 +26,6 @@
 #  define CSDLEC_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Client-Server Devices Library Embedded Client
 
 # include "err.h"
@@ -341,10 +336,5 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	};
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

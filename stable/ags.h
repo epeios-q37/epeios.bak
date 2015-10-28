@@ -26,11 +26,6 @@
 #  define AGS_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // AGgregated Storage
 
 # include "err.h"
@@ -1453,10 +1448,5 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 # undef AGS__HANDLE_PART_ONE
 # undef AGS__HANDLE_PART_TWO
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

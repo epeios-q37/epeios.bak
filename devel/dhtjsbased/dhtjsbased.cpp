@@ -21,11 +21,6 @@
 
 #include "dhtjsbased.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace dhtjsbased;
 
 using xdhcbk::nstring___;

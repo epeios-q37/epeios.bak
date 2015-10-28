@@ -40,11 +40,6 @@
 
 /* End of automatic documentation generation part. */
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 /* Addendum to the automatic documentation generation part. */
 //D Data TransFert NaTiVe 
 /* End addendum to automatic documentation generation part. */
@@ -151,9 +146,4 @@ namespace dtfntv {
 }
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

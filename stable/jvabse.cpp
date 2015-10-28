@@ -21,11 +21,6 @@
 
 #include "jvabse.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace jvabse;
 
 const str::string_ &jvabse::Convert(

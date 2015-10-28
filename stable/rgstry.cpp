@@ -21,11 +21,6 @@
 
 #include "rgstry.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "flx.h"
 #include "flf.h"
 #include "fnm.h"

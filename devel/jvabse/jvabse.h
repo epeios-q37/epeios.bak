@@ -26,11 +26,6 @@
 #  define JVABSE_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // JaVA BaSE
 
 # include "err.h"
@@ -280,10 +275,5 @@ namespace jvabse {
 	}
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

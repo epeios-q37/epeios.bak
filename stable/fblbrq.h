@@ -25,11 +25,6 @@
 #if defined( E_DEBUG ) && !defined( FBLBRQ_NODBG )
 #define FBLBRQ_DBG
 #endif
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 //D Frontend/Backend Layout Backend ReQuest 
 
 # include "err.h"
@@ -425,9 +420,4 @@ namespace fblbrq {
 }
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

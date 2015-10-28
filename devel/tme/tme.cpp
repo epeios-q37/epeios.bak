@@ -21,11 +21,6 @@
 
 #include "tme.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include <ctype.h>
 
 using namespace tme;

@@ -26,11 +26,6 @@
 #  define XULFBS_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // XUL Frontend BaSe
 
 # include "err.h"
@@ -366,10 +361,5 @@ namespace xulfbs {
 	XULFBS_TWIDGET( trunk, window )
 
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

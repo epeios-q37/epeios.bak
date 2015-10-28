@@ -20,11 +20,6 @@
 #define DTE__COMPILATION
 
 #include "dte.h"
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 /*$BEGIN$*/
 
 #include <ctype.h>

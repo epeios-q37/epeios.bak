@@ -30,11 +30,6 @@
 #define DTFBSC_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Data transFer BaSiC.
 
 
@@ -84,10 +79,5 @@ namespace dtfbsc {
 	}
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

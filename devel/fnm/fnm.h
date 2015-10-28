@@ -135,9 +135,4 @@ txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	const fnm::name___ &Name );
 
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

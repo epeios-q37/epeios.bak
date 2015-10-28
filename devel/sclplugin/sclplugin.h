@@ -26,11 +26,6 @@
 #  define SCLPLUGIN_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe PLUGIN
 
 # include "plgncore.h"
@@ -90,10 +85,5 @@ namespace sclplugin {
 		\
 		delete (plugin *)Plugin;\
 	}
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

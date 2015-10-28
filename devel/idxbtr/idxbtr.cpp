@@ -21,8 +21,9 @@
 
 #include "idxbtr.h"
 
-namespace idxbtr {
+using namespace idxbtr;
 
+namespace {
 	/* structure de description d'un arbre.
 	Est utilis lors du rquilibrage d'un arbre. Usage interne. */
 	struct desc__
@@ -32,120 +33,120 @@ namespace idxbtr {
 		// Niveau de l'arbre.
 		sdr::size__ Niveau;
 	};
+}
 
-	sdr::row_t__ Balance_(
-		E_IBTREE_ &Tree,
-		sdr::row_t__ Root )
+sdr::row_t__ Balance_(
+	E_IBTREE_ &Tree,
+	sdr::row_t__ Root )
+{
+qRH
+	sdr::row__ Current, Head, Temp;
+	que::E_QUEUE Queue;	
+qRB
+	Queue.Init();
+	Queue.Allocate( Tree.BaseTree.Extent() );
+
+	Current = Tree.First( Root );
+
+	Head = Temp = Current;
+
+	Current = Tree.Next( Temp );
+
+	while ( Current != qNIL )
 	{
-	qRH
-		sdr::row__ Current, Head, Temp;
-		que::E_QUEUE Queue;	
-	qRB
-		Queue.Init();
-		Queue.Allocate( Tree.BaseTree.Extent() );
+		Queue.BecomeNext( Current, Temp );
 
-		Current = Tree.First( Root );
-
-		Head = Temp = Current;
+		Temp = Current;
 
 		Current = Tree.Next( Temp );
-
-		while ( Current != qNIL )
-		{
-			Queue.BecomeNext( Current, Temp );
-
-			Temp = Current;
-
-			Current = Tree.Next( Temp );
-		}
-
-		Root = *Tree.Fill( Queue, Head );
-
-	qRR
-	qRT
-	qRE
-		return Root;
 	}
 
-	/* Equilibre l'arbre, sachant que l'ordre des lments est donne par
-	la file 'File' de tte 'Tete' et que l'on doit utiliser la pile 'Pile'. */
-	sdr::row_t__ Equilibrer_(
-		E_IBTREE_ &Tree,
-		const que::E_QUEUE_ &File,
-		sdr::row_t__ Premier,
-		qSD__ &Pilote )
+	Root = *Tree.Fill( Queue, Head );
+
+qRR
+qRT
+qRE
+	return Root;
+}
+
+/* Equilibre l'arbre, sachant que l'ordre des lments est donne par
+la file 'File' de tte 'Tete' et que l'on doit utiliser la pile 'Pile'. */
+sdr::row_t__ idxbtr::Equilibrer_(
+	E_IBTREE_ &Tree,
+	const que::E_QUEUE_ &File,
+	sdr::row_t__ Premier,
+	qSD__ *Pilote )
+{
+	sdr::row_t__ Racine, &Courant = Premier;
+qRH
+	stk::E_BSTACK( desc__ ) Pile;
+	sdr::size__ Niveau = 0;
+	desc__ Sommet;
+	bso::bool__ Boucler = true;
+qRB
+
+	if ( Pilote != NULL )
+		Pile.plug( *Pilote );
+
+	Pile.Init();
+
+	Racine = Courant;
+
+	do
 	{
-		sdr::row_t__ Racine, &Courant = Premier;
-	qRH
-		stk::E_BSTACK( desc__ ) Pile;
-		sdr::size__ Niveau = 0;
-		desc__ Sommet;
-		bso::bool__ Boucler = true;
-	qRB
-
-		if ( &Pilote )
-			Pile.plug( Pilote );
-
-		Pile.Init();
-
-		Racine = Courant;
-
-		do
-		{
-			while( !Pile.IsEmpty() && ( Pile( Pile.Last() ).Niveau == Niveau ) )
-			{
-				Sommet = Pile.Pop();
-
-				Niveau = Sommet.Niveau + 1;
-				Tree.BaseTree.BecomeRight( Racine, Sommet.Racine );
-
-				Racine = *Sommet.Racine;
-			}
-
-			Courant = *File.Next( Courant );
-
-			if ( Courant != qNIL )
-			{
-				if ( File.HasNext( Courant ) )
-				{
-					Tree.BaseTree.BecomeLeft( Racine, Courant );
-
-					Sommet.Racine = Courant;
-					Sommet.Niveau = Niveau;
-
-					Pile.Push( Sommet );
-
-					Courant = *File.Next( Courant );
-				}
-				else
-				{
-					Boucler = false;
-					Tree.BaseTree.BecomeRight( Courant, Tree._SearchMostRightNode( Racine, *(btr::level__ *)NULL ) );
-				}
-			}
-			else
-				Boucler = false;
-
-			if ( Boucler )
-			{
-				Racine = Courant;
-				Niveau = 0;
-			}
-		} while( Boucler );
-
-		while( !Pile.IsEmpty() )
+		while( !Pile.IsEmpty() && ( Pile( Pile.Last() ).Niveau == Niveau ) )
 		{
 			Sommet = Pile.Pop();
 
+			Niveau = Sommet.Niveau + 1;
 			Tree.BaseTree.BecomeRight( Racine, Sommet.Racine );
 
 			Racine = *Sommet.Racine;
 		}
-	qRR
-	qRT
-	qRE
-		return Racine;
+
+		Courant = *File.Next( Courant );
+
+		if ( Courant != qNIL )
+		{
+			if ( File.HasNext( Courant ) )
+			{
+				Tree.BaseTree.BecomeLeft( Racine, Courant );
+
+				Sommet.Racine = Courant;
+				Sommet.Niveau = Niveau;
+
+				Pile.Push( Sommet );
+
+				Courant = *File.Next( Courant );
+			}
+			else
+			{
+				Boucler = false;
+				Tree.BaseTree.BecomeRight( Courant, Tree._SearchMostRightNode( Racine, *(btr::level__ *)NULL ) );
+			}
+		}
+		else
+			Boucler = false;
+
+		if ( Boucler )
+		{
+			Racine = Courant;
+			Niveau = 0;
+		}
+	} while( Boucler );
+
+	while( !Pile.IsEmpty() )
+	{
+		Sommet = Pile.Pop();
+
+		Tree.BaseTree.BecomeRight( Racine, Sommet.Racine );
+
+		Racine = *Sommet.Racine;
 	}
+qRR
+qRT
+qRE
+	return Racine;
 }
 
 sdr::row_t__ idxbtr::Compare_(

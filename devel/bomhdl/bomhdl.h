@@ -27,11 +27,6 @@
 #if defined( E_DEBUG ) && !defined( BOMHDL_NODBG )
 #define BOMHDL_DBG
 #endif
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 // Byte Order Marker 
 
 # include "err.h"
@@ -109,10 +104,5 @@ namespace bomhdl {
 
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

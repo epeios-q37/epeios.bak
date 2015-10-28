@@ -26,11 +26,6 @@
 #  define DHTJSBASED_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // DHT(ML) JavaScript BASED
 
 # include "xdhcbk.h"
@@ -182,10 +177,5 @@ namespace dhtjsbased {
 
 	
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

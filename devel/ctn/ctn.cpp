@@ -21,11 +21,6 @@
 
 #include "ctn.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace ctn;
 
 void ctn::hook_filenames___::Init(

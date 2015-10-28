@@ -26,11 +26,6 @@
 #  define PLGN_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // PLuGiN
 
 # include "plgncore.h"
@@ -158,10 +153,5 @@ namespace plgn {
 		}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

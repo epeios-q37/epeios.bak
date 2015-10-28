@@ -26,11 +26,6 @@
 #  define SCLCGI_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe CGI (Common Gateway Interface)
 
 # include "err.h"
@@ -102,10 +97,5 @@ namespace sclcgi {
 	void SCLCGIDeleteSteering( steering_callback__ *SteeringCallback );
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

@@ -416,9 +416,4 @@ namespace idxbtq {
 #define E_ISEEKER__			index_seeker__<sdr::row__>
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

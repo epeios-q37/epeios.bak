@@ -40,11 +40,6 @@
 
 /* End of automatic documentation generation part. */
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 /* Addendum to the automatic documentation generation part. */
 //D Frontend/Backend Layout Frontend Remote Parameters 
 /* End addendum to automatic documentation generation part. */
@@ -121,9 +116,4 @@ namespace fblfrp {
 }
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

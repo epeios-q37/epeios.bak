@@ -26,11 +26,6 @@
 #define FBLFAQ_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Frontend/Backend Layout Frontend API Querying
 
 #include "err.h"
@@ -172,9 +167,4 @@ namespace fblfaq {
 		fblfrd::frontend___ &Frontend,
 		types_ &Types );
 }
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

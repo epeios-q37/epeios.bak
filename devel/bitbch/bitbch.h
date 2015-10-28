@@ -26,11 +26,6 @@
 #  define BITBCH_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // BInary digiT BunCH
 
 # include "err.h"
@@ -503,10 +498,5 @@ template <typename r__> txf::text_oflow__ &operator <<(
 {
 	return OStream << *(const bitbch::E_BIT_BUNCH_ *)&Bunch;
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

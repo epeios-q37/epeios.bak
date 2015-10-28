@@ -26,11 +26,6 @@
 #  define SCLDAEMON_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe DAEMON
 
 # include "err.h"
@@ -124,10 +119,5 @@ namespace scldaemon {
 		csdleo::context__ Context,
 		csdleo::mode__ Mode );	// To overload !
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

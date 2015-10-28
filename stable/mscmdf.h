@@ -27,11 +27,6 @@
 #define MSCMDF_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 //D MuSiC MiDi File 
 
 #include "err.h"

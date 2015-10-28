@@ -26,11 +26,6 @@
 #  define SCLFRNTND_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe FRoNTeND
 
 # include "sclrgstry.h"
@@ -384,10 +379,5 @@ namespace sclfrntnd {
 		Dump_<id, ctn::E_CITEM( sclfrntnd::ilw_<id> ), ctn::E_CONTAINER_( sclfrntnd::ilw_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
 	}
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

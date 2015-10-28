@@ -26,11 +26,6 @@
 #define RGSTRY_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // ReGiSTRY
 
 # include "err.h"
@@ -2306,10 +2301,5 @@ namespace rgstry {
 # endif
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

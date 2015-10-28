@@ -26,11 +26,6 @@
 #  define LST_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // LiST
 
 #include "err.h"
@@ -600,10 +595,5 @@ namespace lst {
 
 }
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

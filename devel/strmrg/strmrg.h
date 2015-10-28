@@ -26,11 +26,6 @@
 #  define STRMRG_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // STRings MeRGer
 
 # include "err.h"
@@ -359,10 +354,5 @@ namespace strmrg {
 		}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

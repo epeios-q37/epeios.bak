@@ -26,11 +26,6 @@
 #  define TME_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // TiME
 
 # include "err.h"
@@ -159,10 +154,5 @@ namespace tme {
 	};
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

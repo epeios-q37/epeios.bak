@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-10-28 :
+- IDXBTR :
+	- Fixing the inadvisable '&... == NULL'.
+
 2015-10-27 :
 - RGSTRY :
 	- Handle complaining of LLVM.

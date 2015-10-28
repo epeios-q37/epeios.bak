@@ -26,11 +26,6 @@
 #define IOP_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 //D Input/Output Picker 
 
 # include "err.h"
@@ -80,9 +75,4 @@ namespace iop {
 }
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

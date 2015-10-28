@@ -26,11 +26,6 @@
 #  define TAGSBS_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // TAG SuBStitution
 
 # include "err.h"
@@ -294,10 +289,5 @@ namespace tagsbs {
 	}
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

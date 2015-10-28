@@ -26,11 +26,6 @@
 #  define PLGNCORE_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // PLuGiN CORE
 
 # include "err.h"
@@ -144,10 +139,5 @@ namespace plgncore {
 	typedef const char *(plugin_identification)( void );
 	typedef callback__ &(retrieve_callback)( void );
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

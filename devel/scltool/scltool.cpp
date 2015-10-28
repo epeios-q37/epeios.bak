@@ -21,11 +21,6 @@
 
 #include "scltool.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "cio.h"
 #include "tagsbs.h"
 

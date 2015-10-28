@@ -26,11 +26,6 @@
 #  define CSDSNS_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Client-Server Standard Network Server
 
 # include "err.h"
@@ -377,10 +372,5 @@ qRE
 
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

@@ -26,11 +26,6 @@
 #define DIR_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // DIRectory
 
 #include "err.h"
@@ -383,10 +378,5 @@ namespace dir {
 	}
 }
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

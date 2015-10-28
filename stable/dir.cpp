@@ -21,11 +21,6 @@
 
 #include "dir.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace dir;
 
 state__ dir::HandleError( void )

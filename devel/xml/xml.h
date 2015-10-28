@@ -26,11 +26,6 @@
 #  define XML_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // eXtensible Markup Language
 
 #include "err.h"
@@ -788,10 +783,5 @@ namespace xml {
 		Writer.PutAttribute( Name, bso::Convert( Value, IBuffer ) );
 	}
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

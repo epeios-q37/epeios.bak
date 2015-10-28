@@ -26,11 +26,6 @@
 #  define CGIGAT_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // CGI (Common Gateway Interface) GATe
 
 # include "err.h"
@@ -88,10 +83,5 @@ namespace cgigat {
 		}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

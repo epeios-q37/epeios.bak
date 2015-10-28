@@ -17,45 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: idxbtr.h,v 1.57 2013/04/15 10:50:52 csimon Exp $
-
 #ifndef IDXBTR__INC
-#define IDXBTR__INC
+# define IDXBTR__INC
 
-#define IDXBTR_NAME		"IDXBTR"
+# define IDXBTR_NAME		"IDXBTR"
 
-#define	IDXBTR_VERSION	"$Revision: 1.57 $"
+# define	IDXBTR_VERSION	"$Revision: 1.57 $"
 
-#define IDXBTR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# define IDXBTR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
 
-#if defined( E_DEBUG ) && !defined( IDXBTR_NODBG )
-#define IDXBTR_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( IDXBTR_NODBG )
+#  define IDXBTR_DBG
+# endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.57 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/15 10:50:52 $
-
-/* End of automatic documentation generation part. */
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
-/* Addendum to the automatic documentation generation part. */
 //D InDeX Binary TRee 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-/* Addendum to the automatic documentation generation part. */
-//D InDeX Binary TRee
-/* End addendum to automatic documentation generation part. */
-
 
 #include "err.h"
 #include "btr.h"
@@ -77,7 +53,7 @@ namespace idxbtr {
 		r Equilibrer_(
 			const que::E_QUEUEt_( r ) &Index,
 			r Premier,
-			qSD__ &Pilote );
+			qSD__ *Pilote );
 		r _Compare(
 			const que::E_QUEUEt_( r ) &Queue,
 			r First ) const;
@@ -352,17 +328,26 @@ namespace idxbtr {
 		}
 		//f Balances the tree which underlies the index. Return the new root.
 		r Balance( r Root );
-		//f Fill the index with the items in 'Queue' beginning at 'Head', using 'MD' as memory driver if != 'NULL'. Return the new root.
 		r Fill(
 			const que::E_QUEUEt_( r ) &Queue,
 			r Head,
-			qSD__ &SD = SDR_INTERNAL_SDRIVER )
+			qSD__ &SD  )
 		{
 			Init();
 
 			Allocate( Queue.Amount() );
 
-			return Equilibrer_( Queue, Head, SD );
+			return Equilibrer_( Queue, Head, &SD );
+		}
+		r Fill(
+			const que::E_QUEUEt_( r ) &Queue,
+			r Head )
+		{
+			Init();
+
+			Allocate( Queue.Amount() );
+
+			return Equilibrer_( Queue, Head, NULL );
 		}
 		r Compare(
 			const que::E_QUEUEt_( r ) &Queue,
@@ -381,7 +366,7 @@ namespace idxbtr {
 			tree_index_<sdr::row__> &Tree,
 			const que::E_QUEUE_ &File,
 			sdr::row_t__ Premier,
-			qSD__ &Pilote );
+			qSD__ *Pilote );
 	};
 
 	E_AUTO1( tree_index );
@@ -412,7 +397,7 @@ namespace idxbtr {
 		E_IBTREE_ &Tree,
 		const que::E_QUEUE_ &File,
 		sdr::row_t__ Premier,
-		qSD__ &Pilote );
+		qSD__ *Pilote );
 
 	sdr::row_t__ Compare_(
 		const E_IBTREE_ &Tree,
@@ -422,7 +407,7 @@ namespace idxbtr {
 	template <typename r> inline r tree_index_<r>::Equilibrer_(
 		const que::E_QUEUEt_( r ) &Index,
 		r Premier,
-		qSD__ &Pilote )
+		qSD__ *Pilote )
 	{
 		return idxbtr::Equilibrer_( *(E_IBTREE_ *)this, *(const que::E_QUEUE_ *)&Index, *Premier, Pilote );
 	}
@@ -529,12 +514,5 @@ namespace idxbtr {
 
 
 }
-
-
-/*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

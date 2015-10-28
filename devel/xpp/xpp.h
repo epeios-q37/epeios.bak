@@ -26,11 +26,6 @@
 #  define XPP_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // XML PrepProcessor
 
 # include "err.h"
@@ -914,10 +909,5 @@ namespace xpp {
 		str::string_ &Out,
 		const criterions___ &Criterions = criterions___() );
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

@@ -21,11 +21,6 @@
 
 #include "tagsbs.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "uys.h"
 #include "flx.h"
 

@@ -21,11 +21,6 @@
 
 #include "xpp.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "fnm.h"
 #include "lcl.h"
 

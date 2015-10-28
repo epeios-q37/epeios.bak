@@ -26,11 +26,6 @@
 #  define SCLMISC_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe MISCellaneous
 
 # include "err.h"

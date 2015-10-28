@@ -21,11 +21,6 @@
 
 #include "cgimng.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace cgimng;
 
 #define CASE( n )\

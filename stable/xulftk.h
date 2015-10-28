@@ -26,11 +26,6 @@
 #  define XULFTK_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // XUL Frontend TrunK
 
 # include "err.h"
@@ -544,10 +539,5 @@ namespace xulftk {
 	}
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

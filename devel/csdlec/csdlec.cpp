@@ -21,11 +21,6 @@
 
 #include "csdlec.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace csdlec;
 
 bso::bool__ csdlec::library_embedded_client_core__::Init(

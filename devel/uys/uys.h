@@ -40,11 +40,6 @@
 
 /* End of automatic documentation generation part. */
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 /* Addendum to the automatic documentation generation part. */
 //D UnTyped Storage 
 /* End addendum to automatic documentation generation part. */
@@ -740,9 +735,4 @@ namespace uys {
 # define UYS__HEADER_HANDLED	// A destination de 'AGS'.
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

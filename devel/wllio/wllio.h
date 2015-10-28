@@ -27,11 +27,6 @@
 # endif
 
 /* Begin of automatic documentation generation part. */
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 // Windows Low-Level Input/Output 
 
 # include "cpe.h"
@@ -242,9 +237,4 @@ namespace wllio {
 		}
 	};
 }
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

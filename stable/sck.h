@@ -26,11 +26,6 @@
 #define SCK_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 //D SoCKet 
 
 #include "err.h"
@@ -387,10 +382,5 @@ namespace sck {
 	};
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

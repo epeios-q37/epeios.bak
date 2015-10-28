@@ -21,11 +21,6 @@
 
 #include "xml.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "lstctn.h"
 #include "flx.h"
 #include "flf.h"

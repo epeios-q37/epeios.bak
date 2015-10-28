@@ -40,11 +40,6 @@
 
 /* End of automatic documentation generation part. */
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 /* Addendum to the automatic documentation generation part. */
 //D MuSiC VK (from Roland VK combo organ) Tree 
 /* End addendum to automatic documentation generation part. */
@@ -175,9 +170,4 @@ txf::text_oflow__ operator <<(
 	const mscvkt::tree_ &Tree );
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

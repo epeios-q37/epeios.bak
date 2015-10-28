@@ -26,11 +26,6 @@
 #  define AEM_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Amount/Extent Manager
 
 # include "err.h"
@@ -637,10 +632,5 @@ namespace aem {
 		{}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

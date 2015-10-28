@@ -21,11 +21,6 @@
 
 #include "sclfrntnd.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "scllocale.h"
 #include "sclmisc.h"
 

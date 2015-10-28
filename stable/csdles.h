@@ -26,11 +26,6 @@
 #  define CSDLES_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Client-Server Devices Library Embedded Server
 
 # include "err.h"
@@ -42,10 +37,5 @@ namespace csdles {
 	csdleo::callback__ &CSDLESRetrieveCallback( void );	// A surcharger.
 //	void CSDLESReleaseCallback( csdleo::callback__ * );	// A surcharger.
 }		
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

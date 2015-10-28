@@ -21,11 +21,6 @@
 
 #include "lst.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "flf.h"
 #include "str.h"
 

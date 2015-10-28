@@ -26,11 +26,6 @@
 #  define CSDBNS_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Client-Server Base Network Server
 
 # include "err.h"
@@ -309,9 +304,4 @@ namespace csdbns {
 
 #endif
 }
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

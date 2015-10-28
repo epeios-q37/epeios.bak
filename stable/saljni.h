@@ -75,11 +75,6 @@ Description:
 #if defined( E_DEBUG ) && !defined( SALJNI_NODBG )
 #define SALJNI_DBG 
 #endif
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 /*$BEGIN$*/
 
 #include "err.h"
@@ -107,10 +102,5 @@ public:
 
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif
 /* end of 'xxx.h' template file */

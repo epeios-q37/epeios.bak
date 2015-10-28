@@ -26,11 +26,6 @@
 #  define CTN_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // ConTaiNer (of dynamic objects)
 
 # include "err.h"
@@ -1408,10 +1403,5 @@ namespace ctn {
 }
 
 #undef typename_
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

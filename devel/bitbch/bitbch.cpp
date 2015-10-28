@@ -21,11 +21,6 @@
 
 #include "bitbch.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "txf.h"
 
 using namespace bitbch;

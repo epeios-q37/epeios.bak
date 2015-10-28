@@ -21,11 +21,6 @@
 
 #include "mtk.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "mtx.h"
 
 using namespace mtk;

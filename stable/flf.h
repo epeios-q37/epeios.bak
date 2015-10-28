@@ -26,11 +26,6 @@
 #  define FLF_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // FiLe Flow
 
 # include "cpe.h"
@@ -304,10 +299,5 @@ namespace flf {
 		}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

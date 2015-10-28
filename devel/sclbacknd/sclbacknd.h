@@ -26,11 +26,6 @@
 #  define SCLBACKEND_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe BACKEND
 
 # include "err.h"
@@ -163,10 +158,5 @@ namespace sclbacknd {
 		csdleo::context__ Context,
 		fblbur::mode__ Mode );	// To overload.
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

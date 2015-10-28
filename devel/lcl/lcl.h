@@ -26,11 +26,6 @@
 #  define LCL_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // LoCaLe
 
 # include "err.h"
@@ -325,10 +320,5 @@ namespace lcl {
 
 // A utiliser dans une macro '_( name )', qui prédéfini le paramètre 'prefix'.
 # define LCL_M( prefix, name ) lcl::Control_( prefix##name, #name )
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

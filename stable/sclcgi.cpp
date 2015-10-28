@@ -21,11 +21,6 @@
 
 #include "sclcgi.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "cgigat.h"
 #include "ssnmng.h"
 #include "scldaemon.h"

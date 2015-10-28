@@ -26,11 +26,6 @@
 #  define FBLBKD_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Frontend/Backend Layout BacKenD
 
 # include "err.h"// Frontend/Backend Layout BacKenD
@@ -1004,10 +999,5 @@ namespace fblbkd {
 //d A shared module of an object od type 't'.
 # define FBLBKD_SHARED_MODULE( t, user )	fblbkd::shared_module<t, t::s, user>	
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

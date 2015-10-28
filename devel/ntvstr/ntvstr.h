@@ -26,11 +26,6 @@
 #  define NTVSTR_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // NaTiVe STRing
 
 # include "err.h"
@@ -225,10 +220,5 @@ namespace ntvstr {
 		return string___( String ).UTF8( Buffer );
 	}
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

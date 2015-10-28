@@ -26,11 +26,6 @@
 #  define CSDLEO_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Client-Server Devices Library Embedded Overlapping
 
 # include "err.h"
@@ -201,10 +196,5 @@ namespace csdleo {
 	typedef callback__ &(retrieve_callback)( void );
 //	typedef void (release_callback)( csdleo::callback__ * );
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

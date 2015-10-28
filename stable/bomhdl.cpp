@@ -21,11 +21,6 @@
 #define BOMHDL__COMPILATION
 
 #include "bomhdl.h"
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 /*$BEGIN$*/
 
 

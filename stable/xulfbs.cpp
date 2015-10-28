@@ -21,11 +21,6 @@
 
 #include "xulfbs.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "xulftk.h"
 
 using namespace xulfbs;

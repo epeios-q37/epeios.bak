@@ -26,11 +26,6 @@
 #  define CSDSCB_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Client-Server Devices Server CallBack
 
 # include "err.h"
@@ -80,10 +75,5 @@ namespace csdscb {
 	};
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

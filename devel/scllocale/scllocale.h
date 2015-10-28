@@ -26,11 +26,6 @@
 #  define SCLLOCALE_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe LOCALE
 
 # include "err.h"
@@ -85,10 +80,5 @@ namespace scllocale {
 		str::string_ &Out,
 		char Marker = DefaultMarker );
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

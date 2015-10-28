@@ -40,11 +40,6 @@
 
 /* End of automatic documentation generation part. */
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 /* Addendum to the automatic documentation generation part. */
 //D TYped Storage 
 /* End addendum to automatic documentation generation part. */
@@ -330,9 +325,4 @@ namespace tys {
 	#define E_STORAGEt___( type, r ) storage___< type, r > 
 	#define E_STORAGE___( type ) storage___< type, sdr::row__ > 
 }
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

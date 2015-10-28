@@ -26,11 +26,6 @@
 #  define CLNARG_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Command LiNe ARGuments
 
 # include "err.h"
@@ -429,10 +424,5 @@ namespace clnarg {
 		PrintOptionUsage( Description, OptionId, NULL, Text, View, Flow );
 	}
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

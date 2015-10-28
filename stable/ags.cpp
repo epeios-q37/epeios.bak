@@ -21,11 +21,6 @@
 
 #include "ags.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace ags;
 
 void aggregated_storage_driver__::_Free( void )

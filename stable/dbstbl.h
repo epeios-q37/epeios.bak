@@ -26,11 +26,6 @@
 #if defined( E_DEBUG ) && !defined( DBSTBL_NODBG )
 #define DBSTBL_DBG
 #endif
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 //D DataBaSe TaBLe 
 
 #include "err.h"
@@ -637,9 +632,4 @@ namespace dbstbl {
 }
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

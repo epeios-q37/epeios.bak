@@ -28,11 +28,6 @@
 #define BFL_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 //D Bit FLow 
 
 #include "err.h"
@@ -108,9 +103,4 @@ namespace bfl {
 		}
 	};
 }
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

@@ -21,11 +21,6 @@
 
 #include "scllocale.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "lcl.h"
 #include "fnm.h"
 #include "dir.h"

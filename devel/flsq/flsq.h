@@ -26,11 +26,6 @@
 #define FLSQ_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // FiLe Storage
 
 # include "cpe.h"
@@ -661,10 +656,5 @@ namespace flsq {
 		time_t Delay,	// in s.
 		bso::uint__ MaxAmount = BSO_UINT_MAX ); // Releases up to 'MaxAmount' files not accessed since 'Delay' ms. Thread-safe.
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

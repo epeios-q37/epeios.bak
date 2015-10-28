@@ -21,11 +21,6 @@
 
 #include "csdles.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace csdles;
 
 #ifdef CPE_S_WIN

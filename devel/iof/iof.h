@@ -31,11 +31,6 @@
 #define IOF_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // Input/Output Flows 
 
 #include "cpe.h"
@@ -300,10 +295,5 @@ namespace iof {
 		}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

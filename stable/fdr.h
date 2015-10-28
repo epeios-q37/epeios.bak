@@ -30,11 +30,6 @@
 #define FDR_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 //D Flow DRiver 
 
 # include "err.h"
@@ -594,10 +589,5 @@ namespace fdr {
 		}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

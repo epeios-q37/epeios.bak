@@ -31,11 +31,6 @@
 #endif
 
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 //D CoDinG Base 64 
 
 #include "err.h"
@@ -417,10 +412,5 @@ namespace cdgb64 {
 	};
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

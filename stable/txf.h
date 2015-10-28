@@ -30,11 +30,6 @@
 #define TXF_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // TeXt Flow 
 
 # include <ctype.h>
@@ -435,10 +430,5 @@ namespace txf {
 		return Flow << '\r';
 	}
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

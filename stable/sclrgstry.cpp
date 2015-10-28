@@ -21,11 +21,6 @@
 
 #include "sclrgstry.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "cio.h"
 #include "lcl.h"
 #include "dir.h"

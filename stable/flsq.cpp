@@ -21,11 +21,6 @@
 
 #include "flsq.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace flsq;
 
 #include "lstbch.h"

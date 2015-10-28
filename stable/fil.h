@@ -26,11 +26,6 @@
 #  define FIL_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // FILe
 
 # include <sys/stat.h>
@@ -634,9 +629,4 @@ namespace fil {
 		const fnm::name___ &Filename,
 		err::handling__ = err::h_Default  );
 }
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

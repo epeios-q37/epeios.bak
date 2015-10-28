@@ -26,11 +26,6 @@
 #  define TOL_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // TOoL
 
 
@@ -1622,10 +1617,5 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 	Q37_RMDF( type, name, variable )
 
 
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

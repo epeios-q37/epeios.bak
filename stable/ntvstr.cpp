@@ -21,11 +21,6 @@
 
 #include "ntvstr.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "str.h"
 
 using namespace ntvstr;

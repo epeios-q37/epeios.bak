@@ -26,11 +26,6 @@
 #  define CGIMNG_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // CGI (Common Gateway Interface) MaNaGer
 
 # include "csdbns.h"
@@ -340,10 +335,5 @@ namespace cgimng {
 		}
 	};
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

@@ -75,11 +75,6 @@ Description:
 #if defined( E_DEBUG ) && !defined( TXMHCH_NODBG )
 #define TXMHCH_DBG 
 #endif
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 /*$BEGIN$*/
 
 #include "err.h"
@@ -301,10 +296,5 @@ public:
 AUTO( txmhch_hierarchical_text )
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif
 /* end of 'xxx.h' template file */

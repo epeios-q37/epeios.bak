@@ -26,11 +26,6 @@
 #  define BCH_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // BunCH
 
 # include "err.h"
@@ -801,10 +796,5 @@ namespace bch {
 }
 
 # endif
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

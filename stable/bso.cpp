@@ -21,11 +21,6 @@
 
 #include "bso.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 # include "tol.h"
 
 using namespace bso;

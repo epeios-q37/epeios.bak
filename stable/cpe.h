@@ -26,11 +26,6 @@
 # define CPE_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // ComPilation Enviroment.
 
 // Compiler-related macros.
@@ -202,9 +197,4 @@ namespace cpe {
 
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

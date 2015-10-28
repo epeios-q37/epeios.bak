@@ -21,11 +21,6 @@
 
 #include "dhtproxy.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 using namespace dhtproxy;
 
 extern "C" typedef xhtcllbk::retrieve retrieve;

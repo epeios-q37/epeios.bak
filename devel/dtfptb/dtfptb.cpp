@@ -20,11 +20,6 @@
 #define DTFPTB__COMPILATION
 
 #include "dtfptb.h"
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 /*$BEGIN$*/
 
 #include "flx.h"

@@ -26,11 +26,6 @@
 #  define MSCMLD_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // MuSiC MeLody Description
 
 # include "err.h"
@@ -691,10 +686,5 @@ namespace mscmld {
 		bso::bool__ WithRoot );	// Si  'true', la prochaine balise est 'Melody', sinon, on est  l'intrieur de 'Melody'. Dans les deux cas, au rerour on est  l'extrieur de la balise 'Melody'.
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

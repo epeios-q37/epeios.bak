@@ -26,11 +26,6 @@
 #  define BSO_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // BaSic Objects
 
 # include <limits.h>
@@ -632,10 +627,5 @@ namespace bso {
 	}
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

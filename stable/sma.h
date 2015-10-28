@@ -39,11 +39,6 @@
 //R $Date: 2012/11/14 16:06:36 $
 
 /* End of automatic documentation generation part. */
-
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
 /*$BEGIN$*/
 
 /* Addendum to the automatic documentation generation part. */
@@ -116,9 +111,4 @@ namespace sma {
 }
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

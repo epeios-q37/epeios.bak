@@ -26,11 +26,6 @@
 #  define SCLTOOL_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe TOOL
 
 # include "err.h"
@@ -93,10 +88,5 @@ namespace scltool {
 
 	extern bso::bool__ IgnoreUnknownArguments;	// A 'false' par dfaut, mais peut tre modifi par l'utilisateur (p. ex. dans l'utilisation de 'CEF').
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

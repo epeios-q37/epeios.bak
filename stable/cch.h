@@ -40,11 +40,6 @@
 
 /* End of automatic documentation generation part. */
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 /* Addendum to the automatic documentation generation part. */
 //D CaCHe 
 /* End addendum to automatic documentation generation part. */
@@ -1002,9 +997,4 @@ namespace cch {
 #define E_RW_CACHES___( type, rb ) E_RW_CACHESt___( type, rb, epeios::row__ )
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

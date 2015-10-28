@@ -26,11 +26,6 @@
 #  define DHTPROXY_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // DHT(ML) PROXY
 
 # include "xhtcllbk.h"
@@ -75,10 +70,5 @@ namespace dhtproxy {
 	};
 
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

@@ -21,11 +21,6 @@
 
 #include "lcl.h"
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 #include "tagsbs.h"
 
 using namespace lcl;

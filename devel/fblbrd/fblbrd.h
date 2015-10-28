@@ -27,11 +27,6 @@
 #  define FBLBRD_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 //D Frontend/Backend Layout Backend Request Description 
 
 # include <stdarg.h>
@@ -215,9 +210,4 @@ namespace fblbrd {
 }
 
 /*$END$*/
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
-
 #endif

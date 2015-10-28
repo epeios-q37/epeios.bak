@@ -26,11 +26,6 @@
 #  define FRDBSE_DBG
 # endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // FRonteNd BaSE
 
 # error "Obsolete ! Content moved into 'SCLFRNTND' !"
@@ -303,10 +298,5 @@ namespace frdbse {
 		Dump_<id, ctn::E_CITEM( frdbse::ilw_<id> ), ctn::E_CONTAINER_( frdbse::ilw_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
 	}
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif

@@ -26,11 +26,6 @@
 #define SCLRGSTRY_DBG
 #endif
 
-/******************************************************************************/
-				  /* do not modify anything above this limit */
-				  /*			  unless specified			 */
-				  /*******************************************/
-
 // SoCLe ReGiSTRY
 
 # include "err.h"
@@ -280,10 +275,5 @@ namespace sclrgstry {
 		return OGetValue( Registry, entry, Value, Missing );\
 	}
 }
-
-				  /********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
 
 #endif
