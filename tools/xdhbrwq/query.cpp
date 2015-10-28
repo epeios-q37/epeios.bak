@@ -45,8 +45,9 @@ static void Read_(
 {
 	bso::char__ C = 0;
 
-	while ( C = Flow.Get() )
+	while ( C = Flow.Get() ) {
 		Item.Append( C );
+	}
 }
 
 void query::pairs_::FillWith( flw::iflow__ &Flow )
