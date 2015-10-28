@@ -39,16 +39,24 @@ prow__ query::pairs_::Add(
 	return Pairs.Add( Pair );
 }
 
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wparentheses"
+#endif
+
 static void Read_(
 	flw::iflow__ &Flow,
 	item_ &Item )
 {
 	bso::char__ C = 0;
 
-	while ( C = Flow.Get() ) {
+	while ( C = Flow.Get() )
 		Item.Append( C );
-	}
 }
+
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic pop
+#endif
 
 void query::pairs_::FillWith( flw::iflow__ &Flow )
 {
