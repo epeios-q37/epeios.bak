@@ -33,8 +33,17 @@ using namespace csdles;
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
+#endif
+
 DEF( CSDLEO_RETRIEVE_CALLBACK_FUNCTION_NAME, csdleo::retrieve_callback );
 // DEF( CSDLEO_RELEASE_CALLBACK_FUNCTION_NAME, csdleo::release_callback );
+
+#ifdef CPE_C_CLANG
+# pragma clang diagnostic pop
+#endif
 
 static inline void DoNothing_( void )
 {}
