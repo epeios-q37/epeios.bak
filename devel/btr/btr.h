@@ -141,6 +141,12 @@ namespace btr {
 			if ( Node.Right != qNIL )
 				_ChangeParent( Node.Right, NewParent );
 		}
+		sdr::row_t__ SearchMostLeftNode_(
+			sdr::row_t__ Node,
+			level__ *Level ) const;
+		sdr::row_t__ SearchMostRightNode_(
+			sdr::row_t__ Node,
+			level__ *Level ) const;
 	public:
 		struct s
 		: public _nodes_::s
@@ -319,11 +325,24 @@ namespace btr {
 		// Retourne le premier noeud sans fils gauche  partir de 'Node' en descendant par les fils gauche.
 		sdr::row_t__ SearchMostLeftNode(
 			sdr::row_t__ Node,
-			level__ &Level ) const;
-		// Retourne le premier noeud sans noeid gauche  partir de 'Node' en descendant par les noeuds gauche.
+			level__ &Level ) const
+		{
+			return SearchMostLeftNode_( Node, &Level );
+		}
+		sdr::row_t__ SearchMostLeftNode( sdr::row_t__ Node ) const
+		{
+			return SearchMostLeftNode_( Node, NULL );
+		}
 		sdr::row_t__ SearchMostRightNode(
 			sdr::row_t__ Node,
-			level__ &Level ) const;
+			level__ &Level ) const
+		{
+			return SearchMostRightNode_( Node, &Level );
+		}
+		sdr::row_t__ SearchMostRightNode( sdr::row_t__ Node ) const
+		{
+			return SearchMostRightNode_( Node, NULL );
+		}
 		void PrintStructure(
 			sdr::row_t__ Racine,
 			txf::text_oflow__ &Flot ) const;

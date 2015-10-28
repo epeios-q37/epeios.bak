@@ -13,8 +13,8 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2015-10-28 :
-- IDXBTR :
-	- Fixing the inadvisable '&... == NULL'.
+- BTR, IDXBTR :
+	- Fixing the inadvisable '&Var == NULL', where 'Var' is a reference.
 
 2015-10-27 :
 - RGSTRY :

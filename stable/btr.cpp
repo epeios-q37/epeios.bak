@@ -69,9 +69,9 @@ void btr::_nodes_manager_::Prepare(
 }
 
 
-row_t__ btr::_nodes_manager_::SearchMostLeftNode(
+row_t__ btr::_nodes_manager_::SearchMostLeftNode_(
 	row_t__ Node,
-	level__ &Level ) const
+	level__ *Level ) const
 {
 	level__ L = 0;
 
@@ -80,16 +80,16 @@ row_t__ btr::_nodes_manager_::SearchMostLeftNode(
 		L++;
 	}
 
-	if ( &Level )
-		Level = L;
+	if ( Level != NULL )
+		*Level = L;
 
 	return Node;
 }
 
 // Retourne le premier noeud sans fille  partir de 'Position' en descendant par les fille.
-row_t__ btr::_nodes_manager_::SearchMostRightNode(
+row_t__ btr::_nodes_manager_::SearchMostRightNode_(
 	row_t__ Node,
-	level__ &Level ) const
+	level__ *Level ) const
 {
 	level__ L = 0;
 
@@ -98,8 +98,8 @@ row_t__ btr::_nodes_manager_::SearchMostRightNode(
 		L++;
 	}
 
-	if ( &Level )
-		Level = L;
+	if ( Level != NULL )
+		*Level = L;
 
 	return Node;
 }
