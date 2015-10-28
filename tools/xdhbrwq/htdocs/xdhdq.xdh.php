@@ -1,4 +1,4 @@
 <?php
-$host= "localhost";
+$host= "mac";
 $service = 53700;
 ?>
