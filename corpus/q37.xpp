@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:set name="ostype" env-var="OSTYPE"/>
-	<xpp:ifeq select="ostype" value="">
-		<xpp:set name="env" value="windows"/>
-	</xpp:ifeq>
-	<xpp:ifeq select="ostype" value="linux-gnu">
-		<xpp:set name="env" value="linux"/>
-	</xpp:ifeq>
-	<xpp:ifeq select="ostype" value="darwin14">
-		<xpp:set name="env" value="mac"/>
-	</xpp:ifeq>
+	<xpp:bloc>
+		<xpp:set name="ostype" env-var="OSTYPE"/>
+		<xpp:ifeq select="ostype" value="">
+			<xpp:set name="env" value="windows"/>
+		</xpp:ifeq>
+		<xpp:ifeq select="ostype" value="linux-gnu">
+			<xpp:set name="env" value="linux"/>
+		</xpp:ifeq>
+		<xpp:ifeq select="ostype" value="darwin14">
+			<xpp:set name="env" value="mac"/>
+		</xpp:ifeq>
+		<xpp:set name="packing" env-var="Q37_PACKING"/>
+	</xpp:bloc>
 	<xpp:ifeq select="env" value="windows">
 		<xpp:set name="RootDir" value="h:/"/>
 	</xpp:ifeq>
@@ -19,7 +22,10 @@
 	<xpp:ifeq select="env" value="mac">
 		<xpp:set name="RootDir" value="/H/"/>
 	</xpp:ifeq>
-	<xpp:bloc marker="$">
+	<xpp:ifeq select="env" value="packing">
+		<xpp:set name="RootDir" value=""/>
+	</xpp:ifeq>
+	<xpp:bloc marker="$"> 
 		<xpp:set name="CorpusDir" value="$RootDir$hg/epeios/corpus/"/>
 	</xpp:bloc>
 	<xpp:define name="epeios.xlcl">

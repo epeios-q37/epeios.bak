@@ -5,6 +5,14 @@
 		<xpp:expand value-of="q37.xpp"/>
 		<xpp:expand href="../TOL.xcfg"/>
 		<Parameters>
+			<xpp:ifeq select="packing" value="yes">
+				<xpp:bloc>
+					<Module>
+						<Service Type="Straight">53700</Service>
+						<Filename>xdhbrwq</Filename>
+					</Module>
+				</xpp:bloc>
+			</xpp:ifeq>
 			<Language>en</Language>
 			<Command>Process</Command>
 			<!-- Default command -->

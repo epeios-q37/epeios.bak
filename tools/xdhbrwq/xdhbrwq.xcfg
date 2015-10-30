@@ -24,6 +24,11 @@
 					<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
 				</xpp:define>
 			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="yes">
+				<xpp:define name="BinDir">
+					<xpp:bloc>out/</xpp:bloc>
+				</xpp:define>
+			</xpp:ifeq>
 		</xpp:bloc>
 		<Parameters>
 			<ModuleFilename>
