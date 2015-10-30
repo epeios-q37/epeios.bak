@@ -9,4 +9,4 @@ Meaning of list markers:
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
-2015-10-18 : publication !
+2015-10-30 : publication !

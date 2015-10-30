@@ -169,7 +169,8 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	
+	libs += -lws2_32
+
 	LDFLAGS += -static
 	
 	ifeq ("$(target)","$(win)")
@@ -209,7 +210,6 @@ ifeq ("$(os)","$(Cygwin)")
 	
 	binary=$(name).dll
 	lo += -Wl,--kill-at -shared
-	libs += -lws2_32
 
 	dest=/cygdrive/h/bin/
 
@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20150820"\"
+copt += -DVERSION=\""20151030"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 ifndef EPEIOS_SRC

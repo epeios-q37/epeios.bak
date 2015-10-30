@@ -158,7 +158,8 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	
+	libs += -lws2_32
+
 	LDFLAGS += -static
 	
 	ifeq ("$(target)","$(win)")
@@ -331,7 +332,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20150820"\"
+copt += -DVERSION=\""20151030"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 src += :"$(cef)"	# Had to be here (before the 'src += ...' below),
