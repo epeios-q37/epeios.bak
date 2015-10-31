@@ -29,7 +29,7 @@
 				<xpp:bloc>
 					<URL>file:///home/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
 					<ModuleFilename>
-						<xpp:bloc>/home/csimon/</xpp:bloc>
+						<xpp:bloc>/home/csimon/bin/</xpp:bloc>
 						<xpp:expand select="ModuleWithSuffix"/>
 					</ModuleFilename>
 				</xpp:bloc>
@@ -38,7 +38,7 @@
 				<xpp:bloc>
 					<URL>file:///Users/csimon/epeios/tools/xdhcefq/CEF/xdhcefq.html</URL>
 					<ModuleFilename>
-						<xpp:bloc>/Users/csimon/</xpp:bloc>
+						<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
 						<xpp:expand select="ModuleWithSuffix"/>
 					</ModuleFilename>
 				</xpp:bloc>
@@ -53,6 +53,7 @@
 						<xpp:bloc>
 							<ResourcesDirPath>h:/bin/CEF/</ResourcesDirPath>
 							<LocaleDirPath>h:/bin/CEF/locales/</LocaleDirPath>
+							<CachePath>H:\temp\CEFCachePath\</CachePath>
 						</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="linux">
@@ -70,7 +71,6 @@
 						</xpp:bloc>
 					</xpp:ifeq>
 					<!-- Created if inexistent. This entry must exists to have 'console.log()' messages be displayed (see http://www.magpcss.org/ceforum/viewtopic.php?f=6&t=13349). -->
-					<CachePath>H:\temp\CEFCachePath\</CachePath>
 				</CEF>
 			</Setup>
 		</Setups>
