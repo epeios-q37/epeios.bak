@@ -58,8 +58,11 @@
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="linux">
 						<xpp:bloc>
+							<LocaleDirPath>/home/csimon/CEF/Resources/locales/</LocaleDirPath>
+							<ResourcesDirPath>/home/csimon/CEF/Resources/</ResourcesDirPath>
 							<SingleProcess>true</SingleProcess>
 							<NoSandbox>true</NoSandbox>
+							<CachePath>/tmp</CachePath>
 						</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="mac">
