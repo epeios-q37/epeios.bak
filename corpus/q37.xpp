@@ -8,7 +8,7 @@
 		<xpp:ifeq select="ostype" value="linux-gnu">
 			<xpp:set name="env" value="linux"/>
 		</xpp:ifeq>
-		<xpp:ifeq select="ostype" value="darwin14">
+		<xpp:ifeq select="ostype" value="darwin15">
 			<xpp:set name="env" value="mac"/>
 		</xpp:ifeq>
 		<xpp:set name="packing" env-var="Q37_PACKING"/>
