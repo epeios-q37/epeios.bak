@@ -63,7 +63,9 @@
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="mac">
 						<xpp:bloc>
-							<xpp:expand select="ProcessType"/>
+							<ProcessType>
+								<xpp:expand select="ProcessType"/>
+							</ProcessType>
 							<NoSandbox>true</NoSandbox>
 						</xpp:bloc>
 					</xpp:ifeq>
