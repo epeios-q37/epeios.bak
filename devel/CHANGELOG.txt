@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-10-03 :
+- SCLTOOL :
+	# For non-windows OSes, returns to CLI with failure value when success (and vice-versa).
+
 2015-10-28 :
 - BTR, IDXBTR :
 	- Fixing the inadvisable '&Var == NULL', where 'Var' is a reference.
