@@ -366,6 +366,7 @@ $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
 		
+# No tabulation, otherwise it's passed to 'bash', until to be handled by 'make.
 ifeq ("$(os)","$(MacOS)")
 		cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/cefsimple"
 		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/cefsimple"
