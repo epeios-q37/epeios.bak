@@ -367,6 +367,18 @@ ifdef EPEIOS_SRC
 	cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/cefsimple Helper"
 	cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/cefsimple Helper EH"
 	cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/cefsimple Helper NP"
+	export xcfg="<xpp:bloc><xpp:define name=\"ProcessType\"><xpp:bloc>"$process_type"</xpp:bloc></xpp:define><xpp:expand href=\"/Users/csimon/epeios/tools/xdhcefq/xdhcefq.xcfg\"/></xpp:bloc>"
+	export xlcl="<xpp:expand href=\"/Users/csimon/epeios/tools/xdhcefq/xdhcefq.xlcl\"/>"
+	export process_type="Main"
+	echo $xcfg | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/xdhcefq.xcfg"
+	echo $xlcl | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/xdhcefq.xlcl"
+	export process_type="Sub"
+	echo $xcfg | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xcfg"
+	echo $xlcl | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper.app/Contents/MacOS/xdhcefq.xlcl"
+	echo $xcfg | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xcfg"
+	echo $xlcl | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper EH.app/Contents/MacOS/xdhcefq.xlcl"
+	echo $xcfg | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xcfg"
+	echo $xlcl | xppq >"$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
 				
 endif
 
