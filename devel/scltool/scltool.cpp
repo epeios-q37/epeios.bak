@@ -1691,8 +1691,7 @@ qRFB
 	Oddities.argv = argv;
 	Oddities.argc = argc;
 
-	if ( !main_( Oddities, cio::GetSet( cio::t_Default ) ) )
-		ExitValue = EXIT_FAILURE;
+	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 qRFR
 qRFT	
 	cio::COut.Commit();
