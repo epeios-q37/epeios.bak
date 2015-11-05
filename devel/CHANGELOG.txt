@@ -12,7 +12,15 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
-2015-10-03 :
+2015-11-05 :
+- ERR :
+	- Removing forgotten old 'Data' related item.
+- LTF :
+	- Adaptation to underlying modules.
+- SCLMISC, SCLTOOL :
+	% As 'SCLMISC' is now again aware of 'CIO', 'text_oflow_rack___' is moved from 'SCLTOOL' to 'SCLMISC'.
+
+2015-11-03 :
 - SCLTOOL :
 	# For non-windows OSes, returns to CLI with failure value when success (and vice-versa).
 

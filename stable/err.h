@@ -133,7 +133,6 @@ namespace err {
 # define qRSys()	ERRCommon( err::tSystem )
 # define qRVct()	ERRCommon( err::tVacant )
 # define qRLmt()	ERRCommon( err::tLimitation )
-# define qRDta()	ERRCommon( err::tData )
 # define qRFwk()	ERRCommon( err::tFramework )
 # define qRFbd()	ERRCommon( err::tForbidden )
 # define qRLbr()	ERRCommon( err::tLibrary )

@@ -1702,32 +1702,6 @@ qRFE( ErrFinal_() )
 }
 #endif
 
-txf::text_oflow__ &scltool::text_oflow_rack___::Init( const fnm::name___ &FileName )
-{
-	_FileName.Init( FileName );
-
-	if ( _FileName.IsEmpty() ) {
-		_BackedUp = false;
-		return cio::COut;
-	} else {
-		sclmisc::CreateBackupFile( _FileName );
-		_BackedUp = true;
-
-		if ( _Flow.Init( _FileName ) != tol::rSuccess )
-			sclmisc::ReportFileOpeningErrorAndAbort( _FileName );
-
-		_TFlow.Init( _Flow );
-
-		return _TFlow;
-	}
-}
-
-void scltool::text_oflow_rack___::HandleError( void )
-{
-	if ( _BackedUp )
-		sclmisc::RecoverBackupFile( _FileName );
-}
-
 static inline void signal_( int s )
 {
 	exit( EXIT_SUCCESS );
