@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-10 :
+- SCLRGSTRY:
+	- Adding a comment.
+
 2015-11-05 :
 - ERR :
 	- Removing forgotten old 'Data' related item.

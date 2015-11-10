@@ -341,9 +341,9 @@ qRH
 	str::string Id;
 qRB
 	Id.Init();
-	OGetValue( Registry_, Setup_, Id );
 
-	FillSetupRegistry( Id );
+	if ( OGetValue( Registry_, Setup_, Id ) )
+		FillSetupRegistry( Id );
 qRR
 qRT
 qRE
@@ -676,6 +676,7 @@ Q37_GCTOR( sclrgstry )
 {
 	Registry_.Init();
 
+	// 3 firsts not as 'embedded', due to the fact that plugins use the registry of the main program.
 	ConfigurationLevel_ = Registry_.Create();
 	ProjectLevel_ = Registry_.Create();
 	SetupLevel_ = Registry_.Create();

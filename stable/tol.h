@@ -210,14 +210,14 @@ namespace tol
 	template <typename type, type False, type Error, type Undefined> class extended_enum__
 	{
 	private:
-		type _Value;
+		type Value_;
 		flavor_ F_( void ) const 
 		{
-			if ( _Value > Undefined )
+			if ( Value_ > Undefined )
 				qRFwk();
-			else if ( _Value > Error )
+			else if ( Value_ > Error )
 				return fError;
-			else if ( _Value > False )
+			else if ( Value_ > False )
 				return fFalse;
 
 			return fTrue;
@@ -225,12 +225,12 @@ namespace tol
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_Value = Undefined;
+			Value_ = Undefined;
 		}
 		extended_enum__( type Value = Undefined )
 		{
 			reset();
-			_Value = Value;
+			Value_ = Value;
 		}
 		~extended_enum__( void )
 		{
@@ -238,11 +238,11 @@ namespace tol
 		}
 		void Init( void )
 		{
-			_Value = Undefined;
+			Value_ = Undefined;
 		}
-		type RawValue( void ) const
+		type Value( void ) const
 		{
-			return _Value;
+			return Value_;
 		}
 		bso::bool__ IsError( void ) const
 		{
@@ -256,8 +256,11 @@ namespace tol
 		{
 			return F_() == fTrue;
 		}
-		operator bso::bool__( void ) const
+		bso::bool__ Boolean( void ) const
 		{
+			if ( IsError() )
+				qRFwk();
+
 			return IsTrue();
 		}
 	};

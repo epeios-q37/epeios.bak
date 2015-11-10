@@ -399,7 +399,7 @@ namespace lst {
 		{
 			uys::state__ State = Test_( Filename(), ReferenceTimeStamp );
 
-			if ( State )
+			if ( State.Boolean() )
 				State = ReadFromFile_( Filename(), *_Store );
 
 			return State;
@@ -450,7 +450,7 @@ namespace lst {
 		}
 		bso::bool__ Exists( void ) const
 		{
-			return State();
+			return State().Value() == uys::sExists;
 		}
 #ifdef CPE_C_MSC
 #	undef CreateFile
