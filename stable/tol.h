@@ -1417,7 +1417,7 @@ template <typename type, type False, type Error, type Undefined> bso::bool__ ope
 	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
-	return Op1.RawValue() != Op2.RawValue();
+	return Op1.Value() != Op2.Value();
 }
 
 template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator!=(
@@ -1431,7 +1431,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	_type Op2 )
 {
-	return Op1.RawValue() != Op2;
+	return Op1.Value() != Op2;
 }
 
 #if 0
