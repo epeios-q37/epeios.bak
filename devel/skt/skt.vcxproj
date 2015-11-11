@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <Import Project="h:\hg\Windows.targets" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{713205d2-ca66-4c10-9b8e-244aa2b56cff}</ProjectGuid>
+    <RootNamespace>skt</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration" />
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="h:\hg\EpeiosIncludeDirectories.props" />
+  </ImportGroup>
+  <PropertyGroup>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>E_ST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Console</SubSystem>
+      <SubSystem Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="skt.cpp" />
+    <ClCompile Include="skt_test.cpp" />
+    <ClCompile Include="h:/hg/epeios/stable/cio.cpp" />
+    <ClCompile Include="h:/hg/epeios/stable/err.cpp" />
+    <ClCompile Include="h:/hg/epeios/stable/flw.cpp" />
+    <ClCompile Include="h:/hg/epeios/stable/tol.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\CHANGELOG.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
