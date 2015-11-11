@@ -309,7 +309,6 @@ ifeq ("$(os)","$(MacOS)")
 	binary=$(name)
 
 	dest=/Users/csimon/bin/
-
 endif
 
 ##########################
@@ -342,7 +341,9 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
+		
 	mkdir -p $(dest)
+			
 	cp $(binary) $(dest)
 endif
 
