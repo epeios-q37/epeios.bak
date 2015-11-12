@@ -179,20 +179,24 @@ namespace lstbch {
 
 #ifndef FLS__COMPILATION
 
+	class files_hook___;
+
 	struct hook_filenames___
 	{
+	private:
+		bch::hook_filenames___ Bunch_;
+		lst::hook_filenames___ List_;
 	public:
-		bch::hook_filenames___ Bunch;
-		lst::hook_filenames___ List;
 		void reset( bso::bool__ P = true )
 		{
-			Bunch.reset( P );
-			List.reset( P );
+			Bunch_.reset( P );
+			List_.reset( P );
 		}
 		E_CDTOR( hook_filenames___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
+		friend class files_hook___;
 	};
 
 	class files_hook___
@@ -228,8 +232,8 @@ namespace lstbch {
 		{
 			reset();
 
-			_Bunch.Init( Filenames.Bunch, Mode, Behavior, ID );
-			_List.Init( Filenames.List, Mode, Behavior );
+			_Bunch.Init( Filenames.Bunch_, Mode, Behavior, ID );
+			_List.Init( Filenames.List_, Mode, Behavior );
 
 		}
 		uys::state__ Bind( void )	// A n'appeler qu'aprs un appel  'Plug(...)'.
