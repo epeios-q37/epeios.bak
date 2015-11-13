@@ -6,7 +6,7 @@
 		<xpp:expand href="../TOL.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
-			<ThreadAmountMax>100000</ThreadAmountMax>
+			<ThreadAmountMax>1000</ThreadAmountMax>
 			<Exclusions Handling="Regular">
 				<ListFileName>H:\hg\epeios\tools\fwtchrq\Exclusions.txt</ListFileName>
 				<FileSizeMax>1000000000</FileSizeMax>
