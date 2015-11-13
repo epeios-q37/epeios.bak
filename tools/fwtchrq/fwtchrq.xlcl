@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locales xmlns:xpp="http://q37.info/ns/xpp">
+	<Locale target="fwtchrq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xlcl"/>
+		<Translations text="ProgramDescription">
+			<Translation language="fr">Observateur de fichiers.</Translation>
+			<Translation language="en">File watcher.</Translation>
+		</Translations>
+		<Translations text="ExplorationMessage">
+			<Translation language="fr">Exploration : %1/%2 thread(s) ; %3+%4 (%5 d/s)</Translation>
+			<Translation language="en">Exploration: %1/%2 thread(s); %3+%4 (%5 d/s)</Translation>
+		</Translations>
+		<Translations text="ProcessingMessage">
+			<Translation language="fr">Analyse : %1/%3 (%4 d/s)</Translation>
+			<Translation language="en">Processing: %1/%3 (%4 d/s)</Translation>
+		</Translations>
+		<Translations text="UpdateMessage">
+			<Translation language="fr">Mise à jour : %1/%2, %3 d/s; C: %4, A: %5, I: %6, E: %7; G: %8, P: %9</Translation>
+			<Translation language="en">Updating : %1/%2, %3 d/s; C: %4, U: %5, S: %6, F: %7, I: %8, E: %9</Translation>
+		</Translations>
+		<!--
+		<Translations text="">
+		  <Translation language="fr"></Translation>
+		  <Translation language="en"></Translation>
+		</Translations>
+		-->
+	</Locale>
+</Locales>

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="fwtchrq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand href="../TOL.xcfg"/>
+		<Parameters>
+			<Language>en</Language>
+			<ThreadAmountMax>100000</ThreadAmountMax>
+			<Exclusions Handling="Regular">
+				<ListFileName>H:\hg\epeios\tools\fwtchrq\Exclusions.txt</ListFileName>
+				<FileSizeMax>1000000000</FileSizeMax>
+				<NameLengthMax>9999</NameLengthMax>
+			</Exclusions>
+			<Ghosts>
+				<Prefix>pfx</Prefix>
+				<Suffix>sfx</Suffix>
+			</Ghosts>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="TOL_Locale"/>
+			<!-- Commands -->
+			<xpp:bloc>
+				<Translations message="BrowseCommandDescription">
+					<Translation language="fr">Génère en XML l'aborescence d'un chemin.</Translation>
+					<Translation language="en">Generate the directory tree of a path in XML.</Translation>
+				</Translations>
+				<Translations message="UpdateCommandDescription">
+					<Translation language="fr">Mets à jour données de détection des modifications.</Translation>
+					<Translation language="en">Updates the data for the modifications detection.</Translation>
+				</Translations>
+			</xpp:bloc>
+			<!-- Flags -->
+			<xpp:bloc>
+				<Translations message="ExclusionsKeepFlagDescription">
+					<Translation language="fr">Conserve (et marque) les fichiers/dossiers exclus.</Translation>
+					<Translation language="en">Keep (and mark) excluded files/directories.</Translation>
+				</Translations>
+				<Translations message="ExclusionsSkipFlagDescription">
+					<Translation language="fr">Ne conserve aucun fichiers/dossiers exclus.</Translation>
+					<Translation language="en">Skip all excluded files/directories.</Translation>
+				</Translations>
+			</xpp:bloc>
+			<!-- Options -->
+			<xpp:bloc>
+				<Translations message="ThreadAmountMaxOptionLabel">
+					<Translation language="fr">max-thread</Translation>
+					<Translation language="en">max-thread</Translation>
+				</Translations>
+			</xpp:bloc>
+			<!-- Arguments -->
+			<xpp:bloc>
+				<Translations message="PathArgumentLabel">
+					<Translation language="fr">chemin</Translation>
+					<Translation language="en">path</Translation>
+				</Translations>
+				<Translations message="PathArgumentDescription">
+					<Translation language="fr">Chemin de l'arborescence.</Translation>
+					<Translation language="en">Path of the file tree.</Translation>
+				</Translations>
+				<Translations message="OutputArgumentLabel">
+					<Translation language="fr">sortie</Translation>
+					<Translation language="en">output</Translation>
+				</Translations>
+				<Translations message="OutputArgumentDescription">
+					<Translation language="fr">Fichier de sortie (si absent, utilisation de la sortie standard).</Translation>
+					<Translation language="en">Output file (if missing, use of the standard output). </Translation>
+				</Translations>
+			</xpp:bloc>
+		</Locale>
+		<Arguments>
+			<xpp:expand select="TOL_Arguments"/>
+			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
+			<Argument id="BrowseCommand" Description="BrowseCommandDescription" long="browse" Value="Browse" Usage="[%ThreadAmountMaxOption%] [%ExclusionsKeepFlag%|%ExclusionsSkipFlag%] %PathArgument% %OutputArgument%"/>
+			<Argument id="UpdateCommand" Description="UpdateCommandDescription" long="update" Value="Update" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
+			<!-- Flags : 'Path' ET 'Value'. -->
+			<Argument id="ExclusionsKeepFlag" Description="ExclusionsKeepFlagDescription" long="keep-excluded" Path="Exclusions/@Handling" Value="Keep"/>
+			<Argument id="ExclusionsSkipFlag" Description="ExclusionsSkipFlagDescription" long="skip-excluded" Path="Exclusions/@Handling" Value="Skip"/>
+			<!-- Options : 'Path' , mais pas de 'Value'. -->
+			<Argument id="ThreadAmountMaxOption" Description="ThreadAmountMaxOptionDescription" long="max-thread" short="t" Path="ThreadAmountMax" Label="ThreadAmountMaxOptionLabel"/>
+			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
+			<Argument id="PathArgument" Path="Path" Description="PathArgumentDescription" Label="PathArgumentLabel"/>
+			<Argument id="OutputArgument" Path="Output" Description="OutputArgumentDescription" Label="OutputArgumentLabel"/>
+			<!-- Affectations des arguments libres-->
+			<Layouts>
+				<Layout command="Browse">
+					<Link index="0" Target="PathArgument"/>
+					<Link index="1" Target="OutputArgument"/>
+				</Layout>
+			</Layouts>
+			<Layouts>
+				<Layout command="Update">
+					<Link index="0" Target="PathArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>
