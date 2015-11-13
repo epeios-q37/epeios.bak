@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Version)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2015</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>fwtchrq</Program>
+		<Software>fwtchrq</Software>
+		<UUID>8033dd6d-2114-4c77-ab6c-be19e50ad96e</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>btr</Module>
+				<Module>dtr</Module>
+				<Module>idxbtr</Module>
+				<Module>mtk</Module>
+				<Module>txmtbl</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Modules Group="FWT">
+			<Module>fwtbsc</Module>
+			<Module>fwtcpr</Module>
+			<Module>fwtdct</Module>
+			<Module>fwtftr</Module>
+			<Module>fwtght</Module>
+			<Module>fwtmov</Module>
+			<Module>fwtxcl</Module>
+		</Modules>
+		<Module>browse</Module>
+		<Module>exclusion</Module>
+		<Module>misc</Module>
+		<Module>registry</Module>
+		<Module>store</Module>
+	</Modules>
+	<Files/>
+	<Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">fwtchrq</File>
+			<File Dir="computing/epeios/tools/fwtchrq/">Manual</File>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
+		</WikiFiles>
+	</Packing>
+	<SourceDirs>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

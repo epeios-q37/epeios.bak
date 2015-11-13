@@ -1,0 +1,1249 @@
+/*
+	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+
+	This file is part of fwtchrq.
+
+    fwtchrq is free software: you can redistribute it and/or
+	modify it under the terms of the GNU Affero General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+    fwtchrq is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+*/
+
+#include "fwtcpr.h"
+
+using namespace fwtcpr;
+
+static stsfsm::automat VersionAutomat_;
+static stsfsm::automat StatusAutomatV1_;
+
+const char *fwtcpr::GetLabel( version__ Version )
+{
+	switch ( Version ) {
+	case v0_1:
+		return "0.1";
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+version__ fwtcpr::GetVersion( const str::string_ &Pattern )
+{
+	return stsfsm::GetId( Pattern, VersionAutomat_, v_Undefined, v_amount );
+}
+
+static void FillVersionAutomat_( void )
+{
+	VersionAutomat_.Init();
+	stsfsm::Fill<version__>( VersionAutomat_, v_amount, GetLabel );
+}
+
+#define S( name )	case s##name : return #name; break
+
+const char *GetLabel_(
+	version__ Version,
+	status__ Status )
+{
+	if ( Version != v0_1 )
+		qRChk();
+
+	switch ( Status ) {
+	S( Steady );
+	S( Created );
+	S( Removed );
+	S( Modified );
+	default:
+		qRGnr();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+static status__ GetStatus_(
+	version__ Version,
+	const str::string_ &Pattern )
+{
+	stsfsm::automat_ *Automat = NULL;
+
+	switch ( Version ) {
+	case v0_1:
+		Automat = &StatusAutomatV1_;
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+	
+	return stsfsm::GetId( Pattern, *Automat, s_Undefined, s_amount );
+}
+
+static void FillStatusAutomats_( void )
+{
+	StatusAutomatV1_.Init();
+	stsfsm::Fill<status__,version__>( v0_1, StatusAutomatV1_, s_amount, GetLabel_ );
+}
+
+class fill_link__ {
+public:
+	drow__ Parent;
+	fwtftr::drow__ Source;
+	fwtftr::drow__ Target;
+	void reset( bso::bool__ = true )
+	{
+		Parent = qNIL;
+		Source = Target = qNIL;
+	}
+	E_CDTOR( fill_link__ );
+	void Init( void )
+	{
+		Parent = qNIL;
+		Source = Target = qNIL;
+	}
+};
+
+typedef stk::E_BSTACK_( fill_link__ ) fill_links_;
+E_AUTO( fill_links );
+
+
+static void Complete_(
+	sdr::row__ Row,
+	const fwtftr::drows_ &Rows,
+	const fwtftr::directories_ &Directories,
+	const fwtftr::names_ &Names,
+	status__ Status,
+	drows_ &RRows,
+	directories_ &RDirectories,
+	names_ &RNames,
+	fill_links_ &Links )
+{
+qRH
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+	ctn::E_CITEMt( fwtbsc::directory_, fwtbsc::drow__) Directory;
+	directory Dir;
+	fill_link__ Link;
+	drow__ NewRow = qNIL;
+qRB
+	Name.Init( Names );
+
+	Directory.Init( Directories );
+
+	while ( Row != qNIL ) {
+		if ( Directory( Rows( Row ) )().Exclusion == fwtbsc::xNo ) {
+			Dir.Init();
+			Dir().Name = RNames.Append( Name( Directory( Rows( Row ) )().Name ) );
+			Dir().Status = Status;
+
+			RRows.Append( NewRow = RDirectories.Append( Dir ) );
+
+			if ( Status == sCreated ) {
+				Link.Init();
+				Link.Parent = NewRow;
+				Link.Source = Rows( Row );
+				// Link.Target = TRows( TRow );	// Répertoire n'existant pas dans la cible, 'Target' est laissé à 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-répertoires en 'Created'.
+				Links.Push( Link );
+			}
+		}
+
+		Row = Rows.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
+static inline bso::sign__ Compare_(
+	const str::string_ &Source,
+	const str::string_ &Target )
+{
+	return str::Compare( Source, Target );
+}
+
+static bso::bool__ Compare_(
+	const fwtftr::drows_ &SRows,
+	const fwtftr::directories_ &SDirectories,
+	const fwtftr::names_ &SNames,
+	const fwtftr::drows_ &TRows,
+	const fwtftr::directories_ &TDirectories,
+	const fwtftr::names_ &TNames,
+	drows_ &Rows,
+	directories_ &Directories,
+	names_ &Names,
+	fill_links_ &Links )
+{
+	bso::bool__ Modified = false;
+qRH
+	sdr::row__ SRow = qNIL, TRow = qNIL;
+	ctn::E_CMITEMt( name_, nrow__ ) SName, TName;
+	ctn::E_CITEMt( fwtbsc::directory_, fwtbsc::drow__) SDir, TDir;
+	directory Dir;
+	fill_link__ Link;
+	drow__ Row = qNIL;
+	fwtbsc::exclusion__ Exclusion = fwtbsc::x_Undefined;
+qRB
+	SName.Init( SNames );
+	TName.Init( TNames );
+
+	SDir.Init( SDirectories );
+	TDir.Init( TDirectories );
+
+	SRow = SRows.First();
+	TRow = TRows.First();
+
+	while ( ( SRow != qNIL ) && ( TRow != qNIL ) ) {
+		Exclusion = SDir( SRows( SRow ) )().Exclusion;
+		Dir.Init();
+		Rows.Append( Row = Directories.New() );
+		switch ( Compare_( SName( SDir( SRows( SRow ) )().Name ), TName( TDir( TRows( TRow ) )().Name ) ) ) {
+		case -1:
+			if ( Exclusion == fwtbsc::xNo ) {
+				Dir().Name = Names.Append( SName() );	// Déjà positionné.
+				Dir().Status = sCreated;
+				Modified = true;
+				Directories.Store( Dir, Row );
+
+				Link.Init();
+				Link.Parent = Row;
+				Link.Source = SRows( SRow );
+				// Link.Target = TRows( TRow );	// Répertoire n'existant pas dans la cible, 'Target' est laissé à 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-répertoires en 'Created'.
+				Links.Push( Link );
+}
+			SRow = SRows.Next( SRow );
+			break;
+		case 0:
+			if ( Exclusion == fwtbsc::xNo ) {
+				Dir().Name = Names.Append( SName() );	// Déjà positionné.
+				Dir().Status = sSteady;
+				Directories.Store( Dir, Row );
+
+				Link.Init();
+				Link.Parent = Row;
+				Link.Source = SRows( SRow );
+				Link.Target = TRows( TRow );
+				Links.Push( Link );
+			}
+
+			SRow = SRows.Next( SRow );
+			TRow = TRows.Next( TRow );
+			break;
+		case 1:
+			Dir().Name = Names.Append( TName() );	// Déjà positionné.
+			Dir().Status = sRemoved;
+			TRow = TRows.Next( TRow );
+			Modified = true;
+			Directories.Store( Dir, Row );
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
+
+	if ( SRow != qNIL ) {
+		Complete_( SRow, SRows, SDirectories, SNames, sCreated, Rows, Directories, Names, Links );
+		Modified = true;
+	}
+
+	if ( TRow != qNIL ) {
+		Complete_( TRow, TRows, TDirectories, TNames, sRemoved, Rows, Directories, Names, Links );
+		Modified = true;
+	}
+qRR
+qRT
+qRE
+	return Modified;
+}
+
+static inline bso::bool__ Compare_(
+	fwtftr::drow__ SRow,
+	const fwtftr::file_tree_ &Source,
+	fwtftr::drow__ TRow,
+	const fwtftr::file_tree_ &Target,
+	drows_ &Rows,
+	directories_ &Directories,
+	names_ &Names,
+	fill_links_ &Links )
+{
+
+	ctn::E_CITEMt( fwtftr::directory_, fwtftr::drow__) SDir, TDir;
+
+	SDir.Init( Source.Directories );
+	TDir.Init( Target.Directories );
+
+	return Compare_( SDir( SRow ).Dirs, Source.Directories, Source.Names, TDir( TRow ).Dirs, Target.Directories, Target.Names, Rows, Directories, Names, Links );
+}
+
+template<typename row, typename tree, typename rows> void SetTree_(
+	row Parent,
+	tree &Tree,
+	const rows &Rows )
+{
+	sdr::row__ Row = Rows.First();
+
+	while ( Row != qNIL ) {
+		Tree.BecomeLastChild( Rows( Row ), Parent );
+
+		Row = Rows.Next( Row );
+	}
+}
+
+static void Complete_(
+	sdr::row__ Row,
+	const fwtftr::frows_ &Rows,
+	const fwtftr::files_ &Files,
+	const fwtftr::names_ &Names,
+	status__ Status,
+	frows_ &RRows,
+	files_ &RFiles,
+	names_ &RNames )
+{
+qRH
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+	file__ File;
+qRB
+	Name.Init( Names );
+
+	while ( Row != qNIL ) {
+		if ( Files( Rows( Row ) ).Exclusion == fwtbsc::xNo ) {
+			File.Init();
+			File.Name = RNames.Append( Name( Files( Rows( Row ) ).Name ) );
+			File.Status = Status;
+
+			RRows.Append( RFiles.Append( File ) );
+		}
+
+		Row = Rows.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
+static bso::bool__ IsDifferent_(
+	const fwtftr::file__ &SFile,
+	const fwtftr::file__ &TFile )
+{
+	return ( SFile.TimeStamp != TFile.TimeStamp ) || ( SFile.Size != TFile.Size );
+}
+
+static bso::bool__ Compare_(
+	const fwtftr::frows_ &SRows,
+	const fwtftr::files_ &SFiles,
+	const fwtftr::names_ &SNames,
+	const fwtftr::frows_ &TRows,
+	const fwtftr::files_ &TFiles,
+	const fwtftr::names_ &TNames,
+	frows_ &Rows,
+	files_ &Files,
+	names_ &Names )
+{
+	bso::bool__ Modified = false;
+qRH
+	sdr::row__ SRow = qNIL, TRow = qNIL;
+	ctn::E_CMITEMt( name_, nrow__ ) SName, TName;
+	file__ File;
+	fwtbsc::exclusion__ Exclusion = fwtbsc::x_Undefined;
+qRB
+	SName.Init( SNames );
+	TName.Init( TNames );
+
+	SRow = SRows.First();
+	TRow = TRows.First();
+
+	while ( ( SRow != qNIL ) && ( TRow != qNIL ) ) {
+		Exclusion = SFiles( SRows( SRow ) ).Exclusion;
+		switch ( Compare_( SName( SFiles( SRows( SRow ) ).Name ), TName( TFiles( TRows( TRow ) ).Name ) ) ) {
+		case -1:
+			if ( Exclusion == fwtbsc::xNo ) {
+				File.Init();
+				File.Name = Names.Append( SName() );	// Déjà positionné.
+				File.Status = sCreated;
+				Rows.Append( Files.Append( File ) );
+				Modified = true;
+			}
+			SRow = SRows.Next( SRow );
+			break;
+		case 0:
+			if ( ( Exclusion == fwtbsc::xNo ) && IsDifferent_( SFiles( SRows( SRow ) ), TFiles( TRows( TRow ) ) ) ) {
+				File.Init();
+				File.Name = Names.Append( SName() );	// Déjà positionné.
+				File.Status = sModified;
+				Rows.Append( Files.Append( File ) );
+				Modified = true;
+			}
+
+			SRow = SRows.Next( SRow );
+			TRow = TRows.Next( TRow );
+			break;
+		case 1:
+			File.Init();
+			File.Name = Names.Append( TName() );	// Déjà positionné.
+			File.Status = sRemoved;
+			Rows.Append( Files.Append( File ) );
+			TRow = TRows.Next( TRow );
+			Modified = true;
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
+
+	if ( SRow != qNIL ) {
+		Complete_( SRow, SRows, SFiles, SNames, sCreated, Rows, Files, Names );
+		Modified = true;
+	}
+
+	if ( TRow != qNIL ) {
+		Complete_( TRow, TRows, TFiles, TNames, sRemoved, Rows, Files, Names );
+		Modified = true;
+	}
+qRR
+qRT
+qRE
+	return Modified;
+}
+
+static bso::bool__ inline Compare_(
+	fwtftr::drow__ SRow,
+	const fwtftr::file_tree_ &Source,
+	fwtftr::drow__ TRow,
+	const fwtftr::file_tree_ &Target,
+	frows_ &Rows,
+	files_ &Files,
+	names_ &Names )
+{
+
+	ctn::E_CITEMt( fwtftr::directory_, fwtftr::drow__) SDir, TDir;
+
+	SDir.Init( Source.Directories );
+	TDir.Init( Target.Directories );
+
+	return Compare_( SDir( SRow ).Files, Source.Files, Source.Names, TDir( TRow ).Files, Target.Files, Target.Names, Rows, Files, Names );
+}
+
+static void MarkAsModified_(
+	scene_ &Scene,
+	drow__ Row )
+{
+	while ( ( Row != qNIL ) && ( Scene.Directories( Row )().Status == sSteady ) ) {
+		Scene.Directories( Row )().Status = sModified;
+
+		Row = Scene.Parent( Row );
+	}
+
+	Scene.Directories.Flush();
+}
+
+// Ajoute tous les sous-répertoires d'un nouveau répertoire.
+static void Put_(
+	drow__ Parent,
+	const fwtftr::drows_ &Rows,
+	const fwtftr::directories_ &Directories,
+	const fwtftr::names_ &Names,
+	drows_ &RRows,
+	directories_ &RDirectories,
+	names_ &RNames,
+	fill_links_ &Links )
+{
+qRH
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+	ctn::E_CITEMt( fwtbsc::directory_, fwtbsc::drow__) Directory;
+	directory Dir;
+	sdr::row__ Row = qNIL;
+	fill_link__ Link;
+qRB
+	Name.Init( Names );
+
+	Directory.Init( Directories );
+
+	Row = Rows.First();
+
+	while ( Row != qNIL ) {
+		if ( Directory( Rows( Row ) )().Exclusion == fwtbsc::xNo ) {
+			Dir.Init();
+			Dir().Name = RNames.Append( Name( Directory( Rows( Row ) )().Name ) );
+			Dir().Status = sCreated;
+
+			Link.Init();
+			Link.Parent = RDirectories.Append( Dir );
+			Link.Source = Rows( Row );
+			// Link.Target = TRows( TRow );	// Répertoire n'existant pas dans la cible, 'Target' est laissé à 'qNIL' pour signaler le fait qu'il faut mettre tous les sous-répertoires en 'Created'.
+			Links.Push( Link );
+
+			RRows.Append( Link.Parent );
+		}
+
+		Row = Rows.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
+static void Put_(
+	drow__ Parent,
+	fwtftr::drow__ Row,
+	const fwtftr::file_tree_ &Tree,
+	frows_ &FRows,
+	files_ &Files,
+	drows_ &DRows,
+	directories_ &Directories,
+	names_ &Names,
+	fill_links_ &Links )
+{
+
+	ctn::E_CITEMt( fwtftr::directory_, fwtftr::drow__) Dir;
+
+	Dir.Init( Tree.Directories );
+
+	Put_( Parent, Dir( Row ).Dirs, Tree.Directories, Tree.Names, DRows, Directories, Names, Links );
+	Complete_( Dir( Row ).Files.First(), Dir( Row ).Files, Tree.Files, Tree.Names, sCreated, FRows, Files, Names );
+}
+
+
+drow__ fwtcpr::Compare(
+	const fwtftr::file_tree_ &Source,
+	fwtftr::drow__ SourceRoot,
+	const fwtftr::file_tree_ &Target,
+	fwtftr::drow__ TargetRoot,
+	scene_ &Scene,
+	observer__ &Observer )
+{
+	drow__ Root = qNIL;
+qRH
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+	directory Dir;
+	fill_links Links;
+	fill_link__ Link;
+	bso::bool__ Modified = false;
+	bso::int__ Handled = 1;
+	tol::timer__ Timer;
+qRB
+	Name.Init( Source.Names );
+
+	Links.Init();
+
+	Dir.Init();
+	Dir().Status = sSteady;
+	Dir().Name = Scene.Names.Append( str::string() );
+
+	Root = Scene.Directories.New();
+
+	if ( &Observer != NULL )
+		Observer.Report( 0, Handled );
+
+	Modified = Compare_( SourceRoot, Source, TargetRoot, Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
+	Modified |= Compare_( SourceRoot, Source, TargetRoot, Target, Dir.Files, Scene.Files, Scene.Names );
+
+	Scene.Directories.Store( Dir, Root );
+	Scene.Allocate( Scene.Directories.Amount() );
+	SetTree_( Root, Scene, Dir.Dirs );
+
+	if ( Modified  )
+		MarkAsModified_( Scene, Root );
+
+	if ( &Observer != NULL ) {
+		Observer.Report( 0, Links.Amount() );
+		Timer.Init( Observer.Delay() );
+		Timer.Launch();
+	}
+
+	while ( Links.Amount() ) {
+		Handled++;
+
+		if ( Timer.IsElapsed() ) {
+			if ( &Observer != NULL )
+				Observer.Report( Handled, Handled + Links.Amount() );
+
+			Timer.Launch();
+		}
+
+		Modified = false;
+
+		Link.Init();
+		Links.Pop( Link );
+
+		Dir.Init();
+		Scene.Directories.Recall( Link.Parent, Dir );
+
+		if ( Link.Target != qNIL ){
+			Modified = Compare_( Link.Source, Source, Link.Target, Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
+			Modified |= Compare_( Link.Source, Source, Link.Target, Target, Dir.Files, Scene.Files, Scene.Names );
+		}
+		else // On est dans le cas d'un répertoire nouvellement crée, et on veut donc ajouter tout son contenu à l'arbre des modifications.
+			Put_( Link.Parent, Link.Source, Source, Dir.Files, Scene.Files, Dir.Dirs, Scene.Directories, Scene.Names, Links );
+
+		Scene.Directories.Store( Dir, Link.Parent );
+
+		Scene.Allocate( Scene.Directories.Amount() );
+
+		SetTree_( Link.Parent, Scene, Dir.Dirs );
+
+		if ( Modified  )
+			MarkAsModified_( Scene, Link.Parent );
+	}
+
+	if ( &Observer != NULL )
+		Observer.Report( Handled, Handled );
+
+qRR
+qRT
+qRE
+	return Root;
+}
+
+enum tag__
+{
+	tDirs,
+	tDir,
+	tFiles,
+	tFile,
+	t_amount,
+	t_Undefined
+};
+
+#define T( name )	case t##name : return #name; break
+
+static inline const char *GetLabel_(
+	version__ Version,
+	tag__ Tag )
+{
+	if ( Version != v0_1 )
+		qRChk();
+
+	switch ( Tag ) {
+	T( Dirs );
+	T( Dir );
+	T( Files );
+	T( File );
+	default:
+		qRGnr();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+enum attribute__
+{
+	aName,
+	aStatus,
+	aAmount,
+	a_amount,
+	a_Undefined
+};
+
+#define A( name )	case a##name : return #name; break
+
+static inline const char *GetLabel_(
+	version__ Version,
+	attribute__ Attribute )
+{
+	if ( Version != v0_1 )
+		qRChk();
+
+	switch ( Attribute ) {
+	A( Name );
+	A( Status );
+	A( Amount );
+	default:
+		qRGnr();
+		break;
+	}
+
+	return NULL;	// Pour éviter un 'warning'.
+}
+
+static inline void DumpCore_(
+	bso::bool__ IsFile,
+	version__ Version,
+	const core__ &Core,
+	const names_ &Names,
+	xml::writer_ &Writer )
+{
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+
+	Name.Init( Names );
+
+	Writer.PutAttribute( GetLabel_( Version, aName ), Name( Core.Name ) );
+
+	switch ( Core.Status ) {
+	case sSteady:
+		break;
+	case sCreated:
+		Writer.PutAttribute( GetLabel_( Version, aStatus ), GetLabel_( Version, sCreated ) );
+		break;
+	case sRemoved:
+		Writer.PutAttribute( GetLabel_( Version, aStatus ), GetLabel_( Version, sRemoved ) );
+		break;
+	case sModified:
+		if ( IsFile )
+			Writer.PutAttribute( GetLabel_( Version, aStatus ), GetLabel_( Version, sModified ) );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+}
+
+static inline void Dump_( 
+	version__ Version,
+	const frows_ &Rows,
+	const files_ &Files,
+	const names_ &Names,
+	xml::writer_ &Writer )
+{
+	if ( Rows.Amount() != 0 ) {
+		sdr::row__ Row = Rows.First();
+
+		Writer.PushTag( GetLabel_( Version, tFiles ) );
+		xml::PutAttribute( GetLabel_( Version, aAmount ), Rows.Amount(), Writer );
+
+		while ( Row != qNIL ) {
+			Writer.PushTag( GetLabel_( Version, tFile ) );
+
+			DumpCore_( true, Version, Files( Rows( Row ) ), Names, Writer );
+
+			Writer.PopTag();
+
+			Row = Rows.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+}
+
+static inline void PushDirectory_(
+	version__ Version,
+	const directory_ &Directory,
+	const names_ &Names,
+	xml::writer_ &Writer )
+{
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+
+	Name.Init( Names );
+
+	Writer.PushTag( GetLabel_( Version, tDir ) );
+
+	DumpCore_( false, Version, Directory(), Names, Writer );
+}
+
+void fwtcpr::Dump( 
+	drow__ Root,
+	const scene_ &Scene,
+	xml::writer_ &Writer,
+	version__ Version )
+{
+	dtr::browser__<drow__> Browser;
+	ctn::E_CITEMt( directory_, drow__ ) Directory;
+//	drow__ ChildNotHandled = qNIL;
+	bso::bool__ LastPop = false;
+
+	Directory.Init( Scene.Directories );
+
+	PushDirectory_( Version, Directory( Root ), Scene.Names, Writer );
+	Dump_( Version, Directory( Root ).Files, Scene.Files, Scene.Names, Writer );
+
+	Browser.Init( Root );
+
+	while ( Scene.Browse( Browser ) != qNIL ) {
+		switch ( Browser.GetKinship() ) {
+		case dtr::kChild:
+			Writer.PushTag( GetLabel_( Version, tDirs ) );
+			xml::PutAttribute( GetLabel_( Version, aAmount ), Directory( Scene.Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
+			PushDirectory_( Version, Directory( Browser.GetPosition() ), Scene.Names, Writer );
+			Dump_( Version, Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
+			break;
+		case dtr::kSibling:
+			Writer.PopTag();	// Dir
+			PushDirectory_( Version, Directory( Browser.GetPosition() ), Scene.Names, Writer );
+			Dump_( Version, Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
+			break;
+		case dtr::kParent:
+			Writer.PopTag();	// 'Dir'.
+			Writer.PopTag();	// 'Dirs'.
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
+
+	Writer.PopTag();
+}
+
+static void FillTagAutomat_(
+	version__ Version,
+	stsfsm::automat_ &Automat )
+{
+	stsfsm::Fill<tag__,version__>( Version, Automat, t_amount, GetLabel_ );
+}
+
+static void FillAttributeAutomat_(
+	version__ Version,
+	stsfsm::automat_ &Automat )
+{
+	stsfsm::Fill<attribute__,version__>( Version, Automat, a_amount, GetLabel_ );
+}
+
+#define UNDEFINED_ID	FWTBSC_UNDEFINED_ID
+
+inline static int GetItem_(
+	const str::string_ &Name,
+	const stsfsm::automat_ &Automat )
+{
+	return stsfsm::GetId( Name, Automat );
+}
+
+static tag__ GetTag_(
+	const str::string_ &Name,
+	const stsfsm::automat_ &Automat )
+{
+	int Id = GetItem_( Name, Automat );
+
+	if ( Id == stsfsm::UndefinedId )
+		return t_Undefined;
+	else if ( Id >= t_amount )
+		qRGnr();
+	else
+		return (tag__)Id;
+
+	return t_Undefined;	// Pour éviter un 'warning'.
+}
+
+static attribute__ GetAttribute_(
+	const str::string_ &Name,
+	const stsfsm::automat_ &Automat )
+{
+	int Id = GetItem_( Name, Automat );
+
+	if ( Id == stsfsm::UndefinedId )
+		return a_Undefined;
+	else if ( Id >= a_amount )
+		qRGnr();
+	else
+		return (attribute__)Id;
+
+	return a_Undefined;	// Pour éviter un 'warning'.
+}
+enum kind__ {
+	kDir,
+	kDirs,
+	kFile,
+	kFiles,
+	k_amount,
+	k_Undefined
+};
+
+typedef bso::uint__ depth__;
+
+#define DEPTH_MAX	BSO_UINT_MAX
+
+drow__ fwtcpr::Load(
+	xml::parser___ &Parser,
+	version__ Version,
+	scene_ &Scene,
+	load_observer__ &Observer )
+{
+	drow__ Root = qNIL;
+qRH
+	stsfsm::automat TagAutomat, AttributeAutomat;
+	file__ File;
+	directory Dir;
+	kind__ Kind = kDir;
+	drow__ DRow = qNIL;
+	bso::bool__ Continue = true;
+	depth__ Depth = 0;
+	drow__ Current = qNIL, New = qNIL;
+	sdr::row__ Error = qNIL;
+	bso::uint__ Handled = 0, Total = 1;	// Pour le 'root'.
+	tol::timer__ Timer;
+qRB
+	TagAutomat.Init();
+	FillTagAutomat_(Version,  TagAutomat );
+
+	AttributeAutomat.Init();
+	FillAttributeAutomat_( Version, AttributeAutomat );
+
+	if ( &Observer != NULL ) {
+		Observer.Report( 0, 0 );
+		Timer.Init( Observer.Delay() );
+		Timer.Launch();
+	}
+
+
+	do {
+		if ( Timer.IsElapsed() ) {
+			if ( &Observer != NULL )
+				Observer.Report( Handled, Total );
+
+			Timer.Launch();
+		}
+		switch ( Parser.Parse( xml::tfObvious ) ) {
+		case xml::tStartTag:
+			if ( Depth >= DEPTH_MAX )
+				qRLmt();
+			Depth++;
+			switch ( GetTag_( Parser.TagName(), TagAutomat ) ) {
+			case tDirs:
+				Kind = kDirs;
+
+				if ( Dir().Status == s_Undefined )
+					Dir().Status = sSteady;
+
+				Scene.Directories( Current ) = Dir;
+				Scene.Directories.Flush();
+
+				break;
+			case tFiles:
+				Kind = kFiles;
+				break;
+			case tDir:
+				Kind = kDir;
+
+				Scene.Directories.Flush();
+				New = Scene.Directories.New();
+
+				Dir.Init();
+
+				Scene.dtree_::Allocate( Scene.Directories.Amount() );
+
+				if ( Current != qNIL ) {
+					Scene.Directories( Current ).Dirs.Append( New );
+					Scene.BecomeLastChild( New, Current );
+				} else
+					Root = New;
+
+				Current = New;
+				break;
+			case tFile:
+				Kind = kFile;
+				File.Init();
+				break;
+			default:
+				qRVct();
+				break;
+			}
+			break;
+		case xml::tAttribute:
+			switch ( GetAttribute_( Parser.AttributeName(), AttributeAutomat ) ) {
+			case aAmount:
+				switch ( Kind ) {
+				case kFile:
+				case kFiles:
+				case kDir:
+					break;
+				case kDirs:
+					Error = qNIL;
+					Total += Parser.Value().ToUInt( &Error );
+
+					if ( Error != qNIL )
+						qRVct();
+
+					break;
+				default:
+					qRGnr();
+					break;
+				}
+				break;
+			case aName:
+				switch ( Kind ) {
+				case kDir:
+					Dir().Name = Scene.Names.Append( Parser.Value() );
+					break;
+				case kFile:
+					File.Name = Scene.Names.Append( Parser.Value() );
+					break;
+				default:
+					qRGnr();
+					break;
+				}
+				break;
+			case aStatus:
+				switch ( Kind ) {
+				case kFile:
+					File.Status = GetStatus_( Version, Parser.Value() );
+					break;
+				case kDir:
+					Dir().Status = GetStatus_( Version, Parser.Value() );
+					break;
+				default:
+					qRGnr();
+					break;
+				}
+				break;
+			default:
+				qRVct();
+				break;
+			}
+			break; 
+		case xml::tValue:
+			qRGnr();
+			break;
+		case xml::tEndTag:
+			if ( Depth == 0 )
+				qRGnr();
+
+			Depth--;
+
+			switch ( GetTag_( Parser.TagName(), TagAutomat ) ) {
+			case tDirs:
+				Dir = Scene.Directories( Current );
+				Scene.Directories.Flush();
+				break;
+			case tDir:
+				Kind = k_Undefined;
+
+				if ( Dir().Status == s_Undefined )
+					Dir().Status = sSteady;
+
+				Scene.Directories( Current ) = Dir;
+				Handled++;
+				Scene.Directories.Flush();
+
+				if ( Current == Root )
+					Continue = false;
+				else
+					Current = Scene.Parent( Current );
+
+				break;
+			case tFiles:
+				break;
+			case tFile:
+				Kind = k_Undefined;
+
+				if ( File.Status == s_Undefined )
+					File.Status = sSteady;
+
+				Dir.Files.Append( Scene.Files.Append( File ) );
+
+				break;
+			}
+			break;
+		case xml::t_Error:
+			qRVct();
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	} while ( Depth != 0 );
+
+	if ( &Observer != NULL )
+		Observer.Report( Handled, Total );
+qRR
+qRT
+qRE
+	return Root;
+}
+
+class clean_link__ {
+public:
+	drow__ Parent;
+	drow__ Row;
+	void reset( bso::bool__ = true )
+	{
+		Parent = qNIL;
+		Row = qNIL;
+	}
+	E_CDTOR( clean_link__ );
+	void Init( void )
+	{
+		Parent = qNIL;
+		Row = qNIL;
+	}
+};
+
+typedef stk::E_BSTACK_( clean_link__ ) clean_links_;
+E_AUTO( clean_links );
+
+
+static void Fill_(
+	const drows_ &Rows,
+	const directories_ &Directories,
+	const names_ &Names,
+	drows_ &NewRows,
+	directories_ &NewDirectories,
+	names_ &NewNames,
+	clean_links_ &Links )
+{
+qRH
+	sdr::row__ Row = qNIL;
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+	ctn::E_CITEMt( directory_, drow__) Dir;
+	directory NewDir;
+	clean_link__ Link;
+qRB
+	Name.Init( Names );
+	Dir.Init( Directories );
+
+	Row = Rows.First();
+
+	while ( Row != qNIL) {
+		if ( Dir( Rows( Row ) )().Status != sSteady ) {
+			NewDir.Init();
+			NewDir().Name = NewNames.Append( Name( Dir( Rows( Row ) )().Name ) );
+			NewDir().Status = Dir( Rows( Row ) )().Status;
+
+			Link.Init();
+			NewRows.Append( Link.Parent = NewDirectories.Append( NewDir ) );
+			Link.Row = Rows( Row );
+			Links.Push( Link );
+
+		}
+
+		Row = Rows.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
+static inline void Fill_(
+	drow__ Row,
+	const scene_ &Scene,
+	drows_ &Rows,
+	directories_ &Directories,
+	names_ &Names,
+	clean_links_ &Links )
+{
+	ctn::E_CITEMt( directory_, drow__) Dir;
+
+	Dir.Init( Scene.Directories );
+
+	Fill_( Dir( Row ).Dirs, Scene.Directories, Scene.Names, Rows, Directories, Names, Links );
+}
+
+static void Fill_(
+	const frows_ &Rows,
+	const files_ &Files,
+	const names_ &Names,
+	frows_ &NewRows,
+	files_ &NewFiles,
+	names_ &NewNames )
+{
+qRH
+	sdr::row__ Row = qNIL;
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+	file__ File;
+qRB
+	Name.Init( Names );
+	Row = Rows.First();
+
+	while ( Row != qNIL ) {
+		if ( Files( Rows( Row ) ).Status != sSteady ) {
+			File.Init();
+			File.Name = NewNames.Append( Name( Files( Rows( Row ) ).Name ) );
+			File.Status = Files( Rows( Row ) ).Status;
+			NewRows.Append( NewFiles.Append( File ) );
+			Row = Rows.Next( Row );
+		}
+	}
+qRR
+qRT
+qRE
+}
+
+static void inline Fill_(
+	drow__ Row,
+	const scene_ &Scene,
+	frows_ &Rows,
+	files_ &Files,
+	names_ &Names )
+{
+
+	ctn::E_CITEMt( directory_, drow__) Dir;
+
+	Dir.Init( Scene.Directories );
+
+	Fill_( Dir( Row ).Files, Scene.Files, Scene.Names, Rows, Files, Names );
+}
+
+drow__ fwtcpr::Clean(
+	const scene_ &Scene,
+	drow__ Root,
+	scene_ &NewScene )
+{
+	drow__ NewRoot = qNIL;
+qRH
+	ctn::E_CMITEMt( name_, nrow__ ) Name;
+	directory Dir;
+	clean_links Links;
+	clean_link__ Link;
+	ctn::E_CITEMt( directory_, drow__) Directory;
+qRB
+	Name.Init( Scene.Names );
+	Links.Init();
+
+	Directory.Init( Scene.Directories );
+
+	Dir.Init();
+	Dir().Status = Directory( Root )().Status;
+	Dir().Name = NewScene.Names.Append( str::string() );
+
+	NewRoot = NewScene.Directories.New();
+
+	Fill_( Root, Scene, Dir.Dirs, NewScene.Directories, NewScene.Names, Links );
+	Fill_( Root, Scene, Dir.Files, NewScene.Files, NewScene.Names );
+
+	NewScene.Directories.Store( Dir, Root );
+
+	NewScene.Allocate( NewScene.Directories.Amount() );
+	SetTree_( Root, NewScene, Dir.Dirs );
+
+	while ( Links.Amount() ) {
+		Link.Init();
+		Links.Pop( Link );
+
+		Dir.Init();
+		NewScene.Directories.Recall( Link.Parent, Dir );
+
+		Fill_( Link.Row, Scene, Dir.Dirs, NewScene.Directories, NewScene.Names, Links );
+		Fill_( Link.Row, Scene, Dir.Files, NewScene.Files, NewScene.Names );
+
+		NewScene.Directories.Store( Dir, Link.Parent );
+
+		NewScene.Allocate( NewScene.Directories.Amount() );
+		SetTree_( Link.Parent, NewScene, Dir.Dirs );
+	}
+qRR
+qRT
+qRE
+	return Root;
+}
+
+drow__ fwtcpr::Clean(
+	scene_ &Scene,
+	drow__ Root )
+{
+qRH
+	scene NewScene;
+qRB
+	NewScene.Init();
+
+	Root = Clean( Scene, Root, NewScene );
+
+	Scene = NewScene;
+qRR
+qRT
+qRE
+	return Root;
+}
+
+Q37_GCTOR( fwtcpr )
+{
+	FillVersionAutomat_();
+	FillStatusAutomats_();
+}
