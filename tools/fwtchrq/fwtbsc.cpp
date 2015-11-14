@@ -124,9 +124,6 @@ qRE
 	return State;
 }
 
-
-
-
 void fwtbsc::observer___::Report_(
 	bso::uint__ Handled,
 	bso::uint__ Total )

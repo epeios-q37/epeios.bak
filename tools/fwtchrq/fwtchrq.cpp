@@ -178,7 +178,7 @@ int scltool::SCLTOOLMain(
 	int ExitValue = EXIT_FAILURE;
 qRH
 qRB
-#pragma message ("à enlever !")
+#pragma message ( __LOC__ "à enlever !")
 	cio::COut << "----->" << sizeof(time_t) << txf::tab << sizeof( bso::s32__ ) <<  "<-----" << txf::nl << txf::commit;
 
 	if ( Command == "Version" )

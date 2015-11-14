@@ -20,7 +20,7 @@
 // File WaTcher FileTRee
 
 #ifndef FWTFTR__INC
-#define FWTFTR__INC
+# define FWTFTR__INC
 
 # ifdef XXX_DBG
 #	define FWTFTR__DBG
@@ -184,7 +184,6 @@ namespace fwtftr {
 		}
 	};
 
-
 	class processing_observer__
 	: public fwtbsc::observer__
 	{
@@ -200,8 +199,7 @@ namespace fwtftr {
 			return FWTFTRReport( Handled, Total );
 		}
 	};
-
-
+	
 	drow__ Process(
 		const fwtdct::content_ &Content,
 		file_tree_ &Tree,

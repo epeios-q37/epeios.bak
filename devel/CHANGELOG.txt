@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-13 :
+- TOL :
+	- Cosmetic change.
+
 2015-11-12 :
 - DTR :
 	% Adding files hook related features.

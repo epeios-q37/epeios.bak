@@ -34,8 +34,6 @@ void Generic( int argc, char *argv[] )
 {
 qRH
 qRB
-	tol::System("/s \"c:/Program Files/7-Zip/7z.exe\" \"a\"");
-	tol::System("\"c:\\Program Files\\7-Zip\\7z.exe\" \"a\"");
 qRR
 qRT
 qRE

@@ -11,7 +11,7 @@
 			<xsl:apply-templates select="Frontend"/>
 			<br/>
 			<xsl:apply-templates select="Software"/>
-			<br/>
+			<br/>-
 			<xsl:apply-templates select="Launcher"/>
 			<br/>
 			<xsl:apply-templates select="Backend"/>

@@ -487,8 +487,8 @@ Utile pour afficher le numro de ligne dans un #pragma message (...). */
 # define E_STRING(x) E__STRING(x)
 
 // Inspir du site msdn.microsoft.com.
-// Le ' :'  la fin est ncessaire pour que Visual C++ puisse se positionner sur la bonne ligne.
-# define __LOC__ __FILE__ "(" E_STRING(__LINE__) ") :"
+// Le ' : '  la fin est ncessaire pour que Visual C++ puisse se positionner sur la bonne ligne.
+# define __LOC__ __FILE__ "(" E_STRING(__LINE__) ") : "
 
 // Utilisation :
 // #pragma message(__LOC__ " : Message")
@@ -1417,7 +1417,7 @@ template <typename type, type False, type Error, type Undefined> bso::bool__ ope
 	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	tol::extended_enum__<type, False, Error, Undefined> Op2 )
 {
-	return Op1.RawValue() != Op2.RawValue();
+	return Op1.Value() != Op2.Value();
 }
 
 template <typename type, typename _type, type False, type Error, type Undefined> bso::bool__ operator!=(
@@ -1431,7 +1431,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 	tol::extended_enum__<type, False, Error, Undefined> Op1,
 	_type Op2 )
 {
-	return Op1.RawValue() != Op2;
+	return Op1.Value() != Op2;
 }
 
 #if 0

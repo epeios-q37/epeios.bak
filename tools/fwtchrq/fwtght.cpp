@@ -25,34 +25,6 @@
 using namespace fwtght;
 using namespace fwtbsc;
 
-static const fnm::name___ &GetGhostLocalizedName_(
-	fwtght::grow__ Row,
-	const str::string_ &Root,
-	const str::string_ &Path,
-	const ghosts_oddities_ &GO,
-	fnm::name___ &LocalizedName )
-{
-qRH
-	str::string Name, Localization;
-	bso::integer_buffer__ Buffer;
-qRB
-	Name.Init();
-
-	Name.Append( GO.Prefix );
-	Name.Append( '.' );
-	Name.Append( bso::Convert( *Row, Buffer ) );
-	Name.Append( '.' );
-
-	Localization.Init( Root );
-	Localization.Append( Path );
-
-	fnm::BuildPath( Localization, Name, GO.Suffix, LocalizedName );
-qRR
-qRT
-qRE
-	return LocalizedName;
-}
-
 static inline status__ CreateGhostDir_( const fnm::name___ &Name )
 {
 	if ( dir::CreateDir( Name ) != dir::sOK ) {
@@ -87,7 +59,7 @@ qRB
 	Ghost.Name = BaseName;
 
 	LocalizedName.Init();
-	GetGhostLocalizedName_( Row = Ghosts.Add( Ghost ), Root, Path, GO, LocalizedName );
+	GetGhostLocalizedName( Row = Ghosts.Add( Ghost ), Root, Path, GO, LocalizedName );
 
 	Status = CreateGhostDir_( LocalizedName );
 qRR
@@ -112,13 +84,43 @@ qRT
 qRE
 }
 
-static const fnm::name___ &GetGhostsDataDirName_(
+const fnm::name___ &fwtght::GetGhostLocalizedName(
+	fwtght::grow__ Row,
+	const str::string_ &Root,
+	const str::string_ &Path,
+	const ghosts_oddities_ &GO,
+	fnm::name___ &LocalizedName )
+{
+qRH
+	str::string Name, Localization;
+	bso::integer_buffer__ Buffer;
+qRB
+	Name.Init();
+
+	Name.Append( GO.Prefix );
+	Name.Append( '.' );
+	Name.Append( bso::Convert( *Row, Buffer ) );
+	Name.Append( '.' );
+
+	Localization.Init( Root );
+	Localization.Append( Path );
+
+	fnm::BuildPath( Localization, Name, GO.Suffix, LocalizedName );
+qRR
+qRT
+qRE
+	return LocalizedName;
+}
+
+const fnm::name___ &fwtght::GetGhostsDataDirName(
 	const str::string_ &Root,
 	const ghosts_oddities_ &GO,
 	fnm::name___ &Name )
 {
-	return GetGhostLocalizedName_( 0, Root, str::string(), GO, Name );
+	return GetGhostLocalizedName( 0, Root, str::string(), GO, Name );
 }
+
+
 
 ghosts_ &fwtght::GetRWGhosts(
 	const str::string_ &Root,
@@ -129,7 +131,7 @@ qRH
 	fnm::name___ Name;
 qRB
 	Name.Init();
-	GetGhostsDataDirName_( Root, GO, Name );
+	GetGhostsDataDirName( Root, GO, Name );
 
 	if ( !fil::Exists( Name ) )
 		switch ( CreateGhostDir_( Name ) ) {
@@ -172,7 +174,7 @@ qRH
 	fnm::name___ Name;
 qRB
 	Name.Init();
-	GetGhostsDataDirName_( Root, GO, Name );
+	GetGhostsDataDirName( Root, GO, Name );
 
 	if ( fil::Exists( Name ) ) {
 		SetGhostsFilesHook_( Name, uys::mReadOnly, Rack.FilesHook );
@@ -224,7 +226,6 @@ const str::string_ &fwtght::GetPath(
 
 	return Path;
 }
-
 
 static void ShowGhosts_(
 	const ghosts_ &Ghosts,

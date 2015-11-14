@@ -227,7 +227,6 @@ qRE
 typedef bch::E_BUNCHt_( drow__, irow__ ) itod_;
 E_AUTO( itod );
 
-
 typedef bch::E_BUNCHt_( drows_ *, irow__ ) drows_set_;
 E_AUTO( drows_set );
 
@@ -561,8 +560,6 @@ static inline void DumpRegular_(
 
 	xml::PutAttribute( GetLabel_( Version, aTimestamp ), Regular.TimeStamp, Writer );
 }
-
-
 
 static void Dump_( 
 	version__ Version,
@@ -1068,8 +1065,6 @@ qRT
 qRE
 }
 
-
-
 void fwtftr::Sort(
 	drow__ Root,
 	file_tree_ &Tree,
@@ -1245,11 +1240,11 @@ qRB
 				case kFiles:
 					break;
 				case kDir:
-#pragma message ("à remettre !")
-//					Parser.Value().ToNumber( Dir().TimeStamp, &Error );
+#pragma message ( __LOC__ "Problème !" )
+					Parser.Value().ToNumber( Dir().TimeStamp, &Error );
 					break;
 				case kFile:
-#pragma message ("à remettre !")
+#pragma message ( __LOC__ "Problème !" )
 					Parser.Value().ToNumber( File.TimeStamp, &Error );
 					break;
 				default:
