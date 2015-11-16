@@ -57,6 +57,8 @@ namespace sclbacknd {
 	private:
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
 		flx::void_oflow_driver___ _VoidFlowDriver;
+		rgstry::multi_level_registry _Registry;
+		rgstry::level__ _RegistrySetupLevel;
 		void *_UP;
 	protected:
 		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) override
@@ -94,6 +96,8 @@ namespace sclbacknd {
 			_daemon___::reset( P );
 			_RequestLogFunctions.reset( P );
 			_VoidFlowDriver.reset( P );
+			_Registry.reset( P );
+			_RegistrySetupLevel = rgstry::UndefinedLevel;
 			_UP = NULL;
 		}
 		E_CVDTOR( backend___ );
@@ -111,7 +115,26 @@ namespace sclbacknd {
 			_daemon___::Init();
 			_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
 			_RequestLogFunctions.Init( _VoidFlowDriver );
+			_Registry.Init();
+			_Registry.Push( sclrgstry::GetCommonRegistry() );
+			_RegistrySetupLevel = _Registry.CreateEmbedded( str::string( "Setup" ) );
 			_UP = UP;
+		}
+		const rgstry::multi_level_registry_ &Registry( void ) const
+		{
+			return _Registry;
+		}
+		rgstry::multi_level_registry_ &Registry( void )
+		{
+			return _Registry;
+		}
+		rgstry::level__ GetRegistrySetupLevel( void ) const
+		{
+			return _RegistrySetupLevel;
+		}
+		void FillSetupRegistry( const str::string_ &SetupId )
+		{
+			sclrgstry::FillSetupRegistry( _Registry, _RegistrySetupLevel, SetupId );
 		}
 		void *UP( void ) const
 		{

@@ -89,8 +89,6 @@ rgstry::entry___ sclrgstry::definition::plugin::Filename( "Filename", ::definiti
 rgstry::entry___ sclrgstry::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
 rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
 
-static rgstry::entry___ DefaultSetup_( "@DefaultSetup", Parameters );
-
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
 registry_ &sclrgstry::GetCommonRegistry( void )
@@ -293,21 +291,19 @@ qRE
 	return Content;
 }
 
-static void FillRegistryWithSetup_(
+void sclrgstry::FillSetupRegistry(
 	registry_ &Registry,
 	level__ Level,
-	const str::string_ &RawSetupId )
+	const str::string_ &Id )
 {
 qRH
-	str::string Setup;
+		str::string Setup;
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
-	str::string EntryPath, SetupId;
+	str::string EntryPath;
 qRB
-	SetupId.Init( RawSetupId );
-
-	if ( SetupId.Amount() == 0 )
-		Registry.GetValue( DefaultSetup_, SetupId );
+	if ( Id.Amount() == 0 )
+		qRFwk();
 
 	Setup.Init();
 
@@ -315,7 +311,7 @@ qRB
 	sclrgstry::Parameters.GetPath( Setup );
 	Setup.Append('>' );
 
-	GetSelectedSetupContent_( SetupId, Setup );
+	GetSelectedSetupContent_( Id, Setup );
 
 	Setup.Append( "</" );
 	sclrgstry::Parameters.GetPath( Setup );
@@ -330,12 +326,9 @@ qRT
 qRE
 }
 
-void sclrgstry::FillSetupRegistry( const str::string_ &Id )
-{
-	FillRegistryWithSetup_( Registry_, SetupLevel_, Id );
-}
-
-void sclrgstry::FillSetupRegistry( void )
+void sclrgstry::FillSetupRegistry(
+	registry_ &Registry,
+	level__ Level )
 {
 qRH
 	str::string Id;
@@ -343,7 +336,7 @@ qRB
 	Id.Init();
 
 	if ( OGetValue( Registry_, Setup_, Id ) )
-		FillSetupRegistry( Id );
+		FillSetupRegistry( Registry, Level, Id );
 qRR
 qRT
 qRE

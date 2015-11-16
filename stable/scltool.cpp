@@ -1492,7 +1492,7 @@ qRB
 
 	sclmisc::LoadProject();
 
-	sclrgstry::FillSetupRegistry();
+	sclmisc::FillSetupRegistry();
 
 	sclmisc::RefreshBaseLanguage();
 

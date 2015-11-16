@@ -174,6 +174,16 @@ namespace sclmisc {
 	rgstry::level__ GetRegistrySetupLevel( void );
 	rgstry::level__ GetRegistryArgumentsLevel( void );
 
+	inline void FillSetupRegistry( const str::string_ &Id )
+	{
+		sclrgstry::FillSetupRegistry( sclrgstry::GetCommonRegistry(), sclrgstry::GetSetupLevel(), Id );
+	}
+
+	inline void FillSetupRegistry( void )
+	{
+		sclrgstry::FillSetupRegistry( sclrgstry::GetCommonRegistry(), sclrgstry::GetSetupLevel() );
+	}
+
 	inline void AddValue(
 		const str::string_ &Value,
 		const rgstry::tentry__ &Entry )

@@ -120,9 +120,14 @@ namespace sclrgstry {
 
 	void EraseSetupRegistry( void );
 
-	void FillSetupRegistry( const str::string_ &Id );
+	void FillSetupRegistry(
+		registry_ &Registry,
+		level__ Level,
+		const str::string_ &Id );
 
-	void FillSetupRegistry( void );
+	void FillSetupRegistry(
+		registry_ &Registry,
+		level__ Level );	// Fill the setup registry if one is given.
 
 	void ReportIfNoSetupId( void );
 
