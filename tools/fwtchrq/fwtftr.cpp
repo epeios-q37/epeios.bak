@@ -670,6 +670,86 @@ qRT
 qRE
 }
 
+namespace {
+	void SetFileTreeFilesHook_(
+		const fnm::name___ &Path,
+		uys::mode__ Mode,
+		file_tree_files_hook___ &FilesHook )
+	{
+	qRH
+		file_tree_hook_filenames___ Filenames;
+	qRB
+		Filenames.Init( Path, "tree" );
+
+		FilesHook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
+	qRR
+	qRT
+	qRE
+	}
+
+	void GetFileTree_(
+		fnm::name___ &DataDirName,
+		uys::mode__ Mode,
+		file_tree_rack___ &Rack )
+	{
+		SetFileTreeFilesHook_( DataDirName, Mode, Rack.Hook );
+
+		switch ( Plug( Rack.Tree, Rack.Hook ).Value() ) {
+		case uys::sExists:
+			if ( !Rack.Hook.Bind().Boolean() )
+				qRGnr();
+			break;
+		case uys::sAbsent:
+			Rack.Tree.Init();
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
+}
+
+file_tree_ &fwtftr::GetRWFileTree(
+	const str::string_ &Root,
+	const fwtbsc::ghosts_oddities_ &GO,
+	file_tree_rack___ &Rack )
+{
+qRH
+	fnm::name___ Name;
+qRB
+	Name.Init();
+	GetGhostsDataDirName( Root, GO, Name );
+
+	if ( !fil::Exists(Name) )
+		qRGnr();
+
+	GetFileTree_( Name, uys::mReadWrite, Rack );
+qRR
+qRT
+qRE
+	return Rack.Tree;
+}
+
+const file_tree_ &fwtftr::GetROFileTree(
+	const str::string_ &Root,
+	const fwtbsc::ghosts_oddities_ &GO,
+	file_tree_rack___ &Rack )
+{
+qRH
+	fnm::name___ Name;
+qRB
+	Name.Init();
+	GetGhostsDataDirName( Root, GO, Name );
+
+	if ( fil::Exists( Name ) )
+		GetFileTree_( Name, uys::mReadOnly, Rack );
+	else
+		Rack.Ghosts.Init();
+qRR
+qRT
+qRE
+	return Rack.Ghosts;
+}
 
 static void FillTagAutomat_(
 	version__ Version,

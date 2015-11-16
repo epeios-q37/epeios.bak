@@ -359,6 +359,7 @@ namespace fwtbsc {
 			Names_.Init( Filenames.Names_, Mode, Behavior, ID );
 			Oddities_.Init( Filenames.Oddities_, Mode, Behavior, ID );
 		}
+		uys::state__ Bind( void );
 		friend uys::state__ Plug(
 			kernel_ &Kernel,
 			kernel_files_hook___ &Hook );
@@ -408,6 +409,18 @@ namespace fwtbsc {
 	};
 
 	E_AUTO( ghosts_oddities );
+
+	const fnm::name___ &GetGhostLocalizedName(
+		sdr::row_t__ Row,
+		const str::string_ &Root,
+		const str::string_ &Path,
+		const fwtbsc::ghosts_oddities_ &GO,
+		fnm::name___ &LocalizedName );
+
+	const fnm::name___ &GetGhostsDataDirName(
+		const str::string_ &Root,
+		const fwtbsc::ghosts_oddities_ &GO,
+		fnm::name___ &Name );
 
 	struct limitations__
 	{

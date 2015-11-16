@@ -94,7 +94,69 @@ qRT
 qRE
 }
 
-#define T( m, i )\
+const fnm::name___ &fwtbsc::GetGhostLocalizedName(
+	sdr::row_t__ Row,
+	const str::string_ &Root,
+	const str::string_ &Path,
+	const ghosts_oddities_ &GO,
+	fnm::name___ &LocalizedName )
+{
+qRH
+	str::string Name, Localization;
+	bso::integer_buffer__ Buffer;
+qRB
+	Name.Init();
+
+	Name.Append( GO.Prefix );
+	Name.Append( '.' );
+	Name.Append( bso::Convert( Row, Buffer ) );
+	Name.Append( '.' );
+
+	Localization.Init( Root );
+	Localization.Append( Path );
+
+	fnm::BuildPath( Localization, Name, GO.Suffix, LocalizedName );
+qRR
+qRT
+qRE
+	return LocalizedName;
+}
+
+const fnm::name___ &fwtbsc::GetGhostsDataDirName(
+	const str::string_ &Root,
+	const ghosts_oddities_ &GO,
+	fnm::name___ &Name )
+{
+	return GetGhostLocalizedName( 0, Root, str::string(), GO, Name );
+}
+
+#define B( i )\
+	if ( i.Bind() != State ) {\
+		State = uys::sInconsistent;\
+		qRReturn;\
+	}\
+
+uys::state__ fwtbsc::kernel_files_hook___::Bind( void )
+{
+	uys::state__ State = uys::s_Undefined;
+qRH
+	State = Goofs_.Bind();
+
+	if ( State.IsError() )
+		qRReturn;
+
+	B( Files_ );
+	B( Directories_ );
+	B( Names_ );
+	B( Oddities_ );
+qRB
+qRR
+qRT
+qRE
+	return State;
+}
+
+#define P( m, i )\
 	if ( m::Plug( Kernel.i, Hook.i##_ ) != State ) {\
 		State = uys::sInconsistent;\
 		qRReturn;\
@@ -112,10 +174,10 @@ qRB
 	if ( State.IsError() )
 		qRReturn;
 
-	T( bch, Files );
-	T( ctn, Directories );
-	T( ctn, Names );
-	T( ctn, Oddities );
+	P( bch, Files );
+	P( ctn, Directories );
+	P( ctn, Names );
+	P( ctn, Oddities );
 qRR
 qRT
 	if ( State.IsError() )

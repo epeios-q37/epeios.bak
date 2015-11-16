@@ -126,17 +126,15 @@ namespace fwtght {
 		s_Undefined
 	};
 
-	const fnm::name___ &GetGhostLocalizedName(
+	inline const fnm::name___ &GetGhostLocalizedName(
 		grow__ Row,
 		const str::string_ &Root,
 		const str::string_ &Path,
 		const fwtbsc::ghosts_oddities_ &GO,
-		fnm::name___ &LocalizedName );
-
-	const fnm::name___ &GetGhostsDataDirName(
-		const str::string_ &Root,
-		const fwtbsc::ghosts_oddities_ &GO,
-		fnm::name___ &Name );
+		fnm::name___ &LocalizedName )
+	{
+		return fwtbsc::GetGhostLocalizedName( *Row, Root, Path, GO, LocalizedName );
+	}
 
 	ghosts_ &GetRWGhosts(
 		const str::string_ &Root,

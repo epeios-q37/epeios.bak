@@ -84,43 +84,28 @@ qRT
 qRE
 }
 
-const fnm::name___ &fwtght::GetGhostLocalizedName(
-	fwtght::grow__ Row,
-	const str::string_ &Root,
-	const str::string_ &Path,
-	const ghosts_oddities_ &GO,
-	fnm::name___ &LocalizedName )
-{
-qRH
-	str::string Name, Localization;
-	bso::integer_buffer__ Buffer;
-qRB
-	Name.Init();
+namespace {
+	void GetGhosts_(
+		fnm::name___ &DataDirName,
+		uys::mode__ Mode,
+		rack___ &Rack )
+	{
+		SetGhostsFilesHook_( DataDirName, Mode, Rack.FilesHook );
 
-	Name.Append( GO.Prefix );
-	Name.Append( '.' );
-	Name.Append( bso::Convert( *Row, Buffer ) );
-	Name.Append( '.' );
-
-	Localization.Init( Root );
-	Localization.Append( Path );
-
-	fnm::BuildPath( Localization, Name, GO.Suffix, LocalizedName );
-qRR
-qRT
-qRE
-	return LocalizedName;
+		switch ( lstctn::Plug( Rack.Ghosts, Rack.FilesHook ).Value() ) {
+		case uys::sExists:
+			if ( !Rack.FilesHook.Bind().Boolean() )
+				qRGnr();
+			break;
+		case uys::sAbsent:
+			Rack.Ghosts.Init();
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
 }
-
-const fnm::name___ &fwtght::GetGhostsDataDirName(
-	const str::string_ &Root,
-	const ghosts_oddities_ &GO,
-	fnm::name___ &Name )
-{
-	return GetGhostLocalizedName( 0, Root, str::string(), GO, Name );
-}
-
-
 
 ghosts_ &fwtght::GetRWGhosts(
 	const str::string_ &Root,
@@ -133,7 +118,7 @@ qRB
 	Name.Init();
 	GetGhostsDataDirName( Root, GO, Name );
 
-	if ( !fil::Exists( Name ) )
+	if ( !fil::Exists(Name) ) {
 		switch ( CreateGhostDir_( Name ) ) {
 		case sCreated:
 			break;
@@ -144,21 +129,9 @@ qRB
 			qRGnr();
 			break;
 		}
-
-	SetGhostsFilesHook_( Name, uys::mReadWrite, Rack.FilesHook );
-
-	switch ( lstctn::Plug( Rack.Ghosts, Rack.FilesHook ).Value() ) {
-	case uys::sExists:
-		if ( !Rack.FilesHook.Bind().Boolean() )
-			qRFwk();
-		break;
-	case uys::sAbsent:
-		Rack.Ghosts.Init();
-		break;
-	default:
-		qRGnr();
-		break;
 	}
+
+	GetGhosts_( Name, uys::mReadWrite, Rack );
 qRR
 qRT
 qRE
@@ -176,24 +149,10 @@ qRB
 	Name.Init();
 	GetGhostsDataDirName( Root, GO, Name );
 
-	if ( fil::Exists( Name ) ) {
-		SetGhostsFilesHook_( Name, uys::mReadOnly, Rack.FilesHook );
-
-		switch ( lstctn::Plug( Rack.Ghosts, Rack.FilesHook ).Value() ) {
-		case uys::sExists:
-			if ( !Rack.FilesHook.Bind().Boolean() )
-				qRGnr();
-			break;
-		case uys::sAbsent:
-			Rack.Ghosts.Init();
-			break;
-		default:
-			qRGnr();
-			break;
-		}
-	} else
+	if ( fil::Exists( Name ) )
+		GetGhosts_( Name, uys::mReadOnly, Rack );
+	else
 		Rack.Ghosts.Init();
-
 qRR
 qRT
 qRE

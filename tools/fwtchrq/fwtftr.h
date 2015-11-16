@@ -145,6 +145,18 @@ namespace fwtftr {
 			Tree_.Init( Filenames.Tree_, Mode, Behavior, ID );
 			Kernel_.Init( Filenames.Kernel_, Mode, Behavior, ID );
 		}
+		uys::state__ Bind( void )
+		{
+			uys::state__ State = Tree_.Bind();
+
+			if ( State.IsError() )
+				return State;
+			
+			if ( Kernel_.Bind() != State )
+				State = uys::sInconsistent;
+
+			return State;
+		}
 		friend uys::state__ Plug(
 			file_tree_ &Tree,
 			file_tree_files_hook___ &Hook );
@@ -183,6 +195,16 @@ namespace fwtftr {
 			// L'initialisation proprement dite sera réalisée par des fonctions dédiées.
 		}
 	};
+
+	file_tree_ &GetRWFileTree(
+		const str::string_ &Root,
+		const fwtbsc::ghosts_oddities_ &GO,
+		file_tree_rack___ &Rack );
+
+	const file_tree_ &GetROFileTree(
+		const str::string_ &Root,
+		const fwtbsc::ghosts_oddities_ &GO,
+		file_tree_rack___ &Rack );
 
 	class processing_observer__
 	: public fwtbsc::observer__

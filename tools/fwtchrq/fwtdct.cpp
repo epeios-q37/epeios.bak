@@ -1068,7 +1068,7 @@ qRE
 }
 
 typedef bch::E_BUNCHt_( irow__, fwtght::grow__ ) ghosts_reminder_;	// Garde la trace pour chaque 'ghost' de l'item l'utilisant.
-															// Pour éviter qu'un 'ghost' soit utilisé par deux items (duplicaiton de répertoire).
+															// Pour éviter qu'un 'ghost' soit utilisé par deux items (duplication de répertoire).
 E_AUTO( ghosts_reminder );
 
 void fwtdct::TestGhosts(
@@ -1184,7 +1184,7 @@ qRB
 	str::Append( Total, Values );
 
 	if ( Diff != 0 )
-		str::Append( bso::uint__( Handled / Diff ), Values );
+		str::Append( Handled / Diff, Values );
 	else
 		Values.Append( str::string( "?" ) );
 
