@@ -109,52 +109,6 @@ backend_type__ sclfrntnd::GetBackendType( const str::string_ &Pattern )
 	return stsfsm::GetId( Pattern, BackendAutomat_, bt_Undefined, bt_amount );
 }
 
-
-namespace {
-	class kernel___
-	{
-	private:
-		csducl::universal_client_core___ _ClientCore;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_ClientCore.reset( P );
-		}
-		E_CVDTOR( kernel___ );
-		bso::bool__ Init(
-			const features___ &Features,
-			csdsnc::log_callback__ *LogCallback = NULL )
-		{
-			bso::bool__ Success = false;
-		qRH
-			csdlec::library_data__ LibraryData;
-			csdleo::mode__ Mode = csdleo::m_Undefined;
-			TOL_CBUFFER___ Buffer;
-		qRB
-			LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
-
-			if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
-				qRReturn;
-
-			Success = true;
-		qRR
-		qRT
-		qRE
-			return Success;
-		}
-		bso::bool__ Init(
-			const features___ &Features,
-			csdsnc::log_callback__ &LogCallback )
-		{
-			return Init( Features, &LogCallback );
-		}
-		csducl::universal_client_core___ &Core( void )
-		{
-			return _ClientCore;
-		}
-	} Kernel_;
-}
-
 stsfsm::automat PendingActionAutomat_;
 
 # if 0
@@ -332,7 +286,7 @@ bso::bool__ sclfrntnd::frontend___::Connect(
 {
 	fblfrd::mode__ Mode = fblfrd::m_Undefined;
 
-	switch ( Kernel_.Core().GetType() ) {
+	switch ( K_().Core().GetType() ) {
 	case csducl::tNone:
 		Mode = fblovl::mNone;
 		break;
@@ -348,7 +302,7 @@ bso::bool__ sclfrntnd::frontend___::Connect(
 	}
 
 	if ( Mode != fblovl::mNone )
-		_Flow.Init( Kernel_.Core() );
+		_Flow.Init( K_().Core() );
 
 	return _frontend___::Connect( Language(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
 }
@@ -426,6 +380,7 @@ qRE
 }
 
 void sclfrntnd::Connect(
+	kernel___ &Kernel,
 	backend_type__ BackendType,
 	const str::string_ &BackendFeature )
 {
@@ -459,7 +414,7 @@ qRB
 		break;
 	}
 
-	if ( !Kernel_.Init( Features ) )
+	if ( !Kernel.Init( Features ) )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Location );
 qRR
 qRT
@@ -467,7 +422,7 @@ qRE
 }
 
 namespace{
-	bso::bool__ Connect_( void )
+	bso::bool__ Connect_( kernel___ &Kernel )
 	{
 		bso::bool__ BackendDeclared = false;
 	qRH
@@ -485,7 +440,7 @@ namespace{
 
 			BackendDeclared = true;
 
-			Connect( Type, Feature );
+			Connect( Kernel, Type, Feature );
 		}
 	qRR
 	qRT
@@ -494,15 +449,17 @@ namespace{
 	}
 }
 
-void sclfrntnd::Connect( void )
+void sclfrntnd::Connect( kernel___ &Kernel )
 {
-	if ( !Connect_() )
+	if ( !Connect_( Kernel ) )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_MissingBackendDeclaration" );
 }
 
-const str::string_ &sclfrntnd::GetBackendLocation( str::string_ &Location )
+const str::string_ &sclfrntnd::GetBackendLocation(
+	const kernel___ &Kernel,
+	str::string_ &Location )
 {
-	Location.Append(Kernel_.Core().Location() );
+	Location.Append( Kernel.Core().Location() );
 
 	return Location;
 }

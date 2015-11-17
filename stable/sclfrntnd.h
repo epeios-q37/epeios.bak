@@ -64,10 +64,58 @@ namespace sclfrntnd {
 
 	backend_type__ GetBackendType( const str::string_ &Pattern );
 
+	class kernel___
+	{
+	private:
+		csducl::universal_client_core___ _ClientCore;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_ClientCore.reset( P );
+		}
+		E_CVDTOR( kernel___ );
+		bso::bool__ Init(
+			const features___ &Features,
+			csdsnc::log_callback__ *LogCallback = NULL )
+		{
+			bso::bool__ Success = false;
+		qRH
+			csdlec::library_data__ LibraryData;
+			csdleo::mode__ Mode = csdleo::m_Undefined;
+			TOL_CBUFFER___ Buffer;
+		qRB
+			LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
+
+			if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
+				qRReturn;
+
+			Success = true;
+		qRR
+		qRT
+		qRE
+			return Success;
+		}
+		bso::bool__ Init(
+			const features___ &Features,
+			csdsnc::log_callback__ &LogCallback )
+		{
+			return Init( Features, &LogCallback );
+		}
+		const csducl::universal_client_core___ &Core( void ) const
+		{
+			return _ClientCore;
+		}
+		csducl::universal_client_core___ &Core( void )
+		{
+			return _ClientCore;
+		}
+	};
+
 	class frontend___
 	: public _frontend___
 	{
 	private:
+		Q37_MRMDF( kernel___, K_, Kernel_ );
 		csducl::universal_client_ioflow___ _Flow;
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistryLevel;
@@ -80,9 +128,11 @@ namespace sclfrntnd {
 			_Registry.reset( P );
 			_RegistryLevel = rgstry::UndefinedLevel;
 			_Language.reset();
+			Kernel_ = NULL;
 		}
 		E_CVDTOR( frontend___ );
 		void Init(
+			kernel___ &Kernel,
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback,
 			const rgstry::multi_level_registry_ &Registry )
@@ -94,6 +144,8 @@ namespace sclfrntnd {
 
 			if ( (Language != NULL) && *Language )
 				sclrgstry::SetValue( _Registry, str::string( Language ), rgstry::tentry___( sclrgstry::parameter::Language ) );
+
+			Kernel_ = &Kernel;
 
 			return _frontend___::Init( ReportingCallback );
 		}
@@ -133,12 +185,15 @@ namespace sclfrntnd {
 	bso::uint__ GetBackendPingDelay( void );
 
 	void Connect(
+		kernel___ &Kernel,
 		backend_type__ BackendType,
 		const str::string_ &BackendFeature );
 
-	void Connect( void );
+	void Connect( kernel___ &Kernel );	// Search kernel connection parameters in registry.
 
-	const str::string_ &GetBackendLocation( str::string_ &Location );
+	const str::string_ &GetBackendLocation(
+		const kernel___ &Kernel,
+		str::string_ &Location );
 
 # define SCLF_I_( name, Name, id, Id  )\
 	typedef fbltyp::id##__	name##_t__;\

@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-17 :
+- SCLFRNTND :
+	% Exposing 'kernel___' in order to allow the access to several backend.
+
 2015-11-16 :
 - SCLBACKND :
 	- 'backend___' hosts now a registry, so each instance can have its own setup.
