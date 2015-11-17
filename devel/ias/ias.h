@@ -529,7 +529,10 @@ namespace ias {
 
 			if ( !State.IsError() )
 				if ( State != _Storage.Settle() )
-					State = uys::sInconsistent;
+					if ( State.Value() == uys::sExists )
+						_Storage.CreateFile();
+					else
+						State = uys::sInconsistent;
 
 			return State;
 		}

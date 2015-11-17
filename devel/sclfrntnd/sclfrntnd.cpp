@@ -414,8 +414,7 @@ qRB
 		break;
 	}
 
-	if ( !Kernel.Init( Features ) )
-		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Location );
+	Kernel.Init( Features );
 qRR
 qRT
 qRE

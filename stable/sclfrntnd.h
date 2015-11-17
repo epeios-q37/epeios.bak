@@ -74,11 +74,10 @@ namespace sclfrntnd {
 			_ClientCore.reset( P );
 		}
 		E_CVDTOR( kernel___ );
-		bso::bool__ Init(
+		void Init(
 			const features___ &Features,
 			csdsnc::log_callback__ *LogCallback = NULL )
 		{
-			bso::bool__ Success = false;
 		qRH
 			csdlec::library_data__ LibraryData;
 			csdleo::mode__ Mode = csdleo::m_Undefined;
@@ -87,15 +86,12 @@ namespace sclfrntnd {
 			LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
 
 			if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
-				qRReturn;
-
-			Success = true;
+				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Location );
 		qRR
 		qRT
 		qRE
-			return Success;
 		}
-		bso::bool__ Init(
+		void Init(
 			const features___ &Features,
 			csdsnc::log_callback__ &LogCallback )
 		{

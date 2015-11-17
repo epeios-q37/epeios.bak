@@ -15,8 +15,15 @@ Meaning of list markers (2nd level):
 2015-11-17 :
 - SCLFRNTND :
 	% Exposing 'kernel___' in order to allow the access to several backend.
-- CTN, DTR, IAS, IDWBTQ, LSTBCH, LSTCTN, UYS :
+- CTN, DTR, IDWBTQ, LSTBCH, LSTCTN, UYS :
 	% Removing 'files_hook___' useless 'Bind()' member.
+- IAS :
+	% Removing 'files_hook___' useless 'Bind()' member.
+	# Some files were not created when storage was empty, albeit other files were created.
+- SCLFRNTND :
+	* If the connection to the backend fails, writing of a error message to the console and aborting.
+- TOL :
+	# Bad flavour handling.
 
 2015-11-16 :
 - SCLBACKND :

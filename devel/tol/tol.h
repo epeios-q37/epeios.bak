@@ -213,11 +213,11 @@ namespace tol
 		type Value_;
 		flavor_ F_( void ) const 
 		{
-			if ( Value_ > Undefined )
+			if ( Value_ >= Undefined )
 				qRFwk();
-			else if ( Value_ > Error )
+			else if ( Value_ >= Error )
 				return fError;
-			else if ( Value_ > False )
+			else if ( Value_ >= False )
 				return fFalse;
 
 			return fTrue;
