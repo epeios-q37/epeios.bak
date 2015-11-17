@@ -359,18 +359,6 @@ namespace ctn {
 
 			return State;
 		}
-		uys::state__ Bind( void )
-		{
-			uys::state__ State = _Statics.Bind();
-
-			if ( State.IsError() )
-				return State;
-
-			if ( _Dynamics.Bind() != State )
-				State = uys::sInconsistent;
-
-			return State;
-		}
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = _Statics.Settle();

@@ -523,16 +523,6 @@ namespace ias {
 
 			return State;
 		}
-		uys::state__ Bind( void )	// A appeler seulement aprs 'Plug(...)'.
-		{
-			uys::state__ State = _Descriptors.Bind();
-
-			if ( !State.IsError() )
-				if ( State != _Storage.Bind() )
-					State = uys::sInconsistent;
-
-			return State;
-		}
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = _Descriptors.Settle();

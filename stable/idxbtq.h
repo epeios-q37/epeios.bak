@@ -295,19 +295,6 @@ namespace idxbtq {
 
 			return State;
 		}
-		uys::state__ Bind( void )
-		{
-			uys::state__ State = _Tree.Bind();
-
-			if ( State.IsError() )
-				return State;
-
-			if ( _Queue.Bind() != State )
-				State = uys::sInconsistent;
-
-			return State;
-
-		}
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = _Tree.Settle();

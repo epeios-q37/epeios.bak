@@ -236,18 +236,6 @@ namespace lstbch {
 			_List.Init( Filenames.List_, Mode, Behavior );
 
 		}
-		uys::state__ Bind( void )	// A n'appeler qu'aprs un appel  'Plug(...)'.
-		{
-			uys::state__ State = _Bunch.Bind();
-
-			if ( State.IsError() )
-				return State;
-			
-			if ( _List.Bind( _Bunch.TimeStamp() ) != State )
-				State = uys::sInconsistent;
-
-			return State;
-		}
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = _Bunch.Settle();

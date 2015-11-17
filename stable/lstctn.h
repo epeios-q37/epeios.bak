@@ -233,18 +233,6 @@ namespace lstctn {
 
 			return State;
 		}
-		uys::state__ Bind( void )
-		{
-			uys::state__ State = _Container.Bind();
-
-			if ( State.IsError() )
-				return State;
-
-			if ( _List.Bind( _Container.TimeStamp() ) != State )
-				State = uys::sInconsistent;
-
-			return State;
-		}
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = _Container.Settle();

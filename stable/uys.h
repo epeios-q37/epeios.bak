@@ -482,10 +482,6 @@ namespace uys {
 			else
 				return sAbsent;
 		}
-		state__ Bind( void )
-		{
-			return State();
-		}
 		state__ Settle( void )
 		{
 			if ( Mode() == mReadWrite )

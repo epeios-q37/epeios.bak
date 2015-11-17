@@ -410,18 +410,6 @@ namespace dtr {
 			Queue_.Init( Filenames.Queue_, Mode, Behavior, ID );
 
 		}
-		uys::state__ Bind( void )	// A n'appeler qu'aprs un appel  'Plug(...)'.
-		{
-			uys::state__ State = Tree_.Bind();
-
-			if ( State.IsError() )
-				return State;
-			
-			if ( Queue_.Bind() != State )
-				State = uys::sInconsistent;
-
-			return State;
-		}
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = Tree_.Settle();
