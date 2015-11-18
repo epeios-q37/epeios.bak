@@ -28,9 +28,9 @@
 
 using namespace browse;
 
-fwtbsc::exclusion_handling__ GetExclusionHandling_( const sclrgstry::registry_ &Registry )
+dwtbsc::exclusion_handling__ GetExclusionHandling_( const sclrgstry::registry_ &Registry )
 {
-	fwtbsc::exclusion_handling__ ExclusionHandling = fwtbsc::eh_Undefined;
+	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
 qRH
 	str::string RawExclusionHandling;
 qRB
@@ -39,11 +39,11 @@ qRB
 	sclrgstry::MGetValue( Registry, registry::ExclusionsHandling, RawExclusionHandling );
 
 	if ( RawExclusionHandling == "Regular" )
-		ExclusionHandling = fwtbsc::ehRegular;
+		ExclusionHandling = dwtbsc::ehRegular;
 	else if ( RawExclusionHandling == "Keep" ) 
-		ExclusionHandling = fwtbsc::ehKeep;
+		ExclusionHandling = dwtbsc::ehKeep;
 	else if ( RawExclusionHandling == "Skip" ) 
-		ExclusionHandling = fwtbsc::ehSkip;
+		ExclusionHandling = dwtbsc::ehSkip;
 	else
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ExclusionsHandling );
 qRR
@@ -57,7 +57,7 @@ void browse::Browse(
 	const str::string_ &Path,
 	const str::string_ &Generator,
 	const str::string_ &Output,
-	fwtdct::exploration_observer__ &ExplorationObserver,
+	dwtdct::exploration_observer__ &ExplorationObserver,
 	fwtftr::processing_observer__ &ProcessingObserver	)
 {
 qRH
@@ -65,11 +65,11 @@ qRH
 	fwtftr::file_tree Tree;
 	fwtmov::movings Movings;
 	fwtftr::drow__ Root = qNIL;
-	fwtbsc::exclusion_handling__ ExclusionHandling = fwtbsc::eh_Undefined;
-	fwtxcl::excluder Excluder;
-	fwtbsc::limitations__ Limitations;
-	fwtbsc::ghosts_oddities GO;
-	fwtdct::content Content;
+	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
+	dwtxcl::excluder Excluder;
+	dwtbsc::limitations__ Limitations;
+	dwtbsc::ghosts_oddities GO;
+	dwtdct::content Content;
 	store::store__ Store;
 qRB
 	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
@@ -87,7 +87,7 @@ qRB
 	exclusion::Fill( Registry, Limitations );
 
 	Content.Init();
-	fwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
 
 	Tree.Init();
 	Root = fwtftr::Process( Content, Tree, ProcessingObserver );

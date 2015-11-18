@@ -19,7 +19,7 @@
 
 #include "fwtftr.h"
 
-#include "fwtdct.h"
+#include "dwtdct.h"
 
 #include "dir.h"
 #include "mtx.h"
@@ -28,8 +28,8 @@
 
 using namespace fwtftr;
 
-using namespace fwtbsc;
-using namespace fwtdct;
+using namespace dwtbsc;
+using namespace dwtdct;
 
 static stsfsm::automat VersionAutomat_;
 
@@ -157,12 +157,12 @@ const str::string_ &fwtftr::file_tree_::GetPath(
 static void Fill_(
 	const goofs_data_ &Data,
 	file_tree_ &Tree,
-	fwtbsc::grows_ &Rows )
+	dwtbsc::grows_ &Rows )
 {
 qRH
-	fwtbsc::grow__ Row = qNIL;
-	ctn::E_CMITEMt( str::string_, fwtbsc::grow__ ) Name;
-	ctn::E_CMITEMt( str::string_, fwtbsc::grow__ ) Oddity;
+	dwtbsc::grow__ Row = qNIL;
+	ctn::E_CMITEMt( str::string_, dwtbsc::grow__ ) Name;
+	ctn::E_CMITEMt( str::string_, dwtbsc::grow__ ) Oddity;
 	goof__ Goof;
 qRB
 	Name.Init( Data.Names );
@@ -239,7 +239,7 @@ static void Organize_(
 {
 qRH
 	irow__ IRow = qNIL, ParentIRow = qNIL;
-	fwtght::grow__ GRow = qNIL;
+	dwtght::grow__ GRow = qNIL;
 	directory Directory;
 	tol::timer__ Timer;
 qRB
@@ -376,7 +376,7 @@ static void Delete_( drows_set_ &Dirs )
 }
 
 drow__ fwtftr::Process(
-	const fwtdct::content_ &Content,
+	const dwtdct::content_ &Content,
 	file_tree_ &Tree,
 	processing_observer__ &Observer )
 {
@@ -694,24 +694,14 @@ namespace {
 	{
 		SetFileTreeFilesHook_( DataDirName, Mode, Rack.Hook );
 
-		switch ( Plug( Rack.Tree, Rack.Hook ).Value() ) {
-		case uys::sExists:
-			if ( !Rack.Hook.Bind().Boolean() )
-				qRGnr();
-			break;
-		case uys::sAbsent:
+		if ( !Plug( Rack.Tree, Rack.Hook ).Boolean() )
 			Rack.Tree.Init();
-			break;
-		default:
-			qRGnr();
-			break;
-		}
 	}
 }
 
 file_tree_ &fwtftr::GetRWFileTree(
 	const str::string_ &Root,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::ghosts_oddities_ &GO,
 	file_tree_rack___ &Rack )
 {
 qRH
@@ -732,7 +722,7 @@ qRE
 
 const file_tree_ &fwtftr::GetROFileTree(
 	const str::string_ &Root,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::ghosts_oddities_ &GO,
 	file_tree_rack___ &Rack )
 {
 qRH
@@ -744,11 +734,11 @@ qRB
 	if ( fil::Exists( Name ) )
 		GetFileTree_( Name, uys::mReadOnly, Rack );
 	else
-		Rack.Ghosts.Init();
+		Rack.Tree.Init();
 qRR
 qRT
 qRE
-	return Rack.Ghosts;
+	return Rack.Tree;
 }
 
 static void FillTagAutomat_(
@@ -1122,7 +1112,7 @@ qRE
 static void Sort_(
 	directories_ &Directories,
 	const kernel_ &Kernel,
-	fwtbsc::sort_type__ SortType )
+	dwtbsc::sort_type__ SortType )
 {
 qRH
 	directory Directory;
@@ -1148,7 +1138,7 @@ qRE
 void fwtftr::Sort(
 	drow__ Root,
 	file_tree_ &Tree,
-	fwtbsc::sort_type__ SortType )
+	dwtbsc::sort_type__ SortType )
 {
 	if ( Root != qNIL ) {
 		Sort_( Tree.Directories, Tree, SortType );
@@ -1176,7 +1166,7 @@ qRH
 	kind__ Kind = kDir;
 	drow__ DRow = qNIL;
 	bso::bool__ Continue = true;
-	fwtbsc::depth__ Depth = 0;
+	dwtbsc::depth__ Depth = 0;
 	drow__ Current = qNIL, New = qNIL;
 	exclusion__ Exclusion = x_Undefined;
 	sdr::row__ Error = qNIL;

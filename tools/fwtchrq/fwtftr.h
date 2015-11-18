@@ -26,11 +26,10 @@
 #	define FWTFTR__DBG
 # endif
 
-# include "fwtbsc.h"
+# include "dwtbsc.h"
 
-# include "fwtdct.h"
+# include "dwtdct.h"
 # include "fwtmov.h"
-# include "fwtbsc.h"
 
 # include "dir.h"
 # include "fil.h"
@@ -40,7 +39,7 @@
 
 namespace fwtftr {
 
-	using namespace fwtbsc;
+	using namespace dwtbsc;
 
 	// Version du contenu du flux XML.
 	enum version__ {
@@ -54,7 +53,7 @@ namespace fwtftr {
 
 	version__ GetVersion( const str::string_ &Pattern );
 
-	typedef dtr::E_DTREEt_( fwtbsc::drow__ ) dtree_;
+	typedef dtr::E_DTREEt_( dwtbsc::drow__ ) dtree_;
 	E_AUTO( dtree );
 
 	class file_tree_
@@ -109,7 +108,7 @@ namespace fwtftr {
 	{
 	private:
 		dtr::hook_filenames___ Tree_;
-		fwtbsc::kernel_hook_filenames___ Kernel_;
+		dwtbsc::kernel_hook_filenames___ Kernel_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -128,7 +127,7 @@ namespace fwtftr {
 	{
 	private:
 		dtr::files_hook___ Tree_;
-		fwtbsc::kernel_files_hook___ Kernel_;
+		dwtbsc::kernel_files_hook___ Kernel_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -145,18 +144,6 @@ namespace fwtftr {
 			Tree_.Init( Filenames.Tree_, Mode, Behavior, ID );
 			Kernel_.Init( Filenames.Kernel_, Mode, Behavior, ID );
 		}
-		uys::state__ Bind( void )
-		{
-			uys::state__ State = Tree_.Bind();
-
-			if ( State.IsError() )
-				return State;
-			
-			if ( Kernel_.Bind() != State )
-				State = uys::sInconsistent;
-
-			return State;
-		}
 		friend uys::state__ Plug(
 			file_tree_ &Tree,
 			file_tree_files_hook___ &Hook );
@@ -170,7 +157,7 @@ namespace fwtftr {
 
 		if ( State.IsError() )
 			Hook.reset();
-		else if ( fwtbsc::Plug( Tree, Hook.Kernel_ ) != State ) {
+		else if ( dwtbsc::Plug( Tree, Hook.Kernel_ ) != State ) {
 			State = uys::sInconsistent;
 			Hook.reset();
 		}
@@ -198,16 +185,16 @@ namespace fwtftr {
 
 	file_tree_ &GetRWFileTree(
 		const str::string_ &Root,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		file_tree_rack___ &Rack );
 
 	const file_tree_ &GetROFileTree(
 		const str::string_ &Root,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		file_tree_rack___ &Rack );
 
 	class processing_observer__
-	: public fwtbsc::observer__
+	: public dwtbsc::observer__
 	{
 	protected:
 		virtual void FWTFTRReport(
@@ -223,12 +210,12 @@ namespace fwtftr {
 	};
 	
 	drow__ Process(
-		const fwtdct::content_ &Content,
+		const dwtdct::content_ &Content,
 		file_tree_ &Tree,
 		processing_observer__ &Observer );
 
 	class load_observer__
-	: public fwtbsc::observer__
+	: public dwtbsc::observer__
 	{
 	protected:
 		virtual void FWTFTRReport(
@@ -249,7 +236,7 @@ namespace fwtftr {
 		file_tree_ &Tree,
 		load_observer__ &Observer );
 
-	typedef fwtbsc::observer___ _observer___;
+	typedef dwtbsc::observer___ _observer___;
 
 	class basic_processing_observer___
 	: public processing_observer__,
@@ -311,7 +298,7 @@ namespace fwtftr {
 	void Sort(
 		drow__ Root,
 		file_tree_ &Tree,
-		fwtbsc::sort_type__ SortType );
+		dwtbsc::sort_type__ SortType );
 }
 
 

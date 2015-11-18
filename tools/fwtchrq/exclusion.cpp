@@ -68,7 +68,7 @@ qRE
 }
 
 static void Fill_(
-	fwtxcl::excluder_ &Excluder,
+	dwtxcl::excluder_ &Excluder,
 	const txmtbl::table_ &Table )
 {
 qRH
@@ -100,7 +100,7 @@ qRE
 
 void exclusion::Get(
 	const registry_ &Registry,
-	fwtbsc::ghosts_oddities_ &GO )
+	dwtbsc::ghosts_oddities_ &GO )
 {
 	sclrgstry::MGetValue( Registry, registry::GhostsPrefix, GO.Prefix );
 	sclrgstry::MGetValue( Registry, registry::GhostsSuffix, GO.Suffix );
@@ -112,7 +112,7 @@ void exclusion::Get(
 
 void exclusion::Fill(
 	const registry_ &Registry,
-	fwtxcl::excluder_ &Excluder )
+	dwtxcl::excluder_ &Excluder )
 {
 qRH
 	txmtbl::table Table;
@@ -128,7 +128,7 @@ qRE
 
 void exclusion::Fill(
 	const registry_ &Registry,
-	fwtbsc::limitations__ &Limitations )
+	dwtbsc::limitations__ &Limitations )
 {
 	Limitations.FileSizeMax = sclrgstry::MGetUInt( Registry, registry::ExclusionsFileSizeMax );
 	Limitations.NameLengthMax = sclrgstry::MGetUInt( Registry, registry::ExclusionsNameLengthMax );

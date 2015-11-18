@@ -27,18 +27,20 @@
 				<Module>mtk</Module>
 				<Module>txmtbl</Module>
 			</Modules>
+			<Modules Group="DWT">
+				<Module>dwtbsc</Module>
+				<Module>dwtdct</Module>
+				<Module>dwtght</Module>
+				<Module>dwtxcl</Module>
+			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
 		<Modules Group="FWT">
-			<Module>fwtbsc</Module>
 			<Module>fwtcpr</Module>
-			<Module>fwtdct</Module>
 			<Module>fwtftr</Module>
-			<Module>fwtght</Module>
 			<Module>fwtmov</Module>
-			<Module>fwtxcl</Module>
 		</Modules>
 		<Module>browse</Module>
 		<Module>exclusion</Module>

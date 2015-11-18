@@ -1,27 +1,29 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "fwtxcl.h"
+#define DWTXCL__COMPILATION
+
+#include "dwtxcl.h"
 
 #include "tol.h"
 
-using namespace fwtxcl;
+using namespace dwtxcl;
 
 static void Reverse_(
 	const str::string_ &Source,
@@ -59,7 +61,7 @@ qRT
 qRE
 }
 
-void fwtxcl::excluder_::_AddGhostSuffix( const str::string_ &RawTag )
+void dwtxcl::excluder_::_AddGhostSuffix( const str::string_ &RawTag )
 {
 qRH
 	str::string Tag;
@@ -74,7 +76,7 @@ qRT
 qRE
 }
 
-void fwtxcl::excluder_::AddExtension( const str::string_ &RawExtension )
+void dwtxcl::excluder_::AddExtension( const str::string_ &RawExtension )
 {
 qRH
 	str::string Extension;
@@ -93,7 +95,7 @@ qRT
 qRE
 }
 
-void fwtxcl::excluder_::AddDirectory( const str::string_ &RawDirectory )
+void dwtxcl::excluder_::AddDirectory( const str::string_ &RawDirectory )
 {
 qRH
 	str::string Directory;
@@ -117,7 +119,7 @@ static inline bso::bool__ IsDirectory_( const str::string_ &DirectoryOrExtension
 	return DirectoryOrExtension.Search( '/' ) != qNIL;
 }
 
-void fwtxcl::excluder_::Add( const str::string_ &DirectoryOrExtension )
+void dwtxcl::excluder_::Add( const str::string_ &DirectoryOrExtension )
 {
 	if ( IsDirectory_( DirectoryOrExtension ) )
 		AddDirectory( DirectoryOrExtension );
@@ -181,7 +183,7 @@ static const str::string_ &NormalizeDirectory_(
 	return Pattern;
 }
 
-state__ fwtxcl::excluder_::GetState(
+state__ dwtxcl::excluder_::GetState(
 	const str::string_ &RawPattern,
 	bso::bool__ ForceAsDirectory ) const
 {
@@ -200,4 +202,3 @@ qRT
 qRE
 	return State;
 }
-

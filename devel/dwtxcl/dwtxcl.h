@@ -1,37 +1,39 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// File WaTcher eXCLusion
+#ifndef DWTXCL__INC
+# define DWTXCL__INC
 
-#ifndef FWTXCL__INC
-# define FWTXCL__INC
+# define DWTXCL_NAME		"DWTXCL"
 
-# ifdef XXX_DBG
-#  define FWTXCL__DBG
+# if defined( E_DEBUG ) && !defined( DWTXCL_NODBG )
+#  define DWTXCL_DBG
 # endif
 
-# include "fwtbsc.h"
+// Directory WaTcher eXCLusion
+
+# include "dwtbsc.h"
 
 # include "stsfsm.h"
 # include "ags.h"
 
-namespace fwtxcl {
+namespace dwtxcl {
 	namespace {
 		typedef stsfsm::automat_ _automat_;
 	}
@@ -75,7 +77,7 @@ namespace fwtxcl {
 		{
 			Automat.Init();
 		}
-		void Init( const fwtbsc::ghosts_oddities_ &GO )
+		void Init( const dwtbsc::ghosts_oddities_ &GO )
 		{
 			Init();
 
@@ -92,6 +94,4 @@ namespace fwtxcl {
 
 	E_AUTO( excluder );
 }
-
-
 #endif

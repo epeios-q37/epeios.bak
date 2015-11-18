@@ -513,7 +513,7 @@ namespace fblfrd {
 
 			return Reply;
 		}
-		void Dismiss( void )	// A appeler uniquement lorsque l'un des paramtres de sortie est un 'flow', ds que tout son contenu ('EndOfFlow()' retourne 'true') est lu.
+		void DismissFlow( void )	// To call only when the flow as a out parameter was entirely red ('EndOfFlow()' retuns 'true').
 		{
 			if ( _FlowOutParameter )
 				qRFwk();

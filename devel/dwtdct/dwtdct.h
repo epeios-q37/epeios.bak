@@ -1,26 +1,32 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// File WaTcher Directory ConTent
+#ifndef DWTDCT__INC
+# define DWTDCT__INC
 
-#ifndef FWTDCT__INC
-# define FWTDCT__INC
+# define DWTDCT_NAME		"DWTDCT"
+
+# if defined( E_DEBUG ) && !defined( DWTDCT_NODBG )
+#  define DWTDCT_DBG
+# endif
+
+// Directory WatCher ConTent
 
 # include "bso.h"
 # include "err.h"
@@ -29,12 +35,12 @@
 # include "ltf.h"
 # include "lstctn.h"
 
-# include "fwtbsc.h"
-# include "fwtxcl.h"
-# include "fwtght.h"
+# include "dwtbsc.h"
+# include "dwtxcl.h"
+# include "dwtght.h"
 
-namespace fwtdct {
-	using namespace fwtbsc;
+namespace dwtdct {
+	using namespace dwtbsc;
 
 	qROW( irow__ );
 
@@ -50,7 +56,7 @@ namespace fwtdct {
 	typedef ctn::E_MCONTAINERt_( str::string_, frow__ ) fstrings_;
 	E_AUTO( fstrings );
 
-	typedef ctn::E_MCONTAINERt_( str::string_, fwtbsc::grow__ ) gstrings_;
+	typedef ctn::E_MCONTAINERt_( str::string_, dwtbsc::grow__ ) gstrings_;
 	E_AUTO( gstrings );
 
 	class dir_data_
@@ -59,7 +65,7 @@ namespace fwtdct {
 		struct s
 		{
 			time_t TimeStamp;
-			fwtght::grow__ GhostRow;	// Gestion du renommage de répertoire.
+			dwtght::grow__ GhostRow;	// Gestion du renommage de répertoire.
 			name_::s Name;
 			oddity_::s Oddity;
 			exclusion__ Exclusion;
@@ -106,7 +112,7 @@ namespace fwtdct {
 			Oddity.Init();
 		}
 		E_RWDISCLOSE_( time_t, TimeStamp );
-		E_RWDISCLOSE_( fwtght::grow__, GhostRow );
+		E_RWDISCLOSE_( dwtght::grow__, GhostRow );
 		E_RWDISCLOSE_( exclusion__, Exclusion );
 	};
 
@@ -295,20 +301,20 @@ namespace fwtdct {
 	typedef stk::E_BSTACK_( irow__ ) irows_;
 	E_AUTO( irows );
 
-	typedef bch::E_BUNCHt_( fwtbsc::files_ *, irow__ ) files_set_;
+	typedef bch::E_BUNCHt_( dwtbsc::files_ *, irow__ ) files_set_;
 	E_AUTO( files_set );
 
-	typedef bch::E_BUNCHt_( fwtbsc::commons_ *, irow__ ) commons_set_;
+	typedef bch::E_BUNCHt_( dwtbsc::commons_ *, irow__ ) commons_set_;
 	E_AUTO( commons_set );
 
 	typedef items_ content_;
 	E_AUTO( content );
 
 	class exploration_observer__
-	: public fwtbsc::observer__
+	: public dwtbsc::observer__
 	{
 	protected:
-		virtual void FWTDCTReport(
+		virtual void DWTDCTReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle,
 			tamount__ ThreadAmount ) = 0;
@@ -318,25 +324,25 @@ namespace fwtdct {
 			bso::uint__ ToHandle,
 			tamount__ ThreadAmount )
 		{
-			FWTDCTReport( Handled, ToHandle, ThreadAmount );
+			DWTDCTReport( Handled, ToHandle, ThreadAmount );
 		}
 	};
 
 	void Explore( 
 		const str::string_ &Path,
 		tamount__ ThreadAmountMax,
-		const fwtxcl::excluder_ &Excluder,
-		const fwtbsc::limitations__ &Limitations,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtxcl::excluder_ &Excluder,
+		const dwtbsc::limitations__ &Limitations,
+		const dwtbsc::ghosts_oddities_ &GO,
 		exclusion_handling__ ExclusionHandling,
 		content_ &Content,
 		exploration_observer__ &Observer );
 
 	class ghosts_setting_observer__
-	: public fwtbsc::observer__
+	: public dwtbsc::observer__
 	{
 	protected:
-		virtual void FWTDCTReport(
+		virtual void DWTDCTReport(
 			bso::uint__ Handled,
 			bso::uint__ Total,
 			bso::uint__ Created,
@@ -356,7 +362,7 @@ namespace fwtdct {
 			bso::uint__ Intruder,
 			bso::uint__ Expected )
 		{
-			FWTDCTReport( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+			DWTDCTReport( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
 		}
 	};
 
@@ -364,21 +370,21 @@ namespace fwtdct {
 	void SetGhosts(
 		const str::string_ &Root,
 		const content_ &Content,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		ghosts_setting_observer__ &GhostsSettingObserver );	// Créer dans chaque répertoire le répertoire spécial servant à détecter le renommage des répertoires.
 
 	// ATTENTION : 'Content' doit avoir été récupèré avec 'rhKeepGhostLike'.
 	void DelGhosts(
 		const str::string_ &Root,
 		const content_ &Content,
-		const fwtbsc::ghosts_oddities_ &GO,
-		fwtdct::exploration_observer__ &Observer );	// Supprime toute trace des 'ghostt's
+		const dwtbsc::ghosts_oddities_ &GO,
+		dwtdct::exploration_observer__ &Observer );	// Supprime toute trace des 'ghostt's
 
 	class basic_ghosts_setting_observer___
 	: public ghosts_setting_observer__
 	{
 	protected:
-		virtual void FWTDCTReport(
+		virtual void DWTDCTReport(
 			bso::uint__ Handled,
 			bso::uint__ Total,
 			bso::uint__ Created,
@@ -413,7 +419,7 @@ namespace fwtdct {
 	void TestGhosts(
 		const str::string_ &Root,
 		const content_ &Content,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		const str::string_ &NoGhostMessage,
 		const str::string_ &GhostIgnoredMessage,
 		txf::text_oflow__ &TFlow );
@@ -422,7 +428,7 @@ namespace fwtdct {
 	: public exploration_observer__
 	{
 	protected:
-		virtual void FWTDCTReport(
+		virtual void DWTDCTReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle,
 			tamount__ ThreadAmount );

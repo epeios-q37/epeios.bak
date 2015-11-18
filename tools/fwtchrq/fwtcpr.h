@@ -47,13 +47,13 @@ namespace fwtcpr {
 
 	version__ GetVersion( const str::string_ &Pattern );
 
-	using fwtbsc::names_;
+	using dwtbsc::names_;
 	E_AUTO( names );
 
-	using fwtbsc::name_;
+	using dwtbsc::name_;
 	E_AUTO( name );
 
-	using fwtbsc::nrow__;
+	using dwtbsc::nrow__;
 
 
 	class core__
@@ -203,7 +203,7 @@ namespace fwtcpr {
 	E_AUTO( dtree );
 
 	class observer__
-	: public fwtbsc::observer__
+	: public dwtbsc::observer__
 	{
 	protected:
 		virtual void FWTCPRReport(
@@ -218,7 +218,7 @@ namespace fwtcpr {
 		}
 	};
 
-	typedef fwtbsc::observer___ _observer__;
+	typedef dwtbsc::observer___ _observer__;
 
 	class basic_observer___
 	: public observer__,
@@ -314,7 +314,7 @@ namespace fwtcpr {
 		drow__ Root );	// Enlève les entrées ne nécessitant pas d'action.
 
 	class load_observer__
-	: public fwtbsc::observer__ 
+	: public dwtbsc::observer__ 
 	{
 	protected:
 		virtual void FWTCPRReport(

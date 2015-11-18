@@ -1,31 +1,35 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "fwtbsc.h"
+#define DWTBSC__COMPILATION
 
-#include "fwtdct.h"
+#include "dwtbsc.h"
+
+using namespace dwtbsc;
+
+#include "dwtdct.h"
 
 #include "fnm.h"
 #include "dir.h"
 #include "tagsbs.h"
 
-using namespace fwtbsc;
+using namespace dwtbsc;
 
 static stsfsm::automat SortTypeAutomat_;
 
@@ -43,7 +47,7 @@ static void FillSortTypeAutomat_( void )
 
 #define ST( name )	case st##name : return #name; break
 
-const char *fwtbsc::GetLabel( sort_type__ SortType )
+const char *dwtbsc::GetLabel( sort_type__ SortType )
 {
 	switch ( SortType ) {
 	ST( None );
@@ -57,7 +61,7 @@ const char *fwtbsc::GetLabel( sort_type__ SortType )
 	return NULL;	// Pour éviter un 'warning'.
 }
 
-sort_type__ fwtbsc::GetSortType( const str::string_ &Pattern )
+sort_type__ dwtbsc::GetSortType( const str::string_ &Pattern )
 {
 	stsfsm::id__ Id = GetId( Pattern, SortTypeAutomat_ );
 
@@ -77,7 +81,7 @@ sort_type__ fwtbsc::GetSortType( const str::string_ &Pattern )
 	n##_.Init( "", n )
 
 
-void fwtbsc::kernel_hook_filenames___::Init(
+void dwtbsc::kernel_hook_filenames___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
@@ -94,7 +98,7 @@ qRT
 qRE
 }
 
-const fnm::name___ &fwtbsc::GetGhostLocalizedName(
+const fnm::name___ &dwtbsc::GetGhostLocalizedName(
 	sdr::row_t__ Row,
 	const str::string_ &Root,
 	const str::string_ &Path,
@@ -122,7 +126,7 @@ qRE
 	return LocalizedName;
 }
 
-const fnm::name___ &fwtbsc::GetGhostsDataDirName(
+const fnm::name___ &dwtbsc::GetGhostsDataDirName(
 	const str::string_ &Root,
 	const ghosts_oddities_ &GO,
 	fnm::name___ &Name )
@@ -136,33 +140,13 @@ const fnm::name___ &fwtbsc::GetGhostsDataDirName(
 		qRReturn;\
 	}\
 
-uys::state__ fwtbsc::kernel_files_hook___::Bind( void )
-{
-	uys::state__ State = uys::s_Undefined;
-qRH
-	State = Goofs_.Bind();
-
-	if ( State.IsError() )
-		qRReturn;
-
-	B( Files_ );
-	B( Directories_ );
-	B( Names_ );
-	B( Oddities_ );
-qRB
-qRR
-qRT
-qRE
-	return State;
-}
-
 #define P( m, i )\
 	if ( m::Plug( Kernel.i, Hook.i##_ ) != State ) {\
 		State = uys::sInconsistent;\
 		qRReturn;\
 	}\
 
-uys::state__ fwtbsc::Plug(
+uys::state__ dwtbsc::Plug(
 	kernel_ &Kernel,
 	kernel_files_hook___ &Hook )
 {
@@ -186,7 +170,7 @@ qRE
 	return State;
 }
 
-void fwtbsc::observer___::Report_(
+void dwtbsc::observer___::Report_(
 	bso::uint__ Handled,
 	bso::uint__ Total )
 {
@@ -209,7 +193,7 @@ qRB
 	str::Append( Total, Values );
 
 	if ( Diff != 0 )
-		str::Append( bso::uint__( Handled / Diff ), Values );
+		str::Append( Handled / Diff, Values );
 	else
 		Values.Append( str::string( "?" ) );
 
@@ -252,12 +236,12 @@ static bso::bool__ DeleteFile_( const str::string_ &Name )
 static bso::bool__ Delete_(
 	const str::string_ &Root,
 	const str::string_ &Path,
-	const fwtdct::files_data_ &Files )
+	const dwtdct::files_data_ &Files )
 {
 	bso::bool__ Failure = false;
 qRH
-	ctn::E_CMITEMt( str::string_, fwtdct::frow__ ) Name;
-	fwtbsc::frow__ Row = qNIL;
+	ctn::E_CMITEMt( str::string_, dwtdct::frow__ ) Name;
+	dwtbsc::frow__ Row = qNIL;
 	str::string Absolute;
 qRB
 	Row = Files.First();
@@ -284,7 +268,7 @@ static bso::bool__ DeleteDir_( const str::string_ &Name )
 
 static bso::bool__ Delete_(
 	const str::string_ &Root,
-	const fwtdct::item_ &Item,
+	const dwtdct::item_ &Item,
 	root_fate__ RootFate )
 {
 	bso::bool__ Failure = false;
@@ -313,10 +297,10 @@ qRE
 
 static bso::bool__ Delete_( 
 	const str::string_ &Root,
-	const fwtdct::content_ &Content,
+	const dwtdct::content_ &Content,
 	root_fate__ RootFate )
 {
-	fwtdct::irow__ Row = Content.Last();	// On va dans l'ordre inverse pour commencer par les répertoires les plus imbriquées.
+	dwtdct::irow__ Row = Content.Last();	// On va dans l'ordre inverse pour commencer par les répertoires les plus imbriquées.
 	bso::bool__ Failure = false;
 
 	while ( Row != qNIL ) {
@@ -329,7 +313,7 @@ static bso::bool__ Delete_(
 	return !Failure;
 }
 
-bso::bool__ fwtbsc::Delete(
+bso::bool__ dwtbsc::Delete(
 	const str::string_ &Path,
 	tamount__ ThreadAmountMax,
 	root_fate__ RootFate )
@@ -337,16 +321,16 @@ bso::bool__ fwtbsc::Delete(
 	bso::bool__ Success = false;
 qRH
 	ghosts_oddities GO;
-	fwtxcl::excluder Excluder;
+	dwtxcl::excluder Excluder;
 	limitations__ Limitations;
-	fwtdct::content Content;
+	dwtdct::content Content;
 qRB
 	GO.Init();
 	Excluder.Init( GO );
 	Limitations.Init();
 	Content.Init();
 	if ( fil::Exists( Path ) ) {
-		fwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ehKeep, Content, *(fwtdct::exploration_observer__ *)NULL );
+		dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ehKeep, Content, *(dwtdct::exploration_observer__ *)NULL );
 		Success = Delete_( Path, Content, RootFate );
 	}
 qRR
@@ -370,10 +354,10 @@ static inline const str::string_ &GetAbsolute_(
 	return Absolute;
 }
 
-bso::bool__ fwtbsc::Delete(
+bso::bool__ dwtbsc::Delete(
 	const str::string_ &Path,
 	const str::string_ &Name,
-	fwtbsc::tamount__ ThreadAmountMax )
+	dwtbsc::tamount__ ThreadAmountMax )
 {
 	bso::bool__ Success = false;
 qRH	
@@ -381,14 +365,14 @@ qRH
 qRB
 	Absolute.Init( Path );
 
-	Success = fwtbsc::Delete( GetAbsolute_( Path, Name, Absolute ), ThreadAmountMax, rf_Default );
+	Success = dwtbsc::Delete( GetAbsolute_( Path, Name, Absolute ), ThreadAmountMax, rf_Default );
 qRR
 qRT
 qRE
 	return Success;
 }
 
-bso::bool__ fwtbsc::Delete(
+bso::bool__ dwtbsc::Delete(
 	const str::string_ &Path,
 	const str::strings_ &FileNames )
 {
@@ -417,9 +401,8 @@ qRE
 	return !Failure;
 }
 
-Q37_GCTOR( fwtbsc )
+Q37_GCTOR( dwtbsc )
 {
 	FillSortTypeAutomat_();
 }
-
 

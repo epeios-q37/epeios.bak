@@ -20,7 +20,7 @@
 #ifndef EXCLUSION__INC
 # define EXCLUSION__INC
 
-# include "fwtxcl.h"
+# include "dwtxcl.h"
 # include "rgstry.h"
 
 namespace exclusion {
@@ -29,15 +29,15 @@ namespace exclusion {
 
 	void Get(
 		const registry_ &Registry,
-		fwtbsc::ghosts_oddities_ &GO );
+		dwtbsc::ghosts_oddities_ &GO );
 
 	void Fill(
 		const registry_ &Registry,
-		fwtxcl::excluder_ &Excluder );
+		dwtxcl::excluder_ &Excluder );
 
 	void Fill(
 		const registry_ &Registry,
-		fwtbsc::limitations__ &Limitations );
+		dwtbsc::limitations__ &Limitations );
 }
 
 #endif

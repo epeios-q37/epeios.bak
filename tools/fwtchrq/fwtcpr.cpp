@@ -130,7 +130,7 @@ static void Complete_(
 {
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
-	ctn::E_CITEMt( fwtbsc::directory_, fwtbsc::drow__) Directory;
+	ctn::E_CITEMt( dwtbsc::directory_, dwtbsc::drow__) Directory;
 	directory Dir;
 	fill_link__ Link;
 	drow__ NewRow = qNIL;
@@ -140,7 +140,7 @@ qRB
 	Directory.Init( Directories );
 
 	while ( Row != qNIL ) {
-		if ( Directory( Rows( Row ) )().Exclusion == fwtbsc::xNo ) {
+		if ( Directory( Rows( Row ) )().Exclusion == dwtbsc::xNo ) {
 			Dir.Init();
 			Dir().Name = RNames.Append( Name( Directory( Rows( Row ) )().Name ) );
 			Dir().Status = Status;
@@ -186,11 +186,11 @@ static bso::bool__ Compare_(
 qRH
 	sdr::row__ SRow = qNIL, TRow = qNIL;
 	ctn::E_CMITEMt( name_, nrow__ ) SName, TName;
-	ctn::E_CITEMt( fwtbsc::directory_, fwtbsc::drow__) SDir, TDir;
+	ctn::E_CITEMt( dwtbsc::directory_, dwtbsc::drow__) SDir, TDir;
 	directory Dir;
 	fill_link__ Link;
 	drow__ Row = qNIL;
-	fwtbsc::exclusion__ Exclusion = fwtbsc::x_Undefined;
+	dwtbsc::exclusion__ Exclusion = dwtbsc::x_Undefined;
 qRB
 	SName.Init( SNames );
 	TName.Init( TNames );
@@ -207,7 +207,7 @@ qRB
 		Rows.Append( Row = Directories.New() );
 		switch ( Compare_( SName( SDir( SRows( SRow ) )().Name ), TName( TDir( TRows( TRow ) )().Name ) ) ) {
 		case -1:
-			if ( Exclusion == fwtbsc::xNo ) {
+			if ( Exclusion == dwtbsc::xNo ) {
 				Dir().Name = Names.Append( SName() );	// Déjà positionné.
 				Dir().Status = sCreated;
 				Modified = true;
@@ -222,7 +222,7 @@ qRB
 			SRow = SRows.Next( SRow );
 			break;
 		case 0:
-			if ( Exclusion == fwtbsc::xNo ) {
+			if ( Exclusion == dwtbsc::xNo ) {
 				Dir().Name = Names.Append( SName() );	// Déjà positionné.
 				Dir().Status = sSteady;
 				Directories.Store( Dir, Row );
@@ -315,7 +315,7 @@ qRB
 	Name.Init( Names );
 
 	while ( Row != qNIL ) {
-		if ( Files( Rows( Row ) ).Exclusion == fwtbsc::xNo ) {
+		if ( Files( Rows( Row ) ).Exclusion == dwtbsc::xNo ) {
 			File.Init();
 			File.Name = RNames.Append( Name( Files( Rows( Row ) ).Name ) );
 			File.Status = Status;
@@ -353,7 +353,7 @@ qRH
 	sdr::row__ SRow = qNIL, TRow = qNIL;
 	ctn::E_CMITEMt( name_, nrow__ ) SName, TName;
 	file__ File;
-	fwtbsc::exclusion__ Exclusion = fwtbsc::x_Undefined;
+	dwtbsc::exclusion__ Exclusion = dwtbsc::x_Undefined;
 qRB
 	SName.Init( SNames );
 	TName.Init( TNames );
@@ -365,7 +365,7 @@ qRB
 		Exclusion = SFiles( SRows( SRow ) ).Exclusion;
 		switch ( Compare_( SName( SFiles( SRows( SRow ) ).Name ), TName( TFiles( TRows( TRow ) ).Name ) ) ) {
 		case -1:
-			if ( Exclusion == fwtbsc::xNo ) {
+			if ( Exclusion == dwtbsc::xNo ) {
 				File.Init();
 				File.Name = Names.Append( SName() );	// Déjà positionné.
 				File.Status = sCreated;
@@ -375,7 +375,7 @@ qRB
 			SRow = SRows.Next( SRow );
 			break;
 		case 0:
-			if ( ( Exclusion == fwtbsc::xNo ) && IsDifferent_( SFiles( SRows( SRow ) ), TFiles( TRows( TRow ) ) ) ) {
+			if ( ( Exclusion == dwtbsc::xNo ) && IsDifferent_( SFiles( SRows( SRow ) ), TFiles( TRows( TRow ) ) ) ) {
 				File.Init();
 				File.Name = Names.Append( SName() );	// Déjà positionné.
 				File.Status = sModified;
@@ -459,7 +459,7 @@ static void Put_(
 {
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
-	ctn::E_CITEMt( fwtbsc::directory_, fwtbsc::drow__) Directory;
+	ctn::E_CITEMt( dwtbsc::directory_, dwtbsc::drow__) Directory;
 	directory Dir;
 	sdr::row__ Row = qNIL;
 	fill_link__ Link;
@@ -471,7 +471,7 @@ qRB
 	Row = Rows.First();
 
 	while ( Row != qNIL ) {
-		if ( Directory( Rows( Row ) )().Exclusion == fwtbsc::xNo ) {
+		if ( Directory( Rows( Row ) )().Exclusion == dwtbsc::xNo ) {
 			Dir.Init();
 			Dir().Name = RNames.Append( Name( Directory( Rows( Row ) )().Name ) );
 			Dir().Status = sCreated;

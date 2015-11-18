@@ -135,20 +135,20 @@ public:
 
 E_AUTO( bundle );
 
-typedef bch::E_BUNCHt_( fwtdct::irow__, fwtght::grow__ ) gtoi_;	// Garde la trace pour chaque 'ghost' de l'item l'utilisant.
+typedef bch::E_BUNCHt_( dwtdct::irow__, dwtght::grow__ ) gtoi_;	// Garde la trace pour chaque 'ghost' de l'item l'utilisant.
 																	// Pour éviter qu'un 'ghost' soit utilisé par deux items (duplication de répertoire).
 
 E_AUTO( gtoi );
 
-typedef bch::E_BUNCHt_( drow__, fwtdct::irow__ ) itod_;
+typedef bch::E_BUNCHt_( drow__, dwtdct::irow__ ) itod_;
 E_AUTO( itod );
 
-typedef bch::E_BUNCHt_( drow__, fwtght::grow__ ) gtod_;
+typedef bch::E_BUNCHt_( drow__, dwtght::grow__ ) gtod_;
 E_AUTO( gtod );
 
 struct link__ {
-	fwtght::grow__ GRow;
-	fwtdct::irow__ IRow;
+	dwtght::grow__ GRow;
+	dwtdct::irow__ IRow;
 	void reset( bso::bool__ = true )
 	{
 		GRow = qNIL;
@@ -166,16 +166,16 @@ typedef bch::E_BUNCHt_( link__, drow__ ) links_;
 E_AUTO( links );
 
 static void Complete_(
-	const fwtght::ghosts_ &Ghosts,
+	const dwtght::ghosts_ &Ghosts,
 	gtod_ &GToD,
 	links_ &Links,
 	bundle_ &Bundle )
 {
-	ctn::E_CMITEMt( fwtght::ghost_, fwtght::grow__ ) Ghost;
+	ctn::E_CMITEMt( dwtght::ghost_, dwtght::grow__ ) Ghost;
 	dir__ Dir;
 	link__ Link;
 	drow__ DRow = qNIL;
-	fwtght::grow__ GRow = Ghosts.First();
+	dwtght::grow__ GRow = Ghosts.First();
 
 	if ( GRow != qNIL  )
 		GRow = Ghosts.Next( GRow );	// On passe la racine.
@@ -207,17 +207,17 @@ static void Complete_(
 }
 
 static void Fill_(
-	const fwtdct::content_ &Content,
-	const fwtght::ghosts_ &Ghosts,
+	const dwtdct::content_ &Content,
+	const dwtght::ghosts_ &Ghosts,
 	itod_ &IToD,
 	gtod_ &GToD,
 	links_ &Links,
 	bundle_ &Bundle )
 {
 qRH
-	fwtdct::irow__ IRow = qNIL;
-	fwtght::grow__ GRow = qNIL;
-	ctn::E_CMITEMt( fwtght::ghost_, fwtght::grow__ ) Ghost;
+	dwtdct::irow__ IRow = qNIL;
+	dwtght::grow__ GRow = qNIL;
+	ctn::E_CMITEMt( dwtght::ghost_, dwtght::grow__ ) Ghost;
 	gtoi GToI;
 	link__ Link;
 	dir__ Dir;
@@ -236,7 +236,7 @@ qRB
 	}
 
 	while ( IRow != qNIL ) {
-		fwtdct::item_ &Item = *Content( IRow );
+		dwtdct::item_ &Item = *Content( IRow );
 
 		Dir.Init();
 		Link.Init();
@@ -278,18 +278,18 @@ qRE
 }
 
 static void Complete_(
-	const fwtdct::content_ &Content,
+	const dwtdct::content_ &Content,
 	const itod_ &IToD,
-	const fwtght::ghosts_ &Ghosts,
+	const dwtght::ghosts_ &Ghosts,
 	const gtod_ &GToD,
 	const links_ &Links,
 	bundle_ &Bundle )
 {
 	drow__ Row = Links.First();
-	ctn::E_CMITEMt( fwtght::ghost_, fwtght::grow__ ) Ghost;
+	ctn::E_CMITEMt( dwtght::ghost_, dwtght::grow__ ) Ghost;
 	dir__ Dir;
-	fwtdct::irow__ ParentIRow = qNIL;
-	fwtght::grow__ ParentGRow = qNIL;	
+	dwtdct::irow__ ParentIRow = qNIL;
+	dwtght::grow__ ParentGRow = qNIL;	
 
 
 	Ghost.Init( Ghosts );
@@ -373,18 +373,18 @@ static const str::string_ &GetPath_(
 
 static void Fill_(
 	const str::string_ &Root,
-	const fwtdct::content_ &Content,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtdct::content_ &Content,
+	const dwtbsc::ghosts_oddities_ &GO,
 	bundle_ &Bundle )
 {
 qRH
-	fwtght::rack___ GhostsRack;
+	dwtght::rack___ GhostsRack;
 	itod IToD;
 	gtod GToD;
 	links Links;
 qRB
 	GhostsRack.Init();
-	const fwtght::ghosts_ &Ghosts = GetROGhosts( Root, GO, GhostsRack );
+	const dwtght::ghosts_ &Ghosts = GetROGhosts( Root, GO, GhostsRack );
 
 	IToD.Init();
 	IToD.Allocate( Content.Extent(), aem::mFitted );
@@ -482,8 +482,8 @@ qRE
 
 void fwtmov::Explore(
 	const str::string_ &Root,
-	const fwtdct::content_ &Content,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtdct::content_ &Content,
+	const dwtbsc::ghosts_oddities_ &GO,
 	movings_ &Movings )
 {
 qRH
@@ -502,15 +502,15 @@ qRE
 # if 0
 void fwtmov::Explore(
 	const str::string_ &Root,
-	const fwtdct::content_ &Content,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtdct::content_ &Content,
+	const dwtbsc::ghosts_oddities_ &GO,
 	movings_ &Movings )
 {
 qRH
-	fwtdct::irow__ IRow = qNIL, ParentIRow = qNIL;;
-	fwtght::grow__ GRow = qNIL, ParentGRow = qNIL;
-	fwtght::rack___ GhostsRack;
-	ctn::E_CMITEMt( fwtght::ghost_, fwtght::grow__ ) Ghost;
+	dwtdct::irow__ IRow = qNIL, ParentIRow = qNIL;;
+	dwtght::grow__ GRow = qNIL, ParentGRow = qNIL;
+	dwtght::rack___ GhostsRack;
+	ctn::E_CMITEMt( dwtght::ghost_, dwtght::grow__ ) Ghost;
 	bso::bool__ Moved = false, Renamed = false, Created = false;
 	str::string Path;
 	gtoi GToI;
@@ -519,7 +519,7 @@ qRB
 	IRow = Content.First();
 
 	GhostsRack.Init();
-	const fwtght::ghosts_ &Ghosts = GetROGhosts( Root, GO, GhostsRack );
+	const dwtght::ghosts_ &Ghosts = GetROGhosts( Root, GO, GhostsRack );
 
 	GToI.Init();
 	GToI.Allocate( Ghosts.Amount(), aem::mFitted );
@@ -532,7 +532,7 @@ qRB
 	}
 
 	while ( IRow != qNIL ) {
-		fwtdct::item_ &Item = *Content( IRow );
+		dwtdct::item_ &Item = *Content( IRow );
 
 		Moved = Renamed = Created = false;
 
@@ -596,19 +596,19 @@ inline bso::sign__ Compare_(
 	bso::size__ S1,
 	bso::size__ S2,
 	bso::bool__ Creation,
-	fwtbsc::sort_type__ SortType )
+	dwtbsc::sort_type__ SortType )
 {
 	bso::sign__ Result = bso::Compare( S1, S2 );
 
 	switch ( SortType ) {
-	case fwtbsc::stNone:
+	case dwtbsc::stNone:
 		qRGnr();
 		break;
-	case fwtbsc::stRegular:
+	case dwtbsc::stRegular:
 		if ( Creation  )
 			Result = -Result;
 		break;
-	case fwtbsc::stReverse:
+	case dwtbsc::stReverse:
 		if ( !Creation  )
 			Result = -Result;
 		break;
@@ -624,7 +624,7 @@ inline bso::sign__ Compare_(
 	const move__ &M1,
 	const move__ &M2,
 	const names_ &Names,
-	fwtbsc::sort_type__ SortType )
+	dwtbsc::sort_type__ SortType )
 {
 	ctn::E_CMITEMt( str::string_, nrow__ ) Name;
 
@@ -666,7 +666,7 @@ static mrow__ Insert_(
 	const moves_ &Moves,
 	const names_ &Names,
 	mrow__ Root,
-	fwtbsc::sort_type__ SortType,
+	dwtbsc::sort_type__ SortType,
 	_index_ &Index )
 {
 	bso::bool__ Inserted = false;
@@ -708,7 +708,7 @@ static mrow__ Insert_(
 static mrow__ Sort_(
 	const moves_ &Unsorted,
 	const names_ &Names,
-	fwtbsc::sort_type__ SortType,
+	dwtbsc::sort_type__ SortType,
 	_index_ &Index )
 {
 	mrow__ Root = qNIL;
@@ -759,7 +759,7 @@ static void Fill_(
 static void Sort_(
 	const moves_ &Unsorted,
 	const names_ &Names,
-	fwtbsc::sort_type__ SortType,
+	dwtbsc::sort_type__ SortType,
 	moves_ &Sorted )
 {
 qRH
@@ -868,7 +868,7 @@ static void Dump_(
 	xml::writer_ &Writer )
 {
 	mrow__ Row = Moves.First();
-	ctn::E_CMITEMt( fwtbsc::name_, nrow__ ) Name;
+	ctn::E_CMITEMt( dwtbsc::name_, nrow__ ) Name;
 
 	Name.Init( Names );
 
@@ -1086,7 +1086,7 @@ static bso::bool__ Apply_(
 	const str::string_ &Path,
 	const move__ &Move,
 	const names_ &Names,
-	fwtbsc::tamount__ ThreadAmountMax )
+	dwtbsc::tamount__ ThreadAmountMax )
 {
 	ctn::E_CMITEMt( name_, nrow__ ) Old, New;
 
@@ -1098,7 +1098,7 @@ static bso::bool__ Apply_(
 	else if ( Move.New != qNIL )
 		return Create_( Path, New( Move.New ) );
 	else if ( Move.Old != qNIL  )
-		return fwtbsc::Delete( Path, New( Move.Old ), ThreadAmountMax );
+		return dwtbsc::Delete( Path, New( Move.Old ), ThreadAmountMax );
 	else
 		qRGnr();
 
@@ -1108,7 +1108,7 @@ static bso::bool__ Apply_(
 bso::bool__ fwtmov::Apply(
 	const str::string_ &Path,
 	const movings_ &Movings,
-	fwtbsc::tamount__ ThreadAmountMax,
+	dwtbsc::tamount__ ThreadAmountMax,
 	mrows_ &Failures )
 {
 	bso::bool__ Failure = false;

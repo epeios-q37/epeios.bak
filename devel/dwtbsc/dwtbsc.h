@@ -1,26 +1,32 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// File WaTcher BaSiCs
+#ifndef DWTBSC__INC
+# define DWTBSC__INC
 
-#ifndef FWTBSC__INC
-# define FWTBSC__INC
+# define DWTBSC_NAME		"DWTBSC"
+
+# if defined( E_DEBUG ) && !defined( DWTBSC_NODBG )
+#  define DWTBSC_DBG
+# endif
+
+// Directory WaTcher BaSiCs
 
 # include "bso.h"
 # include "err.h"
@@ -28,7 +34,7 @@
 # include "stsfsm.h"
 # include "ltf.h"
 
-namespace fwtbsc {
+namespace dwtbsc {
 	typedef bso::uint__ depth__;	// Type de la profondeur d'un répertoire.
 	E_CDEF( depth__, DepthMax, bso::UIntMax );
 	E_CDEF( depth__, UndefinedDepth, 0 );
@@ -359,7 +365,6 @@ namespace fwtbsc {
 			Names_.Init( Filenames.Names_, Mode, Behavior, ID );
 			Oddities_.Init( Filenames.Oddities_, Mode, Behavior, ID );
 		}
-		uys::state__ Bind( void );
 		friend uys::state__ Plug(
 			kernel_ &Kernel,
 			kernel_files_hook___ &Hook );
@@ -414,12 +419,12 @@ namespace fwtbsc {
 		sdr::row_t__ Row,
 		const str::string_ &Root,
 		const str::string_ &Path,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const ghosts_oddities_ &GO,
 		fnm::name___ &LocalizedName );
 
 	const fnm::name___ &GetGhostsDataDirName(
 		const str::string_ &Root,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const ghosts_oddities_ &GO,
 		fnm::name___ &Name );
 
 	struct limitations__
@@ -497,7 +502,7 @@ namespace fwtbsc {
 	bso::bool__ Delete(
 		const str::string_ &Root,
 		const str::string_ &Path,
-		fwtbsc::tamount__ ThreadAmountMax );
+		tamount__ ThreadAmountMax );
 
 	bso::bool__ Delete(
 		const str::string_ &Path,

@@ -22,7 +22,7 @@
 #ifndef FWTMOV__INC
 # define FWTMOV__INC
 
-# include "fwtdct.h"
+# include "dwtdct.h"
 
 # include "xml.h"
 # include "txf.h"
@@ -42,11 +42,11 @@ namespace fwtmov {
 
 	version__ GetVersion( const str::string_ &Pattern );
 
-	using fwtbsc::name_;
-	using fwtbsc::nrow__;
-	using fwtbsc::names_;
+	using dwtbsc::name_;
+	using dwtbsc::nrow__;
+	using dwtbsc::names_;
 
-	using fwtbsc::depth__;
+	using dwtbsc::depth__;
 
 	struct move__
 	{
@@ -126,8 +126,8 @@ namespace fwtmov {
 
 	void Explore(
 		const str::string_ &Root,
-		const fwtdct::content_ &Content,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtdct::content_ &Content,
+		const dwtbsc::ghosts_oddities_ &GO,
 		movings_ &Movings );
 
 	void Load(
@@ -150,7 +150,7 @@ namespace fwtmov {
 	bso::bool__ Apply(
 		const str::string_ &Path,
 		const movings_ &Movings,
-		fwtbsc::tamount__ ThreadAmountMax,
+		dwtbsc::tamount__ ThreadAmountMax,
 		mrows_ &Failures );	// Return false if failure, 'Failures' containing the failed ones.
 
 	void Display(

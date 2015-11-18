@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-18 :
+- FBLFRD :
+	% 'frontend___::Dismiss(...)' -> 'DismissFlow'.
+
 2015-11-17 :
 - SCLFRNTND :
 	% Exposing 'kernel___' in order to allow the access to several backend.

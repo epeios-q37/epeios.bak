@@ -1,29 +1,30 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#define DWTGHT__COMPILATION
 
-#include "fwtght.h"
+#include "dwtght.h"
 
 #include "dir.h"
 
-using namespace fwtght;
-using namespace fwtbsc;
+using namespace dwtght;
+using namespace dwtbsc;
 
 static inline status__ CreateGhostDir_( const fnm::name___ &Name )
 {
@@ -39,11 +40,11 @@ static inline status__ CreateGhostDir_( const fnm::name___ &Name )
 		return sCreated;
 }
 
-status__ fwtght::CreateGhost(
+status__ dwtght::CreateGhost(
 	const str::string_ &Root,
 	const str::string_ &Path,
 	const str::string_ &BaseName,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::ghosts_oddities_ &GO,
 	grow__ Parent,
 	ghosts_ &Ghosts,
 	grow__ &Row )
@@ -92,24 +93,14 @@ namespace {
 	{
 		SetGhostsFilesHook_( DataDirName, Mode, Rack.FilesHook );
 
-		switch ( lstctn::Plug( Rack.Ghosts, Rack.FilesHook ).Value() ) {
-		case uys::sExists:
-			if ( !Rack.FilesHook.Bind().Boolean() )
-				qRGnr();
-			break;
-		case uys::sAbsent:
+		if ( !lstctn::Plug( Rack.Ghosts, Rack.FilesHook ).Boolean() )
 			Rack.Ghosts.Init();
-			break;
-		default:
-			qRGnr();
-			break;
-		}
 	}
 }
 
-ghosts_ &fwtght::GetRWGhosts(
+ghosts_ &dwtght::GetRWGhosts(
 	const str::string_ &Root,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::ghosts_oddities_ &GO,
 	rack___ &Rack )
 {
 qRH
@@ -138,9 +129,9 @@ qRE
 	return Rack.Ghosts;
 }
 
-const ghosts_ &fwtght::GetROGhosts(
+const ghosts_ &dwtght::GetROGhosts(
 	const str::string_ &Root,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::ghosts_oddities_ &GO,
 	rack___ &Rack )
 {
 qRH
@@ -159,7 +150,7 @@ qRE
 	return Rack.Ghosts;
 }
 
-const str::string_ &fwtght::GetPath(
+const str::string_ &dwtght::GetPath(
 	grow__ Row,
 	const ghosts_ &Ghosts,
 	str::string_ &Path,
@@ -192,9 +183,9 @@ static void ShowGhosts_(
 	txf::text_oflow__ &TFlow )
 {
 qRH
-	fwtght::grow__ Row = qNIL;
+	dwtght::grow__ Row = qNIL;
 	str::string Path;
-	ctn::E_CMITEMt( ghost_, fwtght::grow__ ) Ghost;
+	ctn::E_CMITEMt( ghost_, dwtght::grow__ ) Ghost;
 qRB
 	Ghost.Init( Ghosts );
 	Row = Ghosts.First();
@@ -218,7 +209,7 @@ qRT
 qRE
 }
 
-void fwtght::ShowGhosts(
+void dwtght::ShowGhosts(
 	const str::string_ &Root,
 	const ghosts_oddities_ &GO,
 	txf::text_oflow__ &TFlow )
@@ -233,6 +224,3 @@ qRR
 qRT
 qRE
 }
-
-
-

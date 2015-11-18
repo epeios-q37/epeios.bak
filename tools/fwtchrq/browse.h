@@ -31,7 +31,7 @@ namespace browse {
 		const str::string_ &Path,
 		const str::string_ &Generator,
 		const str::string_ &OutputFileName,
-		fwtdct::exploration_observer__ &ExplorationObserver,
+		dwtdct::exploration_observer__ &ExplorationObserver,
 		fwtftr::processing_observer__ &ProcessingObserver );
 }
 

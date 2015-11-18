@@ -72,7 +72,7 @@ qRH
 		Generator,
 		ExplorationMessage,
 		ProcessingMessage;
-	fwtdct::basic_exploration_observer___ ExplorationObserver;
+	dwtdct::basic_exploration_observer___ ExplorationObserver;
 	fwtftr::basic_processing_observer___ ProcessingObserver;
 qRB
 	Generator.Init( NAME_MC " V" VERSION " (" );
@@ -117,12 +117,12 @@ static void Update_( const str::string_ &Path )
 {
 qRH
 	bso::uint__ ThreadAmountMax = 0;
-	fwtdct::content Content;
-	fwtxcl::excluder Excluder;
-	fwtbsc::limitations__ Limitations;
-	fwtbsc::ghosts_oddities GO;
-	fwtdct::basic_exploration_observer___ ExplorationObserver;
-	fwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
+	dwtdct::content Content;
+	dwtxcl::excluder Excluder;
+	dwtbsc::limitations__ Limitations;
+	dwtbsc::ghosts_oddities GO;
+	dwtdct::basic_exploration_observer___ ExplorationObserver;
+	dwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
 	str::string ExplorationMessage, UpdateMessage;
 qRB
 	ThreadAmountMax = sclmisc::OGetUInt( registry::ThreadAmountMax, 0 );
@@ -141,7 +141,7 @@ qRB
 
 	Content.Init();
 	ExplorationObserver.Init( ExplorationMessage, cio::COut, Delay_ );
-	fwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, fwtbsc::ehKeepGhostLike, Content, ExplorationObserver );
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, dwtbsc::ehKeepGhostLike, Content, ExplorationObserver );
 
 	cio::COut << txf::nl;
 
@@ -149,7 +149,7 @@ qRB
 	sclmisc::GetBaseTranslation( UpdateMessage_, UpdateMessage );
 
 	GhostsSettingObserver.Init( UpdateMessage, cio::COut, Delay_ );
-	fwtdct::SetGhosts( Path, Content, GO, GhostsSettingObserver );
+	dwtdct::SetGhosts( Path, Content, GO, GhostsSettingObserver );
 qRR
 qRT
 qRE

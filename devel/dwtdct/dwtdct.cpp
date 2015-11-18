@@ -1,36 +1,38 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "fwtdct.h"
+#define DWTDCT__COMPILATION
+
+#include "dwtdct.h"
 
 #include "mtx.h"
 #include "mtk.h"
 #include "dir.h"
 #include "tagsbs.h"
 
-using namespace fwtdct;
+using namespace dwtdct;
 
-using namespace fwtbsc;
-using namespace fwtght;
-using fwtxcl::excluder_;
+using namespace dwtbsc;
+using namespace dwtght;
+using dwtxcl::excluder_;
 
-void fwtdct::_Delete( _items_ &Items )
+void dwtdct::_Delete( _items_ &Items )
 {
 	irow__ Row = Items.First();
 
@@ -186,17 +188,17 @@ static inline bso::bool__ Append_(
 	return false;	// To avoid a 'warning'.
 }
 
-static exclusion__ Convert_( fwtxcl::state__ State )
+static exclusion__ Convert_( dwtxcl::state__ State )
 {
 	switch ( State )  {
-	case fwtxcl::sIncluded:
+	case dwtxcl::sIncluded:
 		return xNo;
 		break;
-	case fwtxcl::sExcludedDir:
-	case fwtxcl::sExcludedFile:
+	case dwtxcl::sExcludedDir:
+	case dwtxcl::sExcludedFile:
 		return xMatchList;
 		break;
-	case fwtxcl::sGhostDir:
+	case dwtxcl::sGhostDir:
 		return xGhostDir;
 		break;
 	default:
@@ -211,8 +213,8 @@ exclusion__ GetExclusion_(
 	const fnm::name___ &LocalizedFileNameWithoutRoot,
 	const fnm::name___  &Name,
 	const fil::info__ &Info,
-	const fwtxcl::excluder_ &Excluder,
-	const fwtbsc::limitations__ &Limitations )
+	const dwtxcl::excluder_ &Excluder,
+	const dwtbsc::limitations__ &Limitations )
 {
 	exclusion__ Exclusion = x_Undefined;
 qRH
@@ -248,11 +250,11 @@ static void GetFile_(
 	const fnm::name___ &LocalizedFileNameWithoutRoot,
 	const fnm::name___ &Name,
 	const excluder_ &Excluder,
-	const fwtbsc::limitations__ Limitations,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::limitations__ Limitations,
+	const dwtbsc::ghosts_oddities_ &GO,
 	exclusion_handling__ ExclusionHandling,
 	kernel_ &Kernel,
-	fwtght::grow__ &GhostRow )
+	dwtght::grow__ &GhostRow )
 {
 qRH
 	fil::info__ Info;
@@ -283,7 +285,7 @@ qRB
 			if ( Exclusion == xGhostDir ) {
 				GhostRawName.Init();
 				Name.UTF8( GhostRawName );
-				if ( ( GhostRow = fwtght::GetGhostRow( GhostRawName, GO ) ) == qNIL )
+				if ( ( GhostRow = dwtght::GetGhostRow( GhostRawName, GO ) ) == qNIL )
 					qRGnr();
 			}
 
@@ -321,12 +323,12 @@ static bso::bool__ GetFiles_(
 	const fnm::name___ &PathWithRoot,
 	const fnm::name___ &PathWithoutRoot,
 	const excluder_ &Excluder,
-	const fwtbsc::limitations__ &Limitations,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::limitations__ &Limitations,
+	const dwtbsc::ghosts_oddities_ &GO,
 	exclusion_handling__ ExclusionHandling,
 	kernel_ &Kernel,
 	oddity_ &Oddity,
-	fwtght::grow__ &GhostRow )
+	dwtght::grow__ &GhostRow )
 {
 	bso::bool__ Success = true;
 qRH
@@ -372,8 +374,8 @@ static void HandleGoofs_(
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	ctn::E_CMITEMt( oddity_, orow__ ) Oddity;
-	fwtbsc::grow__ Row = qNIL;
-	fwtbsc::grow__ Control = qNIL;
+	dwtbsc::grow__ Row = qNIL;
+	dwtbsc::grow__ Control = qNIL;
 	goof__ Goof;
 	str::string EmptyOddity;
 qRB
@@ -513,9 +515,9 @@ private:
 	exclusion_handling__ _ExclusionHandling;
 	content_ *_Content;
 	const excluder_ *_Excluder;
-	const fwtbsc::limitations__ *_Limitations;
+	const dwtbsc::limitations__ *_Limitations;
 	const str::string_ *_RootPath;
-	const fwtbsc::ghosts_oddities_ *_GO;
+	const dwtbsc::ghosts_oddities_ *_GO;
 public:
 	mtx::handler___ Protection;
 	irows ToHandle;
@@ -542,9 +544,9 @@ public:
 		tamount__ ThreadAmountMax,
 		exclusion_handling__ ExclusionHandling,
 		const excluder_ &Excluder,
-		const fwtbsc::limitations__ &Limitations,
+		const dwtbsc::limitations__ &Limitations,
 		const str::string_ &RootPath,
-		const fwtbsc::ghosts_oddities_ &GO )
+		const dwtbsc::ghosts_oddities_ &GO )
 	{
 		_ThreadAmount = 0;
 		_ThreadAmountMax = ThreadAmountMax;
@@ -575,7 +577,7 @@ public:
 
 		return *_Excluder;
 	}
-	const fwtbsc::limitations__ &Limitations( void ) const
+	const dwtbsc::limitations__ &Limitations( void ) const
 	{
 		if ( _Limitations == NULL )
 			qRGnr();
@@ -589,7 +591,7 @@ public:
 
 		return *_RootPath;
 	}
-	const fwtbsc::ghosts_oddities_ &GO( void ) const
+	const dwtbsc::ghosts_oddities_ &GO( void ) const
 	{
 		if ( _GO == NULL )
 			qRGnr();
@@ -603,7 +605,7 @@ public:
 	void IncreaseThreadAmount( void )
 	{
 		if ( ThreadAllowed() ) {
-			if ( _ThreadAmount == fwtdct::ThreadAmountMax )
+			if ( _ThreadAmount == dwtdct::ThreadAmountMax )
 				qRGnr();
 
 			_ThreadAmount++;
@@ -638,7 +640,7 @@ qRFH
 	data___ &Data = *(data___ *)UP;
 	bso::bool__ Continue = true;
 	item_ *Item = NULL;
-	fwtbsc::kernel Kernel;
+	dwtbsc::kernel Kernel;
 	TOL_CBUFFER___ Buffer;
 	mtx::mutex___ Mutex;
 	irow__ Row = qNIL;
@@ -647,10 +649,10 @@ qRFH
 qRFB
 	content_ &Content = Data.Content();
 	const excluder_ &Excluder = Data.Excluder();
-	const fwtbsc::limitations__ &Limitations = Data.Limitations();
+	const dwtbsc::limitations__ &Limitations = Data.Limitations();
 	exclusion_handling__ ExclusionHandling = Data.ExclusionHandling();
 	const str::string_ &RootPath = Data.RootPath();
-	const fwtbsc::ghosts_oddities_ &GO = Data.GO();
+	const dwtbsc::ghosts_oddities_ &GO = Data.GO();
 	Mutex.Init( Data.Protection );
 
 	while ( Continue ) {
@@ -729,12 +731,12 @@ static void WaitForThreadsExiting_(
 	Mutex.Unlock();
 }
 
-void fwtdct::Explore(
+void dwtdct::Explore(
 	const str::string_ &Path,
 	bso::uint__ ThreadAmountMax,
 	const excluder_ &Excluder,
-	const fwtbsc::limitations__ &Limitations,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::limitations__ &Limitations,
+	const dwtbsc::ghosts_oddities_ &GO,
 	exclusion_handling__ ExclusionHandling,
 	content_ &Content,
 	exploration_observer__ &Observer )
@@ -820,7 +822,7 @@ qRT
 qRE
 }
 
-void fwtdct::basic_exploration_observer___::FWTDCTReport(
+void dwtdct::basic_exploration_observer___::DWTDCTReport(
 	bso::uint__ Handled,
 	bso::uint__ ToHandle,
 	tamount__ ThreadAmount )
@@ -866,16 +868,16 @@ qRE
 static inline status__ CreateGhost_(
 	const str::string_ &Root,
 	const item_ &Item,
-	const fwtbsc::ghosts_oddities_ &GO,
-	fwtght::grow__ Parent,
-	fwtght::ghosts_ &Ghosts,
-	fwtght::grow__ &Row )
+	const dwtbsc::ghosts_oddities_ &GO,
+	dwtght::grow__ Parent,
+	dwtght::ghosts_ &Ghosts,
+	dwtght::grow__ &Row )
 {
 	if ( ( ( Row = Item.Dir.GhostRow() ) == qNIL ) || !Ghosts.Exists( Row ) )
-		return fwtght::CreateGhost( Root, Item.Path, Item.Dir.Name, GO, Parent, Ghosts, Row );
+		return dwtght::CreateGhost( Root, Item.Path, Item.Dir.Name, GO, Parent, Ghosts, Row );
 	else if ( (Ghosts( Row ).S_.Parent != Parent) || (Ghosts( Row ).Name != Item.Dir.Name) ) {
 qRH
-		fwtght::ghost Ghost;
+		dwtght::ghost Ghost;
 qRB
 		Ghost.Init();
 		Ghost.S_.Parent = Parent;
@@ -887,25 +889,25 @@ qRB
 qRR
 qRT
 qRE
-return fwtght::sUpdated;
+return dwtght::sUpdated;
 	}
 	else {
 		Ghosts.Flush();
-		return fwtght::sSkipped;
+		return dwtght::sSkipped;
 	}
 }
 
-typedef bch::E_BUNCHt_( fwtght::grow__, irow__ ) itog_;
+typedef bch::E_BUNCHt_( dwtght::grow__, irow__ ) itog_;
 E_AUTO( itog );
 
-typedef bch::E_BUNCHt_( irow__, fwtght::grow__ ) gtoi_;
+typedef bch::E_BUNCHt_( irow__, dwtght::grow__ ) gtoi_;
 E_AUTO( gtoi );
 
 static void Clean_(
-	fwtght::ghosts_ &Ghosts,
+	dwtght::ghosts_ &Ghosts,
 	gtoi_ &GToI )
 {
-	fwtght::grow__ Row = GToI.First();
+	dwtght::grow__ Row = GToI.First();
 
 	while ( Row != qNIL ) {
 		if ( GToI( Row ) == qNIL )
@@ -916,10 +918,10 @@ static void Clean_(
 	}
 }
 
-void fwtdct::SetGhosts(
+void dwtdct::SetGhosts(
 	const str::string_ &Root,
 	const content_ &Content,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::ghosts_oddities_ &GO,
 	ghosts_setting_observer__ &GhostsSettingObserver )
 {
 qRH
@@ -928,10 +930,10 @@ qRH
 	tol::timer__ Timer;
 	itog IToG;
 	gtoi GToI;
-	fwtght::grow__ GRow = qNIL;
-	fwtght::rack___ GhostsRack;
-	fwtght::ghost Ghost;
-	fwtxcl::excluder Excluder;
+	dwtght::grow__ GRow = qNIL;
+	dwtght::rack___ GhostsRack;
+	dwtght::ghost Ghost;
+	dwtxcl::excluder Excluder;
 qRB
 	IToG.Init();
 	IToG.Allocate( Content.Extent() );
@@ -980,13 +982,13 @@ qRB
 
 		item_ &Item = *Content( IRow );
 
-		if ( Excluder.GetState( Item.Dir.Name, true ) == fwtxcl::sGhostDir ) {
-			GRow = fwtght::GetGhostRow( Item.Dir.Name, GO );
+		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhostDir ) {
+			GRow = dwtght::GetGhostRow( Item.Dir.Name, GO );
 			if ( GRow == 0  )
 				Expected++;
 			else if ( (GRow == qNIL) || !Ghosts.Exists( GRow ) || (GRow != Content( Item.GetParent() )->Dir.GetGhostRow()) ) {
 				Intruder++;
-				fwtbsc::Delete( Root, Item.Path, 0 );
+				dwtbsc::Delete( Root, Item.Path, 0 );
 			} else
 				Expected++;
 		} else {
@@ -1037,15 +1039,15 @@ qRT
 qRE
 }
 
-void fwtdct::DelGhosts(
+void dwtdct::DelGhosts(
 	const str::string_ &Root,
 	const content_ &Content,
-	const fwtbsc::ghosts_oddities_ &GO,
-	fwtdct::exploration_observer__ &ExplorationObserver )
+	const dwtbsc::ghosts_oddities_ &GO,
+	dwtdct::exploration_observer__ &ExplorationObserver )
 {
 qRH
 	irow__ IRow = qNIL;
-	fwtxcl::excluder Excluder;
+	dwtxcl::excluder Excluder;
 qRB
 	IRow = Content.Last();	// On va à rebours, pour traiter les répertoires les plus imbriqués d'abord.
 
@@ -1055,8 +1057,8 @@ qRB
 
 		item_ &Item = *Content( IRow );
 
-		if ( Excluder.GetState( Item.Dir.Name, true ) == fwtxcl::sGhostDir )
-			if ( !fwtbsc::Delete( Root, Item.Path, 0 ) )
+		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhostDir )
+			if ( !dwtbsc::Delete( Root, Item.Path, 0 ) )
 				qRGnr();
 
 		IRow = Content.Previous( IRow );
@@ -1067,23 +1069,23 @@ qRT
 qRE
 }
 
-typedef bch::E_BUNCHt_( irow__, fwtght::grow__ ) ghosts_reminder_;	// Garde la trace pour chaque 'ghost' de l'item l'utilisant.
+typedef bch::E_BUNCHt_( irow__, dwtght::grow__ ) ghosts_reminder_;	// Garde la trace pour chaque 'ghost' de l'item l'utilisant.
 															// Pour éviter qu'un 'ghost' soit utilisé par deux items (duplication de répertoire).
 E_AUTO( ghosts_reminder );
 
-void fwtdct::TestGhosts(
+void dwtdct::TestGhosts(
 	const str::string_ &Root,
 	const content_ &Content,
-	const fwtbsc::ghosts_oddities_ &GO,
+	const dwtbsc::ghosts_oddities_ &GO,
 	const str::string_ &NoGhostMessage,
 	const str::string_ &GhostIgnoredMessage,
 	txf::text_oflow__ &TFlow )
 {
 qRH
 	irow__ IRow = qNIL, ParentIRow = qNIL;
-	fwtght::grow__ GRow = qNIL;
+	dwtght::grow__ GRow = qNIL;
 	rack___ GhostsRack;
-	ctn::E_CMITEMt( ghost_, fwtght::grow__ ) Ghost;
+	ctn::E_CMITEMt( ghost_, dwtght::grow__ ) Ghost;
 	bso::bool__ Moved = false, Renamed = false, NoGhost = false, GhostIgnored = false;
 	str::string Path;
 	ghosts_reminder Reminder;
@@ -1160,7 +1162,7 @@ qRT
 qRE
 }
 
-void fwtdct::basic_ghosts_setting_observer___::FWTDCTReport(
+void dwtdct::basic_ghosts_setting_observer___::DWTDCTReport(
 	bso::uint__ Handled,
 	bso::uint__ Total,
 	bso::uint__ Created,

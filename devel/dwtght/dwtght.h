@@ -1,39 +1,45 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// File WaTcher GHosTs
+#ifndef DWTGHT__INC
+# define DWTGHT__INC
 
-#ifndef FWTGHT__INC
-# define FWTGHT__INC
+# define DWTGHT_NAME		"DWTGHT"
 
-# include "fwtbsc.h"
+# if defined( E_DEBUG ) && !defined( DWTGHT_NODBG )
+#  define DWTGHT_DBG
+# endif
+
+// Directory WaTcher GHosTs
+
+# include "dwtbsc.h"
 
 # include "lstctn.h"
 
-namespace fwtght {
-	using fwtbsc::depth__;
+namespace dwtght {
+	using dwtbsc::depth__;
 
 	qROW( grow__ );	// 'Ghost row'.
 
 	inline grow__ GetGhostRow(
 		const str::string_ &Pattern,
-		const fwtbsc::ghosts_oddities_ &GO )
+		const dwtbsc::ghosts_oddities_ &GO )
 	{
 		sdr::row__ Error = qNIL;
 		grow__ Row = qNIL;
@@ -100,6 +106,7 @@ namespace fwtght {
 	typedef lstctn::files_hook___ ghosts_files_hook___;
 
 	struct rack___ {
+
 		ghosts_files_hook___ FilesHook;
 		ghosts Ghosts;
 		void reset( bso::bool__ P = true )
@@ -130,27 +137,27 @@ namespace fwtght {
 		grow__ Row,
 		const str::string_ &Root,
 		const str::string_ &Path,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		fnm::name___ &LocalizedName )
 	{
-		return fwtbsc::GetGhostLocalizedName( *Row, Root, Path, GO, LocalizedName );
+		return dwtbsc::GetGhostLocalizedName( *Row, Root, Path, GO, LocalizedName );
 	}
 
 	ghosts_ &GetRWGhosts(
 		const str::string_ &Root,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		rack___ &Rack );
 
 	const ghosts_ &GetROGhosts(
 		const str::string_ &Root,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		rack___ &Rack );
 
 	status__ CreateGhost(
 		const str::string_ &Root,
 		const str::string_ &Path,
 		const str::string_ &BaseName,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		grow__ Parent,
 		ghosts_ &Ghosts,
 		grow__ &Row );	// Crée un 'ghost', et retourne son 'Row' dans 'Ghosts' si effectivement crée (ce que l'on sait grâce au 'status__' retourné).
@@ -166,14 +173,14 @@ namespace fwtght {
 		const ghosts_ &Ghosts,
 		str::string_ &Path )
 	{
-		depth__ Dummy = fwtbsc::UndefinedDepth;
+		depth__ Dummy = dwtbsc::UndefinedDepth;
 
 		return GetPath( Row, Ghosts, Path, Dummy );
 	}
 
 	void ShowGhosts(
 		const str::string_ &Root,
-		const fwtbsc::ghosts_oddities_ &GO,
+		const dwtbsc::ghosts_oddities_ &GO,
 		txf::text_oflow__ &TFlow );
 }
 
