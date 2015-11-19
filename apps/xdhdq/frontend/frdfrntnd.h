@@ -60,11 +60,12 @@ namespace frdfrntnd {
 		}
 		E_CVDTOR( frontend___ );
 		void Init(
+			sclfrntnd::kernel___ &Kernel,
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback,
 			const rgstry::multi_level_registry_ &Registry )
 		{
-			_frontend___::Init( Language, ReportingCallback, Registry );
+			_frontend___::Init( Kernel, Language, ReportingCallback, Registry );
 		}
 		void TestMessage( void )
 		{

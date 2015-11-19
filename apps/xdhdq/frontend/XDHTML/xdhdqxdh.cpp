@@ -46,7 +46,7 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( Language, ProxyCallback );
+	Session->Init( core::Kernel(), Language, ProxyCallback );
 
 	switch ( core::Core.Mode() ) {
 	case xdhcmn::mMonoUser:

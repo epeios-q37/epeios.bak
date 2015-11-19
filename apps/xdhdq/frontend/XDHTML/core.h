@@ -117,6 +117,8 @@ namespace core {
 
 	extern core___ Core;
 
+	sclfrntnd::kernel___ &Kernel( void );
+
 	void About(
 		session___ &Session,
 		xml::writer_ &Writer );

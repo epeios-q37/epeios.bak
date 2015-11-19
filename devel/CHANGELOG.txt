@@ -12,6 +12,11 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-19 :
+- SCLXDHTML :
+	* Adaptation to chnages in 'SCLFRNTND'.
+	% Changing 'GetBackendFeatures(...)' parameters.
+
 2015-11-18 :
 - FBLFRD :
 	% 'frontend___::Dismiss(...)' -> 'DismissFlow'.

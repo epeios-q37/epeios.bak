@@ -254,7 +254,7 @@ namespace sclxdhtml {
 		proxy__ &Proxy,
 		const char *Language );
 
-	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
+	// User put in 'instances' all his own objects, instanciating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading thie library.
 	template <typename instances, typename frontend, typename page, page UndefinedPage > class session___
 	: public _session_callback__,
 	  public proxy__,
@@ -277,12 +277,13 @@ namespace sclxdhtml {
 		}
 		E_CVDTOR( session___ )
 		void Init(
+			sclfrntnd::kernel___ &Kernel,
 			const char *Language,
 			xdhcmn::proxy_callback__ *Callback )
 		{
 			proxy__::Init( Callback );
 			_ReportingCallback.Init( *this, Language );
-			frontend::Init( Language, _ReportingCallback, sclmisc::GetRegistry() );
+			frontend::Init( Kernel, Language, _ReportingCallback, sclmisc::GetRegistry() );
 			_session_callback__::Init();
 			_Page = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
@@ -450,13 +451,6 @@ namespace sclxdhtml {
 		xdhcmn::proxy_callback__ *ProxyCallback );	// To define by user.
 
 	void SCLXDHTMLReleaseCallback( xdhcmn::session_callback__ *Callback );	// To define by user.
-
-	inline void Connect(
-		sclfrntnd::backend_type__ BackendType,
-		const str::string_ &BackendFeature )
-	{
-		return sclfrntnd::Connect( BackendType, BackendFeature );
-	}
 
 	namespace prolog {
 		E_CDEF( char *, ProjectTypeId, "ProjectType" );

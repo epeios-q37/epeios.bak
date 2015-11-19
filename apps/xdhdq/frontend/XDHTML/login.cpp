@@ -121,7 +121,7 @@ qRB
 	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
 		BackendFeature.Init();
 		BackendType = sclxdhtml::login::GetBackendFeatures( Session, BackendFeature );
-		sclxdhtml::Connect( BackendType, BackendFeature );
+		sclfrntnd::Connect( core::Kernel(), BackendType, BackendFeature );
 	}
 
 	IncompatibilityInformations.Init();

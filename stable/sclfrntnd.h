@@ -64,6 +64,7 @@ namespace sclfrntnd {
 
 	backend_type__ GetBackendType( const str::string_ &Pattern );
 
+	// Is exposed because, even if there is generally only one kernel per frontend, there could be two (a frontend dealing with two different backends).
 	class kernel___
 	{
 	private:
