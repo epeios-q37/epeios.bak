@@ -323,7 +323,6 @@ ifeq ("$(os)","$(MacOS)")
 	lo += -dynamiclib
 
 	dest=/Users/csimon/bin/
-
 endif
 
 ##########################
@@ -356,7 +355,9 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
+		
 	mkdir -p $(dest)
+			
 	cp $(binary) $(dest)
 endif
 
