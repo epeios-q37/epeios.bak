@@ -29,7 +29,18 @@ const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
+qRH
+	str::string BackendFeatures;
+qRB
 	core::Core.Init( Mode );
+
+#pragma message ( __LOC__ "A changer !!!" )
+
+	if ( Mode == xdhcmn::mMultiUser )
+		Connect(core::Kernel() );
+qRR
+qRT
+qRE
 }
 
 xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
