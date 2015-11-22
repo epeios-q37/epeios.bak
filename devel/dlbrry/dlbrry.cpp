@@ -160,7 +160,7 @@ bso::bool__ dlbrry::dynamic_library___::_UnloadLibrary( void  )
 
 // 'MinGW' gnre une erreur lorsque '(void *)' est absent, mais pas 'MSVC4'. On suppose donc que la conversion en 'void *' ne pose pas de problme.
 #ifdef TARGET_WIN
-# ifdef CPE_C_MINGW
+# if defined( CPE_C_MINGW ) || ( defined ( CPE_C_CLANG ) )
 #  define FCAST	(void *)
 # else
 #  define FCAST
