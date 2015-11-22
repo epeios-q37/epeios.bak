@@ -69,7 +69,7 @@
 # define CPE_SL_GNULINUX	"GNU/Linux"
 # define CPE_SL_LINUX		"Linux"
 # define CPE_SL_IOS			"iOS"
-# define CPE_SL_OSX			"OS_X"
+# define CPE_SL_OSX			"OS X"
 # define CPE_SL_CYGWIN		"Cygwin"
 # define CPE_SL_WIN32		"Win32"
 # define CPE_SL_WIN64		"Win64"
@@ -144,7 +144,7 @@
 
 // Architecture-related macros.
 # define CPE_TL_ARM		"ARM"
-# define CPE_TL_IA32	"IA_32"
+# define CPE_TL_IA32	"IA-32"
 # define CPE_TL_AMD64	"AMD64"
 
 # ifdef __arm__
@@ -189,7 +189,7 @@
 #  endif
 # endif
 
-#define CPE_DESCRIPTION	CPE_SL "-" CPE_CL "_" CPE_VL "-" CPE_AL
+#define CPE_DESCRIPTION	CPE_SL ";" CPE_CL " " CPE_VL ";" CPE_AL
 
 namespace cpe {
 
