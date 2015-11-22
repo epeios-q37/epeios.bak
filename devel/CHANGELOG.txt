@@ -13,6 +13,8 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2015-11-22 :
+- DLBRRY :
+	- Fixing 'clang' complaining.
 - SCLFRNTND :
 	% : As 'kernel___' instances are now handled externally, 'Connect(...)' functions has been replace by functions
 	    filling 'features___' instances.
