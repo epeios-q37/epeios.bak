@@ -113,15 +113,13 @@ BASE_AC( login::display_embedded_backend_filename__ )
 BASE_AC( login::connect__ )
 {
 qRH
-	TOL_CBUFFER___ Buffer;
 	fblfrd::incompatibility_informations IncompatibilityInformations;
-	sclfrntnd::backend_type__ BackendType = sclfrntnd::bt_Undefined;
-	str::string BackendFeature;
+	sclfrntnd::features___ Features;
 qRB
 	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
-		BackendFeature.Init();
-		BackendType = sclxdhtml::login::GetBackendFeatures( Session, BackendFeature );
-		sclfrntnd::Connect( core::Kernel(), BackendType, BackendFeature );
+		Features.Init();
+		sclxdhtml::login::GetBackendFeatures( Session, Features );
+		core::Kernel().Init( Features );
 	}
 
 	IncompatibilityInformations.Init();

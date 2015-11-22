@@ -29,6 +29,15 @@ using namespace core;
 
 core::core___ core::Core;
 
+namespace {
+	sclfrntnd::kernel___ Kernel_;
+}
+
+sclfrntnd::kernel___ &core::Kernel( void )
+{
+	return Kernel_;
+}
+
 void core::instances_core___::Init( frdfrntnd::frontend___ &Frontend )
 {
 qRH
@@ -81,7 +90,7 @@ qRB
 	BackendCopyright.Init();
 	SoftwareInformations.Init();
 
-	sclfrntnd::GetBackendLocation( BackendLocation );
+	sclfrntnd::GetBackendLocation( Kernel_, BackendLocation );
 	Frontend.About( ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 
 	V( ProtocolVersion, ProtocolVersion );

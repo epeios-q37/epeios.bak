@@ -490,9 +490,9 @@ namespace sclxdhtml {
 			proxy__ &Proxy,
 			xml::writer_ &Writer );
 
-		sclfrntnd::backend_type__ GetBackendFeatures(
+		void GetBackendFeatures(
 			proxy__ &Proxy,
-			str::string_ &Feature );
+			sclfrntnd::features___ &Features );
 
 		void DisplaySelectedEmbeddedBackendFilename(
 			proxy__ &Proxy,

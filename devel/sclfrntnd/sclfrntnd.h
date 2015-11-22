@@ -52,10 +52,10 @@ namespace sclfrntnd {
 	typedef fblfrd::universal_frontend___ _frontend___;
 
 	enum backend_type__ {
-		btNone,		// Use of no backend.
-		btRemote,	// Remote, as a daemon.
-		btEmbedded,	// Embedded, as a library.
-		btPredefined,
+		btNone,			// Use of no backend.
+		btRemote,		// Remote, as a daemon.
+		btEmbedded,		// Embedded, as a library.
+		btPredefined,	// Retrieve backend parameters from configuration file.
 		bt_amount,
 		bt_Undefined
 	};
@@ -181,12 +181,12 @@ namespace sclfrntnd {
 
 	bso::uint__ GetBackendPingDelay( void );
 
-	void Connect(
-		kernel___ &Kernel,
+	void SetBackendFeatures(
 		backend_type__ BackendType,
-		const str::string_ &BackendFeature );
+		const str::string_ &Parameters,
+		features___ &Features );
 
-	void Connect( kernel___ &Kernel );	// Search kernel connection parameters in registry.
+	void GuessBackendFeatures( features___ &Features );	// Search kernel connection parameters in registry.
 
 	const str::string_ &GetBackendLocation(
 		const kernel___ &Kernel,

@@ -30,14 +30,15 @@ const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
 qRH
-	str::string BackendFeatures;
+	sclfrntnd::features___ Features;
 qRB
 	core::Core.Init( Mode );
 
-#pragma message ( __LOC__ "A changer !!!" )
-
-	if ( Mode == xdhcmn::mMultiUser )
-		Connect(core::Kernel() );
+	if ( Mode == xdhcmn::mMultiUser ) {
+		Features.Init();
+		sclfrntnd::GuessBackendFeatures( Features );
+		core::Kernel().Init( Features );
+	}
 qRR
 qRT
 qRE

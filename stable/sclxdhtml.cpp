@@ -543,34 +543,38 @@ void sclxdhtml::login::GetContext(
 	Writer.PopTag();
 }
 
-sclfrntnd::backend_type__ sclxdhtml::login::GetBackendFeatures(
+void sclxdhtml::login::GetBackendFeatures(
 	proxy__ &Proxy,
-	str::string_ &Feature )
+	sclfrntnd::features___ &Features )
 {
-	sclfrntnd::backend_type__ Type = sclfrntnd::bt_Undefined;
 qRH
 	TOL_CBUFFER___ Buffer;
+	sclfrntnd::backend_type__ Type = sclfrntnd::bt_Undefined;
+	str::string Parameters;
 qRB
+	Parameters.Init();
+
 	switch ( Type = GetBackendType_( Proxy ) ) {
 	case sclfrntnd::btNone:
 		break;
 	case sclfrntnd::btRemote:
-		Feature.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
 		break;
 	case sclfrntnd::btEmbedded:
-		Feature.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
 		break;
 	case sclfrntnd::btPredefined:
-		Feature.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
+		Parameters.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
 		break;
 	default:
 		qRFwk();
 		break;
 	}
+
+	sclfrntnd::SetBackendFeatures( Type, Parameters, Features );
 qRR
 qRT
 qRE
-	return Type;
 }
 
 void sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename(

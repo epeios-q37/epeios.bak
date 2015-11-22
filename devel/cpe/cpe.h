@@ -38,6 +38,7 @@
 # if defined(__clang__)
 #  define CPE_C_CLANG
 #  define CPE_CL	CPE_CL_CLANG
+#  define CPE_VL	__VERSION__
 # elif defined(__GNUC__) || defined(__GNUG__)
 #  define CPE_C_GCC
 #  ifdef __MINGW32__
@@ -49,9 +50,13 @@
 #  else
 #   define CPE_CL	CPE_CL_GCC
 #  endif
+#  define CPE_VL	__VERSION__
 # elif defined(_MSC_VER)
 #  define CPE_C_MSC
 #  define CPE_CL	CPE_CL_MSC
+#  define CPE_STRING__(x) #x
+#  define CPE_STRING_(x) CPE_STRING__(x)
+#  define CPE_VL	CPE_STRING_( _MSC_VER )
 #endif
 
 # ifndef CPE_CL
@@ -183,7 +188,7 @@
 #  endif
 # endif
 
-#define CPE_DESCRIPTION	CPE_SL "-" CPE_CL "-" CPE_AL
+#define CPE_DESCRIPTION	CPE_SL "-" CPE_CL "(" CPE_VL ")-" CPE_AL
 
 namespace cpe {
 

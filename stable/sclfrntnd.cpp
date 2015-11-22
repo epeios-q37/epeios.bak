@@ -379,16 +379,11 @@ qRT
 qRE
 }
 
-void sclfrntnd::Connect(
-	kernel___ &Kernel,
+void sclfrntnd::SetBackendFeatures(
 	backend_type__ BackendType,
-	const str::string_ &BackendFeature )
+	const str::string_ &Parameters,
+	features___ &Features )
 {
-qRH
-	features___ Features;
-qRB
-	Features.Init();
-
 	Features.PingDelay = GetBackendPingDelay();
 
 	switch ( BackendType ) {
@@ -397,14 +392,14 @@ qRB
 		break;
 	case btRemote:
 		Features.Type = csducl::tDaemon;
-		Features.Location = BackendFeature;
+		Features.Location = Parameters;
 		break;
 	case btEmbedded:
 		Features.Type = csducl::tLibrary;
-		Features.Location = BackendFeature;
+		Features.Location = Parameters;
 		break;
 	case btPredefined:
-		GetBackendFeatures_( BackendFeature, Features );
+		GetBackendFeatures_( Parameters, Features );
 		break;
 	case bt_Undefined:
 		qRFwk();
@@ -413,24 +408,19 @@ qRB
 		qRFwk();
 		break;
 	}
-
-	Kernel.Init( Features );
-qRR
-qRT
-qRE
 }
 
 namespace{
-	bso::bool__ Connect_( kernel___ &Kernel )
+	bso::bool__ GuessBackendFeatures_( features___ &Features )
 	{
 		bso::bool__ BackendDeclared = false;
 	qRH
 		backend_type__ Type = bt_Undefined;
-		str::string Feature, RawType;
+		str::string Parameter, RawType;
 	qRB
-		Feature.Init();
+		Parameter.Init();
 
-		if ( sclmisc::OGetValue( parameter_::Backend_, Feature ) ) {
+		if ( sclmisc::OGetValue( parameter_::Backend_, Parameter ) ) {
 			RawType.Init();
 			sclmisc::MGetValue( parameter_::backend_::Type_, RawType );
 
@@ -439,7 +429,7 @@ namespace{
 
 			BackendDeclared = true;
 
-			Connect( Kernel, Type, Feature );
+			SetBackendFeatures( Type, Parameter, Features );
 		}
 	qRR
 	qRT
@@ -448,9 +438,9 @@ namespace{
 	}
 }
 
-void sclfrntnd::Connect( kernel___ &Kernel )
+void sclfrntnd::GuessBackendFeatures( features___ &Features )
 {
-	if ( !Connect_( Kernel ) )
+	if ( !GuessBackendFeatures_( Features ) )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_MissingBackendDeclaration" );
 }
 

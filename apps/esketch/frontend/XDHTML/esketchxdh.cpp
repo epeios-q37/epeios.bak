@@ -28,7 +28,19 @@ const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
+qRH
+	sclfrntnd::features___ Features;
+qRB
 	core::Core.Init( Mode );
+
+	if ( Mode == xdhcmn::mMultiUser ) {
+		Features.Init();
+		sclfrntnd::GuessBackendFeatures( Features );
+		core::Kernel().Init( Features );
+	}
+qRR
+qRT
+qRE
 }
 
 xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
@@ -45,7 +57,7 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	if ( Session == NULL )
 		qRGnr();
 
-	Session->Init( Language, ProxyCallback );
+	Session->Init( core::Kernel(), Language, ProxyCallback );
 
 	switch ( core::Core.Mode() ) {
 	case xdhcmn::mMonoUser:
