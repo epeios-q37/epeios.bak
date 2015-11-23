@@ -12,6 +12,13 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-23 :
+- PLGNCORE :
+	% Adding/changing arguments handling features.
+- SCLARGMNT, SCLTOOL :
+	% Moving all argument handling code from 'SCLTOOL' to new library 'SCLARGMNT', in order to allow the use of arguments
+	  to other program type as tools (in particulary plugins).
+
 2015-11-22 :
 - DLBRRY :
 	- Fixing 'clang' complaining.

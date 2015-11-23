@@ -22,6 +22,9 @@
 #include "sclplugin.h"
 
 #include "sclmisc.h"
+#include "sclargmnt.h"
+
+#include "strmrg.h"
 
 using namespace sclplugin;
 
@@ -53,13 +56,86 @@ _callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 	return Callback_;
 }
 
-void sclplugin::callback__::PLGNCOREInitialize(
-	const plgncore::data__ *Data,
-	... )
-{
-	va_list Parameters;	// NOTA : leur contenu n'est pas encore trait.
-	va_start( Parameters, Data );
+namespace {
+	void Delete_(
+		int Amount,
+		ntvstr::char__ **Args )
+	{
+		while ( Amount-- )
+			delete Args[Amount];
 
+		delete Args;
+	}
+
+	void HandleArguments_( const str::strings_ &Arguments )
+	{
+	qRH
+		ntvstr::char__ **Args = NULL;
+		ntvstr::string___ Arg;
+		ctn::E_CMITEM( str::string_ ) Argument;
+		sdr::row__ Row = qNIL;
+	qRB
+		Argument.Init( Arguments );
+
+		Row = Arguments.First();
+
+		while ( Row != qNIL ) {
+			Arg = new
+		}
+
+		Args = new ntvstr::char__ *[Arguments.Amount()];
+		sclargmnt::FillRegistry( Arguments.Amount(), Args, false );
+	qRR
+	qRT
+		if ( Args != NULL )
+			Delete_( Arguments.Amount(), Args );
+	qRE
+	}
+
+	void HandleArguments_( strmrg::retriever__ &Arguments )
+	{
+	qRH
+		str::strings Strings;
+		str::string String;
+	qRB
+		Strings.Init();
+		while ( !Arguments.Availability() == strmrg::aNone ) {
+			String.Init()	;
+			Arguments.GetString( String );
+			Strings.Append( String );
+		}
+
+		HandleArguments_( Strings );
+	qRR
+	qRT
+	qRE
+	}
+
+	void HandleArguments_( const strmrg::table_ &Arguments )
+	{
+		strmrg::retriever__ Retriever;
+
+		Retriever.Init( Arguemnts );
+
+		HandleArguments_( Retriever );
+	}
+
+	void HandleArguments_( const str::string_ &Arguments )
+	{
+	qRH
+		strmrg::table Splitted;
+		
+	qRB
+		Splitted.Init();
+		strmrg::Split( Arguments, Splitted );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void sclplugin::callback__::PLGNCOREInitialize( const plgncore::data__ *Data )
+{
 	if ( Data == NULL )
 		qRFwk();
 
@@ -70,7 +146,14 @@ void sclplugin::callback__::PLGNCOREInitialize(
 		qRFwk();
 
 	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Data->Configuration, Data->Locale );
+		if ( Data->Location->Amount() == 0 )
+			sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Data->Configuration, Data->Locale );
+		else
+			sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, *Data->Location );
+
+	if ( Data->Arguments->Amount() != 0 )
+		HandleArguments_( *Data->Arguments );
+
 }
 
 void *sclplugin::callback__::PLGNCORERetrievePlugin( void )

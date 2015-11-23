@@ -71,3 +71,12 @@ qRFE
 	return ExitValue;
 }
 #endif
+
+class starter {
+public:
+	starter( void )
+	{
+		scltool::IgnoreUnknownArguments = true;
+
+	}
+} Starter;

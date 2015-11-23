@@ -36,7 +36,8 @@ mods += strng tagsbs tol txf tys
 mods += uys utf xtf llio tht 
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp 
-mods += sclmisc sclerror scllocale sclrgstry scltool 
+mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += scltool 
 mods += i18n registry 
 
 pmods += pllio 

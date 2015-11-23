@@ -297,7 +297,7 @@ void sclrgstry::FillSetupRegistry(
 	const str::string_ &Id )
 {
 qRH
-		str::string Setup;
+	str::string Setup;
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
 	str::string EntryPath;

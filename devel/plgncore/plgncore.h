@@ -36,14 +36,14 @@
 
 # include <stdarg.h>
 
-# define PLGNCORE_SHARED_DATA_VERSION	"4"
+# define PLGNCORE_SHARED_DATA_VERSION	"5"
 
 # define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
 # define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
 
 namespace plgncore {
 #pragma pack( push, 1)
-	// NOTA : Si modifi, modifier 'CSDLEO_SHARED_DATA_VERSION' !
+	// NOTA : If modified, increment 'PLGNCORE_SHARED_DATA_VERSION' !
 	class data__
 	{
 	public:
@@ -54,6 +54,9 @@ namespace plgncore {
 		const cio::set__ *CIO;
 		rgstry::entry__ Configuration;
 		rgstry::entry__ Locale;
+		// Either this below, or both above.
+		const fnm::name___ *Location;
+		const str::string_ *Arguments;
 		void *UP;				// A la discrtion de l'utilisateur.
 		void reset( bso::bool__ P = true )
 		{
@@ -63,6 +66,8 @@ namespace plgncore {
 			UP = NULL;
 			Configuration.reset( P );
 			Locale.reset( P );
+			Location = NULL;
+			Arguments = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
@@ -70,15 +75,26 @@ namespace plgncore {
 			sclerror::error___ *SCLError,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
+			const str::string_ &Arguments,
 			void *UP = NULL )
 		{
-			Init( qRRor, SCLError, Configuration, Locale, UP );
+			Init( qRRor, SCLError, Configuration, Locale, Arguments, UP );
+		}
+		data__(
+			err::err___ *qRRor,
+			sclerror::error___ *SCLError,
+			const fnm::name___ &Location,
+			const str::string_ &Arguments,
+			void *UP = NULL )
+		{
+			Init( qRRor, SCLError, Location, Arguments, UP );
 		}
 		void Init(
 			err::err___ *qRRor,
 			sclerror::error___ *SCLError,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
+			const str::string_ &Arguments,
 			void *UP = NULL )
 		{
 			Version = PLGNCORE_SHARED_DATA_VERSION;
@@ -88,6 +104,26 @@ namespace plgncore {
 			this->CIO = &cio::GetCurrentSet();
 			this->Configuration.Init( Configuration );
 			this->Locale.Init( Locale );
+			Location = NULL;
+			this->Arguments = &Arguments;
+			this->UP = UP;
+		}
+		void Init(
+			err::err___ *qRRor,
+			sclerror::error___ *SCLError,
+			const fnm::name___ &Location,
+			const str::string_ &Arguments,
+			void *UP = NULL )
+		{
+			Version = PLGNCORE_SHARED_DATA_VERSION;
+			ControlValue = Control();
+			this->qRRor = qRRor;
+			this->SCLError = SCLError;
+			this->CIO = &cio::GetCurrentSet();
+			Configuration.Init();
+			Locale.Init();
+			this->Location = &Location;
+			this->Arguments = &Arguments;
 			this->UP = UP;
 		}
 		static bso::size__ Control( void )
@@ -100,9 +136,7 @@ namespace plgncore {
 	class callback__
 	{
 	protected:
-		virtual void PLGNCOREInitialize(
-			const data__ *Data,
-			... ) = 0;
+		virtual void PLGNCOREInitialize( const data__ *Data ) = 0;
 		virtual void *PLGNCORERetrievePlugin( void ) = 0;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
 	public:
@@ -115,16 +149,9 @@ namespace plgncore {
 		{
 			//Standardisaction.
 		}
-		void Initialize(
-			const data__ *Data,
-			const ntvstr::char__ *FirstParameter = NULL,
-			... /* Autres paramtres. Le dernier doit tre = 'NULL' */ )
+		void Initialize( const data__ *Data )
 		{
-			va_list Parameters;
-			va_start( Parameters, FirstParameter );
-
-			PLGNCOREInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la mthode appele.
-																// Il n'existe en tant que paramtre de cette mthode que pour en faciliter la comprhension.
+			PLGNCOREInitialize( Data );
 		}
 		void *RetrievePlugin( void )
 		{

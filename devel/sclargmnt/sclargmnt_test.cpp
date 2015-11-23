@@ -17,34 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDRMC__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "csdrmc.h"
+#include "sclargmnt.h"
 
-using namespace csdrmc;
+#include "err.h"
+#include "cio.h"
 
-const char *csdrmc::callback__::Identification( void )
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+void Generic( int argc, char *argv[] )
 {
-	return CSDRMC_PLUGIN_NAME " V" CSDRMC_PLUGIN_API_VERSION " " CPE_DESCRIPTION;
-}
-
-bso::bool__ csdrmc::core___::Init(
-	const ntvstr::string___ &PluginNameAndLocation,
-	const rgstry::tentry__ &Configuration,
-	const rgstry::tentry__ &Locale,
-	const rgstry::multi_level_registry_ &Registry,
-	err::handling__ ErrHandling )
-{
-	bso::bool__ Success = false;
 qRH
-	plgn::retriever___<callback__> Plugin;
 qRB
-	if ( Success = Plugin.Init(PluginNameAndLocation, Configuration, Locale, Registry, ErrHandling) )
-		Driver_ = Plugin.Plugin().GetFlow();
 qRR
 qRT
 qRE
-	return Success;
 }
 
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+qRFH
+qRFB
+	COut << "Test of library " << SCLARGMNT_NAME << ' ' << __DATE__" "__TIME__"\n";
 
+	Generic( argc, argv );
+qRFR
+	ExitValue = EXIT_FAILURE;
+qRFT
+qRFE
+	return ExitValue;
+}
