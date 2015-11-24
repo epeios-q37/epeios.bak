@@ -42,8 +42,6 @@
 // NOTA : 'SCLF_' is used in place of 'SCLFRNTND_' for macro. 
 
 namespace sclfrntnd {
-	using csducl::features___;
-
 	using fblfrd::compatibility_informations__;
 
 	using fblfrd::incompatibility_informations_;
@@ -64,6 +62,31 @@ namespace sclfrntnd {
 
 	backend_type__ GetBackendType( const str::string_ &Pattern );
 
+	struct features___ {
+	public:
+		csducl::type__ Type;
+		str::string Path;
+		str::string Parameters;
+		void reset( bso::bool__ P = true )
+		{
+			Type = csducl::t_Undefined;
+			Path.reset( P );
+			Parameters.reset( P );
+		}
+		E_CDTOR( features___ );
+		void Init(void) {
+			Type = csducl::t_Undefined;
+			Path.Init();
+			Parameters.Init();
+		}
+	};
+
+	void SetBackendFeatures(
+		backend_type__ BackendType,
+		const str::string_ &Parameters,
+		const str::string_ &Path,
+		features___ &Features );
+
 	// Is exposed because, even if there is generally only one kernel per frontend, there could be two (a frontend dealing with two different backends).
 	class kernel___
 	{
@@ -76,27 +99,40 @@ namespace sclfrntnd {
 		}
 		E_CVDTOR( kernel___ );
 		void Init(
-			const features___ &Features,
-			csdsnc::log_callback__ *LogCallback = NULL )
+			csducl::type__ Type,
+			const str::string_ &Path,
+			const str::string_ &Arguments )
 		{
 		qRH
 			csdlec::library_data__ LibraryData;
 			csdleo::mode__ Mode = csdleo::m_Undefined;
 			TOL_CBUFFER___ Buffer;
+			bso::bool__ Success = false;
 		qRB
-			LibraryData.Init( csdleo::cRegular, Features.Location.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
+			switch ( Type ) {
+			case csducl::tNone:
+				Success = _ClientCore.InitNone();
+				break;
+			case csducl::tDaemon:	// Obsolete.
+				qRFwk();
+				break;
+			case csducl::tLibrary:
+				LibraryData.Init( csdleo::cRegular, Path.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
+				Success = _ClientCore.InitLibrary( Path, LibraryData );
+				break;
+			case csducl::tRemote:
+				_ClientCore.InitRemote( Path, Arguments );
+				break;
+			default:
+				qRFwk();
+				break;
+			}
 
-			if ( !_ClientCore.Init( Features, LibraryData, LogCallback ) )
-				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Location );
+			if ( !Success )
+				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Path );
 		qRR
 		qRT
 		qRE
-		}
-		void Init(
-			const features___ &Features,
-			csdsnc::log_callback__ &LogCallback )
-		{
-			return Init( Features, &LogCallback );
 		}
 		const csducl::universal_client_core___ &Core( void ) const
 		{
@@ -179,18 +215,11 @@ namespace sclfrntnd {
 		const char *Language,
 		xml::writer_ &Writer );
 
-	bso::uint__ GetBackendPingDelay( void );
+	void GuessBackendFeatures( features___ &Features );	// Set features following what's in registry.
 
-	void SetBackendFeatures(
-		backend_type__ BackendType,
-		const str::string_ &Parameters,
-		features___ &Features );
-
-	void GuessBackendFeatures( features___ &Features );	// Search kernel connection parameters in registry.
-
-	const str::string_ &GetBackendLocation(
+	const str::string_ &GetBackendPath(
 		const kernel___ &Kernel,
-		str::string_ &Location );
+		str::string_ &Path );
 
 # define SCLF_I_( name, Name, id, Id  )\
 	typedef fbltyp::id##__	name##_t__;\

@@ -36,14 +36,16 @@
 # include "flw.h"
 # include "csdsnc.h"
 # include "csdlec.h"
+# include "csdrmc.h"
 
 # define CSDUCL_CACHE_SIZE	1000
 
 namespace csducl {
 	enum type__ {
-		tNone,	// Pas de backend.
-		tDaemon,
-		tLibrary,
+		tNone,		// No server.
+		tDaemon,	// Old daemon type server.
+		tLibrary,	// Library embedded  server,
+		tRemote,	// Remote server (accessed throught a plugin).
 		t_amount,
 		t_Undefined
 	};
@@ -52,27 +54,6 @@ namespace csducl {
 
 	type__ GetType( const str::string_ &Pattern );
 
-	struct features___
-	{
-	public:
-		str::string Location;
-		csducl::type__ Type;
-		bso::uint__ PingDelay;
-		void reset( bso::bool__ P = true )
-		{
-			Location.reset( P );
-			Type = csducl::t_Undefined;
-			PingDelay = 0;
-		}
-		E_CDTOR( features___ )
-		void Init( void )
-		{
-			Location.Init();
-			Type = csducl::t_Undefined;
-			PingDelay = 0;
-		}
-	};
-
 	class universal_client_core___
 	{
 	private:
@@ -80,11 +61,13 @@ namespace csducl {
 		str::string _Location;
 		csdsnc::core _DaemonAccess;
 		csdlec::library_embedded_client_core__ _LibraryAccess;
+		csdrmc::core___ _RemoteAccess;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_LibraryAccess.reset( P );
 			_DaemonAccess.reset( P );
+			_RemoteAccess.reset( P );
 			_Type = t_Undefined;
 			_Location.reset( P );
 		}
@@ -96,17 +79,20 @@ namespace csducl {
 		{
 			reset();
 		}
-		bso::bool__ Init(
-			const features___ &Features,
-			csdlec::library_data__ &LibraryData,
-			csdsnc::log_callback__ *Log = NULL );
-		bso::bool__ Init(
-			const features___ &Features,
-			csdlec::library_data__ &LibraryData,
-			csdsnc::log_callback__ &Log )
+		bso::bool__ InitNone( void )
 		{
-			return Init( Features, LibraryData, &Log );
+			_Type = tNone;
+			_Location.Init();
 		}
+		bso::bool__ InitDaemon(
+			const str::string_ &Location,
+			bso::uint__ PingDelay );
+		bso::bool__ InitLibrary(
+			const str::string_ &LibraryPath,
+			csdlec::library_data__ &LibraryData );
+		bso::bool__ InitRemote(
+			const str::string_ &PluginPath,
+			const str::string_ &Parameters );
 		type__ GetType( void ) const
 		{
 			return _Type;
@@ -121,6 +107,7 @@ namespace csducl {
 	private:
 		csdsnc::client_ioflow___ _DaemonFlow;
 		csdlec::library_embedded_client_ioflow___ _LibraryFlow;
+		csdrmc::client__ _RemoteFlow;
 		universal_client_core___ *_Core;
 		flw::ioflow__ &_Get( void )
 		{
@@ -133,6 +120,9 @@ namespace csducl {
 				break;
 			case tLibrary:
 				return _LibraryFlow;
+				break;
+			case tRemote:
+				return _RemoteFlow;
 				break;
 			default:
 				qRFwk();
@@ -168,6 +158,7 @@ namespace csducl {
 			fdr::ioflow_driver___<>::reset( P );
 			_DaemonFlow.reset( P );
 			_LibraryFlow.reset( P );
+			_RemoteFlow.reset( P );
 
 			_Core = NULL;
 		}
@@ -196,6 +187,8 @@ namespace csducl {
 			case tLibrary:
 				_LibraryFlow.Init( Core._LibraryAccess );
 				break;
+			case tRemote:
+				_RemoteFlow.Init( Core._RemoteAccess );
 			default:
 				qRFwk();
 				break;

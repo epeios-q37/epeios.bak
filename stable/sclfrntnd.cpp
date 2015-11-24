@@ -32,9 +32,8 @@ namespace parameter_ {
 	rgstry::entry___ Backend_( "Backend", sclrgstry::Parameters );
 
 	namespace backend_ {
-		rgstry::entry___ AccessMode_( "@AccessMode", Backend_ );
 		rgstry::entry___ Type_( "@Type", Backend_ );
-		rgstry::entry___ PingDelay_( "PingDelay", Backend_ );
+		rgstry::entry___ Path_( "@Path", Backend_ );
 	}
 
 	rgstry::entry___ Authentication_( "Authentication", sclrgstry::Parameters );
@@ -70,6 +69,7 @@ namespace definition_ {
 	namespace tagged_backend_ {
 		rgstry::entry___ Alias_( "@Alias", TaggedBackend_ );
 		rgstry::entry___ Type_( "@Type", TaggedBackend_ );
+		rgstry::entry___ Path_( "@Path", TaggedBackend_ );
 	}
 }
 
@@ -345,11 +345,6 @@ qRT
 qRE
 }
 
-bso::uint__ sclfrntnd::GetBackendPingDelay( void )
-{
-	return sclrgstry::OGetUInt(sclrgstry::GetCommonRegistry(), parameter_::backend_::PingDelay_, 0 );
-}
-
 static void GetBackendFeatures_(
 	const str::string_ &Id,
 	features___ &Features )
@@ -362,18 +357,24 @@ qRB
 
 	Buffer.Init();
 	switch ( GetBackendType(sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), BackendTypeEntry, Buffer ) ) ) {
+	case btNone:
+		Features.Type = csducl::tNone;
+		break;
 	case btRemote:
-		Features.Type = csducl::tDaemon;
+		Features.Type = csducl::tRemote;
+		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::tagged_backend_::Path_, Id ), Features.Path );
+		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::TaggedBackend_, Id ), Features.Parameters );
 		break;
 	case btEmbedded:
 		Features.Type = csducl::tLibrary;
+		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::tagged_backend_::Path_, Id ), Features.Path );
+		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::TaggedBackend_, Id ), Features.Parameters );
 		break;
 	default:
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( BackendTypeEntry );
 		break;
 	}
 
-	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::TaggedBackend_, Id ), Features.Location );
 qRR
 qRT
 qRE
@@ -381,28 +382,26 @@ qRE
 
 void sclfrntnd::SetBackendFeatures(
 	backend_type__ BackendType,
+	const str::string_ &Path,
 	const str::string_ &Parameters,
 	features___ &Features )
 {
-	Features.PingDelay = GetBackendPingDelay();
-
 	switch ( BackendType ) {
 	case btNone:
 		Features.Type = csducl::tNone;
 		break;
-	case btRemote:
-		Features.Type = csducl::tDaemon;
-		Features.Location = Parameters;
-		break;
 	case btEmbedded:
 		Features.Type = csducl::tLibrary;
-		Features.Location = Parameters;
+		Features.Path = Path;
+		Features.Parameters = Parameters;
+		break;
+	case btRemote:
+		Features.Type = csducl::tRemote;
+		Features.Path = Path;
+		Features.Parameters = Parameters;
 		break;
 	case btPredefined:
 		GetBackendFeatures_( Parameters, Features );
-		break;
-	case bt_Undefined:
-		qRFwk();
 		break;
 	default:
 		qRFwk();
@@ -413,28 +412,31 @@ void sclfrntnd::SetBackendFeatures(
 namespace{
 	bso::bool__ GuessBackendFeatures_( features___ &Features )
 	{
-		bso::bool__ BackendDeclared = false;
+		bso::bool__ BackendFound = false;
 	qRH
 		backend_type__ Type = bt_Undefined;
-		str::string Parameter, RawType;
+		str::string RawType, Parameters, Path;
 	qRB
-		Parameter.Init();
+		Parameters.Init();
 
-		if ( sclmisc::OGetValue( parameter_::Backend_, Parameter ) ) {
+		if ( sclmisc::OGetValue( parameter_::Backend_, Parameters ) ) {
 			RawType.Init();
 			sclmisc::MGetValue( parameter_::backend_::Type_, RawType );
+
+			Path.Init();
+			sclmisc::OGetValue( parameter_::backend_::Path_, Path  );
 
 			if ( ( Type = GetBackendType( RawType ) ) == bt_Undefined )
 				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadBackendType" );
 
-			BackendDeclared = true;
-
-			SetBackendFeatures( Type, Parameter, Features );
+			SetBackendFeatures( Type, Parameters, Path, Features );
 		}
+
+		BackendFound = true;
 	qRR
 	qRT
 	qRE
-		return BackendDeclared;
+		return BackendFound;
 	}
 }
 
@@ -444,7 +446,7 @@ void sclfrntnd::GuessBackendFeatures( features___ &Features )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_MissingBackendDeclaration" );
 }
 
-const str::string_ &sclfrntnd::GetBackendLocation(
+const str::string_ &sclfrntnd::GetBackendPath(
 	const kernel___ &Kernel,
 	str::string_ &Location )
 {

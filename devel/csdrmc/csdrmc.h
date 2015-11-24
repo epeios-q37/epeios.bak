@@ -96,35 +96,11 @@ namespace csdrmc {
 		E_CDTOR( core___ );
 		bso::bool__ Init(
 			const ntvstr::string___ &PluginNameAndLocation,
-			const rgstry::tentry__ &Configuration,
-			const rgstry::tentry__ &Locale,
-			const rgstry::multi_level_registry_ &Registry,
+			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default );
 	};
 
-	class client___
-	: public flw::standalone_ioflow__<>
-	{
-	private:
-		core___ Core_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			Core_.reset( P );
-			flw::standalone_ioflow__<>::reset( P );
-		}
-		E_CDTOR( client___ );
-		void Init(
-			const ntvstr::string___ &PluginNameAndLocation,
-			const rgstry::tentry__ &Configuration,
-			const rgstry::tentry__ &Locale,
-			const rgstry::multi_level_registry_ &Registry,
-			err::handling__ ErrHandling = err::h_Default )
-		{
-			Core_.Init( PluginNameAndLocation, Configuration, Locale, Registry, ErrHandling );
-			flw::standalone_ioflow__<>::Init( Core_ );
-		}
-	};
+	typedef flw::standalone_ioflow__<> client__;
 }
 
 #endif

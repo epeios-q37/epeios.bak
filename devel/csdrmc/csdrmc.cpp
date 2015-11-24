@@ -30,16 +30,14 @@ const char *csdrmc::callback__::Identification( void )
 
 bso::bool__ csdrmc::core___::Init(
 	const ntvstr::string___ &PluginNameAndLocation,
-	const rgstry::tentry__ &Configuration,
-	const rgstry::tentry__ &Locale,
-	const rgstry::multi_level_registry_ &Registry,
+	const str::string_ &Arguments,
 	err::handling__ ErrHandling )
 {
 	bso::bool__ Success = false;
 qRH
 	plgn::retriever___<callback__> Plugin;
 qRB
-	if ( Success = Plugin.Init(PluginNameAndLocation, Configuration, Locale, Registry, ErrHandling) )
+	if ( Success = Plugin.Init( PluginNameAndLocation, Arguments, ErrHandling) )
 		Driver_ = Plugin.Plugin().GetFlow();
 qRR
 qRT

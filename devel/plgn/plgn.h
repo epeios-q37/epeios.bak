@@ -61,6 +61,36 @@ namespace plgn {
 
 			return !strcmp(plugin::Identification(), Function() );
 		}
+	private:
+		bso::bool__ SubInit_(
+			const ntvstr::string___ &PluginPath,
+			err::handling__ ErrHandling )
+		{
+			plgncore::retrieve_callback *Function = NULL;
+			if ( !_Library.Init( PluginPath, ErrHandling ) )
+				if ( ErrHandling == err::hThrowException )
+					qRFwk();
+				else
+					return false;
+
+			if ( !_IsCompatible() )
+				if ( ErrHandling == err::hThrowException )
+					qRFwk();
+				else
+					return false;
+
+			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), _Library );
+
+			if ( Function == NULL )
+				if ( ErrHandling == err::hThrowException )
+					qRFwk();
+				else
+					return false;
+
+			Callback_ = &Function();
+
+			return true;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -75,35 +105,21 @@ namespace plgn {
 		}
 		E_CDTOR( retriever___ );
 		bso::bool__ Init(
-			const ntvstr::string___ &PluginNameAndLocation,
+			const ntvstr::string___ &PluginPath,
 			const rgstry::entry__ &Configuration,
 			const rgstry::entry__ &Locale,
+			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
 		qRH
 			plgncore::data__ Data;
-			TOL_CBUFFER___ Buffer;
-			plgncore::retrieve_callback *Function = NULL;
 		qRB
-			if ( !_Library.Init( PluginNameAndLocation, ErrHandling ) )
-				return NULL;
+			if ( !SubInit_( PluginPath, ErrHandling ) )
+				return false;
 
-			if ( !_IsCompatible() )
-				if ( ErrHandling == err::hThrowException )
-					qRFwk();
-				else
-					return false;
+			Data.Init( err::qRRor, sclerror::SCLERRORError, Configuration, Locale, Arguments );
 
-			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), _Library );
-
-			if ( Function == NULL )
-				qRFwk();
-
-			Callback_ = &Function();
-
-			Data.Init( err::qRRor, sclerror::SCLERRORError, Configuration, Locale );
-
-			C_().Initialize( &Data, NULL );
+			C_().Initialize( &Data );
 
 			_Plugin = (plugin *)C_().RetrievePlugin();
 
@@ -115,10 +131,11 @@ namespace plgn {
 			return _Plugin != NULL;
 		}
 		bso::bool__ Init(
-			const ntvstr::string___ &PluginNameAndLocation,
+			const ntvstr::string___ &PluginPath,
 			const rgstry::tentry__ &Configuration,
 			const rgstry::tentry__ &Locale,
 			const rgstry::multi_level_registry_ &Registry,
+			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
 			bso::bool__ Success = false;
@@ -135,7 +152,7 @@ namespace plgn {
 			if ( !Registry.Convert( Locale, LocaleEntry, ErrHandling ) )
 				qRReturn;
 
-			if ( !Init( PluginNameAndLocation, ConfigurationEntry, LocaleEntry, ErrHandling ) )
+			if ( !Init( PluginPath, ConfigurationEntry, LocaleEntry, Arguments, ErrHandling ) )
 				qRReturn;
 
 			Success = true;
@@ -143,6 +160,34 @@ namespace plgn {
 		qRT
 		qRE
 			return Success;
+		}
+		bso::bool__ Init(
+			const ntvstr::string___ &PluginPath,
+			const str::string_ &Arguments,
+			err::handling__ ErrHandling = err::h_Default )
+		{
+		qRH
+			plgncore::data__ Data;
+			fnm::name___ Location;
+		qRB
+			if ( !SubInit_( PluginPath, ErrHandling ) )
+				return false;
+
+			Location.Init();
+			fnm::GetLocation( PluginPath, Location );
+
+			Data.Init( err::qRRor, sclerror::SCLERRORError, Location, Arguments );
+
+			C_().Initialize( &Data );
+
+			_Plugin = (plugin *)C_().RetrievePlugin();
+
+			if ( ( _Plugin == NULL) && ( ErrHandling == err::hThrowException ) )
+				qRFwk();
+		qRR
+		qRT
+		qRE
+			return _Plugin != NULL;
 		}
 		plugin &Plugin( void )
 		{

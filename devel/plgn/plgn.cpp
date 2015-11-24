@@ -25,6 +25,5 @@ using namespace plgn;
 
 #include "sclmisc.h"
 
-/* Although in theory this class is inaccessible to the different modules,
-it is necessary to personalize it, or certain compiler would not work properly */
+
 

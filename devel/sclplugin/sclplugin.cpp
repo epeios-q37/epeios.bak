@@ -57,41 +57,6 @@ _callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 }
 
 namespace {
-	void Delete_(
-		int Amount,
-		ntvstr::char__ **Args )
-	{
-		while ( Amount-- )
-			delete Args[Amount];
-
-		delete Args;
-	}
-
-	void HandleArguments_( const str::strings_ &Arguments )
-	{
-	qRH
-		ntvstr::char__ **Args = NULL;
-		ntvstr::string___ Arg;
-		ctn::E_CMITEM( str::string_ ) Argument;
-		sdr::row__ Row = qNIL;
-	qRB
-		Argument.Init( Arguments );
-
-		Row = Arguments.First();
-
-		while ( Row != qNIL ) {
-			Arg = new
-		}
-
-		Args = new ntvstr::char__ *[Arguments.Amount()];
-		sclargmnt::FillRegistry( Arguments.Amount(), Args, false );
-	qRR
-	qRT
-		if ( Args != NULL )
-			Delete_( Arguments.Amount(), Args );
-	qRE
-	}
-
 	void HandleArguments_( strmrg::retriever__ &Arguments )
 	{
 	qRH
@@ -105,7 +70,7 @@ namespace {
 			Strings.Append( String );
 		}
 
-		HandleArguments_( Strings );
+		sclargmnt::FillRegistry( Strings, sclargmnt::faIsArgument, sclargmnt::uaReport );
 	qRR
 	qRT
 	qRE
@@ -115,7 +80,7 @@ namespace {
 	{
 		strmrg::retriever__ Retriever;
 
-		Retriever.Init( Arguemnts );
+		Retriever.Init( Arguments );
 
 		HandleArguments_( Retriever );
 	}

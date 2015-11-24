@@ -12,8 +12,14 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-24 :
+- CSDUCL :
+	% Introducing 'CSDRMC'.
+- SCLFRNTND :
+	* Use of remote plugin instead of embedded daemon access.
+
 2015-11-23 :
-- PLGNCORE :
+- OLNG, PLGNCORE, SCLPLNG :
 	% Adding/changing arguments handling features.
 - SCLARGMNT, SCLTOOL :
 	% Moving all argument handling code from 'SCLTOOL' to new library 'SCLARGMNT', in order to allow the use of arguments

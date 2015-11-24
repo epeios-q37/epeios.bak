@@ -50,6 +50,9 @@ const char *csducl::GetLabel( type__ Type )
 	case tLibrary:
 		return "Library";
 		break;
+	case tRemote:
+		return "Remote";
+		break;
 	default:
 		qRFwk();
 		break;
@@ -58,10 +61,9 @@ const char *csducl::GetLabel( type__ Type )
 	return NULL;	// Pour viter un 'warning'.
 }
 
-bso::bool__ csducl::universal_client_core___::Init(
-	const features___ &Features,
-	csdlec::library_data__ &LibraryData,
-	csdsnc::log_callback__ *Log )
+bso::bool__ csducl::universal_client_core___::InitDaemon(
+	const str::string_ &Location,
+	bso::uint__ PingDelay )
 {
 	bso::bool__ Success = false;
 qRH
@@ -69,23 +71,50 @@ qRH
 qRB
 	reset();
 
-	switch ( Features.Type ) {
-	case tNone:
-		Success = true;
-		break;
-	case tDaemon:
-		Success = _DaemonAccess.Init( Features.Location.Convert( Buffer ), Features.PingDelay, Log );
-		break;
-	case tLibrary:
-		Success = _LibraryAccess.Init( Features.Location.Convert( Buffer ), LibraryData, err::hUserDefined );
-		break;
-	default:
-		qRFwk();
-		break;
+	if ( Success = _DaemonAccess.Init(Location.Convert(Buffer), PingDelay) ) {
+		_Type = tDaemon;
+		_Location.Init( Location );
 	}
+qRR
+qRT
+qRE
+	return Success;
+}
 
-	_Type = Features.Type;
-	_Location.Init( Features.Location );
+bso::bool__ csducl::universal_client_core___::InitLibrary(
+	const str::string_ &LibraryPath,
+	csdlec::library_data__ &LibraryData )
+{
+	bso::bool__ Success = false;
+qRH
+	TOL_CBUFFER___ Buffer;
+qRB
+	reset();
+
+	if ( Success = _LibraryAccess.Init( LibraryPath.Convert( Buffer ), LibraryData, err::hUserDefined ) ) {
+		_Type = tLibrary;
+		_Location.Init( LibraryPath );
+	}
+qRR
+qRT
+qRE
+	return Success;
+}
+
+bso::bool__ csducl::universal_client_core___::InitRemote(
+	const str::string_ &PluginPath,
+	const str::string_ &Parameters )
+{
+	bso::bool__ Success = false;
+qRH
+	TOL_CBUFFER___ Buffer;
+qRB
+	reset();
+
+	if ( Success = _RemoteAccess.Init(PluginPath, Parameters) ) {
+		_Type = tRemote;
+		_Location.Init( PluginPath );
+	}
 qRR
 qRT
 qRE
