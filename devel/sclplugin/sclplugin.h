@@ -55,24 +55,43 @@ namespace sclplugin {
 		}
 	};
 
-	// Fonctions  surcharger, (la macro ci-dessous le fait).
+	// Function to overload (made by below macro).
 	const char *SCLPLUGINPluginIdentification( void );
 	void *SCLPLUGINRetrievePlugin( void );
 	void SCLPLUGINReleasePlugin( void * );
 }
 
+// If this macro is used, you have to define a 'SCLPLUGINInitilaize()' member.
+// NOTA : needed parameters are genrally retrieved from the registry,
+// which is automatiacally filed by this module.
 # define SCLPLUGIN_DEF( plugin )\
 	const char *sclplugin::SCLPLUGINPluginIdentification( void )\
 	{\
 		return plugin::Identification();\
 	}\
+\
 	void *sclplugin::SCLPLUGINRetrievePlugin( void )\
 	{\
-		plugin *Plugin = new plugin;\
+		plugin *Plugin = NULL;\
+	qRH\
+	qRB\
+		Plugin = new plugin;\
 		\
 		if ( Plugin == NULL )\
 			qRAlc();\
 		\
+		if ( !Plugin->SCLPLUGINInitialize() ) {\
+			delete Plugin;\
+			Plugin = NULL;\
+			qRReturn;\
+		}\
+	qRR\
+		if ( Plugin != NULL ) {\
+			delete Plugin;\
+			Plugin = NULL;\
+		}\
+	qRT\
+	qRE\
 		return Plugin;\
 	}\
 \

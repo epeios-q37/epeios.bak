@@ -34,16 +34,15 @@
 
 # include "err.h"
 # include "flw.h"
-# include "csdsnc.h"
 # include "csdlec.h"
 # include "csdrmc.h"
+# include "plgn.h"
 
 # define CSDUCL_CACHE_SIZE	1000
 
 namespace csducl {
 	enum type__ {
 		tNone,		// No server.
-		tDaemon,	// Old daemon type server.
 		tLibrary,	// Library embedded  server,
 		tRemote,	// Remote server (accessed throught a plugin).
 		t_amount,
@@ -59,15 +58,15 @@ namespace csducl {
 	private:
 		type__ _Type;
 		str::string _Location;
-		csdsnc::core _DaemonAccess;
 		csdlec::library_embedded_client_core__ _LibraryAccess;
 		csdrmc::core___ _RemoteAccess;
+		plgn::retriever___<csdrmc::driver___> RemotePluginRetriever_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_LibraryAccess.reset( P );
-			_DaemonAccess.reset( P );
 			_RemoteAccess.reset( P );
+			RemotePluginRetriever_.reset( P );
 			_Type = t_Undefined;
 			_Location.reset( P );
 		}
@@ -83,10 +82,9 @@ namespace csducl {
 		{
 			_Type = tNone;
 			_Location.Init();
+
+			return true;
 		}
-		bso::bool__ InitDaemon(
-			const str::string_ &Location,
-			bso::uint__ PingDelay );
 		bso::bool__ InitLibrary(
 			const str::string_ &LibraryPath,
 			csdlec::library_data__ &LibraryData );
@@ -105,7 +103,6 @@ namespace csducl {
 	: public fdr::ioflow_driver___<>
 	{
 	private:
-		csdsnc::client_ioflow___ _DaemonFlow;
 		csdlec::library_embedded_client_ioflow___ _LibraryFlow;
 		csdrmc::client__ _RemoteFlow;
 		universal_client_core___ *_Core;
@@ -114,9 +111,6 @@ namespace csducl {
 			switch ( _Core->_Type ) {
 			case tNone:
 				qRFwk();	// Should not be called.
-				break;
-			case tDaemon:
-				return _DaemonFlow;
 				break;
 			case tLibrary:
 				return _LibraryFlow;
@@ -156,7 +150,6 @@ namespace csducl {
 		void reset( bso::bool__ P = true )
 		{
 			fdr::ioflow_driver___<>::reset( P );
-			_DaemonFlow.reset( P );
 			_LibraryFlow.reset( P );
 			_RemoteFlow.reset( P );
 
@@ -181,14 +174,12 @@ namespace csducl {
 			switch ( Core._Type ) {
 			case tNone:
 				break;
-			case tDaemon:
-				_DaemonFlow.Init( Core._DaemonAccess );
-				break;
 			case tLibrary:
 				_LibraryFlow.Init( Core._LibraryAccess );
 				break;
 			case tRemote:
 				_RemoteFlow.Init( Core._RemoteAccess );
+				break;
 			default:
 				qRFwk();
 				break;

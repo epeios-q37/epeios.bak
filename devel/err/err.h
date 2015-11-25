@@ -89,7 +89,7 @@ namespace err {
 		// line where the error occurs
 		int Line;
 		// file where the error occurs
-		const char *File;
+		buffer__ File;
 		// Type of error.
 		err::type Type;
 # ifdef ERR__JMPUSE

@@ -47,6 +47,7 @@ namespace parameter_ {
 
 	rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );
 	rgstry::entry___ DefaultBackendType_("DefaultBackendType", sclrgstry::Parameters );
+
 }
 
 namespace definition_ {
@@ -56,25 +57,47 @@ namespace definition_ {
 	}
 
 	rgstry::entry___ Backends_( "Backends", sclrgstry::Definitions );
-	rgstry::entry___ DefaultBackendId_( "@Default", Backends_ );
 
-	rgstry::entry___ Backend_( "Backend", Backends_ );
+	namespace backends_ {
+		rgstry::entry___ DefaultBackendId_( "@Default", Backends_ );
 
-	namespace backend_ {
-		rgstry::entry___ Id_( "@id", Backend_ );
+		rgstry::entry___ Backend_( "Backend", Backends_ );
+
+		namespace backend_ {
+			rgstry::entry___ Id_( "@id", Backend_ );
+		}
+
+		rgstry::entry___ TaggedBackend_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), Backend_);
+
+		namespace tagged_backend_ {
+			rgstry::entry___ Alias_( "@Alias", TaggedBackend_ );
+			rgstry::entry___ Type_( "@Type", TaggedBackend_ );
+			rgstry::entry___ Path_( "@Path", TaggedBackend_ );
+		}
 	}
 
-	rgstry::entry___ TaggedBackend_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), Backend_);
+	rgstry::entry___ RemoteBackends_( "RemoteBackends", sclrgstry::Definitions );
 
-	namespace tagged_backend_ {
-		rgstry::entry___ Alias_( "@Alias", TaggedBackend_ );
-		rgstry::entry___ Type_( "@Type", TaggedBackend_ );
-		rgstry::entry___ Path_( "@Path", TaggedBackend_ );
+	namespace remote_backends_ {
+		rgstry::entry___ RemoteBackend_( "RemoteBackend", RemoteBackends_ );
+
+		rgstry::entry___ TaggedRemoteBackend_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), RemoteBackend_);
+
+		namespace tagged_remote_backed_ {
+			rgstry::entry___ PluginPath_( "PluginPath", TaggedRemoteBackend_ );
+		}
 	}
 }
 
 static rgstry::entry___ Internals_( "Internals" );
 static rgstry::entry___ ProjectId_( "ProjectId", Internals_ );
+
+void sclfrntnd::GetRemoteBackendPluginPath(
+	const str::string_ &Id,
+	str::string_ &Path )
+{
+	sclmisc::MGetValue( rgstry::tentry___( definition_::remote_backends_::tagged_remote_backed_::PluginPath_, Id ), Path );
+}
 
 #define C( name ) case bt##name: return #name; break
 
@@ -293,7 +316,7 @@ bso::bool__ sclfrntnd::frontend___::Connect(
 	case csducl::tLibrary:
 		Mode = fblfrd::mEmbedded;
 		break;
-	case csducl::tDaemon:
+	case csducl::tRemote:
 		Mode = fblfrd::mRemote;
 		break;
 	default:
@@ -339,7 +362,7 @@ qRB
 		Writer.PopTag();
 	}
 
-	GetFeatures_( "Backends", "Backend", "DefaultBackendType", parameter_::DefaultBackendType_, definition_::backend_::Id_, definition_::DefaultBackendId_, definition_::Backend_, definition_::tagged_backend_::Alias_, Language, Writer );
+	GetFeatures_( "Backends", "Backend", "DefaultBackendType", parameter_::DefaultBackendType_, definition_::backends_::backend_::Id_, definition_::backends_::DefaultBackendId_, definition_::backends_::Backend_, definition_::backends_::tagged_backend_::Alias_, Language, Writer );
 qRR
 qRT
 qRE
@@ -353,7 +376,7 @@ qRH
 	str::string Buffer;
 	rgstry::tentry___ BackendTypeEntry;
 qRB
-	BackendTypeEntry.Init( definition_::tagged_backend_::Type_, Id );
+	BackendTypeEntry.Init( definition_::backends_::tagged_backend_::Type_, Id );
 
 	Buffer.Init();
 	switch ( GetBackendType(sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), BackendTypeEntry, Buffer ) ) ) {
@@ -362,13 +385,13 @@ qRB
 		break;
 	case btRemote:
 		Features.Type = csducl::tRemote;
-		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::tagged_backend_::Path_, Id ), Features.Path );
-		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::TaggedBackend_, Id ), Features.Parameters );
+		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::tagged_backend_::Path_, Id ), Features.Path );
+		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::TaggedBackend_, Id ), Features.Parameters );
 		break;
 	case btEmbedded:
 		Features.Type = csducl::tLibrary;
-		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::tagged_backend_::Path_, Id ), Features.Path );
-		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::TaggedBackend_, Id ), Features.Parameters );
+		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::tagged_backend_::Path_, Id ), Features.Path );
+		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::TaggedBackend_, Id ), Features.Parameters );
 		break;
 	default:
 		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( BackendTypeEntry );

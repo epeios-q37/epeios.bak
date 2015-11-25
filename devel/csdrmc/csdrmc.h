@@ -30,39 +30,32 @@
 
 # include "err.h"
 # include "flw.h"
-# include "plgn.h"
 
 #define CSDRMC_PLUGIN_NAME			"Remote"
 #define CSDRMC_PLUGIN_API_VERSION	"1"
 
 namespace csdrmc {
 
-	typedef fdr::ioflow_driver___<> driver___;
+	typedef fdr::ioflow_driver___<> _driver___;
 
-	class callback__
+	class driver___
+	: public _driver___
 	{
-	protected:
-		virtual driver___ *CSDRMCGetFlow( void ) = 0;
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
-			// Standardization.
+			_driver___::reset( P );
 		}
-		E_CVDTOR( callback__ );
+		E_CVDTOR( driver___ );
 		void Init( void )
 		{
-			// Standardization.
+			_driver___::Init( fdr::ts_Default );
 		}
 		static const char *Identification( void );
-		driver___ *GetFlow( void )
-		{
-			return CSDRMCGetFlow();
-		}
 	};
 
-
 	class core___
-	: public driver___
+	: public _driver___
 	{
 	private:
 		Q37_MRMDF( driver___, D_, Driver_ );
@@ -90,14 +83,15 @@ namespace csdrmc {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			driver___::reset( P );
+			_driver___::reset( P );
 			Driver_ = NULL;
 		}
 		E_CDTOR( core___ );
-		bso::bool__ Init(
-			const ntvstr::string___ &PluginNameAndLocation,
-			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default );
+		void Init( driver___ &Driver )
+		{
+			_driver___::Init( fdr::ts_Default );
+			Driver_ = &Driver;
+		}
 	};
 
 	typedef flw::standalone_ioflow__<> client__;

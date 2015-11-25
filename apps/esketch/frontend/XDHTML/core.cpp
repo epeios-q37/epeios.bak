@@ -90,7 +90,7 @@ qRB
 	BackendCopyright.Init();
 	SoftwareInformations.Init();
 
-	sclfrntnd::GetBackendLocation( Kernel_, BackendLocation );
+	sclfrntnd::GetBackendPath( Kernel_, BackendLocation );
 	Frontend.About( ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 
 	V( ProtocolVersion, ProtocolVersion );

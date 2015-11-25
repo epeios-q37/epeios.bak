@@ -23,26 +23,7 @@
 
 using namespace csdrmc;
 
-const char *csdrmc::callback__::Identification( void )
+const char *csdrmc::driver___::Identification( void )
 {
 	return CSDRMC_PLUGIN_NAME " V" CSDRMC_PLUGIN_API_VERSION " " CPE_DESCRIPTION;
 }
-
-bso::bool__ csdrmc::core___::Init(
-	const ntvstr::string___ &PluginNameAndLocation,
-	const str::string_ &Arguments,
-	err::handling__ ErrHandling )
-{
-	bso::bool__ Success = false;
-qRH
-	plgn::retriever___<callback__> Plugin;
-qRB
-	if ( Success = Plugin.Init( PluginNameAndLocation, Arguments, ErrHandling) )
-		Driver_ = Plugin.Plugin().GetFlow();
-qRR
-qRT
-qRE
-	return Success;
-}
-
-

@@ -23,6 +23,8 @@
 
 using namespace sclxdhtml;
 
+E_CDEF(char *, EthernetRemoteBackendId_, "Ethernet" );
+
 static bso::bool__ IsInitialized_ = false;
 
 static const char *Launcher_ = NULL;
@@ -550,18 +552,20 @@ void sclxdhtml::login::GetBackendFeatures(
 qRH
 	TOL_CBUFFER___ Buffer;
 	sclfrntnd::backend_type__ Type = sclfrntnd::bt_Undefined;
-	str::string Parameters;
+	str::string Path, Parameters;
 qRB
+	Path.Init();
 	Parameters.Init();
 
 	switch ( Type = GetBackendType_( Proxy ) ) {
 	case sclfrntnd::btNone:
 		break;
 	case sclfrntnd::btRemote:
+		sclfrntnd::GetRemoteBackendPluginPath( str::string( EthernetRemoteBackendId_ ), Path );
 		Parameters.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
 		break;
 	case sclfrntnd::btEmbedded:
-		Parameters.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
+		Path.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
 		break;
 	case sclfrntnd::btPredefined:
 		Parameters.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
@@ -571,7 +575,7 @@ qRB
 		break;
 	}
 
-	sclfrntnd::SetBackendFeatures( Type, Parameters, Features );
+	sclfrntnd::SetBackendFeatures( Type, Path, Parameters, Features );
 qRR
 qRT
 qRE

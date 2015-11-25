@@ -33,6 +33,15 @@
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>
+			<xpp:ifeq select="env" value="windows">
+				<xpp:set name="BinRootDir" value="h:/bin/"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="linux">
+				<xpp:set name="BinRootDir" value="/home/csimon/bin/"/>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="mac">
+				<xpp:set name="BinRootDir" value="/Users/csimon/bin/"/>
+			</xpp:ifeq>
 			<Projects Default="Embedded">
 				<xpp:define name="ProjectsRootDir">
 					<xpp:bloc>
@@ -55,11 +64,18 @@
 			</Projects>
 			<Backends Default="Embedded">
 				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote">localhost:2000</Backend>
-				<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded">
-					<xpp:expand select="BinRootDir"/>
-					<xpp:bloc>esketchbkd</xpp:bloc>
-				</Backend>
+				<xpp:bloc marker="$">
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$esketchbkd">
+						<xpp:expand select="BinRootDir"/>
+						<xpp:bloc>esketchbkd</xpp:bloc>
+					</Backend>
+				</xpp:bloc>
 			</Backends>
+			<RemoteBackends>
+				<RemoteBackend id="Ethernet">
+					<PluginPath>h:/bin/Plugins/remote/ethq</PluginPath>
+				</RemoteBackend>
+			</RemoteBackends>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Locale">

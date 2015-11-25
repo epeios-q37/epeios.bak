@@ -139,7 +139,7 @@ const char *err::Message(
 void err___::reset( bool P )
 {
 	Line = 0;
-	File = NULL;
+	File[0] = 0;
 	Type = err::t_Undefined;
 # ifdef ERR__JMPUSE
 	Jump = NULL;
@@ -179,7 +179,9 @@ void err___::Set(
 	{
 		if ( Type != t_Undefined )
 			this->Type = Type;
-		this->File = Fichier;
+		if ( strlen( Fichier ) >= sizeof( this->File ) )
+			qRLmt();
+		strcpy( this->File, Fichier );
 		this->Line = Ligne;
 	} else if ( !ERRHit() )
 		qRFwk();

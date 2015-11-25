@@ -44,9 +44,6 @@ const char *csducl::GetLabel( type__ Type )
 	case tNone:
 		return "None";
 		break;
-	case tDaemon:
-		return "Daemon";
-		break;
 	case tLibrary:
 		return "Library";
 		break;
@@ -59,26 +56,6 @@ const char *csducl::GetLabel( type__ Type )
 	}
 
 	return NULL;	// Pour viter un 'warning'.
-}
-
-bso::bool__ csducl::universal_client_core___::InitDaemon(
-	const str::string_ &Location,
-	bso::uint__ PingDelay )
-{
-	bso::bool__ Success = false;
-qRH
-	TOL_CBUFFER___ Buffer;
-qRB
-	reset();
-
-	if ( Success = _DaemonAccess.Init(Location.Convert(Buffer), PingDelay) ) {
-		_Type = tDaemon;
-		_Location.Init( Location );
-	}
-qRR
-qRT
-qRE
-	return Success;
 }
 
 bso::bool__ csducl::universal_client_core___::InitLibrary(
@@ -111,7 +88,8 @@ qRH
 qRB
 	reset();
 
-	if ( Success = _RemoteAccess.Init(PluginPath, Parameters) ) {
+	if ( Success = RemotePluginRetriever_.Init( PluginPath, Parameters, err::hUserDefined) ) {
+		_RemoteAccess.Init( RemotePluginRetriever_.Plugin() );
 		_Type = tRemote;
 		_Location.Init( PluginPath );
 	}

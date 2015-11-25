@@ -12,6 +12,22 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-25 :
+- CSDUCL :
+	# Fixing missing return value.
+	* Removing daemon features (replaced by remote features).
+- ERR :
+	* 'err___::File' stores now the content of the string, and no more only the pointer, because of plugins	which may be
+	  unloaded before the error was handled, causing a segmentation fault (due to acces to data of the unlodad plugin).
+- SCLFRNTND :
+	* Adding handling of remote backend.
+	% Usign 'features___'.
+	- Adapting to changes in 'CSDUCL'.
+- SCLPLUGIN :
+	* Adding a initialization member called when the plugin is created.
+- SCLXDHTML :
+	* Taking account of the remote access plugin.
+
 2015-11-24 :
 - CSDUCL :
 	% Introducing 'CSDRMC'.

@@ -62,6 +62,10 @@ namespace sclfrntnd {
 
 	backend_type__ GetBackendType( const str::string_ &Pattern );
 
+	void GetRemoteBackendPluginPath(
+		const str::string_ &Id,
+		str::string_ &Path );
+
 	struct features___ {
 	public:
 		csducl::type__ Type;
@@ -83,8 +87,8 @@ namespace sclfrntnd {
 
 	void SetBackendFeatures(
 		backend_type__ BackendType,
-		const str::string_ &Parameters,
 		const str::string_ &Path,
+		const str::string_ &Parameters,
 		features___ &Features );
 
 	// Is exposed because, even if there is generally only one kernel per frontend, there could be two (a frontend dealing with two different backends).
@@ -98,10 +102,7 @@ namespace sclfrntnd {
 			_ClientCore.reset( P );
 		}
 		E_CVDTOR( kernel___ );
-		void Init(
-			csducl::type__ Type,
-			const str::string_ &Path,
-			const str::string_ &Arguments )
+		void Init( const features___ &Features )
 		{
 		qRH
 			csdlec::library_data__ LibraryData;
@@ -109,19 +110,16 @@ namespace sclfrntnd {
 			TOL_CBUFFER___ Buffer;
 			bso::bool__ Success = false;
 		qRB
-			switch ( Type ) {
+			switch ( Features.Type ) {
 			case csducl::tNone:
 				Success = _ClientCore.InitNone();
 				break;
-			case csducl::tDaemon:	// Obsolete.
-				qRFwk();
-				break;
 			case csducl::tLibrary:
-				LibraryData.Init( csdleo::cRegular, Path.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
-				Success = _ClientCore.InitLibrary( Path, LibraryData );
+				LibraryData.Init( csdleo::cRegular, Features.Path.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
+				Success = _ClientCore.InitLibrary( Features.Path, LibraryData );
 				break;
 			case csducl::tRemote:
-				_ClientCore.InitRemote( Path, Arguments );
+				Success = _ClientCore.InitRemote( Features.Path, Features.Parameters );
 				break;
 			default:
 				qRFwk();
@@ -129,7 +127,7 @@ namespace sclfrntnd {
 			}
 
 			if ( !Success )
-				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Path );
+				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Path );
 		qRR
 		qRT
 		qRE

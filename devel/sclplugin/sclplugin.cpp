@@ -93,6 +93,8 @@ namespace {
 	qRB
 		Splitted.Init();
 		strmrg::Split( Arguments, Splitted );
+
+		HandleArguments_( Splitted );
 	qRR
 	qRT
 	qRE
