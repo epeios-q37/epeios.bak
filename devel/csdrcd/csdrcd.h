@@ -17,13 +17,25 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDRMC__COMPILATION
+#ifndef CSDRCD__INC
+# define CSDRCD__INC
 
-#include "csdrmc.h"
+# define CSDRCD_NAME		"CSDRCD"
 
-using namespace csdrmc;
+# if defined( E_DEBUG ) && !defined( CSDRCD_NODBG )
+#  define CSDRCD_DBG
+# endif
 
-const char *csdrmc::driver___::Identification( void )
-{
-	return CSDRMC_PLUGIN_NAME " V" CSDRMC_PLUGIN_API_VERSION " " CPE_DESCRIPTION;
+// Client-Server Devices Remove Client Downstream
+
+# include "csdrcc.h"
+
+# include "err.h"
+
+namespace csdrcd {
+
+	using csdrcc::driver___;
+
 }
+
+#endif

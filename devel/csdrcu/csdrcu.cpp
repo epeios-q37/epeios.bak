@@ -17,39 +17,31 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#define CSDRCU__COMPILATION
 
-#include "csdrmc.h"
+#include "csdrcu.h"
 
-#include "err.h"
-#include "cio.h"
+using namespace csdrcu;
 
-using cio::CIn;
-using cio::COut;
-using cio::CErr;
-
-void Generic( int argc, char *argv[] )
+bso::bool__ csdrcu::core___::Init(
+	const str::string_ &PluginPath,
+	const str::string_ &Parameters,
+	err::handling__ ErrHandling )
 {
+	bso::bool__ Success = false;
 qRH
+	TOL_CBUFFER___ Buffer;
 qRB
+	if ( !( Success = Retriever_.Init( PluginPath, Parameters, err::hUserDefined ) ) )
+			if ( ErrHandling == err::hThrowException )
+			qRFwk();
+		else
+			qRReturn;
+
+	Driver_ = &Retriever_.Plugin();
+	_driver___::Init( fdr::ts_Default );
 qRR
 qRT
 qRE
-}
-
-int main( int argc, char *argv[] )
-{
-	int ExitValue = EXIT_SUCCESS;
-qRFH
-qRFB
-	COut << "Test of library " << CSDRMC_NAME << ' ' << __DATE__" "__TIME__"\n";
-
-	Generic( argc, argv );
-qRFR
-	ExitValue = EXIT_FAILURE;
-qRFT
-qRFE
-	return ExitValue;
+	return Success;
 }

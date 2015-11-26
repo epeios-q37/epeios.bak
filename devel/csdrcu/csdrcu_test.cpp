@@ -17,10 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PLGN__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "plgn.h"
+#include "csdrcu.h"
 
-using namespace plgn;
+#include "err.h"
+#include "cio.h"
 
-#include "sclmisc.h"
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+void Generic( int argc, char *argv[] )
+{
+qRH
+qRB
+qRR
+qRT
+qRE
+}
+
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+qRFH
+qRFB
+	COut << "Test of library " << CSDRCU_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+qRFR
+	ExitValue = EXIT_FAILURE;
+qRFT
+qRFE
+	return ExitValue;
+}

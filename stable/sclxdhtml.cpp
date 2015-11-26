@@ -23,7 +23,7 @@
 
 using namespace sclxdhtml;
 
-E_CDEF(char *, EthernetRemoteBackendId_, "Ethernet" );
+E_CDEF(char *, INetRemoteBackendId_, "INet" );
 
 static bso::bool__ IsInitialized_ = false;
 
@@ -561,7 +561,7 @@ qRB
 	case sclfrntnd::btNone:
 		break;
 	case sclfrntnd::btRemote:
-		sclfrntnd::GetRemoteBackendPluginPath( str::string( EthernetRemoteBackendId_ ), Path );
+		sclfrntnd::GetRemoteBackendPluginPath( str::string( INetRemoteBackendId_ ), Path );
 		Parameters.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
 		break;
 	case sclfrntnd::btEmbedded:

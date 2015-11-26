@@ -83,19 +83,14 @@ bso::bool__ csducl::universal_client_core___::InitRemote(
 	const str::string_ &Parameters )
 {
 	bso::bool__ Success = false;
-qRH
-	TOL_CBUFFER___ Buffer;
-qRB
+
 	reset();
 
-	if ( Success = RemotePluginRetriever_.Init( PluginPath, Parameters, err::hUserDefined) ) {
-		_RemoteAccess.Init( RemotePluginRetriever_.Plugin() );
+	if ( Success = _RemoteAccess.Init( PluginPath, Parameters, err::hUserDefined ) ) {
 		_Type = tRemote;
 		_Location.Init( PluginPath );
 	}
-qRR
-qRT
-qRE
+
 	return Success;
 }
 

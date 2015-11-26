@@ -35,8 +35,7 @@
 # include "err.h"
 # include "flw.h"
 # include "csdlec.h"
-# include "csdrmc.h"
-# include "plgn.h"
+# include "csdrcu.h"
 
 # define CSDUCL_CACHE_SIZE	1000
 
@@ -59,14 +58,12 @@ namespace csducl {
 		type__ _Type;
 		str::string _Location;
 		csdlec::library_embedded_client_core__ _LibraryAccess;
-		csdrmc::core___ _RemoteAccess;
-		plgn::retriever___<csdrmc::driver___> RemotePluginRetriever_;
+		csdrcu::core___ _RemoteAccess;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_LibraryAccess.reset( P );
 			_RemoteAccess.reset( P );
-			RemotePluginRetriever_.reset( P );
 			_Type = t_Undefined;
 			_Location.reset( P );
 		}
@@ -104,7 +101,7 @@ namespace csducl {
 	{
 	private:
 		csdlec::library_embedded_client_ioflow___ _LibraryFlow;
-		csdrmc::client__ _RemoteFlow;
+		csdrcu::client__ _RemoteFlow;
 		universal_client_core___ *_Core;
 		flw::ioflow__ &_Get( void )
 		{

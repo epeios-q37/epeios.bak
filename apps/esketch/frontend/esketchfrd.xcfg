@@ -72,8 +72,8 @@
 				</xpp:bloc>
 			</Backends>
 			<RemoteBackends>
-				<RemoteBackend id="Ethernet">
-					<PluginPath>h:/bin/Plugins/remote/ethq</PluginPath>
+				<RemoteBackend id="INet">
+					<PluginPath>h:/bin/Plugins/remote/inet</PluginPath>
 				</RemoteBackend>
 			</RemoteBackends>
 		</xpp:bloc>

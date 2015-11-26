@@ -102,36 +102,7 @@ namespace sclfrntnd {
 			_ClientCore.reset( P );
 		}
 		E_CVDTOR( kernel___ );
-		void Init( const features___ &Features )
-		{
-		qRH
-			csdlec::library_data__ LibraryData;
-			csdleo::mode__ Mode = csdleo::m_Undefined;
-			TOL_CBUFFER___ Buffer;
-			bso::bool__ Success = false;
-		qRB
-			switch ( Features.Type ) {
-			case csducl::tNone:
-				Success = _ClientCore.InitNone();
-				break;
-			case csducl::tLibrary:
-				LibraryData.Init( csdleo::cRegular, Features.Path.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
-				Success = _ClientCore.InitLibrary( Features.Path, LibraryData );
-				break;
-			case csducl::tRemote:
-				Success = _ClientCore.InitRemote( Features.Path, Features.Parameters );
-				break;
-			default:
-				qRFwk();
-				break;
-			}
-
-			if ( !Success )
-				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToConnectToBackend", Features.Path );
-		qRR
-		qRT
-		qRE
-		}
+		void Init( const features___ &Features );
 		const csducl::universal_client_core___ &Core( void ) const
 		{
 			return _ClientCore;

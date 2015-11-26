@@ -17,10 +17,13 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PLGN__COMPILATION
+#define CSDRCC__COMPILATION
 
-#include "plgn.h"
+#include "csdrcc.h"
 
-using namespace plgn;
+using namespace csdrcc;
 
-#include "sclmisc.h"
+const char *csdrcc::driver___::Identification( void )
+{
+	return CSDRCC_PLUGIN_NAME " V" CSDRCC_PLUGIN_API_VERSION " " CPE_DESCRIPTION;
+}

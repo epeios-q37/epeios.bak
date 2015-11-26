@@ -432,6 +432,38 @@ void sclfrntnd::SetBackendFeatures(
 	}
 }
 
+void sclfrntnd::kernel___::Init( const features___ &Features )
+{
+qRH
+	csdlec::library_data__ LibraryData;
+	csdleo::mode__ Mode = csdleo::m_Undefined;
+	TOL_CBUFFER___ Buffer;
+	bso::bool__ Success = false;
+qRB
+	switch ( Features.Type ) {
+	case csducl::tNone:
+		Success = _ClientCore.InitNone();
+		break;
+	case csducl::tLibrary:
+		LibraryData.Init( csdleo::cRegular, Features.Path.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
+		Success = _ClientCore.InitLibrary( Features.Path, LibraryData );
+		break;
+	case csducl::tRemote:
+		Success = _ClientCore.InitRemote( Features.Path, Features.Parameters );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+
+	if ( !Success )
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToLoad", Features.Path );
+qRR
+qRT
+qRE
+}
+
+
 namespace{
 	bso::bool__ GuessBackendFeatures_( features___ &Features )
 	{

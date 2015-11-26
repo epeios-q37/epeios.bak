@@ -39,7 +39,8 @@ mods += rgstry stsfsm xml xpp dlbrry
 mods += mtk sck 
 mods += csdbns csdlec csdleo csdscb csdsnb 
 mods += csdsns 
-mods += sclmisc sclerror scllocale sclrgstry scltool 
+mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += scltool 
 mods += registry 
 
 pmods += pllio 
@@ -312,7 +313,6 @@ ifeq ("$(os)","$(MacOS)")
 	binary=$(name)
 
 	dest=/Users/csimon/bin/
-
 endif
 
 ##########################
@@ -345,7 +345,9 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
+		
 	mkdir -p $(dest)
+			
 	cp $(binary) $(dest)
 endif
 

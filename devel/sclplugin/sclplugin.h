@@ -61,9 +61,9 @@ namespace sclplugin {
 	void SCLPLUGINReleasePlugin( void * );
 }
 
-// If this macro is used, you have to define a 'SCLPLUGINInitilaize()' member.
-// NOTA : needed parameters are genrally retrieved from the registry,
-// which is automatiacally filed by this module.
+// If this macro is used, you have to define a 'SCLPLUGINInitialize()' member.
+// NOTA : needed parameters are generally retrieved from the registry,
+// which is automatically filled by this module.
 # define SCLPLUGIN_DEF( plugin )\
 	const char *sclplugin::SCLPLUGINPluginIdentification( void )\
 	{\
@@ -80,11 +80,7 @@ namespace sclplugin {
 		if ( Plugin == NULL )\
 			qRAlc();\
 		\
-		if ( !Plugin->SCLPLUGINInitialize() ) {\
-			delete Plugin;\
-			Plugin = NULL;\
-			qRReturn;\
-		}\
+		Plugin->SCLPLUGINInitialize();\
 	qRR\
 		if ( Plugin != NULL ) {\
 			delete Plugin;\

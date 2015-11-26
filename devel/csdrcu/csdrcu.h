@@ -17,48 +17,33 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDRMC__INC
-# define CSDRMC__INC
+#ifndef CSDRCU__INC
+# define CSDRCU__INC
 
-# define CSDRMC_NAME		"CSDRMC"
+# define CSDRCU_NAME		"CSDRCU"
 
-# if defined( E_DEBUG ) && !defined( CSDRMC_NODBG )
-#  define CSDRMC_DBG
+# if defined( E_DEBUG ) && !defined( CSDRCU_NODBG )
+#  define CSDRCU_DBG
 # endif
 
-// Client-Server Devices ReMote Client
+// Client-Server Devices Remove Client Upstream
 
-# include "err.h"
+# include "csdrcc.h"
+
 # include "flw.h"
+# include "plgn.h"
 
-#define CSDRMC_PLUGIN_NAME			"Remote"
-#define CSDRMC_PLUGIN_API_VERSION	"1"
-
-namespace csdrmc {
-
+namespace csdrcu {
 	typedef fdr::ioflow_driver___<> _driver___;
 
-	class driver___
-	: public _driver___
-	{
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_driver___::reset( P );
-		}
-		E_CVDTOR( driver___ );
-		void Init( void )
-		{
-			_driver___::Init( fdr::ts_Default );
-		}
-		static const char *Identification( void );
-	};
+	using csdrcc::driver___;
 
 	class core___
 	: public _driver___
 	{
 	private:
 		Q37_MRMDF( driver___, D_, Driver_ );
+		plgn::retriever___<driver___> Retriever_;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
@@ -84,17 +69,18 @@ namespace csdrmc {
 		void reset( bso::bool__ P = true )
 		{
 			_driver___::reset( P );
+			Retriever_.reset( P );
 			Driver_ = NULL;
 		}
 		E_CDTOR( core___ );
-		void Init( driver___ &Driver )
-		{
-			_driver___::Init( fdr::ts_Default );
-			Driver_ = &Driver;
-		}
+		bso::bool__ Init(
+			const str::string_ &PluginPath,
+			const str::string_ &Parameters,
+			err::handling__ ErrHandling = err::h_Default );
 	};
 
 	typedef flw::standalone_ioflow__<> client__;
+
 }
 
 #endif

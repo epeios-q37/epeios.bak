@@ -17,10 +17,41 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PLGN__COMPILATION
+#ifndef CSDRCC__INC
+# define CSDRCC__INC
 
-#include "plgn.h"
+# define CSDRCC_NAME		"CSDRCC"
 
-using namespace plgn;
+# if defined( E_DEBUG ) && !defined( CSDRCC_NODBG )
+#  define CSDRCC_DBG
+# endif
 
-#include "sclmisc.h"
+// Client-Server Devices Remove Client Core
+
+# include "err.h"
+# include "fdr.h"
+
+#define CSDRCC_PLUGIN_NAME			"Remote"
+#define CSDRCC_PLUGIN_API_VERSION	"1"
+
+namespace csdrcc {
+	typedef fdr::ioflow_driver___<> _driver___;
+
+	class driver___
+	: public _driver___
+	{
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_driver___::reset( P );
+		}
+		E_CVDTOR( driver___ );
+		void Init( void )
+		{
+			_driver___::Init( fdr::ts_Default );
+		}
+		static const char *Identification( void );
+	};
+}
+
+#endif

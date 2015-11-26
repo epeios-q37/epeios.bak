@@ -17,10 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define PLGN__COMPILATION
+#define CSDRCD__COMPILATION
 
-#include "plgn.h"
+#include "csdrcd.h"
 
-using namespace plgn;
+using namespace csdrcd;
 
-#include "sclmisc.h"
