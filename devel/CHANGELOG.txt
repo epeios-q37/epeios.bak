@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-27 :
+- XDHUTL :
+	# Automats were not filled.
+
 2015-11-26 :
 - CSDUCL :
 	- Using new 'CSDRMU' module instead of 'CSDRMC'.

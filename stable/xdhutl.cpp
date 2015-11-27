@@ -705,3 +705,7 @@ qRT
 qRE
 }
 
+Q37_GCTOR( xdhutl )
+{
+	InitAndFillAutomats_();
+}

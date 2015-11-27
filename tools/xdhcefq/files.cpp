@@ -178,9 +178,10 @@ qRR
 qRT
 	if ( List != NULL )
 		cef_string_list_free( List );
-
+/*
 	if ( BrowserHost != NULL )
 		misc::Release( BrowserHost );
+		*/
 qRE
 }
 
