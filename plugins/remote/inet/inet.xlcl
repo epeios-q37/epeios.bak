@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Locales xmlns:xpp="http://q37.info/ns/xpp">
+	<Locale target="inet">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand select="epeios.xlcl"/>
+		<Translations text="UnableToConnectTo">
+			<Translation language="fr">Echec de la connection vers '%1'.</Translation>
+			<Translation language="en">Unable to connect to '%1'.</Translation>
+		</Translations>
+		<!--
+		<Translations text="">
+		  <Translation language="fr"></Translation>
+		  <Translation language="en"></Translation>
+		</Translations>
+		-->
+	</Locale>
+</Locales>
