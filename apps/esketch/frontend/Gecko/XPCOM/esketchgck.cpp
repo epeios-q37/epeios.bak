@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: esketchgck.cpp,v 1.3 2013/04/05 16:33:22 csimon Exp $
-
 #include "trunk.h"
 #include "ui.h"
 

@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: eh.h,v 1.1 2012/12/04 15:28:45 csimon Exp $
-
 #ifndef EH__INC
 # define EH__INC
 

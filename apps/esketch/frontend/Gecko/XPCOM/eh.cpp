@@ -17,8 +17,6 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// $Id: eh.cpp,v 1.4 2013/04/09 17:57:21 csimon Exp $
-
 #include "eh.h"
 #include "trunk.h"
 
