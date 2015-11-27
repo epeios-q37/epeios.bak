@@ -80,7 +80,7 @@
 												<xsl:text>(OpenFile|DisplayEmbeddedBackendFilename|(#lgnSelectEmbeddedBackend#|</xsl:text>
 												<xsl:value-of select="$DynamicLibraryExtension"/>
 												<xsl:text>|</xsl:text>
-												<xsl:text>orgnzqbkd</xsl:text>
+												<xsl:text>xmple</xsl:text>
 												<xsl:value-of select="$DynamicLibraryExtension"/>
 												<xsl:text>))</xsl:text>
 											</xsl:attribute>#lgnBrowse#
