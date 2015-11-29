@@ -101,7 +101,9 @@ namespace {
 	}
 }
 
-void sclplugin::callback__::PLGNCOREInitialize( const plgncore::data__ *Data )
+void sclplugin::callback__::PLGNCOREInitialize(
+	const plgncore::data__ *Data,
+	const rgstry::entry__ &Configuration )
 {
 	if ( Data == NULL )
 		qRFwk();
@@ -113,10 +115,29 @@ void sclplugin::callback__::PLGNCOREInitialize( const plgncore::data__ *Data )
 		qRFwk();
 
 	if ( !sclmisc::IsInitialized() )
-		if ( Data->Location->Amount() == 0 )
-			sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Data->Configuration, Data->Locale );
-		else
-			sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, *Data->Location );
+		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Configuration );
+
+	if ( Data->Arguments->Amount() != 0 )
+		HandleArguments_( *Data->Arguments );
+
+}
+
+void sclplugin::callback__::PLGNCOREInitialize(
+	const plgncore::data__ *Data,
+	const fnm::name___ &Directory,
+	str::string_ &Locale )
+{
+	if ( Data == NULL )
+		qRFwk();
+
+	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
+		qRFwk();
+
+	if ( Data->ControlValue != plgncore::data__::Control() )
+		qRFwk();
+
+	if ( !sclmisc::IsInitialized() )
+		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Directory, Locale );
 
 	if ( Data->Arguments->Amount() != 0 )
 		HandleArguments_( *Data->Arguments );

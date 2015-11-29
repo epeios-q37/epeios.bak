@@ -83,7 +83,16 @@ static level__ GetLevel_( target__ Target )
 	return *(level__ *)NULL;	// Pour viter une 'warning'.
 }
 
-void scllocale::EraseLocale( target__ Target )
+void scllocale::Dump(
+	target__ Target,
+	bso::bool__ RootToo,
+	xml::writer &Writer )
+{
+	Locale_.Dump( GetLevel_( Target ), qNIL, RootToo, Writer );
+}
+
+
+void scllocale::Erase( target__ Target )
 {
 	Locale_.Erase( GetLevel_( Target ) );
 }
@@ -91,7 +100,7 @@ void scllocale::EraseLocale( target__ Target )
 static void Load_(
 	level__ Level,
 	xtf::extended_text_iflow__ &Flow,
-	const char *Directory,
+	const fnm::name___ &Directory,
 	const char *RootPath,
 	const char *ErrorLabel )
 {
@@ -101,14 +110,14 @@ qRB
 	Locale_.Erase( Level );
 
 	Context.Init();
-	if ( Locale_.Fill( Level, Flow, xpp::criterions___( str::string( Directory ) ), RootPath, Context ) != rgstry::sOK )
+	if ( Locale_.Fill( Level, Flow, xpp::criterions___( Directory ), RootPath, Context ) != rgstry::sOK )
 		sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
 qRR
 qRT
 qRE
 }
 
-void scllocale::SetLocale(
+void scllocale::Set(
 	target__ Target,
 	const rgstry::entry__ &Entry )
 {
@@ -119,10 +128,10 @@ void scllocale::SetLocale(
 	Locale_.Set( Level, Entry );
 }
 
-void scllocale::LoadLocale(
+void scllocale::Load(
 	target__ Target,
 	xtf::extended_text_iflow__ &Flow,
-	const char *Directory,
+	const fnm::name___ &Directory,
 	const char *RootPath )
 {
 	const char *ErrorLabel = NULL;
@@ -144,6 +153,25 @@ void scllocale::LoadLocale(
 
 	return Load_( GetLevel_( Target ), Flow, Directory, RootPath, ErrorLabel );
 }
+
+void scllocale::Fill(
+	target__ Target,
+	const char *RootPath,
+	const fnm::name___ &Directory,
+	const str::string_ &XML )
+{
+qRH
+	flx::E_STRING_IFLOW__ Flow;
+	xtf::extended_text_iflow__ XFlow;
+qRB
+	Flow.Init( XML );
+	XFlow.Init( Flow, utf::f_Default );
+	Locale_.Fill( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootPath );
+qRR
+qRT
+qRE
+}
+
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'sclxhtml.cpp', d'o le 'namespace'.
 namespace {

@@ -36,7 +36,7 @@
 
 # include <stdarg.h>
 
-# define PLGNCORE_SHARED_DATA_VERSION	"5"
+# define PLGNCORE_SHARED_DATA_VERSION	"6"
 
 # define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
 # define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
@@ -52,48 +52,28 @@ namespace plgncore {
 		err::err___ *qRRor;
 		sclerror::error___ *SCLError;
 		const cio::set__ *CIO;
-		rgstry::entry__ Configuration;
-		rgstry::entry__ Locale;
-		// Either this below, or both above.
-		const fnm::name___ *Location;
 		const str::string_ *Arguments;
-		void *UP;				// A la discrtion de l'utilisateur.
+		void *UP;				// User pointer.
 		void reset( bso::bool__ P = true )
 		{
 			Version = NULL;
 			qRRor = NULL;
 			SCLError = NULL;
 			UP = NULL;
-			Configuration.reset( P );
-			Locale.reset( P );
-			Location = NULL;
 			Arguments = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
 			err::err___ *qRRor,
 			sclerror::error___ *SCLError,
-			const rgstry::entry__ &Configuration,
-			const rgstry::entry__ &Locale,
 			const str::string_ &Arguments,
 			void *UP = NULL )
 		{
-			Init( qRRor, SCLError, Configuration, Locale, Arguments, UP );
-		}
-		data__(
-			err::err___ *qRRor,
-			sclerror::error___ *SCLError,
-			const fnm::name___ &Location,
-			const str::string_ &Arguments,
-			void *UP = NULL )
-		{
-			Init( qRRor, SCLError, Location, Arguments, UP );
+			Init( qRRor, SCLError, Arguments, UP );
 		}
 		void Init(
 			err::err___ *qRRor,
 			sclerror::error___ *SCLError,
-			const rgstry::entry__ &Configuration,
-			const rgstry::entry__ &Locale,
 			const str::string_ &Arguments,
 			void *UP = NULL )
 		{
@@ -102,27 +82,6 @@ namespace plgncore {
 			this->qRRor = qRRor;
 			this->SCLError = SCLError;
 			this->CIO = &cio::GetCurrentSet();
-			this->Configuration.Init( Configuration );
-			this->Locale.Init( Locale );
-			Location = NULL;
-			this->Arguments = &Arguments;
-			this->UP = UP;
-		}
-		void Init(
-			err::err___ *qRRor,
-			sclerror::error___ *SCLError,
-			const fnm::name___ &Location,
-			const str::string_ &Arguments,
-			void *UP = NULL )
-		{
-			Version = PLGNCORE_SHARED_DATA_VERSION;
-			ControlValue = Control();
-			this->qRRor = qRRor;
-			this->SCLError = SCLError;
-			this->CIO = &cio::GetCurrentSet();
-			Configuration.Init();
-			Locale.Init();
-			this->Location = &Location;
 			this->Arguments = &Arguments;
 			this->UP = UP;
 		}
@@ -136,7 +95,13 @@ namespace plgncore {
 	class callback__
 	{
 	protected:
-		virtual void PLGNCOREInitialize( const data__ *Data ) = 0;
+		virtual void PLGNCOREInitialize(
+			const data__ *Data,
+			const rgstry::entry__ &Configuration ) = 0;
+		virtual void PLGNCOREInitialize(
+			const data__ *Data,
+			const fnm::name___ &Directory,
+			str::string_ &Locale ) = 0;
 		virtual void *PLGNCORERetrievePlugin( void ) = 0;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
 	public:
@@ -149,9 +114,18 @@ namespace plgncore {
 		{
 			//Standardisaction.
 		}
-		void Initialize( const data__ *Data )
+		void Initialize(
+			const data__ *Data,
+			const rgstry::entry__ &Configuration )
 		{
-			PLGNCOREInitialize( Data );
+			PLGNCOREInitialize( Data, Configuration );
+		}
+		void Initialize(
+			const data__ *Data,
+			const fnm::name___ &Directory,
+			str::string_ &Locale )
+		{
+			PLGNCOREInitialize( Data, Directory, Locale );
 		}
 		void *RetrievePlugin( void )
 		{

@@ -83,8 +83,7 @@ namespace sclmisc {
 		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
-		const rgstry::entry__ &Configuration,
-		const rgstry::entry__ &Locale );
+		const rgstry::entry__ &Configuration );
 
 	void Initialize(
 		err::err___ *qRRor,
@@ -99,7 +98,18 @@ namespace sclmisc {
 		err::err___ *qRRor,
 		sclerror::error___ *SCLError,
 		const cio::set__ &CIO,
-		const fnm::name___ &SuggestedDirectory );
+		const fnm::name___ &SuggestedDirectory,
+		str::string_ *Locale = NULL );
+
+	inline void Initialize(
+		err::err___ *qRRor,
+		sclerror::error___ *SCLError,
+		const cio::set__ &CIO,
+		const fnm::name___ &SuggestedDirectory,
+		str::string_ &Locale )
+	{
+		return Initialize( qRRor, SCLError, CIO, SuggestedDirectory, &Locale );
+	}
 
 	void EraseProjectRegistry( void );
 

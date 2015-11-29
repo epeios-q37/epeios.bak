@@ -12,6 +12,23 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-11-29 :
+- PLNGCORE :
+	- Modification to fit with changes in 'SCLMISC'.
+- PLNG :
+	- Adaptation to changes in 'PLNGCORE'.
+- SCLLOCALE :
+	* Adding 'Dump(...)'.
+	* Adding 'Fill(...)'.
+	% Removing 'Locale' suffix from functions.
+- SCLMISC :
+	% Modifying some 'Initialization(...)' functions, so, either the configuration registry is given, either the
+	  directory for configuration and locale file ; in thgis latter case, the content of the locale registry is
+	  returned. This functions are used for plugins, which locales are handled by the calling program.
+	- Adpattion to changes in 'SLLOCALE'.
+- SCLPLUGIN :
+	- Adaptation to 'PLGNCORE'.
+
 2015-11-27 :
 - XDHUTL :
 	# Automats were not filled.

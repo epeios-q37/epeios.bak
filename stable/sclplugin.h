@@ -40,7 +40,13 @@ namespace sclplugin {
 	: public _callback__
 	{
 	protected:
-		virtual void PLGNCOREInitialize( const plgncore::data__ *Data ) override;
+		virtual void PLGNCOREInitialize(
+			const plgncore::data__ *Data,
+			const rgstry::entry__ &Configuration ) override;
+		virtual void PLGNCOREInitialize(
+			const plgncore::data__ *Data,
+			const fnm::name___ &Directory,
+			str::string_ &Locale ) override;
 		virtual void *PLGNCORERetrievePlugin( void ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
 	public:

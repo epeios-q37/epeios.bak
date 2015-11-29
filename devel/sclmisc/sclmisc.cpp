@@ -151,13 +151,12 @@ void sclmisc::Initialize(
 	err::err___ *qRRor,
 	sclerror::error___ *SCLError,
 	const cio::set__ &CIO,
-	const rgstry::entry__ &Configuration,
-	const rgstry::entry__ &Locale )
+	const rgstry::entry__ &Configuration )
 {
 	Initialize_( qRRor, SCLError, CIO );
 
 	sclrgstry::SetConfiguration( Configuration );
-	scllocale::SetLocale( scllocale::tMain, Locale );
+//	scllocale::Set( scllocale::tMain, Locale );
 }
 
 
@@ -257,7 +256,7 @@ qRB
 
 	Entry.Init( Row, sclrgstry::GetCommonRegistry().GetRegistry( Level ) );
 
-	scllocale::SetLocale( Target, Entry );
+	scllocale::Set( Target, Entry );
 qRR
 qRT
 qRE
@@ -293,7 +292,7 @@ qRB
 	RegistryRootPath.Init();
 	BuildRootPath_( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
-	scllocale::LoadLocale( scllocale::tMain, LocaleFlow, LocaleDirectory, LocaleRootPath.Convert( Buffer ) );
+	scllocale::Load( scllocale::tMain, LocaleFlow, LocaleDirectory, LocaleRootPath.Convert( Buffer ) );
 
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
 
@@ -418,11 +417,31 @@ qRE
 	return Flow;
 }
 
+namespace {
+	void DumpLocale_( str::string_ &Tree )
+	{
+	qRH
+		flx::E_STRING_OFLOW___ SFlow;
+		txf::text_oflow__ TFlow;
+		xml::writer Writer;
+	qRB
+		SFlow.Init( Tree );
+		TFlow.Init( SFlow );
+		Writer.Init( TFlow, xml::oCompact, xml::e_Default );
+
+		scllocale::Dump( scllocale::tMain, true, Writer );
+	qRR
+	qRT
+	qRE
+	}
+}
+
 void sclmisc::Initialize(
 	err::err___ *qRRor,
 	sclerror::error___ *SCLError,
 	const cio::set__ &CIO,
-	const fnm::name___ &SuggestedDirectory )
+	const fnm::name___ &SuggestedDirectory,
+	str::string_ *Locale )
 {
 qRH
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
@@ -441,6 +460,9 @@ qRB
 	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
 	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
+
+	if ( Locale != NULL )
+		DumpLocale_( *Locale );
 qRR
 qRT
 qRE
@@ -449,7 +471,7 @@ qRE
 void sclmisc::EraseProjectRegistry( void )
 {
 	sclrgstry::EraseProjectRegistry();
-	scllocale::EraseLocale( scllocale::tProject );
+	scllocale::Erase( scllocale::tProject );
 }
 
 #define C( name ) case pt##name: return #name; break

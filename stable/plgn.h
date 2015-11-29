@@ -107,7 +107,6 @@ namespace plgn {
 		bso::bool__ Init(
 			const ntvstr::string___ &PluginPath,
 			const rgstry::entry__ &Configuration,
-			const rgstry::entry__ &Locale,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
@@ -117,9 +116,9 @@ namespace plgn {
 			if ( !SubInit_( PluginPath, ErrHandling ) )
 				return false;
 
-			Data.Init( err::qRRor, sclerror::SCLERRORError, Configuration, Locale, Arguments );
+			Data.Init( err::qRRor, sclerror::SCLERRORError, Arguments );
 
-			C_().Initialize( &Data );
+			C_().Initialize( &Data, Configuration );
 
 			_Plugin = (plugin *)C_().RetrievePlugin();
 
@@ -133,26 +132,20 @@ namespace plgn {
 		bso::bool__ Init(
 			const ntvstr::string___ &PluginPath,
 			const rgstry::tentry__ &Configuration,
-			const rgstry::tentry__ &Locale,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
 			bso::bool__ Success = false;
 		qRH
-			rgstry::entry__ ConfigurationEntry, LocaleEntry;
+			rgstry::entry__ ConfigurationEntry;
 		qRB
 			ConfigurationEntry.Init();
 
 			if ( !Registry.Convert( Configuration, ConfigurationEntry, ErrHandling ) )
 				qRReturn;
 
-			LocaleEntry.Init();
-
-			if ( !Registry.Convert( Locale, LocaleEntry, ErrHandling ) )
-				qRReturn;
-
-			if ( !Init( PluginPath, ConfigurationEntry, LocaleEntry, Arguments, ErrHandling ) )
+			if ( !Init( PluginPath, ConfigurationEntry, Arguments, ErrHandling ) )
 				qRReturn;
 
 			Success = true;
@@ -169,6 +162,7 @@ namespace plgn {
 		qRH
 			plgncore::data__ Data;
 			fnm::name___ Location;
+			str::string Locale;
 		qRB
 			if ( !SubInit_( PluginPath, ErrHandling ) )
 				return false;
@@ -176,9 +170,12 @@ namespace plgn {
 			Location.Init();
 			fnm::GetLocation( PluginPath, Location );
 
-			Data.Init( err::qRRor, sclerror::SCLERRORError, Location, Arguments );
+			Data.Init( err::qRRor, sclerror::SCLERRORError, Arguments );
 
-			C_().Initialize( &Data );
+			Locale.Init();
+			C_().Initialize( &Data, Location, Locale );
+
+			scllocale::Fill(scllocale::tMain, "Locale", Location, Locale );
 
 			_Plugin = (plugin *)C_().RetrievePlugin();
 

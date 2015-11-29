@@ -47,17 +47,28 @@ namespace scllocale {
 		t_Undefined
 	};
 
-	void EraseLocale( target__ Target );
+	void Dump(
+		target__ Target,
+		bso::bool__ RootToo,
+		xml::writer &Writer );
 
-	void SetLocale(
+	void Erase( target__ Target );
+
+	void Set(
 		target__ Target,
 		const rgstry::entry__ &Entry );
 
-	void LoadLocale(
+	void Load(
 		target__ Target,
 		xtf::extended_text_iflow__ &Flow,
-		const char *Directory,
+		const fnm::name___ &Directory,
 		const char *RootPath );
+
+	void Fill(
+		target__ Target,
+		const char *RootPath,
+		const fnm::name___ &Directory,
+		const str::string_ &XML );
 
 	const str::string_ &GetTranslation(
 		const char *Text,
