@@ -20,7 +20,7 @@
 #ifndef BROWSE__INC
 # define BROWSE__INC
 
-# include "fwtftr.h"
+# include "dwtftr.h"
 
 # include "rgstry.h"
 # include "str.h"
@@ -30,9 +30,9 @@ namespace browse {
 		const rgstry::multi_level_registry_ &Registry,
 		const str::string_ &Path,
 		const str::string_ &Generator,
-		const str::string_ &OutputFileName,
+		const fnm::name___ &OutputFileName,
 		dwtdct::exploration_observer__ &ExplorationObserver,
-		fwtftr::processing_observer__ &ProcessingObserver );
+		dwtftr::processing_observer___ &ProcessingObserver );
 }
 
 #endif

@@ -23,7 +23,7 @@
 #include "store.h"
 #include "misc.h"
 
-#include "fwtftr.h"
+#include "dwtftr.h"
 #include "fwtmov.h"
 
 using namespace browse;
@@ -52,19 +52,47 @@ qRE
 	return ExclusionHandling;
 }
 
+namespace {
+	void Dump_(
+		dwtftr::drow__ Root,
+		const dwtftr::file_tree_ &Tree,
+		const fnm::name___ &Filename )
+	{
+	qRH
+		sclmisc::text_oflow_rack___ Rack;
+		xml::writer Writer;
+	qRB
+		Writer.Init( Rack.Init( Filename ), xml::oIndent, xml::e_Default );
+
+		Writer.PushTag( MISC_NAME_MC );
+
+		Writer.PushTag( "FileTree" );
+
+		Tree.Dump( Root, Writer );
+
+		Writer.PopTag();
+
+		Writer.PopTag();
+	qRR
+		Rack.HandleError();
+	qRT
+	qRE
+	}
+}
+
 void browse::Browse(
 	const rgstry::multi_level_registry_ &Registry,
 	const str::string_ &Path,
 	const str::string_ &Generator,
-	const str::string_ &Output,
+	const fnm::name___ &OutputFilename,
 	dwtdct::exploration_observer__ &ExplorationObserver,
-	fwtftr::processing_observer__ &ProcessingObserver	)
+	dwtftr::processing_observer___ &ProcessingObserver	)
 {
 qRH
 	bso::uint__ ThreadAmountMax = 0;
-	fwtftr::file_tree Tree;
+	dwtftr::file_tree Tree;
 	fwtmov::movings Movings;
-	fwtftr::drow__ Root = qNIL;
+	dwtftr::drow__ Root = qNIL;
 	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
 	dwtxcl::excluder Excluder;
 	dwtbsc::limitations__ Limitations;
@@ -90,7 +118,11 @@ qRB
 	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
 
 	Tree.Init();
-	Root = fwtftr::Process( Content, Tree, ProcessingObserver );
+	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
+
+	Dump_( Root, Tree, OutputFilename );
+
+#if 0
 
 	Movings.Init();
 	fwtmov::Explore( Path, Content, GO, Movings );
@@ -100,6 +132,7 @@ qRB
 	store::Save( Store, Generator, Output );
 
 //	Dump_( Generator, Row, Tree, Movings, tol::EpochTime( false ) - Start, ThreadAmountMax, Output );
+#endif
 qRR
 qRT
 qRE

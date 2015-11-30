@@ -1,31 +1,41 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// File Watcher CoMParison
+#ifndef DWTCPR__INC
+# define DWTCPR__INC
 
-#ifndef FWTCPR__INC
-# define FWTCPR__INC
+# define DWTCPR_NAME		"DWTCPR"
 
-# include "fwtftr.h"
+# if defined( E_DEBUG ) && !defined( DWTCPR_NODBG )
+#  define DWTCPR_DBG
+# endif
 
-namespace fwtcpr {
-	
+// Directory WaTcher ComPaRison
+
+# include "dwtbsc.h"
+# include "dwtftr.h"
+
+# include "err.h"
+# include "str.h"
+# include "dtr.h"
+
+namespace dwtcpr {
 	enum status__ {
 		sSteady,	// Pas de modification.
 		sCreated,
@@ -202,11 +212,11 @@ namespace fwtcpr {
 	typedef dtr::E_DTREEt_( drow__ ) dtree_;
 	E_AUTO( dtree );
 
-	class observer__
-	: public dwtbsc::observer__
+	class observer___
+	: public dwtbsc::observer___
 	{
 	protected:
-		virtual void FWTCPRReport(
+		virtual void DWTCPRReport(
 			bso::uint__ Handled,
 			bso::uint__ Total ) = 0;
 	public:
@@ -214,28 +224,24 @@ namespace fwtcpr {
 			bso::size__ Handled,
 			bso::size__ Total )
 		{
-			FWTCPRReport( Handled, Total );
+			DWTCPRReport( Handled, Total );
 		}
 	};
 
-	typedef dwtbsc::observer___ _observer__;
-
 	class basic_observer___
-	: public observer__,
-	  public _observer__
+	: public observer___
 	{
 	protected:
-		virtual void FWTCPRReport(
+		virtual void DWTCPRReport(
 			bso::uint__ Handled,
-			bso::uint__ ToHandle )
+			bso::uint__ ToHandle ) override
 		{
-			_observer__::Report_( Handled, ToHandle );
+			observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			observer__::reset( P );
-			_observer__::reset( P );
+			observer___::reset( P );
 		}
 		E_CVDTOR( basic_observer___ );
 		void Init(
@@ -243,8 +249,7 @@ namespace fwtcpr {
 			txf::text_oflow__ &Flow,
 			tol::delay__ Delay )
 		{
-			observer__::Init( Delay );
-			_observer__::Init( Message, Flow );
+			observer___::Init( Delay , Message, Flow );
 		}
 	};
 
@@ -296,7 +301,7 @@ namespace fwtcpr {
 		const dwtftr::file_tree_ &Target,
 		dwtftr::drow__ TargetRoot,
 		scene_ &Scene,
-		observer__ &Observer );
+		observer___ &Observer );
 
 	void Dump( 
 		drow__ Row,
@@ -314,10 +319,10 @@ namespace fwtcpr {
 		drow__ Root );	// Enlève les entrées ne nécessitant pas d'action.
 
 	class load_observer__
-	: public dwtbsc::observer__ 
+	: public observer___ 
 	{
 	protected:
-		virtual void FWTCPRReport(
+		virtual void DWTCPRReport(
 			bso::uint__ Handled,
 			bso::uint__ Total ) = 0;
 	public:
@@ -325,7 +330,7 @@ namespace fwtcpr {
 			bso::uint__ Handled,
 			bso::uint__ Total )
 		{
-			FWTCPRReport( Handled, Total );
+			DWTCPRReport( Handled, Total );
 		}
 	};
 
@@ -336,21 +341,20 @@ namespace fwtcpr {
 		load_observer__ &Observer );
 
 	class basic_load_observer___
-	: public load_observer__,
-	  public _observer__
+	: public load_observer__
 	{
 	protected:
-		virtual void FWTCPRReport(
+		virtual void DWTCPRReport(
 			bso::uint__ Handled,
-			bso::uint__ ToHandle )
+			bso::uint__ ToHandle ) override
 		{
-			_observer__::Report_( Handled, ToHandle );
+			observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			load_observer__::reset( P );
-			_observer__::reset( P );
+			observer___::reset( P );
 		}
 		E_CVDTOR( basic_load_observer___ );
 		void Init(
@@ -358,8 +362,7 @@ namespace fwtcpr {
 			txf::text_oflow__ &Flow,
 			tol::delay__ Delay )
 		{
-			load_observer__::Init( Delay );
-			_observer__::Init( Message, Flow );
+			load_observer__::Init( Delay, Message, Flow );
 		}
 	};
 }

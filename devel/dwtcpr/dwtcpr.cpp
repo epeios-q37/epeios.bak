@@ -1,25 +1,27 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
+
+#define DWTCPR__COMPILATION
 
 #include "dwtcpr.h"
 
-using namespace fwtcpr;
+using namespace dwtcpr;
 
 static stsfsm::automat VersionAutomat_;
 static stsfsm::automat StatusAutomatV1_;
@@ -519,7 +521,7 @@ drow__ dwtcpr::Compare(
 	const dwtftr::file_tree_ &Target,
 	dwtftr::drow__ TargetRoot,
 	scene_ &Scene,
-	observer__ &Observer )
+	observer___ &Observer )
 {
 	drow__ Root = qNIL;
 qRH
@@ -554,11 +556,8 @@ qRB
 	if ( Modified  )
 		MarkAsModified_( Scene, Root );
 
-	if ( &Observer != NULL ) {
+	if ( Observer.IsElapsed() )
 		Observer.Report( 0, Links.Amount() );
-		Timer.Init( Observer.Delay() );
-		Timer.Launch();
-	}
 
 	while ( Links.Amount() ) {
 		Handled++;
@@ -595,9 +594,7 @@ qRB
 			MarkAsModified_( Scene, Link.Parent );
 	}
 
-	if ( &Observer != NULL )
-		Observer.Report( Handled, Handled );
-
+	Observer.Report( Handled, Handled );
 qRR
 qRT
 qRE
@@ -798,7 +795,7 @@ static void FillAttributeAutomat_(
 	stsfsm::Fill<attribute__,version__>( Version, Automat, a_amount, GetLabel_ );
 }
 
-#define UNDEFINED_ID	FWTBSC_UNDEFINED_ID
+#define UNDEFINED_ID	DWTBSC_UNDEFINED_ID
 
 inline static int GetItem_(
 	const str::string_ &Name,
@@ -869,7 +866,6 @@ qRH
 	drow__ Current = qNIL, New = qNIL;
 	sdr::row__ Error = qNIL;
 	bso::uint__ Handled = 0, Total = 1;	// Pour le 'root'.
-	tol::timer__ Timer;
 qRB
 	TagAutomat.Init();
 	FillTagAutomat_(Version,  TagAutomat );
@@ -877,20 +873,12 @@ qRB
 	AttributeAutomat.Init();
 	FillAttributeAutomat_( Version, AttributeAutomat );
 
-	if ( &Observer != NULL ) {
-		Observer.Report( 0, 0 );
-		Timer.Init( Observer.Delay() );
-		Timer.Launch();
-	}
-
+	Observer.Report( 0, 0 );
 
 	do {
-		if ( Timer.IsElapsed() ) {
-			if ( &Observer != NULL )
-				Observer.Report( Handled, Total );
+		if ( Observer.IsElapsed() )
+			Observer.Report( Handled, Total );
 
-			Timer.Launch();
-		}
 		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::tStartTag:
 			if ( Depth >= DEPTH_MAX )
@@ -1242,7 +1230,7 @@ qRE
 	return Root;
 }
 
-Q37_GCTOR( fwtcpr )
+Q37_GCTOR( dwtcpr )
 {
 	FillVersionAutomat_();
 	FillStatusAutomats_();

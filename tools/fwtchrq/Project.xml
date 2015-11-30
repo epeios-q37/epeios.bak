@@ -29,7 +29,9 @@
 			</Modules>
 			<Modules Group="DWT">
 				<Module>dwtbsc</Module>
+				<Module>dwtcpr</Module>
 				<Module>dwtdct</Module>
+				<Module>dwtftr</Module>
 				<Module>dwtght</Module>
 				<Module>dwtxcl</Module>
 			</Modules>
@@ -38,8 +40,6 @@
 			</Modules>
 		</Modules>
 		<Modules Group="FWT">
-			<Module>fwtcpr</Module>
-			<Module>fwtftr</Module>
 			<Module>fwtmov</Module>
 		</Modules>
 		<Module>browse</Module>

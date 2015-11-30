@@ -37,9 +37,11 @@ mods += uys utf xtf llio tht
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp btr 
 mods += dtr idxbtr mtk txmtbl 
-mods += dwtbsc dwtdct dwtght dwtxcl 
-mods += sclmisc sclerror scllocale sclrgstry scltool 
-mods += fwtcpr fwtftr fwtmov 
+mods += dwtbsc dwtcpr dwtdct dwtftr dwtght 
+mods += dwtxcl 
+mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += scltool 
+mods += fwtmov 
 mods += browse exclusion misc registry store 
 
 pmods += pllio 

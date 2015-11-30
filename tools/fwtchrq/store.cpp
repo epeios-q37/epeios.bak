@@ -79,8 +79,8 @@ content__ store::GetContent( const str::string_ &Pattern )
 }
 
 void store::SaveTreeAndMovings(
-	fwtftr::drow__ Row,
-	const fwtftr::file_tree_ &Tree,
+	dwtftr::drow__ Row,
+	const dwtftr::file_tree_ &Tree,
 	const fwtmov::movings_ &Movings,
 	xml::writer_ &Writer )
 {
@@ -99,15 +99,15 @@ void store::SaveTreeAndMovings(
 	Writer.PopTag();
 }
 
-fwtftr::drow__ store::LoadTreeAndMovings(
+dwtftr::drow__ store::LoadTreeAndMovings(
 	xml::parser___ &Parser,
-	fwtftr::load_observer__ &Observer,
-	fwtftr::version__ TreeVersion,
-	fwtftr::file_tree_ &Tree,
+	dwtftr::load_observer__ &Observer,
+	dwtftr::version__ TreeVersion,
+	dwtftr::file_tree_ &Tree,
 	fwtmov::version__ MovingsVersion,
 	fwtmov::movings_ &Movings )
 {
-	fwtftr::drow__ Root = qNIL;
+	dwtftr::drow__ Root = qNIL;
 qRH
 	bso::bool__ Continue = true;
 qRB
@@ -118,7 +118,7 @@ qRB
 		switch ( Parser.Parse( xml::tfStartTag ) ) {
 		case xml::tStartTag:
 			if ( Parser.TagName() == "Content" ) {
-				Root = fwtftr::Load( Parser, TreeVersion, Tree, Observer );
+				Root = dwtftr::Load( Parser, TreeVersion, Tree, Observer );
 			} else if ( Parser.TagName() == "DirectoryModifications" ) {
 				fwtmov::Load( Parser, MovingsVersion, Movings );
 			} else
@@ -139,8 +139,8 @@ qRE
 }
 
 void store::SaveModifications(
-	fwtcpr::drow__ Root,
-	const fwtcpr::scene_ &Scene,
+	dwtcpr::drow__ Root,
+	const dwtcpr::scene_ &Scene,
 	const fwtmov::movings_ &Movings,
 	xml::writer_ &Writer )
 {
@@ -159,15 +159,15 @@ void store::SaveModifications(
 	Writer.PopTag();
 }
 
-fwtcpr::drow__ store::LoadModifications(
+dwtcpr::drow__ store::LoadModifications(
 	xml::parser___ &Parser,
-	fwtcpr::load_observer__ &Observer,
-	fwtcpr::version__ SceneVersion,
-	fwtcpr::scene_ &Scene,
+	dwtcpr::load_observer__ &Observer,
+	dwtcpr::version__ SceneVersion,
+	dwtcpr::scene_ &Scene,
 	fwtmov::version__ MovingsVersion,
 	fwtmov::movings_ &Movings )
 {
-	fwtcpr::drow__ Root = qNIL;
+	dwtcpr::drow__ Root = qNIL;
 qRH
 	bso::bool__ Continue = true;
 qRB
@@ -178,7 +178,7 @@ qRB
 		switch ( Parser.Parse( xml::tfStartTag ) ) {
 		case xml::tStartTag:
 			if ( Parser.TagName() == "Files" ) {
-				Root = fwtcpr::Load( Parser, SceneVersion, Scene, Observer );
+				Root = dwtcpr::Load( Parser, SceneVersion, Scene, Observer );
 			} else if ( Parser.TagName() == "Directories" ) {
 				fwtmov::Load( Parser, MovingsVersion, Movings );
 			} else

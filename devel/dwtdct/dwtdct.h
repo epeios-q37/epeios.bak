@@ -310,8 +310,10 @@ namespace dwtdct {
 	typedef items_ content_;
 	E_AUTO( content );
 
+	using tol::timer__;
+
 	class exploration_observer__
-	: public dwtbsc::observer__
+	: public timer__
 	{
 	protected:
 		virtual void DWTDCTReport(
@@ -324,7 +326,10 @@ namespace dwtdct {
 			bso::uint__ ToHandle,
 			tamount__ ThreadAmount )
 		{
-			DWTDCTReport( Handled, ToHandle, ThreadAmount );
+			if ( timer__::IsEnabled() ) {
+				DWTDCTReport( Handled, ToHandle, ThreadAmount );
+				timer__::Launch();
+			}
 		}
 	};
 
@@ -339,7 +344,7 @@ namespace dwtdct {
 		exploration_observer__ &Observer );
 
 	class ghosts_setting_observer__
-	: public dwtbsc::observer__
+	: public timer__
 	{
 	protected:
 		virtual void DWTDCTReport(
@@ -363,6 +368,8 @@ namespace dwtdct {
 			bso::uint__ Expected )
 		{
 			DWTDCTReport( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+
+			timer__::Launch();
 		}
 	};
 
@@ -445,14 +452,14 @@ namespace dwtdct {
 		}
 		E_CVDTOR( basic_exploration_observer___ );
 		void Init(
+			tol::delay__ Delay,
 			const str::string &Message,
-			txf::text_oflow__ &TFLow,
-			tol::delay__ Delay )
+			txf::text_oflow__ &TFlow )
 		{
 			exploration_observer__::Init( Delay );
 
 			_Message.Init( Message );
-			_Flow.Init( TFLow );
+			_Flow.Init( TFlow );
 		}
 	};
 }

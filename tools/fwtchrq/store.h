@@ -21,9 +21,9 @@
 #ifndef STORE__INC
 # define STORE__INC
 
-# include "fwtftr.h"
+# include "dwtftr.h"
 # include "fwtmov.h"
-# include "fwtcpr.h"
+# include "dwtcpr.h"
 //# include "fwtcmd.h"
 
 # include "xml.h"
@@ -66,18 +66,18 @@ namespace store {
 
 	content__ GetContent( const str::string_ &Pattern );
 
-	inline fwtftr::version__ GetFWTFTRVersion( version__ Version )
+	inline dwtftr::version__ GetFWTFTRVersion( version__ Version )
 	{
 		switch ( Version ) {
 		case v0_1:
-			return fwtftr::v0_1;
+			return dwtftr::v0_1;
 			break;
 		default:
 			qRGnr();
 			break;
 		}
 
-		return fwtftr::v_Undefined;	// Pour éviter une 'warning'.
+		return dwtftr::v_Undefined;	// Pour éviter une 'warning'.
 	}
 
 	inline fwtmov::version__ GetFWTMOVVersion( version__ Version )
@@ -94,18 +94,18 @@ namespace store {
 		return fwtmov::v_Undefined;	// Pour éviter une 'warning'.
 	}
 
-	inline fwtcpr::version__ GetFWTCPRVersion( version__ Version )
+	inline dwtcpr::version__ GetFWTCPRVersion( version__ Version )
 	{
 		switch ( Version ) {
 		case v0_1:
-			return fwtcpr::v0_1;
+			return dwtcpr::v0_1;
 			break;
 		default:
 			qRGnr();
 			break;
 		}
 
-		return fwtcpr::v_Undefined;	// Pour éviter une 'warning'.
+		return dwtcpr::v_Undefined;	// Pour éviter une 'warning'.
 	}
 
 	class store__ 
@@ -113,10 +113,10 @@ namespace store {
 	private:
 		content__ _Content;
 	public:
-		fwtftr::drow__ TreeRoot;
-		const fwtftr::file_tree_ *Tree;
-		fwtcpr::drow__ SceneRoot;
-		const fwtcpr::scene_ *Scene;
+		dwtftr::drow__ TreeRoot;
+		const dwtftr::file_tree_ *Tree;
+		dwtcpr::drow__ SceneRoot;
+		const dwtcpr::scene_ *Scene;
 		const fwtmov::movings_ *Movings;
 		void reset( bso::bool__ = true )
 		{
@@ -144,8 +144,8 @@ namespace store {
 			_Content = c_Undefined;
 		}
 		void InitAsTreeAndMovings(
-			fwtftr::drow__ Root,
-			const fwtftr::file_tree_ &Tree,
+			dwtftr::drow__ Root,
+			const dwtftr::file_tree_ &Tree,
 			const fwtmov::movings_ &Movings )
 		{
 			Init();
@@ -156,8 +156,8 @@ namespace store {
 			this->Movings = &Movings;
 		}
 		void InitAsModifications(
-			fwtcpr::drow__ Root,
-			const fwtcpr::scene_ &Scene,
+			dwtcpr::drow__ Root,
+			const dwtcpr::scene_ &Scene,
 			const fwtmov::movings_ &Movings )
 		{
 			Init();
@@ -174,8 +174,8 @@ namespace store {
 	: public store__
 	{
 	public:
-		fwtftr::file_tree Tree;
-		fwtcpr::scene Scene;
+		dwtftr::file_tree Tree;
+		dwtcpr::scene Scene;
 		fwtmov::movings Movings;
 		void reset( bso::bool__ P = true )
 		{
@@ -211,30 +211,30 @@ namespace store {
 	};
 
 	void SaveTreeAndMovings(
-		fwtftr::drow__ Row,
-		const fwtftr::file_tree_ &Tree,
+		dwtftr::drow__ Row,
+		const dwtftr::file_tree_ &Tree,
 		const fwtmov::movings_ &Movings,
 		xml::writer_ &Writer );
 
-	fwtftr::drow__ LoadTreeAndMovings(
+	dwtftr::drow__ LoadTreeAndMovings(
 		xml::parser___ &Parser,
-		fwtftr::load_observer__ &Observer,
-		fwtftr::version__ TreeVersion,
-		fwtftr::file_tree_ &Tree,
+		dwtftr::load_observer__ &Observer,
+		dwtftr::version__ TreeVersion,
+		dwtftr::file_tree_ &Tree,
 		fwtmov::version__ MovingsVersion,
 		fwtmov::movings_ &Movings );
 
 	void SaveModifications(
-		fwtcpr::drow__ Root,
-		const fwtcpr::scene_ &Scene,
+		dwtcpr::drow__ Root,
+		const dwtcpr::scene_ &Scene,
 		const fwtmov::movings_ &Movings,
 		xml::writer_ &Writer );
 
-	fwtcpr::drow__ LoadModifications(
+	dwtcpr::drow__ LoadModifications(
 		xml::parser___ &Parser,
-		fwtcpr::load_observer__ &Observer,
-		fwtcpr::version__ SceneVersion,
-		fwtcpr::scene_ &Scene,
+		dwtcpr::load_observer__ &Observer,
+		dwtcpr::version__ SceneVersion,
+		dwtcpr::scene_ &Scene,
 		fwtmov::version__ MovingsVersion,
 		fwtmov::movings_ &Movings );
 
@@ -255,8 +255,8 @@ namespace store {
 
 	class observers__ {
 	private:
-		fwtftr::load_observer__ *_TreeObserver;
-		fwtcpr::load_observer__ *_SceneObserver;
+		dwtftr::load_observer__ *_TreeObserver;
+		dwtcpr::load_observer__ *_SceneObserver;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -265,20 +265,20 @@ namespace store {
 		}
 		E_CDTOR( observers__ );
 		void Init(
-			fwtftr::load_observer__ &TreeObserver,
-			fwtcpr::load_observer__ &SceneObserver )
+			dwtftr::load_observer__ &TreeObserver,
+			dwtcpr::load_observer__ &SceneObserver )
 		{
 			_TreeObserver = &TreeObserver;
 			_SceneObserver = &SceneObserver;
 		}
-		fwtftr::load_observer__ &TreeObserver( void ) const
+		dwtftr::load_observer__ &TreeObserver( void ) const
 		{
 			if ( _TreeObserver == NULL )
 				qRGnr();
 
 			return *_TreeObserver;
 		}
-		fwtcpr::load_observer__ &SceneObserver( void ) const
+		dwtcpr::load_observer__ &SceneObserver( void ) const
 		{
 			if ( _SceneObserver ==  NULL )
 				qRGnr();
@@ -309,8 +309,8 @@ namespace store {
 	: public observers__
 	{
 	private:
-		fwtftr::basic_load_observer___ TreeObserver;
-		fwtcpr::basic_load_observer___ SceneObserver;
+		dwtftr::basic_load_observer___ TreeObserver;
+		dwtcpr::basic_load_observer___ SceneObserver;
 	public:
 		void reset( bso::bool__ P = true )
 		{

@@ -36,16 +36,6 @@ using cio::CErr;
 using cio::COut;
 using cio::CIn;
 
-# define NAME_MC			"fwtchrq"
-# define NAME_LC			"fwtchrq"
-# define NAME_UC			"FWTCHRQ"
-# define WEBSITE_URL		"http://q37.info"
-# define AUTHOR_NAME		"Claude SIMON"
-# define AUTHOR_CONTACT		"http://q37.info/contact/"
-# define OWNER_NAME			"Claude SIMON"
-# define OWNER_CONTACT		"http://q37.info/contact/"
-# define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
-
 E_CDEF( char *, ExplorationMessage_, "ExplorationMessage" );
 E_CDEF( char *, ProcessingMessage_, "ProcessingMessage" );
 E_CDEF( char *, UpdateMessage_, "UpdateMessage" );
@@ -54,8 +44,8 @@ E_CDEF( tol::delay__, Delay_, 700 );
 
 static void PrintHeader_( void )
 {
-	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
-	COut << "Copyright (C) " COPYRIGHT << txf::nl;
+	COut << MISC_NAME_MC " V" VERSION << " (" MISC_WEBSITE_URL ")" << txf::nl;
+	COut << "Copyright (C) " MISC_COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
@@ -65,7 +55,7 @@ static void PrintHeader_( void )
 
 static void Browse_(
 	const str::string_ &Path,
-	const str::string_ &OutputFileName )
+	const str::string_ &OutputFilename )
 {
 qRH
 	str::string
@@ -73,9 +63,9 @@ qRH
 		ExplorationMessage,
 		ProcessingMessage;
 	dwtdct::basic_exploration_observer___ ExplorationObserver;
-	fwtftr::basic_processing_observer___ ProcessingObserver;
+	dwtftr::basic_processing_observer___ ProcessingObserver;
 qRB
-	Generator.Init( NAME_MC " V" VERSION " (" );
+	Generator.Init( MISC_NAME_MC " V" VERSION " (" );
 	Generator.Append( cpe::GetDescription() );
 	Generator.Append( ')' );
 
@@ -85,10 +75,10 @@ qRB
 	ProcessingMessage.Init(); 
 	sclmisc::GetBaseTranslation( ProcessingMessage_, ProcessingMessage );
 
-	ExplorationObserver.Init( ExplorationMessage, cio::COut, Delay_ );
-	ProcessingObserver.Init( ProcessingMessage, cio::COut, Delay_ );
+	ExplorationObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_, ExplorationMessage, cio::COut );
+	ProcessingObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_,ProcessingMessage, cio::COut );
 
-	browse::Browse( sclmisc::GetRegistry(), Path, Generator, OutputFileName, ExplorationObserver, ProcessingObserver );
+	browse::Browse( sclmisc::GetRegistry(), Path, Generator, OutputFilename, ExplorationObserver, ProcessingObserver );
 qRR
 qRT
 qRE
@@ -140,7 +130,7 @@ qRB
 	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
 
 	Content.Init();
-	ExplorationObserver.Init( ExplorationMessage, cio::COut, Delay_ );
+	ExplorationObserver.Init( Delay_, ExplorationMessage, cio::COut );
 	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, dwtbsc::ehKeepGhostLike, Content, ExplorationObserver );
 
 	cio::COut << txf::nl;
@@ -179,12 +169,12 @@ int scltool::SCLTOOLMain(
 qRH
 qRB
 #pragma message ( __LOC__ "à enlever !")
-	cio::COut << "----->" << sizeof(time_t) << txf::tab << sizeof( bso::s32__ ) <<  "<-----" << txf::nl << txf::commit;
+//	cio::COut << "----->" << sizeof(time_t) << txf::tab << sizeof( bso::s32__ ) <<  "<-----" << txf::nl << txf::commit;
 
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
-		epsmsc::PrintLicense( NAME_MC );
+		epsmsc::PrintLicense( MISC_NAME_MC );
 	C( Browse );
 	C( Update );
 	else
@@ -197,5 +187,5 @@ qRE
 	return ExitValue;
 }
 
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
+const char *sclmisc::SCLMISCTargetName = MISC_NAME_LC;
 

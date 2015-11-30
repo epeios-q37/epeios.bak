@@ -768,6 +768,11 @@ namespace tol {
 	E_TRMIMIC__( LARGE_INTEGER, tick__ );
 	extern LARGE_INTEGER	_TickFrequence;
 
+	inline void Reset( tick__ &Tick )
+	{
+		Tick->QuadPart = 0;
+	}
+
 	inline tick__ Tick( void )
 	{
 		LARGE_INTEGER Counter;
@@ -959,6 +964,7 @@ namespace tol {
 		void reset( bso::bool__ = true )
 		{
 			_Delay = 0;
+			Reset( _Start );
 		}
 		timer__( void )
 		{
@@ -968,18 +974,31 @@ namespace tol {
 		{
 			reset( );
 		}
+		// Timer is dsactivated (i.e. 'IsElapsed()' returns always false) when 'Delay' == 0;
+		// If not desactivated, the timer is considred as elapsed until call to 'Launch()'.
 		void Init( delay__ Delay )
 		{
-			_Start = Tick();
+			Reset( _Start );
 			_Delay = Delay;
 		}
 		void Launch( void )
 		{
 			_Start = Tick();
 		}
+		bso::bool__ IsDisabled( void ) const
+		{
+			return _Delay == 0;
+		}
+		bso::bool__ IsEnabled( void ) const
+		{
+			return !IsDisabled();
+		}
 		bso::bool__ IsElapsed( void ) const
 		{
-			return MilliSecDiff( Tick(), _Start ) >= _Delay;
+			if ( IsEnabled() )
+				return MilliSecDiff( Tick(), _Start ) >= _Delay;
+			else
+				return false;
 		}
 	};
 

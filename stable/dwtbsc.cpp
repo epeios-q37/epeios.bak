@@ -204,6 +204,8 @@ qRB
 	_Flow << Message;
 	_Flow.CR();
 	_Flow.Commit();
+
+	timer__::Launch();
 qRR
 qRT
 qRE

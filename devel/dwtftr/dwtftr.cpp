@@ -1,23 +1,27 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
-	This file is part of fwtchrq.
+	This file is part of the Epeios framework.
 
-    fwtchrq is free software: you can redistribute it and/or
+	The Epeios framework is free software: you can redistribute it and/or
 	modify it under the terms of the GNU Affero General Public License as
 	published by the Free Software Foundation, either version 3 of the
 	License, or (at your option) any later version.
 
-    fwtchrq is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+	The Epeios framework is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 	Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with fwtchrq.  If not, see <http://www.gnu.org/licenses/>
+	You should have received a copy of the GNU Affero General Public License
+	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#define DWTFTR__COMPILATION
+
 #include "dwtftr.h"
+
+using namespace dwtftr;
 
 #include "dwtdct.h"
 
@@ -26,7 +30,7 @@
 #include "mtk.h"
 #include "idxbtq.h"
 
-using namespace fwtftr;
+using namespace dwtftr;
 
 using namespace dwtbsc;
 using namespace dwtdct;
@@ -40,6 +44,12 @@ const char *dwtftr::GetLabel( version__ Version )
 	switch ( Version ) {
 	case v0_1:
 		return "0.1";
+		break;
+	case v0_2:
+		return "0.2";
+		break;
+	case v0_3:
+		return "0.3";
 		break;
 	default:
 		qRGnr();
@@ -65,6 +75,8 @@ static inline xversion__ GetXVersion_( version__ Version )
 {
 	switch ( Version ) {
 	case v0_1:
+	case v0_2:
+	case v0_3:
 		return xv1;
 		break;
 	default:
@@ -127,8 +139,6 @@ static void FillExclusionAutomats_( void )
 	ExclusionAutomatV1_.Init();
 	stsfsm::Fill<exclusion__,xversion__>( xv1, ExclusionAutomatV1_, x_amount, GetLabel_ );
 }
-
-
 
 const str::string_ &dwtftr::file_tree_::GetPath(
 	drow__ Row,
@@ -227,6 +237,7 @@ qRE
 typedef bch::E_BUNCHt_( drow__, irow__ ) itod_;
 E_AUTO( itod );
 
+
 typedef bch::E_BUNCHt_( drows_ *, irow__ ) drows_set_;
 E_AUTO( drows_set );
 
@@ -235,13 +246,12 @@ static void Organize_(
 	file_tree_ &Tree,
 	itod_ &IToD,
 	drows_set_ &Dirs,
-	dwtftr::processing_observer__ &Observer )
+	processing_observer___ &Observer )
 {
 qRH
 	irow__ IRow = qNIL, ParentIRow = qNIL;
 	dwtght::grow__ GRow = qNIL;
 	directory Directory;
-	tol::timer__ Timer;
 qRB
 	IToD.Allocate( Items.Amount() );
 	IToD.FillWith( qNIL );
@@ -251,11 +261,7 @@ qRB
 
 	IRow = Items.First();
 
-	if ( &Observer ) {
-		Observer.Report( 0, Items.Amount() );
-		Timer.Init( Observer.Delay() );
-		Timer.Launch();
-	}
+	Observer.Report( 0, Items.Amount() );
 
 	while ( IRow != qNIL ) {
 		const item_ &Item = *Items( IRow );
@@ -291,17 +297,13 @@ qRB
 			DRows->Append( IToD( IRow ) );
 		}
 
-		if ( &Observer )
-			if ( Timer.IsElapsed() ) {
-					Observer.Report( *IRow + 1, Items.Amount() );
-					Timer.Launch();
-				}
+		if ( Observer.IsElapsed() )
+			Observer.Report( *IRow + 1, Items.Amount() );
 
 		IRow = Items.Next( IRow );
 	}
 
-	if ( &Observer )
-		Observer.Report( Items.Amount(), Items.Amount() );
+	Observer.Report( Items.Amount(), Items.Amount() );
 qRR
 qRT
 qRE
@@ -378,7 +380,7 @@ static void Delete_( drows_set_ &Dirs )
 drow__ dwtftr::Process(
 	const dwtdct::content_ &Content,
 	file_tree_ &Tree,
-	processing_observer__ &Observer )
+	processing_observer___ &Observer )
 {
 	drow__ Root = qNIL;
 qRH
@@ -418,7 +420,9 @@ static inline const char *GetLabel_(
 	tag__ Tag )
 {
 	switch ( Version ) {
-	case v0_1:
+
+	case v0_2:
+	case v0_3:
 		switch ( Tag ) {
 			T( Goofs );
 			T( Goof );
@@ -430,7 +434,16 @@ static inline const char *GetLabel_(
 			qRGnr();
 			break;
 		}
-		break;
+	case v0_1:
+		switch ( Tag ) {
+			T( Dirs );
+			T( Dir );
+			T( Files );
+			T( File );
+		default:
+			qRGnr();
+			break;
+		}
 	default:
 		qRGnr();
 		break;
@@ -459,6 +472,21 @@ static inline const char *GetLabel_(
 {
 	switch( Version ) {
 	case v0_1:
+	case v0_2:
+		switch ( Attribute ) {
+		A( Name );
+		A( Exclusion );
+		A( Oddity );
+		A( Timestamp );
+		A( Amount );
+		A( Size );
+//		A( NewName );
+		default:
+			qRGnr();
+			break;
+		}
+		break;
+	case v0_3:
 		switch ( Attribute ) {
 		A( Name );
 		A( Exclusion );
@@ -970,6 +998,7 @@ template <typename rows> static void Fill_(
 	if ( Queue.Previous( Row ) != qNIL )
 		qRGnr();
 
+
 	while ( Row != qNIL) {
 		SortedRows.Append( UnsortedRows( Row ) );
 
@@ -1171,7 +1200,6 @@ qRH
 	exclusion__ Exclusion = x_Undefined;
 	sdr::row__ Error = qNIL;
 	bso::uint__ Handled = 0, Total = 1;	// Pour le 'root'.
-	tol::timer__ Timer;
 qRB
 	TagAutomat.Init();
 	FillTagAutomat_( Version,  TagAutomat );
@@ -1179,19 +1207,12 @@ qRB
 	AttributeAutomat.Init();
 	FillAttributeAutomat_( Version, AttributeAutomat );
 
-	if ( &Observer != NULL ) {
-		Observer.Report( 0, 0 );
-		Timer.Init( Observer.Delay() );
-		Timer.Launch();
-	}
+	Observer.Report( 0, 0 );
 
 	do {
-		if ( Timer.IsElapsed() ) {
-			if ( &Observer != NULL )
-				Observer.Report( Handled, Total );
+		if ( Observer.IsElapsed() )
+			Observer.Report( Handled, Total );
 
-			Timer.Launch();
-		}
 		switch ( Parser.Parse( xml::tfObvious ) ) {
 		case xml::tStartTag:
 			if ( Depth >= DEPTH_MAX )
@@ -1445,6 +1466,3 @@ Q37_GCTOR( fwtftr )
 	FillVersionAutomat_();
 	FillExclusionAutomats_();
 }
-
-
-

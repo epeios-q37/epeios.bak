@@ -747,7 +747,6 @@ qRH
 	data___ Data;
 	bso::bool__ Continue = true;
 	bso::uint__ Handled = 0;
-	tol::timer__ Timer;
 	TOL_CBUFFER___ Buffer;
 	fil::info__ Info;
 	mtx::mutex___ Mutex;
@@ -778,22 +777,13 @@ qRB
 	Data.ToHandle.Push( Content.Append( Item ) );
 	Item = NULL;
 
-	if ( &Observer ) {
-		Timer.Init( Observer.Delay() );
-		Timer.Launch();
-	}
-
-	if ( &Observer != NULL )
-		Observer.Report( 0, 1, 0 );
+	Observer.Report( 0, 1, 0 );
 
 	while ( Continue ) {
 		Mutex.Lock();
 
-		if ( &Observer != NULL )
-			if ( Timer.IsElapsed() ) {
-				Observer.Report( Content.Amount(), Data.ToHandle.Amount(), Data.GetThreadAmount() );
-				Timer.Launch();
-			}
+		if ( Observer.IsElapsed() )
+			Observer.Report( Content.Amount(), Data.ToHandle.Amount(), Data.GetThreadAmount() );
 
 		if ( Data.ToHandle.Amount() != 0 ) {
 			if ( !Data.ThreadAllowed() )
@@ -811,8 +801,7 @@ qRB
 			tht::Defer();
 	}
 
-	if ( &Observer )
-		Observer.Report( Content.Amount(), Data.ToHandle.Amount(), 0 );
+	Observer.Report( Content.Amount(), Data.ToHandle.Amount(), 0 );
 qRR
 qRT
 	if ( Item != NULL )
@@ -927,7 +916,6 @@ void dwtdct::SetGhosts(
 qRH
 	irow__ IRow = qNIL;
 	bso::size__ Total = 0, Handled = 0, Created= 0, Updated = 0, Skipped = 0, Failed = 0, Intruder = 0, Expected = 0;
-	tol::timer__ Timer;
 	itog IToG;
 	gtoi GToI;
 	dwtght::grow__ GRow = qNIL;
@@ -941,8 +929,7 @@ qRB
 
 	IRow = Content.First();
 
-	if ( &GhostsSettingObserver != NULL )
-		GhostsSettingObserver.Report( 0, 0, 0, 0, 0, 0, 0, 0 );
+	GhostsSettingObserver.Report( 0, 0, 0, 0, 0, 0, 0, 0 );
 
 	Excluder.Init( GO );
 
@@ -969,13 +956,8 @@ qRB
 		GToI.Allocate( Ghosts.Extent() );
 		GToI.Store( 0, GRow );
 
-		if ( &GhostsSettingObserver != NULL )
+		if ( GhostsSettingObserver.IsElapsed()  )
 			GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
-	}
-
-	if ( &GhostsSettingObserver != NULL ) {
-		Timer.Init( GhostsSettingObserver.Delay() );
-		Timer.Launch();
 	}
 
 	while ( IRow != qNIL ) {
@@ -1021,17 +1003,13 @@ qRB
 
 		Handled++;
 
-		if ( &GhostsSettingObserver != NULL )
-			if ( Timer.IsElapsed() ) {
-				GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
-				Timer.Launch();
-			}
+		if ( GhostsSettingObserver.IsElapsed() )
+			GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
 
 		IRow = Content.Next( IRow );
 	}
 
-	if ( &GhostsSettingObserver != NULL )
-		GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+	GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
 
 	Clean_( Ghosts, GToI );
 qRR

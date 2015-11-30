@@ -20,13 +20,24 @@
 #ifndef MISC__INC
 # define MISC__INC
 
-# include "fwtftr.h"
+# include "dwtftr.h"
 # include "fwtmov.h"
-# include "fwtcpr.h"
+# include "dwtcpr.h"
 // # include "fwtcmd.h"
 
 # include "sclmisc.h"
 # include "sclrgstry.h"
+
+# define MISC_NAME_MC			"fwtchrq"
+# define MISC_NAME_LC			"fwtchrq"
+# define MISC_NAME_UC			"FWTCHRQ"
+# define MISC_WEBSITE_URL		"http://q37.info"
+# define MISC_AUTHOR_NAME		"Claude SIMON"
+# define MISC_AUTHOR_CONTACT	"http://q37.info/contact/"
+# define MISC_OWNER_NAME		"Claude SIMON"
+# define MISC_OWNER_CONTACT		"http://q37.info/contact/"
+# define MISC_COPYRIGHT			COPYRIGHT_YEARS " " MISC_OWNER_NAME " (" MISC_OWNER_CONTACT ")"	
+
 
 namespace misc {
 	inline void NormalizePath( str::string_ &Path )
