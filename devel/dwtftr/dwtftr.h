@@ -196,7 +196,7 @@ namespace dwtftr {
 	typedef dwtbsc::observer___ _observer___;
 
 	class processing_observer___
-	: public _observer___
+	: public tol::timer__
 	{
 	protected:
 		virtual void DWTFTRReport(
@@ -220,7 +220,7 @@ namespace dwtftr {
 		processing_observer___ &Observer );
 
 	class load_observer__
-	: public _observer___
+	: public tol::timer__
 	{
 	protected:
 		virtual void DWTFTRReport(
@@ -242,18 +242,20 @@ namespace dwtftr {
 		load_observer__ &Observer );
 
 	class basic_processing_observer___
-	: public processing_observer___
+	: public processing_observer___,
+	  public dwtbsc::observer___
 	{
 	protected:
 		virtual void DWTFTRReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle ) override
 		{
-			processing_observer___::Report_( Handled, ToHandle );
+			dwtbsc::observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			dwtbsc::observer___::reset( P );
 			processing_observer___::reset( P );
 		}
 		E_CVDTOR( basic_processing_observer___ );
@@ -262,25 +264,27 @@ namespace dwtftr {
 			const str::string_ &Message,
 			txf::text_oflow__ &Flow )
 		{
-			processing_observer___::Init( Delay, Message, Flow );
+			processing_observer___::Init( Delay );
+			dwtbsc::observer___::Init( Message, Flow );
 		}
 	};
 
 	class basic_load_observer___
-	: public load_observer__
+	: public load_observer__,
+	  public dwtbsc::observer___
 	{
 	protected:
 		virtual void DWTFTRReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle ) override
 		{
-			load_observer__::Report_( Handled, ToHandle );
+			dwtbsc::observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			load_observer__::reset( P );
-			_observer___::reset( P );
+			dwtbsc::observer___::reset( P );
 		}
 		E_CVDTOR( basic_load_observer___ );
 		void Init(
@@ -288,7 +292,8 @@ namespace dwtftr {
 			txf::text_oflow__ &Flow,
 			tol::delay__ Delay )
 		{
-			load_observer__::Init( Delay, Message, Flow );
+			load_observer__::Init( Delay );
+			dwtbsc::observer___::Init( Message, Flow );
 		}
 	};
 

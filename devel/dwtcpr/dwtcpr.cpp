@@ -521,7 +521,7 @@ drow__ dwtcpr::Compare(
 	const dwtftr::file_tree_ &Target,
 	dwtftr::drow__ TargetRoot,
 	scene_ &Scene,
-	observer___ &Observer )
+	observer__ &Observer )
 {
 	drow__ Root = qNIL;
 qRH

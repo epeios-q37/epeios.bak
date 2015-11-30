@@ -212,8 +212,8 @@ namespace dwtcpr {
 	typedef dtr::E_DTREEt_( drow__ ) dtree_;
 	E_AUTO( dtree );
 
-	class observer___
-	: public dwtbsc::observer___
+	class observer__
+	: public tol::timer__
 	{
 	protected:
 		virtual void DWTCPRReport(
@@ -228,19 +228,23 @@ namespace dwtcpr {
 		}
 	};
 
+	typedef dwtbsc::observer___ _observer___;
+
 	class basic_observer___
-	: public observer___
+	: public observer__,
+	  public _observer___
 	{
 	protected:
 		virtual void DWTCPRReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle ) override
 		{
-			observer___::Report_( Handled, ToHandle );
+			_observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			_observer___::reset( P );
 			observer___::reset( P );
 		}
 		E_CVDTOR( basic_observer___ );
@@ -249,7 +253,8 @@ namespace dwtcpr {
 			txf::text_oflow__ &Flow,
 			tol::delay__ Delay )
 		{
-			observer___::Init( Delay , Message, Flow );
+			observer__::Init( Delay );
+			_observer___::Init( Message, Flow );
 		}
 	};
 
@@ -301,7 +306,7 @@ namespace dwtcpr {
 		const dwtftr::file_tree_ &Target,
 		dwtftr::drow__ TargetRoot,
 		scene_ &Scene,
-		observer___ &Observer );
+		observer__ &Observer );
 
 	void Dump( 
 		drow__ Row,
@@ -319,7 +324,7 @@ namespace dwtcpr {
 		drow__ Root );	// Enlève les entrées ne nécessitant pas d'action.
 
 	class load_observer__
-	: public observer___ 
+	: public observer__ 
 	{
 	protected:
 		virtual void DWTCPRReport(
@@ -341,20 +346,21 @@ namespace dwtcpr {
 		load_observer__ &Observer );
 
 	class basic_load_observer___
-	: public load_observer__
+	: public load_observer__,
+	  public _observer___
 	{
 	protected:
 		virtual void DWTCPRReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle ) override
 		{
-			observer___::Report_( Handled, ToHandle );
+			_observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			_observer___::reset( P );
 			load_observer__::reset( P );
-			observer___::reset( P );
 		}
 		E_CVDTOR( basic_load_observer___ );
 		void Init(
@@ -362,7 +368,8 @@ namespace dwtcpr {
 			txf::text_oflow__ &Flow,
 			tol::delay__ Delay )
 		{
-			load_observer__::Init( Delay, Message, Flow );
+			load_observer__::Init( Delay );
+			_observer___::Init( Message, Flow );
 		}
 	};
 }

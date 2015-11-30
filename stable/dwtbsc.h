@@ -445,10 +445,7 @@ namespace dwtbsc {
 		}
 	};
 
-	using tol::timer__;
-
 	class observer___
-	: public timer__
 	{
 	protected:
 		void Report_(
@@ -460,17 +457,14 @@ namespace dwtbsc {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			timer__::reset( P );
 			_Message.Init();
 			_Flow.reset( P );
 		}
 		E_CVDTOR( observer___ );
 		void Init(
-			tol::delay__ Delay,	// Disabled if == 0.
 			const str::string_ &Message,
 			txf::text_oflow__ &TFlow )
 		{
-			timer__::Init( Delay );
 			_Message.Init( Message );
 			_Flow.Init( TFlow );
 		}
