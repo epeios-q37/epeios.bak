@@ -38,10 +38,9 @@ mods += bomhdl cdgb64 fil fnm lcl
 mods += rgstry stsfsm xml xpp btr 
 mods += dtr idxbtr mtk txmtbl 
 mods += dwtbsc dwtcpr dwtdct dwtftr dwtght 
-mods += dwtxcl 
+mods += dwtmov dwtxcl 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
-mods += fwtmov 
 mods += browse compare exclusion misc registry 
 mods += store 
 

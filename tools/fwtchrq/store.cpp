@@ -81,7 +81,7 @@ content__ store::GetContent( const str::string_ &Pattern )
 void store::SaveTreeAndMovings(
 	dwtftr::drow__ Row,
 	const dwtftr::file_tree_ &Tree,
-	const fwtmov::movings_ &Movings,
+	const dwtmov::movings_ &Movings,
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( GetLabel( cTreeAndMovings ) );
@@ -93,7 +93,7 @@ void store::SaveTreeAndMovings(
 
 	Writer.PushTag( "DirectoryModifications" );
 
-	fwtmov::Dump( Movings, Writer, store::GetFWTMOVVersion( v_Current ) );
+	dwtmov::Dump( Movings, Writer, store::GetFWTMOVVersion( v_Current ) );
 
 	Writer.PopTag();
 	Writer.PopTag();
@@ -104,8 +104,8 @@ dwtftr::drow__ store::LoadTreeAndMovings(
 	dwtftr::load_observer__ &Observer,
 	dwtftr::version__ TreeVersion,
 	dwtftr::file_tree_ &Tree,
-	fwtmov::version__ MovingsVersion,
-	fwtmov::movings_ &Movings )
+	dwtmov::version__ MovingsVersion,
+	dwtmov::movings_ &Movings )
 {
 	dwtftr::drow__ Root = qNIL;
 qRH
@@ -120,7 +120,7 @@ qRB
 			if ( Parser.TagName() == "Content" ) {
 				Root = dwtftr::Load( Parser, TreeVersion, Tree, Observer );
 			} else if ( Parser.TagName() == "DirectoryModifications" ) {
-				fwtmov::Load( Parser, MovingsVersion, Movings );
+				dwtmov::Load( Parser, MovingsVersion, Movings );
 			} else
 				qRGnr();
 			break;
@@ -141,13 +141,13 @@ qRE
 void store::SaveModifications(
 	dwtcpr::drow__ Root,
 	const dwtcpr::scene_ &Scene,
-	const fwtmov::movings_ &Movings,
+	const dwtmov::movings_ &Movings,
 	xml::writer_ &Writer )
 {
 	Writer.PushTag( GetLabel( cModifications ) );
 	Writer.PushTag( "Directories" );
 
-	fwtmov::Dump( Movings, Writer, GetFWTMOVVersion( v_Current ) );
+	dwtmov::Dump( Movings, Writer, GetFWTMOVVersion( v_Current ) );
 
 	Writer.PopTag();
 
@@ -164,8 +164,8 @@ dwtcpr::drow__ store::LoadModifications(
 	dwtcpr::load_observer__ &Observer,
 	dwtcpr::version__ SceneVersion,
 	dwtcpr::scene_ &Scene,
-	fwtmov::version__ MovingsVersion,
-	fwtmov::movings_ &Movings )
+	dwtmov::version__ MovingsVersion,
+	dwtmov::movings_ &Movings )
 {
 	dwtcpr::drow__ Root = qNIL;
 qRH
@@ -180,7 +180,7 @@ qRB
 			if ( Parser.TagName() == "Files" ) {
 				Root = dwtcpr::Load( Parser, SceneVersion, Scene, Observer );
 			} else if ( Parser.TagName() == "Directories" ) {
-				fwtmov::Load( Parser, MovingsVersion, Movings );
+				dwtmov::Load( Parser, MovingsVersion, Movings );
 			} else
 				qRGnr();
 			break;

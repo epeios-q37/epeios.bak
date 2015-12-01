@@ -738,9 +738,6 @@ qRB
 	Name.Init();
 	GetGhostsDataDirName( Root, GO, Name );
 
-	if ( !fil::Exists(Name) )
-		qRGnr();
-
 	GetFileTree_( Name, uys::mReadWrite, Rack );
 qRR
 qRT

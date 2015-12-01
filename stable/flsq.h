@@ -426,7 +426,7 @@ namespace flsq {
 			Temoin_.Manuel = true;
 			Temoin_.Persistant = false;
 			Temoin_.Interne = false;
-			Temoin_.Mode = fil::mReadOnly;
+			Temoin_.Mode = fil::m_Undefined;
 			TailleFichier_ = 0;
 			_Row = qNIL;
 			_ID = Undefined;

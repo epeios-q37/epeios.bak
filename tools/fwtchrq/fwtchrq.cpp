@@ -103,6 +103,56 @@ qRT
 qRE
 }
 
+static void CompareDirs_(
+	const str::string_ &Path,
+	const str::string_ &OutputFilename )
+{
+qRH
+	str::string
+		Generator,
+		ExplorationMessage,
+		ProcessingMessage;
+	dwtdct::basic_exploration_observer___ ExplorationObserver;
+	dwtftr::basic_processing_observer___ ProcessingObserver;
+qRB
+	Generator.Init( MISC_NAME_MC " V" VERSION " (" );
+	Generator.Append( cpe::GetDescription() );
+	Generator.Append( ')' );
+
+	ExplorationMessage.Init(); 
+	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
+
+	ProcessingMessage.Init(); 
+	sclmisc::GetBaseTranslation( ProcessingMessage_, ProcessingMessage );
+
+	ExplorationObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_, ExplorationMessage, cio::COut );
+	ProcessingObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_,ProcessingMessage, cio::COut );
+
+	browse::Browse( sclmisc::GetRegistry(), Path, Generator, OutputFilename, ExplorationObserver, ProcessingObserver );
+qRR
+qRT
+qRE
+}
+
+static void CompareDirs_( void )
+{
+qRH
+	str::string Path, Output;
+qRB
+	Path.Init();
+	sclmisc::MGetValue( registry::Path, Path );
+
+	misc::NormalizeAndTestPath( Path );
+
+	Output.Init();
+	sclmisc::OGetValue( registry::Output, Output );
+
+	CompareDirs_( Path, Output );
+qRR
+qRT
+qRE
+}
+
 static void Update_( const str::string_ &Path )
 {
 qRH
@@ -114,6 +164,9 @@ qRH
 	dwtdct::basic_exploration_observer___ ExplorationObserver;
 	dwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
 	str::string ExplorationMessage, UpdateMessage;
+	dwtftr::file_tree_rack___ FileTreeRack;
+	dwtftr::basic_processing_observer___ ProcessingObserver;
+	str::string ProcessingMessage;
 qRB
 	ThreadAmountMax = sclmisc::OGetUInt( registry::ThreadAmountMax, 0 );
 
@@ -140,6 +193,17 @@ qRB
 
 	GhostsSettingObserver.Init( UpdateMessage, cio::COut, Delay_ );
 	dwtdct::SetGhosts( Path, Content, GO, GhostsSettingObserver );
+
+	FileTreeRack.Init();
+
+	dwtftr::file_tree_ &FileTree = dwtftr::GetRWFileTree( Path, GO, FileTreeRack );
+
+	FileTree.Init();
+
+	ProcessingMessage.Init(); 
+	sclmisc::GetBaseTranslation( ProcessingMessage_, ProcessingMessage );
+	ProcessingObserver.Init( 750, ProcessingMessage, cio::COut );
+	dwtftr::Process( Content, FileTree, ProcessingObserver );
 qRR
 qRT
 qRE
@@ -176,6 +240,7 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( MISC_NAME_MC );
 	C( Browse );
+	C( CompareDirs);
 	C( Update );
 	else
 		qRGnr();

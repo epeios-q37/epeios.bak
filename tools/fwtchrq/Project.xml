@@ -33,14 +33,12 @@
 				<Module>dwtdct</Module>
 				<Module>dwtftr</Module>
 				<Module>dwtght</Module>
+				<Module>dwtmov</Module>
 				<Module>dwtxcl</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
-		</Modules>
-		<Modules Group="FWT">
-			<Module>fwtmov</Module>
 		</Modules>
 		<Module>browse</Module>
 		<Module>compare</Module>

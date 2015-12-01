@@ -12,6 +12,13 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-12-01 :
+- FLSQ
+	* When instanciated, 'file_storage___::Temoin_.Mode' is set to 'fil::m_Undefined', so it can be detected
+	  that it's not yet initialized.
+- UYS :
+	- Adapting to changes in 'FLSQ'.
+
 2015-11-30 :
 - TOL :
 	- 'timer__' :

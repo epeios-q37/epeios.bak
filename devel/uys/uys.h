@@ -356,9 +356,9 @@ namespace uys {
 	E_ENUM( mode )
 	{
 		mReadOnly,
-			mReadWrite,
-			m_amount,
-			m_Undefined
+		mReadWrite,
+		m_amount,
+		m_Undefined
 	};
 
 	inline fil::mode__ Convert_( mode__ Mode )
@@ -369,6 +369,9 @@ namespace uys {
 			break;
 		case mReadWrite:
 			return fil::mReadWrite;
+			break;
+		case m_Undefined:
+			return fil::m_Undefined;
 			break;
 		default:
 			qRFwk();
@@ -386,6 +389,9 @@ namespace uys {
 			break;
 		case fil::mReadWrite:
 			return mReadWrite;
+			break;
+		case fil::m_Undefined:
+			return m_Undefined;
 			break;
 		default:
 			qRFwk();

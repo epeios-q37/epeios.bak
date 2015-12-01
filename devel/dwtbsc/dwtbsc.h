@@ -335,6 +335,12 @@ namespace dwtbsc {
 			const fnm::name___ &Basename );
 	};
 
+	template <typename hook> inline void CreateFilesIfMissing_( hook &Hook )
+	{
+		if ( !Hook.Exists() )
+			Hook.CreateFiles();
+	}
+	
 	class kernel_files_hook___
 	{
 	private:
@@ -343,9 +349,32 @@ namespace dwtbsc {
 		ctn::files_hook___ Directories_;
 		ctn::files_hook___ Names_;
 		ctn::files_hook___ Oddities_;
+		void CreateFilesIfMissing_( void )
+		{
+			dwtbsc::CreateFilesIfMissing_( Goofs_ );
+			dwtbsc::CreateFilesIfMissing_( Files_ );
+			dwtbsc::CreateFilesIfMissing_( Directories_ );
+			dwtbsc::CreateFilesIfMissing_( Names_ );
+			dwtbsc::CreateFilesIfMissing_( Oddities_ );
+		}
+		bso::bool__ Test_( void )
+		{
+			if ( Goofs_.Mode() == uys::m_Undefined )
+				return false;
+			else
+				return Goofs_.Exists()
+						|| Files_.Exists()
+						|| Directories_.Exists()
+						|| Names_.Exists()
+						|| Oddities_.Exists();
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			if ( P )
+				if ( Test_() )
+					CreateFilesIfMissing_();
+
 			Goofs_.reset( P );
 			Files_.reset( P );
 			Directories_.reset( P );

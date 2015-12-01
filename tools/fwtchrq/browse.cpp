@@ -24,7 +24,7 @@
 #include "misc.h"
 
 #include "dwtftr.h"
-#include "fwtmov.h"
+#include "dwtmov.h"
 
 using namespace browse;
 
@@ -91,7 +91,7 @@ void browse::Browse(
 qRH
 	bso::uint__ ThreadAmountMax = 0;
 	dwtftr::file_tree Tree;
-	fwtmov::movings Movings;
+	dwtmov::movings Movings;
 	dwtftr::drow__ Root = qNIL;
 	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
 	dwtxcl::excluder Excluder;

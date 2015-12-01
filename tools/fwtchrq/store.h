@@ -22,7 +22,7 @@
 # define STORE__INC
 
 # include "dwtftr.h"
-# include "fwtmov.h"
+# include "dwtmov.h"
 # include "dwtcpr.h"
 //# include "fwtcmd.h"
 
@@ -80,18 +80,18 @@ namespace store {
 		return dwtftr::v_Undefined;	// Pour éviter une 'warning'.
 	}
 
-	inline fwtmov::version__ GetFWTMOVVersion( version__ Version )
+	inline dwtmov::version__ GetFWTMOVVersion( version__ Version )
 	{
 		switch ( Version ) {
 		case v0_1:
-			return fwtmov::v0_1;
+			return dwtmov::v0_1;
 			break;
 		default:
 			qRGnr();
 			break;
 		}
 
-		return fwtmov::v_Undefined;	// Pour éviter une 'warning'.
+		return dwtmov::v_Undefined;	// Pour éviter une 'warning'.
 	}
 
 	inline dwtcpr::version__ GetFWTCPRVersion( version__ Version )
@@ -117,7 +117,7 @@ namespace store {
 		const dwtftr::file_tree_ *Tree;
 		dwtcpr::drow__ SceneRoot;
 		const dwtcpr::scene_ *Scene;
-		const fwtmov::movings_ *Movings;
+		const dwtmov::movings_ *Movings;
 		void reset( bso::bool__ = true )
 		{
 			TreeRoot = qNIL;
@@ -146,7 +146,7 @@ namespace store {
 		void InitAsTreeAndMovings(
 			dwtftr::drow__ Root,
 			const dwtftr::file_tree_ &Tree,
-			const fwtmov::movings_ &Movings )
+			const dwtmov::movings_ &Movings )
 		{
 			Init();
 
@@ -158,7 +158,7 @@ namespace store {
 		void InitAsModifications(
 			dwtcpr::drow__ Root,
 			const dwtcpr::scene_ &Scene,
-			const fwtmov::movings_ &Movings )
+			const dwtmov::movings_ &Movings )
 		{
 			Init();
 
@@ -176,7 +176,7 @@ namespace store {
 	public:
 		dwtftr::file_tree Tree;
 		dwtcpr::scene Scene;
-		fwtmov::movings Movings;
+		dwtmov::movings Movings;
 		void reset( bso::bool__ P = true )
 		{
 			store__::reset( P );
@@ -213,7 +213,7 @@ namespace store {
 	void SaveTreeAndMovings(
 		dwtftr::drow__ Row,
 		const dwtftr::file_tree_ &Tree,
-		const fwtmov::movings_ &Movings,
+		const dwtmov::movings_ &Movings,
 		xml::writer_ &Writer );
 
 	dwtftr::drow__ LoadTreeAndMovings(
@@ -221,13 +221,13 @@ namespace store {
 		dwtftr::load_observer__ &Observer,
 		dwtftr::version__ TreeVersion,
 		dwtftr::file_tree_ &Tree,
-		fwtmov::version__ MovingsVersion,
-		fwtmov::movings_ &Movings );
+		dwtmov::version__ MovingsVersion,
+		dwtmov::movings_ &Movings );
 
 	void SaveModifications(
 		dwtcpr::drow__ Root,
 		const dwtcpr::scene_ &Scene,
-		const fwtmov::movings_ &Movings,
+		const dwtmov::movings_ &Movings,
 		xml::writer_ &Writer );
 
 	dwtcpr::drow__ LoadModifications(
@@ -235,8 +235,8 @@ namespace store {
 		dwtcpr::load_observer__ &Observer,
 		dwtcpr::version__ SceneVersion,
 		dwtcpr::scene_ &Scene,
-		fwtmov::version__ MovingsVersion,
-		fwtmov::movings_ &Movings );
+		dwtmov::version__ MovingsVersion,
+		dwtmov::movings_ &Movings );
 
 	void Save(
 		const store__ &Store,
