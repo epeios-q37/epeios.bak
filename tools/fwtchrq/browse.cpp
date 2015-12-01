@@ -86,7 +86,7 @@ void browse::Browse(
 	const str::string_ &Generator,
 	const fnm::name___ &OutputFilename,
 	dwtdct::exploration_observer__ &ExplorationObserver,
-	dwtftr::processing_observer___ &ProcessingObserver	)
+	dwtftr::processing_observer__ &ProcessingObserver	)
 {
 qRH
 	bso::uint__ ThreadAmountMax = 0;

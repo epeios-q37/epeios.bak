@@ -42,7 +42,8 @@ mods += dwtxcl
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += fwtmov 
-mods += browse exclusion misc registry store 
+mods += browse compare exclusion misc registry 
+mods += store 
 
 pmods += pllio 
 

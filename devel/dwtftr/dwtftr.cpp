@@ -246,7 +246,7 @@ static void Organize_(
 	file_tree_ &Tree,
 	itod_ &IToD,
 	drows_set_ &Dirs,
-	processing_observer___ &Observer )
+	processing_observer__ &Observer )
 {
 qRH
 	irow__ IRow = qNIL, ParentIRow = qNIL;
@@ -380,7 +380,7 @@ static void Delete_( drows_set_ &Dirs )
 drow__ dwtftr::Process(
 	const dwtdct::content_ &Content,
 	file_tree_ &Tree,
-	processing_observer___ &Observer )
+	processing_observer__ &Observer )
 {
 	drow__ Root = qNIL;
 qRH

@@ -170,7 +170,7 @@ qRE
 	return State;
 }
 
-void dwtbsc::observer___::Report_(
+void dwtbsc::basic_observer___::Report_(
 	bso::uint__ Handled,
 	bso::uint__ Total )
 {

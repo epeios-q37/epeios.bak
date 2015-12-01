@@ -521,7 +521,7 @@ drow__ dwtcpr::Compare(
 	const dwtftr::file_tree_ &Target,
 	dwtftr::drow__ TargetRoot,
 	scene_ &Scene,
-	observer__ &Observer )
+	comparison_observer__ &Observer )
 {
 	drow__ Root = qNIL;
 qRH
@@ -543,8 +543,7 @@ qRB
 
 	Root = Scene.Directories.New();
 
-	if ( &Observer != NULL )
-		Observer.Report( 0, Handled );
+	Observer.Report( 0, Handled );
 
 	Modified = Compare_( SourceRoot, Source, TargetRoot, Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
 	Modified |= Compare_( SourceRoot, Source, TargetRoot, Target, Dir.Files, Scene.Files, Scene.Names );
@@ -556,18 +555,11 @@ qRB
 	if ( Modified  )
 		MarkAsModified_( Scene, Root );
 
-	if ( Observer.IsElapsed() )
-		Observer.Report( 0, Links.Amount() );
-
 	while ( Links.Amount() ) {
 		Handled++;
 
-		if ( Timer.IsElapsed() ) {
-			if ( &Observer != NULL )
-				Observer.Report( Handled, Handled + Links.Amount() );
-
-			Timer.Launch();
-		}
+		if ( Timer.IsElapsed() )
+			Observer.Report( Handled, Handled + Links.Amount() );
 
 		Modified = false;
 

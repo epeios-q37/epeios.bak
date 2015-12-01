@@ -32,7 +32,7 @@ namespace browse {
 		const str::string_ &Generator,
 		const fnm::name___ &OutputFileName,
 		dwtdct::exploration_observer__ &ExplorationObserver,
-		dwtftr::processing_observer___ &ProcessingObserver );
+		dwtftr::processing_observer__ &ProcessingObserver );
 }
 
 #endif

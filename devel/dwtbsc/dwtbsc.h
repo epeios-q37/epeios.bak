@@ -445,7 +445,26 @@ namespace dwtbsc {
 		}
 	};
 
-	class observer___
+	class observer__
+	: public tol::timer__
+	{
+	protected:
+		virtual void DWTBSCReport(
+			bso::uint__ Handled,
+			bso::uint__ Total ) = 0;
+	public:
+		void Report(
+			bso::uint__ Handled,
+			bso::uint__ Total )
+		{
+			if ( IsEnabled() ) {
+				DWTBSCReport( Handled, Total );
+				Launch();
+			}
+		}
+	};
+
+	class basic_observer___
 	{
 	protected:
 		void Report_(
@@ -460,7 +479,7 @@ namespace dwtbsc {
 			_Message.Init();
 			_Flow.reset( P );
 		}
-		E_CVDTOR( observer___ );
+		E_CVDTOR( basic_observer___ );
 		void Init(
 			const str::string_ &Message,
 			txf::text_oflow__ &TFlow )

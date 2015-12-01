@@ -326,9 +326,9 @@ namespace dwtdct {
 			bso::uint__ ToHandle,
 			tamount__ ThreadAmount )
 		{
-			if ( timer__::IsEnabled() ) {
+			if ( IsEnabled() ) {
 				DWTDCTReport( Handled, ToHandle, ThreadAmount );
-				timer__::Launch();
+				Launch();
 			}
 		}
 	};
@@ -367,9 +367,10 @@ namespace dwtdct {
 			bso::uint__ Intruder,
 			bso::uint__ Expected )
 		{
-			DWTDCTReport( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
-
-			timer__::Launch();
+			if ( IsEnabled() ) {
+				DWTDCTReport( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+				Launch();
+			}
 		}
 	};
 

@@ -212,49 +212,34 @@ namespace dwtcpr {
 	typedef dtr::E_DTREEt_( drow__ ) dtree_;
 	E_AUTO( dtree );
 
-	class observer__
-	: public tol::timer__
+	typedef dwtbsc::observer__ comparison_observer__;
+	using dwtbsc::basic_observer___;
+
+	class comparison_basic_observer___
+	: public comparison_observer__,
+	  public basic_observer___
 	{
 	protected:
-		virtual void DWTCPRReport(
-			bso::uint__ Handled,
-			bso::uint__ Total ) = 0;
-	public:
-		void Report(
-			bso::size__ Handled,
-			bso::size__ Total )
-		{
-			DWTCPRReport( Handled, Total );
-		}
-	};
-
-	typedef dwtbsc::observer___ _observer___;
-
-	class basic_observer___
-	: public observer__,
-	  public _observer___
-	{
-	protected:
-		virtual void DWTCPRReport(
+		virtual void DWTBSCReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle ) override
 		{
-			_observer___::Report_( Handled, ToHandle );
+			basic_observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_observer___::reset( P );
-			observer___::reset( P );
+			basic_observer___::reset( P );
+			comparison_observer__::reset( P );
 		}
-		E_CVDTOR( basic_observer___ );
+		E_CVDTOR( comparison_basic_observer___ );
 		void Init(
 			const str::string &Message,
 			txf::text_oflow__ &Flow,
 			tol::delay__ Delay )
 		{
-			observer__::Init( Delay );
-			_observer___::Init( Message, Flow );
+			comparison_observer__::Init( Delay );
+			basic_observer___::Init( Message, Flow );
 		}
 	};
 
@@ -306,7 +291,7 @@ namespace dwtcpr {
 		const dwtftr::file_tree_ &Target,
 		dwtftr::drow__ TargetRoot,
 		scene_ &Scene,
-		observer__ &Observer );
+		comparison_observer__ &Observer );
 
 	void Dump( 
 		drow__ Row,
@@ -323,21 +308,7 @@ namespace dwtcpr {
 		scene_ &Scene,
 		drow__ Root );	// Enlève les entrées ne nécessitant pas d'action.
 
-	class load_observer__
-	: public observer__ 
-	{
-	protected:
-		virtual void DWTCPRReport(
-			bso::uint__ Handled,
-			bso::uint__ Total ) = 0;
-	public:
-		void Report(
-			bso::uint__ Handled,
-			bso::uint__ Total )
-		{
-			DWTCPRReport( Handled, Total );
-		}
-	};
+	typedef dwtbsc::observer__ load_observer__;
 
 	drow__ Load(
 		xml::parser___ &Parser,
@@ -347,19 +318,19 @@ namespace dwtcpr {
 
 	class basic_load_observer___
 	: public load_observer__,
-	  public _observer___
+	  public basic_observer___
 	{
 	protected:
-		virtual void DWTCPRReport(
+		virtual void DWTBSCReport(
 			bso::uint__ Handled,
 			bso::uint__ ToHandle ) override
 		{
-			_observer___::Report_( Handled, ToHandle );
+			basic_observer___::Report_( Handled, ToHandle );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_observer___::reset( P );
+			basic_observer___::reset( P );
 			load_observer__::reset( P );
 		}
 		E_CVDTOR( basic_load_observer___ );
@@ -369,7 +340,7 @@ namespace dwtcpr {
 			tol::delay__ Delay )
 		{
 			load_observer__::Init( Delay );
-			_observer___::Init( Message, Flow );
+			basic_observer___::Init( Message, Flow );
 		}
 	};
 }
