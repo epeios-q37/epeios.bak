@@ -216,6 +216,7 @@ namespace dwtdct {
 		fexclusions_fh___ Exclusions_;
 		sizes_fiels_hook___ Sizes_;
 		timestamps_fh___ Timestamps_;
+	public:
 		void reset( bso::bool__ P = true )
 		{
 			Names_.reset( P );
@@ -545,7 +546,8 @@ namespace dwtdct {
 	typedef bch::hf___ fghosts_hf___;
 	typedef bch::fh___ fghosts_fh___;
 
-	class ghost_related_files_
+	// Files tied to ghosts.
+	class gfiles_
 	{
 	public:
 		struct s {
@@ -554,7 +556,7 @@ namespace dwtdct {
 		};
 		fghosts_ Ghosts;
 		files_data_ Files;
-		ghost_related_files_( s &S )
+		gfiles_( s &S )
 		: Ghosts( S.Ghosts ),
 		  Files( S.Files )
 		{}
@@ -568,10 +570,10 @@ namespace dwtdct {
 			Ghosts.plug( AS );
 			Files.plug( AS );
 		}
-		ghost_related_files_ &operator =( const ghost_related_files_ &GRF )
+		gfiles_ &operator =( const gfiles_ &GF )
 		{
-			Ghosts = GRF.Ghosts;
-			Files = GRF.Files;
+			Ghosts = GF.Ghosts;
+			Files = GF.Files;
 
 			return *this;
 		}
@@ -584,7 +586,11 @@ namespace dwtdct {
 		void Append( const content_ &Content );
 	};
 
-	class ghost_related_files_hf___
+	E_AUTO( gfiles );
+
+	class gfiles_fh___;
+
+	class gfiles_hf___
 	{
 	private:
 		fghosts_hf___ Ghosts_;
@@ -595,11 +601,73 @@ namespace dwtdct {
 			Ghosts_.reset( P );
 			Files_.reset( P );
 		}
-		E_CDTOR( ghost_related_files_hf___);
+		E_CDTOR( gfiles_hf___);
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
+		friend gfiles_fh___;
 	};
+
+	class gfiles_fh___
+	{
+	private:
+		fghosts_fh___ Ghosts_;
+		files_data_fh___ Files_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			Ghosts_.reset( P );
+			Files_.reset( P );
+		}
+		E_CDTOR( gfiles_fh___);
+		void Init(
+			gfiles_hf___ &Filenames,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID )
+		{
+			Ghosts_.Init( Filenames.Ghosts_, Mode, Behavior, ID );
+			Files_.Init( Filenames.Files_, Mode, Behavior, ID );
+		}
+		friend uys::state__ Plug(
+			gfiles_ &Files,
+			gfiles_fh___ &Hook );
+	};
+
+	uys::state__ Plug(
+		gfiles_ &Files,
+		gfiles_fh___ &Hook );
+
+	struct gfiles_rack___
+	{
+	public:
+		gfiles Files;
+		gfiles_fh___ Hook;
+		void reset( bso::bool__ P = true )
+		{
+			Files.reset( P );
+			Hook.reset( P );
+		}
+		E_CDTOR( gfiles_rack___ );
+		void Init( void )
+		{
+			Files.reset();
+			Hook.reset();
+
+			// 'Init(...)' called by dedicated functions.
+		}
+	};
+
+	gfiles_ &GetRWGFiles(
+		const str::string_ &Root,
+		const dwtbsc::ghosts_oddities_ &GO,
+		gfiles_rack___ &Rack );
+
+	const gfiles_ &GetROGFiles(
+		const str::string_ &Root,
+		const dwtbsc::ghosts_oddities_ &GO,
+		gfiles_rack___ &Rack );
+
 }
 
 #endif

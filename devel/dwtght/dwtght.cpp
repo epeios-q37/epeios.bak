@@ -77,7 +77,7 @@ static void SetGhostsFilesHook_(
 qRH
 	lstctn::hf___ Filenames;
 qRB
-	Filenames.Init( Path, "ghosts" );
+	Filenames.Init( Path, "Ghosts_" );
 
 	FilesHook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
 qRR

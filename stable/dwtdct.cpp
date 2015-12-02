@@ -32,6 +32,57 @@ using namespace dwtbsc;
 using namespace dwtght;
 using dwtxcl::excluder_;
 
+# define I( n, p )\
+	n.Init();\
+	fnm::BuildPath( Path, Basename, #p, n );\
+	n##_.Init( "", n )
+
+void dwtdct::files_data_hf___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+qRH
+	fnm::name___ Names, Exclusions, Sizes, Timestamps;
+qRB
+	I( Names, n );
+	I( Exclusions, x );
+	I( Sizes, s );
+	I( Timestamps, t );
+qRR
+qRT
+qRE
+}
+
+#define P( i )\
+	if ( bch::Plug( Files.i, Hook.i##_ ) != State ) {\
+		State = uys::sInconsistent;\
+		qRReturn;\
+	}\
+
+uys::state__ dwtdct::Plug(
+	files_data_ &Files,
+	files_data_fh___ &Hook )
+{
+	uys::state__ State = uys::s_Undefined;
+qRH
+qRB
+	State = ctn::Plug( Files.Names, Hook.Names_ );
+
+	if ( State.IsError() )
+		qRReturn;
+
+	P( Exclusions );
+	P( Sizes );
+	P( Timestamps );
+qRR
+qRT
+	if ( State.IsError() )
+		Hook.reset();	
+qRE
+	return State;
+}
+
+
 void dwtdct::_Delete( _items_ &Items )
 {
 	irow__ Row = Items.First();
@@ -1194,7 +1245,8 @@ namespace {
 		const fstrings_ &Names,
 		const fexclusions_ &Exclusions,
 		const sizes_ &Sizes,
-		const timestamps_ Timestamps,
+		const timestamps_ &Timestamps,
+		fghosts_ &Ghosts,
 		files_data_ &Files )
 	{
 		frow__ SRow = qNIL, TRow = qNIL;
@@ -1206,7 +1258,10 @@ namespace {
 
 		while ( SRow != qNIL )
 		{
-			TRow = Files.Names.Append( Name( SRow ) );
+			TRow = Ghosts.Append( GRow );
+
+			if ( TRow != Files.Names.Append( Name( SRow ) ) )
+				qRFwk();
 
 			if ( TRow != Files.Exclusions.Append(Exclusions( SRow ) ) )
 				qRFwk();
@@ -1224,15 +1279,134 @@ namespace {
 	void Append_(
 		grow__ GRow,
 		const files_data_ &SourceFiles,
+		fghosts_ &Ghosts,
 		files_data_ &TargetFiles )
 	{
-		Append_( GRow, SourceFiles.Names, SourceFiles.Exclusions, SourceFiles.Sizes, SourceFiles.Timestamps, TargetFiles );
+		Append_( GRow, SourceFiles.Names, SourceFiles.Exclusions, SourceFiles.Sizes, SourceFiles.Timestamps, Ghosts, TargetFiles );
 	}
 }
 
-void dwtdct::ghost_related_files_::Append( const item_ &Item )
+void dwtdct::gfiles_::Append( const item_ &Item )
 {
-	Append_( Item.Dir.GetGhostRow(), Item.Files, Files );
+	Append_( Item.Dir.GetGhostRow(), Item.Files, Ghosts, Files );
 }
+
+void dwtdct::gfiles_::Append( const content_ &Content )
+{
+	irow__ Row = Content.First();
+
+	while ( Row != qNIL ) {
+		Append( *Content( Row ) );
+
+		Row = Content.Next( Row );
+	}
+}
+
+void dwtdct::gfiles_hf___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+qRH
+	fnm::name___ Ghosts, Files;
+qRB
+	I( Ghosts, g );
+	I( Files, f );
+qRR
+qRT
+qRE
+}
+
+uys::state__ dwtdct::Plug(
+	gfiles_ &Files,
+	gfiles_fh___ &Hook )
+{
+	uys::state__ State = uys::s_Undefined;
+qRH
+qRB
+	State = Plug( Files.Files, Hook.Files_ );
+
+	if ( State.IsError() )
+		qRReturn;
+
+	if ( State != bch::Plug( Files.Ghosts, Hook.Ghosts_ ) )
+		qRFwk();
+qRR
+qRT
+	if ( State.IsError() )
+		Hook.reset();	
+qRE
+	return State;
+}
+
+namespace {
+	void SetHook_(
+		const fnm::name___ &Path,
+		uys::mode__ Mode,
+		gfiles_fh___ &Hook )
+	{
+	qRH
+		gfiles_hf___ Filenames;
+	qRB
+		Filenames.Init( Path, "GFiles_" );
+
+		Hook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
+	qRR
+	qRT
+	qRE
+	}
+
+	void GetRack_(
+		fnm::name___ &DataDirName,
+		uys::mode__ Mode,
+		gfiles_rack___ &Rack )
+	{
+		SetHook_( DataDirName, Mode, Rack.Hook );
+
+		if ( !Plug( Rack.Files, Rack.Hook ).Boolean() )
+			Rack.Files.Init();
+	}
+}
+
+
+gfiles_ &dwtdct::GetRWGFiles(
+	const str::string_ &Root,
+	const dwtbsc::ghosts_oddities_ &GO,
+	gfiles_rack___ &Rack )
+{
+qRH
+	fnm::name___ Name;
+qRB
+	Name.Init();
+	GetGhostsDataDirName( Root, GO, Name );
+
+	GetRack_( Name, uys::mReadWrite, Rack );
+qRR
+qRT
+qRE
+	return Rack.Files;
+}
+
+const gfiles_ &dwtdct::GetROGFiles(
+	const str::string_ &Root,
+	const dwtbsc::ghosts_oddities_ &GO,
+	gfiles_rack___ &Rack )
+{
+qRH
+	fnm::name___ Name;
+qRB
+	Name.Init();
+	GetGhostsDataDirName( Root, GO, Name );
+
+	if ( fil::Exists( Name ) )
+		GetRack_( Name, uys::mReadOnly, Rack );
+	else
+		Rack.Files.Init();
+qRR
+qRT
+qRE
+	return Rack.Files;
+}
+
+
 
 

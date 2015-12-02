@@ -164,7 +164,7 @@ qRH
 	dwtdct::basic_exploration_observer___ ExplorationObserver;
 	dwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
 	str::string ExplorationMessage, UpdateMessage;
-	dwtftr::file_tree_rack___ FileTreeRack;
+	dwtdct::gfiles_rack___ GFilesRack;
 	dwtftr::basic_processing_observer___ ProcessingObserver;
 	str::string ProcessingMessage;
 qRB
@@ -194,17 +194,13 @@ qRB
 	GhostsSettingObserver.Init( UpdateMessage, cio::COut, Delay_ );
 	dwtdct::SetGhosts( Path, Content, GO, GhostsSettingObserver );
 
-	FileTreeRack.Init();
+	GFilesRack.Init();
 
-	dwtftr::file_tree_ &FileTree = dwtftr::GetRWFileTree( Path, GO, FileTreeRack );
+	dwtdct::gfiles_ &GFiles = dwtdct::GetRWGFiles( Path, GO, GFilesRack );
 
-	FileTree.Init();
+	GFiles.Init();
 
-	ProcessingMessage.Init(); 
-	sclmisc::GetBaseTranslation( ProcessingMessage_, ProcessingMessage );
-	ProcessingObserver.Init( 750, ProcessingMessage, cio::COut );
-	if ( dwtftr::Process( Content, FileTree, ProcessingObserver ) != 0 )
-		qRGnr();
+	GFiles.Append( Content );
 qRR
 qRT
 qRE
