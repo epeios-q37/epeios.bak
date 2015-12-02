@@ -82,7 +82,7 @@ static inline void FillRegular_(
 	FillCommon_( Name, Names, Buffer, Regular );
 
 	Regular.Exclusion = Exclusion;
-	Regular.TimeStamp = Info.Time.Modification;
+	Regular.Timestamp = Info.Time.Modification;
 }
 
 static inline void Fill_(
@@ -425,7 +425,7 @@ qRB
 	Data.Names.PreAllocate( Files.Extent() );
 	Data.Exclusions.PreAllocate( Files.Extent() );
 	Data.Sizes.PreAllocate( Files.Extent() );
-	Data.TimeStamps.PreAllocate( Files.Extent() );
+	Data.Timestamps.PreAllocate( Files.Extent() );
 
 	while ( Row != qNIL ) {
 		Files.Recall( Row, File );
@@ -438,7 +438,7 @@ qRB
 		if ( Control != Data.Sizes.Append( File.Size ) )
 			qRGnr();
 
-		if ( Control != Data.TimeStamps.Append( File.TimeStamp ) )
+		if ( Control != Data.Timestamps.Append( File.Timestamp ) )
 			qRGnr();
 
 		Row = Files.Next( Row );
@@ -489,7 +489,7 @@ qRB
 		Item->Dir.Name = Name( Directory( Row )().Name );
 
 		Item->Dir.Exclusion() = Directory( Row )().Exclusion;
-		Item->Dir.TimeStamp() = Directory( Row )().TimeStamp;
+		Item->Dir.Timestamp() = Directory( Row )().Timestamp;
 
 		Item->Parent() = Parent;
 		Item->Path = NewPath;
@@ -772,7 +772,7 @@ qRB
 //	Item->Path = Path;
 	Item->Parent() = qNIL;
 	Item->Dir.Exclusion() = xNo;
-	Item->Dir.TimeStamp() = Info.Time.Modification;
+	Item->Dir.Timestamp() = Info.Time.Modification;
 
 	Data.ToHandle.Push( Content.Append( Item ) );
 	Item = NULL;
@@ -1187,4 +1187,52 @@ qRR
 qRT
 qRE
 }
+
+namespace {
+	void Append_(
+		grow__ GRow,
+		const fstrings_ &Names,
+		const fexclusions_ &Exclusions,
+		const sizes_ &Sizes,
+		const timestamps_ Timestamps,
+		files_data_ &Files )
+	{
+		frow__ SRow = qNIL, TRow = qNIL;
+
+		ctn::E_CMITEMt( str::string_, frow__ ) Name;
+		Name.Init( Names );
+
+		SRow = Names.First();
+
+		while ( SRow != qNIL )
+		{
+			TRow = Files.Names.Append( Name( SRow ) );
+
+			if ( TRow != Files.Exclusions.Append(Exclusions( SRow ) ) )
+				qRFwk();
+
+			if ( TRow != Files.Sizes.Append(Sizes( SRow ) ) )
+				qRFwk();
+
+			if ( TRow != Files.Timestamps.Append (Timestamps( SRow ) ) )
+				qRFwk();
+
+			SRow = Names.Next( SRow );
+		}
+	}
+
+	void Append_(
+		grow__ GRow,
+		const files_data_ &SourceFiles,
+		files_data_ &TargetFiles )
+	{
+		Append_( GRow, SourceFiles.Names, SourceFiles.Exclusions, SourceFiles.Sizes, SourceFiles.Timestamps, TargetFiles );
+	}
+}
+
+void dwtdct::ghost_related_files_::Append( const item_ &Item )
+{
+	Append_( Item.Dir.GetGhostRow(), Item.Files, Files );
+}
+
 

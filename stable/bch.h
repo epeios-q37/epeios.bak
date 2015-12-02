@@ -605,13 +605,13 @@ namespace bch {
 	#define E_BUNCH_( Type )	E_BUNCHt_( Type, sdr::row__ )
 
 #ifndef FLS__COMPILATION
-	using tys::files_hook___;
+	using tys::fh___;
 
-	using tys::hook_filenames___;
+	using tys::hf___;
 
 	template <typename bunch> uys::state__ Plug(
 		bunch &Bunch,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = tys::Plug( Bunch, Hook );
 

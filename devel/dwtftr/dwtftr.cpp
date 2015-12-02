@@ -222,7 +222,7 @@ qRB
 			File.Size = Data.Sizes( Row );
 
 			File.Exclusion = Data.Exclusions( Row );
-			File.TimeStamp = Data.TimeStamps( Row );
+			File.Timestamp = Data.Timestamps( Row );
 
 			Rows.Append( Tree.Files.Append( File ) );
 
@@ -278,7 +278,7 @@ qRB
 		ParentIRow = Item.Parent();
 
 		Directory().Exclusion = Item.Dir.Exclusion();
-		Directory().TimeStamp = Item.Dir.TimeStamp();
+		Directory().Timestamp = Item.Dir.Timestamp();
 
 		IToD.Store( Tree.Directories.Append( Directory ), IRow );
 
@@ -586,7 +586,7 @@ static inline void DumpRegular_(
 		break;
 	}
 
-	xml::PutAttribute( GetLabel_( Version, aTimestamp ), Regular.TimeStamp, Writer );
+	xml::PutAttribute( GetLabel_( Version, aTimestamp ), Regular.Timestamp, Writer );
 }
 
 static void Dump_( 
@@ -679,7 +679,7 @@ void dwtftr::file_tree_::Dump(
 	Writer.PopTag();
 }
 
-void dwtftr::file_tree_hook_filenames___::Init(
+void dwtftr::file_tree_hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
@@ -702,10 +702,10 @@ namespace {
 	void SetFileTreeFilesHook_(
 		const fnm::name___ &Path,
 		uys::mode__ Mode,
-		file_tree_files_hook___ &FilesHook )
+		file_tree_fh___ &FilesHook )
 	{
 	qRH
-		file_tree_hook_filenames___ Filenames;
+		file_tree_hf___ Filenames;
 	qRB
 		Filenames.Init( Path, "tree" );
 
@@ -1329,11 +1329,11 @@ qRB
 					break;
 				case kDir:
 #pragma message ( __LOC__ "Problème !" )
-					Parser.Value().ToNumber( Dir().TimeStamp, &Error );
+					Parser.Value().ToNumber( Dir().Timestamp, &Error );
 					break;
 				case kFile:
 #pragma message ( __LOC__ "Problème !" )
-					Parser.Value().ToNumber( File.TimeStamp, &Error );
+					Parser.Value().ToNumber( File.Timestamp, &Error );
 					break;
 				default:
 					qRGnr();

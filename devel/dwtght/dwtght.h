@@ -35,7 +35,7 @@
 namespace dwtght {
 	using dwtbsc::depth__;
 
-	qROW( grow__ );	// 'Ghost row'.
+	using dwtbsc::grow__;
 
 	inline grow__ GetGhostRow(
 		const str::string_ &Pattern,
@@ -103,11 +103,11 @@ namespace dwtght {
 	typedef lstctn::E_LXMCONTAINERt_( ghost_, grow__ ) ghosts_;
 	E_AUTO( ghosts );
 
-	typedef lstctn::files_hook___ ghosts_files_hook___;
+	typedef lstctn::fh___ ghosts_fh___;
 
 	struct rack___ {
 
-		ghosts_files_hook___ FilesHook;
+		ghosts_fh___ FilesHook;
 		ghosts Ghosts;
 		void reset( bso::bool__ P = true )
 		{

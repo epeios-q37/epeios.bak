@@ -23,7 +23,7 @@
 
 using namespace dtr;
 
-void dtr::hook_filenames___::Init(
+void dtr::hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

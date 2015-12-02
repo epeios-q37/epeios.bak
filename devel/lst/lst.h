@@ -316,7 +316,7 @@ namespace lst {
 
 #ifndef FLM__COMPILATION
 
-	struct hook_filenames___
+	struct hf___
 	{
 	public:
 		fnm::name___ Filename;
@@ -324,7 +324,7 @@ namespace lst {
 		{
 			Filename.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename )	// Peut être vide ('NULL') si 'Path' contient déjà le nom de fichier.
@@ -334,7 +334,7 @@ namespace lst {
 		}
 	};
 
-	class files_hook___
+	class fh___
 	{
 	private:
 		lst::store_ *_Store;
@@ -353,16 +353,16 @@ namespace lst {
 			_Mode = uys::m_Undefined;
 			_Behavior = uys::b_Undefined;
 		}
-		files_hook___( void )
+		fh___( void )
 		{
 			reset( false );
 		}
-		~files_hook___( void )
+		~fh___( void )
 		{
 			reset();
 		}
 		void Init(
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior )
 		{
@@ -482,7 +482,7 @@ namespace lst {
 
 	template <typename list> uys::state__ Plug(
 		list &List,
-		files_hook___ &Hook,
+		fh___ &Hook,
 		sdr::row__ FirstUnused,
 		time_t ReferenceTimeStamp )
 	{

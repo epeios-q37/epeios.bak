@@ -54,3 +54,30 @@ qRR
 qRT
 qRE
 }
+
+void misc::Dump(
+	dwtftr::drow__ Root,
+	const dwtftr::file_tree_ &Tree,
+	const fnm::name___ &Filename )
+{
+qRH
+	sclmisc::text_oflow_rack___ Rack;
+	xml::writer Writer;
+qRB
+	Writer.Init( Rack.Init( Filename ), xml::oIndent, xml::e_Default );
+
+	Writer.PushTag( MISC_NAME_MC );
+
+	Writer.PushTag( "FileTree" );
+
+	Tree.Dump( Root, Writer );
+
+	Writer.PopTag();
+
+	Writer.PopTag();
+qRR
+	Rack.HandleError();
+qRT
+qRE
+}
+

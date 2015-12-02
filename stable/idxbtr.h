@@ -371,13 +371,13 @@ namespace idxbtr {
 
 	E_AUTO1( tree_index );
 
-	using btr::hook_filenames___;
+	using btr::hf___;
 
-	using btr::files_hook___;
+	using btr::fh___;
 
 	template <typename index> uys::state__ Plug(
 		index &Index,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		return btr::Plug( Index.BaseTree, Hook );
 	}

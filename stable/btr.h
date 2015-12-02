@@ -922,13 +922,13 @@ namespace btr {
 
 	E_AUTO1( binary_tree )
 
-	using bch::hook_filenames___;
+	using bch::hf___;
 
-	using bch::files_hook___;
+	using bch::fh___;
 
 	template <typename tree> uys::state__ Plug(
 		tree &Tree,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		return bch::Plug( Tree.Nodes, Hook );
 	}

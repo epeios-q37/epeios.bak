@@ -135,19 +135,19 @@ namespace dwtbsc {
 	: public common__
 	{
 	public:
-		time_t TimeStamp;	// Last modification.
+		time_t Timestamp;	// Last modification.
 		exclusion__ Exclusion;
 		void reset( bso::bool__ P = true )
 		{
 			common__::reset( P );
-			TimeStamp = 0;
+			Timestamp = 0;
 			Exclusion = x_Undefined;
 		}
 		E_CDTOR( regular__ );
 		void Init( void )
 		{
 			common__::Init();
-			TimeStamp = 0;
+			Timestamp = 0;
 			Exclusion = x_Undefined;
 		}
 	};
@@ -309,16 +309,16 @@ namespace dwtbsc {
 
 	E_AUTO( kernel );
 
-	class kernel_files_hook___;
+	class kernel_fh___;
 
-	class kernel_hook_filenames___
+	class kernel_hf___
 	{
 	private:
-		bch::hook_filenames___ Goofs_;
-		bch::hook_filenames___ Files_;
-		ctn::hook_filenames___ Directories_;
-		ctn::hook_filenames___ Names_;
-		ctn::hook_filenames___ Oddities_;
+		bch::hf___ Goofs_;
+		bch::hf___ Files_;
+		ctn::hf___ Directories_;
+		ctn::hf___ Names_;
+		ctn::hf___ Oddities_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -328,8 +328,8 @@ namespace dwtbsc {
 			Names_.reset( P );
 			Oddities_.reset( P );
 		}
-		E_CDTOR( kernel_hook_filenames___ );
-		friend kernel_files_hook___;
+		E_CDTOR( kernel_hf___ );
+		friend kernel_fh___;
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
@@ -341,14 +341,14 @@ namespace dwtbsc {
 			Hook.CreateFiles();
 	}
 	
-	class kernel_files_hook___
+	class kernel_fh___
 	{
 	private:
-		bch::files_hook___ Goofs_;
-		bch::files_hook___ Files_;
-		ctn::files_hook___ Directories_;
-		ctn::files_hook___ Names_;
-		ctn::files_hook___ Oddities_;
+		bch::fh___ Goofs_;
+		bch::fh___ Files_;
+		ctn::fh___ Directories_;
+		ctn::fh___ Names_;
+		ctn::fh___ Oddities_;
 		void CreateFilesIfMissing_( void )
 		{
 			dwtbsc::CreateFilesIfMissing_( Goofs_ );
@@ -381,9 +381,9 @@ namespace dwtbsc {
 			Names_.reset( P );
 			Oddities_.reset( P );
 		}
-		E_CDTOR( kernel_files_hook___ );
+		E_CDTOR( kernel_fh___ );
 		void Init(
-			kernel_hook_filenames___ &Filenames,
+			kernel_hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -396,12 +396,12 @@ namespace dwtbsc {
 		}
 		friend uys::state__ Plug(
 			kernel_ &Kernel,
-			kernel_files_hook___ &Hook );
+			kernel_fh___ &Hook );
 	};
 
 	uys::state__ Plug(
 		kernel_ &Kernel,
-		kernel_files_hook___ &Hook );
+		kernel_fh___ &Hook );
 
 	class ghosts_oddities_	// Elements pour gèrer le renommage de dossiers.
 	{

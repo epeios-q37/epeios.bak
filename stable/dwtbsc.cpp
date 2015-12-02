@@ -81,7 +81,7 @@ sort_type__ dwtbsc::GetSortType( const str::string_ &Pattern )
 	n##_.Init( "", n )
 
 
-void dwtbsc::kernel_hook_filenames___::Init(
+void dwtbsc::kernel_hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
@@ -148,7 +148,7 @@ const fnm::name___ &dwtbsc::GetGhostsDataDirName(
 
 uys::state__ dwtbsc::Plug(
 	kernel_ &Kernel,
-	kernel_files_hook___ &Hook )
+	kernel_fh___ &Hook )
 {
 	uys::state__ State = uys::s_Undefined;
 qRH

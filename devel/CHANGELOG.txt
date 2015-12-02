@@ -12,6 +12,11 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-12-02 :
+- GLOBAL :
+	- '..._hook_filenames___' -> '..._hf___'
+	- '..._files_hook___' -> '..._fh___'
+
 2015-12-01 :
 - FLSQ
 	* When instanciated, 'file_storage___::Temoin_.Mode' is set to 'fil::m_Undefined', so it can be detected

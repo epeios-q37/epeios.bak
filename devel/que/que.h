@@ -395,13 +395,13 @@ namespace que {
 	E_AUTO1( queue );
 
 #ifndef FLS__COMPILATION
-	using bch::hook_filenames___;
+	using bch::hf___;
 
-	using bch::files_hook___;
+	using bch::fh___;
 
 	template <typename queue> uys::state__ Plug(
 		queue &Queue,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		return bch::Plug( Queue.Links, Hook );
 	}

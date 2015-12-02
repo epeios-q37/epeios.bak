@@ -336,7 +336,7 @@ static bso::bool__ IsDifferent_(
 	const dwtftr::file__ &SFile,
 	const dwtftr::file__ &TFile )
 {
-	return ( SFile.TimeStamp != TFile.TimeStamp ) || ( SFile.Size != TFile.Size );
+	return ( SFile.Timestamp != TFile.Timestamp ) || ( SFile.Size != TFile.Size );
 }
 
 static bso::bool__ Compare_(

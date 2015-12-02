@@ -74,6 +74,11 @@ namespace misc {
 		const sclrgstry::registry_ &Registry,
 		str::strings_ &Tags,
 		str::strings_ &Values );
+
+	void Dump(
+		dwtftr::drow__ Root,
+		const dwtftr::file_tree_ &Tree,
+		const fnm::name___ &Filename );
 }
 
 #endif

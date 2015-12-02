@@ -305,43 +305,43 @@ namespace ctn {
 		}
 	};
 
-	struct hook_filenames___
+	struct hf___
 	{
 	public:
-		tys::hook_filenames___ Statics;
-		ias::hook_filenames___ Dynamics;
+		tys::hf___ Statics;
+		ias::hf___ Dynamics;
 		void reset( bso::bool__ P = true )
 		{
 			Statics.reset( P );
 			Dynamics.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 	};
 
-	class files_hook___
+	class fh___
 	{
 	private:
-		tys::files_hook___ _Statics;
-		ias::files_hook___ _Dynamics;
+		tys::fh___ _Statics;
+		ias::fh___ _Dynamics;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Statics.reset( P );
 			_Dynamics.reset( P );
 		}
-		files_hook___( void )
+		fh___( void )
 		{
 			reset( false );
 		}
-		~files_hook___( void )
+		~fh___( void )
 		{
 			reset();
 		}
 		void Init( 
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -407,11 +407,11 @@ namespace ctn {
 			_Statics.Drop();
 			_Dynamics.Drop();
 		}
-		tys::files_hook___ &StaticsFilesHook( void )
+		tys::fh___ &StaticsFilesHook( void )
 		{
 			return _Statics;
 		}
-		ias::files_hook___ &DynamicsFilesHook( void )
+		ias::fh___ &DynamicsFilesHook( void )
 		{
 			return _Dynamics;
 		}
@@ -448,7 +448,7 @@ namespace ctn {
 
 	template <typename container> inline uys::state__ Plug(
 		container &Container,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = tys::Plug( Container.Statics, Hook.StaticsFilesHook() );
 

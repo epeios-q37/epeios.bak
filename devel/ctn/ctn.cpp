@@ -23,7 +23,7 @@
 
 using namespace ctn;
 
-void ctn::hook_filenames___::Init(
+void ctn::hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

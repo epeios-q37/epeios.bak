@@ -1424,13 +1424,13 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 	E_AUTO( aggregated_storage )
 
-	using uys::files_hook___;
+	using uys::fh___;
 
-	using uys::hook_filenames___;
+	using uys::hf___;
 
 	inline uys::state__ Plug(
 		aggregated_storage_ &AStorage,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = uys::Plug( AStorage.Storage, Hook );
 

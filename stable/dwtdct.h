@@ -64,7 +64,7 @@ namespace dwtdct {
 	public:
 		struct s
 		{
-			time_t TimeStamp;
+			time_t Timestamp;
 			dwtght::grow__ GhostRow;	// Gestion du renommage de répertoire.
 			name_::s Name;
 			oddity_::s Oddity;
@@ -79,7 +79,7 @@ namespace dwtdct {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.TimeStamp = 0;
+			S_.Timestamp = 0;
 			S_.GhostRow = qNIL;
 			S_.Exclusion = x_Undefined;
 
@@ -93,7 +93,7 @@ namespace dwtdct {
 		}
 		dir_data_ &operator =( const dir_data_ &DD )
 		{
-			S_.TimeStamp = DD.S_.TimeStamp;
+			S_.Timestamp = DD.S_.Timestamp;
 			S_.GhostRow = DD.S_.GhostRow;
 			S_.Exclusion = DD.S_.Exclusion;
 
@@ -104,14 +104,14 @@ namespace dwtdct {
 		}
 		void Init( void )
 		{
-			S_.TimeStamp = 0;
+			S_.Timestamp = 0;
 			S_.GhostRow = qNIL;
 			S_.Exclusion = x_Undefined;
 
 			Name.Init();
 			Oddity.Init();
 		}
-		E_RWDISCLOSE_( time_t, TimeStamp );
+		E_RWDISCLOSE_( time_t, Timestamp );
 		E_RWDISCLOSE_( dwtght::grow__, GhostRow );
 		E_RWDISCLOSE_( exclusion__, Exclusion );
 	};
@@ -124,38 +124,38 @@ namespace dwtdct {
 			fstrings_::s Names;
 			fexclusions_::s Exclusions;
 			sizes_::s Sizes;
-			timestamps_::s TimeStamps;
+			timestamps_::s Timestamps;
 		};
 		fstrings_ Names;
 		fexclusions_ Exclusions;
 		sizes_ Sizes;
-		timestamps_ TimeStamps;
+		timestamps_ Timestamps;
 		files_data_( s &S )
 		: Names( S.Names ),
 		  Exclusions( S.Exclusions ),
 		  Sizes( S.Sizes ),
-		  TimeStamps( S.TimeStamps )
+		  Timestamps( S.Timestamps )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			Names.reset( P );
 			Exclusions.reset( P );
 			Sizes.reset( P );
-			TimeStamps.reset( P );
+			Timestamps.reset( P );
 		}
 		void plug( qAS_ &AS )
 		{
 			Names.plug( AS );
 			Exclusions.plug( AS );
 			Sizes.plug( AS );
-			TimeStamps.plug( AS );
+			Timestamps.plug( AS );
 		}
 		files_data_ &operator =( const files_data_ &FD )
 		{
 			Names = FD.Names;
 			Exclusions = FD.Exclusions;
 			Sizes = FD.Sizes;
-			TimeStamps = FD.TimeStamps;
+			Timestamps = FD.Timestamps;
 
 			return *this;
 		}
@@ -164,7 +164,7 @@ namespace dwtdct {
 			Names.Init();
 			Exclusions.Init();
 			Sizes.Init();
-			TimeStamps.Init();
+			Timestamps.Init();
 		}
 		E_NAVt( Names., frow__ );
 	};
@@ -462,6 +462,47 @@ namespace dwtdct {
 			_Message.Init( Message );
 			_Flow.Init( TFlow );
 		}
+	};
+
+	typedef bch::E_BUNCHt_( grow__, frow__ ) fghosts_;	// Link between files and ghosts.
+	E_AUTO( fghosts );
+
+	class ghost_related_files_
+	{
+	public:
+		struct s {
+			fghosts_::s Ghosts;
+			files_data_::s Files;
+		};
+		fghosts_ Ghosts;
+		files_data_ Files;
+		ghost_related_files_( s &S )
+		: Ghosts( S.Ghosts ),
+		  Files( S.Files )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			Ghosts.reset( P );
+			Files.reset( P );
+		}
+		void plug( qAS_ &AS )
+		{
+			Ghosts.plug( AS );
+			Files.plug( AS );
+		}
+		ghost_related_files_ &operator =( const ghost_related_files_ &GRF )
+		{
+			Ghosts = GRF.Ghosts;
+			Files = GRF.Files;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Ghosts.Init();
+			Files.Init();
+		}
+		void Append( const item_ &Item );
 	};
 }
 

@@ -72,10 +72,10 @@ qRE
 static void SetGhostsFilesHook_(
 	const fnm::name___ &Path,
 	uys::mode__ Mode,
-	ghosts_files_hook___ &FilesHook )
+	ghosts_fh___ &FilesHook )
 {
 qRH
-	lstctn::hook_filenames___ Filenames;
+	lstctn::hf___ Filenames;
 qRB
 	Filenames.Init( Path, "ghosts" );
 

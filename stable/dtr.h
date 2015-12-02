@@ -362,20 +362,20 @@ namespace dtr {
 	#define E_DTREE		E_DTREEt( epeios::row__ )
 	#define E_DTREE_	E_DTREEt_( epeios::row__ )
 
-	class files_hook___;
+	class fh___;
 
-	class hook_filenames___
+	class hf___
 	{
 	private:
-		btr::hook_filenames___ Tree_;
-		que::hook_filenames___ Queue_;
+		btr::hf___ Tree_;
+		que::hf___ Queue_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Tree_.reset( P );
 			Queue_.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init( void )
 		{
 
@@ -383,23 +383,23 @@ namespace dtr {
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
-		friend files_hook___;
+		friend fh___;
 	};
 
-	class files_hook___
+	class fh___
 	{
 	private:
-		btr::files_hook___ Tree_;
-		que::files_hook___ Queue_;
+		btr::fh___ Tree_;
+		que::fh___ Queue_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Tree_.reset( P );
 			Queue_.reset( P );
 		}
-		E_CDTOR( files_hook___ );
+		E_CDTOR( fh___ );
 		void Init(
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -484,12 +484,12 @@ namespace dtr {
 		}
 		template <typename dynamic_tree> friend uys::state__ Plug(
 			dynamic_tree &DynamicTree,
-			files_hook___ &Hook );
+			fh___ &Hook );
 	};
 
 	template <typename dynamic_tree> uys::state__ Plug(
 		dynamic_tree &DynamicTree,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = btr::Plug( DynamicTree.Tree, Hook.Tree_ );
 

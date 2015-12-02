@@ -23,7 +23,7 @@
 
 using namespace lstctn;
 
-void lstctn::hook_filenames___::Init(
+void lstctn::hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

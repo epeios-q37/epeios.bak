@@ -203,7 +203,8 @@ qRB
 	ProcessingMessage.Init(); 
 	sclmisc::GetBaseTranslation( ProcessingMessage_, ProcessingMessage );
 	ProcessingObserver.Init( 750, ProcessingMessage, cio::COut );
-	dwtftr::Process( Content, FileTree, ProcessingObserver );
+	if ( dwtftr::Process( Content, FileTree, ProcessingObserver ) != 0 )
+		qRGnr();
 qRR
 qRT
 qRE
@@ -225,6 +226,46 @@ qRT
 qRE
 }
 
+static void ExportTree_(
+	const str::string_ &Path,
+	const str::string_ &OutputFilename )
+{
+qRH
+	dwtbsc::ghosts_oddities GO;
+	dwtftr::file_tree_rack___ FileTreeRack;
+qRB
+	GO.Init();
+	exclusion::Get( sclmisc::GetRegistry(), GO );
+
+	FileTreeRack.Init();
+
+	const dwtftr::file_tree_ &FileTree = dwtftr::GetROFileTree( Path, GO, FileTreeRack );
+
+	misc::Dump( 0, FileTree, OutputFilename );
+qRR
+qRT
+qRE
+}
+
+static void ExportTree_( void )
+{
+qRH
+	str::string Path, Output;
+qRB
+	Path.Init();
+	sclmisc::MGetValue( registry::Path, Path );
+
+	misc::NormalizeAndTestPath( Path );
+
+	Output.Init();
+	sclmisc::OGetValue( registry::Output, Output );
+
+	ExportTree_( Path, Output );
+qRR
+qRT
+qRE
+}
+
 int scltool::SCLTOOLMain(
 	const str::string_ &Command,
 	const scltool::oddities__ &Oddities )
@@ -240,8 +281,9 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( MISC_NAME_MC );
 	C( Browse );
-	C( CompareDirs);
 	C( Update );
+	C( ExportTree );
+	C( CompareDirs);
 	else
 		qRGnr();
 

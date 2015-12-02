@@ -125,13 +125,13 @@ namespace idxque {
 
 	E_AUTO1( queue_index );
 
-	using que::hook_filenames___;
+	using que::hf___;
 
-	using que::files_hook___;
+	using que::fh___;
 
 	template <typename index> uys::state__ Plug(
 		index &Index,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		return que::Plug( Index, Hook );
 	}

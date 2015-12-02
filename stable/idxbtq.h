@@ -233,28 +233,28 @@ namespace idxbtq {
 
 	E_AUTO1( tree_queue_index )
 
-	struct hook_filenames___
+	struct hf___
 	{
 	public:
-		idxbtr::hook_filenames___ Tree;
-		idxque::hook_filenames___ Queue;
+		idxbtr::hf___ Tree;
+		idxque::hf___ Queue;
 		void reset( bso::bool__ P = true )
 		{
 			Tree.reset( P );
 			Queue.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 	};
 
 
-	class files_hook___
+	class fh___
 	{
 	private:
-		idxbtr::files_hook___ _Tree;
-		idxque::files_hook___ _Queue;
+		idxbtr::fh___ _Tree;
+		idxque::fh___ _Queue;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -265,16 +265,16 @@ namespace idxbtq {
 			_Tree.reset( P );
 			_Queue.reset( P );
 		}
-		files_hook___( void ) 
+		fh___( void ) 
 		{
 			reset( false );
 		}
-		~files_hook___( void ) 
+		~fh___( void ) 
 		{
 			reset();
 		}
 		void Init( 
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -350,11 +350,11 @@ namespace idxbtq {
 			_Tree.Drop();
 			_Queue.Drop();
 		}
-		idxbtr::files_hook___ &TreeFilesHook( void )
+		idxbtr::fh___ &TreeFilesHook( void )
 		{
 			return _Tree;
 		}
-		idxque::files_hook___ &QueueFilesHook( void )
+		idxque::fh___ &QueueFilesHook( void )
 		{
 			return _Queue;
 		}
@@ -372,7 +372,7 @@ namespace idxbtq {
 
 	template <typename index> uys::state__ Plug(
 		index &Index,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = idxbtr::Plug( Index, Hook.TreeFilesHook() );
 

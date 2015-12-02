@@ -32,6 +32,57 @@ using namespace dwtbsc;
 using namespace dwtght;
 using dwtxcl::excluder_;
 
+# define I( n, p )\
+	n.Init();\
+	fnm::BuildPath( Path, Basename, #p, n );\
+	n##_.Init( "", n )
+
+void dwtdct::files_data_hf___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+qRH
+	fnm::name___ Names, Exclusions, Sizes, Timestamps;
+qRB
+	I( Names, n );
+	I( Exclusions, x );
+	I( Sizes, s );
+	I( Timestamps, t );
+qRR
+qRT
+qRE
+}
+
+#define P( i )\
+	if ( bch::Plug( Files.i, Hook.i##_ ) != State ) {\
+		State = uys::sInconsistent;\
+		qRReturn;\
+	}\
+
+uys::state__ dwtdct::Plug(
+	files_data_ &Files,
+	files_data_fh___ &Hook )
+{
+	uys::state__ State = uys::s_Undefined;
+qRH
+qRB
+	State = ctn::Plug( Files.Names, Hook.Names_ );
+
+	if ( State.IsError() )
+		qRReturn;
+
+	P( Exclusions );
+	P( Sizes );
+	P( Timestamps );
+qRR
+qRT
+	if ( State.IsError() )
+		Hook.reset();	
+qRE
+	return State;
+}
+
+
 void dwtdct::_Delete( _items_ &Items )
 {
 	irow__ Row = Items.First();
@@ -82,7 +133,7 @@ static inline void FillRegular_(
 	FillCommon_( Name, Names, Buffer, Regular );
 
 	Regular.Exclusion = Exclusion;
-	Regular.TimeStamp = Info.Time.Modification;
+	Regular.Timestamp = Info.Time.Modification;
 }
 
 static inline void Fill_(
@@ -425,7 +476,7 @@ qRB
 	Data.Names.PreAllocate( Files.Extent() );
 	Data.Exclusions.PreAllocate( Files.Extent() );
 	Data.Sizes.PreAllocate( Files.Extent() );
-	Data.TimeStamps.PreAllocate( Files.Extent() );
+	Data.Timestamps.PreAllocate( Files.Extent() );
 
 	while ( Row != qNIL ) {
 		Files.Recall( Row, File );
@@ -438,7 +489,7 @@ qRB
 		if ( Control != Data.Sizes.Append( File.Size ) )
 			qRGnr();
 
-		if ( Control != Data.TimeStamps.Append( File.TimeStamp ) )
+		if ( Control != Data.Timestamps.Append( File.Timestamp ) )
 			qRGnr();
 
 		Row = Files.Next( Row );
@@ -489,7 +540,7 @@ qRB
 		Item->Dir.Name = Name( Directory( Row )().Name );
 
 		Item->Dir.Exclusion() = Directory( Row )().Exclusion;
-		Item->Dir.TimeStamp() = Directory( Row )().TimeStamp;
+		Item->Dir.Timestamp() = Directory( Row )().Timestamp;
 
 		Item->Parent() = Parent;
 		Item->Path = NewPath;
@@ -772,7 +823,7 @@ qRB
 //	Item->Path = Path;
 	Item->Parent() = qNIL;
 	Item->Dir.Exclusion() = xNo;
-	Item->Dir.TimeStamp() = Info.Time.Modification;
+	Item->Dir.Timestamp() = Info.Time.Modification;
 
 	Data.ToHandle.Push( Content.Append( Item ) );
 	Item = NULL;
@@ -1187,4 +1238,79 @@ qRR
 qRT
 qRE
 }
+
+namespace {
+	void Append_(
+		grow__ GRow,
+		const fstrings_ &Names,
+		const fexclusions_ &Exclusions,
+		const sizes_ &Sizes,
+		const timestamps_ Timestamps,
+		files_data_ &Files )
+	{
+		frow__ SRow = qNIL, TRow = qNIL;
+
+		ctn::E_CMITEMt( str::string_, frow__ ) Name;
+		Name.Init( Names );
+
+		SRow = Names.First();
+
+		while ( SRow != qNIL )
+		{
+			TRow = Files.Names.Append( Name( SRow ) );
+
+			if ( TRow != Files.Exclusions.Append(Exclusions( SRow ) ) )
+				qRFwk();
+
+			if ( TRow != Files.Sizes.Append(Sizes( SRow ) ) )
+				qRFwk();
+
+			if ( TRow != Files.Timestamps.Append (Timestamps( SRow ) ) )
+				qRFwk();
+
+			SRow = Names.Next( SRow );
+		}
+	}
+
+	void Append_(
+		grow__ GRow,
+		const files_data_ &SourceFiles,
+		files_data_ &TargetFiles )
+	{
+		Append_( GRow, SourceFiles.Names, SourceFiles.Exclusions, SourceFiles.Sizes, SourceFiles.Timestamps, TargetFiles );
+	}
+}
+
+void dwtdct::ghost_related_files_::Append( const item_ &Item )
+{
+	Append_( Item.Dir.GetGhostRow(), Item.Files, Files );
+}
+
+void dwtdct::ghost_related_files_::Append( const content_ &Content )
+{
+	irow__ Row = Content.First();
+
+	while ( Row != qNIL ) {
+		Append( *Content( Row ) );
+
+		Row = Content.Next( Row );
+	}
+}
+
+
+void dwtdct::ghost_related_files_hf___::Init(
+	const fnm::name___ &Path,
+	const fnm::name___ &Basename )
+{
+qRH
+	fnm::name___ Ghosts, Files;
+qRB
+	I( Ghosts, g );
+	I( Files, f );
+qRR
+qRT
+qRE
+}
+
+
 

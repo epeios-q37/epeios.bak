@@ -23,7 +23,7 @@
 
 using namespace idxbtq;
 
-void idxbtq::hook_filenames___::Init(
+void idxbtq::hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

@@ -23,7 +23,7 @@
 
 using namespace lstbch;
 
-void lstbch::hook_filenames___::Init(
+void lstbch::hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

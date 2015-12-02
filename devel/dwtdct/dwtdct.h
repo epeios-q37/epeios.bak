@@ -47,14 +47,30 @@ namespace dwtdct {
 	typedef bch::E_BUNCHt_( exclusion__, frow__ ) fexclusions_;
 	E_AUTO( fexclusions );
 
+	typedef bch::hf___ fexclusions_hf___;
+	typedef bch::fh___ fexclusions_fh___;
+
+
 	typedef bch::E_BUNCHt_( fil::size__, frow__ ) sizes_;
 	E_AUTO( sizes );
+
+	typedef bch::hf___ sizes_hf___;
+	typedef bch::fh___ sizes_fiels_hook___;
+
 
 	typedef bch::E_BUNCHt_( time_t, frow__ ) timestamps_;
 	E_AUTO( timestamps );
 
+	typedef bch::hf___ timestamps_hf___;
+	typedef bch::fh___ timestamps_fh___;
+
+
 	typedef ctn::E_MCONTAINERt_( str::string_, frow__ ) fstrings_;
 	E_AUTO( fstrings );
+
+	typedef ctn::hf___ fstrings_hf___;
+	typedef ctn::fh___ fstrings_fh___;
+
 
 	typedef ctn::E_MCONTAINERt_( str::string_, dwtbsc::grow__ ) gstrings_;
 	E_AUTO( gstrings );
@@ -64,7 +80,7 @@ namespace dwtdct {
 	public:
 		struct s
 		{
-			time_t TimeStamp;
+			time_t Timestamp;
 			dwtght::grow__ GhostRow;	// Gestion du renommage de répertoire.
 			name_::s Name;
 			oddity_::s Oddity;
@@ -79,7 +95,7 @@ namespace dwtdct {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.TimeStamp = 0;
+			S_.Timestamp = 0;
 			S_.GhostRow = qNIL;
 			S_.Exclusion = x_Undefined;
 
@@ -93,7 +109,7 @@ namespace dwtdct {
 		}
 		dir_data_ &operator =( const dir_data_ &DD )
 		{
-			S_.TimeStamp = DD.S_.TimeStamp;
+			S_.Timestamp = DD.S_.Timestamp;
 			S_.GhostRow = DD.S_.GhostRow;
 			S_.Exclusion = DD.S_.Exclusion;
 
@@ -104,14 +120,14 @@ namespace dwtdct {
 		}
 		void Init( void )
 		{
-			S_.TimeStamp = 0;
+			S_.Timestamp = 0;
 			S_.GhostRow = qNIL;
 			S_.Exclusion = x_Undefined;
 
 			Name.Init();
 			Oddity.Init();
 		}
-		E_RWDISCLOSE_( time_t, TimeStamp );
+		E_RWDISCLOSE_( time_t, Timestamp );
 		E_RWDISCLOSE_( dwtght::grow__, GhostRow );
 		E_RWDISCLOSE_( exclusion__, Exclusion );
 	};
@@ -124,38 +140,38 @@ namespace dwtdct {
 			fstrings_::s Names;
 			fexclusions_::s Exclusions;
 			sizes_::s Sizes;
-			timestamps_::s TimeStamps;
+			timestamps_::s Timestamps;
 		};
 		fstrings_ Names;
 		fexclusions_ Exclusions;
 		sizes_ Sizes;
-		timestamps_ TimeStamps;
+		timestamps_ Timestamps;
 		files_data_( s &S )
 		: Names( S.Names ),
 		  Exclusions( S.Exclusions ),
 		  Sizes( S.Sizes ),
-		  TimeStamps( S.TimeStamps )
+		  Timestamps( S.Timestamps )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			Names.reset( P );
 			Exclusions.reset( P );
 			Sizes.reset( P );
-			TimeStamps.reset( P );
+			Timestamps.reset( P );
 		}
 		void plug( qAS_ &AS )
 		{
 			Names.plug( AS );
 			Exclusions.plug( AS );
 			Sizes.plug( AS );
-			TimeStamps.plug( AS );
+			Timestamps.plug( AS );
 		}
 		files_data_ &operator =( const files_data_ &FD )
 		{
 			Names = FD.Names;
 			Exclusions = FD.Exclusions;
 			Sizes = FD.Sizes;
-			TimeStamps = FD.TimeStamps;
+			Timestamps = FD.Timestamps;
 
 			return *this;
 		}
@@ -164,10 +180,69 @@ namespace dwtdct {
 			Names.Init();
 			Exclusions.Init();
 			Sizes.Init();
-			TimeStamps.Init();
+			Timestamps.Init();
 		}
 		E_NAVt( Names., frow__ );
 	};
+
+	class files_data_fh___;
+
+	class files_data_hf___
+	{
+	private:
+		fstrings_hf___ Names_;
+		fexclusions_hf___ Exclusions_;
+		sizes_hf___ Sizes_;
+		timestamps_hf___ Timestamps_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			Names_.reset( P );
+			Exclusions_.reset( P );
+			Sizes_.reset( P );
+			Timestamps_.reset( P );
+		}
+		E_CDTOR( files_data_hf___ );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );
+		friend files_data_fh___;
+	};
+
+	class files_data_fh___
+	{
+	private:
+		fstrings_fh___ Names_;
+		fexclusions_fh___ Exclusions_;
+		sizes_fiels_hook___ Sizes_;
+		timestamps_fh___ Timestamps_;
+		void reset( bso::bool__ P = true )
+		{
+			Names_.reset( P );
+			Exclusions_.reset( P );
+			Sizes_.reset( P );
+			Timestamps_.reset( P );
+		}
+		E_CDTOR( files_data_fh___ );
+		void Init(
+			files_data_hf___ &Filenames,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID )
+		{
+			Names_.Init( Filenames.Names_, Mode, Behavior, ID );
+			Exclusions_.Init( Filenames.Exclusions_, Mode, Behavior, ID );
+			Sizes_.Init( Filenames.Sizes_, Mode, Behavior, ID );
+			Timestamps_.Init( Filenames.Timestamps_, Mode, Behavior, ID );
+		}
+		friend uys::state__ Plug(
+			files_data_ &Files,
+			files_data_fh___ &Hook );
+	};
+
+	uys::state__ Plug(
+		files_data_ &Files,
+		files_data_fh___ &Hook );
 
 	class goofs_data_
 	{
@@ -462,6 +537,68 @@ namespace dwtdct {
 			_Message.Init( Message );
 			_Flow.Init( TFlow );
 		}
+	};
+
+	typedef bch::E_BUNCHt_( grow__, frow__ ) fghosts_;	// Link between files and ghosts.
+	E_AUTO( fghosts );
+
+	typedef bch::hf___ fghosts_hf___;
+	typedef bch::fh___ fghosts_fh___;
+
+	class ghost_related_files_
+	{
+	public:
+		struct s {
+			fghosts_::s Ghosts;
+			files_data_::s Files;
+		};
+		fghosts_ Ghosts;
+		files_data_ Files;
+		ghost_related_files_( s &S )
+		: Ghosts( S.Ghosts ),
+		  Files( S.Files )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			Ghosts.reset( P );
+			Files.reset( P );
+		}
+		void plug( qAS_ &AS )
+		{
+			Ghosts.plug( AS );
+			Files.plug( AS );
+		}
+		ghost_related_files_ &operator =( const ghost_related_files_ &GRF )
+		{
+			Ghosts = GRF.Ghosts;
+			Files = GRF.Files;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Ghosts.Init();
+			Files.Init();
+		}
+		void Append( const item_ &Item );
+		void Append( const content_ &Content );
+	};
+
+	class ghost_related_files_hf___
+	{
+	private:
+		fghosts_hf___ Ghosts_;
+		files_data_hf___ Files_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			Ghosts_.reset( P );
+			Files_.reset( P );
+		}
+		E_CDTOR( ghost_related_files_hf___);
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );
 	};
 }
 

@@ -145,27 +145,27 @@ namespace lstctn {
 
 	E_AUTO3( list_container );
 
-	struct hook_filenames___
+	struct hf___
 	{
 	public:
-		ctn::hook_filenames___ Container;
-		lst::hook_filenames___ List;
+		ctn::hf___ Container;
+		lst::hf___ List;
 		void reset( bso::bool__ P = true )
 		{
 			Container.reset( P );
 			List.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 	};
 
-	class files_hook___
+	class fh___
 	{
 	private:
-		ctn::files_hook___ _Container;
-		lst::files_hook___ _List;
+		ctn::fh___ _Container;
+		lst::fh___ _List;
 		time_t _ContainerTimeStamp( void ) const
 		{
 			return _Container.TimeStamp();
@@ -186,16 +186,16 @@ namespace lstctn {
 			_Container.reset( P );
 			_List.reset( P );
 		}
-		files_hook___( void )
+		fh___( void )
 		{
 			reset( false );
 		}
-		~files_hook___( void )
+		~fh___( void )
 		{
 			reset();
 		}
 		void Init(
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -289,11 +289,11 @@ namespace lstctn {
 
 			return Is;
 		}
-		ctn::files_hook___ &ContainerFilesHook( void )
+		ctn::fh___ &ContainerFilesHook( void )
 		{
 			return _Container;
 		}
-		lst::files_hook___ &ListFilesHook( void )
+		lst::fh___ &ListFilesHook( void )
 		{
 			return _List;
 		}
@@ -301,7 +301,7 @@ namespace lstctn {
 
 	template <typename list_container> inline uys::state__ Plug(
 		list_container &ListContainer,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = ctn::Plug( ListContainer.Container(), Hook.ContainerFilesHook() );
 

@@ -179,31 +179,31 @@ namespace lstbch {
 
 #ifndef FLS__COMPILATION
 
-	class files_hook___;
+	class fh___;
 
-	struct hook_filenames___
+	struct hf___
 	{
 	private:
-		bch::hook_filenames___ Bunch_;
-		lst::hook_filenames___ List_;
+		bch::hf___ Bunch_;
+		lst::hf___ List_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Bunch_.reset( P );
 			List_.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
-		friend class files_hook___;
+		friend class fh___;
 	};
 
-	class files_hook___
+	class fh___
 	{
 	private:
-		bch::files_hook___ _Bunch;
-		lst::files_hook___ _List;
+		bch::fh___ _Bunch;
+		lst::fh___ _List;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -216,16 +216,16 @@ namespace lstbch {
 			_Bunch.reset( P );
 			_List.reset( P );
 		}
-		files_hook___( void )
+		fh___( void )
 		{
 			reset( false );
 		}
-		~files_hook___( void )
+		~fh___( void )
 		{
 			reset();
 		}
 		void Init(
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -306,13 +306,13 @@ namespace lstbch {
 		}
 		template <typename list_bunch> friend uys::state__ Plug(
 			list_bunch &ListBunch,
-			files_hook___ &Hook );
+			fh___ &Hook );
 	};
 
 
 	template <typename list_bunch> uys::state__ Plug(
 		list_bunch &ListBunch,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = bch::Plug( ListBunch.Bunch(), Hook._Bunch );
 

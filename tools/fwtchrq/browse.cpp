@@ -52,34 +52,6 @@ qRE
 	return ExclusionHandling;
 }
 
-namespace {
-	void Dump_(
-		dwtftr::drow__ Root,
-		const dwtftr::file_tree_ &Tree,
-		const fnm::name___ &Filename )
-	{
-	qRH
-		sclmisc::text_oflow_rack___ Rack;
-		xml::writer Writer;
-	qRB
-		Writer.Init( Rack.Init( Filename ), xml::oIndent, xml::e_Default );
-
-		Writer.PushTag( MISC_NAME_MC );
-
-		Writer.PushTag( "FileTree" );
-
-		Tree.Dump( Root, Writer );
-
-		Writer.PopTag();
-
-		Writer.PopTag();
-	qRR
-		Rack.HandleError();
-	qRT
-	qRE
-	}
-}
-
 void browse::Browse(
 	const rgstry::multi_level_registry_ &Registry,
 	const str::string_ &Path,
@@ -120,7 +92,7 @@ qRB
 	Tree.Init();
 	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
 
-	Dump_( Root, Tree, OutputFilename );
+	misc::Dump( Root, Tree, OutputFilename );
 
 #if 0
 

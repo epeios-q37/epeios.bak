@@ -426,7 +426,8 @@ namespace uys {
 namespace uys {
 	typedef flsq::E_FILqSD___ _file_storage_driver___;
 
-	struct hook_filenames___
+	// Hook filenames.
+	struct hf___
 	{
 	public:
 		fnm::name___ Filename;
@@ -434,7 +435,7 @@ namespace uys {
 		{
 			Filename.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename )	// Peut tre vide ('NULL') si 'Path' contient dj le nom de fichier.
@@ -444,12 +445,13 @@ namespace uys {
 		}
 	};
 		
-	class files_hook___
+	// Files hook.
+	class fh___
 	: public _file_storage_driver___
 	{
 	public:
 		void Init( 
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			mode__ Mode,
 			behavior__ Behavior,
 			flsq::id__ ID )
@@ -499,7 +501,7 @@ namespace uys {
 
 	inline state__ Plug(
 		untyped_storage_ &Storage,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		state__ State = ( Hook.Exists() ? sExists : sAbsent );
 

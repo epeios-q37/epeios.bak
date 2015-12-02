@@ -102,41 +102,41 @@ namespace dwtftr {
 
 	E_AUTO( file_tree );
 
-	class file_tree_files_hook___;
+	class file_tree_fh___;
 
-	class file_tree_hook_filenames___
+	class file_tree_hf___
 	{
 	private:
-		dtr::hook_filenames___ Tree_;
-		dwtbsc::kernel_hook_filenames___ Kernel_;
+		dtr::hf___ Tree_;
+		dwtbsc::kernel_hf___ Kernel_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Tree_.reset( P );
 			Kernel_.reset( P );
 		}
-		E_CDTOR( file_tree_hook_filenames___ );
+		E_CDTOR( file_tree_hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 
-		friend file_tree_files_hook___;
+		friend file_tree_fh___;
 	};
 
-	class file_tree_files_hook___
+	class file_tree_fh___
 	{
 	private:
-		dtr::files_hook___ Tree_;
-		dwtbsc::kernel_files_hook___ Kernel_;
+		dtr::fh___ Tree_;
+		dwtbsc::kernel_fh___ Kernel_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Tree_.reset( P );
 			Kernel_.reset( P );
 		}
-		E_CDTOR( file_tree_files_hook___ );
+		E_CDTOR( file_tree_fh___ );
 		void Init(
-			file_tree_hook_filenames___ &Filenames,
+			file_tree_hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -146,12 +146,12 @@ namespace dwtftr {
 		}
 		friend uys::state__ Plug(
 			file_tree_ &Tree,
-			file_tree_files_hook___ &Hook );
+			file_tree_fh___ &Hook );
 	};
 
 	inline uys::state__ Plug(
 		file_tree_ &Tree,
-		file_tree_files_hook___ &Hook )
+		file_tree_fh___ &Hook )
 	{
 		uys::state__ State = dtr::Plug( Tree, Hook.Tree_ );
 
@@ -166,7 +166,7 @@ namespace dwtftr {
 	}
 
 	struct file_tree_rack___ {
-		file_tree_files_hook___ Hook;
+		file_tree_fh___ Hook;
 		file_tree Tree;
 		void reset( bso::bool__ P = true )
 		{

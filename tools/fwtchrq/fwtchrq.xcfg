@@ -31,6 +31,10 @@
 					<Translation language="fr">Mets à jour données de détection des modifications.</Translation>
 					<Translation language="en">Updates the data for the modifications detection.</Translation>
 				</Translations>
+				<Translations message="ExporteTreeCommandDescription">
+					<Translation language="fr">Exporte l'image de l'arborescence des fichiers.</Translation>
+					<Translation language="en">Exports th .</Translation>
+				</Translations>
 			</xpp:bloc>
 			<!-- Flags -->
 			<xpp:bloc>
@@ -73,8 +77,9 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="BrowseCommand" Description="BrowseCommandDescription" long="browse" Value="Browse" Usage="[%ThreadAmountMaxOption%] [%ExclusionsKeepFlag%|%ExclusionsSkipFlag%] %PathArgument% %OutputArgument%"/>
+			<Argument id="BrowseCommand" Description="BrowseCommandDescription" long="browse" Value="Browse" Usage="[%ThreadAmountMaxOption%] [%ExclusionsKeepFlag%|%ExclusionsSkipFlag%] %PathArgument% [%OutputArgument%]"/>
 			<Argument id="UpdateCommand" Description="UpdateCommandDescription" long="update" Value="Update" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
+			<Argument id="ExportTreeCommand" Description="ExportTreeCommandDescription" long="export-tree" Value="ExportTree" Usage="%PathArgument% [%OutputArgument%]"/>
 			<!-- Flags : 'Path' ET 'Value'. -->
 			<Argument id="ExclusionsKeepFlag" Description="ExclusionsKeepFlagDescription" long="keep-excluded" Path="Exclusions/@Handling" Value="Keep"/>
 			<Argument id="ExclusionsSkipFlag" Description="ExclusionsSkipFlagDescription" long="skip-excluded" Path="Exclusions/@Handling" Value="Skip"/>
@@ -89,10 +94,12 @@
 					<Link index="0" Target="PathArgument"/>
 					<Link index="1" Target="OutputArgument"/>
 				</Layout>
-			</Layouts>
-			<Layouts>
 				<Layout command="Update">
 					<Link index="0" Target="PathArgument"/>
+				</Layout>
+				<Layout command="ExportTree">
+					<Link index="0" Target="PathArgument"/>
+					<Link index="1" Target="OutputArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

@@ -451,43 +451,43 @@ namespace ias {
 
 #ifndef FLS__COMPILATION
 
-	struct hook_filenames___
+	struct hf___
 	{
 	public:
-		bch::hook_filenames___ Descriptors;
-		ags::hook_filenames___ Storage;
+		bch::hf___ Descriptors;
+		ags::hf___ Storage;
 		void reset( bso::bool__ P = true )
 		{
 			Descriptors.reset( P );
 			Storage.reset( P );
 		}
-		E_CDTOR( hook_filenames___ );
+		E_CDTOR( hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );	// Peut tre vide ('NULL') si 'Path' contient dj le nom de fichier.
 	};
 
-	class files_hook___
+	class fh___
 	{
 	private:
-		bch::files_hook___ _Descriptors;
-		ags::files_hook___ _Storage;
+		bch::fh___ _Descriptors;
+		ags::fh___ _Storage;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Descriptors.reset( P );
 			_Storage.reset( P );
 		}
-		files_hook___( void )
+		fh___( void )
 		{
 			reset( false );
 		}
-		~files_hook___( void )
+		~fh___( void )
 		{
 			reset();
 		}
 		void Init( 
-			const hook_filenames___ &Filenames,
+			const hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -554,11 +554,11 @@ namespace ias {
 			_Descriptors.Drop();
 			_Storage.Drop();
 		}
-		tys::files_hook___ &DescriptorsFilesHook( void )
+		tys::fh___ &DescriptorsFilesHook( void )
 		{
 			return _Descriptors;
 		}
-		ags::files_hook___ &StorageFilesHook( void )
+		ags::fh___ &StorageFilesHook( void )
 		{
 			return _Storage;
 		}
@@ -598,7 +598,7 @@ namespace ias {
 
 	inline uys::state__ Plug(
 		indexed_aggregated_storage_ &AStorage,
-		files_hook___ &Hook )
+		fh___ &Hook )
 	{
 		uys::state__ State = bch::Plug( AStorage.Descriptors, Hook.DescriptorsFilesHook() );
 
