@@ -35,6 +35,10 @@
 					<Translation language="fr">Exporte l'image de l'arborescence des fichiers.</Translation>
 					<Translation language="en">Exports th .</Translation>
 				</Translations>
+				<Translations message="TestGhostsCommandDescription">
+					<Translation language="fr">Affiche les modifications sur les répertoires.</Translation>
+					<Translation language="en">Shows the modifications of the directories.</Translation>
+				</Translations>
 			</xpp:bloc>
 			<!-- Flags -->
 			<xpp:bloc>
@@ -80,6 +84,8 @@
 			<Argument id="BrowseCommand" Description="BrowseCommandDescription" long="browse" Value="Browse" Usage="[%ThreadAmountMaxOption%] [%ExclusionsKeepFlag%|%ExclusionsSkipFlag%] %PathArgument% [%OutputArgument%]"/>
 			<Argument id="UpdateCommand" Description="UpdateCommandDescription" long="update" Value="Update" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
 			<Argument id="ExportTreeCommand" Description="ExportTreeCommandDescription" long="export-tree" Value="ExportTree" Usage="%PathArgument% [%OutputArgument%]"/>
+			<Argument id="TestGhostsCommand" Description="TestGhostsCommandDescription" long="test-ghosts" Value="TestGhosts" Usage="[%ThreadAmountMaxOption%] %PathArgument% [%OutputArgument%]"/>
+			<Argument id="CompareCommand" Description="CompareCommandDescription" long="compare" Value="Compare" Usage="[%ThreadAmountMaxOption%] %PathArgument% [%OutputArgument%]"/>
 			<!-- Flags : 'Path' ET 'Value'. -->
 			<Argument id="ExclusionsKeepFlag" Description="ExclusionsKeepFlagDescription" long="keep-excluded" Path="Exclusions/@Handling" Value="Keep"/>
 			<Argument id="ExclusionsSkipFlag" Description="ExclusionsSkipFlagDescription" long="skip-excluded" Path="Exclusions/@Handling" Value="Skip"/>
@@ -97,7 +103,15 @@
 				<Layout command="Update">
 					<Link index="0" Target="PathArgument"/>
 				</Layout>
-				<Layout command="ExportTree">
+				<Layout command="TestGhosts">
+					<Link index="0" Target="PathArgument"/>
+					<Link index="1" Target="OutputArgument"/>
+				</Layout>
+				<Layout command="Diff">
+					<Link index="0" Target="PathArgument"/>
+					<Link index="1" Target="OutputArgument"/>
+				</Layout>
+				<Layout command="Compare">
 					<Link index="0" Target="PathArgument"/>
 					<Link index="1" Target="OutputArgument"/>
 				</Layout>

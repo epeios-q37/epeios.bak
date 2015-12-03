@@ -26,6 +26,31 @@
 
 using namespace misc;
 
+dwtbsc::exclusion_handling__ misc::GetExclusionHandling( const sclrgstry::registry_ &Registry )
+{
+	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
+qRH
+	str::string RawExclusionHandling;
+qRB
+	RawExclusionHandling.Init();
+	
+	sclrgstry::MGetValue( Registry, registry::ExclusionsHandling, RawExclusionHandling );
+
+	if ( RawExclusionHandling == "Regular" )
+		ExclusionHandling = dwtbsc::ehRegular;
+	else if ( RawExclusionHandling == "Keep" ) 
+		ExclusionHandling = dwtbsc::ehKeep;
+	else if ( RawExclusionHandling == "Skip" ) 
+		ExclusionHandling = dwtbsc::ehSkip;
+	else
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ExclusionsHandling );
+qRR
+qRT
+qRE
+	return ExclusionHandling;
+}
+
+
 void misc::Append(
 	const char *Tag,
 	const str::string_ &Value,
@@ -80,4 +105,30 @@ qRR
 qRT
 qRE
 }
+
+void misc::Dump(
+	const dwtmov::movings_ &Movings,
+	const fnm::name___ &Filename )
+{
+qRH
+	sclmisc::text_oflow_rack___ Rack;
+	xml::writer Writer;
+qRB
+	Writer.Init( Rack.Init( Filename ), xml::oIndent, xml::e_Default );
+
+	Writer.PushTag( MISC_NAME_MC );
+
+	Writer.PushTag( "DirMovings" );
+
+	dwtmov::Dump( Movings, Writer );
+
+	Writer.PopTag();
+
+	Writer.PopTag();
+qRR
+	Rack.HandleError();
+qRT
+qRE
+}
+
 

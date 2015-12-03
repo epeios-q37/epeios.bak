@@ -18,7 +18,7 @@
 */
 
 #include "registry.h"
-#include "browse.h"
+// #include "browse.h"
 #include "misc.h"
 #include "exclusion.h"
 
@@ -39,6 +39,8 @@ using cio::CIn;
 E_CDEF( char *, ExplorationMessage_, "ExplorationMessage" );
 E_CDEF( char *, ProcessingMessage_, "ProcessingMessage" );
 E_CDEF( char *, UpdateMessage_, "UpdateMessage" );
+E_CDEF( char *, GhostsSettingMessage_, "GhostsSettingMessage" );
+
 
 E_CDEF( tol::delay__, Delay_, 700 );
 
@@ -49,9 +51,61 @@ static void PrintHeader_( void )
 	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
 
-#define C( name )\
-	else if ( Command == #name )\
-		name##_()
+static void Browse_(
+	const rgstry::multi_level_registry_ &Registry,
+	const str::string_ &Path,
+	const str::string_ &Generator,
+	const fnm::name___ &OutputFilename,
+	dwtdct::exploration_observer__ &ExplorationObserver,
+	dwtftr::processing_observer__ &ProcessingObserver	)
+{
+qRH
+	bso::uint__ ThreadAmountMax = 0;
+	dwtftr::file_tree Tree;
+	dwtmov::movings Movings;
+	dwtftr::drow__ Root = qNIL;
+	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
+	dwtxcl::excluder Excluder;
+	dwtbsc::limitations__ Limitations;
+	dwtbsc::ghosts_oddities GO;
+	dwtdct::content Content;
+qRB
+	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
+
+	ExclusionHandling = misc::GetExclusionHandling( Registry );
+
+	GO.Init();
+
+	exclusion::Get( Registry, GO );
+
+	Excluder.Init( GO );
+	exclusion::Fill( Registry, Excluder );
+
+	Limitations.Init();
+	exclusion::Fill( Registry, Limitations );
+
+	Content.Init();
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
+
+	Tree.Init();
+	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
+
+	misc::Dump( Root, Tree, OutputFilename );
+#if 0
+
+	Movings.Init();
+	fwtmov::Explore( Path, Content, GO, Movings );
+
+	Store.InitAsTreeAndMovings( Root, Tree, Movings );
+
+	store::Save( Store, Generator, Output );
+
+//	Dump_( Generator, Row, Tree, Movings, tol::EpochTime( false ) - Start, ThreadAmountMax, Output );
+#endif
+qRR
+qRT
+qRE
+}
 
 static void Browse_(
 	const str::string_ &Path,
@@ -78,7 +132,7 @@ qRB
 	ExplorationObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_, ExplorationMessage, cio::COut );
 	ProcessingObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_,ProcessingMessage, cio::COut );
 
-	browse::Browse( sclmisc::GetRegistry(), Path, Generator, OutputFilename, ExplorationObserver, ProcessingObserver );
+	Browse_( sclmisc::GetRegistry(), Path, Generator, OutputFilename, ExplorationObserver, ProcessingObserver );
 qRR
 qRT
 qRE
@@ -98,56 +152,6 @@ qRB
 	sclmisc::OGetValue( registry::Output, Output );
 
 	Browse_( Path, Output );
-qRR
-qRT
-qRE
-}
-
-static void CompareDirs_(
-	const str::string_ &Path,
-	const str::string_ &OutputFilename )
-{
-qRH
-	str::string
-		Generator,
-		ExplorationMessage,
-		ProcessingMessage;
-	dwtdct::basic_exploration_observer___ ExplorationObserver;
-	dwtftr::basic_processing_observer___ ProcessingObserver;
-qRB
-	Generator.Init( MISC_NAME_MC " V" VERSION " (" );
-	Generator.Append( cpe::GetDescription() );
-	Generator.Append( ')' );
-
-	ExplorationMessage.Init(); 
-	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
-
-	ProcessingMessage.Init(); 
-	sclmisc::GetBaseTranslation( ProcessingMessage_, ProcessingMessage );
-
-	ExplorationObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_, ExplorationMessage, cio::COut );
-	ProcessingObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_,ProcessingMessage, cio::COut );
-
-	browse::Browse( sclmisc::GetRegistry(), Path, Generator, OutputFilename, ExplorationObserver, ProcessingObserver );
-qRR
-qRT
-qRE
-}
-
-static void CompareDirs_( void )
-{
-qRH
-	str::string Path, Output;
-qRB
-	Path.Init();
-	sclmisc::MGetValue( registry::Path, Path );
-
-	misc::NormalizeAndTestPath( Path );
-
-	Output.Init();
-	sclmisc::OGetValue( registry::Output, Output );
-
-	CompareDirs_( Path, Output );
 qRR
 qRT
 qRE
@@ -222,28 +226,146 @@ qRT
 qRE
 }
 
-static void ExportTree_(
-	const str::string_ &Path,
-	const str::string_ &OutputFilename )
+static void TestGhosts_( void )
 {
 qRH
+	str::string Path, Output;
+	bso::uint__ ThreadAmountMax = 0;
+	dwtdct::content Content;
+	dwtxcl::excluder Excluder;
+	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
-	dwtftr::file_tree_rack___ FileTreeRack;
+	dwtdct::basic_exploration_observer___ ExplorationObserver;
+	dwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
+	str::string NoGhostMessage, GhostIgnoredMessage;
+	str::string GhostsSettingMessage, ExplorationMessage;
+	sclmisc::text_oflow_rack___ TFRack;
 qRB
+	Path.Init();
+	sclmisc::MGetValue( registry::Path, Path );
+
+	misc::NormalizeAndTestPath( Path );
+
+	ThreadAmountMax = sclmisc::OGetUInt( registry::ThreadAmountMax, 0 );
+
 	GO.Init();
 	exclusion::Get( sclmisc::GetRegistry(), GO );
 
-	FileTreeRack.Init();
+	Excluder.Init( GO );
+	exclusion::Fill( sclmisc::GetRegistry(), Excluder );
 
-	const dwtftr::file_tree_ &FileTree = dwtftr::GetROFileTree( Path, GO, FileTreeRack );
+	Limitations.Init();
+	exclusion::Fill( sclmisc::GetRegistry(), Limitations );
 
-	misc::Dump( 0, FileTree, OutputFilename );
+	ExplorationMessage.Init(); 
+	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
+
+	Content.Init();
+	ExplorationObserver.Init( Delay_, ExplorationMessage, cio::COut );
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, dwtbsc::eh_Default, Content, ExplorationObserver );
+
+	cio::COut << txf::nl;
+
+	NoGhostMessage.Init();
+	sclmisc::GetBaseTranslation( "NoGhost", NoGhostMessage );
+
+	GhostIgnoredMessage.Init();
+	sclmisc::GetBaseTranslation( "GhostIgnored", GhostIgnoredMessage );
+
+	Output.Init();
+	sclmisc::OGetValue( registry::Output, Output );
+
+	GhostsSettingMessage.Init();
+	sclmisc::GetBaseTranslation( GhostsSettingMessage_, GhostsSettingMessage );
+
+	GhostsSettingObserver.Init( GhostsSettingMessage, cio::COut, Delay_ );
+	dwtdct::TestGhosts( Path, Content, GO, NoGhostMessage, GhostIgnoredMessage, TFRack.Init( Output ) );
+qRR
+TFRack.HandleError();
+qRT
+qRE
+}
+
+static void Compare_(
+	const rgstry::multi_level_registry_ &Registry,
+	const str::string_ &Path,
+	const str::string_ &Generator,
+	const fnm::name___ &OutputFilename,
+	dwtdct::exploration_observer__ &ExplorationObserver,
+	dwtftr::processing_observer__ &ProcessingObserver	)
+{
+qRH
+	bso::uint__ ThreadAmountMax = 0;
+	dwtftr::file_tree Tree;
+	dwtmov::movings Movings;
+	dwtftr::drow__ Root = qNIL;
+	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
+	dwtxcl::excluder Excluder;
+	dwtbsc::limitations__ Limitations;
+	dwtbsc::ghosts_oddities GO;
+	dwtdct::content Content;
+qRB
+	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
+
+	ExclusionHandling = misc::GetExclusionHandling( Registry );
+
+	GO.Init();
+
+	exclusion::Get( Registry, GO );
+
+	Excluder.Init( GO );
+	exclusion::Fill( Registry, Excluder );
+
+	Limitations.Init();
+	exclusion::Fill( Registry, Limitations );
+	
+	Content.Init();
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
+
+	Tree.Init();
+	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
+
+	Movings.Init();
+	dwtmov::Explore( Path, Content, GO, Movings );
+
+	misc::Dump( Movings, OutputFilename);
 qRR
 qRT
 qRE
 }
 
-static void ExportTree_( void )
+static void Compare_(
+	const str::string_ &Path,
+	const str::string_ &OutputFilename )
+{
+qRH
+	str::string
+		Generator,
+		ExplorationMessage,
+		ProcessingMessage;
+	dwtdct::basic_exploration_observer___ ExplorationObserver;
+	dwtftr::basic_processing_observer___ ProcessingObserver;
+qRB
+	Generator.Init( MISC_NAME_MC " V" VERSION " (" );
+	Generator.Append( cpe::GetDescription() );
+	Generator.Append( ')' );
+
+	ExplorationMessage.Init(); 
+	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
+
+	ProcessingMessage.Init(); 
+	sclmisc::GetBaseTranslation( ProcessingMessage_, ProcessingMessage );
+
+	ExplorationObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_, ExplorationMessage, cio::COut );
+	ProcessingObserver.Init( OutputFilename.Size() == 0 ? 0 : Delay_,ProcessingMessage, cio::COut );
+
+	Compare_( sclmisc::GetRegistry(), Path, Generator, OutputFilename, ExplorationObserver, ProcessingObserver );
+qRR
+qRT
+qRE
+}
+
+static void Compare_( void )
 {
 qRH
 	str::string Path, Output;
@@ -256,11 +378,17 @@ qRB
 	Output.Init();
 	sclmisc::OGetValue( registry::Output, Output );
 
-	ExportTree_( Path, Output );
+	Compare_( Path, Output );
 qRR
 qRT
 qRE
 }
+
+
+
+#define C( name )\
+	else if ( Command == #name )\
+		name##_()
 
 int scltool::SCLTOOLMain(
 	const str::string_ &Command,
@@ -278,8 +406,8 @@ qRB
 		epsmsc::PrintLicense( MISC_NAME_MC );
 	C( Browse );
 	C( Update );
-	C( ExportTree );
-	C( CompareDirs);
+	C( TestGhosts );
+	C( Compare );
 	else
 		qRGnr();
 

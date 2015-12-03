@@ -62,6 +62,8 @@ namespace misc {
 		TestPath( Path );
 	}
 
+	dwtbsc::exclusion_handling__ GetExclusionHandling( const sclrgstry::registry_ &Registry );
+
 	void Append(
 		const char *Tag,
 		const str::string_ &Value,
@@ -78,6 +80,10 @@ namespace misc {
 	void Dump(
 		dwtftr::drow__ Root,
 		const dwtftr::file_tree_ &Tree,
+		const fnm::name___ &Filename );
+
+	void Dump(
+		const dwtmov::movings_ &Movings,
 		const fnm::name___ &Filename );
 }
 

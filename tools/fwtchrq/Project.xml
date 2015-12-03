@@ -40,12 +40,10 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
-		<Module>browse</Module>
 		<Module>compare</Module>
 		<Module>exclusion</Module>
 		<Module>misc</Module>
 		<Module>registry</Module>
-		<Module>store</Module>
 	</Modules>
 	<Files/>
 	<Packing>

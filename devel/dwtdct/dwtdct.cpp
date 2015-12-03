@@ -1258,19 +1258,21 @@ namespace {
 
 		while ( SRow != qNIL )
 		{
-			TRow = Ghosts.Append( GRow );
+			if ( Exclusions(SRow) == dwtbsc::xNo ) {
+				TRow = Ghosts.Append( GRow );
 
-			if ( TRow != Files.Names.Append( Name( SRow ) ) )
-				qRFwk();
+				if ( TRow != Files.Names.Append( Name( SRow ) ) )
+					qRFwk();
 
-			if ( TRow != Files.Exclusions.Append(Exclusions( SRow ) ) )
-				qRFwk();
+				if ( TRow != Files.Exclusions.Append(Exclusions( SRow ) ) )
+					qRFwk();
 
-			if ( TRow != Files.Sizes.Append(Sizes( SRow ) ) )
-				qRFwk();
+				if ( TRow != Files.Sizes.Append(Sizes( SRow ) ) )
+					qRFwk();
 
-			if ( TRow != Files.Timestamps.Append (Timestamps( SRow ) ) )
-				qRFwk();
+				if ( TRow != Files.Timestamps.Append (Timestamps( SRow ) ) )
+					qRFwk();
+			}
 
 			SRow = Names.Next( SRow );
 		}

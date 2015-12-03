@@ -20,6 +20,18 @@
 			<Translation language="fr">Mise à jour : %1/%2, %3 d/s; C: %4, A: %5, I: %6, E: %7; G: %8, P: %9</Translation>
 			<Translation language="en">Updating : %1/%2, %3 d/s; C: %4, U: %5, S: %6, F: %7, I: %8, E: %9</Translation>
 		</Translations>
+		<Translations text="GhostsSettingMessage">
+			<Translation language="fr">Traitement 'ghosts' : %1/%2, %3 d/s; C: %4, A: %5, I: %6, E: %7; G: %8, P: %9</Translation>
+			<Translation language="en">Setting 'ghosts' : %1/%2, %3 d/s; C: %4, U: %5, S: %6, F: %7, I: %8, E: %9</Translation>
+		</Translations>
+		<Translations text="GhostIgnored">
+			<Translation language="fr">'ghost' ignoré.</Translation>
+			<Translation language="en">ignored ghost.</Translation>
+		</Translations>
+		<Translations text="NoGhost">
+			<Translation language="fr">pas de 'ghost'.</Translation>
+			<Translation language="en">no ghost.</Translation>
+		</Translations>
 		<!--
 		<Translations text="">
 		  <Translation language="fr"></Translation>
