@@ -168,9 +168,10 @@ qRH
 	dwtdct::basic_exploration_observer___ ExplorationObserver;
 	dwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
 	str::string ExplorationMessage, UpdateMessage;
-	dwtdct::gfiles_rack___ GFilesRack;
+	dwtdct::ghost2files_rack___ G2FRack;
 	dwtftr::basic_processing_observer___ ProcessingObserver;
 	str::string ProcessingMessage;
+	dwtdct::i2g I2G;
 qRB
 	ThreadAmountMax = sclmisc::OGetUInt( registry::ThreadAmountMax, 0 );
 
@@ -196,15 +197,16 @@ qRB
 	sclmisc::GetBaseTranslation( UpdateMessage_, UpdateMessage );
 
 	GhostsSettingObserver.Init( UpdateMessage, cio::COut, Delay_ );
-	dwtdct::SetGhosts( Path, Content, GO, GhostsSettingObserver );
+	I2G.Init();
+	dwtdct::SetGhosts( Path, Content, GO, GhostsSettingObserver, I2G );
 
-	GFilesRack.Init();
+	G2FRack.Init();
 
-	dwtdct::gfiles_ &GFiles = dwtdct::GetRWGFiles( Path, GO, GFilesRack );
+	dwtdct::ghost2files_ &G2F = dwtdct::GetRWG2F( Path, GO, G2FRack );
 
-	GFiles.Init();
+	G2F.Init();
 
-	GFiles.Append( Content );
+	G2F.Append( Content, I2G );
 qRR
 qRT
 qRE

@@ -937,24 +937,21 @@ return dwtght::sUpdated;
 	}
 }
 
-typedef bch::E_BUNCHt_( dwtght::grow__, irow__ ) itog_;
-E_AUTO( itog );
-
-typedef bch::E_BUNCHt_( irow__, dwtght::grow__ ) gtoi_;
-E_AUTO( gtoi );
+typedef bch::E_BUNCHt_( irow__, dwtght::grow__ ) g2i_;
+E_AUTO( g2i );
 
 static void Clean_(
 	dwtght::ghosts_ &Ghosts,
-	gtoi_ &GToI )
+	g2i_ &G2I )
 {
-	dwtght::grow__ Row = GToI.First();
+	dwtght::grow__ Row = G2I.First();
 
 	while ( Row != qNIL ) {
-		if ( GToI( Row ) == qNIL )
+		if ( G2I( Row ) == qNIL )
 			if ( Ghosts.Exists( Row ) )
 				Ghosts.Remove( Row );
 
-		Row = GToI.Next( Row );
+		Row = G2I.Next( Row );
 	}
 }
 
@@ -962,21 +959,21 @@ void dwtdct::SetGhosts(
 	const str::string_ &Root,
 	const content_ &Content,
 	const dwtbsc::ghosts_oddities_ &GO,
-	ghosts_setting_observer__ &GhostsSettingObserver )
+	ghosts_setting_observer__ &GhostsSettingObserver,
+	i2g_ &I2G )
 {
 qRH
 	irow__ IRow = qNIL;
 	bso::size__ Total = 0, Handled = 0, Created= 0, Updated = 0, Skipped = 0, Failed = 0, Intruder = 0, Expected = 0;
-	itog IToG;
-	gtoi GToI;
+	g2i G2I;
 	dwtght::grow__ GRow = qNIL;
 	dwtght::rack___ GhostsRack;
 	dwtght::ghost Ghost;
 	dwtxcl::excluder Excluder;
 qRB
-	IToG.Init();
-	IToG.Allocate( Content.Extent() );
-	IToG.FillWith( qNIL );
+	I2G.Init();
+	I2G.Allocate( Content.Extent() );
+	I2G.FillWith( qNIL );
 
 	IRow = Content.First();
 
@@ -987,9 +984,9 @@ qRB
 	GhostsRack.Init();
 	ghosts_ &Ghosts = GetRWGhosts( Root, GO, GhostsRack );
 
-	GToI.Init();
-	GToI.Allocate( Ghosts.Extent() );
-	GToI.FillWith( qNIL );
+	G2I.Init();
+	G2I.Allocate( Ghosts.Extent() );
+	G2I.FillWith( qNIL );
 
 	if ( IRow != qNIL ) {
 		Total = Content.Amount() - 1;
@@ -1003,9 +1000,9 @@ qRB
 		else
 			GRow = Ghosts.First();
 
-		IToG.Store( GRow, 0 );
-		GToI.Allocate( Ghosts.Extent() );
-		GToI.Store( 0, GRow );
+		I2G.Store( GRow, 0 );
+		G2I.Allocate( Ghosts.Extent() );
+		G2I.Store( 0, GRow );
 
 		if ( GhostsSettingObserver.IsElapsed()  )
 			GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
@@ -1026,21 +1023,21 @@ qRB
 				Expected++;
 		} else {
 			GRow = qNIL;
-			switch ( CreateGhost_( Root, Item, GO, IToG( Item.GetParent() ), Ghosts, GRow ) ) {
+			switch ( CreateGhost_( Root, Item, GO, I2G( Item.GetParent() ), Ghosts, GRow ) ) {
 			case sCreated:
 				Created++;
-				IToG.Store( GRow, IRow );
-				GToI.Allocate( Ghosts.Extent()  );
-				GToI.Store( IRow, GRow );
+				I2G.Store( GRow, IRow );
+				G2I.Allocate( Ghosts.Extent()  );
+				G2I.Store( IRow, GRow );
 				break;
 			case sUpdated:
-				IToG.Store( GRow, IRow );
-				GToI.Store( IRow, GRow );
+				I2G.Store( GRow, IRow );
+				G2I.Store( IRow, GRow );
 				Updated++;
 				break;
 			case sSkipped:
-				IToG.Store( GRow, IRow );
-				GToI.Store( IRow, GRow );
+				I2G.Store( GRow, IRow );
+				G2I.Store( IRow, GRow );
 				Skipped++;
 				break;
 			case sFailed:
@@ -1062,7 +1059,7 @@ qRB
 
 	GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
 
-	Clean_( Ghosts, GToI );
+	Clean_( Ghosts, G2I );
 qRR
 qRT
 qRE
@@ -1241,12 +1238,11 @@ qRE
 
 namespace {
 	void Append_(
-		grow__ GRow,
 		const fstrings_ &Names,
 		const fexclusions_ &Exclusions,
 		const sizes_ &Sizes,
 		const timestamps_ &Timestamps,
-		fghosts_ &Ghosts,
+		frows_ &FRows,
 		files_data_ &Files )
 	{
 		frow__ SRow = qNIL, TRow = qNIL;
@@ -1259,10 +1255,7 @@ namespace {
 		while ( SRow != qNIL )
 		{
 			if ( Exclusions(SRow) == dwtbsc::xNo ) {
-				TRow = Ghosts.Append( GRow );
-
-				if ( TRow != Files.Names.Append( Name( SRow ) ) )
-					qRFwk();
+				TRow = Files.Names.Append( Name( SRow ) );
 
 				if ( TRow != Files.Exclusions.Append(Exclusions( SRow ) ) )
 					qRFwk();
@@ -1272,6 +1265,8 @@ namespace {
 
 				if ( TRow != Files.Timestamps.Append (Timestamps( SRow ) ) )
 					qRFwk();
+
+				FRows.Append( TRow );
 			}
 
 			SRow = Names.Next( SRow );
@@ -1281,37 +1276,59 @@ namespace {
 	void Append_(
 		grow__ GRow,
 		const files_data_ &SourceFiles,
-		fghosts_ &Ghosts,
+		gfrows_ &GFRows,
 		files_data_ &TargetFiles )
 	{
-		Append_( GRow, SourceFiles.Names, SourceFiles.Exclusions, SourceFiles.Sizes, SourceFiles.Timestamps, Ghosts, TargetFiles );
+	qRH
+		frows FRows;
+	qRB
+		FRows.Init();
+
+		Append_(SourceFiles.Names, SourceFiles.Exclusions, SourceFiles.Sizes, SourceFiles.Timestamps, FRows, TargetFiles );
+
+		if ( !GFRows.Exists( GRow ) )
+			GFRows.Allocate( *GRow + 1 );
+
+		GFRows( GRow ) = FRows;
+		GFRows.Flush();
+	qRR
+	qRT
+	qRE
 	}
 }
 
-void dwtdct::gfiles_::Append( const item_ &Item )
+void dwtdct::ghost2files_::Append(
+	grow__ GRow,
+	const item_ &Item )
 {
-	Append_( Item.Dir.GetGhostRow(), Item.Files, Ghosts, Files );
+	if ( GRow != qNIL )	// Could be 'qNIL' if ghost dir.
+		Append_( GRow, Item.Files, GFRows, Files );
 }
 
-void dwtdct::gfiles_::Append( const content_ &Content )
+void dwtdct::ghost2files_::Append(
+	const content_ &Content,
+	const i2g_ &I2G )
 {
+	if ( Content.Size() != I2G.Size() )
+		qRFwk();
+
 	irow__ Row = Content.First();
 
 	while ( Row != qNIL ) {
-		Append( *Content( Row ) );
+		Append( I2G( Row ), *Content( Row ) );
 
 		Row = Content.Next( Row );
 	}
 }
 
-void dwtdct::gfiles_hf___::Init(
+void dwtdct::ghost2files_hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
 qRH
-	fnm::name___ Ghosts, Files;
+	fnm::name___ GFRows, Files;
 qRB
-	I( Ghosts, g );
+	I( GFRows, g );
 	I( Files, f );
 qRR
 qRT
@@ -1319,8 +1336,8 @@ qRE
 }
 
 uys::state__ dwtdct::Plug(
-	gfiles_ &Files,
-	gfiles_fh___ &Hook )
+	ghost2files_ &Files,
+	ghost2files_fh___ &Hook )
 {
 	uys::state__ State = uys::s_Undefined;
 qRH
@@ -1330,7 +1347,7 @@ qRB
 	if ( State.IsError() )
 		qRReturn;
 
-	if ( State != bch::Plug( Files.Ghosts, Hook.Ghosts_ ) )
+	if ( State != ctn::Plug( Files.GFRows, Hook.GFRows_ ) )
 		qRFwk();
 qRR
 qRT
@@ -1344,12 +1361,12 @@ namespace {
 	void SetHook_(
 		const fnm::name___ &Path,
 		uys::mode__ Mode,
-		gfiles_fh___ &Hook )
+		ghost2files_fh___ &Hook )
 	{
 	qRH
-		gfiles_hf___ Filenames;
+		ghost2files_hf___ Filenames;
 	qRB
-		Filenames.Init( Path, "GFiles_" );
+		Filenames.Init( Path, "Files_" );
 
 		Hook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
 	qRR
@@ -1360,20 +1377,20 @@ namespace {
 	void GetRack_(
 		fnm::name___ &DataDirName,
 		uys::mode__ Mode,
-		gfiles_rack___ &Rack )
+		ghost2files_rack___ &Rack )
 	{
 		SetHook_( DataDirName, Mode, Rack.Hook );
 
-		if ( !Plug( Rack.Files, Rack.Hook ).Boolean() )
-			Rack.Files.Init();
+		if ( !Plug( Rack.G2F, Rack.Hook ).Boolean() )
+			Rack.G2F.Init();
 	}
 }
 
 
-gfiles_ &dwtdct::GetRWGFiles(
+ghost2files_ &dwtdct::GetRWG2F(
 	const str::string_ &Root,
 	const dwtbsc::ghosts_oddities_ &GO,
-	gfiles_rack___ &Rack )
+	ghost2files_rack___ &Rack )
 {
 qRH
 	fnm::name___ Name;
@@ -1385,13 +1402,13 @@ qRB
 qRR
 qRT
 qRE
-	return Rack.Files;
+	return Rack.G2F;
 }
 
-const gfiles_ &dwtdct::GetROGFiles(
+const ghost2files_ &dwtdct::GetROG2F(
 	const str::string_ &Root,
 	const dwtbsc::ghosts_oddities_ &GO,
-	gfiles_rack___ &Rack )
+	ghost2files_rack___ &Rack )
 {
 qRH
 	fnm::name___ Name;
@@ -1402,11 +1419,11 @@ qRB
 	if ( fil::Exists( Name ) )
 		GetRack_( Name, uys::mReadOnly, Rack );
 	else
-		Rack.Files.Init();
+		Rack.G2F.Init();
 qRR
 qRT
 qRE
-	return Rack.Files;
+	return Rack.G2F;
 }
 
 

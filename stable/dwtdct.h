@@ -450,12 +450,16 @@ namespace dwtdct {
 		}
 	};
 
+	typedef bch::E_BUNCHt_( dwtght::grow__, irow__ ) i2g_;
+	E_AUTO( i2g );
+	
 	// ATTENTION : 'Content' doit avoir été récupèré avec 'rhKeepGhostLike'.
 	void SetGhosts(
 		const str::string_ &Root,
 		const content_ &Content,
 		const dwtbsc::ghosts_oddities_ &GO,
-		ghosts_setting_observer__ &GhostsSettingObserver );	// Créer dans chaque répertoire le répertoire spécial servant à détecter le renommage des répertoires.
+		ghosts_setting_observer__ &GhostsSettingObserver,
+		i2g_ &I2G );	// Créer dans chaque répertoire le répertoire spécial servant à détecter le renommage des répertoires.
 
 	// ATTENTION : 'Content' doit avoir été récupèré avec 'rhKeepGhostLike'.
 	void DelGhosts(
@@ -540,133 +544,138 @@ namespace dwtdct {
 		}
 	};
 
-	typedef bch::E_BUNCHt_( grow__, frow__ ) fghosts_;	// Link between files and ghosts.
-	E_AUTO( fghosts );
+	// List of files per ghost.
+	typedef ctn::E_MCONTAINERt_( frows_, grow__ ) gfrows_;
+	E_AUTO( gfrows );
 
-	typedef bch::hf___ fghosts_hf___;
-	typedef bch::fh___ fghosts_fh___;
+	typedef ctn::hf___ gfrows_hf___;
+	typedef ctn::fh___ gfrows_fh___;
 
-	// Files tied to ghosts.
-	class gfiles_
+	// Files rattached to each ghost.
+	class ghost2files_
 	{
 	public:
 		struct s {
-			fghosts_::s Ghosts;
+			gfrows_::s GFRows;
 			files_data_::s Files;
 		};
-		fghosts_ Ghosts;
+		gfrows_ GFRows;
 		files_data_ Files;
-		gfiles_( s &S )
-		: Ghosts( S.Ghosts ),
+		ghost2files_( s &S )
+		: GFRows( S.GFRows ),
 		  Files( S.Files )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			Ghosts.reset( P );
+			GFRows.reset( P );
 			Files.reset( P );
 		}
 		void plug( qAS_ &AS )
 		{
-			Ghosts.plug( AS );
+			GFRows.plug( AS );
 			Files.plug( AS );
 		}
-		gfiles_ &operator =( const gfiles_ &GF )
+		ghost2files_ &operator =( const ghost2files_ &G2F )
 		{
-			Ghosts = GF.Ghosts;
-			Files = GF.Files;
+			GFRows = G2F.GFRows;
+			Files = G2F.Files;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			Ghosts.Init();
+			GFRows.Init();
 			Files.Init();
 		}
-		void Append( const item_ &Item );
-		void Append( const content_ &Content );
+		void Append(
+			grow__ GRow,
+			const item_ &Item );
+		void Append(
+			const content_ &Content,
+			const i2g_ &I2G );
 	};
 
-	E_AUTO( gfiles );
+	E_AUTO( ghost2files );
 
-	class gfiles_fh___;
+	class ghost2files_fh___;
 
-	class gfiles_hf___
+	class ghost2files_hf___
 	{
 	private:
-		fghosts_hf___ Ghosts_;
+		gfrows_hf___ GFRows_;
 		files_data_hf___ Files_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Ghosts_.reset( P );
+			GFRows_.reset( P );
 			Files_.reset( P );
 		}
-		E_CDTOR( gfiles_hf___);
+		E_CDTOR( ghost2files_hf___);
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
-		friend gfiles_fh___;
+		friend ghost2files_fh___;
 	};
 
-	class gfiles_fh___
+	class ghost2files_fh___
 	{
 	private:
-		fghosts_fh___ Ghosts_;
+		gfrows_fh___ GFRows_;
 		files_data_fh___ Files_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Ghosts_.reset( P );
+			GFRows_.reset( P );
 			Files_.reset( P );
 		}
-		E_CDTOR( gfiles_fh___);
+		E_CDTOR( ghost2files_fh___);
 		void Init(
-			gfiles_hf___ &Filenames,
+			ghost2files_hf___ &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Ghosts_.Init( Filenames.Ghosts_, Mode, Behavior, ID );
+			GFRows_.Init( Filenames.GFRows_, Mode, Behavior, ID );
 			Files_.Init( Filenames.Files_, Mode, Behavior, ID );
 		}
 		friend uys::state__ Plug(
-			gfiles_ &Files,
-			gfiles_fh___ &Hook );
+			ghost2files_ &G2F,
+			ghost2files_fh___ &Hook );
 	};
 
 	uys::state__ Plug(
-		gfiles_ &Files,
-		gfiles_fh___ &Hook );
+		ghost2files_ &Files,
+		ghost2files_fh___ &Hook );
 
-	struct gfiles_rack___
+	struct ghost2files_rack___
 	{
 	public:
-		gfiles Files;
-		gfiles_fh___ Hook;
+		ghost2files G2F;
+		ghost2files_fh___ Hook;
 		void reset( bso::bool__ P = true )
 		{
-			Files.reset( P );
+			G2F.reset( P );
 			Hook.reset( P );
 		}
-		E_CDTOR( gfiles_rack___ );
+		E_CDTOR( ghost2files_rack___ );
 		void Init( void )
 		{
-			Files.reset();
+			G2F.reset();
 			Hook.reset();
 
 			// 'Init(...)' called by dedicated functions.
 		}
 	};
 
-	gfiles_ &GetRWGFiles(
+	ghost2files_ &GetRWG2F(
 		const str::string_ &Root,
 		const dwtbsc::ghosts_oddities_ &GO,
-		gfiles_rack___ &Rack );
+		ghost2files_rack___ &Rack );
 
-	const gfiles_ &GetROGFiles(
+	const ghost2files_ &GetROG2F(
 		const str::string_ &Root,
 		const dwtbsc::ghosts_oddities_ &GO,
-		gfiles_rack___ &Rack );
+		ghost2files_rack___ &Rack );
 
 }
 
