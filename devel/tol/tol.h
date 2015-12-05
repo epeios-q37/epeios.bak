@@ -813,6 +813,11 @@ namespace tol {
 	extern uint64_t _Numer;
 	extern uint32_t _Denom;
 
+	inline void Reset( tick__ &Tick )
+	{
+		*Tick = 0;
+	}
+
 	inline tick__ Tick( void )
 	{
 		return mach_absolute_time();
@@ -840,6 +845,12 @@ namespace tol {
 	}
 # elif defined( TOL__POSIX )
 	E_TRMIMIC__( timespec, tick__ );
+
+	inline void Reset( tick__ &Tick )
+	{
+		Tick->tv_nsec = 0;
+		Tick->tv_sec = 0;
+	}
 
 	inline tick__ Tick( void )
 	{
