@@ -1010,6 +1010,9 @@ qRB
 				Dir.Files.Append( Scene.Files.Append( File ) );
 
 				break;
+			default:
+				qRFwk();
+				break;
 			}
 			break;
 		case xml::t_Error:
@@ -1021,8 +1024,7 @@ qRB
 		}
 	} while ( Depth != 0 );
 
-	if ( &Observer != NULL )
-		Observer.Report( Handled, Total );
+	Observer.Report( Handled, Total );
 qRR
 qRT
 qRE

@@ -934,6 +934,9 @@ void dwtmov::Load(
 		case xml::t_Error:
 			qRGnr();
 			break;
+		default:
+			qRFwk();
+			break;
 		}
 	}
 }

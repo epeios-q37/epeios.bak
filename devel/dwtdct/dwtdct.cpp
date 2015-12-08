@@ -285,11 +285,12 @@ qRB
 		break;
 	}
 
-	if ( Exclusion == xNo )
+	if ( Exclusion == xNo ) {
 		if ( ( Limitations.NameLengthMax > 0 ) && ( Name.Amount() > Limitations.NameLengthMax ) )
 			Exclusion = xNameTooLong;
 		else if ( ( Limitations.FileSizeMax > 0 ) && ( Info.Type == fil::tFile ) && ( Info.Size > Limitations.FileSizeMax ) )
 			Exclusion = xFileTooBig;
+	}
 qRR
 qRT
 qRE

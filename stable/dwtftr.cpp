@@ -1433,6 +1433,9 @@ qRB
 				Dir.Goofs.Append( Tree.Goofs.Append( Goof ) );
 
 				break;
+			default:
+				qRFwk();
+				break;
 			}
 			break;
 		case xml::t_Error:
@@ -1444,8 +1447,7 @@ qRB
 		}
 	} while ( Depth != 0 );
 
-	if ( &Observer != NULL )
-		Observer.Report( Handled, Total );
+	Observer.Report( Handled, Total );
 	/*
 	if ( SortType != stNone  )
 		Reorganize_( Tree, Root );
