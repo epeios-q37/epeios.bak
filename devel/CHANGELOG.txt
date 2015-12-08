@@ -12,6 +12,12 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-08-12 :
+- BSO, TOL :
+	# Conversion from string to number are now more complete.
+- RGSTRY :
+	- Adaptation to modifications in 'BSO'.
+
 2015-12-05 :
 - TOL :
 	* Implementing 'Reset( tick__ &)' for mossiong plateform.

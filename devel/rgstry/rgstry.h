@@ -2155,7 +2155,7 @@ namespace rgstry {
 		str::uint__ Value = Default;
 		sdr::row__ LocalError = qNIL;
 
-		Value = str::_UIntConversion( RawValue, 0, &LocalError, str::bAuto, Max );
+		Value = RawValue.ToUInt( 0, &LocalError, str::bAuto, Max );
 
 		if ( ( LocalError != qNIL ) || ( Value < Min ) ) {
 
@@ -2219,7 +2219,7 @@ namespace rgstry {
 		RawValue.Init();
 
 		if ( Registry.GetValue( Path, RawValue, &GenericError ) )
-			Value = str::_SIntConversion( RawValue, 0, &GenericError, str::bAuto, Min, Max );
+			Value = str::_SConversion( RawValue, 0, &GenericError, str::bAuto, Min, Max );
 
 		if ( ( GenericError != qNIL ) ) {
 

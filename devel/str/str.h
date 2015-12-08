@@ -73,35 +73,20 @@ namespace str {
 
 	class string_;	// Prdclaration.
 
-	bso::u64__ _U64Conversion(
+	long long unsigned _UConversion(
 		const class string_ &String,
 		sdr::row__ Begin,
 		sdr::row__ *ErrP,
 		base__ Base,
-		bso::u64__ Limit );
+		long long unsigned Limit );
 
-	bso::s64__ _S64Conversion(
+	long long signed _SConversion(
 		const class string_ &String,
 		sdr::row__ Begin,
 		sdr::row__ *ErrP,
 		base__ Base,
-		bso::s64__ PositiveLimit,
-		bso::s64__ NegativeLimit );
-
-	uint__ _UIntConversion(
-		const class string_ &String,
-		sdr::row__ Begin,
-		sdr::row__ *ErrP,
-		base__ Base,
-		uint__ Limit );
-
-	sint__ _SIntConversion(
-		const class string_ &String,
-		sdr::row__ Begin,
-		sdr::row__ *ErrP,
-		base__ Base,
-		sint__ PositiveLimit,
-		sint__ NegativeLimit );
+		long long signed PositiveLimit,
+		long long signed NegativeLimit );
 
 	class _string_size_handler {
 	public:
@@ -234,14 +219,14 @@ namespace str {
 			char C,
 			sdr::row__ Start = 0 ) const;
 		// NOTA : Les mthodes 'ToNumber'(...)' facilitent la mise en oeuvre de 'template's.
-#define STR_UNR( name, type, limit, casing )\
+#define STR_UN( name, type, limit )\
 	type To##name(\
 			sdr::row__ Begin,\
 			sdr::row__ *ErrP = NULL,\
 			base__ Base = bAuto,\
 			type Limit = limit ) const\
 		{\
-			return (type)_U##casing##Conversion( *this, Begin, ErrP, Base, Limit );\
+			return (type)_U##Conversion( *this, Begin, ErrP, Base, Limit );\
 		}\
 		type To##name(\
 			sdr::row__ *ErrP = NULL,\
@@ -250,27 +235,26 @@ namespace str {
 		{\
 			return To##name( 0, ErrP, Base, Limit );\
 		}
-#define STR_UN( name, type, limit, casing )\
-		STR_UNR( name, type, limit, casing )\
+#define STR_TUN( type, limit )\
 		void ToNumber( \
 			   type &Number, \
 			   sdr::row__ *Error = NULL ) const\
 		{\
-			Number = To##name( Error ); \
+			Number = (type)_UConversion( *this, 0, Error, bAuto, limit );\
 		}\
 		void ToNumber(\
 			type &Number,\
 			type Limit,\
 			sdr::row__ *Error = NULL ) const\
 		{\
-			Number = To##name( Error, bAuto, Limit );\
+			Number = (type)_UConversion( *this, 0, Error, bAuto, Limit );\
 		}\
 		void ToNumber(\
 			type &Number,\
 			sdr::row__ Begin,\
 			sdr::row__ *Error = NULL ) const\
 		{\
-			Number = To##name( Begin, Error, bAuto, limit );\
+			Number = (type)_UConversion( *this, Begin, Error, bAuto, limit );\
 		}\
 		void ToNumber(\
 			type &Number,\
@@ -278,9 +262,9 @@ namespace str {
 			sdr::row__ Begin,\
 			sdr::row__ *Error = NULL ) const\
 		{\
-			Number = To##name( Begin, Error, bAuto, Limit );\
+			Number = (type)_UConversion( *this, Begin, Error, bAuto, Limit );\
 		}
-#define STR_SNR( name, type, positive_limit, negative_limit, casing )\
+#define STR_SN( name, type, positive_limit, negative_limit )\
 	type To##name(\
 			sdr::row__ Begin,\
 			sdr::row__ *ErrP,\
@@ -288,7 +272,7 @@ namespace str {
 			type PositiveLimit = positive_limit,\
 			type NegativeLimit = negative_limit ) const\
 		{\
-			return (type)_S##casing##Conversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
+			return (type)_S##Conversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}\
 		type To##name(\
 			sdr::row__ *ErrP = NULL,\
@@ -298,13 +282,12 @@ namespace str {
 		{\
 			return To##name( 0, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}
-#define STR_SN( name, type, positive_limit, negative_limit, casing )\
-		STR_SNR( name, type, positive_limit, negative_limit, casing )\
+#define STR_TSN( type, positive_limit, negative_limit )\
 		void ToNumber(\
 			type &Number,\
 			sdr::row__ *Error = NULL ) const\
 		{\
-			Number = To##name( Error );\
+			Number = (type)_S##Conversion( *this, 0, Error, bAuto, positive_limit, negative_limit );\
 		}\
 		void ToNumber(\
 			type &Number,\
@@ -312,26 +295,26 @@ namespace str {
 			type NegativeLimit,\
 			sdr::row__ *Error = NULL ) const\
 		{\
-			Number = To##name( Error, bAuto, PositiveLimit, NegativeLimit );\
+			Number = (type)_S##Conversion( *this, 0, Error, bAuto, PositiveLimit, NegativeLimit );\
 		}
-		STR_UNR( Row, sdr::row_t__, SDR_ROW_T_MAX, Int )
-		STR_UNR( UInt, bso::uint__, BSO_UINT_MAX, Int )
-		STR_SNR( SInt, bso::sint__, BSO_SINT_MAX, BSO_SINT_MIN, Int )
+		STR_UN( Row, sdr::row_t__, SDR_ROW_T_MAX )
+		STR_UN( UInt, bso::uint__, BSO_UINT_MAX )
+		STR_SN( SInt, bso::sint__, BSO_SINT_MAX, BSO_SINT_MIN )
 # ifdef CPE_F_64BITS
-		STR_UN( U64, bso::u64__, BSO_U64_MAX, Int )
-		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN, Int )
+		STR_UN( U64, bso::u64__, BSO_U64_MAX )
+		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN )
 # elif defined( CPE_F_32BITS )
-		STR_UN( U64, bso::u64__, BSO_U64_MAX, 64 )
-		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN, 64 )
+		STR_UN( U64, bso::u64__, BSO_U64_MAX )
+		STR_SN( S64, bso::s64__, BSO_S64_MAX, BSO_S64_MIN )
 # else
 #  error
 # endif
-		STR_UN( U32, bso::u32__, BSO_U32_MAX, Int )
-		STR_SN( S32, bso::s32__, BSO_S32_MAX, BSO_S32_MIN, Int )
-		STR_UN( U16, bso::u16__, BSO_U16_MAX, Int )
-		STR_SN( S16, bso::s16__, BSO_S16_MAX, BSO_S16_MIN, Int )
-		STR_UN( U8, bso::u8__, BSO_U8_MAX, Int )
-		STR_SN( S8, bso::s8__, BSO_S8_MAX, BSO_S8_MIN, Int )
+		STR_UN( U32, bso::u32__, BSO_U32_MAX )
+		STR_SN( S32, bso::s32__, BSO_S32_MAX, BSO_S32_MIN )
+		STR_UN( U16, bso::u16__, BSO_U16_MAX )
+		STR_SN( S16, bso::s16__, BSO_S16_MAX, BSO_S16_MIN )
+		STR_UN( U8, bso::u8__, BSO_U8_MAX )
+		STR_SN( S8, bso::s8__, BSO_S8_MAX, BSO_S8_MIN )
 		bso::lfloat__ ToLF(
 			sdr::row__ *ErrP,
 			sdr::row__ Begin ) const;
@@ -355,6 +338,16 @@ namespace str {
 		{
 			Number = ToLF( Error );
 		}
+		STR_TUN( long long unsigned int, ULLONG_MAX )
+		STR_TUN( long unsigned int, ULONG_MAX )
+		STR_TUN( unsigned int, UINT_MAX )
+		STR_TUN( unsigned short, USHRT_MAX )
+		STR_TUN( unsigned char, UCHAR_MAX )
+		STR_TSN( long long signed int, LLONG_MIN, LLONG_MAX )
+		STR_TSN( long signed int, LONG_MIN, LONG_MAX )
+		STR_TSN( signed int , INT_MIN, INT_MAX )
+		STR_TSN( signed short, SHRT_MIN, SHRT_MAX )
+		STR_TSN( signed char, SCHAR_MIN, SCHAR_MAX )
 	};
 
 	template <typename type> inline void ToEnum(
@@ -590,15 +583,15 @@ namespace str {
 		string_ &String,
 		bso::bool__ dontHandleAccent = false );
 
-	template <typename t, typename b_t> inline void Append(
+	template <typename t> inline void Append(
 		t Value,
 		str::strings_ &Values )
 	{
-		b_t Buffer;
+		bso::buffer__ Buffer;
 
 		Values.Append( str::string( bso::Convert( Value, Buffer ) ) );
 	}
-
+#if 0
 	template <typename t> inline void AppendInt(
 		t Value,
 		str::strings_ &Values )
@@ -612,7 +605,8 @@ namespace str {
 	{
 		Append<t, bso::float_buffer__>( Value, Values );
 	}
-
+# endif
+# if 0
 # ifdef CPE_F_32BITS
 	inline void Append(
 		bso::u64__ Value,
@@ -642,7 +636,7 @@ namespace str {
 	{
 		AppendInt( Value, Values );
 	}
-
+# endif
 }
 
 /*$END$*/

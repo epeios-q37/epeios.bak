@@ -1328,11 +1328,9 @@ qRB
 				case kFiles:
 					break;
 				case kDir:
-#pragma message ( __LOC__ "Problème !" )
 					Parser.Value().ToNumber( Dir().Timestamp, &Error );
 					break;
 				case kFile:
-#pragma message ( __LOC__ "Problème !" )
 					Parser.Value().ToNumber( File.Timestamp, &Error );
 					break;
 				default:

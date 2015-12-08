@@ -421,27 +421,27 @@ template <typename sint, typename uint> sint GenericSignedConversion_(
 		return (sint)GenericUnsignedConversion_( String, Begin, ErrP, Base, PositiveLimit );
 }
 
-bso::u64__ str::_U64Conversion(
+unsigned long long int str::_UConversion(
 	const str::string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
 	base__ BaseFlag,
-	bso::u64__ Limit )
+	unsigned long long int Limit )
 {
 	return GenericUnsignedConversion_( String, Begin, ErrP, BaseFlag, Limit );
 }
 
-bso::s64__ str::_S64Conversion(
+signed long long int str::_SConversion(
 	const class string_ &String,
 	sdr::row__ Begin,
 	sdr::row__ *ErrP,
 	base__ Base,
-	bso::s64__ PositiveLimit,
-	bso::s64__ NegativeLimit )
+	signed long long int PositiveLimit,
+	signed long long int NegativeLimit )
 {
 	return GenericSignedConversion_<bso::s64__, bso::u64__>( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
 }
-
+/*
 uint__ str::_UIntConversion(
 	const str::string_ &String,
 	sdr::row__ Begin,
@@ -462,7 +462,7 @@ sint__ str::_SIntConversion(
 {
 	return GenericSignedConversion_<sint__, uint__>( String, Begin, ErrP, Base, PositiveLimit, NegativeLimit );
 }
-
+*/
 bso::lfloat__ string_::ToLF(
 	sdr::row__ *ErrP,
 	sdr::row__ Begin ) const

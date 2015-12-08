@@ -283,7 +283,7 @@ qRB
 	GhostsSettingObserver.Init( GhostsSettingMessage, cio::COut, Delay_ );
 	dwtdct::TestGhosts( Path, Content, GO, NoGhostMessage, GhostIgnoredMessage, TFRack.Init( Output ) );
 qRR
-TFRack.HandleError();
+	TFRack.HandleError();
 qRT
 qRE
 }
@@ -399,9 +399,6 @@ int scltool::SCLTOOLMain(
 	int ExitValue = EXIT_FAILURE;
 qRH
 qRB
-#pragma message ( __LOC__ "à enlever !")
-//	cio::COut << "----->" << sizeof(time_t) << txf::tab << sizeof( bso::s32__ ) <<  "<-----" << txf::nl << txf::commit;
-
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )

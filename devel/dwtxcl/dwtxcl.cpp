@@ -46,7 +46,7 @@ static void Add_(
 qRH
 	str::string Reversed;
 	TOL_CBUFFER___ Buffer;
-	int NewId;
+	stsfsm::id__ NewId;
 qRB
 	Reversed.Init();
 

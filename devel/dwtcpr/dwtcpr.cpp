@@ -789,7 +789,7 @@ static void FillAttributeAutomat_(
 
 #define UNDEFINED_ID	DWTBSC_UNDEFINED_ID
 
-inline static int GetItem_(
+inline static stsfsm::id__ GetItem_(
 	const str::string_ &Name,
 	const stsfsm::automat_ &Automat )
 {
@@ -800,7 +800,7 @@ static tag__ GetTag_(
 	const str::string_ &Name,
 	const stsfsm::automat_ &Automat )
 {
-	int Id = GetItem_( Name, Automat );
+	stsfsm::id__ Id = GetItem_( Name, Automat );
 
 	if ( Id == stsfsm::UndefinedId )
 		return t_Undefined;
@@ -816,7 +816,7 @@ static attribute__ GetAttribute_(
 	const str::string_ &Name,
 	const stsfsm::automat_ &Automat )
 {
-	int Id = GetItem_( Name, Automat );
+	stsfsm::id__ Id = GetItem_( Name, Automat );
 
 	if ( Id == stsfsm::UndefinedId )
 		return a_Undefined;

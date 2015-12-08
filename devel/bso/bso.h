@@ -142,12 +142,13 @@ namespace bso {
 
 	typedef void *pointer__;
 
-	// Taille maximale nécessaire pour stocker la valeur d'un pointeur en binaire dans une chaine de caractère.
-	#define BSO_ASCII_CONVERTED_POINTER_MAX_SIZE	( sizeof( bso::pointer__ ) * 8 )
+# define BSO_CONVERSION_SIZE_MAX	100
 
-	struct pointer_buffer__ {
-		char Datum[BSO_ASCII_CONVERTED_POINTER_MAX_SIZE];	// '+1' pour stocker le caractère 'NULL' final.
+	struct buffer__ {
+		char Datum[BSO_CONVERSION_SIZE_MAX+1];	// + 1 for the NUL chracter.
 	};
+
+	typedef buffer__ pointer_buffer__;
 
 	inline const char *Convert(
 		pointer__ Value,
@@ -162,9 +163,7 @@ namespace bso {
 	// Taille maximale nécessaire pour stocker la valeur d'un entirer en décimal dans une chaine de caractère (+ le signe).
 	#define BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE	( 1 + ( sizeof( bso::pointer__ ) * 8 ) )
 
-	struct integer_buffer__ {
-		char Datum[BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE+1];	// '+1' pour stocker le caractère 'NULL' final.
-	};
+	typedef buffer__ integer_buffer__;
 
 // 'natural unsigned integer'
 # ifdef BSO__64
@@ -406,12 +405,8 @@ namespace bso {
 	}
 #endif
 
-	//d Maximum size of an ASCII converted float.
-	#define BSO_ASCII_CONVERTED_FLOAT_MAX_SIZE	40
+	typedef buffer__ float_buffer__;
 
-	struct float_buffer__ {
-		char Datum[BSO_ASCII_CONVERTED_FLOAT_MAX_SIZE+1];	// '+1' pour stocker le caractère 'NULL' final.
-	};
 	//f Return 'Value' as string in 'String'.
 	inline const char *Convert(
 		lfloat__ Value,

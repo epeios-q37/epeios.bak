@@ -26,7 +26,7 @@
 #  define DWTXCL_DBG
 # endif
 
-// Directory eXCLusion
+// Directory WaTcher eXCLusion
 
 # include "dwtbsc.h"
 
