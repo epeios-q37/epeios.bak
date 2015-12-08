@@ -527,12 +527,14 @@ namespace ias {
 		{
 			uys::state__ State = _Descriptors.Settle();
 
-			if ( !State.IsError() )
-				if ( State != _Storage.Settle() )
+			if ( !State.IsError() ) {
+				if ( State != _Storage.Settle() ) {
 					if ( State.Value() == uys::sExists )
 						_Storage.CreateFile();
 					else
 						State = uys::sInconsistent;
+				}
+			}
 
 			return State;
 		}
