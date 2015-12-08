@@ -41,7 +41,7 @@ mods += dwtbsc dwtcpr dwtdct dwtftr dwtght
 mods += dwtmov dwtxcl 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
-mods += compare exclusion misc registry 
+mods += exclusion misc registry 
 
 pmods += pllio 
 

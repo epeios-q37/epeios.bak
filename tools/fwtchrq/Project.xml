@@ -40,7 +40,7 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
-		<Module>compare</Module>
+		<!--<Module>compare</Module>-->
 		<Module>exclusion</Module>
 		<Module>misc</Module>
 		<Module>registry</Module>
