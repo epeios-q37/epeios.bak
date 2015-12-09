@@ -134,7 +134,7 @@ namespace sclbacknd {
 		}
 		void FillSetupRegistry( const str::string_ &SetupId )
 		{
-			sclrgstry::FillSetupRegistry( _Registry, _RegistrySetupLevel, SetupId );
+			sclrgstry::FillWithSetup( _Registry, _RegistrySetupLevel, SetupId );
 		}
 		void *UP( void ) const
 		{

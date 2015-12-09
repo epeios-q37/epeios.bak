@@ -166,7 +166,7 @@ const str::string_ &dwtftr::file_tree_::GetPath(
 
 static void Fill_(
 	const goofs_data_ &Data,
-	file_tree_ &Tree,
+	kernel_ &Kernel,
 	dwtbsc::grows_ &Rows )
 {
 qRH
@@ -184,12 +184,12 @@ qRB
 		while ( Row != qNIL ) {
 			Goof.Init();
 
-			Goof.Name = Tree.Names.Append( Name( Row ) );
+			Goof.Name = Kernel.Names.Append( Name( Row ) );
 
 			if ( Oddity( Row ).Amount() != 0  )
-				Goof.Oddity = Tree.Oddities.Append( Oddity( Row ) );
+				Goof.Oddity = Kernel.Oddities.Append( Oddity( Row ) );
 
-			Rows.Append( Tree.Goofs.Append( Goof ) );
+			Rows.Append( Kernel.Goofs.Append( Goof ) );
 
 			Row = Data.Names.Next( Row );
 		}
@@ -201,7 +201,7 @@ qRE
 
 static void Fill_(
 	const files_data_ &Data,
-	file_tree_ &Tree,
+	kernel_ &Kernel,
 	frows_ &Rows )
 {
 qRH
@@ -217,14 +217,14 @@ qRB
 		while ( Row != qNIL ) {
 			File.Init();
 
-			File.Name = Tree.Names.Append( Name( Row ) );
+			File.Name = Kernel.Names.Append( Name( Row ) );
 
 			File.Size = Data.Sizes( Row );
 
 			File.Exclusion = Data.Exclusions( Row );
 			File.Timestamp = Data.Timestamps( Row );
 
-			Rows.Append( Tree.Files.Append( File ) );
+			Rows.Append( Kernel.Files.Append( File ) );
 
 			Row = Data.Names.Next( Row );
 		}
@@ -243,7 +243,7 @@ E_AUTO( drows_set );
 
 static void Organize_(
 	const items_ &Items,
-	file_tree_ &Tree,
+	kernel_ &Kernel,
 	itod_ &IToD,
 	drows_set_ &Dirs,
 	processing_observer__ &Observer )
@@ -268,19 +268,19 @@ qRB
 
 		Directory.Init();
 
-		Fill_( Item.Files, Tree, Directory.Files );
-		Fill_( Item.Goofs, Tree, Directory.Goofs );
+		Fill_( Item.Files, Kernel, Directory.Files );
+		Fill_( Item.Goofs, Kernel, Directory.Goofs );
 
 		ParentIRow = Item.Parent();	// Peut-être modifié ci-dessous.
 
-		Directory().Name = Tree.Names.Append( Item.Dir.Name );
+		Directory().Name = Kernel.Names.Append( Item.Dir.Name );
 
 		ParentIRow = Item.Parent();
 
 		Directory().Exclusion = Item.Dir.Exclusion();
 		Directory().Timestamp = Item.Dir.Timestamp();
 
-		IToD.Store( Tree.Directories.Append( Directory ), IRow );
+		IToD.Store( Kernel.Directories.Append( Directory ), IRow );
 
 		if ( ParentIRow != qNIL ) {
 			drows_ *DRows = Dirs( ParentIRow );

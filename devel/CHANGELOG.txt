@@ -13,7 +13,7 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2015-12-09 :
-- SCLARGMNT, SCLMISC, SCLTOOL :
+- SCLARGMNT, SCLBACKND, SCLMISC, SCLTOOL :
 	- Adaptation to changes in 'SCLRGSTRY'.
 - SCLRGSTRY :
 	* Adding 'Debug' entry.
