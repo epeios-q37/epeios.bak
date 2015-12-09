@@ -40,10 +40,7 @@ static sclerror::error___ SCLError_;
 
 bso::bool__ scltool::IgnoreUnknownArguments = false;
 
-static rgstry::entry___ &Parameters_ = sclrgstry::Parameters;
-
-static rgstry::entry___ RegistriesToDump_( "RegistriesToDump", Parameters_ );
-
+static rgstry::entry___ DebugDumpRegistries_( "DumpRegistries", sclrgstry::Debug );
 
 static inline bso::bool__ ReportSCLPendingError_( void )
 {
@@ -86,36 +83,15 @@ namespace {
 }
 
 namespace {
-	void DumpRegistries_( txf::text_oflow__ &Flow )
-	{
-	qRH
-		rgstry::row__ Row = qNIL;
-		rgstry::level__ Level = qNIL;
-	qRB
-		Flow << txf::tab << "----- Configuration registry -----" << txf::nl;
-		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryConfigurationLevel(), qNIL, true, xml::oIndent, xml::e_Default, Flow );
-		Flow << txf::tab << "----- Project registry -----" << txf::nl;
-		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryProjectLevel(), qNIL, true, xml::oIndent, xml::e_Default, Flow );
-		Flow << txf::tab << "----- Setup registry -----" << txf::nl;
-		sclmisc::GetRegistry().Dump( sclmisc::GetRegistrySetupLevel(), qNIL, true, xml::oIndent, xml::e_Default, Flow );
-		Flow << txf::tab << "----- Arguments registry -----" << txf::nl;
-		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryArgumentsLevel(), qNIL, true, xml::oIndent, xml::e_Default, Flow );
-
-		Flow << txf::nl << txf::commit;
-	qRR
-	qRT
-	qRE
-	}
-
 	void DumpRegistriesIfRequired_( void )
 	{
 	qRH
-		str::string DumpRegistries;
+		str::string Registries;
 	qRB
-		DumpRegistries.Init();
+		Registries.Init();
 
-		if ( sclmisc::BGetValue( RegistriesToDump_, DumpRegistries ) )
-			DumpRegistries_( cio::COut );
+		if ( sclmisc::BGetValue( DebugDumpRegistries_, Registries ) )
+			sclmisc::DumpRegistries( Registries, cio::COut );
 	qRR
 	qRT
 	qRE

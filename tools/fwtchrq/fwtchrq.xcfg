@@ -17,7 +17,7 @@
 				<Suffix>sfx</Suffix>
 			</Ghosts>
 		</Parameters>
-		<Definitions>-
+		<Definitions>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>

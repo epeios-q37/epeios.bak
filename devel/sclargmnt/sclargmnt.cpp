@@ -1432,7 +1432,7 @@ qRH
 	str::string EntryPath;
 qRB
 	EntryPath.Init();
-	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetArgumentsLevel() );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetLevel( sclrgstry::nArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
 
 	Ids.Init();
 	GetValues( ArgumentId_, Ids );

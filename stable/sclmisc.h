@@ -179,19 +179,19 @@ namespace sclmisc {
 
 	sclrgstry::registry_ &GetRegistry( void );
 
-	rgstry::level__ GetRegistryConfigurationLevel( void );
-	rgstry::level__ GetRegistryProjectLevel( void );
-	rgstry::level__ GetRegistrySetupLevel( void );
-	rgstry::level__ GetRegistryArgumentsLevel( void );
+	inline rgstry::level__ GetRegistryLevel( sclrgstry::name__ Name )
+	{
+		return sclrgstry::GetLevel( Name );
+	}
 
 	inline void FillSetupRegistry( const str::string_ &Id )
 	{
-		sclrgstry::FillSetupRegistry( sclrgstry::GetCommonRegistry(), sclrgstry::GetSetupLevel(), Id );
+		sclrgstry::FillWithSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ), Id );
 	}
 
 	inline void FillSetupRegistry( void )
 	{
-		sclrgstry::FillSetupRegistry( sclrgstry::GetCommonRegistry(), sclrgstry::GetSetupLevel() );
+		sclrgstry::FillWithSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ) );
 	}
 
 	inline void AddValue(
@@ -369,6 +369,10 @@ namespace sclmisc {
 		txf::text_oflow__ &Init( const fnm::name___ &FileName );
 		void HandleError( void );	// A appeler  partir de 'qRR'.
 	};
+
+	void DumpRegistries(
+		const str::string_ &RawList,
+		txf::text_oflow__ &Flow );
 
 	// Façon standard de récupèrer un plugin.
 	const str::string_ &GetPluginFeatures(

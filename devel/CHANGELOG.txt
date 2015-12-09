@@ -12,7 +12,15 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
-2015-08-12 :
+2015-12-09 :
+- SCLARGMNT, SCLMISC, SCLTOOL :
+	- Adaptation to changes in 'SCLRGSTRY'.
+- SCLRGSTRY :
+	* Adding 'Debug' entry.
+	% Introducing 'name__'.
+	% 'FillSetupRegistry(...)' -> 'FillWithSetup(...)'.
+
+2015-12-08 :
 - BSO, TOL :
 	# Conversion from string to number are now more complete.
 - IAS :	

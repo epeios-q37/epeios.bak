@@ -45,6 +45,7 @@ rgstry::entry___ sclrgstry::Parameters( ParametersTag );
 rgstry::entry___ sclrgstry::Definitions( "Definitions" );
 rgstry::entry___ sclrgstry::Locale( "Locale" );
 rgstry::entry___ sclrgstry::Arguments( "Arguments" );
+rgstry::entry___ sclrgstry::Debug( "Debug", Parameters );
 
 rgstry::entry___ sclrgstry::parameter::Language( "Language", Parameters );
 
@@ -96,25 +97,46 @@ registry_ &sclrgstry::GetCommonRegistry( void )
 	return Registry_;
 }
 
-rgstry::level__ sclrgstry::GetConfigurationLevel( void )
+#define C( name )	case n##name : return #name; break
+ 
+const char *sclrgstry::GetLabel( name__ Name )
 {
-	return ConfigurationLevel_;
+	switch ( Name ) {
+	C( Configuration );
+	C( Project );
+	C( Setup );
+	C( Arguments );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+ 
+#undef C
+
+#define C( name )\
+case n##name:\
+	return name##Level_;\
+	break
+
+rgstry::level__ sclrgstry::GetLevel( name__ Name )
+{
+	switch ( Name ) {
+	C( Configuration );
+	C( Project );
+	C( Setup );
+	C( Arguments );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return rgstry::UndefinedLevel;	// To avoid a warning.
 }
 
-rgstry::level__ sclrgstry::GetProjectLevel( void )
-{
-	return ProjectLevel_;
-}
-
-rgstry::level__ sclrgstry::GetSetupLevel( void )
-{
-	return SetupLevel_;
-}
-
-rgstry::level__ sclrgstry::GetArgumentsLevel( void )
-{
-	return ArgumentsLevel_;
-}
+#undef C
 
 const char *sclrgstry::GetLanguage_(
 	const registry_ &Registry,
@@ -229,8 +251,6 @@ qRT
 qRE
 }
 
-
-
 void sclrgstry::LoadProject(
 	flw::iflow__ &Flow,
 	const char *Target,
@@ -291,9 +311,9 @@ qRE
 	return Content;
 }
 
-void sclrgstry::FillSetupRegistry(
+void sclrgstry::FillWithSetup(
 	registry_ &Registry,
-	level__ Level,
+	rgstry::level__ Level,
 	const str::string_ &Id )
 {
 qRH
@@ -326,9 +346,9 @@ qRT
 qRE
 }
 
-void sclrgstry::FillSetupRegistry(
+void sclrgstry::FillWithSetup(
 	registry_ &Registry,
-	level__ Level )
+	rgstry::level__ Level )
 {
 qRH
 	str::string Id;
@@ -336,7 +356,7 @@ qRB
 	Id.Init();
 
 	if ( OGetValue( Registry_, Setup_, Id ) )
-		FillSetupRegistry( Registry, Level, Id );
+		FillWithSetup( Registry, Level, Id );
 qRR
 qRT
 qRE

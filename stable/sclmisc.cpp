@@ -298,7 +298,7 @@ qRB
 
 	RefreshBaseLanguage();
 
-	LoadLocale_( sclrgstry::GetConfigurationLevel(), scllocale::tConfiguration, RegistryFlow.Format() );
+	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nConfiguration ), scllocale::tConfiguration, RegistryFlow.Format() );
 qRR
 qRT
 qRE
@@ -512,7 +512,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tProject, utf::f_Default );
+	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject, utf::f_Default );
 }
 
 void sclmisc::LoadProject(
@@ -521,7 +521,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetProjectLevel(), scllocale::tProject, utf::f_Default );
+	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject, utf::f_Default );
 }
 
 static void LoadProject_( const str::string_ &FileName )
@@ -765,26 +765,6 @@ sclrgstry::registry_ &sclmisc::GetRegistry( void )
 	return sclrgstry::GetCommonRegistry();
 }
 
-rgstry::level__ sclmisc::GetRegistryConfigurationLevel( void )
-{
-	return sclrgstry::GetConfigurationLevel();
-}
-
-rgstry::level__ sclmisc::GetRegistryProjectLevel( void )
-{
-	return sclrgstry::GetProjectLevel();
-}
-
-rgstry::level__ sclmisc::GetRegistrySetupLevel( void )
-{
-	return sclrgstry::GetSetupLevel();
-}
-
-rgstry::level__ sclmisc::GetRegistryArgumentsLevel( void )
-{
-	return sclrgstry::GetArgumentsLevel();
-}
-
 txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileName )
 {
 	_FileName.Init( FileName );
@@ -803,6 +783,48 @@ txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileNa
 
 		return _TFlow;
 	}
+}
+
+namespace {
+	void Dump(
+		sclrgstry::name__ Name,
+		txf::text_oflow__ &Flow	)
+	{
+		Flow << txf::tab << "----- " << sclrgstry::GetLabel( Name ) << " registry -----" << txf::nl;
+		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryLevel( Name ), qNIL, true, xml::oIndent, xml::e_Default, Flow );
+	}
+}
+
+#define T( c, name )\
+	if ( All || ( List.Search( c ) != qNIL ) )\
+		Dump( sclrgstry::n##name, Flow )
+
+
+void sclmisc::DumpRegistries(
+	const str::string_ &RawList,
+	txf::text_oflow__ &Flow )
+{
+qRH
+	bso::bool__ All = false;
+	str::string List;
+	rgstry::row__ Row = qNIL;
+	rgstry::level__ Level = qNIL;
+qRB
+	List.Init( RawList );
+	List.StripCharacter(' ');
+
+	str::ToLower( List );
+
+	if ( List.Amount() == 0 )
+		All = true;
+
+	T( 'c', Configuration );
+	T( 'p', Project );
+	T( 's', Setup );
+	T( 'a', Arguments );
+qRR
+qRT
+qRE
 }
 
 void sclmisc::text_oflow_rack___::HandleError( void )

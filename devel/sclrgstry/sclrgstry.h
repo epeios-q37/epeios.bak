@@ -34,7 +34,6 @@
 # include "rgstry.h"
 
 namespace sclrgstry {
-	using rgstry::level__;
 
 	using rgstry::tags_;
 	using rgstry::tags;
@@ -49,15 +48,24 @@ namespace sclrgstry {
 
 	registry_ &GetCommonRegistry( void );
 
-	rgstry::level__ GetConfigurationLevel( void );
-	rgstry::level__ GetProjectLevel( void );
-	rgstry::level__ GetSetupLevel( void );
-	rgstry::level__ GetArgumentsLevel( void );
+	E_ENUM( name ) {
+		nConfiguration,
+		nProject,
+		nSetup,
+		nArguments,
+		n_amount,
+		n_Undefined
+	};
+
+	const char *GetLabel( name__ Name );
+
+	rgstry::level__ GetLevel( name__ Name );
 
 	extern rgstry::entry___ Parameters;
 	extern rgstry::entry___ Definitions;
 	extern rgstry::entry___ Locale;
 	extern rgstry::entry___ Arguments;
+	extern rgstry::entry___ Debug;
 
 	namespace parameter {
 		extern rgstry::entry___ Language;
@@ -120,14 +128,14 @@ namespace sclrgstry {
 
 	void EraseSetupRegistry( void );
 
-	void FillSetupRegistry(
+	void FillWithSetup(
 		registry_ &Registry,
-		level__ Level,
+		rgstry::level__ Level,
 		const str::string_ &Id );
 
-	void FillSetupRegistry(
+	void FillWithSetup(
 		registry_ &Registry,
-		level__ Level );	// Fill the setup registry if one is given.
+		rgstry::level__ Level );	// Fill the setup registry if one is given.
 
 	void ReportIfNoSetupId( void );
 
