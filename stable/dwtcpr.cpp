@@ -269,9 +269,9 @@ qRE
 
 static inline bso::bool__ Compare_(
 	dwtftr::drow__ SRow,
-	const dwtftr::file_tree_ &Source,
+	const dwtftr::kernel_ &Source,
 	dwtftr::drow__ TRow,
-	const dwtftr::file_tree_ &Target,
+	const dwtftr::kernel_ &Target,
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
@@ -419,9 +419,9 @@ qRE
 
 static bso::bool__ inline Compare_(
 	dwtftr::drow__ SRow,
-	const dwtftr::file_tree_ &Source,
+	const dwtftr::kernel_ &Source,
 	dwtftr::drow__ TRow,
-	const dwtftr::file_tree_ &Target,
+	const dwtftr::kernel_ &Target,
 	frows_ &Rows,
 	files_ &Files,
 	names_ &Names )
@@ -497,7 +497,7 @@ qRE
 static void Put_(
 	drow__ Parent,
 	dwtftr::drow__ Row,
-	const dwtftr::file_tree_ &Tree,
+	const dwtftr::kernel_ &Kernel,
 	frows_ &FRows,
 	files_ &Files,
 	drows_ &DRows,
@@ -508,18 +508,16 @@ static void Put_(
 
 	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) Dir;
 
-	Dir.Init( Tree.Directories );
+	Dir.Init( Kernel.Directories );
 
-	Put_( Parent, Dir( Row ).Dirs, Tree.Directories, Tree.Names, DRows, Directories, Names, Links );
-	Complete_( Dir( Row ).Files.First(), Dir( Row ).Files, Tree.Files, Tree.Names, sCreated, FRows, Files, Names );
+	Put_( Parent, Dir( Row ).Dirs, Kernel.Directories, Kernel.Names, DRows, Directories, Names, Links );
+	Complete_( Dir( Row ).Files.First(), Dir( Row ).Files, Kernel.Files, Kernel.Names, sCreated, FRows, Files, Names );
 }
 
 
 drow__ dwtcpr::Compare(
-	const dwtftr::file_tree_ &Source,
-	dwtftr::drow__ SourceRoot,
-	const dwtftr::file_tree_ &Target,
-	dwtftr::drow__ TargetRoot,
+	const dwtftr::kernel_ &Source,
+	const dwtftr::kernel_ &Target,
 	scene_ &Scene,
 	comparison_observer__ &Observer )
 {
@@ -545,8 +543,8 @@ qRB
 
 	Observer.Report( 0, Handled );
 
-	Modified = Compare_( SourceRoot, Source, TargetRoot, Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
-	Modified |= Compare_( SourceRoot, Source, TargetRoot, Target, Dir.Files, Scene.Files, Scene.Names );
+	Modified = Compare_( Source.Directories.First(), Source, Target.Directories.First(), Target, Dir.Dirs, Scene.Directories, Scene.Names, Links );
+	Modified |= Compare_( Source.Directories.First(), Source, Target.Directories.First(), Target, Dir.Files, Scene.Files, Scene.Names );
 
 	Scene.Directories.Store( Dir, Root );
 	Scene.Allocate( Scene.Directories.Amount() );

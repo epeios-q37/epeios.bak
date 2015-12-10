@@ -69,6 +69,7 @@ qRH
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::content Content;
+	dwtftr::i2d Dummy;
 qRB
 	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
 
@@ -88,7 +89,8 @@ qRB
 	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
 
 	Tree.Init();
-	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
+	Dummy.Init();
+	Root = dwtftr::Process( Content, Tree, Dummy, ProcessingObserver );
 
 	misc::Dump( Root, Tree, OutputFilename );
 #if 0
@@ -306,6 +308,7 @@ qRH
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::content Content;
+	dwtftr::
 qRB
 	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
 

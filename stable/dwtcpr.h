@@ -286,10 +286,8 @@ namespace dwtcpr {
 	E_AUTO( scene );
 
 	drow__ Compare(
-		const dwtftr::file_tree_ &Source,
-		dwtftr::drow__ SourceRoot,
-		const dwtftr::file_tree_ &Target,
-		dwtftr::drow__ TargetRoot,
+		const dwtftr::kernel_ &Source,
+		const dwtftr::kernel_ &Target,
 		scene_ &Scene,
 		comparison_observer__ &Observer );
 

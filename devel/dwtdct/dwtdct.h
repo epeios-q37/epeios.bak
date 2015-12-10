@@ -677,6 +677,11 @@ namespace dwtdct {
 		const dwtbsc::ghosts_oddities_ &GO,
 		ghost2files_rack___ &Rack );
 
+	void Fill(
+		const content_ &Content,
+		const ghost2files_ &G2F,
+		kernel_ &Kernel );
+
 }
 
 #endif

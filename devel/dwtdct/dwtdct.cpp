@@ -1427,6 +1427,90 @@ qRE
 	return Rack.G2F;
 }
 
+namespace {
+
+	void Fill_(
+		const frows_ &FRows,
+		const files_data_ &Files,
+		directory_ &Directory,
+		kernel_ &Kernel )
+	{
+		ctn::E_CMITEMt( str::string_, frow__ ) Name;
+		file__ File;
+		frow__ FRow = qNIL;
+		sdr::row__ Row = FRows.First();
+
+		Name.Init( Files.Names );
+
+		while ( Row != qNIL ) {
+			FRow = FRows( Row );
+
+			File.Init();
+			File.Name = Kernel.Names.Append( Name( FRow ) );
+			File.Exclusion = Files.Exclusions( FRow );
+			File.Size = Files.Sizes( FRow );
+			File.Timestamp = Files.Timestamps( FRow );
+
+			Directory.Files.Append( Kernel.Files.Append( File ) );
+
+			Row = FRows.Next( Row );
+		}
+	}
+
+	void Fill_(
+		grow__ GRow,
+		const ghost2files_ &G2F,
+		directory_ &Directory,
+		kernel_ &Kernel )
+	{
+		ctn::E_CMITEMt( frows_, grow__ ) FRows;
+
+		FRows.Init( G2F.GFRows );
+
+		Fill_(FRows( GRow ), G2F.Files, Directory, Kernel );
+	}
+
+	void Fill_(
+		const item_ &Item,
+		const ghost2files_ &G2F,
+		kernel_ &Kernel )
+	{
+	qRH
+		directory Directory;
+	qRB
+		Directory.Init();
+
+		Fill_( Item.Dir.GetGhostRow(), G2F, Directory, Kernel );
+
+		Kernel.Directories.Append( Directory );
+	qRR
+	qRT
+	qRE
+
+	}
+}
+
+void dwtdct::Fill(
+	const content_ &Content,
+	const ghost2files_ &G2F,
+	kernel_ &Kernel )
+{
+	irow__ Row = Content.First();
+	item_ *Item = NULL;
+
+	while ( Row != qNIL ) {
+		Item = Content( Row );
+
+		if ( Item == NULL )
+			qRFwk();
+
+		Fill_( *Item, G2F, Kernel );
+
+		Row = Content.Next( Row );
+	}
+
+}
+
 
 
 

@@ -234,17 +234,13 @@ qRT
 qRE
 }
 
-typedef bch::E_BUNCHt_( drow__, irow__ ) itod_;
-E_AUTO( itod );
-
-
 typedef bch::E_BUNCHt_( drows_ *, irow__ ) drows_set_;
 E_AUTO( drows_set );
 
 static void Organize_(
 	const items_ &Items,
 	kernel_ &Kernel,
-	itod_ &IToD,
+	i2d_ &I2D,
 	drows_set_ &Dirs,
 	processing_observer__ &Observer )
 {
@@ -253,8 +249,8 @@ qRH
 	dwtght::grow__ GRow = qNIL;
 	directory Directory;
 qRB
-	IToD.Allocate( Items.Amount() );
-	IToD.FillWith( qNIL );
+	I2D.Allocate( Items.Amount() );
+	I2D.FillWith( qNIL );
 
 	Dirs.Allocate( Items.Amount() );
 	Dirs.FillWith( NULL );
@@ -280,7 +276,7 @@ qRB
 		Directory().Exclusion = Item.Dir.Exclusion();
 		Directory().Timestamp = Item.Dir.Timestamp();
 
-		IToD.Store( Kernel.Directories.Append( Directory ), IRow );
+		I2D.Store( Kernel.Directories.Append( Directory ), IRow );
 
 		if ( ParentIRow != qNIL ) {
 			drows_ *DRows = Dirs( ParentIRow );
@@ -294,7 +290,7 @@ qRB
 				Dirs.Store( DRows, ParentIRow );
 			}
 
-			DRows->Append( IToD( IRow ) );
+			DRows->Append( I2D( IRow ) );
 		}
 
 		if ( Observer.IsElapsed() )
@@ -312,7 +308,7 @@ qRE
 static void Attach_(
 	drow__ ParentRow,
 	const drows_ &Rows,
-	file_tree_ &Tree )
+	dtree_ &Tree )
 {
 	sdr::row__ Row = Rows.First();
 
@@ -325,7 +321,7 @@ static void Attach_(
 
 static drow__ Attach_(
 	drows_set_ &Dirs,	// No 'const', because we delete also the content.
-	const itod_ &IToD,
+	const i2d_ &I2D,
 	file_tree_ &Tree )
 {
 	drow__ Root = qNIL;
@@ -336,7 +332,7 @@ qRB
 	Row = Dirs.First();
 
 	if ( Row != qNIL )
-		Root = IToD( Row );
+		Root = I2D( Row );
 
 	while ( Row != qNIL ) {
 		Rows.Init();
@@ -347,9 +343,9 @@ qRB
 			Dirs.Store( NULL, Row );
 		}
 
-		Tree.Directories( IToD( Row ) ).Dirs = Rows;
+		Tree.Directories( I2D( Row ) ).Dirs = Rows;
 
-		Attach_( IToD( Row ), Rows, Tree );
+		Attach_( I2D( Row ), Rows, Tree );
 
 		Tree.Directories.Flush();
 
@@ -380,25 +376,53 @@ static void Delete_( drows_set_ &Dirs )
 drow__ dwtftr::Process(
 	const dwtdct::content_ &Content,
 	file_tree_ &Tree,
+	i2d_ &I2D,
 	processing_observer__ &Observer )
 {
 	drow__ Root = qNIL;
 qRH
 	drows_set Dirs;
-	itod IToD;
 qRB
 	Tree.Allocate( Content.Amount() );
 
-	IToD.Init();
+	I2D.Init();
 	Dirs.Init();
-	Organize_( Content, Tree, IToD, Dirs, Observer );
+	Organize_( Content, Tree, I2D, Dirs, Observer );
 
-	Root =  Attach_( Dirs, IToD, Tree );
+	Root =  Attach_( Dirs, I2D, Tree );
 qRR
 	Delete_( Dirs );
 qRT
 qRE
 	return Root;
+}
+
+void dwtftr::Fill(
+	const i2d_ &I2D,
+	const dwtdct::content_ &Content,
+	d2g_ &D2G )
+{
+	dwtdct::item_ *Item = NULL;
+	drow__ DRow = qNIL;
+	irow__ Row = I2D.First();
+
+	D2G.Init();
+	D2G.Allocate( Content.Amount() );
+	D2G.FillWith( qNIL );
+
+	while ( Row != qNIL ) {
+		Item = Content( Row );
+
+		if ( Item == NULL )
+			qRFwk();
+
+		DRow = I2D( Row );
+
+		if ( DRow != qNIL )
+			D2G.Store( Item->Dir.GetGhostRow(), DRow );
+
+		Row = I2D.Next( Row );
+	}
 }
 
 enum tag__
@@ -1162,12 +1186,19 @@ qRE
 }
 
 void dwtftr::Sort(
+	kernel_ &Kernel,
+	dwtbsc::sort_type__ SortType )
+{
+	Sort_( Kernel.Directories, Kernel, SortType );
+}
+
+void dwtftr::Sort(
 	drow__ Root,
 	file_tree_ &Tree,
 	dwtbsc::sort_type__ SortType )
 {
 	if ( Root != qNIL ) {
-		Sort_( Tree.Directories, Tree, SortType );
+		Sort( Tree, SortType );
 
 		Reorganize_( Tree, Root );
 	}
@@ -1180,7 +1211,8 @@ typedef bso::uint__ depth__;
 drow__ dwtftr::Load(
 	xml::parser___ &Parser,
 	version__ Version,
-	file_tree_ &Tree,
+	kernel_ &Kernel,
+	dtree_ &Tree,
 	load_observer__ &Observer )
 {
 	drow__ Root = qNIL;
@@ -1218,8 +1250,8 @@ qRB
 			switch ( GetTag_( Parser.TagName(), TagAutomat ) ) {
 			case tDirs:
 				Kind = kDirs;
-				Tree.Directories( Current ) = Dir;
-				Tree.Directories.Flush();
+				Kernel.Directories( Current ) = Dir;
+				Kernel.Directories.Flush();
 
 				break;
 			case tFiles:
@@ -1231,15 +1263,15 @@ qRB
 			case tDir:
 				Kind = kDir;
 
-				Tree.Directories.Flush();
-				New = Tree.Directories.New();
+				Kernel.Directories.Flush();
+				New = Kernel.Directories.New();
 
 				Dir.Init();
 
-				Tree.dtree_::Allocate( Tree.Directories.Amount() );
+				Tree.dtree_::Allocate( Kernel.Directories.Amount() );
 
 				if ( Current != qNIL ) {
-					Tree.Directories( Current ).Dirs.Append( New );
+					Kernel.Directories( Current ).Dirs.Append( New );
 					Tree.BecomeLastChild( New, Current );
 				} else
 					Root = New;
@@ -1292,7 +1324,7 @@ qRB
 					qRGnr();
 					break;
 				case kGoof:
-					Goof.Oddity = Tree.Oddities.Append( Parser.Value() );
+					Goof.Oddity = Kernel.Oddities.Append( Parser.Value() );
 					break;
 				default:
 					qRGnr();
@@ -1365,13 +1397,13 @@ qRB
 			case aName:
 				switch ( Kind ) {
 				case kDir:
-					Dir().Name = Tree.Names.Append( Parser.Value() );
+					Dir().Name = Kernel.Names.Append( Parser.Value() );
 					break;
 				case kFile:
-					File.Name = Tree.Names.Append( Parser.Value() );
+					File.Name = Kernel.Names.Append( Parser.Value() );
 					break;
 				case kGoof:
-					Goof.Name =  Tree.Names.Append( Parser.Value() );
+					Goof.Name =  Kernel.Names.Append( Parser.Value() );
 					break;
 				default:
 					qRGnr();
@@ -1394,8 +1426,8 @@ qRB
 
 			switch ( GetTag_( Parser.TagName(), TagAutomat ) ) {
 			case tDirs:
-				Dir = Tree.Directories( Current );
-				Tree.Directories.Flush();
+				Dir = Kernel.Directories( Current );
+				Kernel.Directories.Flush();
 				break;
 			case tDir:
 				Kind = k_Undefined;
@@ -1406,9 +1438,9 @@ qRB
 				if ( SortType != stNone )
 					Sort_( Dir, Tree, SortType );
 					*/
-				Tree.Directories( Current ) = Dir;
+				Kernel.Directories( Current ) = Dir;
 				Handled++;
-				Tree.Directories.Flush();
+				Kernel.Directories.Flush();
 
 				if ( Current == Root )
 					Continue = false;
@@ -1424,13 +1456,13 @@ qRB
 				if ( File.Exclusion == x_Undefined )
 					File.Exclusion = xNo;
 
-				Dir.Files.Append( Tree.Files.Append( File ) );
+				Dir.Files.Append( Kernel.Files.Append( File ) );
 
 				break;
 			case tGoof:
 				Kind = k_Undefined;
 
-				Dir.Goofs.Append( Tree.Goofs.Append( Goof ) );
+				Dir.Goofs.Append( Kernel.Goofs.Append( Goof ) );
 
 				break;
 			default:

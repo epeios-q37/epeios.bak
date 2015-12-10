@@ -154,6 +154,40 @@ namespace dwtmov {
 	typedef bch::E_BUNCH_( mrow__ ) mrows_;
 	E_AUTO( mrows );
 
+	class callback__
+	{
+	protected:
+		virtual bso::bool__ DWTMOVCreate( const str::string_ &Path ) = 0;
+		virtual bso::bool__ DWTMOVMove(
+			const str::string_ &OldPath,
+			const str::string_ &NewPath ) = 0;
+		virtual bso::bool__ DWTMOVDelete( const str::string_ &Path ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standadisation.
+		}
+		E_CVDTOR( callback__ );
+		void Init( void )
+		{
+			// Standardisation.
+		}
+		bso::bool__ Create( const str::string_ &Path )
+		{
+			return DWTMOVCreate( Path );
+		}
+		bso::bool__ Move(
+			const str::string_ &OldPath,
+			const str::string_ &NewPath )
+		{
+			return DWTMOVMove( OldPath, NewPath );
+		}
+		bso::bool__ Delete( const str::string_ &Path )
+		{
+			return DWTMOVDelete( Path );
+		}
+	};
+
 	bso::bool__ Apply(
 		const str::string_ &Path,
 		const movings_ &Movings,
