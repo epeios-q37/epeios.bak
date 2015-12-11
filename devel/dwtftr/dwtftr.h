@@ -193,22 +193,18 @@ namespace dwtftr {
 		const dwtbsc::ghosts_oddities_ &GO,
 		file_tree_rack___ &Rack );
 
-	typedef bch::E_BUNCHt_( drow__, dwtdct::irow__ ) i2d_;
-	E_AUTO( i2d );
-
 	typedef dwtbsc::observer__ processing_observer__;
 	
 	drow__ Process(
 		const dwtdct::content_ &Content,
 		file_tree_ &Tree,
-		i2d_ &I2D,
 		processing_observer__ &Observer );
 
 	typedef bch::E_BUNCHt_( grow__, drow__ ) d2g_;
 	E_AUTO( d2g );
 
 	void Fill(
-		const i2d_ &I2D,
+		const dwtdct::i2d_ &I2D,
 		const dwtdct::content_ &Content,
 		d2g_ &D2G );
 

@@ -16,6 +16,10 @@
 			<Translation language="fr">Analyse : %1/%3 (%4 d/s)</Translation>
 			<Translation language="en">Processing: %1/%3 (%4 d/s)</Translation>
 		</Translations>
+		<Translations text="ComparisonMessage">
+			<Translation language="fr">Comparaison : %1+%2 (%4 d/s)</Translation>
+			<Translation language="en">Comparison : %1+%2 (%4 d/s)</Translation>
+		</Translations>
 		<Translations text="UpdateMessage">
 			<Translation language="fr">Mise à jour : %1/%2, %3 d/s; C: %4, A: %5, I: %6, E: %7; G: %8, P: %9</Translation>
 			<Translation language="en">Updating : %1/%2, %3 d/s; C: %4, U: %5, S: %6, F: %7, I: %8, E: %9</Translation>

@@ -44,6 +44,9 @@ namespace dwtdct {
 
 	qROW( irow__ );
 
+	typedef bch::E_BUNCHt_( drow__, irow__ ) i2d_;
+	E_AUTO( i2d );
+
 	typedef bch::E_BUNCHt_( exclusion__, frow__ ) fexclusions_;
 	E_AUTO( fexclusions );
 

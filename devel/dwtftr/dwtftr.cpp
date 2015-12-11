@@ -376,12 +376,12 @@ static void Delete_( drows_set_ &Dirs )
 drow__ dwtftr::Process(
 	const dwtdct::content_ &Content,
 	file_tree_ &Tree,
-	i2d_ &I2D,
 	processing_observer__ &Observer )
 {
 	drow__ Root = qNIL;
 qRH
 	drows_set Dirs;
+	i2d I2D;
 qRB
 	Tree.Allocate( Content.Amount() );
 

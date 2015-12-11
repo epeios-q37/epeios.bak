@@ -84,6 +84,8 @@ namespace misc {
 
 	void Dump(
 		const dwtmov::movings_ &Movings,
+		dwtcpr::drow__ SceneRoot,
+		const dwtcpr::scene_ &Scene,
 		const fnm::name___ &Filename );
 }
 

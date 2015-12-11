@@ -272,7 +272,7 @@ namespace str {
 			type PositiveLimit = positive_limit,\
 			type NegativeLimit = negative_limit ) const\
 		{\
-			return (type)_S##Conversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
+			return (type)_SConversion( *this, Begin, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}\
 		type To##name(\
 			sdr::row__ *ErrP = NULL,\
@@ -282,12 +282,12 @@ namespace str {
 		{\
 			return To##name( 0, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}
-#define STR_TSN( type, positive_limit, negative_limit )\
+#define STR_TSN( type, negative_limit, positive_limit )\
 		void ToNumber(\
 			type &Number,\
 			sdr::row__ *Error = NULL ) const\
 		{\
-			Number = (type)_S##Conversion( *this, 0, Error, bAuto, positive_limit, negative_limit );\
+			Number = (type)_SConversion( *this, 0, Error, bAuto, positive_limit, negative_limit );\
 		}\
 		void ToNumber(\
 			type &Number,\
@@ -295,7 +295,7 @@ namespace str {
 			type NegativeLimit,\
 			sdr::row__ *Error = NULL ) const\
 		{\
-			Number = (type)_S##Conversion( *this, 0, Error, bAuto, PositiveLimit, NegativeLimit );\
+			Number = (type)_SConversion( *this, 0, Error, bAuto, PositiveLimit, NegativeLimit );\
 		}
 		STR_UN( Row, sdr::row_t__, SDR_ROW_T_MAX )
 		STR_UN( UInt, bso::uint__, BSO_UINT_MAX )

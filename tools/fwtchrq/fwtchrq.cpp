@@ -40,6 +40,7 @@ E_CDEF( char *, ExplorationMessage_, "ExplorationMessage" );
 E_CDEF( char *, ProcessingMessage_, "ProcessingMessage" );
 E_CDEF( char *, UpdateMessage_, "UpdateMessage" );
 E_CDEF( char *, GhostsSettingMessage_, "GhostsSettingMessage" );
+E_CDEF( char *, ComparisonMessage_, "ComparisonMessage" );
 
 
 E_CDEF( tol::delay__, Delay_, 700 );
@@ -69,7 +70,6 @@ qRH
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::content Content;
-	dwtftr::i2d Dummy;
 qRB
 	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
 
@@ -89,8 +89,7 @@ qRB
 	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
 
 	Tree.Init();
-	Dummy.Init();
-	Root = dwtftr::Process( Content, Tree, Dummy, ProcessingObserver );
+	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
 
 	misc::Dump( Root, Tree, OutputFilename );
 #if 0
@@ -300,15 +299,19 @@ static void Compare_(
 {
 qRH
 	bso::uint__ ThreadAmountMax = 0;
-	dwtftr::file_tree Tree;
+	dwtftr::file_tree New;
 	dwtmov::movings Movings;
-	dwtftr::drow__ Root = qNIL;
 	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
 	dwtxcl::excluder Excluder;
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::content Content;
-	dwtftr::
+	dwtdct::kernel Old;
+	dwtdct::ghost2files_rack___ G2FRack;
+	dwtcpr::scene Scene;
+	dwtcpr::comparison_basic_observer___ ComparisonObserver;
+	str::string ComparisonMessage;
+	dwtcpr::drow__ SceneRoot = qNIL;
 qRB
 	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
 
@@ -327,13 +330,27 @@ qRB
 	Content.Init();
 	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
 
-	Tree.Init();
-	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
+	New.Init();
+	dwtftr::Process( Content, New, ProcessingObserver );
+
+	dwtftr::Sort( New, dwtbsc::st_Default );
 
 	Movings.Init();
 	dwtmov::Explore( Path, Content, GO, Movings );
 
-	misc::Dump( Movings, OutputFilename);
+	G2FRack.Init();
+	Old.Init();
+	dwtdct::Fill( Content, dwtdct::GetROG2F( Path, GO, G2FRack ), Old );
+
+	dwtftr::Sort( Old, dwtbsc::st_Default );
+
+	Scene.Init();
+	ComparisonMessage.Init();
+	sclmisc::GetBaseTranslation( ComparisonMessage_, ComparisonMessage );
+	ComparisonObserver.Init( ComparisonMessage, COut, 750 );
+	SceneRoot = dwtcpr::Compare( New, Old, Scene, ComparisonObserver );
+
+	misc::Dump( Movings, SceneRoot, Scene, OutputFilename);
 qRR
 qRT
 qRE

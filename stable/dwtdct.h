@@ -44,6 +44,9 @@ namespace dwtdct {
 
 	qROW( irow__ );
 
+	typedef bch::E_BUNCHt_( drow__, irow__ ) i2d_;
+	E_AUTO( i2d );
+
 	typedef bch::E_BUNCHt_( exclusion__, frow__ ) fexclusions_;
 	E_AUTO( fexclusions );
 
@@ -676,6 +679,11 @@ namespace dwtdct {
 		const str::string_ &Root,
 		const dwtbsc::ghosts_oddities_ &GO,
 		ghost2files_rack___ &Rack );
+
+	void Fill(
+		const content_ &Content,
+		const ghost2files_ &G2F,
+		kernel_ &Kernel );
 
 }
 

@@ -108,6 +108,8 @@ qRE
 
 void misc::Dump(
 	const dwtmov::movings_ &Movings,
+	dwtcpr::drow__ SceneRoot,
+	const dwtcpr::scene_ &Scene,
 	const fnm::name___ &Filename )
 {
 qRH
@@ -121,6 +123,12 @@ qRB
 	Writer.PushTag( "DirMovings" );
 
 	dwtmov::Dump( Movings, Writer );
+
+	Writer.PopTag();
+
+	Writer.PushTag( "Differences" );
+
+	dwtcpr::Dump( SceneRoot, Scene, Writer );
 
 	Writer.PopTag();
 

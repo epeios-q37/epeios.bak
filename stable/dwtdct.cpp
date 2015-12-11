@@ -1427,6 +1427,113 @@ qRE
 	return Rack.G2F;
 }
 
+namespace {
+	void Fill_(
+		const frows_ &FRows,
+		const files_data_ &Files,
+		directory_ &Directory,
+		kernel_ &Kernel )
+	{
+		ctn::E_CMITEMt( str::string_, frow__ ) Name;
+		file__ File;
+		frow__ FRow = qNIL;
+		sdr::row__ Row = FRows.First();
+
+		Name.Init( Files.Names );
+
+		while ( Row != qNIL ) {
+			FRow = FRows( Row );
+
+			File.Init();
+			File.Name = Kernel.Names.Append( Name( FRow ) );
+			File.Exclusion = Files.Exclusions( FRow );
+			File.Size = Files.Sizes( FRow );
+			File.Timestamp = Files.Timestamps( FRow );
+
+			Directory.Files.Append( Kernel.Files.Append( File ) );
+
+			Row = FRows.Next( Row );
+		}
+	}
+
+	void Fill_(
+		grow__ GRow,
+		const ghost2files_ &G2F,
+		directory_ &Directory,
+		kernel_ &Kernel )
+	{
+		if ( GRow != qNIL ) {
+			ctn::E_CMITEMt( frows_, grow__ ) FRows;
+
+			FRows.Init( G2F.GFRows );
+
+			Fill_(FRows( GRow ), G2F.Files, Directory, Kernel );
+		}
+	}
+
+	drow__ Fill_(
+		const item_ &Item,
+		const ghost2files_ &G2F,
+		kernel_ &Kernel )
+	{
+		drow__ Row = qNIL;
+	qRH
+		directory Directory;
+	qRB
+		Directory.Init();
+
+		Fill_( Item.Dir.GetGhostRow(), G2F, Directory, Kernel );
+
+		Directory().Exclusion = Item.Dir.Exclusion();
+		Directory().Timestamp = Item.Dir.Timestamp();
+		Directory().Name = Kernel.Names.Append( Item.Dir.Name );
+
+		Row = Kernel.Directories.Append( Directory );
+	qRR
+	qRT
+	qRE
+		return Row;
+	}
+}
+
+void dwtdct::Fill(
+	const content_ &Content,
+	const ghost2files_ &G2F,
+	kernel_ &Kernel )
+{
+qRH
+	irow__ Row = qNIL;
+	item_ *Item = NULL;
+	drow__ DRow = qNIL;
+	i2d I2D;
+qRB
+	I2D.Init();
+
+	Row = Content.First();
+
+	while ( Row != qNIL ) {
+		Item = Content( Row );
+
+		if ( Item == NULL )
+			qRFwk();
+
+		DRow = Fill_( *Item, G2F, Kernel );
+
+		if ( I2D.Append( DRow ) != Row )
+			qRFwk();
+
+		if ( Item->GetParent() != qNIL ) {
+			Kernel.Directories( I2D( Item->GetParent() ) ).Dirs.Append( DRow );
+			Kernel.Directories.Flush();
+		}
+
+		Row = Content.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
 
 
 

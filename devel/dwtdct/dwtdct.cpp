@@ -1428,7 +1428,6 @@ qRE
 }
 
 namespace {
-
 	void Fill_(
 		const frows_ &FRows,
 		const files_data_ &Files,
@@ -1463,18 +1462,21 @@ namespace {
 		directory_ &Directory,
 		kernel_ &Kernel )
 	{
-		ctn::E_CMITEMt( frows_, grow__ ) FRows;
+		if ( GRow != qNIL ) {
+			ctn::E_CMITEMt( frows_, grow__ ) FRows;
 
-		FRows.Init( G2F.GFRows );
+			FRows.Init( G2F.GFRows );
 
-		Fill_(FRows( GRow ), G2F.Files, Directory, Kernel );
+			Fill_(FRows( GRow ), G2F.Files, Directory, Kernel );
+		}
 	}
 
-	void Fill_(
+	drow__ Fill_(
 		const item_ &Item,
 		const ghost2files_ &G2F,
 		kernel_ &Kernel )
 	{
+		drow__ Row = qNIL;
 	qRH
 		directory Directory;
 	qRB
@@ -1482,11 +1484,15 @@ namespace {
 
 		Fill_( Item.Dir.GetGhostRow(), G2F, Directory, Kernel );
 
-		Kernel.Directories.Append( Directory );
+		Directory().Exclusion = Item.Dir.Exclusion();
+		Directory().Timestamp = Item.Dir.Timestamp();
+		Directory().Name = Kernel.Names.Append( Item.Dir.Name );
+
+		Row = Kernel.Directories.Append( Directory );
 	qRR
 	qRT
 	qRE
-
+		return Row;
 	}
 }
 
@@ -1495,8 +1501,15 @@ void dwtdct::Fill(
 	const ghost2files_ &G2F,
 	kernel_ &Kernel )
 {
-	irow__ Row = Content.First();
+qRH
+	irow__ Row = qNIL;
 	item_ *Item = NULL;
+	drow__ DRow = qNIL;
+	i2d I2D;
+qRB
+	I2D.Init();
+
+	Row = Content.First();
 
 	while ( Row != qNIL ) {
 		Item = Content( Row );
@@ -1504,11 +1517,21 @@ void dwtdct::Fill(
 		if ( Item == NULL )
 			qRFwk();
 
-		Fill_( *Item, G2F, Kernel );
+		DRow = Fill_( *Item, G2F, Kernel );
+
+		if ( I2D.Append( DRow ) != Row )
+			qRFwk();
+
+		if ( Item->GetParent() != qNIL ) {
+			Kernel.Directories( I2D( Item->GetParent() ) ).Dirs.Append( DRow );
+			Kernel.Directories.Flush();
+		}
 
 		Row = Content.Next( Row );
 	}
-
+qRR
+qRT
+qRE
 }
 
 
