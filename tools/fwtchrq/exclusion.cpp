@@ -57,11 +57,10 @@ qRH
 qRB
 	FileName.Init();
 
-	sclrgstry::MGetValue( Registry, registry::ExclusionsListFileName, FileName );
-
-	GetExclusionsTable_( FileName, Table );
-
-	Table.Purge( '#' );
+	if ( sclrgstry::OGetValue(Registry, registry::ExclusionsListFileName, FileName) ) {
+		GetExclusionsTable_( FileName, Table );
+		Table.Purge( '#' );
+	}
 qRR
 qRT
 qRE

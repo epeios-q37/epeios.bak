@@ -6,10 +6,9 @@
 		<xpp:expand href="../TOL.xcfg"/>
 		<Parameters>
 			<Language>en</Language>
-			<ThreadAmountMax>1000</ThreadAmountMax>
+			<ThreadAmountMax>100</ThreadAmountMax>
 			<Exclusions Handling="Regular">
-				<ListFileName>H:\hg\epeios\tools\fwtchrq\Exclusions.txt</ListFileName>
-				<FileSizeMax>1000000000</FileSizeMax>
+				<FileSizeMax>10000000000</FileSizeMax>
 				<NameLengthMax>9999</NameLengthMax>
 			</Exclusions>
 			<Ghosts>
@@ -24,20 +23,24 @@
 			<!-- Commands -->
 			<xpp:bloc>
 				<Translations message="BrowseCommandDescription">
-					<Translation language="fr">Génère en XML l'aborescence d'un chemin.</Translation>
-					<Translation language="en">Generate the directory tree of a path in XML.</Translation>
+					<Translation language="fr">Affiche l'aborescence d'un chemin.</Translation>
+					<Translation language="en">Generates the tree of a path.</Translation>
 				</Translations>
 				<Translations message="UpdateCommandDescription">
-					<Translation language="fr">Mets à jour données de détection des modifications.</Translation>
-					<Translation language="en">Updates the data for the modifications detection.</Translation>
-				</Translations>
-				<Translations message="ExporteTreeCommandDescription">
-					<Translation language="fr">Exporte l'image de l'arborescence des fichiers.</Translation>
-					<Translation language="en">Exports th .</Translation>
+					<Translation language="fr">Crée/met à jour données de détection des modifications.</Translation>
+					<Translation language="en">Creates/updates the data for the modifications detection.</Translation>
 				</Translations>
 				<Translations message="TestGhostsCommandDescription">
 					<Translation language="fr">Affiche les modifications sur les répertoires.</Translation>
 					<Translation language="en">Shows the modifications of the directories.</Translation>
+				</Translations>
+				<Translations message="CompareCommandDescription">
+					<Translation language="fr">Compare la version actuelle de l'arborescence avec celle stockée.</Translation>
+					<Translation language="en">Compares the current version of the tree with the stored one.</Translation>
+				</Translations>
+				<Translations message="DelGhostsCommandDescription">
+					<Translation language="fr">Supprime les données de détection des modifications.</Translation>
+					<Translation language="en">Deletes the data for the modifications detection.</Translation>
 				</Translations>
 			</xpp:bloc>
 			<!-- Flags -->
@@ -56,6 +59,10 @@
 				<Translations message="ThreadAmountMaxOptionLabel">
 					<Translation language="fr">max-thread</Translation>
 					<Translation language="en">max-thread</Translation>
+				</Translations>
+				<Translations message="ThreadAmountMaxOptionDescription">
+					<Translation language="fr">Nombre maximum de 'thread's.</Translation>
+					<Translation language="en">Maximum amount of threads.</Translation>
 				</Translations>
 			</xpp:bloc>
 			<!-- Arguments -->
@@ -83,9 +90,9 @@
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
 			<Argument id="BrowseCommand" Description="BrowseCommandDescription" long="browse" Value="Browse" Usage="[%ThreadAmountMaxOption%] [%ExclusionsKeepFlag%|%ExclusionsSkipFlag%] %PathArgument% [%OutputArgument%]"/>
 			<Argument id="UpdateCommand" Description="UpdateCommandDescription" long="update" Value="Update" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
-			<Argument id="ExportTreeCommand" Description="ExportTreeCommandDescription" long="export-tree" Value="ExportTree" Usage="%PathArgument% [%OutputArgument%]"/>
 			<Argument id="TestGhostsCommand" Description="TestGhostsCommandDescription" long="test-ghosts" Value="TestGhosts" Usage="[%ThreadAmountMaxOption%] %PathArgument% [%OutputArgument%]"/>
 			<Argument id="CompareCommand" Description="CompareCommandDescription" long="compare" Value="Compare" Usage="[%ThreadAmountMaxOption%] %PathArgument% [%OutputArgument%]"/>
+			<Argument id="DelGhostsCommand" Description="DelGhostsCommandDescription" long="del-ghosts" Value="DelGhosts" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
 			<!-- Flags : 'Path' ET 'Value'. -->
 			<Argument id="ExclusionsKeepFlag" Description="ExclusionsKeepFlagDescription" long="keep-excluded" Path="Exclusions/@Handling" Value="Keep"/>
 			<Argument id="ExclusionsSkipFlag" Description="ExclusionsSkipFlagDescription" long="skip-excluded" Path="Exclusions/@Handling" Value="Skip"/>
@@ -107,13 +114,12 @@
 					<Link index="0" Target="PathArgument"/>
 					<Link index="1" Target="OutputArgument"/>
 				</Layout>
-				<Layout command="Diff">
-					<Link index="0" Target="PathArgument"/>
-					<Link index="1" Target="OutputArgument"/>
-				</Layout>
 				<Layout command="Compare">
 					<Link index="0" Target="PathArgument"/>
 					<Link index="1" Target="OutputArgument"/>
+				</Layout>
+				<Layout command="DelGhosts">
+					<Link index="0" Target="PathArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

@@ -350,6 +350,8 @@ qRB
 	ComparisonObserver.Init( ComparisonMessage, COut, 750 );
 	SceneRoot = dwtcpr::Compare( New, Old, Scene, ComparisonObserver );
 
+	SceneRoot = dwtcpr::Clean( Scene, SceneRoot );
+
 	misc::Dump( Movings, SceneRoot, Scene, OutputFilename);
 qRR
 qRT
@@ -406,7 +408,52 @@ qRT
 qRE
 }
 
+static void DelGhosts_( void )
+{
+qRH
+	str::string Path;
+	bso::uint__ ThreadAmountMax = 0;
+	dwtdct::content Content;
+	dwtxcl::excluder Excluder;
+	dwtbsc::limitations__ Limitations;
+	dwtbsc::ghosts_oddities GO;
+	dwtdct::basic_exploration_observer___ ExplorationObserver;
+	str::string ExplorationMessage, GhostsSettingMessage;
+qRB
+	Path.Init();
+	sclmisc::MGetValue( registry::Path, Path );
 
+	misc::NormalizeAndTestPath( Path );
+
+	ThreadAmountMax = sclmisc::OGetUInt( registry::ThreadAmountMax, 0 );
+
+	GO.Init();
+	exclusion::Get( sclmisc::GetRegistry(), GO );
+
+	Excluder.Init( GO );
+	exclusion::Fill( sclmisc::GetRegistry(), Excluder );
+
+	Limitations.Init();
+	exclusion::Fill( sclmisc::GetRegistry(), Limitations );
+
+	ExplorationMessage.Init();
+	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
+
+	Content.Init();
+	ExplorationObserver.Init( Delay_, ExplorationMessage, cio::COut );
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, dwtbsc::ehKeepGhostLike, Content, ExplorationObserver );
+
+	cio::COut << txf::nl;
+
+	GhostsSettingMessage.Init();
+	sclmisc::GetBaseTranslation( GhostsSettingMessage_, GhostsSettingMessage );
+
+	ExplorationObserver.Init( Delay_, ExplorationMessage, cio::COut );
+	dwtdct::DelGhosts( Path, Content, GO, ExplorationObserver );
+qRR
+qRT
+qRE
+}
 
 #define C( name )\
 	else if ( Command == #name )\
@@ -427,6 +474,7 @@ qRB
 	C( Update );
 	C( TestGhosts );
 	C( Compare );
+	C( DelGhosts );
 	else
 		qRGnr();
 

@@ -6,7 +6,7 @@
 		<xpp:expand select="epeios.xlcl"/>
 		<Translations text="ProgramDescription">
 			<Translation language="fr">Observateur de fichiers.</Translation>
-			<Translation language="en">File watcher.</Translation>
+			<Translation language="en">Files watcher.</Translation>
 		</Translations>
 		<Translations text="ExplorationMessage">
 			<Translation language="fr">Exploration : %1/%2 thread(s) ; %3+%4 (%5 d/s)</Translation>

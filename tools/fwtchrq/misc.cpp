@@ -120,13 +120,13 @@ qRB
 
 	Writer.PushTag( MISC_NAME_MC );
 
-	Writer.PushTag( "DirMovings" );
+	Writer.PushTag( "Dirs" );
 
 	dwtmov::Dump( Movings, Writer );
 
 	Writer.PopTag();
 
-	Writer.PushTag( "Differences" );
+	Writer.PushTag( "Files" );
 
 	dwtcpr::Dump( SceneRoot, Scene, Writer );
 

@@ -28,6 +28,7 @@ using namespace dwtbsc;
 #include "fnm.h"
 #include "dir.h"
 #include "tagsbs.h"
+#include "cio.h"
 
 using namespace dwtbsc;
 
@@ -324,13 +325,15 @@ qRH
 	dwtxcl::excluder Excluder;
 	limitations__ Limitations;
 	dwtdct::content Content;
+	dwtdct::basic_exploration_observer___ Observer;
 qRB
 	GO.Init();
 	Excluder.Init( GO );
 	Limitations.Init();
 	Content.Init();
 	if ( fil::Exists( Path ) ) {
-		dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ehKeep, Content, *(dwtdct::exploration_observer__ *)NULL );
+		Observer.Init(0, str::string(), cio::COut );	// 'Delay' to 0 : no report.
+		dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ehKeep, Content, Observer );
 		Success = Delete_( Path, Content, RootFate );
 	}
 qRR
