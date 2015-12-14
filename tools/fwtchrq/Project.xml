@@ -48,10 +48,9 @@
 	<Files/>
 	<Packing>
 		<WikiFiles>
-			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">fwtchrq</File>
-			<File Dir="computing/epeios/tools/fwtchrq/">Manual</File>
-			<File Dir="computing/epeios/">Compilation</File>
-			<File Dir="computing/epeios/tools/">Configuration</File>
+			<File Dir="computing/epeios/tools/" IsHome="yes" Name="fwtchrq" Desc="general description of fwtchrq"/>
+			<File Dir="computing/epeios/tools/fwtchrq/" Name="Manual" Desc="fwtchrq user manual"/>
+			<xpp:expand select="Wks_ConfComp"/>
 		</WikiFiles>
 	</Packing>
 	<SourceDirs>

@@ -8,12 +8,12 @@
 			<Language>en</Language>
 			<ThreadAmountMax>100</ThreadAmountMax>
 			<Exclusions Handling="Regular">
-				<FileSizeMax>10000000000</FileSizeMax>
+				<FileSizeMax>1000000000</FileSizeMax>
 				<NameLengthMax>9999</NameLengthMax>
 			</Exclusions>
 			<Ghosts>
-				<Prefix>pfx</Prefix>
-				<Suffix>sfx</Suffix>
+				<Prefix>prefix</Prefix>
+				<Suffix>suffix</Suffix>
 			</Ghosts>
 		</Parameters>
 		<Definitions>

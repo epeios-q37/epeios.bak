@@ -284,11 +284,15 @@ namespace dir {
 	    hSearch = FindFirstFileW( Buffer, &File );
 
 		if ( hSearch == INVALID_HANDLE_VALUE )
-			if ( GetLastError() == ERROR_NO_MORE_FILES )
-				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Name' == 'NULL', qui signale une erreur).
-			else
+			switch ( GetLastError() ) {
+			case ERROR_NO_MORE_FILES:
+			case ERROR_ACCESS_DENIED:
+				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Path' == 'NULL', qui signale une erreur).
+				break;
+			default:
 				qRFwk();
-		else {
+				break;
+		} else {
 			Buffer.Malloc( wcslen( File.cFileName ) + 1 );
 			wcscpy( Buffer, File.cFileName );
 		}
@@ -359,12 +363,9 @@ namespace dir {
 	inline void Close( handle___ &Handle )
 	{
 # ifdef DIR__WIN
-#  ifdef DIR_DBG
-		if ( Handle.hSearch == INVALID_HANDLE_VALUE )
-			qRFwk();
-#  endif
-		if ( !FindClose( Handle.hSearch ) )
-			qRLbr();
+		if ( Handle.hSearch != INVALID_HANDLE_VALUE )
+			if ( !FindClose( Handle.hSearch ) )
+				qRLbr();
 # endif
 		
 # ifdef DIR__POSIX
