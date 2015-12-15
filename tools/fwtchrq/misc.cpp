@@ -26,28 +26,30 @@
 
 using namespace misc;
 
-dwtbsc::exclusion_handling__ misc::GetExclusionHandling( const sclrgstry::registry_ &Registry )
+dwtbsc::exclusions_handling__ misc::GetExclusionsHandling_( const sclrgstry::registry_ &Registry )
 {
-	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
+	dwtbsc::exclusions_handling__ ExclusionsHandling = dwtbsc::ehNone;
 qRH
 	str::string RawExclusionHandling;
 qRB
 	RawExclusionHandling.Init();
 	
-	sclrgstry::MGetValue( Registry, registry::ExclusionsHandling, RawExclusionHandling );
-
-	if ( RawExclusionHandling == "Regular" )
-		ExclusionHandling = dwtbsc::ehRegular;
-	else if ( RawExclusionHandling == "Keep" ) 
-		ExclusionHandling = dwtbsc::ehKeep;
-	else if ( RawExclusionHandling == "Skip" ) 
-		ExclusionHandling = dwtbsc::ehSkip;
-	else
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ExclusionsHandling );
+	if ( sclrgstry::OGetValue(Registry, registry::ExclusionsHandling, RawExclusionHandling) ) {
+		if ( RawExclusionHandling == "Regular" )
+			ExclusionsHandling = dwtbsc::ehRegular;
+		else if ( RawExclusionHandling == "Keep" ) 
+			ExclusionsHandling = dwtbsc::ehKeep;
+		else if ( RawExclusionHandling == "Skip" ) 
+			ExclusionsHandling = dwtbsc::ehSkip;
+		else if ( RawExclusionHandling == "None" ) 
+			ExclusionsHandling = dwtbsc::ehNone;
+		else
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ExclusionsHandling );
+	}
 qRR
 qRT
 qRE
-	return ExclusionHandling;
+	return ExclusionsHandling;
 }
 
 

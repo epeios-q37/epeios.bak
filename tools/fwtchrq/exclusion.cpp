@@ -110,26 +110,32 @@ void exclusion::Get(
 
 
 void exclusion::Fill(
+	dwtbsc::exclusions_handling__ ExclusionsHandling,
 	const registry_ &Registry,
 	dwtxcl::excluder_ &Excluder )
 {
 qRH
 	txmtbl::table Table;
 qRB
-	Table.Init();
-	GetExclusionsTable_( Registry, Table );
+	if ( ExclusionsHandling != dwtbsc::ehNone )	{
+		Table.Init();
+		GetExclusionsTable_( Registry, Table );
 
-	Fill_( Excluder, Table );
+		Fill_( Excluder, Table );
+	}
 qRR
 qRT
 qRE
 }
 
 void exclusion::Fill(
+	dwtbsc::exclusions_handling__ ExclusionsHandling,
 	const registry_ &Registry,
 	dwtbsc::limitations__ &Limitations )
 {
-	Limitations.FileSizeMax = sclrgstry::MGetUInt( Registry, registry::ExclusionsFileSizeMax );
-	Limitations.NameLengthMax = sclrgstry::MGetUInt( Registry, registry::ExclusionsNameLengthMax );
+	if ( ExclusionsHandling != dwtbsc::ehNone )	{
+		Limitations.FileSizeMax = sclrgstry::MGetUInt( Registry, registry::ExclusionsFileSizeMax );
+		Limitations.NameLengthMax = sclrgstry::MGetUInt( Registry, registry::ExclusionsNameLengthMax );
+	}
 }
 

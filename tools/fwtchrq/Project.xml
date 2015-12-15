@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>(Version)</xpp:bloc>
+			<xpp:bloc>20151215</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2015</xpp:bloc>
@@ -24,6 +24,9 @@
 				<Module>btr</Module>
 				<Module>dtr</Module>
 				<Module>idxbtr</Module>
+				<Module>idxbtq</Module>
+				<Module>idxque</Module>
+				<Module>ltf</Module>
 				<Module>mtk</Module>
 				<Module>txmtbl</Module>
 			</Modules>

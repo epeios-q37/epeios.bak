@@ -36,7 +36,8 @@ mods += strng tagsbs tol txf tys
 mods += uys utf xtf llio tht 
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp btr 
-mods += dtr idxbtr mtk txmtbl 
+mods += dtr idxbtr idxbtq idxque ltf 
+mods += mtk txmtbl 
 mods += dwtbsc dwtcpr dwtdct dwtftr dwtght 
 mods += dwtmov dwtxcl 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
@@ -320,7 +321,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""(Version)"\"
+copt += -DVERSION=\""20151215"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 ifndef EPEIOS_SRC

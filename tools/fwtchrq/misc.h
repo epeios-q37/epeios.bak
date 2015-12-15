@@ -62,7 +62,7 @@ namespace misc {
 		TestPath( Path );
 	}
 
-	dwtbsc::exclusion_handling__ GetExclusionHandling( const sclrgstry::registry_ &Registry );
+	dwtbsc::exclusions_handling__ GetExclusionsHandling_( const sclrgstry::registry_ &Registry );
 
 	void Append(
 		const char *Tag,

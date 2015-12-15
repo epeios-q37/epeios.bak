@@ -187,7 +187,7 @@ return LocalizedFileName;
 
 static inline bso::bool__ Append_(
 	exclusion__ Exclusion,
-	exclusion_handling__ ExclusionHandling )
+	exclusions_handling__ ExclusionsHandling )
 {
 	switch ( Exclusion ) {
 	case xNo:
@@ -195,7 +195,10 @@ static inline bso::bool__ Append_(
 		break;
 	case xMatchList:
 	case xGhostDir:
-		switch ( ExclusionHandling ) {
+		switch ( ExclusionsHandling ) {
+		case ehNone:
+			return false;
+			break;
 		case ehSkip:
 			return false;
 			break;
@@ -214,7 +217,7 @@ static inline bso::bool__ Append_(
 		}
 	case xFileTooBig:
 	case xNameTooLong:
-		switch ( ExclusionHandling ) {
+		switch ( ExclusionsHandling ) {
 		case ehSkip:
 			return false;
 		case ehRegular:
@@ -304,7 +307,7 @@ static void GetFile_(
 	const excluder_ &Excluder,
 	const dwtbsc::limitations__ Limitations,
 	const dwtbsc::ghosts_oddities_ &GO,
-	exclusion_handling__ ExclusionHandling,
+	exclusions_handling__ ExclusionsHandling,
 	kernel_ &Kernel,
 	dwtght::grow__ &GhostRow )
 {
@@ -331,7 +334,7 @@ qRB
 			SBuffer.Init();
 			Exclusion = GetExclusion_( LocalizedFileNameWithoutRoot, Name, Info, Excluder, Limitations );
 			Fill_( Name, Exclusion, Info, Kernel.Names, SBuffer, Directory );
-			if ( Append_( Exclusion, ExclusionHandling) )
+			if ( Append_( Exclusion, ExclusionsHandling) )
 				Kernel.Directories.Append( Directory );
 
 			if ( Exclusion == xGhostDir ) {
@@ -347,7 +350,7 @@ qRB
 			SBuffer.Init();
 			Exclusion = GetExclusion_( LocalizedFileNameWithoutRoot, Name, Info, Excluder, Limitations );
 			Fill_( Name, Exclusion, Info, Kernel.Names, SBuffer, File );
-			if ( Append_( Exclusion, ExclusionHandling ) )
+			if ( Append_( Exclusion, ExclusionsHandling ) )
 				Kernel.Files.Append( File );
 //			Kernel.Names( 0 ).Convert( CBuffer );
 //			Kernel.Names.Flush();
@@ -377,7 +380,7 @@ static bso::bool__ GetFiles_(
 	const excluder_ &Excluder,
 	const dwtbsc::limitations__ &Limitations,
 	const dwtbsc::ghosts_oddities_ &GO,
-	exclusion_handling__ ExclusionHandling,
+	exclusions_handling__ ExclusionsHandling,
 	kernel_ &Kernel,
 	oddity_ &Oddity,
 	dwtght::grow__ &GhostRow )
@@ -400,7 +403,7 @@ qRB
 			LocalizedFileNameWithoutRoot.Init();
 			Build_( PathWithoutRoot, Name, LocalizedFileNameWithoutRoot );
 
-			GetFile_( LocalizedFileNameWithRoot, LocalizedFileNameWithoutRoot, Name, Excluder, Limitations, GO, ExclusionHandling, Kernel, GhostRow );
+			GetFile_( LocalizedFileNameWithRoot, LocalizedFileNameWithoutRoot, Name, Excluder, Limitations, GO, ExclusionsHandling, Kernel, GhostRow );
 		}
 
 		Name = dir::GetNextFile( Handle );
@@ -564,7 +567,7 @@ struct data___
 private:
 	tamount__ _ThreadAmountMax;	// Nombre maximum de 'thread' simultanés.
 	tamount__ _ThreadAmount;
-	exclusion_handling__ _ExclusionHandling;
+	exclusions_handling__ _ExclusionsHandling;
 	content_ *_Content;
 	const excluder_ *_Excluder;
 	const dwtbsc::limitations__ *_Limitations;
@@ -580,7 +583,7 @@ public:
 		_ThreadAmountMax = 0;
 		_ThreadAmount = 0;
 
-		_ExclusionHandling = eh_Undefined;
+		_ExclusionsHandling = eh_Undefined;
 
 		_Content = NULL;
 		_Excluder = NULL;
@@ -594,7 +597,7 @@ public:
 	void Init(
 		content_ &Content,
 		tamount__ ThreadAmountMax,
-		exclusion_handling__ ExclusionHandling,
+		exclusions_handling__ ExclusionsHandling,
 		const excluder_ &Excluder,
 		const dwtbsc::limitations__ &Limitations,
 		const str::string_ &RootPath,
@@ -603,7 +606,7 @@ public:
 		_ThreadAmount = 0;
 		_ThreadAmountMax = ThreadAmountMax;
 
-		_ExclusionHandling = ExclusionHandling;
+		_ExclusionsHandling = ExclusionsHandling;
 
 		_Content = &Content;
 		_Excluder = &Excluder;
@@ -683,7 +686,7 @@ public:
 
 		return _ThreadAmountMax;
 	}
-	E_RODISCLOSE__( exclusion_handling__, ExclusionHandling );
+	E_RODISCLOSE__( exclusions_handling__, ExclusionsHandling );
 };
 
 static void Thread_( void *UP )	// Explore thread.
@@ -702,7 +705,7 @@ qRFB
 	content_ &Content = Data.Content();
 	const excluder_ &Excluder = Data.Excluder();
 	const dwtbsc::limitations__ &Limitations = Data.Limitations();
-	exclusion_handling__ ExclusionHandling = Data.ExclusionHandling();
+	exclusions_handling__ ExclusionHandling = Data.ExclusionsHandling();
 	const str::string_ &RootPath = Data.RootPath();
 	const dwtbsc::ghosts_oddities_ &GO = Data.GO();
 	Mutex.Init( Data.Protection );
@@ -789,7 +792,7 @@ void dwtdct::Explore(
 	const excluder_ &Excluder,
 	const dwtbsc::limitations__ &Limitations,
 	const dwtbsc::ghosts_oddities_ &GO,
-	exclusion_handling__ ExclusionHandling,
+	exclusions_handling__ ExclusionsHandling,
 	content_ &Content,
 	exploration_observer__ &Observer )
 {
@@ -808,7 +811,7 @@ qRB
 	if ( !fil::Exists( Path ) )
 		qRGnr();
 
-	Data.Init( Content, ThreadAmountMax, ExclusionHandling, Excluder, Limitations, Path, GO );
+	Data.Init( Content, ThreadAmountMax, ExclusionsHandling, Excluder, Limitations, Path, GO );
 	DataInitialized = true;
 
 	Mutex.Init( Data.Protection );

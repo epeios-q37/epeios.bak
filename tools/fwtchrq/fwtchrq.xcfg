@@ -7,13 +7,14 @@
 		<Parameters>
 			<Language>en</Language>
 			<ThreadAmountMax>100</ThreadAmountMax>
-			<Exclusions Handling="Regular">
+			<!--<Exclusions Handling="Regular">
+				<ListFilename>Exclusion.txt</ListFilename>
 				<FileSizeMax>1000000000</FileSizeMax>
 				<NameLengthMax>9999</NameLengthMax>
-			</Exclusions>
+			</Exclusions>-->
 			<Ghosts>
-				<Prefix>prefix</Prefix>
-				<Suffix>suffix</Suffix>
+				<Prefix>fwtchrqp</Prefix>
+				<Suffix>fwtchrqs</Suffix>
 			</Ghosts>
 		</Parameters>
 		<Definitions>
@@ -38,7 +39,7 @@
 					<Translation language="fr">Compare la version actuelle de l'arborescence avec celle stockée.</Translation>
 					<Translation language="en">Compares the current version of the tree with the stored one.</Translation>
 				</Translations>
-				<Translations message="DelGhostsCommandDescription">
+				<Translations message="CleanCommandDescription">
 					<Translation language="fr">Supprime les données de détection des modifications.</Translation>
 					<Translation language="en">Deletes the data for the modifications detection.</Translation>
 				</Translations>
@@ -92,7 +93,7 @@
 			<Argument id="UpdateCommand" Description="UpdateCommandDescription" long="update" Value="Update" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
 			<Argument id="TestGhostsCommand" Description="TestGhostsCommandDescription" long="test-ghosts" Value="TestGhosts" Usage="[%ThreadAmountMaxOption%] %PathArgument% [%OutputArgument%]"/>
 			<Argument id="CompareCommand" Description="CompareCommandDescription" long="compare" Value="Compare" Usage="[%ThreadAmountMaxOption%] %PathArgument% [%OutputArgument%]"/>
-			<Argument id="DelGhostsCommand" Description="DelGhostsCommandDescription" long="del-ghosts" Value="DelGhosts" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
+			<Argument id="CleanCommand" Description="CleanCommandDescription" long="clean" Value="Clean" Usage="[%ThreadAmountMaxOption%] %PathArgument%"/>
 			<!-- Flags : 'Path' ET 'Value'. -->
 			<Argument id="ExclusionsKeepFlag" Description="ExclusionsKeepFlagDescription" long="keep-excluded" Path="Exclusions/@Handling" Value="Keep"/>
 			<Argument id="ExclusionsSkipFlag" Description="ExclusionsSkipFlagDescription" long="skip-excluded" Path="Exclusions/@Handling" Value="Skip"/>
@@ -118,7 +119,7 @@
 					<Link index="0" Target="PathArgument"/>
 					<Link index="1" Target="OutputArgument"/>
 				</Layout>
-				<Layout command="DelGhosts">
+				<Layout command="Clean">
 					<Link index="0" Target="PathArgument"/>
 				</Layout>
 			</Layouts>

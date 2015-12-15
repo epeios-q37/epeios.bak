@@ -1,15 +1,15 @@
-# Fichier contenant les extensions et répertoires à exclure.
-# Le nom du fichier à utiliser est spécifié sous l'entrée 'Parameters/Exclusions/ListFileName' dans le fichier 'vtldta.xcfg'.
+# Fichier contenant les extensions et rÃ©pertoires Ã  exclure.
+# Le nom du fichier Ã  utiliser est spÃ©cifiÃ© sous l'entrÃ©e 'Parameters/Exclusions/ListFileName' dans le fichier 'vtldta.xcfg'.
 
 .bak	# Les extensions doivent normalement commencer par un '.'...
-tmp		# ...mais si on l'oublie, il est rajouté, donc cette entrée est assimilée à '.tmp'.
-/a/b/c/	# Entrée spécifiant un répertoire absolu à exclure ('/' au début). '/a/b/c/...' est exclu, mais pas '.../a/b/c/...'.
-d/e/f/	# Entrée spécifiant un répertoire relatif à exclure (pas de '/' au début). '/d/e/f/...' est exclu, mais également '.../d/e/f/...'.
+tmp		# ...mais si on l'oublie, il est rajoutÃ©, donc cette entrÃ©e est assimilÃ©e Ã  '.tmp'.
+/a/b/c/	# EntrÃ©e spÃ©cifiant un rÃ©pertoire absolu Ã  exclure ('/' au dÃ©but). '/a/b/c/...' est exclu, mais pas '.../a/b/c/...'.
+d/e/f/	# EntrÃ©e spÃ©cifiant un rÃ©pertoire relatif Ã  exclure (pas de '/' au dÃ©but). '/d/e/f/...' est exclu, mais Ã©galement '.../d/e/f/...'.
 b/
 # Exemple de commentaire sur une ligne seule.
-i/j/k	# normalement, une spécification de répertoire doit se terminer par '/'. Cependant, si le '/' final manque, mais qu'il y a un '/' quelque part dans l'entrée, le '/' final est rajouté.
+i/j/k	# normalement, une spÃ©cification de rÃ©pertoire doit se terminer par '/'. Cependant, si le '/' final manque, mais qu'il y a un '/' quelque part dans l'entrÃ©e, le '/' final est rajoutÃ©.
 
-# Les entrée ci-dessous sont pour mes propres tests.
+# Les entrÃ©e ci-dessous sont pour mes propres tests.
 XLS
 props
 /batchs/diff/

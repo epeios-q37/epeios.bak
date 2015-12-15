@@ -67,7 +67,8 @@ namespace dwtbsc {
 		x_Undefined,
 	};
 
-	enum exclusion_handling__ {
+	enum exclusions_handling__ {
+		ehNone,	// No exclusion at all (except ghost files).
 		ehRegular,	// Comportemnt normal (conserve ou non les fichiers/dossiers exclus en fonction de la raisonde leur exclusion).
 		ehSkip,	// Ignore les fichiers/dossiers exclus.
 		ehKeep,	// Conserve fichiers/dossiers exclus (mais sont marqués comme tel).

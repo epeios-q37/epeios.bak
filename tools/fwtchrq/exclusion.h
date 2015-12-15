@@ -20,6 +20,8 @@
 #ifndef EXCLUSION__INC
 # define EXCLUSION__INC
 
+# include "misc.h"
+
 # include "dwtxcl.h"
 # include "rgstry.h"
 
@@ -32,12 +34,35 @@ namespace exclusion {
 		dwtbsc::ghosts_oddities_ &GO );
 
 	void Fill(
+		dwtbsc::exclusions_handling__ ExclusionsHandling,
 		const registry_ &Registry,
 		dwtxcl::excluder_ &Excluder );
 
 	void Fill(
+		dwtbsc::exclusions_handling__ ExclusionsHandling,
 		const registry_ &Registry,
 		dwtbsc::limitations__ &Limitations );
+
+	inline void Fill(
+		dwtbsc::exclusions_handling__ ExclusionsHandling,
+		const registry_ &Registry,
+		dwtxcl::excluder_ &Excluder,
+		dwtbsc::limitations__ &Limitations )
+	{
+		Fill( ExclusionsHandling, Registry, Excluder );
+		Fill( ExclusionsHandling, Registry, Limitations );
+	}
+
+	inline void Fill(
+		const registry_ &Registry,
+		dwtxcl::excluder_ &Excluder,
+		dwtbsc::limitations__ &Limitations )
+	{
+		dwtbsc::exclusions_handling__ ExclusionsHandling = misc::GetExclusionsHandling_( Registry );
+
+		Fill( ExclusionsHandling, Registry, Excluder );
+		Fill( ExclusionsHandling, Registry, Limitations );
+	}
 }
 
 #endif

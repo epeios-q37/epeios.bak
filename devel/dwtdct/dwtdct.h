@@ -418,7 +418,7 @@ namespace dwtdct {
 		const dwtxcl::excluder_ &Excluder,
 		const dwtbsc::limitations__ &Limitations,
 		const dwtbsc::ghosts_oddities_ &GO,
-		exclusion_handling__ ExclusionHandling,
+		exclusions_handling__ ExclusionsHandling,
 		content_ &Content,
 		exploration_observer__ &Observer );
 

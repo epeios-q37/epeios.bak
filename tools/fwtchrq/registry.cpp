@@ -29,7 +29,7 @@ namespace {
 	entry___ Exclusions_( "Exclusions", sclrgstry::Parameters );
 }
 
-entry___ registry::ExclusionsListFileName( "ListFileName", Exclusions_ );
+entry___ registry::ExclusionsListFileName( "ListFilename", Exclusions_ );
 entry___ registry::ExclusionsHandling( "@Handling", Exclusions_ );
 entry___ registry::ExclusionsFileSizeMax( "FileSizeMax", Exclusions_ );
 entry___ registry::ExclusionsNameLengthMax( "NameLengthMax", Exclusions_ );

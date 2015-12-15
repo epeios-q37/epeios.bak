@@ -65,7 +65,7 @@ qRH
 	dwtftr::file_tree Tree;
 	dwtmov::movings Movings;
 	dwtftr::drow__ Root = qNIL;
-	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
+	dwtbsc::exclusions_handling__ ExclusionsHandling = dwtbsc::eh_Undefined;
 	dwtxcl::excluder Excluder;
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
@@ -73,20 +73,18 @@ qRH
 qRB
 	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
 
-	ExclusionHandling = misc::GetExclusionHandling( Registry );
+	ExclusionsHandling = misc::GetExclusionsHandling_( Registry );
 
 	GO.Init();
 
 	exclusion::Get( Registry, GO );
 
 	Excluder.Init( GO );
-	exclusion::Fill( Registry, Excluder );
-
 	Limitations.Init();
-	exclusion::Fill( Registry, Limitations );
+	exclusion::Fill( ExclusionsHandling, Registry, Excluder, Limitations );
 
 	Content.Init();
-	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionsHandling, Content, ExplorationObserver );
 
 	Tree.Init();
 	Root = dwtftr::Process( Content, Tree, ProcessingObserver );
@@ -180,10 +178,8 @@ qRB
 	exclusion::Get( sclmisc::GetRegistry(), GO );
 
 	Excluder.Init( GO );
-	exclusion::Fill( sclmisc::GetRegistry(), Excluder );
-
 	Limitations.Init();
-	exclusion::Fill( sclmisc::GetRegistry(), Limitations );
+	exclusion::Fill( sclmisc::GetRegistry(), Excluder, Limitations );
 
 	ExplorationMessage.Init();
 	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
@@ -255,10 +251,8 @@ qRB
 	exclusion::Get( sclmisc::GetRegistry(), GO );
 
 	Excluder.Init( GO );
-	exclusion::Fill( sclmisc::GetRegistry(), Excluder );
-
 	Limitations.Init();
-	exclusion::Fill( sclmisc::GetRegistry(), Limitations );
+	exclusion::Fill( sclmisc::GetRegistry(), Excluder, Limitations );
 
 	ExplorationMessage.Init(); 
 	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
@@ -301,7 +295,7 @@ qRH
 	bso::uint__ ThreadAmountMax = 0;
 	dwtftr::file_tree New;
 	dwtmov::movings Movings;
-	dwtbsc::exclusion_handling__ ExclusionHandling = dwtbsc::eh_Undefined;
+	dwtbsc::exclusions_handling__ ExclusionsHandling = dwtbsc::eh_Undefined;
 	dwtxcl::excluder Excluder;
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
@@ -315,20 +309,18 @@ qRH
 qRB
 	ThreadAmountMax = sclrgstry::OGetUInt( Registry, registry::ThreadAmountMax, 0 );
 
-	ExclusionHandling = misc::GetExclusionHandling( Registry );
+	ExclusionsHandling = misc::GetExclusionsHandling_( Registry );
 
 	GO.Init();
 
 	exclusion::Get( Registry, GO );
 
 	Excluder.Init( GO );
-	exclusion::Fill( Registry, Excluder );
-
 	Limitations.Init();
-	exclusion::Fill( Registry, Limitations );
+	exclusion::Fill( ExclusionsHandling, Registry, Excluder, Limitations );
 	
 	Content.Init();
-	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionHandling, Content, ExplorationObserver );
+	dwtdct::Explore( Path, ThreadAmountMax, Excluder, Limitations, GO, ExclusionsHandling, Content, ExplorationObserver );
 
 	New.Init();
 	dwtftr::Process( Content, New, ProcessingObserver );
@@ -408,7 +400,7 @@ qRT
 qRE
 }
 
-static void DelGhosts_( void )
+static void Clean_( void )
 {
 qRH
 	str::string Path;
@@ -431,10 +423,8 @@ qRB
 	exclusion::Get( sclmisc::GetRegistry(), GO );
 
 	Excluder.Init( GO );
-	exclusion::Fill( sclmisc::GetRegistry(), Excluder );
-
 	Limitations.Init();
-	exclusion::Fill( sclmisc::GetRegistry(), Limitations );
+	exclusion::Fill( sclmisc::GetRegistry(), Excluder, Limitations );
 
 	ExplorationMessage.Init();
 	sclmisc::GetBaseTranslation( ExplorationMessage_, ExplorationMessage );
@@ -474,7 +464,7 @@ qRB
 	C( Update );
 	C( TestGhosts );
 	C( Compare );
-	C( DelGhosts );
+	C( Clean );
 	else
 		qRGnr();
 
