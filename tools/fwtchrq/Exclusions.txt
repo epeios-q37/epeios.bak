@@ -1,11 +1,10 @@
 # Fichier contenant les extensions et répertoires à exclure.
-# Le nom du fichier à utiliser est spécifié sous l'entrée 'Parameters/Exclusions/ListFileName' dans le fichier 'vtldta.xcfg'.
+# Le nom du fichier à utiliser est spécifié sous l'entrée 'Parameters/Exclusions/Filename' dans le fichier 'fwtchrq.xcfg'.
 
 .bak	# Les extensions doivent normalement commencer par un '.'...
 tmp		# ...mais si on l'oublie, il est rajouté, donc cette entrée est assimilée à '.tmp'.
 /a/b/c/	# Entrée spécifiant un répertoire absolu à exclure ('/' au début). '/a/b/c/...' est exclu, mais pas '.../a/b/c/...'.
 d/e/f/	# Entrée spécifiant un répertoire relatif à exclure (pas de '/' au début). '/d/e/f/...' est exclu, mais également '.../d/e/f/...'.
-b/
 # Exemple de commentaire sur une ligne seule.
 i/j/k	# normalement, une spécification de répertoire doit se terminer par '/'. Cependant, si le '/' final manque, mais qu'il y a un '/' quelque part dans l'entrée, le '/' final est rajouté.
 
