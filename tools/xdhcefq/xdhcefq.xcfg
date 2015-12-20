@@ -5,7 +5,7 @@
 		<xpp:expand value-of="q37.xpp"/>
 		<xpp:expand href="../TOL.xcfg"/>
 		<xpp:expand href="../XDH.xcfg"/>
-		<Parameters DefaultSetup="Default">
+		<Parameters Setup="Default">
 			<!-- For the package version of the configuration file. Supersed by below definition.-->
 			<xpp:define name="Module">
 				<xpp:bloc>xdhdq</xpp:bloc>

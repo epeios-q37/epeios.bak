@@ -1,5 +1,5 @@
 # Fichier contenant les extensions et répertoires à exclure.
-# Le nom du fichier à utiliser est spécifié sous l'entrée 'Parameters/Exclusions/Filename' dans le fichier 'fwtchrq.xcfg'.
+# Le nom du fichier à utiliser est spécifié sous l'entrée 'Parameters/Exclusions/ListFilename' dans le fichier 'fwtchrq.xcfg'.
 
 .bak	# Les extensions doivent normalement commencer par un '.'...
 tmp		# ...mais si on l'oublie, il est rajouté, donc cette entrée est assimilée à '.tmp'.
