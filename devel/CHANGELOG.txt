@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2015-12-21 :
+- CSDUCL, PLGN :
+	- Fixing Clang complainings.
+
 2015-12-14 :
 - DIR :
 	* When trying to access a forbidden dirctory, it's assumed to be empty.

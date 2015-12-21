@@ -67,25 +67,29 @@ namespace plgn {
 			err::handling__ ErrHandling )
 		{
 			plgncore::retrieve_callback *Function = NULL;
-			if ( !_Library.Init( PluginPath, ErrHandling ) )
-				if ( ErrHandling == err::hThrowException )
-					qRFwk();
-				else
-					return false;
 
-			if ( !_IsCompatible() )
+			if ( !_Library.Init( PluginPath, ErrHandling ) ) {
 				if ( ErrHandling == err::hThrowException )
 					qRFwk();
 				else
 					return false;
+			}
+
+			if ( !_IsCompatible() ) {
+				if ( ErrHandling == err::hThrowException )
+					qRFwk();
+				else
+					return false;
+			}
 
 			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), _Library );
 
-			if ( Function == NULL )
+			if ( Function == NULL ) {
 				if ( ErrHandling == err::hThrowException )
 					qRFwk();
 				else
 					return false;
+			}
 
 			Callback_ = &Function();
 

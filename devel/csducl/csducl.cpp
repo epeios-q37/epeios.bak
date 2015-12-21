@@ -68,7 +68,7 @@ qRH
 qRB
 	reset();
 
-	if ( Success = _LibraryAccess.Init( LibraryPath.Convert( Buffer ), LibraryData, err::hUserDefined ) ) {
+	if ( ( Success = _LibraryAccess.Init( LibraryPath.Convert( Buffer ), LibraryData, err::hUserDefined ) ) ) {
 		_Type = tLibrary;
 		_Location.Init( LibraryPath );
 	}
@@ -86,7 +86,7 @@ bso::bool__ csducl::universal_client_core___::InitRemote(
 
 	reset();
 
-	if ( Success = _RemoteAccess.Init( PluginPath, Parameters, err::hUserDefined ) ) {
+	if ( ( Success = _RemoteAccess.Init( PluginPath, Parameters, err::hUserDefined ) ) ) {
 		_Type = tRemote;
 		_Location.Init( PluginPath );
 	}
