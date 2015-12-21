@@ -32,11 +32,12 @@ bso::bool__ csdrcu::core___::Init(
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
-	if ( !( Success = Retriever_.Init( PluginPath, Parameters, err::hUserDefined ) ) )
-			if ( ErrHandling == err::hThrowException )
+	if ( !( Success = Retriever_.Init(PluginPath, Parameters, err::hUserDefined ) ) ) {
+		if ( ErrHandling == err::hThrowException )
 			qRFwk();
 		else
 			qRReturn;
+	}
 
 	Driver_ = &Retriever_.Plugin();
 	_driver___::Init( fdr::ts_Default );
