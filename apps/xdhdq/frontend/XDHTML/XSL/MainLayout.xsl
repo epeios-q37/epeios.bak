@@ -36,6 +36,12 @@
 							</span>
 						</div>
 					</fieldset>
+					<fieldset>
+						<select>
+							<option>1</option>
+							<option>2</option>
+						</select>
+					</fieldset>
 				</span>
 			</span>
 		</span>
