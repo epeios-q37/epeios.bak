@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2014-2016 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
