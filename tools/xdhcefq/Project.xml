@@ -56,6 +56,7 @@
 			<File>xdhcefq.js</File>
 		</Files>
 		<File Path="../">XDH.xcfg</File>
+		<File>cefosx.mm</File>
 	</Files>
 	<Packing>
 		<!-- No documentation, as this tool has not is own package -->

@@ -1,9 +1,5 @@
 /*
-	'proxy' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
-	Part of th 'xdhcefq' tool.
-	Copyright (C) 2014 by Claude SIMON (http://zeusw.org/epeios/contact.html).
-
-	This file is part of the Epeios project (http://zeusw.org/epeios/).
+	Copyright (C) 2014-2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
     This file is part of 'xdhcefq'.
 

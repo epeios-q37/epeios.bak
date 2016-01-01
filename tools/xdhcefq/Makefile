@@ -329,6 +329,8 @@ ifeq ("$(os)","$(MacOS)")
 		xlcl=<xpp:expand href=\"/Users/csimon/epeios/tools/xdhcefq/xdhcefq.xlcl\"/>
 	endif
 	
+	mods += cefosx
+	
 
 	dest=/Users/csimon/bin/
 endif
@@ -389,6 +391,10 @@ endif
 			
 	cp $(binary) $(dest)
 endif
+		
+cefosx.o : cefosx.mm
+	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
+			
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

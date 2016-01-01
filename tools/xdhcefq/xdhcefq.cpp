@@ -1,9 +1,7 @@
 /*
-	'xdhcefq' by Claude SIMON (simon.claude@zeusw.org)
+	Copyright (C) 2014-2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of the Epeios project (http://zeusw.org/epeios/).
-
-    This file is part of 'xdhcefq' tool.
+    This file is part of 'xdhcefq'.
 
     'xdhcefq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -121,6 +119,17 @@ void FillSettings_( cef_settings_t &Settings )
 //	Settings.log_severity = LOGSEVERITY_VERBOSE;
 }
 
+#ifdef CPE_S_OSX
+// NOTA : functions are defined in file 'cefosx.mm'.
+# define F( name ) void name( void );
+#else
+# define F( name ) inline void name( void ) {} 
+#endif
+
+F( Pre );
+F( Main );
+F( Post );
+
 static int Launch_( const scltool::oddities__ &Oddities )
 {
 	int ExitValue = EXIT_SUCCESS;
@@ -157,19 +166,22 @@ qRB
 
 		ExitValue = cef_execute_process( &MainArgs, &Rack_.App, NULL );
 
-
 		if ( ExitValue >= 0 )
 			qRReturn;
 	}
 	
 	if ( ( ProcessType.Amount() == 0 ) || ( ProcessType == "Main" ) ) {
+		Pre();
+
 		cef_initialize( &MainArgs, &Settings, &Rack_.App, NULL );
 
+		Main();
 
 		cef_run_message_loop();
 
-
 		cef_shutdown();
+
+		Post();
 	}
 
 qRR
