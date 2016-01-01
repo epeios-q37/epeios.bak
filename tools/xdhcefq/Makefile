@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2014-2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of xdhcefq.
 #
@@ -341,7 +341,7 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""20151030"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DCOPYRIGHT_YEARS=\""2014-2016"\"
 
 src += :"$(cef)"	# Had to be here (before the 'src += ...' below),
 					# otherwise 'MinGW' under 'MSYS' does not find some header files...
