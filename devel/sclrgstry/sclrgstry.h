@@ -97,6 +97,7 @@ namespace sclrgstry {
 			extern rgstry::entry___ Filename;
 			extern rgstry::entry___ Configuration;
 			extern rgstry::entry___ Locale;
+			extern rgstry::entry___ Arguments;
 		};
 	}
 

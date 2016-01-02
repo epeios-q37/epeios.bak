@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-02 :
+- SCLRGSTRY :
+	% Adding 'Arguments' entry for the plugins.
+
 2015-12-21 :
 - CSDUCL, PLGN :
 	- Fixing Clang complainings.

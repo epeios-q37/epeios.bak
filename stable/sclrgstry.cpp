@@ -89,6 +89,7 @@ namespace definition {
 rgstry::entry___ sclrgstry::definition::plugin::Filename( "Filename", ::definition::Plugin_ );
 rgstry::entry___ sclrgstry::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
 rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
+rgstry::entry___ sclrgstry::definition::plugin::Arguments( "Arguments", ::definition::Plugin_ );
 
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
