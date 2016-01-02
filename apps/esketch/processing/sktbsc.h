@@ -1,7 +1,7 @@
 /*
-	'sktdsc.h' by Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	 This file is part of 'eSketch' software.
+	This file is part of 'eSketch' software.
 
     'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published

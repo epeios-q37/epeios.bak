@@ -1,7 +1,7 @@
 /*
-	'esketchxht.cpp' by Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	 This file is part of 'eSketch' software.
+	This file is part of 'eSketch' software.
 
     'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -47,12 +47,7 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcmn::proxy_callback__ *ProxyCallback )
 {
-#if 0
-	core::session___ *Session = (core::session___ *)malloc( sizeof( core::session___ ) );
-	new(Session) core::session___();
-#else
 	core::session___ *Session = new core::session___;
-#endif
 
 	if ( Session == NULL )
 		qRGnr();

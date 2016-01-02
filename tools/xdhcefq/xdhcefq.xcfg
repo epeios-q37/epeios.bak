@@ -60,7 +60,7 @@
 						<xpp:bloc>
 							<LocaleDirPath>/home/csimon/CEF/Resources/locales/</LocaleDirPath>
 							<ResourcesDirPath>/home/csimon/CEF/Resources/</ResourcesDirPath>
-							<SingleProcess>true</SingleProcess>
+							<SingleProcess>false</SingleProcess>
 							<NoSandbox>true</NoSandbox>
 							<CachePath>/tmp</CachePath>
 						</xpp:bloc>
@@ -118,7 +118,7 @@
 			<!-- Affectations des arguments libres-->
 			<!-- No free argument, because it does not work well due to the fact that 'CEF' launch the excutable more times.-->
 
-			<!-- Below definitions would be better, but free arguments don't work well, dur to the fact the 'CEF' relaunch the executable. -->
+			<!-- Below definitions would be better, but free arguments don't work well, due to the fact the 'CEF' relaunch the executable. -->
 			<!--
 			<Argument id="LaunchCommand" Description="LaunchCommandDescription" long="launch" short="l" Value="Launch" Usage="%ModuleFilenameArgument%"/>
 			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>

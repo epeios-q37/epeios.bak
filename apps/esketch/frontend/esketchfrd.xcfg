@@ -63,7 +63,7 @@
 				</Project>
 			</Projects>
 			<Backends Default="Embedded">
-				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote">localhost:2000</Backend>
+				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="h:/bin/plugins/remote/inet">localhost:2000</Backend>
 				<xpp:bloc marker="$">
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$esketchbkd">
 						<xpp:expand select="BinRootDir"/>

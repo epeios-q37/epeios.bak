@@ -1,7 +1,7 @@
 /*
-	'core.cpp' by Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	 This file is part of 'eSketch' software.
+	This file is part of 'eSketch' software.
 
     'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -80,21 +80,21 @@ static void About_(
 	xml::writer_ &Writer )
 {
 qRH
-	str::string ProtocolVersion, BackendLocation, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
+	str::string ProtocolVersion, BackendPath, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
 qRB
 	ProtocolVersion.Init();
-	BackendLocation.Init();
+	BackendPath.Init();
 	BackendLabel.Init();
 	APIVersion.Init();
 	BackendInformations.Init();
 	BackendCopyright.Init();
 	SoftwareInformations.Init();
 
-	sclfrntnd::GetBackendPath( Kernel_, BackendLocation );
+	sclfrntnd::GetBackendPath( Kernel_, BackendPath );
 	Frontend.About( ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 
 	V( ProtocolVersion, ProtocolVersion );
-	V( BackendLocation, Location );
+	V( BackendPath, Path );
 	V( BackendLabel, Label );
 	V( APIVersion, APIVersion );
 	V( BackendInformations, Build );

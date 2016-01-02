@@ -1,8 +1,8 @@
 /*
-	'sktinf.h' by Claude SIMON ((http://q37.info/contact/)
+	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-    This file is part of 'eSketch' software.
-	
+	This file is part of 'eSketch' software.
+
     'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +14,7 @@
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with 'eSketch'.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+    along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // eSKeTch INFormations.

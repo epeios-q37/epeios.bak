@@ -36,7 +36,8 @@ mods += strng tagsbs tol txf tys
 mods += uys utf xtf llio tht 
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp 
-mods += sclmisc sclerror scllocale sclrgstry scltool 
+mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += scltool 
 mods += registry 
 
 pmods += pllio 
@@ -152,7 +153,8 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	
+	libs += -lws2_32
+
 	LDFLAGS += -static
 	
 	ifeq ("$(target)","$(win)")
@@ -308,7 +310,6 @@ ifeq ("$(os)","$(MacOS)")
 	binary=$(name)
 
 	dest=/Users/csimon/bin/
-
 endif
 
 ##########################
@@ -341,9 +342,12 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
+		
 	mkdir -p $(dest)
+			
 	cp $(binary) $(dest)
 endif
+		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

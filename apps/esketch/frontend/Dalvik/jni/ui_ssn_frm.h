@@ -1,7 +1,7 @@
 /*
 	'ui_ssn_frm.h' by Claude SIMON (http://q37.info/contact/).
 
-	 This file is part of 'eSketch' software.
+	This file is part of 'eSketch' software.
 
     'Ssketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
