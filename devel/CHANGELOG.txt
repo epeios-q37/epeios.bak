@@ -12,6 +12,16 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-03 :
+- PLGN :
+	% 'Init(...)' -> 'Initialize(...)'.
+- RGSTRY :
+	* Adding 'Dump( const entry__ &, ... )'.
+- SCLMISC :
+	* The plugin locale is now added to the main locale.
+	* Plugin arguments are now handled.
+	- Adaptation to changes in 'PLGN'.
+
 2016-01-02 :
 - SCLRGSTRY :
 	% Adding 'Arguments' entry for the plugins.

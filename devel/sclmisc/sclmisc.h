@@ -379,22 +379,29 @@ namespace sclmisc {
 		const char *Target,
 		str::string_ &Filename,
 		rgstry::entry__ &Configuration,
-		rgstry::entry__ &Locale );
+		rgstry::entry__ &Locale,
+		str::string_ &Arguments );
+
+	void HandleLocale_(
+		const rgstry::entry__ &Entry,
+		const str::string_ &Filename );
 
 	template <typename retriever> inline void Plug(
 		const char *Target,
 		retriever &PluginRetriever )
 	{
 	qRH
-		str::string Filename;
+		str::string Filename, Arguments;
 		rgstry::entry__ Configuration, Locale;
 	qRB
 		Filename.Init();
 		Configuration.Init();
 		Locale.Init();
 
-		GetPluginFeatures( Target, Filename, Configuration, Locale );
-		PluginRetriever.Init( Filename, Configuration, Locale );
+		GetPluginFeatures( Target, Filename, Configuration, Locale, Arguments );
+		HandleLocale_( Locale, Filename );
+
+		PluginRetriever.Initialize( Filename, Configuration, Arguments );
 	qRR
 	qRT
 	qRE

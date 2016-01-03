@@ -1515,7 +1515,8 @@ namespace rgstry {
 #	define RGSTRY_UNDEFINED_LEVEL	qNIL
 	E_CDEF( level__, UndefinedLevel, qNIL );
 
-	struct entry__ {
+	struct entry__
+	{
 		row__ Root;
 		const registry_ *Registry;
 		void reset( bso::bool__ = true )
@@ -1545,6 +1546,11 @@ namespace rgstry {
 			return ( Root == qNIL ) && ( Registry == NULL );
 		}
 	};
+
+	void Dump(
+		const entry__ &Entry,
+		bso::bool__ RootToo,
+		xml::writer_ &Writer );
 
 	typedef stk::E_BSTACKt_( entry__, level__ ) _entries_;
 	typedef stk::E_BSTACKt_( time_t, level__ ) _timestamps_;

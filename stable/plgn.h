@@ -62,7 +62,7 @@ namespace plgn {
 			return !strcmp(plugin::Identification(), Function() );
 		}
 	private:
-		bso::bool__ SubInit_(
+		bso::bool__ SubInitialize_(
 			const ntvstr::string___ &PluginPath,
 			err::handling__ ErrHandling )
 		{
@@ -108,7 +108,11 @@ namespace plgn {
 			_Plugin = NULL;
 		}
 		E_CDTOR( retriever___ );
-		bso::bool__ Init(
+		void Init( void )
+		{
+			reset();
+		}
+		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
@@ -117,7 +121,7 @@ namespace plgn {
 		qRH
 			plgncore::data__ Data;
 		qRB
-			if ( !SubInit_( PluginPath, ErrHandling ) )
+			if ( !SubInitialize_( PluginPath, ErrHandling ) )
 				return false;
 
 			Data.Init( err::qRRor, sclerror::SCLERRORError, Arguments );
@@ -133,7 +137,7 @@ namespace plgn {
 		qRE
 			return _Plugin != NULL;
 		}
-		bso::bool__ Init(
+		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
@@ -149,7 +153,7 @@ namespace plgn {
 			if ( !Registry.Convert( Configuration, ConfigurationEntry, ErrHandling ) )
 				qRReturn;
 
-			if ( !Init( PluginPath, ConfigurationEntry, Arguments, ErrHandling ) )
+			if ( !Initialize( PluginPath, ConfigurationEntry, Arguments, ErrHandling ) )
 				qRReturn;
 
 			Success = true;
@@ -158,7 +162,7 @@ namespace plgn {
 		qRE
 			return Success;
 		}
-		bso::bool__ Init(
+		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
@@ -168,7 +172,7 @@ namespace plgn {
 			fnm::name___ Location;
 			str::string Locale;
 		qRB
-			if ( !SubInit_( PluginPath, ErrHandling ) )
+			if ( !SubInitialize_( PluginPath, ErrHandling ) )
 				return false;
 
 			Location.Init();

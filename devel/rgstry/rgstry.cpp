@@ -1152,6 +1152,21 @@ qRE
 }
 #endif
 
+void rgstry::Dump(
+	const entry__ &Entry,
+	bso::bool__ RootToo,
+	xml::writer_ &Writer )
+{
+	if ( Entry.Registry == NULL )
+		qRFwk();
+
+	if ( Entry.Root == qNIL )
+		qRFwk();
+
+	Entry.Registry->Dump( Entry.Root, RootToo, Writer );
+}
+
+
 static value Empty_;
 
 const value_ &rgstry::Empty_( void )

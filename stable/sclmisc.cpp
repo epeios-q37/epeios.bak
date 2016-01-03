@@ -869,7 +869,8 @@ const str::string_ &sclmisc::GetPluginFeatures(
 	const char *Target,
 	str::string_ &Filename,
 	rgstry::entry__ &Configuration,
-	rgstry::entry__ &Locale )
+	rgstry::entry__ &Locale,
+	str::string_ &Arguments )
 {
 qRH
 	rgstry::tags Tags;
@@ -882,11 +883,55 @@ qRB
 
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Locale, Tags ), Locale );
-	qRR
+
+	sclmisc::OGetValue( rgstry::tentry__( sclrgstry::definition::plugin::Filename, Tags ), Arguments );
+qRR
 qRT
 qRE
 	return Filename;
 }
+
+namespace {
+	void Dump_(
+		const rgstry::entry__ &Entry,
+		str::string_ &XML )
+	{
+	qRH
+		flx::E_STRING_OFLOW___ SFlow;
+		txf::text_oflow__ TFlow;
+		xml::writer Writer;
+	qRB
+		SFlow.Init( XML );
+		TFlow.Init( SFlow );
+		Writer.Init( TFlow, xml::oCompact, xml::e_Default );
+
+		rgstry::Dump( Entry, true, Writer );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void sclmisc::HandleLocale_(
+	const rgstry::entry__ &Entry,
+	const str::string_ &Filename )
+{
+qRH
+	str::string XML;
+	fnm::name___ Location;
+qRB
+	XML.Init();
+	Dump_( Entry, XML );
+
+	Location.Init();
+	fnm::GetLocation( Filename, Location );
+
+	scllocale::Fill(scllocale::tMain, "Locale", Location, XML );
+qRR
+qRT
+qRE
+}
+
 
 Q37_GCTOR( sclmisc )
 {
