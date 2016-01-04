@@ -395,6 +395,7 @@ namespace sclmisc {
 		rgstry::entry__ Configuration, Locale;
 	qRB
 		Filename.Init();
+		Arguments.Init();
 		Configuration.Init();
 		Locale.Init();
 

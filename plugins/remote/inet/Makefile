@@ -35,8 +35,8 @@ mods += ntvstr que sdr stk str
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio bomhdl 
 mods += cdgb64 fil fnm lcl rgstry 
-mods += stsfsm xml xpp plgn tht 
-mods += mtk strmrg sck 
+mods += stsfsm xml xpp plgn strmrg 
+mods += tht mtk sck 
 mods += csdbnc csdrcc csdrcd csdsnc 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
@@ -356,6 +356,7 @@ ifdef EPEIOS_SRC
 			plugins/remote/
 	cp $(binary) $(dest)plugins/remote/
 endif
+		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

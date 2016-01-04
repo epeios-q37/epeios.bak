@@ -32,7 +32,9 @@ bso::bool__ csdrcu::core___::Init(
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
-	if ( !( Success = Retriever_.Init(PluginPath, Parameters, err::hUserDefined ) ) ) {
+	Retriever_.Init();
+
+	if ( !( Success = Retriever_.Initialize(PluginPath, Parameters, err::hUserDefined ) ) ) {
 		if ( ErrHandling == err::hThrowException )
 			qRFwk();
 		else
