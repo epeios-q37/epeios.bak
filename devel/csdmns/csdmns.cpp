@@ -17,25 +17,41 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDRCD__INC
-# define CSDRCD__INC
+#define CSDMNS__COMPILATION
 
-# define CSDRCD_NAME		"CSDRCD"
+#include "csdmns.h"
 
-# if defined( E_DEBUG ) && !defined( CSDRCD_NODBG )
-#  define CSDRCD_DBG
-# endif
+using namespace csdmns;
 
-// Client-Server Devices Remote Client Downstream
+#define CASE( n )\
+	case l##n:\
+		return #n;\
+		break
 
-# include "csdrcc.h"
-
-# include "err.h"
-
-namespace csdrcd {
-
-	using csdrcc::driver___;
-
+const char *csdmns::GetLogLabel( log__ Log )
+{
+	switch ( Log ) {
+		CASE( New );
+		CASE( Store );
+		CASE( TestAndGet );
+		CASE( Delete );
+	default:
+		qRFwk();
+		return NULL;	// Pour viter un 'warning'.
+		break;
+	}
 }
 
-#endif
+void csdmns::_callback___::_Clean( void )
+{
+	sdr::row__ Row = _Core.UPs.First();
+
+	while ( Row != qNIL ) {
+		_Callback->PostProcess( _Core.UPs( Row ) );
+
+		Row = _Core.UPs.Next( Row );
+	}
+
+	_Core.reset();
+}
+

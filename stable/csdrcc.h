@@ -26,7 +26,7 @@
 #  define CSDRCC_DBG
 # endif
 
-// Client-Server Devices Remove Client Core
+// Client-Server Devices Remote Client Core
 
 # include "err.h"
 # include "fdr.h"

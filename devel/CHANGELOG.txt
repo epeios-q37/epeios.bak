@@ -12,6 +12,11 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-06 :
+- 'CSDSNS' -> 'CSDMNS'.
+- 'CSDSNB' -> 'CSDMNB'.
+- 'CSDSNC' -> 'CSDMNC'.
+
 2016-01-04
 - CSDRCU
 	- Adaptation to changes in 'PLGN'.

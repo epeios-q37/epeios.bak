@@ -29,8 +29,8 @@ namespace registry {
 		using rgstry::entry___;
 	}
 	
-	extern entry___ ModuleService;
-	extern entry___ ModuleServiceType;
+	extern entry___ ModuleConnection;
+	extern entry___ ModuleConnectionType;
 	extern entry___ ModuleFilename;
 	extern entry___ ModuleLogFilename;
 	extern entry___ ModuleLogMode;
@@ -38,12 +38,7 @@ namespace registry {
 	SCLMISC_OV( GetModuleLogFilename, ModuleLogFilename );
 	SCLMISC_OV( GetRawModuleLogMode, ModuleLogMode );
 	SCLMISC_MV( GetModuleFilename, ModuleFilename );
-	SCLMISC_MV( GetRawModuleServiceType, ModuleServiceType );
-
-	inline bso::u16__ GetRawModuleService( void )
-	{
-		return sclmisc::MGetU16( ModuleService );
-	}
+	SCLMISC_MV( GetRawModuleConnectionType, ModuleConnectionType );
 }
 
 #endif

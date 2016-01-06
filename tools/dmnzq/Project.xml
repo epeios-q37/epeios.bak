@@ -26,12 +26,11 @@
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">
-				<Module>csdbns</Module>
 				<Module>csdlec</Module>
 				<Module>csdleo</Module>
 				<Module>csdscb</Module>
-				<Module>csdsnb</Module>
-				<Module>csdsns</Module>
+				<Module>csdmnb</Module>
+				<Module>csdmns</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>

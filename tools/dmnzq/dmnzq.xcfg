@@ -8,7 +8,11 @@
 			<xpp:ifeq select="packing" value="yes">
 				<xpp:bloc>
 					<Module>
-						<Service Type="Straight">53700</Service>
+						<Connection Type="Straight">53700</Connection>
+						<!--
+							If 'Type' == 'Straight' or 'Muxed', 'Connection' value must be a port to; liste to.
+							if 'Type' == 'Proxy', 'Connection' must have a plugin id.
+						-->
 						<Filename>xdhbrwq</Filename>
 					</Module>
 				</xpp:bloc>
@@ -18,6 +22,10 @@
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>
+			<Plugins>
+				<Plugin id="Forced">
+				</Plugin>
+			</Plugins>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>

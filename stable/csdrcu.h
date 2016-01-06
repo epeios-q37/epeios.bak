@@ -26,7 +26,7 @@
 #  define CSDRCU_DBG
 # endif
 
-// Client-Server Devices Remove Client Upstream
+// Client-Server Devices Remote Client Upstream
 
 # include "csdrcc.h"
 

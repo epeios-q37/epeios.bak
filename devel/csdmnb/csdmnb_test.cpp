@@ -17,25 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDRCD__INC
-# define CSDRCD__INC
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-# define CSDRCD_NAME		"CSDRCD"
+#include "csdmnb.h"
 
-# if defined( E_DEBUG ) && !defined( CSDRCD_NODBG )
-#  define CSDRCD_DBG
-# endif
+#include "err.h"
+#include "cio.h"
 
-// Client-Server Devices Remote Client Downstream
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
 
-# include "csdrcc.h"
-
-# include "err.h"
-
-namespace csdrcd {
-
-	using csdrcc::driver___;
-
+void Generic( int argc, char *argv[] )
+{
+qRH
+qRB
+qRR
+qRT
+qRE
 }
 
-#endif
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+qRFH
+qRFB
+	COut << "Test of library " << CSDMNB_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+qRFR
+	ExitValue = EXIT_FAILURE;
+qRFT
+qRFE
+	return ExitValue;
+}

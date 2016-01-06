@@ -24,7 +24,7 @@
 
 #include "csdlec.h"
 #include "csdbns.h"
-#include "csdsns.h"
+#include "csdmns.h"
 
 #include "err.h"
 #include "cio.h"
@@ -53,10 +53,6 @@ static void PrintHeader_( void )
 	COut << "Copyright (C) " COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 }
-
-#define C( name )\
-	else if ( Command == #name )\
-		name##_()
 
 namespace {
 	csdlec::library_embedded_client_core__ *Core_ = NULL;
@@ -108,17 +104,44 @@ namespace {
 		return Handling;
 	}
 
-	inline csdbns::port__ GetService_( void )
-	{
-		return registry::GetRawModuleService();
-	}
-
+	// If modified, modify also 'GetLabel_(...) below.
 	E_ENUM( module_connection_type ) {
 		mctStraight,	
-		mctSwitched,
+		mctMuxed,	// Has also label 'Switched' for historical reasons.
+		mctProxy,	// 'Muxed' connection, but through the 'proxyq' program : 
 		mct_amount,
 		mct_Undefined
 	};
+
+#define C( name )\
+	case mct ##name :\
+		return #name;\
+		break
+
+	const char *GetLabel_( module_connection_type__ Type )
+	{
+		switch ( Type ) {
+		C( Straight );
+		C( Muxed );
+		C( Proxy );
+		default:
+			qRFwk();
+			break;
+		}
+
+		return NULL;	// To avoid a 'warning'.
+	}
+
+#undef C
+
+	stsfsm::automat ModuleConnectionTypeAutomat_;
+
+	void FillAutomats_( void )
+	{
+		stsfsm::Fill( ModuleConnectionTypeAutomat_, mct_amount, GetLabel_ );
+
+		stsfsm::Add( "Switched", mctMuxed, ModuleConnectionTypeAutomat_ );
+	}
 
 	module_connection_type__ GetModuleConnectionType_( void )
 	{
@@ -128,29 +151,29 @@ namespace {
 	qRB
 		Value.Init();
 
-		registry::GetRawModuleServiceType( Value );
+		registry::GetRawModuleConnectionType( Value );
 
-		if ( Value == "Straight" )
-			Type = mctStraight;
-		else if ( Value == "Switched" )
-			Type = mctSwitched;
-		else
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleServiceType );
+		Type = stsfsm::GetId( Value, ModuleConnectionTypeAutomat_, mct_Undefined, mct_amount );
+
+		if ( Type == mct_Undefined )
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleConnectionType );
 	qRR
 	qRT
 	qRE
 		return Type;
 	}
 
-	void UseStraightConnections_(
-		csdscb::callback__ &Callback,
-		const bso::char__ *Module,
-		csdbns::port__ Port )
+	csdbns::port__ GetPort_( void )
+	{
+		sclmisc::MGetU16( registry::ModuleConnection );
+	}
+
+	void UseStraightConnections_( csdscb::callback__ &Callback )
 	{
 	qRH
 		csdbns::server___ Server;
 	qRB
-		Server.Init( Port, Callback );
+		Server.Init( GetPort_(), Callback );
 
 		Server.Process();
 	qRR
@@ -158,15 +181,14 @@ namespace {
 	qRE
 	}
 
-	void UseSwitchingConnections_(
+	void UseMuxedConnections_(
 		csdscb::callback__ &Callback,
-		csdsns::log_functions__ &LogFunctions,
-		csdbns::port__ Port )
+		csdmns::log_functions__ &LogFunctions )
 	{
 	qRH
-		csdsns::server___ Server;
+		csdmns::server___ Server;
 	qRB
-		Server.Init( Port, Callback, LogFunctions );
+		Server.Init( GetPort_(), Callback, LogFunctions );
 
 		Server.Process();
 	qRR
@@ -174,7 +196,7 @@ namespace {
 	qRE
 	}
 
-	typedef csdsns::log_functions__ _log_functions__;
+	typedef csdmns::log_functions__ _log_functions__;
 
 	class log_functions__
 	: public _log_functions__
@@ -182,18 +204,18 @@ namespace {
 	private:
 		txf::text_oflow__ *_Flow;
 	protected:
-		virtual void CSDSNSLog(
-			csdsns::log__ Log,
-			csdsns::id__ Id,
+		virtual void CSDMNSLog(
+			csdmns::log__ Log,
+			csdmns::id__ Id,
 			void *UP,
-			sdr::size__ Amount )
+			sdr::size__ Amount ) override
 		{
 			tol::buffer__ Buffer;
 
 			if ( _Flow == NULL )
 				qRGnr();
 
-			*_Flow << '[' << tol::DateAndTime( Buffer ) << "] " << csdsns::GetLogLabel( Log ) << ' ' << Id << '/' << Amount << txf::nl << txf::commit;
+			*_Flow << '[' << tol::DateAndTime( Buffer ) << "] " << csdmns::GetLogLabel( Log ) << ' ' << Id << '/' << Amount << txf::nl << txf::commit;
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -216,11 +238,10 @@ namespace {
 		}
 	};
 
-	void UseSwitchingConnections_(
+	void UseMuxedConnections_(
 		csdscb::callback__ &Callback,
 		const char *LogFileName,
-		log_file_handling__ LogFileHandling,
-		csdbns::port__ Port )
+		log_file_handling__ LogFileHandling )
 	{
 	qRH
 		flf::file_oflow___ FFlow;
@@ -257,7 +278,7 @@ namespace {
 				TFlow.Init( FFlow );
 		}
 
-		UseSwitchingConnections_( Callback, LogFileName == NULL ? *(csdsns::log_functions__ *)NULL : LogFunctions, Port );
+		UseMuxedConnections_( Callback, LogFileName == NULL ? *(csdmns::log_functions__ *)NULL : LogFunctions );
 	qRR
 	qRT
 	qRE
@@ -265,7 +286,6 @@ namespace {
 
 	void Process_(
 		const bso::char__ *ModuleFilename,
-		csdbns::port__ Port,
 		module_connection_type__ ConnectionType,
 		const char *LogFileName,
 		log_file_handling__ LogFileHandling )
@@ -296,10 +316,13 @@ namespace {
 
 		switch ( ConnectionType ) {
 		case mctStraight:
-			UseStraightConnections_( Core_->GetCallback(), ModuleFilename, Port );
+			UseStraightConnections_( Core_->GetCallback() );
 			break;
-		case mctSwitched:
-			UseSwitchingConnections_( Core_->GetCallback(), LogFileName, LogFileHandling, Port );
+		case mctMuxed:
+			UseMuxedConnections_( Core_->GetCallback(), LogFileName, LogFileHandling );
+			break;
+		case mctProxy:
+			UseProxyConnection_( Core_->GetCallback() );
 			break;
 		default:
 			qRGnr();
@@ -340,7 +363,7 @@ namespace {
 	qRB
 		ModuleFileName.Init();
 
-		Process_( registry::GetModuleFilename( ModuleFileName ).Convert( Buffer ), GetService_(), GetModuleConnectionType_(), LogFileName, LogFileHandling );
+		Process_( registry::GetModuleFilename( ModuleFileName ).Convert( Buffer ), GetModuleConnectionType_(), LogFileName, LogFileHandling );
 	qRR
 	qRT
 	qRE
@@ -361,6 +384,10 @@ namespace {
 	qRE
 	}
 }
+
+#define C( name )\
+	else if ( Command == #name )\
+		name##_()
 
 int scltool::SCLTOOLMain(
 	const str::string_ &Command,
@@ -384,5 +411,11 @@ qRE
 	return ExitValue;
 }
 
+#undef C
+
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
 
+Q37_GCTOR( dmnzq )
+{
+	FillAutomats_();
+}

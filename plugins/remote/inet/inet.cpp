@@ -27,20 +27,20 @@
 
 #include "csdrcd.h"
 
-#include "csdsnc.h"
+#include "csdmnc.h"
 
 #define PLUGIN_NAME	"inet"
 
 typedef csdrcd::driver___ _plugin___;
 
-typedef csdsnc::_driver___ _driver___;
+typedef csdmnc::_driver___ _driver___;
 
 class plugin___
 : public _plugin___,
   public _driver___
 {
 private:
-	csdsnc::core Core_;
+	csdmnc::core Core_;
 protected:
 	virtual fdr::size__ FDRWrite(
 		const fdr::byte__ *Buffer,

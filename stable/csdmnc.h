@@ -17,77 +17,56 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: csdsnc.h,v 1.46 2013/07/26 10:45:22 csimon Exp $
+#ifndef CSDMNC__INC
+# define CSDMNC__INC
 
-#ifndef CSDSNC__INC
-#define CSDSNC__INC
+# define CSDMNC_NAME		"CSDMNC"
 
-#define CSDSNC_NAME		"CSDSNC"
+# if defined( E_DEBUG ) && !defined( CSDMNC_NODBG )
+#  define CSDMNC_DBG
+# endif
 
-#define	CSDSNC_VERSION	"$Revision: 1.46 $"
+// Client-Server Devices Muxed Network Client;
 
-#define CSDSNC_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# include "csdmnb.h"
+# include "csdbnc.h"
 
-#if defined( E_DEBUG ) && !defined( CSDSNC_NODBG )
-#define CSDSNC_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.46 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/07/26 10:45:22 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Client-Server Standard Network Client 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "sck.h"
-#include "stk.h"
-#include "csdbnc.h"
-#include "csdsnb.h"
-#include "bso.h"
-#include "cpe.h"
-#include "ags.h"
+# include "err.h"
+# include "sck.h"
+# include "stk.h"
 
 #ifdef CPE_F_MT
-#	define CSDSNC__MT
+#	define CSDMNC__MT
 #endif
 
-#ifdef CSDSNC__MT
+#ifdef CSDMNC__MT
 #	include "mtx.h"
 #endif
 
-#define CSDSNC_PING_RESOLUTION	( 2 * 1000 )	// Rsolution du dlai d'inactivit donne pour les 'ping's.
+#define CSDMNC_PING_DELAY	( 2 * 1000 )	// Delay between 2 pings to maintain the connection.
 
-#define CSDSNC_DEFAULT_CACHE_SIZE	100
+#define CSDMNC_DEFAULT_CACHE_SIZE	100
 
-namespace csdsnc {
-	using namespace csdsnb;
-#ifdef CSDSNC__MT
+namespace csdmnc {
+		using namespace csdmnb;
+#ifdef CSDMNC__MT
 	typedef mtx::handler___	mutex__;
-#	define CSDSNC_NO_MUTEX			MTX_INVALID_HANDLER
+#	define CSDMNC_NO_MUTEX			MTX_INVALID_HANDLER
 #else
 	typedef void *mutex__;
-#	define CSDSNC_NO_MUTEX			NULL
+#	define CSDMNC_NO_MUTEX			NULL
 #endif
 
 	inline void _Lock( mutex__ Mutex )
 	{
-#ifdef CSDSNC__MT
+#ifdef CSDMNC__MT
 		mtx::Lock( Mutex );
 #endif
 	}
 
 	inline void _Unlock( mutex__ Mutex )
 	{
-#ifdef CSDSNC__MT
+#ifdef CSDMNC__MT
 		mtx::Unlock( Mutex );
 #endif
 	}
@@ -96,17 +75,17 @@ namespace csdsnc {
 		mutex__ Mutex,
 		bso::bool__ EvenIfLocked = false )
 	{
-#ifdef CSDSNC__MT
+#ifdef CSDMNC__MT
 		mtx::Delete( Mutex, EvenIfLocked );
 #endif
 	}
 
 	inline mutex__ _Create( void )
 	{
-#ifdef CSDSNC__MT
+#ifdef CSDMNC__MT
 		return mtx::Create();
 #else
-		return CSDSNC_NO_MUTEX;
+		return CSDMNC_NO_MUTEX;
 #endif
 	}
 
@@ -127,7 +106,7 @@ namespace csdsnc {
 	class log_callback__
 	{
 	protected:
-		virtual void CSDSNCLog(
+		virtual void CSDMNCLog(
 			log__ Log,
 			const void *Flow,
 			sdr::size__ Amount ) = 0;
@@ -146,7 +125,7 @@ namespace csdsnc {
 			const void *Flow,
 			sdr::size__ Amount )
 		{
-			CSDSNCLog( Log ,Flow, Amount );
+			CSDMNCLog( Log ,Flow, Amount );
 		}
 	};
 
@@ -191,7 +170,7 @@ qRE
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( S_.Ping.Mutex != CSDSNC_NO_MUTEX )
+				if ( S_.Ping.Mutex != CSDMNC_NO_MUTEX )
 					_Lock( S_.Ping.Mutex );	// Signale au 'thread' du 'ping' qu'il doit se terminer.
 
 				_DeleteFlows();
@@ -199,26 +178,26 @@ qRE
 				if ( S_.HostService != NULL )
 					free( S_.HostService );
 
-				if ( S_.Ping.Mutex != CSDSNC_NO_MUTEX ) {
+				if ( S_.Ping.Mutex != CSDMNC_NO_MUTEX ) {
 					_Lock( S_.Ping.Mutex );	// Attend que le 'thread' ud 'ping' prenne acte de la demnade de terminaison.
 					_Delete( S_.Ping.Mutex, true );
 				}
 
-				if ( S_.MainMutex != CSDSNC_NO_MUTEX )
+				if ( S_.MainMutex != CSDMNC_NO_MUTEX )
 					_Delete( S_.MainMutex );
 
-				if ( S_.Log.Mutex != CSDSNC_NO_MUTEX )
+				if ( S_.Log.Mutex != CSDMNC_NO_MUTEX )
 					_Delete( S_.Log.Mutex );
 			}
 
 			Flows.reset( P );
 
 			S_.HostService = NULL;
-			S_.MainMutex = CSDSNC_NO_MUTEX;
-			S_.Log.Mutex = CSDSNC_NO_MUTEX;
+			S_.MainMutex = CSDMNC_NO_MUTEX;
+			S_.Log.Mutex = CSDMNC_NO_MUTEX;
 			S_.Log.Callback = NULL;
 			S_.Ping.Delay = 0;
-			S_.Ping.Mutex = CSDSNC_NO_MUTEX;
+			S_.Ping.Mutex = CSDMNC_NO_MUTEX;
 		}
 		void plug( qSD__ &SD )
 		{
@@ -358,14 +337,14 @@ qRE
 		}
 		void _Commit( void )
 		{
-#ifdef CSDSNC_DBG
+#ifdef CSDMNC_DBG
 			if ( _Flow == NULL )
 				qRFwk();
 #endif
 
 			_Flow->Commit();
 
-			if ( _Id == CSDSNB_UNDEFINED )
+			if ( _Id == CSDMNB_UNDEFINED )
 				_Id = GetId( *_Flow );
 			else if ( _Flow->Get() != 0 )
 				qRFwk();
@@ -412,7 +391,7 @@ qRE
 				}
 
 				_Flow = NULL;
-				_Id = CSDSNB_UNDEFINED;
+				_Id = CSDMNB_UNDEFINED;
 				_Core = NULL;
 			}
 			_driver___( void )
@@ -439,7 +418,7 @@ qRE
 	{
 	private:
 		_driver___ _Driver;
-		flw::byte__ _Cache[CSDSNC_DEFAULT_CACHE_SIZE];
+		flw::byte__ _Cache[CSDMNC_DEFAULT_CACHE_SIZE];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -460,5 +439,4 @@ qRE
 	};
 }
 
-/*$END$*/
 #endif

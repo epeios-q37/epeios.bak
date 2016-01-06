@@ -17,45 +17,28 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: csdsnb.h,v 1.4 2013/03/29 11:02:50 csimon Exp $
+#ifndef CSDMNB__INC
+# define CSDMNB__INC
 
-#ifndef CSDSNB__INC
-#define CSDSNB__INC
+# define CSDMNB_NAME		"CSDMNB"
 
-#define CSDSNB_NAME		"CSDSNB"
+# if defined( E_DEBUG ) && !defined( CSDMNB_NODBG )
+#  define CSDMNB_DBG
+# endif
 
-#define	CSDSNB_VERSION	"$Revision: 1.4 $"
+// Client-Server Devices Muxed Network Base
 
-#define CSDSNB_OWNER		"Claude SIMON"
+# include "err.h"
+# include "bso.h"
+# include "flw.h"
+# include "dtfptb.h"
 
-#if defined( E_DEBUG ) && !defined( CSDSNB_NODBG )
-#define CSDSNB_DBG
-#endif
+# define CSDMNB_PING	BSO_U8_MAX
+# define CSDMNB_CLOSE	( CSDMNB_PING - 1 )
+# define CSDMNB_UNDEFINED	( CSDMNB_CLOSE - 1 )
+# define CSDMNB_RESERVED	CSDMNB_UNDEFINED
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.4 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/03/29 11:02:50 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Client-Server Standard Network Base 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#	include "err.h"
-#	include "flw.h"
-#	include "dtfptb.h"
-
-#	define CSDSNB_PING	BSO_U8_MAX
-#	define CSDSNB_CLOSE	( CSDSNB_PING - 1 )
-#	define CSDSNB_UNDEFINED	( CSDSNB_CLOSE - 1 )
-#	define CSDSNB_RESERVED	CSDSNB_UNDEFINED
-
-namespace csdsnb {
+namespace csdmnb {
 	typedef bso::u8__ id__;
 
 	inline void PutId(
@@ -71,5 +54,4 @@ namespace csdsnb {
 	}
 }
 
-/*$END$*/
 #endif

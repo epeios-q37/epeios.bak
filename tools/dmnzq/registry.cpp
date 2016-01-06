@@ -29,7 +29,7 @@ entry___ registry::ModuleLogMode( "@Mode", ModuleLog_ );
 
 entry___ registry::ModuleFilename( "Filename", Module_ );
 
-entry___ registry::ModuleService( "Service", Module_ );
-entry___ registry::ModuleServiceType( "@Type", ModuleService );
+entry___ registry::ModuleConnection( "Connection", Module_ );
+entry___ registry::ModuleConnectionType( "@Type", ModuleConnection );
 
 

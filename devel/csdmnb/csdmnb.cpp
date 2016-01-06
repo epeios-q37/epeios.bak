@@ -17,42 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDSNS__COMPILATION
+#define CSDMNB__COMPILATION
 
-#include "csdsns.h"
+#include "csdmnb.h"
 
-using namespace csdsns;
-
-#define CASE( n )\
-	case l##n:\
-		return #n;\
-		break
-
-
-const char *csdsns::GetLogLabel( log__ Log )
-{
-	switch ( Log ) {
-		CASE( New );
-		CASE( Store );
-		CASE( TestAndGet );
-		CASE( Delete );
-	default:
-		qRFwk();
-		return NULL;	// Pour viter un 'warning'.
-		break;
-	}
-}
-
-void csdsns::_callback___::_Clean( void )
-{
-	sdr::row__ Row = _Core.UPs.First();
-
-	while ( Row != qNIL ) {
-		_Callback->PostProcess( _Core.UPs( Row ) );
-
-		Row = _Core.UPs.Next( Row );
-	}
-
-	_Core.reset();
-}
+using namespace csdmnb;
 

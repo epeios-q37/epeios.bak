@@ -37,8 +37,7 @@ mods += uys utf xtf llio tht
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp dlbrry 
 mods += mtk sck 
-mods += csdbns csdlec csdleo csdscb csdsnb 
-mods += csdsns 
+mods += csdlec csdleo csdscb csdmnb csdmns 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += registry 
@@ -350,6 +349,7 @@ ifdef EPEIOS_SRC
 			
 	cp $(binary) $(dest)
 endif
+		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

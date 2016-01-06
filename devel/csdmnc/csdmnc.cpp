@@ -17,22 +17,22 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDSNC__COMPILATION
+#define CSDMNC__COMPILATION
 
-#include "csdsnc.h"
+#include "csdmnc.h"
 
-#ifdef CSDSNC__MT
+using namespace csdmnc;
+
+#ifdef CSDMNC__MT
 #	include "mtk.h"
 #endif
-
-using namespace csdsnc;
 
 #define CASE( n )\
 	case l##n:\
 		return #n;\
 		break
 
-const char *csdsnc::GetLogLabel( log__ Log )
+const char *csdmnc::GetLogLabel( log__ Log )
 {
 	switch ( Log ) {
 		CASE( Creation );
@@ -51,7 +51,7 @@ static void Ping_(
 {
 	if ( ( tol::EpochTime( false ) - Flow.EpochTimeStamp() ) >= Delay )
 		if ( !Flow.OFlowIsLocked() ) {
-			csdsnb::PutId( CSDSNB_PING, Flow );
+			csdmnb::PutId( CSDMNB_PING, Flow );
 			Flow.Commit();
 
 			if ( Flow.Get() != 0 )
@@ -61,7 +61,7 @@ static void Ping_(
 		}
 }
 
-void csdsnc::core_::Ping( void )
+void csdmnc::core_::Ping( void )
 {
 	_Lock( S_.MainMutex );
 
@@ -77,17 +77,17 @@ void csdsnc::core_::Ping( void )
 	_Unlock( S_.MainMutex );
 }
 
-#ifdef CSDSNC__MT
+#ifdef CSDMNC__MT
 static void KeepAlive_( void *UP )
 {
-	csdsnc::core_ &Core = *(csdsnc::core_ *)UP;
+	csdmnc::core_ &Core = *(csdmnc::core_ *)UP;
 	tol::timer__ Timer;
 
 	Timer.Init( Core.S_.Ping.Delay );
 	Timer.Launch();
 
-	while ( !mtx::IsLocked( Core.S_.Ping.Mutex ) ) {	// Tant que pas de demande de terminaison.
-		tht::Suspend( CSDSNC_PING_RESOLUTION );
+	while ( !mtx::IsLocked( Core.S_.Ping.Mutex ) ) {	// While no terminating request.
+		tht::Suspend( CSDMNC_PING_DELAY );
 
 		if ( Timer.IsElapsed() ) {
 			Core.Ping();
@@ -95,14 +95,14 @@ static void KeepAlive_( void *UP )
 		}
 	}
 
-	_Unlock( Core.S_.Ping.Mutex );	// Signale que la demande de terminaison a t prise en compte.
+	_Unlock( Core.S_.Ping.Mutex );	// Reports that the terminating request has been handled.
 }
 #endif
 
-void csdsnc::core_::_KeepAlive( time_t Delay )
+void csdmnc::core_::_KeepAlive( time_t Delay )
 {
-#ifdef CSDSNC__MT
-	if ( Delay <= CSDSNC_PING_RESOLUTION )
+#ifdef CSDMNC__MT
+	if ( Delay <= CSDMNC_PING_DELAY )
 		qRFwk();
 
 	mtk::Launch( ::KeepAlive_, this );
@@ -112,11 +112,11 @@ void csdsnc::core_::_KeepAlive( time_t Delay )
 #endif
 }
 
-void csdsnc::core_::_DeleteFlows( void )
+void csdmnc::core_::_DeleteFlows( void )
 {
 	while ( Flows.Amount() != 0 )
 	{
-		PutId( CSDSNB_CLOSE, *Flows.Top() );
+		PutId( CSDMNB_CLOSE, *Flows.Top() );
 		delete Flows.Pop();
 	}
 }

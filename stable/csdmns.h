@@ -17,27 +17,27 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef CSDSNS__INC
-# define CSDSNS__INC
+#ifndef CSDMNS__INC
+# define CSDMNS__INC
 
-# define CSDSNS_NAME		"CSDSNS"
+# define CSDMNS_NAME		"CSDMNS"
 
-# if defined( E_DEBUG ) && !defined( CSDSNS_NODBG )
-#  define CSDSNS_DBG
+# if defined( E_DEBUG ) && !defined( CSDMNS_NODBG )
+#  define CSDMNS_DBG
 # endif
 
-// Client-Server Standard Network Server
+// Client-Server Devices Muxed Network Server
 
-# include "err.h"
-# include "flw.h"
+# include "csdmnb.h"
+# include "csdscb.h"
 # include "csdbns.h"
-# include "csdsnb.h"
+
+# include "sdr.h"
 # include "lstbch.h"
-# include "mtx.h"
+# include "err.h"
 
-namespace csdsns {
-
-	using namespace csdsnb;
+namespace csdmns {
+	using namespace csdmnb;
 	using namespace csdscb;
 
 	using csdbns::port__;
@@ -57,7 +57,7 @@ namespace csdsns {
 
 	class log_functions__ {
 	protected:
-		virtual void CSDSNSLog(
+		virtual void CSDMNSLog(
 			log__ Log,
 			id__ Id,
 			void *UP,
@@ -86,7 +86,7 @@ namespace csdsns {
 			_user_pointer__ UP,
 			sdr::size__ Amount )
 		{
-			CSDSNSLog( Log, Id, UP, Amount );
+			CSDMNSLog( Log, Id, UP, Amount );
 		}
 	};
 
@@ -181,8 +181,8 @@ qRE
 			_user_pointer__ UP,
 			id__ Id )
 		{
-#ifdef CSDSNS_DBG
-			if ( Id == CSDSNB_UNDEFINED )
+#ifdef CSDMNS_DBG
+			if ( Id == CSDMNB_UNDEFINED )
 				qRFwk();
 #endif
 			mtx::Lock( S_.Mutex );
@@ -263,24 +263,24 @@ qRE
 			flw::ioflow__ &Flow,
 			void *UP )
 		{
-#ifdef CSDSNS_DBG
+#ifdef CSDMNS_DBG
 			if ( UP != NULL )
 				qRFwk();
 #endif
-			id__ Id = CSDSNB_UNDEFINED;
+			id__ Id = CSDMNB_UNDEFINED;
 			action__ Action = aContinue;
 
 			UP = NULL;
 
 			Id = GetId( Flow );
 
-			if ( Id == CSDSNB_UNDEFINED ) {
+			if ( Id == CSDMNB_UNDEFINED ) {
 				Id = _Core.New();
 				PutId( Id, Flow );
 				UP = _Callback->PreProcess( _Origin );
 				_Core.Store( UP, Id );
 				Action = _Callback->Process( Flow, UP );
-			} else if ( Id == CSDSNB_PING ) {
+			} else if ( Id == CSDMNB_PING ) {
 				Flow.Put( (flw::byte__)0 );
 				Flow.Commit();
 			} else if ( !_Core.TestAndGet( Id, UP ) ) {
@@ -297,7 +297,7 @@ qRE
 				break;
 			case aStop:
 				_Callback->PostProcess( UP );
-				if ( Id < CSDSNB_RESERVED )
+				if ( Id < CSDMNB_RESERVED )
 					_Core.Delete( Id );
 				break;
 			default:
@@ -369,8 +369,6 @@ qRE
 			_Server.Process( TimeOut );
 		}
 	};
-
-
 }
 
 #endif
