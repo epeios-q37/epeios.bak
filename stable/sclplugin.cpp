@@ -57,44 +57,51 @@ _callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 }
 
 namespace {
-	void HandleArguments_( strmrg::retriever__ &Arguments )
+	E_CDEF( char, EscapeChar, '\\' );
+
+	void HandleArguments_( const str::string_ &MergedArguments )
 	{
 	qRH
-		str::strings Strings;
-		str::string String;
+		str::strings Arguments;
+		str::string Argument;
+		sdr::row__ Row = qNIL;
+		bso::bool__ Escape = false;
+		bso::char__ C = 0;
 	qRB
-		Strings.Init();
-		while ( !Arguments.Availability() == strmrg::aNone ) {
-			String.Init()	;
-			Arguments.GetString( String );
-			Strings.Append( String );
+		Row = MergedArguments.First();
+
+		Arguments.Init();
+		Argument.Init();
+
+		while ( Row != qNIL ) {
+			if ( ( C = MergedArguments(Row) ) == EscapeChar ) {
+				if ( Escape ) {
+					Escape = false;
+					Argument.Append( EscapeChar );
+				} else 
+					Escape = true;
+			} else if ( Escape ) {
+				if ( C == ' ' )
+					Argument.Append( ' ' );
+				else
+					sclmisc::ReportAndAbort(SCLPLUGIN_NAME "_BadArguments" );
+
+				Escape = false;
+			} else if ( C == ' ' ) {
+				if ( Argument.Amount() != 0 )
+					Arguments.Append( Argument );
+
+				Argument.Init();
+			} else
+				Argument.Append( C );
+
+			Row = MergedArguments.Next( Row );
 		}
 
-		sclargmnt::FillRegistry( Strings, sclargmnt::faIsArgument, sclargmnt::uaReport );
-	qRR
-	qRT
-	qRE
-	}
+		if ( Argument.Amount() != 0 )
+			Arguments.Append( Argument );
 
-	void HandleArguments_( const strmrg::table_ &Arguments )
-	{
-		strmrg::retriever__ Retriever;
-
-		Retriever.Init( Arguments );
-
-		HandleArguments_( Retriever );
-	}
-
-	void HandleArguments_( const str::string_ &Arguments )
-	{
-	qRH
-		strmrg::table Splitted;
-		
-	qRB
-		Splitted.Init();
-		strmrg::Split( Arguments, Splitted );
-
-		HandleArguments_( Splitted );
+		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 	qRR
 	qRT
 	qRE

@@ -19,13 +19,13 @@
 			<xpp:define name="PluginsRootDir">
 				<xpp:bloc>
 					<xpp:ifeq select="env" value="windows">
-						<xpp:bloc>h:/bin/dmnzq/plugins/</xpp:bloc>
+						<xpp:bloc>h:/bin/plugins/dmnzq/</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="linux">
-						<xpp:bloc>/home/csimon/bin/dmnzq/plugins/</xpp:bloc>
+						<xpp:bloc>/home/csimon/bin/plugins/dmnzq/</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="mac">
-						<xpp:bloc>/Users/csimon/bin/dmnzq/plugins/</xpp:bloc>
+						<xpp:bloc>/Users/csimon/bin/plugins/dmnzq/</xpp:bloc>
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>

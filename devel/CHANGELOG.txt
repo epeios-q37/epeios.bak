@@ -18,7 +18,13 @@ Meaning of list markers (2nd level):
 	- Standardisation of the optionality of the 'LogCallback' parameter.
 	- Adding missing methods to 'server___'.
 - SCLMISC :
-	- # The plugin arguments were retrieved from the 'Filename' entry instead of the 'Arguments' one.
+	# The plugin arguments were retrieved from the 'Filename' entry instead of the 'Arguments' one.
+	* The plugin arguments are now retrieved from the 'Parmeters/Plugin' entry value, and no more from the 'Definitions/Plugins/Plugin/Arguemnts' entry.
+	* The plugin id for a given target is now retrieved from the 'Id' attribute.
+- SCLPLUGIN :
+	* The plugin arguments are now separated by a space, with '\' as escape character.
+- SCLRGSTRY :
+	% Removing/adding entries related to plugins needed to changes in 'SCLMISC'.
 
 2016-01-06 :
 - 'CSDSNS' -> 'CSDMNS'.

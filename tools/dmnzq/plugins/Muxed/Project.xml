@@ -17,7 +17,7 @@
 		<Software>dmnzq</Software>
 		<UUID>bd259ca0-538e-4b4b-8da7-e0fe3ad4578e</UUID>
 	</About>
-	<InstallPath>dmnzq/plugins/</InstallPath>
+	<InstallPath>plugins/dmnzq/</InstallPath>
 	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">

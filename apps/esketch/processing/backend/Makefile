@@ -166,7 +166,8 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	
+	libs += -lws2_32
+
 	LDFLAGS += -static
 	
 	ifeq ("$(target)","$(win)")
@@ -206,7 +207,6 @@ ifeq ("$(os)","$(Cygwin)")
 	
 	binary=$(name).dll
 	lo += -Wl,--kill-at -shared
-	libs += -lws2_32
 
 	dest=/cygdrive/h/bin/
 
@@ -330,7 +330,6 @@ ifeq ("$(os)","$(MacOS)")
 	lo += -dynamiclib
 
 	dest=/Users/csimon/bin/
-
 endif
 
 ##########################
@@ -363,9 +362,12 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
+		
 	mkdir -p $(dest)
+			
 	cp $(binary) $(dest)
 endif
+		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

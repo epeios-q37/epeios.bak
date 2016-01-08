@@ -10,4 +10,5 @@
 	<xpp:expand href="sclrgstry.xlcl"/>
 	<xpp:expand href="scltool.xlcl"/>
 	<xpp:expand href="sclxdhtml.xlcl"/>
+	<xpp:expand href="sclplugin.xlcl"/>
 </xpp:bloc>

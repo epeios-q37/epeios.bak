@@ -2,7 +2,6 @@
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<Parameters>
 		<Command>Default</Command>
-		<Service>53700</Service>
 	</Parameters>
 	<Arguments>
 		<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%ServiceArgument%"/>

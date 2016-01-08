@@ -843,7 +843,7 @@ qRB
 	Tags.Append( str::string( Target ) );
 
 	Id.Init();
-	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::Plugin, Target ), Id );
+	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::plugin::Id, Target ), Id );
 
 	Tags.Append( Id );
 qRR
@@ -884,7 +884,7 @@ qRB
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Locale, Tags ), Locale );
 
-	sclmisc::OGetValue( rgstry::tentry__( sclrgstry::definition::plugin::Arguments, Tags ), Arguments );
+	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::Plugin, Target ), Arguments );
 qRR
 qRT
 qRE

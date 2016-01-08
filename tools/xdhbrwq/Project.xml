@@ -62,6 +62,7 @@
 			<File Path="js/">xdhtml.js</File>
 			<File>xdh.php</File>
 		</Files>
+		<File>dmnzq.xprj</File>
 		<File Path="../">XDH.xcfg</File>
 	</Files>
 	<Packing>

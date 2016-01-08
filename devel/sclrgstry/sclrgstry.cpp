@@ -80,6 +80,7 @@ namespace parameter_ {
 }
 
 rgstry::entry___ sclrgstry::parameter::Plugin( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), parameter_::Plugins_ );
+rgstry::entry___ sclrgstry::parameter::plugin::Id( "@Id", ::parameter::Plugin );
 
 namespace definition {
 	static rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclrgstry::Definitions );
@@ -89,7 +90,6 @@ namespace definition {
 rgstry::entry___ sclrgstry::definition::plugin::Filename( "Filename", ::definition::Plugin_ );
 rgstry::entry___ sclrgstry::definition::plugin::Configuration( "Configuration", ::definition::Plugin_ );
 rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::Plugin_ );
-rgstry::entry___ sclrgstry::definition::plugin::Arguments( "Arguments", ::definition::Plugin_ );
 
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
