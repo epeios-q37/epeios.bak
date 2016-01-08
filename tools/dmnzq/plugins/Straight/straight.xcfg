@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Parameters>
+		<Command>Default</Command>
+		<Service>53700</Service>
+	</Parameters>
+	<Arguments>
+		<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%ServiceArgument%"/>
+		<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>
+		<!-- Affectations des arguments libres-->
+		<Layouts>
+			<Layout command="Default">
+				<Link index="0" Target="ServiceArgument"/>
+			</Layout>
+		</Layouts>
+	</Arguments>
+</xpp:bloc>

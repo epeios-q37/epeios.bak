@@ -11,19 +11,19 @@
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
 		<Parameters>
+			<Plugins>
+				<Plugin target="Slot">Straight</Plugin>
+			</Plugins>
 			<xpp:define name="lib">
 				<xpp:bloc>xdhbrwq</xpp:bloc>
 			</xpp:define>
 			 <Module>
-				<Service Type="Straight">53700</Service>
-				<Filename>
-					<xpp:bloc preserve="yes">
-						<xpp:expand select="dir"/>
-					</xpp:bloc>
-					<xpp:bloc>
-					<xpp:expand select="lib"/>
-					</xpp:bloc>
-				</Filename>
+				<xpp:bloc preserve="yes">
+					<xpp:expand select="dir"/>
+				</xpp:bloc>
+				<xpp:bloc>
+				<xpp:expand select="lib"/>
+				</xpp:bloc>
 			 </Module>
 		</Parameters>
 	</Project>

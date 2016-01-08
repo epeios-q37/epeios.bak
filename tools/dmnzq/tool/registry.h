@@ -29,16 +29,7 @@ namespace registry {
 		using rgstry::entry___;
 	}
 	
-	extern entry___ ModuleConnection;
-	extern entry___ ModuleConnectionType;
-	extern entry___ ModuleFilename;
-	extern entry___ ModuleLogFilename;
-	extern entry___ ModuleLogMode;
-
-	SCLMISC_OV( GetModuleLogFilename, ModuleLogFilename );
-	SCLMISC_OV( GetRawModuleLogMode, ModuleLogMode );
-	SCLMISC_MV( GetModuleFilename, ModuleFilename );
-	SCLMISC_MV( GetRawModuleConnectionType, ModuleConnectionType );
+	extern entry___ Module;
 }
 
 #endif

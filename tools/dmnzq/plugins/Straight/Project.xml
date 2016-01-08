@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Version)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="Plugin"/>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>straight</Program>
+		<Software>dmnzq</Software>
+		<UUID>24913b17-c969-4327-866c-9639791acb5e</UUID>
+	</About>
+	<InstallPath>dmnzq/plugins/</InstallPath>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>mtk</Module>
+				<Module>sck</Module>
+			</Modules>
+			<Modules Group="CSD">
+				<Module>csdbns</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Modules Group="shared" Path="../../">
+			<Module>misc</Module>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>../../</SourceDir>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>

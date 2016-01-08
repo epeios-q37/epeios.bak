@@ -17,19 +17,9 @@
     along with dmnzq.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#include "registry.h"
+#include "misc.h"
 
-using namespace registry;
-
-static entry___ Module_( "Module", sclrgstry::Parameters );
-
-static entry___ ModuleLog_( "Log", Module_ );
-entry___ registry::ModuleLogFilename( "Filename", ModuleLog_ );
-entry___ registry::ModuleLogMode( "@Mode", ModuleLog_ );
-
-entry___ registry::ModuleFilename( "Filename", Module_ );
-
-entry___ registry::ModuleConnection( "Connection", Module_ );
-entry___ registry::ModuleConnectionType( "@Type", ModuleConnection );
-
-
+const char *misc::callback__::Identification( void )
+{
+	return MISC_SLOT_PLUGIN_TARGET " V" MISC_SLOT_PLUGIN_VERSION " " CPE_DESCRIPTION;
+}

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>20151030</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2015</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>dmnzq</Program>
+		<Software>dmnzq</Software>
+		<UUID>13299010-d5c2-4d64-aad7-94339d73cfcc</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>dlbrry</Module>
+			</Modules>
+			<Modules Group="CSD">
+				<Module>csdlec</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Modules Group="shared" Path="../">
+			<Module>misc</Module>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>../</SourceDir>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_MT</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+	<Packing>
+		<!-- No documentation as this tool has not is own package -->
+		<WikiFiles/>
+	</Packing>
+</Project>

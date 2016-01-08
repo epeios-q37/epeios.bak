@@ -1,21 +1,21 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of eSketch.
+#	This file is part of dmnzq.
 #
-#	eSketch is free software: you can redistribute it and/or
+#	dmnzq is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	eSketch is distributed in the hope that it will be useful,
+#	dmnzq is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
+#	along with dmnzq. If not, see <http://www.gnu.org/licenses/>.
 
-name = esketchxdh
+name = muxed
 
 
 # Epeios general debugging features
@@ -35,20 +35,13 @@ mods += ntvstr que sdr stk str
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio bomhdl 
 mods += cdgb64 fil fnm lcl rgstry 
-mods += stsfsm xml xpp dlbrry mtk 
-mods += tht strmrg 
-mods += csdlec csdleo csdrcc csdrcu csdscb 
-mods += csducl 
-mods += fblcmd fblcst fblfep fblfph fblfrd 
-mods += fblfrp fblovl fbltyp 
-mods += sclmisc sclerror scllocale sclrgstry sclxdhtml 
-mods += sclfrntnd 
-mods += xdhcmn xdhdws 
-mods += frdapi frdfrntnd frdrgstry frdinstc 
-mods += sktfbc sktinf 
-mods += login main prolog 
-mods += Frame 
-mods += base core global registry 
+mods += stsfsm xml xpp plgn strmrg 
+mods += tht mtk sck 
+mods += csdbns csdmns 
+mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += sclplugin 
+mods += misc 
+mods += registry 
 
 pmods += pllio 
 
@@ -84,11 +77,7 @@ MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
-src += :..
-
-src += :../..
-
-src += :../../..
+src += :../../
 
 
 ##########################
@@ -341,7 +330,7 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -367,8 +356,8 @@ $(binary): $(objs)
 ifdef EPEIOS_SRC
 		
 	mkdir -p $(dest)
-			
-	cp $(binary) $(dest)
+			dmnzq/plugins/
+	cp $(binary) $(dest)dmnzq/plugins/
 endif
 		
 

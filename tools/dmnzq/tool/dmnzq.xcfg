@@ -3,18 +3,12 @@
 	<Configuration target="dmnzq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../TOL.xcfg"/>
+		<xpp:expand href="../../TOL.xcfg"/>
 		<Parameters>
 			<xpp:ifeq select="packing" value="yes">
 				<xpp:bloc>
-					<Module>
-						<Connection Type="Straight">53700</Connection>
-						<!--
-							If 'Type' == 'Straight' or 'Muxed', 'Connection' value must be a port to; liste to.
-							if 'Type' == 'Proxy', 'Connection' must have a plugin id.
-						-->
-						<Filename>xdhbrwq</Filename>
-					</Module>
+					<Plugin target="Slot">Straight</Plugin>
+					<Module>xdhbrwq</Module>
 				</xpp:bloc>
 			</xpp:ifeq>
 			<Language>en</Language>
@@ -22,8 +16,48 @@
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>
-			<Plugins>
-				<Plugin id="Forced">
+			<xpp:define name="PluginsRootDir">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>h:/bin/dmnzq/plugins/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>/home/csimon/bin/dmnzq/plugins/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>/Users/csimon/bin/dmnzq/plugins/</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+			<Plugins target="Slot">
+				<xpp:define name="SlotPluginsRootDir">
+					<xpp:bloc>
+						<xpp:expand select="PluginsRootDir"/>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="Straight">
+					<Filename>
+						<xpp:expand select="SlotPluginsRootDir"/>
+						<xpp:bloc>straight</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Straight/straight.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Straight/straight.xlcl"/>
+					</Locale>
+				</Plugin>
+				<Plugin id="Muxed">
+					<Filename>
+						<xpp:expand select="SlotPluginsRootDir"/>
+						<xpp:bloc>muxed</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Muxed/muxed.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Muxed/muxed.xlcl"/>
+					</Locale>
 				</Plugin>
 			</Plugins>
 		</Definitions>

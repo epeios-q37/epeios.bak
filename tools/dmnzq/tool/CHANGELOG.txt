@@ -9,6 +9,9 @@ Meaning of list markers:
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-08 :
+* The different connections mode are now operated through plugins.
+
 2016-01-06 :
 - Adaptation to chnages in underlying libraries.
 - 'Switched' -> 'Muxed' ('Switched', as a label, is a synonym for 'Muxed')

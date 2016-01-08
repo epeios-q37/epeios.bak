@@ -3,48 +3,44 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>20151030</xpp:bloc>
+			<xpp:bloc>(Version)</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2015</xpp:bloc>
+			<xpp:bloc>2016</xpp:bloc>
 		</xpp:define>
-		<xpp:set name="Credits" value="Epeios"/>
-		<xpp:set name="Type" value="Tool"/>
 	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="Plugin"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
 	<About>
-		<Program>dmnzq</Program>
+		<Program>muxed</Program>
 		<Software>dmnzq</Software>
-		<UUID>13299010-d5c2-4d64-aad7-94339d73cfcc</UUID>
+		<UUID>bd259ca0-538e-4b4b-8da7-e0fe3ad4578e</UUID>
 	</About>
+	<InstallPath>dmnzq/plugins/</InstallPath>
 	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-				<Module>dlbrry</Module>
 				<Module>mtk</Module>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">
-				<Module>csdlec</Module>
-				<Module>csdleo</Module>
-				<Module>csdscb</Module>
-				<Module>csdmnb</Module>
+				<Module>csdbns</Module>
 				<Module>csdmns</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
+		<Modules Group="shared" Path="../../">
+			<Module>misc</Module>
+		</Modules>
 		<Module>registry</Module>
 	</Modules>
 	<SourceDirs>
+		<SourceDir>../../</SourceDir>
 	</SourceDirs>
 	<PreprocessorDefinitions>
-		<PreprocessorDefinition>E_MT</PreprocessorDefinition>
 	</PreprocessorDefinitions>
-	<Packing>
-		<!-- No documentation as this tool has not is own package -->
-		<WikiFiles/>
-	</Packing>
 </Project>

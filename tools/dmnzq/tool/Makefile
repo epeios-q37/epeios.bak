@@ -36,10 +36,10 @@ mods += strng tagsbs tol txf tys
 mods += uys utf xtf llio tht 
 mods += bomhdl cdgb64 fil fnm lcl 
 mods += rgstry stsfsm xml xpp dlbrry 
-mods += mtk sck 
-mods += csdlec csdleo csdscb csdmnb csdmns 
+mods += csdlec 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
+mods += misc 
 mods += registry 
 
 pmods += pllio 
@@ -76,6 +76,8 @@ MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
+src += :../
+
 
 ##########################
 # For Cygwin environment #

@@ -12,6 +12,14 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-08 :
+- CSDMNS :
+	- 'log_functions__' -> 'log_callback__'.
+	- Standardisation of the optionality of the 'LogCallback' parameter.
+	- Adding missing methods to 'server___'.
+- SCLMISC :
+	- # The plugin arguments were retrieved from the 'Filename' entry instead of the 'Arguments' one.
+
 2016-01-06 :
 - 'CSDSNS' -> 'CSDMNS'.
 - 'CSDSNB' -> 'CSDMNB'.

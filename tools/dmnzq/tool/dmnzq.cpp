@@ -17,6 +17,8 @@
     along with dmnzq.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#include "misc.h"
+
 #include "registry.h"
 
 #include "scltool.h"
@@ -32,6 +34,7 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "plgn.h"
 
 using cio::CErr;
 using cio::COut;
@@ -55,6 +58,8 @@ static void PrintHeader_( void )
 }
 
 namespace {
+	using misc::module__;
+
 	csdlec::library_embedded_client_core__ *Core_ = NULL;
 
 	void ExitFunction_( void )
@@ -75,6 +80,9 @@ namespace {
 	qRE
 	}
 
+	// To be transfered in the concerned plugin.
+
+	/*
 	E_ENUM( log_file_handling ) {
 		lfhAppend,	// New log are appended to the current ones.
 		lfhDrop,		// Old logs are destroyed.
@@ -104,99 +112,6 @@ namespace {
 		return Handling;
 	}
 
-	// If modified, modify also 'GetLabel_(...) below.
-	E_ENUM( module_connection_type ) {
-		mctStraight,	
-		mctMuxed,	// Has also label 'Switched' for historical reasons.
-		mctProxy,	// 'Muxed' connection, but through the 'proxyq' program : 
-		mct_amount,
-		mct_Undefined
-	};
-
-#define C( name )\
-	case mct ##name :\
-		return #name;\
-		break
-
-	const char *GetLabel_( module_connection_type__ Type )
-	{
-		switch ( Type ) {
-		C( Straight );
-		C( Muxed );
-		C( Proxy );
-		default:
-			qRFwk();
-			break;
-		}
-
-		return NULL;	// To avoid a 'warning'.
-	}
-
-#undef C
-
-	stsfsm::automat ModuleConnectionTypeAutomat_;
-
-	void FillAutomats_( void )
-	{
-		stsfsm::Fill( ModuleConnectionTypeAutomat_, mct_amount, GetLabel_ );
-
-		stsfsm::Add( "Switched", mctMuxed, ModuleConnectionTypeAutomat_ );
-	}
-
-	module_connection_type__ GetModuleConnectionType_( void )
-	{
-		module_connection_type__ Type = mct_Undefined;
-	qRH
-		str::string Value;
-	qRB
-		Value.Init();
-
-		registry::GetRawModuleConnectionType( Value );
-
-		Type = stsfsm::GetId( Value, ModuleConnectionTypeAutomat_, mct_Undefined, mct_amount );
-
-		if ( Type == mct_Undefined )
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleConnectionType );
-	qRR
-	qRT
-	qRE
-		return Type;
-	}
-
-	csdbns::port__ GetPort_( void )
-	{
-		sclmisc::MGetU16( registry::ModuleConnection );
-	}
-
-	void UseStraightConnections_( csdscb::callback__ &Callback )
-	{
-	qRH
-		csdbns::server___ Server;
-	qRB
-		Server.Init( GetPort_(), Callback );
-
-		Server.Process();
-	qRR
-	qRT
-	qRE
-	}
-
-	void UseMuxedConnections_(
-		csdscb::callback__ &Callback,
-		csdmns::log_functions__ &LogFunctions )
-	{
-	qRH
-		csdmns::server___ Server;
-	qRB
-		Server.Init( GetPort_(), Callback, LogFunctions );
-
-		Server.Process();
-	qRR
-	qRT
-	qRE
-	}
-
-	typedef csdmns::log_functions__ _log_functions__;
 
 	class log_functions__
 	: public _log_functions__
@@ -238,8 +153,9 @@ namespace {
 		}
 	};
 
+
 	void UseMuxedConnections_(
-		csdscb::callback__ &Callback,
+		module__ &Module,
 		const char *LogFileName,
 		log_file_handling__ LogFileHandling )
 	{
@@ -278,17 +194,25 @@ namespace {
 				TFlow.Init( FFlow );
 		}
 
-		UseMuxedConnections_( Callback, LogFileName == NULL ? *(csdmns::log_functions__ *)NULL : LogFunctions );
+		UseMuxedConnections_( Module, LogFileName == NULL ? *(csdmns::log_functions__ *)NULL : LogFunctions );
 	qRR
 	qRT
 	qRE
 	}
 
+	*/
+
+	using misc::callback__;
+
 	void Process_(
-		const bso::char__ *ModuleFilename,
-		module_connection_type__ ConnectionType,
-		const char *LogFileName,
-		log_file_handling__ LogFileHandling )
+		callback__ &Callback,
+		module__ &Module )
+	{
+		Callback.Initialize( Module );
+		Callback.Process();
+	}
+
+	void Process_( const bso::char__ *ModuleFilename )
 	{
 	qRH
 		lcl::locale SharedLocale;
@@ -297,6 +221,7 @@ namespace {
 		lcl::meaning Meaning, MeaningBuffer;
 		str::string Translation;
 		err::buffer__ ErrBuffer;
+		plgn::retriever___<callback__> Retriever;
 	qRB
 		SharedLocale.Init();
 		SharedRegistry.Init();
@@ -314,20 +239,11 @@ namespace {
 			qRAbort();
 		}
 
-		switch ( ConnectionType ) {
-		case mctStraight:
-			UseStraightConnections_( Core_->GetCallback() );
-			break;
-		case mctMuxed:
-			UseMuxedConnections_( Core_->GetCallback(), LogFileName, LogFileHandling );
-			break;
-		case mctProxy:
-			UseProxyConnection_( Core_->GetCallback() );
-			break;
-		default:
-			qRGnr();
-			break;
-		}
+		Retriever.Init();
+
+		sclmisc::Plug( misc::SlotPluginTarget, Retriever );
+
+		Process_( Retriever.Plugin(), Core_->GetCallback() );
 	qRR
 		Meaning.Init();
 		Meaning.SetValue( "ModuleError" );
@@ -353,22 +269,6 @@ namespace {
 	qRE
 	}
 
-	void Process_(
-		const char *LogFileName,
-		log_file_handling__ LogFileHandling )
-	{
-	qRH
-		str::string ModuleFileName;
-		TOL_CBUFFER___ Buffer;
-	qRB
-		ModuleFileName.Init();
-
-		Process_( registry::GetModuleFilename( ModuleFileName ).Convert( Buffer ), GetModuleConnectionType_(), LogFileName, LogFileHandling );
-	qRR
-	qRT
-	qRE
-	}
-
 	void Process_( void )
 	{
 	qRH
@@ -378,7 +278,7 @@ namespace {
 
 		cio::COut.Commit();
 
-		Process_( registry::GetModuleLogFilename( Buffer ), GetLogFileHandling_() );
+		Process_( sclmisc::MGetValue( registry::Module, Buffer ) );
 	qRR
 	qRT
 	qRE
@@ -417,5 +317,4 @@ const char *sclmisc::SCLMISCTargetName = NAME_LC;
 
 Q37_GCTOR( dmnzq )
 {
-	FillAutomats_();
 }

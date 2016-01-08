@@ -55,7 +55,7 @@ namespace csdmns {
 
 	typedef void *_user_pointer__;
 
-	class log_functions__ {
+	class log_callback__ {
 	protected:
 		virtual void CSDMNSLog(
 			log__ Log,
@@ -68,11 +68,11 @@ namespace csdmns {
 		{
 			// Standardisation.
 		}
-		log_functions__( void )
+		log_callback__( void )
 		{
 			reset( false );
 		}
-		~log_functions__( void )
+		~log_callback__( void )
 		{
 			reset();
 		}
@@ -104,11 +104,11 @@ namespace csdmns {
 			id__ Id,
 			void *UP ) const
 		{
-			if ( S_.Log.Functions != NULL ) {
+			if ( S_.Log.Callback != NULL ) {
 qRH
 qRB
 				mtx::Lock( S_.Log.Mutex );
-				S_.Log.Functions->Log( Log, Id, UP, UPs.Amount() );
+				S_.Log.Callback->Log( Log, Id, UP, UPs.Amount() );
 qRR
 qRT
 				mtx::Unlock( S_.Log.Mutex );
@@ -121,7 +121,7 @@ qRE
 			user_pointers_::s UPs;
 			mtx::handler___ Mutex;
 			struct log__ {
-				log_functions__ *Functions;
+				log_callback__ *Callback;
 				mtx::handler___ Mutex;
 			} Log;
 		} &S_;
@@ -140,7 +140,7 @@ qRE
 			UPs.reset( P );
 			S_.Mutex = mtx::UndefinedHandler;
 			S_.Log.Mutex = mtx::UndefinedHandler;
-			S_.Log.Functions = NULL;
+			S_.Log.Callback = NULL;
 
 		}
 		void plug( qAS_ &AS )
@@ -153,14 +153,14 @@ qRE
 
 			return *this;
 		}
-		void Init( log_functions__ &LogFunctions )
+		void Init( log_callback__ *LogCallback )
 		{
 			reset();
 
 			UPs.Init();
 			S_.Mutex = mtx::Create();
 			S_.Log.Mutex = mtx::Create();
-			S_.Log.Functions = &LogFunctions;
+			S_.Log.Callback = LogCallback;
 		}
 		id__ New( void )
 		{
@@ -333,11 +333,11 @@ qRE
 		}
 		void Init(
 			callback__ &Callback,
-			log_functions__ &LogFunctions )
+			log_callback__ *LogCallback )
 		{
 			reset();
 
-			_Core.Init( LogFunctions );
+			_Core.Init( LogCallback );
 			_Callback = &Callback;
 			_Origin.Init();
 			callback__::Init();
@@ -351,14 +351,27 @@ qRE
 		csdbns::server___ _Server;
 		_callback___ _Callback;
 	public:
+		void reset( bso::bool__ P = true )
+		{
+			_Callback.reset( P );
+			_Server.reset( P );
+		}
+		E_CDTOR( server___ );
 		void Init(
 			port__ Port,
 			callback__ &Callback,
-			log_functions__ &LogFunctions = *(log_functions__ *)NULL )
+			log_callback__ *LogCallback = NULL )
 		{
-			_Callback.Init( Callback, LogFunctions );
+			_Callback.Init( Callback, LogCallback );
 
 			_Server.Init( Port, _Callback );
+		}
+		void Init(
+			port__ Port,
+			callback__ &Callback,
+			log_callback__ &LogCallback )
+		{
+			Init( Port, Callback, &LogCallback );
 		}
 		bso::bool__ LaunchService( const char *ServiceName )
 		{

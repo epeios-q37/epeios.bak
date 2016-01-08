@@ -884,7 +884,7 @@ qRB
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Locale, Tags ), Locale );
 
-	sclmisc::OGetValue( rgstry::tentry__( sclrgstry::definition::plugin::Filename, Tags ), Arguments );
+	sclmisc::OGetValue( rgstry::tentry__( sclrgstry::definition::plugin::Arguments, Tags ), Arguments );
 qRR
 qRT
 qRE
