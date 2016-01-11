@@ -1,21 +1,21 @@
 #	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of xdhdq.
+#	This file is part of prxyq.
 #
-#	xdhdq is free software: you can redistribute it and/or
+#	prxyq is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	xdhdq is distributed in the hope that it will be useful,
+#	prxyq is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with xdhdq. If not, see <http://www.gnu.org/licenses/>.
+#	along with prxyq. If not, see <http://www.gnu.org/licenses/>.
 
-name = xdhdqxdh
+name = prxyq
 
 
 # Epeios general debugging features
@@ -33,22 +33,14 @@ mods += flx ias ids iof iop
 mods += lst lstbch lstctn mns mtx 
 mods += ntvstr que sdr stk str 
 mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio bomhdl 
-mods += cdgb64 fil fnm lcl rgstry 
-mods += stsfsm xml xpp dlbrry mtk 
-mods += tht strmrg 
-mods += csdlec csdleo csdrcc csdrcu csdscb 
-mods += csducl 
-mods += fblcmd fblcst fblfep fblfph fblfrd 
-mods += fblfrp fblovl fbltyp 
-mods += sclmisc sclerror scllocale sclrgstry sclxdhtml 
-mods += sclfrntnd 
-mods += xdhcmn xdhdws 
-mods += frdapi frdfrntnd frdrgstry frdinstc 
-mods += xddfbc xddinf 
-mods += login main prolog 
-mods += fields 
-mods += base core global registry 
+mods += uys utf xtf llio tht 
+mods += bomhdl cdgb64 fil fnm lcl 
+mods += rgstry stsfsm xml xpp mtk 
+mods += sck 
+mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += scltool 
+mods += csdbns 
+mods += registry 
 
 pmods += pllio 
 
@@ -69,7 +61,7 @@ CXXFLAGS += -O
 
 ###############################
 	
-copt += -DQ37_LIBRARY
+copt += -DE_ST
 
 win=win
 win32=win32
@@ -84,12 +76,6 @@ MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
-src += :..
-
-src += :../..
-
-src += :../../..
-
 
 ##########################
 # For Cygwin environment #
@@ -208,8 +194,7 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -241,8 +226,7 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -271,9 +255,7 @@ ifeq ("$(os)","$(GNULinux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -302,9 +284,7 @@ ifeq ("$(os)","$(Linux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -329,8 +309,7 @@ ifeq ("$(os)","$(MacOS)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).dylib
-	lo += -dynamiclib
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 endif
@@ -340,7 +319,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20151030"\"
+copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
 
 ifndef EPEIOS_SRC
