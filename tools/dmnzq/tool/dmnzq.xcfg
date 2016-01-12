@@ -47,18 +47,6 @@
 						<xpp:expand href="../plugins/Straight/straight.xlcl"/>
 					</Locale>
 				</Plugin>
-				<Plugin id="Muxed">
-					<Filename>
-						<xpp:expand select="SlotPluginsRootDir"/>
-						<xpp:bloc>muxed</xpp:bloc>
-					</Filename>
-					<Configuration>
-						<xpp:expand href="../plugins/Muxed/muxed.xcfg"/>
-					</Configuration>
-					<Locale>
-						<xpp:expand href="../plugins/Muxed/muxed.xlcl"/>
-					</Locale>
-				</Plugin>
 			</Plugins>
 		</Definitions>
 		<Locale>
