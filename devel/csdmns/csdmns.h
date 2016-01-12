@@ -38,7 +38,8 @@
 
 namespace csdmns {
 	using namespace csdmnb;
-	using namespace csdscb;
+
+	typedef csdscb::callback__ _callback__;
 
 	using csdbns::port__;
 
@@ -244,8 +245,8 @@ qRE
 
 	E_AUTO( core)
 
-	class _callback___
-	: public callback__
+	class callback___
+	: public _callback__
 	{
 	private:
 		core _Core;
@@ -259,7 +260,7 @@ qRE
 
 			return NULL;
 		}
-		virtual action__ CSDSCBProcess(
+		virtual csdscb::action__ CSDSCBProcess(
 			flw::ioflow__ &Flow,
 			void *UP )
 		{
@@ -268,7 +269,7 @@ qRE
 				qRFwk();
 #endif
 			id__ Id = CSDMNB_UNDEFINED;
-			action__ Action = aContinue;
+			csdscb::action__ Action = csdscb::aContinue;
 
 			UP = NULL;
 
@@ -286,16 +287,16 @@ qRE
 			} else if ( !_Core.TestAndGet( Id, UP ) ) {
 				Flow.Put( (flw::byte__)-1 );
 				Flow.Commit();
-				Action = aStop;
+				Action = csdscb::aStop;
 			} else {
 				Flow.Put( 0 );
 				Action = _Callback->Process( Flow, UP );
 			}
 
 			switch ( Action ) {
-			case aContinue:
+			case csdscb::aContinue:
 				break;
-			case aStop:
+			case csdscb::aStop:
 				_Callback->PostProcess( UP );
 				if ( Id < CSDMNB_RESERVED )
 					_Core.Delete( Id );
@@ -323,17 +324,10 @@ qRE
 			_Origin.reset( P );
 			callback__::reset( P );
 		}
-		_callback___( void)
-		{
-			reset( false );
-		}
-		~_callback___( void)
-		{
-			reset();
-		}
+		E_CVDTOR( callback___ );
 		void Init(
 			callback__ &Callback,
-			log_callback__ *LogCallback )
+			log_callback__ *LogCallback = NULL )
 		{
 			reset();
 
@@ -349,7 +343,7 @@ qRE
 	{
 	private:
 		csdbns::server___ _Server;
-		_callback___ _Callback;
+		callback___ _Callback;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -359,7 +353,7 @@ qRE
 		E_CDTOR( server___ );
 		void Init(
 			port__ Port,
-			callback__ &Callback,
+			_callback__ &Callback,
 			log_callback__ *LogCallback = NULL )
 		{
 			_Callback.Init( Callback, LogCallback );
@@ -368,7 +362,7 @@ qRE
 		}
 		void Init(
 			port__ Port,
-			callback__ &Callback,
+			_callback__ &Callback,
 			log_callback__ &LogCallback )
 		{
 			Init( Port, Callback, &LogCallback );

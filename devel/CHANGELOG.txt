@@ -12,6 +12,19 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-12 :
+- CSDLEC :
+	- Adaptation to chnges in 'CSDLEO'.
+- CSDLEO :
+	% Removing the useless variadic parameter.
+- CSDMNS :
+	'_callback___' -> 'callback___'.
+- SCLBACKND :
+	- Adaptation to changes in 'SCLDAEMON'.
+- SCLDAEMON :
+	- Adaptation to chnges in 'CSDLEO'.
+	* Handles now the muxed mode too.
+
 2016-01-08 :
 - CSDMNS :
 	- 'log_functions__' -> 'log_callback__'.

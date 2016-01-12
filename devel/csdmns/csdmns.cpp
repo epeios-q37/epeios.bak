@@ -42,7 +42,7 @@ const char *csdmns::GetLogLabel( log__ Log )
 	}
 }
 
-void csdmns::_callback___::_Clean( void )
+void csdmns::callback___::_Clean( void )
 {
 	sdr::row__ Row = _Core.UPs.First();
 

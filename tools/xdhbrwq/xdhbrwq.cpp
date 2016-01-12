@@ -276,10 +276,10 @@ namespace {
 		}
 	};
 
-	typedef scldaemon::callback__ _callback__;
+	typedef scldaemon::callback___ _callback___;
 
 	class xdhbrwq_callback__
-	: public _callback__
+	: public _callback___
 	{
 	private:
 		Q37_MRMDF( session::sessions___, S_, Sessions_ );
@@ -298,13 +298,13 @@ namespace {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_callback__::reset(P);
+			_callback___::reset(P);
 			Sessions_ = NULL;
 		}
 		E_CVDTOR( xdhbrwq_callback__ );
 		void Init( session::sessions___ &Sessions )
 		{
-			_callback__::Init();
+			_callback___::Init( scldaemon::mBasic );
 			Sessions_ = &Sessions;
 		}
 	};
@@ -322,7 +322,7 @@ Q37_GCTOR( xdhbrwq )
 
 }
 
-scldaemon::callback__ *scldaemon::SCLDAEMONGetCallback(
+scldaemon::callback___ *scldaemon::SCLDAEMONGetCallback(
 	csdleo::context__ Context,
 	csdleo::mode__ Mode )
 {

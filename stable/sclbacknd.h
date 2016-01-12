@@ -142,10 +142,10 @@ namespace sclbacknd {
 		}
 	};
 
-	typedef scldaemon::callback__ _callback__;
+	typedef scldaemon::callback___ _callback___;
 
 	class callback__
-	: public _callback__
+	: public _callback___
 	{
 	private:
 		fblbur::mode__ _Mode;
@@ -160,14 +160,31 @@ namespace sclbacknd {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_callback__::reset( P );
+			_callback___::reset( P );
 
 			_Mode = fblbur::m_Undefined;
 		}
 		E_CVDTOR( callback__ );
 		void Init( fblbur::mode__ Mode )
 		{
-			_callback__::Init();
+			scldaemon::mode__ DaemonMode = scldaemon::m_Undefined;
+
+			switch ( Mode ) {
+			case fblbur::mNone:
+				qRFwk();
+				break;
+			case fblbur::mEmbedded:
+				DaemonMode = scldaemon::mBasic;
+				break;
+			case fblbur::mRemote:
+				DaemonMode = scldaemon::mMuxed;
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+
+			_callback___::Init( DaemonMode );
 
 			_Mode = Mode;
 		}

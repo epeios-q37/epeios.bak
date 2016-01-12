@@ -62,7 +62,7 @@ bso::bool__ csdlec::library_embedded_client_core__::_RetrieveCallback( csdleo::s
 	if ( _Callback != NULL )
 		qRFwk();
 
-	Callback.Initialize( Data, NULL );
+	Callback.Initialize( Data );
 
 	/* 'Mode' parameter should normally always be 'csdleo::mEmbedded' (this module is dedicated to the client
 	which deals with an embedded server), except when used by the 'dmnzq' tool, hence retrieving the value of

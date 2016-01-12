@@ -157,9 +157,7 @@ namespace csdleo {
 	class callback__
 	{
 	protected:
-		virtual void CSDLEOInitialize(
-			const shared_data__ *Data,
-			... ) = 0;
+		virtual void CSDLEOInitialize( const shared_data__ *Data ) = 0;
 		// Returned callback is used to handle all connections !
 		virtual csdscb::callback__ *CSDLEORetrieveCallback(
 			csdleo::context__ Context,
@@ -174,16 +172,9 @@ namespace csdleo {
 		{
 			//Standardisaction.
 		}
-		void Initialize(
-			const shared_data__ *Data,
-			const ntvstr::char__ *FirstParameter = NULL,
-			... /* Autres paramètres. Le dernier doit être = 'NULL' */ )
+		void Initialize( const shared_data__ *Data )
 		{
-			va_list Parameters;
-			va_start( Parameters, FirstParameter );
-
-			CSDLEOInitialize( Data, FirstParameter, Parameters );	// 'FirstParameter' est inclus dans le '...' de la méthode appelée.
-			// Il n'existe en tant que paramètre de cette méthode que pour en faciliter la compréhension.
+			CSDLEOInitialize( Data );
 		}
 		csdscb::callback__ *RetrieveCallback(
 			csdleo::context__ Context,

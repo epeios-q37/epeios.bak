@@ -38,7 +38,7 @@
 
 using namespace sclbacknd;
 
-scldaemon::callback__ *scldaemon::SCLDAEMONGetCallback( 
+scldaemon::callback___ *scldaemon::SCLDAEMONGetCallback( 
 	csdleo::context__ Context,
 	csdleo::mode__ CSDMode )
 {
