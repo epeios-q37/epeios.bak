@@ -67,6 +67,9 @@ namespace sclmisc {
 		return sclerror::GetPendingErrorTranslation( GetBaseLanguage(), Translation, ErrHandling );
 	}
 
+	// To use as 'action' parameter for the 'qRFE(...)' macro to display the file/line of an error.
+	void ErrFinal( void );
+
 	void ReportAndAbort( const lcl::meaning_ &Meaning );
 
 	void ReportAndAbort( const char *Text );

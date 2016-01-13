@@ -168,14 +168,18 @@ public:
 			mtx::Lock( Mutex_ );	// Unlocked by 'Plug(...)'.
 			mtx::Unlock( Mutex_ );
 
+			Flow.Put( 0 );	// To report that the flow is plugged.
+
 			Process_( Flow1_, Flow2_ );
 		}
-		void Plug( flw::ioflow__ Flow )
+		void Plug( flw::ioflow__ &Flow )
 		{
 			Flow1_.SetOut( Flow );
 			Flow2_.SetIn( Flow );
 
 			mtx::Unlock( Mutex_ );
+
+			Flow.Put( 0 );	// To report that the flow is plugged.
 
 			Process_( Flow2_, Flow1_ );
 		}

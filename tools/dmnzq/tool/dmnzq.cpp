@@ -208,8 +208,7 @@ namespace {
 		callback__ &Callback,
 		module__ &Module )
 	{
-		Callback.Initialize( Module );
-		Callback.Process();
+		Callback.Process( Module );
 	}
 
 	void Process_( const bso::char__ *ModuleFilename )

@@ -23,7 +23,7 @@
 # include "csdscb.h"
 
 # define MISC_SLOT_PLUGIN_TARGET	"Slot"
-# define MISC_SLOT_PLUGIN_VERSION	"1"
+# define MISC_SLOT_PLUGIN_VERSION	"2"
 
 namespace misc {
 	typedef csdscb::callback__ module__;	// Module to 'daemonize'.
@@ -35,8 +35,7 @@ namespace misc {
 	class callback__
 	{
 	protected:
-		virtual void MISCInitialize( module__ &Module ) = 0;
-		virtual void MISCProcess( void ) = 0;
+		virtual void MISCProcess( module__ &Module ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -47,13 +46,9 @@ namespace misc {
 		{
 			// Standardization.
 		}
-		void Initialize( module__ &Module )
+		void Process( module__ &Module )
 		{
-			return MISCInitialize( Module );
-		}
-		void Process( void )
-		{
-			return MISCProcess();
+			return MISCProcess( Module );
 		}
 		static const char *Identification( void );
 	};

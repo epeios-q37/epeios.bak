@@ -160,39 +160,6 @@ qRE
 	return ExitValue;
 }
 
-static void ErrFinal_( void )
-{
-
-	if ( ERRType != err::t_Abort ) {
-		err::buffer__ Buffer;
-
-		const char *Message = err::Message( Buffer );
-
-		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
-
-		qRH
-		qRB
-			if ( cio::IsInitialized() ) {
-				if ( cio::Target() == cio::tConsole ) {
-					cio::COut << txf::commit;
-					cio::CErr << txf::nl << txf::tab;
-				}
-
-				cio::CErr << "{ " << Message << " }";
-
-				if ( cio::Target() == cio::tConsole )
-					cio::CErr << txf::nl;
-
-				cio::CErr << txf::commit;
-			} else
-				qRFwk();
-		qRR
-		qRT
-		qRE
-	} else
-		ERRRst();
-}
-
 #ifdef CPE_S_WIN
 
 # undef system	// Defined in 'tol.h', referenced in below header file.
@@ -233,7 +200,7 @@ qRFT
 	cio::COut.Commit();
 	cio::CErr.Commit();
 	cio::CIn.Dismiss();
-qRFE( ErrFinal_() )
+qRFE( sclmisc::ErrFinal() )
 	return ExitValue;
 }
 
@@ -300,7 +267,7 @@ qRFT
 			std::wcout << (wchar_t *)ntvstr::string___( SErr ).Internal() << std::endl;
 	}
 # endif
-qRFE( ErrFinal_() )
+qRFE( sclmisc::ErrFinal() )
 	return ExitValue;
 }
 

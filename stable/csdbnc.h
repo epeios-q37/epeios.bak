@@ -153,7 +153,58 @@ namespace csdbnc {
 		err::handling__ ErrorHandling )
 	{
 		return Connect( HostService, SCK_INVALID_SOCKET, ErrorHandling );
-	} 
+	}
+
+	typedef sck::socket_ioflow___ _flow___;
+
+	class flow___
+	: public _flow___
+	{
+	private:
+		sck::socket__ Socket_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			_flow___::reset( P );
+
+			if ( P )
+				if ( Socket_ != SCK_INVALID_SOCKET )
+					sck::Close( Socket_ );
+
+			Socket_ = SCK_INVALID_SOCKET;
+		}
+		E_CDTOR( flow___ );
+		bso::bool__ Init(
+			const char *Host,
+			const char *Service,
+		err::handling__ ErrorHandling = err::h_Default )
+		{
+			reset();
+
+			Socket_ = Connect( Host, Service, ErrorHandling );
+
+			if ( Socket_ != SCK_INVALID_SOCKET ) {
+				_flow___::Init( Socket_ );
+				return true;
+			} else
+				return false;
+		}
+		bso::bool__ Init(
+			const char *HostService,
+		err::handling__ ErrorHandling = err::h_Default )
+		{
+			reset();
+
+			Socket_ = Connect( HostService, ErrorHandling );
+
+			if ( Socket_ != SCK_INVALID_SOCKET ) {
+				_flow___::Init( Socket_ );
+				return true;
+			} else
+				return false;
+		}
+
+	};
 }
 
 /*$END$*/

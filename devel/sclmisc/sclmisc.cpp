@@ -69,6 +69,39 @@ qRT
 qRE
 }
 
+void sclmisc::ErrFinal( void )
+{
+	if ( ERRType != err::t_Abort ) {
+		err::buffer__ Buffer;
+
+		const char *Message = err::Message( Buffer );
+
+		ERRRst();	// To avoid relaunching of current error by objects of the 'FLW' library.
+
+		qRH
+		qRB
+			if ( cio::IsInitialized() ) {
+				if ( cio::Target() == cio::tConsole ) {
+					cio::COut << txf::commit;
+					cio::CErr << txf::nl << txf::tab;
+				}
+
+				cio::CErr << "{ " << Message << " }";
+
+				if ( cio::Target() == cio::tConsole )
+					cio::CErr << txf::nl;
+
+				cio::CErr << txf::commit;
+			} else
+				qRFwk();
+		qRR
+		qRT
+		qRE
+	} else
+		ERRRst();
+}
+
+
 
 void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
 {

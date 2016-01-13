@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2015-2016 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of dmnzq.
 
@@ -46,29 +46,25 @@ namespace {
 	private:
 		csdbns::server___ Server_;
 	protected:
-		virtual void MISCInitialize( module__ &Module ) override
+		virtual void MISCProcess( module__ &Module ) override
 		{
 			Server_.Init( GetPort_(), Module );
-		}
-		virtual void MISCProcess( void ) override
-		{
-			Server_.Process();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			callback__::reset( P );
+			_plugin__::reset( P );
 			Server_.reset( P );
 		}
 		E_CVDTOR( plugin___ );
 		void Init( void )
 		{
-			callback__::Init();
+			_plugin__::Init();
 			Server_.reset();	// See above for initialzation will be made later.
 		}
 		void SCLPLUGINInitialize( void )
 		{
-			// Made in 'MISCInitialize(...)'.
+			// Made in 'MISCProcess(...)'.
 		}
 	};
 }
