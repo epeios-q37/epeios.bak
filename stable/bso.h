@@ -58,6 +58,9 @@ namespace bso {
 	// Unit of digital information, without any intrinsec signification.
 	typedef unsigned char qS( byte );
 
+	//t Size of a memory .
+	typedef size_t qS( size );
+
 	// Boolean.
 	typedef bool qS( bool );
 
@@ -140,7 +143,7 @@ namespace bso {
 // # define BSO_SIZE_MAX	SIZE_MAX
 
 	//t Size of a memory .
-	typedef size_t size__;
+	typedef qS( size ) size__;
 
 	//t Short-sized float.
 	typedef float sfloat__;

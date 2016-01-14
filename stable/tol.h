@@ -87,15 +87,162 @@
 # define qENUM( name )\
 	enum qS( name ) : bso::qS( enum )
 
+# define qROW( name ) E_TMIMIC__( sdr::qS( row_t ), qS( name ) )
+
+// Declaration of standardized constructor.
+# define TOL_CTORD_( name )\
+	name( void )
+
+// Body of standardized constructor.
+# define TOL_CTORB_\
+	{\
+		reset( false );\
+	}\
+
+// Standardized constructor.
+# define qCTOR( name )\
+	TOL_CTORD_( name )\
+	TOL_CTORB_
+
+// Standardized destructor.
+# define qDTOR( name )\
+	~name( void )\
+	{\
+		reset();\
+	}\
+
+// Standardized virtual destructor.
+# define qVDTOR( name )	virtual qDTOR( name )
+
+// Standardized constructor and destructor.
+# define qCDTOR( name )\
+	qCTOR( name )\
+	qDTOR( name )
+
+// Standardized constructor and virtualdestructor.
+# define qCVDTOR( name )\
+	qCTOR( name )\
+	qVDTOR( name )
+
+# define TOL_ERRP_	err::handling__ ErrHandling = err::h_Default
+
+namespace tol{
+	template <typename t> class qT( buffer ) // Dynamic buffer of objects of type 't'. Its size never shrinks, so it can(t be used to know the true amount of objects it contains.
+	{
+	private:
+		t *_Pointer;
+		bso::size__ _Extent;
+		virtual bso::bool__ _Allocate(
+			bso::size__ Size,
+			err::handling__ ErrHandling )
+		{
+			if ( _Extent < Size ) {
+				void *P = realloc( _Pointer, Size * sizeof( t ) );
+
+				if ( P == NULL ) {
+					if ( ErrHandling == err::hThrowException )
+						qRAlc();
+
+					return false;
+				} else 
+					_Pointer = (t *)P;
+
+				_Extent = Size;
+			}
+
+			return true;
+		}
+		virtual void _Free( void *P )
+		{
+			free( _Pointer );
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			if ( P )
+				if ( _Pointer != NULL )
+					_Free( _Pointer );
+
+			_Pointer = NULL;
+			_Extent = 0;
+		}
+		qT( buffer )( void )
+		{
+			reset( false );
+		}
+		~qT( buffer )( void )
+		{
+			reset();
+		}
+		void Init( void )
+		{
+			qRFwk();	// C'est un 'buffer' ; pas d'initailisation.
+		}
+		void Forget( void )	// Evite que le ponteur sous-jacent soit effac  la destruction de l'objet.
+		{
+			reset( false );
+			
+		}
+		t *Malloc(
+			bso::size__ Amount,
+			TOL_ERRP_ )
+		{
+			if ( !_Allocate( Amount, ErrHandling ) )
+				return NULL;
+
+			return _Pointer;
+		}
+		t *Calloc(
+			bso::size__ Amount,
+			TOL_ERRP_ )
+		{
+			if ( !_Allocate( Amount, ErrHandling ) )
+				return NULL;
+
+			memset( _Pointer, 0, Amount * sizeof( t ) );
+
+			return _Pointer;
+		}
+		t *Realloc(
+			bso::size__ Size,
+			TOL_ERRP_ )
+		{
+			if ( !_Allocate( Size, ErrHandling ) )
+				return NULL;
+
+			return _Pointer;
+		}
+		bso::size__ Extent( void ) const	// ATTENTION : n'est PAS le nombre d'octets significatifs !
+		{
+			return _Extent;
+		}
+		operator t*( void ) const
+		{
+			return _Pointer;
+		}
+		qT( buffer ) &operator =( const qT( buffer ) & )
+		{
+			qRFwk(); 
+
+			return *this;
+		}
+		t* operator()( void ) const
+		{
+			return _Pointer;
+		}
+	};
+}
+
+# define qBUFFER( t )	tol::qT( buffer )<t>
+# define qCBUFFER qCBUFFER( bso::char__ )
+
+
+
 /*************************/
 /****** Old version ******/
 /*************************/
 
 # define E_ENUM( name )	enum name##__ : bso::enum__ 
-
-namespace sdr {
-	struct row__;
-}
 
 namespace ntvstr {
 	class string___;
@@ -1327,7 +1474,7 @@ namespace tol {
 
 # define E_DPOINTER___( t )	delete_pointer___<t>
 
-# define TOL__ERRP	err::handling__ ErrHandling = err::h_Default
+# define TOL__ERRP	TOL_ERRP_
 	/*
 		Les mthodes 'virtual' ne sont pas destines  tre surcharge par une quelconque classe mre, mais  viter des problmes lorsque cet objet est partag entre une application et une bibliothque dynamique.
 		En effet, un pointeur allou dans une bibliothque dynamique peut poser problme s'il est dsallou dans l'application, et inversement. En utilisant des mthodes virtuelles pour l'allocation et le dsallocation
@@ -1335,110 +1482,7 @@ namespace tol {
 		des mthodes virtuelles.
 	*/
 
-	template <typename t> class buffer___ // Gestion d'un 'buffer' d'objets de type 't' de taille dynamique. Sa taille ne diminue jamais, et ne peut donc PAS servir pour savoir le nombre d'octets significatifs qu'il contient.
-	{
-	private:
-		t *_Pointer;
-		bso::size__ _Extent;
-		virtual bso::bool__ _Allocate(
-			bso::size__ Size,
-			err::handling__ ErrHandling )
-		{
-			if ( _Extent < Size ) {
-				void *P = realloc( _Pointer, Size * sizeof( t ) );
-
-				if ( P == NULL ) {
-					if ( ErrHandling == err::hThrowException )
-						qRAlc();
-
-					return false;
-				} else 
-					_Pointer = (t *)P;
-
-				_Extent = Size;
-			}
-
-			return true;
-		}
-		virtual void _Free( void *P )
-		{
-			free( _Pointer );
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			if ( P )
-				if ( _Pointer != NULL )
-					_Free( _Pointer );
-
-			_Pointer = NULL;
-			_Extent = 0;
-		}
-		buffer___( void )
-		{
-			reset( false );
-		}
-		~buffer___ ( void )
-		{
-			reset();
-		}
-		void Init( void )
-		{
-			qRFwk();	// C'est un 'buffer' ; pas d'initailisation.
-		}
-		void Forget( void )	// Evite que le ponteur sous-jacent soit effac  la destruction de l'objet.
-		{
-			reset( false );
-			
-		}
-		t *Malloc(
-			bso::size__ Amount,
-			TOL__ERRP )
-		{
-			if ( !_Allocate( Amount, ErrHandling ) )
-				return NULL;
-
-			return _Pointer;
-		}
-		t *Calloc(
-			bso::size__ Amount,
-			TOL__ERRP )
-		{
-			if ( !_Allocate( Amount, ErrHandling ) )
-				return NULL;
-
-			memset( _Pointer, 0, Amount * sizeof( t ) );
-
-			return _Pointer;
-		}
-		t *Realloc(
-			bso::size__ Size,
-			TOL__ERRP )
-		{
-			if ( !_Allocate( Size, ErrHandling ) )
-				return NULL;
-
-			return _Pointer;
-		}
-		bso::size__ Extent( void ) const	// ATTENTION : n'est PAS le nombre d'octets significatifs !
-		{
-			return _Extent;
-		}
-		operator t*( void ) const
-		{
-			return _Pointer;
-		}
-		buffer___ &operator =( const buffer___ & )
-		{
-			qRFwk(); 
-
-			return *this;
-		}
-		t* operator()( void ) const
-		{
-			return _Pointer;
-		}
-	};
+	template <typename t> E_TTCLONE__( qT( buffer )<t>, buffer___ );
 
 # define E_BUFFER___( t )	buffer___<t>
 # define TOL_CBUFFER___ tol::E_BUFFER___( bso::char__ )
@@ -1498,40 +1542,15 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 	}
 #endif
 
-// Dclaration de constructeur standardis.
-# define E_CTORD( name )\
-	name( void )
+# define E_CTOR( name )		qCTOR( name )
 
-// Corps ('body') d'un constructeur standardis.
-# define E_CTORB\
-	{\
-		reset( false );\
-	}\
+# define E_DTOR( name )		qDTOR( name )
 
-// Cration d'un constructeur standardis.
-# define E_CTOR( name )\
-	E_CTORD( name )\
-	E_CTORB
+# define E_VDTOR( name )	qVDTOR( name )
 
-// Cration d'un destructeur standardis.
-# define E_DTOR( name )\
-	~name( void )\
-	{\
-		reset();\
-	}\
+# define E_CDTOR( name )	qCDTOR( name )
 
-// Cration d'un destructeur virtuel standardis.
-# define E_VDTOR( name )	virtual E_DTOR( name )
-
-// Cration d'un constructeur et d'un destructeur standardis.
-# define E_CDTOR( name )\
-	E_CTOR( name )\
-	E_DTOR( name )
-
-// Cration d'un constructeur et d'un destructeur virtuel standardis.
-# define E_CVDTOR( name )\
-	E_CTOR( name )\
-	E_VDTOR( name )
+# define E_CVDTOR( name )	qCDTOR( name )
 
 
 //d Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type__'.
