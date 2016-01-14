@@ -56,7 +56,7 @@ static void FillVersionAutomat_( void )
 	stsfsm::Fill<version__>( VersionAutomat_, v_amount, GetLabel );
 }
 
-qROW( drow__);
+E_ROW( drow__);
 
 class core__ {
 public:

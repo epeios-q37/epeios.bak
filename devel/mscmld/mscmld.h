@@ -178,7 +178,7 @@ namespace mscmld {
 		return ( Op1.Name != Op2.Name ) || ( Op1.Accidental != Op2.Accidental ) || ( Op1.Octave != Op2.Octave );
 	}
 
-	qROW( prow__ );
+	E_ROW( prow__ );
 
 	typedef bch::E_BUNCHt_( pitch__, prow__ ) pitches_;
 	E_AUTO( pitches )
@@ -316,7 +316,7 @@ namespace mscmld {
 		return ( ( Op1.Base != Op2.Base ) || ( Op1.Modifier != Op2.Modifier ) );
 	}
 
-	qROW( drow__ );
+	E_ROW( drow__ );
 
 	typedef bch::E_BUNCHt_( duration__, drow__ ) durations_;
 	E_AUTO( durations )
@@ -515,7 +515,7 @@ namespace mscmld {
 		return ( ( Op1.Key != Op2.Key ) || ( Op1.Time != Op2.Time ) );
 	}
 
-	qROW( srow__ );
+	E_ROW( srow__ );
 
 	typedef bch::E_BUNCHt_( signature__, srow__ ) signatures_;
 	E_AUTO( signatures )
@@ -558,7 +558,7 @@ namespace mscmld {
 		}
 	};
 
-	qROW( row__ );
+	E_ROW( row__ );
 
 	typedef bch::E_BUNCHt_( note__, row__ ) notes_;
 	E_AUTO( notes );

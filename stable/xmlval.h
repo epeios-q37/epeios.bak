@@ -63,7 +63,7 @@ namespace xmlval {
 	typedef xmlelm::item_ 	value_;
 	typedef xmlelm::item	value;
 
-	qROW( vrow__ );	// Value row.
+	E_ROW( vrow__ );	// Value row.
 
 	typedef xmlbsc::basic_<erow__, vrow__> value_tree_;
 	E_AUTO( value_tree )

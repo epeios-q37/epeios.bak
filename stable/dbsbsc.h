@@ -58,13 +58,13 @@
 
 namespace dbsbsc {
 
-	qROW( rrow__ );	// Record row.
+	E_ROW( rrow__ );	// Record row.
 
 	typedef bch::E_BUNCH_( rrow__ ) rrows_;
 	E_AUTO( rrows );
 
 
-	qROW( crow__ );	// Cache row.
+	E_ROW( crow__ );	// Cache row.
 
 	typedef bso::ubyte__ skip_level__;
 #define DBSBSC_NO_SKIP	0

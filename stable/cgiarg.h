@@ -74,10 +74,10 @@ namespace cgiarg {
 
 
 	// Row.
-	qROW( row__ );
+	E_ROW( row__ );
 
 	// Data row.
-	qROW( data_row__ );
+	E_ROW( data_row__ );
 
 	// The value indicating there is no indice.
 	#define CGIARG_NO_INDICE	BSO_ULONG_MAX

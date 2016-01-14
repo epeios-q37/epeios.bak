@@ -442,7 +442,7 @@ namespace mscmdm {
 
 	E_AUTO( event )
 
-	qROW( erow__ );	// Event row.
+	E_ROW( erow__ );	// Event row.
 
 	typedef ctn::E_MCONTAINERt_( event_, erow__ ) events_;
 	E_AUTO( events )
@@ -520,7 +520,7 @@ namespace mscmdm {
 	}
 # endif
 
-	qROW( trow__ );	// Track row.
+	E_ROW( trow__ );	// Track row.
 
 	typedef ctn::E_CONTAINERt_( track_, trow__ ) tracks_;
 	E_AUTO( tracks )

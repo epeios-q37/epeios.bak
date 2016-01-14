@@ -67,8 +67,31 @@
 
 # include "bso.h"
 
-# define E_ENUM( name )\
-	enum name##__ : bso::enum__ 
+/*************************/
+/****** New version ******/
+/*************************/
+
+// The old 'object_' is simply named 'object', as it is the most used (as argument).
+
+// Instanciable version of an object.
+
+// 'object' -> 'qI( object )' (Instantiable).
+# define qI( name ) I_##name
+
+// 'object__' -> 'qS( object )' (Static).
+// Defined in 'BSO'.
+
+// 'objet___' -> 'qT( object )' (Tutorate).
+# define qT( name ) T_##name
+
+# define qENUM( name )\
+	enum qS( name ) : bso::qS( enum )
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+# define E_ENUM( name )	enum name##__ : bso::enum__ 
 
 namespace sdr {
 	struct row__;
@@ -468,7 +491,7 @@ public:\
 
 
 //d Create a new type for a row named 'Type'.
-# define qROW( Type )	E_TMIMIC__( sdr::row_t__, Type )
+# define E_ROW( Type )	E_TMIMIC__( sdr::row_t__, Type )
 
 /* Permet de transformer n arguments en 1; si un argument d'une macro
 a besoin de contenir une virgule, cette macro est l pour a.
@@ -1648,7 +1671,6 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 #define Q37_MRMDF( type, name, variable )\
 	type *variable;\
 	Q37_RMDF( type, name, variable )
-
 
 
 #endif

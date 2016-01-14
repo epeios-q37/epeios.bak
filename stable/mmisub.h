@@ -60,7 +60,7 @@
 
 namespace mmi {
 	//t The type of an index in the indexed multimemory.
-	qROW( index__ );
+	E_ROW( index__ );
 
 	// Prdclaration.
 	class indexed_multimemory_;

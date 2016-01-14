@@ -56,7 +56,7 @@
 
 namespace stsfsm {
 
-	qROW( crow__ );	// 'Card Row'.
+	E_ROW( crow__ );	// 'Card Row'.
 
 	typedef bch::E_BUNCH_( crow__ ) crows_;
 

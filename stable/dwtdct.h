@@ -42,7 +42,7 @@
 namespace dwtdct {
 	using namespace dwtbsc;
 
-	qROW( irow__ );
+	E_ROW( irow__ );
 
 	typedef bch::E_BUNCHt_( drow__, irow__ ) i2d_;
 	E_AUTO( i2d );

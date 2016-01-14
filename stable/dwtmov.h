@@ -71,7 +71,7 @@ namespace dwtmov {
 		}
 	};
 
-	qROW( mrow__ );	// Moving row.
+	E_ROW( mrow__ );	// Moving row.
 
 	typedef bch::E_BUNCHt_( move__, mrow__ ) moves_;
 	E_AUTO( moves );

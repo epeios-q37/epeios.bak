@@ -61,7 +61,7 @@
 namespace ssnmng {
 
 	//t The type of the row of a session.
-	qROW( row__ );
+	E_ROW( row__ );
 
 	typedef bch::E_BUNCH_( row__ ) rows_;
 	E_AUTO( rows )

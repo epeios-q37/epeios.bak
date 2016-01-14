@@ -31,11 +31,11 @@ namespace dpkbsc {
 	typedef bso::uint__ counter__;
 #define DPKBSC_COUNTER_MAX	BSO_UINT_MAX
 
-	qROW( rrow__ );	// 'record row'.
+	E_ROW( rrow__ );	// 'record row'.
 	typedef bch::E_BUNCH_( rrow__ ) rrows_;
 	E_AUTO( rrows );
 
-	qROW( trow__ );	// 'table row'.
+	E_ROW( trow__ );	// 'table row'.
 
 	template <typename container, typename item, typename row> inline row BaseSearch(
 		const str::string_ &Label,

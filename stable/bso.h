@@ -47,12 +47,34 @@
 #  error "Undefined size !"
 # endif
 
+/*************************/
+/****** New version ******/
+/*************************/
+
+// 'object__' -> 'qS( object )' (Static).
+# define qS( name ) S_##name
+
 namespace bso {
 	// Unit of digital information, without any intrinsec signification.
-	typedef unsigned char byte__;
+	typedef unsigned char qS( byte );
 
-	//t Boolean.
-	typedef bool bool__;
+	// Boolean.
+	typedef bool qS( bool );
+
+	typedef unsigned char qS( u8 );
+
+	// Type de base d'un enum (Utilisé par E_ENUM(...).
+	typedef bso::qS( u8 ) qS( enum );
+}
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+namespace bso {
+	typedef qS( byte ) byte__;
+
+	typedef qS( bool ) bool__;
 
 # define BSO__DEF( type, name, value )\
 	static const type##__ &name = value
@@ -76,7 +98,7 @@ namespace bso {
 
 	#define BSO_U8_MAX		UINT8_MAX
 	#define BSO_U8_MIN		0
-	typedef unsigned char u8__;
+	typedef qS( u8 ) u8__;
 
 	BSO__INT_MIN_MAX_DEF( 8, INT8 );
 
@@ -301,8 +323,7 @@ namespace bso {
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
 
-	// Type de base d'un enum (Utilisé par E_ENUM(...).
-	typedef bso::u8__ enum__;
+	typedef qS( enum ) enum__;
 
 	//c A sign ( -(1) +(1) 0 ).
 	class sign__

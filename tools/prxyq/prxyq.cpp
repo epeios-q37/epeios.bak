@@ -192,7 +192,7 @@ public:
 
 	typedef csdbns::callback__ _callback__;
 
-	qROW( row__ );
+	E_ROW( row__ );
 
 	typedef lstbch::E_LBUNCHt_( proxy___ *, row__ ) proxies_;
 	E_AUTO( proxies );

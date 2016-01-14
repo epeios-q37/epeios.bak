@@ -62,7 +62,7 @@ namespace ndbdct {
 	using ndbbsc::cache_;
 	using ndbbsc::cache;
 
-	qROW( drow__ );	// 'Datum row'.
+	E_ROW( drow__ );	// 'Datum row'.
 
 	typedef tys::storage_<ndbbsc::atom__, drow__> _storage_;
 

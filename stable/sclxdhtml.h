@@ -77,7 +77,7 @@ namespace sclxdhtml {
 		}
 	};
 
-	qROW( crow__ );	// callback row;
+	E_ROW( crow__ );	// callback row;
 
 	template <typename session> E_TTCLONE_( bch::E_BUNCHt_( action_callback__<session> *, crow__ ), action_callbacks_ );
 

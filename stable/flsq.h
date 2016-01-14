@@ -79,7 +79,7 @@ namespace flsq {
 	// type dfinissant une position dans la mmoire
 
 	// Identifiant sous lequel est regroup un ensemble de fichiers.
-	qROW( id__ );
+	E_ROW( id__ );
 	E_CDEF( id__, Undefined, qNIL );
 
 	id__ GetId( void );
@@ -234,7 +234,7 @@ namespace flsq {
 		}
 	};
 
-	qROW( row__ );
+	E_ROW( row__ );
 
 	row__ _Register(
 		class file_storage___ &FS,

@@ -79,7 +79,7 @@ namespace fls {
 	// type dfinissant une position dans la mmoire
 
 	// Identifiant sous lequel est regroup un ensemble de fichiers.
-	qROW( id__ );
+	E_ROW( id__ );
 	#define FLS_UNDEFINED_ID	qNIL
 
 	id__ GetId( void );
@@ -234,7 +234,7 @@ namespace fls {
 		}
 	};
 
-	qROW( row__ );
+	E_ROW( row__ );
 
 	row__ _Register(
 		class file_storage___ &FS,

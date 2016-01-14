@@ -48,8 +48,8 @@ namespace dwtbsc {
 	typedef str::string_ oddity_;
 	E_AUTO( oddity );
 
-	qROW( nrow__ );	// Name row.
-	qROW( orow__ );	// Oddity row.
+	E_ROW( nrow__ );	// Name row.
+	E_ROW( orow__ );	// Oddity row.
 
 	typedef ctn::E_MCONTAINERt_( name_, nrow__ ) names_;
 	E_AUTO( names );
@@ -123,7 +123,7 @@ namespace dwtbsc {
 		}
 	};
 
-	qROW( grow__);
+	E_ROW( grow__);
 
 	typedef bch::E_BUNCHt_( goof__, grow__ ) goofs_;
 	E_AUTO( goofs );
@@ -175,12 +175,12 @@ namespace dwtbsc {
 		}
 	};
 
-	qROW( frow__ );	// 'file row'.
+	E_ROW( frow__ );	// 'file row'.
 
 	typedef bch::E_BUNCH_( frow__ ) frows_;
 	E_AUTO( frows );
 
-	qROW( drow__);	// 'dir row'.
+	E_ROW( drow__);	// 'dir row'.
 
 	typedef bch::E_BUNCH_( drow__) drows_;
 	E_AUTO( drows );

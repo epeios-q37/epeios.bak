@@ -33,7 +33,7 @@ namespace query {
 	typedef str::string_ item_;
 	typedef str::string item;
 
-	qROW( irow__ );	// Item row.
+	E_ROW( irow__ );	// Item row.
 
 	typedef ctn::E_MCONTAINERt_( item_, irow__ ) items_;
 	E_AUTO( items );
@@ -54,7 +54,7 @@ namespace query {
 		}
 	};
 
-	qROW( prow__ );	//	'Pair row'. 
+	E_ROW( prow__ );	//	'Pair row'. 
 
 	typedef bch::E_BUNCHt_( pair__, prow__ ) _pairs_;
 	E_AUTO( _pairs );

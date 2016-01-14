@@ -88,12 +88,12 @@ namespace dwtcpr {
 
 	typedef core__ file__;
 
-	qROW( frow__ );	// 'file row'.
+	E_ROW( frow__ );	// 'file row'.
 
 	typedef bch::E_BUNCH_( frow__ ) frows_;
 	E_AUTO( frows );
 
-	qROW( drow__);	// 'dir row'.
+	E_ROW( drow__);	// 'dir row'.
 
 	typedef bch::E_BUNCH_( drow__) drows_;
 	E_AUTO( drows );
