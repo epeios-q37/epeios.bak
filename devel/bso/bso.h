@@ -51,23 +51,19 @@
 /****** New version ******/
 /*************************/
 
-// 'object__' -> 'qS( object )' (Static).
-# define qS( name ) S_##name
-
 namespace bso {
 	// Unit of digital information, without any intrinsec signification.
-	typedef unsigned char qS( byte );
+	typedef unsigned char fByte;
 
 	//t Size of a memory .
-	typedef size_t qS( size );
+	typedef size_t fSize;
 
 	// Boolean.
-	typedef bool qS( bool );
+	typedef bool fBool;
 
-	typedef unsigned char qS( u8 );
+	typedef unsigned char fU8;
 
-	// Type de base d'un enum (Utilisé par E_ENUM(...).
-	typedef bso::qS( u8 ) qS( enum );
+	typedef fU8 fEnum;
 }
 
 /*************************/
@@ -75,9 +71,9 @@ namespace bso {
 /*************************/
 
 namespace bso {
-	typedef qS( byte ) byte__;
+	typedef fByte byte__;
 
-	typedef qS( bool ) bool__;
+	typedef fBool bool__;
 
 # define BSO__DEF( type, name, value )\
 	static const type##__ &name = value
@@ -101,7 +97,7 @@ namespace bso {
 
 	#define BSO_U8_MAX		UINT8_MAX
 	#define BSO_U8_MIN		0
-	typedef qS( u8 ) u8__;
+	typedef fU8 u8__;
 
 	BSO__INT_MIN_MAX_DEF( 8, INT8 );
 
@@ -143,7 +139,7 @@ namespace bso {
 // # define BSO_SIZE_MAX	SIZE_MAX
 
 	//t Size of a memory .
-	typedef qS( size ) size__;
+	typedef fSize size__;
 
 	//t Short-sized float.
 	typedef float sfloat__;
@@ -326,7 +322,7 @@ namespace bso {
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
 
-	typedef qS( enum ) enum__;
+	typedef fEnum enum__;
 
 	//c A sign ( -(1) +(1) 0 ).
 	class sign__

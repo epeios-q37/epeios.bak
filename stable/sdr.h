@@ -56,14 +56,14 @@
 # define SDR__DSIZE_SIZE_MAX ( ( ( 8 * sizeof( sdr::size__ ) ) / 7 ) + 1 )
 
 namespace sdr {
-	using bso::qS( byte );
+	using bso::fByte;
 
-	typedef bso::qS( size ) qS( row_t );
+	typedef bso::fSize bRow;
 
-	typedef qS( row_t )	row_t__;
+	typedef bRow	row_t__;
 
-	E_TMIMIC__( qS( row_t ), qS( row ) );
-	typedef qS( row ) row__;
+	E_TMIMIC__( bRow, fRow );
+	typedef fRow row__;
 
 	E_CDEF( sdr::row_t__, NIL, qNIL );
 

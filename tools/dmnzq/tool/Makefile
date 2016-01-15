@@ -54,7 +54,7 @@ wmods += wllio
 #CXXFLAGS += -g
 
 # General optimization.
-CXXFLAGS += -O
+# CXXFLAGS += -O
 
 # To use with gprof
 #CXXFLAGS += -pg

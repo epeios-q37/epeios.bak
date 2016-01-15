@@ -71,23 +71,10 @@
 /****** New version ******/
 /*************************/
 
-// The old 'object_' is simply named 'object', as it is the most used (as argument).
-
-// Instanciable version of an object.
-
-// 'object' -> 'qI( object )' (Instantiable).
-# define qI( name ) I_##name
-
-// 'object__' -> 'qS( object )' (Static).
-// Defined in 'BSO'.
-
-// 'objet___' -> 'qT( object )' (Tutorate).
-# define qT( name ) T_##name
-
 # define qENUM( name )\
-	enum qS( name ) : bso::qS( enum )
+	enum f##name : bso::fEnum
 
-# define qROW( name ) E_TMIMIC__( sdr::qS( row_t ), qS( name ) )
+# define qROW( name ) E_TMIMIC__( sdr::bRow, f##name )
 
 // Declaration of standardized constructor.
 # define TOL_CTORD_( name )\
@@ -124,10 +111,65 @@
 	qCTOR( name )\
 	qVDTOR( name )
 
+# define qW_( name )	\
+class i##name\
+: public v##name\
+{\
+public:\
+	v##name::s static_;\
+	i##name( void )\
+	: v##name( static_ )\
+	{\
+		reset( false );\
+	}\
+	~i##name( void )\
+	{\
+		reset( true );\
+	}\
+	i##name &operator =( const i##name &O )\
+	{\
+		v##name::operator =( O );\
+\
+		return *this;\
+	}\
+	i##name &operator =( const v##name &O )\
+	{\
+		v##name::operator =( O );\
+\
+		return *this;\
+	}
+
+// Wraps 'vName' to make it instantiable.
+# define qW( name )\
+	qW_( name )\
+	};
+
+
+// Pointer Method Function.
+#define qPMF( type, name, variable )\
+	type *name( void ) const\
+	{\
+		if ( variable == NULL )\
+			qRFwk();\
+\
+		return variable;\
+	}
+
+// Reference Method Function.
+#define qRMF( type, name, variable )\
+	type &name( void ) const\
+	{\
+		if ( variable == NULL )\
+			qRFwk();\
+\
+		return *variable;\
+	}
+
+
 # define TOL_ERRP_	err::handling__ ErrHandling = err::h_Default
 
 namespace tol{
-	template <typename t> class qT( buffer ) // Dynamic buffer of objects of type 't'. Its size never shrinks, so it can(t be used to know the true amount of objects it contains.
+	template <typename t> class rBuffer // Dynamic buffer of objects of type 't'. Its size never shrinks, so it can(t be used to know the true amount of objects it contains.
 	{
 	private:
 		t *_Pointer;
@@ -166,11 +208,11 @@ namespace tol{
 			_Pointer = NULL;
 			_Extent = 0;
 		}
-		qT( buffer )( void )
+		rBuffer( void )
 		{
 			reset( false );
 		}
-		~qT( buffer )( void )
+		~rBuffer( void )
 		{
 			reset();
 		}
@@ -220,7 +262,7 @@ namespace tol{
 		{
 			return _Pointer;
 		}
-		qT( buffer ) &operator =( const qT( buffer ) & )
+		rBuffer &operator =( const rBuffer & )
 		{
 			qRFwk(); 
 
@@ -233,7 +275,7 @@ namespace tol{
 	};
 }
 
-# define qBUFFER( t )	tol::qT( buffer )<t>
+# define qBUFFER( t )	tol::rBuffer<t>
 # define qCBUFFER qCBUFFER( bso::char__ )
 
 
@@ -1482,7 +1524,7 @@ namespace tol {
 		des mthodes virtuelles.
 	*/
 
-	template <typename t> E_TTCLONE__( qT( buffer )<t>, buffer___ );
+	template <typename t> E_TTCLONE__( rBuffer<t>, buffer___ );
 
 # define E_BUFFER___( t )	buffer___<t>
 # define TOL_CBUFFER___ tol::E_BUFFER___( bso::char__ )

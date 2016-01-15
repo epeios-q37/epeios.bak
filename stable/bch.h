@@ -40,6 +40,21 @@
 #  include "ias.h"
 # else
 
+/*************************/
+/****** New version ******/
+/*************************/
+
+# define qV_BUNCHt( type, row ) E_BUNCHt_( type, row )
+# define qI_BUNCHt( type, row ) E_BUNCHt( type, row )
+
+# define qV_BUNCH( type, row ) qV_BUNCHt_( type, sdr::fRow )
+# define qI_BUNCH( type, row ) qV_BUNCHt( type, sdr::fRow )
+
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
 
 namespace bch {
 

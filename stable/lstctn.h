@@ -51,6 +51,18 @@
 #include "lst.h"
 #include "ctn.h"
 
+/*************************/
+/****** New version ******/
+/*************************/
+
+# define qV_LMCONTAINERt( type, row ) E_LMCONTAINERt_( type, row )
+# define qI_LMCONTAINERt( type, row ) E_LMCONTAINERt( type, row )
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+
 namespace lstctn {
 	using lst::list_;
 

@@ -289,7 +289,7 @@ qRFT
 	cio::COut.Commit();
 	cio::CErr.Commit();
 	cio::CIn.Dismiss();
-qRFE( ErrFinal_() )
+qRFE( sclmisc::ErrFinal() )
 	return ExitValue;
 }
 #endif
