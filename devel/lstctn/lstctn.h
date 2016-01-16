@@ -17,46 +17,35 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: lstctn.h,v 1.60 2013/04/11 19:36:49 csimon Exp $
+//D LiST ConTaiNer 
 
 #ifndef LSTCTN__INC
-#define LSTCTN__INC
+# define LSTCTN__INC
 
-#define LSTCTN_NAME		"LSTCTN"
+# define LSTCTN_NAME		"LSTCTN"
 
-#define	LSTCTN_VERSION	"$Revision: 1.60 $"
+# define	LSTCTN_VERSION	"$Revision: 1.60 $"
 
-#define LSTCTN_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# define LSTCTN_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#if defined( E_DEBUG ) && !defined( LSTCTN_NODBG )
-#define LSTCTN_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( LSTCTN_NODBG )
+#  define LSTCTN_DBG
+# endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.60 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/11 19:36:49 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D LiST ConTaiNer 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "lst.h"
-#include "ctn.h"
+# include "err.h"
+# include "flw.h"
+# include "lst.h"
+# include "ctn.h"
 
 /*************************/
 /****** New version ******/
 /*************************/
 
-# define qV_LMCONTAINERt( type, row ) E_LMCONTAINERt_( type, row )
-# define qI_LMCONTAINERt( type, row ) E_LMCONTAINERt( type, row )
+# define qLMCONTAINERv( type, row ) E_LMCONTAINERt_( type, row )
+# define qLMCONTAINERi( type, row ) E_LMCONTAINERt( type, row )
+
+# define qLMCONTAINERvl( type ) qLMCONTAINERv( type, sdr::fRow )
+# define qLMCONTAINERil( type ) qLMCONTAINERi( type, sdr::fRow )
 
 /*************************/
 /****** Old version ******/
@@ -395,44 +384,43 @@ namespace lstctn {
 	};
 
 	E_AUTO4( list_xcontainer )
-
-	#define E_LMCONTAINERtx_( type, row, row_t )	list_container_< ctn::E_MCONTAINERt_( type, row ), row, row_t >
-	#define E_LMCONTAINERtx( type, row, row_t )		list_container< ctn::E_MCONTAINERt_( type, row ), row, row_t >
-
-	#define E_LMCONTAINERt_( type, row )	E_LMCONTAINERtx_( type, row, sdr::row_t__ )
-	#define E_LMCONTAINERt( type, row )		E_LMCONTAINERtx( type, row, sdr::row_t__ )
-
-	#define E_LMCONTAINER_( type )			E_LMCONTAINERt_( type, sdr::row__ )
-	#define E_LMCONTAINER( type )			E_LMCONTAINERt( type, sdr::row__ )
-
-	#define E_LCONTAINERtx_( type, row, row_t )		list_container_< ctn::E_CONTAINERt_( type, row ), row, row_t >
-	#define E_LCONTAINERtx( type, row, row_t )		list_container< ctn::E_CONTAINERt_( type, row ), row, row_t >
-
-	#define E_LCONTAINERt_( type, row )		E_LCONTAINERtx_( type, row, sdr::row_t__ )
-	#define E_LCONTAINERt( type, row )		E_LCONTAINERtx( type, row, sdr::row_t__ )
-
-	#define E_LCONTAINER_( type )			E_LCONTAINERt_( type, sdr::row__ )
-	#define E_LCONTAINER( type )			E_LCONTAINERt( type, sdr::row__ )
-
-	#define E_LXMCONTAINERtx_( type, row, row_t )	list_xcontainer_< ctn::E_MCONTAINERt_( type, row ), type, row, row_t >
-	#define E_LXMCONTAINERtx( type, row, row_t )	list_xcontainer< ctn::E_MCONTAINERt_( type, row ), type, row, row_t >
-
-	#define E_LXMCONTAINERt_( type, row )	E_LXMCONTAINERtx_( type, row, sdr::row_t__ )
-	#define E_LXMCONTAINERt( type, row )	E_LXMCONTAINERtx( type, row, sdr::row_t__ )
-
-	#define E_LXMCONTAINER_( type )			E_LXMCONTAINERt_( type, sdr::row__ )
-	#define E_LXMCONTAINER( type )			E_LXMCONTAINERt( type, sdr::row__ )
-
-	#define E_LXCONTAINERtx_( type, row, row_t )	list_xcontainer_< ctn::E_CONTAINERt_( type, row ), type, row, row_t >
-	#define E_LXCONTAINERtx( type, row, row_t )		list_xcontainer< ctn::E_CONTAINERt_( type, row ), type, row, row_t >
-
-	#define E_LXCONTAINERt_( type, row )	E_LXCONTAINERtx_( type, row, sdr::row_t__ )
-	#define E_LXCONTAINERt( type, row )		E_LXCONTAINERtx( type, row, sdr::row_t__ )
-
-	#define E_LXCONTAINER_( type )			E_LXCONTAINERt_( type, sdr::row__ )
-	#define E_LXCONTAINER( type )			E_LXCONTAINERt( type, sdr::row__ )
-
 }
+
+# define E_LMCONTAINERtx_( type, row, row_t )	list_container_< ctn::E_MCONTAINERt_( type, row ), row, row_t >
+# define E_LMCONTAINERtx( type, row, row_t )		list_container< ctn::E_MCONTAINERt_( type, row ), row, row_t >
+
+# define E_LMCONTAINERt_( type, row )	E_LMCONTAINERtx_( type, row, sdr::row_t__ )
+# define E_LMCONTAINERt( type, row )		E_LMCONTAINERtx( type, row, sdr::row_t__ )
+
+# define E_LMCONTAINER_( type )			E_LMCONTAINERt_( type, sdr::row__ )
+# define E_LMCONTAINER( type )			E_LMCONTAINERt( type, sdr::row__ )
+
+# define E_LCONTAINERtx_( type, row, row_t )		list_container_< ctn::E_CONTAINERt_( type, row ), row, row_t >
+# define E_LCONTAINERtx( type, row, row_t )		list_container< ctn::E_CONTAINERt_( type, row ), row, row_t >
+
+# define E_LCONTAINERt_( type, row )		E_LCONTAINERtx_( type, row, sdr::row_t__ )
+# define E_LCONTAINERt( type, row )		E_LCONTAINERtx( type, row, sdr::row_t__ )
+
+# define E_LCONTAINER_( type )			E_LCONTAINERt_( type, sdr::row__ )
+# define E_LCONTAINER( type )			E_LCONTAINERt( type, sdr::row__ )
+
+# define E_LXMCONTAINERtx_( type, row, row_t )	list_xcontainer_< ctn::E_MCONTAINERt_( type, row ), type, row, row_t >
+# define E_LXMCONTAINERtx( type, row, row_t )	list_xcontainer< ctn::E_MCONTAINERt_( type, row ), type, row, row_t >
+
+# define E_LXMCONTAINERt_( type, row )	E_LXMCONTAINERtx_( type, row, sdr::row_t__ )
+# define E_LXMCONTAINERt( type, row )	E_LXMCONTAINERtx( type, row, sdr::row_t__ )
+
+# define E_LXMCONTAINER_( type )			E_LXMCONTAINERt_( type, sdr::row__ )
+# define E_LXMCONTAINER( type )			E_LXMCONTAINERt( type, sdr::row__ )
+
+# define E_LXCONTAINERtx_( type, row, row_t )	list_xcontainer_< ctn::E_CONTAINERt_( type, row ), type, row, row_t >
+# define E_LXCONTAINERtx( type, row, row_t )		list_xcontainer< ctn::E_CONTAINERt_( type, row ), type, row, row_t >
+
+# define E_LXCONTAINERt_( type, row )	E_LXCONTAINERtx_( type, row, sdr::row_t__ )
+# define E_LXCONTAINERt( type, row )		E_LXCONTAINERtx( type, row, sdr::row_t__ )
+
+# define E_LXCONTAINER_( type )			E_LXCONTAINERt_( type, sdr::row__ )
+# define E_LXCONTAINER( type )			E_LXCONTAINERt( type, sdr::row__ )
 
 /*$END$*/
 #endif
