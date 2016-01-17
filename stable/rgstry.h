@@ -48,6 +48,21 @@
 
 # define RGSTRY_TAGGED_ENTRY( tag, attribute )	tag RGSTRY_TAGGING_ATTRIBUTE( attribute )
 
+/*************************/
+/****** New version ******/
+/*************************/
+
+namespace rgstry {
+	struct tentry__;
+	class tentry___;
+
+	typedef tentry__ fTEntry;
+	typedef tentry___ rTEntry;
+}
+
+/*************************/
+/****** Old version ******/
+/*************************/
 
 // Prédéclaration.
 namespace lcl {

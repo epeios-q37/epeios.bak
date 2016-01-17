@@ -202,7 +202,7 @@ namespace plgn {
 		qRE
 			return Plugin_ != NULL;
 		}
-		void *Plugin( void )
+		void *Plugin( void ) const
 		{
 			if ( Plugin_ == NULL )
 				qRFwk();
@@ -216,25 +216,29 @@ namespace plgn {
 	typedef bch::qBUNCHv( rLooseRetriever, fRow ) vRetrievers;
 	qW( Retrievers );
 
-	class rRetrievers
+	void Delete_( iRetrievers &Retrievers );
+
+	template <typename plugin> class rRetrievers
 	: public iRetrievers
 	{
-	private:
-		void Delete_( void );
 	public:
 		void reset( bso::fBool P = true )
 		{
 			if ( P )
-				Delete_();
+				Delete_( *this );
 
 			vRetrievers::reset( P );
 		}
 		qCDTOR( rRetrievers);
 		void Init( void )
 		{
-			Delete_();
+			Delete_( *this );
 
 			iRetrievers::Init();
+		}
+		plugin &Plugin( fRow Row ) const
+		{
+			return *(plugin *)iRetrievers::operator()( Row ).Plugin();
 		}
 	};
 

@@ -965,16 +965,119 @@ qRT
 qRE
 }
 
-void sclmisc::Plug(
+namespace {
+	static void GetPluginItemRelatedTags_(
+		const char *Target,
+		const str::vString &Id,
+		rgstry::tags_ &Tags )
+	{
+		Tags.Append( str::iString( Target ) );
+		Tags.Append( Id );
+	}
+	
+	const void GetPluginItemFeatures_(
+		const char *Target,
+		const str::string_ &Id,
+		str::string_ &Filename,
+		rgstry::entry__ &Configuration,
+		rgstry::entry__ &Locale,
+		str::string_ &Arguments )
+	{
+	qRH
+		rgstry::tags Tags;
+	qRB
+		Tags.Init();
+
+		GetPluginItemRelatedTags_( Target, Id, Tags );
+
+		sclmisc::MGetValue( rgstry::fTEntry( sclrgstry::definition::plugin::Filename, Tags ), Filename );
+
+		GetPluginFeature_( rgstry::fTEntry( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
+		GetPluginFeature_( rgstry::fTEntry( sclrgstry::definition::plugin::Locale, Tags ), Locale );
+
+		sclmisc::MGetValue( rgstry::rTEntry( sclrgstry::parameter::PluginItem, Target, Id ), Arguments );
+	qRR
+	qRT
+	qRE
+	}
+
+	void Plug_(
+		const char *Target,
+		const char *Identification,
+		const str::vString &Id,
+		plgn::rLooseRetriever &Retriever )
+	{
+	qRH
+		str::iString Filename, Arguments;
+		rgstry::entry__ Configuration, Locale;
+	qRB
+		Filename.Init();
+		Arguments.Init();
+		Configuration.Init();
+		Locale.Init();
+
+		GetPluginItemFeatures_( Target, Id, Filename, Configuration, Locale, Arguments );
+		HandleLocale_( Locale, Filename );
+
+		Retriever.Initialize( Filename, Identification, Configuration, Arguments );
+	qRR
+	qRT
+	qRE
+	}
+
+	void Plug_(
+		const char *Target,
+		const char *Identification,
+		const str::vString &Id,
+		plgn::iRetrievers &Retrievers )
+	{
+	qRH
+		plgn::rLooseRetriever Retriever;
+	qRB
+		Retriever.Init();
+
+		Plug_( Target, Identification, Id, Retriever );
+
+		Retrievers.Add( Retriever );
+
+		Retriever.reset( false );	// To avoid the deletion, as is it store in 'Retrievers'.
+	qRR
+	qRT
+	qRE
+	}
+
+	void Plug_(
+		const char *Target,
+		const char *Identification,
+		const str::vStrings &Ids,
+		plgn::iRetrievers &Retrievers )
+	{
+		ctn::qCMITEMl( str::vString ) Id;
+		sdr::fRow Row = Ids.First();
+
+		Id.Init( Ids );
+
+		while ( Row != qNIL ) {
+			Plug_( Target, Identification, Id( Row ), Retrievers );
+
+			Row = Ids.Next( Row );
+		}
+	}
+}
+
+void sclmisc::Plug_(
 	const char *Target,
-	plgn::rRetrievers &Retrievers )
+	const char *Identification,
+	plgn::iRetrievers &Retrievers )
 {
 qRH
 	str::iStrings Ids;
 qRB
 	Ids.Init();
 
-	sclmisc::GetValues( rgstry::te sclrgstry::parameter::loose_plugin_item::Id, Tar );
+	sclmisc::GetValues( rgstry::rTEntry( sclrgstry::parameter::loose_plugin_item::Id, Target ), Ids );
+
+	::Plug_( Target, Identification, Ids, Retrievers );
 qRR
 qRT
 qRE

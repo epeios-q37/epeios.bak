@@ -26,22 +26,22 @@ using namespace plgn;
 #include "sclmisc.h"
 
 // 'qR...' to be sure that the recalled and removed retriever is deleted if an error occurs.
-void plgn::rRetrievers::Delete_( void )
+void plgn::Delete_( iRetrievers &Retrievers )
 {
 qRH
 	fRow Row = qNIL;
 	rLooseRetriever Retriever;
 qRB
-	fRow Row = iRetrievers::Last();
+	fRow Row = Retrievers.Last();
 
 	while ( Row != qNIL ) {
-		iRetrievers::Recall( Row, Retriever );
+		Retrievers.Recall( Row, Retriever );
 
 		Retriever.reset();
 
-		Row = iRetrievers::Previous( Row );
+		Row = Retrievers.Previous( Row );
 
-		iRetrievers::Remove( Row );
+		Retrievers.Remove( Row );
 	}
 qRR
 qRT

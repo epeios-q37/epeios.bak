@@ -15,8 +15,8 @@ Meaning of list markers (2nd level):
 2016-01-17 :
 - GLOBAL :
 	- Introducting new conventions.
-- PLGN :
-	* Introducing 'fRetriever'.
+- PLGN, SCLMISC, SCLRGSTRY :
+	* Introducing plugins set.
 
 2016-01-16 :
 - GLOBAL :

@@ -72,7 +72,7 @@
 /*************************/
 
 # define qENUM( name )\
-	enum n##name : bso::bEnum
+	enum e##name : bso::bEnum
 
 # define qROW( name ) E_TMIMIC__( sdr::bRow, f##name )
 

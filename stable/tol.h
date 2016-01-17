@@ -72,7 +72,7 @@
 /*************************/
 
 # define qENUM( name )\
-	enum n##name : bso::bEnum
+	enum e##name : bso::bEnum
 
 # define qROW( name ) E_TMIMIC__( sdr::bRow, f##name )
 
@@ -188,11 +188,11 @@
 	qWODISCLOSEf( type, name )
 
 
-# define qRRODISCLOSEr( type, name ) qRRODISCLOSEf( type, name )
-# define qRODISCLOSEr(type, name ) qRODISCLOSEf(type, name )
-# define qWODISCLOSEr(type, name ) qWODISCLOSEf(type, name )
-# define qRRWDISCLOSEr(type, name ) qRRWDISCLOSEf(type, name )
-# define qRWDISCLOSEr(type, name ) qRWDISCLOSEf(type, name )
+# define qRRODISCLOSEr( type, name )	qRRODISCLOSEf( type, name )
+# define qRODISCLOSEr(type, name )		qRODISCLOSEf(type, name )
+# define qWODISCLOSEr(type, name )		qWODISCLOSEf(type, name )
+# define qRRWDISCLOSEr(type, name )		qRRWDISCLOSEf(type, name )
+# define qRWDISCLOSEr(type, name )		qRWDISCLOSEf(type, name )
 
 # define qW_( name )	\
 class i##name\

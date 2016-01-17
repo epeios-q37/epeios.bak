@@ -413,9 +413,17 @@ namespace sclmisc {
 	qRE
 	}
 
-	void Plug(
+	void Plug_(
 		const char *Target,
-		plgn::rRetrievers &Retrievers );
+		const char *Identification,
+		plgn::iRetrievers &Retrievers );
+
+	template <typename plugin> inline void Plug(
+		const char *Target,
+		plgn::rRetrievers<plugin> &Retrievers )
+	{
+		return Plug_(Target, plugin::Identification(), Retrievers );
+	}
 }
 
 			/********************************************/

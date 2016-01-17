@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: lstbch.h,v 1.46 2013/04/06 14:50:46 csimon Exp $
+// LiST BunCH 
 
 #ifndef LSTBCH__INC
 #define LSTBCH__INC
@@ -32,24 +32,24 @@
 #define LSTBCH_DBG
 #endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.46 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/06 14:50:46 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D LiST BunCH 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
 #include "err.h"
 #include "flw.h"
 #include "bch.h"
 #include "lst.h"
+
+/*************************/
+/****** New version ******/
+/*************************/
+
+# define qLBUNCHv( type, row ) E_LBUNCHt_( type, row )
+# define qLBUNCHi( type, row ) E_LBUNCHt( type, row )
+
+# define qLBUNCHvl( type ) qLBUNCHv( type, sdr::fRow )
+# define qLBUNCHil( type ) qLBUNCHi( type, sdr::fRow )
+
+/*************************/
+/****** Old version ******/
+/*************************/
 
 namespace lstbch {
 
