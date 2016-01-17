@@ -49,11 +49,9 @@
 # include "tol.h"
 # include "strng.h"
 
-# define SDR_INTERNAL_SDRIVER *(qSD__ *)NULL
-
-# define qNIL ( (sdr::row_t__) -1 )
-
-# define SDR__DSIZE_SIZE_MAX ( ( ( 8 * sizeof( sdr::size__ ) ) / 7 ) + 1 )
+/*************************/
+/****** New version ******/
+/*************************/
 
 namespace sdr {
 	using bso::fByte;
@@ -63,6 +61,22 @@ namespace sdr {
 	typedef bRow	row_t__;
 
 	E_TMIMIC__( bRow, fRow );
+}
+
+# define qSDf	sdr::storage_driver__
+
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+# define SDR_INTERNAL_SDRIVER *(qSD__ *)NULL
+
+# define qNIL ( (sdr::row_t__) -1 )
+
+# define SDR__DSIZE_SIZE_MAX ( ( ( 8 * sizeof( sdr::size__ ) ) / 7 ) + 1 )
+
+namespace sdr {
 	typedef fRow row__;
 
 	E_CDEF( sdr::row_t__, NIL, qNIL );

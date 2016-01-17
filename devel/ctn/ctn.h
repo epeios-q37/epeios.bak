@@ -41,6 +41,25 @@
 # define	typename_	typename
 #endif
 
+/*************************/
+/****** New version ******/
+/*************************/
+
+
+# define qMITEM( type, row )	volatile_mono_item< type, row >
+# define qCMITEM( type, row )	const_mono_item< type, row >
+
+# define qMITEMl( type )		qMITEM( type, sdr::fRow )
+# define qCMITEMl( type )		qCMITEM( type, sdr::fRow )
+
+
+
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+
 namespace ctn {
 
 	using sdr::size__;
@@ -808,17 +827,17 @@ namespace ctn {
 
 
 
-	//s To reach an item from 'MCONTAINER_( Type )'.
-	#define E_MITEMt( Type, r )		volatile_mono_item< Type, r >
-	#define E_CMITEMt( Type, r )	const_mono_item< Type, r >
+	// To reach an item from 'MCONTAINER_( Type )'.
+# define E_MITEMt( Type, r )	qMITEM( Type, r )
+# define E_CMITEMt( Type, r )	qCMITEM( Type, r )
 
 #if 0	// Was a workaround for some compilers.
 	#define E_MITEM( Type )		volatile_mono_item< Type, sdr::row__ >
 	#define E_CMITEM( Type )	const_mono_item< Type, sdr::row__ >
 #else
 	//s To reach an item from 'MCONTAINER_( Type )' , but only for reading.
-	#define E_MITEM( Type )		E_MITEMt( Type, sdr::row__ )
-	#define E_CMITEM( Type )	E_CMITEMt( Type, sdr::row__ )
+# define E_MITEM( Type )		qMITEMl( Type )
+# define E_CMITEM( Type )		qCMITEMl( Type )
 #endif
 
 	/*c Container for object of type 'Type', which need only one memory.

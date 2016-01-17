@@ -876,7 +876,7 @@ qRB
 	Tags.Append( str::string( Target ) );
 
 	Id.Init();
-	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::plugin::Id, Target ), Id );
+	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::targeted_plugin::Id, Target ), Id );
 
 	Tags.Append( Id );
 qRR
@@ -917,7 +917,7 @@ qRB
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
 	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Locale, Tags ), Locale );
 
-	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::Plugin, Target ), Arguments );
+	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::TargetedPlugin, Target ), Arguments );
 qRR
 qRT
 qRE
@@ -964,6 +964,22 @@ qRR
 qRT
 qRE
 }
+
+void sclmisc::Plug(
+	const char *Target,
+	plgn::rRetrievers &Retrievers )
+{
+qRH
+	str::iStrings Ids;
+qRB
+	Ids.Init();
+
+	sclmisc::GetValues( rgstry::te sclrgstry::parameter::loose_plugin_item::Id, Tar );
+qRR
+qRT
+qRE
+}
+
 
 
 Q37_GCTOR( sclmisc )

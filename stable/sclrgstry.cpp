@@ -79,8 +79,18 @@ namespace parameter_ {
 	rgstry::entry___ Plugins_( "Plugins", sclrgstry::Parameters );
 }
 
-rgstry::entry___ sclrgstry::parameter::Plugin( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), parameter_::Plugins_ );
-rgstry::entry___ sclrgstry::parameter::plugin::Id( "@Id", ::parameter::Plugin );
+rgstry::entry___ sclrgstry::parameter::TargetedPlugin( RGSTRY_TAGGED_ENTRY( "Plugin", "target" ), parameter_::Plugins_ );
+rgstry::entry___ sclrgstry::parameter::targeted_plugin::Id( "@Id", ::parameter::TargetedPlugin );
+
+namespace parameter_ {
+	rgstry::entry___ TargetedPluginsSet_( RGSTRY_TAGGED_ENTRY( "Set", "target" ), parameter_::Plugins_ );
+}
+
+rgstry::entry___ sclrgstry::parameter::LoosePluginItem( "Plugin", parameter_::TargetedPluginsSet_ );
+
+rgstry::entry___ sclrgstry::parameter::loose_plugin_item::Id( "@Id", parameter::LoosePluginItem );
+
+rgstry::entry___ sclrgstry::parameter::PluginItem( RGSTRY_TAGGING_ATTRIBUTE( "Id" ), parameter::LoosePluginItem );
 
 namespace definition {
 	static rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclrgstry::Definitions );

@@ -54,6 +54,18 @@
 #   error
 #  endif
 
+/*************************/
+/****** New version ******/
+/*************************/
+
+# define qASv	ags::aggregated_storage_
+# define qASi	ags::aggregated_storage
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+
 # define AGS_UNDEFINED_DESCRIPTOR	( (ags::descriptor__)qNIL )
 
 namespace ags {

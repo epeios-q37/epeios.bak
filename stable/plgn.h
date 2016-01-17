@@ -38,51 +38,56 @@
 
 # include "sclerror.h"
 
+/*************************/
+/****** New version ******/
+/*************************/
+
 namespace plgn {
-	template <typename plugin> class retriever___
+	class rLooseRetriever
 	{
 	private:
-		dlbrry::dynamic_library___ _Library;
-		Q37_MRMDF( plgncore::callback__, C_, Callback_ );
-		plugin *_Plugin;
-		void _ReleasePlugin( void )
+		dlbrry::dynamic_library___ Library_;
+		qRVM( plgncore::callback__, C_, Callback_ );
+		void *Plugin_;
+		void ReleasePlugin_( void )
 		{
-			if ( _Plugin == NULL )
+			if ( Plugin_ == NULL )
 				qRFwk();
 
-			C_().ReleasePlugin( _Plugin );
+			C_().ReleasePlugin( Plugin_ );
 		}
-		bso::bool__ _IsCompatible( void )
+		bso::bool__ _IsCompatible( const char *Identification )
 		{
-			plgncore::plugin_identification *Function = dlbrry::GetFunction<plgncore::plugin_identification *>( E_STRING( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME ), _Library );
+			plgncore::plugin_identification *Function = dlbrry::GetFunction<plgncore::plugin_identification *>( E_STRING( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME ), Library_ );
 
 			if ( Function == NULL )
 				qRFwk();
 
-			return !strcmp(plugin::Identification(), Function() );
+			return !strcmp( Identification, Function() );
 		}
 	private:
 		bso::bool__ SubInitialize_(
 			const ntvstr::string___ &PluginPath,
+			const char *Identification,
 			err::handling__ ErrHandling )
 		{
 			plgncore::retrieve_callback *Function = NULL;
 
-			if ( !_Library.Init( PluginPath, ErrHandling ) ) {
+			if ( !Library_.Init( PluginPath, ErrHandling ) ) {
 				if ( ErrHandling == err::hThrowException )
 					qRFwk();
 				else
 					return false;
 			}
 
-			if ( !_IsCompatible() ) {
+			if ( !_IsCompatible( Identification ) ) {
 				if ( ErrHandling == err::hThrowException )
 					qRFwk();
 				else
 					return false;
 			}
 
-			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), _Library );
+			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), Library_ );
 
 			if ( Function == NULL ) {
 				if ( ErrHandling == err::hThrowException )
@@ -99,21 +104,22 @@ namespace plgn {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( _Plugin != NULL )
-					_ReleasePlugin();
+				if ( Plugin_ != NULL )
+					ReleasePlugin_();
 			}
 
-			_Library.reset( P );
+			Library_.reset( P );
 			Callback_ = NULL;
-			_Plugin = NULL;
+			Plugin_ = NULL;
 		}
-		E_CDTOR( retriever___ );
+		E_CDTOR( rLooseRetriever );
 		void Init( void )
 		{
 			reset();
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
+			const char *Identification,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
@@ -121,24 +127,25 @@ namespace plgn {
 		qRH
 			plgncore::data__ Data;
 		qRB
-			if ( !SubInitialize_( PluginPath, ErrHandling ) )
+			if ( !SubInitialize_( PluginPath, Identification, ErrHandling ) )
 				return false;
 
 			Data.Init( err::qRRor, sclerror::SCLERRORError, Arguments );
 
 			C_().Initialize( &Data, Configuration );
 
-			_Plugin = (plugin *)C_().RetrievePlugin();
+			Plugin_ = C_().RetrievePlugin();
 
-			if ( ( _Plugin == NULL) && ( ErrHandling == err::hThrowException ) )
+			if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
 				qRFwk();
 		qRR
 		qRT
 		qRE
-			return _Plugin != NULL;
+			return Plugin_ != NULL;
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
+			const char *Identification,
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
@@ -153,7 +160,7 @@ namespace plgn {
 			if ( !Registry.Convert( Configuration, ConfigurationEntry, ErrHandling ) )
 				qRReturn;
 
-			if ( !Initialize( PluginPath, ConfigurationEntry, Arguments, ErrHandling ) )
+			if ( !Initialize( PluginPath, Identification, ConfigurationEntry, Arguments, ErrHandling ) )
 				qRReturn;
 
 			Success = true;
@@ -164,6 +171,7 @@ namespace plgn {
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
+			const char *Identification,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
@@ -172,7 +180,7 @@ namespace plgn {
 			fnm::name___ Location;
 			str::string Locale;
 		qRB
-			if ( !SubInitialize_( PluginPath, ErrHandling ) )
+			if ( !SubInitialize_( PluginPath, Identification, ErrHandling ) )
 				return false;
 
 			Location.Init();
@@ -185,23 +193,103 @@ namespace plgn {
 
 			scllocale::Fill(scllocale::tMain, "Locale", Location, Locale );
 
-			_Plugin = (plugin *)C_().RetrievePlugin();
+			Plugin_ = C_().RetrievePlugin();
 
-			if ( ( _Plugin == NULL) && ( ErrHandling == err::hThrowException ) )
+			if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
 				qRFwk();
 		qRR
 		qRT
 		qRE
-			return _Plugin != NULL;
+			return Plugin_ != NULL;
+		}
+		void *Plugin( void )
+		{
+			if ( Plugin_ == NULL )
+				qRFwk();
+
+			return Plugin_;
+		}
+	};
+
+	qROW( Row );
+
+	typedef bch::qBUNCHv( rLooseRetriever, fRow ) vRetrievers;
+	qW( Retrievers );
+
+	class rRetrievers
+	: public iRetrievers
+	{
+	private:
+		void Delete_( void );
+	public:
+		void reset( bso::fBool P = true )
+		{
+			if ( P )
+				Delete_();
+
+			vRetrievers::reset( P );
+		}
+		qCDTOR( rRetrievers);
+		void Init( void )
+		{
+			Delete_();
+
+			iRetrievers::Init();
+		}
+	};
+
+
+	template <typename plugin> class rRetriever
+	{
+	private:
+		rLooseRetriever LooseRetriever_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			LooseRetriever_.reset( P );
+		}
+		E_CDTOR( rRetriever );
+		void Init( void )
+		{
+			reset();
+		}
+		bso::bool__ Initialize(
+			const ntvstr::string___ &PluginPath,
+			const rgstry::entry__ &Configuration,
+			const str::string_ &Arguments,
+			err::handling__ ErrHandling = err::h_Default )
+		{
+			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Arguments, ErrHandling );
+		}
+		bso::bool__ Initialize(
+			const ntvstr::string___ &PluginPath,
+			const rgstry::tentry__ &Configuration,
+			const rgstry::multi_level_registry_ &Registry,
+			const str::string_ &Arguments,
+			err::handling__ ErrHandling = err::h_Default )
+		{
+			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Registry, Arguments, ErrHandling );
+		}
+		bso::bool__ Initialize(
+			const ntvstr::string___ &PluginPath,
+			const str::string_ &Arguments,
+			err::handling__ ErrHandling = err::h_Default )
+		{
+			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Arguments, ErrHandling );
 		}
 		plugin &Plugin( void )
 		{
-			if ( _Plugin == NULL )
-				qRFwk();
-
-			return *_Plugin;
+			return *(plugin *)LooseRetriever_.Plugin();
 		}
 	};
+}
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+namespace plgn {
+	template <typename plugin> E_TTCLONE__( plgn::rRetriever<plugin>, retriever___ );
 }
 
 #endif

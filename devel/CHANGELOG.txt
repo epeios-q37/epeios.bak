@@ -12,6 +12,12 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-17 :
+- GLOBAL :
+	- Introducting new conventions.
+- PLGN :
+	* Introducing 'fRetriever'.
+
 2016-01-16 :
 - GLOBAL :
 	- Introducting new conventions.

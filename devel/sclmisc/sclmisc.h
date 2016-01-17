@@ -36,6 +36,8 @@
 # include "sclerror.h"
 # include "sclrgstry.h"
 
+# include "plgn.h"
+
 namespace sclmisc {
 
 	extern const char *SCLMISCTargetName;	// A définir par l'utilisateur.
@@ -411,6 +413,9 @@ namespace sclmisc {
 	qRE
 	}
 
+	void Plug(
+		const char *Target,
+		plgn::rRetrievers &Retrievers );
 }
 
 			/********************************************/

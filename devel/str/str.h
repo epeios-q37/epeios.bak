@@ -52,6 +52,25 @@
 #include "cpe.h"
 #include "ctn.h"
 
+/*************************/
+/****** New version ******/
+/*************************/
+
+namespace str {
+	class string_;
+	class string;
+
+	typedef string_ vString;
+	typedef string iString;
+
+	typedef ctn::E_MCONTAINER_( str::string_ ) vStrings;
+	typedef ctn::E_MCONTAINER( str::string_ ) iStrings;
+}
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
 
 namespace str {
 

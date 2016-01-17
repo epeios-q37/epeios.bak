@@ -72,7 +72,7 @@
 /*************************/
 
 # define qENUM( name )\
-	enum f##name : bso::fEnum
+	enum n##name : bso::bEnum
 
 # define qROW( name ) E_TMIMIC__( sdr::bRow, f##name )
 
@@ -111,6 +111,89 @@
 	qCTOR( name )\
 	qVDTOR( name )
 
+// Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type'.
+# define qRRODISCLOSEv(type, name )\
+	const type Get##name( void ) const\
+	{\
+		return S_.name;\
+	}
+
+
+// Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type'.
+# define qRODISCLOSEv(type, name )\
+	qRRODISCLOSEv( type, name )\
+	const type &name( void ) const\
+	{\
+		return S_.name;\
+	}
+
+# define qRWODISCLOSEv(type, name )\
+	void Set##name( const type &V )\
+	{\
+		S_.name = V;\
+	}
+
+# define qWODISCLOSEv(type, name )\
+	qRWODISCLOSEv( type, name )\
+	type &name( void )\
+	{\
+		return S_.name;\
+	}
+
+// Make accessible the static member, for read-write access, of a dynamic object, named 'name' of type 'type'.
+# define qRRWDISCLOSEv(type, name )\
+	qRRODISCLOSEv( type, name )\
+	qRWODISCLOSEv( type, name )
+
+// Make accessible the static member, for read-write access, of a dynamic object, named 'name' of type 'type'.
+# define qRWDISCLOSEv( type, name )\
+	qRODISCLOSEv( type, name )\
+	qWODISCLOSEv( type__, name )
+
+
+
+# define qRRODISCLOSEf( type, name )\
+	const type Get##name( void ) const\
+	{\
+		return name##_;\
+	}
+
+// Make accessible the member, for read-only access, of a static object, named 'name' of type 'type'.
+# define qRODISCLOSEf(type, name )\
+	qRRODISCLOSEf( type, name )\
+	const type &name( void ) const\
+	{\
+		return name##_;\
+	}
+
+# define qRWODISCLOSEf(type, name )\
+	void Set##name( const type &V )\
+	{\
+		name##_ = V;\
+	}
+
+# define qWODISCLOSEf(type, name )\
+	qRWODISCLOSEf( type, name )\
+	type &name( void )\
+	{\
+		return name##_;\
+	}
+
+# define qRRWDISCLOSEf(type, name )\
+	qRRODISCLOSEf( type, name )\
+	qRWODISCLOSEf( type, name )
+
+# define qRWDISCLOSEf(type, name )\
+	qRODISCLOSEf( type, name )\
+	qWODISCLOSEf( type, name )
+
+
+# define qRRODISCLOSEr( type, name ) qRRODISCLOSEf( type, name )
+# define qRODISCLOSEr(type, name ) qRODISCLOSEf(type, name )
+# define qWODISCLOSEr(type, name ) qWODISCLOSEf(type, name )
+# define qRRWDISCLOSEr(type, name ) qRRWDISCLOSEf(type, name )
+# define qRWDISCLOSEr(type, name ) qRWDISCLOSEf(type, name )
+
 # define qW_( name )	\
 class i##name\
 : public v##name\
@@ -145,9 +228,9 @@ public:\
 	};
 
 
-// Pointer Method Function.
-#define qPMF( type, name, variable )\
-	type *name( void ) const\
+// Pointer Method
+#define qPM( type, method, variable )\
+	type *method( void ) const\
 	{\
 		if ( variable == NULL )\
 			qRFwk();\
@@ -155,9 +238,15 @@ public:\
 		return variable;\
 	}
 
-// Reference Method Function.
-#define qRMF( type, name, variable )\
-	type &name( void ) const\
+// Pointer variable and method.
+#define qPVM( type, method, variable )\
+	type *variable;\
+	qPM( type, method, variable )
+
+
+// Reference Method.
+#define qRM( type, method, variable )\
+	type &method( void ) const\
 	{\
 		if ( variable == NULL )\
 			qRFwk();\
@@ -165,6 +254,12 @@ public:\
 		return *variable;\
 	}
 
+// Reference variable and method.
+#define qRVM( type, method, variable )\
+	type *variable;\
+	qRM( type, method, variable )
+
+# define qCDEF( type, name, value ) static const type name = value
 
 # define TOL_ERRP_	err::handling__ ErrHandling = err::h_Default
 
@@ -277,8 +372,6 @@ namespace tol{
 
 # define qBUFFER( t )	tol::rBuffer<t>
 # define qCBUFFER qCBUFFER( bso::char__ )
-
-
 
 /*************************/
 /****** Old version ******/
@@ -485,8 +578,7 @@ namespace tol
 # define E_XROW	E_XROWt( sdr::row__ )
 
 // Dfinition d'une constante par valeur.
-# define E_CDEF( type, name, value )\
-	static const type name = value
+# define E_CDEF( type, name, value ) qCDEF( type, name, value )
 
 // Pose problme d'ordre d'initialisation. La variable pointe sur NULL au dpart est n'est correctement initialise que plus tard.
 # if 0

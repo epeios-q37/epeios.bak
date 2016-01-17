@@ -77,11 +77,22 @@ namespace sclrgstry {
 			extern rgstry::entry___ Feature;
 		}
 
-		extern rgstry::entry___ Plugin;
+		// 'Parameters/Plugins/Plugin[target="..."]'.
+		extern rgstry::entry___ TargetedPlugin;
 
-		namespace plugin {
+		namespace targeted_plugin {
 			extern rgstry::entry___ Id;
 		}
+
+		// 'Parameters/Plugins/Set[target="..."]/Plugin'.
+		extern rgstry::entry___ LoosePluginItem;
+
+		namespace loose_plugin_item {
+			extern rgstry::entry___ Id;
+		}
+
+		// 'Parameters/Plugins/Set[target="..."]/Plugin[Id="..."'.
+		extern rgstry::entry___ PluginItem;
 	}
 
 	namespace definition {

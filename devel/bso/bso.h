@@ -63,7 +63,7 @@ namespace bso {
 
 	typedef unsigned char fU8;
 
-	typedef fU8 fEnum;
+	typedef fU8 bEnum;
 }
 
 /*************************/
@@ -322,7 +322,7 @@ namespace bso {
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
 
-	typedef fEnum enum__;
+	typedef bEnum enum__;
 
 	//c A sign ( -(1) +(1) 0 ).
 	class sign__
