@@ -370,8 +370,8 @@ namespace tol{
 	};
 }
 
-# define qBUFFER( t )	tol::rBuffer<t>
-# define qCBUFFER qCBUFFER( bso::char__ )
+# define qBUFFERr( t )	tol::rBuffer<t>
+# define qCBUFFERr		qBUFFERr( bso::char__ )
 
 /*************************/
 /****** Old version ******/
@@ -1616,7 +1616,7 @@ namespace tol {
 		des mthodes virtuelles.
 	*/
 
-	template <typename t> E_TTCLONE__( rBuffer<t>, buffer___ );
+# define buffer___	rBuffer
 
 # define E_BUFFER___( t )	buffer___<t>
 # define TOL_CBUFFER___ tol::E_BUFFER___( bso::char__ )

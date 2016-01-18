@@ -53,11 +53,13 @@
 /*************************/
 
 namespace rgstry {
+	class entry___;
 	struct tentry__;
 	class tentry___;
 
 	typedef tentry__ fTEntry;
 	typedef tentry___ rTEntry;
+	typedef entry___ rEntry;
 }
 
 /*************************/

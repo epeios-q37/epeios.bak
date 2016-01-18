@@ -263,7 +263,7 @@ namespace plgn {
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Configuration, Arguments, ErrHandling );
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
@@ -272,7 +272,7 @@ namespace plgn {
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Registry, Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Configuration, Registry, Arguments, ErrHandling );
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,

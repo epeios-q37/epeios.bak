@@ -34,8 +34,8 @@ mods += lst lstbch lstctn mns mtx
 mods += ntvstr que sdr stk str 
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio bomhdl 
-mods += cdgb64 fil fnm lcl rgstry 
-mods += stsfsm xml xpp plgn strmrg 
+mods += cdgb64 dlbrry fil fnm lcl 
+mods += plgn rgstry stsfsm xml xpp 
 mods += tht mtk sck 
 mods += csdbns 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
@@ -356,8 +356,8 @@ $(binary): $(objs)
 ifdef EPEIOS_SRC
 		
 	mkdir -p $(dest)
-			dmnzq/plugins/
-	cp $(binary) $(dest)dmnzq/plugins/
+			plugins/dmnzq/
+	cp $(binary) $(dest)plugins/dmnzq/
 endif
 		
 
