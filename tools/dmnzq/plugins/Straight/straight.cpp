@@ -49,6 +49,7 @@ namespace {
 		virtual void MISCProcess( module__ &Module ) override
 		{
 			Server_.Init( GetPort_(), Module );
+			Server_.Process();
 		}
 	public:
 		void reset( bso::bool__ P = true )
