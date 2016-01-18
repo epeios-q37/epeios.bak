@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Version)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2015-2016</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="Backend"/>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>orgnzqbkd</Program>
+		<Software>orgnzq</Software>
+		<UUID>dc3beae2-d82c-4471-bc7e-03adb886d5f7</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="FBL">
+				<xpp:expand select="FBLB"/>
+			</Modules>
+			<Modules Group="CSD">
+				<xpp:expand select="CSDB"/>
+			</Modules>
+		</Modules>
+		<Modules Group="OGZ" Path="../">
+			<Module Path="../">ogzfbc</Module>
+			<Module Path="../">ogzinf</Module>
+			<Module>ogzbsc</Module>
+			<Module>ogzcbs</Module>
+			<Module>ogzclm</Module>
+			<Module>ogzdta</Module>
+			<Module>ogzdtb</Module>
+			<Module>ogzfld</Module>
+			<!-->Module>ogzhlp</Module-->
+			<Module>ogzplg</Module>
+			<Module>ogzrcd</Module>
+			<Module>ogzrgy</Module>
+			<Module>ogztyp</Module>
+			<Module>ogzusr</Module>
+		</Modules>
+		<Module>common</Module>
+		<Module>registry</Module>
+		<Modules Group="WRP">
+			<Module>wrpexample</Module>
+			<Module>wrpunbound</Module>
+		</Modules>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+		<SourceDir>../..</SourceDir>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>

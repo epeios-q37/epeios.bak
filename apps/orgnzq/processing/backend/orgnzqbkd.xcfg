@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Configuration target="orgnzqbkd">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<Parameters>
+			<Language>en</Language>
+			<Plugins>
+				<Plugin target="Meta" id="Regular"></Plugin>
+				<Set target="Type">
+				<!-- The 2 first are mandatory and must be the 2 first ! -->
+					<Plugin Id="Record">Record</Plugin>
+					<Plugin Id="Text">Text</Plugin>
+				</Set>
+			</Plugins>
+		</Parameters>
+		<Definitions>
+			<xpp:define name="PluginsRootDir">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>h:/bin/ogz/Backend/Plugins/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>/home/csimon/bin/ogz/Backend/Plugins/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>/Users/csimon/bin/ogz/Backend/Plugins/</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+			<Plugins target="Type">
+				<xpp:define name="TypesPluginsRootDir">
+					<xpp:bloc>
+						<xpp:expand select="PluginsRootDir"/>
+						<xpp:bloc>Types/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="Record">
+					<Filename>
+						<xpp:expand select="TypesPluginsRootDir"/>
+						<xpp:bloc>record</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Types/Record/record.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Types/Record/record.xlcl"/>
+					</Locale>
+				</Plugin>
+				<Plugin id="Text">
+					<Filename>
+						<xpp:expand select="TypesPluginsRootDir"/>
+						<xpp:bloc>text</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Types/Text/text.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Types/Text/text.xlcl"/>
+					</Locale>
+				</Plugin>
+			</Plugins>
+			<Plugins target="Meta">
+				<xpp:define name="MetaPluginsRootDir">
+					<xpp:bloc>
+						<xpp:expand select="PluginsRootDir"/>
+						<xpp:bloc>Meta/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="Regular">
+					<Filename>
+						<xpp:expand select="MetaPluginsRootDir"/>
+						<xpp:bloc>regular</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Meta/regular/regular.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Meta/regular/regular.xlcl"/>
+					</Locale>
+				</Plugin>
+				<!--<Plugin id="XMLFiles">
+					<Filename>
+						<xpp:expand select="MetaPluginsRootDir"/>
+						<xpp:bloc>xmlfiles</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Database/XMLFiles/xmlfiles.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Database/XMLFiles/xmlfiles.xlcl"/>
+					</Locale>
+				</Plugin>-->
+			</Plugins>
+		</Definitions>
+		<Locale>
+		</Locale>
+	</Configuration>
+</Configurations>

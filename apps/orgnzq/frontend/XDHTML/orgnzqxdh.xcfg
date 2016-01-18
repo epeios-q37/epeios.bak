@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<Configuration target="orgnzqxdh">
+		<xpp:bloc preserve="yes">
+			<xpp:define name="XSLRootDir">
+				<xpp:bloc>
+					<xpp:expand select="XSLRootDirHeader"/>
+					<xpp:bloc>epeios/apps/orgnzq/frontend/XDHTML/XSL/</xpp:bloc>
+				</xpp:bloc>
+			</xpp:define>
+			<xpp:define name="XSLRootDirHeader">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>H:/hg/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>/home/csimon/</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>/Users/csimon/</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+		</xpp:bloc>
+		<xpp:expand href="../orgnzqfrd.xcfg"/>
+		<xpp:expand href="../../../XDH.xcfg"/>
+		<Parameters>
+			<xpp:expand select="Parameters"/>
+			<Language>fr</Language>
+			<xpp:bloc preserve="yes">
+				<XSLFilesSet>
+					<XSLFiles target="About">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>About.xsl</xpp:bloc>
+						</Layout>
+						<!-- No 'casting' XSL -->
+					</XSLFiles>
+					<XSLFiles target="Fields">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>FieldsLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>FieldsCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Prolog">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>PrologLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>PrologCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Login">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>LoginLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>LoginCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+					<XSLFiles target="Main">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>MainLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>MainCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
+				</XSLFilesSet>
+			</xpp:bloc>
+		</Parameters>
+		<Definitions>
+			<xpp:expand select="Definitions"/>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="Locale"/>
+			<xpp:expand select="XDH_Locale"/>
+			<xpp:bloc>
+				<!-- About -->
+				<Translations text="aBy">
+					<Translation language="fr">par</Translation>
+					<Translation language="en">by</Translation>
+				</Translations>
+				<Translations text="aLauncher">
+					<Translation language="fr">Lanceur</Translation>
+					<Translation language="en">Launcher</Translation>
+				</Translations>
+				<Translations text="aBackend">
+					<Translation language="fr">Moteur de traitement</Translation>
+					<Translation language="en">Backend</Translation>
+				</Translations>
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Prolog : in 'XDH.xcfg : XDH_Locale'-->
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
+			</xpp:bloc>
+			<xpp:bloc>
+				<!-- Main -->
+				<Translations text="mainConverter">
+					<Translation language="fr">Convertisseur</Translation>
+					<Translation language="en">Convert</Translation>
+				</Translations>
+				<Translations text="mainUCConverter">
+					<Translation language="fr">Convertisseur en majuscule</Translation>
+					<Translation language="en">To upper case converter</Translation>
+				</Translations>
+				<Translations text="mainConvert">
+					<Translation language="fr">Conversion</Translation>
+					<Translation language="en">Convert</Translation>
+				</Translations>
+				<Translations text="mainOK">
+					<Translation language="fr">OK</Translation>
+					<Translation language="en">OK</Translation>
+				</Translations>
+				<Translations text="mainDisplayTestMessage">
+					<Translation language="fr">Afficher message de test.</Translation>
+					<Translation language="en">Display test message.</Translation>
+				</Translations>
+				<Translations text="mainTest">
+					<Translation language="fr">Test</Translation>
+					<Translation language="en">Test</Translation>
+				</Translations>
+				<Translations text="mainHideShowTestButton">
+					<Translation language="fr">Cliquez sur ce texte pour afficher le bouton de test (sortir du cadre le cache).</Translation>
+					<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
+				</Translations>
+			</xpp:bloc>
+		</Locale>
+	</Configuration>
+</Configurations>
