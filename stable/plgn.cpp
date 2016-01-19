@@ -29,7 +29,7 @@ using namespace plgn;
 void plgn::Delete_( iRetrievers &Retrievers )
 {
 qRH
-	fRow Row = qNIL;
+	fRow Row = qNIL, BufferRow = qNIL;
 	rLooseRetriever Retriever;
 qRB
 	fRow Row = Retrievers.Last();
@@ -39,9 +39,11 @@ qRB
 
 		Retriever.reset();
 
+		BufferRow = Row;
+
 		Row = Retrievers.Previous( Row );
 
-		Retrievers.Remove( Row );
+		Retrievers.Remove( BufferRow );
 	}
 qRR
 qRT

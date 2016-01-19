@@ -64,6 +64,12 @@ namespace common {
 		plgn::rRetrievers<ogzplg::fTypePlugin> Retrievers_;
 	public:
 		ogztyp::iTypes Core;
+		void reset( bso::fBool P = true )
+		{
+			Core.reset( P );
+			Retrievers_.reset( P );
+		}
+		qCDTOR( rTypes );
 		void Init( void );
 	};
 
@@ -77,6 +83,12 @@ namespace common {
 		}
 	public:
 		ogzdtb::rDatabase Core;
+		void reset( bso::fBool P = true )
+		{
+			Core.reset( P );
+			Retriever_.reset( P );
+		}
+		E_CDTOR( rDatabase );
 		void Init( const ogztyp::vTypes &Types );
 	};
 

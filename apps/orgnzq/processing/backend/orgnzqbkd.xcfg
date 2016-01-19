@@ -60,7 +60,7 @@
 					</Locale>
 				</Plugin>
 			</Plugins>
-			<Plugins target="Meta">
+			<!--<Plugins target="Meta">
 				<xpp:define name="MetaPluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
@@ -78,7 +78,7 @@
 					<Locale>
 						<xpp:expand href="../plugins/Meta/regular/regular.xlcl"/>
 					</Locale>
-				</Plugin>
+				</Plugin>-->
 				<!--<Plugin id="XMLFiles">
 					<Filename>
 						<xpp:expand select="MetaPluginsRootDir"/>
@@ -90,8 +90,8 @@
 					<Locale>
 						<xpp:expand href="../plugins/Database/XMLFiles/xmlfiles.xlcl"/>
 					</Locale>
-				</Plugin>-->
-			</Plugins>
+				</Plugin>
+			</Plugins-->
 		</Definitions>
 		<Locale>
 		</Locale>

@@ -33,7 +33,6 @@ using cio::CErr;
 void Generic( int argc, char *argv[] )
 {
 qRH
-	plgn::retriever___ Retriever;
 qRB
 qRR
 qRT
