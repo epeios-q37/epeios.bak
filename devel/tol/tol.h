@@ -1684,7 +1684,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 
 # define E_CDTOR( name )	qCDTOR( name )
 
-# define E_CVDTOR( name )	qCDTOR( name )
+# define E_CVDTOR( name )	qCVDTOR( name )
 
 
 //d Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type__'.

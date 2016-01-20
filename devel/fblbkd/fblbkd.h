@@ -383,7 +383,7 @@ namespace fblbkd {
 			index__ Index,
 			fblbrq::request__ &Requete,
 			void *PU,
-			log_functions__ &LogFunctions )
+			log_functions__ *LogFunctions )
 		{
 			command__ C;
 			ctn::E_CITEM( fblbrd::description_ ) Description;
@@ -397,13 +397,13 @@ namespace fblbkd {
 
 			Requete.Prepare( Description( C ).Casts );
 
-			if ( &LogFunctions != NULL )
-				LogFunctions.Log( Prefix(), Name(), Description( C ).Name, false );
+			if ( LogFunctions != NULL )
+				LogFunctions->Log( Prefix(), Name(), Description( C ).Name, false );
 
 			Objet.HANDLE( *Backend(), *this, Index, C, Requete, PU );
 
-			if ( &LogFunctions != NULL )
-				LogFunctions.Log( Prefix(), Name(), Description( C ).Name, true );
+			if ( LogFunctions != NULL )
+				LogFunctions->Log( Prefix(), Name(), Description( C ).Name, true );
 
 		}
 	protected:
@@ -419,7 +419,7 @@ namespace fblbkd {
 			void *PU,
 			log_functions__ &LogFunctions ) override
 		{
-			Traiter_( *(t *)untyped_module::Object( Index ), Index, Requete, PU, LogFunctions );
+			Traiter_( *(t *)untyped_module::Object( Index ), Index, Requete, PU, &LogFunctions );
 		} 
 	public:
 		//f Initialization.
@@ -630,7 +630,7 @@ namespace fblbkd {
 			index__ Index,
 			fblbrq::request__ &Requete,
 			void *PU,
-			log_functions__ &LogFunctions );
+			log_functions__ &LogFunctions ) override;
 #if 0
 		virtual void FBLBKDGetRawMessages( messages_ &RawMessages )
 		{

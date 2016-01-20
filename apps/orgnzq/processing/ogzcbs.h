@@ -109,7 +109,7 @@ namespace ogzcbs {
 		{
 			row Row = New();
 
-			Store( Items, Row );
+			Store( Item, Row );
 
 			return Row;
 		}
