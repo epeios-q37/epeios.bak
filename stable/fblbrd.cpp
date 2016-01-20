@@ -71,7 +71,7 @@ void fblbrd::description_::Init(
 
 }
 
-#ifdef CPE_C_GCC
+#if defined( CPE_C_GCC ) || defined( CPE_C_CLANG )
 typedef int va_t__;
 #else
 typedef cast__ va_t__;

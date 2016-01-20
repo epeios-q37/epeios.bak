@@ -13,7 +13,7 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2016-01-20 :
-- FBLBKD :
+- FBLBKD, FBLBRD :
 	# Fixing Clang complainings.
 - GLOBAL :
 	- Introducting new conventions.
