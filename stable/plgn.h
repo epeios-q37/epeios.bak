@@ -238,7 +238,15 @@ namespace plgn {
 		}
 		plugin &Plugin( fRow Row ) const
 		{
-			return *(plugin *)iRetrievers::operator()( Row ).Plugin();
+			rLooseRetriever Retriever;
+
+			iRetrievers::Recall( Row, Retriever );
+
+			plugin &Plugin = *(plugin *)Retriever.Plugin();
+
+			Retriever.reset( false );
+
+			return Plugin;
 		}
 	};
 

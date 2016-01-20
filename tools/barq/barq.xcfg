@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="barq">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<xpp:expand href="../TOL.xcfg"/>
+		<Parameters>
+			<Language>fr</Language>
+			<PluginPath>h:/bin/plugins/remote/inet</PluginPath>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+			<xpp:expand select="TOL_Locale"/>
+			<Translations text="LibraryCommandDescription">
+				<Translation language="fr">Récupère l'API d'un 'backend' de type bibliothèque dynamique</Translation>
+				<Translation language="en">Get the API from a dynamic library backend</Translation>
+			</Translations>
+			<Translations text="DaemonCommandDescription">
+				<Translation language="fr">Récupère l'API d'un 'backend' de type 'daemon'</Translation>
+				<Translation language="en">Get the API from a daemon-type backend</Translation>
+			</Translations>
+			<Translations text="DaemonArgumentLabel">
+				<Translation language="fr">daemon</Translation>
+				<Translation language="en">daemon</Translation>
+			</Translations>
+			<Translations text="DaemonArgumentDescription">
+				<Translation language="fr">Adresse du daemon correspondant au 'backend' (ex.: 'localhost:1234')</Translation>
+				<Translation language="en">Backend daemon address (ex.: 'localhost:1234')</Translation>
+			</Translations>
+			<Translations text="LibraryArgumentLabel">
+				<Translation language="fr">bibliothèque</Translation>
+				<Translation language="en">library</Translation>
+			</Translations>
+			<Translations text="LibraryArgumentDescription">
+				<Translation language="fr">Nom avec chemin de la bibliothèque dynamique correspondant au 'backend'.</Translation>
+				<Translation language="en">Backend dynamic library name with path.</Translation>
+			</Translations>
+			<Translations text="OutputArgumentLabel">
+				<Translation language="fr">sortie</Translation>
+				<Translation language="en">output</Translation>
+			</Translations>
+			<Translations text="OutputArgumentDescription">
+				<Translation language="fr">Nom du fichier destination ; sortie standard si absent.</Translation>
+				<Translation language="en">Output file name; standard output if missing.</Translation>
+			</Translations>
+		</Locale>
+		<Arguments>
+			<xpp:expand select="TOL_Arguments"/>
+			<Argument id="LibraryCommand" Description="LibraryCommandDescription" long="library" short="l" Value="Library" Usage="%LibraryArgument% [%OutputArgument%]"/>
+			<Argument id="DaemonCommand" Description="DaemonCommandDescription" long="daemon" short="d" Value="Remote" Usage="%DaemonArgument% [%OutputArgument%]"/>
+			<Argument id="LibraryArgument" Description="LibraryArgumentDescription" Label="LibraryArgumentLabel" Path="BackendLocation"/>
+			<Argument id="DaemonArgument" Description="DaemonArgumentDescription" Label="DaemonArgumentLabel" Path="BackendLocation"/>
+			<Argument id="OutputArgument" Description="OutputArgumentDescription" Label="OutputArgumentLabel" Path="OutputFilename"/>
+			<Layouts>
+				<Layout command="Library">
+					<Link index="0" Target="LibraryArgument"/>
+					<Link index="1" Target="OutputArgument"/>
+				</Layout>
+				<Layout command="Remote">
+					<Link index="0" Target="DaemonArgument"/>
+					<Link index="1" Target="OutputArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>

@@ -61,6 +61,9 @@ void common::rTypes::Init( void )
 	Retrievers_.Init();
 
 	sclmisc::Plug( ogzplg::TypePluginTarget, Retrievers_ );
+
+	Core.Init();
+	Fill_( Retrievers_, Core );
 }
 
 

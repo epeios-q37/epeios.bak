@@ -132,10 +132,6 @@ namespace core {
 	void About(
 		session___ &Session,
 		xml::writer_ &Writer );
-
-	void About(
-		core::session___ &Session,
-		xml::writer_ &Writer );
 }
 
 #endif

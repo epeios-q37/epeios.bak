@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Version)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>barq</Program>
+		<Software>barq</Software>
+		<UUID>415e08c8-aab6-4ea0-9259-ae8e160a5800</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="CSD">
+				<Module>csdlec</Module>
+				<Module>csdrcc</Module>
+				<Module>csdrcu</Module>
+				<Module>csducl</Module>
+			</Modules>"
+			<Modules Group="FBL">
+				<Module>fblcmd</Module>
+				<Module>fblcst</Module>
+				<Module>fblfaq</Module>
+				<Module>fblfrd</Module>
+				<Module>fblfrp</Module>
+				<Module>fbltyp</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<Files/>
+	<Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">barq</File>
+			<File Dir="computing/epeios/tools/barq/">Manual</File>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
+		</WikiFiles>
+	</Packing>
+	<SourceDirs>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

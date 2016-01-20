@@ -49,26 +49,27 @@ using cio::CIn;
 
 # define END
 
-static void PrintHeader_( void )
-{
-	COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
-	COut << "Copyright (C) " COPYRIGHT << txf::nl;
-	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
-}
+namespace {
+	void PrintHeader_( void )
+	{
+		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
+		COut << "Copyright (C) " COPYRIGHT << txf::nl;
+		COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+	}
 
-static void Test_( void )
-{
-	cio::COut << "Test" << txf::nl;
+	void Test_( void )
+	{
+		cio::COut << "Test" << txf::nl;
+	}
 }
 
 #define C( name )\
 	else if ( Command == #name )\
 		name##_()
-		
 
 int scltool::SCLTOOLMain(
-	const str::string_ &Command,
-	const scltool::oddities__ &Oddities )
+	const str::vString &Command,
+	const scltool::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;
 qRH

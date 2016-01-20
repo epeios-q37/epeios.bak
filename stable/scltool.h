@@ -37,18 +37,12 @@
 # include "sclerror.h"
 # include "sclrgstry.h"
 
+/*************************/
+/****** New version ******/
+/*************************/
+
 namespace scltool {
-
-# if 0	// Obsolete ?
-	enum command {
-		cHelp,
-		cVersion,
-		cLicense,
-		c_amount
-	};
-# endif
-
-	struct oddities__ {
+	struct fOddities {
 # ifdef CPE_S_WIN
 		HINSTANCE hInstance;
 		HINSTANCE hPrevInstance;
@@ -60,6 +54,25 @@ namespace scltool {
 # endif
 		int argc;
 	};
+}
+
+
+/*************************/
+/****** Olf version ******/
+/*************************/
+
+namespace scltool {
+
+# if 0	// Obsolete ?
+	enum command {
+		cHelp,
+		cVersion,
+		cLicense,
+		c_amount
+	};
+# endif
+
+	typedef fOddities oddities__;
 
 	// A dfinir par l'utilisateur.
 	int SCLTOOLMain(

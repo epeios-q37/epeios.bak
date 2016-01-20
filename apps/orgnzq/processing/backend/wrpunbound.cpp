@@ -163,7 +163,7 @@ qRB
 
 	Labels.Init();
 	Ids.Init();
-	GetTypes_( Rack().Database.Core.Types, Labels, Ids );
+	GetTypes_( Rack().Types.Core, Labels, Ids );
 
 	Request.StringsOut() = Labels;
 	Request.Id8sOut() = Ids;

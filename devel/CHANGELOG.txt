@@ -17,6 +17,8 @@ Meaning of list markers (2nd level):
 	# Fixing Clang complainings.
 - GLOBAL :
 	- Introducting new conventions.
+- PLGN :	
+	# Fixing 'rRetrievers::Plugin(...)' wrong deletion.
 
 2016-01-19 :
 - PLGN :
