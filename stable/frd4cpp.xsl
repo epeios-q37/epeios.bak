@@ -145,14 +145,14 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:template match="Type" mode="common">
 		<xsl:choose>
 			<xsl:when test="@Object='Master'">
-				<xsl:text>&tab;class statics___</xsl:text>
+				<xsl:text>&tab;class fStatics</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>&tab;class </xsl:text>
-				<xsl:value-of select="Prefix/@Default"/>
-				<xsl:text>_</xsl:text>
-				<xsl:value-of select="Name/@Underscored"/>
-				<xsl:text>_common__</xsl:text>
+				<xsl:text>f</xsl:text>
+				<xsl:value-of select="Prefix/@Upper"/>
+				<xsl:value-of select="Name/@Raw"/>
+				<xsl:text>Common</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:text>&nl;</xsl:text>
@@ -180,13 +180,13 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:text>&tab;&tab;E_CVDTOR( </xsl:text>
 		<xsl:choose>
 			<xsl:when test="@Object='Master'">
-				<xsl:text>statics___</xsl:text>
+				<xsl:text>fStatics</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="Prefix/@Default"/>
-				<xsl:text>_</xsl:text>
-				<xsl:value-of select="Name/@Underscored"/>
-				<xsl:text>_common__</xsl:text>
+				<xsl:text>f</xsl:text>
+				<xsl:value-of select="Prefix/@Upper"/>
+				<xsl:value-of select="Name/@Raw"/>
+				<xsl:text>Common</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:text> )&nl;</xsl:text>
@@ -257,18 +257,18 @@ This header file contains then the API to access to the backend to which 'getbkd
 	<xsl:template match="Type[@Object='Master']" mode="object"/>
 	<xsl:template match="Type" mode="object">
 		<xsl:text>&tab;class </xsl:text>
-		<xsl:value-of select="Prefix/@Default"/>
-		<xsl:text>_</xsl:text>
-		<xsl:value-of select="Name/@Underscored"/>
-		<xsl:text>___&nl;</xsl:text>
+		<xsl:text>r</xsl:text>
+		<xsl:value-of select="Prefix/@Upper"/>
+		<xsl:value-of select="Name/@Raw"/>
+		<xsl:text>&nl;</xsl:text>
 		<xsl:text>&tab;{&nl;</xsl:text>
 		<xsl:text>&tab;private:&nl;</xsl:text>
 		<xsl:text>&tab;&tab;fblfrd::object__ _ID;&nl;</xsl:text>
 		<xsl:text>&tab;&tab;</xsl:text>
-		<xsl:value-of select="Prefix/@Default"/>
-		<xsl:text>_</xsl:text>
-		<xsl:value-of select="Name/@Underscored"/>
-		<xsl:text>_common__ *Common_;&nl;</xsl:text>
+		<xsl:text>f</xsl:text>
+		<xsl:value-of select="Prefix/@Upper"/>
+		<xsl:value-of select="Name/@Raw"/>
+		<xsl:text>Common *Common_;&nl;</xsl:text>
 		<xsl:text>&tab;public:&nl;</xsl:text>
 		<xsl:text>&tab;&tab;void reset( bso::bool__ P = true )&nl;</xsl:text>
 		<xsl:text>&tab;&tab;{&nl;</xsl:text>
@@ -280,18 +280,18 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:text>&tab;&tab;&tab;_ID = FBLFRD_UNDEFINED_OBJECT;&nl;</xsl:text>
 		<xsl:text>&tab;&tab;}&nl;</xsl:text>
 		<xsl:text>&tab;&tab;</xsl:text>
-		<xsl:value-of select="Prefix/@Default"/>
-		<xsl:text>_</xsl:text>
-		<xsl:value-of select="Name/@Underscored"/>
-		<xsl:text>___( void )&nl;</xsl:text>
+		<xsl:text>r</xsl:text>
+		<xsl:value-of select="Prefix/@Upper"/>
+		<xsl:value-of select="Name/@Raw"/>
+		<xsl:text>( void )&nl;</xsl:text>
 		<xsl:text>&tab;&tab;{&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;reset( false );&nl;</xsl:text>
 		<xsl:text>&tab;&tab;}&nl;</xsl:text>
 		<xsl:text>&tab;&tab;~</xsl:text>
-		<xsl:value-of select="Prefix/@Default"/>
-		<xsl:text>_</xsl:text>
-		<xsl:value-of select="Name/@Underscored"/>
-		<xsl:text>___( void )&nl;</xsl:text>
+		<xsl:text>r</xsl:text>
+		<xsl:value-of select="Prefix/@Upper"/>
+		<xsl:value-of select="Name/@Raw"/>
+		<xsl:text>( void )&nl;</xsl:text>
 		<xsl:text>&tab;&tab;{&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;reset();&nl;</xsl:text>
 		<xsl:text>&tab;&tab;}&nl;</xsl:text>
@@ -300,10 +300,10 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:text>&tab;&tab;&tab;return _ID;&nl;</xsl:text>
 		<xsl:text>&tab;&tab;}&nl;</xsl:text>
 		<xsl:text>&tab;&tab;void Init( </xsl:text>
-		<xsl:value-of select="Prefix/@Default"/>
-		<xsl:text>_</xsl:text>
-		<xsl:value-of select="Name/@Underscored"/>
-		<xsl:text>_common__ &amp;Common )&nl;</xsl:text>
+		<xsl:text>f</xsl:text>
+		<xsl:value-of select="Prefix/@Upper"/>
+		<xsl:value-of select="Name/@Raw"/>
+		<xsl:text>Common &amp;Common )&nl;</xsl:text>
 		<xsl:text>&tab;&tab;{&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;Common_ = &amp;Common;&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>

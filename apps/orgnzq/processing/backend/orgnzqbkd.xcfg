@@ -6,7 +6,7 @@
 		<Parameters>
 			<Language>en</Language>
 			<Plugins>
-				<Plugin target="Meta" id="Regular"></Plugin>
+				<Plugin target="Database" Id="Regular"></Plugin>
 				<Set target="Type">
 				<!-- The 2 first are mandatory and must be the 2 first ! -->
 					<Plugin Id="Record">Record</Plugin>
@@ -18,45 +18,66 @@
 			<xpp:define name="PluginsRootDir">
 				<xpp:bloc>
 					<xpp:ifeq select="env" value="windows">
-						<xpp:bloc>h:/bin/ogz/Backend/Plugins/</xpp:bloc>
+						<xpp:bloc>h:/</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="linux">
-						<xpp:bloc>/home/csimon/bin/ogz/Backend/Plugins/</xpp:bloc>
+						<xpp:bloc>/home/csimon/</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="mac">
-						<xpp:bloc>/Users/csimon/bin/ogz/Backend/Plugins/</xpp:bloc>
+						<xpp:bloc>/Users/csimon/</xpp:bloc>
 					</xpp:ifeq>
+					<xpp:bloc>/bin/plugins/ogz/Backend/</xpp:bloc>
 				</xpp:bloc>
 			</xpp:define>
 			<Plugins target="Type">
-				<xpp:define name="TypesPluginsRootDir">
+				<xpp:define name="TypePluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:bloc>Types/</xpp:bloc>
+						<xpp:bloc>Type/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Record">
 					<Filename>
-						<xpp:expand select="TypesPluginsRootDir"/>
+						<xpp:expand select="TypePluginsRootDir"/>
 						<xpp:bloc>record</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Types/Record/record.xcfg"/>
+						<xpp:expand href="../plugins/Type/Record/record.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Types/Record/record.xlcl"/>
+						<xpp:expand href="../plugins/Type/Record/record.xlcl"/>
 					</Locale>
 				</Plugin>
 				<Plugin id="Text">
 					<Filename>
-						<xpp:expand select="TypesPluginsRootDir"/>
+						<xpp:expand select="TypePluginsRootDir"/>
 						<xpp:bloc>text</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Types/Text/text.xcfg"/>
+						<xpp:expand href="../plugins/Type/Text/text.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Types/Text/text.xlcl"/>
+						<xpp:expand href="../plugins/Type/Text/text.xlcl"/>
+					</Locale>
+				</Plugin>
+			</Plugins>
+			<Plugins target="Database">
+				<xpp:define name="DatabasePluginsRootDir">
+					<xpp:bloc>
+						<xpp:expand select="PluginsRootDir"/>
+						<xpp:bloc>Database/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="Regular">
+					<Filename>
+						<xpp:expand select="DatabasePluginsRootDir"/>
+						<xpp:bloc>regular</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Database/Regular/regular.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Database/Regular/regular.xlcl"/>
 					</Locale>
 				</Plugin>
 			</Plugins>

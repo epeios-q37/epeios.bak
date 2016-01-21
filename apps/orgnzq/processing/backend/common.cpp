@@ -85,7 +85,6 @@ void common::rDatabase::Init( const ogztyp::vTypes &Types )
 	Core.Init( Types, P_().GetDTA(), P_().GetCLM(), P_().GetFLD(), P_().GetRCD(), P_().GetUSR() );
 }
 
-
 void common::Initialize( void )
 {
 qRH
@@ -94,7 +93,8 @@ qRB
 		qRGnr();
 
 	Rack_.Types.Init();
-//	Rack_.Database.Init( Rack_.Types.Core );
+	Rack_.Database.Init( Rack_.Types.Core );
+	Rack_.Record.Init();
 
 	Rack.Init( Rack_ );
 

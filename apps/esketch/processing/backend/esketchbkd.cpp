@@ -43,7 +43,7 @@ class backend___
 : public _backend___
 {
 private:
-	FBLBKD_RAM_MODULE( wrpexample::myobject_, common::stuff___ ) MyObject;
+	FBLBKD_RAM_MODULE( wrpexample::vMyObject, common::stuff___ ) MyObject;
 	common::stuff___ _Stuff;
 public:
 	void reset( bso::bool__ P = true )

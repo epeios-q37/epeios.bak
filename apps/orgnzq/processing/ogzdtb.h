@@ -114,6 +114,8 @@ namespace ogzdtb {
 # ifdef OGZDTB_M_
 #  define M OGZDTB_M_
 #  undef OGZDTB_M_
+# else
+#  undef M
 # endif
 
 }

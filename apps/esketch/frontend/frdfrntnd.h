@@ -49,8 +49,8 @@ namespace frdfrntnd {
 			MyObject.reset();
 		}
 	public:
-		esketch::statics___ Statics;
-		esketch::skt_myobject_common__ MyObject;
+		esketch::rStatics Statics;
+		esketch::fSKTMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
 		{
 			_frontend___::reset( P );

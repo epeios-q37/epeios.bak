@@ -45,6 +45,8 @@ namespace ogzusr {
 	typedef ogzcbs::fDCallback<OGZUSR_TP> fCallback;
 
 	typedef ogzcbs::fDItems<OGZUSR_TP> fUsers;
+
+	typedef ogzcbs::rDRegularCallback<OGZUSR_TP> rRegularCallback;
 }
 
 

@@ -29,12 +29,17 @@ namespace {
 void ogzdtb::rDatabase::FetchMandatoryTypes_( void )
 {
 	ogztyp::fTRow Row = Types.First();
+	ogztyp::fType Type;
 
 	while ( Row != qNIL ) {
-		if ( Types(Row).GetLabel() == RecordTypeLabel_ )
+		Types.Recall( Row, Type );
+
+		if ( !strcmp( Type.GetLabel(), RecordTypeLabel_ ) )
 			RecordType_ = Row;
-		else if ( Types(Row).GetLabel() == RecordTypeLabel_ )
+		else if ( !strcmp( Type.GetLabel(), TextTypeLabel_ ) )
 			TextType_ = Row;
+
+		Type.reset( false );
 
 		Row = Types.Next( Row );
 	}

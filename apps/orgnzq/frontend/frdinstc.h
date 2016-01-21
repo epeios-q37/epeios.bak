@@ -32,11 +32,11 @@ namespace frdinstc {
 	{
 	private:
 		Q37_MRMDF( frdfrntnd::frontend___, F_,  Frontend_ );
-		orgnzq::statics___ &S_( void )
+		orgnzq::rStatics &S_( void )
 		{
 			return F_().Statics;
 		}
-		orgnzq::ogz_myobject___ _Object;
+		orgnzq::rOGZMyObject _Object;
 	public:
 		void reset( bso::bool__ P = true )
 		{	

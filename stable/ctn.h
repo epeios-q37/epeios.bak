@@ -45,6 +45,19 @@
 /****** New version ******/
 /*************************/
 
+# define qMCONTAINERv( Type, r )	mono_container_< Type, r >
+# define qMCONTAINERi( Type, r )	mono_container< Type, r >
+
+# define qMCONTAINERvl( Type )		qMCONTAINERv( Type, sdr::row__ )
+# define qMCONTAINERil( Type )		qMCONTAINERi( Type, sdr::row__ )
+
+
+# define qCONTAINERv( Type, r )		multi_container_< Type, r >
+# define qCONTAINERi( Type, r )		multi_container< Type, r >
+
+# define qCONTAINERvl( Type )		qCONTAINERv( Type, sdr::row__ )
+# define qCONTAINER( Type )			qCONTAINERi( Type, sdr::row__ )*
+
 
 # define qMITEM( type, row )	volatile_mono_item< type, row >
 # define qCMITEM( type, row )	const_mono_item< type, row >
@@ -52,13 +65,9 @@
 # define qMITEMl( type )		qMITEM( type, sdr::fRow )
 # define qCMITEMl( type )		qCMITEM( type, sdr::fRow )
 
-
-
-
 /*************************/
 /****** Old version ******/
 /*************************/
-
 
 namespace ctn {
 

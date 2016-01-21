@@ -30,8 +30,8 @@ using namespace wrpexample;
 using namespace sktxmp;
 using common::stuff___;
 
-const char *wrpexample::myobject_::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
-const char *wrpexample::myobject_::NAME = WRPEXAMPLE_MYOBJECT_NAME;
+const char *wrpexample::vMyObject::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
+const char *wrpexample::vMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
 
 enum message__ {
 	mTestMessage,
@@ -72,14 +72,14 @@ static const char *GetMessage_(
 #endif
 
 #define ARGS (\
-	_myobject_ &MyObject,\
+	vMyObject_ &MyObject,\
 	fblbkd::backend___ &Backend,\
 	fblbkd::request__ &Request,\
 	stuff___ &Stuff )\
 
 typedef void (* f_manager ) ARGS;
 
-void wrpexample::myobject_::HANDLE(
+void wrpexample::vMyObject::HANDLE(
 	fblbkd::backend___ &Backend,
 	fblbkd::untyped_module &Module,
 	fblbkd::index__ Index,
@@ -166,7 +166,7 @@ qRE
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpexample::myobject_::NOTIFY(
+void wrpexample::vMyObject::NOTIFY(
 	fblbkd::untyped_module &Module,
 	common::stuff___ &Data )
 {

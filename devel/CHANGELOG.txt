@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-21 :
+- GLOBAL :
+	- Applying new conventions.
+
 2016-01-20 :
 - FBLBKD, FBLBRD :
 	# Fixing Clang complainings.

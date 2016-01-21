@@ -55,6 +55,7 @@
 
 namespace sdr {
 	using bso::fByte;
+	using bso::fSize;
 
 	typedef bso::fSize bRow;
 

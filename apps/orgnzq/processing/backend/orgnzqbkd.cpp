@@ -1,7 +1,7 @@
 /*
-	'orgnzqbkd.cpp' by Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2016 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	 This file is part of 'orgnzq' software.
+	This file is part of 'orgnzq' software.
 
     'orgnzq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -29,6 +29,7 @@
 #include "fblbkd.h"
 
 #include "wrpunbound.h"
+#include "wrprecord.h"
 #include "wrpexample.h"
 
 #define BACKEND_NAME	OGZINF_LC_AFFIX	"bkd"
@@ -43,13 +44,15 @@ class backend___
 : public _backend___
 {
 private:
-	FBLBKD_RAM_MODULE( wrpexample::myobject_, common::stuff___ ) MyObject;
+	FBLBKD_RAM_MODULE( wrprecord::vRecord, common::stuff___ ) Record;
+	FBLBKD_RAM_MODULE( wrpexample::vMyObject, common::stuff___ ) MyObject;
 	common::stuff___ _Stuff;
 public:
 	void reset( bso::bool__ P = true )
 	{
 		_backend___::reset( P );
 		_Stuff.reset( P );
+		Record.reset( P );
 		MyObject.reset( P );
 	}
 	E_CVDTOR( backend___ );
@@ -70,6 +73,9 @@ public:
 			&_Stuff );
 
 		wrpunbound::Inform( *this, _Stuff );
+
+		Record.Init( _Stuff );
+		Add( Record );
 
 		MyObject.Init( _Stuff );
 		Add( MyObject );

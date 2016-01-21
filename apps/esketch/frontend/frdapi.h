@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd (Version) Build Aug 12 2015 08:12:19 - Win32-MSC-IA_32
+	API from : esketchbkd (Version) Build Jan 21 2016 12:04:48 - Win32;MSC 1800;IA-32
 
-	This file was generated using eGetAPI 20140119 (Build Aug 19 2015 09:27:47 Win32-MSC-IA_32)
+	This file was generated using barq (Version) (Build Jan 20 2016 09:40:31 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ESKETCH__INC
@@ -20,7 +20,7 @@ namespace esketch {
 		typedef fblfrd::frontend_depot__ _frontend_depot__;
 	}
 
-	class statics___
+	class rStatics
 	: public _frontend_depot__
 	{
 	private:
@@ -32,7 +32,7 @@ namespace esketch {
 			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		E_CVDTOR( statics___ )
+		E_CVDTOR( rStatics )
 		void Init( fblfrd::frontend___ &Frontend )
 		{
 			fblfrd::commands_details CommandsDetails;
@@ -73,7 +73,7 @@ namespace esketch {
 		}
 	};
 
-	class skt_myobject_common__
+	class fSKTMyObjectCommon
 	: public _frontend_depot__
 	{
 	private:
@@ -85,7 +85,7 @@ namespace esketch {
 			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		E_CVDTOR( skt_myobject_common__ )
+		E_CVDTOR( fSKTMyObjectCommon )
 		void Init( fblfrd::frontend___ &Frontend )
 		{
 			fblfrd::commands_details CommandsDetails;
@@ -99,7 +99,7 @@ namespace esketch {
 
 			_frontend_depot__::Init( Frontend );
 
-			_ID = this->Frontend().GetType( str::string( "myobject" ) );
+			_ID = this->Frontend().GetType( str::string( "MyObject" ) );
 
 			CommandsDetails.Init();
 
@@ -132,11 +132,11 @@ namespace esketch {
 		}
 	};
 
-	class skt_myobject___
+	class rSKTMyObject
 	{
 	private:
 		fblfrd::object__ _ID;
-		skt_myobject_common__ *Common_;
+		fSKTMyObjectCommon *Common_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -147,11 +147,11 @@ namespace esketch {
 			Common_ = NULL;
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		skt_myobject___( void )
+		rSKTMyObject( void )
 		{
 			reset( false );
 		}
-		~skt_myobject___( void )
+		~rSKTMyObject( void )
 		{
 			reset();
 		}
@@ -159,7 +159,7 @@ namespace esketch {
 		{
 			return _ID;
 		}
-		void Init( skt_myobject_common__ &Common )
+		void Init( fSKTMyObjectCommon &Common )
 		{
 			Common_ = &Common;
 

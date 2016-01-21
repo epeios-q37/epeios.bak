@@ -27,20 +27,20 @@
 # include "common.h"
 
 # define WRPEXAMPLE_MYOBJECT_PREFIX	SKTINF_LC_SHORT
-# define WRPEXAMPLE_MYOBJECT_NAME	"myobject"
+# define WRPEXAMPLE_MYOBJECT_NAME	"MyObject"
 
 namespace wrpexample {
-	typedef sktxmp::myobject_	_myobject_;
+	typedef sktxmp::vMyObject	vMyObject_;
 
-	class myobject_
-	: public _myobject_
+	class vMyObject
+	: public vMyObject_
 	{
 	public:
 		struct s
-		: public _myobject_::s
+		: public vMyObject_::s
 		{};
-		myobject_( s &S )
-		: _myobject_( S )
+		vMyObject( s &S )
+		: vMyObject_( S )
 		{}
 		void HANDLE(
 			fblbkd::backend___ &Backend,
@@ -55,13 +55,13 @@ namespace wrpexample {
 		static const char *PREFIX;
 		static const char *NAME;
 //		static void RAW_MESSAGES( lcl::strings_ &Messages );
-		_myobject_ *OBJECT( void )
+		vMyObject_ *OBJECT( void )
 		{
 			return this;
 		}
 	};
 
-	E_AUTO(	myobject );
+	qW( MyObject );
 }
 
 

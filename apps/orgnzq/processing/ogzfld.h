@@ -38,7 +38,6 @@ namespace ogzfld {
 	using ogzbsc::fFRow;
 	using ogzclm::fCRow;
 
-
 	typedef bch::qBUNCHvl( fDRow ) vData;
 	qW( Data );
 
@@ -49,7 +48,6 @@ namespace ogzfld {
 		struct s
 		: public vData::s
 		{
-			fTRow Type;
 			fCRow Column;
 		}&S_;
 		vField( s &S )
@@ -58,7 +56,6 @@ namespace ogzfld {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.Type = qNIL;
 			S_.Column = qNIL;
 			vData::reset( P );
 		}
@@ -72,7 +69,6 @@ namespace ogzfld {
 		}
 		vField &operator =( const vField &F )
 		{
-			S_.Type = F.S_.Type;
 			S_.Column = F.S_.Column;
 			vData::operator=( F );
 
@@ -80,7 +76,6 @@ namespace ogzfld {
 		}
 		void Init( void )
 		{
-			S_.Type = qNIL;
 			S_.Column = qNIL;
 			vData::Init();
 		}
@@ -94,6 +89,8 @@ namespace ogzfld {
 	typedef ogzcbs::fDCallback<OGZFLD_TP> fCallback;
 
 	typedef ogzcbs::fDItems<OGZFLD_TP> fFields;
+
+	typedef ogzcbs::rDRegularCallback<OGZFLD_TP> rRegularCallback;
 }
 
 #endif

@@ -45,7 +45,7 @@ mods += csdleo csdles csdmns csdscb
 mods += ogzfbc ogzinf ogzbsc ogzcbs ogzclm 
 mods += ogzdta ogzdtb ogzfld ogzplg ogzrcd 
 mods += ogzrgy ogztyp ogzusr 
-mods += wrpexample wrpunbound 
+mods += wrprecord wrpexample wrpunbound 
 mods += common registry 
 
 pmods += pllio 

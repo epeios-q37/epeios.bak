@@ -28,6 +28,7 @@
 
 # include "ogzbsc.h"
 # include "ogzcbs.h"
+# include "ogzdta.h"
 # include "ogzfld.h"
 
 namespace ogzrcd {
@@ -43,6 +44,73 @@ namespace ogzrcd {
 	typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
 
 	typedef ogzcbs::fDItems<OGZRCD_TP> fRecords;
+
+	typedef ogzcbs::rDRegularCallback<OGZRCD_TP> rRegularCallback;
+
+	typedef ogzclm::fColumns fColumns_;
+
+	class rColumns
+	: public fColumns_
+	{
+	private:
+		ogzclm::rRegularCallback Callback_;
+	public:
+		void reset( bso::fBool P = true )
+		{
+			fColumns_::reset( P );
+			Callback_.reset( P );
+		}
+		E_CDTOR( rColumns );
+		void Init( void )
+		{
+			Callback_.Init();
+			fColumns_::Init( Callback_ );
+		}
+	};
+
+	typedef ogzfld::fFields fFields_;
+
+	class rFields
+	: public fFields_
+	{
+	private:
+		ogzfld::rRegularCallback Callback_;
+	public:
+		void reset( bso::fBool P = true )
+		{
+			fFields_::reset( P );
+			Callback_.reset( P );
+		}
+		E_CDTOR( rFields );
+		void Init( void )
+		{
+			Callback_.Init();
+			fFields_::Init( Callback_ );
+		}
+	};
+
+	class rRecordBuffer
+	: public iRecord
+	{
+	private:
+		ogzdta::rRegularCallback Data_;
+		rColumns Columns_;
+		rFields Fields_;
+	public:
+		void reset( bso::fBool P = true )
+		{
+			Fields_.reset( P );
+			Columns_.reset( P );
+			Data_.reset( P );
+		}
+		qCDTOR( rRecordBuffer );
+		void Init( void )
+		{
+			Data_.Init();
+			Columns_.Init();
+			Fields_.Init();
+		}
+	};
 }
 
 

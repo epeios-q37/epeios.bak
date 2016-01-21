@@ -28,6 +28,9 @@
 
 # include "ogzbsc.h"
 
+# include "bch.h"
+# include "lstctn.h"
+
 namespace ogzdta {
 
 	using ogzbsc::fDRow;
@@ -48,11 +51,10 @@ namespace ogzdta {
 			fTRow Type,
 			const fByte *Datum,
 			sdr::size__ Size ) = 0;
-		virtual void OGZDTARecall(
+		virtual sdr::fSize OGZDTARecall(
 			fDRow Row,
 			fTRow Type,
-			rBuffer &Buffer,
-			sdr::size__ &Size ) = 0;
+			rBuffer &Buffer ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -85,13 +87,12 @@ namespace ogzdta {
 		{
 			OGZDTAStore( Row, Type, Datum, Size );
 		}
-		void Recall(
+		sdr::fSize Recall(
 			fDRow Row,
 			fTRow Type,
-			rBuffer &Buffer,
-			sdr::size__ &Size )
+			rBuffer &Buffer )
 		{
-			return OGZDTARecall( Row, Type, Buffer, Size );
+			return OGZDTARecall( Row, Type, Buffer );
 		}
 	};
 
@@ -131,13 +132,82 @@ namespace ogzdta {
 		{
 			C_().Store( Row, Type, Datum, Size );
 		}
-		void Recall(
+		sdr::fSize Recall(
 			fDRow Row,
 			fTRow Type,
-			rBuffer &Buffer,
-			sdr::size__ &Size )
+			rBuffer &Buffer )
 		{
-			return C_().Recall( Row, Type, Buffer, Size );
+			return C_().Recall( Row, Type, Buffer );
+		}
+	};
+
+	typedef bch::qBUNCHvl( ogzdta::fByte ) vBytes;
+	qW( Bytes );
+
+	class rRegularCallback
+	: public fCallback
+	{
+	private:
+		lstctn::qLMCONTAINERi( vBytes, ogzdta::fDRow ) Container_;
+	protected:
+		virtual ogzdta::fDRow OGZDTANew(
+			ogzdta::fTRow Type,
+			ogzdta::fDRow Row ) override 
+		{
+			Row = Container_.New( Row );
+
+			Container_(Row).Init();
+			Container_.Flush();
+
+			return Row;
+		}
+		virtual void OGZDTADelete( ogzdta::fDRow Row ) override 
+		{
+			if ( Row == qNIL )
+				Container_.reset();
+			else
+				Container_.Remove( Row );
+		}
+		virtual void OGZDTAStore(
+			ogzdta::fDRow Row,
+			ogzdta::fTRow Type,
+			const ogzdta::fByte *Datum,
+			sdr::size__ Size ) override 
+		{
+			Container_( Row ).StoreAndAdjust( Datum, Size );
+
+			Container_.Flush();
+		}
+		virtual sdr::fSize OGZDTARecall(
+			ogzdta::fDRow Row,
+			ogzdta::fTRow Type,
+			ogzdta::rBuffer &Buffer ) override 
+		{
+			ctn::qCMITEM( vBytes, ogzdta::fDRow ) Datum;
+
+			Datum.Init( Container_ );
+
+			sdr::fSize Size = Datum(Row).Amount();
+
+			if ( Size ) {
+				Buffer.Malloc( Size );
+
+				Datum().Recall(Datum().First(), Size, Buffer );
+			}
+
+			return Size;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			fCallback::reset( P );
+			Container_.reset( P );
+		}
+		qCVDTOR( rRegularCallback );
+		void Init( void )
+		{
+			fCallback::Init();
+			Container_.Init();
 		}
 	};
 }

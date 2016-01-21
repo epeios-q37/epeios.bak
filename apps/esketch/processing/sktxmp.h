@@ -29,14 +29,13 @@
 # include "sktbsc.h"
 
 namespace sktxmp {
-
-	class myobject_
+	class vMyObject
 	{
 	private:
 	public:
 		struct s {
 		};
-		myobject_( s &S )
+		vMyObject( s &S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
@@ -44,11 +43,11 @@ namespace sktxmp {
 		void plug( qAS_ &AS )
 		{
 		}
-		myobject_ &operator =( const myobject_ &M )
+		vMyObject &operator =( const vMyObject &M )
 		{
 			return *this;
 		}
-		bso::bool__ Init( void )
+		bso::fBool Init( void )
 		{
 			return true;
 		}

@@ -1,20 +1,20 @@
 /*
-	'wrpexample.cpp' by Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2016 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	 This file is part of 'orgnzq' software.
+	This file is part of 'eSketch' software.
 
-    'orgnzq' is free software: you can redistribute it and/or modify it
+    'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    'orgnzq' is distributed in the hope that it will be useful,
+    'eSketch' is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
+    along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "wrpexample.h"
@@ -30,8 +30,8 @@ using namespace wrpexample;
 using namespace ogzxmp;
 using common::stuff___;
 
-const char *wrpexample::myobject_::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
-const char *wrpexample::myobject_::NAME = WRPEXAMPLE_MYOBJECT_NAME;
+const char *wrpexample::vMyObject::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
+const char *wrpexample::vMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
 
 enum message__ {
 	mTestMessage,
@@ -72,14 +72,14 @@ static const char *GetMessage_(
 #endif
 
 #define ARGS (\
-	_myobject_ &MyObject,\
+	vMyObject_ &MyObject,\
 	fblbkd::backend___ &Backend,\
 	fblbkd::request__ &Request,\
 	stuff___ &Stuff )\
 
 typedef void (* f_manager ) ARGS;
 
-void wrpexample::myobject_::HANDLE(
+void wrpexample::vMyObject::HANDLE(
 	fblbkd::backend___ &Backend,
 	fblbkd::untyped_module &Module,
 	fblbkd::index__ Index,
@@ -166,7 +166,7 @@ qRE
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpexample::myobject_::NOTIFY(
+void wrpexample::vMyObject::NOTIFY(
 	fblbkd::untyped_module &Module,
 	common::stuff___ &Data )
 {

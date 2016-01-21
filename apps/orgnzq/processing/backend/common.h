@@ -96,6 +96,7 @@ namespace common {
 	public:
 		rTypes Types;
 		rDatabase Database;
+		ogzrcd::rRecordBuffer Record;
 	};
 
 	typedef lck::control___<naked_rack___> rack___;

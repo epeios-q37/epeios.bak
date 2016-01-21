@@ -1,20 +1,20 @@
 /*
-	'wrpexample.h' by Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2016 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	 This file is part of 'orgnzq' software.
+	This file is part of 'eSketch' software.
 
-    'orgnzq' is free software: you can redistribute it and/or modify it
+    'eSketch' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    'orgnzq' is distributed in the hope that it will be useful,
+    'eSketch' is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
+    along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef WRPEXAMPLE__INC
@@ -27,20 +27,20 @@
 # include "common.h"
 
 # define WRPEXAMPLE_MYOBJECT_PREFIX	OGZINF_LC_SHORT
-# define WRPEXAMPLE_MYOBJECT_NAME	"myobject"
+# define WRPEXAMPLE_MYOBJECT_NAME	"MyObject"
 
 namespace wrpexample {
-	typedef ogzxmp::myobject_	_myobject_;
+	typedef ogzxmp::vMyObject	vMyObject_;
 
-	class myobject_
-	: public _myobject_
+	class vMyObject
+	: public vMyObject_
 	{
 	public:
 		struct s
-		: public _myobject_::s
+		: public vMyObject_::s
 		{};
-		myobject_( s &S )
-		: _myobject_( S )
+		vMyObject( s &S )
+		: vMyObject_( S )
 		{}
 		void HANDLE(
 			fblbkd::backend___ &Backend,
@@ -55,13 +55,13 @@ namespace wrpexample {
 		static const char *PREFIX;
 		static const char *NAME;
 //		static void RAW_MESSAGES( lcl::strings_ &Messages );
-		_myobject_ *OBJECT( void )
+		vMyObject_ *OBJECT( void )
 		{
 			return this;
 		}
 	};
 
-	E_AUTO(	myobject );
+	qW( MyObject );
 }
 
 

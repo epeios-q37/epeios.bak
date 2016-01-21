@@ -67,6 +67,11 @@
 
 # include "bso.h"
 
+// Predcleration
+namespace ags {
+	class aggregated_storage_;
+}
+
 /*************************/
 /****** New version ******/
 /*************************/
@@ -118,7 +123,6 @@
 		return S_.name;\
 	}
 
-
 // Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type'.
 # define qRODISCLOSEv(type, name )\
 	qRRODISCLOSEv( type, name )\
@@ -149,8 +153,6 @@
 # define qRWDISCLOSEv( type, name )\
 	qRODISCLOSEv( type, name )\
 	qWODISCLOSEv( type__, name )
-
-
 
 # define qRRODISCLOSEf( type, name )\
 	const type Get##name( void ) const\
@@ -186,7 +188,6 @@
 # define qRWDISCLOSEf(type, name )\
 	qRODISCLOSEf( type, name )\
 	qWODISCLOSEf( type, name )
-
 
 # define qRRODISCLOSEr( type, name )	qRRODISCLOSEf( type, name )
 # define qRODISCLOSEr(type, name )		qRODISCLOSEf(type, name )
@@ -227,6 +228,46 @@ public:\
 	qW_( name )\
 	};
 
+//m Same as 'qW()', but with one template parameter of type 'name'
+# define qW1( name )\
+template <typename t> class i##name\
+: public v##name<t>\
+{\
+public:\
+	typename v##name<t>::s static_;\
+	i##name( void )\
+	: v##name<t>( static_ )\
+	{\
+		v##name<t>::reset( false );\
+	}\
+	~i##name( void )\
+	{\
+		v##name<t>::reset( true );\
+	}\
+	i##name &operator =( const i##name &S )\
+	{\
+		v##name<t>operator =( S );\
+\
+		return *this;\
+	}\
+	i##name &operator =( const v##name<t> &S )\
+	{\
+		v##name<t>operator =( S );\
+\
+		return *this;\
+	}\
+	v##name<t> &operator *( void )\
+	{\
+		return *this;\
+	}\
+	const v##name<t> &operator *( void ) const\
+	{\
+		return *this;\
+	}\
+};
+
+
+
 
 // Pointer Method
 #define qPM( type, method, variable )\
@@ -260,6 +301,27 @@ public:\
 	qRM( type, method, variable )
 
 # define qCDEF( type, name, value ) static const type name = value
+
+/* Transforms n arguments in 1.
+Useful when a macro argument contains one or more coma. 
+ex. : 'qCOVER2( a, b )' -> 'a, b' */
+# define qCOVER2(a, b)					a, b
+# define qCOVER3(a, b, c)				a, b, c
+# define qCOVER4(a, b, c, d)			a, b, c, d
+# define qCOVER5(a, b, c, d, e)			a, b, c, d, e
+# define qCOVER6(a, b, c, d, e, f)		a, b, c, d, e, f
+// To modify using macros variadics ?
+
+
+// For static objects only.
+// Example of use : 'template <typename r> qTCLONEf( object1<r>, object2 );'
+// Example of use : 'template <typename r, typename s> qTCLONEf( object1<qCOVER2(r,s)>, object2 );'
+# define qTCLONEf( type, alias )\
+	class alias\
+	: public type\
+	{\
+	}
+
 
 # define TOL_ERRP_	err::handling__ ErrHandling = err::h_Default
 
@@ -372,6 +434,49 @@ namespace tol{
 
 # define qBUFFERr( t )	tol::rBuffer<t>
 # define qCBUFFERr		qBUFFERr( bso::char__ )
+
+namespace tol {
+	// A basic object 't' becomes a normal object.
+	template <class t> class vObject
+	{
+	public:
+		struct s
+		{
+			t Object;
+		} &S_;
+		vObject( s &S )
+		: S_( S )
+		{}
+		void reset( bool P = true )
+		{
+			S_.Object.reset( P );
+		}
+		void plug( class ags::aggregated_storage_ & )
+		{
+			// Pour des raisons de standardisation.
+		}
+		vObject &operator =( const vObject &O )
+		{
+			S_.Object = O.S_.Object;
+
+			return *this;
+		}
+		t &operator()( void )
+		{
+			return S_.Object;
+		}
+		const t &operator()( void ) const
+		{
+			return S_.Object;
+		}
+		operator t( void )
+		{
+			return S_.Object;
+		}
+	};
+
+	qW1( Object );
+}
 
 /*************************/
 /****** Old version ******/
@@ -1422,59 +1527,10 @@ pour parvenir au mme rsultat que 'E_XNAVt(...)'. */
 # define E_NAVX( Object )	E_NAVXt( Object, sdr::row__ )
 # define E_XNAV( Object )	E_XNAVt( Object, sdr::row__ )
 
-// PRdclaration.
-namespace ags {
-	class aggregated_storage_;
-}
-
 namespace tol {
 
-	// A basic object 't' becomes a normal object.
-	template <class t> class object_
-	{
-	public:
-		struct s
-		{
-			t Object;
-		} &S_;
-		object_( s &S )
-		: S_( S )
-		{}
-		void reset( bool P = true )
-		{
-			S_.Object.reset( P );
-		}
-		void plug( class ags::aggregated_storage_ & )
-		{
-			// Pour des raisons de standardisation.
-		}
-		object_ &operator =( const object_ &O )
-		{
-			S_.Object = O.S_.Object;
-
-			return *this;
-		}
-		/*
-		void Init( void )
-		{
-			S_.Object.Init();
-		}
-		*/
-		t &operator()( void )
-		{
-			return S_.Object;
-		}
-		const t &operator()( void ) const
-		{
-			return S_.Object;
-		}
-		operator t( void )
-		{
-			return S_.Object;
-		}
-	};
-
-	E_AUTO1( object )
+	template <typename t> E_TTCLONE_( vObject<t>, object_ );
+	E_AUTO1( object );
 
 	template <typename t> class _core_pointer___	// Classe de base de gestion d'un pointeur.
 	{

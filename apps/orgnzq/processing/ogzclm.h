@@ -75,6 +75,8 @@ namespace ogzclm {
 	typedef ogzcbs::fSCallback<OGZCLM_TP> fCallback;
 
 	typedef ogzcbs::fSItems<OGZCLM_TP> fColumns;
+
+	typedef ogzcbs::rSRegularCallback<OGZCLM_TP> rRegularCallback;
 }
 
 #endif

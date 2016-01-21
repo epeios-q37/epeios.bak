@@ -31,11 +31,12 @@
 # include "sdr.h"
 # include "bch.h"
 # include "lstctn.h"
+# include "lstbch.h"
 
-// 'Base Template Typenames'. 'i_item' : instanciable item.
-#define OGZCBS_BTT	typename item, typename i_item, typename row, typename subitem, typename subrow
+// 'Base Template Typenames'. 'item_i' : instanciable item.
+#define OGZCBS_BTT	typename item_v, typename item_i, typename row, typename subitem, typename subrow
 // 'Base Template Parameters'.
-#define OGZCBS_BTP	item, i_item, row, subitem, subrow
+#define OGZCBS_BTP	item_v, item_i, row, subitem, subrow
 
 // 'Regular Callback Template Typenames'.
 #define OGZCBS_RCTT	typename container, OGZCBS_BTT
@@ -56,7 +57,7 @@ namespace ogzcbs {
 			const item &Item,
 			row Row ) = 0;
 		// Must 'true' if the item exists, 'false' otherwise.
-		virtual bso::bool__ OGZCBSRecall(
+		virtual bso::fBool OGZCBSRecall(
 			row Row,
 			item &Item ) const = 0;
 	public:
@@ -130,19 +131,19 @@ namespace ogzcbs {
 		// If 'Row' == 'qNIL', the content must be erased.
 		virtual void OGZCBSDelete( row Row ) = 0;
 		virtual void OGZCBSStore(
-			const item &Item,
+			const item_v &Item,
 			row Row ) = 0;
 		// Must 'true' if the item exists, 'false' otherwise.
-		virtual bso::bool__ OGZCBSRecall(
+		virtual bso::fBool OGZCBSRecall(
 			row Row,
-			item &Item ) const = 0;
+			item_v &Item ) const = 0;
 		virtual void OGZCBSStore(
 			const subitem &SubItem,
 			row Row,
 			subrow SubRow )
 		{
 		qRH
-			i_item Item;
+			item_i Item;
 		qRB
 			Item.Init();
 
@@ -161,7 +162,7 @@ namespace ogzcbs {
 			subitem &SubItem )
 		{
 		qRH
-			i_item Item;
+			item_i Item;
 		qRB
 			Item.Init();
 
@@ -180,7 +181,7 @@ namespace ogzcbs {
 		{
 			subrow SubRow = qNIL;
 		qRH
-			i_item Item;
+			item_i Item;
 		qRB
 			Item.Init();
 
@@ -199,7 +200,7 @@ namespace ogzcbs {
 			subrow SubRow )
 		{
 		qRH
-			i_item Item;
+			item_i Item;
 		qRB
 			Item.Init();
 
@@ -235,14 +236,14 @@ namespace ogzcbs {
 			return OGZCBSDelete( Row );
 		}
 		void Store(
-			const item &Item,
+			const item_v &Item,
 			row Row )
 		{
 			OGZCBSStore( Item, Row );
 		}
 		bso::bool__ Recall(
 			row Row,
-			item &Item ) const
+			item_v &Item ) const
 		{
 			return OGZCBSRecall( Row, Item );
 		}
@@ -274,7 +275,7 @@ namespace ogzcbs {
 		}
 	};
 
-	// Callbakc-based storage for dynamic objects.
+	// Callback-based storage for dynamic objects.
 	template <OGZCBS_BTT> class fDItems
 	{
 	private:
@@ -303,14 +304,14 @@ namespace ogzcbs {
 			return C_().Delete( Row );
 		}
 		void Store(
-			const item &Item,
+			const item_v &Item,
 			row Row )
 		{
 			return C_().Store( Item, Row );
 		}
 		bso::bool__ Recall(
 			row Row,
-			item &Item ) const
+			item_v &Item ) const
 		{
 			return C_().Recall( Row, Item );
 		}
@@ -342,106 +343,102 @@ namespace ogzcbs {
 		}
 	};
 
-	/*
-	E_ROW( _rcrow__ ); // Callback row.
-	template <OGZCBS_RCTT> class _regular_callback___
-	: public callback__ <OGZCBS_BTP>
+	template <typename item, typename row> class rSRegularCallback
+	: public fSCallback<item,row>
 	{
 	private:
-		bch::E_BUNCHt( _rcrow__, row ) _Links;
-		container _Items;
+		lstbch::qLBUNCHi( item, row ) Items_;
 	protected:
 		virtual row OGZCBSNew( row Row ) override
 		{
-			if ( Row != qNIL )
-				if ( _Links.Exists( Row ) ) {
-					if ( _Links( Row ) != qNIL )
-						qRGnr();
-				} else
-					_Links.Allocate( *Row + 1, qNIL );
-			else
-				Row = _Links.Append( qNIL );
-
-			return Row;
+			return Items_.New();
 		}
-		virtual void OGZCBSDelete( row Row, int test ) override
+		virtual void OGZCBSDelete( row Row ) override
 		{
-			if ( Row == qNIL ) {
-				_Items.Init();
-				_Links.Init();
-			} else {
-				_rcrow__ CRow = _Links( Row );
-
-				if ( CRow != qNIL ) {
-					_Items.Remove( CRow );
-					_Links.Store( qNIL, Row );
-				}
-			}
+			if ( Row == qNIL )
+				Items_.Init();
+			else
+				Items_.Remove( Row );
 		}
 		virtual void OGZCBSStore(
 			const item &Item,
 			row Row ) override
 		{
-			_rcrow__ RCRow = _Links( Row );
-
-			if ( RCRow == qNIL ) {
-				RCRow = _Items.New();
-
-				_Links.Store( RCRow, Row );
-
-				_Items( RCRow ).Init();
-			}
-
-			_Items.Store( Item, _Links( Row ) );
+			Items_.Store( Item, Row );
 		}
-		virtual bso::bool__ OGZCBSRecall(
+		virtual bso::fBool OGZCBSRecall(
 			row Row,
 			item &Item ) const override
 		{
-			_rcrow__ RCRow = _Links( Row );
-
-			if ( RCRow != qNIL ) {
-				_Items.Recall( _Links( Row ), Item );
+			if ( Items_.Exists( Row ) ) {
+				Items_.Recall( Row, Item );
 				return true;
 			} else
 				return false;
 		}
 	public:
-		void reset( bso::bool__ P = true )
+		void reset( bso::fBool P = true )
 		{
-			_Links.reset( P );
-			_Items.reset( P );
+			fSCallback<item, row>::reset( P );
+			Items_.reset( P );
 		}
-		E_CVDTOR( _regular_callback___ );
+		qCVDTOR( rSRegularCallback );
 		void Init( void )
 		{
-			_Links.Init();
-			_Items.Init();
-		}
-		bch::E_BUNCHt( _rcrow__, row ) &Links( void )
-		{
-			return _Links;
-		}
-		const bch::E_BUNCHt( _rcrow__, row ) &Links( void ) const
-		{
-			return _Links;
-		}
-		container &Items( void )
-		{
-			return _Items;
-		}
-		const container &Items( void ) const
-		{
-			return _Items;
+			fSCallback<item, row>::Init();
+			Items_.Init();
 		}
 	};
 
-	template <typename item, typename i_item, typename row, typename subitem, typename subrow>
-	E_TTCLONE__( _regular_callback___<E_COVER2( lstctn::E_LMCONTAINERt( item, _rcrow__ ), OGZCBS_BTP )>, mregular_callback___ );
+	template <OGZCBS_BTT> class rDRegularCallback
+	: public fDCallback<OGZCBS_BTP>
+	{
+	private:
+		lstctn::qLMCONTAINERi( item_v, row ) Container_;
+	protected:
+		virtual row OGZCBSNew( row Row ) override
+		{
+			return Container_.New( Row );
+		}
+		virtual void OGZCBSDelete( row Row ) override
+		{
+			if ( Row == qNIL )
+				Container_.Init();
+			else
+				Container_.Remove( Row );
+		}
+		virtual void OGZCBSStore(
+			const item_v &Item,
+			row Row ) override
+		{
+			Container_.Store( Item, Row );
+		}
+		virtual bso::fBool OGZCBSRecall(
+			row Row,
+			item_v &Item ) const override
+		{
+			if ( Container_.Exists(Row) ) {
+				Container_.Recall( Row, Item );
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	public:
+		void reset( bso::fBool P = true )
+		{
+			fDCallback<OGZCBS_BTP>::reset( P );
+			Container_.reset( P );
+		}
+		qCVDTOR( rDRegularCallback );
+		void Init( void )
+		{
+			fDCallback<OGZCBS_BTP>::Init();
+			Container_.Init();
+		}
+	};
 
-	template <typename item, typename i_item, typename row, typename subitem, typename subrow>
-	E_TTCLONE__( _regular_callback___<E_COVER2( lstctn::E_LCONTAINERt( item, _rcrow__ ), OGZCBS_BTP> ), regular_callback___ );
-	*/
 }
 
 

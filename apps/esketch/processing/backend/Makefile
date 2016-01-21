@@ -1,4 +1,4 @@
-#	Copyright (C) 2013 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of eSketch.
 #
@@ -34,8 +34,9 @@ mods += lst lstbch lstctn mns mtx
 mods += ntvstr que sdr stk str 
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio tht 
-mods += mtk bomhdl cdgb64 fil fnm 
-mods += lcl rgstry stsfsm xml xpp 
+mods += mtk bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn rgstry stsfsm 
+mods += xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
@@ -57,7 +58,7 @@ wmods += wllio
 #CXXFLAGS += -g
 
 # General optimization.
-# CXXFLAGS += -O
+CXXFLAGS += -O
 
 # To use with gprof
 #CXXFLAGS += -pg
@@ -338,7 +339,7 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2013"\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
