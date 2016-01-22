@@ -36,33 +36,33 @@
 #define COPYRIGHT		COPYRIGHT_YEARS " " OGZINF_OWNER_NAME " (" OGZINF_OWNER_CONTACT ")"	
 #define API_VERSION		"1"
 
-typedef sclbacknd::callback__ _callback___;
+typedef sclbacknd::rCallback rCallback_;
 
-typedef sclbacknd::backend___	_backend___;
+typedef sclbacknd::rBackend	rBackend_;
 
-class backend___
-: public _backend___
+class rBackend
+: public rBackend_
 {
 private:
-	FBLBKD_RAM_MODULE( wrprecord::vRecord, common::stuff___ ) Record;
-	FBLBKD_RAM_MODULE( wrpexample::vMyObject, common::stuff___ ) MyObject;
-	common::stuff___ _Stuff;
+	FBLBKD_RAM_MODULE( wrprecord::vRecord, common::rStuff ) Record_;
+	FBLBKD_RAM_MODULE( wrpexample::vMyObject, common::rStuff ) MyObject_;
+	common::rStuff Stuff_;
 public:
 	void reset( bso::bool__ P = true )
 	{
-		_backend___::reset( P );
-		_Stuff.reset( P );
-		Record.reset( P );
-		MyObject.reset( P );
+		rBackend_::reset( P );
+		Stuff_.reset( P );
+		Record_.reset( P );
+		MyObject_.reset( P );
 	}
-	E_CVDTOR( backend___ );
+	qCVDTOR( rBackend );
 	void Init(
 		fblbur::mode__ Mode,
 		const ntvstr::char__ *ClientOrigin )
 	{
-		_Stuff.Init( *this );
+		Stuff_.Init( *this );
 
-		_backend___::Init(
+		rBackend_::Init(
 			Mode,
 			API_VERSION,
 			ClientOrigin,
@@ -70,31 +70,31 @@ public:
 			BACKEND_NAME " " VERSION,
 			COPYRIGHT,
 			OGZINF_SOFTWARE_NAME " V" OGZINF_SOFTWARE_VERSION,
-			&_Stuff );
+			&Stuff_ );
 
-		wrpunbound::Inform( *this, _Stuff );
+		wrpunbound::Inform( *this, Stuff_ );
 
-		Record.Init( _Stuff );
-		Add( Record );
+		Record_.Init( Stuff_ );
+		Add( Record_ );
 
-		MyObject.Init( _Stuff );
-		Add( MyObject );
+		MyObject_.Init( Stuff_ );
+		Add( MyObject_ );
 	}
 };
 
 // Dans cette classe, on place ce qui est commun  tous les 'backend's.
-class callback___
-: public _callback___
+class rCallback
+: public rCallback_
 {
 protected:
-	virtual _backend___ *SCLBACKNDNew( 
+	virtual rBackend_ *SCLBACKNDNew( 
 		fblbur::mode__ Mode,
 		const ntvstr::char__ *Origin ) override
 	{
-		backend___ *Backend = NULL;
+		rBackend *Backend = NULL;
 	qRH
 	qRB
-		if ( ( Backend = new backend___ ) == NULL )
+		if ( ( Backend = new rBackend ) == NULL )
 			qRAlc();
 
 		Backend->Init( Mode, Origin );
@@ -110,20 +110,20 @@ protected:
 public:
 	void reset( bso::bool__ P = true )
 	{
-		_callback___::reset( P );
+		rCallback_::reset( P );
 	}
-	E_CVDTOR( callback___ )
+	qCVDTOR( rCallback )
 	void Init( fblbur::mode__ Mode )
 	{
-		_callback___::Init( Mode );
+		rCallback_::Init( Mode );
 	}
 };
 
-_callback___ *sclbacknd::SCLBACKNDGetCallback(
+rCallback_ *sclbacknd::SCLBACKNDGetCallback(
 	csdleo::context__ Context,
 	fblbur::mode__ Mode )
 {
-	callback___ *Callback = NULL;
+	rCallback *Callback = NULL;
 qRH
 qRB
 	if ( Context == csdleo::cRegular ) {
@@ -133,7 +133,7 @@ qRB
 		common::Initialize();
 	}
 
-	if ( ( Callback = new callback___ ) == NULL )
+	if ( ( Callback = new ::rCallback ) == NULL )
 		qRAlc();
 
 	Callback->Init( Mode );

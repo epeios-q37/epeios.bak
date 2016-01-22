@@ -42,17 +42,20 @@
 # include "scllocale.h"
 # include "sclerror.h"
 
+/*************************/
+/****** New version ******/
+/*************************/
+
 namespace sclbacknd {
-
 	// Prédéclaration.
-	class callback__;
+	class fCallback;
 
-	typedef fblbkd::backend___	_backend___;
-	typedef scldaemon::daemon___ _daemon___;
+	typedef fblbkd::backend___	rBackend_;
+	typedef scldaemon::daemon___ rDaemon_;
 
-	struct backend___ 
-	: public _backend___,
-	  public _daemon___
+	struct rBackend 
+	: public rBackend_,
+	  public rDaemon_
 	{
 	private:
 		fblbkd::text_log_functions__<> _RequestLogFunctions;
@@ -92,15 +95,15 @@ namespace sclbacknd {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_backend___::reset( P );
-			_daemon___::reset( P );
+			rBackend_::reset( P );
+			rDaemon_::reset( P );
 			_RequestLogFunctions.reset( P );
 			_VoidFlowDriver.reset( P );
 			_Registry.reset( P );
 			_RegistrySetupLevel = rgstry::UndefinedLevel;
 			_UP = NULL;
 		}
-		E_CVDTOR( backend___ );
+		E_CVDTOR( rBackend );
 		void Init(
 			fblbur::mode__ Mode,
 			const char *APIVersion,
@@ -111,8 +114,8 @@ namespace sclbacknd {
 			const char *SoftwareInformations,
 			void *UP )
 		{
-			_backend___::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations );
-			_daemon___::Init();
+			rBackend_::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations );
+			rDaemon_::Init();
 			_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
 			_RequestLogFunctions.Init( _VoidFlowDriver );
 			_Registry.Init();
@@ -142,10 +145,10 @@ namespace sclbacknd {
 		}
 	};
 
-	typedef scldaemon::callback___ _callback___;
+	typedef scldaemon::callback___ rCallback_;
 
-	class callback__
-	: public _callback___
+	class rCallback
+	: public rCallback_
 	{
 	private:
 		fblbur::mode__ _Mode;
@@ -154,17 +157,17 @@ namespace sclbacknd {
 		{
 			return SCLBACKNDNew( _Mode, Origin );
 		}
-		virtual backend___ *SCLBACKNDNew(
+		virtual rBackend *SCLBACKNDNew(
 			fblbur::mode__ Mode,
 			const ntvstr::char__ *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_callback___::reset( P );
+			rCallback_::reset( P );
 
 			_Mode = fblbur::m_Undefined;
 		}
-		E_CVDTOR( callback__ );
+		E_CVDTOR( rCallback );
 		void Init( fblbur::mode__ Mode )
 		{
 			scldaemon::mode__ DaemonMode = scldaemon::m_Undefined;
@@ -184,12 +187,24 @@ namespace sclbacknd {
 				break;
 			}
 
-			_callback___::Init( DaemonMode );
+			rCallback_::Init( DaemonMode );
 
 			_Mode = Mode;
 		}
 	};
 
+
+}
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+namespace sclbacknd {
+
+	typedef rBackend backend___;
+
+	typedef rCallback callback__;
 
 	/* See 'SCLDAEMONGetCallback(...)' for more details.
 	The difference is that all 'registry' stuff are already

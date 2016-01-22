@@ -25,7 +25,7 @@
 
 using namespace wrpunbound;
 
-using common::stuff___;
+using common::rStuff;
 
 enum message__ {
 	mTestMessage,
@@ -65,8 +65,8 @@ static const char *GetRawMessage_( message__ MessageId )
 		bso::bool__ &,\
 		void *UP )
 
-#define STUFF common::stuff___ &Stuff = *(common::stuff___ *)UP
-#define XBACKEND	STUFF;common::xbackend___ &XBackend = Stuff.XBackend()
+#define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
+#define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
 
 static void Report_(
 	message__ Message,
@@ -125,7 +125,7 @@ DEC( Test )
 	message__ Message = m_OK;
 qRH
 qRB
-	XBACKEND;
+	BACKEND;
 
 	Message = mTestMessage;
 qRR
@@ -138,7 +138,7 @@ qRE
 
 void wrpunbound::Inform(
 	fblbkd::backend___ &Backend,
-	stuff___ &Stuff )
+	rStuff &Stuff )
 {
 	Backend.Add( D( Test ),
 		fblbkd::cEnd,

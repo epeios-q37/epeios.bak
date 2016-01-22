@@ -33,28 +33,30 @@
 # include "lck.h"
 
 namespace common {
-	typedef sclbacknd::backend___ xbackend___;	// // 'xbackend' ('eXtended' 'backend').
+	typedef sclbacknd::rBackend rBackend;	// // ('eXtended Backend').
 
-	class stuff___	// Contient les donnes propres  chaque 'backend', chaque connection (virtuelle) ayant son propre backend.
+	class rStuff	// Contains data peculiar to a backend, each (virtual) connection having its own backend.
 	{
 	private:
-		xbackend___ *_XBackend;
+		rBackend *Backend_;
+		ogzusr::fURow User_;
 	public:
 		void reset( bso::bool__ = true )
 		{
-			_XBackend = NULL;
+			Backend_ = NULL;
+			User_ = qNIL;
 		}
-		E_CVDTOR( stuff___ );
-		void Init( xbackend___ &XBackend )
+		E_CVDTOR( rStuff );
+		void Init( rBackend &Backend )
 		{
-			_XBackend = &XBackend;
+			Backend_ = &Backend;
 		}
-		xbackend___ &XBackend( void ) const
+		rBackend &Backend( void ) const
 		{
-			if ( _XBackend == NULL )
+			if ( Backend_ == NULL )
 				qRGnr();
 
-			return *_XBackend;
+			return *Backend_;
 		}
 	};
 
