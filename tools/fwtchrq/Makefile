@@ -34,10 +34,10 @@ mods += lst lstbch lstctn mns mtx
 mods += ntvstr que sdr stk str 
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio tht 
-mods += bomhdl cdgb64 fil fnm lcl 
-mods += rgstry stsfsm xml xpp btr 
-mods += dtr idxbtr idxbtq idxque ltf 
-mods += mtk txmtbl 
+mods += bomhdl cdgb64 dlbrry fil fnm 
+mods += lcl plgn rgstry stsfsm xml 
+mods += xpp btr dtr idxbtr idxbtq 
+mods += idxque ltf mtk txmtbl 
 mods += dwtbsc dwtcpr dwtdct dwtftr dwtght 
 mods += dwtmov dwtxcl 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
@@ -351,6 +351,7 @@ ifdef EPEIOS_SRC
 			
 	cp $(binary) $(dest)
 endif
+		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

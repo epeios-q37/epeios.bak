@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd (Version) Build Jan 21 2016 12:09:50 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd (Version) Build Jan 22 2016 10:03:13 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq (Version) (Build Jan 20 2016 09:40:31 Win32;MSC 1800;IA-32)
 */
@@ -20,19 +20,19 @@ namespace orgnzq {
 		typedef fblfrd::frontend_depot__ _frontend_depot__;
 	}
 
-	class rStatics
+	class fStatics
 	: public _frontend_depot__
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[2];
+		fblfrd::command__ _Commands[3];
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		E_CVDTOR( rStatics )
+		E_CVDTOR( fStatics )
 		void Init( fblfrd::frontend___ &Frontend )
 		{
 			fblfrd::commands_details CommandsDetails;
@@ -40,6 +40,7 @@ namespace orgnzq {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
+				21, 21, 0, 2, 
 				0, 
 				0, 22, 9, 
 			};
@@ -50,23 +51,43 @@ namespace orgnzq {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
+			CommandDetail.Name = "OGZLogin";;
+			CommandDetail.Casts.Append( Parameters + 0, 4 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "OGZTest";;
-			CommandDetail.Casts.Append( Parameters + 0, 1 );
+			CommandDetail.Casts.Append( Parameters + 4, 1 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetTypes";;
-			CommandDetail.Casts.Append( Parameters + 1, 3 );
+			CommandDetail.Casts.Append( Parameters + 5, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 2, _Commands );
+			Commands.Recall( 0, 3, _Commands );
+		}
+		fblovl::reply__ OGZLogin( 
+			const fblfrd::string_ &In1,
+			const fblfrd::string_ &In2,
+			fblfrd::boolean__ &Out1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[0] );
+			Frontend().StringIn( In1 );
+			Frontend().StringIn( In2 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().BooleanOut( Out1 );
+
+			return Frontend().Handle();
 		}
 		fblovl::reply__ OGZTest( void ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[0] );
+			Frontend().PushHeader( _ID, Commands()[1] );
 
 			Frontend().EndOfInParameters();
 
@@ -77,7 +98,7 @@ namespace orgnzq {
 			fblfrd::strings_ &Out1,
 			fblfrd::id8s_ &Out2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[1] );
+			Frontend().PushHeader( _ID, Commands()[2] );
 
 			Frontend().EndOfInParameters();
 

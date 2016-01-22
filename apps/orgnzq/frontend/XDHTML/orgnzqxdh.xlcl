@@ -15,5 +15,15 @@
 		  <Translation language="fr">Cette action nécessite une connection à un moteur de traitement.</Translation>
 		  <Translation language="en">This action needs a conneciton to a backend.</Translation>
 	  </Translations>
+	  <Translations text="UnableToLogin">
+		  <Translation language="fr">Echec authentification !</Translation>
+		  <Translation language="en">Login failure !</Translation>
+	  </Translations>
+	  <!--
+	  <Translations text="">
+		  <Translation language="fr"></Translation>
+		  <Translation language="en"></Translation>
+	  </Translations>
+	  -->
   </Locale>
 </Locales>

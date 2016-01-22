@@ -57,7 +57,7 @@ namespace frdfrntnd {
 			MyObject.reset();
 		}
 	public:
-		orgnzq::rStatics Statics;
+		orgnzq::fStatics Statics;
 		orgnzq::fOGZMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
 		{

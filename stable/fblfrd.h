@@ -408,6 +408,20 @@ namespace fblfrd {
 		qRE
 			return Success;
 		}
+		void Disconnect( void )
+		{
+			FBLFRDOnDisconnect();
+
+			Internal_( fblcmd::cDisconnect );
+
+			EndOfInParameters();
+
+			_Handle();
+			
+			Channel_ = NULL;
+
+			_ParametersCallbacks = NULL;
+		}
 		//f Add header with object 'Object' and command 'Command'.
 		void PushHeader(
 			object__ Object,
@@ -689,18 +703,6 @@ namespace fblfrd {
 			_Handle();
 		} 
 		//f Disconnection.
-		void Disconnect( void )
-		{
-			FBLFRDOnDisconnect();
-
-			Internal_( fblcmd::cDisconnect );
-
-			EndOfInParameters();
-
-			_Handle();
-			
-			Channel_ = NULL;
-		}
 		bso::bool__ IsConnected( void ) const
 		{
 			return Channel_ != NULL;
@@ -841,6 +843,13 @@ namespace fblfrd {
 			}
 
 			return frontend___::Connect( Language, Flow, Callbacks, CompatibilityInformations, IncompatibilityInformations  );
+		}
+		void Disconnect( void )
+		{
+			frontend___::Disconnect();
+
+			_RemoteCallbacks.reset();
+			_EmbeddedCallbacks.reset();
 		}
 	};
 }

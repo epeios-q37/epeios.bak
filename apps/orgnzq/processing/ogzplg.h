@@ -38,6 +38,9 @@
 # define OGZPLG_DATABASE_PLUGIN_TARGET	"Database"
 # define OGZPLG_DATABASE_PLUGIN_VERSION	"1"
 
+# define OGZPLG_AUTHENTICATION_PLUGIN_TARGET	"Authentication"
+# define OGZPLG_AUTHENTICATION_PLUGIN_VERSION	"1"
+
 namespace ogzplg {
 
 	template <typename callback> class fCommon
@@ -75,6 +78,19 @@ namespace ogzplg {
 
 	class fDatabasePlugin
 	: public fCommon<ogzdtb::fCallback>
+	{
+	public:
+		static const char *Identification( void );
+	};
+
+
+	/* Authentication */
+
+	qCDEF( char *, AuthenticationPluginTarget, OGZPLG_AUTHENTICATION_PLUGIN_TARGET );
+	qCDEF( char *, AuthenticationPluginVersion, OGZPLG_AUTHENTICATION_PLUGIN_VERSION );
+
+	class fAuthenticationPlugin
+	: public fCommon<ogzusr::fAuthenticationCallback>
 	{
 	public:
 		static const char *Identification( void );

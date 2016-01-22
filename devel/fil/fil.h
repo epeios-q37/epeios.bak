@@ -38,7 +38,19 @@
 # include "cpe.h"
 # include "fnm.h"
 
-// Prdclaration, car l'incusion des fichiers d'entte correspondants posent des problmes d  l'inclusion circulaire.
+/*************************/
+/****** New version ******/
+/*************************/
+
+// To avoid to have to include "str.h".
+namespace str {
+	class vtsring;
+}
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
 
 namespace str {
 	class string_;

@@ -152,6 +152,32 @@ namespace {
 	}
 }
 
+DEC( Login )
+{
+qRH
+	common::rw_rack___ Rack;
+	fbltyp::strings Labels;
+	fbltyp::id8s Ids;
+	ogzusr::fURow UserRow = qNIL;
+qRB
+	STUFF;
+
+	Rack.Init( common::Rack );
+
+	const str::vString &Username = Request.StringIn();
+	const str::vString &Password = Request.StringIn();
+
+	UserRow = Rack().Authentication.Login( Username, Password );
+
+	if ( UserRow != qNIL )
+		Stuff.SetUser( UserRow );
+
+	Request.BooleanOut() = UserRow != qNIL;
+qRR 
+qRT
+qRE
+}
+
 DEC( GetTypes )
 {
 qRH
@@ -178,6 +204,13 @@ void wrpunbound::Inform(
 	fblbkd::backend___ &Backend,
 	rStuff &Stuff )
 {
+	Backend.Add( D( Login ),
+			fblbkd::cString,	// Username.
+			fblbkd::cString,	// Password.
+		fblbkd::cEnd,
+			fblbkd::cBoolean,	// Success.
+		fblbkd::cEnd );
+
 	Backend.Add( D( Test ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );

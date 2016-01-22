@@ -13,8 +13,18 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2016-01-22 :
+- FBLBKF :
+	# Fixing bad order destruction in 'ram_module::reset()'
+	- Using the list bunch object rather than the combination of a list and a bunch for simplification.
+- FBLFRD :
+	* Adding 'universal_frontend___::Disconnect()'.
+	# Fixing incomplete deconnection.
 - GLOBAL :
 	- Applying new naming conventions.
+- PLGN :
+	# Fixing bad locale filling.
+- SCLXDHTML :
+	# Fixing bad deconnection procedure.
 
 2016-01-21 :
 - GLOBAL :

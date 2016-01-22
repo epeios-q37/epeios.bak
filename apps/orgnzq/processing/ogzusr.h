@@ -47,6 +47,31 @@ namespace ogzusr {
 	typedef ogzcbs::fDItems<OGZUSR_TP> fUsers;
 
 	typedef ogzcbs::rDRegularCallback<OGZUSR_TP> rRegularCallback;
+
+	class fAuthenticationCallback
+	{
+	protected:
+		virtual ogzusr::fURow OGZUSRAuthenticate(
+			const str::vString &Username,
+			const str::vString &Password ) = 0;
+	public:
+		void reset( bso::bool__ = true )
+		{
+			// Standardisation.
+		}
+		qCVDTOR( fAuthenticationCallback );
+		void Init( void )
+		{
+			// Standardisation.
+		}
+		ogzusr::fURow Authenticate(
+			const str::vString &Username,
+			const str::vString &Password )
+		{
+			return OGZUSRAuthenticate( Username, Password );
+		}
+	};
+
 }
 
 

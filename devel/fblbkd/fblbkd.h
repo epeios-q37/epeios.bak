@@ -431,36 +431,11 @@ namespace fblbkd {
 		}
 	};
 
-	namespace {
-		typedef lst::E_LIST_ _list_;
-		E_AUTO( _list );
-	}
-	
 	//c A module with object stored in RAM.
 	template <class t, class st, class user> class ram_module
-	: public module<t,user>,
-	  private _list
+	: public module<t,user>
 	{
-	private:
-		const _list_ &_List( void ) const
-		{
-			return *this;
-		}
-		_list_ &_List( void )
-		{
-			return *this;
-		}
 	protected:
-		virtual void LSTAllocate(
-			sdr::size__ Size,
-			aem::mode__ Mode ) override
-		{
-#ifdef FBLBKD_DBG
-			if ( Mode != aem::m_Default )
-				qRFwk();
-#endif
-			Objets.Allocate( Size, aem::mFitted );
-		}
 		virtual index__ FBLBKDNew( void ) override
 		{
 			st *S = NULL;
@@ -477,7 +452,7 @@ namespace fblbkd {
 
 			Pointeur->reset( false );
 
-			index__ Index = _List().New();
+			index__ Index = Objets.New();
 
 			Objets.Store( Pointeur, Index );
 
@@ -491,7 +466,7 @@ namespace fblbkd {
 
 			delete Object;
 
-			_List().Delete( Index );
+			Objets.Delete( Index );
 		}
 		virtual void *FBLBKDObject( index__ Index ) override
 		{
@@ -501,19 +476,16 @@ namespace fblbkd {
 			return (void *)( Objets( Index )->OBJECT() );
 		}
 	public:
-		//r The pointer object.
-		bch::E_BUNCH( t * ) Objets;
+		lstbch::qLBUNCHil( t * ) Objets;
 		void reset( bso::bool__ P = true )
 		{
-			Objets.reset( P );
 			module<t, user>::reset( P );
-			_list::reset( P );
+			Objets.reset( P );
 		}
 		E_CDTOR( ram_module );
 		//f Initialization.
 		void Init( user &User )
 		{
-			_List().Init();
 			Objets.Init();
 			module<t,user>::Init( User );
 		}

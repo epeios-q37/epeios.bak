@@ -32,7 +32,7 @@ namespace frdinstc {
 	{
 	private:
 		Q37_MRMDF( frdfrntnd::frontend___, F_,  Frontend_ );
-		orgnzq::rStatics &S_( void )
+		orgnzq::fStatics &S_( void )
 		{
 			return F_().Statics;
 		}
@@ -63,6 +63,16 @@ namespace frdinstc {
 
 			return String;
 		}
+		bso::fBool Login(
+			const str::vString &Username,
+			const str::vString &Password )
+		{
+			bso::fBool Success = false;
+
+			S_().OGZLogin( Username, Password, Success );
+
+			return Success;
+		}
 		void TestMessage( void )
 		{
 			S_().OGZTest();
@@ -83,6 +93,12 @@ namespace frdinstc {
 		{
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
+		}
+		bso::fBool Login(
+			const str::vString &Username,
+			const str::vString &Password )
+		{
+			return Core_.Login( Username, Password );
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{

@@ -43,11 +43,26 @@
 #  error "Unknown target !"
 # endif
 
-// Pour viter d'avoir  inclure 'str.h'
+/*************************/
+/****** New version ******/
+/*************************/
+
+// To avoid to have to include "str.h".
+namespace str {
+	class string_;
+
+	// Already declared as 'typedef' in 'str.h', so can not be predeclared as a class.
+	typedef string_ vString;
+}
+
+/*************************/
+/****** Old version ******/
+/*************************/
+
+// To avoid to have to include "str.h".
 namespace str {
 	class string_;
 }
-
 
 namespace ntvstr {
 # ifdef NTVSTR__MBS

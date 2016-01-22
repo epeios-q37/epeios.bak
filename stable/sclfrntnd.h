@@ -154,6 +154,7 @@ namespace sclfrntnd {
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
 			fblfrd::incompatibility_informations_ &IncompatibilityInformations );
+		void Disconnect( void );
 		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
 			return _Registry;

@@ -58,6 +58,10 @@ namespace common {
 
 			return *Backend_;
 		}
+		void SetUser( ogzusr::fURow User )
+		{
+			User_ = User;
+		}
 	};
 
 	class rTypes
@@ -94,11 +98,37 @@ namespace common {
 		void Init( const ogztyp::vTypes &Types );
 	};
 
+	class rAuthentication
+	{
+	private:
+		plgn::rRetriever<ogzplg::fAuthenticationPlugin> Retriever_;
+		ogzplg::fAuthenticationPlugin &P_( void )
+		{
+			return Retriever_.Plugin();
+		}
+	public:
+		void reset( bso::fBool P = true )
+		{
+			Retriever_.reset( P );
+		}
+		qCDTOR( rAuthentication );
+		void Init( void );
+		ogzusr::fURow Login(
+			const str::vString &Username,
+			const str::vString &Password )
+		{
+			return P_().Authenticate( Username, Password );
+		}
+	};
+
+	typedef ogzrcd::rRecordBuffer rRecord;
+
 	class naked_rack___ {
 	public:
 		rTypes Types;
 		rDatabase Database;
-		ogzrcd::rRecordBuffer Record;
+		rAuthentication Authentication;
+		rRecord Record;
 	};
 
 	typedef lck::control___<naked_rack___> rack___;

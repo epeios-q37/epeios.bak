@@ -300,6 +300,12 @@ namespace sclxdhtml {
 			
 			return true;
 		}
+		void Disconnect( void )
+		{
+			instances::reset();
+
+			frontend::Disconnect();
+		}
 		const char *Language( void )
 		{
 			return frontend::Language();

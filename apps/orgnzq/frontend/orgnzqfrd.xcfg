@@ -7,10 +7,10 @@
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
 			<DefaultProjectType>New</DefaultProjectType>
-			<DefaultBackendType>None</DefaultBackendType>
+			<DefaultBackendType>LocalHost</DefaultBackendType>
 
 			<!-- For multi-user mode. Can be overriden by project file. -->
-			<Backend Type="Predefined">Embedded</Backend>
+			<Backend Type="Predefined">LocalHost</Backend>
 			<Authentication Mode="Full">
 				<Login>Hello</Login>
 				<Password>toto</Password>

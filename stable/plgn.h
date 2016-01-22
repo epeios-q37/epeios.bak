@@ -191,7 +191,7 @@ namespace plgn {
 			Locale.Init();
 			C_().Initialize( &Data, Location, Locale );
 
-			scllocale::Fill(scllocale::tMain, "Locale", Location, Locale );
+			scllocale::Fill(scllocale::tMain, NULL, Location, Locale );
 
 			Plugin_ = C_().RetrievePlugin();
 

@@ -85,6 +85,12 @@ void common::rDatabase::Init( const ogztyp::vTypes &Types )
 	Core.Init( Types, P_().GetDTA(), P_().GetCLM(), P_().GetFLD(), P_().GetRCD(), P_().GetUSR() );
 }
 
+void common::rAuthentication::Init( void )
+{
+	Retriever_.Init();
+	sclmisc::Plug( ogzplg::AuthenticationPluginTarget, Retriever_ );
+}
+
 void common::Initialize( void )
 {
 qRH
@@ -94,6 +100,7 @@ qRB
 
 	Rack_.Types.Init();
 	Rack_.Database.Init( Rack_.Types.Core );
+	Rack_.Authentication.Init();
 	Rack_.Record.Init();
 
 	Rack.Init( Rack_ );

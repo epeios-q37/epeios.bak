@@ -330,6 +330,14 @@ bso::bool__ sclfrntnd::frontend___::Connect(
 	return _frontend___::Connect( Language(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
 }
 
+void sclfrntnd::frontend___::Disconnect( void )
+{
+	_frontend___::Disconnect();
+
+	_Flow.reset();
+}
+
+
 void sclfrntnd::GetProjectsFeatures(
 	const char *Language,
 	xml::writer_ &Writer )

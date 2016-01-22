@@ -6,12 +6,13 @@
 		<Parameters>
 			<Language>en</Language>
 			<Plugins>
-				<Plugin target="Database" Id="Regular"></Plugin>
 				<Set target="Type">
-				<!-- The 2 first are mandatory and must be the 2 first ! -->
+					<!-- The 2 first are mandatory and must be the 2 first ! -->
 					<Plugin Id="Record">Record</Plugin>
 					<Plugin Id="Text">Text</Plugin>
 				</Set>
+				<Plugin target="Database" Id="Regular"></Plugin>
+				<Plugin target="Authentication" Id="Dummy"></Plugin>
 			</Plugins>
 		</Parameters>
 		<Definitions>
@@ -81,38 +82,26 @@
 					</Locale>
 				</Plugin>
 			</Plugins>
-			<!--<Plugins target="Meta">
-				<xpp:define name="MetaPluginsRootDir">
+			<Plugins target="Authentication">
+				<xpp:define name="AuthenticationPluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:bloc>Meta/</xpp:bloc>
+						<xpp:bloc>Authentication/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
-				<Plugin id="Regular">
+				<Plugin id="Dummy">
 					<Filename>
-						<xpp:expand select="MetaPluginsRootDir"/>
-						<xpp:bloc>regular</xpp:bloc>
+						<xpp:expand select="AuthenticationPluginsRootDir"/>
+						<xpp:bloc>dummy</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Meta/regular/regular.xcfg"/>
+						<xpp:expand href="../plugins/Authentication/Dummy/dummy.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Meta/regular/regular.xlcl"/>
-					</Locale>
-				</Plugin>-->
-				<!--<Plugin id="XMLFiles">
-					<Filename>
-						<xpp:expand select="MetaPluginsRootDir"/>
-						<xpp:bloc>xmlfiles</xpp:bloc>
-					</Filename>
-					<Configuration>
-						<xpp:expand href="../plugins/Database/XMLFiles/xmlfiles.xcfg"/>
-					</Configuration>
-					<Locale>
-						<xpp:expand href="../plugins/Database/XMLFiles/xmlfiles.xlcl"/>
+						<xpp:expand href="../plugins/Authentication/Dummy/dummy.xlcl"/>
 					</Locale>
 				</Plugin>
-			</Plugins-->
+			</Plugins>
 		</Definitions>
 		<Locale>
 		</Locale>

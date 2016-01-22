@@ -31,5 +31,10 @@ const char *ogzplg::fDatabasePlugin::Identification( void )
 	return OGZPLG_DATABASE_PLUGIN_TARGET " V" OGZPLG_DATABASE_PLUGIN_VERSION " " CPE_DESCRIPTION;
 }
 
+const char *ogzplg::fAuthenticationPlugin::Identification( void )
+{
+	return OGZPLG_AUTHENTICATION_PLUGIN_TARGET " V" OGZPLG_AUTHENTICATION_PLUGIN_VERSION " " CPE_DESCRIPTION;
+}
+
 
 
