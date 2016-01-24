@@ -24,13 +24,13 @@
 
 namespace fields {
 
-	BASE_ACD( template );
+	BASE_ACD( Template );
 
 	class action_callbacks__
 	{
 	public:
 	public:
-		BASE_ACU( template, Template );
+		BASE_ACU( Template );
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( Template );

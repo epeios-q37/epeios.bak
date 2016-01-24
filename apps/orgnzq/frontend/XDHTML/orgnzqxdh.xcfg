@@ -120,6 +120,14 @@
 					<Translation language="fr">Conversion</Translation>
 					<Translation language="en">Convert</Translation>
 				</Translations>
+				<Translations text="mainCreateNewRecord">
+					<Translation language="fr">Créer un nouvel enregistrement.</Translation>
+					<Translation language="en">Create new record.</Translation>
+				</Translations>
+				<Translations text="mainNewRecord">
+					<Translation language="fr">Nouveau</Translation>
+					<Translation language="en">New</Translation>
+				</Translations>
 				<Translations text="mainOK">
 					<Translation language="fr">OK</Translation>
 					<Translation language="en">OK</Translation>
@@ -137,6 +145,12 @@
 					<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
 				</Translations>
 			</xpp:bloc>
+			<!--
+				<Translations text="">
+					<Translation language="fr"></Translation>
+					<Translation language="en"></Translation>
+				</Translations>
+			-->
 		</Locale>
 	</Configuration>
 </Configurations>

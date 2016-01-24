@@ -96,7 +96,7 @@ qRT
 qRE
 }
 
-BASE_AC( fields::template__ )
+BASE_AC( fields::fTemplate )
 {
 	Session.AlertT( "Template" );
 }

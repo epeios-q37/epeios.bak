@@ -96,7 +96,7 @@ qRT
 qRE
 }
 
-BASE_AC( main::testing__ )
+BASE_AC( main::fTesting )
 {
 	Session.User.TestMessage();
 }

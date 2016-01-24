@@ -23,18 +23,18 @@
 # include "base.h"
 
 namespace login {
-	BASE_ACD( switch_backend_type );
-	BASE_ACD( display_embedded_backend_filename );
-	BASE_ACD( connect );
-	BASE_ACD( dismiss );
+	BASE_ACD( SwitchBackendType );
+	BASE_ACD( DisplayEmbeddedBackendFilename );
+	BASE_ACD( Connect );
+	BASE_ACD( Dismiss );
 
-	class action_callbacks__
+	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( switch_backend_type, SwitchBackendType );
-		BASE_ACU( display_embedded_backend_filename, DisplayEmbeddedBackendFilename );
-		BASE_ACU( connect, Connect );
-		BASE_ACU( dismiss, Dismiss );
+		BASE_ACU( SwitchBackendType );
+		BASE_ACU( DisplayEmbeddedBackendFilename );
+		BASE_ACU( Connect );
+		BASE_ACU( Dismiss );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -43,7 +43,7 @@ namespace login {
 			BASE_ACR( Connect );
 			BASE_ACR( Dismiss );
 		}
-		E_CVDTOR( action_callbacks__ );
+		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
 			BASE_ACI( SwitchBackendType );

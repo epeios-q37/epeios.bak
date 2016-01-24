@@ -23,23 +23,23 @@
 # include "base.h"
 
 namespace global {
-	BASE_ACD( about );
-	BASE_ACD( refresh );
-	BASE_ACD( test );
+	BASE_ACD( About );
+	BASE_ACD( Refresh );
+	BASE_ACD( Test );
 
-	class action_callbacks__
+	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( about, About );
-		BASE_ACU( refresh, Refresh );
-		BASE_ACU( test, Test );
+		BASE_ACU( About );
+		BASE_ACU( Refresh );
+		BASE_ACU( Test );
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( About );
 			BASE_ACR( Refresh );
 			BASE_ACR( Test );
 		}
-		E_CVDTOR( action_callbacks__ );
+		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
 			BASE_ACI( About );

@@ -23,18 +23,18 @@
 # include "base.h"
 
 namespace main {
-	BASE_ACD( submission );
-	BASE_ACD( show_test_button );
-	BASE_ACD( hide_test_button );
-	BASE_ACD( testing );
+	BASE_ACD( Submission );
+	BASE_ACD( ShowTestButton );
+	BASE_ACD( HideTestButton );
+	BASE_ACD( Testing );
 
-	class action_callbacks__
+	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( submission, Submission );
-		BASE_ACU( show_test_button, ShowTestButton );
-		BASE_ACU( hide_test_button, HideTestButton );
-		BASE_ACU( testing, Testing );
+		BASE_ACU( Submission );
+		BASE_ACU( ShowTestButton );
+		BASE_ACU( HideTestButton );
+		BASE_ACU( Testing );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -43,7 +43,7 @@ namespace main {
 			BASE_ACR( HideTestButton );
 			BASE_ACR( Testing );
 		}
-		E_CVDTOR( action_callbacks__ );
+		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
 			BASE_ACI( Submission );

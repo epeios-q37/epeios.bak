@@ -100,17 +100,17 @@ qRT
 qRE
 }
 
-BASE_AC( login::switch_backend_type__ )
+BASE_AC( login::fSwitchBackendType )
 {
 	FillCasting_( Session );
 }
 
-BASE_AC( login::display_embedded_backend_filename__ )
+BASE_AC( login::fDisplayEmbeddedBackendFilename )
 {
 	sclxdhtml::login::DisplaySelectedEmbeddedBackendFilename( Session, Id );
 }
 
-BASE_AC( login::connect__ )
+BASE_AC( login::fConnect )
 {
 qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
@@ -132,7 +132,7 @@ qRE
 qRT
 }
 
-BASE_AC( login::dismiss__ )
+BASE_AC( login::fDismiss )
 {
 	prolog::SetLayout( Session );
 }

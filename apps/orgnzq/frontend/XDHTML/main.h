@@ -25,18 +25,18 @@
 # include "fields.h"
 
 namespace main {
-	BASE_ACD( testing );
+	BASE_ACD( Testing );
 
-	class action_callbacks__
+	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( testing, Testing );
+		BASE_ACU( Testing );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( Testing );
 		}
-		E_CVDTOR( action_callbacks__ );
+		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
 			BASE_ACI( Testing );

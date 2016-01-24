@@ -25,19 +25,18 @@
 # include "base.h"
 
 namespace frame {
+	BASE_ACD( Template );
 
-	BASE_ACD( template );
-
-	class action_callbacks__
+	class fActionCallbacks
 	{
 	public:
 	public:
-		BASE_ACU( template, Template );
+		BASE_ACU( Template );
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( Template );
 		}
-		E_CVDTOR( action_callbacks__ );
+		qCVDTOR( fActionCallbacks );
 		void Init( core::session___ &Session )
 		{
 			BASE_ACI( Template );

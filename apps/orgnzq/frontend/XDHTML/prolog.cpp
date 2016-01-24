@@ -99,17 +99,17 @@ qRT
 qRE
 }
 
-BASE_AC( prolog::switch_project_type__ )
+BASE_AC( prolog::fSwitchProjectType )
 {
 	SetCasting_( Session );
 }
 
-BASE_AC( prolog::display_project_filename__ )
+BASE_AC( prolog::fDisplayProjectFilename )
 {
 	sclxdhtml::prolog::DisplaySelectedProjectFilename( Session, Id );
 }
 
-BASE_AC( prolog::load_project__ )
+BASE_AC( prolog::fLoadProject )
 {
 	sclxdhtml::prolog::LoadProject( Session );
 

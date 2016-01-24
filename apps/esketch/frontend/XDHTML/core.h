@@ -40,42 +40,42 @@ namespace core {
 	struct action_callbacks__
 	{
 	private:
-		global::action_callbacks__ _Global;
-		prolog::action_callbacks__ _Prolog;
-		login::action_callbacks__ _Login;
-		main::action_callbacks__ _Main;
+		global::fActionCallbacks Global_;
+		prolog::fActionCallbacks Prolog_;
+		login::fActionCallbacks Login_;
+		main::fActionCallbacks Main_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Global.reset( P );
-			_Prolog.reset( P );
-			_Login.reset( P );
-			_Main.reset( P );
+			Global_.reset( P );
+			Prolog_.reset( P );
+			Login_.reset( P );
+			Main_.reset( P );
 		}
 		E_CVDTOR( action_callbacks__ );
 		void Init( void )
 		{
-			_Prolog.Init();
-			_Login.Init();
-			_Main.Init();
-			_Global.Init();
+			Prolog_.Init();
+			Login_.Init();
+			Main_.Init();
+			Global_.Init();
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&_Global.About, &_Global.Refresh, &_Global.Test,
+				&Global_.About, &Global_.Refresh, &Global_.Test,
 				NULL );
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&_Prolog.DisplayProjectFilename, &_Prolog.LoadProject, &_Prolog.SwitchProjectType,	// All 'prolog'-related actions are allowed.
+				&Prolog_.DisplayProjectFilename, &Prolog_.LoadProject, &Prolog_.SwitchProjectType,	// All 'prolog'-related actions are allowed.
 				NULL );
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&_Login.Dismiss, &_Login.DisplayEmbeddedBackendFilename, &_Login.Connect, &_Login.SwitchBackendType,	// All 'login'-related actions too.
+				&Login_.Dismiss, &Login_.DisplayEmbeddedBackendFilename, &Login_.Connect, &Login_.SwitchBackendType,	// All 'login'-related actions too.
 				NULL );
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&_Main.HideTestButton, &_Main.ShowTestButton,
+				&Main_.HideTestButton, &Main_.ShowTestButton,
 				NULL );
 
 		}

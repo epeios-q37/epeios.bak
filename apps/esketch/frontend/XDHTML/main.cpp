@@ -96,7 +96,7 @@ qRT
 qRE
 }
 
-BASE_AC( main::submission__ )
+BASE_AC( main::fSubmission )
 {
 	str::string Test;
 	TOL_CBUFFER___ Buffer;
@@ -108,19 +108,19 @@ BASE_AC( main::submission__ )
 	Session.SetContent("Pattern", Test );
 }
 
-BASE_AC( main::show_test_button__ )
+BASE_AC( main::fShowTestButton )
 {
 	Session.User.TestButtonIsVisible() = true;
 	SetCasting_( Session );
 }
 
-BASE_AC( main::hide_test_button__ )
+BASE_AC( main::fHideTestButton )
 {
 	Session.User.TestButtonIsVisible() = false;
 	SetCasting_(Session );
 }
 
-BASE_AC( main::testing__ )
+BASE_AC( main::fTesting )
 {
 	Session.User.TestMessage();
 }

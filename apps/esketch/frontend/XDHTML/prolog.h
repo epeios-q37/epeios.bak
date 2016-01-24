@@ -23,24 +23,23 @@
 # include "base.h"
 
 namespace prolog {
+	BASE_ACD( SwitchProjectType );
+	BASE_ACD( DisplayProjectFilename );
+	BASE_ACD( LoadProject );
 
-	BASE_ACD( switch_project_type );
-	BASE_ACD( display_project_filename );
-	BASE_ACD( load_project );
-
-	class action_callbacks__
+	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( switch_project_type, SwitchProjectType );
-		BASE_ACU( display_project_filename, DisplayProjectFilename );
-		BASE_ACU( load_project, LoadProject );
+		BASE_ACU( SwitchProjectType );
+		BASE_ACU( DisplayProjectFilename );
+		BASE_ACU( LoadProject );
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( SwitchProjectType );
 			BASE_ACR( DisplayProjectFilename );
 			BASE_ACR( LoadProject );
 		}
-		E_CVDTOR( action_callbacks__ );
+		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
 			BASE_ACI( SwitchProjectType );
