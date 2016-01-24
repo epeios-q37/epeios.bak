@@ -31,7 +31,7 @@ namespace {
 	E_CDEF( char *, XSLAffix_, "Login" );
 
 	void GetContext_(
-		core::session___ &Session,
+		core::fSession &Session,
 		str::string_ &XML )
 	{
 	qRH
@@ -45,7 +45,7 @@ namespace {
 	qRE
 	}
 
-	void SetCasting_( core::session___ &Session )
+	void SetCasting_( core::fSession &Session )
 	{
 	qRH
 		str::string XML, XSL;
@@ -64,7 +64,7 @@ namespace {
 
 	void GetContent_(
 		const sclrgstry::registry_ &Registry,
-		core::session___ &Session,
+		core::fSession &Session,
 		str::string_ &XML )
 	{
 	qRH
@@ -80,7 +80,7 @@ namespace {
 	}
 }
 
-void login::SetLayout( core::session___ &Session )
+void login::SetLayout( core::fSession &Session )
 {
 qRH
 	str::string XML, XSL;

@@ -36,7 +36,7 @@ namespace fields {
 			BASE_ACR( Template );
 		}
 		E_CVDTOR( action_callbacks__ );
-		void Init( core::session___ &Session )
+		void Init( core::fSession &Session )
 		{
 			BASE_ACI( Template );
 		}
@@ -44,7 +44,7 @@ namespace fields {
 
 	void SetLayout(
 		const char *Id,
-		core::session___ &Session );
+		core::fSession &Session );
 }
 
 #endif

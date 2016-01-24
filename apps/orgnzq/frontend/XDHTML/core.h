@@ -88,10 +88,10 @@ namespace core {
 		void Init( frdfrntnd::frontend___ &Frontend );
 	};
 
-	typedef sclxdhtml::session___<instances_core___, frdfrntnd::frontend___, page__, p_Undefined> _session___;
+	typedef sclxdhtml::session___<instances_core___, frdfrntnd::frontend___, page__, p_Undefined> _fSession;
 
 	class fSession
-	: public _session___
+	: public _fSession
 	{
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
@@ -102,7 +102,7 @@ namespace core {
 		qCVDTOR( fSession );
 	};
 
-	typedef sclxdhtml::core___<session___> _core___;
+	typedef sclxdhtml::core___<fSession> _core___;
 
 	class core___
 	: public _core___
@@ -130,7 +130,7 @@ namespace core {
 	sclfrntnd::kernel___ &Kernel( void );
 
 	void About(
-		session___ &Session,
+		fSession &Session,
 		xml::writer_ &Writer );
 }
 

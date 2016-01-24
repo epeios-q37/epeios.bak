@@ -49,7 +49,7 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 	const char *Language,
 	xdhcmn::proxy_callback__ *ProxyCallback )
 {
-	core::session___ *Session = new core::session___;
+	core::fSession *Session = new core::fSession;
 
 	if ( Session == NULL )
 		qRGnr();
