@@ -37,7 +37,7 @@ namespace frame {
 			BASE_ACR( Template );
 		}
 		qCVDTOR( fActionCallbacks );
-		void Init( core::fSession &Session )
+		void Init( core::rSession &Session )
 		{
 			BASE_ACI( Template );
 		}
@@ -45,7 +45,7 @@ namespace frame {
 
 	void SetLayout(
 		const char *Id,
-		core::fSession &Session );
+		core::rSession &Session );
 }
 
 #endif

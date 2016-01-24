@@ -41,7 +41,7 @@ namespace {
 }
 
 bso::bool__ base::action_helper_callback__::SCLXHTMLOnBeforeAction(
-	core::fSession &Session,
+	core::rSession &Session,
 	const char *Id,
 	const char *Action )
 {
@@ -55,7 +55,7 @@ bso::bool__ base::action_helper_callback__::SCLXHTMLOnBeforeAction(
 		return true;
 }
 
-bso::bool__ base::action_helper_callback__::SCLXHTMLOnClose( core::fSession &Session )
+bso::bool__ base::action_helper_callback__::SCLXHTMLOnClose( core::rSession &Session )
 {
 	return Session.ConfirmT( "ClosingConfirmation" );
 }

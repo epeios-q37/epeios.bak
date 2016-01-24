@@ -43,7 +43,7 @@ namespace main {
 		}
 	};
 
-	void SetLayout( core::fSession &Session );
+	void SetLayout( core::rSession &Session );
 }
 
 #endif

@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-24 :
+- GLOBAL :
+	- Applying new naming conventions.
+
 2016-01-22 :
 - FBLBKF :
 	# Fixing bad order destruction in 'ram_module::reset()'

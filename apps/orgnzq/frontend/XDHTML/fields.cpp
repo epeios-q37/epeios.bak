@@ -27,7 +27,7 @@ namespace {
 	E_CDEF( char *, XSLAffix_, "Fields" );
 
 	void GetContext_(
-		core::fSession &Session,
+		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
@@ -41,7 +41,7 @@ namespace {
 
 	void SetCasting_(
 		const char *Id,
-		core::fSession &Session )
+		core::rSession &Session )
 	{
 	qRH
 		str::string XML, XSL;
@@ -60,7 +60,7 @@ namespace {
 
 	void GetContent_(
 		const sclrgstry::registry_ &Registry,
-		core::fSession &Session,
+		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
@@ -77,7 +77,7 @@ namespace {
 
 void fields::SetLayout(
 	const char *Id,
-	core::fSession &Session )
+	core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;

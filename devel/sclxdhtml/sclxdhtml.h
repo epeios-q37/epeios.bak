@@ -255,7 +255,7 @@ namespace sclxdhtml {
 		const char *Language );
 
 	// User put in 'instances' all his own objects, instanciating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading thie library.
-	template <typename instances, typename frontend, typename page, page UndefinedPage > class session___
+	template <typename instances, typename frontend, typename page, page UndefinedPage > class rSession
 	: public _session_callback__,
 	  public proxy__,
 	  public instances,
@@ -275,7 +275,7 @@ namespace sclxdhtml {
 			_Page = UndefinedPage;
 			_ReportingCallback.reset( P );
 		}
-		E_CVDTOR( session___ )
+		qCVDTOR( rSession )
 		void Init(
 			sclfrntnd::kernel___ &Kernel,
 			const char *Language,

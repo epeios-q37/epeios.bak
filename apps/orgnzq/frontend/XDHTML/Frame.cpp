@@ -28,7 +28,7 @@ namespace {
 	E_CDEF( char *, XSLAffix_, "Frame" );
 
 	void GetContext_(
-		core::fSession &Session,
+		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
@@ -42,7 +42,7 @@ namespace {
 
 	void SetCasting_(
 		const char *Id,
-		core::fSession &Session )
+		core::rSession &Session )
 	{
 	qRH
 		str::string XML, XSL;
@@ -61,7 +61,7 @@ namespace {
 
 	static void GetContent_(
 		const sclrgstry::registry_ &Registry,
-		core::fSession &Session,
+		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
@@ -76,7 +76,7 @@ namespace {
 
 void frame::SetLayout(
 	const char *Id,
-	core::fSession &Session )
+	core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;

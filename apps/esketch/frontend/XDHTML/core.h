@@ -93,10 +93,10 @@ namespace core {
 		void Init( frdfrntnd::frontend___ &Frontend );
 	};
 
-	typedef sclxdhtml::session___<instances_core___, frdfrntnd::frontend___, page__, p_Undefined> _session___;
+	typedef sclxdhtml::rSession<instances_core___, frdfrntnd::frontend___, page__, p_Undefined> rSession_;
 
-	class fSession
-	: public _session___
+	class rSession
+	: public rSession_
 	{
 	protected:
 		virtual bso::bool__ XDHCMNLaunch(
@@ -104,10 +104,10 @@ namespace core {
 			const char *Action ) override;
 		virtual void SCLXDHTMLRefresh( page__ Page ) override;
 	public:
-		qCVDTOR( fSession );
+		qCVDTOR( rSession );
 	};
 
-	typedef sclxdhtml::core___<fSession> _core___;
+	typedef sclxdhtml::core___<rSession> _core___;
 
 	class core___
 	: public _core___
@@ -135,11 +135,11 @@ namespace core {
 	sclfrntnd::kernel___ &Kernel( void );
 
 	void About(
-		fSession &Session,
+		rSession &Session,
 		xml::writer_ &Writer );
 
 	void About(
-		core::fSession &Session,
+		core::rSession &Session,
 		xml::writer_ &Writer );
 }
 
