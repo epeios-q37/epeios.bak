@@ -93,12 +93,14 @@ namespace ogzrcd {
 	: public iRecord
 	{
 	private:
+		fRRow Source_;	// Row of the source record. If qNIL, it's a new record.
 		ogzdta::rRegularCallback Data_;
 		rColumns Columns_;
 		rFields Fields_;
 	public:
 		void reset( bso::fBool P = true )
 		{
+			Source_ = qNIL;
 			Fields_.reset( P );
 			Columns_.reset( P );
 			Data_.reset( P );
@@ -106,6 +108,7 @@ namespace ogzrcd {
 		qCDTOR( rRecordBuffer );
 		void Init( void )
 		{
+			Source_ = qNIL;
 			Data_.Init();
 			Columns_.Init();
 			Fields_.Init();

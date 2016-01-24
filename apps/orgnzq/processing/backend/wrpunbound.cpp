@@ -27,89 +27,9 @@ using namespace wrpunbound;
 
 using common::rStuff;
 
-enum message__ {
-	mTestMessage,
-
-	m_amount,
-	m_Undefined,
-	m_OK
-};
-
-#define CASE( i )	\
-	case m##i:\
-		Message = OGZINF_UC_AFFIX "_" #i;\
-		break
-
-static const char *GetRawMessage_( message__ MessageId )
-{
-	const char *Message = NULL;
-
-	switch ( MessageId ) {
-	CASE( TestMessage );
-	break;
-	default:
-		qRGnr();
-		break;
-	}
-
-	return Message;
-}
-
-#define DEC( name )\
-	static inline void name(\
-		fblbkd::backend___ &Backend,\
-		fblbkd::untyped_module &,\
-		fblbkd::index__,\
-		fblbkd::command__,\
-		fblbkd::request__ &Request,\
-		bso::bool__ &,\
-		void *UP )
-
 #define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
 #define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
 
-static void Report_(
-	message__ Message,
-	const fblbkd::backend___ &Backend,
-	fblbrq::request__ &Request )
-{
-qRH
-	str::string Translation;
-	TOL_CBUFFER___ Buffer;
-qRB
-	Translation.Init();
-
-	Backend.Locale().GetTranslation( GetRawMessage_( Message ), Backend.Language(), Translation );
-	Request.ReportRequestError( Translation.Convert( Buffer ) );
-qRR
-qRT
-qRE
-}
-
-#define REPORT( v )	Report_( ( v ), Backend, Request )
-
-inline static void Return_(
-	message__ &M,
-	message__ m )
-{
-	M = m;
-	qRReturn;
-}
-
-#define RETURN( message )\
-	Return_( Message, m##message )\
-
-static void Handle_(
-	message__ Message,
-	const fblbkd::backend___ &Backend,
-	fblbrq::request__ &Request )
-{
-	if ( Message != m_OK )
-		REPORT( Message );
-}
-
-#define HANDLE( f )	Handle_( ( f ), Backend, Request )
-
 #define DEC( name )\
 	static inline void name(\
 		fblbkd::backend___ &Backend,\
@@ -119,20 +39,6 @@ static void Handle_(
 		fblbkd::request__ &Request,\
 		bso::bool__ &,\
 		void *UP )
-
-DEC( Test )
-{
-	message__ Message = m_OK;
-qRH
-qRB
-	BACKEND;
-
-	Message = mTestMessage;
-qRR
-qRT
-	HANDLE( Message );
-qRE
-}
 
 namespace {
 	void GetTypes_(
@@ -209,10 +115,6 @@ void wrpunbound::Inform(
 			fblbkd::cString,	// Password.
 		fblbkd::cEnd,
 			fblbkd::cBoolean,	// Success.
-		fblbkd::cEnd );
-
-	Backend.Add( D( Test ),
-		fblbkd::cEnd,
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetTypes ),

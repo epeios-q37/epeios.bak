@@ -26,20 +26,24 @@
 
 namespace main {
 	BASE_ACD( Testing );
+	BASE_ACD( NewRecord );
 
 	class fActionCallbacks
 	{
 	public:
 		BASE_ACU( Testing );
+		BASE_ACU( NewRecord );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( Testing );
+			BASE_ACR( NewRecord );
 		}
 		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
 			BASE_ACI( Testing );
+			BASE_ACI( NewRecord );
 		}
 	};
 
