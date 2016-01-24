@@ -50,7 +50,7 @@
 	{\
 	protected:\
 		virtual void SCLXDHTMLLaunch(\
-			core::session___ &Session,\
+			core::fSession &Session,\
 			const char *Id ) override;\
 	}
 
@@ -69,34 +69,34 @@
 
 # define BASE_AC( name )\
 	void name::SCLXDHTMLLaunch(\
-		core::session___ &Session,\
+		core::fSession &Session,\
 		const char *Id )
 /**********/
 
 // Prdeclaration.
 
 namespace core {
-	class session___;
+	class fSession;
 }
 
 namespace base {
 	E_CDEF( char *, Name, BASE_NAME );
 
-	typedef sclxdhtml::action_callback__<core::session___> action_callback__;
+	typedef sclxdhtml::action_callback__<core::fSession> action_callback__;
 
 	void AddActionCallback(
 		const char *Name,
 		action_callback__ &Callback );
 
 	class action_helper_callback__
-	: public sclxdhtml::action_helper_callback__<core::session___>
+	: public sclxdhtml::action_helper_callback__<core::fSession>
 	{
 	protected:
 		virtual bso::bool__ SCLXHTMLOnBeforeAction(
-			core::session___ &Session,
+			core::fSession &Session,
 			const char *Id,
 			const char *Action ) override;
-		virtual bso::bool__ SCLXHTMLOnClose( core::session___ &Session ) override;
+		virtual bso::bool__ SCLXHTMLOnClose( core::fSession &Session ) override;
 	};
 
 	typedef xdhdws::corpus_callback__ _corpus_callback__;

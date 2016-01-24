@@ -90,7 +90,7 @@ namespace core {
 
 	typedef sclxdhtml::session___<instances_core___, frdfrntnd::frontend___, page__, p_Undefined> _session___;
 
-	class session___
+	class fSession
 	: public _session___
 	{
 	protected:
@@ -99,7 +99,7 @@ namespace core {
 			const char *Action ) override;
 		virtual void SCLXDHTMLRefresh( page__ Page ) override;
 	public:
-		E_CVDTOR( session___ );
+		qCVDTOR( fSession );
 	};
 
 	typedef sclxdhtml::core___<session___> _core___;

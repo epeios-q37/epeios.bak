@@ -95,7 +95,7 @@ namespace core {
 
 	typedef sclxdhtml::session___<instances_core___, frdfrntnd::frontend___, page__, p_Undefined> _session___;
 
-	class session___
+	class fSession
 	: public _session___
 	{
 	protected:
@@ -104,10 +104,10 @@ namespace core {
 			const char *Action ) override;
 		virtual void SCLXDHTMLRefresh( page__ Page ) override;
 	public:
-		E_CVDTOR( session___ );
+		qCVDTOR( fSession );
 	};
 
-	typedef sclxdhtml::core___<session___> _core___;
+	typedef sclxdhtml::core___<fSession> _core___;
 
 	class core___
 	: public _core___
@@ -135,11 +135,11 @@ namespace core {
 	sclfrntnd::kernel___ &Kernel( void );
 
 	void About(
-		session___ &Session,
+		fSession &Session,
 		xml::writer_ &Writer );
 
 	void About(
-		core::session___ &Session,
+		core::fSession &Session,
 		xml::writer_ &Writer );
 }
 

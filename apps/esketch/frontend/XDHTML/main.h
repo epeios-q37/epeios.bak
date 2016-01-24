@@ -53,7 +53,7 @@ namespace main {
 		}
 	};
 
-	void SetLayout( core::session___ &Session );
+	void SetLayout( core::fSession &Session );
 }
 
 #endif

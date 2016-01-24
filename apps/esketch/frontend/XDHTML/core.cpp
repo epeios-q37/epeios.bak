@@ -48,14 +48,14 @@ qRT
 qRE
 }
 
-bso::bool__ core::session___::XDHCMNLaunch(
+bso::bool__ core::fSession::XDHCMNLaunch(
 	const char *Id,
 	const char *Action )
 {
 	return Core.Launch( *this, Id, Action );
 }
 
-void core::session___::SCLXDHTMLRefresh( page__ Page )
+void core::fSession::SCLXDHTMLRefresh( page__ Page )
 {
 	switch ( Page ) {
 	case pProlog:
@@ -106,7 +106,7 @@ qRE
 }
 
 void core::About(
-	session___ &Session,
+	fSession &Session,
 	xml::writer_ &Writer )
 {
 qRH
