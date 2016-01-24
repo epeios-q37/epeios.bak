@@ -31,25 +31,25 @@ namespace frdinstc {
 	class _user___
 	{
 	private:
-		Q37_MRMDF( frdfrntnd::frontend___, F_,  Frontend_ );
+		qRVM( frdfrntnd::rFrontend, F_,  Frontend_ );
 		esketch::rStatics S_( void )
 		{
 			return F_().Statics;
 		}
-		esketch::rSKTMyObject _Object;
+		esketch::rSKTMyObject Object_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Frontend_ = NULL;
 
-			_Object.reset( P );
+			Object_.reset( P );
 		}
 		E_CVDTOR( _user___ );
-		void Init( frdfrntnd::frontend___ &Frontend )
+		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			Frontend_ = &Frontend;
 
-			_Object.Init( Frontend.MyObject );
+			Object_.Init( Frontend.MyObject );
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -57,7 +57,7 @@ namespace frdinstc {
 
 			Result.Init();
 
-			_Object.ToUC( String, Result );
+			Object_.ToUC( String, Result );
 
 			String = Result;
 
@@ -81,7 +81,7 @@ namespace frdinstc {
 			_TestButtonIsVisible = false;
 		}
 		E_CVDTOR( user___ );
-		void Init( frdfrntnd::frontend___ &Frontend )
+		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );

@@ -36,7 +36,7 @@ namespace frdfrntnd {
 
 	SCLF_IL( type, Type, id8, Id8 );
 
-	class frontend___
+	class rFrontend
 	: public _frontend___
 	{
 	private:
@@ -47,6 +47,7 @@ namespace frdfrntnd {
 		virtual void FBLFRDOnConnect( void ) override
 		{
 			Statics.Init( *this );
+			Record.Init( *this );
 			MyObject.Init( *this );
 
 			GetTypes_();
@@ -54,10 +55,12 @@ namespace frdfrntnd {
 		virtual void FBLFRDOnDisconnect( void ) override
 		{
 			Statics.reset();
+			Record.reset();
 			MyObject.reset();
 		}
 	public:
 		orgnzq::fStatics Statics;
+		orgnzq::fOGZRecordCommon Record;
 		orgnzq::fOGZMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
 		{
@@ -65,9 +68,10 @@ namespace frdfrntnd {
 			Types_.reset( P );
 
 			Statics.reset( P );
+			Record.reset();
 			MyObject.reset( P );
 		}
-		E_CVDTOR( frontend___ );
+		qCVDTOR( rFrontend );
 		void Init(
 			sclfrntnd::kernel___ &Kernel,
 			const char *Language,

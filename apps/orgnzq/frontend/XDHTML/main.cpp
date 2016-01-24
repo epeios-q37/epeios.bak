@@ -100,9 +100,3 @@ BASE_AC( main::fNewRecord )
 {
 	Session.AlertU( "New record !" );
 }
-
-BASE_AC( main::fTesting )
-{
-	Session.User.TestMessage();
-}
-

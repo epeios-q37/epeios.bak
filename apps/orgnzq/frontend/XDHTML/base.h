@@ -105,24 +105,24 @@ namespace base {
 	: public _corpus_callback__
 	{
 	private:
-		Q37_MRMDF( frdfrntnd::frontend___, _F,  _Frontend );
+		qRVM( frdfrntnd::rFrontend, F_,  Frontend_ );
 	protected:
 		virtual void XDHDWSDump( xml::writer_ &Writer ) override
 		{
-			if ( _F().IsConnected() )
-				_F().DumpCorpus( Writer );
+			if ( F_().IsConnected() )
+				F_().DumpCorpus( Writer );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_corpus_callback__::reset( P );
-			_Frontend = NULL;
+			Frontend_ = NULL;
 		}
 		E_CVDTOR( corpus_callback__ );
-		void Init( frdfrntnd::frontend___ &Frontend )
+		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			_corpus_callback__::Init();
-			_Frontend = &Frontend;
+			Frontend_ = &Frontend;
 		}
 	};
 
@@ -143,7 +143,7 @@ namespace base {
 		void Init(
 			const char *View,
 			str::string_ &Target,
-			frdfrntnd::frontend___ &Frontend )
+			frdfrntnd::rFrontend &Frontend )
 		{
 			_Callback.Init( Frontend );
 			rack::Init( View, Target, _Callback );

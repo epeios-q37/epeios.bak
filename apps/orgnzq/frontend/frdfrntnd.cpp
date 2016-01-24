@@ -27,7 +27,7 @@ using namespace fbltyp;
 
 using namespace frdfrntnd;
 
-void frdfrntnd::frontend___::GetTypes_( void )
+void frdfrntnd::rFrontend::GetTypes_( void )
 {
 qRH
 	fbltyp::strings Labels;
@@ -45,7 +45,7 @@ qRE
 }
 
 
-void  frdfrntnd::frontend___::DumpTypes_( xml::writer_ &Writer )
+void  frdfrntnd::rFrontend::DumpTypes_( xml::writer_ &Writer )
 {
-	sclfrntnd::Dump<type__>(Types_, "Fields", "Field", Writer );
+	sclfrntnd::Dump<type__>( Types_, "Fields", "Field", Writer );
 }

@@ -31,37 +31,28 @@ namespace frdinstc {
 	class _user___
 	{
 	private:
-		Q37_MRMDF( frdfrntnd::frontend___, F_,  Frontend_ );
+		qRVM( frdfrntnd::rFrontend, F_,  Frontend_ );
 		orgnzq::fStatics &S_( void )
 		{
 			return F_().Statics;
 		}
-		orgnzq::rOGZMyObject _Object;
+		orgnzq::rOGZRecord Record_;
+		orgnzq::rOGZMyObject Object_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Frontend_ = NULL;
 
-			_Object.reset( P );
+			Record_.reset( P );
+			Object_.reset( P );
 		}
 		E_CVDTOR( _user___ );
-		void Init( frdfrntnd::frontend___ &Frontend )
+		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			Frontend_ = &Frontend;
 
-			_Object.Init( Frontend.MyObject );
-		}
-		str::string_ &ToUpper( str::string_ &String )
-		{
-			str::string Result;
-
-			Result.Init();
-
-			_Object.ToUC( String, Result );
-
-			String = Result;
-
-			return String;
+			Record_.Init( Frontend.Record );
+			Object_.Init( Frontend.MyObject );
 		}
 		bso::fBool Login(
 			const str::vString &Username,
@@ -72,10 +63,6 @@ namespace frdinstc {
 			S_().OGZLogin( Username, Password, Success );
 
 			return Success;
-		}
-		void TestMessage( void )
-		{
-			S_().OGZTest();
 		}
 	};
 
@@ -89,7 +76,7 @@ namespace frdinstc {
 			Core_.reset( P );
 		}
 		E_CVDTOR( user___ );
-		void Init( frdfrntnd::frontend___ &Frontend )
+		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
@@ -99,14 +86,6 @@ namespace frdinstc {
 			const str::vString &Password )
 		{
 			return Core_.Login( Username, Password );
-		}
-		str::string_ &ToUpper( str::string_ &String )
-		{
-			return Core_.ToUpper( String );
-		}
-		void TestMessage( void )
-		{
-			Core_.TestMessage();
 		}
 	};
 }

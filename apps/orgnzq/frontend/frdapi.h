@@ -25,7 +25,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[3];
+		fblfrd::command__ _Commands[2];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -41,7 +41,6 @@ namespace orgnzq {
 
 			fblfrd::id8__ Parameters[] = {
 				21, 21, 0, 2, 
-				0, 
 				0, 22, 9, 
 			};
 
@@ -56,19 +55,14 @@ namespace orgnzq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "OGZTest";;
-			CommandDetail.Casts.Append( Parameters + 4, 1 );
-			CommandsDetails.Append( CommandDetail );
-
-			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetTypes";;
-			CommandDetail.Casts.Append( Parameters + 5, 3 );
+			CommandDetail.Casts.Append( Parameters + 4, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 3, _Commands );
+			Commands.Recall( 0, 2, _Commands );
 		}
 		fblovl::reply__ OGZLogin( 
 			const fblfrd::string_ &In1,
@@ -85,20 +79,11 @@ namespace orgnzq {
 
 			return Frontend().Handle();
 		}
-		fblovl::reply__ OGZTest( void ) const
-		{
-			Frontend().PushHeader( _ID, Commands()[1] );
-
-			Frontend().EndOfInParameters();
-
-
-			return Frontend().Handle();
-		}
 		fblovl::reply__ OGZGetTypes( 
 			fblfrd::strings_ &Out1,
 			fblfrd::id8s_ &Out2 ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[2] );
+			Frontend().PushHeader( _ID, Commands()[1] );
 
 			Frontend().EndOfInParameters();
 
@@ -118,7 +103,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[2];
+		fblfrd::command__ _Commands[1];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -133,8 +118,7 @@ namespace orgnzq {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
-				21, 0, 21, 
-				0, 
+				17, 0, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -144,19 +128,14 @@ namespace orgnzq {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "ToUC";;
-			CommandDetail.Casts.Append( Parameters + 0, 3 );
-			CommandsDetails.Append( CommandDetail );
-
-			CommandDetail.Init();
-			CommandDetail.Name = "Test";;
-			CommandDetail.Casts.Append( Parameters + 3, 1 );
+			CommandDetail.Name = "EditRecord";;
+			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 2, _Commands );
+			Commands.Recall( 0, 1, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -177,7 +156,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[2];
+		fblfrd::command__ _Commands[1];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -192,7 +171,6 @@ namespace orgnzq {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
-				21, 0, 21, 
 				0, 
 			};
 
@@ -203,19 +181,14 @@ namespace orgnzq {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "ToUC";;
-			CommandDetail.Casts.Append( Parameters + 0, 3 );
-			CommandsDetails.Append( CommandDetail );
-
-			CommandDetail.Init();
 			CommandDetail.Name = "Test";;
-			CommandDetail.Casts.Append( Parameters + 3, 1 );
+			CommandDetail.Casts.Append( Parameters + 0, 1 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 2, _Commands );
+			Commands.Recall( 0, 1, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -264,22 +237,11 @@ namespace orgnzq {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ ToUC( 
-			const fblfrd::string_ &In1,
-			fblfrd::string_ &Out1 ) const
+		fblovl::reply__ EditRecord( 
+			const fblfrd::id__ &In1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
-			Common_->Frontend().StringIn( In1 );
-
-			Common_->Frontend().EndOfInParameters();
-
-			Common_->Frontend().StringOut( Out1 );
-
-			return Common_->Frontend().Handle();
-		}
-		fblovl::reply__ Test( void ) const
-		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
+			Common_->Frontend().IdIn( In1 );
 
 			Common_->Frontend().EndOfInParameters();
 
@@ -321,22 +283,9 @@ namespace orgnzq {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ ToUC( 
-			const fblfrd::string_ &In1,
-			fblfrd::string_ &Out1 ) const
-		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
-			Common_->Frontend().StringIn( In1 );
-
-			Common_->Frontend().EndOfInParameters();
-
-			Common_->Frontend().StringOut( Out1 );
-
-			return Common_->Frontend().Handle();
-		}
 		fblovl::reply__ Test( void ) const
 		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
 
 			Common_->Frontend().EndOfInParameters();
 

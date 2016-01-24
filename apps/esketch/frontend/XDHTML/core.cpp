@@ -38,7 +38,7 @@ sclfrntnd::kernel___ &core::Kernel( void )
 	return Kernel_;
 }
 
-void core::instances_core___::Init( frdfrntnd::frontend___ &Frontend )
+void core::instances_core___::Init( frdfrntnd::rFrontend &Frontend )
 {
 qRH
 qRB

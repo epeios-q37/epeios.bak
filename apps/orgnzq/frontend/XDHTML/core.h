@@ -85,10 +85,10 @@ namespace core {
 			User.reset( P );
 		}
 		E_CVDTOR( instances_core___ );
-		void Init( frdfrntnd::frontend___ &Frontend );
+		void Init( frdfrntnd::rFrontend &Frontend );
 	};
 
-	typedef sclxdhtml::rSession<instances_core___, frdfrntnd::frontend___, page__, p_Undefined> rSession_;
+	typedef sclxdhtml::rSession<instances_core___, frdfrntnd::rFrontend, page__, p_Undefined> rSession_;
 
 	class rSession
 	: public rSession_

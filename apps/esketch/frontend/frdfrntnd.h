@@ -34,7 +34,7 @@
 namespace frdfrntnd {
 	typedef sclfrntnd::frontend___ _frontend___;
 
-	class frontend___
+	class rFrontend
 	: public _frontend___
 	{
 	protected:
@@ -57,7 +57,7 @@ namespace frdfrntnd {
 			Statics.reset( P );
 			MyObject.reset( P );
 		}
-		E_CVDTOR( frontend___ );
+		qCVDTOR( rFrontend );
 		void Init(
 			sclfrntnd::kernel___ &Kernel,
 			const char *Language,
