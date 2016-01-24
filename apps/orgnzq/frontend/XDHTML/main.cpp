@@ -98,5 +98,5 @@ qRE
 
 BASE_AC( main::fNewRecord )
 {
-	Session.AlertU( "New record !" );
+	Session.User.CreateRecord();
 }

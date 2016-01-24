@@ -64,6 +64,10 @@ namespace frdinstc {
 
 			return Success;
 		}
+		void EditRecord( fbltyp::fId Record )	// if == 'UndefinedId', we create empty record.
+		{
+			Record_.EditRecord( Record );
+		}
 	};
 
 	class user___
@@ -86,6 +90,10 @@ namespace frdinstc {
 			const str::vString &Password )
 		{
 			return Core_.Login( Username, Password );
+		}
+		void CreateRecord( void )
+		{
+			Core_.EditRecord( 0 );
 		}
 	};
 }

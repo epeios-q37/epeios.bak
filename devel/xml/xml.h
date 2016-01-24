@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// eXtensible Markup Language
+
 #ifndef XML__INC
 # define XML__INC
 
@@ -26,8 +28,6 @@
 #  define XML_DBG
 # endif
 
-// eXtensible Markup Language
-
 #include "err.h"
 #include "flw.h"
 #include "str.h"
@@ -36,10 +36,304 @@
 #include "ctn.h"
 #include "cpe.h"
 
+/***************/
+/***** New *****/
+/***************/
+
 // Prdclaration.
 namespace lcl {
 	class meaning_;
 }
+
+# define XML_UNDEFINED_MARK	((xml::mark__)qNIL)
+
+namespace xml {
+	typedef str::string_	name_;
+	typedef str::string		name;
+
+	typedef str::string_	value_;
+	typedef str::string		value;
+
+	// Output layout.
+	qENUM( Layout ) {
+		lCompact,	// All of one line.
+		oCompact = lCompact,	// Old
+		lIndent,	// Several line with indentation.
+		oIndent = lIndent,	// Old
+		l_amount,
+		l_Undefined,
+		o_Undefined = l_Undefined	// Old
+	};
+
+	// Special characters handling ('<', '&', ...).
+	qENUM( SpecialCharHandling ) {
+		schReplace,	// Replaced with their entities.
+		schKeep,	// Not replaced, except the '"' in the attribute values.
+		sch_amount,
+		sch_Undefined,
+		sch_Default = schReplace
+	};
+
+	enum _encoding__ {
+		eISO_8859_1,
+		eUTF_8,
+		e_amount,
+		e_Undefined,
+		e_Default = eUTF_8,
+		e_None,
+	};
+
+	inline const char *Label( _encoding__ Encoding )
+	{
+		switch ( Encoding ) {
+		case eISO_8859_1:
+			return "iso-8859-1";
+			break;
+		case eUTF_8:
+			return "utf-8";
+			break;
+		case e_None:
+			return NULL;
+			break;
+		default:qRFwk();
+			break;
+		}
+		return NULL;	// Pour viter un 'Warning'.
+	}
+
+	class fEncoding
+	{
+	private:
+		const char *_EncodingString;
+	public:
+		fEncoding( void )
+		{
+			_EncodingString = Label( e_Default );
+		}
+		fEncoding( _encoding__ Encoding )
+		{
+			_EncodingString = Label( Encoding );
+		}
+		fEncoding( const char *Encoding )
+		{
+			_EncodingString = Encoding;
+		}
+		const char *EncodingString( void ) const
+		{
+			return _EncodingString;
+		}
+	};
+
+	E_TMIMIC__( stk::row__, mark__ );
+
+	inline bso::bool__ WriteXMLHeader(
+		txf::text_oflow__ &OFlow,
+		const char *Encoding )
+	{
+		if ( Encoding != NULL ) {
+			OFlow << "<?xml version=\"1.0\" encoding=\"" << Encoding << "\"?>";
+			return true;
+		} else
+			return false;
+	}
+
+	inline bso::bool__ WriteXMLHeader(
+		txf::text_oflow__ &OFlow,
+		_encoding__ Encoding )
+	{
+		return WriteXMLHeader( OFlow, Label( Encoding ) );
+	}
+
+
+	inline bso::bool__ WriteXMLHeader(
+		txf::text_oflow__ &OFlow,
+		fEncoding Encoding )
+	{
+		return WriteXMLHeader( OFlow, Encoding.EncodingString() );
+	}
+
+	class vWriter
+	{
+	private:
+		void _CloseAllTags( void );
+		void _Indent( bso::size__ Amount ) const;
+		void _Commit( void )
+		{
+			if ( S_.AlwaysCommit )
+				S_.Flow->Commit();
+		}
+	public:
+		struct s {
+			stk::E_MCSTACK_( name_ )::s Tags;
+			txf::text_oflow__ *Flow;
+			bso::bool__ TagNameInProgress;
+			bso::bool__ TagValueInProgress;
+			eLayout Outfit;
+			eSpecialCharHandling SpecialCharHandling;
+			bso::bool__ Ignore;
+			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
+		} &S_;
+		stk::E_MCSTACK_( name_ ) Tags;
+		vWriter( s &S )
+		: S_( S ),
+		  Tags( S.Tags )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			if ( P )
+				_CloseAllTags();
+
+			S_.TagNameInProgress = false;
+			S_.TagValueInProgress = false;
+
+			Tags.reset( P );
+			S_.Flow = NULL;
+			S_.Outfit = o_Undefined;
+			S_.SpecialCharHandling = sch_Undefined;
+			S_.Ignore = false;
+			S_.AlwaysCommit = false;
+		}
+		void plug( qAS_ &AS )
+		{
+			Tags.plug( AS );
+		}
+		vWriter &operator =( const vWriter &W )
+		{
+			Tags = W.Tags;
+
+			S_.TagNameInProgress = W.S_.TagNameInProgress;
+			S_.TagValueInProgress = W.S_.TagValueInProgress;
+			S_.Flow = W.S_.Flow;
+			S_.Outfit = W.S_.Outfit;
+			S_.SpecialCharHandling = W.S_.SpecialCharHandling;
+			S_.Ignore = W.S_.Ignore;
+			S_.AlwaysCommit = W.S_.AlwaysCommit;
+
+			return *this;
+		}
+		void Init(
+			txf::text_oflow__ &Flow,
+			eLayout Outfit,
+			fEncoding Encoding,
+			eSpecialCharHandling SpecialCharHandling = sch_Default )
+		{
+			reset();
+
+			Tags.Init();
+			S_.Flow = &Flow;
+			S_.Outfit = Outfit;
+			S_.SpecialCharHandling = SpecialCharHandling;
+
+			if ( WriteXMLHeader( Flow, Encoding ) )
+				switch ( Outfit ) {
+				case oIndent:
+					Flow << txf::nl;
+					break;
+				case oCompact:
+					break;
+				default:
+					qRFwk();
+					break;
+			}
+		}
+		mark__ GetMark( void ) const
+		{
+			return Tags.Last();
+		}
+		mark__ PushTag( const name_ &Name )	// Valeur retourne : voir 'PopTag(...)'.
+		{
+			mark__ Mark = XML_UNDEFINED_MARK;
+
+			if ( S_.TagNameInProgress ) {
+				*S_.Flow << '>';
+
+				if ( S_.Outfit == oIndent )
+					*S_.Flow << txf::nl;
+			}
+
+			if ( S_.Outfit == oIndent )
+				_Indent( Tags.Amount() );
+
+			*S_.Flow << '<' << Name;
+			Mark = Tags.Push( Name );
+			S_.TagNameInProgress = true;
+			S_.TagValueInProgress = false;
+
+			_Commit();
+
+			return Mark;
+		}
+		mark__ PushTag( const char *Name )	// Valeur retourne : voir 'PopTag(...)'.
+		{
+			return PushTag( name( Name ) );
+		}
+		void PutValue( const value_ &Value );
+		void PutValue( const char *Value )
+		{
+			PutValue( value( Value ) );
+		}
+		void PutValue(
+			const value_ &Value,
+			const name_ &Name )
+		{
+			PushTag( Name );
+
+			PutValue( Value );
+
+			PopTag();
+		}
+		void PutValue(
+			const value_ &Value,
+			const char *Name )
+		{
+			PutValue( Value, name( Name ) );
+		}
+		void PutValue(
+			const char *Value,
+			const char *Name )
+		{
+			PutValue( value( Value ), name( Name ) );
+		}
+		void PutAttribute(
+			const name_ &Name,
+			const value_ &Value );
+		void PutAttribute(
+			const char *Name,
+			const char *Value )
+		{
+			PutAttribute( name( Name ), value( Value ) );
+		}
+		void PutAttribute(
+			const char *Name,
+			const value_ &Value )
+		{
+			PutAttribute( name( Name ), Value );
+		}
+		void PutCData( const str::string_ &Value );
+		void PutCData( const char *Value )
+		{
+			PutCData( value( Value ) ) ;
+		}
+		mark__ PopTag( mark__ Mark = XML_UNDEFINED_MARK );	// 'Mark', si utilis, est retourn par un 'Push(...)' et permet de contrler si l'on se retrouve bien au mme niveau que le 'Push(...)' en question.
+		void Rewind( mark__ Mark );	// Dsemile l'arbre jusqu'au niveau de 'Mark'.
+		txf::text_oflow__ &GetFlow( void )
+		{
+			return *S_.Flow;
+		}
+		void AlwayCommit( bso::bool__ Value = true )
+		{
+			S_.AlwaysCommit = Value;
+		}
+		qRODISCLOSEv( eLayout, Outfit )
+		qRODISCLOSEv( eSpecialCharHandling, SpecialCharHandling )
+	};
+
+	qW( Writer )
+}
+
+/***************/
+/***** Old *****/
+/***************/
 
 namespace xml {
 	using xtf::pos__;
@@ -465,285 +759,13 @@ namespace xml {
 		TransformUsingEntities( Target, DelimiterOnly );
 	}
 
+	typedef eLayout outfit__;
 
-	typedef str::string_	name_;
-	typedef str::string		name;
+	typedef eSpecialCharHandling special_charèhandling__;
 
-	typedef str::string_	value_;
-	typedef str::string		value;
+	typedef fEncoding encoding__;
 
-	// Mise en forme de la sortie.
-	enum outfit__ {
-		oCompact,	// Tout sur une seule ligne.
-		oIndent,	// Indent.
-		o_amount,
-		o_Undefined
-	};	// 
-
-	// Traitement des caractres spciaux ('<', '&', ...).
-	enum special_char_handling__ {
-		schReplace,	// Sont remplacs par les 'entity's ddis.
-		schKeep,	// Ne sont pas remplacs. Cependant, les '"' sont tout de mme remplac per leur 'entity' correspondante dans les valeurs d'attributs.
-		sch_amount,
-		sch_Undefined,
-		sch_Default = schReplace
-	};
-
-	enum _encoding__ {
-		eISO_8859_1,
-		eUTF_8,
-		e_amount,
-		e_Undefined,
-		e_Default = eUTF_8,
-		e_None,
-	};
-
-	inline const char *Label( _encoding__ Encoding )
-	{
-		switch ( Encoding ) {
-		case eISO_8859_1:
-			return "iso-8859-1";
-			break;
-		case eUTF_8:
-			return "utf-8";
-			break;
-		case e_None:
-			return NULL;
-			break;
-		default:qRFwk();
-			break;
-		}
-		return NULL;	// Pour viter un 'Warning'.
-	}
-
-	class encoding__
-	{
-	private:
-		const char *_EncodingString;
-	public:
-		encoding__( void )
-		{
-			_EncodingString = Label( e_Default );
-		}
-		encoding__( _encoding__ Encoding )
-		{
-			_EncodingString = Label( Encoding );
-		}
-		encoding__( const char *Encoding )
-		{
-			_EncodingString = Encoding;
-		}
-		const char *EncodingString( void ) const
-		{
-			return _EncodingString;
-		}
-	};
-
-	inline bso::bool__ WriteXMLHeader(
-		txf::text_oflow__ &OFlow,
-		const char *Encoding )
-	{
-		if ( Encoding != NULL ) {
-			OFlow << "<?xml version=\"1.0\" encoding=\"" << Encoding << "\"?>";
-			return true;
-		} else
-			return false;
-	}
-
-	inline bso::bool__ WriteXMLHeader(
-		txf::text_oflow__ &OFlow,
-		_encoding__ Encoding )
-	{
-		return WriteXMLHeader( OFlow, Label( Encoding ) );
-	}
-
-	inline bso::bool__ WriteXMLHeader(
-		txf::text_oflow__ &OFlow,
-		encoding__ Encoding )
-	{
-		return WriteXMLHeader( OFlow, Encoding.EncodingString() );
-	}
-
-	E_TMIMIC__( stk::row__, mark__ );
-
-# define XML_UNDEFINED_MARK	((xml::mark__)qNIL)
-
-
-	class writer_
-	{
-	private:
-		void _CloseAllTags( void );
-		void _Indent( bso::size__ Amount ) const;
-		void _Commit( void )
-		{
-			if ( S_.AlwaysCommit )
-				S_.Flow->Commit();
-		}
-	public:
-		struct s {
-			stk::E_MCSTACK_( name_ )::s Tags;
-			txf::text_oflow__ *Flow;
-			bso::bool__ TagNameInProgress;
-			bso::bool__ TagValueInProgress;
-			outfit__ Outfit;
-			special_char_handling__ SpecialCharHandling;
-			bso::bool__ Ignore;
-			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
-		} &S_;
-		stk::E_MCSTACK_( name_ ) Tags;
-		writer_( s &S )
-		: S_( S ),
-		  Tags( S.Tags )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			if ( P )
-				_CloseAllTags();
-
-			S_.TagNameInProgress = false;
-			S_.TagValueInProgress = false;
-
-			Tags.reset( P );
-			S_.Flow = NULL;
-			S_.Outfit = o_Undefined;
-			S_.SpecialCharHandling = sch_Undefined;
-			S_.Ignore = false;
-			S_.AlwaysCommit = false;
-		}
-		void plug( qAS_ &AS )
-		{
-			Tags.plug( AS );
-		}
-		writer_ &operator =( const writer_ &W )
-		{
-			Tags = W.Tags;
-
-			S_.TagNameInProgress = W.S_.TagNameInProgress;
-			S_.TagValueInProgress = W.S_.TagValueInProgress;
-			S_.Flow = W.S_.Flow;
-			S_.Outfit = W.S_.Outfit;
-			S_.SpecialCharHandling = W.S_.SpecialCharHandling;
-			S_.Ignore = W.S_.Ignore;
-			S_.AlwaysCommit = W.S_.AlwaysCommit;
-
-			return *this;
-		}
-		void Init(
-			txf::text_oflow__ &Flow,
-			outfit__ Outfit,
-			encoding__ Encoding,
-			special_char_handling__ SpecialCharHandling = sch_Default )
-		{
-			reset();
-
-			Tags.Init();
-			S_.Flow = &Flow;
-			S_.Outfit = Outfit;
-			S_.SpecialCharHandling = SpecialCharHandling;
-
-			if ( WriteXMLHeader( Flow, Encoding ) )
-				switch ( Outfit ) {
-				case oIndent:
-					Flow << txf::nl;
-					break;
-				case oCompact:
-					break;
-				default:
-					qRFwk();
-					break;
-			}
-		}
-		mark__ GetMark( void ) const
-		{
-			return Tags.Last();
-		}
-		mark__ PushTag( const name_ &Name )	// Valeur retourne : voir 'PopTag(...)'.
-		{
-			mark__ Mark = XML_UNDEFINED_MARK;
-
-			if ( S_.TagNameInProgress ) {
-				*S_.Flow << '>';
-
-				if ( S_.Outfit == oIndent )
-					*S_.Flow << txf::nl;
-			}
-
-			if ( S_.Outfit == oIndent )
-				_Indent( Tags.Amount() );
-
-			*S_.Flow << '<' << Name;
-			Mark = Tags.Push( Name );
-			S_.TagNameInProgress = true;
-			S_.TagValueInProgress = false;
-
-			_Commit();
-
-			return Mark;
-		}
-		mark__ PushTag( const char *Name )	// Valeur retourne : voir 'PopTag(...)'.
-		{
-			return PushTag( name( Name ) );
-		}
-		void PutValue( const value_ &Value );
-		void PutValue( const char *Value )
-		{
-			PutValue( value( Value ) );
-		}
-		void PutValue(
-			const value_ &Value,
-			const name_ &Name )
-		{
-			PushTag( Name );
-
-			PutValue( Value );
-
-			PopTag();
-		}
-		void PutValue(
-			const value_ &Value,
-			const char *Name )
-		{
-			PutValue( Value, name( Name ) );
-		}
-		void PutValue(
-			const char *Value,
-			const char *Name )
-		{
-			PutValue( value( Value ), name( Name ) );
-		}
-		void PutAttribute(
-			const name_ &Name,
-			const value_ &Value );
-		void PutAttribute(
-			const char *Name,
-			const char *Value )
-		{
-			PutAttribute( name( Name ), value( Value ) );
-		}
-		void PutAttribute(
-			const char *Name,
-			const value_ &Value )
-		{
-			PutAttribute( name( Name ), Value );
-		}
-		void PutCData( const str::string_ &Value );
-		void PutCData( const char *Value )
-		{
-			PutCData( value( Value ) ) ;
-		}
-		mark__ PopTag( mark__ Mark = XML_UNDEFINED_MARK );	// 'Mark', si utilis, est retourn par un 'Push(...)' et permet de contrler si l'on se retrouve bien au mme niveau que le 'Push(...)' en question.
-		void Rewind( mark__ Mark );	// Dsemile l'arbre jusqu'au niveau de 'Mark'.
-		txf::text_oflow__ &GetFlow( void )
-		{
-			return *S_.Flow;
-		}
-		void AlwayCommit( bso::bool__ Value = true )
-		{
-			S_.AlwaysCommit = Value;
-		}
-		E_RODISCLOSE_( outfit__, Outfit )
-		E_RODISCLOSE_( special_char_handling__, SpecialCharHandling )
-	};
+	typedef vWriter writer_;
 
 	E_AUTO( writer )
 

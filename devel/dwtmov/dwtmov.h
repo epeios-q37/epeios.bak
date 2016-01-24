@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// Directory WaTcher MOVings
+
 #ifndef DWTMOV__INC
 # define DWTMOV__INC
 
@@ -26,14 +28,107 @@
 #  define DWTMOV_DBG
 # endif
 
-// Directory WaTcher MOVings
-
 # include "dwtbsc.h"
 # include "dwtdct.h"
 
 # include "err.h"
 # include "str.h"
 # include "xml.h"
+
+/*************/
+/**** New ****/
+/*************/
+
+namespace dwtmov {
+	using dwtbsc::nrow__;
+
+	struct fMove
+	{
+		nrow__
+			Old,		// Nom de l'ancien chemin/nom courant du répertoire.
+			New;		// Nom du nouveau chemin/nom du répertoire.
+		void reset( bso::bool__ = true )
+		{
+			Old = New = qNIL;
+		}
+		qCDTOR( fMove );
+		void Init( void )
+		{
+			Old = New = qNIL;
+		}
+	};
+
+	qROW( MRow );	// Moving row.
+
+	typedef bch::qBUNCHvl( fMRow ) vMRows;
+	qW( MRows );
+
+	typedef bch::qBUNCHv( fMove, fMRow ) vMoves;
+	qW( Moves );
+
+	using dwtbsc::name_;
+	using dwtbsc::names_;
+
+	class vMovings
+	{
+	public:
+		struct s {
+			vMoves::s Moves;
+			names_::s Names;
+		};
+		vMoves Moves;
+		names_ Names;
+		vMovings( s &S )
+		: Moves( S.Moves ),
+		  Names( S.Names )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			Moves.reset( P );
+			Names.reset( P );
+		}
+		void plug( qAS_ &AS )
+		{
+			Moves.plug( AS );
+			Names.plug( AS );
+		}
+		vMovings &operator =(const vMovings &M)
+		{
+			Moves = M.Moves;
+			Names = M.Names;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Moves.Init();
+			Names.Init();
+		}
+		E_NAVt( Moves., fMRow );
+		void GetMove(
+			fMRow Row,
+			str::string_ &Old,
+			str::string_ &New ) const
+		{
+			ctn::E_CMITEMt( name_, nrow__ ) Name;
+
+			Name.Init( Names );
+
+			if ( Moves( Row ).Old != qNIL )
+				Old = Name( Moves( Row ).Old );
+
+			if ( Moves( Row ).New != qNIL )
+				New = Name( Moves( Row ).New );
+		}
+	};
+
+	qW( Movings );
+}
+
+/*************/
+/**** Old ****/
+/*************/
+
 
 namespace dwtmov {
 	// XML flow content version.
@@ -49,85 +144,16 @@ namespace dwtmov {
 
 	version__ GetVersion( const str::string_ &Pattern );
 
-	using dwtbsc::name_;
-	using dwtbsc::nrow__;
-	using dwtbsc::names_;
-
 	using dwtbsc::depth__;
 
-	struct move__
-	{
-		nrow__
-			Old,		// Nom de l'ancien chemin/nom courant du répertoire.
-			New;		// Nom du nouveau chemin/nom du répertoire.
-		void reset( bso::bool__ = true )
-		{
-			Old = New = qNIL;
-		}
-		E_CDTOR( move__ );
-		void Init( void )
-		{
-			Old = New = qNIL;
-		}
-	};
+	typedef fMove move__;
 
-	E_ROW( mrow__ );	// Moving row.
+	typedef fMRow mrow__;
 
-	typedef bch::E_BUNCHt_( move__, mrow__ ) moves_;
+	typedef vMoves moves_;
 	E_AUTO( moves );
 
-	class movings_
-	{
-	public:
-		struct s {
-			moves_::s Moves;
-			names_::s Names;
-		};
-		moves_ Moves;
-		names_ Names;
-		movings_( s &S )
-		: Moves( S.Moves ),
-		  Names( S.Names )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			Moves.reset( P );
-			Names.reset( P );
-		}
-		void plug( qAS_ &AS )
-		{
-			Moves.plug( AS );
-			Names.plug( AS );
-		}
-		movings_ &operator =(const movings_ &M)
-		{
-			Moves = M.Moves;
-			Names = M.Names;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			Moves.Init();
-			Names.Init();
-		}
-		E_NAVt( Moves., mrow__ );
-		void GetMove(
-			mrow__ Row,
-			str::string_ &Old,
-			str::string_ &New ) const
-		{
-			ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-			Name.Init( Names );
-
-			if ( Moves( Row ).Old != qNIL )
-				Old = Name( Moves( Row ).Old );
-
-			if ( Moves( Row ).New != qNIL )
-				New = Name( Moves( Row ).New );
-		}
-	};
+	typedef vMovings movings_;
 
 	E_AUTO( movings );
 
@@ -151,7 +177,8 @@ namespace dwtmov {
 		const movings_ &Movings,
 		txf::text_oflow__ &Flow );
 
-	typedef bch::E_BUNCH_( mrow__ ) mrows_;
+
+	typedef vMRows mrows_;
 	E_AUTO( mrows );
 
 	class callback__

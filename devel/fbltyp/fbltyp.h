@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+//D Frontend/Backend Layout TYPes 
+
 #ifndef FBLTYP__INC
 # define FBLTYP__INC
 
@@ -26,12 +28,20 @@
 #  define FBLTYP_DBG
 # endif
 
-//D Frontend/Backend Layout TYPes 
-
 #include "err.h"
 #include "flw.h"
 #include "str.h"
 #include "bitbch.h"
+
+/***************/
+/***** New *****/
+/***************/
+
+// For simplification, some 'New' are at end of file.
+
+/***************/
+/***** Old *****/
+/***************/
 
 #ifdef CPE_C_MSC
 #	undef GetObject
@@ -1044,5 +1054,12 @@ namespace fbltyp {
 
 }
 
-/*$END$*/
+/***************/
+/***** New *****/
+/***************/
+
+namespace fbltyp {
+	typedef id__ fId;
+}
+
 #endif
