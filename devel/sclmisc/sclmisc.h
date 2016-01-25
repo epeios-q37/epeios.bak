@@ -116,6 +116,8 @@ namespace sclmisc {
 		return Initialize( qRRor, SCLError, CIO, SuggestedDirectory, &Locale );
 	}
 
+	void DumpRegistriesIfRequired( void );
+
 	void EraseProjectRegistry( void );
 
 	enum project_type__ {

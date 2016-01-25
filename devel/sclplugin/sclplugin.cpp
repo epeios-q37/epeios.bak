@@ -59,10 +59,11 @@ _callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 namespace {
 	E_CDEF( char, EscapeChar, '\\' );
 
-	void HandleArguments_( const str::string_ &MergedArguments )
+	void HandleArguments_(
+		const str::string_ &MergedArguments,
+		str::vStrings &SplittedArguments	)
 	{
 	qRH
-		str::strings Arguments;
 		str::string Argument;
 		sdr::row__ Row = qNIL;
 		bso::bool__ Escape = false;
@@ -70,7 +71,6 @@ namespace {
 	qRB
 		Row = MergedArguments.First();
 
-		Arguments.Init();
 		Argument.Init();
 
 		while ( Row != qNIL ) {
@@ -89,7 +89,7 @@ namespace {
 				Escape = false;
 			} else if ( C == ' ' ) {
 				if ( Argument.Amount() != 0 )
-					Arguments.Append( Argument );
+					SplittedArguments.Append( Argument );
 
 				Argument.Init();
 			} else
@@ -99,12 +99,28 @@ namespace {
 		}
 
 		if ( Argument.Amount() != 0 )
-			Arguments.Append( Argument );
+			SplittedArguments.Append( Argument );
 
-		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 	qRR
 	qRT
 	qRE
+	}
+
+	void PreInitialize_(
+		const plgncore::data__ *Data,
+		str::vStrings &Arguments )
+	{
+	if ( Data == NULL )
+		qRFwk();
+
+	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
+		qRFwk();
+
+	if ( Data->ControlValue != plgncore::data__::Control() )
+		qRFwk();
+
+	if ( Data->Arguments->Amount() != 0 )
+		HandleArguments_( *Data->Arguments, Arguments );
 	}
 }
 
@@ -112,21 +128,23 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	const plgncore::data__ *Data,
 	const rgstry::entry__ &Configuration )
 {
-	if ( Data == NULL )
-		qRFwk();
+qRH
+	str::iStrings Arguments;
+qRB
+	Arguments.Init();
 
-	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
-		qRFwk();
-
-	if ( Data->ControlValue != plgncore::data__::Control() )
-		qRFwk();
+	PreInitialize_( Data, Arguments );
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Configuration );
 
-	if ( Data->Arguments->Amount() != 0 )
-		HandleArguments_( *Data->Arguments );
+	if ( Arguments.Amount() != 0 )
+		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
+	sclmisc::DumpRegistriesIfRequired();
+qRR
+qRT
+qRE
 }
 
 void sclplugin::callback__::PLGNCOREInitialize(
@@ -134,21 +152,23 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	const fnm::name___ &Directory,
 	str::string_ &Locale )
 {
-	if ( Data == NULL )
-		qRFwk();
+qRH
+	str::iStrings Arguments;
+qRB
+	Arguments.Init();
 
-	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
-		qRFwk();
-
-	if ( Data->ControlValue != plgncore::data__::Control() )
-		qRFwk();
+	PreInitialize_( Data, Arguments );
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Directory, Locale );
 
-	if ( Data->Arguments->Amount() != 0 )
-		HandleArguments_( *Data->Arguments );
+	if ( Arguments.Amount() != 0 )
+		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
+	sclmisc::DumpRegistriesIfRequired();
+qRR
+qRT
+qRE
 }
 
 void *sclplugin::callback__::PLGNCORERetrievePlugin( void )

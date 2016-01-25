@@ -501,6 +501,21 @@ qRT
 qRE
 }
 
+void sclmisc::DumpRegistriesIfRequired( void )
+{
+qRH
+	str::string Registries;
+qRB
+	Registries.Init();
+
+	if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpRegistries, Registries ) )
+		sclmisc::DumpRegistries( Registries, cio::COut );
+qRR
+qRT
+qRE
+}
+
+
 void sclmisc::EraseProjectRegistry( void )
 {
 	sclrgstry::EraseProjectRegistry();
@@ -855,6 +870,8 @@ qRB
 	T( 'p', Project );
 	T( 's', Setup );
 	T( 'a', Arguments );
+
+	Flow << txf::commit;
 qRR
 qRT
 qRE

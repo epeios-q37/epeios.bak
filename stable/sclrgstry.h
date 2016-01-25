@@ -93,6 +93,10 @@ namespace sclrgstry {
 
 		// 'Parameters/Plugins/Set[target="..."]/Plugin[Id="..."'.
 		extern rgstry::entry___ PluginItem;
+
+		namespace debug {
+			extern rgstry::rEntry DumpRegistries;
+		}
 	}
 
 	namespace definition {

@@ -40,8 +40,6 @@ static sclerror::error___ SCLError_;
 
 bso::bool__ scltool::IgnoreUnknownArguments = false;
 
-static rgstry::entry___ DebugDumpRegistries_( "DumpRegistries", sclrgstry::Debug );
-
 static inline bso::bool__ ReportSCLPendingError_( void )
 {
 	bso::bool__ Exists = false;
@@ -82,22 +80,6 @@ namespace {
 	}
 }
 
-namespace {
-	void DumpRegistriesIfRequired_( void )
-	{
-	qRH
-		str::string Registries;
-	qRB
-		Registries.Init();
-
-		if ( sclmisc::BGetValue( DebugDumpRegistries_, Registries ) )
-			sclmisc::DumpRegistries( Registries, cio::COut );
-	qRR
-	qRT
-	qRE
-	}
-}
-
 static int main_(
 	const oddities__ &Oddities,
 	const cio::set__ &CIO )
@@ -117,7 +99,7 @@ qRB
 
 	sclmisc::RefreshBaseLanguage();
 
-	DumpRegistriesIfRequired_();
+	sclmisc::DumpRegistriesIfRequired();
 	RegistriesDumped = true;
 
 	Command.Init();
@@ -128,7 +110,7 @@ qRB
 		ExitValue = SCLTOOLMain( Command, Oddities );
 qRR
 	if ( !RegistriesDumped )
-		DumpRegistriesIfRequired_();
+		sclmisc::DumpRegistriesIfRequired();
 
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {

@@ -191,7 +191,9 @@ namespace plgn {
 			Locale.Init();
 			C_().Initialize( &Data, Location, Locale );
 
-			scllocale::Fill(scllocale::tMain, NULL, Location, Locale );
+#pragma message ( __LOC__ "Twice loaded DLL shared data problem temporary workaround until a solution is found." )
+			if ( Locale.Amount() != 0 )	// Temporary workaround for the shared data from twice loaded DLL.
+				scllocale::Fill(scllocale::tMain, NULL, Location, Locale );
 
 			Plugin_ = C_().RetrievePlugin();
 
