@@ -17,7 +17,7 @@
     along with 'inet'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// 'inet' remote plugin.
+// 'straight' remote plugin.
 
 #include "registry.h"
 
@@ -29,7 +29,7 @@
 
 #include "csdmnc.h"
 
-#define PLUGIN_NAME	"inet"
+#define PLUGIN_NAME	"straight"
 
 typedef csdrcd::driver___ _plugin___;
 

@@ -13,7 +13,7 @@
 	<xpp:set name="Type" value="Plugin"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
 	<About>
-		<Program>inet</Program>
+		<Program>straight</Program>
 		<Software>inet</Software>
 		<UUID>2c95d4ed-2c57-4399-9c86-4115883be7cc</UUID>
 	</About>
