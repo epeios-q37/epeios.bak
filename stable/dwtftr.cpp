@@ -96,7 +96,7 @@ const char *GetLabel_(
 	switch ( Exclusion ) {
 	E( No );
 	E( MatchList );
-	E( GhostDir );
+	E( Ghost );
 	E( FileTooBig );
 	E( NameTooLong );
 	default:
@@ -602,8 +602,8 @@ static inline void DumpRegular_(
 	case xNameTooLong:
 		Writer.PutAttribute( GetLabel_( Version, aExclusion ), GetLabel_( XVersion, xNameTooLong ) );
 		break;
-	case xGhostDir:
-		Writer.PutAttribute( GetLabel_( Version, aExclusion ), GetLabel_( XVersion, xGhostDir ) );
+	case xGhost:
+		Writer.PutAttribute( GetLabel_( Version, aExclusion ), GetLabel_( XVersion, xGhost ) );
 		break;
 	default:
 		qRGnr();

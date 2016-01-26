@@ -51,7 +51,7 @@ static callback__ Callback_;
 
 _callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 {
-	Callback_.Init();
+	Callback_.Init();                             
 
 	return Callback_;
 }
@@ -137,6 +137,9 @@ qRB
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Configuration );
+	else // Same plugin loaded several times from same excutable ; data is common,
+		// so the 'Arguments' registry from the previous loading is erased.
+		sclrgstry::EraseArgumentsRegistry();
 
 	if ( Arguments.Amount() != 0 )
 		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
@@ -161,6 +164,9 @@ qRB
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Directory, Locale );
+	else // Same plugin loaded several times from same excutable ; data is common,
+		// so the 'Arguments' registry from the previous loading is erased.
+		sclrgstry::EraseArgumentsRegistry();
 
 	if ( Arguments.Amount() != 0 )
 		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );

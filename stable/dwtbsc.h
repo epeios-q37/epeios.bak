@@ -60,7 +60,7 @@ namespace dwtbsc {
 	enum exclusion__ {
 		xNo,	// Not excluded.
 		xMatchList,	// Excluded because it matches the list.,
-		xGhostDir,	// Exclut parce que c'est un répertoire spécial (répertoire de renommage).
+		xGhost,	// Exclut parce que c'est un répertoire/fichier spécial (répertoire de renommage).
 		xFileTooBig,	// Exclut parce que la taille di fichier dépasse la limite autorisée.
 		xNameTooLong,	// Exclut parce que le nom du fichier/Répertoire est trop long.
 		x_amount,

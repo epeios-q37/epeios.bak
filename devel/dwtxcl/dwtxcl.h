@@ -41,7 +41,7 @@ namespace dwtxcl {
 	enum state__ {
 		sExcludedFile,
 		sExcludedDir,
-		sGhostDir,	// Répertoire fantôme pour la gestion du renommage de répertoire.
+		sGhost,	// Répertoire/fichier fantôme pour la gestion du renommage de répertoire.
 		sIncluded,
 		s_amount,
 		s_Undefined,

@@ -194,7 +194,7 @@ static inline bso::bool__ Append_(
 		return true;
 		break;
 	case xMatchList:
-	case xGhostDir:
+	case xGhost:
 		switch ( ExclusionsHandling ) {
 		case ehNone:
 			return false;
@@ -252,8 +252,8 @@ static exclusion__ Convert_( dwtxcl::state__ State )
 	case dwtxcl::sExcludedFile:
 		return xMatchList;
 		break;
-	case dwtxcl::sGhostDir:
-		return xGhostDir;
+	case dwtxcl::sGhost:
+		return xGhost;
 		break;
 	default:
 		qRGnr();
@@ -337,7 +337,7 @@ qRB
 			if ( Append_( Exclusion, ExclusionsHandling) )
 				Kernel.Directories.Append( Directory );
 
-			if ( Exclusion == xGhostDir ) {
+			if ( Exclusion == xGhost ) {
 				GhostRawName.Init();
 				Name.UTF8( GhostRawName );
 				if ( ( GhostRow = dwtght::GetGhostRow( GhostRawName, GO ) ) == qNIL )
@@ -1016,7 +1016,7 @@ qRB
 
 		item_ &Item = *Content( IRow );
 
-		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhostDir ) {
+		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhost ) {
 			GRow = dwtght::GetGhostRow( Item.Dir.Name, GO );
 			if ( GRow == 0  )
 				Expected++;
@@ -1087,7 +1087,7 @@ qRB
 
 		item_ &Item = *Content( IRow );
 
-		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhostDir )
+		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhost )
 			if ( !dwtbsc::Delete( Root, Item.Path, 0 ) )
 				qRGnr();
 

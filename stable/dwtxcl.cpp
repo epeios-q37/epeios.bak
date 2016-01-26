@@ -70,7 +70,7 @@ qRB
 	Tag.Append( RawTag );
 	Tag.Append( '/' );
 
-	Add_( Tag, sGhostDir, Automat );
+	Add_( Tag, sGhost, Automat );
 qRR
 qRT
 qRE

@@ -158,6 +158,9 @@ namespace sclrgstry {
 
 	void ReportIfNoSetupId( void );
 
+	void EraseArgumentsRegistry( void );
+
+
 # if 0
 	void FillRegistryWithSetup(
 		registry_ &Registry,

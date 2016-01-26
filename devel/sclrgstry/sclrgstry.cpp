@@ -381,6 +381,12 @@ void sclrgstry::ReportIfNoSetupId( void )
 		ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
 }
 
+void sclrgstry::EraseArgumentsRegistry( void )
+{
+	Registry_.Erase( ArgumentsLevel_ );
+	ArgumentsLevel_ = Registry_.CreateEmbedded();
+}
+
 bso::bool__ sclrgstry::BGetValue(
 	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,

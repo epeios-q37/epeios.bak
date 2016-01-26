@@ -13,8 +13,14 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2016-01-26 :
+- DWT...
+	- Ghosts are now files.
 - PLGN :
 	# Temporary workaround for twice (or mode) loaded plugin.
+- SCLARGMNT :
+	- Erasing 'Arguments' registry when the same plugin is loaded more that once from the same excutable.
+- SCLRGSTRY :
+	* Adding 'EraseArgumentsRegistry()'.
 
 2016-01-25 :
 - SCLMISC, SCLRGSTRY, SCLTOOL :
