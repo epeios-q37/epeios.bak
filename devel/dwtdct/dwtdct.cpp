@@ -1069,6 +1069,27 @@ qRT
 qRE
 }
 
+namespace {
+	void DelGhosts_(
+		const str::vString &Root,
+		const str::vString &Path,
+		const dwtdct::fstrings_ &Filenames,
+		const dwtxcl::excluder_ &Excluder )
+	{
+		ctn::qCMITEM( str::vString, dwtdct::frow__ ) Filename;
+		dwtdct::frow__ Row = Filenames.First();
+
+		Filename.Init( Filenames );
+
+		while ( Row != qNIL ) {
+			if ( Excluder.GetState( Filename( Row ), true ) == dwtxcl::sGhost )
+				dwtbsc::Delete(Root, Path, Filename( Row ) );
+
+			Row = Filenames.Next( Row );
+		}
+	}
+}
+
 void dwtdct::DelGhosts(
 	const str::string_ &Root,
 	const content_ &Content,
@@ -1090,6 +1111,8 @@ qRB
 		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhost )
 			if ( !dwtbsc::Delete( Root, Item.Path, 0 ) )
 				qRGnr();
+
+		DelGhosts_( Root, Item.Path, Item.Files.Names, Excluder );
 
 		IRow = Content.Previous( IRow );
 	}

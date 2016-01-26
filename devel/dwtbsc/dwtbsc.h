@@ -537,6 +537,11 @@ namespace dwtbsc {
 		const str::string_ &Path,
 		tamount__ ThreadAmountMax );
 
+	bso::fBool Delete(
+		const str::vString &Root,
+		const str::vString &Path,
+		const str::vString &Filename );
+
 	bso::bool__ Delete(
 		const str::string_ &Path,
 		const str::strings_ &FileNames );

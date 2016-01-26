@@ -375,6 +375,24 @@ qRE
 	return Success;
 }
 
+bso::fBool dwtbsc::Delete(
+	const str::vString &Root,
+	const str::vString &Path,
+	const str::vString &Filename )
+{
+	bso::bool__ Success = false;
+qRH
+	str::string Absolute;
+qRB
+
+	Absolute.Init();
+	Success = DeleteFile_( GetAbsolute_( Root, Path, Filename, Absolute ) );
+qRR
+qRT
+qRE
+	return Success;
+}
+
 bso::bool__ dwtbsc::Delete(
 	const str::string_ &Path,
 	const str::strings_ &FileNames )
@@ -383,17 +401,15 @@ bso::bool__ dwtbsc::Delete(
 qRH
 	ctn::E_CMITEM( str::string_ ) FileName;
 	sdr::row__ Row = qNIL;
-	str::string Absolute, Empty;
+	str::string Empty;
 qRB
-
 	Empty.Init();
 	FileName.Init( FileNames );
 
 	Row = FileNames.First();
 
 	while ( Row != qNIL ) {
-		Absolute.Init();
-		Failure |= !DeleteFile_( GetAbsolute_( Empty, Path, FileName( Row ), Absolute ) );
+		Failure |= !Delete( Empty, Path, FileName( Row ) );
 
 		Row = FileNames.Next( Row );
 
