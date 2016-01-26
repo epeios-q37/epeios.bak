@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with inet. If not, see <http://www.gnu.org/licenses/>.
 
-name = inet
+name = straight
 
 
 # Epeios general debugging features
@@ -351,9 +351,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
-	mkdir -p $(dest)
-			plugins/remote/
+	mkdir -p $(dest)plugins/remote/
 	cp $(binary) $(dest)plugins/remote/
 endif
 		

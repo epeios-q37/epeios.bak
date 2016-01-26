@@ -761,7 +761,7 @@ namespace xml {
 
 	typedef eLayout outfit__;
 
-	typedef eSpecialCharHandling special_charèhandling__;
+	typedef eSpecialCharHandling special_char_handling__;
 
 	typedef fEncoding encoding__;
 

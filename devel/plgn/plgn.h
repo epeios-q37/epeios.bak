@@ -191,8 +191,14 @@ namespace plgn {
 			Locale.Init();
 			C_().Initialize( &Data, Location, Locale );
 
-#pragma message ( __LOC__ "Twice loaded DLL shared data problem temporary workaround until a solution is found." )
-			if ( Locale.Amount() != 0 )	// Temporary workaround for the shared data from twice loaded DLL.
+			// Temporary workaround for the shared data from twice loaded plugin.
+			/* When a plugin is loaded several time by the same excutable, its data
+			is common to all library. Actually, the 'Configuration' and 'Locale'
+			registry are the one from the foirst loaded library. The 'Argument'
+			registry is the one from the last one. So, the 'Configuration' and
+			'Locale' section should be the same for all the plugin, and you should
+			read what be needed from the registry before returoing from here. */
+			if ( Locale.Amount() != 0 )
 				scllocale::Fill(scllocale::tMain, NULL, Location, Locale );
 
 			Plugin_ = C_().RetrievePlugin();

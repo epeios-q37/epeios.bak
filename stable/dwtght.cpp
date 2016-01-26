@@ -26,18 +26,41 @@
 using namespace dwtght;
 using namespace dwtbsc;
 
-static inline status__ CreateGhostDir_( const fnm::name___ &Name )
+
+// To put to header files, so the user can choose the type of ghsots.
+qENUM( GhostType ) {
+	gtFile,
+	gtDir,
+	ft_amount,
+	gt_Undefined
+};
+
+static inline status__ CreateGhost_(
+	const fnm::name___ &Name,
+	eGhostType GhostType )
 {
-	if ( dir::CreateDir( Name ) != dir::sOK ) {
-		return sFailed;
-# ifdef CPE_WIN
-	} else if ( !fil::MakeSystem( Name ) ) {
+	bso::fBool Success = false;
+
+	switch ( GhostType ) {
+	case gtFile:
+		Success = fil::Create( Name );
+		break;
+	case gtDir:
+		Success = dir::CreateDir( Name ) == dir::sOK;
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+
+# if 0
+	if ( !fil::MakeSystem( Name ) ) {
 		if ( dir::DropDir( Name ) != dir::sOK )
 			ERRSys();
-		return sFailed;
+		Success = false;
+	}	
 # endif
-	} else
-		return sCreated;
+	return ( Success ? sCreated : sFailed );
 }
 
 status__ dwtght::CreateGhost(
@@ -62,7 +85,7 @@ qRB
 	LocalizedName.Init();
 	GetGhostLocalizedName( Row = Ghosts.Add( Ghost ), Root, Path, GO, LocalizedName );
 
-	Status = CreateGhostDir_( LocalizedName );
+	Status = CreateGhost_( LocalizedName, gtFile );
 qRR
 qRT
 qRE
@@ -110,7 +133,7 @@ qRB
 	GetGhostsDataDirName( Root, GO, Name );
 
 	if ( !fil::Exists(Name) ) {
-		switch ( CreateGhostDir_( Name ) ) {
+		switch ( CreateGhost_( Name, gtDir ) ) {
 		case sCreated:
 			break;
 		case sFailed:

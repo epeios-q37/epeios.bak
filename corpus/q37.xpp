@@ -46,4 +46,15 @@
 			</xpp:ifeq>
 		</xpp:bloc>
 	</xpp:define>
+	<xpp:bloc>
+		<xpp:ifeq select="env" value="windows">
+			<xpp:set name="BinDir" value="h:\bin\"/>
+		</xpp:ifeq>
+		<xpp:ifeq select="env" value="linux">
+			<xpp:set name="BinDir" value="/home/csimon/bin/"/>
+		</xpp:ifeq>
+		<xpp:ifeq select="env" value="mac">
+			<xpp:set name="BinDir" value="/Users/csimon/bin/"/>
+		</xpp:ifeq>
+	</xpp:bloc>
 </xpp:bloc>
