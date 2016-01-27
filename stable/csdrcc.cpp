@@ -23,7 +23,7 @@
 
 using namespace csdrcc;
 
-const char *csdrcc::driver___::Identification( void )
+const char *csdrcc::driver___::Label( void )
 {
 	return CSDRCC_PLUGIN_NAME " V" CSDRCC_PLUGIN_API_VERSION " " CPE_DESCRIPTION;
 }

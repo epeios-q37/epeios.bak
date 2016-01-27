@@ -395,6 +395,7 @@ namespace sclmisc {
 
 	template <typename retriever> inline void Plug(
 		const char *Target,
+		const char *Identifier,
 		retriever &PluginRetriever )
 	{
 	qRH
@@ -409,7 +410,7 @@ namespace sclmisc {
 		GetPluginFeatures( Target, Filename, Configuration, Locale, Arguments );
 		HandleLocale_( Locale, Filename );
 
-		PluginRetriever.Initialize( Filename, Configuration, Arguments );
+		PluginRetriever.Initialize( Filename, Identifier, Configuration, Arguments );
 	qRR
 	qRT
 	qRE
@@ -417,14 +418,16 @@ namespace sclmisc {
 
 	void Plug_(
 		const char *Target,
-		const char *Identification,
+		const char *Label,
+		const char *Identifier,
 		plgn::iRetrievers &Retrievers );
 
 	template <typename plugin> inline void Plug(
 		const char *Target,
+		const char *Identifier,
 		plgn::rRetrievers<plugin> &Retrievers )
 	{
-		return Plug_(Target, plugin::Identification(), Retrievers );
+		return Plug_(Target, plugin::Label(), Identifier, Retrievers );
 	}
 }
 

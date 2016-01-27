@@ -12,6 +12,13 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-27 :
+- CSDRCC, CSDRCU, CSDUCL, SCLFRNTND :
+	- Adaptation to undelying modules modifications.
+- PLGN, PLGNCORE, SCLMISC, SCLPLUGIN 
+	% 'Identification' -> 'Label'.
+	* Introducing 'Identifier', which is an UUID peculiar to each plugin.
+
 2016-01-26 :
 - DWT...
 	- Ghosts are now files.

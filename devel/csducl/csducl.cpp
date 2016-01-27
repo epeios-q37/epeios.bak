@@ -80,13 +80,14 @@ qRE
 
 bso::bool__ csducl::universal_client_core___::InitRemote(
 	const str::string_ &PluginPath,
+	const char *PluginIdentifier,
 	const str::string_ &Parameters )
 {
 	bso::bool__ Success = false;
 
 	reset();
 
-	if ( ( Success = _RemoteAccess.Init( PluginPath, Parameters, err::hUserDefined ) ) ) {
+	if ( ( Success = _RemoteAccess.Init( PluginPath, PluginIdentifier, Parameters, err::hUserDefined ) ) ) {
 		_Type = tRemote;
 		_Location.Init( PluginPath );
 	}

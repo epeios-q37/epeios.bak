@@ -153,6 +153,8 @@ namespace flw {
 			}
 
 			_Red = 0;
+			_Driver = NULL;
+			_AmountMax = 0;
 		}
 		iflow__( void )
 		{

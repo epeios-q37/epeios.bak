@@ -38,7 +38,8 @@
 
 # define PLGNCORE_SHARED_DATA_VERSION	"6"
 
-# define PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME	PluginIdentification
+# define PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME		PluginLabel
+# define PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME		PluginIdentifier
 # define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
 
 namespace plgncore {
@@ -104,6 +105,7 @@ namespace plgncore {
 			str::string_ &Locale ) = 0;
 		virtual void *PLGNCORERetrievePlugin( void ) = 0;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
+		virtual const char *PLGNCOREPluginIndentifier( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -118,14 +120,14 @@ namespace plgncore {
 			const data__ *Data,
 			const rgstry::entry__ &Configuration )
 		{
-			PLGNCOREInitialize( Data, Configuration );
+			return PLGNCOREInitialize( Data, Configuration );
 		}
 		void Initialize(
 			const data__ *Data,
 			const fnm::name___ &Directory,
 			str::string_ &Locale )
 		{
-			PLGNCOREInitialize( Data, Directory, Locale );
+			return PLGNCOREInitialize( Data, Directory, Locale );
 		}
 		void *RetrievePlugin( void )
 		{
@@ -133,11 +135,16 @@ namespace plgncore {
 		}
 		void ReleasePlugin( void *Plugin )
 		{
-			PLGNCOREReleasePlugin( Plugin );
+			return PLGNCOREReleasePlugin( Plugin );
+		}
+		const char *PluginIdentifier( void )
+		{
+			return PLGNCOREPluginIndentifier();
 		}
 	};
 
-	typedef const char *(plugin_identification)( void );
+	typedef const char *(plugin_label)( void );
+	typedef const char *(plugin_identifier)( void );
 	typedef callback__ &(retrieve_callback)( void );
 }
 

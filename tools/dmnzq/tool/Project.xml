@@ -6,7 +6,7 @@
 			<xpp:bloc>20151030</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2015</xpp:bloc>
+			<xpp:bloc>2015-2016</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
@@ -21,7 +21,6 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
-				<Module>dlbrry</Module>
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdlec</Module>

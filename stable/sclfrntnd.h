@@ -70,17 +70,21 @@ namespace sclfrntnd {
 	public:
 		csducl::type__ Type;
 		str::string Path;
+		const char *Identifier;
 		str::string Parameters;
 		void reset( bso::bool__ P = true )
 		{
 			Type = csducl::t_Undefined;
 			Path.reset( P );
+			Identifier = NULL;
 			Parameters.reset( P );
 		}
 		E_CDTOR( features___ );
-		void Init(void) {
+		void Init(void)
+		{
 			Type = csducl::t_Undefined;
 			Path.Init();
+			Identifier = NULL;
 			Parameters.Init();
 		}
 	};

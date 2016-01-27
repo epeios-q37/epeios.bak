@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of prxyq.
 #
@@ -34,9 +34,9 @@ mods += lst lstbch lstctn mns mtx
 mods += ntvstr que sdr stk str 
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio tht 
-mods += bomhdl cdgb64 fil fnm lcl 
-mods += rgstry stsfsm xml xpp mtk 
-mods += sck 
+mods += bomhdl cdgb64 dlbrry fil fnm 
+mods += lcl plgn rgstry stsfsm xml 
+mods += xpp mtk sck 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += csdbns 
@@ -320,7 +320,8 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DIDENTIFIER=\""84bb3ee5-a8a6-44ea-95b9-f5c467116cfb"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -344,9 +345,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
 	mkdir -p $(dest)
-			
 	cp $(binary) $(dest)
 endif
 		

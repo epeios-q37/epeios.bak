@@ -50,7 +50,7 @@ namespace csdrcc {
 		{
 			_driver___::Init( fdr::ts_Default );
 		}
-		static const char *Identification( void );
+		static const char *Label( void );
 	};
 }
 

@@ -352,6 +352,7 @@ public:
 		callback__ Callback;
 	qRB
 		Server.Init(sclmisc::MGetU16( registry::Service ), Callback );
+		Server.Process();
 	qRR
 	qRT
 	qRE

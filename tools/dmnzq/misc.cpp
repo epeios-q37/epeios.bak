@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2015-2016 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of dmnzq.
 
@@ -19,7 +19,7 @@
 
 #include "misc.h"
 
-const char *misc::callback__::Identification( void )
+const char *misc::callback__::Label( void )
 {
 	return MISC_SLOT_PLUGIN_TARGET " V" MISC_SLOT_PLUGIN_VERSION " " CPE_DESCRIPTION;
 }

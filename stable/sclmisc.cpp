@@ -1020,7 +1020,8 @@ namespace {
 
 	void Plug_(
 		const char *Target,
-		const char *Identification,
+		const char *Label,
+		const char *Identifier,
 		const str::vString &Id,
 		plgn::rLooseRetriever &Retriever )
 	{
@@ -1036,7 +1037,7 @@ namespace {
 		GetPluginItemFeatures_( Target, Id, Filename, Configuration, Locale, Arguments );
 		HandleLocale_( Locale, Filename );
 
-		Retriever.Initialize( Filename, Identification, Configuration, Arguments );
+		Retriever.Initialize( Filename, Label, Identifier, Configuration, Arguments );
 	qRR
 	qRT
 	qRE
@@ -1044,7 +1045,8 @@ namespace {
 
 	void Plug_(
 		const char *Target,
-		const char *Identification,
+		const char *Label,
+		const char *Identifier,
 		const str::vString &Id,
 		plgn::iRetrievers &Retrievers )
 	{
@@ -1053,7 +1055,7 @@ namespace {
 	qRB
 		Retriever.Init();
 
-		Plug_( Target, Identification, Id, Retriever );
+		Plug_( Target, Label, Identifier, Id, Retriever );
 
 		Retrievers.Add( Retriever );
 
@@ -1065,7 +1067,8 @@ namespace {
 
 	void Plug_(
 		const char *Target,
-		const char *Identification,
+		const char *Label,
+		const char *Identifier,
 		const str::vStrings &Ids,
 		plgn::iRetrievers &Retrievers )
 	{
@@ -1075,7 +1078,7 @@ namespace {
 		Id.Init( Ids );
 
 		while ( Row != qNIL ) {
-			Plug_( Target, Identification, Id( Row ), Retrievers );
+			Plug_( Target, Label, Identifier, Id( Row ), Retrievers );
 
 			Row = Ids.Next( Row );
 		}
@@ -1084,7 +1087,8 @@ namespace {
 
 void sclmisc::Plug_(
 	const char *Target,
-	const char *Identification,
+	const char *Label,
+	const char *Identifier,
 	plgn::iRetrievers &Retrievers )
 {
 qRH
@@ -1094,7 +1098,7 @@ qRB
 
 	sclmisc::GetValues( rgstry::rTEntry( sclrgstry::parameter::loose_plugin_item::Id, Target ), Ids );
 
-	::Plug_( Target, Identification, Ids, Retrievers );
+	::Plug_( Target, Label, Identifier, Ids, Retrievers );
 qRR
 qRT
 qRE

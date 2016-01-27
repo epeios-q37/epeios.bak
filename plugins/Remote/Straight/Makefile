@@ -1,19 +1,19 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of inet.
+#	This file is part of remote.
 #
-#	inet is free software: you can redistribute it and/or
+#	remote is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	inet is distributed in the hope that it will be useful,
+#	remote is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with inet. If not, see <http://www.gnu.org/licenses/>.
+#	along with remote. If not, see <http://www.gnu.org/licenses/>.
 
 name = straight
 
@@ -327,7 +327,8 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DIDENTIFIER=\""2c95d4ed-2c57-4399-9c86-4115883be7cc"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios

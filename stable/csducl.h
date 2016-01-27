@@ -87,6 +87,7 @@ namespace csducl {
 			csdlec::library_data__ &LibraryData );
 		bso::bool__ InitRemote(
 			const str::string_ &PluginPath,
+			const char *PluginIdentifier,
 			const str::string_ &Parameters );
 		type__ GetType( void ) const
 		{

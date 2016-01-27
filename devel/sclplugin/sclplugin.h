@@ -49,6 +49,7 @@ namespace sclplugin {
 			str::string_ &Locale ) override;
 		virtual void *PLGNCORERetrievePlugin( void ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
+		virtual const char *PLGNCOREPluginIndentifier( void ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -61,8 +62,10 @@ namespace sclplugin {
 		}
 	};
 
-	// Function to overload (made by below macro).
-	const char *SCLPLUGINPluginIdentification( void );
+	// Functions to overload.
+	const char *SCLPLUGINPluginIdentifier( void );
+	// The following ones are defined by below macro.
+	const char *SCLPLUGINPluginLabel( void );
 	void *SCLPLUGINRetrievePlugin( void );
 	void SCLPLUGINReleasePlugin( void * );
 }
@@ -71,9 +74,9 @@ namespace sclplugin {
 // NOTA : needed parameters are generally retrieved from the registry,
 // which is automatically filled by this module.
 # define SCLPLUGIN_DEF( plugin )\
-	const char *sclplugin::SCLPLUGINPluginIdentification( void )\
+	const char *sclplugin::SCLPLUGINPluginLabel( void )\
 	{\
-		return plugin::Identification();\
+		return plugin::Label();\
 	}\
 \
 	void *sclplugin::SCLPLUGINRetrievePlugin( void )\

@@ -23,8 +23,7 @@
 
 #include "registry.h"
 
-#include "csdbnc.h"
-#include "csdbns.h"
+# include "prxy.h"
 
 #include "sclplugin.h"
 #include "sclmisc.h"
@@ -38,80 +37,10 @@ typedef misc::callback__ _plugin__;
 using misc::module__;
 
 namespace {
-	typedef fdr::ioflow_driver___<> _flow_driver___;
 
-	typedef flw::standalone_ioflow__<> _flow__;
-
-	class flow___
-	: public _flow_driver___,
-	  public _flow__
-	{
-	private:
-		csdbnc::flow___ Flow_;
-		flx::size_embedded_oflow___ OFlow_;
-		flw::iflow__ &IFlow_;
-	protected:
-		virtual fdr::size__ FDRWrite(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum) override
-		{
-			return OFlow_.WriteUpTo( Buffer, Maximum );
-		}
-		virtual void FDRCommit( void ) override
-		{
-			OFlow_.Commit();
-		}
-		virtual fdr::size__ FDRRead(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override
-		{
-			return IFlow_.ReadUpTo( Maximum, Buffer );
-		}
-		virtual void FDRDismiss( void ) override
-		{
-			IFlow_.Dismiss();
-		}
-public:
-		void reset( bso::bool__ P = true )
-		{
-			_flow__::reset( P );
-			_flow_driver___::reset( P );
-			OFlow_.reset( P );
-			Flow_.reset( P );
-		}
-		E_VDTOR( flow___ );
-		flow___( void )
-		: IFlow_( Flow_ )
-		{
-			reset( false );
-		}
-		bso::bool__ Init(
-			const char *HostService,
-			const char *Identifier )
-		{
-			reset();
-
-			_flow_driver___::Init( fdr::ts_Default );
-			_flow__::Init( *this );
-
-			Flow_.Init( HostService );
-
-			OFlow_.Init( Flow_ );
-
-			OFlow_.Write(Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
-
-			if ( !IFlow_.EndOfFlow() ) {
-				if ( IFlow_.Get() != 0 )
-					qRGnr();
-
-				return true;
-			} else
-				return false;
-		}
-	};
 
 	struct data__ {
-		flow___ *Flow;
+		prxy::rFlow *Flow;
 		module__ *Module;
 		mtx::handler___ Mutex;
 		const char *Origin;
@@ -128,7 +57,7 @@ public:
 			Mutex = mtx::UndefinedHandler;
 		}
 		void Init(
-			flow___ *Flow,
+			prxy::rFlow *Flow,
 			module__ &Module,
 			const char *Origin )
 		{
@@ -147,7 +76,7 @@ public:
 	{
 	qRFH
 		data__ &Data = *(data__ *)UP;
-		flow___ *Flow = Data.Flow;
+		prxy::rFlow *Flow = Data.Flow;
 		module__ &Module = *Data.Module;
 		ntvstr::string___ Origin;
 		void *MUP = NULL;
@@ -176,10 +105,10 @@ public:
 		virtual void MISCProcess( module__ &Module ) override
 		{
 		qRH
-			flow___ *Flow = NULL;
+			prxy::rFlow *Flow = NULL;
 			data__ Data;
 		qRB
-			Flow = new flow___;
+			Flow = new prxy::rFlow;
 
 			if ( Flow == NULL )
 				qRAlc();
@@ -196,7 +125,7 @@ public:
 
 				Flow = NULL;
 
-				Flow = new flow___;
+				Flow = new prxy::rFlow;
 
 				if ( Flow == NULL )
 					qRAlc();
@@ -240,3 +169,9 @@ public:
 SCLPLUGIN_DEF( plugin___ );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
+
+const char *sclplugin::SCLPLUGINPluginIdentifier( void )
+{
+	return IDENTIFIER;
+}
+

@@ -43,6 +43,18 @@
 /*************************/
 
 namespace plgn {
+	template <typename function> inline const char *GetAndExecute_(
+		const char *FunctionName,
+		dlbrry::dynamic_library___ &Library )
+	{
+		function *Function = dlbrry::GetFunction<function *>( FunctionName, Library );
+
+		if ( Function == NULL )
+			qRFwk();
+
+		return Function();
+	}
+
 	class rLooseRetriever
 	{
 	private:
@@ -56,19 +68,23 @@ namespace plgn {
 
 			C_().ReleasePlugin( Plugin_ );
 		}
-		bso::bool__ _IsCompatible( const char *Identification )
+		bso::bool__ _IsCompatible(
+			const char *Label,
+			const char *Identifier )	// When == 'NULL', not used for comparison.
 		{
-			plgncore::plugin_identification *Function = dlbrry::GetFunction<plgncore::plugin_identification *>( E_STRING( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME ), Library_ );
-
-			if ( Function == NULL )
-				qRFwk();
-
-			return !strcmp( Identification, Function() );
+			if ( !strcmp( Label, GetAndExecute_<plgncore::plugin_label>( E_STRING( PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME ), Library_ ) ) ) {
+				if ( Identifier != NULL )
+					return !strcmp( Identifier, GetAndExecute_<plgncore::plugin_identifier>( E_STRING( PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME ), Library_ ) );
+				else
+					return true;
+			} else
+				return false;
 		}
 	private:
 		bso::bool__ SubInitialize_(
 			const ntvstr::string___ &PluginPath,
-			const char *Identification,
+			const char *Label,
+			const char *Identifier,
 			err::handling__ ErrHandling )
 		{
 			plgncore::retrieve_callback *Function = NULL;
@@ -80,7 +96,7 @@ namespace plgn {
 					return false;
 			}
 
-			if ( !_IsCompatible( Identification ) ) {
+			if ( !_IsCompatible( Label, Identifier ) ) {
 				if ( ErrHandling == err::hThrowException )
 					qRFwk();
 				else
@@ -119,7 +135,8 @@ namespace plgn {
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
-			const char *Identification,
+			const char *Label,
+			const char *Identifier,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
@@ -127,7 +144,7 @@ namespace plgn {
 		qRH
 			plgncore::data__ Data;
 		qRB
-			if ( !SubInitialize_( PluginPath, Identification, ErrHandling ) )
+			if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
 				return false;
 
 			Data.Init( err::qRRor, sclerror::SCLERRORError, Arguments );
@@ -145,7 +162,8 @@ namespace plgn {
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
-			const char *Identification,
+			const char *Label,
+			const char *Identifier,
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
@@ -160,7 +178,7 @@ namespace plgn {
 			if ( !Registry.Convert( Configuration, ConfigurationEntry, ErrHandling ) )
 				qRReturn;
 
-			if ( !Initialize( PluginPath, Identification, ConfigurationEntry, Arguments, ErrHandling ) )
+			if ( !Initialize( PluginPath, Label, Identifier, ConfigurationEntry, Arguments, ErrHandling ) )
 				qRReturn;
 
 			Success = true;
@@ -171,7 +189,8 @@ namespace plgn {
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
-			const char *Identification,
+			const char *Label,
+			const char *Identifier,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
@@ -180,7 +199,7 @@ namespace plgn {
 			fnm::name___ Location;
 			str::string Locale;
 		qRB
-			if ( !SubInitialize_( PluginPath, Identification, ErrHandling ) )
+			if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
 				return false;
 
 			Location.Init();
@@ -275,27 +294,30 @@ namespace plgn {
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
+			const char *Identifier,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Configuration, Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Arguments, ErrHandling );
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
+			const char *Identifier,
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Configuration, Registry, Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Registry, Arguments, ErrHandling );
 		}
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
+			const char *Identifier,
 			const str::string_ &Arguments,
 			err::handling__ ErrHandling = err::h_Default )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Identification(), Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Arguments, ErrHandling );
 		}
 		plugin &Plugin( void )
 		{

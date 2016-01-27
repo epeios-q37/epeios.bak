@@ -6,7 +6,7 @@
 			<xpp:bloc>(Version)</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2015</xpp:bloc>
+			<xpp:bloc>2016</xpp:bloc>
 		</xpp:define>
 	</xpp:bloc>
 	<xpp:set name="Credits" value="Epeios"/>
@@ -14,7 +14,7 @@
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
 	<About>
 		<Program>straight</Program>
-		<Software>inet</Software>
+		<Software>remote</Software>
 		<UUID>2c95d4ed-2c57-4399-9c86-4115883be7cc</UUID>
 	</About>
 	<InstallPath>plugins/remote/</InstallPath>

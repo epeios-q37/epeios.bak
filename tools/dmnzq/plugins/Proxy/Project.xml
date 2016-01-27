@@ -6,7 +6,7 @@
 			<xpp:bloc>(Version)</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2016</xpp:bloc>
+			<xpp:bloc>2015-2016</xpp:bloc>
 		</xpp:define>
 	</xpp:bloc>
 	<xpp:set name="Credits" value="Epeios"/>
@@ -23,9 +23,10 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>mtk</Module>
+				<Module>prxy</Module>
 				<Module>sck</Module>
 			</Modules>
-			<Modules Groups="CSD">
+			<Modules Group="CSD">
 				<Module>csdbnc</Module>
 			</Modules>
 			<Modules Group="SCL">

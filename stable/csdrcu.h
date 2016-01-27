@@ -75,6 +75,7 @@ namespace csdrcu {
 		E_CDTOR( core___ );
 		bso::bool__ Init(
 			const str::string_ &PluginPath,
+			const char *Identifier,
 			const str::string_ &Parameters,
 			err::handling__ ErrHandling = err::h_Default );
 	};

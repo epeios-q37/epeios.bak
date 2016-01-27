@@ -4,12 +4,14 @@
 		<Command>Default</Command>
 	</Parameters>
 	<Arguments>
-		<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%ServiceArgument%"/>
-		<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>
+		<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%HostServiceArgument% %IdentifierArgument%"/>
+		<Argument id="HostServiceArgument" Description="HostServiceArgumentDescription" Path="HostService" Label="HostServiceArgumentLabel"/>
+		<Argument id="IdentifierArgument" Description="IdentifierArgumentDescription" Path="Identifier" Label="IdentifierArgumentLabel"/>
 		<!-- Affectations des arguments libres-->
 		<Layouts>
 			<Layout command="Default">
-				<Link index="0" Target="ServiceArgument"/>
+				<Link index="0" Target="HostServiceArgument"/>
+				<Link index="1" Target="IdentifierArgument"/>
 			</Layout>
 		</Layouts>
 	</Arguments>

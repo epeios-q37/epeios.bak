@@ -1,4 +1,4 @@
-#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2015-2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of dmnzq.
 #
@@ -330,7 +330,8 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
+copt += -DIDENTIFIER=\""24913b17-c969-4327-866c-9639791acb5e"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -354,9 +355,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
-	mkdir -p $(dest)
-			plugins/dmnzq/
+	mkdir -p $(dest)plugins/dmnzq/
 	cp $(binary) $(dest)plugins/dmnzq/
 endif
 		

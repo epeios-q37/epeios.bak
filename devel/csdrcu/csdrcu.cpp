@@ -25,6 +25,7 @@ using namespace csdrcu;
 
 bso::bool__ csdrcu::core___::Init(
 	const str::string_ &PluginPath,
+	const char *Identifier,
 	const str::string_ &Parameters,
 	err::handling__ ErrHandling )
 {
@@ -34,7 +35,7 @@ qRH
 qRB
 	Retriever_.Init();
 
-	if ( !( Success = Retriever_.Initialize(PluginPath, Parameters, err::hUserDefined ) ) ) {
+	if ( !( Success = Retriever_.Initialize( PluginPath, Identifier, Parameters, err::hUserDefined ) ) ) {
 		if ( ErrHandling == err::hThrowException )
 			qRFwk();
 		else

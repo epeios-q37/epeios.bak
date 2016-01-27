@@ -17,35 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDRCU__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "csdrcu.h"
+#include "prxy.h"
 
-using namespace csdrcu;
+#include "err.h"
+#include "cio.h"
 
-bso::bool__ csdrcu::core___::Init(
-	const str::string_ &PluginPath,
-	const char *Identifier,
-	const str::string_ &Parameters,
-	err::handling__ ErrHandling )
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+void Generic( int argc, char *argv[] )
 {
-	bso::bool__ Success = false;
 qRH
-	TOL_CBUFFER___ Buffer;
 qRB
-	Retriever_.Init();
-
-	if ( !( Success = Retriever_.Initialize( PluginPath, Identifier, Parameters, err::hUserDefined ) ) ) {
-		if ( ErrHandling == err::hThrowException )
-			qRFwk();
-		else
-			qRReturn;
-	}
-
-	Driver_ = &Retriever_.Plugin();
-	_driver___::Init( fdr::ts_Default );
 qRR
 qRT
 qRE
-	return Success;
+}
+
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+qRFH
+qRFB
+	COut << "Test of library " << PRXY_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+qRFR
+	ExitValue = EXIT_FAILURE;
+qRFT
+qRFE
+	return ExitValue;
 }

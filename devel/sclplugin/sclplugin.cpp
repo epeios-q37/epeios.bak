@@ -39,12 +39,18 @@ it is necessary to personalize it, or certain compiler would not work properly *
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
-DEF( PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME, plgncore::plugin_identification );
+DEF( PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME, plgncore::plugin_label );
+DEF( PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME, plgncore::plugin_identifier );
 DEF( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME, plgncore::retrieve_callback );
 
-const char *PLGNCORE_PLUGIN_IDENTIFICATION_FUNCTION_NAME( void )
+const char *PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME( void )
 {
-	return sclplugin::SCLPLUGINPluginIdentification();
+	return sclplugin::SCLPLUGINPluginLabel();
+}
+
+const char *PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME( void )
+{
+	return sclplugin::SCLPLUGINPluginIdentifier();
 }
 
 static callback__ Callback_;
@@ -186,3 +192,9 @@ void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
 {
 	sclplugin::SCLPLUGINReleasePlugin( Plugin );
 }
+
+const char *sclplugin::callback__::PLGNCOREPluginIndentifier( void )
+{
+	return sclplugin::SCLPLUGINPluginIdentifier();
+}
+

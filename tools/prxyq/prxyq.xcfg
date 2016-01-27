@@ -6,52 +6,34 @@
 		<xpp:expand href="../TOL.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
-			<Command>Test</Command>
+			<Command>Process</Command>
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
-			<Translations text="TestCommandDescription">
-				<Translation language="fr">Commande de test.</Translation>
-				<Translation language="en">Test command.</Translation>
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Proxy.</Translation>
+				<Translation language="en">Proxy.</Translation>
 			</Translations>
-			<Translations text="TestFlagDescription">
-				<Translation language="fr">fanion de test.</Translation>
-				<Translation language="en">test flag.</Translation>
+			<Translations text="ServiceArgumentDescription">
+				<Translation language="fr">Port en écoute</Translation>
+				<Translation language="en">Port to listen to.</Translation>
 			</Translations>
-			<Translations text="TestOptionDescription">
-				<Translation language="fr">option de test.</Translation>
-				<Translation language="en">test option.</Translation>
-			</Translations>
-			<Translations text="TestOptionLabel">
-				<Translation language="fr">option (fr)</Translation>
-				<Translation language="en">option (en)</Translation>
-			</Translations>
-			<Translations text="TestArgumentDescription">
-				<Translation language="fr">argument de test.</Translation>
-				<Translation language="en">test argument.</Translation>
-			</Translations>
-			<Translations text="TestArgumentLabel">
-				<Translation language="fr">argument (fr)</Translation>
-				<Translation language="en">argument (en)</Translation>
+			<Translations text="ServiceArgumentLabel">
+				<Translation language="fr">service</Translation>
+				<Translation language="en">service</Translation>
 			</Translations>
 		</Locale>
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
-			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
-			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
-			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
-			<!-- Options : 'Path' ET 'Value'. -->
-			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
-			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Argument" Label="TestArgumentLabel"/>
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="%ServiceArgument%"/>
+			<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
-				<Layout command="test">
-					<Link index="0" Target="TestArgument"/>
+				<Layout command="Process">
+					<Link index="0" Target="ServiceArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

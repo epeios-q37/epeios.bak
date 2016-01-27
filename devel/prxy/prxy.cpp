@@ -17,35 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDRCU__COMPILATION
+#define PRXY__COMPILATION
 
-#include "csdrcu.h"
+#include "prxy.h"
 
-using namespace csdrcu;
+using namespace prxy;
 
-bso::bool__ csdrcu::core___::Init(
-	const str::string_ &PluginPath,
-	const char *Identifier,
-	const str::string_ &Parameters,
-	err::handling__ ErrHandling )
-{
-	bso::bool__ Success = false;
-qRH
-	TOL_CBUFFER___ Buffer;
-qRB
-	Retriever_.Init();
-
-	if ( !( Success = Retriever_.Initialize( PluginPath, Identifier, Parameters, err::hUserDefined ) ) ) {
-		if ( ErrHandling == err::hThrowException )
-			qRFwk();
-		else
-			qRReturn;
-	}
-
-	Driver_ = &Retriever_.Plugin();
-	_driver___::Init( fdr::ts_Default );
-qRR
-qRT
-qRE
-	return Success;
-}

@@ -73,3 +73,8 @@ namespace {
 SCLPLUGIN_DEF( plugin___ );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
+
+const char *sclplugin::SCLPLUGINPluginIdentifier( void )
+{
+	return IDENTIFIER;
+}

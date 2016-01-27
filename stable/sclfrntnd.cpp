@@ -457,7 +457,7 @@ qRB
 		Success = _ClientCore.InitLibrary( Features.Path, LibraryData );
 		break;
 	case csducl::tRemote:
-		Success = _ClientCore.InitRemote( Features.Path, Features.Parameters );
+		Success = _ClientCore.InitRemote( Features.Path, Features.Identifier, Features.Parameters );
 		break;
 	default:
 		qRFwk();

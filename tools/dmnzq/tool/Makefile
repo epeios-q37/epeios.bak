@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2015-2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of dmnzq.
 #
@@ -34,8 +34,9 @@ mods += lst lstbch lstctn mns mtx
 mods += ntvstr que sdr stk str 
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio tht 
-mods += bomhdl cdgb64 fil fnm lcl 
-mods += rgstry stsfsm xml xpp dlbrry 
+mods += bomhdl cdgb64 dlbrry fil fnm 
+mods += lcl plgn rgstry stsfsm xml 
+mods += xpp 
 mods += csdlec 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
@@ -54,7 +55,7 @@ wmods += wllio
 #CXXFLAGS += -g
 
 # General optimization.
-# CXXFLAGS += -O
+CXXFLAGS += -O
 
 # To use with gprof
 #CXXFLAGS += -pg
@@ -322,7 +323,8 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""20151030"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
+copt += -DIDENTIFIER=\""13299010-d5c2-4d64-aad7-94339d73cfcc"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -346,9 +348,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
 	mkdir -p $(dest)
-			
 	cp $(binary) $(dest)
 endif
 		
