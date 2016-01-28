@@ -281,7 +281,10 @@ qRB
 		Exclusion = Convert_( Excluder.GetState( LocalizedFileNameWithoutRoot.UTF8( Buffer ), false ) );
 		break;
 	case fil::tFile:
-		Exclusion = Convert_( Excluder.GetState( Name.UTF8( Buffer ), false ) );
+		Exclusion = Convert_( Excluder.GetState( Name.UTF8( Buffer ), true ) );
+
+		if ( Exclusion != xGhost )
+			Exclusion = Convert_( Excluder.GetState( Name.UTF8( Buffer ), false ) );
 		break;
 	default:
 		qRGnr();
@@ -336,14 +339,6 @@ qRB
 			Fill_( Name, Exclusion, Info, Kernel.Names, SBuffer, Directory );
 			if ( Append_( Exclusion, ExclusionsHandling) )
 				Kernel.Directories.Append( Directory );
-
-			if ( Exclusion == xGhost ) {
-				GhostRawName.Init();
-				Name.UTF8( GhostRawName );
-				if ( ( GhostRow = dwtght::GetGhostRow( GhostRawName, GO ) ) == qNIL )
-					qRGnr();
-			}
-
 			break;
 		case fil::tFile:
 			File.Init();
@@ -358,6 +353,13 @@ qRB
 		default:
 			qRVct();
 			break;
+		}
+
+		if ( Exclusion == xGhost ) {
+			GhostRawName.Init();
+			Name.UTF8( GhostRawName );
+			if ( ( GhostRow = dwtght::GetGhostRow( GhostRawName, GO ) ) == qNIL )
+				qRGnr();
 		}
 		break;
 	default:
@@ -959,6 +961,31 @@ static void Clean_(
 	}
 }
 
+namespace {
+	dwtght::grow__ GetGhostRowIfExists_(
+		const str::vString &Root,
+		const str::vString &Path,
+		const dwtdct::fstrings_ &Filenames,
+		const dwtxcl::excluder_ &Excluder,
+		const dwtbsc::ghosts_oddities_ &GO,
+		str::vString &GhostFilename )
+	{
+		bso::bool__ GhostDetected = false;
+		ctn::qCMITEM( str::vString, dwtdct::frow__ ) Filename;
+		dwtdct::frow__ Row = Filenames.First();
+
+		Filename.Init( Filenames );
+
+		while ( ( Row != qNIL ) && Excluder.GetState( Filename( Row ), true ) != dwtxcl::sGhost )
+			Row = Filenames.Next( Row );
+
+		if ( Row != qNIL )
+			return dwtght::GetGhostRow( GhostFilename = Filename( Row ), GO );
+		else
+			return qNIL;
+	}
+}
+
 void dwtdct::SetGhosts(
 	const str::string_ &Root,
 	const content_ &Content,
@@ -974,6 +1001,7 @@ qRH
 	dwtght::rack___ GhostsRack;
 	dwtght::ghost Ghost;
 	dwtxcl::excluder Excluder;
+	str::iString GhostFilename;
 qRB
 	I2G.Init();
 	I2G.Allocate( Content.Extent() );
@@ -1013,16 +1041,23 @@ qRB
 	}
 
 	while ( IRow != qNIL ) {
-
+		GhostFilename.Init();
 		item_ &Item = *Content( IRow );
 
-		if ( Excluder.GetState( Item.Dir.Name, true ) == dwtxcl::sGhost ) {
+		if ( Excluder.GetState(Item.Dir.Name, true) == dwtxcl::sGhost )
 			GRow = dwtght::GetGhostRow( Item.Dir.Name, GO );
+		else
+			GRow = GetGhostRowIfExists_( Root, Item.Path, Item.Files.Names, Excluder, GO, GhostFilename );
+
+		if ( GRow != qNIL ) {
 			if ( GRow == 0  )
 				Expected++;
-			else if ( (GRow == qNIL) || !Ghosts.Exists( GRow ) || (GRow != Content( Item.GetParent() )->Dir.GetGhostRow()) ) {
+			else if ( (GRow == qNIL) || !Ghosts.Exists( GRow ) || (GRow != Content( GhostFilename.Amount() == 0 ? Item.GetParent() : IRow )->Dir.GetGhostRow()) ) {
 				Intruder++;
-				dwtbsc::Delete( Root, Item.Path, 0 );
+				if ( GhostFilename.Amount() == 0 )
+					dwtbsc::Delete( Root, Item.Path, 0 );
+				else
+					dwtbsc::Delete( Root, Item.Path, GhostFilename );
 			} else
 				Expected++;
 		} else {
