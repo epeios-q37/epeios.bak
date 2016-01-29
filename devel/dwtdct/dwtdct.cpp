@@ -911,7 +911,7 @@ qRT
 qRE
 }
 
-static inline status__ CreateGhost_(
+static inline status__ CreateGhostIfRequired_(
 	const str::string_ &Root,
 	const item_ &Item,
 	const dwtbsc::ghosts_oddities_ &GO,
@@ -935,9 +935,8 @@ qRB
 qRR
 qRT
 qRE
-return dwtght::sUpdated;
-	}
-	else {
+		return dwtght::sUpdated;
+	} else {
 		Ghosts.Flush();
 		return dwtght::sSkipped;
 	}
@@ -962,46 +961,88 @@ static void Clean_(
 }
 
 namespace {
-	dwtght::grow__ GetGhostRowIfExists_(
+	void DeleteExtraneousGhostFiles_(
 		const str::vString &Root,
-		const str::vString &Path,
+		const item_ &Item,
 		const dwtdct::fstrings_ &Filenames,
 		const dwtxcl::excluder_ &Excluder,
 		const dwtbsc::ghosts_oddities_ &GO,
-		str::vString &GhostFilename )
+		const ghosts_ &Ghosts,
+		fGhostsSettingStats &Stats )
 	{
-		bso::bool__ GhostDetected = false;
 		ctn::qCMITEM( str::vString, dwtdct::frow__ ) Filename;
+		dwtght::grow__ GRow = qNIL;
 		dwtdct::frow__ Row = Filenames.First();
 
 		Filename.Init( Filenames );
 
-		while ( ( Row != qNIL ) && Excluder.GetState( Filename( Row ), true ) != dwtxcl::sGhost )
-			Row = Filenames.Next( Row );
+		while ( Row != qNIL ) {
+			if ( Excluder.GetState( Filename( Row ), true ) == dwtxcl::sGhost ) {
+				GRow = dwtght::GetGhostRow( Filename( Row ), GO );
 
-		if ( Row != qNIL )
-			return dwtght::GetGhostRow( GhostFilename = Filename( Row ), GO );
-		else
-			return qNIL;
+				if ( GRow != qNIL ) {
+					if ( !Ghosts.Exists( GRow ) || ( GRow != Item.Dir.GetGhostRow()) ) {
+						Stats.Inc( gssIntruder );
+						dwtbsc::Delete( Root, Item.Path, Filename( Row ) );
+					} else
+						Stats.Inc( gssExpected );
+				}
+			}
+
+			Row = Filenames.Next( Row );
+		}
+
 	}
+
+	bso::fBool DeleteExtraneousGhosts_(
+		const str::string_ &Root,
+		const item_ &Item,
+		const content_ &Content,
+		dwtxcl::excluder_ &Excluder,
+		const dwtbsc::ghosts_oddities_ &GO,
+		const ghosts_ &Ghosts,
+		fGhostsSettingStats &Stats )
+	{
+		dwtght::grow__ GRow = qNIL;
+
+		if ( Excluder.GetState(Item.Dir.Name, true) == dwtxcl::sGhost ) {
+			GRow = dwtght::GetGhostRow( Item.Dir.Name, GO );
+	
+			if ( GRow != qNIL ) {
+				if ( GRow == 0  )
+					Stats.Inc( gssExpected );
+				else if ( !Ghosts.Exists( GRow ) || ( GRow != Content( Item.GetParent() )->Dir.GetGhostRow()) ) {
+					Stats.Inc( gssIntruder );
+					dwtbsc::Delete( Root, Item.Path, 0 );
+				} else
+					Stats.Inc( gssExpected );
+			}
+
+			return false;
+		} else {
+			DeleteExtraneousGhostFiles_( Root, Item, Item.Files.Names, Excluder, GO, Ghosts, Stats );
+
+			return true;
+		}
+	}
+
 }
 
 void dwtdct::SetGhosts(
 	const str::string_ &Root,
 	const content_ &Content,
 	const dwtbsc::ghosts_oddities_ &GO,
-	ghosts_setting_observer__ &GhostsSettingObserver,
+	fGhostsSettingObserver &GhostsSettingObserver,
 	i2g_ &I2G )
 {
 qRH
 	irow__ IRow = qNIL;
-	bso::size__ Total = 0, Handled = 0, Created= 0, Updated = 0, Skipped = 0, Failed = 0, Intruder = 0, Expected = 0;
+	fGhostsSettingStats Stats;
 	g2i G2I;
 	dwtght::grow__ GRow = qNIL;
 	dwtght::rack___ GhostsRack;
 	dwtght::ghost Ghost;
 	dwtxcl::excluder Excluder;
-	str::iString GhostFilename;
 qRB
 	I2G.Init();
 	I2G.Allocate( Content.Extent() );
@@ -1009,7 +1050,9 @@ qRB
 
 	IRow = Content.First();
 
-	GhostsSettingObserver.Report( 0, 0, 0, 0, 0, 0, 0, 0 );
+	Stats.Init();
+
+	GhostsSettingObserver.Report( Stats );
 
 	Excluder.Init( GO );
 
@@ -1021,7 +1064,7 @@ qRB
 	G2I.FillWith( qNIL );
 
 	if ( IRow != qNIL ) {
-		Total = Content.Amount() - 1;
+		Stats.SetValue( gssTotal, Content.Amount() - 1 );
 		IRow = Content.Next( IRow );	// On saute le répertoire racine, qui correspond à 'Root'.
 
 		Ghost.Init();
@@ -1037,34 +1080,17 @@ qRB
 		G2I.Store( 0, GRow );
 
 		if ( GhostsSettingObserver.IsElapsed()  )
-			GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+			GhostsSettingObserver.Report( Stats );
 	}
 
 	while ( IRow != qNIL ) {
-		GhostFilename.Init();
 		item_ &Item = *Content( IRow );
 
-		if ( Excluder.GetState(Item.Dir.Name, true) == dwtxcl::sGhost )
-			GRow = dwtght::GetGhostRow( Item.Dir.Name, GO );
-		else
-			GRow = GetGhostRowIfExists_( Root, Item.Path, Item.Files.Names, Excluder, GO, GhostFilename );
-
-		if ( GRow != qNIL ) {
-			if ( GRow == 0  )
-				Expected++;
-			else if ( (GRow == qNIL) || !Ghosts.Exists( GRow ) || (GRow != Content( GhostFilename.Amount() == 0 ? Item.GetParent() : IRow )->Dir.GetGhostRow()) ) {
-				Intruder++;
-				if ( GhostFilename.Amount() == 0 )
-					dwtbsc::Delete( Root, Item.Path, 0 );
-				else
-					dwtbsc::Delete( Root, Item.Path, GhostFilename );
-			} else
-				Expected++;
-		} else {
+		if ( DeleteExtraneousGhosts_( Root, Item, Content, Excluder, GO, Ghosts, Stats ) ) {
 			GRow = qNIL;
-			switch ( CreateGhost_( Root, Item, GO, I2G( Item.GetParent() ), Ghosts, GRow ) ) {
+			switch ( CreateGhostIfRequired_( Root, Item, GO, I2G( Item.GetParent() ), Ghosts, GRow ) ) {
 			case sCreated:
-				Created++;
+				Stats.Inc( gssCreated );
 				I2G.Store( GRow, IRow );
 				G2I.Allocate( Ghosts.Extent()  );
 				G2I.Store( IRow, GRow );
@@ -1072,15 +1098,15 @@ qRB
 			case sUpdated:
 				I2G.Store( GRow, IRow );
 				G2I.Store( IRow, GRow );
-				Updated++;
+				Stats.Inc( gssUpdated );
 				break;
 			case sSkipped:
 				I2G.Store( GRow, IRow );
 				G2I.Store( IRow, GRow );
-				Skipped++;
+				Stats.Inc( gssSkipped );
 				break;
 			case sFailed:
-				Failed++;
+				Stats.Inc( gssFailed );
 				break;
 			default:
 				qRGnr();
@@ -1088,15 +1114,15 @@ qRB
 			}
 		}
 
-		Handled++;
+		Stats.Inc( gssHandled );
 
 		if ( GhostsSettingObserver.IsElapsed() )
-			GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+			GhostsSettingObserver.Report( Stats );
 
 		IRow = Content.Next( IRow );
 	}
 
-	GhostsSettingObserver.Report( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+	GhostsSettingObserver.Report( Stats );
 
 	Clean_( Ghosts, G2I );
 qRR
@@ -1250,15 +1276,7 @@ qRT
 qRE
 }
 
-void dwtdct::basic_ghosts_setting_observer___::DWTDCTReport(
-	bso::uint__ Handled,
-	bso::uint__ Total,
-	bso::uint__ Created,
-	bso::uint__ Updated,
-	bso::uint__ Skipped,
-	bso::uint__ Failed,
-	bso::uint__ Intruder,
-	bso::uint__ Expected )
+void dwtdct::rBasicGhostsSettingObserver::DWTDCTReport( const fGhostsSettingStats &Stats )
 {
 	static time_t Depart = tol::EpochTime( false );
 qRH
@@ -1270,20 +1288,20 @@ qRB
 
 	Values.Init();
 
-	str::Append( Handled, Values );
-	str::Append( Total, Values );
+	str::Append( Stats.GetValue( gssHandled ), Values );
+	str::Append( Stats.GetValue( gssTotal ), Values );
 
 	if ( Diff != 0 )
-		str::Append( Handled / Diff, Values );
+		str::Append( Stats.GetValue( gssHandled ) / Diff, Values );
 	else
 		Values.Append( str::string( "?" ) );
 
-	str::Append( Created, Values );
-	str::Append( Updated, Values );
-	str::Append( Skipped, Values );
-	str::Append( Failed, Values );
-	str::Append( Intruder, Values );
-	str::Append( Expected, Values );
+	str::Append( Stats.GetValue( gssCreated ), Values );
+	str::Append( Stats.GetValue( gssUpdated ), Values );
+	str::Append( Stats.GetValue( gssSkipped ), Values );
+	str::Append( Stats.GetValue( gssFailed ), Values );
+	str::Append( Stats.GetValue( gssIntruder ), Values );
+	str::Append( Stats.GetValue( gssExpected ), Values );
 
 
 	Message.Init(_Message );

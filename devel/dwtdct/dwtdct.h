@@ -422,32 +422,69 @@ namespace dwtdct {
 		content_ &Content,
 		exploration_observer__ &Observer );
 
-	class ghosts_setting_observer__
+	qENUM( GhostsSettingStat ) {
+		gssHandled,
+		gssTotal,
+		gssCreated,
+		gssUpdated,
+		gssSkipped,
+		gssFailed,
+		gssIntruder,
+		gssExpected,
+		gss_amount,
+		gss_Undefined
+	};
+
+	struct fGhostsSettingStats
+	{
+	private:
+		bso::uint__ Core_[gss_amount];
+		void Test_( eGhostsSettingStat Stat ) const
+		{
+			if ( Stat >= gss_amount )
+				qRFwk();
+		}
+	public:
+		void reset( bso::fBool = true )
+		{
+			memset(Core_, 0, sizeof( Core_ ) );
+		}
+		qCDTOR( fGhostsSettingStats );
+		void Init( void )
+		{
+			memset(Core_, 0, sizeof( Core_ ) );
+		}
+		bso::uint__ GetValue( eGhostsSettingStat Stat ) const
+		{
+			Test_( Stat );
+
+			return Core_[Stat];
+		}
+		void SetValue(
+			eGhostsSettingStat Stat,
+			bso::uint__ Value )
+		{
+			Test_( Stat );
+
+			Core_[Stat] = Value;
+		}
+		void Inc( eGhostsSettingStat Stat )
+		{
+			Test_( Stat );
+			Core_[Stat]++;
+		}
+	};
+
+	class fGhostsSettingObserver
 	: public timer__
 	{
 	protected:
-		virtual void DWTDCTReport(
-			bso::uint__ Handled,
-			bso::uint__ Total,
-			bso::uint__ Created,
-			bso::uint__ Updated,
-			bso::uint__ Skipped,
-			bso::uint__ Failed,
-			bso::uint__ Intruder,
-			bso::uint__ Expected ) = 0;
+		virtual void DWTDCTReport( const fGhostsSettingStats &Stats ) = 0;
 	public:
-		void Report(
-			bso::uint__ Handled,
-			bso::uint__ Total,
-			bso::uint__ Created,
-			bso::uint__ Updated,
-			bso::uint__ Skipped,
-			bso::uint__ Failed,
-			bso::uint__ Intruder,
-			bso::uint__ Expected )
+		void Report(const fGhostsSettingStats &Stats )
 		{
 			if ( IsEnabled() ) {
-				DWTDCTReport( Handled, Total, Created, Updated, Skipped, Failed, Intruder, Expected );
+				DWTDCTReport( Stats );
 				Launch();
 			}
 		}
@@ -461,7 +498,7 @@ namespace dwtdct {
 		const str::string_ &Root,
 		const content_ &Content,
 		const dwtbsc::ghosts_oddities_ &GO,
-		ghosts_setting_observer__ &GhostsSettingObserver,
+		fGhostsSettingObserver &GhostsSettingObserver,
 		i2g_ &I2G );	// Créer dans chaque répertoire le répertoire spécial servant à détecter le renommage des répertoires.
 
 	// ATTENTION : 'Content' doit avoir été récupèré avec 'rhKeepGhostLike'.
@@ -471,36 +508,28 @@ namespace dwtdct {
 		const dwtbsc::ghosts_oddities_ &GO,
 		dwtdct::exploration_observer__ &Observer );	// Supprime toute trace des 'ghostt's
 
-	class basic_ghosts_setting_observer___
-	: public ghosts_setting_observer__
+	class rBasicGhostsSettingObserver
+	: public fGhostsSettingObserver
 	{
 	protected:
-		virtual void DWTDCTReport(
-			bso::uint__ Handled,
-			bso::uint__ Total,
-			bso::uint__ Created,
-			bso::uint__ Updated,
-			bso::uint__ Skipped,
-			bso::uint__ Failed,
-			bso::uint__ Intruder,
-			bso::uint__ Expected );
+		virtual void DWTDCTReport( const fGhostsSettingStats &Stats ) override;
 	private:
 		ltf::line_text_oflow___<> _Flow;
 		str::string _Message;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			ghosts_setting_observer__::reset( P );
+			fGhostsSettingObserver::reset( P );
 			_Flow.reset( P );
 			_Message.reset( P );
 		}
-		E_CVDTOR( basic_ghosts_setting_observer___ );
+		E_CVDTOR( rBasicGhostsSettingObserver );
 		void Init(
 			const str::string_ &Message,
 			txf::text_oflow__ &TFLow,
 			tol::delay__ Delay )
 		{
-			ghosts_setting_observer__::Init( Delay );
+			fGhostsSettingObserver::Init( Delay );
 
 			_Flow.Init( TFLow );
 			_Message.Init( Message );
