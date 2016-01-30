@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// SKeTch
+
 #ifndef SKT__INC
 # define SKT__INC
 
@@ -25,8 +27,6 @@
 # if defined( E_DEBUG ) && !defined( SKT_NODBG )
 #  define SKT_DBG
 # endif
-
-// SKeTch
 
 # include "err.h"
 

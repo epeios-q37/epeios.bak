@@ -17,8 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STK__COMPILATION
+#define IDS__COMPILATION
 
-#include "stk.h"
+#include "ids.h"
 
-using namespace stk;
+using namespace ids;
+

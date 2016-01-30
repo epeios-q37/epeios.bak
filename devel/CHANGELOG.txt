@@ -8,9 +8,13 @@ Meaning of list markers (2nd level):
 	- Changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
 	   in a broad sense (parameters of a function, a method, or a template...).
 	- Changes fixing compiler errors/warnings.
-- '*' : Functionnality changes.
+- '*' : Functionnality addition/changes.
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
+
+2016-01-30 :
+- STK :
+	* Adding files hook related features.
 
 2016-01-27 :
 - CSDRCC, CSDRCU, CSDUCL, SCLFRNTND :
