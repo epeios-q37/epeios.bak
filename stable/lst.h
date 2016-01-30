@@ -493,6 +493,7 @@ namespace lst {
 		else {
 			Hook.Set( List.Locations );
 			List.Locations.Init( FirstUnused );
+			Hook.Bind( ReferenceTimeStamp );
 		}
 
 		return State;

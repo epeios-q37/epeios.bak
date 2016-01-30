@@ -155,9 +155,9 @@ namespace stk {
 
 	E_ROW( row__ );
 
-	typedef tys::fh___ rFH;
+	typedef bch::fh___ rFH;
 
-	typedef tys::hf___ rHF;
+	typedef bch::hf___ rHF;
 
 	template <typename stack> uys::state__ Plug(
 		stack &Stack,

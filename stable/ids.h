@@ -17,43 +17,23 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: ids.h,v 1.25 2013/04/11 19:36:49 csimon Exp $
+// ID Store 
 
-#ifndef IDS__INC
-#define IDS__INC
+# ifndef IDS__INC
+# define IDS__INC
 
-#define IDS_NAME		"IDS"
+# define IDS_NAME		"IDS"
 
-#define	IDS_VERSION	"$Revision: 1.25 $"
+# if defined( E_DEBUG ) && !defined( IDS_NODBG )
+#  define IDS_DBG
+# endif
 
-#define IDS_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-
-#if defined( E_DEBUG ) && !defined( IDS_NODBG )
-#define IDS_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.25 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/11 19:36:49 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D ID Store 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "stk.h"
-#include "ags.h"
+# include "err.h"
+# include "flw.h"
+# include "stk.h"
+# include "ags.h"
 
 namespace ids {
-
 	//c Store of ids of type 'id__'. Use 'ID_STORE' rather than directly this class.
 	template <typename id__> class ids_store_ 
 	{
@@ -184,9 +164,21 @@ namespace ids {
 
 	E_AUTO1( ids_store )
 
-	#define E_IDS_STORE_( t )	ids_store_<t>
-	#define E_IDS_STORE( t )	ids_store<t>
+	using stk::rFH;
+
+	using stk::rHF;
+
+	template <typename ids> uys::state__ Plug(
+		ids &Ids,
+		rFH &Hook )
+	{
+		return stk::Plug( Stack, Hook );
+	}
+
 }
 
-/*$END$*/
+# define E_IDS_STORE_( t )	ids_store_<t>
+# define E_IDS_STORE( t )	ids_store<t>
+
+
 #endif

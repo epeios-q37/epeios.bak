@@ -619,7 +619,7 @@ namespace bch {
 	#define E_BUNCH( Type )		E_BUNCHt( Type, sdr::row__ )
 	#define E_BUNCH_( Type )	E_BUNCHt_( Type, sdr::row__ )
 
-#ifndef FLS__COMPILATION
+// #ifndef FLS__COMPILATION
 	using tys::fh___;
 
 	using tys::hf___;
@@ -634,7 +634,7 @@ namespace bch {
 
 		return State;
 	}
-#endif
+// #endif
 
 	typedef E_BUNCH_( sdr::row__ ) relations_;
 	E_AUTO( relations )

@@ -13,8 +13,10 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2016-01-30 :
-- STK :
+- IDS, STK :
 	* Adding files hook related features.
+- LST :
+	# Fixing files hook bad released entries reading.
 
 2016-01-27 :
 - CSDRCC, CSDRCU, CSDUCL, SCLFRNTND :
