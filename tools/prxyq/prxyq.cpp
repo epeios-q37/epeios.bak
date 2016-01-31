@@ -106,7 +106,7 @@ public:
 		}
 		void SetIn( flw::iflow__ &Flow )
 		{
-			IFlow_.Init( Flow );
+			IFlow_.Init( Flow, flx::dhPropagate );
 		}
 		void SetOut( flw::oflow__ &Flow )
 		{

@@ -47,6 +47,18 @@
 						<xpp:expand href="../plugins/Straight/straight.xlcl"/>
 					</Locale>
 				</Plugin>
+				<Plugin id="Proxy">
+					<Filename>
+						<xpp:expand select="SlotPluginsRootDir"/>
+						<xpp:bloc>proxy</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Proxy/proxy.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Proxy/proxy.xlcl"/>
+					</Locale>
+				</Plugin>
 			</Plugins>
 		</Definitions>
 		<Locale>

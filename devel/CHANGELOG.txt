@@ -12,6 +12,12 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-01-31 :
+- FLX :
+	* 'size_embedded_oflow[_driver]___' can be configured so the 'Commit()' is or not propagated to underlying flow.
+- FBLBRR, FBLFRP, PRXY :
+	- Adaptation to changes in 'FLX'.
+
 2016-01-30 :
 - IDS, STK :
 	* Adding files hook related features.

@@ -59,3 +59,8 @@ public:
 SCLPLUGIN_DEF( rPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
+
+const char *sclplugin::SCLPLUGINPluginIdentifier( void )
+{
+	return IDENTIFIER;
+}

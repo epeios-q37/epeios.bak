@@ -45,7 +45,7 @@ namespace {
 
 		while ( Row != qNIL )
 		{
-			Type.Init( Retrievers.Plugin( Row ) );
+			Type.Init( Retrievers.Plugin( Row ), NULL );
 			Types.Add( Type );
 
 			Row = Retrievers.Next( Row );
@@ -56,11 +56,11 @@ namespace {
 	}
 }
 
-void common::rTypes::Init( void )
+void common::rTypes::Init( const char *Identifier )
 {
 	Retrievers_.Init();
 
-	sclmisc::Plug( ogzplg::TypePluginTarget, Retrievers_ );
+	sclmisc::Plug( ogzplg::TypePluginTarget, Identifier, Retrievers_ );
 
 	Core.Init();
 	Fill_( Retrievers_, Core );
@@ -76,19 +76,21 @@ template <typename retriever> static void Set_(
 	PluginRetriever.Plugin().Initialize();
 }
 
-void common::rDatabase::Init( const ogztyp::vTypes &Types )
+void common::rDatabase::Init(
+	const ogztyp::vTypes &Types,
+	const char *Identifier )
 {
 	Retriever_.Init();
-	sclmisc::Plug( ogzplg::DatabasePluginTarget, Retriever_ );
+	sclmisc::Plug( ogzplg::DatabasePluginTarget, Identifier, Retriever_ );
 //	P_().Initialize();
 
 	Core.Init( Types, P_().GetDTA(), P_().GetCLM(), P_().GetFLD(), P_().GetRCD(), P_().GetUSR() );
 }
 
-void common::rAuthentication::Init( void )
+void common::rAuthentication::Init( const char *Identifier )
 {
 	Retriever_.Init();
-	sclmisc::Plug( ogzplg::AuthenticationPluginTarget, Retriever_ );
+	sclmisc::Plug( ogzplg::AuthenticationPluginTarget, Identifier, Retriever_ );
 }
 
 void common::Initialize( void )
@@ -98,9 +100,9 @@ qRB
 	if ( IsInitialized() )
 		qRGnr();
 
-	Rack_.Types.Init();
-	Rack_.Database.Init( Rack_.Types.Core );
-	Rack_.Authentication.Init();
+	Rack_.Types.Init( NULL );
+	Rack_.Database.Init( Rack_.Types.Core, NULL );
+	Rack_.Authentication.Init( NULL );
 	Rack_.Record.Init();
 
 	Rack.Init( Rack_ );

@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2015-2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of orgnzq.
 #
@@ -332,7 +332,8 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
+copt += -DIDENTIFIER=\""3cfe8169-fe17-4cfc-9523-eb245ccebe6f"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -356,10 +357,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
-	mkdir -p $(dest)
-			ogz/Backend/Plugins/Types/
-	cp $(binary) $(dest)ogz/Backend/Plugins/Types/
+	mkdir -p $(dest)plugins/ogz/Backend/Type/
+	cp $(binary) $(dest)plugins/ogz/Backend/Type/
 endif
 		
 

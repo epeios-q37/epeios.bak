@@ -15,8 +15,9 @@
 	  </xpp:bloc>
 		<Parameters>
 			<Plugins>
-				<Plugin target="Slot" Id="Straight">53700</Plugin>
-			</Plugins>
+			<!--Plugin target="Slot" Id="Straight">53700</Plugin-->
+			<Plugin target="Slot" Id="Proxy">localhost:53700 test</Plugin>
+		</Plugins>
 		<xpp:define name="lib_prefix">
 			<xpp:bloc>
 				<xpp:ifeq select="env" value="win">

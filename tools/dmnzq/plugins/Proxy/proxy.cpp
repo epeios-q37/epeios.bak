@@ -37,8 +37,6 @@ typedef misc::callback__ _plugin__;
 using misc::module__;
 
 namespace {
-
-
 	struct data__ {
 		prxy::rFlow *Flow;
 		module__ *Module;

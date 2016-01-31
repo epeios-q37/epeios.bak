@@ -340,8 +340,9 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""(Version)"\"
+copt += -DVERSION=\""20160128"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
+copt += -DIDENTIFIER=\""dc3beae2-d82c-4471-bc7e-03adb886d5f7"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -365,9 +366,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
 	mkdir -p $(dest)
-			
 	cp $(binary) $(dest)
 endif
 		

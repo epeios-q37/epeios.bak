@@ -93,9 +93,11 @@ public:
 			if ( !Flow_.Init( HostService, err::hUserDefined ) )
 				return false;
 
-			OFlow_.Init( Flow_ );
+			OFlow_.Init( Flow_, flx::chPropagate );
 
 			OFlow_.Write(Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
+
+			OFlow_.Commit();
 
 			if ( !IFlow_.EndOfFlow() ) {
 				if ( IFlow_.Get() != 0 )
@@ -108,6 +110,10 @@ public:
 		void Commit( void )
 		{
 			return sFlow_::Commit();
+		}
+		void Dismiss( void )
+		{
+			return sFlow_::Dismiss();
 		}
 	};
 

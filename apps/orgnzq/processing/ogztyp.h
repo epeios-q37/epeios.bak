@@ -62,15 +62,20 @@ namespace ogztyp {
 	{
 	private:
 		qRVM( fCallback, C_, Callback_ );
+		const char *Identifier_;
 	public:
 		qCDTOR( fType );
 		void reset( bso::bool__ = true )
 		{
 			Callback_ = NULL;
+			Identifier_ = NULL;
 		}
-		void Init( fCallback &Callback )
+		void Init(
+			fCallback &Callback,
+			const char *Identifier )
 		{
 			Callback_ = &Callback;
+			Identifier_ = Identifier;
 		}
 		const char *GetLabel( void ) const
 		{

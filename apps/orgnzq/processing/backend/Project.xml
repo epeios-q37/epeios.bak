@@ -56,6 +56,9 @@
 			<Module>wrpunbound</Module>
 		</Modules>
 	</Modules>
+	<Files>
+		<File>dmnzq.xprj</File>
+	</Files>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>
 		<SourceDir>../..</SourceDir>

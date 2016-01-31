@@ -774,7 +774,17 @@ namespace flx {
 		{
 			return _Driver != NULL;
 		}
-	};	
+	};
+
+	qENUM( CommitHandling ) {
+		chPropagate,	// 'Commit()' IS propagated to undelying flow.
+		chHold,			// 'Commit()' is NOT propagated to undelying flow.
+		ch_amount,
+		ch_Undefined,
+		ch_Default = chPropagate
+	};
+
+
 
 	// 'driver' qui relaye un 'oflow', mais dont la taille est 'encode' dans le flux.
 	class size_embedded_oflow_driver___
@@ -784,6 +794,7 @@ namespace flx {
 		flw::oflow__ *_Flow;
 		fdr::size__ _EmbeddedSizeRemainder;
 		bso::bool__ _PendingCommit;
+		eCommitHandling CommitHandling_;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
@@ -825,22 +836,26 @@ namespace flx {
 
 			_PendingCommit = false;
 
-			//	_Flow->Commit();	// Le 'flow' est enclav dans un autre flot ; c'est ce dernier qui devra faire le 'commit'.
+			if ( CommitHandling_ == chPropagate )
+				_Flow->Commit();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_oflow_driver___::reset( P );
 			_Flow = NULL;
+			CommitHandling_ = ch_Undefined;
 			_EmbeddedSizeRemainder = 0;
 			_PendingCommit = false;
 		}
 		E_CVDTOR( size_embedded_oflow_driver___)
 		void Init(
 			flw::oflow__ &Flow,
-			fdr::thread_safety__ ThreadSafety )
+			fdr::thread_safety__ ThreadSafety,
+			eCommitHandling CommitHandling )
 		{
 			_Flow = &Flow;
+			CommitHandling_ = CommitHandling;
 			_EmbeddedSizeRemainder = 0;
 			_PendingCommit = false;
 			_oflow_driver___::Init( ThreadSafety );
@@ -948,7 +963,7 @@ namespace flx {
 		}
 	};	
 
-	template <typename flow, typename sflow, typename driver> class _sizes_embbeded_flow___
+	template <typename flow, typename sflow, typename driver, typename handling> class _sizes_embbeded_flow___
 	: public sflow
 	{
 	private:
@@ -960,15 +975,17 @@ namespace flx {
 			_Driver.reset( P );
 		}
 		E_CDTOR( _sizes_embbeded_flow___ );
-		void Init( flow &Flow )
+		void Init(
+			flow &Flow,
+			handling Handling )
 		{
 			sflow::Init( _Driver );
-			_Driver.Init( Flow, fdr::tsDisabled );
+			_Driver.Init( Flow, fdr::tsDisabled, Handling );
 		}
 	};
 
-	typedef _sizes_embbeded_flow___<flw::iflow__, _iflow__, size_embedded_iflow_driver___> size_embedded_iflow___;
-	typedef _sizes_embbeded_flow___<flw::oflow__, _oflow__, size_embedded_oflow_driver___> size_embedded_oflow___;
+	typedef _sizes_embbeded_flow___<flw::iflow__, _iflow__, size_embedded_iflow_driver___, dismiss_handling__> size_embedded_iflow___;
+	typedef _sizes_embbeded_flow___<flw::oflow__, _oflow__, size_embedded_oflow_driver___, eCommitHandling> size_embedded_oflow___;
 
 
 # ifdef FLX__MT

@@ -67,7 +67,7 @@ namespace ogzplg {
 	: public fCommon<ogztyp::fCallback>
 	{
 	public:
-		static const char *Identification( void );
+		static const char *Label( void );
 	};
 
 
@@ -80,7 +80,7 @@ namespace ogzplg {
 	: public fCommon<ogzdtb::fCallback>
 	{
 	public:
-		static const char *Identification( void );
+		static const char *Label( void );
 	};
 
 
@@ -93,7 +93,7 @@ namespace ogzplg {
 	: public fCommon<ogzusr::fAuthenticationCallback>
 	{
 	public:
-		static const char *Identification( void );
+		static const char *Label( void );
 	};
 }
 

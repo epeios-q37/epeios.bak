@@ -21,17 +21,17 @@
 
 using namespace ogzplg;
 
-const char *ogzplg::fTypePlugin::Identification( void )
+const char *ogzplg::fTypePlugin::Label( void )
 {
 	return OGZPLG_TYPE_PLUGIN_TARGET " V" OGZPLG_TYPE_PLUGIN_VERSION " " CPE_DESCRIPTION;
 }
 
-const char *ogzplg::fDatabasePlugin::Identification( void )
+const char *ogzplg::fDatabasePlugin::Label( void )
 {
 	return OGZPLG_DATABASE_PLUGIN_TARGET " V" OGZPLG_DATABASE_PLUGIN_VERSION " " CPE_DESCRIPTION;
 }
 
-const char *ogzplg::fAuthenticationPlugin::Identification( void )
+const char *ogzplg::fAuthenticationPlugin::Label( void )
 {
 	return OGZPLG_AUTHENTICATION_PLUGIN_TARGET " V" OGZPLG_AUTHENTICATION_PLUGIN_VERSION " " CPE_DESCRIPTION;
 }

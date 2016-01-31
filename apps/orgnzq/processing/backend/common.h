@@ -76,7 +76,7 @@ namespace common {
 			Retrievers_.reset( P );
 		}
 		qCDTOR( rTypes );
-		void Init( void );
+		void Init( const char *Identifier );
 	};
 
 	class rDatabase
@@ -95,7 +95,9 @@ namespace common {
 			Retriever_.reset( P );
 		}
 		E_CDTOR( rDatabase );
-		void Init( const ogztyp::vTypes &Types );
+		void Init(
+			const ogztyp::vTypes &Types,
+			const char *Identifier );
 	};
 
 	class rAuthentication
@@ -112,7 +114,7 @@ namespace common {
 			Retriever_.reset( P );
 		}
 		qCDTOR( rAuthentication );
-		void Init( void );
+		void Init( const char *Identifier );
 		ogzusr::fURow Login(
 			const str::vString &Username,
 			const str::vString &Password )
