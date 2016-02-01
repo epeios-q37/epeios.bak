@@ -170,6 +170,8 @@ public:
 
 			Flow.Put( 0 );	// To report that the flow is plugged.
 
+			Flow.Commit();
+
 			Process_( Flow1_, Flow2_ );
 		}
 		void Plug( flw::ioflow__ &Flow )
@@ -180,6 +182,8 @@ public:
 			mtx::Unlock( Mutex_ );
 
 			Flow.Put( 0 );	// To report that the flow is plugged.
+
+			Flow.Commit();
 
 			Process_( Flow2_, Flow1_ );
 		}
@@ -303,7 +307,6 @@ public:
 	class callback__
 	: public _callback__
 	{
-	private:
 	protected:
 		void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{

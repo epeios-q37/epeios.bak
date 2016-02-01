@@ -93,15 +93,15 @@ public:
 			if ( !Flow_.Init( HostService, err::hUserDefined ) )
 				return false;
 
-			OFlow_.Init( Flow_, flx::chPropagate );
+			Flow_.Write(Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
 
-			OFlow_.Write(Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
+			Flow_.Commit();
 
-			OFlow_.Commit();
-
-			if ( !IFlow_.EndOfFlow() ) {
-				if ( IFlow_.Get() != 0 )
+			if ( !Flow_.EndOfFlow() ) {
+				if ( Flow_.Get() != 0 )
 					qRGnr();
+
+				OFlow_.Init( Flow_, flx::chPropagate );
 
 				return true;
 			} else
