@@ -34,49 +34,20 @@
 # include "flx.h"
 
 namespace prxy {
-	typedef fdr::ioflow_driver___<>	rFlowDriver_;
-
-	typedef flw::standalone_ioflow__<> sFlow_;
-
-	class rFlow
-	: private rFlowDriver_,
-	  public sFlow_
+	class rProxy
 	{
 	private:
 		csdbnc::flow___ Flow_;
 		flx::size_embedded_oflow___ OFlow_;
 		flw::iflow__ &IFlow_;
-	protected:
-		virtual fdr::size__ FDRWrite(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum) override
-		{
-			return OFlow_.WriteUpTo( Buffer, Maximum );
-		}
-		virtual void FDRCommit( void ) override
-		{
-			OFlow_.Commit();
-		}
-		virtual fdr::size__ FDRRead(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override
-		{
-			return IFlow_.ReadUpTo( Maximum, Buffer );
-		}
-		virtual void FDRDismiss( void ) override
-		{
-			IFlow_.Dismiss();
-		}
-public:
+	public:
 		void reset( bso::bool__ P = true )
 		{
-			sFlow_::reset( P );
-			rFlowDriver_::reset( P );
 			OFlow_.reset( P );
 			Flow_.reset( P );
 		}
-		qVDTOR( rFlow );
-		rFlow( void )
+		qDTOR( rProxy );
+		rProxy( void )
 		: IFlow_( Flow_ )
 		{
 			reset( false );
@@ -86,9 +57,6 @@ public:
 			const char *Identifier )
 		{
 			reset();
-
-			rFlowDriver_::Init( fdr::ts_Default );
-			sFlow_::Init( *this );
 
 			if ( !Flow_.Init( HostService, err::hUserDefined ) )
 				return false;
@@ -101,23 +69,35 @@ public:
 				if ( Flow_.Get() != 0 )
 					qRGnr();
 
+				Flow_.Dismiss();
+
 				OFlow_.Init( Flow_, flx::chPropagate );
 
 				return true;
 			} else
 				return false;
 		}
+		fdr::size__ WriteUpTo(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum )
+		{
+			return OFlow_.WriteUpTo( Buffer, Maximum );
+		}
 		void Commit( void )
 		{
-			return sFlow_::Commit();
+			OFlow_.Commit();
+		}
+		fdr::size__ ReadUpTo(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer )
+		{
+			return IFlow_.ReadUpTo( Maximum, Buffer );
 		}
 		void Dismiss( void )
 		{
-			return sFlow_::Dismiss();
+			IFlow_.Dismiss();
 		}
 	};
-
-
 }
 
 #endif

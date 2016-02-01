@@ -37,8 +37,60 @@ typedef misc::callback__ _plugin__;
 using misc::module__;
 
 namespace {
+	typedef fdr::ioflow_driver___<>	rFlowDriver_;
+
+	typedef flw::standalone_ioflow__<> sFlow_;
+
+	class rFlow
+	: private rFlowDriver_,
+	  public sFlow_
+	{
+	private:
+		prxy::rProxy Proxy_;
+	protected:
+		virtual fdr::size__ FDRWrite(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum) override
+		{
+			return Proxy_.WriteUpTo( Buffer, Maximum );
+		}
+		virtual void FDRCommit( void ) override
+		{
+			Proxy_.Commit();
+		}
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+		{
+			return Proxy_.ReadUpTo( Maximum, Buffer );
+		}
+		virtual void FDRDismiss( void ) override
+		{
+			Proxy_.Dismiss();
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			sFlow_::reset( P );
+			rFlowDriver_::reset( P );
+			Proxy_.reset( P );
+		}
+		qCVDTOR( rFlow );
+		bso::bool__ Init(
+			const char *HostService,
+			const char *Identifier )
+		{
+			reset();
+
+			rFlowDriver_::Init( fdr::ts_Default );
+			sFlow_::Init( *this );
+
+			return Proxy_.Init( HostService, Identifier );
+		}
+	};
+
 	struct data__ {
-		prxy::rFlow *Flow;
+		rFlow *Flow;
 		module__ *Module;
 		mtx::handler___ Mutex;
 		const char *Origin;
@@ -55,7 +107,7 @@ namespace {
 			Mutex = mtx::UndefinedHandler;
 		}
 		void Init(
-			prxy::rFlow *Flow,
+			rFlow *Flow,
 			module__ &Module,
 			const char *Origin )
 		{
@@ -74,7 +126,7 @@ namespace {
 	{
 	qRFH
 		data__ &Data = *(data__ *)UP;
-		prxy::rFlow *Flow = Data.Flow;
+		rFlow *Flow = Data.Flow;
 		module__ &Module = *Data.Module;
 		ntvstr::string___ Origin;
 		void *MUP = NULL;
@@ -103,10 +155,10 @@ namespace {
 		virtual void MISCProcess( module__ &Module ) override
 		{
 		qRH
-			prxy::rFlow *Flow = NULL;
+			rFlow *Flow = NULL;
 			data__ Data;
 		qRB
-			Flow = new prxy::rFlow;
+			Flow = new rFlow;
 
 			if ( Flow == NULL )
 				qRAlc();
@@ -123,7 +175,7 @@ namespace {
 
 				Flow = NULL;
 
-				Flow = new prxy::rFlow;
+				Flow = new rFlow;
 
 				if ( Flow == NULL )
 					qRAlc();

@@ -128,11 +128,12 @@ public:
 			flw::oflow__ &OFlow )
 		{
 			fdr::byte__ Buffer[1024];
-			fdr::size__ Size = 0;
+			fdr::size__ Size = 0,  Written = 0;
 
 			while ( ( Size = IFlow.ReadUpTo( sizeof( Buffer ), Buffer ) ) != 0) {
-				while ( Size )
-					Size -= OFlow.WriteUpTo( Buffer, Size );
+				Written = 0;
+				while ( Size > Written )
+					Written += OFlow.WriteUpTo( Buffer + Written, Size - Written );
 			}
 		}
 	public:
