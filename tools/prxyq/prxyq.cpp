@@ -63,7 +63,7 @@ namespace {
 	  public _flow__
 	{
 	private:
-		flx::size_embedded_iflow___ IFlow_;
+		Q37_MRMDF( flw::iflow__, IF_, IFlow_ );
 		Q37_MRMDF( flw::oflow__, OF_, OFlow_ );
 	protected:
 		virtual fdr::size__ FDRWrite(
@@ -80,18 +80,18 @@ namespace {
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override
 		{
-			return IFlow_.ReadUpTo( Maximum, Buffer );
+			return IF_().ReadUpTo( Maximum, Buffer );
 		}
 		virtual void FDRDismiss( void ) override
 		{
-			IFlow_.Dismiss();
+			IF_().Dismiss();
 		}
 public:
 		void reset( bso::bool__ P = true )
 		{
 			_flow__::reset( P );
 			_flow_driver___::reset( P );
-			IFlow_.reset( P );
+			IFlow_ = NULL;
 			OFlow_ = NULL;
 		}
 		E_CVDTOR( flow___ );
@@ -106,7 +106,10 @@ public:
 		}
 		void SetIn( flw::iflow__ &Flow )
 		{
-			IFlow_.Init( Flow, flx::dhPropagate );
+			if ( IFlow_ != NULL )
+				qRGnr();
+
+			IFlow_ = &Flow;
 		}
 		void SetOut( flw::oflow__ &Flow )
 		{
@@ -134,6 +137,7 @@ public:
 				Written = 0;
 				while ( Size > Written )
 					Written += OFlow.WriteUpTo( Buffer + Written, Size - Written );
+				OFlow.Commit();
 			}
 		}
 	public:

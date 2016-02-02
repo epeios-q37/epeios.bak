@@ -30,48 +30,34 @@
 
 # include "err.h"
 # include "flw.h"
-# include "csdbnc.h"
-# include "flx.h"
 
 namespace prxy {
 	class rProxy
 	{
 	private:
-		csdbnc::flow___ Flow_;
-		flx::size_embedded_oflow___ OFlow_;
-		flw::iflow__ &IFlow_;
+		qRVM( flw::ioflow__, F_, Flow_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			OFlow_.reset( P );
-			Flow_.reset( P );
+			Flow_ = NULL;
 		}
-		qDTOR( rProxy );
-		rProxy( void )
-		: IFlow_( Flow_ )
-		{
-			reset( false );
-		}
+		qCDTOR( rProxy );
 		bso::bool__ Init(
-			const char *HostService,
+			flw::ioflow__ NakedFlow,
+			flw::ioflow__ &Flow,
 			const char *Identifier )
 		{
-			reset();
+			Flow_ = &Flow;
 
-			if ( !Flow_.Init( HostService, err::hUserDefined ) )
-				return false;
+			NakedFlow.Write( Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
 
-			Flow_.Write(Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
+			NakedFlow.Commit();
 
-			Flow_.Commit();
-
-			if ( !Flow_.EndOfFlow() ) {
-				if ( Flow_.Get() != 0 )
+			if ( !NakedFlow.EndOfFlow() ) {
+				if ( NakedFlow.Get() != 0 )
 					qRGnr();
 
-				Flow_.Dismiss();
-
-				OFlow_.Init( Flow_, flx::chPropagate );
+				NakedFlow.Dismiss();
 
 				return true;
 			} else
@@ -81,21 +67,21 @@ namespace prxy {
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
-			return OFlow_.WriteUpTo( Buffer, Maximum );
+			return F_().WriteUpTo( Buffer, Maximum );
 		}
 		void Commit( void )
 		{
-			OFlow_.Commit();
+			F_().Commit();
 		}
 		fdr::size__ ReadUpTo(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer )
 		{
-			return IFlow_.ReadUpTo( Maximum, Buffer );
+			return F_().ReadUpTo( Maximum, Buffer );
 		}
 		void Dismiss( void )
 		{
-			IFlow_.Dismiss();
+			F_().Dismiss();
 		}
 	};
 }

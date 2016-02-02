@@ -6,27 +6,24 @@
 		<xpp:expand href="../TOL.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
-			<PluginPath>h:/bin/plugins/remote/inet</PluginPath>
+			<StraightPluginPath>h:/bin/plugins/remote/straight</StraightPluginPath>
+			<ProxyPluginPath>h:/bin/plugins/remote/proxy</ProxyPluginPath>
 		</Parameters>
 		<Definitions>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
 			<Translations text="LibraryCommandDescription">
-				<Translation language="fr">Récupère l'API d'un 'backend' de type bibliothèque dynamique</Translation>
-				<Translation language="en">Get the API from a dynamic library backend</Translation>
+				<Translation language="fr">Récupère l'API d'un 'backend' de type bibliothèque dynamique.</Translation>
+				<Translation language="en">Get the API from a dynamic library backend.</Translation>
 			</Translations>
 			<Translations text="DaemonCommandDescription">
-				<Translation language="fr">Récupère l'API d'un 'backend' de type 'daemon'</Translation>
-				<Translation language="en">Get the API from a daemon-type backend</Translation>
+				<Translation language="fr">Récupère l'API d'un 'backend' de type 'daemon'.</Translation>
+				<Translation language="en">Get the API from a daemon-type backend.</Translation>
 			</Translations>
-			<Translations text="DaemonArgumentLabel">
-				<Translation language="fr">daemon</Translation>
-				<Translation language="en">daemon</Translation>
-			</Translations>
-			<Translations text="DaemonArgumentDescription">
-				<Translation language="fr">Adresse du daemon correspondant au 'backend' (ex.: 'localhost:1234')</Translation>
-				<Translation language="en">Backend daemon address (ex.: 'localhost:1234')</Translation>
+			<Translations text="ProxyCommandDescription">
+				<Translation language="fr">Récupère l'API d'un 'backend' de type 'daemon' via un 'proxy'.</Translation>
+				<Translation language="en">Get the API from a daemon-type backend through a proxy.</Translation>
 			</Translations>
 			<Translations text="LibraryArgumentLabel">
 				<Translation language="fr">bibliothèque</Translation>
@@ -35,6 +32,30 @@
 			<Translations text="LibraryArgumentDescription">
 				<Translation language="fr">Nom avec chemin de la bibliothèque dynamique correspondant au 'backend'.</Translation>
 				<Translation language="en">Backend dynamic library name with path.</Translation>
+			</Translations>
+			<Translations text="DaemonArgumentLabel">
+				<Translation language="fr">daemon</Translation>
+				<Translation language="en">daemon</Translation>
+			</Translations>
+			<Translations text="DaemonArgumentDescription">
+				<Translation language="fr">Adresse du daemon correspondant au 'backend' (ex.: 'localhost:1234').</Translation>
+				<Translation language="en">Backend daemon address (ex.: 'localhost:1234').</Translation>
+			</Translations>
+			<Translations text="ProxyArgumentLabel">
+				<Translation language="fr">proxy</Translation>
+				<Translation language="en">proxy</Translation>
+			</Translations>
+			<Translations text="ProxyArgumentDescription">
+				<Translation language="fr">Adresse du 'proxy' (ex.: 'localhost:1234').</Translation>
+				<Translation language="en">Proxy address (ex.: 'localhost:1234').</Translation>
+			</Translations>
+			<Translations text="IdentifierArgumentLabel">
+				<Translation language="fr">identifiant</Translation>
+				<Translation language="en">identifier</Translation>
+			</Translations>
+			<Translations text="IdentifierArgumentDescription">
+				<Translation language="fr">Identifiant de connexion.</Translation>
+				<Translation language="en">Connection identifier.</Translation>
 			</Translations>
 			<Translations text="OutputArgumentLabel">
 				<Translation language="fr">sortie</Translation>
@@ -48,18 +69,26 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<Argument id="LibraryCommand" Description="LibraryCommandDescription" long="library" short="l" Value="Library" Usage="%LibraryArgument% [%OutputArgument%]"/>
-			<Argument id="DaemonCommand" Description="DaemonCommandDescription" long="daemon" short="d" Value="Remote" Usage="%DaemonArgument% [%OutputArgument%]"/>
+			<Argument id="DaemonCommand" Description="DaemonCommandDescription" long="daemon" short="d" Value="Daemon" Usage="%DaemonArgument% [%OutputArgument%]"/>
+			<Argument id="ProxyCommand" Description="ProxyCommandDescription" long="proxy" short="p" Value="Proxy" Usage="%ProxyArgument% %IdentifierArgument% [%OutputArgument%]"/>
 			<Argument id="LibraryArgument" Description="LibraryArgumentDescription" Label="LibraryArgumentLabel" Path="BackendLocation"/>
 			<Argument id="DaemonArgument" Description="DaemonArgumentDescription" Label="DaemonArgumentLabel" Path="BackendLocation"/>
+			<Argument id="ProxyArgument" Description="ProxyArgumentDescription" Label="ProxyArgumentLabel" Path="BackendLocation"/>
+			<Argument id="IdentifierArgument" Description="IdentifierArgumentDescription" Label="IdentifierArgumentLabel" Path="Identifier"/>
 			<Argument id="OutputArgument" Description="OutputArgumentDescription" Label="OutputArgumentLabel" Path="OutputFilename"/>
 			<Layouts>
 				<Layout command="Library">
 					<Link index="0" Target="LibraryArgument"/>
 					<Link index="1" Target="OutputArgument"/>
 				</Layout>
-				<Layout command="Remote">
+				<Layout command="Daemon">
 					<Link index="0" Target="DaemonArgument"/>
 					<Link index="1" Target="OutputArgument"/>
+				</Layout>
+				<Layout command="Proxy">
+					<Link index="0" Target="ProxyArgument"/>
+					<Link index="1" Target="IdentifierArgument"/>
+					<Link index="2" Target="OutputArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

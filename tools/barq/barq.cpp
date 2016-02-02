@@ -524,7 +524,8 @@ namespace {
 }
 
 static void GetBackendData_(
-	const str::vString &Location,
+	const str::vString &PluginPath,
+	const str::vString &Arguments,
 	csducl::type__ Type,
 	types_ &Types,
 	str::string_ &ProtocolVersion,
@@ -545,20 +546,17 @@ qRH
 	csdlec::library_data__ LibraryData;
 	lcl::meaning Meaning;
 	bso::fBool Success = false;
-	str::iString PluginPath;
 	qCBUFFERr Buffer;
 qRB
 	switch ( Type ) {
 	case csducl::tRemote:
 		FBLMode = fblfrd::mRemote;
-		PluginPath.Init();
-		sclmisc::MGetValue( registry::PluginPath, PluginPath );
-		Success = Core.InitRemote( PluginPath, Location );
+		Success = Core.InitRemote( PluginPath, NULL, Arguments );
 		break;
 	case csducl::tLibrary:
 		FBLMode = fblfrd::mEmbedded;
-		LibraryData.Init( csdleo::cIntrospection, Location.Convert( Buffer ), err::qRRor, NULL );
-		Success = Core.InitLibrary( Location, LibraryData );
+		LibraryData.Init( csdleo::cIntrospection, Arguments.Convert( Buffer ), err::qRRor, NULL );
+		Success = Core.InitLibrary( Arguments, LibraryData );
 		break;
 	default:
 		qRGnr();
@@ -569,7 +567,7 @@ qRB
 		Meaning.Init();
 
 		Meaning.SetValue( "UnableToAccessBackendError" );
-		Meaning.AddTag( Location );
+		Meaning.AddTag( Arguments );
 
 		sclerror::SetMeaning( Meaning );
 
@@ -757,7 +755,7 @@ qRH
 	txf::text_oflow__ TFile;
 	lcl::locale Dummy;
 	csducl::type__ Type = csducl::t_Undefined;
-	str::string BackendLocation, OutputFilename;
+	str::iString PluginPath, Arguments, OutputFilename;
 qRB
 	Types.Init();
 
@@ -768,18 +766,28 @@ qRB
 	BackendCopyright.Init();
 	SoftwareInformations.Init();
 
-	Type = csducl::GetType( Command );
+	Arguments.Init();
+	sclmisc::MGetValue( registry::BackendLocation, Arguments );
 
-	if ( Type == csducl::t_Undefined )
-		sclmisc::ReportAndAbort( "BadCommand" );
+	PluginPath.Init();
 
-	BackendLocation.Init();
-	sclmisc::MGetValue( registry::BackendLocation, BackendLocation );
+	if ( Command == "Library" )
+		Type = csducl::tLibrary;
+	else if ( Command == "Daemon" ) {
+		Type = csducl::tRemote;
+		sclmisc::MGetValue( registry::StraightPluginPath, PluginPath );
+	} else if ( Command == "Proxy" ) {
+		Type = csducl::tRemote;
+		Arguments.Append( ' ' );
+		sclmisc::MGetValue( registry::ProxyPluginPath, PluginPath );
+		sclmisc::MGetValue( registry::Identifier, Arguments );
+	} else
+		qRGnr();
 
 	OutputFilename.Init();
 	sclmisc::OGetValue( registry::OutputFilename, OutputFilename );
 
-	GetBackendData_( BackendLocation, Type, Types, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
+	GetBackendData_( PluginPath, Arguments, Type, Types, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 	
 	MasterRow = FindMasterType_( Types );
 

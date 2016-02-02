@@ -28,6 +28,8 @@
 #include "sclplugin.h"
 #include "sclmisc.h"
 
+#include "csdbnc.h"
+
 #include "mtk.h"
 
 #define PLUGIN_NAME	"proxy"
@@ -46,6 +48,7 @@ namespace {
 	  public sFlow_
 	{
 	private:
+		csdbnc::flow___ Flow_;
 		prxy::rProxy Proxy_;
 	protected:
 		virtual fdr::size__ FDRWrite(
@@ -73,6 +76,7 @@ namespace {
 		{
 			sFlow_::reset( P );
 			rFlowDriver_::reset( P );
+			Flow_.reset( P );
 			Proxy_.reset( P );
 		}
 		qCVDTOR( rFlow );
@@ -85,7 +89,9 @@ namespace {
 			rFlowDriver_::Init( fdr::ts_Default );
 			sFlow_::Init( *this );
 
-			return Proxy_.Init( HostService, Identifier );
+			Flow_.Init( HostService );
+
+			return Proxy_.Init( Flow_, Flow_, Identifier );
 		}
 	};
 

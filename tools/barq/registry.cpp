@@ -21,7 +21,9 @@
 
 using namespace registry;
 
+rEntry registry::StraightPluginPath( "StraightPluginPath", sclrgstry::Parameters );
+rEntry registry::ProxyPluginPath( "ProxyPluginPath", sclrgstry::Parameters );
 rEntry registry::BackendLocation("BackendLocation", sclrgstry::Parameters );
-rEntry registry::PluginPath( "PluginPath", sclrgstry::Parameters );
+rEntry registry::Identifier("Identifier", sclrgstry::Parameters );
 rEntry registry::OutputFilename( "OutputFilename", sclrgstry::Parameters );
 

@@ -29,8 +29,10 @@ namespace registry {
 		using rgstry::rEntry;
 	}
 
+	extern rEntry StraightPluginPath;
+	extern rEntry ProxyPluginPath;
 	extern rEntry BackendLocation;
-	extern rEntry PluginPath;
+	extern rEntry Identifier;
 	extern rEntry OutputFilename;
 	
 }

@@ -33,40 +33,39 @@
 
 typedef csdrcd::driver___ _plugin___;
 
-typedef csdmnc::_driver___ _driver___;
 
 class plugin___
-: public _plugin___,
-  public _driver___
+: public _plugin___
 {
 private:
 	csdmnc::core Core_;
+	csdmnc::client_ioflow___ Flow_;
 protected:
 	virtual fdr::size__ FDRWrite(
 		const fdr::byte__ *Buffer,
 		fdr::size__ Maximum ) override
 	{
-		return _driver___::FDRWrite( Buffer, Maximum );
+		return Flow_.WriteUpTo( Buffer, Maximum );
 	}
 	virtual void FDRCommit( void ) override
 	{
-		return _driver___::FDRCommit();
+		return Flow_.Commit();
 	}
 	virtual fdr::size__ FDRRead(
 		fdr::size__ Maximum,
 		fdr::byte__ *Buffer ) override
 	{
-		return _driver___::FDRRead( Maximum, Buffer );
+		return Flow_.ReadUpTo( Maximum, Buffer );
 	}
 	virtual void FDRDismiss( void ) override
 	{
-		return _driver___::FDRDismiss();
+		return Flow_.Dismiss();
 	}
 public:
 	void reset( bso::bool__ P = true )
 	{
 		_plugin___::reset( P );
-		_driver___::reset( P );
+		Flow_.reset( P );
 		Core_.reset( P );
 	}
 	E_CVDTOR( plugin___ );
@@ -79,7 +78,7 @@ public:
 		if ( !Core_.Init( HostService, PingDelay ) )
 			return false;
 
-		_driver___::Init( Core_, fdr::ts_Default );
+		Flow_.Init( Core_ );
 
 		return true;
 	}
