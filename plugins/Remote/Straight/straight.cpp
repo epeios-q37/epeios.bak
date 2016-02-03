@@ -38,8 +38,8 @@ class plugin___
 : public _plugin___
 {
 private:
-	csdmnc::core Core_;
-	csdmnc::client_ioflow___ Flow_;
+	csdmnc::rCore Core_;
+	csdmnc::rClientIOFlow Flow_;
 protected:
 	virtual fdr::size__ FDRWrite(
 		const fdr::byte__ *Buffer,

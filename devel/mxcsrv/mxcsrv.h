@@ -54,7 +54,7 @@ namespace mxcsrv {
 
 	class fLogCallback {
 	protected:
-		virtual void CSDMNSLog(
+		virtual void MXCSRVLog(
 			eLog Log,
 			fId Id,
 			void *UP,
@@ -76,7 +76,7 @@ namespace mxcsrv {
 			fUserPointer UP,
 			sdr::size__ Amount )
 		{
-			CSDMNSLog( Log, Id, UP, Amount );
+			MXCSRVLog( Log, Id, UP, Amount );
 		}
 	};
 
@@ -171,8 +171,8 @@ qRE
 			fUserPointer UP,
 			fId Id )
 		{
-#ifdef CSDMNS_DBG
-			if ( Id == CSDMNB_UNDEFINED )
+#ifdef MXCSRV_DBG
+			if ( Id == MXCBSE_UNDEFINED )
 				qRFwk();
 #endif
 			mtx::Lock( S_.Mutex );
@@ -253,7 +253,7 @@ qRE
 			flw::ioflow__ &Flow,
 			void *UP )
 		{
-#ifdef CSDMNS_DBG
+#ifdef MXCSRV_DBG
 			if ( UP != NULL )
 				qRFwk();
 #endif

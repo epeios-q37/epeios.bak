@@ -23,35 +23,3 @@
 
 using namespace csdmns;
 
-#define CASE( n )\
-	case l##n:\
-		return #n;\
-		break
-
-const char *csdmns::GetLogLabel( log__ Log )
-{
-	switch ( Log ) {
-		CASE( New );
-		CASE( Store );
-		CASE( TestAndGet );
-		CASE( Delete );
-	default:
-		qRFwk();
-		return NULL;	// Pour viter un 'warning'.
-		break;
-	}
-}
-
-void csdmns::callback___::_Clean( void )
-{
-	sdr::row__ Row = _Core.UPs.First();
-
-	while ( Row != qNIL ) {
-		_Callback->PostProcess( _Core.UPs( Row ) );
-
-		Row = _Core.UPs.Next( Row );
-	}
-
-	_Core.reset();
-}
-

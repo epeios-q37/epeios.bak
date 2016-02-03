@@ -29,10 +29,7 @@
 # endif
 
 # include "mxcbse.h"
-# include "sck.h"
 # include "stk.h"
-# pragma message( __LOC__ "Include à enlever !")
-# include "csdbnc.h"
 
 # include "err.h"
 # include "mtx.h"
@@ -48,7 +45,6 @@
 #define MXCCLT_PING_DELAY	( 2 * 1000 )	// Delay between 2 pings to maintain the connection.
 
 #define MXCCLT_DEFAULT_CACHE_SIZE	100
-
 
 namespace mxcclt {
 	using namespace mxcbse;
@@ -92,9 +88,10 @@ namespace mxcclt {
 #endif
 	}
 
-	typedef sck::socket_ioflow___ rFlow;
+	typedef flw::ioflow__ fFlow;
 
-	typedef stk::E_BSTACK_( rFlow * )	vFlows;
+	typedef stk::E_BSTACK_( void * )	vUPs;
+	qW( UPs );
 
 	qENUM( Log ) {
 		lCreation,
@@ -111,245 +108,247 @@ namespace mxcclt {
 	protected:
 		virtual void MXCCLTLog(
 			eLog Log,
-			const void *Flow,
+			const void *UP,
 			sdr::size__ Amount ) = 0;
 	public:
-		void reset( bso::bool__ P = true )
-		{
-			// Standardisation.
-		}
-		qCVDTOR( fLogCallback );
-		void Init( void )
-		{
-			// Standardization.
-		}
+		qCALLBACK_DEF( LogCallback );
 		void Log(
 			eLog Log,
-			const void *Flow,
+			const void *UP,
 			sdr::size__ Amount )
 		{
-			MXCCLTLog( Log ,Flow, Amount );
+			MXCCLTLog( Log, UP, Amount );
 		}
 	};
 
-	class vCore {
-	private:
-		void DeleteFlows_( void );
-		void KeepAlive_( time_t Delay );	// Lance le thread permettant de 'pinger' les connections inactives durant plus de 'Delay' ms.
-		void Log_(
-			eLog Log,
-			const rFlow *Flow )
+	class fCallback
+	{
+	protected:
+		virtual void *MXCCLTNew( void ) = 0;
+		virtual fFlow &MXCCLTExtractFlow( void *UP ) = 0;
+		virtual void MXCCLTRelease( void *UP ) = 0;
+		virtual time_t MXCCLTEpochTimeStamp( void *UP )	// By default, the connection is always in use.
 		{
-			if ( S_.Log.Callback != NULL ) {
+			return tol::EpochTime( false );
+		}
+	public:
+		qCALLBACK_DEF( Callback );
+		void *New( void )
+		{
+			return MXCCLTNew();
+		}
+		virtual fFlow &ExtractFlow( void *UP )
+		{
+			return MXCCLTExtractFlow( UP );
+		}
+		void Release( void *Flow )
+		{
+			return MXCCLTRelease( Flow );
+		}
+		time_t EpochTimeStamp( void *UP )
+		{
+			return MXCCLTEpochTimeStamp( UP );
+		}
+	};
+
+# ifdef MXCCLT__MT
+	// Predeclaration
+	void KeepAlive_( void * );
+# endif
+
+	class rCore {
+	private:
+		qRVM( fCallback, C_, Callback_ );
+		iUPs UPs;
+		mutex__ MainMutex_;
+		struct fLog_ {
+			fLogCallback *Callback;
+			mutex__ Mutex;
+		} Log_;
+		struct fPing__ {
+			bso::uint__ Delay;	// Dlai maximum d'inactivit.
+			mutex__ Mutex;	// Pour signaler et attendre la terminaison du 'thread' ddi au 'ping'.
+		} Ping_;
+		void ReleaseUPs_( void );
+		void KeepAlive_( time_t Delay );	// Lance le thread permettant de 'pinger' les connections inactives durant plus de 'Delay' ms.
+		void Record_(
+			eLog Log,
+			const void *UP )
+		{
+			if ( Log_.Callback != NULL ) {
 qRH
 qRB
-				Lock_( S_.Log.Mutex );
-				S_.Log.Callback->Log( Log, Flow, Flows.Amount() );
+				Lock_( Log_.Mutex );
+				Log_.Callback->Log( Log, UP, UPs.Amount() );
 qRR
 qRT
-				Unlock_( S_.Log.Mutex );
+				Unlock_( Log_.Mutex );
 qRE
 			}
 		}
 	public:
-		struct s {
-			char *HostService;
-			mutex__ MainMutex;
-			struct log__ {
-				fLogCallback *Callback;
-				mutex__ Mutex;
-			} Log;
-			struct ping__ {
-				bso::uint__ Delay;	// Dlai maximum d'inactivit.
-				mutex__ Mutex;	// Pour signaler et attendre la terminaison du 'thread' ddi au 'ping'.
-			} Ping;
-			vFlows::s Flows;
-		} &S_;
-		vFlows Flows;
-		vCore( s &S )
-		: S_( S ),
-		  Flows( S.Flows )
-		{}
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( S_.Ping.Mutex != MXCCLT_NO_MUTEX )
-					Lock_( S_.Ping.Mutex );	// Signale au 'thread' du 'ping' qu'il doit se terminer.
+				if ( Ping_.Mutex != MXCCLT_NO_MUTEX )
+					Lock_( Ping_.Mutex );	// Signale au 'thread' du 'ping' qu'il doit se terminer.
 
-				DeleteFlows_();
+				ReleaseUPs_();
 
-				if ( S_.HostService != NULL )
-					free( S_.HostService );
-
-				if ( S_.Ping.Mutex != MXCCLT_NO_MUTEX ) {
-					Lock_( S_.Ping.Mutex );	// Attend que le 'thread' ud 'ping' prenne acte de la demnade de terminaison.
-					Delete_( S_.Ping.Mutex, true );
+				if ( Ping_.Mutex != MXCCLT_NO_MUTEX ) {
+					Lock_( Ping_.Mutex );	// Attend que le 'thread' ud 'ping' prenne acte de la demnade de terminaison.
+					Delete_( Ping_.Mutex, true );
 				}
 
-				if ( S_.MainMutex != MXCCLT_NO_MUTEX )
-					Delete_( S_.MainMutex );
+				if ( MainMutex_ != MXCCLT_NO_MUTEX )
+					Delete_( MainMutex_ );
 
-				if ( S_.Log.Mutex != MXCCLT_NO_MUTEX )
-					Delete_( S_.Log.Mutex );
+				if ( Log_.Mutex != MXCCLT_NO_MUTEX )
+					Delete_( Log_.Mutex );
 			}
 
-			Flows.reset( P );
+			UPs.reset( P );
 
-			S_.HostService = NULL;
-			S_.MainMutex = MXCCLT_NO_MUTEX;
-			S_.Log.Mutex = MXCCLT_NO_MUTEX;
-			S_.Log.Callback = NULL;
-			S_.Ping.Delay = 0;
-			S_.Ping.Mutex = MXCCLT_NO_MUTEX;
+			Callback_ = NULL;
+			MainMutex_ = MXCCLT_NO_MUTEX;
+			Log_.Mutex = MXCCLT_NO_MUTEX;
+			Log_.Callback = NULL;
+			Ping_.Delay = 0;
+			Ping_.Mutex = MXCCLT_NO_MUTEX;
 		}
-		void plug( qSD__ &SD )
-		{
-			Flows.plug( SD );
-		}
-		void plug( qAS_ &AS )
-		{
-			Flows.plug( AS );
-		}
-		vCore &operator =( const vCore &C )
-		{
-			qRFbd();
-
-			return *this;
-		}
+		qVDTOR( rCore );
 		bso::bool__ Init( 
-			const char *HostService,
+			fCallback &Callback,
 			bso::uint__ PingDelay = 0,
 			fLogCallback *LogCallback = NULL )
 		{
 			reset();
 
-			if ( ( S_.HostService = (char *)malloc( strlen( HostService ) + 1 ) ) == NULL )
-				qRAlc();
+			Callback_ = &Callback;
 
-			strcpy( S_.HostService, HostService );
 
-			S_.MainMutex = _Create();
-			S_.Log.Mutex = _Create();
-			S_.Log.Callback = LogCallback;
+			MainMutex_ = _Create();
+			Log_.Mutex = _Create();
+			Log_.Callback = LogCallback;                
 
-			Flows.Init();
+			UPs.Init();
 
-			rFlow *Flow = Get( err::hUserDefined );
+			void *UP = Get( err::hUserDefined );
 
-			if ( Flow == NULL )
+			if ( UP == NULL )
 				return false;
 
-			Release( Flow );
+			Release( UP );
 
-			S_.Ping.Delay = PingDelay;
+			Ping_.Delay = PingDelay;
 
 			if ( PingDelay != 0 ) {
-				S_.Ping.Mutex = _Create();
+				Ping_.Mutex = _Create();
 				KeepAlive_( PingDelay );
 			}
 
 			return true;
 		}
 		bso::bool__ Init(
-			const char *HostService,
+			fCallback &Callback,
 			bso::uint__ PingDelay,
-			fLogCallback &LogFunctions )
+			fLogCallback &LogCallback )
 		{
-			return Init( HostService, PingDelay, &LogFunctions );
+			return Init( Callback, PingDelay, &LogCallback );
 		}
-		rFlow *Get( err::handling__ ErrorHandling = err::h_Default )
+		void *Get( err::handling__ ErrorHandling = err::h_Default )
 		{
-			rFlow *Flow = NULL;
+			void *UP = NULL;
 		qRH
 			eLog Log = l_Undefined;
 			bso::bool__ Locked = false;
-			sck::socket__ Socket = SCK_INVALID_SOCKET;
 		qRB
-			Lock_( S_.MainMutex );
+			Lock_( MainMutex_ );
 			Locked = true;
 
-			if ( Flows.Amount() ) {
-				Flow = Flows.Pop();
+			if ( UPs.Amount() ) {
+				UP = UPs.Pop();
 				Log = lRetrieval;
 			} else {
-				Flow = new rFlow;
+				UP = C_().New();
 
-				if ( Flow == NULL )
+				if ( UP == NULL )
 					qRAlc();
-
-				if ( ( Socket = csdbnc::Connect( S_.HostService, ErrorHandling ) ) == SCK_INVALID_SOCKET ) {
-					delete Flow;
-					Flow = NULL;
-					qRReturn;
-				}
-
-				Flow->Init( Socket );
 
 				Log = lCreation;
 			}
 
-			Unlock_( S_.MainMutex );
+			Unlock_( MainMutex_ );
 			Locked = false;
 
-			Log_( Log, Flow );
+			Record_( Log, UP );
 		qRR
-			if ( Flow != NULL ) {
-				delete Flow;
-				Flow = NULL;
+			if ( UP != NULL ) {
+				C_().Release( UP );
+				UP = NULL;
 			}
 		qRT
 			if ( Locked )
-				Unlock_( S_.MainMutex );
+				Unlock_( MainMutex_ );
 		qRE
 
-			return Flow;
+			return UP;
 		}
-		void Release( rFlow *Flow )
+		fFlow &ExtractFlow( void *UP )
 		{
-			Lock_( S_.MainMutex );
+			return C_().ExtractFlow( UP );
+		}
+		void Release( void *UP )
+		{
+			Lock_( MainMutex_ );
 
-			Flows.Push( Flow );
+			UPs.Push( UP );
 
-			Unlock_( S_.MainMutex );
+			Unlock_( MainMutex_ );
 
-			Log_( lRelease, Flow );
+			Record_( lRelease, UP );
 		}
 		void Ping( void );	// Emet un 'ping' sur les connections reste inactives trop longtemps.
+# ifdef MXCCLT__MT
+		friend void mxcclt::KeepAlive_( void *UP );
+# endif
 	};
-
-	qW( Core );
 
 	class _driver___
 	: public fdr::ioflow_driver___<>
 	{
 	private:
-		rFlow *Flow_;
-		vCore *Core_;
+		void *UP_;
+		qRVM( rCore, C_, Core_ );
+		fFlow &F_( void )
+		{
+			if ( UP_ == NULL )
+				qRFwk();
+
+			return C_().ExtractFlow( UP_ );
+		}
 		fId Id_;
 		bso::bool__ Prepare_( void )	// Return true if has already a flow, false otherwise.
 		{
-			bso::bool__ Created = Flow_ == NULL;
+			bso::bool__ Created = UP_ == NULL;
 
 			if ( Created ) {
-				Flow_ = Core_->Get();
+				UP_ = C_().Get();
 
-				PutId( Id_, *Flow_ );
+				PutId( Id_, F_() );
 			}
 
 			return !Created;
 		}
 		void Commit_( void )
 		{
-#ifdef MXCCLT_DBG
-			if ( Flow_ == NULL )
-				qRFwk();
-#endif
+			fFlow &Flow = F_();
 
-			Flow_->Commit();
+			Flow.Commit();
 
 			if ( Id_ == MXCBSE_UNDEFINED )
-				Id_ = GetId( *Flow_ );
-			else if ( Flow_->Get() != 0 )
+				Id_ = GetId( Flow );
+			else if ( Flow.Get() != 0 )
 				qRFwk();
 		}
 	protected:
@@ -361,27 +360,27 @@ qRE
 
 			Prepare_();
 
-			return Flow_->WriteUpTo( Buffer, Maximum );
+			return F_().WriteUpTo( Buffer, Maximum );
 		}
 		virtual void FDRCommit( void )
 		{
-			if ( Flow_ != NULL )
+			if ( UP_ != NULL )
 				Commit_();
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer )
 		{
-			return Flow_->ReadUpTo( Maximum, Buffer );
+			return F_().ReadUpTo( Maximum, Buffer );
 		}
 		virtual void FDRDismiss( void )
 		{
-			if ( Flow_ != NULL ) {
-				Core_->Release( Flow_ );
-				Flow_->Dismiss();
+			if ( UP_ != NULL ) {
+				F_().Dismiss();
+				C_().Release( UP_ );
 			}
 
-			Flow_ = NULL;
+			UP_ = NULL;
 		}
 		public:
 			void reset( bso::bool__ P = true )
@@ -389,11 +388,11 @@ qRE
 				fdr::ioflow_driver___<>::reset( P );
 
 				if ( P ) {
-					if ( Flow_ != NULL )
-						delete Flow_;
+					if ( UP_ != NULL )
+						C_().Release( UP_ );
 				}
 
-				Flow_ = NULL;
+				UP_ = NULL;
 				Id_ = MXCBSE_UNDEFINED;
 				Core_ = NULL;
 			}
@@ -406,7 +405,7 @@ qRE
 				reset();
 			}
 			void Init(
-				vCore &Core,
+				rCore &Core,
 				fdr::thread_safety__ ThreadSafety )
 			{
 				reset();
@@ -416,7 +415,7 @@ qRE
 			}
 	};
 
-	class client_ioflow___
+	class rClientIOFlow
 	: public flw::ioflow__
 	{
 	private:
@@ -428,11 +427,8 @@ qRE
 			flw::ioflow__::reset( P );
 			_Driver.reset( P );
 		}
-		client_ioflow___( void )
-		{
-			reset( false );
-		}
-		void Init( vCore &Core )
+		qCDTOR( rClientIOFlow );
+		void Init( rCore &Core )
 		{
 			reset();
 

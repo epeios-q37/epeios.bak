@@ -299,7 +299,7 @@ namespace sck {
 			if ( P ) {
 				if ( _Socket != SCK_INVALID_SOCKET ) {
 					_ioflow_driver___::Commit( _User );
-					Close( _Socket );
+					//	Close( _Socket );	// Normally done by user.
 				}
 			}
 
@@ -320,7 +320,8 @@ namespace sck {
 			reset();
 		}
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
-		void Init(
+# pragma message( __LOC__ "Temprary name change to view who uses it .")
+		void Init_(
 			socket__ Socket,
 			const flw::ioflow__ *User,
 			fdr::thread_safety__ ThreadSafety,
@@ -361,14 +362,15 @@ namespace sck {
 			reset();
 		}
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
-		void Init(
+# pragma message( __LOC__ "Temprary name change to view who uses it .")
+		void Init_(
 			socket__ Socket,
 			flw::size__ AmountMax = SCK__DEFAULT_AMOUNT,
 			duration__ TimeOut = SCK__DEFAULT_TIMEOUT ) // En secondes.
 		{
 			reset();
 
-			_Driver.Init( Socket, this, fdr::ts_Default, TimeOut );
+			_Driver.Init_( Socket, this, fdr::ts_Default, TimeOut );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
 		}
 		socket__ Socket( void ) const

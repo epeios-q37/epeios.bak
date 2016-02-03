@@ -164,7 +164,7 @@ namespace csdbns {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			socket__ Socket,
-			const char *IP )
+			const char *IP ) override
 		{
 			_flow_data__ *Data = NULL;
 		qRH
@@ -174,7 +174,7 @@ namespace csdbns {
 			if ( Data == NULL )
 				qRAlc();
 
-			Data->Flow.Init( Socket );
+			Data->Flow.Init_( Socket );
 			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );
 		qRR
 			if ( Data != NULL )
@@ -196,7 +196,7 @@ namespace csdbns {
 
 			return BaseCallback->Process( Data.Flow, Data.UP );
 		}
-		virtual void CSDBNSPostProcess( void *UP )
+		virtual void CSDBNSPostProcess( void *UP ) override
 		{
 			if ( UP == NULL )
 				qRFwk();

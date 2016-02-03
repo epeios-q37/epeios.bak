@@ -118,7 +118,7 @@ namespace scldaemon {
 		}
 	};
 
-	typedef csdmns::callback___ muxed_callback___;
+	typedef csdmns::rCallback muxed_callback___;
 
 	class callback___
 	: public _callback__

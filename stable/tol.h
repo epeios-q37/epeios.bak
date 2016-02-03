@@ -266,9 +266,6 @@ public:\
 	}\
 };
 
-
-
-
 // Pointer Method
 #define qPM( type, method, variable )\
 	type *method( void ) const\
@@ -477,6 +474,12 @@ namespace tol {
 
 	qW1( Object );
 }
+
+// The standardized definitions/ for a callback.
+# define qCALLBACK_DEF( name )\
+	void reset( bso::fBool = true ) {}\
+	qCVDTOR( f##name )\
+	void Init( void ){}
 
 /*************************/
 /****** Old version ******/

@@ -45,48 +45,53 @@ const char *mxcclt::GetLogLabel( eLog Log )
 	}
 }
 
-static void Ping_(
-	rFlow &Flow,
-	time_t Delay )
-{
-	if ( ( tol::EpochTime( false ) - Flow.EpochTimeStamp() ) >= Delay )
-		if ( !Flow.OFlowIsLocked() ) {
-			PutId( MXCBSE_PING, Flow );
-			Flow.Commit();
+namespace {
+	inline void Ping_(
+		void *UP,
+		time_t Delay,
+		fCallback &Callback )
+	{
+		fFlow &Flow = Callback.ExtractFlow( UP );
 
-			if ( Flow.Get() != 0 )
-				qRFwk();
+		if ( ( tol::EpochTime( false ) - Callback.EpochTimeStamp( UP ) ) >= Delay )
+			if ( !Flow.OFlowIsLocked() ) {
+				PutId( MXCBSE_PING, Flow );
+				Flow.Commit();
 
-			Flow.Dismiss();
-		}
+				if ( Flow.Get() != 0 )
+					qRFwk();
+
+				Flow.Dismiss();
+			}
+	}
 }
 
-void mxcclt::vCore::Ping( void )
+void mxcclt::rCore::Ping( void )
 {
-	Lock_( S_.MainMutex );
+	Lock_( MainMutex_ );
 
-	stk::row__ Row = Flows.First();
+	stk::row__ Row = UPs.First();
 	
 	while ( Row != qNIL )
 	{
-		Ping_( *Flows( Row ), S_.Ping.Delay );
+		::Ping_( UPs( Row ), Ping_.Delay, C_() );
 
-		Row = Flows.Next( Row );
+		Row = UPs.Next( Row );
 	}
 
-	Unlock_( S_.MainMutex );
+	Unlock_( MainMutex_ );
 }
 
 #ifdef MXCCLT__MT
-static void KeepAlive_( void *UP )
+void mxcclt::KeepAlive_( void *UP )
 {
-	vCore &Core = *(vCore *)UP;
+	rCore &Core = *(rCore *)UP;
 	tol::timer__ Timer;
 
-	Timer.Init( Core.S_.Ping.Delay );
+	Timer.Init( Core.Ping_.Delay );
 	Timer.Launch();
 
-	while ( !mtx::IsLocked( Core.S_.Ping.Mutex ) ) {	// While no terminating request.
+	while ( !mtx::IsLocked( Core.Ping_.Mutex ) ) {	// While no terminating request.
 		tht::Suspend( MXCCLT_PING_DELAY );
 
 		if ( Timer.IsElapsed() ) {
@@ -95,14 +100,14 @@ static void KeepAlive_( void *UP )
 		}
 	}
 
-	Unlock_( Core.S_.Ping.Mutex );	// Reports that the terminating request has been handled.
+	Unlock_( Core.Ping_.Mutex );	// Reports that the terminating request has been handled.
 }
 #endif
 
-void mxcclt::vCore::KeepAlive_( time_t Delay )
+void mxcclt::rCore::KeepAlive_( time_t Delay )
 {
-#ifdef CSDMNC__MT
-	if ( Delay <= CSDMNC_PING_DELAY )
+#ifdef MXCCLT__MT
+	if ( Delay <= MXCCLT_PING_DELAY )
 		qRFwk();
 
 	mtk::Launch( ::KeepAlive_, this );
@@ -112,11 +117,11 @@ void mxcclt::vCore::KeepAlive_( time_t Delay )
 #endif
 }
 
-void mxcclt::vCore::DeleteFlows_( void )
+void mxcclt::rCore::ReleaseUPs_( void )
 {
-	while ( Flows.Amount() != 0 )
+	while ( UPs.Amount() != 0 )
 	{
-		PutId( MXCBSE_CLOSE, *Flows.Top() );
-		delete Flows.Pop();
+		PutId( MXCBSE_CLOSE, C_().ExtractFlow( UPs.Top() ) );
+		C_().Release( UPs.Pop() );
 	}
 }
