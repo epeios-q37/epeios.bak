@@ -28,6 +28,8 @@
 #  define PRXY_DBG
 # endif
 
+# include "csdbnc.h"
+
 # include "err.h"
 # include "flw.h"
 
@@ -43,21 +45,20 @@ namespace prxy {
 		}
 		qCDTOR( rProxy );
 		bso::bool__ Init(
-			flw::ioflow__ NakedFlow,
 			flw::ioflow__ &Flow,
 			const char *Identifier )
 		{
 			Flow_ = &Flow;
 
-			NakedFlow.Write( Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
+			Flow.Write( Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
 
-			NakedFlow.Commit();
+			Flow.Commit();
 
-			if ( !NakedFlow.EndOfFlow() ) {
-				if ( NakedFlow.Get() != 0 )
+			if ( !Flow.EndOfFlow() ) {
+				if ( Flow.Get() != 0 )
 					qRGnr();
 
-				NakedFlow.Dismiss();
+				Flow.Dismiss();
 
 				return true;
 			} else
@@ -84,6 +85,67 @@ namespace prxy {
 			F_().Dismiss();
 		}
 	};
+
+	typedef fdr::ioflow_driver___<>	rFlowDriver_;
+
+	typedef flw::standalone_ioflow__<> sFlow_;
+
+	class rFlow
+	: private rFlowDriver_,
+	  public sFlow_
+	{
+	private:
+		csdbnc::flow___ Flow_;
+		prxy::rProxy Proxy_;
+	protected:
+		virtual fdr::size__ FDRWrite(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum) override
+		{
+			return Proxy_.WriteUpTo( Buffer, Maximum );
+		}
+		virtual void FDRCommit( void ) override
+		{
+			Proxy_.Commit();
+		}
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+		{
+			return Proxy_.ReadUpTo( Maximum, Buffer );
+		}
+		virtual void FDRDismiss( void ) override
+		{
+			Proxy_.Dismiss();
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			sFlow_::reset( P );
+			rFlowDriver_::reset( P );
+			Flow_.reset( P );
+			Proxy_.reset( P );
+		}
+		qCVDTOR( rFlow );
+		bso::bool__ Init(
+			const char *HostService,
+			const char *Identifier )
+		{
+			reset();
+
+			rFlowDriver_::Init( fdr::ts_Default );
+			sFlow_::Init( *this );
+
+			Flow_.Init( HostService );
+
+			return Proxy_.Init( Flow_, Identifier );
+		}
+		time_t EpochTimeStamp( void ) const
+		{
+			return Flow_.EpochTimeStamp();
+		}
+	};
+
 }
 
 #endif

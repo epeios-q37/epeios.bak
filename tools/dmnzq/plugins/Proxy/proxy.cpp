@@ -28,8 +28,6 @@
 #include "sclplugin.h"
 #include "sclmisc.h"
 
-#include "csdbnc.h"
-
 #include "mtk.h"
 
 #define PLUGIN_NAME	"proxy"
@@ -39,64 +37,9 @@ typedef misc::callback__ _plugin__;
 using misc::module__;
 
 namespace {
-	typedef fdr::ioflow_driver___<>	rFlowDriver_;
-
-	typedef flw::standalone_ioflow__<> sFlow_;
-
-	class rFlow
-	: private rFlowDriver_,
-	  public sFlow_
-	{
-	private:
-		csdbnc::flow___ Flow_;
-		prxy::rProxy Proxy_;
-	protected:
-		virtual fdr::size__ FDRWrite(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum) override
-		{
-			return Proxy_.WriteUpTo( Buffer, Maximum );
-		}
-		virtual void FDRCommit( void ) override
-		{
-			Proxy_.Commit();
-		}
-		virtual fdr::size__ FDRRead(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override
-		{
-			return Proxy_.ReadUpTo( Maximum, Buffer );
-		}
-		virtual void FDRDismiss( void ) override
-		{
-			Proxy_.Dismiss();
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			sFlow_::reset( P );
-			rFlowDriver_::reset( P );
-			Flow_.reset( P );
-			Proxy_.reset( P );
-		}
-		qCVDTOR( rFlow );
-		bso::bool__ Init(
-			const char *HostService,
-			const char *Identifier )
-		{
-			reset();
-
-			rFlowDriver_::Init( fdr::ts_Default );
-			sFlow_::Init( *this );
-
-			Flow_.Init( HostService );
-
-			return Proxy_.Init( Flow_, Flow_, Identifier );
-		}
-	};
 
 	struct data__ {
-		rFlow *Flow;
+		prxy::rFlow *Flow;
 		module__ *Module;
 		mtx::handler___ Mutex;
 		const char *Origin;
@@ -113,7 +56,7 @@ namespace {
 			Mutex = mtx::UndefinedHandler;
 		}
 		void Init(
-			rFlow *Flow,
+			prxy::rFlow *Flow,
 			module__ &Module,
 			const char *Origin )
 		{
@@ -132,7 +75,7 @@ namespace {
 	{
 	qRFH
 		data__ &Data = *(data__ *)UP;
-		rFlow *Flow = Data.Flow;
+		prxy::rFlow *Flow = Data.Flow;
 		module__ &Module = *Data.Module;
 		ntvstr::string___ Origin;
 		void *MUP = NULL;
@@ -161,10 +104,10 @@ namespace {
 		virtual void MISCProcess( module__ &Module ) override
 		{
 		qRH
-			rFlow *Flow = NULL;
+			prxy::rFlow *Flow = NULL;
 			data__ Data;
 		qRB
-			Flow = new rFlow;
+			Flow = new prxy::rFlow;
 
 			if ( Flow == NULL )
 				qRAlc();
@@ -181,7 +124,7 @@ namespace {
 
 				Flow = NULL;
 
-				Flow = new rFlow;
+				Flow = new prxy::rFlow;
 
 				if ( Flow == NULL )
 					qRAlc();

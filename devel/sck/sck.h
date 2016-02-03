@@ -377,7 +377,7 @@ namespace sck {
 		{
 			return _Driver.Socket();
 		}
-		time_t EpochTimeStamp( void )
+		time_t EpochTimeStamp( void ) const
 		{
 			return _Driver.EpochTimeStamp();
 		}
