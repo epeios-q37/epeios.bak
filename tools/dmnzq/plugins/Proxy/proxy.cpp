@@ -112,7 +112,7 @@ namespace {
 			if ( Flow == NULL )
 				qRAlc();
 
-			while ( Flow->Init( HostService_, Identifier_ ) ) {
+			while ( Flow->Init( HostService_, Identifier_, prxybase::tServer ) ) {
 				Data.Init( Flow, Module, HostService_ );
 
 				mtx::Lock( Data.Mutex );

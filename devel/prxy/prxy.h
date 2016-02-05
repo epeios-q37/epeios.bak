@@ -28,12 +28,15 @@
 #  define PRXY_DBG
 # endif
 
+# include "prxybase.h"
+
 # include "csdbnc.h"
 
 # include "err.h"
 # include "flw.h"
 
 namespace prxy {
+	
 	class rProxy
 	{
 	private:
@@ -46,9 +49,12 @@ namespace prxy {
 		qCDTOR( rProxy );
 		bso::bool__ Init(
 			flw::ioflow__ &Flow,
-			const char *Identifier )
+			const char *Identifier,
+			prxybase::eType Type )
 		{
 			Flow_ = &Flow;
+
+			prxybase::PutType( Type, Flow );
 
 			Flow.Write( Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
 
@@ -129,7 +135,8 @@ namespace prxy {
 		qCVDTOR( rFlow );
 		bso::bool__ Init(
 			const char *HostService,
-			const char *Identifier )
+			const char *Identifier,
+			prxybase::eType Type )
 		{
 			reset();
 
@@ -138,7 +145,7 @@ namespace prxy {
 
 			Flow_.Init( HostService );
 
-			return Proxy_.Init( Flow_, Identifier );
+			return Proxy_.Init( Flow_, Identifier, Type );
 		}
 		time_t EpochTimeStamp( void ) const
 		{
