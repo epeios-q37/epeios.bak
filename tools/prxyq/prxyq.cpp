@@ -142,11 +142,19 @@ public:
 				Flow.Commit();
 			}
 		}
+		void WaitForOther_( void )
+		{
+			if ( mtx::TryToLock( PairingMutex_ ) ) {
+				mtx::Lock( PairingMutex_ );
+				mtx::Unlock( PairingMutex_ );
+			} else
+				mtx::Unlock( PairingMutex_ );
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Flow1_.reset( P );
-			Flow2_.reset( P );
+			Flow1_.reset( false );
+			Flow2_.reset( false );
 
 			if ( P ) {
 				if ( PairingMutex_ != mtx::UndefinedHandler )
@@ -186,6 +194,8 @@ public:
 			mtx::Unlock( CommitMutex_ );
 
 			Process_( Flow1_ );
+
+			WaitForOther_();
 		}
 		void Plug( flw::ioflow__ &Flow )
 		{
@@ -202,6 +212,8 @@ public:
 			mtx::Unlock( CommitMutex_ );
 
 			Process_( Flow2_ );
+
+			WaitForOther_();
 		}
 	};
 
@@ -342,12 +354,11 @@ public:
 
 		Proxy->Init( Flow );	// Blocking until deconnection.
 	qRR
-		if ( Proxy != NULL )
-			delete Proxy;
-
 		if ( mtx::IsLocked( Mutex_ ) )
 			mtx::Unlock( Mutex_ );
 	qRT
+		if ( Proxy != NULL )
+			delete Proxy;
 	qRE
 	}
 

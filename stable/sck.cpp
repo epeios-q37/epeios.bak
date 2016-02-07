@@ -64,13 +64,15 @@ flw::size__ sck::Read(
 
 	if ( Result == 1 )
 	{
+		error__ Error = 0;
+
 		Result = recv( Socket, (cast__)Buffer, (int)Amount, 0 );
 
 		if ( Result == SCK_SOCKET_ERROR )
 		{
 			Result = SCK_DISCONNECTED;
 
-			if ( Error() != SCK_ECONNRESET )
+			if ( ( Error = sck::Error() ) != SCK_ECONNRESET )
 				qRLbr();
 		}
 		else if ( !Result && Amount )
@@ -116,9 +118,10 @@ flw::size__ sck::Write(
 
 		if ( Result == SCK_SOCKET_ERROR )
 		{
+			error__ Error = 0;
 			Result = SCK_DISCONNECTED;
 
-			if ( Error() != SCK_ECONNRESET )
+			if ( ( Error = sck::Error() ) != SCK_ECONNRESET )
 				qRLbr();
 		}
 		else if ( !Result && Amount )	// I assume that, because the send is call immediatly after the select, this can not be happen.
