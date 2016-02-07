@@ -28,7 +28,7 @@
 #  define CSDMNS_DBG
 # endif
 
-# include "mxcsrv.h"
+# include "csdmxs.h"
 # include "csdscb.h"
 # include "csdbns.h"
 
@@ -37,7 +37,7 @@
 # include "err.h"
 
 namespace csdmns {
-	using namespace mxcsrv;
+	using namespace csdmxs;
 
 	typedef csdbns::port__ fPort;
 
