@@ -71,7 +71,10 @@ namespace csdmnc {
 			if ( Flow == NULL )
 				qRAlc();
 
-			Flow->Init( HostService_ );
+			if ( !Flow->Init( HostService_, err::hUserDefined ) ) {
+				delete Flow;
+				Flow = NULL;
+			}
 
 			return Flow;
 		}

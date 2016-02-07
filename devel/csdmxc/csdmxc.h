@@ -273,10 +273,8 @@ qRE
 			} else {
 				UP = C_().New();
 
-				if ( UP == NULL )
-					qRAlc();
-
-				Log = lCreation;
+				if ( UP != NULL )
+					Log = lCreation;
 			}
 
 			Unlock_( MainMutex_ );
