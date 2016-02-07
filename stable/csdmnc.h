@@ -28,7 +28,7 @@
 #  define CSDMNC_DBG
 # endif
 
-# include "mxcclt.h"
+# include "csdmxc.h"
 # include "csdbnc.h"
 
 # include "err.h"
@@ -45,7 +45,7 @@
 namespace csdmnc {
 	typedef csdbnc::flow___ rFlow_;
 
-	typedef mxcclt::fCallback fCallback_;
+	typedef csdmxc::fCallback fCallback_;
 
 	class rCallback
 	: public fCallback_
@@ -64,7 +64,7 @@ namespace csdmnc {
 			return *FlowAsPointer_( UP );
 		}
 	protected:
-		virtual void *MXCCLTNew( void ) override
+		virtual void *CSDMXCNew( void ) override
 		{
 			rFlow_ *Flow = new rFlow_;
 
@@ -75,15 +75,15 @@ namespace csdmnc {
 
 			return Flow;
 		}
-		virtual mxcclt::fFlow &MXCCLTExtractFlow( void *UP ) override
+		virtual csdmxc::fFlow &CSDMXCExtractFlow( void *UP ) override
 		{
 			return F_( UP );
 		}
-		virtual void MXCCLTRelease( void *UP ) override
+		virtual void CSDMXCRelease( void *UP ) override
 		{
 			delete FlowAsPointer_( UP );
 		}
-		virtual time_t MXCCLTEpochTimeStamp( void *UP )
+		virtual time_t CSDMXCEpochTimeStamp( void *UP ) override
 		{
 			return F_( UP ).EpochTimeStamp();
 		}
@@ -100,9 +100,9 @@ namespace csdmnc {
 		}
 	};
 
-	typedef mxcclt::rCore rCore_;
+	typedef csdmxc::rCore rCore_;
 
-	using mxcclt::fLogCallback;
+	using csdmxc::fLogCallback;
 	
 	class rCore
 	: public rCore_
@@ -134,7 +134,7 @@ namespace csdmnc {
 		}
 	};
 
-	using mxcclt::rClientIOFlow;
+	using csdmxc::rClientIOFlow;
 
 }
 

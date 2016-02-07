@@ -23,7 +23,7 @@
 
 using namespace csdmxc;
 
-#ifdef CXDMXC__MT
+#ifdef CSDMXC__MT
 #	include "mtk.h"
 #endif
 
@@ -82,7 +82,7 @@ void csdmxc::rCore::Ping( void )
 	Unlock_( MainMutex_ );
 }
 
-#ifdef CXDMXC__MT
+#ifdef CSDMXC__MT
 void csdmxc::KeepAlive_( void *UP )
 {
 	rCore &Core = *(rCore *)UP;
@@ -92,7 +92,7 @@ void csdmxc::KeepAlive_( void *UP )
 	Timer.Launch();
 
 	while ( !mtx::IsLocked( Core.Ping_.Mutex ) ) {	// While no terminating request.
-		tht::Suspend( CXDMXC_PING_DELAY );
+		tht::Suspend( CSDMXC_PING_DELAY );
 
 		if ( Timer.IsElapsed() ) {
 			Core.Ping();
@@ -106,8 +106,8 @@ void csdmxc::KeepAlive_( void *UP )
 
 void csdmxc::rCore::KeepAlive_( time_t Delay )
 {
-#ifdef CXDMXC__MT
-	if ( Delay <= CXDMXC_PING_DELAY )
+#ifdef CSDMXC__MT
+	if ( Delay <= CSDMXC_PING_DELAY )
 		qRFwk();
 
 	mtk::Launch( ::KeepAlive_, this );

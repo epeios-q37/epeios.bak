@@ -34,30 +34,39 @@
 
 # include "err.h"
 
-#define CXDMXC_PING_DELAY	( 2 * 1000 )	// Delay between 2 pings to maintain the connection.
+#ifdef CPE_F_MT
+#	define CSDMXC__MT
+#endif
 
-#define CXDMXC_DEFAULT_CACHE_SIZE	100
+#ifdef CSDMXC__MT
+#	include "mtx.h"
+#endif
+
+
+#define CSDMXC_PING_DELAY	( 2 * 1000 )	// Delay between 2 pings to maintain the connection.
+
+#define CSDMXC_DEFAULT_CACHE_SIZE	100
 
 namespace csdmxc {
 	using namespace csdmxb;
-#ifdef CXDMXC__MT
+#ifdef CSDMXC__MT
 	typedef mtx::handler___	mutex__;
-#	define CXDMXC_NO_MUTEX			MTX_INVALID_HANDLER
+#	define CSDMXC_NO_MUTEX			MTX_INVALID_HANDLER
 #else
 	typedef void *mutex__;
-#	define CXDMXC_NO_MUTEX			NULL
+#	define CSDMXC_NO_MUTEX			NULL
 #endif
 
 	inline void Lock_( mutex__ Mutex )
 	{
-#ifdef CXDMXC__MT
+#ifdef CSDMXC__MT
 		mtx::Lock( Mutex );
 #endif
 	}
 
 	inline void Unlock_( mutex__ Mutex )
 	{
-#ifdef CXDMXC__MT
+#ifdef CSDMXC__MT
 		mtx::Unlock( Mutex );
 #endif
 	}
@@ -66,17 +75,17 @@ namespace csdmxc {
 		mutex__ Mutex,
 		bso::bool__ EvenIfLocked = false )
 	{
-#ifdef CXDMXC__MT
+#ifdef CSDMXC__MT
 		mtx::Delete( Mutex, EvenIfLocked );
 #endif
 	}
 
 	inline mutex__ _Create( void )
 	{
-#ifdef CXDMXC__MT
+#ifdef CSDMXC__MT
 		return mtx::Create();
 #else
-		return CXDMXC_NO_MUTEX;
+		return CSDMXC_NO_MUTEX;
 #endif
 	}
 
@@ -98,7 +107,7 @@ namespace csdmxc {
 	class fLogCallback
 	{
 	protected:
-		virtual void CXDMXCLog(
+		virtual void CSDMXCLog(
 			eLog Log,
 			const void *UP,
 			sdr::size__ Amount ) = 0;
@@ -109,17 +118,17 @@ namespace csdmxc {
 			const void *UP,
 			sdr::size__ Amount )
 		{
-			CXDMXCLog( Log, UP, Amount );
+			CSDMXCLog( Log, UP, Amount );
 		}
 	};
 
 	class fCallback
 	{
 	protected:
-		virtual void *CXDMXCNew( void ) = 0;
-		virtual fFlow &CXDMXCExtractFlow( void *UP ) = 0;
-		virtual void CXDMXCRelease( void *UP ) = 0;
-		virtual time_t CXDMXCEpochTimeStamp( void *UP )	// By default, the connection is always in use.
+		virtual void *CSDMXCNew( void ) = 0;
+		virtual fFlow &CSDMXCExtractFlow( void *UP ) = 0;
+		virtual void CSDMXCRelease( void *UP ) = 0;
+		virtual time_t CSDMXCEpochTimeStamp( void *UP )	// By default, the connection is always in use.
 		{
 			return tol::EpochTime( false );
 		}
@@ -127,23 +136,23 @@ namespace csdmxc {
 		qCALLBACK_DEF( Callback );
 		void *New( void )
 		{
-			return CXDMXCNew();
+			return CSDMXCNew();
 		}
 		virtual fFlow &ExtractFlow( void *UP )
 		{
-			return CXDMXCExtractFlow( UP );
+			return CSDMXCExtractFlow( UP );
 		}
 		void Release( void *Flow )
 		{
-			return CXDMXCRelease( Flow );
+			return CSDMXCRelease( Flow );
 		}
 		time_t EpochTimeStamp( void *UP )
 		{
-			return CXDMXCEpochTimeStamp( UP );
+			return CSDMXCEpochTimeStamp( UP );
 		}
 	};
 
-# ifdef CXDMXC__MT
+# ifdef CSDMXC__MT
 	// Predeclaration
 	void KeepAlive_( void * );
 # endif
@@ -182,31 +191,31 @@ qRE
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				if ( Ping_.Mutex != CXDMXC_NO_MUTEX )
+				if ( Ping_.Mutex != CSDMXC_NO_MUTEX )
 					Lock_( Ping_.Mutex );	// Signale au 'thread' du 'ping' qu'il doit se terminer.
 
 				ReleaseUPs_();
 
-				if ( Ping_.Mutex != CXDMXC_NO_MUTEX ) {
+				if ( Ping_.Mutex != CSDMXC_NO_MUTEX ) {
 					Lock_( Ping_.Mutex );	// Attend que le 'thread' ud 'ping' prenne acte de la demnade de terminaison.
 					Delete_( Ping_.Mutex, true );
 				}
 
-				if ( MainMutex_ != CXDMXC_NO_MUTEX )
+				if ( MainMutex_ != CSDMXC_NO_MUTEX )
 					Delete_( MainMutex_ );
 
-				if ( Log_.Mutex != CXDMXC_NO_MUTEX )
+				if ( Log_.Mutex != CSDMXC_NO_MUTEX )
 					Delete_( Log_.Mutex );
 			}
 
 			UPs.reset( P );
 
 			Callback_ = NULL;
-			MainMutex_ = CXDMXC_NO_MUTEX;
-			Log_.Mutex = CXDMXC_NO_MUTEX;
+			MainMutex_ = CSDMXC_NO_MUTEX;
+			Log_.Mutex = CSDMXC_NO_MUTEX;
 			Log_.Callback = NULL;
 			Ping_.Delay = 0;
-			Ping_.Mutex = CXDMXC_NO_MUTEX;
+			Ping_.Mutex = CSDMXC_NO_MUTEX;
 		}
 		qVDTOR( rCore );
 		bso::bool__ Init( 
@@ -301,7 +310,7 @@ qRE
 			Record_( lRelease, UP );
 		}
 		void Ping( void );	// Emet un 'ping' sur les connections reste inactives trop longtemps.
-# ifdef CXDMXC__MT
+# ifdef CSDMXC__MT
 		friend void csdmxc::KeepAlive_( void *UP );
 # endif
 	};
@@ -412,7 +421,7 @@ qRE
 	{
 	private:
 		_driver___ _Driver;
-		flw::byte__ _Cache[CXDMXC_DEFAULT_CACHE_SIZE];
+		flw::byte__ _Cache[CSDMXC_DEFAULT_CACHE_SIZE];
 	public:
 		void reset( bso::bool__ P = true )
 		{
