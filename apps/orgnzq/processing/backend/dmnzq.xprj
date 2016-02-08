@@ -15,12 +15,12 @@
 	  </xpp:bloc>
 		<Parameters>
 			<Plugins>
-				<xpp:set name="Slot" value="Straight"/>
+				<xpp:set name="Slot" value="Proxy"/>
 				<xpp:ifeq select="Slot" value="Straight">
 					<Plugin target="Slot" Id="Straight">53700</Plugin>
 				</xpp:ifeq>
 				<xpp:ifeq select="Slot" value="Proxy">
-					<Plugin target="Slot" Id="Proxy">localhost:53700 test</Plugin>
+					<Plugin target="Slot" Id="Proxy">localhost:53700 orgnzq</Plugin>
 				</xpp:ifeq>
 			</Plugins>
 		<xpp:define name="lib_prefix">
