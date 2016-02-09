@@ -852,12 +852,8 @@ namespace flx {
 		void Init(
 			flw::oflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety,
-			class fCallback *Callback,
 			eCommitHandling CommitHandling )
 		{
-			if ( Callback != NULL )	// Doesn't need a callback ; only here to faclitate the use of template.
-				qRFwk();
-
 			_Flow = &Flow;
 			CommitHandling_ = CommitHandling;
 			_EmbeddedSizeRemainder = 0;
@@ -878,33 +874,12 @@ namespace flx {
 		dh_Default = dhPropagate
 	};
 
-	class fCallback
-	{
-	protected:
-		virtual void FLXOnAllRed( void ) = 0;
-	public:
-		void reset( bso::fBool = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( fCallback );
-		void Init( void )
-		{
-			// Standardisation.
-		}
-		void OnAllRed( void )
-		{
-			return FLXOnAllRed();
-		}
-	};
-
 	// 'driver' qui relaye un 'iflow', mais dont la taille est 'encode' dans le flux.
 	class size_embedded_iflow_driver___
 	: public _iflow_driver___<>
 	{
 	private:
 		flw::iflow__ *_Flow;
-		fCallback *Callback_;
 		fdr::size__ _EmbeddedSizeRemainder;
 		dismiss_handling__ _DismissHandling;
 		bso::bool__ _AllRed;
@@ -932,15 +907,9 @@ namespace flx {
 			if ( _EmbeddedSizeRemainder == 0 ) {
 				dtfptb::VGet( *_Flow, _EmbeddedSizeRemainder );
 
-				while ( _EmbeddedSizeRemainder == 0 ) {
+				if ( _EmbeddedSizeRemainder == 0 ) {
 					_AllRed = true;
-					if ( Callback_ != NULL )
-						Callback_->OnAllRed();
-
-					if ( _Flow->EndOfFlow() ) {
-						return 0;
-					} else
-						dtfptb::VGet( *_Flow, _EmbeddedSizeRemainder );
+					return 0;
 				}
 			}
 
@@ -973,7 +942,6 @@ namespace flx {
 		{
 			_iflow_driver___<>::reset( P );
 			_Flow = NULL;
-			Callback_ = NULL;
 			_EmbeddedSizeRemainder = 0;
 			_DismissHandling = dh_Undefined;
 			_AllRed = false;
@@ -982,11 +950,9 @@ namespace flx {
 		void Init(
 			flw::iflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety,
-			fCallback *Callback,
 			dismiss_handling__ DismissHandling = dh_Default )
 		{
 			_Flow = &Flow;
-			Callback_ = Callback;
 			_EmbeddedSizeRemainder = 0;
 			_DismissHandling = DismissHandling,
 			_iflow_driver___<>::Init( ThreadSafety );
@@ -1012,11 +978,10 @@ namespace flx {
 		E_CDTOR( _sizes_embbeded_flow___ );
 		void Init(
 			flow &Flow,
-			handling Handling,
-			fCallback *Callback = NULL )
+			handling Handling )
 		{
 			sflow::Init( _Driver );
-			_Driver.Init( Flow, fdr::tsDisabled, Callback, Handling );
+			_Driver.Init( Flow, fdr::tsDisabled, Handling );
 		}
 	};
 

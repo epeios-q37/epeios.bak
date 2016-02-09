@@ -132,23 +132,30 @@ public:
 			CommitMutex_;	// To ensure that the pairing data is transmitted.
 		void Process_( flw::ioflow__ &Flow )
 		{
+		qRFH
 			fdr::byte__ Buffer[1024];
 			fdr::size__ Size = 0,  Written = 0;
-
+		qRFB
 			while ( ( Size = Flow.ReadUpTo( sizeof( Buffer ), Buffer ) ) != 0) {
 				Written = 0;
 				while ( Size > Written )
 					Written += Flow.WriteUpTo( Buffer + Written, Size - Written );
 				Flow.Commit();
 			}
+		qRFR
+		qRFT
+		qRFE( sclmisc::ErrFinal() )
 		}
-		void WaitForOther_( void )
+		bso::fBool WaitForOther_(void)	// If the returning value is 'true', then the thread is the one which deletes the proxy.
 		{
 			if ( mtx::TryToLock( PairingMutex_ ) ) {
 				mtx::Lock( PairingMutex_ );
 				mtx::Unlock( PairingMutex_ );
-			} else
+				return true;
+			} else {
 				mtx::Unlock( PairingMutex_ );
+				return false;
+			}
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -168,7 +175,7 @@ public:
 			CommitMutex_ = mtx::UndefinedHandler;
 		}
 		E_CDTOR( rProxy );
-		void Init( flw::ioflow__ &Flow )
+		bso::fBool Init( flw::ioflow__ &Flow )
 		{
 			reset();
 
@@ -195,9 +202,9 @@ public:
 
 			Process_( Flow1_ );
 
-			WaitForOther_();
+			return WaitForOther_();
 		}
-		void Plug( flw::ioflow__ &Flow )
+		bso::fBool Plug( flw::ioflow__ &Flow )
 		{
 			Flow1_.SetOut( Flow );
 			Flow2_.SetIn( Flow );
@@ -213,22 +220,17 @@ public:
 
 			Process_( Flow2_ );
 
-			WaitForOther_();
+			return WaitForOther_();
 		}
 	};
 
 	typedef csdbns::callback__ _callback__;
 
-	qROW( Row );
-
-	typedef lstbch::qLBUNCHv( rProxy *, fRow ) vProxies;
-	qW( Proxies );
-
 	class vPending
 	{
 	public:
 		struct s {
-			fRow Proxy;
+			rProxy *Proxy;
 			str::vString::s Id;
 		} &S_;
 		str::vString Id;
@@ -238,7 +240,7 @@ public:
 		{}
 		void reset( bso::fBool P = true )
 		{
-			S_.Proxy = qNIL;
+			S_.Proxy = NULL;
 			Id.reset( P );
 		}
 		void plug( qSDf &SD )
@@ -258,14 +260,20 @@ public:
 			return *this;
 		}
 		void Init(
-			fRow Proxy,
+			rProxy *Proxy,
 			const str::vString &Id )
 		{
 			S_.Proxy = Proxy;
 
 			this->Id.Init( Id );
 		}
-		qRODISCLOSEv( fRow, Proxy );
+		rProxy *Proxy( void ) const
+		{
+			if ( S_.Proxy == NULL )
+				qRGnr();
+
+			return S_.Proxy;
+		}
 	};
 
 	qW( Pending );
@@ -273,46 +281,48 @@ public:
 	typedef ctn::qMCONTAINERvl( vPending ) vPendings;
 	qW( Pendings );
 
-	iProxies Proxies_;
 	iPendings PendingClients_, PendingServers_;
 
 	mtx::handler___ Mutex_ = mtx::UndefinedHandler;
 
-	void DeleteProxies_( void )
+	void DeletePendings_( vPendings &Pendings)
 	{
-		fRow Row = Proxies_.First();
+		sdr::fRow Row = Pendings.First();
 
 		while ( Row != qNIL ) {
-			delete Proxies_( Row );
+			delete Pendings( Row ).Proxy();
 
-			Row = Proxies_.Next( Row );
+			Pendings.Flush();
+
+			Row = Pendings.Next( Row );
 		}
+
+		Pendings.reset();
 	}
 
-	fRow SearchPendingAndRemoveIfExists_(
+	rProxy *SearchPendingAndRemoveIfExists_(
 		const str::string_ &Id,
 		vPendings &Pendings )
 	{
-		fRow PRow = qNIL;
+		rProxy *Proxy = NULL;
 	qRH
 		sdr::row__ Row = qNIL;
-		ctn::qCMITEMl( vPending ) Pending;
 	qRB
-		Pending.Init( Pendings );
-
 		Row = Pendings.First();
 
-		while ( ( Row != qNIL ) && ( Pending( Row ).Id != Id ) )
+		while ( ( Row != qNIL ) && ( Pendings( Row ).Id != Id ) )
 			Row = Pendings.Next( Row );
 
 		if ( Row != qNIL ) {
-			PRow = Pending( Row ).Proxy();
+			Proxy = Pendings(Row).Proxy();
+			Pendings.Flush();
 			Pendings.Remove( Row );
 		}
+
 	qRR
 	qRT
 	qRE
-		return PRow;
+		return Proxy;
 	}
 
 	vPendings &GetPendings_( prxybase::eType Type )
@@ -346,41 +356,29 @@ public:
 		if ( Proxy == NULL )
 			qRAlc();
 
-		Pending.Init( Proxies_.Add( Proxy ), Id );
+		Pending.Init( Proxy, Id );
 
 		GetPendings_( Type ).Append( Pending );
 
 		mtx::Unlock( Mutex_ );	// Locked by caller.
 
-		Proxy->Init( Flow );	// Blocking until deconnection.
+		if ( Proxy->Init( Flow ) )	// Blocking until deconnection.
+			delete Proxy;
 	qRR
 		if ( mtx::IsLocked( Mutex_ ) )
 			mtx::Unlock( Mutex_ );
 	qRT
-		if ( Proxy != NULL )
-			delete Proxy;
 	qRE
 	}
 
 	void Plug_(
-		fRow Row,
+		rProxy *Proxy,
 		flw::ioflow__ &Flow )
 	{
-	qRH
-		rProxy *Proxy = NULL;
-	qRB
-		Proxy = Proxies_( Row );
+		mtx::Unlock( Mutex_ );	// Locked by caller.
 
-		Proxies_.Remove( Row );
-
-		mtx::Unlock( Mutex_ );	// Locaked by caller.
-
-		Proxy->Plug( Flow );	// Blocking until deconnection.
-	qRR
-		if ( mtx::IsLocked( Mutex_ ) )
-			mtx::Unlock( Mutex_ );
-	qRT
-	qRE
+		if ( Proxy->Plug( Flow ) )	// Blocking until deconnection.
+			delete Proxy;
 	}
 
 
@@ -399,7 +397,7 @@ public:
 		qRH
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
-			fRow Row = qNIL;
+			rProxy *Proxy = NULL;
 		qRB
 			mtx::Lock( Mutex_ );
 
@@ -410,21 +408,23 @@ public:
 
 			switch ( Type ) {
 			case prxybase::tClient:
-				Row = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
+				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
 				break;
 			case prxybase::tServer:
-				Row = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
+				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
 				break;
 			default:
 				qRGnr();
 				break;
 			}
 
-			if ( Row == qNIL ) 
+			if ( Proxy == NULL ) 
 				Create_( Id, Flow, Type );
 			else
-				Plug_( Row, Flow );
+				Plug_( Proxy, Flow );
 		qRR
+			if (  mtx::IsLocked( Mutex_ ) )
+				mtx::Unlock( Mutex_ );
 		qRT
 		qRE
 			return csdscb::aStop;
@@ -488,7 +488,6 @@ const char *sclmisc::SCLMISCTargetName = NAME_LC;
 
 Q37_GCTOR( prxyq )
 {
-	Proxies_.Init();
 	PendingClients_.Init();
 	PendingServers_.Init();
 
@@ -497,7 +496,8 @@ Q37_GCTOR( prxyq )
 
 Q37_GDTOR( prxyq )
 {
-	DeleteProxies_();
+	DeletePendings_( PendingClients_ );
+	DeletePendings_( PendingServers_ );
 
 	if ( Mutex_ != mtx::UndefinedHandler )
 		mtx::Delete( Mutex_ );
