@@ -121,12 +121,27 @@ public:
 
 			OFlow_ = &Flow;
 		}
+		bso::fBool IsSet( void ) const
+		{
+			if ( IFlow_ != NULL ) {
+				if ( OFlow_ != NULL )
+					return true;
+				else
+					qRGnr();
+			} else if ( OFlow_ == NULL )
+				return false;
+			else
+				qRGnr();
+
+
+
+		}
 	};
 
 	class rProxy
 	{
 	private:
-		flow___ Flow1_, Flow2_;
+		flow___ C2S_, S2C_;
 		mtx::handler___
 			PairingMutex_,	// To wait for the pairing.
 			CommitMutex_;	// To ensure that the pairing data is transmitted.
@@ -135,6 +150,7 @@ public:
 		qRFH
 			fdr::byte__ Buffer[1024];
 			fdr::size__ Size = 0,  Written = 0;
+			err::buffer__ ERRBuffer;
 		qRFB
 			while ( ( Size = Flow.ReadUpTo( sizeof( Buffer ), Buffer ) ) != 0) {
 				Written = 0;
@@ -143,8 +159,26 @@ public:
 				Flow.Commit();
 			}
 		qRFR
+			if ( ERRType == err::tLibrary ) {
+				// cio::COut << ">>>" << txf::pad << err::Message( ERRBuffer ) << txf::nl << txf::commit;	// sck.cpp:78 'WSAECONNABORTED'.
+				ERRRst();
+			}
 		qRFT
 		qRFE( sclmisc::ErrFinal() )
+		}
+		void Process_( prxybase::eType Type )
+		{
+			switch ( Type ) {
+			case prxybase::tClient:
+				Process_( C2S_ );
+				break;
+			case prxybase::tServer:
+				Process_( S2C_ );
+				break;
+			default:
+				qRGnr();
+				break;
+			}
 		}
 		bso::fBool WaitForOther_(void)	// If the returning value is 'true', then the thread is the one which deletes the proxy.
 		{
@@ -157,11 +191,29 @@ public:
 				return false;
 			}
 		}
+		void Plug_(
+			flw::ioflow__ &Flow,
+			prxybase::eType Type )
+		{
+			switch ( Type ) {
+			case prxybase::tClient:
+				C2S_.SetIn( Flow );
+				S2C_.SetOut( Flow );
+				break;
+			case prxybase::tServer:
+				S2C_.SetIn( Flow );
+				C2S_.SetOut( Flow );
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Flow1_.reset( false );
-			Flow2_.reset( false );
+			C2S_.reset( false );
+			S2C_.reset( false );
 
 			if ( P ) {
 				if ( PairingMutex_ != mtx::UndefinedHandler )
@@ -175,15 +227,16 @@ public:
 			CommitMutex_ = mtx::UndefinedHandler;
 		}
 		E_CDTOR( rProxy );
-		bso::fBool Init( flw::ioflow__ &Flow )
+		bso::fBool Init(
+			flw::ioflow__ &Flow,
+			prxybase::eType Type )
 		{
 			reset();
 
-			Flow1_.Init();
-			Flow2_.Init();
+			C2S_.Init();
+			S2C_.Init();
 
-			Flow1_.SetIn( Flow );
-			Flow2_.SetOut( Flow );
+			Plug_( Flow, Type );
 
 			PairingMutex_ = mtx::Create();
 			CommitMutex_ = mtx::Create();
@@ -200,14 +253,15 @@ public:
 
 			mtx::Unlock( CommitMutex_ );
 
-			Process_( Flow1_ );
+			Process_( Type );
 
 			return WaitForOther_();
 		}
-		bso::fBool Plug( flw::ioflow__ &Flow )
+		bso::fBool Plug(
+			flw::ioflow__ &Flow,
+			prxybase::eType Type )
 		{
-			Flow1_.SetOut( Flow );
-			Flow2_.SetIn( Flow );
+			Plug_( Flow, Type );
 
 			mtx::Unlock( PairingMutex_ );
 
@@ -218,7 +272,7 @@ public:
 			mtx::Lock( CommitMutex_ );
 			mtx::Unlock( CommitMutex_ );
 
-			Process_( Flow2_ );
+			Process_( Type );
 
 			return WaitForOther_();
 		}
@@ -362,7 +416,7 @@ public:
 
 		mtx::Unlock( Mutex_ );	// Locked by caller.
 
-		if ( Proxy->Init( Flow ) )	// Blocking until deconnection.
+		if ( Proxy->Init( Flow, Type ) )	// Blocking until deconnection.
 			delete Proxy;
 	qRR
 		if ( mtx::IsLocked( Mutex_ ) )
@@ -373,11 +427,12 @@ public:
 
 	void Plug_(
 		rProxy *Proxy,
-		flw::ioflow__ &Flow )
+		flw::ioflow__ &Flow,
+		prxybase::eType Type )
 	{
 		mtx::Unlock( Mutex_ );	// Locked by caller.
 
-		if ( Proxy->Plug( Flow ) )	// Blocking until deconnection.
+		if ( Proxy->Plug( Flow, Type ) )	// Blocking until deconnection.
 			delete Proxy;
 	}
 
@@ -421,7 +476,7 @@ public:
 			if ( Proxy == NULL ) 
 				Create_( Id, Flow, Type );
 			else
-				Plug_( Proxy, Flow );
+				Plug_( Proxy, Flow, Type );
 		qRR
 			if (  mtx::IsLocked( Mutex_ ) )
 				mtx::Unlock( Mutex_ );
