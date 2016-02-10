@@ -35,11 +35,12 @@ mods += ntvstr que sdr stk str
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio tht 
 mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn rgstry stsfsm xml 
-mods += xpp 
-mods += csdlec csdrcc csdrcu csducl 
-mods += fblcmd fblcst fblfaq fblfrd fblfrp 
-mods += fbltyp 
+mods += lcl plgn plgncore rgstry stsfsm 
+mods += xml xpp 
+mods += csdlec csdleo csdrcc csdrcu csdscb 
+mods += csducl 
+mods += fblcmd fblcst fblfep fblfph fblfrd 
+mods += fblfrp fblovl fbltyp fblfaq 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += registry 
@@ -323,6 +324,7 @@ all: $(binary)
 
 copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DIDENTIFIER=\""415e08c8-aab6-4ea0-9259-ae8e160a5800"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -346,9 +348,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
 	mkdir -p $(dest)
-			
 	cp $(binary) $(dest)
 endif
 		

@@ -35,9 +35,9 @@ mods += ntvstr que sdr stk str
 mods += strng tagsbs tol txf tys 
 mods += uys utf xtf llio tht 
 mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn rgstry stsfsm xml 
-mods += xpp 
-mods += csdlec 
+mods += lcl plgn plgncore rgstry stsfsm 
+mods += xml xpp 
+mods += csdlec csdleo csdscb 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += misc 
@@ -322,12 +322,12 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160128"\"
+copt += -DVERSION=\""20160210"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""13299010-d5c2-4d64-aad7-94339d73cfcc"\"
 
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif

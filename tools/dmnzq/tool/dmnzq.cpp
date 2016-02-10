@@ -25,8 +25,6 @@
 #include "sclerror.h"
 
 #include "csdlec.h"
-#include "csdbns.h"
-#include "csdmns.h"
 
 #include "err.h"
 #include "cio.h"
@@ -79,128 +77,6 @@ namespace {
 	qRT
 	qRE
 	}
-
-	// To be transfered in the concerned plugin.
-
-	/*
-	E_ENUM( log_file_handling ) {
-		lfhAppend,	// New log are appended to the current ones.
-		lfhDrop,		// Old logs are destroyed.
-		lfh_amount,
-		lfh_Undefined,
-	};
-
-	log_file_handling__ GetLogFileHandling_( void )
-	{
-		log_file_handling__ Handling = lfh_Undefined;
-	qRH
-		str::string Value;
-	qRB
-		Value.Init();
-
-		registry::GetRawModuleLogMode( Value );
-
-		if ( ( Value.Amount() == 0 ) ||( Value == "Append" ) )
-			Handling = lfhAppend;
-		else if ( Value == "Drop" )
-			Handling = lfhDrop;
-		else
-			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( registry::ModuleLogMode );
-	qRR
-	qRT
-	qRE
-		return Handling;
-	}
-
-
-	class log_functions__
-	: public _log_functions__
-	{
-	private:
-		txf::text_oflow__ *_Flow;
-	protected:
-		virtual void CSDMNSLog(
-			csdmns::log__ Log,
-			csdmns::id__ Id,
-			void *UP,
-			sdr::size__ Amount ) override
-		{
-			tol::buffer__ Buffer;
-
-			if ( _Flow == NULL )
-				qRGnr();
-
-			*_Flow << '[' << tol::DateAndTime( Buffer ) << "] " << csdmns::GetLogLabel( Log ) << ' ' << Id << '/' << Amount << txf::nl << txf::commit;
-		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_log_functions__::reset( P );
-			_Flow = NULL;
-		}
-		log_functions__( void )
-		{
-			reset( false );
-		}
-		~log_functions__( void )
-		{
-			reset();
-		}
-		void Init( txf::text_oflow__ &Flow )
-		{
-			_log_functions__::Init();
-			_Flow = &Flow;
-		}
-	};
-
-
-	void UseMuxedConnections_(
-		module__ &Module,
-		const char *LogFileName,
-		log_file_handling__ LogFileHandling )
-	{
-	qRH
-		flf::file_oflow___ FFlow;
-		txf::text_oflow__ TFlow;
-		log_functions__ LogFunctions;
-		fil::mode__ Mode = fil::m_Undefined;
-		lcl::meaning ErrorMeaning;
-		str::string ErrorTranslation;
-	qRB
-
-		if ( LogFileName != NULL ) {
-			switch ( LogFileHandling ) {
-			case lfhAppend:
-				Mode = fil::mAppend;
-				break;
-			case lfhDrop:
-				Mode = fil::mRemove;
-				break;
-			default:
-				if ( LogFileName != NULL )
-					qRGnr();
-				break;
-			}
-
-			if ( FFlow.Init( LogFileName, Mode, err::hUserDefined ) != tol::rSuccess ) {
-				ErrorMeaning.Init();
-				ErrorMeaning.SetValue( "UnableToOpenLogFileError" );
-				ErrorMeaning.AddTag( LogFileName );
-
-				ErrorTranslation.Init();
-				CErr << sclmisc::GetBaseTranslation( ErrorMeaning, ErrorTranslation ) << txf::nl << txf::commit;
-				LogFileName = NULL;	// To notify no to use log functions.
-			} else
-				TFlow.Init( FFlow );
-		}
-
-		UseMuxedConnections_( Module, LogFileName == NULL ? *(csdmns::log_functions__ *)NULL : LogFunctions );
-	qRR
-	qRT
-	qRE
-	}
-
-	*/
 
 	using misc::callback__;
 

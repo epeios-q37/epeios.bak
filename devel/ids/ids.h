@@ -172,7 +172,7 @@ namespace ids {
 		ids &Ids,
 		rFH &Hook )
 	{
-		return stk::Plug( Stack, Hook );
+		return stk::Plug( Ids, Hook );
 	}
 
 }

@@ -61,7 +61,7 @@ namespace {
 		void Init( void )
 		{
 			_plugin__::Init();
-			Server_.reset();	// See above for initialzation will be made later.
+			Server_.reset();	// See above for initialization will be made later.
 		}
 		void SCLPLUGINInitialize( void )
 		{

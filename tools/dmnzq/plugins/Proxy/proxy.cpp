@@ -23,7 +23,7 @@
 
 #include "registry.h"
 
-# include "prxy.h"
+#include "prxy.h"
 
 #include "sclplugin.h"
 #include "sclmisc.h"

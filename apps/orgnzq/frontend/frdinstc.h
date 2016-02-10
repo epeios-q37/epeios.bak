@@ -93,7 +93,7 @@ namespace frdinstc {
 		}
 		void CreateRecord( void )
 		{
-			Core_.EditRecord( 0 );
+			Core_.EditRecord( qNIL );
 		}
 	};
 }

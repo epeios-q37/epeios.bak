@@ -24,8 +24,6 @@
 #include "sclmisc.h"
 #include "sclargmnt.h"
 
-#include "strmrg.h"
-
 using namespace sclplugin;
 
 /* Although in theory this class is inaccessible to the different modules,

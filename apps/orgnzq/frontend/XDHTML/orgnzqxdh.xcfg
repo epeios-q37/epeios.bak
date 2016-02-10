@@ -145,6 +145,25 @@
 					<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
 				</Translations>
 			</xpp:bloc>
+			<xpp:bloc>
+			<!-- Field-->
+				<Translations text="fldMonoLabel">
+					<Translation language="fr">Mono</Translation>
+					<Translation language="en">Mono</Translation>
+				</Translations>
+				<Translations text="fldMonoTitle">
+					<Translation language="fr">Le champs peut contenir au maximum une entrée.</Translation>
+					<Translation language="en">Fiels can contain at most one entry</Translation>
+				</Translations>
+				<Translations text="fldMultiLabel">
+					<Translation language="fr">Multi</Translation>
+					<Translation language="en">Multi</Translation>
+				</Translations>
+				<Translations text="fldMultiTitle">
+					<Translation language="fr">Le champs peut contenir plusieurs entrées</Translation>
+					<Translation language="en">The filed can contain several entries.</Translation>
+				</Translations>
+			</xpp:bloc>
 			<!--
 				<Translations text="">
 					<Translation language="fr"></Translation>

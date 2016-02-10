@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>(Version)</xpp:bloc>
+			<xpp:bloc>20160210</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2015-2016</xpp:bloc>
@@ -24,10 +24,12 @@
 				<xpp:expand select="Core"/>
 				<Module>mtk</Module>
 				<Module>prxy</Module>
+				<Module>prxybase</Module>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdbnc</Module>
+				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>

@@ -23,18 +23,11 @@
 				<xpp:expand select="Core"/>
 			</Modules>
 			<Modules Group="CSD">
-				<Module>csdlec</Module>
-				<Module>csdrcc</Module>
-				<Module>csdrcu</Module>
-				<Module>csducl</Module>
+				<xpp:expand select="CSDF"/>
 			</Modules>"
 			<Modules Group="FBL">
-				<Module>fblcmd</Module>
-				<Module>fblcst</Module>
+				<xpp:expand select="FBLF"/>
 				<Module>fblfaq</Module>
-				<Module>fblfrd</Module>
-				<Module>fblfrp</Module>
-				<Module>fbltyp</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
@@ -43,14 +36,14 @@
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
-	<Packing>
+	<!--Packing>
 		<WikiFiles>
 			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">barq</File>
 			<File Dir="computing/epeios/tools/barq/">Manual</File>
 			<File Dir="computing/epeios/">Compilation</File>
 			<File Dir="computing/epeios/tools/">Configuration</File>
 		</WikiFiles>
-	</Packing>
+	</Packing-->
 	<SourceDirs>
 	</SourceDirs>
 	<PreprocessorDefinitions>
