@@ -150,7 +150,7 @@ public:
 		qRFH
 			fdr::byte__ Buffer[1024];
 			fdr::size__ Size = 0,  Written = 0;
-			err::buffer__ ERRBuffer;
+//			err::buffer__ ERRBuffer;
 		qRFB
 			while ( ( Size = Flow.ReadUpTo( sizeof( Buffer ), Buffer ) ) != 0) {
 				Written = 0;

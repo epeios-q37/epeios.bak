@@ -3,7 +3,7 @@
 	<xpp:bloc>
 		<!-- User definitions -->
 		<xpp:define name="Version">
-			<xpp:bloc>(Version)</xpp:bloc>
+			<xpp:bloc>20160210</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
 			<xpp:bloc>2016</xpp:bloc>
@@ -22,6 +22,7 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>mtk</Module>
+				<Module>prxybase</Module>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="SCL">
@@ -29,18 +30,19 @@
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdbns</Module>
+				<Module>csdscb</Module>
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
 	</Modules>
 	<Files/>
 	<Packing>
-		<WikiFiles>
+		<!--WikiFiles>
 			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">prxyq</File>
 			<File Dir="computing/epeios/tools/prxyq/">Manual</File>
 			<File Dir="computing/epeios/">Compilation</File>
 			<File Dir="computing/epeios/tools/">Configuration</File>
-		</WikiFiles>
+		</WikiFiles-->
 	</Packing>
 	<SourceDirs>
 	</SourceDirs>

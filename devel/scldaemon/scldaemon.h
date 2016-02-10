@@ -32,7 +32,7 @@
 # include "flw.h"
 
 # include "csdleo.h"
-# include "csdmns.h"
+# include "csdmxs.h"
 
 # include "sclrgstry.h"
 
@@ -118,7 +118,7 @@ namespace scldaemon {
 		}
 	};
 
-	typedef csdmns::rCallback muxed_callback___;
+	typedef csdmxs::rCallback muxed_callback___;
 
 	class callback___
 	: public _callback__
