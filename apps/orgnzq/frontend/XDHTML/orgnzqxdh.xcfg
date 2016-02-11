@@ -153,7 +153,7 @@
 				</Translations>
 				<Translations text="fldMonoTitle">
 					<Translation language="fr">Le champs peut contenir au maximum une entrée.</Translation>
-					<Translation language="en">Fiels can contain at most one entry</Translation>
+					<Translation language="en">Fiedls can contain at most one entry</Translation>
 				</Translations>
 				<Translations text="fldMultiLabel">
 					<Translation language="fr">Multi</Translation>

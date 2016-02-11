@@ -21,5 +21,20 @@
 
 using namespace ogzclm;
 
+#define C( name )	case n##name : return #name ; break
+
+const char *ogzclm::GetLabel( eNumber Number )
+{
+	switch ( Number ) {
+		C( Mono );
+		C( Multi );
+	default:
+		qRGnr();
+		break;
+	}
+
+	return NULL; // To avoid a warning.
+}
+
 
 

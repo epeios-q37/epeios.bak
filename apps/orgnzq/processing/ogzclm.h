@@ -39,6 +39,8 @@ namespace ogzclm {
 		n_Undefined,
 	};
 
+	const char *GetLabel( eNumber Number );
+
 	qENUM( Type ) {
 		tExplicit,	// Explicit column definition.
 		tDeduced,	// Deduced (from a model) column defintion.
