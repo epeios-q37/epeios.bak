@@ -41,51 +41,28 @@ namespace ogzrcd {
 // Template parameters.
 # define OGZRCD_TP	ogzrcd::vRecord, ogzrcd::iRecord, ogzrcd::fRRow, ogzrcd::fFRow, sdr::fRow
 
-	typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
+typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
 
 	typedef ogzcbs::fDItems<OGZRCD_TP> fRecords;
 
 	typedef ogzcbs::rDRegularCallback<OGZRCD_TP> rRegularCallback;
 
-	typedef ogzclm::fColumns fColumns_;
-
-	class rColumns
-	: public fColumns_
+	template <typename callback, typename items> class rCommon_
+	: public items
 	{
 	private:
-		ogzclm::rRegularCallback Callback_;
+		callback Callback_;
 	public:
 		void reset( bso::fBool P = true )
 		{
-			fColumns_::reset( P );
+			items::reset( P );
 			Callback_.reset( P );
 		}
-		E_CDTOR( rColumns );
+		E_CDTOR( rCommon_ );
 		void Init( void )
 		{
 			Callback_.Init();
-			fColumns_::Init( Callback_ );
-		}
-	};
-
-	typedef ogzfld::fFields fFields_;
-
-	class rFields
-	: public fFields_
-	{
-	private:
-		ogzfld::rRegularCallback Callback_;
-	public:
-		void reset( bso::fBool P = true )
-		{
-			fFields_::reset( P );
-			Callback_.reset( P );
-		}
-		E_CDTOR( rFields );
-		void Init( void )
-		{
-			Callback_.Init();
-			fFields_::Init( Callback_ );
+			items::Init( Callback_ );
 		}
 	};
 
@@ -93,26 +70,27 @@ namespace ogzrcd {
 	: public iRecord
 	{
 	private:
-		fRRow Source_;	// Row of the source record. If qNIL, it's a new record.
-		ogzdta::rRegularCallback Data_;
-		rColumns Columns_;
-		rFields Fields_;
+		fRRow Id_;	// Row of the source record. If qNIL, it's a new record.
 	public:
+		rCommon_<ogzdta::rRegularCallback, ogzdta::fData> Data;
+		rCommon_<ogzclm::rRegularCallback, ogzclm::fColumns> Columns;
+		rCommon_<ogzfld::rRegularCallback, ogzfld::fFields> Fields;
 		void reset( bso::fBool P = true )
 		{
-			Source_ = qNIL;
-			Fields_.reset( P );
-			Columns_.reset( P );
-			Data_.reset( P );
+			Id_ = qNIL;
+			Data.reset( P );
+			Columns.reset( P );
+			Fields.reset( P );
 		}
 		qCDTOR( rRecordBuffer );
 		void Init( void )
 		{
-			Source_ = qNIL;
-			Data_.Init();
-			Columns_.Init();
-			Fields_.Init();
+			Id_ = qNIL;
+			Data.Init();
+			Columns.Init();
+			Fields.Init();
 		}
+		qRODISCLOSEr( fRRow, Id );
 	};
 }
 
