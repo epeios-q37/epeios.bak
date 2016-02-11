@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: stsfsm.h,v 1.1 2013/07/18 19:46:25 csimon Exp $
+// State Transition System Finite State Machine .
 
 #ifndef STSFSM__INC
 #define STSFSM__INC
@@ -32,20 +32,6 @@
 #define STSFSM_DBG
 #endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.1 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/07/18 19:46:25 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D State Transition System Finite State Machine 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
 # include "err.h"
 # include "flw.h"
 # include "tol.h"
@@ -54,20 +40,27 @@
 # include "ctn.h"
 # include "str.h"
 
+/***************/
+/***** NEW *****/
+/***************/
+
 namespace stsfsm {
+	typedef bso::uint__ fId;
 
-	E_ROW( crow__ );	// 'Card Row'.
+	qROW( CRow );	// 'Card Row'.
 
-	typedef bch::E_BUNCH_( crow__ ) crows_;
+	typedef bch::qBUNCHvl( fCRow ) vCRows;
 
-	typedef bso::uint__ id__;
-	E_CDEF( id__, UndefinedId, BSO_UINT_MAX );
-
-	// Par dfaut, cette valeur signifie qu'une 'card' n'est pas rattache  une entre. Dans ce cas 'Cards( 255 ) n'existe pas.
+	// By defalt, cette valeur signifie qu'une 'card' n'est pas rattache  une entre. Dans ce cas 'Cards( 255 ) n'existe pas.
 	// Si les 255 entre de la table sont utilise et pointe tous sur des 'card's inutilise, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
-	E_CDEF( int, NoCard, 255 );
 
-	class card_ {
+	// By default, this value means that a card is not linked to another. In this case 'Cards( 255 )' doesn't exist.
+	// If the 255 entries of a table are used and are all linked to unused cards, then 'Cards( 255 )' is a row pointing to a card like the others .
+	qCDEF( int, NoCard, 255 );
+
+	qCDEF( fId, UndefinedId, BSO_UINT_MAX );
+
+	class vCard {
 	private:
 		void _ResetTable( void )
 		{
@@ -88,12 +81,12 @@ namespace stsfsm {
 		}
 	public:
 		struct s {
-			id__ Id;
+			fId Id;
 			bso::u8__ Table[256];
-			crows_::s Cards;
+			vCRows::s Cards;
 		} &S_;
-		crows_ Cards;
-		card_ ( s &S )
+		vCRows Cards;
+		vCard ( s &S )
 		: S_( S ),
 		  Cards( S.Cards )
 		{}
@@ -111,7 +104,7 @@ namespace stsfsm {
 		{
 			Cards.plug( AS );
 		}
-		card_ &operator =( const card_ &C )
+		vCard &operator =( const vCard &C )
 		{
 			S_.Id = C.S_.Id;
 			memcpy( S_.Table, C.S_.Table, sizeof( S_.Table ) );
@@ -125,7 +118,7 @@ namespace stsfsm {
 			_ResetTable();
 			Cards.Init();
 		}
-		crow__ Get( bso::u8__ C ) const
+		fCRow Get( bso::u8__ C ) const
 		{
 			if ( _T( C ) == NoCard )
 				if ( !Cards.Exists( NoCard ) )
@@ -135,17 +128,36 @@ namespace stsfsm {
 		}
 		void Set(
 			bso::u8__ C,
-			crow__ Row )
+			fCRow Row )
 		{
 			if ( Get( C ) != qNIL )
 				qRFwk();
 
 			_SetT( C, Cards.Append( Row ) );
 		}
-		E_RWDISCLOSE_( id__, Id );
+		E_RWDISCLOSE_( fId, Id );
 	};
 
-	typedef ctn::E_MCONTAINERt_( card_, crow__ ) automat_;
+	typedef ctn::qMCONTAINERv( vCard, fCRow ) vAutomat;
+	qW( Automat );
+}
+
+/***************/
+/***** OLD *****/
+/***************/
+
+namespace stsfsm {
+
+	typedef fCRow crow__;
+
+	typedef vCRows crows_;
+
+	typedef fId id__;
+
+	typedef vCard card_;
+	E_AUTO(  card  );
+
+	typedef vAutomat automat_;
 	E_AUTO( automat );
 
 	id__ Add(
@@ -248,12 +260,12 @@ namespace stsfsm {
 		version Version,
 		automat_ &Automat,
 		type Amount,
-		const char *(* GetLabel)( version, type ) )
+		const char *(* GetLabel)( type, version ) )
 	{
 		int i = 0;
 
 		while ( i < Amount ) {
-			if ( Add( GetLabel( Version, (type)i ), i, Automat ) != UndefinedId )
+			if ( Add( GetLabel( (type)i, Version ), i, Automat ) != UndefinedId )
 				qRFwk();
 
 			i++;
@@ -283,5 +295,4 @@ namespace stsfsm {
 	}
 }
 
-/*$END$*/
 #endif

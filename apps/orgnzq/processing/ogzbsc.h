@@ -37,6 +37,7 @@ namespace ogzbsc {
 	qROW( URRow );	// User record row.
 
 	using sdr::fByte;
+	using sdr::fSize;
 
 	typedef qBUFFERr( fByte ) rBuffer;
 }

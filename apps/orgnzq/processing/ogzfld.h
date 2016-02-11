@@ -29,6 +29,7 @@
 # include "ogzbsc.h"
 # include "ogzcbs.h"
 # include "ogzclm.h"
+# include "ogzdta.h"
 
 # include "bch.h"
 
@@ -38,47 +39,47 @@ namespace ogzfld {
 	using ogzbsc::fFRow;
 	using ogzclm::fCRow;
 
-	typedef bch::qBUNCHvl( fDRow ) vData;
-	qW( Data );
+	using ogzdta::vDatumList;
 
 	class vField
-	: public vData
+	: public vDatumList
 	{
 	public:
 		struct s
-		: public vData::s
+		: public vDatumList::s
 		{
 			fCRow Column;
 		}&S_;
 		vField( s &S )
 		: S_( S ),
-		  vData( S )
+		  vDatumList( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			S_.Column = qNIL;
-			vData::reset( P );
+			vDatumList::reset( P );
 		}
 		void plug( qSDf &SD )
 		{
-			vData::plug( SD );
+			vDatumList::plug( SD );
 		}
 		void plug( qASv &AS )
 		{
-			vData::plug( AS );
+			vDatumList::plug( AS );
 		}
 		vField &operator =( const vField &F )
 		{
 			S_.Column = F.S_.Column;
-			vData::operator=( F );
+			vDatumList::operator=( F );
 
 			return *this;
 		}
 		void Init( void )
 		{
 			S_.Column = qNIL;
-			vData::Init();
+			vDatumList::Init();
 		}
+		qRODISCLOSEv( fCRow, Column );
 	};
 
 	qW( Field );
@@ -91,6 +92,9 @@ namespace ogzfld {
 	typedef ogzcbs::fDItems<OGZFLD_TP> fFields;
 
 	typedef ogzcbs::rDRegularCallback<OGZFLD_TP> rRegularCallback;
+
+	typedef bch::qBUNCHvl( fFRow ) vFieldList;
+	qW( FieldList );
 }
 
 #endif

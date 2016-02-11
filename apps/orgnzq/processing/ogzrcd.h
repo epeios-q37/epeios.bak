@@ -35,7 +35,7 @@ namespace ogzrcd {
 	using ogzbsc::fFRow;
 	using ogzbsc::fRRow;
 
-	typedef bch::qBUNCHvl( fFRow ) vRecord;
+	typedef ogzfld::vFieldList vRecord;
 	qW( Record );
 
 // Template parameters.

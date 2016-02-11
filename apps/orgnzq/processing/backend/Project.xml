@@ -41,12 +41,12 @@
 			<Module>ogzdta</Module>
 			<Module>ogzdtb</Module>
 			<Module>ogzfld</Module>
-			<!-->Module>ogzhlp</Module-->
 			<Module>ogzplg</Module>
 			<Module>ogzrcd</Module>
 			<Module>ogzrgy</Module>
 			<Module>ogztyp</Module>
 			<Module>ogzusr</Module>
+			<Module>ogzxml</Module>
 		</Modules>
 		<Module>common</Module>
 		<Module>registry</Module>

@@ -51,6 +51,7 @@ namespace ogzclm {
 
 	class fColumn
 	{
+	public:
 		ogztyp::fTRow Type;
 		eNumber Number;
 		void reset( bso::fBool = true )

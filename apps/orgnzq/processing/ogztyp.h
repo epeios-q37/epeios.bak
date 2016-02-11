@@ -33,15 +33,18 @@
 # include "str.h"
 
 namespace ogztyp {
-
-	using ogzbsc::fRRow;
-	using ogzbsc::fURow;
 	using ogzbsc::fTRow;
 
 	class fCallback
 	{
 	protected:
+		// Returns the label.
 		virtual const char *OGZTYPGetLabel( void ) = 0;
+		// Convert into 'XML' the content of 'Buffer' of size 'Size' in a XML value form.
+		virtual void OGZTYPToXML(
+			const ogzbsc::rBuffer &Buffer,
+			ogzbsc::fSize Size,
+			str::vString &XML ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -55,6 +58,15 @@ namespace ogztyp {
 		const char *GetLabel( void )
 		{
 			return OGZTYPGetLabel();
+		}
+		const str::vString &ToXML(
+			const ogzbsc::rBuffer &Buffer,
+			ogzbsc::fSize Size,
+			str::vString &XML )
+		{
+			OGZTYPToXML( Buffer, Size, XML );
+
+			return XML;
 		}
 	};
 
@@ -80,6 +92,13 @@ namespace ogztyp {
 		const char *GetLabel( void ) const
 		{
 			return C_().GetLabel();
+		}
+		const str::vString &ToXML(
+			const ogzbsc::rBuffer &Buffer,
+			ogzbsc::fSize Size,
+			str::vString &XML ) const
+		{
+			return C_().ToXML( Buffer, Size, XML );
 		}
 	};
 

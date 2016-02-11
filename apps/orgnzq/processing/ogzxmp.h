@@ -27,6 +27,7 @@
 # endif
 
 # include "ogzbsc.h"
+
 # include "ags.h"
 
 namespace ogzxmp {

@@ -32,6 +32,7 @@
 # include "lstctn.h"
 
 namespace ogzdta {
+	using ogzbsc::fSize;
 
 	using ogzbsc::fDRow;
 	using ogzbsc::fTRow;
@@ -110,17 +111,17 @@ namespace ogzdta {
 		{
 			Callback_ = &Callback;
 		}
-		void Wipe( void )
+		void Wipe( void ) const
 		{
 			C_().Delete( qNIL );
 		}
 		fDRow New(
 			fTRow Type,
-			fDRow Row = qNIL )
+			fDRow Row = qNIL ) const
 		{
 			return C_().New( Type, Row );
 		}
-		void Delete( fDRow Row )
+		void Delete( fDRow Row ) const
 		{
 			C_().Delete( Row );
 		}
@@ -128,14 +129,14 @@ namespace ogzdta {
 			fDRow Row,
 			fTRow Type,
 			const fByte *Datum,
-			sdr::size__ Size )
+			sdr::size__ Size ) const
 		{
 			C_().Store( Row, Type, Datum, Size );
 		}
-		sdr::fSize Recall(
+		fSize Recall(
 			fDRow Row,
 			fTRow Type,
-			rBuffer &Buffer )
+			rBuffer &Buffer ) const
 		{
 			return C_().Recall( Row, Type, Buffer );
 		}
@@ -210,6 +211,9 @@ namespace ogzdta {
 			Container_.Init();
 		}
 	};
+
+	typedef bch::qBUNCHvl( fDRow ) vDatumList;
+	qW( DatumList );
 }
 
 

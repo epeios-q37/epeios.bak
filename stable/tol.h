@@ -319,7 +319,6 @@ ex. : 'qCOVER2( a, b )' -> 'a, b' */
 	{\
 	}
 
-
 # define TOL_ERRP_	err::handling__ ErrHandling = err::h_Default
 
 namespace tol{
@@ -480,6 +479,9 @@ namespace tol {
 	void reset( bso::fBool = true ) {}\
 	qCVDTOR( f##name )\
 	void Init( void ){}
+
+# define qGCTOR(discriminator)	Q37_GCTOR( discriminator )
+# define qGDTOR(discriminator)	Q37_GDTOR( discriminator )
 
 /*************************/
 /****** Old version ******/
@@ -1830,7 +1832,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 	class discriminator##_q37gctor\
 	{\
 	public:\
-	discriminator##_q37gctor( void );\
+		discriminator##_q37gctor( void );\
 	};\
 	\
 	static discriminator##_q37gctor discriminator##_Q37gctor;\

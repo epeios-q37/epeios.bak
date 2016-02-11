@@ -70,6 +70,30 @@ namespace ogzcbs {
 		{
 			//Standardisation.
 		}
+		void Wipe( void )
+		{
+			OGZCBSDelete( qNIL );
+		}
+		row New( row Row )
+		{
+			return OGZCBSNew( Row );
+		}
+		void Delete( row Row )
+		{
+			return OGZCBSDelete( Row );
+		}
+		void Store(
+			const item &Item,
+			row Row )
+		{
+			OGZCBSStore( Item, Row );
+		}
+		bso::bool__ Recall(
+			row Row,
+			item &Item )
+		{
+			return OGZCBSRecall( Row, Item );
+		}
 	};
 
 	// Storage for static (fixed-sized) objects.
@@ -88,25 +112,25 @@ namespace ogzcbs {
 		{
 			Callback_ = &Callback;
 		}
-		void Wipe( void )
+		void Wipe( void ) const
 		{
 			C_().Wipe();
 		}
-		row New( row Row = qNIL )
+		row New( row Row = qNIL ) const
 		{
 			return C_().New( Row );
 		}
-		void Delete( row Row )
+		void Delete( row Row ) const
 		{
 			return C_().Delete( Row );
 		}
 		void Store(
 			const item &Item,
-			row Row )
+			row Row ) const
 		{
 			return C_().Store( Item, Row );
 		}
-		row Append( const item &Item )
+		row Append( const item &Item ) const
 		{
 			row Row = New();
 
@@ -124,19 +148,9 @@ namespace ogzcbs {
 
 	// Callback for dynamic (not fixed size) objetcs.
 	template <OGZCBS_BTT> class fDCallback
+	: public fSCallback<item_v, row>
 	{
 	protected:
-		// If 'Row' != 'qNIL', it must be used.
-		virtual row OGZCBSNew( row Row ) = 0;
-		// If 'Row' == 'qNIL', the content must be erased.
-		virtual void OGZCBSDelete( row Row ) = 0;
-		virtual void OGZCBSStore(
-			const item_v &Item,
-			row Row ) = 0;
-		// Must 'true' if the item exists, 'false' otherwise.
-		virtual bso::fBool OGZCBSRecall(
-			row Row,
-			item_v &Item ) const = 0;
 		virtual void OGZCBSStore(
 			const subitem &SubItem,
 			row Row,
@@ -147,11 +161,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			Recall( Row, Item );
+			fSCallback<item_v, row>::Recall( Row, Item );
 
 			Item.Store( SubItem, SubRow );
 
-			Store( Item, Row );
+			fSCallback<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -166,11 +180,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			Recall( Row, Item );
+			fSCallback<item_v, row>::Recall( Row, Item );
 
 			Item.Recall( SubRow, SubItem );
 
-			Store( Item, Row );
+			fSCallback<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -185,11 +199,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			Recall( Row, Item );
+			fSCallback<item_v, row>::Recall( Row, Item );
 
 			SubRow = Item.Add( SubItem );
 
-			Store( Item, Row );
+			fSCallback<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -204,48 +218,24 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			Recall( Row, Item );
+			fSCallback<item_v, row>::Recall( Row, Item );
 
 			Item.Remove( SubRow );
 
-			Store( Item, Row );
+			fSCallback<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
 		}
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
-			// Standardisation.
+			fSCallback<item_v, row>::reset( P );
 		}
 		E_CVDTOR( fDCallback);
 		void Init( void )
 		{
-			// Standardisation.
-		}
-		void Wipe( void )
-		{
-			OGZCBSDelete( qNIL );
-		}
-		row New( row Row )
-		{
-			return OGZCBSNew( Row );
-		}
-		void Delete( row Row )
-		{
-			return OGZCBSDelete( Row );
-		}
-		void Store(
-			const item_v &Item,
-			row Row )
-		{
-			OGZCBSStore( Item, Row );
-		}
-		bso::bool__ Recall(
-			row Row,
-			item_v &Item ) const
-		{
-			return OGZCBSRecall( Row, Item );
+			fSCallback<item_v, row>::Init();
 		}
 		void Store(
 			const subitem &SubItem,
@@ -281,6 +271,11 @@ namespace ogzcbs {
 	private:
 		typedef fDCallback<OGZCBS_BTP> fCallback;
 		Q37_MRMDF( fCallback, C_, Callback_ );
+		typedef fSCallback<item_v, row> fSCallback;
+		fSCallback &SC_( void ) const
+		{
+			return C_();
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -291,53 +286,53 @@ namespace ogzcbs {
 		{
 			Callback_ = &Callback;
 		}
-		void Wipe( void )
+		void Wipe( void ) const
 		{
 			C_().Wipe();
 		}
-		row New( row Row = qNIL )
+		row New( row Row = qNIL ) const
 		{
-			return C_().New( Row );
+			return SC_().New( Row );
 		}
-		void Delete( row Row )
+		void Delete( row Row ) const
 		{
-			return C_().Delete( Row );
+			return SC_().Delete( Row );
 		}
 		void Store(
 			const item_v &Item,
-			row Row )
+			row Row ) const
 		{
-			return C_().Store( Item, Row );
+			return SC_().Store( Item, Row );
 		}
 		bso::bool__ Recall(
 			row Row,
 			item_v &Item ) const
 		{
-			return C_().Recall( Row, Item );
+			return SC_().Recall( Row, Item );
 		}
 		void Store(
 			const subitem &SubItem,
 			row Row,
-			subrow SubRow )
+			subrow SubRow ) const
 		{
 			return C_().Store( SubItem, Row, SubRow );
 		}
 		void Recall(
 			row Row,
 			subrow SubRow,
-			subitem &SubItem )
+			subitem &SubItem ) const
 		{
 			return C_().Recall( Row, SubRow, SubItem );
 		}
 		subrow Append(
 			row Row,
-			subitem &SubItem )
+			subitem &SubItem ) const
 		{
 			return C_().Append( Row, SubItem );
 		}
 		void Remove(
 			row Row,
-			subrow SubRow )
+			subrow SubRow ) const
 		{
 			return C_().Remove( Row, SubRow );
 		}
