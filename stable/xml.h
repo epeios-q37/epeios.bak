@@ -162,6 +162,17 @@ namespace xml {
 			if ( S_.AlwaysCommit )
 				S_.Flow->Commit();
 		}
+		txf::text_oflow__ &F_( void ) const
+		{
+			if ( S_.Flow == NULL )
+				qRFwk();
+
+			return *S_.Flow;
+		}
+		flw::oflow__ &RF_( void ) const
+		{
+			return F_().Flow();
+		}
 	public:
 		struct s {
 			stk::E_MCSTACK_( name_ )::s Tags;
@@ -267,6 +278,9 @@ namespace xml {
 		{
 			return PushTag( name( Name ) );
 		}
+		void PutRawValue( flw::fIFlow &Flow );
+		void PutValue( flw::fIFlow &Flow );
+		void PuRawValue( const value_ &Value );
 		void PutValue( const value_ &Value );
 		void PutValue( const char *Value )
 		{
@@ -296,6 +310,9 @@ namespace xml {
 		}
 		void PutAttribute(
 			const name_ &Name,
+			flw::fIFlow &Flow );
+		void PutAttribute(
+			const name_ &Name,
 			const value_ &Value );
 		void PutAttribute(
 			const char *Name,
@@ -309,6 +326,7 @@ namespace xml {
 		{
 			PutAttribute( name( Name ), Value );
 		}
+		void PutCData( flw::fIFlow &Flow );
 		void PutCData( const str::string_ &Value );
 		void PutCData( const char *Value )
 		{
@@ -746,18 +764,19 @@ namespace xml {
 
 	// Transformation des caractres spciaux, comm '<' qui devient '&lt;'.
 	void TransformUsingEntities(
-		str::string_ &Target,
-		bso::bool__ DelimiterOnly );	// Si  true', seul les dlimiteurs de valeur d'attributs (''' et '"') sont modifis.
+		const str::vString &Source,
+		str::vString &Target );
 
+	/*
 	inline void TransformUsingEntities(
 		const str::string_ &Source,
-		bso::bool__ DelimiterOnly,
 		str::string_ &Target )	// Conversion des caractres spciaux, comme '<' qui devient '&lt;'.
 	{
 		Target = Source;
 
-		TransformUsingEntities( Target, DelimiterOnly );
+		TransformUsingEntities( Target );
 	}
+	*/
 
 	typedef eLayout outfit__;
 

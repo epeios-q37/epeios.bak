@@ -1102,56 +1102,103 @@ qRE
 	return Status;
 }
 
+typedef fdr::iflow_driver___<> rIFlowDriver_;
+
+namespace {
+	qCDEF( char *, APOS_, "&apos;" );
+	qCDEF( char *, QUOT_, "&quot;");
+	qCDEF(char *, LT_, "&lt;" );
+	qCDEF(char *, GT_, "&gt;" );
+	qCDEF(char *, AMP_, "&amp;" );
+
+	class rIFlowDriver
+	: public rIFlowDriver_
+	{
+	private:
+		qRVM( flw::iflow__, F_, Flow_ );
+		const char *Pending_;
+		bso::fBool EOF_;
+	protected:
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+		{
+			bso::char__ C = 0;
+			fdr::size__ Size = 0;
+
+			if ( EOF_ )
+				return 0;
+			while ( ( Size < Maximum ) & !EOF_ ) {
+				if ( Pending_ != NULL ) {
+					Buffer[Size++] = *(Pending_++);
+
+					if ( *Pending_ == 0 )
+						Pending_ = NULL;
+				} else {
+					if ( F_().EndOfFlow() )
+						EOF_ = true;
+					else {
+						switch ( C = F_().Get() ) {
+						case '\'':
+							Pending_ = APOS_;
+							break;
+						case '"':
+							Pending_ = QUOT_;
+							break;
+						case '<':
+							Pending_ = LT_;
+							break;
+						case '>':
+							Pending_ = GT_;
+							break;
+						case '&':
+							Pending_ = AMP_;
+							break;
+						default:
+							Buffer[Size++] = C;
+							break;
+						}
+					}
+				}
+			}
+
+			return Size;
+		}
+		virtual void FDRDismiss( void ) override
+		{
+			F_().Dismiss();
+		}
+	public:
+		void reset( bso::fBool P = true )
+		{
+			rIFlowDriver_::reset( P );
+			Flow_ = NULL;
+			Pending_ = NULL;
+			EOF_ = false;
+		}
+		qCVDTOR( rIFlowDriver );
+		void Init( flw::iflow__ &Flow )
+		{
+			rIFlowDriver_::Init( fdr::ts_Default );
+			Flow_ = &Flow;
+			Pending_ = NULL;
+			EOF_ = false;
+		}
+	};
+};
+
 void xml::TransformUsingEntities(
-	str::string_ &Target,
-	bso::bool__ DelimiterOnly )
+	const str::vString &Source,
+	str::vString &Target )
 {
 qRH
-	sdr::row__ Position = Target.First();
-	bso::char__ C;
-	str::string Buffer;
+	flx::fStringIFlow IFlow;
+	flx::rStringOFlow OFlow;
 qRB
-	while( Position != qNIL ) {
-		switch ( C = Target( Position ) ) {
-		case '\'':
-			if ( !DelimiterOnly ) {
-				Buffer.Init( "&apos;" );
-				Target.Remove( Position );
-				Target.InsertAt( Buffer, Position );
-			}
-			break;
-		case '"':
-			Buffer.Init( "&quot;" );
-			Target.Remove( Position );
-			Target.InsertAt( Buffer, Position );
-			break;
-		case '<':
-			if ( !DelimiterOnly ) {
-				Buffer.Init( "&lt;" );
-				Target.Remove( Position );
-				Target.InsertAt( Buffer, Position );
-			}
-			break;
-		case '>':
-			if ( !DelimiterOnly ) {
-				Buffer.Init( "&gt;" );
-				Target.Remove( Position );
-				Target.InsertAt( Buffer, Position );
-			}
-			break;
-		case '&':
-			if ( !DelimiterOnly ) {
-				Buffer.Init( "&amp;" );
-				Target.Remove( Position );
-				Target.InsertAt( Buffer, Position );
-			}
-			break;
-		default:
-			break;
-		}
+	IFlow.Init( Source );
+	OFlow.Init( Target );
 
-		Position = Target.Next( Position );	// Could be dangerous, but actually works.
-	}
+	flw::Copy( IFlow, OFlow );
 qRR
 qRT
 qRE
@@ -1169,33 +1216,90 @@ void xml::writer_::_Indent( bso::size__ Amount ) const
 		*S_.Flow << ' ';
 }
 
-void xml::writer_::PutValue( const value_ &Value )
+void xml::writer_::PutRawValue( flw::fIFlow &Flow )
 {
-qRH
-	value TransformedValue;
-qRB
-	TransformedValue.Init();
-
-	switch ( S_.SpecialCharHandling ) {
-	case schReplace:
-		TransformUsingEntities( Value, false, TransformedValue );
-		break;
-	case schKeep:
-		TransformedValue = Value;
-		break;
-	default:
-		qRFwk();
-		break;
-	}
-	
 	if ( S_.TagNameInProgress ) {
 		*S_.Flow << '>';
 		S_.TagNameInProgress = false;
 	}
 
-	*S_.Flow << TransformedValue;
+	flx::Copy( Flow, RF_() );
 
 	S_.TagValueInProgress = true;
+
+	_Commit();
+}
+
+namespace {
+	void TransformAndPutValue_(
+		flw::fIFlow &Flow,
+		vWriter &Writer )
+	{
+	qRH
+		flw::standalone_iflow__<> TFlow;
+		rIFlowDriver Driver;
+	qRB
+		Driver.Init( Flow );
+		TFlow.Init( Driver );
+
+		Writer.PutRawValue( TFlow );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void xml::writer_::PutValue( flw::fIFlow &Flow )
+{
+	switch ( S_.SpecialCharHandling ) {
+	case schReplace:
+		TransformAndPutValue_( Flow, *this );
+		break;
+	case schKeep:
+		PutRawValue( Flow );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+}
+
+void xml::writer_::PuRawValue( const value_ &Value )
+{
+	flx::fStringIFlow Flow;
+
+	Flow.Init( Value );
+	PutRawValue( Flow );
+}
+
+
+void xml::writer_::PutValue( const value_ &Value )
+{
+	flx::fStringIFlow Flow;
+
+	Flow.Init( Value );
+	PutValue( Flow );
+}
+
+void xml::writer_::PutAttribute(
+	const name_ &Name,
+	flw::fIFlow &Flow )
+{
+qRH
+	flw::standalone_iflow__<> TFlow;
+	rIFlowDriver Driver;
+qRB
+	if ( !S_.TagNameInProgress )
+		qRFwk();
+
+	Driver.Init( Flow );
+	TFlow.Init( Driver );
+
+	F_() << ' ' << Name << "=\"";
+
+	flx::Copy( TFlow, RF_() );
+		
+	F_() << '"';
 
 	_Commit();
 qRR
@@ -1207,36 +1311,35 @@ void xml::writer_::PutAttribute(
 	const name_ &Name,
 	const value_ &Value )
 {
-qRH
-	value TransformedValue;
-qRB
-	TransformedValue.Init();
+	flx::fStringIFlow Flow;
 
-	TransformUsingEntities( Value, S_.SpecialCharHandling == schKeep, TransformedValue );
-
-	if ( !S_.TagNameInProgress )
-		qRFwk();
-
-	*S_.Flow << ' ' << Name << "=\"" << TransformedValue << '"';
-
-	_Commit();
-qRR
-qRT
-qRE
+	Flow.Init( Value );
+	PutAttribute( Name, Flow );
 }
 
-void xml::writer_::PutCData( const value_ &Value )
+void xml::writer_::PutCData( flw::fIFlow &Flow )
 {
 	if ( S_.TagNameInProgress ) {
 		*S_.Flow << '>';
 		S_.TagNameInProgress = false;
 	}
 	
-	*S_.Flow << "<![CDATA[" << Value << "]]>";
+	F_() << "<![CDATA[";
+
+	flw::Copy( Flow, RF_() );
+		
+	F_() << "]]>";
 
 	_Commit();
 }
 
+void xml::writer_::PutCData( const value_ &Value )
+{
+	flx::fStringIFlow Flow;
+
+	Flow.Init( Value );
+	PutCData( Flow );
+}
 
 mark__ xml::writer_::PopTag( mark__ Mark )
 {

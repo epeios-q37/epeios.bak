@@ -294,8 +294,7 @@ namespace dwtcpr {
 	void Dump( 
 		drow__ Row,
 		const scene_ &Scene,
-		xml::writer_ &Writer,
-		version__ Version = v_Current );
+		xml::writer_ &Writer );
 
 	drow__ Clean(
 		const scene_ &Scene,

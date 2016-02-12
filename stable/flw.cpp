@@ -17,10 +17,6 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-
-
-//	$Id: flw.cpp,v 1.93 2013/05/02 08:12:41 csimon Exp $
-
 #define FLW__COMPILATION
 
 #include "flw.h"

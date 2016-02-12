@@ -17,59 +17,57 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: flw.h,v 1.89 2013/05/02 08:12:41 csimon Exp $
+// FLoW.
 
 #ifndef FLW__INC
-#define FLW__INC
+# define FLW__INC
 
-#define FLW_NAME		"FLW"
+# define FLW_NAME		"FLW"
 
-#define	FLW_VERSION	"$Revision: 1.89 $"
+# if defined( E_DEBUG ) && !defined( FLW_NODBG )
+#  define FLW_DBG
+# endif
 
-#define FLW_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# include "bso.h"
+# include "cpe.h"
+# include "fdr.h"
 
-#if defined( E_DEBUG ) && !defined( FLW_NODBG )
-#define FLW_DBG
-#endif
+// Not uses in this library, but in calling libraries.
+# ifndef FLW_INPUT_CACHE_SIZE
+#  define FLW__INPUT_CACHE_SIZE	FDR__DEFAULT_CACHE_SIZE
+# else
+#  define FLW__INPUT_CACHE_SIZE	FLW_INPUT_CACHE_SIZE
+# endif
 
-/* Begin of automatic documentation generation part. */
+# ifndef FLW_OUTPUT_CACHE_SIZE
+#  define FLW__OUTPUT_CACHE_SIZE	FDR__DEFAULT_CACHE_SIZE
+# else
+#  define FLW__OUTPUT_CACHE_SIZE	FLW_OUTPUT_CACHE_SIZE
+# endif
 
-//V $Revision: 1.89 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/05/02 08:12:41 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D FLoW 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "bso.h"
-#include "cpe.h"
-#include "fdr.h"
-
-// Non utilis dabs cette bibliothque, mais dans des bibliothques appelantes.
-#ifndef FLW_INPUT_CACHE_SIZE
-#	define FLW__INPUT_CACHE_SIZE	FDR__DEFAULT_CACHE_SIZE
-#else
-#	define FLW__INPUT_CACHE_SIZE	FLW_INPUT_CACHE_SIZE
-#endif
-
-#ifndef FLW_OUTPUT_CACHE_SIZE
-#	define FLW__OUTPUT_CACHE_SIZE	FDR__DEFAULT_CACHE_SIZE
-#else
-#	define FLW__OUTPUT_CACHE_SIZE	FLW_OUTPUT_CACHE_SIZE
-#endif
-
-#ifdef CPE_S_UNIX
-#	ifndef FLW_LET_SIGPIPE
-#		define FLW__IGNORE_SIGPIPE
-#	endif
-#endif
+# ifdef CPE_S_UNIX
+#  ifndef FLW_LET_SIGPIPE
+#   define FLW__IGNORE_SIGPIPE
+#  endif
+# endif
 
 # define FLW_AMOUNT_MAX BSO_SIZE_MAX
+
+/**************/
+/**** NEW *****/
+/**************/
+
+namespace flw {
+	class iflow__;
+	typedef iflow__ fIFlow;
+
+	class oflow__;
+	typedef oflow__ fOFlow;
+}
+
+/**************/
+/**** OLD *****/
+/**************/
 
 namespace flw {
 	using fdr::byte__;

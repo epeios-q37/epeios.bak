@@ -17,34 +17,12 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: flx.h,v 1.65 2013/04/19 19:28:01 csimon Exp $
+// FLow eXtension 
 
 #ifndef FLX__INC
-#define FLX__INC
+# define FLX__INC
 
-#define FLX_NAME		"FLX"
-
-#define	FLX_VERSION	"$Revision: 1.65 $"
-
-#define FLX_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-#if defined( E_DEBUG ) && !defined( FLX_NODBG )
-#define FLX_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.65 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/19 19:28:01 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D FLow eXtension 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# define FLX_NAME		"FLX"
 
 # include "err.h"
 # include "fdr.h"
@@ -71,20 +49,62 @@
 #  include "mtx.h"
 # endif
 
+# ifndef FLX_COPY_BUFFER_SIZE
+#  define FLX_COPY_BUFFER_IZE	1024
+# endif
+
 # ifndef FLX_BUFFER_BUFFER_SIZE
-//d Size of the buffer of a 'flx::buffer_flow___'.
 #  define FLX_BUFFER_BUFFER_SIZE	100
 # endif
 
 # ifndef FLX_BUNCH_BUFFER_SIZE
-//d Size of the buffer of a 'flx::bunch_flow___'.
 #  define FLX_BUNCH_BUFFER_SIZE		500
 # endif
 
 # ifndef FLX_VOID_BUFFER_SIZE
-//d Size of the buffer of a 'flx::void_oflow___'.
 #  define FLX_VOID_BUFFER_SIZE		500
 # endif
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace flx {
+	template < typename bunch_, typename so__,int  CacheSize = FLX_BUNCH_BUFFER_SIZE> class bunch_iflow__;
+	typedef bunch_iflow__<str::string_, bso::char__> fStringIFlow;
+
+	template < typename bunch_, typename so__> class bunch_oflow___;
+	typedef bunch_oflow___<str::string_, bso::char__> rStringOFlow;
+
+	class string_text_oflow__;
+	typedef string_text_oflow__ fStrinfTOflow;
+
+	template <int buffer_size = FLW_COPY_BUFFER_SIZE> void Copy(
+		flw::fIFlow &IFlow,
+		flw::fOFlow &OFlow )
+	{
+		fdr::size__ Size = 0;
+		bso::char__ Buffer[buffer_size];
+
+		while ( !IFlow.EOF() ) {
+			Size = IFlow.ReadUpTo( sizeof( Buffer ), Buffer );
+
+			OFlow.Write( Buffer, Size );
+		}
+	}
+
+	inline void Copy(
+		flw::fIFlow &IFlow,
+		flw::fOFlow &OFlow )
+	{
+		return Copy<>( IFlow, OFlow );
+	}
+}
+
+/***************/
+/***** OLD *****/
+/***************/
+
 
 namespace flx {
 
@@ -348,7 +368,7 @@ namespace flx {
 # define E_STRING_IFLOW_DRIVER___	bunch_iflow_driver___<str::string_, bso::char__>
 
 	//c A bunch as input flow.driver.
-	template < typename bunch_, typename so__,int  CacheSize = FLX_BUNCH_BUFFER_SIZE> class bunch_iflow__
+	template < typename bunch_, typename so__,int  CacheSize> class bunch_iflow__
 	: public _iflow__
 	{ 
 	private:
@@ -1342,5 +1362,4 @@ namespace flx {
 	typedef _exec_flow___<flw::standalone_oflow__<>, exec_oflow_driver___> exec_oflow__;
 }
 
-/*$END$*/
 #endif

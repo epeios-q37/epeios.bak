@@ -12,6 +12,15 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-02-12:
+- DWTCPR, DWTFTR :
+	- Adaptation to chages in 'STSFSM'.
+	% The 'Dump' functionnalitiés are always made in the current version.
+- GLOBAL :
+	- Applying new naming conventions.
+- XML :
+	* An 'iflow' can now be used as value.
+
 2016-02-03 :
 - MISC :
 	- Heavy changes about muxed connections handling.

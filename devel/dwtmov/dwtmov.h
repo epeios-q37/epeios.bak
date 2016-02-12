@@ -170,8 +170,7 @@ namespace dwtmov {
 
 	void Dump(
 		const movings_ &Movings,
-		xml::writer_ &Writer,
-		version__ Version = v_Current );
+		xml::writer_ &Writer );
 
 	void Display(
 		const movings_ &Movings,

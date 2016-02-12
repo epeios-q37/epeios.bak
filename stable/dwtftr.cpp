@@ -90,8 +90,8 @@ static inline xversion__ GetXVersion_( version__ Version )
 #define E( name )	case x##name : return #name; break
 
 const char *GetLabel_(
-	xversion__ Version,
-	exclusion__ Exclusion )
+	exclusion__ Exclusion,
+	xversion__ Version = xv_Current )
 {
 	switch ( Exclusion ) {
 	E( No );
@@ -440,8 +440,8 @@ enum tag__
 #define T( name )	case t##name : return #name; break
 
 static inline const char *GetLabel_(
-	version__ Version,
-	tag__ Tag )
+	tag__ Tag,
+	version__ Version = v_Current )
 {
 	switch ( Version ) {
 
@@ -491,8 +491,8 @@ enum attribute__
 #define A( name )	case a##name : return #name; break
 
 static inline const char *GetLabel_(
-	version__ Version,
-	attribute__ Attribute )
+	attribute__ Attribute,
+	version__ Version = v_Current )
 {
 	switch( Version ) {
 	case v0_1:
@@ -532,7 +532,6 @@ static inline const char *GetLabel_(
 }
 
 static inline void DumpCommon_(
-	version__ Version,
 	const common__ &Common,
 	const names_ &Names,
 	xml::writer_ &Writer )
@@ -541,11 +540,10 @@ static inline void DumpCommon_(
 
 	Name.Init( Names );
 
-	Writer.PutAttribute( GetLabel_( Version, aName ), Name( Common.Name ) );
+	Writer.PutAttribute( GetLabel_( aName ), Name( Common.Name ) );
 }
 
 static void Dump_( 
-	version__ Version,
 	const grows_ &Rows,
 	const goofs_ &Goofs,
 	const names_ &Names,
@@ -561,16 +559,16 @@ static void Dump_(
 
 	Oddity.Init( Oddities );
 
-	Writer.PushTag( GetLabel_( Version, tGoofs ) );
-	xml::PutAttribute( GetLabel_( Version, aAmount ), Rows.Amount(), Writer );
+	Writer.PushTag( GetLabel_( tGoofs ) );
+	xml::PutAttribute( GetLabel_( aAmount ), Rows.Amount(), Writer );
 
 	while ( Row != qNIL ) {
-		Writer.PushTag( GetLabel_( Version, tGoof ) );
+		Writer.PushTag( GetLabel_( tGoof ) );
 
-		DumpCommon_( Version, Goofs( Rows( Row ) ), Names, Writer );
+		DumpCommon_( Goofs( Rows( Row ) ), Names, Writer );
 
 		if ( Goofs( Rows( Row ) ).Oddity != qNIL )
-			Writer.PutAttribute( GetLabel_( Version, aOddity ), Oddity( Goofs( Rows( Row ) ).Oddity ) );
+			Writer.PutAttribute( GetLabel_( aOddity ), Oddity( Goofs( Rows( Row ) ).Oddity ) );
 
 		Writer.PopTag();
 
@@ -581,40 +579,36 @@ static void Dump_(
 }
 
 static inline void DumpRegular_(
-	version__ Version,
 	const regular__ &Regular,
 	const names_ &Names,
 	xml::writer_ &Writer )
 {
-	DumpCommon_( Version, Regular, Names, Writer );
-
-	xversion__ XVersion = GetXVersion_( Version );
+	DumpCommon_( Regular, Names, Writer );
 
 	switch ( Regular.Exclusion ) {
 	case xNo:
 		break;
 	case xMatchList:
-		Writer.PutAttribute( GetLabel_( Version, aExclusion ), GetLabel_( XVersion, xMatchList ) );
+		Writer.PutAttribute( GetLabel_( aExclusion ), GetLabel_( xMatchList ) );
 		break;
 	case xFileTooBig:
-		Writer.PutAttribute( GetLabel_( Version, aExclusion ), GetLabel_( XVersion, xFileTooBig ) );
+		Writer.PutAttribute( GetLabel_( aExclusion ), GetLabel_( xFileTooBig ) );
 		break;
 	case xNameTooLong:
-		Writer.PutAttribute( GetLabel_( Version, aExclusion ), GetLabel_( XVersion, xNameTooLong ) );
+		Writer.PutAttribute( GetLabel_( aExclusion ), GetLabel_( xNameTooLong ) );
 		break;
 	case xGhost:
-		Writer.PutAttribute( GetLabel_( Version, aExclusion ), GetLabel_( XVersion, xGhost ) );
+		Writer.PutAttribute( GetLabel_( aExclusion ), GetLabel_( xGhost ) );
 		break;
 	default:
 		qRGnr();
 		break;
 	}
 
-	xml::PutAttribute( GetLabel_( Version, aTimestamp ), Regular.Timestamp, Writer );
+	xml::PutAttribute( GetLabel_( aTimestamp ), Regular.Timestamp, Writer );
 }
 
 static void Dump_( 
-	version__ Version,
 	const frows_ &Rows,
 	const files_ &Files,
 	const names_ &Names,
@@ -625,15 +619,15 @@ static void Dump_(
 
 	sdr::row__ Row = Rows.First();
 
-	Writer.PushTag( GetLabel_( Version, tFiles ) );
-	xml::PutAttribute( GetLabel_( Version, aAmount ), Rows.Amount(), Writer );
+	Writer.PushTag( GetLabel_( tFiles ) );
+	xml::PutAttribute( GetLabel_( aAmount ), Rows.Amount(), Writer );
 
 	while ( Row != qNIL ) {
-		Writer.PushTag( GetLabel_( Version, tFile ) );
+		Writer.PushTag( GetLabel_( tFile ) );
 
-		DumpRegular_( Version, Files( Rows( Row ) ), Names, Writer );
+		DumpRegular_( Files( Rows( Row ) ), Names, Writer );
 
-		xml::PutAttribute( GetLabel_( Version, aSize ), Files( Rows( Row ) ).Size, Writer );
+		xml::PutAttribute( GetLabel_( aSize ), Files( Rows( Row ) ).Size, Writer );
 
 		Writer.PopTag();
 
@@ -644,7 +638,6 @@ static void Dump_(
 }
 
 static inline void PushDirectory_(
-	version__ Version,
 	const directory_ &Directory,
 	const names_ &Names,
 	xml::writer_ &Writer )
@@ -653,15 +646,14 @@ static inline void PushDirectory_(
 
 	Name.Init( Names );
 
-	Writer.PushTag( GetLabel_( Version, tDir ) );
+	Writer.PushTag( GetLabel_( tDir ) );
 
-	DumpRegular_( Version, Directory(), Names, Writer );
+	DumpRegular_( Directory(), Names, Writer );
 }
 
 void dwtftr::file_tree_::Dump( 
 	drow__ Root,
-	xml::writer_ &Writer,
-	version__ Version ) const
+	xml::writer_ &Writer ) const
 {
 	dtr::browser__<drow__> Browser;
 	ctn::E_CITEMt( directory_, drow__ ) Directory;
@@ -669,26 +661,26 @@ void dwtftr::file_tree_::Dump(
 
 	Directory.Init( Directories );
 
-	PushDirectory_( Version, Directory( Root ), Names, Writer );
-	Dump_( Version, Directory( Root ).Files, Files, Names, Writer );
-	Dump_( Version, Directory( Root ).Goofs, Goofs, Names, Oddities, Writer );
+	PushDirectory_( Directory( Root ), Names, Writer );
+	Dump_( Directory( Root ).Files, Files, Names, Writer );
+	Dump_( Directory( Root ).Goofs, Goofs, Names, Oddities, Writer );
 
 	Browser.Init( Root );
 
 	while ( Browse( Browser ) != qNIL ) {
 		switch ( Browser.GetKinship() ) {
 		case dtr::kChild:
-			Writer.PushTag( GetLabel_( Version, tDirs ) );
-			xml::PutAttribute( GetLabel_( Version, aAmount ), Directory( Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
-			PushDirectory_( Version, Directory( Browser.GetPosition() ), Names,  Writer );
-			Dump_( Version, Directory( Browser.GetPosition() ).Files, Files, Names, Writer );
-			Dump_( Version, Directory( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
+			Writer.PushTag( GetLabel_( tDirs ) );
+			xml::PutAttribute( GetLabel_( aAmount ), Directory( Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
+			PushDirectory_( Directory( Browser.GetPosition() ), Names,  Writer );
+			Dump_( Directory( Browser.GetPosition() ).Files, Files, Names, Writer );
+			Dump_( Directory( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
 			break;
 		case dtr::kSibling:
 			Writer.PopTag();	// 'Dir'.
-			PushDirectory_( Version, Directory( Browser.GetPosition() ), Names, Writer );
-			Dump_( Version, Directory( Browser.GetPosition() ).Files, Files, Names, Writer );
-			Dump_( Version, Directory( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
+			PushDirectory_( Directory( Browser.GetPosition() ), Names, Writer );
+			Dump_( Directory( Browser.GetPosition() ).Files, Files, Names, Writer );
+			Dump_( Directory( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
 			break;
 		case dtr::kParent:
 			Writer.PopTag();	// 'Dir'.

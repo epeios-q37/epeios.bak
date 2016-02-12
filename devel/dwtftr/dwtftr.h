@@ -96,8 +96,7 @@ namespace dwtftr {
 			str::string_ &Path ) const;
 		 void Dump( 
 			 drow__ Row,
-			 xml::writer_ &Writer,
-			 version__ Version = v_Current ) const;
+			 xml::writer_ &Writer ) const;
 	};
 
 	E_AUTO( file_tree );

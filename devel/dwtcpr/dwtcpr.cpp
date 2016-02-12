@@ -54,8 +54,8 @@ static void FillVersionAutomat_( void )
 #define S( name )	case s##name : return #name; break
 
 const char *GetLabel_(
-	version__ Version,
-	status__ Status )
+	status__ Status,
+	version__ Version = v_Current )
 {
 	if ( Version != v0_1 )
 		qRChk();
@@ -604,8 +604,8 @@ enum tag__
 #define T( name )	case t##name : return #name; break
 
 static inline const char *GetLabel_(
-	version__ Version,
-	tag__ Tag )
+	tag__ Tag,
+	version__ Version = v_Current )
 {
 	if ( Version != v0_1 )
 		qRChk();
@@ -635,8 +635,8 @@ enum attribute__
 #define A( name )	case a##name : return #name; break
 
 static inline const char *GetLabel_(
-	version__ Version,
-	attribute__ Attribute )
+	attribute__ Attribute,
+	version__ Version = v_Current )
 {
 	if ( Version != v0_1 )
 		qRChk();
@@ -655,7 +655,6 @@ static inline const char *GetLabel_(
 
 static inline void DumpCore_(
 	bso::bool__ IsFile,
-	version__ Version,
 	const core__ &Core,
 	const names_ &Names,
 	xml::writer_ &Writer )
@@ -664,20 +663,20 @@ static inline void DumpCore_(
 
 	Name.Init( Names );
 
-	Writer.PutAttribute( GetLabel_( Version, aName ), Name( Core.Name ) );
+	Writer.PutAttribute( GetLabel_( aName ), Name( Core.Name ) );
 
 	switch ( Core.Status ) {
 	case sSteady:
 		break;
 	case sCreated:
-		Writer.PutAttribute( GetLabel_( Version, aStatus ), GetLabel_( Version, sCreated ) );
+		Writer.PutAttribute( GetLabel_( aStatus ), GetLabel_( sCreated ) );
 		break;
 	case sRemoved:
-		Writer.PutAttribute( GetLabel_( Version, aStatus ), GetLabel_( Version, sRemoved ) );
+		Writer.PutAttribute( GetLabel_( aStatus ), GetLabel_( sRemoved ) );
 		break;
 	case sModified:
 		if ( IsFile )
-			Writer.PutAttribute( GetLabel_( Version, aStatus ), GetLabel_( Version, sModified ) );
+			Writer.PutAttribute( GetLabel_( aStatus ), GetLabel_( sModified ) );
 		break;
 	default:
 		qRGnr();
@@ -686,7 +685,6 @@ static inline void DumpCore_(
 }
 
 static inline void Dump_( 
-	version__ Version,
 	const frows_ &Rows,
 	const files_ &Files,
 	const names_ &Names,
@@ -695,13 +693,13 @@ static inline void Dump_(
 	if ( Rows.Amount() != 0 ) {
 		sdr::row__ Row = Rows.First();
 
-		Writer.PushTag( GetLabel_( Version, tFiles ) );
-		xml::PutAttribute( GetLabel_( Version, aAmount ), Rows.Amount(), Writer );
+		Writer.PushTag( GetLabel_( tFiles ) );
+		xml::PutAttribute( GetLabel_( aAmount ), Rows.Amount(), Writer );
 
 		while ( Row != qNIL ) {
-			Writer.PushTag( GetLabel_( Version, tFile ) );
+			Writer.PushTag( GetLabel_( tFile ) );
 
-			DumpCore_( true, Version, Files( Rows( Row ) ), Names, Writer );
+			DumpCore_( true, Files( Rows( Row ) ), Names, Writer );
 
 			Writer.PopTag();
 
@@ -713,7 +711,6 @@ static inline void Dump_(
 }
 
 static inline void PushDirectory_(
-	version__ Version,
 	const directory_ &Directory,
 	const names_ &Names,
 	xml::writer_ &Writer )
@@ -722,16 +719,15 @@ static inline void PushDirectory_(
 
 	Name.Init( Names );
 
-	Writer.PushTag( GetLabel_( Version, tDir ) );
+	Writer.PushTag( GetLabel_( tDir ) );
 
-	DumpCore_( false, Version, Directory(), Names, Writer );
+	DumpCore_( false, Directory(), Names, Writer );
 }
 
 void dwtcpr::Dump( 
 	drow__ Root,
 	const scene_ &Scene,
-	xml::writer_ &Writer,
-	version__ Version )
+	xml::writer_ &Writer )
 {
 	dtr::browser__<drow__> Browser;
 	ctn::E_CITEMt( directory_, drow__ ) Directory;
@@ -740,23 +736,23 @@ void dwtcpr::Dump(
 
 	Directory.Init( Scene.Directories );
 
-	PushDirectory_( Version, Directory( Root ), Scene.Names, Writer );
-	Dump_( Version, Directory( Root ).Files, Scene.Files, Scene.Names, Writer );
+	PushDirectory_( Directory( Root ), Scene.Names, Writer );
+	Dump_( Directory( Root ).Files, Scene.Files, Scene.Names, Writer );
 
 	Browser.Init( Root );
 
 	while ( Scene.Browse( Browser ) != qNIL ) {
 		switch ( Browser.GetKinship() ) {
 		case dtr::kChild:
-			Writer.PushTag( GetLabel_( Version, tDirs ) );
-			xml::PutAttribute( GetLabel_( Version, aAmount ), Directory( Scene.Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
-			PushDirectory_( Version, Directory( Browser.GetPosition() ), Scene.Names, Writer );
-			Dump_( Version, Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
+			Writer.PushTag( GetLabel_( tDirs ) );
+			xml::PutAttribute( GetLabel_( aAmount ), Directory( Scene.Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
+			PushDirectory_( Directory( Browser.GetPosition() ), Scene.Names, Writer );
+			Dump_( Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
 			break;
 		case dtr::kSibling:
 			Writer.PopTag();	// Dir
-			PushDirectory_( Version, Directory( Browser.GetPosition() ), Scene.Names, Writer );
-			Dump_( Version, Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
+			PushDirectory_( Directory( Browser.GetPosition() ), Scene.Names, Writer );
+			Dump_( Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
 			break;
 		case dtr::kParent:
 			Writer.PopTag();	// 'Dir'.

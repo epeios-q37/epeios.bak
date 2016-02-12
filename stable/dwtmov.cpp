@@ -696,8 +696,8 @@ enum tag__
 #define T( name )	case t##name : return #name; break
 
 static inline const char *GetLabel_(
-	version__ Version,
-	tag__ Tag )
+	tag__ Tag,
+	version__ Version = v_Current )
 {
 	switch ( Version ) {
 	case v0_1:
@@ -730,8 +730,8 @@ enum attribute__
 #define A( name )	case a##name : return #name; break
 
 static inline const char *GetLabel_(
-	version__ Version,
-	attribute__ Attribute )
+	attribute__ Attribute,
+	version__ Version = v_Current )
 {
 	switch( Version ) {
 	case v0_1:
@@ -769,7 +769,6 @@ static inline const char *GetLabel_(
 }
 
 static void Dump_(
-	version__ Version,
 	const moves_ &Moves,
 	const names_ &Names,
 	xml::writer_ &Writer )
@@ -779,17 +778,17 @@ static void Dump_(
 
 	Name.Init( Names );
 
-	Writer.PushTag( GetLabel_( Version, tMoves ) );
-	xml::PutAttribute( GetLabel_( Version, aAmount ) , Moves.Amount(), Writer );
+	Writer.PushTag( GetLabel_( tMoves ) );
+	xml::PutAttribute( GetLabel_( aAmount ) , Moves.Amount(), Writer );
 
 	while ( Row != qNIL ) {
-		Writer.PushTag( GetLabel_( Version, tMove ) );
+		Writer.PushTag( GetLabel_( tMove ) );
 
 		if ( Moves( Row ).Old != qNIL )
-			Writer.PutAttribute( GetLabel_( Version, aOld ), Name( Moves( Row ).Old ) );
+			Writer.PutAttribute( GetLabel_( aOld ), Name( Moves( Row ).Old ) );
 
 		if ( Moves( Row ).New != qNIL )
-			Writer.PutAttribute( GetLabel_( Version, aNew ), Name( Moves( Row ).New ) );
+			Writer.PutAttribute( GetLabel_( aNew ), Name( Moves( Row ).New ) );
 
 		Writer.PopTag();
 
@@ -801,10 +800,9 @@ static void Dump_(
 
 void dwtmov::Dump(
 	const movings_ &Movings,
-	xml::writer_ &Writer,
-	version__ Version )
+	xml::writer_ &Writer )
 {
-	Dump_( Version, Movings.Moves, Movings.Names, Writer );
+	Dump_( Movings.Moves, Movings.Names, Writer );
 }
 
 static void Display_(
@@ -870,15 +868,15 @@ qRB
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfAttribute | xml::tfEndTag ) ) {
 		case xml::tAttribute:
-			if ( Parser.AttributeName() == GetLabel_( Version, aOld ) )
+			if ( Parser.AttributeName() == GetLabel_( aOld, Version ) )
 				Move.Old = Movings.Names.Append( Parser.Value() );
-			else if ( Parser.AttributeName() == GetLabel_( Version, aNew ) )
+			else if ( Parser.AttributeName() == GetLabel_( aNew, Version ) )
 				Move.New = Movings.Names.Append( Parser.Value() );
-			else if ( Parser.AttributeName() != GetLabel_( Version, aDepth ) )	// NOTA: L'attribute 'Depth' est obsolete.
+			else if ( Parser.AttributeName() != GetLabel_( aDepth, Version ) )	// NOTA: L'attribute 'Depth' est obsolete.
 				qRGnr();
 			break;
 		case xml::tEndTag:
-			if ( Parser.TagName() != GetLabel_( Version, tMove ) )
+			if ( Parser.TagName() != GetLabel_( tMove, Version ) )
 				qRGnr();
 			else
 				Continue = false;
@@ -907,14 +905,14 @@ void dwtmov::Load(
 	while ( Continue ) {
 		switch ( Parser.Parse( xml::tfStartTag | xml::tfAttribute | xml::tfEndTag ) ) {
 		case xml::tStartTag:
-			if ( Parser.TagName() == GetLabel_( Version, tMove ) )
+			if ( Parser.TagName() == GetLabel_( tMove, Version ) )
 				ParseMoveSection_( Parser, Version, Movings );
-			else if ( Parser.TagName() != GetLabel_( Version, tMoves ) )
+			else if ( Parser.TagName() != GetLabel_( tMoves, Version ) )
 				qRGnr();
 			break;
 		case xml::tAttribute:
 			Error = qNIL;
-			if ( Parser.AttributeName() != GetLabel_( Version, aAmount ) )
+			if ( Parser.AttributeName() != GetLabel_( aAmount, Version ) )
 				qRGnr();
 
 			Parser.Value().ToNumber( Amount, &Error );
@@ -923,7 +921,7 @@ void dwtmov::Load(
 				qRGnr();
 			break;
 		case xml::tEndTag:
-			if ( Parser.TagName() == GetLabel_( Version, tMoves ) )
+			if ( Parser.TagName() == GetLabel_( tMoves, Version ) )
 				Continue = false;
 			else
 				qRGnr();
