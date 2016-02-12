@@ -1281,30 +1281,57 @@ void xml::writer_::PutValue( const value_ &Value )
 	PutValue( Flow );
 }
 
-void xml::writer_::PutAttribute(
+void xml::writer_::PutRawAttribute(
 	const name_ &Name,
 	flw::fIFlow &Flow )
 {
-qRH
-	flw::standalone_iflow__<> TFlow;
-	rIFlowDriver Driver;
-qRB
 	if ( !S_.TagNameInProgress )
 		qRFwk();
 
-	Driver.Init( Flow );
-	TFlow.Init( Driver );
-
 	F_() << ' ' << Name << "=\"";
 
-	flx::Copy( TFlow, RF_() );
+	flx::Copy( Flow, RF_() );
 		
 	F_() << '"';
 
 	_Commit();
-qRR
-qRT
-qRE
+}
+
+namespace {
+	void TransformAndPutAttribute_(
+		const name_ &Name,
+		flw::fIFlow &Flow,
+		vWriter &Writer )
+	{
+	qRH
+		flw::standalone_iflow__<> TFlow;
+		rIFlowDriver Driver;
+	qRB
+		Driver.Init( Flow );
+		TFlow.Init( Driver );
+
+		Writer.PutRawAttribute( Name, TFlow );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void xml::writer_::PutAttribute(
+	const name_ &Name,
+	flw::fIFlow &Flow )
+{
+	switch ( S_.SpecialCharHandling ) {
+	case schReplace:
+		TransformAndPutAttribute_( Name, Flow, *this );
+		break;
+	case schKeep:
+		PutRawAttribute( Name, Flow );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
 }
 
 void xml::writer_::PutAttribute(
@@ -1315,6 +1342,16 @@ void xml::writer_::PutAttribute(
 
 	Flow.Init( Value );
 	PutAttribute( Name, Flow );
+}
+
+void xml::writer_::PutRawAttribute(
+	const name_ &Name,
+	const value_ &Value )
+{
+	flx::fStringIFlow Flow;
+
+	Flow.Init( Value );
+	PutRawAttribute( Name, Flow );
 }
 
 void xml::writer_::PutCData( flw::fIFlow &Flow )

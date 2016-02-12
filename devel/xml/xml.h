@@ -308,9 +308,15 @@ namespace xml {
 		{
 			PutValue( value( Value ), name( Name ) );
 		}
+		void PutRawAttribute(
+			const name_ &Name,
+			flw::fIFlow &Flow );
 		void PutAttribute(
 			const name_ &Name,
 			flw::fIFlow &Flow );
+		void PutRawAttribute(
+			const name_ &Name,
+			const value_ &Value );
 		void PutAttribute(
 			const name_ &Name,
 			const value_ &Value );
