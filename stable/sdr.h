@@ -17,32 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: sdr.h,v 1.10 2013/04/15 10:50:54 csimon Exp $
+// Storage DRiver 
 
 #ifndef SDR__INC
 #define SDR__INC
 
 #define SDR_NAME		"SDR"
 
-#define	SDR_VERSION	"$Revision: 1.10 $"
-
-#define SDR_OWNER		"Claude SIMON"
-
 #if defined( E_DEBUG ) && !defined( SDR_NODBG )
 #define SDR_DBG
 #endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.10 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/15 10:50:54 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Storage DRiver 
-/* End addendum to automatic documentation generation part. */
 
 # include "err.h"
 # include "bso.h"
@@ -169,7 +153,4 @@ namespace sdr {
 	#define qSD__	sdr::storage_driver__
 }
 
-/*$END$*/
-
-/*$END$*/
 #endif

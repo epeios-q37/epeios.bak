@@ -38,7 +38,7 @@ void indexed_aggregated_storage_::RemoveWithoutReallocating(
 	_Initialize( ActualCapacity - Amount, ActualCapacity );
 }
 
-void ias::hf___::Init(
+void ias::rHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

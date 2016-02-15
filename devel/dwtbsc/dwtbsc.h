@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// Directory WaTcher BaSiCs
+
 #ifndef DWTBSC__INC
 # define DWTBSC__INC
 
@@ -26,13 +28,16 @@
 #  define DWTBSC_DBG
 # endif
 
-// Directory WaTcher BaSiCs
-
 # include "bso.h"
 # include "err.h"
 # include "str.h"
 # include "stsfsm.h"
 # include "ltf.h"
+
+# ifdef M
+#  define DWTBSC_M_ M
+#  undef M
+# endif
 
 namespace dwtbsc {
 	typedef bso::uint__ depth__;	// Type de la profondeur d'un répertoire.
@@ -249,7 +254,7 @@ namespace dwtbsc {
 	typedef ctn::E_CONTAINERt_( directory_, drow__ ) directories_;
 	E_AUTO( directories );
 
-	class kernel_
+	class vKernel
 	{
 	public:
 		struct s
@@ -265,7 +270,7 @@ namespace dwtbsc {
 		directories_ Directories;
 		names_ Names;
 		oddities_ Oddities;
-		kernel_( s &S )
+		vKernel( s &S )
 		: Goofs( S.Goofs ),
 		  Files( S.Files ),
 		  Directories( S.Directories ),
@@ -288,7 +293,7 @@ namespace dwtbsc {
 			Names.plug( AS );
 			Oddities.plug( AS );
 		}
-		kernel_ &operator =( const kernel_ &K )
+		vKernel &operator =( const vKernel &K )
 		{
 			Goofs = K.Goofs;
 			Files = K.Files;
@@ -308,101 +313,115 @@ namespace dwtbsc {
 		}
 	};
 
-	E_AUTO( kernel );
-
-	class kernel_fh___;
-
-	class kernel_hf___
-	{
-	private:
-		bch::hf___ Goofs_;
-		bch::hf___ Files_;
-		ctn::hf___ Directories_;
-		ctn::hf___ Names_;
-		ctn::hf___ Oddities_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			Goofs_.reset( P );
-			Files_.reset( P );
-			Directories_.reset( P );
-			Names_.reset( P );
-			Oddities_.reset( P );
-		}
-		E_CDTOR( kernel_hf___ );
-		friend kernel_fh___;
-		void Init(
-			const fnm::name___ &Path,
-			const fnm::name___ &Basename );
-	};
+	qW( Kernel );
 
 	template <typename hook> inline void CreateFilesIfMissing_( hook &Hook )
 	{
 		if ( !Hook.Exists() )
 			Hook.CreateFiles();
 	}
-	
-	class kernel_fh___
+
+# define M( lib, name )\
+	protected:\
+		virtual lib::fHook &DWTBSCGet##name##Hook( void ) = 0;\
+	public:\
+		lib::fHook &Get##name##Hook( void ) { return DWTBSCGet##name##Hook(); }
+
+	class fHook
 	{
+	public:
+		qCALLBACK_DEF( Hook );
+		M( bch, Goofs );
+		M( bch, Files);
+		M( ctn, Directories );
+		M( ctn, Names );
+		M( ctn, Oddities );
+	};
+
+# undef M
+
+	inline bso::fBool Plug(
+		vKernel &Kernel,
+		fHook  &Hook )
+	{
+		bso::fBool Exists = false;
+
+# define M( lib, name ) Exists |= lib::Plug( Kernel.name, Hook.Get##name##Hook() )
+		M( bch, Goofs );
+		M( bch, Files);
+		M( ctn, Directories );
+		M( ctn, Names );
+		M( ctn, Oddities );
+#undef M
+
+		return Exists;
+	}
+
+	struct rHF
+	{
+	public:
+		bch::rHF Goofs;
+		bch::rHF Files;
+		ctn::rHF Directories;
+		ctn::rHF Names;
+		ctn::rHF Oddities;
+		void reset( bso::bool__ P = true )
+		{
+			Goofs.reset( P );
+			Files.reset( P );
+			Directories.reset( P );
+			Names.reset( P );
+			Oddities.reset( P );
+		}
+		E_CDTOR( rHF );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );
+	};
+
+	class rFH
+	: public fHook
+	{
+	protected:
+# define M( lib, name )	virtual lib::fHook &DWTBSCGet##name##Hook( void ) override { return name##_; }
+		M( bch, Goofs );
+		M( bch, Files);
+		M( ctn, Directories );
+		M( ctn, Names );
+		M( ctn, Oddities );
+#undef M
 	private:
-		bch::fh___ Goofs_;
-		bch::fh___ Files_;
-		ctn::fh___ Directories_;
-		ctn::fh___ Names_;
-		ctn::fh___ Oddities_;
-		void CreateFilesIfMissing_( void )
-		{
-			dwtbsc::CreateFilesIfMissing_( Goofs_ );
-			dwtbsc::CreateFilesIfMissing_( Files_ );
-			dwtbsc::CreateFilesIfMissing_( Directories_ );
-			dwtbsc::CreateFilesIfMissing_( Names_ );
-			dwtbsc::CreateFilesIfMissing_( Oddities_ );
-		}
-		bso::bool__ Test_( void )
-		{
-			if ( Goofs_.Mode() == uys::m_Undefined )
-				return false;
-			else
-				return Goofs_.Exists()
-						|| Files_.Exists()
-						|| Directories_.Exists()
-						|| Names_.Exists()
-						|| Oddities_.Exists();
-		}
+		bch::rFH<goofs_> Goofs_;
+		bch::rFH<files_> Files_;
+		ctn::rFH<directories_> Directories_;
+		ctn::rFH<names_> Names_;
+		ctn::rFH<oddities_> Oddities_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P )
-				if ( Test_() )
-					CreateFilesIfMissing_();
-
 			Goofs_.reset( P );
 			Files_.reset( P );
 			Directories_.reset( P );
 			Names_.reset( P );
 			Oddities_.reset( P );
 		}
-		E_CDTOR( kernel_fh___ );
+		E_CDTOR( rFH );
 		void Init(
-			kernel_hf___ &Filenames,
+			rHF &Filenames,
+			const vKernel &Kernel,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Goofs_.Init( Filenames.Goofs_, Mode, Behavior, ID );
-			Files_.Init( Filenames.Files_, Mode, Behavior, ID );
-			Directories_.Init( Filenames.Directories_, Mode, Behavior, ID );
-			Names_.Init( Filenames.Names_, Mode, Behavior, ID );
-			Oddities_.Init( Filenames.Oddities_, Mode, Behavior, ID );
+# define M( lib, name )	name##_.Init( Filenames.name, Kernel.name, Mode, Behavior, ID )
+			M( bch, Goofs );
+			M( bch, Files);
+			M( ctn, Directories );
+			M( ctn, Names );
+			M( ctn, Oddities );
+# undef M
 		}
-		friend uys::state__ Plug(
-			kernel_ &Kernel,
-			kernel_fh___ &Hook );
 	};
-
-	uys::state__ Plug(
-		kernel_ &Kernel,
-		kernel_fh___ &Hook );
 
 	class ghosts_oddities_	// Elements pour gèrer le renommage de dossiers.
 	{
@@ -546,5 +565,10 @@ namespace dwtbsc {
 		const str::string_ &Path,
 		const str::strings_ &FileNames );
 }
+
+# ifdef DWTBSC_M_
+#  define M DWTBSC_M_
+# endif
+
 
 #endif

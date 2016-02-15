@@ -50,29 +50,29 @@ namespace dwtdct {
 	typedef bch::E_BUNCHt_( exclusion__, frow__ ) fexclusions_;
 	E_AUTO( fexclusions );
 
-	typedef bch::hf___ fexclusions_hf___;
-	typedef bch::fh___ fexclusions_fh___;
+	typedef bch::rHF fexclusions_hf___;
+	typedef bch::rFH<fexclusions_> fexclusions_fh___;
 
 
 	typedef bch::E_BUNCHt_( fil::size__, frow__ ) sizes_;
 	E_AUTO( sizes );
 
-	typedef bch::hf___ sizes_hf___;
-	typedef bch::fh___ sizes_fiels_hook___;
+	typedef bch::rHF sizes_hf___;
+	typedef bch::rFH<sizes_> sizes_files_hook___;
 
 
 	typedef bch::E_BUNCHt_( time_t, frow__ ) timestamps_;
 	E_AUTO( timestamps );
 
-	typedef bch::hf___ timestamps_hf___;
-	typedef bch::fh___ timestamps_fh___;
+	typedef bch::rHF timestamps_hf___;
+	typedef bch::rFH<timestamps_> timestamps_fh___;
 
 
 	typedef ctn::E_MCONTAINERt_( str::string_, frow__ ) fstrings_;
 	E_AUTO( fstrings );
 
-	typedef ctn::hf___ fstrings_hf___;
-	typedef ctn::fh___ fstrings_fh___;
+	typedef ctn::rHF fstrings_hf___;
+	typedef ctn::rFH<fstrings_> fstrings_fh___;
 
 
 	typedef ctn::E_MCONTAINERt_( str::string_, dwtbsc::grow__ ) gstrings_;
@@ -188,63 +188,56 @@ namespace dwtdct {
 		E_NAVt( Names., frow__ );
 	};
 
-	class files_data_fh___;
-
-	class files_data_hf___
+	struct files_data_hf___
 	{
-	private:
-		fstrings_hf___ Names_;
-		fexclusions_hf___ Exclusions_;
-		sizes_hf___ Sizes_;
-		timestamps_hf___ Timestamps_;
 	public:
+		fstrings_hf___ Names;
+		fexclusions_hf___ Exclusions;
+		sizes_hf___ Sizes;
+		timestamps_hf___ Timestamps;
 		void reset( bso::bool__ P = true )
 		{
-			Names_.reset( P );
-			Exclusions_.reset( P );
-			Sizes_.reset( P );
-			Timestamps_.reset( P );
+			Names.reset( P );
+			Exclusions.reset( P );
+			Sizes.reset( P );
+			Timestamps.reset( P );
 		}
 		E_CDTOR( files_data_hf___ );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
-		friend files_data_fh___;
 	};
 
-	class files_data_fh___
+	struct files_data_fh___
 	{
-	private:
-		fstrings_fh___ Names_;
-		fexclusions_fh___ Exclusions_;
-		sizes_fiels_hook___ Sizes_;
-		timestamps_fh___ Timestamps_;
 	public:
+		fstrings_fh___ Names;
+		fexclusions_fh___ Exclusions;
+		sizes_files_hook___ Sizes;
+		timestamps_fh___ Timestamps;
 		void reset( bso::bool__ P = true )
 		{
-			Names_.reset( P );
-			Exclusions_.reset( P );
-			Sizes_.reset( P );
-			Timestamps_.reset( P );
+			Names.reset( P );
+			Exclusions.reset( P );
+			Sizes.reset( P );
+			Timestamps.reset( P );
 		}
 		E_CDTOR( files_data_fh___ );
 		void Init(
 			files_data_hf___ &Filenames,
+			const files_data_ &FilesData,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Names_.Init( Filenames.Names_, Mode, Behavior, ID );
-			Exclusions_.Init( Filenames.Exclusions_, Mode, Behavior, ID );
-			Sizes_.Init( Filenames.Sizes_, Mode, Behavior, ID );
-			Timestamps_.Init( Filenames.Timestamps_, Mode, Behavior, ID );
+			Names.Init( Filenames.Names, FilesData.Names, Mode, Behavior, ID );
+			Exclusions.Init( Filenames.Exclusions, FilesData.Exclusions, Mode, Behavior, ID );
+			Sizes.Init( Filenames.Sizes, FilesData.Sizes, Mode, Behavior, ID );
+			Timestamps.Init( Filenames.Timestamps, FilesData.Timestamps, Mode, Behavior, ID );
 		}
-		friend uys::state__ Plug(
-			files_data_ &Files,
-			files_data_fh___ &Hook );
 	};
 
-	uys::state__ Plug(
+	bso::fBool Plug(
 		files_data_ &Files,
 		files_data_fh___ &Hook );
 
@@ -580,8 +573,8 @@ namespace dwtdct {
 	typedef ctn::E_MCONTAINERt_( frows_, grow__ ) gfrows_;
 	E_AUTO( gfrows );
 
-	typedef ctn::hf___ gfrows_hf___;
-	typedef ctn::fh___ gfrows_fh___;
+	typedef ctn::rHF gfrows_hf___;
+	typedef ctn::rFH<gfrows_> gfrows_fh___;
 
 	// Files rattached to each ghost.
 	class ghost2files_
@@ -629,55 +622,53 @@ namespace dwtdct {
 
 	E_AUTO( ghost2files );
 
-	class ghost2files_fh___;
-
-	class ghost2files_hf___
+	struct ghost2files_hf___
 	{
-	private:
-		gfrows_hf___ GFRows_;
-		files_data_hf___ Files_;
 	public:
+		gfrows_hf___ GFRows;
+		files_data_hf___ Files;
 		void reset( bso::bool__ P = true )
 		{
-			GFRows_.reset( P );
-			Files_.reset( P );
+			GFRows.reset( P );
+			Files.reset( P );
 		}
 		E_CDTOR( ghost2files_hf___);
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
-		friend ghost2files_fh___;
 	};
 
-	class ghost2files_fh___
+	struct ghost2files_fh___
 	{
-	private:
-		gfrows_fh___ GFRows_;
-		files_data_fh___ Files_;
 	public:
+		gfrows_fh___ GFRows;
+		files_data_fh___ Files;
 		void reset( bso::bool__ P = true )
 		{
-			GFRows_.reset( P );
-			Files_.reset( P );
+			GFRows.reset( P );
+			Files.reset( P );
 		}
 		E_CDTOR( ghost2files_fh___);
 		void Init(
 			ghost2files_hf___ &Filenames,
+			const ghost2files_ &G2F,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			GFRows_.Init( Filenames.GFRows_, Mode, Behavior, ID );
-			Files_.Init( Filenames.Files_, Mode, Behavior, ID );
+			GFRows.Init( Filenames.GFRows, G2F.GFRows, Mode, Behavior, ID );
+			Files.Init( Filenames.Files, G2F.Files, Mode, Behavior, ID );
 		}
-		friend uys::state__ Plug(
-			ghost2files_ &G2F,
-			ghost2files_fh___ &Hook );
 	};
 
-	uys::state__ Plug(
+	inline bso::fBool Plug(
 		ghost2files_ &Files,
-		ghost2files_fh___ &Hook );
+		ghost2files_fh___ &Hook )
+	{
+		bso::fBool Exists = Plug( Files.Files, Hook.Files );
+
+		return ctn::Plug( Files.GFRows, Hook.GFRows ) || Exists;
+	}
 
 	struct ghost2files_rack___
 	{
@@ -712,7 +703,7 @@ namespace dwtdct {
 	void Fill(
 		const content_ &Content,
 		const ghost2files_ &G2F,
-		kernel_ &Kernel );
+		vKernel &Kernel );
 
 }
 

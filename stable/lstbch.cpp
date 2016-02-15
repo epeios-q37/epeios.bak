@@ -23,7 +23,7 @@
 
 using namespace lstbch;
 
-void lstbch::hf___::Init(
+void lstbch::rHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

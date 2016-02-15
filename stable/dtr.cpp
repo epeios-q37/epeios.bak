@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2016 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -23,7 +23,7 @@
 
 using namespace dtr;
 
-void dtr::hf___::Init(
+void dtr::rHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
@@ -36,8 +36,8 @@ qRB
 	Queue.Init();
 	fnm::BuildPath( Path, Basename, "q", Queue );
 
-	Tree_.Init( "", Tree );
-	Queue_.Init( "", Queue );
+	this->Tree.Init( "", Tree );
+	this->Queue.Init( "", Queue );
 qRR
 qRT
 qRE

@@ -166,7 +166,7 @@ const str::string_ &dwtftr::file_tree_::GetPath(
 
 static void Fill_(
 	const goofs_data_ &Data,
-	kernel_ &Kernel,
+	vKernel &Kernel,
 	dwtbsc::grows_ &Rows )
 {
 qRH
@@ -201,7 +201,7 @@ qRE
 
 static void Fill_(
 	const files_data_ &Data,
-	kernel_ &Kernel,
+	vKernel &Kernel,
 	frows_ &Rows )
 {
 qRH
@@ -239,7 +239,7 @@ E_AUTO( drows_set );
 
 static void Organize_(
 	const items_ &Items,
-	kernel_ &Kernel,
+	vKernel &Kernel,
 	i2d_ &I2D,
 	drows_set_ &Dirs,
 	processing_observer__ &Observer )
@@ -704,11 +704,11 @@ qRH
 qRB
 	Tree.Init();
 	fnm::BuildPath(Path, Basename, "t", Tree );
-	Tree_.Init( "", Tree );
+	this->Tree.Init( "", Tree );
 
 	Kernel.Init();
 	fnm::BuildPath( Path, Basename, "k", Kernel );
-	Kernel_.Init( "", Kernel );
+	this->Kernel.Init( "", Kernel );
 qRR
 qRT
 qRE
@@ -717,6 +717,7 @@ qRE
 namespace {
 	void SetFileTreeFilesHook_(
 		const fnm::name___ &Path,
+		const file_tree_ &FileTree,
 		uys::mode__ Mode,
 		file_tree_fh___ &FilesHook )
 	{
@@ -725,7 +726,7 @@ namespace {
 	qRB
 		Filenames.Init( Path, "tree" );
 
-		FilesHook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
+		FilesHook.Init( Filenames, FileTree, Mode, uys::bPersistent, flsq::GetId() );
 	qRR
 	qRT
 	qRE
@@ -736,9 +737,9 @@ namespace {
 		uys::mode__ Mode,
 		file_tree_rack___ &Rack )
 	{
-		SetFileTreeFilesHook_( DataDirName, Mode, Rack.Hook );
+		SetFileTreeFilesHook_( DataDirName, Rack.Tree, Mode, Rack.Hook );
 
-		if ( !Plug( Rack.Tree, Rack.Hook ).Boolean() )
+		if ( !Plug( Rack.Tree, Rack.Hook ) )
 			Rack.Tree.Init();
 	}
 }
@@ -1072,7 +1073,7 @@ qRE
 
 static void Sort_(
 	directory_ &Directory,
-	const kernel_ &Kernel,
+	const vKernel &Kernel,
 	sort_type__ SortType )
 {
 	Sort_<drow__,directories_>( Directory.Dirs, Kernel.Names, Kernel.Directories, SortType );
@@ -1153,7 +1154,7 @@ qRE
 
 static void Sort_(
 	directories_ &Directories,
-	const kernel_ &Kernel,
+	const vKernel &Kernel,
 	dwtbsc::sort_type__ SortType )
 {
 qRH
@@ -1178,7 +1179,7 @@ qRE
 }
 
 void dwtftr::Sort(
-	kernel_ &Kernel,
+	vKernel &Kernel,
 	dwtbsc::sort_type__ SortType )
 {
 	Sort_( Kernel.Directories, Kernel, SortType );
@@ -1203,7 +1204,7 @@ typedef bso::uint__ depth__;
 drow__ dwtftr::Load(
 	xml::parser___ &Parser,
 	version__ Version,
-	kernel_ &Kernel,
+	vKernel &Kernel,
 	dtree_ &Tree,
 	load_observer__ &Observer )
 {

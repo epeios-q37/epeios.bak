@@ -209,8 +209,7 @@ qRB
 		}
 	}
 
-	while( Quantite )
-	{
+	while( Quantite ) {
 		if ( Quantite < Taille )
 			Taille = Quantite;
 

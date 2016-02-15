@@ -146,27 +146,54 @@ namespace lstctn {
 
 	E_AUTO3( list_container );
 
-	struct hf___
+	class fHook
+	{
+	protected:
+		virtual ctn::fHook &LSTCTNGetContainerHook( void ) = 0;
+		virtual lst::fHook &LSTCTNGetListHook( void ) = 0;
+	public:
+		qCALLBACK_DEF( Hook );
+		ctn::fHook &GetContainerHook( void )
+		{
+			return LSTCTNGetContainerHook();
+		}
+		lst::fHook &GetListHook( void )
+		{
+			return LSTCTNGetListHook();
+		}
+	};
+
+	template <typename list_container> inline bso::fBool Plug(
+		list_container &ListContainer,
+		fHook &Hook )
+	{
+		bso::fBool Exists = ctn::Plug( ListContainer.Container(), Hook.GetContainerHook() );
+
+		return lst::Plug(ListContainer, Hook.GetListHook() ) || Exists;
+	}
+
+	struct rHF
 	{
 	public:
-		ctn::hf___ Container;
-		lst::hf___ List;
+		ctn::rHF Container;
+		lst::rHF List;
 		void reset( bso::bool__ P = true )
 		{
 			Container.reset( P );
 			List.reset( P );
 		}
-		E_CDTOR( hf___ );
+		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 	};
 
-	class fh___
+	template <typename list_container> class rFH
+	: public fHook
 	{
 	private:
-		ctn::fh___ _Container;
-		lst::fh___ _List;
+		ctn::rFH<list_container> _Container;
+		lst::rFH<list_container> _List;
 		time_t _ContainerTimeStamp( void ) const
 		{
 			return _Container.TimeStamp();
@@ -175,37 +202,37 @@ namespace lstctn {
 		{
 			return _List.TimeStamp();
 		}
+	protected:
+		virtual ctn::fHook &LSTCTNGetContainerHook( void ) override
+		{
+			return _Container;
+		}
+		virtual lst::fHook &LSTCTNGetListHook( void ) override
+		{
+			return _List;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Container.ReleaseFiles();	// Sinon le 'Settle()'  ci'dessous ne fonctionne pas correctement.
-
-			if ( P ) {
-				Settle();	// Lanc explicitement, car le 'reset(...)' de '_List' ne peut lancer son propre 'Settle(...)'.
-			}
-
 			_Container.reset( P );
 			_List.reset( P );
+			fHook::reset( P );
 		}
-		fh___( void )
-		{
-			reset( false );
-		}
-		~fh___( void )
-		{
-			reset();
-		}
+		qCVDTOR( rFH );
 		void Init(
-			const hf___ &Filenames,
+			const rHF &Filenames,
+			const list_container &ListContainer,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
 			reset();
 
-			_Container.Init( Filenames.Container, Mode, Behavior, ID );
-			_List.Init( Filenames.List, Mode, Behavior );
+			_Container.Init( Filenames.Container, ListContainer, Mode, Behavior, ID );
+			_List.Init( Filenames.List, ListContainer, Mode, Behavior, ID );
+			fHook::Init();
 		}
+		/*
 		uys::mode__ Mode( uys::mode__ Mode )
 		{
 			uys::mode__ ModeBuffer = _Container.Mode( Mode );
@@ -298,31 +325,8 @@ namespace lstctn {
 		{
 			return _List;
 		}
+		*/
 	};
-
-	template <typename list_container> inline uys::state__ Plug(
-		list_container &ListContainer,
-		fh___ &Hook )
-	{
-		uys::state__ State = ctn::Plug( ListContainer.Container(), Hook.ContainerFilesHook() );
-
-		if ( State.IsError() ) {
-			Hook.reset();
-		} else {
-			fil::size__ Size = Hook.ContainerFilesHook().StaticsFilesHook().FileSize() / ListContainer.GetStaticsItemSize();
-
-			if ( Size > SDR_SIZE_MAX )
-				qRFwk();
-
-			if ( lst::Plug( ListContainer, Hook.ListFilesHook(), ( sdr::size__ )Size, Hook.ContainerFilesHook().TimeStamp() ) != State ) {
-				Hook.reset();
-				State = uys::sInconsistent;
-			}
-		}
-
-		return State;
-	}
-
 
 	template <typename container, typename object, typename row, typename row_t> class list_xcontainer_
 	: public list_container_<container, row, row_t>

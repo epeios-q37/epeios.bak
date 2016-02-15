@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: uys.h,v 1.9 2013/04/15 10:50:58 csimon Exp $
+//D UnTyped Storage 
 
 #ifndef UYS__INC
 #define UYS__INC
@@ -31,20 +31,6 @@
 #if defined( E_DEBUG ) && !defined( UYS_NODBG )
 #define UYS_DBG
 #endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.9 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/15 10:50:58 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D UnTyped Storage 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
 
 # include "err.h"
 # include "tol.h"
@@ -424,10 +410,33 @@ namespace uys {
 }
 
 namespace uys {
-	typedef flsq::E_FILqSD___ _file_storage_driver___;
+
+	class fHook {
+	protected:
+		virtual class qSDf &UYSGetSD( void ) = 0;
+	public:
+		qCALLBACK_DEF( Hook );
+		qSDf &GetSD( void )
+		{
+			return UYSGetSD();
+		}
+	};
+
+	inline bso::fBool Plug(
+		untyped_storage_ &Storage,
+		fHook &Hook )
+	{
+		qSDf &SD = Hook.GetSD();
+
+		Storage.plug( SD );
+
+		Storage.Allocate( SD.Size() );
+
+		return SD.Size() != 0;
+	}
 
 	// Hook filenames.
-	struct hf___
+	struct rHF
 	{
 	public:
 		fnm::name___ Filename;
@@ -435,7 +444,7 @@ namespace uys {
 		{
 			Filename.reset( P );
 		}
-		E_CDTOR( hf___ );
+		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename )	// Peut tre vide ('NULL') si 'Path' contient dj le nom de fichier.
@@ -446,23 +455,37 @@ namespace uys {
 	};
 		
 	// Files hook.
-	class fh___
-	: public _file_storage_driver___
+	class rFH
+	: public fHook
 	{
+	private:
+		flsq::file_storage_driver___ Driver_;
+	protected:
+		qSDf &UYSGetSD( void ) override
+		{
+			return Driver_;
+		}
 	public:
+		void reset( bso::fBool P = true )
+		{
+			fHook::reset( P );
+			Driver_.reset( P );
+		}
+		qCDTOR( rFH );
 		void Init( 
-			const hf___ &Filenames,
+			const rHF &Filenames,
 			mode__ Mode,
 			behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			_file_storage_driver___::Init( ID, Filenames.Filename, Convert_( Mode ), flsq::cFirstUse );
+			Driver_.Init( ID, Filenames.Filename, Convert_( Mode ), flsq::cFirstUse );
+			fHook::Init();
 
 			switch ( Behavior ) {
 			case bVolatile:
 				break;
 			case bPersistent:
-				_file_storage_driver___::Persistent();
+				Driver_.Persistent();
 				break;
 			default:
 				qRFwk();
@@ -471,46 +494,32 @@ namespace uys {
 		}
 		bso::bool__ CreateFiles( err::handling__ ErrHandling = err::h_Default )
 		{
-			return CreateFile( ErrHandling );
+			return Driver_.CreateFile( ErrHandling );
 		}
 		mode__ Mode( mode__ Mode )
 		{
-			return Convert_( _file_storage_driver___::Mode( Convert_( Mode ) ) );
+			return Convert_( Driver_.Mode( Convert_( Mode ) ) );
 		}
 		mode__ Mode( void ) const
 		{
-			return Convert_( _file_storage_driver___::Mode() );
+			return Convert_( Driver_.Mode() );
 		}
-		state__ State( void ) const
-		{
-			if ( GetFileName().Amount() == 0 )
-				return sInconsistent;
-			else if ( Exists() )
-				return sExists;
-			else
-				return sAbsent;
-		}
-		state__ Settle( void )
+		bso::fBool Settle( void )
 		{
 			if ( Mode() == mReadWrite )
-				_file_storage_driver___::Flush();
+				Driver_.Flush();
 
-			return State();
+			return Driver_.Exists();
+		}
+		void ReleaseFiles( void )
+		{
+			Driver_.ReleaseFile();
+		}
+		void AdjustSize( fil::size__ Size )
+		{
+			Driver_.AdjustSize( Size );
 		}
 	};
-
-	inline state__ Plug(
-		untyped_storage_ &Storage,
-		fh___ &Hook )
-	{
-		state__ State = ( Hook.Exists() ? sExists : sAbsent );
-
-		Storage.plug( Hook );
-
-		Storage.Allocate( Hook.Size() );
-
-		return State;
-	}
 
 	class untyped_storage
 	: public untyped_storage_
@@ -738,5 +747,4 @@ namespace uys {
 
 # define UYS__HEADER_HANDLED	// A destination de 'AGS'.
 
-/*$END$*/
 #endif

@@ -23,7 +23,7 @@
 
 using namespace idxbtq;
 
-void idxbtq::hf___::Init(
+void idxbtq::rHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

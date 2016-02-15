@@ -17,41 +17,26 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: que.h,v 1.44 2013/04/15 10:50:53 csimon Exp $
+// QUEue 
 
 #ifndef QUE__INC
-#define QUE__INC
+# define QUE__INC
 
-#define QUE_NAME		"QUE"
+# define QUE_NAME		"QUE"
 
-#define	QUE_VERSION	"$Revision: 1.44 $"
+# define	QUE_VERSION	"$Revision: 1.44 $"
 
-#define QUE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# define QUE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#if defined( E_DEBUG ) && !defined( QUE_NODBG )
-#define QUE_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( QUE_NODBG )
+#  define QUE_DBG
+# endif
 
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.44 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/15 10:50:53 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D QUEue 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-//D QUeuE.
-
-#include "err.h"
-#include "flw.h"
-#include "tys.h"
-#include "bch.h"
-#include "stk.h"
+# include "err.h"
+# include "flw.h"
+# include "tys.h"
+# include "bch.h"
+# include "stk.h"
 
 namespace que {
 	//e dump direction.	
@@ -178,8 +163,8 @@ namespace que {
 
 	E_AUTO1( _stack )
 */
-	#define E_QSTACK_( r ) stk::E_BSTACK_( r )
-	#define E_QSTACK( r ) stk::E_BSTACK( r )
+# define E_QSTACK_( r ) stk::E_BSTACK_( r )
+# define E_QSTACK( r ) stk::E_BSTACK( r )
 
 	
 	//c A queue. Use 'QUEUE_' rather than directly this.
@@ -204,7 +189,7 @@ namespace que {
 				Links.Store( L, Link.Next );
 			}
 		}
-	#ifdef QUE_DBG
+# ifdef QUE_DBG
 		void TestIfItem_( sdr::row_t__ Item )
 		{
 			link__ L = Links( Item );
@@ -212,7 +197,7 @@ namespace que {
 			if ( ( L.Previous != qNIL ) || ( L.Next != qNIL ) )
 				qRFwk();
 		}
-	#endif
+# endif
 	public:
 		//r Links between nodes.
 		que::links_ Links;
@@ -282,9 +267,9 @@ namespace que {
 			r Item,
 			r Node )
 		{
-	#ifdef QUE_DBG
+# ifdef QUE_DBG
 			TestIfItem_( *Item );
-	#endif
+# endif
 			link__ LNode = Links( *Node );
 			link__ LItem = Links( *Item );
 
@@ -303,9 +288,9 @@ namespace que {
 			r Item,
 			r Node )
 		{
-	#ifdef QUE_DBG
+# ifdef QUE_DBG
 			TestIfItem_( *Item );
-	#endif
+# endif
 			link__ LNode = Links( *Node );
 			link__ LItem = Links( *Item );
 
@@ -394,25 +379,27 @@ namespace que {
 
 	E_AUTO1( queue );
 
-#ifndef FLS__COMPILATION
-	using bch::hf___;
+# ifndef FLS__COMPILATION
+	using bch::fHook;
 
-	using bch::fh___;
-
-	template <typename queue> uys::state__ Plug(
+	template <typename queue> bso::fBool Plug(
 		queue &Queue,
-		fh___ &Hook )
+		fHook &Hook )
 	{
 		return bch::Plug( Queue.Links, Hook );
 	}
-#endif
+
+	using bch::rHF;
+	using bch::rFH;
+
+# endif
 
 	//d A queue.
-	#define E_QUEUEt_( r )		queue_< r >
-	#define E_QUEUEt(r )		queue< r >
+# define E_QUEUEt_( r )		queue_< r >
+# define E_QUEUEt(r )		queue< r >
 
-	#define E_QUEUE_	E_QUEUEt_( sdr::row__ )
-	#define E_QUEUE		E_QUEUEt( sdr::row__ )
+# define E_QUEUE_	E_QUEUEt_( sdr::row__ )
+# define E_QUEUE		E_QUEUEt( sdr::row__ )
 
 	void Dump_(
 		const E_QUEUE_ &Queue,
@@ -436,13 +423,13 @@ namespace que {
 		r Head_;
 		r Tail_;
 		sdr::size__ Amount_;
-	#ifdef QUE_DBG
+# ifdef QUE_DBG
 		void Test_( void ) const
 		{
 			if ( ( Tail_ == qNIL ) ||( Head_ == qNIL ) )
 				qRFwk();
 		}
-	#endif
+# endif
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -772,5 +759,4 @@ namespace que {
 	#define E_MQUEUE	E_MQUEUEt( sdr::row__ )
 }
 
-/*$END$*/
 #endif

@@ -179,31 +179,69 @@ namespace lstbch {
 
 #ifndef FLS__COMPILATION
 
-	class fh___;
+	class fHook
+	{
+	protected:
+		virtual bch::fHook &LSTBCHGetBunchHook( void ) = 0;
+		virtual lst::fHook &LSTBCHGetListHook( void ) = 0;
+	public:
+		qCALLBACK_DEF( Hook );
+		bch::fHook &GetBunchHook( void )
+		{
+			return LSTBCHGetBunchHook();
+		}
+		lst::fHook &BCHGetListHook( void )
+		{
+			return LSTBCHGetListHook();
+		}
+	};
 
-	struct hf___
+	template <typename list_bunch> bso::fBool Plug(
+		list_bunch &ListBunch,
+		fHook &Hook )
+	{
+		bso::fBool Exists = bch::Plug( ListBunch.Bunch(), Hook._Bunch );
+
+		if ( State.IsError() )
+			Hook.reset();
+		else {
+			fil::size__ Size = Hook._Bunch.FileSize() / ListBunch.GetItemSize();
+
+			if ( Size > SDR_SIZE_MAX )
+				qRFwk();
+
+			if ( lst::Plug( ListBunch, Hook._List, (sdr::size__)Size, Hook._Bunch.TimeStamp() ) != State ) {
+				Hook.reset();
+				State = uys::sInconsistent;
+			}
+		}
+
+		return State;
+	}
+
+	struct rHF
 	{
 	private:
-		bch::hf___ Bunch_;
-		lst::hf___ List_;
+		bch::rHF Bunch_;
+		lst::rHF List_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Bunch_.reset( P );
 			List_.reset( P );
 		}
-		E_CDTOR( hf___ );
+		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 		friend class fh___;
 	};
 
-	class fh___
+	template <typename list_bunch> class rFH
 	{
 	private:
-		bch::fh___ _Bunch;
-		lst::fh___ _List;
+		bch::rFH Bunch_;
+		lst::rFH List_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -216,16 +254,10 @@ namespace lstbch {
 			_Bunch.reset( P );
 			_List.reset( P );
 		}
-		fh___( void )
-		{
-			reset( false );
-		}
-		~fh___( void )
-		{
-			reset();
-		}
+		qCDTOR( rFH );
 		void Init(
-			const hf___ &Filenames,
+			const rFH &Filenames,
+			const list_bunch &ListBunch,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -234,7 +266,6 @@ namespace lstbch {
 
 			_Bunch.Init( Filenames.Bunch_, Mode, Behavior, ID );
 			_List.Init( Filenames.List_, Mode, Behavior );
-
 		}
 		uys::state__ Settle( void )
 		{
@@ -308,30 +339,6 @@ namespace lstbch {
 			list_bunch &ListBunch,
 			fh___ &Hook );
 	};
-
-
-	template <typename list_bunch> uys::state__ Plug(
-		list_bunch &ListBunch,
-		fh___ &Hook )
-	{
-		uys::state__ State = bch::Plug( ListBunch.Bunch(), Hook._Bunch );
-
-		if ( State.IsError() )
-			Hook.reset();
-		else {
-			fil::size__ Size = Hook._Bunch.FileSize() / ListBunch.GetItemSize();
-
-			if ( Size > SDR_SIZE_MAX )
-				qRFwk();
-
-			if ( lst::Plug( ListBunch, Hook._List, (sdr::size__)Size, Hook._Bunch.TimeStamp() ) != State ) {
-				Hook.reset();
-				State = uys::sInconsistent;
-			}
-		}
-
-		return State;
-	}
 #endif
 
 	#define E_LBUNCHtx_( type, row, row_t )		list_bunch_<type, row, row_t>

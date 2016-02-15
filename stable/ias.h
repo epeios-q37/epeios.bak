@@ -451,50 +451,82 @@ namespace ias {
 
 #ifndef FLS__COMPILATION
 
-	struct hf___
+	class fHook
+	{
+	protected:
+		virtual bch::fHook &IASGetDescriptorsHook( void ) = 0;
+		virtual ags::fHook &IASGetStorageHook( void ) = 0;
+	public:
+		qCALLBACK_DEF( Hook );
+		bch::fHook &GetDescriptorsHook( void )
+		{
+			return IASGetDescriptorsHook();
+		}
+		ags::fHook &GetStorageHook( void )
+		{
+			return IASGetStorageHook();
+		}
+	};
+
+	inline bso::fBool Plug(
+		indexed_aggregated_storage_ &AStorage,
+		fHook &Hook )
+	{
+		bso::fBool Exists = bch::Plug( AStorage.Descriptors, Hook.GetDescriptorsHook() );
+
+		// In 2 lines, or right member of '||' could not be excuted, due to '||' behaviour.
+		return ags::Plug( AStorage.AStorage, Hook.GetStorageHook() ) || Exists;
+	}
+
+	struct rHF
 	{
 	public:
-		bch::hf___ Descriptors;
-		ags::hf___ Storage;
+		bch::rHF Descriptors;
+		ags::rHF Storage;
 		void reset( bso::bool__ P = true )
 		{
 			Descriptors.reset( P );
 			Storage.reset( P );
 		}
-		E_CDTOR( hf___ );
+		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );	// Peut tre vide ('NULL') si 'Path' contient dj le nom de fichier.
 	};
 
-	class fh___
+	class rFH
+	: public fHook
 	{
 	private:
-		bch::fh___ _Descriptors;
-		ags::fh___ _Storage;
+		bch::rFH<descriptors_> _Descriptors;
+		ags::rFH _Storage;
+	protected:
+		virtual bch::fHook &IASGetDescriptorsHook( void ) override
+		{
+			return _Descriptors;
+		}
+		virtual ags::fHook &IASGetStorageHook( void ) override
+		{
+			return _Storage;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Descriptors.reset( P );
 			_Storage.reset( P );
 		}
-		fh___( void )
-		{
-			reset( false );
-		}
-		~fh___( void )
-		{
-			reset();
-		}
+		qCDTOR( rFH );
 		void Init( 
-			const hf___ &Filenames,
+			const rHF &Filenames,
+			const indexed_aggregated_storage_ &Storage,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			_Descriptors.Init( Filenames.Descriptors, Mode, Behavior, ID );
+			_Descriptors.Init( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID );
 			_Storage.Init( Filenames.Storage, Mode, Behavior, ID );
 		}
+		/*
 		uys::mode__ Mode( uys::mode__ Mode )
 		{
 			uys::mode__ ModeBuffer = _Descriptors.Mode( Mode );
@@ -513,36 +545,21 @@ namespace ias {
 
 			return Mode;
 		}
-		uys::state__ State( void ) const
+		bso::fBool Settle( void )
 		{
-			uys::state__ State = _Descriptors.State();
-
-			if ( !State.IsError() )
-				if ( State != _Storage.State() )
-					State = uys::sInconsistent;
-
-			return State;
+			if ( _Descriptors.Settle() ) {
+				_Storage.CreateFiles();
+				return true;
+			} else
+				return false;
 		}
-		uys::state__ Settle( void )
+		void ReleaseFiles( void )
 		{
-			uys::state__ State = _Descriptors.Settle();
-
-			if ( !State.IsError() ) {
-				if ( State != _Storage.Settle() ) {
-					if ( State.Value() == uys::sExists )
-						_Storage.CreateFile();
-					else
-						State = uys::sInconsistent;
-				}
-			}
-
-			return State;
+			_Descriptors.ReleaseFiles();
+			_Storage.ReleaseFiles();
 		}
-		void ReleaseFile( void )
-		{
-			_Descriptors.ReleaseFile();
-			_Storage.ReleaseFile();
-		}
+		*/
+#if 0
 		bso::bool__ IsPersistent( void ) const
 		{
 #ifdef IAS_DBG
@@ -596,24 +613,8 @@ namespace ias {
 
 			return Success;
 		}
+# endif
 	};
-
-	inline uys::state__ Plug(
-		indexed_aggregated_storage_ &AStorage,
-		fh___ &Hook )
-	{
-		uys::state__ State = bch::Plug( AStorage.Descriptors, Hook.DescriptorsFilesHook() );
-
-		if ( State.IsError() )
-			Hook.reset();
-		else
-			if ( ags::Plug( AStorage.AStorage, Hook.StorageFilesHook() ) != State ) {
-				State = uys::sInconsistent;
-				Hook.reset();
-			}
-
-		return State;
-	}
 
 #endif
 

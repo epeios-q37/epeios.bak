@@ -35,7 +35,8 @@ using dwtxcl::excluder_;
 # define I( n, p )\
 	n.Init();\
 	fnm::BuildPath( Path, Basename, #p, n );\
-	n##_.Init( "", n )
+	this->n.Init( "", n )
+
 
 void dwtdct::files_data_hf___::Init(
 	const fnm::name___ &Path,
@@ -53,33 +54,21 @@ qRT
 qRE
 }
 
-#define P( i )\
-	if ( bch::Plug( Files.i, Hook.i##_ ) != State ) {\
-		State = uys::sInconsistent;\
-		qRReturn;\
-	}\
+#define P( name ) Exists |= bch::Plug( Files.name, Hook.name )
 
-uys::state__ dwtdct::Plug(
+bso::fBool dwtdct::Plug(
 	files_data_ &Files,
 	files_data_fh___ &Hook )
 {
-	uys::state__ State = uys::s_Undefined;
-qRH
-qRB
-	State = ctn::Plug( Files.Names, Hook.Names_ );
+	bso::bool__ Exists = false;
 
-	if ( State.IsError() )
-		qRReturn;
+	Exists |= ctn::Plug( Files.Names, Hook.Names );
 
 	P( Exclusions );
 	P( Sizes );
 	P( Timestamps );
-qRR
-qRT
-	if ( State.IsError() )
-		Hook.reset();	
-qRE
-	return State;
+
+	return Exists;
 }
 
 
@@ -311,7 +300,7 @@ static void GetFile_(
 	const dwtbsc::limitations__ Limitations,
 	const dwtbsc::ghosts_oddities_ &GO,
 	exclusions_handling__ ExclusionsHandling,
-	kernel_ &Kernel,
+	vKernel &Kernel,
 	dwtght::grow__ &GhostRow )
 {
 qRH
@@ -383,7 +372,7 @@ static bso::bool__ GetFiles_(
 	const dwtbsc::limitations__ &Limitations,
 	const dwtbsc::ghosts_oddities_ &GO,
 	exclusions_handling__ ExclusionsHandling,
-	kernel_ &Kernel,
+	vKernel &Kernel,
 	oddity_ &Oddity,
 	dwtght::grow__ &GhostRow )
 {
@@ -697,7 +686,7 @@ qRFH
 	data___ &Data = *(data___ *)UP;
 	bso::bool__ Continue = true;
 	item_ *Item = NULL;
-	dwtbsc::kernel Kernel;
+	dwtbsc::iKernel Kernel;
 	TOL_CBUFFER___ Buffer;
 	mtx::mutex___ Mutex;
 	irow__ Row = qNIL;
@@ -1040,7 +1029,7 @@ qRH
 	fGhostsSettingStats Stats;
 	g2i G2I;
 	dwtght::grow__ GRow = qNIL;
-	dwtght::rack___ GhostsRack;
+	dwtght::rRack GhostsRack;
 	dwtght::ghost Ghost;
 	dwtxcl::excluder Excluder;
 qRB
@@ -1198,7 +1187,7 @@ void dwtdct::TestGhosts(
 qRH
 	irow__ IRow = qNIL, ParentIRow = qNIL;
 	dwtght::grow__ GRow = qNIL;
-	rack___ GhostsRack;
+	rRack GhostsRack;
 	ctn::E_CMITEMt( ghost_, dwtght::grow__ ) Ghost;
 	bso::bool__ Moved = false, Renamed = false, NoGhost = false, GhostIgnored = false;
 	str::string Path;
@@ -1415,31 +1404,10 @@ qRT
 qRE
 }
 
-uys::state__ dwtdct::Plug(
-	ghost2files_ &Files,
-	ghost2files_fh___ &Hook )
-{
-	uys::state__ State = uys::s_Undefined;
-qRH
-qRB
-	State = Plug( Files.Files, Hook.Files_ );
-
-	if ( State.IsError() )
-		qRReturn;
-
-	if ( State != ctn::Plug( Files.GFRows, Hook.GFRows_ ) )
-		qRFwk();
-qRR
-qRT
-	if ( State.IsError() )
-		Hook.reset();	
-qRE
-	return State;
-}
-
 namespace {
 	void SetHook_(
 		const fnm::name___ &Path,
+		const ghost2files_ &G2F,
 		uys::mode__ Mode,
 		ghost2files_fh___ &Hook )
 	{
@@ -1448,7 +1416,7 @@ namespace {
 	qRB
 		Filenames.Init( Path, "Files_" );
 
-		Hook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
+		Hook.Init( Filenames, G2F, Mode, uys::bPersistent, flsq::GetId() );
 	qRR
 	qRT
 	qRE
@@ -1459,9 +1427,9 @@ namespace {
 		uys::mode__ Mode,
 		ghost2files_rack___ &Rack )
 	{
-		SetHook_( DataDirName, Mode, Rack.Hook );
+		SetHook_( DataDirName, Rack.G2F, Mode, Rack.Hook );
 
-		if ( !Plug( Rack.G2F, Rack.Hook ).Boolean() )
+		if ( !Plug( Rack.G2F, Rack.Hook ) )
 			Rack.G2F.Init();
 	}
 }
@@ -1511,7 +1479,7 @@ namespace {
 		const frows_ &FRows,
 		const files_data_ &Files,
 		directory_ &Directory,
-		kernel_ &Kernel )
+		vKernel &Kernel )
 	{
 		ctn::E_CMITEMt( str::string_, frow__ ) Name;
 		file__ File;
@@ -1539,7 +1507,7 @@ namespace {
 		grow__ GRow,
 		const ghost2files_ &G2F,
 		directory_ &Directory,
-		kernel_ &Kernel )
+		vKernel &Kernel )
 	{
 		if ( GRow != qNIL ) {
 			ctn::E_CMITEMt( frows_, grow__ ) FRows;
@@ -1553,7 +1521,7 @@ namespace {
 	drow__ Fill_(
 		const item_ &Item,
 		const ghost2files_ &G2F,
-		kernel_ &Kernel )
+		vKernel &Kernel )
 	{
 		drow__ Row = qNIL;
 	qRH
@@ -1578,7 +1546,7 @@ namespace {
 void dwtdct::Fill(
 	const content_ &Content,
 	const ghost2files_ &G2F,
-	kernel_ &Kernel )
+	vKernel &Kernel )
 {
 qRH
 	irow__ Row = qNIL;

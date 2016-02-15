@@ -333,60 +333,83 @@ namespace ctn {
 		}
 	};
 
-	struct hf___
+	class fHook
+	{
+	protected:
+		virtual tys::fHook &CTNGetStaticsHook( void ) = 0;
+		virtual ias::fHook &CTNGetDynamicsHook( void ) = 0;
+	public:
+		qCALLBACK_DEF( Hook );
+		tys::fHook &GetStaticsHook( void )
+		{
+			return CTNGetStaticsHook();
+		}
+		ias::fHook &GetDynamicsHook( void )
+		{
+			return CTNGetDynamicsHook();
+		}
+	};
+
+	template <typename container> inline bso::fBool Plug(
+		container &Container,
+		fHook &Hook )
+	{
+		bso::fBool Exists = tys::Plug( Container.Statics, Hook.GetStaticsHook() );
+
+		return ias::Plug( Container.Dynamics, Hook.GetDynamicsHook() ) || Exists;
+	}
+
+	struct rHF
 	{
 	public:
-		tys::hf___ Statics;
-		ias::hf___ Dynamics;
+		tys::rHF Statics;
+		ias::rHF Dynamics;
 		void reset( bso::bool__ P = true )
 		{
 			Statics.reset( P );
 			Dynamics.reset( P );
 		}
-		E_CDTOR( hf___ );
+		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 	};
 
-	class fh___
+	template <typename container> class rFH
+	: public fHook
 	{
 	private:
-		tys::fh___ _Statics;
-		ias::fh___ _Dynamics;
+		tys::rFH _Statics;
+		ias::rFH _Dynamics;
+	protected:
+		virtual tys::fHook &CTNGetStaticsHook( void ) override
+		{
+			return _Statics;
+		}
+		virtual ias::fHook &CTNGetDynamicsHook( void ) override
+		{
+			return _Dynamics;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_Statics.reset( P );
 			_Dynamics.reset( P );
+			fHook::reset( P );
 		}
-		fh___( void )
-		{
-			reset( false );
-		}
-		~fh___( void )
-		{
-			reset();
-		}
+		qCVDTOR( rFH );
 		void Init( 
-			const hf___ &Filenames,
+			const rHF &Filenames,
+			const container &Container,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
+			fHook::Init();
 			_Statics.Init( Filenames.Statics, Mode, Behavior, ID );
-			_Dynamics.Init( Filenames.Dynamics, Mode, Behavior, ID );
+			_Dynamics.Init( Filenames.Dynamics, Container.Dynamics, Mode, Behavior, ID );
 		}
-		uys::state__ State( void ) const
-		{
-			uys::state__ State = _Statics.State();
-
-			if ( !State.IsError() )
-				if ( State != _Dynamics.State() )
-					State = uys::sInconsistent;
-
-			return State;
-		}
+# if 0
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = _Statics.Settle();
@@ -472,33 +495,8 @@ namespace ctn {
 
 			return Success;
 		}
+# endif
 	};
-
-	template <typename container> inline uys::state__ Plug(
-		container &Container,
-		fh___ &Hook )
-	{
-		uys::state__ State = tys::Plug( Container.Statics, Hook.StaticsFilesHook() );
-
-		if ( State.IsError() ) {
-			Hook.reset();
-			return State;
-		}
-
-		// Container.SetStepValue( 0 );	// Made by 'SubInit(...)'.
-
-		if ( !State.IsError() ) {
-			if ( ias::Plug( Container.Dynamics, Hook.DynamicsFilesHook() ) != State ) {
-				Hook.reset();
-				State = uys::sInconsistent;
-			} else
-				Container.SubInit( Container.Dynamics.Descriptors.Amount() );
-		}
-
-		return State;
-	}
-
-
 
 	//c The base of a volatile item. Internal use.
 	template <class st, typename r> class item_base_volatile__

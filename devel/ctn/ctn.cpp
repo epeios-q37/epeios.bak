@@ -23,7 +23,7 @@
 
 using namespace ctn;
 
-void ctn::hf___::Init(
+void ctn::rHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

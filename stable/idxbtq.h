@@ -17,28 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: idxbtq.h,v 1.49 2013/05/17 15:03:50 csimon Exp $
+// InDeX Best of Tree and Queue
 
 #ifndef IDXBTQ__INC
-#define IDXBTQ__INC
+# define IDXBTQ__INC
 
 #define IDXBTQ_NAME		"IDXBTQ"
 
-#define	IDXBTQ_VERSION	"$Revision: 1.49 $"
-
-#define IDXBTQ_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-
 #if defined( E_DEBUG ) && !defined( IDXBTQ_NODBG )
-#define IDXBTQ_DBG
+# define IDXBTQ_DBG
 #endif
 
-//D InDeX Best of Tree and Queue
-
-#include "err.h"
-#include "cpe.h"
-#include "idxque.h"
-#include "idxbtr.h"
+# include "err.h"
+# include "cpe.h"
+# include "idxque.h"
+# include "idxbtr.h"
 
 namespace idxbtq {
 	using idxbtr::tree_index_;
@@ -233,28 +226,54 @@ namespace idxbtq {
 
 	E_AUTO1( tree_queue_index )
 
-	struct hf___
+	class fHook
+	{
+	protected:
+		virtual idxbtr::fHook &IDXBTQGetTreeHook( void ) = 0;
+		virtual idxque::fHook &IDXBTQGetQueueHook( void ) = 0;
+	public:
+		qCALLBACK_DEF( Hook );
+		idxbtr::fHook &GetTreeHook( void )
+		{
+			return IDXBTQGetTreeHook();
+		}
+		idxque::fHook &GetQueueHook( void )
+		{
+			return IDXBTQGetQueueHook();
+		}
+	};
+
+	template <typename index> inline bso::fBool Plug(
+		index &Index,
+		fHook &Hook )
+	{
+		bso::fBool Exists = idxbtr::Plug( Index, Hook.GetTreeHook() );
+
+		return idxque::Plug(Index, Hook.GetQueueHook() ) || Exists;
+	}
+
+	struct rHF
 	{
 	public:
-		idxbtr::hf___ Tree;
-		idxque::hf___ Queue;
+		idxbtr::rHF Tree;
+		idxque::rHF Queue;
 		void reset( bso::bool__ P = true )
 		{
 			Tree.reset( P );
 			Queue.reset( P );
 		}
-		E_CDTOR( hf___ );
+		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
 	};
 
-
-	class fh___
+	template <typename index> class rFH
+	: public fHook
 	{
 	private:
-		idxbtr::fh___ _Tree;
-		idxque::fh___ _Queue;
+		idxbtr::rFH<index> _Tree;
+		idxque::rFH<index> _Queue;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -264,17 +283,11 @@ namespace idxbtq {
 
 			_Tree.reset( P );
 			_Queue.reset( P );
+			fHook::reset( P );
 		}
-		fh___( void ) 
-		{
-			reset( false );
-		}
-		~fh___( void ) 
-		{
-			reset();
-		}
+		qCVDTOR( rFH );
 		void Init( 
-			const hf___ &Filenames,
+			const rHF &Filenames,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -282,9 +295,10 @@ namespace idxbtq {
 			reset();
 
 			_Tree.Init( Filenames.Tree, Mode, Behavior, ID );
-
 			_Queue.Init( Filenames.Queue, Mode, Behavior, ID );
+			rHook::Init();
 		}
+		/*
 		uys::state__ State( void ) const
 		{
 			uys::state__ State = _Tree.State();
@@ -367,40 +381,20 @@ namespace idxbtq {
 
 			return ( TreeTimeStamp > QueueTimeStamp ? TreeTimeStamp : QueueTimeStamp );
 		}
+		*/
 	};
-
-
-	template <typename index> uys::state__ Plug(
-		index &Index,
-		fh___ &Hook )
-	{
-		uys::state__ State = idxbtr::Plug( Index, Hook.TreeFilesHook() );
-
-		if ( State.IsError() ) {
-			Hook.reset();
-			return State;
-		}
-
-		if ( State != idxque::Plug( Index, Hook.QueueFilesHook() ) ) {
-			Hook.reset();
-			State = uys::sInconsistent;
-		}
-
-		return State;
-	}
 
 	template <typename r> E_TTCLONE__( idxbtr::E_TSEEKERt__( r ), index_seeker__ );
 }
 
 //d An index.
-#define E_INDEXt_( r )	tree_queue_index_<r>
-#define E_INDEXt( r )	tree_queue_index<r>
+# define E_INDEXt_( r )	tree_queue_index_<r>
+# define E_INDEXt( r )	tree_queue_index<r>
 
-#define E_INDEX_	E_INDEXt_( sdr::row__ )
-#define E_INDEX		E_INDEXt( sdr::row__ )
+# define E_INDEX_	E_INDEXt_( sdr::row__ )
+# define E_INDEX		E_INDEXt( sdr::row__ )
 
-#define E_ISEEKERt__( r )	index_seeker__<r>
-#define E_ISEEKER__			index_seeker__<sdr::row__>
+# define E_ISEEKERt__( r )	index_seeker__<r>
+# define E_ISEEKER__			index_seeker__<sdr::row__>
 
-/*$END$*/
 #endif

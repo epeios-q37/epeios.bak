@@ -188,6 +188,36 @@ qRE
 	return Success;
 }
 
+void fil::Shrink(
+	const fnm::name___ &Filename,
+	size__ Size )
+{
+qRH
+	str::iString TempName;
+	flf::file_iflow___ Source;
+	flf::file_oflow___ Target;
+qRB
+	TempName.Init();
+	Filename.UTF8( TempName );
+	
+	TempName.Append( '~' );
+
+	Source.Init( Filename );
+	Target.Init( Filename );
+
+	while ( Size-- ) {
+		Target.Put( Source.Get() );
+	}
+
+	Remove( Filename );
+	Rename( TempName, Filename );
+qRR
+	Remove( TempName );
+qRT
+qRE
+}
+
+
 const fnm::name___ &fil::GetBackupFilename(
 	const fnm::name___ &Filename,
 	fnm::name___ &Buffer )

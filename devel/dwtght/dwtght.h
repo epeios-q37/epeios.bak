@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// Directory WaTcher GHosTs
+
 #ifndef DWTGHT__INC
 # define DWTGHT__INC
 
@@ -25,8 +27,6 @@
 # if defined( E_DEBUG ) && !defined( DWTGHT_NODBG )
 #  define DWTGHT_DBG
 # endif
-
-// Directory WaTcher GHosTs
 
 # include "dwtbsc.h"
 
@@ -103,18 +103,17 @@ namespace dwtght {
 	typedef lstctn::E_LXMCONTAINERt_( ghost_, grow__ ) ghosts_;
 	E_AUTO( ghosts );
 
-	typedef lstctn::fh___ ghosts_fh___;
+	typedef lstctn::rFH<ghosts_> rFH;
 
-	struct rack___ {
-
-		ghosts_fh___ FilesHook;
+	struct rRack {
+		rFH FilesHook;
 		ghosts Ghosts;
 		void reset( bso::bool__ P = true )
 		{
 			FilesHook.reset( P );
 			Ghosts.reset( P );
 		}
-		E_CDTOR( rack___ );
+		qCDTOR( rRack );
 		void Init( void )
 		{
 			Ghosts.reset();
@@ -146,12 +145,12 @@ namespace dwtght {
 	ghosts_ &GetRWGhosts(
 		const str::string_ &Root,
 		const dwtbsc::ghosts_oddities_ &GO,
-		rack___ &Rack );
+		rRack &Rack );
 
 	const ghosts_ &GetROGhosts(
 		const str::string_ &Root,
 		const dwtbsc::ghosts_oddities_ &GO,
-		rack___ &Rack );
+		rRack &Rack );
 
 	status__ CreateGhost(
 		const str::string_ &Root,

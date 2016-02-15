@@ -269,9 +269,9 @@ qRE
 
 static inline bso::bool__ Compare_(
 	dwtftr::drow__ SRow,
-	const dwtftr::kernel_ &Source,
+	const dwtftr::vKernel &Source,
 	dwtftr::drow__ TRow,
-	const dwtftr::kernel_ &Target,
+	const dwtftr::vKernel &Target,
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
@@ -419,9 +419,9 @@ qRE
 
 static bso::bool__ inline Compare_(
 	dwtftr::drow__ SRow,
-	const dwtftr::kernel_ &Source,
+	const dwtftr::vKernel &Source,
 	dwtftr::drow__ TRow,
-	const dwtftr::kernel_ &Target,
+	const dwtftr::vKernel &Target,
 	frows_ &Rows,
 	files_ &Files,
 	names_ &Names )
@@ -497,7 +497,7 @@ qRE
 static void Put_(
 	drow__ Parent,
 	dwtftr::drow__ Row,
-	const dwtftr::kernel_ &Kernel,
+	const dwtftr::vKernel &Kernel,
 	frows_ &FRows,
 	files_ &Files,
 	drows_ &DRows,
@@ -516,8 +516,8 @@ static void Put_(
 
 
 drow__ dwtcpr::Compare(
-	const dwtftr::kernel_ &Source,
-	const dwtftr::kernel_ &Target,
+	const dwtftr::vKernel &Source,
+	const dwtftr::vKernel &Target,
 	scene_ &Scene,
 	comparison_observer__ &Observer )
 {

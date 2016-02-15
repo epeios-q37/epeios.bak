@@ -256,7 +256,7 @@ namespace flsq {
 		// nom du fichier
 		fnm::name___ _Name;
 		// taille du fichier
-		sdr::size__ TailleFichier_;	// 'sdr::size__' et non 'fil::size__', car considr comme un 'storage', et donc soumis  ses limites.
+//		sdr::size__ TailleFichier_;	// 'sdr::size__' et non 'fil::size__', car considr comme un 'storage', et donc soumis  ses limites.
 		struct {
 			int
 				// signale si le Stream est ouvert ou non
@@ -297,6 +297,7 @@ namespace flsq {
 
 			return Success;
 		}
+		/*
 		void _AdjustPhysicalFileSize( void )	// Ajuste la taille physique du fichier  celle suppose.
 		{
 			if ( ( Temoin_.Mode != fil::mReadOnly ) && (  TailleFichier_ != 0 ) ) {
@@ -320,7 +321,9 @@ namespace flsq {
 							ReleaseFile();
 				}
 			}
+		
 		}
+		*/
 	protected:
 		void Read(
 			position__ Position,
@@ -339,14 +342,8 @@ namespace flsq {
 					
 				if ( Amount <= 0 ) {
 					if ( Amount == 0 ) {
-						if ( ( Position + Nombre ) <= TailleFichier_ )	{ /* Lors d'une allocation, la nouvelle taille est note, mais la taille du fichier n'est pas modifie
-																		   (gain de temps). Or, certaines bibliothques ('MMM', par exemple) lisent un emplacement allou
-																		   avant d'avoir crit dedans, on considre donc que la quantit, si correcte par rapport  la taille alloue,
-																		   de donnes demande est disponible, peu importe le contenu.
-																		*/
-							Amount = Nombre;
-						} else
-							qRFwk();
+						qRFwk();	// May be we should not generate an error, due to the behavior of some lybrary ('AGS' ? ).
+						Amount = Nombre;
 					} else
 						qRFwk();
 				}
@@ -386,22 +383,10 @@ namespace flsq {
 */		}
 		void Allocate( bso::size__ Capacite )
 		{
-			if ( ( TailleFichier_ == 0 ) && fil::Exists( _Name ) ) {
-				fil::size__ RawFileSize = fil::GetSize( _Name );
-
-				if ( RawFileSize > SDR_SIZE_MAX )
-					qRFwk();
-
-				TailleFichier_ = (sdr::size__)RawFileSize;
+			if ( fil::Exists( _Name ) ) {
+				if ( Capacite <= fil::GetSize( _Name ) )
+					qRFwk();	// Maybe not an error, so this method should do nothing.
 			}
-
-			if ( Capacite > TailleFichier_ )
-				TailleFichier_ = Capacite;
-		}
-		void Flush( void )
-		{
-			if ( Temoin_.Ouvert )
-				File_.Flush();
 		}
 	public:
 		E_CVDTOR( file_storage___ )
@@ -427,7 +412,7 @@ namespace flsq {
 			Temoin_.Persistant = false;
 			Temoin_.Interne = false;
 			Temoin_.Mode = fil::m_Undefined;
-			TailleFichier_ = 0;
+//			TailleFichier_ = 0;
 			_Row = qNIL;
 			_ID = Undefined;
 			_EpochTimeStamp = 0;
@@ -486,7 +471,7 @@ namespace flsq {
 			// initialise l'objet avec le nom 'NomFichier'; si NULL, cration d'un nom
 		void ReleaseFile( bso::bool__ ReportClosing = true )
 		{
-			_AdjustPhysicalFileSize();
+//			_AdjustPhysicalFileSize();
 
 			if ( Temoin_.Ouvert ) {
 				File_.reset();
@@ -497,7 +482,42 @@ namespace flsq {
 
 			Temoin_.Ouvert = 0;
 		}
-			// libre le File Descriptor
+		void AdjustSize( fil::size__ Size )
+		{
+			Flush();	// To update the physical size of the file, so that 'GetSize()' returns the correct value.
+
+			switch ( bso::Compare( Size, fil::GetSize( _Name ) ) ) {
+			case -1:
+				ReleaseFile();
+				fil::Shrink( _Name, Size );
+				break;
+			case 0:
+				fil::Touch( _Name );
+				break;
+			case 1:
+				{
+					sdr::byte__ Datum = 0;
+					
+					Open_( true );
+				
+					File_.Seek( Size - 1 );
+
+					if ( File_.Write( &Datum, 1 ) != 1 ) {
+						if ( !Temoin_.Manuel )
+							ReleaseFile();
+
+						qRLbr();
+					}
+				}	
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+
+	
+		}
+		// libre le File Descriptor
 		void Manual( void )
 		{
 			Temoin_.Manuel = 1;
@@ -540,7 +560,7 @@ namespace flsq {
 				if ( !fil::Remove( _Name ) )
 					qRLbr();
 
-			TailleFichier_ = 0;
+//			TailleFichier_ = 0;
 		}
 		const fnm::name___ &GetFileName( void ) const
 		{
@@ -576,6 +596,11 @@ namespace flsq {
 		bso::bool__ CreateFile( err::handling__ ErrHandle = err::h_Default )
 		{
 			return Open_( false, ErrHandle );
+		}
+		void Flush( void )
+		{
+			if ( Temoin_.Ouvert )
+				File_.Flush();
 		}
 		E_RODISCLOSE__( time_t, EpochTimeStamp );
 		_file___ &File( void )

@@ -254,13 +254,15 @@ namespace tys {
 	E_AUTO2( storage )
 
 #ifndef FLM__COMPILATION
-	using uys::fh___;
+	using uys::fHook;
 
-	using uys::hf___;
+	using uys::rFH;
 
-	template <typename storage> inline uys::state__ Plug(
+	using uys::rHF;
+
+	template <typename storage> inline bso::fBool Plug(
 		storage &Storage,
-		fh___ &Hook )
+		fHook &Hook )
 	{
 		return uys::Plug( Storage.GetUnderlyingStorage(), Hook );
 	}

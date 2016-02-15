@@ -125,18 +125,18 @@ namespace idxque {
 
 	E_AUTO1( queue_index );
 
-	using que::hf___;
+	using que::fHook;
 
-	using que::fh___;
-
-	template <typename index> uys::state__ Plug(
+	template <typename index> inline bso::fBool Plug(
 		index &Index,
-		fh___ &Hook )
+		fHook &Hook )
 	{
 		return que::Plug( Index, Hook );
 	}
 
-	
+	using que::rHF;
+	using que::rFH;
+
 	#define E_IQUEUEt_( r )	queue_index_<r>
 	#define E_IQUEUEt( r )	queue_index<r>
 	

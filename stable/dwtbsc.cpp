@@ -79,10 +79,10 @@ sort_type__ dwtbsc::GetSortType( const str::string_ &Pattern )
 # define I( n, p )\
 	n.Init();\
 	fnm::BuildPath( Path, Basename, #p, n );\
-	n##_.Init( "", n )
+	this->n.Init( "", n )
 
 
-void dwtbsc::kernel_hf___::Init(
+void dwtbsc::rHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
@@ -146,30 +146,6 @@ const fnm::name___ &dwtbsc::GetGhostsDataDirName(
 		State = uys::sInconsistent;\
 		qRReturn;\
 	}\
-
-uys::state__ dwtbsc::Plug(
-	kernel_ &Kernel,
-	kernel_fh___ &Hook )
-{
-	uys::state__ State = uys::s_Undefined;
-qRH
-qRB
-	State = bch::Plug( Kernel.Goofs, Hook.Goofs_ );
-
-	if ( State.IsError() )
-		qRReturn;
-
-	P( bch, Files );
-	P( ctn, Directories );
-	P( ctn, Names );
-	P( ctn, Oddities );
-qRR
-qRT
-	if ( State.IsError() )
-		Hook.reset();
-qRE
-	return State;
-}
 
 void dwtbsc::basic_observer___::Report_(
 	bso::uint__ Handled,

@@ -620,20 +620,57 @@ namespace bch {
 	#define E_BUNCH_( Type )	E_BUNCHt_( Type, sdr::row__ )
 
 // #ifndef FLS__COMPILATION
-	using tys::fh___;
+	using tys::fHook;
 
-	using tys::hf___;
-
-	template <typename bunch> uys::state__ Plug(
+	template <typename bunch> bso::fBool Plug(
 		bunch &Bunch,
-		fh___ &Hook )
+		fHook& Hook )
 	{
-		uys::state__ State = tys::Plug( Bunch, Hook );
+		bso::bool__ Exists = tys::Plug( Bunch, Hook ) ;
 
-		Bunch.Allocate( Hook.Size() / Bunch.GetItemSize(), aem::mFitted );
+		qSDf &SD = Hook.GetSD();
 
-		return State;
+		Bunch.Allocate( SD.Size() / Bunch.GetItemSize(), aem::mFitted );
+
+		return Exists;
 	}
+
+	using tys::rHF;
+
+	template <typename bunch> class rFH
+	: public fHook
+	{
+	private:
+		tys::rFH FH_;
+		qCRVM( bunch, B_, Bunch_ );
+	protected:
+		virtual qSDf &UYSGetSD( void ) override
+		{
+			return FH_.GetSD();
+		}
+	public:
+		void reset( bso::fBool P = true )
+		{
+			if ( P ) {
+				FH_.AdjustSize( B_().Amount() );
+				FH_.ReleaseFiles();
+			}
+
+			FH_.reset( P );
+			Bunch_ = NULL;
+		}
+		qCVDTOR( rFH );
+		void Init(
+			const rHF &Filenames,
+			const bunch &Bunch,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID )
+		{
+			FH_.Init( Filenames, Mode, Behavior, ID );
+			Bunch_ = &Bunch;
+		}
+	};
 // #endif
 
 	typedef E_BUNCH_( sdr::row__ ) relations_;

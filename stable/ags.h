@@ -1436,21 +1436,18 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 	E_AUTO( aggregated_storage )
 
-	using uys::fh___;
+	using uys::fHook;
 
-	using uys::hf___;
-
-	inline uys::state__ Plug(
-		aggregated_storage_ &AStorage,
-		fh___ &Hook )
+	inline bso::fBool Plug(
+		aggregated_storage_ &Storage,
+		fHook &Hook )
 	{
-		uys::state__ State = uys::Plug( AStorage.Storage, Hook );
-
-		if ( State.IsError() )
-			AStorage.S_.Free.Init();
-
-		return State;
+		return uys::Plug( Storage.Storage, Hook );
 	}
+
+	using uys::rHF;
+	using uys::rFH;
+
 # define qAS_	ags::aggregated_storage_
 # define qAS	ags::aggregated_storage
 }

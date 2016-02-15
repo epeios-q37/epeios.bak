@@ -553,6 +553,11 @@ namespace fil {
 		const fnm::name___ &Filename,
 		err::handling__ ErrorHandling = err::h_Default );	// Cre un fichier de nom 'FileName'.
 
+	// Reduce file 'Filename' to 'Size'.
+	void Shrink(
+		const fnm::name___ &Filename,
+		size__ Size );
+
 # ifdef FIL__WIN
 	inline bso::bool__ MakeNormal(
 		const fnm::name___ &Filename,

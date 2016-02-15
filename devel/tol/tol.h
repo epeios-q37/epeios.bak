@@ -281,7 +281,6 @@ public:\
 	type *variable;\
 	qPM( type, method, variable )
 
-
 // Reference Method.
 #define qRM( type, method, variable )\
 	type &method( void ) const\
@@ -296,6 +295,21 @@ public:\
 #define qRVM( type, method, variable )\
 	type *variable;\
 	qRM( type, method, variable )
+
+// 'const' reference Method.
+#define qCRM( type, method, variable )\
+	const type &method( void ) const\
+	{\
+		if ( variable == NULL )\
+			qRFwk();\
+\
+		return *variable;\
+	}
+
+// 'const' reference variable and method.
+#define qCRVM( type, method, variable )\
+	const type *variable;\
+	qCRM( type, method, variable )
 
 # define qCDEF( type, name, value ) static const type name = value
 

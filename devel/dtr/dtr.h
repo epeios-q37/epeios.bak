@@ -17,25 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// Dynamic TRee 
+
 #ifndef DTR__INC
-#define DTR__INC
+# define DTR__INC
 
-#define DTR_NAME		"DTR"
+# define DTR_NAME		"DTR"
 
-#define	DTR_VERSION	"$Revision: 1.27 $"
+# if defined( E_DEBUG ) && !defined( DTR_NODBG )
+#  define DTR_DBG
+# endif
 
-#define DTR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-#if defined( E_DEBUG ) && !defined( DTR_NODBG )
-#define DTR_DBG
-#endif
-
-//D Dynamic TRee 
-
-#include "err.h"
-#include "flw.h"
-#include "que.h"
-#include "btr.h"
+# include "err.h"
+# include "flw.h"
+# include "que.h"
+# include "btr.h"
 
 
 namespace dtr {
@@ -187,7 +183,7 @@ namespace dtr {
 				Tree.ForceParent( Next, Parent );
 			}
 		}
-	#if 0
+# if 0
 		// Swap 'Node1' and 'Node2'. Both nodes must be from the same queue.
 		void Swap(
 			r Node1,
@@ -209,7 +205,7 @@ namespace dtr {
 					Tree.BecomeRight( Node1, Parent );
 			}
 		}
-	#endif
+# endif
 		//f Return first node of 'Node'.
 		r FirstChild( r Node ) const
 		{
@@ -305,10 +301,10 @@ namespace dtr {
 				} else if ( !Browser._GotoParent && HasNextSibling( Position ) ) {
 					Position = NextSibling( Position );
 					Kinship = kSibling;
-#ifdef DTR_DBG
+# ifdef DTR_DBG
 				} else if ( !HasParent( Position ) ) {
 					qRFwk();
-#endif
+# endif
 				} else {
 					Position = Parent( Position );
 					Kinship = kParent;
@@ -322,10 +318,10 @@ namespace dtr {
 				} else if ( HasNextSibling( Position ) ) {
 					Position = NextSibling( Position );
 					Kinship = kSibling;
-#ifdef DTR_DBG
+# ifdef DTR_DBG
 				} else if ( !HasParent( Position ) ) {
 					qRFwk();
-#endif
+# endif
 				} else {
 					Position = Parent( Position );
 					Kinship = kParent;
@@ -356,60 +352,91 @@ namespace dtr {
 
 	E_AUTO1( dynamic_tree )
 
-	#define E_DTREEt( r )	dynamic_tree< r >
-	#define E_DTREEt_( r )	dynamic_tree_< r >
+# define E_DTREEt( r )	dynamic_tree< r >
+# define E_DTREEt_( r )	dynamic_tree_< r >
 
-	#define E_DTREE		E_DTREEt( epeios::row__ )
-	#define E_DTREE_	E_DTREEt_( epeios::row__ )
+# define E_DTREE		E_DTREEt( epeios::row__ )
+# define E_DTREE_	E_DTREEt_( epeios::row__ )
 
-	class fh___;
-
-	class hf___
+	class fHook
 	{
-	private:
-		btr::hf___ Tree_;
-		que::hf___ Queue_;
+	protected:
+		virtual btr::fHook &DTRGetTreeHook( void ) = 0;
+		virtual que::fHook &DTRGetQueueHook( void ) = 0;
 	public:
+		qCALLBACK_DEF( Hook );
+		btr::fHook &GetTreeHook( void )
+		{
+			return DTRGetTreeHook();
+		}
+		que::fHook &GetQueueHook( void )
+		{
+			return DTRGetQueueHook();
+		}
+	};
+
+	template <typename dynamic_tree> bso::fBool Plug(
+		dynamic_tree &DynamicTree,
+		fHook &Hook )
+	{
+		bso::fBool Exists = btr::Plug( DynamicTree.Tree, Hook.GetTreeHook() );
+
+		return que::Plug( DynamicTree.Queue, Hook.GetQueueHook() ) || Exists;
+	}
+
+	struct rHF
+	{
+	public:
+		btr::rHF Tree;
+		que::rHF Queue;
 		void reset( bso::bool__ P = true )
 		{
-			Tree_.reset( P );
-			Queue_.reset( P );
+			Tree.reset( P );
+			Queue.reset( P );
 		}
-		E_CDTOR( hf___ );
-		void Init( void )
-		{
-
-		}
+		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
-		friend fh___;
 	};
 
-	class fh___
+	template <typename r> class rFH
+	: public fHook
 	{
 	private:
-		btr::fh___ Tree_;
-		que::fh___ Queue_;
+		btr::rFH<btr::E_BTREEt_( r )> Tree_;
+		que::rFH<que::E_QUEUEt_( r )> Queue_;
+	protected:
+		virtual btr::fHook &DTRGetTreeHook( void ) override
+		{
+			return Tree_;
+		}
+		virtual que::fHook &DTRGetQueueHook( void ) override
+		{
+			return Queue_;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Tree_.reset( P );
 			Queue_.reset( P );
+			fHook::reset( P );
 		}
-		E_CDTOR( fh___ );
+		E_CDTOR( rFH );
 		void Init(
-			const hf___ &Filenames,
+			const rHF &Filenames,
+			const E_DTREEt_( r ) &Tree,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
 			reset();
 
-			Tree_.Init( Filenames.Tree_, Mode, Behavior, ID );
-			Queue_.Init( Filenames.Queue_, Mode, Behavior, ID );
-
+			Tree_.Init( Filenames.Tree, Tree.Tree, Mode, Behavior, ID );
+			Queue_.Init( Filenames.Queue, Tree.Queue, Mode, Behavior, ID );
+			fHook::Init();
 		}
+		/*
 		uys::state__ Settle( void )
 		{
 			uys::state__ State = Tree_.Settle();
@@ -436,9 +463,9 @@ namespace dtr {
 
 			return State;
 		}
-#ifdef CPE_C_MSC
-#	undef CreateFile
-#endif
+# ifdef CPE_C_MSC
+#   undef CreateFile
+# endif
 		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
 		{
 			bso::bool__ Success =Tree_.CreateFiles( ErrorHandling );
@@ -485,23 +512,8 @@ namespace dtr {
 		template <typename dynamic_tree> friend uys::state__ Plug(
 			dynamic_tree &DynamicTree,
 			fh___ &Hook );
+		*/
 	};
-
-	template <typename dynamic_tree> uys::state__ Plug(
-		dynamic_tree &DynamicTree,
-		fh___ &Hook )
-	{
-		uys::state__ State = btr::Plug( DynamicTree.Tree, Hook.Tree_ );
-
-		if ( State.IsError() )
-			Hook.reset();
-		else if ( que::Plug( DynamicTree.Queue, Hook.Queue_ ) != State ) {
-			Hook.reset();
-			State = uys::sInconsistent;
-		}
-
-		return State;
-	}
 }
 
 #endif

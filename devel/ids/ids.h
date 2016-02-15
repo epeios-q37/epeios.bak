@@ -164,17 +164,17 @@ namespace ids {
 
 	E_AUTO1( ids_store )
 
-	using stk::rFH;
+	using stk::fHook;
 
-	using stk::rHF;
-
-	template <typename ids> uys::state__ Plug(
+	template <typename ids> bso::fBool Plug(
 		ids &Ids,
-		rFH &Hook )
+		fHook &Hook )
 	{
-		return stk::Plug( Ids, Hook );
+		return stk::Plug( Ids.Released, Hook );
 	}
 
+	using stk::rFH;
+	using stk::rHF;
 }
 
 # define E_IDS_STORE_( t )	ids_store_<t>

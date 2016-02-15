@@ -94,15 +94,16 @@ qRE
 
 static void SetGhostsFilesHook_(
 	const fnm::name___ &Path,
+	const ghosts_ &Ghosts,
 	uys::mode__ Mode,
-	ghosts_fh___ &FilesHook )
+	dwtght::rFH &FilesHook )
 {
 qRH
-	lstctn::hf___ Filenames;
+	lstctn::rHF Filenames;
 qRB
 	Filenames.Init( Path, "Ghosts_" );
 
-	FilesHook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
+	FilesHook.Init( Filenames, Ghosts, Mode, uys::bPersistent, flsq::GetId() );
 qRR
 qRT
 qRE
@@ -112,11 +113,11 @@ namespace {
 	void GetGhosts_(
 		fnm::name___ &DataDirName,
 		uys::mode__ Mode,
-		rack___ &Rack )
+		rRack &Rack )
 	{
-		SetGhostsFilesHook_( DataDirName, Mode, Rack.FilesHook );
+		SetGhostsFilesHook_( DataDirName, Rack.Ghosts, Mode, Rack.FilesHook );
 
-		if ( !lstctn::Plug( Rack.Ghosts, Rack.FilesHook ).Boolean() )
+		if ( !lstctn::Plug( Rack.Ghosts, Rack.FilesHook ) )
 			Rack.Ghosts.Init();
 	}
 }
@@ -124,7 +125,7 @@ namespace {
 ghosts_ &dwtght::GetRWGhosts(
 	const str::string_ &Root,
 	const dwtbsc::ghosts_oddities_ &GO,
-	rack___ &Rack )
+	rRack &Rack )
 {
 qRH
 	fnm::name___ Name;
@@ -155,7 +156,7 @@ qRE
 const ghosts_ &dwtght::GetROGhosts(
 	const str::string_ &Root,
 	const dwtbsc::ghosts_oddities_ &GO,
-	rack___ &Rack )
+	rRack &Rack )
 {
 qRH
 	fnm::name___ Name;
@@ -238,7 +239,7 @@ void dwtght::ShowGhosts(
 	txf::text_oflow__ &TFlow )
 {
 qRH
-	rack___ Rack;
+	rRack Rack;
 qRB
 	Rack.Init();
 

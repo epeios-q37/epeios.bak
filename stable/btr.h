@@ -17,40 +17,22 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: btr.h,v 1.50 2013/07/18 19:46:23 csimon Exp $
+// Binary Tree 
 
 #ifndef BTR__INC
-#define BTR__INC
+# define BTR__INC
 
-#define BTR_NAME		"BTR"
+# define BTR_NAME		"BTR"
 
-#define	BTR_VERSION	"$Revision: 1.50 $"
+# if defined( E_DEBUG ) && !defined( BTR_NODBG )
+#  define BTR_DBG
+# endif
 
-#define BTR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# include "err.h"
+# include "flw.h"
+# include "bch.h"
 
-#if defined( E_DEBUG ) && !defined( BTR_NODBG )
-#define BTR_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.50 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/07/18 19:46:23 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Binary Tree 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "bch.h"
-
-#if 1
+# if 1
 
 namespace btr {
 	typedef bso::u8__ level__;
@@ -252,13 +234,13 @@ namespace btr {
 			sdr::row_t__ Parent )
 		{
 			_node__ GParent = _nodes_::Get( Parent ), GLeft = _nodes_::Get( Left );
-#ifdef BTR_DBG
+#  ifdef BTR_DBG
 			if ( GParent.Left != qNIL )
 				qRFwk();
 
 			if ( ( GLeft.Parent != qNIL ) && ( GLeft.Parent != Parent ) )	// Un noeud peut avoir pour fils gauche et droit le mme noeud.
 				qRFwk();
-#endif
+#  endif
 
 			GParent.Left = Left;
 			GLeft.Parent = Parent;
@@ -273,13 +255,13 @@ namespace btr {
 		{
 			_node__ GParent = _nodes_::Get( Parent ), GRight = _nodes_::Get( Right );
 
-#ifdef BTR_DBG
+#  ifdef BTR_DBG
 			if ( GParent.Right != qNIL )
 				qRFwk();
 
 			if ( ( GRight.Parent != qNIL ) && ( GRight.Parent != Parent ) ) // Un noeud peut avoir pour fils gauche et droit le mme noeud.
 				qRFwk();
-#endif
+#  endif
 			GParent.Right = Right;
 			GRight.Parent = Parent;
 
@@ -687,10 +669,10 @@ namespace btr {
 
 			E = Right( B );
 
-#ifdef BTR_DBG
+#  ifdef BTR_DBG
 			if ( E == qNIL )
 				qRFwk();
-#endif
+#  endif
 			Cut( E );
 
 			D = Left( E );
@@ -922,27 +904,27 @@ namespace btr {
 
 	E_AUTO1( binary_tree )
 
-	using bch::hf___;
+	using bch::fHook;
 
-	using bch::fh___;
-
-	template <typename tree> uys::state__ Plug(
+	template <typename tree> inline bso::fBool Plug(
 		tree &Tree,
-		fh___ &Hook )
+		fHook &Hook )
 	{
 		return bch::Plug( Tree.Nodes, Hook );
 	}
 
+	using bch::rHF;
+	using bch::rFH;
 
-	#define E_BTREEt_( r )	binary_tree_< r >
-	#define E_BTREEt( r )	binary_tree< r >
+#  define E_BTREEt_( r )	binary_tree_< r >
+#  define E_BTREEt( r )	binary_tree< r >
 
-	#define E_BTREE_	E_BTREEt_( sdr::row__ )
-	#define E_BTREE		E_BTREEt( sdr::row__ )
+#  define E_BTREE_	E_BTREEt_( sdr::row__ )
+#  define E_BTREE		E_BTREEt( sdr::row__ )
 }
 
 
-#else	//Version portable ; pb avec gcc.
+# else	//Version portable ; pb avec gcc.
 namespace btr {
 	//c Node. Internal use.
 	template <typename r_t> class _node__
@@ -1497,10 +1479,10 @@ namespace btr {
 
 			B = Left( D );
 
-#ifdef BTR_DBG
+#  ifdef BTR_DBG
 			if ( B == qNIL )
 				qRFwk();
-#endif
+#  endif
 
 			A = Left( B );
 			C = Right( B );
@@ -1542,10 +1524,10 @@ namespace btr {
 
 			D = Right( B );
 
-#ifdef BTR_DBG
+#  ifdef BTR_DBG
 			if ( D == qNIL )
 				qRFwk();
-#endif
+#  endif
 
 			E = Right( D );
 			C = Left( B );
@@ -1615,19 +1597,18 @@ namespace btr {
 
 	E_AUTO2( binary_tree )
 
-	#define E_BTREEt_( r )	binary_tree_<r,sdr::row_t__>
-	#define E_BTREEt( r )	binary_tree<r,sdr::row_t__>
+#  define E_BTREEt_( r )	binary_tree_<r,sdr::row_t__>
+#  define E_BTREEt( r )	binary_tree<r,sdr::row_t__>
 
-	#define E_BTREE_	E_BTREEt_( sdr::row__ )
-	#define E_BTREE		E_BTREEt( sdr::row__ )
+#  define E_BTREE_	E_BTREEt_( sdr::row__ )
+#  define E_BTREE		E_BTREEt( sdr::row__ )
 
-	#define E_PBTREEt_( r )	binary_tree_<r,sdr::p_row_t__>
-	#define E_PBTREEt( r )	binary_tree<r,sdr::p_row_t__>
+#  define E_PBTREEt_( r )	binary_tree_<r,sdr::p_row_t__>
+#  define E_PBTREEt( r )	binary_tree<r,sdr::p_row_t__>
 
-	#define E_PBTREE_		E_PBTREEt_( sdr::p_row__ )
-	#define E_PBTREE		E_PBTREEt( sdr::p_row__ )
+#  define E_PBTREE_		E_PBTREEt_( sdr::p_row__ )
+#  define E_PBTREE		E_PBTREEt( sdr::p_row__ )
 }
-#endif
+# endif
 
-/*$END$*/
 #endif

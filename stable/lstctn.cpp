@@ -23,7 +23,7 @@
 
 using namespace lstctn;
 
-void lstctn::hf___::Init(
+void lstctn::rHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {

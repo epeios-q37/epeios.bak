@@ -17,27 +17,22 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// InDeX Binary TRee 
+
 #ifndef IDXBTR__INC
 # define IDXBTR__INC
 
 # define IDXBTR_NAME		"IDXBTR"
 
-# define	IDXBTR_VERSION	"$Revision: 1.57 $"
-
-# define IDXBTR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-
 # if defined( E_DEBUG ) && !defined( IDXBTR_NODBG )
 #  define IDXBTR_DBG
 # endif
 
-//D InDeX Binary TRee 
-
-#include "err.h"
-#include "btr.h"
-#include "que.h"
-#include "stk.h"
-#include "bitbch.h"
+# include "err.h"
+# include "btr.h"
+# include "que.h"
+# include "stk.h"
+# include "bitbch.h"
 
 namespace idxbtr {
 
@@ -166,7 +161,7 @@ namespace idxbtr {
 		{
 			return BaseTree.Amount();
 		}
-#if 0
+# if 0
 		r Delete(
 			r Node,
 			r Root )
@@ -204,7 +199,7 @@ namespace idxbtr {
 
 			return Root;
 		}
-#else
+# else
 		//f Remove 'Item'. Return the new root.
 		r Delete(
 			r Item,
@@ -263,7 +258,7 @@ namespace idxbtr {
 
 			return Root;
 		}
-#endif
+# endif
 		//f Mark 'Row' as greater then 'Current'. 'Current' must be the result as a search with 'seeker_'.
 		r BecomeRight(
 			r Row,
@@ -286,10 +281,10 @@ namespace idxbtr {
 		}
 		void BecomeRoot( r Node )
 		{
-#ifdef IDXBTR_DBG
+# ifdef IDXBTR_DBG
 			if ( BaseTree.HasParent( Node ) )
 				qRFwk();
-#endif
+# endif
 		}
 		r GetParent( r Node ) const
 		{
@@ -371,23 +366,26 @@ namespace idxbtr {
 
 	E_AUTO1( tree_index );
 
-	using btr::hf___;
+	using btr::fHook;
 
-	using btr::fh___;
-
-	template <typename index> uys::state__ Plug(
+	template <typename index> inline bso::fBool Plug(
 		index &Index,
-		fh___ &Hook )
+		fHook &Hook )
 	{
 		return btr::Plug( Index.BaseTree, Hook );
 	}
 
+	using btr::rHF;
 
-	#define E_IBTREEt( r )	tree_index< r >
-	#define E_IBTREEt_( r )	tree_index_< r >
+	using btr::rFH;
 
-	#define E_IBTREE	E_IBTREEt( sdr::row__ )
-	#define E_IBTREE_	E_IBTREEt_( sdr::row__ )
+
+
+# define E_IBTREEt( r )	tree_index< r >
+# define E_IBTREEt_( r )	tree_index_< r >
+
+# define E_IBTREE	E_IBTREEt( sdr::row__ )
+# define E_IBTREE_	E_IBTREEt_( sdr::row__ )
 
 	sdr::row_t__ Balance_(
 		E_IBTREE_ &Tree,
@@ -430,7 +428,7 @@ namespace idxbtr {
 	private:
 		r _Current;
 		const tree_index_<r> *Index_;
-#ifdef IDXBTR_DBG
+# ifdef IDXBTR_DBG
 		void _Test( void ) const
 		{
 			if ( Index_== NULL )
@@ -439,7 +437,7 @@ namespace idxbtr {
 			if ( _Current == qNIL )
 				qRFwk();
 		}
-#endif
+# endif
 		r _Handle( r Row )
 		{
 			if ( Row != qNIL )
@@ -479,9 +477,9 @@ namespace idxbtr {
 		//f Try to find an element greater then the current.
 		r SearchGreater( void )
 		{
-#ifdef IDXBTR_DBG
+ #ifdef IDXBTR_DBG
 			_Test();
-#endif
+# endif
 			return _Handle( GetGreater() );
 		}
 		bso::bool__ HasGreater( void ) const
@@ -495,9 +493,9 @@ namespace idxbtr {
 		}
 		r SearchLesser( void )
 		{
-#ifdef IDXBTR_DBG
+# ifdef IDXBTR_DBG
 			_Test();
-#endif
+# endif
 			return _Handle( GetLesser() );
 		}
 		bso::bool__ HasLesser( void ) const
@@ -509,8 +507,8 @@ namespace idxbtr {
 	};
 
 	//d A seeker.
-	#define E_TSEEKERt__( r )	tree_seeker__<r>
-	#define E_TSEEKER__			tree_seeker__<mdr::row__>
+# define E_TSEEKERt__( r )	tree_seeker__<r>
+# define E_TSEEKER__			tree_seeker__<mdr::row__>
 
 
 }

@@ -379,7 +379,7 @@ static void Fill_(
 	bundle_ &Bundle )
 {
 qRH
-	dwtght::rack___ GhostsRack;
+	dwtght::rRack GhostsRack;
 	itod IToD;
 	gtod GToD;
 	links Links;

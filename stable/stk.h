@@ -155,16 +155,18 @@ namespace stk {
 
 	E_ROW( row__ );
 
-	typedef bch::fh___ rFH;
+	using bch::fHook;
 
-	typedef bch::hf___ rHF;
-
-	template <typename stack> uys::state__ Plug(
+	template <typename stack> bso::fBool Plug(
 		stack &Stack,
-		rFH &Hook )
+		fHook &Hook )
 	{
 		return bch::Plug( Stack, Hook );
 	}
+
+	using bch::rFH;
+	using bch::rHF;
+
 }
 
 # define E_BSTACKt_( item, row )	bstack_< item, row >
