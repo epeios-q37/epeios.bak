@@ -406,20 +406,27 @@ namespace dwtbsc {
 			Oddities_.reset( P );
 		}
 		E_CDTOR( rFH );
-		void Init(
+		uys::eState Init_(
 			rHF &Filenames,
 			const vKernel &Kernel,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-# define M( lib, name )	name##_.Init( Filenames.name, Kernel.name, Mode, Behavior, ID )
-			M( bch, Goofs );
+			uys::eState State = Goofs_.Init_( Filenames.Goofs, Kernel.Goofs, Mode, Behavior, ID, 0 );
+
+# define M( lib, name ) \
+			if ( !State.IsError() ) {\
+				if ( name##_.Init_( Filenames.name, Kernel.name, Mode, Behavior, ID, 0 ) != State )\
+					State = uys::sInconsistent;\
+			}
+
 			M( bch, Files);
 			M( ctn, Directories );
 			M( ctn, Names );
 			M( ctn, Oddities );
 # undef M
+			return State;
 		}
 	};
 

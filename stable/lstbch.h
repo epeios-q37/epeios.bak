@@ -245,10 +245,12 @@ namespace lstbch {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Bunch.ReleaseFile();	// Sinon le 'Settle()'  ci-dessous ne fonctionne pas correctement.
-
 			if ( P ) {
-				Settle();	// Lanc explicitement, car le 'reset(...)' de '_ListFileManager' ne peut lancer son propre 'Settle(...)'.
+				_List.AdjustSize();
+				while ( _Bunch.Modification.Timestamp() >= _List.ModificationTimestamp() ) {
+					tol::EpochTime( true );
+					_List.Touch();
+				}
 			}
 
 			_Bunch.reset( P );
@@ -262,18 +264,16 @@ namespace lstbch {
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			reset();
+			uys::eState State = _Bunch.Init_( Filenames.Bunch_, Mode, Behavior, ID );
 
-			_Bunch.Init( Filenames.Bunch_, Mode, Behavior, ID );
-			_List.Init( Filenames.List_, Mode, Behavior );
-		}
-		uys::state__ Settle( void )
-		{
-			uys::state__ State = _Bunch.Settle();
-
-			if ( _Bunch.IsPersistent() && _Bunch.Exists() )
-				if ( _List.Settle( _Bunch.TimeStamp() ) != State )
+			if ( !State.IsError() ) {
+				if ( State != _List.Init( Filenames.List_, Mode, Behavior ) )
 					State = uys::sInconsistent;
+				else if ( State == uys::sExists ) {
+					if ( _Bunch.ModificationTimestamp() >= _List.ModificationTimestamp() )
+						State = uys::sInconsistent;
+				}
+			}
 
 			return State;
 		}
@@ -281,15 +281,6 @@ namespace lstbch {
 		{
 			_List.Drop();
 			_Bunch.Drop();
-		}
-		uys::state__ State( void ) const
-		{
-			uys::state__ State = _Bunch.State();
-
-			if ( State != _List.State() )
-				State = uys::sInconsistent;
-
-			return State;
 		}
 #ifdef CPE_C_MSC
 #	undef CreateFile
@@ -335,9 +326,6 @@ namespace lstbch {
 
 			return Is;
 		}
-		template <typename list_bunch> friend uys::state__ Plug(
-			list_bunch &ListBunch,
-			fh___ &Hook );
 	};
 #endif
 

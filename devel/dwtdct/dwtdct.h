@@ -223,17 +223,31 @@ namespace dwtdct {
 			Timestamps.reset( P );
 		}
 		E_CDTOR( files_data_fh___ );
-		void Init(
+		uys::eState Init_(
 			files_data_hf___ &Filenames,
 			const files_data_ &FilesData,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Names.Init( Filenames.Names, FilesData.Names, Mode, Behavior, ID );
-			Exclusions.Init( Filenames.Exclusions, FilesData.Exclusions, Mode, Behavior, ID );
-			Sizes.Init( Filenames.Sizes, FilesData.Sizes, Mode, Behavior, ID );
-			Timestamps.Init( Filenames.Timestamps, FilesData.Timestamps, Mode, Behavior, ID );
+			uys::eState State = Names.Init_( Filenames.Names, FilesData.Names, Mode, Behavior, ID, 0 );
+
+			if ( !State.IsError() ) {
+				if ( Exclusions.Init_( Filenames.Exclusions, FilesData.Exclusions, Mode, Behavior, ID, 0 ) != State )
+					State = uys::sInconsistent;
+			}
+
+			if ( !State.IsError() ) {
+				if ( Sizes.Init_( Filenames.Sizes, FilesData.Sizes, Mode, Behavior, ID, 0 ) != State )
+					State = uys::sInconsistent;
+			}
+
+			if ( !State.IsError() ) {
+				if ( Timestamps.Init_( Filenames.Timestamps, FilesData.Timestamps, Mode, Behavior, ID, 0 ) != State )
+					State = uys::sInconsistent;
+			}
+
+			return State;
 		}
 	};
 
@@ -649,15 +663,21 @@ namespace dwtdct {
 			Files.reset( P );
 		}
 		E_CDTOR( ghost2files_fh___);
-		void Init(
+		uys::eState Init_(
 			ghost2files_hf___ &Filenames,
 			const ghost2files_ &G2F,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			GFRows.Init( Filenames.GFRows, G2F.GFRows, Mode, Behavior, ID );
-			Files.Init( Filenames.Files, G2F.Files, Mode, Behavior, ID );
+			uys::eState State = GFRows.Init_( Filenames.GFRows, G2F.GFRows, Mode, Behavior, ID, 0 );
+
+			if ( !State.IsError() ) {
+				if ( Files.Init_( Filenames.Files, G2F.Files, Mode, Behavior, ID ) != State )
+					State = uys::sInconsistent;
+			}
+
+			return State;
 		}
 	};
 

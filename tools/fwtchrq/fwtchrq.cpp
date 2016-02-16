@@ -165,7 +165,7 @@ qRH
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::basic_exploration_observer___ ExplorationObserver;
-	dwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
+	dwtdct::rBasicGhostsSettingObserver GhostsSettingObserver;
 	str::string ExplorationMessage, UpdateMessage;
 	dwtdct::ghost2files_rack___ G2FRack;
 	dwtftr::basic_processing_observer___ ProcessingObserver;
@@ -235,7 +235,7 @@ qRH
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::basic_exploration_observer___ ExplorationObserver;
-	dwtdct::basic_ghosts_setting_observer___ GhostsSettingObserver;
+	dwtdct::rBasicGhostsSettingObserver GhostsSettingObserver;
 	str::string NoGhostMessage, GhostIgnoredMessage;
 	str::string GhostsSettingMessage, ExplorationMessage;
 	sclmisc::text_oflow_rack___ TFRack;
@@ -300,7 +300,7 @@ qRH
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::content Content;
-	dwtdct::kernel Old;
+	dwtdct::iKernel Old;
 	dwtdct::ghost2files_rack___ G2FRack;
 	dwtcpr::scene Scene;
 	dwtcpr::comparison_basic_observer___ ComparisonObserver;

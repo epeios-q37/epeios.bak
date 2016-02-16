@@ -643,6 +643,10 @@ namespace bch {
 	private:
 		tys::rFH FH_;
 		qCRVM( bunch, B_, Bunch_ );
+		void AdjustSize_( time_t ReferenceTimestamp )
+		{
+			FH_.AdjustSize( B_().Amount(), ReferenceTimestamp );
+		}
 	protected:
 		virtual qSDf &UYSGetSD( void ) override
 		{
@@ -652,7 +656,7 @@ namespace bch {
 		void reset( bso::fBool P = true )
 		{
 			if ( P ) {
-				FH_.AdjustSize( B_().Amount() );
+				AdjustSize_( 0 );
 				FH_.ReleaseFiles();
 			}
 
@@ -660,15 +664,29 @@ namespace bch {
 			Bunch_ = NULL;
 		}
 		qCVDTOR( rFH );
-		void Init(
+		uys::eState Init_(
 			const rHF &Filenames,
 			const bunch &Bunch,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			flsq::id__ ID )
+			flsq::id__ ID,
+			time_t ReferenceTime )
 		{
-			FH_.Init( Filenames, Mode, Behavior, ID );
 			Bunch_ = &Bunch;
+
+			return FH_.Init_( Filenames, Mode, Behavior, ID, ReferenceTime );
+		}
+		void AdjustSize( time_t ReferenceTimestamp )
+		{
+			AdjustSize_( ReferenceTimestamp );
+		}
+		void Touch( bso::fBool )
+		{
+			Fh_.Touch();
+		}
+		time_t ModificationTimestamp( void ) const
+		{
+			return FH_.ModificationTimestamp();
 		}
 	};
 // #endif

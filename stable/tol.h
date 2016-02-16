@@ -76,10 +76,14 @@ namespace ags {
 /****** New version ******/
 /*************************/
 
-# define qENUM( name )\
-	enum e##name : bso::bEnum
+# define qENUM( name )	enum e##name : bso::bEnum
 
-# define qROW( name ) E_TMIMIC__( sdr::bRow, f##name )
+# define qXENUM( name, prefix )	typedef tol::extended_enum__<e##name##_, prefix##_False, prefix##_Error, prefix##_Undefined> e##name
+
+# define TOL_ROW_( name ) E_TMIMIC__( sdr::bRow, name )
+
+# define qROW( name ) TOL_ROW_( f##name )
+# define qROWr( name ) TOL_ROW_( r##name )
 
 // Declaration of standardized constructor.
 # define TOL_CTORD_( name )\

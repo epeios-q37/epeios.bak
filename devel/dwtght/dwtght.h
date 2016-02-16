@@ -108,14 +108,25 @@ namespace dwtght {
 	struct rRack {
 		rFH FilesHook;
 		ghosts Ghosts;
+		flsq::rId Id;
 		void reset( bso::bool__ P = true )
 		{
 			FilesHook.reset( P );
 			Ghosts.reset( P );
+
+			if ( Id != flsq::Undefined )
+				flsq::ReleaseId( Id );
+
+			Id = flsq::Undefined;
 		}
 		qCDTOR( rRack );
 		void Init( void )
 		{
+			if ( Id != flsq::Undefined )
+				flsq::ReleaseId( Id );
+
+			Id = flsq::GetId();
+
 			Ghosts.reset();
 			FilesHook.reset();
 

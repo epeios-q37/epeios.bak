@@ -71,16 +71,26 @@
 #  include "mtx.h"
 # endif
 
+/**************/
+/**** NEW *****/
+/**************/
+
+namespace flsq {
+	qROWr( Id );
+	qCDEF( rId, Undefined, qNIL );
+}
+
+/**************/
+/**** OLD *****/
+/**************/
+
 
 namespace flsq {
 	extern fdr::size__ MaxFileAmount;
 
 	typedef bso::size__ position__;
-	// type dfinissant une position dans la mmoire
 
-	// Identifiant sous lequel est regroup un ensemble de fichiers.
-	E_ROW( id__ );
-	E_CDEF( id__, Undefined, qNIL );
+	typedef rId id__;
 
 	id__ GetId( void );
 
@@ -272,7 +282,7 @@ namespace flsq {
 		} Temoin_;
 		row__ _Row;	// Pour le suivi des 'file handler' ouverts.
 		// diffrents tmoins
-		time_t _EpochTimeStamp;	// Last access time.
+		time_t AccessEpochTimestamp_;	// Last access time.
 		id__ _ID;
 	// Fonctions
 		bso::bool__ Open_(
@@ -292,7 +302,7 @@ namespace flsq {
 			if ( Success ) {
 				_ReportFileUsing( _Row, ToFlush );
 
-				_EpochTimeStamp = tol::EpochTime( false );
+				AccessEpochTimestamp_ = tol::EpochTime( false );
 			}
 
 			return Success;
@@ -415,7 +425,7 @@ namespace flsq {
 //			TailleFichier_ = 0;
 			_Row = qNIL;
 			_ID = Undefined;
-			_EpochTimeStamp = 0;
+			AccessEpochTimestamp_ = 0;
 		}
 		void Init(
 			id__ ID,
@@ -468,7 +478,18 @@ namespace flsq {
 			else if ( Creation != flsq::cFirstUse )
 				qRFwk();
 		}
-			// initialise l'objet avec le nom 'NomFichier'; si NULL, cration d'un nom
+		void Touch( time_t ReferenceTime = 0 )
+		{
+			fil::Touch( _Name );
+
+			if ( ReferenceTime != 0 ) {
+				while ( ModificationTimestamp() <= ReferenceTime ) {
+					tol::EpochTime( true );
+
+					fil::Touch( _Name );
+				}
+			}
+		}
 		void ReleaseFile( bso::bool__ ReportClosing = true )
 		{
 //			_AdjustPhysicalFileSize();
@@ -482,7 +503,9 @@ namespace flsq {
 
 			Temoin_.Ouvert = 0;
 		}
-		void AdjustSize( fil::size__ Size )
+		void AdjustSize(
+			fil::size__ Size,
+			time_t ReferenceTime )
 		{
 			Flush();	// To update the physical size of the file, so that 'GetSize()' returns the correct value.
 
@@ -515,19 +538,17 @@ namespace flsq {
 				break;
 			}
 
-	
+			if ( ReferenceTime != 0 )
+				Touch( ReferenceTime );
 		}
-		// libre le File Descriptor
 		void Manual( void )
 		{
 			Temoin_.Manuel = 1;
 		}
-			// indique que la fermeture du fichier se fait manuellement
 		void Automatic( void )
 		{
 			Temoin_.Manuel = 0;
 		}
-			// indique que la fermeture du fichier se fait automatiquement
 		void Persistent( void )
 		{
 			Temoin_.Persistant = true;
@@ -536,18 +557,15 @@ namespace flsq {
 		{
 			return Temoin_.Persistant != 0;
 		}
-		// bascule en mode d'acces 'Acces'.
 		fil::mode__ Mode( fil::mode__ Mode )
 		{
-			if ( Temoin_.Mode != Mode )
-			{
+			if ( Temoin_.Mode != Mode )	{
 				tol::Swap( Temoin_.Mode, Mode );
 				ReleaseFile();
 			}
 
 			return Mode;
 		}
-		// Retourne le mode d'accs.
 		fil::mode__ Mode( void ) const
 		{
 			return Temoin_.Mode;
@@ -559,20 +577,18 @@ namespace flsq {
 			if ( ( _Name.Amount() != 0 ) && fil::Exists( _Name ) )
 				if ( !fil::Remove( _Name ) )
 					qRLbr();
-
-//			TailleFichier_ = 0;
 		}
 		const fnm::name___ &GetFileName( void ) const
 		{
 			return _Name;
 		}
-		bso::bool__ Exists( void ) const
+		bso::bool__ FileExists( void ) const
 		{
 			return fil::Exists( _Name );
 		}
-		time_t TimeStamp( void ) const
+		time_t ModificationTimestamp( void ) const
 		{
-			if ( Exists() )
+			if ( FileExists() )
 				return fil::GetLastModificationTime( _Name );
 			else
 				return 0;
@@ -584,7 +600,7 @@ namespace flsq {
 
 			return File_.Size();
 #	else
-			if ( Exists() )
+			if ( FileExists() )
 				return fil::GetSize( _Name );
 			else
 				return 0;
@@ -602,7 +618,7 @@ namespace flsq {
 			if ( Temoin_.Ouvert )
 				File_.Flush();
 		}
-		E_RODISCLOSE__( time_t, EpochTimeStamp );
+		qRODISCLOSEf( time_t, AccessEpochTimestamp );
 		_file___ &File( void )
 		{
 			return File_;

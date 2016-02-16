@@ -128,15 +128,15 @@ namespace dwtftr {
 			Kernel.reset( P );
 		}
 		E_CDTOR( file_tree_fh___ );
-		void Init(
+		void Init_(
 			file_tree_hf___ &Filenames,
 			const file_tree_ &FileTree,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Tree.Init( Filenames.Tree, FileTree, Mode, Behavior, ID );
-			Kernel.Init( Filenames.Kernel, FileTree, Mode, Behavior, ID );
+			Tree.Init_( Filenames.Tree, FileTree, Mode, Behavior, ID );
+			Kernel.Init_( Filenames.Kernel, FileTree, Mode, Behavior, ID );
 		}
 	};
 
@@ -152,10 +152,16 @@ namespace dwtftr {
 	struct file_tree_rack___ {
 		file_tree_fh___ Hook;
 		file_tree Tree;
+		flsq::rId Id;
 		void reset( bso::bool__ P = true )
 		{
 			Hook.reset( P );
 			Tree.reset( P );
+
+			if ( Id != flsq::Undefined )
+				flsq::ReleaseId( Id );
+
+			Id = flsq::Undefined;
 		}
 		E_CDTOR( file_tree_rack___ );
 		void Init( void )
@@ -163,6 +169,10 @@ namespace dwtftr {
 			Hook.reset();
 			Tree.reset();
 
+			if ( Id != flsq::Undefined )
+				flsq::ReleaseId( Id );
+
+			Id = flsq::GetId();
 			// L'initialisation proprement dite sera réalisée par des fonctions dédiées.
 		}
 	};

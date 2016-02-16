@@ -390,7 +390,22 @@ namespace que {
 	}
 
 	using bch::rHF;
-	using bch::rFH;
+	template <typename queue> E_TTCLONE__( bch::rFH<queue>, rFH_ );
+
+	template <typename queue> class rFH
+	: public rFH_<queue>
+	{
+	public:
+		uys::eState Init_(
+			const rHF &Filenames,
+			const queue &Queue,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID )
+		{
+			return rFH_<queue>::Init_( Filenames, Queue, Mode, Behavior, ID, 0 );
+		}
+	};
 
 # endif
 

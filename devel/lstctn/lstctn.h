@@ -214,12 +214,16 @@ namespace lstctn {
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			if ( P ) {
+				_List.AdjustSize( _Container.ModificationTimestamp() );
+			}
+
 			_Container.reset( P );
 			_List.reset( P );
 			fHook::reset( P );
 		}
 		qCVDTOR( rFH );
-		void Init(
+		void Init_(
 			const rHF &Filenames,
 			const list_container &ListContainer,
 			uys::mode__ Mode,
@@ -228,8 +232,8 @@ namespace lstctn {
 		{
 			reset();
 
-			_Container.Init( Filenames.Container, ListContainer, Mode, Behavior, ID );
-			_List.Init( Filenames.List, ListContainer, Mode, Behavior, ID );
+			_Container.Init_( Filenames.Container, ListContainer, Mode, Behavior, ID, 0 );
+			_List.Init_( Filenames.List, ListContainer, Mode, Behavior, ID, _Container.ModificationTimestamp() );
 			fHook::Init();
 		}
 		/*

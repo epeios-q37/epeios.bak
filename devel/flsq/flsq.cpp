@@ -343,7 +343,7 @@ void flsq::ReleaseInactiveFiles_(
 
 	time_t Now = tol::EpochTime( false );
 
-	while ( MaxAmount-- && ( Queue_.Tail() != qNIL ) && ( ( Now - List_( Queue_.Tail() ).File->EpochTimeStamp() ) <= Delay ) ) {
+	while ( MaxAmount-- && ( Queue_.Tail() != qNIL ) && ( ( Now - List_( Queue_.Tail() ).File->AccessEpochTimestamp() ) <= Delay ) ) {
 		List_( Queue_.Tail() ).File->ReleaseFile( false );
 		Queue_.Delete( Queue_.Tail() );
 	}

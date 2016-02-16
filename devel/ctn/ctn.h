@@ -398,16 +398,32 @@ namespace ctn {
 			fHook::reset( P );
 		}
 		qCVDTOR( rFH );
-		void Init( 
+		uys::eState Init_( 
 			const rHF &Filenames,
 			const container &Container,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			flsq::id__ ID )
+			flsq::id__ ID,
+			time_t ReferenceTime )
 		{
 			fHook::Init();
-			_Statics.Init( Filenames.Statics, Mode, Behavior, ID );
-			_Dynamics.Init( Filenames.Dynamics, Container.Dynamics, Mode, Behavior, ID );
+
+			uys::eState State =_Statics.Init_( Filenames.Statics, Mode, Behavior, ID, 0 );
+
+			if ( !State.IsError() )
+				if ( _Dynamics.Init_( Filenames.Dynamics, Container.Dynamics, Mode, Behavior, ID ) != State )
+					State = uys::sInconsistent;
+
+			return State;
+		}
+		time_t ModificationTimestamp( void ) const
+		{
+			time_t Statics, Dynamics;
+
+			Statics = _Statics.ModificationTimestamp();
+			Dynamics = _Dynamics.ModificationTimestamp();
+
+			return ( Statics > Dynamics ? Statics : Dynamics );
 		}
 # if 0
 		uys::state__ Settle( void )
@@ -474,15 +490,6 @@ namespace ctn {
 				qRFwk();
 
 			return Exists;
-		}
-		time_t TimeStamp( void ) const
-		{
-			time_t StaticsTimeStamp, DynamicsTimeStamp;
-
-			StaticsTimeStamp = _Statics.TimeStamp();
-			DynamicsTimeStamp = _Dynamics.TimeStamp();
-
-			return ( StaticsTimeStamp > DynamicsTimeStamp ? StaticsTimeStamp : DynamicsTimeStamp );
 		}
 		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
 		{

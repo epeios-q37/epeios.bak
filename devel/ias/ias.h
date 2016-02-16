@@ -516,15 +516,30 @@ namespace ias {
 			_Storage.reset( P );
 		}
 		qCDTOR( rFH );
-		void Init( 
+		uys::eState Init_( 
 			const rHF &Filenames,
 			const indexed_aggregated_storage_ &Storage,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			_Descriptors.Init( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID );
-			_Storage.Init( Filenames.Storage, Mode, Behavior, ID );
+			uys::eState State = _Descriptors.Init_( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID, 0 );
+
+			if ( !State.IsError() ) {
+				if ( State != _Storage.Init_( Filenames.Storage, Mode, Behavior, ID, 0 ) )
+					State = uys::sInconsistent;
+			}
+
+			return State;
+		}
+		time_t ModificationTimestamp( void ) const
+		{
+			time_t Descriptors, AStorage;
+
+			Descriptors = _Descriptors.ModificationTimestamp();
+			AStorage = _Storage.ModificationTimestamp();
+
+			return ( Descriptors > AStorage ? Descriptors : AStorage );
 		}
 		/*
 		uys::mode__ Mode( uys::mode__ Mode )
@@ -589,15 +604,6 @@ namespace ias {
 				qRFwk();
 
 			return Exists;
-		}
-		time_t TimeStamp( void ) const
-		{
-			time_t DescriptorsTimeStamp, AStorageTimeStamp;
-
-			DescriptorsTimeStamp = _Descriptors.TimeStamp();
-			AStorageTimeStamp = _Storage.TimeStamp();
-
-			return ( DescriptorsTimeStamp > AStorageTimeStamp ? DescriptorsTimeStamp : AStorageTimeStamp );
 		}
 #ifdef CPE_C_MSC
 #	undef CreateFile

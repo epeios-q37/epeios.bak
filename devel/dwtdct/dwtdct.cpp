@@ -1416,7 +1416,8 @@ namespace {
 	qRB
 		Filenames.Init( Path, "Files_" );
 
-		Hook.Init( Filenames, G2F, Mode, uys::bPersistent, flsq::GetId() );
+		if ( Hook.Init_(Filenames, G2F, Mode, uys::bPersistent, flsq::GetId()).IsError() )
+			qRFwk();
 	qRR
 	qRT
 	qRE

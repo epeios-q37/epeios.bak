@@ -719,14 +719,15 @@ namespace {
 		const fnm::name___ &Path,
 		const file_tree_ &FileTree,
 		uys::mode__ Mode,
-		file_tree_fh___ &FilesHook )
+		file_tree_fh___ &FilesHook,
+		flsq::rId Id )
 	{
 	qRH
 		file_tree_hf___ Filenames;
 	qRB
 		Filenames.Init( Path, "tree" );
 
-		FilesHook.Init( Filenames, FileTree, Mode, uys::bPersistent, flsq::GetId() );
+		FilesHook.Init_( Filenames, FileTree, Mode, uys::bPersistent, Id );
 	qRR
 	qRT
 	qRE
@@ -737,7 +738,7 @@ namespace {
 		uys::mode__ Mode,
 		file_tree_rack___ &Rack )
 	{
-		SetFileTreeFilesHook_( DataDirName, Rack.Tree, Mode, Rack.Hook );
+		SetFileTreeFilesHook_( DataDirName, Rack.Tree, Mode, Rack.Hook, Rack.Id );
 
 		if ( !Plug( Rack.Tree, Rack.Hook ) )
 			Rack.Tree.Init();

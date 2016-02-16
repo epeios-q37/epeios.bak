@@ -96,14 +96,15 @@ static void SetGhostsFilesHook_(
 	const fnm::name___ &Path,
 	const ghosts_ &Ghosts,
 	uys::mode__ Mode,
-	dwtght::rFH &FilesHook )
+	dwtght::rFH &FilesHook,
+	flsq::rId Id )
 {
 qRH
 	lstctn::rHF Filenames;
 qRB
 	Filenames.Init( Path, "Ghosts_" );
 
-	FilesHook.Init( Filenames, Ghosts, Mode, uys::bPersistent, flsq::GetId() );
+	FilesHook.Init_( Filenames, Ghosts, Mode, uys::bPersistent, Id );
 qRR
 qRT
 qRE
@@ -115,7 +116,7 @@ namespace {
 		uys::mode__ Mode,
 		rRack &Rack )
 	{
-		SetGhostsFilesHook_( DataDirName, Rack.Ghosts, Mode, Rack.FilesHook );
+		SetGhostsFilesHook_( DataDirName, Rack.Ghosts, Mode, Rack.FilesHook, Rack.Id );
 
 		if ( !lstctn::Plug( Rack.Ghosts, Rack.FilesHook ) )
 			Rack.Ghosts.Init();

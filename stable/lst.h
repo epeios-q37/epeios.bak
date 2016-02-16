@@ -36,16 +36,7 @@ namespace lst {
 
 	typedef ids::E_IDS_STORE_( sdr::row__ ) store_;
 
-	// Retourne l'id de la première entrée disponible (hors pile des 'released').
-	uys::state__ WriteToFile_(
-		const store_ &Store,
-		const fnm::name___ &Name );
-
-	uys::state__ ReadFromFile_(
-		const fnm::name___ &Name,
-		store_ &Store );
-
-	inline uys::state__ Test_(
+	inline uys::eState Test_(
 		const fnm::name___ &FileName,
 		time_t ReferenceTimeStamp )
 	{

@@ -423,7 +423,7 @@ namespace dtr {
 			fHook::reset( P );
 		}
 		E_CDTOR( rFH );
-		void Init(
+		uys::eState Init_(
 			const rHF &Filenames,
 			const E_DTREEt_( r ) &Tree,
 			uys::mode__ Mode,
@@ -432,9 +432,16 @@ namespace dtr {
 		{
 			reset();
 
-			Tree_.Init( Filenames.Tree, Tree.Tree, Mode, Behavior, ID );
-			Queue_.Init( Filenames.Queue, Tree.Queue, Mode, Behavior, ID );
+			uys::eState State = Tree_.Init_( Filenames.Tree, Tree.Tree, Mode, Behavior, ID );
+
+			if ( !State.IsError() ) {
+				if ( Queue_.Init_( Filenames.Queue, Tree.Queue, Mode, Behavior, ID ) != State )
+					State = uys::sInconsistent;
+			}
+
 			fHook::Init();
+
+			return State;
 		}
 		/*
 		uys::state__ Settle( void )

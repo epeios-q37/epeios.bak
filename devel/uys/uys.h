@@ -394,19 +394,6 @@ namespace uys {
 			b_amount,
 			b_Undefined
 	};
-
-	E_ENUM( _state )
-	{	// Statut de l'opration de connection.
-		sExists,		// le fichier rattach existe.
-		s_False,
-		sAbsent = s_False,		// Fichier rattach absent (ce n'est pas une erreur, cela signifie que des donnes n'ont pas encore t stockes).
-		s_Error,
-		sInconsistent = s_Error,	// Les fichiers sont dans une tat incohrent, probablement d  un arrt inopin du logiciel. Utilis par les bibliothques en amont.
-		s_amount,
-		s_Undefined
-	};
-
-	E_XENUM( state, s );
 }
 
 namespace uys {
@@ -454,6 +441,19 @@ namespace uys {
 		}
 	};
 		
+	qENUM( State_ )
+	{	// Statut de l'opration de connection.
+		sExists,		// le fichier rattach existe.
+		s_False,
+		sAbsent = s_False,		// Fichier rattach absent (ce n'est pas une erreur, cela signifie que des donnes n'ont pas encore t stockes).
+		s_Error,
+		sInconsistent = s_Error,	// Les fichiers sont dans une tat incohrent, probablement d  un arrt inopin du logiciel. Utilis par les bibliothques en amont.
+		s_amount,
+		s_Undefined
+	};
+
+	qXENUM( State, s );
+
 	// Files hook.
 	class rFH
 	: public fHook
@@ -468,15 +468,16 @@ namespace uys {
 	public:
 		void reset( bso::fBool P = true )
 		{
-			fHook::reset( P );
 			Driver_.reset( P );
+			fHook::reset( P );
 		}
 		qCDTOR( rFH );
-		void Init( 
+		eState Init_( 
 			const rHF &Filenames,
 			mode__ Mode,
 			behavior__ Behavior,
-			flsq::id__ ID )
+			flsq::id__ ID,
+			time_t ReferenceTimestamp )
 		{
 			Driver_.Init( ID, Filenames.Filename, Convert_( Mode ), flsq::cFirstUse );
 			fHook::Init();
@@ -491,6 +492,22 @@ namespace uys {
 				qRFwk();
 				break;
 			}
+
+			fHook::Init();
+
+			if ( Driver_.FileExists() ) {
+				if ( Driver_.ModificationTimestamp() <= ReferenceTimestamp )
+					return sInconsistent;
+				else
+					return sExists;
+			} else if ( ReferenceTimestamp != 0 )
+				return sInconsistent;
+			else
+				return sAbsent;
+		}
+		time_t ModificationTimestamp( void ) const
+		{
+			return Driver_.ModificationTimestamp();
 		}
 		bso::bool__ CreateFiles( err::handling__ ErrHandling = err::h_Default )
 		{
@@ -504,20 +521,15 @@ namespace uys {
 		{
 			return Convert_( Driver_.Mode() );
 		}
-		bso::fBool Settle( void )
-		{
-			if ( Mode() == mReadWrite )
-				Driver_.Flush();
-
-			return Driver_.Exists();
-		}
 		void ReleaseFiles( void )
 		{
 			Driver_.ReleaseFile();
 		}
-		void AdjustSize( fil::size__ Size )
+		void AdjustSize(
+			fil::size__ Size,
+			time_t ReferenceTimestamp )
 		{
-			Driver_.AdjustSize( Size );
+			Driver_.AdjustSize( Size, ReferenceTimestamp );
 		}
 	};
 
