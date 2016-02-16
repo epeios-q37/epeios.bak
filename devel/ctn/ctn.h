@@ -398,20 +398,19 @@ namespace ctn {
 			fHook::reset( P );
 		}
 		qCVDTOR( rFH );
-		uys::eState Init_( 
+		uys::eState Init( 
 			const rHF &Filenames,
 			const container &Container,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			flsq::id__ ID,
-			time_t ReferenceTime )
+			flsq::id__ ID )
 		{
 			fHook::Init();
 
-			uys::eState State =_Statics.Init_( Filenames.Statics, Mode, Behavior, ID, 0 );
+			uys::eState State =_Statics.Init( Filenames.Statics, Mode, Behavior, ID, 0 );
 
 			if ( !State.IsError() )
-				if ( _Dynamics.Init_( Filenames.Dynamics, Container.Dynamics, Mode, Behavior, ID ) != State )
+				if ( _Dynamics.Init( Filenames.Dynamics, Container.Dynamics, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 
 			return State;

@@ -223,27 +223,27 @@ namespace dwtdct {
 			Timestamps.reset( P );
 		}
 		E_CDTOR( files_data_fh___ );
-		uys::eState Init_(
+		uys::eState Init(
 			files_data_hf___ &Filenames,
 			const files_data_ &FilesData,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = Names.Init_( Filenames.Names, FilesData.Names, Mode, Behavior, ID, 0 );
+			uys::eState State = Names.Init( Filenames.Names, FilesData.Names, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( Exclusions.Init_( Filenames.Exclusions, FilesData.Exclusions, Mode, Behavior, ID, 0 ) != State )
+				if ( Exclusions.Init( Filenames.Exclusions, FilesData.Exclusions, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 
 			if ( !State.IsError() ) {
-				if ( Sizes.Init_( Filenames.Sizes, FilesData.Sizes, Mode, Behavior, ID, 0 ) != State )
+				if ( Sizes.Init( Filenames.Sizes, FilesData.Sizes, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 
 			if ( !State.IsError() ) {
-				if ( Timestamps.Init_( Filenames.Timestamps, FilesData.Timestamps, Mode, Behavior, ID, 0 ) != State )
+				if ( Timestamps.Init( Filenames.Timestamps, FilesData.Timestamps, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 
@@ -663,17 +663,17 @@ namespace dwtdct {
 			Files.reset( P );
 		}
 		E_CDTOR( ghost2files_fh___);
-		uys::eState Init_(
+		uys::eState Init(
 			ghost2files_hf___ &Filenames,
 			const ghost2files_ &G2F,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = GFRows.Init_( Filenames.GFRows, G2F.GFRows, Mode, Behavior, ID, 0 );
+			uys::eState State = GFRows.Init( Filenames.GFRows, G2F.GFRows, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( Files.Init_( Filenames.Files, G2F.Files, Mode, Behavior, ID ) != State )
+				if ( Files.Init( Filenames.Files, G2F.Files, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 

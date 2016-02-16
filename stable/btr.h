@@ -914,22 +914,7 @@ namespace btr {
 	}
 
 	using bch::rHF;
-	template <typename tree> E_TTCLONE__( bch::rFH<tree>, rFH_ );
-
-	template <typename tree> class rFH
-	: public rFH_<tree>
-	{
-	public:
-		uys::eState Init_(
-			const rHF &Filenames,
-			const tree &Tree,
-			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
-		{
-			return rFH_<tree>::Init_( Filenames, Tree, Mode, Behavior, ID, 0 );
-		}
-	};
+	using bch::rFH;
 
 #  define E_BTREEt_( r )	binary_tree_< r >
 #  define E_BTREEt( r )	binary_tree< r >

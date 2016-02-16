@@ -516,17 +516,17 @@ namespace ias {
 			_Storage.reset( P );
 		}
 		qCDTOR( rFH );
-		uys::eState Init_( 
+		uys::eState Init( 
 			const rHF &Filenames,
 			const indexed_aggregated_storage_ &Storage,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = _Descriptors.Init_( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID, 0 );
+			uys::eState State = _Descriptors.Init( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( State != _Storage.Init_( Filenames.Storage, Mode, Behavior, ID, 0 ) )
+				if ( State != _Storage.Init( Filenames.Storage, Mode, Behavior, ID, 0 ) )
 					State = uys::sInconsistent;
 			}
 

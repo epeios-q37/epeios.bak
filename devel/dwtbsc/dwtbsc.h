@@ -406,18 +406,18 @@ namespace dwtbsc {
 			Oddities_.reset( P );
 		}
 		E_CDTOR( rFH );
-		uys::eState Init_(
+		uys::eState Init(
 			rHF &Filenames,
 			const vKernel &Kernel,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = Goofs_.Init_( Filenames.Goofs, Kernel.Goofs, Mode, Behavior, ID, 0 );
+			uys::eState State = Goofs_.Init( Filenames.Goofs, Kernel.Goofs, Mode, Behavior, ID );
 
 # define M( lib, name ) \
 			if ( !State.IsError() ) {\
-				if ( name##_.Init_( Filenames.name, Kernel.name, Mode, Behavior, ID, 0 ) != State )\
+				if ( name##_.Init( Filenames.name, Kernel.name, Mode, Behavior, ID ) != State )\
 					State = uys::sInconsistent;\
 			}
 

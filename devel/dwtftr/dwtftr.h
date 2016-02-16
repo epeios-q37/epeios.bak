@@ -135,8 +135,8 @@ namespace dwtftr {
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Tree.Init_( Filenames.Tree, FileTree, Mode, Behavior, ID );
-			Kernel.Init_( Filenames.Kernel, FileTree, Mode, Behavior, ID );
+			Tree.Init( Filenames.Tree, FileTree, Mode, Behavior, ID );
+			Kernel.Init( Filenames.Kernel, FileTree, Mode, Behavior, ID );
 		}
 	};
 
@@ -158,8 +158,10 @@ namespace dwtftr {
 			Hook.reset( P );
 			Tree.reset( P );
 
-			if ( Id != flsq::Undefined )
-				flsq::ReleaseId( Id );
+			if ( P ) {
+				if ( Id != flsq::Undefined )
+					flsq::ReleaseId( Id );
+			}
 
 			Id = flsq::Undefined;
 		}

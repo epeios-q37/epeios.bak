@@ -223,7 +223,7 @@ namespace lstctn {
 			fHook::reset( P );
 		}
 		qCVDTOR( rFH );
-		void Init_(
+		void Init(
 			const rHF &Filenames,
 			const list_container &ListContainer,
 			uys::mode__ Mode,
@@ -232,8 +232,8 @@ namespace lstctn {
 		{
 			reset();
 
-			_Container.Init_( Filenames.Container, ListContainer, Mode, Behavior, ID, 0 );
-			_List.Init_( Filenames.List, ListContainer, Mode, Behavior, ID, _Container.ModificationTimestamp() );
+			_Container.Init( Filenames.Container, ListContainer, Mode, Behavior, ID );
+			_List.Init( Filenames.List, ListContainer, Mode, Behavior, ID, _Container.ModificationTimestamp() );
 			fHook::Init();
 		}
 		/*

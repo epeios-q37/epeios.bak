@@ -480,13 +480,17 @@ namespace flsq {
 		}
 		void Touch( time_t ReferenceTime = 0 )
 		{
-			fil::Touch( _Name );
+			ReleaseFile();
+
+			if ( !fil::Touch( _Name ) )
+				qRFwk();
 
 			if ( ReferenceTime != 0 ) {
 				while ( ModificationTimestamp() <= ReferenceTime ) {
 					tol::EpochTime( true );
 
-					fil::Touch( _Name );
+				if ( !fil::Touch( _Name ) )
+					qRFwk();
 				}
 			}
 		}
@@ -509,13 +513,14 @@ namespace flsq {
 		{
 			Flush();	// To update the physical size of the file, so that 'GetSize()' returns the correct value.
 
-			switch ( bso::Compare( Size, fil::GetSize( _Name ) ) ) {
+			switch ( bso::Compare( Size, FileSize() ) ) {
 			case -1:
 				ReleaseFile();
 				fil::Shrink( _Name, Size );
 				break;
 			case 0:
-				fil::Touch( _Name );
+				if ( FileExists() )
+					fil::Touch( _Name );
 				break;
 			case 1:
 				{
@@ -584,7 +589,10 @@ namespace flsq {
 		}
 		bso::bool__ FileExists( void ) const
 		{
-			return fil::Exists( _Name );
+			if ( _Name.IsEmpty() )
+				return false;
+			else
+				return fil::Exists( _Name );
 		}
 		time_t ModificationTimestamp( void ) const
 		{

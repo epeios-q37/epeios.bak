@@ -645,7 +645,8 @@ namespace bch {
 		qCRVM( bunch, B_, Bunch_ );
 		void AdjustSize_( time_t ReferenceTimestamp )
 		{
-			FH_.AdjustSize( B_().Amount(), ReferenceTimestamp );
+			if ( Bunch_ != NULL )
+				FH_.AdjustSize( B_().Amount(), ReferenceTimestamp );
 		}
 	protected:
 		virtual qSDf &UYSGetSD( void ) override
@@ -664,17 +665,17 @@ namespace bch {
 			Bunch_ = NULL;
 		}
 		qCVDTOR( rFH );
-		uys::eState Init_(
+		uys::eState Init(
 			const rHF &Filenames,
 			const bunch &Bunch,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID,
-			time_t ReferenceTime )
+			time_t ReferenceTime = 0 )
 		{
 			Bunch_ = &Bunch;
 
-			return FH_.Init_( Filenames, Mode, Behavior, ID, ReferenceTime );
+			return FH_.Init( Filenames, Mode, Behavior, ID, ReferenceTime );
 		}
 		void AdjustSize( time_t ReferenceTimestamp )
 		{

@@ -114,8 +114,10 @@ namespace dwtght {
 			FilesHook.reset( P );
 			Ghosts.reset( P );
 
-			if ( Id != flsq::Undefined )
-				flsq::ReleaseId( Id );
+			if ( P ) {
+				if ( Id != flsq::Undefined )
+					flsq::ReleaseId( Id );
+			}
 
 			Id = flsq::Undefined;
 		}

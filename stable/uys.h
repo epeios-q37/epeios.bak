@@ -472,7 +472,7 @@ namespace uys {
 			fHook::reset( P );
 		}
 		qCDTOR( rFH );
-		eState Init_( 
+		eState Init( 
 			const rHF &Filenames,
 			mode__ Mode,
 			behavior__ Behavior,
