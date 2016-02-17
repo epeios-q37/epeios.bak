@@ -591,7 +591,6 @@ namespace bch {
 		}
 	};
 
-
 	/*c A bunch of static object of type 'type'. Use 'E_BUNCH_( type )' rather then directly this class. */
 	template <class type, typename row, typename sh=dummy_size_handler> class bunch_
 	: public _bunch_<type, row, aem::amount_extent_manager_< row >, sh >
@@ -603,6 +602,14 @@ namespace bch {
 		bunch_( s &S )
 		: _bunch_<type, row, aem::amount_extent_manager_< row >, sh >( S )
 		{};
+		bunch_ &GetBunch( void )
+		{
+			return *this;
+		}
+		const bunch_ &GetBunch( void ) const
+		{
+			return *this;
+		}
 	};
 
 	E_AUTO3( bunch )
@@ -622,31 +629,36 @@ namespace bch {
 // #ifndef FLS__COMPILATION
 	using tys::fHook;
 
-	template <typename bunch> bso::fBool Plug(
-		bunch &Bunch,
+	template <typename host> bso::fBool Plug(
+		host &Host,
 		fHook& Hook )
 	{
-		bso::bool__ Exists = tys::Plug( Bunch, Hook ) ;
+		bso::bool__ Exists = tys::Plug( Host.GetBunch(), Hook ) ;
 
 		qSDf &SD = Hook.GetSD();
 
-		Bunch.Allocate( SD.Size() / Bunch.GetItemSize(), aem::mFitted );
+		Host.GetBunch().Allocate( SD.Size() / Host.GetBunch().GetItemSize(), aem::mFitted );
 
 		return Exists;
 	}
 
 	using tys::rHF;
 
-	template <typename bunch> class rFH
+	template <typename host> class rFH
 	: public fHook
 	{
 	private:
 		tys::rFH FH_;
-		qCRVM( bunch, B_, Bunch_ );
-		void AdjustSize_( time_t ReferenceTimestamp )
+		qCRVM( host, H_, Host_ );
+		void AdjustSize_( void )
 		{
-			if ( Bunch_ != NULL )
-				FH_.AdjustSize( B_().Amount(), ReferenceTimestamp );
+			if ( Host_ != NULL )
+				FH_.AdjustSize( H_().GetBunch().Amount() * H_().GetBunch().GetItemSize() );
+		}
+		void Touch_( time_t ReferenceTimestamp )
+		{
+			if ( Host_ != NULL )	// To verify if a initialization was made.
+				FH_.Touch( ReferenceTimestamp );
 		}
 	protected:
 		virtual qSDf &UYSGetSD( void ) override
@@ -657,33 +669,30 @@ namespace bch {
 		void reset( bso::fBool P = true )
 		{
 			if ( P ) {
-				AdjustSize_( 0 );
-				FH_.ReleaseFiles();
+				AdjustSize_();
 			}
 
 			FH_.reset( P );
-			Bunch_ = NULL;
+			Host_ = NULL;
 		}
 		qCVDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
-			const bunch &Bunch,
+			const host &Host,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID,
 			time_t ReferenceTime = 0 )
 		{
-			Bunch_ = &Bunch;
+			Host_ = &Host;
 
 			return FH_.Init( Filenames, Mode, Behavior, ID, ReferenceTime );
 		}
-		void AdjustSize( time_t ReferenceTimestamp )
+		void AdjustSize( time_t ReferenceTimestamp = 0 )
 		{
-			AdjustSize_( ReferenceTimestamp );
-		}
-		void Touch( bso::fBool )
-		{
-			Fh_.Touch();
+			AdjustSize_();
+
+			Touch_( ReferenceTimestamp );
 		}
 		time_t ModificationTimestamp( void ) const
 		{

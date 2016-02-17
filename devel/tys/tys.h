@@ -17,40 +17,22 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: tys.h,v 1.3 2013/04/15 10:50:58 csimon Exp $
+// TYped Storage 
 
 #ifndef TYS__INC
-#define TYS__INC
+# define TYS__INC
 
-#define TYS_NAME		"TYS"
+# define TYS_NAME		"TYS"
 
-#define	TYS_VERSION	"$Revision: 1.3 $"
+# if defined( E_DEBUG ) && !defined( TYS_NODBG )
+#  define TYS_DBG
+# endif
 
-#define TYS_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( TYS_NODBG )
-#define TYS_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.3 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/15 10:50:58 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D TYped Storage 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "uys.h"
-#include "ags.h"
-#include "sdr.h"
+# include "err.h"
+# include "flw.h"
+# include "uys.h"
+# include "ags.h"
+# include "sdr.h"
 
 namespace tys {
 	#define TYS_MAX_SIZE	UYS_MAX_SIZE
@@ -206,7 +188,11 @@ namespace tys {
 		{
 			return sizeof( t );
 		}
-		b &GetUnderlyingStorage( void )
+		b &GetStorage( void )
+		{
+			return *this;
+		}
+		const b &GetStorage( void ) const
 		{
 			return *this;
 		}
@@ -253,20 +239,19 @@ namespace tys {
 
 	E_AUTO2( storage )
 
-#ifndef FLM__COMPILATION
+# ifndef FLM__COMPILATION
 	using uys::fHook;
 
-	using uys::rFH;
-
-	using uys::rHF;
-
-	template <typename storage> inline bso::fBool Plug(
-		storage &Storage,
+	template <typename host> inline bso::fBool Plug(
+		host &Host,
 		fHook &Hook )
 	{
-		return uys::Plug( Storage.GetUnderlyingStorage(), Hook );
+		return uys::Plug( Host.GetStorage(), Hook );
 	}
-#endif
+
+	using uys::rFH;
+	using uys::rHF;
+# endif
 
 	//m 'memory' would be often used, then create a special name.
 	#define E_STORAGEt( t, r )	storage< t, r >
@@ -323,8 +308,7 @@ namespace tys {
 	};
 
 
-	//d A static set of 'amount' object of type 'Type'.
-	#define E_STORAGEt___( type, r ) storage___< type, r > 
-	#define E_STORAGE___( type ) storage___< type, sdr::row__ > 
+# define E_STORAGEt___( type, r ) storage___< type, r > 
+# define E_STORAGE___( type ) storage___< type, sdr::ow__ > 
 }
 #endif

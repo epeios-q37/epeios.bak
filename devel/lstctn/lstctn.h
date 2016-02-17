@@ -132,13 +132,19 @@ namespace lstctn {
 		{
 			qRFbd();
 		}
-		// Pour viter certains 'castage'.
-		const container &Container( void ) const
+		const container &GetContainer( void ) const
 		{
 			return *this;
 		}
-		// Pour viter certains 'castage'.
-		container &Container( void )
+		container &GetContainer( void )
+		{
+			return *this;
+		}
+		list_<row, row_t> &GetList( void )
+		{
+			return *this;
+		}
+		const list_<row, row_t> &GetList( void ) const
 		{
 			return *this;
 		}
@@ -163,13 +169,13 @@ namespace lstctn {
 		}
 	};
 
-	template <typename list_container> inline bso::fBool Plug(
-		list_container &ListContainer,
+	template <typename host> inline bso::fBool Plug(
+		host &Host,
 		fHook &Hook )
 	{
-		bso::fBool Exists = ctn::Plug( ListContainer.Container(), Hook.GetContainerHook() );
+		bso::fBool Exists = ctn::Plug( Host..GetContainer(), Hook.GetContainerHook() );
 
-		return lst::Plug(ListContainer, Hook.GetListHook() ) || Exists;
+		return lst::Plug( Host.GetList(), Hook.GetListHook() ) || Exists;
 	}
 
 	struct rHF
@@ -188,12 +194,12 @@ namespace lstctn {
 			const fnm::name___ &Basename );
 	};
 
-	template <typename list_container> class rFH
+	template <typename host> class rFH
 	: public fHook
 	{
 	private:
-		ctn::rFH<list_container> _Container;
-		lst::rFH<list_container> _List;
+		ctn::rFH<host> _Container;
+		lst::rFH<host> _List;
 		time_t _ContainerTimeStamp( void ) const
 		{
 			return _Container.TimeStamp();
@@ -225,15 +231,15 @@ namespace lstctn {
 		qCVDTOR( rFH );
 		void Init(
 			const rHF &Filenames,
-			const list_container &ListContainer,
+			const host &Host,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
 			reset();
 
-			_Container.Init( Filenames.Container, ListContainer, Mode, Behavior, ID );
-			_List.Init( Filenames.List, ListContainer, Mode, Behavior, ID, _Container.ModificationTimestamp() );
+			_Container.Init( Filenames.Container, Host, Mode, Behavior, ID );
+			_List.Init( Filenames.List, Host, Mode, Behavior, ID, _Container.ModificationTimestamp() );
 			fHook::Init();
 		}
 		/*

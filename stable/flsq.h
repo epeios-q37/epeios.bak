@@ -17,16 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// FiLe Storage
+
 #ifndef FLSQ__INC
 # define FLSQ__INC
 
 # define FLSQ_NAME		"FLSQ"
 
 #if defined( E_DEBUG ) && !defined( FLSQ_NODBG )
-#define FLSQ_DBG
+# define FLSQ_DBG
 #endif
-
-// FiLe Storage
 
 # include "cpe.h"
 # include "tol.h"
@@ -47,25 +47,24 @@
 # endif
 
 
-#ifdef FLSQ_MAX_FILE_AMOUNT
-#	define FLSQ__MAX_FILE_AMOUNT	FLSQ_MAX_FILE_AMOUNT
-#else
-#	define FLSQ__MAX_FILE_AMOUNT	FLSQ_DEFAULT_MAX_FILE_AMOUNT
-#endif
+# ifdef FLSQ_MAX_FILE_AMOUNT
+#  define FLSQ__MAX_FILE_AMOUNT	FLSQ_MAX_FILE_AMOUNT
+# else
+#  define FLSQ__MAX_FILE_AMOUNT	FLSQ_DEFAULT_MAX_FILE_AMOUNT
+# endif
+
+# ifndef FLSQ_NO_MT
+#  ifdef CPE_F_MT
+#   define FLSQ__MT
+#  endif
+# endif
 
 
-#ifndef FLSQ_NO_MT
-#	ifdef CPE_F_MT
-#		define FLSQ__MT
-#	endif
-#endif
-
-
-#ifndef FLSQ_NO_AUTOFLUSH
-#	ifdef FLSQ__MT
-#		define FLSQ__AUTOFLUSH
-#	endif
-#endif
+# ifndef FLSQ_NO_AUTOFLUSH
+#  ifdef FLSQ__MT
+#   define FLSQ__AUTOFLUSH
+#  endif
+# endif
 
 # ifdef CPE_F_MT
 #  include "mtx.h"
@@ -398,6 +397,21 @@ namespace flsq {
 					qRFwk();	// Maybe not an error, so this method should do nothing.
 			}
 		}
+		void GrowToSize_( fil::size__ Size )
+		{
+			sdr::byte__ Datum = 0;
+					
+			Open_( true );
+				
+			File_.Seek( Size - 1 );
+
+			if ( File_.Write( &Datum, 1 ) != 1 ) {
+				if ( !Temoin_.Manuel )
+					ReleaseFile();
+
+				qRLbr();
+			}
+		}
 	public:
 		E_CVDTOR( file_storage___ )
 		void reset( bool P  = true )
@@ -478,19 +492,31 @@ namespace flsq {
 			else if ( Creation != flsq::cFirstUse )
 				qRFwk();
 		}
-		void Touch( time_t ReferenceTime = 0 )
+# ifdef CPE_C_MSC
+#  undef CreateFile
+# endif
+		bso::bool__ CreateFile( err::handling__ ErrHandle = err::h_Default )
+		{
+			return Open_( false, ErrHandle );
+		}
+		void Touch( time_t ReferenceTime )
 		{
 			ReleaseFile();
 
-			if ( !fil::Touch( _Name ) )
-				qRFwk();
+			if ( FileExists() ) {
+				if ( !fil::Touch( _Name ) )
+					qRFwk();
+			} else {
+				CreateFile();
+				ReleaseFile();
+			}
 
 			if ( ReferenceTime != 0 ) {
 				while ( ModificationTimestamp() <= ReferenceTime ) {
 					tol::EpochTime( true );
 
-				if ( !fil::Touch( _Name ) )
-					qRFwk();
+					if ( !fil::Touch( _Name ) )
+						qRFwk();
 				}
 			}
 		}
@@ -507,44 +533,26 @@ namespace flsq {
 
 			Temoin_.Ouvert = 0;
 		}
-		void AdjustSize(
-			fil::size__ Size,
-			time_t ReferenceTime )
+		void AdjustSize( fil::size__ Size )
 		{
-			Flush();	// To update the physical size of the file, so that 'GetSize()' returns the correct value.
+			ReleaseFile();
+
+			if ( !FileExists() && ( Size != 0 ) )
+				qRFwk();
 
 			switch ( bso::Compare( Size, FileSize() ) ) {
 			case -1:
-				ReleaseFile();
 				fil::Shrink( _Name, Size );
 				break;
 			case 0:
-				if ( FileExists() )
-					fil::Touch( _Name );
 				break;
 			case 1:
-				{
-					sdr::byte__ Datum = 0;
-					
-					Open_( true );
-				
-					File_.Seek( Size - 1 );
-
-					if ( File_.Write( &Datum, 1 ) != 1 ) {
-						if ( !Temoin_.Manuel )
-							ReleaseFile();
-
-						qRLbr();
-					}
-				}	
+				GrowToSize_( Size );
 				break;
 			default:
 				qRFwk();
 				break;
 			}
-
-			if ( ReferenceTime != 0 )
-				Touch( ReferenceTime );
 		}
 		void Manual( void )
 		{
@@ -583,7 +591,7 @@ namespace flsq {
 				if ( !fil::Remove( _Name ) )
 					qRLbr();
 		}
-		const fnm::name___ &GetFileName( void ) const
+		const fnm::name___ &GetFilename( void ) const
 		{
 			return _Name;
 		}
@@ -603,23 +611,16 @@ namespace flsq {
 		}
 		fil::size__ FileSize( void ) const
 		{
-#	if 0
+# if 0
 			Open_( false );
 
 			return File_.Size();
-#	else
+# else
 			if ( FileExists() )
 				return fil::GetSize( _Name );
 			else
 				return 0;
-#	endif
-		}
-#ifdef CPE_C_MSC
-#	undef CreateFile
-#endif
-		bso::bool__ CreateFile( err::handling__ ErrHandle = err::h_Default )
-		{
-			return Open_( false, ErrHandle );
+# endif
 		}
 		void Flush( void )
 		{

@@ -290,6 +290,15 @@ namespace lst {
 
 			LSTAllocate( Size, Mode );
 		}
+		// Some help for the 'Hook' related functionnalities.
+		store_ &GetIds( void )
+		{
+			return Locations;
+		}
+		const store_ &GetIds( void ) const
+		{
+			return Locations;
+		}
 	};
 
 	E_AUTO2( list )
@@ -309,11 +318,11 @@ namespace lst {
 
 	using ids::fHook;
 
-	template <typename list> bso::fBool Plug(
-		list &List,
+	template <typename host> bso::fBool Plug(
+		host &Host,
 		fHook &Hook )
 	{
-		return ids::Plug( List.Locations, Hook );
+		return ids::Plug( Host.GetIds(), Hook );
 	}
 
 	using ids::rHF;

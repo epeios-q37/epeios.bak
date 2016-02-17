@@ -157,11 +157,11 @@ namespace stk {
 
 	using bch::fHook;
 
-	template <typename stack> bso::fBool Plug(
-		stack &Stack,
+	template <typename host> bso::fBool Plug(
+		host &Host,
 		fHook &Hook )
 	{
-		return bch::Plug( Stack, Hook );
+		return bch::Plug( Host.GetBunch(), Hook );
 	}
 
 	using bch::rFH;

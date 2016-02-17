@@ -160,17 +160,26 @@ namespace ids {
 		{
 			return IsAvailable_( ID );
 		}
+		// Some help for the 'Hook' related functionnalities.
+		stk::E_BSTACK_( id__ ) &GetStack( void )
+		{
+			return Released;
+		}
+		const stk::E_BSTACK_( id__ ) &GetStack( void ) const
+		{
+			return Released;
+		}
 	};
 
 	E_AUTO1( ids_store )
 
 	using stk::fHook;
 
-	template <typename ids> bso::fBool Plug(
-		ids &Ids,
+	template <typename host> bso::fBool Plug(
+		host &Host,
 		fHook &Hook )
 	{
-		return stk::Plug( Ids.Released, Hook );
+		return stk::Plug( Ids.GetStack(), Hook );
 	}
 
 	using stk::rFH;

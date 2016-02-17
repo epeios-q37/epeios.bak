@@ -513,6 +513,10 @@ namespace uys {
 		{
 			return Driver_.CreateFile( ErrHandling );
 		}
+		void Drop( void )
+		{
+			Driver_.Drop();
+		}
 		mode__ Mode( mode__ Mode )
 		{
 			return Convert_( Driver_.Mode( Convert_( Mode ) ) );
@@ -525,11 +529,13 @@ namespace uys {
 		{
 			Driver_.ReleaseFile();
 		}
-		void AdjustSize(
-			fil::size__ Size,
-			time_t ReferenceTimestamp )
+		void AdjustSize( fil::size__ Size )
 		{
-			Driver_.AdjustSize( Size, ReferenceTimestamp );
+			Driver_.AdjustSize( Size );
+		}
+		void Touch( time_t ReferenceTimestamp = 0 )
+		{
+			Driver_.Touch( ReferenceTimestamp ) ;
 		}
 	};
 
