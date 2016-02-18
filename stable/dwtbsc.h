@@ -391,8 +391,8 @@ namespace dwtbsc {
 		M( ctn, Oddities );
 #undef M
 	private:
-		bch::rFH<goofs_> Goofs_;
-		bch::rFH<files_> Files_;
+		bch::rFH Goofs_;
+		bch::rFH Files_;
 		ctn::rFH<directories_> Directories_;
 		ctn::rFH<names_> Names_;
 		ctn::rFH<oddities_> Oddities_;
@@ -408,7 +408,7 @@ namespace dwtbsc {
 		E_CDTOR( rFH );
 		uys::eState Init(
 			rHF &Filenames,
-			const vKernel &Kernel,
+			vKernel &Kernel,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )

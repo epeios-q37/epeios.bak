@@ -51,21 +51,21 @@ namespace dwtdct {
 	E_AUTO( fexclusions );
 
 	typedef bch::rHF fexclusions_hf___;
-	typedef bch::rFH<fexclusions_> fexclusions_fh___;
+	typedef bch::rFH fexclusions_fh___;
 
 
 	typedef bch::E_BUNCHt_( fil::size__, frow__ ) sizes_;
 	E_AUTO( sizes );
 
 	typedef bch::rHF sizes_hf___;
-	typedef bch::rFH<sizes_> sizes_files_hook___;
+	typedef bch::rFH sizes_files_hook___;
 
 
 	typedef bch::E_BUNCHt_( time_t, frow__ ) timestamps_;
 	E_AUTO( timestamps );
 
 	typedef bch::rHF timestamps_hf___;
-	typedef bch::rFH<timestamps_> timestamps_fh___;
+	typedef bch::rFH timestamps_fh___;
 
 
 	typedef ctn::E_MCONTAINERt_( str::string_, frow__ ) fstrings_;
@@ -225,7 +225,7 @@ namespace dwtdct {
 		E_CDTOR( files_data_fh___ );
 		uys::eState Init(
 			files_data_hf___ &Filenames,
-			const files_data_ &FilesData,
+			files_data_ &FilesData,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -665,7 +665,7 @@ namespace dwtdct {
 		E_CDTOR( ghost2files_fh___);
 		uys::eState Init(
 			ghost2files_hf___ &Filenames,
-			const ghost2files_ &G2F,
+			ghost2files_ &G2F,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )

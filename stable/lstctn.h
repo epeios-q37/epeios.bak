@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//D LiST ConTaiNer 
+// LiST ConTaiNer 
 
 #ifndef LSTCTN__INC
 # define LSTCTN__INC
@@ -173,7 +173,7 @@ namespace lstctn {
 		host &Host,
 		fHook &Hook )
 	{
-		bso::fBool Exists = ctn::Plug( Host..GetContainer(), Hook.GetContainerHook() );
+		bso::fBool Exists = ctn::Plug( Host.GetContainer(), Hook.GetContainerHook() );
 
 		return lst::Plug( Host.GetList(), Hook.GetListHook() ) || Exists;
 	}
@@ -199,7 +199,7 @@ namespace lstctn {
 	{
 	private:
 		ctn::rFH<host> _Container;
-		lst::rFH<host> _List;
+		lst::rFH _List;
 		time_t _ContainerTimeStamp( void ) const
 		{
 			return _Container.TimeStamp();
@@ -231,7 +231,7 @@ namespace lstctn {
 		qCVDTOR( rFH );
 		void Init(
 			const rHF &Filenames,
-			const host &Host,
+			host &Host,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )

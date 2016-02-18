@@ -202,7 +202,7 @@ namespace aem {
 		Shadow = 0;
 	}
 
-	template <typename row> class _amount_extent_manager_
+	class vAmountExtentManagerCore
 	{
 	private:
 		shadow__ _GetShadow( void ) const
@@ -386,7 +386,7 @@ namespace aem {
 			size__ Amount;
 			shadow__ Shadow;	// Contient de quoi dduire l''extent', ainsi que la gestion des pas d'allocation.
 		} &S_;
-		_amount_extent_manager_( s &S )
+		vAmountExtentManagerCore( s &S )
 		: S_( S )
 		{}
 		void reset( bso::bool__ = true )
@@ -394,7 +394,7 @@ namespace aem {
 			S_.Amount = 0;
 			S_.Shadow = _GetStepCorrespondingShadowForUnusableState( AEM_DEFAULT_STEP );
 		}
-		_amount_extent_manager_ &operator =( const _amount_extent_manager_ &AEM )
+		vAmountExtentManagerCore &operator =( const vAmountExtentManagerCore &AEMC )
 		{
 			// 'S_.Amount' et 'S_.Extent' sont normallement traits en amont.
 
@@ -408,7 +408,32 @@ namespace aem {
 		{
 			return _GetExtent();
 		}
-		row First( void ) const
+		bso::bool__ IsEmpty( void ) const
+		{
+			return _GetAmount() ==  0;
+		}
+	};
+
+	template <typename row> class _amount_extent_manager_
+	: public vAmountExtentManagerCore
+	{
+	public:
+		struct s
+		: public vAmountExtentManagerCore::s {};
+		void reset( bso::bool__ P = true )
+		{
+			vAmountExtentManagerCore::reset( P );
+		}
+		_amount_extent_manager_ &operator =( const _amount_extent_manager_ &AEM )
+		{
+			vAmountExtentManagerCore::operator =( AEM );
+
+			return *this;
+		}
+		_amount_extent_manager_( s &S )
+		: vAmountExtentManagerCore( S )
+		{}
+row First( void ) const
 		{
 			if ( S_.Amount )
 				return 0;
@@ -469,10 +494,6 @@ namespace aem {
 		bso::bool__ Exists( row Row ) const
 		{
 			return *Row < S_.Amount;
-		}
-		bso::bool__ IsEmpty( void ) const
-		{
-			return _GetAmount() ==  0;
 		}
 	};
 

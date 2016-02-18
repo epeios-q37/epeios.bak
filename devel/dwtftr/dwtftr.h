@@ -120,7 +120,7 @@ namespace dwtftr {
 	struct file_tree_fh___
 	{
 	public:
-		dtr::rFH<dwtbsc::drow__> Tree;
+		dtr::rFH<dtree_> Tree;
 		dwtbsc::rFH Kernel;
 		void reset( bso::bool__ P = true )
 		{

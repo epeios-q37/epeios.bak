@@ -58,9 +58,41 @@
 
 namespace bch {
 
+	class fCore
+	{
+	protected:
+		virtual tys::fCore &BCHGetStorage( void ) = 0;
+		virtual aem::size__ BCHGetItemSize( void ) = 0;
+		virtual aem::size__ BCHGetAmount( void ) = 0;
+		virtual void BCHAllocate( aem::size__ Amount ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		tys::fCore &GetStorage( void )
+		{
+			return BCHGetStorage();
+		}
+		aem::size__ GetItemSize( void )
+		{
+			return BCHGetItemSize();
+		}
+		aem::size__ GetAmount( void )
+		{
+			return BCHGetAmount();
+		}
+		aem::size__ GetSize( void )
+		{
+			return GetItemSize() * GetAmount();
+		}
+		void Allocate( aem::size__ Amount )
+		{
+			return BCHAllocate( Amount );
+		}
+	};
+
 	//c The kernel of a bunch. For internal use only. The 'sh' template parameter is to simplify the use of the 'STR' library.
 	template <class type, class mmr, class mng, typename row, typename sh> class _bunch
-	: public mmr,
+	: public fCore,
+	  public mmr,
 	  public mng
 	{
 	private:
@@ -110,17 +142,36 @@ namespace bch {
 		{
 			return ( ( Row == qNIL ) || ( ( mng::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
+	protected:
+		virtual tys::fCore &BCHGetStorage( void ) override
+		{
+			return *this;
+		}
+		virtual aem::size__ BCHGetItemSize( void ) override
+		{
+			return sizeof( type );
+		}
+		virtual aem::size__ BCHGetAmount( void ) override
+		{
+			return Amount();
+		}
+		virtual void BCHAllocate( aem::size__ Amount ) override
+		{
+			return Allocate( Amount, aem::mFitted );
+		}
 	public:
 		struct s
 		: public mmr::s,
 		  public mng::s
 		{};
 		_bunch( s &S )
-		: mmr( S ),
+		: fCore(),
+		  mmr( S ),
 		  mng( S )
 		{}
 		void reset( bso::bool__ P )
 		{
+			fCore::reset( P );
 			mmr::reset( P );
 			mng::reset( P );
 		}
@@ -133,6 +184,7 @@ namespace bch {
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			mmr::Init();
 			mng::Init();
 		}
@@ -629,35 +681,35 @@ namespace bch {
 // #ifndef FLS__COMPILATION
 	using tys::fHook;
 
-	template <typename host> bso::fBool Plug(
-		host &Host,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook& Hook )
 	{
-		bso::bool__ Exists = tys::Plug( Host.GetBunch(), Hook ) ;
+		bso::bool__ Exists = tys::Plug( Core.GetStorage(), Hook ) ;
 
 		qSDf &SD = Hook.GetSD();
 
-		Host.GetBunch().Allocate( SD.Size() / Host.GetBunch().GetItemSize(), aem::mFitted );
+		Core.Allocate( SD.Size() / Core.GetItemSize() );
 
 		return Exists;
 	}
 
 	using tys::rHF;
 
-	template <typename host> class rFH
+	class rFH
 	: public fHook
 	{
 	private:
 		tys::rFH FH_;
-		qCRVM( host, H_, Host_ );
+		qRVM( fCore, C_, Core_ );
 		void AdjustSize_( void )
 		{
-			if ( Host_ != NULL )
-				FH_.AdjustSize( H_().GetBunch().Amount() * H_().GetBunch().GetItemSize() );
+			if ( Core_ != NULL )
+				FH_.AdjustSize( C_().GetSize() );
 		}
 		void Touch_( time_t ReferenceTimestamp )
 		{
-			if ( Host_ != NULL )	// To verify if a initialization was made.
+			if ( Core_ != NULL )	// To verify if a initialization was made.
 				FH_.Touch( ReferenceTimestamp );
 		}
 	protected:
@@ -673,18 +725,18 @@ namespace bch {
 			}
 
 			FH_.reset( P );
-			Host_ = NULL;
+			Core_ = NULL;
 		}
 		qCVDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
-			const host &Host,
+			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID,
 			time_t ReferenceTime = 0 )
 		{
-			Host_ = &Host;
+			Core_ = &Core;
 
 			return FH_.Init( Filenames, Mode, Behavior, ID, ReferenceTime );
 		}

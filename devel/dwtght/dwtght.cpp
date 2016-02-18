@@ -94,7 +94,7 @@ qRE
 
 static void SetGhostsFilesHook_(
 	const fnm::name___ &Path,
-	const ghosts_ &Ghosts,
+	ghosts_ &Ghosts,
 	uys::mode__ Mode,
 	dwtght::rFH &FilesHook,
 	flsq::rId Id )

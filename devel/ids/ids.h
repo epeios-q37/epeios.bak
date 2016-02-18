@@ -179,7 +179,7 @@ namespace ids {
 		host &Host,
 		fHook &Hook )
 	{
-		return stk::Plug( Ids.GetStack(), Hook );
+		return stk::Plug( Host.GetStack(), Hook );
 	}
 
 	using stk::rFH;

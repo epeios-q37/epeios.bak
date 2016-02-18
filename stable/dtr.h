@@ -400,12 +400,12 @@ namespace dtr {
 			const fnm::name___ &Basename );
 	};
 
-	template <typename r> class rFH
+	template <typename host> class rFH
 	: public fHook
 	{
 	private:
-		btr::rFH<btr::E_BTREEt_( r )> Tree_;
-		que::rFH<que::E_QUEUEt_( r )> Queue_;
+		btr::rFH Tree_;
+		que::rFH Queue_;
 	protected:
 		virtual btr::fHook &DTRGetTreeHook( void ) override
 		{
@@ -425,17 +425,17 @@ namespace dtr {
 		E_CDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
-			const E_DTREEt_( r ) &Tree,
+			const host &Host,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
 			reset();
 
-			uys::eState State = Tree_.Init( Filenames.Tree, Tree.Tree, Mode, Behavior, ID );
+			uys::eState State = Tree_.Init( Filenames.Tree, Host.Tree, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( Queue_.Init( Filenames.Queue, Tree.Queue, Mode, Behavior, ID ) != State )
+				if ( Queue_.Init( Filenames.Queue, Host.Queue, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 

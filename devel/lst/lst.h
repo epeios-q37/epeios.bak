@@ -71,9 +71,21 @@ namespace lst {
 		sdr::row_t__ Last,
 		store_ &Store );
 
+	class fCore
+	{
+	protected:
+		virtual ctn::fCore &LSTCTNGetContainer( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		ctn::fCore &GetContainer( void )
+		{
+			return LSTCTNGetContainer();
+		}
+	};
 
 	//c Handle a list of objects. Use 'LIST_' rather than directly this class.
 	template <typename r, typename r_t> class list_
+	: public fCore
 	{
 	protected:
 		/*v Cette fonction est appelée lors d'allocations dans la liste;
@@ -118,10 +130,12 @@ namespace lst {
 		};
 	// fonctions
 		list_( s &S )
-		: Locations( S.Locations )
+		: fCore(),
+		  Locations( S.Locations )
 		{}
 		void reset( bool P = true )
 		{
+			Core.reset( P );
 			Locations.reset( P );
 		}
 		void plug( qSD__ &SD )
@@ -153,6 +167,7 @@ namespace lst {
 	*/	//f Initialiration.
 		void Init( void )
 		{
+			core::Init();
 			Locations.Init();
 		}
 		//f Delete 'Entry'.
@@ -318,11 +333,11 @@ namespace lst {
 
 	using ids::fHook;
 
-	template <typename host> bso::fBool Plug(
-		host &Host,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return ids::Plug( Host.GetIds(), Hook );
+		return ids::Plug( Core.GetIds(), Hook );
 	}
 
 	using ids::rHF;

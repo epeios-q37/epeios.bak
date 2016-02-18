@@ -1378,7 +1378,7 @@ void dwtdct::ghost2files_::Append(
 	const content_ &Content,
 	const i2g_ &I2G )
 {
-	if ( Content.Size() != I2G.Size() )
+	if ( Content.Amount() != I2G.Amount() )
 		qRFwk();
 
 	irow__ Row = Content.First();
@@ -1407,7 +1407,7 @@ qRE
 namespace {
 	void SetHook_(
 		const fnm::name___ &Path,
-		const ghost2files_ &G2F,
+		ghost2files_ &G2F,
 		uys::mode__ Mode,
 		ghost2files_fh___ &Hook )
 	{
@@ -1416,7 +1416,7 @@ namespace {
 	qRB
 		Filenames.Init( Path, "Files_" );
 
-		if ( Hook.Init(Filenames, G2F, Mode, uys::bPersistent, flsq::GetId() ).IsError() )
+		if ( Hook.Init( Filenames, G2F, Mode, uys::bPersistent, flsq::GetId() ).IsError() )
 			qRFwk();
 	qRR
 	qRT

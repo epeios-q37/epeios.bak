@@ -74,10 +74,28 @@ namespace ctn {
 	using sdr::size__;
 	using aem::amount_extent_manager_;
 
+	class fCore
+	{
+	protected:
+		virtual tys::fCore &CTNGetStatics( void ) = 0;
+		virtual ias::indexed_aggregated_storage_ &CTNGetDynamics( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		tys::fCore &GetStatics( void )
+		{
+			return CTNGetStatics();
+		}
+		ias::indexed_aggregated_storage_ &GetDynamics( void )
+		{
+			return CTNGetDynamics();
+		}
+	};
+
 
 	//c The base of a container. Internal use.
 	template <class st, typename r> class basic_container_
-	: public amount_extent_manager_<r>
+	: public fCore,
+	  public amount_extent_manager_<r>
 	{
 	private:
 		void _Allocate(
@@ -119,12 +137,14 @@ namespace ctn {
 			ias::indexed_aggregated_storage_::s Dynamics;
 		};
 		basic_container_( s &S )
-		: Dynamics( S.Dynamics ),
+		: fCore(), 
+		  Dynamics( S.Dynamics ),
 		  Statics( S.Statics ),
 		  amount_extent_manager_<r>( S )
 		{}
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			Dynamics.reset( P );
 			Statics.reset( P );
 			amount_extent_manager_<r>::reset( P );
@@ -182,6 +202,7 @@ namespace ctn {
 		{
 			FlushTest();
 
+			fCore::Init();
 			Dynamics.Init();
 			Statics.Init();
 
@@ -350,13 +371,13 @@ namespace ctn {
 		}
 	};
 
-	template <typename container> inline bso::fBool Plug(
-		container &Container,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		bso::fBool Exists = tys::Plug( Container.Statics, Hook.GetStaticsHook() );
+		bso::fBool Exists = tys::Plug( Core.GetStatics(), Hook.GetStaticsHook() );
 
-		return ias::Plug( Container.Dynamics, Hook.GetDynamicsHook() ) || Exists;
+		return ias::Plug( Core.GetDynamics(), Hook.GetDynamicsHook() ) || Exists;
 	}
 
 	struct rHF
@@ -375,7 +396,7 @@ namespace ctn {
 			const fnm::name___ &Basename );
 	};
 
-	template <typename container> class rFH
+	class rFH
 	: public fHook
 	{
 	private:
@@ -400,7 +421,7 @@ namespace ctn {
 		qCVDTOR( rFH );
 		uys::eState Init( 
 			const rHF &Filenames,
-			const container &Container,
+			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -410,7 +431,7 @@ namespace ctn {
 			uys::eState State =_Statics.Init( Filenames.Statics, Mode, Behavior, ID, 0 );
 
 			if ( !State.IsError() )
-				if ( _Dynamics.Init( Filenames.Dynamics, Container.Dynamics, Mode, Behavior, ID ) != State )
+				if ( _Dynamics.Init( Filenames.Dynamics, Core.GetDynamics(), Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 
 			return State;

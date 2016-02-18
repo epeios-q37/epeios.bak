@@ -37,9 +37,27 @@
 namespace tys {
 	#define TYS_MAX_SIZE	UYS_MAX_SIZE
 
-	template <typename t, typename b, typename r> class _storage_
-	: public b
+	class fCore
 	{
+	protected:
+		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		uys::untyped_storage_ &GetUntypedStorage( void )
+		{
+			return TYSGetUntypedStorage();
+		}
+	};
+
+	template <typename t, typename b, typename r> class _storage_
+	: public fCore,
+	  public b
+	{
+	protected:
+		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) override
+		{
+			return *this;
+		}
 	private:
 		// place dans 'Tampon' 'Nomnbre' objets  la position 'Position'
 		void _Recall(
@@ -77,11 +95,18 @@ namespace tys {
 		: public b::s
 		{};
 		_storage_( s &S )
-		: b( S )
+		: fCore(),
+		  b( S )
 		{}
+		void reset( bso::fBool P = true )
+		{
+			fCore::reset( P );
+			b::reset( P );
+		}
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			b::Init();
 		}
 		//f Put in 'Buffer' 'Amount' bytes at 'Position'.
@@ -242,11 +267,11 @@ namespace tys {
 # ifndef FLM__COMPILATION
 	using uys::fHook;
 
-	template <typename host> inline bso::fBool Plug(
-		host &Host,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return uys::Plug( Host.GetStorage(), Hook );
+		return uys::Plug( Core.GetUntypedStorage(), Hook );
 	}
 
 	using uys::rFH;

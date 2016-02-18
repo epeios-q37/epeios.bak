@@ -272,8 +272,8 @@ namespace idxbtq {
 	: public fHook
 	{
 	private:
-		idxbtr::rFH<index> _Tree;
-		idxque::rFH<index> _Queue;
+		idxbtr::rFH _Tree;
+		idxque::rFH _Queue;
 	public:
 		void reset( bso::bool__ P = true )
 		{

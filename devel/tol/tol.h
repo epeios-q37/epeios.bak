@@ -492,11 +492,14 @@ namespace tol {
 	qW1( Object );
 }
 
-// The standardized definitions/ for a callback.
-# define qCALLBACK_DEF( name )\
+// Basics declarations for hollow objects (with no members.
+#define qHOLLOW_DEF( name )\
 	void reset( bso::fBool = true ) {}\
-	qCVDTOR( f##name )\
+	qCVDTOR( name )\
 	void Init( void ){}
+
+// The standardized definitions/ for a callback.
+# define qCALLBACK_DEF( name )	qHOLLOW_DEF( f##name )
 
 # define qGCTOR(discriminator)	Q37_GCTOR( discriminator )
 # define qGDTOR(discriminator)	Q37_GDTOR( discriminator )

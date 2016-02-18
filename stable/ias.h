@@ -498,7 +498,7 @@ namespace ias {
 	: public fHook
 	{
 	private:
-		bch::rFH<descriptors_> _Descriptors;
+		bch::rFH _Descriptors;
 		ags::rFH _Storage;
 	protected:
 		virtual bch::fHook &IASGetDescriptorsHook( void ) override
@@ -518,7 +518,7 @@ namespace ias {
 		qCDTOR( rFH );
 		uys::eState Init( 
 			const rHF &Filenames,
-			const indexed_aggregated_storage_ &Storage,
+			indexed_aggregated_storage_ &Storage,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )

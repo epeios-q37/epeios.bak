@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//D LiST ConTaiNer 
+// LiST ConTaiNer 
 
 #ifndef LSTCTN__INC
 # define LSTCTN__INC
@@ -55,8 +55,21 @@
 namespace lstctn {
 	using lst::list_;
 
+	class fCore
+	{
+	protected:
+		virtual ctn::fCore &LSTCTNGetContainer( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		ctn::fCore &GetContainer( void )
+		{
+			return LSTCTNGetContainer();
+		}
+	};
+
 	template <typename container, typename row, typename row_t> class list_container_
-	: public list_<row, row_t>,
+	: public fCore,
+	  public list_<row, row_t>,
 	  public container
 	{
 	protected:
@@ -72,11 +85,13 @@ namespace lstctn {
 		  public container::s
 		{};
 		list_container_( s &S )
-		: list_<row, row_t>( S ), 
+		: fCore(),
+		  list_<row, row_t>( S ), 
 		  container( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
+			fCore::reset( P );
 			list_<row, row_t>::reset( P );
 			container::reset( P );
 		}
@@ -97,6 +112,7 @@ namespace lstctn {
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			list_<row, row_t>::Init();
 			container::Init();
 		}
@@ -169,13 +185,13 @@ namespace lstctn {
 		}
 	};
 
-	template <typename host> inline bso::fBool Plug(
-		host &Host,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		bso::fBool Exists = ctn::Plug( Host..GetContainer(), Hook.GetContainerHook() );
+		bso::fBool Exists = ctn::Plug( Core.GetContainer(), Hook.GetContainerHook() );
 
-		return lst::Plug( Host.GetList(), Hook.GetListHook() ) || Exists;
+		return lst::Plug( Core.GetList(), Hook.GetListHook() ) || Exists;
 	}
 
 	struct rHF
@@ -194,12 +210,12 @@ namespace lstctn {
 			const fnm::name___ &Basename );
 	};
 
-	template <typename host> class rFH
+	class rFH
 	: public fHook
 	{
 	private:
 		ctn::rFH<host> _Container;
-		lst::rFH<host> _List;
+		lst::rFH _List;
 		time_t _ContainerTimeStamp( void ) const
 		{
 			return _Container.TimeStamp();
@@ -231,7 +247,7 @@ namespace lstctn {
 		qCVDTOR( rFH );
 		void Init(
 			const rHF &Filenames,
-			const host &Host,
+			host &Host,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
