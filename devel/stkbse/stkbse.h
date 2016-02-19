@@ -45,7 +45,6 @@ namespace stkbse {
 		{}
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			structure::reset( P );
 		}
 		void plug( qSDf &SD )
@@ -65,7 +64,6 @@ namespace stkbse {
 		//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			structure::Init();
 		}
 		//f Place 'Object' at the top of the stack. Return the position where this object is put.

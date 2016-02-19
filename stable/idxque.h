@@ -39,10 +39,28 @@ namespace idxque {
 	using namespace que;
 	using que::queue_;	// VC++ has problem without this, despite line above.
 
+	class fCore
+	{
+	protected:
+		virtual que::fCore &IDXQUIEGetQueue( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		que::fCore &GetQueue( void )
+		{
+			return IDXQUIEGetQueue();
+		}
+	};
+
 	//c Queue-based index, fast browsing, but slow sorting.
 	template <typename r> class queue_index_
-	: public E_QUEUEt_( r )
+	: public fCore,
+	  public E_QUEUEt_( r )
 	{
+	protected:
+		virtual que::fCore &IDXQUIEGetQueue( void ) override
+		{
+			return *this;
+		}
 	public:
 		struct s
 		: public E_QUEUEt_( r )::s
@@ -53,6 +71,7 @@ namespace idxque {
 		{}
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			E_QUEUEt_( r )::reset( P );
 		}
 		void plug( qAS_ &AS )
@@ -72,6 +91,7 @@ namespace idxque {
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			E_QUEUEt_( r )::Init();
 		}
 		/*f Dump to the stack 'Stack' the queue beginning at 'Begin' and in the 'Direction ' direction.. */
@@ -102,11 +122,11 @@ namespace idxque {
 
 	using que::fHook;
 
-	template <typename index> inline bso::fBool Plug(
-		index &Index,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return que::Plug( Index, Hook );
+		return que::Plug( Core.GetQueue(), Hook );
 	}
 
 	using que::rHF;

@@ -326,13 +326,13 @@ public:\
 	}\
 	i##name &operator =( const i##name &S )\
 	{\
-		v##name<t>::operator =( S );\
+		v##name<t,u,v>::operator =( S );\
 \
 		return *this;\
 	}\
 	i##name &operator =( const v##name<t,u,v> &S )\
 	{\
-		v##name<t>::operator =( S );\
+		v##name<t,u,v>::operator =( S );\
 \
 		return *this;\
 	}\

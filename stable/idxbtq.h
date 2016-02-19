@@ -37,11 +37,38 @@ namespace idxbtq {
 	using idxbtr::tree_index_;
 	using idxque::queue_index_;
 
+	class fCore
+	{
+	protected:
+		virtual idxbtr::fCore &IDXBTQGetTree( void ) = 0;
+		virtual idxque::fCore &IDXBTQGetQueue( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		idxbtr::fCore &GetTree( void )
+		{
+			return IDXBTQGetTree();
+		}
+		idxque::fCore &GetQueue( void )
+		{
+			return IDXBTQGetQueue();
+		}
+	};
+
 	//c Index using a tree-based index and a queue-based index. Fast browsing and sorting.
 	template <typename r> class tree_queue_index_
-	: public E_IBTREEt_( r ),
+	: public fCore,
+	  public E_IBTREEt_( r ),
 	  public E_IQUEUEt_( r )
 	{
+	protected:
+		virtual idxbtr::fCore &IDXBTQGetTree( void ) override
+		{
+			return *this;
+		}
+		virtual idxque::fCore &IDXBTQGetQueue( void ) override
+		{
+			return *this;
+		}
 	public:
 		struct s
 		: public E_IBTREEt_( r )::s,
@@ -53,6 +80,7 @@ namespace idxbtq {
 		{}
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			E_IBTREEt_( r )::reset( P );
 			E_IQUEUEt_( r )::reset( P );
 		}
@@ -81,6 +109,7 @@ namespace idxbtq {
 	*/	//f Initializtion.
 		void Init( void )
 		{
+			fCore::Init();
 			E_IBTREEt_( r )::Init();
 			E_IQUEUEt_( r )::Init();
 		}
@@ -243,13 +272,13 @@ namespace idxbtq {
 		}
 	};
 
-	template <typename index> inline bso::fBool Plug(
-		index &Index,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		bso::fBool Exists = idxbtr::Plug( Index, Hook.GetTreeHook() );
+		bso::fBool Exists = idxbtr::Plug( Core.GetTree(), Hook.GetTreeHook() );
 
-		return idxque::Plug(Index, Hook.GetQueueHook() ) || Exists;
+		return idxque::Plug( Core.GetQueue(), Hook.GetQueueHook() ) || Exists;
 	}
 
 	struct rHF
@@ -268,7 +297,7 @@ namespace idxbtq {
 			const fnm::name___ &Basename );
 	};
 
-	template <typename index> class rFH
+	class rFH
 	: public fHook
 	{
 	private:
@@ -277,26 +306,28 @@ namespace idxbtq {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P ) {
-				Settle();
-			}
-
 			_Tree.reset( P );
 			_Queue.reset( P );
 			fHook::reset( P );
 		}
 		qCVDTOR( rFH );
-		void Init( 
+		uys::eState Init( 
 			const rHF &Filenames,
+			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			reset();
+			uys::eState State = _Tree.Init( Filenames.Tree, Core.GetTree().GetTree().GetBunch(), Mode, Behavior, ID );
 
-			_Tree.Init( Filenames.Tree, Mode, Behavior, ID );
-			_Queue.Init( Filenames.Queue, Mode, Behavior, ID );
-			rHook::Init();
+			if ( !State.IsError() ) {
+				if ( _Queue.Init( Filenames.Queue, Core.GetQueue().GetQueue().GetBunch(), Mode, Behavior, ID ) != State )
+					State = uys::sInconsistent;
+			}
+
+			fHook::Init();
+
+			return State;
 		}
 		/*
 		uys::state__ State( void ) const

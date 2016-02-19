@@ -320,8 +320,7 @@ namespace sck {
 			reset();
 		}
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
-# pragma message( __LOC__ "Temprary name change to view who uses it .")
-		void Init_(
+		void Init(
 			socket__ Socket,
 			const flw::ioflow__ *User,
 			fdr::thread_safety__ ThreadSafety,
@@ -362,15 +361,14 @@ namespace sck {
 			reset();
 		}
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
-# pragma message( __LOC__ "Temprary name change to view who uses it .")
-		void Init_(
+		void Init(
 			socket__ Socket,
 			flw::size__ AmountMax = SCK__DEFAULT_AMOUNT,
 			duration__ TimeOut = SCK__DEFAULT_TIMEOUT ) // En secondes.
 		{
 			reset();
 
-			_Driver.Init_( Socket, this, fdr::ts_Default, TimeOut );
+			_Driver.Init( Socket, this, fdr::ts_Default, TimeOut );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
 		}
 		socket__ Socket( void ) const

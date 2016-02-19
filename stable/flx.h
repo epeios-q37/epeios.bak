@@ -50,7 +50,7 @@
 # endif
 
 # ifndef FLX_COPY_BUFFER_SIZE
-#  define FLX_COPY_BUFFER_IZE	1024
+#  define FLX_COPY_BUFFER_SIZE	1024
 # endif
 
 # ifndef FLX_BUFFER_BUFFER_SIZE
@@ -79,26 +79,7 @@ namespace flx {
 	class string_text_oflow__;
 	typedef string_text_oflow__ fStrinfTOflow;
 
-	template <int buffer_size = FLW_COPY_BUFFER_SIZE> void Copy(
-		flw::fIFlow &IFlow,
-		flw::fOFlow &OFlow )
-	{
-		fdr::size__ Size = 0;
-		bso::char__ Buffer[buffer_size];
-
-		while ( !IFlow.EOF() ) {
-			Size = IFlow.ReadUpTo( sizeof( Buffer ), Buffer );
-
-			OFlow.Write( Buffer, Size );
-		}
-	}
-
-	inline void Copy(
-		flw::fIFlow &IFlow,
-		flw::fOFlow &OFlow )
-	{
-		return Copy<>( IFlow, OFlow );
-	}
+	using flw::Copy;
 }
 
 /***************/

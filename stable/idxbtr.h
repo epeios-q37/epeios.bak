@@ -37,8 +37,21 @@ namespace idxbtr {
 
 	using btr::level__;
 
+	class fCore
+	{
+	protected:
+		virtual btr::fCore &IDXBTRGetTree( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		btr::fCore &GetTree( void )
+		{
+			return IDXBTRGetTree();
+		}
+	};
+
 	//c Tree-based index, fast sorting, but slow browsing.
 	template <typename r> class tree_index_
+	: public fCore
 	{
 	private:
 		/* Equilibre l'arbre, sachant que l'ordre des lments est donne par
@@ -63,6 +76,11 @@ namespace idxbtr {
 		{
 			return BaseTree.SearchMostRightNode( Node, Level );
 		}
+	protected:
+		virtual btr::fCore &IDXBTRGetTree( void ) override
+		{
+			return BaseTree;
+		}
 	public:
 		btr::E_BTREEt_( r ) BaseTree;
 		struct s
@@ -74,6 +92,7 @@ namespace idxbtr {
 		{}
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			BaseTree.reset( P );
 		}
 		void plug( qAS_ &AS )
@@ -104,6 +123,7 @@ namespace idxbtr {
 	*/	//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			BaseTree.Init();
 		}
 		r GetRoot( r Row ) const
@@ -367,17 +387,15 @@ namespace idxbtr {
 
 	using btr::fHook;
 
-	template <typename index> inline bso::fBool Plug(
-		index &Index,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return btr::Plug( Index.BaseTree, Hook );
+		return btr::Plug( Core.GetTree(), Hook );
 	}
 
 	using btr::rHF;
-
 	using btr::rFH;
-
 
 
 # define E_IBTREEt( r )	tree_index< r >

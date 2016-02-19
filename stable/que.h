@@ -431,7 +431,7 @@ namespace que {
 		r Begin,
 		que::direction Direction ) const
 	{
-		Dump_( *(E_QUEUE_ *)this, *(E_QSTACK_( sdr::row__)*)&Stack, Begin, Direction );
+		Dump_( *(E_QUEUE_ *)this, *(qQSTACKv( sdr::row__)*)&Stack, Begin, Direction );
 	}
 
 

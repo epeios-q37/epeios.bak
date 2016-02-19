@@ -177,28 +177,28 @@ namespace csdbnc {
 		bso::bool__ Init(
 			const char *Host,
 			const char *Service,
-		err::handling__ ErrorHandling = err::h_Default )
+			err::handling__ ErrorHandling = err::h_Default )
 		{
 			reset();
 
 			Socket_ = Connect( Host, Service, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init_( Socket_ );
+				_flow___::Init( Socket_ );
 				return true;
 			} else
 				return false;
 		}
 		bso::bool__ Init(
 			const char *HostService,
-		err::handling__ ErrorHandling = err::h_Default )
+			err::handling__ ErrorHandling = err::h_Default )
 		{
 			reset();
 
 			Socket_ = Connect( HostService, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init_( Socket_ );
+				_flow___::Init( Socket_ );
 				return true;
 			} else
 				return false;

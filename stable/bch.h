@@ -153,7 +153,7 @@ namespace bch {
 		}
 		virtual aem::size__ BCHGetAmount( void ) override
 		{
-			return Amount();
+			return mng::Amount();
 		}
 		virtual void BCHAllocate( aem::size__ Amount ) override
 		{
