@@ -115,8 +115,8 @@ public:
 	}
 };
 
-typedef stk::E_BSTACK_( fill_link__ ) fill_links_;
-E_AUTO( fill_links );
+typedef stkbch::qBSTACKvl( fill_link__ ) vFillLinks;
+qW( FillLinks );
 
 
 static void Complete_(
@@ -128,7 +128,7 @@ static void Complete_(
 	drows_ &RRows,
 	directories_ &RDirectories,
 	names_ &RNames,
-	fill_links_ &Links )
+	vFillLinks &Links )
 {
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
@@ -182,7 +182,7 @@ static bso::bool__ Compare_(
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
-	fill_links_ &Links )
+	vFillLinks &Links )
 {
 	bso::bool__ Modified = false;
 qRH
@@ -275,7 +275,7 @@ static inline bso::bool__ Compare_(
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
-	fill_links_ &Links )
+	vFillLinks &Links )
 {
 
 	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) SDir, TDir;
@@ -427,7 +427,7 @@ static bso::bool__ inline Compare_(
 	names_ &Names )
 {
 
-	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) SDir, TDir;
+	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__ ) SDir, TDir;
 
 	SDir.Init( Source.Directories );
 	TDir.Init( Target.Directories );
@@ -457,7 +457,7 @@ static void Put_(
 	drows_ &RRows,
 	directories_ &RDirectories,
 	names_ &RNames,
-	fill_links_ &Links )
+	vFillLinks &Links )
 {
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
@@ -503,7 +503,7 @@ static void Put_(
 	drows_ &DRows,
 	directories_ &Directories,
 	names_ &Names,
-	fill_links_ &Links )
+	vFillLinks &Links )
 {
 
 	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) Dir;
@@ -525,7 +525,7 @@ drow__ dwtcpr::Compare(
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	directory Dir;
-	fill_links Links;
+	iFillLinks Links;
 	fill_link__ Link;
 	bso::bool__ Modified = false;
 	bso::int__ Handled = 1;
@@ -1042,8 +1042,8 @@ public:
 	}
 };
 
-typedef stk::E_BSTACK_( clean_link__ ) clean_links_;
-E_AUTO( clean_links );
+typedef stkbch::qBSTACKvl( clean_link__ ) vCleanLinks;
+qW( CleanLinks );
 
 
 static void Fill_(
@@ -1053,7 +1053,7 @@ static void Fill_(
 	drows_ &NewRows,
 	directories_ &NewDirectories,
 	names_ &NewNames,
-	clean_links_ &Links )
+	vCleanLinks &Links )
 {
 qRH
 	sdr::row__ Row = qNIL;
@@ -1093,7 +1093,7 @@ static inline void Fill_(
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
-	clean_links_ &Links )
+	vCleanLinks &Links )
 {
 	ctn::E_CITEMt( directory_, drow__) Dir;
 
@@ -1156,7 +1156,7 @@ drow__ dwtcpr::Clean(
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	directory Dir;
-	clean_links Links;
+	iCleanLinks Links;
 	clean_link__ Link;
 	ctn::E_CITEMt( directory_, drow__) Directory;
 qRB

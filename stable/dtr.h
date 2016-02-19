@@ -101,6 +101,15 @@ namespace dtr {
 	template <typename r> class dynamic_tree_
 	: public fCore
 	{
+	protected:
+		virtual btr::fCore &DTRGetTree( void ) override
+		{
+			return Tree;
+		}
+		virtual que::fCore &DTRGetQueue( void ) override
+		{
+			return Queue;
+		}
 	public:
 		//r A binary tree.
 		btr::E_BTREEt_( r ) Tree;

@@ -174,7 +174,7 @@ namespace que {
 		qCALLBACK_DEF( Core );
 		bch::fCore &GetBunch( void )
 		{
-			return GetBunch();
+			return QUEGetBunch();
 		}
 	};
 	
@@ -210,6 +210,11 @@ namespace que {
 				qRFwk();
 		}
 # endif
+	protected:
+		virtual bch::fCore &QUEGetBunch( void ) override
+		{
+			return Links; 
+		}
 	public:
 		//r Links between nodes.
 		que::links_ Links;

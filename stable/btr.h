@@ -477,6 +477,11 @@ namespace btr {
 		{
 			return Nodes.ForceParent( Node, Parent );
 		}
+	protected:
+		virtual bch::fCore &BTRGetBunch( void ) override
+		{
+			return Nodes;
+		}
 	public:
 		struct s
 		{
