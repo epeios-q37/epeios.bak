@@ -46,7 +46,6 @@ namespace dtr {
 	
 	template <typename r> class dynamic_tree_;	// Predeclaration.
 
-
 	//c Browse structure.
 	template <typename r> struct browser__
 	{
@@ -80,9 +79,27 @@ namespace dtr {
 		friend class dynamic_tree_<r>;
 	};
 
+	class fCore
+	{
+	protected:
+		virtual btr::fCore &DTRGetTree( void ) = 0;
+		virtual que::fCore &DTRGetQueue( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		btr::fCore &GetTree( void )
+		{
+			return DTRGetTree();
+		}
+		que::fCore &GetQueue( void )
+		{
+			return DTRGetQueue();
+		}
+	};
+
 # define E_BROWSER__( t )	browser__<t>
 	//c A dynamic tree.
 	template <typename r> class dynamic_tree_
+	: public fCore
 	{
 	public:
 		//r A binary tree.
@@ -100,6 +117,7 @@ namespace dtr {
 		{}
 		void reset( bso::bool__ P = true )
 		{
+			fCore::reset( P );
 			Tree.reset( P );
 			Queue.reset( P );
 		}
@@ -118,6 +136,7 @@ namespace dtr {
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			Tree.Init();
 			Queue.Init();
 		}
@@ -375,13 +394,13 @@ namespace dtr {
 		}
 	};
 
-	template <typename dynamic_tree> bso::fBool Plug(
-		dynamic_tree &DynamicTree,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		bso::fBool Exists = btr::Plug( DynamicTree.Tree, Hook.GetTreeHook() );
+		bso::fBool Exists = btr::Plug( Core.GetTree(), Hook.GetTreeHook() );
 
-		return que::Plug( DynamicTree.Queue, Hook.GetQueueHook() ) || Exists;
+		return que::Plug( Core.GetQueue(), Hook.GetQueueHook() ) || Exists;
 	}
 
 	struct rHF
@@ -400,7 +419,7 @@ namespace dtr {
 			const fnm::name___ &Basename );
 	};
 
-	template <typename host> class rFH
+	class rFH
 	: public fHook
 	{
 	private:
@@ -425,17 +444,17 @@ namespace dtr {
 		E_CDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
-			const host &Host,
+			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
 			reset();
 
-			uys::eState State = Tree_.Init( Filenames.Tree, Host.Tree, Mode, Behavior, ID );
+			uys::eState State = Tree_.Init( Filenames.Tree, Core.GetTree().GetBunch(), Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( Queue_.Init( Filenames.Queue, Host.Queue, Mode, Behavior, ID ) != State )
+				if ( Queue_.Init( Filenames.Queue, Core.GetQueue().GetBunch(), Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 

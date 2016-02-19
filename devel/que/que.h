@@ -166,9 +166,21 @@ namespace que {
 # define qQSTACKv( r ) stkbch::qBSTACKvl( r )
 # define qQSTACKi( r ) stkbch::qBSTACKil( r )
 
+	class fCore
+	{
+	protected:
+		virtual bch::fCore &QUEGetBunch( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		bch::fCore &GetBunch( void )
+		{
+			return GetBunch();
+		}
+	};
 	
 	//c A queue. Use 'QUEUE_' rather than directly this.
 	template <typename r> class queue_
+	: public fCore
 	{
 	private:
 		void HandleNeighboursForSwap_(
@@ -210,6 +222,7 @@ namespace que {
 		{}
 		void reset( bso::bool__ P = true )
 		{
+			fCore::reset( P );
 			Links.reset( P );
 		}
 		void plug( qSD__ &SD )
@@ -229,6 +242,7 @@ namespace que {
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			Links.Init();
 		}
 		//f Allocate enough room to contains 'Size' nodes.
@@ -382,11 +396,11 @@ namespace que {
 # ifndef FLS__COMPILATION
 	using bch::fHook;
 
-	template <typename queue> bso::fBool Plug(
-		queue &Queue,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return bch::Plug( Queue.Links, Hook );
+		return bch::Plug( Core.GetBunch(), Hook );
 	}
 
 	using bch::rHF;

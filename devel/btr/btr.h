@@ -375,13 +375,21 @@ namespace btr {
 	};
 
 
-
-	/**********************************************/
-	/* CLASSE DE GESTION D'UN CONTENAIRE D'ARBRES */
-	/**********************************************/
+	class fCore
+	{
+	protected:
+		virtual bch::fCore &BTRGetBunch( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		bch::fCore &GetBunch( void )
+		{
+			return BTRGetBunch();
+		}
+	};
 
 	//c Binary tree.
 	template <typename r> class binary_tree_
+	: public fCore
 	{
 	private:
 		void Prepare_(
@@ -481,6 +489,7 @@ namespace btr {
 		{}
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			Nodes.reset( P );
 		}
 		void plug( qAS_ &AS )
@@ -509,6 +518,7 @@ namespace btr {
 	*/	//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			Nodes.Init();
 		}
 		r GetRoot( r Row ) const
@@ -906,11 +916,11 @@ namespace btr {
 
 	using bch::fHook;
 
-	template <typename tree> inline bso::fBool Plug(
-		tree &Tree,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return bch::Plug( Tree.Nodes, Hook );
+		return bch::Plug( Core.GetBunch(), Hook );
 	}
 
 	using bch::rHF;

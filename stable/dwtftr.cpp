@@ -717,7 +717,7 @@ qRE
 namespace {
 	void SetFileTreeFilesHook_(
 		const fnm::name___ &Path,
-		const file_tree_ &FileTree,
+		file_tree_ &FileTree,
 		uys::mode__ Mode,
 		file_tree_fh___ &FilesHook,
 		flsq::rId Id )

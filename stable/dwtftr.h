@@ -120,7 +120,7 @@ namespace dwtftr {
 	struct file_tree_fh___
 	{
 	public:
-		dtr::rFH<dwtbsc::drow__> Tree;
+		dtr::rFH<dtree_> Tree;
 		dwtbsc::rFH Kernel;
 		void reset( bso::bool__ P = true )
 		{
@@ -130,7 +130,7 @@ namespace dwtftr {
 		E_CDTOR( file_tree_fh___ );
 		void Init_(
 			file_tree_hf___ &Filenames,
-			const file_tree_ &FileTree,
+			file_tree_ &FileTree,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )

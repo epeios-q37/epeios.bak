@@ -130,7 +130,7 @@ namespace dwtftr {
 		E_CDTOR( file_tree_fh___ );
 		void Init_(
 			file_tree_hf___ &Filenames,
-			const file_tree_ &FileTree,
+			file_tree_ &FileTree,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
