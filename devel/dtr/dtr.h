@@ -375,7 +375,7 @@ namespace dtr {
 		}
 	};
 
-	template <typename dynamic_tree> bso::fBool Plug(
+	inline bso::fBool Plug(
 		dynamic_tree &DynamicTree,
 		fHook &Hook )
 	{
@@ -400,7 +400,7 @@ namespace dtr {
 			const fnm::name___ &Basename );
 	};
 
-	template <typename host> class rFH
+	class rFH
 	: public fHook
 	{
 	private:
