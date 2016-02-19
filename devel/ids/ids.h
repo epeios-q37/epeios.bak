@@ -208,10 +208,9 @@ namespace ids {
 			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			flsq::id__ ID,
-			time_t ReferenceTime = 0 )
+			flsq::id__ ID )
 		{
-			return rFH_::Init( Filenames, Core.GetStack(), Mode, Behavior, ID, ReferenceTime );
+			return rFH_::Init( Filenames, Core.GetStack(), Mode, Behavior, ID );
 		}
 	};
 }

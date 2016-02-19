@@ -161,22 +161,6 @@ namespace lstctn {
 		{
 			qRFbd();
 		}
-		const container &GetContainer( void ) const
-		{
-			return *this;
-		}
-		container &GetContainer( void )
-		{
-			return *this;
-		}
-		list_<row, row_t> &GetList( void )
-		{
-			return *this;
-		}
-		const list_<row, row_t> &GetList( void ) const
-		{
-			return *this;
-		}
 	};
 
 	E_AUTO3( list_container );
@@ -260,7 +244,7 @@ namespace lstctn {
 			uys::eState State = Container_.Init( Filenames.Container, Core.GetContainer(), Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID, Container_.ModificationTimestamp() ) != State )
+				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 

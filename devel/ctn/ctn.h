@@ -436,7 +436,7 @@ namespace ctn {
 		{
 			fHook::Init();
 
-			uys::eState State =_Statics.Init( Filenames.Statics, Mode, Behavior, ID, 0 );
+			uys::eState State =_Statics.Init( Filenames.Statics, Mode, Behavior, ID );
 
 			if ( !State.IsError() )
 				if ( _Dynamics.Init( Filenames.Dynamics, Core.GetDynamics(), Mode, Behavior, ID ) != State )

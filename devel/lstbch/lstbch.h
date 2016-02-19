@@ -278,7 +278,7 @@ namespace lstbch {
 			uys::eState State = Bunch_.Init( Filenames.Bunch, Core.GetBunch(), Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID, Bunch_.ModificationTimestamp() ) != State )
+				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 

@@ -733,12 +733,11 @@ namespace bch {
 			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			flsq::id__ ID,
-			time_t ReferenceTime = 0 )
+			flsq::id__ ID )
 		{
 			Core_ = &Core;
 
-			return FH_.Init( Filenames, Mode, Behavior, ID, ReferenceTime );
+			return FH_.Init( Filenames, Mode, Behavior, ID );
 		}
 		void AdjustSize( time_t ReferenceTimestamp = 0 )
 		{

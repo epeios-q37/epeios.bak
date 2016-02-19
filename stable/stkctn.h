@@ -47,15 +47,31 @@ namespace stkctn {
 	};
 
 	template <typename structure, typename item, typename row> class vContainerStack
-	: public vStack< bch::bunch_< item, row >, item, row >
+	: public fCore,
+	  public vStack< structure, item, row >
 	{
+	protected:
+		virtual ctn::fCore &STKGetContainer( void ) override
+		{
+			return *this;
+		}
 	public:
 		struct s
-		: public vStack< bch::bunch_< item, row >, item, row >::s
+		: public vStack< structure, item, row >::s
 		{};
 		vContainerStack( s &S )
-		: vStack< bch::bunch_< item, row >, item, row >( S )
+		: vStack< structure, item, row >( S )
 		{}
+		void reset( bso::fBool P = true )
+		{
+			fCore::reset( P );
+			vStack< structure, item, row >::reset( P );
+		}
+		void Init( void )
+		{
+			fCore::Init();
+			vStack< structure, item, row >::Init();
+		}
 	};
 
 	using ctn::fHook;

@@ -104,7 +104,8 @@ qRH
 qRB
 	Filenames.Init( Path, "Ghosts_" );
 
-	FilesHook.Init( Filenames, Ghosts, Mode, uys::bPersistent, Id );
+	if ( FilesHook.Init(Filenames, Ghosts, Mode, uys::bPersistent, Id).IsError() )
+		qRFwk();
 qRR
 qRT
 qRE

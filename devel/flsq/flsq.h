@@ -393,7 +393,7 @@ namespace flsq {
 		void Allocate( bso::size__ Capacite )
 		{
 			if ( fil::Exists( _Name ) ) {
-				if ( Capacite <= fil::GetSize( _Name ) )
+				if ( Capacite < fil::GetSize( _Name ) )
 					qRFwk();	// Maybe not an error, so this method should do nothing.
 			}
 		}
@@ -497,7 +497,13 @@ namespace flsq {
 # endif
 		bso::bool__ CreateFile( err::handling__ ErrHandle = err::h_Default )
 		{
-			return Open_( false, ErrHandle );
+			bso::fBool Success = Open_( false, ErrHandle );
+
+			if ( Success )
+				if ( !Temoin_.Manuel )
+					ReleaseFile();
+
+			return Success;
 		}
 		void Touch( time_t ReferenceTime )
 		{
@@ -582,6 +588,10 @@ namespace flsq {
 		fil::mode__ Mode( void ) const
 		{
 			return Temoin_.Mode;
+		}
+		bso::fBool IsInitialized( void ) const
+		{
+			return _Name != NULL;
 		}
 		void Drop( void ) // Efface le fichier sous-jacent, s'il existe.
 		{

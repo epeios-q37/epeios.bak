@@ -526,7 +526,7 @@ namespace ias {
 			uys::eState State = _Descriptors.Init( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( State != _Storage.Init( Filenames.Storage, Mode, Behavior, ID, 0 ) )
+				if ( State != _Storage.Init( Filenames.Storage, Mode, Behavior, ID ) )
 					State = uys::sInconsistent;
 			}
 

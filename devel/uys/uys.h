@@ -468,6 +468,13 @@ namespace uys {
 	public:
 		void reset( bso::fBool P = true )
 		{
+			if ( P ) {
+				if ( Driver_.IsInitialized() ) {
+					if ( !Driver_.FileExists() )
+						Driver_.CreateFile();
+				}
+			}
+
 			Driver_.reset( P );
 			fHook::reset( P );
 		}
@@ -476,8 +483,7 @@ namespace uys {
 			const rHF &Filenames,
 			mode__ Mode,
 			behavior__ Behavior,
-			flsq::id__ ID,
-			time_t ReferenceTimestamp )
+			flsq::id__ ID )
 		{
 			Driver_.Init( ID, Filenames.Filename, Convert_( Mode ), flsq::cFirstUse );
 			fHook::Init();
@@ -495,23 +501,14 @@ namespace uys {
 
 			fHook::Init();
 
-			if ( Driver_.FileExists() ) {
-				if ( Driver_.ModificationTimestamp() <= ReferenceTimestamp )
-					return sInconsistent;
-				else
-					return sExists;
-			} else if ( ReferenceTimestamp != 0 )
-				return sInconsistent;
+			if ( Driver_.FileExists() )
+				return sExists;
 			else
 				return sAbsent;
 		}
 		time_t ModificationTimestamp( void ) const
 		{
 			return Driver_.ModificationTimestamp();
-		}
-		bso::bool__ CreateFiles( err::handling__ ErrHandling = err::h_Default )
-		{
-			return Driver_.CreateFile( ErrHandling );
 		}
 		void Drop( void )
 		{
