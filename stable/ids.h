@@ -30,33 +30,54 @@
 
 # include "err.h"
 # include "flw.h"
-# include "stk.h"
+# include "stkbch.h"
 # include "ags.h"
 
 namespace ids {
+
+	class fCore
+	{
+	protected:
+		virtual stkbch::fCore &IDSGetStack( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		stkbch::fCore &GetStack( void )
+		{
+			return IDSGetStack();
+		}
+	};
+
 	//c Store of ids of type 'id__'. Use 'ID_STORE' rather than directly this class.
 	template <typename id__> class ids_store_ 
+	: public fCore
 	{
+	private:
 		// Return true if 'Id' available, false otherwise.
 		bso::bool__ IsAvailable_( id__ ID ) const
 		{
 			return Released.Exists( ID ) || ( *ID >= *S_.FirstUnused );
 		}
+	protected:
+		virtual stkbch::fCore &IDSGetStack( void ) override
+		{
+			return Released;
+		}
 	public:
 		struct s
 		{
-			typename stk::E_BSTACK_( id__ )::s Released;
+			typename stkbch::qBSTACKvl( id__ )::s Released;
 			//r First unused ID.
 			id__ FirstUnused;
 		} &S_;
 		//o Released IDs
-		stk::E_BSTACK_( id__ ) Released;
+		stkbch::qBSTACKvl( id__ ) Released;
 		ids_store_( s &S )
 		: S_( S ),
 		  Released( S.Released )
 		{}
 		void reset( bso::bool__ P = true )
 		{
+			fCore::reset( P );
 			Released.reset( P );
 			S_.FirstUnused = 0;
 		}
@@ -78,6 +99,8 @@ namespace ids {
 		//f Initialization with 'First' as first unused.
 		void Init( id__ FirstUnused = 0 )
 		{
+			fCore::Init();
+
 			S_.FirstUnused = FirstUnused;
 
 			Released.Init();
@@ -160,30 +183,37 @@ namespace ids {
 		{
 			return IsAvailable_( ID );
 		}
-		// Some help for the 'Hook' related functionnalities.
-		stk::E_BSTACK_( id__ ) &GetStack( void )
-		{
-			return Released;
-		}
-		const stk::E_BSTACK_( id__ ) &GetStack( void ) const
-		{
-			return Released;
-		}
 	};
 
 	E_AUTO1( ids_store )
 
-	using stk::fHook;
+	using stkbch::fHook;
 
-	template <typename host> bso::fBool Plug(
-		host &Host,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return stk::Plug( Host.GetStack(), Hook );
+		return stkbch::Plug( Core.GetStack(), Hook );
 	}
 
-	using stk::rFH;
-	using stk::rHF;
+	using stkbch::rHF;
+	typedef stkbch::rFH rFH_;
+
+	class rFH
+	: public rFH_
+	{
+	public:
+		uys::eState Init(
+			const rHF &Filenames,
+			fCore &Core,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID,
+			time_t ReferenceTime = 0 )
+		{
+			return rFH_::Init( Filenames, Core.GetStack(), Mode, Behavior, ID, ReferenceTime );
+		}
+	};
 }
 
 # define E_IDS_STORE_( t )	ids_store_<t>

@@ -36,7 +36,7 @@
 # include "flw.h"
 # include "tys.h"
 # include "bch.h"
-# include "stk.h"
+# include "stkbch.h"
 
 namespace que {
 	//e dump direction.	
@@ -163,8 +163,8 @@ namespace que {
 
 	E_AUTO1( _stack )
 */
-# define E_QSTACK_( r ) stk::E_BSTACK_( r )
-# define E_QSTACK( r ) stk::E_BSTACK( r )
+# define qQSTACKv( r ) stkbch::qBSTACKvl( r )
+# define qQSTACKi( r ) stkbch::qBSTACKil( r )
 
 	
 	//c A queue. Use 'QUEUE_' rather than directly this.
@@ -352,7 +352,7 @@ namespace que {
 			return Links.Exists( *Node );
 		}
 		void Dump(
-			E_QSTACK_( r ) &Stack,
+			qQSTACKv( r ) &Stack,
 			r Begin,
 			que::direction Direction ) const;
 		r Cut( r Node )
@@ -403,12 +403,12 @@ namespace que {
 
 	void Dump_(
 		const E_QUEUE_ &Queue,
-		E_QSTACK_( sdr::row__ ) &Stack,
+		qQSTACKv( sdr::row__ ) &Stack,
 		sdr::row__ Begin,
 		direction Direction );
 
 	template <typename r> inline void queue_<r>::Dump(
-		E_QSTACK_( r ) &Stack,
+		qQSTACKv( r ) &Stack,
 		r Begin,
 		que::direction Direction ) const
 	{
@@ -741,7 +741,7 @@ namespace que {
 			S_.QueueManager.Swap( Node1, Node2, Queue );
 		}
 		void Dump(
-			E_QSTACK_( r ) &Stack,
+			qQSTACKv( r ) &Stack,
 			r Begin,
 			que::direction Direction ) const
 		{

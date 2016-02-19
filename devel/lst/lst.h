@@ -74,12 +74,12 @@ namespace lst {
 	class fCore
 	{
 	protected:
-		virtual ctn::fCore &LSTCTNGetContainer( void ) = 0;
+		virtual ids::fCore &LSTGetIds( void ) = 0;
 	public:
 		qCALLBACK_DEF( Core );
-		ctn::fCore &GetContainer( void )
+		ids::fCore &GetIds( void )
 		{
-			return LSTCTNGetContainer();
+			return LSTGetIds();
 		}
 	};
 
@@ -88,12 +88,13 @@ namespace lst {
 	: public fCore
 	{
 	protected:
-		/*v Cette fonction est appelée lors d'allocations dans la liste;
-		permet de synchroniser la taille de la liste avec d'autres ensembles;
-		'Size' est la capacité allouée. */
 		virtual void LSTAllocate(
 			sdr::size__ Size,
 			aem::mode__ Mode ) = 0;
+		virtual ids::fCore &LSTGetIds( void ) override
+		{
+			return Locations;
+		}
 	private:
 		// Return the extent, based on 'Locations'.
 		sdr::row_t__ Extent_( void ) const
@@ -135,7 +136,7 @@ namespace lst {
 		{}
 		void reset( bool P = true )
 		{
-			Core.reset( P );
+			fCore::reset( P );
 			Locations.reset( P );
 		}
 		void plug( qSD__ &SD )
@@ -167,7 +168,7 @@ namespace lst {
 	*/	//f Initialiration.
 		void Init( void )
 		{
-			core::Init();
+			fCore::Init();
 			Locations.Init();
 		}
 		//f Delete 'Entry'.
@@ -341,7 +342,23 @@ namespace lst {
 	}
 
 	using ids::rHF;
-	using ids::rFH;
+	typedef ids::rFH rFH_;
+
+	class rFH
+	: public rFH_
+	{
+	public:
+		uys::eState Init(
+			const rHF &Filenames,
+			fCore &Core,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID,
+			time_t ReferenceTime = 0 )
+		{
+			return rFH_::Init(Filenames, Core.GetIds(), Mode, Behavior, ID, ReferenceTime );
+		}
+	};
 
 #endif
 

@@ -36,8 +36,8 @@ qRB
 	List.Init();
 	fnm::BuildPath( Path, Basename, "l", List );
 
-	Bunch_.Init( "", Bunch );
-	List_.Init( "", List );
+	this->Bunch.Init( "", Bunch );
+	this->List.Init( "", List );
 qRR
 qRT
 qRE

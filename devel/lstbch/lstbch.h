@@ -20,22 +20,22 @@
 // LiST BunCH 
 
 #ifndef LSTBCH__INC
-#define LSTBCH__INC
+# define LSTBCH__INC
 
-#define LSTBCH_NAME		"LSTBCH"
+# define LSTBCH_NAME		"LSTBCH"
 
-#define	LSTBCH_VERSION	"$Revision: 1.46 $"
+# define	LSTBCH_VERSION	"$Revision: 1.46 $"
 
-#define LSTBCH_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# define LSTBCH_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#if defined( E_DEBUG ) && !defined( LSTBCH_NODBG )
-#define LSTBCH_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( LSTBCH_NODBG )
+#  define LSTBCH_DBG
+# endif
 
-#include "err.h"
-#include "flw.h"
-#include "bch.h"
-#include "lst.h"
+# include "err.h"
+# include "flw.h"
+# include "bch.h"
+# include "lst.h"
 
 /*************************/
 /****** New version ******/
@@ -56,15 +56,42 @@ namespace lstbch {
 	using lst::list_;
 	using bch::bunch_;
 
+	class fCore
+	{
+	protected:
+		virtual bch::fCore &LSTBCHGetBunch( void ) = 0;
+		virtual lst::fCore &LSTBCHGetList( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		bch::fCore &GetBunch( void )
+		{
+			return LSTBCHGetBunch();
+		}
+		lst::fCore &GetList( void )
+		{
+			return LSTBCHGetList();
+		}
+	};
+
+
 	//c Bunch associated to a list.
 	template <typename type, typename row, typename row_t> class list_bunch_
-	: public list_<row, row_t>,
+	: public fCore,
+	  public list_<row, row_t>,
 	  public bunch_<type, row>
 	{
 	protected:
+		virtual bch::fCore &LSTBCHGetBunch( void ) override
+		{
+			return *this;
+		}
+		virtual lst::fCore &LSTBCHGetList( void ) override
+		{
+			return *this;
+		}
 		virtual void LSTAllocate(
 			sdr::size__ Size,
-			aem::mode__ Mode )
+			aem::mode__ Mode ) override
 		{
 			bunch_<type, row>::Allocate( Size, Mode );
 		}
@@ -79,6 +106,7 @@ namespace lstbch {
 		{}
 		void reset( bso::bool__ P = true )
 		{
+			fCore::reset( P );
 			list_<row, row_t>::reset( P );
 			bunch_<type, row>::reset( P );
 		}
@@ -97,6 +125,7 @@ namespace lstbch {
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			list_<row, row_t>::Init();
 			bunch_<type, row>::Init();
 		}
@@ -190,54 +219,38 @@ namespace lstbch {
 		{
 			return LSTBCHGetBunchHook();
 		}
-		lst::fHook &BCHGetListHook( void )
+		lst::fHook &GetListHook( void )
 		{
 			return LSTBCHGetListHook();
 		}
 	};
 
-	template <typename list_bunch> bso::fBool Plug(
-		list_bunch &ListBunch,
+	inline bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		bso::fBool Exists = bch::Plug( ListBunch.Bunch(), Hook._Bunch );
+		bso::fBool Exists = bch::Plug( Core.GetBunch(), Hook.GetBunchHook() );
 
-		if ( State.IsError() )
-			Hook.reset();
-		else {
-			fil::size__ Size = Hook._Bunch.FileSize() / ListBunch.GetItemSize();
-
-			if ( Size > SDR_SIZE_MAX )
-				qRFwk();
-
-			if ( lst::Plug( ListBunch, Hook._List, (sdr::size__)Size, Hook._Bunch.TimeStamp() ) != State ) {
-				Hook.reset();
-				State = uys::sInconsistent;
-			}
-		}
-
-		return State;
+		return lst::Plug(Core.GetList(), Hook.GetListHook() );
 	}
 
 	struct rHF
 	{
-	private:
-		bch::rHF Bunch_;
-		lst::rHF List_;
 	public:
+		bch::rHF Bunch;
+		lst::rHF List;
 		void reset( bso::bool__ P = true )
 		{
-			Bunch_.reset( P );
-			List_.reset( P );
+			Bunch.reset( P );
+			List.reset( P );
 		}
 		E_CDTOR( rHF );
 		void Init(
 			const fnm::name___ &Path,
 			const fnm::name___ &Basename );
-		friend class fh___;
 	};
 
-	template <typename list_bunch> class rFH
+	class rFH
 	: public fHook
 	{
 	private:
@@ -247,98 +260,53 @@ namespace lstbch {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				_List.AdjustSize( _Bunch.ModificationTimestamp() );
+				List_.AdjustSize( Bunch_.ModificationTimestamp() );
 			}
 
-			_Bunch.reset( P );
-			_List.reset( P );
+			Bunch_.reset( P );
+			List_.reset( P );
 			fHook::reset( P );
 		}
 		qCDTOR( rFH );
-		void Init(
-			const rFH &Filenames,
-			const list_bunch &ListBunch,
+		uys::eState Init(
+			const rHF &Filenames,
+			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
-			flsq::id__ ID,
-			time_t ReferenceTime )
+			flsq::id__ ID )
 		{
-			uys::eState State = _Bunch.Init_( Filenames.Bunch_, Mode, Behavior, ID, ReferenceTime );
+			uys::eState State = Bunch_.Init( Filenames.Bunch, Core.GetBunch(), Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( State != _List.Init( Filenames.List_, Mode, Behavior ) )
+				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID, Bunch_.ModificationTimestamp() ) != State )
 					State = uys::sInconsistent;
-				else if ( State == uys::sExists ) {
-					if ( _Bunch.ModificationTimestamp() >= _List.ModificationTimestamp() )
-						State = uys::sInconsistent;
-				}
 			}
 
 			fHook::Init();
 
 			return State;
 		}
-		void Drop( void )
+		time_t ModificationTimestamp( void ) const
 		{
-			_List.Drop();
-			_Bunch.Drop();
-		}
-#ifdef CPE_C_MSC
-#	undef CreateFile
-#endif
-		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
-		{
-			bso::bool__ Success = _Bunch.CreateFiles( ErrorHandling );
-
-			if ( !Success )
-				return false;
-
-			if ( Settle().IsError() ) {
-				_Bunch.Drop();
-				Success = false;
-			}
-
-			return Success;
-		}
-		time_t TimeStamp( void ) const
-		{
-			time_t BunchTimeStamp = _Bunch.TimeStamp();
-			time_t ListTimeStamp = _List.TimeStamp();
+			time_t BunchTimeStamp = Bunch_.ModificationTimestamp();
+			time_t ListTimeStamp = List_.ModificationTimestamp();
 
 			if ( BunchTimeStamp > ListTimeStamp )
 				return BunchTimeStamp;
 			else
 				return ListTimeStamp;
 		}
-		void ReleaseFile( void )
-		{
-			_Bunch.ReleaseFile();
-		}
-		void Mode( uys::mode__ Mode )
-		{
-			_Bunch.Mode( Mode );
-		}
-		bso::bool__ IsPersistent( void ) const
-		{
-			bso::bool__ Is = _Bunch.IsPersistent();
-
-			if ( Is != _List.IsPersistent() )
-				qRFwk();
-
-			return Is;
-		}
 	};
-#endif
+# endif
 
-	#define E_LBUNCHtx_( type, row, row_t )		list_bunch_<type, row, row_t>
-	#define E_LBUNCHtx( type, row, row_t )		list_bunch<type, row, row_t>
+# define E_LBUNCHtx_( type, row, row_t )		list_bunch_<type, row, row_t>
+# define E_LBUNCHtx( type, row, row_t )		list_bunch<type, row, row_t>
 
-	#define E_LBUNCHt_( type, row )	E_LBUNCHtx_( type, row, sdr::row_t__)
-	#define E_LBUNCHt( type, row )	E_LBUNCHtx( type, row, sdr::row_t__)
+# define E_LBUNCHt_( type, row )	E_LBUNCHtx_( type, row, sdr::row_t__)
+# define E_LBUNCHt( type, row )	E_LBUNCHtx( type, row, sdr::row_t__)
 
-	#define  E_LBUNCH_( type )		E_LBUNCHt_( type, sdr::row__ )
-	#define  E_LBUNCH( type )		E_LBUNCHt( type, sdr::row__ )
+# define  E_LBUNCH_( type )		E_LBUNCHt_( type, sdr::row__ )
+# define  E_LBUNCH( type )		E_LBUNCHt( type, sdr::row__ )
 }
 
-/*$END$*/
 #endif

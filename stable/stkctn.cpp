@@ -17,8 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define STK__COMPILATION
+#define STKCTN__COMPILATION
 
-#include "stk.h"
+#include "stkctn.h"
 
-using namespace stk;
+using namespace stkctn;
+

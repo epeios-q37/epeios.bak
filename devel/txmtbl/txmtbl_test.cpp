@@ -17,28 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LSTBCH__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "lstbch.h"
+#include "txmtbl.h"
 
-using namespace lstbch;
+#include "err.h"
+#include "cio.h"
 
-void lstbch::rHF::Init(
-	const fnm::name___ &Path,
-	const fnm::name___ &Basename )
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
+
+void Generic( int argc, char *argv[] )
 {
 qRH
-	fnm::name___ Bunch, List;
 qRB
-	Bunch.Init();
-	fnm::BuildPath( Path, Basename, "b", Bunch );
-
-	List.Init();
-	fnm::BuildPath( Path, Basename, "l", List );
-
-	this->Bunch.Init( "", Bunch );
-	this->List.Init( "", List );
 qRR
 qRT
 qRE
+}
+
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+qRFH
+qRFB
+	COut << "Test of library " << TXMTBL_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+qRFR
+	ExitValue = EXIT_FAILURE;
+qRFT
+qRFE
+	return ExitValue;
 }

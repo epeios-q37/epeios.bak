@@ -393,9 +393,9 @@ namespace dwtbsc {
 	private:
 		bch::rFH Goofs_;
 		bch::rFH Files_;
-		ctn::rFH<directories_> Directories_;
-		ctn::rFH<names_> Names_;
-		ctn::rFH<oddities_> Oddities_;
+		ctn::rFH Directories_;
+		ctn::rFH Names_;
+		ctn::rFH Oddities_;
 	public:
 		void reset( bso::bool__ P = true )
 		{

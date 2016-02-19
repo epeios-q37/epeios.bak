@@ -59,11 +59,16 @@ namespace lstctn {
 	{
 	protected:
 		virtual ctn::fCore &LSTCTNGetContainer( void ) = 0;
+		virtual lst::fCore &LSTCTNGetList( void ) = 0;
 	public:
 		qCALLBACK_DEF( Core );
 		ctn::fCore &GetContainer( void )
 		{
 			return LSTCTNGetContainer();
+		}
+		lst::fCore &GetList( void )
+		{
+			return LSTCTNGetList();
 		}
 	};
 
@@ -73,9 +78,17 @@ namespace lstctn {
 	  public container
 	{
 	protected:
+		virtual ctn::fCore &LSTCTNGetContainer( void ) override
+		{
+			return *this;
+		}
+		virtual lst::fCore &LSTCTNGetList( void ) override
+		{
+			return *this;
+		}
 		virtual void LSTAllocate(
 			sdr::size__ Size,
-			aem::mode__ Mode )
+			aem::mode__ Mode ) override
 		{
 			container::Allocate( Size, Mode );
 		}
@@ -214,144 +227,57 @@ namespace lstctn {
 	: public fHook
 	{
 	private:
-		ctn::rFH<host> _Container;
-		lst::rFH _List;
-		time_t _ContainerTimeStamp( void ) const
-		{
-			return _Container.TimeStamp();
-		}
-		time_t _ListTimeStamp( void ) const
-		{
-			return _List.TimeStamp();
-		}
+		ctn::rFH Container_;
+		lst::rFH List_;
 	protected:
 		virtual ctn::fHook &LSTCTNGetContainerHook( void ) override
 		{
-			return _Container;
+			return Container_;
 		}
 		virtual lst::fHook &LSTCTNGetListHook( void ) override
 		{
-			return _List;
+			return List_;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				_List.AdjustSize( _Container.ModificationTimestamp() );
+				List_.AdjustSize( Container_.ModificationTimestamp() );
 			}
 
-			_Container.reset( P );
-			_List.reset( P );
+			Container_.reset( P );
+			List_.reset( P );
 			fHook::reset( P );
 		}
 		qCVDTOR( rFH );
-		void Init(
+		uys::eState Init(
 			const rHF &Filenames,
-			host &Host,
+			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			reset();
+			uys::eState State = Container_.Init( Filenames.Container, Core.GetContainer(), Mode, Behavior, ID );
 
-			_Container.Init( Filenames.Container, Host, Mode, Behavior, ID );
-			_List.Init( Filenames.List, Host, Mode, Behavior, ID, _Container.ModificationTimestamp() );
-			fHook::Init();
-		}
-		/*
-		uys::mode__ Mode( uys::mode__ Mode )
-		{
-			uys::mode__ ModeBuffer = _Container.Mode( Mode );
-
-			if ( ModeBuffer != _List.Mode( Mode ) )
-				qRFwk();
-
-			return ModeBuffer;
-		}
-		uys::mode__ Mode( void ) const
-		{
-			uys::mode__ Mode = _Container.Mode();
-
-			if ( Mode != _List.Mode() )
-				qRFwk();
-
-			return Mode;
-		}
-		uys::state__ State( void ) const
-		{
-			uys::state__ State = _Container.State();
-
-			if ( !State.IsError() )
-				if ( State != _List.State() )
+			if ( !State.IsError() ) {
+				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID, Container_.ModificationTimestamp() ) != State )
 					State = uys::sInconsistent;
-
-			return State;
-		}
-		uys::state__ Settle( void )
-		{
-			uys::state__ State = _Container.Settle();
-
-			if ( State.IsError() )
-				return State;
-
-			if ( _Container.IsPersistent() && _Container.Exists() )
-				if ( _List.Settle( _Container.TimeStamp() ) != State )
-						State = uys::sInconsistent;
-
-			return State;
-		}
-		void Drop( void )
-		{
-			 _Container.Drop();
-			_List.Drop();
-		}
-		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
-		{
-			bso::bool__ Success = _Container.CreateFiles( ErrorHandling );
-
-			if ( !Success )
-				return false;
-
-			if ( Settle().IsError() ) {
-				_Container.Drop();
-				Success = false;
 			}
 
-			return Success;
+			fHook::Init();
+
+			return State;
 		}
-		void ReleaseFiles( void )
+		time_t ModificationTimestamp( void ) const
 		{
-			_Container.ReleaseFiles();
-			_List.ReleaseFiles();
-		}
-		time_t TimeStamp( void ) const
-		{
-			time_t ContainerTimeStamp = _ContainerTimeStamp();
-			time_t ListTimeStamp = _ListTimeStamp();
+			time_t ContainerTimeStamp = Container_.ModificationTimestamp();
+			time_t ListTimeStamp = List_.ModificationTimestamp();
 
 			if ( ContainerTimeStamp > ListTimeStamp )
 				return ContainerTimeStamp;
 			else
 				return ListTimeStamp;
 		}
-		bso::bool__ IsPersistent( void ) const
-		{
-			bso::bool__ Is = _Container.IsPersistent();
-
-			if ( Is != _List.IsPersistent() )
-				qRFwk();
-
-			return Is;
-		}
-		ctn::fh___ &ContainerFilesHook( void )
-		{
-			return _Container;
-		}
-		lst::fh___ &ListFilesHook( void )
-		{
-			return _List;
-		}
-		*/
 	};
 
 	template <typename container, typename object, typename row, typename row_t> class list_xcontainer_

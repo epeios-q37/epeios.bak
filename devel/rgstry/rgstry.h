@@ -36,7 +36,6 @@
 # include "xtf.h"
 # include "cpe.h"
 # include "xpp.h"
-# include "stk.h"
 # include "fnm.h"
 # include "tagsbs.h"
 
@@ -1569,8 +1568,8 @@ namespace rgstry {
 		bso::bool__ RootToo,
 		xml::writer_ &Writer );
 
-	typedef stk::E_BSTACKt_( entry__, level__ ) _entries_;
-	typedef stk::E_BSTACKt_( time_t, level__ ) _timestamps_;
+	typedef stkbch::qBSTACKv( entry__, level__ ) _entries_;
+	typedef stkbch::qBSTACKv( time_t, level__ ) _timestamps_;
 
 	const value_ &Empty_( void );	// Retourne une valeur vide.
 

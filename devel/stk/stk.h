@@ -32,10 +32,29 @@
 # include "bch.h"
 
 namespace stk {
+
+	class fCore
+	{
+	protected:
+		virtual bch::fCore &STKGetBunch( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		bch::fCore &GetBunch( void )
+		{
+			return STKGetBunch();
+		}
+	};
+
 	//c Stack of static objects of type 't'. Use 'STACK_( t )' rather then directly this class.
 	template <typename structure, typename item, typename row> class stack_
-	: public structure
+	: public fCore,
+	  public structure
 	{
+	protected:
+		virtual bch::fCore &STKGetBunch( void ) override
+		{
+			return *this;
+		}
 	public:
 		struct s
 		: public structure::s
@@ -45,6 +64,7 @@ namespace stk {
 		{}
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			structure::reset( P );
 		}
 		void plug( qSD__ &SD )
@@ -64,6 +84,7 @@ namespace stk {
 		//f Initialization.
 		void Init( void )
 		{
+			fCore::Init();
 			structure::Init();
 		}
 		//f Place 'Object' at the top of the stack. Return the position where this object is put.
@@ -157,16 +178,31 @@ namespace stk {
 
 	using bch::fHook;
 
-	template <typename host> bso::fBool Plug(
-		host &Host,
+	bso::fBool Plug(
+		fCore &Core,
 		fHook &Hook )
 	{
-		return bch::Plug( Host.GetBunch(), Hook );
+		return bch::Plug( Core.GetBunch(), Hook );
 	}
 
-	using bch::rFH;
 	using bch::rHF;
+	typedef bch::rFH rFH_;
 
+	class rFH
+	: public rFH_
+	{
+	public:
+		uys::eState Init(
+			const rHF &Filenames,
+			fCore &Core,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID,
+			time_t ReferenceTime = 0 )
+		{
+			return rFH_::Init(Filenames, Core.GetBunch(), Mode, Behavior, ID, ReferenceTime );
+		}
+	};
 }
 
 # define E_BSTACKt_( item, row )	bstack_< item, row >

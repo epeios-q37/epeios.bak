@@ -17,48 +17,23 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: idxque.h,v 1.24 2013/04/11 19:36:49 csimon Exp $
+// InDeX QUEue
 
 #ifndef IDXQUE__INC
-#define IDXQUE__INC
+# define IDXQUE__INC
 
-#define IDXQUE_NAME		"IDXQUE"
+# define IDXQUE_NAME		"IDXQUE"
 
-#define	IDXQUE_VERSION	"$Revision: 1.24 $"
+# if defined( E_DEBUG ) && !defined( IDXQUE_NODBG )
+#  define IDXQUE_DBG
+# endif
 
-#define IDXQUE_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-
-#if defined( E_DEBUG ) && !defined( IDXQUE_NODBG )
-#define IDXQUE_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.24 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/11 19:36:49 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D InDeX QUEue 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-/* Addendum to the automatic documentation generation part. */
-//D InDeX QUEue
-/* End addendum to automatic documentation generation part. */
-
-
-#include "err.h"
-#include "txf.h"
-#include "que.h"
-#include "stk.h"
+# include "err.h"
+# include "txf.h"
+# include "que.h"
 
 //d The end of the queue.
-#define IDXQUE_END	NONE
+# define IDXQUE_END	qNIL
 
 namespace idxque {
 	using namespace que;
@@ -101,7 +76,7 @@ namespace idxque {
 		}
 		/*f Dump to the stack 'Stack' the queue beginning at 'Begin' and in the 'Direction ' direction.. */
 		void Dump(
-			stk::E_BSTACK_( r ) &Stack,
+			stkbch::qBSTACKvl( r ) &Stack,
 			r Begin,
 			idxque::direction Direction )
 		{
@@ -144,5 +119,4 @@ namespace idxque {
 	#define E_IQUEUE	E_IQUEUEt( epeios::row__ )
 }
 
-/*$END$*/
 #endif

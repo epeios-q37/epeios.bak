@@ -31,7 +31,6 @@
 # include "bso.h"
 # include "err.h"
 # include "str.h"
-# include "stk.h"
 # include "ltf.h"
 # include "lstctn.h"
 
@@ -72,7 +71,7 @@ namespace dwtdct {
 	E_AUTO( fstrings );
 
 	typedef ctn::rHF fstrings_hf___;
-	typedef ctn::rFH<fstrings_> fstrings_fh___;
+	typedef ctn::rFH fstrings_fh___;
 
 
 	typedef ctn::E_MCONTAINERt_( str::string_, dwtbsc::grow__ ) gstrings_;
@@ -384,7 +383,7 @@ namespace dwtdct {
 
 	E_AUTO( items );
 
-	typedef stk::E_BSTACK_( irow__ ) irows_;
+	typedef stkbch::qBSTACKvl( irow__ ) irows_;
 	E_AUTO( irows );
 
 	typedef bch::E_BUNCHt_( dwtbsc::files_ *, irow__ ) files_set_;
@@ -588,7 +587,7 @@ namespace dwtdct {
 	E_AUTO( gfrows );
 
 	typedef ctn::rHF gfrows_hf___;
-	typedef ctn::rFH<gfrows_> gfrows_fh___;
+	typedef ctn::rFH gfrows_fh___;
 
 	// Files rattached to each ghost.
 	class ghost2files_

@@ -30,7 +30,6 @@
 
 # include "err.h"
 # include "flw.h"
-# include "stk.h"
 # include "rgstry.h"
 
 # define LCL_TAG_MARKER_C	'%'
@@ -237,12 +236,12 @@ namespace lcl {
 		void _GetCorrespondingLabels(
 			const strings_ &Labels,
 			strings_ &Wordings ) const;
-		// A des fins de compatibilit ascendente.
+		// A des fins de compatibilité ascendente.
 		bso::bool__ _GetTranslationFollowingLanguageThenMessage(
 			const str::string_ &Text,
 			const char *Language,
 			str::string_ &Translation ) const;
-		// A des fins de compatibilit ascendente.
+		// A des fins de compatibilité ascendente.
 		bso::bool__ _GetTranslationFollowingMessageThenLanguage(
 			const str::string_ &Text,
 			const char *Language,
@@ -290,7 +289,7 @@ namespace lcl {
 		const str::string_ &GetTranslation(
 			const str::string_ &Text,
 			const char *Language,
-			str::string_ &Translation ) const	// Version simplifie.
+			str::string_ &Translation ) const	// Version simplifiée.
 		{
 			_GetTranslation( Text, Language, Translation );
 
@@ -299,7 +298,7 @@ namespace lcl {
 		const str::string_ &GetTranslation(
 			const char *Text,
 			const char *Language,
-			str::string_ &Translation ) const	// Version simplifie.
+			str::string_ &Translation ) const	// Version simplifiée.
 		{
 			_GetTranslation( str::string( Text ), Language, Translation );
 
@@ -309,16 +308,16 @@ namespace lcl {
 
 	E_AUTO( locale );
 
-	// Fonction utilise dans le cadre de l'internationalisation, qui sert juste  contrler l'existence du premier paramtre, qui correspond gnralement  une entre d'un 'enum'.
+	// Fonction utilisée dans le cadre de l'internationalisation, qui sert juste à contrôler l'existence du premier paramètre, qui correspond généralement à une entrée d'un 'enum'.
 	inline const char *Control_(
-		int,	// Sert juste  vrifier l'existence d'une entre d'un 'enum'.
+		int,	// Sert juste à vérifier l'existence d'une entrée d'un 'enum'.
 		const char *Text )
 	{
 		return Text;
 	}
 }
 
-// A utiliser dans une macro '_( name )', qui prdfini le paramtre 'prefix'.
+// A utiliser dans une macro '_( name )', qui prédéfini le paramètre 'prefix'.
 # define LCL_M( prefix, name ) lcl::Control_( prefix##name, #name )
 
 #endif

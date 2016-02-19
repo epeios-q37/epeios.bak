@@ -30,7 +30,6 @@
 
 # include "err.h"
 # include "flw.h"
-# include "stk.h"
 # include "rgstry.h"
 
 # define LCL_TAG_MARKER_C	'%'

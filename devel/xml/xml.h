@@ -32,7 +32,7 @@
 #include "flw.h"
 #include "str.h"
 #include "xtf.h"
-#include "stk.h"
+#include "stkctn.h"
 #include "ctn.h"
 #include "cpe.h"
 
@@ -124,7 +124,7 @@ namespace xml {
 		}
 	};
 
-	E_TMIMIC__( stk::row__, mark__ );
+	E_TMIMIC__( stkctn::fRow, mark__ );
 
 	inline bso::bool__ WriteXMLHeader(
 		txf::text_oflow__ &OFlow,
@@ -175,7 +175,7 @@ namespace xml {
 		}
 	public:
 		struct s {
-			stk::E_MCSTACK_( name_ )::s Tags;
+			stkctn::qMCSTACKvl( name_ )::s Tags;
 			txf::text_oflow__ *Flow;
 			bso::bool__ TagNameInProgress;
 			bso::bool__ TagValueInProgress;
@@ -184,7 +184,7 @@ namespace xml {
 			bso::bool__ Ignore;
 			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
 		} &S_;
-		stk::E_MCSTACK_( name_ ) Tags;
+		stkctn::qMCSTACKvl( name_ ) Tags;
 		vWriter( s &S )
 		: S_( S ),
 		  Tags( S.Tags )
@@ -613,7 +613,7 @@ namespace xml {
 	private:
 		_context__ _Context;
 		token__ _Token;
-		stk::E_MCSTACK( str::string_ ) _Tags;
+		stkctn::qMCSTACKil( str::string_ ) _Tags;
 		bso::bool__ _EmptyTag;	// A 'true' pour '<tag/>', sinon  'false'.
 		_flow___ _Flow;
 		str::string _TagName;

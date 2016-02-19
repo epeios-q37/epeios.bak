@@ -31,7 +31,6 @@
 # include "err.h"
 # include "btr.h"
 # include "que.h"
-# include "stk.h"
 # include "bitbch.h"
 
 namespace idxbtr {

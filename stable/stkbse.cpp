@@ -17,28 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define LSTBCH__COMPILATION
+#define STKBSE__COMPILATION
 
-#include "lstbch.h"
+#include "stkbse.h"
 
-using namespace lstbch;
+using namespace stkbse;
 
-void lstbch::rHF::Init(
-	const fnm::name___ &Path,
-	const fnm::name___ &Basename )
-{
-qRH
-	fnm::name___ Bunch, List;
-qRB
-	Bunch.Init();
-	fnm::BuildPath( Path, Basename, "b", Bunch );
-
-	List.Init();
-	fnm::BuildPath( Path, Basename, "l", List );
-
-	this->Bunch.Init( "", Bunch );
-	this->List.Init( "", List );
-qRR
-qRT
-qRE
-}

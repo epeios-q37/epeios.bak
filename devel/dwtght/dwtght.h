@@ -103,7 +103,7 @@ namespace dwtght {
 	typedef lstctn::E_LXMCONTAINERt_( ghost_, grow__ ) ghosts_;
 	E_AUTO( ghosts );
 
-	typedef lstctn::rFH<ghosts_> rFH;
+	using lstctn::rFH;
 
 	struct rRack {
 		rFH FilesHook;

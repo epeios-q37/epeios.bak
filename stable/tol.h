@@ -232,7 +232,7 @@ public:\
 	qW_( name )\
 	};
 
-//m Same as 'qW()', but with one template parameter of type 'name'
+//m Same as 'qW()', but with one template parameter.
 # define qW1( name )\
 template <typename t> class i##name\
 : public v##name<t>\
@@ -265,6 +265,82 @@ public:\
 		return *this;\
 	}\
 	const v##name<t> &operator *( void ) const\
+	{\
+		return *this;\
+	}\
+};
+
+// Same as 'qW()', but with 2 template parameters.
+# define qW2( name )\
+template <typename t, typename u> class i##name\
+: public v##name<t,u>\
+{\
+public:\
+	typename v##name<t,u>::s static_;\
+	i##name( void )\
+	: v##name<t,u>( static_ )\
+	{\
+		v##name<t,u>::reset( false );\
+	}\
+	~i##name( void )\
+	{\
+		v##name<t,u>::reset( true );\
+	}\
+	i##name &operator =( const i##name &S )\
+	{\
+		v##name<t,u>::operator =( S );\
+\
+		return *this;\
+	}\
+	i##name &operator =( const v##name<t,u> &S )\
+	{\
+		v##name<t,u>::operator =( S );\
+\
+		return *this;\
+	}\
+	v##name<t,u> &operator *( void )\
+	{\
+		return *this;\
+	}\
+	const v##name<t,u> &operator *( void ) const\
+	{\
+		return *this;\
+	}\
+};
+
+// Same as 'qW()', but with 3 template parameters.
+# define qW3( name )\
+template <typename t, typename u, typename v> class i##name\
+: public v##name<t,u,v>\
+{\
+public:\
+	typename v##name<t,u,v>::s static_;\
+	i##name( void )\
+	: v##name<t,u,v>( static_ )\
+	{\
+		v##name<t,u,v>::reset( false );\
+	}\
+	~i##name( void )\
+	{\
+		v##name<t,u,v>::reset( true );\
+	}\
+	i##name &operator =( const i##name &S )\
+	{\
+		v##name<t>::operator =( S );\
+\
+		return *this;\
+	}\
+	i##name &operator =( const v##name<t,u,v> &S )\
+	{\
+		v##name<t>::operator =( S );\
+\
+		return *this;\
+	}\
+	v##name<t,u,v> &operator *( void )\
+	{\
+		return *this;\
+	}\
+	const v##name<t,u,v> &operator *( void ) const\
 	{\
 		return *this;\
 	}\

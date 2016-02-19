@@ -112,6 +112,14 @@ namespace ctn {
 		}
 	protected:
 		virtual bso::bool__ IsFlushed( void ) const = 0;
+		virtual tys::fCore &CTNGetStatics( void ) override
+		{
+			return Statics;
+		}
+		virtual ias::indexed_aggregated_storage_ &CTNGetDynamics( void ) override
+		{
+			return Dynamics;
+		}
 		void Insert(
 			const st &ST,
 			r Row,

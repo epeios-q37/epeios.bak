@@ -38,6 +38,7 @@
 # include "crptgr.h"
 # include "cdgb64.h"
 # include "fnm.h"
+# include "stkbch.h"
 
 
 # ifdef XPP_PREPROCESSOR_DEFAULT_NAMESPACE
@@ -604,7 +605,7 @@ namespace xpp {
 		E_RODISCLOSE__( fnm::name___, LocalizedFileName );
 	};
 
-	typedef stk::E_BSTACK_(_extended_parser___ *) _xparser_stack_;
+	typedef stkbch::qBSTACKvl(_extended_parser___ *) _xparser_stack_;
 	E_AUTO( _xparser_stack );
 
 	typedef fdr::iflow_driver___<> _iflow_driver___;
