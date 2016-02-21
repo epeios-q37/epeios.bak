@@ -28,7 +28,7 @@
 sdr::row_t__ lst::Successeur_(
 	sdr::row_t__ Element,
 	sdr::size__ Amount,
-	const store_ &Libres )
+	const vStore &Libres )
 {
 	while( ( ++Element < Amount ) && Libres.IsAvailable( Element ) ) {};
 
@@ -41,7 +41,7 @@ sdr::row_t__ lst::Successeur_(
 // Retourne l'lment prcdent 'Element', ou LST_INEXISTANT si inexistant.
 sdr::row_t__ lst::Predecesseur_(
 	sdr::row_t__ Element,
-	const store_ &Libres )
+	const vStore &Libres )
 {
 	bso::bool__ Trouve = false;
 
@@ -56,7 +56,7 @@ sdr::row_t__ lst::Predecesseur_(
 void lst::MarkAsReleased_(
 	sdr::row_t__ First,
 	sdr::row_t__ Last,
-	store_ &Store )
+	vStore &Store )
 {
 	while ( First < Last )
 		Store.RestorationRelease( Last-- );

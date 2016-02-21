@@ -80,10 +80,9 @@ struct _data__ {
 static lstbch::E_LBUNCHt( _data__, row__ ) List_;
 static que::E_MQUEUEt( row__ ) Queue_;
 
-typedef ids::E_IDS_STORE_( id__ )	_ids_;
-E_AUTO( _ids );
-
-static _ids	IDs_;
+namespace {
+	idsq::qIDSi( id__ )	Ids_;
+}
 
 id__ flsq::GetId( void )
 {
@@ -91,7 +90,7 @@ id__ flsq::GetId( void )
 
 	Lock_();
 
-	ID = IDs_.New();
+	ID = Ids_.New();
 
 	Unlock_();
 
@@ -102,7 +101,7 @@ void flsq::ReleaseId( id__ ID )
 {
 	Lock_();
 
-	IDs_.Release( ID );
+	Ids_.Release( ID );
 
 	Unlock_();
 }
@@ -379,7 +378,7 @@ Q37_GCTOR( flsq )
 {
 	List_.Init();
 	Queue_.Init();
-	IDs_.Init();
+	Ids_.Init();
 
 	flsq::MaxFileAmount = FLSQ__MAX_FILE_AMOUNT;
 

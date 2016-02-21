@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// LiST
+
 #ifndef LST__INC
 # define LST__INC
 
@@ -26,15 +28,13 @@
 #  define LST_DBG
 # endif
 
-// LiST
-
-#include "err.h"
-#include "ids.h"
-#include "bitbch.h"
+# include "err.h"
+# include "idsq.h"
+# include "bitbch.h"
 
 namespace lst {
 
-	typedef ids::E_IDS_STORE_( sdr::row__ ) store_;
+	typedef idsq::qIDSv( sdr::fRow ) vStore;
 
 	inline uys::eState Test_(
 		const fnm::name___ &FileName,
@@ -55,29 +55,29 @@ namespace lst {
 	sdr::row_t__ Successeur_(
 		sdr::row_t__ Element,
 		sdr::size__ Amount,
-		const store_ &Libres );
+		const vStore &Libres );
 
 	sdr::row_t__ Predecesseur_(
 		sdr::row_t__ Element,
-		const store_ &Libres );
+		const vStore &Libres );
 
 	void Insert_(
 		sdr::row_t__ First,
 		sdr::row_t__ Last,
-		store_ &Store );
+		vStore &Store );
 
 	void MarkAsReleased_(
 		sdr::row_t__ First,
 		sdr::row_t__ Last,
-		store_ &Store );
+		vStore &Store );
 
 	class fCore
 	{
 	protected:
-		virtual ids::fCore &LSTGetIds( void ) = 0;
+		virtual idsq::fCore &LSTGetIds( void ) = 0;
 	public:
 		qCALLBACK_DEF( Core );
-		ids::fCore &GetIds( void )
+		idsq::fCore &GetIds( void )
 		{
 			return LSTGetIds();
 		}
@@ -91,7 +91,7 @@ namespace lst {
 		virtual void LSTAllocate(
 			sdr::size__ Size,
 			aem::mode__ Mode ) = 0;
-		virtual ids::fCore &LSTGetIds( void ) override
+		virtual idsq::fCore &LSTGetIds( void ) override
 		{
 			return Locations;
 		}
@@ -124,10 +124,10 @@ namespace lst {
 		}
 	public:
 		//o Store of locations.
-		store_ Locations;
+		vStore Locations;
 		struct s
 		{
-			store_::s Locations;
+			vStore::s Locations;
 		};
 	// fonctions
 		list_( s &S )
@@ -307,11 +307,11 @@ namespace lst {
 			LSTAllocate( Size, Mode );
 		}
 		// Some help for the 'Hook' related functionnalities.
-		store_ &GetIds( void )
+		vStore &GetIds( void )
 		{
 			return Locations;
 		}
-		const store_ &GetIds( void ) const
+		const vStore &GetIds( void ) const
 		{
 			return Locations;
 		}
@@ -332,18 +332,18 @@ namespace lst {
 
 #ifndef FLM__COMPILATION
 
-	using ids::fHook;
+	using idsq::fHook;
 
 	inline bso::fBool Plug(
 		fCore &Core,
 		fHook &Hook,
 		sdr::bRow FirstUnused )
 	{
-		return ids::Plug( Core.GetIds(), Hook, FirstUnused );
+		return idsq::Plug( Core.GetIds(), Hook, FirstUnused );
 	}
 
-	using ids::rHF;
-	typedef ids::rFH rFH_;
+	using idsq::rHF;
+	typedef idsq::rFH rFH_;
 
 	class rFH
 	: public rFH_

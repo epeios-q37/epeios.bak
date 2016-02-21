@@ -17,9 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define IDS__COMPILATION
+#define IDSQ__COMPILATION
 
-#include "ids.h"
+#include "idsq.h"
 
-using namespace ids;
+using namespace idsq;
 
