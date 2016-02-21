@@ -25,6 +25,7 @@
 # include "bso.h"
 # include "err.h"
 # include "sdr.h"
+# include "bch.h"
 
 namespace ogzbsc {
 
@@ -39,7 +40,8 @@ namespace ogzbsc {
 	using sdr::fByte;
 	using sdr::fSize;
 
-	typedef qBUFFERr( fByte ) rBuffer;
+	typedef bch::qBUNCHvl( fByte ) vDatum;
+	qW( Datum );
 }
 
 #endif

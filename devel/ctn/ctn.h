@@ -401,6 +401,39 @@ namespace ctn {
 		return Exists;
 	}
 
+	class rRH
+	: public fHook
+	{
+	private:
+		tys::rRH Statics_;
+		ias::rRH Dynamics_;
+	protected:
+		virtual tys::fHook &CTNGetStaticsHook( void ) override
+		{
+			return Statics_;
+		}
+		virtual ias::fHook &CTNGetDynamicsHook( void ) override
+		{
+			return Dynamics_;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			fHook::reset( P );
+
+			Statics_.reset( P );
+			Dynamics_.reset( P );
+		}
+		qCVDTOR( rRH );
+		void Init( void )
+		{
+			Statics_.Init();
+			Dynamics_.Init();
+
+			fHook::Init();
+		}
+	};
+
 	struct rHF
 	{
 	public:
@@ -421,23 +454,24 @@ namespace ctn {
 	: public fHook
 	{
 	private:
-		tys::rFH _Statics;
-		ias::rFH _Dynamics;
+		tys::rFH Statics_;
+		ias::rFH Dynamics_;
 	protected:
 		virtual tys::fHook &CTNGetStaticsHook( void ) override
 		{
-			return _Statics;
+			return Statics_;
 		}
 		virtual ias::fHook &CTNGetDynamicsHook( void ) override
 		{
-			return _Dynamics;
+			return Dynamics_;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Statics.reset( P );
-			_Dynamics.reset( P );
 			fHook::reset( P );
+
+			Statics_.reset( P );
+			Dynamics_.reset( P );
 		}
 		qCVDTOR( rFH );
 		uys::eState Init( 
@@ -447,13 +481,13 @@ namespace ctn {
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			fHook::Init();
-
-			uys::eState State =_Statics.Init( Filenames.Statics, Mode, Behavior, ID );
+			uys::eState State = Statics_.Init( Filenames.Statics, Mode, Behavior, ID );
 
 			if ( !State.IsError() )
-				if ( _Dynamics.Init( Filenames.Dynamics, Core.GetDynamics(), Mode, Behavior, ID ) != State )
+				if ( Dynamics_.Init( Filenames.Dynamics, Core.GetDynamics(), Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
+
+			fHook::Init();
 
 			return State;
 		}

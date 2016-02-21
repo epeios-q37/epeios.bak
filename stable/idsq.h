@@ -202,6 +202,8 @@ namespace idsq {
 		return stkbch::Plug( Core.GetStack(), Hook );
 	}
 
+	using stkbch::rRH;
+
 	using stkbch::rHF;
 	typedef stkbch::rFH rFH_;
 

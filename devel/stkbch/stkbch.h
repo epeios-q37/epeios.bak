@@ -118,6 +118,8 @@ namespace stkbch {
 		return bch::Plug( Core.GetBunch(), Hook );
 	}
 
+	using bch::rRH;
+
 	using bch::rHF;
 	typedef bch::rFH rFH_;
 

@@ -191,6 +191,40 @@ namespace lstctn {
 		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetContainer().GetDynamics().Amount() ) || Exists;
 	}
 
+	class rRH
+	: public fHook
+	{
+	private:
+		ctn::rRH Container_;
+		lst::rRH List_;
+	protected:
+		virtual ctn::fHook &LSTCTNGetContainerHook( void ) override
+		{
+			return Container_;
+		}
+		virtual lst::fHook &LSTCTNGetListHook( void ) override
+		{
+			return List_;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			fHook::reset( P );
+
+			Container_.reset( P );
+			List_.reset( P );
+		}
+		qCVDTOR( rRH );
+		void Init( void )
+		{
+			Container_.Init();
+			List_.Init();
+
+			fHook::Init();
+		}
+	};
+
+
 	struct rHF
 	{
 	public:
@@ -225,9 +259,10 @@ namespace lstctn {
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			fHook::reset( P );
+
 			Container_.reset( P );
 			List_.reset( P );
-			fHook::reset( P );
 		}
 		qCVDTOR( rFH );
 		uys::eState Init(

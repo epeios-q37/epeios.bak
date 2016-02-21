@@ -342,6 +342,8 @@ namespace lst {
 		return idsq::Plug( Core.GetIds(), Hook, FirstUnused );
 	}
 
+	using idsq::rRH;
+
 	using idsq::rHF;
 	typedef idsq::rFH rFH_;
 

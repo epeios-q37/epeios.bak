@@ -482,6 +482,39 @@ namespace ias {
 		return ags::Plug( AStorage.AStorage, Hook.GetStorageHook() ) || Exists;
 	}
 
+	class rRH
+	: public fHook
+	{
+	private:
+		bch::rRH Descriptors_;
+		ags::rRH Storage_;
+	protected:
+		virtual bch::fHook &IASGetDescriptorsHook( void ) override
+		{
+			return Descriptors_;
+		}
+		virtual ags::fHook &IASGetStorageHook( void ) override
+		{
+			return Storage_;
+		}
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			fHook::reset( P );
+
+			Descriptors_.reset( P );
+			Storage_.reset( P );
+		}
+		qCDTOR( rRH );
+		void Init( void )
+		{
+			Descriptors_.Init();
+			Storage_.Init();
+
+			fHook::Init();
+		}
+	};
+
 	struct rHF
 	{
 	public:
@@ -502,22 +535,24 @@ namespace ias {
 	: public fHook
 	{
 	private:
-		bch::rFH _Descriptors;
-		ags::rFH _Storage;
+		bch::rFH Descriptors_;
+		ags::rFH Storage_;
 	protected:
 		virtual bch::fHook &IASGetDescriptorsHook( void ) override
 		{
-			return _Descriptors;
+			return Descriptors_;
 		}
 		virtual ags::fHook &IASGetStorageHook( void ) override
 		{
-			return _Storage;
+			return Storage_;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_Descriptors.reset( P );
-			_Storage.reset( P );
+			fHook::reset( P );
+
+			Descriptors_.reset( P );
+			Storage_.reset( P );
 		}
 		qCDTOR( rFH );
 		uys::eState Init( 
@@ -527,12 +562,14 @@ namespace ias {
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = _Descriptors.Init( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID );
+			uys::eState State = Descriptors_.Init( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( State != _Storage.Init( Filenames.Storage, Mode, Behavior, ID ) )
+				if ( State != Storage_.Init( Filenames.Storage, Mode, Behavior, ID ) )
 					State = uys::sInconsistent;
 			}
+
+			fHook::Init();
 
 			return State;
 		}

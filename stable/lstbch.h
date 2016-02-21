@@ -234,6 +234,31 @@ namespace lstbch {
 		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetBunch().GetAmount() );
 	}
 
+	class rRH
+	: public fHook
+	{
+	private:
+		bch::rRH Bunch_;
+		lst::rRH List_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			fHook::reset( P );
+
+			Bunch_.reset( P );
+			List_.reset( P );
+		}
+		qCDTOR( rRH );
+		void Init( void )
+		{
+			Bunch_.Init();
+			List_.Init();
+
+			fHook::Init();
+		}
+	};
+
+
 	struct rHF
 	{
 	public:
@@ -259,9 +284,10 @@ namespace lstbch {
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			fHook::reset( P );
+
 			Bunch_.reset( P );
 			List_.reset( P );
-			fHook::reset( P );
 		}
 		qCDTOR( rFH );
 		uys::eState Init(

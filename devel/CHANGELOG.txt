@@ -12,7 +12,16 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
-2016-02-12:
+2016-02-21 :
+- GLOBAL :
+	- misc.
+	- Huge rewriting of the 'hook's and 'file hooks'.
+
+			.
+			.
+			.
+
+2016-02-12 :
 - DWTCPR, DWTFTR :
 	- Adaptation to chages in 'STSFSM'.
 	% The 'Dump' functionnalitiés are always made in the current version.

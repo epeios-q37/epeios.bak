@@ -423,6 +423,29 @@ namespace uys {
 		return Size != 0;
 	}
 
+	class rRH
+	: public fHook
+	{
+	private:
+		mns::standalone_conventional_memory_driver___ Driver_;
+	protected:
+		qSDf &UYSGetSD( void ) override
+		{
+			return Driver_;
+		}
+	public:
+		void reset( bso::fBool P = true )
+		{
+			fHook::reset( P );
+			Driver_.reset( P );
+		}
+		qCDTOR( rRH );
+		void Init( void )
+		{
+			Driver_.Init();
+		}
+	};
+
 	// Hook filenames.
 	struct rHF
 	{

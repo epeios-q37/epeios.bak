@@ -694,6 +694,8 @@ namespace bch {
 		return Exists;
 	}
 
+	using tys::rRH;
+
 	using tys::rHF;
 
 	class rFH

@@ -42,8 +42,7 @@ namespace ogztyp {
 		virtual const char *OGZTYPGetLabel( void ) = 0;
 		// Convert into 'XML' the content of 'Buffer' of size 'Size' in a XML value form.
 		virtual void OGZTYPToXML(
-			const ogzbsc::rBuffer &Buffer,
-			ogzbsc::fSize Size,
+			const ogzbsc::vDatum &Datum,
 			str::vString &XML ) = 0;
 	public:
 		void reset( bso::bool__ = true )
@@ -60,11 +59,10 @@ namespace ogztyp {
 			return OGZTYPGetLabel();
 		}
 		const str::vString &ToXML(
-			const ogzbsc::rBuffer &Buffer,
-			ogzbsc::fSize Size,
+			const ogzbsc::vDatum &Datum,
 			str::vString &XML )
 		{
-			OGZTYPToXML( Buffer, Size, XML );
+			OGZTYPToXML( Datum, XML );
 
 			return XML;
 		}
@@ -94,11 +92,10 @@ namespace ogztyp {
 			return C_().GetLabel();
 		}
 		const str::vString &ToXML(
-			const ogzbsc::rBuffer &Buffer,
-			ogzbsc::fSize Size,
+			const ogzbsc::vDatum &Datum,
 			str::vString &XML ) const
 		{
-			return C_().ToXML( Buffer, Size, XML );
+			return C_().ToXML( Datum, XML );
 		}
 	};
 

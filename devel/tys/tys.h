@@ -274,6 +274,7 @@ namespace tys {
 		return uys::Plug( Core.GetUntypedStorage(), Hook );
 	}
 
+	using uys::rRH;
 	using uys::rFH;
 	using uys::rHF;
 # endif

@@ -1445,6 +1445,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		return uys::Plug( Storage.Storage, Hook );
 	}
 
+	using uys::rRH;
+
 	using uys::rHF;
 	using uys::rFH;
 

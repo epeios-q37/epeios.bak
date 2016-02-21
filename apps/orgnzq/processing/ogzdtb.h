@@ -40,7 +40,7 @@ namespace ogzdtb {
 		ogztyp::fTRow TextType_, RecordType_;	// The 2 types which have to exists.
 		void FetchMandatoryTypes_( void );
 	public:
-		ogzdta::fData Data;
+		ogzdta::rData Data;
 		ogztyp::iTypes Types;
 		ogzclm::fColumns Columns;
 		ogzfld::fFields Fields;

@@ -83,6 +83,8 @@ namespace stkctn {
 		return ctn::Plug( Core.GetContainer(), Hook );
 	}
 
+	using ctn::rRH;
+
 	using ctn::rHF;
 	typedef ctn::rFH rFH_;
 
