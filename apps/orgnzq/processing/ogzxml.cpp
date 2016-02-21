@@ -90,12 +90,12 @@ namespace {
 	inline void Dump_(
 		ogztyp::fTRow TypeRow,
 		const ogztyp::fType &Type,
-		const ogzdta::rData &Data,
+		const ogzdta::fData &Data,
 		ogzdta::fDRow DatumRow,
 		vWriter &Writer )
 	{
 	qRH
-		ogzdta::iDatum Datum;
+		ogzdta::rBuffer Buffer;
 		ogzdta::fSize Size = 0;
 		str::string XML;
 	qRB
@@ -103,11 +103,7 @@ namespace {
 
 		Writer.PushTag( T( Datum ) );
 
-		Datum.Init();
-
-		Data.Recall( DatumRow, Datum );
-
-		Writer.PutValue( Type.ToXML( Datum, XML ) );
+		Writer.PutValue( Type.ToXML( Buffer, Data.Recall( DatumRow, TypeRow, Buffer ), XML ) );
 
 		Writer.PopTag();
 	qRR
@@ -118,7 +114,7 @@ namespace {
 	inline void Dump_(
 		ogztyp::fTRow TypeRow,
 		const ogztyp::fType &Type,
-		const ogzdta::rData &Data,
+		const ogzdta::fData &Data,
 		const ogzdta::vDatumList &DatumList,
 		vWriter &Writer )
 	{
@@ -139,7 +135,7 @@ namespace {
 	inline void Dump_(
 		const ogztyp::vTypes &Types,
 		const ogzclm::fColumns &Columns,
-		const ogzdta::rData &Data,
+		const ogzdta::fData &Data,
 		const ogzfld::vField &Field,
 		vWriter &Writer )
 	{
@@ -168,7 +164,7 @@ namespace {
 		const ogzfld::fFields &Fields,
 		ogzrcd::fFRow Row,
 		const ogzclm::fColumns &Columns,
-		const ogzdta::rData &Data,
+		const ogzdta::fData &Data,
 		vWriter &Writer )
 	{
 	qRH
@@ -188,7 +184,7 @@ namespace {
 		const ogzfld::fFields &Fields,
 		const ogzfld::vFieldList &FieldList,
 		const ogzclm::fColumns &Columns,
-		const ogzdta::rData &Data,
+		const ogzdta::fData &Data,
 		vWriter &Writer )
 	{
 		sdr::fRow Row = FieldList.First();

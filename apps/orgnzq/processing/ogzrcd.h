@@ -47,27 +47,6 @@ typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
 
 	typedef ogzcbs::rDRegularCallback<OGZRCD_TP> rRegularCallback;
 
-	template <typename callback, typename items, typename core, typename hook> class rCommon__
-	: public items
-	{
-	private:
-		callback Callback_;
-	public:
-		void reset( bso::fBool P = true )
-		{
-			items::reset( P );
-			Callback_.reset( P );
-		}
-		E_CDTOR( rCommon__ );
-		void Init( bso::fBool (* Plug)(core &, hook & ) )
-		{
-			Callback_.Init();
-
-			if ( !Plug( *this, Callback_ ) )
-				items::Init( Callback_ );
-		}
-	};
-
 	template <typename callback, typename items> class rCommon_
 	: public items
 	{
@@ -93,7 +72,7 @@ typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
 	private:
 		fRRow Id_;	// Row of the source record. If qNIL, it's a new record.
 	public:
-		rCommon__<ogzdta::rRegularCallback, ogzdta::rData, ogzdta::fCore, lstctn::fHook> Data;
+		rCommon_<ogzdta::rRegularCallback, ogzdta::fData> Data;
 		rCommon_<ogzclm::rRegularCallback, ogzclm::fColumns> Columns;
 		rCommon_<ogzfld::rRegularCallback, ogzfld::fFields> Fields;
 		void reset( bso::fBool P = true )
@@ -107,7 +86,7 @@ typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
 		void Init( void )
 		{
 			Id_ = qNIL;
-			Data.Init( ogzdta::Plug );
+			Data.Init();
 			Columns.Init();
 			Fields.Init();
 		}
