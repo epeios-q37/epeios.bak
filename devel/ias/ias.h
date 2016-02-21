@@ -429,6 +429,10 @@ namespace ias {
 			Descriptors.Store( Descriptors, Descriptors.Amount() - 1 - *Index, *Index + 1, Index );
 			Descriptors.Store( Descriptor, Index );
 		}
+		sdr::size__ Amount( void ) const
+		{
+			return Descriptors.Amount();
+		}
 #if 0
 		void write(
 			flw::oflow__ &OFlow,
@@ -532,94 +536,6 @@ namespace ias {
 
 			return State;
 		}
-		time_t ModificationTimestamp( void ) const
-		{
-			time_t Descriptors, AStorage;
-
-			Descriptors = _Descriptors.ModificationTimestamp();
-			AStorage = _Storage.ModificationTimestamp();
-
-			return ( Descriptors > AStorage ? Descriptors : AStorage );
-		}
-		/*
-		uys::mode__ Mode( uys::mode__ Mode )
-		{
-			uys::mode__ ModeBuffer = _Descriptors.Mode( Mode );
-
-			if ( ModeBuffer != _Storage.Mode( Mode ) )
-				qRFwk();
-
-			return ModeBuffer;
-		}
-		uys::mode__ Mode( void ) const
-		{
-			uys::mode__ Mode = _Descriptors.Mode();
-
-			if ( Mode != _Storage.Mode() )
-				qRFwk();
-
-			return Mode;
-		}
-		bso::fBool Settle( void )
-		{
-			if ( _Descriptors.Settle() ) {
-				_Storage.CreateFiles();
-				return true;
-			} else
-				return false;
-		}
-		void ReleaseFiles( void )
-		{
-			_Descriptors.ReleaseFiles();
-			_Storage.ReleaseFiles();
-		}
-		*/
-#if 0
-		bso::bool__ IsPersistent( void ) const
-		{
-#ifdef IAS_DBG
-			if ( _Descriptors.IsPersistent() != _Storage.IsPersistent() )
-				qRFwk();
-#endif
-			return _Descriptors.IsPersistent();
-		}
-		void Drop( void )
-		{
-			_Descriptors.Drop();
-			_Storage.Drop();
-		}
-		tys::fh___ &DescriptorsFilesHook( void )
-		{
-			return _Descriptors;
-		}
-		ags::fh___ &StorageFilesHook( void )
-		{
-			return _Storage;
-		}
-		bso::bool__ Exists( void ) const
-		{
-			bso::bool__ Exists = _Descriptors.Exists();
-
-			if ( Exists != _Storage.Exists() )
-				qRFwk();
-
-			return Exists;
-		}
-#ifdef CPE_C_MSC
-#	undef CreateFile
-#endif
-		bso::bool__ CreateFiles( err::handling__ ErrorHandling )
-		{
-			bso::bool__ Success = _Descriptors.CreateFile( ErrorHandling );
-
-			if ( !Success )
-				return false;
-
-			Success = _Storage.CreateFile( ErrorHandling );
-
-			return Success;
-		}
-# endif
 	};
 
 #endif

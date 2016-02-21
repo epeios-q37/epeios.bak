@@ -31,13 +31,14 @@ mods += dir dte dtfbsc dtfptb epsmsc
 mods += err fdr flf flsq flw 
 mods += flx ias ids iof iop 
 mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio tht 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn rgstry stsfsm xml 
-mods += xpp btr dtr idxbtr idxbtq 
-mods += idxque ltf mtk txmtbl 
+mods += ntvstr que sdr stkbse stkbch 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio tht bomhdl cdgb64 dlbrry 
+mods += fil fnm lcl plgn plgncore 
+mods += rgstry stsfsm xml xpp btr 
+mods += dtr idxbtr idxbtq idxque ltf 
+mods += mtk txmtbl 
 mods += dwtbsc dwtcpr dwtdct dwtftr dwtght 
 mods += dwtmov dwtxcl 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
@@ -323,9 +324,10 @@ all: $(binary)
 
 copt += -DVERSION=\""20151215"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DIDENTIFIER=\""8033dd6d-2114-4c77-ab6c-be19e50ad96e"\"
 
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -346,9 +348,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
 	mkdir -p $(dest)
-			
 	cp $(binary) $(dest)
 endif
 		

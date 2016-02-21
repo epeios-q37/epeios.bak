@@ -188,7 +188,7 @@ namespace lstctn {
 	{
 		bso::fBool Exists = ctn::Plug( Core.GetContainer(), Hook.GetContainerHook() );
 
-		return lst::Plug( Core.GetList(), Hook.GetListHook() ) || Exists;
+		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetContainer().GetDynamics().Amount() ) || Exists;
 	}
 
 	struct rHF
@@ -225,10 +225,6 @@ namespace lstctn {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P ) {
-				List_.AdjustSize( Container_.ModificationTimestamp() );
-			}
-
 			Container_.reset( P );
 			List_.reset( P );
 			fHook::reset( P );
@@ -251,16 +247,6 @@ namespace lstctn {
 			fHook::Init();
 
 			return State;
-		}
-		time_t ModificationTimestamp( void ) const
-		{
-			time_t ContainerTimeStamp = Container_.ModificationTimestamp();
-			time_t ListTimeStamp = List_.ModificationTimestamp();
-
-			if ( ContainerTimeStamp > ListTimeStamp )
-				return ContainerTimeStamp;
-			else
-				return ListTimeStamp;
 		}
 	};
 

@@ -79,6 +79,7 @@ namespace ctn {
 	protected:
 		virtual tys::fCore &CTNGetStatics( void ) = 0;
 		virtual ias::indexed_aggregated_storage_ &CTNGetDynamics( void ) = 0;
+		virtual void CTNAllocate( sdr::size__ Size ) = 0;
 	public:
 		qCALLBACK_DEF( Core );
 		tys::fCore &GetStatics( void )
@@ -88,6 +89,10 @@ namespace ctn {
 		ias::indexed_aggregated_storage_ &GetDynamics( void )
 		{
 			return CTNGetDynamics();
+		}
+		void Allocate( sdr::size__ Size )
+		{
+			return CTNAllocate( Size );
 		}
 	};
 
@@ -119,6 +124,10 @@ namespace ctn {
 		virtual ias::indexed_aggregated_storage_ &CTNGetDynamics( void ) override
 		{
 			return Dynamics;
+		}
+		virtual void CTNAllocate( sdr::size__ Size ) override 
+		{
+			_Allocate( Size, aem::mFitted );
 		}
 		void Insert(
 			const st &ST,
@@ -385,7 +394,11 @@ namespace ctn {
 	{
 		bso::fBool Exists = tys::Plug( Core.GetStatics(), Hook.GetStaticsHook() );
 
-		return ias::Plug( Core.GetDynamics(), Hook.GetDynamicsHook() ) || Exists;
+		Exists |= ias::Plug( Core.GetDynamics(), Hook.GetDynamicsHook() );
+
+		Core.Allocate( Core.GetDynamics().Amount() );
+
+		return Exists;
 	}
 
 	struct rHF
@@ -444,93 +457,6 @@ namespace ctn {
 
 			return State;
 		}
-		time_t ModificationTimestamp( void ) const
-		{
-			time_t Statics, Dynamics;
-
-			Statics = _Statics.ModificationTimestamp();
-			Dynamics = _Dynamics.ModificationTimestamp();
-
-			return ( Statics > Dynamics ? Statics : Dynamics );
-		}
-# if 0
-		uys::state__ Settle( void )
-		{
-			uys::state__ State = _Statics.Settle();
-
-			if ( State.IsError() )
-				return State;
-
-			if ( _Dynamics.Settle() != State )
-				State = uys::sInconsistent;
-
-			return State;
-		}
-		void ReleaseFiles( void )
-		{
-			_Statics.ReleaseFile();
-			_Dynamics.ReleaseFile();
-		}
-		uys::mode__ Mode( void ) const
-		{
-			uys::mode__ Mode = _Statics.Mode();
-
-			if ( Mode != _Dynamics.Mode() )
-				qRFwk();
-
-			return Mode;
-		}
-		uys::mode__ Mode( uys::mode__ Mode )
-		{
-			uys::mode__ ModeBuffer = _Statics.Mode( Mode );
-
-			if ( ModeBuffer != _Dynamics.Mode( ModeBuffer ) )
-				qRFwk();
-
-			return ModeBuffer;
-		}
-		bso::bool__ IsPersistent( void ) const
-		{
-# ifdef CTN_DBG
-			if ( _Statics.IsPersistent() != _Dynamics.IsPersistent() )
-				qRFwk();
-# endif
-			return _Statics.IsPersistent();
-		}
-		void Drop( void )
-		{
-			_Statics.Drop();
-			_Dynamics.Drop();
-		}
-		tys::fh___ &StaticsFilesHook( void )
-		{
-			return _Statics;
-		}
-		ias::fh___ &DynamicsFilesHook( void )
-		{
-			return _Dynamics;
-		}
-		bso::bool__ Exists( void ) const
-		{
-			bso::bool__ Exists = _Statics.Exists();
-
-			if ( Exists != _Dynamics.Exists() )
-				qRFwk();
-
-			return Exists;
-		}
-		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
-		{
-			bso::bool__ Success = _Statics.CreateFile( ErrorHandling );
-
-			if ( !Success )
-				return false;
-
-			Success = _Dynamics.CreateFiles( ErrorHandling );
-
-			return Success;
-		}
-# endif
 	};
 
 	//c The base of a volatile item. Internal use.

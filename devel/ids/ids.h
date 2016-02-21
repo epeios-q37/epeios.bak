@@ -39,11 +39,16 @@ namespace ids {
 	{
 	protected:
 		virtual stkbch::fCore &IDSGetStack( void ) = 0;
+		virtual void IDSSetFirstUnused( bso::uint__ Id )= 0;
 	public:
 		qCALLBACK_DEF( Core );
 		stkbch::fCore &GetStack( void )
 		{
 			return IDSGetStack();
+		}
+		void SetFirstUnused( bso::uint__ Id )
+		{
+			return IDSSetFirstUnused( Id );
 		}
 	};
 
@@ -61,6 +66,10 @@ namespace ids {
 		virtual stkbch::fCore &IDSGetStack( void ) override
 		{
 			return Released;
+		}
+		virtual void IDSSetFirstUnused( bso::uint__ Id ) override
+		{
+			SetFirstUnused( Id );
 		}
 	public:
 		struct s
@@ -191,8 +200,11 @@ namespace ids {
 
 	inline bso::fBool Plug(
 		fCore &Core,
-		fHook &Hook )
+		fHook &Hook,
+		bso::uint__ FirstUnused )
 	{
+		Core.SetFirstUnused( FirstUnused );
+
 		return stkbch::Plug( Core.GetStack(), Hook );
 	}
 

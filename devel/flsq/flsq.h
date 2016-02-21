@@ -393,8 +393,10 @@ namespace flsq {
 		void Allocate( bso::size__ Capacite )
 		{
 			if ( fil::Exists( _Name ) ) {
-				if ( Capacite < fil::GetSize( _Name ) )
-					qRFwk();	// Maybe not an error, so this method should do nothing.
+				if ( Capacite < fil::GetSize( _Name ) ) {
+					ReleaseFile();
+					fil::Shrink( _Name, Capacite );	// Time consuming. If called too often, allocation to less should be avoid upstream.
+				} // else nothing, as the file will grow with the writing of the data.
 			}
 		}
 		void GrowToSize_( fil::size__ Size )

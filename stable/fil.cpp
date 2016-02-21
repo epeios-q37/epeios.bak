@@ -188,26 +188,41 @@ qRE
 	return Success;
 }
 
+namespace {
+	void Copy_(
+		const fnm::name___ &SourceFilename,
+		const fnm::name___ &TargetFilename,
+		size__ Size )
+	{
+		qRH
+			flf::file_iflow___ Source;
+			flf::file_oflow___ Target;
+		qRB
+			Source.Init( SourceFilename );
+			Target.Init( TargetFilename );
+
+			while ( Size-- ) {
+				Target.Put( Source.Get() );
+			}
+		qRR
+		qRT
+		qRE
+	}
+}
+
 void fil::Shrink(
 	const fnm::name___ &Filename,
 	size__ Size )
 {
 qRH
 	str::iString TempName;
-	flf::file_iflow___ Source;
-	flf::file_oflow___ Target;
 qRB
 	TempName.Init();
 	Filename.UTF8( TempName );
 	
 	TempName.Append( '~' );
 
-	Source.Init( Filename );
-	Target.Init( Filename );
-
-	while ( Size-- ) {
-		Target.Put( Source.Get() );
-	}
+	Copy_( Filename, TempName, Size );
 
 	Remove( Filename );
 	Rename( TempName, Filename );

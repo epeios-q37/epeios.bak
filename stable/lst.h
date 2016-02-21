@@ -336,9 +336,10 @@ namespace lst {
 
 	inline bso::fBool Plug(
 		fCore &Core,
-		fHook &Hook )
+		fHook &Hook,
+		sdr::bRow FirstUnused )
 	{
-		return ids::Plug( Core.GetIds(), Hook );
+		return ids::Plug( Core.GetIds(), Hook, FirstUnused );
 	}
 
 	using ids::rHF;

@@ -414,12 +414,13 @@ namespace uys {
 		fHook &Hook )
 	{
 		qSDf &SD = Hook.GetSD();
+		sdr::size__ Size = SD.Size(); 
 
 		Storage.plug( SD );
 
-		Storage.Allocate( SD.Size() );
+		Storage.Allocate( Size );
 
-		return SD.Size() != 0;
+		return Size != 0;
 	}
 
 	// Hook filenames.
@@ -506,10 +507,6 @@ namespace uys {
 			else
 				return sAbsent;
 		}
-		time_t ModificationTimestamp( void ) const
-		{
-			return Driver_.ModificationTimestamp();
-		}
 		void Drop( void )
 		{
 			Driver_.Drop();
@@ -525,14 +522,6 @@ namespace uys {
 		void ReleaseFiles( void )
 		{
 			Driver_.ReleaseFile();
-		}
-		void AdjustSize( fil::size__ Size )
-		{
-			Driver_.AdjustSize( Size );
-		}
-		void Touch( time_t ReferenceTimestamp = 0 )
-		{
-			Driver_.Touch( ReferenceTimestamp ) ;
 		}
 	};
 

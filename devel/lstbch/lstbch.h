@@ -231,7 +231,7 @@ namespace lstbch {
 	{
 		bso::fBool Exists = bch::Plug( Core.GetBunch(), Hook.GetBunchHook() );
 
-		return lst::Plug(Core.GetList(), Hook.GetListHook() );
+		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetBunch().GetAmount() );
 	}
 
 	struct rHF
@@ -259,10 +259,6 @@ namespace lstbch {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P ) {
-				List_.AdjustSize( Bunch_.ModificationTimestamp() );
-			}
-
 			Bunch_.reset( P );
 			List_.reset( P );
 			fHook::reset( P );
@@ -285,16 +281,6 @@ namespace lstbch {
 			fHook::Init();
 
 			return State;
-		}
-		time_t ModificationTimestamp( void ) const
-		{
-			time_t BunchTimeStamp = Bunch_.ModificationTimestamp();
-			time_t ListTimeStamp = List_.ModificationTimestamp();
-
-			if ( BunchTimeStamp > ListTimeStamp )
-				return BunchTimeStamp;
-			else
-				return ListTimeStamp;
 		}
 	};
 # endif

@@ -702,16 +702,6 @@ namespace bch {
 	private:
 		tys::rFH FH_;
 		qRVM( fCore, C_, Core_ );
-		void AdjustSize_( void )
-		{
-			if ( Core_ != NULL )
-				FH_.AdjustSize( C_().GetSize() );
-		}
-		void Touch_( time_t ReferenceTimestamp )
-		{
-			if ( Core_ != NULL )	// To verify if a initialization was made.
-				FH_.Touch( ReferenceTimestamp );
-		}
 	protected:
 		virtual qSDf &UYSGetSD( void ) override
 		{
@@ -720,10 +710,6 @@ namespace bch {
 	public:
 		void reset( bso::fBool P = true )
 		{
-			if ( P ) {
-				AdjustSize_();
-			}
-
 			FH_.reset( P );
 			Core_ = NULL;
 		}
@@ -738,16 +724,6 @@ namespace bch {
 			Core_ = &Core;
 
 			return FH_.Init( Filenames, Mode, Behavior, ID );
-		}
-		void AdjustSize( time_t ReferenceTimestamp = 0 )
-		{
-			AdjustSize_();
-
-			Touch_( ReferenceTimestamp );
-		}
-		time_t ModificationTimestamp( void ) const
-		{
-			return FH_.ModificationTimestamp();
 		}
 	};
 // #endif
