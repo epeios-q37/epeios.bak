@@ -37,7 +37,8 @@ namespace ogzdta {
 	using ogzbsc::fDRow;
 	using ogzbsc::fTRow;
 	using ogzbsc::fByte;
-	using ogzbsc::rBuffer;
+	using ogzbsc::vDatum;
+	using ogzbsc::iDatum;
 
 	class fCallback {
 	protected:
@@ -50,12 +51,11 @@ namespace ogzdta {
 		virtual void OGZDTAStore(
 			fDRow Row,
 			fTRow Type,
-			const fByte *Datum,
-			sdr::size__ Size ) = 0;
-		virtual sdr::fSize OGZDTARecall(
+			const vDatum &Datum ) = 0;
+		virtual void OGZDTARecall(
 			fDRow Row,
 			fTRow Type,
-			rBuffer &Buffer ) = 0;
+			vDatum &Datum ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -83,17 +83,16 @@ namespace ogzdta {
 		void Store(
 			fDRow Row,
 			fTRow Type,
-			const fByte *Datum,
-			sdr::size__ Size )
+			const vDatum &Datum )
 		{
-			OGZDTAStore( Row, Type, Datum, Size );
+			OGZDTAStore( Row, Type, Datum );
 		}
-		sdr::fSize Recall(
+		void Recall(
 			fDRow Row,
 			fTRow Type,
-			rBuffer &Buffer )
+			vDatum &Datum )
 		{
-			return OGZDTARecall( Row, Type, Buffer );
+			return OGZDTARecall( Row, Type, Datum );
 		}
 	};
 
@@ -128,17 +127,16 @@ namespace ogzdta {
 		void Store(
 			fDRow Row,
 			fTRow Type,
-			const fByte *Datum,
-			sdr::size__ Size ) const
+			const vDatum &Datum ) const
 		{
-			C_().Store( Row, Type, Datum, Size );
+			C_().Store( Row, Type, Datum );
 		}
-		fSize Recall(
+		void Recall(
 			fDRow Row,
 			fTRow Type,
-			rBuffer &Buffer ) const
+			vDatum &Datum ) const
 		{
-			return C_().Recall( Row, Type, Buffer );
+			return C_().Recall( Row, Type, Datum );
 		}
 	};
 
@@ -172,31 +170,16 @@ namespace ogzdta {
 		virtual void OGZDTAStore(
 			ogzdta::fDRow Row,
 			ogzdta::fTRow Type,
-			const ogzdta::fByte *Datum,
-			sdr::size__ Size ) override 
+			const vDatum &Datum ) override 
 		{
-			Container_( Row ).StoreAndAdjust( Datum, Size );
-
-			Container_.Flush();
+			Container_.Store( Datum, Row );
 		}
-		virtual sdr::fSize OGZDTARecall(
+		virtual void OGZDTARecall(
 			ogzdta::fDRow Row,
 			ogzdta::fTRow Type,
-			ogzdta::rBuffer &Buffer ) override 
+			ogzdta::vDatum &Datum ) override 
 		{
-			ctn::qCMITEM( vBytes, ogzdta::fDRow ) Datum;
-
-			Datum.Init( Container_ );
-
-			sdr::fSize Size = Datum(Row).Amount();
-
-			if ( Size ) {
-				Buffer.Malloc( Size );
-
-				Datum().Recall(Datum().First(), Size, Buffer );
-			}
-
-			return Size;
+			Container_.Recall( Row, Datum );
 		}
 	public:
 		void reset( bso::bool__ P = true )

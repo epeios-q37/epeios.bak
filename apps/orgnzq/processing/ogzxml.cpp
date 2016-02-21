@@ -95,7 +95,7 @@ namespace {
 		vWriter &Writer )
 	{
 	qRH
-		ogzdta::rBuffer Buffer;
+		ogzdta::iDatum Datum;
 		ogzdta::fSize Size = 0;
 		str::string XML;
 	qRB
@@ -103,7 +103,10 @@ namespace {
 
 		Writer.PushTag( T( Datum ) );
 
-		Writer.PutValue( Type.ToXML( Buffer, Data.Recall( DatumRow, TypeRow, Buffer ), XML ) );
+		Datum.Init();
+		Data.Recall( DatumRow, TypeRow, Datum );
+
+		Writer.PutValue( Type.ToXML( Datum, XML ) );
 
 		Writer.PopTag();
 	qRR
