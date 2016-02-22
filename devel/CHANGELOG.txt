@@ -12,6 +12,10 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-02-22
+- UYS :
+	- Optimization of copy between 2 'vUntypesStorage'.
+
 2016-02-21 :
 - GLOBAL :
 	- misc.

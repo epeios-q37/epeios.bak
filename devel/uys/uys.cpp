@@ -70,52 +70,46 @@ bso::sign__ uys::Compare(
 	return Resultat;
 }
 
-inline void uys::_Copy(
+void uys::IndirectCopy_(
 	const untyped_storage_ &Source,
 	row_t__ PosSource,
 	untyped_storage_ &Dest,
 	row_t__ PosDest,
-	size__ Nombre,
-	byte__ *Tampon,
-	size__ TailleTampon )
+	size__ Nombre )
 {
-	if ( PosSource >= PosDest )
-	{
-		while( Nombre > TailleTampon )
-		{
-			Source.Recall( PosSource, TailleTampon, Tampon );
-			Dest.Store( Tampon, TailleTampon, PosDest );
+	byte__ Buffer[BUFFER_SIZE];
+	const size_t BufferSize = sizeof( Buffer );
 
-			PosSource += TailleTampon;
-			PosDest += TailleTampon;
-			Nombre -= TailleTampon;
+	if ( PosSource >= PosDest ) {
+		while( Nombre > BufferSize ) {
+			Source.Recall( PosSource, BufferSize, Buffer );
+			Dest.Store( Buffer, BufferSize, PosDest );
+
+			PosSource += BufferSize ;
+			PosDest += BufferSize;
+			Nombre -= BufferSize;
 		}
 
-		if ( Nombre )
-		{
-			Source.Recall( PosSource, Nombre, Tampon );
-			Dest.Store( Tampon, Nombre, PosDest );
+		if ( Nombre ) {
+			Source.Recall( PosSource, Nombre, Buffer );
+			Dest.Store( Buffer, Nombre, PosDest );
 		}
-	}
-	else
-	{
+	} else {
 		PosDest += Nombre;
 		PosSource += Nombre;
 
-		while( Nombre > TailleTampon )
-		{
-			Source.Recall( PosSource - TailleTampon, TailleTampon, Tampon );
-			Dest.Store( Tampon, TailleTampon, PosDest - TailleTampon );
+		while( Nombre > BufferSize ) {
+			Source.Recall( PosSource - BufferSize, BufferSize, Buffer );
+			Dest.Store( Buffer, BufferSize, PosDest - BufferSize );
 
-			PosSource -= TailleTampon;
-			PosDest -= TailleTampon;
-			Nombre -= TailleTampon;
+			PosSource -= BufferSize;
+			PosDest -= BufferSize;
+			Nombre -= BufferSize;
 		}
 
-		if ( Nombre )
-		{
-			Source.Recall( PosSource - Nombre, Nombre, Tampon );
-			Dest.Store( Tampon, Nombre, PosDest - Nombre );
+		if ( Nombre ) {
+			Source.Recall( PosSource - Nombre, Nombre, Buffer );
+			Dest.Store( Buffer, Nombre, PosDest - Nombre );
 		}
 	}
 }
@@ -171,18 +165,6 @@ row_t__ untyped_storage_::Search(
 		return Debut;
 	else
 		return qNIL;
-}
-
-
-void untyped_storage_::Store(
-	const untyped_storage_ &Source,
-	size__ Amount,
-	row_t__ Position,
-	row_t__ Offset )
-{
-	byte__ Buffer[BUFFER_SIZE];
-
-	_Copy( Source, Offset, *this, Position, Amount, Buffer, BUFFER_SIZE );
 }
 
 #define BUFFER_SIZE_MAX		FLW_AMOUNT_MAX

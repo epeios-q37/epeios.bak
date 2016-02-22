@@ -158,7 +158,20 @@ namespace uys {
 			else
 				return _Driver->Size();
 		}
+		sdr::byte__ *CVMBuffer( void ) const
+		{
+			return _CVMBuffer;
+		}
 	};
+
+	class untyped_storage_;
+
+	void IndirectCopy_(
+		const untyped_storage_ &Source,
+		sdr::row_t__ PosSource,
+		untyped_storage_ &Dest,
+		sdr::row_t__ PosDest,
+		sdr::size__ Nombre );
 
 	//c Untyped storage.
 	class untyped_storage_
@@ -315,7 +328,24 @@ namespace uys {
 			const untyped_storage_ &Source,
 			sdr::size__ Amount,
 			sdr::row_t__ Position,
-			sdr::row_t__ Offset = 0 );
+			sdr::row_t__ Offset = 0 )
+		{
+			const sdr::byte__ *SourceBuffer = Source.CVMBuffer();
+			sdr::byte__ *TargetBuffer = CVMBuffer();
+
+			if ( SourceBuffer == NULL ) {
+				if ( TargetBuffer == NULL )
+					IndirectCopy_( Source, Offset, *this, Position, Amount );
+				else if ( Amount != 0 )
+					Source.Recall( Offset, Amount, TargetBuffer + Position );
+			} else if ( TargetBuffer == NULL ) {
+				if ( Amount != 0  )
+					Store( SourceBuffer + Offset, Amount, Position );
+			} else if ( SourceBuffer == TargetBuffer  )
+				memmove( TargetBuffer + Position, SourceBuffer + Offset, Amount );
+			else
+				memcpy( TargetBuffer + Position, SourceBuffer + Offset, Amount );
+		}
 		// Remplit  partir de 'Position' avec 'Amount' 'Object' de taille 'Size'.
 		void Fill(
 			const sdr::byte__ *Object,
@@ -336,6 +366,10 @@ namespace uys {
 		sdr::size__ Size( void ) const
 		{
 			return S_.Size;
+		}
+		sdr::byte__ *CVMBuffer( void ) const
+		{
+			return _Driver.CVMBuffer();
 		}
 	};
 
@@ -564,15 +598,6 @@ namespace uys {
 #ifndef qNIL
 	#define qNIL	UYS_UNREACHABLE_POSITION
 #endif
-
-	void _Copy(
-		const class untyped_storage_ &Source,
-		sdr::row_t__ PosSource,
-		class untyped_storage_ &Dest,
-		sdr::row_t__ PosDest,
-		sdr::size__ Quantity,
-		sdr::byte__ *Buffer,
-		sdr::size__ BufferSize );
 
 	//f Return 'E1' - 'E2' which begin at 'BeginS1' and 'BeginS2' and have a length of 'Quantity'.
 	bso::sign__ Compare(

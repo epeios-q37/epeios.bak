@@ -29,14 +29,14 @@ mods += ags aem bch bitbch bso
 mods += cio cpe crptgr cslio ctn 
 mods += dir dte dtfbsc dtfptb epsmsc 
 mods += err fdr flf flsq flw 
-mods += flx ias ids iof iop 
+mods += flx ias idsq iof iop 
 mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio bomhdl 
-mods += cdgb64 dlbrry fil fnm lcl 
-mods += plgn rgstry stsfsm xml xpp 
-mods += tht 
+mods += ntvstr que sdr stkbse stkbch 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp tht 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
 mods += ogzplg 
@@ -333,9 +333,10 @@ all: $(binary)
 
 copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
+copt += -DIDENTIFIER=\""d59d9cbe-dfcb-45da-8910-adeea8f1d500"\"
 
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -356,10 +357,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
-	mkdir -p $(dest)
-			ogz/Backend/Plugins/Types/
-	cp $(binary) $(dest)ogz/Backend/Plugins/Types/
+	mkdir -p $(dest)plugins/ogz/Backend/Type/
+	cp $(binary) $(dest)plugins/ogz/Backend/Type/
 endif
 		
 

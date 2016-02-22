@@ -29,14 +29,14 @@ mods += ags aem bch bitbch bso
 mods += cio cpe crptgr cslio ctn 
 mods += dir dte dtfbsc dtfptb epsmsc 
 mods += err fdr flf flsq flw 
-mods += flx ias ids iof iop 
+mods += flx ias idsq iof iop 
 mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio bomhdl 
-mods += cdgb64 dlbrry fil fnm lcl 
-mods += plgn rgstry stsfsm xml xpp 
-mods += tht 
+mods += ntvstr que sdr stkbse stkbch 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp tht 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
 mods += ogzplg 
@@ -336,7 +336,7 @@ copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""3cfe8169-fe17-4cfc-9523-eb245ccebe6f"\"
 
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
