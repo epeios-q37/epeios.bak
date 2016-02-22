@@ -37,27 +37,9 @@
 namespace tys {
 	#define TYS_MAX_SIZE	UYS_MAX_SIZE
 
-	class fCore
-	{
-	protected:
-		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		uys::untyped_storage_ &GetUntypedStorage( void )
-		{
-			return TYSGetUntypedStorage();
-		}
-	};
-
 	template <typename t, typename b, typename r> class _storage_
-	: public fCore,
-	  public b
+	: public b
 	{
-	protected:
-		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) override
-		{
-			return *this;
-		}
 	private:
 		// place dans 'Tampon' 'Nomnbre' objets  la position 'Position'
 		void _Recall(
@@ -95,18 +77,15 @@ namespace tys {
 		: public b::s
 		{};
 		_storage_( s &S )
-		: fCore(),
-		  b( S )
+		: b( S )
 		{}
 		void reset( bso::fBool P = true )
 		{
-			fCore::reset( P );
 			b::reset( P );
 		}
 		//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			b::Init();
 		}
 		//f Put in 'Buffer' 'Amount' bytes at 'Position'.
@@ -223,10 +202,28 @@ namespace tys {
 		}
 	};
 
+	class fCore
+	{
+	protected:
+		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		uys::untyped_storage_ &GetUntypedStorage( void )
+		{
+			return TYSGetUntypedStorage();
+		}
+	};
+
 	template <typename t, typename r> class storage_
-	: public _storage_< t, uys::untyped_storage_, r >
+	: public fCore,
+	  public _storage_< t, uys::untyped_storage_, r >
 	/* NOTA: See 'storage_core about' '::s'. */
 	{
+	protected:
+		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) override
+		{
+			return *this;
+		}
 	public:
 		struct s
 		: public _storage_< t, uys::untyped_storage_, r >::s
@@ -236,7 +233,13 @@ namespace tys {
 		{}
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			_storage_< t, uys::untyped_storage_, r >::reset( P );
+		}
+		void Init( void )
+		{
+			_storage_< t, uys::untyped_storage_, r >::Init();
+			fCore::Init();
 		}
 		void plug( qAS_ &AS )
 		{

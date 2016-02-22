@@ -31,7 +31,6 @@
 				<Module>csdmxc</Module>
 				<Module>csdrcc</Module>
 				<Module>csdrcd</Module>
-				<Module>csdmnc</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>

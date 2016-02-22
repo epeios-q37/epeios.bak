@@ -231,7 +231,7 @@ namespace lstbch {
 	{
 		bso::fBool Exists = bch::Plug( Core.GetBunch(), Hook.GetBunchHook() );
 
-		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetBunch().GetAmount() );
+		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetBunch().GetAmount_() );
 	}
 
 	class rRH

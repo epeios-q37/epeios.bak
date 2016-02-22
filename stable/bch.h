@@ -58,41 +58,9 @@
 
 namespace bch {
 
-	class fCore
-	{
-	protected:
-		virtual tys::fCore &BCHGetStorage( void ) = 0;
-		virtual aem::size__ BCHGetItemSize( void ) = 0;
-		virtual aem::size__ BCHGetAmount( void ) = 0;
-		virtual void BCHAllocate( aem::size__ Amount ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		tys::fCore &GetStorage( void )
-		{
-			return BCHGetStorage();
-		}
-		aem::size__ GetItemSize( void )
-		{
-			return BCHGetItemSize();
-		}
-		aem::size__ GetAmount( void )
-		{
-			return BCHGetAmount();
-		}
-		aem::size__ GetSize( void )
-		{
-			return GetItemSize() * GetAmount();
-		}
-		void Allocate( aem::size__ Amount )
-		{
-			return BCHAllocate( Amount );
-		}
-	};
-
 	//c The kernel of a bunch. For internal use only. The 'sh' template parameter is to simplify the use of the 'STR' library.
 	template <class type, class mmr, class mng, typename row, typename sh> class _bunch
-	: public fCore,
-	  public mmr,
+	: public mmr,
 	  public mng
 	{
 	private:
@@ -142,36 +110,17 @@ namespace bch {
 		{
 			return ( ( Row == qNIL ) || ( ( mng::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
-	protected:
-		virtual tys::fCore &BCHGetStorage( void ) override
-		{
-			return *this;
-		}
-		virtual aem::size__ BCHGetItemSize( void ) override
-		{
-			return sizeof( type );
-		}
-		virtual aem::size__ BCHGetAmount( void ) override
-		{
-			return mng::Amount();
-		}
-		virtual void BCHAllocate( aem::size__ Amount ) override
-		{
-			return Allocate( Amount, aem::mFitted );
-		}
 	public:
 		struct s
 		: public mmr::s,
 		  public mng::s
 		{};
 		_bunch( s &S )
-		: fCore(),
-		  mmr( S ),
+		: mmr( S ),
 		  mng( S )
 		{}
 		void reset( bso::bool__ P )
 		{
-			fCore::reset( P );
 			mmr::reset( P );
 			mng::reset( P );
 		}
@@ -184,7 +133,6 @@ namespace bch {
 		//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			mmr::Init();
 			mng::Init();
 		}
@@ -572,6 +520,7 @@ namespace bch {
 		{};
 		void reset( bool P = true )
 		{
+			fCore::reset( P );
 			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::reset( P );
 //			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::Memory().reset( P );
 		}
@@ -643,10 +592,59 @@ namespace bch {
 		}
 	};
 
+	class fCore
+	{
+	protected:
+		virtual tys::fCore &BCHGetStorage( void ) = 0;
+		virtual aem::size__ BCHGetItemSize( void ) = 0;
+		virtual aem::size__ BCHGetAmount( void ) = 0;
+		virtual void BCHAllocate( aem::size__ Amount ) = 0;
+	public:
+		qCALLBACK_DEF( Core );
+		tys::fCore &GetStorage_( void )
+		{
+			return BCHGetStorage();
+		}
+		aem::size__ GetItemSize_( void )
+		{
+			return BCHGetItemSize();
+		}
+		aem::size__ GetAmount_( void )
+		{
+			return BCHGetAmount();
+		}
+		aem::size__ GetSize_( void )
+		{
+			return GetItemSize_() * GetAmount_();
+		}
+		void Allocate_( aem::size__ Amount )
+		{
+			return BCHAllocate( Amount );
+		}
+	};
+
 	/*c A bunch of static object of type 'type'. Use 'E_BUNCH_( type )' rather then directly this class. */
 	template <class type, typename row, typename sh=dummy_size_handler> class bunch_
-	: public _bunch_<type, row, aem::amount_extent_manager_< row >, sh >
+	: public fCore,
+	  public _bunch_<type, row, aem::amount_extent_manager_< row >, sh >
 	{
+	protected:
+		virtual tys::fCore &BCHGetStorage( void ) override
+		{
+			return *this;
+		}
+		virtual aem::size__ BCHGetItemSize( void ) override
+		{
+			return sizeof( type );
+		}
+		virtual aem::size__ BCHGetAmount( void ) override
+		{
+			return Amount();
+		}
+		virtual void BCHAllocate( aem::size__ Amount ) override
+		{
+			return Allocate( Amount, aem::mFitted );
+		}
 	public:
 		struct s
 		: public _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::s
@@ -654,6 +652,11 @@ namespace bch {
 		bunch_( s &S )
 		: _bunch_<type, row, aem::amount_extent_manager_< row >, sh >( S )
 		{};
+		void reset( bso::fBool P = true )
+		{
+			fCore::reset( P );
+			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::reset( P );
+		}
 		bunch_ &GetBunch( void )
 		{
 			return *this;
@@ -661,6 +664,18 @@ namespace bch {
 		const bunch_ &GetBunch( void ) const
 		{
 			return *this;
+		}
+		void Init( void )
+		{
+			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init();
+			fCore::Init();
+		}
+		void Init(
+			const type *Seed,
+			sdr::size__ Size )
+		{
+			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init( Seed, Size );
+			fCore::Init();
 		}
 	};
 
@@ -685,11 +700,11 @@ namespace bch {
 		fCore &Core,
 		fHook& Hook )
 	{
-		bso::bool__ Exists = tys::Plug( Core.GetStorage(), Hook ) ;
+		bso::bool__ Exists = tys::Plug( Core.GetStorage_(), Hook ) ;
 
 		qSDf &SD = Hook.GetSD();
 
-		Core.Allocate( SD.Size() / Core.GetItemSize() );
+		Core.Allocate_( SD.Size() / Core.GetItemSize_() );
 
 		return Exists;
 	}

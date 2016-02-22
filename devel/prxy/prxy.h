@@ -136,7 +136,8 @@ namespace prxy {
 		bso::bool__ Init(
 			const char *HostService,
 			const char *Identifier,
-			prxybase::eType Type )
+			prxybase::eType Type,
+			err::handling__ ErrorHandling = err::h_Default )
 		{
 			reset();
 
@@ -145,7 +146,7 @@ namespace prxy {
 
 			Flow_.Init( HostService );
 
-			return Proxy_.Init( Flow_, Identifier, Type );
+			return Proxy_.Init( Flow_, Identifier, Type, ErrorHandling );
 		}
 		time_t EpochTimeStamp( void ) const
 		{

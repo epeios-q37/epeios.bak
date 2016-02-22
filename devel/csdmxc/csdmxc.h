@@ -30,7 +30,7 @@
 
 # include "csdmxb.h"
 
-# include "stk.h"
+# include "stkbch.h"
 
 # include "err.h"
 
@@ -91,7 +91,7 @@ namespace csdmxc {
 
 	typedef flw::ioflow__ fFlow;
 
-	typedef stk::E_BSTACK_( void * )	vUPs;
+	typedef stkbch::qBSTACKvl( void * )	vUPs;
 	qW( UPs );
 
 	qENUM( Log ) {

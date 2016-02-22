@@ -29,16 +29,16 @@ mods += ags aem bch bitbch bso
 mods += cio cpe crptgr cslio ctn 
 mods += dir dte dtfbsc dtfptb epsmsc 
 mods += err fdr flf flsq flw 
-mods += flx ias ids iof iop 
+mods += flx ias idsq iof iop 
 mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio bomhdl 
-mods += cdgb64 dlbrry fil fnm lcl 
-mods += plgn rgstry stsfsm xml xpp 
-mods += tht mtk sck 
+mods += ntvstr que sdr stkbse stkbch 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp tht mtk 
+mods += sck 
 mods += csdbnc csdmxb csdmxc csdrcc csdrcd 
-mods += csdmnc 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
 mods += registry 
@@ -327,12 +327,12 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160128"\"
+copt += -DVERSION=\""20160210"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""2c95d4ed-2c57-4399-9c86-4115883be7cc"\"
 
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
