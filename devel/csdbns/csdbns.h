@@ -174,7 +174,7 @@ namespace csdbns {
 			if ( Data == NULL )
 				qRAlc();
 
-			Data->Flow.Init_( Socket );
+			Data->Flow.Init( Socket );
 			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );
 		qRR
 			if ( Data != NULL )

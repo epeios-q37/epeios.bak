@@ -13,6 +13,8 @@ Meaning of list markers (2nd level):
 - '#' : Bug fixing.
 
 2016-02-22
+* TXF :
+	- Adding 'Copy(..)' function.	
 - UYS :
 	- Optimization of copy between 2 'vUntypesStorage'.
 

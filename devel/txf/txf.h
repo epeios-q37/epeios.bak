@@ -429,6 +429,13 @@ namespace txf {
 	{
 		return Flow << '\r';
 	}
+
+	inline void Copy(
+		flw::iflow__ &IFlow,
+		text_oflow__ &OFlow )
+	{
+		flw::Copy( IFlow, OFlow.Flow() );
+	}
 }
 
 #endif
