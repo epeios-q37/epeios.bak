@@ -36,7 +36,7 @@
 # include "flw.h"
 
 namespace prxy {
-	
+
 	class rProxy
 	{
 	private:
@@ -96,6 +96,21 @@ namespace prxy {
 
 	typedef flw::standalone_ioflow__<> sFlow_;
 
+	qENUM( State ) {
+		sOK,
+		sUnableToConnect,
+		sBadProxyResponse,
+		s_amount,
+		s_Undefined
+	};
+
+	const char *GetLabel( eState State );
+
+	lcl::meaning_ &GetMeaning(
+		eState State,
+		const char *HostService,
+		lcl::meaning_ &Meaning );
+
 	class rFlow
 	: private rFlowDriver_,
 	  public sFlow_
@@ -133,7 +148,7 @@ namespace prxy {
 			Proxy_.reset( P );
 		}
 		qCVDTOR( rFlow );
-		bso::bool__ Init(
+		eState Init(
 			const char *HostService,
 			const char *Identifier,
 			prxybase::eType Type,
@@ -142,11 +157,20 @@ namespace prxy {
 			reset();
 
 			rFlowDriver_::Init( fdr::ts_Default );
+
 			sFlow_::Init( *this );
 
-			Flow_.Init( HostService );
+			if ( !Flow_.Init( HostService, ErrorHandling ) )
+				return sUnableToConnect;
 
-			return Proxy_.Init( Flow_, Identifier, Type, ErrorHandling );
+			if ( Proxy_.Init( Flow_, Identifier, Type ) )
+				return sOK;
+			else if ( ErrorHandling == err::hThrowException )
+				qRFwk();
+			else
+				return sBadProxyResponse;
+
+			return s_Undefined;	// To avoid a warning.
 		}
 		time_t EpochTimeStamp( void ) const
 		{

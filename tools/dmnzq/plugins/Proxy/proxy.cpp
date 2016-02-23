@@ -106,13 +106,15 @@ namespace {
 		qRH
 			prxy::rFlow *Flow = NULL;
 			data__ Data;
+			prxy::eState State = prxy::s_Undefined;
+			lcl::meaning Meaning;
 		qRB
 			Flow = new prxy::rFlow;
 
 			if ( Flow == NULL )
 				qRAlc();
 
-			while ( Flow->Init( HostService_, Identifier_, prxybase::tServer ) ) {
+			while ( ( State = Flow->Init( HostService_, Identifier_, prxybase::tServer, err::hUserDefined ) ) == prxy::sOK ) {
 				Data.Init( Flow, Module, HostService_ );
 
 				mtx::Lock( Data.Mutex );
@@ -129,6 +131,11 @@ namespace {
 				if ( Flow == NULL )
 					qRAlc();
 			}
+
+			Meaning.Init();
+			prxy::GetMeaning( State, HostService_, Meaning );
+
+			sclmisc::ReportAndAbort( Meaning );
 		qRR
 		qRT
 			if ( Flow != NULL )

@@ -21,5 +21,34 @@
 
 #include "prxy.h"
 
+#include "lcl.h"
+
 using namespace prxy;
+
+#define C( name )	case s##name : return PRXY_NAME "_"  #name; break
+ 
+const char *prxy::GetLabel( eState State )
+{
+	switch ( State ) {
+	C( UnableToConnect );
+	C( BadProxyResponse );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+
+lcl::meaning_ &prxy::GetMeaning(
+	eState State,
+	const char *HostService,
+	lcl::meaning_ &Meaning )
+{
+	Meaning.SetValue( GetLabel( State ) );
+
+	Meaning.AddTag( HostService );
+
+	return Meaning;
+}
 
