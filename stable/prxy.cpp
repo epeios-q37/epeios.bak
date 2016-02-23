@@ -21,8 +21,6 @@
 
 #include "prxy.h"
 
-#include "lcl.h"
-
 using namespace prxy;
 
 #define C( name )	case s##name : return PRXY_NAME "_"  #name; break
@@ -31,7 +29,7 @@ const char *prxy::GetLabel( eState State )
 {
 	switch ( State ) {
 	C( UnableToConnect );
-	C( BadProxyResponse );
+	C( LostProxyConnexion );
 	default:
 		qRFwk();
 		break;

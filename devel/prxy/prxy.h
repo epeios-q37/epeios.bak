@@ -34,6 +34,7 @@
 
 # include "err.h"
 # include "flw.h"
+# include "lcl.h"
 
 namespace prxy {
 
@@ -99,7 +100,7 @@ namespace prxy {
 	qENUM( State ) {
 		sOK,
 		sUnableToConnect,
-		sBadProxyResponse,
+		sLostProxyConnexion,
 		s_amount,
 		s_Undefined
 	};
@@ -144,8 +145,8 @@ namespace prxy {
 		{
 			sFlow_::reset( P );
 			rFlowDriver_::reset( P );
-			Flow_.reset( P );
 			Proxy_.reset( P );
+			Flow_.reset( P );
 		}
 		qCVDTOR( rFlow );
 		eState Init(
@@ -156,21 +157,35 @@ namespace prxy {
 		{
 			reset();
 
+			if ( !Flow_.Init( HostService, ErrorHandling ) )
+				return sUnableToConnect;
+
 			rFlowDriver_::Init( fdr::ts_Default );
 
 			sFlow_::Init( *this );
-
-			if ( !Flow_.Init( HostService, ErrorHandling ) )
-				return sUnableToConnect;
 
 			if ( Proxy_.Init( Flow_, Identifier, Type ) )
 				return sOK;
 			else if ( ErrorHandling == err::hThrowException )
 				qRFwk();
 			else
-				return sBadProxyResponse;
+				return sLostProxyConnexion;
 
 			return s_Undefined;	// To avoid a warning.
+		}
+		bso::fBool Init(
+			const char *HostService,
+			const char *Identifier,
+			prxybase::eType Type,
+			lcl::meaning_ &Meaning )	// If returned value == 'false', then 'Meaning' contents the error message.
+		{
+			eState State = Init( HostService, Identifier, Type, err::hUserDefined );
+
+			if ( State != sOK ) {
+				GetMeaning( State, HostService, Meaning );
+				return false;
+			} else
+				return true;
 		}
 		time_t EpochTimeStamp( void ) const
 		{

@@ -2,12 +2,12 @@
 <!-- $Id: fblovl.xlcl,v 1.2 2013/07/18 19:46:19 csimon Exp $ -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 		<Translations text="PRXY_UnableToConnect">
-		<Translation language="fr">Echec connexion au proxy à l'adresse '%1'.</Translation>
-		<Translation language="en">Unable to connect to proxy at '%1'.</Translation>
+		<Translation language="fr">Echec connexion au 'proxy' à l'adresse '%1'.</Translation>
+		<Translation language="en">Unable to connect to 'proxy' at '%1'.</Translation>
 	</Translations>
-	<Translations text="PRXY_BadProxyResponse">
-		<Translation language="fr">Mauvaise réponse du proxy.</Translation>
-		<Translation language="en">Bad proxy response.</Translation>
+	<Translations text="PRXY_LostProxyConnexion">
+		<Translation language="fr">Perte de la connexion au 'proxy'.</Translation>
+		<Translation language="en">Lost proxy connection.</Translation>
 	</Translations>
 <!--
 	<Translations text="PRXY_B">
