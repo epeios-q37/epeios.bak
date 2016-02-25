@@ -322,7 +322,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160210"\"
+copt += -DVERSION=\""20160225"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""13299010-d5c2-4d64-aad7-94339d73cfcc"\"
 

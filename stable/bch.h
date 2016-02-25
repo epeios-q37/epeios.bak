@@ -520,7 +520,6 @@ namespace bch {
 		{};
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::reset( P );
 //			_bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::Memory().reset( P );
 		}
@@ -639,11 +638,11 @@ namespace bch {
 		}
 		virtual aem::size__ BCHGetAmount( void ) override
 		{
-			return Amount();
+			return _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Amount();
 		}
 		virtual void BCHAllocate( aem::size__ Amount ) override
 		{
-			return Allocate( Amount, aem::mFitted );
+			return _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Allocate( Amount, aem::mFitted );
 		}
 	public:
 		struct s
