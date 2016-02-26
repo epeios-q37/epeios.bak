@@ -47,6 +47,8 @@ namespace scllocale {
 		t_Undefined
 	};
 
+	const char *GetLabel( target__ Target );
+
 	void Dump(
 		target__ Target,
 		bso::bool__ RootToo,

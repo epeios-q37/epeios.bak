@@ -93,6 +93,7 @@ rgstry::entry___ sclrgstry::parameter::loose_plugin_item::Id( "@Id", parameter::
 rgstry::entry___ sclrgstry::parameter::PluginItem( RGSTRY_TAGGING_ATTRIBUTE( "Id" ), parameter::LoosePluginItem );
 
 rgstry::entry___ sclrgstry::parameter::debug::DumpRegistries( "DumpRegistries", Debug );
+rgstry::entry___ sclrgstry::parameter::debug::DumpLocales( "DumpLocales", Debug );
 
 namespace definition {
 	static rgstry::entry___ Plugins_( RGSTRY_TAGGED_ENTRY( "Plugins", "target" ), sclrgstry::Definitions );

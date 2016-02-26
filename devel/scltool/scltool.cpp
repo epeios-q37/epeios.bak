@@ -87,7 +87,7 @@ static int main_(
 	int ExitValue = EXIT_SUCCESS;
 qRH
 	str::string Command;
-	bso::bool__ RegistriesDumped = false;
+	bso::bool__ RegistriesDumped = false, LocalesDumped = false;;
 qRB
 	sclmisc::Initialize( &qRRor_, &SCLError_, CIO, (const char *)NULL );
 
@@ -102,6 +102,9 @@ qRB
 	sclmisc::DumpRegistriesIfRequired();
 	RegistriesDumped = true;
 
+	sclmisc::DumpLocalesIfRequired();
+	LocalesDumped = true;
+
 	Command.Init();
 
 	if ( sclargmnt::GetCommand( Command ) == "Usage" )
@@ -111,6 +114,9 @@ qRB
 qRR
 	if ( !RegistriesDumped )
 		sclmisc::DumpRegistriesIfRequired();
+
+	if ( !LocalesDumped )
+		sclmisc::DumpLocalesIfRequired();
 
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {

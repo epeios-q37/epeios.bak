@@ -118,6 +118,8 @@ namespace sclmisc {
 
 	void DumpRegistriesIfRequired( void );
 
+	void DumpLocalesIfRequired( void );
+
 	void EraseProjectRegistry( void );
 
 	enum project_type__ {
@@ -378,6 +380,10 @@ namespace sclmisc {
 	};
 
 	void DumpRegistries(
+		const str::string_ &RawList,
+		txf::text_oflow__ &Flow );
+
+	void DumpLocales(
 		const str::string_ &RawList,
 		txf::text_oflow__ &Flow );
 

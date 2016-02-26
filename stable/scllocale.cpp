@@ -40,6 +40,23 @@ static level__ SoftwareLevel_ = LCL_UNDEFINED_LEVEL;
 static level__ ConfigurationLevel_ = LCL_UNDEFINED_LEVEL;
 static level__ ProjectLevel_ = LCL_UNDEFINED_LEVEL;
 
+#define C( name ) case t##name: return #name; break
+
+const char *scllocale::GetLabel( target__ Target )
+{
+	switch ( Target ) {
+		C( Main );
+		C( Configuration );
+		C( Project );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return NULL;	// To avois a warning.
+}
+
+
 const lcl::locale_ &scllocale::GetLocale( void )
 {
 	return Locale_;

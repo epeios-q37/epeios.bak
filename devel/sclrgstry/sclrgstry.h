@@ -96,6 +96,7 @@ namespace sclrgstry {
 
 		namespace debug {
 			extern rgstry::rEntry DumpRegistries;
+			extern rgstry::rEntry DumpLocales;
 		}
 	}
 

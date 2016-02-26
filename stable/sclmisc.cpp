@@ -515,6 +515,19 @@ qRT
 qRE
 }
 
+void sclmisc::DumpLocalesIfRequired( void )
+{
+qRH
+	str::string Locales;
+qRB
+	Locales.Init();
+
+	if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpLocales, Locales ) )
+		sclmisc::DumpLocales( Locales, cio::COut );
+qRR
+qRT
+qRE
+}
 
 void sclmisc::EraseProjectRegistry( void )
 {
@@ -834,7 +847,7 @@ txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileNa
 }
 
 namespace {
-	void Dump(
+	void DumpRegistry_(
 		sclrgstry::name__ Name,
 		txf::text_oflow__ &Flow	)
 	{
@@ -845,8 +858,7 @@ namespace {
 
 #define T( c, name )\
 	if ( All || ( List.Search( c ) != qNIL ) )\
-		Dump( sclrgstry::n##name, Flow )
-
+		DumpRegistry_( sclrgstry::n##name, Flow )
 
 void sclmisc::DumpRegistries(
 	const str::string_ &RawList,
@@ -876,6 +888,54 @@ qRR
 qRT
 qRE
 }
+
+#undef T
+
+namespace {
+	void DumpLocale_(
+		scllocale::target__ Target,
+		txf::text_oflow__ &Flow	)
+	{
+		Flow << txf::tab << "----- " << scllocale::GetLabel( Target ) << " locale -----" << txf::nl;
+		scllocale::GetLocale().Dump( Target, qNIL, true, xml::oIndent, xml::e_Default, Flow );
+	}
+}
+
+
+
+#define T( c, target )\
+	if ( All || ( List.Search( c ) != qNIL ) )\
+		DumpLocale_( scllocale::t##target, Flow )
+
+void sclmisc::DumpLocales(
+	const str::string_ &RawList,
+	txf::text_oflow__ &Flow )
+{
+qRH
+	bso::bool__ All = false;
+	str::string List;
+	rgstry::row__ Row = qNIL;
+	rgstry::level__ Level = qNIL;
+qRB
+	List.Init( RawList );
+	List.StripCharacter(' ');
+
+	str::ToLower( List );
+
+	if ( List.Amount() == 0 )
+		All = true;
+
+	T( 'm', Main );
+	T( 'c', Configuration );
+	T( 'p', Project );
+
+	Flow << txf::commit;
+qRR
+qRT
+qRE
+}
+
+#undef T
 
 void sclmisc::text_oflow_rack___::HandleError( void )
 {
