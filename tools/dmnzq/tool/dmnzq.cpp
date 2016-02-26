@@ -122,7 +122,7 @@ namespace {
 	qRR
 		Meaning.Init();
 		Meaning.SetValue( "ModuleError" );
-		Meaning.SetValue( ModuleFilename );
+		Meaning.AddTag( ModuleFilename );
 
 		if ( ERRType >= err::t_amount ) {
 			if ( sclerror::IsErrorPending() ) {
