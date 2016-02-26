@@ -1559,51 +1559,14 @@ qRH
 	preprocessing_iflow___ PFlow;
 	xml::token__ Token = xml::t_Undefined;
 	bso::bool__ Continue = true;
-	xml::parser___ Parser;
 	xtf::extended_text_iflow__ RelayXFlow;
 qRB
 	PFlow.Init( XFlow, Criterions );
 	RelayXFlow.Init( PFlow, XFlow.Format() );
 
-	Parser.Init( RelayXFlow, xml::ehKeep );
-
-	while ( Continue ) {
-		switch( Parser.Parse( xml::tfAll & ~xml::tfStartTagClosed ) ) {
-		case xml::tProcessingInstruction:
-			Writer.GetFlow() << Parser.DumpData();
-			
-			if ( Writer.GetOutfit() == xml::oIndent )
-				Writer.GetFlow() << txf::nl;
-
-			break;
-		case xml::tStartTag:
-			Writer.PushTag( Parser.TagName() );
-			break;
-		case xml::tAttribute:
-		case xml::tSpecialAttribute:
-			Writer.PutAttribute( Parser.AttributeName(), Parser.Value() );
-			break;
-		case xml::tValue:
-			Writer.PutValue( Parser.Value() );
-			break;
-		case xml::tEndTag:
-			Writer.PopTag();
-			break;
-		case xml::tCData:
-			Writer.PutCData( Parser.Value() );
-			break;
-		case xml::t_Processed:
-			Continue = false;
-			break;
-		case xml::t_Error:
-			PFlow.GetContext( Context );
-			Status = Context.Status;
-			Continue = false;
-			break;
-		default:
-			qRFwk();
-			break;
-		}
+	if ( !Writer.Put( RelayXFlow ) ) {
+		PFlow.GetContext( Context );
+		Status = Context.Status;
 	}
 
 	if ( RelayXFlow.Format() != utf::f_Guess )

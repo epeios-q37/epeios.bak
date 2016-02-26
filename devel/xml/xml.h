@@ -152,6 +152,10 @@ namespace xml {
 		return WriteXMLHeader( OFlow, Encoding.EncodingString() );
 	}
 
+	class parser___;
+
+	typedef parser___ rParser;
+
 	class vWriter
 	{
 	private:
@@ -348,6 +352,11 @@ namespace xml {
 		{
 			S_.AlwaysCommit = Value;
 		}
+		bso::fBool Put( rParser &Parser );
+		// Ident and put the content of 'XFlow' (reparse it).
+		bso::fBool Put( xtf::extended_text_iflow__ &XFlow );
+		// Ident and put the content of 'XML' (reparse it).
+		bso::fBool Put( const str::vString &XML );
 		qRODISCLOSEv( eLayout, Outfit )
 		qRODISCLOSEv( eSpecialCharHandling, SpecialCharHandling )
 	};

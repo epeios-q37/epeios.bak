@@ -1418,6 +1418,84 @@ void xml::writer_::Rewind( mark__ Mark )
 	while ( PopTag() != Mark );
 }
 
+bso::fBool vWriter::Put( rParser &Parser )
+{
+	bso::fBool Continue = true, Success = false;
+
+	while ( Continue ) {
+		switch( Parser.Parse( xml::tfAll & ~xml::tfStartTagClosed ) ) {
+		case xml::tProcessingInstruction:
+			GetFlow() << Parser.DumpData();
+			
+			if ( GetOutfit() == xml::oIndent )
+				GetFlow() << txf::nl;
+
+			break;
+		case xml::tStartTag:
+			PushTag( Parser.TagName() );
+			break;
+		case xml::tAttribute:
+		case xml::tSpecialAttribute:
+			PutAttribute( Parser.AttributeName(), Parser.Value() );
+			break;
+		case xml::tValue:
+			PutValue( Parser.Value() );
+			break;
+		case xml::tEndTag:
+			PopTag();
+			break;
+		case xml::tCData:
+			PutCData( Parser.Value() );
+			break;
+		case xml::t_Processed:
+			Continue = false;
+			Success = true;
+			break;
+		case xml::t_Error:
+			Success = false;
+			Continue = false;
+			break;
+		default:
+			qRFwk();
+			break;
+		}
+	}
+
+	return Success;
+}
+
+bso::fBool xml::vWriter::Put( xtf::extended_text_iflow__ &XFlow )
+{
+	bso::fBool Success = true;
+qRH
+	rParser Parser;
+qRB
+	Parser.Init( XFlow, ehKeep );
+
+	Success = Put( Parser );
+qRR
+qRT
+qRE
+	return Success;
+}
+
+bso::fBool xml::vWriter::Put( const str::vString &XML )
+{
+	bso::fBool Success = false;
+qRH
+	flx::fStringIFlow SFlow;
+	xtf::extended_text_iflow__ XFlow;
+qRB
+	SFlow.Init( XML );
+	XFlow.Init( SFlow, utf::f_Default );
+
+	Success = Put( XFlow );
+qRR
+qRT
+qRE
+	return Success;
+}
+
 Q37_GCTOR( xml )
 {
 	if ( ( s_FirstNonXTFError - s_FirstXTFError ) != xtf::e_amount )

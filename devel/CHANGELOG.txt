@@ -12,6 +12,12 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-02-26 :
+- XML
+	* Adding 'vWriter::Put(...)' (retrieved from 'XPP' library) to put and indent XML data.
+- XPP :
+	- Use of above new methods.
+
 2016-02-22
 * TXF :
 	- Adding 'Copy(..)' function.	
