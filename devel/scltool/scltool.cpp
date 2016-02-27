@@ -87,7 +87,6 @@ static int main_(
 	int ExitValue = EXIT_SUCCESS;
 qRH
 	str::string Command;
-	bso::bool__ RegistriesDumped = false, LocalesDumped = false;;
 qRB
 	sclmisc::Initialize( &qRRor_, &SCLError_, CIO, (const char *)NULL );
 
@@ -99,12 +98,6 @@ qRB
 
 	sclmisc::RefreshBaseLanguage();
 
-	sclmisc::DumpRegistriesIfRequired();
-	RegistriesDumped = true;
-
-	sclmisc::DumpLocalesIfRequired();
-	LocalesDumped = true;
-
 	Command.Init();
 
 	if ( sclargmnt::GetCommand( Command ) == "Usage" )
@@ -112,12 +105,6 @@ qRB
 	else
 		ExitValue = SCLTOOLMain( Command, Oddities );
 qRR
-	if ( !RegistriesDumped )
-		sclmisc::DumpRegistriesIfRequired();
-
-	if ( !LocalesDumped )
-		sclmisc::DumpLocalesIfRequired();
-
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {
 		case err::t_Abort:
@@ -144,6 +131,11 @@ qRR
 		}
 	}
 qRT
+	cio::COut.Commit();
+	cio::CErr.Commit();
+	cio::CIn.Dismiss();
+
+	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
 qRE
 	return ExitValue;
 }
@@ -185,9 +177,6 @@ qRFB
 	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 qRFR
 qRFT	
-	cio::COut.Commit();
-	cio::CErr.Commit();
-	cio::CIn.Dismiss();
 qRFE( sclmisc::ErrFinal() )
 	return ExitValue;
 }
@@ -274,9 +263,6 @@ qRFB
 	ExitValue = main_( Oddities, cio::GetSet( cio::t_Default ) );
 qRFR
 qRFT	
-	cio::COut.Commit();
-	cio::CErr.Commit();
-	cio::CIn.Dismiss();
 qRFE( sclmisc::ErrFinal() )
 	return ExitValue;
 }

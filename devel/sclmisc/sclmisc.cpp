@@ -501,33 +501,42 @@ qRT
 qRE
 }
 
-void sclmisc::DumpRegistriesIfRequired( void )
-{
-qRH
-	str::string Registries;
-qRB
-	Registries.Init();
+namespace {
+	void DumpRegistriesIfRequired_( void )
+	{
+	qRH
+		str::string Registries;
+	qRB
+		Registries.Init();
 
-	if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpRegistries, Registries ) )
-		sclmisc::DumpRegistries( Registries, cio::COut );
-qRR
-qRT
-qRE
+		if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpRegistries, Registries ) )
+			sclmisc::DumpRegistries( Registries, cio::COut );
+	qRR
+	qRT
+	qRE
+	}
+
+	void DumpLocalesIfRequired_( void )
+	{
+	qRH
+		str::string Locales;
+	qRB
+		Locales.Init();
+
+		if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpLocales, Locales ) )
+			sclmisc::DumpLocales( Locales, cio::COut );
+	qRR
+	qRT
+	qRE
+	}
 }
 
-void sclmisc::DumpLocalesIfRequired( void )
+void sclmisc::DumpRegistriesAndOrLocalesIfRequired( void )
 {
-qRH
-	str::string Locales;
-qRB
-	Locales.Init();
-
-	if ( sclmisc::BGetValue( sclrgstry::parameter::debug::DumpLocales, Locales ) )
-		sclmisc::DumpLocales( Locales, cio::COut );
-qRR
-qRT
-qRE
+	DumpRegistriesIfRequired_();
+	DumpLocalesIfRequired_();
 }
+
 
 void sclmisc::EraseProjectRegistry( void )
 {

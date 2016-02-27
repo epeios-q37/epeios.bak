@@ -148,7 +148,7 @@ qRB
 	if ( Arguments.Amount() != 0 )
 		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	sclmisc::DumpRegistriesIfRequired();
+	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
 qRR
 qRT
 qRE
@@ -175,7 +175,7 @@ qRB
 	if ( Arguments.Amount() != 0 )
 		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
 
-	sclmisc::DumpRegistriesIfRequired();
+	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
 qRR
 qRT
 qRE
