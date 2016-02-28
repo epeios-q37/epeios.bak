@@ -715,22 +715,24 @@ qRE
 }
 
 namespace {
-	void SetFileTreeFilesHook_(
+	bso::fBool SetFileTreeFilesHook_(
 		const fnm::name___ &Path,
 		file_tree_ &FileTree,
 		uys::mode__ Mode,
 		file_tree_fh___ &FilesHook,
 		flsq::rId Id )
 	{
+		uys::eState State = uys::s_Undefined;
 	qRH
 		file_tree_hf___ Filenames;
 	qRB
 		Filenames.Init( Path, "tree" );
 
-		FilesHook.Init_( Filenames, FileTree, Mode, uys::bPersistent, Id );
+		State = FilesHook.Init( Filenames, Mode, uys::bPersistent, Id );
 	qRR
 	qRT
 	qRE
+		return State.Boolean();
 	}
 
 	void GetFileTree_(
@@ -738,9 +740,11 @@ namespace {
 		uys::mode__ Mode,
 		file_tree_rack___ &Rack )
 	{
-		SetFileTreeFilesHook_( DataDirName, Rack.Tree, Mode, Rack.Hook, Rack.Id );
+		bso::fBool Exists = SetFileTreeFilesHook_( DataDirName, Rack.Tree, Mode, Rack.Hook, Rack.Id );
 
-		if ( !Plug( Rack.Tree, Rack.Hook ) )
+		Rack.Tree.plug( Rack.Hook );
+
+		if ( !Exists )
 			Rack.Tree.Init();
 	}
 }

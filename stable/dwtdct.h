@@ -104,7 +104,7 @@ namespace dwtdct {
 			Name.reset( P );
 			Oddity.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Name.plug( AS );
 			Oddity.plug( AS );
@@ -132,59 +132,6 @@ namespace dwtdct {
 		E_RWDISCLOSE_( time_t, Timestamp );
 		E_RWDISCLOSE_( dwtght::grow__, GhostRow );
 		E_RWDISCLOSE_( exclusion__, Exclusion );
-	};
-
-	class files_data_
-	{
-	public:
-		struct s
-		{
-			fstrings_::s Names;
-			fexclusions_::s Exclusions;
-			sizes_::s Sizes;
-			timestamps_::s Timestamps;
-		};
-		fstrings_ Names;
-		fexclusions_ Exclusions;
-		sizes_ Sizes;
-		timestamps_ Timestamps;
-		files_data_( s &S )
-		: Names( S.Names ),
-		  Exclusions( S.Exclusions ),
-		  Sizes( S.Sizes ),
-		  Timestamps( S.Timestamps )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			Names.reset( P );
-			Exclusions.reset( P );
-			Sizes.reset( P );
-			Timestamps.reset( P );
-		}
-		void plug( qAS_ &AS )
-		{
-			Names.plug( AS );
-			Exclusions.plug( AS );
-			Sizes.plug( AS );
-			Timestamps.plug( AS );
-		}
-		files_data_ &operator =( const files_data_ &FD )
-		{
-			Names = FD.Names;
-			Exclusions = FD.Exclusions;
-			Sizes = FD.Sizes;
-			Timestamps = FD.Timestamps;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			Names.Init();
-			Exclusions.Init();
-			Sizes.Init();
-			Timestamps.Init();
-		}
-		E_NAVt( Names., frow__ );
 	};
 
 	struct files_data_hf___
@@ -224,25 +171,24 @@ namespace dwtdct {
 		E_CDTOR( files_data_fh___ );
 		uys::eState Init(
 			files_data_hf___ &Filenames,
-			files_data_ &FilesData,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = Names.Init( Filenames.Names, FilesData.Names, Mode, Behavior, ID );
+			uys::eState State = Names.Init( Filenames.Names, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( Exclusions.Init( Filenames.Exclusions, FilesData.Exclusions, Mode, Behavior, ID ) != State )
+				if ( Exclusions.Init( Filenames.Exclusions, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 
 			if ( !State.IsError() ) {
-				if ( Sizes.Init( Filenames.Sizes, FilesData.Sizes, Mode, Behavior, ID ) != State )
+				if ( Sizes.Init( Filenames.Sizes, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 
 			if ( !State.IsError() ) {
-				if ( Timestamps.Init( Filenames.Timestamps, FilesData.Timestamps, Mode, Behavior, ID ) != State )
+				if ( Timestamps.Init( Filenames.Timestamps, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
 
@@ -250,9 +196,66 @@ namespace dwtdct {
 		}
 	};
 
-	bso::fBool Plug(
-		files_data_ &Files,
-		files_data_fh___ &Hook );
+
+	class files_data_
+	{
+	public:
+		struct s
+		{
+			fstrings_::s Names;
+			fexclusions_::s Exclusions;
+			sizes_::s Sizes;
+			timestamps_::s Timestamps;
+		};
+		fstrings_ Names;
+		fexclusions_ Exclusions;
+		sizes_ Sizes;
+		timestamps_ Timestamps;
+		files_data_( s &S )
+		: Names( S.Names ),
+		  Exclusions( S.Exclusions ),
+		  Sizes( S.Sizes ),
+		  Timestamps( S.Timestamps )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			Names.reset( P );
+			Exclusions.reset( P );
+			Sizes.reset( P );
+			Timestamps.reset( P );
+		}
+		void plug( files_data_fh___ &Hook )
+		{
+			Names.plug( Hook.Names );
+			Exclusions.plug( Hook.Exclusions );
+			Sizes.plug( Hook.Sizes );
+			Timestamps.plug( Hook.Timestamps );
+		}
+		void plug( qASv &AS )
+		{
+			Names.plug( AS );
+			Exclusions.plug( AS );
+			Sizes.plug( AS );
+			Timestamps.plug( AS );
+		}
+		files_data_ &operator =( const files_data_ &FD )
+		{
+			Names = FD.Names;
+			Exclusions = FD.Exclusions;
+			Sizes = FD.Sizes;
+			Timestamps = FD.Timestamps;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Names.Init();
+			Exclusions.Init();
+			Sizes.Init();
+			Timestamps.Init();
+		}
+		E_NAVt( Names., frow__ );
+	};
 
 	class goofs_data_
 	{
@@ -275,7 +278,7 @@ namespace dwtdct {
 			Names.reset( P );
 			Oddities.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Names.plug( AS );
 			Oddities.plug( AS );
@@ -325,7 +328,7 @@ namespace dwtdct {
 			Files.reset( P );
 			Goofs.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Path.plug( AS );
 			Dir.plug( AS );
@@ -589,6 +592,51 @@ namespace dwtdct {
 	typedef ctn::rHF gfrows_hf___;
 	typedef ctn::rFH gfrows_fh___;
 
+	struct rGhost2FilesHF
+	{
+	public:
+		gfrows_hf___ GFRows;
+		files_data_hf___ Files;
+		void reset( bso::bool__ P = true )
+		{
+			GFRows.reset( P );
+			Files.reset( P );
+		}
+		E_CDTOR( rGhost2FilesHF );
+		void Init(
+			const fnm::name___ &Path,
+			const fnm::name___ &Basename );
+	};
+
+	struct rGhost2FilesFH
+	{
+	public:
+		gfrows_fh___ GFRows;
+		files_data_fh___ Files;
+		void reset( bso::bool__ P = true )
+		{
+			GFRows.reset( P );
+			Files.reset( P );
+		}
+		E_CDTOR( rGhost2FilesFH );
+		uys::eState Init(
+			rGhost2FilesHF &Filenames,
+			uys::mode__ Mode,
+			uys::behavior__ Behavior,
+			flsq::id__ ID )
+		{
+			uys::eState State = GFRows.Init( Filenames.GFRows, Mode, Behavior, ID );
+
+			if ( !State.IsError() ) {
+				if ( Files.Init( Filenames.Files, Mode, Behavior, ID ) != State )
+					State = uys::sInconsistent;
+			}
+
+			return State;
+		}
+	};
+
+
 	// Files rattached to each ghost.
 	class ghost2files_
 	{
@@ -608,7 +656,12 @@ namespace dwtdct {
 			GFRows.reset( P );
 			Files.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( rGhost2FilesFH &Hook )
+		{
+			GFRows.plug( Hook.GFRows );
+			Files.plug( Hook.Files );
+		}
+		void plug( qASv &AS )
 		{
 			GFRows.plug( AS );
 			Files.plug( AS );
@@ -635,65 +688,11 @@ namespace dwtdct {
 
 	E_AUTO( ghost2files );
 
-	struct ghost2files_hf___
-	{
-	public:
-		gfrows_hf___ GFRows;
-		files_data_hf___ Files;
-		void reset( bso::bool__ P = true )
-		{
-			GFRows.reset( P );
-			Files.reset( P );
-		}
-		E_CDTOR( ghost2files_hf___);
-		void Init(
-			const fnm::name___ &Path,
-			const fnm::name___ &Basename );
-	};
-
-	struct ghost2files_fh___
-	{
-	public:
-		gfrows_fh___ GFRows;
-		files_data_fh___ Files;
-		void reset( bso::bool__ P = true )
-		{
-			GFRows.reset( P );
-			Files.reset( P );
-		}
-		E_CDTOR( ghost2files_fh___);
-		uys::eState Init(
-			ghost2files_hf___ &Filenames,
-			ghost2files_ &G2F,
-			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
-		{
-			uys::eState State = GFRows.Init( Filenames.GFRows, G2F.GFRows, Mode, Behavior, ID );
-
-			if ( !State.IsError() ) {
-				if ( Files.Init( Filenames.Files, G2F.Files, Mode, Behavior, ID ) != State )
-					State = uys::sInconsistent;
-			}
-
-			return State;
-		}
-	};
-
-	inline bso::fBool Plug(
-		ghost2files_ &Files,
-		ghost2files_fh___ &Hook )
-	{
-		bso::fBool Exists = Plug( Files.Files, Hook.Files );
-
-		return ctn::Plug( Files.GFRows, Hook.GFRows ) || Exists;
-	}
-
 	struct ghost2files_rack___
 	{
 	public:
 		ghost2files G2F;
-		ghost2files_fh___ Hook;
+		rGhost2FilesFH Hook;
 		void reset( bso::bool__ P = true )
 		{
 			G2F.reset( P );

@@ -87,7 +87,7 @@ namespace dwtmov {
 			Moves.reset( P );
 			Names.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Moves.plug( AS );
 			Names.plug( AS );

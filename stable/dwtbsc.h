@@ -221,7 +221,7 @@ namespace dwtbsc {
 			Files.reset( P );
 			Dirs.reset(P);
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			regular_::plug( AS );
 			Goofs.plug( AS );
@@ -254,6 +254,24 @@ namespace dwtbsc {
 	typedef ctn::E_CONTAINERt_( directory_, drow__ ) directories_;
 	E_AUTO( directories );
 
+	# define M( lib, name )\
+	protected:\
+		virtual lib::cHook &DWTBSCGet##name##Hook( void ) = 0;\
+	public:\
+		lib::cHook &Get##name##Hook( void ) { return DWTBSCGet##name##Hook(); }
+
+	class cHook
+	{
+	public:
+		M( bch, Goofs );
+		M( bch, Files);
+		M( ctn, Directories );
+		M( ctn, Names );
+		M( ctn, Oddities );
+	};
+
+# undef M
+
 	class vKernel
 	{
 	public:
@@ -285,7 +303,17 @@ namespace dwtbsc {
 			Names.reset( P );
 			Oddities.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( cHook  &Hook )
+		{
+# define M( lib, name ) name.plug( Hook.Get##name##Hook() )
+			M( bch, Goofs );
+			M( bch, Files);
+			M( ctn, Directories );
+			M( ctn, Names );
+			M( ctn, Oddities );
+# undef M
+		}
+		void plug( qASv &AS )
 		{
 			Goofs.plug( AS );
 			Files.plug( AS );
@@ -321,42 +349,6 @@ namespace dwtbsc {
 			Hook.CreateFiles();
 	}
 
-# define M( lib, name )\
-	protected:\
-		virtual lib::fHook &DWTBSCGet##name##Hook( void ) = 0;\
-	public:\
-		lib::fHook &Get##name##Hook( void ) { return DWTBSCGet##name##Hook(); }
-
-	class fHook
-	{
-	public:
-		qCALLBACK_DEF( Hook );
-		M( bch, Goofs );
-		M( bch, Files);
-		M( ctn, Directories );
-		M( ctn, Names );
-		M( ctn, Oddities );
-	};
-
-# undef M
-
-	inline bso::fBool Plug(
-		vKernel &Kernel,
-		fHook  &Hook )
-	{
-		bso::fBool Exists = false;
-
-# define M( lib, name ) Exists |= lib::Plug( Kernel.name, Hook.Get##name##Hook() )
-		M( bch, Goofs );
-		M( bch, Files);
-		M( ctn, Directories );
-		M( ctn, Names );
-		M( ctn, Oddities );
-#undef M
-
-		return Exists;
-	}
-
 	struct rHF
 	{
 	public:
@@ -380,10 +372,10 @@ namespace dwtbsc {
 	};
 
 	class rFH
-	: public fHook
+	: public cHook
 	{
 	protected:
-# define M( lib, name )	virtual lib::fHook &DWTBSCGet##name##Hook( void ) override { return name##_; }
+# define M( lib, name )	virtual lib::cHook &DWTBSCGet##name##Hook( void ) override { return name##_; }
 		M( bch, Goofs );
 		M( bch, Files);
 		M( ctn, Directories );
@@ -408,16 +400,15 @@ namespace dwtbsc {
 		E_CDTOR( rFH );
 		uys::eState Init(
 			rHF &Filenames,
-			vKernel &Kernel,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = Goofs_.Init( Filenames.Goofs, Kernel.Goofs, Mode, Behavior, ID );
+			uys::eState State = Goofs_.Init( Filenames.Goofs, Mode, Behavior, ID );
 
 # define M( lib, name ) \
 			if ( !State.IsError() ) {\
-				if ( name##_.Init( Filenames.name, Kernel.name, Mode, Behavior, ID ) != State )\
+				if ( name##_.Init( Filenames.name, Mode, Behavior, ID ) != State )\
 					State = uys::sInconsistent;\
 			}
 
@@ -450,7 +441,7 @@ namespace dwtbsc {
 			Prefix.reset( P );
 			Suffix.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Prefix.plug( AS );
 			Suffix.plug( AS );

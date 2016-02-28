@@ -46,6 +46,10 @@ namespace sdr {
 	typedef bRow	row_t__;
 
 	E_TMIMIC__( bRow, fRow );
+
+	class storage_driver__;
+
+	typedef storage_driver__ fStorageDriver;
 }
 
 # define qSDf	sdr::storage_driver__
@@ -150,7 +154,7 @@ namespace sdr {
 		}
 	};
 
-	#define qSD__	sdr::storage_driver__
+//	#define qSD__	sdr::storage_driver__
 }
 
 #endif

@@ -56,39 +56,29 @@ namespace lstbch {
 	using lst::list_;
 	using bch::bunch_;
 
-	class fCore
+	class cHook
 	{
 	protected:
-		virtual bch::fCore &LSTBCHGetBunch( void ) = 0;
-		virtual lst::fCore &LSTBCHGetList( void ) = 0;
+		virtual bch::cHook &LSTBCHGetBunchHook( void ) = 0;
+		virtual lst::cHook &LSTBCHGetListHook( void ) = 0;
 	public:
-		qCALLBACK_DEF( Core );
-		bch::fCore &GetBunch( void )
+		bch::cHook &GetBunchHook( void )
 		{
-			return LSTBCHGetBunch();
+			return LSTBCHGetBunchHook();
 		}
-		lst::fCore &GetList( void )
+		lst::cHook &GetListHook( void )
 		{
-			return LSTBCHGetList();
+			return LSTBCHGetListHook();
 		}
 	};
 
 
 	//c Bunch associated to a list.
 	template <typename type, typename row, typename row_t> class list_bunch_
-	: public fCore,
-	  public list_<row, row_t>,
+	: public list_<row, row_t>,
 	  public bunch_<type, row>
 	{
 	protected:
-		virtual bch::fCore &LSTBCHGetBunch( void ) override
-		{
-			return *this;
-		}
-		virtual lst::fCore &LSTBCHGetList( void ) override
-		{
-			return *this;
-		}
 		virtual void LSTAllocate(
 			sdr::size__ Size,
 			aem::mode__ Mode ) override
@@ -106,14 +96,20 @@ namespace lstbch {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			fCore::reset( P );
 			list_<row, row_t>::reset( P );
 			bunch_<type, row>::reset( P );
 		}
-		void plug( qAS_ &AS )
+		bso::fBool plug( cHook &Hook )
 		{
-			list_<row, row_t>::plug( AS );
-			bunch_<type, row>::plug( AS );
+			bso::fBool Exists = list_<row, row_t>::plug( Hook.GetListHook() );
+
+			return bunch_<type, row>::plug( Hook.GetBunchHook() ) || Exists;
+		}
+		bso::fBool plug( qASv &AS )
+		{
+			bso::fBool Exists = <row, row_t>::plug( AS );
+
+			return bunch_<type, row>::plug( AS ) || Exists;
 		}
 		list_bunch_ &operator =( const list_bunch_ &LB )
 		{
@@ -125,7 +121,6 @@ namespace lstbch {
 		//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			list_<row, row_t>::Init();
 			bunch_<type, row>::Init();
 		}
@@ -208,56 +203,31 @@ namespace lstbch {
 
 #ifndef FLS__COMPILATION
 
-	class fHook
+	template <typename bunch, typename list> class rH_
+	: public cHook
 	{
 	protected:
-		virtual bch::fHook &LSTBCHGetBunchHook( void ) = 0;
-		virtual lst::fHook &LSTBCHGetListHook( void ) = 0;
+		bunch Bunch_;
+		list List_;
 	public:
-		qCALLBACK_DEF( Hook );
-		bch::fHook &GetBunchHook( void )
+		void reset( bso::fBool P = true )
 		{
-			return LSTBCHGetBunchHook();
-		}
-		lst::fHook &GetListHook( void )
-		{
-			return LSTBCHGetListHook();
-		}
-	};
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		bso::fBool Exists = bch::Plug( Core.GetBunch(), Hook.GetBunchHook() );
-
-		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetBunch().GetAmount_() );
-	}
-
-	class rRH
-	: public fHook
-	{
-	private:
-		bch::rRH Bunch_;
-		lst::rRH List_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			fHook::reset( P );
-
 			Bunch_.reset( P );
 			List_.reset( P );
 		}
-		qCDTOR( rRH );
+		qCVDTOR( rH_ );
+	};
+
+	class rRH
+	: public rH_<bch::rRH, lst::rRH>
+	{
+	public:
 		void Init( void )
 		{
 			Bunch_.Init();
 			List_.Init();
-
-			fHook::Init();
 		}
 	};
-
 
 	struct rHF
 	{
@@ -276,35 +246,21 @@ namespace lstbch {
 	};
 
 	class rFH
-	: public fHook
+	: public rH_<bch::rFH, lst::rFH>
 	{
-	private:
-		bch::rFH Bunch_;
-		lst::rFH List_;
 	public:
-		void reset( bso::bool__ P = true )
-		{
-			fHook::reset( P );
-
-			Bunch_.reset( P );
-			List_.reset( P );
-		}
-		qCDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
-			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = Bunch_.Init( Filenames.Bunch, Core.GetBunch(), Mode, Behavior, ID );
+			uys::eState State = Bunch_.Init( Filenames.Bunch, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID ) != State )
+				if ( List_.Init( Filenames.List, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
-
-			fHook::Init();
 
 			return State;
 		}

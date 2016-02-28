@@ -47,14 +47,6 @@ namespace stkbse {
 		{
 			structure::reset( P );
 		}
-		void plug( qSDf &SD )
-		{
-			structure::plug( SD );
-		}
-		void plug( qASv &AS )
-		{
-			structure::plug( AS );
-		}
 		vStack &operator =( const vStack &S )
 		{
 			structure::operator =( S );

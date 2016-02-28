@@ -54,11 +54,13 @@
 #endif
 
 namespace uys {
+	typedef sdr::fStorageDriver fStorageDriver_;
+
 	class _storage_driver__
 	{
 	private:
 		// Le pilote.
-		qSD__ *_Driver;
+		fStorageDriver_ *_Driver;
 		// Indique si le pilote a t dfini de manire interne ou non.
 		bso::bool__ _Internal;
 		// Uniquement pour la 'conventional_storage__'.
@@ -95,7 +97,7 @@ namespace uys {
 		{
 			reset( true );
 		}
-		void plug( qSD__ &Driver )
+		void plug( fStorageDriver_ &Driver )
 		{
 			reset();
 
@@ -113,7 +115,7 @@ namespace uys {
 				}
 			}
 		}
-		qSD__ *Driver( bso::bool__ Ignore = false ) const
+		fStorageDriver_ *Driver( bso::bool__ Ignore = false ) const
 		{
 #ifdef UYS_DBG
 			if ( !Ignore && !_Driver )
@@ -173,6 +175,16 @@ namespace uys {
 		sdr::row_t__ PosDest,
 		sdr::size__ Nombre );
 
+	class cHook {
+	protected:
+		virtual fStorageDriver_ &UYSGetSD( void ) = 0;
+	public:
+		fStorageDriver_ &GetSD( void )
+		{
+			return UYSGetSD();
+		}
+	};
+
 	//c Untyped storage.
 	class untyped_storage_
 	{
@@ -213,6 +225,12 @@ namespace uys {
 
 			S_.Size = Size;
 		}
+		void plug_( fStorageDriver_ &Driver )
+		{
+			_Driver.plug( Driver );
+
+			_Driver.Allocate( S_.Size = Driver.Size() );
+		}
 	public:
 		struct s
 		{
@@ -237,17 +255,14 @@ namespace uys {
 		{
 			reset();
 		}
-		void plug( qSD__ &Driver )
+		void plug( cHook &Hook )
 		{
-			reset();
-
-			_Driver.plug( Driver );
+			plug_( Hook.GetSD() );
 		}
 		void plug( ags::aggregated_storage_ &AS )
 		{
 			_AggregatedStorageDriver.Init( AS );
-			_Driver.plug( _AggregatedStorageDriver );
-			S_.Size = _Driver.Size();
+			plug_( _AggregatedStorageDriver );
 		}
 		untyped_storage_ &operator =( const untyped_storage_ &US )
 		{
@@ -359,7 +374,7 @@ namespace uys {
 			sdr::row_t__ Begin,
 			sdr::row_t__ End ) const;
 		//f Return the used storage driver. 'Ignore' is only for 'UYS_DBG' mode and for the 'MMG' library.
-		qSD__ *Driver( bso::bool__ Ignore = false )
+		fStorageDriver_ *Driver( bso::bool__ Ignore = false )
 		{
 			return _Driver.Driver( Ignore );
 		}
@@ -432,48 +447,27 @@ namespace uys {
 
 namespace uys {
 
-	class fHook {
-	protected:
-		virtual class qSDf &UYSGetSD( void ) = 0;
-	public:
-		qCALLBACK_DEF( Hook );
-		qSDf &GetSD( void )
-		{
-			return UYSGetSD();
-		}
-	};
-
-	inline bso::fBool Plug(
-		untyped_storage_ &Storage,
-		fHook &Hook )
+	template <typename driver> class rH_
+	: public cHook
 	{
-		qSDf &SD = Hook.GetSD();
-		sdr::size__ Size = SD.Size(); 
-
-		Storage.plug( SD );
-
-		Storage.Allocate( Size );
-
-		return Size != 0;
-	}
-
-	class rRH
-	: public fHook
-	{
-	private:
-		mns::standalone_conventional_memory_driver___ Driver_;
 	protected:
-		qSDf &UYSGetSD( void ) override
+		driver Driver_;
+		fStorageDriver_ &UYSGetSD( void ) override
 		{
 			return Driver_;
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::bool__ P = true )
 		{
-			fHook::reset( P );
 			Driver_.reset( P );
 		}
-		qCDTOR( rRH );
+		qCVDTOR( rH_ );
+	};
+
+	class rRH
+	: public rH_<mns::standalone_conventional_memory_driver___>
+	{
+	public:
 		void Init( void )
 		{
 			Driver_.Init();
@@ -514,18 +508,13 @@ namespace uys {
 
 	// Files hook.
 	class rFH
-	: public fHook
+	: public rH_<flsq::file_storage_driver___>
 	{
-	private:
-		flsq::file_storage_driver___ Driver_;
-	protected:
-		qSDf &UYSGetSD( void ) override
-		{
-			return Driver_;
-		}
 	public:
 		void reset( bso::fBool P = true )
 		{
+			rH_<flsq::file_storage_driver___>::reset( P );
+
 			if ( P ) {
 				if ( Driver_.IsInitialized() ) {
 					if ( !Driver_.FileExists() )
@@ -534,9 +523,8 @@ namespace uys {
 			}
 
 			Driver_.reset( P );
-			fHook::reset( P );
 		}
-		qCDTOR( rFH );
+		qCVDTOR( rFH );
 		eState Init( 
 			const rHF &Filenames,
 			mode__ Mode,
@@ -544,7 +532,6 @@ namespace uys {
 			flsq::id__ ID )
 		{
 			Driver_.Init( ID, Filenames.Filename, Convert_( Mode ), flsq::cFirstUse );
-			fHook::Init();
 
 			switch ( Behavior ) {
 			case bVolatile:
@@ -556,8 +543,6 @@ namespace uys {
 				qRFwk();
 				break;
 			}
-
-			fHook::Init();
 
 			if ( Driver_.FileExists() )
 				return sExists;

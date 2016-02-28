@@ -71,30 +71,15 @@ namespace lst {
 		sdr::row_t__ Last,
 		vStore &Store );
 
-	class fCore
-	{
-	protected:
-		virtual idsq::fCore &LSTGetIds( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		idsq::fCore &GetIds( void )
-		{
-			return LSTGetIds();
-		}
-	};
+	using idsq::cHook;
 
 	//c Handle a list of objects. Use 'LIST_' rather than directly this class.
 	template <typename r, typename r_t> class list_
-	: public fCore
 	{
 	protected:
 		virtual void LSTAllocate(
 			sdr::size__ Size,
 			aem::mode__ Mode ) = 0;
-		virtual idsq::fCore &LSTGetIds( void ) override
-		{
-			return Locations;
-		}
 	private:
 		// Return the extent, based on 'Locations'.
 		sdr::row_t__ Extent_( void ) const
@@ -131,19 +116,19 @@ namespace lst {
 		};
 	// fonctions
 		list_( s &S )
-		: fCore(),
-		  Locations( S.Locations )
+		: Locations( S.Locations )
 		{}
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			Locations.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug(
+			cHook &Hook,
+			sdr::bRow FirstUnused )
 		{
-			Locations.plug( SD );
+			Locations.plug( Hook, FirstUnused );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Locations.plug( AS );
 		}
@@ -168,7 +153,6 @@ namespace lst {
 	*/	//f Initialiration.
 		void Init( void )
 		{
-			fCore::Init();
 			Locations.Init();
 		}
 		//f Delete 'Entry'.
@@ -331,37 +315,10 @@ namespace lst {
 #define E_LIST_	E_LISTt_( sdr::row__ )
 
 #ifndef FLM__COMPILATION
-
-	using idsq::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook,
-		sdr::bRow FirstUnused )
-	{
-		return idsq::Plug( Core.GetIds(), Hook, FirstUnused );
-	}
-
 	using idsq::rRH;
 
 	using idsq::rHF;
-	typedef idsq::rFH rFH_;
-
-	class rFH
-	: public rFH_
-	{
-	public:
-		uys::eState Init(
-			const rHF &Filenames,
-			fCore &Core,
-			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
-		{
-			return rFH_::Init(Filenames, Core.GetIds(), Mode, Behavior, ID );
-		}
-	};
-
+	using idsq::rFH;
 #endif
 
 	//c Handle a list with a maximum of 't' entries. Use 'LIST__' rather than directly this class.

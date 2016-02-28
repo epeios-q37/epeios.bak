@@ -118,6 +118,8 @@ namespace str {
 		}
 	};
 
+	using uys::cHook;
+
 	//c A string.
 	class string_
 	: public E_BUNCHx_( bso::char__, _string_size_handler )
@@ -133,6 +135,7 @@ namespace str {
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::reset( P );
 		}
+		/*
 		void plug( qSD__ &Driver )
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::plug( Driver );
@@ -141,6 +144,7 @@ namespace str {
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::plug( AS );
 		}
+		*/
 		string_ &operator =( const string_ &O )
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::operator =( O );

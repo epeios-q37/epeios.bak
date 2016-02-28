@@ -202,28 +202,12 @@ namespace tys {
 		}
 	};
 
-	class fCore
-	{
-	protected:
-		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		uys::untyped_storage_ &GetUntypedStorage( void )
-		{
-			return TYSGetUntypedStorage();
-		}
-	};
+	using uys::cHook;
 
 	template <typename t, typename r> class storage_
-	: public fCore,
-	  public _storage_< t, uys::untyped_storage_, r >
+	: public _storage_< t, uys::untyped_storage_, r >
 	/* NOTA: See 'storage_core about' '::s'. */
 	{
-	protected:
-		virtual uys::untyped_storage_ &TYSGetUntypedStorage( void ) override
-		{
-			return *this;
-		}
 	public:
 		struct s
 		: public _storage_< t, uys::untyped_storage_, r >::s
@@ -233,22 +217,22 @@ namespace tys {
 		{}
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			_storage_< t, uys::untyped_storage_, r >::reset( P );
 		}
 		void Init( void )
 		{
 			_storage_< t, uys::untyped_storage_, r >::Init();
-			fCore::Init();
 		}
-		void plug( qAS_ &AS )
+		/*
+		bso::fBool plug( qASv &AS )
 		{
-			_storage_< t, uys::untyped_storage_, r >::plug( AS );
+			return _storage_< t, uys::untyped_storage_, r >::plug( AS );
 		}
-		void plug( qSD__ &SD )
+		bso::fBool plug( cHook &Hook )
 		{
-			_storage_< t, uys::untyped_storage_, r >::plug( SD );
+			return _storage_< t, uys::untyped_storage_, r >::plug( Hook );
 		}
+		*/
 		void WriteToFlow(
 			r Position,
 			sdr::size__ Quantity,
@@ -268,15 +252,6 @@ namespace tys {
 	E_AUTO2( storage )
 
 # ifndef FLM__COMPILATION
-	using uys::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		return uys::Plug( Core.GetUntypedStorage(), Hook );
-	}
-
 	using uys::rRH;
 	using uys::rFH;
 	using uys::rHF;

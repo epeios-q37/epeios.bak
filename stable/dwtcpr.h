@@ -128,7 +128,7 @@ namespace dwtcpr {
 
 			S_.NewName = qNIL;
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			core_::plug( AS );
 			Files.plug( AS );
@@ -185,7 +185,7 @@ namespace dwtcpr {
 			Directories.reset( P );
 			Names.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Files.plug( AS );
 			Directories.plug( AS );
@@ -261,7 +261,7 @@ namespace dwtcpr {
 			kernel_::reset( P );
 			dtree_::reset( P );
 		}
-		void plug( qAS_  &AS )
+		void plug( qASv  &AS )
 		{
 			kernel_::plug( AS );
 			dtree_::plug( AS );

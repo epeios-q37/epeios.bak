@@ -54,24 +54,6 @@ qRT
 qRE
 }
 
-#define P( name ) Exists |= bch::Plug( Files.name, Hook.name )
-
-bso::fBool dwtdct::Plug(
-	files_data_ &Files,
-	files_data_fh___ &Hook )
-{
-	bso::bool__ Exists = false;
-
-	Exists |= ctn::Plug( Files.Names, Hook.Names );
-
-	P( Exclusions );
-	P( Sizes );
-	P( Timestamps );
-
-	return Exists;
-}
-
-
 void dwtdct::_Delete( _items_ &Items )
 {
 	irow__ Row = Items.First();
@@ -1390,7 +1372,7 @@ void dwtdct::ghost2files_::Append(
 	}
 }
 
-void dwtdct::ghost2files_hf___::Init(
+void dwtdct::rGhost2FilesHF::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )
 {
@@ -1405,22 +1387,25 @@ qRE
 }
 
 namespace {
-	void SetHook_(
+	bso::fBool SetHook_(
 		const fnm::name___ &Path,
-		ghost2files_ &G2F,
 		uys::mode__ Mode,
-		ghost2files_fh___ &Hook )
+		rGhost2FilesFH &Hook )
 	{
+		uys::eState State = uys::s_Undefined;
 	qRH
-		ghost2files_hf___ Filenames;
+		rGhost2FilesHF Filenames;
 	qRB
 		Filenames.Init( Path, "Files_" );
-
-		if ( Hook.Init( Filenames, G2F, Mode, uys::bPersistent, flsq::GetId() ).IsError() )
+		
+		State = Hook.Init( Filenames, Mode, uys::bPersistent, flsq::GetId() );
+		
+		if ( State.IsError() )
 			qRFwk();
 	qRR
 	qRT
 	qRE
+	return State.Boolean();
 	}
 
 	void GetRack_(
@@ -1428,9 +1413,11 @@ namespace {
 		uys::mode__ Mode,
 		ghost2files_rack___ &Rack )
 	{
-		SetHook_( DataDirName, Rack.G2F, Mode, Rack.Hook );
+		bso::fBool Exists = SetHook_( DataDirName, Mode, Rack.Hook );
 
-		if ( !Plug( Rack.G2F, Rack.Hook ) )
+		Rack.G2F.plug( Rack.Hook );
+
+		if ( !Exists )
 			Rack.G2F.Init();
 	}
 }

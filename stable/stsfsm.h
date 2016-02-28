@@ -60,6 +60,8 @@ namespace stsfsm {
 
 	qCDEF( fId, UndefinedId, BSO_UINT_MAX );
 
+	using bch::cHook;
+
 	class vCard {
 	private:
 		void _ResetTable( void )
@@ -96,11 +98,11 @@ namespace stsfsm {
 			_ResetTable();
 			Cards.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( cHook &Hook )
 		{
-			Cards.plug( SD );
+			Cards.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Cards.plug( AS );
 		}
@@ -140,6 +142,11 @@ namespace stsfsm {
 
 	typedef ctn::qMCONTAINERv( vCard, fCRow ) vAutomat;
 	qW( Automat );
+
+	using bch::rRH;
+
+	using bch::rHF;
+	using bch::rFH;
 }
 
 /***************/

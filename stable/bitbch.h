@@ -232,6 +232,8 @@ namespace bitbch {
 		}
 	};
 
+	using tys::cHook;
+
 	// N.B.: le contenu du tableau est invers bit  bit
 	//c Bits set.
 	template <typename r> class bit_bunch_
@@ -280,13 +282,13 @@ namespace bitbch {
 			Table.reset( P );
 			amount_extent_manager_<r>::reset( P );
 		}
-		void plug( qSD__ &SD )
+		bso::fBool plug( cHook &Hook )
 		{
-			Table.plug( SD );
+			return Table.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		bso::fBool plug( qASv &AS )
 		{
-			Table.plug( AS );
+			retunn Table.plug( AS );
 		}
 		bit_bunch_ &operator =( const bit_bunch_ &O )
 		{
@@ -358,6 +360,11 @@ namespace bitbch {
 	};
 
 	E_AUTO1( bit_bunch )
+
+	using tys::rRH;
+
+	using tys::rHF;
+	using tys::rFH;
 
 # define E_BIT_BUNCHt_( row )	bit_bunch_< row >
 # define E_BIT_BUNCHt( row )		bit_bunch< row >
@@ -434,10 +441,11 @@ namespace bitbch {
 			T1.reset( P );
 			T2.reset( P );
 		}
-		void plug( qAS_ &AS )
+		bso::fBool plug( qASv &AS )
 		{
-			T1.plug( AS );
-			T2.plug( AS );
+			bso::fBool Exists = T1.plug( AS );
+			
+			return T2.plug( AS ) ||Exists;
 		}
 		// Operateur d'affectation.
 		bibit_bunch_ &operator =( const bibit_bunch_ &O)

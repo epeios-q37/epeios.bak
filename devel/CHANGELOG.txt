@@ -12,6 +12,14 @@ Meaning of list markers (2nd level):
 - '%' : API changes (is superseded by functionnality changes).
 - '#' : Bug fixing.
 
+2016-02-28
+- GLOBAL :
+	- Huge rewriting (cont.) of the 'hook's and 'file hooks'.
+
+2016-02-27
+- GLOBAL :
+	- Huge rewriting (again) of the 'hook's and 'file hooks'.
+
 2016-02-26 :
 - XML
 	* Adding 'vWriter::Put(...)' (retrieved from 'XPP' library) to put and indent XML data.

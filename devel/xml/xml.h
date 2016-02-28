@@ -208,7 +208,7 @@ namespace xml {
 			S_.Ignore = false;
 			S_.AlwaysCommit = false;
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Tags.plug( AS );
 		}
@@ -402,7 +402,6 @@ namespace xml {
 		return ( Status >= s_FirstXTFError ) && ( Status < s_FirstNonXTFError );
 	}
 
-
 	class dump_ {
 	public:
 		struct s {
@@ -421,11 +420,11 @@ namespace xml {
 
 			S_.Position.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( str::cHook &Hook )
 		{
-			Data.plug( SD );
+			Data.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Data.plug( AS );
 		}

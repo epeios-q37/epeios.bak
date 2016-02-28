@@ -37,21 +37,8 @@ namespace idxbtr {
 
 	using btr::level__;
 
-	class fCore
-	{
-	protected:
-		virtual btr::fCore &IDXBTRGetTree( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		btr::fCore &GetTree( void )
-		{
-			return IDXBTRGetTree();
-		}
-	};
-
 	//c Tree-based index, fast sorting, but slow browsing.
 	template <typename r> class tree_index_
-	: public fCore
 	{
 	private:
 		/* Equilibre l'arbre, sachant que l'ordre des lments est donne par
@@ -60,7 +47,7 @@ namespace idxbtr {
 		r Equilibrer_(
 			const que::E_QUEUEt_( r ) &Index,
 			r Premier,
-			qSD__ *Pilote );
+			uys::cHook *Pilote );
 		r _Compare(
 			const que::E_QUEUEt_( r ) &Queue,
 			r First ) const;
@@ -76,11 +63,6 @@ namespace idxbtr {
 		{
 			return BaseTree.SearchMostRightNode( Node, Level );
 		}
-	protected:
-		virtual btr::fCore &IDXBTRGetTree( void ) override
-		{
-			return BaseTree;
-		}
 	public:
 		btr::E_BTREEt_( r ) BaseTree;
 		struct s
@@ -92,10 +74,9 @@ namespace idxbtr {
 		{}
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			BaseTree.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			BaseTree.plug( AS );
 		}
@@ -123,7 +104,6 @@ namespace idxbtr {
 	*/	//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			BaseTree.Init();
 		}
 		r GetRoot( r Row ) const
@@ -345,13 +325,13 @@ namespace idxbtr {
 		r Fill(
 			const que::E_QUEUEt_( r ) &Queue,
 			r Head,
-			qSD__ &SD  )
+			uys::cHook *Hook  )
 		{
 			Init();
 
 			Allocate( Queue.Amount() );
 
-			return Equilibrer_( Queue, Head, &SD );
+			return Equilibrer_( Queue, Head, Hook );
 		}
 		r Fill(
 			const que::E_QUEUEt_( r ) &Queue,
@@ -380,19 +360,12 @@ namespace idxbtr {
 			tree_index_<sdr::row__> &Tree,
 			const que::E_QUEUE_ &File,
 			sdr::row_t__ Premier,
-			qSD__ *Pilote );
+			uys::cHook *Pilote );
 	};
 
 	E_AUTO1( tree_index );
 
-	using btr::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		return btr::Plug( Core.GetTree(), Hook );
-	}
+	using btr::rRH;
 
 	using btr::rHF;
 	using btr::rFH;
@@ -412,7 +385,7 @@ namespace idxbtr {
 		E_IBTREE_ &Tree,
 		const que::E_QUEUE_ &File,
 		sdr::row_t__ Premier,
-		qSD__ *Pilote );
+		uys::cHook *Pilote );
 
 	sdr::row_t__ Compare_(
 		const E_IBTREE_ &Tree,
@@ -422,7 +395,7 @@ namespace idxbtr {
 	template <typename r> inline r tree_index_<r>::Equilibrer_(
 		const que::E_QUEUEt_( r ) &Index,
 		r Premier,
-		qSD__ *Pilote )
+		uys::cHook *Pilote )
 	{
 		return idxbtr::Equilibrer_( *(E_IBTREE_ *)this, *(const que::E_QUEUE_ *)&Index, *Premier, Pilote );
 	}

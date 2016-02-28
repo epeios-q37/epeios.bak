@@ -55,37 +55,27 @@
 namespace lstctn {
 	using lst::list_;
 
-	class fCore
+	class cHook
 	{
 	protected:
-		virtual ctn::fCore &LSTCTNGetContainer( void ) = 0;
-		virtual lst::fCore &LSTCTNGetList( void ) = 0;
+		virtual ctn::cHook &LSTCTNGetContainerHook( void ) = 0;
+		virtual lst::cHook &LSTCTNGetListHook( void ) = 0;
 	public:
-		qCALLBACK_DEF( Core );
-		ctn::fCore &GetContainer( void )
+		ctn::cHook &GetContainerHook( void )
 		{
-			return LSTCTNGetContainer();
+			return LSTCTNGetContainerHook();
 		}
-		lst::fCore &GetList( void )
+		lst::cHook &GetListHook( void )
 		{
-			return LSTCTNGetList();
+			return LSTCTNGetListHook();
 		}
 	};
 
+
 	template <typename container, typename row, typename row_t> class list_container_
-	: public fCore,
-	  public list_<row, row_t>,
+	: public list_<row, row_t>,
 	  public container
 	{
-	protected:
-		virtual ctn::fCore &LSTCTNGetContainer( void ) override
-		{
-			return *this;
-		}
-		virtual lst::fCore &LSTCTNGetList( void ) override
-		{
-			return *this;
-		}
 		virtual void LSTAllocate(
 			sdr::size__ Size,
 			aem::mode__ Mode ) override
@@ -98,17 +88,20 @@ namespace lstctn {
 		  public container::s
 		{};
 		list_container_( s &S )
-		: fCore(),
-		  list_<row, row_t>( S ), 
+		: list_<row, row_t>( S ), 
 		  container( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			fCore::reset( P );
 			list_<row, row_t>::reset( P );
 			container::reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( cHook &Hook )
+		{
+			list_<row, row_t>::plug( Hook.GetListHook(), container::Dynamics.Amount() );
+			container::plug( Hook.GetContainerHook() );
+		}
+		void plug( qASv &AS )
 		{
 			list_<row, row_t>::plug( AS );
 			container::plug( AS );
@@ -125,7 +118,6 @@ namespace lstctn {
 		//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			list_<row, row_t>::Init();
 			container::Init();
 		}
@@ -165,65 +157,38 @@ namespace lstctn {
 
 	E_AUTO3( list_container );
 
-	class fHook
+	template <typename container, typename list> class rH_
+	: public cHook
 	{
 	protected:
-		virtual ctn::fHook &LSTCTNGetContainerHook( void ) = 0;
-		virtual lst::fHook &LSTCTNGetListHook( void ) = 0;
-	public:
-		qCALLBACK_DEF( Hook );
-		ctn::fHook &GetContainerHook( void )
-		{
-			return LSTCTNGetContainerHook();
-		}
-		lst::fHook &GetListHook( void )
-		{
-			return LSTCTNGetListHook();
-		}
-	};
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		bso::fBool Exists = ctn::Plug( Core.GetContainer(), Hook.GetContainerHook() );
-
-		return lst::Plug( Core.GetList(), Hook.GetListHook(), Core.GetContainer().GetDynamics().Amount() ) || Exists;
-	}
-
-	class rRH
-	: public fHook
-	{
-	private:
-		ctn::rRH Container_;
-		lst::rRH List_;
-	protected:
-		virtual ctn::fHook &LSTCTNGetContainerHook( void ) override
+		container Container_;
+		list List_;
+		virtual ctn::cHook &LSTCTNGetContainerHook( void ) override
 		{
 			return Container_;
 		}
-		virtual lst::fHook &LSTCTNGetListHook( void ) override
+		virtual lst::cHook &LSTCTNGetListHook( void ) override
 		{
 			return List_;
 		}
 	public:
-		void reset( bso::bool__ P = true )
+		void reset( bso::fBool P = true )
 		{
-			fHook::reset( P );
-
 			Container_.reset( P );
 			List_.reset( P );
 		}
-		qCVDTOR( rRH );
+	};
+
+	class rRH
+	: public rH_<ctn::rRH, lst::rRH>
+	{
+	public:
 		void Init( void )
 		{
 			Container_.Init();
 			List_.Init();
-
-			fHook::Init();
 		}
 	};
-
 
 	struct rHF
 	{
@@ -242,44 +207,21 @@ namespace lstctn {
 	};
 
 	class rFH
-	: public fHook
+	: public rH_<ctn::rFH, lst::rFH>
 	{
-	private:
-		ctn::rFH Container_;
-		lst::rFH List_;
-	protected:
-		virtual ctn::fHook &LSTCTNGetContainerHook( void ) override
-		{
-			return Container_;
-		}
-		virtual lst::fHook &LSTCTNGetListHook( void ) override
-		{
-			return List_;
-		}
 	public:
-		void reset( bso::bool__ P = true )
-		{
-			fHook::reset( P );
-
-			Container_.reset( P );
-			List_.reset( P );
-		}
-		qCVDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
-			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = Container_.Init( Filenames.Container, Core.GetContainer(), Mode, Behavior, ID );
+			uys::eState State = Container_.Init( Filenames.Container, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( List_.Init( Filenames.List, Core.GetList(), Mode, Behavior, ID ) != State )
+				if ( List_.Init( Filenames.List, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
-
-			fHook::Init();
 
 			return State;
 		}

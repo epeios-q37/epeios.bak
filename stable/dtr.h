@@ -79,37 +79,26 @@ namespace dtr {
 		friend class dynamic_tree_<r>;
 	};
 
-	class fCore
+	class cHook
 	{
 	protected:
-		virtual btr::fCore &DTRGetTree( void ) = 0;
-		virtual que::fCore &DTRGetQueue( void ) = 0;
+		virtual btr::cHook &DTRGetTreeHook( void ) = 0;
+		virtual que::cHook &DTRGetQueueHook( void ) = 0;
 	public:
-		qCALLBACK_DEF( Core );
-		btr::fCore &GetTree( void )
+		btr::cHook &GetTreeHook( void )
 		{
-			return DTRGetTree();
+			return DTRGetTreeHook();
 		}
-		que::fCore &GetQueue( void )
+		que::cHook &GetQueueHook( void )
 		{
-			return DTRGetQueue();
+			return DTRGetQueueHook();
 		}
 	};
 
 # define E_BROWSER__( t )	browser__<t>
 	//c A dynamic tree.
 	template <typename r> class dynamic_tree_
-	: public fCore
 	{
-	protected:
-		virtual btr::fCore &DTRGetTree( void ) override
-		{
-			return Tree;
-		}
-		virtual que::fCore &DTRGetQueue( void ) override
-		{
-			return Queue;
-		}
 	public:
 		//r A binary tree.
 		btr::E_BTREEt_( r ) Tree;
@@ -126,11 +115,15 @@ namespace dtr {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			fCore::reset( P );
 			Tree.reset( P );
 			Queue.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( cHook &Hook )
+		{
+			Tree.plug (Hook.GetTreeHook() );
+			Queue.plug( Hook.GetQueueHook() );
+		}
+		void plug( qASv &AS )
 		{
 			Tree.plug( AS );
 			Queue.plug( AS );
@@ -145,7 +138,6 @@ namespace dtr {
 		//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			Tree.Init();
 			Queue.Init();
 		}
@@ -386,31 +378,39 @@ namespace dtr {
 # define E_DTREE		E_DTREEt( epeios::row__ )
 # define E_DTREE_	E_DTREEt_( epeios::row__ )
 
-	class fHook
+	template <typename tree, typename queue> class rH_
+	: public cHook
 	{
 	protected:
-		virtual btr::fHook &DTRGetTreeHook( void ) = 0;
-		virtual que::fHook &DTRGetQueueHook( void ) = 0;
+		tree Tree_;
+		queue Queue_;
+		virtual btr::cHook &DTRGetTreeHook( void ) override
+		{
+			return Tree_;
+		}
+		virtual que::cHook &DTRGetQueueHook( void ) override
+		{
+			return Queue_;
+		}
 	public:
-		qCALLBACK_DEF( Hook );
-		btr::fHook &GetTreeHook( void )
+		void reset( bso::fBool P = true )
 		{
-			return DTRGetTreeHook();
+			Tree_.reset( P );
+			Queue_.reset( P );
 		}
-		que::fHook &GetQueueHook( void )
-		{
-			return DTRGetQueueHook();
-		}
+		qCVDTOR( rH_ );
 	};
 
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
+	class rRH
+	: public rH_<btr::rRH, que::rRH>
 	{
-		bso::fBool Exists = btr::Plug( Core.GetTree(), Hook.GetTreeHook() );
-
-		return que::Plug( Core.GetQueue(), Hook.GetQueueHook() ) || Exists;
-	}
+	public:
+		void Init( void )
+		{
+			Tree_.Init();
+			Queue_.Init();
+		}
+	};
 
 	struct rHF
 	{
@@ -429,45 +429,23 @@ namespace dtr {
 	};
 
 	class rFH
-	: public fHook
+	: public rH_<btr::rFH, que::rFH>
 	{
-	private:
-		btr::rFH Tree_;
-		que::rFH Queue_;
-	protected:
-		virtual btr::fHook &DTRGetTreeHook( void ) override
-		{
-			return Tree_;
-		}
-		virtual que::fHook &DTRGetQueueHook( void ) override
-		{
-			return Queue_;
-		}
 	public:
-		void reset( bso::bool__ P = true )
-		{
-			Tree_.reset( P );
-			Queue_.reset( P );
-			fHook::reset( P );
-		}
-		E_CDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
-			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
 			reset();
 
-			uys::eState State = Tree_.Init( Filenames.Tree, Core.GetTree().GetBunch(), Mode, Behavior, ID );
+			uys::eState State = Tree_.Init( Filenames.Tree, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( Queue_.Init( Filenames.Queue, Core.GetQueue().GetBunch(), Mode, Behavior, ID ) != State )
+				if ( Queue_.Init( Filenames.Queue, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
-
-			fHook::Init();
 
 			return State;
 		}

@@ -98,11 +98,11 @@ public:
 		S_.Stamp = s_Undefined;
 		Name.reset( P );
 	}
-	void plug( qSD__ &SD )
+	void plug( uys::cHook &Hook )
 	{
-		Name.plug( SD );
+		Name.plug( Hook );
 	}
-	void plug( qAS_ &AS )
+	void plug( qASv &AS )
 	{
 		Name.plug( AS );
 	}
@@ -154,10 +154,9 @@ public:
 
 		Value.reset( P );
 	}
-	void plug( qAS_ &AS )
+	void plug( qASv &AS )
 	{
 		flag_::plug( AS );
-
 		Value.plug( AS );
 	}
 	option_ &operator =( const option_ &O )

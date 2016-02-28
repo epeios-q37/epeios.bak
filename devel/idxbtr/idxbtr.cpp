@@ -75,7 +75,7 @@ sdr::row_t__ idxbtr::Equilibrer_(
 	E_IBTREE_ &Tree,
 	const que::E_QUEUE_ &File,
 	sdr::row_t__ Premier,
-	qSD__ *Pilote )
+	uys::cHook *Pilote )
 {
 	sdr::row_t__ Racine, &Courant = Premier;
 qRH

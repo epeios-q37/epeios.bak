@@ -646,9 +646,11 @@ namespace flsq {
 		}
 	};
 
+	typedef sdr::fStorageDriver fStorageDriver_;
+
 	//c The standard storage driver which handle a file as storage.
 	class file_storage_driver___
-	: public qSD__,
+	: public fStorageDriver_,
 	  public file_storage___
 	{
 	protected:
@@ -682,13 +684,13 @@ namespace flsq {
 		}
 	public:
 		file_storage_driver___( void )
-		: qSD__(),
+		: fStorageDriver_(),
 		  file_storage___()
 		{}
 		void reset( bool P = true )
 		{
 			file_storage___::reset( P );
-			qSD__::reset( P );
+			fStorageDriver_::reset( P );
 		}
 		//f Return the mode.
 		fil::mode__ Mode( void ) const
@@ -708,7 +710,7 @@ namespace flsq {
 			flsq::creation Creation = flsq::cFirstUse )
 		{
 			file_storage___::Init( ID, FileName, Mode, Creation );
-			qSD__::Init();
+			fStorageDriver_::Init();
 		}
 	};
 

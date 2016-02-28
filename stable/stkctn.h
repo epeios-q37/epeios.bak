@@ -34,27 +34,9 @@
 namespace stkctn {
 	using stkbse::vStack;
 
-	class fCore
-	{
-	protected:
-		virtual ctn::fCore &STKGetContainer( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		ctn::fCore &GetContainer( void )
-		{
-			return STKGetContainer();
-		}
-	};
-
 	template <typename structure, typename item, typename row> class vContainerStack
-	: public fCore,
-	  public vStack< structure, item, row >
+	: public vStack< structure, item, row >
 	{
-	protected:
-		virtual ctn::fCore &STKGetContainer( void ) override
-		{
-			return *this;
-		}
 	public:
 		struct s
 		: public vStack< structure, item, row >::s
@@ -64,46 +46,20 @@ namespace stkctn {
 		{}
 		void reset( bso::fBool P = true )
 		{
-			fCore::reset( P );
 			vStack< structure, item, row >::reset( P );
 		}
 		void Init( void )
 		{
-			fCore::Init();
 			vStack< structure, item, row >::Init();
 		}
 	};
 
-	using ctn::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		return ctn::Plug( Core.GetContainer(), Hook );
-	}
+	qW3( ContainerStack );
 
 	using ctn::rRH;
 
 	using ctn::rHF;
-	typedef ctn::rFH rFH_;
-
-	class rFH
-	: public rFH_
-	{
-	public:
-		uys::eState Init(
-			const rHF &Filenames,
-			fCore &Core,
-			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
-		{
-			return rFH_::Init(Filenames, Core.GetContainer(), Mode, Behavior, ID );
-		}
-	};
-	
-	qW3( ContainerStack );
+	using ctn::rFH;
 
 	qROW( Row );
 

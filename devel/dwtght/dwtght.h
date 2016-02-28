@@ -56,6 +56,8 @@ namespace dwtght {
 		return Row;
 	}
 
+	using str::cHook;
+
 	// Pour ma gestion du renommage/déplacement de répertoires.
 	class ghost_
 	{
@@ -74,11 +76,11 @@ namespace dwtght {
 			S_.Parent = qNIL;
 			Name.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( cHook &Hook )
 		{
-			Name.plug( SD );
+			Name.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Name.plug( AS );
 		}

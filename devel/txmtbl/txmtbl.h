@@ -89,13 +89,13 @@ namespace txmtbl {
 			string_::reset( P );
 			S_.Location = 0;
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			string_::plug( AS );
 		}
-		void plug( qSD__ &SD )
+		void plug( uys::cHook &Hook )
 		{
-			string_::plug( SD );
+			string_::plug( Hook );
 		}
 		cell_ &operator =( const cell_ &C )
 		{
@@ -168,7 +168,7 @@ namespace txmtbl {
 
 			S_.Location = 0;
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			cells_::plug( AS );
 		}
@@ -299,7 +299,7 @@ namespace txmtbl {
 		{
 			lines_::reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			lines_::plug( AS );
 		}

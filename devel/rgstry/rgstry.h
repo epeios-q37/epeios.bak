@@ -100,7 +100,7 @@ namespace rgstry {
 			AttributeName.reset( P );
 			AttributeValue.reset( P);
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			TagName.plug( AS );
 			AttributeName.plug( AS );
@@ -139,7 +139,7 @@ namespace rgstry {
 		{
 			_path_items_::reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			_path_items_::plug( AS );
 		}
@@ -499,7 +499,7 @@ namespace rgstry {
 			Value.reset( P );
 			Children.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Name.plug( AS );
 			Value.plug( AS );
@@ -819,7 +819,7 @@ namespace rgstry {
 		{
 			Nodes.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Nodes.plug( AS );
 		}
@@ -1650,7 +1650,7 @@ namespace rgstry {
 			Entries.reset( P );
 			TimeStamps.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			EmbeddedRegistry.plug( AS );
 			Entries.plug( AS );

@@ -37,38 +37,11 @@ namespace idxbtq {
 	using idxbtr::tree_index_;
 	using idxque::queue_index_;
 
-	class fCore
-	{
-	protected:
-		virtual idxbtr::fCore &IDXBTQGetTree( void ) = 0;
-		virtual idxque::fCore &IDXBTQGetQueue( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		idxbtr::fCore &GetTree( void )
-		{
-			return IDXBTQGetTree();
-		}
-		idxque::fCore &GetQueue( void )
-		{
-			return IDXBTQGetQueue();
-		}
-	};
-
 	//c Index using a tree-based index and a queue-based index. Fast browsing and sorting.
 	template <typename r> class tree_queue_index_
-	: public fCore,
-	  public E_IBTREEt_( r ),
+	: public E_IBTREEt_( r ),
 	  public E_IQUEUEt_( r )
 	{
-	protected:
-		virtual idxbtr::fCore &IDXBTQGetTree( void ) override
-		{
-			return *this;
-		}
-		virtual idxque::fCore &IDXBTQGetQueue( void ) override
-		{
-			return *this;
-		}
 	public:
 		struct s
 		: public E_IBTREEt_( r )::s,
@@ -80,11 +53,10 @@ namespace idxbtq {
 		{}
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			E_IBTREEt_( r )::reset( P );
 			E_IQUEUEt_( r )::reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			E_IBTREEt_( r )::plug( AS );
 			E_IQUEUEt_( r )::plug( AS );
@@ -109,7 +81,6 @@ namespace idxbtq {
 	*/	//f Initializtion.
 		void Init( void )
 		{
-			fCore::Init();
 			E_IBTREEt_( r )::Init();
 			E_IQUEUEt_( r )::Init();
 		}
@@ -157,9 +128,22 @@ namespace idxbtq {
 		//f Balances the tree of the index.
 		r Balance(
 			r Root,
-			qSD__ &SD = SDR_INTERNAL_SDRIVER )
+			uys::cHook *Hook )
 		{
-			return E_IBTREEt_( r )::Fill( *this, First( Root ), SD );
+			return E_IBTREEt_( r )::Fill( *this, First( Root ), Hook );
+		}
+		r Balance( r Root )
+		{
+			r Row = qNIL;
+		qRH
+			uys::rRH Hook;
+		qRB
+			Hook.Init();
+
+		Row = Balance( Root, &Hook );
+		qRR
+		qRT
+		qRE
 		}
 		r Compare( r Root ) const
 		{
@@ -255,31 +239,36 @@ namespace idxbtq {
 
 	E_AUTO1( tree_queue_index )
 
-	class fHook
+	template <typename index, typename tree, typename queue> class rH_
 	{
 	protected:
-		virtual idxbtr::fHook &IDXBTQGetTreeHook( void ) = 0;
-		virtual idxque::fHook &IDXBTQGetQueueHook( void ) = 0;
+		tree Tree_;
+		queue Queue_;
 	public:
-		qCALLBACK_DEF( Hook );
-		idxbtr::fHook &GetTreeHook( void )
+		void reset( bso::fBool P = true )
 		{
-			return IDXBTQGetTreeHook();
+			Tree_.reset( P );
+			Queue_.reset( P );
 		}
-		idxque::fHook &GetQueueHook( void )
+		qCVDTOR( rH_ );
+		bso::fBool Plug( index &Index )
 		{
-			return IDXBTQGetQueueHook();
+			bso::fBool Exists = Tree_.Plug( Index.GetTree() );
+
+			return Queue_.Plug( Index.GetQueue() ) || Exists;
 		}
 	};
 
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
+	template <class index> class rRH
+	: public rH_<index, idxbtr::rRH, idxque::rRH>
 	{
-		bso::fBool Exists = idxbtr::Plug( Core.GetTree(), Hook.GetTreeHook() );
-
-		return idxque::Plug( Core.GetQueue(), Hook.GetQueueHook() ) || Exists;
-	}
+	public:
+		void Init( void )
+		{
+			Tree_.Init();
+			Index_.Init();
+		}
+	};
 
 	struct rHF
 	{
@@ -297,23 +286,11 @@ namespace idxbtq {
 			const fnm::name___ &Basename );
 	};
 
-	class rFH
-	: public fHook
+	template <class index> class rFH
+	: public rH_<index, idxbtr::rFH, idxque::rFH>
 	{
-	private:
-		idxbtr::rFH _Tree;
-		idxque::rFH _Queue;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			_Tree.reset( P );
-			_Queue.reset( P );
-			fHook::reset( P );
-		}
-		qCVDTOR( rFH );
 		uys::eState Init( 
 			const rHF &Filenames,
-			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )

@@ -166,21 +166,10 @@ namespace que {
 # define qQSTACKv( r ) stkbch::qBSTACKvl( r )
 # define qQSTACKi( r ) stkbch::qBSTACKil( r )
 
-	class fCore
-	{
-	protected:
-		virtual bch::fCore &QUEGetBunch( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		bch::fCore &GetBunch( void )
-		{
-			return QUEGetBunch();
-		}
-	};
-	
+	using bch::cHook;
+
 	//c A queue. Use 'QUEUE_' rather than directly this.
 	template <typename r> class queue_
-	: public fCore
 	{
 	private:
 		void HandleNeighboursForSwap_(
@@ -210,11 +199,6 @@ namespace que {
 				qRFwk();
 		}
 # endif
-	protected:
-		virtual bch::fCore &QUEGetBunch( void ) override
-		{
-			return Links; 
-		}
 	public:
 		//r Links between nodes.
 		que::links_ Links;
@@ -227,14 +211,13 @@ namespace que {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			fCore::reset( P );
 			Links.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( cHook &Hook )
 		{
-			Links.plug( SD );
+			Links.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Links.plug( AS );
 		}
@@ -247,7 +230,6 @@ namespace que {
 		//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			Links.Init();
 		}
 		//f Allocate enough room to contains 'Size' nodes.
@@ -399,18 +381,10 @@ namespace que {
 	E_AUTO1( queue );
 
 # ifndef FLS__COMPILATION
-	using bch::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		return bch::Plug( Core.GetBunch(), Hook );
-	}
+	using bch::rRH;
 
 	using bch::rHF;
 	using bch::rFH;
-
 # endif
 
 	//d A queue.
@@ -646,13 +620,13 @@ namespace que {
 		: S_( S ),
 		  Queue( S.Queue )
 		{}
-		void plug( qAS_ &AS )
+		bso::fBool plug( cHook &Hook )
 		{
-			Queue.plug( AS );
+			return Queue.plug( Hook );
 		}
-		void plug( qSD__ &SD )
+		bso::fBool plug( qASv &AS )
 		{
-			Queue.plug( SD );
+			return Queue.plug( AS );
 		}
 		managed_queue_ &operator =( const managed_queue_ &Q )
 		{

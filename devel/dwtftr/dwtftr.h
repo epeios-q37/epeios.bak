@@ -56,51 +56,6 @@ namespace dwtftr {
 	typedef dtr::E_DTREEt_( dwtbsc::drow__ ) dtree_;
 	E_AUTO( dtree );
 
-	class file_tree_
-	: public vKernel,
-	  public dtree_
-	{
-	public:
-		struct s
-		: public vKernel::s,
-		  public dtree_::s
-		{};
-		file_tree_( s &S )
-		: vKernel( S ),
-		  dtree_( S )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			vKernel::reset( P );
-			dtree_::reset( P );
-		}
-		void plug( qAS_  &AS )
-		{
-			vKernel::plug( AS );
-			dtree_::plug( AS );
-		}
-		file_tree_ &operator =( const file_tree_ &FT )
-		{
-			vKernel::operator =( FT );
-			dtree_::operator =( FT );
-
-			return *this;
-		}
-		void Init( void )
-		{
-			vKernel::Init();
-			dtree_::Init();
-		}
-		const str::string_ &GetPath(
-			drow__ Row,
-			str::string_ &Path ) const;
-		 void Dump( 
-			 drow__ Row,
-			 xml::writer_ &Writer ) const;
-	};
-
-	E_AUTO( file_tree );
-
 	struct file_tree_hf___
 	{
 	public:
@@ -128,26 +83,73 @@ namespace dwtftr {
 			Kernel.reset( P );
 		}
 		E_CDTOR( file_tree_fh___ );
-		void Init_(
+		uys::eState Init(
 			file_tree_hf___ &Filenames,
-			file_tree_ &FileTree,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			Tree.Init( Filenames.Tree, FileTree, Mode, Behavior, ID );
-			Kernel.Init( Filenames.Kernel, FileTree, Mode, Behavior, ID );
+			uys::eState State = Tree.Init( Filenames.Tree, Mode, Behavior, ID );
+
+			if ( !State.IsError() ) {
+				if ( Kernel.Init( Filenames.Kernel, Mode, Behavior, ID ) != State )
+					State = uys::sInconsistent;
+			}
+
+			return State;
 		}
 	};
 
-	inline bso::fBool Plug(
-		file_tree_ &Tree,
-		file_tree_fh___ &Hook )
-	{
-		bso::fBool Exists = dtr::Plug( Tree, Hook.Tree );
 
-		return dwtbsc::Plug( Tree, Hook.Kernel ) || Exists;
-	}
+	class file_tree_
+	: public vKernel,
+	  public dtree_
+	{
+	public:
+		struct s
+		: public vKernel::s,
+		  public dtree_::s
+		{};
+		file_tree_( s &S )
+		: vKernel( S ),
+		  dtree_( S )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			vKernel::reset( P );
+			dtree_::reset( P );
+		}
+		void plug( file_tree_fh___ &Hook )
+		{
+			vKernel::plug( Hook.Kernel );
+			dtree_::plug( Hook.Tree );
+		}
+		void plug( qASv  &AS )
+		{
+			vKernel::plug( AS );
+			dtree_::plug( AS );
+		}
+		file_tree_ &operator =( const file_tree_ &FT )
+		{
+			vKernel::operator =( FT );
+			dtree_::operator =( FT );
+
+			return *this;
+		}
+		void Init( void )
+		{
+			vKernel::Init();
+			dtree_::Init();
+		}
+		const str::string_ &GetPath(
+			drow__ Row,
+			str::string_ &Path ) const;
+		 void Dump( 
+			 drow__ Row,
+			 xml::writer_ &Writer ) const;
+	};
+
+	E_AUTO( file_tree );
 
 	struct file_tree_rack___ {
 		file_tree_fh___ Hook;

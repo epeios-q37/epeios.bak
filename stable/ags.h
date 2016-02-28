@@ -74,8 +74,10 @@ namespace ags {
 
 	class aggregated_storage_;
 
+	typedef sdr::fStorageDriver fStorageDriver_;
+
 	class aggregated_storage_driver__
-	: public qSD__
+	: public fStorageDriver_
 	{
 	private:
 		descriptor__ &_Descriptor;
@@ -107,13 +109,13 @@ namespace ags {
 			} else
 				_AStorage = NULL;
 
-			qSD__::reset( P );
+			fStorageDriver_::reset( P );
 
 			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		aggregated_storage_driver__( descriptor__ &Descriptor )
 		: _Descriptor( Descriptor ),
-		  qSD__()
+		  fStorageDriver_()
 		{
 			reset( false );
 		}
@@ -123,7 +125,7 @@ namespace ags {
 			reset();
 
 			_AStorage = &AStorage;
-			qSD__::Init();
+			fStorageDriver_::Init();
 
 			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
@@ -768,6 +770,8 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 	};
 
+	using uys::cHook;
+
 	class aggregated_storage_
 	{
 	private:
@@ -1338,9 +1342,9 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			return *this;
 		}
-		void plug( qSD__ &MD )
+		void plug( cHook &Hook )
 		{
-			Storage.plug( MD );
+			Storage.plug( Hook );
 		}
 		void plug( aggregated_storage_ &AS )
 		{
@@ -1436,22 +1440,15 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 	E_AUTO( aggregated_storage )
 
-	using uys::fHook;
-
-	inline bso::fBool Plug(
-		aggregated_storage_ &Storage,
-		fHook &Hook )
-	{
-		return uys::Plug( Storage.Storage, Hook );
-	}
-
 	using uys::rRH;
 
 	using uys::rHF;
 	using uys::rFH;
 
+/*
 # define qAS_	ags::aggregated_storage_
 # define qAS	ags::aggregated_storage
+*/
 }
 
 #endif

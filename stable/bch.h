@@ -591,59 +591,12 @@ namespace bch {
 		}
 	};
 
-	class fCore
-	{
-	protected:
-		virtual tys::fCore &BCHGetStorage( void ) = 0;
-		virtual aem::size__ BCHGetItemSize( void ) = 0;
-		virtual aem::size__ BCHGetAmount( void ) = 0;
-		virtual void BCHAllocate( aem::size__ Amount ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		tys::fCore &GetStorage_( void )
-		{
-			return BCHGetStorage();
-		}
-		aem::size__ GetItemSize_( void )
-		{
-			return BCHGetItemSize();
-		}
-		aem::size__ GetAmount_( void )
-		{
-			return BCHGetAmount();
-		}
-		aem::size__ GetSize_( void )
-		{
-			return GetItemSize_() * GetAmount_();
-		}
-		void Allocate_( aem::size__ Amount )
-		{
-			return BCHAllocate( Amount );
-		}
-	};
+	using tys::cHook;
 
 	/*c A bunch of static object of type 'type'. Use 'E_BUNCH_( type )' rather then directly this class. */
 	template <class type, typename row, typename sh=dummy_size_handler> class bunch_
-	: public fCore,
-	  public _bunch_<type, row, aem::amount_extent_manager_< row >, sh >
+	: public _bunch_<type, row, aem::amount_extent_manager_< row >, sh >
 	{
-	protected:
-		virtual tys::fCore &BCHGetStorage( void ) override
-		{
-			return *this;
-		}
-		virtual aem::size__ BCHGetItemSize( void ) override
-		{
-			return sizeof( type );
-		}
-		virtual aem::size__ BCHGetAmount( void ) override
-		{
-			return _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Amount();
-		}
-		virtual void BCHAllocate( aem::size__ Amount ) override
-		{
-			return _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Allocate( Amount, aem::mFitted );
-		}
 	public:
 		struct s
 		: public _bunch_<type, row, aem::amount_extent_manager_< row >, sh >::s
@@ -653,7 +606,6 @@ namespace bch {
 		{};
 		void reset( bso::fBool P = true )
 		{
-			fCore::reset( P );
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::reset( P );
 		}
 		bunch_ &GetBunch( void )
@@ -664,7 +616,7 @@ namespace bch {
 		{
 			return *this;
 		}
-		void Init( void )
+/*		void Init( void )
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init();
 			fCore::Init();
@@ -676,6 +628,7 @@ namespace bch {
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init( Seed, Size );
 			fCore::Init();
 		}
+		*/
 	};
 
 	E_AUTO3( bunch )
@@ -693,55 +646,11 @@ namespace bch {
 	#define E_BUNCH_( Type )	E_BUNCHt_( Type, sdr::row__ )
 
 // #ifndef FLS__COMPILATION
-	using tys::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook& Hook )
-	{
-		bso::bool__ Exists = tys::Plug( Core.GetStorage_(), Hook ) ;
-
-		qSDf &SD = Hook.GetSD();
-
-		Core.Allocate_( SD.Size() / Core.GetItemSize_() );
-
-		return Exists;
-	}
 
 	using tys::rRH;
-
 	using tys::rHF;
+	using tys::rFH;
 
-	class rFH
-	: public fHook
-	{
-	private:
-		tys::rFH FH_;
-		qRVM( fCore, C_, Core_ );
-	protected:
-		virtual qSDf &UYSGetSD( void ) override
-		{
-			return FH_.GetSD();
-		}
-	public:
-		void reset( bso::fBool P = true )
-		{
-			FH_.reset( P );
-			Core_ = NULL;
-		}
-		qCVDTOR( rFH );
-		uys::eState Init(
-			const rHF &Filenames,
-			fCore &Core,
-			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
-		{
-			Core_ = &Core;
-
-			return FH_.Init( Filenames, Mode, Behavior, ID );
-		}
-	};
 // #endif
 
 	typedef E_BUNCH_( sdr::row__ ) relations_;

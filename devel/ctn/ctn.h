@@ -74,33 +74,25 @@ namespace ctn {
 	using sdr::size__;
 	using aem::amount_extent_manager_;
 
-	class fCore
+	class cHook
 	{
 	protected:
-		virtual tys::fCore &CTNGetStatics( void ) = 0;
-		virtual ias::indexed_aggregated_storage_ &CTNGetDynamics( void ) = 0;
-		virtual void CTNAllocate( sdr::size__ Size ) = 0;
+		virtual tys::cHook &CTNGetStaticsHook( void ) = 0;
+		virtual ias::cHook &CTNGetDynamicsHook( void ) = 0;
 	public:
-		qCALLBACK_DEF( Core );
-		tys::fCore &GetStatics( void )
+		tys::cHook &GetStaticsHook( void )
 		{
-			return CTNGetStatics();
+			return CTNGetStaticsHook();
 		}
-		ias::indexed_aggregated_storage_ &GetDynamics( void )
+		ias::cHook &GetDynamicsHook( void )
 		{
-			return CTNGetDynamics();
-		}
-		void Allocate( sdr::size__ Size )
-		{
-			return CTNAllocate( Size );
+			return CTNGetDynamicsHook();
 		}
 	};
 
-
 	//c The base of a container. Internal use.
 	template <class st, typename r> class basic_container_
-	: public fCore,
-	  public amount_extent_manager_<r>
+	: public amount_extent_manager_<r>
 	{
 	private:
 		void _Allocate(
@@ -117,18 +109,6 @@ namespace ctn {
 		}
 	protected:
 		virtual bso::bool__ IsFlushed( void ) const = 0;
-		virtual tys::fCore &CTNGetStatics( void ) override
-		{
-			return Statics;
-		}
-		virtual ias::indexed_aggregated_storage_ &CTNGetDynamics( void ) override
-		{
-			return Dynamics;
-		}
-		virtual void CTNAllocate( sdr::size__ Size ) override 
-		{
-			_Allocate( Size, aem::mFitted );
-		}
 		void Insert(
 			const st &ST,
 			r Row,
@@ -154,19 +134,23 @@ namespace ctn {
 			ias::indexed_aggregated_storage_::s Dynamics;
 		};
 		basic_container_( s &S )
-		: fCore(), 
-		  Dynamics( S.Dynamics ),
+		: Dynamics( S.Dynamics ),
 		  Statics( S.Statics ),
 		  amount_extent_manager_<r>( S )
 		{}
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			Dynamics.reset( P );
 			Statics.reset( P );
 			amount_extent_manager_<r>::reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( cHook &Hook )
+		{
+			Statics.plug( Hook.GetStaticsHook() );
+			Dynamics.plug( Hook.GetDynamicsHook() );
+			_Allocate( Dynamics.Amount(), aem::mFitted );
+		}
+		void plug( qASv &AS )
 		{
 			Dynamics.plug( AS );
 			Statics.plug( AS );
@@ -219,7 +203,6 @@ namespace ctn {
 		{
 			FlushTest();
 
-			fCore::Init();
 			Dynamics.Init();
 			Statics.Init();
 
@@ -371,66 +354,37 @@ namespace ctn {
 		}
 	};
 
-	class fHook
+	template <typename statics, typename dynamics> class rH_
+	: public cHook
 	{
 	protected:
-		virtual tys::fHook &CTNGetStaticsHook( void ) = 0;
-		virtual ias::fHook &CTNGetDynamicsHook( void ) = 0;
-	public:
-		qCALLBACK_DEF( Hook );
-		tys::fHook &GetStaticsHook( void )
-		{
-			return CTNGetStaticsHook();
-		}
-		ias::fHook &GetDynamicsHook( void )
-		{
-			return CTNGetDynamicsHook();
-		}
-	};
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		bso::fBool Exists = tys::Plug( Core.GetStatics(), Hook.GetStaticsHook() );
-
-		Exists |= ias::Plug( Core.GetDynamics(), Hook.GetDynamicsHook() );
-
-		Core.Allocate( Core.GetDynamics().Amount() );
-
-		return Exists;
-	}
-
-	class rRH
-	: public fHook
-	{
-	private:
-		tys::rRH Statics_;
-		ias::rRH Dynamics_;
-	protected:
-		virtual tys::fHook &CTNGetStaticsHook( void ) override
+		statics Statics_;
+		dynamics Dynamics_;
+		virtual tys::cHook &CTNGetStaticsHook( void ) override
 		{
 			return Statics_;
 		}
-		virtual ias::fHook &CTNGetDynamicsHook( void ) override
+		virtual ias::cHook &CTNGetDynamicsHook( void ) override
 		{
 			return Dynamics_;
 		}
-	public:
-		void reset( bso::bool__ P = true )
+public:
+		void reset( bso::fBool P = true )
 		{
-			fHook::reset( P );
-
 			Statics_.reset( P );
 			Dynamics_.reset( P );
 		}
-		qCVDTOR( rRH );
+		qCVDTOR( rH_ );
+	};
+
+	class rRH
+	: public rH_<tys::rRH, ias::rRH>
+	{
+	public:
 		void Init( void )
 		{
 			Statics_.Init();
 			Dynamics_.Init();
-
-			fHook::Init();
 		}
 	};
 
@@ -451,32 +405,11 @@ namespace ctn {
 	};
 
 	class rFH
-	: public fHook
+	: public rH_<tys::rFH, ias::rFH>
 	{
-	private:
-		tys::rFH Statics_;
-		ias::rFH Dynamics_;
-	protected:
-		virtual tys::fHook &CTNGetStaticsHook( void ) override
-		{
-			return Statics_;
-		}
-		virtual ias::fHook &CTNGetDynamicsHook( void ) override
-		{
-			return Dynamics_;
-		}
 	public:
-		void reset( bso::bool__ P = true )
-		{
-			fHook::reset( P );
-
-			Statics_.reset( P );
-			Dynamics_.reset( P );
-		}
-		qCVDTOR( rFH );
 		uys::eState Init( 
 			const rHF &Filenames,
-			fCore &Core,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
@@ -484,12 +417,24 @@ namespace ctn {
 			uys::eState State = Statics_.Init( Filenames.Statics, Mode, Behavior, ID );
 
 			if ( !State.IsError() )
-				if ( Dynamics_.Init( Filenames.Dynamics, Core.GetDynamics(), Mode, Behavior, ID ) != State )
+				if ( Dynamics_.Init( Filenames.Dynamics, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 
-			fHook::Init();
-
 			return State;
+		}
+	};
+
+	typedef uys::cHook cHook_;
+	typedef ias::indexed_aggregated_storage_driver__ rADriver_;
+
+	class rAHook_
+	: public cHook_,
+	  public rADriver_
+	{
+	protected:
+		virtual sdr::fStorageDriver &UYSGetSD( void ) override
+		{
+			return *this;
 		}
 	};
 
@@ -519,7 +464,7 @@ namespace ctn {
 		basic_container_<st, r> *Conteneur_;
 		/* Pilote permettant l'accs  la partie dynamique des objets contenus
 		dans le conteneur auquel cet lment est rattach. */
-		ias::indexed_aggregated_storage_driver__ Pilote_;
+		rAHook_ Pilote_;
 	public:
 		struct s
 		: public st
@@ -604,6 +549,20 @@ namespace ctn {
 		}
 	};
 
+	typedef ias::const_indexed_aggregated_storage_driver__ rCADriver_;
+
+	class rCAHook_
+	: public cHook_,
+	  public rCADriver_
+	{
+	protected:
+		virtual sdr::fStorageDriver &UYSGetSD( void ) override
+		{
+			return *this;
+		}
+	};
+
+
 	template <class st, typename r> class item_base_const__
 	{
 	private:
@@ -621,7 +580,7 @@ namespace ctn {
 		const basic_container_<st,r> *Conteneur_;
 		/* Pilote permettant l'accs  la partie dynamique des objets contenus
 		dans le conteneur auquel cet lment est rattach. */
-		ias::const_indexed_aggregated_storage_driver__ Pilote_;
+		rCAHook_ Pilote_;
 	public:
 		struct s
 		: public st

@@ -92,23 +92,26 @@ qRE
 	return Status;
 }
 
-static void SetGhostsFilesHook_(
+static bso::fBool SetGhostsFilesHook_(
 	const fnm::name___ &Path,
-	ghosts_ &Ghosts,
 	uys::mode__ Mode,
 	dwtght::rFH &FilesHook,
 	flsq::rId Id )
 {
+	uys::eState State = uys::s_Undefined;
 qRH
 	lstctn::rHF Filenames;
 qRB
 	Filenames.Init( Path, "Ghosts_" );
 
-	if ( FilesHook.Init(Filenames, Ghosts, Mode, uys::bPersistent, Id).IsError() )
+	State = FilesHook.Init(Filenames, Mode, uys::bPersistent, Id );
+		
+	if ( State.IsError() )
 		qRFwk();
 qRR
 qRT
 qRE
+	return State.Boolean();
 }
 
 namespace {
@@ -117,9 +120,11 @@ namespace {
 		uys::mode__ Mode,
 		rRack &Rack )
 	{
-		SetGhostsFilesHook_( DataDirName, Rack.Ghosts, Mode, Rack.FilesHook, Rack.Id );
+		bso::fBool Exists = SetGhostsFilesHook_( DataDirName, Mode, Rack.FilesHook, Rack.Id );
 
-		if ( !lstctn::Plug( Rack.Ghosts, Rack.FilesHook ) )
+		Rack.Ghosts.plug( Rack.FilesHook );
+
+		if ( !Exists )
 			Rack.Ghosts.Init();
 	}
 }

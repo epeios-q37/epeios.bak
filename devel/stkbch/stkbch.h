@@ -34,27 +34,11 @@
 namespace stkbch {
 	using stkbse::vStack;
 
-	class fCore
-	{
-	protected:
-		virtual bch::fCore &STKGetBunch( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		bch::fCore &GetBunch( void )
-		{
-			return STKGetBunch();
-		}
-	};
+	using bch::cHook;
 
 	template <typename item, typename row> class vBunchStack
-	: public fCore,
-	  public vStack< bch::bunch_< item, row >, item, row >
+	: public vStack< bch::bunch_< item, row >, item, row >
 	{
-	protected:
-		virtual bch::fCore &STKGetBunch( void ) override
-		{
-			return *this;
-		}
 	public:
 		struct s
 		: public vStack< bch::bunch_< item, row >, item, row >::s
@@ -64,12 +48,10 @@ namespace stkbch {
 		{}
 		void reset( bso::fBool P = true )
 		{
-			fCore::reset( P );
 			vStack< bch::bunch_< item, row >, item, row >::reset( P );
 		}
 		void Init( void )
 		{
-			fCore::Init();
 			vStack< bch::bunch_< item, row >, item, row >::Init();
 		}
 		row Pop( item &Item )
@@ -108,35 +90,11 @@ namespace stkbch {
 # define qBSTACKvl( item )	qBSTACKv( item, stkbch::fRow )
 # define qBSTACKil( item )	qBSTACKi( item, stkbch::fRow )
 
-
-	using bch::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		return bch::Plug( Core.GetBunch(), Hook );
-	}
-
 	using bch::rRH;
 
 	using bch::rHF;
-	typedef bch::rFH rFH_;
+	using bch::rFH;
 
-	class rFH
-	: public rFH_
-	{
-	public:
-		uys::eState Init(
-			const rHF &Filenames,
-			fCore &Core,
-			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
-		{
-			return rFH_::Init(Filenames, Core.GetBunch(), Mode, Behavior, ID );
-		}
-	};
 }
 
 #endif

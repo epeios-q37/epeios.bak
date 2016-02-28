@@ -59,8 +59,10 @@ namespace ias {
 	// Prdclaration.
 	class indexed_aggregated_storage_;
 
+	typedef sdr::fStorageDriver fStorageDriver_;
+
 	class _indexed_aggregated_storage_driver__
-	: public qSD__
+	: public fStorageDriver_
 	{
 	private:
 		index__ _Index;
@@ -92,7 +94,7 @@ namespace ias {
 		{}
 		void reset( bool P = true )
 		{
-			qSD__::reset( P );
+			fStorageDriver_::reset( P );
 
 			_Index = qNIL;
 			_AStorage = NULL;
@@ -100,7 +102,7 @@ namespace ias {
 		//f Initialize with 'Multimemory' multimemory.
 		void Init( void )
 		{
-			qSD__::Init();
+			fStorageDriver_::Init();
 
 			_Index = qNIL;
 		}
@@ -181,6 +183,22 @@ namespace ias {
 	typedef bch::E_BUNCHt_( descriptor__, index__ ) descriptors_;
 
 #define IAS_BUFFER_SIZE	1024
+
+	class cHook
+	{
+	protected:
+		virtual bch::cHook &IASGetDescriptorsHook( void ) = 0;
+		virtual ags::cHook &IASGetStorageHook( void ) = 0;
+	public:
+		bch::cHook &GetDescriptorsHook( void )
+		{
+			return IASGetDescriptorsHook();
+		}
+		ags::cHook &GetStorageHook( void )
+		{
+			return IASGetStorageHook();
+		}
+	};
 
 	//c An indexed multimemory.
 	class indexed_aggregated_storage_
@@ -289,10 +307,15 @@ namespace ias {
 			Descriptors.reset( P );
 			AStorage.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( cHook &Hook )
+		{
+			Descriptors.plug( Hook.GetDescriptorsHook() );
+			AStorage.plug( Hook.GetStorageHook() );
+		}
+		void plug( qASv &AS )
 		{
 			Descriptors.plug( AS );
-			this->AStorage.plug( AS );
+			AStorage.plug( AS );
 		}
 		indexed_aggregated_storage_ &operator =( const indexed_aggregated_storage_ &IAS )
 		{
@@ -455,63 +478,38 @@ namespace ias {
 
 #ifndef FLS__COMPILATION
 
-	class fHook
+	template <typename descriptors, typename storage> class rH_
+	: public cHook
 	{
 	protected:
-		virtual bch::fHook &IASGetDescriptorsHook( void ) = 0;
-		virtual ags::fHook &IASGetStorageHook( void ) = 0;
-	public:
-		qCALLBACK_DEF( Hook );
-		bch::fHook &GetDescriptorsHook( void )
-		{
-			return IASGetDescriptorsHook();
-		}
-		ags::fHook &GetStorageHook( void )
-		{
-			return IASGetStorageHook();
-		}
-	};
-
-	inline bso::fBool Plug(
-		indexed_aggregated_storage_ &AStorage,
-		fHook &Hook )
-	{
-		bso::fBool Exists = bch::Plug( AStorage.Descriptors, Hook.GetDescriptorsHook() );
-
-		// In 2 lines, or right member of '||' could not be excuted, due to '||' behaviour.
-		return ags::Plug( AStorage.AStorage, Hook.GetStorageHook() ) || Exists;
-	}
-
-	class rRH
-	: public fHook
-	{
-	private:
-		bch::rRH Descriptors_;
-		ags::rRH Storage_;
-	protected:
-		virtual bch::fHook &IASGetDescriptorsHook( void ) override
+		descriptors Descriptors_;
+		storage Storage_;
+		virtual bch::cHook &IASGetDescriptorsHook( void ) override
 		{
 			return Descriptors_;
 		}
-		virtual ags::fHook &IASGetStorageHook( void ) override
+		virtual ags::cHook &IASGetStorageHook( void ) override
 		{
 			return Storage_;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			fHook::reset( P );
-
 			Descriptors_.reset( P );
 			Storage_.reset( P );
 		}
-		qCDTOR( rRH );
+		qCDTOR( rH_ );
+	};
+
+
+	class rRH
+	: public rH_<bch::rRH, ags::rRH>
+	{
+	public:
 		void Init( void )
 		{
 			Descriptors_.Init();
 			Storage_.Init();
-
-			fHook::Init();
 		}
 	};
 
@@ -532,44 +530,24 @@ namespace ias {
 	};
 
 	class rFH
-	: public fHook
+	: public rH_<bch::rFH, ags::rFH>
 	{
 	private:
 		bch::rFH Descriptors_;
 		ags::rFH Storage_;
-	protected:
-		virtual bch::fHook &IASGetDescriptorsHook( void ) override
-		{
-			return Descriptors_;
-		}
-		virtual ags::fHook &IASGetStorageHook( void ) override
-		{
-			return Storage_;
-		}
 	public:
-		void reset( bso::bool__ P = true )
-		{
-			fHook::reset( P );
-
-			Descriptors_.reset( P );
-			Storage_.reset( P );
-		}
-		qCDTOR( rFH );
 		uys::eState Init( 
 			const rHF &Filenames,
-			indexed_aggregated_storage_ &Storage,
 			uys::mode__ Mode,
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = Descriptors_.Init( Filenames.Descriptors, Storage.Descriptors, Mode, Behavior, ID );
+			uys::eState State = Descriptors_.Init( Filenames.Descriptors, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
 				if ( State != Storage_.Init( Filenames.Storage, Mode, Behavior, ID ) )
 					State = uys::sInconsistent;
 			}
-
-			fHook::Init();
 
 			return State;
 		}

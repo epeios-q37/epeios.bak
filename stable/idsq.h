@@ -34,40 +34,14 @@
 
 namespace idsq {
 
-	class fCore
-	{
-	protected:
-		virtual stkbch::fCore &IDSQGetStack( void ) = 0;
-		virtual void IDSQSetFirstUnused( bso::uint__ Id )= 0;
-	public:
-		qCALLBACK_DEF( Core );
-		stkbch::fCore &GetStack( void )
-		{
-			return IDSQGetStack();
-		}
-		void SetFirstUnused( bso::uint__ Id )
-		{
-			return IDSQSetFirstUnused( Id );
-		}
-	};
+	using stkbch::cHook;
 
 	template <typename id> class vIdStore
-	: public fCore
 	{
 	private:
-		// Return true if 'Id' available, false otherwise.
 		bso::bool__ IsAvailable_( id ID ) const
 		{
 			return Released.Exists( ID ) || ( *ID >= *S_.FirstUnused );
-		}
-	protected:
-		virtual stkbch::fCore &IDSQGetStack( void ) override
-		{
-			return Released;
-		}
-		virtual void IDSQSetFirstUnused( bso::uint__ Id ) override
-		{
-			SetFirstUnused( Id );
 		}
 	public:
 		struct s
@@ -84,15 +58,17 @@ namespace idsq {
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			fCore::reset( P );
 			Released.reset( P );
 			S_.FirstUnused = 0;
 		}
-		void plug( qSD__ &SD )
+		void plug(
+			cHook &Hook,
+			id FirstUnused )
 		{
-			Released.plug( SD );
+			S_.FirstUnused = FirstUnused,
+			Released.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Released.plug( AS );
 		}
@@ -106,8 +82,6 @@ namespace idsq {
 		//f Initialization with 'First' as first unused.
 		void Init( id FirstUnused = 0 )
 		{
-			fCore::Init();
-
 			S_.FirstUnused = FirstUnused;
 
 			Released.Init();
@@ -190,37 +164,10 @@ namespace idsq {
 
 	qW1( IdStore );
 
-	using stkbch::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook,
-		bso::uint__ FirstUnused )
-	{
-		Core.SetFirstUnused( FirstUnused );
-
-		return stkbch::Plug( Core.GetStack(), Hook );
-	}
-
 	using stkbch::rRH;
 
 	using stkbch::rHF;
-	typedef stkbch::rFH rFH_;
-
-	class rFH
-	: public rFH_
-	{
-	public:
-		uys::eState Init(
-			const rHF &Filenames,
-			fCore &Core,
-			uys::mode__ Mode,
-			uys::behavior__ Behavior,
-			flsq::id__ ID )
-		{
-			return rFH_::Init( Filenames, Core.GetStack(), Mode, Behavior, ID );
-		}
-	};
+	using stkbch::rFH;
 }
 
 # define qIDSv( t )	vIdStore<t>

@@ -72,11 +72,11 @@ namespace lcl {
 			S_.ToTranslate = false;
 			Tags.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( bch::cHook &Hook )
 		{
-			Tags.plug( SD );
+			Tags.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Tags.plug( AS );
 		}
@@ -121,7 +121,7 @@ namespace lcl {
 			Values.reset( P );
 			Basics.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Values.plug( AS );
 			Basics.plug( AS );
@@ -179,7 +179,7 @@ namespace lcl {
 			S_.Basic = qNIL;
 			Core.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Core.plug( AS );
 		}

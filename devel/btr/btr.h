@@ -374,22 +374,11 @@ namespace btr {
 		sdr::row_t__ ParentOfFirstRightNode( sdr::row_t__ Node ) const;
 	};
 
+	using bch::cHook;
 
-	class fCore
-	{
-	protected:
-		virtual bch::fCore &BTRGetBunch( void ) = 0;
-	public:
-		qCALLBACK_DEF( Core );
-		bch::fCore &GetBunch( void )
-		{
-			return BTRGetBunch();
-		}
-	};
 
 	//c Binary tree.
 	template <typename r> class binary_tree_
-	: public fCore
 	{
 	private:
 		void Prepare_(
@@ -477,11 +466,6 @@ namespace btr {
 		{
 			return Nodes.ForceParent( Node, Parent );
 		}
-	protected:
-		virtual bch::fCore &BTRGetBunch( void ) override
-		{
-			return Nodes;
-		}
 	public:
 		struct s
 		{
@@ -494,16 +478,15 @@ namespace btr {
 		{}
 		void reset( bool P = true )
 		{
-			fCore::reset( P );
 			Nodes.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Nodes.plug( AS );
 		}
-		void plug( qSD__ &SD )
+		void plug( cHook &Hook )
 		{
-			Nodes.plug( SD );
+			Nodes.plug( Hook );
 		}
 		// Operateur d'affectation.
 		binary_tree_ &operator =( const binary_tree_ &O )
@@ -523,7 +506,6 @@ namespace btr {
 	*/	//f Initialization.
 		void Init( void )
 		{
-			fCore::Init();
 			Nodes.Init();
 		}
 		r GetRoot( r Row ) const
@@ -919,14 +901,7 @@ namespace btr {
 
 	E_AUTO1( binary_tree )
 
-	using bch::fHook;
-
-	inline bso::fBool Plug(
-		fCore &Core,
-		fHook &Hook )
-	{
-		return bch::Plug( Core.GetBunch(), Hook );
-	}
+	using bch::rRH;
 
 	using bch::rHF;
 	using bch::rFH;

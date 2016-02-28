@@ -222,7 +222,7 @@ namespace tagsbs {
 			Tags.reset( P );
 			Values.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Tags.plug( AS );
 			Values.plug( AS );
