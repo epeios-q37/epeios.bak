@@ -140,10 +140,11 @@ namespace idxbtq {
 		qRB
 			Hook.Init();
 
-		Row = Balance( Root, &Hook );
+			Row = Balance( Root, &Hook );
 		qRR
 		qRT
 		qRE
+			return Row;
 		}
 		r Compare( r Root ) const
 		{

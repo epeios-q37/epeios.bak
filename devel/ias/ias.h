@@ -532,9 +532,6 @@ namespace ias {
 	class rFH
 	: public rH_<bch::rFH, ags::rFH>
 	{
-	private:
-		bch::rFH Descriptors_;
-		ags::rFH Storage_;
 	public:
 		uys::eState Init( 
 			const rHF &Filenames,
@@ -581,7 +578,8 @@ namespace ias {
 
 	inline void indexed_aggregated_storage_driver__::SDRAllocate( sdr::size__ Capacity )
 	{
-		_AStorage->Reallocate( _Index, Capacity );
+		if ( _AStorage != NULL )
+			_AStorage->Reallocate( _Index, Capacity );
 	}
 }
 

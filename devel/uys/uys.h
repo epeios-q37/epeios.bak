@@ -227,9 +227,12 @@ namespace uys {
 		}
 		void plug_( fStorageDriver_ &Driver )
 		{
+			bso::size__ Size = Driver.Size();
+
 			_Driver.plug( Driver );
 
-			_Driver.Allocate( S_.Size = Driver.Size() );
+			if ( S_.Size != Size )
+				_Driver.Allocate( S_.Size = Size );
 		}
 	public:
 		struct s
@@ -456,22 +459,21 @@ namespace uys {
 		{
 			return Driver_;
 		}
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			Driver_.reset( P );
-		}
-		qCVDTOR( rH_ );
 	};
 
 	class rRH
 	: public rH_<mns::standalone_conventional_memory_driver___>
 	{
 	public:
+		void reset( bso::fBool P = true )
+		{
+			Driver_.reset( P );
+		}
 		void Init( void )
 		{
 			Driver_.Init();
 		}
+		qCVDTOR( rRH );
 	};
 
 	// Hook filenames.
@@ -513,12 +515,11 @@ namespace uys {
 	public:
 		void reset( bso::fBool P = true )
 		{
-			rH_<flsq::file_storage_driver___>::reset( P );
-
 			if ( P ) {
 				if ( Driver_.IsInitialized() ) {
-					if ( !Driver_.FileExists() )
-						Driver_.CreateFile();
+					if ( !State().Boolean() )
+						if ( IsPersistent() && ( Mode() == mReadWrite ) )
+							Driver_.CreateFile();
 				}
 			}
 
@@ -549,21 +550,33 @@ namespace uys {
 			else
 				return sAbsent;
 		}
-		void Drop( void )
+		eState State( void ) const
+		{
+			return ( Driver_.FileExists() ? sExists : sAbsent );
+		}
+		void CreateFiles( void )
+		{
+			Driver_.CreateFile();
+		}
+		void ReleaseFiles( void )
+		{
+			Driver_.ReleaseFile();
+		}
+		void DropFiles( void )
 		{
 			Driver_.Drop();
 		}
-		mode__ Mode( mode__ Mode )
+		bso::fBool IsPersistent( void ) const
+		{
+			return Driver_.IsPersistent();
+		}
+		mode__ SetMode( mode__ Mode )
 		{
 			return Convert_( Driver_.Mode( Convert_( Mode ) ) );
 		}
 		mode__ Mode( void ) const
 		{
 			return Convert_( Driver_.Mode() );
-		}
-		void ReleaseFiles( void )
-		{
-			Driver_.ReleaseFile();
 		}
 	};
 

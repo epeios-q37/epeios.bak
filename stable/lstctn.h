@@ -98,13 +98,13 @@ namespace lstctn {
 		}
 		void plug( cHook &Hook )
 		{
-			list_<row, row_t>::plug( Hook.GetListHook(), container::Dynamics.Amount() );
 			container::plug( Hook.GetContainerHook() );
+			list_<row, row_t>::plug( Hook.GetListHook(), container::Dynamics.Amount() );
 		}
 		void plug( qASv &AS )
 		{
-			list_<row, row_t>::plug( AS );
 			container::plug( AS );
+			list_<row, row_t>::plug( AS );
 		}
 		list_container_ &operator =( const list_container_ &LC )
 		{

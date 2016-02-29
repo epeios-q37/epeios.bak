@@ -99,17 +99,15 @@ namespace lstbch {
 			list_<row, row_t>::reset( P );
 			bunch_<type, row>::reset( P );
 		}
-		bso::fBool plug( cHook &Hook )
+		void plug( cHook &Hook )
 		{
-			bso::fBool Exists = list_<row, row_t>::plug( Hook.GetListHook() );
-
-			return bunch_<type, row>::plug( Hook.GetBunchHook() ) || Exists;
+			bunch_<type, row>::plug( Hook.GetBunchHook() );
+			list_<row, row_t>::plug( Hook.GetListHook(), bunch_<type, row>::Amount );
 		}
-		bso::fBool plug( qASv &AS )
+		void plug( qASv &AS )
 		{
-			bso::fBool Exists = <row, row_t>::plug( AS );
-
-			return bunch_<type, row>::plug( AS ) || Exists;
+			bunch_<type, row>::plug( AS );
+			list_<row, row_t>::plug( AS );
 		}
 		list_bunch_ &operator =( const list_bunch_ &LB )
 		{

@@ -608,6 +608,19 @@ namespace bch {
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::reset( P );
 		}
+		void plug( cHook &Hook )
+		{
+			aem::size__ Amount = Hook.GetSD().Size() / sizeof( type );
+
+			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::plug( Hook );
+
+			if ( Amount != this->Amount() )
+				Allocate( Amount, aem::mFitted );
+		}
+		void plug( qASv &AS )
+		{
+			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::plug( AS );
+		}
 		bunch_ &GetBunch( void )
 		{
 			return *this;
