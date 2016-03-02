@@ -127,6 +127,19 @@ namespace sclrgstry {
 		const registry_ &Registry,
 		TOL_CBUFFER___ &Buffer );
 
+	inline void BuildRootPath(
+		const char *Subject,
+		const char *Target,
+		str::string_ &Path )
+	{
+	/*	Path.Append( Subject );
+		Path.Append( "s/" );
+	*/	Path.Append( Subject );
+		Path.Append( "[target=\"" );
+		Path.Append( Target );
+		Path.Append( "\"]" );
+	}
+
 	void SetConfiguration( const rgstry::entry__ &Entry );
 
 	void LoadConfiguration(

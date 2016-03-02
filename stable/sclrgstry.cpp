@@ -164,7 +164,7 @@ const char *sclrgstry::GetLanguage_(
 		return Buffer;
 }
 
-static rgstry::status__ FillConfigurationRegistry_(
+static bso::fBool FillConfigurationRegistry_(
 	xtf::extended_text_iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath,
@@ -226,7 +226,7 @@ qRB
 
 	Context.Init();
 
-	if ( FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) != rgstry::sOK )
+	if ( !FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
 qRR
 qRT
@@ -238,8 +238,6 @@ void sclrgstry::EraseProjectRegistry( void )
 	Registry_.Erase( ProjectLevel_ );
 }
 
-#define PROJECT_ROOT_PATH	"Projects/Project[@target=\"%1\"]"
-
 template <typename source> static void LoadProject_(
 	source &Source,
 	const char *Target,
@@ -250,13 +248,14 @@ qRH
 	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
 qRB
-	Path.Init( PROJECT_ROOT_PATH );
-	tagsbs::SubstituteShortTag( Path, 1, str::string( Target ), '%' );
+	Path.Init();
+
+	BuildRootPath("Project", Target, Path );
 
 	EraseProjectRegistry();
 
 	Context.Init();
-	if ( Registry_.Fill( ProjectLevel_, Source, xpp::criterions___(), Path.Convert( Buffer ), Context ) != rgstry::sOK )
+	if ( !Registry_.Fill( ProjectLevel_, Source, xpp::criterions___(), Path.Convert( Buffer ), Context ) )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
 	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );

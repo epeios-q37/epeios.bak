@@ -1199,18 +1199,23 @@ namespace rgstry {
 	E_AUTO( error_details );
 #endif
 
-	row__ Parse(
+	qENUM( RootTagHandling ) {
+		rthKeep,		// The root tag is put in the registry.
+		rthIgnore,	// The root tag is not put in the registry.
+		rth_amount,
+		rth_Undefined,
+	};
+
+	row__ Fill(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		registry_ &Registry,
-		row__ &Root,	// Peut être = 'qNIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
 		xpp::context___ &Context );
 
-	inline row__ Parse(
+	inline row__ Fill(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
-		registry_ &Registry,
-		row__ &Root	) // Peut être = 'qNIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
+		registry_ &Registry	) // Peut être = 'qNIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
 	{
 		row__ Row = qNIL;
 	qRH
@@ -1218,7 +1223,7 @@ namespace rgstry {
 	qRB
 		Context.Init();
 
-		Row = Parse( XFlow, Criterions, Registry, Root, Context );
+		Row = Fill( XFlow, Criterions, Registry, Context );
 	qRR
 	qRT
 	qRE
@@ -1275,60 +1280,37 @@ namespace rgstry {
 		const context___ &Context,
 		lcl::meaning_ &Meaning );
 
-	status__ FillRegistry(
+	rgstry::row__ FillRegistry(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		const char *RootPath,
 		rgstry::registry_ &Registry,
-		rgstry::row__ &RegistryRoot,
 		context___ &Context );
 
-	inline status__ FillRegistry(
-		xtf::extended_text_iflow__ &XFlow,
+	rgstry::row__ FillRegistry(
+		const fnm::name___ &FileName,
 		const xpp::criterions___ &Criterions,
 		const char *RootPath,
 		rgstry::registry_ &Registry,
-		rgstry::row__ &RegistryRoot )
+		context___ &Context );
+
+	template <typename source> inline rgstry::row__ FillRegistry(
+		source &Source,
+		const xpp::criterions___ &Criterions,
+		const char *RootPath,
+		rgstry::registry_ &Registry )
 	{
-		status__ Status = s_Undefined;
+		rgstry::row__ Root = qNIL;
 	qRH
 		context___ Context;
 	qRB
 		Context.Init();
 
-		Status = FillRegistry( XFlow, Criterions, RootPath, Registry, RegistryRoot, Context );
+		Root = FillRegistry( Source, Criterions, RootPath, Registry, Context );
 	qRR
 	qRT
 	qRE
-		return Status;
-	}
-
-	status__ FillRegistry(
-		const fnm::name___ &FileName,
-		const xpp::criterions___ &Criterions,
-		const char *RootPath,
-		rgstry::registry_ &Registry,
-		rgstry::row__ &RegistryRoot,
-		context___ &Context );
-
-	inline status__ FillRegistry(
-		const fnm::name___ &FileName,
-		const xpp::criterions___ &Criterions,
-		const char *RootPath,
-		rgstry::registry_ &Registry,
-		rgstry::row__ &RegistryRoot )
-	{
-		status__ Status = s_Undefined;
-	qRH
-		context___ Context;
-	qRB
-		Context.Init();
-
-		Status = FillRegistry( FileName, Criterions, RootPath, Registry, RegistryRoot, Context );
-	qRR
-	qRT
-	qRE
-		return Status;
+		return Root;
 	}
 
 # if 1	// Déprécié, destiné à disparaître. Utiliser 'multi_level_registry_'.
@@ -2045,75 +2027,46 @@ namespace rgstry {
 			level__ Dummy = qNIL;
 			return Search( Entry, Dummy ) != qNIL;
 		}
-		status__ Fill(
+		template <typename source> bso::fBool Fill(
 			level__ Level,
-			xtf::extended_text_iflow__ &XFlow,
+			source &Source,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath,
 			context___ &Context )
 		{
-			status__ Status = s_Undefined;
-			row__ Root = _GetRoot( Level );
+			row__ Root = qNIL;
 			
-			Status = FillRegistry( XFlow, Criterions, RootPath, _GetRegistry( Level ), Root, Context ); 
+			if ( _GetRoot( Level ) != qNIL )
+				qRFwk();
+			
+			if ( ( Root = FillRegistry( Source, Criterions, RootPath, _GetRegistry( Level ), Context ) ) != qNIL ) {
+				Entries.Store( entry__( Root ), Level );
 
-			Entries.Store( entry__( Root ), Level );
+				_Touch( Level );
 
-			_Touch( Level );
-
-			return Status;
+				return true;
+			} else
+				return false;
 		}
-		status__ Fill(
+		template <typename source> bso::fBool Fill(
 			level__ Level,
-			xtf::extended_text_iflow__ &XFlow,
+			source &Source,
 			const xpp::criterions___ &Criterions,
 			const char *RootPath )
 		{
-			status__ Status = s_Undefined;
-			row__ Root = _GetRoot( Level );
+			row__ Root = qNIL;
 			
-			Status = FillRegistry( XFlow, Criterions, RootPath, _GetRegistry( Level ), Root ); 
-
-			Entries.Store( entry__( Root ), Level );
-
-			_Touch( Level );
-
-			return Status;
-		}
-		status__ Fill(
-			level__ Level,
-			const fnm::name___ &FileName,
-			const xpp::criterions___ &Criterions,
-			const char *RootPath,
-			context___ &Context )
-		{
-			status__ Status = s_Undefined;
-			row__ Root = _GetRoot( Level );
+			if ( _GetRoot( Level ) != qNIL )
+				qRFwk();
 			
-			Status = FillRegistry( FileName, Criterions, RootPath, _GetRegistry( Level ), Root, Context ); 
+			if ( ( Root = FillRegistry( Source, Criterions, RootPath, _GetRegistry( Level ) ) ) != qNIL ) {
+				Entries.Store( entry__( Root ), Level );
 
-			Entries.Store( entry__( Root ), Level );
+				_Touch( Level );
 
-			_Touch( Level );
-
-			return Status;
-		}
-		status__ Fill(
-			level__ Level,
-			const fnm::name___ &FileName,
-			const xpp::criterions___ &Criterions,
-			const char *RootPath )
-		{
-			status__ Status = s_Undefined;
-			row__ Root = _GetRoot( Level );
-			
-			Status = FillRegistry( FileName, Criterions, RootPath, _GetRegistry( Level ), Root ); 
-
-			Entries.Store( entry__( Root ), Level );
-
-			_Touch( Level );
-
-			return Status;
+				return true;
+			} else
+				return false;
 		}
 		bso::bool__ Convert(
 			const tentry__ TaggedEntry,

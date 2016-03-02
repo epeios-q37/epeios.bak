@@ -273,11 +273,12 @@ qRT
 qRE
 }
 # else
-static void LoadLocale_(
+static bso::fBool LoadLocale_(
 	rgstry::level__ Level,
 	scllocale::target__ Target,
 	utf::format__ Format )
 {
+	bso::fBool Found = false;
 qRH
 	rgstry::entry__ Entry;
 	rgstry::row__ Row = qNIL;
@@ -285,29 +286,19 @@ qRB
 	Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
 
 	if ( Row == qNIL )
-		qRFwk();
+		qRReturn;
 
 	Entry.Init( Row, sclrgstry::GetCommonRegistry().GetRegistry( Level ) );
 
 	scllocale::Set( Target, Entry );
+
+	Found = true;
 qRR
 qRT
 qRE
+	return Found;
 }
 # endif
-
-static void BuildRootPath_(
-	const char *Subject,
-	const char *Target,
-	str::string_ &Path )
-{
-	Path.Append( Subject );
-	Path.Append( "s/" );
-	Path.Append( Subject );
-	Path.Append( "[target=\"" );
-	Path.Append( Target );
-	Path.Append( "\"]" );
-}
 
 static void Initialize_(
 	xtf::extended_text_iflow__ &LocaleFlow,
@@ -320,10 +311,10 @@ qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	LocaleRootPath.Init();
-	BuildRootPath_( "Locale", SCLMISCTargetName, LocaleRootPath );
+	sclrgstry::BuildRootPath( "Locale", SCLMISCTargetName, LocaleRootPath );
 
 	RegistryRootPath.Init();
-	BuildRootPath_( "Configuration", SCLMISCTargetName, RegistryRootPath );
+	sclrgstry::BuildRootPath( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
 	scllocale::Load( scllocale::tMain, LocaleFlow, LocaleDirectory, LocaleRootPath.Convert( Buffer ) );
 
@@ -1045,7 +1036,8 @@ qRB
 	Location.Init();
 	fnm::GetLocation( Filename, Location );
 
-	scllocale::Fill(scllocale::tMain, "Locale", Location, XML );
+#pragma message ( __LOC__ "ICI !" )
+//	scllocale::Fill(scllocale::tMain, rgstry::rthIgnore, NULL, Location, XML );
 qRR
 qRT
 qRE

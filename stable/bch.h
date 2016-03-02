@@ -632,14 +632,12 @@ namespace bch {
 /*		void Init( void )
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init();
-			fCore::Init();
 		}
 		void Init(
 			const type *Seed,
 			sdr::size__ Size )
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Init( Seed, Size );
-			fCore::Init();
 		}
 		*/
 	};

@@ -127,7 +127,7 @@ qRB
 	Locale_.Erase( Level );
 
 	Context.Init();
-	if ( Locale_.Fill( Level, Flow, xpp::criterions___( Directory ), RootPath, Context ) != rgstry::sOK )
+	if ( !Locale_.Fill( Level, Flow, xpp::criterions___( Directory ), RootPath, Context ) )
 		sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
 qRR
 qRT

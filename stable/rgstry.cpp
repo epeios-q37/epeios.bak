@@ -552,98 +552,6 @@ qRE
 #	define DEFAULT_NAMESPACE XPP__PREPROCESSOR_DEFAULT_NAMESPACE
 #endif
 
-namespace {
-	class callback___
-	: public xml::callback__
-	{
-	private:
-		registry_ &_Registry;
-		row__ _Target, _Current;
-	protected:
-		virtual bso::bool__ XMLProcessingInstruction( const xml::dump_ & )
-		{
-			return true;
-		}
-		virtual bso::bool__ XMLStartTag(
-			const str::string_ &TagName,
-			const xml::dump_ &Dump )
-		{
-
-			if ( _Current == qNIL )
-				_Current = _Registry.CreateRegistry( str::string( "_root" ) );
-		
-			_Current = _Registry.AddTag( TagName, _Current );
-
-			if ( _Target == qNIL )
-				_Target = _Current;
-
-			return true;
-		}
-		virtual bso::bool__ XMLAttribute(
-			const str::string_ &TagName,
-			const str::string_ &Name,
-			const str::string_ &Value,
-			const xml::dump_ &Dump )
-		{
-			_Registry.AddAttribute( Name, Value, _Current );
-
-			return true;
-		}
-		virtual bso::bool__ XMLStartTagClosed(
-			const str::string_ &TagName,
-			const xml::dump_ &Dump )
-		{
-			return true;
-		}
-		virtual bso::bool__ XMLValue(
-			const str::string_ &TagName,
-			const str::string_ &Value,
-			const xml::dump_ &Dump )
-		{
-			_Registry.SetValue( Value, _Current, true );
-
-			return true;
-		}
-		virtual bso::bool__ XMLEndTag(
-			const str::string_ &TagName,
-			const xml::dump_ &Dump )
-		{
-
-			_Current = _Registry.GetParentRow( _Current );
-
-			if ( _Current == qNIL )
-				return false;
-
-			return true;
-		}
-		virtual bso::bool__ XMLComment(
-			const str::string_ &Value,
-			const xml::dump_ &Dump )
-		{
-			return true;
-		}
-	public:
-		callback___( registry_ &Registry )
-		: _Registry( Registry )
-		{
-			_Target = _Current = qNIL;
-		}
-		void Init( row__ Root )
-		{
-			_Target = qNIL;
-			_Current = Root;
-		}
-		row__ GetTarget( void ) const
-		{
-			return _Target;
-		}
-		row__ GetRoot( void ) const
-		{
-			return _Current;
-		}
-	};
-}
-
 void rgstry::registry_::_Delete( row__ Row )
 {
 	const node_ &Node = Nodes( Row );
@@ -1002,49 +910,168 @@ qRE
 	return Exists;
 }
 
-row__ rgstry::Parse(
+namespace {
+	bso::fBool Parse_(
+		xtf::extended_text_iflow__ &XFlow,
+		const xpp::criterions___ &Criterions,
+		xml::callback__ &Callback,
+		xpp::context___ &Context )
+	{
+		bso::fBool Success = false;
+	qRH
+		xpp::preprocessing_iflow___ PFlow;
+		xtf::extended_text_iflow__ PXFlow;
+		xml::status__ Status = xml::s_Undefined;
+	qRB
+		PFlow.Init( XFlow, xpp::criterions___( Criterions.Directory, Criterions.CypherKey, Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string( DEFAULT_NAMESPACE ) ) );
+		PXFlow.Init( PFlow, XFlow.Format() );
+
+		switch ( Status = xml::Parse( PXFlow, xml::ehReplace, Callback ) ) {
+		case xml::sOK:
+			Success = true;
+			break;
+		case xml::sUnexpectedEOF:
+			PFlow.GetContext( Context );
+			break;
+		default:
+			if ( xml::IsEncodingRelatedError( Status ) )
+				PFlow.GetContext( Context );
+			else
+				// Puisque l'on passe par le prprocesseur, si une erreur est rencontre, xml::Parse(...)' ne peut normalement retourner que 'xml::sUndexpectedEOF'.
+				qRFwk();
+			break;
+		}
+
+		if ( PXFlow.Format() != utf::f_Guess )
+			XFlow.SetFormat( PXFlow.Format() );
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
+}
+
+namespace {
+	class callback___
+	: public xml::callback__
+	{
+	private:
+		registry_ &_Registry;
+		row__ _Current, Root_;
+		eRootTagHandling RootTagHandling_;
+		bso::fBool Ignore_;	// At true when the first call of 'XMLStartTag()' has to be ignored.
+	protected:
+		virtual bso::bool__ XMLProcessingInstruction( const xml::dump_ & )
+		{
+			return true;
+		}
+		virtual bso::bool__ XMLStartTag(
+			const str::string_ &TagName,
+			const xml::dump_ &Dump )
+		{
+			if ( Ignore_ )
+				Ignore_ = false;
+			else {
+				if ( _Current == qNIL )
+					Root_ = _Current = _Registry.CreateRegistry( TagName );
+				else
+					_Current = _Registry.AddTag( TagName, _Current );
+			}
+
+			return true;
+		}
+		virtual bso::bool__ XMLAttribute(
+			const str::string_ &TagName,
+			const str::string_ &Name,
+			const str::string_ &Value,
+			const xml::dump_ &Dump )
+		{
+			_Registry.AddAttribute( Name, Value, _Current );
+
+			return true;
+		}
+		virtual bso::bool__ XMLStartTagClosed(
+			const str::string_ &TagName,
+			const xml::dump_ &Dump )
+		{
+			return true;
+		}
+		virtual bso::bool__ XMLValue(
+			const str::string_ &TagName,
+			const str::string_ &Value,
+			const xml::dump_ &Dump )
+		{
+			_Registry.SetValue( Value, _Current, true );
+
+			return true;
+		}
+		virtual bso::bool__ XMLEndTag(
+			const str::string_ &TagName,
+			const xml::dump_ &Dump )
+		{
+			if ( _Current == qNIL )
+				qRFwk();
+
+			_Current = _Registry.GetParentRow( _Current );
+
+			return true;
+		}
+		virtual bso::bool__ XMLComment(
+			const str::string_ &Value,
+			const xml::dump_ &Dump )
+		{
+			return true;
+		}
+	public:
+		callback___( registry_ &Registry )
+		: _Registry( Registry )
+		{
+			Root_ = _Current = qNIL;
+			RootTagHandling_ = rth_Undefined;
+			Ignore_ = false;
+		}
+		void Init(
+			row__ Root,
+			eRootTagHandling RootTagHandling )
+		{
+			if ( RootTagHandling == rthIgnore ) {
+				if ( Root == qNIL )
+					qRFwk();
+				else
+					Ignore_ = true;
+			} else
+				Ignore_ = false;
+
+			Root_ = _Current = Root;
+
+			RootTagHandling_ = RootTagHandling;
+		}
+		row__ GetRoot( void ) const
+		{
+			return Root_;
+		}
+	};
+}
+
+
+row__ rgstry::Fill(
 	xtf::extended_text_iflow__ &XFlow,
 	const xpp::criterions___ &Criterions,
 	registry_ &Registry,
-	row__ &Root,
 	xpp::context___ &Context )
 {
-	row__ Target = qNIL;
+	row__ Root = qNIL;
 qRH
 	callback___ Callback( Registry );
-	xpp::preprocessing_iflow___ PFlow;
-	xtf::extended_text_iflow__ PXFlow;
-	xml::status__ Status = xml::s_Undefined;
 qRB
-	Callback.Init( Root );
+	Callback.Init( qNIL, rthKeep );
 
-	PFlow.Init( XFlow, xpp::criterions___( Criterions.Directory, Criterions.CypherKey, Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string( DEFAULT_NAMESPACE ) ) );
-	PXFlow.Init( PFlow, XFlow.Format() );
-
-	switch ( Status = xml::Parse( PXFlow, xml::ehReplace, Callback ) ) {
-	case xml::sOK:
-		Target = Callback.GetTarget();
+	if ( Parse_( XFlow, Criterions, Callback, Context ) )
 		Root = Callback.GetRoot();
-		break;
-	case xml::sUnexpectedEOF:
-//		Root = qNIL;	// 'Root' peut avoir t in,itilise par l'utilisateur.
-		PFlow.GetContext( Context );
-		break;
-	default:
-		if ( xml::IsEncodingRelatedError( Status ) )
-			PFlow.GetContext( Context );
-		else
-			// Puisque l'on passe par le prprocesseur, si une erreur est rencontre, xml::Parse(...)' ne peut normalement retourner que 'xml::sUndexpectedEOF'.
-			qRFwk();
-		break;
-	}
-
-	if ( PXFlow.Format() != utf::f_Guess )
-		XFlow.SetFormat( PXFlow.Format() );
 qRR
 qRT
 qRE
-	return Target;
+	return Root;
 }
 
 #if 1
@@ -1600,7 +1627,7 @@ qRB
 	Path.Init();
 	Entry.GetPath( Path );
 
-	Row = Search( Path, Level );
+	Row = Search( Level, Path );
 qRR
 qRT
 qRE
@@ -1660,46 +1687,49 @@ qRE
 }
 
 
-status__ rgstry::FillRegistry(
+rgstry::row__ rgstry::FillRegistry(
 	xtf::extended_text_iflow__ &XFlow,
 	const xpp::criterions___ &Criterions,
 	const char *RootPath,
 	rgstry::registry_ &Registry,
-	rgstry::row__ &RegistryRoot,
 	context___ &Context )
 {
 	sdr::row__ PathErrorRow = qNIL;
-	rgstry::row__ NewRoot = qNIL;
+	rgstry::row__ Root = qNIL, NewRoot = qNIL;
 
-	if ( rgstry::Parse( XFlow, Criterions, Registry, RegistryRoot, Context ) == qNIL )
-		return Context.Status = sParseError;
-
-	if ( ( RootPath != NULL ) && ( *RootPath ) ) {
-		if ( ( NewRoot = Registry.Search( str::string( RootPath ), RegistryRoot, &PathErrorRow ) ) == qNIL ) {
-			if ( PathErrorRow != qNIL ) {
-				Context.PathErrorRow = PathErrorRow;
-				return Context.Status = sRootPathError;
+	if ( ( Root = rgstry::Fill(XFlow, Criterions, Registry, Context ) ) != qNIL ) {
+		if ( ( RootPath != NULL ) && ( *RootPath ) ) {
+			if ( ( NewRoot = Registry.Search( str::string( RootPath ), Root, &PathErrorRow ) ) == qNIL ) {
+				if ( PathErrorRow != qNIL ) {
+					Context.PathErrorRow = PathErrorRow;
+					Context.Status = sRootPathError;
+					Registry.Delete( Root );
+					Root = qNIL;
+				} else  {
+					Context.Status = sUnableToFindRootPath;
+					Registry.Delete( Root );
+					Root = qNIL;
+				}
+			} else if ( Registry.GetNature(Root) == nAttribute ) {
+				Context.Status = sRootPathError;
+				Registry.Delete( Root );
+				Root = qNIL;
 			} else
-				return Context.Status = sUnableToFindRootPath;
-		} else if ( Registry.GetNature( RegistryRoot ) == nAttribute )
-				return Context.Status = sRootPathError;
-			else
-				RegistryRoot = NewRoot;
+				Root = NewRoot;
+		}
 	}
 
-
-	return sOK;
+	return Root;
 }
 
-status__ rgstry::FillRegistry(
+rgstry::row__ rgstry::FillRegistry(
 	const fnm::name___ &FileName,
 	const xpp::criterions___ &Criterions,
 	const char *RootPath,
 	rgstry::registry_ &Registry,
-	rgstry::row__ &RegistryRoot,
 	context___ &Context )
 {
-	status__ Status = s_Undefined;
+	rgstry::row__ Root = qNIL;
 qRH
 	flf::file_iflow___ FFlow;
 	xtf::extended_text_iflow__ XFlow;
@@ -1707,7 +1737,7 @@ qRH
 	str::string Buffer;
 qRB
 	if ( FFlow.Init( FileName, err::hUserDefined ) != tol::rSuccess ) {
-		Status = Context.Status = sUnableToOpenFile;
+		Context.Status = sUnableToOpenFile;
 		Context.Coordinates.FileName = FileName;
 		qRReturn;
 	}
@@ -1719,15 +1749,16 @@ qRB
 
 	Location.Init();
 	Buffer.Init();
-	Status = FillRegistry( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, RegistryRoot, Context );
+	Root = FillRegistry( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, Context );
 
-	if ( Status == sParseError )
-		if ( Context.Coordinates.FileName.IsEmpty() )
-			Context.Coordinates.FileName = FileName;
+	if ( Root == qNIL )
+		if ( Context.Status == sParseError )
+			if ( Context.Coordinates.FileName.IsEmpty() )
+				Context.Coordinates.FileName = FileName;
 qRR
 qRT
 qRE
-	return Status;
+	return Root;
 }
 
 #define LIMIT 9
