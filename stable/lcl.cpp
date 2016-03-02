@@ -31,7 +31,6 @@ namespace {
 		str::vString &Normalized )
 	{
 	qRH
-		str::string Normalized;
 		flx::E_STRING_IFLOW__ Flow;
 		bso::char__ C = 0;
 	qRB

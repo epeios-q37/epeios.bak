@@ -78,16 +78,7 @@ namespace {
 	qRE
 	}
 
-	using misc::callback__;
-
-	void Process_(
-		callback__ &Callback,
-		module__ &Module )
-	{
-		Callback.Process( Module );
-	}
-
-	void Process_( const bso::char__ *ModuleFilename )
+	void LoadModule_( const bso::char__ *ModuleFilename )
 	{
 	qRH
 		lcl::locale SharedLocale;
@@ -96,7 +87,6 @@ namespace {
 		lcl::meaning Meaning, MeaningBuffer;
 		str::string Translation;
 		err::buffer__ ErrBuffer;
-		plgn::retriever___<callback__> Retriever;
 	qRB
 		SharedLocale.Init();
 		SharedRegistry.Init();
@@ -113,12 +103,6 @@ namespace {
 			sclerror::SetMeaning( Meaning );
 			qRAbort();
 		}
-
-		Retriever.Init();
-
-		sclmisc::Plug( misc::SlotPluginTarget, NULL, Retriever );
-
-		Process_( Retriever.Plugin(), Core_->GetCallback() );
 	qRR
 		Meaning.Init();
 		Meaning.SetValue( "ModuleError" );
@@ -144,16 +128,32 @@ namespace {
 	qRE
 	}
 
+	using misc::callback__;
+
+	void Process_(
+		callback__ &Callback,
+		module__ &Module )
+	{
+		Callback.Process( Module );
+	}
+
 	void Process_( void )
 	{
 	qRH
 		TOL_CBUFFER___ Buffer;
+		plgn::retriever___<callback__> Retriever;
 	qRB
 		atexit( ExitFunction_ );
 
 		cio::COut.Commit();
 
-		Process_( sclmisc::MGetValue( registry::Module, Buffer ) );
+		LoadModule_( sclmisc::MGetValue( registry::Module, Buffer ) );
+
+		Retriever.Init();
+
+		sclmisc::Plug( misc::SlotPluginTarget, NULL, Retriever );
+
+		Process_( Retriever.Plugin(), Core_->GetCallback() );
 	qRR
 	qRT
 	qRE
