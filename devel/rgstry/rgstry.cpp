@@ -1074,6 +1074,28 @@ qRE
 	return Root;
 }
 
+bso::fBool rgstry::Insert(
+	xtf::extended_text_iflow__ &XFlow,
+	const xpp::criterions___ &Criterions,
+	rgstry::row__ Root,
+	eRootTagHandling RootTagHandling,
+	registry_ &Registry,
+	xpp::context___ &Context )
+{
+	bso::fBool Success = false;
+qRH
+	callback___ Callback( Registry );
+qRB
+	Callback.Init( Root, RootTagHandling );
+
+	Success =  Parse_( XFlow, Criterions, Callback, Context );
+qRR
+qRT
+qRE
+	return Success;
+}
+
+
 #if 1
 const value_ &rgstry::overloaded_registry___::GetValue(
 	const str::string_ &PathString,
@@ -1687,7 +1709,7 @@ qRE
 }
 
 
-rgstry::row__ rgstry::FillRegistry(
+rgstry::row__ rgstry::Fill(
 	xtf::extended_text_iflow__ &XFlow,
 	const xpp::criterions___ &Criterions,
 	const char *RootPath,
@@ -1722,7 +1744,7 @@ rgstry::row__ rgstry::FillRegistry(
 	return Root;
 }
 
-rgstry::row__ rgstry::FillRegistry(
+rgstry::row__ rgstry::Fill(
 	const fnm::name___ &FileName,
 	const xpp::criterions___ &Criterions,
 	const char *RootPath,
@@ -1749,7 +1771,7 @@ qRB
 
 	Location.Init();
 	Buffer.Init();
-	Root = FillRegistry( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, Context );
+	Root = Fill( XFlow, xpp::criterions___( fnm::GetLocation( FileName, Location ).UTF8( Buffer ), Criterions.CypherKey, Criterions.Namespace ), RootPath, Registry, Context );
 
 	if ( Root == qNIL )
 		if ( Context.Status == sParseError )

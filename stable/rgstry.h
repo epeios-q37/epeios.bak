@@ -1199,13 +1199,6 @@ namespace rgstry {
 	E_AUTO( error_details );
 #endif
 
-	qENUM( RootTagHandling ) {
-		rthKeep,		// The root tag is put in the registry.
-		rthIgnore,	// The root tag is not put in the registry.
-		rth_amount,
-		rth_Undefined,
-	};
-
 	row__ Fill(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
@@ -1228,6 +1221,41 @@ namespace rgstry {
 	qRT
 	qRE
 		return Row;
+	}
+
+	qENUM( RootTagHandling ) {
+		rthKeep,		// The root tag is put in the registry.
+		rthIgnore,	// The root tag is not put in the registry.
+		rth_amount,
+		rth_Undefined,
+	};
+
+	bso::fBool Insert(
+		xtf::extended_text_iflow__ &XFlow,
+		const xpp::criterions___ &Criterions,
+		rgstry::row__ Root,
+		eRootTagHandling RootTagHandling,
+		registry_ &Registry,
+		xpp::context___ &Context );
+
+	inline bso::fBool Insert(
+		xtf::extended_text_iflow__ &XFlow,
+		const xpp::criterions___ &Criterions,
+		rgstry::row__ Root,
+		eRootTagHandling RootTagHandling,
+		registry_ &Registry	) // Peut être = 'qNIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
+	{
+		bso::fBool Success = false;
+	qRH
+		xpp::context___ Context;
+	qRB
+		Context.Init();
+
+		Success = Insert( XFlow, Criterions, Root, RootTagHandling, Registry, Context );
+	qRR
+	qRT
+	qRE
+		return Success;
 	}
 
 	enum status__ {
@@ -1280,21 +1308,21 @@ namespace rgstry {
 		const context___ &Context,
 		lcl::meaning_ &Meaning );
 
-	rgstry::row__ FillRegistry(
+	rgstry::row__ Fill(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		const char *RootPath,
 		rgstry::registry_ &Registry,
 		context___ &Context );
 
-	rgstry::row__ FillRegistry(
+	rgstry::row__ Fill(
 		const fnm::name___ &FileName,
 		const xpp::criterions___ &Criterions,
 		const char *RootPath,
 		rgstry::registry_ &Registry,
 		context___ &Context );
 
-	template <typename source> inline rgstry::row__ FillRegistry(
+	template <typename source> inline rgstry::row__ Fill(
 		source &Source,
 		const xpp::criterions___ &Criterions,
 		const char *RootPath,
@@ -1306,7 +1334,7 @@ namespace rgstry {
 	qRB
 		Context.Init();
 
-		Root = FillRegistry( Source, Criterions, RootPath, Registry, Context );
+		Root = Fill( Source, Criterions, RootPath, Registry, Context );
 	qRR
 	qRT
 	qRE
@@ -2039,7 +2067,7 @@ namespace rgstry {
 			if ( _GetRoot( Level ) != qNIL )
 				qRFwk();
 			
-			if ( ( Root = FillRegistry( Source, Criterions, RootPath, _GetRegistry( Level ), Context ) ) != qNIL ) {
+			if ( ( Root = rgstry::Fill( Source, Criterions, RootPath, _GetRegistry( Level ), Context ) ) != qNIL ) {
 				Entries.Store( entry__( Root ), Level );
 
 				_Touch( Level );
@@ -2059,9 +2087,36 @@ namespace rgstry {
 			if ( _GetRoot( Level ) != qNIL )
 				qRFwk();
 			
-			if ( ( Root = FillRegistry( Source, Criterions, RootPath, _GetRegistry( Level ) ) ) != qNIL ) {
+			if ( ( Root = rgstry::Fill( Source, Criterions, RootPath, _GetRegistry( Level ) ) ) != qNIL ) {
 				Entries.Store( entry__( Root ), Level );
 
+				_Touch( Level );
+
+				return true;
+			} else
+				return false;
+		}
+		template <typename source> bso::fBool Insert(
+			level__ Level,
+			source &Source,
+			const xpp::criterions___ &Criterions,
+			eRootTagHandling RootTagHandling,
+			context___ &Context )
+		{
+			if ( rgstry::Insert( Source, Criterions, _GetRoot( Level ), RootTagHandling, _GetRegistry( Level ), Context ) ) {
+				_Touch( Level );
+
+				return true;
+			} else
+				return false;
+		}
+		template <typename source> bso::fBool Insert(
+			level__ Level,
+			source &Source,
+			const xpp::criterions___ &Criterions,
+			eRootTagHandling RootTagHandling )
+		{
+			if ( rgstry::Insert( Source, Criterions, _GetRoot( Level ), RootTagHandling, _GetRegistry( Level ) ) ) {
 				_Touch( Level );
 
 				return true;

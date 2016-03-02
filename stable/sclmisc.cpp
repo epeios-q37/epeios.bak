@@ -1036,8 +1036,7 @@ qRB
 	Location.Init();
 	fnm::GetLocation( Filename, Location );
 
-#pragma message ( __LOC__ "ICI !" )
-//	scllocale::Fill(scllocale::tMain, rgstry::rthIgnore, NULL, Location, XML );
+	scllocale::Insert( scllocale::tMain, Location, XML, rgstry::rthIgnore );
 qRR
 qRT
 qRE

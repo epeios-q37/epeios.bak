@@ -183,12 +183,31 @@ qRH
 qRB
 	Flow.Init( XML );
 	XFlow.Init( Flow, utf::f_Default );
-	Locale_.Fill( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootPath );
+	if ( !Locale_.Fill( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootPath ) )
+		qRFwk();
 qRR
 qRT
 qRE
 }
 
+void scllocale::Insert(
+	target__ Target,
+	const fnm::name___ &Directory,
+	const str::string_ &XML,
+	rgstry::eRootTagHandling RootTagHandling )
+{
+qRH
+	flx::E_STRING_IFLOW__ Flow;
+	xtf::extended_text_iflow__ XFlow;
+qRB
+	Flow.Init( XML );
+	XFlow.Init( Flow, utf::f_Default );
+	if ( !Locale_.Insert( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootTagHandling  ) )
+		qRFwk();
+qRR
+qRT
+qRE
+}
 
 // Bien que dfinit dans un '.cpp', et propre  ce '.cpp', VC++ se mlange les pinceaux avec le 'callback__' dfinit dans 'sclxhtml.cpp', d'o le 'namespace'.
 namespace {

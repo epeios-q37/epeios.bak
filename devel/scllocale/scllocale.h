@@ -72,6 +72,12 @@ namespace scllocale {
 		const fnm::name___ &Directory,
 		const str::string_ &XML );
 
+	void Insert(
+		target__ Target,
+		const fnm::name___ &Directory,
+		const str::string_ &XML,
+		rgstry::eRootTagHandling RootTagHandling );
+
 	const str::string_ &GetTranslation(
 		const char *Text,
 		const char *Language,
