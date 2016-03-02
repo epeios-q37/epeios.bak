@@ -25,13 +25,42 @@
 
 using namespace lcl;
 
+namespace {
+	void Normalize_(
+		const str::vString &Value,
+		str::vString &Normalized )
+	{
+	qRH
+		str::string Normalized;
+		flx::E_STRING_IFLOW__ Flow;
+		bso::char__ C = 0;
+	qRB
+		Flow.Init( Value );
+
+		while ( !Flow.EndOfFlow() ) {
+			if ( ( C = Flow.Get() ) == '\\' )
+				Normalized.Append('\\' );
+			
+			Normalized.Append( C );
+		}
+	qRR
+	qRT
+	qRE
+	}
+}
+
 static inline vrow__ NewValue_(
 	const str::string_ &Value,
+	bso::fBool  Normalize,
 	values_ &Values )
 {
 	vrow__ Row = Values.New();
 
-	Values( Row ).Init( Value );
+	if ( Normalize ) {
+		Values(Row).Init();
+		Normalize_(Value, Values( Row ) );
+	} else
+		Values( Row ).Init( Value );
 
 	Values.Flush();
 
@@ -57,14 +86,16 @@ static inline brow__ NewBasic_(
 static inline brow__ NewBasic_(
 	const str::string_ &Value,
 	bso::bool__ ToTranslate,
+	bso::fBool Normalize,
 	_core_ &Core )
 {
-	return NewBasic_( NewValue_( Value, Core.Values ), ToTranslate, Core.Basics );
+	return NewBasic_( NewValue_( Value, Normalize, Core.Values ), ToTranslate, Core.Basics );
 }
 
 static inline brow__ NewBasic_(
 	const _basic_ &SourceBasic,
 	const _core_ &SourceCore,
+	bso::fBool Normalize,
 	_core_ &NewCore );	// Pr-dclaration
 
 static void Duplicate_(
@@ -79,7 +110,7 @@ static void Duplicate_(
 	SourceBasic.Init( SourceCore.Basics );
 
 	while ( Row != qNIL ) {
-		Basic.Tags.Append( NewBasic_( SourceBasic( Tags( Row ) ), SourceCore, NewCore ) );
+		Basic.Tags.Append( NewBasic_( SourceBasic( Tags( Row ) ), SourceCore, false, NewCore ) );
 
 		Row = Tags.Next( Row );
 	}
@@ -88,6 +119,7 @@ static void Duplicate_(
 static inline brow__ NewBasic_(
 	const _basic_ &SourceBasic,
 	const _core_ &SourceCore,
+	bso::fBool Normalize,
 	_core_ &NewCore )
 {
 	brow__ Row = qNIL;
@@ -96,7 +128,7 @@ qRH
 	_basic Basic;
 qRB
 	Value.Init( SourceCore.Values );
-	Row = NewBasic_( Value( SourceBasic.S_.Value ), SourceBasic.ToTranslate(), NewCore );
+	Row = NewBasic_( Value( SourceBasic.S_.Value ), SourceBasic.ToTranslate(), Normalize, NewCore );
 
 	Basic.Init( NewCore.Basics( Row ).ToTranslate() );
 	Basic = NewCore.Basics( Row );
@@ -114,17 +146,18 @@ qRE
 
 static inline brow__ NewBasic_(
 	const meaning_ &Meaning,
+	bso::fBool Normalize,
 	_core_ &Core )
 {
 	ctn::E_CMITEMt( _basic_, brow__ ) Basic;
 
-	return NewBasic_( Meaning.GetBasic( Basic ), Meaning.Core, Core );
+	return NewBasic_( Meaning.GetBasic( Basic ), Meaning.Core, Normalize, Core );
 }
 
 void lcl::meaning_::SetValue( const str::string_ &Value )
 {
 #if 1
-	vrow__ Row = NewValue_( Value, Core.Values );
+	vrow__ Row = NewValue_( Value, false, Core.Values );
 	_Basic().S_.Value = Row;
 #else
 	_Basic().S_.Value = NewValue_( Value, Core.Values );
@@ -136,7 +169,7 @@ void lcl::meaning_::SetValue( const str::string_ &Value )
 void lcl::meaning_::AddTag( const str::string_ &Value )
 {
 #if 1
-	brow__ Row = NewBasic_( Value, false, Core );
+	brow__ Row = NewBasic_( Value, false, true,  Core );
 	_Basic().Tags.Append( Row );
 #else
 	_Basic().Tags.Append( NewBasic_( Value, false, Core ) );
@@ -148,7 +181,7 @@ void lcl::meaning_::AddTag( const str::string_ &Value )
 void lcl::meaning_::AddTag( const meaning_ &Meaning )
 {
 #if 1
-	brow__ Row = NewBasic_( Meaning, Core );
+	brow__ Row = NewBasic_( Meaning, true, Core );
 	_Basic().Tags.Append( Row );
 #else
 	_Basic().Tags.Append( NewBasic_( Meaning, Core ) );
