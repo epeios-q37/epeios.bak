@@ -615,7 +615,7 @@ namespace bch {
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::plug( Hook );
 
 			if ( Amount != this->Amount() )
-				Allocate( Amount, aem::mFitted );
+				_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Allocate( Amount, aem::mFitted );
 		}
 		void plug( qASv &AS )
 		{

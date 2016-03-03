@@ -59,11 +59,11 @@ namespace ogzdtb {
 		qCDTOR( rDatabase );
 		void Init(
 			const ogztyp::vTypes &Types,
-			ogzdta::fCallback &DTACallback,
-			ogzclm::fCallback &CLMCallback,
-			ogzfld::fCallback &FLDCallback,
-			ogzrcd::fCallback &RCDCallback,
-			ogzusr::fCallback &USRCallback )
+			ogzdta::cData &DTACallback,
+			ogzclm::cColumn &CLMCallback,
+			ogzfld::cField &FLDCallback,
+			ogzrcd::cRecord &RCDCallback,
+			ogzusr::cUser &USRCallback )
 		{
 			this->Types.Init();
 			this->Types = Types;
@@ -84,31 +84,22 @@ namespace ogzdtb {
 
 # define M( module, name )\
 	protected:\
-		virtual module::fCallback &OGZDTBGet##name( void ) = 0;\
+		virtual module::c##name &OGZDTBGet##name##Callback( void ) = 0;\
 	public:\
-		module::fCallback &Get##name( void )\
+		module::c##name &Get##name##Callback( void )\
 		{\
-			return OGZDTBGet##name();\
+			return OGZDTBGet##name##Callback();\
 		}
 
-	class fCallback
+	class cDtatbase
 	{
 	protected:
-		M( ogzdta, DTA );
-		M( ogzclm, CLM );
-		M( ogzfld, FLD );
-		M( ogzrcd, RCD );
-		M( ogzusr, USR );
+		M( ogzdta, Data );
+		M( ogzclm, Column );
+		M( ogzfld, Field );
+		M( ogzrcd, Record );
+		M( ogzusr, User );
 	public:
-		void reset( bso::fBool = true )
-		{
-			// Standardization.
-		}
-		qCVDTOR( fCallback );
-		void Init( void )
-		{
-			// Standardization.
-		}
 	};
 
 # ifdef OGZDTB_M_

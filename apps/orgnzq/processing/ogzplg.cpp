@@ -21,20 +21,22 @@
 
 using namespace ogzplg;
 
-const char *ogzplg::fTypePlugin::Label( void )
-{
-	return OGZPLG_TYPE_PLUGIN_TARGET " V" OGZPLG_TYPE_PLUGIN_VERSION " " CPE_DESCRIPTION;
-}
+// The use of 'namespace ogzplg' writing rather then 'ogzplg::' is required by GCC.
+namespace ogzplg {
+	template <> const char *fTypePlugin::Label( void )
+	{
+		return OGZPLG_TYPE_PLUGIN_TARGET " V" OGZPLG_TYPE_PLUGIN_VERSION " " CPE_DESCRIPTION;
+	}
 
-const char *ogzplg::fDatabasePlugin::Label( void )
-{
-	return OGZPLG_DATABASE_PLUGIN_TARGET " V" OGZPLG_DATABASE_PLUGIN_VERSION " " CPE_DESCRIPTION;
-}
+	template <> const char *fDatabasePlugin::Label( void )
+	{
+		return OGZPLG_DATABASE_PLUGIN_TARGET " V" OGZPLG_DATABASE_PLUGIN_VERSION " " CPE_DESCRIPTION;
+	}
 
-const char *ogzplg::fAuthenticationPlugin::Label( void )
-{
-	return OGZPLG_AUTHENTICATION_PLUGIN_TARGET " V" OGZPLG_AUTHENTICATION_PLUGIN_VERSION " " CPE_DESCRIPTION;
+	template <> const char *fAuthenticationPlugin::Label( void )
+	{
+		return OGZPLG_AUTHENTICATION_PLUGIN_TARGET " V" OGZPLG_AUTHENTICATION_PLUGIN_VERSION " " CPE_DESCRIPTION;
+	}
 }
-
 
 

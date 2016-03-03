@@ -43,7 +43,7 @@ namespace ogzxmp {
 		void reset( bso::bool__ P = true )
 		{
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 		}
 		vMyObject &operator =( const vMyObject &M )

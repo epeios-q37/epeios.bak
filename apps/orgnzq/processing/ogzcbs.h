@@ -46,7 +46,7 @@
 namespace ogzcbs {
 
 	// Callback for static (fixed-sized) objects.
-	template <typename item, typename row> class fSCallback
+	template <typename item, typename row> class cStatic
 	{
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
@@ -61,15 +61,6 @@ namespace ogzcbs {
 			row Row,
 			item &Item ) const = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			//Standadisation.
-		}
-		E_CVDTOR( fSCallback );
-		void Init( void )
-		{
-			//Standardisation.
-		}
 		void Wipe( void )
 		{
 			OGZCBSDelete( qNIL );
@@ -97,18 +88,18 @@ namespace ogzcbs {
 	};
 
 	// Storage for static (fixed-sized) objects.
-	template <typename item, typename row> class fSItems
+	template <typename item, typename row> class fStaticItems
 	{
 	private:
-		typedef fSCallback<item, row> fCallback;
-		Q37_MRMDF( fCallback, C_, Callback_ );
+		typedef cStatic<item, row> cStatic_;
+		qRMV( cStatic_, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Callback_ = NULL;
 		}
-		E_CDTOR( fSItems );
-		void Init( fCallback &Callback )
+		E_CDTOR( fStaticItems );
+		void Init( cStatic_ &Callback )
 		{
 			Callback_ = &Callback;
 		}
@@ -147,8 +138,8 @@ namespace ogzcbs {
 	};
 
 	// Callback for dynamic (not fixed size) objetcs.
-	template <OGZCBS_BTT> class fDCallback
-	: public fSCallback<item_v, row>
+	template <OGZCBS_BTT> class cDynamic
+	: public cStatic<item_v, row>
 	{
 	protected:
 		virtual void OGZCBSStore(
@@ -161,11 +152,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			fSCallback<item_v, row>::Recall( Row, Item );
+			cStatic<item_v, row>::Recall( Row, Item );
 
 			Item.Store( SubItem, SubRow );
 
-			fSCallback<item_v, row>::Store( Item, Row );
+			cStatic<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -180,11 +171,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			fSCallback<item_v, row>::Recall( Row, Item );
+			cStatic<item_v, row>::Recall( Row, Item );
 
 			Item.Recall( SubRow, SubItem );
 
-			fSCallback<item_v, row>::Store( Item, Row );
+			cStatic<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -199,11 +190,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			fSCallback<item_v, row>::Recall( Row, Item );
+			cStatic<item_v, row>::Recall( Row, Item );
 
 			SubRow = Item.Add( SubItem );
 
-			fSCallback<item_v, row>::Store( Item, Row );
+			cStatic<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -218,25 +209,16 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			fSCallback<item_v, row>::Recall( Row, Item );
+			cStatic<item_v, row>::Recall( Row, Item );
 
 			Item.Remove( SubRow );
 
-			fSCallback<item_v, row>::Store( Item, Row );
+			cStatic<item_v, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
 		}
 	public:
-		void reset( bso::bool__ P = true )
-		{
-			fSCallback<item_v, row>::reset( P );
-		}
-		E_CVDTOR( fDCallback);
-		void Init( void )
-		{
-			fSCallback<item_v, row>::Init();
-		}
 		void Store(
 			const subitem &SubItem,
 			row Row,
@@ -266,13 +248,13 @@ namespace ogzcbs {
 	};
 
 	// Callback-based storage for dynamic objects.
-	template <OGZCBS_BTT> class fDItems
+	template <OGZCBS_BTT> class fDynamicItems
 	{
 	private:
-		typedef fDCallback<OGZCBS_BTP> fCallback;
-		Q37_MRMDF( fCallback, C_, Callback_ );
-		typedef fSCallback<item_v, row> fSCallback;
-		fSCallback &SC_( void ) const
+		typedef cDynamic<OGZCBS_BTP> cDynamic_;
+		qRMV( cDynamic_, C_, Callback_ );
+		typedef cStatic<item_v, row> cStatic_;
+		cStatic_ &SC_( void ) const
 		{
 			return C_();
 		}
@@ -281,8 +263,8 @@ namespace ogzcbs {
 		{
 			Callback_ = NULL;
 		}
-		E_CDTOR( fDItems );
-		void Init( fCallback &Callback )
+		E_CDTOR( fDynamicItems );
+		void Init( cDynamic_ &Callback )
 		{
 			Callback_ = &Callback;
 		}
@@ -338,8 +320,8 @@ namespace ogzcbs {
 		}
 	};
 
-	template <typename item, typename row> class rSRegularCallback
-	: public fSCallback<item,row>
+	template <typename item, typename row> class rRegularStaticCallback
+	: public cStatic<item,row>
 	{
 	private:
 		lstbch::qLBUNCHi( item, row ) Items_;
@@ -374,19 +356,17 @@ namespace ogzcbs {
 	public:
 		void reset( bso::fBool P = true )
 		{
-			fSCallback<item, row>::reset( P );
 			Items_.reset( P );
 		}
-		qCVDTOR( rSRegularCallback );
+		qCVDTOR( rRegularStaticCallback );
 		void Init( void )
 		{
-			fSCallback<item, row>::Init();
 			Items_.Init();
 		}
 	};
 
-	template <OGZCBS_BTT> class rDRegularCallback
-	: public fDCallback<OGZCBS_BTP>
+	template <OGZCBS_BTT> class rRegularDynamicCallback
+	: public cDynamic<OGZCBS_BTP>
 	{
 	private:
 		lstctn::qLMCONTAINERi( item_v, row ) Container_;
@@ -423,13 +403,11 @@ namespace ogzcbs {
 	public:
 		void reset( bso::fBool P = true )
 		{
-			fDCallback<OGZCBS_BTP>::reset( P );
 			Container_.reset( P );
 		}
-		qCVDTOR( rDRegularCallback );
+		qCVDTOR( rRegularDynamicCallback );
 		void Init( void )
 		{
-			fDCallback<OGZCBS_BTP>::Init();
 			Container_.Init();
 		}
 	};

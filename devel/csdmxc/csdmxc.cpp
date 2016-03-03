@@ -49,7 +49,7 @@ namespace {
 	inline void Ping_(
 		void *UP,
 		time_t Delay,
-		fCallback &Callback )
+		cCallback &Callback )
 	{
 		fFlow &Flow = Callback.ExtractFlow( UP );
 

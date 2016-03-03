@@ -41,11 +41,11 @@ namespace ogzrcd {
 // Template parameters.
 # define OGZRCD_TP	ogzrcd::vRecord, ogzrcd::iRecord, ogzrcd::fRRow, ogzrcd::fFRow, sdr::fRow
 
-typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
+	typedef ogzcbs::cDynamic<OGZRCD_TP> cRecord;
 
-	typedef ogzcbs::fDItems<OGZRCD_TP> fRecords;
+	typedef ogzcbs::fDynamicItems<OGZRCD_TP> fRecords;
 
-	typedef ogzcbs::rDRegularCallback<OGZRCD_TP> rRegularCallback;
+	typedef ogzcbs::rRegularDynamicCallback<OGZRCD_TP> rRegularRecordCallback;
 
 	template <typename callback, typename items> class rCommon_
 	: public items
@@ -72,9 +72,9 @@ typedef ogzcbs::fDCallback<OGZRCD_TP> fCallback;
 	private:
 		fRRow Id_;	// Row of the source record. If qNIL, it's a new record.
 	public:
-		rCommon_<ogzdta::rRegularCallback, ogzdta::fData> Data;
-		rCommon_<ogzclm::rRegularCallback, ogzclm::fColumns> Columns;
-		rCommon_<ogzfld::rRegularCallback, ogzfld::fFields> Fields;
+		rCommon_<ogzdta::rRegularDataCallback, ogzdta::fData> Data;
+		rCommon_<ogzclm::rRegularColumnCallback, ogzclm::fColumns> Columns;
+		rCommon_<ogzfld::rRegularFieldCallback, ogzfld::fFields> Fields;
 		void reset( bso::fBool P = true )
 		{
 			Id_ = qNIL;

@@ -1115,7 +1115,7 @@ namespace {
 	: public rIFlowDriver_
 	{
 	private:
-		qRVM( flw::iflow__, F_, Flow_ );
+		qRMV( flw::iflow__, F_, Flow_ );
 		const char *Pending_;
 		bso::fBool EOF_;
 	protected:

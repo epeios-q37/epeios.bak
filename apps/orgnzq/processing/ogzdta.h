@@ -40,7 +40,7 @@ namespace ogzdta {
 	using ogzbsc::vDatum;
 	using ogzbsc::iDatum;
 
-	class fCallback {
+	class cData {
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
 		virtual fDRow OGZDTANew(
@@ -57,15 +57,6 @@ namespace ogzdta {
 			fTRow Type,
 			vDatum &Datum ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			//Standardisation.
-		}
-		qCVDTOR( fCallback );
-		void Init( void )
-		{
-			// Standardisation.
-		}
 		void Wipe( void )
 		{
 			OGZDTADelete( qNIL );
@@ -99,14 +90,14 @@ namespace ogzdta {
 	class fData
 	{
 	private:
-		qRVM( fCallback, C_, Callback_ );
+		qRMV( cData, C_, Callback_ );
 	public:
 		void reset( bso::bool__ = true )
 		{
 			Callback_ = NULL;
 		}
 		qCDTOR( fData );
-		void Init( fCallback &Callback )
+		void Init( cData &Callback )
 		{
 			Callback_ = &Callback;
 		}
@@ -143,8 +134,8 @@ namespace ogzdta {
 	typedef bch::qBUNCHvl( ogzdta::fByte ) vBytes;
 	qW( Bytes );
 
-	class rRegularCallback
-	: public fCallback
+	class rRegularDataCallback
+	: public cData
 	{
 	private:
 		lstctn::qLMCONTAINERi( vBytes, ogzdta::fDRow ) Container_;
@@ -184,19 +175,19 @@ namespace ogzdta {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			fCallback::reset( P );
 			Container_.reset( P );
 		}
-		qCVDTOR( rRegularCallback );
+		qCVDTOR( rRegularDataCallback );
 		void Init( void )
 		{
-			fCallback::Init();
 			Container_.Init();
 		}
 	};
 
 	typedef bch::qBUNCHvl( fDRow ) vDatumList;
 	qW( DatumList );
+
+	using bch::cHook;
 }
 
 

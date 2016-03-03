@@ -75,11 +75,11 @@ namespace ogzclm {
 	// template parameters.
 # define OGZCLM_TP	ogzclm::fColumn, ogzclm::fCRow
 
-	typedef ogzcbs::fSCallback<OGZCLM_TP> fCallback;
+	typedef ogzcbs::cStatic<OGZCLM_TP> cColumn;
 
-	typedef ogzcbs::fSItems<OGZCLM_TP> fColumns;
+	typedef ogzcbs::fStaticItems<OGZCLM_TP> fColumns;
 
-	typedef ogzcbs::rSRegularCallback<OGZCLM_TP> rRegularCallback;
+	typedef ogzcbs::rRegularStaticCallback<OGZCLM_TP> rRegularColumnCallback;
 }
 
 #endif

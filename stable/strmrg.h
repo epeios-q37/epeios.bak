@@ -75,13 +75,13 @@ namespace strmrg {
 				S_.String = qNIL;
 				Items.reset( P );
 			}
-			void plug( qSD__ &SD )
+			void plug( bch::cHook &Hook )
 			{
-				Items.plug( SD );
+				return Items.plug( Hook );
 			}
-			void plug( qAS_ &AS )
+			void plug( qASv &AS )
 			{
-				Items.plug( AS );
+				return Items.plug( AS );
 			}
 			_item_ &operator =( const _item_ &I )
 			{
@@ -145,7 +145,7 @@ namespace strmrg {
 			Items.reset( P );
 			Main.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Strings.plug( AS );
 			Items.plug( AS );

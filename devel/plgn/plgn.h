@@ -59,7 +59,7 @@ namespace plgn {
 	{
 	private:
 		dlbrry::dynamic_library___ Library_;
-		qRVM( plgncore::callback__, C_, Callback_ );
+		qRMV( plgncore::callback__, C_, Callback_ );
 		void *Plugin_;
 		void ReleasePlugin_( void )
 		{
@@ -218,7 +218,7 @@ namespace plgn {
 			'Locale' section should be the same for all the plugin, and you should
 			read what be needed from the registry before returoing from here. */
 			if ( Locale.Amount() != 0 )
-				scllocale::Fill(scllocale::tMain, NULL, Location, Locale );
+				scllocale::Insert( scllocale::tMain, Location, Locale, rgstry::rthIgnore );
 
 			Plugin_ = C_().RetrievePlugin();
 

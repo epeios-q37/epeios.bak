@@ -37,6 +37,22 @@ namespace idxbtq {
 	using idxbtr::tree_index_;
 	using idxque::queue_index_;
 
+	class cHook
+	{
+	protected:
+		virtual idxbtr::cHook &IDXBTQGetTreeHook( void ) = 0;
+		virtual idxque::cHook &IDXBTQGetQueueHook( void ) = 0;
+	public:
+		idxbtr::cHook &GetTreeHook( void )
+		{
+			return IDXBTQGetTreeHook();
+		}
+		idxque::cHook &GetQueueHook( void )
+		{
+			return IDXBTQGetQueueHook();
+		}
+	};
+
 	//c Index using a tree-based index and a queue-based index. Fast browsing and sorting.
 	template <typename r> class tree_queue_index_
 	: public E_IBTREEt_( r ),
@@ -55,6 +71,11 @@ namespace idxbtq {
 		{
 			E_IBTREEt_( r )::reset( P );
 			E_IQUEUEt_( r )::reset( P );
+		}
+		void plug( cHook &Hook )
+		{
+			E_IBTREEt_( r )::plug( Hook.GetTreeHook() );
+			E_IQUEUEt_( r )::plug( Hook.GetQueueHook() );
 		}
 		void plug( qASv &AS )
 		{
@@ -240,7 +261,8 @@ namespace idxbtq {
 
 	E_AUTO1( tree_queue_index )
 
-	template <typename index, typename tree, typename queue> class rH_
+	template <typename tree, typename queue> class rH_
+	: public cHook
 	{
 	protected:
 		tree Tree_;
@@ -252,22 +274,16 @@ namespace idxbtq {
 			Queue_.reset( P );
 		}
 		qCVDTOR( rH_ );
-		bso::fBool Plug( index &Index )
-		{
-			bso::fBool Exists = Tree_.Plug( Index.GetTree() );
-
-			return Queue_.Plug( Index.GetQueue() ) || Exists;
-		}
 	};
 
-	template <class index> class rRH
-	: public rH_<index, idxbtr::rRH, idxque::rRH>
+	class rRH
+	: public rH_<idxbtr::rRH, idxque::rRH>
 	{
 	public:
 		void Init( void )
 		{
 			Tree_.Init();
-			Index_.Init();
+			Queue_.Init();
 		}
 	};
 
@@ -287,8 +303,8 @@ namespace idxbtq {
 			const fnm::name___ &Basename );
 	};
 
-	template <class index> class rFH
-	: public rH_<index, idxbtr::rFH, idxque::rFH>
+	class rFH
+	: public rH_<idxbtr::rFH, idxque::rFH>
 	{
 		uys::eState Init( 
 			const rHF &Filenames,
@@ -296,14 +312,12 @@ namespace idxbtq {
 			uys::behavior__ Behavior,
 			flsq::id__ ID )
 		{
-			uys::eState State = _Tree.Init( Filenames.Tree, Core.GetTree().GetTree().GetBunch(), Mode, Behavior, ID );
+			uys::eState State = Tree_.Init( Filenames.Tree, Mode, Behavior, ID );
 
 			if ( !State.IsError() ) {
-				if ( _Queue.Init( Filenames.Queue, Core.GetQueue().GetQueue().GetBunch(), Mode, Behavior, ID ) != State )
+				if ( Queue_.Init( Filenames.Queue, Mode, Behavior, ID ) != State )
 					State = uys::sInconsistent;
 			}
-
-			fHook::Init();
 
 			return State;
 		}

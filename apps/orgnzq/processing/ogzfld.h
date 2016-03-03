@@ -59,9 +59,9 @@ namespace ogzfld {
 			S_.Column = qNIL;
 			vDatumList::reset( P );
 		}
-		void plug( qSDf &SD )
+		void plug( ogzdta::cHook &Hook )
 		{
-			vDatumList::plug( SD );
+			vDatumList::plug( Hook );
 		}
 		void plug( qASv &AS )
 		{
@@ -87,11 +87,11 @@ namespace ogzfld {
 	// template parameters.
 # define OGZFLD_TP	ogzfld::vField, ogzfld::iField, ogzfld::fFRow, ogzfld::fDRow, sdr::fRow
 
-	typedef ogzcbs::fDCallback<OGZFLD_TP> fCallback;
+	typedef ogzcbs::cDynamic<OGZFLD_TP> cField;
 
-	typedef ogzcbs::fDItems<OGZFLD_TP> fFields;
+	typedef ogzcbs::fDynamicItems<OGZFLD_TP> fFields;
 
-	typedef ogzcbs::rDRegularCallback<OGZFLD_TP> rRegularCallback;
+	typedef ogzcbs::rRegularDynamicCallback<OGZFLD_TP> rRegularFieldCallback;
 
 	typedef bch::qBUNCHvl( fFRow ) vFieldList;
 	qW( FieldList );

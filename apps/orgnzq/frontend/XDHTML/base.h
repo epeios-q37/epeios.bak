@@ -45,7 +45,7 @@
 /***** Macros dealing with actions ****/
 // Definition.
 # define BASE_ACD( type )\
-	class f##type##\
+	class f##type\
 	: public base::action_callback__\
 	{\
 	protected:\
@@ -105,7 +105,7 @@ namespace base {
 	: public _corpus_callback__
 	{
 	private:
-		qRVM( frdfrntnd::rFrontend, F_,  Frontend_ );
+		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
 	protected:
 		virtual void XDHDWSDump( xml::writer_ &Writer ) override
 		{

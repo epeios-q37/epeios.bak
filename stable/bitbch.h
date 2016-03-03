@@ -282,13 +282,13 @@ namespace bitbch {
 			Table.reset( P );
 			amount_extent_manager_<r>::reset( P );
 		}
-		bso::fBool plug( cHook &Hook )
+		void plug( cHook &Hook )
 		{
 			return Table.plug( Hook );
 		}
-		bso::fBool plug( qASv &AS )
+		void plug( qASv &AS )
 		{
-			retunn Table.plug( AS );
+			return Table.plug( AS );
 		}
 		bit_bunch_ &operator =( const bit_bunch_ &O )
 		{

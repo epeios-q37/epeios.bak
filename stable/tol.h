@@ -357,7 +357,7 @@ public:\
 	}
 
 // Pointer variable and method.
-#define qPVM( type, method, variable )\
+#define qPMV( type, method, variable )\
 	type *variable;\
 	qPM( type, method, variable )
 
@@ -372,7 +372,7 @@ public:\
 	}
 
 // Reference variable and method.
-#define qRVM( type, method, variable )\
+#define qRMV( type, method, variable )\
 	type *variable;\
 	qRM( type, method, variable )
 
@@ -387,7 +387,7 @@ public:\
 	}
 
 // 'const' reference variable and method.
-#define qCRVM( type, method, variable )\
+#define qCRMV( type, method, variable )\
 	const type *variable;\
 	qCRM( type, method, variable )
 

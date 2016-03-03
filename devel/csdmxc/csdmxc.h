@@ -104,7 +104,7 @@ namespace csdmxc {
 
 	const char *GetLogLabel( eLog Log );
 
-	class fLogCallback
+	class cLogCallback
 	{
 	protected:
 		virtual void CSDMXCLog(
@@ -112,7 +112,6 @@ namespace csdmxc {
 			const void *UP,
 			sdr::size__ Amount ) = 0;
 	public:
-		qCALLBACK_DEF( LogCallback );
 		void Log(
 			eLog Log,
 			const void *UP,
@@ -122,7 +121,7 @@ namespace csdmxc {
 		}
 	};
 
-	class fCallback
+	class cCallback
 	{
 	protected:
 		virtual void *CSDMXCNew( void ) = 0;
@@ -133,7 +132,6 @@ namespace csdmxc {
 			return tol::EpochTime( false );
 		}
 	public:
-		qCALLBACK_DEF( Callback );
 		void *New( void )
 		{
 			return CSDMXCNew();
@@ -159,11 +157,11 @@ namespace csdmxc {
 
 	class rCore {
 	private:
-		qRVM( fCallback, C_, Callback_ );
+		qRVM( cCallback, C_, Callback_ );
 		iUPs UPs;
 		mutex__ MainMutex_;
 		struct fLog_ {
-			fLogCallback *Callback;
+			cLogCallback *Callback;
 			mutex__ Mutex;
 		} Log_;
 		struct fPing__ {
@@ -219,9 +217,9 @@ qRE
 		}
 		qVDTOR( rCore );
 		bso::bool__ Init( 
-			fCallback &Callback,
+			cCallback &Callback,
 			bso::uint__ PingDelay = 0,
-			fLogCallback *LogCallback = NULL )
+			cLogCallback *LogCallback = NULL )
 		{
 			reset();
 
@@ -251,9 +249,9 @@ qRE
 			return true;
 		}
 		bso::bool__ Init(
-			fCallback &Callback,
+			cCallback &Callback,
 			bso::uint__ PingDelay,
-			fLogCallback &LogCallback )
+			cLogCallback &LogCallback )
 		{
 			return Init( Callback, PingDelay, &LogCallback );
 		}

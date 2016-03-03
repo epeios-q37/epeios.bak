@@ -45,10 +45,10 @@
 namespace csdmnc {
 	typedef csdbnc::flow___ rFlow_;
 
-	typedef csdmxc::fCallback fCallback_;
+	typedef csdmxc::cCallback cCallback_;
 
 	class rCallback
-	: public fCallback_
+	: public cCallback_
 	{
 	private:
 		qCBUFFERr HostService_;
@@ -91,9 +91,8 @@ namespace csdmnc {
 			return F_( UP ).EpochTimeStamp();
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::fBool = true )
 		{
-			fCallback_::reset( P );
 		}
 		E_CVDTOR( rCallback );
 		void Init( const char *HostService )
@@ -105,7 +104,7 @@ namespace csdmnc {
 
 	typedef csdmxc::rCore rCore_;
 
-	using csdmxc::fLogCallback;
+	using csdmxc::cLogCallback;
 	
 	class rCore
 	: public rCore_
@@ -122,7 +121,7 @@ namespace csdmnc {
 		bso::fBool Init(
 			const char *HostService,
 			bso::uint__ PingDelay = 0,
-			fLogCallback *LogCallback = NULL )
+			cLogCallback *LogCallback = NULL )
 		{
 			Callback_.Init( HostService );
 
@@ -131,7 +130,7 @@ namespace csdmnc {
 		bso::bool__ Init(
 			const char *HostService,
 			bso::uint__ PingDelay,
-			fLogCallback &LogCallback )
+			cLogCallback &LogCallback )
 		{
 			return Init( HostService, PingDelay, &LogCallback );
 		}

@@ -42,28 +42,19 @@ namespace ogzusr {
 // Template parameters.
 # define OGZUSR_TP	ogzusr::vUser, ogzusr::iUser, ogzusr::fURow, ogzusr::fRRow, ogzusr::fURRow
 
-	typedef ogzcbs::fDCallback<OGZUSR_TP> fCallback;
+	typedef ogzcbs::cDynamic<OGZUSR_TP> cUser;
 
-	typedef ogzcbs::fDItems<OGZUSR_TP> fUsers;
+	typedef ogzcbs::fDynamicItems<OGZUSR_TP> fUsers;
 
-	typedef ogzcbs::rDRegularCallback<OGZUSR_TP> rRegularCallback;
+	typedef ogzcbs::rRegularDynamicCallback<OGZUSR_TP> rRegularCallback;
 
-	class fAuthenticationCallback
+	class cAuthentication
 	{
 	protected:
 		virtual ogzusr::fURow OGZUSRAuthenticate(
 			const str::vString &Username,
 			const str::vString &Password ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		qCVDTOR( fAuthenticationCallback );
-		void Init( void )
-		{
-			// Standardisation.
-		}
 		ogzusr::fURow Authenticate(
 			const str::vString &Username,
 			const str::vString &Password )

@@ -220,11 +220,11 @@ namespace sclfrntnd {
 			S_.Id = t(-1);
 			Label.reset( P );
 		}
-		void plug( qSD__ &SD )
+		void plug( str::cHook &Hook )
 		{
-			Label.plug( SD );
+			Label.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			Label.plug( AS );
 		}
@@ -274,7 +274,7 @@ namespace sclfrntnd {
 			il_<t>::reset( P );
 			Wording.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASv &AS )
 		{
 			il_<t>::plug( AS );
 			Wording.plug( AS );

@@ -49,13 +49,13 @@ namespace ogzplg {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			callback::reset( P );
 		}
 		E_CVDTOR( fCommon );
 		void Init( void )
 		{
-			callback::Init();
 		}
+	public:
+		static const char *Label( void );
 	};
 
 	/* Type */
@@ -63,38 +63,21 @@ namespace ogzplg {
 	qCDEF( char *, TypePluginTarget, OGZPLG_TYPE_PLUGIN_TARGET );
 	qCDEF( char *, TypePluginVersion, OGZPLG_TYPE_PLUGIN_VERSION );
 
-	class fTypePlugin
-	: public fCommon<ogztyp::fCallback>
-	{
-	public:
-		static const char *Label( void );
-	};
-
+	typedef fCommon<ogztyp::cType> fTypePlugin;
 
 	/* Database */
 
 	qCDEF( char *, DatabasePluginTarget, OGZPLG_DATABASE_PLUGIN_TARGET );
 	qCDEF( char *, DatabasePluginVersion, OGZPLG_DATABASE_PLUGIN_VERSION );
 
-	class fDatabasePlugin
-	: public fCommon<ogzdtb::fCallback>
-	{
-	public:
-		static const char *Label( void );
-	};
-
+	typedef fCommon<ogzdtb::cDtatbase> fDatabasePlugin;
 
 	/* Authentication */
 
 	qCDEF( char *, AuthenticationPluginTarget, OGZPLG_AUTHENTICATION_PLUGIN_TARGET );
 	qCDEF( char *, AuthenticationPluginVersion, OGZPLG_AUTHENTICATION_PLUGIN_VERSION );
 
-	class fAuthenticationPlugin
-	: public fCommon<ogzusr::fAuthenticationCallback>
-	{
-	public:
-		static const char *Label( void );
-	};
+	typedef fCommon<ogzusr::cAuthentication> fAuthenticationPlugin;
 }
 
 

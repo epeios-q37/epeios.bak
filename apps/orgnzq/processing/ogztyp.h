@@ -35,7 +35,7 @@
 namespace ogztyp {
 	using ogzbsc::fTRow;
 
-	class fCallback
+	class cType
 	{
 	protected:
 		// Returns the label.
@@ -45,15 +45,6 @@ namespace ogztyp {
 			const ogzbsc::vDatum &Datum,
 			str::vString &XML ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			//	Standardization.
-		}
-		qCVDTOR( fCallback );
-		void Init( void )
-		{
-			//	Standardization.
-		}
 		const char *GetLabel( void )
 		{
 			return OGZTYPGetLabel();
@@ -71,7 +62,7 @@ namespace ogztyp {
 	class fType
 	{
 	private:
-		qRVM( fCallback, C_, Callback_ );
+		qRMV( cType, C_, Callback_ );
 		const char *Identifier_;
 	public:
 		qCDTOR( fType );
@@ -81,7 +72,7 @@ namespace ogztyp {
 			Identifier_ = NULL;
 		}
 		void Init(
-			fCallback &Callback,
+			cType &Callback,
 			const char *Identifier )
 		{
 			Callback_ = &Callback;

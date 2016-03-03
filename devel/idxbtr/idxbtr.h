@@ -34,8 +34,9 @@
 # include "bitbch.h"
 
 namespace idxbtr {
-
 	using btr::level__;
+
+	using btr::cHook;
 
 	//c Tree-based index, fast sorting, but slow browsing.
 	template <typename r> class tree_index_
@@ -76,9 +77,13 @@ namespace idxbtr {
 		{
 			BaseTree.reset( P );
 		}
+		void plug( cHook &Hook )
+		{
+			return BaseTree.plug( Hook );
+		}
 		void plug( qASv &AS )
 		{
-			BaseTree.plug( AS );
+			return BaseTree.plug( AS );
 		}
 /*
 		void plug( mdr::E_MEMORY_DRIVER__ &MD )
