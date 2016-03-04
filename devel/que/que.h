@@ -620,11 +620,11 @@ namespace que {
 		: S_( S ),
 		  Queue( S.Queue )
 		{}
-		bso::fBool plug( cHook &Hook )
+		void plug( cHook &Hook )
 		{
 			return Queue.plug( Hook );
 		}
-		bso::fBool plug( qASv &AS )
+		void plug( qASv &AS )
 		{
 			return Queue.plug( AS );
 		}

@@ -157,7 +157,7 @@ namespace csdmxc {
 
 	class rCore {
 	private:
-		qRVM( cCallback, C_, Callback_ );
+		qRMV( cCallback, C_, Callback_ );
 		iUPs UPs;
 		mutex__ MainMutex_;
 		struct fLog_ {
@@ -316,7 +316,7 @@ qRE
 	{
 	private:
 		void *UP_;
-		qRVM( rCore, C_, Core_ );
+		qRMV( rCore, C_, Core_ );
 		fFlow &F_( void )
 		{
 			if ( UP_ == NULL )

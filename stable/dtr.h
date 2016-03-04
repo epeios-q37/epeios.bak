@@ -79,7 +79,7 @@ namespace dtr {
 		friend class dynamic_tree_<r>;
 	};
 
-	class cHook
+	class cHooks
 	{
 	protected:
 		virtual btr::cHook &DTRGetTreeHook( void ) = 0;
@@ -118,10 +118,10 @@ namespace dtr {
 			Tree.reset( P );
 			Queue.reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( cHooks &Hooks )
 		{
-			Tree.plug (Hook.GetTreeHook() );
-			Queue.plug( Hook.GetQueueHook() );
+			Tree.plug (Hooks.GetTreeHook() );
+			Queue.plug( Hooks.GetQueueHook() );
 		}
 		void plug( qASv &AS )
 		{
@@ -379,7 +379,7 @@ namespace dtr {
 # define E_DTREE_	E_DTREEt_( epeios::row__ )
 
 	template <typename tree, typename queue> class rH_
-	: public cHook
+	: public cHooks
 	{
 	protected:
 		tree Tree_;

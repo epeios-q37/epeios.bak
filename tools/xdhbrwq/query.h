@@ -77,7 +77,7 @@ namespace query {
 			Items.reset( P );
 			Pairs.reset( P );
 		}
-		void plug( qAS_ &AS  )
+		void plug( qASv &AS  )
 		{
 			Items.plug( AS );
 			Pairs.plug( AS );

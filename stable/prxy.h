@@ -41,7 +41,7 @@ namespace prxy {
 	class rProxy
 	{
 	private:
-		qRVM( flw::ioflow__, F_, Flow_ );
+		qRMV( flw::ioflow__, F_, Flow_ );
 	public:
 		void reset( bso::bool__ P = true )
 		{

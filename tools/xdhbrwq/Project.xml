@@ -22,7 +22,6 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
 				<Module>btr</Module>
-				<Module>dlbrry</Module>
 				<Module>idxbtq</Module>
 				<Module>idxbtr</Module>
 				<Module>idxque</Module>

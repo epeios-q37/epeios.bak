@@ -37,7 +37,7 @@ namespace idxbtq {
 	using idxbtr::tree_index_;
 	using idxque::queue_index_;
 
-	class cHook
+	class cHooks
 	{
 	protected:
 		virtual idxbtr::cHook &IDXBTQGetTreeHook( void ) = 0;
@@ -72,10 +72,10 @@ namespace idxbtq {
 			E_IBTREEt_( r )::reset( P );
 			E_IQUEUEt_( r )::reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( cHooks &Hooks )
 		{
-			E_IBTREEt_( r )::plug( Hook.GetTreeHook() );
-			E_IQUEUEt_( r )::plug( Hook.GetQueueHook() );
+			E_IBTREEt_( r )::plug( Hooks.GetTreeHook() );
+			E_IQUEUEt_( r )::plug( Hooks.GetQueueHook() );
 		}
 		void plug( qASv &AS )
 		{
@@ -262,11 +262,19 @@ namespace idxbtq {
 	E_AUTO1( tree_queue_index )
 
 	template <typename tree, typename queue> class rH_
-	: public cHook
+	: public cHooks
 	{
 	protected:
 		tree Tree_;
 		queue Queue_;
+		virtual idxbtr::cHook &IDXBTQGetTreeHook( void ) override
+		{
+			return Tree_;
+		}
+		virtual idxque::cHook &IDXBTQGetQueueHook( void ) override
+		{
+			return Queue_;
+		}
 	public:
 		void reset( bso::fBool P = true )
 		{

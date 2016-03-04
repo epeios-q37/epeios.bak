@@ -55,15 +55,15 @@
 namespace lstctn {
 	using lst::list_;
 
-	class cHook
+	class cHooks
 	{
 	protected:
-		virtual ctn::cHook &LSTCTNGetContainerHook( void ) = 0;
+		virtual ctn::cHooks &LSTCTNGetContainerHooks( void ) = 0;
 		virtual lst::cHook &LSTCTNGetListHook( void ) = 0;
 	public:
-		ctn::cHook &GetContainerHook( void )
+		ctn::cHooks &GetContainerHooks( void )
 		{
-			return LSTCTNGetContainerHook();
+			return LSTCTNGetContainerHooks();
 		}
 		lst::cHook &GetListHook( void )
 		{
@@ -96,10 +96,10 @@ namespace lstctn {
 			list_<row, row_t>::reset( P );
 			container::reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( cHooks &Hooks )
 		{
-			container::plug( Hook.GetContainerHook() );
-			list_<row, row_t>::plug( Hook.GetListHook(), container::Dynamics.Amount() );
+			container::plug( Hooks.GetContainerHooks() );
+			list_<row, row_t>::plug( Hooks.GetListHook(), container::Dynamics.Amount() );
 		}
 		void plug( qASv &AS )
 		{
@@ -158,12 +158,12 @@ namespace lstctn {
 	E_AUTO3( list_container );
 
 	template <typename container, typename list> class rH_
-	: public cHook
+	: public cHooks
 	{
 	protected:
 		container Container_;
 		list List_;
-		virtual ctn::cHook &LSTCTNGetContainerHook( void ) override
+		virtual ctn::cHooks &LSTCTNGetContainerHooks( void ) override
 		{
 			return Container_;
 		}

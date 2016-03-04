@@ -254,20 +254,20 @@ namespace dwtbsc {
 	typedef ctn::E_CONTAINERt_( directory_, drow__ ) directories_;
 	E_AUTO( directories );
 
-	# define M( lib, name )\
+# define M( lib, hook, name )\
 	protected:\
-		virtual lib::cHook &DWTBSCGet##name##Hook( void ) = 0;\
+		virtual lib::c##hook &DWTBSCGet##name##hook( void ) = 0;\
 	public:\
-		lib::cHook &Get##name##Hook( void ) { return DWTBSCGet##name##Hook(); }
+		lib::c##hook &Get##name##hook( void ) { return DWTBSCGet##name##hook(); }
 
 	class cHook
 	{
 	public:
-		M( bch, Goofs );
-		M( bch, Files);
-		M( ctn, Directories );
-		M( ctn, Names );
-		M( ctn, Oddities );
+		M( bch, Hook, Goofs );
+		M( bch, Hook, Files);
+		M( ctn, Hooks, Directories );
+		M( ctn, Hooks, Names );
+		M( ctn, Hooks, Oddities );
 	};
 
 # undef M
@@ -305,12 +305,12 @@ namespace dwtbsc {
 		}
 		void plug( cHook  &Hook )
 		{
-# define M( lib, name ) name.plug( Hook.Get##name##Hook() )
-			M( bch, Goofs );
-			M( bch, Files);
-			M( ctn, Directories );
-			M( ctn, Names );
-			M( ctn, Oddities );
+# define M( lib, hook, name ) name.plug( Hook.Get##name##hook() )
+			M( bch, Hook, Goofs );
+			M( bch, Hook, Files);
+			M( ctn, Hooks, Directories );
+			M( ctn, Hooks, Names );
+			M( ctn, Hooks, Oddities );
 # undef M
 		}
 		void plug( qASv &AS )
@@ -375,12 +375,12 @@ namespace dwtbsc {
 	: public cHook
 	{
 	protected:
-# define M( lib, name )	virtual lib::cHook &DWTBSCGet##name##Hook( void ) override { return name##_; }
-		M( bch, Goofs );
-		M( bch, Files);
-		M( ctn, Directories );
-		M( ctn, Names );
-		M( ctn, Oddities );
+# define M( lib, hook, name )	virtual lib::c##hook &DWTBSCGet##name##hook( void ) override { return name##_; }
+		M( bch, Hook, Goofs );
+		M( bch, Hook, Files);
+		M( ctn, Hooks, Directories );
+		M( ctn, Hooks, Names );
+		M( ctn, Hooks, Oddities );
 #undef M
 	private:
 		bch::rFH Goofs_;

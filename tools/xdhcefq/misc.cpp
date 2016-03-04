@@ -24,11 +24,11 @@
 
 #include "scltool.h"
 
-#include "ids.h"
+#include "idsq.h"
 
 using namespace misc;
 
-static ids::ids_store<sdr::row__> Ids_;	// Pour le gnrateur d'indetifiant d'lment, lorsque l'id n'est pas dfinit par l'utilisateur dans le layout.
+static idsq::iIdStore<sdr::row__> Ids_;	// Pour le gnrateur d'indetifiant d'lment, lorsque l'id n'est pas dfinit par l'utilisateur dans le layout.
 
 static stsfsm::automat RenderAutomat_, ClientAutomat_;
 

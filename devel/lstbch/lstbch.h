@@ -56,7 +56,7 @@ namespace lstbch {
 	using lst::list_;
 	using bch::bunch_;
 
-	class cHook
+	class cHooks
 	{
 	protected:
 		virtual bch::cHook &LSTBCHGetBunchHook( void ) = 0;
@@ -99,10 +99,10 @@ namespace lstbch {
 			list_<row, row_t>::reset( P );
 			bunch_<type, row>::reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( cHooks &Hooks )
 		{
-			bunch_<type, row>::plug( Hook.GetBunchHook() );
-			list_<row, row_t>::plug( Hook.GetListHook(), bunch_<type, row>::Amount );
+			bunch_<type, row>::plug( Hooks.GetBunchHook() );
+			list_<row, row_t>::plug( Hooks.GetListHook(), bunch_<type, row>::Amount );
 		}
 		void plug( qASv &AS )
 		{
@@ -202,11 +202,19 @@ namespace lstbch {
 #ifndef FLS__COMPILATION
 
 	template <typename bunch, typename list> class rH_
-	: public cHook
+	: public cHooks
 	{
 	protected:
 		bunch Bunch_;
 		list List_;
+		virtual bch::cHook &LSTBCHGetBunchHook( void ) override
+		{
+			return Bunch_;
+		}
+		virtual lst::cHook &LSTBCHGetListHook( void ) override
+		{
+			return List_;
+		}
 	public:
 		void reset( bso::fBool P = true )
 		{

@@ -29,14 +29,15 @@ mods += ags aem bch bitbch bso
 mods += cio cpe crptgr cslio ctn 
 mods += dir dte dtfbsc dtfptb epsmsc 
 mods += err fdr flf flsq flw 
-mods += flx ias ids iof iop 
+mods += flx ias idsq iof iop 
 mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio tht 
-mods += bomhdl cdgb64 fil fnm lcl 
-mods += rgstry stsfsm xml xpp dlbrry 
-mods += mtk strmrg 
+mods += ntvstr que sdr stkbse stkbch 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio tht bomhdl cdgb64 dlbrry 
+mods += fil fnm lcl plgn plgncore 
+mods += rgstry stsfsm xml xpp mtk 
+mods += strmrg 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += xdhujp xdhujr xdhujs 
@@ -342,12 +343,13 @@ all: $(binary)
 
 copt += -DVERSION=\""20151030"\"
 copt += -DCOPYRIGHT_YEARS=\""2014-2016"\"
+copt += -DIDENTIFIER=\""968ea869-90d0-4e03-a4d9-10f4f73d50aa"\"
 
 src += :"$(cef)"	# Had to be here (before the 'src += ...' below),
 					# otherwise 'MinGW' under 'MSYS' does not find some header files...
       
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -368,7 +370,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
+
 # No tabulation, otherwise it's passed to 'bash', until to be handled by 'make.
 ifeq ("$(os)","$(MacOS)")
 		cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/cefsimple"
@@ -386,9 +388,7 @@ ifeq ("$(os)","$(MacOS)")
 # 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xcfg"
 # 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
 endif
-				
-	mkdir -p $(dest)
-			
+					mkdir -p $(dest)
 	cp $(binary) $(dest)
 endif
 		

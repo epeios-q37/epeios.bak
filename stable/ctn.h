@@ -52,18 +52,23 @@
 # define qMCONTAINERil( Type )		qMCONTAINERi( Type, sdr::row__ )
 
 
-# define qCONTAINERv( Type, r )		multi_container_< Type, r >
-# define qCONTAINERi( Type, r )		multi_container< Type, r >
+# define qCONTAINERv( Type, r )		poly_container_< Type, r >
+# define qCONTAINERi( Type, r )		poly_container< Type, r >
 
 # define qCONTAINERvl( Type )		qCONTAINERv( Type, sdr::row__ )
 # define qCONTAINER( Type )			qCONTAINERi( Type, sdr::row__ )*
-
 
 # define qMITEM( type, row )	volatile_mono_item< type, row >
 # define qCMITEM( type, row )	const_mono_item< type, row >
 
 # define qMITEMl( type )		qMITEM( type, sdr::fRow )
 # define qCMITEMl( type )		qCMITEM( type, sdr::fRow )
+
+# define qITEMr( type, row )	volatile_poly_item< type, row >
+# define qCITEMf( type, row )	const_poly_item< type, row >
+
+# define qMITEMrl( type )		qMITEMr( type, sdr::fRow )
+# define qCMITEMfl( type )		qCMITEMf( type, sdr::fRow )
 
 /*************************/
 /****** Old version ******/
@@ -74,19 +79,19 @@ namespace ctn {
 	using sdr::size__;
 	using aem::amount_extent_manager_;
 
-	class cHook
+	class cHooks
 	{
 	protected:
 		virtual tys::cHook &CTNGetStaticsHook( void ) = 0;
-		virtual ias::cHook &CTNGetDynamicsHook( void ) = 0;
+		virtual ias::cHooks &CTNGetDynamicsHooks( void ) = 0;
 	public:
 		tys::cHook &GetStaticsHook( void )
 		{
 			return CTNGetStaticsHook();
 		}
-		ias::cHook &GetDynamicsHook( void )
+		ias::cHooks &GetDynamicsHooks( void )
 		{
-			return CTNGetDynamicsHook();
+			return CTNGetDynamicsHooks();
 		}
 	};
 
@@ -144,10 +149,10 @@ namespace ctn {
 			Statics.reset( P );
 			amount_extent_manager_<r>::reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( cHooks &Hooks )
 		{
-			Statics.plug( Hook.GetStaticsHook() );
-			Dynamics.plug( Hook.GetDynamicsHook() );
+			Statics.plug( Hooks.GetStaticsHook() );
+			Dynamics.plug( Hooks.GetDynamicsHooks() );
 			_Allocate( Dynamics.Amount(), aem::mFitted );
 		}
 		void plug( qASv &AS )
@@ -259,14 +264,14 @@ namespace ctn {
 # endif
 			Allocate( Size, *(st *)NULL, Mode );	// 'NULL' because this parameter is used only when size increased.
 		}
-		// Comme 'ecrire()', sauf pour la multimmoire, qui contient la partie dynamique.
+		// Comme 'ecrire()', sauf pour la polymmoire, qui contient la partie dynamique.
 	/*	void EcrireToutDansFlotSaufPartiesDynamiques( flo_sortie_ &Flot ) const
 		{
 			FLOEcrire( *AStorage.S_, Flot );
 			Dynamique.ecrire( Flot );
 			Statique.ecrire( Flot );
 		}
-		// Comme 'lire()', sauf pour la multimmoire, qui contient la partie dynamique.
+		// Comme 'lire()', sauf pour la polymmoire, qui contient la partie dynamique.
 		void LireToutDeFlotSaufPartiesDynamiques( flo_entree_ &Flot )
 		{
 			FLOLire( Flot, *AStorage.S_ );
@@ -355,7 +360,7 @@ namespace ctn {
 	};
 
 	template <typename statics, typename dynamics> class rH_
-	: public cHook
+	: public cHooks
 	{
 	protected:
 		statics Statics_;
@@ -364,7 +369,7 @@ namespace ctn {
 		{
 			return Statics_;
 		}
-		virtual ias::cHook &CTNGetDynamicsHook( void ) override
+		virtual ias::cHooks &CTNGetDynamicsHooks( void ) override
 		{
 			return Dynamics_;
 		}
@@ -654,40 +659,40 @@ public:
 	};
 
 
-	template <class st> struct item_mono_statique__
+	template <class st> struct mono_static__
 	: public st
 	{
-		sdr::size__ Extent;
+//		sdr::size__ Extent;
 	};
 
 	/*c To reach an object from a 'MCONTAINER_( t )'. Use 'MITEM( t )'
 	rather then directly this class. */
 	template <class t, typename r> class volatile_mono_item
-	: public item_base_volatile__< item_mono_statique__<typename t::s>, r >
+	: public item_base_volatile__< mono_static__<typename t::s>, r >
 	{
 	private:
 		t Objet_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			item_base_volatile__< item_mono_statique__<typename_ t::s>, r >::reset( P );
+			item_base_volatile__< mono_static__<typename_ t::s>, r >::reset( P );
 				
 			Objet_.reset( false );
 
-			Objet_.plug( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::Pilote_ );
+			Objet_.plug( item_base_volatile__< mono_static__< typename_ t::s >, r >::Pilote_ );
 		}
 		volatile_mono_item( void )
-		: Objet_( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::ctn_S_ )
+		: Objet_( item_base_volatile__< mono_static__< typename_ t::s >, r >::ctn_S_ )
 		{
 			reset( false );
 		}
 		// Remplace la fonction d'initialisation. 
-		volatile_mono_item( basic_container_< item_mono_statique__< typename t::s >, r > &Conteneur )
-		: Objet_( item_base_volatile__< item_mono_statique__< typename t::s >, r >::ctn_S_ )
+		volatile_mono_item( basic_container_< mono_static__< typename t::s >, r > &Conteneur )
+		: Objet_( item_base_volatile__< mono_static__< typename t::s >, r >::ctn_S_ )
 		{
 			reset( false );
 
-			item_base_volatile__< item_mono_statique__<typename_ t::s >, r >::Init( Conteneur );
+			item_base_volatile__< mono_static__<typename_ t::s >, r >::Init( Conteneur );
 		}
 		virtual ~volatile_mono_item( void )
 		{
@@ -706,14 +711,14 @@ public:
 		//f Return the object at current position.
 		t &operator()( void )
 		{
-			if ( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::IsFlushed() )
+			if ( item_base_volatile__< mono_static__< typename_ t::s >, r >::IsFlushed() )
 				qRFwk();
 
 			return Objet_;
 		}
 		const t &operator()( void ) const
 		{
-			if ( item_base_volatile__< item_mono_statique__< typename_ t::s >, r >::IsFlushed() )
+			if ( item_base_volatile__< mono_static__< typename_ t::s >, r >::IsFlushed() )
 				qRFwk();
 
 			return Objet_;
@@ -725,7 +730,7 @@ public:
 	/*c To reach an object of type from a 'MCONTAINER_( t )', but only for reading.
 	Use 'CMITEM( t )' rather then directly this class. */
 	template <class t, typename r> class const_mono_item
-	: public item_base_const__< item_mono_statique__< typename t::s >, r >
+	: public item_base_const__< mono_static__< typename t::s >, r >
 	{
 	private:
 		t Objet_;
@@ -733,16 +738,16 @@ public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				item_base_const__< item_mono_statique__< typename_ t::s >, r >::Flush();
+				item_base_const__< mono_static__< typename_ t::s >, r >::Flush();
 			}
 
-			item_base_const__< item_mono_statique__<typename_ t::s >, r >::reset( P );
+			item_base_const__< mono_static__<typename_ t::s >, r >::reset( P );
 			Objet_.reset( false );
 
-			Objet_.plug( item_base_const__< item_mono_statique__< typename_ t::s >, r >::Pilote_ );
+			Objet_.plug( item_base_const__< mono_static__< typename_ t::s >, r >::Pilote_ );
 		}
 		const_mono_item( void )
-		: Objet_( item_base_const__< item_mono_statique__< typename_ t::s >, r >::ctn_S_ )
+		: Objet_( item_base_const__< mono_static__< typename_ t::s >, r >::ctn_S_ )
 		{
 			reset( false );
 		}
@@ -763,7 +768,7 @@ public:
 		t &operator()( void )
 		{
 # ifdef CTN_DBG
-			if ( item_base_const__< item_mono_statique__< typename_ t::s >, r >::IsEmpty() )
+			if ( item_base_const__< mono_static__< typename_ t::s >, r >::IsEmpty() )
 				qRFwk();
 # endif
 			return Objet_;
@@ -772,7 +777,7 @@ public:
 		const t &operator()( void ) const
 		{
 # ifdef CTN_DBG
-			if ( item_base_const__< item_mono_statique__< typename_ t::s >, r >::IsEmpty() )
+			if ( item_base_const__< mono_static__< typename_ t::s >, r >::IsEmpty() )
 				qRFwk();
 # endif
 			return Objet_;
@@ -782,7 +787,7 @@ public:
 		{
 			Container.FlushTest();
 
-			item_base_const__< item_mono_statique__< typename_ t::s >, r >::Init( Container );
+			item_base_const__< mono_static__< typename_ t::s >, r >::Init( Container );
 		}
 	};
 
@@ -804,7 +809,7 @@ public:
 	/*c Container for object of type 'Type', which need only one memory.
 	Use 'MCONTAINER_( Type )' rather then directly this class. */
 	template <class t, typename r> class mono_container_
-	: public basic_container_< item_mono_statique__<typename t::s>, r >
+	: public basic_container_< mono_static__<typename t::s>, r >
 	{
 	private:
 		E_MITEMt( t, r ) Ponctuel_;
@@ -814,17 +819,17 @@ public:
 		}
 	public:
 		struct s
-		: public basic_container_< item_mono_statique__<typename t::s>, r >::s
+		: public basic_container_< mono_static__<typename t::s>, r >::s
 		{};
 		mono_container_( s &S )
-		: basic_container_< item_mono_statique__<typename_ t::s>, r >( S )
+		: basic_container_< mono_static__<typename_ t::s>, r >( S )
 		{
 			Ponctuel_.Init( *this );
 		}
 		void reset( bool P = true )
 		{
 			Ponctuel_.reset( P );
-			basic_container_< item_mono_statique__< typename_ t::s >, r >::reset( P );
+			basic_container_< mono_static__< typename_ t::s >, r >::reset( P );
 			Ponctuel_.Init( *this );
 		}
 		/*f Return the object at position 'Position'. BE CAREFUL: after calling this fonction
@@ -855,7 +860,7 @@ public:
 		}
 		void FlushTest( void ) const
 		{
-			basic_container_< item_mono_statique__<typename t::s>, r >::FlushTest();
+			basic_container_< mono_static__<typename t::s>, r >::FlushTest();
 		}
 		/*f Call this function after calling one of the two previous function
 		and before calling another function. */
@@ -915,7 +920,7 @@ public:
 		{
 			E_MITEMt( t, r ) E;
 
-			basic_container_< item_mono_statique__< typename_ t::s >, r >::Allocate( Size, E.ctn_S_, Mode );	// pas de E.xxx::ctn_S_ car G++ V2.90.29 n'aime pas
+			basic_container_< mono_static__< typename_ t::s >, r >::Allocate( Size, E.ctn_S_, Mode );	// pas de E.xxx::ctn_S_ car G++ V2.90.29 n'aime pas
 		}
 		void InsertAt(
 			const t &Object,
@@ -930,7 +935,7 @@ public:
 			else {
 				E_CMITEMt( t, r ) E;
 
-				basic_container_< item_mono_statique__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
+				basic_container_< mono_static__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
 
 				operator()( Row ) = Object;
 
@@ -941,7 +946,7 @@ public:
 		{
 			Ponctuel_.Erase();
 			
-			basic_container_< item_mono_statique__< typename_ t::s >, r >::operator =( C );
+			basic_container_< mono_static__< typename_ t::s >, r >::operator =( C );
 
 			return *this;
 		}
@@ -987,7 +992,7 @@ public:
 		{
 			FlushTest();
 
-			basic_container_< item_mono_statique__< typename_ t::s >, r >::Remove( Position, Amount, Mode );
+			basic_container_< mono_static__< typename_ t::s >, r >::Remove( Position, Amount, Mode );
 		}
 		r Index( void ) const
 		{
@@ -1009,17 +1014,17 @@ public:
 	#define E_MCONTAINER( Type )	E_MCONTAINERt( Type, sdr::row__ )
 #endif
 
-	template <class st> struct item_multi_statique__
+	template <class st> struct poly_static__
 	: public st
 	{
 		ags::aggregated_storage_::s AStorage;
-		sdr::size__ Extent;
+//		sdr::size__ Extent;
 	};
 
 	/*c To reach an object from a 'CONTAINER_( t )'. Use 'ITEM( t )'
 	rather then directly this class. */
-	template <class t, typename r> class volatile_multi_item
-	: public item_base_volatile__< item_multi_statique__<typename t::s>, r >
+	template <class t, typename r> class volatile_poly_item
+	: public item_base_volatile__< poly_static__<typename t::s>, r >
 	{
 	private:
 		t Objet_;
@@ -1028,46 +1033,46 @@ public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::Flush();
+				item_base_volatile__< poly_static__<typename_ t::s>, r >::Flush();
 			}
 
-			item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::reset( P );
+			item_base_volatile__< poly_static__<typename_ t::s>, r >::reset( P );
 
 			Objet_.reset( false );
 			AStorage.reset( P );
 
-			AStorage.plug( item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::Pilote_ );
+			AStorage.plug( item_base_volatile__< poly_static__< typename_ t::s >, r >::Pilote_ );
 			Objet_.plug( AStorage );
 		}
-		volatile_multi_item( void )
-		: Objet_( item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::ctn_S_ ),
-		  AStorage( item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::ctn_S_.AStorage )
+		volatile_poly_item( void )
+		: Objet_( item_base_volatile__< poly_static__< typename_ t::s >, r >::ctn_S_ ),
+		  AStorage( item_base_volatile__< poly_static__< typename_ t::s >, r >::ctn_S_.AStorage )
 		{
 			reset( false );
 		}
 		// Remplace la fonction d'initialisation.
-		volatile_multi_item( basic_container_< item_multi_statique__< typename t::s >, r > &Conteneur )
-		: Objet_( item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::ctn_S_ ),
-		  AStorage( item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::ctn_S_.AStorage )
+		volatile_poly_item( basic_container_< poly_static__< typename t::s >, r > &Conteneur )
+		: Objet_( item_base_volatile__< poly_static__< typename_ t::s >, r >::ctn_S_ ),
+		  AStorage( item_base_volatile__< poly_static__< typename_ t::s >, r >::ctn_S_.AStorage )
 		{
 			reset( false );
 
 			AStorage.Init();
-			item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::Init( Conteneur );
+			item_base_volatile__< poly_static__< typename_ t::s >, r >::Init( Conteneur );
 		}
-		~volatile_multi_item( void )
+		~volatile_poly_item( void )
 		{
 			reset( true );
 		}
 		//f Initialize with container 'Container', in mode 'Mode'.
-		void Init( basic_container_< item_multi_statique__< typename t::s >, r > &Container )
+		void Init( basic_container_< poly_static__< typename t::s >, r > &Container )
 		{
 			Container.FlushTest();
 
 			AStorage.Init();
-			item_base_volatile__< item_multi_statique__< typename_ t::s >, r >::Init( Container );
+			item_base_volatile__< poly_static__< typename_ t::s >, r >::Init( Container );
 		}
-		volatile_multi_item &operator =( const volatile_multi_item &O )
+		volatile_poly_item &operator =( const volatile_poly_item &O )
 		{
 			qRFwk();
 		}
@@ -1079,14 +1084,14 @@ public:
 		}
 		t &operator()( void )
 		{
-			if ( item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::IsFlushed() )
+			if ( item_base_volatile__< poly_static__<typename_ t::s>, r >::IsFlushed() )
 				qRFwk();
 
 			return Objet_;
 		}
 		const t &operator()( void ) const
 		{
-			if ( item_base_volatile__< item_multi_statique__<typename_ t::s>, r >::IsFlushed() )
+			if ( item_base_volatile__< poly_static__<typename_ t::s>, r >::IsFlushed() )
 				qRFwk();
 
 			return Objet_;
@@ -1096,8 +1101,8 @@ public:
 
 	/*c To reach an item from a 'CONTAINER_( t )', but only in read-only mode.
 	Use 'CITEM( t )' rather then directly this class. */
-	template <class t, typename r> class const_multi_item
-	: public item_base_const__< item_multi_statique__<typename t::s>, r >
+	template <class t, typename r> class const_poly_item
+	: public item_base_const__< poly_static__<typename t::s>, r >
 	{
 	private:
 		t Objet_;
@@ -1106,36 +1111,36 @@ public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
-				item_base_const__< item_multi_statique__<typename_ t::s>, r >::Flush();
+				item_base_const__< poly_static__<typename_ t::s>, r >::Flush();
 			}
 
-			item_base_const__< item_multi_statique__<typename_ t::s>, r >::reset(  P) ;
+			item_base_const__< poly_static__<typename_ t::s>, r >::reset(  P) ;
 
 			Objet_.reset( false );
 			AStorage.reset( P );
 
-			AStorage.plug( item_base_const__< item_multi_statique__< typename_ t::s >, r >::Pilote_ );
+			AStorage.plug( item_base_const__< poly_static__< typename_ t::s >, r >::Pilote_ );
 			Objet_.plug( AStorage );
 		}
-		const_multi_item( void )
-		: Objet_( item_base_const__< item_multi_statique__< typename_ t::s >, r >::ctn_S_ ),
-		  AStorage( item_base_const__< item_multi_statique__< typename_ t::s >, r >::ctn_S_.AStorage )
+		const_poly_item( void )
+		: Objet_( item_base_const__< poly_static__< typename_ t::s >, r >::ctn_S_ ),
+		  AStorage( item_base_const__< poly_static__< typename_ t::s >, r >::ctn_S_.AStorage )
 		{
 			reset( false );
 		}
-		virtual ~const_multi_item( void )
+		virtual ~const_poly_item( void )
 		{
 			reset( true );
 		}
 		//f Initializing with container 'Container'.
-		void Init( const basic_container_< item_multi_statique__<typename t::s>, r > &Container )
+		void Init( const basic_container_< poly_static__<typename t::s>, r > &Container )
 		{
 			Container.FlushTest();
 
 //			AStorage.Init();
-			item_base_const__< item_multi_statique__< typename_ t::s >, r >::Init( Container );
+			item_base_const__< poly_static__< typename_ t::s >, r >::Init( Container );
 		}
-		const_multi_item &operator =( const const_multi_item &O )
+		const_poly_item &operator =( const const_poly_item &O )
 		{
 			qRFwk();
 		}
@@ -1148,7 +1153,7 @@ public:
 		const t &operator()( void ) const
 		{
 #ifdef CTN_DBG
-			if ( item_base_const__< item_multi_statique__<typename_ t::s>, r >::IsEmpty() )
+			if ( item_base_const__< poly_static__<typename_ t::s>, r >::IsEmpty() )
 				qRFwk();
 #endif
 			return Objet_;
@@ -1156,12 +1161,12 @@ public:
 	};
 
 
-	#define E_ITEMt( Type, r )		volatile_multi_item< Type, r >
-	#define E_CITEMt( Type,r  )		const_multi_item< Type, r  >
+	#define E_ITEMt( Type, r )		volatile_poly_item< Type, r >
+	#define E_CITEMt( Type,r  )		const_poly_item< Type, r  >
 
 #if 0 // Was a workaround for some compiler.
-	#define E_ITEM( Type )			volatile_multi_item< Type, sdr::row__ >
-	#define E_CITEM( Type )			const_multi_item< Type, sdr::row__  >
+	#define E_ITEM( Type )			volatile_poly_item< Type, sdr::row__ >
+	#define E_CITEM( Type )			const_poly_item< Type, sdr::row__  >
 #else
 	#define E_ITEM( Type )			E_ITEMt( Type, sdr::row__ )
 	#define E_CITEM( Type )			E_CITEMt( Type, sdr::row__ )
@@ -1169,24 +1174,24 @@ public:
 
 	/*c Container for objects 't', with static part 'st', which need more then one memory.
 	Use 'CONTAINER_( t )' rather then directly this class.*/
-	template <class t, typename r> class multi_container_
-	: public basic_container_< item_multi_statique__< typename t::s >, r >
+	template <class t, typename r> class poly_container_
+	: public basic_container_< poly_static__< typename t::s >, r >
 	{
 	private:
 		E_ITEMt( t, r ) Ponctuel_;
 	public:
 		struct s
-		: public basic_container_< item_multi_statique__< typename t::s >, r >::s
+		: public basic_container_< poly_static__< typename t::s >, r >::s
 		{};
-		multi_container_( s &S )
-		: basic_container_< item_multi_statique__< typename_ t::s >, r >( S )
+		poly_container_( s &S )
+		: basic_container_< poly_static__< typename_ t::s >, r >( S )
 		{
 			Ponctuel_.Init( *this );
 		}
 		void reset( bool P = true )
 		{
 			Ponctuel_.reset( P );
-			basic_container_< item_multi_statique__< typename_ t::s >, r >::reset( P );
+			basic_container_< poly_static__< typename_ t::s >, r >::reset( P );
 			Ponctuel_.Init( *this );
 		}
 		/*f Return the object at position 'Position'. BE CAREFUL: after calling this fonction
@@ -1274,7 +1279,7 @@ public:
 		{
 			E_ITEMt( t, r ) E;
 
-			basic_container_< item_multi_statique__< typename_ t::s >, r >::Allocate( Capacity, E.ctn_S_, Mode );// pas de E.xxx::ctn_S_ car G++ V2.90.29 n'aime pas
+			basic_container_< poly_static__< typename_ t::s >, r >::Allocate( Capacity, E.ctn_S_, Mode );// pas de E.xxx::ctn_S_ car G++ V2.90.29 n'aime pas
 		}
 		void InsertAt(
 			const t &Object,
@@ -1289,18 +1294,18 @@ public:
 
 				E_CITEMt( t, r ) E;
 
-				basic_container_< item_multi_statique__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
+				basic_container_< poly_static__< typename_ t::s >, r >::Insert( E.ctn_S_, Row, Mode );
 
 				operator()( Row ) = Object;
 
 				Flush();
 			}
 		}
-		multi_container_ &operator =( const multi_container_ &C )
+		poly_container_ &operator =( const poly_container_ &C )
 		{
 			Ponctuel_.Erase();
 			
-			basic_container_< item_multi_statique__< typename_ t::s >, r >::operator =( C );
+			basic_container_< poly_static__< typename_ t::s >, r >::operator =( C );
 
 			return *this;
 		}
@@ -1347,7 +1352,7 @@ public:
 			if ( !IsFlushed() )
 				qRFwk();
 
-			basic_container_< item_multi_statique__< typename_ t::s >, r >::Remove( Position, Amount, Mode );
+			basic_container_< poly_static__< typename_ t::s >, r >::Remove( Position, Amount, Mode );
 		}
 		r Index( void ) const
 		{
@@ -1355,15 +1360,15 @@ public:
 		}
 	};
 
-	E_AUTO2( multi_container )
+	E_AUTO2( poly_container )
 
 	//s Container of object of type 'Type', which need more then one memory.
-	#define E_CONTAINERt_( Type, r ) multi_container_< Type, r >
-	#define E_CONTAINERt( Type, r ) multi_container< Type, r >
+	#define E_CONTAINERt_( Type, r ) poly_container_< Type, r >
+	#define E_CONTAINERt( Type, r ) poly_container< Type, r >
 
 # if 0	// Was a workaround for some compilers.
-	#define E_CONTAINER_( Type )	multi_container_< Type, sdr::row__ >
-	#define E_CONTAINER( Type )		multi_container< Type, sdr::row__ >
+	#define E_CONTAINER_( Type )	poly_container_< Type, sdr::row__ >
+	#define E_CONTAINER( Type )		poly_container< Type, sdr::row__ >
 # else
 	#define E_CONTAINER_( Type )	E_CONTAINERt_( Type, sdr::row__ )
 	#define E_CONTAINER( Type )		E_CONTAINERt( Type, sdr::row__ )

@@ -184,7 +184,7 @@ namespace ias {
 
 #define IAS_BUFFER_SIZE	1024
 
-	class cHook
+	class cHooks
 	{
 	protected:
 		virtual bch::cHook &IASGetDescriptorsHook( void ) = 0;
@@ -307,10 +307,10 @@ namespace ias {
 			Descriptors.reset( P );
 			AStorage.reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( cHooks &Hooks )
 		{
-			Descriptors.plug( Hook.GetDescriptorsHook() );
-			AStorage.plug( Hook.GetStorageHook() );
+			Descriptors.plug( Hooks.GetDescriptorsHook() );
+			AStorage.plug( Hooks.GetStorageHook() );
 		}
 		void plug( qASv &AS )
 		{
@@ -479,7 +479,7 @@ namespace ias {
 #ifndef FLS__COMPILATION
 
 	template <typename descriptors, typename storage> class rH_
-	: public cHook
+	: public cHooks
 	{
 	protected:
 		descriptors Descriptors_;

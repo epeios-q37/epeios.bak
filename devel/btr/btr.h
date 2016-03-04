@@ -376,7 +376,6 @@ namespace btr {
 
 	using bch::cHook;
 
-
 	//c Binary tree.
 	template <typename r> class binary_tree_
 	{
