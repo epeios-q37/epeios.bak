@@ -29,25 +29,25 @@
 # include "sktbsc.h"
 
 namespace sktxmp {
-	class vMyObject
+	class dMyObject
 	{
 	private:
 	public:
 		struct s {
 		};
-		vMyObject( s &S )
+		dMyObject( s &S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 		}
-		vMyObject &operator =( const vMyObject &M )
+		dMyObject &operator =( const dMyObject &M )
 		{
 			return *this;
 		}
-		bso::fBool Init( void )
+		bso::sBool Init( void )
 		{
 			return true;
 		}

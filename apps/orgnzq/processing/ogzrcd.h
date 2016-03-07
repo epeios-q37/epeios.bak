@@ -32,14 +32,14 @@
 # include "ogzfld.h"
 
 namespace ogzrcd {
-	using ogzbsc::fFRow;
-	using ogzbsc::fRRow;
+	using ogzbsc::sFRow;
+	using ogzbsc::sRRow;
 
-	typedef ogzfld::vFieldList vRecord;
+	typedef ogzfld::dFieldList dRecord;
 	qW( Record );
 
 // Template parameters.
-# define OGZRCD_TP	ogzrcd::vRecord, ogzrcd::iRecord, ogzrcd::fRRow, ogzrcd::fFRow, sdr::fRow
+# define OGZRCD_TP	ogzrcd::dRecord, ogzrcd::wRecord, ogzrcd::sRRow, ogzrcd::sFRow, sdr::sRow
 
 	typedef ogzcbs::cDynamic<OGZRCD_TP> cRecord;
 
@@ -53,7 +53,7 @@ namespace ogzrcd {
 	private:
 		callback Callback_;
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			items::reset( P );
 			Callback_.reset( P );
@@ -67,15 +67,15 @@ namespace ogzrcd {
 	};
 
 	class rRecordBuffer
-	: public iRecord
+	: public wRecord
 	{
 	private:
-		fRRow Id_;	// Row of the source record. If qNIL, it's a new record.
+		sRRow Id_;	// Row of the source record. If qNIL, it's a new record.
 	public:
 		rCommon_<ogzdta::rRegularDataCallback, ogzdta::fData> Data;
 		rCommon_<ogzclm::rRegularColumnCallback, ogzclm::fColumns> Columns;
 		rCommon_<ogzfld::rRegularFieldCallback, ogzfld::fFields> Fields;
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Id_ = qNIL;
 			Data.reset( P );
@@ -90,7 +90,7 @@ namespace ogzrcd {
 			Columns.Init();
 			Fields.Init();
 		}
-		qRODISCLOSEr( fRRow, Id );
+		qRODISCLOSEr( sRRow, Id );
 	};
 }
 

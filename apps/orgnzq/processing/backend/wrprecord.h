@@ -30,17 +30,17 @@
 # define WRPRECORD_RECORD_NAME		"Record"
 
 namespace wrprecord {
-	typedef tol::vObject<ogzrcd::rRecordBuffer> vRecord_;
+	typedef tol::dObject<ogzrcd::rRecordBuffer> dRecord_;
 
-	class vRecord
-	: public vRecord_
+	class dRecord
+	: public dRecord_
 	{
 	public:
 		struct s
-		: public vRecord_::s
+		: public dRecord_::s
 		{};
-		vRecord( s &S )
-		: vRecord_( S )
+		dRecord( s &S )
+		: dRecord_( S )
 		{}
 		void HANDLE(
 			fblbkd::backend___ &Backend,
@@ -55,7 +55,7 @@ namespace wrprecord {
 		static const char *PREFIX;
 		static const char *NAME;
 //		static void RAW_MESSAGES( lcl::strings_ &Messages );
-		vRecord_ *OBJECT( void )
+		dRecord_ *OBJECT( void )
 		{
 			return this;
 		}

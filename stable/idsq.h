@@ -36,7 +36,7 @@ namespace idsq {
 
 	using stkbch::cHook;
 
-	template <typename id> class vIdStore
+	template <typename id> class dIdStore
 	{
 	private:
 		bso::bool__ IsAvailable_( id ID ) const
@@ -46,13 +46,13 @@ namespace idsq {
 	public:
 		struct s
 		{
-			typename stkbch::qBSTACKvl( id )::s Released;
+			typename stkbch::qBSTACKdl( id )::s Released;
 			//r First unused ID.
 			id FirstUnused;
 		} &S_;
 		//o Released IDs
-		stkbch::qBSTACKvl( id ) Released;
-		vIdStore( s &S )
+		stkbch::qBSTACKdl( id ) Released;
+		dIdStore( s &S )
 		: S_( S ),
 		  Released( S.Released )
 		{}
@@ -68,11 +68,11 @@ namespace idsq {
 			S_.FirstUnused = FirstUnused,
 			Released.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Released.plug( AS );
 		}
-		vIdStore &operator =( const vIdStore &IS )
+		dIdStore &operator =( const dIdStore &IS )
 		{
 			Released = IS.Released;
 			S_.FirstUnused = IS.S_.FirstUnused;
@@ -170,8 +170,8 @@ namespace idsq {
 	using stkbch::rFH;
 }
 
-# define qIDSv( t )	vIdStore<t>
-# define qIDSi( t )	iIdStore<t>
+# define qIDSd( t )	dIdStore<t>
+# define qIDSw( t )	wIdStore<t>
 
 
 #endif

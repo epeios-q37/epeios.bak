@@ -37,7 +37,7 @@ void que::links_::Initialize(
 
 void que::Dump_(
 		const E_QUEUE_ &Queue,
-		qQSTACKv( sdr::row__ ) &Stack,
+		qQSTACKd( sdr::row__ ) &Stack,
 		sdr::row__ Begin,
 		direction Direction )
 {

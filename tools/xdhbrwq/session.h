@@ -469,7 +469,7 @@ namespace session {
 			Index.reset( P );
 			Timers.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Sessions.plug( AS );
 			Order.plug( AS );

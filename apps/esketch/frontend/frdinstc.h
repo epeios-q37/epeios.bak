@@ -31,7 +31,7 @@ namespace frdinstc {
 	class _user___
 	{
 	private:
-		qRVM( frdfrntnd::rFrontend, F_,  Frontend_ );
+		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
 		esketch::rStatics S_( void )
 		{
 			return F_().Statics;

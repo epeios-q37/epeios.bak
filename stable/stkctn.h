@@ -32,25 +32,25 @@
 # include "ctn.h"
 
 namespace stkctn {
-	using stkbse::vStack;
+	using stkbse::dStack;
 
-	template <typename structure, typename item, typename row> class vContainerStack
-	: public vStack< structure, item, row >
+	template <typename structure, typename item, typename row> class dContainerStack
+	: public dStack< structure, item, row >
 	{
 	public:
 		struct s
-		: public vStack< structure, item, row >::s
+		: public dStack< structure, item, row >::s
 		{};
-		vContainerStack( s &S )
-		: vStack< structure, item, row >( S )
+		dContainerStack( s &S )
+		: dStack< structure, item, row >( S )
 		{}
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
-			vStack< structure, item, row >::reset( P );
+			dStack< structure, item, row >::reset( P );
 		}
 		void Init( void )
 		{
-			vStack< structure, item, row >::Init();
+			dStack< structure, item, row >::Init();
 		}
 	};
 
@@ -63,17 +63,17 @@ namespace stkctn {
 
 	qROW( Row );
 
-# define qCSTACKv( item, row )	vContainerStack< ctn::E_CONTAINERt_( item, row ), item, row >
-# define qCSTACKi( item, row )	iContainerStack< ctn::E_CONTAINERt_( item, row ), item, row >
+# define qCSTACKd( item, row )	dContainerStack< ctn::E_CONTAINERt_( item, row ), item, row >
+# define qCSTACKw( item, row )	wContainerStack< ctn::E_CONTAINERt_( item, row ), item, row >
 
-# define qCSTACKvl( item )		qCSTACKv( item, stkctn::fRow )
-# define qCSTACKil( item )		qCSTACKi( item, stkctn::fRow )
+# define qCSTACKdl( item )		qCSTACKd( item, stkctn::sRow )
+# define qCSTACKwl( item )		qCSTACKw( item, stkctn::sRow )
 
-# define qMCSTACKv( item, row )	vContainerStack< ctn::E_MCONTAINERt_( item, row ), item, row >
-# define qMCSTACKi( item, row )	iContainerStack< ctn::E_MCONTAINERt_( item, row ), item, row >
+# define qMCSTACKd( item, row )	dContainerStack< ctn::E_MCONTAINERt_( item, row ), item, row >
+# define qMCSTACKw( item, row )	wContainerStack< ctn::E_MCONTAINERt_( item, row ), item, row >
 
-# define qMCSTACKvl( item )		qMCSTACKv( item, stkctn::fRow )
-# define qMCSTACKil( item )		qMCSTACKi( item, stkctn::fRow )
+# define qMCSTACKdl( item )		qMCSTACKd( item, stkctn::sRow )
+# define qMCSTACKwl( item )		qMCSTACKw( item, stkctn::sRow )
 
 
 }

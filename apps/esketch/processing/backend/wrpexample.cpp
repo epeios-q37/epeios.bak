@@ -32,18 +32,18 @@ using namespace wrpexample;
 using namespace sktxmp;
 using common::rStuff;
 
-const char *wrpexample::vMyObject::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
-const char *wrpexample::vMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
+const char *wrpexample::dMyObject::PREFIX = WRPEXAMPLE_MYOBJECT_PREFIX;
+const char *wrpexample::dMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
 
 #define ARGS (\
-	vMyObject_ &MyObject,\
+	dMyObject_ &MyObject,\
 	fblbkd::backend___ &Backend,\
 	fblbkd::request__ &Request,\
 	rStuff &Stuff )\
 
 typedef void (* f_manager ) ARGS;
 
-void wrpexample::vMyObject::HANDLE(
+void wrpexample::dMyObject::HANDLE(
 	fblbkd::backend___ &Backend,
 	fblbkd::untyped_module &Module,
 	fblbkd::index__ Index,
@@ -83,7 +83,7 @@ qRE
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpexample::vMyObject::NOTIFY(
+void wrpexample::dMyObject::NOTIFY(
 	fblbkd::untyped_module &Module,
 	common::rStuff &Data )
 {

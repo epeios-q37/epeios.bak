@@ -42,14 +42,14 @@ using common::rStuff;
 
 namespace {
 	void GetTypes_(
-		const ogztyp::vTypes &Types,
+		const ogztyp::dTypes &Types,
 		fbltyp::strings_ &Labels,
 		fbltyp::id8s_ &Ids )
 	{
-		ogztyp::fTRow Row = Types.First();
+		ogztyp::sTRow Row = Types.First();
 
 		while ( Row != qNIL ) {
-			Labels.Add( str::iString( Types( Row ).GetLabel() ) );
+			Labels.Add( str::wString( Types( Row ).GetLabel() ) );
 			Ids.Add( *Row );
 
 			Row = Types.Next( Row );
@@ -64,7 +64,7 @@ qRH
 	common::rw_rack___ Rack;
 	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
-	ogzusr::fURow UserRow = qNIL;
+	ogzusr::sURow UserRow = qNIL;
 qRB
 	STUFF;
 

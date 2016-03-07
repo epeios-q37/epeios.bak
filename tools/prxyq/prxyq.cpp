@@ -301,7 +301,7 @@ public:
 		{
 			Id.plug( SD );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Id.plug( AS );
 		}

@@ -54,9 +54,9 @@ namespace ogzclm {
 	class fColumn
 	{
 	public:
-		ogztyp::fTRow Type;
+		ogztyp::sTRow Type;
 		eNumber Number;
-		void reset( bso::fBool = true )
+		void reset( bso::sBool = true )
 		{
 			Type = qNIL;
 			Number = n_Undefined;
@@ -73,7 +73,7 @@ namespace ogzclm {
 	qROW( CRow );
 
 	// template parameters.
-# define OGZCLM_TP	ogzclm::fColumn, ogzclm::fCRow
+# define OGZCLM_TP	ogzclm::fColumn, ogzclm::sCRow
 
 	typedef ogzcbs::cStatic<OGZCLM_TP> cColumn;
 

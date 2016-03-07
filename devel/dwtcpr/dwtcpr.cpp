@@ -115,7 +115,7 @@ public:
 	}
 };
 
-typedef stkbch::qBSTACKvl( fill_link__ ) vFillLinks;
+typedef stkbch::qBSTACKdl( fill_link__ ) dFillLinks;
 qW( FillLinks );
 
 
@@ -128,7 +128,7 @@ static void Complete_(
 	drows_ &RRows,
 	directories_ &RDirectories,
 	names_ &RNames,
-	vFillLinks &Links )
+	dFillLinks &Links )
 {
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
@@ -182,7 +182,7 @@ static bso::bool__ Compare_(
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
-	vFillLinks &Links )
+	dFillLinks &Links )
 {
 	bso::bool__ Modified = false;
 qRH
@@ -269,13 +269,13 @@ qRE
 
 static inline bso::bool__ Compare_(
 	dwtftr::drow__ SRow,
-	const dwtftr::vKernel &Source,
+	const dwtftr::dKernel &Source,
 	dwtftr::drow__ TRow,
-	const dwtftr::vKernel &Target,
+	const dwtftr::dKernel &Target,
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
-	vFillLinks &Links )
+	dFillLinks &Links )
 {
 
 	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) SDir, TDir;
@@ -419,9 +419,9 @@ qRE
 
 static bso::bool__ inline Compare_(
 	dwtftr::drow__ SRow,
-	const dwtftr::vKernel &Source,
+	const dwtftr::dKernel &Source,
 	dwtftr::drow__ TRow,
-	const dwtftr::vKernel &Target,
+	const dwtftr::dKernel &Target,
 	frows_ &Rows,
 	files_ &Files,
 	names_ &Names )
@@ -457,7 +457,7 @@ static void Put_(
 	drows_ &RRows,
 	directories_ &RDirectories,
 	names_ &RNames,
-	vFillLinks &Links )
+	dFillLinks &Links )
 {
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
@@ -497,13 +497,13 @@ qRE
 static void Put_(
 	drow__ Parent,
 	dwtftr::drow__ Row,
-	const dwtftr::vKernel &Kernel,
+	const dwtftr::dKernel &Kernel,
 	frows_ &FRows,
 	files_ &Files,
 	drows_ &DRows,
 	directories_ &Directories,
 	names_ &Names,
-	vFillLinks &Links )
+	dFillLinks &Links )
 {
 
 	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) Dir;
@@ -516,8 +516,8 @@ static void Put_(
 
 
 drow__ dwtcpr::Compare(
-	const dwtftr::vKernel &Source,
-	const dwtftr::vKernel &Target,
+	const dwtftr::dKernel &Source,
+	const dwtftr::dKernel &Target,
 	scene_ &Scene,
 	comparison_observer__ &Observer )
 {
@@ -525,7 +525,7 @@ drow__ dwtcpr::Compare(
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	directory Dir;
-	iFillLinks Links;
+	wFillLinks Links;
 	fill_link__ Link;
 	bso::bool__ Modified = false;
 	bso::int__ Handled = 1;
@@ -1042,7 +1042,7 @@ public:
 	}
 };
 
-typedef stkbch::qBSTACKvl( clean_link__ ) vCleanLinks;
+typedef stkbch::qBSTACKdl( clean_link__ ) dCleanLinks;
 qW( CleanLinks );
 
 
@@ -1053,7 +1053,7 @@ static void Fill_(
 	drows_ &NewRows,
 	directories_ &NewDirectories,
 	names_ &NewNames,
-	vCleanLinks &Links )
+	dCleanLinks &Links )
 {
 qRH
 	sdr::row__ Row = qNIL;
@@ -1093,7 +1093,7 @@ static inline void Fill_(
 	drows_ &Rows,
 	directories_ &Directories,
 	names_ &Names,
-	vCleanLinks &Links )
+	dCleanLinks &Links )
 {
 	ctn::E_CITEMt( directory_, drow__) Dir;
 
@@ -1156,7 +1156,7 @@ drow__ dwtcpr::Clean(
 qRH
 	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	directory Dir;
-	iCleanLinks Links;
+	wCleanLinks Links;
 	clean_link__ Link;
 	ctn::E_CITEMt( directory_, drow__) Directory;
 qRB

@@ -124,7 +124,7 @@ namespace xml {
 		}
 	};
 
-	E_TMIMIC__( stkctn::fRow, mark__ );
+	E_TMIMIC__( stkctn::sRow, mark__ );
 
 	inline bso::bool__ WriteXMLHeader(
 		txf::text_oflow__ &OFlow,
@@ -156,7 +156,7 @@ namespace xml {
 
 	typedef parser___ rParser;
 
-	class vWriter
+	class dWriter
 	{
 	private:
 		void _CloseAllTags( void );
@@ -179,7 +179,7 @@ namespace xml {
 		}
 	public:
 		struct s {
-			stkctn::qMCSTACKvl( name_ )::s Tags;
+			stkctn::qMCSTACKdl( name_ )::s Tags;
 			txf::text_oflow__ *Flow;
 			bso::bool__ TagNameInProgress;
 			bso::bool__ TagValueInProgress;
@@ -188,8 +188,8 @@ namespace xml {
 			bso::bool__ Ignore;
 			bso::bool__ AlwaysCommit;	// Fait un 'commit' aprs chaque criture. Utile pour le dboguage d'application.
 		} &S_;
-		stkctn::qMCSTACKvl( name_ ) Tags;
-		vWriter( s &S )
+		stkctn::qMCSTACKdl( name_ ) Tags;
+		dWriter( s &S )
 		: S_( S ),
 		  Tags( S.Tags )
 		{}
@@ -208,11 +208,11 @@ namespace xml {
 			S_.Ignore = false;
 			S_.AlwaysCommit = false;
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Tags.plug( AS );
 		}
-		vWriter &operator =( const vWriter &W )
+		dWriter &operator =( const dWriter &W )
 		{
 			Tags = W.Tags;
 
@@ -352,11 +352,11 @@ namespace xml {
 		{
 			S_.AlwaysCommit = Value;
 		}
-		bso::fBool Put( rParser &Parser );
+		bso::sBool Put( rParser &Parser );
 		// Ident and put the content of 'XFlow' (reparse it).
-		bso::fBool Put( xtf::extended_text_iflow__ &XFlow );
+		bso::sBool Put( xtf::extended_text_iflow__ &XFlow );
 		// Ident and put the content of 'XML' (reparse it).
-		bso::fBool Put( const str::vString &XML );
+		bso::sBool Put( const str::vString &XML );
 		qRODISCLOSEv( eLayout, Outfit )
 		qRODISCLOSEv( eSpecialCharHandling, SpecialCharHandling )
 	};
@@ -424,7 +424,7 @@ namespace xml {
 		{
 			Data.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Data.plug( AS );
 		}
@@ -621,7 +621,7 @@ namespace xml {
 	private:
 		_context__ _Context;
 		token__ _Token;
-		stkctn::qMCSTACKil( str::string_ ) _Tags;
+		stkctn::qMCSTACKwl( str::dString ) _Tags;
 		bso::bool__ _EmptyTag;	// A 'true' pour '<tag/>', sinon  'false'.
 		_flow___ _Flow;
 		str::string _TagName;
@@ -798,7 +798,7 @@ namespace xml {
 
 	typedef fEncoding encoding__;
 
-	typedef vWriter writer_;
+	typedef dWriter writer_;
 
 	E_AUTO( writer )
 

@@ -79,7 +79,7 @@ namespace tys {
 		_storage_( s &S )
 		: b( S )
 		{}
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			b::reset( P );
 		}
@@ -224,7 +224,7 @@ namespace tys {
 			_storage_< t, uys::untyped_storage_, r >::Init();
 		}
 		/*
-		bso::fBool plug( qASv &AS )
+		bso::fBool plug( qASd &AS )
 		{
 			return _storage_< t, uys::untyped_storage_, r >::plug( AS );
 		}

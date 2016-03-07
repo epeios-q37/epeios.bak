@@ -102,43 +102,43 @@ namespace dwtftr {
 
 
 	class file_tree_
-	: public vKernel,
+	: public dKernel,
 	  public dtree_
 	{
 	public:
 		struct s
-		: public vKernel::s,
+		: public dKernel::s,
 		  public dtree_::s
 		{};
 		file_tree_( s &S )
-		: vKernel( S ),
+		: dKernel( S ),
 		  dtree_( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			vKernel::reset( P );
+			dKernel::reset( P );
 			dtree_::reset( P );
 		}
 		void plug( file_tree_fh___ &Hook )
 		{
-			vKernel::plug( Hook.Kernel );
+			dKernel::plug( Hook.Kernel );
 			dtree_::plug( Hook.Tree );
 		}
-		void plug( qASv  &AS )
+		void plug( qASd  &AS )
 		{
-			vKernel::plug( AS );
+			dKernel::plug( AS );
 			dtree_::plug( AS );
 		}
 		file_tree_ &operator =( const file_tree_ &FT )
 		{
-			vKernel::operator =( FT );
+			dKernel::operator =( FT );
 			dtree_::operator =( FT );
 
 			return *this;
 		}
 		void Init( void )
 		{
-			vKernel::Init();
+			dKernel::Init();
 			dtree_::Init();
 		}
 		const str::string_ &GetPath(
@@ -211,7 +211,7 @@ namespace dwtftr {
 	drow__ Load(
 		xml::parser___ &Parser,
 		version__ Version,
-		vKernel &Kernel,
+		dKernel &Kernel,
 		dtree_ &Tree,
 		load_observer__ &Observer );
 
@@ -274,7 +274,7 @@ namespace dwtftr {
 	};
 
 	void Sort(
-		vKernel &Tree,
+		dKernel &Tree,
 		dwtbsc::sort_type__ SortType );
 
 	void Sort(

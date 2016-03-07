@@ -135,10 +135,10 @@ namespace mns {
 		}
 	};
 
-	typedef sdr::fStorageDriver fStorageDriver_;
+	typedef sdr::sStorageDriver sStorageDriver_;
 
 	class main_storage_driver__
-	: public fStorageDriver_,
+	: public sStorageDriver_,
 	  public main_storage__
 	{
 	protected:
@@ -170,10 +170,10 @@ namespace mns {
 		void reset( bool P = true )
 		{
 			main_storage__::reset( P );
-			fStorageDriver_::reset( P );
+			sStorageDriver_::reset( P );
 		}
 		main_storage_driver__( sdr::byte__ *&Buffer )
-		: fStorageDriver_(),
+		: sStorageDriver_(),
 		  main_storage__( Buffer )
 		{
 			reset( false );
@@ -186,7 +186,7 @@ namespace mns {
 		void Init( void )
 		{
 			main_storage__::Init();
-			fStorageDriver_::Init();
+			sStorageDriver_::Init();
 		}
 	};
 

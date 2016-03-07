@@ -32,31 +32,31 @@
 # include "bch.h"
 
 namespace stkbch {
-	using stkbse::vStack;
+	using stkbse::dStack;
 
 	using bch::cHook;
 
-	template <typename item, typename row> class vBunchStack
-	: public vStack< bch::bunch_< item, row >, item, row >
+	template <typename item, typename row> class dBunchStack
+	: public dStack< bch::bunch_< item, row >, item, row >
 	{
 	public:
 		struct s
-		: public vStack< bch::bunch_< item, row >, item, row >::s
+		: public dStack< bch::bunch_< item, row >, item, row >::s
 		{};
-		vBunchStack( s &S )
-		: vStack< bch::bunch_< item, row >, item, row >( S )
+		dBunchStack( s &S )
+		: dStack< bch::bunch_< item, row >, item, row >( S )
 		{}
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
-			vStack< bch::bunch_< item, row >, item, row >::reset( P );
+			dStack< bch::bunch_< item, row >, item, row >::reset( P );
 		}
 		void Init( void )
 		{
-			vStack< bch::bunch_< item, row >, item, row >::Init();
+			dStack< bch::bunch_< item, row >, item, row >::Init();
 		}
 		row Pop( item &Item )
 		{
-			return vStack< bch::bunch_< item, row >, item, row >::Pop( Item );
+			return dStack< bch::bunch_< item, row >, item, row >::Pop( Item );
 		}
 		item Pop( void )
 		{
@@ -68,7 +68,7 @@ namespace stkbch {
 		}
 		void Top( item &Item ) const
 		{
-			vStack< bch::bunch_< item, row >, item, row >::Top( Item );
+			dStack< bch::bunch_< item, row >, item, row >::Top( Item );
 		}
 		item Top( void ) const
 		{
@@ -84,11 +84,11 @@ namespace stkbch {
 
 	qROW( Row );
 
-# define qBSTACKv( item, row )	vBunchStack< item, row >
-# define qBSTACKi( item, row )	iBunchStack< item, row >
+# define qBSTACKd( item, row )	dBunchStack< item, row >
+# define qBSTACKw( item, row )	wBunchStack< item, row >
 
-# define qBSTACKvl( item )	qBSTACKv( item, stkbch::fRow )
-# define qBSTACKil( item )	qBSTACKi( item, stkbch::fRow )
+# define qBSTACKdl( item )	qBSTACKd( item, stkbch::sRow )
+# define qBSTACKwl( item )	qBSTACKw( item, stkbch::sRow )
 
 	using bch::rRH;
 

@@ -35,11 +35,11 @@ bso::bool__ common::IsInitialized( void )
 namespace {
 	void Fill_(
 		const plgn::rRetrievers<ogzplg::fTypePlugin> &Retrievers,
-		ogztyp::vTypes &Types )
+		ogztyp::dTypes &Types )
 	{
 	qRH
-		plgn::fRow Row = qNIL;
-		ogztyp::fType Type;
+		plgn::sRow Row = qNIL;
+		ogztyp::sType Type;
 	qRB
 		Row = Retrievers.First();
 
@@ -77,7 +77,7 @@ template <typename retriever> static void Set_(
 }
 
 void common::rDatabase::Init(
-	const ogztyp::vTypes &Types,
+	const ogztyp::dTypes &Types,
 	const char *Identifier )
 {
 	Retriever_.Init();

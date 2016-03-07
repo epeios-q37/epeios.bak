@@ -100,7 +100,7 @@ namespace rgstry {
 			AttributeName.reset( P );
 			AttributeValue.reset( P);
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			TagName.plug( AS );
 			AttributeName.plug( AS );
@@ -139,7 +139,7 @@ namespace rgstry {
 		{
 			_path_items_::reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			_path_items_::plug( AS );
 		}
@@ -499,7 +499,7 @@ namespace rgstry {
 			Value.reset( P );
 			Children.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Name.plug( AS );
 			Value.plug( AS );
@@ -819,7 +819,7 @@ namespace rgstry {
 		{
 			Nodes.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Nodes.plug( AS );
 		}
@@ -1230,7 +1230,7 @@ namespace rgstry {
 		rth_Undefined,
 	};
 
-	bso::fBool Insert(
+	bso::sBool Insert(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		rgstry::row__ Root,
@@ -1238,14 +1238,14 @@ namespace rgstry {
 		registry_ &Registry,
 		xpp::context___ &Context );
 
-	inline bso::fBool Insert(
+	inline bso::sBool Insert(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		rgstry::row__ Root,
 		eRootTagHandling RootTagHandling,
 		registry_ &Registry	) // Peut être = 'qNIL', auquel cas une nouvelle 'registry' est créee dont la racine est stockée dans ce paramètre.
 	{
-		bso::fBool Success = false;
+		bso::sBool Success = false;
 	qRH
 		xpp::context___ Context;
 	qRB
@@ -1578,8 +1578,8 @@ namespace rgstry {
 		bso::bool__ RootToo,
 		xml::writer_ &Writer );
 
-	typedef stkbch::qBSTACKv( entry__, level__ ) _entries_;
-	typedef stkbch::qBSTACKv( time_t, level__ ) _timestamps_;
+	typedef stkbch::qBSTACKd( entry__, level__ ) _entries_;
+	typedef stkbch::qBSTACKd( time_t, level__ ) _timestamps_;
 
 	const value_ &Empty_( void );	// Retourne une valeur vide.
 
@@ -1660,7 +1660,7 @@ namespace rgstry {
 			Entries.reset( P );
 			TimeStamps.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			EmbeddedRegistry.plug( AS );
 			Entries.plug( AS );
@@ -2055,7 +2055,7 @@ namespace rgstry {
 			level__ Dummy = qNIL;
 			return Search( Entry, Dummy ) != qNIL;
 		}
-		template <typename source> bso::fBool Fill(
+		template <typename source> bso::sBool Fill(
 			level__ Level,
 			source &Source,
 			const xpp::criterions___ &Criterions,
@@ -2076,7 +2076,7 @@ namespace rgstry {
 			} else
 				return false;
 		}
-		template <typename source> bso::fBool Fill(
+		template <typename source> bso::sBool Fill(
 			level__ Level,
 			source &Source,
 			const xpp::criterions___ &Criterions,
@@ -2096,7 +2096,7 @@ namespace rgstry {
 			} else
 				return false;
 		}
-		template <typename source> bso::fBool Insert(
+		template <typename source> bso::sBool Insert(
 			level__ Level,
 			source &Source,
 			const xpp::criterions___ &Criterions,
@@ -2110,7 +2110,7 @@ namespace rgstry {
 			} else
 				return false;
 		}
-		template <typename source> bso::fBool Insert(
+		template <typename source> bso::sBool Insert(
 			level__ Level,
 			source &Source,
 			const xpp::criterions___ &Criterions,

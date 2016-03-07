@@ -273,12 +273,12 @@ qRT
 qRE
 }
 # else
-static bso::fBool LoadLocale_(
+static bso::sBool LoadLocale_(
 	rgstry::level__ Level,
 	scllocale::target__ Target,
 	utf::format__ Format )
 {
-	bso::fBool Found = false;
+	bso::sBool Found = false;
 qRH
 	rgstry::entry__ Entry;
 	rgstry::row__ Row = qNIL;
@@ -1048,7 +1048,7 @@ namespace {
 		const str::vString &Id,
 		rgstry::tags_ &Tags )
 	{
-		Tags.Append( str::iString( Target ) );
+		Tags.Append( str::wString( Target ) );
 		Tags.Append( Id );
 	}
 	
@@ -1086,7 +1086,7 @@ namespace {
 		plgn::rLooseRetriever &Retriever )
 	{
 	qRH
-		str::iString Filename, Arguments;
+		str::wString Filename, Arguments;
 		rgstry::entry__ Configuration, Locale;
 	qRB
 		Filename.Init();
@@ -1108,7 +1108,7 @@ namespace {
 		const char *Label,
 		const char *Identifier,
 		const str::vString &Id,
-		plgn::iRetrievers &Retrievers )
+		plgn::dRetrievers &Retrievers )
 	{
 	qRH
 		plgn::rLooseRetriever Retriever;
@@ -1129,11 +1129,11 @@ namespace {
 		const char *Target,
 		const char *Label,
 		const char *Identifier,
-		const str::vStrings &Ids,
-		plgn::iRetrievers &Retrievers )
+		const str::dStrings &Ids,
+		plgn::dRetrievers &Retrievers )
 	{
 		ctn::qCMITEMl( str::vString ) Id;
-		sdr::fRow Row = Ids.First();
+		sdr::sRow Row = Ids.First();
 
 		Id.Init( Ids );
 
@@ -1149,10 +1149,10 @@ void sclmisc::Plug_(
 	const char *Target,
 	const char *Label,
 	const char *Identifier,
-	plgn::iRetrievers &Retrievers )
+	plgn::dRetrievers &Retrievers )
 {
 qRH
-	str::iStrings Ids;
+	str::wStrings Ids;
 qRB
 	Ids.Init();
 

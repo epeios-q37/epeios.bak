@@ -187,7 +187,7 @@ namespace ssnmng {
 			Index.reset( P );
 			Chronos.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Pointers.plug( AS );
 			Queue.plug( AS );

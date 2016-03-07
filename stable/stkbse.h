@@ -33,46 +33,46 @@
 # include "tol.h"
 
 namespace stkbse {
-	template <typename structure, typename item, typename row> class vStack
-	: public structure
+	template <typename set, typename item, typename row> class dStack
+	: public set
 	{
 	public:
 		struct s
-		: public structure::s
+		: public set::s
 		{};
-		vStack( s &S )
-		: structure( S )
+		dStack( s &S )
+		: set( S )
 		{}
 		void reset( bool P = true )
 		{
-			structure::reset( P );
+			set::reset( P );
 		}
-		vStack &operator =( const vStack &S )
+		dStack &operator =( const dStack &S )
 		{
-			structure::operator =( S );
+			set::operator =( S );
 
 			return *this;
 		}
 		//f Initialization.
 		void Init( void )
 		{
-			structure::Init();
+			set::Init();
 		}
 		//f Place 'Object' at the top of the stack. Return the position where this object is put.
 		row Push( const item &Object )
 		{
-			return structure::Append( Object );
+			return set::Append( Object );
 		}
 		//f Remove the object at row 'R'. If 'Adjust' at 'true', than adjust the size of the stack.
 		void Remove(
 			row Row,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			structure::Remove( Row );
+			set::Remove( Row );
 		}
 		row Pop( void )
 		{
-			row Row = structure::Last();
+			row Row = set::Last();
 
 			Remove( Row );
 
@@ -80,28 +80,28 @@ namespace stkbse {
 		}
 		row Pop( item &Item )
 		{
-			structure::Recall( structure::Last(), Item );
+			set::Recall( set::Last(), Item );
 
 			return Pop();
 		}
 		//f Return 'true' if 'Object' exists in the stack, false otherwise.
 		bso::bool__ Exists( const item &Object ) const
 		{
-			return structure::Search( Object, 0, structure::Amount() ) != qNIL;
+			return set::Search( Object, 0, set::Amount() ) != qNIL;
 		}
 		//f Return true if an entry exists for row 'Row'.
 		bso::bool__ Exists( row Row ) const
 		{
-			return structure::Exists( Row );
+			return set::Exists( Row );
 		}
 		//f Return the value stord on top of the stack.
 		void Top( item &Item ) const
 		{
 # ifdef STK_DBG
-			if ( structure::Amount() == 0 )
+			if ( set::Amount() == 0 )
 				qRFwk();
 # endif
-			structure::Recall( structure::Last(), Item );
+			set::Recall( set::Last(), Item );
 		}
 	};
 

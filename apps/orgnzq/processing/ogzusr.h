@@ -32,15 +32,15 @@
 # include "bch.h"
 
 namespace ogzusr {
-	using ogzbsc::fURow;
-	using ogzbsc::fRRow;
-	using ogzbsc::fURRow;
+	using ogzbsc::sURow;
+	using ogzbsc::sRRow;
+	using ogzbsc::sURRow;
 
-	typedef bch::qBUNCHv( fRRow, fURRow ) vUser;
+	typedef bch::qBUNCHd( sRRow, sURRow ) dUser;
 	qW( User );
 
 // Template parameters.
-# define OGZUSR_TP	ogzusr::vUser, ogzusr::iUser, ogzusr::fURow, ogzusr::fRRow, ogzusr::fURRow
+# define OGZUSR_TP	ogzusr::dUser, ogzusr::wUser, ogzusr::sURow, ogzusr::sRRow, ogzusr::sURRow
 
 	typedef ogzcbs::cDynamic<OGZUSR_TP> cUser;
 
@@ -51,11 +51,11 @@ namespace ogzusr {
 	class cAuthentication
 	{
 	protected:
-		virtual ogzusr::fURow OGZUSRAuthenticate(
+		virtual ogzusr::sURow OGZUSRAuthenticate(
 			const str::vString &Username,
 			const str::vString &Password ) = 0;
 	public:
-		ogzusr::fURow Authenticate(
+		ogzusr::sURow Authenticate(
 			const str::vString &Username,
 			const str::vString &Password )
 		{

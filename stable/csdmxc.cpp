@@ -70,7 +70,7 @@ void csdmxc::rCore::Ping( void )
 {
 	Lock_( MainMutex_ );
 
-	stkbch::fRow Row = UPs.First();
+	stkbch::sRow Row = UPs.First();
 	
 	while ( Row != qNIL )
 	{

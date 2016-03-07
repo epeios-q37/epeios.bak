@@ -39,7 +39,7 @@ namespace common {
 	{
 	private:
 		rBackend *Backend_;
-		ogzusr::fURow User_;
+		ogzusr::sURow User_;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -58,7 +58,7 @@ namespace common {
 
 			return *Backend_;
 		}
-		void SetUser( ogzusr::fURow User )
+		void SetUser( ogzusr::sURow User )
 		{
 			User_ = User;
 		}
@@ -69,8 +69,8 @@ namespace common {
 	private:
 		plgn::rRetrievers<ogzplg::fTypePlugin> Retrievers_;
 	public:
-		ogztyp::iTypes Core;
-		void reset( bso::fBool P = true )
+		ogztyp::wTypes Core;
+		void reset( bso::sBool P = true )
 		{
 			Core.reset( P );
 			Retrievers_.reset( P );
@@ -89,14 +89,14 @@ namespace common {
 		}
 	public:
 		ogzdtb::rDatabase Core;
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Core.reset( P );
 			Retriever_.reset( P );
 		}
 		E_CDTOR( rDatabase );
 		void Init(
-			const ogztyp::vTypes &Types,
+			const ogztyp::dTypes &Types,
 			const char *Identifier );
 	};
 
@@ -109,13 +109,13 @@ namespace common {
 			return Retriever_.Plugin();
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Retriever_.reset( P );
 		}
 		qCDTOR( rAuthentication );
 		void Init( const char *Identifier );
-		ogzusr::fURow Login(
+		ogzusr::sURow Login(
 			const str::vString &Username,
 			const str::vString &Password )
 		{

@@ -97,7 +97,7 @@ namespace xdhutl {
 			UserAction.reset( P );
 			Args.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Event.plug( AS );
 			EventKeys.plug( AS );

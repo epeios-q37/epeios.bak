@@ -215,7 +215,7 @@ void fil::Shrink(
 	size__ Size )
 {
 qRH
-	str::iString TempName;
+	str::wString TempName;
 qRB
 	TempName.Init();
 	Filename.UTF8( TempName );

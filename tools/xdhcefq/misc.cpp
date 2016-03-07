@@ -28,7 +28,7 @@
 
 using namespace misc;
 
-static idsq::iIdStore<sdr::row__> Ids_;	// Pour le gnrateur d'indetifiant d'lment, lorsque l'id n'est pas dfinit par l'utilisateur dans le layout.
+static idsq::wIdStore<sdr::row__> Ids_;	// Pour le gnrateur d'indetifiant d'lment, lorsque l'id n'est pas dfinit par l'utilisateur dans le layout.
 
 static stsfsm::automat RenderAutomat_, ClientAutomat_;
 

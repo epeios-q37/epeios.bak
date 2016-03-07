@@ -81,7 +81,7 @@ namespace idxbtr {
 		{
 			return BaseTree.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			return BaseTree.plug( AS );
 		}

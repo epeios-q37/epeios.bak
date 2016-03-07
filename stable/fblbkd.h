@@ -476,7 +476,7 @@ namespace fblbkd {
 			return (void *)( Objets( Index )->OBJECT() );
 		}
 	public:
-		lstbch::qLBUNCHil( t * ) Objets;
+		lstbch::qLBUNCHwl( t * ) Objets;
 		void reset( bso::bool__ P = true )
 		{
 			module<t, user>::reset( P );

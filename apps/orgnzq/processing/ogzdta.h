@@ -32,56 +32,56 @@
 # include "lstctn.h"
 
 namespace ogzdta {
-	using ogzbsc::fSize;
+	using ogzbsc::sSize;
 
-	using ogzbsc::fDRow;
-	using ogzbsc::fTRow;
-	using ogzbsc::fByte;
-	using ogzbsc::vDatum;
-	using ogzbsc::iDatum;
+	using ogzbsc::sDRow;
+	using ogzbsc::sTRow;
+	using ogzbsc::sByte;
+	using ogzbsc::dDatum;
+	using ogzbsc::wDatum;
 
 	class cData {
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
-		virtual fDRow OGZDTANew(
-			fTRow Type,
-			fDRow Row ) = 0;
+		virtual sDRow OGZDTANew(
+			sTRow Type,
+			sDRow Row ) = 0;
 		// if 'Row' == 'qNIL', the entire content must be erased.
-		virtual void OGZDTADelete( fDRow Row ) = 0;
+		virtual void OGZDTADelete( sDRow Row ) = 0;
 		virtual void OGZDTAStore(
-			fDRow Row,
-			fTRow Type,
-			const vDatum &Datum ) = 0;
+			sDRow Row,
+			sTRow Type,
+			const dDatum &Datum ) = 0;
 		virtual void OGZDTARecall(
-			fDRow Row,
-			fTRow Type,
-			vDatum &Datum ) = 0;
+			sDRow Row,
+			sTRow Type,
+			dDatum &Datum ) = 0;
 	public:
 		void Wipe( void )
 		{
 			OGZDTADelete( qNIL );
 		}
-		fDRow New(
-			fTRow Type,
-			fDRow Row = qNIL )
+		sDRow New(
+			sTRow Type,
+			sDRow Row = qNIL )
 		{
 			return OGZDTANew( Type, Row );
 		}
-		void Delete( fDRow Row )
+		void Delete( sDRow Row )
 		{
 			OGZDTADelete( Row );
 		}
 		void Store(
-			fDRow Row,
-			fTRow Type,
-			const vDatum &Datum )
+			sDRow Row,
+			sTRow Type,
+			const dDatum &Datum )
 		{
 			OGZDTAStore( Row, Type, Datum );
 		}
 		void Recall(
-			fDRow Row,
-			fTRow Type,
-			vDatum &Datum )
+			sDRow Row,
+			sTRow Type,
+			dDatum &Datum )
 		{
 			return OGZDTARecall( Row, Type, Datum );
 		}
@@ -105,44 +105,44 @@ namespace ogzdta {
 		{
 			C_().Delete( qNIL );
 		}
-		fDRow New(
-			fTRow Type,
-			fDRow Row = qNIL ) const
+		sDRow New(
+			sTRow Type,
+			sDRow Row = qNIL ) const
 		{
 			return C_().New( Type, Row );
 		}
-		void Delete( fDRow Row ) const
+		void Delete( sDRow Row ) const
 		{
 			C_().Delete( Row );
 		}
 		void Store(
-			fDRow Row,
-			fTRow Type,
-			const vDatum &Datum ) const
+			sDRow Row,
+			sTRow Type,
+			const dDatum &Datum ) const
 		{
 			C_().Store( Row, Type, Datum );
 		}
 		void Recall(
-			fDRow Row,
-			fTRow Type,
-			vDatum &Datum ) const
+			sDRow Row,
+			sTRow Type,
+			dDatum &Datum ) const
 		{
 			return C_().Recall( Row, Type, Datum );
 		}
 	};
 
-	typedef bch::qBUNCHvl( ogzdta::fByte ) vBytes;
+	typedef bch::qBUNCHdl( ogzdta::sByte ) dBytes;
 	qW( Bytes );
 
 	class rRegularDataCallback
 	: public cData
 	{
 	private:
-		lstctn::qLMCONTAINERi( vBytes, ogzdta::fDRow ) Container_;
+		lstctn::qLMCONTAINERw( dBytes, ogzdta::sDRow ) Container_;
 	protected:
-		virtual ogzdta::fDRow OGZDTANew(
-			ogzdta::fTRow Type,
-			ogzdta::fDRow Row ) override 
+		virtual ogzdta::sDRow OGZDTANew(
+			ogzdta::sTRow Type,
+			ogzdta::sDRow Row ) override 
 		{
 			Row = Container_.New( Row );
 
@@ -151,7 +151,7 @@ namespace ogzdta {
 
 			return Row;
 		}
-		virtual void OGZDTADelete( ogzdta::fDRow Row ) override 
+		virtual void OGZDTADelete( ogzdta::sDRow Row ) override 
 		{
 			if ( Row == qNIL )
 				Container_.reset();
@@ -159,16 +159,16 @@ namespace ogzdta {
 				Container_.Remove( Row );
 		}
 		virtual void OGZDTAStore(
-			ogzdta::fDRow Row,
-			ogzdta::fTRow Type,
-			const vDatum &Datum ) override 
+			ogzdta::sDRow Row,
+			ogzdta::sTRow Type,
+			const dDatum &Datum ) override 
 		{
 			Container_.Store( Datum, Row );
 		}
 		virtual void OGZDTARecall(
-			ogzdta::fDRow Row,
-			ogzdta::fTRow Type,
-			ogzdta::vDatum &Datum ) override 
+			ogzdta::sDRow Row,
+			ogzdta::sTRow Type,
+			ogzdta::dDatum &Datum ) override 
 		{
 			Container_.Recall( Row, Datum );
 		}
@@ -184,7 +184,7 @@ namespace ogzdta {
 		}
 	};
 
-	typedef bch::qBUNCHvl( fDRow ) vDatumList;
+	typedef bch::qBUNCHdl( sDRow ) dDatumList;
 	qW( DatumList );
 
 	using bch::cHook;

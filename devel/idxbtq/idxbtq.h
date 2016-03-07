@@ -77,7 +77,7 @@ namespace idxbtq {
 			E_IBTREEt_( r )::plug( Hooks.GetTreeHook() );
 			E_IQUEUEt_( r )::plug( Hooks.GetQueueHook() );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			E_IBTREEt_( r )::plug( AS );
 			E_IQUEUEt_( r )::plug( AS );
@@ -276,7 +276,7 @@ namespace idxbtq {
 			return Queue_;
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Tree_.reset( P );
 			Queue_.reset( P );

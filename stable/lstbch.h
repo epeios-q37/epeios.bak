@@ -41,11 +41,11 @@
 /****** New version ******/
 /*************************/
 
-# define qLBUNCHv( type, row ) E_LBUNCHt_( type, row )
-# define qLBUNCHi( type, row ) E_LBUNCHt( type, row )
+# define qLBUNCHd( type, row ) E_LBUNCHt_( type, row )
+# define qLBUNCHw( type, row ) E_LBUNCHt( type, row )
 
-# define qLBUNCHvl( type ) qLBUNCHv( type, sdr::fRow )
-# define qLBUNCHil( type ) qLBUNCHi( type, sdr::fRow )
+# define qLBUNCHdl( type ) qLBUNCHd( type, sdr::sRow )
+# define qLBUNCHwl( type ) qLBUNCHw( type, sdr::sRow )
 
 /*************************/
 /****** Old version ******/
@@ -104,7 +104,7 @@ namespace lstbch {
 			bunch_<type, row>::plug( Hooks.GetBunchHook() );
 			list_<row, row_t>::plug( Hooks.GetListHook(), bunch_<type, row>::Amount );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			bunch_<type, row>::plug( AS );
 			list_<row, row_t>::plug( AS );
@@ -216,7 +216,7 @@ namespace lstbch {
 			return List_;
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Bunch_.reset( P );
 			List_.reset( P );

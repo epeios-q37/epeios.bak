@@ -63,7 +63,7 @@ namespace dwtxcl {
 		{
 			Automat.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Automat.plug( AS );
 		}

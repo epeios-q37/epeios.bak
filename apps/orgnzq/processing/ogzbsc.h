@@ -37,10 +37,10 @@ namespace ogzbsc {
 	qROW( URow );	// User row.
 	qROW( URRow );	// User record row.
 
-	using sdr::fByte;
-	using sdr::fSize;
+	using sdr::sByte;
+	using sdr::sSize;
 
-	typedef bch::qBUNCHvl( fByte ) vDatum;
+	typedef bch::qBUNCHdl( sByte ) dDatum;
 	qW( Datum );
 }
 

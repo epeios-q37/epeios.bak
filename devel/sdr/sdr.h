@@ -38,21 +38,21 @@
 /*************************/
 
 namespace sdr {
-	using bso::fByte;
-	using bso::fSize;
+	using bso::sByte;
+	using bso::sSize;
 
-	typedef bso::fSize bRow;
+	typedef bso::sSize bRow;
 
 	typedef bRow	row_t__;
 
-	E_TMIMIC__( bRow, fRow );
+	E_TMIMIC__( bRow, sRow );
 
 	class storage_driver__;
 
-	typedef storage_driver__ fStorageDriver;
+	typedef storage_driver__ sStorageDriver;
 }
 
-# define qSDf	sdr::storage_driver__
+# define qSDs	sdr::storage_driver__
 
 
 /*************************/
@@ -66,7 +66,7 @@ namespace sdr {
 # define SDR__DSIZE_SIZE_MAX ( ( ( 8 * sizeof( sdr::size__ ) ) / 7 ) + 1 )
 
 namespace sdr {
-	typedef fRow row__;
+	typedef sRow row__;
 
 	E_CDEF( sdr::row_t__, NIL, qNIL );
 

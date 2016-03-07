@@ -33,7 +33,7 @@
 # include "str.h"
 
 namespace ogztyp {
-	using ogzbsc::fTRow;
+	using ogzbsc::sTRow;
 
 	class cType
 	{
@@ -42,7 +42,7 @@ namespace ogztyp {
 		virtual const char *OGZTYPGetLabel( void ) = 0;
 		// Convert into 'XML' the content of 'Buffer' of size 'Size' in a XML value form.
 		virtual void OGZTYPToXML(
-			const ogzbsc::vDatum &Datum,
+			const ogzbsc::dDatum &Datum,
 			str::vString &XML ) = 0;
 	public:
 		const char *GetLabel( void )
@@ -50,7 +50,7 @@ namespace ogztyp {
 			return OGZTYPGetLabel();
 		}
 		const str::vString &ToXML(
-			const ogzbsc::vDatum &Datum,
+			const ogzbsc::dDatum &Datum,
 			str::vString &XML )
 		{
 			OGZTYPToXML( Datum, XML );
@@ -59,13 +59,13 @@ namespace ogztyp {
 		}
 	};
 
-	class fType
+	class sType
 	{
 	private:
 		qRMV( cType, C_, Callback_ );
 		const char *Identifier_;
 	public:
-		qCDTOR( fType );
+		qCDTOR( sType );
 		void reset( bso::bool__ = true )
 		{
 			Callback_ = NULL;
@@ -83,14 +83,14 @@ namespace ogztyp {
 			return C_().GetLabel();
 		}
 		const str::vString &ToXML(
-			const ogzbsc::vDatum &Datum,
+			const ogzbsc::dDatum &Datum,
 			str::vString &XML ) const
 		{
 			return C_().ToXML( Datum, XML );
 		}
 	};
 
-	typedef lstbch::qLBUNCHv( fType, fTRow ) vTypes;
+	typedef lstbch::qLBUNCHd( sType, sTRow ) dTypes;
 	qW( Types );
 }
 

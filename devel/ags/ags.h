@@ -58,8 +58,8 @@
 /****** New version ******/
 /*************************/
 
-# define qASv	ags::aggregated_storage_
-# define qASi	ags::aggregated_storage
+# define qASd	ags::aggregated_storage_
+# define qASw	ags::aggregated_storage
 
 /*************************/
 /****** Old version ******/
@@ -74,10 +74,10 @@ namespace ags {
 
 	class aggregated_storage_;
 
-	typedef sdr::fStorageDriver fStorageDriver_;
+	typedef sdr::sStorageDriver sStorageDriver_;
 
 	class aggregated_storage_driver__
-	: public fStorageDriver_
+	: public sStorageDriver_
 	{
 	private:
 		descriptor__ &_Descriptor;
@@ -109,13 +109,13 @@ namespace ags {
 			} else
 				_AStorage = NULL;
 
-			fStorageDriver_::reset( P );
+			sStorageDriver_::reset( P );
 
 			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}
 		aggregated_storage_driver__( descriptor__ &Descriptor )
 		: _Descriptor( Descriptor ),
-		  fStorageDriver_()
+		  sStorageDriver_()
 		{
 			reset( false );
 		}
@@ -125,7 +125,7 @@ namespace ags {
 			reset();
 
 			_AStorage = &AStorage;
-			fStorageDriver_::Init();
+			sStorageDriver_::Init();
 
 			// On ne touche ni  '_Descriptor', ni  '_Addendum' car ils sont grs extrieurement (ce sont des rfrences).
 		}

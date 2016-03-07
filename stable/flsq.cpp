@@ -81,7 +81,7 @@ static lstbch::E_LBUNCHt( _data__, row__ ) List_;
 static que::E_MQUEUEt( row__ ) Queue_;
 
 namespace {
-	idsq::qIDSi( id__ )	Ids_;
+	idsq::qIDSw( id__ )	Ids_;
 }
 
 id__ flsq::GetId( void )

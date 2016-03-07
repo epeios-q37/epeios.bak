@@ -193,7 +193,7 @@ namespace fblfrd {
 			Message.reset( P );
 			URL.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Message.plug( AS );
 			URL.plug( AS );

@@ -45,30 +45,30 @@
 /****** New version ******/
 /*************************/
 
-# define qMCONTAINERv( Type, r )	mono_container_< Type, r >
-# define qMCONTAINERi( Type, r )	mono_container< Type, r >
+# define qMCONTAINERd( Type, r )	mono_container_< Type, r >
+# define qMCONTAINERw( Type, r )	mono_container< Type, r >
 
-# define qMCONTAINERvl( Type )		qMCONTAINERv( Type, sdr::row__ )
-# define qMCONTAINERil( Type )		qMCONTAINERi( Type, sdr::row__ )
+# define qMCONTAINERdl( Type )		qMCONTAINERd( Type, sdr::row__ )
+# define qMCONTAINERwl( Type )		qMCONTAINERw( Type, sdr::row__ )
 
 
-# define qCONTAINERv( Type, r )		poly_container_< Type, r >
-# define qCONTAINERi( Type, r )		poly_container< Type, r >
+# define qCONTAINERd( Type, r )		poly_container_< Type, r >
+# define qCONTAINERw( Type, r )		poly_container< Type, r >
 
-# define qCONTAINERvl( Type )		qCONTAINERv( Type, sdr::row__ )
-# define qCONTAINER( Type )			qCONTAINERi( Type, sdr::row__ )*
+# define qCONTAINERdl( Type )		qCONTAINERd( Type, sdr::row__ )
+# define qCONTAINERwl( Type )		qCONTAINERw( Type, sdr::row__ )*
 
 # define qMITEM( type, row )	volatile_mono_item< type, row >
 # define qCMITEM( type, row )	const_mono_item< type, row >
 
-# define qMITEMl( type )		qMITEM( type, sdr::fRow )
-# define qCMITEMl( type )		qCMITEM( type, sdr::fRow )
+# define qMITEMl( type )		qMITEM( type, sdr::sRow )
+# define qCMITEMl( type )		qCMITEM( type, sdr::sRow )
 
 # define qITEMr( type, row )	volatile_poly_item< type, row >
 # define qCITEMf( type, row )	const_poly_item< type, row >
 
-# define qMITEMrl( type )		qMITEMr( type, sdr::fRow )
-# define qCMITEMfl( type )		qCMITEMf( type, sdr::fRow )
+# define qMITEMrl( type )		qMITEMr( type, sdr::sRow )
+# define qCMITEMfl( type )		qCMITEMf( type, sdr::sRow )
 
 /*************************/
 /****** Old version ******/
@@ -155,7 +155,7 @@ namespace ctn {
 			Dynamics.plug( Hooks.GetDynamicsHooks() );
 			_Allocate( Dynamics.Amount(), aem::mFitted );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Dynamics.plug( AS );
 			Statics.plug( AS );
@@ -374,7 +374,7 @@ namespace ctn {
 			return Dynamics_;
 		}
 public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Statics_.reset( P );
 			Dynamics_.reset( P );
@@ -437,7 +437,7 @@ public:
 	  public rADriver_
 	{
 	protected:
-		virtual sdr::fStorageDriver &UYSGetSD( void ) override
+		virtual sdr::sStorageDriver &UYSGetSD( void ) override
 		{
 			return *this;
 		}
@@ -561,7 +561,7 @@ public:
 	  public rCADriver_
 	{
 	protected:
-		virtual sdr::fStorageDriver &UYSGetSD( void ) override
+		virtual sdr::sStorageDriver &UYSGetSD( void ) override
 		{
 			return *this;
 		}

@@ -128,7 +128,7 @@ namespace dwtcpr {
 
 			S_.NewName = qNIL;
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			core_::plug( AS );
 			Files.plug( AS );
@@ -185,7 +185,7 @@ namespace dwtcpr {
 			Directories.reset( P );
 			Names.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Files.plug( AS );
 			Directories.plug( AS );
@@ -261,7 +261,7 @@ namespace dwtcpr {
 			kernel_::reset( P );
 			dtree_::reset( P );
 		}
-		void plug( qASv  &AS )
+		void plug( qASd  &AS )
 		{
 			kernel_::plug( AS );
 			dtree_::plug( AS );
@@ -286,8 +286,8 @@ namespace dwtcpr {
 	E_AUTO( scene );
 
 	drow__ Compare(
-		const dwtftr::vKernel &Source,
-		const dwtftr::vKernel &Target,
+		const dwtftr::dKernel &Source,
+		const dwtftr::dKernel &Target,
 		scene_ &Scene,
 		comparison_observer__ &Observer );
 

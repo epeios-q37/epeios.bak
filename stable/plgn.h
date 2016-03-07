@@ -240,34 +240,34 @@ namespace plgn {
 
 	qROW( Row );
 
-	typedef bch::qBUNCHv( rLooseRetriever, fRow ) vRetrievers;
+	typedef bch::qBUNCHd( rLooseRetriever, sRow ) dRetrievers;
 	qW( Retrievers );
 
-	void Delete_( iRetrievers &Retrievers );
+	void Delete_( dRetrievers &Retrievers );
 
 	template <typename plugin> class rRetrievers
-	: public iRetrievers
+	: public wRetrievers
 	{
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			if ( P )
 				Delete_( *this );
 
-			vRetrievers::reset( P );
+			wRetrievers::reset( P );
 		}
 		qCDTOR( rRetrievers);
 		void Init( void )
 		{
 			Delete_( *this );
 
-			iRetrievers::Init();
+			wRetrievers::Init();
 		}
-		plugin &Plugin( fRow Row ) const
+		plugin &Plugin( sRow Row ) const
 		{
 			rLooseRetriever Retriever;
 
-			iRetrievers::Recall( Row, Retriever );
+			wRetrievers::Recall( Row, Retriever );
 
 			plugin &Plugin = *(plugin *)Retriever.Plugin();
 

@@ -424,7 +424,7 @@ namespace sclmisc {
 		const char *Target,
 		const char *Label,
 		const char *Identifier,
-		plgn::iRetrievers &Retrievers );
+		plgn::dRetrievers &Retrievers );
 
 	template <typename plugin> inline void Plug(
 		const char *Target,

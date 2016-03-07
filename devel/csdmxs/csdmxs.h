@@ -53,9 +53,9 @@ namespace csdmxs {
 
 	const char *GetLogLabel( eLog Log );
 
-	typedef void *fUserPointer;
+	typedef void *sUserPointer;
 
-	class fLogCallback {
+	class cLog {
 	protected:
 		virtual void CSDMXSLog(
 			eLog Log,
@@ -64,28 +64,19 @@ namespace csdmxs {
 			sdr::size__ Amount )
 		{}
 	public:
-		void reset( bso::bool__  = true )
-		{
-			// Standardisation.
-		}
-		qCVDTOR( fLogCallback );
-		void Init( void )
-		{
-			// Standardisation.
-		}
 		void Log(
 			eLog Log,
 			fId Id,
-			fUserPointer UP,
+			sUserPointer UP,
 			sdr::size__ Amount )
 		{
 			CSDMXSLog( Log, Id, UP, Amount );
 		}
 	};
 
-	typedef lstbch::qLBUNCHvl( fUserPointer ) vUserPointers;
+	typedef lstbch::qLBUNCHdl( sUserPointer ) dUserPointers;
 
-	class vCore
+	class dCore
 	{
 	private:
 		bso::bool__ Exists_( fId Id ) const
@@ -111,19 +102,19 @@ qRE
 	public:
 		struct s
 		{
-			vUserPointers::s UPs;
+			dUserPointers::s UPs;
 			mtx::handler___ Mutex;
 			struct log__ {
-				fLogCallback *Callback;
+				cLog *Callback;
 				mtx::handler___ Mutex;
 			} Log;
 		} &S_;
-		vUserPointers UPs;
-		vCore ( s &S )
+		dUserPointers UPs;
+		dCore ( s &S )
 		: S_( S ),
 		  UPs( S.UPs )
 		{}
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
 				if ( S_.Mutex != mtx::UndefinedHandler )
@@ -136,17 +127,17 @@ qRE
 			S_.Log.Callback = NULL;
 
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			UPs.plug( AS );
 		}
-		vCore &operator =( const vCore &C )
+		dCore &operator =( const dCore &C )
 		{
 			qRFwk();
 
 			return *this;
 		}
-		void Init( fLogCallback *LogCallback )
+		void Init( cLog *LogCallback )
 		{
 			reset();
 
@@ -171,7 +162,7 @@ qRE
 			return (fId)*Row;
 		}
 		void Store(
-			fUserPointer UP,
+			sUserPointer UP,
 			fId Id )
 		{
 #ifdef CSDMXS_DBG
@@ -241,7 +232,7 @@ qRE
 	: public fCallback_
 	{
 	private:
-		iCore Core_;
+		wCore Core_;
 		fCallback_ *Callback_;
 		ntvstr::string___ _Origin;
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
@@ -319,7 +310,7 @@ qRE
 		qCVDTOR( rCallback );
 		void Init(
 			fCallback_ &Callback,
-			fLogCallback *LogCallback = NULL )
+			cLog *LogCallback = NULL )
 		{
 			reset();
 

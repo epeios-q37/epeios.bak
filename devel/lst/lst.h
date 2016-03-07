@@ -34,7 +34,7 @@
 
 namespace lst {
 
-	typedef idsq::qIDSv( sdr::fRow ) vStore;
+	typedef idsq::qIDSd( sdr::sRow ) dStore;
 
 	inline uys::eState Test_(
 		const fnm::name___ &FileName,
@@ -55,21 +55,21 @@ namespace lst {
 	sdr::row_t__ Successeur_(
 		sdr::row_t__ Element,
 		sdr::size__ Amount,
-		const vStore &Libres );
+		const dStore &Libres );
 
 	sdr::row_t__ Predecesseur_(
 		sdr::row_t__ Element,
-		const vStore &Libres );
+		const dStore &Libres );
 
 	void Insert_(
 		sdr::row_t__ First,
 		sdr::row_t__ Last,
-		vStore &Store );
+		dStore &Store );
 
 	void MarkAsReleased_(
 		sdr::row_t__ First,
 		sdr::row_t__ Last,
-		vStore &Store );
+		dStore &Store );
 
 	using idsq::cHook;
 
@@ -109,10 +109,10 @@ namespace lst {
 		}
 	public:
 		//o Store of locations.
-		vStore Locations;
+		dStore Locations;
 		struct s
 		{
-			vStore::s Locations;
+			dStore::s Locations;
 		};
 	// fonctions
 		list_( s &S )
@@ -128,7 +128,7 @@ namespace lst {
 		{
 			Locations.plug( Hook, FirstUnused );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Locations.plug( AS );
 		}
@@ -291,11 +291,11 @@ namespace lst {
 			LSTAllocate( Size, Mode );
 		}
 		// Some help for the 'Hook' related functionnalities.
-		vStore &GetIds( void )
+		dStore &GetIds( void )
 		{
 			return Locations;
 		}
-		const vStore &GetIds( void ) const
+		const dStore &GetIds( void ) const
 		{
 			return Locations;
 		}

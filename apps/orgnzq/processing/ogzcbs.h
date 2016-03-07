@@ -57,7 +57,7 @@ namespace ogzcbs {
 			const item &Item,
 			row Row ) = 0;
 		// Must 'true' if the item exists, 'false' otherwise.
-		virtual bso::fBool OGZCBSRecall(
+		virtual bso::sBool OGZCBSRecall(
 			row Row,
 			item &Item ) const = 0;
 	public:
@@ -324,7 +324,7 @@ namespace ogzcbs {
 	: public cStatic<item,row>
 	{
 	private:
-		lstbch::qLBUNCHi( item, row ) Items_;
+		lstbch::qLBUNCHw( item, row ) Items_;
 	protected:
 		virtual row OGZCBSNew( row Row ) override
 		{
@@ -343,7 +343,7 @@ namespace ogzcbs {
 		{
 			Items_.Store( Item, Row );
 		}
-		virtual bso::fBool OGZCBSRecall(
+		virtual bso::sBool OGZCBSRecall(
 			row Row,
 			item &Item ) const override
 		{
@@ -354,7 +354,7 @@ namespace ogzcbs {
 				return false;
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Items_.reset( P );
 		}
@@ -369,7 +369,7 @@ namespace ogzcbs {
 	: public cDynamic<OGZCBS_BTP>
 	{
 	private:
-		lstctn::qLMCONTAINERi( item_v, row ) Container_;
+		lstctn::qLMCONTAINERw( item_v, row ) Container_;
 	protected:
 		virtual row OGZCBSNew( row Row ) override
 		{
@@ -388,7 +388,7 @@ namespace ogzcbs {
 		{
 			Container_.Store( Item, Row );
 		}
-		virtual bso::fBool OGZCBSRecall(
+		virtual bso::sBool OGZCBSRecall(
 			row Row,
 			item_v &Item ) const override
 		{
@@ -401,7 +401,7 @@ namespace ogzcbs {
 			}
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Container_.reset( P );
 		}

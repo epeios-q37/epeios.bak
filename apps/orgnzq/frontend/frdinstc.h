@@ -54,11 +54,11 @@ namespace frdinstc {
 			Record_.Init( Frontend.Record );
 			Object_.Init( Frontend.MyObject );
 		}
-		bso::fBool Login(
+		bso::sBool Login(
 			const str::vString &Username,
 			const str::vString &Password )
 		{
-			bso::fBool Success = false;
+			bso::sBool Success = false;
 
 			S_().OGZLogin( Username, Password, Success );
 
@@ -85,7 +85,7 @@ namespace frdinstc {
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
 		}
-		bso::fBool Login(
+		bso::sBool Login(
 			const str::vString &Username,
 			const str::vString &Password )
 		{

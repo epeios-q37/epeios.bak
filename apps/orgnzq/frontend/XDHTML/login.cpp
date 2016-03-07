@@ -127,7 +127,7 @@ qRB
 	if ( !Session.Connect( fblfrd::compatibility_informations__( OGZINF_LC_AFFIX, ORGNZQ_API_VERSION ), IncompatibilityInformations ) )
 		qRGnr();
 
-	if ( !Session.User.Login(str::iString(), str::iString()) ) {
+	if ( !Session.User.Login(str::wString(), str::wString()) ) {
 		Session.AlertT( "UnableToLogin" );
 		Session.Disconnect();
 	} else

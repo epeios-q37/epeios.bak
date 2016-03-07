@@ -29,19 +29,19 @@ mods += ags aem bch bitbch bso
 mods += cio cpe crptgr cslio ctn 
 mods += dir dte dtfbsc dtfptb epsmsc 
 mods += err fdr flf flsq flw 
-mods += flx ias ids iof iop 
+mods += flx ias idsq iof iop 
 mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio tht 
-mods += mtk bomhdl cdgb64 dlbrry fil 
-mods += fnm lcl plgn rgstry stsfsm 
-mods += xml xpp 
+mods += ntvstr que sdr stkbse stkbch 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio tht mtk bomhdl cdgb64 
+mods += dlbrry fil fnm lcl plgn 
+mods += plgncore rgstry stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
 mods += fblbur fblcmd fblcst fbltyp fblovl 
-mods += csdleo csdles csdmns csdscb 
+mods += csdleo csdles csdmxb csdmxs csdscb 
 mods += sktfbc sktinf sktbsc sktxmp 
 mods += wrpexample wrpunbound 
 mods += common registry 
@@ -340,9 +340,10 @@ all: $(binary)
 
 copt += -DVERSION=\""(Version)"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -363,9 +364,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
 	mkdir -p $(dest)
-			
 	cp $(binary) $(dest)
 endif
 		

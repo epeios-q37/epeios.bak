@@ -44,8 +44,8 @@ class rBackend
 : public rBackend_
 {
 private:
-	FBLBKD_RAM_MODULE( wrprecord::vRecord, common::rStuff ) Record_;
-	FBLBKD_RAM_MODULE( wrpexample::vMyObject, common::rStuff ) MyObject_;
+	FBLBKD_RAM_MODULE( wrprecord::dRecord, common::rStuff ) Record_;
+	FBLBKD_RAM_MODULE( wrpexample::dMyObject, common::rStuff ) MyObject_;
 	common::rStuff Stuff_;
 public:
 	void reset( bso::bool__ P = true )

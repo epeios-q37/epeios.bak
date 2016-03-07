@@ -250,7 +250,7 @@ namespace xpp {
 			FileNames.reset( P );
 			Contents.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Names.plug( AS );
 			Positions.plug( AS );
@@ -605,7 +605,7 @@ namespace xpp {
 		E_RODISCLOSE__( fnm::name___, LocalizedFileName );
 	};
 
-	typedef stkbch::qBSTACKvl(_extended_parser___ *) _xparser_stack_;
+	typedef stkbch::qBSTACKdl(_extended_parser___ *) _xparser_stack_;
 	E_AUTO( _xparser_stack );
 
 	typedef fdr::iflow_driver___<> _iflow_driver___;

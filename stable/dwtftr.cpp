@@ -166,7 +166,7 @@ const str::string_ &dwtftr::file_tree_::GetPath(
 
 static void Fill_(
 	const goofs_data_ &Data,
-	vKernel &Kernel,
+	dKernel &Kernel,
 	dwtbsc::grows_ &Rows )
 {
 qRH
@@ -201,7 +201,7 @@ qRE
 
 static void Fill_(
 	const files_data_ &Data,
-	vKernel &Kernel,
+	dKernel &Kernel,
 	frows_ &Rows )
 {
 qRH
@@ -239,7 +239,7 @@ E_AUTO( drows_set );
 
 static void Organize_(
 	const items_ &Items,
-	vKernel &Kernel,
+	dKernel &Kernel,
 	i2d_ &I2D,
 	drows_set_ &Dirs,
 	processing_observer__ &Observer )
@@ -715,7 +715,7 @@ qRE
 }
 
 namespace {
-	bso::fBool SetFileTreeFilesHook_(
+	bso::sBool SetFileTreeFilesHook_(
 		const fnm::name___ &Path,
 		file_tree_ &FileTree,
 		uys::mode__ Mode,
@@ -740,7 +740,7 @@ namespace {
 		uys::mode__ Mode,
 		file_tree_rack___ &Rack )
 	{
-		bso::fBool Exists = SetFileTreeFilesHook_( DataDirName, Rack.Tree, Mode, Rack.Hook, Rack.Id );
+		bso::sBool Exists = SetFileTreeFilesHook_( DataDirName, Rack.Tree, Mode, Rack.Hook, Rack.Id );
 
 		Rack.Tree.plug( Rack.Hook );
 
@@ -1078,7 +1078,7 @@ qRE
 
 static void Sort_(
 	directory_ &Directory,
-	const vKernel &Kernel,
+	const dKernel &Kernel,
 	sort_type__ SortType )
 {
 	Sort_<drow__,directories_>( Directory.Dirs, Kernel.Names, Kernel.Directories, SortType );
@@ -1159,7 +1159,7 @@ qRE
 
 static void Sort_(
 	directories_ &Directories,
-	const vKernel &Kernel,
+	const dKernel &Kernel,
 	dwtbsc::sort_type__ SortType )
 {
 qRH
@@ -1184,7 +1184,7 @@ qRE
 }
 
 void dwtftr::Sort(
-	vKernel &Kernel,
+	dKernel &Kernel,
 	dwtbsc::sort_type__ SortType )
 {
 	Sort_( Kernel.Directories, Kernel, SortType );
@@ -1209,7 +1209,7 @@ typedef bso::uint__ depth__;
 drow__ dwtftr::Load(
 	xml::parser___ &Parser,
 	version__ Version,
-	vKernel &Kernel,
+	dKernel &Kernel,
 	dtree_ &Tree,
 	load_observer__ &Observer )
 {

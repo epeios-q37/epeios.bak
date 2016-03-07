@@ -37,11 +37,11 @@ namespace ogzdtb {
 	class rDatabase
 	{
 	private:
-		ogztyp::fTRow TextType_, RecordType_;	// The 2 types which have to exists.
+		ogztyp::sTRow TextType_, RecordType_;	// The 2 types which have to exists.
 		void FetchMandatoryTypes_( void );
 	public:
 		ogzdta::fData Data;
-		ogztyp::iTypes Types;
+		ogztyp::wTypes Types;
 		ogzclm::fColumns Columns;
 		ogzfld::fFields Fields;
 		ogzrcd::fRecords Records;
@@ -58,7 +58,7 @@ namespace ogzdtb {
 		}
 		qCDTOR( rDatabase );
 		void Init(
-			const ogztyp::vTypes &Types,
+			const ogztyp::dTypes &Types,
 			ogzdta::cData &DTACallback,
 			ogzclm::cColumn &CLMCallback,
 			ogzfld::cField &FLDCallback,

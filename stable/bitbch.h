@@ -286,7 +286,7 @@ namespace bitbch {
 		{
 			return Table.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			return Table.plug( AS );
 		}
@@ -441,11 +441,10 @@ namespace bitbch {
 			T1.reset( P );
 			T2.reset( P );
 		}
-		bso::fBool plug( qASv &AS )
+		void plug( qASd &AS )
 		{
-			bso::fBool Exists = T1.plug( AS );
-			
-			return T2.plug( AS ) ||Exists;
+			T1.plug( AS );
+			T2.plug( AS );
 		}
 		// Operateur d'affectation.
 		bibit_bunch_ &operator =( const bibit_bunch_ &O)

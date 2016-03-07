@@ -163,8 +163,8 @@ namespace que {
 
 	E_AUTO1( _stack )
 */
-# define qQSTACKv( r ) stkbch::qBSTACKvl( r )
-# define qQSTACKi( r ) stkbch::qBSTACKil( r )
+# define qQSTACKd( r ) stkbch::qBSTACKdl( r )
+# define qQSTACKw( r ) stkbch::qBSTACKwl( r )
 
 	using bch::cHook;
 
@@ -217,7 +217,7 @@ namespace que {
 		{
 			Links.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Links.plug( AS );
 		}
@@ -353,7 +353,7 @@ namespace que {
 			return Links.Exists( *Node );
 		}
 		void Dump(
-			qQSTACKv( r ) &Stack,
+			qQSTACKd( r ) &Stack,
 			r Begin,
 			que::direction Direction ) const;
 		r Cut( r Node )
@@ -396,16 +396,16 @@ namespace que {
 
 	void Dump_(
 		const E_QUEUE_ &Queue,
-		qQSTACKv( sdr::row__ ) &Stack,
+		qQSTACKd( sdr::row__ ) &Stack,
 		sdr::row__ Begin,
 		direction Direction );
 
 	template <typename r> inline void queue_<r>::Dump(
-		qQSTACKv( r ) &Stack,
+		qQSTACKd( r ) &Stack,
 		r Begin,
 		que::direction Direction ) const
 	{
-		Dump_( *(E_QUEUE_ *)this, *(qQSTACKv( sdr::row__)*)&Stack, Begin, Direction );
+		Dump_( *(E_QUEUE_ *)this, *(qQSTACKd( sdr::row__)*)&Stack, Begin, Direction );
 	}
 
 
@@ -624,7 +624,7 @@ namespace que {
 		{
 			return Queue.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			return Queue.plug( AS );
 		}
@@ -734,7 +734,7 @@ namespace que {
 			S_.QueueManager.Swap( Node1, Node2, Queue );
 		}
 		void Dump(
-			qQSTACKv( r ) &Stack,
+			qQSTACKd( r ) &Stack,
 			r Begin,
 			que::direction Direction ) const
 		{

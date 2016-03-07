@@ -23,16 +23,16 @@
 
 using namespace ogzxml;
 
-using xml::vWriter;
+using xml::dWriter;
 
 namespace {
-	stsfsm::iAutomat RecordTagAutomats_[RecordLastVersion+1];
-	stsfsm::iAutomat RecordAttributeAutomats_[RecordLastVersion+1];
+	stsfsm::wAutomat RecordTagAutomats_[RecordLastVersion+1];
+	stsfsm::wAutomat RecordAttributeAutomats_[RecordLastVersion+1];
 }
 
 const char *ogzxml::GetLabel(
 	eRecordTag Tag,
-	fVersion Version )
+	sVersion Version )
 {
 	switch ( Tag ) {
 	case rtRecord:
@@ -60,7 +60,7 @@ const char *ogzxml::GetLabel(
 
 const char *ogzxml::GetLabel(
 	eRecordAttribute Attribute,
-	fVersion Version )
+	sVersion Version )
 {
 	switch ( Attribute ) {
 	case raId:
@@ -88,15 +88,15 @@ const char *ogzxml::GetLabel(
 
 namespace {
 	inline void Dump_(
-		ogztyp::fTRow TypeRow,
-		const ogztyp::fType &Type,
+		ogztyp::sTRow TypeRow,
+		const ogztyp::sType &Type,
 		const ogzdta::fData &Data,
-		ogzdta::fDRow DatumRow,
-		vWriter &Writer )
+		ogzdta::sDRow DatumRow,
+		dWriter &Writer )
 	{
 	qRH
-		ogzdta::iDatum Datum;
-		ogzdta::fSize Size = 0;
+		ogzdta::wDatum Datum;
+		ogzdta::sSize Size = 0;
 		str::string XML;
 	qRB
 		XML.Init();
@@ -115,13 +115,13 @@ namespace {
 	}
 
 	inline void Dump_(
-		ogztyp::fTRow TypeRow,
-		const ogztyp::fType &Type,
+		ogztyp::sTRow TypeRow,
+		const ogztyp::sType &Type,
 		const ogzdta::fData &Data,
-		const ogzdta::vDatumList &DatumList,
-		vWriter &Writer )
+		const ogzdta::dDatumList &DatumList,
+		dWriter &Writer )
 	{
-		sdr::fRow Row = DatumList.First();
+		sdr::sRow Row = DatumList.First();
 
 		Writer.PushTag( T( Data ) );
 		xml::PutAttribute( A(Amount), DatumList.Amount(), Writer );
@@ -136,11 +136,11 @@ namespace {
 	}
 
 	inline void Dump_(
-		const ogztyp::vTypes &Types,
+		const ogztyp::dTypes &Types,
 		const ogzclm::fColumns &Columns,
 		const ogzdta::fData &Data,
-		const ogzfld::vField &Field,
-		vWriter &Writer )
+		const ogzfld::dField &Field,
+		dWriter &Writer )
 	{
 	qRH
 		ogzclm::fColumn Column;
@@ -163,15 +163,15 @@ namespace {
 	}
 
 	inline void Dump_(
-		const ogztyp::vTypes &Types,
+		const ogztyp::dTypes &Types,
 		const ogzfld::fFields &Fields,
-		ogzrcd::fFRow Row,
+		ogzrcd::sFRow Row,
 		const ogzclm::fColumns &Columns,
 		const ogzdta::fData &Data,
-		vWriter &Writer )
+		dWriter &Writer )
 	{
 	qRH
-		ogzfld::iField Field;
+		ogzfld::wField Field;
 	qRB
 		Field.Init();
 		Fields.Recall( Row, Field );
@@ -183,14 +183,14 @@ namespace {
 	}
 
 	inline void Dump_(
-		const ogztyp::vTypes &Types,
+		const ogztyp::dTypes &Types,
 		const ogzfld::fFields &Fields,
-		const ogzfld::vFieldList &FieldList,
+		const ogzfld::dFieldList &FieldList,
 		const ogzclm::fColumns &Columns,
 		const ogzdta::fData &Data,
-		vWriter &Writer )
+		dWriter &Writer )
 	{
-		sdr::fRow Row = FieldList.First();
+		sdr::sRow Row = FieldList.First();
 
 		Writer.PushTag( T( Fields ) );
 
@@ -206,9 +206,9 @@ namespace {
 	}
 
 	inline void Dump_(
-		const ogzrcd::vRecord &Record,
+		const ogzrcd::dRecord &Record,
 		const ogzdtb::rDatabase &Database,
-		xml::vWriter &Writer )
+		xml::dWriter &Writer )
 	{
 		Writer.PushTag( T( Record ) );
 		Dump_( Database.Types, Database.Fields, Record, Database.Columns, Database.Data, Writer );
@@ -216,13 +216,13 @@ namespace {
 	}
 
 	inline void Dump_(
-		ogzrcd::fRRow RecordRow,
+		ogzrcd::sRRow RecordRow,
 		const ogzrcd::fRecords &Records,
 		const ogzdtb::rDatabase &Database,
-		xml::vWriter &Writer )
+		xml::dWriter &Writer )
 	{
 	qRH
-		ogzrcd::iRecord Record;
+		ogzrcd::wRecord Record;
 	qRB
 		Record.Init();
 		
@@ -236,17 +236,17 @@ namespace {
 }
 
 void ogzxml::Dump(
-	ogzrcd::fRRow RecordRow,
+	ogzrcd::sRRow RecordRow,
 	const ogzdtb::rDatabase &Database,
-	vWriter &Writer )
+	dWriter &Writer )
 {
 	Dump_( RecordRow, Database.Records, Database, Writer );
 }
 
 void ogzxml::Dump(
-	const ogztyp::vTypes &Types,
+	const ogztyp::dTypes &Types,
 	const ogzrcd::rRecordBuffer &Record,
-	xml::vWriter &Writer )
+	xml::dWriter &Writer )
 {
 	Writer.PushTag( T( Record ) );
 
@@ -260,17 +260,17 @@ void ogzxml::Dump(
 
 namespace {
 		template <typename type> inline void InitAndFillAutomat_(
-		stsfsm::vAutomat &Automat,
-		fVersion Version,
+		stsfsm::dAutomat &Automat,
+		sVersion Version,
 		type Amount )
 	{
 		Automat.Init();
-		stsfsm::Fill<type, fVersion>( Version, Automat, Amount, GetLabel );
+		stsfsm::Fill<type, sVersion>( Version, Automat, Amount, GetLabel );
 	}
 
 	template <typename type>  void InitAndFillAutomats_(
-		stsfsm::iAutomat *Automats,
-		fVersion LastVersion,
+		stsfsm::dAutomat *Automats,
+		sVersion LastVersion,
 		type Amount )
 	{
 		for ( int i = 0; i <= RecordLastVersion; i++ )
@@ -283,7 +283,7 @@ namespace {
 		InitAndFillAutomats_( RecordAttributeAutomats_, RecordLastVersion, ra_amount );
 	}
 
-	void InitAndFilleAutomats_( void )
+	void InitAndFillAutomats_( void )
 	{
 		InitAndFillRecordAutomats_();
 	}
@@ -291,7 +291,7 @@ namespace {
 
 qGCTOR( ogzxml )
 {
-	InitAndFilleAutomats_();
+	InitAndFillAutomats_();
 }
 
 

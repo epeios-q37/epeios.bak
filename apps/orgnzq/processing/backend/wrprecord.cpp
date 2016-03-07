@@ -32,18 +32,18 @@ using namespace wrprecord;
 using namespace ogzrcd;
 using common::rStuff;
 
-const char *wrprecord::vRecord::PREFIX = WRPRECORD_RECORD_PREFIX;
-const char *wrprecord::vRecord::NAME = WRPRECORD_RECORD_NAME;
+const char *wrprecord::dRecord::PREFIX = WRPRECORD_RECORD_PREFIX;
+const char *wrprecord::dRecord::NAME = WRPRECORD_RECORD_NAME;
 
 #define ARGS (\
-	vRecord_ &Record,\
+	dRecord_ &Record,\
 	fblbkd::backend___ &Backend,\
 	fblbkd::request__ &Request,\
 	rStuff &Stuff )\
 
 typedef void (* f_manager ) ARGS;
 
-void wrprecord::vRecord::HANDLE(
+void wrprecord::dRecord::HANDLE(
 	fblbkd::backend___ &Backend,
 	fblbkd::untyped_module &Module,
 	fblbkd::index__ Index,
@@ -59,7 +59,7 @@ void wrprecord::vRecord::HANDLE(
 DEC( EditRecord )
 {
 qRH
-	fRRow Row = qNIL;
+	sRRow Row = qNIL;
 qRB
 	Row = Request.IdIn();
 
@@ -76,7 +76,7 @@ qRE
 
 #define D( name )	#name, (void *)exported##name
 
-void wrprecord::vRecord::NOTIFY(
+void wrprecord::dRecord::NOTIFY(
 	fblbkd::untyped_module &Module,
 	common::rStuff &Data )
 {

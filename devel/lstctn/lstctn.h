@@ -41,11 +41,11 @@
 /****** New version ******/
 /*************************/
 
-# define qLMCONTAINERv( type, row ) E_LMCONTAINERt_( type, row )
-# define qLMCONTAINERi( type, row ) E_LMCONTAINERt( type, row )
+# define qLMCONTAINERd( type, row ) E_LMCONTAINERt_( type, row )
+# define qLMCONTAINERw( type, row ) E_LMCONTAINERt( type, row )
 
-# define qLMCONTAINERvl( type ) qLMCONTAINERv( type, sdr::fRow )
-# define qLMCONTAINERil( type ) qLMCONTAINERi( type, sdr::fRow )
+# define qLMCONTAINERdl( type ) qLMCONTAINERd( type, sdr::sRow )
+# define qLMCONTAINERwl( type ) qLMCONTAINERw( type, sdr::sRow )
 
 /*************************/
 /****** Old version ******/
@@ -101,7 +101,7 @@ namespace lstctn {
 			container::plug( Hooks.GetContainerHooks() );
 			list_<row, row_t>::plug( Hooks.GetListHook(), container::Dynamics.Amount() );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			container::plug( AS );
 			list_<row, row_t>::plug( AS );
@@ -172,7 +172,7 @@ namespace lstctn {
 			return List_;
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Container_.reset( P );
 			List_.reset( P );

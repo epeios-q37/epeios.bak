@@ -104,7 +104,7 @@ namespace dwtdct {
 			Name.reset( P );
 			Oddity.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Name.plug( AS );
 			Oddity.plug( AS );
@@ -231,7 +231,7 @@ namespace dwtdct {
 			Sizes.plug( Hook.Sizes );
 			Timestamps.plug( Hook.Timestamps );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Names.plug( AS );
 			Exclusions.plug( AS );
@@ -278,7 +278,7 @@ namespace dwtdct {
 			Names.reset( P );
 			Oddities.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Names.plug( AS );
 			Oddities.plug( AS );
@@ -328,7 +328,7 @@ namespace dwtdct {
 			Files.reset( P );
 			Goofs.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Path.plug( AS );
 			Dir.plug( AS );
@@ -386,7 +386,7 @@ namespace dwtdct {
 
 	E_AUTO( items );
 
-	typedef stkbch::qBSTACKvl( irow__ ) irows_;
+	typedef stkbch::qBSTACKdl( irow__ ) irows_;
 	E_AUTO( irows );
 
 	typedef bch::E_BUNCHt_( dwtbsc::files_ *, irow__ ) files_set_;
@@ -454,7 +454,7 @@ namespace dwtdct {
 				qRFwk();
 		}
 	public:
-		void reset( bso::fBool = true )
+		void reset( bso::sBool = true )
 		{
 			memset(Core_, 0, sizeof( Core_ ) );
 		}
@@ -661,7 +661,7 @@ namespace dwtdct {
 			GFRows.plug( Hook.GFRows );
 			Files.plug( Hook.Files );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			GFRows.plug( AS );
 			Files.plug( AS );
@@ -721,7 +721,7 @@ namespace dwtdct {
 	void Fill(
 		const content_ &Content,
 		const ghost2files_ &G2F,
-		vKernel &Kernel );
+		dKernel &Kernel );
 
 }
 

@@ -30,17 +30,17 @@
 # define WRPEXAMPLE_MYOBJECT_NAME	"MyObject"
 
 namespace wrpexample {
-	typedef sktxmp::vMyObject	vMyObject_;
+	typedef sktxmp::dMyObject	dMyObject_;
 
-	class vMyObject
-	: public vMyObject_
+	class dMyObject
+	: public dMyObject_
 	{
 	public:
 		struct s
-		: public vMyObject_::s
+		: public dMyObject_::s
 		{};
-		vMyObject( s &S )
-		: vMyObject_( S )
+		dMyObject( s &S )
+		: dMyObject_( S )
 		{}
 		void HANDLE(
 			fblbkd::backend___ &Backend,
@@ -55,7 +55,7 @@ namespace wrpexample {
 		static const char *PREFIX;
 		static const char *NAME;
 //		static void RAW_MESSAGES( lcl::strings_ &Messages );
-		vMyObject_ *OBJECT( void )
+		dMyObject_ *OBJECT( void )
 		{
 			return this;
 		}

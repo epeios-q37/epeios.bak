@@ -53,17 +53,17 @@
 
 namespace bso {
 	// Unit of digital information, without any intrinsec signification.
-	typedef unsigned char fByte;
+	typedef unsigned char sByte;
 
 	//t Size of a memory .
-	typedef size_t fSize;
+	typedef size_t sSize;
 
 	// Boolean.
-	typedef bool fBool;
+	typedef bool sBool;
 
-	typedef unsigned char fU8;
+	typedef unsigned char sU8;
 
-	typedef fU8 bEnum;
+	typedef sU8 bEnum;
 }
 
 /*************************/
@@ -71,9 +71,9 @@ namespace bso {
 /*************************/
 
 namespace bso {
-	typedef fByte byte__;
+	typedef sByte byte__;
 
-	typedef fBool bool__;
+	typedef sBool bool__;
 
 # define BSO__DEF( type, name, value )\
 	static const type##__ &name = value
@@ -97,7 +97,7 @@ namespace bso {
 
 	#define BSO_U8_MAX		UINT8_MAX
 	#define BSO_U8_MIN		0
-	typedef fU8 u8__;
+	typedef sU8 u8__;
 
 	BSO__INT_MIN_MAX_DEF( 8, INT8 );
 
@@ -139,7 +139,7 @@ namespace bso {
 // # define BSO_SIZE_MAX	SIZE_MAX
 
 	//t Size of a memory .
-	typedef fSize size__;
+	typedef sSize size__;
 
 	//t Short-sized float.
 	typedef float sfloat__;

@@ -173,7 +173,7 @@ namespace prxy {
 
 			return s_Undefined;	// To avoid a warning.
 		}
-		bso::fBool Init(
+		bso::sBool Init(
 			const char *HostService,
 			const char *Identifier,
 			prxybase::eType Type,

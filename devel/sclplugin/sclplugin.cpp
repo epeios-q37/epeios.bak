@@ -65,7 +65,7 @@ namespace {
 
 	void HandleArguments_(
 		const str::string_ &MergedArguments,
-		str::vStrings &SplittedArguments	)
+		str::dStrings &SplittedArguments	)
 	{
 	qRH
 		str::string Argument;
@@ -112,7 +112,7 @@ namespace {
 
 	void PreInitialize_(
 		const plgncore::data__ *Data,
-		str::vStrings &Arguments )
+		str::dStrings &Arguments )
 	{
 	if ( Data == NULL )
 		qRFwk();
@@ -133,7 +133,7 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	const rgstry::entry__ &Configuration )
 {
 qRH
-	str::iStrings Arguments;
+	str::wStrings Arguments;
 qRB
 	Arguments.Init();
 
@@ -160,7 +160,7 @@ void sclplugin::callback__::PLGNCOREInitialize(
 	str::string_ &Locale )
 {
 qRH
-	str::iStrings Arguments;
+	str::wStrings Arguments;
 qRB
 	Arguments.Init();
 

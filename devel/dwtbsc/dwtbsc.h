@@ -221,7 +221,7 @@ namespace dwtbsc {
 			Files.reset( P );
 			Dirs.reset(P);
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			regular_::plug( AS );
 			Goofs.plug( AS );
@@ -272,7 +272,7 @@ namespace dwtbsc {
 
 # undef M
 
-	class vKernel
+	class dKernel
 	{
 	public:
 		struct s
@@ -288,7 +288,7 @@ namespace dwtbsc {
 		directories_ Directories;
 		names_ Names;
 		oddities_ Oddities;
-		vKernel( s &S )
+		dKernel( s &S )
 		: Goofs( S.Goofs ),
 		  Files( S.Files ),
 		  Directories( S.Directories ),
@@ -313,7 +313,7 @@ namespace dwtbsc {
 			M( ctn, Hooks, Oddities );
 # undef M
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Goofs.plug( AS );
 			Files.plug( AS );
@@ -321,7 +321,7 @@ namespace dwtbsc {
 			Names.plug( AS );
 			Oddities.plug( AS );
 		}
-		vKernel &operator =( const vKernel &K )
+		dKernel &operator =( const dKernel &K )
 		{
 			Goofs = K.Goofs;
 			Files = K.Files;
@@ -441,7 +441,7 @@ namespace dwtbsc {
 			Prefix.reset( P );
 			Suffix.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Prefix.plug( AS );
 			Suffix.plug( AS );
@@ -554,7 +554,7 @@ namespace dwtbsc {
 		const str::string_ &Path,
 		tamount__ ThreadAmountMax );
 
-	bso::fBool Delete(
+	bso::sBool Delete(
 		const str::vString &Root,
 		const str::vString &Path,
 		const str::vString &Filename );

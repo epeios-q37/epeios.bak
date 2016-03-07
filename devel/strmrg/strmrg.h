@@ -79,7 +79,7 @@ namespace strmrg {
 			{
 				return Items.plug( Hook );
 			}
-			void plug( qASv &AS )
+			void plug( qASd &AS )
 			{
 				return Items.plug( AS );
 			}
@@ -145,7 +145,7 @@ namespace strmrg {
 			Items.reset( P );
 			Main.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Strings.plug( AS );
 			Items.plug( AS );

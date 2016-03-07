@@ -28,8 +28,8 @@ namespace {
 
 void ogzdtb::rDatabase::FetchMandatoryTypes_( void )
 {
-	ogztyp::fTRow Row = Types.First();
-	ogztyp::fType Type;
+	ogztyp::sTRow Row = Types.First();
+	ogztyp::sType Type;
 
 	while ( Row != qNIL ) {
 		Types.Recall( Row, Type );

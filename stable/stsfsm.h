@@ -49,7 +49,7 @@ namespace stsfsm {
 
 	qROW( CRow );	// 'Card Row'.
 
-	typedef bch::qBUNCHvl( fCRow ) vCRows;
+	typedef bch::qBUNCHdl( sCRow ) dCRows;
 
 	// By defalt, cette valeur signifie qu'une 'card' n'est pas rattache  une entre. Dans ce cas 'Cards( 255 ) n'existe pas.
 	// Si les 255 entre de la table sont utilise et pointe tous sur des 'card's inutilise, alors 'Cards(255)' est un 'row' sur une 'card' comme un autre.
@@ -62,7 +62,7 @@ namespace stsfsm {
 
 	using bch::cHook;
 
-	class vCard {
+	class dCard {
 	private:
 		void _ResetTable( void )
 		{
@@ -85,10 +85,10 @@ namespace stsfsm {
 		struct s {
 			fId Id;
 			bso::u8__ Table[256];
-			vCRows::s Cards;
+			dCRows::s Cards;
 		} &S_;
-		vCRows Cards;
-		vCard ( s &S )
+		dCRows Cards;
+		dCard ( s &S )
 		: S_( S ),
 		  Cards( S.Cards )
 		{}
@@ -102,11 +102,11 @@ namespace stsfsm {
 		{
 			Cards.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Cards.plug( AS );
 		}
-		vCard &operator =( const vCard &C )
+		dCard &operator =( const dCard &C )
 		{
 			S_.Id = C.S_.Id;
 			memcpy( S_.Table, C.S_.Table, sizeof( S_.Table ) );
@@ -120,7 +120,7 @@ namespace stsfsm {
 			_ResetTable();
 			Cards.Init();
 		}
-		fCRow Get( bso::u8__ C ) const
+		sCRow Get( bso::u8__ C ) const
 		{
 			if ( _T( C ) == NoCard )
 				if ( !Cards.Exists( NoCard ) )
@@ -130,7 +130,7 @@ namespace stsfsm {
 		}
 		void Set(
 			bso::u8__ C,
-			fCRow Row )
+			sCRow Row )
 		{
 			if ( Get( C ) != qNIL )
 				qRFwk();
@@ -140,7 +140,7 @@ namespace stsfsm {
 		E_RWDISCLOSE_( fId, Id );
 	};
 
-	typedef ctn::qMCONTAINERv( vCard, fCRow ) vAutomat;
+	typedef ctn::qMCONTAINERd( dCard, sCRow ) dAutomat;
 	qW( Automat );
 
 	using bch::rRH;
@@ -155,16 +155,16 @@ namespace stsfsm {
 
 namespace stsfsm {
 
-	typedef fCRow crow__;
+	typedef sCRow crow__;
 
-	typedef vCRows crows_;
+	typedef dCRows crows_;
 
 	typedef fId id__;
 
-	typedef vCard card_;
+	typedef dCard card_;
 	E_AUTO(  card  );
 
-	typedef vAutomat automat_;
+	typedef dAutomat automat_;
 	E_AUTO( automat );
 
 	id__ Add(

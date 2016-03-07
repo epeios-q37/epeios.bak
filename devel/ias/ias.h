@@ -59,10 +59,10 @@ namespace ias {
 	// Prdclaration.
 	class indexed_aggregated_storage_;
 
-	typedef sdr::fStorageDriver fStorageDriver_;
+	typedef sdr::sStorageDriver sStorageDriver_;
 
 	class _indexed_aggregated_storage_driver__
-	: public fStorageDriver_
+	: public sStorageDriver_
 	{
 	private:
 		index__ _Index;
@@ -94,7 +94,7 @@ namespace ias {
 		{}
 		void reset( bool P = true )
 		{
-			fStorageDriver_::reset( P );
+			sStorageDriver_::reset( P );
 
 			_Index = qNIL;
 			_AStorage = NULL;
@@ -102,7 +102,7 @@ namespace ias {
 		//f Initialize with 'Multimemory' multimemory.
 		void Init( void )
 		{
-			fStorageDriver_::Init();
+			sStorageDriver_::Init();
 
 			_Index = qNIL;
 		}
@@ -312,7 +312,7 @@ namespace ias {
 			Descriptors.plug( Hooks.GetDescriptorsHook() );
 			AStorage.plug( Hooks.GetStorageHook() );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Descriptors.plug( AS );
 			AStorage.plug( AS );

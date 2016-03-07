@@ -1117,7 +1117,7 @@ namespace {
 	private:
 		qRMV( flw::iflow__, F_, Flow_ );
 		const char *Pending_;
-		bso::fBool EOF_;
+		bso::sBool EOF_;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -1169,7 +1169,7 @@ namespace {
 			F_().Dismiss();
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			rIFlowDriver_::reset( P );
 			Flow_ = NULL;
@@ -1233,7 +1233,7 @@ void xml::writer_::PutRawValue( flw::fIFlow &Flow )
 namespace {
 	void TransformAndPutValue_(
 		flw::fIFlow &Flow,
-		vWriter &Writer )
+		dWriter &Writer )
 	{
 	qRH
 		flw::standalone_iflow__<> TFlow;
@@ -1301,7 +1301,7 @@ namespace {
 	void TransformAndPutAttribute_(
 		const name_ &Name,
 		flw::fIFlow &Flow,
-		vWriter &Writer )
+		dWriter &Writer )
 	{
 	qRH
 		flw::standalone_iflow__<> TFlow;
@@ -1418,9 +1418,9 @@ void xml::writer_::Rewind( mark__ Mark )
 	while ( PopTag() != Mark );
 }
 
-bso::fBool vWriter::Put( rParser &Parser )
+bso::sBool dWriter::Put( rParser &Parser )
 {
-	bso::fBool Continue = true, Success = false;
+	bso::sBool Continue = true, Success = false;
 
 	while ( Continue ) {
 		switch( Parser.Parse( xml::tfAll & ~xml::tfStartTagClosed ) ) {
@@ -1464,9 +1464,9 @@ bso::fBool vWriter::Put( rParser &Parser )
 	return Success;
 }
 
-bso::fBool xml::vWriter::Put( xtf::extended_text_iflow__ &XFlow )
+bso::sBool xml::dWriter::Put( xtf::extended_text_iflow__ &XFlow )
 {
-	bso::fBool Success = true;
+	bso::sBool Success = true;
 qRH
 	rParser Parser;
 qRB
@@ -1479,9 +1479,9 @@ qRE
 	return Success;
 }
 
-bso::fBool xml::vWriter::Put( const str::vString &XML )
+bso::sBool xml::dWriter::Put( const str::vString &XML )
 {
-	bso::fBool Success = false;
+	bso::sBool Success = false;
 qRH
 	flx::fStringIFlow SFlow;
 	xtf::extended_text_iflow__ XFlow;

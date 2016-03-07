@@ -224,7 +224,7 @@ namespace sclfrntnd {
 		{
 			Label.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Label.plug( AS );
 		}
@@ -274,7 +274,7 @@ namespace sclfrntnd {
 			il_<t>::reset( P );
 			Wording.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			il_<t>::plug( AS );
 			Wording.plug( AS );

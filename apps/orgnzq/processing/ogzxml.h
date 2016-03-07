@@ -32,9 +32,9 @@
 # include "xml.h"
 
 namespace ogzxml {
-	typedef bso::fU8 fVersion;
+	typedef bso::sU8 sVersion;
 
-	qCDEF( fVersion, RecordLastVersion, 0 );
+	qCDEF( sVersion, RecordLastVersion, 0 );
 
 	qENUM( RecordTag ) {
 		rtRecord,
@@ -48,7 +48,7 @@ namespace ogzxml {
 
 	const char *GetLabel(
 		eRecordTag Tag,
-		fVersion Version = RecordLastVersion );
+		sVersion Version = RecordLastVersion );
 
 	qENUM( RecordAttribute ) {
 		raId,
@@ -61,17 +61,17 @@ namespace ogzxml {
 
 	const char *GetLabel(
 		eRecordAttribute Attribute,
-		fVersion Version = RecordLastVersion );
+		sVersion Version = RecordLastVersion );
 
 	void Dump(
-		const ogzrcd::fRRow Record,
+		const ogzrcd::sRRow Record,
 		const ogzdtb::rDatabase &Database,
-		xml::vWriter &Writer );
+		xml::dWriter &Writer );
 
 	void Dump(
-		const ogztyp::vTypes &Types,
+		const ogztyp::dTypes &Types,
 		const ogzrcd::rRecordBuffer &Record,
-		xml::vWriter &Writer );
+		xml::dWriter &Writer );
 }
 
 #endif

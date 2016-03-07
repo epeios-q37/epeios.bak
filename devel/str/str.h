@@ -17,40 +17,24 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: str.h,v 1.82 2013/04/15 10:50:57 csimon Exp $
+// STRing 
 
 #ifndef STR__INC
-#define STR__INC
+# define STR__INC
 
-#define STR_NAME		"STR"
+# define STR_NAME		"STR"
 
-#define	STR_VERSION	"$Revision: 1.82 $"
-
-#define STR_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-#if defined( E_DEBUG ) && !defined( STR_NODBG )
-#define STR_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( STR_NODBG )
+#  define STR_DBG
+# endif
 
 /* Begin of automatic documentation generation part. */
 
-//V $Revision: 1.82 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/15 10:50:57 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D STRing 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "txf.h"
-#include "bch.h"
-#include "cpe.h"
-#include "ctn.h"
+# include "err.h"
+# include "txf.h"
+# include "bch.h"
+# include "cpe.h"
+# include "ctn.h"
 
 /*************************/
 /****** New version ******/
@@ -60,11 +44,11 @@ namespace str {
 	class string_;
 	class string;
 
-	typedef string_ vString;
-	typedef string iString;
+	typedef string_ dString;
+	typedef string wString;
 
-	typedef ctn::E_MCONTAINER_( str::string_ ) vStrings;
-	typedef ctn::E_MCONTAINER( str::string_ ) iStrings;
+	typedef ctn::E_MCONTAINER_( str::vString ) dStrings;
+	typedef ctn::E_MCONTAINER( str::vString ) wStrings;
 }
 
 /*************************/
@@ -242,7 +226,7 @@ namespace str {
 			char C,
 			sdr::row__ Start = 0 ) const;
 		// NOTA : Les mthodes 'ToNumber'(...)' facilitent la mise en oeuvre de 'template's.
-#define STR_UN( name, type, limit )\
+# define STR_UN( name, type, limit )\
 	type To##name(\
 			sdr::row__ Begin,\
 			sdr::row__ *ErrP = NULL,\
@@ -258,7 +242,7 @@ namespace str {
 		{\
 			return To##name( 0, ErrP, Base, Limit );\
 		}
-#define STR_TUN( type, limit )\
+# define STR_TUN( type, limit )\
 		void ToNumber( \
 			   type &Number, \
 			   sdr::row__ *Error = NULL ) const\
@@ -287,7 +271,7 @@ namespace str {
 		{\
 			Number = (type)_UConversion( *this, Begin, Error, bAuto, Limit );\
 		}
-#define STR_SN( name, type, positive_limit, negative_limit )\
+# define STR_SN( name, type, positive_limit, negative_limit )\
 	type To##name(\
 			sdr::row__ Begin,\
 			sdr::row__ *ErrP,\
@@ -305,7 +289,7 @@ namespace str {
 		{\
 			return To##name( 0, ErrP, Base, PositiveLimit, NegativeLimit );\
 		}
-#define STR_TSN( type, negative_limit, positive_limit )\
+# define STR_TSN( type, negative_limit, positive_limit )\
 		void ToNumber(\
 			type &Number,\
 			sdr::row__ *Error = NULL ) const\
@@ -614,7 +598,7 @@ namespace str {
 
 		Values.Append( str::string( bso::Convert( Value, Buffer ) ) );
 	}
-#if 0
+ #if 0
 	template <typename t> inline void AppendInt(
 		t Value,
 		str::strings_ &Values )
@@ -662,5 +646,4 @@ namespace str {
 # endif
 }
 
-/*$END$*/
 #endif

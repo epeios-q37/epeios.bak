@@ -82,7 +82,7 @@ namespace ags {
 
 # define TOL_ROW_( name ) E_TMIMIC__( sdr::bRow, name )
 
-# define qROW( name ) TOL_ROW_( f##name )
+# define qROW( name ) TOL_ROW_( s##name )
 # define qROWr( name ) TOL_ROW_( r##name )
 
 // Declaration of standardized constructor.
@@ -200,29 +200,29 @@ namespace ags {
 # define qRWDISCLOSEr(type, name )		qRWDISCLOSEf(type, name )
 
 # define qW_( name )	\
-class i##name\
-: public v##name\
+class w##name\
+: public d##name\
 {\
 public:\
-	v##name::s static_;\
-	i##name( void )\
-	: v##name( static_ )\
+	d##name::s static_;\
+	w##name( void )\
+	: d##name( static_ )\
 	{\
 		reset( false );\
 	}\
-	~i##name( void )\
+	~w##name( void )\
 	{\
 		reset( true );\
 	}\
-	i##name &operator =( const i##name &O )\
+	w##name &operator =( const w##name &O )\
 	{\
-		v##name::operator =( O );\
+		d##name::operator =( O );\
 \
 		return *this;\
 	}\
-	i##name &operator =( const v##name &O )\
+	w##name &operator =( const d##name &O )\
 	{\
-		v##name::operator =( O );\
+		d##name::operator =( O );\
 \
 		return *this;\
 	}
@@ -234,37 +234,37 @@ public:\
 
 //m Same as 'qW()', but with one template parameter.
 # define qW1( name )\
-template <typename t> class i##name\
-: public v##name<t>\
+template <typename t> class w##name\
+: public d##name<t>\
 {\
 public:\
-	typename v##name<t>::s static_;\
-	i##name( void )\
-	: v##name<t>( static_ )\
+	typename d##name<t>::s static_;\
+	w##name( void )\
+	: d##name<t>( static_ )\
 	{\
-		v##name<t>::reset( false );\
+		d##name<t>::reset( false );\
 	}\
-	~i##name( void )\
+	~w##name( void )\
 	{\
-		v##name<t>::reset( true );\
+		d##name<t>::reset( true );\
 	}\
-	i##name &operator =( const i##name &S )\
+	w##name &operator =( const w##name &S )\
 	{\
-		v##name<t>::operator =( S );\
+		d##name<t>::operator =( S );\
 \
 		return *this;\
 	}\
-	i##name &operator =( const v##name<t> &S )\
+	w##name &operator =( const d##name<t> &S )\
 	{\
-		v##name<t>::operator =( S );\
+		d##name<t>::operator =( S );\
 \
 		return *this;\
 	}\
-	v##name<t> &operator *( void )\
+	d##name<t> &operator *( void )\
 	{\
 		return *this;\
 	}\
-	const v##name<t> &operator *( void ) const\
+	const d##name<t> &operator *( void ) const\
 	{\
 		return *this;\
 	}\
@@ -272,37 +272,37 @@ public:\
 
 // Same as 'qW()', but with 2 template parameters.
 # define qW2( name )\
-template <typename t, typename u> class i##name\
-: public v##name<t,u>\
+template <typename t, typename u> class w##name\
+: public d##name<t,u>\
 {\
 public:\
-	typename v##name<t,u>::s static_;\
-	i##name( void )\
-	: v##name<t,u>( static_ )\
+	typename d##name<t,u>::s static_;\
+	w##name( void )\
+	: d##name<t,u>( static_ )\
 	{\
-		v##name<t,u>::reset( false );\
+		d##name<t,u>::reset( false );\
 	}\
-	~i##name( void )\
+	~w##name( void )\
 	{\
-		v##name<t,u>::reset( true );\
+		d##name<t,u>::reset( true );\
 	}\
-	i##name &operator =( const i##name &S )\
+	w##name &operator =( const w##name &S )\
 	{\
-		v##name<t,u>::operator =( S );\
+		d##name<t,u>::operator =( S );\
 \
 		return *this;\
 	}\
-	i##name &operator =( const v##name<t,u> &S )\
+	w##name &operator =( const d##name<t,u> &S )\
 	{\
-		v##name<t,u>::operator =( S );\
+		d##name<t,u>::operator =( S );\
 \
 		return *this;\
 	}\
-	v##name<t,u> &operator *( void )\
+	d##name<t,u> &operator *( void )\
 	{\
 		return *this;\
 	}\
-	const v##name<t,u> &operator *( void ) const\
+	const d##name<t,u> &operator *( void ) const\
 	{\
 		return *this;\
 	}\
@@ -310,37 +310,37 @@ public:\
 
 // Same as 'qW()', but with 3 template parameters.
 # define qW3( name )\
-template <typename t, typename u, typename v> class i##name\
-: public v##name<t,u,v>\
+template <typename t, typename u, typename v> class w##name\
+: public d##name<t,u,v>\
 {\
 public:\
-	typename v##name<t,u,v>::s static_;\
-	i##name( void )\
-	: v##name<t,u,v>( static_ )\
+	typename d##name<t,u,v>::s static_;\
+	w##name( void )\
+	: d##name<t,u,v>( static_ )\
 	{\
-		v##name<t,u,v>::reset( false );\
+		d##name<t,u,v>::reset( false );\
 	}\
-	~i##name( void )\
+	~w##name( void )\
 	{\
-		v##name<t,u,v>::reset( true );\
+		d##name<t,u,v>::reset( true );\
 	}\
-	i##name &operator =( const i##name &S )\
+	w##name &operator =( const w##name &S )\
 	{\
-		v##name<t,u,v>::operator =( S );\
+		d##name<t,u,v>::operator =( S );\
 \
 		return *this;\
 	}\
-	i##name &operator =( const v##name<t,u,v> &S )\
+	w##name &operator =( const d##name<t,u,v> &S )\
 	{\
-		v##name<t,u,v>::operator =( S );\
+		d##name<t,u,v>::operator =( S );\
 \
 		return *this;\
 	}\
-	v##name<t,u,v> &operator *( void )\
+	d##name<t,u,v> &operator *( void )\
 	{\
 		return *this;\
 	}\
-	const v##name<t,u,v> &operator *( void ) const\
+	const d##name<t,u,v> &operator *( void ) const\
 	{\
 		return *this;\
 	}\
@@ -527,14 +527,14 @@ namespace tol{
 
 namespace tol {
 	// A basic object 't' becomes a normal object.
-	template <class t> class vObject
+	template <class t> class dObject
 	{
 	public:
 		struct s
 		{
 			t Object;
 		} &S_;
-		vObject( s &S )
+		dObject( s &S )
 		: S_( S )
 		{}
 		void reset( bool P = true )
@@ -545,7 +545,7 @@ namespace tol {
 		{
 			// Pour des raisons de standardisation.
 		}
-		vObject &operator =( const vObject &O )
+		dObject &operator =( const dObject &O )
 		{
 			S_.Object = O.S_.Object;
 
@@ -1622,7 +1622,7 @@ pour parvenir au mme rsultat que 'E_XNAVt(...)'. */
 
 namespace tol {
 
-	template <typename t> E_TTCLONE_( vObject<t>, object_ );
+	template <typename t> E_TTCLONE_( dObject<t>, object_ );
 	E_AUTO1( object );
 
 	template <typename t> class _core_pointer___	// Classe de base de gestion d'un pointeur.

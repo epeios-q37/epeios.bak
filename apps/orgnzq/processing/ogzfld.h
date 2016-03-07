@@ -34,58 +34,58 @@
 # include "bch.h"
 
 namespace ogzfld {
-	using ogzbsc::fDRow;
-	using ogzbsc::fTRow;
-	using ogzbsc::fFRow;
-	using ogzclm::fCRow;
+	using ogzbsc::sDRow;
+	using ogzbsc::sTRow;
+	using ogzbsc::sFRow;
+	using ogzclm::sCRow;
 
-	using ogzdta::vDatumList;
+	using ogzdta::dDatumList;
 
-	class vField
-	: public vDatumList
+	class dField
+	: public dDatumList
 	{
 	public:
 		struct s
-		: public vDatumList::s
+		: public dDatumList::s
 		{
-			fCRow Column;
+			sCRow Column;
 		}&S_;
-		vField( s &S )
+		dField( s &S )
 		: S_( S ),
-		  vDatumList( S )
+		  dDatumList( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			S_.Column = qNIL;
-			vDatumList::reset( P );
+			dDatumList::reset( P );
 		}
 		void plug( ogzdta::cHook &Hook )
 		{
-			vDatumList::plug( Hook );
+			dDatumList::plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
-			vDatumList::plug( AS );
+			dDatumList::plug( AS );
 		}
-		vField &operator =( const vField &F )
+		dField &operator =( const dField &F )
 		{
 			S_.Column = F.S_.Column;
-			vDatumList::operator=( F );
+			dDatumList::operator=( F );
 
 			return *this;
 		}
 		void Init( void )
 		{
 			S_.Column = qNIL;
-			vDatumList::Init();
+			dDatumList::Init();
 		}
-		qRODISCLOSEv( fCRow, Column );
+		qRODISCLOSEv( sCRow, Column );
 	};
 
 	qW( Field );
 
 	// template parameters.
-# define OGZFLD_TP	ogzfld::vField, ogzfld::iField, ogzfld::fFRow, ogzfld::fDRow, sdr::fRow
+# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sFRow, ogzfld::sDRow, sdr::sRow
 
 	typedef ogzcbs::cDynamic<OGZFLD_TP> cField;
 
@@ -93,7 +93,7 @@ namespace ogzfld {
 
 	typedef ogzcbs::rRegularDynamicCallback<OGZFLD_TP> rRegularFieldCallback;
 
-	typedef bch::qBUNCHvl( fFRow ) vFieldList;
+	typedef bch::qBUNCHdl( sFRow ) dFieldList;
 	qW( FieldList );
 }
 

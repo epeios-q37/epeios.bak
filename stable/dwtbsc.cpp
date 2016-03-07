@@ -351,7 +351,7 @@ qRE
 	return Success;
 }
 
-bso::fBool dwtbsc::Delete(
+bso::sBool dwtbsc::Delete(
 	const str::vString &Root,
 	const str::vString &Path,
 	const str::vString &Filename )

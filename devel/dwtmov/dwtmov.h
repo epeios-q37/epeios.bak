@@ -60,25 +60,25 @@ namespace dwtmov {
 
 	qROW( MRow );	// Moving row.
 
-	typedef bch::qBUNCHvl( fMRow ) vMRows;
+	typedef bch::qBUNCHdl( sMRow ) dMRows;
 	qW( MRows );
 
-	typedef bch::qBUNCHv( fMove, fMRow ) vMoves;
+	typedef bch::qBUNCHd( fMove, sMRow ) dMoves;
 	qW( Moves );
 
 	using dwtbsc::name_;
 	using dwtbsc::names_;
 
-	class vMovings
+	class dMovings
 	{
 	public:
 		struct s {
-			vMoves::s Moves;
+			dMoves::s Moves;
 			names_::s Names;
 		};
-		vMoves Moves;
+		dMoves Moves;
 		names_ Names;
-		vMovings( s &S )
+		dMovings( s &S )
 		: Moves( S.Moves ),
 		  Names( S.Names )
 		{}
@@ -87,12 +87,12 @@ namespace dwtmov {
 			Moves.reset( P );
 			Names.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Moves.plug( AS );
 			Names.plug( AS );
 		}
-		vMovings &operator =(const vMovings &M)
+		dMovings &operator =(const dMovings &M)
 		{
 			Moves = M.Moves;
 			Names = M.Names;
@@ -104,9 +104,9 @@ namespace dwtmov {
 			Moves.Init();
 			Names.Init();
 		}
-		E_NAVt( Moves., fMRow );
+		E_NAVt( Moves., sMRow );
 		void GetMove(
-			fMRow Row,
+			sMRow Row,
 			str::string_ &Old,
 			str::string_ &New ) const
 		{
@@ -148,12 +148,12 @@ namespace dwtmov {
 
 	typedef fMove move__;
 
-	typedef fMRow mrow__;
+	typedef sMRow mrow__;
 
-	typedef vMoves moves_;
+	typedef dMoves moves_;
 	E_AUTO( moves );
 
-	typedef vMovings movings_;
+	typedef dMovings movings_;
 
 	E_AUTO( movings );
 
@@ -177,7 +177,7 @@ namespace dwtmov {
 		txf::text_oflow__ &Flow );
 
 
-	typedef vMRows mrows_;
+	typedef dMRows mrows_;
 	E_AUTO( mrows );
 
 	class callback__

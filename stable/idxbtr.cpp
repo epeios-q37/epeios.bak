@@ -79,7 +79,7 @@ sdr::row_t__ idxbtr::Equilibrer_(
 {
 	sdr::row_t__ Racine, &Courant = Premier;
 qRH
-	stkbch::qBSTACKil( desc__ ) Pile;
+	stkbch::qBSTACKwl( desc__ ) Pile;
 	sdr::size__ Niveau = 0;
 	desc__ Sommet;
 	bso::bool__ Boucler = true;

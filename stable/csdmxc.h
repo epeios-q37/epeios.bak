@@ -91,7 +91,7 @@ namespace csdmxc {
 
 	typedef flw::ioflow__ fFlow;
 
-	typedef stkbch::qBSTACKvl( void * )	vUPs;
+	typedef stkbch::qBSTACKdl( void * )	dUPs;
 	qW( UPs );
 
 	qENUM( Log ) {
@@ -158,7 +158,7 @@ namespace csdmxc {
 	class rCore {
 	private:
 		qRMV( cCallback, C_, Callback_ );
-		iUPs UPs;
+		wUPs UPs;
 		mutex__ MainMutex_;
 		struct fLog_ {
 			cLogCallback *Callback;

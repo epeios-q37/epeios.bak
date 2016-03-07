@@ -50,7 +50,7 @@ namespace {
 
 static inline vrow__ NewValue_(
 	const str::string_ &Value,
-	bso::fBool  Normalize,
+	bso::sBool  Normalize,
 	values_ &Values )
 {
 	vrow__ Row = Values.New();
@@ -85,7 +85,7 @@ static inline brow__ NewBasic_(
 static inline brow__ NewBasic_(
 	const str::string_ &Value,
 	bso::bool__ ToTranslate,
-	bso::fBool Normalize,
+	bso::sBool Normalize,
 	_core_ &Core )
 {
 	return NewBasic_( NewValue_( Value, Normalize, Core.Values ), ToTranslate, Core.Basics );
@@ -94,7 +94,7 @@ static inline brow__ NewBasic_(
 static inline brow__ NewBasic_(
 	const _basic_ &SourceBasic,
 	const _core_ &SourceCore,
-	bso::fBool Normalize,
+	bso::sBool Normalize,
 	_core_ &NewCore );	// Pr-dclaration
 
 static void Duplicate_(
@@ -118,7 +118,7 @@ static void Duplicate_(
 static inline brow__ NewBasic_(
 	const _basic_ &SourceBasic,
 	const _core_ &SourceCore,
-	bso::fBool Normalize,
+	bso::sBool Normalize,
 	_core_ &NewCore )
 {
 	brow__ Row = qNIL;
@@ -145,7 +145,7 @@ qRE
 
 static inline brow__ NewBasic_(
 	const meaning_ &Meaning,
-	bso::fBool Normalize,
+	bso::sBool Normalize,
 	_core_ &Core )
 {
 	ctn::E_CMITEMt( _basic_, brow__ ) Basic;

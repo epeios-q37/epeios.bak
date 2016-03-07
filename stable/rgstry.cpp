@@ -911,13 +911,13 @@ qRE
 }
 
 namespace {
-	bso::fBool Parse_(
+	bso::sBool Parse_(
 		xtf::extended_text_iflow__ &XFlow,
 		const xpp::criterions___ &Criterions,
 		xml::callback__ &Callback,
 		xpp::context___ &Context )
 	{
-		bso::fBool Success = false;
+		bso::sBool Success = false;
 	qRH
 		xpp::preprocessing_iflow___ PFlow;
 		xtf::extended_text_iflow__ PXFlow;
@@ -959,7 +959,7 @@ namespace {
 		registry_ &_Registry;
 		row__ _Current, Root_;
 		eRootTagHandling RootTagHandling_;
-		bso::fBool Ignore_;	// At true when the first call of 'XMLStartTag()' has to be ignored.
+		bso::sBool Ignore_;	// At true when the first call of 'XMLStartTag()' has to be ignored.
 	protected:
 		virtual bso::bool__ XMLProcessingInstruction( const xml::dump_ & )
 		{
@@ -1074,7 +1074,7 @@ qRE
 	return Root;
 }
 
-bso::fBool rgstry::Insert(
+bso::sBool rgstry::Insert(
 	xtf::extended_text_iflow__ &XFlow,
 	const xpp::criterions___ &Criterions,
 	rgstry::row__ Root,
@@ -1082,7 +1082,7 @@ bso::fBool rgstry::Insert(
 	registry_ &Registry,
 	xpp::context___ &Context )
 {
-	bso::fBool Success = false;
+	bso::sBool Success = false;
 qRH
 	callback___ Callback( Registry );
 qRB

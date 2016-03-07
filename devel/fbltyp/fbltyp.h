@@ -149,7 +149,7 @@ namespace fbltyp {
 		{
 			Value.plug( Hook );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Value.plug( AS );
 		}
@@ -206,7 +206,7 @@ namespace fbltyp {
 		{
 			Values.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Values.plug( AS );
 		}
@@ -256,7 +256,7 @@ namespace fbltyp {
 			Name.reset( P );
 			Casts.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Name.plug( AS );
 			Casts.plug( AS );

@@ -109,7 +109,7 @@ namespace sclxdhtml {
 			Automat.reset( P );
 			Callbacks.reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Automat.plug( AS );
 			Callbacks.plug( AS );

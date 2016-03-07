@@ -164,7 +164,7 @@ const char *sclrgstry::GetLanguage_(
 		return Buffer;
 }
 
-static bso::fBool FillConfigurationRegistry_(
+static bso::sBool FillConfigurationRegistry_(
 	xtf::extended_text_iflow__ &Flow,
 	const char *Directory,
 	const char *RootPath,

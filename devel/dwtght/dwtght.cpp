@@ -39,7 +39,7 @@ static inline status__ CreateGhost_(
 	const fnm::name___ &Name,
 	eGhostType GhostType )
 {
-	bso::fBool Success = false;
+	bso::sBool Success = false;
 
 	switch ( GhostType ) {
 	case gtFile:
@@ -92,7 +92,7 @@ qRE
 	return Status;
 }
 
-static bso::fBool SetGhostsFilesHook_(
+static bso::sBool SetGhostsFilesHook_(
 	const fnm::name___ &Path,
 	uys::mode__ Mode,
 	dwtght::rFH &FilesHook,
@@ -120,7 +120,7 @@ namespace {
 		uys::mode__ Mode,
 		rRack &Rack )
 	{
-		bso::fBool Exists = SetGhostsFilesHook_( DataDirName, Mode, Rack.FilesHook, Rack.Id );
+		bso::sBool Exists = SetGhostsFilesHook_( DataDirName, Mode, Rack.FilesHook, Rack.Id );
 
 		Rack.Ghosts.plug( Rack.FilesHook );
 

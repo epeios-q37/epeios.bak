@@ -44,11 +44,11 @@
 /****** New version ******/
 /*************************/
 
-# define qBUNCHv( type, row ) E_BUNCHt_( type, row )
-# define qBUNCHi( type, row ) E_BUNCHt( type, row )
+# define qBUNCHd( type, row ) E_BUNCHt_( type, row )
+# define qBUNCHw( type, row ) E_BUNCHt( type, row )
 
-# define qBUNCHvl( type ) qBUNCHv( type, sdr::fRow )
-# define qBUNCHil( type ) qBUNCHi( type, sdr::fRow )
+# define qBUNCHdl( type ) qBUNCHd( type, sdr::sRow )
+# define qBUNCHwl( type ) qBUNCHw( type, sdr::sRow )
 
 
 /*************************/
@@ -604,7 +604,7 @@ namespace bch {
 		bunch_( s &S )
 		: _bunch_<type, row, aem::amount_extent_manager_< row >, sh >( S )
 		{};
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::reset( P );
 		}
@@ -617,7 +617,7 @@ namespace bch {
 			if ( Amount != this->Amount() )
 				_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Allocate( Amount, aem::mFitted );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::plug( AS );
 		}

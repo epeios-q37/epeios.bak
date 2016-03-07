@@ -123,7 +123,7 @@ namespace dtr {
 			Tree.plug (Hooks.GetTreeHook() );
 			Queue.plug( Hooks.GetQueueHook() );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			Tree.plug( AS );
 			Queue.plug( AS );
@@ -393,7 +393,7 @@ namespace dtr {
 			return Queue_;
 		}
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Tree_.reset( P );
 			Queue_.reset( P );

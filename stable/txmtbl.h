@@ -89,7 +89,7 @@ namespace txmtbl {
 			string_::reset( P );
 			S_.Location = 0;
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			string_::plug( AS );
 		}
@@ -141,8 +141,8 @@ namespace txmtbl {
 		separator__ Separator = TXMTBL_DEFAULT_CELL_SEPARATOR,
 		escape__ Escape = TXMTBL_DEFAULT_ESCAPE_CHARACTER );
 
-	typedef stkbch::qBSTACKvl( sdr::row__ ) stack_;
-	typedef stkbch::qBSTACKil( sdr::row__ ) stack;
+	typedef stkbch::qBSTACKdl( sdr::row__ ) stack_;
+	typedef stkbch::qBSTACKwl( sdr::row__ ) stack;
 
 	typedef ctn::E_MCONTAINER_( cell_ ) cells_;
 
@@ -168,7 +168,7 @@ namespace txmtbl {
 
 			S_.Location = 0;
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			cells_::plug( AS );
 		}
@@ -299,7 +299,7 @@ namespace txmtbl {
 		{
 			lines_::reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			lines_::plug( AS );
 		}

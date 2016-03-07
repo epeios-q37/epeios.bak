@@ -57,7 +57,7 @@ namespace idxque {
 		{
 			E_QUEUEt_( r )::reset( P );
 		}
-		void plug( qASv &AS )
+		void plug( qASd &AS )
 		{
 			E_QUEUEt_( r )::plug( AS );
 		}
@@ -78,7 +78,7 @@ namespace idxque {
 		}
 		/*f Dump to the stack 'Stack' the queue beginning at 'Begin' and in the 'Direction ' direction.. */
 		void Dump(
-			stkbch::qBSTACKvl( r ) &Stack,
+			stkbch::qBSTACKdl( r ) &Stack,
 			r Begin,
 			idxque::direction Direction )
 		{

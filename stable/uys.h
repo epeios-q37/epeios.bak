@@ -54,13 +54,13 @@
 #endif
 
 namespace uys {
-	typedef sdr::fStorageDriver fStorageDriver_;
+	typedef sdr::sStorageDriver sStorageDriver_;
 
 	class _storage_driver__
 	{
 	private:
 		// Le pilote.
-		fStorageDriver_ *_Driver;
+		sStorageDriver_ *_Driver;
 		// Indique si le pilote a t dfini de manire interne ou non.
 		bso::bool__ _Internal;
 		// Uniquement pour la 'conventional_storage__'.
@@ -97,7 +97,7 @@ namespace uys {
 		{
 			reset( true );
 		}
-		void plug( fStorageDriver_ &Driver )
+		void plug( sStorageDriver_ &Driver )
 		{
 			reset();
 
@@ -115,7 +115,7 @@ namespace uys {
 				}
 			}
 		}
-		fStorageDriver_ *Driver( bso::bool__ Ignore = false ) const
+		sStorageDriver_ *Driver( bso::bool__ Ignore = false ) const
 		{
 #ifdef UYS_DBG
 			if ( !Ignore && !_Driver )
@@ -177,9 +177,9 @@ namespace uys {
 
 	class cHook {
 	protected:
-		virtual fStorageDriver_ &UYSGetSD( void ) = 0;
+		virtual sStorageDriver_ &UYSGetSD( void ) = 0;
 	public:
-		fStorageDriver_ &GetSD( void )
+		sStorageDriver_ &GetSD( void )
 		{
 			return UYSGetSD();
 		}
@@ -225,7 +225,7 @@ namespace uys {
 
 			S_.Size = Size;
 		}
-		void plug_( fStorageDriver_ &Driver )
+		void plug_( sStorageDriver_ &Driver )
 		{
 			bso::size__ Size = Driver.Size();
 
@@ -377,7 +377,7 @@ namespace uys {
 			sdr::row_t__ Begin,
 			sdr::row_t__ End ) const;
 		//f Return the used storage driver. 'Ignore' is only for 'UYS_DBG' mode and for the 'MMG' library.
-		fStorageDriver_ *Driver( bso::bool__ Ignore = false )
+		sStorageDriver_ *Driver( bso::bool__ Ignore = false )
 		{
 			return _Driver.Driver( Ignore );
 		}
@@ -455,7 +455,7 @@ namespace uys {
 	{
 	protected:
 		driver Driver_;
-		fStorageDriver_ &UYSGetSD( void ) override
+		sStorageDriver_ &UYSGetSD( void ) override
 		{
 			return Driver_;
 		}
@@ -465,7 +465,7 @@ namespace uys {
 	: public rH_<mns::standalone_conventional_memory_driver___>
 	{
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			Driver_.reset( P );
 		}
@@ -513,7 +513,7 @@ namespace uys {
 	: public rH_<flsq::file_storage_driver___>
 	{
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
 				if ( Driver_.IsInitialized() ) {
@@ -566,7 +566,7 @@ namespace uys {
 		{
 			Driver_.Drop();
 		}
-		bso::fBool IsPersistent( void ) const
+		bso::sBool IsPersistent( void ) const
 		{
 			return Driver_.IsPersistent();
 		}

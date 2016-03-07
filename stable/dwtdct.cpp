@@ -282,7 +282,7 @@ static void GetFile_(
 	const dwtbsc::limitations__ Limitations,
 	const dwtbsc::ghosts_oddities_ &GO,
 	exclusions_handling__ ExclusionsHandling,
-	vKernel &Kernel,
+	dKernel &Kernel,
 	dwtght::grow__ &GhostRow )
 {
 qRH
@@ -354,7 +354,7 @@ static bso::bool__ GetFiles_(
 	const dwtbsc::limitations__ &Limitations,
 	const dwtbsc::ghosts_oddities_ &GO,
 	exclusions_handling__ ExclusionsHandling,
-	vKernel &Kernel,
+	dKernel &Kernel,
 	oddity_ &Oddity,
 	dwtght::grow__ &GhostRow )
 {
@@ -668,7 +668,7 @@ qRFH
 	data___ &Data = *(data___ *)UP;
 	bso::bool__ Continue = true;
 	item_ *Item = NULL;
-	dwtbsc::iKernel Kernel;
+	dwtbsc::wKernel Kernel;
 	TOL_CBUFFER___ Buffer;
 	mtx::mutex___ Mutex;
 	irow__ Row = qNIL;
@@ -965,7 +965,7 @@ namespace {
 
 	}
 
-	bso::fBool DeleteExtraneousGhosts_(
+	bso::sBool DeleteExtraneousGhosts_(
 		const str::string_ &Root,
 		const item_ &Item,
 		const content_ &Content,
@@ -1387,7 +1387,7 @@ qRE
 }
 
 namespace {
-	bso::fBool SetHook_(
+	bso::sBool SetHook_(
 		const fnm::name___ &Path,
 		uys::mode__ Mode,
 		rGhost2FilesFH &Hook )
@@ -1413,7 +1413,7 @@ namespace {
 		uys::mode__ Mode,
 		ghost2files_rack___ &Rack )
 	{
-		bso::fBool Exists = SetHook_( DataDirName, Mode, Rack.Hook );
+		bso::sBool Exists = SetHook_( DataDirName, Mode, Rack.Hook );
 
 		Rack.G2F.plug( Rack.Hook );
 
@@ -1467,7 +1467,7 @@ namespace {
 		const frows_ &FRows,
 		const files_data_ &Files,
 		directory_ &Directory,
-		vKernel &Kernel )
+		dKernel &Kernel )
 	{
 		ctn::E_CMITEMt( str::string_, frow__ ) Name;
 		file__ File;
@@ -1495,7 +1495,7 @@ namespace {
 		grow__ GRow,
 		const ghost2files_ &G2F,
 		directory_ &Directory,
-		vKernel &Kernel )
+		dKernel &Kernel )
 	{
 		if ( GRow != qNIL ) {
 			ctn::E_CMITEMt( frows_, grow__ ) FRows;
@@ -1509,7 +1509,7 @@ namespace {
 	drow__ Fill_(
 		const item_ &Item,
 		const ghost2files_ &G2F,
-		vKernel &Kernel )
+		dKernel &Kernel )
 	{
 		drow__ Row = qNIL;
 	qRH
@@ -1534,7 +1534,7 @@ namespace {
 void dwtdct::Fill(
 	const content_ &Content,
 	const ghost2files_ &G2F,
-	vKernel &Kernel )
+	dKernel &Kernel )
 {
 qRH
 	irow__ Row = qNIL;

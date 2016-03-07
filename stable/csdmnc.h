@@ -91,7 +91,7 @@ namespace csdmnc {
 			return F_( UP ).EpochTimeStamp();
 		}
 	public:
-		void reset( bso::fBool = true )
+		void reset( bso::sBool = true )
 		{
 		}
 		E_CVDTOR( rCallback );
@@ -112,13 +112,13 @@ namespace csdmnc {
 	private:
 		rCallback Callback_;
 	public:
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			rCore_::reset( P );
 			Callback_.reset( P );
 		}
 		qCDTOR( rCore );
-		bso::fBool Init(
+		bso::sBool Init(
 			const char *HostService,
 			bso::uint__ PingDelay = 0,
 			cLogCallback *LogCallback = NULL )

@@ -499,7 +499,7 @@ namespace flsq {
 # endif
 		bso::bool__ CreateFile( err::handling__ ErrHandle = err::h_Default )
 		{
-			bso::fBool Success = Open_( false, ErrHandle );
+			bso::sBool Success = Open_( false, ErrHandle );
 
 			if ( Success )
 				if ( !Temoin_.Manuel )
@@ -591,7 +591,7 @@ namespace flsq {
 		{
 			return Temoin_.Mode;
 		}
-		bso::fBool IsInitialized( void ) const
+		bso::sBool IsInitialized( void ) const
 		{
 			return _Name != NULL;
 		}
@@ -646,11 +646,11 @@ namespace flsq {
 		}
 	};
 
-	typedef sdr::fStorageDriver fStorageDriver_;
+	typedef sdr::sStorageDriver sStorageDriver_;
 
 	//c The standard storage driver which handle a file as storage.
 	class file_storage_driver___
-	: public fStorageDriver_,
+	: public sStorageDriver_,
 	  public file_storage___
 	{
 	protected:
@@ -684,13 +684,13 @@ namespace flsq {
 		}
 	public:
 		file_storage_driver___( void )
-		: fStorageDriver_(),
+		: sStorageDriver_(),
 		  file_storage___()
 		{}
 		void reset( bool P = true )
 		{
 			file_storage___::reset( P );
-			fStorageDriver_::reset( P );
+			sStorageDriver_::reset( P );
 		}
 		//f Return the mode.
 		fil::mode__ Mode( void ) const
@@ -710,7 +710,7 @@ namespace flsq {
 			flsq::creation Creation = flsq::cFirstUse )
 		{
 			file_storage___::Init( ID, FileName, Mode, Creation );
-			fStorageDriver_::Init();
+			sStorageDriver_::Init();
 		}
 	};
 
