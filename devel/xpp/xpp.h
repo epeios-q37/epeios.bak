@@ -216,12 +216,9 @@ namespace xpp {
 	private:
 		_rrow__ _Locate( const str::string_ &Name ) const
 		{
-			ctn::E_CMITEMt( str::string_, _rrow__ ) NamesItem;
 			_rrow__ Row = Names.First();
 
-			NamesItem.Init( Names );
-
-			while ( ( Row!= qNIL ) && ( NamesItem( Row ) != Name ) )
+			while ( ( Row!= qNIL ) && ( Names( Row ) != Name ) )
 				Row = Names.Next( Row );
 
 			return Row;
@@ -347,12 +344,9 @@ namespace xpp {
 	private:
 		_vrow__ _Locate( const str::string_ &Name ) const
 		{
-			ctn::E_CMITEMt( str::string_, _vrow__ ) NamesItem;
 			_vrow__ Row = Names.First();
 
-			NamesItem.Init( Names );
-
-			while ( ( Row != qNIL ) && ( NamesItem( Row ) != Name ) )
+			while ( ( Row != qNIL ) && ( Names( Row ) != Name ) )
 				Row = Names.Next( Row );
 
 			return Row;
@@ -399,10 +393,7 @@ namespace xpp {
 			_vrow__ Row = _Locate( Name );
 
 			if ( Row != qNIL ) {
-				ctn::E_CMITEMt( str::string_, _vrow__ ) ValuesItem;
-				ValuesItem.Init( Values );
-
-				Value.Append( ValuesItem( Row ) );
+				Value.Append( Values( Row ) );
 			}
 
 			return Row != qNIL;
@@ -415,15 +406,12 @@ namespace xpp {
 			const str::string_ &Name,
 			const str::string_ &Value ) const
 		{
-			ctn::E_CMITEMt( str::string_, _vrow__ ) ValuesItem;
 			_vrow__ Row = _Locate( Name );
 
 			if ( Row == qNIL )
 				qRFwk();
 
-			ValuesItem.Init( Values );
-
-			return ValuesItem( Row ) == Value;
+			return Values( Row ) == Value;
 		}
 	};
 

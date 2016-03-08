@@ -75,10 +75,7 @@ id__ stsfsm::Add(
 
 status__ stsfsm::parser__::Handle( bso::u8__ C )
 {
-	ctn::E_CMITEMt( card_, crow__ ) Card;
 	crow__ Next = qNIL;
-
-	Card.Init( _A() );
 
 	if ( _Current == qNIL )
 		_Current = _A().First();
@@ -86,14 +83,14 @@ status__ stsfsm::parser__::Handle( bso::u8__ C )
 	if ( _Current == qNIL )
 		return sLost;	// L'automate est vide.
 
-	Next = Card( _Current ).Get( C );
+	Next = _A()( _Current ).Get( C );
 
 	if ( Next == qNIL )
 		return sLost;
 
 	_Current = Next;
 
-	if ( Card( _Current ).GetId() == UndefinedId )
+	if ( _A()( _Current ).GetId() == UndefinedId )
 		return sPending;
 	else
 		return sMatch;

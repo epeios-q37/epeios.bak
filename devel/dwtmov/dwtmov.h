@@ -110,15 +110,11 @@ namespace dwtmov {
 			str::string_ &Old,
 			str::string_ &New ) const
 		{
-			ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-			Name.Init( Names );
-
 			if ( Moves( Row ).Old != qNIL )
-				Old = Name( Moves( Row ).Old );
+				Old = Names( Moves( Row ).Old );
 
 			if ( Moves( Row ).New != qNIL )
-				New = Name( Moves( Row ).New );
+				New = Names( Moves( Row ).New );
 		}
 	};
 

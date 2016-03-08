@@ -172,7 +172,6 @@ static void Complete_(
 	links_ &Links,
 	bundle_ &Bundle )
 {
-	ctn::E_CMITEMt( dwtght::ghost_, dwtght::grow__ ) Ghost;
 	dir__ Dir;
 	link__ Link;
 	drow__ DRow = qNIL;
@@ -181,15 +180,13 @@ static void Complete_(
 	if ( GRow != qNIL  )
 		GRow = Ghosts.Next( GRow );	// On passe la racine.
 
-	Ghost.Init( Ghosts );
-
 	while ( GRow != qNIL ) {
 		if ( GToD( GRow ) == qNIL )
 		{
 			Dir.Init();
 			Link.Init();
 
-			Dir.Old.Name = Bundle.Names.Append( Ghost( GRow ).Name );
+			Dir.Old.Name = Bundle.Names.Append( Ghosts( GRow ).Name );
 			Link.GRow = GRow;
 
 			DRow = Bundle.Dirs.New();
@@ -218,7 +215,6 @@ static void Fill_(
 qRH
 	dwtdct::irow__ IRow = qNIL;
 	dwtght::grow__ GRow = qNIL;
-	ctn::E_CMITEMt( dwtght::ghost_, dwtght::grow__ ) Ghost;
 	gtoi GToI;
 	link__ Link;
 	dir__ Dir;
@@ -229,8 +225,6 @@ qRB
 	GToI.Init();
 	GToI.Allocate( Ghosts.Extent(), aem::mFitted );
 	GToI.FillWith( qNIL );
-
-	Ghost.Init( Ghosts );
 
 	if ( IRow != qNIL ) {
 		IRow = Content.Next( IRow );	// On saute le répertoire racine, qui correspond à 'Root'.
@@ -258,7 +252,7 @@ qRB
 		{
 			GToI.Store( IRow, GRow );
 
-			Dir.Old.Name = Bundle.Names.Append( Ghost( GRow ).Name );
+			Dir.Old.Name = Bundle.Names.Append( Ghosts( GRow ).Name );
 
 			Link.GRow = GRow;
 
@@ -287,13 +281,9 @@ static void Complete_(
 	bundle_ &Bundle )
 {
 	drow__ Row = Links.First();
-	ctn::E_CMITEMt( dwtght::ghost_, dwtght::grow__ ) Ghost;
 	dir__ Dir;
 	dwtdct::irow__ ParentIRow = qNIL;
 	dwtght::grow__ ParentGRow = qNIL;	
-
-
-	Ghost.Init( Ghosts );
 
 	if ( Links.Amount() != Bundle.Dirs.Amount() )
 		qRGnr();
@@ -303,7 +293,7 @@ static void Complete_(
 		Bundle.Dirs.Recall( Row, Dir );
 
 		if ( Links( Row ).GRow != qNIL ) {
-			ParentGRow = Ghost( Links( Row ).GRow ).S_.Parent;
+			ParentGRow = Ghosts( Links( Row ).GRow ).S_.Parent;
 
 			if ( ParentGRow != qNIL )
 				Dir.Old.Parent = GToD( ParentGRow );
@@ -332,17 +322,13 @@ static const str::string_ &GetPath_(
 	const names_ &Names,
 	str::string_ &Path )
 {
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-	Name.Init( Names );
-
 	if ( Row != qNIL) {
 		if ( Handled( Row ) )
 		{
-			Path.Append( Name( Dirs( Row ).New.Name ) );
+			Path.Append( Names( Dirs( Row ).New.Name ) );
 			Row = Dirs( Row ).New.Parent;
 		} else {
-			Path.Append( Name( Dirs( Row ).Old.Name ) );
+			Path.Append( Names( Dirs( Row ).Old.Name ) );
 			Row = Dirs( Row ).Old.Parent;
 		}
 	}
@@ -351,10 +337,10 @@ static const str::string_ &GetPath_(
 		Path.InsertAt( '/' );
 		if ( Handled( Row ) )
 		{
-			Path.InsertAt( Name( Dirs( Row ).New.Name ) );
+			Path.InsertAt( Names( Dirs( Row ).New.Name ) );
 			Row = Dirs( Row ).New.Parent;
 		} else {
-			Path.InsertAt( Name( Dirs( Row ).Old.Name ) );
+			Path.InsertAt( Names( Dirs( Row ).Old.Name ) );
 			Row = Dirs( Row ).Old.Parent;
 		}
 	}
@@ -415,7 +401,7 @@ static void Fill_(
 qRH
 	drow__ Row = qNIL;
 	move__ Move;
-	ctn::E_CMITEMt( name_, nrow__ ) OldName, NewName;
+	ctn::q_CMITEMs( name_, nrow__ ) OldName, NewName;
 	handled Handled;
 	dir__ Dir;
 	bso::bool__ Old = false, New = false;
@@ -533,21 +519,15 @@ inline bso::sign__ Compare_(
 	const names_ &Names,
 	dwtbsc::sort_type__ SortType )
 {
-	ctn::E_CMITEMt( str::string_, nrow__ ) Name;
-
 	if ( M1.Old == qNIL )
 		if ( M2.Old == qNIL ) {
-			Name.Init( Names );
-
-			return Compare_( Name( M1.New ).Amount(), Name( M2.New ).Amount(), true, SortType );
+			return Compare_( Names( M1.New ).Amount(), Names( M2.New ).Amount(), true, SortType );
 		} else
 			return 1;
 	else if ( M2.Old == qNIL )
 		return -1;
 	else {
-		Name.Init( Names );
-
-		return Compare_( Name( M1.Old ).Amount(), Name( M2.Old ).Amount(), false, SortType );
+		return Compare_( Names( M1.Old ).Amount(), Names( M2.Old ).Amount(), false, SortType );
 	}
 
 }
@@ -579,7 +559,6 @@ static mrow__ Insert_(
 	bso::bool__ Inserted = false;
 	mrow__ Candidate = Root;
 	btr::level__ Level = 0;
-	ctn::E_CMITEM( str::string_ ) Name;
 
 	while ( !Inserted ) {
 		switch ( Compare_( Moves( Row ), Moves( Candidate ), Names, SortType ) ) {
@@ -774,9 +753,6 @@ static void Dump_(
 	xml::writer_ &Writer )
 {
 	mrow__ Row = Moves.First();
-	ctn::E_CMITEMt( dwtbsc::name_, nrow__ ) Name;
-
-	Name.Init( Names );
 
 	Writer.PushTag( GetLabel_( tMoves ) );
 	xml::PutAttribute( GetLabel_( aAmount ) , Moves.Amount(), Writer );
@@ -785,10 +761,10 @@ static void Dump_(
 		Writer.PushTag( GetLabel_( tMove ) );
 
 		if ( Moves( Row ).Old != qNIL )
-			Writer.PutAttribute( GetLabel_( aOld ), Name( Moves( Row ).Old ) );
+			Writer.PutAttribute( GetLabel_( aOld ), Names( Moves( Row ).Old ) );
 
 		if ( Moves( Row ).New != qNIL )
-			Writer.PutAttribute( GetLabel_( aNew ), Name( Moves( Row ).New ) );
+			Writer.PutAttribute( GetLabel_( aNew ), Names( Moves( Row ).New ) );
 
 		Writer.PopTag();
 
@@ -996,7 +972,7 @@ static bso::bool__ Apply_(
 	const names_ &Names,
 	dwtbsc::tamount__ ThreadAmountMax )
 {
-	ctn::E_CMITEMt( name_, nrow__ ) Old, New;
+	ctn::q_CMITEMs( name_, nrow__ ) Old, New;
 
 	Old.Init( Names );
 	New.Init( Names );
@@ -1021,7 +997,7 @@ bso::bool__ dwtmov::Apply(
 {
 	bso::bool__ Failure = false;
 	mrow__ Row = Movings.First();
-	ctn::E_CMITEMt( name_, nrow__ ) Current, New;
+	ctn::q_CMITEMs( name_, nrow__ ) Current, New;
 
 	Current.Init( Movings.Names );
 	New.Init( Movings.Names );

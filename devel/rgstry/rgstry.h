@@ -554,9 +554,9 @@ namespace rgstry {
 	typedef lstctn::E_LXCONTAINERt_( node_, row__ ) nodes_;
 	E_AUTO( nodes )
 
-	typedef ctn::E_CITEMt( node_, row__ )	buffer;
-
 	typedef sdr::row__ cursor__;
+
+	typedef ctn::q_CITEMs( node_, row__ )	buffer;
 
 	class registry_ {
 	private:
@@ -790,23 +790,20 @@ namespace rgstry {
 			xml::writer_ &Writer ) const;
 		void _DumpNode(
 			row__ Row,
-			xml::writer_ &Writer,
-			buffer &Buffer ) const
+			xml::writer_ &Writer ) const
 		{
-			Writer.PushTag( Buffer( Row ).Name );	// 'PopTag' correspondant fait par méthode appelante.
+			Writer.PushTag( Nodes( Row ).Name );	// 'PopTag' correspondant fait par méthode appelante.
 			_DumpAttributes( Row, Writer );
 
-			const value_ &Value = Buffer( Row ).Value;
+			const value_ &Value = Nodes( Row ).Value;
 
 			if ( Value.Amount() != 0 )
 				Writer.PutValue( Value );
-
 		}
 		sdr::size__ _Dump(
 			row__ Root,
 			bso::bool__ RootToo,
-			xml::writer_ &Writer,
-			buffer &Buffer ) const;	// Retourne le nombre d'enfants.
+			xml::writer_ &Writer ) const;	// Retourne le nombre d'enfants.
 	public:
 		struct s {
 			nodes_::s Nodes;
@@ -901,17 +898,15 @@ namespace rgstry {
 		const value_ &GetValue(
 			const path_ &Path,
 			row__ Row,
-			bso::bool__ *Missing,
-			buffer &Buffer ) const;	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			bso::bool__ *Missing ) const;	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		bso::bool__ GetValue(
 			const path_ &Path,
 			row__ Row,
 			value_ &Value ) const
 		{
-			buffer Buffer;
 			bso::bool__ Missing = false;
 
-			Value.Append( GetValue( Path, Row, &Missing, Buffer ) );
+			Value.Append( GetValue( Path, Row, &Missing ) );
 
 			return !Missing;
 		}
@@ -919,28 +914,25 @@ namespace rgstry {
 			const str::string_ &PathString,
 			row__ Row,
 			bso::bool__ *Missing,
-			buffer &Buffer,
 			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		bso::bool__ GetValue(
 			const str::string_ &PathString,
 			row__ Row,
 			value_ &Value ) const
 		{
-			buffer Buffer;
 			bso::bool__ Missing = false;
 
-			Value.Append( GetValue( PathString, Row, &Missing, Buffer ) );
+			Value.Append( GetValue( PathString, Row, &Missing ) );
 
 			return !Missing;
 		}
 		const value_ &GetValue(
 			const str::string_ &PathString,
-			row__ Row,
-			buffer &Buffer ) const
+			row__ Row ) const
 		{
 			bso::bool__ Missing = false;
 
-			const value_ &Value = GetValue( PathString, Row, &Missing, Buffer );
+			const value_ &Value = GetValue( PathString, Row, &Missing );
 
 			if ( Missing )
 				qRFwk();
@@ -951,17 +943,15 @@ namespace rgstry {
 			const tentry__ &Entry,
 			row__ Row,
 			bso::bool__ *Missing,
-			buffer &Buffer,
 			sdr::row__ *PathErrorRow = NULL ) const;	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		bso::bool__ GetValue(
 			const tentry__ &Entry,
 			row__ Row,
 			value_ &Value ) const
 		{
-			buffer Buffer;
 			bso::bool__ Missing = false;
 
-			Value.Append( GetValue( Entry, Row, &Missing, Buffer ) );
+			Value.Append( GetValue( Entry, Row, &Missing ) );
 
 			return !Missing;
 		}
@@ -981,9 +971,7 @@ namespace rgstry {
 			str::string_ &Value,
 			sdr::row__ *PathErrorRow = NULL ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		{
-			buffer Buffer;
-
-			Value.Append( GetValue( Entry, Row, Missing, Buffer, PathErrorRow ) );
+			Value.Append( GetValue( Entry, Row, Missing, PathErrorRow ) );
 
 			return Value;
 		}
@@ -1373,8 +1361,6 @@ namespace rgstry {
 			const registry_ &Global,
 			row__ Root )
 		{
-			buffer Buffer;
-
 			this->Global.Registry = &Global;
 			this->Global.Root = Root;
 
@@ -1397,7 +1383,6 @@ namespace rgstry {
 				LocalRoot = Local.CreateRegistry( this->Global.Registry->GetName( Root, Buffer ) );
 
 			return this->Local.Root = LocalRoot;
-
 		}
 		row__ SetLocal(
 			registry_ &Registry,	// Si == 'NULL', on prend le 'Global'.
@@ -1419,16 +1404,14 @@ namespace rgstry {
 		const value_ &GetValue(
 			const str::string_ &PathString,
 			bso::bool__ *Missing,
-			buffer &Buffer,
 			sdr::row__ *PathErrorRow = NULL  ) const;	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		bso::bool__ GetValue(
 			const str::string_ &PathString,
 			value_ &Value ) const
 		{
-			buffer Buffer;
 			bso::bool__ Missing = false;
 
-			Value.Append( GetValue( PathString, &Missing, Buffer ) );
+			Value.Append( GetValue( PathString, &Missing ) );
 
 			return !Missing;
 		}
@@ -1791,32 +1774,29 @@ namespace rgstry {
 		const value_ &GetValue(
 			level__ Level,
 			const path_ &Path,
-			bso::bool__ *Missing,
-			buffer &Buffer ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
+			bso::bool__ *Missing ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		{
 			if ( _IsEmpty( Level ) ) {
 				*Missing = true;
 				return Empty_();
 			} else
-				return _GetRegistry( Level ).GetValue( Path, _GetRoot( Level ), Missing, Buffer );
+				return _GetRegistry( Level ).GetValue( Path, _GetRoot( Level ), Missing );
 		}
 		const value_ &GetValue(
 			level__ Level,
 			const str::string_ &PathString,
 			bso::bool__ *Missing,
-			buffer &Buffer,
 			sdr::row__ *PathErrorRow = NULL  ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		{
 			if ( _IsEmpty( Level ) ) {
 				*Missing = true;
 				return Empty_();
 			} else
-				return _GetRegistry( Level ).GetValue( PathString, _GetRoot( Level ), Missing, Buffer, PathErrorRow );
+				return _GetRegistry( Level ).GetValue( PathString, _GetRoot( Level ), Missing, PathErrorRow );
 		}
 		const value_ &GetValue(
 			const str::string_ &PathString,
 			bso::bool__ *Missing,
-			buffer &Buffer,
 			sdr::row__ *PathErrorRow = NULL  ) const;	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		bso::bool__ GetValue(
 			level__ Level,
@@ -1834,10 +1814,9 @@ namespace rgstry {
 			value_ &Value,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			buffer Buffer;
 			bso::bool__ Missing = false;
 
-			Value.Append( GetValue( Level, PathString, &Missing, Buffer, PathErrorRow ) );
+			Value.Append( GetValue( Level, PathString, &Missing, PathErrorRow ) );
 
 			return !Missing;
 		}

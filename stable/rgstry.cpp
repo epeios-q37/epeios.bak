@@ -95,8 +95,6 @@ row__ rgstry::registry_::_Search(
 	const rows_ &NodeRows,
 	sdr::row__ &Cursor ) const
 {
-	buffer Buffer;
-
 	sdr::row__ &Row = Cursor;
 	
 	if ( Row == qNIL )
@@ -104,9 +102,7 @@ row__ rgstry::registry_::_Search(
 	else
 		Row = NodeRows.Next( Row );
 
-	Buffer.Init( Nodes );
-
-	while ( ( Row != qNIL ) && ( Buffer( NodeRows( Row ) ).Name != Name ) )
+	while ( ( Row != qNIL ) && ( Nodes( NodeRows( Row ) ).Name != Name ) )
 		Row = NodeRows.Next( Row );
 
 	if ( Row != qNIL )
@@ -122,15 +118,11 @@ row__ rgstry::registry_::_Search(
 	const rows_ &NodeRows,
 	cursor__ &Cursor ) const
 {
-	buffer Buffer;
-
 	row__ Row = qNIL;
 	
-	Buffer.Init( Nodes );
-
 	Row = _Search( Name, NodeRows, Cursor );
 
-	while ( ( Row != qNIL ) && ( Buffer( Row ).Nature() != Nature ) )
+	while ( ( Row != qNIL ) && ( Nodes( Row ).Nature() != Nature ) )
 		Row = _Search( Name, NodeRows, Cursor );
 
 	return Row;
@@ -176,20 +168,16 @@ const str::string_ &rgstry::registry_::GetCompleteName(
 	str::string_ &Name,
 	const char *Separator ) const
 {
-	buffer Buffer;
-
-	Buffer.Init( Nodes );
-
 	if ( Row != qNIL ) {
-		Name.Append( Buffer( Row ).Name );
-		Row = Buffer( Row ).ParentRow();
+		Name.Append( Nodes( Row ).Name );
+		Row = Nodes( Row ).ParentRow();
 	}
 
 	while ( Row != qNIL ) {
 		Name.InsertAt( Separator );
-		Name.InsertAt( Buffer( Row ).Name );
+		Name.InsertAt( Nodes( Row ).Name );
 
-		Row = Buffer( Row ).ParentRow();
+		Row = Nodes( Row ).ParentRow();
 	}
 
 	return Name;
@@ -373,13 +361,11 @@ row__ rgstry::registry_::_Search(
 {
 	cursor__ CandidateRow = qNIL;
 	cursor__ Cursor = qNIL;
-	ctn::E_CITEM( path_item_ ) Item;
+	ctn::q_CITEMsl( path_item_ ) Item;
 	row__ ResultRow, ChildRow = qNIL;
 	bso::bool__ All = ResultRows != NULL;
-	buffer Buffer;
 
 	Item.Init( Path );
-	Buffer.Init( Nodes );
 
 	ResultRow = ChildRow = _Search( Item( PathRow ), Row, Cursor );
 
@@ -449,19 +435,16 @@ row__ rgstry::registry_::Create(
 	bso::bool__ Reuse )
 {
 	bso::bool__ Continue = true;
-	ctn::E_CITEM( path_item_ ) Item;
 	sdr::row__ PathRow = Path.First();
 	row__ CandidateRow = qNIL;
 
-	Item.Init( Path );
-
 	while ( ( PathRow != qNIL ) && Continue ) {
-		CandidateRow = _Search( Item( PathRow ), Row );
+		CandidateRow = _Search( Path( PathRow ), Row );
 
 		if ( CandidateRow == qNIL ) {
 			Continue = false;
 
-			Row = _Create( Item( PathRow ), Row );
+			Row = _Create( Path( PathRow ), Row );
 		} else
 			Row = CandidateRow;
 
@@ -472,7 +455,7 @@ row__ rgstry::registry_::Create(
 	}
 
 	while ( PathRow != qNIL ) {
-		Row = _Create( Item( PathRow ), Row );
+		Row = _Create( Path( PathRow ), Row );
 
 		PathRow = Path.Next( PathRow );
 	}
@@ -585,21 +568,18 @@ void rgstry::registry_::_DumpAttributes(
 	xml::writer_ &Writer ) const
 {
 qRH
-	buffer Buffer;
 	rows Rows;
 	cursor__ Cursor = qNIL;
 qRB
-	Buffer.Init( Nodes );
-
 	Rows.Init();
 
-	Rows = Buffer( Row ).Children;
+	Rows = Nodes( Row ).Children;
 
 	Cursor = Rows.First();
 
 	while ( Cursor != qNIL ){
-		if ( Buffer( Rows( Cursor ) ).Nature() == nAttribute )
-			Writer.PutAttribute( Buffer().Name, Buffer().Value );
+		if ( Nodes( Rows( Cursor ) ).Nature() == nAttribute )
+			Writer.PutAttribute( Nodes().Name, Nodes().Value );
 
 		Cursor = Rows.Next( Cursor );
 	}
@@ -611,8 +591,7 @@ qRE
 sdr::size__ rgstry::registry_::_Dump(
 	row__ Root,
 	bso::bool__ RootToo,
-	xml::writer_ &Writer,
-	buffer &Buffer ) const
+	xml::writer_ &Writer ) const
 {
 	sdr::size__ ChildAmount = 0;
 qRH
@@ -620,16 +599,16 @@ qRH
 	sdr::row__ Row = qNIL;
 qRB
 	Children.Init();
-	Children = Buffer( Root ).Children;
+	Children = Nodes( Root ).Children;
 
 	if ( RootToo )
-		_DumpNode( Root, Writer, Buffer );
+		_DumpNode( Root, Writer );
 	
 	Row = Children.First();
 
 	while ( Row != qNIL ) {
-		if ( Buffer( Children( Row ) ).GetNature() != nAttribute )
-			_Dump( Children( Row ), true, Writer, Buffer );
+		if ( Nodes( Children( Row ) ).GetNature() != nAttribute )
+			_Dump( Children( Row ), true, Writer );
 
 		Row = Children.Next( Row );
 	}
@@ -644,23 +623,12 @@ qRE
 	return ChildAmount;
 }
 
-
 sdr::size__ rgstry::registry_::Dump(
 	row__ Root,
 	bso::bool__ RootToo,
 	xml::writer_ &Writer ) const
 {
-	sdr::size__ ChildAmount = 0;
-qRH
-	buffer Buffer;
-qRB
-	Buffer.Init( Nodes );
-
-	ChildAmount = _Dump( Root, RootToo, Writer, Buffer );
-qRR
-qRT
-qRE
-	return ChildAmount;
+	return _Dump( Root, RootToo, Writer );
 }
 
 sdr::size__ rgstry::registry_::Dump(
@@ -673,10 +641,7 @@ sdr::size__ rgstry::registry_::Dump(
 	sdr::size__ ChildAmount = 0;
 qRH
 	xml::writer Writer;
-	buffer Buffer;
 qRB
-	Buffer.Init( Nodes );
-
 	Writer.Init( Flow, Outfit, Encoding );
 
 	ChildAmount = Dump( Root, RootToo, Writer );
@@ -701,8 +666,7 @@ void rgstry::registry_::_Delete( const rows_ &Rows )
 const value_ &rgstry::registry_::GetValue(
 	const path_ &Path,
 	row__ Row,
-	bso::bool__ *Missing,
-	buffer &Buffer ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
+	bso::bool__ *Missing ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	static value Empty;
 	const value_ *Result = &Empty;
@@ -712,10 +676,9 @@ const value_ &rgstry::registry_::GetValue(
 		return *Result;
 
 	Empty.Init();
-	Buffer.Init( Nodes );
 
 	if ( ( ResultRow = _Search( Path, Row ) ) != qNIL )
-		Result = &Buffer( ResultRow ).Value;
+		Result = &Nodes( ResultRow ).Value;
 	else
 		*Missing = true;
 
@@ -726,7 +689,6 @@ const value_ &rgstry::registry_::GetValue(
 	const str::string_ &PathString,
 	row__ Row,
 	bso::bool__ *Missing,
-	buffer &Buffer,
 	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	static value Empty;
@@ -741,7 +703,7 @@ qRB
 		qRReturn;
 
 	if ( BuildPath_( PathString, Path, PathErrorRow ) )
-		Result = &GetValue( Path, Row, Missing, Buffer );
+		Result = &GetValue( Path, Row, Missing );
 	else
 		*Missing = true;
 qRR
@@ -754,7 +716,6 @@ const value_ &rgstry::registry_::GetValue(
 	const tentry__ &Entry,
 	row__ Row,
 	bso::bool__ *Missing,
-	buffer &Buffer,
 	sdr::row__ *PathErrorRow ) const
 {
 	const value_ *Value = NULL;
@@ -763,38 +724,12 @@ qRH
 qRB
 	Path.Init();
 
-	Value = &GetValue( Entry.GetPath( Path ), Row, Missing, Buffer, PathErrorRow );
+	Value = &GetValue( Entry.GetPath( Path ), Row, Missing, PathErrorRow );
 qRR
 qRT
 qRE
 	return *Value;
 }
-
-
-#if 0
-const value_ &rgstry::registry_::GetValue(
-	const entry___ &Entry,
-	const tags_ &Tags,
-	row__ Row,
-	bso::bool__ *Missing,
-	buffer &Buffer,
-	sdr::row__ *PathErrorRow ) const
-{
-	const value_ *Value = NULL;
-qRH
-	str::string Path;
-qRB
-	Path.Init();
-
-	Entry.GetPath( Tags, Path );
-
-	Value = &GetValue( Path, Row, Missing, Buffer, PathErrorRow );
-qRR
-qRT
-qRE
-	return *Value;
-}
-#endif
 
 bso::bool__ rgstry::registry_::GetValues(
 	const path_ &Path,
@@ -804,10 +739,8 @@ bso::bool__ rgstry::registry_::GetValues(
 	bso::bool__ Exists = false;
 qRH
 	cursor__ Cursor = qNIL;
-	buffer Buffer;
 	rows ResultRows;
 qRB
-	Buffer.Init( Nodes );
 	ResultRows.Init();
 
 	_Search( Path, Path.First(), Row, &ResultRows );
@@ -817,7 +750,7 @@ qRB
 		Cursor = ResultRows.First();
 
 		while ( Cursor != qNIL ) {
-			Values.Append( Buffer( ResultRows( Cursor ) ).Value );
+			Values.Append( Nodes( ResultRows( Cursor ) ).Value );
 
 			Cursor = ResultRows.Next( Cursor );
 		}
@@ -1100,7 +1033,6 @@ qRE
 const value_ &rgstry::overloaded_registry___::GetValue(
 	const str::string_ &PathString,
 	bso::bool__ *Missing,
-	buffer &Buffer,
 	sdr::row__ *PathErrorRow )const // Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	static value Empty;
@@ -1121,7 +1053,7 @@ qRB
 	}
 
 	if ( Local.Registry != NULL )
-		Result = &Local.Registry->GetValue( Path, Local.Root, Missing, Buffer );
+		Result = &Local.Registry->GetValue( Path, Local.Root, Missing );
 	else
 		*Missing = true;
 
@@ -1129,7 +1061,7 @@ qRB
 		*Missing = false;
 
 		if ( Global.Registry != NULL )
-			Result = &Global.Registry->GetValue( Path, Global.Root, Missing, Buffer );
+			Result = &Global.Registry->GetValue( Path, Global.Root, Missing );
 	}
 qRR
 qRT
@@ -1226,7 +1158,6 @@ const value_ &rgstry::Empty_( void )
 const value_ &rgstry::multi_level_registry_::GetValue(
 	const str::string_ &PathString,
 	bso::bool__ *Missing,
-	buffer &Buffer,
 	sdr::row__ *PathErrorRow ) const	// Nota : ne met 'Missing'  'true' que lorque 'Path' n'existe pas. Si 'Missing' est  'true', aucune action n'est ralise.
 {
 	const value_ *Result = &::Empty_;
@@ -1247,7 +1178,7 @@ qRB
 	while ( Level != qNIL ) {
 		*Missing = false;
 
-		Result = &GetValue( Level, Path, Missing, Buffer );
+		Result = &GetValue( Level, Path, Missing );
 
 		if ( *Missing  )
 			Level = Entries.Previous( Level );

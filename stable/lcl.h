@@ -142,27 +142,19 @@ namespace lcl {
 
 	class meaning_ {
 	private:
-		_basic_ &_Basic( void )
+		_basic_ &Basic_( void )
 		{
 			if ( S_.Basic == qNIL )
 				qRFwk();
 
 			return Core.Basics( S_.Basic );
 		}
-		const _basic_ &_GetBasic(
-			brow__ Row,
-			ctn::E_CMITEMt( _basic_, brow__ ) &Basic ) const
-		{
-			Basic.Init( Core.Basics );
-
-			return Basic( Row );
-		}
-		const _basic_ &_Basic( ctn::E_CMITEMt( _basic_, brow__ ) &Basic ) const
+		const _basic_ &Basic_( void ) const
 		{
 			if ( S_.Basic == qNIL )
 				qRFwk();
 
-			return _GetBasic( S_.Basic, Basic );
+			return Core.Basics( S_.Basic );
 		}
 	public:
 		struct s {
@@ -196,7 +188,7 @@ namespace lcl {
 
 			S_.Basic = Core.Basics.New();
 
-			_Basic().Init( true );
+			Basic_().Init( true );
 
 			Core.Basics.Flush();
 		}
@@ -211,15 +203,13 @@ namespace lcl {
 			AddTag( str::string( Value ) );
 		}
 		void AddTag( const meaning_ &Meaning );
-		const _basic_ &GetBasic( ctn::E_CMITEMt( _basic_, brow__ ) &Basic ) const
+		const _basic_ &GetBasic( void ) const
 		{
-			return _Basic( Basic );
+			return Basic_();
 		}
 		bso::bool__ IsEmpty( void ) const
 		{
-			ctn::E_CMITEMt( _basic_, brow__ ) Basic;
-
-			return _Basic( Basic ).S_.Value == qNIL;
+			return Basic_().S_.Value == qNIL;
 		}
 	};
 

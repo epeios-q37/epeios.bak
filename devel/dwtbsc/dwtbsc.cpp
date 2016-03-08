@@ -217,17 +217,14 @@ static bso::bool__ Delete_(
 {
 	bso::bool__ Failure = false;
 qRH
-	ctn::E_CMITEMt( str::string_, dwtdct::frow__ ) Name;
 	dwtbsc::frow__ Row = qNIL;
 	str::string Absolute;
 qRB
 	Row = Files.First();
 
-	Name.Init( Files.Names );
-
 	while ( Row != qNIL ) {
 		Absolute.Init();
-		Failure |= !DeleteFile_( GetAbsolute_( Root, Path, Name( Row ), Absolute ) );
+		Failure |= !DeleteFile_( GetAbsolute_( Root, Path, Files.Names( Row ), Absolute ) );
 
 		Row = Files.Next( Row );
 
@@ -375,17 +372,15 @@ bso::bool__ dwtbsc::Delete(
 {
 	bso::bool__ Failure = false;
 qRH
-	ctn::E_CMITEM( str::string_ ) FileName;
 	sdr::row__ Row = qNIL;
 	str::string Empty;
 qRB
 	Empty.Init();
-	FileName.Init( FileNames );
 
 	Row = FileNames.First();
 
 	while ( Row != qNIL ) {
-		Failure |= !Delete( Empty, Path, FileName( Row ) );
+		Failure |= !Delete( Empty, Path, FileNames( Row ) );
 
 		Row = FileNames.Next( Row );
 

@@ -1132,13 +1132,10 @@ namespace {
 		const str::dStrings &Ids,
 		plgn::dRetrievers &Retrievers )
 	{
-		ctn::qCMITEMl( str::vString ) Id;
 		sdr::sRow Row = Ids.First();
 
-		Id.Init( Ids );
-
 		while ( Row != qNIL ) {
-			Plug_( Target, Label, Identifier, Id( Row ), Retrievers );
+			Plug_( Target, Label, Identifier, Ids( Row ), Retrievers );
 
 			Row = Ids.Next( Row );
 		}

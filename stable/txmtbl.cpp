@@ -227,17 +227,14 @@ amount__ line_::RemoveEmptyCells( void )
 {
 	amount__ Amount = 0;
 qRH
-	ctn::E_CMITEM( cell_ ) Cell;
 	sdr::row__ Current = First();
 	stack Stack;
 qRB
-	Cell.Init( *this );
-
 	Stack.Init();
 
 	while( Current != qNIL )
 	{
-		if ( !Cell( Current ).Amount() )
+		if ( !Get( Current ).Amount() )
 		{
 			Stack.Push( Current );
 			Amount++;
@@ -255,12 +252,9 @@ qRE
 
 sdr::row__ line_::FirstNonEmptyCell( void ) const
 {
-	ctn::E_CMITEM( cell_ ) Cell;
 	sdr::row__ Current = First();
 
-	Cell.Init( *this );
-
-	while( ( Current != qNIL ) && !Cell( Current ).Amount() )
+	while( ( Current != qNIL ) && !Get( Current ).Amount() )
 		Current = Next( Current );
 
 	return Current;
@@ -268,12 +262,9 @@ sdr::row__ line_::FirstNonEmptyCell( void ) const
 
 sdr::row__ line_::LastNonEmptyCell( void ) const
 {
-	ctn::E_CMITEM( cell_ ) Cell;
 	sdr::row__ Current = Last();
 
-	Cell.Init( *this );
-
-	while( ( Current != qNIL ) && !Cell( Current ).Amount() )
+	while( ( Current != qNIL ) && !Get( Current ).Amount() )
 		Current = Previous( Current );
 
 	return Current;
@@ -349,7 +340,6 @@ amount__ line_::RemoveCentralEmptyCells( void )
 {
 	amount__ Amount = 0;
 qRH
-	ctn::E_CMITEM( cell_ ) Cell;
 	sdr::row__
 		Current = FirstNonEmptyCell(),
 		Last = LastNonEmptyCell();
@@ -357,15 +347,13 @@ qRH
 qRB
 	Stack.Init();
 
-	Cell.Init( *this );
-
 	if ( Current != Last )
 	{
 		Current = Next( Current );
 
 		while( Current != Last )
 		{
-			if ( !Cell( Current ).Amount() )
+			if ( !Get( Current ).Amount() )
 			{
 				Stack.Push( Current );
 				Amount++;
@@ -418,11 +406,8 @@ static inline bool IsCommentary_(
 amount__ line_::RemoveComment( bso::char__ Marker )
 {
 	sdr::row__ Position = First();
-	ctn::E_CMITEM( cell_ ) Cell;
 
-	Cell.Init( *this );
-
-	while( ( Position != qNIL ) && !IsCommentary_( Cell( Position ), Marker ) )
+	while( ( Position != qNIL ) && !IsCommentary_( Get( Position ), Marker ) )
 		Position = Next( Position );
 
 	if ( Position != qNIL )
@@ -436,21 +421,18 @@ txf::text_oflow__ &operator <<(
 	const line_ &Line )
 {
 	sdr::row__ Current;
-	ctn::E_CMITEM( cell_ ) Cell;
-
-	Cell.Init( Line );
 
 	Current = Line.First();
 
 	if ( Current != qNIL )
 	{
-		Flow << Cell( Current );
+		Flow << Line( Current );
 		Current = Line.Next( Current );
 	}
 
 	while( Current != qNIL )
 	{
-		Flow << txf::tab << Cell( Current );
+		Flow << txf::tab << Line( Current );
 		Current = Line.Next( Current );
 	}
 
@@ -597,17 +579,14 @@ amount__ table_::RemoveEmptyLines( void )
 {
 	amount__ Amount = 0;
 qRH
-	ctn::E_CITEM( line_ ) Line;
 	sdr::row__ Current = First();
 	stack Stack;
 qRB
-	Line.Init( *this );
-
 	Stack.Init();
 
 	while( Current != qNIL )
 	{
-		if ( !Line( Current ).Amount() )
+		if ( !Get( Current ).Amount() )
 		{
 			Stack.Push( Current );
 			Amount++;
@@ -628,22 +607,19 @@ txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	const table_ &Table )
 {
-	ctn::E_CITEM( line_ ) Line;
 	sdr::row__ Current;
-
-	Line.Init( Table );
 
 	Current = Table.First();
 
 	if ( Current != qNIL )
 	{
-		Flow << Line( Current );
+		Flow << Table( Current );
 		Current = Table.Next( Current );
 	}
 
 	while( Current != qNIL )
 	{
-		Flow << txf::nl << Line( Current );
+		Flow << txf::nl << Table( Current );
 		Current = Table.Next( Current );
 	}
 

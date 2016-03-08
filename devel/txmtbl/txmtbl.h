@@ -354,19 +354,11 @@ namespace txmtbl {
 			sdr::row__ Row,
 			cell_ &Cell ) const
 		{
-			ctn::E_CITEM( line_ ) Line;
-
-			Line.Init( *this );
-
-			return Line( Row ).GetUniqueCell( Cell );
+			return Get( Row ).GetUniqueCell( Cell );
 		}
 		location__ Location( sdr::row__ Row ) const
 		{
-			ctn::E_CITEM( line_ ) Line;
-
-			Line.Init( *this );
-
-			return Line( Row ).Location();
+			return Get( Row ).Location();
 		}
 
 		E_XNAV( lines_:: )

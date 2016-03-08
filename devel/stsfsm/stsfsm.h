@@ -237,14 +237,7 @@ namespace stsfsm {
 		}
 		id__ GetId( void ) const
 		{
-			ctn::E_CMITEMt( card_, crow__ ) Card;
-			
-			if ( _Current == qNIL )
-				qRFwk();
-
-			Card.Init( _A() );
-
-			return Card( _Current ).GetId();
+			return _A()( _Current ).GetId();
 		}
 	};
 

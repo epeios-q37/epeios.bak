@@ -502,13 +502,10 @@ static void FillAutomat_(
 	const str::strings_ &Tags,
 	stsfsm::automat_ &Automat )
 {
-	ctn::E_CMITEM( str::string_ ) Tag;
 	sdr::row__ Row = Tags.First();
 
-	Tag.Init( Tags );
-
 	while ( Row != qNIL ) {
-		stsfsm::Add( Tag( Row ), *Row, Automat );
+		stsfsm::Add( Tags( Row ), *Row, Automat );
 
 		Row = Tags.Next( Row );
 	}

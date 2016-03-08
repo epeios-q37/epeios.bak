@@ -400,15 +400,11 @@ static void HandleGoofs_(
 	goofs_data_ &Data )
 {
 qRH
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-	ctn::E_CMITEMt( oddity_, orow__ ) Oddity;
 	dwtbsc::grow__ Row = qNIL;
 	dwtbsc::grow__ Control = qNIL;
 	goof__ Goof;
 	str::string EmptyOddity;
 qRB
-	Name.Init( Names );
-	Oddity.Init( Oddities );
 	EmptyOddity.Init();
 
 	Row = Goofs.First();
@@ -419,13 +415,13 @@ qRB
 	while ( Row != qNIL ) {
 		Goofs.Recall( Row, Goof );
 
-		Control = Data.Names.Append( Name( Goof.Name ) );
+		Control = Data.Names.Append( Names( Goof.Name ) );
 
 		if ( Goof.Oddity == qNIL ) {
 			if ( Control != Data.Oddities.Append( EmptyOddity ) )
 				qRGnr();
 		} else
-			if ( Control != Data.Oddities.Append( Oddity( Goof.Oddity ) ) )
+			if ( Control != Data.Oddities.Append( Oddities( Goof.Oddity ) ) )
 				qRGnr();
 
 		Row = Goofs.Next( Row );
@@ -441,13 +437,10 @@ static void HandleFiles_(
 	files_data_ &Data )
 {
 qRH
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	frow__ Row = qNIL;
 	frow__ Control = qNIL;
 	file__ File;
 qRB
-	Name.Init( Names );
-
 	Row = Files.First();
 
 	Data.Names.PreAllocate( Files.Extent() );
@@ -458,7 +451,7 @@ qRB
 	while ( Row != qNIL ) {
 		Files.Recall( Row, File );
 
-		Control = Data.Names.Append( Name( File.Name ) );
+		Control = Data.Names.Append( Names( File.Name ) );
 
 		if ( Control != Data.Exclusions.Append( File.Exclusion ) )
 			qRGnr();
@@ -490,12 +483,7 @@ qRH
 	drow__ Row = qNIL;
 	str::string NewPath;
 	bso::size__ ParentPathSize;
-	ctn::E_CITEMt( directory_, drow__ ) Directory;
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
 qRB
-	Directory.Init( Directories );
-	Name.Init( Names );
-
 	Row = Directories.First();
 
 	NewPath.Init( Path );
@@ -508,16 +496,16 @@ qRB
 			qRAlc();
 
 		NewPath.Crop( ParentPathSize );
-		NewPath.Append( Name( Directory( Row )().Name ) );
+		NewPath.Append( Names( Directories( Row )().Name ) );
 
-		Item->Dir.Name.PreAllocate( Name( Directory( Row )().Name ).Extent() );
+		Item->Dir.Name.PreAllocate( Names( Directories( Row )().Name ).Extent() );
 		Item->Path.PreAllocate( NewPath.Extent() );
 
 		Item->Init();
-		Item->Dir.Name = Name( Directory( Row )().Name );
+		Item->Dir.Name = Names( Directories( Row )().Name );
 
-		Item->Dir.Exclusion() = Directory( Row )().Exclusion;
-		Item->Dir.Timestamp() = Directory( Row )().Timestamp;
+		Item->Dir.Exclusion() = Directories( Row )().Exclusion;
+		Item->Dir.Timestamp() = Directories( Row )().Timestamp;
 
 		Item->Parent() = Parent;
 		Item->Path = NewPath;
@@ -941,20 +929,17 @@ namespace {
 		const ghosts_ &Ghosts,
 		fGhostsSettingStats &Stats )
 	{
-		ctn::qCMITEM( str::vString, dwtdct::frow__ ) Filename;
 		dwtght::grow__ GRow = qNIL;
 		dwtdct::frow__ Row = Filenames.First();
 
-		Filename.Init( Filenames );
-
 		while ( Row != qNIL ) {
-			if ( Excluder.GetState( Filename( Row ), true ) == dwtxcl::sGhost ) {
-				GRow = dwtght::GetGhostRow( Filename( Row ), GO );
+			if ( Excluder.GetState( Filenames( Row ), true ) == dwtxcl::sGhost ) {
+				GRow = dwtght::GetGhostRow( Filenames( Row ), GO );
 
 				if ( GRow != qNIL ) {
 					if ( !Ghosts.Exists( GRow ) || ( GRow != Item.Dir.GetGhostRow()) ) {
 						Stats.Inc( gssIntruder );
-						dwtbsc::Delete( Root, Item.Path, Filename( Row ) );
+						dwtbsc::Delete( Root, Item.Path, Filenames( Row ) );
 					} else
 						Stats.Inc( gssExpected );
 				}
@@ -1108,14 +1093,11 @@ namespace {
 		const dwtdct::fstrings_ &Filenames,
 		const dwtxcl::excluder_ &Excluder )
 	{
-		ctn::qCMITEM( str::vString, dwtdct::frow__ ) Filename;
 		dwtdct::frow__ Row = Filenames.First();
 
-		Filename.Init( Filenames );
-
 		while ( Row != qNIL ) {
-			if ( Excluder.GetState( Filename( Row ), true ) == dwtxcl::sGhost )
-				dwtbsc::Delete(Root, Path, Filename( Row ) );
+			if ( Excluder.GetState( Filenames( Row ), true ) == dwtxcl::sGhost )
+				dwtbsc::Delete(Root, Path, Filenames( Row ) );
 
 			Row = Filenames.Next( Row );
 		}
@@ -1170,7 +1152,6 @@ qRH
 	irow__ IRow = qNIL, ParentIRow = qNIL;
 	dwtght::grow__ GRow = qNIL;
 	rRack GhostsRack;
-	ctn::E_CMITEMt( ghost_, dwtght::grow__ ) Ghost;
 	bso::bool__ Moved = false, Renamed = false, NoGhost = false, GhostIgnored = false;
 	str::string Path;
 	ghosts_reminder Reminder;
@@ -1183,8 +1164,6 @@ qRB
 	Reminder.Init();
 	Reminder.Allocate( Ghosts.Extent(), aem::mFitted );
 	Reminder.FillWith( qNIL );
-
-	Ghost.Init( Ghosts );
 
 	if ( IRow != qNIL ) {
 		IRow = Content.Next( IRow );	// On saute le répertoire racine, qui correspond à 'Root'.
@@ -1205,13 +1184,13 @@ qRB
 		else {
 			Reminder.Store( IRow, GRow );
 
-			if ( Ghost( GRow ).Name != Item.Dir.Name )
+			if ( Ghosts( GRow ).Name != Item.Dir.Name )
 				Renamed = true;
 
 			if ( ParentIRow == qNIL )
 				qRGnr();
 
-			if ( Ghost( GRow ).S_.Parent != Content( ParentIRow )->Dir.GhostRow() )
+			if ( Ghosts( GRow ).S_.Parent != Content( ParentIRow )->Dir.GhostRow() )
 				Moved = true;
 		}
 
@@ -1298,15 +1277,12 @@ namespace {
 	{
 		frow__ SRow = qNIL, TRow = qNIL;
 
-		ctn::E_CMITEMt( str::string_, frow__ ) Name;
-		Name.Init( Names );
-
 		SRow = Names.First();
 
 		while ( SRow != qNIL )
 		{
 			if ( Exclusions(SRow) == dwtbsc::xNo ) {
-				TRow = Files.Names.Append( Name( SRow ) );
+				TRow = Files.Names.Append( Names( SRow ) );
 
 				if ( TRow != Files.Exclusions.Append(Exclusions( SRow ) ) )
 					qRFwk();
@@ -1469,18 +1445,15 @@ namespace {
 		directory_ &Directory,
 		dKernel &Kernel )
 	{
-		ctn::E_CMITEMt( str::string_, frow__ ) Name;
 		file__ File;
 		frow__ FRow = qNIL;
 		sdr::row__ Row = FRows.First();
-
-		Name.Init( Files.Names );
 
 		while ( Row != qNIL ) {
 			FRow = FRows( Row );
 
 			File.Init();
-			File.Name = Kernel.Names.Append( Name( FRow ) );
+			File.Name = Kernel.Names.Append( Files.Names( FRow ) );
 			File.Exclusion = Files.Exclusions( FRow );
 			File.Size = Files.Sizes( FRow );
 			File.Timestamp = Files.Timestamps( FRow );
@@ -1498,11 +1471,7 @@ namespace {
 		dKernel &Kernel )
 	{
 		if ( GRow != qNIL ) {
-			ctn::E_CMITEMt( frows_, grow__ ) FRows;
-
-			FRows.Init( G2F.GFRows );
-
-			Fill_(FRows( GRow ), G2F.Files, Directory, Kernel );
+			Fill_( G2F.GFRows( GRow ), G2F.Files, Directory, Kernel );
 		}
 	}
 

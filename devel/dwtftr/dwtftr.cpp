@@ -144,20 +144,14 @@ const str::string_ &dwtftr::file_tree_::GetPath(
 	drow__ Row,
 	str::string_ &Path ) const
 {
-	ctn::E_CITEMt( directory_, drow__ ) Directory;
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-	Directory.Init( Directories );
-	Name.Init( Names );
-
 	if ( Row != qNIL ) {
-		Path.InsertAt( Name( Directory( Row )().Name ) );
+		Path.InsertAt( Names( Directories( Row )().Name ) );
 		Row = Parent( Row );
 	}
 
 	while ( Row != qNIL ) {
 		Path.InsertAt( '/' );
-		Path.InsertAt( Name( Directory( Row )().Name ) );
+		Path.InsertAt( Names( Directories( Row )().Name ) );
 		Row = Parent( Row );
 	}
 
@@ -171,23 +165,18 @@ static void Fill_(
 {
 qRH
 	dwtbsc::grow__ Row = qNIL;
-	ctn::E_CMITEMt( str::string_, dwtbsc::grow__ ) Name;
-	ctn::E_CMITEMt( str::string_, dwtbsc::grow__ ) Oddity;
 	goof__ Goof;
 qRB
-	Name.Init( Data.Names );
-	Oddity.Init( Data.Oddities );
-
 	if ( Data.Names.Amount() != 0 ) {
 		Row = Data.Names.First();
 
 		while ( Row != qNIL ) {
 			Goof.Init();
 
-			Goof.Name = Kernel.Names.Append( Name( Row ) );
+			Goof.Name = Kernel.Names.Append( Data.Names( Row ) );
 
-			if ( Oddity( Row ).Amount() != 0  )
-				Goof.Oddity = Kernel.Oddities.Append( Oddity( Row ) );
+			if ( Data.Oddities( Row ).Amount() != 0  )
+				Goof.Oddity = Kernel.Oddities.Append( Data.Oddities( Row ) );
 
 			Rows.Append( Kernel.Goofs.Append( Goof ) );
 
@@ -206,18 +195,15 @@ static void Fill_(
 {
 qRH
 	frow__ Row = qNIL;
-	ctn::E_CMITEMt( str::string_, frow__ ) Name;
 	file__ File;
 qRB
-	Name.Init( Data.Names );
-
 	if ( Data.Names.Amount() != 0 ) {
 		Row = Data.Names.First();
 
 		while ( Row != qNIL ) {
 			File.Init();
 
-			File.Name = Kernel.Names.Append( Name( Row ) );
+			File.Name = Kernel.Names.Append( Data.Names( Row ) );
 
 			File.Size = Data.Sizes( Row );
 
@@ -536,11 +522,7 @@ static inline void DumpCommon_(
 	const names_ &Names,
 	xml::writer_ &Writer )
 {
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-	Name.Init( Names );
-
-	Writer.PutAttribute( GetLabel_( aName ), Name( Common.Name ) );
+	Writer.PutAttribute( GetLabel_( aName ), Names( Common.Name ) );
 }
 
 static void Dump_( 
@@ -555,10 +537,6 @@ static void Dump_(
 
 	sdr::row__ Row = Rows.First();
 
-	ctn::E_CMITEMt( oddity_, orow__ ) Oddity;
-
-	Oddity.Init( Oddities );
-
 	Writer.PushTag( GetLabel_( tGoofs ) );
 	xml::PutAttribute( GetLabel_( aAmount ), Rows.Amount(), Writer );
 
@@ -568,7 +546,7 @@ static void Dump_(
 		DumpCommon_( Goofs( Rows( Row ) ), Names, Writer );
 
 		if ( Goofs( Rows( Row ) ).Oddity != qNIL )
-			Writer.PutAttribute( GetLabel_( aOddity ), Oddity( Goofs( Rows( Row ) ).Oddity ) );
+			Writer.PutAttribute( GetLabel_( aOddity ), Oddities( Goofs( Rows( Row ) ).Oddity ) );
 
 		Writer.PopTag();
 
@@ -642,10 +620,6 @@ static inline void PushDirectory_(
 	const names_ &Names,
 	xml::writer_ &Writer )
 {
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-	Name.Init( Names );
-
 	Writer.PushTag( GetLabel_( tDir ) );
 
 	DumpRegular_( Directory(), Names, Writer );
@@ -656,14 +630,11 @@ void dwtftr::file_tree_::Dump(
 	xml::writer_ &Writer ) const
 {
 	dtr::browser__<drow__> Browser;
-	ctn::E_CITEMt( directory_, drow__ ) Directory;
 //	drow__ ChildNotHandled = qNIL;
 
-	Directory.Init( Directories );
-
-	PushDirectory_( Directory( Root ), Names, Writer );
-	Dump_( Directory( Root ).Files, Files, Names, Writer );
-	Dump_( Directory( Root ).Goofs, Goofs, Names, Oddities, Writer );
+	PushDirectory_( Directories( Root ), Names, Writer );
+	Dump_( Directories( Root ).Files, Files, Names, Writer );
+	Dump_( Directories( Root ).Goofs, Goofs, Names, Oddities, Writer );
 
 	Browser.Init( Root );
 
@@ -671,16 +642,16 @@ void dwtftr::file_tree_::Dump(
 		switch ( Browser.GetKinship() ) {
 		case dtr::kChild:
 			Writer.PushTag( GetLabel_( tDirs ) );
-			xml::PutAttribute( GetLabel_( aAmount ), Directory( Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
-			PushDirectory_( Directory( Browser.GetPosition() ), Names,  Writer );
-			Dump_( Directory( Browser.GetPosition() ).Files, Files, Names, Writer );
-			Dump_( Directory( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
+			xml::PutAttribute( GetLabel_( aAmount ), Directories( Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
+			PushDirectory_( Directories( Browser.GetPosition() ), Names,  Writer );
+			Dump_( Directories( Browser.GetPosition() ).Files, Files, Names, Writer );
+			Dump_( Directories( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
 			break;
 		case dtr::kSibling:
 			Writer.PopTag();	// 'Dir'.
-			PushDirectory_( Directory( Browser.GetPosition() ), Names, Writer );
-			Dump_( Directory( Browser.GetPosition() ).Files, Files, Names, Writer );
-			Dump_( Directory( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
+			PushDirectory_( Directories( Browser.GetPosition() ), Names, Writer );
+			Dump_( Directories( Browser.GetPosition() ).Files, Files, Names, Writer );
+			Dump_( Directories( Browser.GetPosition() ).Goofs, Goofs, Names, Oddities, Writer );
 			break;
 		case dtr::kParent:
 			Writer.PopTag();	// 'Dir'.
@@ -861,11 +832,7 @@ static inline nrow__ GetNameRow_(
 	const directories_ &Directories,
 	drow__ Row )
 {
-	ctn::E_CITEMt( directory_, drow__ ) Directory;
-
-	Directory.Init( Directories );
-
-	return Directory( Row )().Name;
+	return Directories( Row )().Name;
 }
 
 static inline nrow__ GetNameRow_(
@@ -911,16 +878,13 @@ template <typename rows, typename items> static sdr::row__ Insert_(
 	sort_type__ SortType,
 	_index_ &Index )
 {
-	ctn::E_CMITEMt( str::string_, nrow__ ) Name;
 	sdr::row__ IRow = qNIL;
 	btr::level__ Level = 0;
 	bso::bool__ Inserted = false;
 
-	Name.Init( Names );
-
 	IRow = Index.First( Root, Level );
 	
-	if ( Compare_( Pattern, Name( GetNameRow_( Items, Rows( IRow ) ) ), SortType ) == -1 ) {
+	if ( Compare_( Pattern, Names( GetNameRow_( Items, Rows( IRow ) ) ), SortType ) == -1 ) {
 		Index.BecomeLesser( Row, IRow, Root );
 
 		Root = BalanceIfNeeded_( Level, Root, Index );
@@ -930,7 +894,7 @@ template <typename rows, typename items> static sdr::row__ Insert_(
 
 	IRow = Index.Last( Root, Level );
 
-	if ( Compare_( Pattern, Name( GetNameRow_( Items, Rows( IRow ) ) ), SortType ) == 1 ) {
+	if ( Compare_( Pattern, Names( GetNameRow_( Items, Rows( IRow ) ) ), SortType ) == 1 ) {
 		Index.BecomeGreater( Row, IRow, Root );
 
 		Root = BalanceIfNeeded_( Level, Root, Index );
@@ -942,7 +906,7 @@ template <typename rows, typename items> static sdr::row__ Insert_(
 
 
 	while ( !Inserted ) {
-		switch ( Compare_( Pattern, Name( GetNameRow_( Items, Rows( IRow ) ) ) , SortType ) ) {
+		switch ( Compare_( Pattern, Names( GetNameRow_( Items, Rows( IRow ) ) ) , SortType ) ) {
 		case 1:
 			if ( Index.TreeHasGreater( IRow ) )
 				IRow = Index.GetGreater( IRow );
@@ -1116,13 +1080,11 @@ static void Reorganize_(
 	dtree_ &NewTree )
 {
 	dtr::browser__<drow__> Browser;
-	ctn::E_CITEMt( directory_, drow__ ) Directory;
 
-	Directory.Init( Tree.Directories );
 	NewTree.Allocate( Tree.Amount(), aem::mFitted );
 
 	if ( Root != qNIL ) {
-		Fill_( Directory( Root ).Dirs, NewTree, Root );
+		Fill_( Tree.Directories( Root ).Dirs, NewTree, Root );
 	}
 
 	Browser.Init( Root );
@@ -1131,7 +1093,7 @@ static void Reorganize_(
 		switch ( Browser.GetKinship() ) {
 		case dtr::kChild:
 		case dtr::kSibling:
-			Fill_( Directory( Browser.Position() ).Dirs, NewTree, Browser.Position() );
+			Fill_( Tree.Directories( Browser.Position() ).Dirs, NewTree, Browser.Position() );
 			break;
 		case dtr::kParent:
 			break;

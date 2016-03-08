@@ -131,20 +131,14 @@ static void Complete_(
 	dFillLinks &Links )
 {
 qRH
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-	ctn::E_CITEMt( dwtbsc::directory_, dwtbsc::drow__) Directory;
 	directory Dir;
 	fill_link__ Link;
 	drow__ NewRow = qNIL;
 qRB
-	Name.Init( Names );
-
-	Directory.Init( Directories );
-
 	while ( Row != qNIL ) {
-		if ( Directory( Rows( Row ) )().Exclusion == dwtbsc::xNo ) {
+		if ( Directories( Rows( Row ) )().Exclusion == dwtbsc::xNo ) {
 			Dir.Init();
-			Dir().Name = RNames.Append( Name( Directory( Rows( Row ) )().Name ) );
+			Dir().Name = RNames.Append( Names( Directories( Rows( Row ) )().Name ) );
 			Dir().Status = Status;
 
 			RRows.Append( NewRow = RDirectories.Append( Dir ) );
@@ -187,8 +181,8 @@ static bso::bool__ Compare_(
 	bso::bool__ Modified = false;
 qRH
 	sdr::row__ SRow = qNIL, TRow = qNIL;
-	ctn::E_CMITEMt( name_, nrow__ ) SName, TName;
-	ctn::E_CITEMt( dwtbsc::directory_, dwtbsc::drow__) SDir, TDir;
+	ctn::q_CMITEMs( name_, nrow__ ) SName, TName;
+	ctn::q_CITEMs( dwtbsc::directory_, dwtbsc::drow__) SDir, TDir;
 	directory Dir;
 	fill_link__ Link;
 	drow__ Row = qNIL;
@@ -278,7 +272,7 @@ static inline bso::bool__ Compare_(
 	dFillLinks &Links )
 {
 
-	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) SDir, TDir;
+	ctn::q_CITEMs( dwtftr::directory_, dwtftr::drow__) SDir, TDir;
 
 	SDir.Init( Source.Directories );
 	TDir.Init( Target.Directories );
@@ -311,15 +305,12 @@ static void Complete_(
 	names_ &RNames )
 {
 qRH
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	file__ File;
 qRB
-	Name.Init( Names );
-
 	while ( Row != qNIL ) {
 		if ( Files( Rows( Row ) ).Exclusion == dwtbsc::xNo ) {
 			File.Init();
-			File.Name = RNames.Append( Name( Files( Rows( Row ) ).Name ) );
+			File.Name = RNames.Append( Names( Files( Rows( Row ) ).Name ) );
 			File.Status = Status;
 
 			RRows.Append( RFiles.Append( File ) );
@@ -353,7 +344,7 @@ static bso::bool__ Compare_(
 	bso::bool__ Modified = false;
 qRH
 	sdr::row__ SRow = qNIL, TRow = qNIL;
-	ctn::E_CMITEMt( name_, nrow__ ) SName, TName;
+	ctn::q_CMITEMs( name_, nrow__ ) SName, TName;
 	file__ File;
 	dwtbsc::exclusion__ Exclusion = dwtbsc::x_Undefined;
 qRB
@@ -427,7 +418,7 @@ static bso::bool__ inline Compare_(
 	names_ &Names )
 {
 
-	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__ ) SDir, TDir;
+	ctn::q_CITEMs( dwtftr::directory_, dwtftr::drow__ ) SDir, TDir;
 
 	SDir.Init( Source.Directories );
 	TDir.Init( Target.Directories );
@@ -460,22 +451,16 @@ static void Put_(
 	dFillLinks &Links )
 {
 qRH
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-	ctn::E_CITEMt( dwtbsc::directory_, dwtbsc::drow__) Directory;
 	directory Dir;
 	sdr::row__ Row = qNIL;
 	fill_link__ Link;
 qRB
-	Name.Init( Names );
-
-	Directory.Init( Directories );
-
 	Row = Rows.First();
 
 	while ( Row != qNIL ) {
-		if ( Directory( Rows( Row ) )().Exclusion == dwtbsc::xNo ) {
+		if ( Directories( Rows( Row ) )().Exclusion == dwtbsc::xNo ) {
 			Dir.Init();
-			Dir().Name = RNames.Append( Name( Directory( Rows( Row ) )().Name ) );
+			Dir().Name = RNames.Append( Names( Directories( Rows( Row ) )().Name ) );
 			Dir().Status = sCreated;
 
 			Link.Init();
@@ -506,7 +491,7 @@ static void Put_(
 	dFillLinks &Links )
 {
 
-	ctn::E_CITEMt( dwtftr::directory_, dwtftr::drow__) Dir;
+	ctn::q_CITEMs( dwtftr::directory_, dwtftr::drow__) Dir;
 
 	Dir.Init( Kernel.Directories );
 
@@ -523,7 +508,6 @@ drow__ dwtcpr::Compare(
 {
 	drow__ Root = qNIL;
 qRH
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	directory Dir;
 	wFillLinks Links;
 	fill_link__ Link;
@@ -531,8 +515,6 @@ qRH
 	bso::int__ Handled = 1;
 	tol::timer__ Timer;
 qRB
-	Name.Init( Source.Names );
-
 	Links.Init();
 
 	Dir.Init();
@@ -659,11 +641,7 @@ static inline void DumpCore_(
 	const names_ &Names,
 	xml::writer_ &Writer )
 {
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-	Name.Init( Names );
-
-	Writer.PutAttribute( GetLabel_( aName ), Name( Core.Name ) );
+	Writer.PutAttribute( GetLabel_( aName ), Names( Core.Name ) );
 
 	switch ( Core.Status ) {
 	case sSteady:
@@ -715,10 +693,6 @@ static inline void PushDirectory_(
 	const names_ &Names,
 	xml::writer_ &Writer )
 {
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-
-	Name.Init( Names );
-
 	Writer.PushTag( GetLabel_( tDir ) );
 
 	DumpCore_( false, Directory(), Names, Writer );
@@ -730,14 +704,11 @@ void dwtcpr::Dump(
 	xml::writer_ &Writer )
 {
 	dtr::browser__<drow__> Browser;
-	ctn::E_CITEMt( directory_, drow__ ) Directory;
 //	drow__ ChildNotHandled = qNIL;
 	bso::bool__ LastPop = false;
 
-	Directory.Init( Scene.Directories );
-
-	PushDirectory_( Directory( Root ), Scene.Names, Writer );
-	Dump_( Directory( Root ).Files, Scene.Files, Scene.Names, Writer );
+	PushDirectory_( Scene.Directories( Root ), Scene.Names, Writer );
+	Dump_( Scene.Directories( Root ).Files, Scene.Files, Scene.Names, Writer );
 
 	Browser.Init( Root );
 
@@ -745,14 +716,14 @@ void dwtcpr::Dump(
 		switch ( Browser.GetKinship() ) {
 		case dtr::kChild:
 			Writer.PushTag( GetLabel_( tDirs ) );
-			xml::PutAttribute( GetLabel_( aAmount ), Directory( Scene.Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
-			PushDirectory_( Directory( Browser.GetPosition() ), Scene.Names, Writer );
-			Dump_( Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
+			xml::PutAttribute( GetLabel_( aAmount ), Scene.Directories( Scene.Parent( Browser.Position() ) ).Dirs.Amount(), Writer );
+			PushDirectory_( Scene.Directories( Browser.GetPosition() ), Scene.Names, Writer );
+			Dump_( Scene.Directories( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
 			break;
 		case dtr::kSibling:
 			Writer.PopTag();	// Dir
-			PushDirectory_( Directory( Browser.GetPosition() ), Scene.Names, Writer );
-			Dump_( Directory( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
+			PushDirectory_( Scene.Directories( Browser.GetPosition() ), Scene.Names, Writer );
+			Dump_( Scene.Directories( Browser.GetPosition() ).Files, Scene.Files, Scene.Names, Writer );
 			break;
 		case dtr::kParent:
 			Writer.PopTag();	// 'Dir'.
@@ -1057,21 +1028,16 @@ static void Fill_(
 {
 qRH
 	sdr::row__ Row = qNIL;
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
-	ctn::E_CITEMt( directory_, drow__) Dir;
 	directory NewDir;
 	clean_link__ Link;
 qRB
-	Name.Init( Names );
-	Dir.Init( Directories );
-
 	Row = Rows.First();
 
 	while ( Row != qNIL) {
-		if ( Dir( Rows( Row ) )().Status != sSteady ) {
+		if ( Directories( Rows( Row ) )().Status != sSteady ) {
 			NewDir.Init();
-			NewDir().Name = NewNames.Append( Name( Dir( Rows( Row ) )().Name ) );
-			NewDir().Status = Dir( Rows( Row ) )().Status;
+			NewDir().Name = NewNames.Append( Names( Directories( Rows( Row ) )().Name ) );
+			NewDir().Status = Directories( Rows( Row ) )().Status;
 
 			Link.Init();
 			NewRows.Append( Link.Parent = NewDirectories.Append( NewDir ) );
@@ -1095,7 +1061,7 @@ static inline void Fill_(
 	names_ &Names,
 	dCleanLinks &Links )
 {
-	ctn::E_CITEMt( directory_, drow__) Dir;
+	ctn::q_CITEMs( directory_, drow__) Dir;
 
 	Dir.Init( Scene.Directories );
 
@@ -1112,16 +1078,14 @@ static void Fill_(
 {
 qRH
 	sdr::row__ Row = qNIL;
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	file__ File;
 qRB
-	Name.Init( Names );
 	Row = Rows.First();
 
 	while ( Row != qNIL ) {
 		if ( Files( Rows( Row ) ).Status != sSteady ) {
 			File.Init();
-			File.Name = NewNames.Append( Name( Files( Rows( Row ) ).Name ) );
+			File.Name = NewNames.Append( Names( Files( Rows( Row ) ).Name ) );
 			File.Status = Files( Rows( Row ) ).Status;
 			NewRows.Append( NewFiles.Append( File ) );
 			Row = Rows.Next( Row );
@@ -1139,12 +1103,7 @@ static void inline Fill_(
 	files_ &Files,
 	names_ &Names )
 {
-
-	ctn::E_CITEMt( directory_, drow__) Dir;
-
-	Dir.Init( Scene.Directories );
-
-	Fill_( Dir( Row ).Files, Scene.Files, Scene.Names, Rows, Files, Names );
+	Fill_( Scene.Directories( Row ).Files, Scene.Files, Scene.Names, Rows, Files, Names );
 }
 
 drow__ dwtcpr::Clean(
@@ -1154,19 +1113,14 @@ drow__ dwtcpr::Clean(
 {
 	drow__ NewRoot = qNIL;
 qRH
-	ctn::E_CMITEMt( name_, nrow__ ) Name;
 	directory Dir;
 	wCleanLinks Links;
 	clean_link__ Link;
-	ctn::E_CITEMt( directory_, drow__) Directory;
 qRB
-	Name.Init( Scene.Names );
 	Links.Init();
 
-	Directory.Init( Scene.Directories );
-
 	Dir.Init();
-	Dir().Status = Directory( Root )().Status;
+	Dir().Status = Scene.Directories( Root )().Status;
 	Dir().Name = NewScene.Names.Append( str::string() );
 
 	NewRoot = NewScene.Directories.New();

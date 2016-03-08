@@ -412,18 +412,16 @@ qRH
 	sdr::row__ Row = qNIL;
 	bso::bool__ FreeArgumentsOnly = false;
 	TOL_CBUFFER___ Buffer;
-	ctn::E_CMITEM( str::string_ ) Argument;
 qRB
-	Argument.Init( Arguments );
 	Row = Arguments.First( IgnoreFirstArgument ? 1 : 0 );
 
 	while ( Row != qNIL && ( !FreeArgumentsOnly ) ) {
-		FreeArgumentsOnly = Fill_( Argument( Row ).Convert( Buffer ), Flags, Options, Free );
+		FreeArgumentsOnly = Fill_( Arguments( Row ).Convert( Buffer ), Flags, Options, Free );
 		Row = Arguments.Next( Row );
 	}
 
 	while ( Row != qNIL ) {
-		Free.Append( Argument( Row ) );
+		Free.Append( Arguments( Row ) );
 		Row = Arguments.Next( Row );
 	}
 qRR
@@ -891,17 +889,14 @@ qRT
 qRE
 }
 
-template <typename c, typename i> static void FillRegistry_(
+template <typename c> static void FillRegistry_(
 	const c &Conteneur,
 	bso::bool__ IgnoreUnknownArguments )
 {
-	i Item;
 	sdr::row__ Row = Conteneur.First();
 
-	Item.Init( Conteneur );
-
 	while ( Row != qNIL ) {
-		FillRegistry_( Row, Item( Row ), IgnoreUnknownArguments );
+		FillRegistry_( Row, Conteneur( Row ), IgnoreUnknownArguments );
 
 		Row = Conteneur.Next( Row );
 	}
@@ -914,9 +909,9 @@ static void FillRegistry_(
 	bso::bool__ IgnoreUnknownArguments )
 {
 	// Otions before flags, so the special options ('--#...') are handled first.
-	FillRegistry_<options_, ctn::E_CITEM( option_ )>( Options, IgnoreUnknownArguments );
-	FillRegistry_<flags_, ctn::E_CMITEM( flag_ )>( Flags, IgnoreUnknownArguments );
-	FillRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( Arguments, IgnoreUnknownArguments );
+	FillRegistry_<options_>( Options, IgnoreUnknownArguments );
+	FillRegistry_<flags_>( Flags, IgnoreUnknownArguments );
+	FillRegistry_<arguments_>( Arguments, IgnoreUnknownArguments );
 }
 
 #define CLI_ARGUMENTS	"_/CLIArguments"
@@ -951,19 +946,17 @@ qRH
 	bso::integer_buffer__ IBuffer;
 	str::string Path;
 	TOL_CBUFFER___ SBuffer;
-	ctn::E_CMITEM( str::string_ ) Argument;
 	sdr::row__ Row = qNIL;
 qRB
 	SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( Arguments.Amount(), IBuffer ) ) );
 
-	Argument.Init( Arguments );
 	Row = Arguments.First();
 
 	while ( Row != qNIL ) {
 		Path.Init();
 		PutIndice_( RAW_ARGUMENT, *Row, "", Path );
 
-		SetValue( Path, Argument( Row ) );
+		SetValue( Path, Arguments( Row ) );
 
 		Row = Arguments.Next( Row );
 	}
@@ -1077,12 +1070,11 @@ qRE
 	return Type;
 }
 
-template <typename c, typename i> static void DumpInRegistry_(
+template <typename c> static void DumpInRegistry_(
 	const char *Prefix,
 	const c &Conteneur )
 {
 qRH
-	i Item;
 	sdr::row__ Row = Conteneur.First();
 	bso::integer_buffer__ Buffer;
 	str::string Path;
@@ -1092,10 +1084,8 @@ qRB
 
 	SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
 
-	Item.Init( Conteneur );
-
 	while ( Row != qNIL ) {
-		DumpInRegistry_( *Row, Item( Row ) );
+		DumpInRegistry_( *Row, Conteneur( Row ) );
 
 		Row = Conteneur.Next( Row );
 	}
@@ -1112,9 +1102,9 @@ static void DumpInRegistry_(
 {
 	DumpInRegistry_( Arguments );
 
-	DumpInRegistry_<flags_, ctn::E_CMITEM( flag_ )>( ARGUMENT_FLAGS, Flags );
-	DumpInRegistry_<options_, ctn::E_CITEM( option_ )>( ARGUMENT_OPTIONS, Options );
-	DumpInRegistry_<arguments_, ctn::E_CMITEM( argument_ )>( ARGUMENT_FREES, Free );
+	DumpInRegistry_<flags_>( ARGUMENT_FLAGS, Flags );
+	DumpInRegistry_<options_>( ARGUMENT_OPTIONS, Options );
+	DumpInRegistry_<arguments_>( ARGUMENT_FREES, Free );
 }
 
 void sclargmnt::FillRegistry(
@@ -1365,13 +1355,10 @@ static void PrintUsage_(
 	type__ Type,
 	const str::strings_ &Ids )
 {
-	ctn::E_CMITEM( str::string_ ) Id;
 	sdr::row__ Row = Ids.First();
 
-	Id.Init( Ids );
-
 	while ( Row != qNIL ) {
-		PrintUsage_( Id( Row ), Type );
+		PrintUsage_( Ids( Row ), Type );
 
 		Row = Ids.Next( Row );
 
@@ -1386,31 +1373,28 @@ static void IdentifyArguments_(
 	str::strings_ &Options,
 	str::strings_ &Frees )
 {
-	ctn::E_CMITEM( str::string_ ) Id;
 	sdr::row__ Row = Ids.First();
-
-	Id.Init( Ids );
 
 	while ( Row != qNIL ) {
 
 //		cio::COut << Id( Row ) << " : " << txf::commit;
 
-		switch ( IdentifyArgument_( Id( Row ) ) )  {
+		switch ( IdentifyArgument_( Ids( Row ) ) )  {
 		case tCommand:
 //			cio::COut << "Command";
-			Commands.Append( Id( Row ) );
+			Commands.Append( Ids( Row ) );
 			break;
 		case tFlag:
 //			cio::COut << "Flag";
-			Flags.Append( Id( Row ) );
+			Flags.Append( Ids( Row ) );
 			break;
 		case tOption:
 //			cio::COut << "Option";
-			Options.Append( Id( Row ) );
+			Options.Append( Ids( Row ) );
 			break;
 		case tFree:
 //			cio::COut << "Free";
-			Frees.Append( Id( Row ) );
+			Frees.Append( Ids( Row ) );
 			break;
 		default:
 			qRFwk();

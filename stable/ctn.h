@@ -58,17 +58,17 @@
 # define qCONTAINERdl( Type )		qCONTAINERd( Type, sdr::row__ )
 # define qCONTAINERwl( Type )		qCONTAINERw( Type, sdr::row__ )*
 
-# define qMITEM( type, row )	volatile_mono_item< type, row >
-# define qCMITEM( type, row )	const_mono_item< type, row >
+# define q_MITEMr( type, row )	volatile_mono_item< type, row >
+# define q_CMITEMs( type, row )	const_mono_item< type, row >
 
-# define qMITEMl( type )		qMITEM( type, sdr::sRow )
-# define qCMITEMl( type )		qCMITEM( type, sdr::sRow )
+# define q_MITEMrl( type )		q_MITEMr( type, sdr::sRow )
+# define q_CMITEMsl( type )		q_CMITEMs( type, sdr::sRow )
 
-# define qITEMr( type, row )	volatile_poly_item< type, row >
-# define qCITEMf( type, row )	const_poly_item< type, row >
+# define q_ITEMr( type, row )	volatile_poly_item< type, row >
+# define q_CITEMs( type, row )	const_poly_item< type, row >
 
-# define qMITEMrl( type )		qMITEMr( type, sdr::sRow )
-# define qCMITEMfl( type )		qCMITEMf( type, sdr::sRow )
+# define q_ITEMrl( type )		q_ITEMr( type, sdr::sRow )
+# define q_CITEMsl( type )		q_CITEMs( type, sdr::sRow )
 
 /*************************/
 /****** Old version ******/
@@ -118,7 +118,7 @@ namespace ctn {
 			sdr::size__ Size,
 			aem::mode__ Mode )
 		{
-			FlushTest();
+			Flush();
 
 			Dynamics.Allocate( Size, Mode );
 
@@ -275,7 +275,7 @@ namespace ctn {
 		//f Initialization.
 		void Init( void )
 		{
-			FlushTest();
+			Flush();
 
 			Dynamics.Init();
 			Statics.Init();
@@ -371,7 +371,7 @@ namespace ctn {
 			sdr::size__ Amount = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			FlushTest();
+			Flush();
 
 			sdr::size__ CurrentAmount = amount_extent_manager_<r>::Amount();
 			sdr::size__ NewAmount = CurrentAmount - Amount;
@@ -490,7 +490,7 @@ namespace ctn {
 			}
 			
 		}*/
-		void Flush( void )
+		void Flush( void ) const
 		{
 			Flush_();
 		}
@@ -657,12 +657,14 @@ public:
 		// Rattache au conteneur 'Conteneur'.
 		void Init( basic_container_<t, st, r> &Conteneur )
 		{
+			Conteneur.Flush();
+
 			Init( &Conteneur );
 		}
 		// Rattache au conteneur 'Conteneur'.
 		void Init( basic_container_<t, st,r> *Conteneur )
 		{
-			Conteneur->FlushTest();
+			Conteneur->Flush();
 
 			Conteneur_ = Conteneur;
 			Pilote_.Init( Conteneur->Dynamics );
@@ -772,7 +774,7 @@ public:
 	*/	// Rattache au conteneur 'Conteneur'.
 		void Init( const basic_container_<t, st,r> &Conteneur )
 		{
-			Conteneur.FlushTest();
+			Conteneur.Flush();
 
 			Conteneur_ = &Conteneur;
 			Pilote_.Init( Conteneur.Dynamics );
@@ -942,26 +944,9 @@ public:
 		//f Initialization with container 'Container'.
 		void Init(const mono_container_< t , r > &Container )
 		{
-			Container.FlushTest();
-
 			item_base_const__< t, mono_static__< typename_ t::s >, r >::Init( Container );
 		}
 	};
-
-
-
-	// To reach an item from 'MCONTAINER_( Type )'.
-# define E_MITEMt( Type, r )	qMITEM( Type, r )
-# define E_CMITEMt( Type, r )	qCMITEM( Type, r )
-
-#if 0	// Was a workaround for some compilers.
-	#define E_MITEM( Type )		volatile_mono_item< Type, sdr::row__ >
-	#define E_CMITEM( Type )	const_mono_item< Type, sdr::row__ >
-#else
-	//s To reach an item from 'MCONTAINER_( Type )' , but only for reading.
-# define E_MITEM( Type )		qMITEMl( Type )
-# define E_CMITEM( Type )		qCMITEMl( Type )
-#endif
 
 	/*c Container for object of type 'Type', which need only one memory.
 	Use 'MCONTAINER_( Type )' rather then directly this class. */
@@ -1075,8 +1060,6 @@ public:
 		//f Initialize with container 'Container', in mode 'Mode'.
 		void Init( basic_container_< t, poly_static__< typename t::s >, r > &Container )
 		{
-			Container.FlushTest();
-
 			AStorage.Init();
 			item_base_volatile__< t, poly_static__< typename_ t::s >, r >::Init( Container );
 		}
@@ -1143,8 +1126,6 @@ public:
 		//f Initializing with container 'Container'.
 		void Init( const basic_container_< t, poly_static__<typename t::s>, r > &Container )
 		{
-			Container.FlushTest();
-
 //			AStorage.Init();
 			item_base_const__< t, poly_static__< typename_ t::s >, r >::Init( Container );
 		}
@@ -1167,18 +1148,6 @@ public:
 			return Objet_;
 		}
 	};
-
-
-	#define E_ITEMt( Type, r )		volatile_poly_item< Type, r >
-	#define E_CITEMt( Type,r  )		const_poly_item< Type, r  >
-
-#if 0 // Was a workaround for some compiler.
-	#define E_ITEM( Type )			volatile_poly_item< Type, sdr::row__ >
-	#define E_CITEM( Type )			const_poly_item< Type, sdr::row__  >
-#else
-	#define E_ITEM( Type )			E_ITEMt( Type, sdr::row__ )
-	#define E_CITEM( Type )			E_CITEMt( Type, sdr::row__ )
-#endif
 
 	/*c Container for objects 't', with static part 'st', which need more then one memory.
 	Use 'CONTAINER_( t )' rather then directly this class.*/
