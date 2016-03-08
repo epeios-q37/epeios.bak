@@ -187,22 +187,18 @@ const str::string_ &dwtght::GetPath(
 	str::string_ &Path,
 	depth__ &Depth )
 {
-	ctn::E_CMITEMt( ghost_, grow__ ) Ghost;
-
-	Ghost.Init( Ghosts );
-
 	if ( Row != qNIL) {
-		Path.Append( Ghost( Row ).Name );
+		Path.Append( Ghosts( Row ).Name );
 
-		Row = Ghost( Row ).S_.Parent;
+		Row = Ghosts( Row ).S_.Parent;
 	}
 
 	while ( Row != qNIL ) {
 		Depth++;
 		Path.InsertAt( '/' );
-		Path.InsertAt( Ghost( Row ).Name );
+		Path.InsertAt( Ghosts( Row ).Name );
 
-		Row = Ghost( Row ).S_.Parent;
+		Row = Ghosts( Row ).S_.Parent;
 	}
 
 	return Path;
@@ -216,9 +212,7 @@ static void ShowGhosts_(
 qRH
 	dwtght::grow__ Row = qNIL;
 	str::string Path;
-	ctn::E_CMITEMt( ghost_, dwtght::grow__ ) Ghost;
 qRB
-	Ghost.Init( Ghosts );
 	Row = Ghosts.First();
 
 	if ( Row != qNIL )
@@ -228,7 +222,7 @@ qRB
 
 		TFlow << *Row << ' ';
 
-		TFlow << '(' << *Ghost( Row ).S_.Parent << ')';
+		TFlow << '(' << *Ghosts( Row ).S_.Parent << ')';
 
 		Path.Init();
 		TFlow << " : " << GetPath( Row, Ghosts, Path ) << txf::nl;

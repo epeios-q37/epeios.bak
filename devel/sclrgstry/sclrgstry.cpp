@@ -340,7 +340,7 @@ qRB
 
 	Setup.Init();
 
-	Setup.Append('<' );
+	Setup.Append("<_setup><" );
 	sclrgstry::Parameters.GetPath( Setup );
 	Setup.Append('>' );
 
@@ -348,7 +348,7 @@ qRB
 
 	Setup.Append( "</" );
 	sclrgstry::Parameters.GetPath( Setup );
-	Setup.Append('>' );
+	Setup.Append( "></_setup>" );
 
 
 	IFlow.Init( Setup );

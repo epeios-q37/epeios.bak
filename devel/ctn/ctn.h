@@ -162,8 +162,7 @@ namespace ctn {
 			} else if ( Row != *Hook_.Index() ) {
 				Set_( Row );
 
-				if ( !IsConst )
-					IsVolatile_ = true;
+				IsVolatile_ = !IsConst;
 			} else if ( !IsConst ) {
 				IsVolatile_ = true;
 			}
@@ -213,7 +212,7 @@ namespace ctn {
 			if ( P )
 				Flush_();
 
-			Object_.reset( P );
+			Object_.reset( false ); // Due to 'Flush_()' above, its content is useless.
 			Dynamics.reset( P );
 			Statics.reset( P );
 			amount_extent_manager_<r>::reset( P );
@@ -226,12 +225,14 @@ namespace ctn {
 			Statics.plug( Hooks.GetStaticsHook() );
 			Dynamics.plug( Hooks.GetDynamicsHooks() );
 			_Allocate( Dynamics.Amount(), aem::mFitted );
+			Hook_.Init( Dynamics );
 		}
 		void plug( qASd &AS )
 		{
 			// 'Object' is plugged independently.
 			Dynamics.plug( AS );
 			Statics.plug( AS );
+			Hook_.Init( Dynamics );
 	//		amount_extent_manager_::plug( M );	// Not relevant
 		}
 		basic_container_ &operator =( const basic_container_ &O )
