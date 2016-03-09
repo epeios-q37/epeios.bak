@@ -401,7 +401,7 @@ static void Fill_(
 qRH
 	drow__ Row = qNIL;
 	move__ Move;
-	ctn::q_CMITEMs( name_, nrow__ ) OldName, NewName;
+	ctn::qCMITEMs( name_, nrow__ ) OldName, NewName;
 	handled Handled;
 	dir__ Dir;
 	bso::bool__ Old = false, New = false;
@@ -972,7 +972,7 @@ static bso::bool__ Apply_(
 	const names_ &Names,
 	dwtbsc::tamount__ ThreadAmountMax )
 {
-	ctn::q_CMITEMs( name_, nrow__ ) Old, New;
+	ctn::qCMITEMs( name_, nrow__ ) Old, New;
 
 	Old.Init( Names );
 	New.Init( Names );
@@ -997,7 +997,7 @@ bso::bool__ dwtmov::Apply(
 {
 	bso::bool__ Failure = false;
 	mrow__ Row = Movings.First();
-	ctn::q_CMITEMs( name_, nrow__ ) Current, New;
+	ctn::qCMITEMs( name_, nrow__ ) Current, New;
 
 	Current.Init( Movings.Names );
 	New.Init( Movings.Names );

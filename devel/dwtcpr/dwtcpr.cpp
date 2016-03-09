@@ -181,8 +181,8 @@ static bso::bool__ Compare_(
 	bso::bool__ Modified = false;
 qRH
 	sdr::row__ SRow = qNIL, TRow = qNIL;
-	ctn::q_CMITEMs( name_, nrow__ ) SName, TName;
-	ctn::q_CITEMs( dwtbsc::directory_, dwtbsc::drow__) SDir, TDir;
+	ctn::qCMITEMs( name_, nrow__ ) SName, TName;
+	ctn::qCITEMs( dwtbsc::directory_, dwtbsc::drow__) SDir, TDir;
 	directory Dir;
 	fill_link__ Link;
 	drow__ Row = qNIL;
@@ -272,7 +272,7 @@ static inline bso::bool__ Compare_(
 	dFillLinks &Links )
 {
 
-	ctn::q_CITEMs( dwtftr::directory_, dwtftr::drow__) SDir, TDir;
+	ctn::qCITEMs( dwtftr::directory_, dwtftr::drow__) SDir, TDir;
 
 	SDir.Init( Source.Directories );
 	TDir.Init( Target.Directories );
@@ -344,7 +344,7 @@ static bso::bool__ Compare_(
 	bso::bool__ Modified = false;
 qRH
 	sdr::row__ SRow = qNIL, TRow = qNIL;
-	ctn::q_CMITEMs( name_, nrow__ ) SName, TName;
+	ctn::qCMITEMs( name_, nrow__ ) SName, TName;
 	file__ File;
 	dwtbsc::exclusion__ Exclusion = dwtbsc::x_Undefined;
 qRB
@@ -418,7 +418,7 @@ static bso::bool__ inline Compare_(
 	names_ &Names )
 {
 
-	ctn::q_CITEMs( dwtftr::directory_, dwtftr::drow__ ) SDir, TDir;
+	ctn::qCITEMs( dwtftr::directory_, dwtftr::drow__ ) SDir, TDir;
 
 	SDir.Init( Source.Directories );
 	TDir.Init( Target.Directories );
@@ -491,7 +491,7 @@ static void Put_(
 	dFillLinks &Links )
 {
 
-	ctn::q_CITEMs( dwtftr::directory_, dwtftr::drow__) Dir;
+	ctn::qCITEMs( dwtftr::directory_, dwtftr::drow__) Dir;
 
 	Dir.Init( Kernel.Directories );
 
@@ -1061,7 +1061,7 @@ static inline void Fill_(
 	names_ &Names,
 	dCleanLinks &Links )
 {
-	ctn::q_CITEMs( directory_, drow__) Dir;
+	ctn::qCITEMs( directory_, drow__) Dir;
 
 	Dir.Init( Scene.Directories );
 
