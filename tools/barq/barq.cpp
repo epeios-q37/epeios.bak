@@ -693,7 +693,7 @@ qRB
 	Flow << "<!--                    DON'T MODIFY !!! !" << txf::nl;
 	Flow << txf::pad << "This document was generated the " << tol::DateAndTime( Buffer ) << txf::nl;
 	Flow << txf::pad << "using " NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
-	Flow << txf::pad << "Build : "__DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
+	Flow << txf::pad << "Build : " __DATE__ " " __TIME__ << " (" << cpe::GetDescription() << ')' << txf::nl;
 	Flow << "-->" << txf::nl;
 
 	Writer.PushTag( "API" );
