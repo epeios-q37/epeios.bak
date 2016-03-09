@@ -76,7 +76,7 @@ namespace {
 	{
 		sdr::row__ P = qNIL;
 
-		Type.ID( Item.ID() );
+		Type.SetID( Item.ID() );
 
 		P = Item.Values.First();
 

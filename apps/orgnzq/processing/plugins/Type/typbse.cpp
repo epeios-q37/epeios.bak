@@ -26,7 +26,7 @@ using namespace typbse;
 const char *typbse::rPluginCommon::OGZTYPGetLabel( void )
 {
 qRH
-	str::iString Label;
+	str::wString Label;
 qRB
 	Label.Init();
 

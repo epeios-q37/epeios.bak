@@ -154,9 +154,9 @@ namespace ags {
 	qRWODISCLOSEv( type, name )
 
 // Make accessible the static member, for read-write access, of a dynamic object, named 'name' of type 'type'.
-# define qRWDISCLOSEv( type, name )\
+# define qRWDISCLOSEd( type, name )\
 	qRODISCLOSEv( type, name )\
-	qWODISCLOSEv( type__, name )
+	qWODISCLOSEv( type, name )
 
 # define qRRODISCLOSEf( type, name )\
 	const type Get##name( void ) const\

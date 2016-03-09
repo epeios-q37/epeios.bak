@@ -46,7 +46,7 @@ namespace ogzusr {
 
 	typedef ogzcbs::fDynamicItems<OGZUSR_TP> fUsers;
 
-	typedef ogzcbs::rRegularDynamicCallback<OGZUSR_TP> rRegularCallback;
+	typedef ogzcbs::rRegularDynamicCallback<OGZUSR_TP> rRegularUserCallback;
 
 	class cAuthentication
 	{

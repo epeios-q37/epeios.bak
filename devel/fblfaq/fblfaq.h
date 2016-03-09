@@ -97,8 +97,6 @@ namespace fblfaq {
 
 	class type_
 	{
-	private:
-		type_id__ ID_;
 	public:
 		str::string_ Name;
 		str::string_ Prefix;
@@ -107,15 +105,17 @@ namespace fblfaq {
 			str::string_::s Prefix;
 			str::string_::s Name;
 			commands_::s Commands;
-		};
+			type_id__ ID;
+		} &S_;
 		type_( s &S )
-		: Prefix( S.Prefix ),
+		: S_( S),
+		  Prefix( S.Prefix ),
 		  Name( S.Name ),
 		  Commands( S.Commands )
 		{}
 		void reset( bool P = true )
 		{
-			ID_ = FBLFRD_UNDEFINED_TYPE;
+			S_.ID = FBLFRD_UNDEFINED_TYPE;
 
 			Prefix.reset( P );
 			Name.reset( P );
@@ -129,7 +129,7 @@ namespace fblfaq {
 		}
 		type_ &operator =( const type_ &BT )
 		{
-			ID_ = BT.ID_;
+			S_.ID = BT.S_.ID;
 
 			Prefix = BT.Prefix;
 			Name = BT.Name;
@@ -140,22 +140,13 @@ namespace fblfaq {
 		//f Initialization.
 		void Init( void )
 		{
-			ID_ = FBLFRD_UNDEFINED_TYPE;
+			S_.ID = FBLFRD_UNDEFINED_TYPE;
 
 			Prefix.Init();
 			Name.Init();
 			Commands.Init();
 		}
-		//f Return the ID.
-		type_id__ ID( void ) const
-		{
-			return ID_;
-		}
-		//f Set the ID to 'ID'.
-		void ID( type_id__ ID )
-		{
-			ID_ = ID;
-		}
+		qRWDISCLOSEd( type_id__, ID );
 	};
 
 	E_AUTO( type )

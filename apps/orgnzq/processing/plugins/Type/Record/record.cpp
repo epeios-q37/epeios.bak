@@ -41,7 +41,7 @@ private:
 	qCBUFFERr LabelBuffer_;
 protected:
 	virtual void OGZTYPToXML(
-		const ogzbsc::vDatum &Datum,
+		const ogzbsc::dDatum &Datum,
 		str::vString &XML ) override
 	{
 		qRVct();
