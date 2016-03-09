@@ -58,17 +58,17 @@
 # define qCONTAINERdl( Type )		qCONTAINERd( Type, sdr::row__ )
 # define qCONTAINERwl( Type )		qCONTAINERw( Type, sdr::row__ )*
 
-# define q_MITEMr( type, row )	volatile_mono_item< type, row >
-# define q_CMITEMs( type, row )	const_mono_item< type, row >
+# define qMITEMr( type, row )		volatile_mono_item< type, row >
+# define qCMITEMs( type, row )		const_mono_item< type, row >
 
-# define q_MITEMrl( type )		q_MITEMr( type, sdr::sRow )
-# define q_CMITEMsl( type )		q_CMITEMs( type, sdr::sRow )
+# define qMITEMrl( type )			qMITEMr( type, sdr::sRow )
+# define qCMITEMsl( type )			qCMITEMs( type, sdr::sRow )
 
-# define q_ITEMr( type, row )	volatile_poly_item< type, row >
-# define q_CITEMs( type, row )	const_poly_item< type, row >
+# define qITEMr( type, row )		volatile_poly_item< type, row >
+# define qCITEMs( type, row )		const_poly_item< type, row >
 
-# define q_ITEMrl( type )		q_ITEMr( type, sdr::sRow )
-# define q_CITEMsl( type )		q_CITEMs( type, sdr::sRow )
+# define qITEMrl( type )			qITEMr( type, sdr::sRow )
+# define qCITEMsl( type )			qCITEMs( type, sdr::sRow )
 
 /*************************/
 /****** Old version ******/
@@ -114,34 +114,29 @@ namespace ctn {
 	: public amount_extent_manager_<r>
 	{
 	private:
-		void _Allocate(
-			sdr::size__ Size,
-			aem::mode__ Mode )
-		{
-			Flush();
-
-			Dynamics.Allocate( Size, Mode );
-
-			if ( amount_extent_manager_<r>::Handle( Size, Mode ) ) {
-				Statics.Allocate( Size );
-			}
-		}
-		void Flush_( void ) const
+		void Flush_( bso::bool__ Reset ) const
 		{
 			if ( IsVolatile_ && IsSet_() )
 				Statics.Store( S_, *Hook_.Index() );
 
 			IsVolatile_ = false;
 
-			Hook_.Index( qNIL );
+			if ( Reset )
+				Hook_.Index( qNIL );
 		}
-		bso::sBool IsFlushed_( void ) const
+		void _Allocate(
+			sdr::size__ Size,
+			aem::mode__ Mode )
 		{
-			return Hook_.Index() == qNIL;
+			Dynamics.Allocate( Size, Mode );
+
+			if ( amount_extent_manager_<r>::Handle( Size, Mode ) ) {
+				Statics.Allocate( Size );
+			}
 		}
 		void Set_( r Row ) const
 		{
-			Flush_();
+			Flush_( false );
 
 			Hook_.Index( *Row );
 			Statics.Recall( Row, S_ );
@@ -184,10 +179,10 @@ namespace ctn {
 			return ( ( Row == qNIL ) || ( ( amount_extent_manager_<r>::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
 	protected:
+		st Reseted_;	//Static par in a reseted state.
 		t Object_;
 		mutable rAHook_ Hook_;
 		mutable bso::sBool IsVolatile_;
-		virtual const st &ST_( void ) = 0;
 	public:
 		//r All the static parts.
 		mutable tys::E_STORAGEt_( st, r ) Statics;
@@ -210,7 +205,7 @@ namespace ctn {
 		void reset( bool P = true )
 		{
 			if ( P )
-				Flush_();
+				Flush_( true );
 
 			Object_.reset( false ); // Due to 'Flush_()' above, its content is useless.
 			Dynamics.reset( P );
@@ -237,8 +232,8 @@ namespace ctn {
 		}
 		basic_container_ &operator =( const basic_container_ &O )
 		{
-			Flush_();
-			O.Flush_();
+			Flush_( true );
+			O.Flush_( true );
 
 			size__ Size = O.Amount();
 
@@ -252,30 +247,10 @@ namespace ctn {
 
 			return *this;
 		}
-#if 0
-		void write( flw::oflow__ &OFlow ) const
-		{
-			Dynamics.write( OFlow );
-			Statics.write( OFlow );
-		}
-		void read( flw::iflow__ &IFlow )
-		{
-			Dynamics.read( IFlow );
-			Statics.read( IFlow );
-		}
-#endif
-		//f Debug feature. If the container is not flushed, throw an error.
-		void FlushTest( void ) const
-		{
-# ifdef CTN_DBG
-			if ( !IsFlushed_() )
-				qRFwk();
-# endif
-		}
 		//f Initialization.
 		void Init( void )
 		{
-			Flush();
+			Flush_( true );
 
 			Dynamics.Init();
 			Statics.Init();
@@ -307,7 +282,7 @@ namespace ctn {
 			sdr::size__ Size,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			Flush_();
+			Flush_( true );
 
 			sdr::size__ AncCap;
 			sdr::size__ Amount = Size;
@@ -318,12 +293,10 @@ namespace ctn {
 
 			if ( AncCap < Size )
 			{
-				const st &ST = this->ST_();
-
 				if ( ( Size - AncCap ) > 1 )
-					Statics.Fill( ST, AncCap, Size - AncCap );
+					Statics.Fill( Reseted_, AncCap, Size - AncCap );
 				else
-					Statics.Store( ST, AncCap );
+					Statics.Store( Reseted_, AncCap );
 			}
 		}
 		void DecreaseTo(
@@ -336,42 +309,13 @@ namespace ctn {
 # endif
 			Allocate( Size, *(st *)NULL, Mode );	// 'NULL' because this parameter is used only when size increased.
 		}
-		// Comme 'ecrire()', sauf pour la polymmoire, qui contient la partie dynamique.
-	/*	void EcrireToutDansFlotSaufPartiesDynamiques( flo_sortie_ &Flot ) const
-		{
-			FLOEcrire( *AStorage.S_, Flot );
-			Dynamique.ecrire( Flot );
-			Statique.ecrire( Flot );
-		}
-		// Comme 'lire()', sauf pour la polymmoire, qui contient la partie dynamique.
-		void LireToutDeFlotSaufPartiesDynamiques( flo_entree_ &Flot )
-		{
-			FLOLire( Flot, *AStorage.S_ );
-			Dynamique.lire( Flot );
-			Statique.lire( Flot );
-		}
-	*/
-		//f Adjust the extent/amount to 'Size'.
-#if 0
-		void Adjust( void )
-		{
-			FlushTest();
-
-			sdr::size__ Extent = this->Extent();
-
-			if ( amount_extent_manager_<r>::Force( Size ) ) {
-				Dynamics.Allocate( Size, Extent );
-				Statics.Allocate( Size );
-			}
-		}
-#endif
 		//f Remove 'Amount' entries from 'Position'.
 		void Remove(
 			r Position,
 			sdr::size__ Amount = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			Flush();
+			Flush_( true );
 
 			sdr::size__ CurrentAmount = amount_extent_manager_<r>::Amount();
 			sdr::size__ NewAmount = CurrentAmount - Amount;
@@ -450,49 +394,32 @@ namespace ctn {
 			r Row )
 		{
 			Get( Row ) = Object;
-
-			Flush_();
 		}
 		void Recall(
 			r Row,
 			t &Object ) const
 		{
 			Object = Get( Row );
-
-			Flush_();
 		}
-		/*
 		void InsertAt(
 			const t &Object,
 			r Row = 0,
 			aem::mode__ Mode = aem::m_Default )
 		{
-			if ( !IsFlushed_() )
-				qRFwk();
-
 			if ( _AppendInsteadOfInsert( Row ) )
 				Append( Object, Mode );
 			else {
-				Flush_();
+				Flush_( true );
 
-				st S;
-				t O( S.ST );
-
-				memset(&S, 0, sizeof( S ) );
-
-				O.reset( false );
-
-				Insert( S, Row, Mode );
+				Insert( &Reseted_, Row, Mode );
 
 				Get( Row ) = Object;
-
-				Flush_();
 			}
 			
-		}*/
+		}
 		void Flush( void ) const
 		{
-			Flush_();
+			Flush_( true );
 		}
 		r Append(
 			const t &Object,
@@ -501,8 +428,6 @@ namespace ctn {
 			r P = New( Mode );
 
 			operator()( P ) = Object;
-
-			Flush_();
 
 			return P;
 		}
@@ -518,6 +443,8 @@ namespace ctn {
 			sdr::size__ Size = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
+			Flush_( true );
+
 			sdr::row_t__ P = this->Amount();
 
 			Allocate( P + Size, Mode );
@@ -953,15 +880,12 @@ public:
 	template <class t, typename r> class mono_container_
 	: public basic_container_< t, mono_static__<typename t::s>, r >
 	{
-	protected:
-		virtual const mono_static__<typename t::s> &ST_( void ) override
+	private:
+		void SetReseted_( void )
 		{
-			static mono_static__<typename t::s> S;
-			t O( S.ST );
+			t O( basic_container_< t, mono_static__<typename t::s>, r >::Reseted_.ST );
 
 			O.reset( false );
-
-			return S;
 		}
 	public:
 		struct s
@@ -974,6 +898,7 @@ public:
 		}
 		void reset( bool P = true )
 		{
+			SetReseted_();
 			basic_container_< t, mono_static__< typename_ t::s >, r >::reset( P );
 			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug( basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_ );
 		}
@@ -1157,17 +1082,13 @@ public:
 	private:
 		ags::aggregated_storage_ AStorage_;
 	protected:
-		virtual const poly_static__<typename t::s> &ST_( void ) override
+		void SetReseted_( void )
 		{
-			static poly_static__<typename t::s> S;
-
-			t O( S.ST );
-			ags::aggregated_storage_ A( S.AStorage );
+			t O( basic_container_< t, poly_static__< typename t::s >, r >::Reseted_.ST );
+			ags::aggregated_storage_ A( basic_container_< t, poly_static__< typename t::s >, r >::Reseted_.AStorage );
 
 			O.reset( false );
 			A.reset( false );
-
-			return S;
 		}
 	public:
 		struct s
@@ -1181,6 +1102,7 @@ public:
 		}
 		void reset( bool P = true )
 		{
+			SetReseted_();
 			basic_container_< t, poly_static__< typename_ t::s >, r >::reset( P );
 			AStorage_.plug( basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_ );
 			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( AStorage_ );

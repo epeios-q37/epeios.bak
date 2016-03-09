@@ -556,7 +556,7 @@ namespace rgstry {
 
 	typedef sdr::row__ cursor__;
 
-	typedef ctn::q_CITEMs( node_, row__ )	buffer;
+	typedef ctn::qCITEMs( node_, row__ )	buffer;
 
 	class registry_ {
 	private:

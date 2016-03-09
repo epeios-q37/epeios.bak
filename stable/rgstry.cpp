@@ -361,11 +361,11 @@ row__ rgstry::registry_::_Search(
 {
 	cursor__ CandidateRow = qNIL;
 	cursor__ Cursor = qNIL;
-	ctn::q_CITEMsl( path_item_ ) Item;
+	ctn::qCITEMsl( path_item_ ) Item;
 	row__ ResultRow, ChildRow = qNIL;
 	bso::bool__ All = ResultRows != NULL;
 
-	Item.Init( Path );
+	Item.Init( Path );	// An item is used, due to recusive behavior of this method.
 
 	ResultRow = ChildRow = _Search( Item( PathRow ), Row, Cursor );
 
