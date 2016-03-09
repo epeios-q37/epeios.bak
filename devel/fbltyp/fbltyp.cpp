@@ -317,35 +317,18 @@ namespace {
 		const strings_ &Strings,
 		flw::oflow__ &OFlow );	// Predeclaration.
 
-	template <typename c, typename i> inline void GenericPutContainer_(
+	template <typename c> inline void PutContainer_(
 		const c &C,
 		flw::oflow__ &OFlow )
 	{
-		i Item;
 		sdr::row__ P = C.First();
-
-		Item.Init( C );
 
 		PutSize_( C.Amount(), OFlow );
 
 		while ( P != qNIL ) {
-			Put_( Item( P ), OFlow );
+			Put_( C( P ), OFlow );
 			P = C.Next( P );
 		}
-	}
-
-	template <typename c, typename i> inline void PutContainer_(
-		const c &C,
-		flw::oflow__ &OFlow )
-	{
-		GenericPutContainer_<c, ctn::E_CITEM( i )>( C, OFlow );
-	}
-
-	template <typename c, typename i> inline void PutMContainer_(
-		const c &C,
-		flw::oflow__ &OFlow )
-	{
-		GenericPutContainer_<c, ctn::E_CMITEM( i )>( C, OFlow );
 	}
 
 	template <typename t> inline void Put_(
@@ -353,7 +336,7 @@ namespace {
 		flw::oflow__ &OFlow )
 	{
 		_Put( I.ID(), OFlow );
-		PutMContainer_<strings_, string_>( I.Values, OFlow );
+		PutContainer_<strings_>( I.Values, OFlow );
 	}
 
 	void Get_(
@@ -391,7 +374,7 @@ namespace {
 		const strings_ &Strings,
 		flw::oflow__ &OFlow )
 	{
-		PutMContainer_<strings_, string_>( Strings, OFlow );
+		PutContainer_<strings_>( Strings, OFlow );
 	}
 
 	inline void Get_(
@@ -407,7 +390,7 @@ void fbltyp::PutXId8s(
 	const xid8s_ &XId8s,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<xid8s_, id8s_>( XId8s, OFlow );
+	PutContainer_<xid8s_>( XId8s, OFlow );
 }
 
 void fbltyp::GetXId8s(
@@ -421,7 +404,7 @@ void fbltyp::PutXId16s(
 	const xid16s_ &XId16s,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<xid16s_, id16s_>( XId16s, OFlow );
+	PutContainer_<xid16s_>( XId16s, OFlow );
 }
 
 void fbltyp::GetXId16s(
@@ -462,7 +445,7 @@ void fbltyp::PutXId32s(
 	const xid32s_ &XId32s,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<xid32s_, id32s_>( XId32s, OFlow );
+	PutContainer_<xid32s_>( XId32s, OFlow );
 }
 
 void fbltyp::GetXId32s(
@@ -489,7 +472,7 @@ void fbltyp::PutXIds(
 	const xids_ &XIds,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<xids_, ids_>( XIds, OFlow );
+	PutContainer_<xids_>( XIds, OFlow );
 }
 
 void fbltyp::GetXIds(
@@ -517,7 +500,7 @@ void fbltyp::PutXStrings(
 	const xstrings_ &XStrings,
 	flw::oflow__ &OFlow )
 {
-	PutContainer_<xstrings_, strings_>( XStrings, OFlow );
+	PutContainer_<xstrings_>( XStrings, OFlow );
 }
 
 void fbltyp::GetXStrings(
@@ -545,7 +528,7 @@ void fbltyp::PutBinaries(
 	const binaries_ &Binaries,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<binaries_, binary_>( Binaries, OFlow );
+	PutContainer_<binaries_>( Binaries, OFlow );
 }
 
 void fbltyp::GetBinaries(
@@ -573,7 +556,7 @@ void fbltyp::PutItem8s(
 	const item8s_ &Item8s,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<item8s_, item8_>( Item8s, OFlow );
+	PutContainer_<item8s_>( Item8s, OFlow );
 }
 
 void fbltyp::GetItem8s(
@@ -601,7 +584,7 @@ void fbltyp::PutItem16s(
 	const item16s_ &Item16s,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<item16s_, item16_>( Item16s, OFlow );
+	PutContainer_<item16s_>( Item16s, OFlow );
 }
 
 void fbltyp::GetItem16s(
@@ -629,7 +612,7 @@ void fbltyp::PutItem32s(
 	const item32s_ &Item32s,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<item32s_, item32_>( Item32s, OFlow );
+	PutContainer_<item32s_>( Item32s, OFlow );
 }
 
 void fbltyp::GetItem32s(
@@ -657,7 +640,7 @@ void fbltyp::PutItems(
 	const items_ &Items,
 	flw::oflow__ &OFlow )
 {
-	PutMContainer_<items_, item_>( Items, OFlow );
+	PutContainer_<items_>( Items, OFlow );
 }
 
 void fbltyp::GetItems(
@@ -672,7 +655,7 @@ void fbltyp::PutXItem8s(
 	const xitem8s_ &XItem8s,
 	flw::oflow__ &OFlow )
 {
-	PutContainer_<xitem8s_, xitem8_>( XItem8s, OFlow );
+	PutContainer_<xitem8s_>( XItem8s, OFlow );
 }
 
 void fbltyp::GetXItem8s(
@@ -686,7 +669,7 @@ void fbltyp::PutXItem16s(
 	const xitem16s_ &XItem16s,
 	flw::oflow__ &OFlow )
 {
-	PutContainer_<xitem16s_, xitem16_>( XItem16s, OFlow );
+	PutContainer_<xitem16s_>( XItem16s, OFlow );
 }
 
 void fbltyp::GetXItem16s(
@@ -700,7 +683,7 @@ void fbltyp::PutXItem32s(
 	const xitem32s_ &XItem32s,
 	flw::oflow__ &OFlow )
 {
-	PutContainer_<xitem32s_, xitem32_>( XItem32s, OFlow );
+	PutContainer_<xitem32s_>( XItem32s, OFlow );
 }
 
 void fbltyp::GetXItem32s(
@@ -714,7 +697,7 @@ void fbltyp::PutXItems(
 	const xitems_ &XItems,
 	flw::oflow__ &OFlow )
 {
-	PutContainer_<xitems_, xitem_>( XItems, OFlow );
+	PutContainer_<xitems_>( XItems, OFlow );
 }
 
 void fbltyp::GetXItems(
@@ -742,7 +725,7 @@ void fbltyp::PutCommandsDetails(
 	const fbltyp::commands_details_ &CommandsDetails,
 	flw::oflow__ &OFlow )
 {
-	PutContainer_<commands_details_, command_detail_ >( CommandsDetails, OFlow );
+	PutContainer_<commands_details_>( CommandsDetails, OFlow );
 }
 
 void fbltyp::GetCommandsDetails(

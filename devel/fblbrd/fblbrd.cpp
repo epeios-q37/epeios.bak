@@ -126,18 +126,11 @@ void fblbrd::description_::Init(
 sdr::row__ fblbrd::descriptions_::Position( const description_ &Description ) const
 {
 	sdr::row__ Position = E_CONTAINER_( description_ )::First();
-qRH
-	E_CITEM( description_ ) D;
-qRB
-
-	D.Init( *this );
 
 	while( ( Position != qNIL )
-		    && ( ( D( Position ).Name != Description.Name )
-		         || ( D( Position ).Casts != Description.Casts ) ) )
+		    && ( ( Get( Position ).Name != Description.Name )
+		         || ( Get( Position ).Casts != Description.Casts ) ) )
 		Position = E_CONTAINER_( description_ )::Next( Position );
-qRR
-qRT
-qRE
+
 	return Position;
 }

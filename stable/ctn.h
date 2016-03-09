@@ -975,7 +975,7 @@ public:
 		void reset( bool P = true )
 		{
 			basic_container_< t, mono_static__< typename_ t::s >, r >::reset( P );
-			Object_.plug( Hook_ );
+			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug( basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_ );
 		}
 		void FlushTest( void ) const
 		{
@@ -1182,8 +1182,8 @@ public:
 		void reset( bool P = true )
 		{
 			basic_container_< t, poly_static__< typename_ t::s >, r >::reset( P );
-			AStorage_.plug( Hook_ );
-			Object_.plug( AStorage_ );
+			AStorage_.plug( basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_ );
+			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( AStorage_ );
 		}
 		poly_container_ &operator =( const poly_container_ &C )
 		{

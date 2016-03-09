@@ -59,11 +59,9 @@ static _irow__ Append_(
 	_irow__ Row = qNIL;
 qRH
 	_item Item;
-	ctn::E_CMITEMt( _string_ , _srow__ ) SourceString;
 qRB
 	if ( SourceItem.ContainsString() ) {	// Positionne 'SourceItem()' pour la suite !
-		SourceString.Init( SourceStrings );
-		Item.Init( TargetStrings.Append( SourceString( SourceItem.String() ) ) );
+		Item.Init( TargetStrings.Append( SourceStrings( SourceItem.String() ) ) );
 	} else {
 		Item.Init();
 		Append_( SourceItem.Items, SourceItems, SourceStrings, Item.Items, TargetItems, TargetStrings );
@@ -83,7 +81,7 @@ static _irow__ Append_(
 	_items_ &TargetItems,
 	_strings_ &TargetStrings )
 {
-	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
+	ctn::q_CMITEMs( _item_, _irow__ ) SourceItem;
 
 	SourceItem.Init( SourceItems );
 
@@ -98,10 +96,7 @@ static void Append_(
 	_items_ &TargetItems,
 	_strings_ &TargetStrings )	// Rcursif (paaaaas bien) !
 {
-	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
 	row__ Row = SourceRows.First();
-
-	SourceItem.Init( SourceItems );
 
 	while ( Row != qNIL ) {
 		TargetRows.Append( Append_( SourceRows( Row ), SourceItems, SourceStrings, TargetItems, TargetStrings ) );
@@ -115,14 +110,9 @@ row__ strmrg::table_::AppendMono( const table_ &Table )
 	row__ Row = qNIL;
 qRH
 	_item Item;
-	ctn::E_CMITEMt( _item_, _irow__ ) SourceItem;
-	ctn::E_CMITEMt( _string_, _srow__ ) SourceString;
 qRB
-	SourceItem.Init( Table.Items );
-
-	if ( (Table.Amount() == 1) && (SourceItem(Table.Main(Table.Main.First())).ContainsString()) ) {
-		SourceString.Init( Table.Strings );
-		Row = Append( SourceString( SourceItem().String() ) );
+	if ( (Table.Amount() == 1) && (Table.Items(Table.Main(Table.Main.First())).ContainsString()) ) {
+		Row = Append( Table.Strings( Table.Items().String() ) );
 	} else {
 		Item.Init();
 
@@ -159,16 +149,13 @@ row__ strmrg::table_::AppendMono( const str::strings_ &Strings )
 	row__ Row = qNIL;
 qRH
 	table Table;
-	ctn::E_CMITEM( str::string_ ) String;
 	sdr::row__ SRow = qNIL;
 qRB
 	Table.Init();
 	SRow = Strings.First();
 
-	String.Init( Strings );
-
 	while ( SRow != qNIL ) {
-		Table.Append( String( SRow ) );
+		Table.Append( Strings( SRow ) );
 
 		SRow = Strings.Next( SRow );
 	}
@@ -182,29 +169,24 @@ qRE
 
 void strmrg::table_::AppendMulti( const str::strings_ &Strings )
 {
-qRH
-	ctn::E_CMITEM( str::string_ ) String;
+
 	sdr::row__ Row = Strings.First();
-qRB
+
 	Row = Strings.First();
 
-	String.Init( Strings );
-
 	while ( Row != qNIL ) {
-		Append( String( Row ) );
+		Append( Strings( Row ) );
 
 		Row = Strings.Next( Row );
 	}
-qRR
-qRT
-qRE
 }
 
 void strmrg::table_::GetTable(
 	row__ Row,
 	table_ &Table ) const
 {
-	ctn::E_CMITEMt( _item_, _irow__ ) Item;
+	ctn::q_CMITEMs( _item_, _irow__ ) Item;
+
 	Item.Init( Items );
 
 	Append_( Item( Main( Row ) ).Items, Items, Strings, Table.Main, Table.Items, Table.Strings );
@@ -216,11 +198,8 @@ void strmrg::GetTable(
 	const _strings_ &Strings,
 	table_ &Table )
 {
-	ctn::E_CMITEMt( _string_, _srow__ ) String;
-
 	if ( Item.ContainsString() ) {
-		String.Init( Strings );
-		Table.Append( String( Item.String() ) );
+		Table.Append( Strings( Item.String() ) );
 	} else
 		Append_( Item.Items, Items, Strings, Table.Main, Table.Items, Table.Strings );
 }
@@ -251,17 +230,16 @@ static void Merge_(
 	const tokens__ &Tokens,
 	flw::oflow__ &Flow )	// Rcursif (paaas bien !) !
 {
-	ctn::E_CMITEMt( _item_, _irow__ ) Item;
-	ctn::E_CMITEMt( _string_, _srow__ ) String;
+	ctn::q_CMITEMs( _item_, _irow__ ) Item;
 
 	row__ Row = Rows.First();
+
 	Item.Init( Items );
-	String.Init( Strings );
 
 	while ( Row != qNIL ) {
 		if ( Item( Rows ( Row ) ).ContainsString() ) {	// Positionne 'Item' pour la suite !
 
-			Put_( String( Item().String() ), Tokens, Flow );
+			Put_( Strings( Item().String() ), Tokens, Flow );
 
 			Flow << Tokens.Separator;
 		} else {
@@ -411,18 +389,13 @@ static void GetStrings_(
 	const _strings_ &Strings,
 	str::strings_ &Result )
 {
-	ctn::E_CMITEMt( _item_, _irow__ ) Item;
-	ctn::E_CMITEMt( _string_, _srow__ ) String;
 	row__ Row = Rows.First();
 
-	Item.Init( Items );
-	String.Init( Strings );
-
 	while ( Row != qNIL ) {
-		if ( !Item(Rows( Row ) ).ContainsString() )
+		if ( !Items(Rows( Row ) ).ContainsString() )
 			qRFwk();
 
-		Result.Append( String( Item().String() ) );
+		Result.Append( Strings( Items().String() ) );
 
 		Row = Rows.Next( Row );
 	}
@@ -434,11 +407,8 @@ static void GetStrings_(
 	const _strings_ &Strings,
 	str::strings_ &Result )
 {
-	ctn::E_CMITEMt( _string_, _srow__ ) String;
-	String.Init( Strings );
-
 	if ( Item.ContainsString() )
-		Result.Append( String( Item.String() ) );
+		Result.Append( Strings( Item.String() ) );
 	else {
 		GetStrings_( Item.Items, Items, Strings, Result );
 	}
@@ -446,14 +416,12 @@ static void GetStrings_(
 
 void strmrg::retriever__::GetStrings( str::strings_ &Result )
 {
-	ctn::E_CMITEMt( _item_, _irow__ ) Item;
-	ctn::E_CMITEMt( _string_, _srow__ ) String;
+	ctn::q_CMITEMs( _item_, _irow__ ) Item;
 
 	Item.Init( _I() );
-	String.Init( s_() );
 
 	if ( Item( _R()( _Row ) ).ContainsString() )	// Positionne 'Item()'.
-		Result.Append( String( Item().String() ) );
+		Result.Append( s_()( Item().String() ) );
 	else
 		GetStrings_( Item(_R()( _Row ) ), _I(), s_(), Result );
 

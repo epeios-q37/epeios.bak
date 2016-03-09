@@ -386,24 +386,21 @@ namespace fblbkd {
 			log_functions__ *LogFunctions )
 		{
 			command__ C;
-			ctn::E_CITEM( fblbrd::description_ ) Description;
 
 			flw::Get( Requete.Input(), C );
 
 			if ( C > Descriptions.Amount() )
 				qRFwk();
 
-			Description.Init( Descriptions );
-
-			Requete.Prepare( Description( C ).Casts );
+			Requete.Prepare( Descriptions( C ).Casts );
 
 			if ( LogFunctions != NULL )
-				LogFunctions->Log( Prefix(), Name(), Description( C ).Name, false );
+				LogFunctions->Log( Prefix(), Name(), Descriptions( C ).Name, false );
 
 			Objet.HANDLE( *Backend(), *this, Index, C, Requete, PU );
 
 			if ( LogFunctions != NULL )
-				LogFunctions->Log( Prefix(), Name(), Description( C ).Name, true );
+				LogFunctions->Log( Prefix(), Name(), Descriptions( C ).Name, true );
 
 		}
 	protected:
@@ -497,7 +494,6 @@ namespace fblbkd {
 	  private lst::E_LIST
 	{
 	private:
-		ctn::E_ITEM( t ) Element_;
 		lst::E_LIST &_List( void )
 		{
 			return *this;
@@ -509,33 +505,29 @@ namespace fblbkd {
 	protected:
 		virtual void LSTAllocate( sdr::size__ Size )
 		{
-			Element_.Commit();
 			Objets.Allocate( Size, aem::mFitted );
 		}
 		virtual index__ FBLBKDNew( void )
 		{
-			Element_.Commit();
 			return _List().New();
 		}
 		virtual void FBLBKDDelete( index__ Index )
 		{
-			Element_( Index ).reset();
+			Objets( Index ).reset();
 			_List().Delete( Index );
-			Element_.Commit();
 		}
 		virtual void *FBLBKDObject( index__ Index )
 		{
 			if ( *Index >= Objets.Amount() )
 				qRFwk();
 
-			return (void *)Element_( Index ).OBJECT();
+			return (void *)Objets( Index ).OBJECT();
 		}
 	public:
 		//r Contient les objets.
 		ctn::E_CONTAINER( t ) Objets;
 		void reset( bool P = true )
 		{
-			Element_.Commit();
 			Objets.reset( P );
 			_List().reset( P );
 		}
@@ -545,7 +537,6 @@ namespace fblbkd {
 		{
 			_List().Init();
 			Objets.Init();
-			Element_.Init( Objets );
 			module<t,user>::Init( User );
 		}
 	};

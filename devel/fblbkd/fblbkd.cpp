@@ -122,18 +122,15 @@ void master_module::Handle_(
 {
 	command__ C;
 	master_data__ &MasterData = *(master_data__ *)PU;
-	ctn::E_CITEM( description_ ) Description;
-
-	Description.Init( Descriptions );
 
 	flw::Get( Requete.Input(), C );
 
 	if (  C < Descriptions.Amount() )
 	{
-		Requete.Prepare( Description( C ).Casts );
-		LogFunctions.Log( "", "MASTER", Description( C ).Name, false );
+		Requete.Prepare( Descriptions( C ).Casts );
+		LogFunctions.Log( "", "MASTER", Descriptions( C ).Name, false );
 		(*(function__)UPs( C ))( *Backend(), *this, Index, C, Requete, MasterData.Deconnexion, MasterData.UP );
-		LogFunctions.Log( "", "MASTER", Description( C ).Name, true );
+		LogFunctions.Log( "", "MASTER", Descriptions( C ).Name, true );
 	}
 	else if ( C == FBLBKD_MASTER_COMMAND )
 	{
@@ -178,7 +175,7 @@ qRE
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(GetCommandCommand)" ), false );
 
 			
-			while ( ( P != qNIL ) && ( Description( P ).Name != str::string( PrimaryCommandName ) ) )
+			while ( ( P != qNIL ) && ( Descriptions( P ).Name != str::string( PrimaryCommandName ) ) )
 				P = Descriptions.Next( P );
 
 			if ( P != qNIL )
@@ -246,15 +243,12 @@ static void WriteCommandsIDAndName_(
 {
 qRH
 	item16 Item;
-	ctn::E_CITEM( description_ ) Description;
 	sdr::row__ P;
 	command__ Command;
 qRB
 	item16s_ &Items = Requete.Item16sOut();
 
 	P = Descriptions.First();
-
-	Description.Init( Descriptions );
 
 	while( P != qNIL )
 	{
@@ -267,7 +261,7 @@ qRB
 		Command = (command__)*P;
 
 		Item.ID( Command );
-		Item.Value = Description( P ).Name;
+		Item.Value = Descriptions( P ).Name;
 		
 		if ( Item.Value( 0 ) != '_' )
 			Items.Append( Item );
@@ -309,11 +303,7 @@ static void WriteParameters_(
 	command__ Command,
 	request__ &Requete )
 {
-	ctn::E_CITEM( description_ ) Description;
-
-	Description.Init( Descriptions );
-
-	WriteParameters_( Description( Command ), Requete );
+	WriteParameters_( Descriptions( Command ), Requete );
 }
 
 
@@ -519,18 +509,15 @@ qRH
 	id16_t__ Command;
 	sdr::row__ Position = qNIL;
 	description Description;
-	ctn::E_CITEM( command_detail_ ) CommandDetail;
 qRB
-	CommandDetail.Init( CommandsDetails );
-
 	Position = CommandsDetails.First();
 
 	while( Position != qNIL )
 	{
 		Description.Init();
 
-		Description.Casts = CommandDetail( Position ).Casts;
-		Description.Name = CommandDetail( Position ).Name;
+		Description.Casts = CommandsDetails( Position ).Casts;
+		Description.Name = CommandsDetails( Position ).Name;
 
 		if ( ( Command = Backend.Command( Type, Description ) ) == FBLBKD_INVALID_COMMAND )
 			qRFwk();

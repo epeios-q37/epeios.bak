@@ -225,19 +225,16 @@ static void GetPredefinedItems_(
 	const char *Language,
 	xml::writer_ &Writer )
 {
-	ctn::E_CMITEM( rgstry::value_ ) Id;
 	sdr::row__ Row = Ids.First();
-
-	Id.Init( Ids );
 
 	while ( Row != qNIL ) {
 		Writer.PushTag( Tag );
-		Writer.PutAttribute( "id", Id( Row ) );
+		Writer.PutAttribute( "id", Ids( Row ) );
 
-		if ( DefaultProjectId == Id( Row ) )
+		if ( DefaultProjectId == Ids( Row ) )
 			Writer.PutAttribute("Selected", "true" );
 
-		GetPredefinedItem_( ValueEntry,  AliasEntry, Id( Row ), Registry, Locale, Language, Writer );
+		GetPredefinedItem_( ValueEntry,  AliasEntry, Ids( Row ), Registry, Locale, Language, Writer );
 
 		Writer.PopTag();
 

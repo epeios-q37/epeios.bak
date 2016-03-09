@@ -319,7 +319,7 @@ namespace strmrg {
 		void GetString( str::string_ &Target );
 		void GetTable( table_ &Table )
 		{
-			ctn::E_CMITEMt( _item_, _irow__ ) Item;
+			ctn::q_CMITEMs( _item_, _irow__ ) Item;
 			Item.Init( _I() );
 
 			strmrg::GetTable( Item( _R()( _Row ) ), _I(), s_(), Table );
@@ -339,12 +339,9 @@ namespace strmrg {
 			if ( _Row == qNIL )
 				Availability = aNone;
 			else {
-				ctn::E_CMITEMt( _item_, _irow__ ) Item;
-				Item.Init( _I() );
-
-				if ( Item( _R()( _Row ) ).ContainsString() )	// Positionne 'Item()'.
+				if ( _I()( _R()( _Row ) ).ContainsString() )	// Positionne 'Item()'.
 					Availability = aString;
-				else if ( Item().ContainsItems() )
+				else if ( _I()().ContainsItems() )
 					Availability = aTable;
 				else
 					Availability = aEmpty;

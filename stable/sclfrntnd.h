@@ -312,7 +312,6 @@ namespace sclfrntnd {
 		items_ &Items )
 	{
 	qRH
-		ctn::E_CMITEM( fbltyp::string_ ) Label;
 		sdr::row__ Row = qNIL;
 		item Item;
 	qRB
@@ -321,10 +320,8 @@ namespace sclfrntnd {
 		if ( Ids.Amount() != Labels.Amount() )
 			qRGnr();
 
-		Label.Init( Labels );
-
 		while ( Row != qNIL ) {
-			Item.Init( Ids(Row), Label(Row) );
+			Item.Init( Ids(Row), Labels(Row) );
 			Items.Append( Item );
 
 			Row = Ids.Next( Row );
@@ -341,8 +338,6 @@ namespace sclfrntnd {
 		items_ &Items )
 	{
 	qRH
-		ctn::E_CMITEM( fbltyp::string_ ) Label;
-		ctn::E_CMITEM( fbltyp::string_ ) Wording;
 		sdr::row__ Row = qNIL;
 		item Item;
 	qRB
@@ -354,11 +349,8 @@ namespace sclfrntnd {
 		if ( Ids.Amount() != Wordings.Amount() )
 			qRGnr();
 
-		Label.Init( Labels );
-		Wording.Init( Wordings );
-
 		while ( Row != qNIL ) {
-			Item.Init( Ids(Row), Label(Row), Wording( Row ) );
+			Item.Init( Ids(Row), Labels(Row), Wordings( Row ) );
 			Items.Append( Item );
 
 			Row = Ids.Next( Row );
@@ -389,16 +381,13 @@ namespace sclfrntnd {
 		Writer.PutValue( Item.Wording, sclfrntnd::WordingAttribute );
 	}
 
-	template <typename id, typename citem, typename items> static void Dump_(
+	template <typename id, typename items> static void Dump_(
 		const items &Items,
 		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		citem Item;
 		sdr::row__ Row = Items.First();
-
-		Item.Init( Items );
 
 		Writer.PushTag( ItemsLabel );
 		xml::PutAttribute( sclfrntnd::AmountAttribute, Items.Amount(), Writer );
@@ -406,7 +395,7 @@ namespace sclfrntnd {
 		while ( Row != qNIL ) {
 			Writer.PushTag( ItemLabel );
 
-			Dump_<id>( Item( Row ), Writer );
+			Dump_<id>( Items( Row ), Writer );
 
 			Writer.PopTag();
 
@@ -422,7 +411,7 @@ namespace sclfrntnd {
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		Dump_<id, ctn::E_CMITEM( sclfrntnd::il_<id> ), ctn::E_MCONTAINER_( sclfrntnd::il_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+		Dump_<id, ctn::E_MCONTAINER_( sclfrntnd::il_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
 	}
 
 	template <typename id> static void Dump(
@@ -431,7 +420,7 @@ namespace sclfrntnd {
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		Dump_<id, ctn::E_CITEM( sclfrntnd::ilw_<id> ), ctn::E_CONTAINER_( sclfrntnd::ilw_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+		Dump_<id, ctn::E_CONTAINER_( sclfrntnd::ilw_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
 	}
 }
 
