@@ -614,13 +614,10 @@ void misc::FillList(
 	const str::strings_ &Source,
 	cef_string_list_t &Target )
 {
-	ctn::E_CMITEM( str::string_ ) Value;
 	sdr::row__ Row = Source.First();
 
-	Value.Init( Source );
-
 	while ( Row != qNIL ) {
-		cef_string_list_append( Target, cef_string___( Value( Row ) ) );
+		cef_string_list_append( Target, cef_string___( Source( Row ) ) );
 
 		Row = Source.Next( Row );
 	}

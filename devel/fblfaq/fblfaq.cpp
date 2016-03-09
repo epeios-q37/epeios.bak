@@ -34,19 +34,16 @@ namespace {
 		commands_ &Commands )
 	{
 	qRH
-		ctn::E_CMITEM( command_item_ ) Item;
 		sdr::row__ P =qNIL;
 		command Command;
 	qRB
-		Item.Init( Items );
-
 		P = Items.First();
 
 		while( P != qNIL ) {
 			Command.Init();
-			Command.Identification.Value = Item( P ).Value;
-			Command.Identification.ID( Item( P ).ID() );
-			Frontend.GetParameters( Type, Item( P ).ID(), Command.Parameters );
+			Command.Identification.Value = Items( P ).Value;
+			Command.Identification.ID( Items( P ).ID() );
+			Frontend.GetParameters( Type, Items( P ).ID(), Command.Parameters );
 			Commands.Append( Command );
 			P = Items.Next( P );
 		}
@@ -78,9 +75,6 @@ namespace {
 		type_ &Type )
 	{
 		sdr::row__ P = qNIL;
-		ctn::E_CMITEM( str::string_ ) Value;
-
-		Value.Init( Item.Values );
 
 		Type.ID( Item.ID() );
 
@@ -89,14 +83,14 @@ namespace {
 		if ( P == qNIL) 
 			qRFwk();
 
-		Type.Prefix = Value( P );
+		Type.Prefix = Item.Values( P );
 
 		P = Item.Values.Next( P );
 
 		if ( P == qNIL) 
 			qRFwk();
 
-		Type.Name = Value( P );
+		Type.Name = Item.Values( P );
 
 		P = Item.Values.Next( P );
 
@@ -110,21 +104,18 @@ namespace {
 		types_ &Types )
 	{
 	qRH
-		ctn::E_CITEM( xitem16_ ) Item;
 		sdr::row__ P = qNIL;
 		type Type;
 	qRB
-		Item.Init( Items );
-
 		P = Items.First();
 
 		while( P != qNIL ) {
 
 			Type.Init();
 
-			HandleType_( Item( P ), Type );
+			HandleType_( Items( P ), Type );
 
-			GetCommands_( Item( P ).ID(), Frontend, Type.Commands );
+			GetCommands_( Items( P ).ID(), Frontend, Type.Commands );
 
 			Types.Append( Type );
 			P = Items.Next( P );

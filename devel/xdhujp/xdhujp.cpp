@@ -103,24 +103,19 @@ static void HandleEvents_(
 	str::string_ &IdsTag,
 	str::string_ &EventsTag )
 {
-qRH
 	sdr::row__ Row = qNIL;
-	ctn::E_CMITEM( str::string_ ) Id;
-	ctn::E_CITEM( xdhutl::event_abstract_ ) Abstract;
-qRB
+
 	if ( Ids.Amount() != Abstracts.Amount() )
 		qRFwk();
 
 	Row = Ids.First();
-	Id.Init( Ids );
-	Abstract.Init( Abstracts );
 
 	IdsTag.Append( "[ " );
 	EventsTag.Append( "[ ");
 
 	while ( Row != qNIL ) {
-		Append_( Id( Row ), IdsTag );
-		Append_( Abstract( Row ).Event, EventsTag );
+		Append_( Ids( Row ), IdsTag );
+		Append_( Abstracts( Row ).Event, EventsTag );
 
 		Row = Ids.Next( Row );
 
@@ -132,9 +127,6 @@ qRB
 
 	IdsTag.Append( " ]" );
 	EventsTag.Append( " ]");
-qRR
-qRE
-qRT
 }
 
 static void HandleEvents_(
@@ -170,10 +162,8 @@ static void HandleWidgets_(
 	str::string_ &TypesTag,
 	str::string_ &ParametersSetsTag )
 {
-qRH
 	sdr::row__ Row = qNIL;
-	ctn::E_CMITEM( str::string_ ) Id, Type, Parameters;
-qRB
+
 	if ( Ids.Amount() != Types.Amount() )
 		qRFwk();
 
@@ -181,18 +171,15 @@ qRB
 		qRFwk();
 
 	Row = Ids.First();
-	Id.Init( Ids );
-	Type.Init( Types );
-	Parameters.Init( ParametersSets );
 
 	IdsTag.Append( "[ " );
 	TypesTag.Append( "[ ");
 	ParametersSetsTag.Append( "[ ");
 
 	while ( Row != qNIL ) {
-		Append_( Id( Row ), IdsTag );
-		Append_( Type( Row ), TypesTag );
-		Append_( Parameters( Row ), ParametersSetsTag );
+		Append_( Ids( Row ), IdsTag );
+		Append_( Types( Row ), TypesTag );
+		Append_( ParametersSets( Row ), ParametersSetsTag );
 
 		Row = Ids.Next( Row );
 
@@ -206,9 +193,6 @@ qRB
 	IdsTag.Append( " ]" );
 	TypesTag.Append( " ]");
 	ParametersSetsTag.Append( " ]");
-qRR
-qRE
-qRT
 }
 
 static void HandleWidgets_(
@@ -302,27 +286,23 @@ static void HandleCastings_(
 	str::string_ &IdsTag,
 	str::string_ &CastingsTag )
 {
-qRH
 	sdr::row__ Row = qNIL;
-	ctn::E_CMITEM( str::string_ ) Id, Casting;
-qRB
+
 	if ( Ids.Amount() != Castings.Amount() )
 		qRFwk();
 
 	Row = Ids.First();
-	Id.Init( Ids );
-	Casting.Init( Castings );
 
 	IdsTag.Append( "[ " );
 	CastingsTag.Append( "[ ");
 
 	while ( Row != qNIL ) {
 		IdsTag.Append('"');
-		IdsTag.Append(Id( Row) );
+		IdsTag.Append(Ids( Row) );
 		IdsTag.Append('"');
 
 		CastingsTag.Append('"');
-		CastingsTag.Append( Casting( Row ) );
+		CastingsTag.Append( Castings( Row ) );
 		CastingsTag.Append('"');
 
 		Row = Ids.Next( Row );
@@ -335,9 +315,6 @@ qRB
 
 	IdsTag.Append( " ]" );
 	CastingsTag.Append( " ]");
-qRR
-qRE
-qRT
 }
 
 static void HandleCastings_(

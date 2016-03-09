@@ -70,7 +70,7 @@ namespace fblfaq {
 	 		Identification.reset( P );
 			Parameters.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 			Identification .plug( AS );
 			Parameters.plug( AS );
@@ -121,7 +121,7 @@ namespace fblfaq {
 			Name.reset( P );
 			Commands.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 			Name.plug( AS );
 			Prefix.plug( AS );

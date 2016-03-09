@@ -83,11 +83,8 @@ qRE
 prow__ query::pairs_::Find( const item_ &Field ) const
 {
 	prow__ Row = Pairs.First();
-	ctn::E_CMITEMt( item_, irow__ ) Item;
 
-	Item.Init( Items );
-
-	while ( (Row != qNIL) && (Item( Pairs( Row ).Field ) != Field) )
+	while ( (Row != qNIL) && (Items( Pairs( Row ).Field ) != Field) )
 		Row = Pairs.Next( Row );
 
 	return Row;
@@ -110,9 +107,6 @@ bso::bool__ query::pairs_::GetValue(
 void query::pairs_::Dump( xml::writer_ &Writer ) const
 {
 	prow__ Row = Pairs.First();
-	ctn::E_CMITEMt( item_, irow__ ) Item;
-
-	Item.Init( Items );
 
 	Writer.PushTag("Pairs");
 	xml::PutAttribute("Amount", Pairs.Amount(), Writer );
@@ -121,8 +115,8 @@ void query::pairs_::Dump( xml::writer_ &Writer ) const
 	{
 		Writer.PushTag("Pair");
 
-		Writer.PutValue( Item( Pairs( Row ).Field ), "Field" );
-		Writer.PutValue( Item( Pairs( Row ).Value ), "Value" );
+		Writer.PutValue( Items( Pairs( Row ).Field ), "Field" );
+		Writer.PutValue( Items( Pairs( Row ).Value ), "Value" );
 
 		Writer.PopTag();
 

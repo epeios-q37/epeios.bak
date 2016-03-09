@@ -354,12 +354,9 @@ bso::bool__ xdhutl::Exists(
 	const char *Event,
 	const event_abstracts_ &Abstracts )
 {
-	ctn::E_CITEM( event_abstract_ ) Abstract;
 	sdr::row__ Row = Abstracts.First();
 
-	Abstract.Init( Abstracts );
-
-	while ( ( Row != qNIL ) && ( Abstract( Row ).Event != Event ) )
+	while ( ( Row != qNIL ) && ( Abstracts( Row ).Event != Event ) )
 		Row = Abstracts.Next( Row );
 
 	return Row != qNIL;
@@ -372,19 +369,16 @@ sdr::row__ xdhutl::Find(
 {
 	sdr::row__ Row = qNIL;
 qRH
-	ctn::E_CITEM( event_abstract_ ) Abstract;
 	str::string Keys;
 qRB
 	Row = Abstracts.First();
-
-	Abstract.Init( Abstracts );
 
 	Keys.Init();
 	BuildKeyShortcut( RawKeys, Keys );
 
 	while ( ( Row != qNIL )
-		    && ( ( Abstract( Row ).Event != Event )
-			     || ( IsKeyEvent( Event ) && Abstract( Row ).EventKeys != Keys ) ) )
+		    && ( ( Abstracts( Row ).Event != Event )
+			     || ( IsKeyEvent( Event ) && Abstracts( Row ).EventKeys != Keys ) ) )
 		Row = Abstracts.Next( Row );
 
 	qRR
@@ -404,7 +398,6 @@ qRH
 	str::string  Name, Type, Keys;
 	xdhcmn::digest Events;
 	xdhutl::event_abstracts Abstracts;
-	ctn::E_CITEM( xdhutl::event_abstract_ ) Abstract;
 	sdr::row__ Row = qNIL;
 qRB
 	Retriever.Init( Digest );
@@ -438,8 +431,7 @@ qRB
 
 	Found = true;
 
-	Abstract.Init( Abstracts );
-	AbstractBuffer = Abstract( Row );	// To set the position of 'Handler'.
+	AbstractBuffer = Abstracts( Row );	// To set the position of 'Handler'.
 qRR
 qRT
 qRE

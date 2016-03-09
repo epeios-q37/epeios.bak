@@ -376,7 +376,6 @@ static void Generate_(
 	writer_ &Writer )
 {
 qRH
-	ctn::E_CITEM( command_ ) Command;
 	sdr::row__ P;
 	char Buffer[20];
 	sdr::size__ Position = 0;
@@ -387,10 +386,9 @@ qRB
 	
 	Writer.PutAttribute( "Amount", Buffer );
 	P = Commands.First();
-	Command.Init( Commands );
 	
 	while( P != qNIL ) {
-		Generate_( Command( P ), Writer, Position );
+		Generate_( Commands( P ), Writer, Position );
 		P = Commands.Next( P );
 	}
 	
@@ -545,7 +543,7 @@ qRH
 	dummy_reporting_callbacks__ DummyReportingFunctions;
 	csdlec::library_data__ LibraryData;
 	lcl::meaning Meaning;
-	bso::fBool Success = false;
+	bso::sBool Success = false;
 	qCBUFFERr Buffer;
 qRB
 	switch ( Type ) {
@@ -616,24 +614,18 @@ static void Generate_(
 	sdr::row__ MasterRow,
 	writer_ &Writer )
 {
-qRH
 	sdr::row__ P;
-	ctn::E_CITEM( type_ ) Type;
-qRB
+
 	Writer.PushTag( "Types" );
 	
 	P = Types.First();
-	Type.Init( Types );
 	
 	while( P != qNIL ) {
-		Generate_( Type( P ), ( P == MasterRow ), Writer );
+		Generate_( Types( P ), ( P == MasterRow ), Writer );
 		P = Types.Next( P );
 	}
 	
 	Writer.PopTag();
-qRR
-qRT
-qRE
 }
 
 static void GenerateMisc_(
@@ -725,21 +717,15 @@ qRE
 static sdr::row__ FindMasterType_( const types_ &Types )
 {
 	sdr::row__ P = qNIL;
-qRH
-	ctn::E_CITEM( type_ ) Type;
-qRB
-	Type.Init( Types );
-	
+
 	P = Types.First();
 	
-	while( ( P != qNIL ) && ( Type( P ).ID() != FBLFRD_MASTER_TYPE ) )
+	while( ( P != qNIL ) && ( Types( P ).ID() != FBLFRD_MASTER_TYPE ) )
 		P = Types.Next( P );
 		
 	if ( P == qNIL )
 		qRGnr();
-qRR
-qRT
-qRE
+
 	return P;
 }
 
@@ -755,7 +741,7 @@ qRH
 	txf::text_oflow__ TFile;
 	lcl::locale Dummy;
 	csducl::type__ Type = csducl::t_Undefined;
-	str::iString PluginPath, Arguments, OutputFilename;
+	str::wString PluginPath, Arguments, OutputFilename;
 qRB
 	Types.Init();
 
