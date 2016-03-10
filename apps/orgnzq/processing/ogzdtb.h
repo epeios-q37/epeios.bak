@@ -37,7 +37,7 @@ namespace ogzdtb {
 	class rDatabase
 	{
 	private:
-		ogztyp::sTRow TextType_, RecordType_;	// The 2 types which have to exists.
+		ogztyp::sRow TextType_, RecordType_;	// The 2 types which have to exists.
 		void FetchMandatoryTypes_( void );
 	public:
 		ogzdta::fData Data;

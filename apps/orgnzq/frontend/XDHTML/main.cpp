@@ -26,7 +26,7 @@
 namespace {
 	E_CDEF( char *, XSLAffix_, "Main" );
 
-	E_CDEF( char *, FieldsFrameId_, "Fields" );
+	E_CDEF( char *, RecordFrameId_, "Record" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -88,7 +88,7 @@ qRB
 
 	SetCasting_( Session );
 
-	fields::SetLayout( FieldsFrameId_, Session );
+	record::SetLayout( RecordFrameId_, Session );
 
 	Session.SwitchTo( core::pMain );
 qRR
@@ -96,7 +96,7 @@ qRT
 qRE
 }
 
-BASE_AC( main::fNewRecord )
+BASE_AC( main::sNewRecord )
 {
 	Session.User.CreateRecord();
 }

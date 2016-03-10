@@ -46,7 +46,7 @@ namespace {
 		fbltyp::strings_ &Labels,
 		fbltyp::id8s_ &Ids )
 	{
-		ogztyp::sTRow Row = Types.First();
+		ogztyp::sRow Row = Types.First();
 
 		while ( Row != qNIL ) {
 			Labels.Add( str::wString( Types( Row ).GetLabel() ) );

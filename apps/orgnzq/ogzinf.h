@@ -17,8 +17,6 @@
     along with 'orgnzq'.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
 */
 
-// $Id$
-
 // eOrGaniZer INFormations.
 
 #ifndef OGZINF__INC

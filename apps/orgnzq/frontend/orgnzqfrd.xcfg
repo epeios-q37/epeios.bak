@@ -7,7 +7,7 @@
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
 			<DefaultProjectType>New</DefaultProjectType>
-			<DefaultBackendType>LocalHost</DefaultBackendType>
+			<DefaultBackendType>Embedded</DefaultBackendType>
 
 			<!-- For multi-user mode. Can be overriden by project file. -->
 			<Backend Type="Predefined">LocalHost</Backend>
@@ -62,7 +62,7 @@
 					<xpp:bloc>Embedded.xprj</xpp:bloc>
 				</Project>
 			</Projects>
-			<Backends Default="LocalHost">
+			<Backends Default="Embedded">
 				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="h:/bin/plugins/Remote/Straight">localhost:53700</Backend>
 				<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="h:/bin/plugins/Remote/Proxy">localhost:53700 test</Backend>
 				<xpp:bloc marker="$">

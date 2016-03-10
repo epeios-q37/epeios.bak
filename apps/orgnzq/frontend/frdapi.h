@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd (Version) Build Jan 24 2016 10:43:23 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160128 Build Mar 10 2016 09:22:35 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq (Version) (Build Jan 20 2016 09:40:31 Win32;MSC 1800;IA-32)
+	This file was generated using barq (Version) (Build Mar  9 2016 11:07:03 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ORGNZQ__INC
@@ -103,7 +103,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[1];
+		fblfrd::command__ _Commands[2];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -119,6 +119,7 @@ namespace orgnzq {
 
 			fblfrd::id8__ Parameters[] = {
 				17, 0, 
+				0, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -132,10 +133,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "CreateField";;
+			CommandDetail.Casts.Append( Parameters + 2, 1 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 1, _Commands );
+			Commands.Recall( 0, 2, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -242,6 +248,15 @@ namespace orgnzq {
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
 			Common_->Frontend().IdIn( In1 );
+
+			Common_->Frontend().EndOfInParameters();
+
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ CreateField( void ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 
 			Common_->Frontend().EndOfInParameters();
 

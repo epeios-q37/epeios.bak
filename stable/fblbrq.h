@@ -60,7 +60,7 @@ namespace fblbrq {
 		if ( Reply == fblovl::rOK )
 				qRFwk();
 
-		if ( ( Message == NULL ) || ( Message[0] == 0 ) )
+		if ( Message == NULL )
 			qRFwk();
 
 		flw::PutString( Message, Channel );

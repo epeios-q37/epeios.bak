@@ -46,6 +46,16 @@
 							<xpp:bloc>FieldsCasting.xsl</xpp:bloc>
 						</Casting>
 					</XSLFiles>
+					<XSLFiles target="Record">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>RecordLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>RecordCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
 					<XSLFiles target="Prolog">
 						<Layout>
 							<xpp:expand select="XSLRootDir"/>
@@ -160,10 +170,19 @@
 					<Translation language="en">Multi</Translation>
 				</Translations>
 				<Translations text="fldMultiTitle">
-					<Translation language="fr">Le champs peut contenir plusieurs entrées</Translation>
+					<Translation language="fr">Le champ peut contenir plusieurs entrées</Translation>
 					<Translation language="en">The filed can contain several entries.</Translation>
 				</Translations>
 			</xpp:bloc>
+			<!-- Record -->
+			<Translations text="recordCreateNewField">
+				<Translation language="fr">Créer un nouveau champ.</Translation>
+				<Translation language="en">Create new field.</Translation>
+			</Translations>
+			<Translations text="recordNewField">
+				<Translation language="fr">Nouveau</Translation>
+				<Translation language="en">New</Translation>
+			</Translations>
 			<!--
 				<Translations text="">
 					<Translation language="fr"></Translation>

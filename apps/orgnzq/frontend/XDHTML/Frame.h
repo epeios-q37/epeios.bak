@@ -30,14 +30,13 @@ namespace frame {
 	class fActionCallbacks
 	{
 	public:
-	public:
 		BASE_ACU( Template );
 		void reset( bso::bool__ P = true )
 		{
 			BASE_ACR( Template );
 		}
 		qCVDTOR( fActionCallbacks );
-		void Init( core::rSession &Session )
+		void Init( void )
 		{
 			BASE_ACI( Template );
 		}

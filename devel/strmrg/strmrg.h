@@ -319,7 +319,7 @@ namespace strmrg {
 		void GetString( str::string_ &Target );
 		void GetTable( table_ &Table )
 		{
-			ctn::q_CMITEMs( _item_, _irow__ ) Item;
+			ctn::qCMITEMs( _item_, _irow__ ) Item;
 			Item.Init( _I() );
 
 			strmrg::GetTable( Item( _R()( _Row ) ), _I(), s_(), Table );

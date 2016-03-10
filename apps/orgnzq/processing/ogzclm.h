@@ -49,31 +49,35 @@ namespace ogzclm {
 	};
 
 	// Deduced column row. Refers to a column row from a model.
-	qROW( DCRow );
+	qROW( DRow );
 
-	class fColumn
+	class sColumn
 	{
+	private:
+		ogztyp::sRow Type_;
+		eNumber Number_;
 	public:
-		ogztyp::sTRow Type;
-		eNumber Number;
 		void reset( bso::sBool = true )
 		{
-			Type = qNIL;
-			Number = n_Undefined;
+			Type_ = qNIL;
+			Number_ = n_Undefined;
 		}
-		E_CDTOR( fColumn );
-		void Init( void )
+		E_CDTOR( sColumn );
+		void Init(
+			ogztyp::sRow Type = qNIL,
+			eNumber Number = n_Undefined )
 		{
-			Type = qNIL;
-			Number = n_Undefined;
+			Type_ = Type;
+			Number_ = Number;
 		}
+		qRODISCLOSEs( ogztyp::sRow, Type );
+		qRODISCLOSEs( eNumber, Number );
 	};
 
-	// Column row.
-	qROW( CRow );
+	typedef ogzbsc::sCRow sRow;
 
 	// template parameters.
-# define OGZCLM_TP	ogzclm::fColumn, ogzclm::sCRow
+# define OGZCLM_TP	ogzclm::sColumn, ogzclm::sRow
 
 	typedef ogzcbs::cStatic<OGZCLM_TP> cColumn;
 

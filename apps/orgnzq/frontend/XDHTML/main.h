@@ -22,7 +22,7 @@
 
 # include "base.h"
 
-# include "fields.h"
+# include "record.h"
 
 namespace main {
 	BASE_ACD( NewRecord );

@@ -56,7 +56,7 @@ namespace ogzcbs {
 		virtual void OGZCBSStore(
 			const item &Item,
 			row Row ) = 0;
-		// Must 'true' if the item exists, 'false' otherwise.
+		// Must return 'true' if the item exists, 'false' otherwise.
 		virtual bso::sBool OGZCBSRecall(
 			row Row,
 			item &Item ) const = 0;

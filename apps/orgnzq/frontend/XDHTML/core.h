@@ -24,6 +24,7 @@
 # include "prolog.h"
 # include "login.h"
 # include "main.h"
+# include "record.h"
 
 # include "frdinstc.h"
 
@@ -44,6 +45,7 @@ namespace core {
 		prolog::fActionCallbacks Prolog_;
 		login::fActionCallbacks Login_;
 		main::fActionCallbacks Main_;
+		record::fActionCallbacks Record_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -51,6 +53,7 @@ namespace core {
 			Prolog_.reset( P );
 			Login_.reset( P );
 			Main_.reset( P );
+			Record_.reset( P );
 		}
 		E_CVDTOR( action_callbacks__ );
 		void Init( void )
@@ -59,6 +62,7 @@ namespace core {
 			Login_.Init();
 			Main_.Init();
 			Global_.Init();
+			Record_.Init();
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
 

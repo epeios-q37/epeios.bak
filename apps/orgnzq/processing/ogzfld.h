@@ -36,8 +36,9 @@
 namespace ogzfld {
 	using ogzbsc::sDRow;
 	using ogzbsc::sTRow;
-	using ogzbsc::sFRow;
-	using ogzclm::sCRow;
+	using ogzbsc::sCRow;
+
+	typedef ogzbsc::sFRow sRow;
 
 	using ogzdta::dDatumList;
 
@@ -74,9 +75,9 @@ namespace ogzfld {
 
 			return *this;
 		}
-		void Init( void )
+		void Init( ogzclm::sRow Column = qNIL )
 		{
-			S_.Column = qNIL;
+			S_.Column = Column;
 			dDatumList::Init();
 		}
 		qRODISCLOSEv( sCRow, Column );
@@ -85,7 +86,7 @@ namespace ogzfld {
 	qW( Field );
 
 	// template parameters.
-# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sFRow, ogzfld::sDRow, sdr::sRow
+# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sRow, ogzfld::sDRow, sdr::sRow
 
 	typedef ogzcbs::cDynamic<OGZFLD_TP> cField;
 
@@ -93,7 +94,7 @@ namespace ogzfld {
 
 	typedef ogzcbs::rRegularDynamicCallback<OGZFLD_TP> rRegularFieldCallback;
 
-	typedef bch::qBUNCHdl( sFRow ) dFieldList;
+	typedef bch::qBUNCHdl( sRow ) dFieldList;
 	qW( FieldList );
 }
 

@@ -158,46 +158,46 @@ namespace ags {
 	qRODISCLOSEv( type, name )\
 	qWODISCLOSEv( type, name )
 
-# define qRRODISCLOSEf( type, name )\
+# define qRRODISCLOSEs( type, name )\
 	const type Get##name( void ) const\
 	{\
 		return name##_;\
 	}
 
 // Make accessible the member, for read-only access, of a static object, named 'name' of type 'type'.
-# define qRODISCLOSEf(type, name )\
-	qRRODISCLOSEf( type, name )\
+# define qRODISCLOSEs(type, name )\
+	qRRODISCLOSEs( type, name )\
 	const type &name( void ) const\
 	{\
 		return name##_;\
 	}
 
-# define qRWODISCLOSEf(type, name )\
+# define qRWODISCLOSEs(type, name )\
 	void Set##name( const type &V )\
 	{\
 		name##_ = V;\
 	}
 
-# define qWODISCLOSEf(type, name )\
-	qRWODISCLOSEf( type, name )\
+# define qWODISCLOSEs(type, name )\
+	qRWODISCLOSEs( type, name )\
 	type &name( void )\
 	{\
 		return name##_;\
 	}
 
-# define qRRWDISCLOSEf(type, name )\
-	qRRODISCLOSEf( type, name )\
-	qRWODISCLOSEf( type, name )
+# define qRRWDISCLOSEs(type, name )\
+	qRRODISCLOSEs( type, name )\
+	qRWODISCLOSEs( type, name )
 
-# define qRWDISCLOSEf(type, name )\
-	qRODISCLOSEf( type, name )\
-	qWODISCLOSEf( type, name )
+# define qRWDISCLOSEs(type, name )\
+	qRODISCLOSEs( type, name )\
+	qWODISCLOSEs( type, name )
 
-# define qRRODISCLOSEr( type, name )	qRRODISCLOSEf( type, name )
-# define qRODISCLOSEr(type, name )		qRODISCLOSEf(type, name )
-# define qWODISCLOSEr(type, name )		qWODISCLOSEf(type, name )
-# define qRRWDISCLOSEr(type, name )		qRRWDISCLOSEf(type, name )
-# define qRWDISCLOSEr(type, name )		qRWDISCLOSEf(type, name )
+# define qRRODISCLOSEr( type, name )	qRRODISCLOSEs( type, name )
+# define qRODISCLOSEr(type, name )		qRODISCLOSEs(type, name )
+# define qWODISCLOSEr(type, name )		qWODISCLOSEs(type, name )
+# define qRRWDISCLOSEr(type, name )		qRRWDISCLOSEs(type, name )
+# define qRWDISCLOSEr(type, name )		qRWDISCLOSEs(type, name )
 
 # define qW_( name )	\
 class w##name\

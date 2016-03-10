@@ -1059,7 +1059,7 @@ namespace fbltyp {
 /***************/
 
 namespace fbltyp {
-	typedef id__ fId;
+	typedef id__ sId;
 }
 
 #endif

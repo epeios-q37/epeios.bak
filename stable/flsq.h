@@ -639,7 +639,7 @@ namespace flsq {
 			if ( Temoin_.Ouvert )
 				File_.Flush();
 		}
-		qRODISCLOSEf( time_t, AccessEpochTimestamp );
+		qRODISCLOSEs( time_t, AccessEpochTimestamp );
 		_file___ &File( void )
 		{
 			return File_;

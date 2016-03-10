@@ -88,7 +88,7 @@ const char *ogzxml::GetLabel(
 
 namespace {
 	inline void Dump_(
-		ogztyp::sTRow TypeRow,
+		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
 		const ogzdta::fData &Data,
 		ogzdta::sDRow DatumRow,
@@ -115,7 +115,7 @@ namespace {
 	}
 
 	inline void Dump_(
-		ogztyp::sTRow TypeRow,
+		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
 		const ogzdta::fData &Data,
 		const ogzdta::dDatumList &DatumList,
@@ -143,7 +143,7 @@ namespace {
 		dWriter &Writer )
 	{
 	qRH
-		ogzclm::fColumn Column;
+		ogzclm::sColumn Column;
 	qRB
 		Column.Init();
 		
@@ -151,10 +151,10 @@ namespace {
 
 		Writer.PushTag ( T( Field ) );
 
-		xml::PutAttribute( A( Type ), *Column.Type, Writer );
-		Writer.PutAttribute( A( Number ), ogzclm::GetLabel( Column.Number ) );
+		xml::PutAttribute( A( Type ), *Column.Type(), Writer );
+		Writer.PutAttribute( A( Number ), ogzclm::GetLabel( Column.Number() ) );
 
-		Dump_( Column.Type, Types( Column.Type ), Data, Field, Writer );
+		Dump_( Column.Type(), Types( Column.Type() ), Data, Field, Writer );
 
 		Writer.PopTag();
 	qRR

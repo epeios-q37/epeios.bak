@@ -64,9 +64,13 @@ namespace frdinstc {
 
 			return Success;
 		}
-		void EditRecord( fbltyp::fId Record )	// if == 'UndefinedId', we create empty record.
+		void EditRecord( fbltyp::sId Record )	// if == 'UndefinedId', we create empty record.
 		{
 			Record_.EditRecord( Record );
+		}
+		void CreateField( void )
+		{
+			Record_.CreateField();
 		}
 	};
 
@@ -94,6 +98,10 @@ namespace frdinstc {
 		void CreateRecord( void )
 		{
 			Core_.EditRecord( qNIL );
+		}
+		void CreateField( void )
+		{
+			Core_.CreateField();
 		}
 	};
 }

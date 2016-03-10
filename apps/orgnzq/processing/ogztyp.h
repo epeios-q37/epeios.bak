@@ -33,7 +33,7 @@
 # include "str.h"
 
 namespace ogztyp {
-	using ogzbsc::sTRow;
+	typedef ogzbsc::sTRow sRow;
 
 	class cType
 	{
@@ -90,7 +90,7 @@ namespace ogztyp {
 		}
 	};
 
-	typedef lstbch::qLBUNCHd( sType, sTRow ) dTypes;
+	typedef lstbch::qLBUNCHd( sType, sRow ) dTypes;
 	qW( Types );
 }
 

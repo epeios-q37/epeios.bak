@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of orgnzq.
 #
@@ -48,7 +48,7 @@ mods += xdhcmn xdhdws
 mods += frdapi frdfrntnd frdrgstry frdinstc 
 mods += ogzfbc ogzinf 
 mods += login main prolog 
-mods += fields Frame 
+mods += fields record Frame 
 mods += base core global registry 
 
 pmods += pllio 
@@ -342,7 +342,7 @@ all: $(binary)
 	rm -f *.o
 
 copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
 ifndef EPEIOS_SRC

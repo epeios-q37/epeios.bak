@@ -28,6 +28,8 @@
 
 #include "sclmisc.h"
 
+#define REPORT( message ) sclmisc::ReportAndAbort( OGZINF_UC_AFFIX "_" message )
+
 using namespace wrprecord;
 using namespace ogzrcd;
 using common::rStuff;
@@ -72,6 +74,22 @@ qRT
 qRE
 }
 
+namespace {
+	void CreateField_(
+		ogztyp::sRow Type,
+		ogzclm::eNumber Number,
+		ogzdtb::rDatabase &Database )
+	{
+		if ( !Database.Types.Exists( Type ) )
+			REPORT( "UnknowFieldType");
+	}
+}
+
+DEC( CreateField )
+{
+	REPORT( "UnknownFieldType" );
+}
+
 
 
 #define D( name )	#name, (void *)exported##name
@@ -82,6 +100,10 @@ void wrprecord::dRecord::NOTIFY(
 {
 	Module.Add( D( EditRecord ),
 			fblbkd::cId,	// Record to edit. If == 'qNIL', we want a new record.
+		fblbkd::cEnd,
+		fblbkd::cEnd );
+
+	Module.Add( D( CreateField ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 }

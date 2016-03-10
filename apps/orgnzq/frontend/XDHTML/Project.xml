@@ -6,7 +6,7 @@
 			<xpp:bloc>(Version)</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2015</xpp:bloc>
+			<xpp:bloc>2016</xpp:bloc>
 		</xpp:define>
 	</xpp:bloc>
 	<xpp:set name="Credits" value="Epeios"/>
@@ -53,6 +53,7 @@
 		</Modules>
 		<Modules Group="Frames">
 			<Module>fields</Module>
+			<Module>record</Module>
 			<Module>Frame</Module>
 		</Modules>
 		<Module>base</Module>
@@ -71,6 +72,10 @@
 				<Files Group="Fields">
 					<File>FieldsLayout.xsl</File>
 					<File>FieldsCasting.xsl</File>
+				</Files>
+				<Files Group="Record">
+					<File>RecordLayout.xsl</File>
+					<File>RecordCasting.xsl</File>
 				</Files>
 			</Files>
 			<Files Group="Global">

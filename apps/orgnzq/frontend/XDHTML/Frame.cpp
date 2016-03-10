@@ -97,7 +97,7 @@ qRT
 qRE
 }
 
-BASE_AC( frame::fTemplate )
+BASE_AC( frame::sTemplate )
 {
 	Session.AlertT( "Template" );
 }

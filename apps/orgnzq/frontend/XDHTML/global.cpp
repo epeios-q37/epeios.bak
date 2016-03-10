@@ -24,7 +24,7 @@
 
 E_CDEF(char *, XSLAffix_, "Global" );
 
-BASE_AC( global::fAbout )
+BASE_AC( global::sAbout )
 {
 qRH
 	str::string XML, XSL;
@@ -52,12 +52,12 @@ qRT
 qRE
 }
 
-BASE_AC( global::fRefresh )
+BASE_AC( global::sRefresh )
 {
 	Session.Refresh();
 }
 
-BASE_AC( global::fTest )
+BASE_AC( global::sTest )
 {
 qRH
 	str::string Message;

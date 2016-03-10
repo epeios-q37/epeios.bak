@@ -81,7 +81,7 @@ static _irow__ Append_(
 	_items_ &TargetItems,
 	_strings_ &TargetStrings )
 {
-	ctn::q_CMITEMs( _item_, _irow__ ) SourceItem;
+	ctn::qCMITEMs( _item_, _irow__ ) SourceItem;
 
 	SourceItem.Init( SourceItems );
 
@@ -185,7 +185,7 @@ void strmrg::table_::GetTable(
 	row__ Row,
 	table_ &Table ) const
 {
-	ctn::q_CMITEMs( _item_, _irow__ ) Item;
+	ctn::qCMITEMs( _item_, _irow__ ) Item;
 
 	Item.Init( Items );
 
@@ -230,7 +230,7 @@ static void Merge_(
 	const tokens__ &Tokens,
 	flw::oflow__ &Flow )	// Rcursif (paaas bien !) !
 {
-	ctn::q_CMITEMs( _item_, _irow__ ) Item;
+	ctn::qCMITEMs( _item_, _irow__ ) Item;
 
 	row__ Row = Rows.First();
 
@@ -416,7 +416,7 @@ static void GetStrings_(
 
 void strmrg::retriever__::GetStrings( str::strings_ &Result )
 {
-	ctn::q_CMITEMs( _item_, _irow__ ) Item;
+	ctn::qCMITEMs( _item_, _irow__ ) Item;
 
 	Item.Init( _I() );
 

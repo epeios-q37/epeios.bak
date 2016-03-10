@@ -21,5 +21,49 @@
 
 using namespace ogzrcd;
 
+ogzfld::sRow ogzrcd::rRecordBuffer::CreateField( ogzclm::sRow Column )
+{
+	ogzfld::sRow Row = qNIL;
+qRH
+	ogzfld::wField Field;
+qRB
+	Field.Init( Column );
+
+	Row = Fields.New();
+
+	Fields.Store( Field, Row );
+
+	Append( Row );
+qRR
+qRT
+qRE
+	return Row;
+}
+
+ogzfld::sRow ogzrcd::rRecordBuffer::CreateField(
+	ogztyp::sRow Type,
+	ogzclm::eNumber Number )
+{
+	return CreateField(CreateColumn( Type, Number ) );
+}
+
+ogzclm::sRow ogzrcd::rRecordBuffer::CreateColumn(
+	ogztyp::sRow Type,
+	ogzclm::eNumber Number )
+{
+	ogzclm::sRow Row = qNIL;	
+	ogzclm::sColumn Column;
+
+	Column.Init( Type, Number );
+
+	Row = Columns.New();
+
+	Columns.Store( Column, Row );
+
+	return Row;
+}
+
+
+
 
 

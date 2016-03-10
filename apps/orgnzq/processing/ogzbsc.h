@@ -32,6 +32,7 @@ namespace ogzbsc {
 	qROW( DRow );	// Datum row.
 	qROW( TRow );	// Type row.
 	qROW( UTRow );	// User type row.
+	qROW( CRow );	// Column row.
 	qROW( FRow );	// Field row.
 	qROW( RRow );	// Record row.
 	qROW( URow );	// User row.
