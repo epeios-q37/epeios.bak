@@ -74,20 +74,34 @@ namespace frdinstc {
 		}
 	};
 
+	qENUM( View )
+	{
+		vRecords,
+		vRecord,
+		v_amount,
+		v_Undefined
+	};
+
+	const char *GetLabel( eView View );
+
 	class rUser
 	{
 	private:
 		rUser_ Core_;
+		eView View_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Core_.reset( P );
+			View_ = v_Undefined;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
+
+			View_ = vRecords;
 		}
 		bso::sBool Login(
 			const str::vString &Username,
@@ -97,12 +111,14 @@ namespace frdinstc {
 		}
 		void CreateRecord( void )
 		{
+			View_ = vRecord;
 			Core_.EditRecord( qNIL );
 		}
 		void CreateField( void )
 		{
 			Core_.CreateField();
 		}
+		qRODISCLOSEr( eView, View );
 	};
 }
 

@@ -22,6 +22,7 @@
 #include "dir.h"
 #include "fnm.h"
 #include "ogzinf.h"
+#include "sclmisc.h"
 
 using namespace wrpunbound;
 
@@ -84,12 +85,69 @@ qRT
 qRE
 }
 
+namespace {
+	const str::dString &GetWording_( ogzclm::eNumber Number )
+	{
+		static str::wString Wording;
+	qRH
+		str::wString RawWording;
+	qRB
+		RawWording.Init();
+		RawWording.Append( ogzclm::GetLabel( Number ) );
+		RawWording.Append( "NumberWording" );
+
+		Wording.Init();
+		sclmisc::GetBaseTranslation( RawWording, Wording );
+	qRR
+	qRT
+	qRE
+		return Wording;
+	}
+
+	void GetNumbers_(
+		fbltyp::dId8s &Ids,
+		fbltyp::dStrings &Labels,
+		fbltyp::dStrings &Wordings )
+	{
+		int Number = 0;
+
+		while ( Number < ogzclm::n_amount )
+		{
+			Ids.Append( Number );
+			Labels.Append( str::wString( ogzclm::GetLabel( (ogzclm::eNumber)Number ) ) );
+			Wordings.Append( GetWording_( (ogzclm::eNumber)Number ) );
+
+			Number++;
+		}
+	}
+}
+
+DEC( GetNumbers )
+{
+qRH
+	fbltyp::wId8s Ids;
+	fbltyp::wStrings Labels, Wordings;
+qRB
+	Ids.Init();
+	Labels.Init();
+	Wordings.Init();
+
+	GetNumbers_( Ids, Labels, Wordings );
+
+	Request.Id8sOut() = Ids;
+	Request.StringsOut() = Labels;
+	Request.StringsOut() = Wordings;
+qRR 
+qRT
+qRE
+}
+
 DEC( GetTypes )
 {
 qRH
 	common::ro_rack___ Rack;
-	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
+	fbltyp::strings Labels;
 qRB
 	Rack.Init( common::Rack );
 
@@ -97,8 +155,8 @@ qRB
 	Ids.Init();
 	GetTypes_( Rack().Types.Core, Labels, Ids );
 
-	Request.StringsOut() = Labels;
 	Request.Id8sOut() = Ids;
+	Request.StringsOut() = Labels;
 qRR 
 qRT
 qRE
@@ -117,10 +175,17 @@ void wrpunbound::Inform(
 			fblbkd::cBoolean,	// Success.
 		fblbkd::cEnd );
 
+	Backend.Add( D( GetNumbers ),
+		fblbkd::cEnd,
+			fblbkd::cId8s,		// Ids.
+			fblbkd::cStrings,	// Labels,
+			fblbkd::cStrings,	// Wordings,
+		fblbkd::cEnd );
+
 	Backend.Add( D( GetTypes ),
 		fblbkd::cEnd,
-			fblbkd::cStrings,	// Labels,
 			fblbkd::cId8s,		// Ids.
+			fblbkd::cStrings,	// Labels,
 		fblbkd::cEnd );
 }
 

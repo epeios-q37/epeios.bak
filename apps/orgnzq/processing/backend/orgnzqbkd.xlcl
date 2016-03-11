@@ -4,16 +4,24 @@
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
 		<xpp:expand select="epeios.xlcl"/>
-		<Translations text="ORGNZQ_TestMessage">
+		<Translations text="TestMessage">
 			<Translation language="fr">Message d'erreur de test</Translation>
 			<Translation language="en">Test error message</Translation>
 		</Translations>
-		<Translations text="ORGNZQ_UnknownFieldType">
+		<Translations text="UnknownFieldType">
 			<Translation language="fr">Type de champ inconnu.</Translation>
 			<Translation language="en">Unknown field type.</Translation>
 		</Translations>
+		<Translations text="MonoNumberWording">
+			<Translation language="fr">Mono</Translation>
+			<Translation language="en">Mono</Translation>
+		</Translations>
+		<Translations text="MultiNumberWording">
+			<Translation language="fr">Multi</Translation>
+			<Translation language="en">Multi</Translation>
+		</Translations>
 		<!--
-	<Translations text="ORGNZQ_">
+	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

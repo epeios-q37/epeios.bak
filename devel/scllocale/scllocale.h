@@ -79,6 +79,11 @@ namespace scllocale {
 		rgstry::eRootTagHandling RootTagHandling );
 
 	const str::string_ &GetTranslation(
+		const str::dString &Text,
+		const char *Language,
+		str::string_ &Translation );
+
+	const str::string_ &GetTranslation(
 		const char *Text,
 		const char *Language,
 		str::string_ &Translation );

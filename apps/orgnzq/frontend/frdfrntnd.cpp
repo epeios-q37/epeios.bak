@@ -36,7 +36,7 @@ qRB
 	Ids.Init();
 	Labels.Init();
 
-	Statics.OGZGetTypes( Labels, Ids );
+	Statics.OGZGetTypes( Ids, Labels );
 
 	sclfrntnd::Fill<sTypeId, dTypeIds>( Ids, Labels, Types_ );
 qRR
@@ -60,7 +60,7 @@ qRB
 	Labels.Init();
 	Wordings.Init();
 
-//	Statics.OGZGetNumbers( Ids, Labels, Wordings );
+	Statics.OGZGetNumbers( Ids, Labels, Wordings );
 
 	sclfrntnd::Fill<sNumberId, dNumberIds>( Ids, Labels, Wordings, Numbers_ );
 qRR

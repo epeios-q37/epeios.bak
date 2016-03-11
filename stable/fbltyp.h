@@ -1068,6 +1068,12 @@ namespace fbltyp {
 	qW( Id##s )
 
 namespace fbltyp {
+	typedef strings_	dStrings;
+	qW( Strings );
+
+	typedef xstrings_	dXStrings;
+	qW( XStrings );
+
 	M( id, Id );
 	M( id8, Id8 );
 }

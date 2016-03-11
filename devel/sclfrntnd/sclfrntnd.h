@@ -306,7 +306,7 @@ namespace sclfrntnd {
 		}
 		dILW_ &operator =(const dILW_ &ILW)
 		{
-			dIL_<t>::operator = ( ILW );
+			dIL_<t>::operator =( ILW );
 			Wording = ILW.Wording;
 
 			return *this;
@@ -367,7 +367,7 @@ namespace sclfrntnd {
 	E_CDEF( char *, LabelAttribute, "label" );
 	E_CDEF( char *, WordingAttribute, "Wording" );
 
-	template <typename id> static void Dump_(
+	template <typename id> inline void Dump_(
 		const sclfrntnd::dIL_<id> &Item,
 		xml::writer_ &Writer )
 	{
@@ -375,11 +375,22 @@ namespace sclfrntnd {
 		Writer.PutAttribute( sclfrntnd::LabelAttribute, Item.Label );
 	}
 
+	template <typename id> inline void DumpIL_(
+		const sclfrntnd::dIL_<id> &Item,
+		xml::writer_ &Writer )
+	{
+		Dump_( Item, Writer );
+	}
+
 	template <typename id> inline void Dump_(
 		const sclfrntnd::dILW_<id> &Item,
 		xml::writer_ &Writer )
 	{
-		Dump_( (sclfrntnd::dIL_<id>)Item, Writer );
+# if 0	// Should work, but not with VC++.
+		Dump_( (const sclfrntnd::dIL_<id>)Item, Writer );
+# else
+		DumpIL_( Item, Writer );
+# endif
 		Writer.PutValue( Item.Wording, sclfrntnd::WordingAttribute );
 	}
 

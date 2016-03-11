@@ -28,7 +28,7 @@
 
 #include "sclmisc.h"
 
-#define REPORT( message ) sclmisc::ReportAndAbort( OGZINF_UC_AFFIX "_" message )
+#define REPORT( message ) sclmisc::ReportAndAbort( message )
 
 using namespace wrprecord;
 using namespace ogzrcd;

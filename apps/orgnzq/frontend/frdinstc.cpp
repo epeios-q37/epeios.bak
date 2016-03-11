@@ -24,3 +24,21 @@
 
 using namespace frdinstc;
 
+#define C( name )	case v##name : return #name; break
+ 
+const char *frdinstc::GetLabel( eView View )
+{
+	switch ( View ) {
+	C( Records );
+	C( Record );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+ 
+#undef C
+ 
+

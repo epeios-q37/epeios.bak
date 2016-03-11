@@ -36,6 +36,8 @@ namespace {
 		base::context_rack___ Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Rack().PutAttribute("View", frdinstc::GetLabel( Session.User.GetView() ) );
 	qRR
 	qRT
 	qRE
@@ -88,8 +90,6 @@ qRB
 
 	SetCasting_( Session );
 
-	record::SetLayout( RecordFrameId_, Session );
-
 	Session.SwitchTo( core::pMain );
 qRR
 qRT
@@ -99,4 +99,8 @@ qRE
 BASE_AC( main::sNewRecord )
 {
 	Session.User.CreateRecord();
+
+	SetCasting_( Session );
+
+	record::SetLayout( RecordFrameId_, Session );
 }

@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160128 Build Mar 10 2016 09:22:35 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160128 Build Mar 11 2016 09:34:06 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq (Version) (Build Mar  9 2016 11:07:03 Win32;MSC 1800;IA-32)
 */
@@ -25,7 +25,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[2];
+		fblfrd::command__ _Commands[3];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -41,7 +41,8 @@ namespace orgnzq {
 
 			fblfrd::id8__ Parameters[] = {
 				21, 21, 0, 2, 
-				0, 22, 9, 
+				0, 9, 22, 22, 
+				0, 9, 22, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -55,14 +56,19 @@ namespace orgnzq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
+			CommandDetail.Name = "OGZGetNumbers";;
+			CommandDetail.Casts.Append( Parameters + 4, 4 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetTypes";;
-			CommandDetail.Casts.Append( Parameters + 4, 3 );
+			CommandDetail.Casts.Append( Parameters + 8, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 2, _Commands );
+			Commands.Recall( 0, 3, _Commands );
 		}
 		fblovl::reply__ OGZLogin( 
 			const fblfrd::string_ &In1,
@@ -79,16 +85,31 @@ namespace orgnzq {
 
 			return Frontend().Handle();
 		}
-		fblovl::reply__ OGZGetTypes( 
-			fblfrd::strings_ &Out1,
-			fblfrd::id8s_ &Out2 ) const
+		fblovl::reply__ OGZGetNumbers( 
+			fblfrd::id8s_ &Out1,
+			fblfrd::strings_ &Out2,
+			fblfrd::strings_ &Out3 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[1] );
 
 			Frontend().EndOfInParameters();
 
-			Frontend().StringsOut( Out1 );
-			Frontend().Id8sOut( Out2 );
+			Frontend().Id8sOut( Out1 );
+			Frontend().StringsOut( Out2 );
+			Frontend().StringsOut( Out3 );
+
+			return Frontend().Handle();
+		}
+		fblovl::reply__ OGZGetTypes( 
+			fblfrd::id8s_ &Out1,
+			fblfrd::strings_ &Out2 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[2] );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().Id8sOut( Out1 );
+			Frontend().StringsOut( Out2 );
 
 			return Frontend().Handle();
 		}

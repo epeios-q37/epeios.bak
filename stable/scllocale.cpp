@@ -360,6 +360,14 @@ namespace {
 }
 
 const str::string_ &scllocale::GetTranslation(
+	const str::dString &Text,
+	const char *Language,
+	str::string_ &Translation )
+{
+	return GetTranslation_( Text, Language, Translation );
+}
+
+const str::string_ &scllocale::GetTranslation(
 	const char *Text,
 	const char *Language,
 	str::string_ &Translation )
