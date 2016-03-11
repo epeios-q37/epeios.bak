@@ -7,7 +7,7 @@
 		<xpp:expand href="../XDH.xcfg"/>
 		<xpp:bloc>
 			<xpp:define name="Module">
-				<xpp:bloc>xdhdq</xpp:bloc>
+				<xpp:bloc>orgnzq</xpp:bloc>
 			</xpp:define>
 			<xpp:ifeq select="env" value="windows">
 				<xpp:define name="BinDir">

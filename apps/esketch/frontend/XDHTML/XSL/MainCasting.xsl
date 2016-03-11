@@ -3,6 +3,9 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				>
 	<xsl:output method="html" encoding="UTF-8"/>
+	<xsl:template match="/">
+		<xsl:apply-templates select="*/Context"/>
+	</xsl:template>
 	<xsl:template match="Context">
 		<xsl:choose>
 			<xsl:when test="Test/@Enabled='true'">

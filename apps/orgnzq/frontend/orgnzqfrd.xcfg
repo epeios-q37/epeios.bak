@@ -10,7 +10,7 @@
 			<DefaultBackendType>Embedded</DefaultBackendType>
 
 			<!-- For multi-user mode. Can be overriden by project file. -->
-			<Backend Type="Predefined">LocalHost</Backend>
+			<Backend Type="Predefined">Embedded</Backend>
 			<Authentication Mode="Full">
 				<Login>Hello</Login>
 				<Password>toto</Password>

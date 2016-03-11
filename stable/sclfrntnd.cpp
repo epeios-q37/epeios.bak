@@ -489,7 +489,7 @@ namespace{
 			if ( ( Type = GetBackendType( RawType ) ) == bt_Undefined )
 				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadBackendType" );
 
-			SetBackendFeatures( Type, Parameters, Path, Features );
+			SetBackendFeatures( Type, Path, Parameters, Features );
 		}
 
 		BackendFound = true;

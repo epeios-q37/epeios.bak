@@ -354,6 +354,8 @@ qRFB
 	qRT
 		if ( Row != qNIL )
 			Clean_( Row );
+
+		sck::Close( Socket );
 	qRE
 qRFR
 qRFT
