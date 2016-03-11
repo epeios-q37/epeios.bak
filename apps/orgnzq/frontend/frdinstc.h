@@ -28,7 +28,7 @@ namespace frdinstc {
 
 	using namespace frdfrntnd;
 
-	class _user___
+	class rUser_
 	{
 	private:
 		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
@@ -46,7 +46,7 @@ namespace frdinstc {
 			Record_.reset( P );
 			Object_.reset( P );
 		}
-		E_CVDTOR( _user___ );
+		E_CVDTOR( rUser_ );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			Frontend_ = &Frontend;
@@ -74,16 +74,16 @@ namespace frdinstc {
 		}
 	};
 
-	class user___
+	class rUser
 	{
 	private:
-		_user___ Core_;
+		rUser_ Core_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Core_.reset( P );
 		}
-		E_CVDTOR( user___ );
+		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )

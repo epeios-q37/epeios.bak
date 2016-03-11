@@ -195,15 +195,14 @@ namespace sclfrntnd {
 		const kernel___ &Kernel,
 		str::string_ &Path );
 
-# define SCLF_I_( name, Name, id, Id  )\
-	typedef fbltyp::id##__	name##_t__;\
-	typedef fbltyp::id##s_	name##s_t_;\
-	E_AUTO( name##s_t );\
+# define SCLF_I_( name, id  )\
+	E_TMIMIC__( fbltyp::s##id,	s##name##Id );\
+	typedef fbltyp::d##id##s	d##name##Ids;\
+	qW( name##Ids );\
 \
-	E_TMIMIC__( name##_t__, name##__ );\
-	E_CDEF( name##__, Undefined##Name, fbltyp::Undefined##Id );\
+	E_CDEF( s##name##Id, Undefined##name, fbltyp::Undefined##id );\
 
-	template <typename t> class il_	// id, label.
+	template <typename t> class dIL_	// id, label.
 	{
 	public:
 		struct s {
@@ -211,7 +210,7 @@ namespace sclfrntnd {
 			str::string_::s Label;
 		} &S_;
 		str::string_ Label;
-		il_( s &S )
+		dIL_( s &S )
 		: S_( S ),
 		  Label( S.Label )
 		{}
@@ -228,7 +227,7 @@ namespace sclfrntnd {
 		{
 			Label.plug( AS );
 		}
-		il_ &operator =(const il_ &IL)
+		dIL_ &operator =(const dIL_ &IL)
 		{
 			S_.Id = IL.S_.Id;
 			Label = IL.Label;
@@ -245,75 +244,25 @@ namespace sclfrntnd {
 		E_RODISCLOSE_( t, Id );
 	};
 
-# define SCLF_IL( name, Name, id, Id  )\
-	SCLF_I_( name, Name, id, Id );\
+	qW1( IL_ );
+
+# define SCLF_IL( name, id  )\
+	SCLF_I_( name, id );\
 \
-	typedef sclfrntnd::il_<name##__> name##_;\
-	E_AUTO( name );\
+	typedef sclfrntnd::dIL_<s##name##Id> d##name;\
+	qW( name );\
 \
-	typedef ctn::E_MCONTAINER_( name##_ ) name##s_;\
-	E_AUTO( name##s );
+	typedef ctn::qMCONTAINERdl( d##name ) d##name##s;\
+	qW( name##s );
 
-
-	template <typename t> class ilw_	// id, label, wording.
-	: public il_<t>
-	{
-	public:
-		struct s
-		: public il_<t>::s
-		{
-			str::string_::s Wording;
-		};
-		str::string_ Wording;
-		ilw_( s &S )
-		: il_<t>( S ),
-		  Wording( S.Wording )
-		{}
-		void reset( bso::bool__ P = true )
-		{
-			il_<t>::reset( P );
-			Wording.reset( P );
-		}
-		void plug( qASd &AS )
-		{
-			il_<t>::plug( AS );
-			Wording.plug( AS );
-		}
-		ilw_ &operator =(const ilw_ &ILW)
-		{
-			il_<t>::operator = ( ILW );
-			Wording = ILW.Wording;
-
-			return *this;
-		}
-		void Init(
-			t Id,
-			const str::string_ &Label,
-			const str::string_ &Wording )
-		{
-			il_<t>::Init( Id, Label );
-			this->Wording.Init( Wording );
-		}
-	};
-
-
-# define SCLF_ILW( name, Name, id, Id  )\
-	SCLF_I_( name, Name, id, Id );\
-\
-	typedef sclfrntnd::ilw_<name##__> name##_;\
-	E_AUTO( name );\
-\
-	typedef ctn::E_CONTAINER_( name##_ ) name##s_;\
-	E_AUTO( name##s );
-
-	template <typename ids_t, typename item, typename items_> inline void Fill(
-		const ids_t &Ids,
+	template <typename id, typename ids> inline void Fill(
+		const ids &Ids,
 		const fbltyp::strings_ &Labels,
-		items_ &Items )
+		ctn::qMCONTAINERdl( dIL_<id> ) &Items )
 	{
 	qRH
 		sdr::row__ Row = qNIL;
-		item Item;
+		wIL_<id> Item;
 	qRB
 		Row = Ids.First();
 
@@ -331,15 +280,68 @@ namespace sclfrntnd {
 	qRE
 	}
 
-	template <typename ids_t, typename item, typename items_> inline void Fill(
-		const ids_t &Ids,
+	template <typename t> class dILW_	// id, label, wording.
+	: public dIL_<t>
+	{
+	public:
+		struct s
+		: public dIL_<t>::s
+		{
+			str::string_::s Wording;
+		};
+		str::string_ Wording;
+		dILW_( s &S )
+		: dIL_<t>( S ),
+		  Wording( S.Wording )
+		{}
+		void reset( bso::bool__ P = true )
+		{
+			dIL_<t>::reset( P );
+			Wording.reset( P );
+		}
+		void plug( qASd &AS )
+		{
+			dIL_<t>::plug( AS );
+			Wording.plug( AS );
+		}
+		dILW_ &operator =(const dILW_ &ILW)
+		{
+			dIL_<t>::operator = ( ILW );
+			Wording = ILW.Wording;
+
+			return *this;
+		}
+		void Init(
+			t Id,
+			const str::string_ &Label,
+			const str::string_ &Wording )
+		{
+			dIL_<t>::Init( Id, Label );
+			this->Wording.Init( Wording );
+		}
+	};
+
+	qW1( ILW_ );
+
+
+# define SCLF_ILW( name, id  )\
+	SCLF_I_( name, id );\
+\
+	typedef sclfrntnd::dILW_<s##name##Id> d##name;\
+	qW( name );\
+\
+	typedef ctn::qCONTAINERdl( d##name ) d##name##s;\
+	qW( name##s );
+
+	template <typename id, typename ids> inline void Fill(
+		const ids &Ids,
 		const fbltyp::strings_ &Labels,
 		const fbltyp::strings_ &Wordings,
-		items_ &Items )
+		ctn::qCONTAINERdl( dILW_<id> ) &Items )
 	{
 	qRH
 		sdr::row__ Row = qNIL;
-		item Item;
+		wILW_<id> Item;
 	qRB
 		Row = Ids.First();
 
@@ -366,7 +368,7 @@ namespace sclfrntnd {
 	E_CDEF( char *, WordingAttribute, "Wording" );
 
 	template <typename id> static void Dump_(
-		const sclfrntnd::il_<id> &Item,
+		const sclfrntnd::dIL_<id> &Item,
 		xml::writer_ &Writer )
 	{
 		xml::PutAttribute( sclfrntnd::IdAttribute, **Item.Id(), Writer );
@@ -374,10 +376,10 @@ namespace sclfrntnd {
 	}
 
 	template <typename id> inline void Dump_(
-		const sclfrntnd::ilw_<id> &Item,
+		const sclfrntnd::dILW_<id> &Item,
 		xml::writer_ &Writer )
 	{
-		Dump_( (sclfrntnd::il_<id>)Item, Writer );
+		Dump_( (sclfrntnd::dIL_<id>)Item, Writer );
 		Writer.PutValue( Item.Wording, sclfrntnd::WordingAttribute );
 	}
 
@@ -406,21 +408,21 @@ namespace sclfrntnd {
 	}
 
 	template <typename id> static void Dump(
-		const ctn::E_MCONTAINER_( sclfrntnd::il_<id> ) &Items,
+		const ctn::E_MCONTAINER_( sclfrntnd::dIL_<id> ) &Items,
 		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		Dump_<id, ctn::E_MCONTAINER_( sclfrntnd::il_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+		Dump_<id, ctn::E_MCONTAINER_( sclfrntnd::dIL_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
 	}
 
 	template <typename id> static void Dump(
-		const ctn::E_CONTAINER_( sclfrntnd::ilw_<id> ) &Items,
+		const ctn::E_CONTAINER_( sclfrntnd::dILW_<id> ) &Items,
 		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		Dump_<id, ctn::E_CONTAINER_( sclfrntnd::ilw_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+		Dump_<id, ctn::E_CONTAINER_( sclfrntnd::dILW_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
 	}
 }
 

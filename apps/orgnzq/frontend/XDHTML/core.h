@@ -80,19 +80,19 @@ namespace core {
 		}
 	};
 
-	class instances_core___
+	class rInstancesCore
 	{
 	public:
-		frdinstc::user___ User;
+		frdinstc::rUser User;
 		void reset( bso::bool__ P = true )
 		{
 			User.reset( P );
 		}
-		E_CVDTOR( instances_core___ );
+		E_CVDTOR( rInstancesCore );
 		void Init( frdfrntnd::rFrontend &Frontend );
 	};
 
-	typedef sclxdhtml::rSession<instances_core___, frdfrntnd::rFrontend, page__, p_Undefined> rSession_;
+	typedef sclxdhtml::rSession<rInstancesCore, frdfrntnd::rFrontend, page__, p_Undefined> rSession_;
 
 	class rSession
 	: public rSession_

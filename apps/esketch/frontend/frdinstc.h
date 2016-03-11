@@ -28,7 +28,7 @@ namespace frdinstc {
 
 	using namespace frdfrntnd;
 
-	class _user___
+	class rUser_
 	{
 	private:
 		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
@@ -44,7 +44,7 @@ namespace frdinstc {
 
 			Object_.reset( P );
 		}
-		E_CVDTOR( _user___ );
+		E_CVDTOR( rUser_ );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			Frontend_ = &Frontend;
@@ -69,10 +69,10 @@ namespace frdinstc {
 		}
 	};
 
-	class user___
+	class rUser
 	{
 	private:
-		_user___ Core_;
+		rUser_ Core_;
 		bso::bool__ _TestButtonIsVisible;
 	public:
 		void reset( bso::bool__ P = true )
@@ -80,7 +80,7 @@ namespace frdinstc {
 			Core_.reset( P );
 			_TestButtonIsVisible = false;
 		}
-		E_CVDTOR( user___ );
+		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )

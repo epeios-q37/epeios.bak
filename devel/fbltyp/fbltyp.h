@@ -33,6 +33,10 @@
 #include "str.h"
 #include "bitbch.h"
 
+# ifdef M
+#  define FBLTYP_M_	M
+# endif
+
 /***************/
 /***** New *****/
 /***************/
@@ -1058,8 +1062,20 @@ namespace fbltyp {
 /***** New *****/
 /***************/
 
+# define M( id, Id )\
+	typedef id##__	s##Id;\
+	typedef id##s_	d##Id##s;\
+	qW( Id##s )
+
 namespace fbltyp {
-	typedef id__ sId;
+	M( id, Id );
+	M( id8, Id8 );
 }
+
+# undef M
+
+# ifdef FBLTYP_M_
+#   define M FBLTYP_M_
+# endif
 
 #endif

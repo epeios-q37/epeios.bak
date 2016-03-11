@@ -34,15 +34,19 @@
 namespace frdfrntnd {
 	typedef sclfrntnd::frontend___ _frontend___;
 
-	SCLF_IL( type, Type, id8, Id8 );
+	SCLF_IL( Type, Id8 );
+	SCLF_ILW( Number, Id8 );
 
 	class rFrontend
 	: public _frontend___
 	{
 	private:
-		types Types_;
+		wTypes Types_;
+		wNumbers Numbers_;
 		void GetTypes_( void );
 		void DumpTypes_( xml::writer_ &Writer );
+		void GetNumbers_( void );
+		void DumpNumbers_( xml::writer_ &Writer );
 	protected:
 		virtual void FBLFRDOnConnect( void ) override
 		{
@@ -51,6 +55,7 @@ namespace frdfrntnd {
 			MyObject.Init( *this );
 
 			GetTypes_();
+			GetNumbers_();
 		}
 		virtual void FBLFRDOnDisconnect( void ) override
 		{
@@ -66,6 +71,7 @@ namespace frdfrntnd {
 		{
 			_frontend___::reset( P );
 			Types_.reset( P );
+			Numbers_.reset( P );
 
 			Statics.reset( P );
 			Record.reset();
@@ -80,10 +86,12 @@ namespace frdfrntnd {
 		{
 			_frontend___::Init( Kernel, Language, ReportingCallback, Registry );
 			Types_.Init();
+			Numbers_.Init();
 		}
 		void DumpCorpus( xml::writer_ &Writer )
 		{
 			DumpTypes_( Writer );
+			DumpNumbers_( Writer );
 		}
 	};
 

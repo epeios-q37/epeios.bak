@@ -84,8 +84,10 @@ static inline void _Get(
 	Get( Flow, Value );
 }
 
+#undef M
 
-# define M( name, type )\
+
+#define M( name, type )\
 static inline void _Put(\
 	type##__ Value,\
 	flw::oflow__ &Flow )\

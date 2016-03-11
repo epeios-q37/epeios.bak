@@ -30,15 +30,15 @@ using namespace frdfrntnd;
 void frdfrntnd::rFrontend::GetTypes_( void )
 {
 qRH
-	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
+	fbltyp::strings Labels;
 qRB
-	Labels.Init();
 	Ids.Init();
+	Labels.Init();
 
 	Statics.OGZGetTypes( Labels, Ids );
 
-	sclfrntnd::Fill<types_t_, type, types_>( Ids, Labels, Types_ );
+	sclfrntnd::Fill<sTypeId, dTypeIds>( Ids, Labels, Types_ );
 qRR
 qRT
 qRE
@@ -47,5 +47,28 @@ qRE
 
 void  frdfrntnd::rFrontend::DumpTypes_( xml::writer_ &Writer )
 {
-	sclfrntnd::Dump<type__>( Types_, "Fields", "Field", Writer );
+	sclfrntnd::Dump<sTypeId>( Types_, "Fields", "Field", Writer );
+}
+
+void frdfrntnd::rFrontend::GetNumbers_( void )
+{
+qRH
+	fbltyp::id8s Ids;
+	fbltyp::strings Labels, Wordings;
+qRB
+	Ids.Init();
+	Labels.Init();
+	Wordings.Init();
+
+//	Statics.OGZGetNumbers( Ids, Labels, Wordings );
+
+	sclfrntnd::Fill<sNumberId, dNumberIds>( Ids, Labels, Wordings, Numbers_ );
+qRR
+qRT
+qRE
+}
+
+void  frdfrntnd::rFrontend::DumpNumbers_( xml::writer_ &Writer )
+{
+	sclfrntnd::Dump<sNumberId>( Numbers_, "Numbers", "Number", Writer );
 }
