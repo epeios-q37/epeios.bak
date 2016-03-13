@@ -28,7 +28,7 @@
 # define OGZINF_UC_SHORT	"OGZ"
 # define OGZINF_LC_SHORT	"ogz"
 
-# define OGZINF_WEBSITE_URL	"http://q37.info"
+# define OGZINF_WEBSITE_URL	"http://q37.info/"
 
 # define OGZINF_SOFTWARE_NAME		OGZINF_MC_AFFIX	// Commercial name of the software ; set to appropriate value if needed.
 # define OGZINF_SOFTWARE_VERSION 	"1.0"	// Version of the whole software, not of a particular program.

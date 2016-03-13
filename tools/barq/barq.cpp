@@ -45,7 +45,7 @@ using xml::writer_;
 # define NAME_MC			"barq"
 # define NAME_LC			"barq"
 # define NAME_UC			"BARQ"
-# define WEBSITE_URL		"http://q37.info"
+# define WEBSITE_URL		"http://q37.info/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"

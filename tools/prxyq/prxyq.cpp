@@ -41,7 +41,7 @@ using cio::CIn;
 # define NAME_MC			"prxyq"
 # define NAME_LC			"prxyq"
 # define NAME_UC			"PRXYQ"
-# define WEBSITE_URL		"http://q37.info"
+# define WEBSITE_URL		"http://q37.info/"
 # define AUTHOR_NAME		"Claude SIMON"
 # define AUTHOR_CONTACT		"http://q37.info/contact/"
 # define OWNER_NAME			"Claude SIMON"

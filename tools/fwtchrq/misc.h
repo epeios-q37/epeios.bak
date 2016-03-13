@@ -31,7 +31,7 @@
 # define MISC_NAME_MC			"fwtchrq"
 # define MISC_NAME_LC			"fwtchrq"
 # define MISC_NAME_UC			"FWTCHRQ"
-# define MISC_WEBSITE_URL		"http://q37.info"
+# define MISC_WEBSITE_URL		"http://q37.info/"
 # define MISC_AUTHOR_NAME		"Claude SIMON"
 # define MISC_AUTHOR_CONTACT	"http://q37.info/contact/"
 # define MISC_OWNER_NAME		"Claude SIMON"

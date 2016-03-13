@@ -2,7 +2,7 @@
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
   <xpp:bloc><!-- User definitions -->
 	<xpp:define name="Version">
-		<xpp:bloc>99999999</xpp:bloc>
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
 	</xpp:define>
     <xpp:define name="CopyrightYears">
       <xpp:bloc>2013</xpp:bloc>
