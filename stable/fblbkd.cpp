@@ -840,7 +840,6 @@ bso::bool__ backend___::_HandleRequest(
 	master_data__ MasterData;
 qRH
 	object__ O;
-	err::buffer__ ErrorBuffer;
 	fblbrq::request__ Request;
 	fblbrq::callbacks__ *Callbacks = NULL;
 qRB
@@ -876,13 +875,6 @@ qRB
 
 	Request.Complete();
 qRR
-	if ( ERRType != err::t_Abort ) {	// Les erreurs de type 't_Abort' doivent tre traits en amont.
-		const char *ErrMsg = err::Message( ErrorBuffer );
-
-		ERRRst();
-
-		Request.ReportSoftwareError( ErrMsg );
-	}
 qRT
 qRE
 	return !MasterData.Deconnexion;

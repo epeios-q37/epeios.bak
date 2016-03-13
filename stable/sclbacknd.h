@@ -17,13 +17,13 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef SCLBACKEND__INC
-# define SCLBACKEND__INC
+#ifndef SCLBACKND__INC
+# define SCLBACKND__INC
 
-# define SCLBACKEND_NAME		"SCLBACKEND"
+# define SCLBACKND_NAME		"SCLBACKND"
 
-# if defined( E_DEBUG ) && !defined( SCLBACKEND_NODBG )
-#  define SCLBACKEND_DBG
+# if defined( E_DEBUG ) && !defined( SCLBACKND_NODBG )
+#  define SCLBACKND_DBG
 # endif
 
 // SoCLe BACKEND
@@ -64,34 +64,7 @@ namespace sclbacknd {
 		rgstry::level__ _RegistrySetupLevel;
 		void *_UP;
 	protected:
-		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) override
-		{
-			bso::bool__ Continue = true;
-		qRH
-		qRB
-			Continue = Handle( Flow, _UP, _RequestLogFunctions );
-		qRR
-			if ( ERRType == err::t_Abort )
-			{
-				ERRRst();
-			qRH
-				str::string Translation;
-				TOL_CBUFFER___ Buffer;
-			qRB
-				Translation.Init();
-				sclerror::GetPendingErrorTranslation( Language(), Translation );
-
-				sclerror::ResetPendingError();
-
-				fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
-			qRR
-			qRT
-			qRE
-			}
-		qRT
-		qRE
-			return Continue;
-		}
+		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -120,7 +93,7 @@ namespace sclbacknd {
 			_RequestLogFunctions.Init( _VoidFlowDriver );
 			_Registry.Init();
 			_Registry.Push( sclrgstry::GetCommonRegistry() );
-			_RegistrySetupLevel = _Registry.CreateEmbedded( str::string( "Setup" ) );
+			_RegistrySetupLevel = _Registry.Create();
 			_UP = UP;
 		}
 		const rgstry::multi_level_registry_ &Registry( void ) const

@@ -17,7 +17,7 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define SCLBACKEND__COMPILATION
+#define SCLBACKND__COMPILATION
 
 #include "sclbacknd.h"
 
@@ -68,3 +68,69 @@ qRT
 qRE
 	return Callback;
 }
+
+namespace {
+	void ReportRequestError_(
+		const char *Language,
+		flw::ioflow__ &Flow )
+	{
+		qRH
+			str::string Translation;
+			TOL_CBUFFER___ Buffer;
+		qRB
+			Translation.Init();
+			sclerror::GetPendingErrorTranslation( Language, Translation );
+
+			sclerror::ResetPendingError();
+
+			fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
+		qRR
+		qRT
+		qRE
+	}
+
+	void ReportSoftwareError_(
+		const char *Language,
+		flw::ioflow__ &Flow )
+	{
+	qRH
+		err::buffer__ ErrorBuffer;
+		const char *ErrMsg = NULL;
+		lcl::meaning Meaning;
+		str::wString Translation;
+		qCBUFFERr Buffer;
+	qRB
+		Meaning.Init();
+
+		Meaning.SetValue( SCLBACKND_NAME "_BackendError" );
+		Meaning.AddTag( err::Message( ErrorBuffer ) );
+
+		Translation.Init();
+		scllocale::GetTranslation( Meaning, Language, Translation );
+
+		fblbrq::Report( fblovl::rSoftwareError, Translation.Convert( Buffer ), Flow );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+bso::sBool sclbacknd::backend___::SCLDAEMONProcess( flw::ioflow__ &Flow )
+{
+	bso::bool__ Continue = true;
+qRH
+qRB
+	Continue = Handle( Flow, _UP, _RequestLogFunctions );
+qRR
+	if ( ERRType == err::t_Abort )
+		ReportRequestError_ (Language(), Flow );
+	else
+		ReportSoftwareError_( Language(), Flow );
+
+	ERRRst();
+qRT
+qRE
+	return Continue;
+}
+
+	

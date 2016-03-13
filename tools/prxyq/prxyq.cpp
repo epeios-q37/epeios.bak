@@ -121,7 +121,7 @@ public:
 
 			OFlow_ = &Flow;
 		}
-		bso::fBool IsSet( void ) const
+		bso::sBool IsSet( void ) const
 		{
 			if ( IFlow_ != NULL ) {
 				if ( OFlow_ != NULL )
@@ -180,7 +180,7 @@ public:
 				break;
 			}
 		}
-		bso::fBool WaitForOther_(void)	// If the returning value is 'true', then the thread is the one which deletes the proxy.
+		bso::sBool WaitForOther_(void)	// If the returning value is 'true', then the thread is the one which deletes the proxy.
 		{
 			if ( mtx::TryToLock( PairingMutex_ ) ) {
 				mtx::Lock( PairingMutex_ );
@@ -227,7 +227,7 @@ public:
 			CommitMutex_ = mtx::UndefinedHandler;
 		}
 		E_CDTOR( rProxy );
-		bso::fBool Init(
+		bso::sBool Init(
 			flw::ioflow__ &Flow,
 			prxybase::eType Type )
 		{
@@ -257,7 +257,7 @@ public:
 
 			return WaitForOther_();
 		}
-		bso::fBool Plug(
+		bso::sBool Plug(
 			flw::ioflow__ &Flow,
 			prxybase::eType Type )
 		{
@@ -280,7 +280,7 @@ public:
 
 	typedef csdbns::callback__ _callback__;
 
-	class vPending
+	class dPending
 	{
 	public:
 		struct s {
@@ -288,24 +288,24 @@ public:
 			str::vString::s Id;
 		} &S_;
 		str::vString Id;
-		vPending( s &S )
+		dPending( s &S )
 		: S_( S ),
 		  Id( S.Id )
 		{}
-		void reset( bso::fBool P = true )
+		void reset( bso::sBool P = true )
 		{
 			S_.Proxy = NULL;
 			Id.reset( P );
 		}
-		void plug( qSDf &SD )
+		void plug( str::cHook &Hook )
 		{
-			Id.plug( SD );
+			Id.plug(Hook );
 		}
 		void plug( qASd &AS )
 		{
 			Id.plug( AS );
 		}
-		const vPending &operator =(const vPending &P )
+		const dPending &operator =( const dPending &P )
 		{
 			S_.Proxy = P.S_.Proxy;
 
@@ -332,16 +332,16 @@ public:
 
 	qW( Pending );
 
-	typedef ctn::qMCONTAINERvl( vPending ) vPendings;
+	typedef ctn::qMCONTAINERdl( dPending ) dPendings;
 	qW( Pendings );
 
-	iPendings PendingClients_, PendingServers_;
+	wPendings PendingClients_, PendingServers_;
 
 	mtx::handler___ Mutex_ = mtx::UndefinedHandler;
 
-	void DeletePendings_( vPendings &Pendings)
+	void DeletePendings_( dPendings &Pendings)
 	{
-		sdr::fRow Row = Pendings.First();
+		sdr::sRow Row = Pendings.First();
 
 		while ( Row != qNIL ) {
 			delete Pendings( Row ).Proxy();
@@ -356,7 +356,7 @@ public:
 
 	rProxy *SearchPendingAndRemoveIfExists_(
 		const str::string_ &Id,
-		vPendings &Pendings )
+		dPendings &Pendings )
 	{
 		rProxy *Proxy = NULL;
 	qRH
@@ -379,7 +379,7 @@ public:
 		return Proxy;
 	}
 
-	vPendings &GetPendings_( prxybase::eType Type )
+	dPendings &GetPendings_( prxybase::eType Type )
 	{
 		switch ( Type ) {
 		case prxybase::tClient:
@@ -393,7 +393,7 @@ public:
 			break;
 		}
 
-		return *(vPendings *)NULL;	//To avoid a waring.
+		return *(dPendings *)NULL;	//To avoid a warning.
 	}
 
 	void Create_(
@@ -403,7 +403,7 @@ public:
 	{
 	qRH
 		rProxy *Proxy = NULL;
-		iPending Pending;
+		wPending Pending;
 	qRB
 		Proxy = new rProxy;
 
