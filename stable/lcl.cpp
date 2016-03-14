@@ -103,10 +103,13 @@ static void Duplicate_(
 	_basic_ &Basic,
 	_core_ &NewCore )
 {
+	ctn::qCMITEMs( _basic_, brow__ ) SourceBasic;
 	sdr::row__ Row = Tags.First();
 
+	SourceBasic.Init( SourceCore.Basics );
+
 	while ( Row != qNIL ) {
-		Basic.Tags.Append( NewBasic_( SourceCore.Basics( Tags( Row ) ), SourceCore, false, NewCore ) );
+		Basic.Tags.Append( NewBasic_( SourceBasic( Tags( Row ) ), SourceCore, false, NewCore ) );
 
 		Row = Tags.Next( Row );
 	}
@@ -120,9 +123,11 @@ static inline brow__ NewBasic_(
 {
 	brow__ Row = qNIL;
 qRH
+	ctn::qCMITEMs( str::string_, vrow__ ) Value;
 	_basic Basic;
 qRB
-	Row = NewBasic_( SourceCore.Values( SourceBasic.S_.Value ), SourceBasic.ToTranslate(), Normalize, NewCore );
+	Value.Init( SourceCore.Values );
+	Row = NewBasic_( Value( SourceBasic.S_.Value ), SourceBasic.ToTranslate(), Normalize, NewCore );
 
 	Basic.Init( NewCore.Basics( Row ).ToTranslate() );
 	Basic = NewCore.Basics( Row );
@@ -143,14 +148,16 @@ static inline brow__ NewBasic_(
 	bso::sBool Normalize,
 	_core_ &Core )
 {
-	return NewBasic_( Meaning.GetBasic(), Meaning.Core, Normalize, Core );
+	ctn::qCMITEMs( _basic_, brow__ ) Basic;
+
+	return NewBasic_( Meaning.GetBasic( Basic ), Meaning.Core, Normalize, Core );
 }
 
 void lcl::meaning_::SetValue( const str::string_ &Value )
 {
 #if 1
 	vrow__ Row = NewValue_( Value, false, Core.Values );
-	Basic_().S_.Value = Row;
+	_Basic().S_.Value = Row;
 #else
 	_Basic().S_.Value = NewValue_( Value, Core.Values );
 #endif
@@ -162,7 +169,7 @@ void lcl::meaning_::AddTag( const str::string_ &Value )
 {
 #if 1
 	brow__ Row = NewBasic_( Value, false, true,  Core );
-	Basic_().Tags.Append( Row );
+	_Basic().Tags.Append( Row );
 #else
 	_Basic().Tags.Append( NewBasic_( Value, false, Core ) );
 #endif
@@ -174,7 +181,7 @@ void lcl::meaning_::AddTag( const meaning_ &Meaning )
 {
 #if 1
 	brow__ Row = NewBasic_( Meaning, true, Core );
-	Basic_().Tags.Append( Row );
+	_Basic().Tags.Append( Row );
 #else
 	_Basic().Tags.Append( NewBasic_( Meaning, Core ) );
 #endif
@@ -187,22 +194,25 @@ void lcl::locale_::_GetCorrespondingLabels(
 	strings_ &Wordings ) const
 {
 qRH
+	ctn::qCMITEMsl( str::string_ ) Label;
 	str::string Wording;
 	sdr::row__ Row = qNIL;
 	str::string Path;
 qRB
+	Label.Init( Labels );
+
 	Row = Labels.First();
 
 	while ( Row != qNIL ) {
 		Path.Init( "Languages/Language[label=\"" );
-		Path.Append( Labels( Row ) );
+		Path.Append( Label( Row ) );
 		Path.Append( "\"]/@Wording" );
 
 		Wording.Init();
 		if ( _registry_::GetValue( Path, Wording ) )
 			Wordings.Append( Wording );
 		else
-			Wordings.Append( Labels( Row ) );
+			Wordings.Append( Label( Row ) );
 
 		Row = Labels.Next( Row );
 	}
@@ -347,15 +357,18 @@ static void GetTags_(
 	str::strings_ &Tags )
 {
 qRH
+	ctn::qCMITEMs( _basic_, brow__ ) Basic;
 	sdr::row__ Row = qNIL;
 	str::string Translation;
 qRB
 	Row = InputTags.First();
 
+	Basic.Init( Core.Basics );
+
 	while ( Row != qNIL ) {
 		Translation.Init();
 
-		GetTranslation_( Core.Basics( InputTags( Row ) ), Core, Language, Locale, Translation );
+		GetTranslation_( Basic( InputTags( Row ) ), Core, Language, Locale, Translation );
 		Tags.Append( Translation );
 
 		Row = InputTags.Next( Row );
@@ -406,5 +419,31 @@ const str::string_  &lcl::locale_::GetTranslation(
 	const char *Language,
 	str::string_ &Translation ) const
 {
-	return GetTranslation_( Meaning.GetBasic(), Meaning.Core, Language, *this, Translation );
+	ctn::qCMITEMs( _basic_, brow__ ) Basic;
+
+	return GetTranslation_( Meaning.GetBasic( Basic ), Meaning.Core, Language, *this, Translation );
 }
+
+
+
+/*
+
+const char *lcl::locale_::GetTranslation(
+	const char *Text,
+	const char *Language,
+	STR_BUFFER___ &Buffer ) const
+{
+qRH
+	str::string Translation;
+qRB
+	Translation.Init();
+
+	GetTranslation( Text, Language, Translation );
+
+	Translation.Convert( Buffer );
+qRR
+qRT
+qRE
+	return Buffer;
+}
+*/
