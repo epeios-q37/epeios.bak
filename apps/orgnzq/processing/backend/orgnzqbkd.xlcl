@@ -12,6 +12,10 @@
 			<Translation language="fr">Type de champ inconnu.</Translation>
 			<Translation language="en">Unknown field type.</Translation>
 		</Translations>
+		<Translations text="UnknownFieldNumber">
+			<Translation language="fr">Specification de nombre inconnu pour un champ.</Translation>
+			<Translation language="en">Unknown field number.</Translation>
+		</Translations>
 		<Translations text="MonoNumberWording">
 			<Translation language="fr">Mono</Translation>
 			<Translation language="en">Mono</Translation>

@@ -7,6 +7,8 @@ NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characte
 	- Adding 'About()' and 'Identifier'()' methods.
 - CSDUCL :
 	- Adding 'RemoteAbout()' and 'RemoteIdentifier'()' methods.
+- LCK :
+	- Applying new naming conventions.
 - PLGNCORE :
 	- Adding '(PLGNCORE)AboutPlugin()' method.
 	- Changing some method parameters and fixing name.

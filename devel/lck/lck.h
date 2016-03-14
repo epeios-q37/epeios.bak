@@ -17,39 +17,28 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: lck.h,v 1.21 2013/04/11 19:36:49 csimon Exp $
+// LoCKs 
 
 #ifndef LCK__INC
-#define LCK__INC
+# define LCK__INC
 
-#define LCK_NAME		"LCK"
+# define LCK_NAME		"LCK"
 
-#define	LCK_VERSION	"$Revision: 1.21 $"
+# define	LCK_VERSION	"$Revision: 1.21 $"
 
-#define LCK_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
+# define LCK_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
 
-#if defined( E_DEBUG ) && !defined( LCK_NODBG )
-#define LCK_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( LCK_NODBG )
+#  define LCK_DBG
+# endif
 
-/* Begin of automatic documentation generation part. */
+# include "err.h"
+# include "flw.h"
+# include "mtx.h"
 
-//V $Revision: 1.21 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/11 19:36:49 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D LoCKs 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "mtx.h"
-
+/*************/
+/**** OLD ****/
+/*************/
 
 namespace lck {
 
@@ -482,5 +471,14 @@ namespace lck {
 	template <typename objet> E_TTCLONE__( read_only_access___<objet>,	shared_access___ );
 }
 
-/*$END$*/
+/*************/
+/**** OLD ****/
+/*************/
+
+namespace lck {
+	template <typename object> E_TTCLONE__( control___<object>, rControl );
+	template <typename object> E_TTCLONE__( read_write_access___<object>, rReadWriteAccess );
+	template <typename object> E_TTCLONE__( read_only_access___<object>, rReadOnlyAccess );
+}
+
 #endif

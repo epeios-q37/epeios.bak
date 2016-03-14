@@ -91,10 +91,10 @@ namespace ogzrcd {
 			Fields.Init();
 		}
 		ogzfld::sRow CreateField( ogzclm::sRow Column );
-		ogzfld::sRow CreateField(
+		ogzclm::sRow CreateColumn(
 			ogztyp::sRow Type,
 			ogzclm::eNumber Number );
-		ogzclm::sRow CreateColumn(
+		ogzfld::sRow CreateField(
 			ogztyp::sRow Type,
 			ogzclm::eNumber Number );
 		qRODISCLOSEr( sRRow, Id );

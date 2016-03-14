@@ -78,19 +78,37 @@ namespace {
 	void CreateField_(
 		ogztyp::sRow Type,
 		ogzclm::eNumber Number,
-		ogzdtb::rDatabase &Database )
+		const ogzdtb::rDatabase &Database,
+		ogzrcd::rRecordBuffer &Record )
 	{
 		if ( !Database.Types.Exists( Type ) )
 			REPORT( "UnknowFieldType");
+
+		if ( !ogzclm::Exists( Number ) )
+			REPORT( "UnknownFieldNumber" );
+
+		if ( Record.CreateColumn( Type, Number ) == qNIL )
+			qRFwk();
 	}
 }
 
+# define RORD common::rRORack RORack
+
+# define ROR\
+	RORack.Init( common::Rack );\
+	const common::rNakedRack &Rack = RORack();
+	
+
 DEC( CreateField )
 {
-	REPORT( "UnknownFieldType" );
+	RORD;
+	ROR;
+
+	const fbltyp::sId &Type = Request.IdIn();
+	const fbltyp::sId8 &Number = Request.Id8In();
+
+	CreateField_( *Type, *Number, Rack.Database.Core, Record() );
 }
-
-
 
 #define D( name )	#name, (void *)exported##name
 

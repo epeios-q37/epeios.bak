@@ -40,13 +40,6 @@ qRE
 	return Row;
 }
 
-ogzfld::sRow ogzrcd::rRecordBuffer::CreateField(
-	ogztyp::sRow Type,
-	ogzclm::eNumber Number )
-{
-	return CreateField(CreateColumn( Type, Number ) );
-}
-
 ogzclm::sRow ogzrcd::rRecordBuffer::CreateColumn(
 	ogztyp::sRow Type,
 	ogzclm::eNumber Number )
@@ -63,7 +56,9 @@ ogzclm::sRow ogzrcd::rRecordBuffer::CreateColumn(
 	return Row;
 }
 
-
-
-
-
+ogzfld::sRow ogzrcd::rRecordBuffer::CreateField(
+	ogztyp::sRow Type,
+	ogzclm::eNumber Number )
+{
+	return CreateField(CreateColumn( Type, Number ) );
+}

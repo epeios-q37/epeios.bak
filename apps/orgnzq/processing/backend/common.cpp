@@ -23,8 +23,8 @@
 
 using namespace common;
 
-naked_rack___ Rack_;
-rack___ common::Rack;
+rNakedRack Rack_;
+rRack common::Rack;
 bso::bool__ IsInitialized_ = false;
 
 bso::bool__ common::IsInitialized( void )

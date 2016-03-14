@@ -41,6 +41,12 @@ namespace ogzclm {
 
 	const char *GetLabel( eNumber Number );
 
+	inline bso::sBool Exists( eNumber Number )
+	{
+		return Number < n_amount;
+	}
+
+
 	qENUM( Type ) {
 		tExplicit,	// Explicit column definition.
 		tDeduced,	// Deduced (from a model) column defintion.

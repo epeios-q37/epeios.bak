@@ -125,7 +125,7 @@ namespace common {
 
 	typedef ogzrcd::rRecordBuffer rRecord;
 
-	class naked_rack___ {
+	class rNakedRack {
 	public:
 		rTypes Types;
 		rDatabase Database;
@@ -133,12 +133,12 @@ namespace common {
 		rRecord Record;
 	};
 
-	typedef lck::control___<naked_rack___> rack___;
+	typedef lck::rControl<rNakedRack> rRack;
 
-	typedef lck::read_write_access___<common::naked_rack___> rw_rack___;
-	typedef lck::read_only_access___<common::naked_rack___> ro_rack___;
+	typedef lck::rReadWriteAccess<common::rNakedRack> rRWRack;
+	typedef lck::rReadOnlyAccess<common::rNakedRack> rRORack;
 
-	extern rack___ Rack;
+	extern rRack Rack;
 
 	void Initialize( void );
 

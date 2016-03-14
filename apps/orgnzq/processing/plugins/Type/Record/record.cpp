@@ -67,7 +67,14 @@ SCLPLUGIN_DEF( rPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
 
-const char *sclplugin::SCLPLUGINPluginIdentifier( void )
+void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 {
-	return IDENTIFIER;
+	Identifier.Append( IDENTIFIER );
+}
+
+void sclplugin::SCLPLUGINAboutPlugin( str::dString &About )
+{
+	About.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
+	About.Append( cpe::GetDescription() );
+	About.Append( ')' );
 }

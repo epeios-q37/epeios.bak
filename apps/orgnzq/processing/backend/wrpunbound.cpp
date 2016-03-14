@@ -62,7 +62,7 @@ namespace {
 DEC( Login )
 {
 qRH
-	common::rw_rack___ Rack;
+	common::rRWRack Rack;
 	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
 	ogzusr::sURow UserRow = qNIL;
@@ -145,7 +145,7 @@ qRE
 DEC( GetTypes )
 {
 qRH
-	common::ro_rack___ Rack;
+	common::rRORack Rack;
 	fbltyp::id8s Ids;
 	fbltyp::strings Labels;
 qRB
