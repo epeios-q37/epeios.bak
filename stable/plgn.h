@@ -229,6 +229,14 @@ namespace plgn {
 		qRE
 			return Plugin_ != NULL;
 		}
+		const char *Identifier( void )
+		{
+			return C_().PluginIdentifier();
+		}
+		const char *About( void )
+		{
+			return C_().AboutPlugin();
+		}
 		void *Plugin( void ) const
 		{
 			if ( Plugin_ == NULL )
@@ -318,6 +326,14 @@ namespace plgn {
 			err::handling__ ErrHandling = err::h_Default )
 		{
 			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Arguments, ErrHandling );
+		}
+		const char *Identifier( void )
+		{
+			return LooseRetriever_.Identifier();
+		}
+		const char *About( void )
+		{
+			return LooseRetriever_.About();
 		}
 		plugin &Plugin( void )
 		{

@@ -23,32 +23,23 @@
 # include "csdscb.h"
 
 # define MISC_SLOT_PLUGIN_TARGET	"Slot"
-# define MISC_SLOT_PLUGIN_VERSION	"2"
+# define MISC_SLOT_PLUGIN_VERSION	"3"
 
 namespace misc {
-	typedef csdscb::callback__ module__;	// Module to 'daemonize'.
+	typedef csdscb::cProcessing sModule;	// Module to 'daemonize'.
 
 	E_CDEF( char *, SlotPluginTarget, MISC_SLOT_PLUGIN_TARGET );
 	E_CDEF( char *, SlotPluginVersion, MISC_SLOT_PLUGIN_VERSION );
 
 
-	class callback__
+	class cHandler
 	{
 	protected:
-		virtual void MISCProcess( module__ &Module ) = 0;
+		virtual void MISCHandle( sModule &Module ) = 0;
 	public:
-		void reset( bso::bool__ = true )
+		void Handle( sModule &Module )
 		{
-			// Standadization.
-		}
-		E_CVDTOR( callback__ );
-		void Init( void )
-		{
-			// Standardization.
-		}
-		void Process( module__ &Module )
-		{
-			return MISCProcess( Module );
+			return MISCHandle( Module );
 		}
 		static const char *Label( void );
 	};

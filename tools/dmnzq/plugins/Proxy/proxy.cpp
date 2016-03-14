@@ -32,15 +32,15 @@
 
 #define PLUGIN_NAME	"proxy"
 
-typedef misc::callback__ _plugin__;
+using misc::cHandler;
 
-using misc::module__;
+using misc::sModule;
 
 namespace {
 
 	struct data__ {
 		prxy::rFlow *Flow;
-		module__ *Module;
+		sModule *Module;
 		mtx::handler___ Mutex;
 		const char *Origin;
 		void reset( bso::bool__ P = true )
@@ -57,7 +57,7 @@ namespace {
 		}
 		void Init(
 			prxy::rFlow *Flow,
-			module__ &Module,
+			sModule &Module,
 			const char *Origin )
 		{
 			reset();
@@ -76,7 +76,7 @@ namespace {
 	qRFH
 		data__ &Data = *(data__ *)UP;
 		prxy::rFlow *Flow = Data.Flow;
-		module__ &Module = *Data.Module;
+		sModule &Module = *Data.Module;
 		ntvstr::string___ Origin;
 		void *MUP = NULL;
 	qRFB
@@ -95,13 +95,13 @@ namespace {
 	qRFE( sclmisc::ErrFinal() )
 	}
 
-	class plugin___
-	: public _plugin__
+	class sPlugin
+	: public cHandler
 	{
 	private:
 		TOL_CBUFFER___ HostService_, Identifier_;
 	protected:
-		virtual void MISCProcess( module__ &Module ) override
+		virtual void MISCHandle( sModule &Module ) override
 		{
 		qRH
 			prxy::rFlow *Flow = NULL;
@@ -143,12 +143,10 @@ namespace {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_plugin__::reset( P );
 		}
-		E_CVDTOR( plugin___ );
+		E_CVDTOR( sPlugin );
 		void Init( void )
 		{
-			_plugin__::Init();
 		}
 		void SCLPLUGINInitialize( void )
 		{
@@ -170,12 +168,19 @@ namespace {
 	};
 }
 
-SCLPLUGIN_DEF( plugin___ );
+SCLPLUGIN_DEF( sPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
 
-const char *sclplugin::SCLPLUGINPluginIdentifier( void )
+void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 {
-	return IDENTIFIER;
+	Identifier.Append( IDENTIFIER );
+}
+
+void sclplugin::SCLPLUGINAboutPlugin( str::dString &About )
+{
+	About.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
+	About.Append( cpe::GetDescription() );
+	About.Append( ')' );
 }
 

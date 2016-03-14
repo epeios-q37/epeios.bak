@@ -38,7 +38,7 @@
 
 # define PLGNCORE_SHARED_DATA_VERSION	"6"
 
-# define PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME		PluginLabel
+# define PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME			PluginLabel
 # define PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME		PluginIdentifier
 # define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
 
@@ -105,7 +105,8 @@ namespace plgncore {
 			str::string_ &Locale ) = 0;
 		virtual void *PLGNCORERetrievePlugin( void ) = 0;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
-		virtual const char *PLGNCOREPluginIndentifier( void ) = 0;
+		virtual const char *PLGNCOREPluginIdentifier( void ) = 0;
+		virtual const char *PLGNCOREAboutPlugin( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -139,7 +140,11 @@ namespace plgncore {
 		}
 		const char *PluginIdentifier( void )
 		{
-			return PLGNCOREPluginIndentifier();
+			return PLGNCOREPluginIdentifier();
+		}
+		const char *AboutPlugin( void )
+		{
+			return PLGNCOREAboutPlugin();
 		}
 	};
 

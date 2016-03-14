@@ -30,9 +30,9 @@
 
 #define PLUGIN_NAME	"straight"
 
-typedef misc::callback__ _plugin__;
+using misc::cHandler;
 
-using misc::module__;
+using misc::sModule;
 
 namespace {
 	csdbns::port__ GetPort_( void )
@@ -40,13 +40,13 @@ namespace {
 		return sclmisc::MGetU16( registry::Service );
 	}
 
-	class plugin___
-	: public _plugin__
+	class rPlugin
+	: public cHandler
 	{
 	private:
 		csdbns::server___ Server_;
 	protected:
-		virtual void MISCProcess( module__ &Module ) override
+		virtual void MISCHandle( sModule &Module ) override
 		{
 			Server_.Init( GetPort_(), Module );
 			Server_.Process();
@@ -54,13 +54,11 @@ namespace {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_plugin__::reset( P );
 			Server_.reset( P );
 		}
-		E_CVDTOR( plugin___ );
+		E_CVDTOR( rPlugin );
 		void Init( void )
 		{
-			_plugin__::Init();
 			Server_.reset();	// See above for initialization will be made later.
 		}
 		void SCLPLUGINInitialize( void )
@@ -70,11 +68,19 @@ namespace {
 	};
 }
 
-SCLPLUGIN_DEF( plugin___ );
+SCLPLUGIN_DEF( rPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
 
-const char *sclplugin::SCLPLUGINPluginIdentifier( void )
+void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 {
-	return IDENTIFIER;
+	Identifier.Append( IDENTIFIER );
 }
+
+void sclplugin::SCLPLUGINAboutPlugin( str::dString &About )
+{
+	About.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
+	About.Append( cpe::GetDescription() );
+	About.Append( ')' );
+}
+

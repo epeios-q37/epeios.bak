@@ -56,7 +56,7 @@ static void PrintHeader_( void )
 }
 
 namespace {
-	using misc::module__;
+	using misc::sModule;
 
 	csdlec::library_embedded_client_core__ *Core_ = NULL;
 
@@ -128,20 +128,20 @@ namespace {
 	qRE
 	}
 
-	using misc::callback__;
+	using misc::cHandler;
 
 	void Process_(
-		callback__ &Callback,
-		module__ &Module )
+		cHandler &Handler,
+		sModule &Module )
 	{
-		Callback.Process( Module );
+		Handler.Handle( Module );
 	}
 
 	void Process_( void )
 	{
 	qRH
 		TOL_CBUFFER___ Buffer;
-		plgn::retriever___<callback__> Retriever;
+		plgn::rRetriever<cHandler> Retriever;
 	qRB
 		atexit( ExitFunction_ );
 
@@ -154,6 +154,21 @@ namespace {
 		sclmisc::Plug( misc::SlotPluginTarget, NULL, Retriever );
 
 		Process_( Retriever.Plugin(), Core_->GetCallback() );
+	qRR
+	qRT
+	qRE
+	}
+
+	void AboutPlugin_( void )
+	{
+	qRH
+		plgn::rRetriever<cHandler> Retriever;
+	qRB
+		Retriever.Init();
+
+		sclmisc::Plug( misc::SlotPluginTarget, NULL, Retriever );
+
+		cio::COut << Retriever.About() << txf::nl << Retriever.Identifier() << txf::commit;
 	qRR
 	qRT
 	qRE
@@ -176,6 +191,7 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( Process );
+	C( AboutPlugin );
 	else
 		qRGnr();
 

@@ -19,7 +19,7 @@
 
 #include "misc.h"
 
-const char *misc::callback__::Label( void )
+const char *misc::cHandler::Label( void )
 {
 	return MISC_SLOT_PLUGIN_TARGET " V" MISC_SLOT_PLUGIN_VERSION " " CPE_DESCRIPTION;
 }

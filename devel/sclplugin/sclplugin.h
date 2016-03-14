@@ -49,7 +49,8 @@ namespace sclplugin {
 			str::string_ &Locale ) override;
 		virtual void *PLGNCORERetrievePlugin( void ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
-		virtual const char *PLGNCOREPluginIndentifier( void ) override;
+		virtual const char *PLGNCOREPluginIdentifier( void ) override;
+		virtual const char *PLGNCOREAboutPlugin( void ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -63,7 +64,8 @@ namespace sclplugin {
 	};
 
 	// Functions to overload.
-	const char *SCLPLUGINPluginIdentifier( void );
+	void SCLPLUGINPluginIdentifier( str::dString &Identifier );
+	void SCLPLUGINAboutPlugin( str::dString &About );
 	// The following ones are defined by below macro.
 	const char *SCLPLUGINPluginLabel( void );
 	void *SCLPLUGINRetrievePlugin( void );

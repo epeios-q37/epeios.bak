@@ -67,6 +67,10 @@
 				<Translation language="fr">Lance le daemon correspondant au projet donné.</Translation>
 				<Translation language="en">Launch the daemon corresponding to the given project.</Translation>
 			</Translations>
+			<Translations text="AboutCommandDescription">
+				<Translation language="fr">Affiche des informations à propos du 'plugin'.</Translation>
+				<Translation language="en">Displays informations about the plugin.</Translation>
+			</Translations>
 			<!-- Arguments -->
 			<Translations text="ProjectFilenameArgumentDescription">
 				<Translation language="fr">Nom du fichier projet.</Translation>
@@ -80,9 +84,15 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="%ProjectFilenameArgument%"/>
+			<Argument id="AboutPluginCommand" Description="AboutPluginCommandDescription" long="about-plugin" Value="AboutPlugin" Usage="%ProjectFilenameArgument%"/>
 			<Argument id="ProjectFilenameArgument" Description="ProjectFilenameArgumentDescription" Label="ProjectFilenameArgumentLabel" Path="Project[Type=&quot;Remote&quot;]"/>
 			<Layouts>
 				<Layout command="Process">
+					<Link index="0" Target="ProjectFilenameArgument"/>
+				</Layout>
+			</Layouts>
+			<Layouts>
+				<Layout command="AboutPlugin">
 					<Link index="0" Target="ProjectFilenameArgument"/>
 				</Layout>
 			</Layouts>

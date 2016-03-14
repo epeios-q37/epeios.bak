@@ -35,6 +35,10 @@ it is necessary to personalize it, or certain compiler would not work properly *
 #define FUNCTION_SPEC
 # endif
 
+namespace {
+	qCBUFFERr Identifier_, About_;
+}
+
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
 
 DEF( PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME, plgncore::plugin_label );
@@ -48,7 +52,7 @@ const char *PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME( void )
 
 const char *PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME( void )
 {
-	return sclplugin::SCLPLUGINPluginIdentifier();
+	return Identifier_;
 }
 
 static callback__ Callback_;
@@ -191,8 +195,29 @@ void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
 	sclplugin::SCLPLUGINReleasePlugin( Plugin );
 }
 
-const char *sclplugin::callback__::PLGNCOREPluginIndentifier( void )
+const char *sclplugin::callback__::PLGNCOREPluginIdentifier( void )
 {
-	return sclplugin::SCLPLUGINPluginIdentifier();
+	return Identifier_;
 }
 
+const char *sclplugin::callback__::PLGNCOREAboutPlugin( void )
+{
+	return About_;
+}
+
+qGCTOR( sclpugin )
+{
+qRH
+	str::string Buffer;
+qRB
+	Buffer.Init();
+	SCLPLUGINPluginIdentifier( Buffer );
+	Buffer.Convert( Identifier_ );
+
+	Buffer.Init();
+	SCLPLUGINAboutPlugin( Buffer );
+	Buffer.Convert( About_ );
+qRR
+qRT
+qRE
+}

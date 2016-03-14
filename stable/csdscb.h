@@ -33,32 +33,31 @@
 # include "tol.h"
 # include "ntvstr.h"
 
+/*************/
+/**** NEW ****/
+/*************/
+
 namespace csdscb {
-	enum action__ {
+	qENUM( Action ) {
 		aContinue,
 		aStop,
 		a_amount,
 		a_Undefined
 	};
 
-	class callback__ {
+	class cProcessing {
 	protected:
 		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) = 0;
-		virtual action__ CSDSCBProcess(
+		virtual eAction CSDSCBProcess(
 			flw::ioflow__ &Flow,
 			void *UP ) = 0;
 		virtual void CSDSCBPostProcess( void *UP ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			// Standardisation.
-		}
-		E_CVDTOR( callback__ );
 		void *PreProcess( const ntvstr::char__ *Origin )
 		{
 			return CSDSCBPreProcess( Origin );
 		}
-		action__ Process(
+		eAction Process(
 			flw::ioflow__ &Flow,
 			void *UP )
 		{
@@ -68,12 +67,17 @@ namespace csdscb {
 		{
 			CSDSCBPostProcess( UP );
 		}
-		void Init( void )
-		{
-			// Standadisation.
-		}
 	};
+}
 
+/*************/
+/**** OLD ****/
+/*************/
+
+namespace csdscb {
+	typedef eAction action__;
+
+	typedef cProcessing callback__;
 }
 
 #endif
