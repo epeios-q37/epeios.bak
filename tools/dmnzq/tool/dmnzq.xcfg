@@ -67,7 +67,7 @@
 				<Translation language="fr">Lance le daemon correspondant au projet donné.</Translation>
 				<Translation language="en">Launch the daemon corresponding to the given project.</Translation>
 			</Translations>
-			<Translations text="AboutCommandDescription">
+			<Translations text="AboutPluginCommandDescription">
 				<Translation language="fr">Affiche des informations à propos du 'plugin'.</Translation>
 				<Translation language="en">Displays informations about the plugin.</Translation>
 			</Translations>

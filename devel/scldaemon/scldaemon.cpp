@@ -36,7 +36,6 @@ using namespace scldaemon;
 
 void scldaemon::basic_callback__::reset( bso::bool__ P )
 {
-	_callback__::reset( P );
 	Callback_ = NULL;
 }
 

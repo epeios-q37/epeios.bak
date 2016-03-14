@@ -13,6 +13,14 @@
 		<Translation language="fr">Déclaration de moteur de traitement manquante.</Translation>
 		<Translation language="en">Missing backend declaration.</Translation>
 	</Translations>
+	<Translations text="SCLFRNTND_NoBackend">
+		<Translation language="fr">(Non connecté à un 'backend'.)</Translation>
+		<Translation language="en">(Not connected to a backend.)</Translation>
+	</Translations>
+	<Translations text="SCLFRNTND_EmbeddedBackend">
+		<Translation language="fr">(Connecté à un 'backend' enclavé.)</Translation>
+		<Translation language="en">(Connected to an ebedded backend.)</Translation>
+	</Translations>
 	<!--
 	<Translations text="SCLFRNTND_">
 		<Translation language="fr"></Translation>

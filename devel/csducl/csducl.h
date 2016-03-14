@@ -93,6 +93,14 @@ namespace csducl {
 		{
 			return _Type;
 		}
+		const char *RemoteIdentifier( void )
+		{
+			return _RemoteAccess.Identifier();
+		}
+		const char *RemoteAbout( void )
+		{
+			return _RemoteAccess.About();
+		}
 		E_RODISCLOSE__( str::string_, Location );
 		friend class universal_client_ioflow_driver___;
 	};

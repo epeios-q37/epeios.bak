@@ -78,6 +78,14 @@ namespace csdrcu {
 			const char *Identifier,
 			const str::string_ &Parameters,
 			err::handling__ ErrHandling = err::h_Default );
+		const char *Identifier( void )
+		{
+			return Retriever_.Identifier();
+		}
+		const char *About( void )
+		{
+			return Retriever_.About();
+		}
 	};
 
 	typedef flw::standalone_ioflow__<> client__;

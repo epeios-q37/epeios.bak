@@ -40,7 +40,7 @@
 namespace csdmxs {
 	using namespace csdmxb;
 
-	typedef csdscb::callback__ fCallback_;
+	using csdscb::cProcessing;
 
 	qENUM( Log ) {
 		lNew,
@@ -229,11 +229,11 @@ qRE
 	qW( Core );
 
 	class rCallback
-	: public fCallback_
+	: public cProcessing
 	{
 	private:
 		wCore Core_;
-		fCallback_ *Callback_;
+		cProcessing *Callback_;
 		ntvstr::string___ _Origin;
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
 	protected:
@@ -305,11 +305,10 @@ qRE
 			Core_.reset( P );
 			Callback_ = NULL;
 			_Origin.reset( P );
-			fCallback_::reset( P );
 		}
 		qCVDTOR( rCallback );
 		void Init(
-			fCallback_ &Callback,
+			cProcessing &Callback,
 			cLog *LogCallback = NULL )
 		{
 			reset();
@@ -317,7 +316,6 @@ qRE
 			Core_.Init( LogCallback );
 			Callback_ = &Callback;
 			_Origin.Init();
-			callback__::Init();
 		}
 	};
 

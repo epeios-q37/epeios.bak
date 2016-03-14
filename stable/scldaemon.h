@@ -63,7 +63,7 @@ namespace scldaemon {
 		}
 	};
 
-	typedef csdscb::callback__ _callback__;
+	using csdscb::cProcessing;
 
 	E_ENUM( mode ) {
 		mBasic,
@@ -76,7 +76,7 @@ namespace scldaemon {
 	class callback___;
 
 	class basic_callback__
-	: public _callback__
+	: public cProcessing
 	{
 	private:
 		Q37_MRMDF( callback___, C_, Callback_ );
@@ -113,7 +113,6 @@ namespace scldaemon {
 		E_CVDTOR( basic_callback__ );
 		void Init( callback___ &Callback )
 		{
-			_callback__::Init();
 			Callback_ = &Callback;
 		}
 	};
@@ -121,7 +120,7 @@ namespace scldaemon {
 	typedef csdmxs::rCallback muxed_callback___;
 
 	class callback___
-	: public _callback__
+	: public cProcessing
 	{
 	private:
 		mode__ Mode_;
@@ -181,7 +180,6 @@ namespace scldaemon {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_callback__::reset( P );
 			Basic_.reset( P );
 			Muxed_.reset( P );
 			Mode_ = m_Undefined;
@@ -189,7 +187,6 @@ namespace scldaemon {
 		E_CVDTOR( callback___ );
 		void Init( mode__ Mode )
 		{
-			_callback__::Init();
 			Mode_ = Mode;
 
 			switch ( Mode_ ) {

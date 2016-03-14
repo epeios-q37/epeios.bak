@@ -278,7 +278,7 @@ public:
 		}
 	};
 
-	typedef csdbns::callback__ _callback__;
+	using csdbns::cProcessing;
 
 	class dPending
 	{
@@ -438,7 +438,7 @@ public:
 
 
 	class callback__
-	: public _callback__
+	: public cProcessing
 	{
 	protected:
 		void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
@@ -489,12 +489,10 @@ public:
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_callback__::reset( P );
 		}
 		E_CVDTOR( callback__ );
 		void Init( void )
 		{
-			_callback__::Init();
 		}
 	};
 

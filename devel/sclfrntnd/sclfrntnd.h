@@ -115,6 +115,11 @@ namespace sclfrntnd {
 		{
 			return _ClientCore;
 		}
+		const char *About( void )
+		{
+			return _ClientCore.RemoteAbout();
+		}
+		const str::dString &AboutPlugin( str::dString &About );
 	};
 
 	class frontend___

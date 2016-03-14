@@ -468,6 +468,28 @@ qRT
 qRE
 }
 
+const str::dString &sclfrntnd::kernel___::AboutPlugin( str::dString &About )
+{
+	switch ( _ClientCore.GetType() ){
+	case csducl::tNone:
+		sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_NoBackend", About );
+		break;
+	case csducl::tLibrary:
+		sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_EmbeddedBackend", About );
+		break;
+	case csducl::tRemote:
+		About.Append(_ClientCore.RemoteAbout() );
+		About.Append(" - " );
+		About.Append(_ClientCore.RemoteIdentifier() );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+
+	return About;
+}
+
 
 namespace{
 	bso::bool__ GuessBackendFeatures_( features___ &Features )

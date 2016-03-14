@@ -3,11 +3,15 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 2016-03-04 :
-- PLGN :
-	- Adding 'About()' and 'Identifier')' methods.
+- CSDRCU, PLGN :
+	- Adding 'About()' and 'Identifier'()' methods.
+- CSDUCL :
+	- Adding 'RemoteAbout()' and 'RemoteIdentifier'()' methods.
 - PLGNCORE :
 	- Adding '(PLGNCORE)AboutPlugin()' method.
 	- Changing some method parameters and fixing name.
+- SCLFRNTND :
+	- Adding 'kernel___::AboutPlugin()'.
 
 2016-03-13 :
 - FBLBKD :
