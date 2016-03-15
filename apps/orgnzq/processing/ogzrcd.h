@@ -33,24 +33,25 @@
 
 namespace ogzrcd {
 	using ogzbsc::sFRow;
-	using ogzbsc::sRRow;
 
 	typedef ogzfld::dFieldList dRecord;
 	qW( Record );
 
+	typedef ogzbsc::sRRow sRow;
+
 // Template parameters.
-# define OGZRCD_TP	ogzrcd::dRecord, ogzrcd::wRecord, ogzrcd::sRRow, ogzrcd::sFRow, sdr::sRow
+# define OGZRCD_TP	ogzrcd::dRecord, ogzrcd::wRecord, ogzrcd::sRow, ogzrcd::sFRow, sdr::sRow
 
 	typedef ogzcbs::cDynamic<OGZRCD_TP> cRecord;
 
-	typedef ogzcbs::fDynamicItems<OGZRCD_TP> fRecords;
+	typedef ogzcbs::sDynamicItems<OGZRCD_TP> sRecords;
 
 	typedef ogzcbs::rRegularDynamicCallback<OGZRCD_TP> rRegularRecordCallback;
 
 	template <typename callback, typename items> class rCommon_
 	: public items
 	{
-	private:
+	protected:
 		callback Callback_;
 	public:
 		void reset( bso::sBool P = true )
@@ -66,15 +67,28 @@ namespace ogzrcd {
 		}
 	};
 
+	typedef ogzfld::sXFields sFields_;
+
+	class sFields
+	: public rCommon_<ogzfld::rRegularFieldCallback, sFields_ >
+	{
+	public:
+		void Init( ogzclm::sXColumns &Columns )
+		{
+			Callback_.Init();
+			sFields_::Init( Callback_, Columns );
+		}
+	};
+
 	class rRecordBuffer
 	: public wRecord
 	{
 	private:
-		sRRow Id_;	// Row of the source record. If qNIL, it's a new record.
+		sRow Id_;	// Row of the source record. If qNIL, it's a new record.
 	public:
-		rCommon_<ogzdta::rRegularDataCallback, ogzdta::fData> Data;
-		rCommon_<ogzclm::rRegularColumnCallback, ogzclm::fColumns> Columns;
-		rCommon_<ogzfld::rRegularFieldCallback, ogzfld::fFields> Fields;
+		rCommon_<ogzdta::rRegularDataCallback, ogzdta::sData> Data;
+		rCommon_<ogzclm::rRegularColumnCallback, ogzclm::sColumns> Columns;
+		sFields Fields;
 		void reset( bso::sBool P = true )
 		{
 			Id_ = qNIL;
@@ -88,16 +102,19 @@ namespace ogzrcd {
 			Id_ = qNIL;
 			Data.Init();
 			Columns.Init();
-			Fields.Init();
+			Fields.Init( Columns );
 		}
-		ogzfld::sRow CreateField( ogzclm::sRow Column );
-		ogzclm::sRow CreateColumn(
-			ogztyp::sRow Type,
-			ogzclm::eNumber Number );
 		ogzfld::sRow CreateField(
 			ogztyp::sRow Type,
-			ogzclm::eNumber Number );
-		qRODISCLOSEr( sRRow, Id );
+			ogzclm::eNumber Number )
+		{
+			Append( Fields.Create( Type, Number ) );
+		}
+		ogzdta::sRow UpdateDatum(
+			ogzdta::sRow DatumRow,	// if == 'qNIL', an entry is created.
+			ogzfld::sRow FieldRow,
+			const str::dString &Datum );
+		qRODISCLOSEr( sRow, Id );
 	};
 }
 

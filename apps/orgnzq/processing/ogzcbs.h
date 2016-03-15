@@ -88,7 +88,7 @@ namespace ogzcbs {
 	};
 
 	// Storage for static (fixed-sized) objects.
-	template <typename item, typename row> class fStaticItems
+	template <typename item, typename row> class sStaticItems
 	{
 	private:
 		typedef cStatic<item, row> cStatic_;
@@ -98,7 +98,7 @@ namespace ogzcbs {
 		{
 			Callback_ = NULL;
 		}
-		E_CDTOR( fStaticItems );
+		E_CDTOR( sStaticItems );
 		void Init( cStatic_ &Callback )
 		{
 			Callback_ = &Callback;
@@ -248,7 +248,7 @@ namespace ogzcbs {
 	};
 
 	// Callback-based storage for dynamic objects.
-	template <OGZCBS_BTT> class fDynamicItems
+	template <OGZCBS_BTT> class sDynamicItems
 	{
 	private:
 		typedef cDynamic<OGZCBS_BTP> cDynamic_;
@@ -263,7 +263,7 @@ namespace ogzcbs {
 		{
 			Callback_ = NULL;
 		}
-		E_CDTOR( fDynamicItems );
+		E_CDTOR( sDynamicItems );
 		void Init( cDynamic_ &Callback )
 		{
 			Callback_ = &Callback;

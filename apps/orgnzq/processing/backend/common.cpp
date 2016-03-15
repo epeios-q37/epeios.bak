@@ -23,9 +23,18 @@
 
 using namespace common;
 
-rNakedRack Rack_;
+namespace {
+	rTypes Types_;
+	rNakedRack Rack_;
+	bso::bool__ IsInitialized_ = false;
+}
+
 rRack common::Rack;
-bso::bool__ IsInitialized_ = false;
+
+const ogztyp::dTypes &common::GetTypes( void )
+{
+	return Types_.Core;
+}
 
 bso::bool__ common::IsInitialized( void )
 {
@@ -100,8 +109,8 @@ qRB
 	if ( IsInitialized() )
 		qRGnr();
 
-	Rack_.Types.Init( NULL );
-	Rack_.Database.Init( Rack_.Types.Core, NULL );
+	Types_.Init( NULL );
+	Rack_.Database.Init(  GetTypes(), NULL );
 	Rack_.Authentication.Init( NULL );
 	Rack_.Record.Init();
 

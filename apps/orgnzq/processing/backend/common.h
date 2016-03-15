@@ -39,7 +39,7 @@ namespace common {
 	{
 	private:
 		rBackend *Backend_;
-		ogzusr::sURow User_;
+		ogzusr::sRow User_;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -58,7 +58,7 @@ namespace common {
 
 			return *Backend_;
 		}
-		void SetUser( ogzusr::sURow User )
+		void SetUser( ogzusr::sRow User )
 		{
 			User_ = User;
 		}
@@ -115,7 +115,7 @@ namespace common {
 		}
 		qCDTOR( rAuthentication );
 		void Init( const char *Identifier );
-		ogzusr::sURow Login(
+		ogzusr::sRow Login(
 			const str::vString &Username,
 			const str::vString &Password )
 		{
@@ -127,7 +127,6 @@ namespace common {
 
 	class rNakedRack {
 	public:
-		rTypes Types;
 		rDatabase Database;
 		rAuthentication Authentication;
 		rRecord Record;
@@ -135,16 +134,28 @@ namespace common {
 
 	typedef lck::rControl<rNakedRack> rRack;
 
-	typedef lck::rReadWriteAccess<common::rNakedRack> rRWRack;
-	typedef lck::rReadOnlyAccess<common::rNakedRack> rRORack;
+	typedef lck::rReadWriteAccess<common::rNakedRack> rRWLock;
+	typedef lck::rReadOnlyAccess<common::rNakedRack> rROLock;
 
 	extern rRack Rack;
 
 	void Initialize( void );
 
 	bso::bool__ IsInitialized( void );
+
+	const ogztyp::dTypes &GetTypes( void );
 }
 
+# define RWL common::rRWLock Lock
 
+# define RWR\
+	Lock.Init( common::Rack );\
+	common::rNakedRack &Rack = Lock()
+
+# define ROL common::rROLock Lock
+
+# define ROR\
+	Lock.Init( common::Rack );\
+	const common::rNakedRack &Rack = Lock()
 
 #endif

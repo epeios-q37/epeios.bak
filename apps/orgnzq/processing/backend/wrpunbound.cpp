@@ -28,12 +28,9 @@ using namespace wrpunbound;
 
 using common::rStuff;
 
-#define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
-#define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
-
 #define DEC( name )\
 	static inline void name(\
-		fblbkd::backend___ &Backend,\
+		fblbkd::backend___ &,\
 		fblbkd::untyped_module &,\
 		fblbkd::index__,\
 		fblbkd::command__,\
@@ -59,22 +56,25 @@ namespace {
 	}
 }
 
+# define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
+# define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
+
 DEC( Login )
 {
 qRH
-	common::rRWRack Rack;
+	RWL;
 	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
 	ogzusr::sURow UserRow = qNIL;
 qRB
 	STUFF;
 
-	Rack.Init( common::Rack );
+	RWR;
 
 	const str::vString &Username = Request.StringIn();
 	const str::vString &Password = Request.StringIn();
 
-	UserRow = Rack().Authentication.Login( Username, Password );
+	UserRow = Rack.Authentication.Login( Username, Password );
 
 	if ( UserRow != qNIL )
 		Stuff.SetUser( UserRow );
@@ -145,15 +145,15 @@ qRE
 DEC( GetTypes )
 {
 qRH
-	common::rRORack Rack;
+	ROL;
 	fbltyp::id8s Ids;
 	fbltyp::strings Labels;
 qRB
-	Rack.Init( common::Rack );
+	ROR;
 
 	Labels.Init();
 	Ids.Init();
-	GetTypes_( Rack().Types.Core, Labels, Ids );
+	GetTypes_( Rack.Types.Core, Labels, Ids );
 
 	Request.Id8sOut() = Ids;
 	Request.StringsOut() = Labels;

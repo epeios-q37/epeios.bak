@@ -90,7 +90,42 @@ namespace ogzfld {
 
 	typedef ogzcbs::cDynamic<OGZFLD_TP> cField;
 
-	typedef ogzcbs::fDynamicItems<OGZFLD_TP> fFields;
+	typedef ogzcbs::sDynamicItems<OGZFLD_TP> sFields;
+
+	class sXFields
+	{
+	private:
+		sFields Core_;
+		qRMV( ogzclm::sXColumns, C_, Columns_ );
+		ogzclm::sRow GetColumn_( sRow Row ) const;
+		sRow Create_( ogzclm::sRow Column );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Core_.reset( P );
+			Columns_ = NULL;
+		}
+		qCVDTOR( sXFields );
+		void Init(
+			cField &Callback,
+			ogzclm::sXColumns &Columns )
+		{
+			Core_.Init( Callback );
+			Columns_ = &Columns;
+		}
+		ogztyp::sRow GetType( sRow Row ) const
+		{
+			return C_().GetType( GetColumn_( Row ) );
+		}
+		sRow Create(
+			ogztyp::sRow Type,
+			ogzclm::eNumber Number )
+		{
+			return Create_( C_().Create( Type, Number ) );
+		}
+		qRODISCLOSEs( sFields, Core );
+	};
+
 
 	typedef ogzcbs::rRegularDynamicCallback<OGZFLD_TP> rRegularFieldCallback;
 

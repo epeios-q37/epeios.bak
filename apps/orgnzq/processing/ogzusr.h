@@ -28,34 +28,34 @@
 
 # include "ogzbsc.h"
 # include "ogzcbs.h"
+# include "ogzrcd.h"
 
 # include "bch.h"
 
 namespace ogzusr {
-	using ogzbsc::sURow;
-	using ogzbsc::sRRow;
-	using ogzbsc::sURRow;
+	typedef ogzbsc::sURow sRow;
+	typedef ogzbsc::sURRow sRRow;
 
-	typedef bch::qBUNCHd( sRRow, sURRow ) dUser;
+	typedef bch::qBUNCHd( ogzrcd::sRow, sRRow ) dUser;
 	qW( User );
 
 // Template parameters.
-# define OGZUSR_TP	ogzusr::dUser, ogzusr::wUser, ogzusr::sURow, ogzusr::sRRow, ogzusr::sURRow
+# define OGZUSR_TP	ogzusr::dUser, ogzusr::wUser, ogzusr::sRow, ogzrcd::sRow, ogzusr::sRRow
 
 	typedef ogzcbs::cDynamic<OGZUSR_TP> cUser;
 
-	typedef ogzcbs::fDynamicItems<OGZUSR_TP> fUsers;
+	typedef ogzcbs::sDynamicItems<OGZUSR_TP> sUsers;
 
 	typedef ogzcbs::rRegularDynamicCallback<OGZUSR_TP> rRegularUserCallback;
 
 	class cAuthentication
 	{
 	protected:
-		virtual ogzusr::sURow OGZUSRAuthenticate(
+		virtual ogzusr::sRow OGZUSRAuthenticate(
 			const str::vString &Username,
 			const str::vString &Password ) = 0;
 	public:
-		ogzusr::sURow Authenticate(
+		ogzusr::sRow Authenticate(
 			const str::vString &Username,
 			const str::vString &Password )
 		{

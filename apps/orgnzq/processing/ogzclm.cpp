@@ -36,5 +36,16 @@ const char *ogzclm::GetLabel( eNumber Number )
 	return NULL; // To avoid a warning.
 }
 
+ogztyp::sRow ogzclm::sXColumns::GetType( sRow Row )
+{
+	sColumn Column;
+
+	Column.Init();
+	Core_.Recall( Row, Column );
+
+	return Column.Type();
+}
+
+
 
 

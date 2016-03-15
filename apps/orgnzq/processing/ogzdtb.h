@@ -38,19 +38,17 @@ namespace ogzdtb {
 	{
 	private:
 		ogztyp::sRow TextType_, RecordType_;	// The 2 types which have to exists.
-		void FetchMandatoryTypes_( void );
+		void FetchMandatoryTypes_( const ogztyp::dTypes &Types );
 	public:
-		ogzdta::fData Data;
-		ogztyp::wTypes Types;
-		ogzclm::fColumns Columns;
-		ogzfld::fFields Fields;
-		ogzrcd::fRecords Records;
-		ogzusr::fUsers Users;
+		ogzdta::sData Data;
+		ogzclm::sColumns Columns;
+		ogzfld::sFields Fields;
+		ogzrcd::sRecords Records;
+		ogzusr::sUsers Users;
 		void reset( bso::bool__ P = true )
 		{
 			TextType_ = RecordType_ = qNIL;
 			Data.reset( P );
-			Types.reset( P );
 			Columns.reset( P );
 			Fields.reset( P );
 			Records.reset( P );
@@ -65,16 +63,13 @@ namespace ogzdtb {
 			ogzrcd::cRecord &RCDCallback,
 			ogzusr::cUser &USRCallback )
 		{
-			this->Types.Init();
-			this->Types = Types;
-
 			Data.Init( DTACallback );
 			Columns.Init( CLMCallback );
 			Fields.Init( FLDCallback );
 			Records.Init( RCDCallback );
 			Users.Init( USRCallback );
 
-			FetchMandatoryTypes_();
+			FetchMandatoryTypes_( Types );
 		}
 	};
 # ifdef M

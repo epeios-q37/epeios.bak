@@ -87,7 +87,39 @@ namespace ogzclm {
 
 	typedef ogzcbs::cStatic<OGZCLM_TP> cColumn;
 
-	typedef ogzcbs::fStaticItems<OGZCLM_TP> fColumns;
+	typedef ogzcbs::sStaticItems<OGZCLM_TP> sColumns;
+
+	class sXColumns
+	{
+	private:
+		sColumns Core_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Core_.reset( P );
+		}
+		qCVDTOR( sXColumns );
+		void Init( cColumn &Callback )
+		{
+			Core_.Init( Callback );
+		}
+		ogztyp::sRow GetType( sRow Row );
+		sRow Create(
+			ogztyp::sRow Type,
+			ogzclm::eNumber Number )
+		{
+			sRow Row = qNIL;	
+			sColumn Column;
+
+			Column.Init( Type, Number );
+
+			Row = Core_.New();
+
+			Core_.Store( Column, Row );
+
+			return Row;
+		}
+	};
 
 	typedef ogzcbs::rRegularStaticCallback<OGZCLM_TP> rRegularColumnCallback;
 }

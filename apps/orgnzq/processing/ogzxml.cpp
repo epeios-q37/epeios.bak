@@ -90,8 +90,8 @@ namespace {
 	inline void Dump_(
 		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
-		const ogzdta::fData &Data,
-		ogzdta::sDRow DatumRow,
+		const ogzdta::sData &Data,
+		ogzdta::sRow DatumRow,
 		dWriter &Writer )
 	{
 	qRH
@@ -117,7 +117,7 @@ namespace {
 	inline void Dump_(
 		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
-		const ogzdta::fData &Data,
+		const ogzdta::sData &Data,
 		const ogzdta::dDatumList &DatumList,
 		dWriter &Writer )
 	{
@@ -137,8 +137,8 @@ namespace {
 
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
-		const ogzclm::fColumns &Columns,
-		const ogzdta::fData &Data,
+		const ogzclm::sColumns &Columns,
+		const ogzdta::sData &Data,
 		const ogzfld::dField &Field,
 		dWriter &Writer )
 	{
@@ -164,10 +164,10 @@ namespace {
 
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
-		const ogzfld::fFields &Fields,
+		const ogzfld::sFields &Fields,
 		ogzrcd::sFRow Row,
-		const ogzclm::fColumns &Columns,
-		const ogzdta::fData &Data,
+		const ogzclm::sColumns &Columns,
+		const ogzdta::sData &Data,
 		dWriter &Writer )
 	{
 	qRH
@@ -184,10 +184,10 @@ namespace {
 
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
-		const ogzfld::fFields &Fields,
+		const ogzfld::sFields &Fields,
 		const ogzfld::dFieldList &FieldList,
-		const ogzclm::fColumns &Columns,
-		const ogzdta::fData &Data,
+		const ogzclm::sColumns &Columns,
+		const ogzdta::sData &Data,
 		dWriter &Writer )
 	{
 		sdr::sRow Row = FieldList.First();
@@ -206,19 +206,21 @@ namespace {
 	}
 
 	inline void Dump_(
+		const ogztyp::dTypes &Types,
 		const ogzrcd::dRecord &Record,
 		const ogzdtb::rDatabase &Database,
 		xml::dWriter &Writer )
 	{
 		Writer.PushTag( T( Record ) );
-		Dump_( Database.Types, Database.Fields, Record, Database.Columns, Database.Data, Writer );
+		Dump_( Types, Database.Fields, Record, Database.Columns, Database.Data, Writer );
 		Writer.PopTag();
 	}
 
 	inline void Dump_(
-		ogzrcd::sRRow RecordRow,
-		const ogzrcd::fRecords &Records,
+		ogzrcd::sRow RecordRow,
+		const ogzrcd::sRecords &Records,
 		const ogzdtb::rDatabase &Database,
+		const ogztyp::dTypes &Types,
 		xml::dWriter &Writer )
 	{
 	qRH
@@ -228,7 +230,7 @@ namespace {
 		
 		Records.Recall( RecordRow, Record );
 
-		Dump_( Record, Database, Writer );
+		Dump_( Types, Record, Database, Writer );
 	qRR
 	qRT
 	qRE
@@ -236,11 +238,12 @@ namespace {
 }
 
 void ogzxml::Dump(
-	ogzrcd::sRRow RecordRow,
+	ogzrcd::sRow RecordRow,
+	const ogztyp::dTypes &Types,
 	const ogzdtb::rDatabase &Database,
 	dWriter &Writer )
 {
-	Dump_( RecordRow, Database.Records, Database, Writer );
+	Dump_( RecordRow, Database.Records, Database, Types, Writer );
 }
 
 void ogzxml::Dump(
@@ -253,7 +256,7 @@ void ogzxml::Dump(
 	if ( Record.Id() != qNIL )
 		xml::PutAttribute( A( Id ), *Record.Id(), Writer );
 
-	Dump_( Types, Record.Fields, Record, Record.Columns, Record.Data, Writer );
+	Dump_( Types, Record.Fields.Core(), Record, Record.Columns, Record.Data, Writer );
 
 	Writer.PopTag();
 }

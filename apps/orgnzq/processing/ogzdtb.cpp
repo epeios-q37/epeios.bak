@@ -26,7 +26,7 @@ namespace {
 	E_CDEF(char *, TextTypeLabel_, "Text");
 }
 
-void ogzdtb::rDatabase::FetchMandatoryTypes_( void )
+void ogzdtb::rDatabase::FetchMandatoryTypes_( const ogztyp::dTypes &Types )
 {
 	ogztyp::sRow Row = Types.First();
 	ogztyp::sType Type;

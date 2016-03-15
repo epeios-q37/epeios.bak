@@ -64,7 +64,8 @@ namespace ogzxml {
 		sVersion Version = RecordLastVersion );
 
 	void Dump(
-		const ogzrcd::sRRow Record,
+		const ogzrcd::sRow Record,
+		const ogztyp::dTypes &Types,
 		const ogzdtb::rDatabase &Database,
 		xml::dWriter &Writer );
 
