@@ -70,7 +70,7 @@ namespace ogzplg {
 	qCDEF( char *, DatabasePluginTarget, OGZPLG_DATABASE_PLUGIN_TARGET );
 	qCDEF( char *, DatabasePluginVersion, OGZPLG_DATABASE_PLUGIN_VERSION );
 
-	typedef fCommon<ogzdtb::cDtatbase> fDatabasePlugin;
+	typedef fCommon<ogzdtb::cDatabase> fDatabasePlugin;
 
 	/* Authentication */
 

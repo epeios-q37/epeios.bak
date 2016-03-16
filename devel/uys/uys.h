@@ -179,6 +179,7 @@ namespace uys {
 	protected:
 		virtual sStorageDriver_ &UYSGetSD( void ) = 0;
 	public:
+		qCALLBACK( Hook );
 		sStorageDriver_ &GetSD( void )
 		{
 			return UYSGetSD();

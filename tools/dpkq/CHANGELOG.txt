@@ -1,5 +1,8 @@
 ***** Changelog for dpkq *****
 
+2016-03-16
+- Adaptation to modifications in underlying libraries.
+
 2015-06-31 : PUBLICATION !
 
 2015-06-18

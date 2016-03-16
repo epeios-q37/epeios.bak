@@ -58,6 +58,7 @@ namespace ogzdta {
 			sTRow Type,
 			dDatum &Datum ) = 0;
 	public:
+		qCALLBACK( Data );
 		void Wipe( void )
 		{
 			OGZDTADelete( qNIL );

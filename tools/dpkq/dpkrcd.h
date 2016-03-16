@@ -58,7 +58,7 @@ namespace dpkrcd {
 			S_.Weight = DEFAULT_WEIGHT;
 			S_.Skip = false;
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 			Label.plug( AS );
 			Content.plug( AS );
@@ -113,7 +113,7 @@ namespace dpkrcd {
 		const records_ &Records,
 		record_ &Record )
 	{
-		ctn::E_CITEMt( record_, rrow__ ) SourceRecord;
+		ctn::qCITEMs( record_, rrow__ ) SourceRecord;
 
 		SourceRecord.Init( Records );
 

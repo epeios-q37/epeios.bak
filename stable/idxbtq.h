@@ -43,6 +43,7 @@ namespace idxbtq {
 		virtual idxbtr::cHook &IDXBTQGetTreeHook( void ) = 0;
 		virtual idxque::cHook &IDXBTQGetQueueHook( void ) = 0;
 	public:
+		qCALLBACK( Hooks );
 		idxbtr::cHook &GetTreeHook( void )
 		{
 			return IDXBTQGetTreeHook();

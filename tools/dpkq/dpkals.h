@@ -49,11 +49,11 @@ namespace dpkals {
 			S_.TableRow = qNIL;
 			S_.RecordRow = qNIL;
 		}
-		void plug( qSD__ &SD )
+		void plug( uys::cHook &Hook )
 		{
-			Label.plug( SD );
+			Label.plug( Hook );
 		}
-		void plug( qAS_  &AS )
+		void plug( qASd  &AS )
 		{
 			Label.plug( AS );
 		}
@@ -111,11 +111,11 @@ namespace dpkals {
 
 			S_.TableRow = qNIL;
 		}
-		void plug( qSD__ &SD )
+		void plug( str::cHook &Hook )
 		{
-			Label.plug( SD );
+			Label.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 			Label.plug( AS );
 		}
@@ -167,7 +167,7 @@ namespace dpkals {
 			Records.reset( P );
 			Tables.reset( P );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 			Records.plug( AS );
 			Tables.plug( AS );

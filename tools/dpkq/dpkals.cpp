@@ -25,7 +25,7 @@ trow__ dpkals::FindTable(
 	const str::string_ &Label,
 	const table_aliases_ &Aliases )
 {
-	ctn::E_CMITEM( table_alias_ ) Alias;
+	ctn::qCMITEMsl( table_alias_ ) Alias;
 	sdr::row__ Row = Aliases.First();
 
 	Alias.Init( Aliases );

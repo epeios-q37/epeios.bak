@@ -61,6 +61,7 @@ namespace ogzcbs {
 			row Row,
 			item &Item ) const = 0;
 	public:
+		qCALLBACK( Static );
 		void Wipe( void )
 		{
 			OGZCBSDelete( qNIL );
@@ -219,6 +220,7 @@ namespace ogzcbs {
 		qRE
 		}
 	public:
+		qCALLBACK( Dynamic );
 		void Store(
 			const subitem &SubItem,
 			row Row,

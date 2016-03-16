@@ -120,6 +120,8 @@ namespace ags {
 	qCTOR( name )\
 	qVDTOR( name )
 
+# define qCALLBACK( name ) virtual ~c##name( void ) {}
+
 // Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type'.
 # define qRRODISCLOSEv(type, name )\
 	const type Get##name( void ) const\

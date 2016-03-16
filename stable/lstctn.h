@@ -61,6 +61,7 @@ namespace lstctn {
 		virtual ctn::cHooks &LSTCTNGetContainerHooks( void ) = 0;
 		virtual lst::cHook &LSTCTNGetListHook( void ) = 0;
 	public:
+		qCALLBACK( Hooks );
 		ctn::cHooks &GetContainerHooks( void )
 		{
 			return LSTCTNGetContainerHooks();

@@ -86,7 +86,7 @@ namespace ogzdtb {
 			return OGZDTBGet##name##Callback();\
 		}
 
-	class cDtatbase
+	class cDatabase
 	{
 	protected:
 		M( ogzdta, Data );
@@ -95,6 +95,7 @@ namespace ogzdtb {
 		M( ogzrcd, Record );
 		M( ogzusr, User );
 	public:
+		qCALLBACK( Database );
 	};
 
 # ifdef OGZDTB_M_

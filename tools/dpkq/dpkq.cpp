@@ -72,11 +72,11 @@ public:
 		Name.reset( P );
 		S_.Limit = 0;
 	}
-	void plug( qSD__ &SD )
+	void plug( str::cHook &Hook )
 	{
-		Name.plug( SD );
+		Name.plug( Hook );
 	}
-	void plug( qAS_ &AS )
+	void plug( qASd &AS )
 	{
 		Name.plug( AS );
 	}
@@ -129,7 +129,7 @@ static void GetRandoms_(
 {
 qRH
 	random_parameter Random;
-	ctn::E_CMITEM( str::string_ ) Name;
+	ctn::qCMITEMsl( str::string_ ) Name;
 	sdr::row__ Row = qNIL;
 qRB
 	Name.Init( Names );
@@ -539,7 +539,7 @@ static void Insert_(
 	xpp::preprocessing_iflow___ &IFlow,
 	record_ &Record )
 {
-	ctn::E_CITEMt( table_, trow__ )Table;
+	ctn::qCITEMs( table_, trow__ )Table;
 
 	Table.Init( Tables );
 
@@ -554,7 +554,7 @@ static void Insert_(
 	xpp::preprocessing_iflow___ &IFlow,
 	record_ &Record )
 {
-	ctn::E_CMITEM( table_alias_ ) Alias;
+	ctn::qCMITEMsl( table_alias_ ) Alias;
 
 	Alias.Init( Aliases );
 
@@ -587,7 +587,7 @@ static void InsertUsingLabels_(
 	record_ &Record )
 {
 	trow__ Row = qNIL;
-	ctn::E_CITEMt( table_, trow__ ) Table;
+	ctn::qCITEMs( table_, trow__ ) Table;
 
 	Row = SearchTable( TableLabel, Tables );
 
@@ -1088,7 +1088,7 @@ static void ProcessGenericAlias_(
 {
 qRH
 	record_alias Alias;
-	ctn::E_CITEMt( record_, rrow__ ) Record;
+	ctn::qCITEMs( record_, rrow__ ) Record;
 	rrow__ Row = qNIL;
 	str::string AliasLabel;
 	str::strings Tags, Values;
@@ -1137,7 +1137,7 @@ static void ProcessGenericAlias_(
 	record_aliases_ &Aliases )
 {
 qRH
-	ctn::E_CITEMt( table_, trow__ ) Table;
+	ctn::qCITEMs( table_, trow__ ) Table;
 	str::strings Tags, Values;
 	bso::integer_buffer__ Buffer;
 qRB
@@ -1431,7 +1431,7 @@ static void Display_(
 	str::string_ &Label,
 	xml::writer_ &Writer )
 {
-	ctn::E_CITEMt( record_, rrow__ ) Record;
+	ctn::qCITEMs( record_, rrow__ ) Record;
 
 	Record.Init( Records );
 
@@ -1444,7 +1444,7 @@ static void DisplayAll_(
 	const records_ &Records,
 	xml::writer_ &Writer )
 {
-	ctn::E_CITEMt( record_, rrow__ ) Record;
+	ctn::qCITEMs( record_, rrow__ ) Record;
 	rrow__ Row = Records.First();
 
 	Record.Init( Records );
@@ -1464,7 +1464,7 @@ counter__ GetSkippedAmount_(
 	counter__ Skipped = 0;
 	sdr::row__ Row = RecordRows.Last();
 	rrow__ RecordRow = qNIL;
-	ctn::E_CITEMt( record_, rrow__ ) Record;
+	ctn::qCITEMs( record_, rrow__ ) Record;
 
 	Record.Init( Records );
 
@@ -1497,7 +1497,7 @@ id__  Display_(
 qRH
 	rrow__ Row = qNIL;
 	bso::integer_buffer__ Buffer;
-	ctn::E_CITEMt( record_, rrow__ ) Record;
+	ctn::qCITEMs( record_, rrow__ ) Record;
 	counter__ Counter = 0;
 	lcl::meaning Meaning;
 qRB
@@ -1584,7 +1584,7 @@ static void HandleRandoms_(
 	const random_parameters_ &Randoms,
 	xml::writer_ &Writer )
 {
-	ctn::E_CMITEM( random_parameter_ ) Random;
+	ctn::qCMITEMsl( random_parameter_ ) Random;
 	sdr::row__ Row = qNIL;
 
 	if ( Randoms.Amount() == 0 )
@@ -1619,7 +1619,7 @@ static id__ Display_(
 {
 qRH
 	xml::writer Writer;
-	ctn::E_CITEMt( table_, trow__ ) Table;
+	ctn::qCITEMs( table_, trow__ ) Table;
 	random_parameters Randoms;
 	str::string NS, URI;
 	tol::buffer__ Buffer;

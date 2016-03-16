@@ -85,6 +85,7 @@ namespace dtr {
 		virtual btr::cHook &DTRGetTreeHook( void ) = 0;
 		virtual que::cHook &DTRGetQueueHook( void ) = 0;
 	public:
+		qCALLBACK( Hooks );
 		btr::cHook &GetTreeHook( void )
 		{
 			return DTRGetTreeHook();

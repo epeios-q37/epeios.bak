@@ -62,6 +62,7 @@ namespace lstbch {
 		virtual bch::cHook &LSTBCHGetBunchHook( void ) = 0;
 		virtual lst::cHook &LSTBCHGetListHook( void ) = 0;
 	public:
+		qCALLBACK( Hooks );
 		bch::cHook &GetBunchHook( void )
 		{
 			return LSTBCHGetBunchHook();

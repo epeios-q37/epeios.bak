@@ -85,6 +85,7 @@ namespace ctn {
 		virtual tys::cHook &CTNGetStaticsHook( void ) = 0;
 		virtual ias::cHooks &CTNGetDynamicsHooks( void ) = 0;
 	public:
+		qCALLBACK( Hooks );
 		tys::cHook &GetStaticsHook( void )
 		{
 			return CTNGetStaticsHook();

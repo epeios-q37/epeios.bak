@@ -55,6 +55,7 @@ namespace ogzusr {
 			const str::vString &Username,
 			const str::vString &Password ) = 0;
 	public:
+		qCALLBACK( Authentication );
 		ogzusr::sRow Authenticate(
 			const str::vString &Username,
 			const str::vString &Password )

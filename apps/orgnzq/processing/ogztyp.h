@@ -45,6 +45,7 @@ namespace ogztyp {
 			const ogzbsc::dDatum &Datum,
 			str::vString &XML ) = 0;
 	public:
+		qCALLBACK( Type );
 		const char *GetLabel( void )
 		{
 			return OGZTYPGetLabel();

@@ -54,7 +54,7 @@ namespace dpktbl {
 			S_.Skipped = 0;
 
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 			Label.plug( AS );
 			Records.plug( AS );
@@ -96,7 +96,7 @@ namespace dpktbl {
 		trow__ TableRow,
 		const tables_ &Tables )
 	{
-		ctn::E_CITEMt( table_, trow__ ) Table;
+		ctn::qCITEMs( table_, trow__ ) Table;
 
 		Table.Init( Tables );
 
@@ -109,7 +109,7 @@ namespace dpktbl {
 		const tables_ &Tables,
 		record_ &Record )
 	{
-		ctn::E_CITEMt( table_, trow__ ) Table;
+		ctn::qCITEMs( table_, trow__ ) Table;
 
 		Table.Init( Tables );
 
@@ -122,7 +122,7 @@ namespace dpktbl {
 		const tables_ &Tables,
 		record_ &Record )
 	{
-		ctn::E_CMITEM( record_alias_ ) Alias;
+		ctn::qCMITEMsl( record_alias_ ) Alias;
 
 		Alias.Init( Aliases );
 

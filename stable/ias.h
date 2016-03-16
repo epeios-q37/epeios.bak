@@ -190,6 +190,7 @@ namespace ias {
 		virtual bch::cHook &IASGetDescriptorsHook( void ) = 0;
 		virtual ags::cHook &IASGetStorageHook( void ) = 0;
 	public:
+		qCALLBACK( Hooks );
 		bch::cHook &GetDescriptorsHook( void )
 		{
 			return IASGetDescriptorsHook();

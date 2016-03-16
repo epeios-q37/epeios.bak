@@ -56,14 +56,14 @@ namespace dpkbsc {
 		const str::string_ &Label,
 		const container &Container )
 	{
-		return BaseSearch<container, ctn::E_CITEMt( item, row ), row >( Label, Container );
+		return BaseSearch<container, ctn::qCITEMs( item, row ), row >( Label, Container );
 	}
 
 	template <typename container, typename item, typename row> inline row SearchInMono(
 		const str::string_ &Label,
 		const container &Container )
 	{
-		return BaseSearch<container, ctn::E_CMITEMt( item, row ), row >( Label, Container );
+		return BaseSearch<container, ctn::qCMITEMs( item, row ), row >( Label, Container );
 	}
 };
 

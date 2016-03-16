@@ -55,11 +55,11 @@ namespace dpkctx {
 			S_.Session = S_.Cycle = 0;
 			S_.TimeStamp = 0;
 		}
-		void plug( qSD__ &SD )
+		void plug( bch::cHook &Hook )
 		{
-			Pool.plug( SD );
+			Pool.plug( Hook );
 		}
-		void plug( qAS_ &AS )
+		void plug( qASd &AS )
 		{
 			Pool.plug( AS );
 		}

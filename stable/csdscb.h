@@ -53,6 +53,7 @@ namespace csdscb {
 			void *UP ) = 0;
 		virtual void CSDSCBPostProcess( void *UP ) = 0;
 	public:
+		qCALLBACK( Processing );
 		void *PreProcess( const ntvstr::char__ *Origin )
 		{
 			return CSDSCBPreProcess( Origin );
