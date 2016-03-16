@@ -117,11 +117,11 @@ namespace ogzrcd {
 			Columns.Init();
 			Fields.Init( Columns );
 		}
-		ogzfld::sRow CreateField(
+		sdr::sRow CreateField(
 			ogztyp::sRow Type,
 			ogzclm::eNumber Number )
 		{
-			Append( Fields.Create( Type, Number ) );
+			return Append( Fields.Create( Type, Number ) );
 		}
 		ogzdta::sRow UpdateDatum(
 			ogzdta::sRow DatumRow,	// if == 'qNIL', an entry is created.

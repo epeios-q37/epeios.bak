@@ -123,6 +123,12 @@ namespace ogzfld {
 		{
 			return Create_( C_().Create( Type, Number ) );
 		}
+		void Recall(
+			sRow Row,
+			dField &Field ) const
+		{
+			Core_.Recall( Row, Field );
+		}
 		qRODISCLOSEs( sFields, Core );
 	};
 

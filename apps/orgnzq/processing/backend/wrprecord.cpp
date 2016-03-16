@@ -61,7 +61,7 @@ void wrprecord::dRecord::HANDLE(
 DEC( EditRecord )
 {
 qRH
-	sRRow Row = qNIL;
+	ogzrcd::sRow Row = qNIL;
 qRB
 	Row = Request.IdIn();
 
@@ -75,7 +75,7 @@ qRE
 }
 
 namespace {
-	void CreateField_(
+	inline sdr::sRow CreateField_(
 		ogztyp::sRow Type,
 		ogzclm::eNumber Number,
 		const ogzdtb::rDatabase &Database,
@@ -87,8 +87,7 @@ namespace {
 		if ( !ogzclm::Exists( Number ) )
 			REPORT( "UnknownFieldNumber" );
 
-		if ( Record.CreateColumn( Type, Number ) == qNIL )
-			qRFwk();
+		return Record.CreateField( Type, Number );
 	}
 }
 
@@ -105,7 +104,7 @@ qRB
 	if ( *Number >= ogzclm::n_amount )
 		qRGnr();
 
-	CreateField_( *Type, (ogzclm::eNumber)*Number, Rack.Database.Core, Record() );
+	Request.IdOut() = *CreateField_( *Type, (ogzclm::eNumber)*Number, Rack.Database.Core, Record() );
 qRR
 qRT
 qRE
@@ -167,7 +166,7 @@ namespace {
 	void GetDataSet_(
 		const ogzrcd::rRecordBuffer &Record,
 		fbltyp::dIds &Ids,
-		fbltyp::dXStrings &DataSet )
+		fbltyp::dStringsSet &DataSet )
 	{
 	qRH
 		sdr::sRow Row = qNIL;
@@ -193,7 +192,7 @@ namespace {
 DEC( GetFields )
 {
 	fbltyp::dIds &Ids = Request.IdsOut();
-	fbltyp::dXStrings &DataSet = Request.XStringsOut();
+	fbltyp::dStringsSet &DataSet = Request.StringsSetOut();
 
 	GetDataSet_( Record, Ids, DataSet );
 }
@@ -213,12 +212,13 @@ void wrprecord::dRecord::NOTIFY(
 			fblbkd::cId,	// Field type.
 			fblbkd::cId8,	// Field number ('ogzclm::eNumber).
 		fblbkd::cEnd,
+			fblbkd::cId,	// Id of the created field.
 		fblbkd::cEnd );
 
 	Module.Add( D( GetFields ),
 		fblbkd::cEnd,
-			fblbkd::dIds,	// row of the fields,
-			fblbkd::dXStrings	// Data of each field.
+			fblbkd::cIds,	// Ids of the fields,
+			fblbkd::cStringsSet,	// Data of each field.
 		fblbkd::cEnd );
 
 	/*

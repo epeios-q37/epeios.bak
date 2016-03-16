@@ -65,7 +65,7 @@ qRH
 	RWL;
 	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
-	ogzusr::sURow UserRow = qNIL;
+	ogzusr::sRow UserRow = qNIL;
 qRB
 	STUFF;
 
@@ -153,7 +153,7 @@ qRB
 
 	Labels.Init();
 	Ids.Init();
-	GetTypes_( Rack.Types.Core, Labels, Ids );
+	GetTypes_( common::GetTypes(), Labels, Ids );
 
 	Request.Id8sOut() = Ids;
 	Request.StringsOut() = Labels;

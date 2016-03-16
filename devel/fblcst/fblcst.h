@@ -102,6 +102,7 @@ namespace fblcst {
 		cStrings,
 		//i Array of array of strings ( 'XCONTAINER_( strings_ )' )
 		cXStrings,
+		cStringsSet = cXStrings,
 		/*i A byte, as data common data cluster for all plateform.
 		Has no intrensec signification ('bso::raw__'). */
 		cByte,

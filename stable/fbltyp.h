@@ -1074,8 +1074,8 @@ namespace fbltyp {
 	typedef strings_	dStrings;
 	qW( Strings );
 
-	typedef xstrings_	dXStrings;
-	qW( XStrings );
+	typedef xstrings_	dStringsSet;
+	qW( StringsSet );
 
 	M( id, Id );
 	M( id8, Id8 );

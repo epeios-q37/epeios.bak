@@ -119,6 +119,13 @@ namespace ogzclm {
 
 			return Row;
 		}
+		void Recall(
+			sRow Row,
+			sColumn &Column ) const
+		{
+			Core_.Recall( Row, Column );
+		}
+		qRODISCLOSEs( sColumns, Core );
 	};
 
 	typedef ogzcbs::rRegularStaticCallback<OGZCLM_TP> rRegularColumnCallback;

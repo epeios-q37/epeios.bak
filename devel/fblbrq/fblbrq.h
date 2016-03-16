@@ -324,6 +324,7 @@ namespace fblbrq {
 		FBLBRQ_M( String, string_ )
 		FBLBRQ_M( Strings, strings_ )
 		FBLBRQ_M( XStrings, xstrings_ )
+		FBLBRQ_M( StringsSet, xstrings_ )
 		FBLBRQ_M( Byte, byte_t__ )
 		FBLBRQ_M( Binary, binary_ )
 		FBLBRQ_M( Binaries, binaries_ )
