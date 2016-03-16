@@ -67,6 +67,19 @@ namespace ogzrcd {
 		}
 	};
 
+	typedef ogzclm::sXColumns sColumns_;
+
+	class sColumns
+	: public rCommon_<ogzclm::rRegularColumnCallback, sColumns_ >
+	{
+	public:
+		void Init( void )
+		{
+			Callback_.Init();
+			sColumns_::Init( Callback_ );
+		}
+	};
+
 	typedef ogzfld::sXFields sFields_;
 
 	class sFields
@@ -87,7 +100,7 @@ namespace ogzrcd {
 		sRow Id_;	// Row of the source record. If qNIL, it's a new record.
 	public:
 		rCommon_<ogzdta::rRegularDataCallback, ogzdta::sData> Data;
-		rCommon_<ogzclm::rRegularColumnCallback, ogzclm::sColumns> Columns;
+		sColumns Columns;
 		sFields Fields;
 		void reset( bso::sBool P = true )
 		{

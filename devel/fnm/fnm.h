@@ -52,6 +52,10 @@
 #  error "Unknown target !"
 # endif
 
+/**************/
+/**** OLD *****/
+/**************/
+
 namespace fnm {
 	typedef ntvstr::char__ nchar__;
 	typedef ntvstr::core___ ncore___;
@@ -134,5 +138,14 @@ namespace fnm {
 txf::text_oflow__ &operator <<(
 	txf::text_oflow__ &Flow,
 	const fnm::name___ &Name );
+
+/**************/
+/**** NEW *****/
+/**************/
+
+namespace fnm {
+	typedef name___ rName;
+}
+
 
 #endif

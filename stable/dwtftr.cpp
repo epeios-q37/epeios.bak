@@ -1419,6 +1419,8 @@ qRB
 				Dir.Files.Append( Kernel.Files.Append( File ) );
 
 				break;
+			case tGoofs:
+				break;
 			case tGoof:
 				Kind = k_Undefined;
 

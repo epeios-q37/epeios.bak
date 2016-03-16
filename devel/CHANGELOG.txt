@@ -2,7 +2,15 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
-2016-03-04 :
+2016-03-15
+- DWTFTR :
+	- The 'Goofs' tag was not handled when In 'Load(...)'.
+- FLW :
+	- Adding 'Purge()' function.
+- FNM :
+	- Applying new naming conventions.
+
+2016-03-14 :
 - CSDRCU, PLGN :
 	- Adding 'About()' and 'Identifier'()' methods.
 - CSDUCL :

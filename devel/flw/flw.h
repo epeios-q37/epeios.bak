@@ -652,6 +652,13 @@ namespace flw {
 			OFlow.Write( Buffer, IFlow.ReadUpTo( BufferSize, Buffer ) );
 	}
 
+	template <int BufferSize = 1024> inline void Purge( iflow__ &IFlow )
+	{
+		fdr::byte__ Buffer[BufferSize];
+
+		while ( !IFlow.EndOfFlow() )
+			IFlow.ReadUpTo( BufferSize, Buffer );
+	}
 }
 
 inline flw::oflow__ &operator <<(
