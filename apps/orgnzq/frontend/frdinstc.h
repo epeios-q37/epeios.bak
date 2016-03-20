@@ -68,9 +68,26 @@ namespace frdinstc {
 		{
 			Record_.EditRecord( Record );
 		}
-		void CreateField( void )
+		sFieldId CreateField(
+			sTypeId Type,
+			sNumberId Number,
+			const str::dString &Label,
+			const str::dString &Comment ) const
 		{
-			Record_.CreateField();
+			bFieldId Id = *UndefinedField;
+
+			Record_.CreateField( *Type, *Number, Label, Comment, Id );
+
+			return Id;
+		}
+		void GetFieldsColumns(
+			fbltyp::dIds &Ids,
+			fbltyp::dIds &Types,
+			fbltyp::dId8s &Numbers,
+			str::dStrings &Labels,
+			str::dStrings &Comments ) const
+		{
+			Record_.GetFieldsColumns( Ids, Types, Numbers, Labels, Comments );
 		}
 	};
 
@@ -114,10 +131,15 @@ namespace frdinstc {
 			View_ = vRecord;
 			Core_.EditRecord( qNIL );
 		}
-		void CreateField( void )
+		void CreateField(
+			sTypeId Type,
+			sNumberId Number,
+			const str::dString &Label,
+			const str::dString &Comment )
 		{
-			Core_.CreateField();
+			Core_.CreateField( Type, Number, Label, Comment );
 		}
+		void DumpFieldsColumns( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eView, View );
 	};
 }

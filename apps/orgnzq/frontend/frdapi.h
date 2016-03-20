@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160128 Build Mar 11 2016 09:34:06 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160128 Build Mar 20 2016 12:29:00 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq (Version) (Build Mar  9 2016 11:07:03 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160313 (Build Mar 16 2016 15:57:53 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ORGNZQ__INC
@@ -42,7 +42,7 @@ namespace orgnzq {
 			fblfrd::id8__ Parameters[] = {
 				21, 21, 0, 2, 
 				0, 9, 22, 22, 
-				0, 9, 22, 
+				0, 18, 22, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -101,14 +101,14 @@ namespace orgnzq {
 			return Frontend().Handle();
 		}
 		fblovl::reply__ OGZGetTypes( 
-			fblfrd::id8s_ &Out1,
+			fblfrd::ids_ &Out1,
 			fblfrd::strings_ &Out2 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[2] );
 
 			Frontend().EndOfInParameters();
 
-			Frontend().Id8sOut( Out1 );
+			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
 
 			return Frontend().Handle();
@@ -124,7 +124,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[2];
+		fblfrd::command__ _Commands[4];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -140,7 +140,9 @@ namespace orgnzq {
 
 			fblfrd::id8__ Parameters[] = {
 				17, 0, 
-				0, 
+				17, 8, 21, 21, 0, 17, 
+				0, 18, 18, 9, 22, 22, 
+				0, 18, 23, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -156,13 +158,23 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "CreateField";;
-			CommandDetail.Casts.Append( Parameters + 2, 1 );
+			CommandDetail.Casts.Append( Parameters + 2, 6 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "GetFieldsColumns";;
+			CommandDetail.Casts.Append( Parameters + 8, 6 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "GetFieldsData";;
+			CommandDetail.Casts.Append( Parameters + 14, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 2, _Commands );
+			Commands.Recall( 0, 4, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -275,12 +287,54 @@ namespace orgnzq {
 
 			return Common_->Frontend().Handle();
 		}
-		fblovl::reply__ CreateField( void ) const
+		fblovl::reply__ CreateField( 
+			const fblfrd::id__ &In1,
+			const fblfrd::id8__ &In2,
+			const fblfrd::string_ &In3,
+			const fblfrd::string_ &In4,
+			fblfrd::id__ &Out1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
+			Common_->Frontend().IdIn( In1 );
+			Common_->Frontend().Id8In( In2 );
+			Common_->Frontend().StringIn( In3 );
+			Common_->Frontend().StringIn( In4 );
 
 			Common_->Frontend().EndOfInParameters();
 
+			Common_->Frontend().IdOut( Out1 );
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ GetFieldsColumns( 
+			fblfrd::ids_ &Out1,
+			fblfrd::ids_ &Out2,
+			fblfrd::id8s_ &Out3,
+			fblfrd::strings_ &Out4,
+			fblfrd::strings_ &Out5 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
+
+			Common_->Frontend().EndOfInParameters();
+
+			Common_->Frontend().IdsOut( Out1 );
+			Common_->Frontend().IdsOut( Out2 );
+			Common_->Frontend().Id8sOut( Out3 );
+			Common_->Frontend().StringsOut( Out4 );
+			Common_->Frontend().StringsOut( Out5 );
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ GetFieldsData( 
+			fblfrd::ids_ &Out1,
+			fblfrd::xstrings_ &Out2 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
+
+			Common_->Frontend().EndOfInParameters();
+
+			Common_->Frontend().IdsOut( Out1 );
+			Common_->Frontend().XStringsOut( Out2 );
 
 			return Common_->Frontend().Handle();
 		}

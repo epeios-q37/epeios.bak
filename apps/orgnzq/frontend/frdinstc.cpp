@@ -40,5 +40,61 @@ const char *frdinstc::GetLabel( eView View )
 }
  
 #undef C
+
+namespace {
+	void Dump_(
+		const fbltyp::dIds &Ids,
+		const fbltyp::dIds &Types,
+		const fbltyp::dId8s &Numbers,
+		const str::dStrings &Labels,
+		const str::dStrings &Comments,
+		xml::dWriter &Writer )
+	{
+		sdr::sRow Row = Ids.First();
+
+		Writer.PushTag( "Columns" );
+		xml::PutAttribute("Amount", Ids.Amount(), Writer );
+
+		while ( Row != qNIL ) {
+			Writer.PushTag( "Column" );
+
+			xml::PutAttribute( "id", *Ids( Row ), Writer );
+			xml::PutAttribute( "Type", *Types( Row ), Writer );
+			xml::PutAttribute( "Number", *Numbers( Row ), Writer );
+			Writer.PutValue( Labels( Row ), "Label"  );
+			Writer.PutValue( Comments( Row ), "Comment" );
+
+			Writer.PopTag();
+
+			Row = Ids.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+}
+
+void frdinstc::rUser::DumpFieldsColumns( xml::dWriter &Writer ) const
+{
+qRH
+	fbltyp::wIds Ids;
+	fbltyp::wIds Types;
+	fbltyp::wId8s Numbers;
+	str::wStrings Labels;
+	str::wStrings Comments;
+qRB
+	Ids.Init();
+	Types.Init();
+	Numbers.Init();
+	Labels.Init();
+	Comments.Init();
+
+	Core_.GetFieldsColumns( Ids, Types, Numbers, Labels, Comments );
+
+	Dump_( Ids, Types, Numbers, Labels, Comments, Writer );
+qRR
+qRT
+qRE
+}
+
  
 

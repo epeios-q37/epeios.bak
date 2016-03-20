@@ -29,6 +29,7 @@
 # include "ogzbsc.h"
 # include "ags.h"
 # include "ogztyp.h"
+# include "ogzdta.h"
 
 namespace ogzclm {
 
@@ -62,22 +63,33 @@ namespace ogzclm {
 	private:
 		ogztyp::sRow Type_;
 		eNumber Number_;
+		ogzdta::sRow
+			Label_,
+			Comment_;
 	public:
 		void reset( bso::sBool = true )
 		{
 			Type_ = qNIL;
 			Number_ = n_Undefined;
+			Label_ = Comment_ = qNIL;
 		}
 		E_CDTOR( sColumn );
 		void Init(
 			ogztyp::sRow Type = qNIL,
-			eNumber Number = n_Undefined )
+			eNumber Number = n_Undefined,
+			ogzdta::sRow Label = qNIL,
+			ogzdta::sRow Comment = qNIL )
 		{
 			Type_ = Type;
 			Number_ = Number;
+			Label_ = Label;
+			Comment_ = Comment;
 		}
 		qRODISCLOSEs( ogztyp::sRow, Type );
 		qRODISCLOSEs( eNumber, Number );
+		qRODISCLOSEs( ogzdta::sRow, Label );
+		qRODISCLOSEs( ogzdta::sRow, Comment );
+
 	};
 
 	typedef ogzbsc::sCRow sRow;
@@ -93,25 +105,49 @@ namespace ogzclm {
 	{
 	private:
 		sColumns Core_;
+		ogztyp::sRow TextType_;
+		qRMV( ogzdta::sData, D_, Data_ );
+		ogzdta::sRow Create_( const str::dString &Text )
+		{
+			ogzdta::sRow Row = qNIL;
+
+			if ( Text.Amount() != 0 ) {
+				Row = D_().New( TextType_ );
+				D_().Store( Row, TextType_, Text );
+			}
+
+			return Row;
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
 			Core_.reset( P );
+			TextType_ = qNIL;
+			Data_ = NULL;
 		}
 		qCVDTOR( sXColumns );
-		void Init( cColumn &Callback )
+		void Init(
+			cColumn &Callback,
+			ogztyp::sRow TextType,
+			ogzdta::sData &Data )
 		{
 			Core_.Init( Callback );
+			TextType_ = TextType;
+			Data_ = &Data;
 		}
+		qRODISCLOSEs( sColumns, Core );
+		qRODISCLOSEs( ogztyp::sRow, TextType );
 		ogztyp::sRow GetType( sRow Row );
 		sRow Create(
 			ogztyp::sRow Type,
-			ogzclm::eNumber Number )
+			ogzclm::eNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment )
 		{
 			sRow Row = qNIL;	
 			sColumn Column;
 
-			Column.Init( Type, Number );
+			Column.Init( Type, Number, Create_( Label ), Create_( Comment )  );
 
 			Row = Core_.New();
 
@@ -125,7 +161,6 @@ namespace ogzclm {
 		{
 			Core_.Recall( Row, Column );
 		}
-		qRODISCLOSEs( sColumns, Core );
 	};
 
 	typedef ogzcbs::rRegularStaticCallback<OGZCLM_TP> rRegularColumnCallback;

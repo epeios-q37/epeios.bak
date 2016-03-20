@@ -30,7 +30,7 @@ using namespace frdfrntnd;
 void frdfrntnd::rFrontend::GetTypes_( void )
 {
 qRH
-	fbltyp::id8s Ids;
+	fbltyp::wIds Ids;
 	fbltyp::strings Labels;
 qRB
 	Ids.Init();
@@ -47,7 +47,7 @@ qRE
 
 void  frdfrntnd::rFrontend::DumpTypes_( xml::writer_ &Writer )
 {
-	sclfrntnd::Dump<sTypeId>( Types_, "Fields", "Field", Writer );
+	sclfrntnd::Dump<sTypeId>( Types_, "Types", "Type", Writer );
 }
 
 void frdfrntnd::rFrontend::GetNumbers_( void )

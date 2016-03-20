@@ -1068,7 +1068,7 @@ namespace fbltyp {
 	qW( Id##s )
 
 namespace fbltyp {
-	typedef strings_	dString;
+	typedef string_	dString;
 	qW( String );
 
 	typedef strings_	dStrings;

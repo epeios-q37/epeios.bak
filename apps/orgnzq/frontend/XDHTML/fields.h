@@ -24,21 +24,21 @@
 
 namespace fields {
 
-	BASE_ACD( Template );
+	BASE_ACD( CreateField );
 
-	class action_callbacks__
+	class fActionCallbacks
 	{
 	public:
 	public:
-		BASE_ACU( Template );
+		BASE_ACU( CreateField );
 		void reset( bso::bool__ P = true )
 		{
-			BASE_ACR( Template );
+			BASE_ACR( CreateField );
 		}
-		E_CVDTOR( action_callbacks__ );
-		void Init( core::rSession &Session )
+		E_CVDTOR( fActionCallbacks );
+		void Init( void )
 		{
-			BASE_ACI( Template );
+			BASE_ACI( CreateField );
 		}
 	};
 

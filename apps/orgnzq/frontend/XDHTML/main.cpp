@@ -91,6 +91,10 @@ qRB
 	SetCasting_( Session );
 
 	Session.SwitchTo( core::pMain );
+
+	if ( Session.User.View() == frdinstc::vRecord ) {
+		record::SetLayout( RecordFrameId_, Session );
+	}
 qRR
 qRT
 qRE

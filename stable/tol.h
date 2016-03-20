@@ -405,11 +405,13 @@ ex. : 'qCOVER2( a, b )' -> 'a, b' */
 # define qCOVER6(a, b, c, d, e, f)		a, b, c, d, e, f
 // To modify using macros variadics ?
 
+# define qMIMICs( type, alias )	E_TMIMIC__( type, alias )
+
 
 // For static objects only.
 // Example of use : 'template <typename r> qTCLONEf( object1<r>, object2 );'
 // Example of use : 'template <typename r, typename s> qTCLONEf( object1<qCOVER2(r,s)>, object2 );'
-# define qTCLONEf( type, alias )\
+# define qTCLONEs( type, alias )\
 	class alias\
 	: public type\
 	{\

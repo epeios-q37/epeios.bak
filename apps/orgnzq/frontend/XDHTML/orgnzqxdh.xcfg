@@ -157,21 +157,37 @@
 			</xpp:bloc>
 			<xpp:bloc>
 			<!-- Field-->
-				<Translations text="fldMonoLabel">
+				<Translations text="fieldsMonoTypeLabel">
 					<Translation language="fr">Mono</Translation>
 					<Translation language="en">Mono</Translation>
 				</Translations>
-				<Translations text="fldMonoTitle">
+				<Translations text="fieldsMonoTypeTitle">
 					<Translation language="fr">Le champs peut contenir au maximum une entrée.</Translation>
 					<Translation language="en">Fiedls can contain at most one entry</Translation>
 				</Translations>
-				<Translations text="fldMultiLabel">
+				<Translations text="fieldsMultiTypeLabel">
 					<Translation language="fr">Multi</Translation>
 					<Translation language="en">Multi</Translation>
 				</Translations>
-				<Translations text="fldMultiTitle">
+				<Translations text="fieldsMultiTypeTitle">
 					<Translation language="fr">Le champ peut contenir plusieurs entrées</Translation>
 					<Translation language="en">The filed can contain several entries.</Translation>
+				</Translations>
+				<Translations text="fieldsFieldLabelPlaceholder">
+					<Translation language="fr">Libellé</Translation>
+					<Translation language="en">Label</Translation>
+				</Translations>
+				<Translations text="fieldsFieldLabelTitle">
+					<Translation language="fr">Saisissez le libellé du champ.</Translation>
+					<Translation language="en">Type the field label.</Translation>
+				</Translations>
+				<Translations text="fieldsFieldCommentPlaceholder">
+					<Translation language="fr">Commentaire</Translation>
+					<Translation language="en">Comment</Translation>
+				</Translations>
+				<Translations text="fieldsFieldCommentTitle">
+					<Translation language="fr">Saisissez le commentaire du champ.</Translation>
+					<Translation language="en">Type the field comment.</Translation>
 				</Translations>
 			</xpp:bloc>
 			<!-- Record -->

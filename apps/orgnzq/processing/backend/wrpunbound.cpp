@@ -42,7 +42,7 @@ namespace {
 	void GetTypes_(
 		const ogztyp::dTypes &Types,
 		fbltyp::strings_ &Labels,
-		fbltyp::id8s_ &Ids )
+		fbltyp::ids_ &Ids )
 	{
 		ogztyp::sRow Row = Types.First();
 
@@ -146,7 +146,7 @@ DEC( GetTypes )
 {
 qRH
 	ROL;
-	fbltyp::id8s Ids;
+	fbltyp::ids Ids;
 	fbltyp::strings Labels;
 qRB
 	ROR;
@@ -155,7 +155,7 @@ qRB
 	Ids.Init();
 	GetTypes_( common::GetTypes(), Labels, Ids );
 
-	Request.Id8sOut() = Ids;
+	Request.IdsOut() = Ids;
 	Request.StringsOut() = Labels;
 qRR 
 qRT
@@ -184,7 +184,7 @@ void wrpunbound::Inform(
 
 	Backend.Add( D( GetTypes ),
 		fblbkd::cEnd,
-			fblbkd::cId8s,		// Ids.
+			fblbkd::cIds,		// Ids.
 			fblbkd::cStrings,	// Labels,
 		fblbkd::cEnd );
 }

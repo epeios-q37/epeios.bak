@@ -25,6 +25,9 @@ using namespace common;
 
 namespace {
 	rTypes Types_;
+	ogztyp::sRow
+		RecordType = qNIL,
+		extType_ = qNIL;
 	rNakedRack Rack_;
 	bso::bool__ IsInitialized_ = false;
 }
@@ -33,8 +36,19 @@ rRack common::Rack;
 
 const ogztyp::dTypes &common::GetTypes( void )
 {
-	return Types_.Core;
+	return Types_.Core();
 }
+
+ogztyp::sRow common::GetMandatoryRecordType( void )
+{
+	return Types_.GetMandatoryRecordType();
+}
+
+ogztyp::sRow common::GetMandatoryTextType( void )
+{
+	return Types_.GetMandatoryTextType();
+}
+
 
 bso::bool__ common::IsInitialized( void )
 {
@@ -42,6 +56,9 @@ bso::bool__ common::IsInitialized( void )
 }
 
 namespace {
+	E_CDEF(char *, RecordTypeLabel_, "Record");
+	E_CDEF(char *, TextTypeLabel_, "Text");
+
 	void Fill_(
 		const plgn::rRetrievers<ogzplg::fTypePlugin> &Retrievers,
 		ogztyp::dTypes &Types )
@@ -65,16 +82,41 @@ namespace {
 	}
 }
 
+void common::rTypes::FetchMandatoryTypes_( void )
+{
+	ogztyp::sRow Row = Core_.First();
+	ogztyp::sType Type;
+
+	while ( Row != qNIL ) {
+		Core_.Recall( Row, Type );
+
+		if ( !strcmp( Type.GetLabel(), RecordTypeLabel_ ) )
+			MandatoryRecordType_ = Row;
+		else if ( !strcmp( Type.GetLabel(), TextTypeLabel_ ) )
+			MandatoryTextType_ = Row;
+
+		Type.reset( false );
+
+		Row = Core_.Next( Row );
+	}
+
+	if ( MandatoryRecordType_ == qNIL )
+		qRGnr();
+
+	if ( MandatoryTextType_ == qNIL )
+		qRGnr();
+}
+
 void common::rTypes::Init( const char *Identifier )
 {
 	Retrievers_.Init();
 
 	sclmisc::Plug( ogzplg::TypePluginTarget, Identifier, Retrievers_ );
 
-	Core.Init();
-	Fill_( Retrievers_, Core );
+	Core_.Init();
+	Fill_( Retrievers_, Core_ );
+	FetchMandatoryTypes_();
 }
-
 
 template <typename retriever> static void Set_(
 	const char *Target,
@@ -110,9 +152,9 @@ qRB
 		qRGnr();
 
 	Types_.Init( NULL );
-	Rack_.Database.Init(  GetTypes(), NULL );
+	Rack_.Database.Init( GetTypes(), NULL );
 	Rack_.Authentication.Init( NULL );
-	Rack_.Record.Init();
+	Rack_.Record.Init( GetMandatoryTextType() );
 
 	Rack.Init( Rack_ );
 

@@ -68,7 +68,7 @@ qRB
 	if ( Row != *fbltyp::UndefinedId )
 		qRLmt();
 
-	Record().Init();
+	Record().Init( common::GetMandatoryTextType() );
 qRR
 qRT
 qRE
@@ -78,6 +78,8 @@ namespace {
 	inline sdr::sRow CreateField_(
 		ogztyp::sRow Type,
 		ogzclm::eNumber Number,
+		const str::dString &Label,
+		const str::dString &Comment,
 		const ogzdtb::rDatabase &Database,
 		ogzrcd::rRecordBuffer &Record )
 	{
@@ -87,7 +89,7 @@ namespace {
 		if ( !ogzclm::Exists( Number ) )
 			REPORT( "UnknownFieldNumber" );
 
-		return Record.CreateField( Type, Number );
+		return Record.CreateField( Type, Number, Label, Comment );
 	}
 }
 
@@ -100,11 +102,14 @@ qRB
 
 	const fbltyp::sId &Type = Request.IdIn();
 	const fbltyp::sId8 &Number = Request.Id8In();
+	const fbltyp::dString
+		&Label = Request.StringIn(),
+		&Comment = Request.StringIn();
 
 	if ( *Number >= ogzclm::n_amount )
 		qRGnr();
 
-	Request.IdOut() = *CreateField_( *Type, (ogzclm::eNumber)*Number, Rack.Database.Core, Record() );
+	Request.IdOut() = *CreateField_( *Type, (ogzclm::eNumber)*Number, Label, Comment, Rack.Database.Core, Record() );
 qRR
 qRT
 qRE
@@ -152,12 +157,12 @@ namespace {
 		ogzclm::sColumn Column;
 	qRB
 		Field.Init();
-		Record.Fields.Recall( Record( Row ), Field );
+		Record.Fields().Recall( Record( Row ), Field );
 
 		Column.Init();
-		Record.Columns.Recall(Field.Column(), Column );
+		Record.Columns().Recall(Field.Column(), Column );
 
-		GetData_( Field, Column.Type(), Types, Record.Data, Data );
+		GetData_( Field, Column.Type(), Types, Record.Data(), Data );
 	qRR
 	qRT
 	qRE
@@ -170,7 +175,7 @@ namespace {
 	{
 	qRH
 		sdr::sRow Row = qNIL;
-		fbltyp::wString Data;
+		fbltyp::wStrings Data;
 	qRB
 		Row = Record.First();
 
@@ -178,7 +183,7 @@ namespace {
 			Ids.Append( *Row );
 
 			Data.Init();
-			GetData_(Row, Record, GetTypes(), Data );
+			GetData_( Row, Record, GetTypes(), Data );
 			DataSet.Append( Data );
 
 			Row = Record.Next( Row );
@@ -189,12 +194,61 @@ namespace {
 	}
 }
 
-DEC( GetFields )
+DEC( GetFieldsData )
 {
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dStringsSet &DataSet = Request.StringsSetOut();
 
 	GetDataSet_( Record, Ids, DataSet );
+}
+
+namespace {
+	void GetColumns_(
+		const ogzrcd::rRecordBuffer &Record,
+		fbltyp::dIds &Ids,
+		fbltyp::dIds &Types,
+		fbltyp::dId8s &Numbers,
+		fbltyp::dStrings &Labels,
+		fbltyp::dStrings &Comments )
+	{
+	qRH
+		sdr::sRow Row = qNIL;
+		ogzclm::sColumn Column;
+		ogztyp::sRow Type = qNIL;
+		ogzclm::eNumber Number = ogzclm::n_Undefined;
+		str::wString Label, Comment;
+	qRB
+		Row = Record.First();
+
+		while ( Row != qNIL ) {
+			Label.Init();
+			Comment.Init();
+
+			Record.GetColumnContent( Row, Type, Number, Label, Comment );
+
+			Ids.Append( *Row );
+			Types.Append( *Type );
+			Numbers.Append( Number );
+			Labels.Append( Label );
+			Comment.Append( Comment );
+
+			Row = Record.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+}
+
+DEC( GetFieldsColumns )
+{
+	fbltyp::dIds &Ids = Request.IdsOut();
+	fbltyp::dIds &Types = Request.IdsOut();
+	fbltyp::dId8s &Numbers = Request.Id8sOut();
+	fbltyp::dStrings &Labels = Request.StringsOut();
+	fbltyp::dStrings &Comments = Request.StringsOut();
+
+	GetColumns_( Record, Ids, Types, Numbers, Labels, Comments );
 }
 
 #define D( name )	#name, (void *)exported##name
@@ -209,13 +263,24 @@ void wrprecord::dRecord::NOTIFY(
 		fblbkd::cEnd );
 
 	Module.Add( D( CreateField ),
-			fblbkd::cId,	// Field type.
-			fblbkd::cId8,	// Field number ('ogzclm::eNumber).
+			fblbkd::cId,		// Field type.
+			fblbkd::cId8,		// Field number ('ogzclm::eNumber).
+			fblbkd::cString,	// Label.
+			fblbkd::cString,	// Comment.
 		fblbkd::cEnd,
 			fblbkd::cId,	// Id of the created field.
 		fblbkd::cEnd );
 
-	Module.Add( D( GetFields ),
+	Module.Add( D( GetFieldsColumns ),
+		fblbkd::cEnd,
+			fblbkd::cIds,		// Ids of the fields,
+			fblbkd::cIds,		// Types.
+			fblbkd::cId8s,		// Numbers.
+			fblbkd::cStrings,	// Labels.
+			fblbkd::cStrings,	// Comments.
+		fblbkd::cEnd );
+
+	Module.Add( D( GetFieldsData ),
 		fblbkd::cEnd,
 			fblbkd::cIds,	// Ids of the fields,
 			fblbkd::cStringsSet,	// Data of each field.

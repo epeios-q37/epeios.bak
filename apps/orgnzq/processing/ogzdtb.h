@@ -37,8 +37,6 @@ namespace ogzdtb {
 	class rDatabase
 	{
 	private:
-		ogztyp::sRow TextType_, RecordType_;	// The 2 types which have to exists.
-		void FetchMandatoryTypes_( const ogztyp::dTypes &Types );
 	public:
 		ogzdta::sData Data;
 		ogzclm::sColumns Columns;
@@ -47,7 +45,6 @@ namespace ogzdtb {
 		ogzusr::sUsers Users;
 		void reset( bso::bool__ P = true )
 		{
-			TextType_ = RecordType_ = qNIL;
 			Data.reset( P );
 			Columns.reset( P );
 			Fields.reset( P );
@@ -68,8 +65,6 @@ namespace ogzdtb {
 			Fields.Init( FLDCallback );
 			Records.Init( RCDCallback );
 			Users.Init( USRCallback );
-
-			FetchMandatoryTypes_( Types );
 		}
 	};
 # ifdef M

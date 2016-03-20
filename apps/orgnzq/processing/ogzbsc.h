@@ -25,7 +25,7 @@
 # include "bso.h"
 # include "err.h"
 # include "sdr.h"
-# include "bch.h"
+# include "str.h"
 
 namespace ogzbsc {
 
@@ -38,10 +38,9 @@ namespace ogzbsc {
 	qROW( URow );	// User row.
 	qROW( URRow );	// User record row.
 
-	using sdr::sByte;
 	using sdr::sSize;
 
-	typedef bch::qBUNCHdl( sByte ) dDatum;
+	typedef str::dString dDatum;
 	qW( Datum );
 }
 

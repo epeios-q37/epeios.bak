@@ -21,32 +21,3 @@
 
 using namespace ogzdtb;
 
-namespace {
-	E_CDEF(char *, RecordTypeLabel_, "Record");
-	E_CDEF(char *, TextTypeLabel_, "Text");
-}
-
-void ogzdtb::rDatabase::FetchMandatoryTypes_( const ogztyp::dTypes &Types )
-{
-	ogztyp::sRow Row = Types.First();
-	ogztyp::sType Type;
-
-	while ( Row != qNIL ) {
-		Types.Recall( Row, Type );
-
-		if ( !strcmp( Type.GetLabel(), RecordTypeLabel_ ) )
-			RecordType_ = Row;
-		else if ( !strcmp( Type.GetLabel(), TextTypeLabel_ ) )
-			TextType_ = Row;
-
-		Type.reset( false );
-
-		Row = Types.Next( Row );
-	}
-
-	if ( RecordType_ == qNIL )
-		qRGnr();
-
-	if ( TextType_ == qNIL )
-		qRGnr();
-}

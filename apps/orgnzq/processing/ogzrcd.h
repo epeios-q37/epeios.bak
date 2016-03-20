@@ -73,10 +73,12 @@ namespace ogzrcd {
 	: public rCommon_<ogzclm::rRegularColumnCallback, sColumns_ >
 	{
 	public:
-		void Init( void )
+		void Init(
+			ogztyp::sRow TextType,
+			ogzdta::sData &Data )
 		{
 			Callback_.Init();
-			sColumns_::Init( Callback_ );
+			sColumns_::Init( Callback_, TextType, Data );
 		}
 	};
 
@@ -98,36 +100,62 @@ namespace ogzrcd {
 	{
 	private:
 		sRow Id_;	// Row of the source record. If qNIL, it's a new record.
+		rCommon_<ogzdta::rRegularDataCallback, ogzdta::sData> Data_;
+		sColumns Columns_;
+		sFields Fields_;
 	public:
-		rCommon_<ogzdta::rRegularDataCallback, ogzdta::sData> Data;
-		sColumns Columns;
-		sFields Fields;
 		void reset( bso::sBool P = true )
 		{
 			Id_ = qNIL;
-			Data.reset( P );
-			Columns.reset( P );
-			Fields.reset( P );
+			Data_.reset( P );
+			Columns_.reset( P );
+			Fields_.reset( P );
 		}
 		qCDTOR( rRecordBuffer );
-		void Init( void )
+		void Init( ogztyp::sRow TextType )
 		{
 			Id_ = qNIL;
-			Data.Init();
-			Columns.Init();
-			Fields.Init( Columns );
+			Data_.Init();
+			Columns_.Init( TextType, Data_ );
+			Fields_.Init( Columns_ );
 		}
 		sdr::sRow CreateField(
 			ogztyp::sRow Type,
-			ogzclm::eNumber Number )
+			ogzclm::eNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment )
 		{
-			return Append( Fields.Create( Type, Number ) );
+			return Append( Fields_.Create( Type, Number, Label, Comment ) );
 		}
 		ogzdta::sRow UpdateDatum(
 			ogzdta::sRow DatumRow,	// if == 'qNIL', an entry is created.
 			ogzfld::sRow FieldRow,
 			const str::dString &Datum );
 		qRODISCLOSEr( sRow, Id );
+		const ogzdta::sData &Data( void ) const
+		{
+			return Data_;
+		}
+		const ogzclm::sColumns &Columns( void ) const
+		{
+			return Columns_.Core();
+		}
+		const ogzfld::sFields &Fields( void ) const
+		{
+			return Fields_.Core();
+		}
+		void GetColumn(
+			sdr::sRow Row,
+			ogzclm::sColumn &Column ) const
+		{
+			Fields_.GetColumn( Get( Row ), Column );
+		}
+		void GetColumnContent(
+			sdr::sRow &Row,
+			ogztyp::sRow &Type,
+			ogzclm::eNumber &Number,
+			str::dString &Label,
+			str::dString &Comment ) const;
 	};
 }
 

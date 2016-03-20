@@ -35,7 +35,6 @@ namespace ogzdta {
 	using ogzbsc::sSize;
 
 	using ogzbsc::sTRow;
-	using ogzbsc::sByte;
 	using ogzbsc::dDatum;
 	using ogzbsc::wDatum;
 
@@ -133,7 +132,7 @@ namespace ogzdta {
 		}
 	};
 
-	typedef bch::qBUNCHdl( ogzdta::sByte ) dBytes;
+	typedef str::dString dBytes;
 	qW( Bytes );
 
 	class rRegularDataCallback

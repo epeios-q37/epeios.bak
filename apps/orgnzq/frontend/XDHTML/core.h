@@ -25,6 +25,7 @@
 # include "login.h"
 # include "main.h"
 # include "record.h"
+# include "fields.h"
 
 # include "frdinstc.h"
 
@@ -46,6 +47,7 @@ namespace core {
 		login::fActionCallbacks Login_;
 		main::fActionCallbacks Main_;
 		record::fActionCallbacks Record_;
+		fields::fActionCallbacks Fields_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -54,6 +56,7 @@ namespace core {
 			Login_.reset( P );
 			Main_.reset( P );
 			Record_.reset( P );
+			Fields_.reset();
 		}
 		E_CVDTOR( action_callbacks__ );
 		void Init( void )
@@ -63,6 +66,7 @@ namespace core {
 			Main_.Init();
 			Global_.Init();
 			Record_.Init();
+			Fields_.Init();
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
 

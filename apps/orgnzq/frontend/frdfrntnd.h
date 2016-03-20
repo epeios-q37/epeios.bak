@@ -34,8 +34,10 @@
 namespace frdfrntnd {
 	typedef sclfrntnd::frontend___ _frontend___;
 
-	SCLF_IL( Type, Id8 );
+	SCLF_IL( Type, Id );
 	SCLF_ILW( Number, Id8 );
+	SCLF_I( Field, Id );
+	
 
 	class rFrontend
 	: public _frontend___

@@ -21,3 +21,37 @@
 
 using namespace ogzrcd;
 
+namespace {
+	inline void GetDatum_(
+		ogzdta::sRow Row,
+		ogztyp::sRow TextType,
+		const ogzdta::sData &Data,
+		str::dString &Datum )
+	{
+		if ( Row != qNIL )
+			Data.Recall( Row, TextType, Datum );
+	}
+}
+
+void ogzrcd::rRecordBuffer::GetColumnContent(
+	sdr::sRow &Row,
+	ogztyp::sRow &Type,
+	ogzclm::eNumber &Number,
+	str::dString &Label,
+	str::dString &Comment ) const
+{
+qRH
+	ogzclm::sColumn Column;
+qRB
+	Column.Init();
+	GetColumn( Row, Column );
+
+	Type = Column.Type();
+	Number = Column.Number();
+
+	GetDatum_( Column.Label(), Columns_.TextType(), Data_, Label );
+	GetDatum_( Column.Comment(), Columns_.TextType(), Data_, Comment );
+qRR
+qRT
+qRE
+}

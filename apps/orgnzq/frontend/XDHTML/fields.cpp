@@ -34,6 +34,8 @@ namespace {
 		base::context_rack___ Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpFieldsColumns( Rack );
 	qRR
 	qRT
 	qRE
@@ -96,8 +98,22 @@ qRT
 qRE
 }
 
-BASE_AC( fields::sTemplate )
+BASE_AC( fields::sCreateField )
 {
-	Session.AlertT( "Template" );
+qRH
+	str::wString Label, Comment;
+qRB
+	Label.Init();
+	Session.GetContent( "FieldLabel", Label );
+
+	Comment.Init();
+	Session.GetContent( "FieldLabel", Comment );
+
+	Session.User.CreateField( (frdinstc::sTypeId)0, (frdinstc::sNumberId)0, Label, Comment );
+
+	main::SetLayout( Session );
+qRR
+qRT
+qRE
 }
 

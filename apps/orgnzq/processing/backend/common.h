@@ -68,15 +68,23 @@ namespace common {
 	{
 	private:
 		plgn::rRetrievers<ogzplg::fTypePlugin> Retrievers_;
+		ogztyp::wTypes Core_;
+		ogztyp::sRow
+			MandatoryRecordType_,
+			MandatoryTextType_;
+		void FetchMandatoryTypes_( void );
 	public:
-		ogztyp::wTypes Core;
 		void reset( bso::sBool P = true )
 		{
-			Core.reset( P );
+			Core_.reset( P );
 			Retrievers_.reset( P );
+			MandatoryRecordType_, MandatoryTextType_ = qNIL;
 		}
 		qCDTOR( rTypes );
 		void Init( const char *Identifier );
+		qRODISCLOSEs( ogztyp::dTypes, Core );
+		qRODISCLOSEr( ogztyp::sRow, MandatoryRecordType );
+		qRODISCLOSEr( ogztyp::sRow, MandatoryTextType );
 	};
 
 	class rDatabase
@@ -144,6 +152,9 @@ namespace common {
 	bso::bool__ IsInitialized( void );
 
 	const ogztyp::dTypes &GetTypes( void );
+
+	ogztyp::sRow GetMandatoryRecordType( void  );
+	ogztyp::sRow GetMandatoryTextType( void  );
 }
 
 # define RWL common::rRWLock Lock

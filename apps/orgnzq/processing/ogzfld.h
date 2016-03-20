@@ -119,15 +119,23 @@ namespace ogzfld {
 		}
 		sRow Create(
 			ogztyp::sRow Type,
-			ogzclm::eNumber Number )
+			ogzclm::eNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment )
 		{
-			return Create_( C_().Create( Type, Number ) );
+			return Create_( C_().Create( Type, Number, Label, Comment ) );
 		}
 		void Recall(
 			sRow Row,
 			dField &Field ) const
 		{
 			Core_.Recall( Row, Field );
+		}
+		void GetColumn(
+			sRow Row,
+			ogzclm::sColumn &Column ) const
+		{
+			C_().Recall( GetColumn_( Row ), Column );
 		}
 		qRODISCLOSEs( sFields, Core );
 	};

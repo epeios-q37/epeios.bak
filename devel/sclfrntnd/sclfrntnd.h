@@ -200,12 +200,13 @@ namespace sclfrntnd {
 		const kernel___ &Kernel,
 		str::string_ &Path );
 
-# define SCLF_I_( name, id  )\
-	E_TMIMIC__( fbltyp::s##id,	s##name##Id );\
+# define SCLF_I( name, id  )\
+	typedef fbltyp::s##id b##name##Id;\
+	E_TMIMIC__( b##name##Id,	s##name##Id );\
 	typedef fbltyp::d##id##s	d##name##Ids;\
 	qW( name##Ids );\
 \
-	E_CDEF( s##name##Id, Undefined##name, fbltyp::Undefined##id );\
+	E_CDEF( s##name##Id, Undefined##name, fbltyp::Undefined##id )
 
 	template <typename t> class dIL_	// id, label.
 	{
@@ -252,7 +253,7 @@ namespace sclfrntnd {
 	qW1( IL_ );
 
 # define SCLF_IL( name, id  )\
-	SCLF_I_( name, id );\
+	SCLF_I( name, id );\
 \
 	typedef sclfrntnd::dIL_<s##name##Id> d##name;\
 	qW( name );\
@@ -330,7 +331,7 @@ namespace sclfrntnd {
 
 
 # define SCLF_ILW( name, id  )\
-	SCLF_I_( name, id );\
+	SCLF_I( name, id );\
 \
 	typedef sclfrntnd::dILW_<s##name##Id> d##name;\
 	qW( name );\
