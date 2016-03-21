@@ -137,7 +137,6 @@ namespace common {
 	public:
 		rDatabase Database;
 		rAuthentication Authentication;
-		rRecord Record;
 	};
 
 	typedef lck::rControl<rNakedRack> rRack;

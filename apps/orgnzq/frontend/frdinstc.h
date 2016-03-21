@@ -53,6 +53,8 @@ namespace frdinstc {
 
 			Record_.Init( Frontend.Record );
 			Object_.Init( Frontend.MyObject );
+
+			Record_.Initialize();
 		}
 		bso::sBool Login(
 			const str::vString &Username,

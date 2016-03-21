@@ -17,14 +17,17 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "fields.h"
+#include "record.h"
 
 #include "core.h"
 #include "registry.h"
 #include "sclfrntnd.h"
+#include "fields.h"
 
 namespace {
-	E_CDEF( char *, XSLAffix_, "Fields" );
+	E_CDEF( char *, XSLAffix_, "Record" );
+
+	E_CDEF( char *, FieldsFrameId_, "Fields" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -58,7 +61,7 @@ namespace {
 	qRE
 	}
 
-	void GetContent_(
+	static void GetContent_(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
@@ -67,17 +70,13 @@ namespace {
 		base::content_rack___ Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
-
-		Session.User.DumpFieldsColumns( Rack );
 	qRR
 	qRT
 	qRE
 	}
-
 }
 
-
-void fields::SetLayout(
+void record::SetLayout(
 	const char *Id,
 	core::rSession &Session )
 {
@@ -93,27 +92,20 @@ qRB
 	Session.FillElement( Id, XML, XSL );
 
 	SetCasting_( Id, Session );
+
+	fields::SetLayout( FieldsFrameId_, Session );
+
+//	Session.SwitchTo( core::fframe );
 qRR
 qRT
 qRE
 }
 
-BASE_AC( fields::sCreateField )
+BASE_AC( record::sTemplate )
 {
-qRH
-	str::wString Label, Comment;
-qRB
-	Label.Init();
-	Session.GetContent( "FieldLabel", Label );
-
-	Comment.Init();
-	Session.GetContent( "FieldLabel", Comment );
-
-	Session.User.CreateField( (frdinstc::sTypeId)0, (frdinstc::sNumberId)0, Label, Comment );
-
-	main::SetLayout( Session );
-qRR
-qRT
-qRE
+	/*
+	Session.GetAttribute()
+	Session.User.CreateField();
+	*/
 }
 

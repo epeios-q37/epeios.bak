@@ -154,7 +154,6 @@ qRB
 	Types_.Init( NULL );
 	Rack_.Database.Init( GetTypes(), NULL );
 	Rack_.Authentication.Init( NULL );
-	Rack_.Record.Init( GetMandatoryTextType() );
 
 	Rack.Init( Rack_ );
 

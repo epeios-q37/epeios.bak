@@ -563,10 +563,6 @@ namespace tol {
 		{
 			return S_.Object;
 		}
-		operator t( void )
-		{
-			return S_.Object;
-		}
 	};
 
 	qW1( Object );

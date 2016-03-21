@@ -118,6 +118,7 @@ namespace ogzrcd {
 			Data_.Init();
 			Columns_.Init( TextType, Data_ );
 			Fields_.Init( Columns_ );
+			wRecord::Init();
 		}
 		sdr::sRow CreateField(
 			ogztyp::sRow Type,

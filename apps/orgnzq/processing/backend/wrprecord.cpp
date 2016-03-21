@@ -58,6 +58,11 @@ void wrprecord::dRecord::HANDLE(
 
 #define DEC( name )	static void exported##name ARGS
 
+DEC( Initialize )
+{
+	Record().Init(common::GetMandatoryTextType() );
+}
+
 DEC( EditRecord )
 {
 qRH
@@ -80,7 +85,6 @@ namespace {
 		ogzclm::eNumber Number,
 		const str::dString &Label,
 		const str::dString &Comment,
-		const ogzdtb::rDatabase &Database,
 		ogzrcd::rRecordBuffer &Record )
 	{
 		if ( !GetTypes().Exists( Type ) )
@@ -95,11 +99,6 @@ namespace {
 
 DEC( CreateField )
 {
-qRH
-	ROL;
-qRB
-	ROR;
-
 	const fbltyp::sId &Type = Request.IdIn();
 	const fbltyp::sId8 &Number = Request.Id8In();
 	const fbltyp::dString
@@ -109,10 +108,7 @@ qRB
 	if ( *Number >= ogzclm::n_amount )
 		qRGnr();
 
-	Request.IdOut() = *CreateField_( *Type, (ogzclm::eNumber)*Number, Label, Comment, Rack.Database.Core, Record() );
-qRR
-qRT
-qRE
+	Request.IdOut() = *CreateField_( *Type, (ogzclm::eNumber)*Number, Label, Comment, Record() );
 }
 
 namespace {
@@ -199,7 +195,7 @@ DEC( GetFieldsData )
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dStringsSet &DataSet = Request.StringsSetOut();
 
-	GetDataSet_( Record, Ids, DataSet );
+	GetDataSet_( Record(), Ids, DataSet );
 }
 
 namespace {
@@ -230,7 +226,7 @@ namespace {
 			Types.Append( *Type );
 			Numbers.Append( Number );
 			Labels.Append( Label );
-			Comment.Append( Comment );
+			Comments.Append( Comment );
 
 			Row = Record.Next( Row );
 		}
@@ -248,7 +244,7 @@ DEC( GetFieldsColumns )
 	fbltyp::dStrings &Labels = Request.StringsOut();
 	fbltyp::dStrings &Comments = Request.StringsOut();
 
-	GetColumns_( Record, Ids, Types, Numbers, Labels, Comments );
+	GetColumns_( Record(), Ids, Types, Numbers, Labels, Comments );
 }
 
 #define D( name )	#name, (void *)exported##name
@@ -259,6 +255,10 @@ void wrprecord::dRecord::NOTIFY(
 {
 	Module.Add( D( EditRecord ),
 			fblbkd::cId,	// Record to edit. If == 'qNIL', we want a new record.
+		fblbkd::cEnd,
+		fblbkd::cEnd );
+
+	Module.Add( D( Initialize ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 

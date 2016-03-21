@@ -108,7 +108,7 @@ namespace ogzdta {
 		}
 		sRow New(
 			sTRow Type,
-			sRow Row = qNIL ) const
+			sRow Row = qNIL )
 		{
 			return C_().New( Type, Row );
 		}

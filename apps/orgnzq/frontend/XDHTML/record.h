@@ -17,39 +17,36 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ogzfld.h"
+// Record
 
-using namespace ogzfld;
+#ifndef RECORD__INC
+# define RECORD__INC
 
-ogzclm::sRow ogzfld::sXFields::GetColumn_( sRow Row ) const
-{
-	ogzclm::sRow Column = qNIL;
-qRH
-	wField Field;
-qRB
-	Field.Init();
-	Core_.Recall( Row, Field  );
+# include "base.h"
 
-	Column = Field.Column();
-qRR
-qRT
-qRE
-	return Column;
+namespace record {
+	E_CDEF( char *, FieldsFrameId_, "Fields" );
+
+	BASE_ACD( Template );
+
+	class fActionCallbacks
+	{
+	public:
+		BASE_ACU( Template );
+		void reset( bso::bool__ P = true )
+		{
+			BASE_ACR( Template );
+		}
+		qCVDTOR( fActionCallbacks );
+		void Init( void )
+		{
+			BASE_ACI( Template );
+		}
+	};
+
+	void SetLayout(
+		const char *Id,
+		core::rSession &Session );
 }
 
-sRow ogzfld::sXFields::Create_( ogzclm::sRow Column )
-{
-	ogzfld::sRow Row = qNIL;
-qRH
-	ogzfld::wField Field;
-qRB
-	Field.Init( Column );
-
-	Row = Core_.New();
-
-	Core_.Store( Field, Row );
-qRR
-qRT
-qRE
-	return Row;
-}
+#endif
