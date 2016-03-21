@@ -435,17 +435,10 @@ namespace fblbkd {
 	protected:
 		virtual index__ FBLBKDNew( void ) override
 		{
-			st *S = NULL;
 			t *Pointeur = NULL;
 
-			if ( ( S = new st ) == NULL )
+			if ( ( Pointeur = new t() ) == NULL )
 				qRAlc();
-
-			if ( ( Pointeur = new t( *S ) ) == NULL )
-			{
-				delete S;
-				qRAlc();
-			}
 
 			Pointeur->reset( false );
 

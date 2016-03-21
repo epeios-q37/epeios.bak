@@ -545,6 +545,7 @@ namespace tol {
 		{
 			S_.Object.reset( P );
 		}
+		qCVDTOR( dObject );
 		void plug( class ags::aggregated_storage_ & )
 		{
 			// Pour des raisons de standardisation.

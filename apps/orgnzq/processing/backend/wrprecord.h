@@ -41,9 +41,7 @@ namespace wrprecord {
 		{};
 		dRecord( s &S )
 		: dRecord_( S )
-		{ 
-			dRecord::reset( false );
-		}
+		{}
 		void HANDLE(
 			fblbkd::backend___ &Backend,
 			fblbkd::untyped_module &Module,

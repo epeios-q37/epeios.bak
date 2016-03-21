@@ -2,6 +2,12 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-03-21 :
+- FBLBKD :
+	- Simplification.
+- TOL :
+	- Fixing some bug in 'dObject'/
+
 2016-03-15
 - DWTFTR :
 	- The 'Goofs' tag was not handled when In 'Load(...)'.
