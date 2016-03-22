@@ -921,7 +921,7 @@ static void Clean_(
 
 namespace {
 	void DeleteExtraneousGhostFiles_(
-		const str::vString &Root,
+		const str::dString &Root,
 		const item_ &Item,
 		const dwtdct::fstrings_ &Filenames,
 		const dwtxcl::excluder_ &Excluder,
@@ -1088,8 +1088,8 @@ qRE
 
 namespace {
 	void DelGhosts_(
-		const str::vString &Root,
-		const str::vString &Path,
+		const str::dString &Root,
+		const str::dString &Path,
 		const dwtdct::fstrings_ &Filenames,
 		const dwtxcl::excluder_ &Excluder )
 	{

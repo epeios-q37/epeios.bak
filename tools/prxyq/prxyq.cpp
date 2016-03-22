@@ -30,6 +30,7 @@
 #include "xpp.h"
 #include "fnm.h"
 #include "flf.h"
+#include "csdcmn.h"
 #include "csdbns.h"
 #include "lstbch.h"
 #include "ctn.h"
@@ -285,9 +286,9 @@ public:
 	public:
 		struct s {
 			rProxy *Proxy;
-			str::vString::s Id;
+			str::dString::s Id;
 		} &S_;
-		str::vString Id;
+		str::dString Id;
 		dPending( s &S )
 		: S_( S ),
 		  Id( S.Id )
@@ -315,7 +316,7 @@ public:
 		}
 		void Init(
 			rProxy *Proxy,
-			const str::vString &Id )
+			const str::dString &Id )
 		{
 			S_.Proxy = Proxy;
 
@@ -455,6 +456,9 @@ public:
 			rProxy *Proxy = NULL;
 		qRB
 			mtx::Lock( Mutex_ );
+
+			if ( csdcmn::GetProtocolVersion( prxybase::ProtocolId, Flow ) != prxybase::ProtocolVersion )
+				qRGnr();
 
 			if ( prxybase::GetRequest( Flow ) != prxybase::rPlug )
 				qRGnr();

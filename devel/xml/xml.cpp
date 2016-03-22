@@ -1188,8 +1188,8 @@ namespace {
 };
 
 void xml::TransformUsingEntities(
-	const str::vString &Source,
-	str::vString &Target )
+	const str::dString &Source,
+	str::dString &Target )
 {
 qRH
 	flx::fStringIFlow IFlow;
@@ -1479,7 +1479,7 @@ qRE
 	return Success;
 }
 
-bso::sBool xml::dWriter::Put( const str::vString &XML )
+bso::sBool xml::dWriter::Put( const str::dString &XML )
 {
 	bso::sBool Success = false;
 qRH

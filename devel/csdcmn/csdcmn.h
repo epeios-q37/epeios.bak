@@ -17,11 +17,37 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDSCB__COMPILATION
+// Client-Server Devices CoMmoN
 
-#include "csdscb.h"
+#ifndef CSDCMN__INC
+# define CSDCMN__INC
 
-#include "str.h"
+# define CSDCMN_NAME		"CSDCMN"
 
-using namespace csdscb;
+# if defined( E_DEBUG ) && !defined( CSDCMN_NODBG )
+#  define CSDCMN_DBG
+# endif
 
+# include "err.h"
+
+# include "bso.h"
+# include "tol.h"
+# include "flw.h"
+
+namespace csdcmn {
+	typedef bso::uint__ sVersion;
+
+	qCDEF( sVersion, UndefinedVersion, BSO_UINT_MAX );
+
+	void SendProtocol(
+		const char *Id,
+		sVersion Version,
+		flw::oflow__ &Flow );
+
+	sVersion GetProtocolVersion(
+		const char *Id,
+		flw::iflow__ &Flow );	// If 'UndefinedVersion' is returned, then the protocol is not the good one, or the content of the flow is not valid.
+
+}
+
+#endif

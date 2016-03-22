@@ -27,8 +27,8 @@ using namespace lcl;
 
 namespace {
 	void Normalize_(
-		const str::vString &Value,
-		str::vString &Normalized )
+		const str::dString &Value,
+		str::dString &Normalized )
 	{
 	qRH
 		flx::E_STRING_IFLOW__ Flow;

@@ -29,6 +29,7 @@
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdbnc</Module>
+				<Module>csdcmn</Module>
 				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="SCL">

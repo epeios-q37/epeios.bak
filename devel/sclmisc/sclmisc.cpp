@@ -1045,7 +1045,7 @@ qRE
 namespace {
 	static void GetPluginItemRelatedTags_(
 		const char *Target,
-		const str::vString &Id,
+		const str::dString &Id,
 		rgstry::tags_ &Tags )
 	{
 		Tags.Append( str::wString( Target ) );
@@ -1082,7 +1082,7 @@ namespace {
 		const char *Target,
 		const char *Label,
 		const char *Identifier,
-		const str::vString &Id,
+		const str::dString &Id,
 		plgn::rLooseRetriever &Retriever )
 	{
 	qRH
@@ -1107,7 +1107,7 @@ namespace {
 		const char *Target,
 		const char *Label,
 		const char *Identifier,
-		const str::vString &Id,
+		const str::dString &Id,
 		plgn::dRetrievers &Retrievers )
 	{
 	qRH

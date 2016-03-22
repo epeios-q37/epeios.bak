@@ -17,11 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#define CSDSCB__COMPILATION
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "csdscb.h"
+#include "csdcmn.h"
 
-#include "str.h"
+#include "err.h"
+#include "cio.h"
 
-using namespace csdscb;
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
 
+void Generic( int argc, char *argv[] )
+{
+qRH
+qRB
+qRR
+qRT
+qRE
+}
+
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+qRFH
+qRFB
+	COut << "Test of library " << CSDCMN_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+qRFR
+	ExitValue = EXIT_FAILURE;
+qRFT
+qRFE
+	return ExitValue;
+}

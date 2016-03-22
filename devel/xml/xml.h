@@ -356,7 +356,7 @@ namespace xml {
 		// Ident and put the content of 'XFlow' (reparse it).
 		bso::sBool Put( xtf::extended_text_iflow__ &XFlow );
 		// Ident and put the content of 'XML' (reparse it).
-		bso::sBool Put( const str::vString &XML );
+		bso::sBool Put( const str::dString &XML );
 		qRODISCLOSEv( eLayout, Outfit )
 		qRODISCLOSEv( eSpecialCharHandling, SpecialCharHandling )
 	};
@@ -778,8 +778,8 @@ namespace xml {
 
 	// Transformation des caractres spciaux, comm '<' qui devient '&lt;'.
 	void TransformUsingEntities(
-		const str::vString &Source,
-		str::vString &Target );
+		const str::dString &Source,
+		str::dString &Target );
 
 	/*
 	inline void TransformUsingEntities(

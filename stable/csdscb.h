@@ -38,18 +38,6 @@
 /*************/
 
 namespace csdscb {
-	typedef bso::uint__ sVersion;
-
-	E_CDEF( sVersion, UndefinedVersion, BSO_UINT_MAX );
-
-	void SendProtocol(
-		const char *Label,
-		sVersion Version,
-		flw::oflow__ &Flow );
-
-	sVersion GetProtocolVersion(
-		const char *Label,
-		flw::iflow__ &Flow );	// If 'UndefinedVersion' is returned, then the protocol is not the good one, or the content of the flow is not valid.
 
 	qENUM( Action ) {
 		aContinue,

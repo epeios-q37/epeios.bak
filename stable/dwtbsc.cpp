@@ -349,9 +349,9 @@ qRE
 }
 
 bso::sBool dwtbsc::Delete(
-	const str::vString &Root,
-	const str::vString &Path,
-	const str::vString &Filename )
+	const str::dString &Root,
+	const str::dString &Path,
+	const str::dString &Filename )
 {
 	bso::bool__ Success = false;
 qRH

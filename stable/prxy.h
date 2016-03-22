@@ -30,6 +30,7 @@
 
 # include "prxybase.h"
 
+# include "csdcmn.h"
 # include "csdbnc.h"
 
 # include "err.h"
@@ -54,6 +55,8 @@ namespace prxy {
 			prxybase::eType Type )
 		{
 			Flow_ = &Flow;
+
+			csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, Flow );
 
 			prxybase::PutRequest( prxybase::rPlug, Flow );
 
