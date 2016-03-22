@@ -52,7 +52,7 @@ namespace str {
 	class string_;
 
 	// Already declared as 'typedef' in 'str.h', so can not be predeclared as a class.
-	typedef string_ vString;
+	typedef string_ dString;
 }
 
 /*************************/

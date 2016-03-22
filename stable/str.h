@@ -47,8 +47,8 @@ namespace str {
 	typedef string_ dString;
 	typedef string wString;
 
-	typedef ctn::E_MCONTAINER_( str::vString ) dStrings;
-	typedef ctn::E_MCONTAINER( str::vString ) wStrings;
+	typedef ctn::E_MCONTAINER_( str::dString ) dStrings;
+	typedef ctn::E_MCONTAINER( str::dString ) wStrings;
 }
 
 /*************************/

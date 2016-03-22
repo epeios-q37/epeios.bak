@@ -124,9 +124,9 @@ namespace {
 }
 
 namespace {
-	inline const str::vString &GetString_(
+	inline const str::dString &GetString_(
 		flw::iflow__ &Flow,
-		str::vString &String )
+		str::dString &String )
 	{
 		bso::char__ C = 0;
 

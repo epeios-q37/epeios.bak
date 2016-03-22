@@ -21,5 +21,73 @@
 
 #include "csdscb.h"
 
+#include "str.h"
+
 using namespace csdscb;
 
+namespace {
+	void Write_(
+		const char *Text,
+		flw::oflow__ &Flow )
+	{
+		Flow.Write( Text, strlen( Text ) + 1 );	// '+1' to put the final 0.
+	}
+}
+
+void csdscb::SendProtocol(
+	const char *Label,
+	sVersion Version,
+	flw::oflow__ &Flow )
+{
+	bso::buffer__ Buffer;
+
+	if ( Version == UndefinedVersion )
+		qRFwk();
+
+	Write_( Label, Flow );
+
+	Write_(bso::Convert( Version, Buffer ), Flow );
+}
+
+namespace {
+	inline const str::dString &GetString_(
+		flw::iflow__ &Flow,
+		str::dString &String )
+	{
+		bso::char__ C = 0;
+
+		while ( ( C = Flow.Get() ) != 0 )
+			String.Append( C );
+
+		return String;
+	}
+}
+
+
+sVersion csdscb::GetProtocolVersion(
+	const char *Label,
+	flw::iflow__ &Flow )
+{
+	sVersion Version = UndefinedVersion;
+qRH
+	str::wString Incoming;
+	sdr::sRow Error = qNIL;
+qRB
+	Incoming.Init();
+	GetString_( Flow, Incoming );
+
+	if ( Incoming != Label )
+		qRReturn;
+
+	Incoming.Init();
+	GetString_( Flow, Incoming );
+
+	Incoming.ToNumber( Version, Error );
+
+	if ( Error != qNIL )
+		Version = UndefinedVersion;
+qRR
+qRT
+qRE
+	return Version;
+}
