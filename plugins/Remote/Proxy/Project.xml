@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>20160225</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="Plugin"/>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>proxy</Program>
+		<Software>remote</Software>
+		<UUID>e51c58a9-0f0b-408a-9580-e0b2714c8619</UUID>
+	</About>
+	<InstallPath>plugins/remote/</InstallPath>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+				<Module>mtk</Module>
+				<Module>prxy</Module>
+				<Module>prxybase</Module>
+				<Module>sck</Module>
+			</Modules>
+			<Modules Group="CSD">
+				<Module>csdbnc</Module>
+				<Module>csdmxb</Module>
+				<Module>csdmxc</Module>
+				<Module>csdrcc</Module>
+				<Module>csdrcd</Module>
+				<Module>csdmnc</Module>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>

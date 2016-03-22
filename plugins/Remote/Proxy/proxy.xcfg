@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="proxy">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<Parameters>
+			<Language>fr</Language>
+			<Command>Default</Command>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+			<Translations text="SendCommandDescription">
+				<Translation language="fr">Commande de test.</Translation>
+				<Translation language="en">Test command.</Translation>
+			</Translations>
+			<Translations text="TestFlagDescription">
+				<Translation language="fr">fanion de test.</Translation>
+				<Translation language="en">test flag.</Translation>
+			</Translations>
+			<Translations text="TestOptionDescription">
+				<Translation language="fr">option de test.</Translation>
+				<Translation language="en">test option.</Translation>
+			</Translations>
+			<Translations text="TestOptionLabel">
+				<Translation language="fr">option (fr)</Translation>
+				<Translation language="en">option (en)</Translation>
+			</Translations>
+			<Translations text="TestArgumentDescription">
+				<Translation language="fr">argument de test.</Translation>
+				<Translation language="en">test argument.</Translation>
+			</Translations>
+			<Translations text="HostServiceArgumentLabel">
+				<Translation language="fr">argument (fr)</Translation>
+				<Translation language="en">argument (en)</Translation>
+			</Translations>
+		</Locale>
+		<Arguments>
+			<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%HostServiceArgument% %IdentifierArgument%"/>
+			<Argument id="HostServiceArgument" Description="HostServiceArgumentDescription" Path="HostService" Label="HostServiceArgumentLabel"/>
+			<Argument id="IdentifierArgument" Description="IdentifierArgumentDescription" Path="Identifier" Label="IdentifierArgumentLabel"/>
+			<!-- Affectations des arguments libres-->
+			<Layouts>
+				<Layout command="Default">
+					<Link index="0" Target="HostServiceArgument"/>
+					<Link index="1" Target="IdentifierArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>
