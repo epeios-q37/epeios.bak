@@ -247,7 +247,7 @@ public:
 			mtx::Lock( PairingMutex_ );	// Unlocked by 'Plug(...)'.
 			mtx::Unlock( PairingMutex_ );
 
-			Flow.Put( 0 );	// To report that the flow is plugged.
+			prxybase::PutAnswer( prxybase::aPlugged, Flow );
 
 			Flow.Commit();
 
@@ -265,7 +265,7 @@ public:
 
 			mtx::Unlock( PairingMutex_ );
 
-			Flow.Put( 0 );	// To report that the flow is plugged.
+			prxybase::PutAnswer( prxybase::aPlugged, Flow );
 
 			Flow.Commit();
 
@@ -455,6 +455,9 @@ public:
 			rProxy *Proxy = NULL;
 		qRB
 			mtx::Lock( Mutex_ );
+
+			if ( prxybase::GetRequest( Flow ) != prxybase::rPlug )
+				qRGnr();
 
 			Type = prxybase::GetType( Flow );
 

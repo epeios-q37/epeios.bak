@@ -2,6 +2,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-03-22 :
+- PRXY, PRXYBASE :
+	- Rewriting the protocole to be more verbose, so it can be extended.
+
 2016-03-21 :
 - FBLBKD :
 	- Simplification.

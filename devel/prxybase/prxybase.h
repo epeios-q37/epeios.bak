@@ -35,6 +35,38 @@
 # include "err.h"
 
 namespace prxybase {
+	qENUM( Request ) {
+		rPlug,
+		r_amount,
+		r_Undefined
+	};
+
+	const char *GetLabel( eRequest Request );
+
+	eRequest GetRequest( const str::dString &Pattern );
+
+	eRequest GetRequest( flw::iflow__ &Flow );
+
+	void PutRequest(
+		eRequest Request,
+		flw::oflow__ &Flow );
+
+	qENUM( Answer ) {
+		aPlugged,
+		a_amount,
+		a_Undefined
+	};
+
+	const char *GetLabel( eAnswer Answer );
+
+	eAnswer GetAnswer( const str::dString &Pattern );
+
+	eAnswer GetAnswer( flw::iflow__ &Flow );
+
+	void PutAnswer(
+		eAnswer Answer,
+		flw::oflow__ &Flow );
+
 	qENUM( Type ) {
 		tClient,
 		tServer,
@@ -42,36 +74,26 @@ namespace prxybase {
 		t_Undefined
 	};
 
-	inline eType GetType( flw::iflow__ &Flow )
-	{
-		return (eType)Flow.Get();
-	}
+	const char *GetLabel( eType Type );
 
-	inline void PutType(
+	eType GetType( const str::dString &Pattern );
+
+	eType GetType( flw::iflow__ &Flow );
+
+	void PutType(
 		eType Type,
-		flw::oflow__ &Flow )
-	{
-		Flow.Put( Type );
-	}
+		flw::oflow__ &Flow );
+
+	const str::dString &GetId(
+		flw::iflow__ &Flow,
+		str::dString &Id );
 
 	inline void PutId(
-		const char *Identifier,
-		flw::oflow__ &Flow )
-	{
-		Flow.Write( Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
-	};
-
-	inline const str::vString &GetId(
-		flw::iflow__ &Flow,
-		str::vString &Id )
-	{
-		bso::char__ C = 0;
-
-		while ( ( C = Flow.Get() ) != 0 )
-			Id.Append( C );
-
-		return Id;
-	}
+			const char *Identifier,
+			flw::oflow__ &Flow )
+		{
+			Flow.Write( Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
+		};
 }
 
 #endif

@@ -55,14 +55,16 @@ namespace prxy {
 		{
 			Flow_ = &Flow;
 
+			prxybase::PutRequest( prxybase::rPlug, Flow );
+
 			prxybase::PutType( Type, Flow );
 
-			Flow.Write( Identifier, strlen( Identifier ) + 1 );	// '+1' to put the final 0.
+			prxybase::PutId( Identifier, Flow );
 
 			Flow.Commit();
 
 			if ( !Flow.EndOfFlow() ) {
-				if ( Flow.Get() != 0 )
+				if ( prxybase::GetAnswer( Flow ) != prxybase::aPlugged )
 					qRGnr();
 
 				Flow.Dismiss();
