@@ -39,6 +39,10 @@
 
 # define CSDUCL_CACHE_SIZE	1000
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace csducl {
 	enum type__ {
 		tNone,		// No server.
@@ -225,6 +229,15 @@ namespace csducl {
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
 		}
 	};
+}
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace csducl {
+	typedef universal_client_core___ rCore;
+	typedef universal_client_ioflow___ rIOFlow;
 }
 
 #endif
