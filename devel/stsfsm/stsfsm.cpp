@@ -21,6 +21,8 @@
 
 #include "stsfsm.h"
 
+#include "flx.h"
+
 using namespace stsfsm;
 
 id__ stsfsm::Add(
@@ -119,20 +121,18 @@ status__ stsfsm::parser__::_Handle(
 
 
 id__ stsfsm::GetId(
-	const str::string_ &Pattern,
+	flw::iflow__ &Flow,
 	const automat_ &Automat )
 {
 	id__ Id = UndefinedId;
 qRH
 	parser__ Parser;
-	sdr::row__ Row = qNIL;
 	bso::bool__ Match = false;
 qRB
-	Row = Pattern.First();
 	Parser.Init( Automat );
 
-	while ( Row != qNIL ) {
-		switch ( Parser.Handle( Pattern( Row ) ) ) {
+	while ( !Flow.EndOfFlow() ) {
+		switch ( Parser.Handle( Flow.Get() ) ) {
 		case sLost:
 			qRReturn;
 			break;
@@ -146,8 +146,6 @@ qRB
 			qRFwk();
 			break;
 		}
-
-		Row = Pattern.Next( Row );
 	}
 
 	if ( Match )
@@ -157,3 +155,15 @@ qRT
 qRE
 	return Id;
 }
+
+id__ stsfsm::GetId(
+	const str::dString &Pattern,
+	const automat_ &Automat )
+{
+	flx::E_STRING_IFLOW__ Flow;
+
+	Flow.Init( Pattern );
+
+	return GetId( Flow, Automat );
+}
+

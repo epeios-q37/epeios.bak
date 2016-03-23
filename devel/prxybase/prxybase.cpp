@@ -123,6 +123,21 @@ namespace {
 	}
 }
 
+eRequest prxybase::GetRequest( flw::iflow__ &Flow )
+{
+	return stsfsm::GetId( Flow, RequestAutomat_, r_Undefined, r_amount );
+}
+
+eAnswer prxybase::GetAnswer( flw::iflow__ &Flow )
+{
+	return stsfsm::GetId( Flow, AnswerAutomat_, a_Undefined, a_amount );
+}
+
+eType prxybase::GetType( flw::iflow__ &Flow )
+{
+	return stsfsm::GetId( Flow, TypeAutomat_, t_Undefined, t_amount );
+}
+
 namespace {
 	inline const str::dString &GetString_(
 		flw::iflow__ &Flow,
@@ -135,41 +150,8 @@ namespace {
 
 		return String;
 	}
-
-
-	template <typename t> t Get_(
-		flw::iflow__ &Flow,
-		t Undefined,
-		t( *Get )(const str::dString &Pattern) )
-	{
-		t T = Undefined;
-	qRH
-		str::wString Pattern;
-	qRB
-		Pattern.Init();
-		GetString_( Flow, Pattern );
-		T = Get( Pattern );
-	qRR
-	qRT
-	qRE
-		return T;
-	}
 }
 
-eRequest prxybase::GetRequest( flw::iflow__ &Flow )
-{
-	return Get_( Flow, r_Undefined, GetRequest );
-}
-
-eAnswer prxybase::GetAnswer( flw::iflow__ &Flow )
-{
-	return Get_( Flow, a_Undefined, GetAnswer );
-}
-
-eType prxybase::GetType( flw::iflow__ &Flow )
-{
-	return Get_( Flow, t_Undefined, GetType );
-}
 
 const str::dString &prxybase::GetId(
 	flw::iflow__ &Flow,

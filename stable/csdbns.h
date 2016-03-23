@@ -36,6 +36,16 @@
 
 # define CSDNBS__DEFAULT_TIMEOUT	SCK__DEFAULT_TIMEOUT
 
+/***************/
+/***** NEW *****/
+/***************/
+
+// There is also another 'NEW' section at the end.
+
+/***************/
+/***** PLD *****/
+/***************/
+
 namespace csdbns {
 	using namespace sck;
 
@@ -151,7 +161,7 @@ namespace csdbns {
 			sck::duration__ TimeOut = SCK_INFINITE );
 	};
 
-#ifdef CPE_F_MT
+# ifdef CPE_F_MT
 
 	struct _flow_data__ {
 		sck::socket_ioflow___ Flow;
@@ -189,10 +199,10 @@ namespace csdbns {
 			void *UP )
 		{
 			_flow_data__ &Data = *(_flow_data__ *)UP;
-#ifdef CSDNBS_DBG
+#  ifdef CSDNBS_DBG
 			if ( Data.Flow.GetSocket() != Socket )
 				ERRc();
-#endif
+#  endif
 
 			return BaseCallback->Process( Data.Flow, Data.UP );
 		}
@@ -237,10 +247,10 @@ namespace csdbns {
 			int Amount,
 			err::handling__ ErrorHandling = err::h_Default )
 		{
-#ifdef CSD__HANDLE_SERVICE
+#  ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
 				qRFwk();
-#endif
+#  endif
 			_SocketCallback = &SocketCallback;
 			
 			return listener___::Init( Port, Amount, ErrorHandling );
@@ -253,10 +263,10 @@ namespace csdbns {
 			err::handling__ ErrorHandling = err::h_Default,
 			int Amount = 5 )
 		{
-#ifdef CSD__HANDLE_SERVICE
+#  ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
 				qRFwk();
-#endif
+#  endif
 			_SocketCallback = &SocketCallback;
 
 			return listener___::Init( Port, Amount, ErrorHandling );
@@ -267,10 +277,10 @@ namespace csdbns {
 			err::handling__ ErrorHandling = err::h_Default,
 			int Amount = 5 )
 		{
-#ifdef CSD__HANDLE_SERVICE
+#  ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
 				qRFwk();
-#endif
+#  endif
 			_Callback.BaseCallback = &Callback;
 
 			return Init( Port, this->_Callback, Amount, ErrorHandling );
@@ -281,27 +291,34 @@ namespace csdbns {
 			int Amount,
 			err::handling__ ErrorHandling = err::h_Default )
 		{
-#ifdef CSD__HANDLE_SERVICE
+#  ifdef CSD__HANDLE_SERVICE
 			if ( !_service__::Init() )
 				qRFwk();
-#endif
+#  endif
 			_Callback.BaseCallback = &Callback;
 
 			return Init( Port, this->_Callback, Amount, ErrorHandling );
 		}
 		bso::bool__ LaunchService( const char *ServiceName )
 		{
-#ifdef CSD__HANDLE_SERVICE
+#  ifdef CSD__HANDLE_SERVICE
 			return _service__::Launch( ServiceName );
-#else
+#  else
 			return false;
-#endif
+#  endif
 		}
 		void Process(
 			sck::duration__ TimeOut = CSDNBS__DEFAULT_TIMEOUT,
 			err::handling__ ErrorHandling = err::h_Default );
 	};
+# endif
+}
 
-#endif
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace csdbns {
+	typedef server___ rServer;
 }
 #endif

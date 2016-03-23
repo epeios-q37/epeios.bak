@@ -273,6 +273,34 @@ namespace stsfsm {
 	}
 
 	id__ GetId(
+		flw::iflow__ &Flow,
+		const automat_ &Automat );
+
+	template <typename type> inline type Normalize_(
+		id__ Id,
+		bso::uint__ Amount,
+		type UndefinedValue )
+	{
+		if ( Id == UndefinedId )
+			return UndefinedValue;
+		else if ( Id >= (id__)Amount )
+			qRFwk();
+		else
+			return (type)Id;
+
+		return UndefinedValue;	// Pour viter un 'warning'.
+	}
+
+	template <typename type> inline type GetId(
+		flw::iflow__ &Flow,
+		const automat_ &Automat,
+		type UndefinedValue,
+		bso::uint__ Amount )
+	{
+		return Normalize_<type>( GetId( Flow, Automat ), Amount, UndefinedValue );
+	}
+
+	id__ GetId(
 		const str::string_ &Pattern,
 		const automat_ &Automat );
 
@@ -282,16 +310,7 @@ namespace stsfsm {
 		type UndefinedValue,
 		bso::uint__ Amount )
 	{
-		id__ Id = GetId( Pattern, Automat );
-
-		if ( Id == UndefinedId )
-			return UndefinedValue;
-		else if ( Id >= (id__)Amount )
-			qRFwk();
-		else
-			return (type)Id;
-
-		return UndefinedValue;	// Pour viter un 'warning'.
+		return Normalize_<type>( GetId( Pattern, Automat ), Amount, UndefinedValue );
 	}
 }
 
