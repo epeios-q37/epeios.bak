@@ -378,7 +378,15 @@ namespace sclmisc {
 		const str::string_ &RawList,
 		txf::text_oflow__ &Flow );
 
-	// Façon standard de récupèrer un plugin.
+	// Retrieve plugin features with given target AND id.
+	const str::string_ &GetPluginFeatures(
+		const char *Target,
+		const str::dString &Id,
+		str::string_ &Filename,
+		rgstry::entry__ &Configuration,
+		rgstry::entry__ &Locale );
+
+	// Retrieve a plugin with given target. Its id is retrieved from the registry.
 	const str::string_ &GetPluginFeatures(
 		const char *Target,
 		str::string_ &Filename,
@@ -390,27 +398,44 @@ namespace sclmisc {
 		const rgstry::entry__ &Entry,
 		const str::string_ &Filename );
 
+	// Retrieve a plugin with given target AND Id.
+	template <typename retriever> inline void Plug(
+		const char *Target,
+		const str::dString &Id,
+		const str::dString &Arguments,	// Useless if 'Id' empty.
+		const char *Identifier,
+		retriever &PluginRetriever )
+	{
+	qRH
+		str::string Filename, TrueArguments;
+		rgstry::entry__ Configuration, Locale;
+	qRB
+		Filename.Init();
+		TrueArguments.Init();
+		Configuration.Init();
+		Locale.Init();
+
+		if ( Id.Amount() != 0 ) {
+			GetPluginFeatures( Target, Id, Filename, Configuration, Locale );
+			TrueArguments = Arguments;
+		} else
+			GetPluginFeatures( Target, Filename, Configuration, Locale, TrueArguments );
+
+		HandleLocale_( Locale, Filename );
+
+		PluginRetriever.Initialize( Filename, Identifier, Configuration, TrueArguments );
+	qRR
+	qRT
+	qRE
+	}
+
+	// Retrieve a plugin with given target. Its id is retrieved from the registry.
 	template <typename retriever> inline void Plug(
 		const char *Target,
 		const char *Identifier,
 		retriever &PluginRetriever )
 	{
-	qRH
-		str::string Filename, Arguments;
-		rgstry::entry__ Configuration, Locale;
-	qRB
-		Filename.Init();
-		Arguments.Init();
-		Configuration.Init();
-		Locale.Init();
-
-		GetPluginFeatures( Target, Filename, Configuration, Locale, Arguments );
-		HandleLocale_( Locale, Filename );
-
-		PluginRetriever.Initialize( Filename, Identifier, Configuration, Arguments );
-	qRR
-	qRT
-	qRE
+		Plug( Target, str::wString(), str::wString(), Identifier, PluginRetriever );
 	}
 
 	void Plug_(

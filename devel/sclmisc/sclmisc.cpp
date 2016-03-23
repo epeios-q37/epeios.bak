@@ -943,22 +943,31 @@ void sclmisc::text_oflow_rack___::HandleError( void )
 		sclmisc::RecoverBackupFile( _FileName );
 }
 
-static void GetPluginRelatedTags_(
-	const char *Target,
-	rgstry::tags_ &Tags )
-{
-qRH
-	str::string Id;
-qRB
-	Tags.Append( str::string( Target ) );
+namespace {
+	 inline void FillPluginRelatedTags_(
+		const char *Target,
+		const str::dString &Id,
+		rgstry::tags_ &Tags )
+	{
+		Tags.Append( str::string( Target ) );
+		Tags.Append( Id );
+	}
 
-	Id.Init();
-	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::targeted_plugin::Id, Target ), Id );
+	 void GetPluginRelatedTags_(
+		const char *Target,
+		rgstry::tags_ &Tags )
+	{
+	qRH
+		str::string Id;
+	qRB
+		Id.Init();
+		sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::targeted_plugin::Id, Target ), Id );
 
-	Tags.Append( Id );
-qRR
-qRT
-qRE
+		FillPluginRelatedTags_( Target, Id, Tags );
+	qRR
+	qRT
+	qRE
+	}
 }
 
 static void GetPluginFeature_(
@@ -975,6 +984,45 @@ static void GetPluginFeature_(
 	Entry.Registry = &GetRegistry().GetRegistry( Level );
 }
 
+namespace {
+	const str::string_ &GetPluginFeatures_(
+		const char *Target,
+		const rgstry::tags_ &Tags,
+		str::string_ &Filename,
+		rgstry::entry__ &Configuration,
+		rgstry::entry__ &Locale )
+	{
+		sclmisc::MGetValue( rgstry::tentry__( sclrgstry::definition::plugin::Filename, Tags ), Filename );
+
+		GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
+		GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Locale, Tags ), Locale );
+
+		return Filename;
+	}
+}
+
+const str::string_ &sclmisc::GetPluginFeatures(
+	const char *Target,
+	const str::dString &Id,
+	str::string_ &Filename,
+	rgstry::entry__ &Configuration,
+	rgstry::entry__ &Locale )
+{
+qRH
+	rgstry::tags Tags;
+qRB
+	Tags.Init();
+
+	FillPluginRelatedTags_( Target, Id, Tags );
+
+	GetPluginFeatures_( Target, Tags, Filename, Configuration, Locale );
+qRR
+qRT
+qRE
+	return Filename;
+}
+
+
 const str::string_ &sclmisc::GetPluginFeatures(
 	const char *Target,
 	str::string_ &Filename,
@@ -989,11 +1037,8 @@ qRB
 
 	GetPluginRelatedTags_( Target, Tags );
 
-	sclmisc::MGetValue( rgstry::tentry__( sclrgstry::definition::plugin::Filename, Tags ), Filename );
-
-	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
-	GetPluginFeature_( rgstry::tentry__( sclrgstry::definition::plugin::Locale, Tags ), Locale );
-
+	GetPluginFeatures_( Target, Tags, Filename, Configuration, Locale );
+	
 	sclmisc::MGetValue( rgstry::tentry___( sclrgstry::parameter::TargetedPlugin, Target ), Arguments );
 qRR
 qRT

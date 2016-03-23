@@ -137,11 +137,30 @@ namespace {
 		Handler.Handle( Module );
 	}
 
+	void Process_( misc::sModule &Module )
+	{
+	qRH
+		plgn::rRetriever<cHandler> Retriever;
+		str::wString PluginId, PluginArguments;
+	qRB
+		PluginId.Init();
+		PluginArguments.Init();
+		Module.Preferences( PluginId, PluginArguments );
+
+		Retriever.Init();
+
+		sclmisc::Plug( misc::SlotPluginTarget, PluginId, PluginArguments, NULL, Retriever );
+
+		Process_( Retriever.Plugin(), Module );
+	qRR
+	qRT
+	qRE
+	}
+
 	void Process_( void )
 	{
 	qRH
 		TOL_CBUFFER___ Buffer;
-		plgn::rRetriever<cHandler> Retriever;
 	qRB
 		atexit( ExitFunction_ );
 
@@ -149,11 +168,7 @@ namespace {
 
 		LoadModule_( sclmisc::MGetValue( registry::Module, Buffer ) );
 
-		Retriever.Init();
-
-		sclmisc::Plug( misc::SlotPluginTarget, NULL, Retriever );
-
-		Process_( Retriever.Plugin(), Core_->GetCallback() );
+		Process_( Core_->GetCallback() );
 	qRR
 	qRT
 	qRE

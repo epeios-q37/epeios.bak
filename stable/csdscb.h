@@ -48,6 +48,11 @@ namespace csdscb {
 
 	class cProcessing {
 	protected:
+		// If returned 'Preferences' not empty, it indicates some connection preferences (see 'dmnzq').
+		virtual void CSDSCBPreferences(
+			str::dString &Preferences,
+			str::dString &Arguments )
+		{}
 		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) = 0;
 		virtual eAction CSDSCBProcess(
 			flw::ioflow__ &Flow,
@@ -55,6 +60,12 @@ namespace csdscb {
 		virtual void CSDSCBPostProcess( void *UP ) = 0;
 	public:
 		qCALLBACK( Processing );
+		void Preferences(
+			str::dString &Preferences,
+			str::dString &Arguments )
+		{
+			CSDSCBPreferences( Preferences, Arguments );
+		}
 		void *PreProcess( const ntvstr::char__ *Origin )
 		{
 			return CSDSCBPreProcess( Origin );
