@@ -59,13 +59,13 @@ qRH
 	sdr::sRow Error = qNIL;
 qRB
 	Incoming.Init();
-	Get( Flow, Incoming );
+	GetString( Flow, Incoming );
 
 	if ( Incoming != Label )
 		qRReturn;
 
 	Incoming.Init();
-	Get( Flow, Incoming );
+	GetString( Flow, Incoming );
 
 	Incoming.ToNumber( Version, &Error );
 

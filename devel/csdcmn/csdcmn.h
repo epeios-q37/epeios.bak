@@ -51,20 +51,31 @@ namespace csdcmn {
 
 	// Facilities.
 
-	inline const str::dString &Get(
+	inline const str::dString &GetString(
 		flw::sIFlow &Flow,
 		str::dString &Value )
 	{
-		Flow >> Value;
+		int C = 0;
+
+		while ( ( C = Flow.Get() ) != 0 )
+			Value.Append( C );
 
 		return Value;
 	}
 
-	inline void Put(
+	inline void PutString(
 		const str::dString &Value,
 		flw::sOFlow &Flow )
 	{
-		Flow << Value;
+		sdr::sRow Row = Value.First();
+
+		while ( Row != qNIL ) {
+			Flow.Put(Value( Row ) );
+
+			Row = Value.Next( Row );
+		}
+
+		Flow.Put( 0 );
 	}
 }
 

@@ -127,12 +127,12 @@ id__ stsfsm::GetId(
 	id__ Id = UndefinedId;
 qRH
 	parser__ Parser;
-	bso::bool__ Match = false;
+	bso::bool__ Match = false;int C = 0;
 qRB
 	Parser.Init( Automat );
 
-	while ( !Flow.EndOfFlow() ) {
-		switch ( Parser.Handle( Flow.Get() ) ) {
+	while ( ( !Flow.EndOfFlow() ) && ( ( C = Flow.Get() ) != 0 ) ) {
+		switch ( Parser.Handle( C ) ) {
 		case sLost:
 			qRReturn;
 			break;
