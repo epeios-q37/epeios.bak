@@ -1216,7 +1216,7 @@ void xml::writer_::_Indent( bso::size__ Amount ) const
 		*S_.Flow << ' ';
 }
 
-void xml::writer_::PutRawValue( flw::fIFlow &Flow )
+void xml::writer_::PutRawValue( flw::sIFlow &Flow )
 {
 	if ( S_.TagNameInProgress ) {
 		*S_.Flow << '>';
@@ -1232,7 +1232,7 @@ void xml::writer_::PutRawValue( flw::fIFlow &Flow )
 
 namespace {
 	void TransformAndPutValue_(
-		flw::fIFlow &Flow,
+		flw::sIFlow &Flow,
 		dWriter &Writer )
 	{
 	qRH
@@ -1249,7 +1249,7 @@ namespace {
 	}
 }
 
-void xml::writer_::PutValue( flw::fIFlow &Flow )
+void xml::writer_::PutValue( flw::sIFlow &Flow )
 {
 	switch ( S_.SpecialCharHandling ) {
 	case schReplace:
@@ -1283,7 +1283,7 @@ void xml::writer_::PutValue( const value_ &Value )
 
 void xml::writer_::PutRawAttribute(
 	const name_ &Name,
-	flw::fIFlow &Flow )
+	flw::sIFlow &Flow )
 {
 	if ( !S_.TagNameInProgress )
 		qRFwk();
@@ -1300,7 +1300,7 @@ void xml::writer_::PutRawAttribute(
 namespace {
 	void TransformAndPutAttribute_(
 		const name_ &Name,
-		flw::fIFlow &Flow,
+		flw::sIFlow &Flow,
 		dWriter &Writer )
 	{
 	qRH
@@ -1319,7 +1319,7 @@ namespace {
 
 void xml::writer_::PutAttribute(
 	const name_ &Name,
-	flw::fIFlow &Flow )
+	flw::sIFlow &Flow )
 {
 	switch ( S_.SpecialCharHandling ) {
 	case schReplace:
@@ -1354,7 +1354,7 @@ void xml::writer_::PutRawAttribute(
 	PutRawAttribute( Name, Flow );
 }
 
-void xml::writer_::PutCData( flw::fIFlow &Flow )
+void xml::writer_::PutCData( flw::sIFlow &Flow )
 {
 	if ( S_.TagNameInProgress ) {
 		*S_.Flow << '>';

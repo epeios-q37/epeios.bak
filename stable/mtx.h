@@ -33,6 +33,14 @@
 # include "tht.h"
 # include "tol.h"
 
+/***************/
+/***** NEW *****/
+/***************/
+
+/***************/
+/***** OLD *****/
+/***************/
+
 //# define MTX_NATIVE		// Use native library.
 //# define MTX_PTHREAD	// Use pthread library.
 //# define MTX_BASIC		// Use basic operations (atomicity NOY guaranted !).
@@ -516,6 +524,15 @@ namespace mtx {
 			mtx::Unlock( _Handler );
 		}
 	};
+}
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace mtx {
+	typedef mutex___ rMutex;
+	typedef handler___ rHandler;
 }
 
 #endif

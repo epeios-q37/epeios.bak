@@ -49,21 +49,6 @@ void csdcmn::SendProtocol(
 	Write_(bso::Convert( Version, Buffer ), Flow );
 }
 
-namespace {
-	inline const str::dString &GetString_(
-		flw::iflow__ &Flow,
-		str::dString &String )
-	{
-		bso::char__ C = 0;
-
-		while ( ( C = Flow.Get() ) != 0 )
-			String.Append( C );
-
-		return String;
-	}
-}
-
-
 sVersion csdcmn::GetProtocolVersion(
 	const char *Label,
 	flw::iflow__ &Flow )
@@ -74,13 +59,13 @@ qRH
 	sdr::sRow Error = qNIL;
 qRB
 	Incoming.Init();
-	GetString_( Flow, Incoming );
+	Get( Flow, Incoming );
 
 	if ( Incoming != Label )
 		qRReturn;
 
 	Incoming.Init();
-	GetString_( Flow, Incoming );
+	Get( Flow, Incoming );
 
 	Incoming.ToNumber( Version, &Error );
 

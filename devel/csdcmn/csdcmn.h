@@ -33,6 +33,7 @@
 # include "bso.h"
 # include "tol.h"
 # include "flw.h"
+# include "str.h"
 
 namespace csdcmn {
 	typedef bso::uint__ sVersion;
@@ -48,6 +49,23 @@ namespace csdcmn {
 		const char *Id,
 		flw::iflow__ &Flow );	// If 'UndefinedVersion' is returned, then the protocol is not the good one, or the content of the flow is not valid.
 
+	// Facilities.
+
+	inline const str::dString &Get(
+		flw::sIFlow &Flow,
+		str::dString &Value )
+	{
+		Flow >> Value;
+
+		return Value;
+	}
+
+	inline void Put(
+		const str::dString &Value,
+		flw::sOFlow &Flow )
+	{
+		Flow << Value;
+	}
 }
 
 #endif

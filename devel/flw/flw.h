@@ -59,10 +59,13 @@
 
 namespace flw {
 	class iflow__;
-	typedef iflow__ fIFlow;
+	typedef iflow__ sIFlow;
 
 	class oflow__;
-	typedef oflow__ fOFlow;
+	typedef oflow__ sOFlow;
+
+	class ioflow__;
+	typedef ioflow__ sIOFlow;
 }
 
 /**************/

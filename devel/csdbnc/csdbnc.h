@@ -69,6 +69,10 @@
 
 #define CSDBNC_ADDRESS_SIZE_MAX	100
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace csdbnc {
 	using namespace sck;
 
@@ -207,5 +211,11 @@ namespace csdbnc {
 	};
 }
 
-/*$END$*/
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace csdbnc {
+	typedef flow___ rIOFlow;
+}
 #endif

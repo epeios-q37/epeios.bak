@@ -282,8 +282,8 @@ namespace xml {
 		{
 			return PushTag( name( Name ) );
 		}
-		void PutRawValue( flw::fIFlow &Flow );
-		void PutValue( flw::fIFlow &Flow );
+		void PutRawValue( flw::sIFlow &Flow );
+		void PutValue( flw::sIFlow &Flow );
 		void PuRawValue( const value_ &Value );
 		void PutValue( const value_ &Value );
 		void PutValue( const char *Value )
@@ -314,10 +314,10 @@ namespace xml {
 		}
 		void PutRawAttribute(
 			const name_ &Name,
-			flw::fIFlow &Flow );
+			flw::sIFlow &Flow );
 		void PutAttribute(
 			const name_ &Name,
-			flw::fIFlow &Flow );
+			flw::sIFlow &Flow );
 		void PutRawAttribute(
 			const name_ &Name,
 			const value_ &Value );
@@ -336,7 +336,7 @@ namespace xml {
 		{
 			PutAttribute( name( Name ), Value );
 		}
-		void PutCData( flw::fIFlow &Flow );
+		void PutCData( flw::sIFlow &Flow );
 		void PutCData( const str::string_ &Value );
 		void PutCData( const char *Value )
 		{
