@@ -8,7 +8,7 @@
 			<Language>fr</Language>
 			<Command>Process</Command>
 			<!-- Default command -->
-			<Service>53700</Service>
+			<Service>53710</Service>
 		</Parameters>
 		<Definitions>
 		</Definitions>
