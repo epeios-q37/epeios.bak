@@ -25,6 +25,80 @@ using namespace plgn;
 
 #include "sclmisc.h"
 
+bso::bool__ plgn::rLooseRetriever::Initialize(
+	const ntvstr::string___ &PluginPath,
+	const char *Label,
+	const char *Identifier,
+	const rgstry::entry__ &Configuration,
+	const str::string_ &Arguments,
+	err::handling__ ErrHandling )
+{
+qRH
+	plgncore::sData Data;
+	sclmisc::sRack SCLRack;
+qRB
+	if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
+		return false;
+
+	SCLRack.Init( *err::qRRor, *sclerror::SCLERRORError, cio::GetCurrentSet(), scllocale::GetRack() );
+
+	Data.Init( SCLRack, Arguments );
+
+	C_().Initialize( &Data, Configuration );
+
+	Plugin_ = C_().RetrievePlugin();
+
+	if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
+		qRFwk();
+qRR
+qRT
+qRE
+	return Plugin_ != NULL;
+}
+
+bso::bool__ plgn::rLooseRetriever::Initialize(
+	const ntvstr::string___ &PluginPath,
+	const char *Label,
+	const char *Identifier,
+	const str::string_ &Arguments,
+	err::handling__ ErrHandling )
+{
+qRH
+	plgncore::sData Data;
+	sclmisc::sRack SCLRack;
+	fnm::name___ Location;
+qRB
+	if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
+		return false;
+
+	Location.Init();
+	fnm::GetLocation( PluginPath, Location );
+
+	SCLRack.Init( *err::qRRor, *sclerror::SCLERRORError, cio::GetCurrentSet(), scllocale::GetRack() );
+	Data.Init( SCLRack, Arguments );
+
+	C_().Initialize( &Data, Location );
+
+	// Temporary workaround for the shared data from twice loaded plugin.
+	/* When a plugin is loaded several time by the same excutable, its data
+	is common to all library. Actually, the 'Configuration' and 'Locale'
+	registry are the one from the first loaded library. The 'Argument'
+	registry is the one from the last one. So, the 'Configuration' and
+	'Locale' section should be the same for all the plugin, and you should
+	read what be needed from the registry before returning from here. */
+
+	Plugin_ = C_().RetrievePlugin();
+
+	if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
+		qRFwk();
+qRR
+qRT
+qRE
+	return Plugin_ != NULL;
+}
+
+
+
 // 'qR...' to be sure that the recalled and removed retriever is deleted if an error occurs.
 void plgn::Delete_( dRetrievers &Retrievers )
 {
@@ -49,4 +123,6 @@ qRR
 qRT
 qRE
 }
+
+
 

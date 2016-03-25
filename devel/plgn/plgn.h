@@ -36,8 +36,6 @@
 # include "dlbrry.h"
 # include "fnm.h"
 
-# include "sclerror.h"
-
 /*************************/
 /****** New version ******/
 /*************************/
@@ -139,27 +137,7 @@ namespace plgn {
 			const char *Identifier,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default )
-		{
-		qRH
-			plgncore::data__ Data;
-		qRB
-			if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
-				return false;
-
-			Data.Init( err::qRRor, sclerror::SCLERRORError, Arguments );
-
-			C_().Initialize( &Data, Configuration );
-
-			Plugin_ = C_().RetrievePlugin();
-
-			if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
-				qRFwk();
-		qRR
-		qRT
-		qRE
-			return Plugin_ != NULL;
-		}
+			err::handling__ ErrHandling = err::h_Default );
 		bso::bool__ Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Label,
@@ -192,43 +170,7 @@ namespace plgn {
 			const char *Label,
 			const char *Identifier,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default )
-		{
-		qRH
-			plgncore::data__ Data;
-			fnm::name___ Location;
-			str::string Locale;
-		qRB
-			if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
-				return false;
-
-			Location.Init();
-			fnm::GetLocation( PluginPath, Location );
-
-			Data.Init( err::qRRor, sclerror::SCLERRORError, Arguments );
-
-			Locale.Init();
-			C_().Initialize( &Data, Location, Locale );
-
-			// Temporary workaround for the shared data from twice loaded plugin.
-			/* When a plugin is loaded several time by the same excutable, its data
-			is common to all library. Actually, the 'Configuration' and 'Locale'
-			registry are the one from the foirst loaded library. The 'Argument'
-			registry is the one from the last one. So, the 'Configuration' and
-			'Locale' section should be the same for all the plugin, and you should
-			read what be needed from the registry before returoing from here. */
-			if ( Locale.Amount() != 0 )
-				scllocale::Insert( scllocale::tMain, Location, Locale, rgstry::rthIgnore );
-
-			Plugin_ = C_().RetrievePlugin();
-
-			if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
-				qRFwk();
-		qRR
-		qRT
-		qRE
-			return Plugin_ != NULL;
-		}
+			err::handling__ ErrHandling = err::h_Default );
 		const char *Identifier( void )
 		{
 			return C_().PluginIdentifier();

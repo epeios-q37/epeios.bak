@@ -45,6 +45,7 @@ protected:
 		const fdr::byte__ *Buffer,
 		fdr::size__ Maximum ) override
 	{
+		qRGnr();
 		return Flow_.WriteUpTo( Buffer, Maximum );
 	}
 	virtual void FDRCommit( void ) override

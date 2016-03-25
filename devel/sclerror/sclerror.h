@@ -61,7 +61,7 @@ namespace sclerror {
 
 	E_ROW( row__ );
 
-	class error___
+	class rError
 	{
 	public:
 		mtx::handler___ Mutex = mtx::UndefinedHandler;
@@ -77,7 +77,7 @@ namespace sclerror {
 			TIds.reset( P );
 			Meanings.reset( P );
 		}
-		E_CDTOR( error___ );
+		E_CDTOR( rError );
 		void Init( void )
 		{
 			if ( Mutex != mtx::UndefinedHandler )
@@ -91,7 +91,7 @@ namespace sclerror {
 	};
 
 	// A surcharger.
-	extern error___ *SCLERRORError;
+	extern rError *SCLERRORError;
 
 	const lcl::meaning_ &GetMeaning( lcl::meaning_ &Meaning );
 

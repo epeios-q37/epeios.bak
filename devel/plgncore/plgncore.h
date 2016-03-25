@@ -31,64 +31,60 @@
 # include "err.h"
 # include "flw.h"
 # include "tol.h"
-
-# include "sclerror.h"
+# include "rgstry.h"
 
 # include <stdarg.h>
 
-# define PLGNCORE_SHARED_DATA_VERSION	"6"
+# define PLGNCORE_SHARED_DATA_VERSION	"7"
 
 # define PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME			PluginLabel
 # define PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME		PluginIdentifier
 # define PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME		RetrieveCallback
 
+namespace sclmisc {
+	struct sRack;
+}
+
 namespace plgncore {
 #pragma pack( push, 1)
 	// NOTA : If modified, increment 'PLGNCORE_SHARED_DATA_VERSION' !
-	class data__
+	class sData
 	{
 	public:
 		const char *Version;	// Toujours en premire position.
 		bso::size__ ControlValue;
-		err::err___ *qRRor;
-		sclerror::error___ *SCLError;
-		const cio::set__ *CIO;
+		sclmisc::sRack *SCLRack;
 		const str::string_ *Arguments;
 		void *UP;				// User pointer.
 		void reset( bso::bool__ P = true )
 		{
 			Version = NULL;
-			qRRor = NULL;
-			SCLError = NULL;
 			UP = NULL;
+			SCLRack = NULL;
 			Arguments = NULL;
 		}
-		E_CDTOR( data__ );
-		data__(
-			err::err___ *qRRor,
-			sclerror::error___ *SCLError,
+		E_CDTOR( sData );
+		sData(
+			sclmisc::sRack &Rack,
 			const str::string_ &Arguments,
 			void *UP = NULL )
 		{
-			Init( qRRor, SCLError, Arguments, UP );
+			Init( Rack, Arguments, UP );
 		}
 		void Init(
-			err::err___ *qRRor,
-			sclerror::error___ *SCLError,
+			sclmisc::sRack &SCLRack,
 			const str::string_ &Arguments,
 			void *UP = NULL )
 		{
 			Version = PLGNCORE_SHARED_DATA_VERSION;
 			ControlValue = Control();
-			this->qRRor = qRRor;
-			this->SCLError = SCLError;
-			this->CIO = &cio::GetCurrentSet();
+			this->SCLRack = &SCLRack;
 			this->Arguments = &Arguments;
 			this->UP = UP;
 		}
 		static bso::size__ Control( void )
 		{
-			return sizeof( data__ );
+			return sizeof( sData );
 		}
 	};
 #pragma pack( pop )
@@ -97,12 +93,11 @@ namespace plgncore {
 	{
 	protected:
 		virtual void PLGNCOREInitialize(
-			const data__ *Data,
+			const sData *Data,
 			const rgstry::entry__ &Configuration ) = 0;
 		virtual void PLGNCOREInitialize(
-			const data__ *Data,
-			const fnm::name___ &Directory,
-			str::string_ &Locale ) = 0;
+			const sData *Data,
+			const fnm::name___ &Directory ) = 0;
 		virtual void *PLGNCORERetrievePlugin( void ) = 0;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
 		virtual const char *PLGNCOREPluginIdentifier( void ) = 0;
@@ -118,17 +113,16 @@ namespace plgncore {
 			//Standardisaction.
 		}
 		void Initialize(
-			const data__ *Data,
+			const sData *Data,
 			const rgstry::entry__ &Configuration )
 		{
 			return PLGNCOREInitialize( Data, Configuration );
 		}
 		void Initialize(
-			const data__ *Data,
-			const fnm::name___ &Directory,
-			str::string_ &Locale )
+			const sData *Data,
+			const fnm::name___ &Directory )
 		{
-			return PLGNCOREInitialize( Data, Directory, Locale );
+			return PLGNCOREInitialize( Data, Directory );
 		}
 		void *RetrievePlugin( void )
 		{

@@ -57,8 +57,8 @@ namespace frdinstc {
 			Record_.Initialize();
 		}
 		bso::sBool Login(
-			const str::vString &Username,
-			const str::vString &Password )
+			const str::dString &Username,
+			const str::dString &Password )
 		{
 			bso::sBool Success = false;
 
@@ -123,8 +123,8 @@ namespace frdinstc {
 			View_ = vRecords;
 		}
 		bso::sBool Login(
-			const str::vString &Username,
-			const str::vString &Password )
+			const str::dString &Username,
+			const str::dString &Password )
 		{
 			return Core_.Login( Username, Password );
 		}

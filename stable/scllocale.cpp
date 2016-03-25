@@ -32,13 +32,35 @@ using namespace scllocale;
 
 namespace {
 	using lcl::level__;
+
+	rRack *RackPointer_ = NULL;
+
+	rRack &Rack_( void )
+	{
+		if ( RackPointer_ == NULL )
+			qRFwk();
+
+		return *RackPointer_;
+	}
+
+	lcl::locale_ &Locale_( void )
+	{
+		return Rack_().Locale;
+	}
 }
 
-static lcl::locale Locale_;
+void scllocale::SetLocale( rRack &Rack )
+{
+	if ( RackPointer_ != NULL )
+		qRFwk();
 
-static level__ SoftwareLevel_ = LCL_UNDEFINED_LEVEL;
-static level__ ConfigurationLevel_ = LCL_UNDEFINED_LEVEL;
-static level__ ProjectLevel_ = LCL_UNDEFINED_LEVEL;
+	RackPointer_ = &Rack;
+}
+
+rRack &scllocale::GetRack( void )
+{
+	return Rack_();
+}
 
 #define C( name ) case t##name: return #name; break
 
@@ -59,7 +81,7 @@ const char *scllocale::GetLabel( target__ Target )
 
 const lcl::locale_ &scllocale::GetLocale( void )
 {
-	return Locale_;
+	return Locale_();
 }
 
 static void GetLocaleFileParsingErrorMeaning_(
@@ -84,13 +106,13 @@ static level__ GetLevel_( target__ Target )
 {
 	switch ( Target ) {
 	case tMain:
-		return SoftwareLevel_;
+		return Rack_().SoftwareLevel;
 		break;
 	case tConfiguration:
-		return ConfigurationLevel_;
+		return Rack_().ConfigurationLevel;
 		break;
 	case tProject:
-		return ProjectLevel_;
+		return Rack_().ProjectLevel;
 		break;
 	default:
 		qRFwk();
@@ -105,51 +127,50 @@ void scllocale::Dump(
 	bso::bool__ RootToo,
 	xml::writer &Writer )
 {
-	Locale_.Dump( GetLevel_( Target ), qNIL, RootToo, Writer );
+	Locale_().Dump( GetLevel_( Target ), qNIL, RootToo, Writer );
 }
 
 
 void scllocale::Erase( target__ Target )
 {
-	Locale_.Erase( GetLevel_( Target ) );
+	Locale_().Erase( GetLevel_( Target ) );
 }
 
-static void Load_(
-	level__ Level,
-	xtf::extended_text_iflow__ &Flow,
-	const fnm::name___ &Directory,
-	const char *RootPath,
-	const char *ErrorLabel )
-{
-qRH
-	rgstry::context___ Context;
-qRB
-	Locale_.Erase( Level );
+namespace {
 
-	Context.Init();
-	if ( !Locale_.Fill( Level, Flow, xpp::criterions___( Directory ), RootPath, Context ) )
-		sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
-qRR
-qRT
-qRE
+	void Load_(
+		level__ Level,
+		xtf::extended_text_iflow__ &Flow,
+		const fnm::name___ &Directory,
+		const char *ErrorLabel )
+	{
+	qRH
+		rgstry::context___ Context;
+	qRB
+		Context.Init();
+		if ( !Locale_().Insert( Level, Flow, xpp::criterions___( Directory ), rgstry::rthIgnore, Context ) )
+			sclmisc::ReportParsingErrorAndAbort( ErrorLabel, Context );
+	qRR
+	qRT
+	qRE
+	}
 }
-
+/*
 void scllocale::Set(
 	target__ Target,
 	const rgstry::entry__ &Entry )
 {
 	rgstry::level__ Level = GetLevel_( Target );
 
-	Locale_.Erase( Level );
+	Locale_().Erase( Level );
 
-	Locale_.Set( Level, Entry );
+	Locale_().Set( Level, Entry );
 }
-
+*/
 void scllocale::Load(
 	target__ Target,
 	xtf::extended_text_iflow__ &Flow,
-	const fnm::name___ &Directory,
-	const char *RootPath )
+	const fnm::name___ &Directory )
 {
 	const char *ErrorLabel = NULL;
 
@@ -168,12 +189,11 @@ void scllocale::Load(
 		break;
 	}
 
-	return Load_( GetLevel_( Target ), Flow, Directory, RootPath, ErrorLabel );
+	return Load_( GetLevel_( Target ), Flow, Directory, ErrorLabel );
 }
 
 void scllocale::Fill(
 	target__ Target,
-	const char *RootPath,
 	const fnm::name___ &Directory,
 	const str::string_ &XML )
 {
@@ -183,7 +203,7 @@ qRH
 qRB
 	Flow.Init( XML );
 	XFlow.Init( Flow, utf::f_Default );
-	if ( !Locale_.Fill( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootPath ) )
+	if ( !Locale_().Fill( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), NULL ) )
 		qRFwk();
 qRR
 qRT
@@ -202,7 +222,7 @@ qRH
 qRB
 	Flow.Init( XML );
 	XFlow.Init( Flow, utf::f_Default );
-	if ( !Locale_.Insert( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootTagHandling  ) )
+	if ( !Locale_().Insert( GetLevel_( Target ), XFlow, xpp::criterions___( Directory ), RootTagHandling  ) )
 		qRFwk();
 qRR
 qRT
@@ -227,7 +247,7 @@ namespace {
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			Locale_.GetTranslation( Tag.Convert(Buffer), _Language, Value );
+			Locale_().GetTranslation( Tag.Convert(Buffer), _Language, Value );
 		qRR
 		qRT
 		qRE
@@ -409,6 +429,7 @@ void scllocale::TranslateTags(
 	tagsbs::SubstituteLongTags( In, Callback, Out, Marker );
 }
 
+/*
 Q37_GCTOR( scllocale )
 {
 	Locale_.Init();
@@ -417,3 +438,4 @@ Q37_GCTOR( scllocale )
 	ConfigurationLevel_ = Locale_.CreateEmbedded( rgstry::name( "Configuration" ) );
 	ProjectLevel_ = Locale_.CreateEmbedded( rgstry::name( "Project" ) );
 }
+*/

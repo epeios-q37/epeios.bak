@@ -36,9 +36,13 @@ using cio::COut;
 using scllocale::GetLocale;
 
 static err::err___ qRRor_;
-static sclerror::error___ SCLError_;
+static sclerror::rError SCLError_;
 
 bso::bool__ scltool::IgnoreUnknownArguments = false;
+
+namespace {
+	scllocale::rRack Locale_;
+};
 
 static inline bso::bool__ ReportSCLPendingError_( void )
 {
@@ -87,8 +91,11 @@ static int main_(
 	int ExitValue = EXIT_SUCCESS;
 qRH
 	str::string Command;
+	sclmisc::sRack Rack;
 qRB
-	sclmisc::Initialize( &qRRor_, &SCLError_, CIO, (const char *)NULL );
+	Rack.Init( qRRor_, SCLError_, CIO, Locale_);
+
+	sclmisc::Initialize( Rack, (const char *)NULL );
 
 	FillRegistry_( Oddities.argc, Oddities.argv, IgnoreUnknownArguments );
 
@@ -292,4 +299,6 @@ Q37_GCTOR( scltool )
 	ExitOnSignal_();
 	qRRor_.Init();
 	SCLError_.Init();
+
+	Locale_.Init();
 }

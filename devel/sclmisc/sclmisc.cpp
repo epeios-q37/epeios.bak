@@ -30,9 +30,11 @@
 #include "sclrgstry.h"
 #include "sclerror.h"
 
+#include "plgn.h"
+
 using namespace sclmisc;
 
-sclerror::error___ *sclerror::SCLERRORError = NULL;
+sclerror::rError *sclerror::SCLERRORError = NULL;
 
 bso::bool__ sclmisc::IsInitialized( void )
 {
@@ -164,29 +166,26 @@ qRT
 qRE
 }
 
-static void Initialize_(
-	err::err___ *qRRor,
-	sclerror::error___ *SCLError,
-	const cio::set__ &CIO )
+static void Initialize_( sRack &Rack )
 {
-	err::qRRor = qRRor;
-	sclerror::SCLERRORError = SCLError;
+	err::qRRor = Rack.qRRor;
+	sclerror::SCLERRORError = Rack.SCLError;
 
-	cio::target__ Target = cio::GetTarget( CIO );
+	cio::target__ Target = cio::GetTarget( *Rack.CIO );
 
 	if ( Target != cio::tUser )
 		cio::Initialize( Target );
 	else
-		cio::Initialize( CIO );
+		cio::Initialize( *Rack.CIO );
+
+	scllocale::SetLocale( *Rack.Locale );
 }
 
 void sclmisc::Initialize(
-	err::err___ *qRRor,
-	sclerror::error___ *SCLError,
-	const cio::set__ &CIO,
+	sRack &Rack,
 	const rgstry::entry__ &Configuration )
 {
-	Initialize_( qRRor, SCLError, CIO );
+	Initialize_( Rack );
 
 	sclrgstry::SetConfiguration( Configuration );
 //	scllocale::Set( scllocale::tMain, Locale );
@@ -273,30 +272,56 @@ qRT
 qRE
 }
 # else
-static bso::sBool LoadLocale_(
-	rgstry::level__ Level,
-	scllocale::target__ Target,
-	utf::format__ Format )
-{
-	bso::sBool Found = false;
-qRH
-	rgstry::entry__ Entry;
-	rgstry::row__ Row = qNIL;
-qRB
-	Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
 
-	if ( Row == qNIL )
-		qRReturn;
+namespace {
+	bso::sBool GetLocale_(
+		rgstry::level__ Level,
+		str::dString &Locale )
+	{
+		bso::sBool Found = false;
+	qRH
+		rgstry::row__ Row = qNIL;
+		flx::E_STRING_OFLOW___ Flow;
+		txf::text_oflow__ TFlow;
+		xml::writer Writer;
+	qRB
+		Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
 
-	Entry.Init( Row, sclrgstry::GetCommonRegistry().GetRegistry( Level ) );
+		if ( Row == qNIL )
+			qRReturn;
 
-	scllocale::Set( Target, Entry );
+		Flow.Init( Locale );
+		TFlow.Init( Flow );
+		Writer.Init( TFlow, xml::lCompact, xml::e_Default );
 
-	Found = true;
-qRR
-qRT
-qRE
-	return Found;
+		sclrgstry::GetCommonRegistry().Dump( Level, Row, true, Writer );
+
+		Found = true;
+	qRR
+	qRT
+	qRE
+		return Found;
+	}
+
+	bso::sBool LoadLocale_(
+		rgstry::level__ Level,
+		scllocale::target__ Target )
+	{
+		bso::sBool Found = false;
+	qRH
+		rgstry::entry__ Entry;
+		rgstry::row__ Row = qNIL;
+		str::wString Locale;
+	qRB
+		Locale.Init();
+
+		if ( Found = GetLocale_( Level, Locale ) )
+			scllocale::Insert( Target, "", Locale, rgstry::rthIgnore );
+	qRR
+	qRT
+	qRE
+		return Found;
+	}
 }
 # endif
 
@@ -316,28 +341,26 @@ qRB
 	RegistryRootPath.Init();
 	sclrgstry::BuildRootPath( "Configuration", SCLMISCTargetName, RegistryRootPath );
 
-	scllocale::Load( scllocale::tMain, LocaleFlow, LocaleDirectory, LocaleRootPath.Convert( Buffer ) );
+	scllocale::Load( scllocale::tMain, LocaleFlow, LocaleDirectory );
 
 	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
 
 	RefreshBaseLanguage();
 
-	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nConfiguration ), scllocale::tConfiguration, RegistryFlow.Format() );
+	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nConfiguration ), scllocale::tConfiguration );
 qRR
 qRT
 qRE
 }
 
 void sclmisc::Initialize(
-	err::err___ *qRRor,
-	sclerror::error___ *SCLError,
-	const cio::set__ &CIO,
+	sRack &Rack,
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
 	const char *RegistryDirectory )
 {
-	Initialize_( qRRor, SCLError, CIO );
+	Initialize_( Rack );
 
 	Initialize_( LocaleFlow, LocaleDirectory, RegistryFlow, RegistryDirectory );
 }
@@ -461,11 +484,8 @@ namespace {
 }
 
 void sclmisc::Initialize(
-	err::err___ *qRRor,
-	sclerror::error___ *SCLError,
-	const cio::set__ &CIO,
-	const fnm::name___ &SuggestedDirectory,
-	str::string_ *Locale )
+	sRack &Rack,
+	const fnm::name___ &SuggestedDirectory )
 {
 qRH
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
@@ -473,7 +493,7 @@ qRH
 	str::string LocaleDirectory, ConfigurationDirectory;
 	TOL_CBUFFER___ LocaleBuffer, ConfigurationBuffer;
 qRB
-	Initialize_( qRRor, SCLError, CIO );
+	Initialize_( Rack );
 
 	LocaleDirectory.Init();
 	InitializeLocaleFlow_( SuggestedDirectory, LocaleFlow, LocaleDirectory );
@@ -484,9 +504,6 @@ qRB
 	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
 	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
-
-	if ( Locale != NULL )
-		DumpLocale_( *Locale );
 qRR
 qRT
 qRE
@@ -573,7 +590,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject, utf::f_Default );
+	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject );
 }
 
 void sclmisc::LoadProject(
@@ -582,7 +599,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject, utf::f_Default );
+	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject );
 }
 
 static void LoadProject_( const str::string_ &FileName )
@@ -1132,17 +1149,17 @@ namespace {
 	{
 	qRH
 		str::wString Filename, Arguments;
-		rgstry::entry__ Configuration, Locale;
+		rgstry::entry__ Configuration, LocaleContent;
 	qRB
 		Filename.Init();
 		Arguments.Init();
 		Configuration.Init();
-		Locale.Init();
+		LocaleContent.Init();
 
-		GetPluginItemFeatures_( Target, Id, Filename, Configuration, Locale, Arguments );
-		HandleLocale_( Locale, Filename );
-
+		GetPluginItemFeatures_( Target, Id, Filename, Configuration, LocaleContent, Arguments );
 		Retriever.Initialize( Filename, Label, Identifier, Configuration, Arguments );
+
+		HandleLocale_( LocaleContent, Filename );
 	qRR
 	qRT
 	qRE

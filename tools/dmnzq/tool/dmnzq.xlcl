@@ -1,46 +1,44 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Locales xmlns:xpp="http://q37.info/ns/xpp">
-	<Locale target="dmnzq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand select="epeios.xlcl"/>
-		<Translations text="ProgramDescription">
-			<Translation language="fr">Daemoniseur basé sur le framework Epeios.</Translation>
-			<Translation language="en">Daemonizer based on the Epeios framework.</Translation>
-		</Translations>
-		<Translations text="ModuleError">
-			<Translation language="fr">Erreur module : %1</Translation>
-			<Translation language="en">Module error : %1</Translation>
-		</Translations>
-		<Translations text="UnableToLoadModuleError">
-			<Translation language="fr">Impossible de charger le module '%1'</Translation>
-			<Translation language="en">Unable to load module '%1'</Translation>
-		</Translations>
-		<Translations text="UnknownError">
-			<Translation language="fr">Erreur inconnue</Translation>
-			<Translation language="en">Unknown error</Translation>
-		</Translations>
-		<Translations text="ProjectFileArgumentDescription">
-			<Translation language="fr">Fichier projet</Translation>
-			<Translation language="en">Project file</Translation>
-		</Translations>
-		<Translations text="UnableToOpenLogFileError">
-			<Translation language="fr">Impossible d'ouvrir le ficher de log '%1'.</Translation>
-			<Translation language="en">Unable to open '%1' log file.</Translation>
-		</Translations>
-		<Translations text="TerminatingModule">
-			<Translation language="fr">Arrêt module...</Translation>
-			<Translation language="en">Terminating module...</Translation>
-		</Translations>
-		<Translations text="ModuleTerminated">
-			<Translation language="fr">Module arrêté.</Translation>
-			<Translation language="en">Module terminated.</Translation>
-		</Translations>
-		<!--
-		<Translations text="">
-		  <Translation language="fr"></Translation>
-		  <Translation language="en"></Translation>
-		</Translations>
-		-->
-	</Locale>
-</Locales>
+<Locale target="dmnzq" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Daemoniseur basé sur le framework Epeios.</Translation>
+		<Translation language="en">Daemonizer based on the Epeios framework.</Translation>
+	</Translations>
+	<Translations text="ModuleError">
+		<Translation language="fr">Erreur module : %1</Translation>
+		<Translation language="en">Module error : %1</Translation>
+	</Translations>
+	<Translations text="UnableToLoadModuleError">
+		<Translation language="fr">Impossible de charger le module '%1'</Translation>
+		<Translation language="en">Unable to load module '%1'</Translation>
+	</Translations>
+	<Translations text="UnknownError">
+		<Translation language="fr">Erreur inconnue</Translation>
+		<Translation language="en">Unknown error</Translation>
+	</Translations>
+	<Translations text="ProjectFileArgumentDescription">
+		<Translation language="fr">Fichier projet</Translation>
+		<Translation language="en">Project file</Translation>
+	</Translations>
+	<Translations text="UnableToOpenLogFileError">
+		<Translation language="fr">Impossible d'ouvrir le ficher de log '%1'.</Translation>
+		<Translation language="en">Unable to open '%1' log file.</Translation>
+	</Translations>
+	<Translations text="TerminatingModule">
+		<Translation language="fr">Arrêt module...</Translation>
+		<Translation language="en">Terminating module...</Translation>
+	</Translations>
+	<Translations text="ModuleTerminated">
+		<Translation language="fr">Module arrêté.</Translation>
+		<Translation language="en">Module terminated.</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>

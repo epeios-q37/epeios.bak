@@ -41,12 +41,11 @@ namespace sclplugin {
 	{
 	protected:
 		virtual void PLGNCOREInitialize(
-			const plgncore::data__ *Data,
+			const plgncore::sData *Data,
 			const rgstry::entry__ &Configuration ) override;
 		virtual void PLGNCOREInitialize(
-			const plgncore::data__ *Data,
-			const fnm::name___ &Directory,
-			str::string_ &Locale ) override;
+			const plgncore::sData *Data,
+			const fnm::name___ &Directory ) override;
 		virtual void *PLGNCORERetrievePlugin( void ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
 		virtual const char *PLGNCOREPluginIdentifier( void ) override;

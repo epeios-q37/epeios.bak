@@ -35,6 +35,33 @@
 
 namespace scllocale {
 
+	class rRack {
+	public:
+		lcl::locale Locale;
+		lcl::level__ SoftwareLevel;
+		lcl::level__ ConfigurationLevel;
+		lcl::level__ ProjectLevel;
+		void reset( bso::sBool P = true )
+		{
+			Locale.reset( P );
+			SoftwareLevel = LCL_UNDEFINED_LEVEL;
+			ConfigurationLevel = LCL_UNDEFINED_LEVEL;
+			ProjectLevel = LCL_UNDEFINED_LEVEL;
+		}
+		qCDTOR( rRack );
+		void Init( void )
+		{
+			Locale.Init();
+			SoftwareLevel = Locale.CreateEmbedded( rgstry::name( "Software" ) );
+			ConfigurationLevel = Locale.CreateEmbedded( rgstry::name( "Configuration" ) );
+			ProjectLevel = Locale.CreateEmbedded( rgstry::name( "Project" ) );
+		}
+	};
+
+	void SetLocale( rRack &Rack );
+
+	rRack &GetRack( void );
+
 	E_CDEF(char, DefaultMarker, '%' );
 
 	const lcl::locale_ &GetLocale( void );
@@ -56,19 +83,18 @@ namespace scllocale {
 
 	void Erase( target__ Target );
 
-	void Set(
+/*	void Set(
 		target__ Target,
 		const rgstry::entry__ &Entry );
+*/
 
 	void Load(
 		target__ Target,
 		xtf::extended_text_iflow__ &Flow,
-		const fnm::name___ &Directory,
-		const char *RootPath );
+		const fnm::name___ &Directory );
 
 	void Fill(
 		target__ Target,
-		const char *RootPath,
 		const fnm::name___ &Directory,
 		const str::string_ &XML );
 

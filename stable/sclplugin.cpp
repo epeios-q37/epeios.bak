@@ -115,7 +115,7 @@ namespace {
 	}
 
 	void PreInitialize_(
-		const plgncore::data__ *Data,
+		const plgncore::sData *Data,
 		str::dStrings &Arguments )
 	{
 	if ( Data == NULL )
@@ -124,7 +124,7 @@ namespace {
 	if ( strcmp( Data->Version, PLGNCORE_SHARED_DATA_VERSION ) )
 		qRFwk();
 
-	if ( Data->ControlValue != plgncore::data__::Control() )
+	if ( Data->ControlValue != plgncore::sData::Control() )
 		qRFwk();
 
 	if ( Data->Arguments->Amount() != 0 )
@@ -133,7 +133,7 @@ namespace {
 }
 
 void sclplugin::callback__::PLGNCOREInitialize(
-	const plgncore::data__ *Data,
+	const plgncore::sData *Data,
 	const rgstry::entry__ &Configuration )
 {
 qRH
@@ -144,7 +144,7 @@ qRB
 	PreInitialize_( Data, Arguments );
 
 	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Configuration );
+		sclmisc::Initialize( *Data->SCLRack, Configuration );
 	else // Same plugin loaded several times from same excutable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
 		sclrgstry::EraseArgumentsRegistry();
@@ -159,9 +159,8 @@ qRE
 }
 
 void sclplugin::callback__::PLGNCOREInitialize(
-	const plgncore::data__ *Data,
-	const fnm::name___ &Directory,
-	str::string_ &Locale )
+	const plgncore::sData *Data,
+	const fnm::name___ &Directory )
 {
 qRH
 	str::wStrings Arguments;
@@ -171,7 +170,7 @@ qRB
 	PreInitialize_( Data, Arguments );
 
 	if ( !sclmisc::IsInitialized() )
-		sclmisc::Initialize( Data->qRRor, Data->SCLError, *Data->CIO, Directory, Locale );
+		sclmisc::Initialize( *Data->SCLRack, Directory );
 	else // Same plugin loaded several times from same excutable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
 		sclrgstry::EraseArgumentsRegistry();
