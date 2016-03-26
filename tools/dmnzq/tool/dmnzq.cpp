@@ -87,11 +87,14 @@ namespace {
 		lcl::meaning Meaning, MeaningBuffer;
 		str::string Translation;
 		err::buffer__ ErrBuffer;
+		sclmisc::sRack SCLRack;
 	qRB
 		SharedLocale.Init();
 		SharedRegistry.Init();
 
-		LibraryData.Init( csdleo::cRegular, ModuleFilename, err::qRRor, sclerror::SCLERRORError, csdleo::mRemote );
+		SCLRack.Init( *err::qRRor, *sclerror::SCLERRORError, cio::GetCurrentSet(), scllocale::GetRack() );
+
+		LibraryData.Init( csdleo::cRegular, ModuleFilename, &SCLRack, csdleo::mRemote );
 
 		if ( ( Core_ = new csdlec::library_embedded_client_core__ ) == NULL )
 			qRAlc();

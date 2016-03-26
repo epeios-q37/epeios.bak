@@ -45,7 +45,7 @@
 NOTA : version de la classe 'shared_data__', à mettre à jour à chaque fois que cette dernière est modifiée.
 */
 
-# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"7"
+# define CSDLEO_SHARED_DATA_VERSION_NUMBER	"8"
 
 # define CSDLEO_SHARED_DATA_VERSION	CSDLEO_SHARED_DATA_VERSION_NUMBER " " CPE_AL
 
@@ -95,41 +95,33 @@ namespace csdleo {
 		context__ Context;
 		mode__ Mode;
 		const char *LibraryLocationAndName;
-		err::err___ *qRRor;
-		const cio::set__ *CIO;
 		void *UP;				// A la discrétion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
 			Context = c_Undefined;
 			Mode = m_Undefined;
 			LibraryLocationAndName = NULL;
-			qRRor = NULL;
-			CIO = NULL;
 			UP = NULL;
 		}
 		E_CDTOR( data__ );
 		data__(
 			context__ Context,
 			const char *LibraryLocationAndName,
-			err::err___ *qRRor,
 			void *UP,
 			mode__ Mode = mEmbedded )
 		{
 			reset( false );
-			Init( Context, LibraryLocationAndName, qRRor,UP, Mode );
+			Init( Context, LibraryLocationAndName, UP, Mode );
 		}
 		void Init(
 			context__ Context,
 			const char *LibraryLocationAndName,
-			err::err___ *qRRor,
 			void *UP,
 			mode__ Mode = mEmbedded )
 		{
 			this->Context = Context;
 			this->Mode = Mode;
 			this->LibraryLocationAndName = LibraryLocationAndName;
-			this->qRRor = qRRor;
-			this->CIO = &cio::GetCurrentSet();
 			this->UP = UP;
 		}
 	};
@@ -149,7 +141,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.qRRor, Data.UP, Data.Mode );
+			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.UP, Data.Mode );
 		}
 	};
 #pragma pack( pop )

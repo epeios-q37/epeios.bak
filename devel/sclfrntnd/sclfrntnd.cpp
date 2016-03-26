@@ -444,13 +444,16 @@ qRH
 	csdleo::mode__ Mode = csdleo::m_Undefined;
 	TOL_CBUFFER___ Buffer;
 	bso::bool__ Success = false;
+	sclmisc::sRack SCLRack;
 qRB
+	SCLRack.Init();
+
 	switch ( Features.Type ) {
 	case csducl::tNone:
 		Success = _ClientCore.InitNone();
 		break;
 	case csducl::tLibrary:
-		LibraryData.Init( csdleo::cRegular, Features.Path.Convert( Buffer ), err::qRRor, sclerror::SCLERRORError );
+		LibraryData.Init( csdleo::cRegular, Features.Path.Convert( Buffer ), &SCLRack );
 		Success = _ClientCore.InitLibrary( Features.Path, LibraryData );
 		break;
 	case csducl::tRemote:

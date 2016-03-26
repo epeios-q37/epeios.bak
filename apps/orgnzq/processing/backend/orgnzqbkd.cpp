@@ -87,6 +87,10 @@ class rCallback
 : public rCallback_
 {
 protected:
+	virtual void SCLDAEMONPreferences(
+		str::dString &Preferences,
+		str::dString &Arguments ) override
+	{}
 	virtual rBackend_ *SCLBACKNDNew( 
 		fblbur::mode__ Mode,
 		const ntvstr::char__ *Origin ) override

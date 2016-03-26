@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2016 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -32,7 +32,7 @@
 # include "flw.h"
 # include "ntvstr.h"
 # include "strmrg.h"
-# include "sclerror.h"
+# include "sclmisc.h"
 
 # include <stdarg.h>
 
@@ -144,23 +144,19 @@ namespace xdhcmn {
 	private:
 		const char *_Version;	// Toujours en premire position.
 		bso::uint__ _Control;	// Une valeur relative au contenu de la structure,  des fins de test primaire de compatibilit.
-		err::err___ *_qRRor;
-		sclerror::error___ *_SCLError;
-		const cio::set__ *_CIO;
 		mode__ _Mode;
 		const char *_LauncherIdentification;
 		const char *_Localization;
+		sclmisc::sRack SCLRack_;
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
 			_Version = NULL;
 			_Control = 0;
-			_qRRor = NULL;
-			_SCLError = NULL;
 			_Mode = m_Undefined;
-			_CIO = NULL;
 			_LauncherIdentification = NULL;
 			_Localization = NULL;
+			SCLRack_.reset( P );
 		}
 		E_CDTOR( shared_data__ );
 		void Init(
@@ -170,22 +166,18 @@ namespace xdhcmn {
 		{
 			_Version = XDHCMN_SHARED_DATA_VERSION;
 			_Control = ControlComputing();
-			_qRRor = err::qRRor;
-			_SCLError = sclerror::SCLERRORError;
-			_CIO = &cio::GetCurrentSet();
 			_Mode = Mode;
 			_LauncherIdentification = LauncherIdentification;
 			_Localization = Localization;
+			SCLRack_.Init();
 		}
 		size_t ControlComputing( void )
 		{
 			return sizeof( shared_data__ );
 		}
-		Q37_PMDF( err::err___, qRRor, _qRRor );
-		Q37_PMDF( sclerror::error___, SCLError, _SCLError );
+		qRWDISCLOSEs( sclmisc::sRack, SCLRack );
 		Q37_PMDF( const char, LauncherIdentification, _LauncherIdentification );
 		Q37_PMDF( const char, Localization, _Localization );
-		Q37_RMDF( const cio::set__, CIO, _CIO );
 		E_RODISCLOSE__( mode__, Mode );
 	};
 #pragma pack( pop )

@@ -64,7 +64,7 @@ namespace {
 
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
-				sclmisc::Initialize( Data.qRRor(), Data.SCLError(), Data.CIO(), Data.Localization() );
+				sclmisc::Initialize( Data.SCLRack(), Data.Localization() );
 				sclfrntnd::LoadProject();
 
 				SCLXDHTMLInitialization( Data.Mode() );

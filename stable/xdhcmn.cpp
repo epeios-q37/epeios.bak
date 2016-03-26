@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2016 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -20,6 +20,11 @@
 #define XDHCMN__COMPILATION
 
 #include "xdhcmn.h"
+
+/******************************************************************************/
+				  /* do not modify anything above this limit */
+				  /*			  unless specified			 */
+				  /*******************************************/
 
 using namespace xdhcmn;
 

@@ -71,8 +71,8 @@ qRB
 
 	RWR;
 
-	const str::vString &Username = Request.StringIn();
-	const str::vString &Password = Request.StringIn();
+	const str::dString &Username = Request.StringIn();
+	const str::dString &Password = Request.StringIn();
 
 	UserRow = Rack.Authentication.Login( Username, Password );
 

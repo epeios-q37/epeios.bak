@@ -43,16 +43,16 @@ namespace ogztyp {
 		// Convert into 'XML' the content of 'Buffer' of size 'Size' in a XML value form.
 		virtual void OGZTYPToXML(
 			const ogzbsc::dDatum &Datum,
-			str::vString &XML ) = 0;
+			str::dString &XML ) = 0;
 	public:
 		qCALLBACK( Type );
 		const char *GetLabel( void )
 		{
 			return OGZTYPGetLabel();
 		}
-		const str::vString &ToXML(
+		const str::dString &ToXML(
 			const ogzbsc::dDatum &Datum,
-			str::vString &XML )
+			str::dString &XML )
 		{
 			OGZTYPToXML( Datum, XML );
 
@@ -83,9 +83,9 @@ namespace ogztyp {
 		{
 			return C_().GetLabel();
 		}
-		const str::vString &ToXML(
+		const str::dString &ToXML(
 			const ogzbsc::dDatum &Datum,
-			str::vString &XML ) const
+			str::dString &XML ) const
 		{
 			return C_().ToXML( Datum, XML );
 		}

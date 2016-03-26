@@ -52,13 +52,13 @@ namespace ogzusr {
 	{
 	protected:
 		virtual ogzusr::sRow OGZUSRAuthenticate(
-			const str::vString &Username,
-			const str::vString &Password ) = 0;
+			const str::dString &Username,
+			const str::dString &Password ) = 0;
 	public:
 		qCALLBACK( Authentication );
 		ogzusr::sRow Authenticate(
-			const str::vString &Username,
-			const str::vString &Password )
+			const str::dString &Username,
+			const str::dString &Password )
 		{
 			return OGZUSRAuthenticate( Username, Password );
 		}

@@ -166,7 +166,7 @@ qRT
 qRE
 }
 
-static void Initialize_( sRack &Rack )
+static void Initialize_( const sRack &Rack )
 {
 	err::qRRor = Rack.qRRor;
 	sclerror::SCLERRORError = Rack.SCLError;
@@ -182,7 +182,7 @@ static void Initialize_( sRack &Rack )
 }
 
 void sclmisc::Initialize(
-	sRack &Rack,
+	const sRack &Rack,
 	const rgstry::entry__ &Configuration )
 {
 	Initialize_( Rack );
@@ -354,7 +354,7 @@ qRE
 }
 
 void sclmisc::Initialize(
-	sRack &Rack,
+	const sRack &Rack,
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
@@ -484,7 +484,7 @@ namespace {
 }
 
 void sclmisc::Initialize(
-	sRack &Rack,
+	const sRack &Rack,
 	const fnm::name___ &SuggestedDirectory )
 {
 qRH

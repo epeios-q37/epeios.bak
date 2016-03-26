@@ -40,7 +40,7 @@ qRB
 	if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
 		return false;
 
-	SCLRack.Init( *err::qRRor, *sclerror::SCLERRORError, cio::GetCurrentSet(), scllocale::GetRack() );
+	SCLRack.Init();
 
 	Data.Init( SCLRack, Arguments );
 
@@ -74,7 +74,7 @@ qRB
 	Location.Init();
 	fnm::GetLocation( PluginPath, Location );
 
-	SCLRack.Init( *err::qRRor, *sclerror::SCLERRORError, cio::GetCurrentSet(), scllocale::GetRack() );
+	SCLRack.Init();
 	Data.Init( SCLRack, Arguments );
 
 	C_().Initialize( &Data, Location );

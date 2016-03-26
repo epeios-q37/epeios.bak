@@ -78,6 +78,19 @@ namespace sclmisc {
 		const rgstry::context___ &Context );
 
 	struct sRack {
+	private:
+		template <typename t> inline void Test_( t *T )
+		{
+			if ( T != NULL )
+				qRFwk();
+		}
+		void Test_( void )
+		{
+			Test_( qRRor );
+			Test_( SCLError );
+			Test_( CIO );
+			Test_( Locale);
+		}
 	public:
 		err::err___ *qRRor;
 		sclerror::rError *SCLError;
@@ -91,33 +104,43 @@ namespace sclmisc {
 			Locale = NULL;
 		}
 		qCDTOR( sRack );
+		void Init( void )
+		{
+			Test_();
+
+			this->qRRor = err::qRRor;
+			this->SCLError = sclerror::SCLERRORError;
+			this->CIO = &cio::GetCurrentSet();
+			this->Locale = &scllocale::GetRack();
+		}
 		void Init(
 			err::err___ &qRRor,
 			sclerror::rError &SCLError,
 			const cio::set__ &CIO,
 			scllocale::rRack &Locale )
 		{
+			Test_();
+
 			this->qRRor = &qRRor;
 			this->SCLError = &SCLError;
 			this->CIO = &CIO;
 			this->Locale = &Locale;
-
 		}
 	};
 
 	void Initialize(
-		sRack &Rack,
+		const sRack &Rack,
 		const rgstry::entry__ &Configuration );
 
 	void Initialize(
-		sRack &Rack,
+		const sRack &Rack,
 		xtf::extended_text_iflow__ &LocaleFlow,
 		const char *LocaleDirectory,
 		xtf::extended_text_iflow__ &RegistryFlow,
 		const char *RegistryDirectory );
 
 	void Initialize(
-		sRack &Rack,
+		const sRack &Rack,
 		const fnm::name___ &SuggestedDirectory );
 
 	void DumpRegistriesAndOrLocalesIfRequired( void );
@@ -460,7 +483,7 @@ namespace sclmisc {
 		const char *Identifier,
 		plgn::rRetrievers<plugin> &Retrievers )
 	{
-		return Plug_(Target, plugin::Label(), Identifier, Locale, Retrievers );
+		return Plug_(Target, plugin::Label(), Identifier, Retrievers );
 	}
 }
 

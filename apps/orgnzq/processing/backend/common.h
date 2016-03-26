@@ -124,8 +124,8 @@ namespace common {
 		qCDTOR( rAuthentication );
 		void Init( const char *Identifier );
 		ogzusr::sRow Login(
-			const str::vString &Username,
-			const str::vString &Password )
+			const str::dString &Username,
+			const str::dString &Password )
 		{
 			return P_().Authenticate( Username, Password );
 		}
