@@ -41,18 +41,6 @@
 /*************************/
 
 namespace plgn {
-	template <typename function> inline const char *GetAndExecute_(
-		const char *FunctionName,
-		dlbrry::dynamic_library___ &Library )
-	{
-		function *Function = dlbrry::GetFunction<function *>( FunctionName, Library );
-
-		if ( Function == NULL )
-			qRFwk();
-
-		return Function();
-	}
-
 	class rLooseRetriever
 	{
 	private:
@@ -66,54 +54,12 @@ namespace plgn {
 
 			C_().ReleasePlugin( Plugin_ );
 		}
-		bso::bool__ _IsCompatible(
-			const char *Label,
-			const char *Identifier )	// When == 'NULL', not used for comparison.
-		{
-			if ( !strcmp( Label, GetAndExecute_<plgncore::plugin_label>( E_STRING( PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME ), Library_ ) ) ) {
-				if ( Identifier != NULL )
-					return !strcmp( Identifier, GetAndExecute_<plgncore::plugin_identifier>( E_STRING( PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME ), Library_ ) );
-				else
-					return true;
-			} else
-				return false;
-		}
-	private:
-		bso::bool__ SubInitialize_(
+			private:
+		bso::sBool SubInitialize_(
 			const ntvstr::string___ &PluginPath,
 			const char *Label,
 			const char *Identifier,
-			err::handling__ ErrHandling )
-		{
-			plgncore::retrieve_callback *Function = NULL;
-
-			if ( !Library_.Init( PluginPath, ErrHandling ) ) {
-				if ( ErrHandling == err::hThrowException )
-					qRFwk();
-				else
-					return false;
-			}
-
-			if ( !_IsCompatible( Label, Identifier ) ) {
-				if ( ErrHandling == err::hThrowException )
-					qRFwk();
-				else
-					return false;
-			}
-
-			Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), Library_ );
-
-			if ( Function == NULL ) {
-				if ( ErrHandling == err::hThrowException )
-					qRFwk();
-				else
-					return false;
-			}
-
-			Callback_ = &Function();
-
-			return true;
-		}
+			err::handling__ ErrHandling );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -175,9 +121,9 @@ namespace plgn {
 		{
 			return C_().PluginIdentifier();
 		}
-		const char *About( void )
+		const char *Details( void )
 		{
-			return C_().AboutPlugin();
+			return C_().PluginDetails();
 		}
 		void *Plugin( void ) const
 		{
@@ -273,9 +219,9 @@ namespace plgn {
 		{
 			return LooseRetriever_.Identifier();
 		}
-		const char *About( void )
+		const char *Details( void )
 		{
-			return LooseRetriever_.About();
+			return LooseRetriever_.Details();
 		}
 		plugin &Plugin( void )
 		{
@@ -290,6 +236,12 @@ namespace plgn {
 
 namespace plgn {
 	template <typename plugin> E_TTCLONE__( plgn::rRetriever<plugin>, retriever___ );
+
+	bso::sBool IdentifierAndDetails(
+		const ntvstr::string___ &PluginPath,
+		str::dString &Identifier,
+		str::dString &Details,
+		err::handling__ ErrHandling = err::h_Default );
 }
 
 #endif

@@ -25,6 +25,89 @@ using namespace plgn;
 
 #include "sclmisc.h"
 
+namespace {
+	template <typename function> inline const char *GetAndExecute_(
+		const char *FunctionName,
+		dlbrry::dynamic_library___ &Library )
+	{
+		function *Function = dlbrry::GetFunction<function *>( FunctionName, Library );
+
+		if ( Function == NULL )
+			qRFwk();
+
+		return Function();
+	}
+
+	bso::bool__ _IsCompatible(
+		const char *Label,
+		const char *Identifier,	// When == 'NULL', not used for comparison.
+		dlbrry::dynamic_library___ &Library )
+	{
+		if ( !strcmp( Label, GetAndExecute_<plgncore::plugin_label>( E_STRING( PLGNCORE_PLUGIN_LABEL_FUNCTION_NAME ), Library ) ) ) {
+			if ( Identifier != NULL )
+				return !strcmp( Identifier, GetAndExecute_<plgncore::plugin_identifier>( E_STRING( PLGNCORE_PLUGIN_IDENTIFIER_FUNCTION_NAME ), Library ) );
+			else
+				return true;
+		} else
+			return false;
+	}
+
+	plgncore::callback__ *SubInitialize_(
+		const ntvstr::string___ &PluginPath,
+		dlbrry::dynamic_library___ &Library,
+		err::handling__ ErrHandling )
+	{
+		plgncore::retrieve_callback *Function = NULL;
+
+		if ( !Library.Init( PluginPath, ErrHandling ) ) {
+			if ( ErrHandling == err::hThrowException )
+				qRFwk();
+			else
+				return NULL;
+		}
+
+		Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), Library );
+
+		if ( Function == NULL ) {
+			if ( ErrHandling == err::hThrowException )
+				qRFwk();
+			else
+				return false;
+		}
+
+		return &Function();
+	}
+}
+
+bso::bool__ plgn::rLooseRetriever::SubInitialize_(
+	const ntvstr::string___ &PluginPath,
+	const char *Label,
+	const char *Identifier,
+	err::handling__ ErrHandling )
+{
+	if ( Plugin_ != NULL )
+		qRFwk();
+
+	Callback_ = ::SubInitialize_( PluginPath, Library_, ErrHandling );
+
+	if ( Callback_ == NULL ) {
+		if ( ErrHandling == err::hThrowException )
+			qRFwk();
+		else
+			return false;
+	}
+
+	if ( !_IsCompatible( Label, Identifier, Library_ ) ) {
+		if ( ErrHandling == err::hThrowException )
+			qRFwk();
+		else
+			return false;
+	}
+
+
+	return true;
+}
+
 bso::bool__ plgn::rLooseRetriever::Initialize(
 	const ntvstr::string___ &PluginPath,
 	const char *Label,
@@ -38,7 +121,7 @@ qRH
 	sclmisc::sRack SCLRack;
 qRB
 	if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
-		return false;
+		qRReturn;
 
 	SCLRack.Init();
 
@@ -69,7 +152,7 @@ qRH
 	fnm::name___ Location;
 qRB
 	if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
-		return false;
+		qRReturn;
 
 	Location.Init();
 	fnm::GetLocation( PluginPath, Location );
@@ -97,8 +180,6 @@ qRE
 	return Plugin_ != NULL;
 }
 
-
-
 // 'qR...' to be sure that the recalled and removed retriever is deleted if an error occurs.
 void plgn::Delete_( dRetrievers &Retrievers )
 {
@@ -124,5 +205,34 @@ qRT
 qRE
 }
 
+bso::sBool plgn::IdentifierAndDetails(
+	const ntvstr::string___ &PluginPath,
+	str::dString &Identifier,
+	str::dString &Details,
+	err::handling__ ErrHandling )
+{
+	bso::sBool Success = false;
+qRH
+	dlbrry::dynamic_library___ Library;
+	plgncore::callback__ *Callback = NULL;
+qRB
+	Callback = SubInitialize_( PluginPath, Library, ErrHandling );
+
+	if ( Callback == NULL ) {
+		if ( ErrHandling == err::hThrowException )
+			qRFwk();
+		else
+			qRReturn;
+	}
+
+	Identifier.Append( Callback->PluginIdentifier() );
+	Details.Append( Callback->PluginDetails() );
+
+	Success = true;
+qRR
+qRT
+qRE
+	return Success;
+}
 
 

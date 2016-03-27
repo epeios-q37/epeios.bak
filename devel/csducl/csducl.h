@@ -71,14 +71,7 @@ namespace csducl {
 			_Type = t_Undefined;
 			_Location.reset( P );
 		}
-		universal_client_core___( void )
-		{
-			reset( false );
-		}
-		~universal_client_core___( void )
-		{
-			reset();
-		}
+		qCDTOR( universal_client_core___ );
 		bso::bool__ InitNone( void )
 		{
 			_Type = tNone;
@@ -101,9 +94,9 @@ namespace csducl {
 		{
 			return _RemoteAccess.Identifier();
 		}
-		const char *RemoteAbout( void )
+		const char *RemoteDetails( void )
 		{
-			return _RemoteAccess.About();
+			return _RemoteAccess.Details();
 		}
 		E_RODISCLOSE__( str::string_, Location );
 		friend class universal_client_ioflow_driver___;

@@ -41,6 +41,10 @@
 
 // NOTA : 'SCLF_' is used in place of 'SCLFRNTND_' for macro. 
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace sclfrntnd {
 	using fblfrd::compatibility_informations__;
 
@@ -115,9 +119,9 @@ namespace sclfrntnd {
 		{
 			return _ClientCore;
 		}
-		const char *About( void )
+		const char *Details( void )
 		{
-			return _ClientCore.RemoteAbout();
+			return _ClientCore.RemoteDetails();
 		}
 		const str::dString &AboutPlugin( str::dString &About );
 	};
@@ -441,6 +445,18 @@ namespace sclfrntnd {
 	{
 		Dump_<id, ctn::E_CONTAINER_( sclfrntnd::dILW_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
 	}
+}
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace sclfrntnd {
+	typedef features___ rFeatures;
+
+	const str::dString &About(
+		const rFeatures &Features,
+		str::dString &About );
 }
 
 #endif

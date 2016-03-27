@@ -82,9 +82,9 @@ namespace csdrcu {
 		{
 			return Retriever_.Identifier();
 		}
-		const char *About( void )
+		const char *Details( void )
 		{
-			return Retriever_.About();
+			return Retriever_.Details();
 		}
 	};
 

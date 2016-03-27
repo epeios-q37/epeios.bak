@@ -471,28 +471,40 @@ qRT
 qRE
 }
 
-const str::dString &sclfrntnd::kernel___::AboutPlugin( str::dString &About )
-{
-	switch ( _ClientCore.GetType() ){
-	case csducl::tNone:
-		sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_NoBackend", About );
-		break;
-	case csducl::tLibrary:
-		sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_EmbeddedBackend", About );
-		break;
-	case csducl::tRemote:
-		About.Append(_ClientCore.RemoteAbout() );
-		About.Append(" - " );
-		About.Append(_ClientCore.RemoteIdentifier() );
-		break;
-	default:
-		qRFwk();
-		break;
+namespace {
+	const str::dString &BuildAbout_(
+		csducl::type__ Type,
+		const str::dString &Identifier,
+		const str::dString &Details,
+		str::dString &About )
+	{
+		switch ( Type ) {
+		case csducl::tNone:
+			sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_NoBackend", About );
+			break;
+		case csducl::tLibrary:
+			sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_EmbeddedBackend", About );
+			break;
+		case csducl::tRemote:
+			About.Append( Details );
+			About.Append(" - {" );
+			About.Append( Identifier );
+			About.Append("}" );
+			break;
+		default:
+			qRFwk();
+			break;
+		}
+
+		return About;
 	}
 
-	return About;
 }
 
+const str::dString &sclfrntnd::kernel___::AboutPlugin( str::dString &About )
+{
+	return BuildAbout_( _ClientCore.GetType(), str::wString( _ClientCore.RemoteDetails() ), str::wString( _ClientCore.RemoteIdentifier() ), About );
+}
 
 namespace{
 	bso::bool__ GuessBackendFeatures_( features___ &Features )
@@ -539,6 +551,46 @@ const str::string_ &sclfrntnd::GetBackendPath(
 
 	return Location;
 }
+
+const str::dString &sclfrntnd::About(
+	const rFeatures &Features,
+	str::dString &About )
+{
+qRH
+	bso::bool__ Success = false;
+	sclmisc::sRack SCLRack;
+	str::wString Identifier, Details;
+qRB
+	SCLRack.Init();
+
+	Identifier.Init();
+	Details.Init();
+
+	switch ( Features.Type ) {
+	case csducl::tNone:
+	case csducl::tLibrary:
+		Success = true;
+		break;
+	case csducl::tRemote:
+		Identifier.Init();
+		Details.Init();
+		Success = plgn::IdentifierAndDetails( Features.Path, Identifier, Details, err::hUserDefined );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+
+	if ( Success )
+		BuildAbout_( Features.Type, Identifier, Details, About );
+	else
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToLoad", Features.Path );
+qRR
+qRT
+qRE
+	return About;
+}
+
 
 Q37_GCTOR( sclfrntnd )
 {

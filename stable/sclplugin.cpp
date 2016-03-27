@@ -199,7 +199,7 @@ const char *sclplugin::callback__::PLGNCOREPluginIdentifier( void )
 	return Identifier_;
 }
 
-const char *sclplugin::callback__::PLGNCOREAboutPlugin( void )
+const char *sclplugin::callback__::PLGNCOREPluginDetails( void )
 {
 	return About_;
 }

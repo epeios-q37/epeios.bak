@@ -49,7 +49,7 @@ namespace sclplugin {
 		virtual void *PLGNCORERetrievePlugin( void ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
 		virtual const char *PLGNCOREPluginIdentifier( void ) override;
-		virtual const char *PLGNCOREAboutPlugin( void ) override;
+		virtual const char *PLGNCOREPluginDetails( void ) override;
 	public:
 		void reset( bso::bool__ P = true )
 		{

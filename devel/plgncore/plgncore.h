@@ -101,7 +101,7 @@ namespace plgncore {
 		virtual void *PLGNCORERetrievePlugin( void ) = 0;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
 		virtual const char *PLGNCOREPluginIdentifier( void ) = 0;
-		virtual const char *PLGNCOREAboutPlugin( void ) = 0;
+		virtual const char *PLGNCOREPluginDetails( void ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -136,9 +136,9 @@ namespace plgncore {
 		{
 			return PLGNCOREPluginIdentifier();
 		}
-		const char *AboutPlugin( void )
+		const char *PluginDetails( void )
 		{
-			return PLGNCOREAboutPlugin();
+			return PLGNCOREPluginDetails();
 		}
 	};
 

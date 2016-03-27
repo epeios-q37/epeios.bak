@@ -2,6 +2,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-03-27 :
+- PLGNCORE :
+	- 'AboutPlugin()' can now be called without initialization.
+
 2016-03-26 :
 - GLOBAL :
 	- Reorganization of handling of error, locale, consile input/output.
