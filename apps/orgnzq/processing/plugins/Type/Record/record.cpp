@@ -42,7 +42,7 @@ private:
 protected:
 	virtual void OGZTYPToXML(
 		const ogzbsc::dDatum &Datum,
-		str::vString &XML ) override
+		str::dString &XML ) override
 	{
 		qRVct();
 	}
