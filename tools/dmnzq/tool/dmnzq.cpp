@@ -186,7 +186,7 @@ namespace {
 
 		sclmisc::Plug( misc::SlotPluginTarget, NULL, Retriever );
 
-		cio::COut << Retriever.About() << txf::nl << Retriever.Identifier() << txf::commit;
+		cio::COut << Retriever.Details() << txf::nl << Retriever.Identifier() << txf::commit;
 	qRR
 	qRT
 	qRE
