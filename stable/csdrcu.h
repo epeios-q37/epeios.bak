@@ -73,11 +73,11 @@ namespace csdrcu {
 			Driver_ = NULL;
 		}
 		E_CDTOR( core___ );
-		bso::bool__ Init(
+		sdr::sRow Init(
 			const str::string_ &PluginPath,
 			const char *Identifier,
 			const str::string_ &Parameters,
-			err::handling__ ErrHandling = err::h_Default );
+			const plgn::dUPs &UPs );
 		const char *Identifier( void )
 		{
 			return Retriever_.Identifier();

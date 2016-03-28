@@ -37,6 +37,7 @@
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
+		<Module>rpstraight</Module>
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>

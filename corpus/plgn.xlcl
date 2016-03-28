@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: fblovl.xlcl,v 1.2 2013/07/18 19:46:19 csimon Exp $ -->
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+		<Translations text="PLGN_UnableToLoadLibrary">
+		<Translation language="fr">Echec chargement de la bibliothèque dynamique '%1'.</Translation>
+		<Translation language="en">Unable to load dynamic library '%1'.</Translation>
+	</Translations>
+	<Translations text="PLGN_BadLibraryContent">
+		<Translation language="fr">Contenu de la bibliothèque dynamique '%1' incorrect..</Translation>
+		<Translation language="en">Bad content of the '%1' dynamic library.</Translation>
+	</Translations>
+	<Translations text="PLGN_LibraryNotCompatible">
+		<Translation language="fr">La bibliothèque dynamique '%1' n'est pas compatible.</Translation>
+		<Translation language="en">The '%1' dynamic library is not compatible.</Translation>
+	</Translations>
+	<!--
+	<Translations text="PLGN_">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</xpp:bloc>

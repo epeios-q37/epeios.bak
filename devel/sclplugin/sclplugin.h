@@ -46,7 +46,7 @@ namespace sclplugin {
 		virtual void PLGNCOREInitialize(
 			const plgncore::sData *Data,
 			const fnm::name___ &Directory ) override;
-		virtual void *PLGNCORERetrievePlugin( void ) override;
+		virtual void *PLGNCORERetrievePlugin( void *UP ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
 		virtual const char *PLGNCOREPluginIdentifier( void ) override;
 		virtual const char *PLGNCOREPluginDetails( void ) override;
@@ -64,14 +64,14 @@ namespace sclplugin {
 
 	// Functions to overload.
 	void SCLPLUGINPluginIdentifier( str::dString &Identifier );
-	void SCLPLUGINAboutPlugin( str::dString &About );
+	void SCLPLUGINPluginDetails( str::dString &Details );
+	void SCLPLUGINPluginParameters( str::dStrings &Parameters );
 	// The following ones are defined by below macro.
 	const char *SCLPLUGINPluginLabel( void );
-	void *SCLPLUGINRetrievePlugin( void );
+	void *SCLPLUGINRetrievePlugin( void *UP );
 	void SCLPLUGINReleasePlugin( void * );
 }
 
-// If this macro is used, you have to define a 'SCLPLUGINInitialize()' member.
 // NOTA : needed parameters are generally retrieved from the registry,
 // which is automatically filled by this module.
 # define SCLPLUGIN_DEF( plugin )\
@@ -80,7 +80,7 @@ namespace sclplugin {
 		return plugin::Label();\
 	}\
 \
-	void *sclplugin::SCLPLUGINRetrievePlugin( void )\
+	void *sclplugin::SCLPLUGINRetrievePlugin( void *UP )\
 	{\
 		plugin *Plugin = NULL;\
 	qRH\
@@ -90,7 +90,10 @@ namespace sclplugin {
 		if ( Plugin == NULL )\
 			qRAlc();\
 		\
-		Plugin->SCLPLUGINInitialize();\
+		if ( !Plugin->SCLPLUGINInitialize( UP ) ) {\
+			delete Plugin;\
+			Plugin = NULL;\
+		}\
 	qRR\
 		if ( Plugin != NULL ) {\
 			delete Plugin;\

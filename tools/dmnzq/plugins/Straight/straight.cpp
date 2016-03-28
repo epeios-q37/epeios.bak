@@ -61,9 +61,14 @@ namespace {
 		{
 			Server_.reset();	// See above for initialization will be made later.
 		}
-		void SCLPLUGINInitialize( void )
+		bso::sBool SCLPLUGINInitialize( void * UP )
 		{
+			if ( UP != NULL )
+				qRGnr();
+
 			// Made in 'MISCProcess(...)'.
+
+			return true;
 		}
 	};
 }
@@ -77,10 +82,10 @@ void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 	Identifier.Append( IDENTIFIER );
 }
 
-void sclplugin::SCLPLUGINAboutPlugin( str::dString &About )
+void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
 {
-	About.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
-	About.Append( cpe::GetDescription() );
-	About.Append( ')' );
+	Details.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
+	Details.Append( cpe::GetDescription() );
+	Details.Append( ')' );
 }
 

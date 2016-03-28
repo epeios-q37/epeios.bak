@@ -6,6 +6,7 @@
 	<xpp:expand href="fbl.xlcl"/>
 	<xpp:expand href="frd.xlcl"/>
 	<xpp:expand href="msc.xlcl"/>
+	<xpp:expand href="plgn.xlcl"/>
 	<xpp:expand href="prxy.xlcl"/>
 	<xpp:expand href="rgstry.xlcl"/>
 	<xpp:expand href="scl.xlcl"/>

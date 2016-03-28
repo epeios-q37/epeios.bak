@@ -21,6 +21,8 @@
 
 #include "registry.h"
 
+#include "rpproxy.h"
+
 #include "sclmisc.h"
 #include "sclplugin.h"
 #include "sclmisc.h"
@@ -151,11 +153,13 @@ public:
 
 		return true;
 	}
-	void SCLPLUGINInitialize( void )
+	bso::sBool SCLPLUGINInitialize( void *UP )
 	{
+		bso::sBool Success = false;
 	qRH
 		str::wString HostService, Identifier;
 		qCBUFFERr HostServiceBuffer, IdentifierBuffer;
+		rpproxy::rData *Data = (rpproxy::rData *)UP;
 	qRB
 		HostService.Init();
 		sclmisc::MGetValue( registry::HostService, HostService );
@@ -164,10 +168,21 @@ public:
 		sclmisc::MGetValue( registry::Identifier, Identifier );
 
 		if ( !Init( HostService.Convert( HostServiceBuffer ), Identifier.Convert( IdentifierBuffer ) ) )
-			sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
+			if ( Data == NULL  )
+				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
+			else {
+				if ( Data != plgn::NonNullUP ) {
+					Data->HostService = HostService;
+				}
+
+				qRReturn;
+			}
+		
+		Success = true;
 	qRR
 	qRT
 	qRE
+		return Success;
 	}
 };
 
@@ -180,10 +195,10 @@ void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 	Identifier.Append( IDENTIFIER );
 }
 
-void sclplugin::SCLPLUGINAboutPlugin( str::dString &About )
+void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
 {
-	About.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
-	About.Append( cpe::GetDescription() );
-	About.Append( ')' );
+	Details.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
+	Details.Append( cpe::GetDescription() );
+	Details.Append( ')' );
 }
 

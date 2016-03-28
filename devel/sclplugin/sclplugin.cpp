@@ -36,7 +36,7 @@ it is necessary to personalize it, or certain compiler would not work properly *
 # endif
 
 namespace {
-	qCBUFFERr Identifier_, About_;
+	qCBUFFERr Identifier_, Details_;
 }
 
 #define DEF( name, function ) extern "C" FUNCTION_SPEC function name
@@ -184,9 +184,9 @@ qRT
 qRE
 }
 
-void *sclplugin::callback__::PLGNCORERetrievePlugin( void )
+void *sclplugin::callback__::PLGNCORERetrievePlugin( void *UP )
 {
-	return sclplugin::SCLPLUGINRetrievePlugin();
+	return sclplugin::SCLPLUGINRetrievePlugin( UP );
 }
 
 void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
@@ -201,7 +201,7 @@ const char *sclplugin::callback__::PLGNCOREPluginIdentifier( void )
 
 const char *sclplugin::callback__::PLGNCOREPluginDetails( void )
 {
-	return About_;
+	return Details_;
 }
 
 qGCTOR( sclpugin )
@@ -214,8 +214,8 @@ qRB
 	Buffer.Convert( Identifier_ );
 
 	Buffer.Init();
-	SCLPLUGINAboutPlugin( Buffer );
-	Buffer.Convert( About_ );
+	SCLPLUGINPluginDetails( Buffer );
+	Buffer.Convert( Details_ );
 qRR
 qRT
 qRE

@@ -206,6 +206,7 @@ namespace lcl {
 			SetValue( str::string( Value ) );
 		}
 		void AddTag( const str::string_ &Value );
+		void AddTag( const ntvstr::string___ &Value );
 		void AddTag( const char *Value )
 		{
 			AddTag( str::string( Value ) );

@@ -35,6 +35,8 @@
 
 # include "csducl.h"
 
+# include "plgn.h"
+
 # include "err.h"
 # include "flw.h"
 # include "xml.h"
@@ -110,7 +112,9 @@ namespace sclfrntnd {
 			_ClientCore.reset( P );
 		}
 		E_CVDTOR( kernel___ );
-		void Init( const features___ &Features );
+		sdr::sRow Init(
+			const features___ &Features,
+			const plgn::dUPs &UPs );
 		const csducl::universal_client_core___ &Core( void ) const
 		{
 			return _ClientCore;
@@ -452,6 +456,13 @@ namespace sclfrntnd {
 /***************/
 
 namespace sclfrntnd {
+	/* An identifier usually identifies the plugin used to access the backend.
+	Identifier belows are returned when there in no bckend, or if the backend is embedded. */
+	namespace identifier {
+		qCDEF(char *, NoneBackendIdentifier, "_NONE" );
+		qCDEF(char *, EmbeddedBackendIdentifier, "_EMBEDDED" );
+	}
+
 	typedef features___ rFeatures;
 
 	const str::dString &About(

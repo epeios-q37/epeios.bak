@@ -144,6 +144,24 @@ qRT
 qRE
 }
 
+void sclmisc::ReportAndAbort(
+	const char *Text,
+	const ntvstr::string___ &Tag )
+{
+qRH
+	lcl::meaning Meaning;
+qRB
+	Meaning.Init();
+
+	Meaning.SetValue( Text );
+	Meaning.AddTag( Tag );
+
+	ReportAndAbort( Meaning );
+qRR
+qRT
+qRE
+}
+
 void sclmisc::ReportParsingErrorAndAbort(
 	const char *ErrorLabel,
 	const rgstry::context___ &Context )
@@ -1140,13 +1158,15 @@ namespace {
 	qRE
 	}
 
-	void Plug_(
+	sdr::sRow Plug_(
 		const char *Target,
 		const char *Label,
 		const char *Identifier,
 		const str::dString &Id,
+		const plgn::dUPs &UPs,
 		plgn::rLooseRetriever &Retriever )
 	{
+		sdr::sRow Row = qNIL;
 	qRH
 		str::wString Filename, Arguments;
 		rgstry::entry__ Configuration, LocaleContent;
@@ -1157,12 +1177,13 @@ namespace {
 		LocaleContent.Init();
 
 		GetPluginItemFeatures_( Target, Id, Filename, Configuration, LocaleContent, Arguments );
-		Retriever.Initialize( Filename, Label, Identifier, Configuration, Arguments );
 
-		HandleLocale_( LocaleContent, Filename );
+		if ( ( Row = Retriever.Initialize( Filename, Label, Identifier, Configuration, Arguments, UPs ) ) == qNIL )
+			HandleLocale_( LocaleContent, Filename );
 	qRR
 	qRT
 	qRE
+		return Row;
 	}
 
 	void Plug_(
@@ -1177,7 +1198,8 @@ namespace {
 	qRB
 		Retriever.Init();
 
-		Plug_( Target, Label, Identifier, Id, Retriever );
+		if ( Plug_( Target, Label, Identifier, Id, plgn::EmptyUPs, Retriever ) != qNIL )
+			qRFwk();
 
 		Retrievers.Add( Retriever );
 

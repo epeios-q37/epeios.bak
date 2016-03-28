@@ -21,6 +21,8 @@
 
 #include "registry.h"
 
+#include "rpstraight.h"
+
 #include "sclmisc.h"
 #include "sclplugin.h"
 #include "sclmisc.h"
@@ -82,12 +84,14 @@ public:
 
 		return true;
 	}
-	void SCLPLUGINInitialize( void )
+	bso::sBool SCLPLUGINInitialize( void *UP )
 	{
+		bso::sBool Success = false;
 	qRH
 		str::string HostService;
 		bso::uint__ PingDelay = 0;
 		TOL_CBUFFER___ Buffer;
+		rpstraight::rData *Data = (rpstraight::rData *)UP;
 	qRB
 		HostService.Init();
 
@@ -95,10 +99,21 @@ public:
 		PingDelay = sclmisc::OGetUInt( registry::PingDelay, 0 );
 
 		if ( !Init(HostService.Convert(Buffer), PingDelay) )
-			sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
+			if ( Data == NULL  )
+				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
+			else {
+				if ( Data != plgn::NonNullUP ) {
+					Data->HostService = HostService;
+				}
+
+				qRReturn;
+			}
+		
+		Success = true;
 	qRR
 	qRT
 	qRE
+		return Success;
 	}
 };
 
@@ -111,9 +126,9 @@ void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 	Identifier.Append( IDENTIFIER );
 }
 
-void sclplugin::SCLPLUGINAboutPlugin( str::dString &About )
+void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
 {
-	About.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
-	About.Append( cpe::GetDescription() );
-	About.Append( ')' );
+	Details.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
+	Details.Append( cpe::GetDescription() );
+	Details.Append( ')' );
 }

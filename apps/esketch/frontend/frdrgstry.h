@@ -26,7 +26,15 @@ namespace frdrgstry {
 	using sclrgstry::registry_;
 	E_AUTO( registry );
 
-	using rgstry::entry___;
+	using rgstry::rEntry;
+
+	namespace parameter {
+		using namespace sclrgstry::parameter;
+	}
+
+	namespace definition {
+		using namespace sclrgstry::definition;
+	}
 }
 
 #endif

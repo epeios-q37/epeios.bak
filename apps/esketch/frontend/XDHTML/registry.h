@@ -25,8 +25,16 @@
 namespace registry {
 	using namespace frdrgstry;
 
-	extern entry___ XSLLayoutFile;
-	extern entry___ XSLCastingFile;
+	namespace parameter{
+		using namespace frdrgstry::parameter;
+		extern rEntry XSLLayoutFile;
+		extern rEntry XSLCastingFile;
+	}
+
+	namespace definition {
+		using namespace frdrgstry::definition;
+	}
+
 }
 
 #endif

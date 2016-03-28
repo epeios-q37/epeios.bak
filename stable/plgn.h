@@ -41,6 +41,53 @@
 /*************************/
 
 namespace plgn {
+
+	class dUP {
+	public:
+		struct s {
+			str::dString::s Identifier;
+			void *UP;
+		} &S_;
+		str::dString Identifier;
+		dUP( s&S )
+		: S_( S ),
+		  Identifier( S.Identifier )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			Identifier.reset( P );
+			S_.UP = NULL;
+		}
+		void plug( str::cHook &Hook )
+		{
+			Identifier.plug( Hook );
+		}
+		void plug( qASd &AS )
+		{
+			Identifier.plug( AS );
+		}
+		dUP &operator = ( const dUP &UP )
+		{
+			Identifier = UP.Identifier;
+			S_.UP = UP.S_.UP;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Identifier.Init();
+			S_.UP = NULL;
+		}
+	};
+
+	qW( UP );
+
+	typedef ctn::qMCONTAINERdl( dUP ) dUPs;
+
+	qW( UPs );
+
+	extern wUPs EmptyUPs;	// Sort of default parameter value.
+
 	class rLooseRetriever
 	{
 	private:
@@ -55,11 +102,10 @@ namespace plgn {
 			C_().ReleasePlugin( Plugin_ );
 		}
 			private:
-		bso::sBool SubInitialize_(
+		void SubInitialize_(
 			const ntvstr::string___ &PluginPath,
 			const char *Label,
-			const char *Identifier,
-			err::handling__ ErrHandling );
+			const char *Identifier );
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -77,46 +123,48 @@ namespace plgn {
 		{
 			reset();
 		}
-		bso::bool__ Initialize(
+		/* For the three below method :
+		If returned value == 'qNIL', there was no error, or the error was handled internally.
+		if returned value != 'qNIL', the error data are in the 'UPs' of given row. */
+		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Label,
 			const char *Identifier,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default );
-		bso::bool__ Initialize(
+			const dUPs &UPs );
+		// See above.
+		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Label,
 			const char *Identifier,
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default )
+			const dUPs &UPs )
 		{
-			bso::bool__ Success = false;
+			sdr::sRow Row = qNIL;
 		qRH
 			rgstry::entry__ ConfigurationEntry;
 		qRB
 			ConfigurationEntry.Init();
 
-			if ( !Registry.Convert( Configuration, ConfigurationEntry, ErrHandling ) )
+			if ( !Registry.Convert( Configuration, ConfigurationEntry ) )
 				qRReturn;
 
-			if ( !Initialize( PluginPath, Label, Identifier, ConfigurationEntry, Arguments, ErrHandling ) )
+			if ( ( Row = Initialize( PluginPath, Label, Identifier, ConfigurationEntry, Arguments, UPs ) ) != qNIL )
 				qRReturn;
-
-			Success = true;
 		qRR
 		qRT
 		qRE
-			return Success;
+			return Row;
 		}
-		bso::bool__ Initialize(
+		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Label,
 			const char *Identifier,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default );
+			const dUPs &UPs );
 		const char *Identifier( void )
 		{
 			return C_().PluginIdentifier();
@@ -188,32 +236,32 @@ namespace plgn {
 		{
 			reset();
 		}
-		bso::bool__ Initialize(
+		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Identifier,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default )
+			const dUPs &UPs )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Arguments, UPs );
 		}
-		bso::bool__ Initialize(
+		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Identifier,
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default )
+			const dUPs &UPs )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Registry, Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Registry, Arguments, UPs );
 		}
-		bso::bool__ Initialize(
+		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Identifier,
 			const str::string_ &Arguments,
-			err::handling__ ErrHandling = err::h_Default )
+			const dUPs &UPs )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Arguments, ErrHandling );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Arguments, UPs );
 		}
 		const char *Identifier( void )
 		{
@@ -235,13 +283,14 @@ namespace plgn {
 /*************************/
 
 namespace plgn {
+	extern void * NonNullUP;	// To use as UP to signal then the error is handled externally, but the UP has no other use.
+
 	template <typename plugin> E_TTCLONE__( plgn::rRetriever<plugin>, retriever___ );
 
-	bso::sBool IdentifierAndDetails(
+	void IdentifierAndDetails(
 		const ntvstr::string___ &PluginPath,
 		str::dString &Identifier,
-		str::dString &Details,
-		err::handling__ ErrHandling = err::h_Default );
+		str::dString &Details );
 }
 
 #endif

@@ -41,6 +41,7 @@
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
+		<Module>rpproxy</Module>
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>

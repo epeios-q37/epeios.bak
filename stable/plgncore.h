@@ -87,6 +87,7 @@ namespace plgncore {
 			return sizeof( sData );
 		}
 	};
+
 #pragma pack( pop )
 
 	class callback__
@@ -98,7 +99,7 @@ namespace plgncore {
 		virtual void PLGNCOREInitialize(
 			const sData *Data,
 			const fnm::name___ &Directory ) = 0;
-		virtual void *PLGNCORERetrievePlugin( void ) = 0;
+		virtual void *PLGNCORERetrievePlugin( void *UP ) = 0;	// When an error occurs, 'NULL' is returned, and if 'UP' == NULL the error is handled internally.
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
 		virtual const char *PLGNCOREPluginIdentifier( void ) = 0;
 		virtual const char *PLGNCOREPluginDetails( void ) = 0;
@@ -124,9 +125,9 @@ namespace plgncore {
 		{
 			return PLGNCOREInitialize( Data, Directory );
 		}
-		void *RetrievePlugin( void )
+		void *RetrievePlugin( void *UP )
 		{
-			return PLGNCORERetrievePlugin();
+			return PLGNCORERetrievePlugin( UP );
 		}
 		void ReleasePlugin( void *Plugin )
 		{

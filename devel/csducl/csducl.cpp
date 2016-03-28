@@ -78,21 +78,22 @@ qRE
 	return Success;
 }
 
-bso::bool__ csducl::universal_client_core___::InitRemote(
+sdr::sRow csducl::universal_client_core___::InitRemote(
 	const str::string_ &PluginPath,
 	const char *PluginIdentifier,
-	const str::string_ &Parameters )
+	const str::string_ &Parameters,
+	const plgn::dUPs &UPs )
 {
-	bso::bool__ Success = false;
+	sdr::sRow Row = qNIL;
 
 	reset();
 
-	if ( ( Success = _RemoteAccess.Init( PluginPath, PluginIdentifier, Parameters, err::hUserDefined ) ) ) {
+	if ( ( Row = _RemoteAccess.Init( PluginPath, PluginIdentifier, Parameters, UPs ) ) == qNIL ) {
 		_Type = tRemote;
 		_Location.Init( PluginPath );
 	}
 
-	return Success;
+	return Row;
 }
 
 static void FillAutomats_( void )

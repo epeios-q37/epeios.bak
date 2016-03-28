@@ -177,6 +177,20 @@ void lcl::meaning_::AddTag( const str::string_ &Value )
 	Core.Basics.Flush();
 }
 
+void lcl::meaning_::AddTag( const ntvstr::string___ &Value )
+{
+qRH
+	str::wString Buffer;
+qRB
+	Buffer.Init();
+	AddTag(Value.UTF8( Buffer ) );
+qRR
+qRT
+qRE
+}
+
+
+
 void lcl::meaning_::AddTag( const meaning_ &Meaning )
 {
 #if 1

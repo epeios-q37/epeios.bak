@@ -19,10 +19,10 @@
 
 #include "registry.h"
 
-using frdrgstry::entry___;
+using frdrgstry::rEntry;
 
-static entry___ XSLFilesSet_( "XSLFilesSet", sclrgstry::Parameters );
-static entry___ FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
-static entry___ TaggedXSLFiles(RGSTRY_TAGGING_ATTRIBUTE("target"), FreeXSLFiles_ );
-entry___ registry::XSLLayoutFile("Layout", TaggedXSLFiles );
-entry___ registry::XSLCastingFile("Casting", TaggedXSLFiles );
+static rEntry XSLFilesSet_( "XSLFilesSet", sclrgstry::Parameters );
+static rEntry FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
+static rEntry TaggedXSLFiles(RGSTRY_TAGGING_ATTRIBUTE("target"), FreeXSLFiles_ );
+rEntry registry::parameter::XSLLayoutFile("Layout", TaggedXSLFiles );
+rEntry registry::parameter::XSLCastingFile("Casting", TaggedXSLFiles );

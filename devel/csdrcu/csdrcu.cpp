@@ -23,29 +23,24 @@
 
 using namespace csdrcu;
 
-bso::bool__ csdrcu::core___::Init(
+sdr::sRow csdrcu::core___::Init(
 	const str::string_ &PluginPath,
 	const char *Identifier,
 	const str::string_ &Parameters,
-	err::handling__ ErrHandling )
+	const plgn::dUPs &UPs )
 {
-	bso::bool__ Success = false;
+	sdr::sRow Row = qNIL;
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
 	Retriever_.Init();
 
-	if ( !( Success = Retriever_.Initialize( PluginPath, Identifier, Parameters, err::hUserDefined ) ) ) {
-		if ( ErrHandling == err::hThrowException )
-			qRFwk();
-		else
-			qRReturn;
+	if ( ( Row = Retriever_.Initialize( PluginPath, Identifier, Parameters, UPs ) ) == qNIL ) {
+		Driver_ = &Retriever_.Plugin();
+		_driver___::Init( fdr::ts_Default );
 	}
-
-	Driver_ = &Retriever_.Plugin();
-	_driver___::Init( fdr::ts_Default );
 qRR
 qRT
 qRE
-	return Success;
+	return Row;
 }

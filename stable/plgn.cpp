@@ -25,6 +25,9 @@ using namespace plgn;
 
 #include "sclmisc.h"
 
+void *plgn::NonNullUP = &NonNullUP;	
+wUPs plgn::EmptyUPs;
+
 namespace {
 	template <typename function> inline const char *GetAndExecute_(
 		const char *FunctionName,
@@ -54,74 +57,73 @@ namespace {
 
 	plgncore::callback__ *SubInitialize_(
 		const ntvstr::string___ &PluginPath,
-		dlbrry::dynamic_library___ &Library,
-		err::handling__ ErrHandling )
+		dlbrry::dynamic_library___ &Library )
 	{
 		plgncore::retrieve_callback *Function = NULL;
 
-		if ( !Library.Init( PluginPath, ErrHandling ) ) {
-			if ( ErrHandling == err::hThrowException )
-				qRFwk();
-			else
-				return NULL;
-		}
+		if ( !Library.Init( PluginPath, err::hUserDefined ) )
+			sclmisc::ReportAndAbort( PLGN_NAME "_UnableToLoadLibrary", PluginPath );
 
 		Function = dlbrry::GetFunction<plgncore::retrieve_callback *>( E_STRING( PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME ), Library );
 
-		if ( Function == NULL ) {
-			if ( ErrHandling == err::hThrowException )
-				qRFwk();
-			else
-				return false;
-		}
+		if ( Function == NULL )
+			sclmisc::ReportAndAbort( PLGN_NAME "_BadLibrary", PluginPath );
 
 		return &Function();
 	}
 }
 
-bso::bool__ plgn::rLooseRetriever::SubInitialize_(
+void plgn::rLooseRetriever::SubInitialize_(
 	const ntvstr::string___ &PluginPath,
 	const char *Label,
-	const char *Identifier,
-	err::handling__ ErrHandling )
+	const char *Identifier )
 {
 	if ( Plugin_ != NULL )
 		qRFwk();
 
-	Callback_ = ::SubInitialize_( PluginPath, Library_, ErrHandling );
+	Callback_ = ::SubInitialize_( PluginPath, Library_ );
 
-	if ( Callback_ == NULL ) {
-		if ( ErrHandling == err::hThrowException )
+	if ( Callback_ == NULL )	// An error should already be handled.
 			qRFwk();
-		else
-			return false;
-	}
 
-	if ( !_IsCompatible( Label, Identifier, Library_ ) ) {
-		if ( ErrHandling == err::hThrowException )
-			qRFwk();
-		else
-			return false;
-	}
-
-
-	return true;
+	if ( !_IsCompatible( Label, Identifier, Library_ ) )
+		sclmisc::ReportAndAbort( PLGN_NAME "_LibraryNotCompatible", PluginPath );
 }
 
-bso::bool__ plgn::rLooseRetriever::Initialize(
+namespace {
+	sdr::sRow GetUP_(
+		plgncore::callback__ &Callback,
+		const dUPs &UPs,
+		void *&UP )
+	{
+		sdr::sRow Row = UPs.First();
+		const char *Identifier = Callback.PluginIdentifier();
+
+		while ( ( Row != qNIL ) && ( UPs( Row ).Identifier != Identifier ) )
+			Row = UPs.Next( Row );
+
+		if ( Row != qNIL )
+			UP = UPs( Row ).S_.UP;
+
+		return Row;
+	}
+}
+
+sdr::sRow plgn::rLooseRetriever::Initialize(
 	const ntvstr::string___ &PluginPath,
 	const char *Label,
 	const char *Identifier,
 	const rgstry::entry__ &Configuration,
 	const str::string_ &Arguments,
-	err::handling__ ErrHandling )
+	const dUPs &UPs )
 {
+	sdr::sRow Row = qNIL;
 qRH
 	plgncore::sData Data;
 	sclmisc::sRack SCLRack;
+	void *UP = NULL;
 qRB
-	if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
-		qRReturn;
+	SubInitialize_( PluginPath, Label, Identifier );
 
 	SCLRack.Init();
 
@@ -129,30 +131,31 @@ qRB
 
 	C_().Initialize( &Data, Configuration );
 
-	Plugin_ = C_().RetrievePlugin();
+	Row = GetUP_( C_(), UPs, UP );
 
-	if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
-		qRFwk();
+	if ( ( Plugin_ = C_().RetrievePlugin( UP ) ) != NULL )
+		Row = qNIL;
 qRR
 qRT
 qRE
-	return Plugin_ != NULL;
+	return Row;
 }
 
-bso::bool__ plgn::rLooseRetriever::Initialize(
+sdr::sRow plgn::rLooseRetriever::Initialize(
 	const ntvstr::string___ &PluginPath,
 	const char *Label,
 	const char *Identifier,
 	const str::string_ &Arguments,
-	err::handling__ ErrHandling )
+	const dUPs &UPs )
 {
+	sdr::sRow Row = qNIL;
 qRH
 	plgncore::sData Data;
 	sclmisc::sRack SCLRack;
 	fnm::name___ Location;
+	void *UP = NULL;
 qRB
-	if ( !SubInitialize_( PluginPath, Label, Identifier, ErrHandling ) )
-		qRReturn;
+	SubInitialize_( PluginPath, Label, Identifier );
 
 	Location.Init();
 	fnm::GetLocation( PluginPath, Location );
@@ -170,14 +173,14 @@ qRB
 	'Locale' section should be the same for all the plugin, and you should
 	read what be needed from the registry before returning from here. */
 
-	Plugin_ = C_().RetrievePlugin();
+	Row = GetUP_( C_(), UPs, UP );
 
-	if ( ( Plugin_ == NULL) && ( ErrHandling == err::hThrowException ) )
-		qRFwk();
+	if ( ( Plugin_ = C_().RetrievePlugin( UP ) ) != NULL )
+		Row = qNIL;
 qRR
 qRT
 qRE
-	return Plugin_ != NULL;
+	return Row;
 }
 
 // 'qR...' to be sure that the recalled and removed retriever is deleted if an error occurs.
@@ -205,34 +208,29 @@ qRT
 qRE
 }
 
-bso::sBool plgn::IdentifierAndDetails(
+void plgn::IdentifierAndDetails(
 	const ntvstr::string___ &PluginPath,
 	str::dString &Identifier,
-	str::dString &Details,
-	err::handling__ ErrHandling )
+	str::dString &Details )
 {
-	bso::sBool Success = false;
 qRH
 	dlbrry::dynamic_library___ Library;
 	plgncore::callback__ *Callback = NULL;
 qRB
-	Callback = SubInitialize_( PluginPath, Library, ErrHandling );
+	Callback = SubInitialize_( PluginPath, Library );
 
-	if ( Callback == NULL ) {
-		if ( ErrHandling == err::hThrowException )
-			qRFwk();
-		else
-			qRReturn;
-	}
+	if ( Callback == NULL )
+		qRFwk();
 
 	Identifier.Append( Callback->PluginIdentifier() );
 	Details.Append( Callback->PluginDetails() );
-
-	Success = true;
 qRR
 qRT
 qRE
-	return Success;
 }
 
+qGCTOR( plgn )
+{
+	EmptyUPs.Init();
+}
 

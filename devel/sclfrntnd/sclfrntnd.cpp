@@ -437,8 +437,11 @@ void sclfrntnd::SetBackendFeatures(
 	}
 }
 
-void sclfrntnd::kernel___::Init( const features___ &Features )
+sdr::sRow sclfrntnd::kernel___::Init(
+	const features___ &Features,
+	const plgn::dUPs &UPs )
 {
+	sdr::sRow Row = qNIL;
 qRH
 	csdlec::library_data__ LibraryData;
 	csdleo::mode__ Mode = csdleo::m_Undefined;
@@ -450,25 +453,25 @@ qRB
 
 	switch ( Features.Type ) {
 	case csducl::tNone:
-		Success = _ClientCore.InitNone();
+		if ( !_ClientCore.InitNone() )
+			qRFwk();
 		break;
 	case csducl::tLibrary:
 		LibraryData.Init( csdleo::cRegular, Features.Path.Convert( Buffer ), &SCLRack );
-		Success = _ClientCore.InitLibrary( Features.Path, LibraryData );
+		if ( !_ClientCore.InitLibrary( Features.Path, LibraryData ) )
+			qRFwk();
 		break;
 	case csducl::tRemote:
-		Success = _ClientCore.InitRemote( Features.Path, Features.Identifier, Features.Parameters );
+		Row = _ClientCore.InitRemote( Features.Path, Features.Identifier, Features.Parameters, UPs );
 		break;
 	default:
 		qRFwk();
 		break;
 	}
-
-	if ( !Success )
-		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToLoad", Features.Path );
 qRR
 qRT
 qRE
+	return Row;
 }
 
 namespace {
@@ -557,7 +560,6 @@ const str::dString &sclfrntnd::About(
 	str::dString &About )
 {
 qRH
-	bso::bool__ Success = false;
 	sclmisc::sRack SCLRack;
 	str::wString Identifier, Details;
 qRB
@@ -569,22 +571,18 @@ qRB
 	switch ( Features.Type ) {
 	case csducl::tNone:
 	case csducl::tLibrary:
-		Success = true;
 		break;
 	case csducl::tRemote:
 		Identifier.Init();
 		Details.Init();
-		Success = plgn::IdentifierAndDetails( Features.Path, Identifier, Details, err::hUserDefined );
+		plgn::IdentifierAndDetails( Features.Path, Identifier, Details );
 		break;
 	default:
 		qRFwk();
 		break;
 	}
 
-	if ( Success )
-		BuildAbout_( Features.Type, Identifier, Details, About );
-	else
-		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_UnableToLoad", Features.Path );
+	BuildAbout_( Features.Type, Identifier, Details, About );
 qRR
 qRT
 qRE

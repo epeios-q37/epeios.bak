@@ -82,10 +82,11 @@ namespace csducl {
 		bso::bool__ InitLibrary(
 			const str::string_ &LibraryPath,
 			csdlec::library_data__ &LibraryData );
-		bso::bool__ InitRemote(
+		sdr::sRow InitRemote(
 			const str::string_ &PluginPath,
 			const char *PluginIdentifier,
-			const str::string_ &Parameters );
+			const str::string_ &Parameters,
+			const plgn::dUPs &UPs );
 		type__ GetType( void ) const
 		{
 			return _Type;
