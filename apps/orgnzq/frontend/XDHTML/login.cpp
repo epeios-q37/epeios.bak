@@ -120,7 +120,7 @@ qRB
 	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
 		Features.Init();
 		sclxdhtml::login::GetBackendFeatures( Session, Features );
-		core::Kernel().Init( Features );
+		core::Kernel().Init( Features, plgn::EmptyAbstracts );
 	}
 
 	IncompatibilityInformations.Init();
