@@ -1,29 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Locales>
-  <Locale target="orgnzqxdh">
-    <xpp:expand xmlns:xpp="http://zeusw.org/epeios/xpp"
-                href="../orgnzqfrd.xlcl"/>
-	  <Translations text="About...">
-		  <Translation language="fr">À propos...</Translation>
-		  <Translation language="en">About...</Translation>
-	  </Translations>
-	  <Translations text="ClosingConfirmation">
-		  <Translation language="fr">Êtes-vous sûr de vouloir fermer l'application ?</Translation>
-		  <Translation language="en">Are yu sure you want to close ?</Translation>
-	  </Translations>
-	  <Translations text="ActionNeedsBackend">
-		  <Translation language="fr">Cette action nécessite une connection à un moteur de traitement.</Translation>
-		  <Translation language="en">This action needs a conneciton to a backend.</Translation>
-	  </Translations>
-	  <Translations text="UnableToLogin">
-		  <Translation language="fr">Echec authentification !</Translation>
-		  <Translation language="en">Login failure !</Translation>
-	  </Translations>
-	  <!--
-	  <Translations text="">
-		  <Translation language="fr"></Translation>
-		  <Translation language="en"></Translation>
-	  </Translations>
-	  -->
-  </Locale>
-</Locales>
+<Locale target="orgnzqxdh" xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:expand href="../orgnzqfrd.xlcl"/>
+	<Translations text="About...">
+		<Translation language="fr">À propos...</Translation>
+		<Translation language="en">About...</Translation>
+	</Translations>
+	<Translations text="ClosingConfirmation">
+		<Translation language="fr">Êtes-vous sûr de vouloir fermer l'application ?</Translation>
+		<Translation language="en">Are yu sure you want to close ?</Translation>
+	</Translations>
+	<Translations text="ActionNeedsBackend">
+		<Translation language="fr">Cette action nécessite une connection à un moteur de traitement.</Translation>
+		<Translation language="en">This action needs a conneciton to a backend.</Translation>
+	</Translations>
+	<Translations text="UnableToLogin">
+		<Translation language="fr">Echec authentification !</Translation>
+		<Translation language="en">Login failure !</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>
