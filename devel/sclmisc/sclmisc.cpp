@@ -333,7 +333,9 @@ namespace {
 	qRB
 		Locale.Init();
 
-		if ( Found = GetLocale_( Level, Locale ) )
+		Found = GetLocale_( Level, Locale );
+
+		if ( Found )
 			scllocale::Insert( Target, "", Locale, rgstry::rthIgnore );
 	qRR
 	qRT
