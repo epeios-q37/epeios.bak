@@ -36,7 +36,7 @@ qRB
 	if ( Mode == xdhcmn::mMultiUser ) {
 		Features.Init();
 		sclfrntnd::GuessBackendFeatures( Features );
-		core::Kernel().Init( Features );
+		core::Kernel().Init( Features, plgn::EmptyAbstracts );
 	}
 qRR
 qRT
