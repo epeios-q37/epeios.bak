@@ -46,7 +46,7 @@ namespace sclplugin {
 		virtual void PLGNCOREInitialize(
 			const plgncore::sData *Data,
 			const fnm::name___ &Directory ) override;
-		virtual void *PLGNCORERetrievePlugin( void *UP ) override;
+		virtual void *PLGNCORERetrievePlugin( plgncore::sAbstract *Abstract ) override;
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
 		virtual const char *PLGNCOREPluginIdentifier( void ) override;
 		virtual const char *PLGNCOREPluginDetails( void ) override;
@@ -68,7 +68,7 @@ namespace sclplugin {
 	void SCLPLUGINPluginParameters( str::dStrings &Parameters );
 	// The following ones are defined by below macro.
 	const char *SCLPLUGINPluginLabel( void );
-	void *SCLPLUGINRetrievePlugin( void *UP );
+	void *SCLPLUGINRetrievePlugin( plgncore::sAbstract *Abstract );
 	void SCLPLUGINReleasePlugin( void * );
 }
 
@@ -80,7 +80,7 @@ namespace sclplugin {
 		return plugin::Label();\
 	}\
 \
-	void *sclplugin::SCLPLUGINRetrievePlugin( void *UP )\
+	void *sclplugin::SCLPLUGINRetrievePlugin( plgncore::sAbstract *Abstract )\
 	{\
 		plugin *Plugin = NULL;\
 	qRH\
@@ -90,7 +90,7 @@ namespace sclplugin {
 		if ( Plugin == NULL )\
 			qRAlc();\
 		\
-		if ( !Plugin->SCLPLUGINInitialize( UP ) ) {\
+		if ( !Plugin->SCLPLUGINInitialize( Abstract ) ) {\
 			delete Plugin;\
 			Plugin = NULL;\
 		}\

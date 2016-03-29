@@ -148,12 +148,12 @@ namespace {
 		void Init( void )
 		{
 		}
-		bso::sBool SCLPLUGINInitialize( void *UP )
+		bso::sBool SCLPLUGINInitialize( plgn::sAbstract *Abstract )
 		{
 		qRH
 			str::string HostService, Identifier;
 		qRB
-			if ( UP != NULL )
+			if ( Abstract != NULL )
 				qRGnr();
 
 			HostService.Init();

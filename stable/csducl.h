@@ -86,7 +86,7 @@ namespace csducl {
 			const str::string_ &PluginPath,
 			const char *PluginIdentifier,
 			const str::string_ &Parameters,
-			const plgn::dUPs &UPs );
+			const plgn::dAbstracts &Abstracts );
 		type__ GetType( void ) const
 		{
 			return _Type;

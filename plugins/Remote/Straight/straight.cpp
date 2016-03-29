@@ -84,29 +84,35 @@ public:
 
 		return true;
 	}
-	bso::sBool SCLPLUGINInitialize( void *UP )
+	bso::sBool SCLPLUGINInitialize( plgncore::sAbstract *BaseAbstract )
 	{
 		bso::sBool Success = false;
 	qRH
 		str::string HostService;
 		bso::uint__ PingDelay = 0;
 		TOL_CBUFFER___ Buffer;
-		rpstraight::rData *Data = (rpstraight::rData *)UP;
+		rpstraight::rAbstract *Abstract = (rpstraight::rAbstract *)BaseAbstract;
 	qRB
+		plgn::Test( BaseAbstract, rpstraight::Identifier );
+
 		HostService.Init();
 
 		sclmisc::MGetValue( registry::HostService, HostService );
 		PingDelay = sclmisc::OGetUInt( registry::PingDelay, 0 );
 
 		if ( !Init(HostService.Convert(Buffer), PingDelay) )
-			if ( Data == NULL  )
+			switch ( plgn::ErrorReporting( Abstract ) ) {
+			case plgn::rhInternally:
 				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
-			else {
-				if ( Data != plgn::NonNullUP ) {
-					Data->HostService = HostService;
-				}
-
+				break;
+			case plgn::rhDetailed:
+				Abstract->HostService = HostService;
+			case plgn::rhBasic:
 				qRReturn;
+				break;
+			default:
+				qRGnr();
+				break;
 			}
 		
 		Success = true;
@@ -132,3 +138,10 @@ void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
 	Details.Append( cpe::GetDescription() );
 	Details.Append( ')' );
 }
+
+qGCTOR(straight)
+{
+	if ( strcmp( rpstraight::Identifier, IDENTIFIER ) )
+		qRChk();
+}
+

@@ -61,9 +61,9 @@ namespace {
 		{
 			Server_.reset();	// See above for initialization will be made later.
 		}
-		bso::sBool SCLPLUGINInitialize( void * UP )
+		bso::sBool SCLPLUGINInitialize( plgn::sAbstract *Abstract )
 		{
-			if ( UP != NULL )
+			if ( Abstract != NULL )
 				qRGnr();
 
 			// Made in 'MISCProcess(...)'.

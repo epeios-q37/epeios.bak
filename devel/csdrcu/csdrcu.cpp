@@ -27,7 +27,7 @@ sdr::sRow csdrcu::core___::Init(
 	const str::string_ &PluginPath,
 	const char *Identifier,
 	const str::string_ &Parameters,
-	const plgn::dUPs &UPs )
+	const plgn::dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
 qRH
@@ -35,7 +35,7 @@ qRH
 qRB
 	Retriever_.Init();
 
-	if ( ( Row = Retriever_.Initialize( PluginPath, Identifier, Parameters, UPs ) ) == qNIL ) {
+	if ( ( Row = Retriever_.Initialize( PluginPath, Identifier, Parameters, Abstracts ) ) == qNIL ) {
 		Driver_ = &Retriever_.Plugin();
 		_driver___::Init( fdr::ts_Default );
 	}

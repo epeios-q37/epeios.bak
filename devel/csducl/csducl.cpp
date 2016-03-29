@@ -82,13 +82,13 @@ sdr::sRow csducl::universal_client_core___::InitRemote(
 	const str::string_ &PluginPath,
 	const char *PluginIdentifier,
 	const str::string_ &Parameters,
-	const plgn::dUPs &UPs )
+	const plgn::dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
 
 	reset();
 
-	if ( ( Row = _RemoteAccess.Init( PluginPath, PluginIdentifier, Parameters, UPs ) ) == qNIL ) {
+	if ( ( Row = _RemoteAccess.Init( PluginPath, PluginIdentifier, Parameters, Abstracts ) ) == qNIL ) {
 		_Type = tRemote;
 		_Location.Init( PluginPath );
 	}

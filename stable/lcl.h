@@ -37,6 +37,10 @@
 
 # define LCL_UNDEFINED_LEVEL	RGSTRY_UNDEFINED_LEVEL
 
+/*************/
+/**** OLD ****/
+/*************/
+
 namespace lcl {
 	using rgstry::status__;
 	using rgstry::context___;
@@ -321,4 +325,13 @@ namespace lcl {
 // A utiliser dans une macro '_( name )', qui prédéfini le paramètre 'prefix'.
 # define LCL_M( prefix, name ) lcl::Control_( prefix##name, #name )
 
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace lcl {
+	typedef meaning_ dMeaning;
+
+	qW( Meaning );
+}
 #endif

@@ -77,7 +77,7 @@ namespace csdrcu {
 			const str::string_ &PluginPath,
 			const char *Identifier,
 			const str::string_ &Parameters,
-			const plgn::dUPs &UPs );
+			const plgn::dAbstracts &Abstracts );
 		const char *Identifier( void )
 		{
 			return Retriever_.Identifier();

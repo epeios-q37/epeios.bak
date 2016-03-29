@@ -41,52 +41,15 @@
 /*************************/
 
 namespace plgn {
+	using plgncore::sAbstract;
 
-	class dUP {
-	public:
-		struct s {
-			str::dString::s Identifier;
-			void *UP;
-		} &S_;
-		str::dString Identifier;
-		dUP( s&S )
-		: S_( S ),
-		  Identifier( S.Identifier )
-		{}
-		void reset( bso::sBool P = true )
-		{
-			Identifier.reset( P );
-			S_.UP = NULL;
-		}
-		void plug( str::cHook &Hook )
-		{
-			Identifier.plug( Hook );
-		}
-		void plug( qASd &AS )
-		{
-			Identifier.plug( AS );
-		}
-		dUP &operator = ( const dUP &UP )
-		{
-			Identifier = UP.Identifier;
-			S_.UP = UP.S_.UP;
+	extern sAbstract * NonNullAbstractPointer;	// To use as error pointer to report that the error is handled externally, but the error pointer has no other use.
 
-			return *this;
-		}
-		void Init( void )
-		{
-			Identifier.Init();
-			S_.UP = NULL;
-		}
-	};
+	typedef bch::qBUNCHdl( plgncore::sAbstract * ) dAbstracts;
 
-	qW( UP );
+	qW( Abstracts );
 
-	typedef ctn::qMCONTAINERdl( dUP ) dUPs;
-
-	qW( UPs );
-
-	extern wUPs EmptyUPs;	// Sort of default parameter value.
+	extern wAbstracts EmptyAbstracts;	// Sort of default parameter value.
 
 	class rLooseRetriever
 	{
@@ -132,7 +95,7 @@ namespace plgn {
 			const char *Identifier,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
-			const dUPs &UPs );
+			const dAbstracts& Abstracts );
 		// See above.
 		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
@@ -141,7 +104,7 @@ namespace plgn {
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
-			const dUPs &UPs )
+			const dAbstracts &Abstracts )
 		{
 			sdr::sRow Row = qNIL;
 		qRH
@@ -152,7 +115,7 @@ namespace plgn {
 			if ( !Registry.Convert( Configuration, ConfigurationEntry ) )
 				qRReturn;
 
-			if ( ( Row = Initialize( PluginPath, Label, Identifier, ConfigurationEntry, Arguments, UPs ) ) != qNIL )
+			if ( ( Row = Initialize( PluginPath, Label, Identifier, ConfigurationEntry, Arguments, Abstracts ) ) != qNIL )
 				qRReturn;
 		qRR
 		qRT
@@ -164,7 +127,7 @@ namespace plgn {
 			const char *Label,
 			const char *Identifier,
 			const str::string_ &Arguments,
-			const dUPs &UPs );
+			const dAbstracts &Abstracts );
 		const char *Identifier( void )
 		{
 			return C_().PluginIdentifier();
@@ -241,9 +204,9 @@ namespace plgn {
 			const char *Identifier,
 			const rgstry::entry__ &Configuration,
 			const str::string_ &Arguments,
-			const dUPs &UPs )
+			const dAbstracts &Abstracts )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Arguments, UPs );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Arguments, Abstracts );
 		}
 		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
@@ -251,17 +214,17 @@ namespace plgn {
 			const rgstry::tentry__ &Configuration,
 			const rgstry::multi_level_registry_ &Registry,
 			const str::string_ &Arguments,
-			const dUPs &UPs )
+			const dAbstracts &Abstracts )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Registry, Arguments, UPs );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Configuration, Registry, Arguments, Abstracts );
 		}
 		sdr::sRow Initialize(
 			const ntvstr::string___ &PluginPath,
 			const char *Identifier,
 			const str::string_ &Arguments,
-			const dUPs &UPs )
+			const dAbstracts &Abstracts )
 		{
-			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Arguments, UPs );
+			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Arguments, Abstracts );
 		}
 		const char *Identifier( void )
 		{
@@ -276,6 +239,39 @@ namespace plgn {
 			return *(plugin *)LooseRetriever_.Plugin();
 		}
 	};
+
+	void IdentifierAndDetails(
+		const ntvstr::string___ &PluginPath,
+		str::dString &Identifier,
+		str::dString &Details );
+
+	qENUM( ErrorReporting ) {
+		rhInternally,		// Errors are handled internally (mainly with a 'ReportAndAbort(...)').
+		rhDetailed,			// Errors will be handled externally, details are given.
+		rhBasic,			// Errors will be handled externally, but without details.
+		rh_amount,
+		rh_Undefined
+	};
+
+	inline eErrorReporting ErrorReporting( const sAbstract *Abstract )
+	{
+		if ( Abstract == NULL )
+			return rhInternally;
+		else if ( Abstract == NonNullAbstractPointer )
+			return rhBasic;
+		else
+			return rhDetailed;
+	}
+
+	inline void Test(
+		sAbstract *Abstract,
+		const char *Identifier )
+	{
+		if ( ErrorReporting( Abstract ) == rhDetailed )
+			if ( strcmp( Abstract->Identifier(), Identifier ) )
+				qRFwk();
+	}
+
 }
 
 /*************************/
@@ -283,14 +279,7 @@ namespace plgn {
 /*************************/
 
 namespace plgn {
-	extern void * NonNullUP;	// To use as UP to signal then the error is handled externally, but the UP has no other use.
-
 	template <typename plugin> E_TTCLONE__( plgn::rRetriever<plugin>, retriever___ );
-
-	void IdentifierAndDetails(
-		const ntvstr::string___ &PluginPath,
-		str::dString &Identifier,
-		str::dString &Details );
 }
 
 #endif

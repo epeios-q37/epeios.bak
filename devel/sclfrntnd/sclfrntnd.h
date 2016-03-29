@@ -114,7 +114,7 @@ namespace sclfrntnd {
 		E_CVDTOR( kernel___ );
 		sdr::sRow Init(
 			const features___ &Features,
-			const plgn::dUPs &UPs );
+			const plgn::dAbstracts &Abstracts );
 		const csducl::universal_client_core___ &Core( void ) const
 		{
 			return _ClientCore;

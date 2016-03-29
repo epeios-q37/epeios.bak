@@ -88,6 +88,21 @@ namespace plgncore {
 		}
 	};
 
+	// If an error occurs, contains details
+	class sAbstract {
+	protected:
+		virtual const char *PLGNCOREIdentifier( void ) = 0;
+	public:
+		void reset( bso::sBool = true )
+		{}
+		qCVDTOR( sAbstract );
+		const char *Identifier( void ) {
+			return PLGNCOREIdentifier();
+		}
+		void Init( void )
+		{}
+	};
+
 #pragma pack( pop )
 
 	class callback__
@@ -99,7 +114,7 @@ namespace plgncore {
 		virtual void PLGNCOREInitialize(
 			const sData *Data,
 			const fnm::name___ &Directory ) = 0;
-		virtual void *PLGNCORERetrievePlugin( void *UP ) = 0;	// When an error occurs, 'NULL' is returned, and if 'UP' == NULL the error is handled internally.
+		virtual void *PLGNCORERetrievePlugin( sAbstract *Abstract ) = 0;	// When an error occurs, 'NULL' is returned, and if 'Abstract' == NULL the error is handled internally.
 		virtual void PLGNCOREReleasePlugin( void *Plugin ) = 0;
 		virtual const char *PLGNCOREPluginIdentifier( void ) = 0;
 		virtual const char *PLGNCOREPluginDetails( void ) = 0;
@@ -125,9 +140,9 @@ namespace plgncore {
 		{
 			return PLGNCOREInitialize( Data, Directory );
 		}
-		void *RetrievePlugin( void *UP )
+		void *RetrievePlugin( sAbstract *Abstract )
 		{
-			return PLGNCORERetrievePlugin( UP );
+			return PLGNCORERetrievePlugin( Abstract );
 		}
 		void ReleasePlugin( void *Plugin )
 		{

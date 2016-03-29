@@ -25,8 +25,21 @@ using namespace plgn;
 
 #include "sclmisc.h"
 
-void *plgn::NonNullUP = &NonNullUP;	
-wUPs plgn::EmptyUPs;
+namespace {
+	class sDummyAbstract_
+	: public sAbstract
+	{
+	protected:
+		virtual const char *PLGNCOREIdentifier( void ) override
+		{
+			return NULL;
+		}
+	} DummyAbstract_;
+
+}
+
+sAbstract *plgn::NonNullAbstractPointer = &DummyAbstract_;	
+wAbstracts plgn::EmptyAbstracts;
 
 namespace {
 	template <typename function> inline const char *GetAndExecute_(
@@ -91,19 +104,19 @@ void plgn::rLooseRetriever::SubInitialize_(
 }
 
 namespace {
-	sdr::sRow GetUP_(
+	sdr::sRow GetAbstract_(
 		plgncore::callback__ &Callback,
-		const dUPs &UPs,
-		void *&UP )
+		const dAbstracts &Abstracts,
+		sAbstract *&Abstract )
 	{
-		sdr::sRow Row = UPs.First();
+		sdr::sRow Row = Abstracts.First();
 		const char *Identifier = Callback.PluginIdentifier();
 
-		while ( ( Row != qNIL ) && ( UPs( Row ).Identifier != Identifier ) )
-			Row = UPs.Next( Row );
+		while ( ( Row != qNIL ) && ( strcmp( Abstracts( Row )->Identifier(), Identifier ) ) )
+			Row = Abstracts.Next( Row );
 
 		if ( Row != qNIL )
-			UP = UPs( Row ).S_.UP;
+			Abstract = Abstracts( Row );
 
 		return Row;
 	}
@@ -115,13 +128,13 @@ sdr::sRow plgn::rLooseRetriever::Initialize(
 	const char *Identifier,
 	const rgstry::entry__ &Configuration,
 	const str::string_ &Arguments,
-	const dUPs &UPs )
+	const dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
 qRH
 	plgncore::sData Data;
 	sclmisc::sRack SCLRack;
-	void *UP = NULL;
+	sAbstract *Abstract = NULL;
 qRB
 	SubInitialize_( PluginPath, Label, Identifier );
 
@@ -131,9 +144,9 @@ qRB
 
 	C_().Initialize( &Data, Configuration );
 
-	Row = GetUP_( C_(), UPs, UP );
+	Row = GetAbstract_( C_(), Abstracts, Abstract );
 
-	if ( ( Plugin_ = C_().RetrievePlugin( UP ) ) != NULL )
+	if ( ( Plugin_ = C_().RetrievePlugin( Abstract ) ) != NULL )
 		Row = qNIL;
 qRR
 qRT
@@ -146,14 +159,14 @@ sdr::sRow plgn::rLooseRetriever::Initialize(
 	const char *Label,
 	const char *Identifier,
 	const str::string_ &Arguments,
-	const dUPs &UPs )
+	const dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
 qRH
 	plgncore::sData Data;
 	sclmisc::sRack SCLRack;
 	fnm::name___ Location;
-	void *UP = NULL;
+	sAbstract *Abstract = NULL;
 qRB
 	SubInitialize_( PluginPath, Label, Identifier );
 
@@ -173,9 +186,9 @@ qRB
 	'Locale' section should be the same for all the plugin, and you should
 	read what be needed from the registry before returning from here. */
 
-	Row = GetUP_( C_(), UPs, UP );
+	Row = GetAbstract_( C_(), Abstracts, Abstract );
 
-	if ( ( Plugin_ = C_().RetrievePlugin( UP ) ) != NULL )
+	if ( ( Plugin_ = C_().RetrievePlugin( Abstract ) ) != NULL )
 		Row = qNIL;
 qRR
 qRT
@@ -231,6 +244,6 @@ qRE
 
 qGCTOR( plgn )
 {
-	EmptyUPs.Init();
+	EmptyAbstracts.Init();
 }
 

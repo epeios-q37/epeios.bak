@@ -153,14 +153,16 @@ public:
 
 		return true;
 	}
-	bso::sBool SCLPLUGINInitialize( void *UP )
+	bso::sBool SCLPLUGINInitialize( plgncore::sAbstract *BaseAbstract )
 	{
 		bso::sBool Success = false;
 	qRH
 		str::wString HostService, Identifier;
 		qCBUFFERr HostServiceBuffer, IdentifierBuffer;
-		rpproxy::rData *Data = (rpproxy::rData *)UP;
+		rpproxy::rAbstract *Abstract = (rpproxy::rAbstract *)BaseAbstract;
 	qRB
+		plgn::Test( BaseAbstract, rpproxy::Identifier );
+
 		HostService.Init();
 		sclmisc::MGetValue( registry::HostService, HostService );
 
@@ -168,14 +170,18 @@ public:
 		sclmisc::MGetValue( registry::Identifier, Identifier );
 
 		if ( !Init( HostService.Convert( HostServiceBuffer ), Identifier.Convert( IdentifierBuffer ) ) )
-			if ( Data == NULL  )
+			switch ( plgn::ErrorReporting( Abstract ) ) {
+			case plgn::rhInternally:
 				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
-			else {
-				if ( Data != plgn::NonNullUP ) {
-					Data->HostService = HostService;
-				}
-
+				break;
+			case plgn::rhDetailed:
+				Abstract->HostService = HostService;
+			case plgn::rhBasic:
 				qRReturn;
+				break;
+			default:
+				qRGnr();
+				break;
 			}
 		
 		Success = true;
@@ -200,5 +206,11 @@ void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
 	Details.Append( PLUGIN_NAME " V" VERSION " - Build " __DATE__ " " __TIME__ " (" );
 	Details.Append( cpe::GetDescription() );
 	Details.Append( ')' );
+}
+
+qGCTOR( proxy )
+{
+	if ( strcmp( rpproxy::Identifier, IDENTIFIER ) )
+		qRChk();
 }
 

@@ -1163,7 +1163,7 @@ namespace {
 		const char *Label,
 		const char *Identifier,
 		const str::dString &Id,
-		const plgn::dUPs &UPs,
+		const plgn::dAbstracts &Abstracts,
 		plgn::rLooseRetriever &Retriever )
 	{
 		sdr::sRow Row = qNIL;
@@ -1178,7 +1178,7 @@ namespace {
 
 		GetPluginItemFeatures_( Target, Id, Filename, Configuration, LocaleContent, Arguments );
 
-		if ( ( Row = Retriever.Initialize( Filename, Label, Identifier, Configuration, Arguments, UPs ) ) == qNIL )
+		if ( ( Row = Retriever.Initialize( Filename, Label, Identifier, Configuration, Arguments, Abstracts ) ) == qNIL )
 			HandleLocale_( LocaleContent, Filename );
 	qRR
 	qRT
@@ -1198,7 +1198,7 @@ namespace {
 	qRB
 		Retriever.Init();
 
-		if ( Plug_( Target, Label, Identifier, Id, plgn::EmptyUPs, Retriever ) != qNIL )
+		if ( Plug_( Target, Label, Identifier, Id, plgn::EmptyAbstracts, Retriever ) != qNIL )
 			qRFwk();
 
 		Retrievers.Add( Retriever );

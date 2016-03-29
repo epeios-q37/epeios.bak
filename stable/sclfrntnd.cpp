@@ -439,7 +439,7 @@ void sclfrntnd::SetBackendFeatures(
 
 sdr::sRow sclfrntnd::kernel___::Init(
 	const features___ &Features,
-	const plgn::dUPs &UPs )
+	const plgn::dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
 qRH
@@ -462,7 +462,7 @@ qRB
 			qRFwk();
 		break;
 	case csducl::tRemote:
-		Row = _ClientCore.InitRemote( Features.Path, Features.Identifier, Features.Parameters, UPs );
+		Row = _ClientCore.InitRemote( Features.Path, Features.Identifier, Features.Parameters, Abstracts );
 		break;
 	default:
 		qRFwk();

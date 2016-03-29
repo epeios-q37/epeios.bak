@@ -184,9 +184,9 @@ qRT
 qRE
 }
 
-void *sclplugin::callback__::PLGNCORERetrievePlugin( void *UP )
+void *sclplugin::callback__::PLGNCORERetrievePlugin( plgncore::sAbstract *Abstract )
 {
-	return sclplugin::SCLPLUGINRetrievePlugin( UP );
+	return sclplugin::SCLPLUGINRetrievePlugin( Abstract );
 }
 
 void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )

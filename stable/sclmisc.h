@@ -461,7 +461,7 @@ namespace sclmisc {
 
 		HandleLocale_( Locale, Filename );
 
-		PluginRetriever.Initialize( Filename, Identifier, Configuration, TrueArguments, plgn::EmptyUPs );
+		PluginRetriever.Initialize( Filename, Identifier, Configuration, TrueArguments, plgn::EmptyAbstracts );
 	qRR
 	qRT
 	qRE
