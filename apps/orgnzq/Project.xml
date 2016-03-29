@@ -1,27 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
-	<xpp:set name="Type" value="MetaPackage"/>
+	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
-	<xpp:bloc marker="$">
-		<xpp:set name="Name" value="orgnzq"/>
-		<xpp:set name="RADir" value="$AppsDir$orgnzq/"/><!-- Root absolute directory -->
-		<xpp:set name="FRDir" value="frontend/"/><!-- Frontend relative directory -->
-		<xpp:set name="BRDir" value="processing/backend/"/><!-- Backend relative directory -->
-		<xpp:set name="FADir" value="$RADir$$FRDir$"/>
-		<xpp:set name="BADir" value="$RADir$$BRDir$"/>
-		<Content Target="orgnzq">
-			<Package Name="$Name$xdh">
-				<Dirs Source="$FADir$XDHTML" Target="$FRDir$"/>
-			</Package>
-			<Package Name="$Name$bkd">
-				<Dirs Source="$BADir$" Target="$BRDir$"/>
-			</Package>
-			<Package Name="xdhcefq" Type="ExternalTool">
-				<Dirs Source="$ToolsDir$xdhcefq" Target="tools"/>
-			</Package>
-		</Content>
-		<WikiFiles Group="Doc" Path="Doc/">
-			<File Dir="computing/epeios/apps/" Desc="general description of orgnzq" Oddity="IsHome">orgnzq</File>
-		</WikiFiles>
-	</xpp:bloc>
+	<Content Type="Tool" Target="dmnzq" Dir="/cygdrive/h/hg/epeios/tools/dmnzq">
+		<Component Name="frontend" Dir="frontend/"/>
+		<Component Name="processing" Dir="processing/"/>
+		<!--Component Name="$Name$bkd" Dir="$BDir$"/-->
+	</Content>
 </Project>
