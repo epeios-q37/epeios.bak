@@ -21,8 +21,8 @@
 
 using frdrgstry::rEntry;
 
-static rEntry XSLFilesSet_( "XSLFilesSet", sclrgstry::Parameters );
+static rEntry XSLFilesSet_( "XSLFilesSet", sclrgstry::Definitions );
 static rEntry FreeXSLFiles_( "XSLFiles", XSLFilesSet_ );
 static rEntry TaggedXSLFiles(RGSTRY_TAGGING_ATTRIBUTE("target"), FreeXSLFiles_ );
-rEntry registry::parameter::XSLLayoutFile("Layout", TaggedXSLFiles );
-rEntry registry::parameter::XSLCastingFile("Casting", TaggedXSLFiles );
+rEntry registry::definition::XSLLayoutFile("Layout", TaggedXSLFiles );
+rEntry registry::definition::XSLCastingFile("Casting", TaggedXSLFiles );

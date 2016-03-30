@@ -50,7 +50,7 @@ namespace {
 		GetContext_( Session,  XML );
 
 		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
 
 		Session.FillElementCastings( Id, XML, XSL );
 	qRR
@@ -88,7 +88,7 @@ qRB
 	GetContent_( Session.Registry(), Session, XML );
 
 	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
+	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
 	Session.FillElement( Id, XML, XSL );
 
@@ -102,18 +102,41 @@ BASE_AC( fields::sCreateField )
 {
 qRH
 	str::wString Label, Comment;
+	frdinstc::sTypeId Type = frdinstc::UndefinedType;
+	frdinstc::sNumberId Number = frdinstc::UndefinedNumber;
+	bso::buffer__ Buffer;
 qRB
 	Label.Init();
 	Session.GetContent( "FieldLabel", Label );
 
 	Comment.Init();
-	Session.GetContent( "FieldLabel", Comment );
+	Session.GetContent( "FieldComment", Comment );
 
-	Session.User.CreateField( (frdinstc::sTypeId)0, (frdinstc::sNumberId)0, Label, Comment );
+	if ( !Session.GetNumericalProperty( "Type", "value", **Type ) )
+		sclmisc::ReportAndAbort( "FieldTypeIsRequired" );
+
+	if ( !Session.GetNumericalProperty( "Number", "value", **Number ) )
+		sclmisc::ReportAndAbort( "FieldNumberIsRequired" );
+
+
+	Session.AlertU( bso::Convert( **Number, Buffer ) );
+
+	Label.StripCharacter( ' ' );
+	
+	if ( Label.Amount() == 0 )
+		sclmisc::ReportAndAbort( "LabelCanNotBeEmpty" );
+
+	Session.User.CreateField( Type, Number, Label, Comment );
 
 	main::SetLayout( Session );
 qRR
 qRT
 qRE
 }
+BASE_AC( fields::sEditField )
+{
+	Session.AlertU( Id );
+
+}
+
 

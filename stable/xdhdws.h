@@ -139,6 +139,28 @@ namespace xdhdws {
 		qRE
 			return Property;
 		}
+		template <typename type> bso::sBool GetNumericalProperty(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			type &Value )
+		{
+			bso::sBool IsEmpty = true;
+		qRH
+			str::wString Property;
+		qRB
+			Property.Init();
+
+			GetProperty( Id, Name, Property );
+
+			if ( Property.Amount() != 0 ) {
+				Property.ToNumber( Value );
+				IsEmpty = false;
+			}
+		qRR
+		qRT
+		qRE
+			return !IsEmpty;
+		}
 		void SetProperty(
 			const nstring___ &Id,
 			const nstring___ &Name,

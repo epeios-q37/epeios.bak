@@ -54,7 +54,7 @@ namespace {
 		GetContext_( Session,  XML );
 
 		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
+		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
 
 		Session.FillDocumentCastings( XML, XSL );
 	qRR
@@ -89,7 +89,7 @@ qRB
 	GetContent_( sclxdhtml::GetRegistry(), Session, XML );	// Outside session, so we use the global registry...
 
 	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
+	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), sclxdhtml::GetRegistry(), XSL );	// Outside session, so we use the global registry...
 
 	Session.FillDocument( XML, XSL );
 

@@ -87,6 +87,9 @@ namespace {
 		const str::dString &Comment,
 		ogzrcd::rRecordBuffer &Record )
 	{
+		if ( Label.Amount() == 0 )
+			REPORT( "FieldLabelCanNotBeEmpty" );
+
 		if ( !GetTypes().Exists( Type ) )
 			REPORT( "UnknowFieldType");
 

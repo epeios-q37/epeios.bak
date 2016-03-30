@@ -41,7 +41,7 @@ qRB
 	Rack.reset();
 
 	XSL.Init();
-	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::XSLLayoutFile, "About" ), sclxdhtml::GetRegistry(), XSL );	// Potentialy outside session, so we use the global registry...
+	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, "About" ), sclxdhtml::GetRegistry(), XSL );	// Potentialy outside session, so we use the global registry...
 
 	AboutTranslation.Init();
 	scllocale::GetTranslation("About...", Session.Language(), AboutTranslation );

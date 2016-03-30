@@ -27,12 +27,12 @@ namespace registry {
 
 	namespace parameter{
 		using namespace frdrgstry::parameter;
-		extern rEntry XSLLayoutFile;
-		extern rEntry XSLCastingFile;
 	}
 
 	namespace definition {
 		using namespace frdrgstry::definition;
+		extern rEntry XSLLayoutFile;
+		extern rEntry XSLCastingFile;
 	}
 
 }
