@@ -99,6 +99,7 @@ namespace ias {
 			_Index = qNIL;
 			_AStorage = NULL;
 		}
+		qVDTOR( _indexed_aggregated_storage_driver__ );
 		//f Initialize with 'Multimemory' multimemory.
 		void Init( void )
 		{
@@ -142,6 +143,7 @@ namespace ias {
 		{
 			_indexed_aggregated_storage_driver__::reset( P );
 		}
+		qVDTOR( indexed_aggregated_storage_driver__ );
 		//f Initialize with the 'Multimemory' multimemory.
 		void Init( indexed_aggregated_storage_ &AStorage )
 		{
@@ -164,6 +166,7 @@ namespace ias {
 		{
 			_indexed_aggregated_storage_driver__::reset( P );
 		}
+		qVDTOR( const_indexed_aggregated_storage_driver__ );
 		//f Initialize with the 'Multimemory' multimemory.
 		void Init( const indexed_aggregated_storage_ &AStorage )
 		{

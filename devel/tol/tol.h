@@ -543,7 +543,7 @@ namespace tol {
 		{}
 		void reset( bool P = true )
 		{
-			S_.Object.reset( P );
+//			S_.Object.reset( P );	// The object is already destroyed by the one which features the reference.
 		}
 		qCVDTOR( dObject );
 		void plug( class ags::aggregated_storage_ & )
