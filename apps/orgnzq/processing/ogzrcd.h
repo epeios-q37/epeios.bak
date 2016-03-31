@@ -103,6 +103,7 @@ namespace ogzrcd {
 		rCommon_<ogzdta::rRegularDataCallback, ogzdta::sData> Data_;
 		sColumns Columns_;
 		sFields Fields_;
+		ogzfld::wField FieldBuffer_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -110,23 +111,26 @@ namespace ogzrcd {
 			Data_.reset( P );
 			Columns_.reset( P );
 			Fields_.reset( P );
+			FieldBuffer_.reset( P );
 		}
 		qCDTOR( rRecordBuffer );
 		void Init( ogztyp::sRow TextType )
 		{
+			wRecord::Init();
 			Id_ = qNIL;
 			Data_.Init();
 			Columns_.Init( TextType, Data_ );
 			Fields_.Init( Columns_ );
-			wRecord::Init();
+			FieldBuffer_.Init();
 		}
-		sdr::sRow CreateField(
+		void CreateField(
 			ogztyp::sRow Type,
 			ogzclm::eNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
-			return Append( Fields_.Create( Type, Number, Label, Comment ) );
+			FieldBuffer_.Init();
+			FieldBuffer_.SetColumn( Columns_.Create( Type, Number, Label, Comment ) );
 		}
 		ogzdta::sRow UpdateDatum(
 			ogzdta::sRow DatumRow,	// if == 'qNIL', an entry is created.
@@ -144,6 +148,10 @@ namespace ogzrcd {
 		const ogzfld::sFields &Fields( void ) const
 		{
 			return Fields_.Core();
+		}
+		const ogzfld::dField &FieldBuffer( void ) const
+		{
+			return FieldBuffer_;
 		}
 		void GetColumn(
 			sdr::sRow Row,

@@ -336,14 +336,24 @@ namespace lst {
 			Nombre_ = 0;
 		}
 		//f First entry, 'qNIL' if no entries.
-		r First( void ) const
+		r First( bso::sSize Offset = 0 ) const
 		{
-			return Occupation_.First( true );
+			r Row = Occupation_.First( true );
+
+			while ( ( Row != qNIL ) && Ofsset-- )
+				Row = Occupation_.Next( Row );
+
+			return Row;
 		}
 		//f LAsttry, 'qNIL' if no entries.
-		r Last( void ) const
+		r Last( bso::sSize Offset = 0 ) const
 		{
-			return Occupation_.Last( true );
+			r Row = Occupation_.Last( true );
+
+			while ( ( Row != qNIL ) && Ofsset-- )
+				Row = Occupation_.Previous( Row );
+
+			return Row;
 		}
 		//f Entry next to 'Entry', none if 'Entry' the last one.
 		r Next( r Entry ) const

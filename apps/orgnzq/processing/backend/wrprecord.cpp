@@ -80,7 +80,7 @@ qRE
 }
 
 namespace {
-	inline sdr::sRow CreateField_(
+	inline void CreateField_(
 		ogztyp::sRow Type,
 		ogzclm::eNumber Number,
 		const str::dString &Label,
@@ -96,7 +96,7 @@ namespace {
 		if ( !ogzclm::Exists( Number ) )
 			REPORT( "UnknownFieldNumber" );
 
-		return Record.CreateField( Type, Number, Label, Comment );
+		Record.CreateField( Type, Number, Label, Comment );
 	}
 }
 
@@ -111,7 +111,7 @@ DEC( CreateField )
 	if ( *Number >= ogzclm::n_amount )
 		qRGnr();
 
-	Request.IdOut() = *CreateField_( *Type, (ogzclm::eNumber)*Number, Label, Comment, Record() );
+	CreateField_( *Type, (ogzclm::eNumber)*Number, Label, Comment, Record() );
 }
 
 namespace {
@@ -146,6 +146,38 @@ namespace {
 	}
 
 	void GetData_(
+		const ogzfld::dField &Field,
+		const ogzrcd::rRecordBuffer &Record,
+		const ogztyp::dTypes &Types,
+		fbltyp::dStrings &Data )
+	{
+	qRH
+		ogzclm::sColumn Column;
+	qRB
+		Column.Init();
+		Record.Columns().Recall(Field.Column(), Column );
+
+		GetData_( Field, Column.Type(), Types, Record.Data(), Data );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+DEC( GetFieldBuffer )
+{
+qRH
+qRB
+	Request.IdOut() = *Record().FieldBuffer().Column();
+	GetData_( Record().FieldBuffer(), Record(), GetTypes(), Request.StringsOut() );
+qRR
+qRT
+qRE
+}
+
+namespace {
+
+	void GetData_(
 		sdr::sRow Row,
 		const ogzrcd::rRecordBuffer &Record,
 		const ogztyp::dTypes &Types,
@@ -153,15 +185,11 @@ namespace {
 	{
 	qRH
 		ogzfld::wField Field;
-		ogzclm::sColumn Column;
 	qRB
 		Field.Init();
 		Record.Fields().Recall( Record( Row ), Field );
 
-		Column.Init();
-		Record.Columns().Recall(Field.Column(), Column );
-
-		GetData_( Field, Column.Type(), Types, Record.Data(), Data );
+		GetData_( Field, Record, Types, Data );
 	qRR
 	qRT
 	qRE
@@ -211,13 +239,13 @@ namespace {
 		fbltyp::dStrings &Comments )
 	{
 	qRH
-		sdr::sRow Row = qNIL;
+		ogzclm::sRow Row = qNIL;
 		ogzclm::sColumn Column;
 		ogztyp::sRow Type = qNIL;
 		ogzclm::eNumber Number = ogzclm::n_Undefined;
 		str::wString Label, Comment;
 	qRB
-		Row = Record.First();
+		Row = Record.Columns().First();
 
 		while ( Row != qNIL ) {
 			Label.Init();
@@ -271,7 +299,6 @@ void wrprecord::dRecord::NOTIFY(
 			fblbkd::cString,	// Label.
 			fblbkd::cString,	// Comment.
 		fblbkd::cEnd,
-			fblbkd::cId,	// Id of the created field.
 		fblbkd::cEnd );
 
 	Module.Add( D( GetFieldsColumns ),
@@ -281,6 +308,12 @@ void wrprecord::dRecord::NOTIFY(
 			fblbkd::cId8s,		// Numbers.
 			fblbkd::cStrings,	// Labels.
 			fblbkd::cStrings,	// Comments.
+		fblbkd::cEnd );
+
+	Module.Add( D( GetFieldBuffer ),
+		fblbkd::cEnd,
+			fblbkd::cId,		// Column row.
+			fblbkd::cStrings,	// Entries.
 		fblbkd::cEnd );
 
 	Module.Add( D( GetFieldsData ),

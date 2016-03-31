@@ -123,42 +123,42 @@ namespace ags {
 # define qCALLBACK( name ) virtual ~c##name( void ) {}
 
 // Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type'.
-# define qRRODISCLOSEv(type, name )\
+# define qRRODISCLOSEd(type, name )\
 	const type Get##name( void ) const\
 	{\
 		return S_.name;\
 	}
 
 // Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type'.
-# define qRODISCLOSEv(type, name )\
-	qRRODISCLOSEv( type, name )\
+# define qRODISCLOSEd(type, name )\
+	qRRODISCLOSEd( type, name )\
 	const type &name( void ) const\
 	{\
 		return S_.name;\
 	}
 
-# define qRWODISCLOSEv(type, name )\
+# define qRWODISCLOSEd(type, name )\
 	void Set##name( const type &V )\
 	{\
 		S_.name = V;\
 	}
 
-# define qWODISCLOSEv(type, name )\
-	qRWODISCLOSEv( type, name )\
+# define qWODISCLOSEd(type, name )\
+	qRWODISCLOSEd( type, name )\
 	type &name( void )\
 	{\
 		return S_.name;\
 	}
 
 // Make accessible the static member, for read-write access, of a dynamic object, named 'name' of type 'type'.
-# define qRRWDISCLOSEv(type, name )\
-	qRRODISCLOSEv( type, name )\
-	qRWODISCLOSEv( type, name )
+# define qRRWDISCLOSEd(type, name )\
+	qRRODISCLOSEd( type, name )\
+	qRWODISCLOSEd( type, name )
 
 // Make accessible the static member, for read-write access, of a dynamic object, named 'name' of type 'type'.
 # define qRWDISCLOSEd( type, name )\
-	qRODISCLOSEv( type, name )\
-	qWODISCLOSEv( type, name )
+	qRODISCLOSEd( type, name )\
+	qWODISCLOSEd( type, name )
 
 # define qRRODISCLOSEs( type, name )\
 	const type Get##name( void ) const\
@@ -416,6 +416,23 @@ ex. : 'qCOVER2( a, b )' -> 'a, b' */
 	: public type\
 	{\
 	}
+
+# define qTCLONE( name, alias )	E_TTCLONE__( name, alias )
+
+# define qTCLONEd( type, alias )\
+	class alias\
+	: public type\
+	{\
+	public:\
+		struct s\
+		: public type::s\
+		{};\
+		alias( s &S )\
+		: type( S )\
+		{}\
+	}\
+
+
 
 # define TOL_ERRP_	err::handling__ ErrHandling = err::h_Default
 
@@ -1605,12 +1622,6 @@ pour parvenir au mme rsultat que 'E_XNAVt(...)'. */
 		sdr::size__ Offset ) const\
 	{\
 		return Object Next( P, Offset  );\
-	}\
-	void Allocate(\
-		sdr::size__ Size,\
-		aem::mode__ Mode = aem::m_Default )\
-	{\
-		Object Allocate( Size, Mode );\
 	}
 
 # define E_XNAVt( Object, Type )\

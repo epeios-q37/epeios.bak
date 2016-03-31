@@ -44,12 +44,23 @@
 #define OGZCBS_RCTP	container, OGZCBS_BTP
 
 namespace ogzcbs {
+	typedef bso::sUInt sIndice;	// Begins at '0'.
+
+	typedef bso::sUInt sAmount;	// If == '0', return all available.
+	qCDEF( sIndice, AmountMax, BSO_UINT_MAX );
+
+	template <typename row> qTCLONEd( bch::qBUNCHdl( row ), dList );
+	qW1( List );
 
 	// Callback for static (fixed-sized) objects.
 	template <typename item, typename row> class cStatic
 	{
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
+		virtual void OGZCBSGetList(
+			sIndice Indice,
+			sAmount Amount,
+			dList<row> &List ) = 0;
 		virtual row OGZCBSNew( row Row ) = 0;
 		// If 'Row' == 'qNIL', the content must be erased.
 		virtual void OGZCBSDelete( row Row ) = 0;
@@ -62,6 +73,13 @@ namespace ogzcbs {
 			item &Item ) const = 0;
 	public:
 		qCALLBACK( Static );
+		void GetList(
+			sIndice Indice,
+			sAmount Amount,
+			dList<row> &List )
+		{
+			return OGZCBSGetList( Indice, Amount, List );
+		}
 		void Wipe( void )
 		{
 			OGZCBSDelete( qNIL );
@@ -328,6 +346,21 @@ namespace ogzcbs {
 	private:
 		lstbch::qLBUNCHw( item, row ) Items_;
 	protected:
+		virtual void OGZCBSGetList(
+			ogzcbs::sIndice Indice,
+			ogzcbs::sAmount Amount,
+			ogzcbs::dList<row> &List ) override
+		{
+			row Row = Items_.First( Indice );
+
+			if ( Amount == 0 )
+				Amount = AmountMax;
+
+			while ( (Row != qNIL) && Amount-- ) {
+				List.Append( Row );
+				Row = Items_.Next( Row );
+			}
+		}
 		virtual row OGZCBSNew( row Row ) override
 		{
 			return Items_.New();
@@ -373,6 +406,21 @@ namespace ogzcbs {
 	private:
 		lstctn::qLMCONTAINERw( item_v, row ) Container_;
 	protected:
+		virtual void OGZCBSGetList(
+			ogzcbs::sIndice Indice,
+			ogzcbs::sAmount Amount,
+			ogzcbs::dList<row> &List ) override
+		{
+			row Row = Container_.First( Indice );
+
+			if ( Amount == 0 )
+				Amount = AmountMax;
+
+			while ( (Row != qNIL) && Amount-- ) {
+				List.Append( Row );
+				Row = Container_.Next( Row );
+			}
+		}
 		virtual row OGZCBSNew( row Row ) override
 		{
 			return Container_.New( Row );

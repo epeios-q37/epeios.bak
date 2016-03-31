@@ -70,17 +70,13 @@ namespace frdinstc {
 		{
 			Record_.EditRecord( Record );
 		}
-		sFieldId CreateField(
+		void CreateField(
 			sTypeId Type,
 			sNumberId Number,
 			const str::dString &Label,
 			const str::dString &Comment ) const
 		{
-			bFieldId Id = *UndefinedField;
-
-			Record_.CreateField( *Type, *Number, Label, Comment, Id );
-
-			return Id;
+			Record_.CreateField( *Type, *Number, Label, Comment );
 		}
 		void GetFieldsColumns(
 			fbltyp::dIds &Ids,

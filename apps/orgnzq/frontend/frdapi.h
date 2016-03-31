@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160128 Build Mar 21 2016 08:14:09 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160329 Build Mar 31 2016 08:23:58 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20160313 (Build Mar 16 2016 15:57:53 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160313 (Build Mar 31 2016 08:37:00 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ORGNZQ__INC
@@ -124,7 +124,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[5];
+		fblfrd::command__ _Commands[6];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -141,8 +141,9 @@ namespace orgnzq {
 			fblfrd::id8__ Parameters[] = {
 				17, 0, 
 				0, 
-				17, 8, 21, 21, 0, 17, 
+				17, 8, 21, 21, 0, 
 				0, 18, 18, 9, 22, 22, 
+				0, 17, 22, 
 				0, 18, 23, 
 			};
 
@@ -164,23 +165,28 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "CreateField";;
-			CommandDetail.Casts.Append( Parameters + 3, 6 );
+			CommandDetail.Casts.Append( Parameters + 3, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "GetFieldsColumns";;
-			CommandDetail.Casts.Append( Parameters + 9, 6 );
+			CommandDetail.Casts.Append( Parameters + 8, 6 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "GetFieldBuffer";;
+			CommandDetail.Casts.Append( Parameters + 14, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "GetFieldsData";;
-			CommandDetail.Casts.Append( Parameters + 15, 3 );
+			CommandDetail.Casts.Append( Parameters + 17, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 5, _Commands );
+			Commands.Recall( 0, 6, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -306,8 +312,7 @@ namespace orgnzq {
 			const fblfrd::id__ &In1,
 			const fblfrd::id8__ &In2,
 			const fblfrd::string_ &In3,
-			const fblfrd::string_ &In4,
-			fblfrd::id__ &Out1 ) const
+			const fblfrd::string_ &In4 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
 			Common_->Frontend().IdIn( In1 );
@@ -317,7 +322,6 @@ namespace orgnzq {
 
 			Common_->Frontend().EndOfInParameters();
 
-			Common_->Frontend().IdOut( Out1 );
 
 			return Common_->Frontend().Handle();
 		}
@@ -340,11 +344,24 @@ namespace orgnzq {
 
 			return Common_->Frontend().Handle();
 		}
+		fblovl::reply__ GetFieldBuffer( 
+			fblfrd::id__ &Out1,
+			fblfrd::strings_ &Out2 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[4] );
+
+			Common_->Frontend().EndOfInParameters();
+
+			Common_->Frontend().IdOut( Out1 );
+			Common_->Frontend().StringsOut( Out2 );
+
+			return Common_->Frontend().Handle();
+		}
 		fblovl::reply__ GetFieldsData( 
 			fblfrd::ids_ &Out1,
 			fblfrd::xstrings_ &Out2 ) const
 		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[4] );
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[5] );
 
 			Common_->Frontend().EndOfInParameters();
 

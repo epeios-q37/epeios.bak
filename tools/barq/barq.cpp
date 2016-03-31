@@ -522,8 +522,8 @@ namespace {
 }
 
 static void GetBackendData_(
-	const str::vString &PluginPath,
-	const str::vString &Arguments,
+	const str::dString &PluginPath,
+	const str::dString &Arguments,
 	csducl::type__ Type,
 	types_ &Types,
 	str::string_ &ProtocolVersion,
@@ -545,15 +545,18 @@ qRH
 	lcl::meaning Meaning;
 	bso::sBool Success = false;
 	qCBUFFERr Buffer;
+	sclmisc::sRack SCLRack;
 qRB
 	switch ( Type ) {
 	case csducl::tRemote:
 		FBLMode = fblfrd::mRemote;
-		Success = Core.InitRemote( PluginPath, NULL, Arguments );
+		if ( Core.InitRemote( PluginPath, NULL, Arguments, plgn::EmptyAbstracts ) != qNIL )
+			qRFwk();
 		break;
 	case csducl::tLibrary:
 		FBLMode = fblfrd::mEmbedded;
-		LibraryData.Init( csdleo::cIntrospection, Arguments.Convert( Buffer ), err::qRRor, NULL );
+		SCLRack.Init();
+		LibraryData.Init( csdleo::cIntrospection, Arguments.Convert( Buffer ), &SCLRack );
 		Success = Core.InitLibrary( Arguments, LibraryData );
 		break;
 	default:
@@ -797,7 +800,7 @@ qRE
 }
 
 int scltool::SCLTOOLMain(
-	const str::vString &Command,
+	const str::dString &Command,
 	const scltool::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;

@@ -66,7 +66,7 @@ namespace {
 			if ( IsInitialized_ )
 				qRFwk();
 		
-			if ( !IsInitialized_ && ( Data->Context == csdleo::cRegular ) )	{
+			if ( true )	{
 
 				// Does not work when placed in 'global_cdtor'.
 				Directory.Init();

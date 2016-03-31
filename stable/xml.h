@@ -357,8 +357,8 @@ namespace xml {
 		bso::sBool Put( xtf::extended_text_iflow__ &XFlow );
 		// Ident and put the content of 'XML' (reparse it).
 		bso::sBool Put( const str::dString &XML );
-		qRODISCLOSEv( eLayout, Outfit )
-		qRODISCLOSEv( eSpecialCharHandling, SpecialCharHandling )
+		qRODISCLOSEd( eLayout, Outfit )
+		qRODISCLOSEd( eSpecialCharHandling, SpecialCharHandling )
 	};
 
 	qW( Writer )

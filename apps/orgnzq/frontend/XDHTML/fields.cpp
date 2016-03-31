@@ -104,7 +104,6 @@ qRH
 	str::wString Label, Comment;
 	frdinstc::sTypeId Type = frdinstc::UndefinedType;
 	frdinstc::sNumberId Number = frdinstc::UndefinedNumber;
-	bso::buffer__ Buffer;
 qRB
 	Label.Init();
 	Session.GetContent( "FieldLabel", Label );
@@ -117,9 +116,6 @@ qRB
 
 	if ( !Session.GetNumericalProperty( "Number", "value", **Number ) )
 		sclmisc::ReportAndAbort( "FieldNumberIsRequired" );
-
-
-	Session.AlertU( bso::Convert( **Number, Buffer ) );
 
 	Label.StripCharacter( ' ' );
 	

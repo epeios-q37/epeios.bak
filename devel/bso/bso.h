@@ -643,4 +643,12 @@ namespace bso {
 
 }
 
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace bso {
+	typedef uint__ sUInt;
+	typedef sint__ sSInt;
+}
 #endif

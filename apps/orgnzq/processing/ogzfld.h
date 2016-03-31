@@ -80,7 +80,7 @@ namespace ogzfld {
 			S_.Column = Column;
 			dDatumList::Init();
 		}
-		qRODISCLOSEv( sCRow, Column );
+		qRWDISCLOSEd( sCRow, Column );
 	};
 
 	qW( Field );

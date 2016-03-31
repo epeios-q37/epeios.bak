@@ -42,7 +42,9 @@
 				<![CDATA[
 						removeChildren( "%Id%" );
 						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
-						fetchEventHandlersAndWidgets( "%Id%" );
+						var digests = fetchEventHandlersAndWidgets( "%Id%" );
+						log( "%XML%" );
+						digests;
 					]]>
 			</ElementFiller>
 			<Dialog>
@@ -154,9 +156,10 @@
 			</DroppableSetter>
 			<DocumentFiller>
 				<![CDATA[
-					log( "%XML%" );
 					document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );
-					fetchEventHandlersAndWidgets( "" );
+					var digests = fetchEventHandlersAndWidgets( "" );
+					log( "%XML%" );
+					digests;
 				]]>
 			</DocumentFiller>
 			<CastingsFiller>
