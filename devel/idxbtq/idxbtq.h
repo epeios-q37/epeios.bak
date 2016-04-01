@@ -78,7 +78,7 @@ namespace idxbtq {
 			E_IBTREEt_( r )::plug( Hooks.GetTreeHook() );
 			E_IQUEUEt_( r )::plug( Hooks.GetQueueHook() );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			E_IBTREEt_( r )::plug( AS );
 			E_IQUEUEt_( r )::plug( AS );

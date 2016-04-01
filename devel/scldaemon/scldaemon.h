@@ -127,11 +127,11 @@ namespace scldaemon {
 		basic_callback__ Basic_;
 		muxed_callback___ Muxed_;
 	protected:
-		virtual void CSDSCBPreferences(
-			str::dString &Preferences,
+		virtual bso::sBool CSDSCBPluginOverride(
+			str::dString &Id,
 			str::dString &Arguments ) override
 		{
-			SCLDAEMONPreferences( Preferences, Arguments );
+			return SCLDAEMONPluginOverride( Id, Arguments );
 		}
 		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
@@ -182,10 +182,13 @@ namespace scldaemon {
 			}
 		}
 	protected:
+		virtual bso::sBool SCLDAEMONPluginOverride(
+			str::dString &Id,
+			str::dString &Arguments )
+		{
+			return false;
+		}
 		virtual daemon___ *SCLDAEMONNew( const ntvstr::char__ *Origin ) = 0;
-		virtual void SCLDAEMONPreferences(
-			str::dString &Preferences,
-			str::dString &Arguments ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{

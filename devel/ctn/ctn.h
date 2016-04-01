@@ -115,6 +115,10 @@ namespace ctn {
 	: public amount_extent_manager_<r>
 	{
 	private:
+		void FlushObject_( void ) const
+		{
+			Object_.plug( NULL );	// Parameter = NULL means flushing.
+		}
 		void Flush_( bso::bool__ Reset ) const
 		{
 			if ( IsVolatile_ && IsSet_() )
@@ -137,6 +141,8 @@ namespace ctn {
 		}
 		void Set_( r Row ) const
 		{
+			FlushObject_();
+
 			Flush_( false );
 
 			Hook_.Index( *Row );
@@ -180,8 +186,8 @@ namespace ctn {
 			return ( ( Row == qNIL ) || ( ( amount_extent_manager_<r>::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
 	protected:
-		st Reseted_;	//Static par in a reseted state.
-		t Object_;
+		st Reseted_;	//Static part in a reseted state.
+		mutable t Object_;
 		mutable rAHook_ Hook_;
 		mutable bso::sBool IsVolatile_;
 	public:
@@ -223,13 +229,17 @@ namespace ctn {
 			_Allocate( Dynamics.Amount(), aem::mFitted );
 			Hook_.Init( Dynamics );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
-			// 'Object' is plugged independently.
-			Dynamics.plug( AS );
-			Statics.plug( AS );
-			Hook_.Init( Dynamics );
-	//		amount_extent_manager_::plug( M );	// Not relevant
+			if ( AS == NULL ) {
+				Flush();
+			} else {
+				// 'Object' is plugged independently.
+				Dynamics.plug( AS );
+				Statics.plug( AS );
+				Hook_.Init( Dynamics );
+		//		amount_extent_manager_::plug( M );	// Not relevant
+			}
 		}
 		basic_container_ &operator =( const basic_container_ &O )
 		{
@@ -444,6 +454,8 @@ namespace ctn {
 			sdr::size__ Size = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
+			FlushObject_();
+
 			Flush_( true );
 
 			sdr::row_t__ P = this->Amount();
@@ -1037,7 +1049,7 @@ public:
 			AStorage.reset( P );
 
 			AStorage.plug( item_base_const__< t, poly_static__< typename_ t::s >, r >::Pilote_ );
-			Objet_.plug( AStorage );
+			Objet_.plug( &AStorage );
 		}
 		const_poly_item( void )
 		: Objet_( item_base_const__< t, poly_static__< typename_ t::s >, r >::ctn_S_.ST ),
@@ -1106,7 +1118,7 @@ public:
 			SetReseted_();
 			basic_container_< t, poly_static__< typename_ t::s >, r >::reset( P );
 			AStorage_.plug( basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_ );
-			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( AStorage_ );
+			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( &AStorage_ );
 		}
 		poly_container_ &operator =( const poly_container_ &C )
 		{

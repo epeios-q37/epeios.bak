@@ -221,7 +221,7 @@ namespace dwtbsc {
 			Files.reset( P );
 			Dirs.reset(P);
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			regular_::plug( AS );
 			Goofs.plug( AS );
@@ -313,7 +313,7 @@ namespace dwtbsc {
 			M( ctn, Hooks, Oddities );
 # undef M
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Goofs.plug( AS );
 			Files.plug( AS );
@@ -441,7 +441,7 @@ namespace dwtbsc {
 			Prefix.reset( P );
 			Suffix.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Prefix.plug( AS );
 			Suffix.plug( AS );

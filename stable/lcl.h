@@ -80,7 +80,7 @@ namespace lcl {
 		{
 			Tags.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Tags.plug( AS );
 		}
@@ -125,7 +125,7 @@ namespace lcl {
 			Values.reset( P );
 			Basics.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Values.plug( AS );
 			Basics.plug( AS );
@@ -183,7 +183,7 @@ namespace lcl {
 			S_.Basic = qNIL;
 			Core.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Core.plug( AS );
 		}

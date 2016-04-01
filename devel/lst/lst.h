@@ -128,7 +128,7 @@ namespace lst {
 		{
 			Locations.plug( Hook, FirstUnused );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Locations.plug( AS );
 		}

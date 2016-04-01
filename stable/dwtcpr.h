@@ -128,7 +128,7 @@ namespace dwtcpr {
 
 			S_.NewName = qNIL;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			core_::plug( AS );
 			Files.plug( AS );
@@ -185,7 +185,7 @@ namespace dwtcpr {
 			Directories.reset( P );
 			Names.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Files.plug( AS );
 			Directories.plug( AS );

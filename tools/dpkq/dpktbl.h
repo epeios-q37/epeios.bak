@@ -54,7 +54,7 @@ namespace dpktbl {
 			S_.Skipped = 0;
 
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Label.plug( AS );
 			Records.plug( AS );

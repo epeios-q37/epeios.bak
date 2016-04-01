@@ -122,6 +122,13 @@ namespace ogzcbs {
 		{
 			Callback_ = &Callback;
 		}
+		void GetList(
+			ogzcbs::sIndice Indice,
+			ogzcbs::sAmount Amount,
+			ogzcbs::dList<row> &Rows ) const
+		{
+			C_().GetList( Indice, Amount, Rows );
+		}
 		void Wipe( void ) const
 		{
 			C_().Wipe();

@@ -88,10 +88,14 @@ namespace ias {
 	public:
 		_indexed_aggregated_storage_driver__( const indexed_aggregated_storage_ *&AStorage )
 		: _AStorage( AStorage )
-		{}
+		{
+			reset( false );
+		}
 		_indexed_aggregated_storage_driver__( indexed_aggregated_storage_ *&AStorage )
 		: _AStorage( *(const indexed_aggregated_storage_ **)& AStorage )
-		{}
+		{
+			reset( false );
+		}
 		void reset( bool P = true )
 		{
 			sStorageDriver_::reset( P );
@@ -138,7 +142,10 @@ namespace ias {
 		virtual void SDRAllocate( sdr::size__ Capacity );
 	public:
 		indexed_aggregated_storage_driver__( void )
-		: _indexed_aggregated_storage_driver__( _AStorage ) {}
+		: _indexed_aggregated_storage_driver__( _AStorage )
+		{
+			reset( false );
+		}
 		void reset( bool P = true )
 		{
 			_indexed_aggregated_storage_driver__::reset( P );
@@ -161,7 +168,10 @@ namespace ias {
 		// memoire  laquelle il a t affect
 	public:
 		const_indexed_aggregated_storage_driver__( void )
-		: _indexed_aggregated_storage_driver__( AStorage_ ) {}
+		: _indexed_aggregated_storage_driver__( AStorage_ )
+		{
+			reset( false );
+		}
 		void reset( bool P = true )
 		{
 			_indexed_aggregated_storage_driver__::reset( P );
@@ -316,7 +326,7 @@ namespace ias {
 			Descriptors.plug( Hooks.GetDescriptorsHook() );
 			AStorage.plug( Hooks.GetStorageHook() );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Descriptors.plug( AS );
 			AStorage.plug( AS );

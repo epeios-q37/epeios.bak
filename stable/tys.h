@@ -224,7 +224,7 @@ namespace tys {
 			_storage_< t, uys::untyped_storage_, r >::Init();
 		}
 		/*
-		bso::fBool plug( qASd &AS )
+		bso::fBool plug( qASd *AS )
 		{
 			return _storage_< t, uys::untyped_storage_, r >::plug( AS );
 		}

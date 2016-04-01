@@ -40,7 +40,7 @@ namespace sktxmp {
 		void reset( bso::bool__ P = true )
 		{
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 		}
 		dMyObject &operator =( const dMyObject &M )

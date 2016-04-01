@@ -48,11 +48,13 @@ namespace csdscb {
 
 	class cProcessing {
 	protected:
-		// If returned 'Preferences' not empty, it indicates some connection preferences (see 'dmnzq').
-		virtual void CSDSCBPreferences(
-			str::dString &Preferences,
+		// If returned value == 'true', the plugin with given 'Id' and 'Arguments' overrides the one defined in the caller's registry (see 'dmnzq').
+		virtual bso::sBool CSDSCBPluginOverride(
+			str::dString &Id,
 			str::dString &Arguments )
-		{}
+		{
+			return false;
+		}
 		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) = 0;
 		virtual eAction CSDSCBProcess(
 			flw::ioflow__ &Flow,
@@ -60,11 +62,11 @@ namespace csdscb {
 		virtual void CSDSCBPostProcess( void *UP ) = 0;
 	public:
 		qCALLBACK( Processing );
-		void Preferences(
-			str::dString &Preferences,
+		bso::sBool PluginOverride(
+			str::dString &Id,
 			str::dString &Arguments )
 		{
-			CSDSCBPreferences( Preferences, Arguments );
+			return CSDSCBPluginOverride( Id, Arguments );
 		}
 		void *PreProcess( const ntvstr::char__ *Origin )
 		{

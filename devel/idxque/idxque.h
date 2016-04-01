@@ -57,7 +57,7 @@ namespace idxque {
 		{
 			E_QUEUEt_( r )::reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			E_QUEUEt_( r )::plug( AS );
 		}

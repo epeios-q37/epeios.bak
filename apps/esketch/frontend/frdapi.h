@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd (Version) Build Jan 21 2016 12:04:48 - Win32;MSC 1800;IA-32
+	API from : esketchbkd V`echo toto` Build Apr  1 2016 16:34:28 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq (Version) (Build Jan 20 2016 09:40:31 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160313 (Build Apr  1 2016 16:53:39 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ESKETCH__INC
@@ -20,7 +20,7 @@ namespace esketch {
 		typedef fblfrd::frontend_depot__ _frontend_depot__;
 	}
 
-	class rStatics
+	class fStatics
 	: public _frontend_depot__
 	{
 	private:
@@ -32,7 +32,7 @@ namespace esketch {
 			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		E_CVDTOR( rStatics )
+		E_CVDTOR( fStatics )
 		void Init( fblfrd::frontend___ &Frontend )
 		{
 			fblfrd::commands_details CommandsDetails;

@@ -114,7 +114,7 @@ public:
 		Dirs.reset( P );
 		Names.reset( P );
 	}
-	void plug( qASd &AS )
+	void plug( qASd *AS )
 	{
 		Dirs.plug( AS );
 		Names.plug( AS );

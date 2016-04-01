@@ -115,7 +115,7 @@ namespace dpkals {
 		{
 			Label.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Label.plug( AS );
 		}
@@ -167,7 +167,7 @@ namespace dpkals {
 			Records.reset( P );
 			Tables.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Records.plug( AS );
 			Tables.plug( AS );

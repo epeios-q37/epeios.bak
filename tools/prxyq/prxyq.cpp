@@ -302,7 +302,7 @@ public:
 		{
 			Id.plug(Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Id.plug( AS );
 		}

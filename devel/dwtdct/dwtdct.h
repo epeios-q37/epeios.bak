@@ -104,7 +104,7 @@ namespace dwtdct {
 			Name.reset( P );
 			Oddity.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Name.plug( AS );
 			Oddity.plug( AS );
@@ -231,7 +231,7 @@ namespace dwtdct {
 			Sizes.plug( Hook.Sizes );
 			Timestamps.plug( Hook.Timestamps );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Names.plug( AS );
 			Exclusions.plug( AS );
@@ -278,7 +278,7 @@ namespace dwtdct {
 			Names.reset( P );
 			Oddities.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Names.plug( AS );
 			Oddities.plug( AS );
@@ -328,7 +328,7 @@ namespace dwtdct {
 			Files.reset( P );
 			Goofs.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Path.plug( AS );
 			Dir.plug( AS );
@@ -661,7 +661,7 @@ namespace dwtdct {
 			GFRows.plug( Hook.GFRows );
 			Files.plug( Hook.Files );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			GFRows.plug( AS );
 			Files.plug( AS );

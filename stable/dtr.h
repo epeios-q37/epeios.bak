@@ -124,7 +124,7 @@ namespace dtr {
 			Tree.plug (Hooks.GetTreeHook() );
 			Queue.plug( Hooks.GetQueueHook() );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Tree.plug( AS );
 			Queue.plug( AS );

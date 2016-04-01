@@ -58,7 +58,7 @@ namespace dpkrcd {
 			S_.Weight = DEFAULT_WEIGHT;
 			S_.Skip = false;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Label.plug( AS );
 			Content.plug( AS );

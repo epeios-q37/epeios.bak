@@ -77,7 +77,7 @@ namespace fblbrd {
 
 			return *this;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Name.plug( AS );
 			Casts.plug( AS );
@@ -143,7 +143,7 @@ namespace fblbrd {
 		{
 			E_CONTAINER_( description_ )::reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			E_CONTAINER_( description_ )::plug( AS );
 		}

@@ -247,7 +247,7 @@ namespace xpp {
 			FileNames.reset( P );
 			Contents.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Names.plug( AS );
 			Positions.plug( AS );

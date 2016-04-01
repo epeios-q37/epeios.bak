@@ -68,7 +68,7 @@ namespace idsq {
 			S_.FirstUnused = FirstUnused,
 			Released.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Released.plug( AS );
 		}

@@ -148,7 +148,14 @@ namespace {
 	qRB
 		PluginId.Init();
 		PluginArguments.Init();
-		Module.Preferences( PluginId, PluginArguments );
+
+		if ( Module.PluginOverride(PluginId, PluginArguments) ) {
+			if ( PluginId.Amount() == 0 )
+				qRFwk();
+		} else
+			PluginId.Init();
+
+		// If 'PluginId' is empty, it (and 'PluginArguments') will not be used.
 
 		Retriever.Init();
 

@@ -509,8 +509,6 @@ namespace bch {
 	template <class type, typename row, typename mng, typename sh> class _bunch_
 	: public _bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >
 	{
-	private:
-		ias::indexed_aggregated_storage_driver__ _IASDriver;
 	public:
 		struct s
 		: public _bunch<type, tys::E_STORAGEt_( type, row ), mng, row, sh >::s
@@ -617,7 +615,7 @@ namespace bch {
 			if ( Amount != this->Amount() )
 				_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::Allocate( Amount, aem::mFitted );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::plug( AS );
 		}

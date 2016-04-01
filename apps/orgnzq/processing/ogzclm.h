@@ -94,6 +94,9 @@ namespace ogzclm {
 
 	typedef ogzbsc::sCRow sRow;
 
+	typedef ogzcbs::dList<sRow> dRows;
+	qW( Rows );
+
 	// template parameters.
 # define OGZCLM_TP	ogzclm::sColumn, ogzclm::sRow
 
@@ -160,6 +163,10 @@ namespace ogzclm {
 			sColumn &Column ) const
 		{
 			Core_.Recall( Row, Column );
+		}
+		void GetColumnsList( dRows &Rows )
+		{
+			Core_.GetList( 0, 0, Rows );
 		}
 	};
 

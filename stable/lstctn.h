@@ -102,7 +102,7 @@ namespace lstctn {
 			container::plug( Hooks.GetContainerHooks() );
 			list_<row, row_t>::plug( Hooks.GetListHook(), container::Dynamics.Amount() );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			container::plug( AS );
 			list_<row, row_t>::plug( AS );

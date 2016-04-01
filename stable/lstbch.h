@@ -105,7 +105,7 @@ namespace lstbch {
 			bunch_<type, row>::plug( Hooks.GetBunchHook() );
 			list_<row, row_t>::plug( Hooks.GetListHook(), bunch_<type, row>::Amount );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			bunch_<type, row>::plug( AS );
 			list_<row, row_t>::plug( AS );

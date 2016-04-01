@@ -217,7 +217,7 @@ namespace que {
 		{
 			Links.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Links.plug( AS );
 		}
@@ -624,7 +624,7 @@ namespace que {
 		{
 			return Queue.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			return Queue.plug( AS );
 		}

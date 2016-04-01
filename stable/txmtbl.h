@@ -89,7 +89,7 @@ namespace txmtbl {
 			string_::reset( P );
 			S_.Location = 0;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			string_::plug( AS );
 		}
@@ -168,7 +168,7 @@ namespace txmtbl {
 
 			S_.Location = 0;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			cells_::plug( AS );
 		}
@@ -299,7 +299,7 @@ namespace txmtbl {
 		{
 			lines_::reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			lines_::plug( AS );
 		}

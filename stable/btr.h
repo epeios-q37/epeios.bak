@@ -479,7 +479,7 @@ namespace btr {
 		{
 			Nodes.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Nodes.plug( AS );
 		}

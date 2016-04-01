@@ -1346,7 +1346,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		{
 			Storage.plug( Hook );
 		}
-		void plug( aggregated_storage_ &AS )
+		void plug( aggregated_storage_ *AS )
 		{
 			Storage.plug( AS );
 		}

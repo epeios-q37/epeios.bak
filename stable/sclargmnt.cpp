@@ -102,7 +102,7 @@ public:
 	{
 		Name.plug( Hook );
 	}
-	void plug( qASd &AS )
+	void plug( qASd *AS )
 	{
 		Name.plug( AS );
 	}
@@ -154,7 +154,7 @@ public:
 
 		Value.reset( P );
 	}
-	void plug( qASd &AS )
+	void plug( qASd *AS )
 	{
 		flag_::plug( AS );
 		Value.plug( AS );

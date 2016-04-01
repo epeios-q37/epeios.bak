@@ -286,7 +286,7 @@ namespace bitbch {
 		{
 			return Table.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			return Table.plug( AS );
 		}
@@ -441,7 +441,7 @@ namespace bitbch {
 			T1.reset( P );
 			T2.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			T1.plug( AS );
 			T2.plug( AS );

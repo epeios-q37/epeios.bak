@@ -263,10 +263,13 @@ namespace uys {
 		{
 			plug_( Hook.GetSD() );
 		}
-		void plug( ags::aggregated_storage_ &AS )
+		void plug( ags::aggregated_storage_ *AS )
 		{
-			_AggregatedStorageDriver.Init( AS );
-			plug_( _AggregatedStorageDriver );
+			// 'AS' == 'NULL' is for flushing (mainly operated by the 'ctn' module. 
+			if ( AS != NULL ) {
+				_AggregatedStorageDriver.Init( *AS );
+				plug_( _AggregatedStorageDriver );
+			}
 		}
 		untyped_storage_ &operator =( const untyped_storage_ &US )
 		{

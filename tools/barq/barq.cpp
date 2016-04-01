@@ -391,6 +391,8 @@ qRB
 		Generate_( Commands( P ), Writer, Position );
 		P = Commands.Next( P );
 	}
+
+//	Commands.Flush();
 	
 	Writer.PopTag();
 qRR
@@ -552,6 +554,7 @@ qRB
 		FBLMode = fblfrd::mRemote;
 		if ( Core.InitRemote( PluginPath, NULL, Arguments, plgn::EmptyAbstracts ) != qNIL )
 			qRFwk();
+		Success = true;
 		break;
 	case csducl::tLibrary:
 		FBLMode = fblfrd::mEmbedded;

@@ -102,7 +102,7 @@ namespace stsfsm {
 		{
 			Cards.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Cards.plug( AS );
 		}

@@ -126,9 +126,21 @@ namespace sclbacknd {
 	private:
 		fblbur::mode__ _Mode;
 	protected:
+		virtual bso::sBool SCLDAEMONPluginOverride(
+			str::dString &Id,
+			str::dString &Arguments ) override
+		{
+			return SCLBACKNDPluginOverride( Id, Arguments );
+		}
 		virtual scldaemon::daemon___ *SCLDAEMONNew(	const ntvstr::char__ *Origin ) override
 		{
 			return SCLBACKNDNew( _Mode, Origin );
+		}
+		virtual bso::sBool SCLBACKNDPluginOverride(
+			str::dString &Id,
+			str::dString &Arguments )
+		{
+			return false;
 		}
 		virtual rBackend *SCLBACKNDNew(
 			fblbur::mode__ Mode,

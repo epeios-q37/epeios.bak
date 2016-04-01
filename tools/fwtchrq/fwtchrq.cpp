@@ -300,7 +300,7 @@ qRH
 	dwtbsc::limitations__ Limitations;
 	dwtbsc::ghosts_oddities GO;
 	dwtdct::content Content;
-	dwtdct::iKernel Old;
+	dwtdct::wKernel Old;
 	dwtdct::ghost2files_rack___ G2FRack;
 	dwtcpr::scene Scene;
 	dwtcpr::comparison_basic_observer___ ComparisonObserver;

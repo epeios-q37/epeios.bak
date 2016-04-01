@@ -48,28 +48,56 @@ qRH
 	data Data;
 	data_cluster DataCluster;
 qRB
-	Datum.Init( "coucou" );
 
 	Data.Init();
 
-	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::commit << txf::nl;
-
+	Datum.Init( "Text A1" );
 	Data.Append( Datum );
-//	Data.Append( Datum );
 
-	Data.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::commit << txf::nl;
+	Datum.Init( "Text A2" );
+	Data.Append( Datum );
+
+	Datum.Init( "Text A3" );
+	Data.Append( Datum );
+
+	cio::COut << Data( 0 ) << txf::tab;
+	cio::COut << Data( 1 ) << txf::nl << txf::commit;
 
 	DataCluster.Init();
 
-	DataCluster.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::commit << txf::nl;
+	DataCluster.Append( Data );
+
+	Data.Init();
+
+	Datum.Init( "Text B1" );
+	Data.Append( Datum );
+
+	Datum.Init( "Text B2" );
+	Data.Append( Datum );
+
+	Datum.Init( "Text B3" );
+	Data.Append( Datum );
 
 	DataCluster.Append( Data );
 
-	DataCluster.Dynamics.AStorage.DisplayStructure( cio::COut );
-	cio::COut << txf::commit << txf::nl;
+	cio::COut << DataCluster( 1 ).Get( 1 ) << txf::commit << txf::nl;
+
+	Data.Init();
+
+	Datum.Init( "Text C1" );
+	Data.Append( Datum );
+
+	Datum.Init( "Text C2" );
+	Data.Append( Datum );
+
+	Datum.Init( "Text C3" );
+	Data.Append( Datum );
+
+//	DataCluster(1).Flush();	// !!!
+
+	DataCluster.Append( Data );
+
+	cio::COut << DataCluster( 1 ).Get( 1 ) << txf::commit << txf::nl;
 qRR
 qRT
 qRE
@@ -116,11 +144,15 @@ qRT
 qRE
 }
 
+void Action( void )
+{}
+
 int main( int argc, char *argv[] )
 {
 	int ExitValue = EXIT_SUCCESS;
 qRFH
 qRFB
+	cio::Initialize( cio::t_Default );
 	COut << "Test of library " << CTN_NAME << ' ' << __DATE__" "__TIME__"\n";
 
 	Test1( argc, argv );
@@ -128,6 +160,6 @@ qRFR
 qRFT
 	cio::COut << txf::commit;
 	cio::CErr << txf::commit;
-qRFE
+qRFE( Action() )
 	return ExitValue;
 }

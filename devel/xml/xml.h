@@ -208,7 +208,7 @@ namespace xml {
 			S_.Ignore = false;
 			S_.AlwaysCommit = false;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Tags.plug( AS );
 		}
@@ -424,7 +424,7 @@ namespace xml {
 		{
 			Data.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Data.plug( AS );
 		}

@@ -127,7 +127,7 @@ qRE
 			S_.Log.Callback = NULL;
 
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			UPs.plug( AS );
 		}

@@ -239,13 +239,19 @@ namespace {
 		fbltyp::dStrings &Comments )
 	{
 	qRH
-		ogzclm::sRow Row = qNIL;
+		sdr::sRow Row = qNIL;
 		ogzclm::sColumn Column;
 		ogztyp::sRow Type = qNIL;
 		ogzclm::eNumber Number = ogzclm::n_Undefined;
 		str::wString Label, Comment;
+		ogzclm::wRows Rows;
 	qRB
-		Row = Record.Columns().First();
+		Rows.Init();
+		Record.Columns().GetList( 0, 0, Rows );
+
+#error "Confusion entre de type de row d'une liste de rows de colum,ns et d'une liste de rows de fields"
+
+		Row = Rows.First();
 
 		while ( Row != qNIL ) {
 			Label.Init();

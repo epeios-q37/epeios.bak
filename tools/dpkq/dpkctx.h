@@ -59,7 +59,7 @@ namespace dpkctx {
 		{
 			Pool.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Pool.plug( AS );
 		}

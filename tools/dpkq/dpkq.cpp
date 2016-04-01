@@ -76,7 +76,7 @@ public:
 	{
 		Name.plug( Hook );
 	}
-	void plug( qASd &AS )
+	void plug( qASd *AS )
 	{
 		Name.plug( AS );
 	}

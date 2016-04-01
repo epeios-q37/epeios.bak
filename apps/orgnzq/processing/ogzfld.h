@@ -64,7 +64,7 @@ namespace ogzfld {
 		{
 			dDatumList::plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			dDatumList::plug( AS );
 		}

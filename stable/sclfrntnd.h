@@ -237,7 +237,7 @@ namespace sclfrntnd {
 		{
 			Label.plug( Hook );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			Label.plug( AS );
 		}
@@ -313,7 +313,7 @@ namespace sclfrntnd {
 			dIL_<t>::reset( P );
 			Wording.reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			dIL_<t>::plug( AS );
 			Wording.plug( AS );
