@@ -124,7 +124,7 @@ namespace dwtftr {
 			dKernel::plug( Hook.Kernel );
 			dtree_::plug( Hook.Tree );
 		}
-		void plug( qASd  &AS )
+		void plug( qASd *AS )
 		{
 			dKernel::plug( AS );
 			dtree_::plug( AS );

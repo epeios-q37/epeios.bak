@@ -261,7 +261,7 @@ namespace dwtcpr {
 			kernel_::reset( P );
 			dtree_::reset( P );
 		}
-		void plug( qASd  &AS )
+		void plug( qASd *AS )
 		{
 			kernel_::plug( AS );
 			dtree_::plug( AS );
