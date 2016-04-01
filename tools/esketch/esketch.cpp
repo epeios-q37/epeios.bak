@@ -68,7 +68,7 @@ namespace {
 		name##_()
 
 int scltool::SCLTOOLMain(
-	const str::vString &Command,
+	const str::dString &Command,
 	const scltool::fOddities &Oddities )
 {
 	int ExitValue = EXIT_FAILURE;

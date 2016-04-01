@@ -32,7 +32,7 @@ namespace frdinstc {
 	{
 	private:
 		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
-		esketch::rStatics S_( void )
+		esketch::fStatics S_( void )
 		{
 			return F_().Statics;
 		}

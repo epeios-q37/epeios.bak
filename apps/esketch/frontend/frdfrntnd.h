@@ -49,7 +49,7 @@ namespace frdfrntnd {
 			MyObject.reset();
 		}
 	public:
-		esketch::rStatics Statics;
+		esketch::fStatics Statics;
 		esketch::fSKTMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
 		{

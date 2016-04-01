@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of eSketch.
 #
@@ -29,14 +29,14 @@ mods += ags aem bch bitbch bso
 mods += cio cpe crptgr cslio ctn 
 mods += dir dte dtfbsc dtfptb epsmsc 
 mods += err fdr flf flsq flw 
-mods += flx ias ids iof iop 
+mods += flx ias idsq iof iop 
 mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio tht 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn rgstry stsfsm xml 
-mods += xpp 
+mods += ntvstr que sdr stkbse stkbch 
+mods += stkctn str strng tagsbs tol 
+mods += txf tys uys utf xtf 
+mods += llio tht bomhdl cdgb64 dlbrry 
+mods += fil fnm lcl plgn plgncore 
+mods += rgstry stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += registry 
@@ -318,11 +318,12 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""(Version)"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DVERSION=\""20160401"\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
 
 ifndef EPEIOS_SRC
-	src += :src:src/epeios
+	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -343,9 +344,7 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC
-		
 	mkdir -p $(dest)
-			
 	cp $(binary) $(dest)
 endif
 		
