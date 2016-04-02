@@ -463,6 +463,9 @@ namespace sclfrntnd {
 		qCDEF(char *, EmbeddedBackendIdentifier, "_EMBEDDED" );
 	}
 
+	typedef kernel___ rKernel;
+	typedef frontend___ rFrontend;
+
 	typedef features___ rFeatures;
 
 	const str::dString &About(

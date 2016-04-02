@@ -32,10 +32,11 @@
 
 
 namespace frdfrntnd {
-	typedef sclfrntnd::frontend___ _frontend___;
+	using sclfrntnd::rKernel;
+	typedef sclfrntnd::rFrontend rFrontend_;
 
 	class rFrontend
-	: public _frontend___
+	: public rFrontend_
 	{
 	protected:
 		virtual void FBLFRDOnConnect( void ) override
@@ -53,18 +54,18 @@ namespace frdfrntnd {
 		esketch::fSKTMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
 		{
-			_frontend___::reset( P );
+			rFrontend_::reset( P );
 			Statics.reset( P );
 			MyObject.reset( P );
 		}
 		qCVDTOR( rFrontend );
 		void Init(
-			sclfrntnd::kernel___ &Kernel,
+			rKernel &Kernel,
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback,
 			const rgstry::multi_level_registry_ &Registry )
 		{
-			_frontend___::Init( Kernel, Language, ReportingCallback, Registry );
+			rFrontend_::Init( Kernel, Language, ReportingCallback, Registry );
 		}
 	};
 

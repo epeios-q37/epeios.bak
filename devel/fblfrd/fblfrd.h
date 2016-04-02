@@ -17,34 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: fblfrd.h,v 1.18 2013/07/25 15:59:08 csimon Exp $
+// Frontend/Backend Layout FRrontenD 
 
 #ifndef FBLFRD__INC
-#define FBLFRD__INC
+# define FBLFRD__INC
 
-#define FBLFRD_NAME		"FBLFRD"
+# define FBLFRD_NAME		"FBLFRD"
 
-#define	FBLFRD_VERSION	"$Revision: 1.18 $"
-
-#define FBLFRD_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( FBLFRD_NODBG )
-#define FBLFRD_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.18 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/07/25 15:59:08 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Frontend/Backend Layout FRrontenD 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( FBLFRD_NODBG )
+#  define FBLFRD_DBG
+# endif
 
 # include "err.h"
 # include "flw.h"
@@ -67,7 +49,7 @@
 # define FBLFRD_UNDEFINED_ID16		FBLTYP_UNDEFINED_ID16
 # define FBLFRD_UNDEFINED_ID8		FBLTYP_UNDEFINED_ID8
 
-# define	FBLFRD_MASTER_OBJECT	FBLFRD_UNDEFINED_OBJECT
+# define FBLFRD_MASTER_OBJECT	FBLFRD_UNDEFINED_OBJECT
 # define FBLFRD_MASTER_TYPE		FBLFRD_UNDEFINED_TYPE
 # define FBLFRD_MASTER_COMMAND	FBLFRD_UNDEFINED_COMMAND
 
@@ -108,7 +90,9 @@
 		_Out( fblcst::c##name, &O );\
 	}\
 
-
+/*************/
+/**** OLD ****/
+/*************/
 
 namespace fblfrd {
 	using namespace fblovl;
@@ -854,5 +838,36 @@ namespace fblfrd {
 	};
 }
 
-/*$END$*/
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace fblfrd {
+	typedef reporting_callback__ cReporting;
+	typedef compatibility_informations__ sCompatibilityInformations;
+
+	typedef incompatibility_informations_ dIncompatibilityInformations;
+	qW( IncompatibilityInformations );
+
+
+	class sDefaultReportingCallback
+	: public cReporting
+	{
+	protected:
+		virtual void FBLFRDReport(
+			fblovl::reply__ Reply,
+			const char *Message ) override;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			cReporting::reset( P );
+		}
+		E_CVDTOR( sDefaultReportingCallback );
+		void Init( void)
+		{
+			cReporting::Init();
+		}
+	};
+}
+
 #endif

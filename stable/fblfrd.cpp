@@ -21,6 +21,8 @@
 
 #include "fblfrd.h"
 
+#include "cio.h"
+
 using namespace fblfrd;
 
 bso::bool__ fblfrd::frontend___::_TestCompatibility(
@@ -173,4 +175,11 @@ qRB
 qRR
 qRT
 qRE
+}
+
+void fblfrd::sDefaultReportingCallback::FBLFRDReport(
+	fblovl::reply__ Reply,
+	const char *Message )
+{
+	cio::CErr << Message << txf::nl << txf::commit;
 }
