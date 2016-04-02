@@ -35,6 +35,10 @@
 # include "iof.h"
 # include "fnm.h"
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace flf {
 
 	class file_iflow_driver___
@@ -299,5 +303,15 @@ namespace flf {
 		}
 	};
 }
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace flf {
+	typedef file_oflow___ rOFlow;
+	typedef file_iflow___ rIFlow;
+}
+
 
 #endif

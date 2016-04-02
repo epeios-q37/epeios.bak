@@ -39,6 +39,10 @@
 # include "flw.h"
 # include "tol.h"
 
+/***************/
+/**** OLD ******/
+/***************/
+
 namespace txf {
 	using flw::size__;
 	using flw::byte__;
@@ -437,5 +441,14 @@ namespace txf {
 		flw::Copy( IFlow, OFlow.Flow() );
 	}
 }
+
+/***************/
+/**** NEW ******/
+/***************/
+
+namespace txf {
+	typedef text_oflow__ sOFlow;
+}
+
 
 #endif

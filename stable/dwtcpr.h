@@ -35,6 +35,10 @@
 # include "str.h"
 # include "dtr.h"
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace dwtcpr {
 	enum status__ {
 		sSteady,	// Pas de modification.
@@ -341,5 +345,19 @@ namespace dwtcpr {
 		}
 	};
 }
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace dwtcpr {
+	typedef drow__ sDRow;
+
+	typedef comparison_observer__ cComparison;
+
+	typedef scene_ dScene;
+	qW( Scene );
+}
+
 
 #endif

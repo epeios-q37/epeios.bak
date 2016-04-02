@@ -463,6 +463,9 @@ namespace sclfrntnd {
 		qCDEF(char *, EmbeddedBackendIdentifier, "_EMBEDDED" );
 	}
 
+	using fblfrd::cReporting;
+	using fblfrd::sDefaultReportingCallback;
+
 	typedef kernel___ rKernel;
 	typedef frontend___ rFrontend;
 

@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// SoCLe MISCellaneous
+
 #ifndef SCLMISC__INC
 # define SCLMISC__INC
 
@@ -25,8 +27,6 @@
 # if defined( E_DEBUG ) && !defined( SCLMISC_NODBG )
 #  define SCLMISC_DBG
 # endif
-
-// SoCLe MISCellaneous
 
 # include "err.h"
 # include "flw.h"
@@ -38,8 +38,11 @@
 
 # include "plgn.h"
 
-namespace sclmisc {
+/***************/
+/***** OLD *****/
+/***************/
 
+namespace sclmisc {
 	extern const char *SCLMISCTargetName;	// A définir par l'utilisateur.
 
 	bso::bool__ IsInitialized( void );
@@ -491,9 +494,13 @@ namespace sclmisc {
 	}
 }
 
-			/********************************************/
-				  /* do not modify anything belove this limit */
-				  /*			  unless specified		   	  */
-/******************************************************************************/
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace sclmisc {
+	typedef text_oflow_rack___ rTextOFlowRack;
+}
+
 
 #endif

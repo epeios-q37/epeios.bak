@@ -36,6 +36,10 @@
 # include "dtr.h"
 # include "xml.h"
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace dwtftr {
 	using namespace dwtbsc;
 
@@ -282,5 +286,18 @@ namespace dwtftr {
 		file_tree_ &Tree,
 		dwtbsc::sort_type__ SortType );
 }
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace dwtftr{
+	typedef file_tree_ dFileTree;
+	qW( FileTree );
+
+	typedef drow__ sDRow;
+}
+
+
 
 #endif
