@@ -155,6 +155,8 @@ namespace dwtftr {
 
 	E_AUTO( file_tree );
 
+	void SetAsEmpty( file_tree_ &Tree );
+
 	struct file_tree_rack___ {
 		file_tree_fh___ Hook;
 		file_tree Tree;

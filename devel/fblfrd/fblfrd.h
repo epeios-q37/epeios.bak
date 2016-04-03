@@ -302,12 +302,17 @@ namespace fblfrd {
 
 			Channel_->Commit();
 
-			if ( ( Reply = (fblovl::reply__)Channel_->Get() ) != fblovl::rOK ) {
-				if ( Reply >= fblovl::r_amount )
-					qRFwk();
+			if ( Channel_->EndOfFlow() ) {
+				Channel_ = NULL;
+				Reply = fblovl::rDisconnected;
+			} else {
+				if ( ( Reply = (fblovl::reply__)Channel_->Get() ) != fblovl::rOK ) {
+					if ( Reply >= fblovl::r_amount )
+						qRFwk();
 
-				if ( ( !flw::GetString( *Channel_, Message_, sizeof( Message_ ) ) ) )
-					qRLmt();
+					if ( ( !flw::GetString( *Channel_, Message_, sizeof( Message_ ) ) ) )
+						qRLmt();
+				}
 			}
 
 			return Reply;
@@ -491,20 +496,23 @@ namespace fblfrd {
 			if ( Reply == fblovl::rOK )
 				_PostProcess( *Channel_ );
 
-			if ( Channel_->Get() != fblcst::cEnd )
-				qRFwk();
+			if ( Reply != fblovl::rDisconnected ) {
 
-			if ( !_FlowOutParameter )
-				Channel_->Dismiss();
-			else {
-				if ( _DismissPending )
+				if ( Channel_->Get() != fblcst::cEnd )
 					qRFwk();
 
-				_DismissPending= true;
+				if ( !_FlowOutParameter )
+					Channel_->Dismiss();
+				else {
+					if ( _DismissPending )
+						qRFwk();
+
+					_DismissPending= true;
+					_FlowOutParameter = false;
+				}
+
 				_FlowOutParameter = false;
 			}
-
-			_FlowOutParameter = false;
 
 			if ( Reply != rOK )
 				_ReportError( Reply, Message_ );

@@ -108,9 +108,13 @@ namespace sclbacknd {
 		{
 			return _RegistrySetupLevel;
 		}
-		void FillSetupRegistry( const str::string_ &SetupId )
+		void FillSetupRegistryFollowingId( const str::string_ &SetupId )
 		{
-			sclrgstry::FillWithSetup( _Registry, _RegistrySetupLevel, SetupId );
+			sclrgstry::FillWithSetupOfId( _Registry, _RegistrySetupLevel, SetupId );
+		}
+		void FillSetupRegistryWithContent( const str::string_ &Content )
+		{
+			sclrgstry::FillWithContent( _Registry, _RegistrySetupLevel, Content );
 		}
 		void *UP( void ) const
 		{

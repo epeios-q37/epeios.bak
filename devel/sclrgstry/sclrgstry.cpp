@@ -324,7 +324,7 @@ qRE
 	return Content;
 }
 
-void sclrgstry::FillWithSetup(
+void sclrgstry::FillWithSetupOfId(
 	registry_ &Registry,
 	rgstry::level__ Level,
 	const str::string_ &Id )
@@ -340,7 +340,7 @@ qRB
 
 	Setup.Init();
 
-	Setup.Append("<_setup><" );
+	Setup.Append("<_><" );
 	sclrgstry::Parameters.GetPath( Setup );
 	Setup.Append('>' );
 
@@ -348,7 +348,7 @@ qRB
 
 	Setup.Append( "</" );
 	sclrgstry::Parameters.GetPath( Setup );
-	Setup.Append( "></_setup>" );
+	Setup.Append( "></_>" );
 
 
 	IFlow.Init( Setup );
@@ -359,7 +359,7 @@ qRT
 qRE
 }
 
-void sclrgstry::FillWithSetup(
+void sclrgstry::FillWithGivenSetup(
 	registry_ &Registry,
 	rgstry::level__ Level )
 {
@@ -369,7 +369,7 @@ qRB
 	Id.Init();
 
 	if ( OGetValue( Registry_, Setup_, Id ) )
-		FillWithSetup( Registry, Level, Id );
+		FillWithSetupOfId( Registry, Level, Id );
 qRR
 qRT
 qRE
@@ -380,6 +380,32 @@ void sclrgstry::ReportIfNoSetupId( void )
 	if ( !Registry_.Exists( Setup_  ) )
 		ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
 }
+
+void sclrgstry::FillWithContent(
+	registry_ &Registry,
+	rgstry::level__ Level,
+	const str::string_ &RawContent )
+{
+qRH
+	str::string Content;
+	flx::E_STRING_IFLOW__ IFlow;
+	xtf::extended_text_iflow__ XFlow;
+	str::string EntryPath;
+qRB
+	Content.Init();
+
+	Content.Append("<_>" );
+	Content.Append( RawContent );
+	Content.Append( "</_>" );
+
+	IFlow.Init( Content );
+	XFlow.Init( IFlow, utf::f_Default );
+	Registry.Fill( Level, XFlow, xpp::criterions___(), NULL );
+qRR
+qRT
+qRE
+}
+
 
 void sclrgstry::EraseArgumentsRegistry( void )
 {

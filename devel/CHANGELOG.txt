@@ -2,6 +2,12 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-04-03 :
+- DWTDCT :
+	- Fixing mutitasking issue in exclude handling.
+- XPP :
+	- Diwing cdata nesting bug.
+
 2016-04-01 :
 - GLOBAL :
 	- Fixing missing flush.

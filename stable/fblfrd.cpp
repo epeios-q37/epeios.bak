@@ -181,5 +181,16 @@ void fblfrd::sDefaultReportingCallback::FBLFRDReport(
 	fblovl::reply__ Reply,
 	const char *Message )
 {
-	cio::CErr << Message << txf::nl << txf::commit;
+	switch ( Reply ) {
+	case fblovl::rRequestError:
+	case fblovl::rSoftwareError:
+		cio::CErr << Message << txf::nl << txf::commit;
+		break;
+	case fblovl::rDisconnected:
+		qRVct();
+		break;
+	default:
+		qRGnr();
+		break;
+	}
 }

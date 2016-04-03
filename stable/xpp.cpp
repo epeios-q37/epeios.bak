@@ -1363,8 +1363,10 @@ status__ xpp::_extended_parser___::Handle(
 					Continue = true;
 				else
 					Status = sOK;
+				if ( _CDataNesting == 0 )
+					Data.Append( "<![CDATA[" );
+
 				_CDataNesting++;
-				Data.Append( "<![CDATA[" );
 				StripHeadingSpaces = true;
 				break;
 			case dBloc:

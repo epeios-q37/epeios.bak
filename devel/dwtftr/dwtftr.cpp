@@ -666,6 +666,49 @@ void dwtftr::file_tree_::Dump(
 	Writer.PopTag();
 }
 
+namespace {
+	class sDummyProcessinObserver
+	: public processing_observer__
+	{
+	protected:
+		virtual void DWTBSCReport(
+			bso::uint__ Handled,
+			bso::uint__ Total ) override
+		{}
+	};
+}
+
+void dwtftr::SetAsEmpty( file_tree_ &Tree )
+{
+qRH
+	item_ *Item = NULL;
+	content Content;
+	sDummyProcessinObserver Observer;
+qRB
+	Content.Init();
+
+	Item = new item;
+
+	if ( Item == NULL )
+		qRAlc();
+
+	Item->Init();
+
+	Item->Dir.Exclusion() = dwtbsc::xNo;
+
+	Content.Append( Item );
+
+	Item = NULL;
+
+	Process( Content, Tree, Observer );
+qRR
+qRT
+	if ( Item != NULL )
+		delete Item;
+qRE
+}
+
+
 void dwtftr::file_tree_hf___::Init(
 	const fnm::name___ &Path,
 	const fnm::name___ &Basename )

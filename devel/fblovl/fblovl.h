@@ -49,6 +49,7 @@ namespace fblovl {
 		rOK,
 		rSoftwareError,	// Lorsque survient un 'ERR[x|X](...)'.
 		rRequestError,	// Lorsque survient un problme lors de l'excution de la requte.
+		rDisconnected,	// Connection was lost.
 		r_amount,
 		r_Undefined
 	};

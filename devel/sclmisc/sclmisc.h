@@ -227,12 +227,12 @@ namespace sclmisc {
 
 	inline void FillSetupRegistry( const str::string_ &Id )
 	{
-		sclrgstry::FillWithSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ), Id );
+		sclrgstry::FillWithSetupOfId( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ), Id );
 	}
 
 	inline void FillSetupRegistry( void )
 	{
-		sclrgstry::FillWithSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ) );
+		sclrgstry::FillWithGivenSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ) );
 	}
 
 	inline void AddValue(

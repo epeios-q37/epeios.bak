@@ -161,17 +161,22 @@ namespace sclrgstry {
 
 	void EraseSetupRegistry( void );
 
-	void FillWithSetup(
+	void FillWithSetupOfId(
 		registry_ &Registry,
 		rgstry::level__ Level,
 		const str::string_ &Id );
 
-	void FillWithSetup(
+	void FillWithGivenSetup(
 		registry_ &Registry,
-		rgstry::level__ Level );	// Fill the setup registry if one is given.
+		rgstry::level__ Level );	// Fill the indicated setup if one is given.
 
 	void ReportIfNoSetupId( void );
 
+	void FillWithContent(
+		registry_ &Registry,
+		rgstry::level__ Level,
+		const str::string_ &Content );
+	
 	void EraseArgumentsRegistry( void );
 
 

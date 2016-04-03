@@ -7,6 +7,10 @@
 		<Translation language="fr">Echec de la connexion vers le 'backend' '%1'.</Translation>
 		<Translation language="en">Unable to connect to backend '%1'.</Translation>
 	</Translations>
+	<Translations text="ConnectionLost">
+		<Translation language="fr">Connexion vers le 'backend' interrompue.</Translation>
+		<Translation language="en">Connection to backend lost.</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

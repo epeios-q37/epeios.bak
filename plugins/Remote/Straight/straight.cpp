@@ -42,26 +42,74 @@ class plugin___
 private:
 	csdmnc::rCore Core_;
 	csdmnc::rClientIOFlow Flow_;
+	bso::sBool Connected_;
+	void HandleLostConnection_( void )
+	{
+		Connected_ = false;
+		ERRRst();
+	}
 protected:
 	virtual fdr::size__ FDRWrite(
 		const fdr::byte__ *Buffer,
 		fdr::size__ Maximum ) override
 	{
-		return Flow_.WriteUpTo( Buffer, Maximum );
+		fdr::size__ Size = 0;
+
+		if ( !Connected_ )
+			return 0;
+	qRH
+	qRB
+		Size = Flow_.WriteUpTo( Buffer, Maximum );
+	qRR
+		HandleLostConnection_();
+		Size = 0;
+	qRT
+	qRE
+		return Size;
 	}
 	virtual void FDRCommit( void ) override
 	{
-		return Flow_.Commit();
+		if ( !Connected_ )
+			return;
+	qRH
+	qRB
+		Flow_.Commit();
+	qRR
+		HandleLostConnection_();
+	qRT
+	qRE
+		return;
 	}
 	virtual fdr::size__ FDRRead(
 		fdr::size__ Maximum,
 		fdr::byte__ *Buffer ) override
 	{
-		return Flow_.ReadUpTo( Maximum, Buffer );
+		if ( !Connected_ )
+			return 0;
+
+		fdr::size__ Size = 0;
+	qRH
+	qRB
+		Size = Flow_.ReadUpTo( Maximum, Buffer );
+	qRR
+		HandleLostConnection_();
+		Size = 0;
+	qRT
+	qRE
+		return Size;
 	}
 	virtual void FDRDismiss( void ) override
 	{
-		return Flow_.Dismiss();
+		if ( !Connected_ )
+			return;
+	qRH
+	qRB
+		Flow_.Dismiss();
+	qRR
+		HandleLostConnection_();
+	qRT
+	qRE
+		return;
 	}
 public:
 	void reset( bso::bool__ P = true )
@@ -69,6 +117,7 @@ public:
 		_plugin___::reset( P );
 		Flow_.reset( P );
 		Core_.reset( P );
+		Connected_ = false;
 	}
 	E_CVDTOR( plugin___ );
 	bso::bool__ Init(
@@ -81,6 +130,8 @@ public:
 			return false;
 
 		Flow_.Init( Core_ );
+
+		Connected_ = true;
 
 		return true;
 	}

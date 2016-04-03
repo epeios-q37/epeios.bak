@@ -36,6 +36,7 @@ const char *fblovl::GetLabel( reply__ Reply )
 	CASE( OK );
 	CASE( SoftwareError );
 	CASE( RequestError );
+	CASE( Disconnected );
 	default:
 		qRFwk();
 		break;

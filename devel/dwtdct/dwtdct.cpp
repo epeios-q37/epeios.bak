@@ -662,14 +662,18 @@ qRFH
 	irow__ Row = qNIL;
 	oddity Oddity;
 	fnm::name___ PathWithRoot;
+	dwtxcl::excluder Excluder;
 qRFB
 	content_ &Content = Data.Content();
-	const excluder_ &Excluder = Data.Excluder();
+	// const excluder_ &Excluder = Data.Excluder();	// Due to multitasking, we duplicate teh excluder (below).
 	const dwtbsc::limitations__ &Limitations = Data.Limitations();
 	exclusions_handling__ ExclusionHandling = Data.ExclusionsHandling();
 	const str::string_ &RootPath = Data.RootPath();
 	const dwtbsc::ghosts_oddities_ &GO = Data.GO();
 	Mutex.Init( Data.Protection );
+
+	Excluder.Init();
+	Excluder = Data.Excluder();
 
 	while ( Continue ) {
 //_CrtMemDumpStatistics( &s1 );
