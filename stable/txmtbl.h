@@ -35,6 +35,10 @@
 # include "xtf.h"
 # include "stkbch.h"
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace txmtbl {
 
 	//e The different delimiter.
@@ -381,6 +385,22 @@ txf::text_oflow__ &operator <<(
 txf::text_oflow__ &operator <<(
 		txf::text_oflow__ &Flot,
 		const txmtbl::table_ &Table );
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace txmtbl {
+	typedef cell_ dCell;
+	qW( Cell );
+
+	typedef line_ dLine;
+	qW( Line );
+
+	typedef table_ dTable;
+	qW( Table );
+}
+
 
 
 

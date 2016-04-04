@@ -35,6 +35,10 @@
 # include "xtf.h"
 # include "stkbch.h"
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace txmtbl {
 
 	//e The different delimiter.
@@ -89,7 +93,7 @@ namespace txmtbl {
 			string_::reset( P );
 			S_.Location = 0;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			string_::plug( AS );
 		}
@@ -168,7 +172,7 @@ namespace txmtbl {
 
 			S_.Location = 0;
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			cells_::plug( AS );
 		}
@@ -299,7 +303,7 @@ namespace txmtbl {
 		{
 			lines_::reset( P );
 		}
-		void plug( qASd &AS )
+		void plug( qASd *AS )
 		{
 			lines_::plug( AS );
 		}
@@ -381,6 +385,22 @@ txf::text_oflow__ &operator <<(
 txf::text_oflow__ &operator <<(
 		txf::text_oflow__ &Flot,
 		const txmtbl::table_ &Table );
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace txmtbl {
+	typedef cell_ dCell;
+	qW( Cell );
+
+	typedef line_ dLine;
+	qW( Line );
+
+	typedef table_ dTable;
+	qW( Table );
+}
+
 
 
 

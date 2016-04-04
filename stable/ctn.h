@@ -121,8 +121,10 @@ namespace ctn {
 		}
 		void Flush_( bso::bool__ Reset ) const
 		{
-			if ( IsVolatile_ && IsSet_() )
+			if ( IsVolatile_ && IsSet_() ) {
+				FlushObject_();
 				Statics.Store( S_, *Hook_.Index() );
+			}
 
 			IsVolatile_ = false;
 

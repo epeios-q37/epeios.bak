@@ -1,30 +1,28 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Locales xmlns:xpp="http://q37.info/ns/xpp">
-	<Locale target="barq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand select="epeios.xlcl"/>
-		<Translations text="ProgramDescription">
-			<Translation language="fr">Récupère l'API d'un moteur de traitement ('backend').</Translation>
-			<Translation language="en">Retrieve the API from a backend.</Translation>
-		</Translations>
-		<Translations text="UnableToAccessBackendError">
-			<Translation language="fr">Impossible d'accéder au moteur de traitement '%1'.</Translation>
-			<Translation language="en">Unable to access the backend '%1'.</Translation>
-		</Translations>
-		<Translations text="UnableToCommunicateWithBackendError">
-			<Translation language="fr">Impossible de communiquer avec le 'backend'.</Translation>
-			<Translation language="en">Unable to communicate with backend.</Translation>
-		</Translations>
-		<Translations text="IncompatibleBackendError">
-			<Translation language="fr">'backend' incompatible.</Translation>
-			<Translation language="en">Incompatible 'backend'.</Translation>
-		</Translations>
-		<!--
-		<Translations text="">
-		  <Translation language="fr"></Translation>
-		  <Translation language="en"></Translation>
-		</Translations>
-		-->
-	</Locale>
-</Locales>
+<Locale target="barq"  xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Récupère l'API d'un moteur de traitement ('backend').</Translation>
+		<Translation language="en">Retrieve the API from a backend.</Translation>
+	</Translations>
+	<Translations text="UnableToAccessBackendError">
+		<Translation language="fr">Impossible d'accéder au moteur de traitement '%1'.</Translation>
+		<Translation language="en">Unable to access the backend '%1'.</Translation>
+	</Translations>
+	<Translations text="UnableToCommunicateWithBackendError">
+		<Translation language="fr">Impossible de communiquer avec le 'backend'.</Translation>
+		<Translation language="en">Unable to communicate with backend.</Translation>
+	</Translations>
+	<Translations text="IncompatibleBackendError">
+		<Translation language="fr">'backend' incompatible.</Translation>
+		<Translation language="en">Incompatible 'backend'.</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>
