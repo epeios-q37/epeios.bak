@@ -33,6 +33,10 @@
 
 # include "rgstry.h"
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace sclrgstry {
 
 	using rgstry::tags_;
@@ -328,6 +332,17 @@ namespace sclrgstry {
 	{\
 		return OGetValue( Registry, entry, Value, Missing );\
 	}
+}
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace sclrgstry {
+	typedef registry_ dRegistry;
+	qW( Registry );
+
+	typedef rgstry::entry___ rEntry;
 }
 
 #endif
