@@ -33,6 +33,7 @@
 #include "cpe.h"
 #include "tol.h"
 #include "fnm.h"
+#include "str.h"
 
 #include <limits.h>
 
@@ -63,6 +64,10 @@
 #endif
 
 #include <errno.h>
+
+/***************/
+/***** OLD *****/
+/***************/
 
 namespace dir {
 	enum state__ {
@@ -377,7 +382,18 @@ namespace dir {
 		rep = NULL;
 # endif
 	}
+
+	void FileSystem( str::dStrings &Paths );
 }
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace dir {
+	typedef handle___ rHandle;
+}
+
 
 
 #endif

@@ -320,7 +320,7 @@ namespace ctn {
 			if ( Size > amount_extent_manager_<r>::Amount() )
 				qRFwk();
 # endif
-			Allocate( Size, *(st *)NULL, Mode );	// 'NULL' because this parameter is used only when size increased.
+			Allocate( Size, Mode );
 		}
 		//f Remove 'Amount' entries from 'Position'.
 		void Remove(

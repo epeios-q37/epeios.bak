@@ -33,6 +33,7 @@
 #include "cpe.h"
 #include "tol.h"
 #include "fnm.h"
+#include "str.h"
 
 #include <limits.h>
 
@@ -63,6 +64,10 @@
 #endif
 
 #include <errno.h>
+
+/***************/
+/***** OLD *****/
+/***************/
 
 namespace dir {
 	enum state__ {
@@ -267,7 +272,6 @@ namespace dir {
 		WIN32_FIND_DATAW &File = Handle.File;
 		HANDLE &hSearch = Handle.hSearch;
 		fnm::ncore___ &Buffer = Handle.Path.ExposedInternal();
-		int i;
 
 		Handle.Path.Init();
 
@@ -285,7 +289,7 @@ namespace dir {
 	    hSearch = FindFirstFileW( Buffer, &File );
 
 		if ( hSearch == INVALID_HANDLE_VALUE )
-			switch ( i = GetLastError() ) {
+			switch ( GetLastError() ) {
 			case ERROR_NO_MORE_FILES:
 			case ERROR_ACCESS_DENIED:
 				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Path' == 'NULL', qui signale une erreur).
@@ -378,7 +382,18 @@ namespace dir {
 		rep = NULL;
 # endif
 	}
+
+	void FileSystem( str::dStrings &Paths );
 }
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace dir {
+	typedef handle___ rHandle;
+}
+
 
 
 #endif

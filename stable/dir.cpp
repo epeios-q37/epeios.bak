@@ -58,3 +58,34 @@ state__ dir::HandleError( void )
 	return s_Undefined;	// Pour viter un 'warning'.
 }
 
+void dir::FileSystem( str::dStrings &Paths )
+{
+# ifdef DIR__WIN
+	qRH
+		ntvstr::string___ RawString;
+		str::wString Path;
+	qRB
+		DWORD dwSize = MAX_PATH;
+		WCHAR szLogicalDrives[MAX_PATH] = {0};
+		DWORD dwResult = GetLogicalDriveStringsW(dwSize,szLogicalDrives);
+
+		if ( (dwResult <= 0) || ( dwResult > MAX_PATH ) )
+			qRFwk();
+
+		WCHAR* szSingleDrive = szLogicalDrives;
+		while(*szSingleDrive)
+		{
+			RawString.Init( szSingleDrive );
+
+			Path.Init();
+			Paths.Append( RawString.UTF8( Path ) );
+
+			szSingleDrive += wcslen(szSingleDrive) + 1;
+		}
+	qRR
+	qRT
+	qRE
+# else
+#  error "Not implemented yet !"
+# endif
+}

@@ -2,6 +2,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-04-06
+- DIR
+	- Adding 'FileSystem(...)'
+
 2016-04-04 :
 - CTN :
 	- Fixing incomplete 'Flush_()'.

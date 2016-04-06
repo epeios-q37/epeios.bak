@@ -1,26 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Locales xmlns:xpp="http://q37.info/ns/xpp">
-	<Locale target="xppq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand select="epeios.xlcl"/>
-		<Translations text="ProgramDescription">
-			<Translation language="fr">Preprocesseur XML basé sur le framework Epeios.</Translation>
-			<Translation language="en">XML preprocessor based on the Epeios framework.</Translation>
-		</Translations>
-		<Translations text="ProcessingError">
-			<Translation language="fr">Erreur de traitement : %1</Translation>
-			<Translation language="en">Processing error: %1</Translation>
-		</Translations>
-		<Translations text="EncryptionError">
-			<Translation language="fr">Erreur de chiffrement : %1</Translation>
-			<Translation language="en">Encryption error: %1</Translation>
-		</Translations>
-		<!--
-		<Translations text="">
-			<Translation language="fr"></Translation>
-			<Translation language="en"></Translation>
-		</Translations>
-		-->
-	</Locale>
-</Locales>
+<Locale target="xppq" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Preprocesseur XML basé sur le framework Epeios.</Translation>
+		<Translation language="en">XML preprocessor based on the Epeios framework.</Translation>
+	</Translations>
+	<Translations text="ProcessingError">
+		<Translation language="fr">Erreur de traitement : %1</Translation>
+		<Translation language="en">Processing error: %1</Translation>
+	</Translations>
+	<Translations text="EncryptionError">
+		<Translation language="fr">Erreur de chiffrement : %1</Translation>
+		<Translation language="en">Encryption error: %1</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>

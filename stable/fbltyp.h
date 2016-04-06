@@ -341,8 +341,8 @@ namespace fbltyp {
 	typedef char_t__	char__;
 	typedef str::string_	string_;
 	typedef str::string		string;
-	typedef ctn::E_MCONTAINER_( string_ )	strings_;
-	typedef ctn::E_MCONTAINER( string_ )	strings;
+	typedef str::dStrings	strings_;
+	typedef str::wStrings	strings;
 	typedef ctn::E_CONTAINER_( strings_ )	xstrings_;
 	typedef ctn::E_CONTAINER( strings_ )	xstrings;
 	typedef bso::byte__	byte_t__;

@@ -38,19 +38,18 @@
 # include "cpe.h"
 # include "fnm.h"
 
-/*************************/
-/****** New version ******/
-/*************************/
+/***************/
+/***** NEW *****/
+/***************/
 
 // To avoid to have to include "str.h".
 namespace str {
 	class vtsring;
 }
 
-/*************************/
-/****** Old version ******/
-/*************************/
-
+/***************/
+/***** OLD *****/
+/***************/
 
 namespace str {
 	class string_;
@@ -646,4 +645,13 @@ namespace fil {
 		const fnm::name___ &Filename,
 		err::handling__ = err::h_Default  );
 }
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace fil {
+	typedef info__ sInfo;
+}
+
 #endif
