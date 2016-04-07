@@ -328,6 +328,9 @@ namespace ctn {
 			sdr::size__ Amount = 1,
 			aem::mode__ Mode = aem::m_Default )
 		{
+			if ( Amount == 0 )
+				return;
+
 			Flush_( true );
 
 			sdr::size__ CurrentAmount = amount_extent_manager_<r>::Amount();

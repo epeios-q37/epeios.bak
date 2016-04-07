@@ -2,6 +2,14 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2014-04-07 :
+- CTN :
+	- Fixing 'basic_cintainer_::Remove(...)' limit case.
+- DIR :
+	- Adding handling of empty device (DVD drive, for example) in 'GetFirstFile(...)'.
+- XDHDWS :
+	- Adding 'proxy__::GetNumericalAttribute(...)'.
+
 2016-04-06
 - DIR
 	- Adding 'FileSystem(...)'

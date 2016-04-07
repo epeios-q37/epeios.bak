@@ -146,14 +146,14 @@ namespace xdhdws {
 		{
 			bso::sBool IsEmpty = true;
 		qRH
-			str::wString Property;
+			str::wString RawValue;
 		qRB
-			Property.Init();
+			RawValue.Init();
 
-			GetProperty( Id, Name, Property );
+			GetProperty( Id, Name, RawValue );
 
-			if ( Property.Amount() != 0 ) {
-				Property.ToNumber( Value );
+			if ( RawValue.Amount() != 0 ) {
+				RawValue.ToNumber( Value );
 				IsEmpty = false;
 			}
 		qRR
@@ -190,6 +190,28 @@ namespace xdhdws {
 		qRT
 		qRE
 			return Attribute;
+		}
+		template <typename type> bso::sBool GetNumericalAttribute(
+			const nstring___ &Id,
+			const nstring___ &Name,
+			type &Value )
+		{
+			bso::sBool IsEmpty = true;
+		qRH
+			str::wString RawValue;
+		qRB
+			RawValue.Init();
+
+			GetAttribute( Id, Name, RawValue );
+
+			if ( RawValue.Amount() != 0 ) {
+				RawValue.ToNumber( Value );
+				IsEmpty = false;
+			}
+		qRR
+		qRT
+		qRE
+			return !IsEmpty;
 		}
 		void SetAttribute(
 			const nstring___ &Id,

@@ -292,6 +292,7 @@ namespace dir {
 			switch ( GetLastError() ) {
 			case ERROR_NO_MORE_FILES:
 			case ERROR_ACCESS_DENIED:
+			case ERROR_NOT_READY:	// Empty DVD drive, for example.
 				Handle.Path.Init( "" );	// Pour mettre la taille à 0 (ce qui signale l'absence de fichier, par opposition à 'Handle.Path' == 'NULL', qui signale une erreur).
 				break;
 			default:
