@@ -51,6 +51,7 @@ namespace fblfrp {
 		}
 	};
 
+
 	typedef fblfph::callbacks__ _callbacks__;
 
 	class remote_callbacks___

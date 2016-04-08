@@ -441,6 +441,14 @@ namespace dir {
 		return false;
 # endif
 	}
+
+	qENUM( BusType ){
+		btUSB,
+		bt_amount,
+		bt_Undefined
+	};
+
+	eBusType GetDiskBusType( const fnm::rName &Disk );
 }
 
 

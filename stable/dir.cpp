@@ -89,3 +89,56 @@ void dir::FileSystem( str::dStrings &Paths )
 	qRVct();
 # endif
 }
+
+namespace {
+# ifdef DIR__WIN
+	eBusType Convert_( STORAGE_BUS_TYPE BusType )
+	{
+		switch ( BusType ) {
+		case BusTypeUsb:
+			return btUSB;
+			break;
+		default:
+			return bt_Undefined;
+			break;
+		}
+	}
+# endif
+}
+
+eBusType dir::GetDiskBusType( const fnm::rName &Disk )
+{
+	eBusType Type = bt_Undefined;
+# ifdef DIR__WIN
+qRH
+	str::wString Name;
+	DWORD Size = 0;
+	HANDLE Handle = INVALID_HANDLE_VALUE;
+	STORAGE_PROPERTY_QUERY Query;
+	STORAGE_DEVICE_DESCRIPTOR Descriptor;
+qRB
+	Name.Init( "\\\\.\\" );
+	Disk.UTF8( Name );
+	Name.Truncate();
+
+	Handle = CreateFileW( fnm::rName( Name ).Internal(), 0, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+
+	if ( Handle == INVALID_HANDLE_VALUE )
+		qRReturn;
+
+	Query.PropertyId = StorageDeviceProperty;
+	Query.QueryType = PropertyStandardQuery;
+
+
+	if ( DeviceIoControl(Handle, IOCTL_STORAGE_QUERY_PROPERTY, &Query, sizeof( Query ), &Descriptor, sizeof( Descriptor ), &Size ,NULL ) == 0 )
+		qRReturn;
+
+	Type = Convert_( Descriptor.BusType );
+qRR
+qRE
+qRT
+# else
+	qRVct();
+# endif
+	return Type;
+}
