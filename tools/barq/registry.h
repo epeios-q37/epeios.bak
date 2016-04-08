@@ -25,10 +25,6 @@
 namespace registry {
 	using namespace sclrgstry;
 
-	namespace {
-		using rgstry::rEntry;
-	}
-
 	extern rEntry StraightPluginPath;
 	extern rEntry ProxyPluginPath;
 	extern rEntry BackendLocation;

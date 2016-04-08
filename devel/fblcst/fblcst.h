@@ -17,39 +17,21 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: fblcst.h,v 1.5 2013/04/14 14:37:28 csimon Exp $
+// Frontend/Backend Layout CaSTs 
 
 #ifndef FBLCST__INC
-#define FBLCST__INC
+# define FBLCST__INC
 
-#define FBLCST_NAME		"FBLCST"
+# define FBLCST_NAME		"FBLCST"
 
-#define	FBLCST_VERSION	"$Revision: 1.5 $"
+# if defined( E_DEBUG ) && !defined( FBLCST_NODBG )
+#  define FBLCST_DBG
+# endif
 
-#define FBLCST_OWNER		"Claude SIMON"
+# include "err.h"
+# include "flw.h"
 
-#if defined( E_DEBUG ) && !defined( FBLCST_NODBG )
-#define FBLCST_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.5 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/14 14:37:28 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Frontend/Backend Layout CaSTs 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-
-#include "fbltyp.h"
+# include "fbltyp.h"
 
 namespace fblcst {
 	//e casts.
@@ -70,6 +52,14 @@ namespace fblcst {
 		cUInt,
 		//i Portable unsigned longs (SET_( bso::uint__ ) ).
 		cUInts,
+		//i Portable big (bso::sbig__ ).
+		cSBig,
+		//i Portable bigs (SET_( bso::sbig__ ) ).
+		cSBigs,
+		//i Portable unsigned long (bso::ubig__ ).
+		cUBig,
+		//i Portable unsigned longs (SET_( bso::ubig__ ) ).
+		cUBigs,
 		//i 8 bits identifier ( 'bso::u8__' ).
 		cId8,
 		//i Array of 8 bits identifiers ( 'SET_( bso::u8__ )' )
@@ -150,6 +140,4 @@ namespace fblcst {
 	//f Get id from cast named 'CastName'.
 	cast__ GetID( const char *CastName );
 }
-
-/*$END$*/
 #endif

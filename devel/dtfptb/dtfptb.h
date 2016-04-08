@@ -109,21 +109,21 @@ namespace dtfptb {
 	}
 # endif
 
-	bso::uint__ _VGetUInt(
+	bso::sUBig _VGetUBig(
 		flw::iflow__ &Flow,
-		bso::uint__ Max );
+		bso::sUBig Max );
 
-	bso::sint__ _VGetSInt(
+	bso::sSBig _VGetSBig(
 		flw::iflow__ &Flow,
-		bso::sint__ Min,
-		bso::sint__ Max );
+		bso::sSBig Min,
+		bso::sSBig Max );
 
-	void _VPutUInt(
-		bso::uint__ UInt,
+	void _VPutUBig(
+		bso::sUBig UBig,
 		flw::oflow__ &Flow );
 
-	void _VPutSInt(
-		bso::sint__ SInt,
+	void _VPutSBig(
+		bso::sSBig SBig,
 		flw::oflow__ &Flow );
 
 # ifdef CPE_S_DARWIN
@@ -131,14 +131,14 @@ namespace dtfptb {
 		flw::iflow__ &Flow,
 		bso::size__ &Size )
 	{
-		return Size = _VGetUInt( Flow, BSO_SIZE_MAX );
+		return Size = _VGetUBig( Flow, BSO_SIZE_MAX );
 	}
 
 	inline void VPut(
 		bso::size__ Size,
 		flw::oflow__ &Flow )
 	{
-		_VPutUInt( Size, Flow );
+		_VPutUBig( Size, Flow );
 	}
 # endif
 
@@ -147,33 +147,31 @@ namespace dtfptb {
 		flw::iflow__ &Flow,\
 		bso::u##bitness##__ &Int )\
 	{\
-		return Int = (bso::u##bitness##__)_VGetUInt( Flow, umax );\
+		return Int = (bso::u##bitness##__)_VGetUBig( Flow, umax );\
 	}\
 	inline bso::s##bitness##__ VGet(\
 		flw::iflow__ &Flow,\
 		bso::s##bitness##__ &Int )\
 	{\
-		return Int = (bso::s##bitness##__)_VGetSInt( Flow, smin, smax );\
+		return Int = (bso::s##bitness##__)_VGetSBig( Flow, smin, smax );\
 	}\
 	inline void VPut(\
 		bso::u##bitness##__ Int,\
 		flw::oflow__ &Flow )\
 	{\
-		_VPutUInt( Int, Flow );\
+		_VPutUBig( Int, Flow );\
 	}\
 	inline void VPut(\
 		bso::s##bitness##__ Int,\
 		flw::oflow__ &Flow )\
 	{\
-		_VPutSInt( Int, Flow );\
+		_VPutSBig( Int, Flow );\
 	}
 
 
-# if defined( CPE_F_64BITS )
-DTFPTB__M( 64, BSO_U64_MAX, BSO_S64_MIN, BSO_S64_MAX )
-# endif
 DTFPTB__M( 32, BSO_U32_MAX, BSO_S32_MIN, BSO_S32_MAX )
 DTFPTB__M( 16, BSO_U16_MAX, BSO_S16_MIN, BSO_S16_MAX )
+DTFPTB__M( 64, BSO_U64_MAX, BSO_S64_MIN, BSO_S64_MAX )
 
 // Pour un octet, on envoit/reoit l'octet tel quel ; pas besoin de conversion.
 // DTFPTB__M( 8, BSO_U8_MAX, BSO_S8_MIN, BSO_S8_MAX )

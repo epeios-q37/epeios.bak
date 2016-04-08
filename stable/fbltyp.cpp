@@ -103,6 +103,10 @@ static inline void _Get(\
 
 M( SInt, sint );
 M( UInt, uint );
+#ifndef CPE_F_64BIT
+M( SBig, sbig );
+M( UBig, ubig );
+#endif
 M( Id8, id8 );
 M( Id16, id16 );
 M( Id32, id32 );
@@ -164,6 +168,33 @@ void fbltyp::GetUInts(
 	uints_ &UInts )
 {
 	GetSet_<uints_, uint__>( IFlow, UInts );
+}
+
+void fbltyp::PutSBigs(
+	const sbigs_ &SBigs,
+	flw::oflow__ &OFlow )
+{
+	PutSet_( SBigs, OFlow );
+}
+
+void fbltyp::GetSBigs(
+	flw::iflow__ &IFlow,
+	sbigs_ &SBigs )
+{
+	GetSet_<sbigs_, sbig__>( IFlow, SBigs );
+}
+void fbltyp::PutUBigs(
+	const ubigs_ &UBigs,
+	flw::oflow__ &OFlow )
+{
+	PutSet_( UBigs, OFlow );
+}
+
+void fbltyp::GetUBigs(
+	flw::iflow__ &IFlow,
+	ubigs_ &UBigs )
+{
+	GetSet_<ubigs_, ubig__>( IFlow, UBigs );
 }
 
 void fbltyp::PutId8s(

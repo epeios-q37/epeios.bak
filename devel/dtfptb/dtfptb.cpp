@@ -273,12 +273,12 @@ bso::int__ dtfptb::_FGetInt(
 
 #undef M
 
-bso::uint__ dtfptb::_VGetUInt(
+bso::sUBig dtfptb::_VGetUBig(
 	flw::iflow__ &Flow,
-	bso::uint__ Max )
+	bso::sUBig Max )
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
-	bso::uint__ Value = bso::ConvertToUInt( _GetInt( Flow, DInt ) );
+	bso::sUBig Value = bso::ConvertToUBig( _GetInt( Flow, DInt ) );
 
 	if ( Value > Max )
 		qRFwk();
@@ -286,13 +286,13 @@ bso::uint__ dtfptb::_VGetUInt(
 	return Value;
 }
 
-bso::sint__ dtfptb::_VGetSInt(
+bso::sSBig dtfptb::_VGetSBig(
 	flw::iflow__ &Flow,
-	bso::sint__ Min,
-	bso::sint__ Max )
+	bso::sSBig Min,
+	bso::sSBig Max )
 {
 	bso::byte__ DInt[BSO_DINT_SIZE_MAX];
-	bso::sint__ Value = bso::ConvertToSInt( _GetInt( Flow, DInt ) );
+	bso::sSBig Value = bso::ConvertToSBig( _GetInt( Flow, DInt ) );
 
 	if ( Value < Min )
 		qRFwk();
@@ -303,22 +303,22 @@ bso::sint__ dtfptb::_VGetSInt(
 	return Value;
 }
 
-void dtfptb::_VPutUInt(
-	bso::uint__ UInt,
+void dtfptb::_VPutUBig(
+	bso::sUBig UBig,
 	flw::oflow__ &Flow )
 {
 	bso::xint__ XInt;
 
-	_PutInt( bso::ConvertToDInt( UInt, XInt ), Flow );
+	_PutInt( bso::ConvertToDInt( UBig, XInt ), Flow );
 }
 
-void dtfptb::_VPutSInt(
-	bso::sint__ SInt,
+void dtfptb::_VPutSBig(
+	bso::sSBig SBig,
 	flw::oflow__ &Flow )
 {
 	bso::xint__ XInt;
 
-	_PutInt( bso::ConvertToDInt( SInt, XInt ), Flow );
+	_PutInt( bso::ConvertToDInt( SBig, XInt ), Flow );
 }
 
 Q37_GCTOR( dtfptb )

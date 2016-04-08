@@ -33,7 +33,7 @@
 
 //D Frontend/Backend Layout OVerLapping 
 
-#define FBLOVL_PROTOCOL_VERSION	"11"
+#define FBLOVL_PROTOCOL_VERSION	"12"
 
 namespace fblovl {
 

@@ -86,6 +86,6 @@ void dir::FileSystem( str::dStrings &Paths )
 	qRT
 	qRE
 # else
-#  error "Not implemented yet !"
+	qRVct();
 # endif
 }

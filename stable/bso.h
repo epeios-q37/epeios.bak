@@ -518,9 +518,13 @@ namespace bso {
 #  error
 # endif
 
+	typedef u64__ sBig;
+	typedef u64__ sUBig;
+	typedef s64__ sSBig;
 
+# define BSO_BIG_MAX BSO_U64_MAX
 
-# define BSO_DINT_SIZE_MAX ( ( ( 8 * sizeof( bso::int__ ) ) / 7 ) + 1 )
+# define BSO_DINT_SIZE_MAX ( ( ( 8 * sizeof( bso::sBig ) ) / 7 ) + 1 )
 
 	typedef byte__ dint__[BSO_DINT_SIZE_MAX];
 
@@ -528,7 +532,7 @@ namespace bso {
 # define SDRM__LENGTH_MAX BSO_UBYTE_MAX
 
 	const struct xint__ &_ConvertToDInt(
-		int__ Int,
+		sBig Big,
 		struct xint__ &XInt );	//Avec '_', pour éviter des problèmes d'ambiguïté ('int__' <=> 'uint__').
 
 	struct xint__ {
@@ -564,67 +568,100 @@ namespace bso {
 			reset();
 		}
 		friend const struct xint__ &_ConvertToDInt(
-			int__ Int,
+			sBig Big,
 			struct xint__ &XInt );
 	};
 
 	inline const xint__ &ConvertToDInt(
-		uint__ UInt,
+		sUBig UBig,
 		xint__ &XInt )
 	{
-		return _ConvertToDInt( UInt, XInt );
+		return _ConvertToDInt( UBig, XInt );
 	}
 
 	inline const xint__ &ConvertToDInt(
-		sint__ SInt,
+		sSBig SBig,
 		xint__ &XInt )
 	{
-		return _ConvertToDInt( ( SInt < 0 ? 1 : 0 ) | ( SInt << ( sizeof( SInt ) * 8 - 1 ) ), XInt );
+		return _ConvertToDInt( ( SBig < 0 ? 1 : 0 ) | ( SBig << ( sizeof( SBig ) * 8 - 1 ) ), XInt );
 	}
 
-	int__ ConvertToInt(
+# ifndef BSO__64
+	inline const xint__ &ConvertToDInt(
+		int__ Int,
+		xint__ &XInt )
+	{
+		return ConvertToDInt( (sUBig)Int, XInt );
+	}
+# endif
+
+	sBig ConvertToBig(
 		const byte__ *DInt,
 		size__ *Length = NULL );
 
 	inline int__ ConvertToInt(
 		const byte__ *DInt,
-		size__ &Length )
+		size__ *Length = NULL )
 	{
-		return ConvertToInt( DInt, &Length );
+		sBig Big = ConvertToBig( DInt, Length );
+
+		if ( Big > BSO_INT_MAX )
+			qRFwk();
+
+		return (int__)Big;
 	}
 
-	inline uint__ ConvertToUInt(
+	inline sBig ConvertToBig(
+		const byte__ *DInt,
+		size__ &Length )
+	{
+		return ConvertToBig( DInt, &Length );
+	}
+
+	inline int__ ConvertToInt(
+		const byte__ *DInt,
+		size__ &Length )
+	{
+		sBig Big = ConvertToBig( DInt, Length );
+
+		if ( Big > BSO_INT_MAX )
+			qRFwk();
+
+		return (int__)Big;
+	}
+
+	inline sUBig ConvertToUBig(
 		const byte__ *DInt,
 		size__ *Length = NULL )
 	{
-		return ConvertToInt( DInt, Length );
+		return ConvertToBig( DInt, Length );
 	}
 
-	inline uint__ ConvertToUInt(
+	inline sUBig ConvertToUBig(
 		const byte__ *DInt,
 		size__ &Length  )
 	{
-		return ConvertToUInt( DInt, &Length );
+		return ConvertToUBig( DInt, &Length );
 	}
 
-	inline sint__ ConvertToSInt(
+	inline sSBig ConvertToSBig(
 		const byte__ *DInt,
 		size__ *Length = NULL )
 	{
-		int__ Int = ConvertToInt( DInt, Length );
-		sign__ Sign = ( Int & 1 ? -1 : 1 );
+		sBig Big = ConvertToBig( DInt, Length );
+		sign__ Sign = ( Big & 1 ? -1 : 1 );
 
-		Int >>= sizeof( Int ) * 8 - 1;
+		Big >>= sizeof( Big ) * 8 - 1;
 
 		switch ( Sign ) {
 		case 1:
-			return Int;
+			return Big;
 			break;
 		case 0:
 			qRFwk();
 			break;
 		case -1:
-			return -(sint__)Int;
+			return -(sSBig)Big;
 			break;
 		default:
 			qRFwk();
@@ -634,11 +671,11 @@ namespace bso {
 		return 0;	// Pour éviter un 'warning'.
 	}
 
-	inline sint__ ConvertToSInt(
+	inline sSBig ConvertToSBig(
 		const byte__ *DInt,
 		size__ &Length )
 	{
-		return ConvertToSInt( DInt, &Length );
+		return ConvertToSBig( DInt, &Length );
 	}
 
 }

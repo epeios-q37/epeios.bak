@@ -527,6 +527,10 @@ This header file contains then the API to access to the backend to which 'getbkd
 			<xsl:when test="$Name='uints'">UInts</xsl:when>
 			<xsl:when test="$Name='sint'">SInt</xsl:when>
 			<xsl:when test="$Name='sints'">SInts</xsl:when>
+			<xsl:when test="$Name='ubig'">UBig</xsl:when>
+			<xsl:when test="$Name='ubigs'">UBigs</xsl:when>
+			<xsl:when test="$Name='sbig'">SBig</xsl:when>
+			<xsl:when test="$Name='sbigs'">SBigs</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="translate(substring($Name,1,1),'fobicsbx','FOBICSBX')"/>
 				<xsl:value-of select="substring($Name,2)"/>

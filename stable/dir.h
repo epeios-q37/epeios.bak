@@ -17,53 +17,53 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef DIR__INC
-#define DIR__INC
-
-#define DIR_NAME		"DIR"
-
-#if defined( E_DEBUG ) && !defined( DIR_NODBG )
-#define DIR_DBG
-#endif
-
 // DIRectory
 
-#include "err.h"
-#include "flw.h"
-#include "cpe.h"
-#include "tol.h"
-#include "fnm.h"
-#include "str.h"
+#ifndef DIR__INC
+# define DIR__INC
 
-#include <limits.h>
+# define DIR_NAME		"DIR"
 
-#if defined( CPE_S_POSIX )
-#	define DIR__POSIX
-#elif defined( CPE_S_WIN )
-#	define DIR__WIN
-#else
-#	error
-#endif
-
-
-#ifdef DIR__WIN
-#	include <direct.h>
-#	include <windows.h>
-# define DIR_PATH_MAX_SIZE	MAX_PATH
-#elif defined( DIR__POSIX )
-# ifdef CPE_S_DARWIN
-#  include <mach-o/dyld.h>
-#  include <sys/param.h>
+# if defined( E_DEBUG ) && !defined( DIR_NODBG )
+#  define DIR_DBG
 # endif
+
+# include "err.h"
+# include "flw.h"
+# include "cpe.h"
+# include "tol.h"
+# include "fnm.h"
+# include "str.h"
+
+# include <limits.h>
+
+# if defined( CPE_S_POSIX )
+#  define DIR__POSIX
+# elif defined( CPE_S_WIN )
+#  define DIR__WIN
+# else
+#  error
+# endif
+
+
+# ifdef DIR__WIN
+#  include <direct.h>
+#  include <windows.h>
+#  define DIR_PATH_MAX_SIZE	MAX_PATH
+# elif defined( DIR__POSIX )
+#  ifdef CPE_S_DARWIN
+#   include <mach-o/dyld.h>
+#   include <sys/param.h>
+#  endif
 #	include <unistd.h>
 #	include <sys/stat.h>
 #	include <dirent.h>
-# define DIR_PATH_MAX_SIZE	PATH_MAX
-#else
-#	error
-#endif
+#  define DIR_PATH_MAX_SIZE	PATH_MAX
+# else
+#  error
+# endif
 
-#include <errno.h>
+# include <errno.h>
 
 /***************/
 /***** OLD *****/
@@ -157,13 +157,13 @@ namespace dir {
 
 	inline state__ CreateDir( const fnm::name___ &Dir )
 	{
-#ifdef DIR__WIN
+# ifdef DIR__WIN
 		switch ( _wmkdir( Dir.Internal() ) ) {
-#elif defined( DIR__POSIX )
+# elif defined( DIR__POSIX )
 		switch ( mkdir( Dir.Internal(), 0777 ) ) {
-#else
-#	error
-#endif
+# else
+#  error
+# endif
 		case 0:
 			return sOK;
 			break;
@@ -180,13 +180,13 @@ namespace dir {
 
 	inline state__ DropDir( const fnm::name___ &Dir )
 	{
-#ifdef DIR__WIN
+# ifdef DIR__WIN
 		switch ( _wrmdir( Dir.Internal() ) ) {
-#elif defined( DIR__POSIX )
+# elif defined( DIR__POSIX )
 		switch ( rmdir( Dir.Internal() ) ) {
-#else
-#	error
-#endif
+# else
+#  error
+# endif
 		case 0:
 			return sOK;
 			break;
@@ -203,13 +203,13 @@ namespace dir {
 
 	inline state__ ChangeDir( const fnm::name___ &Dir )
 	{
-#ifdef DIR__WIN
+# ifdef DIR__WIN
 		switch ( _wchdir( Dir.Internal() ) ) {
-#elif defined( DIR__POSIX )
+# elif defined( DIR__POSIX )
 		switch ( chdir( Dir.Internal() ) ) {
-#else
+# else
 #	error
-#endif
+# endif
 		case 0:
 			return sOK;
 			break;
@@ -243,7 +243,7 @@ namespace dir {
 		}
 	};
 
-#elif defined( DIR__POSIX )
+# elif defined( DIR__POSIX )
 	struct handle___ {
 		DIR	*Dir;
 		fnm::name___ Path;
@@ -260,9 +260,9 @@ namespace dir {
 			Path.Init();
 		}
 	};
-#else
-#	error
-#endif
+# else
+#  error
+# endif
 	// Si retourne chaîne vide, plus de fichier; si retourne NULL, erreur.
 	inline const fnm::name___ &GetFirstFile(
 		const fnm::name___ &Path,
@@ -393,6 +393,54 @@ namespace dir {
 
 namespace dir {
 	typedef handle___ rHandle;
+
+	inline bso::sBool GetDiskFreeSpace(
+		const fnm::rName &Name,
+		bso::u64__ &Size,
+		err::handling__ Handling = err::h_Default )
+	{
+# ifdef DIR__WIN
+		ULARGE_INTEGER RawSize;
+
+		if ( GetDiskFreeSpaceExW( Name.Internal(), &RawSize, NULL, NULL) == 0 ) {
+			if ( Handling = err::hThrowException )
+				qRFwk();
+			else
+				return false;
+		}
+
+		Size = RawSize.QuadPart;
+
+		return true;
+# else
+		qRVct();
+		return false;
+# endif
+	}
+
+	inline bso::sBool GetDiskTotalSpace(
+		const fnm::rName &Name,
+		bso::u64__ &Size,
+		err::handling__ Handling = err::h_Default )
+	{
+# ifdef DIR__WIN
+		ULARGE_INTEGER RawSize;
+
+		if ( GetDiskFreeSpaceExW( Name.Internal(), NULL, &RawSize, NULL ) == 0 ) {
+			if ( Handling = err::hThrowException )
+				qRFwk();
+			else
+				return false;
+		}
+
+		Size = RawSize.QuadPart;
+
+		return true;
+# else
+		qRVct();
+		return false;
+# endif
+	}
 }
 
 

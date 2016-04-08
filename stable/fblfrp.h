@@ -17,34 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: xxx.h,v 1.9 2012/11/14 16:06:23 csimon Exp $
+// Frontend/Backend Layout Frontend Remote Parameters 
 
 #ifndef FBLFRP__INC
-#define FBLFRP__INC
+# define FBLFRP__INC
 
-#define FBLFRP_NAME		"FBLFRP"
+# define FBLFRP_NAME		"FBLFRP"
 
-#define	FBLFRP_VERSION	"$Revision: 1.9 $"
-
-#define FBLFRP_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( FBLFRP_NODBG )
-#define FBLFRP_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.9 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2012/11/14 16:06:23 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Frontend/Backend Layout Frontend Remote Parameters 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( FBLFRP_NODBG )
+#  define FBLFRP_DBG
+# endif
 
 # include "fblfph.h"
 
@@ -115,5 +97,4 @@ namespace fblfrp {
 	};
 }
 
-/*$END$*/
 #endif

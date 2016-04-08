@@ -105,6 +105,20 @@ static inline const char *GetTypeName(
 		TypeName = "uints";
 		CastType = ctBunch;
 		break;
+	case fblcst::cSBig:
+		TypeName = "sbig";
+		break;
+	case fblcst::cSBigs:
+		TypeName = "sbigs";
+		CastType = ctBunch;
+		break;
+	case fblcst::cUBig:
+		TypeName = "ubig";
+		break;
+	case fblcst::cUBigs:
+		TypeName = "ubigs";
+		CastType = ctBunch;
+		break;
 	case fblcst::cId8:
 		TypeName = "id8";
 		break;

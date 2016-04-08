@@ -2,7 +2,17 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
-2014-04-07 :
+2016-04-08 :
+- BSO :
+	- Adding 's[U|S]Big' type.
+- DIR :
+	- Adding 'GetDisk(Free|Total)Space(...)'.
+- FBL...
+	- Adding '(U|S]Big)' type handling.
+- GLOBAL :
+	- Adaptation to BSO.
+
+2016-04-07 :
 - CTN :
 	- Fixing 'basic_cintainer_::Remove(...)' limit case.
 - DIR :
