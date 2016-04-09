@@ -116,6 +116,8 @@ const char *sclfrntnd::GetLabel( backend_type__ BackendType )
 	return NULL;	// Pour viter un 'warning'.
 }
 
+#undef C
+
 namespace {
 
 	stsfsm::automat BackendAutomat_;
@@ -132,9 +134,9 @@ backend_type__ sclfrntnd::GetBackendType( const str::string_ &Pattern )
 	return stsfsm::GetId( Pattern, BackendAutomat_, bt_Undefined, bt_amount );
 }
 
+# if 0
 stsfsm::automat PendingActionAutomat_;
 
-# if 0
 static void FillPendingActionAutomat_( void )
 {
 	PendingActionAutomat_.Init();
@@ -161,6 +163,38 @@ pending_action__ sclfrntnd::GetPendingAction( const str::string_ &Pattern )
 	return stsfsm::GetId( Pattern, PendingActionAutomat_, pa_Undefined, pa_amount );
 }
 #endif
+
+#define C( name )	case bst##name : return #name; break
+ 
+const char *sclfrntnd::GetLabel( eBackendSetupType Type )
+{
+	switch ( Type ) {
+	C( Id );
+	C( Content );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+ 
+#undef C
+ 
+namespace {
+	stsfsm::wAutomat BackendSetupTypeAutomat_;
+ 
+	void FillBackendSetupTypeAutomat_( void )
+	{
+		BackendSetupTypeAutomat_.Init();
+		stsfsm::Fill<eBackendSetupType>( BackendSetupTypeAutomat_, bst_amount, GetLabel );
+	}
+}
+ 
+eBackendSetupType sclfrntnd::GetBackendSetupType( const str::dString &Pattern )
+{
+	return stsfsm::GetId( Pattern, BackendSetupTypeAutomat_, bst_Undefined, bst_amount );
+}
 
 static const lcl::meaning_ &GetMeaning_(
 	const char *Message,
@@ -593,6 +627,7 @@ qRE
 Q37_GCTOR( sclfrntnd )
 {
 	FillBackendAutomat_();
+	FillBackendSetupTypeAutomat_();
 }
 
 

@@ -350,6 +350,7 @@ qRB
 	sclrgstry::Parameters.GetPath( Setup );
 	Setup.Append( "></_>" );
 
+	Registry.Erase( Level );
 
 	IFlow.Init( Setup );
 	XFlow.Init( IFlow, utf::f_Default );
@@ -397,6 +398,8 @@ qRB
 	Content.Append("<_>" );
 	Content.Append( RawContent );
 	Content.Append( "</_>" );
+
+	Registry.Erase( Level );
 
 	IFlow.Init( Content );
 	XFlow.Init( IFlow, utf::f_Default );

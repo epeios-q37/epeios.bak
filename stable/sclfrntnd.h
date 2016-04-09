@@ -474,6 +474,17 @@ namespace sclfrntnd {
 	const str::dString &About(
 		const rFeatures &Features,
 		str::dString &About );
+
+	qENUM( BackendSetupType ) {
+		bstId,
+		bstContent,
+		bst_amount,
+		bst_Undefined
+	};
+
+	const char *GetLabel( eBackendSetupType Type);
+
+	eBackendSetupType GetBackendSetupType( const str::dString &Pattern );
 }
 
 #endif
