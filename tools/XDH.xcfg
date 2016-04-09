@@ -165,11 +165,8 @@
 			<CastingsFiller>
 				<![CDATA[
 					// Edge executes this script in loop !!!
-					console.log( "1 !!!" );
 					removeCastingChildren( document );
-					console.log( "2 !!!" );
 					document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
-					console.log( "3 !!!" );
 					fetchCastings( "%Id%" );
 				]]>
 			</CastingsFiller>

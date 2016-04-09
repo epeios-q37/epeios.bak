@@ -124,7 +124,7 @@ namespace ags {
 
 // Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type'.
 # define qRRODISCLOSEd(type, name )\
-	const type Get##name( void ) const\
+	const type &Get##name( void ) const\
 	{\
 		return S_.name;\
 	}
@@ -161,7 +161,7 @@ namespace ags {
 	qWODISCLOSEd( type, name )
 
 # define qRRODISCLOSEs( type, name )\
-	const type Get##name( void ) const\
+	const type &Get##name( void ) const\
 	{\
 		return name##_;\
 	}
@@ -1850,7 +1850,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 
 //d Make accessible the static member, for read-only access, of a dynamic object, named 'name' of type 'type__'.
 # define E_RRODISCLOSE_(type__, name )\
-	const type__ Get##name( void ) const\
+	const type__ &Get##name( void ) const\
 	{\
 		return S_.name;\
 	}
@@ -1890,7 +1890,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 
 
 # define E_RRODISCLOSE__(type__, name )\
-	const type__ Get##name( void ) const\
+	const type__ &Get##name( void ) const\
 	{\
 		return _##name;\
 	}

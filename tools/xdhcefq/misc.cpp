@@ -306,11 +306,11 @@ qRB
 	if ( !V8Context->is_valid( V8Context ) )
 		qRGnr();
 
-
+	/*
 	cio::COut << __LOC__ << txf::nl << txf::commit;
 	cio::COut << CEFString()->length << "," << Script.Amount() << " : " << Script << txf::nl << txf::commit;
 	cio::COut << __LOC__ << txf::nl << txf::commit;
-
+	*/
 
 	if ( V8Context->eval( V8Context, CEFString, &V8Value, &V8Exception ) != 1 )
 		qRGnr();
