@@ -21,6 +21,8 @@
 
 #include "dir.h"
 
+#include "flx.h"
+
 using namespace dir;
 
 state__ dir::HandleError( void )
@@ -56,6 +58,159 @@ state__ dir::HandleError( void )
 	}
 
 	return s_Undefined;	// Pour viter un 'warning'.
+}
+
+namespace {
+	void BuildParts_(
+		flw::sIFlow &Flow,
+		str::dStrings &Parts )
+	{
+	qRH
+		str::wString Part;
+		bso::char__ C;
+	qRB
+		Part.Init();
+
+		while ( !Flow.EndOfFlow() ) {
+			switch ( C = Flow.Get() ) {
+			case '/':
+			case '\\':
+				if ( ( Part.Amount() != 0 ) || ( Parts.Amount() == 0 ) )	// So we can have a leading '/'.
+					Parts.Append( Part );
+				Part.Init();
+				break;
+			default:
+				Part.Append( C );
+				break;
+			}
+		}
+
+		if ( Part.Amount() != 0 )
+			Parts.Append( Part );
+	qRR
+	qRT
+	qRE
+	}
+
+	void BuildParts_(
+		const str::dString &Name,
+		str::dStrings &Parts )
+	{
+	qRH
+		flx::E_STRING_IFLOW__ Flow;
+	qRB
+		Flow.Init( Name );
+		BuildParts_( Flow, Parts );
+	qRR
+	qRT
+	qRE
+	}
+
+	void BuildParts_(
+		const fnm::rName &Name,
+		str::dStrings &Parts )
+	{
+	qRH
+		str::wString Buffer;
+	qRB
+		Buffer.Init();
+		BuildParts_( Name.UTF8( Buffer ), Parts );
+	qRR
+	qRT
+	qRE
+	}
+
+	void BuildPath_(
+		const str::dStrings &Parts,
+		sdr::sRow Last,
+		str::dString &Path )
+	{
+		sdr::sRow Row = Parts.First();
+
+		while ( ( Row != qNIL ) && ( Row != Last ) )
+		{
+			Path.Append( Parts( Row ) );
+			Path.Append( '/' );
+
+			Row = Parts.Next( Row );
+		}
+
+		if ( Row != qNIL ) {
+			Path.Append( Parts( Row ) );
+			if ( Path( Path.Last() ) == ':' )
+				Path.Append('/');
+		} else
+			qRFwk();
+	}
+
+	eState CreateDirs_(
+		const str::dStrings &Parts,
+		sdr::sRow First )
+	{
+		eState State = sOK;
+	qRH
+		str::wString Path;
+	qRB
+		sdr::sRow &Row = First;
+
+		while ( (Row != qNIL) && ( State == sOK ) ) {
+			Path.Init();
+			BuildPath_( Parts, Row, Path );
+
+			State = CreateDir( Path );
+
+			Row = Parts.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+		return State;
+	}
+
+	eState CreateDirs_( const str::dStrings &Parts )
+	{
+		eState State = s_Undefined;
+	qRH
+		sdr::sRow Row = qNIL;
+		str::wString Path;
+		bso::sBool Continue = true;
+	qRB
+		Path.Init();
+		Row = Parts.Last();
+
+		while ( ( Row != qNIL ) && Continue ) {
+			Path.Init();
+			BuildPath_( Parts, Row, Path );
+
+			if ( Continue = !fil::Exists( Path ) )
+				Row = Parts.Previous( Row );
+		}
+
+		if ( Row == Parts.Last() )
+			State = sExists;
+		else
+			State = CreateDirs_( Parts, Row == qNIL ? Parts.First() : Parts.Next( Row ) );
+	qRR
+	qRT
+	qRE
+		return State;
+	}
+}
+
+eState dir::CreateDirWithParents( const fnm::rName &Name )
+{
+	eState State = s_Undefined;
+qRH
+	str::wStrings Parts;
+qRB
+	Parts.Init();
+	BuildParts_( Name, Parts );
+
+	State = CreateDirs_( Parts );
+qRR
+qRT
+qRE
+	return State;
 }
 
 void dir::FileSystem( str::dStrings &Paths )
@@ -119,7 +274,13 @@ qRH
 qRB
 	Name.Init( "\\\\.\\" );
 	Disk.UTF8( Name );
-	Name.Truncate();
+
+	switch ( Name( Name.Last() ) ) {
+	case '/':
+	case '\\':
+		Name.Truncate();
+		break;
+	}
 
 	Handle = CreateFileW( fnm::rName( Name ).Internal(), 0, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
 

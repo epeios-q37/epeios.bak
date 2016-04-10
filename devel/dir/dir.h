@@ -394,6 +394,10 @@ namespace dir {
 namespace dir {
 	typedef handle___ rHandle;
 
+	typedef state__ eState;
+
+	eState CreateDirWithParents( const fnm::rName &Name );
+
 	inline bso::sBool GetDiskFreeSpace(
 		const fnm::rName &Name,
 		bso::u64__ &Size,
