@@ -919,6 +919,7 @@ qRB
 	T( 'p', Project );
 	T( 's', Setup );
 	T( 'a', Arguments );
+	T( 'r', Runtime );
 
 	Flow << txf::commit;
 qRR

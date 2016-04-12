@@ -40,6 +40,7 @@ static rgstry::level__ ConfigurationLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ ProjectLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ SetupLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ ArgumentsLevel_ = rgstry::UndefinedLevel;
+static rgstry::level__ RuntimeLevel_ = rgstry::UndefinedLevel;
 
 rgstry::entry___ sclrgstry::Parameters( ParametersTag );
 rgstry::entry___ sclrgstry::Definitions( "Definitions" );
@@ -120,6 +121,7 @@ const char *sclrgstry::GetLabel( name__ Name )
 	C( Project );
 	C( Setup );
 	C( Arguments );
+	C( Runtime );
 	default:
 		qRFwk();
 		break;
@@ -142,6 +144,7 @@ rgstry::level__ sclrgstry::GetLevel( name__ Name )
 	C( Project );
 	C( Setup );
 	C( Arguments );
+	C( Runtime );
 	default:
 		qRFwk();
 		break;
@@ -742,4 +745,5 @@ Q37_GCTOR( sclrgstry )
 	ProjectLevel_ = Registry_.Create();
 	SetupLevel_ = Registry_.Create();
 	ArgumentsLevel_ = Registry_.CreateEmbedded();
+	RuntimeLevel_ = Registry_.CreateEmbedded();
 }

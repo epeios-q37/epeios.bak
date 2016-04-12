@@ -57,6 +57,7 @@ namespace sclrgstry {
 		nProject,
 		nSetup,
 		nArguments,
+		nRuntime,
 		n_amount,
 		n_Undefined
 	};

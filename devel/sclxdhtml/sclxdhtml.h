@@ -255,7 +255,7 @@ namespace sclxdhtml {
 		const char *Language );
 
 	// User put in 'instances' all his own objects, instanciating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading thie library.
-	template <typename instances, typename user_data, typename frontend, typename page, page UndefinedPage > class rSession
+	template <typename instances, typename frontend, typename page, page UndefinedPage > class rSession
 	: public _session_callback__,
 	  public proxy__,
 	  public instances,
@@ -290,14 +290,13 @@ namespace sclxdhtml {
 		}
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
-			fblfrd::incompatibility_informations_ &IncompatibilityInformations,
-			const user_data &UserData )
+			fblfrd::incompatibility_informations_ &IncompatibilityInformations )
 		{
 			if ( !frontend::Connect( CompatibilityInformations, IncompatibilityInformations ) )
 				return false;
 
 			// if ( frontend::IsConnected() )	// It's to each subcomponent to decide what to do when not connected.
-			instances::Init( UserData, *this );
+			instances::Init( *this );
 			
 			return true;
 		}
