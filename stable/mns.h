@@ -107,7 +107,7 @@ namespace mns {
 		void reset( bool P = true )
 		{
 			if ( P ) {
-				if ( Tampon_ )
+				if ( Tampon_ != NULL )
 					free( Tampon_ );
 			}
 

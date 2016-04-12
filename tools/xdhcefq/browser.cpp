@@ -22,6 +22,7 @@
 #include "scltool.h"
 #include "files.h"
 #include "render.h"
+#include "dir.h"
 
 namespace {
 	static class rack__ {
@@ -372,13 +373,34 @@ qRE
 	return Handled;
 }
 
+namespace {
+	const str::dString &GetURL_( str::dString &URL )
+	{
+	qRH
+		fnm::rName Dir;
+	qRB
+		if ( !sclmisc::OGetValue( registry::URL, URL ) ) {
+			Dir.Init();
+			dir::GetSelfDir( Dir );
+
+			URL.Append("file://");
+			Dir.UTF8( URL );
+			URL.Append("CEF/xdhcefq.html");
+		}
+	qRR
+	qRT
+	qRE
+	}
+
+}
+
 static void CEF_CALLBACK OnContextInitialized_( struct _cef_browser_process_handler_t* self )
 {
 qRH
 	str::string URL;
 qRB
 	URL.Init();
-	sclmisc::MGetValue( registry::URL, URL );
+	GetURL_( URL );
 
 	misc::Set( &Rack_.WindowInfo );
 
