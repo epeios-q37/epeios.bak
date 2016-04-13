@@ -678,6 +678,24 @@ static const str::string_ &GetValue_(
 	return GetIdTagged_( Id, IdTaggedArgumentValue_, Value );
 }
 
+namespace {
+	void SetValue_(
+		const str::dString &Path,
+		const str::dString &Value,
+		sdr::sRow *Error = NULL )
+	{
+		sclmisc::GetRegistry().SetValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+	}
+
+	void AddValue_(
+		const str::dString &Path,
+		const str::dString &Value,
+		sdr::sRow *Error = NULL )
+	{
+		sclmisc::GetRegistry().AddValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+	}
+}
+
 static void FillRegistry_(
 	sdr::row__,	// Pas utile.
 	const flag_ &Flag,
@@ -749,7 +767,7 @@ qRB
 		qRAbort();
 	}
 
-	SetValue( Path, Value, &Error );
+	SetValue_( Path, Value, &Error );
 
 	if ( Error != qNIL ) {
 		Meaning.Init();
@@ -816,7 +834,7 @@ qRB
 		qRAbort();
 	}
 
-	SetValue( Path, Option.Value, &Error );
+	SetValue_( Path, Option.Value, &Error );
 
 	if ( Error != qNIL ) {
 		Meaning.Init();
@@ -878,9 +896,9 @@ qRB
 		sclmisc::ReportAndAbort( SCLARGMNT_NAME "_NoPathForArgument", Id );
 
 	if ( AdditionalArg )
-		AddValue( Path, Argument, &Error );
+		AddValue_( Path, Argument, &Error );
 	else
-		SetValue( Path, Argument, &Error );
+		SetValue_( Path, Argument, &Error );
 
 	if (Error != qNIL)
 		sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadPathForArgument", Id );
@@ -948,7 +966,7 @@ qRH
 	TOL_CBUFFER___ SBuffer;
 	sdr::row__ Row = qNIL;
 qRB
-	SetValue( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( Arguments.Amount(), IBuffer ) ) );
+	SetValue_( str::string( RAW "/@" AMOUNT_ATTRIBUTE ), str::string( bso::Convert( Arguments.Amount(), IBuffer ) ) );
 
 	Row = Arguments.First();
 
@@ -956,7 +974,7 @@ qRB
 		Path.Init();
 		PutIndice_( RAW_ARGUMENT, *Row, "", Path );
 
-		SetValue( Path, Arguments( Row ) );
+		SetValue_( Path, Arguments( Row ) );
 
 		Row = Arguments.Next( Row );
 	}
@@ -977,7 +995,7 @@ qRH
 qRB
 	Path.Init();
 	PutIndice_( ARGUMENT_FLAG, Indice, "", Path );
-	SetValue( Path, Flag.Name );
+	SetValue_( Path, Flag.Name );
 qRR
 qRT
 qRE
@@ -995,11 +1013,11 @@ qRH
 qRB
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Name", Path );
-	SetValue( Path, Option.Name );
+	SetValue_( Path, Option.Name );
 
 	Path.Init();
 	PutIndice_( ARGUMENT_OPTION, Indice, "Value", Path );
-	SetValue( Path, Option.Value );
+	SetValue_( Path, Option.Value );
 qRR
 qRT
 qRE
@@ -1017,7 +1035,7 @@ qRH
 qRB
 	Path.Init();
 	PutIndice_( ARGUMENT_FREE, Indice, "", Path );
-	SetValue( Path, Argument );
+	SetValue_( Path, Argument );
 qRR
 qRT
 qRE
@@ -1082,7 +1100,7 @@ qRB
 	Path.Init( Prefix );
 	Path.Append( "/@" AMOUNT_ATTRIBUTE );
 
-	SetValue( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
+	SetValue_( Path, str::string( bso::Convert( Conteneur.Amount(), Buffer ) ) );
 
 	while ( Row != qNIL ) {
 		DumpInRegistry_( *Row, Conteneur( Row ) );

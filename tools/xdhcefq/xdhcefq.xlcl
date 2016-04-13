@@ -1,22 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Locales xmlns:xpp="http://q37.info/ns/xpp">
-	<Locale target="xdhcefq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand select="epeios.xlcl"/>
-		<Translations text="ProgramDescription">
-			<Translation language="fr">Utilitaire de lancement d'un module XDHTML en tant qu'application native.</Translation>
-			<Translation language="en">Tool launching a XDHTML module as a native application.</Translation>
-		</Translations>
-		<Translations text="CloseText">
-			<Translation language="fr">Fermer</Translation>
-			<Translation language="en">Close</Translation>
-		</Translations>
-		<!--
-		<Translations text="">
-		  <Translation language="fr"></Translation>
-		  <Translation language="en"></Translation>
-		</Translations>
-		-->
-	</Locale>
-</Locales>
+<Locale target="xdhcefq" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Utilitaire de lancement d'un module XDHTML en tant qu'application native.</Translation>
+		<Translation language="en">Tool launching a XDHTML module as a native application.</Translation>
+	</Translations>
+	<Translations text="CloseText">
+		<Translation language="fr">Fermer</Translation>
+		<Translation language="en">Close</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>

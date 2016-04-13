@@ -385,13 +385,13 @@ namespace {
 
 			URL.Append("file://");
 			Dir.UTF8( URL );
-			URL.Append("CEF/xdhcefq.html");
+			URL.Append("xdhcefq.html");
 		}
 	qRR
 	qRT
 	qRE
+		return URL;
 	}
-
 }
 
 static void CEF_CALLBACK OnContextInitialized_( struct _cef_browser_process_handler_t* self )
