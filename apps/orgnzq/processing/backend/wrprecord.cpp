@@ -249,7 +249,7 @@ namespace {
 		Rows.Init();
 		Record.Columns().GetList( 0, 0, Rows );
 
-#error "Confusion entre de type de row d'une liste de rows de colum,ns et d'une liste de rows de fields"
+#error "Confusion entre de type de row d'une liste de rows de columns et d'une liste de rows de fields"
 
 		Row = Rows.First();
 
