@@ -17,20 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// Flow DRiver
+
 #ifndef FDR__INC
-#define FDR__INC
+# define FDR__INC
 
-#define FDR_NAME		"FDR"
+# define FDR_NAME		"FDR"
 
-#define	FDR_VERSION	"$Revision: 1.18 $"
-
-#define FDR_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( FDR_NODBG )
-#define FDR_DBG
-#endif
-
-//D Flow DRiver 
+# if defined( E_DEBUG ) && !defined( FDR_NODBG )
+#  define FDR_DBG
+# endif
 
 # include "err.h"
 # include "bso.h"
@@ -245,6 +241,7 @@ namespace fdr {
 		size__ _Size;	// Si == '0', signale 'EOF' atteint.
 		size__ _Available;
 		size__ _Position;
+		size__ Red_;	// Amount of red data since last dismiss.
 		size__ _Read(
 			size__ Wanted,
 			byte__ *Buffer )	// Si valeur retourne == 0, alors , alors 'EOF' atteint.
@@ -260,12 +257,16 @@ namespace fdr {
 		}
 		size__ _LoopingRead(
 			size__ Wanted,
-			byte__ *Buffer )	// Si valeur retourne diffrent de 'Wanted', alors 'EOF' atteint.
+			byte__ *Buffer,
+			size__ *TotalRed )	// Si valeur retourne diffrent de 'Wanted', alors 'EOF' atteint.
 		{
 			size__ Red = 0, PonctualRed = 0;
 
 			while ( ( Red < Wanted ) && ( ( PonctualRed = _Read( Wanted - Red, Buffer + Red ) ) != 0 ) )
 				Red += PonctualRed;
+
+			if ( TotalRed != NULL )
+				*TotalRed += Red;
 
 			return Red;
 		}
@@ -284,7 +285,7 @@ namespace fdr {
 				qRFwk();
 
 			if ( Size != 0 ) {
-				_Available = _LoopingRead( Size, _Cache );
+				_Available = _LoopingRead( Size, _Cache, NULL );
 
 				if ( _Available < Size )
 					_Size = 0;	// Pour signaler 'EOF' atteint.
@@ -313,7 +314,7 @@ namespace fdr {
 					_Position = 0;
 				}
 
-				_Available += _LoopingRead( Size - _Available, _Cache + _Position + _Available );
+				_Available += _LoopingRead( Size - _Available, _Cache + _Position + _Available, NULL );
 
 				if ( _Available < Size )
 					_Size = 0;	// Pour signaler 'EOF' atteint.
@@ -322,7 +323,8 @@ namespace fdr {
 		size__ _ReadFromCache(
 			size__ Size,
 			byte__ *Buffer,
-			bso::bool__ Adjust )
+			bso::bool__ Adjust,
+			size__ *TotalRed )
 		{
 			if ( Size > _Available )
 				Size = _Available;
@@ -336,14 +338,18 @@ namespace fdr {
 				}
 			}
 
+			if ( TotalRed != NULL )
+				*TotalRed += Size;
+
 			return Size;
 		}
 		size__ _ReadThroughCache(
 			size__ Size,
 			byte__ *Buffer,
-			bso::bool__ Force )	// Si == 'true', on fait le maximum pour lire la quantite demande.
+			bso::bool__ Force,
+			size__ *TotalRed )	// Si == 'true', on fait le maximum pour lire la quantite demande.
 		{
-			size__ Red = _ReadFromCache( Size, Buffer, true );
+			size__ Red = _ReadFromCache( Size, Buffer, true, TotalRed );
 
 			if ( Red < Size )  {
 				if ( Force )
@@ -353,7 +359,7 @@ namespace fdr {
 				else
 					return Red;
 
-				Red += _ReadFromCache( Size - Red, Buffer + Red, true );
+				Red += _ReadFromCache( Size - Red, Buffer + Red, true, TotalRed );
 			}
 
 			return Red;
@@ -384,6 +390,7 @@ namespace fdr {
 			_Cache = NULL;
 			_Size = _Available = _Position = 0;
 			_flow_driver_base__::reset( P );
+			Red_ = 0;
 		}
 		E_CVDTOR( iflow_driver_base___ );
 		void Init(
@@ -399,6 +406,7 @@ namespace fdr {
 
 			_Cache = Cache;
 			_Size = Size;
+			Red_ = 0;
 
 			_Available = _Position = 0;
 			_flow_driver_base__::Init( ThreadSafety );
@@ -409,6 +417,8 @@ namespace fdr {
 				FDRDismiss();
 				Unlock( User );
 			}
+
+			Red_ = 0;
 		}
 		size__ Read(
 			const flw::iflow__ *User,
@@ -427,17 +437,17 @@ namespace fdr {
 
 			switch ( Behavior ) {
 			case bNonBlocking:
-				return _ReadThroughCache( Wanted, Buffer, false );
+				return _ReadThroughCache( Wanted, Buffer, false, &Red_ );
 				break;
 			case bBlocking:
 
 				if ( ( _Available >= Wanted ) || ( _Size > ( Wanted - _Available ) ) )
-					return _ReadThroughCache( Wanted, Buffer, true );
+					return _ReadThroughCache( Wanted, Buffer, true, &Red_ );
 				else {
-					size__ Red = _ReadFromCache( Wanted, Buffer, true );
+					size__ Red = _ReadFromCache( Wanted, Buffer, true, &Red );
 
 					if ( Red < Wanted )
-						Red += _LoopingRead( Wanted - Red, Buffer + Red );
+						Red += _LoopingRead( Wanted - Red, Buffer + Red, &Red_ );
 
 					return Red;
 				}
@@ -446,7 +456,7 @@ namespace fdr {
 			case bKeep:
 				_CompleteCache( Wanted );
 
-				return _ReadFromCache( Wanted, Buffer, false );
+				return _ReadFromCache( Wanted, Buffer, false, &Red_ );
 				break;
 			default:
 				qRFwk();
@@ -472,6 +482,10 @@ namespace fdr {
 		bso::bool__ IFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{
 			return IsLocked();
+		}
+		size__ AmountRed( void ) const
+		{
+			return Red_;
 		}
 	};
 

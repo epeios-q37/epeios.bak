@@ -85,9 +85,6 @@ namespace flw {
 	private:
 		fdr::iflow_driver_base___ *_Driver;
 		// Amount of data red since the last reset.
-		size__ _Red;
-		// Max amount of data alllowed between 2 reset.
-		size__ _AmountMax;
 		fdr::iflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
@@ -143,19 +140,11 @@ namespace flw {
 		void _Dismiss( void )
 		{
 			_D().Dismiss( this );
-			_Red = 0;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			if ( P ) {
-				if ( _Red )
-					Dismiss();
-			}
-
-			_Red = 0;
 			_Driver = NULL;
-			_AmountMax = 0;
 		}
 		iflow__( void )
 		{
@@ -165,17 +154,9 @@ namespace flw {
 		{
 			reset();
 		}
-		void Init(
-			fdr::iflow_driver_base___ &Driver,
-			size__ AmountMax )
+		void Init( fdr::iflow_driver_base___ &Driver )
 		{
-			if ( _Red )
-				Dismiss();
-
 			_Driver = &Driver;
-			_AmountMax = AmountMax;
-
-			_Red = 0;
 		}
 		fdr::iflow_driver_base___ &Driver( void ) const
 		{
@@ -237,11 +218,7 @@ namespace flw {
 		//f Return the amount of data red since last 'Reset()'.
 		size__ AmountRed( void ) const
 		{
-			return _Red;
-		}
-		void SetAmountMax( size__ AmountMax )
-		{
-			_AmountMax = AmountMax;
+			return _D().AmountRed();
 		}
 		void Dismiss( void )
 		{
@@ -278,11 +255,9 @@ namespace flw {
 			if ( Dummy != 0 )	
 				qRFwk();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 		}
-		void Init(
-			fdr::iflow_driver_base___ &Driver,
-			size__ AmountMax = FDR_SIZE_MAX )
+		void Init( fdr::iflow_driver_base___ &Driver )
 		{
-			iflow__::Init( Driver, AmountMax );
+			iflow__::Init( Driver );
 		}
 	};
 
@@ -319,10 +294,8 @@ namespace flw {
 		size__ _Size;
 		// The amount of bytes yet free.
 		size__ _Free;
-		// Amount of data written since the last synchronizing.
-		size__ _Written;
-		// Max amount of data between 2 synchronizing.
-		size__ _AmountMax;
+		// Amount of data PHYSICALLY written since the last synchronizing (does not take account of the data in the cache).
+		size__ Written_;
 		fdr::oflow_driver_base___ &_D( void ) const
 		{
 			if ( _Driver == NULL )
@@ -333,7 +306,8 @@ namespace flw {
 		size__ _LoopingWrite(
 			const byte__ *Buffer,
 			size__ Wanted,
-			size__ Minimum )
+			size__ Minimum,
+			size__ *TotalWritten )
 		{
 			size__ PonctualAmount = _D().Write( this, Buffer, Wanted );
 			size__ CumulativeAmount = PonctualAmount;
@@ -343,6 +317,9 @@ namespace flw {
 				CumulativeAmount += PonctualAmount;
 			}
 
+			if ( TotalWritten != NULL )
+				TotalWritten += CumulativeAmount;
+
 			return CumulativeAmount;
 		}
 
@@ -350,13 +327,14 @@ namespace flw {
 		size__ _DirectWrite(
 			const byte__ *Buffer,
 			size__ Wanted,
-			size__ Minimum );
+			size__ Minimum,
+			size__ *TotalSize );
 		void _DumpCache( void )
 		{
 			size__ Stayed = _Size - _Free;
 			
 			if ( Stayed != 0 ) {
-				_DirectWrite( _Cache, Stayed, Stayed );
+				_DirectWrite( _Cache, Stayed, Stayed, NULL );
 
 				_Free = _Size;
 			}
@@ -378,14 +356,15 @@ namespace flw {
 		Return amount of bytes written. Cache MUST be EMPTY. */
 		size__ _DirectWriteOrIntoCache(
 			const byte__ *Buffer,
-			size__ Amount )
+			size__ Amount,
+			size__ *TotalWritten )
 		{
 #ifdef FLW_DBG
 			if ( _Size != _Free )
 				qRFwk();
 #endif
 			if ( Amount > _Size )
-				return _DirectWrite( Buffer, Amount, Amount );
+				return _DirectWrite( Buffer, Amount, Amount, TotalWritten );
 			else
 				return _WriteIntoCache( Buffer, Amount );
 		}
@@ -395,18 +374,19 @@ namespace flw {
 			_DumpCache();
 			_D().Commit( this );
 
-			_Written = 0;
+			Written_ = 0;
 		}
 		// Put up to 'Amount' bytes from 'Buffer'. Return number of bytes written.
 		size__ _WriteUpTo(
 			const byte__ *Buffer,
-			size__ Amount )
+			size__ Amount,
+			size__ *TotalWritten )
 		{
 			size__ AmountWritten = _WriteIntoCache( Buffer, Amount );
 
 			if ( ( AmountWritten == 0 )  && ( Amount != 0 ) ) {
 				_DumpCache();
-				AmountWritten = _DirectWriteOrIntoCache( Buffer, Amount );
+				AmountWritten = _DirectWriteOrIntoCache( Buffer, Amount, TotalWritten );
 			}
 
 			return AmountWritten;
@@ -426,8 +406,7 @@ namespace flw {
 			_Driver = NULL;
 			_Cache = NULL;
 			_Size = _Free = 0;
-			_AmountMax = 0;
-			_Written = 0;
+			Written_ = 0;
 		}
 		oflow__( void )
 		{
@@ -441,8 +420,7 @@ namespace flw {
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
 			byte__ *Cache,
-			size__ Size,
-			size__ AmountMax )
+			size__ Size )
 		{
 			if ( _Size != _Free )
 				Commit();
@@ -450,9 +428,8 @@ namespace flw {
 			_Driver = &Driver;
 			_Cache = Cache;
 			_Size = _Free = Size;
-			_AmountMax = AmountMax;
 
-			_Written = 0;
+			Written_ = 0;
 		}
 		fdr::oflow_driver_base___ &Driver( void ) const
 		{
@@ -463,7 +440,7 @@ namespace flw {
 			const void *Buffer,
 			size__ Amount )
 		{
-			return _WriteUpTo( (byte__ *)Buffer, Amount );
+			return _WriteUpTo( (byte__ *)Buffer, Amount, &Written_ );
 		}
 		//f Put 'Amount' data from 'Buffer'.
 		void Write(
@@ -486,11 +463,7 @@ namespace flw {
 		//f Return the amount of data written since last 'Synchronize()'.
 		size__ AmountWritten( void ) const
 		{
-			return _Written + ( _Size - _Free );
-		}
-		void SetAmountMax( size__ AmountMax )
-		{
-			_AmountMax = AmountMax;
+			return Written_ + ( _Size - _Free );
 		}
 # if 0
 		size__ WriteRelay(
@@ -542,11 +515,9 @@ namespace flw {
 	private:
 		flw::byte__ _Cache[CacheSize];
 	public:
-		void Init(
-			fdr::oflow_driver_base___ &Driver,
-			size__ AmountMax = FDR_SIZE_MAX )
+		void Init( fdr::oflow_driver_base___ &Driver )
 		{
-			oflow__::Init( Driver, _Cache, sizeof( _Cache ), AmountMax );
+			oflow__::Init( Driver, _Cache, sizeof( _Cache ) );
 		}
 	};
 
@@ -582,36 +553,13 @@ namespace flw {
 		{
 			reset( false );
 		}
-		void SetAmountMax(
-			size__ ReadAmountMax,
-			size__ WriteAmountMax )
-		{
-			iflow__::SetAmountMax( ReadAmountMax );
-			oflow__::SetAmountMax( WriteAmountMax );
-		}
-		void SetAmountMax( size__ AmountMax )
-		{
-			SetAmountMax( AmountMax, AmountMax );
-		}
 		void Init(
 			fdr::ioflow_driver_base___ &Driver,
-			size__ ReadAmountMax,
-			byte__ *OCache,
-			size__ OSize,
-			size__ WriteAmountMax )
+			byte__ *Cache,	// The cache is only used for the output flow.
+			size__ Size )
 		{
-			iflow__::Init( Driver, ReadAmountMax );
-			oflow__::Init( Driver, OCache, OSize, WriteAmountMax );
-
-		}
-		void Init(
-			fdr::ioflow_driver_base___ &Driver,
-			byte__ *Cache,
-			size__ Size,
-			size__ AmountMax )
-		{
-			iflow__::Init( Driver, AmountMax );
-			oflow__::Init( Driver, Cache + Size / 2, Size / 2, AmountMax );
+			iflow__::Init( Driver );
+			oflow__::Init( Driver, Cache, Size );
 		}
 	};
 
@@ -621,18 +569,9 @@ namespace flw {
 	private:
 		flw::byte__ _OutputCache[OutCacheSize];
 	public:
-		void Init(
-			fdr::ioflow_driver_base___ &Driver,
-			size__ ReadAmountMax,
-			size__ WriteAmountMax )
+		void Init( fdr::ioflow_driver_base___ &Driver )
 		{
-			ioflow__::Init( Driver, ReadAmountMax, _OutputCache, sizeof( _OutputCache ), WriteAmountMax );
-		}
-		void Init(
-			fdr::ioflow_driver_base___ &Driver,
-			size__ AmountMax = FDR_SIZE_MAX )
-		{
-			ioflow__::Init( Driver, AmountMax, _OutputCache, sizeof( _OutputCache ), AmountMax );
+			ioflow__::Init( Driver, _OutputCache, sizeof( _OutputCache ) );
 		}
 	};
 

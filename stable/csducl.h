@@ -213,14 +213,12 @@ namespace csducl {
 		{
 			reset();
 		}
-		void Init(
-			universal_client_core___ &Core,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( universal_client_core___ &Core )
 		{
 			reset();
 
 			_Driver.Init( Core, fdr::tsDisabled );
-			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
+			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 	};
 }

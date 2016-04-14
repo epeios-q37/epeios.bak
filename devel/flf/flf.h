@@ -137,8 +137,7 @@ namespace flf {
 		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fil::mode__ Mode = fil::mReadOnly,
-			err::handling__ ErrorHandling = err::h_Default,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+			err::handling__ ErrorHandling = err::h_Default )
 		{
 			reset();
 
@@ -158,17 +157,16 @@ namespace flf {
 				}
 			}
 
-			_io_iflow___::Init( D_, AmountMax );
+			_io_iflow___::Init( D_ );
 
 			return tol::rSuccess;
 		}
 		tol::report__ Init(
 			const fnm::name___ &FileName,
 			err::handling__ ErrorHandling,
-			fil::mode__ Mode = fil::mReadOnly,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+			fil::mode__ Mode = fil::mReadOnly )
 		{
-			return Init( FileName, Mode, ErrorHandling, AmountMax );
+			return Init( FileName, Mode, ErrorHandling );
 		}
 	};
 
@@ -269,8 +267,7 @@ namespace flf {
 		tol::report__ Init(
 			const fnm::name___ &FileName,
 			fil::mode__ Mode = fil::mRemove,
-			err::handling__ ErrorHandling = err::h_Default,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+			err::handling__ ErrorHandling = err::h_Default )
 		{
 			reset();
 
@@ -290,7 +287,7 @@ namespace flf {
 				}
 			}
 
-			io_oflow___::Init( D_, AmountMax );
+			io_oflow___::Init( D_ );
 
 			return tol::rSuccess;
 		}

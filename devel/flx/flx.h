@@ -187,11 +187,10 @@ namespace flx {
 		needed if you are sure that you don't exceed the buffer size. */
 		void Init(
 			const flw::byte__ *Buffer,
-			bso::size__ Size = FLW_AMOUNT_MAX,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+			bso::size__ Size = FLW_AMOUNT_MAX )
 		{
 			_Driver.Init( Buffer, fdr::tsDisabled, Size );
-			_iflow__::Init( _Driver, AmountMax );
+			_iflow__::Init( _Driver );
 		}
 	};
 
@@ -281,13 +280,12 @@ namespace flx {
 		//f Initialization with 'Buffer' of size 'Size'.
 		void Init(
 			flw::byte__ *Buffer,
-			bso::size__ Size,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+			bso::size__ Size )
 		{
 			reset();
 
 			_Driver.Init( Buffer, fdr::tsDisabled, Size );
-			oflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
+			oflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 	};
 
@@ -371,13 +369,12 @@ namespace flx {
 		//f Initializing with the bunch buffer 'Set'.
 		void Init(
 			const bunch_ &Bunch,
-			sdr::row_t__ Position = 0,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+			sdr::row_t__ Position = 0 )
 		{
 			reset();
 
 			_Driver.Init( Bunch, fdr::tsDisabled, Position );
-			iflow__::Init( _Driver, AmountMax );
+			iflow__::Init( _Driver );
 		}
 	};
 
@@ -480,14 +477,12 @@ namespace flx {
 			_Driver.reset( P );
 		}
 		//f Initializing with the buffer bunch 'Bunch'.
-		void Init(
-			bunch_ &Bunch,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( bunch_ &Bunch )
 		{
 			reset();
 
 			_Driver.Init( Bunch, fdr::tsDisabled );
-			_oflow__::Init( _Driver, AmountMax );
+			_oflow__::Init( _Driver );
 		}
 	};
 
@@ -596,9 +591,9 @@ namespace flx {
 		{
 			reset();
 		}
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( void )
 		{
-			_oflow__::Init( VoidOFlowDriver, AmountMax );
+			_oflow__::Init( VoidOFlowDriver );
 		}
 	};
 
@@ -660,9 +655,9 @@ namespace flx {
 		{
 			reset();
 		}
-		void Init( flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( void )
 		{
-			iflow__::Init( VoidIFlowDriver, AmountMax );
+			iflow__::Init( VoidIFlowDriver );
 		}
 	};
 
@@ -858,7 +853,7 @@ namespace flx {
 			_Flow = &Flow;
 			CommitHandling_ = CommitHandling;
 			_EmbeddedSizeRemainder = 0;
-			_PendingCommit = false;
+			_PendingCommit = true;	// So that, if there was no data, the final '0' is still written.
 			_oflow_driver___::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const

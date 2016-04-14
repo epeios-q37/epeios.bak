@@ -223,12 +223,10 @@ namespace cdgb64 {
 		{
 			reset();
 		}
-		void Init(
-			flw::oflow__ &Flow,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( flw::oflow__ &Flow )
 		{
 			_Driver.Init( Flow, fdr::tsDisabled );
-			_oflow__::Init( _Driver, AmountMax  );
+			_oflow__::Init( _Driver  );
 
 #ifdef CDGB64_DBG
 			if ( GetCacheSize() < 3 )
@@ -402,12 +400,10 @@ namespace cdgb64 {
 			_iflow___::reset( P );
 			_Driver.reset( P );
 		}
-		void Init(
-			flw::iflow__ &Flow,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( flw::iflow__ &Flow )
 		{
 			_Driver.Init( Flow );
-			_iflow___::Init( _Driver, AmountMax  );
+			_iflow___::Init( _Driver  );
 		}
 	};
 

@@ -102,10 +102,6 @@ qRB
 		SEFlow.Init( Channel, flx::chHold );
 
 		flw::Copy( Flow, SEFlow );
-
-		Flow.Dismiss();
-
-		SEFlow.Commit();
 	}
 qRR
 qRT

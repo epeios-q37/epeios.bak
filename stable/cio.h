@@ -125,11 +125,9 @@ namespace cio {
 	private:
 		flw::byte__ _Cache[IOP__BUFFER_SIZE];
 	public:
-		void Init(
-			fdr::oflow_driver_base___ &Driver,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( fdr::oflow_driver_base___ &Driver )
 		{
-			oflow__::Init( Driver, _Cache, sizeof( _Cache ), AmountMax );
+			oflow__::Init( Driver, _Cache, sizeof( _Cache ) );
 		}
 		void Init(
 			fdr::oflow_driver_base___ &,
@@ -146,11 +144,9 @@ namespace cio {
 	: public flw::iflow__
 	{
 	public:
-		void Init(
-			fdr::iflow_driver_base___ &Driver,
-			flw::size__ AmountMax = FLW_AMOUNT_MAX )
+		void Init( fdr::iflow_driver_base___ &Driver )
 		{
-			iflow__::Init( Driver, AmountMax );
+			iflow__::Init( Driver );
 		}
 		void Init(
 			fdr::oflow_driver_base___ &Driver,

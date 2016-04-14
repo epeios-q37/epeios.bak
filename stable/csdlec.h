@@ -237,7 +237,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			void Init( void )
 			{
 				Driver.Init( fdr::ts_Default );
-				Flow.Init( Driver, Cache, sizeof( Cache ), FLW_AMOUNT_MAX );
+				Flow.Init( Driver, Cache, sizeof( Cache ) );
 			}
 		} _Backend;
 	public:
@@ -273,7 +273,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			_Backend.Init();
 
 			_Driver.Init( Callback, _Backend.Flow, fdr::ts_Default );
-			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), FLW_AMOUNT_MAX );
+			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 	};
 

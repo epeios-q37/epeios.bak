@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2016 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 2000-2015 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -183,7 +183,7 @@ namespace ltf {
 			flw::size__ Size )
 		{
 			_Driver.Init( TFlow, Data, Size, fdr::tsDisabled );
-			oflow__::Init( _Driver, NULL, 0, FLW_AMOUNT_MAX );
+			oflow__::Init( _Driver, NULL, 0 );
 		}
 		txf::text_oflow__ &TFlow( void )
 		{

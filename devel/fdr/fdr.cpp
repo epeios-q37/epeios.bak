@@ -17,10 +17,6 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-
-
-//	$Id: fdr.cpp,v 1.18 2013/07/19 14:54:34 csimon Exp $
-
 #define FDR__COMPILATION
 
 #include "fdr.h"

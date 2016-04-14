@@ -31,10 +31,10 @@ void flw::oflow__::_Write(
 	const byte__ *Buffer,
 	size__ Amount )
 {
-	size__ AmountWritten = _WriteUpTo( Buffer, Amount );
+	size__ AmountWritten = _WriteUpTo( Buffer, Amount, &Written_ );
 
 	while( AmountWritten < Amount )
-		AmountWritten += _WriteUpTo( Buffer + AmountWritten, Amount - AmountWritten );
+		AmountWritten += _WriteUpTo( Buffer + AmountWritten, Amount - AmountWritten, &Written_ );
 }
 
 bool flw::GetString(
@@ -87,7 +87,8 @@ qRE
 size__ flw::oflow__::_DirectWrite(
 	const byte__ *Buffer,
 	size__ Wanted,
-	size__ Minimum )
+	size__ Minimum,
+	size__ *Written )
 {
 	size__ Amount = 0;
 qRH
@@ -103,7 +104,7 @@ qRB
 		qRFwk();
 #endif
 
-	Amount = _LoopingWrite( Buffer, Wanted, Minimum );
+	Amount = _LoopingWrite( Buffer, Wanted, Minimum, Written );
 
 	if ( Amount == 0 )
 		qRFwk();
@@ -115,11 +116,6 @@ qRB
 		if ( Amount < Minimum )
 			qRFwk();
 #endif
-
-	_Written += Amount;
-
-	if ( _Written >= _AmountMax )
-		qRFwk();
 qRR
 	_Size = _Free = 0;	// Pour viter toute nouvelle criture dans le cache. La prochaine tentative gnrera une erreur.
 	Commit();	// N'crit rien ( priori) ; juste pour dverouiiler.

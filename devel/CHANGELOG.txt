@@ -2,6 +2,14 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-04-14 :
+- FDR, FLW :
+	- Adding amount of satared/written since last dismiss/commit.
+- FLX :
+	- When no data is written in a 'embedded_size_oflow___', the final '0' is now sent.
+- GLOBAL :
+	- Adaptation to changes in above modules.
+
 2016-04-12 :
 - SCLRGSTRY :
 	- Adding runtime level.

@@ -183,7 +183,7 @@ namespace ltf {
 			flw::size__ Size )
 		{
 			_Driver.Init( TFlow, Data, Size, fdr::tsDisabled );
-			oflow__::Init( _Driver, NULL, 0, FLW_AMOUNT_MAX );
+			oflow__::Init( _Driver, NULL, 0 );
 		}
 		txf::text_oflow__ &TFlow( void )
 		{

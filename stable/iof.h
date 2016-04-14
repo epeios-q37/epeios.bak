@@ -125,12 +125,10 @@ namespace iof {
 		{
 			reset();
 		}
-		void Init(
-			iop::descriptor__ D,
-			size__ AmountMax )
+		void Init( iop::descriptor__ D )
 		{
 			_Driver.Init( D, fdr::tsDisabled );
-			oflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
+			oflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 	};
 
@@ -214,12 +212,10 @@ namespace iof {
 		{
 			reset();
 		}
-		void Init(
-			iop::descriptor__ D,
-			size__ AmountMax )
+		void Init( iop::descriptor__ D )
 		{
 			_Driver.Init( D, fdr::tsDisabled );
-			iflow__::Init( _Driver, AmountMax );
+			iflow__::Init( _Driver );
 		}
 	};
 
@@ -286,12 +282,11 @@ namespace iof {
 		}
 		void Init(
 			iop::descriptor__ D,
-			size__ AmountMax,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_io__::Init( D );
 			_Driver.Init( D, ThreadSafety );
-			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
+			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 	};
 }

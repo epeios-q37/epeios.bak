@@ -430,7 +430,7 @@ qRE
 			reset();
 
 			_Driver.Init( Core, fdr::tsDisabled );
-			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), FLW_AMOUNT_MAX );
+			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 	};
 }

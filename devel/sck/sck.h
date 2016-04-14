@@ -363,13 +363,12 @@ namespace sck {
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
 		void Init(
 			socket__ Socket,
-			flw::size__ AmountMax = SCK__DEFAULT_AMOUNT,
 			duration__ TimeOut = SCK__DEFAULT_TIMEOUT ) // En secondes.
 		{
 			reset();
 
 			_Driver.Init( Socket, this, fdr::ts_Default, TimeOut );
-			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ), AmountMax );
+			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 		socket__ Socket( void ) const
 		{
