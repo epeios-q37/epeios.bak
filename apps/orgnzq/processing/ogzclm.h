@@ -94,11 +94,13 @@ namespace ogzclm {
 
 	typedef ogzbsc::sCRow sRow;
 
-	typedef ogzcbs::dList<sRow> dRows;
+	qROW( LRow );
+
+	typedef ogzcbs::dList<sRow,sLRow> dRows;
 	qW( Rows );
 
 	// template parameters.
-# define OGZCLM_TP	ogzclm::sColumn, ogzclm::sRow
+# define OGZCLM_TP	ogzclm::sColumn, ogzclm::sRow, ogzclm::sLRow
 
 	typedef ogzcbs::cStatic<OGZCLM_TP> cColumn;
 

@@ -33,10 +33,10 @@
 # include "lstctn.h"
 # include "lstbch.h"
 
-// 'Base Template Typenames'. 'item_i' : instanciable item.
-#define OGZCBS_BTT	typename item_v, typename item_i, typename row, typename subitem, typename subrow
+// 'Base Template Typenames'.
+#define OGZCBS_BTT	typename d_item, typename w_item, typename row, typename subitem, typename subrow, typename lrow
 // 'Base Template Parameters'.
-#define OGZCBS_BTP	item_v, item_i, row, subitem, subrow
+#define OGZCBS_BTP	d_item, w_item, row, subitem, subrow, lrow
 
 // 'Regular Callback Template Typenames'.
 #define OGZCBS_RCTT	typename container, OGZCBS_BTT
@@ -49,18 +49,18 @@ namespace ogzcbs {
 	typedef bso::sUInt sAmount;	// If == '0', return all available.
 	qCDEF( sIndice, AmountMax, BSO_UINT_MAX );
 
-	template <typename row> qTCLONEd( bch::qBUNCHdl( row ), dList );
-	qW1( List );
+	template <typename row, typename lrow> qTCLONEd( bch::qBUNCHd( row, lrow ), dList );
+	qW2( List );
 
 	// Callback for static (fixed-sized) objects.
-	template <typename item, typename row> class cStatic
+	template <typename item, typename row, typename lrow> class cStatic
 	{
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
 		virtual void OGZCBSGetList(
 			sIndice Indice,
 			sAmount Amount,
-			dList<row> &List ) = 0;
+			dList<row,lrow> &List ) = 0;
 		virtual row OGZCBSNew( row Row ) = 0;
 		// If 'Row' == 'qNIL', the content must be erased.
 		virtual void OGZCBSDelete( row Row ) = 0;
@@ -76,7 +76,7 @@ namespace ogzcbs {
 		void GetList(
 			sIndice Indice,
 			sAmount Amount,
-			dList<row> &List )
+			dList<row,lrow> &List )
 		{
 			return OGZCBSGetList( Indice, Amount, List );
 		}
@@ -107,10 +107,10 @@ namespace ogzcbs {
 	};
 
 	// Storage for static (fixed-sized) objects.
-	template <typename item, typename row> class sStaticItems
+	template <typename item, typename row, typename lrow> class sStaticItems
 	{
 	private:
-		typedef cStatic<item, row> cStatic_;
+		typedef cStatic<item,row,lrow> cStatic_;
 		qRMV( cStatic_, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
@@ -125,7 +125,7 @@ namespace ogzcbs {
 		void GetList(
 			ogzcbs::sIndice Indice,
 			ogzcbs::sAmount Amount,
-			ogzcbs::dList<row> &Rows ) const
+			ogzcbs::dList<row,lrow> &Rows ) const
 		{
 			C_().GetList( Indice, Amount, Rows );
 		}
@@ -165,7 +165,7 @@ namespace ogzcbs {
 
 	// Callback for dynamic (not fixed size) objetcs.
 	template <OGZCBS_BTT> class cDynamic
-	: public cStatic<item_v, row>
+	: public cStatic<d_item,row,lrow>
 	{
 	protected:
 		virtual void OGZCBSStore(
@@ -174,15 +174,15 @@ namespace ogzcbs {
 			subrow SubRow )
 		{
 		qRH
-			item_i Item;
+			w_item Item;
 		qRB
 			Item.Init();
 
-			cStatic<item_v, row>::Recall( Row, Item );
+			cStatic<d_item,row,lrow>::Recall( Row, Item );
 
 			Item.Store( SubItem, SubRow );
 
-			cStatic<item_v, row>::Store( Item, Row );
+			cStatic<d_item,row,lrow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -193,15 +193,15 @@ namespace ogzcbs {
 			subitem &SubItem )
 		{
 		qRH
-			item_i Item;
+			w_item Item;
 		qRB
 			Item.Init();
 
-			cStatic<item_v, row>::Recall( Row, Item );
+			cStatic<d_item, row>::Recall( Row, Item );
 
 			Item.Recall( SubRow, SubItem );
 
-			cStatic<item_v, row>::Store( Item, Row );
+			cStatic<d_item, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -212,15 +212,15 @@ namespace ogzcbs {
 		{
 			subrow SubRow = qNIL;
 		qRH
-			item_i Item;
+			w_item Item;
 		qRB
 			Item.Init();
 
-			cStatic<item_v, row>::Recall( Row, Item );
+			cStatic<d_item, row>::Recall( Row, Item );
 
 			SubRow = Item.Add( SubItem );
 
-			cStatic<item_v, row>::Store( Item, Row );
+			cStatic<d_item, row>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -231,7 +231,7 @@ namespace ogzcbs {
 			subrow SubRow )
 		{
 		qRH
-			item_i Item;
+			w_item Item;
 		qRB
 			Item.Init();
 
@@ -280,7 +280,7 @@ namespace ogzcbs {
 	private:
 		typedef cDynamic<OGZCBS_BTP> cDynamic_;
 		qRMV( cDynamic_, C_, Callback_ );
-		typedef cStatic<item_v, row> cStatic_;
+		typedef cStatic<d_item,row,lrow> cStatic_;
 		cStatic_ &SC_( void ) const
 		{
 			return C_();
@@ -308,14 +308,14 @@ namespace ogzcbs {
 			return SC_().Delete( Row );
 		}
 		void Store(
-			const item_v &Item,
+			const d_item &Item,
 			row Row ) const
 		{
 			return SC_().Store( Item, Row );
 		}
 		bso::bool__ Recall(
 			row Row,
-			item_v &Item ) const
+			d_item &Item ) const
 		{
 			return SC_().Recall( Row, Item );
 		}
@@ -347,8 +347,8 @@ namespace ogzcbs {
 		}
 	};
 
-	template <typename item, typename row> class rRegularStaticCallback
-	: public cStatic<item,row>
+	template <typename item, typename row, typename lrow> class rRegularStaticCallback
+	: public cStatic<item,row,lrow>
 	{
 	private:
 		lstbch::qLBUNCHw( item, row ) Items_;
@@ -356,7 +356,7 @@ namespace ogzcbs {
 		virtual void OGZCBSGetList(
 			ogzcbs::sIndice Indice,
 			ogzcbs::sAmount Amount,
-			ogzcbs::dList<row> &List ) override
+			ogzcbs::dList<row,lrow> &List ) override
 		{
 			row Row = Items_.First( Indice );
 
@@ -411,12 +411,12 @@ namespace ogzcbs {
 	: public cDynamic<OGZCBS_BTP>
 	{
 	private:
-		lstctn::qLMCONTAINERw( item_v, row ) Container_;
+		lstctn::qLMCONTAINERw( d_item, row ) Container_;
 	protected:
 		virtual void OGZCBSGetList(
 			ogzcbs::sIndice Indice,
 			ogzcbs::sAmount Amount,
-			ogzcbs::dList<row> &List ) override
+			ogzcbs::dList<row,lrow> &List ) override
 		{
 			row Row = Container_.First( Indice );
 
@@ -440,14 +440,14 @@ namespace ogzcbs {
 				Container_.Remove( Row );
 		}
 		virtual void OGZCBSStore(
-			const item_v &Item,
+			const d_item &Item,
 			row Row ) override
 		{
 			Container_.Store( Item, Row );
 		}
 		virtual bso::sBool OGZCBSRecall(
 			row Row,
-			item_v &Item ) const override
+			d_item &Item ) const override
 		{
 			if ( Container_.Exists(Row) ) {
 				Container_.Recall( Row, Item );

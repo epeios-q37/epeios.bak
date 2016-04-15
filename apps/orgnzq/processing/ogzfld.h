@@ -85,8 +85,11 @@ namespace ogzfld {
 
 	qW( Field );
 
+	qROW( IRow );	// Item row.
+	qROW( LRow );	// List row.
+
 	// template parameters.
-# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sRow, ogzfld::sDRow, sdr::sRow
+# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sRow, ogzfld::sDRow, ogzfld::sIRow, ogzfld::sLRow
 
 	typedef ogzcbs::cDynamic<OGZFLD_TP> cField;
 
@@ -143,7 +146,7 @@ namespace ogzfld {
 
 	typedef ogzcbs::rRegularDynamicCallback<OGZFLD_TP> rRegularFieldCallback;
 
-	typedef bch::qBUNCHdl( sRow ) dFieldList;
+	typedef ogzcbs::dList<sRow,sLRow> dFieldList;
 	qW( FieldList );
 }
 

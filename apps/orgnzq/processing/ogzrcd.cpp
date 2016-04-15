@@ -34,7 +34,7 @@ namespace {
 }
 
 void ogzrcd::rRecordBuffer::GetColumnContent(
-	sdr::sRow &Row,
+	ogzfld::sLRow Row,
 	ogztyp::sRow &Type,
 	ogzclm::eNumber &Number,
 	str::dString &Label,

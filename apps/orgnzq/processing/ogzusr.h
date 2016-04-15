@@ -39,8 +39,10 @@ namespace ogzusr {
 	typedef bch::qBUNCHd( ogzrcd::sRow, sRRow ) dUser;
 	qW( User );
 
+	qROW( LRow );	// List row.
+
 // Template parameters.
-# define OGZUSR_TP	ogzusr::dUser, ogzusr::wUser, ogzusr::sRow, ogzrcd::sRow, ogzusr::sRRow
+# define OGZUSR_TP	ogzusr::dUser, ogzusr::wUser, ogzusr::sRow, ogzrcd::sRow, ogzusr::sRRow, ogzusr::sLRow
 
 	typedef ogzcbs::cDynamic<OGZUSR_TP> cUser;
 

@@ -39,8 +39,11 @@ namespace ogzrcd {
 
 	typedef ogzbsc::sRRow sRow;
 
+	qROW( IRow );	// Item row.
+	qROW( LRow );	// List row.
+
 // Template parameters.
-# define OGZRCD_TP	ogzrcd::dRecord, ogzrcd::wRecord, ogzrcd::sRow, ogzrcd::sFRow, sdr::sRow
+# define OGZRCD_TP	ogzrcd::dRecord,ogzrcd::wRecord,ogzrcd::sRow,ogzrcd::sFRow,ogzrcd::sIRow,ogzrcd::sLRow
 
 	typedef ogzcbs::cDynamic<OGZRCD_TP> cRecord;
 
@@ -154,13 +157,13 @@ namespace ogzrcd {
 			return FieldBuffer_;
 		}
 		void GetColumn(
-			sdr::sRow Row,
+			ogzfld::sLRow Row,
 			ogzclm::sColumn &Column ) const
 		{
 			Fields_.GetColumn( Get( Row ), Column );
 		}
 		void GetColumnContent(
-			sdr::sRow &Row,
+			ogzfld::sLRow Row,
 			ogztyp::sRow &Type,
 			ogzclm::eNumber &Number,
 			str::dString &Label,
