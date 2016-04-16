@@ -129,7 +129,8 @@ namespace lstbch {
 		{
 			list_<row, row_t>::Allocate( Size, Mode );
 		}
-		E_XNAVt( list_<E_COVER2(row,row_t)>::, row )
+		E_NAVt( list_<E_COVER2(row,row_t)>::, row )
+		E_NAVXt( list_<E_COVER2(row,row_t)>::, row )
 		row Add(
 			const type &Object,
 			row Row = qNIL )

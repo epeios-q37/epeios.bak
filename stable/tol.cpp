@@ -227,6 +227,22 @@ static inline void SetSystemCommandAvailabitity_( void )
 		SystemCommandIsAvailable_ = xbFalse;
 }
 
+const char *tol::UUIDGen( bUUID &UUID )
+{
+	InitializeRandomGenerator();
+
+	// http://stackoverflow.com/questions/2174768/generating-random-uuids-in-linux
+
+	sprintf(UUID, "%04x%04x-%04x-%04x-%04x-%04x%04x%04x", 
+		rand()&0xffff, rand()&0xffff,
+		rand()&0xffff,
+		((rand() & 0x0fff) | 0x4000),
+		rand() % 0x3fff + 0x8000,
+		rand()&0xffff, rand()&0xffff, rand()&0xffff);
+
+	return UUID;
+}
+
 Q37_GCTOR( tol )
 {
 	SetSystemCommandAvailabitity_();

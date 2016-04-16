@@ -228,7 +228,7 @@ namespace ntvstr {
 		return string___( String ).SystemEncoding( Buffer );
 	}
 
-	template <typename s, typename b> inline const bso::char__ *ToUTF8(
+	template <typename s, typename b> inline const b &ToUTF8(
 		const s &String,
 		b &Buffer )
 	{

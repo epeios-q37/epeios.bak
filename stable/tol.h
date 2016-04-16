@@ -76,6 +76,12 @@ namespace ags {
 /****** New version ******/
 /*************************/
 
+namespace str {
+	class string_;
+
+	typedef string_ dString;
+}
+
 # define qENUM( name )	enum e##name : bso::bEnum
 
 # define qXENUM( name, prefix )	typedef tol::extended_enum__<e##name##_, prefix##_False, prefix##_Error, prefix##_Undefined> e##name
@@ -584,6 +590,10 @@ namespace tol {
 	};
 
 	qW1( Object );
+
+	typedef char bUUID[37];
+
+	const char *UUIDGen( bUUID &UUID );
 }
 
 # define qGCTOR(discriminator)	Q37_GCTOR( discriminator )

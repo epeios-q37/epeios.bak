@@ -340,7 +340,7 @@ namespace lst {
 		{
 			r Row = Occupation_.First( true );
 
-			while ( ( Row != qNIL ) && Ofsset-- )
+			while ( ( Row != qNIL ) && Offset-- )
 				Row = Occupation_.Next( Row );
 
 			return Row;
@@ -350,7 +350,7 @@ namespace lst {
 		{
 			r Row = Occupation_.Last( true );
 
-			while ( ( Row != qNIL ) && Ofsset-- )
+			while ( ( Row != qNIL ) && Offset-- )
 				Row = Occupation_.Previous( Row );
 
 			return Row;
