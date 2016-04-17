@@ -55,7 +55,8 @@
 #include <sys/stat.h>
 
 namespace pllio {
-	typedef fdr::size__ size__;
+	typedef bso::size__ size__;
+	qCDEF( size__, SizeMax, BSO_SIZE_MAX );
 
 	typedef int	descriptor__;
 

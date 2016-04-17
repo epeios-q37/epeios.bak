@@ -59,6 +59,7 @@ namespace iop {
 	typedef llio::lowlevel_io__			io__;
 	using llio::descriptor__;
 	using llio::size__;
+	using llio::SizeMax;
 #	define IOP_UNDEFINED_DESCRIPTOR	LLIO_UNDEFINED_DESCRIPTOR
 #elif defined( IOP__USE_STANDARD_IO )
 	typedef cslio::standard_input__		input__;
