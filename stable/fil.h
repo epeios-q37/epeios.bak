@@ -42,11 +42,6 @@
 /***** NEW *****/
 /***************/
 
-// To avoid to have to include "str.h".
-namespace str {
-	class vtsring;
-}
-
 /***************/
 /***** OLD *****/
 /***************/
@@ -652,6 +647,7 @@ namespace fil {
 
 namespace fil {
 	typedef info__ sInfo;
+	typedef size__ sSize;
 }
 
 #endif

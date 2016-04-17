@@ -32,12 +32,14 @@
 # include "cpe.h"
 # include "err.h"
 # include "bso.h"
+# include "tol.h"
 # include <io.h>
 # include <fcntl.h>
 
 namespace wllio {
 
 	typedef bso::u64__	size__;	// LA taille d'un fichier est toujours cod en 64 bits, mme pour une architectue 32 bits.
+	qCDEF( size__, SizeMax, BSO_U64_MAX );
 
 	typedef int descriptor__;
 

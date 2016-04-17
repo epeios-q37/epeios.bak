@@ -1534,10 +1534,14 @@ namespace tol {
 		{
 			return !IsDisabled();
 		}
+		diff__ Elapsed( void ) const
+		{
+			return MilliSecDiff( Tick(), _Start );
+		}
 		bso::bool__ IsElapsed( void ) const
 		{
 			if ( IsEnabled() )
-				return MilliSecDiff( Tick(), _Start ) >= _Delay;
+				return Elapsed() >= _Delay;
 			else
 				return false;
 		}
@@ -1995,6 +1999,15 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 #define Q37_MRMDF( type, name, variable )\
 	type *variable;\
 	Q37_RMDF( type, name, variable )
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace tol {
+	typedef delay__ sDelay;
+	typedef timer__ sTimer;
+}
 
 
 #endif
