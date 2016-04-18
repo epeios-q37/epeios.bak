@@ -808,9 +808,6 @@ namespace flx {
 
 			Size = _Flow->WriteUpTo(Buffer, ( Size > _EmbeddedSizeRemainder ? _EmbeddedSizeRemainder : Size ) );
 
-			if ( Size == 0 )
-				qRFwk();
-
 			_EmbeddedSizeRemainder -= Size;
 
 			_PendingCommit = true;
@@ -825,10 +822,8 @@ namespace flx {
 			if ( _Flow == NULL )
 				qRFwk();
 
-			if ( _EmbeddedSizeRemainder != 0 )
-				qRFwk();
-
-			dtfptb::VPut( (bso::u8__)0, *_Flow );
+			if ( _EmbeddedSizeRemainder == 0 )
+				dtfptb::VPut( (bso::u8__)0, *_Flow );
 
 			_PendingCommit = false;
 
