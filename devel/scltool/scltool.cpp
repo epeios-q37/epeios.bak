@@ -137,6 +137,12 @@ qRR
 			break;
 		}
 	}
+	else {
+		err::buffer__ Buffer;
+		ExitValue = EXIT_FAILURE;
+		cio::CErr << err::Message( Buffer ) << txf::nl;
+		ERRRst();
+	}
 qRT
 	cio::COut.Commit();
 	cio::CErr.Commit();

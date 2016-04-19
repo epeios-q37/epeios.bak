@@ -52,6 +52,7 @@ namespace csdmnc {
 	{
 	private:
 		qCBUFFERr HostService_;
+		sck::duration__ TimeOut_;
 		rFlow_ *FlowAsPointer_( void *UP )
 		{
 			if ( UP == NULL )
@@ -71,7 +72,7 @@ namespace csdmnc {
 			if ( Flow == NULL )
 				qRAlc();
 
-			if ( !Flow->Init( HostService_, err::hUserDefined ) ) {
+			if ( !Flow->Init( HostService_, TimeOut_, err::hUserDefined ) ) {
 				delete Flow;
 				Flow = NULL;
 			}
@@ -93,12 +94,16 @@ namespace csdmnc {
 	public:
 		void reset( bso::sBool = true )
 		{
+			TimeOut_ = sck::NoTimeOut;
 		}
 		E_CVDTOR( rCallback );
-		void Init( const char *HostService )
+		void Init(
+			const char *HostService,
+			sck::duration__ TimeOut )
 		{
 			HostService_.Calloc( strlen( HostService ) + 1 );
 			strcpy( HostService_, HostService );
+			TimeOut_ = TimeOut;
 		}
 	};
 
@@ -120,19 +125,21 @@ namespace csdmnc {
 		qCDTOR( rCore );
 		bso::sBool Init(
 			const char *HostService,
-			bso::uint__ PingDelay = 0,
+			bso::uint__ PingDelay,
+			sck::duration__ TimeOut,
 			cLogCallback *LogCallback = NULL )
 		{
-			Callback_.Init( HostService );
+			Callback_.Init( HostService, TimeOut );
 
 			return rCore_::Init( Callback_, PingDelay, LogCallback );
 		}
 		bso::bool__ Init(
 			const char *HostService,
 			bso::uint__ PingDelay,
+			sck::duration__ TimeOut,
 			cLogCallback &LogCallback )
 		{
-			return Init( HostService, PingDelay, &LogCallback );
+			return Init( HostService, TimeOut, PingDelay, &LogCallback );
 		}
 	};
 

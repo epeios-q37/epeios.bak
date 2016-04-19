@@ -17,57 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: csdbnc.h,v 1.14 2013/04/09 17:57:27 csimon Exp $
+// Client-Server Base Network Client 
 
 #ifndef CSDBNC__INC
-#define CSDBNC__INC
+# define CSDBNC__INC
 
-#define CSDBNC_NAME		"CSDBNC"
+# define CSDBNC_NAME		"CSDBNC"
 
-#define	CSDBNC_VERSION	"$Revision: 1.14 $"
+# if defined( E_DEBUG ) && !defined( CSDBNC_NODBG )
+#  define CSDBNC_DBG
+# endif
 
-#define CSDBNC_OWNER		"Claude SIMON"
+# include "err.h"
+# include "flw.h"
+# include "sck.h"
 
-#if defined( E_DEBUG ) && !defined( CSDBNC_NODBG )
-#define CSDBNC_DBG
-#endif
+# if defined( CPE_S_POSIX )
+#  define CSDBNC__POSIX
+# elif defined( CPE_S_WIN )
+#  define CSDBNC__WIN
+# else
+#  error
+# endif
 
-/* Begin of automatic documentation generation part. */
+# if defined( CSDBNC__POSIX )
+#  include <sys/socket.h>
+#  include <netinet/in.h>
+#  include <arpa/inet.h>
+#  include <netdb.h>
+# elif !defined( CSDBNC__WIN )
+#  error "Unknow compiler enviroment"
+# endif
 
-//V $Revision: 1.14 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/09 17:57:27 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Client-Server Base Network Client 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
-
-#include "err.h"
-#include "flw.h"
-#include "sck.h"
-
-#if defined( CPE_S_POSIX )
-#	define CSDBNC__POSIX
-#elif defined( CPE_S_WIN )
-#	define CSDBNC__WIN
-#else
-#	error
-#endif
-
-#if defined( CSDBNC__POSIX )
-#	include <sys/socket.h>
-#	include <netinet/in.h>
-#	include <arpa/inet.h>
-#	include <netdb.h>
-#elif !defined( CSDBNC__WIN )
-#	error "Unknow compiler enviroment"
-#endif
-
-#define CSDBNC_ADDRESS_SIZE_MAX	100
+# define CSDBNC_ADDRESS_SIZE_MAX	100
 
 /***************/
 /***** OLD *****/
@@ -181,28 +163,30 @@ namespace csdbnc {
 		bso::bool__ Init(
 			const char *Host,
 			const char *Service,
-			err::handling__ ErrorHandling = err::h_Default )
+			sck::duration__ TimeOut,
+			err::handling__ ErrorHandling )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
 		{
 			reset();
 
 			Socket_ = Connect( Host, Service, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_ );
+				_flow___::Init( Socket_, TimeOut );
 				return true;
 			} else
 				return false;
 		}
 		bso::bool__ Init(
 			const char *HostService,
-			err::handling__ ErrorHandling = err::h_Default )
+			sck::duration__ TimeOut,
+			err::handling__ ErrorHandling )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
 		{
 			reset();
 
 			Socket_ = Connect( HostService, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_ );
+				_flow___::Init( Socket_, TimeOut );
 				return true;
 			} else
 				return false;

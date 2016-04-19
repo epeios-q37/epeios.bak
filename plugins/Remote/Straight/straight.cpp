@@ -122,11 +122,12 @@ public:
 	E_CVDTOR( plugin___ );
 	bso::bool__ Init(
 		const char *HostService,
-		bso::uint__ PingDelay )
+		bso::uint__ PingDelay,
+		sck::duration__ TimeOut )
 	{
 		_plugin___::Init();
 
-		if ( !Core_.Init( HostService, PingDelay ) )
+		if ( !Core_.Init( HostService, PingDelay, TimeOut ) )
 			return false;
 
 		Flow_.Init( Core_ );
@@ -141,6 +142,7 @@ public:
 	qRH
 		str::string HostService;
 		bso::uint__ PingDelay = 0;
+		sck::duration__ TimeOut = sck::NoTimeOut;
 		TOL_CBUFFER___ Buffer;
 		rpstraight::rAbstract *Abstract = (rpstraight::rAbstract *)BaseAbstract;
 	qRB
@@ -148,10 +150,11 @@ public:
 
 		HostService.Init();
 
-		sclmisc::MGetValue( registry::HostService, HostService );
-		PingDelay = sclmisc::OGetUInt( registry::PingDelay, 0 );
+		sclmisc::MGetValue( registry::parameter::HostService, HostService );
+		PingDelay = sclmisc::OGetUInt( registry::parameter::PingDelay, 0 );
+		TimeOut = sclmisc::OGetU16( registry::parameter::TimeOut, sck::NoTimeOut );
 
-		if ( !Init(HostService.Convert(Buffer), PingDelay) )
+		if ( !Init( HostService.Convert(Buffer), PingDelay, TimeOut ) )
 			switch ( plgn::ErrorReporting( Abstract ) ) {
 			case plgn::rhInternally:
 				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );

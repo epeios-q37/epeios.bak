@@ -36,12 +36,14 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<Argument id="SendCommand" Description="SendCommandDescription" long="send" short="s" Value="Send" Usage="%HostServiceArgument%"/>
+			<Argument id="SendCommand" Description="SendCommandDescription" long="send" short="s" Value="Send" Usage="%HostServiceArgument% [%TimeOut%]"/>
 			<Argument id="HostServiceArgument" Description="HostArgumentDescription" Path="HostService" Label="HostArgumentLabel"/>
+			<Argument id="TimeOutArgument" Description="TimeOutArgumentDescription" Path="TimeOut" Label="TimeOutArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Send">
 					<Link index="0" Target="HostServiceArgument"/>
+					<Link index="1" Target="TimeOutArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

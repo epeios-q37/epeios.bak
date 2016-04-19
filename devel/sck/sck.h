@@ -217,7 +217,7 @@ namespace sck {
 		socket__ Socket,
 		flw::size__ Amount,
 		void *Buffer,
-		duration__ TimeOut = SCK_INFINITE );	// En secondes.
+		duration__ TimeOut );	// En secondes.
 
 	/*f Write up to 'Amount' bytes from 'Buffer' to the socket 'Socket'. Return
 	the amount effectively written. If 0 is returned, it means 'TimeOut' expired.
@@ -226,7 +226,7 @@ namespace sck {
 		socket__ Socket,
 		const void *Buffer,
 		flw::size__ Amount,
-		duration__ TimeOut = SCK_INFINITE );	// En secondes.
+		duration__ TimeOut );	// En secondes.
 
 	//f Close the socket 'Socket'.
 	inline void Close( socket__ Socket )
@@ -324,7 +324,7 @@ namespace sck {
 			socket__ Socket,
 			const flw::ioflow__ *User,
 			fdr::thread_safety__ ThreadSafety,
-			duration__ TimeOut = SCK__DEFAULT_TIMEOUT )	// En secondes.
+			duration__ TimeOut )	// En secondes.
 		{
 			reset();
 		
@@ -363,7 +363,7 @@ namespace sck {
 		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
 		void Init(
 			socket__ Socket,
-			duration__ TimeOut = SCK__DEFAULT_TIMEOUT ) // En secondes.
+			duration__ TimeOut ) // En secondes.
 		{
 			reset();
 
@@ -379,6 +379,8 @@ namespace sck {
 			return _Driver.EpochTimeStamp();
 		}
 	};
+
+	qCDEF( duration__, NoTimeOut, SCK_INFINITE );
 
 }
 

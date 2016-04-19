@@ -576,11 +576,17 @@ qRB
 	if ( Tags.Amount() != Values.Amount() )
 		qRFwk();
 
-	Callback.Init( Values );
+	if ( Tags.Amount() != Values.Amount() )
+		qRFwk();
 
-	FillAutomat_( Tags, Callback.Automat );
+	if ( Tags.Amount() == 0 ) {
+		Callback.Init( Values );
 
-	Success = SubstituteLongTags( IFlow, Callback, OFlow, TagMarker );
+		FillAutomat_( Tags, Callback.Automat );
+
+		Success = SubstituteLongTags( IFlow, Callback, OFlow, TagMarker );
+	} else
+		Success = true;
 qRR
 qRT
 qRE

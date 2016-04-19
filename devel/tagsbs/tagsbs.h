@@ -34,6 +34,10 @@
 # include "stsfsm.h"
 # include "sdr.h"
 
+/**************/
+/**** OLD *****/
+/**************/
+
 namespace tagsbs {
 	E_CDEF( char, DefaultTagMarker, '%' );
 
@@ -202,7 +206,7 @@ namespace tagsbs {
 		const str::strings_ &Values,
 		char TagMarker = DefaultTagMarker);// Si la valeur retourne != 'qNIL', elle indique la position problmatique dans la chane.
 
-		class tvalues_	// Tagged values.
+	class tvalues_	// Tagged values.
 	{
 	public:
 		struct s {
@@ -250,13 +254,17 @@ namespace tagsbs {
 			const char *Tag,
 			const char *Value )
 		{
-			Append(str::string(Tag), str::string( Value ) );
+			Append( str::string(Tag), str::string( Value ) );
 		}
 		void Append(
 			const char *Tag,
 			const str::string_ &Value )
 		{
-			Append(str::string( Tag ), Value );
+			Append( str::string( Tag ), Value );
+		}
+		bso::sBool IsEmpty( void ) const
+		{
+			return Tags.Amount() != 0;
 		}
 	};
 
@@ -287,7 +295,15 @@ namespace tagsbs {
 	{
 		return SubstituteLongTags( String, TaggedValues.Tags, TaggedValues.Values, TagMarker );
 	}
+}
 
+/**************/
+/**** NEW *****/
+/**************/
+
+namespace tagsbs {
+	typedef tvalues_ dTaggedValues;
+	qW( TaggedValues );
 }
 
 #endif
