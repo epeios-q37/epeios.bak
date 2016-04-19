@@ -31,6 +31,9 @@ const char *prxybase::GetLabel( eRequest Request )
 	case rPlug:
 		return "Plug";
 		break;
+	case rPing:
+		return "Ping";
+		break;
 	default:
 		qRFwk();
 		break;
@@ -59,6 +62,9 @@ const char *prxybase::GetLabel( eAnswer Answer )
 	switch ( Answer ) {
 	case aPlugged:
 		return "Plugged";
+		break;
+	case aPong:
+		return "Pong";
 		break;
 	default:
 		qRFwk();

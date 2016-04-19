@@ -40,6 +40,7 @@ namespace prxybase {
 
 	qENUM( Request ) {
 		rPlug,
+		rPing,
 		r_amount,
 		r_Undefined
 	};
@@ -56,6 +57,7 @@ namespace prxybase {
 
 	qENUM( Answer ) {
 		aPlugged,
+		aPong,
 		a_amount,
 		a_Undefined
 	};

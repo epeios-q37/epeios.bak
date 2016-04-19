@@ -3,11 +3,11 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 2016-04-19 :
+- CSDBNS, CSDMNC :
+	- Adaptation to changes in 'CSDBNC'.
 - CSDBNC :
 	- Adding 'TimeOut' parameter to 'flow___::Init(...)'.
 	- Removing default value for 'ErrHandling' parameter in 'flow___::Init(...)', because a 'err::handling___' value is confused with a 'duration__'.
-- CSDMNC :
-	- Adaptation to changes in 'CSDBNC'.
 - SCK :
 	- Removing default value for 'TimeOut' parameter.
 
