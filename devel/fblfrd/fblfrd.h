@@ -202,6 +202,7 @@ namespace fblfrd {
 	class frontend___
 	{
 	private:
+		qRMV( flw::ioflow__, C_, Channel_ );
 		fblfph::callbacks__ *_ParametersCallbacks;
 		reporting_callback__ *_ReportingCallback;
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramtre d'entre.
@@ -219,8 +220,8 @@ namespace fblfrd {
 			if ( _DismissPending )
 				qRFwk();
 
-			Channel_->Put( Cast );
-			_ParametersCallbacks->In( Cast, Pointer, *Channel_ );
+			C_().Put( Cast );
+			_ParametersCallbacks->In( Cast, Pointer, C_() );
 		}
 		void _Out(
 			fblcst::cast__ Cast,
@@ -229,8 +230,8 @@ namespace fblfrd {
 			if ( _DismissPending )
 				qRFwk();
 
-			Channel_->Put( Cast );
-			_ParametersCallbacks->Out( *Channel_, Cast, Pointer );
+			C_().Put( Cast );
+			_ParametersCallbacks->Out( C_(), Cast, Pointer );
 		}
 		void _FlowIn(
 			bso::bool__ FirstCall,
@@ -239,15 +240,15 @@ namespace fblfrd {
 			if ( _DismissPending )
 				qRFwk();
 
-			_ParametersCallbacks->FlowIn( FirstCall, Flow, *Channel_ );
+			_ParametersCallbacks->FlowIn( FirstCall, Flow, C_() );
 		}
 		void _FlowOut( flw::iflow__ *&Flow )
 		{
 			if ( _DismissPending )
 				qRFwk();
 
-			Channel_->Put( fblcst::cFlow );
-			_ParametersCallbacks->FlowOut( *Channel_, Flow );
+			C_().Put( fblcst::cFlow );
+			_ParametersCallbacks->FlowOut( C_(), Flow );
 		}
 		void _PostProcess( flw::ioflow__ &Flow )
 		{
@@ -266,7 +267,6 @@ namespace fblfrd {
 		}
 		id16__ Commands_[fblcmd::c_amount];
 		char Message_[100];
-		flw::ioflow__ *Channel_;
 		bso::bool__ TestBackendCasts_( void );
 		command__ GetBackendDefaultCommand_( void );
 		void GetGetCommandsCommand_( command__ DefaultCommand );
@@ -290,7 +290,7 @@ namespace fblfrd {
 		}
 		void TestInput_( fblcst::cast__ Cast )
 		{
-			Channel_->Put( Cast );
+			C_().Put( Cast );
 		}
 		void _Handle( void )
 		{
@@ -301,17 +301,17 @@ namespace fblfrd {
 		{
 			fblovl::reply__ Reply = fblovl::r_Undefined;
 
-			Channel_->Commit();
+			C_().Commit();
 
-			if ( Channel_->EndOfFlow() ) {
+			if ( C_().EndOfFlow() ) {
 				Channel_ = NULL;
 				Reply = fblovl::rDisconnected;
 			} else {
-				if ( ( Reply = (fblovl::reply__)Channel_->Get() ) != fblovl::rOK ) {
+				if ( ( Reply = (fblovl::reply__)C_().Get() ) != fblovl::rOK ) {
 					if ( Reply >= fblovl::r_amount )
 						qRFwk();
 
-					if ( ( !flw::GetString( *Channel_, Message_, sizeof( Message_ ) ) ) )
+					if ( ( !flw::GetString( C_(), Message_, sizeof( Message_ ) ) ) )
 						qRLmt();
 				}
 			}
@@ -388,7 +388,7 @@ namespace fblfrd {
 			Channel_ = &Channel;
 
 
-			if ( !_TestCompatibility( Language, CompatibilityInformations, *Channel_, IncompatibilityInformations ) ) {
+			if ( !_TestCompatibility( Language, CompatibilityInformations, C_(), IncompatibilityInformations ) ) {
 				Success = false;
 				qRReturn;
 			}
@@ -423,8 +423,8 @@ namespace fblfrd {
 		{
 			_PreProcess();
 
-			flw::Put( Object, *Channel_ );
-			flw::Put( Command, *Channel_ );
+			flw::Put( Object, C_() );
+			flw::Put( Command, C_() );
 		}
 		//f Put 'Object'.
 		FBLFRD_M( Object, object__)
@@ -470,7 +470,7 @@ namespace fblfrd {
 			if ( _FlowInParameter != NULL)
 				qRFwk();
 
-			Channel_->Put( fblcst::cFlow );
+			C_().Put( fblcst::cFlow );
 
 			_FlowIn( true, Flow );
 
@@ -490,7 +490,7 @@ namespace fblfrd {
 		}
 		void EndOfInParameters( void )
 		{
-			Channel_->Put( 0 );	// End of request
+			C_().Put( 0 );	// End of request
 		}
 		//f Send the request.
 		fblovl::reply__ Handle( void )
@@ -503,15 +503,15 @@ namespace fblfrd {
 			fblovl::reply__  Reply = _Send();
 
 			if ( Reply == fblovl::rOK )
-				_PostProcess( *Channel_ );
+				_PostProcess( C_() );
 
 			if ( Reply != fblovl::rDisconnected ) {
 
-				if ( Channel_->Get() != fblcst::cEnd )
+				if ( C_().Get() != fblcst::cEnd )
 					qRFwk();
 
 				if ( !_FlowOutParameter )
-					Channel_->Dismiss();
+					C_().Dismiss();
 				else {
 					if ( _DismissPending )
 						qRFwk();
@@ -536,7 +536,7 @@ namespace fblfrd {
 			if ( !_DismissPending )
 				qRFwk();
 
-			Channel_->Dismiss();
+			C_().Dismiss();
 
 			_DismissPending = false;
 		}
@@ -548,12 +548,12 @@ namespace fblfrd {
 		//f Return the channel used to handle the request as input flow.
 		flw::iflow__ &Input( void )
 		{
-			return *Channel_;
+			return C_();
 		}
 		//f Return the channel used to handle the request as ouput flow.
 		flw::oflow__ &Output( void )
 		{
-			return *Channel_;
+			return C_();
 		}
 		//f Throw an user error, for testing purpose.
 		fblovl::reply__ ThrowERRFwk( void )

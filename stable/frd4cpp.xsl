@@ -273,7 +273,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 		<xsl:text>&tab;&tab;void reset( bso::bool__ P = true )&nl;</xsl:text>
 		<xsl:text>&tab;&tab;{&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;if ( P == true )&nl;</xsl:text>
-		<xsl:text>&tab;&tab;&tab;&tab;if ( ( Common_ != NULL ) &amp;&amp; ( _ID != FBLFRD_UNDEFINED_OBJECT ) )&nl;</xsl:text>
+		<xsl:text>&tab;&tab;&tab;&tab;if ( ( Common_ != NULL ) &amp;&amp; ( _ID != FBLFRD_UNDEFINED_OBJECT ) &amp;&amp; Common_->Frontend().IsConnected() )&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;&tab;&tab;Common_->RemoveObject( _ID );&nl;</xsl:text>
 		<xsl:text>&nl;</xsl:text>
 		<xsl:text>&tab;&tab;&tab;Common_ = NULL;&nl;</xsl:text>
