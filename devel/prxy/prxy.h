@@ -158,11 +158,12 @@ namespace prxy {
 			const char *HostService,
 			const char *Identifier,
 			prxybase::eType Type,
-			err::handling__ ErrorHandling = err::h_Default )
+			sck::duration__ TimeOut,
+			err::handling__ ErrorHandling )
 		{
 			reset();
 
-			if ( !Flow_.Init( HostService, ErrorHandling ) )
+			if ( !Flow_.Init( HostService, TimeOut, ErrorHandling ) )
 				return sUnableToConnect;
 
 			rFlowDriver_::Init( fdr::ts_Default );
@@ -182,9 +183,10 @@ namespace prxy {
 			const char *HostService,
 			const char *Identifier,
 			prxybase::eType Type,
+			sck::duration__ TimeOut,
 			lcl::meaning_ &Meaning )	// If returned value == 'false', then 'Meaning' contents the error message.
 		{
-			eState State = Init( HostService, Identifier, Type, err::hUserDefined );
+			eState State = Init( HostService, Identifier, Type, TimeOut, err::hUserDefined );
 
 			if ( State != sOK ) {
 				GetMeaning( State, HostService, Meaning );

@@ -66,7 +66,7 @@ protected:
 
 		Meaning.Init();
 
-		if ( !Flow->Init( HostService_, Identifier_, prxybase::tClient, Meaning ) )
+		if ( !Flow->Init( HostService_, Identifier_, prxybase::tClient, sck::NoTimeOut, Meaning ) )
 			sclmisc::ReportAndAbort( Meaning );
 	qRR
 	qRT
