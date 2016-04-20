@@ -40,7 +40,7 @@
 
 namespace cdgb64 {
 
-	extern bso::byte__ *Encode;
+	extern bso::byte__ *Encoding_;
 
 	inline bso::byte__ Encode_( flw::byte__ Value )
 	{
@@ -48,7 +48,7 @@ namespace cdgb64 {
 		if ( Value > 63 )
 			qRFwk();
 #endif
-		return Encode[Value];
+		return Encoding_[Value];
 	}
 
 	inline void Encode_(
@@ -235,15 +235,19 @@ namespace cdgb64 {
 		}
 	};
 
-	extern bso::byte__ *Decode;
+	const str::string_ &Encode(
+		const str::string_ &Plain,
+		str::string_ &Encoded );
+
+	extern bso::byte__ *Decoding_;
 
 	inline bso::byte__ Decode_( bso::byte__ Value )
 	{
 #ifdef CDGB64_DBG
-		if ( Decode[Value] == '@' )
+		if ( Decoding_[Value] == '@' )
 			qRFwk();
 #endif
-		return Decode[Value];
+		return Decoding_[Value];
 	}
 
 	inline void Decode_(
@@ -317,6 +321,9 @@ namespace cdgb64 {
 			bso::size__ Amount = 0;
 			flw::byte__ Datum;
 			bso::bool__ CacheIsEmpty = false;
+
+			if ( _Flow->EndOfFlow() )
+				return 0;
 
 #ifdef CDGB64_DBG
 			if ( Maximum < 4 )
@@ -407,6 +414,9 @@ namespace cdgb64 {
 		}
 	};
 
+	const str::string_ &Decode(
+		const str::string_ &Encoded,
+		str::string_ &Plain );
 }
 
 #endif

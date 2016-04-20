@@ -45,6 +45,14 @@ namespace parameter_ {
 		rgstry::entry___ Password_( "Password", Authentication_ );
 	}
 
+	rgstry::rEntry WatchDog_( "WatchDog", sclrgstry::Parameters );
+
+	namespace watchdog {
+		sclrgstry::rEntry
+			Key_( "Key", WatchDog_ ),
+			Code_( "Code", WatchDog_ );
+	}
+
 	rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );
 	rgstry::entry___ DefaultBackendType_("DefaultBackendType", sclrgstry::Parameters );
 
@@ -359,6 +367,59 @@ bso::bool__ sclfrntnd::frontend___::Connect(
 		_Flow.Init( K_().Core() );
 
 	return _frontend___::Connect( Language(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
+}
+
+void sclfrntnd::frontend___::Init(
+	kernel___ &Kernel,
+	const char *Language,
+	fblfrd::reporting_callback__ &ReportingCallback,
+	const rgstry::multi_level_registry_ &Registry )
+{
+qRH
+	str::wString Key;
+qRB
+	// _Flow.Init(...);	// Made on connection.
+	_Registry.Init();
+	_Registry.Push( Registry );
+	_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
+
+	if ( (Language != NULL) && *Language )
+		sclrgstry::SetValue( _Registry, str::string( Language ), rgstry::tentry___( sclrgstry::parameter::Language ) );
+
+	Kernel_ = &Kernel;
+
+	Key.Init();
+	sclmisc::OGetValue( parameter_::watchdog::Key_, Key );
+	_frontend___::Init( Key, ReportingCallback );
+qRR
+qRT
+qRE
+}
+
+void sclfrntnd::frontend___::Ping( void )
+{
+qRH
+	str::wString Code;
+qRB
+	Code.Init();
+	sclmisc::OGetValue( parameter_::watchdog::Code_, Code );
+	_frontend___::Ping( Code );	// If 'Code' not empty and correct, the backend doesn't return (watchdog testing purpose).
+qRR
+qRT
+qRE
+}
+
+void sclfrntnd::frontend___::Crash( void )
+{
+qRH
+	str::wString Code;
+qRB
+	Code.Init();
+	sclmisc::MGetValue( parameter_::watchdog::Code_, Code );
+	_frontend___::Crash( Code );
+qRR
+qRT
+qRE
 }
 
 void sclfrntnd::frontend___::Disconnect( void )

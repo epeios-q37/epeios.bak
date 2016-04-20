@@ -85,17 +85,7 @@ namespace sclbacknd {
 			const char *BackendInformations,
 			const char *BackendCopyright,
 			const char *SoftwareInformations,
-			void *UP )
-		{
-			rBackend_::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations );
-			rDaemon_::Init();
-			_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
-			_RequestLogFunctions.Init( _VoidFlowDriver );
-			_Registry.Init();
-			_Registry.Push( sclrgstry::GetCommonRegistry() );
-			_RegistrySetupLevel = _Registry.Create();
-			_UP = UP;
-		}
+			void *UP );
 		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
 			return _Registry;

@@ -21,11 +21,13 @@
 
 #include "cdgb64.h"
 
+#include "flx.h"
+
 using namespace cdgb64;
 
-bso::byte__ *cdgb64::Encode = (bso::byte__ *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+bso::byte__ *cdgb64::Encoding_ = (bso::byte__ *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-bso::byte__ *cdgb64::Decode = (bso::byte__ *)
+bso::byte__ *cdgb64::Decoding_ = (bso::byte__ *)
 						"@@@@@@@@@@@@@@@@"
 						"@@@@@@@@@@@@@@@c"
 						"@@@@@@@@@@@@@\x3e@@"
@@ -42,4 +44,49 @@ bso::byte__ *cdgb64::Decode = (bso::byte__ *)
 						"@@@@@@@@@@@@@@@@"
 						"@@@@@@@@@@@@@@@@"
 						"@@@@@@@@@@@@@@@@";
+
+const str::string_ &cdgb64::Encode(
+	const str::string_ &Plain,
+	str::string_ &Encoded )
+{
+qRH
+	flx::E_STRING_OFLOW___ SFlow;
+	encoding_oflow___ EFlow;
+	sdr::row__ Row = qNIL;
+qRB
+	SFlow.Init( Encoded );
+	EFlow.Init( SFlow );
+
+	Row = Plain.First();
+
+	while( Row != qNIL ) {
+		EFlow.Put( Plain( Row ) );
+
+		Row = Plain.Next( Row );
+	}
+qRR
+qRT
+qRE
+	return Encoded;
+}
+
+const str::string_ &cdgb64::Decode(
+	const str::string_ &Encoded,
+	str::string_ &Plain )
+{
+qRH
+	flx::E_STRING_IFLOW__ SFlow;
+	decoding_iflow___ DFlow;
+qRB
+	SFlow.Init( Encoded );
+	DFlow.Init( SFlow );
+
+	while ( !DFlow.EndOfFlow() )
+		Plain.Append( DFlow.Get() );
+qRR
+qRT
+qRE
+	return Plain;
+}
+
 

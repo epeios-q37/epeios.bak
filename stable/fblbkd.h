@@ -28,7 +28,7 @@
 
 // Frontend/Backend Layout BacKenD
 
-# include "err.h"// Frontend/Backend Layout BacKenD
+# include "err.h"
 
 # include "err.h"
 # include "flw.h"
@@ -689,6 +689,9 @@ namespace fblbkd {
 		TOL_CBUFFER___ _SoftwareInformations;
 		fblber::embedded_callbacks___ _Embedded;
 		fblbrr::remote_callbacks___ _Remote;
+		str::wString
+			Key_,	// Key used for encrypting the codes.
+			Code_;	// Code to allow a blocking ping or a crash.
 		// Retourne le module correspondant à 'IdType'.
 		untyped_module &Module_( type__ IdType ) const
 		{
@@ -736,6 +739,8 @@ namespace fblbkd {
 			_Mode = fblbur::m_Undefined;
 			_Embedded.reset( P );
 			_Remote.reset( P );
+			Key_.reset( P );
+			Code_.reset( P );
 		}
 		E_CVDTOR( backend___ );
 		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
@@ -747,7 +752,9 @@ namespace fblbkd {
 			const lcl::locale_ &Locale,
 			const char *BackendInformations,
 			const char *BackendCopyright,
-			const char *SoftwareInformations )
+			const char *SoftwareInformations,
+			const str::dString &Code,
+			const str::dString &Key )
 		{
 		qRH
 			str::string Buffer;
@@ -778,11 +785,15 @@ namespace fblbkd {
 
 			_Embedded.Init();
 			_Remote.Init();
+
+			Key_.Init( Key );
+			Code_.Init( Code );
 		qRR
 		qRT
 		qRE
 		}
-
+		qRODISCLOSEr( str::dString, Code );
+		qRODISCLOSEr( str::dString, Key );
 		//f Add 'Module' to the interface.
 		void Add( untyped_module &Module )
 		{

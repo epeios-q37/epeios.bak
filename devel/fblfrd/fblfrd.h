@@ -207,6 +207,7 @@ namespace fblfrd {
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramtre d'entre.
 		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramtre flow dans les paramtres de sortie.
 		bso::bool__ _DismissPending;
+		str::wString CodeKey_;	// Clé de cryptage des codes pour le 'Ping' et le 'Crash'.
 		void _PreProcess( void )
 		{
 			_ParametersCallbacks->PreProcess();
@@ -344,9 +345,12 @@ namespace fblfrd {
 			_FlowInParameter = NULL;
 			_FlowOutParameter = false;
 			_DismissPending = false;
+			CodeKey_.reset( P );
 		}
 		E_CVDTOR( frontend___ );
-		void Init( reporting_callback__ &ReportingCallback )
+		void Init(
+			const str::dString &CodeKey,
+			reporting_callback__ &ReportingCallback )
 		{
 
 			if ( Channel_ != NULL )
@@ -358,6 +362,7 @@ namespace fblfrd {
 			_FlowInParameter = NULL;
 			_FlowOutParameter = false;
 			_DismissPending = false;
+			CodeKey_.Init( CodeKey );
 		}
 		bso::bool__ Connect(
 			const char *Language,
@@ -697,7 +702,11 @@ namespace fblfrd {
 			StringOut( Software );
 
 			_Handle();
-		} 
+		}
+		/// (watchdog testing purpose) To verify if the the 'backend' is still responding. If 'Code' is correct, the backend doesn't return.
+		void Ping( const str::dString &Code );
+		/// Crashes the backend (watchdog testing purpose), if 'Code' is correct.
+		void Crash( const str::dString &Code );
 		//f Disconnection.
 		bso::bool__ IsConnected( void ) const
 		{
@@ -809,9 +818,11 @@ namespace fblfrd {
 			_EmbeddedCallbacks.reset( P );
 		}
 		E_CVDTOR( universal_frontend___ );
-		void Init( fblfrd::reporting_callback__ &ReportingCallback )
+		void Init(
+			const str::dString &CodeKey,
+			fblfrd::reporting_callback__ &ReportingCallback )
 		{
-			return frontend___::Init(  ReportingCallback  );
+			return frontend___::Init( CodeKey, ReportingCallback );
 		}
 		bso::bool__ Connect(
 			const char *Language,

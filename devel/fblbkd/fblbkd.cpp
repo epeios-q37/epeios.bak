@@ -24,6 +24,8 @@
 #include "fblcmd.h"
 #include "fblovl.h"
 
+#include "cdgb64.h"
+
 using namespace fblbkd;
 
 using namespace fbltyp;
@@ -340,6 +342,57 @@ static void About_(
 	Requete.StringOut() = Backend.GetBackendCopyright();
 	Requete.StringOut() = Backend.GetSoftwareInformations();
 	Requete.Complete();
+}
+
+namespace {
+	bso::sBool Test_(
+		const str::dString &Crypted,
+		const str::dString &Code,
+		const str::dString &Key )
+	{
+		bso::sBool Correct = false;
+	qRH
+		str::wString Decoded, Plain;
+	qRB
+		if ( ( Crypted.Amount() != 0 ) && ( Key.Amount() != 0 ) ) {
+			Decoded.Init();
+			cdgb64::Decode( Crypted, Decoded );
+			Plain.Init();
+			crptgr::Decrypt( Decoded, Key, Plain );
+
+			Correct = Plain == Code;
+		}
+	qRR
+	qRT
+	qRE
+		return Correct;
+	}
+}
+
+static void Ping_(
+	backend___ &Backend,
+	untyped_module &Module,
+	index__,
+	command__ Command,
+	request__ &Request,
+	bso::bool__ &,
+	void * )
+{
+	if ( Test_( Request.StringIn(), Backend.Code(), Backend.Key() ) )
+		Request.Input().Get();
+}
+
+static void Crash_(
+	backend___ &Backend,
+	untyped_module &Module,
+	index__,
+	command__ Command,
+	request__ &Request,
+	bso::bool__ &,
+	void * )
+{
+	if ( Test_( Request.StringIn(), Backend.Code(), Backend.Key() ) )
+		memcpy( NULL, NULL, 1 );	// Crashes the application.
 }
 
 // Throw an framework error (ERRFwk), for testing purpose.
@@ -716,6 +769,12 @@ void fblbkd::master_module::Init( fblbkd::backend___ &Backend )
 
 	// Informations au sujet du 'backend' et du 'publisher'.
 	ADD( About );
+
+	// Command to verify if the backend is still responding. When the apporiate code is given, the backend does nor respond ; for watchdog testing purpose.
+	ADD( Ping );
+
+	// When the appropriate code is given, crashes the backend ; for watchdog testing purpose.
+	ADD( Crash );
 
 	// Disconnection.
 	ADD( Disconnect );

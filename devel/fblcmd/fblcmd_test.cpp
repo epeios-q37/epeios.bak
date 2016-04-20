@@ -17,46 +17,39 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-#ifndef FBLOVL__INC
-#define FBLOVL__INC
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#define FBLOVL_NAME		"FBLOVL"
+#include "fblcmd.h"
 
-#define	FBLOVL_VERSION	"$Revision: 1.5 $"
+#include "err.h"
+#include "cio.h"
 
-#define FBLOVL_OWNER		"Claude SIMON"
+using cio::CIn;
+using cio::COut;
+using cio::CErr;
 
-
-#if defined( E_DEBUG ) && !defined( FBLOVL_NODBG )
-#define FBLOVL_DBG
-#endif
-
-//D Frontend/Backend Layout OVerLapping 
-
-#define FBLOVL_PROTOCOL_VERSION	"13"
-
-namespace fblovl {
-
-	enum mode__ {
-		mNone,
-		mEmbedded,
-		mRemote,
-		m_Amount,
-		m_Undefined
-	};
-
-	enum reply__ {
-		rOK,
-		rSoftwareError,	// Lorsque survient un 'ERR[x|X](...)'.
-		rRequestError,	// Lorsque survient un problme lors de l'excution de la requte.
-		rDisconnected,	// Connection was lost.
-		r_amount,
-		r_Undefined
-	};
-
-	const char *GetLabel( reply__ Reply );
-
+void Generic( int argc, char *argv[] )
+{
+qRH
+qRB
+qRR
+qRT
+qRE
 }
 
-/*$END$*/
-#endif
+int main( int argc, char *argv[] )
+{
+	int ExitValue = EXIT_SUCCESS;
+qRFH
+qRFB
+	COut << "Test of library " << FBLCMD_NAME << ' ' << __DATE__" "__TIME__"\n";
+
+	Generic( argc, argv );
+qRFR
+	ExitValue = EXIT_FAILURE;
+qRFT
+qRFE
+	return ExitValue;
+}

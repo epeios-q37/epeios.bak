@@ -154,20 +154,9 @@ namespace sclfrntnd {
 			kernel___ &Kernel,
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback,
-			const rgstry::multi_level_registry_ &Registry )
-		{
-			// _Flow.Init(...);	// Made on connection.
-			_Registry.Init();
-			_Registry.Push( Registry );
-			_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
-
-			if ( (Language != NULL) && *Language )
-				sclrgstry::SetValue( _Registry, str::string( Language ), rgstry::tentry___( sclrgstry::parameter::Language ) );
-
-			Kernel_ = &Kernel;
-
-			return _frontend___::Init( ReportingCallback );
-		}
+			const rgstry::multi_level_registry_ &Registry );
+		void Ping( void );
+		void Crash( void );
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
 			fblfrd::incompatibility_informations_ &IncompatibilityInformations );

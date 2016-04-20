@@ -22,6 +22,8 @@
 #include "fblfrd.h"
 
 #include "cio.h"
+#include "crptgr.h"
+#include "cdgb64.h"
 
 using namespace fblfrd;
 
@@ -176,6 +178,64 @@ qRR
 qRT
 qRE
 }
+
+namespace {
+	const str::dString &Encrypt_(
+		const str::dString &Code,
+		const str::dString &Key,
+		str::dString &Crypted )
+	{
+	qRH
+		str::wString Buffer;
+	qRB
+		if ( (Key.Amount() != 0) && (Code.Amount() != 0) ) {
+			Buffer.Init();
+			crptgr::Encrypt( Code, Key, Buffer );
+			cdgb64::Encode( Buffer, Crypted );
+		}
+	qRR
+	qRT
+	qRE
+		return Crypted;
+	}
+}
+
+void fblfrd::frontend___::Ping( const str::dString &Code )
+{
+qRH
+	str::wString Crypted;
+qRB
+	Crypted.Init();
+	Internal_( fblcmd::cPing );
+
+	StringIn( Encrypt_( Code, CodeKey_, Crypted ) );
+
+	EndOfInParameters();
+
+	_Handle();
+qRR
+qRT
+qRE
+}
+
+void fblfrd::frontend___::Crash( const str::dString &Code )
+{
+qRH
+	str::wString Crypted;
+qRB
+	Crypted.Init();
+	Internal_( fblcmd::cCrash );
+
+	StringIn( Encrypt_( Code, CodeKey_, Crypted ) );
+
+	EndOfInParameters();
+
+	_Handle();
+qRR
+qRT
+qRE
+}
+
 
 void fblfrd::sDefaultReportingCallback::FBLFRDReport(
 	fblovl::reply__ Reply,

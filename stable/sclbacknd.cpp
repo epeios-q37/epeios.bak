@@ -38,6 +38,46 @@
 
 using namespace sclbacknd;
 
+namespace {
+	sclrgstry::rEntry
+		WatchDog_( "WatchDog", sclrgstry::Parameters ),
+		Code_( "Code", WatchDog_ ),
+		Key_( "Key", WatchDog_ );
+}
+
+void sclbacknd::backend___::Init(
+	fblbur::mode__ Mode,
+	const char *APIVersion,
+	const ntvstr::char__ *ClientOrigin,
+	const char *BackendLabel,
+	const char *BackendInformations,
+	const char *BackendCopyright,
+	const char *SoftwareInformations,
+	void *UP )
+{
+qRH
+	str::wString Code, Key;
+qRB
+	Code.Init();
+	sclmisc::OGetValue( ::Code_, Code );
+
+	Key.Init();
+	sclmisc::OGetValue( ::Key_, Key );
+
+	rBackend_::Init( Mode, APIVersion, ClientOrigin, BackendLabel, scllocale::GetLocale(), BackendInformations, BackendCopyright, SoftwareInformations, Code, Key );
+	rDaemon_::Init();
+	_VoidFlowDriver.Init( fdr::tsDisabled, flx::aAllowed );
+	_RequestLogFunctions.Init( _VoidFlowDriver );
+	_Registry.Init();
+	_Registry.Push( sclrgstry::GetCommonRegistry() );
+	_RegistrySetupLevel = _Registry.Create();
+	_UP = UP;
+qRR
+qRT
+qRE
+}
+
+
 scldaemon::callback___ *scldaemon::SCLDAEMONGetCallback( 
 	csdleo::context__ Context,
 	csdleo::mode__ CSDMode )
