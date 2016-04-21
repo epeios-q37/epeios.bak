@@ -123,11 +123,11 @@ public:
 	bso::bool__ Init(
 		const char *HostService,
 		bso::uint__ PingDelay,
-		sck::duration__ TimeOut )
+		sck::duration__ Timeout )
 	{
 		_plugin___::Init();
 
-		if ( !Core_.Init( HostService, PingDelay, TimeOut ) )
+		if ( !Core_.Init( HostService, PingDelay, Timeout ) )
 			return false;
 
 		Flow_.Init( Core_ );
@@ -142,7 +142,7 @@ public:
 	qRH
 		str::string HostService;
 		bso::uint__ PingDelay = 0;
-		sck::duration__ TimeOut = sck::NoTimeOut;
+		sck::duration__ Timeout = sck::NoTimeout;
 		TOL_CBUFFER___ Buffer;
 		rpstraight::rAbstract *Abstract = (rpstraight::rAbstract *)BaseAbstract;
 	qRB
@@ -152,9 +152,9 @@ public:
 
 		sclmisc::MGetValue( registry::parameter::HostService, HostService );
 		PingDelay = sclmisc::OGetUInt( registry::parameter::PingDelay, 0 );
-		TimeOut = sclmisc::OGetU16( registry::parameter::TimeOut, sck::NoTimeOut );
+		Timeout = sclmisc::OGetU16( registry::parameter::Timeout, sck::NoTimeout );
 
-		if ( !Init( HostService.Convert(Buffer), PingDelay, TimeOut ) )
+		if ( !Init( HostService.Convert(Buffer), PingDelay, Timeout ) )
 			switch ( plgn::ErrorReporting( Abstract ) ) {
 			case plgn::rhInternally:
 				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );

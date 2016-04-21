@@ -74,7 +74,7 @@ bso::bool__ csdbns::listener___::Init(
 
 socket__ csdbns::listener___::_Interroger(
 	err::handling__ ErrorHandling,
-	sck::duration__ TimeOut,
+	sck::duration__ Timeout,
 	const char *&IP )
 {
 	fd_set fds;
@@ -86,7 +86,7 @@ socket__ csdbns::listener___::_Interroger(
 	{
 qRH
 	Socket = SCK_INVALID_SOCKET;
-	timeval TimeOutStruct;
+	timeval TimeoutStruct;
 	struct sockaddr_in SockAddr;
 #ifdef SCK__WIN
     int
@@ -101,10 +101,10 @@ qRB
 		FD_ZERO( &fds );
 		FD_SET( Socket_, &fds );
 
-		TimeOutStruct.tv_sec = TimeOut / 1000;
-		TimeOutStruct.tv_usec = ( (bso::u32__)TimeOut % 1000UL ) * 1000;
+		TimeoutStruct.tv_sec = Timeout / 1000;
+		TimeoutStruct.tv_usec = ( (bso::u32__)Timeout % 1000UL ) * 1000;
 
-		Reponse = select( (int)( Socket_ + 1 ), &fds, 0, 0, TimeOut != SCK_INFINITE ? &TimeOutStruct : NULL );
+		Reponse = select( (int)( Socket_ + 1 ), &fds, 0, 0, Timeout != SCK_INFINITE ? &TimeoutStruct : NULL );
 
 		if ( Reponse == SCK_SOCKET_ERROR )
 			qRSys();
@@ -147,7 +147,7 @@ qRE
 bso::bool__ csdbns::listener___::Process(
 	socket_callback__ &Callback,
 	err::handling__ ErrorHandling,
-	sck::duration__ TimeOut )
+	sck::duration__ Timeout )
 {
 	bso::bool__ Continue = true;
 qRH
@@ -155,7 +155,7 @@ qRH
 	action__ Action = a_Undefined;
 	const char *UP = NULL;
 qRB
-	Socket = _Interroger( ErrorHandling, TimeOut, UP );
+	Socket = _Interroger( ErrorHandling, Timeout, UP );
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
 
@@ -363,7 +363,8 @@ qRFE( ErrFinal_() )
 }
 
 void server___::Process(
-	sck::duration__ TimeOut,
+	const bso::sBool *Freeze,
+	sck::duration__ Timeout,
 	err::handling__ ErrorHandling )
 {
 qRH
@@ -372,7 +373,7 @@ qRH
 	::socket_data__ Data = {NULL, SCK_INVALID_SOCKET, NULL, MTX_INVALID_HANDLER};
 	bso::bool__ Continue = true;
 qRB
-	Socket = listener___::GetConnection( IP, ErrorHandling, TimeOut );
+	Socket = listener___::GetConnection( IP, ErrorHandling, Timeout );
 
 	if ( Socket != SCK_INVALID_SOCKET ) {
 
@@ -393,7 +394,11 @@ qRB
 
 		Socket = SCK_INVALID_SOCKET;
 
-		Socket = listener___::GetConnection( IP, ErrorHandling, TimeOut );
+		Socket = listener___::GetConnection( IP, ErrorHandling, Timeout );
+
+		if ( Freeze != NULL )
+			while ( *Freeze )
+				tht::Defer( 100 );
 
 		if ( Socket != SCK_INVALID_SOCKET ) {
 			mtx::Lock( Data.Mutex );	// Unlocked by the 'Traiter_()' function.

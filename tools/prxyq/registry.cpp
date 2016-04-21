@@ -21,4 +21,12 @@
 
 using namespace registry;
 
-entry___ registry::Service("Service", sclrgstry::Parameters );
+entry___ registry::parameter::Service("Service", sclrgstry::Parameters );
+
+namespace {
+	rEntry Watchdog_( "Watchdog", sclrgstry::Parameters );
+}
+
+rEntry registry::parameter::watchdog::Target( "Target",  Watchdog_ );
+rEntry registry::parameter::watchdog::Timeout( "Timeout",  Watchdog_ );
+rEntry registry::parameter::watchdog::Blocking( "Blocking",  Watchdog_ );

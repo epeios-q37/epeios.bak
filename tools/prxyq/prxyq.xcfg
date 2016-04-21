@@ -9,15 +9,33 @@
 			<Command>Process</Command>
 			<!-- Default command -->
 			<Service>53710</Service>
+			<Watchdog>
+				<Target>localhost:53710</Target>
+				<Timeout>5</Timeout>
+			</Watchdog>
 		</Parameters>
 		<Definitions>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
+			<!-- Commands -->
 			<Translations text="ProcessCommandDescription">
-				<Translation language="fr">Proxy.</Translation>
-				<Translation language="en">Proxy.</Translation>
+				<Translation language="fr">Lance le 'proxy'.</Translation>
+				<Translation language="en">Launches the proxy.</Translation>
 			</Translations>
+			<Translations text="PingCommandDescription">
+				<Translation language="fr">Test l'accessibilité d'un 'proxy'.</Translation>
+				<Translation language="en">Tests accessibility of a proxy.</Translation>
+			</Translations>
+			<Translations text="FreezeCommandDescription">
+				<Translation language="fr">Gèle un 'proxy' (test 'watchdog').</Translation>
+				<Translation language="en">Freezes a proxy (watchdog testing).</Translation>
+			</Translations>
+			<Translations text="CrashCommandDescription">
+				<Translation language="fr">Provoque le dysfonctionnement d'un 'proxy' (test 'watchdog').</Translation>
+				<Translation language="en">Causes a proxy malfunction (watchdog testing).</Translation>
+			</Translations>
+			<!-- Arguments -->
 			<Translations text="ServiceArgumentDescription">
 				<Translation language="fr">Port en écoute</Translation>
 				<Translation language="en">Port to listen to.</Translation>
@@ -26,15 +44,48 @@
 				<Translation language="fr">service</Translation>
 				<Translation language="en">service</Translation>
 			</Translations>
+			<Translations text="WatchdogTargetArgumentDescription">
+				<Translation language="fr">Adresse:port du 'proxy'.</Translation>
+				<Translation language="en">Address:port of the proxy.</Translation>
+			</Translations>
+			<Translations text="WatchdogTargetArgumentLabel">
+				<Translation language="fr">proxy</Translation>
+				<Translation language="en">proxy</Translation>
+			</Translations>
+			<Translations text="WatchdogTimeoutArgumentDescription">
+				<Translation language="fr">Délai d'attente en secondes.</Translation>
+				<Translation language="en">Timeout in seconds.</Translation>
+			</Translations>
+			<Translations text="WatchdogTimeoutArgumentLabel">
+				<Translation language="fr">temporisation</Translation>
+				<Translation language="en">timeout</Translation>
+			</Translations>
 		</Locale>
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
+			<!-- Commands -->
 			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" short="p" Value="Process" Usage="%ServiceArgument%"/>
+			<Argument id="PingCommand" Description="PingCommandDescription" long="ping" Value="Ping" Usage="[%WatchdogTimeoutArgument% [%WatchdogTargetArgument%]]"/>
+			<Argument id="FreezeCommand" Description="FreezeCommandDescription" long="freeze" Value="Freeze" Usage="[%WatchdogTargetArgument%]"/>
+			<Argument id="CrashCommand" Description="CrashCommandDescription" long="crash" Value="Crash" Usage="[%WatchdogTargetArgument%]"/>
+			<!-- Arguments -->
 			<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>
+			<Argument id="WatchdogTimeoutArgument" Description="WatchdogTimeoutArgumentDescription" Path="Watchdog/Timeout" Label="WatchdogTimeoutArgumentLabel"/>
+			<Argument id="WatchdogTargetArgument" Description="WatchdogTargetArgumentDescription" Path="Watchdog/Target" Label="WatchdogTargetArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Process">
 					<Link index="0" Target="ServiceArgument"/>
+				</Layout>
+				<Layout command="Ping">
+					<Link index="0" Target="WatchdogTimeoutArgument"/>
+					<Link index="1" Target="WatchdogTargetArgument"/>
+				</Layout>
+				<Layout command="Freeze">
+					<Link index="0" Target="WatchdogTargetArgument"/>
+				</Layout>
+				<Layout command="Ping">
+					<Link index="0" Target="WatchdogTargetArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

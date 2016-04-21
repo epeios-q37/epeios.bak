@@ -45,12 +45,12 @@ namespace parameter_ {
 		rgstry::entry___ Password_( "Password", Authentication_ );
 	}
 
-	rgstry::rEntry WatchDog_( "WatchDog", sclrgstry::Parameters );
+	rgstry::rEntry Watchdog_( "Watchdog", sclrgstry::Parameters );
 
 	namespace watchdog {
 		sclrgstry::rEntry
-			Key_( "Key", WatchDog_ ),
-			Code_( "Code", WatchDog_ );
+			Key_( "Key", Watchdog_ ),
+			Code_( "Code", Watchdog_ );
 	}
 
 	rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );

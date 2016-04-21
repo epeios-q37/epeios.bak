@@ -18,6 +18,7 @@
 */
 
 #include "registry.h"
+#include "watchdog.h"
 
 #include "prxybase.h"
 
@@ -31,6 +32,7 @@
 #include "fnm.h"
 #include "flf.h"
 #include "csdcmn.h"
+#include "csdbnc.h"
 #include "csdbns.h"
 #include "lstbch.h"
 #include "ctn.h"
@@ -49,8 +51,9 @@ using cio::CIn;
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
 
-
 namespace {
+	bso::sBool FreezeFlag_ = false;	// For watchdog testing putpose.
+
 	void PrintHeader_( void )
 	{
 		COut << NAME_MC " V" VERSION << " (" WEBSITE_URL ")" << txf::nl;
@@ -420,8 +423,6 @@ public:
 		if ( Proxy->Init( Flow, Type ) )	// Blocking until deconnection.
 			delete Proxy;
 	qRR
-		if ( mtx::IsLocked( Mutex_ ) )
-			mtx::Unlock( Mutex_ );
 	qRT
 	qRE
 	}
@@ -437,13 +438,89 @@ public:
 			delete Proxy;
 	}
 
+	void Plug_( flw::ioflow__ &Flow )
+	{
+	qRH
+		prxybase::eType Type = prxybase::t_Undefined;
+		str::string Id;
+		rProxy *Proxy = NULL;
+	qRB
+		Type = prxybase::GetType( Flow );
+
+		Id.Init();
+		prxybase::GetId( Flow, Id );
+
+		mtx::Lock( Mutex_ );
+
+		switch ( Type ) {
+		case prxybase::tClient:
+			Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
+			break;
+		case prxybase::tServer:
+			Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+
+		if ( Proxy == NULL ) 
+			Create_( Id, Flow, Type );
+		else
+			Plug_( Proxy, Flow, Type );
+	qRR
+	qRT
+	qRE
+	}
+
+	void Ping_( flw::ioflow__ &Flow )
+	{
+		prxybase::PutAnswer( prxybase::aPong, Flow );
+
+		Flow.Commit();
+	}
+
+	void Freeze_(
+		flw::ioflow__ &Flow,
+		bso::sBool FromLocalhost )
+	{
+		if ( FromLocalhost ) {
+			FreezeFlag_ = true;
+			prxybase::PutAnswer( prxybase::aFrozen, Flow );
+		} else
+			prxybase::PutAnswer( prxybase::aForbidden, Flow );
+
+
+		Flow.Commit();
+	}
+
+	void Crash_(
+		flw::ioflow__ &Flow,
+		bso::sBool FromLocalhost )
+	{
+		if ( FromLocalhost ) {
+			memcpy( NULL, NULL, 1 );	// To crash the program ; for watchdog testing purpose.
+		} else
+			prxybase::PutAnswer( prxybase::aForbidden, Flow );
+
+		Flow.Commit();
+	}
 
 	class callback__
 	: public cProcessing
 	{
+	private:
+		bso::sBool FromLocalhost_;
 	protected:
 		void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
+		qRH
+			qCBUFFERr Buffer;
+		qRB
+			FromLocalhost_ = strncmp( ntvstr::string___( Origin ).UTF8( Buffer ), "127.", 4 ) == 0;
+		qRR
+		qRT
+		qRE
 			return NULL;
 		}
 		csdscb::action__ CSDSCBProcess(
@@ -455,35 +532,26 @@ public:
 			str::string Id;
 			rProxy *Proxy = NULL;
 		qRB
-			mtx::Lock( Mutex_ );
-
 			if ( csdcmn::GetProtocolVersion( prxybase::ProtocolId, Flow ) != prxybase::ProtocolVersion )
 				qRGnr();
 
-			if ( prxybase::GetRequest( Flow ) != prxybase::rPlug )
-				qRGnr();
-
-			Type = prxybase::GetType( Flow );
-
-			Id.Init();
-			prxybase::GetId( Flow, Id );
-
-			switch ( Type ) {
-			case prxybase::tClient:
-				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
+			switch ( prxybase::GetRequest( Flow ) ) {
+			case prxybase::rPlug:
+				Plug_( Flow );
 				break;
-			case prxybase::tServer:
-				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
+			case prxybase::rPing:
+				Ping_( Flow );
+				break;
+			case prxybase::rFreeze:
+				Freeze_( Flow, FromLocalhost_ );
+				break;
+			case prxybase::rCrash:
+				Crash_( Flow, FromLocalhost_ );
 				break;
 			default:
 				qRGnr();
 				break;
 			}
-
-			if ( Proxy == NULL ) 
-				Create_( Id, Flow, Type );
-			else
-				Plug_( Proxy, Flow, Type );
 		qRR
 			if (  mtx::IsLocked( Mutex_ ) )
 				mtx::Unlock( Mutex_ );
@@ -496,12 +564,17 @@ public:
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			FromLocalhost_ = false;
 		}
 		E_CVDTOR( callback__ );
 		void Init( void )
 		{
+			FromLocalhost_ = false;
 		}
 	};
+}
+
+namespace {
 
 	void Process_( void )
 	{
@@ -509,11 +582,26 @@ public:
 		csdbns::server___ Server;
 		callback__ Callback;
 	qRB
-		Server.Init(sclmisc::MGetU16( registry::Service ), Callback );
-		Server.Process();
+		Server.Init(sclmisc::MGetU16( registry::parameter::Service ), Callback );
+		Server.Process( &FreezeFlag_ );
 	qRR
 	qRT
 	qRE
+	}
+
+	void Ping_( void )
+	{
+		watchdog::Ping();
+	}
+
+	void Freeze_( void )
+	{
+		watchdog::Freeze();
+	}
+
+	void Crash_( void )
+	{
+		watchdog::Crash();
 	}
 }
 
@@ -534,6 +622,9 @@ qRB
 	else if ( Command == "License" )
 		epsmsc::PrintLicense( NAME_MC );
 	C( Process );
+	C( Ping );
+	C( Freeze );
+	C( Crash );
 	else
 		qRGnr();
 

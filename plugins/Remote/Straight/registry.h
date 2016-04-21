@@ -28,7 +28,7 @@ namespace registry {
 
 		extern rgstry::entry___ HostService;
 		extern rgstry::entry___ PingDelay;
-		extern rgstry::entry___ TimeOut;
+		extern rgstry::entry___ Timeout;
 	}
 }
 

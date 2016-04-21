@@ -95,7 +95,7 @@ namespace csdbns {
 		}
 		socket__ _Interroger(
 			err::handling__ ErrorHandling,
-			sck::duration__ TimeOut,
+			sck::duration__ Timeout,
 			const char *&IP );
 	public:
 		void reset( bool P = true )
@@ -136,29 +136,29 @@ namespace csdbns {
 		{
 			return Init( Port, Amount, ErrorHandling );
 		}
-		//f Return the first available connection. BLOCKING FUNCTION if 'TimeOut == 'SCK_INFINITE'.
+		//f Return the first available connection. BLOCKING FUNCTION if 'Timeout == 'SCK_INFINITE'.
 		socket__ GetConnection(
 			const char *&IP,
 			err::handling__ ErrorHandling = err::h_Default,
-			sck::duration__ TimeOut = SCK_INFINITE )
+			sck::duration__ Timeout = SCK_INFINITE )
 		{
-			return _Interroger( ErrorHandling, TimeOut, IP );
+			return _Interroger( ErrorHandling, Timeout, IP );
 		}
-		//f Initialize 'Socket' with the first connection available. BLOCKING FUNCTION if 'TimeOut' == 'SCK_INFINITE'.
+		//f Initialize 'Socket' with the first connection available. BLOCKING FUNCTION if 'Timeout' == 'SCK_INFINITE'.
 		void GetConnection(
 			socket__ &Socket,
 			const char *&IP,
 			err::handling__ ErrorHandling = err::h_Default,
-			sck::duration__ TimeOut = 0 )
+			sck::duration__ Timeout = 0 )
 		{
-			Socket = _Interroger( ErrorHandling, TimeOut, IP );
+			Socket = _Interroger( ErrorHandling, Timeout, IP );
 		}
-		// If returned value = 'true', then exiting is because 'TimeOut' reached.
+		// If returned value = 'true', then exiting is because 'Timeout' reached.
 		// If returned value == 'false', then underlying user function retuns 'bStop'.
 		bso::bool__ Process(
 			socket_callback__ &Callback,
 			err::handling__ ErrorHandling = err::h_Default,
-			sck::duration__ TimeOut = SCK_INFINITE );
+			sck::duration__ Timeout = SCK_INFINITE );
 	};
 
 # ifdef CPE_F_MT
@@ -184,7 +184,7 @@ namespace csdbns {
 			if ( Data == NULL )
 				qRAlc();
 
-			Data->Flow.Init( Socket, sck::NoTimeOut );
+			Data->Flow.Init( Socket, sck::NoTimeout );
 			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );
 		qRR
 			if ( Data != NULL )
@@ -308,7 +308,8 @@ namespace csdbns {
 #  endif
 		}
 		void Process(
-			sck::duration__ TimeOut = CSDNBS__DEFAULT_TIMEOUT,
+			const bso::sBool *Freeze,	// Pointer to a boolean. If this pointer != NULL and the boolean becomes 'true', the server does no more respond to a connexion. For watchdog testing purpose.
+			sck::duration__ Timeout = CSDNBS__DEFAULT_TIMEOUT,
 			err::handling__ ErrorHandling = err::h_Default );
 	};
 # endif

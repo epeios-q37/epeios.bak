@@ -42,7 +42,7 @@ flw::size__ sck::Read(
 	socket__ Socket,
 	flw::size__ Amount,
 	void *Buffer,
-	duration__ TimeOut )
+	duration__ Timeout )
 {
 	fd_set fds;
 	int Result;
@@ -50,13 +50,13 @@ flw::size__ sck::Read(
 	FD_ZERO( &fds );
 	FD_SET( Socket, &fds );
 
-	if ( TimeOut == SCK_INFINITE )
+	if ( Timeout == SCK_INFINITE )
 		Result = select( (int)( Socket + 1 ), &fds, NULL, NULL, NULL );
 	else
 	{
 		timeval TV;
 
-		TV.tv_sec = TimeOut;
+		TV.tv_sec = Timeout;
 		TV.tv_usec = 0;
 
 		Result = select( (int)( Socket + 1 ), &fds, NULL, NULL, &TV );
@@ -90,7 +90,7 @@ flw::size__ sck::Write(
 	socket__ Socket,
 	const void *Buffer,
 	flw::size__ Amount,
-	duration__ TimeOut )
+	duration__ Timeout )
 {
 	fd_set fds;
 	int Result;
@@ -98,13 +98,13 @@ flw::size__ sck::Write(
 	FD_ZERO( &fds );
 	FD_SET( Socket, &fds );
 
-	if ( TimeOut == SCK_INFINITE )
+	if ( Timeout == SCK_INFINITE )
 		Result = select( (int)( Socket + 1 ), NULL, &fds, NULL, NULL );
 	else
 	{
 		timeval TV;
 
-		TV.tv_sec = TimeOut;
+		TV.tv_sec = Timeout;
 		TV.tv_usec = 0;
 
 		Result = select( (int)( Socket + 1 ), NULL, &fds, NULL, &TV );

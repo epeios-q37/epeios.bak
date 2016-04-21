@@ -71,7 +71,7 @@
 #	error
 #endif
 
-//d Value to give to the 'TimeOut' parameter to indicate waiting forever.
+//d Value to give to the 'Timeout' parameter to indicate waiting forever.
 #define SCK_INFINITE	BSO_U16_MAX
 
 //d Returned value to indicate that the connection no longer exists.
@@ -90,6 +90,10 @@
 
 //d Max data amount of concurrent write and read.
 #define SCK__DEFAULT_AMOUNT	FLW_AMOUNT_MAX
+
+/**************/
+/**** OLD *****/
+/**************/
 
 namespace sck {
 	using flw::byte__;
@@ -217,16 +221,16 @@ namespace sck {
 		socket__ Socket,
 		flw::size__ Amount,
 		void *Buffer,
-		duration__ TimeOut );	// En secondes.
+		duration__ Timeout );	// En secondes.
 
 	/*f Write up to 'Amount' bytes from 'Buffer' to the socket 'Socket'. Return
-	the amount effectively written. If 0 is returned, it means 'TimeOut' expired.
+	the amount effectively written. If 0 is returned, it means 'Timeout' expired.
 	If connection no longer exists, then 'SCK_DISCONNECTED' is returned. */
 	flw::size__ Write(
 		socket__ Socket,
 		const void *Buffer,
 		flw::size__ Amount,
-		duration__ TimeOut );	// En secondes.
+		duration__ Timeout );	// En secondes.
 
 	//f Close the socket 'Socket'.
 	inline void Close( socket__ Socket )
@@ -252,7 +256,7 @@ namespace sck {
 	{
 	private:
 		socket__ _Socket;
-		duration__ _TimeOut;	// En secondes.
+		duration__ _Timeout;	// En secondes.
 		bso::bool__ _Error;
 		time_t _EpochTimeStamp;	// Horodatage de la dernire activit (lecture ou criture);
 		const flw::ioflow__ *_User;
@@ -265,7 +269,7 @@ namespace sck {
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer )
 		{
-			if ( ( Maximum = sck::Read( _Socket, ( Maximum ), Buffer, _TimeOut ) ) == SCK_DISCONNECTED )
+			if ( ( Maximum = sck::Read( _Socket, ( Maximum ), Buffer, _Timeout ) ) == SCK_DISCONNECTED )
 				Maximum = 0;
 			else
 				_Touch();
@@ -279,7 +283,7 @@ namespace sck {
 			if ( _Error )
 				qRFwk();
 
-			if ( ( Maximum = sck::Write( _Socket, Buffer, Maximum, _TimeOut ) ) == SCK_DISCONNECTED ) {
+			if ( ( Maximum = sck::Write( _Socket, Buffer, Maximum, _Timeout ) ) == SCK_DISCONNECTED ) {
 				_Socket = SCK_INVALID_SOCKET;
 				_Error = true;
 				Maximum = 0;
@@ -306,7 +310,7 @@ namespace sck {
 			_ioflow_driver___::reset( P );
 								
 			_Socket = SCK_INVALID_SOCKET;
-			_TimeOut = SCK_INFINITE;
+			_Timeout = SCK_INFINITE;
 			_Error = false;
 			_EpochTimeStamp = 0;
 			_User = NULL;
@@ -319,19 +323,19 @@ namespace sck {
 		{
 			reset();
 		}
-		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
+		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		void Init(
 			socket__ Socket,
 			const flw::ioflow__ *User,
 			fdr::thread_safety__ ThreadSafety,
-			duration__ TimeOut )	// En secondes.
+			duration__ Timeout )	// En secondes.
 		{
 			reset();
 		
 			_ioflow_driver___::Init( ThreadSafety );
 
 			_Socket = Socket;
-			_TimeOut = TimeOut;
+			_Timeout = Timeout;
 			_User = User;
 			_Touch();	// On suppose qu'il n'y a pas une trop longue attente entre la cration de la socket et l'appel  cette mthode ...
 		}
@@ -360,14 +364,14 @@ namespace sck {
 		{
 			reset();
 		}
-		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
+		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		void Init(
 			socket__ Socket,
-			duration__ TimeOut ) // En secondes.
+			duration__ Timeout ) // En secondes.
 		{
 			reset();
 
-			_Driver.Init( Socket, this, fdr::ts_Default, TimeOut );
+			_Driver.Init( Socket, this, fdr::ts_Default, Timeout );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 		socket__ Socket( void ) const
@@ -380,8 +384,15 @@ namespace sck {
 		}
 	};
 
-	qCDEF( duration__, NoTimeOut, SCK_INFINITE );
+	qCDEF( duration__, NoTimeout, SCK_INFINITE );
 
 }
 
+/**************/
+/**** NEW *****/
+/**************/
+
+namespace sck {
+	typedef duration__ sTimeout;
+}
 #endif

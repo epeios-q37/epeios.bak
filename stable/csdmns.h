@@ -74,9 +74,9 @@ namespace csdmns {
 		{
 			return Server_.LaunchService( ServiceName );
 		}
-		void Process( sck::duration__ TimeOut = SCK_INFINITE )
+		void Process( sck::duration__ Timeout = SCK_INFINITE )
 		{
-			Server_.Process( TimeOut );
+			Server_.Process( Timeout );
 		}
 	};
 }

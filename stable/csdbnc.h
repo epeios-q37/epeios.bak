@@ -163,7 +163,7 @@ namespace csdbnc {
 		bso::bool__ Init(
 			const char *Host,
 			const char *Service,
-			sck::duration__ TimeOut,
+			sck::duration__ Timeout,
 			err::handling__ ErrorHandling )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
 		{
 			reset();
@@ -171,14 +171,14 @@ namespace csdbnc {
 			Socket_ = Connect( Host, Service, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_, TimeOut );
+				_flow___::Init( Socket_, Timeout );
 				return true;
 			} else
 				return false;
 		}
 		bso::bool__ Init(
 			const char *HostService,
-			sck::duration__ TimeOut,
+			sck::duration__ Timeout,
 			err::handling__ ErrorHandling )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
 		{
 			reset();
@@ -186,7 +186,7 @@ namespace csdbnc {
 			Socket_ = Connect( HostService, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_, TimeOut );
+				_flow___::Init( Socket_, Timeout );
 				return true;
 			} else
 				return false;

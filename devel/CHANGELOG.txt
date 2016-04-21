@@ -3,6 +3,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 2016-04-20 :
+- CSDBNS :
+	- the 'server___' can now be freezed ; for watchdog testing purpose.
+
+2016-04-20 :
 - CDGB64 :
 	- Adding '(En|De)code' functions.
 	- Fixing 'EnfOfFlow()' issue.

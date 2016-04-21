@@ -7,6 +7,18 @@
 		<Translation language="fr">Proxy du 'framework' 'Epeios'.</Translation>
 		<Translation language="en">Proxy of the 'Epeios' framework.</Translation>
 	</Translations>
+	<Translations text="BadAnswerFromProxy">
+		<Translation language="fr">Mauvaise réponse du 'proxy'.</Translation>
+		<Translation language="en">Bad anwser from 'proxy'.</Translation>
+	</Translations>
+	<Translations text="UnableToConnectToProxy">
+		<Translation language="fr">Echec connexion au 'proxy' '%1'.</Translation>
+		<Translation language="en">Unable to connect to proxy '%1'.</Translation>
+	</Translations>
+	<Translations text="ForbiddenRequest">
+		<Translation language="fr">Requête non autorisée.</Translation>
+		<Translation language="en">Forbidden request.</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

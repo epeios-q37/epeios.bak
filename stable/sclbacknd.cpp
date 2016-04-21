@@ -40,9 +40,9 @@ using namespace sclbacknd;
 
 namespace {
 	sclrgstry::rEntry
-		WatchDog_( "WatchDog", sclrgstry::Parameters ),
-		Code_( "Code", WatchDog_ ),
-		Key_( "Key", WatchDog_ );
+		Watchdog_( "Watchdog", sclrgstry::Parameters ),
+		Code_( "Code", Watchdog_ ),
+		Key_( "Key", Watchdog_ );
 }
 
 void sclbacknd::backend___::Init(

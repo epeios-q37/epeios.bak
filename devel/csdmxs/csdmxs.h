@@ -353,9 +353,9 @@ qRE
 		{
 			return _Server.LaunchService( ServiceName );
 		}
-		void Process( sck::duration__ TimeOut = SCK_INFINITE )
+		void Process( sck::duration__ Timeout = SCK_INFINITE )
 		{
-			_Server.Process( TimeOut );
+			_Server.Process( Timeout );
 		}
 	};
 # endif

@@ -25,15 +25,15 @@
 
 using namespace prxybase;
 
+#define C( name ) case r##name : return #name ; break
+
 const char *prxybase::GetLabel( eRequest Request )
 {
 	switch ( Request ) {
-	case rPlug:
-		return "Plug";
-		break;
-	case rPing:
-		return "Ping";
-		break;
+	C( Plug );
+	C( Ping );
+	C( Freeze );
+	C( Crash );
 	default:
 		qRFwk();
 		break;
@@ -41,6 +41,8 @@ const char *prxybase::GetLabel( eRequest Request )
 
 	return NULL; // To avoid a 'warning'.
 }
+
+#undef C
 
 namespace {
 	stsfsm::wAutomat RequestAutomat_;
@@ -57,15 +59,15 @@ eRequest prxybase::GetRequest( const str::dString &Pattern )
 	return stsfsm::GetId( Pattern, RequestAutomat_, r_Undefined, r_amount );
 }
 
+#define C( name ) case a##name : return #name ; break
+
 const char *prxybase::GetLabel( eAnswer Answer )
 {
 	switch ( Answer ) {
-	case aPlugged:
-		return "Plugged";
-		break;
-	case aPong:
-		return "Pong";
-		break;
+	C( Forbidden );
+	C( Plugged );
+	C( Pong );
+	C( Frozen );
 	default:
 		qRFwk();
 		break;
@@ -73,6 +75,8 @@ const char *prxybase::GetLabel( eAnswer Answer )
 
 	return NULL; // To avoid a 'warning'.
 }
+
+#undef C
 
 namespace {
 	stsfsm::wAutomat AnswerAutomat_;

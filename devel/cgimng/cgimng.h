@@ -329,9 +329,9 @@ namespace cgimng {
 			core_manager::Init( UserFunctions, Relative, Absolute, LogFunctions );
 			return server___::Init( Port, *this );
 		}
-		void Process( sck::duration__ TimeOut = CSDNBS__DEFAULT_TIMEOUT )
+		void Process( sck::duration__ Timeout = CSDNBS__DEFAULT_TIMEOUT )
 		{
-			server___::Process( TimeOut );
+			server___::Process( Timeout );
 		}
 	};
 }

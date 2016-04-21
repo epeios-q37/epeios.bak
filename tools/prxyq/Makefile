@@ -40,8 +40,8 @@ mods += rgstry stsfsm xml xpp mtk
 mods += prxybase sck 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
-mods += csdbns csdscb csdcmn 
-mods += registry 
+mods += csdbnc csdbns csdscb csdcmn 
+mods += registry watchdog 
 
 pmods += pllio 
 
@@ -320,7 +320,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160329"\"
+copt += -DVERSION=\""20160421"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""84bb3ee5-a8a6-44ea-95b9-f5c467116cfb"\"
 

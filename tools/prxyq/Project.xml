@@ -29,12 +29,14 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 			<Modules Group="CSD">
+				<Module>csdbnc</Module>
 				<Module>csdbns</Module>
 				<Module>csdscb</Module>
 				<Module>csdcmn</Module>
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
+		<Module>watchdog</Module>
 	</Modules>
 	<Files/>
 	<Packing>

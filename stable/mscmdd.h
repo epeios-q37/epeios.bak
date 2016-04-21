@@ -291,7 +291,7 @@ namespace mscmdd {
 		{
 			reset();
 		}
-		//f Initialization with socket 'Socket' and 'TimeOut' as timeout.
+		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		bso::bool__ Init(
 			int DeviceId,
 			flw::size__ AmountMax = FLW_AMOUNT_MAX,
