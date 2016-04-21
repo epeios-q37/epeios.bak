@@ -37,8 +37,7 @@ namespace registry {
 		namespace watchdog {
 			extern rEntry
 				Target,
-				Timeout,
-				Blocking;
+				Timeout;
 		}
 	}
 }

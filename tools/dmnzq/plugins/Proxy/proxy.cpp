@@ -115,7 +115,7 @@ namespace {
 
 			Meaning.Init();
 
-			while ( Flow->Init( HostService_, Identifier_, prxybase::tServer, Meaning ) ) {
+			while ( Flow->Init( HostService_, Identifier_, prxybase::tServer, sck::NoTimeout, Meaning ) ) {
 				Data.Init( Flow, Module, HostService_ );
 
 				mtx::Lock( Data.Mutex );

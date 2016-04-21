@@ -24,15 +24,15 @@
 				<Translation language="en">Launches the proxy.</Translation>
 			</Translations>
 			<Translations text="PingCommandDescription">
-				<Translation language="fr">Test l'accessibilité d'un 'proxy'.</Translation>
-				<Translation language="en">Tests accessibility of a proxy.</Translation>
+				<Translation language="fr">Test l'accessibilité du 'proxy'.</Translation>
+				<Translation language="en">Tests accessibility of the proxy.</Translation>
 			</Translations>
 			<Translations text="FreezeCommandDescription">
-				<Translation language="fr">Gèle un 'proxy' (test 'watchdog').</Translation>
-				<Translation language="en">Freezes a proxy (watchdog testing).</Translation>
+				<Translation language="fr">Gèle le 'proxy' (test 'watchdog').</Translation>
+				<Translation language="en">Freezes the proxy (watchdog testing).</Translation>
 			</Translations>
 			<Translations text="CrashCommandDescription">
-				<Translation language="fr">Provoque le dysfonctionnement d'un 'proxy' (test 'watchdog').</Translation>
+				<Translation language="fr">Provoque le dysfonctionnement du 'proxy' (test 'watchdog').</Translation>
 				<Translation language="en">Causes a proxy malfunction (watchdog testing).</Translation>
 			</Translations>
 			<!-- Arguments -->

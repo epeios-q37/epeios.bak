@@ -29,4 +29,3 @@ namespace {
 
 rEntry registry::parameter::watchdog::Target( "Target",  Watchdog_ );
 rEntry registry::parameter::watchdog::Timeout( "Timeout",  Watchdog_ );
-rEntry registry::parameter::watchdog::Blocking( "Blocking",  Watchdog_ );

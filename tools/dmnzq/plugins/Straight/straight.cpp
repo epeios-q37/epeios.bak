@@ -49,7 +49,7 @@ namespace {
 		virtual void MISCHandle( sModule &Module ) override
 		{
 			Server_.Init( GetPort_(), Module );
-			Server_.Process();
+			Server_.Process( NULL );
 		}
 	public:
 		void reset( bso::bool__ P = true )
