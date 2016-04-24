@@ -42,6 +42,10 @@
 	<PreprocessorDefinitions>
 		<PreprocessorDefinition>E_MT</PreprocessorDefinition>
 	</PreprocessorDefinitions>
+	<Dependencies>
+		<Dependency Name="straight" Source="../plugins/Straight" Target="plugins/"/>
+		<Dependency Name="proxy" Source="../plugins/Proxy" Target="plugins/"/>
+	</Dependencies>
 	<Packing>
 		<!-- No documentation as this tool has not is own package -->
 		<WikiFiles/>

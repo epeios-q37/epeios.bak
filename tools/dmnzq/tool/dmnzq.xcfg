@@ -5,7 +5,7 @@
 		<xpp:expand value-of="q37.xpp"/>
 		<xpp:expand href="../../TOL.xcfg"/>
 		<Parameters>
-			<xpp:ifeq select="packing" value="yes">
+			<xpp:ifeq select="env" value="packing">
 				<xpp:bloc>
 					<Plugin target="Slot">Straight</Plugin>
 					<Module>xdhbrwq</Module>
@@ -16,28 +16,16 @@
 			<!-- Default command -->
 		</Parameters>
 		<Definitions>
-			<xpp:define name="PluginsRootDir">
-				<xpp:bloc>
-					<xpp:ifeq select="env" value="windows">
-						<xpp:bloc>h:/bin/plugins/dmnzq/</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="linux">
-						<xpp:bloc>/home/csimon/bin/plugins/dmnzq/</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="mac">
-						<xpp:bloc>/Users/csimon/bin/plugins/dmnzq/</xpp:bloc>
-					</xpp:ifeq>
-				</xpp:bloc>
-			</xpp:define>
 			<Plugins target="Slot">
-				<xpp:define name="SlotPluginsRootDir">
+				<xpp:define name="SlotPluginsDir">
 					<xpp:bloc>
-						<xpp:expand select="PluginsRootDir"/>
+						<xpp:expand select="PluginsDir"/>
+						<xpp:bloc>dmnzq/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Straight">
 					<Filename>
-						<xpp:expand select="SlotPluginsRootDir"/>
+						<xpp:expand select="SlotPluginsDir"/>
 						<xpp:bloc>straight</xpp:bloc>
 					</Filename>
 					<Configuration>
@@ -49,7 +37,7 @@
 				</Plugin>
 				<Plugin id="Proxy">
 					<Filename>
-						<xpp:expand select="SlotPluginsRootDir"/>
+						<xpp:expand select="SlotPluginsDir"/>
 						<xpp:bloc>proxy</xpp:bloc>
 					</Filename>
 					<Configuration>
