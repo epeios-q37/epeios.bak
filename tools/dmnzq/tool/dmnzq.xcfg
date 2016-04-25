@@ -5,12 +5,6 @@
 		<xpp:expand value-of="q37.xpp"/>
 		<xpp:expand href="../../TOL.xcfg"/>
 		<Parameters>
-			<xpp:ifeq select="env" value="packing">
-				<xpp:bloc>
-					<Plugin target="Slot">Straight</Plugin>
-					<Module>xdhbrwq</Module>
-				</xpp:bloc>
-			</xpp:ifeq>
 			<Language>en</Language>
 			<Command>Process</Command>
 			<!-- Default command -->

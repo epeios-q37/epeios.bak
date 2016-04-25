@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:bloc>
-		<xpp:set name="packing" env-var="Q37_PACKING"/>
-		<xpp:ifeq select="packing" value="">
+		<xpp:set name="q37_packing" env-var="Q37_PACKING"/>
+		<xpp:ifeq select="q37_packing" value="">
 			<xpp:bloc>
 				<xpp:set name="ostype" env-var="OSTYPE"/>
 				<xpp:ifeq select="ostype" value="">
@@ -14,10 +14,14 @@
 				<xpp:ifeq select="ostype" value="darwin15">
 					<xpp:set name="env" value="mac"/>
 				</xpp:ifeq>
+				<xpp:set name="packing" value="no"/>
 			</xpp:bloc>
 		</xpp:ifeq>
-		<xpp:ifeq select="packing" value="yes">
-			<xpp:set name="env" value="packing"/>
+		<xpp:ifeq select="q37_packing" value="yes">
+			<xpp:bloc>
+				<xpp:set name="env" value="packing"/>
+				<xpp:set name="packing" value="yes"/>
+			</xpp:bloc>
 		</xpp:ifeq>
 	</xpp:bloc>
 	<xpp:bloc>
@@ -67,7 +71,7 @@
 				<xpp:set name="BinDir" value="/home/csimon/bin/"/>
 			</xpp:bloc>
 		</xpp:ifeq>
-		<xpp:ifeq select="env" value="packing">
+		<xpp:ifeq select="env" value="mac">
 			<xpp:bloc>
 				<xpp:define name="BinDir">
 					<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
@@ -84,7 +88,7 @@
 			</xpp:bloc>
 		</xpp:define>
 		<xpp:bloc marker="$">
-			<xpp:set name="BinDir" value="$BinDir$plugins/"/>
+			<xpp:set name="PluginsDir" value="$BinDir$plugins/"/>
 		</xpp:bloc>
 	</xpp:bloc>
 </xpp:bloc>
