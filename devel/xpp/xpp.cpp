@@ -495,25 +495,31 @@ class attribute_value_substitution_callback
 : public ltcallback_
 {
 private:
-	Q37_MRMDF( _variables_, V_, Variables_ );
+	qCRMV( _variables_, V_, Variables_ );
+	qCRMV( fnm::name___, S_, SelfPath_ );
 protected:
 	virtual bso::bool__ TAGSBSGetTagValue(
 		const str::string_ &Tag,
 		str::string_ &Value ) override
 	{
-		return ( V_().Get( Tag, Value ) );
+		return GetValue_(V_(), Tag, S_(), Value );
 	}
 public:
 	void reset( bso::bool__ P = true )
 	{
 		ltcallback_::reset( P );
 		Variables_ = NULL;
+		SelfPath_ = NULL;
+
 	}
 	E_CVDTOR( attribute_value_substitution_callback );
-	void Init( _variables_ &Variables )
+	void Init(
+		const _variables_ &Variables,
+		const fnm::name___ &SelfPath )
 	{
 		ltcallback_::Init();
 		Variables_ = &Variables;
+		SelfPath_ = &SelfPath;
 	}
 };
 
@@ -534,7 +540,7 @@ qRB
 
 	MacroName.Init();
 	if ( SubstitutionMarker_() != 0 ) {
-		Callback.Init( _Variables );
+		Callback.Init( _Variables, _Directory );
 		if ( !tagsbs::SubstituteLongTags( RawMacroName, Callback, MacroName, SubstitutionMarker_() ) ) {
 			Status = sUnknownVariable;
 			qRReturn;
@@ -579,7 +585,7 @@ qRB
 
 	Filename.Init();
 	if ( SubstitutionMarker_() != 0 ) {
-		Callback.Init( _Variables );
+		Callback.Init( _Variables, _Directory );
 		if ( !tagsbs::SubstituteLongTags(RawFilename, Callback, Filename, SubstitutionMarker_() ) ) {
 			Status = sUnknownVariable;
 			qRReturn;
@@ -620,7 +626,7 @@ qRB
 	Content.Append( _Directives.BlocTag );
 	Content.Append( '>' );
 
-	if ( _Variables.Get( VariableName, Content ) ) {
+	if ( GetVariableValue_( VariableName, Content ) ) {
 		Content.Append( "</" );
 		Content.Append( _Directives.BlocTag );
 		Content.Append( '>' );
@@ -630,7 +636,7 @@ qRB
 		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
 	}
 	else
-		Status = sOK;
+		Status = sUnknownVariable;
 
 qRR
 	if ( Parser != NULL ) {
@@ -768,7 +774,7 @@ qRB
 
 	Value.Init();
 	if ( SubstitutionMarker_() != 0  ) {
-		Callback.Init( _Variables );
+		Callback.Init( _Variables, _Directory );
 		if ( !tagsbs::SubstituteLongTags( RawValue, Callback, Value, SubstitutionMarker_() ) ) {
 			Status = sUnknownVariable;
 			qRReturn;
@@ -857,7 +863,7 @@ qRB
 
 	TrueValue.Init();
 
-	if ( ( _Variables.Get( Name, TrueValue ) ) && ( ExpectedValue == TrueValue ) ) {
+	if ( ( GetVariableValue_( Name, TrueValue ) ) && ( ExpectedValue == TrueValue ) ) {
 		Parser = NewParser( _Repository, _Variables, _Directives );
 
 		Status = Parser->_InitWithContent( Content, _LocalizedFileName, Position, _Directory, _CypherKey, Preserve_, SubstitutionMarker_(), _Parser.GetFormat() );
@@ -1048,7 +1054,7 @@ status__ xpp::_extended_parser___::HandleAtributeValueSubstitution_(
 {
 	attribute_value_substitution_callback Callback;
 
-	Callback.Init( _Variables );
+	Callback.Init( _Variables, _Directory );
 
 	if ( !tagsbs::SubstituteLongTags( Source, Callback, Data, Marker ) )
 		return sUnknownVariable;
@@ -1311,17 +1317,20 @@ status__ xpp::_extended_parser___::Handle(
 						} else
 							Status = sOK;
 					else if ( _Parser.AttributeName() == BLOC_TAG_MARKER_ATTRIBUTE ) {
-						if ( _Parser.Value().Amount() > 1 )
-							Status = sUnexpectedValue;
-						else  {
-							if ( _Parser.Value().Amount() == 0 )
-								SubstitutionMarkers_.Push( 0 );
-							else
-								SubstitutionMarkers_.Push( _Parser.Value()( _Parser.Value().First() ) );
+						if ( PreservationLevel_ == 0 ) {
+							if ( _Parser.Value().Amount() > 1 )
+								Status = sUnexpectedValue;
+							else  {
+								if ( _Parser.Value().Amount() == 0 )
+									SubstitutionMarkers_.Push( 0 );
+								else
+									SubstitutionMarkers_.Push( _Parser.Value()( _Parser.Value().First() ) );
 
-							SubstitutionMarkerHandled = true;
-							Continue = true;
-						}
+								SubstitutionMarkerHandled = true;
+								Continue = true;
+							}
+						} else
+							Status = sOK;
 					} else
 						Status = sUnexpectedAttribute;
 					break;

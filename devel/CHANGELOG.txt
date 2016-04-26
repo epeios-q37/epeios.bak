@@ -2,6 +2,14 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-04-26 :
+- SCLMISC, SCLRGSTRY :
+	- Adaptation to changes in 'XPP'.
+- XPP :
+	- 'criterions___::Directory' parameter is now mandatory.
+	- Introducing the '_SelfPath' variable containig the path of the currently preprocessed file.
+	- Introducing the '_BinPath' variable containig the path of the binary processing file.
+
 2016-04-20 :
 - CSDBNS :
 	- the 'server___' can now be freezed ; for watchdog testing purpose.

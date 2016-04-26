@@ -47,6 +47,8 @@ namespace sclmisc {
 
 	bso::bool__ IsInitialized( void );
 
+	const str::dString &GetBinPath( void );
+
 	void RefreshBaseLanguage( void );	// Set the base langauge (returned by above function) with the content of the registry.
 
 	const char *GetBaseLanguage( void );	// Language d'administration, pouvant être language utilsateur selon contexte.
@@ -144,11 +146,12 @@ namespace sclmisc {
 		xtf::extended_text_iflow__ &LocaleFlow,
 		const char *LocaleDirectory,
 		xtf::extended_text_iflow__ &RegistryFlow,
-		const char *RegistryDirectory );
+		const char *RegistryDirectory,
+		const fnm::name___ &BinPath );
 
 	void Initialize(
 		const sRack &Rack,
-		const fnm::name___ &SuggestedDirectory );
+		const fnm::name___ &BinPath );
 
 	void DumpRegistriesAndOrLocalesIfRequired( void );
 
@@ -169,6 +172,7 @@ namespace sclmisc {
 
 	void LoadProject(
 		flw::iflow__ &Flow,
+		const fnm::name___ &Directory,
 		str::string_ &Id );
 
 	void LoadProject(

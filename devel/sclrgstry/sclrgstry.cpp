@@ -169,11 +169,11 @@ const char *sclrgstry::GetLanguage_(
 
 static bso::sBool FillConfigurationRegistry_(
 	xtf::extended_text_iflow__ &Flow,
-	const char *Directory,
+	const fnm::name___&Directory,
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	return Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( str::string( Directory ) ), RootPath );
+	return Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( Directory ), RootPath );
 }
 
 void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
@@ -219,7 +219,7 @@ void sclrgstry::SetConfiguration( const rgstry::entry__ &Entry )
 
 void sclrgstry::LoadConfiguration(
 	xtf::extended_text_iflow__&Flow,
-	const char *Directory,
+	const fnm::name___ &Directory,
 	const char *RootPath )
 {
 qRH
@@ -244,6 +244,7 @@ void sclrgstry::EraseProjectRegistry( void )
 template <typename source> static void LoadProject_(
 	source &Source,
 	const char *Target,
+	const fnm::name___ &SelfPath,
 	str::string_ &Id )
 {
 qRH
@@ -258,7 +259,7 @@ qRB
 	EraseProjectRegistry();
 
 	Context.Init();
-	if ( !Registry_.Fill( ProjectLevel_, Source, xpp::criterions___(), Path.Convert( Buffer ), Context ) )
+	if ( !Registry_.Fill( ProjectLevel_, Source, xpp::criterions___( SelfPath ), Path.Convert( Buffer ), Context ) )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
 	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
@@ -270,6 +271,7 @@ qRE
 void sclrgstry::LoadProject(
 	flw::iflow__ &Flow,
 	const char *Target,
+	const fnm::name___ &Directory,
 	str::string_ &Id )
 {
 qRH
@@ -277,7 +279,7 @@ qRH
 qRB
 	XFlow.Init( Flow, utf::f_Guess );
 
-	LoadProject_( XFlow, Target, Id );
+	LoadProject_( XFlow, Target, Directory, Id );
 qRR
 qRT
 qRE
@@ -288,7 +290,14 @@ void sclrgstry::LoadProject(
 	const char *Target,
 	str::string_ &Id )
 {
-	LoadProject_( Filename, Target, Id );
+qRH
+	fnm::name___ Location;
+qRB
+	Location.Init();
+	LoadProject_( Filename, Target, fnm::name___(), Id );
+qRR
+qRT
+qRE
 }
 
 void sclrgstry::EraseSetupRegistry( void )
@@ -357,7 +366,7 @@ qRB
 
 	IFlow.Init( Setup );
 	XFlow.Init( IFlow, utf::f_Default );
-	Registry.Fill( Level, XFlow, xpp::criterions___(), NULL );
+	Registry.Fill( Level, XFlow, xpp::criterions___( fnm::name___() ), NULL );
 qRR
 qRT
 qRE
@@ -388,6 +397,7 @@ void sclrgstry::ReportIfNoSetupId( void )
 void sclrgstry::FillWithContent(
 	registry_ &Registry,
 	rgstry::level__ Level,
+	const str::dString &BinPath,
 	const str::string_ &RawContent )
 {
 qRH
@@ -406,7 +416,7 @@ qRB
 
 	IFlow.Init( Content );
 	XFlow.Init( IFlow, utf::f_Default );
-	Registry.Fill( Level, XFlow, xpp::criterions___(), NULL );
+	Registry.Fill( Level, XFlow, xpp::criterions___( BinPath ), NULL );
 qRR
 qRT
 qRE

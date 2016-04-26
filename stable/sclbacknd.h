@@ -41,6 +41,7 @@
 # include "scldaemon.h"
 # include "scllocale.h"
 # include "sclerror.h"
+# include "sclmisc.h"
 
 /*************************/
 /****** New version ******/
@@ -104,7 +105,7 @@ namespace sclbacknd {
 		}
 		void FillSetupRegistryWithContent( const str::string_ &Content )
 		{
-			sclrgstry::FillWithContent( _Registry, _RegistrySetupLevel, Content );
+			sclrgstry::FillWithContent( _Registry, _RegistrySetupLevel, sclmisc::GetBinPath(), Content );
 		}
 		void *UP( void ) const
 		{

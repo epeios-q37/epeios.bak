@@ -366,10 +366,11 @@ namespace xpp {
 			reset();
 		}
 		ctn::E_MCONTAINERt( str::string_, _vrow__ ) Names, Values;
-		void Init( void )
+		void Init( const str::dString &BinPath )
 		{
 			Names.Init();
 			Values.Init();
+			Set( str::wString( "_BinPath" ), BinPath );
 		}
 		void Set(
 			const str::string_ &Name,
@@ -386,7 +387,7 @@ namespace xpp {
 				Values.Flush();
 			}
 		}
-		bso::bool__ Get(
+		bso::bool__ GetValue(
 			const str::string_ &Name,
 			str::string_ &Value ) const
 		{
@@ -420,6 +421,22 @@ namespace xpp {
 	typedef bch::E_BUNCH_( bso::char__ ) substitution_markers_;
 	E_AUTO( substitution_markers );
 
+	inline bso::sBool GetValue_(
+		const _variables &Variables,
+		const str::dString &Name,
+		const fnm::name___ &SelfPath,
+		str::dString &Value )
+	{
+		if ( !Variables.GetValue( Name, Value ) ) {
+			if ( Name == "_SelfPath" ) {
+				SelfPath.UTF8( Value );
+				return true;
+			} else
+				return false;
+		} else
+			return true;
+	}
+
 	class _extended_parser___
 	{
 	private:
@@ -443,6 +460,12 @@ namespace xpp {
 		bso::bool__ _IgnorePreprocessingInstruction;
 		bso::bool__ _AttributeDefinitionInProgress;
 		bso::uint__ _CDataNesting;
+		bso::sBool GetVariableValue_(
+			const str::dString &Name,
+			str::dString &Value )
+		{
+			return GetValue_( _Variables, Name, _Directory, Value );
+		}
 		status__ _HandleDefineDirective( _extended_parser___ *&Parser );
 		status__ _InitWithFile(
 			const fnm::name___ &FileName,
@@ -628,10 +651,6 @@ namespace xpp {
 			Preserve = false;
 			SubstitutionTag = 0;
 		}
-		criterions___( void )
-		{
-			reset( false );
-		}
 		~criterions___( void )
 		{
 			reset();
@@ -731,9 +750,14 @@ namespace xpp {
 			fdr::thread_safety__ ThreadSafety,
 			const criterions___ &Criterions )
 		{
+		qRH
+			str::wString Buffer;
+		qRB
 			_DeleteParsers();
 			_Repository.Init();
-			_Variables.Init();
+
+			Buffer.Init();
+			_Variables.Init( Criterions.Directory.UTF8( Buffer ) );
 # if 0	// A priori équivalent à ce qu'il y a dans le '#else', mais VC++ 10 détruit 'Criterions.Namespace' quand 'Criterions.IsNamespaceDefined()' est vrai. Fonctionne avec 'g++4'.
 			_Directives.Init( Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string( XPP__PREPROCESSOR_DEFAULT_NAMESPACE ) );
 # else
@@ -750,6 +774,9 @@ namespace xpp {
 			if ( _Parser().Init( XFlow, str::string(), Criterions.Directory, Criterions.CypherKey, Criterions.Preserve, Criterions.SubstitutionTag ) != sOK )
 				qRFwk();
 			_Status = sOK;
+		qRR
+		qRT
+		qRE
 
 		}
 		const context___ &GetContext( context___ &Context ) const
@@ -876,27 +903,11 @@ namespace xpp {
 		return Status;
 	}
 
-
-	inline status__ Process(
-		xtf::extended_text_iflow__ &XFlow,
-		xml::writer_ &Writer )
-	{
-		return Process( XFlow, criterions___(), Writer );
-	}
-
-	inline status__ Process(
-		xtf::extended_text_iflow__ &XFlow,
-		xml::outfit__ Outfit,
-		txf::text_oflow__ &OFlow )
-	{
-		return Process( XFlow, criterions___(), Outfit, OFlow );
-	}
-
 	void Process(
 		const str::string_ &In,
 		xml::outfit__ Outfit,
 		str::string_ &Out,
-		const criterions___ &Criterions = criterions___() );
+		const criterions___ &Criterions );
 }
 
 #endif

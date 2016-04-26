@@ -149,7 +149,7 @@ namespace sclrgstry {
 
 	void LoadConfiguration(
 		xtf::extended_text_iflow__ &Flow,
-		const char *Directory,
+		const fnm::name___ &Directory,
 		const char *RootPath );
 
 	void EraseProjectRegistry( void );
@@ -157,6 +157,7 @@ namespace sclrgstry {
 	void LoadProject(
 		flw::iflow__ &Flow,
 		const char *Target,
+		const fnm::name___ &Directory,
 		str::string_ &Id );
 
 	void LoadProject(
@@ -180,6 +181,7 @@ namespace sclrgstry {
 	void FillWithContent(
 		registry_ &Registry,
 		rgstry::level__ Level,
+		const str::dString &BinPath,
 		const str::string_ &Content );
 	
 	void EraseArgumentsRegistry( void );

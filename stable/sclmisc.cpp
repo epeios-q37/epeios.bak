@@ -34,6 +34,15 @@
 
 using namespace sclmisc;
 
+namespace {
+	str::wString BinPath_;
+}
+
+const str::dString &sclmisc::GetBinPath( void )
+{
+	return BinPath_;
+}
+
 sclerror::rError *sclerror::SCLERRORError = NULL;
 
 bso::bool__ sclmisc::IsInitialized( void )
@@ -349,7 +358,8 @@ static void Initialize_(
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
-	const char *RegistryDirectory )
+	const char *RegistryDirectory,
+	const fnm::name___ &BinPath )
 {
 qRH
 	str::string LocaleRootPath, RegistryRootPath;
@@ -368,6 +378,9 @@ qRB
 	RefreshBaseLanguage();
 
 	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nConfiguration ), scllocale::tConfiguration );
+
+	BinPath_.Init();
+	BinPath.UTF8( BinPath_ );
 qRR
 qRT
 qRE
@@ -378,11 +391,12 @@ void sclmisc::Initialize(
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
 	xtf::extended_text_iflow__ &RegistryFlow,
-	const char *RegistryDirectory )
+	const char *RegistryDirectory,
+	const fnm::name___ &BinPath )
 {
 	Initialize_( Rack );
 
-	Initialize_( LocaleFlow, LocaleDirectory, RegistryFlow, RegistryDirectory );
+	Initialize_( LocaleFlow, LocaleDirectory, RegistryFlow, RegistryDirectory, BinPath );
 }
 
 static bso::bool__ GuessFileName_(
@@ -505,7 +519,7 @@ namespace {
 
 void sclmisc::Initialize(
 	const sRack &Rack,
-	const fnm::name___ &SuggestedDirectory )
+	const fnm::name___ &BinPath )
 {
 qRH
 	flf::file_iflow___ LocaleFlow, ConfigurationFlow;
@@ -516,14 +530,14 @@ qRB
 	Initialize_( Rack );
 
 	LocaleDirectory.Init();
-	InitializeLocaleFlow_( SuggestedDirectory, LocaleFlow, LocaleDirectory );
+	InitializeLocaleFlow_( BinPath, LocaleFlow, LocaleDirectory );
 	LocaleXFlow.Init( LocaleFlow, utf::f_Default );
 
 	ConfigurationDirectory.Init();
-	InitializeConfigurationFlow_( SuggestedDirectory, ConfigurationFlow, ConfigurationDirectory );
+	InitializeConfigurationFlow_( BinPath, ConfigurationFlow, ConfigurationDirectory );
 	ConfigurationXFlow.Init( ConfigurationFlow, utf::f_Default );
 
-	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ) );
+	Initialize_( LocaleXFlow, LocaleDirectory.Convert( LocaleBuffer ), ConfigurationXFlow, ConfigurationDirectory.Convert( ConfigurationBuffer ), BinPath );
 qRR
 qRT
 qRE
@@ -606,9 +620,10 @@ project_type__ sclmisc::GetProjectType( const str::string_ &Pattern )
 
 void sclmisc::LoadProject(
 	flw::iflow__ &Flow,
+	const fnm::name___ &Directory,
 	str::string_ &Id )
 {
-	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Id );
+	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Directory, Id );
 
 	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject );
 }
@@ -1252,5 +1267,6 @@ qRE
 
 Q37_GCTOR( sclmisc )
 {
+	BinPath_.Init();
 	FillProjectAutomat_();
 }
