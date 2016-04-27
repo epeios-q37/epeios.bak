@@ -243,6 +243,25 @@ const char *tol::UUIDGen( bUUID &UUID )
 	return UUID;
 }
 
+namespace {
+	void Crash_( str::dString )
+	{
+		Crash();
+	}
+}
+
+// Crash the program by stack overflow.
+void tol::Crash( void )
+{
+qRH
+	str::wString Dummy;
+qRB
+	Crash_( Dummy );
+qRR
+qRT
+qRE
+}
+
 Q37_GCTOR( tol )
 {
 	SetSystemCommandAvailabitity_();

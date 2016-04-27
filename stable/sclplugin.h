@@ -47,7 +47,7 @@ namespace sclplugin {
 			const plgncore::sData *Data,
 			const fnm::name___ &Directory ) override;
 		virtual void *PLGNCORERetrievePlugin( plgncore::sAbstract *Abstract ) override;
-		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
+		virtual bso::sBool PLGNCOREReleasePlugin( void *Plugin ) override;
 		virtual const char *PLGNCOREPluginIdentifier( void ) override;
 		virtual const char *PLGNCOREPluginDetails( void ) override;
 	public:
@@ -69,7 +69,7 @@ namespace sclplugin {
 	// The following ones are defined by below macro.
 	const char *SCLPLUGINPluginLabel( void );
 	void *SCLPLUGINRetrievePlugin( plgncore::sAbstract *Abstract );
-	void SCLPLUGINReleasePlugin( void * );
+	bso::sBool SCLPLUGINReleasePlugin( void * );
 }
 
 // NOTA : needed parameters are generally retrieved from the registry,
@@ -104,12 +104,22 @@ namespace sclplugin {
 		return Plugin;\
 	}\
 \
-	void sclplugin::SCLPLUGINReleasePlugin( void *Plugin )\
+	bso::sBool sclplugin::SCLPLUGINReleasePlugin( void *Plugin )\
 	{\
+		bso::sBool Success = false;\
+	qRH\
+	qRB\
 		if ( Plugin == NULL )\
 			qRFwk();\
 		\
 		delete (plugin *)Plugin;\
+		\
+		Success = true;\
+	qRR\
+		ERRRst();\
+	qRT\
+	qRE\
+		return Success;\
 	}
 
 #endif

@@ -266,7 +266,7 @@ namespace fblfrd {
 			qRAbort();
 		}
 		id16__ Commands_[fblcmd::c_amount];
-		char Message_[100];
+		char Message_[256];
 		bso::bool__ TestBackendCasts_( void );
 		command__ GetBackendDefaultCommand_( void );
 		void GetGetCommandsCommand_( command__ DefaultCommand );
@@ -312,7 +312,7 @@ namespace fblfrd {
 						qRFwk();
 
 					if ( ( !flw::GetString( C_(), Message_, sizeof( Message_ ) ) ) )
-						qRLmt();
+						strcpy( Message_ + sizeof( Message_ ) - 7, " [...]" );
 				}
 			}
 

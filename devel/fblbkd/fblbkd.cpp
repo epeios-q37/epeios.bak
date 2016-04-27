@@ -392,7 +392,12 @@ static void Crash_(
 	void * )
 {
 	if ( Test_( Request.StringIn(), Backend.Code(), Backend.Key() ) )
+# if 1
+		tol::Crash();
+# else
+	// Doesn't work (i.e. doesn't crash) in release mode.
 		memcpy( NULL, NULL, 1 );	// Crashes the application.
+#endif
 }
 
 // Throw an framework error (ERRFwk), for testing purpose.

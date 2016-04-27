@@ -2,6 +2,16 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-04-27 :
+- FBLBKD :
+	- Using new 'tol::Crash()' function to crash the backend.
+- FBLFRD :
+	- IF the message returned by the backend is too long, it does no more génrate an error, but is truncated.
+- PLGNCORE, SCLPLUGIN :
+	- The error is now intercepted when it occurs while relesing a plugin, and does no more crash the program.
+- TOL :
+	- Adding 'Crash()' function.
+
 2016-04-26 :
 - SCLMISC, SCLRGSTRY :
 	- Adaptation to changes in 'XPP'.
