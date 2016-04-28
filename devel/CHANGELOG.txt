@@ -2,6 +2,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-04-28 :
+- XPP :
+	- Fixing error which occurs when a 'expand' directive was within a 'cdata' directive.
+
 2016-04-27 :
 - FBLBKD :
 	- Using new 'tol::Crash()' function to crash the backend.

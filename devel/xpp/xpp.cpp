@@ -1391,6 +1391,9 @@ status__ xpp::_extended_parser___::Handle(
 
 				SubstitutionMarkerHandled = false;
 				break;
+			case dExpand:
+				Status = sOK;
+				break;
 			default:
 				qRFwk();
 				break;
@@ -1434,6 +1437,9 @@ status__ xpp::_extended_parser___::Handle(
 					Continue = true;
 				} else
 					Status = sOK;
+				break;
+			case dExpand:
+				Status = sOK;
 				break;
 			default:
 				qRFwk();

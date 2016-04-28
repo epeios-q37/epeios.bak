@@ -499,7 +499,7 @@ public:
 		bso::sBool FromLocalhost )
 	{
 		if ( FromLocalhost ) {
-			memcpy( NULL, NULL, 1 );	// To crash the program ; for watchdog testing purpose.
+			tol::Crash();
 		} else
 			prxybase::PutAnswer( prxybase::aForbidden, Flow );
 
