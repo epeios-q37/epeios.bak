@@ -58,19 +58,41 @@ namespace ogzclm {
 	// Deduced column row. Refers to a column row from a model.
 	qROW( DRow );
 
-	class sColumn
+	class sColumnCore_
 	{
 	private:
 		ogztyp::sRow Type_;
 		eNumber Number_;
-		ogzdta::sRow
-			Label_,
-			Comment_;
 	public:
 		void reset( bso::sBool = true )
 		{
 			Type_ = qNIL;
 			Number_ = n_Undefined;
+		}
+		E_CDTOR( sColumnCore_ );
+		void Init(
+			ogztyp::sRow Type = qNIL,
+			eNumber Number = n_Undefined )
+		{
+			Type_ = Type;
+			Number_ = Number;
+		}
+		qRODISCLOSEs( ogztyp::sRow, Type );
+		qRODISCLOSEs( eNumber, Number );
+
+	};
+
+	class sColumn
+	: public sColumnCore_
+	{
+	private:
+		ogzdta::sRow
+			Label_,
+			Comment_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			sColumnCore_::reset( P );
 			Label_ = Comment_ = qNIL;
 		}
 		E_CDTOR( sColumn );
@@ -80,15 +102,42 @@ namespace ogzclm {
 			ogzdta::sRow Label = qNIL,
 			ogzdta::sRow Comment = qNIL )
 		{
-			Type_ = Type;
-			Number_ = Number;
+			sColumnCore_::Init( Type, Number );
 			Label_ = Label;
 			Comment_ = Comment;
 		}
-		qRODISCLOSEs( ogztyp::sRow, Type );
-		qRODISCLOSEs( eNumber, Number );
 		qRODISCLOSEs( ogzdta::sRow, Label );
 		qRODISCLOSEs( ogzdta::sRow, Comment );
+
+	};
+
+	class rColumn
+	: public sColumnCore_
+	{
+	private:
+		str::wString
+			Label_,
+			Comment_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			sColumnCore_::reset( P );
+			Label_.reset( P );
+			Comment_.reset( P );
+		}
+		E_CDTOR( rColumn );
+		void Init(
+			ogztyp::sRow Type = qNIL,
+			eNumber Number = n_Undefined,
+			const str::dString &Label = str::wString(),
+			const str::dString &Comment = str::wString() )
+		{
+			sColumnCore_::Init( Type, Number );
+			Label_.Init( Label );
+			Comment_.Init( Comment );
+		}
+		qRODISCLOSEr( str::dString, Label );
+		qRODISCLOSEr( str::dString, Comment );
 
 	};
 

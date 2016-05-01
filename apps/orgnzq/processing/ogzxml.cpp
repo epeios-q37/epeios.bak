@@ -190,7 +190,7 @@ namespace {
 		const ogzdta::sData &Data,
 		dWriter &Writer )
 	{
-		sdr::sRow Row = FieldList.First();
+		ogzfld::sLRow Row = FieldList.First();
 
 		Writer.PushTag( T( Fields ) );
 
@@ -253,8 +253,8 @@ void ogzxml::Dump(
 {
 	Writer.PushTag( T( Record ) );
 
-	if ( Record.Id() != qNIL )
-		xml::PutAttribute( A( Id ), *Record.Id(), Writer );
+	if ( Record.Row() != qNIL )
+		xml::PutAttribute( A( Id ), *Record.Row(), Writer );
 
 	Dump_( Types, Record.Fields(), Record, Record.Columns(), Record.Data(), Writer );
 

@@ -53,6 +53,7 @@ namespace frdfrntnd {
 		virtual void FBLFRDOnConnect( void ) override
 		{
 			Statics.Init( *this );
+			Field.Init( *this );
 			Record.Init( *this );
 			MyObject.Init( *this );
 
@@ -62,11 +63,13 @@ namespace frdfrntnd {
 		virtual void FBLFRDOnDisconnect( void ) override
 		{
 			Statics.reset();
+			Field.reset();
 			Record.reset();
 			MyObject.reset();
 		}
 	public:
 		orgnzq::fStatics Statics;
+		orgnzq::fOGZFieldCommon Field;
 		orgnzq::fOGZRecordCommon Record;
 		orgnzq::fOGZMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
@@ -76,6 +79,7 @@ namespace frdfrntnd {
 			Numbers_.reset( P );
 
 			Statics.reset( P );
+			Field.reset();
 			Record.reset();
 			MyObject.reset( P );
 		}

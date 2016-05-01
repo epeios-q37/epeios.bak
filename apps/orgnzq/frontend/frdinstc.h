@@ -36,6 +36,7 @@ namespace frdinstc {
 		{
 			return F_().Statics;
 		}
+		orgnzq::rOGZField Field_;
 		orgnzq::rOGZRecord Record_;
 		orgnzq::rOGZMyObject Object_;
 	public:
@@ -43,6 +44,7 @@ namespace frdinstc {
 		{	
 			Frontend_ = NULL;
 
+			Field_.reset( P );
 			Record_.reset( P );
 			Object_.reset( P );
 		}
@@ -51,6 +53,7 @@ namespace frdinstc {
 		{
 			Frontend_ = &Frontend;
 
+			Field_.Init( Frontend.Field );
 			Record_.Init( Frontend.Record );
 			Object_.Init( Frontend.MyObject );
 
@@ -76,7 +79,7 @@ namespace frdinstc {
 			const str::dString &Label,
 			const str::dString &Comment ) const
 		{
-			Record_.CreateField( *Type, *Number, Label, Comment );
+			Field_.CreateField( *Type, *Number, Label, Comment );
 		}
 		void GetFieldsColumns(
 			fbltyp::dIds &Ids,

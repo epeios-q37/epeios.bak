@@ -29,6 +29,7 @@
 #include "fblbkd.h"
 
 #include "wrpunbound.h"
+#include "wrpField.h"
 #include "wrprecord.h"
 #include "wrpexample.h"
 
@@ -44,6 +45,7 @@ class rBackend
 : public rBackend_
 {
 private:
+	FBLBKD_RAM_MODULE( wrpfield::wField, common::rStuff ) Field_;
 	FBLBKD_RAM_MODULE( wrprecord::wRecord, common::rStuff ) Record_;
 	FBLBKD_RAM_MODULE( wrpexample::wMyObject, common::rStuff ) MyObject_;
 	common::rStuff Stuff_;
@@ -52,6 +54,7 @@ public:
 	{
 		rBackend_::reset( P );
 		Stuff_.reset( P );
+		Field_.reset( P );
 		Record_.reset( P );
 		MyObject_.reset( P );
 	}
@@ -73,6 +76,9 @@ public:
 			&Stuff_ );
 
 		wrpunbound::Inform( *this, Stuff_ );
+
+		Field_.Init( Stuff_ );
+		Add( Field_ );
 
 		Record_.Init( Stuff_ );
 		Add( Record_ );

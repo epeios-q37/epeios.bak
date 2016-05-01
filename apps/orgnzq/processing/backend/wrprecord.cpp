@@ -80,41 +80,6 @@ qRE
 }
 
 namespace {
-	inline void CreateField_(
-		ogztyp::sRow Type,
-		ogzclm::eNumber Number,
-		const str::dString &Label,
-		const str::dString &Comment,
-		ogzrcd::rRecordBuffer &Record )
-	{
-		if ( Label.Amount() == 0 )
-			REPORT( "FieldLabelCanNotBeEmpty" );
-
-		if ( !GetTypes().Exists( Type ) )
-			REPORT( "UnknowFieldType");
-
-		if ( !ogzclm::Exists( Number ) )
-			REPORT( "UnknownFieldNumber" );
-
-		Record.CreateField( Type, Number, Label, Comment );
-	}
-}
-
-DEC( CreateField )
-{
-	const fbltyp::sId &Type = Request.IdIn();
-	const fbltyp::sId8 &Number = Request.Id8In();
-	const fbltyp::dString
-		&Label = Request.StringIn(),
-		&Comment = Request.StringIn();
-
-	if ( *Number >= ogzclm::n_amount )
-		qRGnr();
-
-	CreateField_( *Type, (ogzclm::eNumber)*Number, Label, Comment, Record() );
-}
-
-namespace {
 	void GetData_(
 		const ogzfld::dField &Field,
 		ogztyp::sRow Type,
@@ -164,21 +129,10 @@ namespace {
 	}
 }
 
-DEC( GetFieldBuffer )
-{
-qRH
-qRB
-	Request.IdOut() = *Record().FieldBuffer().Column();
-	GetData_( Record().FieldBuffer(), Record(), GetTypes(), Request.StringsOut() );
-qRR
-qRT
-qRE
-}
-
 namespace {
 
 	void GetData_(
-		sdr::sRow Row,
+		ogzfld::sLRow Row,
 		const ogzrcd::rRecordBuffer &Record,
 		const ogztyp::dTypes &Types,
 		fbltyp::dStrings &Data )
@@ -201,7 +155,7 @@ namespace {
 		fbltyp::dStringsSet &DataSet )
 	{
 	qRH
-		sdr::sRow Row = qNIL;
+		ogzfld::sLRow Row = qNIL;
 		fbltyp::wStrings Data;
 	qRB
 		Row = Record.First();
@@ -239,17 +193,15 @@ namespace {
 		fbltyp::dStrings &Comments )
 	{
 	qRH
-		sdr::sRow Row = qNIL;
+		ogzfld::sLRow Row = qNIL;
 		ogzclm::sColumn Column;
 		ogztyp::sRow Type = qNIL;
 		ogzclm::eNumber Number = ogzclm::n_Undefined;
 		str::wString Label, Comment;
-		ogzclm::wRows Rows;
+		ogzfld::wRows Rows;
 	qRB
 		Rows.Init();
-		Record.Columns().GetList( 0, 0, Rows );
-
-#error "Confusion entre de type de row d'une liste de rows de columns et d'une liste de rows de fields"
+		Record.Fields().GetList( 0, 0, Rows );
 
 		Row = Rows.First();
 
@@ -299,14 +251,6 @@ void wrprecord::dRecord::NOTIFY(
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 
-	Module.Add( D( CreateField ),
-			fblbkd::cId,		// Field type.
-			fblbkd::cId8,		// Field number ('ogzclm::eNumber).
-			fblbkd::cString,	// Label.
-			fblbkd::cString,	// Comment.
-		fblbkd::cEnd,
-		fblbkd::cEnd );
-
 	Module.Add( D( GetFieldsColumns ),
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids of the fields,
@@ -314,12 +258,6 @@ void wrprecord::dRecord::NOTIFY(
 			fblbkd::cId8s,		// Numbers.
 			fblbkd::cStrings,	// Labels.
 			fblbkd::cStrings,	// Comments.
-		fblbkd::cEnd );
-
-	Module.Add( D( GetFieldBuffer ),
-		fblbkd::cEnd,
-			fblbkd::cId,		// Column row.
-			fblbkd::cStrings,	// Entries.
 		fblbkd::cEnd );
 
 	Module.Add( D( GetFieldsData ),

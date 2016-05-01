@@ -598,7 +598,7 @@ qRB
 	DummyCompatibilityInformations.Init( "", "" );
 	DummyIncompatibilityInformations.Init();
 
-	Frontend.Init( DummyReportingFunctions );
+	Frontend.Init( str::wString(), DummyReportingFunctions );
 
 	if ( !Frontend.Connect( "",  Flow, FBLMode, DummyCompatibilityInformations, DummyIncompatibilityInformations ) ) {
 		Meaning.Init();

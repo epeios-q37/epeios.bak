@@ -92,13 +92,13 @@ namespace csdleo {
 	// NOTA : Si modifié, modifier 'CSDLEO_SHARED_DATA_VERSION' !
 	class data__ {
 	public:
-//		context__ Context;
+		context__ Context;
 		mode__ Mode;
 		const char *LibraryLocationAndName;
 		void *UP;				// A la discrétion de l'utilisateur.
 		void reset( bso::bool__ = true )
 		{
-//			Context = c_Undefined;
+			Context = c_Undefined;
 			Mode = m_Undefined;
 			LibraryLocationAndName = NULL;
 			UP = NULL;
@@ -119,7 +119,7 @@ namespace csdleo {
 			void *UP,
 			mode__ Mode = mEmbedded )
 		{
-//			this->Context = Context;
+			this->Context = Context;
 			this->Mode = Mode;
 			this->LibraryLocationAndName = LibraryLocationAndName;
 			this->UP = UP;
@@ -141,7 +141,7 @@ namespace csdleo {
 		void Init( data__ &Data )
 		{
 			data_control__::Init();
-			data__::Init( c_Undefined, Data.LibraryLocationAndName, Data.UP, Data.Mode );
+			data__::Init( Data.Context, Data.LibraryLocationAndName, Data.UP, Data.Mode );
 		}
 	};
 #pragma pack( pop )

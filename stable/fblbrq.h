@@ -17,15 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// Frontend/Backend Layout Backend ReQuest 
+
 #ifndef FBLBRQ__INC
 # define FBLBRQ__INC
 
 # define FBLBRQ_NAME		"FBLBRQ"
 
-#if defined( E_DEBUG ) && !defined( FBLBRQ_NODBG )
-#define FBLBRQ_DBG
-#endif
-//D Frontend/Backend Layout Backend ReQuest 
+# if defined( E_DEBUG ) && !defined( FBLBRQ_NODBG )
+#  define FBLBRQ_DBG
+# endif
 
 # include "err.h"
 # include "flw.h"
@@ -46,6 +47,10 @@
 
 # define FBLBRQ_INVALID_OBJECT		((unsigned long)BSO_U16_MAX)
 # define FBLBRQ_OBJECT_MAX			( FBLBRQ_INVALID_OBJECT - 1UL )
+
+/***************/
+/***** OLD *****/
+/***************/
 
 namespace fblbrq {
 	using namespace fblcst;
@@ -424,5 +429,11 @@ namespace fblbrq {
 
 }
 
-/*$END$*/
+/***************/
+/***** OLD *****/
+/***************/
+
+namespace fblbrq {
+	typedef request__ sRequest;
+}
 #endif

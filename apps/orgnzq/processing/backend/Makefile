@@ -45,7 +45,7 @@ mods += csdleo csdles csdmxb csdmxs csdscb
 mods += ogzfbc ogzinf ogzbsc ogzcbs ogzclm 
 mods += ogzdta ogzdtb ogzfld ogzplg ogzrcd 
 mods += ogzrgy ogztyp ogzusr ogzxml 
-mods += wrprecord wrpexample wrpunbound 
+mods += wrpfield wrprecord wrpexample wrpunbound 
 mods += common registry 
 
 pmods += pllio 
@@ -340,7 +340,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160128"\"
+copt += -DVERSION=\""20160501"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""dc3beae2-d82c-4471-bc7e-03adb886d5f7"\"
 

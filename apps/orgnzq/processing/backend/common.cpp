@@ -162,3 +162,8 @@ qRR
 qRT
 qRE
 }
+
+qGCTOR( common )
+{
+	Rack.Init( Rack_ );
+}

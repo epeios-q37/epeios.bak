@@ -89,11 +89,14 @@ namespace ogzfld {
 	qROW( LRow );	// List row.
 
 	// template parameters.
-# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sRow, ogzfld::sDRow, ogzfld::sIRow, ogzfld::sLRow
+# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sRow, ogzfld::sDRow, sdr::sRow, ogzfld::sLRow
 
 	typedef ogzcbs::cDynamic<OGZFLD_TP> cField;
 
 	typedef ogzcbs::sDynamicItems<OGZFLD_TP> sFields;
+
+	typedef ogzcbs::dList<ogzfld::sRow, ogzfld::sLRow> dRows;
+	qW( Rows );
 
 	class sXFields
 	{
@@ -148,6 +151,35 @@ namespace ogzfld {
 
 	typedef ogzcbs::dList<sRow,sLRow> dFieldList;
 	qW( FieldList );
+
+	class rFieldBuffer
+	: public wField
+	{
+	private:
+		sRow Row_;	// Row of the source field. if  == 'qNIL', new field.
+		ogzclm::rColumn Column_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Row_ = qNIL;
+			Column_.reset( P );
+		}
+		qCDTOR( rFieldBuffer );
+		void Init( sRow Row )
+		{
+			Row_ = Row;
+			wField::Init();
+			Column_.Init();
+		}
+		void Set(
+			ogztyp::sRow Type,
+			ogzclm::eNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment )
+		{
+			Column_.Init( Type, Number, Label, Comment );
+		}
+};
 }
 
 #endif

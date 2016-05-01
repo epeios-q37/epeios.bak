@@ -33,16 +33,6 @@
 # include "lstctn.h"
 # include "lstbch.h"
 
-// 'Base Template Typenames'.
-#define OGZCBS_BTT	typename d_item, typename w_item, typename row, typename subitem, typename subrow, typename lrow
-// 'Base Template Parameters'.
-#define OGZCBS_BTP	d_item, w_item, row, subitem, subrow, lrow
-
-// 'Regular Callback Template Typenames'.
-#define OGZCBS_RCTT	typename container, OGZCBS_BTT
-// 'Regular Callback Template PArameterss'.
-#define OGZCBS_RCTP	container, OGZCBS_BTP
-
 namespace ogzcbs {
 	typedef bso::sUInt sIndice;	// Begins at '0'.
 
@@ -162,7 +152,14 @@ namespace ogzcbs {
 			return C_().Recall( Row, Item );
 		}
 	};
+}
 
+// 'Base Template Typenames'.
+#define OGZCBS_BTT	typename d_item, typename w_item, typename row, typename subitem, typename subrow, typename lrow
+// 'Base Template Parameters'.
+#define OGZCBS_BTP	d_item, w_item, row, subitem, subrow, lrow
+
+namespace ogzcbs {
 	// Callback for dynamic (not fixed size) objetcs.
 	template <OGZCBS_BTT> class cDynamic
 	: public cStatic<d_item,row,lrow>
@@ -197,11 +194,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			cStatic<d_item, row>::Recall( Row, Item );
+			cStatic<d_item, row, lrow>::Recall( Row, Item );
 
 			Item.Recall( SubRow, SubItem );
 
-			cStatic<d_item, row>::Store( Item, Row );
+			cStatic<d_item, row, lrow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -216,11 +213,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			cStatic<d_item, row>::Recall( Row, Item );
+			cStatic<d_item, row, lrow>::Recall( Row, Item );
 
 			SubRow = Item.Add( SubItem );
 
-			cStatic<d_item, row>::Store( Item, Row );
+			cStatic<d_item, row, lrow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -235,11 +232,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			cStatic<item_v, row>::Recall( Row, Item );
+			cStatic<d_item, row, lrow>::Recall( Row, Item );
 
 			Item.Remove( SubRow );
 
-			cStatic<item_v, row>::Store( Item, Row );
+			cStatic<d_item, row, lrow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -345,6 +342,13 @@ namespace ogzcbs {
 		{
 			return C_().Remove( Row, SubRow );
 		}
+		void GetList(
+			ogzcbs::sIndice Indice,
+			ogzcbs::sAmount Amount,
+			ogzcbs::dList<row,lrow> &Rows ) const
+		{
+			SC_().GetList( Indice, Amount, Rows );
+		}
 	};
 
 	template <typename item, typename row, typename lrow> class rRegularStaticCallback
@@ -406,7 +410,15 @@ namespace ogzcbs {
 			Items_.Init();
 		}
 	};
+}
 
+// 'Regular Callback Template Typenames'.
+#define OGZCBS_RCTT	typename container, OGZCBS_BTT
+// 'Regular Callback Template PArameterss'.
+#define OGZCBS_RCTP	container, OGZCBS_BTP
+
+
+namespace ogzcbs {
 	template <OGZCBS_BTT> class rRegularDynamicCallback
 	: public cDynamic<OGZCBS_BTP>
 	{
