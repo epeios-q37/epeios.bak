@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160501 Build May  1 2016 10:26:36 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160501 Build May  2 2016 09:18:09 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build May  1 2016 10:29:26 Win32;MSC 1800;IA-32)
 */
@@ -124,7 +124,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[2];
+		fblfrd::command__ _Commands[3];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -141,6 +141,7 @@ namespace orgnzq {
 			fblfrd::id8__ Parameters[] = {
 				0, 
 				21, 12, 25, 25, 0, 
+				0, 21, 12, 25, 25, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -159,10 +160,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 1, 5 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "GetColumn";;
+			CommandDetail.Casts.Append( Parameters + 6, 5 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 2, _Commands );
+			Commands.Recall( 0, 3, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -358,6 +364,23 @@ namespace orgnzq {
 
 			Common_->Frontend().EndOfInParameters();
 
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ GetColumn( 
+			fblfrd::id__ &Out1,
+			fblfrd::id8__ &Out2,
+			fblfrd::string_ &Out3,
+			fblfrd::string_ &Out4 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
+
+			Common_->Frontend().EndOfInParameters();
+
+			Common_->Frontend().IdOut( Out1 );
+			Common_->Frontend().Id8Out( Out2 );
+			Common_->Frontend().StringOut( Out3 );
+			Common_->Frontend().StringOut( Out4 );
 
 			return Common_->Frontend().Handle();
 		}

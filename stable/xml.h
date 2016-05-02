@@ -301,10 +301,34 @@ namespace xml {
 			PopTag();
 		}
 		void PutValue(
+			const value &Value,
+			const name_ &Name )
+		{
+			PutValue( *Value, Name );
+		}
+		void PutValue(
+			const value_ &Value,
+			const name &Name )
+		{
+			PutValue( Value, *Name );
+		}
+		void PutValue(
+			const value &Value,
+			const name &Name )
+		{
+			PutValue( *Value, *Name );
+		}
+		void PutValue(
 			const value_ &Value,
 			const char *Name )
 		{
 			PutValue( Value, name( Name ) );
+		}
+		void PutValue(
+			const value &Value,
+			const char *Name )
+		{
+			PutValue( *Value, Name );
 		}
 		void PutValue(
 			const char *Value,
@@ -312,18 +336,72 @@ namespace xml {
 		{
 			PutValue( value( Value ), name( Name ) );
 		}
+		template <typename s, typename i> void PutValue(
+			i Value,
+			const s &Name )
+		{
+			bso::integer_buffer__ IBuffer;
+
+			PutValue( bso::Convert( Value, IBuffer ), Name );
+		}
+		template <typename s, typename i> void PutValue(
+			i Value,
+			const s &Name,
+			i UndefinedValue )
+		{
+			if ( Value == UndefinedValue )
+				PutValue( "", Name );
+			else
+				PutValue( Value, Name );
+		}
 		void PutRawAttribute(
 			const name_ &Name,
 			flw::sIFlow &Flow );
 		void PutAttribute(
 			const name_ &Name,
 			flw::sIFlow &Flow );
+		void PutAttribute(
+			const name &Name,
+			flw::sIFlow &Flow )
+		{
+			PutAttribute( *Name, Flow );
+		}
 		void PutRawAttribute(
 			const name_ &Name,
 			const value_ &Value );
 		void PutAttribute(
 			const name_ &Name,
 			const value_ &Value );
+		void PutAttribute(
+			const value_ &Value,
+			const name &Name )
+		{
+			PutAttribute( Value, *Name );
+		}
+		void PutAttribute(
+			const value &Value,
+			const name &Name )
+		{
+			PutAttribute( *Value, *Name );
+		}
+		void PutAttribute(
+			const value &Value,
+			const name_ &Name )
+		{
+			PutAttribute( *Value, Name );
+		}
+		void PutAttribute(
+			const value_ &Value,
+			const char *Name )
+		{
+			PutAttribute( Value, name( Name ) );
+		}
+		void PutAttribute(
+			const value &Value,
+			const char *Name )
+		{
+			PutAttribute( *Value, Name );
+		}
 		void PutAttribute(
 			const char *Name,
 			const char *Value )
@@ -335,6 +413,30 @@ namespace xml {
 			const value_ &Value )
 		{
 			PutAttribute( name( Name ), Value );
+		}
+		void PutAttribute(
+			const char *Name,
+			const value &Value )
+		{
+			PutAttribute( Name, *Value );
+		}
+		template <typename s, typename i> void PutAttribute(
+			const s &Name,
+			i Value )
+		{
+			bso::integer_buffer__ IBuffer;
+
+			PutAttribute( Name, bso::Convert( Value, IBuffer ) );
+		}
+		template <typename s, typename i> void PutAttribute(
+			const s &Name,
+			i Value,
+			i UndefinedValue )
+		{
+			if ( Value == UndefinedValue )
+				PutAttribute( Name, "" );
+			else
+				PutAttribute( Name, Value );
 		}
 		void PutCData( flw::sIFlow &Flow );
 		void PutCData( const str::string_ &Value );

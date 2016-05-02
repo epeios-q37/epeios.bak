@@ -73,6 +73,41 @@ namespace {
 	}
 }
 
+void frdinstc::rUser::DumpFieldBufferColumn_( xml::dWriter &Writer ) const
+{
+qRH
+	sType Type = UndefinedType;
+	sNumber Number = UndefinedNumber;
+	str::wString Label, Comment;
+qRB
+	Label.Init();
+	Comment.Init();
+
+	Core_.GetFieldBufferColumn( Type, Number, Label, Comment );
+
+	Writer.PushTag("Column" );
+
+	Writer.PutAttribute( "Type", **Type, **UndefinedType  );
+	Writer.PutAttribute( "Number" , **Number, **UndefinedNumber );
+	Writer.PutValue( Label, "Label" );
+	Writer.PutValue( Comment, "Comment" );
+
+	Writer.PopTag();
+qRR
+qRT
+qRE
+}
+
+void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
+{
+	Writer.PushTag( "FieldBuffer" );
+
+	DumpFieldBufferColumn_( Writer );
+
+	Writer.PopTag();
+}
+
+
 void frdinstc::rUser::DumpFieldsColumns( xml::dWriter &Writer ) const
 {
 qRH

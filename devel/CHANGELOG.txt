@@ -2,6 +2,12 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-05-02 :
+- SCLFRNTND :
+	- Macros to define ids, label, and/or comment define shorter names for ids.*
+- XML :
+	- Adding 'dWriter::Put(Value|Attribute)(...)' methods which take a number.
+
 2016-04-28 :
 - XPP :
 	- Fixing error which occurs when a 'expand' directive was within a 'cdata' directive.

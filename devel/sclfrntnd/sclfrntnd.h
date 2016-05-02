@@ -198,12 +198,12 @@ namespace sclfrntnd {
 		str::string_ &Path );
 
 # define SCLF_I( name, id  )\
-	typedef fbltyp::s##id b##name##Id;\
-	E_TMIMIC__( b##name##Id,	s##name##Id );\
-	typedef fbltyp::d##id##s	d##name##Ids;\
-	qW( name##Ids );\
+	typedef fbltyp::s##id t##name;\
+	E_TMIMIC__( t##name,	s##name );\
+	typedef fbltyp::d##id##s	d##name##s;\
+	qW( name##s );\
 \
-	E_CDEF( s##name##Id, Undefined##name, fbltyp::Undefined##id )
+	E_CDEF( s##name, Undefined##name, fbltyp::Undefined##id )
 
 	template <typename t> class dIL_	// id, label.
 	{
@@ -252,11 +252,11 @@ namespace sclfrntnd {
 # define SCLF_IL( name, id  )\
 	SCLF_I( name, id );\
 \
-	typedef sclfrntnd::dIL_<s##name##Id> d##name;\
-	qW( name );\
+	typedef sclfrntnd::dIL_<s##name> d##name##IL;\
+	qW( name##IL );\
 \
-	typedef ctn::qMCONTAINERdl( d##name ) d##name##s;\
-	qW( name##s );
+	typedef ctn::qMCONTAINERdl( d##name##IL ) d##name##ILs;\
+	qW( name##ILs );
 
 	template <typename id, typename ids> inline void Fill(
 		const ids &Ids,
@@ -330,11 +330,11 @@ namespace sclfrntnd {
 # define SCLF_ILW( name, id  )\
 	SCLF_I( name, id );\
 \
-	typedef sclfrntnd::dILW_<s##name##Id> d##name;\
-	qW( name );\
+	typedef sclfrntnd::dILW_<s##name> d##name##ILW;\
+	qW( name##ILW );\
 \
-	typedef ctn::qCONTAINERdl( d##name ) d##name##s;\
-	qW( name##s );
+	typedef ctn::qCONTAINERdl( d##name##ILW ) d##name##ILWs;\
+	qW( name##ILWs );
 
 	template <typename id, typename ids> inline void Fill(
 		const ids &Ids,

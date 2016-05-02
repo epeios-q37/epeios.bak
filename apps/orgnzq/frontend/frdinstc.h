@@ -74,12 +74,20 @@ namespace frdinstc {
 			Record_.EditRecord( Record );
 		}
 		void CreateField(
-			sTypeId Type,
-			sNumberId Number,
+			sType Type,
+			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment ) const
 		{
 			Field_.CreateField( *Type, *Number, Label, Comment );
+		}
+		void GetFieldBufferColumn(
+			sType &Type,
+			sNumber &Number,
+			str::dString &Label,
+			str::dString &Comment ) const
+		{
+			Field_.GetColumn( *Type, *Number, Label, Comment );
 		}
 		void GetFieldsColumns(
 			fbltyp::dIds &Ids,
@@ -107,6 +115,7 @@ namespace frdinstc {
 	private:
 		rUser_ Core_;
 		eView View_;
+		void DumpFieldBufferColumn_( xml::dWriter &Writer ) const;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
@@ -133,13 +142,14 @@ namespace frdinstc {
 			Core_.EditRecord( qNIL );
 		}
 		void CreateField(
-			sTypeId Type,
-			sNumberId Number,
+			sType Type,
+			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
 			Core_.CreateField( Type, Number, Label, Comment );
 		}
+		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldsColumns( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eView, View );
 	};

@@ -102,8 +102,8 @@ BASE_AC( fields::sCreateField )
 {
 qRH
 	str::wString Label, Comment;
-	frdinstc::sTypeId Type = frdinstc::UndefinedType;
-	frdinstc::sNumberId Number = frdinstc::UndefinedNumber;
+	frdinstc::sType Type = frdinstc::UndefinedType;
+	frdinstc::sNumber Number = frdinstc::UndefinedNumber;
 qRB
 	Label.Init();
 	Session.GetContent( "FieldLabel", Label );
@@ -129,6 +129,7 @@ qRR
 qRT
 qRE
 }
+
 BASE_AC( fields::sEditField )
 {
 	Session.AlertU( Id );

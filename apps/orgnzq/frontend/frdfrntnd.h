@@ -43,8 +43,8 @@ namespace frdfrntnd {
 	: public _frontend___
 	{
 	private:
-		wTypes Types_;
-		wNumbers Numbers_;
+		wTypeILs Types_;
+		wNumberILWs Numbers_;
 		void GetTypes_( void );
 		void DumpTypes_( xml::writer_ &Writer );
 		void GetNumbers_( void );

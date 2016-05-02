@@ -179,6 +179,7 @@ namespace ogzfld {
 		{
 			Column_.Init( Type, Number, Label, Comment );
 		}
+		qRODISCLOSEr( ogzclm::rColumn, Column );
 };
 }
 

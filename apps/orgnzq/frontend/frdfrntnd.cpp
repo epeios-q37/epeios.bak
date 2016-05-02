@@ -38,7 +38,7 @@ qRB
 
 	Statics.OGZGetTypes( Ids, Labels );
 
-	sclfrntnd::Fill<sTypeId, dTypeIds>( Ids, Labels, Types_ );
+	sclfrntnd::Fill<sType, dTypes>( Ids, Labels, Types_ );
 qRR
 qRT
 qRE
@@ -47,7 +47,7 @@ qRE
 
 void  frdfrntnd::rFrontend::DumpTypes_( xml::writer_ &Writer )
 {
-	sclfrntnd::Dump<sTypeId>( Types_, "Types", "Type", Writer );
+	sclfrntnd::Dump<sType>( Types_, "Types", "Type", Writer );
 }
 
 void frdfrntnd::rFrontend::GetNumbers_( void )
@@ -62,7 +62,7 @@ qRB
 
 	Statics.OGZGetNumbers( Ids, Labels, Wordings );
 
-	sclfrntnd::Fill<sNumberId, dNumberIds>( Ids, Labels, Wordings, Numbers_ );
+	sclfrntnd::Fill<sNumber, dNumbers>( Ids, Labels, Wordings, Numbers_ );
 qRR
 qRT
 qRE
@@ -70,5 +70,5 @@ qRE
 
 void  frdfrntnd::rFrontend::DumpNumbers_( xml::writer_ &Writer )
 {
-	sclfrntnd::Dump<sNumberId>( Numbers_, "Numbers", "Number", Writer );
+	sclfrntnd::Dump<sNumber>( Numbers_, "Numbers", "Number", Writer );
 }

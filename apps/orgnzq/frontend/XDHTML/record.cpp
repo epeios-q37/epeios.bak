@@ -70,6 +70,8 @@ namespace {
 		base::content_rack___ Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpFieldBuffer( Rack() );
 	qRR
 	qRT
 	qRE

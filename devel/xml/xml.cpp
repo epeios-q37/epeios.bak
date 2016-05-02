@@ -1341,7 +1341,7 @@ void xml::writer_::PutAttribute(
 	flx::fStringIFlow Flow;
 
 	Flow.Init( Value );
-	PutAttribute( Name, Flow );
+	PutAttribute( Name, *Flow );
 }
 
 void xml::writer_::PutRawAttribute(

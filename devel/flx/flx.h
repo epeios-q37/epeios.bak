@@ -376,6 +376,10 @@ namespace flx {
 			_Driver.Init( Bunch, fdr::tsDisabled, Position );
 			iflow__::Init( _Driver );
 		}
+		flw::sIFlow &operator *( void )
+		{
+			return *this;
+		}
 	};
 
 # define E_STRING_IFLOW__	bunch_iflow__<str::string_, bso::char__>
