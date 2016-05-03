@@ -54,6 +54,8 @@ void wrpexample::dMyObject::HANDLE(
 	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(rStuff *)UP );
 }
 
+#define REPORT( message ) sclmisc::ReportAndAbort( message )
+
 #define DEC( name )	static void exported##name ARGS
 
 DEC( Test )

@@ -51,6 +51,7 @@
 		<Module>common</Module>
 		<Module>registry</Module>
 		<Modules Group="WRP">
+			<Module>wrpcolumn</Module>
 			<Module>wrpfield</Module>
 			<Module>wrprecord</Module>
 			<Module>wrpexample</Module>

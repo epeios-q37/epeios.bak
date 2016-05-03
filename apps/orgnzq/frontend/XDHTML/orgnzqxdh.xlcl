@@ -17,15 +17,15 @@
 		<Translation language="fr">Echec authentification !</Translation>
 		<Translation language="en">Login failure !</Translation>
 	</Translations>
-	<Translations text="LabelCanNotBeEmpty">
-		<Translation language="fr">Le libellé ne peut être vide.</Translation>
-		<Translation language="en">The label can not be empty.</Translation>
+	<Translations text="ColumnLabelCanNotBeEmpty">
+		<Translation language="fr">Le libellé du champ ne peut être vide.</Translation>
+		<Translation language="en">The fied label can not be empty.</Translation>
 	</Translations>
-	<Translations text="FieldTypeIsRequired">
+	<Translations text="ColumnTypeIsRequired">
 		<Translation language="fr">Le type du champs doit être spécifié.</Translation>
 		<Translation language="en">The field type must be specified.</Translation>
 	</Translations>
-	<Translations text="FieldNumberIsRequired">
+	<Translations text="ColumnNumberIsRequired">
 		<Translation language="fr">Le nombre du champs doit être spécifié.</Translation>
 		<Translation language="en">The field number must be specified.</Translation>
 	</Translations>

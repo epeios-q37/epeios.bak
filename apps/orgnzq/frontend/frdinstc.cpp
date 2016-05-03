@@ -73,7 +73,7 @@ namespace {
 	}
 }
 
-void frdinstc::rUser::DumpFieldBufferColumn_( xml::dWriter &Writer ) const
+void frdinstc::rUser::DumpColumnBuffer( xml::dWriter &Writer ) const
 {
 qRH
 	sType Type = UndefinedType;
@@ -83,7 +83,7 @@ qRB
 	Label.Init();
 	Comment.Init();
 
-	Core_.GetFieldBufferColumn( Type, Number, Label, Comment );
+	Core_.GetColumn( Type, Number, Label, Comment );
 
 	Writer.PushTag("Column" );
 
@@ -101,8 +101,6 @@ qRE
 void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
 {
 	Writer.PushTag( "FieldBuffer" );
-
-	DumpFieldBufferColumn_( Writer );
 
 	Writer.PopTag();
 }

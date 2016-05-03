@@ -52,6 +52,7 @@
 			<Module>prolog</Module>
 		</Modules>
 		<Modules Group="Frames">
+			<Module>column</Module>
 			<Module>fields</Module>
 			<Module>record</Module>
 			<Module>Frame</Module>
@@ -69,13 +70,20 @@
 	<Files>
 		<Files Group="XSL" Path="XSL/">
 			<Files Group="Frames">
+				<Files Group="Column">
+					<File>ColumnLayout.xsl</File>
+					<File>ColumnCasting.xsl</File>
+					<File>ColumnLocale.xml</File>
+				</Files>
 				<Files Group="Fields">
 					<File>FieldsLayout.xsl</File>
 					<File>FieldsCasting.xsl</File>
+					<File>FieldsLocale.xml</File>
 				</Files>
 				<Files Group="Record">
 					<File>RecordLayout.xsl</File>
 					<File>RecordCasting.xsl</File>
+					<File>RecordLocale.xml</File>
 				</Files>
 			</Files>
 			<Files Group="Global">

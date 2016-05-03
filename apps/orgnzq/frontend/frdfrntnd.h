@@ -32,7 +32,7 @@
 
 
 namespace frdfrntnd {
-	typedef sclfrntnd::frontend___ _frontend___;
+	typedef sclfrntnd::frontend___ rFrontend_;
 
 	SCLF_IL( Type, Id );
 	SCLF_ILW( Number, Id8 );
@@ -40,7 +40,7 @@ namespace frdfrntnd {
 	
 
 	class rFrontend
-	: public _frontend___
+	: public rFrontend_
 	{
 	private:
 		wTypeILs Types_;
@@ -53,6 +53,7 @@ namespace frdfrntnd {
 		virtual void FBLFRDOnConnect( void ) override
 		{
 			Statics.Init( *this );
+			Column.Init( *this );
 			Field.Init( *this );
 			Record.Init( *this );
 			MyObject.Init( *this );
@@ -63,22 +64,25 @@ namespace frdfrntnd {
 		virtual void FBLFRDOnDisconnect( void ) override
 		{
 			Statics.reset();
+			Column.reset();
 			Field.reset();
 			Record.reset();
 			MyObject.reset();
 		}
 	public:
 		orgnzq::fStatics Statics;
+		orgnzq::fOGZColumnCommon Column;
 		orgnzq::fOGZFieldCommon Field;
 		orgnzq::fOGZRecordCommon Record;
 		orgnzq::fOGZMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
 		{
-			_frontend___::reset( P );
+			rFrontend_::reset( P );
 			Types_.reset( P );
 			Numbers_.reset( P );
 
 			Statics.reset( P );
+			Column.reset( P );
 			Field.reset();
 			Record.reset();
 			MyObject.reset( P );
@@ -90,7 +94,7 @@ namespace frdfrntnd {
 			fblfrd::reporting_callback__ &ReportingCallback,
 			const rgstry::multi_level_registry_ &Registry )
 		{
-			_frontend___::Init( Kernel, Language, ReportingCallback, Registry );
+			rFrontend_::Init( Kernel, Language, ReportingCallback, Registry );
 			Types_.Init();
 			Numbers_.Init();
 		}

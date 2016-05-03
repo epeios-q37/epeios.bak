@@ -191,10 +191,6 @@
 				</Translations>
 			</xpp:bloc>
 			<!-- Record -->
-			<Translations text="recordCreateNewField">
-				<Translation language="fr">Créer un nouveau champ.</Translation>
-				<Translation language="en">Create new field.</Translation>
-			</Translations>
 			<Translations text="recordNewField">
 				<Translation language="fr">Nouveau</Translation>
 				<Translation language="en">New</Translation>

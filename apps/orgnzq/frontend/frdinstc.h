@@ -36,6 +36,7 @@ namespace frdinstc {
 		{
 			return F_().Statics;
 		}
+		orgnzq::rOGZColumn Column_;
 		orgnzq::rOGZField Field_;
 		orgnzq::rOGZRecord Record_;
 		orgnzq::rOGZMyObject Object_;
@@ -44,6 +45,7 @@ namespace frdinstc {
 		{	
 			Frontend_ = NULL;
 
+			Column_.reset( P );
 			Field_.reset( P );
 			Record_.reset( P );
 			Object_.reset( P );
@@ -53,6 +55,7 @@ namespace frdinstc {
 		{
 			Frontend_ = &Frontend;
 
+			Column_.Init( Frontend.Column );
 			Field_.Init( Frontend.Field );
 			Record_.Init( Frontend.Record );
 			Object_.Init( Frontend.MyObject );
@@ -73,21 +76,21 @@ namespace frdinstc {
 		{
 			Record_.EditRecord( Record );
 		}
-		void CreateField(
+		void CreateColumn(
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment ) const
 		{
-			Field_.CreateField( *Type, *Number, Label, Comment );
+			Column_.Create( *Type, *Number, Label, Comment );
 		}
-		void GetFieldBufferColumn(
+		void GetColumn(
 			sType &Type,
 			sNumber &Number,
 			str::dString &Label,
 			str::dString &Comment ) const
 		{
-			Field_.GetColumn( *Type, *Number, Label, Comment );
+			Column_.Get( *Type, *Number, Label, Comment );
 		}
 		void GetFieldsColumns(
 			fbltyp::dIds &Ids,
@@ -115,7 +118,6 @@ namespace frdinstc {
 	private:
 		rUser_ Core_;
 		eView View_;
-		void DumpFieldBufferColumn_( xml::dWriter &Writer ) const;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
@@ -141,14 +143,23 @@ namespace frdinstc {
 			View_ = vRecord;
 			Core_.EditRecord( qNIL );
 		}
-		void CreateField(
+		void CreateColumn(
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
-			Core_.CreateField( Type, Number, Label, Comment );
+			Core_.CreateColumn( Type, Number, Label, Comment );
 		}
+		void GetColumn(
+			sType &Type,
+			sNumber &Number,
+			str::dString &Label,
+			str::dString &Comment ) const
+		{
+			Core_.GetColumn( Type, Number, Label, Comment );
+		}
+		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldsColumns( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eView, View );

@@ -32,6 +32,8 @@ using common::rStuff;
 #define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
 #define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
 
+#define REPORT( message ) sclmisc::ReportAndAbort( message )
+
 #define DEC( name )\
 	static inline void name(\
 		fblbkd::backend___ &Backend,\
@@ -46,7 +48,7 @@ DEC( Test )
 {
 qRH
 qRB
-	sclmisc::ReportAndAbort("TestMessage");
+	REPORT("TestMessage");
 qRR
 qRT
 qRE

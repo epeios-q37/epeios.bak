@@ -157,30 +157,23 @@ namespace ogzfld {
 	{
 	private:
 		sRow Row_;	// Row of the source field. if  == 'qNIL', new field.
-		ogzclm::rColumn Column_;
+		ogzclm::sRow ColumnRow_;	// Row of the column.
 	public:
-		void reset( bso::sBool P = true )
+		void reset( bso::sBool  = true )
 		{
 			Row_ = qNIL;
-			Column_.reset( P );
+			ColumnRow_ = qNIL;
 		}
 		qCDTOR( rFieldBuffer );
-		void Init( sRow Row )
+		void Init(
+			ogzclm::sRow ColumnRow = qNIL,
+			sRow Row = qNIL )
 		{
 			Row_ = Row;
 			wField::Init();
-			Column_.Init();
+			ColumnRow_ = ColumnRow;
 		}
-		void Set(
-			ogztyp::sRow Type,
-			ogzclm::eNumber Number,
-			const str::dString &Label,
-			const str::dString &Comment )
-		{
-			Column_.Init( Type, Number, Label, Comment );
-		}
-		qRODISCLOSEr( ogzclm::rColumn, Column );
-};
+	};
 }
 
 #endif

@@ -111,7 +111,7 @@ namespace ogzclm {
 
 	};
 
-	class rColumn
+	class rColumnBuffer
 	: public sColumnCore_
 	{
 	private:
@@ -125,7 +125,7 @@ namespace ogzclm {
 			Label_.reset( P );
 			Comment_.reset( P );
 		}
-		E_CDTOR( rColumn );
+		E_CDTOR( rColumnBuffer );
 		void Init(
 			ogztyp::sRow Type = qNIL,
 			eNumber Number = n_Undefined,

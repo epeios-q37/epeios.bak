@@ -48,7 +48,7 @@ mods += xdhcmn xdhdws
 mods += frdapi frdfrntnd frdrgstry frdinstc 
 mods += ogzfbc ogzinf 
 mods += login main prolog 
-mods += fields record Frame 
+mods += column fields record Frame 
 mods += base core global registry 
 
 pmods += pllio 
@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160321"\"
+copt += -DVERSION=\""20160503"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 

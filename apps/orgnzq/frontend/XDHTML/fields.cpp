@@ -101,30 +101,8 @@ qRE
 BASE_AC( fields::sCreateField )
 {
 qRH
-	str::wString Label, Comment;
-	frdinstc::sType Type = frdinstc::UndefinedType;
-	frdinstc::sNumber Number = frdinstc::UndefinedNumber;
 qRB
-	Label.Init();
-	Session.GetContent( "FieldLabel", Label );
-
-	Comment.Init();
-	Session.GetContent( "FieldComment", Comment );
-
-	if ( !Session.GetNumericalProperty( "Type", "value", **Type ) )
-		sclmisc::ReportAndAbort( "FieldTypeIsRequired" );
-
-	if ( !Session.GetNumericalProperty( "Number", "value", **Number ) )
-		sclmisc::ReportAndAbort( "FieldNumberIsRequired" );
-
-	Label.StripCharacter( ' ' );
-	
-	if ( Label.Amount() == 0 )
-		sclmisc::ReportAndAbort( "LabelCanNotBeEmpty" );
-
-	Session.User.CreateField( Type, Number, Label, Comment );
-
-	main::SetLayout( Session );
+	qRVct();
 qRR
 qRT
 qRE
