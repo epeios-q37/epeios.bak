@@ -47,6 +47,7 @@ namespace record {
 	void SetLayout(
 		const char *Id,
 		core::rSession &Session );
+	void SetFieldsLayout( core::rSession &Session );
 }
 
 #endif

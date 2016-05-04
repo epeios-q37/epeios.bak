@@ -48,7 +48,8 @@ mods += xdhcmn xdhdws
 mods += frdapi frdfrntnd frdrgstry frdinstc 
 mods += ogzfbc ogzinf 
 mods += login main prolog 
-mods += column fields record records Frame 
+mods += column field fields record records 
+mods += Frame 
 mods += base core global registry 
 
 pmods += pllio 

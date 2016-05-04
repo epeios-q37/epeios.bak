@@ -97,6 +97,7 @@ qRB
 
 	switch ( Session.User.View() ) {
 	case frdinstc::vRecord:
+		fields::SetLayout( FieldsFrameId_, Session );
 		break;
 	case frdinstc::vColumn:
 		column::SetLayout( ColumnFrameId_, Session );
@@ -105,6 +106,11 @@ qRB
 qRR
 qRT
 qRE
+}
+
+void record::SetFieldsLayout( core::rSession &Session )
+{
+	fields::SetLayout( FieldsFrameId_, Session );
 }
 
 BASE_AC( record::sDefineNewField )

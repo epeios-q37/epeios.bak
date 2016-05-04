@@ -53,6 +53,7 @@
 		</Modules>
 		<Modules Group="Frames">
 			<Module>column</Module>
+			<Module>field</Module>
 			<Module>fields</Module>
 			<Module>record</Module>
 			<Module>records</Module>
@@ -75,6 +76,11 @@
 					<File>ColumnLayout.xsl</File>
 					<File>ColumnCasting.xsl</File>
 					<File>ColumnLocale.xml</File>
+				</Files>
+				<Files Group="Field">
+					<File>FieldLayout.xsl</File>
+					<File>FieldCasting.xsl</File>
+					<File>FieldLocale.xml</File>
 				</Files>
 				<Files Group="Fields">
 					<File>FieldsLayout.xsl</File>

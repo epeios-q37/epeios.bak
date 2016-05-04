@@ -67,7 +67,8 @@ void base::rContextRack::Init(
 {
 	rContextRack_::Init( View, Target, Session );
 
-	operator()().PutAttribute( "View", frdinstc::GetLabel( Session.User.GetView() ) );
+	if ( Session.User.GetView() != frdinstc::v_Undefined )
+		operator()().PutAttribute( "View", frdinstc::GetLabel( Session.User.GetView() ) );
 }
 
 

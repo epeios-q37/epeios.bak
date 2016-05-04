@@ -137,10 +137,11 @@
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
 			<xpp:expand href="XSL/ColumnLocale.xml"/>
-			<xpp:expand href="XSL/MainLocale.xml"/>
+			<xpp:expand href="XSL/FieldLocale.xml"/>
 			<xpp:expand href="XSL/FieldsLocale.xml"/>
 			<xpp:expand href="XSL/RecordLocale.xml"/>
 			<xpp:expand href="XSL/RecordsLocale.xml"/>
+			<xpp:expand href="XSL/MainLocale.xml"/>
 		</Locale>
 	</Configuration>
 </Configurations>
