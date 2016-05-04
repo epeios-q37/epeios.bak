@@ -197,7 +197,7 @@ namespace fblbrq {
 	};
 
 	//c A request manager.
-	class request__
+	class request___
 	{
 	private:
 		Q37_MRMDF( callbacks__, C_, Callbacks_ );
@@ -275,11 +275,11 @@ namespace fblbrq {
 
 			Channel_ = NULL;
 		}
-		request__( void )
+		request___( void )
 		{
 			reset( false );
 		}
-		virtual ~request__( void )
+		virtual ~request___( void )
 		{
 			reset( true );
 		}
@@ -317,7 +317,7 @@ namespace fblbrq {
 		FBLBRQ_M( SBigs, sbigs_t_ )
 		FBLBRQ_M( UBig, ubig_t__ )
 		FBLBRQ_M( UBigs, ubigs_t_ )
-		FBLBRQ_M( Id8, id8_t__ )
+		FBLBRQ_M( Id8, id8__ )
 		FBLBRQ_M( Id8s, id8s_ )
 		FBLBRQ_M( XId8s, xid8s_t_ )
 		FBLBRQ_M( Id16, id16_t__ )
@@ -326,7 +326,7 @@ namespace fblbrq {
 		FBLBRQ_M( Id32, id32_t__ )
 		FBLBRQ_M( Id32s, id32s_t_ )
 		FBLBRQ_M( XId32s, xid32s_t_ )
-		FBLBRQ_M( Id, id_t__ )
+		FBLBRQ_M( Id, id__ )
 		FBLBRQ_M( Ids, ids_ )
 		FBLBRQ_M( XIds, xids_t_ )
 		FBLBRQ_M( Char, char__ )
@@ -434,6 +434,6 @@ namespace fblbrq {
 /***************/
 
 namespace fblbrq {
-	typedef request__ sRequest;
+	typedef request___ rRequest;
 }
 #endif

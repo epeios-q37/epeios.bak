@@ -26,7 +26,7 @@
 namespace {
 	E_CDEF( char *, XSLAffix_, "Main" );
 
-	E_CDEF( char *, RecordFrameId_, "Record" );
+	E_CDEF( char *, RecordsFrameId_, "Records" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -92,19 +92,14 @@ qRB
 
 	Session.SwitchTo( core::pMain );
 
-	if ( Session.User.View() == frdinstc::vRecord ) {
-		record::SetLayout( RecordFrameId_, Session );
+	if ( Session.User.View() == frdinstc::vRecords ) {
+		records::SetLayout( RecordsFrameId_, Session );
 	}
 qRR
 qRT
 qRE
 }
 
-BASE_AC( main::sNewRecord )
+BASE_AC( main::sTemplate )
 {
-	Session.User.CreateRecord();
-
-	SetCasting_( Session );
-
-	record::SetLayout( RecordFrameId_, Session );
 }

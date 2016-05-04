@@ -38,7 +38,7 @@ const char *wrpexample::dMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
 #define ARGS (\
 	dMyObject_ &MyObject,\
 	fblbkd::backend___ &Backend,\
-	fblbkd::request__ &Request,\
+	fblbkd::rRequest &Request,\
 	rStuff &Stuff )\
 
 typedef void (* f_manager ) ARGS;
@@ -48,7 +48,7 @@ void wrpexample::dMyObject::HANDLE(
 	fblbkd::untyped_module &Module,
 	fblbkd::index__ Index,
 	fblbkd::command__ Command,
-	fblbkd::request__ &Request,
+	fblbkd::rRequest &Request,
 	void *UP )
 {
 	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(rStuff *)UP );

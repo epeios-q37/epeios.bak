@@ -25,21 +25,21 @@
 # include "record.h"
 
 namespace main {
-	BASE_ACD( NewRecord );
+	BASE_ACD( Template );
 
 	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( NewRecord );
+		BASE_ACU( Template );
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			BASE_ACR( NewRecord );
+			BASE_ACR( Template );
 		}
 		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
-			BASE_ACI( NewRecord );
+			BASE_ACI( Template );
 		}
 	};
 

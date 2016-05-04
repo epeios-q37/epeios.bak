@@ -22,12 +22,12 @@
 #include "core.h"
 #include "registry.h"
 #include "sclfrntnd.h"
-#include "fields.h"
 
 namespace {
 	E_CDEF( char *, XSLAffix_, "Record" );
 
 	E_CDEF( char *, FieldsFrameId_, "Fields" );
+	E_CDEF( char *, ColumnFrameId_, "Column" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -94,10 +94,6 @@ qRB
 	Session.FillElement( Id, XML, XSL );
 
 	SetCasting_( Id, Session );
-
-	fields::SetLayout( FieldsFrameId_, Session );
-
-//	Session.SwitchTo( core::fframe );
 qRR
 qRT
 qRE

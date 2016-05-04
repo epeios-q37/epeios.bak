@@ -69,7 +69,7 @@ static void Report_(
 	message__ Message,
 	const lcl::locale_ &Locale,
 	const char *Language,
-	request__ &Request )
+	rRequest &Request )
 {
 qRH
 	str::string Translation;
@@ -118,7 +118,7 @@ struct master_data__ {
 
 void master_module::Handle_(
 	index__ Index,
-	request__ &Requete,
+	rRequest &Requete,
 	void *PU,
 	log_functions__ &LogFunctions )
 {
@@ -201,7 +201,7 @@ static void GetTypesIDAndPrefixAndName_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -241,7 +241,7 @@ qRE
 
 static void WriteCommandsIDAndName_(
 	const descriptions_ &Descriptions,
-	request__ &Requete )
+	rRequest &Requete )
 {
 qRH
 	item16 Item;
@@ -281,7 +281,7 @@ static void GetCommandsIDAndName_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -294,7 +294,7 @@ static void GetCommandsIDAndName_(
 
 static inline void WriteParameters_(
 	const description_ &Description,
-	request__ &Requete )
+	rRequest &Requete )
 {
 	Requete.Id8sOut() = Description.Casts;
 }
@@ -303,7 +303,7 @@ static inline void WriteParameters_(
 static void WriteParameters_(
 	const descriptions_ &Descriptions,
 	command__ Command,
-	request__ &Requete )
+	rRequest &Requete )
 {
 	WriteParameters_( Descriptions( Command ), Requete );
 }
@@ -314,7 +314,7 @@ static void GetParameters_(
 	untyped_module &Module,
 	index__,
 	command__,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -331,7 +331,7 @@ static void About_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -374,7 +374,7 @@ static void Ping_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Request,
+	rRequest &Request,
 	bso::bool__ &,
 	void * )
 {
@@ -387,7 +387,7 @@ static void Crash_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Request,
+	rRequest &Request,
 	bso::bool__ &,
 	void * )
 {
@@ -406,7 +406,7 @@ static void ThrowERRFwk_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -421,7 +421,7 @@ static void ThrowERRFree_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -435,7 +435,7 @@ static void TestNotification_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -455,7 +455,7 @@ static void GetNewObject_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Request,
+	rRequest &Request,
 	bso::bool__ &,
 	void * )
 {
@@ -491,7 +491,7 @@ static void GetType_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Request,
+	rRequest &Request,
 	bso::bool__ &,
 	void * )
 {
@@ -519,7 +519,7 @@ static void GetRawMessages_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -543,7 +543,7 @@ static void RemoveObject_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -597,7 +597,7 @@ static void GetTypeAndCommands_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -623,7 +623,7 @@ static void GetCommand_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Request,
+	rRequest &Request,
 	bso::bool__ &,
 	void * )
 {
@@ -662,7 +662,7 @@ static void GetCommands_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &,
 	void * )
 {
@@ -682,7 +682,7 @@ static void Disconnect_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &Deconnexion,
 	void * )
 {
@@ -697,7 +697,7 @@ static void GetLanguage_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Requete,
+	rRequest &Requete,
 	bso::bool__ &Deconnexion,
 	void * )
 {
@@ -712,7 +712,7 @@ static void SetLanguage_(
 	untyped_module &Module,
 	index__,
 	command__ Command,
-	request__ &Request,
+	rRequest &Request,
 	bso::bool__ &Deconnexion,
 	void * )
 {
@@ -904,7 +904,7 @@ bso::bool__ backend___::_HandleRequest(
 	master_data__ MasterData;
 qRH
 	object__ O;
-	fblbrq::request__ Request;
+	rRequest Request;
 	fblbrq::callbacks__ *Callbacks = NULL;
 qRB
 	MasterData.Deconnexion = false;

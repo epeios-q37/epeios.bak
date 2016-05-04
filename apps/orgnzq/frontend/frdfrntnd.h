@@ -36,7 +36,9 @@ namespace frdfrntnd {
 
 	SCLF_IL( Type, Id );
 	SCLF_ILW( Number, Id8 );
+	SCLF_I( Column, Id );
 	SCLF_I( Field, Id );
+	SCLF_I( Record, Id );
 	
 
 	class rFrontend

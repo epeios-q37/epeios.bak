@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160503 Build May  3 2016 08:44:59 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160503 Build May  4 2016 10:17:10 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build May  1 2016 10:29:26 Win32;MSC 1800;IA-32)
 */
@@ -124,7 +124,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[3];
+		fblfrd::command__ _Commands[4];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -140,6 +140,7 @@ namespace orgnzq {
 
 			fblfrd::id8__ Parameters[] = {
 				0, 
+				21, 0, 
 				21, 12, 25, 25, 0, 
 				0, 21, 12, 25, 25, 
 			};
@@ -156,19 +157,24 @@ namespace orgnzq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "Create";;
-			CommandDetail.Casts.Append( Parameters + 1, 5 );
+			CommandDetail.Name = "Define";;
+			CommandDetail.Casts.Append( Parameters + 1, 2 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "Update";;
+			CommandDetail.Casts.Append( Parameters + 3, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Get";;
-			CommandDetail.Casts.Append( Parameters + 6, 5 );
+			CommandDetail.Casts.Append( Parameters + 8, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 3, _Commands );
+			Commands.Recall( 0, 4, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -276,7 +282,7 @@ namespace orgnzq {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "EditRecord";;
+			CommandDetail.Name = "Define";;
 			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -409,13 +415,24 @@ namespace orgnzq {
 
 			return Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Create( 
+		fblovl::reply__ Define( 
+			const fblfrd::id__ &In1 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
+			Common_->Frontend().IdIn( In1 );
+
+			Common_->Frontend().EndOfInParameters();
+
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ Update( 
 			const fblfrd::id__ &In1,
 			const fblfrd::id8__ &In2,
 			const fblfrd::string_ &In3,
 			const fblfrd::string_ &In4 ) const
 		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
 			Common_->Frontend().IdIn( In1 );
 			Common_->Frontend().Id8In( In2 );
 			Common_->Frontend().StringIn( In3 );
@@ -432,7 +449,7 @@ namespace orgnzq {
 			fblfrd::string_ &Out3,
 			fblfrd::string_ &Out4 ) const
 		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
 
 			Common_->Frontend().EndOfInParameters();
 
@@ -533,7 +550,7 @@ namespace orgnzq {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ EditRecord( 
+		fblovl::reply__ Define( 
 			const fblfrd::id__ &In1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );

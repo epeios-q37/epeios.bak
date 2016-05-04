@@ -72,17 +72,21 @@ namespace frdinstc {
 
 			return Success;
 		}
-		void EditRecord( fbltyp::sId Record )	// if == 'UndefinedId', we create empty record.
+		void DefineRecord( sRecord Record )	// if == 'UndefinedId', we create empty record.
 		{
-			Record_.EditRecord( Record );
+			Record_.Define( *Record );
 		}
-		void CreateColumn(
+		void DefineColumn( sColumn Column ) const
+		{
+			Column_.Define( *Column	);
+		}
+		void UpdateColumn(
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment ) const
 		{
-			Column_.Create( *Type, *Number, Label, Comment );
+			Column_.Update( *Type, *Number, Label, Comment );
 		}
 		void GetColumn(
 			sType &Type,
@@ -105,8 +109,10 @@ namespace frdinstc {
 
 	qENUM( View )
 	{
-		vRecords,
+		vColumn,
+		vField,
 		vRecord,
+		vRecords,
 		v_amount,
 		v_Undefined
 	};
@@ -138,18 +144,28 @@ namespace frdinstc {
 		{
 			return Core_.Login( Username, Password );
 		}
-		void CreateRecord( void )
+		void DefineRecord( sRecord Record )
 		{
+			Core_.DefineRecord( Record );
 			View_ = vRecord;
-			Core_.EditRecord( qNIL );
 		}
-		void CreateColumn(
+		void DefineNewRecord( void )
+		{
+			return DefineRecord( UndefinedRecord );
+		}
+		void DefineColumn( sColumn Column )
+		{
+			Core_.DefineColumn( Column );
+			View_ = vColumn;
+		}
+		void UpdateColumn(
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
-			Core_.CreateColumn( Type, Number, Label, Comment );
+			Core_.UpdateColumn( Type, Number, Label, Comment );
+			View_ = vField;
 		}
 		void GetColumn(
 			sType &Type,

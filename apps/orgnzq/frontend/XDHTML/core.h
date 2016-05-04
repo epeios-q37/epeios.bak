@@ -24,8 +24,10 @@
 # include "prolog.h"
 # include "login.h"
 # include "main.h"
-# include "record.h"
+# include "column.h"
 # include "fields.h"
+# include "record.h"
+# include "records.h"
 
 # include "frdinstc.h"
 

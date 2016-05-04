@@ -80,6 +80,10 @@
 # define FBLBKD_UNDEFINED_ID		FBLTYP_UNDEFINED_ID
 # endif
 
+/***************/
+/***** OLD *****/
+/***************/
+
 namespace fblbkd {
 	using namespace fblbrq;
 	using namespace fbltyp;
@@ -179,7 +183,7 @@ namespace fblbkd {
 		class untyped_module &Module,
 		index__ Index,
 		command__ Command,
-		request__ &Request,
+		rRequest &Request,
 		bso::bool__ &,
 		void *UP );
 
@@ -219,7 +223,7 @@ namespace fblbkd {
 		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
 		virtual void Handle_(
 			index__ Index,
-			request__ &Requete,
+			rRequest &Requete,
 			void *PU,
 			log_functions__ &LogFunctions ) = 0;
 	public:
@@ -304,7 +308,7 @@ namespace fblbkd {
 		//f Handle the request 'Request' for object of index 'Index'.
 		void Handle(
 			index__ Index,
-			request__ &Requete,
+			rRequest &Requete,
 			void *UP,
 			log_functions__ &LogFunctions )
 		{
@@ -381,7 +385,7 @@ namespace fblbkd {
 		void Traiter_(
 			t &Objet,
 			index__ Index,
-			fblbrq::request__ &Requete,
+			rRequest &Requete,
 			void *PU,
 			log_functions__ *LogFunctions )
 		{
@@ -412,7 +416,7 @@ namespace fblbkd {
 #endif
 		virtual void Handle_(
 			index__ Index,
-			fblbrq::request__ &Requete,
+			rRequest &Requete,
 			void *PU,
 			log_functions__ &LogFunctions ) override
 		{
@@ -584,7 +588,7 @@ namespace fblbkd {
 	protected:
 		virtual void Handle_(
 			index__ Index,
-			fblbrq::request__ &Requete,
+			rRequest &Requete,
 			void *PU,
 			log_functions__ &LogFunctions ) override;
 #if 0
@@ -966,5 +970,11 @@ namespace fblbkd {
 //d A shared module of an object od type 't'.
 # define FBLBKD_SHARED_MODULE( t, user )	fblbkd::shared_module<t, t::s, user>	
 
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace fblbkd {
+}
 
 #endif

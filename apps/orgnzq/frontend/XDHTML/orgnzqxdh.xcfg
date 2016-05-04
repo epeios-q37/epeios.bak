@@ -39,6 +39,16 @@
 						</Layout>
 						<!-- No 'casting' XSL -->
 					</XSLFiles>
+					<XSLFiles target="Column">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>ColumnLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>ColumnCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
 					<XSLFiles target="Fields">
 						<Layout>
 							<xpp:expand select="XSLRootDir"/>
@@ -116,91 +126,11 @@
 			<xpp:bloc>
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
-			<xpp:bloc>
-				<!-- Main -->
-				<Translations text="mainConverter">
-					<Translation language="fr">Convertisseur</Translation>
-					<Translation language="en">Convert</Translation>
-				</Translations>
-				<Translations text="mainUCConverter">
-					<Translation language="fr">Convertisseur en majuscule</Translation>
-					<Translation language="en">To upper case converter</Translation>
-				</Translations>
-				<Translations text="mainConvert">
-					<Translation language="fr">Conversion</Translation>
-					<Translation language="en">Convert</Translation>
-				</Translations>
-				<Translations text="mainCreateNewRecord">
-					<Translation language="fr">Créer un nouvel enregistrement.</Translation>
-					<Translation language="en">Create new record.</Translation>
-				</Translations>
-				<Translations text="mainNewRecord">
-					<Translation language="fr">Nouveau</Translation>
-					<Translation language="en">New</Translation>
-				</Translations>
-				<Translations text="mainOK">
-					<Translation language="fr">OK</Translation>
-					<Translation language="en">OK</Translation>
-				</Translations>
-				<Translations text="mainDisplayTestMessage">
-					<Translation language="fr">Afficher message de test.</Translation>
-					<Translation language="en">Display test message.</Translation>
-				</Translations>
-				<Translations text="mainTest">
-					<Translation language="fr">Test</Translation>
-					<Translation language="en">Test</Translation>
-				</Translations>
-				<Translations text="mainHideShowTestButton">
-					<Translation language="fr">Cliquez sur ce texte pour afficher le bouton de test (sortir du cadre le cache).</Translation>
-					<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
-				</Translations>
-			</xpp:bloc>
-			<xpp:bloc>
-			<!-- Field-->
-				<Translations text="fieldsMonoTypeLabel">
-					<Translation language="fr">Mono</Translation>
-					<Translation language="en">Mono</Translation>
-				</Translations>
-				<Translations text="fieldsMonoTypeTitle">
-					<Translation language="fr">Le champs peut contenir au maximum une entrée.</Translation>
-					<Translation language="en">Fiedls can contain at most one entry</Translation>
-				</Translations>
-				<Translations text="fieldsMultiTypeLabel">
-					<Translation language="fr">Multi</Translation>
-					<Translation language="en">Multi</Translation>
-				</Translations>
-				<Translations text="fieldsMultiTypeTitle">
-					<Translation language="fr">Le champ peut contenir plusieurs entrées</Translation>
-					<Translation language="en">The filed can contain several entries.</Translation>
-				</Translations>
-				<Translations text="fieldsFieldLabelPlaceholder">
-					<Translation language="fr">Libellé</Translation>
-					<Translation language="en">Label</Translation>
-				</Translations>
-				<Translations text="fieldsFieldLabelTitle">
-					<Translation language="fr">Saisissez le libellé du champ.</Translation>
-					<Translation language="en">Type the field label.</Translation>
-				</Translations>
-				<Translations text="fieldsFieldCommentPlaceholder">
-					<Translation language="fr">Commentaire</Translation>
-					<Translation language="en">Comment</Translation>
-				</Translations>
-				<Translations text="fieldsFieldCommentTitle">
-					<Translation language="fr">Saisissez le commentaire du champ.</Translation>
-					<Translation language="en">Type the field comment.</Translation>
-				</Translations>
-			</xpp:bloc>
-			<!-- Record -->
-			<Translations text="recordNewField">
-				<Translation language="fr">Nouveau</Translation>
-				<Translation language="en">New</Translation>
-			</Translations>
-			<!--
-				<Translations text="">
-					<Translation language="fr"></Translation>
-					<Translation language="en"></Translation>
-				</Translations>
-			-->
+			<xpp:expand href="XSL/ColumnLocale.xml"/>
+			<xpp:expand href="XSL/MainLocale.xml"/>
+			<xpp:expand href="XSL/FieldsLocale.xml"/>
+			<xpp:expand href="XSL/RecordLocale.xml"/>
+			<xpp:expand href="XSL/RecordsLocale.xml"/>
 		</Locale>
 	</Configuration>
 </Configurations>

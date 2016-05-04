@@ -96,37 +96,7 @@
 			<xpp:bloc>
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
-			<xpp:bloc>
-				<!-- Main -->
-				<Translations text="mainConverter">
-					<Translation language="fr">Convertisseur</Translation>
-					<Translation language="en">Convert</Translation>
-				</Translations>
-				<Translations text="mainUCConverter">
-					<Translation language="fr">Convertisseur en majuscule</Translation>
-					<Translation language="en">To upper case converter</Translation>
-				</Translations>
-				<Translations text="mainConvert">
-					<Translation language="fr">Conversion</Translation>
-					<Translation language="en">Convert</Translation>
-				</Translations>
-				<Translations text="mainOK">
-					<Translation language="fr">OK</Translation>
-					<Translation language="en">OK</Translation>
-				</Translations>
-				<Translations text="mainDisplayTestMessage">
-					<Translation language="fr">Afficher message de test.</Translation>
-					<Translation language="en">Display test message.</Translation>
-				</Translations>
-				<Translations text="mainTest">
-					<Translation language="fr">Test</Translation>
-					<Translation language="en">Test</Translation>
-				</Translations>
-				<Translations text="mainHideShowTestButton">
-					<Translation language="fr">Cliquez sur ce texte pour afficher le bouton de test (sortir du cadre le cache).</Translation>
-					<Translation language="en">Click on this text to show test button (moving away hides it)</Translation>
-				</Translations>
-			</xpp:bloc>
+			<xpp:expand href="XSL/MainLocale.xml"/>"
 		</Locale>
 	</Configuration>
 </Configurations>

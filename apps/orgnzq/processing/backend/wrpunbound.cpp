@@ -34,7 +34,7 @@ using common::rStuff;
 		fblbkd::untyped_module &,\
 		fblbkd::index__,\
 		fblbkd::command__,\
-		fblbkd::request__ &Request,\
+		fblbkd::rRequest &Request,\
 		bso::bool__ &,\
 		void *UP )
 

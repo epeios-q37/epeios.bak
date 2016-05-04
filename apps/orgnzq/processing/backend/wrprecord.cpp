@@ -40,7 +40,7 @@ const char *wrprecord::dRecord::NAME = WRPRECORD_RECORD_NAME;
 
 #define ARGS (\
 	dRecord_ &Record,\
-	fblbkd::request__ &Request,\
+	fblbkd::rRequest &Request,\
 	rStuff &Stuff )\
 
 typedef void (* f_manager ) ARGS;
@@ -50,7 +50,7 @@ void wrprecord::dRecord::HANDLE(
 	fblbkd::untyped_module &Module,
 	fblbkd::index__ Index,
 	fblbkd::command__ Command,
-	fblbkd::request__ &Request,
+	fblbkd::rRequest &Request,
 	void *UP )
 {
 	((f_manager)Module.UPs( Command ))( *this, Request, *(rStuff *)UP );
@@ -63,14 +63,14 @@ DEC( Initialize )
 	Record().Init(common::GetMandatoryTextType() );
 }
 
-DEC( EditRecord )
+DEC( Define )
 {
 qRH
 	ogzrcd::sRow Row = qNIL;
 qRB
-	Row = Request.IdIn();
+	Row = *Request.IdIn();
 
-	if ( Row != *fbltyp::UndefinedId )
+	if ( Row != qNIL )
 		qRLmt();
 
 	Record().Init( common::GetMandatoryTextType() );
@@ -242,8 +242,8 @@ void wrprecord::dRecord::NOTIFY(
 	fblbkd::untyped_module &Module,
 	common::rStuff &Data )
 {
-	Module.Add( D( EditRecord ),
-			fblbkd::cId,	// Record to edit. If == 'qNIL', we want a new record.
+	Module.Add( D( Define ),
+			fblbkd::cId,	// Record to edit. If == 'qNIL', new record.
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 

@@ -55,6 +55,7 @@
 			<Module>column</Module>
 			<Module>fields</Module>
 			<Module>record</Module>
+			<Module>records</Module>
 			<Module>Frame</Module>
 		</Modules>
 		<Module>base</Module>
@@ -85,6 +86,11 @@
 					<File>RecordCasting.xsl</File>
 					<File>RecordLocale.xml</File>
 				</Files>
+				<Files Group="Records">
+					<File>RecordsLayout.xsl</File>
+					<File>RecordsCasting.xsl</File>
+					<File>RecordsLocale.xml</File>
+				</Files>
 			</Files>
 			<Files Group="Global">
 				<File>About.xsl</File>
@@ -97,6 +103,7 @@
 				<Files Group="Main">
 					<File>MainLayout.xsl</File>
 					<File>MainCasting.xsl</File>
+					<File>MainLocale.xml</File>
 				</Files>
 				<Files Group="Prolog">
 					<File>PrologLayout.xsl</File>

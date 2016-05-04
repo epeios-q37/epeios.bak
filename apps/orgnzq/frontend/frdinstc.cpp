@@ -29,8 +29,10 @@ using namespace frdinstc;
 const char *frdinstc::GetLabel( eView View )
 {
 	switch ( View ) {
-	C( Records );
+	C( Column );
+	C( Field );
 	C( Record );
+	C( Records );
 	default:
 		qRFwk();
 		break;

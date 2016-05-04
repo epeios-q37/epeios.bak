@@ -70,6 +70,7 @@
 				<Files Group="Frame">
 					<File>FrameLayout.xsl</File>
 					<File>FrameCasting.xsl</File>
+					<File>FrameLocale.xml</File>
 				</Files>
 			</Files>
 			<Files Group="Global">
@@ -83,6 +84,7 @@
 				<Files Group="Main">
 					<File>MainLayout.xsl</File>
 					<File>MainCasting.xsl</File>
+					<File>MainLocale.xml</File>
 				</Files>
 				<Files Group="Prolog">
 					<File>PrologLayout.xsl</File>

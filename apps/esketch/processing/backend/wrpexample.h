@@ -47,7 +47,7 @@ namespace wrpexample {
 			fblbkd::untyped_module &Module,
 			fblbkd::index__ Index,
 			fblbkd::command__ Command,
-			fblbkd::request__ &Request,
+			fblbkd::rRequest &Request,
 			void *UP );
 		static void NOTIFY(
 			fblbkd::untyped_module &Module,
