@@ -167,7 +167,9 @@
 					// Edge executes this script in loop !!!
 					removeCastingChildren( document );
 					document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
-					fetchCastings( "%Id%" );
+					var castings = fetchCastings( "%Id%" );
+					log( "%XML%" );
+					castings;
 				]]>
 			</CastingsFiller>
 			<EventHandlersSetter>

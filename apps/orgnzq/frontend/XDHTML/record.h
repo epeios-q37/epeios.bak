@@ -27,20 +27,20 @@
 namespace record {
 	E_CDEF( char *, FieldsFrameId_, "Fields" );
 
-	BASE_ACD( Template );
+	BASE_ACD( DefineNewField );
 
 	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( Template );
+		BASE_ACU( DefineNewField );
 		void reset( bso::bool__ P = true )
 		{
-			BASE_ACR( Template );
+			BASE_ACR( DefineNewField );
 		}
 		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
-			BASE_ACI( Template );
+			BASE_ACI( DefineNewField );
 		}
 	};
 

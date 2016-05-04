@@ -25,7 +25,7 @@
 # include "ogzfbc.h"
 # include "ogzinf.h"
 
-# include "frdfrntnd.h"
+# include "frdinstc.h"
 
 # include "xdhdws.h"
 
@@ -151,7 +151,17 @@ namespace base {
 	};
 
 	typedef _rack___<_content_rack___> content_rack___;
-	typedef _rack___<_context_rack___> context_rack___;
+	typedef _rack___<_context_rack___> rContextRack_;
+
+	class rContextRack
+	: public rContextRack_
+	{
+	public:
+		void Init(
+			const char *View,
+			str::string_ &Target,
+			core::rSession &Session );
+	};
 
 
 	void AddAllowedActionsOnWhenNotConnectedToBackend( const char *Action );

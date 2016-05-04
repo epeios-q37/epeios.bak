@@ -148,8 +148,8 @@ namespace base {
 		}
 	};
 
-	typedef _rack___<_content_rack___> content_rack___;
-	typedef _rack___<_context_rack___> context_rack___;
+	typedef _rack___<_content_rack___> rContentRack;
+	typedef _rack___<_context_rack___> rContextRack;
 
 
 	void AddAllowedActionsOnWhenNotConnectedToBackend( const char *Action );

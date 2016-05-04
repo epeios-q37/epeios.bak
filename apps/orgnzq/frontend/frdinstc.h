@@ -153,6 +153,11 @@ namespace frdinstc {
 		{
 			return DefineRecord( UndefinedRecord );
 		}
+		void DefineNewField( void )
+		{
+			Core_.DefineColumn( UndefinedColumn );
+			View_ = vColumn;
+		}
 		void DefineColumn( sColumn Column )
 		{
 			Core_.DefineColumn( Column );

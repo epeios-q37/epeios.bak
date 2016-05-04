@@ -34,7 +34,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::context_rack___ Rack;
+		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 	qRR
@@ -94,16 +94,23 @@ qRB
 	Session.FillElement( Id, XML, XSL );
 
 	SetCasting_( Id, Session );
+
+	switch ( Session.User.View() ) {
+	case frdinstc::vRecord:
+		break;
+	case frdinstc::vColumn:
+		column::SetLayout( ColumnFrameId_, Session );
+		break;
+	}
 qRR
 qRT
 qRE
 }
 
-BASE_AC( record::sTemplate )
+BASE_AC( record::sDefineNewField )
 {
-	/*
-	Session.GetAttribute()
-	Session.User.CreateField();
-	*/
+	Session.User.DefineNewField();
+
+	main::SetRecordLayout( Session );
 }
 

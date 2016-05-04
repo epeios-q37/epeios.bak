@@ -69,6 +69,16 @@
 							<xpp:bloc>RecordCasting.xsl</xpp:bloc>
 						</Casting>
 					</XSLFiles>
+					<XSLFiles target="Records">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>RecordsLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>RecordsCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
 					<XSLFiles target="Prolog">
 						<Layout>
 							<xpp:expand select="XSLRootDir"/>

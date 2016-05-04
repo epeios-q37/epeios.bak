@@ -31,7 +31,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::context_rack___ Rack;
+		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -66,7 +66,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::content_rack___ Rack;
+		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 	qRR

@@ -60,6 +60,17 @@ bso::bool__ base::action_helper_callback__::SCLXHTMLOnClose( core::rSession &Ses
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
+void base::rContextRack::Init(
+	const char *View,
+	str::string_ &Target,
+	core::rSession &Session )
+{
+	rContextRack_::Init( View, Target, Session );
+
+	operator()().PutAttribute( "View", frdinstc::GetLabel( Session.User.GetView() ) );
+}
+
+
 void base::AddAllowedActionsOnWhenNotConnectedToBackend( const char *Action )
 {
 	if ( stsfsm::Add( Action, 0, AllowedActionsOnWhenNotConnectedToBackend_ ) != stsfsm::UndefinedId )

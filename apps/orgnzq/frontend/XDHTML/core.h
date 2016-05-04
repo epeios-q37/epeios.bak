@@ -48,8 +48,10 @@ namespace core {
 		prolog::fActionCallbacks Prolog_;
 		login::fActionCallbacks Login_;
 		main::fActionCallbacks Main_;
-		record::fActionCallbacks Record_;
+		column::fActionCallbacks Column_;
 		fields::fActionCallbacks Fields_;
+		record::fActionCallbacks Record_;
+		records::fActionCallbacks Records_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -57,8 +59,10 @@ namespace core {
 			Prolog_.reset( P );
 			Login_.reset( P );
 			Main_.reset( P );
+			Column_.reset( P );
+			Fields_.reset( P );
 			Record_.reset( P );
-			Fields_.reset();
+			Records_.reset( P );
 		}
 		E_CVDTOR( action_callbacks__ );
 		void Init( void )
@@ -67,8 +71,10 @@ namespace core {
 			Login_.Init();
 			Main_.Init();
 			Global_.Init();
-			Record_.Init();
+			Column_.Init();
 			Fields_.Init();
+			Record_.Init();
+			Records_.Init();
 
 			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
 

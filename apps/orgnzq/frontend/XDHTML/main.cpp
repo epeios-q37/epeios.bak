@@ -27,17 +27,16 @@ namespace {
 	E_CDEF( char *, XSLAffix_, "Main" );
 
 	E_CDEF( char *, RecordsFrameId_, "Records" );
+	E_CDEF( char *, RecordFrameId_, "Record" );
 
 	void GetContext_(
 		core::rSession &Session,
 		str::string_ &XML )
 	{
 	qRH
-		base::context_rack___ Rack;
+		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
-
-		Rack().PutAttribute("View", frdinstc::GetLabel( Session.User.GetView() ) );
 	qRR
 	qRT
 	qRE
@@ -92,13 +91,27 @@ qRB
 
 	Session.SwitchTo( core::pMain );
 
-	if ( Session.User.View() == frdinstc::vRecords ) {
+	switch ( Session.User.View() ) {
+	case frdinstc::vRecords:
 		records::SetLayout( RecordsFrameId_, Session );
+		break;
+	case frdinstc::vRecord:
+		record::SetLayout( RecordFrameId_, Session );
+		break;
+	default:
+		qRGnr();
+		break;
 	}
 qRR
 qRT
 qRE
 }
+
+void main::SetRecordLayout( core::rSession &Session )
+{
+	record::SetLayout( RecordFrameId_, Session );
+}
+
 
 BASE_AC( main::sTemplate )
 {

@@ -44,6 +44,7 @@ namespace main {
 	};
 
 	void SetLayout( core::rSession &Session );
+	void SetRecordLayout( core::rSession &Session );
 }
 
 #endif
