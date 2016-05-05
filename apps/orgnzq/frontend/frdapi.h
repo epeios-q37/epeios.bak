@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160503 Build May  4 2016 10:17:10 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160503 Build May  5 2016 09:34:00 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build May  1 2016 10:29:26 Win32;MSC 1800;IA-32)
 */
@@ -254,7 +254,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[4];
+		fblfrd::command__ _Commands[5];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -273,6 +273,7 @@ namespace orgnzq {
 				0, 
 				0, 22, 22, 13, 26, 26, 
 				0, 22, 27, 
+				1, 0, 21, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -292,7 +293,7 @@ namespace orgnzq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "GetFieldsColumns";;
+			CommandDetail.Name = "GetColumns";;
 			CommandDetail.Casts.Append( Parameters + 3, 6 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -301,10 +302,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 9, 3 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "CreateField";;
+			CommandDetail.Casts.Append( Parameters + 12, 3 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 4, _Commands );
+			Commands.Recall( 0, 5, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -570,7 +576,7 @@ namespace orgnzq {
 
 			return Common_->Frontend().Handle();
 		}
-		fblovl::reply__ GetFieldsColumns( 
+		fblovl::reply__ GetColumns( 
 			fblfrd::ids_ &Out1,
 			fblfrd::ids_ &Out2,
 			fblfrd::id8s_ &Out3,
@@ -599,6 +605,19 @@ namespace orgnzq {
 
 			Common_->Frontend().IdsOut( Out1 );
 			Common_->Frontend().XStringsOut( Out2 );
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ CreateField( 
+			const fblfrd::object__ &In1,
+			fblfrd::id__ &Out1 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[4] );
+			Common_->Frontend().ObjectIn( In1 );
+
+			Common_->Frontend().EndOfInParameters();
+
+			Common_->Frontend().IdOut( Out1 );
 
 			return Common_->Frontend().Handle();
 		}

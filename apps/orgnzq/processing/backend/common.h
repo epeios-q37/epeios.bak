@@ -87,7 +87,10 @@ namespace common {
 		qRODISCLOSEr( ogztyp::sRow, MandatoryTextType );
 	};
 
+	typedef ogzdtb::rDatabase rDatabase_;
+
 	class rDatabase
+	: public rDatabase_
 	{
 	private:
 		plgn::rRetriever<ogzplg::fDatabasePlugin> Retriever_;
@@ -96,10 +99,9 @@ namespace common {
 			return Retriever_.Plugin();
 		}
 	public:
-		ogzdtb::rDatabase Core;
 		void reset( bso::sBool P = true )
 		{
-			Core.reset( P );
+			rDatabase_::reset( P );
 			Retriever_.reset( P );
 		}
 		E_CDTOR( rDatabase );

@@ -103,7 +103,7 @@ static inline void _Get(\
 
 M( SInt, sint );
 M( UInt, uint );
-#ifndef CPE_F_64BIT
+#ifndef CPE_F_64BITS
 M( SBig, sbig );
 M( UBig, ubig );
 #endif

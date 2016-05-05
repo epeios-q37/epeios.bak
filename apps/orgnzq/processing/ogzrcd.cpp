@@ -33,6 +33,7 @@ namespace {
 	}
 }
 
+#if 0
 void ogzrcd::rRecordBuffer::GetColumnContent(
 	ogzfld::sLRow Row,
 	ogztyp::sRow &Type,
@@ -55,3 +56,4 @@ qRR
 qRT
 qRE
 }
+# endif

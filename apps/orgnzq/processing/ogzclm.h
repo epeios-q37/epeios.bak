@@ -47,7 +47,6 @@ namespace ogzclm {
 		return Number < n_amount;
 	}
 
-
 	qENUM( Type ) {
 		tExplicit,	// Explicit column definition.
 		tDeduced,	// Deduced (from a model) column defintion.
@@ -192,6 +191,12 @@ namespace ogzclm {
 		qRODISCLOSEs( sColumns, Core );
 		qRODISCLOSEs( ogztyp::sRow, TextType );
 		ogztyp::sRow GetType( sRow Row );
+		void GetFeatures(
+			sRow Row,
+			ogztyp::sRow &Type,
+			eNumber &Number,
+			str::dString &Label,
+			str::dString &Comment ) const;
 		sRow Create(
 			ogztyp::sRow Type,
 			ogzclm::eNumber Number,
@@ -208,6 +213,10 @@ namespace ogzclm {
 			Core_.Store( Column, Row );
 
 			return Row;
+		}
+		sRow Create( const rColumnBuffer &Column )
+		{
+			return Create( Column.GetType(), Column.GetNumber(), Column.GetLabel(), Column.GetComment() );
 		}
 		void Recall(
 			sRow Row,

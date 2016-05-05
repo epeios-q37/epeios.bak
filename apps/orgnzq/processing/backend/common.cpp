@@ -135,7 +135,7 @@ void common::rDatabase::Init(
 	sclmisc::Plug( ogzplg::DatabasePluginTarget, Identifier, Retriever_ );
 //	P_().Initialize();
 
-	Core.Init( Types, P_().GetDataCallback(), P_().GetColumnCallback(), P_().GetFieldCallback(), P_().GetRecordCallback(), P_().GetUserCallback() );
+	rDatabase_::Init( Types, P_().GetDataCallback(), P_().GetColumnCallback(), P_().GetFieldCallback(), P_().GetRecordCallback(), P_().GetUserCallback() );
 }
 
 void common::rAuthentication::Init( const char *Identifier )

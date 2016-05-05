@@ -256,7 +256,7 @@ void ogzxml::Dump(
 	if ( Record.Row() != qNIL )
 		xml::PutAttribute( A( Id ), *Record.Row(), Writer );
 
-	Dump_( Types, Record.Fields(), Record, Record.Columns(), Record.Data(), Writer );
+	Dump_( Types, Record.Core(), Record, Record.Columns().Core(), Record.Data(), Writer );
 
 	Writer.PopTag();
 }

@@ -102,48 +102,31 @@ namespace ogzfld {
 	{
 	private:
 		sFields Core_;
-		qRMV( ogzclm::sXColumns, C_, Columns_ );
+		ogzclm::sXColumns Columns_;
 		ogzclm::sRow GetColumn_( sRow Row ) const;
 		sRow Create_( ogzclm::sRow Column );
 	public:
 		void reset( bso::sBool P = true )
 		{
 			Core_.reset( P );
-			Columns_ = NULL;
+			Columns_.reset( P );
 		}
 		qCVDTOR( sXFields );
 		void Init(
-			cField &Callback,
-			ogzclm::sXColumns &Columns )
+			ogzdta::sData &Data,
+			ogzclm::cColumn &ColumnCallback,
+			ogztyp::sRow TextType,
+			cField &FieldCallback )
 		{
-			Core_.Init( Callback );
-			Columns_ = &Columns;
+			Columns_.Init( ColumnCallback, TextType, Data );
+			Core_.Init( FieldCallback );
 		}
-		ogztyp::sRow GetType( sRow Row ) const
+		sRow Create( const ogzclm::rColumnBuffer &Column )
 		{
-			return C_().GetType( GetColumn_( Row ) );
-		}
-		sRow Create(
-			ogztyp::sRow Type,
-			ogzclm::eNumber Number,
-			const str::dString &Label,
-			const str::dString &Comment )
-		{
-			return Create_( C_().Create( Type, Number, Label, Comment ) );
-		}
-		void Recall(
-			sRow Row,
-			dField &Field ) const
-		{
-			Core_.Recall( Row, Field );
-		}
-		void GetColumn(
-			sRow Row,
-			ogzclm::sColumn &Column ) const
-		{
-			C_().Recall( GetColumn_( Row ), Column );
+			return Create_( Columns_.Create( Column ) );
 		}
 		qRODISCLOSEs( sFields, Core );
+		qRODISCLOSEs( ogzclm::sXColumns, Columns );
 	};
 
 

@@ -18,6 +18,9 @@
 */
 
 #include "wrprecord.h"
+
+#include "wrpcolumn.h"
+
 #include "registry.h"
 #include "dir.h"
 #include "fnm.h"
@@ -40,6 +43,7 @@ const char *wrprecord::dRecord::NAME = WRPRECORD_RECORD_NAME;
 
 #define ARGS (\
 	dRecord_ &Record,\
+	fblbkd::backend___ &Backend,\
 	fblbkd::rRequest &Request,\
 	rStuff &Stuff )\
 
@@ -53,7 +57,7 @@ void wrprecord::dRecord::HANDLE(
 	fblbkd::rRequest &Request,
 	void *UP )
 {
-	((f_manager)Module.UPs( Command ))( *this, Request, *(rStuff *)UP );
+	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(rStuff *)UP );
 }
 
 #define DEC( name )	static void exported##name ARGS
@@ -120,7 +124,7 @@ namespace {
 		ogzclm::sColumn Column;
 	qRB
 		Column.Init();
-		Record.Columns().Recall(Field.Column(), Column );
+		Record.Fields().Columns().Core().Recall( Field.Column(), Column );
 
 		GetData_( Field, Column.Type(), Types, Record.Data(), Data );
 	qRR
@@ -130,7 +134,6 @@ namespace {
 }
 
 namespace {
-
 	void GetData_(
 		ogzfld::sLRow Row,
 		const ogzrcd::rRecordBuffer &Record,
@@ -141,7 +144,7 @@ namespace {
 		ogzfld::wField Field;
 	qRB
 		Field.Init();
-		Record.Fields().Recall( Record( Row ), Field );
+		Record.Fields().Core().Recall( Record( Row ), Field );
 
 		GetData_( Field, Record, Types, Data );
 	qRR
@@ -175,7 +178,7 @@ namespace {
 	}
 }
 
-DEC( GetFieldsData )
+DEC( GetFields )
 {
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dStringsSet &DataSet = Request.StringsSetOut();
@@ -193,15 +196,14 @@ namespace {
 		fbltyp::dStrings &Comments )
 	{
 	qRH
-		ogzfld::sLRow Row = qNIL;
-		ogzclm::sColumn Column;
+		ogzclm::sLRow Row = qNIL;
 		ogztyp::sRow Type = qNIL;
 		ogzclm::eNumber Number = ogzclm::n_Undefined;
 		str::wString Label, Comment;
-		ogzfld::wRows Rows;
+		ogzclm::wRows Rows;
 	qRB
 		Rows.Init();
-		Record.Fields().GetList( 0, 0, Rows );
+		Record.Fields().Columns().Core().GetList( 0, 0, Rows );
 
 		Row = Rows.First();
 
@@ -209,7 +211,7 @@ namespace {
 			Label.Init();
 			Comment.Init();
 
-			Record.GetColumnContent( Row, Type, Number, Label, Comment );
+			Record.Fields().Columns().GetFeatures( Rows( Row ), Type, Number, Label, Comment );
 
 			Ids.Append( *Row );
 			Types.Append( *Type );
@@ -217,7 +219,7 @@ namespace {
 			Labels.Append( Label );
 			Comments.Append( Comment );
 
-			Row = Record.Next( Row );
+			Row = Rows.Next( Row );
 		}
 	qRR
 	qRT
@@ -225,7 +227,7 @@ namespace {
 	}
 }
 
-DEC( GetFieldsColumns )
+DEC( GetColumns )
 {
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dIds &Types = Request.IdsOut();
@@ -234,6 +236,13 @@ DEC( GetFieldsColumns )
 	fbltyp::dStrings &Comments = Request.StringsOut();
 
 	GetColumns_( Record(), Ids, Types, Numbers, Labels, Comments );
+}
+
+DEC( CreateField )
+{
+	fbltyp::sObject Object = Request.ObjectIn();
+	
+	Request.IdOut() = *Record().CreateField( ( (wrpcolumn::dColumn *)Backend.Object( Object, WRPCOLUMN_COLUMN_NAME ) )->operator()() );
 }
 
 #define D( name )	#name, (void *)exported##name
@@ -251,9 +260,9 @@ void wrprecord::dRecord::NOTIFY(
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 
-	Module.Add( D( GetFieldsColumns ),
+	Module.Add( D( GetColumns ),
 		fblbkd::cEnd,
-			fblbkd::cIds,		// Ids of the fields,
+			fblbkd::cIds,		// Ids of the columns,
 			fblbkd::cIds,		// Types.
 			fblbkd::cId8s,		// Numbers.
 			fblbkd::cStrings,	// Labels.
@@ -266,6 +275,11 @@ void wrprecord::dRecord::NOTIFY(
 			fblbkd::cStringsSet,	// Data of each field.
 		fblbkd::cEnd );
 
+	Module.Add( D( CreateField ),
+			fblbkd::cObject,	// Column buffer.
+		fblbkd::cEnd,
+			fblbkd::cId,		// The newly created field id.
+		fblbkd::cEnd );
 	/*
 	Module.Add( D(  ),
 		fblbkd::cEnd,

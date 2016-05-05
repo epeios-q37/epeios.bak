@@ -97,6 +97,7 @@ qRB
 
 	switch ( Session.User.View() ) {
 	case frdinstc::vRecord:
+	case frdinstc::vField:
 		fields::SetLayout( FieldsFrameId_, Session );
 		break;
 	case frdinstc::vColumn:

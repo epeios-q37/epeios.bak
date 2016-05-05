@@ -107,8 +107,7 @@ void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
 	Writer.PopTag();
 }
 
-
-void frdinstc::rUser::DumpFieldsColumns( xml::dWriter &Writer ) const
+void frdinstc::rUser::DumpRecordColumns( xml::dWriter &Writer ) const
 {
 qRH
 	fbltyp::wIds Ids;
@@ -123,13 +122,10 @@ qRB
 	Labels.Init();
 	Comments.Init();
 
-	Core_.GetFieldsColumns( Ids, Types, Numbers, Labels, Comments );
+	Core_.GetColumns( Ids, Types, Numbers, Labels, Comments );
 
 	Dump_( Ids, Types, Numbers, Labels, Comments, Writer );
 qRR
 qRT
 qRE
 }
-
- 
-

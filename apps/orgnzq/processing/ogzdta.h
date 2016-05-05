@@ -128,7 +128,8 @@ namespace ogzdta {
 			sTRow Type,
 			dDatum &Datum ) const
 		{
-			return C_().Recall( Row, Type, Datum );
+			if ( Row != qNIL )
+				return C_().Recall( Row, Type, Datum );
 		}
 	};
 

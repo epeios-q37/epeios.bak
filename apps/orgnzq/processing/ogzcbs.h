@@ -46,11 +46,13 @@ namespace ogzcbs {
 	template <typename item, typename row, typename lrow> class cStatic
 	{
 	protected:
-		// If 'Row' != 'qNIL', it must be used.
+		virtual sAmount OGZCBSAmount( void ) = 0;
+		// If 'Amount' == 0, returns all from 'Indice'.
 		virtual void OGZCBSGetList(
 			sIndice Indice,
 			sAmount Amount,
 			dList<row,lrow> &List ) = 0;
+		// If 'Row' != 'qNIL', it must be used.
 		virtual row OGZCBSNew( row Row ) = 0;
 		// If 'Row' == 'qNIL', the content must be erased.
 		virtual void OGZCBSDelete( row Row ) = 0;
@@ -63,6 +65,10 @@ namespace ogzcbs {
 			item &Item ) const = 0;
 	public:
 		qCALLBACK( Static );
+		sAmount Amount( void )
+		{
+			return OGZCBSAmount();
+		}
 		void GetList(
 			sIndice Indice,
 			sAmount Amount,
@@ -111,6 +117,10 @@ namespace ogzcbs {
 		void Init( cStatic_ &Callback )
 		{
 			Callback_ = &Callback;
+		}
+		sAmount Amount( void )
+		{
+			return C_().Amount();
 		}
 		void GetList(
 			ogzcbs::sIndice Indice,
@@ -357,6 +367,10 @@ namespace ogzcbs {
 	private:
 		lstbch::qLBUNCHw( item, row ) Items_;
 	protected:
+		virtual sAmount OGZCBSAmount( void ) override
+		{
+			return Items_.Amount();
+		}
 		virtual void OGZCBSGetList(
 			ogzcbs::sIndice Indice,
 			ogzcbs::sAmount Amount,
@@ -367,7 +381,7 @@ namespace ogzcbs {
 			if ( Amount == 0 )
 				Amount = AmountMax;
 
-			while ( (Row != qNIL) && Amount-- ) {
+			while ( ( Row != qNIL ) && Amount-- ) {
 				List.Append( Row );
 				Row = Items_.Next( Row );
 			}
@@ -425,6 +439,10 @@ namespace ogzcbs {
 	private:
 		lstctn::qLMCONTAINERw( d_item, row ) Container_;
 	protected:
+		virtual sAmount OGZCBSAmount( void ) override
+		{
+			return Container_.Amount();
+		}
 		virtual void OGZCBSGetList(
 			ogzcbs::sIndice Indice,
 			ogzcbs::sAmount Amount,

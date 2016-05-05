@@ -1250,6 +1250,8 @@ namespace fbltyp {
 	M( sint, SInt );
 	M( ubig, UBig );
 	M( sbig, SBig );
+
+	typedef object__ sObject;
 }
 
 # undef M

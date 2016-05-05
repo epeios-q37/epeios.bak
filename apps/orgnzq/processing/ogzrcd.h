@@ -51,107 +51,42 @@ namespace ogzrcd {
 
 	typedef ogzcbs::rRegularDynamicCallback<OGZRCD_TP> rRegularRecordCallback;
 
-	template <typename callback, typename items> class rCommon_
-	: public items
-	{
-	protected:
-		callback Callback_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			items::reset( P );
-			Callback_.reset( P );
-		}
-		E_CDTOR( rCommon_ );
-		void Init( void )
-		{
-			Callback_.Init();
-			items::Init( Callback_ );
-		}
-	};
-
-	typedef ogzclm::sXColumns sColumns_;
-
-	class sColumns
-	: public rCommon_<ogzclm::rRegularColumnCallback, sColumns_ >
-	{
-	public:
-		void Init(
-			ogztyp::sRow TextType,
-			ogzdta::sData &Data )
-		{
-			Callback_.Init();
-			sColumns_::Init( Callback_, TextType, Data );
-		}
-	};
-
 	typedef ogzfld::sXFields sFields_;
 
-	class sFields
-	: public rCommon_<ogzfld::rRegularFieldCallback, sFields_ >
-	{
-	public:
-		void Init( ogzclm::sXColumns &Columns )
-		{
-			Callback_.Init();
-			sFields_::Init( Callback_, Columns );
-		}
-	};
-
 	class rRecordBuffer
-	: public wRecord
+	: public sFields_
 	{
 	private:
 		sRow Row_;	// Row of the source record. If qNIL, it's a new record.
-		rCommon_<ogzdta::rRegularDataCallback, ogzdta::sData> Data_;
-		sColumns Columns_;
-		sFields Fields_;
+		ogzdta::rRegularDataCallback DataCallback_;
+		ogzclm::rRegularColumnCallback ColumnCallback_;
+		ogzfld::rRegularFieldCallback FieldCallback_;
+		ogzdta::sData Data_;
 	public:
 		void reset( bso::sBool P = true )
 		{
 			Row_ = qNIL;
 			Data_.reset( P );
-			Columns_.reset( P );
-			Fields_.reset( P );
+			sFields_::reset( P );
+			FieldCallback_.reset( P );
+			ColumnCallback_.reset( P );
+			DataCallback_.reset( P );
 		}
 		qCDTOR( rRecordBuffer );
 		void Init( ogztyp::sRow TextType )
 		{
-			wRecord::Init();
-			Row_ = qNIL;
-			Data_.Init();
-			Columns_.Init( TextType, Data_ );
-			Fields_.Init( Columns_ );
+			DataCallback_.Init();
+			ColumnCallback_.Init();
+			FieldCallback_.Init();
+			Data_.Init( DataCallback_ );
+			sFields_::Init( Data_, ColumnCallback_, TextType, FieldCallback_ );
 		}
 		ogzdta::sRow UpdateDatum(
 			ogzdta::sRow DatumRow,	// if == 'qNIL', an entry is created.
 			ogzfld::sRow FieldRow,
 			const str::dString &Datum );
 		qRODISCLOSEr( sRow, Row );
-		const ogzdta::sData &Data( void ) const
-		{
-			return Data_;
-		}
-		const ogzclm::sColumns &Columns( void ) const
-		{
-			return Columns_.Core();
-		}
-		const ogzfld::sFields &Fields( void ) const
-		{
-			return Fields_.Core();
-		}
-		void GetColumn(
-			ogzfld::sLRow Row,
-			ogzclm::sColumn &Column ) const
-		{
-			Fields_.GetColumn( Get( Row ), Column );
-		}
-		void GetColumnContent(
-			ogzfld::sLRow Row,
-			ogztyp::sRow &Type,
-			ogzclm::eNumber &Number,
-			str::dString &Label,
-			str::dString &Comment ) const;
+		qRODISCLOSEr( ogzdta::sData, Data );
 	};
 }
 

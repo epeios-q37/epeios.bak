@@ -46,6 +46,25 @@ ogztyp::sRow ogzclm::sXColumns::GetType( sRow Row )
 	return Column.Type();
 }
 
+void ogzclm::sXColumns::GetFeatures(
+	sRow Row,
+	ogztyp::sRow &Type,
+	eNumber &Number,
+	str::dString &Label,
+	str::dString &Comment ) const
+{
+	sColumn Column;
+
+	Column.Init();
+	Core_.Recall( Row, Column );
+
+	Type = Column.Type();
+	Number = Column.Number();
+	D_().Recall( Column.Label(), TextType_, Label );
+	D_().Recall( Column.Comment(), TextType_, Comment );
+}
+
+
 
 
 

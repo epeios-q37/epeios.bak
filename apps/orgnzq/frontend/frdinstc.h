@@ -80,6 +80,14 @@ namespace frdinstc {
 		{
 			Column_.Define( *Column	);
 		}
+		sField CreateField( fbltyp::sObject Column )
+		{
+			fbltyp::sId Id = fbltyp::UndefinedId;
+
+			Record_.CreateField( Column, Id );
+
+			return Id;
+		}
 		void UpdateColumn(
 			sType Type,
 			sNumber Number,
@@ -96,14 +104,18 @@ namespace frdinstc {
 		{
 			Column_.Get( *Type, *Number, Label, Comment );
 		}
-		void GetFieldsColumns(
+		fbltyp::sObject GetColumnObjectId( void ) const
+		{
+			return Column_.ID();
+		}
+		void GetColumns(
 			fbltyp::dIds &Ids,
 			fbltyp::dIds &Types,
 			fbltyp::dId8s &Numbers,
 			str::dStrings &Labels,
 			str::dStrings &Comments ) const
 		{
-			Record_.GetFieldsColumns( Ids, Types, Numbers, Labels, Comments );
+			Record_.GetColumns( Ids, Types, Numbers, Labels, Comments );
 		}
 	};
 
@@ -124,11 +136,13 @@ namespace frdinstc {
 	private:
 		rUser_ Core_;
 		eView View_;
+		sField Field_;	// Current field.
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Core_.reset( P );
 			View_ = v_Undefined;
+			Field_ = UndefinedField;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -137,6 +151,7 @@ namespace frdinstc {
 				Core_.Init( Frontend );
 
 			View_ = vRecords;
+			Field_ = UndefinedField;
 		}
 		bso::sBool Login(
 			const str::dString &Username,
@@ -163,15 +178,6 @@ namespace frdinstc {
 			Core_.DefineColumn( Column );
 			View_ = vColumn;
 		}
-		void UpdateColumn(
-			sType Type,
-			sNumber Number,
-			const str::dString &Label,
-			const str::dString &Comment )
-		{
-			Core_.UpdateColumn( Type, Number, Label, Comment );
-			View_ = vField;
-		}
 		void GetColumn(
 			sType &Type,
 			sNumber &Number,
@@ -180,9 +186,19 @@ namespace frdinstc {
 		{
 			Core_.GetColumn( Type, Number, Label, Comment );
 		}
+		void CreateField(
+			sType Type,
+			sNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment )
+		{
+			Core_.UpdateColumn( Type, Number, Label, Comment );
+			Field_ = Core_.CreateField(Core_.GetColumnObjectId() );
+			View_ = vRecord;
+		}
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
-		void DumpFieldsColumns( xml::dWriter &Writer ) const;
+		void DumpRecordColumns( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eView, View );
 	};
 }
