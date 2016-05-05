@@ -84,109 +84,6 @@ qRE
 }
 
 namespace {
-	void GetData_(
-		const ogzfld::dField &Field,
-		ogztyp::sRow Type,
-		const ogztyp::dTypes &Types,
-		const ogzdta::sData &DataRep,
-		fbltyp::dStrings &Data )
-	{
-	qRH
-		ogzbsc::wDatum Datum;
-		str::wString XML;
-	qRB
-		sdr::sRow Row = Field.First();
-
-		while ( Row != qNIL ) {
-			Datum.Init();
-
-			DataRep.Recall( Field( Row ), Type, Datum );
-
-			XML.Init();
-			Types( Type ).ToXML( Datum, XML );
-
-			Data.Append( XML );
-
-			Row = Field.Next( Row );
-		}
-	qRR
-	qRT
-	qRE
-	}
-
-	void GetData_(
-		const ogzfld::dField &Field,
-		const ogzrcd::rRecordBuffer &Record,
-		const ogztyp::dTypes &Types,
-		fbltyp::dStrings &Data )
-	{
-	qRH
-		ogzclm::sColumn Column;
-	qRB
-		Column.Init();
-		Record.Fields().Columns().Core().Recall( Field.Column(), Column );
-
-		GetData_( Field, Column.Type(), Types, Record.Data(), Data );
-	qRR
-	qRT
-	qRE
-	}
-}
-
-namespace {
-	void GetData_(
-		ogzfld::sLRow Row,
-		const ogzrcd::rRecordBuffer &Record,
-		const ogztyp::dTypes &Types,
-		fbltyp::dStrings &Data )
-	{
-	qRH
-		ogzfld::wField Field;
-	qRB
-		Field.Init();
-		Record.Fields().Core().Recall( Record( Row ), Field );
-
-		GetData_( Field, Record, Types, Data );
-	qRR
-	qRT
-	qRE
-	}
-
-	void GetDataSet_(
-		const ogzrcd::rRecordBuffer &Record,
-		fbltyp::dIds &Ids,
-		fbltyp::dStringsSet &DataSet )
-	{
-	qRH
-		ogzfld::sLRow Row = qNIL;
-		fbltyp::wStrings Data;
-	qRB
-		Row = Record.First();
-
-		while ( Row != qNIL ) {
-			Ids.Append( *Row );
-
-			Data.Init();
-			GetData_( Row, Record, GetTypes(), Data );
-			DataSet.Append( Data );
-
-			Row = Record.Next( Row );
-		}
-	qRR
-	qRT
-	qRE
-	}
-}
-
-DEC( GetFields )
-{
-	fbltyp::dIds &Ids = Request.IdsOut();
-	fbltyp::dStringsSet &DataSet = Request.StringsSetOut();
-
-	GetDataSet_( Record(), Ids, DataSet );
-}
-
-namespace {
 	void GetColumns_(
 		const ogzrcd::rRecordBuffer &Record,
 		fbltyp::dIds &Ids,
@@ -225,6 +122,34 @@ namespace {
 	qRT
 	qRE
 	}
+}
+
+namespace {
+	void GetFields_(
+		const ogzrcd::rRecordBuffer &Record,
+		fbltyp::dIds &Ids,
+		fbltyp::dIds &Columns )
+	{
+		ogzfld::sLRow Row = Record.First();
+		ogzclm::sRow Column = qNIL;
+
+		while ( Row != qNIL ) {
+			Ids.Append( *Record( Row ) );
+
+			Record.GetFieldFeatures( Row, Column );
+			Columns.Append( *Column );
+
+			Row = Record.Next( Row );
+		}
+	}
+}
+
+DEC( GetFields )
+{
+	fbltyp::dIds &Ids = Request.IdsOut();
+	fbltyp::dIds &Columns = Request.IdsOut();
+
+	GetFields_( Record(), Ids, Columns );
 }
 
 DEC( GetColumns )
@@ -269,10 +194,10 @@ void wrprecord::dRecord::NOTIFY(
 			fblbkd::cStrings,	// Comments.
 		fblbkd::cEnd );
 
-	Module.Add( D( GetFieldsData ),
+	Module.Add( D( GetFields ),
 		fblbkd::cEnd,
-			fblbkd::cIds,	// Ids of the fields,
-			fblbkd::cStringsSet,	// Data of each field.
+			fblbkd::cIds,	// Ids of the fields.
+			fblbkd::cIds,	// Ids the column for each fields.
 		fblbkd::cEnd );
 
 	Module.Add( D( CreateField ),

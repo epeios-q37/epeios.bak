@@ -117,6 +117,12 @@ namespace frdinstc {
 		{
 			Record_.GetColumns( Ids, Types, Numbers, Labels, Comments );
 		}
+		void GetFields(
+			fbltyp::dIds &Ids,
+			fbltyp::dIds &Columns ) const
+		{
+			Record_.GetFields( Ids, Columns );
+		}
 	};
 
 	qENUM( View )
@@ -199,6 +205,7 @@ namespace frdinstc {
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpRecordColumns( xml::dWriter &Writer ) const;
+		void DumpRecordFields( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eView, View );
 	};
 }

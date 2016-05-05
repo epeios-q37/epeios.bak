@@ -103,7 +103,6 @@ namespace ogzfld {
 	private:
 		sFields Core_;
 		ogzclm::sXColumns Columns_;
-		ogzclm::sRow GetColumn_( sRow Row ) const;
 		sRow Create_( ogzclm::sRow Column );
 	public:
 		void reset( bso::sBool P = true )
@@ -125,6 +124,9 @@ namespace ogzfld {
 		{
 			return Create_( Columns_.Create( Column ) );
 		}
+		void GetFeatures(
+			sRow Row,
+			ogzclm::sRow &Column ) const;
 		qRODISCLOSEs( sFields, Core );
 		qRODISCLOSEs( ogzclm::sXColumns, Columns );
 	};

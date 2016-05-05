@@ -43,38 +43,6 @@ const char *frdinstc::GetLabel( eView View )
  
 #undef C
 
-namespace {
-	void Dump_(
-		const fbltyp::dIds &Ids,
-		const fbltyp::dIds &Types,
-		const fbltyp::dId8s &Numbers,
-		const str::dStrings &Labels,
-		const str::dStrings &Comments,
-		xml::dWriter &Writer )
-	{
-		sdr::sRow Row = Ids.First();
-
-		Writer.PushTag( "Columns" );
-		xml::PutAttribute("Amount", Ids.Amount(), Writer );
-
-		while ( Row != qNIL ) {
-			Writer.PushTag( "Column" );
-
-			xml::PutAttribute( "id", *Ids( Row ), Writer );
-			xml::PutAttribute( "Type", *Types( Row ), Writer );
-			xml::PutAttribute( "Number", *Numbers( Row ), Writer );
-			Writer.PutValue( Labels( Row ), "Label"  );
-			Writer.PutValue( Comments( Row ), "Comment" );
-
-			Writer.PopTag();
-
-			Row = Ids.Next( Row );
-		}
-
-		Writer.PopTag();
-	}
-}
-
 void frdinstc::rUser::DumpColumnBuffer( xml::dWriter &Writer ) const
 {
 qRH
@@ -107,6 +75,38 @@ void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
 	Writer.PopTag();
 }
 
+namespace {
+	void Dump_(
+		const fbltyp::dIds &Ids,
+		const fbltyp::dIds &Types,
+		const fbltyp::dId8s &Numbers,
+		const str::dStrings &Labels,
+		const str::dStrings &Comments,
+		xml::dWriter &Writer )
+	{
+		sdr::sRow Row = Ids.First();
+
+		Writer.PushTag( "Columns" );
+		xml::PutAttribute("Amount", Ids.Amount(), Writer );
+
+		while ( Row != qNIL ) {
+			Writer.PushTag( "Column" );
+
+			xml::PutAttribute( "id", *Ids( Row ), Writer );
+			xml::PutAttribute( "Type", *Types( Row ), Writer );
+			xml::PutAttribute( "Number", *Numbers( Row ), Writer );
+			Writer.PutValue( Labels( Row ), "Label"  );
+			Writer.PutValue( Comments( Row ), "Comment" );
+
+			Writer.PopTag();
+
+			Row = Ids.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+}
+
 void frdinstc::rUser::DumpRecordColumns( xml::dWriter &Writer ) const
 {
 qRH
@@ -129,3 +129,46 @@ qRR
 qRT
 qRE
 }
+
+namespace {
+	void Dump_(
+		const fbltyp::dIds &Ids,
+		const fbltyp::dIds &Columns,
+		xml::dWriter &Writer )
+	{
+		sdr::sRow Row = Ids.First();
+
+		Writer.PushTag( "Fields" );
+		xml::PutAttribute("Amount", Ids.Amount(), Writer );
+
+		while ( Row != qNIL ) {
+			Writer.PushTag( "Field" );
+
+			xml::PutAttribute( "id", *Ids( Row ), Writer );
+			xml::PutAttribute( "Column", *Columns( Row ), Writer );
+
+			Writer.PopTag();
+
+			Row = Ids.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+}
+
+void frdinstc::rUser::DumpRecordFields( xml::dWriter &Writer ) const
+{
+qRH
+	fbltyp::wIds Ids, Columns;
+qRB
+	Ids.Init();
+	Columns.Init();
+
+	Core_.GetFields( Ids, Columns );
+
+	Dump_( Ids, Columns, Writer );
+qRR
+qRT
+qRE
+}
+

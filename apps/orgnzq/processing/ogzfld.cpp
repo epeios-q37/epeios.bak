@@ -21,22 +21,6 @@
 
 using namespace ogzfld;
 
-ogzclm::sRow ogzfld::sXFields::GetColumn_( sRow Row ) const
-{
-	ogzclm::sRow Column = qNIL;
-qRH
-	wField Field;
-qRB
-	Field.Init();
-	Core_.Recall( Row, Field  );
-
-	Column = Field.Column();
-qRR
-qRT
-qRE
-	return Column;
-}
-
 sRow ogzfld::sXFields::Create_( ogzclm::sRow Column )
 {
 	ogzfld::sRow Row = qNIL;
@@ -53,3 +37,20 @@ qRT
 qRE
 	return Row;
 }
+
+void ogzfld::sXFields::GetFeatures(
+	sRow Row,
+	ogzclm::sRow &Column ) const
+{
+qRH
+	wField Field;
+qRB
+	Field.Init();
+	Core_.Recall( Row, Field  );
+
+	Column = Field.Column();
+qRR
+qRT
+qRE
+}
+

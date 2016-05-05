@@ -69,11 +69,11 @@ namespace {
 		Rack.Init( XSLAffix_, XML, Session );
 
 		Session.User.DumpRecordColumns( Rack );
+		Session.User.DumpRecordFields( Rack );
 	qRR
 	qRT
 	qRE
 	}
-
 }
 
 

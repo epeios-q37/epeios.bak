@@ -272,7 +272,7 @@ namespace orgnzq {
 				21, 0, 
 				0, 
 				0, 22, 22, 13, 26, 26, 
-				0, 22, 27, 
+				0, 22, 22, 
 				1, 0, 21, 
 			};
 
@@ -298,7 +298,7 @@ namespace orgnzq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "GetFieldsData";;
+			CommandDetail.Name = "GetFields";;
 			CommandDetail.Casts.Append( Parameters + 9, 3 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -595,16 +595,16 @@ namespace orgnzq {
 
 			return Common_->Frontend().Handle();
 		}
-		fblovl::reply__ GetFieldsData( 
+		fblovl::reply__ GetFields( 
 			fblfrd::ids_ &Out1,
-			fblfrd::xstrings_ &Out2 ) const
+			fblfrd::ids_ &Out2 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
 
 			Common_->Frontend().EndOfInParameters();
 
 			Common_->Frontend().IdsOut( Out1 );
-			Common_->Frontend().XStringsOut( Out2 );
+			Common_->Frontend().IdsOut( Out2 );
 
 			return Common_->Frontend().Handle();
 		}
