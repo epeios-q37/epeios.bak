@@ -103,12 +103,14 @@ namespace ogzfld {
 	private:
 		sFields Core_;
 		ogzclm::sXColumns Columns_;
+		qRMV( ogzdta::sData, D_, Data_ );
 		sRow Create_( ogzclm::sRow Column );
 	public:
 		void reset( bso::sBool P = true )
 		{
 			Core_.reset( P );
 			Columns_.reset( P );
+			Data_ = NULL;
 		}
 		qCVDTOR( sXFields );
 		void Init(
@@ -117,6 +119,7 @@ namespace ogzfld {
 			ogztyp::sRow TextType,
 			cField &FieldCallback )
 		{
+			Data_ = &Data;
 			Columns_.Init( ColumnCallback, TextType, Data );
 			Core_.Init( FieldCallback );
 		}
@@ -126,7 +129,8 @@ namespace ogzfld {
 		}
 		void GetFeatures(
 			sRow Row,
-			ogzclm::sRow &Column ) const;
+			ogzclm::sRow &Column,
+			str::dStrings &Entries ) const;
 		qRODISCLOSEs( sFields, Core );
 		qRODISCLOSEs( ogzclm::sXColumns, Columns );
 	};

@@ -38,7 +38,10 @@
 		</Modules>
 		<Modules Group="FRD" Path="../">
 			<Module>frdapi</Module>
+			<Module>frdcllbck</Module>
 			<Module>frdfrntnd</Module>
+			<Module>frdmisc</Module>
+			<Module>frdplgn</Module>
 			<Module>frdrgstry</Module>
 			<Module>frdinstc</Module>
 		</Modules>

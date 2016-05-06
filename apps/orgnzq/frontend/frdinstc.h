@@ -119,9 +119,10 @@ namespace frdinstc {
 		}
 		void GetFields(
 			fbltyp::dIds &Ids,
-			fbltyp::dIds &Columns ) const
+			fbltyp::dIds &Columns,
+			fbltyp::dStringsSet &EntriesSet ) const
 		{
-			Record_.GetFields( Ids, Columns );
+			Record_.GetFields( Ids, Columns, EntriesSet );
 		}
 	};
 

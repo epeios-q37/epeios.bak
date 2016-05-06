@@ -45,7 +45,8 @@ mods += fblfrp fblovl fbltyp
 mods += sclmisc sclerror scllocale sclrgstry sclxdhtml 
 mods += sclfrntnd 
 mods += xdhcmn xdhdws 
-mods += frdapi frdfrntnd frdrgstry frdinstc 
+mods += frdapi frdcllbck frdfrntnd frdmisc frdplgn 
+mods += frdrgstry frdinstc 
 mods += ogzfbc ogzinf 
 mods += login main prolog 
 mods += column field fields record records 
@@ -342,7 +343,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160504"\"
+copt += -DVERSION=\""20160506"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 

@@ -23,9 +23,9 @@ using namespace ogzfld;
 
 sRow ogzfld::sXFields::Create_( ogzclm::sRow Column )
 {
-	ogzfld::sRow Row = qNIL;
+	sRow Row = qNIL;
 qRH
-	ogzfld::wField Field;
+	wField Field;
 qRB
 	Field.Init( Column );
 
@@ -38,9 +38,37 @@ qRE
 	return Row;
 }
 
+namespace {
+	void GetEntries_(
+		const wField &Field,
+		ogztyp::sRow Type,
+		const ogzdta::sData &Data,
+		str::dStrings &Entries )
+	{
+	qRH
+		sdr::sRow Row = qNIL;
+		str::wString Entry;
+	qRB
+		Row = Field.First();
+
+		while ( Row != qNIL ) {
+			Entry.Init();
+			Data.Recall( Field( Row ), Type, Entry );
+
+			Entries.Append( Entry );
+
+			Row = Field.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+}
+
 void ogzfld::sXFields::GetFeatures(
 	sRow Row,
-	ogzclm::sRow &Column ) const
+	ogzclm::sRow &Column,
+	str::dStrings &Entries ) const
 {
 qRH
 	wField Field;
@@ -49,6 +77,8 @@ qRB
 	Core_.Recall( Row, Field  );
 
 	Column = Field.Column();
+
+	GetEntries_(Field, Columns_.GetType(Column), D_(), Entries );
 qRR
 qRT
 qRE

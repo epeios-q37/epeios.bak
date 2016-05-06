@@ -190,7 +190,7 @@ namespace ogzclm {
 		}
 		qRODISCLOSEs( sColumns, Core );
 		qRODISCLOSEs( ogztyp::sRow, TextType );
-		ogztyp::sRow GetType( sRow Row );
+		ogztyp::sRow GetType( sRow Row ) const;
 		void GetFeatures(
 			sRow Row,
 			ogztyp::sRow &Type,

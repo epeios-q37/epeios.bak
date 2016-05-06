@@ -36,7 +36,7 @@ const char *ogzclm::GetLabel( eNumber Number )
 	return NULL; // To avoid a warning.
 }
 
-ogztyp::sRow ogzclm::sXColumns::GetType( sRow Row )
+ogztyp::sRow ogzclm::sXColumns::GetType( sRow Row ) const
 {
 	sColumn Column;
 

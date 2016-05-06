@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160503 Build May  5 2016 09:34:00 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160503 Build May  6 2016 08:37:55 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build May  1 2016 10:29:26 Win32;MSC 1800;IA-32)
 */
@@ -272,7 +272,7 @@ namespace orgnzq {
 				21, 0, 
 				0, 
 				0, 22, 22, 13, 26, 26, 
-				0, 22, 22, 
+				0, 22, 22, 27, 
 				1, 0, 21, 
 			};
 
@@ -299,12 +299,12 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "GetFields";;
-			CommandDetail.Casts.Append( Parameters + 9, 3 );
+			CommandDetail.Casts.Append( Parameters + 9, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "CreateField";;
-			CommandDetail.Casts.Append( Parameters + 12, 3 );
+			CommandDetail.Casts.Append( Parameters + 13, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -597,7 +597,8 @@ namespace orgnzq {
 		}
 		fblovl::reply__ GetFields( 
 			fblfrd::ids_ &Out1,
-			fblfrd::ids_ &Out2 ) const
+			fblfrd::ids_ &Out2,
+			fblfrd::xstrings_ &Out3 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
 
@@ -605,6 +606,7 @@ namespace orgnzq {
 
 			Common_->Frontend().IdsOut( Out1 );
 			Common_->Frontend().IdsOut( Out2 );
+			Common_->Frontend().XStringsOut( Out3 );
 
 			return Common_->Frontend().Handle();
 		}

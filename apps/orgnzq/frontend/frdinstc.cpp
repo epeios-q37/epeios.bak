@@ -132,11 +132,34 @@ qRE
 
 namespace {
 	void Dump_(
-		const fbltyp::dIds &Ids,
-		const fbltyp::dIds &Columns,
+		const fbltyp::dStrings &Entries,
 		xml::dWriter &Writer )
 	{
-		sdr::sRow Row = Ids.First();
+		sdr::sRow Row = Entries.First();
+
+		Writer.PushTag( "Entries" );
+
+		Writer.PutAttribute( "Amount", Entries.Amount() );
+
+		while ( Row != qNIL ){
+			Writer.PutValue( Entries( Row ), "Entry" );
+
+			Row = Entries.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+
+	void Dump_(
+		const fbltyp::dIds &Ids,
+		const fbltyp::dIds &Columns,
+		const fbltyp::dStringsSet &EntriesSet,
+		xml::dWriter &Writer )
+	{
+	qRH
+		sdr::sRow Row = qNIL;
+	qRB
+		Row = Ids.First();
 
 		Writer.PushTag( "Fields" );
 		xml::PutAttribute("Amount", Ids.Amount(), Writer );
@@ -147,12 +170,18 @@ namespace {
 			xml::PutAttribute( "id", *Ids( Row ), Writer );
 			xml::PutAttribute( "Column", *Columns( Row ), Writer );
 
+			Dump_( EntriesSet( Row ), Writer );
+
 			Writer.PopTag();
 
 			Row = Ids.Next( Row );
 		}
 
 		Writer.PopTag();
+
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -160,13 +189,15 @@ void frdinstc::rUser::DumpRecordFields( xml::dWriter &Writer ) const
 {
 qRH
 	fbltyp::wIds Ids, Columns;
+	fbltyp::wStringsSet EntriesSet;
 qRB
 	Ids.Init();
 	Columns.Init();
 
-	Core_.GetFields( Ids, Columns );
+	EntriesSet.Init();
+	Core_.GetFields( Ids, Columns, EntriesSet );
 
-	Dump_( Ids, Columns, Writer );
+	Dump_( Ids, Columns, EntriesSet, Writer );
 qRR
 qRT
 qRE

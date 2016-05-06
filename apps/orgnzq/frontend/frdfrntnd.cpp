@@ -18,6 +18,9 @@
 */
 
 #include "frdfrntnd.h"
+
+#include "frdplgn.h"
+
 #include "flf.h"
 #include "flx.h"
 #include "lcl.h"
@@ -26,6 +29,10 @@
 using namespace fbltyp;
 
 using namespace frdfrntnd;
+
+namespace {
+	frdplgn::rXMLRetrievers XML_;
+}
 
 void frdfrntnd::rFrontend::GetTypes_( void )
 {
@@ -43,7 +50,6 @@ qRR
 qRT
 qRE
 }
-
 
 void  frdfrntnd::rFrontend::DumpTypes_( xml::writer_ &Writer )
 {
@@ -71,4 +77,9 @@ qRE
 void  frdfrntnd::rFrontend::DumpNumbers_( xml::writer_ &Writer )
 {
 	sclfrntnd::Dump<sNumber>( Numbers_, "Numbers", "Number", Writer );
+}
+
+qGCTOR( void )
+{
+	sclmisc::Plug( frdplgn::XMLTarget, NULL, XML_ );
 }
