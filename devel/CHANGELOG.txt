@@ -2,6 +2,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-05-06 :
+- PLGB :
+	- Adding 'Details(..)' and 'Identifier(...)' methods to 'wRetrievers'.
+
 2016-05-04 :
 - FBLBRQ :
 	- 'request__' -> 'request___'.

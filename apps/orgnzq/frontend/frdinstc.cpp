@@ -19,6 +19,8 @@
 
 #include "frdinstc.h"
 
+#include "frdcllbck.h"
+
 #include "flf.h"
 #include "fnm.h"
 
@@ -132,22 +134,32 @@ qRE
 
 namespace {
 	void Dump_(
-		const fbltyp::dStrings &Entries,
+		const fbltyp::dStrings &RawEntries,
+		frdcllbck::cXML &Callback,
 		xml::dWriter &Writer )
 	{
-		sdr::sRow Row = Entries.First();
+	qRH
+		sdr::sRow Row = qNIL;
+		str::wString Entry;
+	qRB
+		Row = RawEntries.First();
 
 		Writer.PushTag( "Entries" );
 
-		Writer.PutAttribute( "Amount", Entries.Amount() );
+		Writer.PutAttribute( "Amount", RawEntries.Amount() );
 
 		while ( Row != qNIL ){
-			Writer.PutValue( Entries( Row ), "Entry" );
+			Entry.Init();
+			Callback.ToXML( RawEntries( Row ), Entry );
+			Writer.PutValue( Entry, "Entry" );
 
-			Row = Entries.Next( Row );
+			Row = RawEntries.Next( Row );
 		}
 
 		Writer.PopTag();
+	qRR
+	qRT
+	qRE
 	}
 
 	void Dump_(
@@ -189,13 +201,13 @@ void frdinstc::rUser::DumpRecordFields( xml::dWriter &Writer ) const
 {
 qRH
 	fbltyp::wIds Ids, Columns;
-	fbltyp::wStringsSet EntriesSet;
+	fbltyp::wStringsSet RawEntriesSet, XMLEntriesSet;
 qRB
 	Ids.Init();
 	Columns.Init();
 
 	EntriesSet.Init();
-	Core_.GetFields( Ids, Columns, EntriesSet );
+	Core_.GetFields( Ids, Columns, RawEntriesSet );
 
 	Dump_( Ids, Columns, EntriesSet, Writer );
 qRR

@@ -182,6 +182,30 @@ namespace plgn {
 
 			return Plugin;
 		}
+		const char *Identifier( sRow Row ) const
+		{
+			rLooseRetriever Retriever;
+
+			wRetrievers::Recall( Row, Retriever );
+
+			const char *Identifier = Retriever.Identifier();
+
+			Retriever.reset( false );
+
+			return Identifier;
+		}
+		const char *Details( sRow Row ) const
+		{
+			rLooseRetriever Retriever;
+
+			wRetrievers::Recall( Row, Retriever );
+
+			const char *Details = Retriever.Details();
+
+			Retriever.reset( false );
+
+			return Details;
+		}
 	};
 
 

@@ -24,6 +24,7 @@
 # include "frdapi.h"
 
 # include "frdrgstry.h"
+# include "frdmisc.h"
 
 # include "sclfrntnd.h"
 
@@ -34,7 +35,10 @@
 namespace frdfrntnd {
 	typedef sclfrntnd::frontend___ rFrontend_;
 
-	SCLF_IL( Type, Id );
+	using frdmisc::sType;
+	using frdmisc::dTypes;
+	using frdmisc::UndefinedType;
+
 	SCLF_ILW( Number, Id8 );
 	SCLF_I( Column, Id );
 	SCLF_I( Field, Id );
@@ -45,7 +49,7 @@ namespace frdfrntnd {
 	: public rFrontend_
 	{
 	private:
-		wTypeILs Types_;
+		frdmisc::wXTypes Types_;
 		wNumberILWs Numbers_;
 		void GetTypes_( void );
 		void DumpTypes_( xml::writer_ &Writer );

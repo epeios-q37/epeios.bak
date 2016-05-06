@@ -31,7 +31,29 @@ using namespace fbltyp;
 using namespace frdfrntnd;
 
 namespace {
-	frdplgn::rXMLRetrievers XML_;
+	void Fill_(
+		const fbltyp::dIds &Ids,
+		const fbltyp::dStrings &Labels,
+		frdmisc::dXTypes &Types )
+	{
+	qRH
+		frdmisc::wXType Type;
+		sdr::sRow Row = qNIL;
+	qRB
+		if ( Ids.Amount() != Labels.Amount() )
+			qRGnr();
+
+		Row = Ids.First();
+
+		while ( Row != qNIL ) {
+			Type.Init( Ids(Row), Labels(Row), frdmisc::Get(Labels( Row ) ) );
+
+			Row = Ids.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
 }
 
 void frdfrntnd::rFrontend::GetTypes_( void )
@@ -45,7 +67,7 @@ qRB
 
 	Statics.OGZGetTypes( Ids, Labels );
 
-	sclfrntnd::Fill<sType, dTypes>( Ids, Labels, Types_ );
+	Fill_( Ids, Labels, Types_ );
 qRR
 qRT
 qRE
@@ -79,7 +101,3 @@ void  frdfrntnd::rFrontend::DumpNumbers_( xml::writer_ &Writer )
 	sclfrntnd::Dump<sNumber>( Numbers_, "Numbers", "Number", Writer );
 }
 
-qGCTOR( void )
-{
-	sclmisc::Plug( frdplgn::XMLTarget, NULL, XML_ );
-}
