@@ -120,9 +120,14 @@ namespace frdinstc {
 		void GetFields(
 			fbltyp::dIds &Ids,
 			fbltyp::dIds &Columns,
-			fbltyp::dStringsSet &EntriesSet ) const
+			fbltyp::dStringsSet &EntriesSet,
+			fbltyp::dIds &Types ) const
 		{
-			Record_.GetFields( Ids, Columns, EntriesSet );
+			Record_.GetFields( Ids, Columns, EntriesSet, Types );
+		}
+		const frdmisc::wXTypes &Types( void ) const
+		{
+			return F_().Types();
 		}
 	};
 

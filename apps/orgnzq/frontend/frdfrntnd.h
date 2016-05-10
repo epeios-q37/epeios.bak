@@ -109,8 +109,14 @@ namespace frdfrntnd {
 			DumpTypes_( Writer );
 			DumpNumbers_( Writer );
 		}
-	};
+		const frdmisc::wXTypes &Types( void ) const
+		{
+			if ( Types_.Amount() == 0 )
+				qRGnr();
 
+			return Types_;
+		}
+	};
 }
 
 #endif

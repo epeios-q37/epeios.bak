@@ -83,6 +83,13 @@ namespace ogztyp {
 		{
 			return C_().GetLabel();
 		}
+		const char *GetIdentifier( void ) const
+		{
+			if ( Identifier_ == NULL )
+				qRGnr();
+
+			return Identifier_;
+		}
 		const str::dString &ToXML(
 			const ogzbsc::dDatum &Datum,
 			str::dString &XML ) const

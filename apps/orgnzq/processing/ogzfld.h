@@ -130,7 +130,9 @@ namespace ogzfld {
 		void GetFeatures(
 			sRow Row,
 			ogzclm::sRow &Column,
-			str::dStrings &Entries ) const;
+			str::dStrings &Entries,
+			ogztyp::sRow &Type ) const;	// 'Type' should be obtianed through the 'Column', but, sue to use og plugin's for the types, it's given here for convenience.
+		ogztyp::sRow GetType( sRow Row ) const;
 		qRODISCLOSEs( sFields, Core );
 		qRODISCLOSEs( ogzclm::sXColumns, Columns );
 	};

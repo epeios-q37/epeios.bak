@@ -34,6 +34,7 @@ namespace {
 	void Fill_(
 		const fbltyp::dIds &Ids,
 		const fbltyp::dStrings &Labels,
+		const fbltyp::dStrings &PluginIds,
 		frdmisc::dXTypes &Types )
 	{
 	qRH
@@ -43,10 +44,15 @@ namespace {
 		if ( Ids.Amount() != Labels.Amount() )
 			qRGnr();
 
+		if ( Ids.Amount() != PluginIds.Amount() )
+			qRGnr();
+
 		Row = Ids.First();
 
 		while ( Row != qNIL ) {
-			Type.Init( Ids(Row), Labels(Row), frdmisc::Get(Labels( Row ) ) );
+			Type.Init( Ids(Row), Labels(Row), frdmisc::Get( PluginIds( Row ) ) );
+
+			Types.Append( Type );
 
 			Row = Ids.Next( Row );
 		}
@@ -60,22 +66,53 @@ void frdfrntnd::rFrontend::GetTypes_( void )
 {
 qRH
 	fbltyp::wIds Ids;
-	fbltyp::strings Labels;
+	fbltyp::strings Labels, PluginIds;
 qRB
 	Ids.Init();
 	Labels.Init();
+	PluginIds.Init();
 
-	Statics.OGZGetTypes( Ids, Labels );
+	Statics.OGZGetTypes( Ids, Labels, PluginIds );
 
-	Fill_( Ids, Labels, Types_ );
+	Fill_( Ids, Labels, PluginIds, Types_ );
 qRR
 qRT
 qRE
 }
 
+namespace {
+	void Dump_(
+		const frdmisc::dXType &Type,
+		xml::dWriter &Writer )
+	{
+		Writer.PushTag( "Type" );
+		Writer.PutAttribute( "id", **Type.Id() );
+		Writer.PutValue( Type.Label, "Label" );
+		Writer.PopTag();
+	}
+
+	void Dump_(
+		const frdmisc::dXTypes &Types,
+		xml::dWriter &Writer )
+	{
+		sdr::sRow Row = Types.First();
+
+		Writer.PushTag( "Types" );
+		Writer.PutAttribute("Amount", Types.Amount() );
+
+		while ( Row != qNIL ) {
+			Dump_( Types( Row ), Writer );
+
+			Row = Types.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+}
+
 void  frdfrntnd::rFrontend::DumpTypes_( xml::writer_ &Writer )
 {
-	sclfrntnd::Dump<sType>( Types_, "Types", "Type", Writer );
+	Dump_( Types_, Writer );
 }
 
 void frdfrntnd::rFrontend::GetNumbers_( void )

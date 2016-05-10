@@ -124,16 +124,29 @@ namespace {
 	}
 }
 
+DEC( GetColumns )
+{
+	fbltyp::dIds &Ids = Request.IdsOut();
+	fbltyp::dIds &Types = Request.IdsOut();
+	fbltyp::dId8s &Numbers = Request.Id8sOut();
+	fbltyp::dStrings &Labels = Request.StringsOut();
+	fbltyp::dStrings &Comments = Request.StringsOut();
+
+	GetColumns_( Record(), Ids, Types, Numbers, Labels, Comments );
+}
+
 namespace {
 	void GetFields_(
 		const ogzrcd::rRecordBuffer &Record,
 		fbltyp::dIds &Ids,
 		fbltyp::dIds &Columns,
-		fbltyp::dStringsSet &EntriesSet )
+		fbltyp::dStringsSet &EntriesSet,
+		fbltyp::dIds &Types )
 	{
 	qRH
 		ogzfld::sLRow Row = qNIL;
 		ogzclm::sRow Column = qNIL;
+		ogztyp::sRow Type = qNIL;
 		str::wStrings Entries;
 	qRB
 		Row = Record.First();
@@ -142,10 +155,11 @@ namespace {
 			Ids.Append( *Record( Row ) );
 
 			Entries.Init();
-			Record.GetFieldFeatures( Row, Column, Entries );
+			Record.GetFieldFeatures( Row, Column, Entries, Type );
 
 			Columns.Append( *Column );
 			EntriesSet.Append( Entries );
+			Types.Append( *Type );
 
 			Row = Record.Next( Row );
 		}
@@ -160,19 +174,9 @@ DEC( GetFields )
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dIds &Columns = Request.IdsOut();
 	fbltyp::dStringsSet &EntriesSet = Request.StringsSetOut();
-
-	GetFields_( Record(), Ids, Columns, EntriesSet );
-}
-
-DEC( GetColumns )
-{
-	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dIds &Types = Request.IdsOut();
-	fbltyp::dId8s &Numbers = Request.Id8sOut();
-	fbltyp::dStrings &Labels = Request.StringsOut();
-	fbltyp::dStrings &Comments = Request.StringsOut();
 
-	GetColumns_( Record(), Ids, Types, Numbers, Labels, Comments );
+	GetFields_( Record(), Ids, Columns, EntriesSet, Types );
 }
 
 DEC( CreateField )
@@ -208,9 +212,10 @@ void wrprecord::dRecord::NOTIFY(
 
 	Module.Add( D( GetFields ),
 		fblbkd::cEnd,
-			fblbkd::cIds,		// Ids of the fields.
-			fblbkd::cIds,		// Ids the column for each fields.
-			fblbkd::cStringsSet, // The entries for each field.
+			fblbkd::cIds,			// Ids of the fields.
+			fblbkd::cIds,			// The column for each fields.
+			fblbkd::cStringsSet,	// The entries for each field.
+			fblbkd::cIds,			// The type of each field. More convenient to be here due to use of plugins for the types.
 		fblbkd::cEnd );
 
 	Module.Add( D( CreateField ),

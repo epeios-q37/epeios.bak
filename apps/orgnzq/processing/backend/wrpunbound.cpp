@@ -38,24 +38,6 @@ using common::rStuff;
 		bso::bool__ &,\
 		void *UP )
 
-namespace {
-	void GetTypes_(
-		const ogztyp::dTypes &Types,
-		fbltyp::strings_ &Labels,
-		fbltyp::ids_ &Ids )
-	{
-		ogztyp::sRow Row = Types.First();
-
-		while ( Row != qNIL ) {
-			Labels.Add( str::wString( Types( Row ).GetLabel() ) );
-			Ids.Add( *Row );
-
-			Row = Types.Next( Row );
-		}
-
-	}
-}
-
 # define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
 # define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
 
@@ -142,21 +124,44 @@ qRT
 qRE
 }
 
+namespace {
+	void GetType_(
+		const ogztyp::sType &Type,
+		fbltyp::strings_ &Labels,
+		fbltyp::strings_ &PluginIds )
+	{
+		Labels.Add( str::wString( Type.GetLabel() ) );
+		PluginIds.Append(str::wString( Type.GetIdentifier() ) );
+	}
+
+	void GetTypes_(
+		const ogztyp::dTypes &Types,
+		fbltyp::ids_ &Ids,
+		fbltyp::strings_ &Labels,
+		fbltyp::strings_ &PluginIds )
+	{
+		ogztyp::sRow Row = Types.First();
+
+		while ( Row != qNIL ) {
+			GetType_( Types( Row ), Labels, PluginIds );
+
+			Ids.Add( *Row );
+
+			Row = Types.Next( Row );
+		}
+
+	}
+}
+
 DEC( GetTypes )
 {
 qRH
-	ROL;
-	fbltyp::ids Ids;
-	fbltyp::strings Labels;
 qRB
-	ROR;
+	fbltyp::dIds &Ids = Request.IdsOut();
+	fbltyp::dStrings &Labels = Request.StringsOut();
+	fbltyp::dStrings &PluginIds = Request.StringsOut();
 
-	Labels.Init();
-	Ids.Init();
-	GetTypes_( common::GetTypes(), Labels, Ids );
-
-	Request.IdsOut() = Ids;
-	Request.StringsOut() = Labels;
+	GetTypes_( common::GetTypes(), Ids, Labels, PluginIds );
 qRR 
 qRT
 qRE
@@ -185,7 +190,8 @@ void wrpunbound::Inform(
 	Backend.Add( D( GetTypes ),
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids.
-			fblbkd::cStrings,	// Labels,
+			fblbkd::cStrings,	// Labels.
+			fblbkd::cStrings,	// Plugin ids.
 		fblbkd::cEnd );
 }
 

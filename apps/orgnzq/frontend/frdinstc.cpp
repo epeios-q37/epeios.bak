@@ -166,6 +166,8 @@ namespace {
 		const fbltyp::dIds &Ids,
 		const fbltyp::dIds &Columns,
 		const fbltyp::dStringsSet &EntriesSet,
+		const fbltyp::dIds &Types,
+		const frdmisc::dXTypes &XTypes,
 		xml::dWriter &Writer )
 	{
 	qRH
@@ -182,7 +184,7 @@ namespace {
 			xml::PutAttribute( "id", *Ids( Row ), Writer );
 			xml::PutAttribute( "Column", *Columns( Row ), Writer );
 
-			Dump_( EntriesSet( Row ), Writer );
+			Dump_( EntriesSet( Row ), XTypes( *Types( Row ) ).Callback(), Writer );
 
 			Writer.PopTag();
 
@@ -200,16 +202,16 @@ namespace {
 void frdinstc::rUser::DumpRecordFields( xml::dWriter &Writer ) const
 {
 qRH
-	fbltyp::wIds Ids, Columns;
-	fbltyp::wStringsSet RawEntriesSet, XMLEntriesSet;
+	fbltyp::wIds Ids, Columns, Types;
+	fbltyp::wStringsSet EntriesSet;
 qRB
 	Ids.Init();
 	Columns.Init();
-
 	EntriesSet.Init();
-	Core_.GetFields( Ids, Columns, RawEntriesSet );
+	Types.Init();
+	Core_.GetFields( Ids, Columns, EntriesSet, Types );
 
-	Dump_( Ids, Columns, EntriesSet, Writer );
+	Dump_( Ids, Columns, EntriesSet, Types, Core_.Types(), Writer );
 qRR
 qRT
 qRE

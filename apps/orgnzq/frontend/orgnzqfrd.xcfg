@@ -8,13 +8,19 @@
 			<xpp:expand select="FRD_Parameters"/>
 			<DefaultProjectType>New</DefaultProjectType>
 			<DefaultBackendType>Embedded</DefaultBackendType>
-
 			<!-- For multi-user mode. Can be overriden by project file. -->
 			<Backend Type="Predefined">Embedded</Backend>
 			<Authentication Mode="Full">
 				<Login>Hello</Login>
 				<Password>toto</Password>
 			</Authentication>
+			<Plugins>
+				<Set target="XML">
+					<!-- The 2 first are mandatory and must be the 2 first ! -->
+					<Plugin Id="Record">3cfe8169-fe17-4cfc-9523-eb245ccebe6f</Plugin>
+					<Plugin Id="Text">d59d9cbe-dfcb-45da-8910-adeea8f1d500</Plugin>
+				</Set>
+			</Plugins>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Definitions">
@@ -69,6 +75,38 @@
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$orgnzqbkd"/>
 				</xpp:bloc>
 			</Backends>
+			<Plugins target="XML">
+				<xpp:define name="XMLPluginsRootDir">
+					<xpp:bloc>
+						<xpp:expand value-of="PluginsDir"/>
+						<xpp:bloc>ogz/Frontend/</xpp:bloc>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="Record">
+					<Filename>
+						<xpp:expand select="XMLPluginsRootDir"/>
+						<xpp:bloc>record</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Record/record.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Record/record.xlcl"/>
+					</Locale>
+				</Plugin>
+				<Plugin id="Text">
+					<Filename>
+						<xpp:expand select="XMLPluginsRootDir"/>
+						<xpp:bloc>text</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/Text/text.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/Text/text.xlcl"/>
+					</Locale>
+				</Plugin>
+			</Plugins>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Locale">

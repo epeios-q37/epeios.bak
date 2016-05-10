@@ -128,11 +128,11 @@ namespace plgn {
 			const char *Identifier,
 			const str::string_ &Arguments,
 			const dAbstracts &Abstracts );
-		const char *Identifier( void )
+		const char *Identifier( void ) const
 		{
 			return C_().PluginIdentifier();
 		}
-		const char *Details( void )
+		const char *Details( void ) const
 		{
 			return C_().PluginDetails();
 		}

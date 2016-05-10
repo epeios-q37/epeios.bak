@@ -68,7 +68,8 @@ namespace {
 void ogzfld::sXFields::GetFeatures(
 	sRow Row,
 	ogzclm::sRow &Column,
-	str::dStrings &Entries ) const
+	str::dStrings &Entries,
+	ogztyp::sRow &Type ) const
 {
 qRH
 	wField Field;
@@ -78,7 +79,9 @@ qRB
 
 	Column = Field.Column();
 
-	GetEntries_(Field, Columns_.GetType(Column), D_(), Entries );
+	Type = Columns_.GetType( Column );
+
+	GetEntries_( Field, Type, D_(), Entries );
 qRR
 qRT
 qRE

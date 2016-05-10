@@ -71,7 +71,7 @@ namespace {
 
 		while ( Row != qNIL )
 		{
-			Type.Init( Retrievers.Plugin( Row ), NULL );
+			Type.Init( Retrievers.Plugin( Row ), Retrievers.Identifier( Row ) );
 			Types.Add( Type );
 
 			Row = Retrievers.Next( Row );

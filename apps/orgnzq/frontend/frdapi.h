@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160503 Build May  6 2016 08:37:55 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160503 Build May 10 2016 08:40:16 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build May  1 2016 10:29:26 Win32;MSC 1800;IA-32)
 */
@@ -42,7 +42,7 @@ namespace orgnzq {
 			fblfrd::id8__ Parameters[] = {
 				25, 25, 0, 2, 
 				0, 13, 26, 26, 
-				0, 22, 26, 
+				0, 22, 26, 26, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -62,7 +62,7 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetTypes";;
-			CommandDetail.Casts.Append( Parameters + 8, 3 );
+			CommandDetail.Casts.Append( Parameters + 8, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -102,7 +102,8 @@ namespace orgnzq {
 		}
 		fblovl::reply__ OGZGetTypes( 
 			fblfrd::ids_ &Out1,
-			fblfrd::strings_ &Out2 ) const
+			fblfrd::strings_ &Out2,
+			fblfrd::strings_ &Out3 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[2] );
 
@@ -110,6 +111,7 @@ namespace orgnzq {
 
 			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
+			Frontend().StringsOut( Out3 );
 
 			return Frontend().Handle();
 		}
@@ -272,7 +274,7 @@ namespace orgnzq {
 				21, 0, 
 				0, 
 				0, 22, 22, 13, 26, 26, 
-				0, 22, 22, 27, 
+				0, 22, 22, 27, 22, 
 				1, 0, 21, 
 			};
 
@@ -299,12 +301,12 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "GetFields";;
-			CommandDetail.Casts.Append( Parameters + 9, 4 );
+			CommandDetail.Casts.Append( Parameters + 9, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "CreateField";;
-			CommandDetail.Casts.Append( Parameters + 13, 3 );
+			CommandDetail.Casts.Append( Parameters + 14, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -598,7 +600,8 @@ namespace orgnzq {
 		fblovl::reply__ GetFields( 
 			fblfrd::ids_ &Out1,
 			fblfrd::ids_ &Out2,
-			fblfrd::xstrings_ &Out3 ) const
+			fblfrd::xstrings_ &Out3,
+			fblfrd::ids_ &Out4 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
 
@@ -607,6 +610,7 @@ namespace orgnzq {
 			Common_->Frontend().IdsOut( Out1 );
 			Common_->Frontend().IdsOut( Out2 );
 			Common_->Frontend().XStringsOut( Out3 );
+			Common_->Frontend().IdsOut( Out4 );
 
 			return Common_->Frontend().Handle();
 		}

@@ -32,6 +32,7 @@ qRH
 	sclfrntnd::features___ Features;
 qRB
 	core::Core.Init( Mode );
+	frdmisc::LoadPugins();
 
 	if ( Mode == xdhcmn::mMultiUser ) {
 		Features.Init();

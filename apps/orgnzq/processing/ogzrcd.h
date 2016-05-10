@@ -89,9 +89,10 @@ namespace ogzrcd {
 		void GetFieldFeatures(
 			ogzfld::sLRow Row,
 			ogzclm::sRow &Column,
-			str::dStrings &Entries ) const
+			str::dStrings &Entries,
+			ogztyp::sRow Type ) const
 		{
-			Fields_.GetFeatures( wRecord::Get( Row ), Column, Entries );
+			Fields_.GetFeatures( wRecord::Get( Row ), Column, Entries, Type );
 		}
 		qRODISCLOSEr( sRow, Row );
 		qRODISCLOSEr( ogzfld::sXFields, Fields );
