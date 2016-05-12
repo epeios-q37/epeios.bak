@@ -27,144 +27,77 @@
 # endif
 
 # include "ogzbsc.h"
-# include "ogzcbs.h"
 # include "ogzclm.h"
 # include "ogzdta.h"
 
 # include "bch.h"
 
 namespace ogzfld {
-	using ogzbsc::sDRow;
-	using ogzbsc::sTRow;
-	using ogzbsc::sCRow;
+	qROW( Row );
+	qROW( DRow );
 
-	typedef ogzbsc::sFRow sRow;
-
-	using ogzdta::dDatumList;
+	typedef ogzbsc::dList<ogzdta::sRow, sDRow> dData;
 
 	class dField
-	: public dDatumList
+	: public dData
 	{
 	public:
 		struct s
-		: public dDatumList::s
+		: public dData::s
 		{
-			sCRow Column;
+			ogzclm::sRow Column;
 		}&S_;
 		dField( s &S )
 		: S_( S ),
-		  dDatumList( S )
+		  dData( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			S_.Column = qNIL;
-			dDatumList::reset( P );
-		}
-		void plug( ogzdta::cHook &Hook )
-		{
-			dDatumList::plug( Hook );
+			dData::reset( P );
 		}
 		void plug( qASd *AS )
 		{
-			dDatumList::plug( AS );
+			dData::plug( AS );
 		}
 		dField &operator =( const dField &F )
 		{
 			S_.Column = F.S_.Column;
-			dDatumList::operator=( F );
+			dData::operator=( F );
 
 			return *this;
 		}
 		void Init( ogzclm::sRow Column = qNIL )
 		{
 			S_.Column = Column;
-			dDatumList::Init();
+			dData::Init();
 		}
-		qRWDISCLOSEd( sCRow, Column );
+		qRWDISCLOSEd( ogzclm::sRow, Column );
 	};
 
 	qW( Field );
+}
 
-	qROW( IRow );	// Item row.
-	qROW( LRow );	// List row.
+// template parameters.
+# define OGZFLD_TP	ogzfld::dField, ogzfld::sRow
+namespace ogzfld {
+	typedef ogzbsc::cCommon<OGZFLD_TP> cField;
 
-	// template parameters.
-# define OGZFLD_TP	ogzfld::dField, ogzfld::wField, ogzfld::sRow, ogzfld::sDRow, sdr::sRow, ogzfld::sLRow
+	typedef ogzbsc::sItems<OGZFLD_TP> sFields_;
 
-	typedef ogzcbs::cDynamic<OGZFLD_TP> cField;
-
-	typedef ogzcbs::sDynamicItems<OGZFLD_TP> sFields;
-
-	typedef ogzcbs::dList<ogzfld::sRow, ogzfld::sLRow> dRows;
-	qW( Rows );
-
-	class sXFields
+	class sFields
+	: public sFields_
 	{
-	private:
-		sFields Core_;
-		ogzclm::sXColumns Columns_;
-		qRMV( ogzdta::sData, D_, Data_ );
-		sRow Create_( ogzclm::sRow Column );
 	public:
-		void reset( bso::sBool P = true )
-		{
-			Core_.reset( P );
-			Columns_.reset( P );
-			Data_ = NULL;
-		}
-		qCVDTOR( sXFields );
-		void Init(
-			ogzdta::sData &Data,
-			ogzclm::cColumn &ColumnCallback,
-			ogztyp::sRow TextType,
-			cField &FieldCallback )
-		{
-			Data_ = &Data;
-			Columns_.Init( ColumnCallback, TextType, Data );
-			Core_.Init( FieldCallback );
-		}
-		sRow Create( const ogzclm::rColumnBuffer &Column )
-		{
-			return Create_( Columns_.Create( Column ) );
-		}
-		void GetFeatures(
-			sRow Row,
-			ogzclm::sRow &Column,
-			str::dStrings &Entries,
-			ogztyp::sRow &Type ) const;	// 'Type' should be obtianed through the 'Column', but, sue to use og plugin's for the types, it's given here for convenience.
-		ogztyp::sRow GetType( sRow Row ) const;
-		qRODISCLOSEs( sFields, Core );
-		qRODISCLOSEs( ogzclm::sXColumns, Columns );
+		sRow New(
+			ogzclm::sRow Column,
+			sRow Field = qNIL );
 	};
 
+	typedef ogzbsc::rRegularCallback<lstctn::qLCONTAINERw( dField, sRow ), OGZFLD_TP> rRegularCallback;
 
-	typedef ogzcbs::rRegularDynamicCallback<OGZFLD_TP> rRegularFieldCallback;
-
-	typedef ogzcbs::dList<sRow,sLRow> dFieldList;
-	qW( FieldList );
-
-	class rFieldBuffer
-	: public wField
-	{
-	private:
-		sRow Row_;	// Row of the source field. if  == 'qNIL', new field.
-		ogzclm::sRow ColumnRow_;	// Row of the column.
-	public:
-		void reset( bso::sBool  = true )
-		{
-			Row_ = qNIL;
-			ColumnRow_ = qNIL;
-		}
-		qCDTOR( rFieldBuffer );
-		void Init(
-			ogzclm::sRow ColumnRow = qNIL,
-			sRow Row = qNIL )
-		{
-			Row_ = Row;
-			wField::Init();
-			ColumnRow_ = ColumnRow;
-		}
-	};
+	typedef ogzbsc::dData dFieldBuffer;
+	qW( FieldBuffer );
 }
 
 #endif

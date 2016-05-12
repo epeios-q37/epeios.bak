@@ -181,9 +181,9 @@ DEC( GetFields )
 
 DEC( CreateField )
 {
-	fbltyp::sObject Object = Request.ObjectIn();
+	const wrpcolumn::dColumn &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() );
 	
-	Request.IdOut() = *Record().CreateField( ( (wrpcolumn::dColumn *)Backend.Object( Object, WRPCOLUMN_COLUMN_NAME ) )->operator()() );
+	Request.IdOut() = *Record().CreateField( Column() );
 }
 
 #define D( name )	#name, (void *)exported##name

@@ -37,6 +37,22 @@ namespace ogzdtb {
 	class rDatabase
 	{
 	private:
+		ogzrcd::sFRow NewField_(
+			ogzrcd::sRow Record,
+			const ogzclm::rColumnBuffer &Column );
+		void GetEntries_(
+			const ogzfld::dField &Field,
+			ogzbsc::dData &Entries ) const;
+		void GetEntries_(
+			ogzfld::sRow Field,
+			ogzbsc::dData &Entries	) const;
+		void GetEntries_(
+			ogzrcd::sRow Record,
+			ogzrcd::sFRow Field,
+			ogzbsc::dData &Entries	) const
+		{
+			return GetEntries_( Records.GetRawFieldRow( Record, Field ), Entries );
+		}
 	public:
 		ogzdta::sData Data;
 		ogzclm::sColumns Columns;
@@ -65,6 +81,25 @@ namespace ogzdtb {
 			Fields.Init( FLDCallback );
 			Records.Init( RCDCallback );
 			Users.Init( USRCallback );
+		}
+		ogzusr::sRRow NewRecord( ogzusr::sRow User )
+		{
+			return Users.Add( Records.New(), User );
+		}
+		ogzrcd::sFRow NewField(
+			ogzusr::sRow User,
+			ogzusr::sRRow Record,
+			const ogzclm::rColumnBuffer &Column )
+		{
+			return NewField_( Users.GetRawRecordRow( User, Record ), Column );
+		}
+		void GetEntries(
+			ogzusr::sRow User,
+			ogzusr::sRRow Record,
+			ogzrcd::sFRow Field,
+			ogzbsc::dData &Data	) const
+		{
+			return GetEntries_( Users.GetRawRecordRow( User, Record ), Field, Data );
 		}
 	};
 # ifdef M

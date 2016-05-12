@@ -27,7 +27,7 @@ namespace {
 	rTypes Types_;
 	ogztyp::sRow
 		RecordType = qNIL,
-		extType_ = qNIL;
+		TextType_ = qNIL;
 	rNakedRack Rack_;
 	bso::bool__ IsInitialized_ = false;
 }

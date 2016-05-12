@@ -27,82 +27,40 @@
 # endif
 
 # include "ogzbsc.h"
-# include "ogzcbs.h"
 # include "ogzdta.h"
 # include "ogzfld.h"
 
 namespace ogzrcd {
-	using ogzbsc::sFRow;
+	qROW( Row );
+	qROW( FRow );
 
-	typedef ogzfld::dFieldList dRecord;
+	typedef ogzbsc::dList<ogzfld::sRow, sFRow> dFields;
+	qW( Fields );
+
+	typedef dFields dRecord;
 	qW( Record );
-
-	typedef ogzbsc::sRRow sRow;
-
-	qROW( IRow );	// Item row.
-	qROW( LRow );	// List row.
-
-// Template parameters.
-# define OGZRCD_TP	ogzrcd::dRecord,ogzrcd::wRecord,ogzrcd::sRow,ogzrcd::sFRow,ogzfld::sLRow,ogzrcd::sLRow
-
-	typedef ogzcbs::cDynamic<OGZRCD_TP> cRecord;
-
-	typedef ogzcbs::sDynamicItems<OGZRCD_TP> sRecords;
-
-	typedef ogzcbs::rRegularDynamicCallback<OGZRCD_TP> rRegularRecordCallback;
-
-	class rRecordBuffer
-	: public wRecord
-	{
-	private:
-		sRow Row_;	// Row of the source record. If qNIL, it's a new record.
-		ogzdta::rRegularDataCallback DataCallback_;
-		ogzclm::rRegularColumnCallback ColumnCallback_;
-		ogzfld::rRegularFieldCallback FieldCallback_;
-		ogzfld::sXFields Fields_;
-		ogzdta::sData Data_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Row_ = qNIL;
-			Data_.reset( P );
-			Fields_.reset( P );
-			FieldCallback_.reset( P );
-			ColumnCallback_.reset( P );
-			DataCallback_.reset( P );
-			wRecord::reset( P );
-		}
-		qCDTOR( rRecordBuffer );
-		void Init( ogztyp::sRow TextType )
-		{
-			DataCallback_.Init();
-			ColumnCallback_.Init();
-			FieldCallback_.Init();
-			Data_.Init( DataCallback_ );
-			Fields_.Init( Data_, ColumnCallback_, TextType, FieldCallback_ );
-			wRecord::Init();
-		}
-		ogzdta::sRow UpdateDatum(
-			ogzdta::sRow DatumRow,	// if == 'qNIL', an entry is created.
-			ogzfld::sRow FieldRow,
-			const str::dString &Datum );
-		void GetFieldFeatures(
-			ogzfld::sLRow Row,
-			ogzclm::sRow &Column,
-			str::dStrings &Entries,
-			ogztyp::sRow Type ) const
-		{
-			Fields_.GetFeatures( wRecord::Get( Row ), Column, Entries, Type );
-		}
-		qRODISCLOSEr( sRow, Row );
-		qRODISCLOSEr( ogzfld::sXFields, Fields );
-		qRODISCLOSEr( ogzdta::sData, Data );
-		ogzfld::sLRow CreateField( const ogzclm::rColumnBuffer &Column )
-		{
-			return Append( Fields_.Create( Column ) );
-		}
-	};
 }
 
+// template parameters.
+# define OGZRCD_TP	ogzrcd::dRecord, ogzrcd::sRow
+namespace ogzrcd {
+	typedef ogzbsc::cCommon<OGZRCD_TP> cRecord;
+
+	typedef ogzbsc::sItems<OGZRCD_TP> sRecords_;
+
+	class sRecords
+	: public sRecords_
+	{
+	public:
+		ogzfld::sRow GetRawFieldRow(
+			sRow Record,
+			sFRow Field ) const;
+		sFRow AddField(
+			ogzfld::sRow Field,
+			sRow Record );
+	};
+
+	typedef ogzbsc::rRegularCallback<lstctn::qLCONTAINERw( dRecord, sRow ), OGZRCD_TP> rRegularCallback;
+}
 
 #endif

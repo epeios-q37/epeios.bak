@@ -31,7 +31,6 @@
 #include "wrpunbound.h"
 #include "wrpcolumn.h"
 #include "wrpfield.h"
-#include "wrprecord.h"
 #include "wrpexample.h"
 
 #define BACKEND_NAME	OGZINF_LC_AFFIX	"bkd"
@@ -48,7 +47,6 @@ class rBackend
 private:
 	FBLBKD_RAM_MODULE( wrpcolumn::wColumn, common::rStuff ) Column_;
 	FBLBKD_RAM_MODULE( wrpfield::wField, common::rStuff ) Field_;
-	FBLBKD_RAM_MODULE( wrprecord::wRecord, common::rStuff ) Record_;
 	FBLBKD_RAM_MODULE( wrpexample::wMyObject, common::rStuff ) MyObject_;
 	common::rStuff Stuff_;
 public:
@@ -58,7 +56,6 @@ public:
 		Stuff_.reset( P );
 		Column_.reset( P );
 		Field_.reset( P );
-		Record_.reset( P );
 		MyObject_.reset( P );
 	}
 	qCVDTOR( rBackend );
@@ -85,9 +82,6 @@ public:
 
 		Field_.Init( Stuff_ );
 		Add( Field_ );
-
-		Record_.Init( Stuff_ );
-		Add( Record_ );
 
 		MyObject_.Init( Stuff_ );
 		Add( MyObject_ );

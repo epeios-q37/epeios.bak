@@ -36,35 +36,21 @@ const char *ogzclm::GetLabel( eNumber Number )
 	return NULL; // To avoid a warning.
 }
 
-ogztyp::sRow ogzclm::sXColumns::GetType( sRow Row ) const
+sRow ogzclm::sColumns::New(
+	ogztyp::sRow Type,
+	eNumber Number,
+	ogzdta::sRow Label,
+	ogzdta::sRow Comment,
+	sRow ColumnRow )
 {
 	sColumn Column;
 
-	Column.Init();
-	Core_.Recall( Row, Column );
+	Column.Init( Type, Number, Label, Comment );
 
-	return Column.Type();
+	ColumnRow = sColumns_::New( ColumnRow );
+
+	Store( Column, ColumnRow );
+
+	return ColumnRow;
 }
-
-void ogzclm::sXColumns::GetFeatures(
-	sRow Row,
-	ogztyp::sRow &Type,
-	eNumber &Number,
-	str::dString &Label,
-	str::dString &Comment ) const
-{
-	sColumn Column;
-
-	Column.Init();
-	Core_.Recall( Row, Column );
-
-	Type = Column.Type();
-	Number = Column.Number();
-	D_().Recall( Column.Label(), TextType_, Label );
-	D_().Recall( Column.Comment(), TextType_, Comment );
-}
-
-
-
-
 

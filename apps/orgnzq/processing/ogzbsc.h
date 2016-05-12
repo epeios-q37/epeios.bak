@@ -26,22 +26,153 @@
 # include "err.h"
 # include "sdr.h"
 # include "str.h"
+# include "lstbch.h"
 
 namespace ogzbsc {
-
-	qROW( DRow );	// Datum row.
-	qROW( TRow );	// Type row.
-	qROW( UTRow );	// User type row.
-	qROW( CRow );	// Column row.
-	qROW( FRow );	// Field row.
-	qROW( RRow );	// Record row.
-	qROW( URow );	// User row.
-	qROW( URRow );	// User record row.
-
-	using sdr::sSize;
-
 	typedef str::dString dDatum;
 	qW( Datum );
+
+	typedef str::dStrings dData;
+	qW( Data );
+
+	template <typename lrow, typename srow> qTCLONEd( lstbch::qLBUNCHd( lrow, srow ), dList );
+	qW2( List );
+
+	template <typename item, typename row> class cCommon
+	{
+	protected:
+		// If 'Row' != 'qNIL', it must be used.
+		virtual row OGZBSCNew( row Row ) = 0;
+		// If 'Row' == 'qNIL', the content must be erased.
+		virtual void OGZBSCDelete( row Row ) = 0;
+		virtual void OGZBSCStore(
+			const item &Item,
+			row Row ) = 0;
+		// Must return 'true' if the item exists, 'false' otherwise.
+		virtual bso::sBool OGZBSCRecall(
+			row Row,
+			item &Item ) const = 0;
+	public:
+		qCALLBACK( Common );
+		void Wipe( void )
+		{
+			OGZBSCDelete( qNIL );
+		}
+		row New( row Row )
+		{
+			return OGZBSCNew( Row );
+		}
+		void Delete( row Row )
+		{
+			return OGZBSCDelete( Row );
+		}
+		void Store(
+			const item &Item,
+			row Row )
+		{
+			OGZBSCStore( Item, Row );
+		}
+		bso::bool__ Recall(
+			row Row,
+			item &Item )
+		{
+			return OGZBSCRecall( Row, Item );
+		}
+	};
+
+	template <typename item, typename row> class sItems
+	{
+	private:
+		typedef cCommon<item,row> cCommon_;
+		qRMV( cCommon_, C_, Callback_ );
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			Callback_ = NULL;
+		}
+		E_CDTOR( sItems );
+		void Init( cCommon_ &Callback )
+		{
+			Callback_ = &Callback;
+		}
+		void Wipe( void ) const
+		{
+			C_().Wipe();
+		}
+		row New( row Row = qNIL ) const
+		{
+			return C_().New( Row );
+		}
+		void Delete( row Row ) const
+		{
+			return C_().Delete( Row );
+		}
+		void Store(
+			const item &Item,
+			row Row ) const
+		{
+			return C_().Store( Item, Row );
+		}
+		row Append( const item &Item ) const
+		{
+			row Row = New();
+
+			Store( Item, Row );
+
+			return Row;
+		}
+		bso::bool__ Recall(
+			row Row,
+			item &Item ) const
+		{
+			return C_().Recall( Row, Item );
+		}
+	};
+
+	template <typename crate, typename item, typename row> class rRegularCallback
+	: public cCommon<item,row>
+	{
+	private:
+		crate Items_;
+	protected:
+		virtual row OGZBSCNew( row Row ) override
+		{
+			return Items_.New();
+		}
+		virtual void OGZBSCDelete( row Row ) override
+		{
+			if ( Row == qNIL )
+				Items_.Init();
+			else
+				Items_.Remove( Row );
+		}
+		virtual void OGZBSCStore(
+			const item &Item,
+			row Row ) override
+		{
+			Items_.Store( Item, Row );
+		}
+		virtual bso::sBool OGZBSCRecall(
+			row Row,
+			item &Item ) const override
+		{
+			if ( Items_.Exists( Row ) ) {
+				Items_.Recall( Row, Item );
+				return true;
+			} else
+				return false;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Items_.reset( P );
+		}
+		qCVDTOR( rRegularCallback );
+		void Init( void )
+		{
+			Items_.Init();
+		}
+	};
 }
 
 #endif

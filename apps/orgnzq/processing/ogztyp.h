@@ -27,13 +27,12 @@
 # endif
 
 # include "ogzbsc.h"
-# include "ogzcbs.h"
 
 # include "lstbch.h"
 # include "str.h"
 
 namespace ogztyp {
-	typedef ogzbsc::sTRow sRow;
+	qROW( Row );
 
 	class cType
 	{

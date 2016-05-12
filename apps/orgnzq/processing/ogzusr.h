@@ -27,28 +27,198 @@
 # endif
 
 # include "ogzbsc.h"
-# include "ogzcbs.h"
 # include "ogzrcd.h"
 
-# include "bch.h"
+# include "lstctn.h"
 
 namespace ogzusr {
-	typedef ogzbsc::sURow sRow;
-	typedef ogzbsc::sURRow sRRow;
+	typedef bso::sUInt sIndice;	// Begins at '0'.
 
-	typedef bch::qBUNCHd( ogzrcd::sRow, sRRow ) dUser;
-	qW( User );
+	typedef bso::sUInt sAmount;	// If == '0', return all available.
+	qCDEF( sIndice, AmountMax, BSO_UINT_MAX );
 
-	qROW( LRow );	// List row.
+	qROW( Row );
+	qROW( RRow );
+	qROW( SRow );
 
-// Template parameters.
-# define OGZUSR_TP	ogzusr::dUser, ogzusr::wUser, ogzusr::sRow, ogzrcd::sRow, ogzusr::sRRow, ogzusr::sLRow
+	typedef bch::qBUNCHd( sRRow, sSRow ) dSet;
+	qW( Set );
 
-	typedef ogzcbs::cDynamic<OGZUSR_TP> cUser;
+	class cUser
+	{
+	protected:
+		// If 'Row' != 'qNIL', it must be used.
+		virtual sRow OGZUSRNew( sRow User ) = 0;
+		// If 'Row' == 'qNIL', the content must be erased.
+		virtual void OGZUSRDelete( sRow User ) = 0;
+		virtual sRRow OGZUSRAdd(
+			ogzrcd::sRow Record,
+			sRow User ) = 0;
+		virtual void OGZUSRRemove(
+			sRow User,
+			sRRow Record ) = 0;
+		virtual sAmount OGZUSRGetSet(
+			sRow User,
+			sIndice Indice,
+			sAmount Amount,
+			dSet &Set ) = 0;
+		virtual ogzrcd::sRow OGZUSRGetRawRecordRow(
+			sRow User,
+			sRRow Record ) = 0;
+	public:
+		qCALLBACK( User );
+		void Wipe( void )
+		{
+			OGZUSRDelete( qNIL );
+		}
+		sRow New( sRow User )
+		{
+			return OGZUSRNew( User );
+		}
+		void Delete( sRow Row )
+		{
+			return OGZUSRDelete( Row );
+		}
+		sRRow Add(
+			ogzrcd::sRow Record,
+			sRow User )
+		{
+			return OGZUSRAdd( Record, User );
+		}
+		void Remove(
+			sRow User,
+			sRRow Record )
+		{
+			return OGZUSRRemove( User, Record );
+		}
+		sAmount GetSet(
+			sRow User,
+			sIndice Indice,
+			sAmount Amount,
+			dSet &Set )
+		{
+			return OGZUSRGetSet( User, Indice, Amount, Set );
+		}
+		ogzrcd::sRow GetRawRecordRow(
+			sRow User,
+			sRRow Record )
+		{
+			return OGZUSRGetRawRecordRow( User, Record );
+		}
+	};
 
-	typedef ogzcbs::sDynamicItems<OGZUSR_TP> sUsers;
+	class sUsers
+	{
+	private:
+		qRMV( cUser, C_, Callback_ );
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			Callback_ = NULL;
+		}
+		E_CDTOR( sUsers );
+		void Init( cUser &Callback )
+		{
+			Callback_ = &Callback;
+		}
+		void Wipe( void ) const
+		{
+			C_().Wipe();
+		}
+		sRow New( sRow Row = qNIL ) const
+		{
+			return C_().New( Row );
+		}
+		void Delete( sRow Row ) const
+		{
+			return C_().Delete( Row );
+		}
+		sRRow Add(
+			ogzrcd::sRow Record,
+			sRow User )
+		{
+			return C_().Add( Record, User );
+		}
+		void Remove(
+			sRow User,
+			sRRow Record )
+		{
+			return C_().Remove( User, Record );
+		}
+		sAmount GetSet(
+			sRow User,
+			sIndice Indice,
+			sAmount Amount,
+			dSet &Set )
+		{
+			return C_().GetSet( User, Indice, Amount, Set );
+		}
+		ogzrcd::sRow GetRawRecordRow(
+			sRow User,
+			sRRow Record ) const
+		{
+			return C_().GetRawRecordRow( User, Record );
+		}
+	};
 
-	typedef ogzcbs::rRegularDynamicCallback<OGZUSR_TP> rRegularUserCallback;
+	class rRegularCallback
+	: public cUser
+	{
+	private:
+		lstctn::qLCONTAINERw( lstbch::qLBUNCHd( ogzrcd::sRow, sRRow ), sRow ) Core_;
+	protected:
+		// If 'Row' != 'qNIL', it must be used.
+		sRow OGZUSRNew( sRow User ) override
+		{
+			return Core_.New();
+		}
+		// If 'Row' == 'qNIL', the content must be erased.
+		virtual void OGZUSRDelete( sRow User ) override
+		{
+			if ( User == qNIL )
+				Core_.Init();
+			else
+				Core_.Remove( User );
+		}
+		virtual sRRow OGZUSRAdd(
+			ogzrcd::sRow Record,
+			sRow User ) override
+		{
+			return Core_( User ).Add( Record );
+		}
+		virtual void OGZUSRRemove(
+			sRow User,
+			sRRow Record ) override
+		{
+			Core_( User ).Remove( Record );
+		}
+		virtual sAmount OGZUSRGetSet(
+			sRow User,
+			sIndice Indice,
+			sAmount Amount,
+			dSet &Set ) override
+		{
+			qRVct();
+			return  0;
+		}
+		virtual ogzrcd::sRow OGZUSRGetRawRecordRow(
+			sRow User,
+			sRRow Record ) override
+		{
+			qRVct();
+			return qNIL;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Core_.reset( P );
+		}
+		qCVDTOR( rRegularCallback );
+		void Init( void )
+		{
+			Core_.Init();
+		}
+	};
 
 	class cAuthentication
 	{

@@ -62,6 +62,13 @@ namespace common {
 		{
 			User_ = User;
 		}
+		ogzusr::sRow User( void ) const
+		{
+			if ( User_ == qNIL )
+				qRGnr();
+
+			return User_;
+		}
 	};
 
 	class rTypes
@@ -132,8 +139,6 @@ namespace common {
 			return P_().Authenticate( Username, Password );
 		}
 	};
-
-	typedef ogzrcd::rRecordBuffer rRecord;
 
 	class rNakedRack {
 	public:

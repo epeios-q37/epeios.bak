@@ -96,7 +96,6 @@ namespace {
 	{
 	qRH
 		ogzdta::wDatum Datum;
-		ogzdta::sSize Size = 0;
 		str::string XML;
 	qRB
 		XML.Init();
@@ -118,18 +117,18 @@ namespace {
 		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
 		const ogzdta::sData &Data,
-		const ogzdta::dDatumList &DatumList,
+		const ogzfld::dData &List,
 		dWriter &Writer )
 	{
-		sdr::sRow Row = DatumList.First();
+		ogzfld::sDRow Row = List.First();
 
 		Writer.PushTag( T( Data ) );
-		xml::PutAttribute( A(Amount), DatumList.Amount(), Writer );
+		xml::PutAttribute( A(Amount), List.Amount(), Writer );
 
 		while ( Row != qNIL ) {
-			Dump_( TypeRow, Type, Data, DatumList( Row ), Writer );
+			Dump_( TypeRow, Type, Data, List( Row ), Writer );
 
-			Row = DatumList.Next( Row );
+			Row = List.Next( Row );
 		}
 
 		Writer.PopTag();
@@ -165,7 +164,7 @@ namespace {
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
 		const ogzfld::sFields &Fields,
-		ogzrcd::sFRow Row,
+		ogzfld::sRow Row,
 		const ogzclm::sColumns &Columns,
 		const ogzdta::sData &Data,
 		dWriter &Writer )
@@ -185,21 +184,21 @@ namespace {
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
 		const ogzfld::sFields &Fields,
-		const ogzfld::dFieldList &FieldList,
+		const ogzrcd::dFields &List,
 		const ogzclm::sColumns &Columns,
 		const ogzdta::sData &Data,
 		dWriter &Writer )
 	{
-		ogzfld::sLRow Row = FieldList.First();
+		ogzrcd::sFRow Row = List.First();
 
 		Writer.PushTag( T( Fields ) );
 
-		xml::PutAttribute( A( Amount ), FieldList.Amount(), Writer );
+		xml::PutAttribute( A( Amount ), List.Amount(), Writer );
 
 		while ( Row != qNIL ) {
-			Dump_( Types, Fields, FieldList( Row ), Columns, Data, Writer );
+			Dump_( Types, Fields, List( Row ), Columns, Data, Writer );
 
-			Row = FieldList.Next( Row );
+			Row = List.Next( Row );
 		}
 
 		Writer.PopTag();
@@ -244,21 +243,6 @@ void ogzxml::Dump(
 	dWriter &Writer )
 {
 	Dump_( RecordRow, Database.Records, Database, Types, Writer );
-}
-
-void ogzxml::Dump(
-	const ogztyp::dTypes &Types,
-	const ogzrcd::rRecordBuffer &Record,
-	xml::dWriter &Writer )
-{
-	Writer.PushTag( T( Record ) );
-
-	if ( Record.Row() != qNIL )
-		xml::PutAttribute( A( Id ), *Record.Row(), Writer );
-
-//	Dump_( Types, Record.Fields().Columns, Record, Record.Fields().Columns().Core(), Record.Data(), Writer );
-
-	Writer.PopTag();
 }
 
 namespace {

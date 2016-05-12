@@ -26,6 +26,8 @@
 #	define OGZCBS__DBG
 # endif
 
+# include "ogzbsc.h"
+
 # include "bso.h"
 # include "tol.h"
 # include "sdr.h"
@@ -34,24 +36,16 @@
 # include "lstbch.h"
 
 namespace ogzcbs {
-	typedef bso::sUInt sIndice;	// Begins at '0'.
-
-	typedef bso::sUInt sAmount;	// If == '0', return all available.
-	qCDEF( sIndice, AmountMax, BSO_UINT_MAX );
-
-	template <typename row, typename lrow> qTCLONEd( bch::qBUNCHd( row, lrow ), dList );
-	qW2( List );
-
 	// Callback for static (fixed-sized) objects.
-	template <typename item, typename row, typename lrow> class cStatic
+	template <typename item, typename row, typename srow> class cStatic
 	{
 	protected:
-		virtual sAmount OGZCBSAmount( void ) = 0;
+		virtual ogzbsc::sAmount OGZCBSAmount( void ) = 0;
 		// If 'Amount' == 0, returns all from 'Indice'.
-		virtual void OGZCBSGetList(
-			sIndice Indice,
-			sAmount Amount,
-			dList<row,lrow> &List ) = 0;
+		virtual void OGZCBSGetSet(
+			ogzbsc::sIndice Indice,
+			ogzbsc::sAmount Amount,
+			ogzbsc::dSet<row,srow> &Set ) = 0;
 		// If 'Row' != 'qNIL', it must be used.
 		virtual row OGZCBSNew( row Row ) = 0;
 		// If 'Row' == 'qNIL', the content must be erased.
@@ -65,16 +59,16 @@ namespace ogzcbs {
 			item &Item ) const = 0;
 	public:
 		qCALLBACK( Static );
-		sAmount Amount( void )
+		ogzbsc::sAmount Amount( void )
 		{
 			return OGZCBSAmount();
 		}
-		void GetList(
-			sIndice Indice,
-			sAmount Amount,
-			dList<row,lrow> &List )
+		void GetSet(
+			ogzbsc::sIndice Indice,
+			ogzbsc::sAmount Amount,
+			ogzbsc::dSet<row,srow> &Set )
 		{
-			return OGZCBSGetList( Indice, Amount, List );
+			return OGZCBSGetSet( Indice, Amount, Set );
 		}
 		void Wipe( void )
 		{
@@ -103,10 +97,10 @@ namespace ogzcbs {
 	};
 
 	// Storage for static (fixed-sized) objects.
-	template <typename item, typename row, typename lrow> class sStaticItems
+	template <typename item, typename row, typename srow> class sStaticItems
 	{
 	private:
-		typedef cStatic<item,row,lrow> cStatic_;
+		typedef cStatic<item,row,srow> cStatic_;
 		qRMV( cStatic_, C_, Callback_ );
 	public:
 		void reset( bso::bool__ P = true )
@@ -118,16 +112,16 @@ namespace ogzcbs {
 		{
 			Callback_ = &Callback;
 		}
-		sAmount Amount( void )
+		ogzbsc::sAmount Amount( void )
 		{
 			return C_().Amount();
 		}
-		void GetList(
-			ogzcbs::sIndice Indice,
-			ogzcbs::sAmount Amount,
-			ogzcbs::dList<row,lrow> &Rows ) const
+		void GetSet(
+			ogzbsc::sIndice Indice,
+			ogzbsc::sAmount Amount,
+			ogzbsc::dSet<row,srow> &Set ) const
 		{
-			C_().GetList( Indice, Amount, Rows );
+			C_().GetSet( Indice, Amount, Set );
 		}
 		void Wipe( void ) const
 		{
@@ -165,14 +159,14 @@ namespace ogzcbs {
 }
 
 // 'Base Template Typenames'.
-#define OGZCBS_BTT	typename d_item, typename w_item, typename row, typename subitem, typename subrow, typename lrow
+#define OGZCBS_BTT	typename d_item, typename w_item, typename row, typename subitem, typename subrow, typename srow
 // 'Base Template Parameters'.
-#define OGZCBS_BTP	d_item, w_item, row, subitem, subrow, lrow
+#define OGZCBS_BTP	d_item, w_item, row, subitem, subrow, srow
 
 namespace ogzcbs {
 	// Callback for dynamic (not fixed size) objetcs.
 	template <OGZCBS_BTT> class cDynamic
-	: public cStatic<d_item,row,lrow>
+	: public cStatic<d_item,row,srow>
 	{
 	protected:
 		virtual void OGZCBSStore(
@@ -185,11 +179,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			cStatic<d_item,row,lrow>::Recall( Row, Item );
+			cStatic<d_item,row,srow>::Recall( Row, Item );
 
 			Item.Store( SubItem, SubRow );
 
-			cStatic<d_item,row,lrow>::Store( Item, Row );
+			cStatic<d_item,row,srow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -204,11 +198,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			cStatic<d_item, row, lrow>::Recall( Row, Item );
+			cStatic<d_item, row, srow>::Recall( Row, Item );
 
 			Item.Recall( SubRow, SubItem );
 
-			cStatic<d_item, row, lrow>::Store( Item, Row );
+			cStatic<d_item, row, srow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -223,11 +217,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			cStatic<d_item, row, lrow>::Recall( Row, Item );
+			cStatic<d_item, row, srow>::Recall( Row, Item );
 
 			SubRow = Item.Add( SubItem );
 
-			cStatic<d_item, row, lrow>::Store( Item, Row );
+			cStatic<d_item, row, srow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -242,11 +236,11 @@ namespace ogzcbs {
 		qRB
 			Item.Init();
 
-			cStatic<d_item, row, lrow>::Recall( Row, Item );
+			cStatic<d_item, row, srow>::Recall( Row, Item );
 
 			Item.Remove( SubRow );
 
-			cStatic<d_item, row, lrow>::Store( Item, Row );
+			cStatic<d_item, row, srow>::Store( Item, Row );
 		qRR
 		qRT
 		qRE
@@ -287,7 +281,7 @@ namespace ogzcbs {
 	private:
 		typedef cDynamic<OGZCBS_BTP> cDynamic_;
 		qRMV( cDynamic_, C_, Callback_ );
-		typedef cStatic<d_item,row,lrow> cStatic_;
+		typedef cStatic<d_item,row,srow> cStatic_;
 		cStatic_ &SC_( void ) const
 		{
 			return C_();
@@ -352,29 +346,29 @@ namespace ogzcbs {
 		{
 			return C_().Remove( Row, SubRow );
 		}
-		void GetList(
-			ogzcbs::sIndice Indice,
-			ogzcbs::sAmount Amount,
-			ogzcbs::dList<row,lrow> &Rows ) const
+		void GetSet(
+			ogzbsc::sIndice Indice,
+			ogzbsc::sAmount Amount,
+			ogzbsc::dSet<row,srow> &Set ) const
 		{
 			SC_().GetList( Indice, Amount, Rows );
 		}
 	};
 
-	template <typename item, typename row, typename lrow> class rRegularStaticCallback
-	: public cStatic<item,row,lrow>
+	template <typename item, typename row, typename srow> class rRegularStaticCallback
+	: public cStatic<item,row,srow>
 	{
 	private:
 		lstbch::qLBUNCHw( item, row ) Items_;
 	protected:
-		virtual sAmount OGZCBSAmount( void ) override
+		virtual ogzbsc::sAmount OGZCBSAmount( void ) override
 		{
 			return Items_.Amount();
 		}
 		virtual void OGZCBSGetList(
-			ogzcbs::sIndice Indice,
-			ogzcbs::sAmount Amount,
-			ogzcbs::dList<row,lrow> &List ) override
+			ogzbsc::sIndice Indice,
+			ogzbsc::sAmount Amount,
+			ogzbsc::dSet<row,srow> &Set ) override
 		{
 			row Row = Items_.First( Indice );
 
@@ -439,14 +433,14 @@ namespace ogzcbs {
 	private:
 		lstctn::qLMCONTAINERw( d_item, row ) Container_;
 	protected:
-		virtual sAmount OGZCBSAmount( void ) override
+		virtual ogzbsc::sAmount OGZCBSAmount( void ) override
 		{
 			return Container_.Amount();
 		}
-		virtual void OGZCBSGetList(
-			ogzcbs::sIndice Indice,
-			ogzcbs::sAmount Amount,
-			ogzcbs::dList<row,lrow> &List ) override
+		virtual void OGZCBSGetSet(
+			ogzbsc::sIndice Indice,
+			ogzbsc::sAmount Amount,
+			ogzbsc::dList<row,srow> &List ) override
 		{
 			row Row = Container_.First( Indice );
 

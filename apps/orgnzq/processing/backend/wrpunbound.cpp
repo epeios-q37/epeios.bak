@@ -18,6 +18,9 @@
 */
 
 #include "wrpunbound.h"
+
+#include "wrpcolumn.h"
+
 #include "registry.h"
 #include "dir.h"
 #include "fnm.h"
@@ -25,6 +28,8 @@
 #include "sclmisc.h"
 
 using namespace wrpunbound;
+
+#define REPORT( message ) sclmisc::ReportAndAbort( message )
 
 using common::rStuff;
 
@@ -167,6 +172,43 @@ qRT
 qRE
 }
 
+DEC( DefineRecord )
+{
+qRH
+	RWL;
+qRB
+	RWR;
+	STUFF;
+
+	if ( Request.IdIn() != fbltyp::UndefinedId )
+		qRVct();
+
+	Request.IdOut() = *Rack.Database.NewRecord( Stuff.User() );
+qRR
+qRT
+qRE
+}
+
+DEC( CreateField )
+{
+qRH
+	RWL;
+qRB
+	RWR;
+	BACKEND;
+
+	const ogzusr::sRRow &Record = *Request.IdIn();
+	const fbltyp::sObject &Column = Request.ObjectIn();
+
+	if ( Record == qNIL )
+		REPORT( "RecordUndefined" );
+
+	Request.IdOut() = *Rack.Database.NewField( Stuff.User(), Record, Backend.Object<wrpcolumn::dColumn>( Column )() );
+qRR
+qRT
+qRE
+}
+
 #define D( name )	OGZINF_UC_SHORT #name, ::name
 
 void wrpunbound::Inform(
@@ -192,6 +234,19 @@ void wrpunbound::Inform(
 			fblbkd::cIds,		// Ids.
 			fblbkd::cStrings,	// Labels.
 			fblbkd::cStrings,	// Plugin ids.
+		fblbkd::cEnd );
+
+	Backend.Add( D( DefineRecord ),
+			fblbkd::cId,	// Id ot the record to define. New one if undefined.
+		fblbkd::cEnd,
+			fblbkd::cId,	// Id ot the record to be defiend.
+		fblbkd::cEnd );
+
+	Backend.Add( D( CreateField ),
+			fblbkd::cId,	// Id of the record .
+			fblbkd::cObject,	// Id of the column object.
+		fblbkd::cEnd,
+			fblbkd::cId,	// Id of the created field.
 		fblbkd::cEnd );
 }
 

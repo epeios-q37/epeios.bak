@@ -36,7 +36,6 @@
 			<Module Path="../">ogzfbc</Module>
 			<Module Path="../">ogzinf</Module>
 			<Module>ogzbsc</Module>
-			<Module>ogzcbs</Module>
 			<Module>ogzclm</Module>
 			<Module>ogzdta</Module>
 			<Module>ogzdtb</Module>
@@ -53,7 +52,6 @@
 		<Modules Group="WRP">
 			<Module>wrpcolumn</Module>
 			<Module>wrpfield</Module>
-			<Module>wrprecord</Module>
 			<Module>wrpexample</Module>
 			<Module>wrpunbound</Module>
 		</Modules>

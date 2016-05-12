@@ -841,7 +841,7 @@ namespace fblbkd {
 			return Module_( Object );
 		}
 		//f Return a pointer to the 'Object' object.
-		const void *Object(
+		const void *GetUntypedObject(
 			object__ Object,
 			const char *Name ) const
 		{
@@ -849,6 +849,10 @@ namespace fblbkd {
 				qRFwk();
 
 			return Module_( Object ).Object( Links.Index( Object ) );
+		}
+		template <typename object> object &Object( object__ Object )
+		{
+			return *(object *)GetUntypedObject( Object, object::NAME );
 		}
 		//f Give a new object.
 		object__ New( type__ Type )

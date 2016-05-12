@@ -38,7 +38,6 @@ namespace frdinstc {
 		}
 		orgnzq::rOGZColumn Column_;
 		orgnzq::rOGZField Field_;
-		orgnzq::rOGZRecord Record_;
 		orgnzq::rOGZMyObject Object_;
 	public:
 		void reset( bso::bool__ P = true )
@@ -47,7 +46,6 @@ namespace frdinstc {
 
 			Column_.reset( P );
 			Field_.reset( P );
-			Record_.reset( P );
 			Object_.reset( P );
 		}
 		E_CVDTOR( rUser_ );
@@ -57,10 +55,7 @@ namespace frdinstc {
 
 			Column_.Init( Frontend.Column );
 			Field_.Init( Frontend.Field );
-			Record_.Init( Frontend.Record );
 			Object_.Init( Frontend.MyObject );
-
-			Record_.Initialize();
 		}
 		bso::sBool Login(
 			const str::dString &Username,
@@ -72,21 +67,31 @@ namespace frdinstc {
 
 			return Success;
 		}
-		void DefineRecord( sRecord Record )	// if == 'UndefinedId', we create empty record.
+		sRecord DefineRecord( sRecord Record )	// if == 'UndefinedId', we create empty record.
 		{
-			Record_.Define( *Record );
+			S_().OGZDefineRecord( *Record, *Record );
+
+			return Record;
 		}
 		void DefineColumn( sColumn Column ) const
 		{
 			Column_.Define( *Column	);
 		}
-		sField CreateField( fbltyp::sObject Column )
+		sField CreateField(
+			sRecord Record,
+			fbltyp::sObject Column )
 		{
 			fbltyp::sId Id = fbltyp::UndefinedId;
 
-			Record_.CreateField( Column, Id );
+			S_().OGZCreateField( *Record, Column, Id );
 
 			return Id;
+		}
+		void DefineField(
+			sRecord Record,
+			sField Field )
+		{
+			Field_.Define( *Record, *Field );
 		}
 		void UpdateColumn(
 			sType Type,
@@ -206,6 +211,7 @@ namespace frdinstc {
 		{
 			Core_.UpdateColumn( Type, Number, Label, Comment );
 			Field_ = Core_.CreateField(Core_.GetColumnObjectId() );
+			Core_.
 			View_ = vRecord;
 		}
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;

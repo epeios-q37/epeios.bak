@@ -27,34 +27,32 @@
 # endif
 
 # include "ogzbsc.h"
+# include "ogztyp.h"
 
 # include "bch.h"
 # include "lstctn.h"
 
 namespace ogzdta {
-	using ogzbsc::sSize;
-
-	using ogzbsc::sTRow;
 	using ogzbsc::dDatum;
 	using ogzbsc::wDatum;
 
-	typedef ogzbsc::sDRow sRow;
+	qROW( Row );
 
 	class cData {
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
 		virtual sRow OGZDTANew(
-			sTRow Type,
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
 			sRow Row ) = 0;
 		// if 'Row' == 'qNIL', the entire content must be erased.
 		virtual void OGZDTADelete( sRow Row ) = 0;
 		virtual void OGZDTAStore(
-			sRow Row,
-			sTRow Type,
-			const dDatum &Datum ) = 0;
+			const dDatum &Datum,
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
+			sRow Row )= 0;
 		virtual void OGZDTARecall(
 			sRow Row,
-			sTRow Type,
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
 			dDatum &Datum ) = 0;
 	public:
 		qCALLBACK( Data );
@@ -63,7 +61,7 @@ namespace ogzdta {
 			OGZDTADelete( qNIL );
 		}
 		sRow New(
-			sTRow Type,
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
 			sRow Row = qNIL )
 		{
 			return OGZDTANew( Type, Row );
@@ -74,14 +72,14 @@ namespace ogzdta {
 		}
 		void Store(
 			sRow Row,
-			sTRow Type,
+			ogztyp::sRow Type,
 			const dDatum &Datum )
 		{
-			OGZDTAStore( Row, Type, Datum );
+			OGZDTAStore( Datum, Type, Row );
 		}
 		void Recall(
 			sRow Row,
-			sTRow Type,
+			ogztyp::sRow Type,
 			dDatum &Datum )
 		{
 			return OGZDTARecall( Row, Type, Datum );
@@ -107,7 +105,7 @@ namespace ogzdta {
 			C_().Delete( qNIL );
 		}
 		sRow New(
-			sTRow Type,
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
 			sRow Row = qNIL )
 		{
 			return C_().New( Type, Row );
@@ -117,15 +115,15 @@ namespace ogzdta {
 			C_().Delete( Row );
 		}
 		void Store(
-			sRow Row,
-			sTRow Type,
-			const dDatum &Datum ) const
+			const dDatum &Datum,
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
+			sRow Row ) const
 		{
 			C_().Store( Row, Type, Datum );
 		}
 		void Recall(
 			sRow Row,
-			sTRow Type,
+			ogztyp::sRow Type,
 			dDatum &Datum ) const
 		{
 			if ( Row != qNIL )
@@ -136,14 +134,14 @@ namespace ogzdta {
 	typedef str::dString dBytes;
 	qW( Bytes );
 
-	class rRegularDataCallback
+	class rRegularCallback
 	: public cData
 	{
 	private:
 		lstctn::qLMCONTAINERw( dBytes, sRow ) Container_;
 	protected:
 		virtual sRow OGZDTANew(
-			sTRow Type,
+			ogztyp::sRow Type,
 			sRow Row ) override 
 		{
 			Row = Container_.New( Row );
@@ -161,15 +159,15 @@ namespace ogzdta {
 				Container_.Remove( Row );
 		}
 		virtual void OGZDTAStore(
-			sRow Row,
-			sTRow Type,
-			const dDatum &Datum ) override 
+			const dDatum &Datum,
+			ogztyp::sRow Type,
+			sRow Row ) override 
 		{
 			Container_.Store( Datum, Row );
 		}
 		virtual void OGZDTARecall(
 			sRow Row,
-			sTRow Type,
+			ogztyp::sRow Type,
 			dDatum &Datum ) override 
 		{
 			Container_.Recall( Row, Datum );
@@ -179,15 +177,12 @@ namespace ogzdta {
 		{
 			Container_.reset( P );
 		}
-		qCVDTOR( rRegularDataCallback );
+		qCVDTOR( rRegularCallback );
 		void Init( void )
 		{
 			Container_.Init();
 		}
 	};
-
-	typedef bch::qBUNCHdl( sRow ) dDatumList;
-	qW( DatumList );
 
 	using bch::cHook;
 }

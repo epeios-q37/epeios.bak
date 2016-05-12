@@ -68,11 +68,6 @@ namespace ogzxml {
 		const ogztyp::dTypes &Types,
 		const ogzdtb::rDatabase &Database,
 		xml::dWriter &Writer );
-
-	void Dump(
-		const ogztyp::dTypes &Types,
-		const ogzrcd::rRecordBuffer &Record,
-		xml::dWriter &Writer );
 }
 
 #endif

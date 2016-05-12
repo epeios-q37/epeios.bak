@@ -32,7 +32,6 @@
 # include "ogzdta.h"
 
 namespace ogzclm {
-
 	qENUM( Number ) {
 		nMono,
 		nMulti,
@@ -54,8 +53,7 @@ namespace ogzclm {
 		t_Undefined
 	};
 
-	// Deduced column row. Refers to a column row from a model.
-	qROW( DRow );
+	qROW( Row );
 
 	class sColumnCore_
 	{
@@ -109,6 +107,30 @@ namespace ogzclm {
 		qRODISCLOSEs( ogzdta::sRow, Comment );
 
 	};
+}
+
+// template parameters.
+# define OGZCLM_TP	ogzclm::sColumn, ogzclm::sRow
+
+namespace ogzclm {
+	typedef ogzbsc::cCommon<OGZCLM_TP> cColumn;
+
+	typedef ogzbsc::sItems<OGZCLM_TP> sColumns_;
+
+	class sColumns
+	: public sColumns_
+	{
+	public:
+		sRow New(
+			ogztyp::sRow Type,
+			eNumber Number,
+			ogzdta::sRow Label,
+			ogzdta::sRow Comment,
+			sRow Column = qNIL );
+	};
+
+
+	typedef ogzbsc::rRegularCallback<lstbch::qLBUNCHw( sColumn, sRow ), OGZCLM_TP> rRegularCallback;
 
 	class rColumnBuffer
 	: public sColumnCore_
@@ -139,98 +161,6 @@ namespace ogzclm {
 		qRODISCLOSEr( str::dString, Comment );
 
 	};
-
-	typedef ogzbsc::sCRow sRow;
-
-	qROW( LRow );
-
-	typedef ogzcbs::dList<sRow,sLRow> dRows;
-	qW( Rows );
-
-	// template parameters.
-# define OGZCLM_TP	ogzclm::sColumn, ogzclm::sRow, ogzclm::sLRow
-
-	typedef ogzcbs::cStatic<OGZCLM_TP> cColumn;
-
-	typedef ogzcbs::sStaticItems<OGZCLM_TP> sColumns;
-
-	class sXColumns
-	{
-	private:
-		sColumns Core_;
-		ogztyp::sRow TextType_;
-		qRMV( ogzdta::sData, D_, Data_ );
-		ogzdta::sRow Create_( const str::dString &Text )
-		{
-			ogzdta::sRow Row = qNIL;
-
-			if ( Text.Amount() != 0 ) {
-				Row = D_().New( TextType_ );
-				D_().Store( Row, TextType_, Text );
-			}
-
-			return Row;
-		}
-	public:
-		void reset( bso::sBool P = true )
-		{
-			Core_.reset( P );
-			TextType_ = qNIL;
-			Data_ = NULL;
-		}
-		qCVDTOR( sXColumns );
-		void Init(
-			cColumn &Callback,
-			ogztyp::sRow TextType,
-			ogzdta::sData &Data )
-		{
-			Core_.Init( Callback );
-			TextType_ = TextType;
-			Data_ = &Data;
-		}
-		qRODISCLOSEs( sColumns, Core );
-		qRODISCLOSEs( ogztyp::sRow, TextType );
-		ogztyp::sRow GetType( sRow Row ) const;
-		void GetFeatures(
-			sRow Row,
-			ogztyp::sRow &Type,
-			eNumber &Number,
-			str::dString &Label,
-			str::dString &Comment ) const;
-		sRow Create(
-			ogztyp::sRow Type,
-			ogzclm::eNumber Number,
-			const str::dString &Label,
-			const str::dString &Comment )
-		{
-			sRow Row = qNIL;	
-			sColumn Column;
-
-			Column.Init( Type, Number, Create_( Label ), Create_( Comment )  );
-
-			Row = Core_.New();
-
-			Core_.Store( Column, Row );
-
-			return Row;
-		}
-		sRow Create( const rColumnBuffer &Column )
-		{
-			return Create( Column.GetType(), Column.GetNumber(), Column.GetLabel(), Column.GetComment() );
-		}
-		void Recall(
-			sRow Row,
-			sColumn &Column ) const
-		{
-			Core_.Recall( Row, Column );
-		}
-		void GetColumnsList( dRows &Rows )
-		{
-			Core_.GetList( 0, 0, Rows );
-		}
-	};
-
-	typedef ogzcbs::rRegularStaticCallback<OGZCLM_TP> rRegularColumnCallback;
 }
 
 #endif

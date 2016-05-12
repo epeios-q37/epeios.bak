@@ -21,69 +21,20 @@
 
 using namespace ogzfld;
 
-sRow ogzfld::sXFields::Create_( ogzclm::sRow Column )
+sRow ogzfld::sFields::New(
+	ogzclm::sRow Column,
+	sRow FieldRow )
 {
-	sRow Row = qNIL;
 qRH
 	wField Field;
 qRB
 	Field.Init( Column );
 
-	Row = Core_.New();
+	FieldRow = sFields_::New( FieldRow );
 
-	Core_.Store( Field, Row );
+	Store( Field, FieldRow );
 qRR
 qRT
 qRE
-	return Row;
+	return FieldRow;
 }
-
-namespace {
-	void GetEntries_(
-		const wField &Field,
-		ogztyp::sRow Type,
-		const ogzdta::sData &Data,
-		str::dStrings &Entries )
-	{
-	qRH
-		sdr::sRow Row = qNIL;
-		str::wString Entry;
-	qRB
-		Row = Field.First();
-
-		while ( Row != qNIL ) {
-			Entry.Init();
-			Data.Recall( Field( Row ), Type, Entry );
-
-			Entries.Append( Entry );
-
-			Row = Field.Next( Row );
-		}
-	qRR
-	qRT
-	qRE
-	}
-}
-
-void ogzfld::sXFields::GetFeatures(
-	sRow Row,
-	ogzclm::sRow &Column,
-	str::dStrings &Entries,
-	ogztyp::sRow &Type ) const
-{
-qRH
-	wField Field;
-qRB
-	Field.Init();
-	Core_.Recall( Row, Field  );
-
-	Column = Field.Column();
-
-	Type = Columns_.GetType( Column );
-
-	GetEntries_( Field, Type, D_(), Entries );
-qRR
-qRT
-qRE
-}
-

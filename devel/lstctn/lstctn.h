@@ -47,6 +47,12 @@
 # define qLMCONTAINERdl( type ) qLMCONTAINERd( type, sdr::sRow )
 # define qLMCONTAINERwl( type ) qLMCONTAINERw( type, sdr::sRow )
 
+# define qLCONTAINERd( type, row ) E_LCONTAINERt_( type, row )
+# define qLCONTAINERw( type, row ) E_LCONTAINERt( type, row )
+
+# define qLCONTAINERdl( type ) qLCONTAINERd( type, sdr::sRow )
+# define qLCONTAINERwl( type ) qLCONTAINERw( type, sdr::sRow )
+
 /*************************/
 /****** Old version ******/
 /*************************/

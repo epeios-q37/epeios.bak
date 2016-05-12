@@ -61,7 +61,6 @@ namespace frdfrntnd {
 			Statics.Init( *this );
 			Column.Init( *this );
 			Field.Init( *this );
-			Record.Init( *this );
 			MyObject.Init( *this );
 
 			GetTypes_();
@@ -72,14 +71,12 @@ namespace frdfrntnd {
 			Statics.reset();
 			Column.reset();
 			Field.reset();
-			Record.reset();
 			MyObject.reset();
 		}
 	public:
 		orgnzq::fStatics Statics;
 		orgnzq::fOGZColumnCommon Column;
 		orgnzq::fOGZFieldCommon Field;
-		orgnzq::fOGZRecordCommon Record;
 		orgnzq::fOGZMyObjectCommon MyObject;
 		void reset( bso::bool__ P = true )
 		{
@@ -90,7 +87,6 @@ namespace frdfrntnd {
 			Statics.reset( P );
 			Column.reset( P );
 			Field.reset();
-			Record.reset();
 			MyObject.reset( P );
 		}
 		qCVDTOR( rFrontend );

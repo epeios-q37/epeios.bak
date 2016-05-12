@@ -21,39 +21,41 @@
 
 using namespace ogzrcd;
 
-namespace {
-	inline void GetDatum_(
-		ogzdta::sRow Row,
-		ogztyp::sRow TextType,
-		const ogzdta::sData &Data,
-		str::dString &Datum )
-	{
-		if ( Row != qNIL )
-			Data.Recall( Row, TextType, Datum );
-	}
-}
-
-#if 0
-void ogzrcd::rRecordBuffer::GetColumnContent(
-	ogzfld::sLRow Row,
-	ogztyp::sRow &Type,
-	ogzclm::eNumber &Number,
-	str::dString &Label,
-	str::dString &Comment ) const
+ogzfld::sRow ogzrcd::sRecords::GetRawFieldRow(
+	sRow RecordRow,
+	sFRow Field ) const
 {
+	ogzfld::sRow RawFieldRow = qNIL;
 qRH
-	ogzclm::sColumn Column;
+	wRecord Record;
 qRB
-	Column.Init();
-	GetColumn( Row, Column );
+	Record.Init();
+	Recall( RecordRow, Record );
 
-	Type = Column.Type();
-	Number = Column.Number();
-
-	GetDatum_( Column.Label(), Columns_.TextType(), Data_, Label );
-	GetDatum_( Column.Comment(), Columns_.TextType(), Data_, Comment );
+	RawFieldRow = Record( Field );
 qRR
 qRT
 qRE
+	return RawFieldRow;
 }
-# endif
+
+sFRow ogzrcd::sRecords::AddField(
+	ogzfld::sRow RawFieldRow,
+	sRow RecordRow )
+{
+	sFRow FieldRow = qNIL;
+qRH
+	wRecord Record;
+qRB
+	Record.Init();
+	Recall( RecordRow, Record );
+
+	FieldRow = Record.Add( RawFieldRow );
+
+	Store( Record, RecordRow );
+qRR
+qRT
+qRE
+	return FieldRow;
+}
+
