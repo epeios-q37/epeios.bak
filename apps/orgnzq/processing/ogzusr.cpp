@@ -21,5 +21,27 @@
 
 using namespace ogzusr;
 
+sAmount ogzusr::rRegularCallback::GetSet_(
+	const dRecords &Records,
+	sIndice Indice,
+	sAmount Amount,
+	dSet &Set ) const
+{
+	sAmount RealAmount = 0;
+
+	if ( Amount == 0 )
+		Amount = Records.Amount() - 1;
+
+	sRRow Row = Records.First( Indice );
+
+	while ( ( Row != qNIL) && Amount-- ) {
+		Set.Append( Row );
+
+		Row = Records.Next( Row );
+		RealAmount++;
+	}
+
+	return RealAmount;
+}
 
 

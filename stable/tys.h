@@ -96,6 +96,13 @@ namespace tys {
 		{
 			_Recall( *Position, Amount, Buffer );
 		}
+		void Recall(
+			sdr::size__ Amount,
+			r Position,
+			_storage_<t,b,r> &Target )
+		{
+			Target._Store( *this, Amount, *Position, 0 );
+		}
 		//f Put in 'Buffer' 'Amount' bytes at 'Position'. Return 'Buffer'.
 		t *Get(
 			r Position,

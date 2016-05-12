@@ -161,11 +161,18 @@ namespace ogzusr {
 		}
 	};
 
+	typedef ogzbsc::dList<ogzrcd::sRow, sRRow> dRecords;
+
 	class rRegularCallback
 	: public cUser
 	{
 	private:
-		lstctn::qLCONTAINERw( lstbch::qLBUNCHd( ogzrcd::sRow, sRRow ), sRow ) Core_;
+		lstctn::qLCONTAINERw( dRecords, sRow ) Core_;
+		sAmount GetSet_(
+			const dRecords &Records,
+			sIndice Indice,
+			sAmount Amount,
+			dSet &Set ) const;
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
 		sRow OGZUSRNew( sRow User ) override
@@ -198,15 +205,13 @@ namespace ogzusr {
 			sAmount Amount,
 			dSet &Set ) override
 		{
-			qRVct();
-			return  0;
+			return GetSet_( Core_( User ), Indice, Amount, Set );
 		}
 		virtual ogzrcd::sRow OGZUSRGetRawRecordRow(
 			sRow User,
 			sRRow Record ) override
 		{
-			qRVct();
-			return qNIL;
+			return Core_(User).Get( Record );
 		}
 	public:
 		void reset( bso::sBool P = true )
