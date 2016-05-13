@@ -66,7 +66,7 @@ namespace ogzxml {
 	void Dump(
 		const ogzrcd::sRow Record,
 		const ogztyp::dTypes &Types,
-		const ogzdtb::rDatabase &Database,
+		const ogzdtb::mDatabase &Database,
 		xml::dWriter &Writer );
 }
 

@@ -83,15 +83,15 @@ namespace ogzfld {
 namespace ogzfld {
 	typedef ogzbsc::cCommon<OGZFLD_TP> cField;
 
-	typedef ogzbsc::sItems<OGZFLD_TP> sFields_;
+	typedef ogzbsc::mItems<OGZFLD_TP> mFields_;
 
-	class sFields
-	: public sFields_
+	class mFields
+	: public mFields_
 	{
 	public:
 		sRow New(
 			ogzclm::sRow Column,
-			sRow Field = qNIL );
+			sRow Field = qNIL ) const;
 	};
 
 	typedef ogzbsc::rRegularCallback<lstctn::qLCONTAINERw( dField, sRow ), OGZFLD_TP> rRegularCallback;

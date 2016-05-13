@@ -36,18 +36,18 @@ const char *ogzclm::GetLabel( eNumber Number )
 	return NULL; // To avoid a warning.
 }
 
-sRow ogzclm::sColumns::New(
+sRow ogzclm::mColumns::New(
 	ogztyp::sRow Type,
 	eNumber Number,
 	ogzdta::sRow Label,
 	ogzdta::sRow Comment,
-	sRow ColumnRow )
+	sRow ColumnRow ) const
 {
 	sColumn Column;
 
 	Column.Init( Type, Number, Label, Comment );
 
-	ColumnRow = sColumns_::New( ColumnRow );
+	ColumnRow = mColumns_::New( ColumnRow );
 
 	Store( Column, ColumnRow );
 

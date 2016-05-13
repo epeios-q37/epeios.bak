@@ -34,7 +34,7 @@
 # include "ogzusr.h"
 
 namespace ogzdtb {
-	class rDatabase
+	class mDatabase
 	{
 	private:
 		ogzrcd::sFRow NewField_(
@@ -54,11 +54,11 @@ namespace ogzdtb {
 			return GetEntries_( Records.GetRawFieldRow( Record, Field ), Entries );
 		}
 	public:
-		ogzdta::sData Data;
-		ogzclm::sColumns Columns;
-		ogzfld::sFields Fields;
-		ogzrcd::sRecords Records;
-		ogzusr::sUsers Users;
+		ogzdta::mData Data;
+		ogzclm::mColumns Columns;
+		ogzfld::mFields Fields;
+		ogzrcd::mRecords Records;
+		ogzusr::mUsers Users;
 		void reset( bso::bool__ P = true )
 		{
 			Data.reset( P );
@@ -67,7 +67,7 @@ namespace ogzdtb {
 			Records.reset( P );
 			Users.reset( P );
 		}
-		qCDTOR( rDatabase );
+		qCDTOR( mDatabase );
 		void Init(
 			const ogztyp::dTypes &Types,
 			ogzdta::cData &DTACallback,

@@ -21,7 +21,7 @@
 
 using namespace ogzrcd;
 
-ogzfld::sRow ogzrcd::sRecords::GetRawFieldRow(
+ogzfld::sRow ogzrcd::mRecords::GetRawFieldRow(
 	sRow RecordRow,
 	sFRow Field ) const
 {
@@ -39,9 +39,9 @@ qRE
 	return RawFieldRow;
 }
 
-sFRow ogzrcd::sRecords::AddField(
+sFRow ogzrcd::mRecords::AddField(
 	ogzfld::sRow RawFieldRow,
-	sRow RecordRow )
+	sRow RecordRow ) const
 {
 	sFRow FieldRow = qNIL;
 qRH

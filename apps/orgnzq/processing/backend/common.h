@@ -94,10 +94,10 @@ namespace common {
 		qRODISCLOSEr( ogztyp::sRow, MandatoryTextType );
 	};
 
-	typedef ogzdtb::rDatabase rDatabase_;
+	typedef ogzdtb::mDatabase mDatabase_;
 
 	class rDatabase
-	: public rDatabase_
+	: public mDatabase_
 	{
 	private:
 		plgn::rRetriever<ogzplg::fDatabasePlugin> Retriever_;
@@ -108,7 +108,7 @@ namespace common {
 	public:
 		void reset( bso::sBool P = true )
 		{
-			rDatabase_::reset( P );
+			mDatabase_::reset( P );
 			Retriever_.reset( P );
 		}
 		E_CDTOR( rDatabase );
@@ -117,7 +117,10 @@ namespace common {
 			const char *Identifier );
 	};
 
+	typedef ogzusr::mAuthentication mAuthentication_;
+
 	class rAuthentication
+	: public mAuthentication_
 	{
 	private:
 		plgn::rRetriever<ogzplg::fAuthenticationPlugin> Retriever_;
@@ -128,16 +131,11 @@ namespace common {
 	public:
 		void reset( bso::sBool P = true )
 		{
+			mAuthentication_::reset(P );
 			Retriever_.reset( P );
 		}
 		qCDTOR( rAuthentication );
 		void Init( const char *Identifier );
-		ogzusr::sRow Login(
-			const str::dString &Username,
-			const str::dString &Password )
-		{
-			return P_().Authenticate( Username, Password );
-		}
 	};
 
 	class rNakedRack {

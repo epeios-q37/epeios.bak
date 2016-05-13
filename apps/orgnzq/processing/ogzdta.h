@@ -86,48 +86,107 @@ namespace ogzdta {
 		}
 	};
 
-	class sData
+	typedef ogzbsc::rLock rLock_;
+
+	class mData
+	: public rLock_
 	{
 	private:
 		qRMV( cData, C_, Callback_ );
+		sRow New_(
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
+			sRow Row = qNIL ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			Row = C_().New( Type, Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
+		void Delete_( sRow Row ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			C_().Delete( Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+		}
+		void Store_(
+			const dDatum &Datum,
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
+			sRow Row ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			C_().Store( Row, Type, Datum );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+		}
+		void Recall_(
+			sRow Row,
+			ogztyp::sRow Type,
+			dDatum &Datum ) const
+		{
+			if ( Row != qNIL ) {
+			qRH
+			qRB
+				Lock_();
+				C_().Recall( Row, Type, Datum );
+			qRR
+			qRT
+				Unlock_();
+			qRE
+			}
+		}
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P = true )
 		{
 			Callback_ = NULL;
+			rLock_::reset( P );
 		}
-		qCDTOR( sData );
+		qCDTOR( mData );
 		void Init( cData &Callback )
 		{
 			Callback_ = &Callback;
+			rLock_::Init();
 		}
 		void Wipe( void ) const
 		{
-			C_().Delete( qNIL );
+			return Delete_( qNIL );
 		}
 		sRow New(
 			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
 			sRow Row = qNIL )
 		{
-			return C_().New( Type, Row );
+			return New_( Type, Row );
 		}
 		void Delete( sRow Row ) const
 		{
-			C_().Delete( Row );
+			return Delete_( Row );
 		}
 		void Store(
 			const dDatum &Datum,
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
+			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
 			sRow Row ) const
 		{
-			C_().Store( Row, Type, Datum );
+			return Store_( Datum, Type, Row );
 		}
 		void Recall(
 			sRow Row,
 			ogztyp::sRow Type,
 			dDatum &Datum ) const
 		{
-			if ( Row != qNIL )
-				return C_().Recall( Row, Type, Datum );
+			return Recall_( Row, Type, Datum );
 		}
 	};
 

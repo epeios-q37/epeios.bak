@@ -115,10 +115,10 @@ namespace ogzclm {
 namespace ogzclm {
 	typedef ogzbsc::cCommon<OGZCLM_TP> cColumn;
 
-	typedef ogzbsc::sItems<OGZCLM_TP> sColumns_;
+	typedef ogzbsc::mItems<OGZCLM_TP> mColumns_;
 
-	class sColumns
-	: public sColumns_
+	class mColumns
+	: public mColumns_
 	{
 	public:
 		sRow New(
@@ -126,7 +126,7 @@ namespace ogzclm {
 			eNumber Number,
 			ogzdta::sRow Label,
 			ogzdta::sRow Comment,
-			sRow Column = qNIL );
+			sRow Column = qNIL ) const;
 	};
 
 

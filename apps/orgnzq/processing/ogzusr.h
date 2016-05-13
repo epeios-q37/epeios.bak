@@ -107,43 +107,130 @@ namespace ogzusr {
 		}
 	};
 
-	class sUsers
+	typedef ogzbsc::rLock rLock_;
+
+	class mUsers
+	: public rLock_
 	{
 	private:
 		qRMV( cUser, C_, Callback_ );
+		sRow New_( sRow Row ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			Row = C_().New( Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
+		void Delete_( sRow Row ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			C_().Delete( Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+		}
+		sRRow Add_(
+			ogzrcd::sRow Record,
+			sRow User )
+		{
+			sRRow Row = qNIL;
+		qRH
+		qRB
+			Lock_();
+			Row = C_().Add( Record, User );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
+		void Remove_(
+			sRow User,
+			sRRow Record )
+		{
+		qRH
+		qRB
+			Lock_();
+			C_().Remove( User, Record );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+		}
+		sAmount GetSet_(
+			sRow User,
+			sIndice Indice,
+			sAmount Amount,
+			dSet &Set )
+		{
+		qRH
+		qRB
+			Lock_();
+			Amount = C_().GetSet( User, Indice, Amount, Set );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Amount;
+		}
+		ogzrcd::sRow GetRawRecordRow_(
+			sRow User,
+			sRRow Record ) const
+		{
+			ogzrcd::sRow Row = qNIL;
+		qRH
+		qRB
+			Lock_();
+			Row = C_().GetRawRecordRow( User, Record );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Callback_ = NULL;
+			rLock_::reset( P );
 		}
-		E_CDTOR( sUsers );
+		E_CDTOR( mUsers );
 		void Init( cUser &Callback )
 		{
 			Callback_ = &Callback;
+			rLock_::Init();
 		}
 		void Wipe( void ) const
 		{
-			C_().Wipe();
+			return Delete_( qNIL );
 		}
 		sRow New( sRow Row = qNIL ) const
 		{
-			return C_().New( Row );
+			return New_( Row );
 		}
 		void Delete( sRow Row ) const
 		{
-			return C_().Delete( Row );
+			return Delete_( Row );
 		}
 		sRRow Add(
 			ogzrcd::sRow Record,
 			sRow User )
 		{
-			return C_().Add( Record, User );
+			return Add_( Record, User );
 		}
 		void Remove(
 			sRow User,
 			sRRow Record )
 		{
-			return C_().Remove( User, Record );
+			return Remove_( User, Record );
 		}
 		sAmount GetSet(
 			sRow User,
@@ -151,13 +238,13 @@ namespace ogzusr {
 			sAmount Amount,
 			dSet &Set )
 		{
-			return C_().GetSet( User, Indice, Amount, Set );
+			return GetSet_( User, Indice, Amount, Set );
 		}
 		ogzrcd::sRow GetRawRecordRow(
 			sRow User,
 			sRRow Record ) const
 		{
-			return C_().GetRawRecordRow( User, Record );
+			return GetRawRecordRow_( User, Record );
 		}
 	};
 
@@ -241,7 +328,39 @@ namespace ogzusr {
 		}
 	};
 
+	class mAuthentication
+	: public rLock_
+	{
+	private:
+		qRMV( cAuthentication, C_, Callback_ );
+		ogzusr::sRow Authenticate_(
+			const str::dString &Username,
+			const str::dString &Password ) const
+		{
+			ogzusr::sRow Row = qNIL;
+		qRH
+		qRB
+			Lock_();
+			Row = C_().Authenticate( Username, Password );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Callback_ = NULL;
+			rLock_::reset( P );
+		}
+		qCDTOR( mAuthentication );
+		void Init( cAuthentication &Callback )
+		{
+			Callback_ = &Callback;
+			rLock_::Init();
+		}
+	};
 }
-
 
 #endif

@@ -46,10 +46,10 @@ namespace ogzrcd {
 namespace ogzrcd {
 	typedef ogzbsc::cCommon<OGZRCD_TP> cRecord;
 
-	typedef ogzbsc::sItems<OGZRCD_TP> sRecords_;
+	typedef ogzbsc::mItems<OGZRCD_TP> mRecords_;
 
-	class sRecords
-	: public sRecords_
+	class mRecords
+	: public mRecords_
 	{
 	public:
 		ogzfld::sRow GetRawFieldRow(
@@ -57,7 +57,7 @@ namespace ogzrcd {
 			sFRow Field ) const;
 		sFRow AddField(
 			ogzfld::sRow Field,
-			sRow Record );
+			sRow Record ) const;
 	};
 
 	typedef ogzbsc::rRegularCallback<lstctn::qLCONTAINERw( dRecord, sRow ), OGZRCD_TP> rRegularCallback;

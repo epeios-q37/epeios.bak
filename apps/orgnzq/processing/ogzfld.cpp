@@ -21,16 +21,16 @@
 
 using namespace ogzfld;
 
-sRow ogzfld::sFields::New(
+sRow ogzfld::mFields::New(
 	ogzclm::sRow Column,
-	sRow FieldRow )
+	sRow FieldRow ) const
 {
 qRH
 	wField Field;
 qRB
 	Field.Init( Column );
 
-	FieldRow = sFields_::New( FieldRow );
+	FieldRow = mFields_::New( FieldRow );
 
 	Store( Field, FieldRow );
 qRR

@@ -24,7 +24,7 @@ using namespace ogzdtb;
 namespace {
 	ogzdta::sRow Create_(
 		const str::dString &Value,
-		ogzdta::sData &Data )
+		ogzdta::mData &Data )
 	{
 		ogzdta::sRow Datum = qNIL;
 
@@ -37,7 +37,7 @@ namespace {
 	}
 }
 
-ogzrcd::sFRow ogzdtb::rDatabase::NewField_(
+ogzrcd::sFRow ogzdtb::mDatabase::NewField_(
 	ogzrcd::sRow Record,
 	const ogzclm::rColumnBuffer &Column )
 {
@@ -48,7 +48,7 @@ namespace {
 	void GetEntries_(
 		const ogzfld::dField &Field,
 		ogztyp::sRow Type,
-		const ogzdta::sData &Data,
+		const ogzdta::mData &Data,
 		ogzbsc::dData &Entries )
 	{
 	qRH
@@ -71,7 +71,7 @@ namespace {
 	}
 }
 
-void ogzdtb::rDatabase::GetEntries_(
+void ogzdtb::mDatabase::GetEntries_(
 	const ogzfld::dField &Field,
 	ogzbsc::dData &Entries ) const
 {
@@ -87,7 +87,7 @@ qRT
 qRE
 }
 
-void ogzdtb::rDatabase::GetEntries_(
+void ogzdtb::mDatabase::GetEntries_(
 	ogzfld::sRow FieldRow,
 	ogzbsc::dData &Entries	) const
 {

@@ -90,7 +90,7 @@ namespace {
 	inline void Dump_(
 		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
-		const ogzdta::sData &Data,
+		const ogzdta::mData &Data,
 		ogzdta::sRow DatumRow,
 		dWriter &Writer )
 	{
@@ -116,7 +116,7 @@ namespace {
 	inline void Dump_(
 		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
-		const ogzdta::sData &Data,
+		const ogzdta::mData &Data,
 		const ogzfld::dData &List,
 		dWriter &Writer )
 	{
@@ -136,8 +136,8 @@ namespace {
 
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
-		const ogzclm::sColumns &Columns,
-		const ogzdta::sData &Data,
+		const ogzclm::mColumns &Columns,
+		const ogzdta::mData &Data,
 		const ogzfld::dField &Field,
 		dWriter &Writer )
 	{
@@ -163,10 +163,10 @@ namespace {
 
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
-		const ogzfld::sFields &Fields,
+		const ogzfld::mFields &Fields,
 		ogzfld::sRow Row,
-		const ogzclm::sColumns &Columns,
-		const ogzdta::sData &Data,
+		const ogzclm::mColumns &Columns,
+		const ogzdta::mData &Data,
 		dWriter &Writer )
 	{
 	qRH
@@ -183,10 +183,10 @@ namespace {
 
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
-		const ogzfld::sFields &Fields,
+		const ogzfld::mFields &Fields,
 		const ogzrcd::dFields &List,
-		const ogzclm::sColumns &Columns,
-		const ogzdta::sData &Data,
+		const ogzclm::mColumns &Columns,
+		const ogzdta::mData &Data,
 		dWriter &Writer )
 	{
 		ogzrcd::sFRow Row = List.First();
@@ -207,7 +207,7 @@ namespace {
 	inline void Dump_(
 		const ogztyp::dTypes &Types,
 		const ogzrcd::dRecord &Record,
-		const ogzdtb::rDatabase &Database,
+		const ogzdtb::mDatabase &Database,
 		xml::dWriter &Writer )
 	{
 		Writer.PushTag( T( Record ) );
@@ -217,8 +217,8 @@ namespace {
 
 	inline void Dump_(
 		ogzrcd::sRow RecordRow,
-		const ogzrcd::sRecords &Records,
-		const ogzdtb::rDatabase &Database,
+		const ogzrcd::mRecords &Records,
+		const ogzdtb::mDatabase &Database,
 		const ogztyp::dTypes &Types,
 		xml::dWriter &Writer )
 	{
@@ -239,7 +239,7 @@ namespace {
 void ogzxml::Dump(
 	ogzrcd::sRow RecordRow,
 	const ogztyp::dTypes &Types,
-	const ogzdtb::rDatabase &Database,
+	const ogzdtb::mDatabase &Database,
 	dWriter &Writer )
 {
 	Dump_( RecordRow, Database.Records, Database, Types, Writer );

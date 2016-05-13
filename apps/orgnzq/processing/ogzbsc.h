@@ -54,10 +54,6 @@ namespace ogzbsc {
 			item &Item ) const = 0;
 	public:
 		qCALLBACK( Common );
-		void Wipe( void )
-		{
-			OGZBSCDelete( qNIL );
-		}
 		row New( row Row )
 		{
 			return OGZBSCNew( Row );
@@ -80,52 +76,149 @@ namespace ogzbsc {
 		}
 	};
 
-	template <typename item, typename row> class sItems
+	class rLock
+	{
+	private:
+		mutable mtx::rHandler Mutex_;
+	protected:
+		void Lock_( void ) const
+		{
+			mtx::Lock( Mutex_ );
+		}
+		void Unlock_( void ) const
+		{
+			mtx::Unlock( Mutex_ );
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				if ( Mutex_ != mtx::UndefinedHandler )
+					mtx::Delete( Mutex_ );
+			}
+
+			Mutex_ = mtx::UndefinedHandler;
+		}
+		void Init( void )
+		{
+			if ( Mutex_ != mtx::UndefinedHandler )
+				mtx::Delete( Mutex_ );
+
+			Mutex_ = mtx::Create();
+		}
+	};
+
+	template <typename item, typename row> class mItems
+	: public rLock
 	{
 	private:
 		typedef cCommon<item,row> cCommon_;
 		qRMV( cCommon_, C_, Callback_ );
+		row New_( row Row ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			Row = C_().New( Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+
+			return Row;
+		}
+		void Delete_( row Row ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			C_().Delete( Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+		}
+		void Store_(
+			const item &Item,
+			row Row ) const
+		{
+		qRH
+		qRB
+			Lock_();
+			C_().Store( Item, Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+		}
+		row Append_( const item &Item ) const
+		{
+			row Row = qNIL;
+		qRH
+		qRB
+			Lock_();
+			Row = C_().New();
+			C_().Store( Item, Row );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
+		bso::bool__ Recall_(
+			row Row,
+			item &Item ) const
+		{
+			bso::sBool Exists = false;
+		qRH
+		qRB
+			Lock_();
+			Exists = C_().Recall( Row, Item );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Exists;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Callback_ = NULL;
+			rLock::reset( P );
 		}
-		E_CDTOR( sItems );
+		E_CDTOR( mItems );
 		void Init( cCommon_ &Callback )
 		{
 			Callback_ = &Callback;
+			rLock::Init();
 		}
 		void Wipe( void ) const
 		{
-			C_().Wipe();
+			return Delete_( qNIL );
 		}
 		row New( row Row = qNIL ) const
 		{
-			return C_().New( Row );
+			return New_( Row );
 		}
 		void Delete( row Row ) const
 		{
-			return C_().Delete( Row );
+			return Delete_( Row );
 		}
 		void Store(
 			const item &Item,
 			row Row ) const
 		{
-			return C_().Store( Item, Row );
+			return Store_( Item, Row );
 		}
 		row Append( const item &Item ) const
 		{
-			row Row = New();
-
-			Store( Item, Row );
-
-			return Row;
+			return Append_( Item, Row );
 		}
 		bso::bool__ Recall(
 			row Row,
 			item &Item ) const
 		{
-			return C_().Recall( Row, Item );
+			return Recall_( Row, Item );
 		}
 	};
 
