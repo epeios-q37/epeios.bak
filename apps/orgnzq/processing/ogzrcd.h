@@ -28,13 +28,12 @@
 
 # include "ogzbsc.h"
 # include "ogzdta.h"
-# include "ogzfld.h"
 
 namespace ogzrcd {
 	qROW( Row );
-	qROW( FRow );
+	qROWS( Row );
 
-	typedef ogzbsc::dList<ogzfld::sRow, sFRow> dFields;
+	typedef ogzbsc::dList<ogzbsc::sFRow> dFields;
 	qW( Fields );
 
 	typedef dFields dRecord;
@@ -52,11 +51,8 @@ namespace ogzrcd {
 	: public mRecords_
 	{
 	public:
-		ogzfld::sRow GetRawFieldRow(
-			sRow Record,
-			sFRow Field ) const;
-		sFRow AddField(
-			ogzfld::sRow Field,
+		void AddField(
+			ogzbsc::sFRow Field,
 			sRow Record ) const;
 	};
 

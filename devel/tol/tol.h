@@ -91,6 +91,11 @@ namespace str {
 # define qROW( name ) TOL_ROW_( s##name )
 # define qROWr( name ) TOL_ROW_( r##name )
 
+#define qROWS( name )\
+	typedef bch::qBUNCHdl( s##name ) d##name##s;\
+	qW( name##s )
+
+
 // Declaration of standardized constructor.
 # define TOL_CTORD_( name )\
 	name( void )

@@ -28,7 +28,7 @@
 		<Translation language="en">The field label can not be empty.</Translation>
 	</Translations>
 	<!--
-<Translations text="">
+<Translations text="UndefindRecord">
 	<Translation language="fr"></Translation>
 	<Translation language="en"></Translation>
 </Translations>

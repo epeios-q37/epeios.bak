@@ -37,11 +37,34 @@ namespace {
 	}
 }
 
-ogzrcd::sFRow ogzdtb::mDatabase::NewField_(
-	ogzrcd::sRow Record,
-	const ogzclm::rColumnBuffer &Column )
+ogzbsc::sFRow ogzdtb::mDatabase::NewField(
+	const ogzclm::rColumnBuffer &Column,
+	ogzbsc::sRRow Record,
+	ogzusr::sRow User )
 {
-	return Records.AddField( Fields.New( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), Data ), Create_( Column.Comment(), Data ) ) ), Record );
+	return Users.Add( Fields.New( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), Data ), Create_( Column.Comment(), Data ) ) ), Record, User );
+}
+
+void ogzdtb::mDatabase::GetColumnFeatures_(
+	ogzclm::sRow ColumnRow,
+	ogztyp::sRow &Type,
+	ogzclm::eNumber &Number,
+	str::dString &Label,
+	str::dString &Comment ) const
+{
+qRH
+	ogzclm::sColumn Column;
+qRB
+	Column.Init();
+	Columns.Recall( ColumnRow, Column );
+
+	Type = Column.Type();
+	Number = Column.Number();
+	GetDatum_( Column.Label(), qNIL, Label );
+	GetDatum_( Column.Comment(), qNIL, Comment );
+qRR
+qRT
+qRE
 }
 
 namespace {
@@ -71,34 +94,40 @@ namespace {
 	}
 }
 
-void ogzdtb::mDatabase::GetEntries_(
+ogztyp::sRow ogzdtb::mDatabase::GetEntries_(
 	const ogzfld::dField &Field,
 	ogzbsc::dData &Entries ) const
 {
+	ogztyp::sRow Type = qNIL;
 qRH
 	ogzclm::sColumn Column;
 qRB
 	Column.Init();
 	Columns.Recall( Field.Column(), Column );
 
-	::GetEntries_( Field, Column.GetType(), Data, Entries );
+	Type = Column.GetType();
+
+	::GetEntries_( Field, Type, Data, Entries );
 qRR
 qRT
 qRE
+	return Type;
 }
 
-void ogzdtb::mDatabase::GetEntries_(
+ogztyp::sRow ogzdtb::mDatabase::GetEntries_(
 	ogzfld::sRow FieldRow,
 	ogzbsc::dData &Entries	) const
 {
+	ogztyp::sRow Type = qNIL;
 qRH
 	ogzfld::wField Field;
 qRB
 	Field.Init();
 	Fields.Recall( FieldRow, Field );
 
-	GetEntries_( Field, Entries );
+	Type = GetEntries_( Field, Entries );
 qRR
 qRT
 qRE
+	return Type;
 }

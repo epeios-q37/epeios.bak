@@ -43,25 +43,20 @@ using common::rStuff;
 		bso::bool__ &,\
 		void *UP )
 
-# define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
-# define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
-
 DEC( Login )
 {
 qRH
-	RWL;
 	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
 	ogzusr::sRow UserRow = qNIL;
 qRB
 	STUFF;
-
-	RWR;
+	AUTHENTICATION;
 
 	const str::dString &Username = Request.StringIn();
 	const str::dString &Password = Request.StringIn();
 
-	UserRow = Rack.Authentication.Login( Username, Password );
+	UserRow = Authentication.Authenticate( Username, Password );
 
 	if ( UserRow != qNIL )
 		Stuff.SetUser( UserRow );
@@ -175,15 +170,14 @@ qRE
 DEC( DefineRecord )
 {
 qRH
-	RWL;
 qRB
-	RWR;
 	STUFF;
+	DATABASE;
 
 	if ( Request.IdIn() != fbltyp::UndefinedId )
 		qRVct();
 
-	Request.IdOut() = *Rack.Database.NewRecord( Stuff.User() );
+	Request.IdOut() = *Database.NewRecord( Stuff.User() );
 qRR
 qRT
 qRE
@@ -192,18 +186,166 @@ qRE
 DEC( CreateField )
 {
 qRH
-	RWL;
 qRB
-	RWR;
 	BACKEND;
+	STUFF;
+	DATABASE;
 
 	const ogzusr::sRRow &Record = *Request.IdIn();
 	const fbltyp::sObject &Column = Request.ObjectIn();
 
-	if ( Record == qNIL )
-		REPORT( "RecordUndefined" );
+	Request.IdOut() = *Database.NewField( Stuff.User(), Record, Backend.Object<wrpcolumn::dColumn>( Column )() );
+qRR
+qRT
+qRE
+}
 
-	Request.IdOut() = *Rack.Database.NewField( Stuff.User(), Record, Backend.Object<wrpcolumn::dColumn>( Column )() );
+namespace {
+	void GetColumnFeatures_(
+		ogzfld::sRow Field,
+		const ogzdtb::mDatabase &Database,
+		ogzclm::sRow &Column,
+		ogztyp::sRow &Type,
+		ogzclm::eNumber &Number,
+		str::dString &Label,
+		str::dString &Comment )
+	{
+		Database.GetFieldColumnFeatures( Field, Column, Type, Number, Label, Comment );
+	}
+
+	void GetColumns_(
+		const ogzrcd::dFields &Fields,
+		fbltyp::dIds &Columns,
+		fbltyp::dIds &Types,
+		fbltyp::dId8s &Numbers,
+		str::dStrings &Labels,
+		str::dStrings &Comments )
+	{
+	qRH
+		ogzrcd::sFRow Row = qNIL;
+		ogzclm::sRow Column = qNIL;
+		ogztyp::sRow Type = qNIL;
+		ogzclm::eNumber Number = ogzclm::n_Undefined;
+		str::wString Label, Comment;
+	qRB
+		DATABASE;
+
+		Row = Fields.First();
+
+		while ( Row != qNIL ) {
+			Label.Init();
+			Comment.Init();
+
+			GetColumnFeatures_( Fields( Row ), Database, Column, Type, Number, Label, Comment );
+
+			if ( Columns.Search( *Column ) == qNIL ) {
+				Columns.Append( *Column );
+				Types.Append( *Type );
+				Numbers.Append( Number );
+				Labels.Append( Label );
+				Comments.Append( Comment );
+			}
+
+			Row = Fields.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+}
+
+DEC( GetRecordColumns )
+{
+qRH
+	ogzrcd::wFields Fields;
+qRB
+	STUFF;
+	DATABASE;
+
+	const ogzusr::sRRow &Record = *Request.IdIn();
+
+	Fields.Init();
+	Database.GetRawFieldRows( Stuff.User(), Record, Fields );
+
+	fbltyp::dIds &Columns = Request.IdsOut();
+	fbltyp::dIds &Types = Request.IdsOut();
+	fbltyp::dId8s &Numbers = Request.Id8sOut();
+	str::dStrings &Labels = Request.StringsOut();
+	str::dStrings &Comments = Request.StringsOut();
+
+	GetColumns_( Fields, Columns, Types, Numbers, Labels, Comments );
+qRR
+qRT
+qRE
+}
+
+namespace {
+	void GetFieldFeatures_(
+		ogzfld::sRow Field,
+		const ogzdtb::mDatabase &Database,
+		ogzclm::sRow &Column,
+		ogztyp::sRow &Type,
+		str::dStrings &Entries )
+	{
+		Type = Database.GetFieldEntries( Field, Column, Entries );
+	}
+
+	void GetColumns_(
+		const ogzrcd::dFields &Fields,
+		fbltyp::dIds &FieldIds,
+		fbltyp::dIds &Columns,
+		fbltyp::dStringsSet &EntriesSet,
+		fbltyp::dIds &Types )
+	{
+	qRH
+		ogzrcd::sFRow Row = qNIL;
+		ogzclm::sRow Column = qNIL;
+		ogztyp::sRow Type = qNIL;
+		str::wStrings Entries;
+	qRB
+		DATABASE;
+
+		Row = Fields.First();
+
+		while ( Row != qNIL ) {
+			Label.Init();
+			Comment.Init();
+
+			GetColumnFeatures_( Fields( Row ), Database, Column, Type, Number, Label, Comment );
+
+			if ( Columns.Search( *Column ) == qNIL ) {
+				Columns.Append( *Column );
+				Types.Append( *Type );
+				Numbers.Append( Number );
+				Labels.Append( Label );
+				Comments.Append( Comment );
+			}
+
+			Row = Fields.Next( Row );
+		}
+	qRR
+	qRT
+	qRE
+	}
+}
+
+DEC( GetRecordFields )
+{
+qRH
+	ogzrcd::wFields Fields;
+qRB
+	STUFF;
+	DATABASE;
+
+	const ogzusr::sRRow &Record = *Request.IdIn();
+
+	Fields.Init();
+	Database.GetRawFieldRows( Stuff.User(), Record, Fields );
+
+	fbltyp::dIds &Fields = Request.IdsOut();
+	fbltyp::dIds &Columns = Request.IdsOut();
+	fbltyp::dStringsSet &EntriesSet = Request.StringsSetOut();
+	fbltyp::dIds &Types = Request.IdsOut();
 qRR
 qRT
 qRE
@@ -247,6 +389,25 @@ void wrpunbound::Inform(
 			fblbkd::cObject,	// Id of the column object.
 		fblbkd::cEnd,
 			fblbkd::cId,	// Id of the created field.
+		fblbkd::cEnd );
+
+	Backend.Add( D( GetRecordColumns ),
+			fblbkd::cId,	// Id of the record .
+		fblbkd::cEnd,
+			fblbkd::cIds,		// Ids of the columns,
+			fblbkd::cIds,		// Types.
+			fblbkd::cId8s,		// Numbers.
+			fblbkd::cStrings,	// Labels.
+			fblbkd::cStrings,	// Comments.
+		fblbkd::cEnd );
+
+	Module.Add( D( GetRecordFields ),
+			fblbkd::cId,			// Id of the record .
+		fblbkd::cEnd,
+			fblbkd::cIds,			// Ids of the fields.
+			fblbkd::cIds,			// The column for each fields.
+			fblbkd::cStringsSet,	// The entries for each field.
+			fblbkd::cIds,			// The type of each field. More convenient to be here due to use of plugins for the types.
 		fblbkd::cEnd );
 }
 

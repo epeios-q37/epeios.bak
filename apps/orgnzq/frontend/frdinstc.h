@@ -113,22 +113,24 @@ namespace frdinstc {
 		{
 			return Column_.ID();
 		}
-		void GetColumns(
-			fbltyp::dIds &Ids,
+		void GetRecordColumns(
+			fbltyp::sId Record,
+			fbltyp::dIds &Columns,
 			fbltyp::dIds &Types,
 			fbltyp::dId8s &Numbers,
 			str::dStrings &Labels,
-			str::dStrings &Comments ) const
+			str::dStrings &Comments )
 		{
-			Record_.GetColumns( Ids, Types, Numbers, Labels, Comments );
+			S_().OGZGetRecordColumns( Record, Columns, Types, Numbers, Labels, Comments );
 		}
-		void GetFields(
-			fbltyp::dIds &Ids,
+		void GetRecordFields(
+			fbltyp::sId Record,
+			fbltyp::dIds &Fields,
 			fbltyp::dIds &Columns,
 			fbltyp::dStringsSet &EntriesSet,
 			fbltyp::dIds &Types ) const
 		{
-			Record_.GetFields( Ids, Columns, EntriesSet, Types );
+			Record_.GetFields( Fields, Columns, EntriesSet, Types );
 		}
 		const frdmisc::wXTypes &Types( void ) const
 		{

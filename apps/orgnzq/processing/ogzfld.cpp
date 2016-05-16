@@ -21,6 +21,22 @@
 
 using namespace ogzfld;
 
+ogzclm::sRow ogzfld::mFields::GetColumn( sRow FieldRow ) const
+{
+	ogzclm::sRow Column = qNIL;
+qRH
+	ogzfld::wField Field;
+qRB
+	Field.Init();
+	Recall( FieldRow, Field );
+
+	Column = Field.Column();
+qRR
+qRT
+qRE
+	return Column;
+}
+
 sRow ogzfld::mFields::New(
 	ogzclm::sRow Column,
 	sRow FieldRow ) const

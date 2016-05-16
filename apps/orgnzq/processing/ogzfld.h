@@ -28,15 +28,14 @@
 
 # include "ogzbsc.h"
 # include "ogzclm.h"
-# include "ogzdta.h"
 
 # include "bch.h"
 
 namespace ogzfld {
 	qROW( Row );
-	qROW( DRow );
+	qROWS( Row );
 
-	typedef ogzbsc::dList<ogzdta::sRow, sDRow> dData;
+	typedef ogzbsc::dList<ogzbsc::sDRow> dData;
 
 	class dField
 	: public dData
@@ -89,6 +88,7 @@ namespace ogzfld {
 	: public mFields_
 	{
 	public:
+		ogzclm::sRow GetColumn( sRow Field ) const;
 		sRow New(
 			ogzclm::sRow Column,
 			sRow Field = qNIL ) const;

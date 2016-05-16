@@ -35,8 +35,14 @@ namespace ogzbsc {
 	typedef str::dStrings dData;
 	qW( Data );
 
-	template <typename lrow, typename srow> qTCLONEd( lstbch::qLBUNCHd( lrow, srow ), dList );
-	qW2( List );
+	qROW( DRow );	// User datum row.
+	qROW( FRow );	// User field row.
+	qROW( RRow );	// User record row.
+
+	template <typename row> qTCLONEd( bch::qBUNCHdl( row ), dRows );
+
+	template <typename row> qTCLONEd( bch::qBUNCHdl( row ), dList );
+	qW1(List );
 
 	template <typename item, typename row> class cCommon
 	{

@@ -37,6 +37,7 @@ namespace ogzdta {
 	using ogzbsc::wDatum;
 
 	qROW( Row );
+	qROWS( Row );
 
 	class cData {
 	protected:

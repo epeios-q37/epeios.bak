@@ -138,18 +138,8 @@ namespace common {
 		void Init( const char *Identifier );
 	};
 
-	class rNakedRack {
-	public:
-		rDatabase Database;
-		rAuthentication Authentication;
-	};
-
-	typedef lck::rControl<rNakedRack> rRack;
-
-	typedef lck::rReadWriteAccess<common::rNakedRack> rRWLock;
-	typedef lck::rReadOnlyAccess<common::rNakedRack> rROLock;
-
-	extern rRack Rack;
+	ogzdtb::mDatabase &Database( void );
+	ogzusr::mAuthentication &Authentication( void );
 
 	void Initialize( void );
 
@@ -161,16 +151,9 @@ namespace common {
 	ogztyp::sRow GetMandatoryTextType( void  );
 }
 
-# define RWL common::rRWLock Lock
-
-# define RWR\
-	Lock.Init( common::Rack );\
-	common::rNakedRack &Rack = Lock()
-
-# define ROL common::rROLock Lock
-
-# define ROR\
-	Lock.Init( common::Rack );\
-	const common::rNakedRack &Rack = Lock()
+# define STUFF			common::rStuff &Stuff = *(common::rStuff *)UP
+# define BACKEND		common::rBackend &Backend = ((common::rStuff *)UP)->Backend()
+# define DATABASE		ogzdtb::mDatabase &Database = common::Database()
+# define AUTHENTICATION	ogzusr::mAuthentication &Authentication = common::Authentication()
 
 #endif

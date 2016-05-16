@@ -21,41 +21,21 @@
 
 using namespace ogzrcd;
 
-ogzfld::sRow ogzrcd::mRecords::GetRawFieldRow(
-	sRow RecordRow,
-	sFRow Field ) const
-{
-	ogzfld::sRow RawFieldRow = qNIL;
-qRH
-	wRecord Record;
-qRB
-	Record.Init();
-	Recall( RecordRow, Record );
-
-	RawFieldRow = Record( Field );
-qRR
-qRT
-qRE
-	return RawFieldRow;
-}
-
-sFRow ogzrcd::mRecords::AddField(
-	ogzfld::sRow RawFieldRow,
+void ogzrcd::mRecords::AddField(
+	ogzbsc::sFRow Field,
 	sRow RecordRow ) const
 {
-	sFRow FieldRow = qNIL;
 qRH
 	wRecord Record;
 qRB
 	Record.Init();
 	Recall( RecordRow, Record );
 
-	FieldRow = Record.Add( RawFieldRow );
+	Record.Add( Field );
 
 	Store( Record, RecordRow );
 qRR
 qRT
 qRE
-	return FieldRow;
 }
 

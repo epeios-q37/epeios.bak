@@ -28,11 +28,24 @@ namespace {
 	ogztyp::sRow
 		RecordType = qNIL,
 		TextType_ = qNIL;
-	rNakedRack Rack_;
+		class rRack {
+	public:
+		rDatabase Database;
+		rAuthentication Authentication;
+	} Rack_;
+
 	bso::bool__ IsInitialized_ = false;
 }
 
-rRack common::Rack;
+ogzdtb::mDatabase &common::Database( void )
+{
+	return Rack_.Database;
+}
+
+ogzusr::mAuthentication &common::Authentication( void )
+{
+	return Rack_.Authentication;
+}
 
 const ogztyp::dTypes &common::GetTypes( void )
 {
@@ -157,8 +170,6 @@ qRB
 	Rack_.Database.Init( GetTypes(), NULL );
 	Rack_.Authentication.Init( NULL );
 
-	Rack.Init( Rack_ );
-
 	IsInitialized_ = true;
 qRR
 qRT
@@ -167,5 +178,4 @@ qRE
 
 qGCTOR( common )
 {
-	Rack.Init( Rack_ );
 }

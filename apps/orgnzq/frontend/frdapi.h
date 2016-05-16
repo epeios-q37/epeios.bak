@@ -25,7 +25,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[5];
+		fblfrd::command__ _Commands[6];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -45,6 +45,7 @@ namespace orgnzq {
 				0, 22, 26, 26, 
 				21, 0, 21, 
 				21, 1, 0, 21, 
+				21, 0, 22, 22, 13, 26, 26, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -77,10 +78,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 15, 4 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "OGZGetRecordColumns";;
+			CommandDetail.Casts.Append( Parameters + 19, 7 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 5, _Commands );
+			Commands.Recall( 0, 6, _Commands );
 		}
 		fblovl::reply__ OGZLogin( 
 			const fblfrd::string_ &In1,
@@ -152,6 +158,27 @@ namespace orgnzq {
 			Frontend().EndOfInParameters();
 
 			Frontend().IdOut( Out1 );
+
+			return Frontend().Handle();
+		}
+		fblovl::reply__ OGZGetRecordColumns( 
+			const fblfrd::id__ &In1,
+			fblfrd::ids_ &Out1,
+			fblfrd::ids_ &Out2,
+			fblfrd::id8s_ &Out3,
+			fblfrd::strings_ &Out4,
+			fblfrd::strings_ &Out5 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[5] );
+			Frontend().IdIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdsOut( Out1 );
+			Frontend().IdsOut( Out2 );
+			Frontend().Id8sOut( Out3 );
+			Frontend().StringsOut( Out4 );
+			Frontend().StringsOut( Out5 );
 
 			return Frontend().Handle();
 		}

@@ -30,6 +30,7 @@
 # include "ogzdta.h"
 # include "ogztyp.h"
 # include "ogzclm.h"
+# include "ogzfld.h"
 # include "ogzrcd.h"
 # include "ogzusr.h"
 
@@ -37,21 +38,50 @@ namespace ogzdtb {
 	class mDatabase
 	{
 	private:
-		ogzrcd::sFRow NewField_(
+		ogzrcd::sRow GetRawRecordRow_(
+			ogzbsc::sRRow Record,
+			ogzusr::sRow User ) const
+		{
+			ogzrcd::sRow RawRecordRow = Users.GetRaw( Record, User );
+
+			if ( RawRecordRow == qNIL )
+				qRGnr();
+
+			return RawRecordRow;;
+		}
+		void GetRawFieldRows_(
 			ogzrcd::sRow Record,
-			const ogzclm::rColumnBuffer &Column );
-		void GetEntries_(
+			ogzusr::sRow User,
+			ogzrcd::dFields &Fields ) const
+		{
+			Users.GetRaws( Record, User, Fields );
+		}
+		void GetDatum_(
+			ogzdta::sRow Row,
+			ogztyp::sRow Type,
+			str::dString &Datum) const
+		{
+			if ( Row != qNIL )
+				Data.Recall( Row, Type, Datum );
+		}
+		void GetColumnFeatures_(
+			ogzclm::sRow Column,
+			ogztyp::sRow &Type,
+			ogzclm::eNumber &Number,
+			str::dString &Label,
+			str::dString &Comment ) const;
+		ogztyp::sRow GetEntries_(
 			const ogzfld::dField &Field,
 			ogzbsc::dData &Entries ) const;
-		void GetEntries_(
+		ogztyp::sRow GetEntries_(
 			ogzfld::sRow Field,
 			ogzbsc::dData &Entries	) const;
-		void GetEntries_(
-			ogzrcd::sRow Record,
-			ogzrcd::sFRow Field,
+		ogztyp::sRow GetEntries_(
+			ogzbsc::sFRow Field,
+			ogzusr::sRow User,
 			ogzbsc::dData &Entries	) const
 		{
-			return GetEntries_( Records.GetRawFieldRow( Record, Field ), Entries );
+			return GetEntries_( Users.GetRaw( Field, User ), Entries );
 		}
 	public:
 		ogzdta::mData Data;
@@ -82,26 +112,42 @@ namespace ogzdtb {
 			Records.Init( RCDCallback );
 			Users.Init( USRCallback );
 		}
-		ogzusr::sRRow NewRecord( ogzusr::sRow User )
+		ogzbsc::sRRow NewRecord( ogzusr::sRow User )
 		{
 			return Users.Add( Records.New(), User );
 		}
-		ogzrcd::sFRow NewField(
+		ogzbsc::sFRow NewField(
+			const ogzclm::rColumnBuffer &Column,
+			ogzbsc::sRRow Record,
+			ogzusr::sRow User );
+		void GetRawFieldRows(
+			ogzbsc::sRRow Record,
 			ogzusr::sRow User,
-			ogzusr::sRRow Record,
-			const ogzclm::rColumnBuffer &Column )
+			ogzrcd::dFields &Fields ) const
 		{
-			return NewField_( Users.GetRawRecordRow( User, Record ), Column );
+			return GetRawFieldRows_( GetRawRecordRow_( Record, User ), User, Fields );
 		}
-		void GetEntries(
-			ogzusr::sRow User,
-			ogzusr::sRRow Record,
-			ogzrcd::sFRow Field,
-			ogzbsc::dData &Data	) const
+		void GetFieldColumnFeatures(
+			ogzfld::sRow Field,
+			ogzclm::sRow &Row,
+			ogztyp::sRow &Type,
+			ogzclm::eNumber &Number,
+			str::dString &Label,
+			str::dString &Comment ) const
 		{
-			return GetEntries_( Users.GetRawRecordRow( User, Record ), Field, Data );
+			Row = Fields.GetColumn( Field );
+
+			GetColumnFeatures_( Row, Type, Number, Label, Comment );
+		}
+		ogztyp::sRow GetFieldEntries(
+			ogzbsc::sFRow Field,
+			ogzusr::sRow User,
+			ogzbsc::dData &Entries	) const
+		{
+			return GetEntries_( Field, User, Entries );
 		}
 	};
+
 # ifdef M
 #  define OGZDTB_M_	M
 #  #undef M
