@@ -117,10 +117,10 @@ namespace {
 		ogztyp::sRow TypeRow,
 		const ogztyp::sType &Type,
 		const ogzdta::mData &Data,
-		const ogzfld::dData &List,
+		const ogzdta::dRows &List,
 		dWriter &Writer )
 	{
-		ogzfld::sDRow Row = List.First();
+		sdr::sRow Row = List.First();
 
 		Writer.PushTag( T( Data ) );
 		xml::PutAttribute( A(Amount), List.Amount(), Writer );

@@ -54,3 +54,20 @@ sRow ogzclm::mColumns::New(
 	return ColumnRow;
 }
 
+ogztyp::sRow ogzclm::mColumns::GetType( sRow ColumnRow ) const
+{
+	ogztyp::sRow Type = qNIL;
+qRH
+	ogzclm::sColumn Column;
+qRB
+	Column.Init();
+	Recall( ColumnRow, Column );
+
+	Type = Column.GetType();
+qRR
+qRT
+qRE
+	return Type;
+}
+
+

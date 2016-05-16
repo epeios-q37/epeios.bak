@@ -69,24 +69,24 @@ qRE
 
 namespace {
 	void GetEntries_(
-		const ogzfld::dField &Field,
+		const ogzdta::dRows &EntryRows,
 		ogztyp::sRow Type,
 		const ogzdta::mData &Data,
 		ogzbsc::dData &Entries )
 	{
 	qRH
-		ogzfld::sDRow Row = qNIL;
+		sdr::sRow Row = qNIL;
 		ogzbsc::wDatum Entry;
 	qRB
-		Row = Field.First();
+		Row = EntryRows.First();
 
 		while ( Row != qNIL ) {
 			Entry.Init();
-			Data.Recall( Field( Row ), Type, Entry );
+			Data.Recall( EntryRows( Row ), Type, Entry );
 
 			Entries.Append( Entry );
 
-			Row = Field.Next( Row );
+			Row = EntryRows.Next( Row );
 		}
 	qRR
 	qRT
@@ -96,18 +96,19 @@ namespace {
 
 ogztyp::sRow ogzdtb::mDatabase::GetEntries_(
 	const ogzfld::dField &Field,
+	ogzusr::sRow User,
 	ogzbsc::dData &Entries ) const
 {
 	ogztyp::sRow Type = qNIL;
 qRH
-	ogzclm::sColumn Column;
+	ogzdta::wRows EntryRows;
 qRB
-	Column.Init();
-	Columns.Recall( Field.Column(), Column );
+	Type = Columns.GetType( Field.GetColumn() );
 
-	Type = Column.GetType();
+	EntryRows.Init();
+	Users.GetRaws( Field, User, EntryRows );
 
-	::GetEntries_( Field, Type, Data, Entries );
+	::GetEntries_( EntryRows, Type, Data, Entries );
 qRR
 qRT
 qRE
@@ -116,6 +117,7 @@ qRE
 
 ogztyp::sRow ogzdtb::mDatabase::GetEntries_(
 	ogzfld::sRow FieldRow,
+	ogzusr::sRow User,
 	ogzbsc::dData &Entries	) const
 {
 	ogztyp::sRow Type = qNIL;
@@ -125,7 +127,7 @@ qRB
 	Field.Init();
 	Fields.Recall( FieldRow, Field );
 
-	Type = GetEntries_( Field, Entries );
+	Type = GetEntries_( Field, User, Entries );
 qRR
 qRT
 qRE
