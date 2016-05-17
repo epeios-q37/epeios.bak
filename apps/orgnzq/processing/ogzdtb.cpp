@@ -67,6 +67,147 @@ qRT
 qRE
 }
 
+void ogzdtb::mDatabase::GetColumnFeatures_(
+	const ogzfld::dRows &RawFields,
+	cColumnFeatures &Callback ) const
+{
+qRH
+	sdr::sRow Row = qNIL;
+	ogzfld::wField Field;
+	ogzclm::sRow Column = qNIL;
+	ogztyp::sRow Type = qNIL;
+	ogzclm::eNumber Number = ogzclm::n_Undefined;
+	str::wString Label, Comment;
+qRB
+	Row = RawFields.First();
+
+	while ( Row != qNIL ) {
+		Field.Init();
+		Fields.Recall( RawFields( Row ), Field );
+
+		Column = Field.Column();
+
+		Label.Init();
+		Comment.Init();
+
+		GetColumnFeatures_( Column, Type, Number, Label, Comment );
+
+		Callback.ColumnFeatures( Column, Type, Number, Label, Comment );
+
+		Row = RawFields.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
+void ogzdtb::mDatabase::GetColumnFeatures_(
+	const ogzrcd::dFields &Fields,
+	ogzusr::sRow User,
+	cColumnFeatures &Callback ) const
+{
+qRH
+	ogzfld::wField Field;
+	ogzfld::wRows Raws;
+qRB
+	Raws.Init();
+	Users.GetRaws( Fields, User, Raws );
+
+	GetColumnFeatures_( Raws, Callback );
+qRR
+qRT
+qRE
+}
+
+void ogzdtb::mDatabase::GetColumnFeatures(
+	ogzbsc::sRRow RecordRow,
+	ogzusr::sRow User,
+	cColumnFeatures &Callback ) const
+{
+qRH
+	ogzrcd::wRecord Record;
+qRB
+	Record.Init();
+	Records.Recall( Users.GetRaw( RecordRow, User ), Record );
+
+	GetColumnFeatures_( Record, User, Callback );
+qRR
+qRT
+qRE
+}
+
+void ogzdtb::mDatabase::GetEntries_(
+	const ogzrcd::dFields &RegularFields,
+	const ogzfld::dRows &RawFields,
+	ogzusr::sRow User,
+	cFieldEntries &Callback ) const
+{
+qRH
+	sdr::sRow Row = qNIL;
+	ogzfld::wField Field;
+	ogzclm::sRow Column = qNIL;
+	ogztyp::sRow Type = qNIL;
+	str::wStrings Entries;
+qRB
+	Row = RawFields.First();
+
+	while ( Row != qNIL ) {
+		Field.Init();
+		Fields.Recall( RawFields( Row ), Field );
+
+		Column = Field.Column();
+
+		Type = Columns.GetType( Column );
+
+		Entries.Init();
+		GetEntries_( RawFields( Row ), User, Entries );
+
+		Callback.FieldEntries(RegularFields( Row ), Column, Type, Entries );
+
+		Row = RawFields.Next( Row );
+	}
+qRR
+qRT
+qRE
+}
+
+
+void ogzdtb::mDatabase::GetEntries_(
+	const ogzrcd::dFields &Fields,
+	ogzusr::sRow User,
+	cFieldEntries &Callback ) const
+{
+qRH
+	ogzfld::wField Field;
+	ogzfld::wRows Raws;
+qRB
+	Raws.Init();
+	Users.GetRaws( Fields, User, Raws );
+
+	GetEntries_( Fields, Raws, User, Callback );
+qRR
+qRT
+qRE
+}
+
+void ogzdtb::mDatabase::GetEntries(
+	ogzbsc::sRRow RecordRow,
+	ogzusr::sRow User,
+	cFieldEntries &Callback	) const
+
+{
+qRH
+	ogzrcd::wRecord Record;
+qRB
+	Record.Init();
+	Records.Recall( Users.GetRaw( RecordRow, User ), Record );
+
+	GetEntries_( Record, User, Callback );
+qRR
+qRT
+qRE
+}
+
 namespace {
 	void GetEntries_(
 		const ogzdta::dRows &EntryRows,

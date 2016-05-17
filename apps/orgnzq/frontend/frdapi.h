@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160512 Build May 12 2016 16:26:40 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160512 Build May 16 2016 07:56:02 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build May  1 2016 10:29:26 Win32;MSC 1800;IA-32)
 */
@@ -25,7 +25,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[6];
+		fblfrd::command__ _Commands[7];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -46,6 +46,7 @@ namespace orgnzq {
 				21, 0, 21, 
 				21, 1, 0, 21, 
 				21, 0, 22, 22, 13, 26, 26, 
+				21, 0, 22, 22, 22, 27, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -83,10 +84,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 19, 7 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "OGZGetRecordFields";;
+			CommandDetail.Casts.Append( Parameters + 26, 6 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 6, _Commands );
+			Commands.Recall( 0, 7, _Commands );
 		}
 		fblovl::reply__ OGZLogin( 
 			const fblfrd::string_ &In1,
@@ -179,6 +185,25 @@ namespace orgnzq {
 			Frontend().Id8sOut( Out3 );
 			Frontend().StringsOut( Out4 );
 			Frontend().StringsOut( Out5 );
+
+			return Frontend().Handle();
+		}
+		fblovl::reply__ OGZGetRecordFields( 
+			const fblfrd::id__ &In1,
+			fblfrd::ids_ &Out1,
+			fblfrd::ids_ &Out2,
+			fblfrd::ids_ &Out3,
+			fblfrd::xstrings_ &Out4 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[6] );
+			Frontend().IdIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdsOut( Out1 );
+			Frontend().IdsOut( Out2 );
+			Frontend().IdsOut( Out3 );
+			Frontend().XStringsOut( Out4 );
 
 			return Frontend().Handle();
 		}
@@ -280,7 +305,7 @@ namespace orgnzq {
 
 			fblfrd::id8__ Parameters[] = {
 				0, 
-				21, 21, 0, 
+				21, 0, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -296,7 +321,7 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Define";;
-			CommandDetail.Casts.Append( Parameters + 1, 3 );
+			CommandDetail.Casts.Append( Parameters + 1, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -503,12 +528,10 @@ namespace orgnzq {
 			return Common_->Frontend().Handle();
 		}
 		fblovl::reply__ Define( 
-			const fblfrd::id__ &In1,
-			const fblfrd::id__ &In2 ) const
+			const fblfrd::id__ &In1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 			Common_->Frontend().IdIn( In1 );
-			Common_->Frontend().IdIn( In2 );
 
 			Common_->Frontend().EndOfInParameters();
 

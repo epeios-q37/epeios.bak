@@ -32,7 +32,7 @@ namespace frdinstc {
 	{
 	private:
 		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
-		orgnzq::fStatics &S_( void )
+		orgnzq::fStatics &S_( void ) const
 		{
 			return F_().Statics;
 		}
@@ -87,11 +87,9 @@ namespace frdinstc {
 
 			return Id;
 		}
-		void DefineField(
-			sRecord Record,
-			sField Field )
+		void DefineField( sField Field )
 		{
-			Field_.Define( *Record, *Field );
+			Field_.Define( *Field );
 		}
 		void UpdateColumn(
 			sType Type,
@@ -114,23 +112,23 @@ namespace frdinstc {
 			return Column_.ID();
 		}
 		void GetRecordColumns(
-			fbltyp::sId Record,
+			sRecord Record,
 			fbltyp::dIds &Columns,
 			fbltyp::dIds &Types,
 			fbltyp::dId8s &Numbers,
 			str::dStrings &Labels,
-			str::dStrings &Comments )
+			str::dStrings &Comments ) const
 		{
-			S_().OGZGetRecordColumns( Record, Columns, Types, Numbers, Labels, Comments );
+			S_().OGZGetRecordColumns( *Record, Columns, Types, Numbers, Labels, Comments );
 		}
 		void GetRecordFields(
-			fbltyp::sId Record,
+			sRecord Record,
 			fbltyp::dIds &Fields,
 			fbltyp::dIds &Columns,
 			fbltyp::dStringsSet &EntriesSet,
 			fbltyp::dIds &Types ) const
 		{
-			Record_.GetFields( Fields, Columns, EntriesSet, Types );
+			S_().OGZGetRecordFields( *Record, Fields, Columns, Types, EntriesSet );
 		}
 		const frdmisc::wXTypes &Types( void ) const
 		{
@@ -206,20 +204,24 @@ namespace frdinstc {
 			Core_.GetColumn( Type, Number, Label, Comment );
 		}
 		void CreateField(
+			sRecord Record,
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
 			Core_.UpdateColumn( Type, Number, Label, Comment );
-			Field_ = Core_.CreateField(Core_.GetColumnObjectId() );
-			Core_.
+			Field_ = Core_.CreateField( Record, Core_.GetColumnObjectId() );
 			View_ = vRecord;
 		}
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
-		void DumpRecordColumns( xml::dWriter &Writer ) const;
-		void DumpRecordFields( xml::dWriter &Writer ) const;
+		void DumpRecordColumns(
+			sRecord Record,
+			xml::dWriter &Writer ) const;
+		void DumpRecordFields(
+			sRecord Record,
+			xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eView, View );
 	};
 }

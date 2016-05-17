@@ -35,6 +35,49 @@
 # include "ogzusr.h"
 
 namespace ogzdtb {
+
+	class cColumnFeatures
+	{
+	protected:
+		virtual void OGZDTBColumnFeatures(
+			ogzclm::sRow Column,
+			ogztyp::sRow Type,
+			ogzclm::eNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment ) = 0;
+	public:
+		qCALLBACK( ColumnFeatures );
+		void ColumnFeatures(
+			ogzclm::sRow Column,
+			ogztyp::sRow Type,
+			ogzclm::eNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment )
+		{
+			return OGZDTBColumnFeatures( Column, Type, Number, Label, Comment );
+		}
+	};
+
+	class cFieldEntries
+	{
+	protected:
+		virtual void OGZDTBFieldEntries(
+			ogzbsc::sFRow Field,
+			ogzclm::sRow Column,
+			ogztyp::sRow Type,
+			const str::dStrings &Entries ) = 0;
+	public:
+		qCALLBACK( FieldEntries );
+		void FieldEntries(
+			ogzbsc::sFRow Field,
+			ogzclm::sRow Column,
+			ogztyp::sRow Type,
+			const str::dStrings &Entries )
+		{
+			return OGZDTBFieldEntries( Field, Column, Type, Entries );
+		}
+	};
+
 	class mDatabase
 	{
 	private:
@@ -63,6 +106,13 @@ namespace ogzdtb {
 			ogzclm::eNumber &Number,
 			str::dString &Label,
 			str::dString &Comment ) const;
+		void GetColumnFeatures_(
+			const ogzfld::dRows &Fields,
+			cColumnFeatures &Callback ) const;
+		void GetColumnFeatures_(
+			const ogzrcd::dFields &Fields,
+			ogzusr::sRow User,
+			cColumnFeatures &Callback ) const;
 		ogztyp::sRow GetEntries_(
 			const ogzfld::dField &Field,
 			ogzusr::sRow User,
@@ -71,13 +121,15 @@ namespace ogzdtb {
 			ogzfld::sRow Field,
 			ogzusr::sRow User,
 			ogzbsc::dData &Entries	) const;
-		ogztyp::sRow GetEntries_(
-			ogzbsc::sFRow Field,
+		void GetEntries_(
+			const ogzrcd::dFields &RegularFields,
+			const ogzfld::dRows &RawFields,
 			ogzusr::sRow User,
-			ogzbsc::dData &Entries	) const
-		{
-			return GetEntries_( Users.GetRaw( Field, User ), User, Entries );
-		}
+			cFieldEntries &Callback ) const;
+		void GetEntries_(
+			const ogzrcd::dFields &Fields,
+			ogzusr::sRow User,
+			cFieldEntries &Callback ) const;
 	public:
 		ogzdta::mData Data;
 		ogzclm::mColumns Columns;
@@ -115,25 +167,21 @@ namespace ogzdtb {
 			const ogzclm::rColumnBuffer &Column,
 			ogzbsc::sRRow Record,
 			ogzusr::sRow User );
-		void GetFieldColumnFeatures(
-			ogzfld::sRow Field,
-			ogzclm::sRow &Row,
-			ogztyp::sRow &Type,
-			ogzclm::eNumber &Number,
-			str::dString &Label,
-			str::dString &Comment ) const
-		{
-			Row = Fields.GetColumn( Field );
-
-			GetColumnFeatures_( Row, Type, Number, Label, Comment );
-		}
-		ogztyp::sRow GetFieldEntries(
+		void GetColumnFeatures(
+			ogzbsc::sRRow Record,
+			ogzusr::sRow User,
+			cColumnFeatures &Callback ) const;
+		ogztyp::sRow GetEntries(
 			ogzbsc::sFRow Field,
 			ogzusr::sRow User,
 			ogzbsc::dData &Entries	) const
 		{
-			return GetEntries_( Field, User, Entries );
+			return GetEntries_( Users.GetRaw( Field, User ), User, Entries );
 		}
+		void GetEntries(
+			ogzbsc::sRRow Record,
+			ogzusr::sRow User,
+			cFieldEntries &Callback	) const;
 	};
 
 # ifdef M

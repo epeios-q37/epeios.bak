@@ -191,161 +191,122 @@ qRB
 	STUFF;
 	DATABASE;
 
-	const ogzusr::sRRow &Record = *Request.IdIn();
+	const ogzbsc::sRRow &Record = *Request.IdIn();
 	const fbltyp::sObject &Column = Request.ObjectIn();
 
-	Request.IdOut() = *Database.NewField( Stuff.User(), Record, Backend.Object<wrpcolumn::dColumn>( Column )() );
+	Request.IdOut() = *Database.NewField( Backend.Object<wrpcolumn::dColumn>( Column )(), Record, Stuff.User() );
 qRR
 qRT
 qRE
 }
 
 namespace {
-	void GetColumnFeatures_(
-		ogzfld::sRow Field,
-		const ogzdtb::mDatabase &Database,
-		ogzclm::sRow &Column,
-		ogztyp::sRow &Type,
-		ogzclm::eNumber &Number,
-		str::dString &Label,
-		str::dString &Comment )
+	class sColumnFeaturesCallback
+	: public ogzdtb::cColumnFeatures
 	{
-		Database.GetFieldColumnFeatures( Field, Column, Type, Number, Label, Comment );
-	}
+	private:
+		fbltyp::dIds
+			&Columns_,
+			&Types_;
+		fbltyp::dId8s &Numbers_;
+		str::dStrings
+			&Labels_,
+			&Comments_;
+	protected:
+		virtual void OGZDTBColumnFeatures(
+			ogzclm::sRow Column,
+			ogztyp::sRow Type,
+			ogzclm::eNumber Number,
+			const str::dString &Label,
+			const str::dString &Comment ) override
+		{
+			Columns_.Append( *Column );
+			Types_.Append( *Type );
+			Numbers_.Append( Number );
+			Labels_.Append( Label );
+			Comments_.Append( Comment );
+		}
+	public:
+		sColumnFeaturesCallback( fblbrq::rRequest &Request )
+		: Columns_( Request.IdsOut() ),
+		  Types_( Request.IdsOut() ),
+		  Numbers_( Request.Id8sOut() ),
+		  Labels_( Request.StringsOut() ),
+		  Comments_( Request.StringsOut() )
+		{}
+	};
 
 	void GetColumns_(
-		const ogzrcd::dFields &Fields,
-		fbltyp::dIds &Columns,
-		fbltyp::dIds &Types,
-		fbltyp::dId8s &Numbers,
-		str::dStrings &Labels,
-		str::dStrings &Comments )
+		ogzbsc::sRRow Record,
+		ogzusr::sRow User,
+		const ogzdtb::mDatabase &Database,
+		fblbrq::rRequest &Request )
 	{
-	qRH
-		ogzrcd::sFRow Row = qNIL;
-		ogzclm::sRow Column = qNIL;
-		ogztyp::sRow Type = qNIL;
-		ogzclm::eNumber Number = ogzclm::n_Undefined;
-		str::wString Label, Comment;
-	qRB
-		DATABASE;
+		sColumnFeaturesCallback Callback( Request );
 
-		Row = Fields.First();
-
-		while ( Row != qNIL ) {
-			Label.Init();
-			Comment.Init();
-
-			GetColumnFeatures_( Fields( Row ), Database, Column, Type, Number, Label, Comment );
-
-			if ( Columns.Search( *Column ) == qNIL ) {
-				Columns.Append( *Column );
-				Types.Append( *Type );
-				Numbers.Append( Number );
-				Labels.Append( Label );
-				Comments.Append( Comment );
-			}
-
-			Row = Fields.Next( Row );
-		}
-	qRR
-	qRT
-	qRE
+		Database.GetColumnFeatures( Record, User, Callback );
 	}
 }
 
 DEC( GetRecordColumns )
 {
 qRH
-	ogzrcd::wFields Fields;
 qRB
 	STUFF;
 	DATABASE;
 
-	const ogzusr::sRRow &Record = *Request.IdIn();
+	const ogzbsc::sRRow &Record = *Request.IdIn();
 
-	Fields.Init();
-	Database.GetRawFieldRows( Stuff.User(), Record, Fields );
-
-	fbltyp::dIds &Columns = Request.IdsOut();
-	fbltyp::dIds &Types = Request.IdsOut();
-	fbltyp::dId8s &Numbers = Request.Id8sOut();
-	str::dStrings &Labels = Request.StringsOut();
-	str::dStrings &Comments = Request.StringsOut();
-
-	GetColumns_( Fields, Columns, Types, Numbers, Labels, Comments );
+	GetColumns_( Record, Stuff.User(), Database, Request );
 qRR
 qRT
 qRE
 }
 
 namespace {
-	void GetFieldFeatures_(
-		ogzfld::sRow Field,
-		const ogzdtb::mDatabase &Database,
-		ogzclm::sRow &Column,
-		ogztyp::sRow &Type,
-		str::dStrings &Entries )
+	class sFieldEntriesCallback
+	: public ogzdtb::cFieldEntries
 	{
-		Type = Database.GetFieldEntries( Field, Column, Entries );
-	}
+	private:
+		fbltyp::dIds
+			&Fields_,
+			&Columns_,
+			&Types_;
+		fbltyp::dStringsSet &EntriesSet_;
+	protected:
+		virtual void OGZDTBFieldEntries(
+			ogzbsc::sFRow Field,
+			ogzclm::sRow Column,
+			ogztyp::sRow Type,
+			const str::dStrings &Entries ) override
+		{
+			Fields_.Append( *Field );
+			Columns_.Append( *Column );
+			Types_.Append( *Type );
+			EntriesSet_.Append( Entries );
 
-	void GetColumns_(
-		const ogzrcd::dFields &Fields,
-		fbltyp::dIds &FieldIds,
-		fbltyp::dIds &Columns,
-		fbltyp::dStringsSet &EntriesSet,
-		fbltyp::dIds &Types )
-	{
-	qRH
-		ogzrcd::sFRow Row = qNIL;
-		ogzclm::sRow Column = qNIL;
-		ogztyp::sRow Type = qNIL;
-		str::wStrings Entries;
-	qRB
-		DATABASE;
-
-		Row = Fields.First();
-
-		while ( Row != qNIL ) {
-			Label.Init();
-			Comment.Init();
-
-			GetColumnFeatures_( Fields( Row ), Database, Column, Type, Number, Label, Comment );
-
-			if ( Columns.Search( *Column ) == qNIL ) {
-				Columns.Append( *Column );
-				Types.Append( *Type );
-				Numbers.Append( Number );
-				Labels.Append( Label );
-				Comments.Append( Comment );
-			}
-
-			Row = Fields.Next( Row );
 		}
-	qRR
-	qRT
-	qRE
-	}
+	public:
+		sFieldEntriesCallback( fblbrq::rRequest &Request )
+		: Fields_( Request.IdsOut() ),
+	      Columns_( Request.IdsOut() ),
+		  Types_( Request.IdsOut() ),
+		  EntriesSet_( Request.StringsSetOut() )
+		{}
+	};
 }
 
 DEC( GetRecordFields )
 {
 qRH
-	ogzrcd::wFields Fields;
+	sFieldEntriesCallback Callback( Request );
 qRB
 	STUFF;
 	DATABASE;
 
-	const ogzusr::sRRow &Record = *Request.IdIn();
+	const ogzbsc::sRRow &Record = *Request.IdIn();
 
-	Fields.Init();
-	Database.GetRawFieldRows( Stuff.User(), Record, Fields );
-
-	fbltyp::dIds &Fields = Request.IdsOut();
-	fbltyp::dIds &Columns = Request.IdsOut();
-	fbltyp::dStringsSet &EntriesSet = Request.StringsSetOut();
-	fbltyp::dIds &Types = Request.IdsOut();
+	Database.GetEntries(Record, Stuff.User(), Callback );
 qRR
 qRT
 qRE
@@ -401,13 +362,13 @@ void wrpunbound::Inform(
 			fblbkd::cStrings,	// Comments.
 		fblbkd::cEnd );
 
-	Module.Add( D( GetRecordFields ),
+	Backend.Add( D( GetRecordFields ),
 			fblbkd::cId,			// Id of the record .
 		fblbkd::cEnd,
 			fblbkd::cIds,			// Ids of the fields.
 			fblbkd::cIds,			// The column for each fields.
-			fblbkd::cStringsSet,	// The entries for each field.
 			fblbkd::cIds,			// The type of each field. More convenient to be here due to use of plugins for the types.
+			fblbkd::cStringsSet,	// The entries for each field.
 		fblbkd::cEnd );
 }
 

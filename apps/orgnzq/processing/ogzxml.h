@@ -62,12 +62,6 @@ namespace ogzxml {
 	const char *GetLabel(
 		eRecordAttribute Attribute,
 		sVersion Version = RecordLastVersion );
-
-	void Dump(
-		const ogzrcd::sRow Record,
-		const ogztyp::dTypes &Types,
-		const ogzdtb::mDatabase &Database,
-		xml::dWriter &Writer );
 }
 
 #endif
