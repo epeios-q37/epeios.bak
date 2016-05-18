@@ -26,18 +26,18 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio ctn 
-mods += dir dte dtfbsc dtfptb epsmsc 
-mods += err fdr flf flsq flw 
-mods += flx ias idsq iof iop 
-mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stkbse stkbch 
-mods += stkctn str strng tagsbs tol 
-mods += txf tys uys utf xtf 
-mods += llio bomhdl cdgb64 dlbrry fil 
-mods += fnm lcl plgn plgncore rgstry 
-mods += stsfsm xml xpp mtk tht 
-mods += strmrg 
+mods += cio cpe crptgr cslio crt 
+mods += ctn dir dte dtfbsc dtfptb 
+mods += epsmsc err fdr flf flsq 
+mods += flw flx ias idsq iof 
+mods += iop lst lstbch lstcrt lstctn 
+mods += mns mtx ntvstr que sdr 
+mods += stkbse stkbch stkctn str strng 
+mods += tagsbs tol txf tys uys 
+mods += utf xtf llio bomhdl cdgb64 
+mods += dlbrry fil fnm lcl plgn 
+mods += plgncore rgstry stsfsm xml xpp 
+mods += mtk tht strmrg 
 mods += csdlec csdleo csdrcc csdrcu csdscb 
 mods += csducl 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
@@ -343,7 +343,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160506"\"
+copt += -DVERSION=\""20160518"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
