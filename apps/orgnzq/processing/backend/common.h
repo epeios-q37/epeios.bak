@@ -85,7 +85,7 @@ namespace common {
 		{
 			Core_.reset( P );
 			Retrievers_.reset( P );
-			MandatoryRecordType_, MandatoryTextType_ = qNIL;
+			MandatoryRecordType_ = MandatoryTextType_ = qNIL;
 		}
 		qCDTOR( rTypes );
 		void Init( const char *Identifier );
