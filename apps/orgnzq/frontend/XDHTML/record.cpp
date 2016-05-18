@@ -103,6 +103,9 @@ qRB
 	case frdinstc::vColumn:
 		column::SetLayout( ColumnFrameId_, Session );
 		break;
+	default:
+		qRGnr();
+		break;
 	}
 qRR
 qRT
