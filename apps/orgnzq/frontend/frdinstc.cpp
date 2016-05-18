@@ -109,9 +109,7 @@ namespace {
 	}
 }
 
-void frdinstc::rUser::DumpRecordColumns(
-	sRecord Record,
-	xml::dWriter &Writer ) const
+void frdinstc::rUser::DumpCurrentRecordColumns( xml::dWriter &Writer ) const
 {
 qRH
 	fbltyp::wIds Columns;
@@ -120,13 +118,15 @@ qRH
 	str::wStrings Labels;
 	str::wStrings Comments;
 qRB
+	if ( Record_ == UndefinedRecord )
+		qRGnr();
+
 	Columns.Init();
 	Types.Init();
 	Numbers.Init();
 	Labels.Init();
 	Comments.Init();
-
-	Core_.GetRecordColumns( Record, Columns, Types, Numbers, Labels, Comments );
+	Core_.GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
 
 	Dump_( Columns, Types, Numbers, Labels, Comments, Writer );
 qRR
@@ -201,19 +201,20 @@ namespace {
 	}
 }
 
-void frdinstc::rUser::DumpRecordFields(
-	sRecord Record,
-	xml::dWriter &Writer ) const
+void frdinstc::rUser::DumpCurrentRecordFields( xml::dWriter &Writer ) const
 {
 qRH
 	fbltyp::wIds Fields, Columns, Types;
 	fbltyp::wStringsSet EntriesSet;
 qRB
+	if ( Record_ == UndefinedRecord )
+		qRGnr();
+
 	Fields.Init();
 	Columns.Init();
 	EntriesSet.Init();
 	Types.Init();
-	Core_.GetRecordFields( Record, Fields, Columns, EntriesSet, Types );
+	Core_.GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
 
 	Dump_( Fields, Columns, EntriesSet, Types, Core_.Types(), Writer );
 qRR

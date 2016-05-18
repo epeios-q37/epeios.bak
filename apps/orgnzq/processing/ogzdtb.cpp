@@ -42,7 +42,11 @@ ogzbsc::sFRow ogzdtb::mDatabase::NewField(
 	ogzbsc::sRRow Record,
 	ogzusr::sRow User )
 {
-	return Users.Add( Fields.New( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), Data ), Create_( Column.Comment(), Data ) ) ), Record, User );
+	ogzbsc::sFRow Field = Users.Add( Fields.New( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), Data ), Create_( Column.Comment(), Data ) ) ), User );
+
+	Records.AddField( Field, GetRawRecordRow_( Record, User ) );
+
+	return Field;
 }
 
 void ogzdtb::mDatabase::GetColumnFeatures_(

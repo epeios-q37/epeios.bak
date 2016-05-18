@@ -294,19 +294,29 @@ namespace {
 		  EntriesSet_( Request.StringsSetOut() )
 		{}
 	};
+
+	void GetRecordFields_(
+		const ogzdtb::mDatabase &Database,
+		ogzbsc::sRRow Record,
+		ogzusr::sRow User,
+		fblbrq::rRequest &Request )
+	{
+		sFieldEntriesCallback Callback( Request );
+
+		Database.GetEntries( Record, User, Callback );
+	}
 }
+
+
 
 DEC( GetRecordFields )
 {
 qRH
-	sFieldEntriesCallback Callback( Request );
 qRB
 	STUFF;
 	DATABASE;
 
-	const ogzbsc::sRRow &Record = *Request.IdIn();
-
-	Database.GetEntries(Record, Stuff.User(), Callback );
+	GetRecordFields_( Database, *Request.IdIn(), Stuff.User(), Request );
 qRR
 qRT
 qRE

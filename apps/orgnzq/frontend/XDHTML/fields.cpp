@@ -68,8 +68,8 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpRecordColumns( Rack );
-		Session.User.DumpRecordFields( Rack );
+		Session.User.DumpCurrentRecordColumns( Rack );
+		Session.User.DumpCurrentRecordFields( Rack );
 	qRR
 	qRT
 	qRE

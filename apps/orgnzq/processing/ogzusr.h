@@ -30,7 +30,7 @@
 # include "ogzfld.h"
 # include "ogzrcd.h"
 
-# include "lstctn.h"
+# include "lstcrt.h"
 
 namespace ogzusr {
 	typedef bso::sUInt sIndice;	// Begins at '0'.
@@ -55,44 +55,34 @@ namespace ogzusr {
 		virtual void OGZUSRDelete( sRow User ) = 0;
 		virtual ogzbsc::sDRow OGZUSRAdd(
 			ogzdta::sRow Entry,
-			ogzbsc::sFRow Field,
 			sRow User ) = 0;
 		virtual void OGZUSRRemove(
 			ogzbsc::sDRow Entry,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
+			const ogzfld::dData &Entries,
+			sRow User,
+			ogzdta::dRows &RawEntries ) = 0;
+		virtual ogzbsc::sFRow OGZUSRAdd(
+			ogzfld::sRow Field,
+			sRow User ) = 0;
+		virtual void OGZUSRRemove(
+			ogzbsc::sFRow Field,
+			sRow User ) = 0;
+		virtual void OGZUSRGetRaws(
 			const ogzrcd::dFields &Fields,
 			sRow User,
 			ogzfld::dRows &RawFields ) = 0;
-		virtual ogzbsc::sFRow OGZUSRAdd(
-			ogzfld::sRow Field,
-			ogzbsc::sRRow Record,
+		virtual ogzbsc::sRRow OGZUSRAdd(
+			ogzrcd::sRow Record,
 			sRow User ) = 0;
 		virtual void OGZUSRRemove(
-			ogzbsc::sFRow Entry,
+			ogzbsc::sRRow Record,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
 			const dRecords &Records,
 			sRow User,
 			ogzrcd::dRows &RawRecords ) = 0;
-		virtual ogzbsc::sRRow OGZUSRAdd(
-			ogzrcd::sRow Record,
-			sRow User ) = 0;
-		// Dummy method which simplifies the use of template methods.
-		ogzbsc::sRRow OGZUSRAdd(
-			ogzrcd::sRow Record,
-			sdr::sRow,	// Dummy argument.
-			sRow User )
-		{
-			return OGZUSRAdd( Record, User );
-		}
-		virtual void OGZUSRRemove(
-			ogzbsc::sRRow Record,
-			sRow User ) = 0;
-		virtual void OGZUSRGetRaws(
-			const ogzfld::dData &Data,
-			sRow User,
-			ogzdta::dRows &RawData ) = 0;
 		virtual sAmount OGZUSRGetRecordsSet(
 			sRow User,
 			sIndice Indice,
@@ -112,12 +102,11 @@ namespace ogzusr {
 		{
 			return OGZUSRDelete( Row );
 		}
-		template <typename regular, typename raw, typename owner> regular Add(
+		template <typename regular, typename raw> regular Add(
 			raw Raw,
-			owner Owner,
 			sRow User )
 		{
-			return OGZUSRAdd( Raw, Owner, User );
+			return OGZUSRAdd( Raw, User );
 		}
 		template <typename regular> void Remove(
 			regular Regular,
@@ -172,16 +161,15 @@ namespace ogzusr {
 			Unlock_();
 		qRE
 		}
-		template <typename regular, typename raw, typename owner> regular Add_(
+		template <typename regular, typename raw> regular Add_(
 			raw Raw,
-			owner Owner,
 			sRow User ) const
 		{
 			regular Row = qNIL;
 		qRH
 		qRB
 			Lock_();
-			Row = C_().Add<regular,raw,owner>( Raw, Owner, User );
+			Row = C_().Add<regular,raw>( Raw, User );
 		qRR
 		qRT
 			Unlock_();
@@ -264,6 +252,7 @@ namespace ogzusr {
 		{
 			Callback_ = &Callback;
 			rLock_::Init();
+			New();
 		}
 		void Wipe( void ) const
 		{
@@ -278,7 +267,7 @@ namespace ogzusr {
 			return Delete_( Row );
 		}
 		template <typename regular> void Remove(
-			regular Record,
+			regular Regular,
 			sRow User ) const
 		{
 			return Remove_( Regular, User );
@@ -293,10 +282,9 @@ namespace ogzusr {
 		// No template members below, because some template can not be deduced.
 		ogzbsc::sDRow Add(
 			ogzdta::sRow Datum,
-			ogzbsc::sFRow Field,
 			sRow User ) const
 		{
-			return Add_<ogzbsc::sDRow,ogzdta::sRow,ogzbsc::sFRow>( Datum, Field, User );
+			return Add_<ogzbsc::sDRow,ogzdta::sRow>( Datum, User );
 		}
 		ogzdta::sRow GetRaw(
 			ogzbsc::sDRow Datum,
@@ -306,10 +294,9 @@ namespace ogzusr {
 		}
 		ogzbsc::sFRow Add(
 			ogzfld::sRow Field,
-			ogzbsc::sRRow Record,
 			sRow User ) const
 		{
-			return Add_<ogzbsc::sFRow,ogzfld::sRow,ogzbsc::sRRow>( Field, Record, User );
+			return Add_<ogzbsc::sFRow,ogzfld::sRow>( Field, User );
 		}
 		ogzfld::sRow GetRaw(
 			ogzbsc::sFRow Field,
@@ -321,7 +308,7 @@ namespace ogzusr {
 			ogzrcd::sRow Record,
 			sRow User ) const
 		{
-			return Add_<ogzbsc::sRRow,ogzrcd::sRow,sdr::sRow>( Record, qNIL, User );
+			return Add_<ogzbsc::sRRow,ogzrcd::sRow>( Record, User );
 		}
 		ogzrcd::sRow GetRaw(
 			ogzbsc::sRRow Record,
@@ -339,13 +326,58 @@ namespace ogzusr {
 		}
 	};
 
+	typedef lstbch::qBUNCHd( ogzdta::sRow, ogzbsc::sDRow ) dEntries_;
+	typedef lstbch::qBUNCHd( ogzfld::sRow, ogzbsc::sFRow ) dFields_;
 	typedef lstbch::qBUNCHd( ogzrcd::sRow, ogzbsc::sRRow ) dRecords_;
+
+	typedef lstcrt::qLMCRATEd( dEntries_, sRow ) dEntriesCrate_;
+	qW( EntriesCrate_ );
+
+	typedef lstcrt::qLMCRATEd( dFields_, sRow ) dFieldsCrate_;
+	qW( FieldsCrate_ );
+
+	typedef lstcrt::qLMCRATEd( dRecords_, sRow ) dRecordsCrate_;
+	qW( RecordsCrate_ );
+
 
 	class rRegularCallback
 	: public cUser
 	{
 	private:
-		lstctn::qLCONTAINERw( dRecords_, sRow ) Core_;
+		wEntriesCrate_ Entries_;
+		wFieldsCrate_  Fields_;
+		wRecordsCrate_  Records_;
+		template <typename crate, typename regular, typename raw> regular Add_(
+			crate &Crate,
+			raw Raw,
+			sRow User )
+		{
+			return Crate( User ).Add( Raw );
+		}
+		template <typename crate, typename regular> void Remove_(
+			crate &Crate,
+			regular Regular,
+			sRow User )
+		{
+			if ( Regular == qNIL )
+				Crate( User ).Init();
+			else
+				Crate( User).Remove( Regular );
+		}
+		template <typename crate, typename regular, typename raws> void GetRaws_(
+			const ogzbsc::dList<regular> &Regulars,
+			const crate &Crate,
+			sRow User,
+			raws &Raws )
+		{
+			sdr::sRow Row = Regulars.First();
+
+			while ( Row != qNIL ) {
+				Raws.Append( Crate( User )( Regulars( Row ) ) );
+
+				Row = Regulars.Next( Row );
+			}
+		}
 		sAmount GetRecordsSet_(
 			const dRecords_ &Records,
 			sIndice Indice,
@@ -355,27 +387,89 @@ namespace ogzusr {
 		// If 'Row' != 'qNIL', it must be used.
 		sRow OGZUSRNew( sRow User ) override
 		{
-			return Core_.New();
+			sRow Row = Entries_.New();
+
+			if ( Fields_.New() != Row )
+				qRGnr();
+
+			if ( Records_.New() != Row )
+				qRGnr();
+
+			Fields_( Row ).Init();
+			Entries_( Row ).Init();
+			Records_( Row ).Init();
+
+			return Row;
 		}
 		// If 'Row' == 'qNIL', the content must be erased.
 		virtual void OGZUSRDelete( sRow User ) override
 		{
-			if ( User == qNIL )
-				Core_.Init();
-			else
-				Core_.Remove( User );
+			if ( User == qNIL ) {
+				Entries_.Init();
+				Fields_.Init();
+				Records_.Init();
+			} else {
+				Entries_.Remove( User );
+				Fields_.Remove( User );
+				Records_.Remove( User );
+			}
+		}
+		virtual ogzbsc::sDRow OGZUSRAdd(
+			ogzdta::sRow Entry,
+			sRow User ) override
+		{
+			return Add_<dEntriesCrate_, ogzbsc::sDRow, ogzdta::sRow> ( Entries_, Entry, User );
+		}
+		virtual void OGZUSRRemove(
+			ogzbsc::sDRow Entry,
+			sRow User ) override
+		{
+			return Remove_( Entries_, Entry, User );
+		}
+		virtual void OGZUSRGetRaws(
+			const ogzfld::dData &Entries,
+			sRow User,
+			ogzdta::dRows &RawEntries ) override
+		{
+			return GetRaws_( Entries, Entries_, User, RawEntries );
+		}
+		virtual ogzbsc::sFRow OGZUSRAdd(
+			ogzfld::sRow Field,
+			sRow User ) override
+		{
+			return Add_<dFieldsCrate_, ogzbsc::sFRow, ogzfld::sRow> ( Fields_, Field, User );
+		}
+		virtual void OGZUSRRemove(
+			ogzbsc::sFRow Field,
+			sRow User ) override
+		{
+			return Remove_( Fields_, Field, User );
+		}
+		virtual void OGZUSRGetRaws(
+			const ogzrcd::dFields &Fields,
+			sRow User,
+			ogzfld::dRows &RawFields ) override
+		{
+			return GetRaws_( Fields, Fields_, User, RawFields );
 		}
 		virtual ogzbsc::sRRow OGZUSRAdd(
 			ogzrcd::sRow Record,
 			sRow User ) override
 		{
-			return Core_( User ).Add( Record );
+			return Records_( User ).Add( Record );
 		}
 		virtual void OGZUSRRemove(
 			ogzbsc::sRRow Record,
 			sRow User ) override
 		{
-			Core_( User ).Remove( Record );
+			Records_( User ).Remove( Record );
+		}
+		virtual void OGZUSRGetRaws(
+			const dRecords &Records,
+			sRow User,
+			ogzrcd::dRows &RawRecords ) override
+		{
+			return GetRaws_( Records, Records_, User, RawRecords );
 		}
 		virtual sAmount OGZUSRGetRecordsSet(
 			sRow User,
@@ -383,17 +477,21 @@ namespace ogzusr {
 			sAmount Amount,
 			dSet &Set ) override
 		{
-			return GetRecordsSet_( Core_( User ), Indice, Amount, Set );
+			return GetRecordsSet_( Records_( User ), Indice, Amount, Set );
 		}
 	public:
 		void reset( bso::sBool P = true )
 		{
-			Core_.reset( P );
+			Entries_.reset( P );
+			Fields_.reset( P );
+			Records_.reset( P );
 		}
 		qCVDTOR( rRegularCallback );
 		void Init( void )
 		{
-			Core_.Init();
+			Entries_.Init();
+			Fields_.Init();
+			Records_.Init();
 		}
 	};
 

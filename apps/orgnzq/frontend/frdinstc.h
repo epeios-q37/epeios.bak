@@ -154,12 +154,14 @@ namespace frdinstc {
 		rUser_ Core_;
 		eView View_;
 		sField Field_;	// Current field.
+		sRecord Record_; // Current record.
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Core_.reset( P );
 			View_ = v_Undefined;
 			Field_ = UndefinedField;
+			Record_ = UndefinedRecord;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -169,6 +171,7 @@ namespace frdinstc {
 
 			View_ = vRecords;
 			Field_ = UndefinedField;
+			Record_ = UndefinedRecord;
 		}
 		bso::sBool Login(
 			const str::dString &Username,
@@ -178,7 +181,7 @@ namespace frdinstc {
 		}
 		void DefineRecord( sRecord Record )
 		{
-			Core_.DefineRecord( Record );
+			Record_ = Core_.DefineRecord( Record );
 			View_ = vRecord;
 		}
 		void DefineNewRecord( void )
@@ -204,24 +207,22 @@ namespace frdinstc {
 			Core_.GetColumn( Type, Number, Label, Comment );
 		}
 		void CreateField(
-			sRecord Record,
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
+			if ( Record_ == UndefinedRecord )
+				qRGnr();
+
 			Core_.UpdateColumn( Type, Number, Label, Comment );
-			Field_ = Core_.CreateField( Record, Core_.GetColumnObjectId() );
+			Field_ = Core_.CreateField( Record_, Core_.GetColumnObjectId() );
 			View_ = vRecord;
 		}
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
-		void DumpRecordColumns(
-			sRecord Record,
-			xml::dWriter &Writer ) const;
-		void DumpRecordFields(
-			sRecord Record,
-			xml::dWriter &Writer ) const;
+		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
+		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eView, View );
 	};
 }

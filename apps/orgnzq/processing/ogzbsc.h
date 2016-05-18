@@ -218,7 +218,7 @@ namespace ogzbsc {
 		}
 		row Append( const item &Item ) const
 		{
-			return Append_( Item, Row );
+			return Append_( Item );
 		}
 		bso::bool__ Recall(
 			row Row,
