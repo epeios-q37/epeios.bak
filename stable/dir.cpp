@@ -182,7 +182,7 @@ namespace {
 			Path.Init();
 			BuildPath_( Parts, Row, Path );
 
-			if ( Continue = !fil::Exists( Path ) )
+			if ( ( Continue = !fil::Exists( Path ) ) )	// Extra '()' to avoid LLVM warning.
 				Row = Parts.Previous( Row );
 		}
 
