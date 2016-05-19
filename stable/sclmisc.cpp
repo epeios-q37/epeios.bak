@@ -780,7 +780,7 @@ void sclmisc::Load(
 qRH
 	flf::file_iflow___ Flow;
 qRB
-	if ( !Flow.Init(FileName) )
+	if ( !Flow.Init( FileName, err::hUserDefined ) )
 		ReportFileOpeningErrorAndAbort( FileName );
 
 	String.FillWith( Flow );
