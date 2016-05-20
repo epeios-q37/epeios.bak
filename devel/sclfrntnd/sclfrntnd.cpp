@@ -107,6 +107,109 @@ void sclfrntnd::GetRemoteBackendPluginPath(
 	sclmisc::MGetValue( rgstry::tentry___( definition_::remote_backends_::tagged_remote_backed_::PluginPath_, Id ), Path );
 }
 
+
+#define C( name )	case a##name : return #name; break
+ 
+const char *sclfrntnd::GetLabel( eAuth Auth )
+{
+	switch ( Auth ) {
+	C( Blank );
+	C( Partial );
+	C( Full );
+	C( Automatic );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+ 
+#undef C
+ 
+namespace {
+	stsfsm::wAutomat AuthAutomat_;
+ 
+	void FillAuthAutomat_( void )
+	{
+		AuthAutomat_.Init();
+		stsfsm::Fill<eAuth>( AuthAutomat_, a_amount, GetLabel );
+	}
+}
+ 
+eAuth sclfrntnd::GetAuth( const str::dString &Pattern )
+{
+	return stsfsm::GetId( Pattern, AuthAutomat_, a_Undefined, a_amount );
+}
+
+eAuth sclfrntnd::GetAuthParameters(
+	str::dString &Login,
+	str::dString &Password )
+{
+	eAuth Auth = a_Undefined;
+qRH
+	str::wString Mode;
+qRB
+	Mode.Init();
+
+	if ( !sclmisc::OGetValue( parameter_::authentication_::Mode_, Mode ) ) {
+		Mode = aBlank;
+		qRReturn;
+	}
+
+	switch ( Auth = GetAuth( Mode ) ) {
+	case aBlank:
+		break;
+	case aFull:
+	case aAutomatic:
+		sclmisc::MGetValue( parameter_::authentication_::Password_, Password );
+	case aPartial:
+		sclmisc::MGetValue( parameter_::authentication_::Login_, Login );
+		break;
+	default:
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::authentication_::Mode_ );
+		break;
+	}
+qRR
+qRT
+qRE
+	return Auth;
+}
+
+eAuth sclfrntnd::GetAuthFeatures( xml::dWriter &Writer )
+{
+	eAuth Auth = a_Undefined;
+qRH
+	str::wString Login, Password;
+qRB
+	Login.Init();
+	Password.Init();
+
+	Auth = GetAuthParameters( Login, Password );
+
+	Writer.PushTag("Authentication" );
+	Writer.PutAttribute("Mode", GetLabel( Auth ) );
+
+	switch ( Auth ) {
+	case aBlank:
+		break;
+	case aFull:
+	case aAutomatic:
+		Writer.PutValue( Password, "Password" );
+	case aPartial:
+		Writer.PutValue( Login, "Login" );
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+qRR
+qRT
+qRE
+	return Auth;
+}
+
+
 #define C( name ) case bt##name: return #name; break
 
 const char *sclfrntnd::GetLabel( backend_type__ BackendType )
@@ -684,23 +787,17 @@ qRE
 	return About;
 }
 
-
-Q37_GCTOR( sclfrntnd )
-{
-	FillBackendAutomat_();
-	FillBackendSetupTypeAutomat_();
-}
-
-
-
-#if 0
-static void FillAutomats_( void )
-{
-	FillPendingActionAutomat_();
+namespace {
+	void FillAutomats_( void )
+	{
+		FillAuthAutomat_();
+		FillBackendAutomat_();
+		FillBackendSetupTypeAutomat_();
+	}
 }
 
 Q37_GCTOR( sclfrntnd )
 {
 	FillAutomats_();
 }
-#endif
+

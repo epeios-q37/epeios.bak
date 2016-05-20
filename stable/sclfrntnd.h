@@ -445,6 +445,27 @@ namespace sclfrntnd {
 /***************/
 
 namespace sclfrntnd {
+
+	// Authentication-related bevaviour.
+	qENUM( Auth ) {
+		aBlank,		// All the fields are left blank,
+		aPartial,	// Only the 'Login' field is filled.
+		aFull,		// Both 'Login' and 'Password' field are filled.
+		aAutomatic,	// The 'Login' page is skipped, and the authentication parameters are retrieved frrom the configuration file.
+		a_amount,
+		a_Undefined
+	};
+
+	const char *GetLabel( eAuth Auth );
+
+	eAuth GetAuth( const str::dString &Pattern );
+
+	eAuth GetAuthParameters(
+		str::dString &Login,
+		str::dString &Password );
+
+	eAuth GetAuthFeatures( xml::dWriter &Writer );
+
 	/* An identifier usually identifies the plugin used to access the backend.
 	Identifier belows are returned when there in no bckend, or if the backend is embedded. */
 	namespace identifier {
