@@ -25,6 +25,21 @@
 		</xsl:variable>
 		<span class="vcenter-out">
 			<span class="vcenter-in">
+				<fieldset title="#lgnAuthTitle#">
+					<legend>#lgnAuth#</legend>
+					<xsl:element name="input">
+						<xsl:attribute name="type">text</xsl:attribute>
+						<xsl:attribute name="id">Authlgn</xsl:attribute>
+						<xsl:attribute name="title">#lgnAuthLoginTitle#</xsl:attribute>
+						<xsl:attribute name="placeholder">#lgnAuthLoginPlaceholder#</xsl:attribute>
+					</xsl:element>
+					<xsl:element name="input">
+						<xsl:attribute name="type">password</xsl:attribute>
+						<xsl:attribute name="id">AuthPassword</xsl:attribute>
+						<xsl:attribute name="title">#lgnAuthPasswordTitle#</xsl:attribute>
+						<xsl:attribute name="placeholder">#lgnAuthPasswordPlaceholder#</xsl:attribute>
+					</xsl:element>
+				</fieldset>
 				<fieldset title="#lgnBackendToUse#">
 					<legend>#lgnBackend#</legend>
 					<div>

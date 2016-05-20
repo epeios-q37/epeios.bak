@@ -45,7 +45,7 @@
 /***** Macros dealing with actions ****/
 // Definition.
 # define BASE_ACD( type )\
-	class f##type\
+	class s##type\
 	: public base::action_callback__\
 	{\
 	protected:\
@@ -56,7 +56,7 @@
 
 // Utilisation.
 # define BASE_ACU( name )\
-	f##name  name
+	s##name  name
 
 // 'reset(...)'.
 # define BASE_ACR( name )\

@@ -64,6 +64,30 @@
 			</xpp:bloc>
 			<xpp:bloc>
 				<!-- Login -->
+				<Translations text="lgnAuth">
+					<Translation language="fr">Authentification</Translation>
+					<Translation language="en">Authentication</Translation>
+				</Translations>
+				<Translations text="lgnAuthTitle">
+					<Translation language="fr">Paramètres d'authentification.</Translation>
+					<Translation language="en">Authentication parameters.</Translation>
+				</Translations>
+				<Translations text="lgnAuthLoginTitle">
+					<Translation language="fr">Identifiant d'authentification.</Translation>
+					<Translation language="en">Authentication identifier.</Translation>
+				</Translations>
+				<Translations text="lgnAuthLoginPlaceholder">
+					<Translation language="fr">Identifiant</Translation>
+					<Translation language="en">Identifiert</Translation>
+				</Translations>
+				<Translations text="lgnAuthPasswordTitle">
+					<Translation language="fr">Mot de passe pour l'authentification.</Translation>
+					<Translation language="en">Authentication password.</Translation>
+				</Translations>
+				<Translations text="lgnAuthPasswordPlaceholder">
+					<Translation language="fr">Mot de passe</Translation>
+					<Translation language="en">Password</Translation>
+				</Translations>
 				<Translations text="lgnBackend">
 					<Translation language="fr">Moteur de traitement</Translation>
 					<Translation language="en">Backend</Translation>
