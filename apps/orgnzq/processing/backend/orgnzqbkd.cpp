@@ -45,10 +45,14 @@ class rBackend
 : public rBackend_
 {
 private:
-	FBLBKD_RAM_MODULE( wrpcolumn::wColumn, common::rStuff ) Column_;
-	FBLBKD_RAM_MODULE( wrpfield::wField, common::rStuff ) Field_;
-	FBLBKD_RAM_MODULE( wrpexample::wMyObject, common::rStuff ) MyObject_;
+	FBLBKD_RAM_MODULE( wrpcolumn::wColumn ) Column_;
+	FBLBKD_RAM_MODULE( wrpfield::wField ) Field_;
+	FBLBKD_RAM_MODULE( wrpexample::wMyObject ) MyObject_;
 	common::rStuff Stuff_;
+	void *SCLBACKNDStuff( void ) override
+	{
+		return &Stuff_;
+	}
 public:
 	void reset( bso::bool__ P = true )
 	{
@@ -72,18 +76,17 @@ public:
 			OGZINF_LC_AFFIX,
 			BACKEND_NAME " " VERSION,
 			COPYRIGHT,
-			OGZINF_SOFTWARE_NAME " V" OGZINF_SOFTWARE_VERSION,
-			&Stuff_ );
+			OGZINF_SOFTWARE_NAME " V" OGZINF_SOFTWARE_VERSION );
 
-		wrpunbound::Inform( *this, Stuff_ );
+		wrpunbound::Inform( *this );
 
-		Column_.Init( Stuff_ );
+		Column_.Init( *this );
 		Add( Column_ );
 
-		Field_.Init( Stuff_ );
+		Field_.Init( *this );
 		Add( Field_ );
 
-		MyObject_.Init( Stuff_ );
+		MyObject_.Init( *this );
 		Add( MyObject_ );
 	}
 };

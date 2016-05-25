@@ -29,9 +29,7 @@
 
 namespace wrpunbound {
 
-	void Inform(
-		fblbkd::backend___ &Backend,
-		common::rStuff &Stuff );
+	void Inform( fblbkd::backend___ &Backend );
 }
 
 

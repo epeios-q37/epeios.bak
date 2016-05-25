@@ -30,23 +30,24 @@ const char *wrpfield::dField::PREFIX = WRPFIELD_FIELD_PREFIX;
 const char *wrpfield::dField::NAME = WRPFIELD_FIELD_NAME;
 
 #define ARGS (\
-	fblbkd::backend___ &Backend,\
 	dField_ &Field,\
-	fblbkd::rRequest &Request,\
-	rStuff &Stuff )\
+	fblbkd::backend___ &BaseBackend,\
+	fblbkd::rRequest &Request )
 
 typedef void (* f_manager ) ARGS;
 
 void wrpfield::dField::HANDLE(
 	fblbkd::backend___ &Backend,
-	fblbkd::untyped_module &Module,
-	fblbkd::index__ Index,
+	fblbkd::rModule &Module,
 	fblbkd::command__ Command,
-	fblbkd::rRequest &Request,
-	void *UP )
+	fblbkd::rRequest &Request )
 {
-	((f_manager)Module.UPs( Command ))( Backend, *this, Request, *(rStuff *)UP );
+	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
+
+#define STUFF\
+	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\
+	common::rStuff &Stuff = *(common::rStuff *)Backend.UP()
 
 #define DEC( name )	static void exported##name ARGS
 
@@ -57,6 +58,7 @@ DEC( Initialize )
 
 DEC( Define )
 {
+	STUFF;
 	DATABASE;
 
 	Database.GetEntries( *Request.IdIn(), Stuff.User(), Field );
@@ -64,9 +66,7 @@ DEC( Define )
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpfield::dField::NOTIFY(
-	fblbkd::untyped_module &Module,
-	common::rStuff &Data )
+void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 {
 	Module.Add( D( Initialize ),
 		fblbkd::cEnd,

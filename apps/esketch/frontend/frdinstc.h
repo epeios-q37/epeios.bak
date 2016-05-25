@@ -51,6 +51,22 @@ namespace frdinstc {
 
 			Object_.Init( Frontend.MyObject );
 		}
+		void Ping( void )
+		{
+			F_().Ping();
+		}
+		void Crash( void )
+		{
+			F_().Crash();
+		}
+		void LoadSetupOfId( const str::string_ &Id )
+		{
+			S_().LoadSetupOfId( Id );
+		}
+		void LoadSetupContent( const str::string_ &Content )
+		{
+			S_().LoadSetupContent( Content );
+		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
 			str::string Result;

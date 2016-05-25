@@ -39,20 +39,17 @@ const char *wrpcolumn::dColumn::NAME = WRPCOLUMN_COLUMN_NAME;
 #define ARGS (\
 	dColumn_ &Column,\
 	fblbkd::backend___ &Backend,\
-	fblbkd::rRequest &Request,\
-	rStuff &Stuff )\
+	fblbkd::rRequest &Request )
 
 typedef void (* f_manager ) ARGS;
 
 void wrpcolumn::dColumn::HANDLE(
 	fblbkd::backend___ &Backend,
-	fblbkd::untyped_module &Module,
-	fblbkd::index__ Index,
+	fblbkd::rModule &Module,
 	fblbkd::command__ Command,
-	fblbkd::rRequest &Request,
-	void *UP )
+	fblbkd::rRequest &Request )
 {
-	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(rStuff *)UP );
+	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
 
 #define REPORT( message ) sclmisc::ReportAndAbort( message )
@@ -131,9 +128,7 @@ DEC( Get )
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpcolumn::dColumn::NOTIFY(
-	fblbkd::untyped_module &Module,
-	common::rStuff &Data )
+void wrpcolumn::dColumn::NOTIFY( fblbkd::rModule &Module )
 {
 	Module.Add( D( Initialize ),
 		fblbkd::cEnd,

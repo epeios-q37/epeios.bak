@@ -35,13 +35,8 @@ using common::rStuff;
 
 #define DEC( name )\
 	static inline void name(\
-		fblbkd::backend___ &,\
-		fblbkd::untyped_module &,\
-		fblbkd::index__,\
-		fblbkd::command__,\
-		fblbkd::rRequest &Request,\
-		bso::bool__ &,\
-		void *UP )
+		fblbkd::backend___ &BaseBackend,\
+		fblbkd::rRequest &Request )
 
 DEC( Login )
 {
@@ -187,7 +182,6 @@ DEC( CreateField )
 {
 qRH
 qRB
-	BACKEND;
 	STUFF;
 	DATABASE;
 
@@ -324,9 +318,7 @@ qRE
 
 #define D( name )	OGZINF_UC_SHORT #name, ::name
 
-void wrpunbound::Inform(
-	fblbkd::backend___ &Backend,
-	rStuff &Stuff )
+void wrpunbound::Inform( fblbkd::backend___ &Backend )
 {
 	Backend.Add( D( Login ),
 			fblbkd::cString,	// Username.

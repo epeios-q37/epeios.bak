@@ -37,21 +37,18 @@ const char *wrpexample::dMyObject::NAME = WRPEXAMPLE_MYOBJECT_NAME;
 
 #define ARGS (\
 	dMyObject_ &MyObject,\
-	fblbkd::backend___ &Backend,\
-	fblbkd::rRequest &Request,\
-	rStuff &Stuff )\
+	fblbkd::backend___ &BaserBackend,\
+	fblbkd::rRequest &Request )
 
 typedef void (* f_manager ) ARGS;
 
 void wrpexample::dMyObject::HANDLE(
 	fblbkd::backend___ &Backend,
-	fblbkd::untyped_module &Module,
-	fblbkd::index__ Index,
+	fblbkd::rModule &Module,
 	fblbkd::command__ Command,
-	fblbkd::rRequest &Request,
-	void *UP )
+	fblbkd::rRequest &Request )
 {
-	((f_manager)Module.UPs( Command ))( *this, Backend, Request, *(rStuff *)UP );
+	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
 
 #define REPORT( message ) sclmisc::ReportAndAbort( message )
@@ -70,9 +67,7 @@ qRE
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpexample::dMyObject::NOTIFY(
-	fblbkd::untyped_module &Module,
-	common::rStuff &Data )
+void wrpexample::dMyObject::NOTIFY( fblbkd::rModule &Module )
 {
 	Module.Add( D( Test ),
 		fblbkd::cEnd,

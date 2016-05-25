@@ -151,8 +151,10 @@ namespace common {
 	ogztyp::sRow GetMandatoryTextType( void  );
 }
 
-# define STUFF			common::rStuff &Stuff = *(common::rStuff *)UP
-# define BACKEND		common::rBackend &Backend = ((common::rStuff *)UP)->Backend()
+#define STUFF\
+	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\
+	common::rStuff &Stuff = *(common::rStuff *)Backend.UP()
+
 # define DATABASE		ogzdtb::mDatabase &Database = common::Database()
 # define AUTHENTICATION	ogzusr::mAuthentication &Authentication = common::Authentication()
 

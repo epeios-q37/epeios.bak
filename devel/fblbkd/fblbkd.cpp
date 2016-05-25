@@ -83,7 +83,7 @@ qRT
 qRE
 }
 
-void fblbkd::rModule_::_Clean( void )
+void fblbkd::rModule::_Clean( void )
 {
 	sdr::row__ Row = Indexes.First();
 

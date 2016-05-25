@@ -43,7 +43,7 @@ class rBackend
 : public rBackend_
 {
 private:
-	FBLBKD_RAM_MODULE( wrpexample::wMyObject, common::rStuff ) MyObject_;
+	FBLBKD_RAM_MODULE( wrpexample::wMyObject ) MyObject_;
 	common::rStuff Stuff_;
 protected:
 	void *SCLBACKNDStuff( void ) override
@@ -73,9 +73,9 @@ public:
 			COPYRIGHT,
 			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION );
 
-		wrpunbound::Inform( *this, Stuff_ );
+		wrpunbound::Inform( *this );
 
-		MyObject_.Init( Stuff_, *this );
+		MyObject_.Init( *this );
 		Add( MyObject_ );
 	}
 };

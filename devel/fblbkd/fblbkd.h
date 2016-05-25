@@ -306,7 +306,7 @@ namespace fblbkd {
 	};
 
 		//c An untyped module.
-	class rModule_
+	class rModule
 	: public rBaseModule_
 	{
 	private:
@@ -347,7 +347,7 @@ namespace fblbkd {
 
 			rBaseModule_::reset( P );
 		}
-		E_CDTOR( rModule_ );
+		E_CDTOR( rModule );
 		//f Give the index of a new object.
 		index__ New( void )
 		{
@@ -462,8 +462,8 @@ namespace fblbkd {
 	};
 
 	//c A module for an object of type 't'.
-	template <class t, class user> class module
-	: public rModule_
+	template <class t> class rModule_
+	: public rModule
 	{
 	private:
 		void Traiter_(
@@ -505,19 +505,17 @@ namespace fblbkd {
 		} 
 	public:
 		//f Initialization.
-		void Init(
-			user &User,
-			backend___ &Backend )
+		void Init( backend___ &Backend )
 		{
-			rModule_::Init( t::PREFIX, t::NAME, Backend );
+			rModule::Init( t::PREFIX, t::NAME, Backend );
 
-			t::NOTIFY( *this, User );
+			t::NOTIFY( *this );
 		}
 	};
 
 	//c A module with object stored in RAM.
-	template <class t, class st, class user> class ram_module
-	: public module<t,user>
+	template <class t, class st> class ram_module
+	: public rModule_<t>
 	{
 	protected:
 		virtual index__ FBLBKDNew( void ) override
@@ -556,23 +554,21 @@ namespace fblbkd {
 		lstbch::qLBUNCHwl( t * ) Objets;
 		void reset( bso::bool__ P = true )
 		{
-			module<t, user>::reset( P );
+			rModule_<t>::reset( P );
 			Objets.reset( P );
 		}
 		E_CDTOR( ram_module );
 		//f Initialization.
-		void Init(
-			user &User,
-			backend___ &Backend )
+		void Init( backend___ &Backend )
 		{
 			Objets.Init();
-			module<t,user>::Init( User, Backend );
+			rModule_<t>::Init( Backend );
 		}
 	};
 	
 	//c A module with object stored in standard memory.
-	template <class t, class st, class user> class standard_module
-	: public module<t,user>,
+	template <class t, class st> class standard_module
+	: public rModule_<t>,
 	  private lst::E_LIST
 	{
 	private:
@@ -615,17 +611,17 @@ namespace fblbkd {
 		}
 		E_CDTOR( standard_module );
 		// Initialisation.
-		void Init( user &User )
+		void Init( void )
 		{
 			_List().Init();
 			Objets.Init();
-			module<t,user>::Init( User );
+			rModule_<t>::Init();
 		}
 	};
 
 	//c A shared module. One instance for all.
-	template <class t, class st, class user> class shared_module
-	: public module<t,user>
+	template <class t, class st> class shared_module
+	: public rModule_<t>
 	{
 	private:
 		t *T_;
@@ -655,12 +651,10 @@ namespace fblbkd {
 		}
 		E_CDTOR( shared_module )
 		// Initialisation.
-		void Init(
-			user &User,
-			t &Object )
+		void Init( t &Object )
 		{
 			reset();
-			module<t,user>::Init( User );
+			rModule_<t>::Init();
 			Created_ = false;
 			T_ = &Object;
 		}
@@ -668,7 +662,7 @@ namespace fblbkd {
 
 	// Module maître, qui fait tout le boulot.
 	class rMasterModule
-	: public rModule_
+	: public rModule
 	{
 	protected:
 		virtual void Handle_(
@@ -770,14 +764,14 @@ namespace fblbkd {
 			Key_,	// Key used for encrypting the codes.
 			Code_;	// Code to allow a blocking ping or a crash.
 		// Retourne le module correspondant à 'IdType'.
-		rModule_ &Module_( type__ IdType )
+		rModule &Module_( type__ IdType )
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
 				return *Modules( *IdType );
 			else
 				return Master_;	// Not very happy about this conversion, 
 		}
-		const rModule_ &Module_( type__ IdType ) const
+		const rModule &Module_( type__ IdType ) const
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
 				return *Modules( *IdType );
@@ -785,11 +779,11 @@ namespace fblbkd {
 				return Master_;	// Not very happy about this conversion, 
 		}
 		// Retourne le module correspondant à 'IdObjet'.
-		rModule_ &Module_( object__ IdObjet )
+		rModule &Module_( object__ IdObjet )
 		{
 			return Module_( Type_( IdObjet ) );
 		}
-		const rModule_ &Module_( object__ IdObjet ) const
+		const rModule &Module_( object__ IdObjet ) const
 		{
 			return Module_( Type_( IdObjet ) );
 		}
@@ -816,7 +810,7 @@ namespace fblbkd {
 		virtual void *FBLBKDUserPointer( void ) = 0;
 	public:
 		//o The different modules.
-		bch::E_BUNCH( rModule_ * ) Modules;
+		bch::E_BUNCH( rModule * ) Modules;
 		//o The relation between modules an index.
 		links Links;
 		void reset( bso::bool__ P = true )
@@ -885,7 +879,7 @@ namespace fblbkd {
 		qRODISCLOSEr( str::dString, Code );
 		qRODISCLOSEr( str::dString, Key );
 		//f Add 'Module' to the interface.
-		void Add( rModule_ &Module )
+		void Add( rModule &Module )
 		{
 			Module.Backend_ = this;
 			Modules.Append( &Module );
@@ -916,12 +910,12 @@ namespace fblbkd {
 			return Links.Exists( Object );
 		}
 		//f Give the module for the object of type 'Type'.
-		const rModule_ &Module( type__ Type )
+		const rModule &Module( type__ Type )
 		{
 			return Module_( Type );
 		}
 		//f Give the module for object 'Object'.
-		const rModule_ &Module( object__ Object ) const
+		const rModule &Module( object__ Object ) const
 		{
 			return Module_( Object );
 		}
@@ -1051,13 +1045,13 @@ namespace fblbkd {
 }
 
 //d A ram module of an object of type 't'.
-# define FBLBKD_RAM_MODULE( t, user )	fblbkd::ram_module<t, t::s, user>	
+# define FBLBKD_RAM_MODULE( t )	fblbkd::ram_module<t, t::s>	
 
 //d A standard module of an object of type 't'.
-# define FBLBKD_STANDARD_MODULE( t, user )	fblbkd::standard_module<t, t::s, user>	
+# define FBLBKD_STANDARD_MODULE( t )	fblbkd::standard_module<t, t::s>	
 
 //d A shared module of an object od type 't'.
-# define FBLBKD_SHARED_MODULE( t, user )	fblbkd::shared_module<t, t::s, user>	
+# define FBLBKD_SHARED_MODULE( t )	fblbkd::shared_module<t, t::s>	
 
 /***************/
 /***** NEW *****/

@@ -29,9 +29,6 @@ using namespace wrpunbound;
 
 using common::rStuff;
 
-#define STUFF common::rStuff &Stuff = *(common::rStuff *)UP
-#define BACKEND	STUFF;common::rBackend &Backend = Stuff.Backend()
-
 #define REPORT( message ) sclmisc::ReportAndAbort( message )
 
 #define DEC( name )\
@@ -51,9 +48,7 @@ qRE
 
 #define D( name )	SKTINF_UC_SHORT #name, ::name
 
-void wrpunbound::Inform(
-	fblbkd::backend___ &Backend,
-	rStuff &Stuff )
+void wrpunbound::Inform( fblbkd::backend___ &Backend )
 {
 	Backend.Add( D( Test ),
 		fblbkd::cEnd,

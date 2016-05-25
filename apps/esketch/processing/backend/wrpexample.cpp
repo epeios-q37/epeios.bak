@@ -44,7 +44,7 @@ typedef void (* f_manager ) ARGS;
 
 void wrpexample::dMyObject::HANDLE(
 	fblbkd::backend___ &Backend,
-	fblbkd::rModule_ &Module,
+	fblbkd::rModule &Module,
 	fblbkd::command__ Command,
 	fblbkd::rRequest &Request )
 {
@@ -82,9 +82,7 @@ qRE
 
 #define D( name )	#name, (void *)exported##name
 
-void wrpexample::dMyObject::NOTIFY(
-	fblbkd::rModule_ &Module,
-	common::rStuff &Data )
+void wrpexample::dMyObject::NOTIFY(	fblbkd::rModule &Module	)
 {
 	Module.Add( D( ToUC ),
 			fblbkd::cString,
