@@ -33,7 +33,7 @@ using common::rStuff;
 
 #define DEC( name )\
 	static inline void name(\
-		fblbkd::backend___ &Backend,\
+		fblbkd::backend___ &BaseBackend,\
 		fblbkd::rRequest &Request )
 
 DEC( Test )
