@@ -83,7 +83,7 @@ qRT
 qRE
 }
 
-void fblbkd::untyped_module::_Clean( void )
+void fblbkd::rModule_::_Clean( void )
 {
 	sdr::row__ Row = Indexes.First();
 
@@ -111,40 +111,30 @@ namespace {
 	}
 }
 
-struct master_data__ {
-	bso::bool__ Deconnexion;
-	void *UP;
-};
-
-void master_module::Handle_(
+void fblbkd::rMasterModule::Handle_(
 	index__ Index,
-	rRequest &Requete,
-	void *PU,
+	rRequest &Request,
 	log_functions__ &LogFunctions )
 {
 	command__ C;
-	master_data__ &MasterData = *(master_data__ *)PU;
 
-	flw::Get( Requete.Input(), C );
+	flw::Get( Request.Input(), C );
 
-	if (  C < Descriptions.Amount() )
-	{
-		Requete.Prepare( Descriptions( C ).Casts );
+	if (  C < Descriptions.Amount() ) {
+		Request.Prepare( Descriptions( C ).Casts );
 		LogFunctions.Log( "", "MASTER", Descriptions( C ).Name, false );
-		(*(function__)UPs( C ))( *Backend(), *this, Index, C, Requete, MasterData.Deconnexion, MasterData.UP );
+		(*(function__)Functions( C ))( *Backend(), Request );
 		LogFunctions.Log( "", "MASTER", Descriptions( C ).Name, true );
-	}
-	else if ( C == FBLBKD_MASTER_COMMAND )
-	{
+	} else if ( C == FBLBKD_MASTER_COMMAND ) {
 		char Car;
 
-		if ( ( Car = Requete.Input().Get() ) != 0 )
+		if ( ( Car = Request.Input().Get() ) != 0 )
 		{
 qRH
 			cast__ Cast;
 			str::string S;
 qRB
-			Requete.Output().Put( 0 );	// No explanation message;
+			Request.Output().Put( 0 );	// No explanation message;
 		
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(Casts & languages)" ), false );
 			
@@ -154,23 +144,21 @@ qRB
 
 				S.Append( Car );
 
-				while( ( Car = Requete.Input().Get() ) != 0 )
+				while( ( Car = Request.Input().Get() ) != 0 )
 					S.Append( Car );
 
 				Cast = GetCastID_( S );
 
-				flw::Put( (fbltyp::id8__)Cast, Requete.Output() );
+				flw::Put( (fbltyp::id8__)Cast, Request.Output() );
 
-			} while ( ( Car = Requete.Input().Get() ) != 0 );
+			} while ( ( Car = Request.Input().Get() ) != 0 );
 
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(Casts & languages)" ), true );
 
 qRR
 qRT
 qRE
-		}
-		else
-		{
+		} else {
 			sdr::row__ P = Descriptions.First();
 			command__ C = FBLBKD_INVALID_COMMAND;
 
@@ -183,14 +171,13 @@ qRE
 			if ( P != qNIL )
 				C = (command__)*P;
 
-			Requete.Output().Put( 0 );	// No explanation message;
+			Request.Output().Put( 0 );	// No explanation message;
 
-			flw::Put( C, Requete.Output() );
+			flw::Put( C, Request.Output() );
 
 			LogFunctions.Log( "", "MASTER", str::string( "MASTER_COMMAND(GetCommandCommand)" ), true );
 		}
-	}
-	else
+	} else
 		qRFwk();
 }
 
@@ -198,19 +185,14 @@ qRE
 // Donne la liste des identificateurs et des libells de types
 static void GetTypesIDAndPrefixAndName_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 qRH
 	xitem16 XItem;
 	sdr::row__ P;
 	type__ Type;
 qRB
-	xitem16s_ &XItems = Requete.XItem16sOut();
+	xitem16s_ &XItems = Request.XItem16sOut();
 
 	P = Backend.Modules.First();
 
@@ -230,8 +212,6 @@ qRB
 		XItems.Append( XItem );
 		P = Backend.Modules.Next( P );
 	}
-
-	Requete.Complete();
 qRR
 qRT
 qRE
@@ -241,14 +221,14 @@ qRE
 
 static void WriteCommandsIDAndName_(
 	const descriptions_ &Descriptions,
-	rRequest &Requete )
+	rRequest &Request )
 {
 qRH
 	item16 Item;
 	sdr::row__ P;
 	command__ Command;
 qRB
-	item16s_ &Items = Requete.Item16sOut();
+	item16s_ &Items = Request.Item16sOut();
 
 	P = Descriptions.First();
 
@@ -278,25 +258,18 @@ qRE
 
 static void GetCommandsIDAndName_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
-	type__ Type = Requete.Id16In();
+	type__ Type = Request.Id16In();
 
-	WriteCommandsIDAndName_( Backend.Module( Type ).Descriptions, Requete );
-
-	Requete.Complete();
+	WriteCommandsIDAndName_( Backend.Module( Type ).Descriptions, Request );
 }
 
 static inline void WriteParameters_(
 	const description_ &Description,
-	rRequest &Requete )
+	rRequest &Request )
 {
-	Requete.Id8sOut() = Description.Casts;
+	Request.Id8sOut() = Description.Casts;
 }
 
 
@@ -311,37 +284,24 @@ static void WriteParameters_(
 
 static void GetParameters_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
-	type__ Type = Requete.Id16In();
-	id16__ Command = Requete.Id16In();;
+	type__ Type = Request.Id16In();
+	id16__ Command = Request.Id16In();;
 
-	WriteParameters_( Backend.Module( (type__)*Type ).Descriptions, *Command, Requete );
-
-	Requete.Complete();
+	WriteParameters_( Backend.Module( (type__)*Type ).Descriptions, *Command, Request );
 }
 
 static void About_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
-	Requete.StringOut() = FBLOVL_PROTOCOL_VERSION;
-	Requete.StringOut() = Backend.GetBackendLabel();
-	Requete.StringOut() = Backend.GetAPIVersion();
-	Requete.StringOut() = Backend.GetExtendedBackendInformations();
-	Requete.StringOut() = Backend.GetBackendCopyright();
-	Requete.StringOut() = Backend.GetSoftwareInformations();
-	Requete.Complete();
+	Request.StringOut() = FBLOVL_PROTOCOL_VERSION;
+	Request.StringOut() = Backend.GetBackendLabel();
+	Request.StringOut() = Backend.GetAPIVersion();
+	Request.StringOut() = Backend.GetExtendedBackendInformations();
+	Request.StringOut() = Backend.GetBackendCopyright();
+	Request.StringOut() = Backend.GetSoftwareInformations();
 }
 
 namespace {
@@ -371,12 +331,7 @@ namespace {
 
 static void Ping_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Request,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 	if ( Test_( Request.StringIn(), Backend.Code(), Backend.Key() ) )
 		Request.Input().Get();
@@ -384,12 +339,7 @@ static void Ping_(
 
 static void Crash_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Request,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 	if ( Test_( Request.StringIn(), Backend.Code(), Backend.Key() ) )
 # if 1
@@ -403,61 +353,36 @@ static void Crash_(
 // Throw an framework error (ERRFwk), for testing purpose.
 static void ThrowERRFwk_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 	qRFwk();
-
-	Requete.Complete();
 }
 
 // Throw an itentional error (ERRFree), for testing purpose.
 static void ThrowERRFree_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 	qRFree();
-
-	Requete.Complete();
 }
 
 static void TestNotification_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 qRH
 	TOL_CBUFFER___ Buffer;
 qRB
-	Requete.ReportRequestError( Requete.StringIn().Convert( Buffer ) );
+	Request.ReportRequestError( Request.StringIn().Convert( Buffer ) );
 qRR
 qRT
 qRE
 }
 
-
 // Retourne un nouvel objet.
 static void GetNewObject_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Request,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 qRH
 	type__ T = FBLBKD_INVALID_TYPE;
@@ -478,8 +403,6 @@ qRB
 		Request.ObjectOut() = O;
 	else
 		Report_( m_UnknowObjectType, Backend.Locale(), Backend.Language(), Request );
-
-	Request.Complete();
 qRR
 qRT
 qRE
@@ -488,12 +411,7 @@ qRE
 // Retourne l'identificateur correspondant  un type donn.
 static void GetType_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Request,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 qRH
 	TOL_CBUFFER___ Buffer;
@@ -506,55 +424,22 @@ qRB
 		Request.Id16Out() = *T;
 	else
 		Report_( m_UnknowObjectTypeName, Backend.Locale(), Backend.Language(), Request );
-
-	Request.Complete();
 qRR
 qRT
 qRE
 }
-#if 0
-// Returns all the raw messages.
-static void GetRawMessages_(
-	backend_ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
-{
-	mdr::row__ Row = qNIL;
-	strings_ &Messages = Requete.StringsOut();
-	Messages = Backend.GetMasterRawMessages();
-
-	Row = Backend.Modules.First();
-
-	while ( Row != qNIL ) {
-		Backend.Modules( Row )->GetRawMessages( Messages );
-
-		Row = Backend.Modules.Next( Row );
-	}
-}
-#endif
 
 // Supprime un objet.
 static void RemoveObject_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
-	object__ O = Requete.ObjectIn();
+	object__ O = Request.ObjectIn();
 
 /*	if ( !Backend.Valide( O ) )
 		ERRb();
 */
 	Backend.Delete( O );
-
-	Requete.Complete();
 }
 
 static void FillCommands_(
@@ -594,17 +479,12 @@ qRE
 // Retourne l'identificateur de type et les identificateurs de commande demand.
 static void GetTypeAndCommands_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
-	const string_ &Name = Requete.StringIn();
-	const commands_details_ &CommandsDetails = Requete.CommandsDetailsIn();
-	type__ &Type = (type__ &)Requete.Id16Out();
-	id16s_t_ &Commands = Requete.Id16sOut();
+	const string_ &Name = Request.StringIn();
+	const commands_details_ &CommandsDetails = Request.CommandsDetailsIn();
+	type__ &Type = (type__ &)Request.Id16Out();
+	id16s_t_ &Commands = Request.Id16sOut();
 
 	if ( ( Type = Backend.Type( Name ) ) == FBLBKD_INVALID_TYPE )
 		qRFwk();
@@ -612,20 +492,13 @@ static void GetTypeAndCommands_(
 	Commands.Init();
 
 	FillCommands_( Backend, Type, CommandsDetails, Commands );
-
-	Requete.Complete();
 }
 
 
 // Retourne l'identificateur d'une commande donne pour un type donn.
 static void GetCommand_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Request,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
 qRH
 	description Description;
@@ -648,8 +521,6 @@ qRB
 		Request.Id16Out() = Command;
 	else
 		Report_( m_UnknowCommandNameOrDescription, Backend.Locale(), Backend.Language(), Request );
-
-	Request.Complete();
 qRR
 qRT
 qRE
@@ -659,62 +530,36 @@ qRE
 // Retourne l'identificateur des commandes demandes pour un type donn.
 static void GetCommands_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &,
-	void * )
+	rRequest &Request )
 {
-	type__ Type = Requete.Id16In();
-	const commands_details_ &CommandsDetails = Requete.CommandsDetailsIn();
-	id16s_t_ &Commands = Requete.Id16sOut();
+	type__ Type = Request.Id16In();
+	const commands_details_ &CommandsDetails = Request.CommandsDetailsIn();
+	id16s_t_ &Commands = Request.Id16sOut();
 
 	FillCommands_( Backend, Type, CommandsDetails, Commands );
-
-	Requete.Complete();
 }
 
 
 // Deconnection
 static void Disconnect_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &Deconnexion,
-	void * )
+	rRequest &Request )
 {
-	Deconnexion = true;
-
-	Requete.Complete();
+	Request.Disconnect() = true;
 }
 
 // Return the current language.
 static void GetLanguage_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Requete,
-	bso::bool__ &Deconnexion,
-	void * )
+	rRequest &Request )
 {
-	Requete.StringOut() = Backend.Language();
-
-	Requete.Complete();
+	Request.StringOut() = Backend.Language();
 }
 
 // Set the current language;
 static void SetLanguage_(
 	backend___ &Backend,
-	untyped_module &Module,
-	index__,
-	command__ Command,
-	rRequest &Request,
-	bso::bool__ &Deconnexion,
-	void * )
+	rRequest &Request )
 {
 qRH
 	TOL_CBUFFER___ Buffer;
@@ -725,8 +570,6 @@ qRB
 		Report_( m_BadLanguage, Backend.Locale(), Backend.Language(), Request );
 	else
 		Backend.SetLanguage( Language.Convert( Buffer ) );
-
-	Request.Complete();
 qRR
 qRT
 qRE
@@ -735,10 +578,9 @@ qRE
 #define ADD( I )	Backend.Add( fblcmd::CommandsNames[fblcmd::c##I], ::I##_, fblcmd::CommandsParameters[fblcmd::c##I] )
 
 // Initialisation avec rattachement  l'interface 'Frontend'.
-void fblbkd::master_module::Init( fblbkd::backend___ &Backend )
+void fblbkd::rMasterModule::Init( fblbkd::backend___ &Backend )
 {
-	untyped_module::Init( NULL, NULL );
-	Backend_ = &Backend;
+	rBaseModule_::Init( NULL, NULL, Backend );
 #if 0
 	RawMessages.Init();
 #endif
@@ -895,21 +737,16 @@ qRE
 	return Success;
 }
 
-
 bso::bool__ backend___::_HandleRequest(
 	flw::ioflow__ &FrontendFlow,
-	void *PU,
 	log_functions__ &LogFunctions )
 {
-	master_data__ MasterData;
+	bso::sBool Disconnect = false;
 qRH
 	object__ O;
 	rRequest Request;
 	fblbrq::callbacks__ *Callbacks = NULL;
 qRB
-	MasterData.Deconnexion = false;
-	MasterData.UP = PU;
-
 	switch ( _Mode ) {
 	case fblovl::mEmbedded:
 		_Embedded.Init();
@@ -924,7 +761,6 @@ qRB
 		break;
 	}
 
-
 	Request.Init( *Callbacks, FrontendFlow );
 
 	flw::Get( Request.Input(), O );
@@ -933,15 +769,17 @@ qRB
 		qRFwk();
 
 	if ( O != FBLBKD_MASTER_OBJECT ) {
-		Module_( O ).Handle( Index_( O ), Request, PU, LogFunctions );
+		Module_( O ).Handle( Index_( O ), Request, LogFunctions );
 	} else
-		Master_.Handle( (index__)0, Request, &MasterData, LogFunctions );
+		Master_.Handle( (index__)0, Request, LogFunctions );
+
+	Disconnect = Request.Disconnect();
 
 	Request.Complete();
 qRR
 qRT
 qRE
-	return !MasterData.Deconnexion;
+	return !Disconnect;
 }
 #if 0	
 	mdr::row__ untyped_module::Add(

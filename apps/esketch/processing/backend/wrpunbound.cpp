@@ -37,12 +37,7 @@ using common::rStuff;
 #define DEC( name )\
 	static inline void name(\
 		fblbkd::backend___ &Backend,\
-		fblbkd::untyped_module &,\
-		fblbkd::index__,\
-		fblbkd::command__,\
-		fblbkd::rRequest &Request,\
-		bso::bool__ &,\
-		void *UP )
+		fblbkd::rRequest &Request )
 
 DEC( Test )
 {

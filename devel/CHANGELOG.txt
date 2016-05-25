@@ -1,6 +1,9 @@
 CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
+2016-05-23 :
+- SCLBACKND, FBL...
+	- Reorganization.
 
 2016-05-20 :
 - SCLFRNTND, SCLXDHTML :

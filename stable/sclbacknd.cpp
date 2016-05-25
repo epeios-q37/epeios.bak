@@ -45,6 +45,66 @@ namespace {
 		Key_( "Key", Watchdog_ );
 }
 
+#define DEC( name )\
+	static inline void name(\
+		rBackend_ &BaseBackend,\
+		fblbkd::rRequest &Request )
+
+DEC( LoadSetupOfId )
+{
+qRH
+qRB
+	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();
+
+	Backend.FillSetupRegistryFollowingId( Request.StringIn() );
+qRR
+qRT
+qRE
+}
+
+DEC( LoadSetupContent )
+{
+qRH
+	str::wString Content;
+qRB
+	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();
+
+	const str::string_ &RawContent = Request.StringIn();
+
+	Content.Init( "<" );
+	sclrgstry::Parameters.GetPath( Content );
+	Content.Append( '>' );
+	Content.Append( RawContent  );
+	Content.Append( "</" );
+	sclrgstry::Parameters.GetPath( Content );
+	Content.Append( '>' );
+
+
+	Backend.FillSetupRegistryWithContent( Content );
+qRR
+qRT
+qRE
+}
+
+#define D( name )	#name, ::name
+
+namespace {
+	void AppendFunctions_( rBackend_ &Backend )
+	{
+		Backend.Add( D( LoadSetupOfId ),
+				fblbkd::cString,	// Id of the setup to load.
+			fblbkd::cEnd,
+			fblbkd::cEnd );
+
+		Backend.Add( D( LoadSetupContent ),
+				fblbkd::cString,	// Content of the setup to load.
+			fblbkd::cEnd,
+			fblbkd::cEnd );
+	}
+}
+
+
+
 void sclbacknd::backend___::Init(
 	fblbur::mode__ Mode,
 	const char *APIVersion,
@@ -52,8 +112,7 @@ void sclbacknd::backend___::Init(
 	const char *BackendLabel,
 	const char *BackendInformations,
 	const char *BackendCopyright,
-	const char *SoftwareInformations,
-	void *UP )
+	const char *SoftwareInformations )
 {
 qRH
 	str::wString Code, Key;
@@ -71,7 +130,8 @@ qRB
 	_Registry.Init();
 	_Registry.Push( sclrgstry::GetCommonRegistry() );
 	_RegistrySetupLevel = _Registry.Create();
-	_UP = UP;
+
+	AppendFunctions_( *this );
 qRR
 qRT
 qRE
@@ -160,7 +220,7 @@ bso::sBool sclbacknd::backend___::SCLDAEMONProcess( flw::ioflow__ &Flow )
 	bso::bool__ Continue = true;
 qRH
 qRB
-	Continue = Handle( Flow, _UP, _RequestLogFunctions );
+	Continue = Handle( Flow, _RequestLogFunctions );
 qRR
 	if ( ERRType == err::t_Abort )
 		ReportRequestError_ (Language(), Flow );
@@ -172,5 +232,3 @@ qRT
 qRE
 	return Continue;
 }
-
-	

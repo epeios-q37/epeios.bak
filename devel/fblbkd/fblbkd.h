@@ -180,15 +180,9 @@ namespace fblbkd {
 
 	typedef void (* function__ )(
 		class backend___ &Backend,
-		class untyped_module &Module,
-		index__ Index,
-		command__ Command,
-		rRequest &Request,
-		bso::bool__ &,
-		void *UP );
+		rRequest &Request );
 
-	//c An untyped module.
-	class untyped_module
+	class rBaseModule_
 	{
 	private:
 		// Prefix for the module/object name.
@@ -197,77 +191,23 @@ namespace fblbkd {
 		const char *Name_;
 		// L'interface auquel le module est rattaché.
 		class backend___ *Backend_;
-		void _Clean( void );	// Permet l'effacement correct de chaque objet utilisateur.
-	protected:
-		//v To get the index of a new object.
-		virtual index__ FBLBKDNew( void )
-		{
-			qRFwk();
-			return 0;	// Pour éviter un warning.
-		}
-		//v To delete the object with index 'Index'.
-		virtual void FBLBKDDelete( index__ Index )
-		{
-			qRFwk();
-		}
-		//v To get a pointer of the object of index 'Index'.
-		virtual void *FBLBKDObject( index__ Index )
-		{
-			qRFwk();
-			return NULL;	// Pour éviter un 'warning'
-		}
-#if 0
-		//v To get the raw messages.
-		virtual void FBLBKDGetRawMessages( messages_ &Messages ) = 0;
-#endif
-		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
-		virtual void Handle_(
-			index__ Index,
-			rRequest &Requete,
-			void *PU,
-			log_functions__ &LogFunctions ) = 0;
 	public:
 		//r The description of the request.
 		fblbrd::descriptions Descriptions;
 		//r User pointers.
-		bch::E_BUNCH( const void *) UPs;
+		bch::E_BUNCH( const void *) Functions;
 		bch::E_BUNCH( index__ ) Indexes;
 		void reset( bso::bool__ P = true )
 		{
-			if ( P ) {
-				_Clean();
-			}
-
 			Prefix_ = NULL;
 			Name_ = NULL;
 			Backend_ = NULL;
 
 			Descriptions.reset( P );
-			UPs.reset( P );
+			Functions.reset( P );
 			Indexes.reset( P );
 		}
-		E_CDTOR( untyped_module );
-		//f Give the index of a new object.
-		index__ New( void )
-		{
-			index__ Index = FBLBKDNew();
-
-			Indexes.Append( Index );
-
-			return Index;
-		}
-		//f Delete the object of index 'Index'.
-		void Delete( index__ Index )
-		{
-			sdr::row__ Row = Indexes.Search( Index );
-
-			if ( Row == qNIL )
-				qRFwk();
-
-			Indexes.Remove( Index );
-
-			FBLBKDDelete( Index );
-		}
+		qCDTOR( rBaseModule_ );
 		//f Give the name of the object.
 		const char *Name( void ) const
 		{
@@ -277,11 +217,6 @@ namespace fblbkd {
 		const char *Prefix( void ) const
 		{
 			return Prefix_;
-		}
-		//f Give an pointer to the object of index 'Index'.
-		void *Object( index__ Index )
-		{
-			return FBLBKDObject( Index );
 		}
 		//f Get the raw messages.
 #if 0
@@ -294,25 +229,18 @@ namespace fblbkd {
 		'Prefix' and 'Name' are not duplicated. They should NOT be modified. */
 		void Init(
 			const char *Prefix,
-			const char *Name )
+			const char *Name,
+			backend___ &Backend )
 		{
 			reset();
 
 			Descriptions.Init();
-			UPs.Init();
+			Functions.Init();
 			Indexes.Init();
 
 			Prefix_ = Prefix;
 			Name_ = Name;
-		}
-		//f Handle the request 'Request' for object of index 'Index'.
-		void Handle(
-			index__ Index,
-			rRequest &Requete,
-			void *UP,
-			log_functions__ &LogFunctions )
-		{
-			Handle_( Index, Requete, UP, LogFunctions );
+			Backend_ = &Backend;
 		}
 		//f Return the backend attached to this module.
 		backend___ *Backend( void )
@@ -334,24 +262,180 @@ namespace fblbkd {
 		sdr::row__ Add(
 			const char *Name,
 			const cast__ *Casts,
-			const void *UP )
+			const void *Function )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Casts );
 			
-			if ( UPs.Append( UP ) != Row )
+			if ( Functions.Append( Function ) != Row )
 				qRFwk();
 				
 			return Row;
 		}			
 		sdr::row__ Add(
 			const char *Name,
-			const void *UP,
+			const void *Function,
 			cast__ Cast,
 			va_list VL )
 		{
 			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
 			
-			if ( UPs.Append( UP ) != Row )
+			if ( Functions.Append( Function ) != Row )
+				qRFwk();
+				
+			return Row;
+		}			
+		sdr::row__ Add(
+			const char *Name,
+			const void *Function,
+			cast__ Cast,
+			... )
+		{
+			sdr::row__ Row = qNIL;
+			va_list VL;
+
+			va_start( VL, Cast );
+
+			Row = Add( Name, Function, Cast, VL );
+
+			va_end( VL );
+
+			return Row;
+		}
+		friend class backend___;
+		friend class master_module;
+	};
+
+		//c An untyped module.
+	class rModule_
+	: public rBaseModule_
+	{
+	private:
+		void _Clean( void );	// Permet l'effacement correct de chaque objet utilisateur.
+	protected:
+		//v To get the index of a new object.
+		virtual index__ FBLBKDNew( void )
+		{
+			qRFwk();
+			return 0;	// Pour éviter un warning.
+		}
+		//v To delete the object with index 'Index'.
+		virtual void FBLBKDDelete( index__ Index )
+		{
+			qRFwk();
+		}
+		//v To get a pointer of the object of index 'Index'.
+		virtual void *FBLBKDObject( index__ Index ) const
+		{
+			qRFwk();
+			return NULL;	// Pour éviter un 'warning'
+		}
+#if 0
+		//v To get the raw messages.
+		virtual void FBLBKDGetRawMessages( messages_ &Messages ) = 0;
+#endif
+		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
+		virtual void Handle_(
+			index__ Index,
+			rRequest &Requete,
+			log_functions__ &LogFunctions ) = 0;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			if ( P ) {
+				_Clean();
+			}
+
+			rBaseModule_::reset( P );
+		}
+		E_CDTOR( rModule_ );
+		//f Give the index of a new object.
+		index__ New( void )
+		{
+			index__ Index = FBLBKDNew();
+
+			Indexes.Append( Index );
+
+			return Index;
+		}
+		//f Delete the object of index 'Index'.
+		void Delete( index__ Index )
+		{
+			sdr::row__ Row = Indexes.Search( Index );
+
+			if ( Row == qNIL )
+				qRFwk();
+
+			Indexes.Remove( Index );
+
+			FBLBKDDelete( Index );
+		}
+		//f Give an pointer to the object of index 'Index'.
+		void *Object( index__ Index ) const
+		{
+			return FBLBKDObject( Index );
+		}
+		//f Get the raw messages.
+#if 0
+		void GetRawMessages( messages_ &RawMessages )
+		{
+			FBLBKDGetRawMessages( RawMessages );
+		}
+#endif
+		/*f Initialization with the object prefix 'Prefix' and name 'Name'.
+		'Prefix' and 'Name' are not duplicated. They should NOT be modified. */
+		void Init(
+			const char *Prefix,
+			const char *Name,
+			backend___ &Backend )
+		{
+			reset();
+
+			rBaseModule_::Init( Prefix, Name, Backend );
+
+			Descriptions.Init();
+			Functions.Init();
+			Indexes.Init();
+		}
+		//f Handle the request 'Request' for object of index 'Index'.
+		void Handle(
+			index__ Index,
+			rRequest &Requete,
+			log_functions__ &LogFunctions )
+		{
+			Handle_( Index, Requete, LogFunctions );
+		}
+		command__ Command( const fblbrd::description_ &Description ) const
+		{
+			sdr::row__ P = Descriptions.Position( Description );
+
+			if ( P == qNIL )
+				P = FBLBKD_INVALID_COMMAND;
+			else if ( *P > FBLBKD_COMMAND_MAX )
+				qRLmt();
+
+			return (command__)*P;
+		}
+		sdr::row__ Add(
+			const char *Name,
+			const cast__ *Casts,
+			const void *Function )
+		{
+			sdr::row__ Row = Descriptions.Add( Name, Casts );
+			
+			if ( Functions.Append( Function ) != Row )
+				qRFwk();
+				
+			return Row;
+		}			
+		sdr::row__ Add(
+			const char *Name,
+			const void *Function,
+			cast__ Cast,
+			va_list VL )
+		{
+			sdr::row__ Row = Descriptions.Add( Name, Cast, VL );
+			
+			if ( Functions.Append( Function ) != Row )
 				qRFwk();
 				
 			return Row;
@@ -379,32 +463,30 @@ namespace fblbkd {
 
 	//c A module for an object of type 't'.
 	template <class t, class user> class module
-	: public untyped_module
+	: public rModule_
 	{
 	private:
 		void Traiter_(
 			t &Objet,
-			index__ Index,
 			rRequest &Requete,
-			void *PU,
 			log_functions__ *LogFunctions )
 		{
-			command__ C;
+			command__ Command;
 
-			flw::Get( Requete.Input(), C );
+			flw::Get( Requete.Input(), Command );
 
-			if ( C > Descriptions.Amount() )
+			if ( Command > Descriptions.Amount() )
 				qRFwk();
 
-			Requete.Prepare( Descriptions( C ).Casts );
+			Requete.Prepare( Descriptions( Command ).Casts );
 
 			if ( LogFunctions != NULL )
-				LogFunctions->Log( Prefix(), Name(), Descriptions( C ).Name, false );
+				LogFunctions->Log( Prefix(), Name(), Descriptions( Command ).Name, false );
 
-			Objet.HANDLE( *Backend(), *this, Index, C, Requete, PU );
+			Objet.HANDLE( *Backend(), *this, Command, Requete );
 
 			if ( LogFunctions != NULL )
-				LogFunctions->Log( Prefix(), Name(), Descriptions( C ).Name, true );
+				LogFunctions->Log( Prefix(), Name(), Descriptions( Command ).Name, true );
 
 		}
 	protected:
@@ -417,16 +499,17 @@ namespace fblbkd {
 		virtual void Handle_(
 			index__ Index,
 			rRequest &Requete,
-			void *PU,
 			log_functions__ &LogFunctions ) override
 		{
-			Traiter_( *(t *)untyped_module::Object( Index ), Index, Requete, PU, &LogFunctions );
+			Traiter_( *(t *)rModule_::Object( Index ), Requete, &LogFunctions );
 		} 
 	public:
 		//f Initialization.
-		void Init( user &User )
+		void Init(
+			user &User,
+			backend___ &Backend )
 		{
-			untyped_module::Init( t::PREFIX, t::NAME  );
+			rModule_::Init( t::PREFIX, t::NAME, Backend );
 
 			t::NOTIFY( *this, User );
 		}
@@ -462,7 +545,7 @@ namespace fblbkd {
 
 			Objets.Delete( Index );
 		}
-		virtual void *FBLBKDObject( index__ Index ) override
+		virtual void *FBLBKDObject( index__ Index ) const override
 		{
 			if ( *Index >= Objets.Amount() )
 				qRFwk();
@@ -478,10 +561,12 @@ namespace fblbkd {
 		}
 		E_CDTOR( ram_module );
 		//f Initialization.
-		void Init( user &User )
+		void Init(
+			user &User,
+			backend___ &Backend )
 		{
 			Objets.Init();
-			module<t,user>::Init( User );
+			module<t,user>::Init( User, Backend );
 		}
 	};
 	
@@ -582,27 +667,15 @@ namespace fblbkd {
 	};
 
 	// Module maître, qui fait tout le boulot.
-	class master_module
-	: public untyped_module
+	class rMasterModule
+	: public rModule_
 	{
 	protected:
 		virtual void Handle_(
 			index__ Index,
 			rRequest &Requete,
-			void *PU,
 			log_functions__ &LogFunctions ) override;
-#if 0
-		virtual void FBLBKDGetRawMessages( messages_ &RawMessages )
-		{
-			RawMessages = this->RawMessages;
-		}
-#endif
 	public:
-#if 0
-		//o All raw messages from all modules.
-		messages RawMessages;
-#endif
-		// Initialisation avec rattachement à l'interface 'Backend'.
 		void Init( backend___ &Backend );
 	};
 
@@ -683,7 +756,7 @@ namespace fblbkd {
 		fblbur::mode__ _Mode;
 		TOL_CBUFFER___ _ClientOrigin;
 		TOL_CBUFFER___ _APIVersion;
-		master_module Master_;
+		rMasterModule Master_;
 		TOL_CBUFFER___ _Language;
 		const lcl::locale_ *_Locale;
 		TOL_CBUFFER___ _BackendLabel;
@@ -697,20 +770,28 @@ namespace fblbkd {
 			Key_,	// Key used for encrypting the codes.
 			Code_;	// Code to allow a blocking ping or a crash.
 		// Retourne le module correspondant à 'IdType'.
-		untyped_module &Module_( type__ IdType ) const
+		rModule_ &Module_( type__ IdType )
 		{
 			if ( IdType != FBLBKD_MASTER_TYPE )
 				return *Modules( *IdType );
 			else
-				return (untyped_module &)Master_;	// Not very happy about this conversion, 
+				return Master_;	// Not very happy about this conversion, 
+		}
+		const rModule_ &Module_( type__ IdType ) const
+		{
+			if ( IdType != FBLBKD_MASTER_TYPE )
+				return *Modules( *IdType );
+			else
+				return Master_;	// Not very happy about this conversion, 
 		}
 		// Retourne le module correspondant à 'IdObjet'.
-		untyped_module &Module_( object__ IdObjet ) const
+		rModule_ &Module_( object__ IdObjet )
 		{
-			if ( IdObjet != FBLBKD_MASTER_OBJECT )
-				return Module_( Type_( IdObjet ) );
-			else
-				return (untyped_module &)Master_; // Not very happy about this conversion, 
+			return Module_( Type_( IdObjet ) );
+		}
+		const rModule_ &Module_( object__ IdObjet ) const
+		{
+			return Module_( Type_( IdObjet ) );
 		}
 		// Retourne le type correpondant à l'objet d'indetificateur 'IdObjet'.
 		type__ Type_( object__ IdObjet ) const
@@ -730,11 +811,12 @@ namespace fblbkd {
 		bso::bool__ _TestCompatibility( flw::ioflow__ &Flow );
 		bso::bool__ _HandleRequest(
 			flw::ioflow__ &FrontendFlow,
-			void *PU,
 			log_functions__ &LogFunctions );
+	protected:
+		virtual void *FBLBKDUserPointer( void ) = 0;
 	public:
 		//o The different modules.
-		bch::E_BUNCH( untyped_module * ) Modules;
+		bch::E_BUNCH( rModule_ * ) Modules;
 		//o The relation between modules an index.
 		links Links;
 		void reset( bso::bool__ P = true )
@@ -796,10 +878,14 @@ namespace fblbkd {
 		qRT
 		qRE
 		}
+		void *UP( void )
+		{
+			return FBLBKDUserPointer();
+		}
 		qRODISCLOSEr( str::dString, Code );
 		qRODISCLOSEr( str::dString, Key );
 		//f Add 'Module' to the interface.
-		void Add( untyped_module &Module )
+		void Add( rModule_ &Module )
 		{
 			Module.Backend_ = this;
 			Modules.Append( &Module );
@@ -808,14 +894,13 @@ namespace fblbkd {
 		If 'true' is returned, than the request contains a deconnection request. */
 		bso::bool__ Handle(
 			flw::ioflow__ &FrontendFlow,
-			void *PU,
 			log_functions__ &LogFunctions )
 		{
 			if ( !_CompatibilityTested ) {
 				_CompatibilityTested = true;
 				return _TestCompatibility( FrontendFlow );
 			}else
-				return _HandleRequest( FrontendFlow, PU, LogFunctions );
+				return _HandleRequest( FrontendFlow, LogFunctions );
 		}
 		/*f Return the command corresponding at request description 'Description' and
 		object type 'Type'. 'FBLBKD_INVALID_COMMAND' is returned if command not found. */
@@ -831,12 +916,12 @@ namespace fblbkd {
 			return Links.Exists( Object );
 		}
 		//f Give the module for the object of type 'Type'.
-		const untyped_module &Module( type__ Type ) const
+		const rModule_ &Module( type__ Type )
 		{
 			return Module_( Type );
 		}
 		//f Give the module for object 'Object'.
-		const untyped_module &Module( object__ Object ) const
+		const rModule_ &Module( object__ Object ) const
 		{
 			return Module_( Object );
 		}
@@ -979,6 +1064,7 @@ namespace fblbkd {
 /***************/
 
 namespace fblbkd {
+	typedef backend___ rBackend;
 }
 
 #endif

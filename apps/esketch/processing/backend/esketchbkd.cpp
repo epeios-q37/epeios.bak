@@ -45,6 +45,11 @@ class rBackend
 private:
 	FBLBKD_RAM_MODULE( wrpexample::wMyObject, common::rStuff ) MyObject_;
 	common::rStuff Stuff_;
+protected:
+	void *SCLBACKNDStuff( void ) override
+	{
+		return &Stuff_;
+	}
 public:
 	void reset( bso::bool__ P = true )
 	{
@@ -57,7 +62,7 @@ public:
 		fblbur::mode__ Mode,
 		const ntvstr::char__ *ClientOrigin )
 	{
-		Stuff_.Init( *this );
+		Stuff_.Init();
 
 		rBackend_::Init(
 			Mode,
@@ -66,12 +71,11 @@ public:
 			SKTINF_LC_AFFIX,
 			BACKEND_NAME " V" VERSION,
 			COPYRIGHT,
-			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION,
-			&Stuff_ );
+			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION );
 
 		wrpunbound::Inform( *this, Stuff_ );
 
-		MyObject_.Init( Stuff_ );
+		MyObject_.Init( Stuff_, *this );
 		Add( MyObject_ );
 	}
 };

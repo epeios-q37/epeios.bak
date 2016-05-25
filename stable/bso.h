@@ -168,7 +168,7 @@ namespace bso {
 	struct buffer__ {
 		char Datum[BSO_CONVERSION_SIZE_MAX+1];	// + 1 for the NUL chracter.
 	};
-
+	/*
 	typedef buffer__ pointer_buffer__;
 
 	inline const char *Convert(
@@ -179,7 +179,7 @@ namespace bso {
 
 		return Buffer.Datum;
 	}
-
+	*/
 
 	// Taille maximale nécessaire pour stocker la valeur d'un entirer en décimal dans une chaine de caractère (+ le signe).
 	#define BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE	( 1 + ( sizeof( bso::pointer__ ) * 8 ) )

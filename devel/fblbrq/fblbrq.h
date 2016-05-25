@@ -213,6 +213,7 @@ namespace fblbrq {
 		// The input/output channel for the request.
 		flw::ioflow__ *Channel_;
 		bso::bool__ _DismissPending;	// Pour grer la prsence d'un flux dans les paramtres entrants.
+		bso::sBool Disconnect_;	// If at 'true', the client asked for disconnection.
 		const void *_Get(
 			sdr::row__ Row,
 			cast__ Cast )
@@ -272,6 +273,7 @@ namespace fblbrq {
 			Cast_ = c_Undefined;
 			Parsed_ = false;
 			_DismissPending = false;
+			Disconnect_ = false;
 
 			Channel_ = NULL;
 		}
@@ -294,6 +296,7 @@ namespace fblbrq {
 			Closed_ = false;
 			Casts_.Init();
 			_DismissPending = false;
+			Disconnect_ = false;
 		}
 		//f Initialization with 'Channel' to parse/answer the request.
 		void Prepare( const casts_ &Casts )
@@ -425,6 +428,7 @@ namespace fblbrq {
 		{
 			return *Channel_;
 		}
+		qRWDISCLOSEr( bso::sBool, Disconnect );
 	};
 
 }

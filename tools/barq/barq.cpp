@@ -242,18 +242,16 @@ static inline const char *GetTypeName(
 
 static void Generate_(
 	const fblcst::cast__ &Cast,
-	bso::u8__ ID,
+	bso::u8__ ID,	// Id of the parameter, NOT of the type.
 	writer_ &Writer,
 	bso::bool__ IsLast )
 {
 qRH
-	char Buffer[20];
 	cast_type CastType = ctUnknow;
 	str::string TypeName;
 qRB
-	sprintf( Buffer, "%u", ID );
 	Writer.PushTag( "Parameter" );
-	Writer.PutAttribute( "Discriminator", Buffer );
+	Writer.PutAttribute( "Discriminator", ID );
 
 	if ( IsLast )
 		Writer.PutAttribute( "Position", "Last" );
@@ -280,8 +278,7 @@ qRB
 
 	Writer.PutValue( TypeName, "Name" );
 
-	sprintf( Buffer, "%u", Cast );
-	Writer.PutValue( Buffer, "ID" );
+	Writer.PutValue( Cast, "ID" );	// We want the id of the type, NOT the parameter's one (not 'ID').
 	Writer.PopTag();
 qRR
 qRT
@@ -343,15 +340,11 @@ static void Generate_(
 	writer_ &Writer,
 	sdr::size__ &Position )
 {
-	char Buffer[20];
-	
 	Writer.PushTag( "Parameters" );
 
-	sprintf( Buffer, "%lu", Parameters.Amount() );	// Don't forget ; there is the 'end of input parameters' cast.
-	Writer.PutAttribute( "Amount", Buffer );
+	Writer.PutAttribute( "Amount", Parameters.Amount() );		// Don't forget ; there is the 'end of input parameters' cast.
 	
-	sprintf( Buffer, "%lu", Position );
-	Writer.PutAttribute( "Position", Buffer );
+	Writer.PutAttribute( "Position", Position );
 
 	Position += Parameters.Amount();
 
@@ -391,14 +384,11 @@ static void Generate_(
 {
 qRH
 	sdr::row__ P;
-	char Buffer[20];
 	sdr::size__ Position = 0;
 qRB
 	Writer.PushTag( "Commands" );
 	
-	sprintf( Buffer, "%lu", Commands.Amount() );
-	
-	Writer.PutAttribute( "Amount", Buffer );
+	Writer.PutAttribute( "Amount", Commands.Amount() );
 	P = Commands.First();
 	
 	while( P != qNIL ) {

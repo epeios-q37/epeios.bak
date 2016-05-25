@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd V`echo toto` Build Apr  1 2016 16:34:28 - Win32;MSC 1800;IA-32
+	API from : esketchbkd V`echo toto` Build May 25 2016 08:48:53 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20160313 (Build Apr  1 2016 16:53:39 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160313 (Build May 25 2016 10:23:05 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ESKETCH__INC
@@ -25,7 +25,7 @@ namespace esketch {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[1];
+		fblfrd::command__ _Commands[3];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -40,6 +40,8 @@ namespace esketch {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
+				25, 0, 
+				25, 0, 
 				0, 
 			};
 
@@ -49,18 +51,50 @@ namespace esketch {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
+			CommandDetail.Name = "LoadSetupOfId";;
+			CommandDetail.Casts.Append( Parameters + 0, 2 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "LoadSetupContent";;
+			CommandDetail.Casts.Append( Parameters + 2, 2 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
 			CommandDetail.Name = "SKTTest";;
-			CommandDetail.Casts.Append( Parameters + 0, 1 );
+			CommandDetail.Casts.Append( Parameters + 4, 1 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 1, _Commands );
+			Commands.Recall( 0, 3, _Commands );
+		}
+		fblovl::reply__ LoadSetupOfId( 
+			const fblfrd::string_ &In1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[0] );
+			Frontend().StringIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+
+			return Frontend().Handle();
+		}
+		fblovl::reply__ LoadSetupContent( 
+			const fblfrd::string_ &In1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[1] );
+			Frontend().StringIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+
+			return Frontend().Handle();
 		}
 		fblovl::reply__ SKTTest( void ) const
 		{
-			Frontend().PushHeader( _ID, Commands()[0] );
+			Frontend().PushHeader( _ID, Commands()[2] );
 
 			Frontend().EndOfInParameters();
 
@@ -93,7 +127,7 @@ namespace esketch {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
-				21, 0, 21, 
+				25, 0, 25, 
 				0, 
 			};
 
@@ -141,7 +175,7 @@ namespace esketch {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P == true )
-				if ( ( Common_ != NULL ) && ( _ID != FBLFRD_UNDEFINED_OBJECT ) )
+				if ( ( Common_ != NULL ) && ( _ID != FBLFRD_UNDEFINED_OBJECT ) && Common_->Frontend().IsConnected() )
 					Common_->RemoveObject( _ID );
 
 			Common_ = NULL;

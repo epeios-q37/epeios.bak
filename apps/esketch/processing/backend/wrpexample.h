@@ -44,13 +44,11 @@ namespace wrpexample {
 		{}
 		void HANDLE(
 			fblbkd::backend___ &Backend,
-			fblbkd::untyped_module &Module,
-			fblbkd::index__ Index,
+			fblbkd::rModule_ &Module,
 			fblbkd::command__ Command,
-			fblbkd::rRequest &Request,
-			void *UP );
+			fblbkd::rRequest &Request );
 		static void NOTIFY(
-			fblbkd::untyped_module &Module,
+			fblbkd::rModule_ &Module,
 			common::rStuff &Stuff );
 		static const char *PREFIX;
 		static const char *NAME;

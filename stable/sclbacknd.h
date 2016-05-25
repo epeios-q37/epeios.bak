@@ -63,9 +63,13 @@ namespace sclbacknd {
 		flx::void_oflow_driver___ _VoidFlowDriver;
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistrySetupLevel;
-		void *_UP;
 	protected:
-		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) override;
+		void *FBLBKDUserPointer( void ) override
+		{
+			return this;
+		}
+		bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) override;
+		virtual void *SCLBACKNDStuff( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -75,7 +79,6 @@ namespace sclbacknd {
 			_VoidFlowDriver.reset( P );
 			_Registry.reset( P );
 			_RegistrySetupLevel = rgstry::UndefinedLevel;
-			_UP = NULL;
 		}
 		E_CVDTOR( rBackend );
 		void Init(
@@ -85,8 +88,11 @@ namespace sclbacknd {
 			const char *BackendLabel,
 			const char *BackendInformations,
 			const char *BackendCopyright,
-			const char *SoftwareInformations,
-			void *UP );
+			const char *SoftwareInformations );
+		void *Stuff( void )
+		{
+			return SCLBACKNDStuff();
+		}
 		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
 			return _Registry;
@@ -106,10 +112,6 @@ namespace sclbacknd {
 		void FillSetupRegistryWithContent( const str::string_ &Content )
 		{
 			sclrgstry::FillWithContent( _Registry, _RegistrySetupLevel, sclmisc::GetBinPath(), Content );
-		}
-		void *UP( void ) const
-		{
-			return _UP;
 		}
 	};
 

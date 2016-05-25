@@ -28,28 +28,16 @@
 #include "sclbacknd.h"
 
 namespace common {
-	typedef sclbacknd::rBackend rBackend;	// // ('eXtended Backend').
 
 	class rStuff	// Contains data peculiar to a backend, each (virtual) connection having its own backend.
 	{
-	private:
-		rBackend *Backend_;
 	public:
-		void reset( bso::bool__ = true )
+		void reset( bso::bool__ P  = true )
 		{
-			Backend_ = NULL;
 		}
 		E_CVDTOR( rStuff );
-		void Init( rBackend &Backend )
+		void Init( void )
 		{
-			Backend_ = &Backend;
-		}
-		rBackend &Backend( void ) const
-		{
-			if ( Backend_ == NULL )
-				qRGnr();
-
-			return *Backend_;
 		}
 	};
 }
