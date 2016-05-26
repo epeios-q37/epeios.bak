@@ -47,6 +47,8 @@
 #  error "Undefined size !"
 # endif
 
+# define BSO_CONVERSION_SIZE_MAX	100
+
 /*************************/
 /****** New version ******/
 /*************************/
@@ -63,7 +65,16 @@ namespace bso {
 
 	typedef unsigned char sU8;
 
-	typedef sU8 bEnum;
+	typedef sU8 tEnum;
+
+	struct bGlobal_ {
+		char Datum[BSO_CONVERSION_SIZE_MAX+1];	// + 1 for the NUL chracter.
+	};
+
+	typedef bGlobal_ bInteger;
+	typedef bInteger bInt;
+
+	typedef bGlobal_ bFloat;
 }
 
 /*************************/
@@ -163,11 +174,8 @@ namespace bso {
 
 	typedef void *pointer__;
 
-# define BSO_CONVERSION_SIZE_MAX	100
+	typedef bGlobal_ buffer__;
 
-	struct buffer__ {
-		char Datum[BSO_CONVERSION_SIZE_MAX+1];	// + 1 for the NUL chracter.
-	};
 	/*
 	typedef buffer__ pointer_buffer__;
 
@@ -322,7 +330,7 @@ namespace bso {
 # define BSO_INT_MIN		BSO_UINT_MIN
 //# define BSO_INT_SIZE		BSO_UINT_SIZE
 
-	typedef bEnum enum__;
+	typedef tEnum enum__;
 
 	//c A sign ( -(1) +(1) 0 ).
 	class sign__

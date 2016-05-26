@@ -82,7 +82,7 @@ namespace str {
 	typedef string_ dString;
 }
 
-# define qENUM( name )	enum e##name : bso::bEnum
+# define qENUM( name )	enum e##name : bso::tEnum
 
 # define qXENUM( name, prefix )	typedef tol::extended_enum__<e##name##_, prefix##_False, prefix##_Error, prefix##_Undefined> e##name
 
