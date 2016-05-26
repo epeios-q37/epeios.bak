@@ -44,6 +44,6 @@ namespace common {
 
 #define STUFF\
 	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\
-	common::rStuff &Stuff = *(common::rStuff *)Backend.UP()
+	common::rStuff &Stuff = *(common::rStuff *)Backend.Stuff()
 
 #endif
