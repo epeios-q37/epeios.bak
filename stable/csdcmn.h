@@ -34,6 +34,7 @@
 # include "tol.h"
 # include "flw.h"
 # include "str.h"
+# include "dtfptb.h"
 
 namespace csdcmn {
 	typedef bso::uint__ sVersion;
@@ -55,10 +56,12 @@ namespace csdcmn {
 		flw::sIFlow &Flow,
 		str::dString &Value )
 	{
-		int C = 0;
+		bso::sSize Size = 0;
+		
+		dtfptb::VGet( Flow, Size );
 
-		while ( ( C = Flow.Get() ) != 0 )
-			Value.Append( C );
+		while ( Size-- )
+			Value.Append( Flow.Get() );
 
 		return Value;
 	}
@@ -67,6 +70,8 @@ namespace csdcmn {
 		const str::dString &Value,
 		flw::sOFlow &Flow )
 	{
+		dtfptb::VPut( Value.Amount(), Flow );
+
 		sdr::sRow Row = Value.First();
 
 		while ( Row != qNIL ) {
@@ -74,8 +79,6 @@ namespace csdcmn {
 
 			Row = Value.Next( Row );
 		}
-
-		Flow.Put( 0 );
 	}
 }
 

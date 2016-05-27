@@ -307,23 +307,6 @@ eBackendSetupType sclfrntnd::GetBackendSetupType( const str::dString &Pattern )
 	return stsfsm::GetId( Pattern, BackendSetupTypeAutomat_, bst_Undefined, bst_amount );
 }
 
-static const lcl::meaning_ &GetMeaning_(
-	const char *Message,
-	lcl::meaning &Meaning )
-{
-qRH
-	str::string RefinedMessage;
-qRB
-	RefinedMessage.Init( "FRD_" );
-	RefinedMessage.Append( Message );
-
-	Meaning.SetValue( RefinedMessage );
-qRR
-qRT
-qRE
-	return Meaning;
-}
-
 static void GetPredefinedItem_(
 	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
