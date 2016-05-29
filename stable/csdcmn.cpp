@@ -25,28 +25,19 @@
 
 using namespace csdcmn;
 
-namespace {
-	void Write_(
-		const char *Text,
-		flw::oflow__ &Flow )
-	{
-		Flow.Write( Text, strlen( Text ) + 1 );	// '+1' to put the final 0.
-	}
-}
-
 void csdcmn::SendProtocol(
 	const char *Label,
 	sVersion Version,
 	flw::oflow__ &Flow )
 {
-	bso::buffer__ Buffer;
+	bso::bInt Buffer;
 
 	if ( Version == UndefinedVersion )
 		qRFwk();
 
-	Write_( Label, Flow );
+	Put( Label, Flow );
 
-	Write_(bso::Convert( Version, Buffer ), Flow );
+	Put ( bso::Convert( Version, Buffer ), Flow );
 }
 
 sVersion csdcmn::GetProtocolVersion(
@@ -59,13 +50,13 @@ qRH
 	sdr::sRow Error = qNIL;
 qRB
 	Incoming.Init();
-	GetString( Flow, Incoming );
+	csdcmn::Get( Flow, Incoming );	// 'csdcmn::' should not be necessary, but VC++ is confused.
 
 	if ( Incoming != Label )
 		qRReturn;
 
 	Incoming.Init();
-	GetString( Flow, Incoming );
+	csdcmn::Get( Flow, Incoming );
 
 	Incoming.ToNumber( Version, &Error );
 

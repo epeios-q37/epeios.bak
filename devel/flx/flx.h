@@ -71,7 +71,7 @@
 
 namespace flx {
 	template < typename bunch_, typename so__,int  CacheSize = FLX_BUNCH_BUFFER_SIZE> class bunch_iflow__;
-	typedef bunch_iflow__<str::string_, bso::char__> fStringIFlow;
+	typedef bunch_iflow__<str::string_, bso::char__> sStringIFlow;
 
 	template < typename bunch_, typename so__> class bunch_oflow___;
 	typedef bunch_oflow___<str::string_, bso::char__> rStringOFlow;

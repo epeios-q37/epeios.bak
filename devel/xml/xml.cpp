@@ -1192,7 +1192,7 @@ void xml::TransformUsingEntities(
 	str::dString &Target )
 {
 qRH
-	flx::fStringIFlow IFlow;
+	flx::sStringIFlow IFlow;
 	flx::rStringOFlow OFlow;
 qRB
 	IFlow.Init( Source );
@@ -1266,7 +1266,7 @@ void xml::writer_::PutValue( flw::sIFlow &Flow )
 
 void xml::writer_::PuRawValue( const value_ &Value )
 {
-	flx::fStringIFlow Flow;
+	flx::sStringIFlow Flow;
 
 	Flow.Init( Value );
 	PutRawValue( Flow );
@@ -1275,7 +1275,7 @@ void xml::writer_::PuRawValue( const value_ &Value )
 
 void xml::writer_::PutValue( const value_ &Value )
 {
-	flx::fStringIFlow Flow;
+	flx::sStringIFlow Flow;
 
 	Flow.Init( Value );
 	PutValue( Flow );
@@ -1338,7 +1338,7 @@ void xml::writer_::PutAttribute(
 	const name_ &Name,
 	const value_ &Value )
 {
-	flx::fStringIFlow Flow;
+	flx::sStringIFlow Flow;
 
 	Flow.Init( Value );
 	PutAttribute( Name, *Flow );
@@ -1348,7 +1348,7 @@ void xml::writer_::PutRawAttribute(
 	const name_ &Name,
 	const value_ &Value )
 {
-	flx::fStringIFlow Flow;
+	flx::sStringIFlow Flow;
 
 	Flow.Init( Value );
 	PutRawAttribute( Name, Flow );
@@ -1372,7 +1372,7 @@ void xml::writer_::PutCData( flw::sIFlow &Flow )
 
 void xml::writer_::PutCData( const value_ &Value )
 {
-	flx::fStringIFlow Flow;
+	flx::sStringIFlow Flow;
 
 	Flow.Init( Value );
 	PutCData( Flow );
@@ -1483,7 +1483,7 @@ bso::sBool xml::dWriter::Put( const str::dString &XML )
 {
 	bso::sBool Success = false;
 qRH
-	flx::fStringIFlow SFlow;
+	flx::sStringIFlow SFlow;
 	xtf::extended_text_iflow__ XFlow;
 qRB
 	SFlow.Init( XML );

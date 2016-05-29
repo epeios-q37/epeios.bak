@@ -52,7 +52,7 @@ namespace csdcmn {
 
 	// Facilities.
 
-	inline const str::dString &GetString(
+	inline const str::dString &Get(
 		flw::sIFlow &Flow,
 		str::dString &Value )
 	{
@@ -66,7 +66,7 @@ namespace csdcmn {
 		return Value;
 	}
 
-	inline void PutString(
+	inline void Put(
 		const str::dString &Value,
 		flw::sOFlow &Flow )
 	{
@@ -79,6 +79,13 @@ namespace csdcmn {
 
 			Row = Value.Next( Row );
 		}
+	}
+
+	inline void Put(
+		const char *Value,
+		flw::sOFlow &Flow )
+	{
+		return csdcmn::Put( str::wString( Value ), Flow );	// 'csdcmn::' should not be necessary, but VC++ is confused.
 	}
 }
 

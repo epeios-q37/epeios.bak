@@ -72,9 +72,9 @@ namespace ags {
 	class aggregated_storage_;
 }
 
-/*************************/
-/****** New version ******/
-/*************************/
+/*****************/
+/****** New ******/
+/*****************/
 
 namespace str {
 	class string_;
@@ -448,6 +448,10 @@ ex. : 'qCOVER2( a, b )' -> 'a, b' */
 # define TOL_ERRP_	err::handling__ ErrHandling = err::h_Default
 
 namespace tol{
+	typedef char bDateAndTime[20];
+	typedef bDateAndTime bDate;
+	typedef bDateAndTime bTime;
+
 	template <typename t> class rBuffer // Dynamic buffer of objects of type 't'. Its size never shrinks, so it can(t be used to know the true amount of objects it contains.
 	{
 	private:
@@ -616,7 +620,7 @@ namespace ntvstr {
 
 namespace tol
 {
-	typedef char buffer__[20];
+	typedef bDateAndTime buffer__;
 
 	enum report__ {
 		rFailure = 0,
@@ -1256,13 +1260,13 @@ namespace tol {
 	void Launch( const ntvstr::string___ &Document );	// Ouvre un document (au sens large ; peut p. ex. tre galement une URL).
 
 	//f Return the current date.
-	const char *Date( buffer__ &Buffer );
+	const char *Date( bDate &Buffer );
 
 	//f Return current time.
-	const char *Time( buffer__ &Buffer );
+	const char *Time( bTime &Buffer );
 
 	//f Return current date  time.
-	const char *DateAndTime( buffer__ &Buffer );
+	const char *DateAndTime( bDateAndTime &Buffer );
 
 # ifdef TOL__WIN
 	bso::size__ GetMemoryUsage( void );
