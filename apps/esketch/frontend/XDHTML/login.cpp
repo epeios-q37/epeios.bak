@@ -128,6 +128,7 @@ qRB
 
 	main::SetLayout( Session );
 qRR
+	Session.Disconnect();
 qRE
 qRT
 }
