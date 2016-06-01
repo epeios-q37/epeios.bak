@@ -695,5 +695,14 @@ namespace bso {
 namespace bso {
 	typedef uint__ sUInt;
 	typedef sint__ sSInt;
+
+	typedef u8__ sU8;
+	typedef s8__ sS8;
+
+	typedef u16__ sU16;
+	typedef s16__ sS16;
+
+	typedef u32__ sU32;
+	typedef s32__ sS32;
 }
 #endif
