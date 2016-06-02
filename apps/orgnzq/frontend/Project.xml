@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="Type" value="Bundle"/>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<Content Type="Tool" Target="dmnzq" Dir="/cygdrive/h/hg/epeios/tools/dmnzq">
+		<Component Name="XDHTML" Dir="XDHTML/"/>
+	</Content>
+</Project>
