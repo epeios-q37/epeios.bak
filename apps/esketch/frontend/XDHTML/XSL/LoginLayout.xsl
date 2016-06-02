@@ -29,15 +29,21 @@
 					<legend>#lgnAuth#</legend>
 					<xsl:element name="input">
 						<xsl:attribute name="type">text</xsl:attribute>
-						<xsl:attribute name="id">Authlgn</xsl:attribute>
+						<xsl:attribute name="id">AuthLogin</xsl:attribute>
 						<xsl:attribute name="title">#lgnAuthLoginTitle#</xsl:attribute>
 						<xsl:attribute name="placeholder">#lgnAuthLoginPlaceholder#</xsl:attribute>
+						<xsl:attribute name="value">
+							<xsl:value-of select="Authentication/Login"/>
+						</xsl:attribute>
 					</xsl:element>
 					<xsl:element name="input">
 						<xsl:attribute name="type">password</xsl:attribute>
 						<xsl:attribute name="id">AuthPassword</xsl:attribute>
 						<xsl:attribute name="title">#lgnAuthPasswordTitle#</xsl:attribute>
 						<xsl:attribute name="placeholder">#lgnAuthPasswordPlaceholder#</xsl:attribute>
+						<xsl:attribute name="value">
+							<xsl:value-of select="Authentication/Password"/>
+						</xsl:attribute>
 					</xsl:element>
 				</fieldset>
 				<fieldset title="#lgnBackendToUse#">

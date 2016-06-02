@@ -62,6 +62,7 @@ namespace htp {
 		fContentType,
 		fContentLength,
 		fLocation,
+		fConnection,
 		f_amount,
 		f_Undefined
 	};

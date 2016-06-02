@@ -105,6 +105,9 @@ static inline const char *GetFieldLabel_( eField Name )
 	case fContentType:
 		return "Content-Type";
 		break;
+	case fConnection:
+		return "Connection";
+		break;
 	default:
 		qRFwk();
 		return NULL;
