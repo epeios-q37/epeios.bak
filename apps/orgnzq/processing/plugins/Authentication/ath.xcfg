@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:define name="Parameters">
+		<xpp:bloc>
+			<Command>Default</Command>
+		</xpp:bloc>
+	</xpp:define>
+	<xpp:define name="Arguments">
+		<xpp:bloc>
+			<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="d" Value="Default" Usage=""/>
+			<Argument id="LabelArgument" Description="LabelArgumentDescription" Path="Label" Label="LabelArgumentLabel"/>
+			<!-- Affectations des arguments libres-->
+			<Layouts>
+				<Layout command="Default">
+				</Layout>
+			</Layouts>
+		</xpp:bloc>
+	</xpp:define>
+</xpp:bloc>
