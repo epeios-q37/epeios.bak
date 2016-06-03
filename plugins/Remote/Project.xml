@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="Type" value="Bundle"/>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml" />
+	<Content Type="Plugins" Target="Remote" Dir="/cygdrive/h/hg/epeios/plugins/Remote">
+		<Component Name="proxy" Dir="Proxy/"/>
+		<Component Name="straight" Dir="Straight/"/>
+		<!--Component Name="$Name$bkd" Dir="$BDir$"/-->
+	</Content>
+	<Dependencies>
+		<Dependency Name="Proxy" Source="Proxy" Target="."/>
+		<Dependency Name="Straight" Source="Straight" Target="."/>
+	</Dependencies>
+	<WikiFiles Group="Doc" Path="Doc/">
+	</WikiFiles>
+</Project>
