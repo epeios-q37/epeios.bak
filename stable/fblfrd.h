@@ -203,7 +203,7 @@ namespace fblfrd {
 	{
 	private:
 		qRMV( flw::ioflow__, C_, Channel_ );
-		fblfph::callbacks__ *_ParametersCallbacks;
+		qRMV( fblfph::callbacks__, P_, ParametersCallback_ );
 		reporting_callback__ *_ReportingCallback;
 		flw::iflow__ *_FlowInParameter;	// Contient, s'il y en a un,  le pointeur sur le 'Flow' en paramtre d'entre.
 		bso::bool__ _FlowOutParameter;	// Signale s'il y a un paramtre flow dans les paramtres de sortie.
@@ -211,7 +211,7 @@ namespace fblfrd {
 		str::wString CodeKey_;	// Clé de cryptage des codes pour le 'Ping' et le 'Crash'.
 		void _PreProcess( void )
 		{
-			_ParametersCallbacks->PreProcess();
+			P_().PreProcess();
 		}
 		void _In(
 			fblcst::cast__ Cast,
@@ -221,7 +221,7 @@ namespace fblfrd {
 				qRFwk();
 
 			C_().Put( Cast );
-			_ParametersCallbacks->In( Cast, Pointer, C_() );
+			P_().In( Cast, Pointer, C_() );
 		}
 		void _Out(
 			fblcst::cast__ Cast,
@@ -231,7 +231,7 @@ namespace fblfrd {
 				qRFwk();
 
 			C_().Put( Cast );
-			_ParametersCallbacks->Out( C_(), Cast, Pointer );
+			P_().Out( C_(), Cast, Pointer );
 		}
 		void _FlowIn(
 			bso::bool__ FirstCall,
@@ -240,7 +240,7 @@ namespace fblfrd {
 			if ( _DismissPending )
 				qRFwk();
 
-			_ParametersCallbacks->FlowIn( FirstCall, Flow, C_() );
+			P_().FlowIn( FirstCall, Flow, C_() );
 		}
 		void _FlowOut( flw::iflow__ *&Flow )
 		{
@@ -248,11 +248,11 @@ namespace fblfrd {
 				qRFwk();
 
 			C_().Put( fblcst::cFlow );
-			_ParametersCallbacks->FlowOut( C_(), Flow );
+			P_().FlowOut( C_(), Flow );
 		}
 		void _PostProcess( flw::ioflow__ &Flow )
 		{
-			_ParametersCallbacks->PostProcess( Flow );
+			P_().PostProcess( Flow );
 		}
 		void _ReportError(
 			fblovl::reply__ Reply,
@@ -339,7 +339,7 @@ namespace fblfrd {
 					Disconnect();
 			}
 				
-			_ParametersCallbacks = NULL;
+			ParametersCallback_ = NULL;
 			_ReportingCallback = NULL;
 			Channel_ = NULL;
 			_FlowInParameter = NULL;
@@ -357,7 +357,7 @@ namespace fblfrd {
 				Disconnect();
 
 			Channel_ = NULL;
-			_ParametersCallbacks = NULL;
+			ParametersCallback_ = NULL;
 			_ReportingCallback = &ReportingCallback;
 			_FlowInParameter = NULL;
 			_FlowOutParameter = false;
@@ -367,7 +367,7 @@ namespace fblfrd {
 		bso::bool__ Connect(
 			const char *Language,
 			flw::ioflow__ &Channel,
-			fblfph::callbacks__ *ParametersCallbacks,	// If == NULL, no backend is used, and this object is only used to know that there is no backend connection.
+			fblfph::callbacks__ *ParametersCallback,	// If == NULL, no backend is used, and this object is only used to know that there is no backend connection.
 			const compatibility_informations__ &CompatibilityInformations,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
@@ -377,12 +377,12 @@ namespace fblfrd {
 			if ( Channel_ != NULL )
 				qRFwk();
 
-			if ( _ParametersCallbacks != NULL )
+			if ( ParametersCallback_ != NULL )
 				qRFwk();
 
-			_ParametersCallbacks = ParametersCallbacks;
+			ParametersCallback_ = ParametersCallback;
 
-			if ( ParametersCallbacks == NULL )
+			if ( ParametersCallback_ == NULL )
 				qRReturn;
 
 			Channel_ = &Channel;
@@ -414,7 +414,7 @@ namespace fblfrd {
 			
 			Channel_ = NULL;
 
-			_ParametersCallbacks = NULL;
+			ParametersCallback_ = NULL;
 		}
 		//f Add header with object 'Object' and command 'Command'.
 		void PushHeader(
@@ -853,10 +853,12 @@ namespace fblfrd {
 		}
 		void Disconnect( void )
 		{
-			frontend___::Disconnect();
+			if ( !IsConnected() ) {
+				frontend___::Disconnect();
 
-			_RemoteCallbacks.reset();
-			_EmbeddedCallbacks.reset();
+				_RemoteCallbacks.reset();
+				_EmbeddedCallbacks.reset();
+			}
 		}
 	};
 }
