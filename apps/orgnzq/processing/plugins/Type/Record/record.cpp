@@ -39,12 +39,15 @@ class rPlugin
 {
 private:
 	qCBUFFERr LabelBuffer_;
-protected:
-	virtual void OGZTYPToXML(
+	void OGZTYPToXML(
 		const ogzbsc::dDatum &Datum,
 		str::dString &XML ) override
 	{
 		qRVct();
+	}
+	bso::sBool OGZTYPTest( const str::dString &Pattern ) override
+	{
+		return false;
 	}
 public:
 	void reset( bso::bool__ P = true )

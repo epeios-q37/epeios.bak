@@ -81,7 +81,7 @@ namespace frdinstc {
 		}
 		void TestMessage( void )
 		{
-			S_().SKTTest();
+			Object_.Test();
 		}
 	};
 

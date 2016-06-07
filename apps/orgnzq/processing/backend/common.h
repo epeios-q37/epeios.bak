@@ -33,6 +33,22 @@
 # include "lck.h"
 
 namespace common {
+	qENUM( Message ) {
+		mBadEntryValue,
+		mNoSuchEntry,
+		mNoSuchField,
+		mFieldLabelCanNotBeEmpty,
+		mOnlyOneEntryAllowed,
+		mTestMessage,
+		mUnknownEntry,
+		mUnknownFieldNumber,
+		mUnknowFieldType,
+		m_amount,
+		m_Undefined
+	};
+
+	const char *GetLabel( eMessage Message );
+
 	typedef sclbacknd::rBackend rBackend;	// // ('eXtended Backend').
 
 	class rStuff	// Contains data peculiar to a backend, each (virtual) connection having its own backend.
@@ -151,9 +167,11 @@ namespace common {
 	ogztyp::sRow GetMandatoryTextType( void  );
 }
 
+#define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
+
 #define STUFF\
 	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\
-	common::rStuff &Stuff = *(common::rStuff *)Backend.UP()
+	common::rStuff &Stuff = *(common::rStuff *)Backend.Stuff()
 
 # define DATABASE		ogzdtb::mDatabase &Database = common::Database()
 # define AUTHENTICATION	ogzusr::mAuthentication &Authentication = common::Authentication()

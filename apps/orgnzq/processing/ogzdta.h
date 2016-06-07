@@ -36,6 +36,8 @@ namespace ogzdta {
 	using ogzbsc::dDatum;
 	using ogzbsc::wDatum;
 
+	using crt::cHooks;
+
 	qROW( Row );
 	qROWS( Row );
 

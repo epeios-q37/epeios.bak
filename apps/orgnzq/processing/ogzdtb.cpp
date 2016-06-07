@@ -123,7 +123,7 @@ qRT
 qRE
 }
 
-void ogzdtb::mDatabase::GetColumnFeatures(
+void ogzdtb::mDatabase::GetColumnsFeatures(
 	ogzbsc::sRRow RecordRow,
 	ogzusr::sRow User,
 	cColumnFeatures &Callback ) const
@@ -151,6 +151,7 @@ qRH
 	ogzfld::wField Field;
 	ogzclm::sRow Column = qNIL;
 	ogztyp::sRow Type = qNIL;
+	ogzclm::eNumber Number = ogzclm::n_Undefined;
 	str::wStrings Entries;
 qRB
 	Row = RawFields.First();
@@ -161,12 +162,12 @@ qRB
 
 		Column = Field.Column();
 
-		Type = Columns.GetType( Column );
+		Columns.GetTypeAndNumber( Column, Type, Number );
 
 		Entries.Init();
-		GetEntries_( RawFields( Row ), User, Entries );
+		GetEntries_( RawFields( Row ), User, Entries, Type, Number );
 
-		Callback.FieldEntries(RegularFields( Row ), Column, Type, Entries );
+		Callback.FieldEntries( RegularFields( Row ), Column, Type, Number, Entries );
 
 		Row = RawFields.Next( Row );
 	}
@@ -239,16 +240,17 @@ namespace {
 	}
 }
 
-ogztyp::sRow ogzdtb::mDatabase::GetEntries_(
+void ogzdtb::mDatabase::GetEntries_(
 	const ogzfld::dField &Field,
 	ogzusr::sRow User,
-	ogzbsc::dData &Entries ) const
+	ogzbsc::dData &Entries,
+	ogztyp::sRow &Type,
+	ogzclm::eNumber &Number ) const
 {
-	ogztyp::sRow Type = qNIL;
 qRH
 	ogzdta::wRows EntryRows;
 qRB
-	Type = Columns.GetType( Field.GetColumn() );
+	Columns.GetTypeAndNumber( Field.GetColumn(), Type, Number );
 
 	EntryRows.Init();
 	Users.GetRaws( Field, User, EntryRows );
@@ -257,24 +259,33 @@ qRB
 qRR
 qRT
 qRE
-	return Type;
 }
 
-ogztyp::sRow ogzdtb::mDatabase::GetEntries_(
+bso::sBool ogzdtb::mDatabase::GetEntries_(
 	ogzfld::sRow FieldRow,
 	ogzusr::sRow User,
-	ogzbsc::dData &Entries	) const
+	ogzbsc::dData &Entries,
+	ogztyp::sRow &Type,
+	ogzclm::eNumber &Number,
+	qRPF ) const
 {
-	ogztyp::sRow Type = qNIL;
+	bso::sBool Exists = false;
 qRH
 	ogzfld::wField Field;
 qRB
 	Field.Init();
-	Fields.Recall( FieldRow, Field );
+	Exists = Fields.Recall( FieldRow, Field );
 
-	Type = GetEntries_( Field, User, Entries );
+	if ( !Exists ) {
+		if ( qRPT )
+			qRFwk();
+		else
+			qRReturn;
+	}
+
+	GetEntries_( Field, User, Entries, Type, Number );
 qRR
 qRT
 qRE
-	return Type;
+	return Exists;
 }

@@ -340,6 +340,7 @@ namespace fblbrq {
 		FBLBRQ_M( Byte, byte_t__ )
 		FBLBRQ_M( Binary, binary_ )
 		FBLBRQ_M( Binaries, binaries_ )
+		FBLBRQ_M( IStrings, dIStrings );
 		FBLBRQ_M( Item8s, item8s_ )
 		FBLBRQ_M( Item16s, item16s_ )
 		FBLBRQ_M( Item32s, item32s_ )

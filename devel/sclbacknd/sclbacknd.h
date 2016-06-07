@@ -82,7 +82,7 @@ namespace sclbacknd {
 		}
 		E_CVDTOR( rBackend );
 		void Init(
-			fblbur::mode__ Mode,
+			fblbur::mode__ Mo_de,
 			const char *APIVersion,
 			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,

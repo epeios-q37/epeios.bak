@@ -29,6 +29,15 @@
 
 namespace common {
 
+	qENUM( Message )
+	{
+		mTestMessage,
+		m_amount,
+		m_Undefined
+	};
+
+	const char *GetLabel( eMessage Message );
+
 	class rStuff	// Contains data peculiar to a backend, each (virtual) connection having its own backend.
 	{
 	public:
@@ -41,6 +50,8 @@ namespace common {
 		}
 	};
 }
+
+#define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
 
 #define STUFF\
 	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\

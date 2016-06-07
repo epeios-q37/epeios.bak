@@ -109,6 +109,7 @@ namespace fblcst {
 		//i An array of items ( 'XMCONTAINER_( { bso::u32__, str::string_ } )' ).
 		cItems,
 		//i An array of 8 bits extended items ( 'XMCONTAINER_( { bso::uint__, XMCONTAINER_( str::string_ ) } )' ).
+		cIStrings = cItems,
 		cXItem8s,
 		//i An array of 16 bits extended items ( 'XMCONTAINER_( { bso::u8__, XMCONTAINER_( str::string_ ) } )' ).
 		cXItem16s,

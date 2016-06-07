@@ -45,38 +45,6 @@ const char *frdinstc::GetLabel( eView View )
  
 #undef C
 
-void frdinstc::rUser::DumpColumnBuffer( xml::dWriter &Writer ) const
-{
-qRH
-	sType Type = UndefinedType;
-	sNumber Number = UndefinedNumber;
-	str::wString Label, Comment;
-qRB
-	Label.Init();
-	Comment.Init();
-
-	Core_.GetColumn( Type, Number, Label, Comment );
-
-	Writer.PushTag("Column" );
-
-	Writer.PutAttribute( "Type", **Type, **UndefinedType  );
-	Writer.PutAttribute( "Number" , **Number, **UndefinedNumber );
-	Writer.PutValue( Label, "Label" );
-	Writer.PutValue( Comment, "Comment" );
-
-	Writer.PopTag();
-qRR
-qRT
-qRE
-}
-
-void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
-{
-	Writer.PushTag( "FieldBuffer" );
-
-	Writer.PopTag();
-}
-
 namespace {
 	void Dump_(
 		const fbltyp::dIds &Ids,
@@ -169,6 +137,7 @@ namespace {
 		const fbltyp::dIds &Columns,
 		const fbltyp::dStringsSet &EntriesSet,
 		const fbltyp::dIds &Types,
+		sField Current,
 		const frdmisc::dXTypes &XTypes,
 		xml::dWriter &Writer )
 	{
@@ -179,6 +148,9 @@ namespace {
 
 		Writer.PushTag( "Fields" );
 		xml::PutAttribute("Amount", Ids.Amount(), Writer );
+
+		if ( Current != UndefinedField )
+			Writer.PutAttribute("Current", **Current );
 
 		while ( Row != qNIL ) {
 			Writer.PushTag( "Field" );
@@ -216,9 +188,51 @@ qRB
 	Types.Init();
 	Core_.GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
 
-	Dump_( Fields, Columns, EntriesSet, Types, Core_.Types(), Writer );
+	Dump_( Fields, Columns, EntriesSet, Types, Field_, Core_.Types(), Writer );
 qRR
 qRT
 qRE
+}
+
+void frdinstc::rUser::DumpColumnBuffer( xml::dWriter &Writer ) const
+{
+qRH
+	sType Type = UndefinedType;
+	sNumber Number = UndefinedNumber;
+	str::wString Label, Comment;
+qRB
+	Label.Init();
+	Comment.Init();
+
+	Core_.GetColumn( Type, Number, Label, Comment );
+
+	Writer.PushTag("Column" );
+
+	Writer.PutAttribute( "Type", **Type, **UndefinedType  );
+	Writer.PutAttribute( "Number" , **Number, **UndefinedNumber );
+	Writer.PutValue( Label, "Label" );
+	Writer.PutValue( Comment, "Comment" );
+
+	Writer.PopTag();
+qRR
+qRT
+qRE
+}
+
+void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
+{
+	Writer.PushTag( "FieldBuffer" );
+
+	Writer.PopTag();
+}
+
+void frdinstc::rUser::DumpFieldBufferCurrentField( xml::dWriter &Writer ) const
+{
+	if ( Field_ == UndefinedField )
+		qRGnr();
+
+	Writer.PushTag( "Field" );
+
+
 }
 

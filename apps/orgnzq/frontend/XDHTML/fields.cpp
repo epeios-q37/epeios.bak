@@ -22,6 +22,7 @@
 #include "core.h"
 #include "registry.h"
 #include "sclfrntnd.h"
+#include "field.h"
 
 namespace {
 	E_CDEF( char *, XSLAffix_, "Fields" );
@@ -91,6 +92,9 @@ qRB
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
 	Session.FillElement( Id, XML, XSL );
+
+	if ( Session.User.FieldInProgress() )
+		field::SetLayout("Field", Session );
 
 	SetCasting_( Id, Session );
 qRR

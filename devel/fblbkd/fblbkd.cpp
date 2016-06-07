@@ -747,7 +747,7 @@ qRH
 	rRequest Request;
 	fblbrq::callbacks__ *Callbacks = NULL;
 qRB
-	switch ( _Mode ) {
+	switch ( Mode_ ) {
 	case fblovl::mEmbedded:
 		_Embedded.Init();
 		Callbacks = &_Embedded;

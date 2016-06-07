@@ -457,6 +457,7 @@ namespace fblfrd {
 		FBLFRD_M( Byte, byte__ )
 		FBLFRD_M( Binary, binary_ )
 		FBLFRD_M( Binaries, binaries_ )
+		FBLFRD_M( Items, items_ )
 		FBLFRD_M( Item8s, item8s_ )
 		FBLFRD_M( Item16s, item16s_ )
 		FBLFRD_M( Item32s, item32s_ )
@@ -853,7 +854,7 @@ namespace fblfrd {
 		}
 		void Disconnect( void )
 		{
-			if ( !IsConnected() ) {
+			if ( IsConnected() ) {
 				frontend___::Disconnect();
 
 				_RemoteCallbacks.reset();

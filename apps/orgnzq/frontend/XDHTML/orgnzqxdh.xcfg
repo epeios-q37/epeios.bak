@@ -49,6 +49,16 @@
 							<xpp:bloc>ColumnCasting.xsl</xpp:bloc>
 						</Casting>
 					</XSLFiles>
+					<XSLFiles target="Field">
+						<Layout>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>FieldLayout.xsl</xpp:bloc>
+						</Layout>
+						<Casting>
+							<xpp:expand select="XSLRootDir"/>
+							<xpp:bloc>FieldCasting.xsl</xpp:bloc>
+						</Casting>
+					</XSLFiles>
 					<XSLFiles target="Fields">
 						<Layout>
 							<xpp:expand select="XSLRootDir"/>

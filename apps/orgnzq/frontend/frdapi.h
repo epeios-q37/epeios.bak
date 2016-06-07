@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160518 Build Jun  2 2016 09:20:40 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160601 Build Jun  6 2016 09:50:36 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20160313 (Build May 25 2016 10:23:05 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160313 (Build Jun  5 2016 10:29:06 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ORGNZQ__INC
@@ -323,7 +323,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[2];
+		fblfrd::command__ _Commands[4];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -340,6 +340,8 @@ namespace orgnzq {
 			fblfrd::id8__ Parameters[] = {
 				0, 
 				21, 0, 
+				0, 21, 12, 34, 
+				21, 25, 0, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -358,10 +360,20 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 1, 2 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "Get";;
+			CommandDetail.Casts.Append( Parameters + 3, 4 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "UpdateEntry";;
+			CommandDetail.Casts.Append( Parameters + 7, 3 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 2, _Commands );
+			Commands.Recall( 0, 4, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -566,6 +578,34 @@ namespace orgnzq {
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 			Common_->Frontend().IdIn( In1 );
+
+			Common_->Frontend().EndOfInParameters();
+
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ Get( 
+			fblfrd::id__ &Out1,
+			fblfrd::id8__ &Out2,
+			fblfrd::items_ &Out3 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
+
+			Common_->Frontend().EndOfInParameters();
+
+			Common_->Frontend().IdOut( Out1 );
+			Common_->Frontend().Id8Out( Out2 );
+			Common_->Frontend().ItemsOut( Out3 );
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ UpdateEntry( 
+			const fblfrd::id__ &In1,
+			const fblfrd::string_ &In2 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
+			Common_->Frontend().IdIn( In1 );
+			Common_->Frontend().StringIn( In2 );
 
 			Common_->Frontend().EndOfInParameters();
 

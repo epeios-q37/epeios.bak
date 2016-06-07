@@ -27,6 +27,7 @@
 # include "sdr.h"
 # include "str.h"
 # include "lstbch.h"
+# include "crt.h"
 
 namespace ogzbsc {
 	typedef str::dString dDatum;
@@ -34,6 +35,8 @@ namespace ogzbsc {
 
 	typedef str::dStrings dData;
 	qW( Data );
+
+	using crt::cHooks;
 
 	qROW( DRow );	// User datum row.
 	qROW( FRow );	// User field row.

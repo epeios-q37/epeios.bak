@@ -95,9 +95,6 @@ namespace ogzfld {
 	};
 
 	typedef ogzbsc::rRegularCallback<lstctn::qLCONTAINERw( dField, sRow ), OGZFLD_TP> rRegularCallback;
-
-	typedef ogzbsc::dData dFieldBuffer;
-	qW( FieldBuffer );
 }
 
 #endif

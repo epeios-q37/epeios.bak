@@ -604,7 +604,6 @@ qRB
 	
 	Frontend.About( ProtocolVersion, TargetLabel, APIVersion, ExtendedBackendInformations, BackendCopyright, SoftwareInformations );
 
-	Frontend.Disconnect();
 qRR
 	if ( ERRFailure() ) { 
 		Meaning.Init();
@@ -616,6 +615,7 @@ qRR
 		qRAbort();
 	}
 qRT
+	Frontend.Disconnect();
 qRE
 }
 

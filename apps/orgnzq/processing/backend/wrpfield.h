@@ -30,7 +30,59 @@
 # define WRPFIELD_FIELD_NAME		"Field"
 
 namespace wrpfield {
-	typedef ogzfld::dFieldBuffer dField_;
+	typedef ogzbsc::dData dData_;
+
+	class dField_
+	: public dData_
+	{
+	public:
+		struct s
+		: public dData_::s
+		{
+			ogztyp::sRow Type;
+			ogzclm::eNumber Number;
+		} &S_;
+		dField_( s &S )
+		: S_( S ),
+		  dData_( S )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			dData_::reset( P );
+			S_.Type = qNIL;
+			S_.Number = ogzclm::n_Undefined;
+		}
+		void plug( ogzdta::cHooks &Hook )
+		{
+			dData_::plug( Hook );
+		}
+		void plug( qASd *AS )
+		{
+			dData_::plug( AS );
+		}
+		dField_ &operator =(const dField_ &F)
+		{
+			dData_::operator =( F );
+
+			S_.Type = F.S_.Type;
+			S_.Number = F.S_.Number;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			dData_::Init();
+
+			S_.Type = qNIL;
+			S_.Number = ogzclm::n_Undefined;
+		}
+		qRWDISCLOSEd( ogztyp::sRow, Type );
+		qRWDISCLOSEd( ogzclm::eNumber, Number );
+	};
+
+	typedef ogzbsc::dData dFieldBuffer;
+	qW( FieldBuffer );
+
 
 	class dField
 	: public dField_

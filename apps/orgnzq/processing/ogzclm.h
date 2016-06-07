@@ -127,7 +127,11 @@ namespace ogzclm {
 			ogzdta::sRow Label,
 			ogzdta::sRow Comment,
 			sRow Column = qNIL ) const;
-		ogztyp::sRow GetType( sRow Column ) const;
+		bso::sBool GetTypeAndNumber(
+			sRow Column,
+			ogztyp::sRow &Type,
+			eNumber &Number,
+			qRPC ) const;
 	};
 
 

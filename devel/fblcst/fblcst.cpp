@@ -60,7 +60,7 @@ const char *fblcst::CastsNames[c_amount] = {
 	"Item8s",
 	"Item16s",
 	"Item32s",
-	"Items",
+	"IStrings",
 	"XItem8s",
 	"XItem16s",
 	"XItem32s",

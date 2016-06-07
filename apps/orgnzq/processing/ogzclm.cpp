@@ -54,20 +54,32 @@ sRow ogzclm::mColumns::New(
 	return ColumnRow;
 }
 
-ogztyp::sRow ogzclm::mColumns::GetType( sRow ColumnRow ) const
+bso::sBool ogzclm::mColumns::GetTypeAndNumber(
+	sRow ColumnRow,
+	ogztyp::sRow &Type,
+	eNumber &Number,
+	qRPF ) const
 {
-	ogztyp::sRow Type = qNIL;
+	bso::sBool Exists = false;
 qRH
 	ogzclm::sColumn Column;
 qRB
 	Column.Init();
-	Recall( ColumnRow, Column );
+	Exists = Recall( ColumnRow, Column );
+
+	if ( !Exists ) {
+		if ( qRPT )
+			qRFwk();
+		else
+			qRReturn;
+	}
 
 	Type = Column.GetType();
+	Number = Column.GetNumber();
 qRR
 qRT
 qRE
-	return Type;
+	return Exists;
 }
 
 

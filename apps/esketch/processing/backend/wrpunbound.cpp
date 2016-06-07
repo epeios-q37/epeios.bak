@@ -29,8 +29,6 @@ using namespace wrpunbound;
 
 using common::rStuff;
 
-#define REPORT( message ) sclmisc::ReportAndAbort( message )
-
 #define DEC( name )\
 	static inline void name(\
 		fblbkd::backend___ &BaseBackend,\
@@ -40,7 +38,7 @@ DEC( Test )
 {
 qRH
 qRB
-	REPORT("TestMessage");
+	REPORT( TestMessage );
 qRR
 qRT
 qRE

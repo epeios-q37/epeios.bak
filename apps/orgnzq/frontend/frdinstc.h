@@ -130,6 +130,13 @@ namespace frdinstc {
 		{
 			S_().OGZGetRecordFields( *Record, Fields, Columns, Types, EntriesSet );
 		}
+		void GetCurrentField(
+			sType &Type,
+			sNumber &Number,
+			fbltyp::dIStrings &Entries ) const
+		{
+			Field_.Get( *Type, *Number, Entries );
+		}
 		const frdmisc::wXTypes &Types( void ) const
 		{
 			return F_().Types();
@@ -219,10 +226,15 @@ namespace frdinstc {
 			Field_ = Core_.CreateField( Record_, Core_.GetColumnObjectId() );
 			View_ = vRecord;
 		}
-		void DumpColumnBuffer( xml::dWriter &Writer ) const;
-		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;
+		void DumpColumnBuffer( xml::dWriter &Writer ) const;
+		void DumpFieldBuffer( xml::dWriter &Writer ) const;
+		void DumpFieldBufferCurrentField( xml::dWriter &Writer ) const;
+		bso::sBool FieldInProgress( void ) const
+		{
+			return Field_ != UndefinedField;
+		}
 		qRODISCLOSEr( eView, View );
 	};
 }

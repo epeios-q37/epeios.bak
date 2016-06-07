@@ -29,8 +29,6 @@
 
 using namespace wrpunbound;
 
-#define REPORT( message ) sclmisc::ReportAndAbort( message )
-
 using common::rStuff;
 
 #define DEC( name )\
@@ -238,7 +236,7 @@ namespace {
 	{
 		sColumnFeaturesCallback Callback( Request );
 
-		Database.GetColumnFeatures( Record, User, Callback );
+		Database.GetColumnsFeatures( Record, User, Callback );
 	}
 }
 
@@ -272,6 +270,7 @@ namespace {
 			ogzbsc::sFRow Field,
 			ogzclm::sRow Column,
 			ogztyp::sRow Type,
+			ogzclm::eNumber Number,
 			const str::dStrings &Entries ) override
 		{
 			Fields_.Append( *Field );
@@ -342,20 +341,20 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd );
 
 	Backend.Add( D( DefineRecord ),
-			fblbkd::cId,	// Id ot the record to define. New one if undefined.
+			fblbkd::cId,	// Id of the record to define. New one if undefined.
 		fblbkd::cEnd,
-			fblbkd::cId,	// Id ot the record to be defiend.
+			fblbkd::cId,	// Id of the record to be defined.
 		fblbkd::cEnd );
 
 	Backend.Add( D( CreateField ),
-			fblbkd::cId,	// Id of the record .
+			fblbkd::cId,		// Id of the record .
 			fblbkd::cObject,	// Id of the column object.
 		fblbkd::cEnd,
-			fblbkd::cId,	// Id of the created field.
+			fblbkd::cId,		// Id of the created field.
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetRecordColumns ),
-			fblbkd::cId,	// Id of the record .
+			fblbkd::cId,		// Id of the record .
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids of the columns,
 			fblbkd::cIds,		// Types.

@@ -25,7 +25,7 @@
 
 namespace {
 
-	E_CDEF( char *, XSLAffix_, "Frame" );
+	E_CDEF( char *, XSLAffix_, "Field" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -68,6 +68,8 @@ namespace {
 		base::content_rack___ Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpFieldBufferCurrentField( Rack );
 	qRR
 	qRT
 	qRE

@@ -52,8 +52,6 @@ void wrpcolumn::dColumn::HANDLE(
 	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
 
-#define REPORT( message ) sclmisc::ReportAndAbort( message )
-
 #define DEC( name )	static void exported##name ARGS
 
 DEC( Initialize )
@@ -83,13 +81,13 @@ namespace {
 		ogzclm::rColumnBuffer &Column )
 	{
 		if ( Label.Amount() == 0 )
-			REPORT( "FieldLabelCanNotBeEmpty" );
+			REPORT( FieldLabelCanNotBeEmpty );
 
 		if ( !GetTypes().Exists( Type ) )
-			REPORT( "UnknowFieldType");
+			REPORT( UnknowFieldType);
 
 		if ( !ogzclm::Exists( Number ) )
-			REPORT( "UnknownFieldNumber" );
+			REPORT( UnknownFieldNumber );
 
 		Column.Init( Type, Number, Label, Comment );
 	}

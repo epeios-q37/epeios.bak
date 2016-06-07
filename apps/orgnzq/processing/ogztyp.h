@@ -43,6 +43,7 @@ namespace ogztyp {
 		virtual void OGZTYPToXML(
 			const ogzbsc::dDatum &Datum,
 			str::dString &XML ) = 0;
+		virtual bso::sBool OGZTYPTest( const str::dString &Pattern ) = 0;
 	public:
 		qCALLBACK( Type );
 		const char *GetLabel( void )
@@ -56,6 +57,10 @@ namespace ogztyp {
 			OGZTYPToXML( Datum, XML );
 
 			return XML;
+		}
+		bso::sBool Test( const str::dString &Pattern )
+		{
+			return OGZTYPTest( Pattern );
 		}
 	};
 
@@ -94,6 +99,10 @@ namespace ogztyp {
 			str::dString &XML ) const
 		{
 			return C_().ToXML( Datum, XML );
+		}
+		bso::sBool Test( const str::dString &Pattern ) const
+		{
+			return C_().Test( Pattern );
 		}
 	};
 

@@ -747,7 +747,7 @@ namespace fblbkd {
 	{
 	private:
 		bso::bool__ _CompatibilityTested;
-		fblbur::mode__ _Mode;
+		fblbur::mode__ Mode_;
 		TOL_CBUFFER___ _ClientOrigin;
 		TOL_CBUFFER___ _APIVersion;
 		rMasterModule Master_;
@@ -816,7 +816,7 @@ namespace fblbkd {
 		void reset( bso::bool__ P = true )
 		{
 			_CompatibilityTested = false;
-			_Mode = fblbur::m_Undefined;
+			Mode_ = fblbur::m_Undefined;
 			_Embedded.reset( P );
 			_Remote.reset( P );
 			Key_.reset( P );
@@ -845,7 +845,7 @@ namespace fblbkd {
 			Links.Init();
 
 			_CompatibilityTested = false;
-			_Mode = Mode;
+			Mode_ = Mode;
 
 			str::string( BackendLabel ).Convert( _BackendLabel );
 

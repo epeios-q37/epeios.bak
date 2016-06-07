@@ -252,4 +252,21 @@ namespace err {
 # define qRFree()		ERRCommon( err::t_Free )
 }
 
+// Error handling parameter related macros.
+
+// For method/function deFinition.
+# define qRPC	qRPF = err::h_Default
+
+// For method/function deClaration.
+# define qRPF	err::handling__ qRP
+
+// For testing
+# define qRPT ( qRP == err::hThrowException )
+
+// For reference.
+# define qRP ErrHandling
+
+// Parameter value for user handled error.
+# define qRPU err::hUserDefined
+
 #endif

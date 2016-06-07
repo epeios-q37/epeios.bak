@@ -317,11 +317,6 @@ namespace {
 	TOL_CBUFFER___ Identification_;
 }
 
-Q37_GCTOR( xdhbrwq )
-{
-
-}
-
 scldaemon::callback___ *scldaemon::SCLDAEMONGetCallback(
 	csdleo::context__ Context,
 	csdleo::mode__ Mode )

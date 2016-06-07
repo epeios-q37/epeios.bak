@@ -51,15 +51,13 @@ void wrpexample::dMyObject::HANDLE(
 	((f_manager)Module.Functions( Command ))( *this, Backend, Request );
 }
 
-#define REPORT( message ) sclmisc::ReportAndAbort( message )
-
 #define DEC( name )	static void exported##name ARGS
 
 DEC( Test )
 {
 qRH
 qRB
-	REPORT( "TestMessage" );
+	REPORT( TestMessage );
 qRR
 qRT
 qRE

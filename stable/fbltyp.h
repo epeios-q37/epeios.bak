@@ -1226,10 +1226,6 @@ namespace fbltyp {
 /***** New *****/
 /***************/
 
-# define M( id, Id )\
-	typedef id##__	s##Id;\
-	typedef id##s_	d##Id##s;\
-	qW( Id##s )
 
 namespace fbltyp {
 	typedef string_	dString;
@@ -1241,6 +1237,11 @@ namespace fbltyp {
 	typedef xstrings_	dStringsSet;
 	qW( StringsSet );
 
+# define M( id, Id )\
+	typedef id##__	s##Id;\
+	typedef id##s_	d##Id##s;\
+	qW( Id##s )
+
 	M( id, Id );
 	M( id8, Id8 );
 	M( id16, Id16 );
@@ -1251,10 +1252,20 @@ namespace fbltyp {
 	M( ubig, UBig );
 	M( sbig, SBig );
 
+# undef M
+
+	typedef item_ dIString;
+	qW( IString );
+
+	typedef items_ dIStrings;
+	qW( IStrings );
+
+	typedef xitems_ dIXStrings;
+	qW( IXStrings );
+
 	typedef object__ sObject;
 }
 
-# undef M
 
 # ifdef FBLTYP_M_
 #   define M FBLTYP_M_
