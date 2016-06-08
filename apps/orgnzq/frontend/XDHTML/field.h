@@ -24,20 +24,20 @@
 # include "base.h"
 
 namespace field {
-	BASE_ACD( Template );
+	BASE_ACD( DefineNewEntry );
 
 	class fActionCallbacks
 	{
 	public:
-		BASE_ACU( Template );
+		BASE_ACU( DefineNewEntry );
 		void reset( bso::bool__ P = true )
 		{
-			BASE_ACR( Template );
+			BASE_ACR( DefineNewEntry );
 		}
 		qCVDTOR( fActionCallbacks );
 		void Init( void )
 		{
-			BASE_ACI( Template );
+			BASE_ACI( DefineNewEntry );
 		}
 	};
 

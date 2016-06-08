@@ -99,8 +99,8 @@ qRT
 qRE
 }
 
-BASE_AC( field::sTemplate )
+BASE_AC( field::sDefineNewEntry )
 {
-	Session.AlertT( "Template" );
+	Session.AlertU( "New entry" );
 }
 

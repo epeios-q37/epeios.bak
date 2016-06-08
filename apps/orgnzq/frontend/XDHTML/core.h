@@ -25,6 +25,7 @@
 # include "login.h"
 # include "main.h"
 # include "column.h"
+# include "field.h"
 # include "fields.h"
 # include "record.h"
 # include "records.h"
@@ -49,6 +50,7 @@ namespace core {
 		login::fActionCallbacks Login_;
 		main::fActionCallbacks Main_;
 		column::fActionCallbacks Column_;
+		field::fActionCallbacks Field_;
 		fields::fActionCallbacks Fields_;
 		record::fActionCallbacks Record_;
 		records::fActionCallbacks Records_;
@@ -60,6 +62,7 @@ namespace core {
 			Login_.reset( P );
 			Main_.reset( P );
 			Column_.reset( P );
+			Field_.reset( P );
 			Fields_.reset( P );
 			Record_.reset( P );
 			Records_.reset( P );
@@ -72,6 +75,7 @@ namespace core {
 			Main_.Init();
 			Global_.Init();
 			Column_.Init();
+			Field_.Init();
 			Fields_.Init();
 			Record_.Init();
 			Records_.Init();
