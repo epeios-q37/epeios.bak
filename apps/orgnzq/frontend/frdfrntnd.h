@@ -39,18 +39,23 @@ namespace frdfrntnd {
 	using frdmisc::dTypes;
 	using frdmisc::UndefinedType;
 
-	SCLF_ILW( Number, Id8 );
+	SCLF_I2S( Number, Id8 );
 	SCLF_I( Column, Id );
 	SCLF_I( Field, Id );
 	SCLF_I( Record, Id );
-	
+
+	SCLF_I1S( Entry, Id );
+	typedef dEntrys dEntries;
+	qW( Entries );
+	typedef dEntrysI1S dEntriesI1S;
+	qW( EntriesI1S );
 
 	class rFrontend
 	: public rFrontend_
 	{
 	private:
 		frdmisc::wXTypes Types_;
-		wNumberILWs Numbers_;
+		wNumbersI2S Numbers_;
 		void GetTypes_( void );
 		void DumpTypes_( xml::writer_ &Writer );
 		void GetNumbers_( void );

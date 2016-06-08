@@ -340,7 +340,7 @@ namespace orgnzq {
 			fblfrd::id8__ Parameters[] = {
 				0, 
 				21, 0, 
-				0, 21, 12, 34, 
+				0, 21, 12, 22, 26, 
 				21, 25, 0, 
 			};
 
@@ -362,12 +362,12 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Get";;
-			CommandDetail.Casts.Append( Parameters + 3, 4 );
+			CommandDetail.Casts.Append( Parameters + 3, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "UpdateEntry";;
-			CommandDetail.Casts.Append( Parameters + 7, 3 );
+			CommandDetail.Casts.Append( Parameters + 8, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -587,7 +587,8 @@ namespace orgnzq {
 		fblovl::reply__ Get( 
 			fblfrd::id__ &Out1,
 			fblfrd::id8__ &Out2,
-			fblfrd::items_ &Out3 ) const
+			fblfrd::ids_ &Out3,
+			fblfrd::strings_ &Out4 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
 
@@ -595,7 +596,8 @@ namespace orgnzq {
 
 			Common_->Frontend().IdOut( Out1 );
 			Common_->Frontend().Id8Out( Out2 );
-			Common_->Frontend().ItemsOut( Out3 );
+			Common_->Frontend().IdsOut( Out3 );
+			Common_->Frontend().StringsOut( Out4 );
 
 			return Common_->Frontend().Handle();
 		}

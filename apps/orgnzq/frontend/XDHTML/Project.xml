@@ -74,6 +74,7 @@
 	</SourceDirs>
 	<Files>
 		<Files Group="XSL" Path="XSL/">
+			<File>functions.xsl</File>
 			<Files Group="Frames">
 				<Files Group="Column">
 					<File>ColumnLayout.xsl</File>

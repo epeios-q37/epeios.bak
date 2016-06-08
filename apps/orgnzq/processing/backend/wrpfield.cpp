@@ -89,23 +89,17 @@ DEC( UpdateEntry )
 namespace {
 	void Get_(
 		const dField_ Field,
-		fbltyp::dIStrings &Strings )
+		fbltyp::dIds &Ids,
+		fbltyp::dStrings &Strings )
 	{
-	qRH
-		fbltyp::wIString String;
-		sdr::sRow Row = qNIL;
-	qRB
-		Row = Field.First();
+		sdr::sRow Row = Field.First();
 
 		while ( Row != qNIL ) {
-			String.Init(*Row, Field( Row ) );
-			Strings.Append( String );
+			Ids.Append( *Row );
+			Strings.Append( Field( Row ) );
 
 			Row = Field.Next( Row );
 		}
-	qRR
-	qRT
-	qRE
 	}
 }
 
@@ -114,7 +108,10 @@ DEC( Get )
 	Request.IdOut() = *Field.Type();
 	Request.Id8Out() = Field.Number();
 
-	Get_(Field, Request.IStringsOut() );
+	fbltyp::dIds &Ids = Request.IdsOut();
+	fbltyp::dStrings &Entries = Request.StringsOut();
+
+	Get_(Field, Ids, Entries );
 }
 
 namespace{
@@ -156,9 +153,10 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 
 	Module.Add( D( Get ),
 		fblbkd::cEnd,
-			fblbkd::cId,	// Type.
-			fblbkd::cId8,	// Number,
-			fblbkd::cIStrings,			
+			fblbkd::cId,		// Type.
+			fblbkd::cId8,		// Number.
+			fblbkd::cIds,		// Ids of the entries.
+			fblbkd::cStrings,	// Entries.	
 		fblbkd::cEnd );
 
 	Module.Add( D( UpdateEntry ),

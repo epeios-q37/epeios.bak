@@ -205,238 +205,212 @@ namespace sclfrntnd {
 \
 	E_CDEF( s##name, Undefined##name, fbltyp::Undefined##id )
 
-	template <typename t> class dIL_	// id, label.
+	template <typename ids> class dI1S
 	{
 	public:
 		struct s {
-			t Id;
-			str::string_::s Label;
-		} &S_;
-		str::string_ Label;
-		dIL_( s &S )
-		: S_( S ),
-		  Label( S.Label )
+			typename ids::s Ids;
+			str::dStrings::s Strings1;
+		};
+		ids Ids;
+		str::dStrings Strings1;
+		dI1S( s &S )
+		: Ids( S.Ids ),
+		  Strings1( S.Strings1 )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			S_.Id = t(-1);
-			Label.reset( P );
-		}
-		void plug( str::cHook &Hook )
-		{
-			Label.plug( Hook );
+			Ids.reset( P );
+			Strings1.reset( P );
 		}
 		void plug( qASd *AS )
 		{
-			Label.plug( AS );
+			Ids.plug( AS );
+			Strings1.plug( AS );
 		}
-		dIL_ &operator =(const dIL_ &IL)
+		dI1S &operator =(const dI1S &I1S)
 		{
-			S_.Id = IL.S_.Id;
-			Label = IL.Label;
+			Ids = I1S.Ids;
+			Strings1 = I1S.Strings1;
 
 			return *this;
 		}
-		void Init(
-			t Id,
-			const str::string_ &Label )
+		void Init( void )
 		{
-			S_.Id = Id;
-			this->Label.Init( Label );
+			Ids.Init();
+			Strings1.Init();
 		}
-		E_RODISCLOSE_( t, Id );
+		qNAV( Ids. );
 	};
 
-	qW1( IL_ );
+	qW1( I1S );
 
-# define SCLF_IL( name, id  )\
+# define SCLF_I1S( name, id  )\
 	SCLF_I( name, id );\
 \
-	typedef sclfrntnd::dIL_<s##name> d##name##IL;\
-	qW( name##IL );\
-\
-	typedef ctn::qMCONTAINERdl( d##name##IL ) d##name##ILs;\
-	qW( name##ILs );
+	typedef sclfrntnd::dI1S<d##name##s> d##name##sI1S;\
+	qW( name##sI1S );
 
-	template <typename id, typename ids> inline void Fill(
-		const ids &Ids,
-		const fbltyp::strings_ &Labels,
-		ctn::qMCONTAINERdl( dIL_<id> ) &Items )
-	{
-	qRH
-		sdr::row__ Row = qNIL;
-		wIL_<id> Item;
-	qRB
-		Row = Ids.First();
-
-		if ( Ids.Amount() != Labels.Amount() )
-			qRGnr();
-
-		while ( Row != qNIL ) {
-			Item.Init( Ids(Row), Labels(Row) );
-			Items.Append( Item );
-
-			Row = Ids.Next( Row );
-		}
-	qRR
-	qRT
-	qRE
-	}
-
-	template <typename t> class dILW_	// id, label, wording.
-	: public dIL_<t>
+	template <typename id> class dI2S	// id, 2 strings.
+	: public dI1S<id>
 	{
 	public:
 		struct s
-		: public dIL_<t>::s
+		: public dI1S<id>::s
 		{
-			str::string_::s Wording;
+			str::dStrings::s Strings2;
 		};
-		str::string_ Wording;
-		dILW_( s &S )
-		: dIL_<t>( S ),
-		  Wording( S.Wording )
+		str::dStrings Strings2;
+		dI2S( s &S )
+		: dI1S<id>( S ),
+		  Strings2( S.Strings2 )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			dIL_<t>::reset( P );
-			Wording.reset( P );
+			dI1S<id>::reset( P );
+			Strings2.reset( P );
 		}
 		void plug( qASd *AS )
 		{
-			dIL_<t>::plug( AS );
-			Wording.plug( AS );
+			dI1S<id>::plug( AS );
+			Strings2.plug( AS );
 		}
-		dILW_ &operator =(const dILW_ &ILW)
+		dI2S &operator =(const dI2S &I2S)
 		{
-			dIL_<t>::operator =( ILW );
-			Wording = ILW.Wording;
+			dI1S<id>::operator =( I2S );
+			Strings2 = I2S.Strings2;
 
 			return *this;
 		}
-		void Init(
-			t Id,
-			const str::string_ &Label,
-			const str::string_ &Wording )
+		void Init( void )
 		{
-			dIL_<t>::Init( Id, Label );
-			this->Wording.Init( Wording );
+			dI1S<id>::Init();
+			this->Strings2.Init();
 		}
 	};
 
-	qW1( ILW_ );
+	qW1( I2S );
 
 
-# define SCLF_ILW( name, id  )\
+# define SCLF_I2S( name, id  )\
 	SCLF_I( name, id );\
 \
-	typedef sclfrntnd::dILW_<s##name> d##name##ILW;\
-	qW( name##ILW );\
-\
-	typedef ctn::qCONTAINERdl( d##name##ILW ) d##name##ILWs;\
-	qW( name##ILWs );
+	typedef sclfrntnd::dI2S<d##name##s> d##name##sI2S;\
+	qW( name##sI2S );
 
-	template <typename id, typename ids> inline void Fill(
-		const ids &Ids,
-		const fbltyp::strings_ &Labels,
-		const fbltyp::strings_ &Wordings,
-		ctn::qCONTAINERdl( dILW_<id> ) &Items )
-	{
-	qRH
-		sdr::row__ Row = qNIL;
-		wILW_<id> Item;
-	qRB
-		Row = Ids.First();
-
-		if ( Ids.Amount() != Labels.Amount() )
-			qRGnr();
-
-		if ( Ids.Amount() != Wordings.Amount() )
-			qRGnr();
-
-		while ( Row != qNIL ) {
-			Item.Init( Ids(Row), Labels(Row), Wordings( Row ) );
-			Items.Append( Item );
-
-			Row = Ids.Next( Row );
-		}
-	qRR
-	qRT
-	qRE
-	}
-
-	E_CDEF( char *, AmountAttribute, "Amount" );
 	E_CDEF( char *, IdAttribute, "id" );
-	E_CDEF( char *, LabelAttribute, "label" );
-	E_CDEF( char *, WordingAttribute, "Wording" );
+	E_CDEF( char *, AmountAttribute, "Amount" );
+
+	qENUM( Kind ) {
+		kTag,
+		kAttribute,
+		kValue,
+		kAttr = kAttribute,
+		k_amount,
+		k_Undefined,
+		k_End = k_Undefined
+	};
 
 	template <typename id> inline void Dump_(
-		const sclfrntnd::dIL_<id> &Item,
-		xml::writer_ &Writer )
+		xml::dWriter &Writer,
+		id Id,
+		... )	// Kind, Value, [Label], kind, value, [Label]... k_End.
 	{
-		xml::PutAttribute( sclfrntnd::IdAttribute, **Item.Id(), Writer );
-		Writer.PutAttribute( sclfrntnd::LabelAttribute, Item.Label );
+		va_list List;
+		va_start( List, Id );
+
+		eKind Kind = va_arg( List, eKind );
+		const str::dString *Value = NULL;
+
+		Writer.PutAttribute( IdAttribute, *Id );
+
+		while ( Kind != k_End ) {
+			Value = va_arg( List, const str::dString *);
+
+			switch ( Kind ) {
+			case kTag:
+				Writer.PutValue( *Value, va_arg( List, const char *) );
+				break;
+			case kAttribute:
+				Writer.PutAttribute( va_arg( List, const char *), *Value );
+				break;
+			case kValue:
+				Writer.PutValue( *Value );
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+
+			Kind = va_arg( List, eKind );
+		}
+
+		va_end( List );
 	}
 
-	template <typename id> inline void DumpIL_(
-		const sclfrntnd::dIL_<id> &Item,
-		xml::writer_ &Writer )
-	{
-		Dump_( Item, Writer );
-	}
-
-	template <typename id> inline void Dump_(
-		const sclfrntnd::dILW_<id> &Item,
-		xml::writer_ &Writer )
-	{
-# if 0	// Should work, but not with VC++.
-		Dump_( (const sclfrntnd::dIL_<id>)Item, Writer );
-# else
-		DumpIL_( Item, Writer );
-# endif
-		Writer.PutValue( Item.Wording, sclfrntnd::WordingAttribute );
-	}
-
-	template <typename id, typename items> static void Dump_(
-		const items &Items,
+	template <typename ids> inline void Dump(
+		const dI1S<ids> &I1S,
 		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		sdr::row__ Row = Items.First();
+		sdr::row__ Row = I1S.First();
 
 		Writer.PushTag( ItemsLabel );
-		xml::PutAttribute( sclfrntnd::AmountAttribute, Items.Amount(), Writer );
+		xml::PutAttribute( sclfrntnd::AmountAttribute, I1S.Amount(), Writer );
 
 		while ( Row != qNIL ) {
 			Writer.PushTag( ItemLabel );
 
-			Dump_<id>( Items( Row ), Writer );
+			Dump_( Writer, I1S.Ids( Row ), kValue, &I1S.Strings1( Row ), k_End );
 
 			Writer.PopTag();
 
-			Row = Items.Next( Row );
+			Row = I1S.Next( Row );
 		}
 
 		Writer.PopTag();
 	}
 
-	template <typename id> static void Dump(
-		const ctn::E_MCONTAINER_( sclfrntnd::dIL_<id> ) &Items,
+
+	template <typename ids> inline void Dump(
+		const dI2S<ids> &I2S,
 		const char *ItemsLabel,
 		const char *ItemLabel,
+		eKind String1LabelKind,
+		const char *String1Label,
+		const char *String2TagLabel,
 		xml::writer_ &Writer )
 	{
-		Dump_<id, ctn::E_MCONTAINER_( sclfrntnd::dIL_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+		sdr::row__ Row = I2S.First();
+
+		Writer.PushTag( ItemsLabel );
+		xml::PutAttribute( sclfrntnd::AmountAttribute, I2S.Amount(), Writer );
+
+		while ( Row != qNIL ) {
+			Writer.PushTag( ItemLabel );
+
+			Dump_( Writer, I2S.Ids( Row ), String1LabelKind, &I2S.Strings1( Row ), String1Label, kTag, &I2S.Strings2( Row ), String2TagLabel, k_End );
+
+			Writer.PopTag();
+
+			Row = I2S.Next( Row );
+		}
+
+		Writer.PopTag();
 	}
 
-	template <typename id> static void Dump(
-		const ctn::E_CONTAINER_( sclfrntnd::dILW_<id> ) &Items,
+
+	E_CDEF( char *, LabelAttribute, "label" );
+	E_CDEF( char *, WordingTag, "Wording" );
+
+	template <typename ids> inline void DumpAsLabelWording(
+		const sclfrntnd::dI2S<ids> &I2S,
 		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		Dump_<id, ctn::E_CONTAINER_( sclfrntnd::dILW_<id> )>( Items, ItemsLabel, ItemLabel, Writer );
+		Dump<ids>( I2S, ItemsLabel, ItemLabel, kAttribute, LabelAttribute, WordingTag, Writer );
 	}
 }
 

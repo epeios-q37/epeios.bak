@@ -133,9 +133,9 @@ namespace frdinstc {
 		void GetCurrentField(
 			sType &Type,
 			sNumber &Number,
-			fbltyp::dIStrings &Entries ) const
+			dEntriesI1S &Entries ) const
 		{
-			Field_.Get( *Type, *Number, Entries );
+			Field_.Get( *Type, *Number, Entries.Ids, Entries.Strings1 );
 		}
 		const frdmisc::wXTypes &Types( void ) const
 		{
@@ -224,6 +224,7 @@ namespace frdinstc {
 
 			Core_.UpdateColumn( Type, Number, Label, Comment );
 			Field_ = Core_.CreateField( Record_, Core_.GetColumnObjectId() );
+			Core_.DefineField( Field_ );
 			View_ = vRecord;
 		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;

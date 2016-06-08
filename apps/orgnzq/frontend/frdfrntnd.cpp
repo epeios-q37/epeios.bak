@@ -87,7 +87,7 @@ namespace {
 	{
 		Writer.PushTag( "Type" );
 		Writer.PutAttribute( "id", **Type.Id() );
-		Writer.PutValue( Type.Label, "Label" );
+		Writer.PutAttribute( "label", Type.Label );
 		Writer.PopTag();
 	}
 
@@ -117,24 +117,13 @@ void  frdfrntnd::rFrontend::DumpTypes_( xml::writer_ &Writer )
 
 void frdfrntnd::rFrontend::GetNumbers_( void )
 {
-qRH
-	fbltyp::id8s Ids;
-	fbltyp::strings Labels, Wordings;
-qRB
-	Ids.Init();
-	Labels.Init();
-	Wordings.Init();
+	Numbers_.Init();
 
-	Statics.OGZGetNumbers( Ids, Labels, Wordings );
-
-	sclfrntnd::Fill<sNumber, dNumbers>( Ids, Labels, Wordings, Numbers_ );
-qRR
-qRT
-qRE
+	Statics.OGZGetNumbers( Numbers_.Ids, Numbers_.Strings1, Numbers_.Strings2 );
 }
 
 void  frdfrntnd::rFrontend::DumpNumbers_( xml::writer_ &Writer )
 {
-	sclfrntnd::Dump<sNumber>( Numbers_, "Numbers", "Number", Writer );
+	sclfrntnd::DumpAsLabelWording( Numbers_, "Numbers", "Number", Writer );
 }
 
