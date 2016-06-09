@@ -53,6 +53,18 @@ namespace ogzusr {
 		virtual sRow OGZUSRNew( sRow User ) = 0;
 		// If 'Row' == 'qNIL', the content must be erased.
 		virtual void OGZUSRDelete( sRow User ) = 0;
+		// Columns related methods.
+		virtual ogzbsc::sCRow OGZUSRAdd(
+			ogzclm::sRow Column,
+			sRow User ) = 0;
+		virtual void OGZUSRRemove(
+			ogzbsc::sCRow Column,
+			sRow User ) = 0;
+		virtual void OGZUSRGetRaws(
+			const ogzfld::dColumns &Columns,
+			sRow User,
+			ogzclm::dRows &RawColumns ) = 0;
+		// Data related methods.
 		virtual ogzbsc::sDRow OGZUSRAdd(
 			ogzdta::sRow Entry,
 			sRow User ) = 0;
@@ -63,6 +75,7 @@ namespace ogzusr {
 			const ogzfld::dData &Entries,
 			sRow User,
 			ogzdta::dRows &RawEntries ) = 0;
+		// Fields related methods.
 		virtual ogzbsc::sFRow OGZUSRAdd(
 			ogzfld::sRow Field,
 			sRow User ) = 0;
@@ -73,6 +86,7 @@ namespace ogzusr {
 			const ogzrcd::dFields &Fields,
 			sRow User,
 			ogzfld::dRows &RawFields ) = 0;
+		// Records related methods.
 		virtual ogzbsc::sRRow OGZUSRAdd(
 			ogzrcd::sRow Record,
 			sRow User ) = 0;
@@ -280,6 +294,18 @@ namespace ogzusr {
 			return GetRaws_( Regulars, User, Raws );
 		}
 		// No template members below, because some template can not be deduced.
+		ogzbsc::sCRow Add(
+			ogzclm::sRow Column,
+			sRow User ) const
+		{
+			return Add_<ogzbsc::sCRow,ogzclm::sRow>( Column, User );
+		}
+		ogzclm::sRow GetRaw(
+			ogzbsc::sCRow Column,
+			sRow User ) const
+		{
+			return GetRaw_<ogzbsc::sCRow,ogzclm::sRow>( Column, User );
+		}
 		ogzbsc::sDRow Add(
 			ogzdta::sRow Datum,
 			sRow User ) const
@@ -326,9 +352,13 @@ namespace ogzusr {
 		}
 	};
 
+	typedef lstbch::qBUNCHd( ogzclm::sRow, ogzbsc::sCRow ) dColumns_;
 	typedef lstbch::qBUNCHd( ogzdta::sRow, ogzbsc::sDRow ) dEntries_;
 	typedef lstbch::qBUNCHd( ogzfld::sRow, ogzbsc::sFRow ) dFields_;
 	typedef lstbch::qBUNCHd( ogzrcd::sRow, ogzbsc::sRRow ) dRecords_;
+
+	typedef lstcrt::qLMCRATEd( dColumns_, sRow ) dColumnsCrate_;
+	qW( ColumnsCrate_ );
 
 	typedef lstcrt::qLMCRATEd( dEntries_, sRow ) dEntriesCrate_;
 	qW( EntriesCrate_ );
@@ -344,6 +374,7 @@ namespace ogzusr {
 	: public cUser
 	{
 	private:
+		wColumnsCrate_ Columns_;
 		wEntriesCrate_ Entries_;
 		wFieldsCrate_  Fields_;
 		wRecordsCrate_  Records_;
@@ -387,7 +418,10 @@ namespace ogzusr {
 		// If 'Row' != 'qNIL', it must be used.
 		sRow OGZUSRNew( sRow User ) override
 		{
-			sRow Row = Entries_.New();
+			sRow Row = Columns_.New();
+
+			if ( Entries_.New() != Row )
+				qRGnr();
 
 			if ( Fields_.New() != Row )
 				qRGnr();
@@ -395,6 +429,7 @@ namespace ogzusr {
 			if ( Records_.New() != Row )
 				qRGnr();
 
+			Columns_( Row ).Init();
 			Fields_( Row ).Init();
 			Entries_( Row ).Init();
 			Records_( Row ).Init();
@@ -405,14 +440,35 @@ namespace ogzusr {
 		virtual void OGZUSRDelete( sRow User ) override
 		{
 			if ( User == qNIL ) {
+				Columns_.Init();
 				Entries_.Init();
 				Fields_.Init();
 				Records_.Init();
 			} else {
+				Columns_.Remove( User );
 				Entries_.Remove( User );
 				Fields_.Remove( User );
 				Records_.Remove( User );
 			}
+		}
+		virtual ogzbsc::sCRow OGZUSRAdd(
+			ogzclm::sRow Column,
+			sRow User ) override
+		{
+			return Add_<dColumnsCrate_, ogzbsc::sCRow, ogzclm::sRow> ( Columns_, Column, User );
+		}
+		virtual void OGZUSRRemove(
+			ogzbsc::sCRow Column,
+			sRow User ) override
+		{
+			return Remove_( Columns_, Column, User );
+		}
+		virtual void OGZUSRGetRaws(
+			const ogzfld::dColumns &Columns,
+			sRow User,
+			ogzclm::dRows &RawColumns ) override
+		{
+			return GetRaws_( Columns, Columns_, User, RawColumns );
 		}
 		virtual ogzbsc::sDRow OGZUSRAdd(
 			ogzdta::sRow Entry,
@@ -482,6 +538,7 @@ namespace ogzusr {
 	public:
 		void reset( bso::sBool P = true )
 		{
+			Columns_.reset( P );
 			Entries_.reset( P );
 			Fields_.reset( P );
 			Records_.reset( P );
@@ -489,6 +546,7 @@ namespace ogzusr {
 		qCVDTOR( rRegularCallback );
 		void Init( void )
 		{
+			Columns_.Init();
 			Entries_.Init();
 			Fields_.Init();
 			Records_.Init();

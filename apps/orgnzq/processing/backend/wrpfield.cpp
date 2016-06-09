@@ -28,7 +28,7 @@ const char *wrpfield::dField::PREFIX = WRPFIELD_FIELD_PREFIX;
 const char *wrpfield::dField::NAME = WRPFIELD_FIELD_NAME;
 
 #define ARGS (\
-	dField_ &Field,\
+	dField &Field,\
 	fblbkd::backend___ &BaseBackend,\
 	fblbkd::rRequest &Request )
 
@@ -45,11 +45,6 @@ void wrpfield::dField::HANDLE(
 
 #define DEC( name )	static void exported##name ARGS
 
-DEC( Initialize )
-{
-	Field().Init();
-}
-
 DEC( Define )
 {
 	STUFF;
@@ -59,29 +54,38 @@ DEC( Define )
 
 	ogzbsc::sFRow FieldRow = *Request.IdIn();
 
+	Field.Init();
+
+	Field.New();
+
 	if ( !Database.GetEntries( FieldRow, Stuff.User(), Field, Field.Type(), Field.Number(), qRPU ) )
 		REPORT( NoSuchField );
 }
 
 DEC( UpdateEntry )
 {
-	sdr::sRow Row = *Request.IdIn();	// If == 'qNIL', new entry is created.
+	sdr::sRow Row = *Request.IdIn();	// If == 'qNIL', new entry is created, unless for a mono field, where the entry is created/updated.
 	const str::dString &Entry = Request.StringIn();
-
-	if ( !Field.Exists( Row ) )
-		REPORT( NoSuchEntry );
 
 	if ( !GetTypes()( Field.Type() ).Test( Entry ) )
 		REPORT( BadEntryValue );
 
-	if ( Row == qNIL ) {
-		if ( Field.Amount() == 1 )
-			if ( Field.Number() == ogzclm::nMono )
-				REPORT( OnlyOneEntryAllowed );
+	if ( Field.Number() == ogzclm::nMono ) {
+		if ( Row != qNIL )
+			REPORT( EntryRowShouldBeNILForMonoField );
 
+		if ( Field.Amount() == 0 ) {
+			Row = Field.New();
+			Field( Row ).Init();
+		} else if ( Field.Amount() == 1 )
+			Row = Field.First();
+		else
+			qRGnr();
+	} else if ( Row == qNIL ) {
 		Row = Field.New();
-		Field(Row).Init();
-	}
+		Field( Row ).Init();
+	} else if ( !Field.Exists( Row ) )
+		REPORT( NoSuchEntry );
 
 	Field.Store( Entry, Row );
 }
@@ -142,10 +146,6 @@ DEC( Update )
 
 void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 {
-	Module.Add( D( Initialize ),
-		fblbkd::cEnd,
-		fblbkd::cEnd );
-
 	Module.Add( D( Define ),
 			fblbkd::cId,		// Field id.
 		fblbkd::cEnd,
@@ -160,7 +160,7 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 		fblbkd::cEnd );
 
 	Module.Add( D( UpdateEntry ),
-			fblbkd::cId,		// Id of entry to update ; if == 'qNIL', a new entry is created.
+			fblbkd::cId,		// Id of entry to update ; if == 'qNIL', a new entry is created, unless it's a mono field, in which case the entry is updated/created.
 			fblbkd::cString,	// Then entry value.		
 		fblbkd::cEnd,
 		fblbkd::cEnd );

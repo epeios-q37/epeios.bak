@@ -26,11 +26,11 @@
 
 using namespace frdinstc;
 
-#define C( name )	case v##name : return #name; break
+#define C( name )	case t##name : return #name; break
  
-const char *frdinstc::GetLabel( eView View )
+const char *frdinstc::GetLabel( eTarget Target )
 {
-	switch ( View ) {
+	switch ( Target ) {
 	C( Column );
 	C( Field );
 	C( Record );

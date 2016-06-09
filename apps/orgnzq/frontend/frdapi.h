@@ -45,7 +45,7 @@ namespace orgnzq {
 				25, 25, 0, 2, 
 				0, 13, 26, 26, 
 				0, 22, 26, 26, 
-				21, 0, 21, 
+				0, 21, 
 				21, 1, 0, 21, 
 				21, 0, 22, 22, 13, 26, 26, 
 				21, 0, 22, 22, 22, 27, 
@@ -82,23 +82,23 @@ namespace orgnzq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "OGZDefineRecord";;
-			CommandDetail.Casts.Append( Parameters + 16, 3 );
+			CommandDetail.Name = "OGZCreateRecord";;
+			CommandDetail.Casts.Append( Parameters + 16, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZCreateField";;
-			CommandDetail.Casts.Append( Parameters + 19, 4 );
+			CommandDetail.Casts.Append( Parameters + 18, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetRecordColumns";;
-			CommandDetail.Casts.Append( Parameters + 23, 7 );
+			CommandDetail.Casts.Append( Parameters + 22, 7 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetRecordFields";;
-			CommandDetail.Casts.Append( Parameters + 30, 6 );
+			CommandDetail.Casts.Append( Parameters + 29, 6 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -173,12 +173,10 @@ namespace orgnzq {
 
 			return Frontend().Handle();
 		}
-		fblovl::reply__ OGZDefineRecord( 
-			const fblfrd::id__ &In1,
+		fblovl::reply__ OGZCreateRecord( 
 			fblfrd::id__ &Out1 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[5] );
-			Frontend().IdIn( In1 );
 
 			Frontend().EndOfInParameters();
 
@@ -323,7 +321,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[4];
+		fblfrd::command__ _Commands[3];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -338,7 +336,6 @@ namespace orgnzq {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
-				0, 
 				21, 0, 
 				0, 21, 12, 22, 26, 
 				21, 25, 0, 
@@ -351,29 +348,24 @@ namespace orgnzq {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "Initialize";;
-			CommandDetail.Casts.Append( Parameters + 0, 1 );
-			CommandsDetails.Append( CommandDetail );
-
-			CommandDetail.Init();
 			CommandDetail.Name = "Define";;
-			CommandDetail.Casts.Append( Parameters + 1, 2 );
+			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Get";;
-			CommandDetail.Casts.Append( Parameters + 3, 5 );
+			CommandDetail.Casts.Append( Parameters + 2, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "UpdateEntry";;
-			CommandDetail.Casts.Append( Parameters + 8, 3 );
+			CommandDetail.Casts.Append( Parameters + 7, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 4, _Commands );
+			Commands.Recall( 0, 3, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -564,19 +556,10 @@ namespace orgnzq {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ Initialize( void ) const
-		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
-
-			Common_->Frontend().EndOfInParameters();
-
-
-			return Common_->Frontend().Handle();
-		}
 		fblovl::reply__ Define( 
 			const fblfrd::id__ &In1 ) const
 		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
 			Common_->Frontend().IdIn( In1 );
 
 			Common_->Frontend().EndOfInParameters();
@@ -590,7 +573,7 @@ namespace orgnzq {
 			fblfrd::ids_ &Out3,
 			fblfrd::strings_ &Out4 ) const
 		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 
 			Common_->Frontend().EndOfInParameters();
 
@@ -605,7 +588,7 @@ namespace orgnzq {
 			const fblfrd::id__ &In1,
 			const fblfrd::string_ &In2 ) const
 		{
-			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[2] );
 			Common_->Frontend().IdIn( In1 );
 			Common_->Frontend().StringIn( In2 );
 

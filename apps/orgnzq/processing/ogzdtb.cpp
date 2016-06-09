@@ -42,7 +42,7 @@ ogzbsc::sFRow ogzdtb::mDatabase::NewField(
 	ogzbsc::sRRow Record,
 	ogzusr::sRow User )
 {
-	ogzbsc::sFRow Field = Users.Add( Fields.New( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), Data ), Create_( Column.Comment(), Data ) ) ), User );
+	ogzbsc::sFRow Field = Users.Add( Fields.New( Users.Add( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), Data ), Create_( Column.Comment(), Data ) ), User ) ), User );
 
 	Records.AddField( Field, GetRawRecordRow_( Record, User ) );
 
@@ -73,6 +73,7 @@ qRE
 
 void ogzdtb::mDatabase::GetColumnFeatures_(
 	const ogzfld::dRows &RawFields,
+	ogzusr::sRow User,
 	cColumnFeatures &Callback ) const
 {
 qRH
@@ -89,7 +90,7 @@ qRB
 		Field.Init();
 		Fields.Recall( RawFields( Row ), Field );
 
-		Column = Field.Column();
+		Column = GetRawColumnRow_( Field.Column(), User );
 
 		Label.Init();
 		Comment.Init();
@@ -117,7 +118,7 @@ qRB
 	Raws.Init();
 	Users.GetRaws( Fields, User, Raws );
 
-	GetColumnFeatures_( Raws, Callback );
+	GetColumnFeatures_( Raws, User, Callback );
 qRR
 qRT
 qRE
@@ -132,7 +133,7 @@ qRH
 	ogzrcd::wRecord Record;
 qRB
 	Record.Init();
-	Records.Recall( Users.GetRaw( RecordRow, User ), Record );
+	Records.Recall( GetRawRecordRow_( RecordRow, User ), Record );
 
 	GetColumnFeatures_( Record, User, Callback );
 qRR
@@ -160,7 +161,7 @@ qRB
 		Field.Init();
 		Fields.Recall( RawFields( Row ), Field );
 
-		Column = Field.Column();
+		Column = GetRawColumnRow_( Field.Column(), User );
 
 		Columns.GetTypeAndNumber( Column, Type, Number );
 
@@ -205,7 +206,7 @@ qRH
 	ogzrcd::wRecord Record;
 qRB
 	Record.Init();
-	Records.Recall( Users.GetRaw( RecordRow, User ), Record );
+	Records.Recall( GetRawRecordRow_( RecordRow, User ), Record );
 
 	GetEntries_( Record, User, Callback );
 qRR
@@ -250,7 +251,7 @@ void ogzdtb::mDatabase::GetEntries_(
 qRH
 	ogzdta::wRows EntryRows;
 qRB
-	Columns.GetTypeAndNumber( Field.GetColumn(), Type, Number );
+	Columns.GetTypeAndNumber( GetRawColumnRow_( Field.GetColumn(), User ), Type, Number );
 
 	EntryRows.Init();
 	Users.GetRaws( Field, User, EntryRows );

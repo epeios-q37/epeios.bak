@@ -21,9 +21,9 @@
 
 using namespace ogzfld;
 
-ogzclm::sRow ogzfld::mFields::GetColumn( sRow FieldRow ) const
+ogzbsc::sCRow ogzfld::mFields::GetColumn( sRow FieldRow ) const
 {
-	ogzclm::sRow Column = qNIL;
+	ogzbsc::sCRow Column = qNIL;
 qRH
 	ogzfld::wField Field;
 qRB
@@ -38,7 +38,7 @@ qRE
 }
 
 sRow ogzfld::mFields::New(
-	ogzclm::sRow Column,
+	ogzbsc::sCRow Column,
 	sRow FieldRow ) const
 {
 qRH

@@ -54,6 +54,7 @@ namespace ogzclm {
 	};
 
 	qROW( Row );
+	qROWS( Row );
 
 	class sColumnCore_
 	{

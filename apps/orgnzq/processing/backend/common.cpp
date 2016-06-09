@@ -33,10 +33,10 @@ const char *common::GetLabel( eMessage Message )
 {
 	switch ( Message ){
 	C( BadEntryValue );
+	C( EntryRowShouldBeNILForMonoField );
 	C( FieldLabelCanNotBeEmpty );
 	C( NoSuchEntry );
 	C( NoSuchField );
-	C( OnlyOneEntryAllowed );
 	C( TestMessage );
 	C( UnknownEntry );
 	C( UnknownFieldNumber );

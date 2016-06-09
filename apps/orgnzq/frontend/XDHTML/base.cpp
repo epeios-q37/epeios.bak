@@ -40,6 +40,26 @@ namespace {
 	}
 }
 
+namespace {
+	void UpdateEntry_( core::rSession &Session )
+	{
+	qRH
+		str::wString Content;
+	qRB
+		Content.Init();
+
+		Session.GetContent( "EditableEntry", Content );
+
+		Session.User.UpdateEntry( Content );
+
+		main::SetRecordLayout( Session );
+	qRR
+	qRT
+	qRE
+	}
+}
+ 
+
 bso::bool__ base::action_helper_callback__::SCLXHTMLOnBeforeAction(
 	core::rSession &Session,
 	const char *Id,
@@ -51,6 +71,9 @@ bso::bool__ base::action_helper_callback__::SCLXHTMLOnBeforeAction(
 			return false;
 		} else
 			return true;
+	} else if ( Session.User.Focus() == frdinstc::tField ) {
+		UpdateEntry_( Session );
+		return true;
 	} else
 		return true;
 }
@@ -67,8 +90,8 @@ void base::rContextRack::Init(
 {
 	rContextRack_::Init( View, Target, Session );
 
-	if ( Session.User.GetView() != frdinstc::v_Undefined )
-		operator()().PutAttribute( "View", frdinstc::GetLabel( Session.User.GetView() ) );
+	if ( Session.User.GetFocus() != frdinstc::t_Undefined )
+		operator()().PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
 }
 
 

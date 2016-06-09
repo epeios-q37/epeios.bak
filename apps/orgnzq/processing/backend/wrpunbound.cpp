@@ -160,15 +160,12 @@ qRT
 qRE
 }
 
-DEC( DefineRecord )
+DEC( CreateRecord )
 {
 qRH
 qRB
 	STUFF;
 	DATABASE;
-
-	if ( Request.IdIn() != fbltyp::UndefinedId )
-		qRVct();
 
 	Request.IdOut() = *Database.NewRecord( Stuff.User() );
 qRR
@@ -340,10 +337,9 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cStrings,	// Plugin ids.
 		fblbkd::cEnd );
 
-	Backend.Add( D( DefineRecord ),
-			fblbkd::cId,	// Id of the record to define. New one if undefined.
+	Backend.Add( D( CreateRecord ),
 		fblbkd::cEnd,
-			fblbkd::cId,	// Id of the record to be defined.
+			fblbkd::cId,	// Id of the new.
 		fblbkd::cEnd );
 
 	Backend.Add( D( CreateField ),

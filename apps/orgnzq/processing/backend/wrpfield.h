@@ -80,10 +80,6 @@ namespace wrpfield {
 		qRWDISCLOSEd( ogzclm::eNumber, Number );
 	};
 
-	typedef ogzbsc::dData dFieldBuffer;
-	qW( FieldBuffer );
-
-
 	class dField
 	: public dField_
 	{

@@ -99,7 +99,7 @@ qRE
 
 BASE_AC( records::sDefineNewRecord )
 {
-	Session.User.DefineNewRecord();
+	Session.User.CreateRecord();
 
 	main::SetLayout( Session );
 }

@@ -91,11 +91,11 @@ qRB
 
 	Session.SwitchTo( core::pMain );
 
-	switch ( Session.User.View() ) {
-	case frdinstc::vRecords:
+	switch ( Session.User.Focus() ) {
+	case frdinstc::tRecords:
 		records::SetLayout( RecordsFrameId_, Session );
 		break;
-	case frdinstc::vRecord:
+	case frdinstc::tRecord:
 		record::SetLayout( RecordFrameId_, Session );
 		break;
 	default:

@@ -123,7 +123,7 @@ qRB
 	if ( Label.Amount() == 0 )
 		sclmisc::ReportAndAbort( "FieldLabelCanNotBeEmpty" );
 
-	Session.User.CreateField( Type, Number, Label, Comment );
+	Session.User.DefineField( Type, Number, Label, Comment );
 
 	main::SetRecordLayout( Session );
 qRR

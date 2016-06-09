@@ -35,6 +35,8 @@ namespace ogzfld {
 	qROW( Row );
 	qROWS( Row );
 
+	typedef ogzbsc::dList<ogzbsc::sCRow> dColumns;
+
 	typedef ogzbsc::dList<ogzbsc::sDRow> dData;
 
 	class dField
@@ -44,7 +46,7 @@ namespace ogzfld {
 		struct s
 		: public dData::s
 		{
-			ogzclm::sRow Column;
+			ogzbsc::sCRow Column;
 		}&S_;
 		dField( s &S )
 		: S_( S ),
@@ -66,12 +68,12 @@ namespace ogzfld {
 
 			return *this;
 		}
-		void Init( ogzclm::sRow Column = qNIL )
+		void Init( ogzbsc::sCRow Column = qNIL )
 		{
 			S_.Column = Column;
 			dData::Init();
 		}
-		qRWDISCLOSEd( ogzclm::sRow, Column );
+		qRWDISCLOSEd( ogzbsc::sCRow, Column );
 	};
 
 	qW( Field );
@@ -88,9 +90,9 @@ namespace ogzfld {
 	: public mFields_
 	{
 	public:
-		ogzclm::sRow GetColumn( sRow Field ) const;
+		ogzbsc::sCRow GetColumn( sRow Field ) const;
 		sRow New(
-			ogzclm::sRow Column,
+			ogzbsc::sCRow Column,
 			sRow Field = qNIL ) const;
 	};
 

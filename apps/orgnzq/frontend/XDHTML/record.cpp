@@ -95,12 +95,13 @@ qRB
 
 	SetCasting_( Id, Session );
 
-	switch ( Session.User.View() ) {
-	case frdinstc::vRecord:
-	case frdinstc::vField:
+	switch ( Session.User.Focus() ) {
+	case frdinstc::tRecord:
+	case frdinstc::tField:
 		fields::SetLayout( FieldsFrameId_, Session );
 		break;
-	case frdinstc::vColumn:
+	case frdinstc::tColumn:
+		fields::SetLayout( FieldsFrameId_, Session );
 		column::SetLayout( ColumnFrameId_, Session );
 		break;
 	default:

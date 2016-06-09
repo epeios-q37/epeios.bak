@@ -83,16 +83,17 @@ namespace ogzdtb {
 	class mDatabase
 	{
 	private:
+		ogzclm::sRow GetRawColumnRow_(
+			ogzbsc::sCRow Row,
+			ogzusr::sRow User ) const
+		{
+			return Users.GetRaw( Row, User );
+		}
 		ogzrcd::sRow GetRawRecordRow_(
 			ogzbsc::sRRow Record,
 			ogzusr::sRow User ) const
 		{
-			ogzrcd::sRow RawRecordRow = Users.GetRaw( Record, User );
-
-			if ( RawRecordRow == qNIL )
-				qRGnr();
-
-			return RawRecordRow;;
+			return Users.GetRaw( Record, User );
 		}
 		void GetDatum_(
 			ogzdta::sRow Row,
@@ -110,6 +111,7 @@ namespace ogzdtb {
 			str::dString &Comment ) const;
 		void GetColumnFeatures_(
 			const ogzfld::dRows &Fields,
+			ogzusr::sRow User,
 			cColumnFeatures &Callback ) const;
 		void GetColumnFeatures_(
 			const ogzrcd::dFields &Fields,

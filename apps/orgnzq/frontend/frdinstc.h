@@ -67,29 +67,17 @@ namespace frdinstc {
 
 			return Success;
 		}
-		sRecord DefineRecord( sRecord Record )	// if == 'UndefinedId', we create empty record.
+		sRecord CreateRecord( void )	// if == 'UndefinedId', we create empty record.
 		{
-			S_().OGZDefineRecord( *Record, *Record );
+			sRecord Record = UndefinedRecord;
+
+			S_().OGZCreateRecord( *Record );
 
 			return Record;
 		}
 		void DefineColumn( sColumn Column ) const
 		{
 			Column_.Define( *Column	);
-		}
-		sField CreateField(
-			sRecord Record,
-			fbltyp::sObject Column )
-		{
-			fbltyp::sId Id = fbltyp::UndefinedId;
-
-			S_().OGZCreateField( *Record, Column, Id );
-
-			return Id;
-		}
-		void DefineField( sField Field )
-		{
-			Field_.Define( *Field );
 		}
 		void UpdateColumn(
 			sType Type,
@@ -110,6 +98,26 @@ namespace frdinstc {
 		fbltyp::sObject GetColumnObjectId( void ) const
 		{
 			return Column_.ID();
+		}
+		sField CreateField(
+			sRecord Record,
+			fbltyp::sObject Column )
+		{
+			fbltyp::sId Id = fbltyp::UndefinedId;
+
+			S_().OGZCreateField( *Record, Column, Id );
+
+			return Id;
+		}
+		void UpdateEntry(
+			sEntry Entry,	// if undefined, new entry is created.
+			const str::dString &Content )
+		{
+			Field_.UpdateEntry( *Entry, Content );
+		}
+		void DefineField( sField Field )
+		{
+			Field_.Define( *Field );
 		}
 		void GetRecordColumns(
 			sRecord Record,
@@ -143,32 +151,111 @@ namespace frdinstc {
 		}
 	};
 
-	qENUM( View )
+	qENUM( Target )
 	{
-		vColumn,
-		vField,
-		vRecord,
-		vRecords,
-		v_amount,
-		v_Undefined
+		tColumn,
+		tField,
+		tRecord,
+		tRecords,
+		t_amount,
+		t_Undefined
 	};
 
-	const char *GetLabel( eView View );
+	const char *GetLabel( eTarget Target );
 
 	class rUser
 	{
 	private:
 		rUser_ Core_;
-		eView View_;
-		sField Field_;	// Current field.
-		sRecord Record_; // Current record.
+		eTarget Focus_;
+		// Focused items.
+		sRecord Record_;
+		sField Field_;
+		sEntry Entry_;
+		sColumn Column_;
+		void UnselectAllItems_( void )
+		{
+			Record_ = UndefinedRecord;
+			Field_ = UndefinedField;
+			Entry_ = UndefinedEntry;
+			Column_ = UndefinedColumn;
+		}
+		void UnselectAll_( void )
+		{
+			Focus_ = t_Undefined;
+
+			UnselectAllItems_();
+		}
+		void FocusOnRecords_( void )
+		{
+			UnselectAllItems_();
+
+			Focus_ = tRecords;
+		}
+		void FocusOn_( sRecord Record )
+		{
+			UnselectAllItems_();
+
+			Record_ = Record;
+			Focus_ = tRecord;
+		}
+		void FocusOn_( sField Field )
+		{
+			if ( ( Focus_ != tRecord )
+				 && ( Focus_ != tColumn ) )
+				qRGnr();
+
+			Field_ = Field;
+			Focus_ = tField;
+		}
+		void FocusOn_( sEntry Entry )
+		{
+			if ( Focus_ != tField )
+				qRGnr();
+
+			Entry_ = Entry;
+		}
+		void FocusOn_( sColumn Column )
+		{
+			if ( ( Focus_ != tRecord )
+				 && ( Focus_ != tField ) )
+				qRGnr();
+
+			Entry_ = UndefinedEntry;
+			Field_ = UndefinedField;
+			Column_ = Column;
+			Focus_ = tColumn;
+		}
+		void FocusOn_( eTarget Target )
+		{
+			switch ( Target ) {
+			case tField:
+				if ( Field_ == UndefinedField )
+					qRGnr();
+
+				Entry_ = UndefinedEntry;
+				break;
+			case tRecord:
+				if ( Record_ == UndefinedRecord )
+					qRGnr();
+
+				Column_ = UndefinedColumn;
+				Entry_ = UndefinedEntry;
+				Field_ = UndefinedField;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+
+			Focus_ = Target;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Core_.reset( P );
-			View_ = v_Undefined;
-			Field_ = UndefinedField;
-			Record_ = UndefinedRecord;
+
+			UnselectAll_();
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -176,9 +263,7 @@ namespace frdinstc {
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
 
-			View_ = vRecords;
-			Field_ = UndefinedField;
-			Record_ = UndefinedRecord;
+			FocusOnRecords_();
 		}
 		bso::sBool Login(
 			const str::dString &Username,
@@ -186,24 +271,30 @@ namespace frdinstc {
 		{
 			return Core_.Login( Username, Password );
 		}
+		void CreateRecord( void )
+		{
+			FocusOn_( Core_.CreateRecord() );
+		}
 		void DefineRecord( sRecord Record )
 		{
-			Record_ = Core_.DefineRecord( Record );
-			View_ = vRecord;
+			FocusOn_( Record );
 		}
-		void DefineNewRecord( void )
+		void DefineField( sField Field )
 		{
-			return DefineRecord( UndefinedRecord );
+			if ( Field == UndefinedField ) {
+				Core_.DefineColumn( UndefinedColumn );
+
+				FocusOn_( UndefinedColumn );
+			}
+			else {
+				Core_.DefineField( Field );
+
+				FocusOn_( Field );
+			}
 		}
 		void DefineNewField( void )
 		{
-			Core_.DefineColumn( UndefinedColumn );
-			View_ = vColumn;
-		}
-		void DefineColumn( sColumn Column )
-		{
-			Core_.DefineColumn( Column );
-			View_ = vColumn;
+			DefineField( UndefinedField );
 		}
 		void GetColumn(
 			sType &Type,
@@ -213,30 +304,35 @@ namespace frdinstc {
 		{
 			Core_.GetColumn( Type, Number, Label, Comment );
 		}
-		void CreateField(
+		void DefineField(
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
-			if ( Record_ == UndefinedRecord )
+			Core_.UpdateColumn( Type, Number, Label, Comment );
+			FocusOn_( Core_.CreateField( Record_, Core_.GetColumnObjectId() ) );
+			Core_.DefineField( Field_ );
+			FocusOn_( UndefinedEntry );
+		}
+		void UpdateEntry( const str::dString &Content )
+		{
+			if ( Focus_ != tField )
 				qRGnr();
 
-			Core_.UpdateColumn( Type, Number, Label, Comment );
-			Field_ = Core_.CreateField( Record_, Core_.GetColumnObjectId() );
-			Core_.DefineField( Field_ );
-			View_ = vRecord;
+			Core_.UpdateEntry( Entry_, Content );
+
+			if ( Entry_ == UndefinedEntry )	// Champ mono.
+				FocusOn_( tRecord );
+			else
+				FocusOn_( tField );
 		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBufferCurrentField( xml::dWriter &Writer ) const;
-		bso::sBool FieldInProgress( void ) const
-		{
-			return Field_ != UndefinedField;
-		}
-		qRODISCLOSEr( eView, View );
+		qRODISCLOSEr( eTarget, Focus );
 	};
 }
 

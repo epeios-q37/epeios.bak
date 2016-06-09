@@ -93,8 +93,11 @@ qRB
 
 	Session.FillElement( Id, XML, XSL );
 
-	if ( Session.User.FieldInProgress() )
+	switch ( Session.User.Focus() ) {
+	case frdinstc::tField:
 		field::SetLayout("Field", Session );
+		break;
+	}
 
 	SetCasting_( Id, Session );
 qRR
