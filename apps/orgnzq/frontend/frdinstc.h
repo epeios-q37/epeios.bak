@@ -57,6 +57,14 @@ namespace frdinstc {
 			Field_.Init( Frontend.Field );
 			Object_.Init( Frontend.MyObject );
 		}
+		fbltyp::sObject GetColumnObjectId( void ) const
+		{
+			return Column_.ID();
+		}
+		fbltyp::sObject GetFieldObjectId( void ) const
+		{
+			return Field_.ID();
+		}
 		bso::sBool Login(
 			const str::dString &Username,
 			const str::dString &Password )
@@ -94,10 +102,6 @@ namespace frdinstc {
 			str::dString &Comment ) const
 		{
 			Column_.Get( *Type, *Number, Label, Comment );
-		}
-		fbltyp::sObject GetColumnObjectId( void ) const
-		{
-			return Column_.ID();
 		}
 		sField CreateField(
 			sRecord Record,
@@ -149,6 +153,12 @@ namespace frdinstc {
 		{
 			return F_().Types();
 		}
+		void UpdateField(
+			sField Field,
+			fbltyp::sObject FieldBuffer )
+		{
+			S_().OGZUpdateField( *Field, FieldBuffer );
+		}
 	};
 
 	qENUM( Target )
@@ -173,12 +183,14 @@ namespace frdinstc {
 		sField Field_;
 		sEntry Entry_;
 		sColumn Column_;
+		bso::sBool EntryLatch_;	// When switching to field editing, avoids to update the entry when not needed.
 		void UnselectAllItems_( void )
 		{
 			Record_ = UndefinedRecord;
 			Field_ = UndefinedField;
 			Entry_ = UndefinedEntry;
 			Column_ = UndefinedColumn;
+			EntryLatch_ = false;
 		}
 		void UnselectAll_( void )
 		{
@@ -314,6 +326,7 @@ namespace frdinstc {
 			FocusOn_( Core_.CreateField( Record_, Core_.GetColumnObjectId() ) );
 			Core_.DefineField( Field_ );
 			FocusOn_( UndefinedEntry );
+			EntryLatch_ = true;
 		}
 		void UpdateEntry( const str::dString &Content )
 		{
@@ -322,7 +335,9 @@ namespace frdinstc {
 
 			Core_.UpdateEntry( Entry_, Content );
 
-			if ( Entry_ == UndefinedEntry )	// Champ mono.
+			Core_.UpdateField( Field_, Core_.GetFieldObjectId() );
+
+			if ( Entry_ == UndefinedEntry ) // Champ mono.
 				FocusOn_( tRecord );
 			else
 				FocusOn_( tField );
@@ -332,6 +347,14 @@ namespace frdinstc {
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBufferCurrentField( xml::dWriter &Writer ) const;
+		bso::sBool EntryLatch( void )
+		{
+			if ( EntryLatch_ ) {
+				EntryLatch_ = false;
+				return true;
+			} else
+				return false;
+		}
 		qRODISCLOSEr( eTarget, Focus );
 	};
 }

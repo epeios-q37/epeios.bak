@@ -51,10 +51,10 @@ ogzbsc::sFRow ogzdtb::mDatabase::NewField(
 
 void ogzdtb::mDatabase::GetColumnFeatures_(
 	ogzclm::sRow ColumnRow,
-	ogztyp::sRow &Type,
-	ogzclm::eNumber &Number,
-	str::dString &Label,
-	str::dString &Comment ) const
+	ogztyp::sRow *Type,
+	ogzclm::eNumber *Number,
+	str::dString *Label,
+	str::dString *Comment ) const
 {
 qRH
 	ogzclm::sColumn Column;
@@ -62,14 +62,33 @@ qRB
 	Column.Init();
 	Columns.Recall( ColumnRow, Column );
 
-	Type = Column.Type();
-	Number = Column.Number();
-	GetDatum_( Column.Label(), qNIL, Label );
-	GetDatum_( Column.Comment(), qNIL, Comment );
+	if ( Type != NULL )
+		*Type = Column.Type();
+
+	if ( Number != NULL )
+		*Number = Column.Number();
+
+	if ( Label != NULL )
+		GetDatum_( Column.Label(), qNIL, *Label );
+
+	if ( Comment != NULL )
+		GetDatum_( Column.Comment(), qNIL, *Comment );
 qRR
 qRT
 qRE
 }
+
+ogztyp::sRow ogzdtb::mDatabase::GetType_(
+	const ogzfld::dField &Field,
+	ogzusr::sRow User) const
+{
+	ogztyp::sRow Type = qNIL;
+
+	GetColumnFeatures_( GetRawColumnRow_( Field.GetColumn(), User ), &Type, NULL, NULL, NULL );
+
+	return Type;
+}
+
 
 void ogzdtb::mDatabase::GetColumnFeatures_(
 	const ogzfld::dRows &RawFields,
@@ -196,6 +215,52 @@ qRT
 qRE
 }
 
+void ogzdtb::mDatabase::Append_(
+	const ogzbsc::dDatum &Datum,
+	ogztyp::sRow Type,
+	ogzusr::sRow User,
+	ogzfld::dField &Field )
+{
+	ogzdta::sRow Row = Data.New( Type );
+
+	Data.Store( Datum, Type, Row );
+
+	Field.Add( Users.Add( Row, User ) );
+}
+
+
+void ogzdtb::mDatabase::Delete_(
+	const ogzfld::dData &DataRows,
+	ogzusr::sRow User )
+{
+qRH
+	ogzdta::wRows RawDataRows;
+qRB
+	RawDataRows.Init();
+
+	Users.GetRaws( DataRows, User, RawDataRows );
+
+	Data.Delete( RawDataRows );
+qRR
+qRT
+qRE
+}
+
+void ogzdtb::mDatabase::Append_(
+	const ogzbsc::dData &Data,
+	ogzusr::sRow User,
+	ogzfld::dField &Field )
+{
+	ogztyp::sRow Type = GetType_( Field, User );
+	sdr::sRow Row = Data.First();
+
+	while ( Row != qNIL ) {
+		Append_( Data( Row ), Type, User, Field );
+
+		Row = Data.Next( Row );
+	}
+}
+
 void ogzdtb::mDatabase::GetEntries(
 	ogzbsc::sRRow RecordRow,
 	ogzusr::sRow User,
@@ -290,3 +355,41 @@ qRT
 qRE
 	return Exists;
 }
+
+bso::sBool ogzdtb::mDatabase::UpdateField(
+	ogzbsc::sFRow FieldRow,
+	ogzusr::sRow User,
+	ogzbsc::dData &Entries,
+	qRPF )
+{
+	bso::sBool Exists = false;
+qRH
+	ogzfld::wField Field;
+	ogzfld::sRow RawFieldRow = qNIL;
+qRB
+	RawFieldRow = GetRawFieldRow_( FieldRow, User );
+
+	Field.Init();
+
+	if ( !Fields.Recall(RawFieldRow, Field) ) {
+		if ( qRPT )
+			qRGnr();
+		else
+			qRReturn;
+	}
+
+	Delete_( Field, User );
+
+	Field.RemoveEntries();
+
+	Append_( Entries, User, Field );
+
+	Fields.Store( Field, RawFieldRow );
+
+	Exists = true;
+qRR
+qRT
+qRE
+	return Exists;
+}
+

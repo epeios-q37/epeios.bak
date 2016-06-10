@@ -177,6 +177,16 @@ namespace ogzdta {
 		{
 			return Delete_( Row );
 		}
+		void Delete( const dRows &Rows )const
+		{
+			sdr::sRow Row = Rows.First();
+
+			while ( Row != qNIL ) {
+				Delete(Rows( Row ) );
+
+				Row = Rows.Next( Row );
+			}
+		}
 		void Store(
 			const dDatum &Datum,
 			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.

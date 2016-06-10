@@ -73,6 +73,10 @@ namespace ogzfld {
 			S_.Column = Column;
 			dData::Init();
 		}
+		void RemoveEntries( void )
+		{
+			dData::Init();
+		}
 		qRWDISCLOSEd( ogzbsc::sCRow, Column );
 	};
 

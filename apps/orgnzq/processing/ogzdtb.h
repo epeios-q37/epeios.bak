@@ -89,6 +89,12 @@ namespace ogzdtb {
 		{
 			return Users.GetRaw( Row, User );
 		}
+		ogzfld::sRow GetRawFieldRow_(
+			ogzbsc::sFRow Row,
+			ogzusr::sRow User ) const
+		{
+			return Users.GetRaw( Row, User );
+		}
 		ogzrcd::sRow GetRawRecordRow_(
 			ogzbsc::sRRow Record,
 			ogzusr::sRow User ) const
@@ -105,10 +111,22 @@ namespace ogzdtb {
 		}
 		void GetColumnFeatures_(
 			ogzclm::sRow Column,
+			ogztyp::sRow *Type,
+			ogzclm::eNumber *Number,
+			str::dString *Label,
+			str::dString *Comment ) const;
+		void GetColumnFeatures_(
+			ogzclm::sRow Column,
 			ogztyp::sRow &Type,
 			ogzclm::eNumber &Number,
 			str::dString &Label,
-			str::dString &Comment ) const;
+			str::dString &Comment ) const
+		{
+			return GetColumnFeatures_( Column, &Type, &Number, &Label, &Comment );
+		}
+		ogztyp::sRow GetType_(
+			const ogzfld::dField &Field,
+			ogzusr::sRow User) const;
 		void GetColumnFeatures_(
 			const ogzfld::dRows &Fields,
 			ogzusr::sRow User,
@@ -139,6 +157,18 @@ namespace ogzdtb {
 			const ogzrcd::dFields &Fields,
 			ogzusr::sRow User,
 			cFieldEntries &Callback ) const;
+		void Delete_(
+			const ogzfld::dData &Data,
+			ogzusr::sRow User );
+		void Append_(
+			const ogzbsc::dDatum &Datum,
+			ogztyp::sRow Type,
+			ogzusr::sRow User,
+			ogzfld::dField &Field );
+		void Append_(
+			const ogzbsc::dData &Data,
+			ogzusr::sRow User,
+			ogzfld::dField &Field );
 	public:
 		ogzdta::mData Data;
 		ogzclm::mColumns Columns;
@@ -188,12 +218,17 @@ namespace ogzdtb {
 			ogzclm::eNumber &Number,
 			qRPC ) const
 		{
-			return GetEntries_( Users.GetRaw( Field, User ), User, Entries, Type, Number, qRP );
+			return GetEntries_( GetRawFieldRow_( Field, User ), User, Entries, Type, Number, qRP );
 		}
 		void GetEntries(
 			ogzbsc::sRRow Record,
 			ogzusr::sRow User,
 			cFieldEntries &Callback	) const;
+		bso::sBool UpdateField(	// return 'false' if field doesn't exists.
+			ogzbsc::sFRow Field,
+			ogzusr::sRow User,
+			ogzbsc::dData &Entries,
+			qRPC );
 	};
 
 # ifdef M

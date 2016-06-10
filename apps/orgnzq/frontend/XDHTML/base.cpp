@@ -46,13 +46,15 @@ namespace {
 	qRH
 		str::wString Content;
 	qRB
-		Content.Init();
+		if ( !Session.User.EntryLatch() ) {
+			Content.Init();
 
-		Session.GetContent( "EditableEntry", Content );
+			Session.GetContent( "EditableEntry", Content );
 
-		Session.User.UpdateEntry( Content );
+			Session.User.UpdateEntry( Content );
 
-		main::SetRecordLayout( Session );
+			main::SetRecordLayout( Session );
+		}
 	qRR
 	qRT
 	qRE

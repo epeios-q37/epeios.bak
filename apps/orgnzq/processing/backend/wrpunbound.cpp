@@ -19,7 +19,11 @@
 
 #include "wrpunbound.h"
 
+#include "common.h"
+
+
 #include "wrpcolumn.h"
+#include "wrpfield.h"
 
 #include "registry.h"
 #include "dir.h"
@@ -312,6 +316,18 @@ qRT
 qRE
 }
 
+DEC( UpdateField )
+{
+	STUFF;
+	DATABASE;
+
+	ogzbsc::sFRow Field = *Request.IdIn();
+	const fbltyp::sObject &FieldBuffer = Request.ObjectIn();
+
+	if ( !Database.UpdateField( Field, Stuff.User(), Backend.Object<wrpfield::dField>( FieldBuffer ), qRPU ) )
+		REPORT( NoSuchField );
+}
+
 #define D( name )	OGZINF_UC_SHORT #name, ::name
 
 void wrpunbound::Inform( fblbkd::backend___ &Backend )
@@ -366,6 +382,12 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cIds,			// The column for each fields.
 			fblbkd::cIds,			// The type of each field. More convenient to be here due to use of plugins for the types.
 			fblbkd::cStringsSet,	// The entries for each field.
+		fblbkd::cEnd );
+
+	Backend.Add(D( UpdateField ),
+			fblbkd::cId,	// ID of the field to update.
+			fblbkd::cObject,	// Field buffer object to update with,
+		fblbkd::cEnd,
 		fblbkd::cEnd );
 }
 

@@ -54,9 +54,10 @@ DEC( Define )
 
 	ogzbsc::sFRow FieldRow = *Request.IdIn();
 
-	Field.Init();
+	if ( FieldRow == qNIL )
+		qRGnr();
 
-	Field.New();
+	Field.Init();
 
 	if ( !Database.GetEntries( FieldRow, Stuff.User(), Field, Field.Type(), Field.Number(), qRPU ) )
 		REPORT( NoSuchField );
@@ -92,7 +93,7 @@ DEC( UpdateEntry )
 
 namespace {
 	void Get_(
-		const dField_ Field,
+		const dField_ &Field,
 		fbltyp::dIds &Ids,
 		fbltyp::dStrings &Strings )
 	{

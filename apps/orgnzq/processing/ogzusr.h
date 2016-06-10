@@ -218,7 +218,7 @@ namespace ogzusr {
 		qRE
 		}
 		template <typename regular, typename raw> raw GetRaw_(
-			regular &Regular,
+			regular Regular,
 			sRow User ) const
 		{
 			raw Raw = qNIL;
