@@ -99,8 +99,10 @@ qRT
 qRE
 }
 
-BASE_AC( field::sDefineNewEntry )
+#define AC( name ) BASE_AC( field, name )
+
+AC( DefineNewEntry )
 {
-	Session.AlertU( "New entry" );
+	main::SetFieldLayout( Session );
 }
 

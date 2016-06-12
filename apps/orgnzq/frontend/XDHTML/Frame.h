@@ -27,20 +27,10 @@
 namespace frame {
 	BASE_ACD( Template );
 
-	class fActionCallbacks
+	inline void Register( void )
 	{
-	public:
-		BASE_ACU( Template );
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( Template );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( Template );
-		}
-	};
+		BASE_ACR( Template );
+	}
 
 	void SetLayout(
 		const char *Id,

@@ -27,24 +27,10 @@ namespace fields {
 	BASE_ACD( CreateField );
 	BASE_ACD( EditField );
 
-	class fActionCallbacks
-	{
-	public:
-	public:
-		BASE_ACU( CreateField );
-		BASE_ACU( EditField );
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( CreateField );
-			BASE_ACR( EditField );
-		}
-		E_CVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( CreateField );
-			BASE_ACI( EditField );
-		}
-	};
+	inline void Register( void ) {
+		BASE_ACR( CreateField );
+		BASE_ACR( EditField );
+	}
 
 	void SetLayout(
 		const char *Id,

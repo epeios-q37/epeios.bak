@@ -27,25 +27,11 @@ namespace prolog {
 	BASE_ACD( DisplayProjectFilename );
 	BASE_ACD( LoadProject );
 
-	class fActionCallbacks
+	inline void Register( void )
 	{
-	public:
-		BASE_ACU( SwitchProjectType );
-		BASE_ACU( DisplayProjectFilename );
-		BASE_ACU( LoadProject );
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( SwitchProjectType );
-			BASE_ACR( DisplayProjectFilename );
-			BASE_ACR( LoadProject );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( SwitchProjectType );
-			BASE_ACI( DisplayProjectFilename );
-			BASE_ACI( LoadProject );
-		}
+		BASE_ACR( SwitchProjectType );
+		BASE_ACR( DisplayProjectFilename );
+		BASE_ACR( LoadProject );
 	};
 
 	void SetLayout( core::rSession &Session);

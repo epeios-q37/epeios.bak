@@ -26,19 +26,9 @@
 namespace field {
 	BASE_ACD( DefineNewEntry );
 
-	class fActionCallbacks
+	inline void Register( void )
 	{
-	public:
-		BASE_ACU( DefineNewEntry );
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( DefineNewEntry );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( DefineNewEntry );
-		}
+		BASE_ACR( DefineNewEntry );
 	};
 
 	void SetLayout(

@@ -27,21 +27,9 @@
 namespace records {
 	BASE_ACD( DefineNewRecord );
 
-	class fActionCallbacks
-	{
-	public:
-		BASE_ACU( DefineNewRecord );
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( DefineNewRecord );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( DefineNewRecord );
-		}
-	};
+	inline void Register(void) {
+		BASE_ACR( DefineNewRecord );
+	}
 
 	void SetLayout(
 		const char *Id,

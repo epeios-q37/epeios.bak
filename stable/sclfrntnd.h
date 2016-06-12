@@ -348,15 +348,14 @@ namespace sclfrntnd {
 		va_end( List );
 	}
 
+	// Root tag is handled by user, so he/she cans put his/her own attributes. 'Amount' attribute is addded.
 	template <typename ids> inline void Dump(
 		const dI1S<ids> &I1S,
-		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
 		sdr::row__ Row = I1S.First();
 
-		Writer.PushTag( ItemsLabel );
 		xml::PutAttribute( sclfrntnd::AmountAttribute, I1S.Amount(), Writer );
 
 		while ( Row != qNIL ) {
@@ -368,49 +367,78 @@ namespace sclfrntnd {
 
 			Row = I1S.Next( Row );
 		}
+	}
+	
+	template <typename ids> inline void Dump(
+		const dI1S<ids> &I1S,
+		const char *ItemsLabel,
+		const char *ItemLabel,
+		xml::writer_ &Writer )
+	{
+		Writer.PushTag( ItemsLabel );
+
+		Dump( I1S, ItemLabel, Writer );
 
 		Writer.PopTag();
 	}
 
-
+	// Root tag is handled by user, so he/she cans put his/her own attributes. 'Amount' attribute is addded.
 	template <typename ids> inline void Dump(
-		const dI2S<ids> &I2S,
-		const char *ItemsLabel,
+		const dI1S<ids> &I1S,
 		const char *ItemLabel,
 		eKind String1LabelKind,
 		const char *String1Label,
-		const char *String2TagLabel,
 		xml::writer_ &Writer )
 	{
-		sdr::row__ Row = I2S.First();
+		sdr::row__ Row = I1S.First();
 
-		Writer.PushTag( ItemsLabel );
-		xml::PutAttribute( sclfrntnd::AmountAttribute, I2S.Amount(), Writer );
+		xml::PutAttribute( sclfrntnd::AmountAttribute, I1S.Amount(), Writer );
 
 		while ( Row != qNIL ) {
 			Writer.PushTag( ItemLabel );
 
-			Dump_( Writer, I2S.Ids( Row ), String1LabelKind, &I2S.Strings1( Row ), String1Label, kTag, &I2S.Strings2( Row ), String2TagLabel, k_End );
+			Dump_( Writer, I1S.Ids( Row ), String1LabelKind, &I1S.Strings1( Row ), String1Label, k_End );
 
 			Writer.PopTag();
 
-			Row = I2S.Next( Row );
+			Row = I1S.Next( Row );
 		}
+	}
+
+	template <typename ids> inline void Dump(
+		const dI1S<ids> &I1S,
+		const char *ItemsLabel,
+		const char *ItemLabel,
+		eKind String1LabelKind,
+		const char *String1Label,
+		xml::writer_ &Writer )
+	{
+		Writer.PushTag( ItemsLabel );
+
+		Dump( I1S, ItemLabel, String1LabelKind, String1Label, Writer );
 
 		Writer.PopTag();
 	}
 
 
 	E_CDEF( char *, LabelAttribute, "label" );
-	E_CDEF( char *, WordingTag, "Wording" );
 
-	template <typename ids> inline void DumpAsLabelWording(
-		const sclfrntnd::dI2S<ids> &I2S,
+	// Root tag is handled by user, so he/she cans put his/her own attributes. 'Amount' attribute is addded.
+	template <typename ids> inline void DumpWithLabelAttribute(
+		const sclfrntnd::dI1S<ids> &I1S,
+		const char *ItemLabel,
+		xml::writer_ &Writer )
+	{
+		Dump<ids>( I1S, ItemLabel, kAttribute, LabelAttribute, Writer );
+	}
+
+	template <typename ids> inline void DumpWithLabelAttribute(
+		const sclfrntnd::dI1S<ids> &I1S,
 		const char *ItemsLabel,
 		const char *ItemLabel,
 		xml::writer_ &Writer )
 	{
-		Dump<ids>( I2S, ItemsLabel, ItemLabel, kAttribute, LabelAttribute, WordingTag, Writer );
+		Dump<ids>( I1S, ItemsLabel, ItemLabel, kAttribute, LabelAttribute, Writer );
 	}
 }
 

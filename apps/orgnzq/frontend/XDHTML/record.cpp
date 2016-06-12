@@ -118,7 +118,9 @@ void record::SetFieldsLayout( core::rSession &Session )
 	fields::SetLayout( FieldsFrameId_, Session );
 }
 
-BASE_AC( record::sDefineNewField )
+#define AC( name ) BASE_AC( record, name )
+
+AC( DefineNewField )
 {
 	Session.User.DefineNewField();
 

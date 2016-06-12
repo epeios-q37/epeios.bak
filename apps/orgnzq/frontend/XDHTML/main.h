@@ -27,24 +27,13 @@
 namespace main {
 	BASE_ACD( Template );
 
-	class fActionCallbacks
-	{
-	public:
-		BASE_ACU( Template );
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( Template );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( Template );
-		}
-	};
+	inline void Register( void ) {
+		BASE_ACR( Template );
+	}
 
 	void SetLayout( core::rSession &Session );
 	void SetRecordLayout( core::rSession &Session );
+	void SetFieldLayout( core::rSession &Session );
 }
 
 #endif

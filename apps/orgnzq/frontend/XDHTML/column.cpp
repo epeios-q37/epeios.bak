@@ -99,7 +99,9 @@ qRT
 qRE
 }
 
-BASE_AC( column::sCreateField )
+#define AC( name ) BASE_AC( column, name )
+
+AC( CreateField )
 {
 qRH
 	str::wString Label, Comment;

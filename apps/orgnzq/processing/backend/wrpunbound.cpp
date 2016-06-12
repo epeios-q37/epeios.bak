@@ -65,28 +65,9 @@ qRE
 }
 
 namespace {
-	const str::dString &GetWording_( ogzclm::eNumber Number )
-	{
-		static str::wString Wording;
-	qRH
-		str::wString RawWording;
-	qRB
-		RawWording.Init();
-		RawWording.Append( ogzclm::GetLabel( Number ) );
-		RawWording.Append( "NumberWording" );
-
-		Wording.Init();
-		sclmisc::GetBaseTranslation( RawWording, Wording );
-	qRR
-	qRT
-	qRE
-		return Wording;
-	}
-
 	void GetNumbers_(
 		fbltyp::dId8s &Ids,
-		fbltyp::dStrings &Labels,
-		fbltyp::dStrings &Wordings )
+		fbltyp::dStrings &Labels )
 	{
 		int Number = 0;
 
@@ -94,7 +75,6 @@ namespace {
 		{
 			Ids.Append( Number );
 			Labels.Append( str::wString( ogzclm::GetLabel( (ogzclm::eNumber)Number ) ) );
-			Wordings.Append( GetWording_( (ogzclm::eNumber)Number ) );
 
 			Number++;
 		}
@@ -105,17 +85,15 @@ DEC( GetNumbers )
 {
 qRH
 	fbltyp::wId8s Ids;
-	fbltyp::wStrings Labels, Wordings;
+	fbltyp::wStrings Labels;
 qRB
 	Ids.Init();
 	Labels.Init();
-	Wordings.Init();
 
-	GetNumbers_( Ids, Labels, Wordings );
+	GetNumbers_( Ids, Labels );
 
 	Request.Id8sOut() = Ids;
 	Request.StringsOut() = Labels;
-	Request.StringsOut() = Wordings;
 qRR 
 qRT
 qRE
@@ -324,6 +302,9 @@ DEC( UpdateField )
 	ogzbsc::sFRow Field = *Request.IdIn();
 	const fbltyp::sObject &FieldBuffer = Request.ObjectIn();
 
+	if ( Field == qNIL )
+		qRGnr();
+
 	if ( !Database.UpdateField( Field, Stuff.User(), Backend.Object<wrpfield::dField>( FieldBuffer ), qRPU ) )
 		REPORT( NoSuchField );
 }
@@ -343,7 +324,6 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd,
 			fblbkd::cId8s,		// Ids.
 			fblbkd::cStrings,	// Labels,
-			fblbkd::cStrings,	// Wordings,
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetTypes ),

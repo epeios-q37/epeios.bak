@@ -28,6 +28,7 @@ namespace {
 
 	E_CDEF( char *, RecordsFrameId_, "Records" );
 	E_CDEF( char *, RecordFrameId_, "Record" );
+	E_CDEF( char *, FieldFrameId_, "Field" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -112,7 +113,13 @@ void main::SetRecordLayout( core::rSession &Session )
 	record::SetLayout( RecordFrameId_, Session );
 }
 
+void main::SetFieldLayout( core::rSession &Session )
+{
+	field::SetLayout( FieldFrameId_, Session );
+}
 
-BASE_AC( main::sTemplate )
+#define AC( name ) BASE_AC( main, name )
+
+AC( Template )
 {
 }

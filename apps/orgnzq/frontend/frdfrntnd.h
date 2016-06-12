@@ -39,7 +39,7 @@ namespace frdfrntnd {
 	using frdmisc::dTypes;
 	using frdmisc::UndefinedType;
 
-	SCLF_I2S( Number, Id8 );
+	SCLF_I1S( Number, Id8 );
 	SCLF_I( Column, Id );
 	SCLF_I( Field, Id );
 	SCLF_I( Record, Id );
@@ -55,7 +55,7 @@ namespace frdfrntnd {
 	{
 	private:
 		frdmisc::wXTypes Types_;
-		wNumbersI2S Numbers_;
+		wNumbersI1S Numbers_;
 		void GetTypes_( void );
 		void DumpTypes_( xml::writer_ &Writer );
 		void GetNumbers_( void );

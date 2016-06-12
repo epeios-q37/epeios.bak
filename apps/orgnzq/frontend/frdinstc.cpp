@@ -233,9 +233,6 @@ qRH
 	sNumber Number = UndefinedNumber;
 	wEntrysI1S Entries;
 qRB
-	if ( Field_ == UndefinedField )
-		qRGnr();
-
 	Entries.Init();
 
 	Core_.GetCurrentField( Type, Number, Entries );
@@ -245,7 +242,12 @@ qRB
 	Writer.PutAttribute( "Type", **Type );
 	Writer.PutAttribute( "Number", **Number );
 
-	sclfrntnd::Dump(Entries, "Entries", "Entry", Writer );
+	Writer.PushTag("Entries");
+	Writer.PutAttribute( "Selected", **Entry_, **UndefinedEntry );
+
+	sclfrntnd::Dump( Entries, "Entry", Writer );
+
+	Writer.PopTag();
 
 	Writer.PopTag();
 qRR

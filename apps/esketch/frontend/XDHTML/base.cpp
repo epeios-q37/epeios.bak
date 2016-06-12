@@ -23,9 +23,9 @@
 
 using namespace base;
 
-void base::AddActionCallback(
+void base::Register(
 	const char *Name,
-	action_callback__ &Callback )
+	cAction &Callback )
 {
 	core::Core.AddActionCallback( Name, Callback );
 }
@@ -60,25 +60,20 @@ bso::bool__ base::action_helper_callback__::SCLXHTMLOnClose( core::rSession &Ses
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
-void base::AddAllowedActionsOnWhenNotConnectedToBackend( const char *Action )
-{
-	if ( stsfsm::Add( Action, 0, AllowedActionsOnWhenNotConnectedToBackend_ ) != stsfsm::UndefinedId )
-		qRGnr();
-}
-
 void base::AddAllowedActionsOnWhenNotConnectedToBackend(
-	const action_callback__ *FirstCallback,
+	const char *FirstCallback,
 	... )
 {
-	const action_callback__ *Callback = FirstCallback;
+	const char *Callback = FirstCallback;
 
 	va_list Callbacks;
 	va_start( Callbacks, FirstCallback );
 
 	while ( Callback != NULL ){
-		AddAllowedActionsOnWhenNotConnectedToBackend( Callback->Name() );
+		if ( stsfsm::Add( Callback, 0, AllowedActionsOnWhenNotConnectedToBackend_ ) != stsfsm::UndefinedId )
+			qRGnr();
 
-		Callback = va_arg( Callbacks, const action_callback__ * );
+		Callback = va_arg( Callbacks, const char *);
 	}
 
 	va_end( Callbacks );

@@ -21,11 +21,13 @@
 
 #include "core.h"
 
+#include "field.h"
+
 using namespace base;
 
-void base::AddActionCallback(
+void base::Register(
 	const char *Name,
-	action_callback__ &Callback )
+	cAction &Callback )
 {
 	core::Core.AddActionCallback( Name, Callback );
 }
@@ -41,7 +43,10 @@ namespace {
 }
 
 namespace {
-	void UpdateEntry_( core::rSession &Session )
+	void UpdateEntry_(
+		core::rSession &Session,
+		const char *Action )
+
 	{
 	qRH
 		str::wString Content;
@@ -53,7 +58,8 @@ namespace {
 
 			Session.User.UpdateEntry( Content );
 
-			main::SetRecordLayout( Session );
+			if ( Action != field::DefineNewEntry.Name )
+				Session.User.UpdateField();
 		}
 	qRR
 	qRT
@@ -74,7 +80,7 @@ bso::bool__ base::action_helper_callback__::SCLXHTMLOnBeforeAction(
 		} else
 			return true;
 	} else if ( Session.User.Focus() == frdinstc::tField ) {
-		UpdateEntry_( Session );
+		UpdateEntry_( Session, Action );
 		return true;
 	} else
 		return true;
@@ -97,25 +103,20 @@ void base::rContextRack::Init(
 }
 
 
-void base::AddAllowedActionsOnWhenNotConnectedToBackend( const char *Action )
-{
-	if ( stsfsm::Add( Action, 0, AllowedActionsOnWhenNotConnectedToBackend_ ) != stsfsm::UndefinedId )
-		qRGnr();
-}
-
 void base::AddAllowedActionsOnWhenNotConnectedToBackend(
-	const action_callback__ *FirstCallback,
+	const char *FirstCallback,
 	... )
 {
-	const action_callback__ *Callback = FirstCallback;
+	const char *Callback = FirstCallback;
 
 	va_list Callbacks;
 	va_start( Callbacks, FirstCallback );
 
 	while ( Callback != NULL ){
-		AddAllowedActionsOnWhenNotConnectedToBackend( Callback->Name() );
+		if ( stsfsm::Add( Callback, 0, AllowedActionsOnWhenNotConnectedToBackend_ ) != stsfsm::UndefinedId )
+			qRGnr();
 
-		Callback = va_arg( Callbacks, const action_callback__ * );
+		Callback = va_arg( Callbacks, const char *);
 	}
 
 	va_end( Callbacks );

@@ -27,20 +27,9 @@
 namespace column {
 	BASE_ACD( CreateField );
 
-	class fActionCallbacks
-	{
-	public:
-		BASE_ACU( CreateField );
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( CreateField );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( CreateField );
-		}
-	};
+	inline void Register( void ) {
+		BASE_ACR( CreateField );
+	}
 
 	void SetLayout(
 		const char *Id,

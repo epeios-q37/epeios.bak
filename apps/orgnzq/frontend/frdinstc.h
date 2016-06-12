@@ -119,9 +119,14 @@ namespace frdinstc {
 		{
 			Field_.UpdateEntry( *Entry, Content );
 		}
-		void DefineField( sField Field )
+		// 'false' : mono, 'true' : multi.
+		bso::sBool DefineField( sField Field )
 		{
-			Field_.Define( *Field );
+			bso::sBool IsMulti = false;
+
+			Field_.Define( *Field, IsMulti );
+
+			return IsMulti;
 		}
 		void GetRecordColumns(
 			sRecord Record,
@@ -183,6 +188,7 @@ namespace frdinstc {
 		sField Field_;
 		sEntry Entry_;
 		sColumn Column_;
+		bso::sBool IsMulti_;	// 'true' if current field is multi, 'false' otherwise.
 		bso::sBool EntryLatch_;	// When switching to field editing, avoids to update the entry when not needed.
 		void UnselectAllItems_( void )
 		{
@@ -191,6 +197,7 @@ namespace frdinstc {
 			Entry_ = UndefinedEntry;
 			Column_ = UndefinedColumn;
 			EntryLatch_ = false;
+			IsMulti_ = false;
 		}
 		void UnselectAll_( void )
 		{
@@ -299,7 +306,7 @@ namespace frdinstc {
 				FocusOn_( UndefinedColumn );
 			}
 			else {
-				Core_.DefineField( Field );
+				IsMulti_ = Core_.DefineField( Field );
 
 				FocusOn_( Field );
 			}
@@ -324,9 +331,9 @@ namespace frdinstc {
 		{
 			Core_.UpdateColumn( Type, Number, Label, Comment );
 			FocusOn_( Core_.CreateField( Record_, Core_.GetColumnObjectId() ) );
-			Core_.DefineField( Field_ );
+			IsMulti_ = Core_.DefineField( Field_ );
 			FocusOn_( UndefinedEntry );
-			EntryLatch_ = true;
+//			EntryLatch_ = true;
 		}
 		void UpdateEntry( const str::dString &Content )
 		{
@@ -335,12 +342,20 @@ namespace frdinstc {
 
 			Core_.UpdateEntry( Entry_, Content );
 
-			Core_.UpdateField( Field_, Core_.GetFieldObjectId() );
+			if ( !IsMulti_ )
+				Core_.UpdateField( Field_, Core_.GetFieldObjectId() );
 
-			if ( Entry_ == UndefinedEntry ) // Champ mono.
-				FocusOn_( tRecord );
-			else
+			if ( IsMulti_ )
 				FocusOn_( tField );
+			else
+				FocusOn_( tRecord );
+		}
+		void UpdateField( void )
+		{
+			if ( Focus_ != tField )
+				qRGnr();
+
+			Core_.UpdateField( Field_, Core_.GetFieldObjectId() );
 		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;

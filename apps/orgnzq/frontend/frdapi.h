@@ -43,7 +43,7 @@ namespace orgnzq {
 				25, 0, 
 				25, 0, 
 				25, 25, 0, 2, 
-				0, 13, 26, 26, 
+				0, 13, 26, 
 				0, 22, 26, 26, 
 				0, 21, 
 				21, 1, 0, 21, 
@@ -74,37 +74,37 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetNumbers";;
-			CommandDetail.Casts.Append( Parameters + 8, 4 );
+			CommandDetail.Casts.Append( Parameters + 8, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetTypes";;
-			CommandDetail.Casts.Append( Parameters + 12, 4 );
+			CommandDetail.Casts.Append( Parameters + 11, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZCreateRecord";;
-			CommandDetail.Casts.Append( Parameters + 16, 2 );
+			CommandDetail.Casts.Append( Parameters + 15, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZCreateField";;
-			CommandDetail.Casts.Append( Parameters + 18, 4 );
+			CommandDetail.Casts.Append( Parameters + 17, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetRecordColumns";;
-			CommandDetail.Casts.Append( Parameters + 22, 7 );
+			CommandDetail.Casts.Append( Parameters + 21, 7 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetRecordFields";;
-			CommandDetail.Casts.Append( Parameters + 29, 6 );
+			CommandDetail.Casts.Append( Parameters + 28, 6 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZUpdateField";;
-			CommandDetail.Casts.Append( Parameters + 35, 3 );
+			CommandDetail.Casts.Append( Parameters + 34, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -151,8 +151,7 @@ namespace orgnzq {
 		}
 		fblovl::reply__ OGZGetNumbers( 
 			fblfrd::id8s_ &Out1,
-			fblfrd::strings_ &Out2,
-			fblfrd::strings_ &Out3 ) const
+			fblfrd::strings_ &Out2 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[3] );
 
@@ -160,7 +159,6 @@ namespace orgnzq {
 
 			Frontend().Id8sOut( Out1 );
 			Frontend().StringsOut( Out2 );
-			Frontend().StringsOut( Out3 );
 
 			return Frontend().Handle();
 		}
@@ -355,7 +353,7 @@ namespace orgnzq {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
-				21, 0, 
+				21, 0, 2, 
 				0, 21, 12, 22, 26, 
 				21, 25, 0, 
 			};
@@ -368,17 +366,17 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Define";;
-			CommandDetail.Casts.Append( Parameters + 0, 2 );
+			CommandDetail.Casts.Append( Parameters + 0, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Get";;
-			CommandDetail.Casts.Append( Parameters + 2, 5 );
+			CommandDetail.Casts.Append( Parameters + 3, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "UpdateEntry";;
-			CommandDetail.Casts.Append( Parameters + 7, 3 );
+			CommandDetail.Casts.Append( Parameters + 8, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -576,13 +574,15 @@ namespace orgnzq {
 			_ID = Common_->GetNewObject();
 		}
 		fblovl::reply__ Define( 
-			const fblfrd::id__ &In1 ) const
+			const fblfrd::id__ &In1,
+			fblfrd::boolean__ &Out1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
 			Common_->Frontend().IdIn( In1 );
 
 			Common_->Frontend().EndOfInParameters();
 
+			Common_->Frontend().BooleanOut( Out1 );
 
 			return Common_->Frontend().Handle();
 		}

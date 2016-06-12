@@ -61,6 +61,8 @@ DEC( Define )
 
 	if ( !Database.GetEntries( FieldRow, Stuff.User(), Field, Field.Type(), Field.Number(), qRPU ) )
 		REPORT( NoSuchField );
+
+	Request.BooleanOut() = Field.Number() == ogzclm::nMulti;
 }
 
 DEC( UpdateEntry )
@@ -68,27 +70,37 @@ DEC( UpdateEntry )
 	sdr::sRow Row = *Request.IdIn();	// If == 'qNIL', new entry is created, unless for a mono field, where the entry is created/updated.
 	const str::dString &Entry = Request.StringIn();
 
-	if ( !GetTypes()( Field.Type() ).Test( Entry ) )
-		REPORT( BadEntryValue );
+	if ( Entry.Amount() != 0 ) {
+		if ( !GetTypes()( Field.Type() ).Test( Entry ) )
+			REPORT( BadEntryValue );
 
-	if ( Field.Number() == ogzclm::nMono ) {
-		if ( Row != qNIL )
-			REPORT( EntryRowShouldBeNILForMonoField );
+		if ( Field.Number() == ogzclm::nMono ) {
+			if ( Row != qNIL )
+				REPORT( EntryRowShouldBeNILForMonoField );
 
-		if ( Field.Amount() == 0 ) {
+			if ( Field.Amount() == 0 ) {
+				Row = Field.New();
+				Field( Row ).Init();
+			} else if ( Field.Amount() == 1 )
+				Row = Field.First();
+			else
+				qRGnr();
+		} else if ( Row == qNIL ) {
 			Row = Field.New();
 			Field( Row ).Init();
-		} else if ( Field.Amount() == 1 )
-			Row = Field.First();
-		else
-			qRGnr();
-	} else if ( Row == qNIL ) {
-		Row = Field.New();
-		Field( Row ).Init();
-	} else if ( !Field.Exists( Row ) )
-		REPORT( NoSuchEntry );
+		} else if ( !Field.Exists( Row ) )
+			REPORT( NoSuchEntry );
 
-	Field.Store( Entry, Row );
+		Field.Store( Entry, Row );
+	} else if ( Row != qNIL ) {
+		if ( Field.Number() == ogzclm::nMono )
+			REPORT( EntryRowShouldBeNILForMonoField );
+
+		if ( !Field.Exists( Row ) )
+			REPORT( NoSuchEntry );
+
+		Field.Remove( Row );
+	}
 }
 
 namespace {
@@ -150,6 +162,7 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 	Module.Add( D( Define ),
 			fblbkd::cId,		// Field id.
 		fblbkd::cEnd,
+			fblbkd::cBoolean,	// 'false' : mono, 'true' : multi.
 		fblbkd::cEnd );
 
 	Module.Add( D( Get ),

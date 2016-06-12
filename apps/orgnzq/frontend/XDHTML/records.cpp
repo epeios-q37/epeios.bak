@@ -97,7 +97,9 @@ qRT
 qRE
 }
 
-BASE_AC( records::sDefineNewRecord )
+#define AC( name ) BASE_AC( records, name )
+
+AC( DefineNewRecord )
 {
 	Session.User.CreateRecord();
 

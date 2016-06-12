@@ -37,48 +37,31 @@ namespace core {
 		p_Undefined
 	};
 
-	struct action_callbacks__
+	inline void Register_( void )
 	{
-	private:
-		global::fActionCallbacks Global_;
-		prolog::fActionCallbacks Prolog_;
-		login::fActionCallbacks Login_;
-		main::fActionCallbacks Main_;
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			Global_.reset( P );
-			Prolog_.reset( P );
-			Login_.reset( P );
-			Main_.reset( P );
-		}
-		E_CVDTOR( action_callbacks__ );
-		void Init( void )
-		{
-			Prolog_.Init();
-			Login_.Init();
-			Main_.Init();
-			Global_.Init();
+		global::Register();
+		prolog::Register();
+		login::Register();
+		main::Register();
 
-			base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
+		base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
 
-			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&Global_.About, &Global_.Refresh, &Global_.Test,
-				NULL );
+		base::AddAllowedActionsOnWhenNotConnectedToBackend(
+			global::About.Name, global::Refresh.Name, global::Test.Name,
+			NULL );
 
-			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&Prolog_.DisplayProjectFilename, &Prolog_.LoadProject, &Prolog_.SwitchProjectType,	// All 'prolog'-related actions are allowed.
-				NULL );
+		base::AddAllowedActionsOnWhenNotConnectedToBackend(
+			prolog::DisplayProjectFilename.Name, prolog::LoadProject.Name, prolog::SwitchProjectType.Name,	// All 'prolog'-related actions are allowed.
+			NULL );
 
-			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&Login_.Dismiss, &Login_.DisplayEmbeddedBackendFilename, &Login_.Connect, &Login_.SwitchBackendType,	// All 'login'-related actions too.
-				NULL );
+		base::AddAllowedActionsOnWhenNotConnectedToBackend(
+			login::Dismiss.Name, login::DisplayEmbeddedBackendFilename.Name, login::Connect.Name, login::SwitchBackendType.Name,	// All 'login'-related actions too.
+			NULL );
 
-			base::AddAllowedActionsOnWhenNotConnectedToBackend(
-				&Main_.HideTestButton, &Main_.ShowTestButton,
-				NULL );
+		base::AddAllowedActionsOnWhenNotConnectedToBackend(
+			main::HideTestButton.Name, main::ShowTestButton.Name,
+			NULL );
 
-		}
 	};
 
 	class rInstancesCore
@@ -113,12 +96,10 @@ namespace core {
 	: public _core___
 	{
 	private:
-		action_callbacks__ _ActionCallbacks;
 		base::action_helper_callback__ _ActionHelperCallback;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_ActionCallbacks.reset( P );
 			_ActionHelperCallback.reset( P );
 		}
 		E_CDTOR( core___ );
@@ -126,7 +107,7 @@ namespace core {
 		{
 			_ActionHelperCallback.Init();
 			_core___::Init( Mode, _ActionHelperCallback );
-			_ActionCallbacks.Init();
+			Register_();
 		}
 	};
 

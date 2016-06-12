@@ -43,37 +43,37 @@
 
 
 /***** Macros dealing with actions ****/
-// Definition.
-# define BASE_ACD( type )\
-	class s##type\
-	: public base::action_callback__\
+// Declaration.
+# define BASE_ACD( name )\
+	extern class s##name\
+	: public base::cAction\
 	{\
 	protected:\
 		virtual void SCLXDHTMLLaunch(\
 			core::rSession &Session,\
 			const char *Id ) override;\
-	}
+	public:\
+		static const char *Name;\
+	} name
 
-// Utilisation.
-# define BASE_ACU( name )\
-	s##name  name
-
-// 'reset(...)'.
+// Registering.
 # define BASE_ACR( name )\
-	name.reset( P )
+	base::Register( s##name::Name, name );
 
-// Initialisation.
-# define BASE_ACI( name )\
-	name.Init( #name );\
-	base::AddActionCallback( #name, name )
-
-# define BASE_AC( name )\
-	void name::SCLXDHTMLLaunch(\
+// Definition.
+# define BASE_AC( owner, name )\
+	owner::s##name owner::name;\
+	const char *owner::s##name::Name = #name;\
+	void owner::s##name::SCLXDHTMLLaunch(\
 		core::rSession &Session,\
 		const char *Id )
 /**********/
 
-// Prdeclaration.
+// Predeclaration.
+
+namespace core {
+	class rSession;
+}
 
 namespace core {
 	class rSession;
@@ -82,11 +82,11 @@ namespace core {
 namespace base {
 	E_CDEF( char *, Name, BASE_NAME );
 
-	typedef sclxdhtml::action_callback__<core::rSession> action_callback__;
+	typedef sclxdhtml::cAction<core::rSession> cAction;
 
-	void AddActionCallback(
+	void Register(
 		const char *Name,
-		action_callback__ &Callback );
+		cAction &Callback );
 
 	class action_helper_callback__
 	: public sclxdhtml::action_helper_callback__<core::rSession>
@@ -163,12 +163,9 @@ namespace base {
 			core::rSession &Session );
 	};
 
-
-	void AddAllowedActionsOnWhenNotConnectedToBackend( const char *Action );
-
 	void AddAllowedActionsOnWhenNotConnectedToBackend(
-		const action_callback__  *FirstCallback,
-		... /* other callbacks */ );	// Last must be 'NULL' !
+		const char *FirstCallback,
+		... /* other callbacks names */ );	// Last must be 'NULL' !
 }
 
 #endif

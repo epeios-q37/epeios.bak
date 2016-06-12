@@ -44,47 +44,30 @@ namespace sclxdhtml {
 
 	const char *GetLauncher( void );
 
-	template <typename session> class action_callback__
+	template <typename session> class cAction
 	{
-	private:
-		const char *_Name;
 	protected:
 		virtual void SCLXDHTMLLaunch(
 			session &Session,
 			const char *Id ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			_Name = NULL;
-		}
-		E_CVDTOR( action_callback__ );
-		void Init( const char *Name )
-		{
-			_Name = Name;
-		}
+		qCALLBACK( Action );
 		void Launch(
 			session &Session,
 			const char *Id )
 		{
 			return SCLXDHTMLLaunch( Session, Id );
 		}
-		const char *Name( void ) const
-		{
-			if ( _Name == NULL )
-				qRFwk();
-
-			return _Name;
-		}
 	};
 
 	E_ROW( crow__ );	// callback row;
 
-	template <typename session> E_TTCLONE_( bch::E_BUNCHt_( action_callback__<session> *, crow__ ), action_callbacks_ );
+	template <typename session> E_TTCLONE_( bch::E_BUNCHt_( cAction<session> *, crow__ ), action_callbacks_ );
 
 	template <typename session> class action_handler_
 	{
 	private:
-		action_callback__<session> *_Get( const str::string_ &Action ) const
+		cAction<session> *_Get( const str::string_ &Action ) const
 		{
 			crow__ Row = stsfsm::GetId( Action, Automat );
 
@@ -128,7 +111,7 @@ namespace sclxdhtml {
 		}
 		bso::bool__ Add(
 			const char *Name,
-			action_callback__<session> &Callback )
+			cAction<session> &Callback )
 		{
 			return stsfsm::Add( Name, *Callbacks.Append( &Callback ), Automat ) == stsfsm::UndefinedId;
 		}
@@ -137,7 +120,7 @@ namespace sclxdhtml {
 			const char *Id,
 			const char *Action )
 		{
-			action_callback__<session> *Callback = _Get( str::string(  Action ) );
+			cAction<session> *Callback = _Get( str::string(  Action ) );
 
 			if ( Callback == NULL )
 				qRFwk();	// L'action affecte  un vnement n'existe pas. Contrler le fichier '.xsl'.
@@ -398,7 +381,7 @@ namespace sclxdhtml {
 		}
 		void AddActionCallback(
 			const char *ActionName,
-			action_callback__<session> &Callback )
+			cAction<session> &Callback )
 		{
 			_Handler.Add( ActionName, Callback );
 		}

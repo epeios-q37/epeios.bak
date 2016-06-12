@@ -24,7 +24,9 @@
 
 E_CDEF(char *, XSLAffix_, "Global" );
 
-BASE_AC( global::sAbout )
+#define AC( name ) BASE_AC( global, name )
+
+AC( About )
 {
 qRH
 	str::string XML, XSL;
@@ -52,12 +54,12 @@ qRT
 qRE
 }
 
-BASE_AC( global::sRefresh )
+AC( Refresh )
 {
 	Session.Refresh();
 }
 
-BASE_AC( global::sTest )
+AC( Test )
 {
 qRH
 	str::string Message;

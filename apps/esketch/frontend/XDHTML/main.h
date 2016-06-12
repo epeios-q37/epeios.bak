@@ -28,29 +28,12 @@ namespace main {
 	BASE_ACD( HideTestButton );
 	BASE_ACD( Testing );
 
-	class fActionCallbacks
+	inline void Register( void  )
 	{
-	public:
-		BASE_ACU( Submission );
-		BASE_ACU( ShowTestButton );
-		BASE_ACU( HideTestButton );
-		BASE_ACU( Testing );
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( Submission );
-			BASE_ACR( ShowTestButton );
-			BASE_ACR( HideTestButton );
-			BASE_ACR( Testing );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( Submission );
-			BASE_ACI( ShowTestButton );
-			BASE_ACI( HideTestButton );
-			BASE_ACI( Testing );
-		}
+		BASE_ACR( Submission );
+		BASE_ACR( ShowTestButton );
+		BASE_ACR( HideTestButton );
+		BASE_ACR( Testing );
 	};
 
 	void SetLayout( core::rSession &Session );

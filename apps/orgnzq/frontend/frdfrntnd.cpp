@@ -119,11 +119,11 @@ void frdfrntnd::rFrontend::GetNumbers_( void )
 {
 	Numbers_.Init();
 
-	Statics.OGZGetNumbers( Numbers_.Ids, Numbers_.Strings1, Numbers_.Strings2 );
+	Statics.OGZGetNumbers( Numbers_.Ids, Numbers_.Strings1 );
 }
 
 void  frdfrntnd::rFrontend::DumpNumbers_( xml::writer_ &Writer )
 {
-	sclfrntnd::DumpAsLabelWording( Numbers_, "Numbers", "Number", Writer );
+	sclfrntnd::DumpWithLabelAttribute( Numbers_, "Numbers", "Number", Writer );
 }
 

@@ -27,26 +27,12 @@ namespace global {
 	BASE_ACD( Refresh );
 	BASE_ACD( Test );
 
-	class fActionCallbacks
+	inline void Register( void )
 	{
-	public:
-		BASE_ACU( About );
-		BASE_ACU( Refresh );
-		BASE_ACU( Test );
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( About );
-			BASE_ACR( Refresh );
-			BASE_ACR( Test );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( About );
-			BASE_ACI( Refresh );
-			BASE_ACI( Test );
-		}
-	};
+		BASE_ACR( About );
+		BASE_ACR( Refresh );
+		BASE_ACR( Test );
+	}
 }
 
 #endif

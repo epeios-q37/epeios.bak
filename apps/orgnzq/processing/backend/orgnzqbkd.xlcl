@@ -15,14 +15,6 @@
 		<Translation language="fr">Le libellé de champ ne peut être vide.</Translation>
 		<Translation language="en">The field label can not be empty.</Translation>
 	</Translations>
-	<Translations text="MonoNumberWording">
-		<Translation language="fr">Mono</Translation>
-		<Translation language="en">Mono</Translation>
-	</Translations>
-	<Translations text="MultiNumberWording">
-		<Translation language="fr">Multi</Translation>
-		<Translation language="en">Multi</Translation>
-	</Translations>
 	<Translations text="NoSuchEntry">
 		<Translation language="fr">Entrée inexistante !</Translation>
 		<Translation language="en">No such entry !</Translation>

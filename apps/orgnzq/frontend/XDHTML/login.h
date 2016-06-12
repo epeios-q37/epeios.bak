@@ -28,30 +28,12 @@ namespace login {
 	BASE_ACD( Connect );
 	BASE_ACD( Dismiss );
 
-	class fActionCallbacks
-	{
-	public:
-		BASE_ACU( SwitchBackendType );
-		BASE_ACU( DisplayEmbeddedBackendFilename );
-		BASE_ACU( Connect );
-		BASE_ACU( Dismiss );
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( SwitchBackendType );
-			BASE_ACR( DisplayEmbeddedBackendFilename );
-			BASE_ACR( Connect );
-			BASE_ACR( Dismiss );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( SwitchBackendType );
-			BASE_ACI( DisplayEmbeddedBackendFilename );
-			BASE_ACI( Connect );
-			BASE_ACI( Dismiss );
-		}
-	};
+	inline void Register( void ) {
+		BASE_ACR( SwitchBackendType );
+		BASE_ACR( DisplayEmbeddedBackendFilename );
+		BASE_ACR( Connect );
+		BASE_ACR( Dismiss );
+	}
 
 	void SetLayout( core::rSession &Session );
 }

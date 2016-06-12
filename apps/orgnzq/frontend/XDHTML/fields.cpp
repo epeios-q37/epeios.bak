@@ -95,7 +95,7 @@ qRB
 
 	switch ( Session.User.Focus() ) {
 	case frdinstc::tField:
-		field::SetLayout("Field", Session );
+		main::SetFieldLayout( Session );
 		break;
 	}
 
@@ -105,7 +105,9 @@ qRT
 qRE
 }
 
-BASE_AC( fields::sCreateField )
+#define AC( name ) BASE_AC( fields, name )
+
+AC( CreateField )
 {
 qRH
 qRB
@@ -115,7 +117,7 @@ qRT
 qRE
 }
 
-BASE_AC( fields::sEditField )
+AC( EditField )
 {
 	Session.AlertU( Id );
 

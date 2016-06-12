@@ -29,20 +29,10 @@ namespace record {
 
 	BASE_ACD( DefineNewField );
 
-	class fActionCallbacks
+	inline void Register( void ) 
 	{
-	public:
-		BASE_ACU( DefineNewField );
-		void reset( bso::bool__ P = true )
-		{
-			BASE_ACR( DefineNewField );
-		}
-		qCVDTOR( fActionCallbacks );
-		void Init( void )
-		{
-			BASE_ACI( DefineNewField );
-		}
-	};
+		BASE_ACR( DefineNewField );
+	}
 
 	void SetLayout(
 		const char *Id,
