@@ -61,8 +61,6 @@ DEC( Define )
 
 	if ( !Database.GetEntries( FieldRow, Stuff.User(), Field, Field.Type(), Field.Number(), qRPU ) )
 		REPORT( NoSuchField );
-
-	Request.BooleanOut() = Field.Number() == ogzclm::nMulti;
 }
 
 DEC( UpdateEntry )
@@ -162,7 +160,6 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 	Module.Add( D( Define ),
 			fblbkd::cId,		// Field id.
 		fblbkd::cEnd,
-			fblbkd::cBoolean,	// 'false' : mono, 'true' : multi.
 		fblbkd::cEnd );
 
 	Module.Add( D( Get ),

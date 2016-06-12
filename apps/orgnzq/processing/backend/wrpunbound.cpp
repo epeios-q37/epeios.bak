@@ -163,9 +163,9 @@ qRB
 	DATABASE;
 
 	const ogzbsc::sRRow &Record = *Request.IdIn();
-	const fbltyp::sObject &Column = Request.ObjectIn();
+	const ogzclm::rColumnBuffer &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() )();
 
-	Request.IdOut() = *Database.NewField( Backend.Object<wrpcolumn::dColumn>( Column )(), Record, Stuff.User() );
+	Request.IdOut() = *Database.NewField( Column, Record, Stuff.User() );
 qRR
 qRT
 qRE
@@ -278,8 +278,6 @@ namespace {
 		Database.GetEntries( Record, User, Callback );
 	}
 }
-
-
 
 DEC( GetRecordFields )
 {

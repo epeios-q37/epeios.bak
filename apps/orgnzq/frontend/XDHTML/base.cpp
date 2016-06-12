@@ -51,16 +51,14 @@ namespace {
 	qRH
 		str::wString Content;
 	qRB
-		if ( !Session.User.EntryLatch() ) {
-			Content.Init();
+		Content.Init();
 
-			Session.GetContent( "EditableEntry", Content );
+		Session.GetContent( "EditableEntry", Content );
 
-			Session.User.UpdateEntry( Content );
+		Session.User.UpdateEntry( Content );
 
-			if ( Action != field::DefineNewEntry.Name )
-				Session.User.UpdateField();
-		}
+		if ( strcmp( Action, field::DefineNewEntry.Name ) )
+			Session.User.UpdateField();
 	qRR
 	qRT
 	qRE

@@ -120,13 +120,9 @@ namespace frdinstc {
 			Field_.UpdateEntry( *Entry, Content );
 		}
 		// 'false' : mono, 'true' : multi.
-		bso::sBool DefineField( sField Field )
+		void DefineField( sField Field )
 		{
-			bso::sBool IsMulti = false;
-
-			Field_.Define( *Field, IsMulti );
-
-			return IsMulti;
+			Field_.Define( *Field );
 		}
 		void GetRecordColumns(
 			sRecord Record,
@@ -188,16 +184,12 @@ namespace frdinstc {
 		sField Field_;
 		sEntry Entry_;
 		sColumn Column_;
-		bso::sBool IsMulti_;	// 'true' if current field is multi, 'false' otherwise.
-		bso::sBool EntryLatch_;	// When switching to field editing, avoids to update the entry when not needed.
 		void UnselectAllItems_( void )
 		{
 			Record_ = UndefinedRecord;
 			Field_ = UndefinedField;
 			Entry_ = UndefinedEntry;
 			Column_ = UndefinedColumn;
-			EntryLatch_ = false;
-			IsMulti_ = false;
 		}
 		void UnselectAll_( void )
 		{
@@ -302,12 +294,9 @@ namespace frdinstc {
 		{
 			if ( Field == UndefinedField ) {
 				Core_.DefineColumn( UndefinedColumn );
-
 				FocusOn_( UndefinedColumn );
-			}
-			else {
-				IsMulti_ = Core_.DefineField( Field );
-
+			} else {
+				Core_.DefineField( Field );
 				FocusOn_( Field );
 			}
 		}
@@ -331,9 +320,8 @@ namespace frdinstc {
 		{
 			Core_.UpdateColumn( Type, Number, Label, Comment );
 			FocusOn_( Core_.CreateField( Record_, Core_.GetColumnObjectId() ) );
-			IsMulti_ = Core_.DefineField( Field_ );
+			Core_.DefineField( Field_ );
 			FocusOn_( UndefinedEntry );
-//			EntryLatch_ = true;
 		}
 		void UpdateEntry( const str::dString &Content )
 		{
@@ -342,13 +330,7 @@ namespace frdinstc {
 
 			Core_.UpdateEntry( Entry_, Content );
 
-			if ( !IsMulti_ )
-				Core_.UpdateField( Field_, Core_.GetFieldObjectId() );
-
-			if ( IsMulti_ )
-				FocusOn_( tField );
-			else
-				FocusOn_( tRecord );
+			FocusOn_( UndefinedEntry );
 		}
 		void UpdateField( void )
 		{
@@ -356,20 +338,14 @@ namespace frdinstc {
 				qRGnr();
 
 			Core_.UpdateField( Field_, Core_.GetFieldObjectId() );
+
+			FocusOn_( tRecord );
 		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBufferCurrentField( xml::dWriter &Writer ) const;
-		bso::sBool EntryLatch( void )
-		{
-			if ( EntryLatch_ ) {
-				EntryLatch_ = false;
-				return true;
-			} else
-				return false;
-		}
 		qRODISCLOSEr( eTarget, Focus );
 	};
 }

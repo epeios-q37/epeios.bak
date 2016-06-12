@@ -353,7 +353,7 @@ namespace orgnzq {
 			fblfrd::id16s Commands;
 
 			fblfrd::id8__ Parameters[] = {
-				21, 0, 2, 
+				21, 0, 
 				0, 21, 12, 22, 26, 
 				21, 25, 0, 
 			};
@@ -366,17 +366,17 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Define";;
-			CommandDetail.Casts.Append( Parameters + 0, 3 );
+			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "Get";;
-			CommandDetail.Casts.Append( Parameters + 3, 5 );
+			CommandDetail.Casts.Append( Parameters + 2, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "UpdateEntry";;
-			CommandDetail.Casts.Append( Parameters + 8, 3 );
+			CommandDetail.Casts.Append( Parameters + 7, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -574,15 +574,13 @@ namespace orgnzq {
 			_ID = Common_->GetNewObject();
 		}
 		fblovl::reply__ Define( 
-			const fblfrd::id__ &In1,
-			fblfrd::boolean__ &Out1 ) const
+			const fblfrd::id__ &In1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
 			Common_->Frontend().IdIn( In1 );
 
 			Common_->Frontend().EndOfInParameters();
 
-			Common_->Frontend().BooleanOut( Out1 );
 
 			return Common_->Frontend().Handle();
 		}
