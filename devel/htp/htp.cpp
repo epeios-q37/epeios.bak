@@ -90,6 +90,9 @@ static inline const char *GetFieldLabel_( eField Name )
 	case fContentLength:
 		return "Content-Length";
 		break;
+	case fTransferEncoding:
+		return "Transfer-Encoding";
+		break;
 	case fLocation:
 		return "Location";
 		break;
@@ -115,87 +118,85 @@ static inline const char *GetFieldLabel_( eField Name )
 	}
 }
 
-static void GetValue_(
-	const str::string_ &RawHeader,
-	const str::string_ &FieldName,
-	str::string_ &Value )
-{
-	sdr::sRow P = qNIL;
+namespace {
+	bso::sBool GetValue_(
+		const str::string_ &RawHeader,
+		const str::string_ &FieldName,
+		str::string_ &Value )
+	{
+		sdr::sRow P = qNIL;
 
-	P = *RawHeader.Search( FieldName );
+		P = *RawHeader.Search( FieldName );
 
-	if ( P != qNIL ) {
-		P = RawHeader.Next( P, FieldName.Amount() );
+		if ( P != qNIL ) {
+			P = RawHeader.Next( P, FieldName.Amount() );
 		
-		while ( ( P != qNIL ) && ( RawHeader( P ) != NL[0] ) ) {
-			Value.Append( RawHeader( P ) );
-			P = RawHeader.Next( P );
-		}
+			while ( ( P != qNIL ) && ( RawHeader( P ) != NL[0] ) ) {
+				Value.Append( RawHeader( P ) );
+				P = RawHeader.Next( P );
+			}
 		
-		if ( P == qNIL )
-			qRFwk();
+			if ( P == qNIL )
+				qRFwk();
+
+			return true;
+		} else
+			return false;
+	}
+
+	bso::sBool GetValue_(
+		const str::string_ &RawHeader,
+		eField Field,
+		str::string_ &Value )
+	{
+		bso::sBool Exists = false;
+	qRH
+		str::string FieldName;
+	qRB
+		FieldName.Init( GetFieldLabel_( Field ) );
+
+		FieldName.Append( ": " );
+
+		Exists = GetValue_( RawHeader, FieldName, Value );
+	qRR
+	qRT
+	qRE
+		return Exists;
 	}
 }
 
-static void GetValue_(
-	const str::string_ &RawHeader,
-	eField Field,
-	str::string_ &Value )
+void htp::rHeader::FillField_( flw::iflow__ &Flow )
 {
 qRH
-	str::string FieldName;
-qRB
-	FieldName.Init( GetFieldLabel_( Field ) );
-
-	FieldName.Append( ": " );
-
-	GetValue_( RawHeader, FieldName, Value );
-qRR
-qRT
-qRE
-}
-
-static bso::sU32 GetU32_( 
-	const str::string_ &RawHeader,
-	eField Field )
-{
-	bso::sU32 Value = 0;
-qRH
-	str::string SValue;
-	sdr::sRow Error = qNIL;
-qRB
-	SValue.Init();
-
-	GetValue_( RawHeader, Field, SValue );
-
-	if ( SValue.Amount() ) {
-		Value = SValue.ToU32( &Error );
-
-		if ( Error != qNIL )
-			qRFwk();
-	}
-qRR
-qRT
-qRE
-	return Value;
-}
-
-static void FillField_(
-	flw::iflow__ &IFlow,
-	dHeader &Header )
-{
-qRH
-	str::string RawHeader;
+	str::string
+		RawHeader,
+		Value;
 	const char *Label = NULL;
 qRB
 	RawHeader.Init();
 
-	GetHeader_( IFlow, RawHeader );
+	GetHeader_( Flow, RawHeader );
 
-	Header.S_.ContentLength = GetU32_( RawHeader, fContentLength );
+	GetValue_( RawHeader, fLocation, Location );
+	GetValue_( RawHeader, fContentType, ContentType );
 
-	GetValue_( RawHeader, fLocation, Header.Location );
-	GetValue_( RawHeader, fContentType, Header.ContentType );
+	Value.Init();
+
+	if ( GetValue_( RawHeader, fContentLength, Value ) ) {
+		BlocFlow_.Init( Value.ToU32(), Flow );
+		Flow_.Init( BlocFlow_ );
+	} else if ( GetValue_(RawHeader, fTransferEncoding, Value) ) {
+		if (  Value != "chunked" )
+			qRFwk();
+		
+		ChunkFlow_.Init( Flow );
+
+		Flow_.Init( ChunkFlow_ );
+	}
+	else {
+		Flow.Dismiss();
+		Flow_.Init( Flow.Driver() );
+	}
 qRR
 qRT
 qRE
@@ -214,10 +215,50 @@ qRT
 qRE
 }
 
+namespace {
+	fdr::size__ GetSize_( flw::iflow__ &Flow )
+	{
+		fdr::size__ Size = 0;
+	qRH
+		str::wString Raw;
+		sdr::sRow Error = qNIL;
+	qRB
+		Raw.Init();
 
-htp::eStatus htp::Parse(
-	flw::iflow__ &IFlow,
-	dHeader &Header )
+		while ( !Flow.EndOfFlow() && ( Flow.View() != NL[0] ) )
+			Raw.Append( Flow.Get() );
+
+		if ( Flow.EndOfFlow() )
+			qRFwk();
+
+		Flow.Skip( 1 );
+
+		if ( Flow.Get() != NL[1] )
+			qRFwk();
+
+		Size = Raw.ToU32( &Error, str::b16 );
+
+		if ( Error != qNIL )
+			qRFwk();
+	qRR
+	qRT
+	qRE
+		return Size;
+	}
+}
+
+bso::sBool htp::rChunkFlow::GetSize_( void )
+{
+	if ( Size_ != 0 )
+		qRFwk();
+
+	Size_ = ::GetSize_( F_() );
+
+	return Size_ != 0;
+}
+
+
+htp::eStatus htp::rHeader::Parse( flw::iflow__ &IFlow )
 {
 	htp::eStatus Status = htp::s_Undefined;
 
@@ -229,11 +270,11 @@ htp::eStatus htp::Parse(
 			break;
 		case 200:
 			Status = htp::sOK;
-			FillField_( IFlow, Header );
+			FillField_( IFlow );
 			break;
 		case 302:
 			Status = htp::sFound;
-			FillField_( IFlow, Header );
+			FillField_( IFlow );
 			break;
 		case 404:
 			Status = htp::sNotFound;
@@ -272,7 +313,7 @@ void htp::Post(
 {
 	sdr::sRow Row = Fields.First();
 
-	Flow << "POST " << URL << " HTTP/1.0" << NL;
+	Flow << "POST " << URL << " HTTP/1.1" << NL;
 
 	while ( Row != qNIL ) {
 		Write_( Fields( Row ), Flow );

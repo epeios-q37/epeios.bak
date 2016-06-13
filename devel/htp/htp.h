@@ -61,6 +61,7 @@ namespace htp {
 		fAccept,
 		fContentType,
 		fContentLength,
+		fTransferEncoding,
 		fLocation,
 		fConnection,
 		f_amount,
@@ -132,56 +133,143 @@ namespace htp {
 
 	typedef bso::sUInt sContentLength;
 
-	class dHeader
+	typedef fdr::iflow_driver___<> rIFlowDriver;
+
+	class rBlocFlow
+	: public rIFlowDriver
 	{
-	public:
-		struct s
+	private:
+		fdr::size__ Size_;	// Size of current chunk.
+		qRMV( flw::sIFlow, F_, Flow_ );
+	protected:
+		fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
 		{
-			sContentLength ContentLength;
-			str::dString::s Location;
-			str::dString::s ContentType;
-		} &S_;
-		dHeader( s &S )
-		: S_( S ),
-		  Location( S.Location ),
-		  ContentType( S.ContentType )
-		{}
-		str::dString Location;
-		str::dString ContentType;
+			fdr::size__ Size = 0;
+
+			if ( Size_ == 0 )
+				return 0;
+
+			Size = F_().ReadUpTo( Size_ > Maximum ? Maximum : Size_, Buffer );
+
+			if ( Size == 0 )
+				qRFwk();
+
+			Size_ -= Size;
+
+			return Size;
+		}
+		void FDRDismiss( void ) override
+		{
+			if ( Size_ != 0 )
+				qRGnr();
+
+			F_().Dismiss();
+		}
+	public:
 		void reset( bso::sBool P = true )
 		{
-			S_.ContentLength = 0;
+			rIFlowDriver::reset( P );
+			Flow_ = NULL;
+		}
+		qCDTOR( rBlocFlow );
+		void Init(
+			fdr::size__ Size,
+			flw::iflow__ &Flow )
+		{
+			Size_ = Size;
+			Flow_ = &Flow;
+
+			rIFlowDriver::Init( fdr::ts_Default );
+		}
+	};
+
+	class rChunkFlow
+	: public rIFlowDriver
+	{
+	private:
+		fdr::size__ Size_;	// Size of current chunk.
+		qRMV( flw::sIFlow, F_, Flow_ );
+		bso::sBool GetSize_( void  );
+	protected:
+		fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+		{
+			fdr::size__ Size = 0;
+
+			if ( Size_ == 0 )
+				if ( !GetSize_() )
+					return 0;
+
+			Size = F_().ReadUpTo( Size_ > Maximum ? Maximum : Size_, Buffer );
+
+			if ( Size == 0 )
+				qRFwk();
+
+			Size_ -= Size;
+
+			if ( Size_ == 0 )
+				F_().Skip( 2 );	// To remve the NL.
+
+			return Size;
+		}
+		void FDRDismiss( void ) override
+		{
+			if ( Size_ != 0 )
+				qRGnr();
+
+			F_().Dismiss();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Size_ = 0;
+			rIFlowDriver::reset( P );
+			Flow_ = NULL;
+		}
+		qCDTOR( rChunkFlow );
+		void Init( flw::iflow__ &Flow )
+		{
+			Size_ = 0;
+			Flow_ = &Flow;
+
+			rIFlowDriver::Init( fdr::ts_Default );
+		}
+	};
+
+	class rHeader
+	{
+	private:
+		rBlocFlow BlocFlow_;
+		rChunkFlow ChunkFlow_;
+		flw::iflow__ Flow_;
+		void FillField_( flw::iflow__ &IFlow );
+	public:
+		str::wString Location;
+		str::wString ContentType;
+		void reset( bso::sBool P = true )
+		{
+			BlocFlow_.reset( P );
+			ChunkFlow_.reset( P );
+			Flow_.reset( P );
 			Location.reset( P );
 			ContentType.reset( P );
 		}
-		void plug( qASd *AS )
-		{
-			Location.plug( AS );
-			ContentType.plug( AS );
-		}
-		dHeader &operator =( const dHeader &H )
-		{
-			S_.ContentLength = H.S_.ContentLength;
-			Location = H.Location;
-			ContentType = H.ContentType;
-
-			return *this;
-		}
+		qCDTOR( rHeader );
 		void Init( void )
 		{
-			S_.ContentLength = 0;
 			Location.Init();
 			ContentType.Init();
+			// Other members initialized when needed.
 		}
-		qRODISCLOSEd( sContentLength, ContentLength );
+		eStatus Parse( flw::iflow__ &IFlow );
+		flw::iflow__ &Flow( void )
+		{
+			return Flow_;
+		}
 	};
-
-	qW( Header )
-
-	//f Parse 'flow' and fill 'Header' with it. Return status. 'Header' is only fill when return value is 'sOK'.
-	eStatus Parse(
-		flw::iflow__ &IFlow,
-		dHeader &Header );
 
 	void Post( 
 		const str::string_ &URL,

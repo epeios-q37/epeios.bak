@@ -31,7 +31,6 @@ void base::Register(
 }
 
 namespace {
-
 	stsfsm::automat AllowedActionsOnWhenNotConnectedToBackend_;
 
 	static inline bso::bool__ IsActionAllowedWhenNotConnectedToBackend_( const char *Action )
