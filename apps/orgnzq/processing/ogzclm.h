@@ -106,7 +106,6 @@ namespace ogzclm {
 		}
 		qRODISCLOSEs( ogzdta::sRow, Label );
 		qRODISCLOSEs( ogzdta::sRow, Comment );
-
 	};
 }
 

@@ -76,10 +76,17 @@ namespace {
 	inline void Update_(
 		ogztyp::sRow Type,
 		ogzclm::eNumber Number,
-		const str::dString &Label,
+		const str::dString &RawLabel,
 		const str::dString &Comment,
 		ogzclm::rColumnBuffer &Column )
 	{
+	qRH
+		str::wString Label;
+	qRB
+		Label.Init( RawLabel );
+
+		Label.StripCharacter(' ' );
+
 		if ( Label.Amount() == 0 )
 			REPORT( FieldLabelCanNotBeEmpty );
 
@@ -90,6 +97,9 @@ namespace {
 			REPORT( UnknownFieldNumber );
 
 		Column.Init( Type, Number, Label, Comment );
+	qRR
+		qRT
+		qRE
 	}
 }
 
