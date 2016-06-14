@@ -246,6 +246,7 @@ namespace htp {
 		rChunkFlow ChunkFlow_;
 		flw::iflow__ Flow_;
 		void FillField_( flw::iflow__ &IFlow );
+		bso::sU16 StatusCode_;
 	public:
 		str::wString Location;
 		str::wString ContentType;
@@ -256,12 +257,14 @@ namespace htp {
 			Flow_.reset( P );
 			Location.reset( P );
 			ContentType.reset( P );
+			StatusCode_ = 0;
 		}
 		qCDTOR( rHeader );
 		void Init( void )
 		{
 			Location.Init();
 			ContentType.Init();
+			StatusCode_ = 0;
 			// Other members initialized when needed.
 		}
 		eStatus Parse( flw::iflow__ &IFlow );
@@ -269,6 +272,7 @@ namespace htp {
 		{
 			return Flow_;
 		}
+		qRODISCLOSEr( bso::sU16, StatusCode );
 	};
 
 	void Post( 

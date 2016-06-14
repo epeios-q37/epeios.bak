@@ -263,7 +263,7 @@ htp::eStatus htp::rHeader::Parse( flw::iflow__ &IFlow )
 	htp::eStatus Status = htp::s_Undefined;
 
 	if ( TestHTTPVersion_( IFlow ) ) {
-		switch( GetHTTPResponseCode_( IFlow ) ) {
+		switch( StatusCode_ = GetHTTPResponseCode_( IFlow ) ) {
 		case 100:
 			Status = htp::sContinue;
 			StripHeader_( IFlow );
