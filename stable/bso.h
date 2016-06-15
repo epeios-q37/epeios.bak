@@ -704,5 +704,7 @@ namespace bso {
 
 	typedef u32__ sU32;
 	typedef s32__ sS32;
+
+	typedef sUInt sFlag;
 }
 #endif

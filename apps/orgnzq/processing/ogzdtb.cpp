@@ -22,18 +22,19 @@
 using namespace ogzdtb;
 
 namespace {
-	ogzdta::sRow Create_(
+	ogzmta::sRow Create_(
 		const str::dString &Value,
-		ogzdta::mData &Data )
+		ogzmta::eTarget Target,
+		ogzmta::mMetas &Metas )
 	{
-		ogzdta::sRow Datum = qNIL;
+		ogzmta::sRow Meta = qNIL;
 
 		if ( Value.Amount() ) {
-			Datum = Data.New( qNIL );
-			Data.Store( Value, qNIL, Datum );
+			Meta = Metas.New( qNIL );
+			Metas.Store( Value, Target, Meta );
 		}
 
-		return Datum;
+		return Meta;
 	}
 }
 
@@ -42,7 +43,7 @@ ogzbsc::sFRow ogzdtb::mDatabase::NewField(
 	ogzbsc::sRRow Record,
 	ogzusr::sRow User )
 {
-	ogzbsc::sFRow Field = Users.Add( Fields.New( Users.Add( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), Data ), Create_( Column.Comment(), Data ) ), User ) ), User );
+	ogzbsc::sFRow Field = Users.Add( Fields.New( Users.Add( Columns.New( Column.Type(), Column.Number(), Create_( Column.Label(), ogzmta::tColumnLabel, Metas ), Create_( Column.Comment(), ogzmta::tColumnComment, Metas ) ), User ) ), User );
 
 	Records.AddField( Field, GetRawRecordRow_( Record, User ) );
 
@@ -69,10 +70,10 @@ qRB
 		*Number = Column.Number();
 
 	if ( Label != NULL )
-		GetDatum_( Column.Label(), qNIL, *Label );
+		GetMeta_( Column.Label(), *Label );
 
 	if ( Comment != NULL )
-		GetDatum_( Column.Comment(), qNIL, *Comment );
+		GetMeta_( Column.Comment(), *Comment );
 qRR
 qRT
 qRE
@@ -216,31 +217,31 @@ qRE
 }
 
 void ogzdtb::mDatabase::Append_(
-	const ogzbsc::dDatum &Datum,
+	const ogzbsc::dDatum &Entry,
 	ogztyp::sRow Type,
 	ogzusr::sRow User,
 	ogzfld::dField &Field )
 {
-	ogzdta::sRow Row = Data.New( Type );
+	ogzetr::sRow Row = Entries.New( Type );
 
-	Data.Store( Datum, Type, Row );
+	Entries.Store( Entry, Type, Row );
 
 	Field.Add( Users.Add( Row, User ) );
 }
 
 
 void ogzdtb::mDatabase::Delete_(
-	const ogzfld::dData &DataRows,
+	const ogzfld::dEntries &EntriesRows,
 	ogzusr::sRow User )
 {
 qRH
-	ogzdta::wRows RawDataRows;
+	ogzetr::wRows RawEntriesRows;
 qRB
-	RawDataRows.Init();
+	RawEntriesRows.Init();
 
-	Users.GetRaws( DataRows, User, RawDataRows );
+	Users.GetRaws( EntriesRows, User, RawEntriesRows );
 
-	Data.Delete( RawDataRows );
+	Entries.Delete( RawEntriesRows );
 qRR
 qRT
 qRE
@@ -281,9 +282,9 @@ qRE
 
 namespace {
 	void GetEntries_(
-		const ogzdta::dRows &EntryRows,
+		const ogzetr::dRows &EntryRows,
 		ogztyp::sRow Type,
-		const ogzdta::mData &Data,
+		const ogzetr::mEntries &EntriesStorage,
 		ogzbsc::dData &Entries )
 	{
 	qRH
@@ -294,7 +295,7 @@ namespace {
 
 		while ( Row != qNIL ) {
 			Entry.Init();
-			Data.Recall( EntryRows( Row ), Type, Entry );
+			EntriesStorage.Recall( EntryRows( Row ), Type, Entry );
 
 			Entries.Append( Entry );
 
@@ -314,14 +315,14 @@ void ogzdtb::mDatabase::GetEntries_(
 	ogzclm::eNumber &Number ) const
 {
 qRH
-	ogzdta::wRows EntryRows;
+	ogzetr::wRows EntryRows;
 qRB
 	Columns.GetTypeAndNumber( GetRawColumnRow_( Field.GetColumn(), User ), Type, Number );
 
 	EntryRows.Init();
 	Users.GetRaws( Field, User, EntryRows );
 
-	::GetEntries_( EntryRows, Type, Data, Entries );
+	::GetEntries_( EntryRows, Type, this->Entries, Entries );
 qRR
 qRT
 qRE

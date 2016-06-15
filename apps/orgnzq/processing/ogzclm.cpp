@@ -39,8 +39,8 @@ const char *ogzclm::GetLabel( eNumber Number )
 sRow ogzclm::mColumns::New(
 	ogztyp::sRow Type,
 	eNumber Number,
-	ogzdta::sRow Label,
-	ogzdta::sRow Comment,
+	ogzmta::sRow Label,
+	ogzmta::sRow Comment,
 	sRow ColumnRow ) const
 {
 	sColumn Column;

@@ -17,9 +17,9 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ogzdta.h"
+#include "ogzetr.h"
 
-using namespace ogzdta;
+using namespace ogzetr;
 
 
 

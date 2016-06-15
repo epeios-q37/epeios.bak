@@ -27,6 +27,7 @@
 # endif
 
 # include "ogzbsc.h"
+# include "ogzetr.h"
 # include "ogzfld.h"
 # include "ogzrcd.h"
 
@@ -64,17 +65,28 @@ namespace ogzusr {
 			const ogzfld::dColumns &Columns,
 			sRow User,
 			ogzclm::dRows &RawColumns ) = 0;
-		// Data related methods.
-		virtual ogzbsc::sDRow OGZUSRAdd(
-			ogzdta::sRow Entry,
+		// Meta related methods.
+		virtual ogzbsc::sMRow OGZUSRAdd(
+			ogzmta::sRow Meta,
 			sRow User ) = 0;
 		virtual void OGZUSRRemove(
-			ogzbsc::sDRow Entry,
+			ogzbsc::sMRow Entry,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
-			const ogzfld::dData &Entries,
+			const ogzclm::dMetas &Metas,
 			sRow User,
-			ogzdta::dRows &RawEntries ) = 0;
+			ogzmta::dRows &RawMetas ) = 0;
+		// Storage related methods.
+		virtual ogzbsc::sERow OGZUSRAdd(
+			ogzetr::sRow Entry,
+			sRow User ) = 0;
+		virtual void OGZUSRRemove(
+			ogzbsc::sERow Entry,
+			sRow User ) = 0;
+		virtual void OGZUSRGetRaws(
+			const ogzfld::dEntries &Entries,
+			sRow User,
+			ogzetr::dRows &RawEntries ) = 0;
 		// Fields related methods.
 		virtual ogzbsc::sFRow OGZUSRAdd(
 			ogzfld::sRow Field,
@@ -294,6 +306,18 @@ namespace ogzusr {
 			return GetRaws_( Regulars, User, Raws );
 		}
 		// No template members below, because some template can not be deduced.
+		ogzbsc::sMRow Add(
+			ogzmta::sRow Meta,
+			sRow User ) const
+		{
+			return Add_<ogzbsc::sMRow,ogzmta::sRow>( Meta, User );
+		}
+		ogzmta::sRow GetRaw(
+			ogzbsc::sMRow Meta,
+			sRow User ) const
+		{
+			return GetRaw_<ogzbsc::sMRow,ogzmta::sRow>( Meta, User );
+		}
 		ogzbsc::sCRow Add(
 			ogzclm::sRow Column,
 			sRow User ) const
@@ -306,17 +330,17 @@ namespace ogzusr {
 		{
 			return GetRaw_<ogzbsc::sCRow,ogzclm::sRow>( Column, User );
 		}
-		ogzbsc::sDRow Add(
-			ogzdta::sRow Datum,
+		ogzbsc::sERow Add(
+			ogzetr::sRow Entry,
 			sRow User ) const
 		{
-			return Add_<ogzbsc::sDRow,ogzdta::sRow>( Datum, User );
+			return Add_<ogzbsc::sERow,ogzetr::sRow>( Entry, User );
 		}
-		ogzdta::sRow GetRaw(
-			ogzbsc::sDRow Datum,
+		ogzetr::sRow GetRaw(
+			ogzbsc::sERow Entry,
 			sRow User ) const
 		{
-			return GetRaw_<ogzbsc::sDRow,ogzdta::sRow>( Datum, User );
+			return GetRaw_<ogzbsc::sERow,ogzetr::sRow>( Entry, User );
 		}
 		ogzbsc::sFRow Add(
 			ogzfld::sRow Field,
@@ -352,20 +376,23 @@ namespace ogzusr {
 		}
 	};
 
-	typedef lstbch::qBUNCHd( ogzclm::sRow, ogzbsc::sCRow ) dColumns_;
-	typedef lstbch::qBUNCHd( ogzdta::sRow, ogzbsc::sDRow ) dEntries_;
-	typedef lstbch::qBUNCHd( ogzfld::sRow, ogzbsc::sFRow ) dFields_;
-	typedef lstbch::qBUNCHd( ogzrcd::sRow, ogzbsc::sRRow ) dRecords_;
+	typedef lstbch::qBUNCHd( ogzmta::sRow, ogzbsc::sMRow ) dMeta_;
+	typedef lstcrt::qLMCRATEd( dMeta_, sRow ) dMetasCrate_;
+	qW( MetasCrate_ );
 
+	typedef lstbch::qBUNCHd( ogzclm::sRow, ogzbsc::sCRow ) dColumns_;
 	typedef lstcrt::qLMCRATEd( dColumns_, sRow ) dColumnsCrate_;
 	qW( ColumnsCrate_ );
 
+	typedef lstbch::qBUNCHd( ogzetr::sRow, ogzbsc::sERow ) dEntries_;
 	typedef lstcrt::qLMCRATEd( dEntries_, sRow ) dEntriesCrate_;
 	qW( EntriesCrate_ );
 
+	typedef lstbch::qBUNCHd( ogzfld::sRow, ogzbsc::sFRow ) dFields_;
 	typedef lstcrt::qLMCRATEd( dFields_, sRow ) dFieldsCrate_;
 	qW( FieldsCrate_ );
 
+	typedef lstbch::qBUNCHd( ogzrcd::sRow, ogzbsc::sRRow ) dRecords_;
 	typedef lstcrt::qLMCRATEd( dRecords_, sRow ) dRecordsCrate_;
 	qW( RecordsCrate_ );
 
@@ -374,10 +401,11 @@ namespace ogzusr {
 	: public cUser
 	{
 	private:
+		wMetasCrate_ Metas_;
 		wColumnsCrate_ Columns_;
 		wEntriesCrate_ Entries_;
-		wFieldsCrate_  Fields_;
-		wRecordsCrate_  Records_;
+		wFieldsCrate_ Fields_;
+		wRecordsCrate_ Records_;
 		template <typename crate, typename regular, typename raw> regular Add_(
 			crate &Crate,
 			raw Raw,
@@ -418,7 +446,10 @@ namespace ogzusr {
 		// If 'Row' != 'qNIL', it must be used.
 		sRow OGZUSRNew( sRow User ) override
 		{
-			sRow Row = Columns_.New();
+			sRow Row = Metas_.New();
+
+			if ( Columns_.New() != Row )
+				qRGnr();
 
 			if ( Entries_.New() != Row )
 				qRGnr();
@@ -429,6 +460,7 @@ namespace ogzusr {
 			if ( Records_.New() != Row )
 				qRGnr();
 
+			Metas_( Row ).Init();
 			Columns_( Row ).Init();
 			Fields_( Row ).Init();
 			Entries_( Row ).Init();
@@ -440,16 +472,37 @@ namespace ogzusr {
 		virtual void OGZUSRDelete( sRow User ) override
 		{
 			if ( User == qNIL ) {
+				Metas_.Init();
 				Columns_.Init();
 				Entries_.Init();
 				Fields_.Init();
 				Records_.Init();
 			} else {
+				Metas_.Remove( User );
 				Columns_.Remove( User );
 				Entries_.Remove( User );
 				Fields_.Remove( User );
 				Records_.Remove( User );
 			}
+		}
+		virtual ogzbsc::sMRow OGZUSRAdd(
+			ogzmta::sRow Meta,
+			sRow User ) override
+		{
+			return Add_<dMetasCrate_, ogzbsc::sMRow, ogzmta::sRow> ( Metas_, Meta, User );
+		}
+		virtual void OGZUSRRemove(
+			ogzbsc::sMRow Meta,
+			sRow User ) override
+		{
+			return Remove_( Metas_, Meta, User );
+		}
+		virtual void OGZUSRGetRaws(
+			const ogzclm::dMetas &Metas,
+			sRow User,
+			ogzmta::dRows &RawMetas ) override
+		{
+			return GetRaws_( Metas, Metas_, User, RawMetas );
 		}
 		virtual ogzbsc::sCRow OGZUSRAdd(
 			ogzclm::sRow Column,
@@ -470,22 +523,22 @@ namespace ogzusr {
 		{
 			return GetRaws_( Columns, Columns_, User, RawColumns );
 		}
-		virtual ogzbsc::sDRow OGZUSRAdd(
-			ogzdta::sRow Entry,
+		virtual ogzbsc::sERow OGZUSRAdd(
+			ogzetr::sRow Entry,
 			sRow User ) override
 		{
-			return Add_<dEntriesCrate_, ogzbsc::sDRow, ogzdta::sRow> ( Entries_, Entry, User );
+			return Add_<dEntriesCrate_, ogzbsc::sERow, ogzetr::sRow> ( Entries_, Entry, User );
 		}
 		virtual void OGZUSRRemove(
-			ogzbsc::sDRow Entry,
+			ogzbsc::sERow Entry,
 			sRow User ) override
 		{
 			return Remove_( Entries_, Entry, User );
 		}
 		virtual void OGZUSRGetRaws(
-			const ogzfld::dData &Entries,
+			const ogzfld::dEntries &Entries,
 			sRow User,
-			ogzdta::dRows &RawEntries ) override
+			ogzetr::dRows &RawEntries ) override
 		{
 			return GetRaws_( Entries, Entries_, User, RawEntries );
 		}
@@ -538,6 +591,7 @@ namespace ogzusr {
 	public:
 		void reset( bso::sBool P = true )
 		{
+			Metas_.reset( P );
 			Columns_.reset( P );
 			Entries_.reset( P );
 			Fields_.reset( P );
@@ -546,6 +600,7 @@ namespace ogzusr {
 		qCVDTOR( rRegularCallback );
 		void Init( void )
 		{
+			Metas_.Init();
 			Columns_.Init();
 			Entries_.Init();
 			Fields_.Init();

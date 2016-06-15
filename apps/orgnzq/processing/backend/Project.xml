@@ -37,9 +37,10 @@
 			<Module Path="../">ogzinf</Module>
 			<Module>ogzbsc</Module>
 			<Module>ogzclm</Module>
-			<Module>ogzdta</Module>
 			<Module>ogzdtb</Module>
+			<Module>ogzetr</Module>
 			<Module>ogzfld</Module>
+			<Module>ogzmta</Module>
 			<Module>ogzplg</Module>
 			<Module>ogzrcd</Module>
 			<Module>ogzrgy</Module>

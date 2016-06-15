@@ -406,6 +406,8 @@ public:\
 
 # define qCDEF( type, name, value ) static const type name = value
 
+# define qFLAG( name, value )	qCDEF( bso::sFlag, f##name, 2 << ( value ) )
+
 /* Transforms n arguments in 1.
 Useful when a macro argument contains one or more coma. 
 ex. : 'qCOVER2( a, b )' -> 'a, b' */

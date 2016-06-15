@@ -17,47 +17,9 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// OrGaniZer ReCorD
+#include "ogzmta.h"
 
-#ifndef OGZRCD__INC
-# define OGZRCD__INC
+using namespace ogzmta;
 
-# ifdef XXX_DBG
-#	define OGZRCD__DBG
-# endif
 
-# include "ogzbsc.h"
 
-# include "lstcrt.h"
-
-namespace ogzrcd {
-	qROW( Row );
-	qROWS( Row );
-
-	typedef ogzbsc::dList<ogzbsc::sFRow> dFields;
-	qW( Fields );
-
-	typedef dFields dRecord;
-	qW( Record );
-}
-
-// template parameters.
-# define OGZRCD_TP	ogzrcd::dRecord, ogzrcd::sRow
-namespace ogzrcd {
-	typedef ogzbsc::cCommon<OGZRCD_TP> cRecord;
-
-	typedef ogzbsc::mItems<OGZRCD_TP> mRecords_;
-
-	class mRecords
-	: public mRecords_
-	{
-	public:
-		void AddField(
-			ogzbsc::sFRow Field,
-			sRow Record ) const;
-	};
-
-	typedef ogzbsc::rRegularCallback<lstcrt::qLCRATEw( dRecord, sRow ), OGZRCD_TP> rRegularCallback;
-}
-
-#endif

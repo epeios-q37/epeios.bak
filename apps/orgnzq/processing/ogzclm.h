@@ -29,9 +29,11 @@
 # include "ogzbsc.h"
 # include "ags.h"
 # include "ogztyp.h"
-# include "ogzdta.h"
+# include "ogzmta.h"
 
 namespace ogzclm {
+	typedef ogzbsc::dList<ogzbsc::sMRow> dMetas;
+
 	qENUM( Number ) {
 		nMono,
 		nMulti,
@@ -84,7 +86,7 @@ namespace ogzclm {
 	: public sColumnCore_
 	{
 	private:
-		ogzdta::sRow
+		ogzmta::sRow
 			Label_,
 			Comment_;
 	public:
@@ -97,15 +99,15 @@ namespace ogzclm {
 		void Init(
 			ogztyp::sRow Type = qNIL,
 			eNumber Number = n_Undefined,
-			ogzdta::sRow Label = qNIL,
-			ogzdta::sRow Comment = qNIL )
+			ogzmta::sRow Label = qNIL,
+			ogzmta::sRow Comment = qNIL )
 		{
 			sColumnCore_::Init( Type, Number );
 			Label_ = Label;
 			Comment_ = Comment;
 		}
-		qRODISCLOSEs( ogzdta::sRow, Label );
-		qRODISCLOSEs( ogzdta::sRow, Comment );
+		qRODISCLOSEs( ogzmta::sRow, Label );
+		qRODISCLOSEs( ogzmta::sRow, Comment );
 	};
 }
 
@@ -124,8 +126,8 @@ namespace ogzclm {
 		sRow New(
 			ogztyp::sRow Type,
 			eNumber Number,
-			ogzdta::sRow Label,
-			ogzdta::sRow Comment,
+			ogzmta::sRow Label,
+			ogzmta::sRow Comment,
 			sRow Column = qNIL ) const;
 		bso::sBool GetTypeAndNumber(
 			sRow Column,

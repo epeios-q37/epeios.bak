@@ -43,9 +43,9 @@ mods += sclbacknd
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
 mods += fblbur fblcmd fblcst fbltyp fblovl 
 mods += csdleo csdles csdmxb csdmxs csdscb 
-mods += ogzfbc ogzinf ogzbsc ogzclm ogzdta 
-mods += ogzdtb ogzfld ogzplg ogzrcd ogzrgy 
-mods += ogztyp ogzusr ogzxml 
+mods += ogzfbc ogzinf ogzbsc ogzclm ogzdtb 
+mods += ogzetr ogzfld ogzmta ogzplg ogzrcd 
+mods += ogzrgy ogztyp ogzusr ogzxml 
 mods += wrpcolumn wrpfield wrpexample wrpunbound 
 mods += common registry 
 
@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160602"\"
+copt += -DVERSION=\""20160615"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""dc3beae2-d82c-4471-bc7e-03adb886d5f7"\"
 

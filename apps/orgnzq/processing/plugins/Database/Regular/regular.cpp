@@ -37,19 +37,24 @@ namespace {
 	: public fPlugin_
 	{
 	private:
-		ogzdta::rRegularCallback Data_;
+		ogzmta::rRegularCallback Meta_;
 		ogzclm::rRegularCallback Column_;
+		ogzetr::rRegularCallback Entry_;
 		ogzfld::rRegularCallback Field_;
 		ogzrcd::rRegularCallback Record_;
 		ogzusr::rRegularCallback User_;
 	protected:
-		virtual ogzdta::cData &OGZDTBGetDataCallback( void ) override
+		virtual ogzmta::cMeta &OGZDTBGetMetaCallback( void ) override
 		{
-			return Data_;
+			return Meta_;
 		}
 		virtual ogzclm::cColumn &OGZDTBGetColumnCallback( void ) override
 		{
 			return Column_;
+		}
+		virtual ogzetr::cEntry &OGZDTBGetEntryCallback( void ) override
+		{
+			return Entry_;
 		}
 		virtual ogzfld::cField &OGZDTBGetFieldCallback( void ) override
 		{
@@ -67,8 +72,9 @@ namespace {
 		void reset( bso::bool__ P = true )
 		{
 			fPlugin_::reset( P );
-			Data_.reset( P );
+			Meta_.reset( P );
 			Column_.reset( P );
+			Entry_.reset( P );
 			Field_.reset( P );
 			Record_.reset( P );
 			User_.reset( P );
@@ -77,8 +83,9 @@ namespace {
 		void Init( void )
 		{
 			fPlugin_::Init();
-			Data_.Init();
+			Meta_.Init();
 			Column_.Init();
+			Entry_.Init();
 			Field_.Init();
 			Record_.Init();
 			User_.Init();

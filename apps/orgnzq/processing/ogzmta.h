@@ -17,13 +17,13 @@
     along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// OrGaniZer DaTuM
+// OrGaniZer MeTAdata
 
-#ifndef OGZDTA__INC
-# define OGZDTA__INC
+#ifndef OGZMTA__INC
+# define OGZMTA__INC
 
 # ifdef XXX_DBG
-#	define OGZDTA__DBG
+#	define OGZMTA__DBG
 # endif
 
 # include "ogzbsc.h"
@@ -32,7 +32,7 @@
 # include "bch.h"
 # include "lstctn.h"
 
-namespace ogzdta {
+namespace ogzmta {
 	using ogzbsc::dDatum;
 	using ogzbsc::wDatum;
 
@@ -41,69 +41,70 @@ namespace ogzdta {
 	qROW( Row );
 	qROWS( Row );
 
-	class cData {
+	qENUM( Target ) {
+		tColumnLabel,
+		tColumnComment,
+		t_amount,
+		t_Undefined
+	};
+
+	qFLAG( ColumnLabel, tColumnLabel );
+
+	class cMeta {
 	protected:
 		// If 'Row' != 'qNIL', it must be used.
-		virtual sRow OGZDTANew(
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
-			sRow Row ) = 0;
+		virtual sRow OGZMTANew(	sRow Row ) = 0;
 		// if 'Row' == 'qNIL', the entire content must be erased.
-		virtual void OGZDTADelete( sRow Row ) = 0;
-		virtual void OGZDTAStore(
+		virtual void OGZMTADelete( sRow Row ) = 0;
+		virtual void OGZMTAStore(
 			const dDatum &Datum,
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
+			eTarget Target,
 			sRow Row )= 0;
-		virtual void OGZDTARecall(
+		virtual void OGZMTARecall(
 			sRow Row,
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
 			dDatum &Datum ) = 0;
 	public:
-		qCALLBACK( Data );
+		qCALLBACK( Meta );
 		void Wipe( void )
 		{
-			OGZDTADelete( qNIL );
+			OGZMTADelete( qNIL );
 		}
-		sRow New(
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
-			sRow Row = qNIL )
+		sRow New( sRow Row = qNIL )
 		{
-			return OGZDTANew( Type, Row );
+			return OGZMTANew( Row );
 		}
 		void Delete( sRow Row )
 		{
-			OGZDTADelete( Row );
+			OGZMTADelete( Row );
 		}
 		void Store(
 			sRow Row,
-			ogztyp::sRow Type,
+			eTarget Target,
 			const dDatum &Datum )
 		{
-			OGZDTAStore( Datum, Type, Row );
+			OGZMTAStore( Datum, Target, Row );
 		}
 		void Recall(
 			sRow Row,
-			ogztyp::sRow Type,
 			dDatum &Datum )
 		{
-			return OGZDTARecall( Row, Type, Datum );
+			return OGZMTARecall( Row, Datum );
 		}
 	};
 
 	typedef ogzbsc::rLock rLock_;
 
-	class mData
+	class mMetas
 	: public rLock_
 	{
 	private:
-		qRMV( cData, C_, Callback_ );
-		sRow New_(
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
-			sRow Row = qNIL ) const
+		qRMV( cMeta, C_, Callback_ );
+		sRow New_( sRow Row = qNIL ) const
 		{
 		qRH
 		qRB
 			Lock_();
-			Row = C_().New( Type, Row );
+			Row = C_().New( Row );
 		qRR
 		qRT
 			Unlock_();
@@ -123,13 +124,13 @@ namespace ogzdta {
 		}
 		void Store_(
 			const dDatum &Datum,
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mnadatory text type.
+			eTarget Target,
 			sRow Row ) const
 		{
 		qRH
 		qRB
 			Lock_();
-			C_().Store( Row, Type, Datum );
+			C_().Store( Row, Target, Datum );
 		qRR
 		qRT
 			Unlock_();
@@ -137,14 +138,13 @@ namespace ogzdta {
 		}
 		void Recall_(
 			sRow Row,
-			ogztyp::sRow Type,
 			dDatum &Datum ) const
 		{
 			if ( Row != qNIL ) {
 			qRH
 			qRB
 				Lock_();
-				C_().Recall( Row, Type, Datum );
+				C_().Recall( Row, Datum );
 			qRR
 			qRT
 				Unlock_();
@@ -157,8 +157,7 @@ namespace ogzdta {
 			Callback_ = NULL;
 			rLock_::reset( P );
 		}
-		qCDTOR( mData );
-		void Init( cData &Callback )
+		void Init( cMeta &Callback )
 		{
 			Callback_ = &Callback;
 			rLock_::Init();
@@ -167,11 +166,9 @@ namespace ogzdta {
 		{
 			return Delete_( qNIL );
 		}
-		sRow New(
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
-			sRow Row = qNIL )
+		sRow New( sRow Row = qNIL )
 		{
-			return New_( Type, Row );
+			return New_( Row );
 		}
 		void Delete( sRow Row ) const
 		{
@@ -189,17 +186,16 @@ namespace ogzdta {
 		}
 		void Store(
 			const dDatum &Datum,
-			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
+			eTarget Target,
 			sRow Row ) const
 		{
-			return Store_( Datum, Type, Row );
+			return Store_( Datum, Target, Row );
 		}
 		void Recall(
 			sRow Row,
-			ogztyp::sRow Type,
 			dDatum &Datum ) const
 		{
-			return Recall_( Row, Type, Datum );
+			return Recall_( Row, Datum );
 		}
 	};
 
@@ -207,14 +203,12 @@ namespace ogzdta {
 	qW( Bytes );
 
 	class rRegularCallback
-	: public cData
+	: public cMeta
 	{
 	private:
 		lstctn::qLMCONTAINERw( dBytes, sRow ) Container_;
 	protected:
-		virtual sRow OGZDTANew(
-			ogztyp::sRow Type,
-			sRow Row ) override 
+		virtual sRow OGZMTANew(	sRow Row ) override 
 		{
 			Row = Container_.New( Row );
 
@@ -223,23 +217,22 @@ namespace ogzdta {
 
 			return Row;
 		}
-		virtual void OGZDTADelete( sRow Row ) override 
+		virtual void OGZMTADelete( sRow Row ) override 
 		{
 			if ( Row == qNIL )
 				Container_.reset();
 			else
 				Container_.Remove( Row );
 		}
-		virtual void OGZDTAStore(
+		virtual void OGZMTAStore(
 			const dDatum &Datum,
-			ogztyp::sRow Type,
+			eTarget Target,
 			sRow Row ) override 
 		{
 			Container_.Store( Datum, Row );
 		}
-		virtual void OGZDTARecall(
+		virtual void OGZMTARecall(
 			sRow Row,
-			ogztyp::sRow Type,
 			dDatum &Datum ) override 
 		{
 			Container_.Recall( Row, Datum );

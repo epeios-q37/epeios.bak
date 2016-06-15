@@ -177,7 +177,7 @@ void common::rDatabase::Init(
 	sclmisc::Plug( ogzplg::DatabasePluginTarget, Identifier, Retriever_ );
 //	P_().Initialize();
 
-	mDatabase_::Init( Types, P_().GetDataCallback(), P_().GetColumnCallback(), P_().GetFieldCallback(), P_().GetRecordCallback(), P_().GetUserCallback() );
+	mDatabase_::Init( Types, P_().GetMetaCallback(), P_().GetColumnCallback(), P_().GetEntryCallback(), P_().GetFieldCallback(), P_().GetRecordCallback(), P_().GetUserCallback() );
 }
 
 void common::rAuthentication::Init( const char *Identifier )

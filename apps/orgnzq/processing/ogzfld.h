@@ -37,45 +37,45 @@ namespace ogzfld {
 
 	typedef ogzbsc::dList<ogzbsc::sCRow> dColumns;
 
-	typedef ogzbsc::dList<ogzbsc::sDRow> dData;
+	typedef ogzbsc::dList<ogzbsc::sERow> dEntries;
 
 	class dField
-	: public dData
+	: public dEntries
 	{
 	public:
 		struct s
-		: public dData::s
+		: public dEntries::s
 		{
 			ogzbsc::sCRow Column;
 		}&S_;
 		dField( s &S )
 		: S_( S ),
-		  dData( S )
+		  dEntries( S )
 		{}
 		void reset( bso::bool__ P = true )
 		{
 			S_.Column = qNIL;
-			dData::reset( P );
+			dEntries::reset( P );
 		}
 		void plug( qASd *AS )
 		{
-			dData::plug( AS );
+			dEntries::plug( AS );
 		}
 		dField &operator =( const dField &F )
 		{
 			S_.Column = F.S_.Column;
-			dData::operator=( F );
+			dEntries::operator=( F );
 
 			return *this;
 		}
 		void Init( ogzbsc::sCRow Column = qNIL )
 		{
 			S_.Column = Column;
-			dData::Init();
+			dEntries::Init();
 		}
 		void RemoveEntries( void )
 		{
-			dData::Init();
+			dEntries::Init();
 		}
 		qRWDISCLOSEd( ogzbsc::sCRow, Column );
 	};

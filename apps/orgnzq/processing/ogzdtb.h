@@ -27,7 +27,8 @@
 # endif
 
 # include "ogzbsc.h"
-# include "ogzdta.h"
+# include "ogzmta.h"
+# include "ogzetr.h"
 # include "ogztyp.h"
 # include "ogzclm.h"
 # include "ogzfld.h"
@@ -101,13 +102,20 @@ namespace ogzdtb {
 		{
 			return Users.GetRaw( Record, User );
 		}
+		void GetMeta_(
+			ogzmta::sRow Row,
+			str::dString &Meta ) const
+		{
+			if ( Row != qNIL )
+				Metas.Recall( Row, Meta );
+		}
 		void GetDatum_(
-			ogzdta::sRow Row,
+			ogzetr::sRow Row,
 			ogztyp::sRow Type,
 			str::dString &Datum) const
 		{
 			if ( Row != qNIL )
-				Data.Recall( Row, Type, Datum );
+				Entries.Recall( Row, Type, Datum );
 		}
 		void GetColumnFeatures_(
 			ogzclm::sRow Column,
@@ -158,7 +166,7 @@ namespace ogzdtb {
 			ogzusr::sRow User,
 			cFieldEntries &Callback ) const;
 		void Delete_(
-			const ogzfld::dData &Data,
+			const ogzfld::dEntries &Entries,
 			ogzusr::sRow User );
 		void Append_(
 			const ogzbsc::dDatum &Datum,
@@ -170,15 +178,17 @@ namespace ogzdtb {
 			ogzusr::sRow User,
 			ogzfld::dField &Field );
 	public:
-		ogzdta::mData Data;
+		ogzmta::mMetas Metas;
 		ogzclm::mColumns Columns;
+		ogzetr::mEntries Entries;
 		ogzfld::mFields Fields;
 		ogzrcd::mRecords Records;
 		ogzusr::mUsers Users;
 		void reset( bso::bool__ P = true )
 		{
-			Data.reset( P );
+			Metas.reset( P );
 			Columns.reset( P );
+			Entries.reset( P );
 			Fields.reset( P );
 			Records.reset( P );
 			Users.reset( P );
@@ -186,14 +196,16 @@ namespace ogzdtb {
 		qCDTOR( mDatabase );
 		void Init(
 			const ogztyp::dTypes &Types,
-			ogzdta::cData &DTACallback,
+			ogzmta::cMeta &MTACallback,
 			ogzclm::cColumn &CLMCallback,
+			ogzetr::cEntry &ETRCallback,
 			ogzfld::cField &FLDCallback,
 			ogzrcd::cRecord &RCDCallback,
 			ogzusr::cUser &USRCallback )
 		{
-			Data.Init( DTACallback );
+			Metas.Init( MTACallback );
 			Columns.Init( CLMCallback );
+			Entries.Init( ETRCallback );
 			Fields.Init( FLDCallback );
 			Records.Init( RCDCallback );
 			Users.Init( USRCallback );
@@ -248,8 +260,9 @@ namespace ogzdtb {
 	class cDatabase
 	{
 	protected:
-		M( ogzdta, Data );
+		M( ogzmta, Meta );
 		M( ogzclm, Column );
+		M( ogzetr, Entry );
 		M( ogzfld, Field );
 		M( ogzrcd, Record );
 		M( ogzusr, User );

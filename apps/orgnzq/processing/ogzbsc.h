@@ -38,8 +38,9 @@ namespace ogzbsc {
 
 	using crt::cHooks;
 
+	qROW( MRow );	// User meta row.
 	qROW( CRow );	// User column row.
-	qROW( DRow );	// User datum row.
+	qROW( ERow );	// User entry row.
 	qROW( FRow );	// User field row.
 	qROW( RRow );	// User record row.
 
