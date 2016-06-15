@@ -67,6 +67,8 @@ namespace sclmisc {
 		return sclerror::GetPendingErrorTranslation( GetBaseLanguage(), Translation, ErrHandling );
 	}
 
+	bso::sBool DisplaySCLBasePendingError( txf::sOFlow &Flow = cio::CErr );
+
 	// To use as 'action' parameter for the 'qRFE(...)' macro to display the file/line of an error.
 	void ErrFinal( void );
 

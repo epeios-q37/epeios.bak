@@ -112,6 +112,24 @@ void sclmisc::ErrFinal( void )
 		ERRRst();
 }
 
+bso::bool__ sclmisc::DisplaySCLBasePendingError( txf::sOFlow &Flow )
+{
+	bso::bool__ Exists = false;
+qRH
+	str::string Translation;
+qRB
+	Translation.Init();
+	
+	Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation );
+
+	Flow << Translation << txf::nl  << txf::commit;
+qRR
+qRT
+qRE
+	return Exists;
+}
+
+
 
 
 void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
@@ -1165,10 +1183,10 @@ namespace {
 
 		GetPluginItemRelatedTags_( Target, Id, Tags );
 
-		sclmisc::MGetValue( rgstry::fTEntry( sclrgstry::definition::plugin::Filename, Tags ), Filename );
+		sclmisc::MGetValue( rgstry::sTEntry( sclrgstry::definition::plugin::Filename, Tags ), Filename );
 
-		GetPluginFeature_( rgstry::fTEntry( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
-		GetPluginFeature_( rgstry::fTEntry( sclrgstry::definition::plugin::Locale, Tags ), Locale );
+		GetPluginFeature_( rgstry::sTEntry( sclrgstry::definition::plugin::Configuration, Tags ), Configuration );
+		GetPluginFeature_( rgstry::sTEntry( sclrgstry::definition::plugin::Locale, Tags ), Locale );
 
 		sclmisc::MGetValue( rgstry::rTEntry( sclrgstry::parameter::PluginItem, Target, Id ), Arguments );
 	qRR

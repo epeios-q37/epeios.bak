@@ -56,7 +56,7 @@ namespace rgstry {
 	struct tentry__;
 	class tentry___;
 
-	typedef tentry__ fTEntry;
+	typedef tentry__ sTEntry;
 	typedef tentry___ rTEntry;
 	typedef entry___ rEntry;
 }

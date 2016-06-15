@@ -44,23 +44,6 @@ namespace {
 	scllocale::rRack Locale_;
 };
 
-static inline bso::bool__ ReportSCLPendingError_( void )
-{
-	bso::bool__ Exists = false;
-qRH
-	str::string Translation;
-qRB
-	Translation.Init();
-	
-	Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation );
-
-	cio::CErr << Translation << txf::nl;
-qRR
-qRT
-qRE
-	return Exists;
-}
-
 namespace {
 	void FillRegistry_(
 		int argc,
@@ -115,7 +98,7 @@ qRR
 	if ( ERRType >= err::t_amount ) {
 		switch ( ERRType ) {
 		case err::t_Abort:
-			if ( ReportSCLPendingError_() )
+			if ( sclmisc::DisplaySCLBasePendingError() )
 				ExitValue = EXIT_FAILURE;
 			ERRRst();
 			break;
