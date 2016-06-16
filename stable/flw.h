@@ -162,9 +162,9 @@ namespace flw {
 		{
 			return _D();
 		}
-		bso::bool__ IsCacheEmpty( bso::size__ &Available = *(bso::size__ *)NULL ) const
+		bso::bool__ IsCacheEmpty( bso::size__ *Available = NULL ) const
 		{
-			return _D().IsCacheEmpty( &Available );
+			return _D().IsCacheEmpty( Available );
 		}
 		// Si valeur retourne == '0', alors toutes les donnes ont t lues.
 		size__ ReadUpTo(

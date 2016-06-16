@@ -202,7 +202,7 @@ namespace cdgb64 {
 		}
 	};
 
-	typedef flw::standalone_oflow__<>	_oflow__;	// NOTA : la taille du cache doit tre suprieur ou gal  3.
+	typedef flw::standalone_oflow__<>	_oflow__;	// NOTA : Cache size MUST be greater as 3.
 
 	class encoding_oflow___
 	: public _oflow__
@@ -215,14 +215,7 @@ namespace cdgb64 {
 			_oflow__::reset( P );
 			_Driver.reset( P );
 		}
-		encoding_oflow___( void )
-		{
-			reset( false );
-		}
-		~encoding_oflow___( void )
-		{
-			reset();
-		}
+		qCDTOR( encoding_oflow___ );
 		void Init( flw::oflow__ &Flow )
 		{
 			_Driver.Init( Flow, fdr::tsDisabled );
@@ -407,6 +400,7 @@ namespace cdgb64 {
 			_iflow___::reset( P );
 			_Driver.reset( P );
 		}
+		qCDTOR( decoding_iflow___ );
 		void Init( flw::iflow__ &Flow )
 		{
 			_Driver.Init( Flow );

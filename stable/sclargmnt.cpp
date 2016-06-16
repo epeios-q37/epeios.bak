@@ -371,8 +371,6 @@ bso::bool__ Fill_(
 
 	switch ( Size ) {
 	case 0:
-		qRFwk();
-		break;
 	case 1:
 		Arguments.Append( str::string( Arg ) );
 		break;
