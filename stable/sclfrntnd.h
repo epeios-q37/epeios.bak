@@ -301,7 +301,7 @@ namespace sclfrntnd {
 	E_CDEF( char *, IdAttribute, "id" );
 	E_CDEF( char *, AmountAttribute, "Amount" );
 
-	enum eKind {
+	enum eKind : int {
 		kTag,
 		kAttribute,
 		kValue,
