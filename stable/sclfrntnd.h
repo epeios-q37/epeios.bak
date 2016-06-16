@@ -319,7 +319,7 @@ namespace sclfrntnd {
 		va_list List;
 		va_start( List, Id );
 
-		enum eKind Kind = va_arg( List, enum eKind );
+		eKind *Kind = va_arg( List, *eKind );
 		const str::dString *Value = NULL;
 
 		Writer.PutAttribute( IdAttribute, *Id );
@@ -342,7 +342,7 @@ namespace sclfrntnd {
 				break;
 			}
 
-			Kind = va_arg( List, enum eKind );
+			Kind = va_arg( List, *Kind );
 		}
 
 		va_end( List );
@@ -361,7 +361,7 @@ namespace sclfrntnd {
 		while ( Row != qNIL ) {
 			Writer.PushTag( ItemLabel );
 
-			Dump_( Writer, I1S.Ids( Row ), kValue, &I1S.Strings1( Row ), k_End );
+			Dump_( Writer, I1S.Ids( Row ), &kValue, &I1S.Strings1( Row ), &k_End );
 
 			Writer.PopTag();
 
@@ -397,7 +397,7 @@ namespace sclfrntnd {
 		while ( Row != qNIL ) {
 			Writer.PushTag( ItemLabel );
 
-			Dump_( Writer, I1S.Ids( Row ), String1LabelKind, &I1S.Strings1( Row ), String1Label, k_End );
+			Dump_( Writer, I1S.Ids( Row ), &String1LabelKind, &I1S.Strings1( Row ), String1Label, &k_End );
 
 			Writer.PopTag();
 
