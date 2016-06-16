@@ -301,7 +301,7 @@ namespace sclfrntnd {
 	E_CDEF( char *, IdAttribute, "id" );
 	E_CDEF( char *, AmountAttribute, "Amount" );
 
-	qENUM( Kind ) {
+	enum eKind {
 		kTag,
 		kAttribute,
 		kValue,
@@ -319,7 +319,7 @@ namespace sclfrntnd {
 		va_list List;
 		va_start( List, Id );
 
-		eKind Kind = va_arg( List, (eKind)eKind );
+		eKind Kind = va_arg( List, eKind );
 		const str::dString *Value = NULL;
 
 		Writer.PutAttribute( IdAttribute, *Id );
