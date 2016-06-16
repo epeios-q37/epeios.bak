@@ -319,7 +319,7 @@ namespace sclfrntnd {
 		va_list List;
 		va_start( List, Id );
 
-		eKind Kind = va_arg( List, eKind );
+		eKind Kind = va_arg( List, (eKind)eKind );
 		const str::dString *Value = NULL;
 
 		Writer.PutAttribute( IdAttribute, *Id );
