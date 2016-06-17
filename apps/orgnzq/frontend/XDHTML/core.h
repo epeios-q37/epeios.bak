@@ -33,6 +33,7 @@
 # include "frdinstc.h"
 
 namespace core {
+	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
 
 	enum page__ {
 		pProlog,
@@ -53,19 +54,11 @@ namespace core {
 		record::Register();
 		records::Register();
 
-		base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
-
-		base::AddAllowedActionsOnWhenNotConnectedToBackend(
-			global::About.Name, global::Refresh.Name, global::Test.Name,
-			NULL );
-
-		base::AddAllowedActionsOnWhenNotConnectedToBackend(
-			prolog::DisplayProjectFilename.Name, prolog::LoadProject.Name, prolog::SwitchProjectType.Name,	// All 'prolog'-related actions are allowed.
-			NULL );
-
-		base::AddAllowedActionsOnWhenNotConnectedToBackend(
-			login::Dismiss.Name, login::DisplayEmbeddedBackendFilename.Name, login::Connect.Name, login::SwitchBackendType.Name,	// All 'login'-related actions too.
-			NULL );
+		OnNotConnectedAllowedActions.Add(
+			xdhcmn::CloseActionLabel,
+			global::About, global::Refresh, global::Test,
+			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
+			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
 	};
 
 	class rInstancesCore
@@ -100,7 +93,7 @@ namespace core {
 	: public _core___
 	{
 	private:
-		base::action_helper_callback__ _ActionHelperCallback;
+		base::sActionHelper _ActionHelperCallback;
 	public:
 		void reset( bso::bool__ P = true )
 		{

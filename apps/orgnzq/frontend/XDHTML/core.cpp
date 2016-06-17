@@ -29,6 +29,8 @@ using namespace core;
 
 core::core___ core::Core;
 
+sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;
+
 namespace {
 	sclfrntnd::kernel___ Kernel_;
 }
@@ -153,4 +155,9 @@ qRB
 qRR
 qRT
 qRE
+}
+
+qGCTOR( core )
+{
+	OnNotConnectedAllowedActions.Init();
 }

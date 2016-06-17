@@ -33,16 +33,6 @@ void base::Register(
 }
 
 namespace {
-
-	stsfsm::automat AllowedActionsOnWhenNotConnectedToBackend_;
-
-	static inline bso::bool__ IsActionAllowedWhenNotConnectedToBackend_( const char *Action )
-	{
-		return stsfsm::GetId( str::string( Action ), AllowedActionsOnWhenNotConnectedToBackend_ ) == 0;
-	}
-}
-
-namespace {
 	void UpdateEntry_(
 		core::rSession &Session,
 		const char *Action )
@@ -66,13 +56,13 @@ namespace {
 }
  
 
-bso::bool__ base::action_helper_callback__::SCLXHTMLOnBeforeAction(
+bso::bool__ base::sActionHelper::SCLXHTMLOnBeforeAction(
 	core::rSession &Session,
 	const char *Id,
 	const char *Action )
 {
 	if ( !Session.IsConnected() ) {
-		if ( !IsActionAllowedWhenNotConnectedToBackend_(Action) ) {
+		if ( !core::OnNotConnectedAllowedActions.Search( Action) ) {
 			Session.AlertT( "ActionNeedsBackend" );
 			return false;
 		} else
@@ -84,7 +74,7 @@ bso::bool__ base::action_helper_callback__::SCLXHTMLOnBeforeAction(
 		return true;
 }
 
-bso::bool__ base::action_helper_callback__::SCLXHTMLOnClose( core::rSession &Session )
+bso::bool__ base::sActionHelper::SCLXHTMLOnClose( core::rSession &Session )
 {
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
@@ -100,28 +90,7 @@ void base::rContextRack::Init(
 		operator()().PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
 }
 
-
-void base::AddAllowedActionsOnWhenNotConnectedToBackend(
-	const char *FirstCallback,
-	... )
-{
-	const char *Callback = FirstCallback;
-
-	va_list Callbacks;
-	va_start( Callbacks, FirstCallback );
-
-	while ( Callback != NULL ){
-		if ( stsfsm::Add( Callback, 0, AllowedActionsOnWhenNotConnectedToBackend_ ) != stsfsm::UndefinedId )
-			qRGnr();
-
-		Callback = va_arg( Callbacks, const char *);
-	}
-
-	va_end( Callbacks );
-}
-
 Q37_GCTOR( base )
 {
-	AllowedActionsOnWhenNotConnectedToBackend_.Init();
 }
 

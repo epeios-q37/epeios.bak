@@ -84,8 +84,8 @@ namespace base {
 		const char *Name,
 		cAction &Callback );
 
-	class action_helper_callback__
-	: public sclxdhtml::action_helper_callback__<core::rSession>
+	class sActionHelper
+	: public sclxdhtml::cActionHelper<core::rSession>
 	{
 	protected:
 		virtual bso::bool__ SCLXHTMLOnBeforeAction(
@@ -146,10 +146,6 @@ namespace base {
 
 	typedef _rack___<_content_rack___> rContentRack;
 	typedef _rack___<_context_rack___> rContextRack;
-
-	void AddAllowedActionsOnWhenNotConnectedToBackend(
-		const char *FirstCallback,
-		... /* other callbacks names */ );	// Last must be 'NULL' !
 }
 
 #endif

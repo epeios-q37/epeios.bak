@@ -131,7 +131,7 @@ namespace sclxdhtml {
 
 	E_AUTO1( action_handler );
 
-	template <typename session> class action_helper_callback__
+	template <typename session> class cActionHelper
 	{
 	protected:
 		virtual bso::bool__ SCLXHTMLOnBeforeAction(
@@ -144,7 +144,7 @@ namespace sclxdhtml {
 		{
 			// Standardisation.
 		}
-		E_CVDTOR( action_helper_callback__ );
+		E_CVDTOR( cActionHelper );
 		void Init( void )
 		{
 			// Standardisation.
@@ -159,6 +159,43 @@ namespace sclxdhtml {
 		bso::bool__ OnClose( session &Session )
 		{
 			return SCLXHTMLOnClose( Session );
+		}
+	};
+
+	class rActionHelper
+	{
+	private:
+		stsfsm::wAutomat Automat_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Automat_.reset( P );
+		}
+		qCDTOR( rActionHelper );
+		void Init( void )
+		{
+			Automat_.Init();
+		}
+		void Add( const char *Action )
+		{
+			if ( stsfsm::Add( Action, 0, Automat_ ) != stsfsm::UndefinedId )
+				qRGnr();
+		}
+		template <typename action> void Add( const action &Action )
+		{
+			if ( stsfsm::Add( action::Name, 0, Automat_ ) != stsfsm::UndefinedId )
+				qRGnr();
+		}
+		template <typename action, typename ... args> void Add(
+			const action &First,
+			const args &... Others )
+		{
+			Add( First );
+			Add( Others... );
+		}
+		bso::sBool Search( const char *Action )
+		{
+			return stsfsm::GetId( str::string( Action ), Automat_ ) == 0;
 		}
 	};
 
@@ -351,7 +388,7 @@ namespace sclxdhtml {
 	private:
 		action_handler<session> _Handler;
 		xdhcmn::mode__ _Mode;
-		Q37_MRMDF( action_helper_callback__<session>, _AH, _ActionHelperCallback );
+		Q37_MRMDF( cActionHelper<session>, _AH, _ActionHelperCallback );
 		bso::bool__ _OnBeforeAction(
 			session &Session,
 			const char *Id,
@@ -373,7 +410,7 @@ namespace sclxdhtml {
 		E_CVDTOR( core___ )
 		void Init(
 			xdhcmn::mode__ Mode,
-			action_helper_callback__<session> &ActionHelperCallback )
+			cActionHelper<session> &ActionHelperCallback )
 		{
 			_ActionHelperCallback = &ActionHelperCallback;
 			_Mode = Mode;
