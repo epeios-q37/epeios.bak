@@ -108,6 +108,11 @@ qRT
 qRE
 }
 
+void main::SetRecordsLayout( core::rSession &Session )
+{
+	records::SetLayout( RecordsFrameId_, Session );
+}
+
 void main::SetRecordLayout( core::rSession &Session )
 {
 	record::SetLayout( RecordFrameId_, Session );

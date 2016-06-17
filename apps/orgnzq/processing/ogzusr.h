@@ -39,7 +39,7 @@ namespace ogzusr {
 	typedef bso::sUInt sAmount;	// If == '0', return all available.
 	qCDEF( sIndice, AmountMax, BSO_UINT_MAX );
 
-	qROW( Row );
+	typedef ogzbsc::sURow sRow;
 
 	typedef ogzbsc::dList<ogzbsc::sRRow> dRecords;
 	qW( Records );
@@ -243,7 +243,7 @@ namespace ogzusr {
 
 			Raws.Init();
 
-			GetRaws( Regulars, User, Raws );
+			GetRaws( User, Regulars, Raws );
 
 			Raw = Raws( Raws.First() );
 		qRR
@@ -293,76 +293,76 @@ namespace ogzusr {
 			return Delete_( Row );
 		}
 		template <typename regular> void Remove(
-			regular Regular,
-			sRow User ) const
+			sRow User,
+			regular Regular ) const
 		{
 			return Remove_( Regular, User );
 		}
 		template <typename regulars, typename raws> void GetRaws(
+			ogzusr::sRow User,
 			regulars &Regulars,
-			sRow User,
 			raws &Raws ) const
 		{
 			return GetRaws_( Regulars, User, Raws );
 		}
 		// No template members below, because some template can not be deduced.
 		ogzbsc::sMRow Add(
-			ogzmta::sRow Meta,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzmta::sRow Meta ) const
 		{
 			return Add_<ogzbsc::sMRow,ogzmta::sRow>( Meta, User );
 		}
 		ogzmta::sRow GetRaw(
-			ogzbsc::sMRow Meta,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzbsc::sMRow Meta ) const
 		{
 			return GetRaw_<ogzbsc::sMRow,ogzmta::sRow>( Meta, User );
 		}
 		ogzbsc::sCRow Add(
-			ogzclm::sRow Column,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzclm::sRow Column ) const
 		{
 			return Add_<ogzbsc::sCRow,ogzclm::sRow>( Column, User );
 		}
 		ogzclm::sRow GetRaw(
-			ogzbsc::sCRow Column,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzbsc::sCRow Column ) const
 		{
 			return GetRaw_<ogzbsc::sCRow,ogzclm::sRow>( Column, User );
 		}
 		ogzbsc::sERow Add(
-			ogzetr::sRow Entry,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzetr::sRow Entry ) const
 		{
 			return Add_<ogzbsc::sERow,ogzetr::sRow>( Entry, User );
 		}
 		ogzetr::sRow GetRaw(
-			ogzbsc::sERow Entry,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzbsc::sERow Entry ) const
 		{
 			return GetRaw_<ogzbsc::sERow,ogzetr::sRow>( Entry, User );
 		}
 		ogzbsc::sFRow Add(
-			ogzfld::sRow Field,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzfld::sRow Field ) const
 		{
 			return Add_<ogzbsc::sFRow,ogzfld::sRow>( Field, User );
 		}
 		ogzfld::sRow GetRaw(
-			ogzbsc::sFRow Field,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzbsc::sFRow Field ) const
 		{
 			return GetRaw_<ogzbsc::sFRow,ogzfld::sRow>( Field, User );
 		}
 		ogzbsc::sRRow Add(
-			ogzrcd::sRow Record,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzrcd::sRow Record ) const
 		{
 			return Add_<ogzbsc::sRRow,ogzrcd::sRow>( Record, User );
 		}
 		ogzrcd::sRow GetRaw(
-			ogzbsc::sRRow Record,
-			sRow User ) const
+			ogzusr::sRow User,
+			ogzbsc::sRRow Record ) const
 		{
 			return GetRaw_<ogzbsc::sRRow,ogzrcd::sRow>( Record, User );
 		}

@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160601 Build Jun  6 2016 09:50:36 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160615 Build Jun 17 2016 11:41:18 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build Jun  5 2016 10:29:06 Win32;MSC 1800;IA-32)
 */
@@ -25,7 +25,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[10];
+		fblfrd::command__ _Commands[11];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -50,6 +50,7 @@ namespace orgnzq {
 				21, 0, 22, 22, 13, 26, 26, 
 				21, 0, 22, 22, 22, 27, 
 				21, 1, 0, 
+				0, 22, 26, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -107,10 +108,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 34, 3 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "OGZGetRecords";;
+			CommandDetail.Casts.Append( Parameters + 37, 3 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 10, _Commands );
+			Commands.Recall( 0, 11, _Commands );
 		}
 		fblovl::reply__ LoadSetupOfId( 
 			const fblfrd::string_ &In1 ) const
@@ -253,6 +259,19 @@ namespace orgnzq {
 
 			Frontend().EndOfInParameters();
 
+
+			return Frontend().Handle();
+		}
+		fblovl::reply__ OGZGetRecords( 
+			fblfrd::ids_ &Out1,
+			fblfrd::strings_ &Out2 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[10] );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdsOut( Out1 );
+			Frontend().StringsOut( Out2 );
 
 			return Frontend().Handle();
 		}

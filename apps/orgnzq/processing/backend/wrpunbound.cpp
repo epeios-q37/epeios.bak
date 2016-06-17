@@ -165,10 +165,10 @@ qRB
 	const ogzbsc::sRRow &Record = *Request.IdIn();
 	const ogzclm::rColumnBuffer &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() )();
 
-	if ( Database.Metas.Search( Column.GetLabel(), ogzmta::tColumnLabel ) != qNIL )
+	if ( Database.Metas.Search( Stuff.User(), Column.GetLabel(), ogzmta::tColumnLabel ) != qNIL )
 		REPORT( FieldNameAlreadyUsed );
 
-	Request.IdOut() = *Database.NewField( Column, Record, Stuff.User() );
+	Request.IdOut() = *Database.NewField( Stuff.User(), Column, Record );
 qRR
 qRT
 qRE
@@ -211,14 +211,14 @@ namespace {
 	};
 
 	void GetColumns_(
-		ogzbsc::sRRow Record,
 		ogzusr::sRow User,
+		ogzbsc::sRRow Record,
 		const ogzdtb::mDatabase &Database,
 		fblbrq::rRequest &Request )
 	{
 		sColumnFeaturesCallback Callback( Request );
 
-		Database.GetColumnsFeatures( Record, User, Callback );
+		Database.GetColumnsFeatures( User, Record, Callback );
 	}
 }
 
@@ -231,7 +231,7 @@ qRB
 
 	const ogzbsc::sRRow &Record = *Request.IdIn();
 
-	GetColumns_( Record, Stuff.User(), Database, Request );
+	GetColumns_( Stuff.User(), Record, Database, Request );
 qRR
 qRT
 qRE
@@ -271,14 +271,14 @@ namespace {
 	};
 
 	void GetRecordFields_(
+		ogzusr::sRow User,
 		const ogzdtb::mDatabase &Database,
 		ogzbsc::sRRow Record,
-		ogzusr::sRow User,
 		fblbrq::rRequest &Request )
 	{
 		sFieldEntriesCallback Callback( Request );
 
-		Database.GetEntries( Record, User, Callback );
+		Database.GetEntries( User, Record, Callback );
 	}
 }
 
@@ -289,7 +289,7 @@ qRB
 	STUFF;
 	DATABASE;
 
-	GetRecordFields_( Database, *Request.IdIn(), Stuff.User(), Request );
+	GetRecordFields_( Stuff.User(), Database, *Request.IdIn(), Request );
 qRR
 qRT
 qRE
@@ -306,8 +306,53 @@ DEC( UpdateField )
 	if ( Field == qNIL )
 		qRGnr();
 
-	if ( !Database.UpdateField( Field, Stuff.User(), Backend.Object<wrpfield::dField>( FieldBuffer ), qRPU ) )
+	if ( !Database.UpdateField( Stuff.User(), Field, Backend.Object<wrpfield::dField>( FieldBuffer ), qRPU ) )
 		REPORT( NoSuchField );
+}
+
+namespace {
+	typedef ogzdtb::cRecordRetriever cRecordRetriever_;
+
+	class sRecordRetriever
+	: public cRecordRetriever_
+	{
+	private:
+		fbltyp::dIds &Rows_;
+		fbltyp::dStrings &Entries_;
+	protected:
+		void OGZDTBRetrieve(
+			ogzbsc::sRRow Record,
+			ogzbsc::dDatum &Entry )	override
+		{
+			if ( Rows_.Append( *Record ) != Entries_.Append( Entry ) )
+				qRGnr();
+		}
+	public:
+		sRecordRetriever(
+			fbltyp::dIds &Rows,
+			fbltyp::dStrings &Entries )
+		: Rows_( Rows ),
+		  Entries_( Entries )
+		{}
+	};
+}
+
+DEC( GetRecords )
+{
+qRH
+qRB
+	STUFF;
+	DATABASE;
+
+	fbltyp::dIds &Rows = Request.IdsOut();
+	fbltyp::dStrings &Entries = Request.StringsOut();
+
+	sRecordRetriever Callback( Rows, Entries );
+
+	Database.GetRecords( Stuff.User(), Callback );
+qRR
+qRT
+qRE
 }
 
 #define D( name )	OGZINF_UC_SHORT #name, ::name
@@ -369,6 +414,12 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId,	// ID of the field to update.
 			fblbkd::cObject,	// Field buffer object to update with,
 		fblbkd::cEnd,
+		fblbkd::cEnd );
+
+	Backend.Add(D( GetRecords ),
+		fblbkd::cEnd,
+			fblbkd::cIds,		// Ids of the record.
+			fblbkd::cStrings,	// First entry of each record.
 		fblbkd::cEnd );
 }
 

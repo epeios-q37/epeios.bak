@@ -255,3 +255,18 @@ qRT
 qRE
 }
 
+void frdinstc::rUser::DumpRecords( xml::dWriter &Writer ) const
+{
+qRH
+	wDigestsI1S Digests;
+qRB
+	Digests.Init();
+	Core_.GetRecords( Digests );
+
+	sclfrntnd::Dump( Digests, "Records", "Record", Writer );
+qRR
+qRE
+qRT
+}
+
+

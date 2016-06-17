@@ -81,26 +81,48 @@ namespace ogzdtb {
 		}
 	};
 
+	class cRecordRetriever
+	{
+	protected:
+		virtual void OGZDTBRetrieve(
+			ogzbsc::sRRow Record,
+			ogzbsc::dDatum &Entry )	= 0;
+	public:
+		qCALLBACK( RecordRetriever );
+		void Retrieve(
+			ogzbsc::sRRow Record,
+			ogzbsc::dDatum &Entry )
+		{
+			return OGZDTBRetrieve( Record, Entry );
+		}
+	};
+
 	class mDatabase
 	{
 	private:
-		ogzclm::sRow GetRawColumnRow_(
-			ogzbsc::sCRow Row,
-			ogzusr::sRow User ) const
+		ogzetr::sRow GetRawEntryRow_(
+			ogzusr::sRow User,
+			ogzbsc::sERow Row ) const
 		{
-			return Users.GetRaw( Row, User );
+			return Users.GetRaw( User, Row );
+		}
+		ogzclm::sRow GetRawColumnRow_(
+			ogzusr::sRow User,
+			ogzbsc::sCRow Row ) const
+		{
+			return Users.GetRaw( User, Row );
 		}
 		ogzfld::sRow GetRawFieldRow_(
-			ogzbsc::sFRow Row,
-			ogzusr::sRow User ) const
+			ogzusr::sRow User,
+			ogzbsc::sFRow Row ) const
 		{
-			return Users.GetRaw( Row, User );
+			return Users.GetRaw( User, Row );
 		}
 		ogzrcd::sRow GetRawRecordRow_(
-			ogzbsc::sRRow Record,
-			ogzusr::sRow User ) const
+			ogzusr::sRow User,
+			ogzbsc::sRRow Record ) const
 		{
-			return Users.GetRaw( Record, User );
+			return Users.GetRaw( User, Record );
 		}
 		void GetMeta_(
 			ogzmta::sRow Row,
@@ -133,50 +155,66 @@ namespace ogzdtb {
 			return GetColumnFeatures_( Column, &Type, &Number, &Label, &Comment );
 		}
 		ogztyp::sRow GetType_(
-			const ogzfld::dField &Field,
-			ogzusr::sRow User) const;
-		void GetColumnFeatures_(
-			const ogzfld::dRows &Fields,
 			ogzusr::sRow User,
+			const ogzfld::dField &Field ) const;
+		void GetColumnFeatures_(
+			ogzusr::sRow User,
+			const ogzfld::dRows &Fields,
 			cColumnFeatures &Callback ) const;
 		void GetColumnFeatures_(
-			const ogzrcd::dFields &Fields,
 			ogzusr::sRow User,
+			const ogzrcd::dFields &Fields,
 			cColumnFeatures &Callback ) const;
 		void GetEntries_(
-			const ogzfld::dField &Field,
 			ogzusr::sRow User,
+			const ogzfld::dField &Field,
 			ogzbsc::dData &Entries,
 			ogztyp::sRow &Type,
 			ogzclm::eNumber &Number ) const;
 		bso::sBool GetEntries_(
-			ogzfld::sRow Field,
 			ogzusr::sRow User,
+			ogzfld::sRow Field,
 			ogzbsc::dData &Entries,
 			ogztyp::sRow &Type,
 			ogzclm::eNumber &Number,
 			qRPC ) const;
 		void GetEntries_(
+			ogzusr::sRow User,
 			const ogzrcd::dFields &RegularFields,
 			const ogzfld::dRows &RawFields,
-			ogzusr::sRow User,
 			cFieldEntries &Callback ) const;
 		void GetEntries_(
-			const ogzrcd::dFields &Fields,
 			ogzusr::sRow User,
+			const ogzrcd::dFields &Fields,
 			cFieldEntries &Callback ) const;
 		void Delete_(
-			const ogzfld::dEntries &Entries,
-			ogzusr::sRow User );
+			ogzusr::sRow User,
+			const ogzfld::dEntries &Entries );
 		void Append_(
+			ogzusr::sRow User,
 			const ogzbsc::dDatum &Datum,
 			ogztyp::sRow Type,
-			ogzusr::sRow User,
 			ogzfld::dField &Field );
 		void Append_(
-			const ogzbsc::dData &Data,
 			ogzusr::sRow User,
+			const ogzbsc::dData &Data,
 			ogzfld::dField &Field );
+		void GetFirstEntry_(
+			ogzusr::sRow User,
+			const ogzfld::dField &Field,
+			ogzbsc::dDatum &Entry ) const;
+		void GetFirstEntry_(
+			ogzusr::sRow User,
+			ogzbsc::sFRow,
+			ogzbsc::dDatum &Entry ) const;
+		void GetFirstEntry_(
+			ogzusr::sRow User,
+			ogzrcd::sRow Record,
+			ogzbsc::dDatum &Entry ) const;
+		void GetRecords_(
+			ogzusr::sRow User,
+			const ogzusr::dRecords &Records,
+			cRecordRetriever &Callback ) const;
 	public:
 		ogzmta::mMetas Metas;
 		ogzclm::mColumns Columns;
@@ -207,35 +245,38 @@ namespace ogzdtb {
 		}
 		ogzbsc::sRRow NewRecord( ogzusr::sRow User )
 		{
-			return Users.Add( Records.New(), User );
+			return Users.Add( User, Records.New() );
 		}
 		ogzbsc::sFRow NewField(
-			const ogzclm::rColumnBuffer &Column,
-			ogzbsc::sRRow Record,
-			ogzusr::sRow User );
-		void GetColumnsFeatures(
-			ogzbsc::sRRow Record,
 			ogzusr::sRow User,
+			const ogzclm::rColumnBuffer &Column,
+			ogzbsc::sRRow Record );
+		void GetColumnsFeatures(
+			ogzusr::sRow User,
+			ogzbsc::sRRow Record,
 			cColumnFeatures &Callback ) const;
 		bso::sBool GetEntries(
-			ogzbsc::sFRow Field,
 			ogzusr::sRow User,
+			ogzbsc::sFRow Field,
 			ogzbsc::dData &Entries,
 			ogztyp::sRow &Type,
 			ogzclm::eNumber &Number,
 			qRPC ) const
 		{
-			return GetEntries_( GetRawFieldRow_( Field, User ), User, Entries, Type, Number, qRP );
+			return GetEntries_( User, GetRawFieldRow_( User, Field ), Entries, Type, Number, qRP );
 		}
 		void GetEntries(
-			ogzbsc::sRRow Record,
 			ogzusr::sRow User,
+			ogzbsc::sRRow Record,
 			cFieldEntries &Callback	) const;
 		bso::sBool UpdateField(	// return 'false' if field doesn't exists.
-			ogzbsc::sFRow Field,
 			ogzusr::sRow User,
+			ogzbsc::sFRow Field,
 			ogzbsc::dData &Entries,
 			qRPC );
+		void GetRecords(
+			ogzusr::sRow User,
+			cRecordRetriever &Callback ) const;
 	};
 
 # ifdef M

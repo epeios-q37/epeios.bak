@@ -36,8 +36,10 @@ namespace ogzfld {
 	qROWS( Row );
 
 	typedef ogzbsc::dList<ogzbsc::sCRow> dColumns;
+	qW( Columns );
 
 	typedef ogzbsc::dList<ogzbsc::sERow> dEntries;
+	qW( Entries );
 
 	class dField
 	: public dEntries

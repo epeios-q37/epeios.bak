@@ -28,10 +28,12 @@ namespace record {
 	E_CDEF( char *, FieldsFrameId_, "Fields" );
 
 	BASE_ACD( DefineNewField );
+	BASE_ACD( BackToList );
 
 	inline void Register( void ) 
 	{
 		BASE_ACR( DefineNewField );
+		BASE_ACR( BackToList );
 	}
 
 	void SetLayout(

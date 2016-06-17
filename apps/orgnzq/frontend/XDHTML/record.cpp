@@ -127,3 +127,9 @@ AC( DefineNewField )
 	main::SetRecordLayout( Session );
 }
 
+AC( BackToList )
+{
+	Session.User.BackToList();
+	main::SetLayout( Session );
+}
+

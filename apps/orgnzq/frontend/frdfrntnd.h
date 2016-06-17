@@ -43,6 +43,8 @@ namespace frdfrntnd {
 	SCLF_I( Column, Id );
 	SCLF_I( Field, Id );
 	SCLF_I( Record, Id );
+	SCLF_I1S( Digest, Id );
+
 
 	SCLF_I1S( Entry, Id );
 	typedef dEntrys dEntries;

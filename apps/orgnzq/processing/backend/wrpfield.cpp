@@ -59,7 +59,7 @@ DEC( Define )
 
 	Field.Init();
 
-	if ( !Database.GetEntries( FieldRow, Stuff.User(), Field, Field.Type(), Field.Number(), qRPU ) )
+	if ( !Database.GetEntries( Stuff.User(), FieldRow, Field, Field.Type(), Field.Number(), qRPU ) )
 		REPORT( NoSuchField );
 }
 

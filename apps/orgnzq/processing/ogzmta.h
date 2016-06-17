@@ -57,6 +57,7 @@ namespace ogzmta {
 		// if 'Row' == 'qNIL', the entire content must be erased.
 		virtual void OGZMTADelete( sRow Row ) = 0;
 		virtual void OGZMTAStore(
+			ogzbsc::sURow User,
 			const dDatum &Datum,
 			eTarget Target,
 			sRow Row )= 0;
@@ -64,6 +65,7 @@ namespace ogzmta {
 			sRow Row,
 			dDatum &Datum ) = 0;
 		virtual sRow OGZMTASearch(
+			ogzbsc::sURow User,
 			const str::dString &Pattern,
 			eTarget Target,
 			sRow First ) = 0;	// Excluded. If == 'qNil', searcg from the first one.
@@ -82,11 +84,12 @@ namespace ogzmta {
 			OGZMTADelete( Row );
 		}
 		void Store(
+			ogzbsc::sURow User,
 			sRow Row,
 			eTarget Target,
 			const dDatum &Datum )
 		{
-			OGZMTAStore( Datum, Target, Row );
+			OGZMTAStore( User, Datum, Target, Row );
 		}
 		void Recall(
 			sRow Row,
@@ -95,11 +98,12 @@ namespace ogzmta {
 			return OGZMTARecall( Row, Datum );
 		}
 		sRow Search(
+			ogzbsc::sURow USer,
 			const str::dString &Pattern,
 			eTarget Target,
 			sRow First = qNIL )
 		{
-			return OGZMTASearch( Pattern, Target, First );
+			return OGZMTASearch( USer, Pattern, Target, First );
 		}
 	};
 
@@ -134,6 +138,7 @@ namespace ogzmta {
 		qRE
 		}
 		void Store_(
+			ogzbsc::sURow USer,
 			const dDatum &Datum,
 			eTarget Target,
 			sRow Row ) const
@@ -141,7 +146,7 @@ namespace ogzmta {
 		qRH
 		qRB
 			Lock_();
-			C_().Store( Row, Target, Datum );
+			C_().Store( USer, Row, Target, Datum );
 		qRR
 		qRT
 			Unlock_();
@@ -163,6 +168,7 @@ namespace ogzmta {
 			}
 		}
 		sRow Search_(
+			ogzbsc::sURow User,
 			const str::dString &Pattern,
 			eTarget Target,
 			sRow First ) const
@@ -171,7 +177,7 @@ namespace ogzmta {
 		qRH
 		qRB
 			Lock_();
-			Row = C_().Search( Pattern, Target, First );
+			Row = C_().Search( User, Pattern, Target, First );
 		qRR
 		qRT
 			Unlock_();
@@ -212,11 +218,12 @@ namespace ogzmta {
 			}
 		}
 		void Store(
+			ogzbsc::sURow User,
 			const dDatum &Datum,
 			eTarget Target,
 			sRow Row ) const
 		{
-			return Store_( Datum, Target, Row );
+			return Store_( User, Datum, Target, Row );
 		}
 		void Recall(
 			sRow Row,
@@ -225,20 +232,22 @@ namespace ogzmta {
 			return Recall_( Row, Datum );
 		}
 		sRow Search(
+			ogzbsc::sURow User,
 			const str::dString &Pattern,
 			eTarget Target ) const
 		{
-			return Search_( Pattern, Target, qNIL );
+			return Search_( User, Pattern, Target, qNIL );
 		}
 		template <typename ... t> sdr::sRow Search(
+			ogzbsc::sURow USer,
 			const str::dString &Pattern,
 			eTarget First,
 			t... Others ) const
 		{
-			sdr::sRow Row = Search( Pattern, First );
+			sdr::sRow Row = Search( User, Pattern, First );
 
-			if ( sRow == qNIL )
-				Row = Search( Pattern, Others );
+			if ( Row == qNIL )
+				Row = Search( User, Pattern, Others );
 
 			return Row;
 		}
@@ -251,12 +260,16 @@ namespace ogzmta {
 	: public cMeta
 	{
 	private:
+		lstbch::qLBUNCHw( ogzbsc::sURow, sRow ) Users_;
 		lstcrt::qLMCRATEw( dBytes, sRow ) Data_;
 		lstbch::qLBUNCHw( eTarget, sRow ) Targets_;
 	protected:
 		virtual sRow OGZMTANew(	sRow Row ) override 
 		{
-			Row = Data_.New( Row );
+			Row = Users_.New();
+
+			if ( Data_.New( Row ) != Row )
+				qRGnr();
 
 			if ( Targets_.New() != Row )
 				qRGnr();
@@ -269,17 +282,20 @@ namespace ogzmta {
 		virtual void OGZMTADelete( sRow Row ) override 
 		{
 			if ( Row == qNIL ) {
-				tol::reset( Data_, Targets_ );
+				tol::reset( Users_, Data_, Targets_ );
 			} else {
+				Users_.Remove( Row );
 				Data_.Remove( Row );
 				Targets_.Remove( Row );
 			}
 		}
 		virtual void OGZMTAStore(
+			ogzbsc::sURow User,
 			const dDatum &Datum,
 			eTarget Target,
 			sRow Row ) override 
 		{
+			Users_.Store( User, Row );
 			Data_.Store( Datum, Row );
 			Targets_.Store( Target, Row );
 		}
@@ -290,6 +306,7 @@ namespace ogzmta {
 			Data_.Recall( Row, Datum );
 		}
 		virtual sRow OGZMTASearch(
+			ogzbsc::sURow User,
 			const str::dString &Pattern,
 			eTarget Target,
 			sRow First ) override
@@ -302,22 +319,22 @@ namespace ogzmta {
 				Row = Data_.Next( Row );
 
 			while ( ( Row != qNIL )
-				    && ( ( Targets_( Row ) != Target )
+				    && ( ( Users_( Row ) != User )
+					     || ( Targets_( Row ) != Target )
 					     || ( Data_( Row ) != Pattern ) ) )
 					Row = Data_.Next( Row );
 
 			return Row;
-
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( Data_, Targets_ );
+			tol::reset( Users_, Data_, Targets_ );
 		}
 		qCVDTOR( rRegularCallback );
 		void Init( void )
 		{
-			tol::Init( Data_, Targets_ );
+			tol::Init( Users_, Data_, Targets_ );
 		}
 	};
 

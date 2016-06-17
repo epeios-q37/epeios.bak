@@ -156,9 +156,13 @@ namespace frdinstc {
 		}
 		void UpdateField(
 			sField Field,
-			fbltyp::sObject FieldBuffer )
+			fbltyp::sObject FieldBuffer ) const
 		{
 			S_().OGZUpdateField( *Field, FieldBuffer );
+		}
+		void GetRecords( dDigestsI1S &Digests ) const
+		{
+			S_().OGZGetRecords( Digests.Ids, Digests.Strings1 );
 		}
 	};
 
@@ -341,11 +345,16 @@ namespace frdinstc {
 
 			FocusOn_( tRecord );
 		}
+		void BackToList( void )
+		{
+			Focus_ = tRecords;
+		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBufferCurrentField( xml::dWriter &Writer ) const;
+		void DumpRecords( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eTarget, Focus );
 	};
 }
