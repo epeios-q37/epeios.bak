@@ -44,7 +44,7 @@ namespace core {
 		login::Register();
 		main::Register();
 
-		base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel );
+		base::AddAllowedActionsOnWhenNotConnectedToBackend( xdhcmn::CloseActionLabel, NULL );
 
 		base::AddAllowedActionsOnWhenNotConnectedToBackend(
 			global::About.Name, global::Refresh.Name, global::Test.Name,

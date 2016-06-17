@@ -311,41 +311,70 @@ namespace sclfrntnd {
 		k_End = k_Undefined
 	};
 
-	template <typename id> inline void Dump_(
+	inline void Dump_(
 		xml::dWriter &Writer,
-		id Id,
-		... )	// Kind, Value, [Label], kind, value, [Label]... k_End.
+		eKind Kind )
 	{
-		va_list List;
-		va_start( List, Id );
-
-		eKind Kind = va_arg( List, eKind );
-		const str::dString *Value = NULL;
-
-		Writer.PutAttribute( IdAttribute, *Id );
-
-		while ( Kind != k_End ) {
-			Value = va_arg( List, const str::dString *);
-
-			switch ( Kind ) {
-			case kTag:
-				Writer.PutValue( *Value, va_arg( List, const char *) );
-				break;
-			case kAttribute:
-				Writer.PutAttribute( va_arg( List, const char *), *Value );
-				break;
-			case kValue:
-				Writer.PutValue( *Value );
-				break;
-			default:
-				qRFwk();
-				break;
-			}
-
-			Kind = va_arg( List, eKind );
+		switch ( Kind ) {
+		case k_End:
+			break;
+		default:
+			qRFwk();
+			break;
+		}
+	}
+	
+	template <typename ... args> inline void Dump_(
+		xml::dWriter &Writer,
+		eKind Kind,
+		const str::dString *Value,
+		const char *Label,
+		args... Args )
+	{
+		switch ( Kind ) {
+		case kTag:
+			Writer.PutValue( *Value, Label );
+			break;
+		case kAttribute:
+			Writer.PutAttribute( Label, *Value );
+			break;
+		case kValue:
+			Writer.PutValue( *Value );
+			break;
+		default:
+			qRFwk();
+			break;
 		}
 
-		va_end( List );
+		Dump_( Writer, Args... );
+	}
+
+	template <typename ... args> inline void Dump_(
+		xml::dWriter &Writer,
+		eKind Kind,
+		const str::dString *Value,
+		args... Args )
+	{
+		switch ( Kind ) {
+		case kValue:
+			Writer.PutValue( *Value );
+			break;
+		default:
+			qRFwk();
+			break;
+		}
+
+		Dump_( Writer, Args... );
+	}
+
+	template <typename id, typename... args> inline void Dump_(
+		xml::dWriter &Writer,
+		id Id,
+		args... Args )	// Kind, Value, [Label], kind, value, [Label]... k_End.
+	{
+		Writer.PutAttribute( IdAttribute, *Id );
+
+		Dump_( Writer, Args... );
 	}
 
 	// Root tag is handled by user, so he/she cans put his/her own attributes. 'Amount' attribute is addded.
