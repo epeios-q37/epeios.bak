@@ -15,6 +15,10 @@
 		<Translation language="fr">Le libellé de champ ne peut être vide.</Translation>
 		<Translation language="en">The field label can not be empty.</Translation>
 	</Translations>
+	<Translations text="FieldNameAlreadyUsed">
+		<Translation language="fr">Libellé de champs déjà utilisé.</Translation>
+		<Translation language="en">Field name already used.</Translation>
+	</Translations>
 	<Translations text="NoSuchEntry">
 		<Translation language="fr">Entrée inexistante !</Translation>
 		<Translation language="en">No such entry !</Translation>

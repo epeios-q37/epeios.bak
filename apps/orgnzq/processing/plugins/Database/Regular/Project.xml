@@ -28,6 +28,7 @@
 			</Modules>
 		</Modules>
 		<Modules Group="OGZ" Path="../../../">
+			<Module>ogzmta</Module>
 			<Module>ogzplg</Module>
 			<Module>ogzusr</Module>
 		</Modules>

@@ -2022,6 +2022,51 @@ namespace tol {
 	typedef timer__ sTimer;
 
 	void Crash( void );	// Crashes deliberately the program. For testing of daemons watchdog.
+
+	// 'reset( bso::sBool P )' serialization.
+	template <typename t> void reset(
+		bso::sBool P,
+		t &O )
+	{
+		O.reset( P );
+	}
+
+	template <typename f, typename ... o> void reset(
+		bso::sBool P,
+		f &F,
+		o&... O )
+	{
+		reset( P, F );
+		reset( P, O... );
+	}
+
+	// 'reset()' serialization.
+	template <typename t> void reset( t &O )
+	{
+		O.reset();
+	}
+
+	template <typename f, typename ... o> void reset(
+		f &F,
+		o&... O )
+	{
+		reset( F );
+		reset( O... );
+	}
+
+	// 'Init()' serialization.
+	template <typename t> void Init( t &O )
+	{
+		O.Init();
+	}
+
+	template <typename f, typename ... o> void Init(
+		f &F,
+		o&... O )
+	{
+		Init( F );
+		Init( O... );
+	}
 }
 
 

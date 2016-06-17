@@ -165,6 +165,9 @@ qRB
 	const ogzbsc::sRRow &Record = *Request.IdIn();
 	const ogzclm::rColumnBuffer &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() )();
 
+	if ( Database.Metas.Search( Column.GetLabel(), ogzmta::tColumnLabel ) != qNIL )
+		REPORT( FieldNameAlreadyUsed );
+
 	Request.IdOut() = *Database.NewField( Column, Record, Stuff.User() );
 qRR
 qRT

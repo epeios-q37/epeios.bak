@@ -35,6 +35,7 @@ const char *common::GetLabel( eMessage Message )
 	C( BadEntryValue );
 	C( EntryRowShouldBeNILForMonoField );
 	C( FieldLabelCanNotBeEmpty );
+	C( FieldNameAlreadyUsed );
 	C( NoSuchEntry );
 	C( NoSuchField );
 	C( TestMessage );

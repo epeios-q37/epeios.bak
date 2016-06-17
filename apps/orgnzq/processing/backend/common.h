@@ -36,6 +36,7 @@ namespace common {
 	qENUM( Message ) {
 		mBadEntryValue,
 		mEntryRowShouldBeNILForMonoField,
+		mFieldNameAlreadyUsed,
 		mNoSuchEntry,
 		mNoSuchField,
 		mFieldLabelCanNotBeEmpty,

@@ -186,12 +186,7 @@ namespace ogzdtb {
 		ogzusr::mUsers Users;
 		void reset( bso::bool__ P = true )
 		{
-			Metas.reset( P );
-			Columns.reset( P );
-			Entries.reset( P );
-			Fields.reset( P );
-			Records.reset( P );
-			Users.reset( P );
+			tol::reset( P, Metas, Columns, Entries, Fields, Records, Users );
 		}
 		qCDTOR( mDatabase );
 		void Init(

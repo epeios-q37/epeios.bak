@@ -112,8 +112,7 @@ qRB
 
 		Column = GetRawColumnRow_( Field.Column(), User );
 
-		Label.Init();
-		Comment.Init();
+		tol::Init( Label, Comment );
 
 		GetColumnFeatures_( Column, Type, Number, Label, Comment );
 

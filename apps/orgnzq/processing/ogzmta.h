@@ -30,7 +30,7 @@
 # include "ogztyp.h"
 
 # include "bch.h"
-# include "lstctn.h"
+# include "lstcrt.h"
 
 namespace ogzmta {
 	using ogzbsc::dDatum;
@@ -63,6 +63,10 @@ namespace ogzmta {
 		virtual void OGZMTARecall(
 			sRow Row,
 			dDatum &Datum ) = 0;
+		virtual sRow OGZMTASearch(
+			const str::dString &Pattern,
+			eTarget Target,
+			sRow First ) = 0;	// Excluded. If == 'qNil', searcg from the first one.
 	public:
 		qCALLBACK( Meta );
 		void Wipe( void )
@@ -89,6 +93,13 @@ namespace ogzmta {
 			dDatum &Datum )
 		{
 			return OGZMTARecall( Row, Datum );
+		}
+		sRow Search(
+			const str::dString &Pattern,
+			eTarget Target,
+			sRow First = qNIL )
+		{
+			return OGZMTASearch( Pattern, Target, First );
 		}
 	};
 
@@ -151,6 +162,22 @@ namespace ogzmta {
 			qRE
 			}
 		}
+		sRow Search_(
+			const str::dString &Pattern,
+			eTarget Target,
+			sRow First ) const
+		{
+			sRow &Row = First;
+		qRH
+		qRB
+			Lock_();
+			Row = C_().Search( Pattern, Target, First );
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -197,6 +224,24 @@ namespace ogzmta {
 		{
 			return Recall_( Row, Datum );
 		}
+		sRow Search(
+			const str::dString &Pattern,
+			eTarget Target ) const
+		{
+			return Search_( Pattern, Target, qNIL );
+		}
+		template <typename ... t> sdr::sRow Search(
+			const str::dString &Pattern,
+			eTarget First,
+			t... Others ) const
+		{
+			sdr::sRow Row = Search( Pattern, First );
+
+			if ( sRow == qNIL )
+				Row = Search( Pattern, Others );
+
+			return Row;
+		}
 	};
 
 	typedef str::dString dBytes;
@@ -206,46 +251,73 @@ namespace ogzmta {
 	: public cMeta
 	{
 	private:
-		lstctn::qLMCONTAINERw( dBytes, sRow ) Container_;
+		lstcrt::qLMCRATEw( dBytes, sRow ) Data_;
+		lstbch::qLBUNCHw( eTarget, sRow ) Targets_;
 	protected:
 		virtual sRow OGZMTANew(	sRow Row ) override 
 		{
-			Row = Container_.New( Row );
+			Row = Data_.New( Row );
 
-			Container_(Row).Init();
-			Container_.Flush();
+			if ( Targets_.New() != Row )
+				qRGnr();
+
+			Data_(Row).Init();
+			Data_.Flush();
 
 			return Row;
 		}
 		virtual void OGZMTADelete( sRow Row ) override 
 		{
-			if ( Row == qNIL )
-				Container_.reset();
-			else
-				Container_.Remove( Row );
+			if ( Row == qNIL ) {
+				tol::reset( Data_, Targets_ );
+			} else {
+				Data_.Remove( Row );
+				Targets_.Remove( Row );
+			}
 		}
 		virtual void OGZMTAStore(
 			const dDatum &Datum,
 			eTarget Target,
 			sRow Row ) override 
 		{
-			Container_.Store( Datum, Row );
+			Data_.Store( Datum, Row );
+			Targets_.Store( Target, Row );
 		}
 		virtual void OGZMTARecall(
 			sRow Row,
 			dDatum &Datum ) override 
 		{
-			Container_.Recall( Row, Datum );
+			Data_.Recall( Row, Datum );
+		}
+		virtual sRow OGZMTASearch(
+			const str::dString &Pattern,
+			eTarget Target,
+			sRow First ) override
+		{
+			sRow &Row = First;
+
+			if ( Row == qNIL )
+				Row = Data_.First();
+			else
+				Row = Data_.Next( Row );
+
+			while ( ( Row != qNIL )
+				    && ( ( Targets_( Row ) != Target )
+					     || ( Data_( Row ) != Pattern ) ) )
+					Row = Data_.Next( Row );
+
+			return Row;
+
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Container_.reset( P );
+			tol::reset( Data_, Targets_ );
 		}
 		qCVDTOR( rRegularCallback );
 		void Init( void )
 		{
-			Container_.Init();
+			tol::Init( Data_, Targets_ );
 		}
 	};
 
