@@ -24,6 +24,8 @@
 #include "sclfrntnd.h"
 #include "field.h"
 
+E_CDEF( char *, FieldFrameId_, "Field" );
+
 namespace {
 	E_CDEF( char *, XSLAffix_, "Fields" );
 
@@ -92,17 +94,14 @@ qRB
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
 	Session.FillElement( Id, XML, XSL );
-
-	switch ( Session.User.Focus() ) {
-	case frdinstc::tField:
-		main::SetFieldLayout( Session );
-		break;
-	}
-
-	SetCasting_( Id, Session );
 qRR
 qRT
 qRE
+}
+
+void fields::SetFieldLayout( core::rSession &Session )
+{
+	field::SetLayout( FieldFrameId_, Session );
 }
 
 #define AC( name ) BASE_AC( fields, name )

@@ -58,7 +58,7 @@ bso::sBool ogzclm::mColumns::GetTypeAndNumber(
 	sRow ColumnRow,
 	ogztyp::sRow &Type,
 	eNumber &Number,
-	qRPF ) const
+	qRPN ) const
 {
 	bso::sBool Exists = false;
 qRH

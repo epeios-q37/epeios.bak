@@ -28,7 +28,6 @@ namespace {
 
 	E_CDEF( char *, RecordsFrameId_, "Records" );
 	E_CDEF( char *, RecordFrameId_, "Record" );
-	E_CDEF( char *, FieldFrameId_, "Field" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -91,18 +90,6 @@ qRB
 	SetCasting_( Session );
 
 	Session.SwitchTo( core::pMain );
-
-	switch ( Session.User.Focus() ) {
-	case frdinstc::tRecords:
-		records::SetLayout( RecordsFrameId_, Session );
-		break;
-	case frdinstc::tRecord:
-		record::SetLayout( RecordFrameId_, Session );
-		break;
-	default:
-		qRGnr();
-		break;
-	}
 qRR
 qRT
 qRE
@@ -116,11 +103,6 @@ void main::SetRecordsLayout( core::rSession &Session )
 void main::SetRecordLayout( core::rSession &Session )
 {
 	record::SetLayout( RecordFrameId_, Session );
-}
-
-void main::SetFieldLayout( core::rSession &Session )
-{
-	field::SetLayout( FieldFrameId_, Session );
 }
 
 #define AC( name ) BASE_AC( main, name )

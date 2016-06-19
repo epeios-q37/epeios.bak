@@ -199,7 +199,7 @@ namespace ogzmta {
 		{
 			return Delete_( qNIL );
 		}
-		sRow New( sRow Row = qNIL )
+		sRow New( sRow Row = qNIL ) const
 		{
 			return New_( Row );
 		}

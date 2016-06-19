@@ -56,7 +56,7 @@ namespace ogzbsc {
 		// If 'Row' != 'qNIL', it must be used.
 		virtual row OGZBSCNew( row Row ) = 0;
 		// If 'Row' == 'qNIL', the content must be erased.
-		virtual void OGZBSCDelete( row Row ) = 0;
+		virtual void OGZBSCErase( row Row ) = 0;
 		virtual void OGZBSCStore(
 			const item &Item,
 			row Row ) = 0;
@@ -70,9 +70,9 @@ namespace ogzbsc {
 		{
 			return OGZBSCNew( Row );
 		}
-		void Delete( row Row )
+		void Erase( row Row )
 		{
-			return OGZBSCDelete( Row );
+			return OGZBSCErase( Row );
 		}
 		void Store(
 			const item &Item,
@@ -139,12 +139,12 @@ namespace ogzbsc {
 
 			return Row;
 		}
-		void Delete_( row Row ) const
+		void Erase_( row Row ) const
 		{
 		qRH
 		qRB
 			Lock_();
-			C_().Delete( Row );
+			C_().Erase( Row );
 		qRR
 		qRT
 			Unlock_();
@@ -206,15 +206,15 @@ namespace ogzbsc {
 		}
 		void Wipe( void ) const
 		{
-			return Delete_( qNIL );
+			return Erase_( qNIL );
 		}
 		row New( row Row = qNIL ) const
 		{
 			return New_( Row );
 		}
-		void Delete( row Row ) const
+		void Erase( row Row ) const
 		{
-			return Delete_( Row );
+			return Erase_( Row );
 		}
 		void Store(
 			const item &Item,
@@ -244,7 +244,7 @@ namespace ogzbsc {
 		{
 			return Items_.New();
 		}
-		virtual void OGZBSCDelete( row Row ) override
+		virtual void OGZBSCErase( row Row ) override
 		{
 			if ( Row == qNIL )
 				Items_.Init();

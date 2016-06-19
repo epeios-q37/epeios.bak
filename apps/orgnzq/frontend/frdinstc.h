@@ -36,34 +36,31 @@ namespace frdinstc {
 		{
 			return F_().Statics;
 		}
-		orgnzq::rOGZColumn Column_;
-		orgnzq::rOGZField Field_;
-		orgnzq::rOGZMyObject Object_;
+		orgnzq::rOGZColumn ColumnBuffer_;
+		orgnzq::rOGZField FieldBuffer_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Frontend_ = NULL;
 
-			Column_.reset( P );
-			Field_.reset( P );
-			Object_.reset( P );
+			ColumnBuffer_.reset( P );
+			FieldBuffer_.reset( P );
 		}
 		E_CVDTOR( rUser_ );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			Frontend_ = &Frontend;
 
-			Column_.Init( Frontend.Column );
-			Field_.Init( Frontend.Field );
-			Object_.Init( Frontend.MyObject );
+			ColumnBuffer_.Init( Frontend.Column );
+			FieldBuffer_.Init( Frontend.Field );
 		}
-		fbltyp::sObject GetColumnObjectId( void ) const
+		fbltyp::sObject GetColumnBuffer( void ) const
 		{
-			return Column_.ID();
+			return ColumnBuffer_.ID();
 		}
-		fbltyp::sObject GetFieldObjectId( void ) const
+		fbltyp::sObject GetFieldBuffer( void ) const
 		{
-			return Field_.ID();
+			return FieldBuffer_.ID();
 		}
 		bso::sBool Login(
 			const str::dString &Username,
@@ -75,54 +72,43 @@ namespace frdinstc {
 
 			return Success;
 		}
-		sRecord CreateRecord( void )	// if == 'UndefinedId', we create empty record.
+		void NewColumnBuffer( void ) const
 		{
-			sRecord Record = UndefinedRecord;
-
-			S_().OGZCreateRecord( *Record );
-
-			return Record;
+			ColumnBuffer_.New();
 		}
-		void DefineColumn( sColumn Column ) const
+		void FillColumnBuffer( sColumn Column ) const
 		{
-			Column_.Define( *Column	);
+			ColumnBuffer_.Fill( *Column	);
 		}
-		void UpdateColumn(
+		void UpdateColumnBuffer(
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment ) const
 		{
-			Column_.Update( *Type, *Number, Label, Comment );
+			ColumnBuffer_.Update( *Type, *Number, Label, Comment );
 		}
-		void GetColumn(
+		void GetColumnBuffer(
 			sType &Type,
 			sNumber &Number,
 			str::dString &Label,
 			str::dString &Comment ) const
 		{
-			Column_.Get( *Type, *Number, Label, Comment );
+			ColumnBuffer_.Get( *Type, *Number, Label, Comment );
 		}
-		sField CreateField(
-			sRecord Record,
-			fbltyp::sObject Column )
-		{
-			fbltyp::sId Id = fbltyp::UndefinedId;
-
-			S_().OGZCreateField( *Record, Column, Id );
-
-			return Id;
-		}
-		void UpdateEntry(
+		void UpdateFieldBufferEntry(
 			sEntry Entry,	// if undefined, new entry is created.
 			const str::dString &Content )
 		{
-			Field_.UpdateEntry( *Entry, Content );
+			FieldBuffer_.UpdateEntry( *Entry, Content );
 		}
-		// 'false' : mono, 'true' : multi.
-		void DefineField( sField Field )
+		void NewFieldBuffer( fbltyp::sObject ColumnBuffer )
 		{
-			Field_.Define( *Field );
+			FieldBuffer_.New( ColumnBuffer );
+		}
+		void FillFieldBuffer( sField Field )	// 'Field' must be != 'UndefiendField'. For an new empty field, use 'NewFieldBuffer'.
+		{
+			FieldBuffer_.Fill( *Field );
 		}
 		void GetRecordColumns(
 			sRecord Record,
@@ -143,22 +129,46 @@ namespace frdinstc {
 		{
 			S_().OGZGetRecordFields( *Record, Fields, Columns, Types, EntriesSet );
 		}
-		void GetCurrentField(
+		void GetFieldBuffer(
 			sType &Type,
 			sNumber &Number,
 			dEntriesI1S &Entries ) const
 		{
-			Field_.Get( *Type, *Number, Entries.Ids, Entries.Strings1 );
+			FieldBuffer_.Get( *Type, *Number, Entries.Ids, Entries.Strings1 );
 		}
 		const frdmisc::wXTypes &Types( void ) const
 		{
 			return F_().Types();
 		}
-		void UpdateField(
-			sField Field,
+		sRecord CreateRecord( void ) const
+		{
+			sRecord Record = UndefinedRecord;
+
+			S_().OGZCreateRecord( *Record );
+
+			return Record;
+		}
+		sField CreateField(
+			sRecord Record,
+			fbltyp::sObject ColumnBuffer,
 			fbltyp::sObject FieldBuffer ) const
 		{
-			S_().OGZUpdateField( *Field, FieldBuffer );
+			sField Field = UndefinedField;
+
+			S_().OGZCreateField( *Record, ColumnBuffer, FieldBuffer, *Field );
+
+			return Field;
+		}
+		bso::sBool UpdateField(
+			sField Field,
+			fbltyp::sObject FieldBuffer,
+			bso::sBool &RecordErased ) const
+		{
+			bso::sBool FieldErased = false;
+
+			S_().OGZUpdateField( *Field, FieldBuffer, FieldErased, RecordErased );
+
+			return FieldErased;
 		}
 		void GetRecords( dDigestsI1S &Digests ) const
 		{
@@ -286,27 +296,23 @@ namespace frdinstc {
 		{
 			return Core_.Login( Username, Password );
 		}
-		void CreateRecord( void )
+		void NewRecord( void )
 		{
-			FocusOn_( Core_.CreateRecord() );
+			FocusOn_( UndefinedRecord );
 		}
-		void DefineRecord( sRecord Record )
+		void NewField( void )
 		{
-			FocusOn_( Record );
+			Core_.NewColumnBuffer();
+			FocusOn_( UndefinedColumn );
 		}
-		void DefineField( sField Field )
+		void DefineField( sField Field )	// 'UndefinedField' for a new field.
 		{
 			if ( Field == UndefinedField ) {
-				Core_.DefineColumn( UndefinedColumn );
-				FocusOn_( UndefinedColumn );
+				NewField();
 			} else {
-				Core_.DefineField( Field );
+				Core_.FillFieldBuffer( Field );
 				FocusOn_( Field );
 			}
-		}
-		void DefineNewField( void )
-		{
-			DefineField( UndefinedField );
 		}
 		void GetColumn(
 			sType &Type,
@@ -314,17 +320,17 @@ namespace frdinstc {
 			str::dString &Label,
 			str::dString &Comment ) const
 		{
-			Core_.GetColumn( Type, Number, Label, Comment );
+			Core_.GetColumnBuffer( Type, Number, Label, Comment );
 		}
-		void DefineField(
+		void NewField(
 			sType Type,
 			sNumber Number,
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
-			Core_.UpdateColumn( Type, Number, Label, Comment );
-			FocusOn_( Core_.CreateField( Record_, Core_.GetColumnObjectId() ) );
-			Core_.DefineField( Field_ );
+			Core_.UpdateColumnBuffer( Type, Number, Label, Comment );
+			Core_.NewFieldBuffer( Core_.GetColumnBuffer() );
+			FocusOn_( UndefinedField );
 			FocusOn_( UndefinedEntry );
 		}
 		void UpdateEntry( const str::dString &Content )
@@ -332,18 +338,28 @@ namespace frdinstc {
 			if ( Focus_ != tField )
 				qRGnr();
 
-			Core_.UpdateEntry( Entry_, Content );
+			Core_.UpdateFieldBufferEntry( Entry_, Content );
 
 			FocusOn_( UndefinedEntry );
 		}
 		void UpdateField( void )
 		{
-			if ( Focus_ != tField )
-				qRGnr();
+			bso::sBool RecordErased = false;
 
-			Core_.UpdateField( Field_, Core_.GetFieldObjectId() );
+			if ( Record_ == UndefinedRecord )
+				Record_ = Core_.CreateRecord();
 
-			FocusOn_( tRecord );
+			if ( Field_ == UndefinedField )
+				Field_ = Core_.CreateField( Record_, Core_.GetColumnBuffer(), Core_.GetFieldBuffer() );
+
+			if ( Core_.UpdateField(Field_, Core_.GetFieldBuffer(), RecordErased) ) {
+				Field_ = UndefinedField;
+
+				if ( RecordErased )
+					Record_ = UndefinedRecord;
+			}
+
+			FocusOn_( Record_ );
 		}
 		void BackToList( void )
 		{
@@ -353,7 +369,6 @@ namespace frdinstc {
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;
 		void DumpColumnBuffer( xml::dWriter &Writer ) const;
 		void DumpFieldBuffer( xml::dWriter &Writer ) const;
-		void DumpFieldBufferCurrentField( xml::dWriter &Writer ) const;
 		void DumpRecords( xml::dWriter &Writer ) const;
 		qRODISCLOSEr( eTarget, Focus );
 	};

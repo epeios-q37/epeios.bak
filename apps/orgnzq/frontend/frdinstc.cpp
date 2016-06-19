@@ -86,15 +86,15 @@ qRH
 	str::wStrings Labels;
 	str::wStrings Comments;
 qRB
-	if ( Record_ == UndefinedRecord )
-		qRGnr();
 
 	Columns.Init();
 	Types.Init();
 	Numbers.Init();
 	Labels.Init();
 	Comments.Init();
-	Core_.GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
+
+	if ( Record_ != UndefinedRecord )
+		Core_.GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
 
 	Dump_( Columns, Types, Numbers, Labels, Comments, Writer );
 qRR
@@ -179,14 +179,13 @@ qRH
 	fbltyp::wIds Fields, Columns, Types;
 	fbltyp::wStringsSet EntriesSet;
 qRB
-	if ( Record_ == UndefinedRecord )
-		qRGnr();
-
 	Fields.Init();
 	Columns.Init();
 	EntriesSet.Init();
 	Types.Init();
-	Core_.GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
+
+	if ( Record_ != UndefinedRecord )
+		Core_.GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
 
 	Dump_( Fields, Columns, EntriesSet, Types, Field_, Core_.Types(), Writer );
 qRR
@@ -204,7 +203,7 @@ qRB
 	Label.Init();
 	Comment.Init();
 
-	Core_.GetColumn( Type, Number, Label, Comment );
+	Core_.GetColumnBuffer( Type, Number, Label, Comment );
 
 	Writer.PushTag("Column" );
 
@@ -221,13 +220,6 @@ qRE
 
 void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
 {
-	Writer.PushTag( "FieldBuffer" );
-
-	Writer.PopTag();
-}
-
-void frdinstc::rUser::DumpFieldBufferCurrentField( xml::dWriter &Writer ) const
-{
 qRH
 	sType Type = UndefinedType;
 	sNumber Number = UndefinedNumber;
@@ -235,7 +227,7 @@ qRH
 qRB
 	Entries.Init();
 
-	Core_.GetCurrentField( Type, Number, Entries );
+	Core_.GetFieldBuffer( Type, Number, Entries );
 
 	Writer.PushTag( "Field" );
 

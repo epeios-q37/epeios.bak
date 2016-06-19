@@ -54,19 +54,14 @@ void wrpcolumn::dColumn::HANDLE(
 
 #define DEC( name )	static void exported##name ARGS
 
-DEC( Initialize )
+DEC( New )
 {
-qRH
-qRB
 	Column().Init();
-qRR
-qRT
-qRE
 }
 
-DEC( Define )
+DEC( Fill )
 {
-	if ( Request.IdIn() != fbltyp::UndefinedId )
+	if ( Request.IdIn() == fbltyp::UndefinedId )
 		qRVct();
 
 	Column().Init();
@@ -138,11 +133,11 @@ DEC( Get )
 
 void wrpcolumn::dColumn::NOTIFY( fblbkd::rModule &Module )
 {
-	Module.Add( D( Initialize ),
+	Module.Add( D( New ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 
-	Module.Add( D( Define ),
+	Module.Add( D( Fill ),
 		fblbkd::cId,		// Column id. New column if == 'qNIL'.
 	fblbkd::cEnd,
 	fblbkd::cEnd );

@@ -23,10 +23,10 @@ using namespace ogzdtb;
 
 namespace {
 	ogzmta::sRow Create_(
-		ogzbsc::sURow User,
+		sURow User,
 		const str::dString &Value,
 		ogzmta::eTarget Target,
-		ogzmta::mMetas &Metas )
+		const ogzmta::mMetas &Metas )
 	{
 		ogzmta::sRow Meta = qNIL;
 
@@ -39,14 +39,26 @@ namespace {
 	}
 }
 
-ogzbsc::sFRow ogzdtb::mDatabase::NewField(
-	ogzusr::sRow User,
+sFRow ogzdtb::mDatabase::Create_(
+	sURow User,
 	const ogzclm::rColumnBuffer &Column,
-	ogzbsc::sRRow Record )
+	sRRow Record,
+	qRPN ) const
 {
-	ogzbsc::sFRow Field = Users.Add( User, Fields.New( Users.Add( User, Columns.New( Column.Type(), Column.Number(), Create_( User, Column.Label(), ogzmta::tColumnLabel, Metas ), Create_( User, Column.Comment(), ogzmta::tColumnComment, Metas ) ) ) ) );
+	ogzrcd::sRow RawRecord = GetRaw_( User, Record, qRP );
 
-	Records.AddField( Field, GetRawRecordRow_( User, Record ) );
+	if ( RawRecord == qNIL )
+		return qNIL;
+
+	sFRow Field = Users.Add( User,
+									 Fields.New( Users.Add( User,
+														    Columns.New( Column.Type(),
+															             Column.Number(),
+																		 ::Create_( User, Column.Label(), ogzmta::tColumnLabel, Metas ),
+																		 ::Create_( User, Column.Comment(), ogzmta::tColumnComment, Metas ) ) ),
+												  Record ) );
+
+	Records.Add( Field, RawRecord );
 
 	return Field;
 }
@@ -81,19 +93,19 @@ qRE
 }
 
 ogztyp::sRow ogzdtb::mDatabase::GetType_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzfld::dField &Field ) const
 {
 	ogztyp::sRow Type = qNIL;
 
-	GetColumnFeatures_( GetRawColumnRow_( User, Field.GetColumn() ), &Type, NULL, NULL, NULL );
+	GetColumnFeatures_( GetRaw_( User, Field.GetColumn() ), &Type, NULL, NULL, NULL );
 
 	return Type;
 }
 
 
 void ogzdtb::mDatabase::GetColumnFeatures_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzfld::dRows &RawFields,
 	cColumnFeatures &Callback ) const
 {
@@ -111,7 +123,7 @@ qRB
 		Field.Init();
 		Fields.Recall( RawFields( Row ), Field );
 
-		Column = GetRawColumnRow_( User, Field.Column() );
+		Column = GetRaw_( User, Field.Column() );
 
 		tol::Init( Label, Comment );
 
@@ -127,7 +139,7 @@ qRE
 }
 
 void ogzdtb::mDatabase::GetColumnFeatures_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzrcd::dFields &Fields,
 	cColumnFeatures &Callback ) const
 {
@@ -144,25 +156,36 @@ qRT
 qRE
 }
 
-void ogzdtb::mDatabase::GetColumnsFeatures(
-	ogzusr::sRow User,
-	ogzbsc::sRRow RecordRow,
-	cColumnFeatures &Callback ) const
+bso::sBool ogzdtb::mDatabase::GetColumnsFeatures(
+	sURow User,
+	sRRow RecordRow,
+	cColumnFeatures &Callback,
+	qRPN ) const
 {
+	bso::sBool Exists = false;
 qRH
 	ogzrcd::wRecord Record;
+	ogzrcd::sRow RawRecord = qNIL;
 qRB
+	RawRecord = GetRaw_( User, RecordRow, qRP );
+
+	if ( RawRecord == qNIL )
+		qRReturn;
+
+	Exists = true;
+
 	Record.Init();
-	Records.Recall( GetRawRecordRow_( User, RecordRow ), Record );
+	Records.Recall( RawRecord, Record );
 
 	GetColumnFeatures_( User, Record, Callback );
 qRR
 qRT
 qRE
+	return Exists;
 }
 
 void ogzdtb::mDatabase::GetEntries_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzrcd::dFields &RegularFields,
 	const ogzfld::dRows &RawFields,
 	cFieldEntries &Callback ) const
@@ -181,7 +204,7 @@ qRB
 		Field.Init();
 		Fields.Recall( RawFields( Row ), Field );
 
-		Column = GetRawColumnRow_( User, Field.Column() );
+		Column = GetRaw_( User, Field.Column() );
 
 		Columns.GetTypeAndNumber( Column, Type, Number );
 
@@ -199,7 +222,7 @@ qRE
 
 
 void ogzdtb::mDatabase::GetEntries_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzrcd::dFields &Fields,
 	cFieldEntries &Callback ) const
 {
@@ -217,10 +240,10 @@ qRE
 }
 
 void ogzdtb::mDatabase::Append_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzbsc::dDatum &Entry,
 	ogztyp::sRow Type,
-	ogzfld::dField &Field )
+	ogzfld::dField &Field ) const
 {
 	ogzetr::sRow Row = Entries.New( Type );
 
@@ -231,8 +254,8 @@ void ogzdtb::mDatabase::Append_(
 
 
 void ogzdtb::mDatabase::Delete_(
-	ogzusr::sRow User,
-	const ogzfld::dEntries &EntriesRows )
+	sURow User,
+	const ogzfld::dEntries &EntriesRows ) const
 {
 qRH
 	ogzetr::wRows RawEntriesRows;
@@ -248,9 +271,9 @@ qRE
 }
 
 void ogzdtb::mDatabase::Append_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzbsc::dData &Data,
-	ogzfld::dField &Field )
+	ogzfld::dField &Field ) const
 {
 	ogztyp::sRow Type = GetType_( User, Field );
 	sdr::sRow Row = Data.First();
@@ -262,22 +285,31 @@ void ogzdtb::mDatabase::Append_(
 	}
 }
 
-void ogzdtb::mDatabase::GetEntries(
-	ogzusr::sRow User,
-	ogzbsc::sRRow RecordRow,
-	cFieldEntries &Callback	) const
+bso::sBool ogzdtb::mDatabase::GetEntries(
+	sURow User,
+	sRRow RecordRow,
+	cFieldEntries &Callback,
+	qRPN ) const
 
 {
+	bso::sBool Exists = false;
 qRH
 	ogzrcd::wRecord Record;
+	ogzrcd::sRow RawRecord = qNIL;
 qRB
+	if ( ( RawRecord = GetRaw_( User, RecordRow, qRPU  ) ) == qNIL )
+		qRReturn;
+
+	Exists = true;
+
 	Record.Init();
-	Records.Recall( GetRawRecordRow_( User, RecordRow ), Record );
+	Records.Recall( RawRecord, Record );
 
 	GetEntries_( User, Record, Callback );
 qRR
 qRT
 qRE
+	return Exists;
 }
 
 namespace {
@@ -308,7 +340,7 @@ namespace {
 }
 
 void ogzdtb::mDatabase::GetEntries_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzfld::dField &Field,
 	ogzbsc::dData &Entries,
 	ogztyp::sRow &Type,
@@ -317,7 +349,7 @@ void ogzdtb::mDatabase::GetEntries_(
 qRH
 	ogzetr::wRows EntryRows;
 qRB
-	Columns.GetTypeAndNumber( GetRawColumnRow_( User, Field.GetColumn() ), Type, Number );
+	Columns.GetTypeAndNumber( GetRaw_( User, Field.GetColumn() ), Type, Number );
 
 	EntryRows.Init();
 	Users.GetRaws( User, Field, EntryRows );
@@ -328,64 +360,53 @@ qRT
 qRE
 }
 
-bso::sBool ogzdtb::mDatabase::GetEntries_(
-	ogzusr::sRow User,
+void ogzdtb::mDatabase::GetEntries_(
+	sURow User,
 	ogzfld::sRow FieldRow,
 	ogzbsc::dData &Entries,
 	ogztyp::sRow &Type,
-	ogzclm::eNumber &Number,
-	qRPF ) const
+	ogzclm::eNumber &Number ) const
 {
-	bso::sBool Exists = false;
 qRH
 	ogzfld::wField Field;
 qRB
 	Field.Init();
-	Exists = Fields.Recall( FieldRow, Field );
 
-	if ( !Exists ) {
-		if ( qRPT )
-			qRFwk();
-		else
-			qRReturn;
-	}
+	if ( !Fields.Recall( FieldRow, Field ) )
+		qRGnr();
 
 	GetEntries_( User, Field, Entries, Type, Number );
 qRR
 qRT
 qRE
-	return Exists;
 }
 
-bso::sBool ogzdtb::mDatabase::UpdateField(
-	ogzusr::sRow User,
-	ogzbsc::sFRow FieldRow,
-	ogzbsc::dData &Entries,
-	qRPF )
+bso::sBool ogzdtb::mDatabase::Update(
+	sURow User,
+	sFRow FieldRow,
+	const dData &Entries,
+	qRPN ) const
 {
 	bso::sBool Exists = false;
 qRH
 	ogzfld::wField Field;
-	ogzfld::sRow RawFieldRow = qNIL;
+	ogzfld::sRow RawField = qNIL;
 qRB
-	RawFieldRow = GetRawFieldRow_( User, FieldRow );
+	if ( ( RawField = GetRaw_( User, FieldRow, qRP ) ) == qNIL )
+		qRReturn;
 
 	Field.Init();
 
-	if ( !Fields.Recall(RawFieldRow, Field) ) {
-		if ( qRPT )
-			qRGnr();
-		else
-			qRReturn;
-	}
+	if ( !Fields.Recall( RawField, Field) )
+		qRGnr();
 
-	Delete_( User, Field );
+	Remove_( RawField );
 
 	Field.RemoveEntries();
 
 	Append_( User, Entries, Field );
 
-	Fields.Store( Field, RawFieldRow );
+	Fields.Store( Field, RawField );
 
 	Exists = true;
 qRR
@@ -395,17 +416,17 @@ qRE
 }
 
 void ogzdtb::mDatabase::GetFirstEntry_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzfld::dField &Field,
-	ogzbsc::dDatum &Entry ) const
+	dDatum &Entry ) const
 {
 qRH
 	ogzclm::sColumn Column;
 qRB
 	if ( Field.Amount() != 0 ) {
 		Column.Init();
-		Columns.Recall( GetRawColumnRow_(User, Field.Column() ), Column );
-		Entries.Recall( GetRawEntryRow_( User, Field(Field.First() ) ), Column.GetType(), Entry );
+		Columns.Recall( GetRaw_(User, Field.Column() ), Column );
+		Entries.Recall( GetRaw_( User, Field(Field.First() ) ), Column.GetType(), Entry );
 	}
 qRR
 qRT
@@ -413,16 +434,16 @@ qRE
 }
 
 void ogzdtb::mDatabase::GetFirstEntry_(
-	ogzusr::sRow User,
-	ogzbsc::sFRow Row,
-	ogzbsc::dDatum &Entry ) const
+	sURow User,
+	sFRow Row,
+	dDatum &Entry ) const
 {
 qRH
 	ogzfld::wField Field;
 qRB
 	Field.Init();
 
-	this->Fields.Recall( GetRawFieldRow_( User, Row ), Field );
+	this->Fields.Recall( GetRaw_( User, Row ), Field );
 
 	GetFirstEntry_( User, Field, Entry );
 qRR
@@ -431,9 +452,9 @@ qRE
 }
 
 void ogzdtb::mDatabase::GetFirstEntry_(
-	ogzusr::sRow User,
+	sURow User,
 	ogzrcd::sRow RecordRow,
-	ogzbsc::dDatum &Entry ) const
+	dDatum &Entry ) const
 {
 qRH
 	ogzrcd::wRecord Record;
@@ -453,19 +474,19 @@ qRE
 
 
 void ogzdtb::mDatabase::GetRecords_(
-	ogzusr::sRow User,
+	sURow User,
 	const ogzusr::dRecords &Records,
 	cRecordRetriever &Callback ) const
 {
 qRH
-	ogzbsc::wDatum Entry;
+	wDatum Entry;
 	sdr::sRow Row = qNIL;
 qRB
 	Row = Records.First();
 	
 	while ( Row != qNIL ) {
 		Entry.Init();
-		GetFirstEntry_( User, GetRawRecordRow_( User, Records( Row ) ), Entry );
+		GetFirstEntry_( User, GetRaw_( User, Records( Row ) ), Entry );
 
 		Callback.Retrieve( Records( Row ), Entry );
 
@@ -477,7 +498,7 @@ qRE
 }
 
 void ogzdtb::mDatabase::GetRecords(
-	ogzusr::sRow User,
+	sURow User,
 	cRecordRetriever &Callback ) const
 {
 qRH
@@ -492,4 +513,63 @@ qRT
 qRE
 }
 
+sRRow ogzdtb::mDatabase::GetRecord(
+	sURow User,
+	sFRow Field,
+	qRPN ) const
+{
+	ogzfld::sRow RawField = GetRaw_( User, Field, qRP );
+
+	if ( RawField == qNIL )
+		return qNIL;
+
+	return Fields.GetRecord( RawField );
+}
+
+bso::sBool ogzdtb::mDatabase::EraseIfEmpty(
+	sURow User,
+	sRRow Record ) const
+{
+	ogzrcd::sRow RawRecord = GetRaw_( User, Record );
+
+	if ( Records.IsEmpty( RawRecord ) ) {
+		Records.Erase( GetRaw_( User, Record ) );
+		return true;
+	} else
+		return false;
+}
+
+
+sFRow ogzdtb::mDatabase::Create(
+	sURow User,
+	const ogzclm::rColumnBuffer &Column,
+	sRRow Record,
+	const dData &Entries,
+	qRPN ) const
+{
+	sFRow Field = Create_( User, Column, Record, qRP );
+
+	if ( Field != qNIL )
+		Update( User, Field, Entries );
+
+	return Field;
+}
+
+void ogzdtb::mDatabase::Remove_( ogzfld::sRow FieldRow ) const
+{
+qRH
+	ogzfld::wField Field;
+qRB
+	Field.Init();
+
+	if ( !Fields.Recall( FieldRow, Field) )
+		qRGnr();
+
+	Field.RemoveEntries();
+
+	Fields.Store( Field, FieldRow );
+qRR
+qRT
+qRE
+}
 

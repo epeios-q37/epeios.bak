@@ -132,8 +132,10 @@ qRB
 	if ( !Session.User.Login(str::wString(), str::wString()) ) {
 		Session.AlertT( "UnableToLogin" );
 		Session.Disconnect();
-	} else
+	} else {
 		main::SetLayout( Session );
+		main::SetRecordsLayout( Session );
+	}
 qRR
 	Session.Disconnect();
 qRE

@@ -39,6 +39,7 @@ namespace common {
 		mFieldNameAlreadyUsed,
 		mNoSuchEntry,
 		mNoSuchField,
+		mNoSuchRecord,
 		mFieldLabelCanNotBeEmpty,
 		mOnlyOneEntryAllowed,
 		mTestMessage,
@@ -169,12 +170,14 @@ namespace common {
 	ogztyp::sRow GetMandatoryTextType( void  );
 }
 
-#define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
+# define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
 
-#define STUFF\
-	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\
-	common::rStuff &Stuff = *(common::rStuff *)Backend.Stuff()
+# define BACKEND_	((sclbacknd::rBackend *)BaseBackend.UP())
+# define STUFF_		(((common::rStuff *)(BACKEND_->Stuff())))
 
+# define BACKEND		sclbacknd::rBackend &Backend = *BACKEND_
+# define STUFF			common::rStuff &Stuff = *STUFF_
+# define USER			ogzusr::sRow &User = STUFF_->User();
 # define DATABASE		ogzdtb::mDatabase &Database = common::Database()
 # define AUTHENTICATION	ogzusr::mAuthentication &Authentication = common::Authentication()
 

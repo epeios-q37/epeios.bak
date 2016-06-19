@@ -52,9 +52,15 @@ namespace ogzrcd {
 	: public mRecords_
 	{
 	public:
-		void AddField(
+		void Add(
 			ogzbsc::sFRow Field,
 			sRow Record ) const;
+		void Erase( ogzbsc::sFRow Field ) const;
+		void Erase( sRow Record ) const
+		{
+			mRecords_::Erase( Record );
+		}
+		bso::sBool IsEmpty( sRow Record ) const;
 	};
 
 	typedef ogzbsc::rRegularCallback<lstcrt::qLCRATEw( dRecord, sRow ), OGZRCD_TP> rRegularCallback;

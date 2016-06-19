@@ -169,7 +169,7 @@ namespace ogzetr {
 		}
 		sRow New(
 			ogztyp::sRow Type,	// If == 'qNIL', it's the mandatory text type.
-			sRow Row = qNIL )
+			sRow Row = qNIL ) const
 		{
 			return New_( Type, Row );
 		}

@@ -103,8 +103,10 @@ qRE
 
 AC( DefineNewRecord )
 {
-	Session.User.CreateRecord();
+	Session.User.NewRecord();
 
 	main::SetLayout( Session );
+	main::SetRecordLayout( Session );
+	record::SetFieldsLayout( Session );
 }
 

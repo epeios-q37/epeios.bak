@@ -21,7 +21,7 @@
 
 using namespace ogzrcd;
 
-void ogzrcd::mRecords::AddField(
+void ogzrcd::mRecords::Add(
 	ogzbsc::sFRow Field,
 	sRow RecordRow ) const
 {
@@ -38,4 +38,21 @@ qRR
 qRT
 qRE
 }
+
+bso::sBool ogzrcd::mRecords::IsEmpty( sRow RecordRow ) const
+{
+	bso::sBool IsEmpty = false;
+qRH
+	wRecord Record;
+qRB
+	Record.Init();
+	Recall( RecordRow, Record );
+
+	IsEmpty = Record.IsEmpty();
+qRR
+qRT
+qRE
+	return IsEmpty;
+}
+
 

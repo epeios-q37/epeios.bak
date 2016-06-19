@@ -297,6 +297,7 @@ namespace fbltyp {
 
 	typedef bso::u16__	object_t__;
 	E_TMIMIC__( object_t__, object__ );
+	qCDEF( object__, UndefinedObject, BSO_U16_MAX );
 
 	typedef bso::bool__ boolean_t__;
 	typedef boolean_t__ boolean__;

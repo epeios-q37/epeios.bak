@@ -254,11 +254,11 @@ namespace err {
 
 // Error handling parameter related macros.
 
-// For method/function deFinition.
-# define qRPC	qRPF = err::h_Default
+// Definition with default value.
+# define qRPD	qRPN = err::h_Default
 
-// For method/function deClaration.
-# define qRPF	err::handling__ qRP
+// Naked defintion, without default value.
+# define qRPN	err::handling__ qRP
 
 // For testing
 # define qRPT ( qRP == err::hThrowException )

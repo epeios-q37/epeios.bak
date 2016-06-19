@@ -142,38 +142,6 @@ qRT
 qRE
 }
 
-DEC( CreateRecord )
-{
-qRH
-qRB
-	STUFF;
-	DATABASE;
-
-	Request.IdOut() = *Database.NewRecord( Stuff.User() );
-qRR
-qRT
-qRE
-}
-
-DEC( CreateField )
-{
-qRH
-qRB
-	STUFF;
-	DATABASE;
-
-	const ogzbsc::sRRow &Record = *Request.IdIn();
-	const ogzclm::rColumnBuffer &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() )();
-
-	if ( Database.Metas.Search( Stuff.User(), Column.GetLabel(), ogzmta::tColumnLabel ) != qNIL )
-		REPORT( FieldNameAlreadyUsed );
-
-	Request.IdOut() = *Database.NewField( Stuff.User(), Column, Record );
-qRR
-qRT
-qRE
-}
-
 namespace {
 	class sColumnFeaturesCallback
 	: public ogzdtb::cColumnFeatures
@@ -218,7 +186,8 @@ namespace {
 	{
 		sColumnFeaturesCallback Callback( Request );
 
-		Database.GetColumnsFeatures( User, Record, Callback );
+		if ( !Database.GetColumnsFeatures( User, Record, Callback, qRPU ) )
+			REPORT( NoSuchField );
 	}
 }
 
@@ -226,12 +195,12 @@ DEC( GetRecordColumns )
 {
 qRH
 qRB
-	STUFF;
+	USER;
 	DATABASE;
 
 	const ogzbsc::sRRow &Record = *Request.IdIn();
 
-	GetColumns_( Stuff.User(), Record, Database, Request );
+	GetColumns_( User, Record, Database, Request );
 qRR
 qRT
 qRE
@@ -295,19 +264,60 @@ qRT
 qRE
 }
 
-DEC( UpdateField )
+DEC( CreateRecord )
 {
-	STUFF;
+	USER;
 	DATABASE;
 
-	ogzbsc::sFRow Field = *Request.IdIn();
-	const fbltyp::sObject &FieldBuffer = Request.ObjectIn();
+	Request.IdOut() = *Database.NewRecord( User );
+}
 
-	if ( Field == qNIL )
+DEC( CreateField )
+{
+	USER;
+	BACKEND;
+	DATABASE;
+
+	ogzbsc::sFRow FieldRow = qNIL;
+	ogzbsc::sRRow Record = *Request.IdIn();
+	const ogzclm::rColumnBuffer &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() )();
+	const wrpfield::dField &Field = Backend.Object<wrpfield::dField>( Request.ObjectIn() );
+
+	if ( ( FieldRow = Database.Create( User, Column, Record, Field, qRPU ) ) == qNIL )
+		REPORT( NoSuchRecord );
+
+	Request.IdOut() = *FieldRow;
+}
+
+DEC( UpdateField )
+{
+	USER;
+	BACKEND;
+	DATABASE;
+
+	ogzbsc::sFRow FieldRow = *Request.IdIn();
+	const wrpfield::dField &Field = Backend.Object<wrpfield::dField>( Request.ObjectIn() );
+	bso::sBool FieldRemoved = false, RecordRemoved = false;
+
+	if ( FieldRow == qNIL )
 		qRGnr();
 
-	if ( !Database.UpdateField( Stuff.User(), Field, Backend.Object<wrpfield::dField>( FieldBuffer ), qRPU ) )
-		REPORT( NoSuchField );
+	if ( Field.Amount() == 0 ) {
+		ogzbsc::sRRow Record = Database.GetRecord( User, FieldRow, qRPU );
+
+		if ( Record == qNIL )
+			REPORT( NoSuchField );	// Above method really returns 'qNIL' if the field doesn't exists.
+
+		Database.Remove( User, FieldRow );
+
+		FieldRemoved = true;
+
+		RecordRemoved = Database.EraseIfEmpty( User, Record );
+	} else if ( !Database.Update( User, FieldRow, Field, qRPU ) )
+			REPORT( NoSuchField );
+
+	Request.BooleanOut() = FieldRemoved;
+	Request.BooleanOut() = RecordRemoved;
 }
 
 namespace {
@@ -379,18 +389,6 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cStrings,	// Plugin ids.
 		fblbkd::cEnd );
 
-	Backend.Add( D( CreateRecord ),
-		fblbkd::cEnd,
-			fblbkd::cId,	// Id of the new.
-		fblbkd::cEnd );
-
-	Backend.Add( D( CreateField ),
-			fblbkd::cId,		// Id of the record .
-			fblbkd::cObject,	// Id of the column object.
-		fblbkd::cEnd,
-			fblbkd::cId,		// Id of the created field.
-		fblbkd::cEnd );
-
 	Backend.Add( D( GetRecordColumns ),
 			fblbkd::cId,		// Id of the record .
 		fblbkd::cEnd,
@@ -402,18 +400,33 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetRecordFields ),
-			fblbkd::cId,			// Id of the record .
+			fblbkd::cId,			// Record.
 		fblbkd::cEnd,
-			fblbkd::cIds,			// Ids of the fields.
+			fblbkd::cIds,			// Fields.
 			fblbkd::cIds,			// The column for each fields.
 			fblbkd::cIds,			// The type of each field. More convenient to be here due to use of plugins for the types.
 			fblbkd::cStringsSet,	// The entries for each field.
 		fblbkd::cEnd );
 
+	Backend.Add(D( CreateRecord ),
+		fblbkd::cEnd,
+			fblbkd::cId,	// The created Record.
+		fblbkd::cEnd );
+
+	Backend.Add(D( CreateField ),
+			fblbkd::cId,		// Record in which to create the new field.
+			fblbkd::cObject,	// Column object.
+			fblbkd::cObject,	// Field buffer object to update with.
+		fblbkd::cEnd,
+			fblbkd::cId,	// The created field.
+		fblbkd::cEnd );
+
 	Backend.Add(D( UpdateField ),
-			fblbkd::cId,	// ID of the field to update.
+			fblbkd::cId,		// Id of the field to update.
 			fblbkd::cObject,	// Field buffer object to update with,
 		fblbkd::cEnd,
+			fblbkd::cBoolean,	// 'true' if the field was erased, because it was empty.
+			fblbkd::cBoolean,	// 'true' if the record was erased, because the field was empty and the last one.
 		fblbkd::cEnd );
 
 	Backend.Add(D( GetRecords ),

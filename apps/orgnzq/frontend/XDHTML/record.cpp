@@ -94,20 +94,6 @@ qRB
 	Session.FillElement( Id, XML, XSL );
 
 	SetCasting_( Id, Session );
-
-	switch ( Session.User.Focus() ) {
-	case frdinstc::tRecord:
-	case frdinstc::tField:
-		fields::SetLayout( FieldsFrameId_, Session );
-		break;
-	case frdinstc::tColumn:
-		fields::SetLayout( FieldsFrameId_, Session );
-		column::SetLayout( ColumnFrameId_, Session );
-		break;
-	default:
-		qRGnr();
-		break;
-	}
 qRR
 qRT
 qRE
@@ -118,18 +104,26 @@ void record::SetFieldsLayout( core::rSession &Session )
 	fields::SetLayout( FieldsFrameId_, Session );
 }
 
+void record::SetColumnLayout( core::rSession &Session )
+{
+	column::SetLayout( ColumnFrameId_, Session );
+}
+
 #define AC( name ) BASE_AC( record, name )
 
 AC( DefineNewField )
 {
-	Session.User.DefineNewField();
+	Session.User.NewField();
 
 	main::SetRecordLayout( Session );
+	record::SetFieldsLayout( Session );
+	record::SetColumnLayout( Session );
 }
 
 AC( BackToList )
 {
 	Session.User.BackToList();
 	main::SetLayout( Session );
+	main::SetRecordsLayout( Session );
 }
 

@@ -49,6 +49,7 @@ namespace ogzfld {
 		: public dEntries::s
 		{
 			ogzbsc::sCRow Column;
+			ogzbsc::sRRow Record;
 		}&S_;
 		dField( s &S )
 		: S_( S ),
@@ -57,6 +58,8 @@ namespace ogzfld {
 		void reset( bso::bool__ P = true )
 		{
 			S_.Column = qNIL;
+			S_.Record = qNIL;
+
 			dEntries::reset( P );
 		}
 		void plug( qASd *AS )
@@ -66,13 +69,26 @@ namespace ogzfld {
 		dField &operator =( const dField &F )
 		{
 			S_.Column = F.S_.Column;
+			S_.Record = F.S_.Record;
+
 			dEntries::operator=( F );
 
 			return *this;
 		}
-		void Init( ogzbsc::sCRow Column = qNIL )
+		void Init( void )
+		{
+			S_.Column = qNIL;
+			S_.Record = qNIL;
+
+			dEntries::Init();
+		}
+		void Init(
+			ogzbsc::sCRow Column,
+			ogzbsc::sRRow Record )
 		{
 			S_.Column = Column;
+			S_.Record = Record;
+
 			dEntries::Init();
 		}
 		void RemoveEntries( void )
@@ -80,6 +96,7 @@ namespace ogzfld {
 			dEntries::Init();
 		}
 		qRWDISCLOSEd( ogzbsc::sCRow, Column );
+		qRWDISCLOSEd( ogzbsc::sRRow, Record );
 	};
 
 	qW( Field );
@@ -99,7 +116,9 @@ namespace ogzfld {
 		ogzbsc::sCRow GetColumn( sRow Field ) const;
 		sRow New(
 			ogzbsc::sCRow Column,
+			ogzbsc::sRRow Record,
 			sRow Field = qNIL ) const;
+		ogzbsc::sRRow GetRecord( sRow Field ) const;
 	};
 
 	typedef ogzbsc::rRegularCallback<lstctn::qLCONTAINERw( dField, sRow ), OGZFLD_TP> rRegularCallback;

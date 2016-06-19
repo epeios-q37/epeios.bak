@@ -19,6 +19,8 @@
 
 #include "wrpfield.h"
 
+#include "wrpcolumn.h"
+
 using namespace wrpfield;
 
 using common::rStuff;
@@ -45,9 +47,21 @@ void wrpfield::dField::HANDLE(
 
 #define DEC( name )	static void exported##name ARGS
 
-DEC( Define )
+DEC( New )
 {
-	STUFF;
+	BACKEND;
+
+	const ogzclm::rColumnBuffer &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() )();
+
+	Field.Init();
+
+	Field.Type() = Column.GetType();
+	Field.Number() = Column.Number();
+}
+
+DEC( Fill )
+{
+	USER;
 	DATABASE;
 
 	ogztyp::sRow Type = qNIL;
@@ -59,7 +73,7 @@ DEC( Define )
 
 	Field.Init();
 
-	if ( !Database.GetEntries( Stuff.User(), FieldRow, Field, Field.Type(), Field.Number(), qRPU ) )
+	if ( !Database.GetEntries( User, FieldRow, Field, Field.Type(), Field.Number(), qRPU ) )
 		REPORT( NoSuchField );
 }
 
@@ -157,7 +171,12 @@ DEC( Update )
 
 void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 {
-	Module.Add( D( Define ),
+	Module.Add( D( New ),
+			fblbkd::cObject,	// Column buffer id.
+		fblbkd::cEnd,
+		fblbkd::cEnd );
+
+	Module.Add( D( Fill ),
 			fblbkd::cId,		// Field id.
 		fblbkd::cEnd,
 		fblbkd::cEnd );
@@ -175,13 +194,5 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 			fblbkd::cString,	// Then entry value.		
 		fblbkd::cEnd,
 		fblbkd::cEnd );
-
-
-
-	/*
-	Module.Add( D(  ),
-		fblbkd::cEnd,
-		fblbkd::cEnd );
-	*/
 }
 

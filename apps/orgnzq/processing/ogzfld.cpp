@@ -39,12 +39,13 @@ qRE
 
 sRow ogzfld::mFields::New(
 	ogzbsc::sCRow Column,
+	ogzbsc::sRRow Record,
 	sRow FieldRow ) const
 {
 qRH
 	wField Field;
 qRB
-	Field.Init( Column );
+	Field.Init( Column, Record );
 
 	FieldRow = mFields_::New( FieldRow );
 
@@ -54,3 +55,20 @@ qRT
 qRE
 	return FieldRow;
 }
+
+ogzbsc::sRRow ogzfld::mFields::GetRecord( sRow FieldRow ) const
+{
+	ogzbsc::sRRow Record = qNIL;
+qRH
+	ogzfld::wField Field;
+qRB
+	Field.Init();
+	Recall( FieldRow, Field );
+
+	Record = Field.Record();
+qRR
+qRT
+qRE
+	return Record;
+}
+

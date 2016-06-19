@@ -133,7 +133,7 @@ namespace ogzclm {
 			sRow Column,
 			ogztyp::sRow &Type,
 			eNumber &Number,
-			qRPC ) const;
+			qRPD ) const;
 	};
 
 

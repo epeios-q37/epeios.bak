@@ -231,7 +231,8 @@ namespace ogzusr {
 		}
 		template <typename regular, typename raw> raw GetRaw_(
 			regular Regular,
-			sRow User ) const
+			sRow User,
+			qRPD ) const
 		{
 			raw Raw = qNIL;
 		qRH
@@ -246,6 +247,10 @@ namespace ogzusr {
 			GetRaws( User, Regulars, Raws );
 
 			Raw = Raws( Raws.First() );
+
+			if ( Raw == qNIL )
+				if ( qRPT )
+					qRGnr();
 		qRR
 		qRT
 		qRE
@@ -314,9 +319,10 @@ namespace ogzusr {
 		}
 		ogzmta::sRow GetRaw(
 			ogzusr::sRow User,
-			ogzbsc::sMRow Meta ) const
+			ogzbsc::sMRow Meta,
+			qRPN ) const
 		{
-			return GetRaw_<ogzbsc::sMRow,ogzmta::sRow>( Meta, User );
+			return GetRaw_<ogzbsc::sMRow,ogzmta::sRow>( Meta, User, qRP );
 		}
 		ogzbsc::sCRow Add(
 			ogzusr::sRow User,
@@ -326,9 +332,10 @@ namespace ogzusr {
 		}
 		ogzclm::sRow GetRaw(
 			ogzusr::sRow User,
-			ogzbsc::sCRow Column ) const
+			ogzbsc::sCRow Column,
+			qRPN ) const
 		{
-			return GetRaw_<ogzbsc::sCRow,ogzclm::sRow>( Column, User );
+			return GetRaw_<ogzbsc::sCRow,ogzclm::sRow>( Column, User, qRP );
 		}
 		ogzbsc::sERow Add(
 			ogzusr::sRow User,
@@ -338,9 +345,10 @@ namespace ogzusr {
 		}
 		ogzetr::sRow GetRaw(
 			ogzusr::sRow User,
-			ogzbsc::sERow Entry ) const
+			ogzbsc::sERow Entry,
+			qRPN ) const
 		{
-			return GetRaw_<ogzbsc::sERow,ogzetr::sRow>( Entry, User );
+			return GetRaw_<ogzbsc::sERow,ogzetr::sRow>( Entry, User, qRP );
 		}
 		ogzbsc::sFRow Add(
 			ogzusr::sRow User,
@@ -350,9 +358,10 @@ namespace ogzusr {
 		}
 		ogzfld::sRow GetRaw(
 			ogzusr::sRow User,
-			ogzbsc::sFRow Field ) const
+			ogzbsc::sFRow Field,
+			qRPN ) const
 		{
-			return GetRaw_<ogzbsc::sFRow,ogzfld::sRow>( Field, User );
+			return GetRaw_<ogzbsc::sFRow,ogzfld::sRow>( Field, User, qRP );
 		}
 		ogzbsc::sRRow Add(
 			ogzusr::sRow User,
@@ -362,9 +371,10 @@ namespace ogzusr {
 		}
 		ogzrcd::sRow GetRaw(
 			ogzusr::sRow User,
-			ogzbsc::sRRow Record ) const
+			ogzbsc::sRRow Record,
+			qRPN ) const
 		{
-			return GetRaw_<ogzbsc::sRRow,ogzrcd::sRow>( Record, User );
+			return GetRaw_<ogzbsc::sRRow,ogzrcd::sRow>( Record, User, qRP );
 		}
 		sAmount GetRecordsSet(
 			sRow User,

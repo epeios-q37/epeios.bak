@@ -35,6 +35,8 @@ namespace fields {
 	void SetLayout(
 		const char *Id,
 		core::rSession &Session );
+
+	void SetFieldLayout( core::rSession &Session );
 }
 
 #endif

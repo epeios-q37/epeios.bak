@@ -69,7 +69,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpFieldBufferCurrentField( Rack );
+		Session.User.DumpFieldBuffer( Rack );
 	qRR
 	qRT
 	qRE
@@ -103,6 +103,6 @@ qRE
 
 AC( DefineNewEntry )
 {
-	main::SetFieldLayout( Session );
+	fields::SetFieldLayout( Session );
 }
 

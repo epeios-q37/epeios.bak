@@ -38,6 +38,7 @@ const char *common::GetLabel( eMessage Message )
 	C( FieldNameAlreadyUsed );
 	C( NoSuchEntry );
 	C( NoSuchField );
+	C( NoSuchRecord );
 	C( TestMessage );
 	C( UnknownEntry );
 	C( UnknownFieldNumber );
