@@ -67,7 +67,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::content_rack___ Rack;
+		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -116,10 +116,17 @@ qRT
 qRE
 }
 
-AC( EditField )
+AC( DefineField )
 {
-	Session.AlertU( Id );
+	frdinstc::sField Field = frdinstc::UndefinedField;
+	
+	Session.GetNumericalContent( Id, **Field );
 
+	Session.User.DefineField( Field );
+
+	main::SetRecordLayout( Session );
+	record::SetFieldsLayout( Session );
+	fields::SetFieldLayout( Session );
 }
 
 

@@ -55,7 +55,10 @@ namespace ogzrcd {
 		void Add(
 			ogzbsc::sFRow Field,
 			sRow Record ) const;
-		void Erase( ogzbsc::sFRow Field ) const;
+		bso::sBool Erase(	// Returns 'false' if 'Field' not owned by 'Record'.
+			ogzbsc::sFRow Field,
+			sRow Record,
+			qRPD ) const;
 		void Erase( sRow Record ) const
 		{
 			mRecords_::Erase( Record );

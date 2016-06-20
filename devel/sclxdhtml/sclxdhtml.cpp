@@ -227,7 +227,7 @@ qRE
 namespace{
 	void Alert_(
 		const ntvstr::string___ &Message,
-		const char *MessageLanguage,	// If != 'NULL', 'Message' is translates, otherwise it is displayed as is.
+		const char *MessageLanguage,	// If != 'NULL', 'Message' is translated, otherwise it is displayed as is.
 		proxy__ &Proxy,
 		const char *CloseTextLanguage )
 	{

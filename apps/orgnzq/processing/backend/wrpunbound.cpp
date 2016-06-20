@@ -297,7 +297,7 @@ DEC( UpdateField )
 
 	ogzbsc::sFRow FieldRow = *Request.IdIn();
 	const wrpfield::dField &Field = Backend.Object<wrpfield::dField>( Request.ObjectIn() );
-	bso::sBool FieldRemoved = false, RecordRemoved = false;
+	bso::sBool FieldErased = false, RecordErased = false;
 
 	if ( FieldRow == qNIL )
 		qRGnr();
@@ -308,16 +308,16 @@ DEC( UpdateField )
 		if ( Record == qNIL )
 			REPORT( NoSuchField );	// Above method really returns 'qNIL' if the field doesn't exists.
 
-		Database.Remove( User, FieldRow );
+		Database.Erase( User, FieldRow );
 
-		FieldRemoved = true;
+		FieldErased = true;
 
-		RecordRemoved = Database.EraseIfEmpty( User, Record );
+		RecordErased = Database.EraseIfEmpty( User, Record );
 	} else if ( !Database.Update( User, FieldRow, Field, qRPU ) )
 			REPORT( NoSuchField );
 
-	Request.BooleanOut() = FieldRemoved;
-	Request.BooleanOut() = RecordRemoved;
+	Request.BooleanOut() = FieldErased;
+	Request.BooleanOut() = RecordErased;
 }
 
 namespace {
@@ -359,7 +359,7 @@ qRB
 
 	sRecordRetriever Callback( Rows, Entries );
 
-	Database.GetRecords( Stuff.User(), Callback );
+	Database.GetRecordsFirstEntry( Stuff.User(), Callback );
 qRR
 qRT
 qRE

@@ -226,7 +226,7 @@ namespace ogzdtb {
 			sURow User,
 			ogzrcd::sRow Record,
 			dDatum &Entry ) const;
-		void GetRecords_(
+		void GetRecordsFirstEntry_(
 			sURow User,
 			const ogzusr::dRecords &Records,
 			cRecordRetriever &Callback ) const;
@@ -239,7 +239,7 @@ namespace ogzdtb {
 			ogzfld::sRow Field,
 			dData &Entries,
 			qRPN );
-		void Remove_( ogzfld::sRow Field ) const;
+		void Erase_( ogzfld::sRow Field ) const;
 	public:
 		ogzmta::mMetas Metas;
 		ogzclm::mColumns Columns;
@@ -303,14 +303,14 @@ namespace ogzdtb {
 			sRRow Record,
 			cFieldEntries &Callback,
 			qRPD ) const;
-		void GetRecords(
+		void GetRecordsFirstEntry(
 			sURow User,
 			cRecordRetriever &Callback ) const;
 		sRRow GetRecord(	// Returns 'qNIL' if field doesn't exists.
 			sURow User,
 			sFRow Field,
 			qRPD  ) const;
-		bso::sBool Remove(	// Returns 'false' if field does not exists.
+		bso::sBool Erase(	// Returns 'false' if field does not exists.
 			sURow User,
 			sFRow Field,
 			qRPD ) const
@@ -320,13 +320,26 @@ namespace ogzdtb {
 			if ( RawField == qNIL )
 				return false;
 			else {
-				Remove_( RawField );
+				Records.Erase( Field, GetRaw_( User, GetRecord( User, Field ) ) );
+
+				Erase_( RawField );
+
 				return true;
 			}
 		}
-		bso::sBool EraseIfEmpty(	// Returns 'true' if record removed.
+		bso::sBool EraseIfEmpty(	// Returns 'true' if record erased.
 			sURow User,
-			sRRow Record ) const;
+			sRRow Record ) const
+		{
+			ogzrcd::sRow RawRecord = GetRaw_( User, Record );
+
+			if ( Records.IsEmpty( RawRecord ) ) {
+				Records.Erase( GetRaw_( User, Record ) );
+				Users.Erase( User, Record );
+				return true;
+			} else
+				return false;
+		}
 		sFRow Create(	// Returns 'qNIL' if the record doesn't exist.
 			sURow User,
 			const ogzclm::rColumnBuffer &Column,

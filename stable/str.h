@@ -196,6 +196,7 @@ namespace str {
 			StripLeadingCharacter( Model );
 			StripTailingCharacter( Model );
 		}
+		bso::sBool IsBlank( void ) const;	// Returns 'true' if contains only blan characters.
 		string_ &Truncate( sdr::row__ Row )
 		{
 			E_BUNCHx_( bso::char__, _string_size_handler )::Truncate( Row );

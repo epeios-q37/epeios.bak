@@ -39,6 +39,34 @@ qRT
 qRE
 }
 
+bso::sBool ogzrcd::mRecords::Erase(
+	ogzbsc::sFRow Field,
+	sRow RecordRow,
+	qRPN ) const
+{
+	sdr::sRow Row = qNIL;
+qRH
+	wRecord Record;
+qRB
+	Record.Init();
+	Recall( RecordRow, Record );
+
+	Row = Record.Search( Field );
+
+	if ( Row != qNIL ) {
+		Record.Remove( Row );
+		Store( Record, RecordRow );
+	} else if ( qRPT )
+			qRGnr();
+
+
+qRR
+qRT
+qRE
+	return Row != qNIL;
+}
+
+
 bso::sBool ogzrcd::mRecords::IsEmpty( sRow RecordRow ) const
 {
 	bso::sBool IsEmpty = false;

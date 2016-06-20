@@ -139,6 +139,7 @@ namespace xdhdws {
 		qRE
 			return Property;
 		}
+		/*
 		template <typename type> bso::sBool GetNumericalProperty(
 			const nstring___ &Id,
 			const nstring___ &Name,
@@ -161,6 +162,7 @@ namespace xdhdws {
 		qRE
 			return !IsEmpty;
 		}
+		*/
 		void SetProperty(
 			const nstring___ &Id,
 			const nstring___ &Name,
@@ -191,6 +193,7 @@ namespace xdhdws {
 		qRE
 			return Attribute;
 		}
+		/*
 		template <typename type> bso::sBool GetNumericalAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
@@ -213,6 +216,7 @@ namespace xdhdws {
 		qRE
 			return !IsEmpty;
 		}
+		*/
 		void SetAttribute(
 			const nstring___ &Id,
 			const nstring___ &Name,
@@ -268,6 +272,27 @@ namespace xdhdws {
 		qRE
 			return Content;
 		}
+		template <typename type> bso::sBool GetNumericalContent(
+			const nstring___ &Id,
+			type &Value )
+		{
+			bso::sBool IsEmpty = true;
+		qRH
+			str::wString RawValue;
+		qRB
+			RawValue.Init();
+
+			GetContent( Id, RawValue );
+
+			if ( RawValue.Amount() != 0 ) {
+				RawValue.ToNumber( Value );
+				IsEmpty = false;
+			}
+		qRR
+		qRT
+		qRE
+			return !IsEmpty;
+		}
 		void SetContent(
 			const nstring___ &Id,
 			const nstring___ &Value )
@@ -280,27 +305,19 @@ namespace xdhdws {
 		}
 	};
 
-	class corpus_callback__
+	class cCorpus
 	{
 	protected:
 		virtual void XDHDWSDump( xml::writer_ &Writer ) = 0;
 	public:
-		void reset( bso::bool__ = true )
-		{
-			//Standardisation.
-		}
-		E_CVDTOR( corpus_callback__ )
-		void Init( void )
-		{
-			//Standardisation.
-		}
+		qCALLBACK( Corpus );
 		void Dump( xml::writer_ &Writer )
 		{
 			XDHDWSDump( Writer );
 		}
 	};
 
-	class generic_rack___
+	class rGenericRack
 	{
 	private:
 		flx::E_STRING_TOFLOW___ _Flow;
@@ -311,13 +328,13 @@ namespace xdhdws {
 			_Writer.reset( P );
 			_Flow.reset( P );
 		}
-		E_CDTOR( generic_rack___ );
+		E_CDTOR( rGenericRack );
 		void Init(
 			const char *Generator,
 			const char *View,
 			const char *Background,
 			str::string_ &Target,
-			corpus_callback__ &Callback )
+			cCorpus &Callback )
 		{
 			tol::buffer__ Buffer;
 
@@ -344,65 +361,51 @@ namespace xdhdws {
 		}
 	};
 
-	class content_rack___
-	: public generic_rack___
+	class rContentRack
+	: public rGenericRack
 	{
 	public:
 		void Init(
 			const char *Generator,
 			const char *View,
 			str::string_ &Target,
-			corpus_callback__ &Callback )
+			cCorpus &Callback )
 		{
-			generic_rack___::Init( Generator, View, ContentTagName, Target, Callback );
+			rGenericRack::Init( Generator, View, ContentTagName, Target, Callback );
 		}
 	};
 
-	class context_rack___
-	: public generic_rack___
+	class rContextRack
+	: public rGenericRack
 	{
 	public:
 		void Init(
 			const char *Generator,
 			const char *View,
 			str::string_ &Target,
-			corpus_callback__ &Callback )
+			cCorpus &Callback )
 		{
-			generic_rack___::Init( Generator, View, ContextTagName, Target, Callback );
+			rGenericRack::Init( Generator, View, ContextTagName, Target, Callback );
 		}
 	};
 
 # define XDHDWS_RACK( Generator, Type )\
-	class _##Type##_rack___\
-	: public xdhdws::Type##_rack___\
+	class r##Type##Rack_\
+	: public xdhdws::r##Type##Rack\
 	{\
 	public:\
 		void Init(\
 			const char *View,\
 			str::string_ &Target,\
-			xdhdws::corpus_callback__ &Callback )\
+			xdhdws::cCorpus &Callback )\
 		{\
-			xdhdws::Type##_rack___::Init( Generator, View, Target, Callback );\
+			xdhdws::r##Type##Rack::Init( Generator, View, Target, Callback );\
 		}\
 	};
 
 # define XDHDWS_RACKS( Generator )\
-	XDHDWS_RACK( Generator, content );\
-	XDHDWS_RACK( Generator, context )
-
-	class event_callback__
-	{
-	public:
-		void reset( bso::bool__ = true )
-		{
-			//Standardisation.
-		}
-		E_CVDTOR( event_callback__ )
-		void Init( void )
-		{
-			// Standadisation;
-		}
-	};
+	XDHDWS_RACK( Generator, Content );\
+	XDHDWS_RACK( Generator, Context )
 }
 
 #endif

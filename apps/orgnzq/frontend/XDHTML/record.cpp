@@ -67,7 +67,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::content_rack___ Rack;
+		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -113,7 +113,7 @@ void record::SetColumnLayout( core::rSession &Session )
 
 AC( DefineNewField )
 {
-	Session.User.NewField();
+	Session.User.NewColumn();
 
 	main::SetRecordLayout( Session );
 	record::SetFieldsLayout( Session );

@@ -25,11 +25,11 @@
 namespace fields {
 
 	BASE_ACD( CreateField );
-	BASE_ACD( EditField );
+	BASE_ACD( DefineField );
 
 	inline void Register( void ) {
 		BASE_ACR( CreateField );
-		BASE_ACR( EditField );
+		BASE_ACR( DefineField );
 	}
 
 	void SetLayout(

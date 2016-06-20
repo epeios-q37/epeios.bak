@@ -251,7 +251,10 @@ namespace sclxdhtml {
 			fblovl::reply__ Reply,
 			const char *Message ) override
 		{
-			Alert( Message, P_(), L_() );
+			if ( Reply == fblovl::rDisconnected )
+				Alert("SCLXHTML_Disconnected", L_(), P_() );
+			else
+				Alert( Message, P_(), L_() );
 		}
 	public:
 		void reset( bso::bool__ P = true )

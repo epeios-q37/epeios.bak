@@ -21,6 +21,8 @@
 
 #include "str.h"
 
+#include "flx.h"
+
 using namespace str;
 
 static const char Table_[] = "AAAAAACEEEE-+DNUUUUOOUUUUYaaaaaaceeeeiiiionooooouuuuyy";
@@ -251,6 +253,17 @@ void string_::StripTailingCharacter( char Model )
 	}
 
 	Truncate( Amount );
+}
+
+bso::sBool string_::IsBlank( void ) const
+{
+	flx::sStringIFlow Flow;
+
+	Flow.Init( *this );
+
+	while ( !Flow.EndOfFlow() && ( isspace( Flow.Get() ) ) );
+
+	return Flow.EndOfFlow();
 }
 
 // Could be easily optimized, would be when I have some time.

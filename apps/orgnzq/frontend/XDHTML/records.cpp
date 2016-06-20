@@ -65,7 +65,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::content_rack___ Rack;
+		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -104,6 +104,19 @@ qRE
 AC( DefineNewRecord )
 {
 	Session.User.NewRecord();
+
+	main::SetLayout( Session );
+	main::SetRecordLayout( Session );
+	record::SetFieldsLayout( Session );
+}
+
+AC( DefineRecord )
+{
+	frdinstc::sRecord Record = frdinstc::UndefinedRecord;
+
+	Session.GetNumericalContent( Id, **Record );
+
+	Session.User.DefineRecord( Record );
 
 	main::SetLayout( Session );
 	main::SetRecordLayout( Session );

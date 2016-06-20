@@ -65,17 +65,11 @@ qRH
 	ogzclm::sColumn Column;
 qRB
 	Column.Init();
-	Exists = Recall( ColumnRow, Column );
 
-	if ( !Exists ) {
-		if ( qRPT )
-			qRFwk();
-		else
-			qRReturn;
+	if ( Recall(ColumnRow, Column, qRP) ) {
+		Type = Column.GetType();
+		Number = Column.GetNumber();
 	}
-
-	Type = Column.GetType();
-	Number = Column.GetNumber();
 qRR
 qRT
 qRE

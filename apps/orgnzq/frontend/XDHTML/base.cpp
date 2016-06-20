@@ -84,7 +84,7 @@ void base::rContextRack::Init(
 	str::string_ &Target,
 	core::rSession &Session )
 {
-	rContextRack_::Init( View, Target, Session );
+//	rContextRack_::Init( View, Target, Session );
 
 	if ( Session.User.GetFocus() != frdinstc::t_Undefined )
 		operator()().PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );

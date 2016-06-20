@@ -300,27 +300,9 @@ namespace frdinstc {
 		{
 			FocusOn_( UndefinedRecord );
 		}
-		void NewField( void )
+		void DefineRecord( sRecord Record )
 		{
-			Core_.NewColumnBuffer();
-			FocusOn_( UndefinedColumn );
-		}
-		void DefineField( sField Field )	// 'UndefinedField' for a new field.
-		{
-			if ( Field == UndefinedField ) {
-				NewField();
-			} else {
-				Core_.FillFieldBuffer( Field );
-				FocusOn_( Field );
-			}
-		}
-		void GetColumn(
-			sType &Type,
-			sNumber &Number,
-			str::dString &Label,
-			str::dString &Comment ) const
-		{
-			Core_.GetColumnBuffer( Type, Number, Label, Comment );
+			FocusOn_( Record );
 		}
 		void NewField(
 			sType Type,
@@ -332,6 +314,24 @@ namespace frdinstc {
 			Core_.NewFieldBuffer( Core_.GetColumnBuffer() );
 			FocusOn_( UndefinedField );
 			FocusOn_( UndefinedEntry );
+		}
+		void DefineField( sField Field )
+		{
+			Core_.FillFieldBuffer( Field );
+			FocusOn_( Field );
+		}
+		void NewColumn( void )
+		{
+			Core_.NewColumnBuffer();
+			FocusOn_( UndefinedColumn );
+		}
+		void GetColumn(
+			sType &Type,
+			sNumber &Number,
+			str::dString &Label,
+			str::dString &Comment ) const
+		{
+			Core_.GetColumnBuffer( Type, Number, Label, Comment );
 		}
 		void UpdateEntry( const str::dString &Content )
 		{

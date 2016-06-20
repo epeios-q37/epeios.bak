@@ -372,8 +372,7 @@ qRH
 qRB
 	Field.Init();
 
-	if ( !Fields.Recall( FieldRow, Field ) )
-		qRGnr();
+	Fields.Recall( FieldRow, Field );
 
 	GetEntries_( User, Field, Entries, Type, Number );
 qRR
@@ -397,10 +396,7 @@ qRB
 
 	Field.Init();
 
-	if ( !Fields.Recall( RawField, Field) )
-		qRGnr();
-
-	Remove_( RawField );
+	Fields.Recall( RawField, Field);
 
 	Field.RemoveEntries();
 
@@ -443,7 +439,7 @@ qRH
 qRB
 	Field.Init();
 
-	this->Fields.Recall( GetRaw_( User, Row ), Field );
+	Fields.Recall( GetRaw_( User, Row ), Field );
 
 	GetFirstEntry_( User, Field, Entry );
 qRR
@@ -473,7 +469,7 @@ qRE
 }
 
 
-void ogzdtb::mDatabase::GetRecords_(
+void ogzdtb::mDatabase::GetRecordsFirstEntry_(
 	sURow User,
 	const ogzusr::dRecords &Records,
 	cRecordRetriever &Callback ) const
@@ -497,7 +493,7 @@ qRT
 qRE
 }
 
-void ogzdtb::mDatabase::GetRecords(
+void ogzdtb::mDatabase::GetRecordsFirstEntry(
 	sURow User,
 	cRecordRetriever &Callback ) const
 {
@@ -507,7 +503,7 @@ qRB
 	Records.Init();
 	Users.GetRecordsSet( User, 0, ogzusr::AmountMax, Records );
 
-	GetRecords_( User, Records, Callback );
+	GetRecordsFirstEntry_( User, Records, Callback );
 qRR
 qRT
 qRE
@@ -526,20 +522,6 @@ sRRow ogzdtb::mDatabase::GetRecord(
 	return Fields.GetRecord( RawField );
 }
 
-bso::sBool ogzdtb::mDatabase::EraseIfEmpty(
-	sURow User,
-	sRRow Record ) const
-{
-	ogzrcd::sRow RawRecord = GetRaw_( User, Record );
-
-	if ( Records.IsEmpty( RawRecord ) ) {
-		Records.Erase( GetRaw_( User, Record ) );
-		return true;
-	} else
-		return false;
-}
-
-
 sFRow ogzdtb::mDatabase::Create(
 	sURow User,
 	const ogzclm::rColumnBuffer &Column,
@@ -555,19 +537,18 @@ sFRow ogzdtb::mDatabase::Create(
 	return Field;
 }
 
-void ogzdtb::mDatabase::Remove_( ogzfld::sRow FieldRow ) const
+void ogzdtb::mDatabase::Erase_( ogzfld::sRow FieldRow ) const
 {
 qRH
 	ogzfld::wField Field;
 qRB
 	Field.Init();
 
-	if ( !Fields.Recall( FieldRow, Field) )
-		qRGnr();
+	Fields.Recall( FieldRow, Field);
 
 	Field.RemoveEntries();
 
-	Fields.Store( Field, FieldRow );
+	Fields.Erase( FieldRow );
 qRR
 qRT
 qRE

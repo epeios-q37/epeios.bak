@@ -65,7 +65,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::content_rack___ Rack;
+		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
@@ -114,10 +114,10 @@ qRB
 	Comment.Init();
 	Session.GetContent( "FieldComment", Comment );
 
-	if ( !Session.GetNumericalProperty( "Type", "value", **Type ) )
+	if ( !Session.GetNumericalContent( "Type", **Type ) )
 		sclmisc::ReportAndAbort( "FieldTypeIsRequired" );
 
-	if ( !Session.GetNumericalProperty( "Number", "value", **Number ) )
+	if ( !Session.GetNumericalContent( "Number", **Number ) )
 		sclmisc::ReportAndAbort( "FieldNumberIsRequired" );
 
 	Label.StripCharacter( ' ' );

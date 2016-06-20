@@ -26,9 +26,11 @@
 
 namespace records {
 	BASE_ACD( DefineNewRecord );
+	BASE_ACD( DefineRecord );
 
 	inline void Register(void) {
 		BASE_ACR( DefineNewRecord );
+		BASE_ACR( DefineRecord );
 	}
 
 	void SetLayout(

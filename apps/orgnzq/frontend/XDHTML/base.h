@@ -99,10 +99,10 @@ namespace base {
 		virtual bso::bool__ SCLXHTMLOnClose( core::rSession &Session ) override;
 	};
 
-	typedef xdhdws::corpus_callback__ _corpus_callback__;
+	typedef xdhdws::cCorpus cCorpus_;
 
-	class corpus_callback__
-	: public _corpus_callback__
+	class sCorpusCallback
+	: public cCorpus_
 	{
 	private:
 		qRMV( frdfrntnd::rFrontend, F_,  Frontend_ );
@@ -115,53 +115,44 @@ namespace base {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_corpus_callback__::reset( P );
 			Frontend_ = NULL;
 		}
-		E_CVDTOR( corpus_callback__ );
+		E_CVDTOR( sCorpusCallback );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
-			_corpus_callback__::Init();
 			Frontend_ = &Frontend;
 		}
 	};
 
 	XDHDWS_RACKS( Name );
 
-	template <typename rack> class _rack___
+	template <typename rack> class rRack_
 	: public rack
 	{
 	private:
-		corpus_callback__ _Callback;
+		sCorpusCallback Callback_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			rack::reset( P );
-			_Callback.reset( P );
+			Callback_.reset( P );
 		}
-		E_CDTOR( _rack___ );
+		E_CDTOR( rRack_ );
 		void Init(
 			const char *View,
 			str::string_ &Target,
-			frdfrntnd::rFrontend &Frontend )
+			core::rSession &Session )
 		{
-			_Callback.Init( Frontend );
-			rack::Init( View, Target, _Callback );
+			Callback_.Init( Session );
+			rack::Init( View, Target, Callback_ );
+
+			if ( Session.User.GetFocus() != frdinstc::t_Undefined )
+				operator()().PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
 		}
 	};
 
-	typedef _rack___<_content_rack___> content_rack___;
-	typedef _rack___<_context_rack___> rContextRack_;
-
-	class rContextRack
-	: public rContextRack_
-	{
-	public:
-		void Init(
-			const char *View,
-			str::string_ &Target,
-			core::rSession &Session );
-	};
+	typedef rRack_<rContentRack_> rContentRack;
+	typedef rRack_<rContextRack_> rContextRack;
 }
 
 #endif

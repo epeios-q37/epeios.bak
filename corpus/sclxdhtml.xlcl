@@ -9,6 +9,10 @@
 		<Translation language="fr">Déclaration de moteur de traitement absente.</Translation>
 		<Translation language="en">No backend dclaration.</Translation>
 	</Translations>
+	<Translations text="SCLXHTML_Disconnected">
+		<Translation language="fr">Perte de la connection au 'backend' !</Translation>
+		<Translation language="en">Connexion to backend lost !</Translation>
+	</Translations>
 	<!--
 	<Translations text="SCLXHTML_">
 		<Translation language="fr"></Translation>

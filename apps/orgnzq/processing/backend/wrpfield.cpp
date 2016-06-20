@@ -82,7 +82,7 @@ DEC( UpdateEntry )
 	sdr::sRow Row = *Request.IdIn();	// If == 'qNIL', new entry is created, unless for a mono field, where the entry is created/updated.
 	const str::dString &Entry = Request.StringIn();
 
-	if ( Entry.Amount() != 0 ) {
+	if ( !Entry.IsBlank() ) {
 		if ( !GetTypes()( Field.Type() ).Test( Entry ) )
 			REPORT( BadEntryValue );
 

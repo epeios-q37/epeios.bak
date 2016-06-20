@@ -306,6 +306,7 @@ namespace fblfrd {
 			if ( C_().EndOfFlow() ) {
 				Channel_ = NULL;
 				Reply = fblovl::rDisconnected;
+				Message_[0] = 0;
 			} else {
 				if ( ( Reply = (fblovl::reply__)C_().Get() ) != fblovl::rOK ) {
 					if ( Reply >= fblovl::r_amount )
@@ -346,6 +347,7 @@ namespace fblfrd {
 			_FlowOutParameter = false;
 			_DismissPending = false;
 			CodeKey_.reset( P );
+			Message_[0] = 0;
 		}
 		E_CVDTOR( frontend___ );
 		void Init(

@@ -65,7 +65,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::content_rack___ Rack;
+		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 	qRR

@@ -67,7 +67,7 @@ namespace {
 		str::string_ &XML )
 	{
 	qRH
-		base::content_rack___ Rack;
+		base::rContentRack Rack;
 		TOL_CBUFFER___ Buffer;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );

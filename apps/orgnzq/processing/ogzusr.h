@@ -58,7 +58,7 @@ namespace ogzusr {
 		virtual ogzbsc::sCRow OGZUSRAdd(
 			ogzclm::sRow Column,
 			sRow User ) = 0;
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sCRow Column,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
@@ -69,7 +69,7 @@ namespace ogzusr {
 		virtual ogzbsc::sMRow OGZUSRAdd(
 			ogzmta::sRow Meta,
 			sRow User ) = 0;
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sMRow Entry,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
@@ -80,7 +80,7 @@ namespace ogzusr {
 		virtual ogzbsc::sERow OGZUSRAdd(
 			ogzetr::sRow Entry,
 			sRow User ) = 0;
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sERow Entry,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
@@ -91,7 +91,7 @@ namespace ogzusr {
 		virtual ogzbsc::sFRow OGZUSRAdd(
 			ogzfld::sRow Field,
 			sRow User ) = 0;
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sFRow Field,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
@@ -102,7 +102,7 @@ namespace ogzusr {
 		virtual ogzbsc::sRRow OGZUSRAdd(
 			ogzrcd::sRow Record,
 			sRow User ) = 0;
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sRRow Record,
 			sRow User ) = 0;
 		virtual void OGZUSRGetRaws(
@@ -134,11 +134,11 @@ namespace ogzusr {
 		{
 			return OGZUSRAdd( Raw, User );
 		}
-		template <typename regular> void Remove(
+		template <typename regular> void Erase(
 			regular Regular,
 			sRow User )
 		{
-			return OGZUSRRemove( Regular, User );
+			return OGZUSRErase( Regular, User );
 		}
 		template <typename regulars, typename raws> void GetRaws(
 			const regulars &Regulars,
@@ -202,14 +202,14 @@ namespace ogzusr {
 		qRE
 			return Row;
 		}
-		template <typename regular> void Remove_(
+		template <typename regular> void Erase_(
 			regular Regular,
 			sRow User ) const
 		{
 		qRH
 		qRB
 			Lock_();
-			C_().Remove( Regular, User );
+			C_().Erase( Regular, User );
 		qRR
 		qRT
 			Unlock_();
@@ -297,11 +297,11 @@ namespace ogzusr {
 		{
 			return Delete_( Row );
 		}
-		template <typename regular> void Remove(
+		template <typename regular> void Erase(
 			sRow User,
 			regular Regular ) const
 		{
-			return Remove_( Regular, User );
+			return Erase_( Regular, User );
 		}
 		template <typename regulars, typename raws> void GetRaws(
 			ogzusr::sRow User,
@@ -423,7 +423,7 @@ namespace ogzusr {
 		{
 			return Crate( User ).Add( Raw );
 		}
-		template <typename crate, typename regular> void Remove_(
+		template <typename crate, typename regular> void Erase_(
 			crate &Crate,
 			regular Regular,
 			sRow User )
@@ -501,11 +501,11 @@ namespace ogzusr {
 		{
 			return Add_<dMetasCrate_, ogzbsc::sMRow, ogzmta::sRow> ( Metas_, Meta, User );
 		}
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sMRow Meta,
 			sRow User ) override
 		{
-			return Remove_( Metas_, Meta, User );
+			return Erase_( Metas_, Meta, User );
 		}
 		virtual void OGZUSRGetRaws(
 			const ogzclm::dMetas &Metas,
@@ -520,11 +520,11 @@ namespace ogzusr {
 		{
 			return Add_<dColumnsCrate_, ogzbsc::sCRow, ogzclm::sRow> ( Columns_, Column, User );
 		}
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sCRow Column,
 			sRow User ) override
 		{
-			return Remove_( Columns_, Column, User );
+			return Erase_( Columns_, Column, User );
 		}
 		virtual void OGZUSRGetRaws(
 			const ogzfld::dColumns &Columns,
@@ -539,11 +539,11 @@ namespace ogzusr {
 		{
 			return Add_<dEntriesCrate_, ogzbsc::sERow, ogzetr::sRow> ( Entries_, Entry, User );
 		}
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sERow Entry,
 			sRow User ) override
 		{
-			return Remove_( Entries_, Entry, User );
+			return Erase_( Entries_, Entry, User );
 		}
 		virtual void OGZUSRGetRaws(
 			const ogzfld::dEntries &Entries,
@@ -558,11 +558,11 @@ namespace ogzusr {
 		{
 			return Add_<dFieldsCrate_, ogzbsc::sFRow, ogzfld::sRow> ( Fields_, Field, User );
 		}
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sFRow Field,
 			sRow User ) override
 		{
-			return Remove_( Fields_, Field, User );
+			return Erase_( Fields_, Field, User );
 		}
 		virtual void OGZUSRGetRaws(
 			const ogzrcd::dFields &Fields,
@@ -577,7 +577,7 @@ namespace ogzusr {
 		{
 			return Records_( User ).Add( Record );
 		}
-		virtual void OGZUSRRemove(
+		virtual void OGZUSRErase(
 			ogzbsc::sRRow Record,
 			sRow User ) override
 		{

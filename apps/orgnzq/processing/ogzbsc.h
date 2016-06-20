@@ -226,11 +226,19 @@ namespace ogzbsc {
 		{
 			return Append_( Item );
 		}
-		bso::bool__ Recall(
+		bso::bool__ Recall(	// Returns false if inexistent.
 			row Row,
-			item &Item ) const
+			item &Item,
+			qRPD ) const
 		{
-			return Recall_( Row, Item );
+			if ( Recall_( Row, Item ) )
+				return true;
+			else { 
+				if ( qRPT )
+					qRGnr();
+
+				return false;
+			}
 		}
 	};
 

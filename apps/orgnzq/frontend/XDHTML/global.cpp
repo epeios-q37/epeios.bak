@@ -30,7 +30,7 @@ AC( About )
 {
 qRH
 	str::string XML, XSL;
-	base::content_rack___ Rack;
+	base::rContentRack Rack;
 	str::string AboutTranslation;
 qRB
 	XML.Init();
