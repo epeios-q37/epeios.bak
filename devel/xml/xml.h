@@ -428,14 +428,13 @@ namespace xml {
 
 			PutAttribute( Name, bso::Convert( Value, IBuffer ) );
 		}
+		// No attribute is added if 'Value' == 'UndefinedValue'.
 		template <typename s, typename i> void PutAttribute(
 			const s &Name,
 			i Value,
 			i UndefinedValue )
 		{
-			if ( Value == UndefinedValue )
-				PutAttribute( Name, "" );
-			else
+			if ( Value != UndefinedValue )
 				PutAttribute( Name, Value );
 		}
 		void PutCData( flw::sIFlow &Flow );

@@ -76,6 +76,10 @@ namespace wrpfield {
 			S_.Type = qNIL;
 			S_.Number = ogzclm::n_Undefined;
 		}
+		void Clear( void )
+		{
+			dData_::Init();
+		}
 		qRWDISCLOSEd( ogztyp::sRow, Type );
 		qRWDISCLOSEd( ogzclm::eNumber, Number );
 	};

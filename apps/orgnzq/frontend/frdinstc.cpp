@@ -137,7 +137,7 @@ namespace {
 		const fbltyp::dIds &Columns,
 		const fbltyp::dStringsSet &EntriesSet,
 		const fbltyp::dIds &Types,
-		sField Current,
+		sField Selected,
 		const frdmisc::dXTypes &XTypes,
 		xml::dWriter &Writer )
 	{
@@ -149,8 +149,7 @@ namespace {
 		Writer.PushTag( "Fields" );
 		xml::PutAttribute("Amount", Ids.Amount(), Writer );
 
-		if ( Current != UndefinedField )
-			Writer.PutAttribute("Current", **Current );
+		Writer.PutAttribute("Selected", **Selected, **UndefinedField );
 
 		while ( Row != qNIL ) {
 			Writer.PushTag( "Field" );

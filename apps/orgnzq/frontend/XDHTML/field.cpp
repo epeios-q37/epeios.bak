@@ -106,3 +106,14 @@ AC( DefineNewEntry )
 	fields::SetFieldLayout( Session );
 }
 
+AC( DefineEntry )
+{
+	frdinstc::sEntry Entry = frdinstc::UndefinedEntry;
+
+	Session.GetNumericalContent( Id, **Entry );
+
+	Session.User.DefineEntry( Entry );
+
+	fields::SetFieldLayout( Session );
+}
+

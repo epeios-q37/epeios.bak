@@ -40,10 +40,11 @@
 			</Content>
 			<ElementFiller>
 				<![CDATA[
+						log( "'%Id%'" );
+						log( "%XML%" );
 						removeChildren( "%Id%" );
 						document.getElementById( "%Id%" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
 						var digests = fetchEventHandlersAndWidgets( "%Id%" );
-						log( "%XML%" );
 						digests;
 					]]>
 			</ElementFiller>
@@ -156,19 +157,21 @@
 			</DroppableSetter>
 			<DocumentFiller>
 				<![CDATA[
+					log( "Document !" );
+					log( "%XML%" );
 					document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );
 					var digests = fetchEventHandlersAndWidgets( "" );
-					log( "%XML%" );
 					digests;
 				]]>
 			</DocumentFiller>
 			<CastingsFiller>
 				<![CDATA[
 					// Edge executes this script in loop !!!
+					log( "Casting : '%Id%'" );
+					log( "%XML%" );
 					removeCastingChildren( document );
 					document.getElementById( "xdh-castings" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );
 					var castings = fetchCastings( "%Id%" );
-					log( "%XML%" );
 					castings;
 				]]>
 			</CastingsFiller>

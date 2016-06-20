@@ -25,10 +25,12 @@
 
 namespace field {
 	BASE_ACD( DefineNewEntry );
+	BASE_ACD( DefineEntry );
 
 	inline void Register( void )
 	{
 		BASE_ACR( DefineNewEntry );
+		BASE_ACR( DefineEntry );
 	};
 
 	void SetLayout(

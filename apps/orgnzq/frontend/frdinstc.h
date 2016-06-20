@@ -320,6 +320,10 @@ namespace frdinstc {
 			Core_.FillFieldBuffer( Field );
 			FocusOn_( Field );
 		}
+		void DefineEntry( sEntry Entry )
+		{
+			FocusOn_( Entry );
+		}
 		void NewColumn( void )
 		{
 			Core_.NewColumnBuffer();
@@ -339,8 +343,6 @@ namespace frdinstc {
 				qRGnr();
 
 			Core_.UpdateFieldBufferEntry( Entry_, Content );
-
-			FocusOn_( UndefinedEntry );
 		}
 		void UpdateField( void )
 		{
@@ -358,8 +360,6 @@ namespace frdinstc {
 				if ( RecordErased )
 					Record_ = UndefinedRecord;
 			}
-
-			FocusOn_( Record_ );
 		}
 		void BackToList( void )
 		{

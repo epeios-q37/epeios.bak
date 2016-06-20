@@ -112,7 +112,8 @@ DEC( UpdateEntry )
 			REPORT( NoSuchEntry );
 
 		Field.Remove( Row );
-	}
+	} else if ( Field.Number() == ogzclm::nMono )
+		Field.Clear();
 }
 
 namespace {
