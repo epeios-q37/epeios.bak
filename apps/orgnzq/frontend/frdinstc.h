@@ -180,6 +180,13 @@ namespace frdinstc {
 		{
 			FieldBuffer_.MoveEntry( *Source, *Target );
 		}
+		void MoveField(
+			sRecord Record,
+			sField Source,
+			sField Target ) const
+		{
+			S_().OGZMoveField( *Record, *Source, *Target );
+		}
 	};
 
 	qENUM( Target )
@@ -205,6 +212,7 @@ namespace frdinstc {
 		sEntry Entry_;
 		sColumn Column_;
 		sEntry DraggedEntry_;
+		sField DraggedField_;
 		void UnselectAllItems_( void )
 		{
 			Record_ = UndefinedRecord;
@@ -212,6 +220,7 @@ namespace frdinstc {
 			Entry_ = UndefinedEntry;
 			Column_ = UndefinedColumn;
 			DraggedEntry_ = UndefinedEntry;
+			DraggedField_ = UndefinedField;
 		}
 		void UnselectAll_( void )
 		{
@@ -400,6 +409,31 @@ namespace frdinstc {
 		bso::sBool IsEntryDraggingInProgress( void ) const
 		{
 			return DraggedEntry_ != UndefinedEntry;
+		}
+		void DragField( sField Field )
+		{
+			if ( DraggedField_ != UndefinedField )
+				qRGnr();
+
+			DraggedField_ = Field;
+		}
+		void DropField( sField Field )
+		{
+			if ( Record_ == UndefinedRecord )
+				qRGnr();
+
+			if ( DraggedField_ == UndefinedField )
+				qRGnr();
+
+			Core_.MoveField( Record_, DraggedField_, Field );
+		}
+		void EndFieldDragging( void )
+		{
+			DraggedField_ = UndefinedField;
+		}
+		bso::sBool IsFieldDraggingInProgress( void ) const
+		{
+			return DraggedField_ != UndefinedField;
 		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;

@@ -554,3 +554,46 @@ qRT
 qRE
 }
 
+void ogzdtb::mDatabase::MoveField(
+	sURow User,
+	sRRow RecordRow,
+	sFRow Source,
+	sFRow Target ) const
+{
+qRH
+	ogzrcd::wRecord Record;
+	ogzrcd::sRow RawRecordRow = qNIL;
+	sdr::sRow SourceRow = qNIL, TargetRow = qNIL;
+qRB
+	RawRecordRow = GetRaw_( User, RecordRow );
+
+	Record.Init();
+	Records.Recall( RawRecordRow, Record );
+
+	if ( ( SourceRow = Record.Search( Source ) ) == qNIL )
+		qRGnr();
+
+	if ( Target != qNIL )
+		if ( ( TargetRow = Record.Search( Source ) ) == qNIL )
+			qRGnr();
+
+	if ( TargetRow != SourceRow ) {
+		Record.Remove( SourceRow );
+
+		if ( TargetRow == qNIL )
+			Record.Append( Source );
+		else {
+			if ( *SourceRow < *TargetRow )
+				TargetRow = Record.Previous( TargetRow );
+
+			Record.InsertAt( Source, TargetRow );
+		}
+
+		Records.Store( Record, RawRecordRow );
+	}
+qRR
+qRT
+qRE
+}
+
+

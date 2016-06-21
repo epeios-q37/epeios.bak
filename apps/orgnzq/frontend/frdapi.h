@@ -25,7 +25,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[11];
+		fblfrd::command__ _Commands[12];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -51,6 +51,7 @@ namespace orgnzq {
 				21, 1, 1, 0, 21, 
 				21, 1, 0, 2, 2, 
 				0, 22, 26, 
+				21, 21, 21, 0, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -113,10 +114,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 40, 3 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "OGZMoveField";;
+			CommandDetail.Casts.Append( Parameters + 43, 4 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 11, _Commands );
+			Commands.Recall( 0, 12, _Commands );
 		}
 		fblovl::reply__ LoadSetupOfId( 
 			const fblfrd::string_ &In1 ) const
@@ -278,6 +284,21 @@ namespace orgnzq {
 
 			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
+
+			return Frontend().Handle();
+		}
+		fblovl::reply__ OGZMoveField( 
+			const fblfrd::id__ &In1,
+			const fblfrd::id__ &In2,
+			const fblfrd::id__ &In3 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[11] );
+			Frontend().IdIn( In1 );
+			Frontend().IdIn( In2 );
+			Frontend().IdIn( In3 );
+
+			Frontend().EndOfInParameters();
+
 
 			return Frontend().Handle();
 		}

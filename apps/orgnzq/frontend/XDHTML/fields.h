@@ -26,10 +26,17 @@ namespace fields {
 
 	BASE_ACD( CreateField );
 	BASE_ACD( DefineField );
+	BASE_ACD( DragField );
+	BASE_ACD( DropField );
+	BASE_ACD( EndFieldDragging );
+
 
 	inline void Register( void ) {
 		BASE_ACR( CreateField );
 		BASE_ACR( DefineField );
+		BASE_ACR( DragField );
+		BASE_ACR( DropField );
+		BASE_ACR( EndFieldDragging );
 	}
 
 	void SetLayout(

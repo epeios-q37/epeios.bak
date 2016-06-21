@@ -351,6 +351,11 @@ namespace ogzdtb {
 			sFRow Field,
 			const dData &Entries,
 			qRPD ) const;
+		void MoveField(
+			sURow User,
+			sRRow Record,
+			sFRow Source,
+			sFRow Target ) const;
 	};
 
 # ifdef M

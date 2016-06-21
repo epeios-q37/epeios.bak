@@ -365,6 +365,17 @@ qRT
 qRE
 }
 
+DEC( MoveField )
+{
+	USER;
+	DATABASE;
+
+	ogzbsc::sRRow Record = *Request.IdIn();
+	ogzbsc::sFRow Source = *Request.IdIn(), Target = *Request.IdIn();
+
+	Database.MoveField( User, Record, Source, Target );
+}
+
 #define D( name )	OGZINF_UC_SHORT #name, ::name
 
 void wrpunbound::Inform( fblbkd::backend___ &Backend )
@@ -408,12 +419,12 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cStringsSet,	// The entries for each field.
 		fblbkd::cEnd );
 
-	Backend.Add(D( CreateRecord ),
+	Backend.Add( D( CreateRecord ),
 		fblbkd::cEnd,
 			fblbkd::cId,	// The created Record.
 		fblbkd::cEnd );
 
-	Backend.Add(D( CreateField ),
+	Backend.Add( D( CreateField ),
 			fblbkd::cId,		// Record in which to create the new field.
 			fblbkd::cObject,	// Column object.
 			fblbkd::cObject,	// Field buffer object to update with.
@@ -421,7 +432,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId,	// The created field.
 		fblbkd::cEnd );
 
-	Backend.Add(D( UpdateField ),
+	Backend.Add( D( UpdateField ),
 			fblbkd::cId,		// Id of the field to update.
 			fblbkd::cObject,	// Field buffer object to update with,
 		fblbkd::cEnd,
@@ -429,10 +440,17 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cBoolean,	// 'true' if the record was erased, because the field was empty and the last one.
 		fblbkd::cEnd );
 
-	Backend.Add(D( GetRecords ),
+	Backend.Add( D( GetRecords ),
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids of the record.
 			fblbkd::cStrings,	// First entry of each record.
+		fblbkd::cEnd );
+
+	Backend.Add( D( MoveField ),
+			fblbkd::cId,		// Id of the record owning the fields to move.
+			fblbkd::cId,		// Id of yhe field to move.
+			fblbkd::cId,		// Id of the field which place is taken by the source field.
+		fblbkd::cEnd,
 		fblbkd::cEnd );
 }
 

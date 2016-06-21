@@ -128,3 +128,33 @@ AC( DefineField )
 	record::SetFieldsLayout( Session );
 	fields::SetFieldLayout( Session );
 }
+
+namespace {
+	inline frdinstc::sField GetContent_(
+		core::rSession &Session,
+		const char *Id )
+	{
+		frdinstc::sField Field = frdinstc::UndefinedField;
+
+		Session.GetNumericalContent( Id, **Field );
+
+		return Field;
+	}
+}
+
+AC( DragField )
+{
+	Session.User.DragField( GetContent_( Session, Id ) );
+}
+
+AC( DropField )
+{
+	Session.User.DropField( GetContent_( Session, Id ) );
+	fields::SetFieldLayout( Session );
+}
+
+AC( EndFieldDragging )
+{
+	Session.User.EndFieldDragging();
+}
+
