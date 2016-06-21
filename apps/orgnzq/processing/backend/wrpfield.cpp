@@ -87,16 +87,24 @@ DEC( UpdateEntry )
 			REPORT( BadEntryValue );
 
 		if ( Field.Number() == ogzclm::nMono ) {
-			if ( Row != qNIL )
-				REPORT( EntryRowShouldBeNILForMonoField );
+			switch ( Field.Amount() ) {
+			case 0:
+				if ( Row != qNIL )
+					qRGnr();
 
-			if ( Field.Amount() == 0 ) {
 				Row = Field.New();
 				Field( Row ).Init();
-			} else if ( Field.Amount() == 1 )
-				Row = Field.First();
-			else
+				break;
+			case 1:
+				if ( Row == qNIL )
+					Row = Field.First();
+				else if ( Row != Field.First() )
+					qRGnr();
+				break;
+			default:
 				qRGnr();
+				break;
+			}
 		} else if ( Row == qNIL ) {
 			Row = Field.New();
 			Field( Row ).Init();
@@ -105,15 +113,14 @@ DEC( UpdateEntry )
 
 		Field.Store( Entry, Row );
 	} else if ( Row != qNIL ) {
-		if ( Field.Number() == ogzclm::nMono )
-			REPORT( EntryRowShouldBeNILForMonoField );
-
 		if ( !Field.Exists( Row ) )
 			REPORT( NoSuchEntry );
 
 		Field.Remove( Row );
-	} else if ( Field.Number() == ogzclm::nMono )
-		Field.Clear();
+	} else if ( Field.Number() == ogzclm::nMono ) {
+		if ( Field.Amount() != 0 )
+			Field.Init();
+	}
 }
 
 namespace {
@@ -168,6 +175,47 @@ DEC( Update )
 	Update_( Row, Entry, Field );
 }
 
+DEC( MoveEntry )
+{
+qRH
+	sdr::sRow Source = qNIL, Target= qNIL;
+	str::wString Entry;
+qRB
+	Source = *Request.IdIn();
+	Target = *Request.IdIn();
+
+	if ( Source == qNIL )
+		qRGnr();
+	
+	if ( !Field.Exists( Source ) )
+		qRGnr();
+
+	if ( Target != qNIL ) {
+		if ( !Field.Exists( Target ) )
+			qRGnr();
+
+		if ( Source == Target )
+			qRReturn;
+	}
+
+	Entry.Init();
+	Field.Recall( Source, Entry );
+
+	Field.Remove( Source );
+
+	if ( Target == qNIL )
+		Field.Append( Entry );
+	else {
+		if ( *Source < *Target )
+			Target = Field.Previous( Target );
+
+		Field.InsertAt( Entry, Target);
+	}
+qRR
+qRT
+qRE
+}
+
 #define D( name )	#name, (void *)exported##name
 
 void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
@@ -193,6 +241,12 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 	Module.Add( D( UpdateEntry ),
 			fblbkd::cId,		// Id of entry to update ; if == 'qNIL', a new entry is created, unless it's a mono field, in which case the entry is updated/created.
 			fblbkd::cString,	// Then entry value.		
+		fblbkd::cEnd,
+		fblbkd::cEnd );
+
+	Module.Add( D( MoveEntry ),
+			fblbkd::cId,	// Position of the entry to move.
+			fblbkd::cId,	// Position where to move the entry.
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 }

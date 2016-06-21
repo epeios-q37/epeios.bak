@@ -68,7 +68,8 @@ bso::bool__ base::sActionHelper::SCLXHTMLOnBeforeAction(
 		} else
 			return true;
 	} else if ( Session.User.Focus() == frdinstc::tField ) {
-		UpdateEntry_( Session, Action );
+		if ( !Session.User.IsEntryDraggingInProgress() )
+			UpdateEntry_( Session, Action );
 		return true;
 	} else
 		return true;

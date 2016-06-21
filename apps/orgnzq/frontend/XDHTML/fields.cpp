@@ -128,5 +128,3 @@ AC( DefineField )
 	record::SetFieldsLayout( Session );
 	fields::SetFieldLayout( Session );
 }
-
-

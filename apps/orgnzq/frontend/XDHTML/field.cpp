@@ -103,6 +103,7 @@ qRE
 
 AC( DefineNewEntry )
 {
+	Session.User.DefineEntry( frdinstc::UndefinedEntry );
 	fields::SetFieldLayout( Session );
 }
 
@@ -117,3 +118,31 @@ AC( DefineEntry )
 	fields::SetFieldLayout( Session );
 }
 
+namespace {
+	inline frdinstc::sEntry GetContent_(
+		core::rSession &Session,
+		const char *Id )
+	{
+		frdinstc::sEntry Entry = frdinstc::UndefinedEntry;
+
+		Session.GetNumericalContent( Id, **Entry );
+
+		return Entry;
+	}
+}
+
+AC( DragEntry )
+{
+	Session.User.DragEntry( GetContent_( Session, Id ) );
+}
+
+AC( DropEntry )
+{
+	Session.User.DropEntry( GetContent_( Session, Id ) );
+	fields::SetFieldLayout( Session );
+}
+
+AC( EndEntryDragging )
+{
+	Session.User.EndEntryDragging();
+}

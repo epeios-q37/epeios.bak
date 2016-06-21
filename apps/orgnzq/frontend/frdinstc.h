@@ -174,6 +174,12 @@ namespace frdinstc {
 		{
 			S_().OGZGetRecords( Digests.Ids, Digests.Strings1 );
 		}
+		void MoveEntry(
+			sEntry Source,
+			sEntry Target ) const
+		{
+			FieldBuffer_.MoveEntry( *Source, *Target );
+		}
 	};
 
 	qENUM( Target )
@@ -198,12 +204,14 @@ namespace frdinstc {
 		sField Field_;
 		sEntry Entry_;
 		sColumn Column_;
+		sEntry DraggedEntry_;
 		void UnselectAllItems_( void )
 		{
 			Record_ = UndefinedRecord;
 			Field_ = UndefinedField;
 			Entry_ = UndefinedEntry;
 			Column_ = UndefinedColumn;
+			DraggedEntry_ = UndefinedEntry;
 		}
 		void UnselectAll_( void )
 		{
@@ -226,12 +234,9 @@ namespace frdinstc {
 		}
 		void FocusOn_( sField Field )
 		{
-			if ( ( Focus_ != tRecord )
-				 && ( Focus_ != tColumn ) )
-				qRGnr();
-
 			Field_ = Field;
 			Focus_ = tField;
+			Entry_ = UndefinedEntry;
 		}
 		void FocusOn_( sEntry Entry )
 		{
@@ -264,6 +269,12 @@ namespace frdinstc {
 				if ( Record_ == UndefinedRecord )
 					qRGnr();
 
+				Column_ = UndefinedColumn;
+				Entry_ = UndefinedEntry;
+				Field_ = UndefinedField;
+				break;
+			case tRecords:
+				Record_ = UndefinedRecord;
 				Column_ = UndefinedColumn;
 				Entry_ = UndefinedEntry;
 				Field_ = UndefinedField;
@@ -354,16 +365,41 @@ namespace frdinstc {
 			if ( Field_ == UndefinedField )
 				Field_ = Core_.CreateField( Record_, Core_.GetColumnBuffer(), Core_.GetFieldBuffer() );
 
-			if ( Core_.UpdateField(Field_, Core_.GetFieldBuffer(), RecordErased) ) {
+			if ( Core_.UpdateField( Field_, Core_.GetFieldBuffer(), RecordErased) ) {
 				Field_ = UndefinedField;
 
 				if ( RecordErased )
-					Record_ = UndefinedRecord;
-			}
+					FocusOn_( tRecords );
+				else
+					FocusOn_( tRecord );
+			} else
+				FocusOn_( tField );
 		}
 		void BackToList( void )
 		{
-			Focus_ = tRecords;
+			FocusOn_( tRecords );
+		}
+		void DragEntry( sEntry Entry )
+		{
+			if ( DraggedEntry_ != UndefinedEntry )
+				qRGnr();
+
+			DraggedEntry_ = Entry;
+		}
+		void DropEntry( sEntry Entry )
+		{
+			if ( DraggedEntry_ == UndefinedEntry )
+				qRGnr();
+
+			Core_.MoveEntry( DraggedEntry_, Entry );
+		}
+		void EndEntryDragging( void )
+		{
+			DraggedEntry_ = UndefinedEntry;
+		}
+		bso::sBool IsEntryDraggingInProgress( void ) const
+		{
+			return DraggedEntry_ != UndefinedEntry;
 		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;

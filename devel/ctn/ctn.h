@@ -187,6 +187,18 @@ namespace ctn {
 		{
 			return ( ( Row == qNIL ) || ( ( amount_extent_manager_<r>::Amount() == 0 ) && ( Row == 0 ) ) );
 		}
+		void Insert_(
+			const st &ST,
+			r Row,
+			aem::mode__ Mode )
+		{
+			_Allocate( amount_extent_manager_<r>::Amount() + 1, Mode );
+
+			Statics.Store( Statics, amount_extent_manager_<r>::Amount() - 1 - *Row, *Row + 1, Row );
+			Dynamics.Shift( *Row );
+
+			Statics.Store( ST, Row );
+		}
 	protected:
 		st Reseted_;	//Static part in a reseted state.
 		mutable t Object_;
@@ -419,15 +431,15 @@ namespace ctn {
 		}
 		void InsertAt(
 			const t &Object,
-			r Row = 0,
+			r Row = 0,	// If == qNIL, appends the object.
 			aem::mode__ Mode = aem::m_Default )
 		{
-			if ( _AppendInsteadOfInsert( Row ) )
+			if ( AppendInsteadOfInsert_( Row ) )
 				Append( Object, Mode );
 			else {
 				Flush_( true );
 
-				Insert( &Reseted_, Row, Mode );
+				Insert_( Reseted_, Row, Mode );
 
 				Get( Row ) = Object;
 			}

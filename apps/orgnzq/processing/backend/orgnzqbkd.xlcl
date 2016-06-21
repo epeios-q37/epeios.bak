@@ -7,10 +7,6 @@
 		<Translation language="fr">Entrée incorrecte !</Translation>
 		<Translation language="en">Bad entry !</Translation>
 	</Translations>
-	<Translations text="EntryRowShouldBeNILForMonoField">
-		<Translation language="fr">L'identifiant d'entrée devrait être à NIL pour un champ mono.</Translation>
-		<Translation language="en">The entry identifier should be NIL for un mnon field.</Translation>
-	</Translations>
 	<Translations text="FieldLabelCanNotBeEmpty">
 		<Translation language="fr">Le libellé de champ ne peut être vide.</Translation>
 		<Translation language="en">The field label can not be empty.</Translation>

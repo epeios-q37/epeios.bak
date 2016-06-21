@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160615 Build Jun 19 2016 11:38:13 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160615 Build Jun 21 2016 10:30:23 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20160313 (Build Jun  5 2016 10:29:06 Win32;MSC 1800;IA-32)
 */
@@ -363,7 +363,7 @@ namespace orgnzq {
 	{
 	private:
 		fblfrd::id16__ _ID;
-		fblfrd::command__ _Commands[4];
+		fblfrd::command__ _Commands[5];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -382,6 +382,7 @@ namespace orgnzq {
 				21, 0, 
 				0, 21, 12, 22, 26, 
 				21, 25, 0, 
+				21, 21, 0, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -410,10 +411,15 @@ namespace orgnzq {
 			CommandDetail.Casts.Append( Parameters + 9, 3 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "MoveEntry";;
+			CommandDetail.Casts.Append( Parameters + 12, 3 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( _ID, CommandsDetails, Commands );
-			Commands.Recall( 0, 4, _Commands );
+			Commands.Recall( 0, 5, _Commands );
 		}
 		fblfrd::object__ GetNewObject( void )
 		{
@@ -650,6 +656,19 @@ namespace orgnzq {
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
 			Common_->Frontend().IdIn( In1 );
 			Common_->Frontend().StringIn( In2 );
+
+			Common_->Frontend().EndOfInParameters();
+
+
+			return Common_->Frontend().Handle();
+		}
+		fblovl::reply__ MoveEntry( 
+			const fblfrd::id__ &In1,
+			const fblfrd::id__ &In2 ) const
+		{
+			Common_->Frontend().PushHeader( _ID, Common_->Commands()[4] );
+			Common_->Frontend().IdIn( In1 );
+			Common_->Frontend().IdIn( In2 );
 
 			Common_->Frontend().EndOfInParameters();
 

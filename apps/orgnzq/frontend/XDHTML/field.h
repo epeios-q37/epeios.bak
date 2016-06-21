@@ -26,11 +26,17 @@
 namespace field {
 	BASE_ACD( DefineNewEntry );
 	BASE_ACD( DefineEntry );
+	BASE_ACD( DragEntry );
+	BASE_ACD( DropEntry );
+	BASE_ACD( EndEntryDragging );
 
 	inline void Register( void )
 	{
 		BASE_ACR( DefineNewEntry );
 		BASE_ACR( DefineEntry );
+		BASE_ACR( DragEntry );
+		BASE_ACR( DropEntry );
+		BASE_ACR( EndEntryDragging );
 	};
 
 	void SetLayout(
