@@ -574,7 +574,7 @@ qRB
 		qRGnr();
 
 	if ( Target != qNIL )
-		if ( ( TargetRow = Record.Search( Source ) ) == qNIL )
+		if ( ( TargetRow = Record.Search( Target ) ) == qNIL )
 			qRGnr();
 
 	if ( TargetRow != SourceRow ) {

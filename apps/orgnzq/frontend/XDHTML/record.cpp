@@ -99,6 +99,11 @@ qRT
 qRE
 }
 
+void record::SetFieldsCasting( core::rSession &Session )
+{
+	fields::SetCasting( FieldsFrameId_, Session );
+}
+
 void record::SetFieldsLayout( core::rSession &Session )
 {
 	fields::SetLayout( FieldsFrameId_, Session );

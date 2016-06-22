@@ -40,7 +40,9 @@ namespace record {
 		const char *Id,
 		core::rSession &Session );
 
+	void SetFieldsCasting( core::rSession &Session );
 	void SetFieldsLayout( core::rSession &Session );
+
 	void SetColumnLayout( core::rSession &Session );
 }
 

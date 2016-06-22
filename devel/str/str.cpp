@@ -261,7 +261,8 @@ bso::sBool string_::IsBlank( void ) const
 
 	Flow.Init( *this );
 
-	while ( !Flow.EndOfFlow() && ( isspace( Flow.Get() ) ) );
+	while ( !Flow.EndOfFlow() && ( isspace( Flow.View() ) ) )
+		Flow.Skip();
 
 	return Flow.EndOfFlow();
 }

@@ -37,25 +37,9 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
-	qRR
-	qRT
-	qRE
-	}
 
-	void SetCasting_(
-		const char *Id,
-		core::rSession &Session )
-	{
-	qRH
-		str::string XML, XSL;
-	qRB
-		XML.Init();
-		GetContext_( Session,  XML );
-
-		XSL.Init();
-		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
-
-		Session.FillElementCastings( Id, XML, XSL );
+		if ( Session.User.IsFieldDraggingInProgress() )
+			Rack().PutValue( "InProgress", "Dragging" );
 	qRR
 	qRT
 	qRE
@@ -79,6 +63,24 @@ namespace {
 	}
 }
 
+void fields::SetCasting(
+	const char *Id,
+	core::rSession &Session )
+{
+qRH
+	str::string XML, XSL;
+qRB
+	XML.Init();
+	GetContext_( Session,  XML );
+
+	XSL.Init();
+	sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
+
+	Session.FillElementCastings( Id, XML, XSL );
+qRR
+qRT
+qRE
+}
 
 void fields::SetLayout(
 	const char *Id,
@@ -102,6 +104,11 @@ qRE
 void fields::SetFieldLayout( core::rSession &Session )
 {
 	field::SetLayout( FieldFrameId_, Session );
+}
+
+void fields::SetFieldCasting( core::rSession &Session )
+{
+	field::SetCasting( FieldFrameId_, Session );
 }
 
 #define AC( name ) BASE_AC( fields, name )
@@ -145,12 +152,13 @@ namespace {
 AC( DragField )
 {
 	Session.User.DragField( GetContent_( Session, Id ) );
+	record::SetFieldsCasting( Session );
 }
 
 AC( DropField )
 {
 	Session.User.DropField( GetContent_( Session, Id ) );
-	fields::SetFieldLayout( Session );
+	record::SetFieldsLayout( Session );
 }
 
 AC( EndFieldDragging )

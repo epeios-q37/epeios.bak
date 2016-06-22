@@ -39,11 +39,15 @@ namespace fields {
 		BASE_ACR( EndFieldDragging );
 	}
 
+	void SetCasting(
+		const char *Id,
+		core::rSession &Session );
 	void SetLayout(
 		const char *Id,
 		core::rSession &Session );
 
 	void SetFieldLayout( core::rSession &Session );
+	void SetFieldCasting( core::rSession &Session );
 }
 
 #endif

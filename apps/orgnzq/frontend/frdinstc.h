@@ -416,6 +416,8 @@ namespace frdinstc {
 				qRGnr();
 
 			DraggedField_ = Field;
+
+			FocusOn_( tRecord );
 		}
 		void DropField( sField Field )
 		{
@@ -434,6 +436,10 @@ namespace frdinstc {
 		bso::sBool IsFieldDraggingInProgress( void ) const
 		{
 			return DraggedField_ != UndefinedField;
+		}
+		bso::sBool IsDraggingInProgress( void ) const
+		{
+			return IsFieldDraggingInProgress() || IsEntryDraggingInProgress();
 		}
 		void DumpCurrentRecordColumns( xml::dWriter &Writer ) const;
 		void DumpCurrentRecordFields( xml::dWriter &Writer ) const;

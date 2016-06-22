@@ -9,7 +9,7 @@
 			<DefaultProjectType>New</DefaultProjectType>
 			<DefaultBackendType>Embedded</DefaultBackendType>
 			<!-- For multi-user mode. Can be overriden by project file. -->
-			<Backend Type="Predefined">Embedded</Backend>
+			<Backend Type="Predefined">LocalHost</Backend>
 			<Authentication Mode="Full">
 				<Login>Hello</Login>
 				<Password>toto</Password>

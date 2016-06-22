@@ -240,7 +240,7 @@ namespace xdhutl {
 	void FillCasting(
 		const xdhcmn::digest_ &Description,
 		str::string_ &Id,
-		str::string_ &Casting );
+		str::dStrings &Castings );
 
 	void FillCastings(
 		const xdhcmn::digest_ &Descriptions,

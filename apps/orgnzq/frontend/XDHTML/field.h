@@ -39,6 +39,10 @@ namespace field {
 		BASE_ACR( EndEntryDragging );
 	};
 
+	void SetCasting(
+		const char *Id,
+		core::rSession &Session );
+
 	void SetLayout(
 		const char *Id,
 		core::rSession &Session );
