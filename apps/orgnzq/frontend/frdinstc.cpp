@@ -234,7 +234,8 @@ qRB
 	Writer.PutAttribute( "Number", **Number );
 
 	Writer.PushTag("Entries");
-	Writer.PutAttribute( "Selected", **Entry_, **UndefinedEntry );
+
+	Writer.PutAttribute( "Selected", **Entry_ < Entries.Amount() ? **Entry_ : **UndefinedEntry, **UndefinedEntry );	// '?:' to handle the case of editing the las entry whil suppressing a entry.
 
 	sclfrntnd::Dump( Entries, "Entry", Writer );
 

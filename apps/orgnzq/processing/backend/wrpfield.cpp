@@ -81,6 +81,7 @@ DEC( UpdateEntry )
 {
 	sdr::sRow Row = *Request.IdIn();	// If == 'qNIL', new entry is created, unless for a mono field, where the entry is created/updated.
 	const str::dString &Entry = Request.StringIn();
+	bso::sBool EntryRemoved = false;
 
 	if ( !Entry.IsBlank() ) {
 		if ( !GetTypes()( Field.Type() ).Test( Entry ) )
@@ -117,10 +118,16 @@ DEC( UpdateEntry )
 			REPORT( NoSuchEntry );
 
 		Field.Remove( Row );
+
+		EntryRemoved = true;
 	} else if ( Field.Number() == ogzclm::nMono ) {
-		if ( Field.Amount() != 0 )
+		if ( Field.Amount() != 0 ) {
 			Field.Init();
+				EntryRemoved = true;
+		}
 	}
+
+	Request.BooleanOut() = EntryRemoved;
 }
 
 namespace {
@@ -242,6 +249,7 @@ void wrpfield::dField::NOTIFY( fblbkd::rModule &Module )
 			fblbkd::cId,		// Id of entry to update ; if == 'qNIL', a new entry is created, unless it's a mono field, in which case the entry is updated/created.
 			fblbkd::cString,	// Then entry value.		
 		fblbkd::cEnd,
+		fblbkd::cBoolean,		// 'true' if entry was removed.
 		fblbkd::cEnd );
 
 	Module.Add( D( MoveEntry ),

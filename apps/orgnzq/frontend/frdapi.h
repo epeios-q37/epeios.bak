@@ -402,7 +402,7 @@ namespace orgnzq {
 				1, 0, 
 				21, 0, 
 				0, 21, 12, 22, 26, 
-				21, 25, 0, 
+				21, 25, 0, 2, 
 				21, 21, 0, 
 			};
 
@@ -429,12 +429,12 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "UpdateEntry";;
-			CommandDetail.Casts.Append( Parameters + 9, 3 );
+			CommandDetail.Casts.Append( Parameters + 9, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MoveEntry";;
-			CommandDetail.Casts.Append( Parameters + 12, 3 );
+			CommandDetail.Casts.Append( Parameters + 13, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -672,7 +672,8 @@ namespace orgnzq {
 		}
 		fblovl::reply__ UpdateEntry( 
 			const fblfrd::id__ &In1,
-			const fblfrd::string_ &In2 ) const
+			const fblfrd::string_ &In2,
+			fblfrd::boolean__ &Out1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[3] );
 			Common_->Frontend().IdIn( In1 );
@@ -680,6 +681,7 @@ namespace orgnzq {
 
 			Common_->Frontend().EndOfInParameters();
 
+			Common_->Frontend().BooleanOut( Out1 );
 
 			return Common_->Frontend().Handle();
 		}
