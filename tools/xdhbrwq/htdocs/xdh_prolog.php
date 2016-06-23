@@ -20,6 +20,9 @@ $out = '
 		<script src="xdhbrwq.js"></script>
 		<script>handleQuery("xdh.php?_target=' . $target . '&_language=' . $language . '&_action=' . $action . '")</script>
 	</head>
-	<body/>
+	<body>
+			<input type="hidden" id="AuthLogin" value="Hello"/>
+			<input type="hidden" id="AuthPassword" value="toto"/>
+	</body>
 </html>'
 ?>
