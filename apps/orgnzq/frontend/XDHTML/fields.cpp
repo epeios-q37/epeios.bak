@@ -57,6 +57,7 @@ namespace {
 
 		Session.User.DumpCurrentRecordColumns( Rack );
 		Session.User.DumpCurrentRecordFields( Rack );
+		Session.User.DumpColumnBuffer( Rack );
 	qRR
 	qRT
 	qRE

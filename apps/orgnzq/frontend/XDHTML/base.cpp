@@ -47,7 +47,7 @@ namespace {
 
 		Session.User.UpdateEntry( Content );
 
-		if ( strcmp( Action, field::DefineNewEntry.Name ) )
+		if ( !core::OnFieldDefiningAllowedActions.Search( Action ) )
 			Session.User.UpdateField();
 	qRR
 	qRT

@@ -204,7 +204,7 @@ qRB
 
 	Core_.GetColumnBuffer( Type, Number, Label, Comment );
 
-	Writer.PushTag("Column" );
+	Writer.PushTag( "ColumnBuffer" );
 
 	Writer.PutAttribute( "Type", **Type, **UndefinedType  );
 	Writer.PutAttribute( "Number" , **Number, **UndefinedNumber );
@@ -235,7 +235,7 @@ qRB
 
 	Writer.PushTag("Entries");
 
-	Writer.PutAttribute( "Selected", **Entry_ < Entries.Amount() ? **Entry_ : **UndefinedEntry, **UndefinedEntry );	// '?:' to handle the case of editing the las entry whil suppressing a entry.
+	Writer.PutAttribute( "Selected", **Entry_.Get(), **UndefinedEntry );
 
 	sclfrntnd::Dump( Entries, "Entry", Writer );
 

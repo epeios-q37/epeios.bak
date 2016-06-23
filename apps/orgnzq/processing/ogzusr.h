@@ -27,6 +27,8 @@
 # endif
 
 # include "ogzbsc.h"
+# include "ogzmta.h"
+# include "ogzclm.h"
 # include "ogzetr.h"
 # include "ogzfld.h"
 # include "ogzrcd.h"
@@ -456,18 +458,18 @@ namespace ogzusr {
 		// If 'Row' != 'qNIL', it must be used.
 		sRow OGZUSRNew( sRow User ) override
 		{
-			sRow Row = Metas_.New();
+			sRow Row = Metas_.New( User );
 
-			if ( Columns_.New() != Row )
+			if ( Columns_.New( User ) != Row )
 				qRGnr();
 
-			if ( Entries_.New() != Row )
+			if ( Entries_.New( User ) != Row )
 				qRGnr();
 
-			if ( Fields_.New() != Row )
+			if ( Fields_.New( User ) != Row )
 				qRGnr();
 
-			if ( Records_.New() != Row )
+			if ( Records_.New( User ) != Row )
 				qRGnr();
 
 			Metas_( Row ).Init();
@@ -623,14 +625,16 @@ namespace ogzusr {
 	protected:
 		virtual ogzusr::sRow OGZUSRAuthenticate(
 			const str::dString &Username,
-			const str::dString &Password ) = 0;
+			const str::dString &Password,
+			bso::sBool *New ) = 0;
 	public:
 		qCALLBACK( Authentication );
 		ogzusr::sRow Authenticate(
 			const str::dString &Username,
-			const str::dString &Password )
+			const str::dString &Password,
+			bso::sBool *New = NULL )
 		{
-			return OGZUSRAuthenticate( Username, Password );
+			return OGZUSRAuthenticate( Username, Password, New );
 		}
 	};
 

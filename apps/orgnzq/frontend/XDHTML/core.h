@@ -34,6 +34,7 @@
 
 namespace core {
 	extern sclxdhtml::rActionHelper OnNotConnectedAllowedActions;
+	extern sclxdhtml::rActionHelper OnFieldDefiningAllowedActions;
 
 	enum page__ {
 		pProlog,
@@ -59,6 +60,8 @@ namespace core {
 			global::About, global::Refresh, global::Test,
 			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
 			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
+
+		OnFieldDefiningAllowedActions.Add( field::DefineEntry, field::DefineNewEntry );
 	};
 
 	class rInstancesCore

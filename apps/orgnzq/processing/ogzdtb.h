@@ -112,6 +112,13 @@ namespace ogzdtb {
 	class mDatabase
 	{
 	private:
+		ogzmta::sRow GetRaw_(
+			sURow User,
+			sMRow Row,
+			qRPD ) const
+		{
+			return Users.GetRaw( User, Row, qRP );
+		}
 		ogzetr::sRow GetRaw_(
 			sURow User,
 			sERow Row,
@@ -147,6 +154,14 @@ namespace ogzdtb {
 			if ( Row != qNIL )
 				Metas.Recall( Row, Meta );
 		}
+		void GetMeta_(
+			sURow User,
+			sMRow Row,
+			str::dString &Meta ) const
+		{
+			if ( Row != qNIL )
+				GetMeta_( GetRaw_( User, Row ), Meta  );
+		}
 		void GetDatum_(
 			ogzetr::sRow Row,
 			ogztyp::sRow Type,
@@ -156,19 +171,21 @@ namespace ogzdtb {
 				Entries.Recall( Row, Type, Datum );
 		}
 		void GetColumnFeatures_(
+			sURow User, 
 			ogzclm::sRow Column,
 			ogztyp::sRow *Type,
 			ogzclm::eNumber *Number,
 			str::dString *Label,
 			str::dString *Comment ) const;
 		void GetColumnFeatures_(
+			sURow User, 
 			ogzclm::sRow Column,
 			ogztyp::sRow &Type,
 			ogzclm::eNumber &Number,
 			str::dString &Label,
 			str::dString &Comment ) const
 		{
-			return GetColumnFeatures_( Column, &Type, &Number, &Label, &Comment );
+			return GetColumnFeatures_( User, Column, &Type, &Number, &Label, &Comment );
 		}
 		ogztyp::sRow GetType_(
 			sURow User,
@@ -239,7 +256,18 @@ namespace ogzdtb {
 			ogzfld::sRow Field,
 			dData &Entries,
 			qRPN );
-		void Erase_( ogzfld::sRow Field ) const;
+		void Erase_(
+			ogzusr::sRow User,
+			ogzfld::sRow Field ) const;
+		void Erase_(
+			ogzusr::sRow User,
+			ogzclm::sRow Column ) const;
+		void Erase_(
+			ogzusr::sRow User,
+			ogzmta::sRow Meta ) const
+		{
+			Metas.Delete( Meta );
+		}
 	public:
 		ogzmta::mMetas Metas;
 		ogzclm::mColumns Columns;
@@ -272,10 +300,6 @@ namespace ogzdtb {
 		{
 			return Users.Add( User, Records.New() );
 		}
-		sFRow NewField(
-			sURow User,
-			const ogzclm::rColumnBuffer &Column,
-			sRRow Record );
 		bso::sBool GetColumnsFeatures(	// Returns 'false' if 'Record' does not exist.
 			sURow User,
 			sRRow Record,
@@ -321,8 +345,7 @@ namespace ogzdtb {
 				return false;
 			else {
 				Records.Erase( Field, GetRaw_( User, GetRecord( User, Field ) ) );
-
-				Erase_( RawField );
+				Erase_( User, RawField );
 
 				return true;
 			}
@@ -356,6 +379,13 @@ namespace ogzdtb {
 			sRRow Record,
 			sFRow Source,
 			sFRow Target ) const;
+		bso::sBool MetaExists(
+			sURow User,
+			ogzmta::eTarget Target,
+			const str::dString &Pattern ) const
+		{
+			return Metas.Search( User, Target, Pattern ) != qNIL;
+		}
 	};
 
 # ifdef M

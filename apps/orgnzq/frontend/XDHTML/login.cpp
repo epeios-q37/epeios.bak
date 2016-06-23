@@ -118,6 +118,7 @@ AC( Connect )
 qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
 	sclfrntnd::features___ Features;
+	str::wString Login, Password;
 qRB
 	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
 		Features.Init();
@@ -129,7 +130,8 @@ qRB
 	if ( !Session.Connect( fblfrd::compatibility_informations__( OGZINF_LC_AFFIX, ORGNZQ_API_VERSION ), IncompatibilityInformations ) )
 		qRGnr();
 
-	if ( !Session.User.Login(str::wString(), str::wString()) ) {
+	tol::Init( Login, Password );
+	if ( !Session.User.Login( Session.GetContent("AuthLogin", Login ), Session.GetContent("AuthPassword", Password ) ) ) {
 		Session.AlertT( "UnableToLogin" );
 		Session.Disconnect();
 	} else {

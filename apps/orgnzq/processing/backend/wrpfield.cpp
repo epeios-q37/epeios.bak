@@ -50,8 +50,13 @@ void wrpfield::dField::HANDLE(
 DEC( New )
 {
 	BACKEND;
+	DATABASE;
+	USER;
 
 	const ogzclm::rColumnBuffer &Column = Backend.Object<wrpcolumn::dColumn>( Request.ObjectIn() )();
+
+	if ( Database.MetaExists( User, ogzmta::tColumnLabel, Column.GetLabel() ) )
+		REPORT( FieldNameAlreadyUsed );
 
 	Field.Init();
 

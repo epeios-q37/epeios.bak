@@ -55,7 +55,7 @@ namespace ogzmta {
 		// If 'Row' != 'qNIL', it must be used.
 		virtual sRow OGZMTANew(	sRow Row ) = 0;
 		// if 'Row' == 'qNIL', the entire content must be erased.
-		virtual void OGZMTADelete( sRow Row ) = 0;
+		virtual void OGZMTAErase( sRow Row ) = 0;
 		virtual void OGZMTAStore(
 			ogzbsc::sURow User,
 			const dDatum &Datum,
@@ -66,14 +66,14 @@ namespace ogzmta {
 			dDatum &Datum ) = 0;
 		virtual sRow OGZMTASearch(
 			ogzbsc::sURow User,
-			const str::dString &Pattern,
 			eTarget Target,
-			sRow First ) = 0;	// Excluded. If == 'qNil', searcg from the first one.
+			const str::dString &Pattern,
+			sRow First ) = 0;	// Excluded. If == 'qNil', search from the first one.
 	public:
 		qCALLBACK( Meta );
 		void Wipe( void )
 		{
-			OGZMTADelete( qNIL );
+			OGZMTAErase( qNIL );
 		}
 		sRow New( sRow Row = qNIL )
 		{
@@ -81,7 +81,7 @@ namespace ogzmta {
 		}
 		void Delete( sRow Row )
 		{
-			OGZMTADelete( Row );
+			OGZMTAErase( Row );
 		}
 		void Store(
 			ogzbsc::sURow User,
@@ -98,12 +98,12 @@ namespace ogzmta {
 			return OGZMTARecall( Row, Datum );
 		}
 		sRow Search(
-			ogzbsc::sURow USer,
-			const str::dString &Pattern,
+			ogzbsc::sURow User,
 			eTarget Target,
+			const str::dString &Pattern,
 			sRow First = qNIL )
 		{
-			return OGZMTASearch( USer, Pattern, Target, First );
+			return OGZMTASearch( User, Target, Pattern, First );
 		}
 	};
 
@@ -169,15 +169,15 @@ namespace ogzmta {
 		}
 		sRow Search_(
 			ogzbsc::sURow User,
-			const str::dString &Pattern,
 			eTarget Target,
+			const str::dString &Pattern,
 			sRow First ) const
 		{
 			sRow &Row = First;
 		qRH
 		qRB
 			Lock_();
-			Row = C_().Search( User, Pattern, Target, First );
+			Row = C_().Search( User, Target, Pattern, First );
 		qRR
 		qRT
 			Unlock_();
@@ -233,10 +233,10 @@ namespace ogzmta {
 		}
 		sRow Search(
 			ogzbsc::sURow User,
-			const str::dString &Pattern,
-			eTarget Target ) const
+			eTarget Target,
+			const str::dString &Pattern ) const
 		{
-			return Search_( User, Pattern, Target, qNIL );
+			return Search_( User, Target, Pattern, qNIL );
 		}
 		template <typename ... t> sdr::sRow Search(
 			ogzbsc::sURow USer,
@@ -279,7 +279,7 @@ namespace ogzmta {
 
 			return Row;
 		}
-		virtual void OGZMTADelete( sRow Row ) override 
+		virtual void OGZMTAErase( sRow Row ) override 
 		{
 			if ( Row == qNIL ) {
 				tol::reset( Users_, Data_, Targets_ );
@@ -307,8 +307,8 @@ namespace ogzmta {
 		}
 		virtual sRow OGZMTASearch(
 			ogzbsc::sURow User,
-			const str::dString &Pattern,
 			eTarget Target,
+			const str::dString &Pattern,
 			sRow First ) override
 		{
 			sRow &Row = First;

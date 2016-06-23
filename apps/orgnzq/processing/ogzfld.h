@@ -27,9 +27,9 @@
 # endif
 
 # include "ogzbsc.h"
-# include "ogzclm.h"
 
 # include "bch.h"
+# include "lstcrt.h"
 
 namespace ogzfld {
 	qROW( Row );
@@ -121,7 +121,7 @@ namespace ogzfld {
 		ogzbsc::sRRow GetRecord( sRow Field ) const;
 	};
 
-	typedef ogzbsc::rRegularCallback<lstctn::qLCONTAINERw( dField, sRow ), OGZFLD_TP> rRegularCallback;
+	typedef ogzbsc::rRegularCallback<lstcrt::qLCRATEw( dField, sRow ), OGZFLD_TP> rRegularCallback;
 }
 
 #endif

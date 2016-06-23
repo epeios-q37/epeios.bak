@@ -22,17 +22,21 @@
 using namespace ogzdtb;
 
 namespace {
-	ogzmta::sRow Create_(
+	sMRow Create_(
 		sURow User,
 		const str::dString &Value,
 		ogzmta::eTarget Target,
-		const ogzmta::mMetas &Metas )
+		const ogzmta::mMetas &Metas,
+		const ogzusr::mUsers &Users )
 	{
-		ogzmta::sRow Meta = qNIL;
+		ogzmta::sRow RawMeta = qNIL;
+		sMRow Meta = qNIL;
 
 		if ( Value.Amount() ) {
-			Meta = Metas.New( qNIL );
-			Metas.Store( User, Value, Target, Meta );
+			RawMeta = Metas.New( qNIL );
+			Metas.Store( User, Value, Target, RawMeta );
+
+			Meta = Users.Add( User, RawMeta );
 		}
 
 		return Meta;
@@ -54,8 +58,8 @@ sFRow ogzdtb::mDatabase::Create_(
 									 Fields.New( Users.Add( User,
 														    Columns.New( Column.Type(),
 															             Column.Number(),
-																		 ::Create_( User, Column.Label(), ogzmta::tColumnLabel, Metas ),
-																		 ::Create_( User, Column.Comment(), ogzmta::tColumnComment, Metas ) ) ),
+																		 ::Create_( User, Column.Label(), ogzmta::tColumnLabel, Metas, Users ),
+																		 ::Create_( User, Column.Comment(), ogzmta::tColumnComment, Metas, Users ) ) ),
 												  Record ) );
 
 	Records.Add( Field, RawRecord );
@@ -64,6 +68,7 @@ sFRow ogzdtb::mDatabase::Create_(
 }
 
 void ogzdtb::mDatabase::GetColumnFeatures_(
+	sURow User, 
 	ogzclm::sRow ColumnRow,
 	ogztyp::sRow *Type,
 	ogzclm::eNumber *Number,
@@ -83,10 +88,10 @@ qRB
 		*Number = Column.Number();
 
 	if ( Label != NULL )
-		GetMeta_( Column.Label(), *Label );
+		GetMeta_( User, Column.Label(), *Label );
 
 	if ( Comment != NULL )
-		GetMeta_( Column.Comment(), *Comment );
+		GetMeta_( User, Column.Comment(), *Comment );
 qRR
 qRT
 qRE
@@ -98,7 +103,7 @@ ogztyp::sRow ogzdtb::mDatabase::GetType_(
 {
 	ogztyp::sRow Type = qNIL;
 
-	GetColumnFeatures_( GetRaw_( User, Field.GetColumn() ), &Type, NULL, NULL, NULL );
+	GetColumnFeatures_( User, GetRaw_( User, Field.GetColumn() ), &Type, NULL, NULL, NULL );
 
 	return Type;
 }
@@ -127,7 +132,7 @@ qRB
 
 		tol::Init( Label, Comment );
 
-		GetColumnFeatures_( Column, Type, Number, Label, Comment );
+		GetColumnFeatures_( User, Column, Type, Number, Label, Comment );
 
 		Callback.ColumnFeatures( Column, Type, Number, Label, Comment );
 
@@ -537,7 +542,9 @@ sFRow ogzdtb::mDatabase::Create(
 	return Field;
 }
 
-void ogzdtb::mDatabase::Erase_( ogzfld::sRow FieldRow ) const
+void ogzdtb::mDatabase::Erase_(
+	ogzusr::sRow User,
+	ogzfld::sRow FieldRow ) const
 {
 qRH
 	ogzfld::wField Field;
@@ -546,9 +553,34 @@ qRB
 
 	Fields.Recall( FieldRow, Field);
 
+	Erase_( User, GetRaw_( User, Field.GetColumn() ) );
+
 	Field.RemoveEntries();
 
 	Fields.Erase( FieldRow );
+qRR
+qRT
+qRE
+}
+
+void ogzdtb::mDatabase::Erase_(
+	ogzusr::sRow User,
+	ogzclm::sRow ColumnRow ) const
+{
+qRH
+	ogzclm::sColumn Column;
+qRB
+	Column.Init();
+
+	Columns.Recall( ColumnRow, Column);
+
+	if ( Column.GetLabel() != qNIL )
+		Erase_( User, GetRaw_( User, Column.GetLabel() ) );
+
+	if ( Column.GetComment() != qNIL ) 
+		Erase_( User, GetRaw_( User, Column.GetComment() ) );
+
+	Columns.Erase( ColumnRow );
 qRR
 qRT
 qRE

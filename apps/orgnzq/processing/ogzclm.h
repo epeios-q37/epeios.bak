@@ -29,7 +29,6 @@
 # include "ogzbsc.h"
 # include "ags.h"
 # include "ogztyp.h"
-# include "ogzmta.h"
 
 namespace ogzclm {
 	typedef ogzbsc::dList<ogzbsc::sMRow> dMetas;
@@ -86,7 +85,7 @@ namespace ogzclm {
 	: public sColumnCore_
 	{
 	private:
-		ogzmta::sRow
+		ogzbsc::sMRow
 			Label_,
 			Comment_;
 	public:
@@ -99,15 +98,15 @@ namespace ogzclm {
 		void Init(
 			ogztyp::sRow Type = qNIL,
 			eNumber Number = n_Undefined,
-			ogzmta::sRow Label = qNIL,
-			ogzmta::sRow Comment = qNIL )
+			ogzbsc::sMRow Label = qNIL,
+			ogzbsc::sMRow Comment = qNIL )
 		{
 			sColumnCore_::Init( Type, Number );
 			Label_ = Label;
 			Comment_ = Comment;
 		}
-		qRODISCLOSEs( ogzmta::sRow, Label );
-		qRODISCLOSEs( ogzmta::sRow, Comment );
+		qRODISCLOSEs( ogzbsc::sMRow, Label );
+		qRODISCLOSEs( ogzbsc::sMRow, Comment );
 	};
 }
 
@@ -126,8 +125,8 @@ namespace ogzclm {
 		sRow New(
 			ogztyp::sRow Type,
 			eNumber Number,
-			ogzmta::sRow Label,
-			ogzmta::sRow Comment,
+			ogzbsc::sMRow Label,
+			ogzbsc::sMRow Comment,
 			sRow Column = qNIL ) const;
 		bso::sBool GetTypeAndNumber(
 			sRow Column,

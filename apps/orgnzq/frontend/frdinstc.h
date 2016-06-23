@@ -96,11 +96,15 @@ namespace frdinstc {
 		{
 			ColumnBuffer_.Get( *Type, *Number, Label, Comment );
 		}
-		void UpdateFieldBufferEntry(
+		bso::sBool UpdateFieldBufferEntry(
 			sEntry Entry,	// if undefined, new entry is created.
 			const str::dString &Content )
 		{
-			FieldBuffer_.UpdateEntry( *Entry, Content );
+			bso::sBool Removed = false;
+
+			FieldBuffer_.UpdateEntry( *Entry, Content, Removed );
+
+			return Removed;
 		}
 		void NewFieldBuffer( fbltyp::sObject ColumnBuffer )
 		{
@@ -201,6 +205,47 @@ namespace frdinstc {
 
 	const char *GetLabel( eTarget Target );
 
+	class sEntryManager
+	{
+	private:
+		sEntry Removed_;
+		sEntry Current_;
+	public:
+		void reset( bso::sBool = true )
+		{
+			Removed_ = Current_ = UndefinedEntry;
+		}
+		qCDTOR( sEntryManager );
+		void Init( void )
+		{
+			Removed_ = Current_ = UndefinedEntry;
+		}
+		sEntry Get( void ) const
+		{
+			if ( Removed_ != UndefinedEntry )
+				qRGnr();
+
+			return Current_;
+		}
+		void Set( sEntry Entry )
+		{
+			if ( Removed_ != UndefinedEntry ) {
+				if ( ( Entry != UndefinedEntry ) && ( **Entry >= **Removed_ ) )
+					(**Entry )--;
+
+				Removed_ = UndefinedEntry;
+			}
+
+			Current_ = Entry;
+		}
+		void MarkAsRemoved( void )
+		{
+			Removed_ = Current_;
+
+			Current_ = UndefinedEntry;
+		}
+	};
+
 	class rUser
 	{
 	private:
@@ -209,7 +254,7 @@ namespace frdinstc {
 		// Focused items.
 		sRecord Record_;
 		sField Field_;
-		sEntry Entry_;
+		sEntryManager Entry_;
 		sColumn Column_;
 		sEntry DraggedEntry_;
 		sField DraggedField_;
@@ -217,7 +262,7 @@ namespace frdinstc {
 		{
 			Record_ = UndefinedRecord;
 			Field_ = UndefinedField;
-			Entry_ = UndefinedEntry;
+			Entry_.reset();
 			Column_ = UndefinedColumn;
 			DraggedEntry_ = UndefinedEntry;
 			DraggedField_ = UndefinedField;
@@ -245,14 +290,14 @@ namespace frdinstc {
 		{
 			Field_ = Field;
 			Focus_ = tField;
-			Entry_ = UndefinedEntry;
+			Entry_.Set( UndefinedEntry );
 		}
 		void FocusOn_( sEntry Entry )
 		{
 			if ( Focus_ != tField )
 				qRGnr();
 
-			Entry_ = Entry;
+			Entry_.Set( Entry );
 		}
 		void FocusOn_( sColumn Column )
 		{
@@ -260,7 +305,7 @@ namespace frdinstc {
 				 && ( Focus_ != tField ) )
 				qRGnr();
 
-			Entry_ = UndefinedEntry;
+			Entry_.Set( UndefinedEntry );
 			Field_ = UndefinedField;
 			Column_ = Column;
 			Focus_ = tColumn;
@@ -272,20 +317,20 @@ namespace frdinstc {
 				if ( Field_ == UndefinedField )
 					qRGnr();
 
-				Entry_ = UndefinedEntry;
+				Entry_.Set( UndefinedEntry );
 				break;
 			case tRecord:
 				if ( Record_ == UndefinedRecord )
 					qRGnr();
 
 				Column_ = UndefinedColumn;
-				Entry_ = UndefinedEntry;
+				Entry_.Set( UndefinedEntry );
 				Field_ = UndefinedField;
 				break;
 			case tRecords:
 				Record_ = UndefinedRecord;
 				Column_ = UndefinedColumn;
-				Entry_ = UndefinedEntry;
+				Entry_.Set( UndefinedEntry );
 				Field_ = UndefinedField;
 				break;
 			default:
@@ -307,6 +352,8 @@ namespace frdinstc {
 		{
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
+
+			UnselectAll_();
 
 			FocusOnRecords_();
 		}
@@ -362,7 +409,8 @@ namespace frdinstc {
 			if ( Focus_ != tField )
 				qRGnr();
 
-			Core_.UpdateFieldBufferEntry( Entry_, Content );
+			if ( Core_.UpdateFieldBufferEntry( Entry_.Get(), Content ) )
+				Entry_.MarkAsRemoved();
 		}
 		void UpdateField( void )
 		{

@@ -30,6 +30,7 @@ using namespace core;
 core::core___ core::Core;
 
 sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;
+sclxdhtml::rActionHelper core::OnFieldDefiningAllowedActions;
 
 namespace {
 	sclfrntnd::kernel___ Kernel_;
@@ -157,7 +158,14 @@ qRT
 qRE
 }
 
+namespace {
+	void InitActionHelpers_( void )
+	{
+		tol::Init( OnNotConnectedAllowedActions, OnFieldDefiningAllowedActions );
+	}
+}
+
 qGCTOR( core )
 {
-	OnNotConnectedAllowedActions.Init();
+	InitActionHelpers_();
 }
