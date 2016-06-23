@@ -153,7 +153,9 @@ namespace common {
 			Retriever_.reset( P );
 		}
 		qCDTOR( rAuthentication );
-		void Init( const char *Identifier );
+		void Init(
+			const char *Identifier,
+			ogzusr::mUsers &Users );
 	};
 
 	ogzdtb::mDatabase &Database( void );

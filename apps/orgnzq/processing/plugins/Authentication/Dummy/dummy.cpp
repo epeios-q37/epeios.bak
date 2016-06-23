@@ -34,11 +34,13 @@
 typedef ogzplg::fAuthenticationPlugin fPlugin_;
 
 namespace {
-	ogzusr::sRow Search_(
+	qROW( Row );
+
+	sRow Search_(
 		const str::dString &Pattern,
-		const lstcrt::qLMCRATEd( str::dString, ogzusr::sRow ) &Crate )
+		const lstcrt::qLMCRATEd( str::dString, sRow ) &Crate )
 		{
-			ogzusr::sRow Row = Crate.First();
+			sRow Row = Crate.First();
 
 			while ( ( Row != qNIL ) && ( Crate( Row ) != Pattern ) )
 				Row = Crate.Next(Row );
@@ -51,16 +53,17 @@ class fPlugin
 : public fPlugin_
 {
 private:
-	lstcrt::qLMCRATEw( str::dString, ogzusr::sRow )
+	lstcrt::qLMCRATEw( str::dString, sRow )
 		Usernames_,
 		Passwords_;
+	lstbch::qLBUNCHw( ogzusr::sRow, sRow ) Users_;
 protected:
 	virtual ogzusr::sRow OGZUSRAuthenticate(
 		const str::dString &Username,
 		const str::dString &Password,
-		bso::sBool *New ) override
+		const ogzusr::mProvider &Provider ) override
 	{
-		ogzusr::sRow Row = qNIL;
+		sRow Row = qNIL;
 
 		if ( Username.IsBlank() )
 			return qNIL;
@@ -75,6 +78,7 @@ protected:
 				Row = qNIL;
 		} else {
 			Row = Usernames_.New();
+
 			Usernames_( Row ).Init( Username );
 
 			if ( Row != Passwords_.New() )
@@ -82,25 +86,28 @@ protected:
 
 			Passwords_(Row).Init( Password );
 
-			if ( New != NULL )
-				*New = true;
+			if ( Users_.Add(Provider.Provide() ) != Row )
+				qRGnr();
 		}
 
-		return Row;
+		if ( Row != qNIL )
+			return Users_( Row );
+		else
+			return qNIL;
 	}
 public:
 	void reset( bso::bool__ P = true )
 	{
 		fPlugin_::reset( P );
 
-		tol::reset( P, Usernames_, Passwords_ );
+		tol::reset( P, Usernames_, Passwords_, Users_ );
 	}
 	qCVDTOR( fPlugin );
 	void Init( void )
 	{
 		fPlugin_::Init();
 
-		tol::Init( Usernames_, Passwords_ );
+		tol::Init( Usernames_, Passwords_, Users_ );
 	}
 	bso::sBool SCLPLUGINInitialize( plgn::sAbstract *Abstract )
 	{

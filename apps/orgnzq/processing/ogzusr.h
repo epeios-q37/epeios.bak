@@ -620,29 +620,76 @@ namespace ogzusr {
 		}
 	};
 
+	class cProvider
+	{
+	protected:
+		virtual sRow OGZUSRProvide( void ) = 0;
+	public:
+		qCALLBACK( Provider );
+		sRow Provide( void )
+		{
+			return OGZUSRProvide();
+		}
+	};
+
+	class mProvider
+	: public rLock_
+	{
+	private:
+		qRMV( cProvider, C_, Callback_ );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rLock_::reset( P );
+			Callback_ = NULL;
+		}
+		qCDTOR( mProvider );
+		void Init( cProvider &Callback )
+		{
+			Callback_ = &Callback;
+			rLock_::Init();
+		}
+		sRow Provide( void ) const
+		{
+			sRow Row = qNIL;
+		qRH
+		qRB
+			Lock_();
+			Row = C_().Provide();
+		qRR
+		qRT
+			Unlock_();
+		qRE
+			return Row;
+		}
+	};
+
 	class cAuthentication
 	{
 	protected:
 		virtual ogzusr::sRow OGZUSRAuthenticate(
 			const str::dString &Username,
 			const str::dString &Password,
-			bso::sBool *New ) = 0;
+			const mProvider &Provider ) = 0;
 	public:
 		qCALLBACK( Authentication );
 		ogzusr::sRow Authenticate(
 			const str::dString &Username,
 			const str::dString &Password,
-			bso::sBool *New = NULL )
+			const mProvider &Provider )
 		{
-			return OGZUSRAuthenticate( Username, Password, New );
+			return OGZUSRAuthenticate( Username, Password, Provider );
 		}
 	};
 
 	class mAuthentication
-	: public rLock_
+	: public rLock_,
+	  public cProvider
 	{
 	private:
 		qRMV( cAuthentication, C_, Callback_ );
+		qRMV( mUsers, U_, Users_ );
+		mProvider Provider_;
 		ogzusr::sRow Authenticate_(
 			const str::dString &Username,
 			const str::dString &Password ) const
@@ -651,23 +698,33 @@ namespace ogzusr {
 		qRH
 		qRB
 			Lock_();
-			Row = C_().Authenticate( Username, Password );
+			Row = C_().Authenticate( Username, Password, Provider_ );
 		qRR
 		qRT
 			Unlock_();
 		qRE
 			return Row;
 		}
+		sRow OGZUSRProvide( void ) override
+		{
+			return U_().New();
+		}
 	public:
 		void reset( bso::sBool P = true )
 		{
+			Provider_.reset( P );
 			Callback_ = NULL;
+			Users_ = NULL;
 			rLock_::reset( P );
 		}
 		qCDTOR( mAuthentication );
-		void Init( cAuthentication &Callback )
+		void Init(
+			cAuthentication &Callback,
+			mUsers &Users )
 		{
 			Callback_ = &Callback;
+			Users_ = &Users;
+			Provider_.Init( *this );
 			rLock_::Init();
 		}
 		ogzusr::sRow Authenticate(

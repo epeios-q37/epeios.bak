@@ -46,6 +46,7 @@ qRH
 	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
 	ogzusr::sRow UserRow = qNIL;
+	bso::sBool NEw = false;
 qRB
 	STUFF;
 	AUTHENTICATION;
@@ -57,6 +58,7 @@ qRB
 
 	if ( UserRow != qNIL )
 		Stuff.SetUser( UserRow );
+
 
 	Request.BooleanOut() = UserRow != qNIL;
 qRR 

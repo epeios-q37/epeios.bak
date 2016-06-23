@@ -181,12 +181,14 @@ void common::rDatabase::Init(
 	mDatabase_::Init( Types, P_().GetMetaCallback(), P_().GetColumnCallback(), P_().GetEntryCallback(), P_().GetFieldCallback(), P_().GetRecordCallback(), P_().GetUserCallback() );
 }
 
-void common::rAuthentication::Init( const char *Identifier )
+void common::rAuthentication::Init(
+	const char *Identifier,
+	ogzusr::mUsers &Users )
 {
 	Retriever_.Init();
 	sclmisc::Plug( ogzplg::AuthenticationPluginTarget, Identifier, Retriever_ );
 
-	mAuthentication_::Init( P_() );
+	mAuthentication_::Init( P_(), Users );
 }
 
 void common::Initialize( void )
@@ -198,7 +200,7 @@ qRB
 
 	Types_.Init( NULL );
 	Rack_.Database.Init( GetTypes(), NULL );
-	Rack_.Authentication.Init( NULL );
+	Rack_.Authentication.Init( NULL, Rack_.Database.Users );
 
 	IsInitialized_ = true;
 qRR
