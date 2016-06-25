@@ -20,11 +20,11 @@
 
 error_reporting(E_ALL);
 
-$target = $_GET["_target"];
+$target = $_REQUEST["_target"];
 
-if ( isset($_GET["_prolog"]) ) {
-	$action = $_GET["_action"];
-	$language = $_GET["_language"];
+if ( isset($_REQUEST["_prolog"]) ) {
+	$action = $_REQUEST["_action"];
+	$language = $_REQUEST["_language"];
 
 	require 'xdh_prolog.php';
 
@@ -47,7 +47,7 @@ if ( isset($_GET["_prolog"]) ) {
 
 	$in = "";
 
-	foreach( $_GET as $key => $value ) {
+	foreach( $_REQUEST as $key => $value ) {
 		$in .= $key . "\00" . $value . "\00";
 	}
 

@@ -41,7 +41,6 @@ class plugin___
 {
 private:
 	csdmnc::rCore Core_;
-	csdmnc::rClientIOFlow Flow_;
 	bso::sBool Connected_;
 	void HandleLostConnection_( void )
 	{
@@ -49,73 +48,25 @@ private:
 		ERRRst();
 	}
 protected:
-	virtual fdr::size__ FDRWrite(
-		const fdr::byte__ *Buffer,
-		fdr::size__ Maximum ) override
+	virtual fdr::ioflow_driver_base___ *CSDRCCNew( void ) override
 	{
-		fdr::size__ Size = 0;
+		csdmxc::_driver___ *Driver = new csdmxc::_driver___;
 
-		if ( !Connected_ )
-			return 0;
-	qRH
-	qRB
-		Size = Flow_.WriteUpTo( Buffer, Maximum );
-	qRR
-		HandleLostConnection_();
-		Size = 0;
-	qRT
-	qRE
-		return Size;
-	}
-	virtual void FDRCommit( void ) override
-	{
-		if ( !Connected_ )
-			return;
-	qRH
-	qRB
-		Flow_.Commit();
-	qRR
-		HandleLostConnection_();
-	qRT
-	qRE
-		return;
-	}
-	virtual fdr::size__ FDRRead(
-		fdr::size__ Maximum,
-		fdr::byte__ *Buffer ) override
-	{
-		if ( !Connected_ )
-			return 0;
+		if ( Driver == NULL )
+			qRAlc();
 
-		fdr::size__ Size = 0;
-	qRH
-	qRB
-		Size = Flow_.ReadUpTo( Maximum, Buffer );
-	qRR
-		HandleLostConnection_();
-		Size = 0;
-	qRT
-	qRE
-		return Size;
+		Driver->Init( Core_, fdr::ts_Default );
+
+		return Driver;
 	}
-	virtual void FDRDismiss( void ) override
+	virtual void CSDRCCDelete( fdr::ioflow_driver_base___ *Driver ) override
 	{
-		if ( !Connected_ )
-			return;
-	qRH
-	qRB
-		Flow_.Dismiss();
-	qRR
-		HandleLostConnection_();
-	qRT
-	qRE
-		return;
+		delete Driver;
 	}
 public:
 	void reset( bso::bool__ P = true )
 	{
 		_plugin___::reset( P );
-		Flow_.reset( P );
 		Core_.reset( P );
 		Connected_ = false;
 	}
@@ -129,8 +80,6 @@ public:
 
 		if ( !Core_.Init( HostService, PingDelay, Timeout ) )
 			return false;
-
-		Flow_.Init( Core_ );
 
 		Connected_ = true;
 

@@ -46,20 +46,28 @@
 */
 
 namespace csdrcc {
-	typedef fdr::ioflow_driver___<> _driver___;
+	typedef fdr::ioflow_driver_base___ _driver___;
 
 	class driver___
-	: public _driver___
 	{
+	protected:
+		virtual _driver___ *CSDRCCNew( void ) = 0;
+		virtual void CSDRCCDelete( _driver___ * ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_driver___::reset( P );
 		}
 		E_CVDTOR( driver___ );
 		void Init( void )
 		{
-			_driver___::Init( fdr::ts_Default );
+		}
+		_driver___ *New( void )
+		{
+			return CSDRCCNew();
+		}
+		void Delete( _driver___ *D )
+		{
+			return CSDRCCDelete( D );
 		}
 		static const char *Label( void );
 	};

@@ -36,7 +36,7 @@ qRB
 	Retriever_.Init();
 
 	if ( ( Row = Retriever_.Initialize( PluginPath, Identifier, Parameters, Abstracts ) ) == qNIL ) {
-		Driver_ = &Retriever_.Plugin();
+		Driver_ = Retriever_.Plugin().New();
 		_driver___::Init( fdr::ts_Default );
 	}
 qRR

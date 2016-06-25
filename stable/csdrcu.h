@@ -42,7 +42,7 @@ namespace csdrcu {
 	: public _driver___
 	{
 	private:
-		Q37_MRMDF( driver___, D_, Driver_ );
+		Q37_MRMDF( fdr::ioflow_driver_base___, D_, Driver_ );
 		plgn::retriever___<driver___> Retriever_;
 	protected:
 		virtual fdr::size__ FDRWrite(
@@ -65,10 +65,17 @@ namespace csdrcu {
 		{
 			return D_().Dismiss( NULL );
 		}
+		virtual void T( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_driver___::reset( P );
+
+			if ( P  )
+
+				if ( Driver_ != NULL )
+					Retriever_.Plugin().Delete( Driver_ );
+
 			Retriever_.reset( P );
 			Driver_ = NULL;
 		}

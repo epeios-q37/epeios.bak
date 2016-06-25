@@ -107,33 +107,26 @@ class plugin___
 private:
 	rCallback Callback_;
 	csdmxc::rCore Core_;
-	csdmxc::rClientIOFlow Flow_;
 protected:
-	virtual fdr::size__ FDRWrite(
-		const fdr::byte__ *Buffer,
-		fdr::size__ Amount ) override
+	virtual fdr::ioflow_driver_base___ *CSDRCCNew( void ) override
 	{
-		return Flow_.WriteUpTo( Buffer, Amount );
+		csdmxc::_driver___ *Driver = new csdmxc::_driver___;
+
+		if ( Driver == NULL )
+			qRAlc();
+
+		Driver->Init( Core_, fdr::ts_Default );
+
+		return Driver;
 	}
-	virtual void FDRCommit( void ) override
+	virtual void CSDRCCDelete( fdr::ioflow_driver_base___ *Driver ) override
 	{
-		return Flow_.Commit();
-	}
-	virtual fdr::size__ FDRRead(
-		fdr::size__ Maximum,
-		fdr::byte__ *Buffer ) override
-	{
-		return Flow_.ReadUpTo( Maximum, Buffer );
-	}
-	virtual void FDRDismiss( void ) override
-	{
-		return Flow_.Dismiss();
+		delete Driver;
 	}
 public:
 	void reset( bso::bool__ P = true )
 	{
 		_plugin___::reset( P );
-		Flow_.reset( P );
 		Core_.reset( P );
 		Callback_.reset( P );
 	}
@@ -148,8 +141,6 @@ public:
 
 		if ( !Core_.Init( Callback_ ) )
 			return false;
-
-		Flow_.Init( Core_ );
 
 		return true;
 	}
