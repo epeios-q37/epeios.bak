@@ -80,15 +80,14 @@ bso::bool__ base::sActionHelper::SCLXHTMLOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
-void base::rContextRack::Init(
-	const char *View,
-	str::string_ &Target,
-	core::rSession &Session )
+void base::sRack_::Init(
+	core::rSession &Session,
+	xml::dWriter &Writer )
 {
-//	rContextRack_::Init( View, Target, Session );
+	Callback_.Init( Session );
 
 	if ( Session.User.GetFocus() != frdinstc::t_Undefined )
-		operator()().PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
+		Writer.PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
 }
 
 Q37_GCTOR( base )

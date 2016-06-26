@@ -9,10 +9,10 @@
 			<DefaultProjectType>New</DefaultProjectType>
 			<DefaultBackendType>Embedded</DefaultBackendType>
 			<!-- For multi-user mode. Can be overriden by project file. -->
-			<Backend Type="Predefined">LocalHost</Backend>
+			<Backend Type="Predefined">Embedded</Backend>
 			<Login Mode="Full">
-				<UserID>Hello</UserID>
-				<Password>toto</Password>
+				<UserID>TheUser</UserID>
+				<Password>ThePassword</Password>
 			</Login>
 			<Plugins>
 				<Set target="XML">

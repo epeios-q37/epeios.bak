@@ -126,16 +126,33 @@ namespace base {
 
 	XDHDWS_RACKS( Name );
 
-	template <typename rack> class rRack_
-	: public rack
+	class sRack_
 	{
 	private:
 		sCorpusCallback Callback_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			rack::reset( P );
 			Callback_.reset( P );
+		}
+		E_CDTOR( sRack_ );
+		void Init(
+			core::rSession &Session,
+			xml::dWriter &Writer );
+		qRWDISCLOSEs( sCorpusCallback, Callback );
+	};
+
+
+
+	template <typename rack> class rRack_
+	: public sRack_,
+	  public rack
+	{
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			rack::reset( P );
+			sRack_::reset( P );
 		}
 		E_CDTOR( rRack_ );
 		void Init(
@@ -143,11 +160,8 @@ namespace base {
 			str::string_ &Target,
 			core::rSession &Session )
 		{
-			Callback_.Init( Session );
-			rack::Init( View, Target, Callback_ );
-
-			if ( Session.User.GetFocus() != frdinstc::t_Undefined )
-				operator()().PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
+			sRack_::Init( Session, *this );
+			rack::Init( View, Target, Callback() );
 		}
 	};
 
