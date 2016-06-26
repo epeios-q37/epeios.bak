@@ -97,12 +97,12 @@ endif
 all : common
 ifndef EPEIOS_SRC
 	mkdir -p out
-	echo \<xpp:expand href=\"../XDHTML/XDHTML.xcfg\"/\> >out/XDHTML.xcfg
-	echo \<xpp:expand href=\"../XDHTML/XDHTML.xlcl\"/\> >out/XDHTML.xlcl
-	cp XDHTML/$(libp)XDHTML$(libs) out
-	echo \<xpp:expand href=\"../plugins/plugins.xcfg\"/\> >out/plugins.xcfg
-	echo \<xpp:expand href=\"../plugins/plugins.xlcl\"/\> >out/plugins.xlcl
-	cp plugins/$(libp)plugins$(libs) out
+	echo \<xpp:expand href=\"../Record/Record.xcfg\"/\> >out/Record.xcfg
+	echo \<xpp:expand href=\"../Record/Record.xlcl\"/\> >out/Record.xlcl
+	cp Record/$(libp)Record$(libs) out
+	echo \<xpp:expand href=\"../Text/Text.xcfg\"/\> >out/Text.xcfg
+	echo \<xpp:expand href=\"../Text/Text.xlcl\"/\> >out/Text.xlcl
+	cp Text/$(libp)Text$(libs) out
 endif
 
 clean : common
@@ -110,5 +110,5 @@ clean : common
 common:
 ifndef EPEIOS_SRC
 endif
-	$(MAKE) $(MAKECMDGOALS) -C XDHTML/
-	$(MAKE) $(MAKECMDGOALS) -C plugins/
+	$(MAKE) $(MAKECMDGOALS) -C Record/
+	$(MAKE) $(MAKECMDGOALS) -C Text/
