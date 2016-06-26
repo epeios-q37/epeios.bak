@@ -126,6 +126,10 @@ namespace base {
 
 	XDHDWS_RACKS( Name );
 
+	void DumpFocus_(
+		const core::rSession &Session,
+		xml::dWriter &Writer );
+
 	template <typename rack> class rRack_
 	: public rack
 	{
@@ -146,8 +150,7 @@ namespace base {
 			Callback_.Init( Session );
 			rack::Init( View, Target, Callback_ );
 
-			if ( Session.User.GetFocus() != frdinstc::t_Undefined )
-				operator()().PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
+			DumpFocus_( Session, *this );
 		}
 	};
 
