@@ -10,10 +10,10 @@
 			<DefaultBackendType>Embedded</DefaultBackendType>
 			<!-- For multi-user mode. Can be overriden by project file. -->
 			<Backend Type="Predefined">LocalHost</Backend>
-			<Authentication Mode="Full">
-				<Login>Hello</Login>
+			<Login Mode="Full">
+				<UserID>Hello</UserID>
 				<Password>toto</Password>
-			</Authentication>
+			</Login>
 			<Plugins>
 				<Set target="XML">
 					<!-- The 2 first are mandatory and must be the 2 first ! -->

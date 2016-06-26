@@ -36,12 +36,12 @@ namespace parameter_ {
 		rgstry::entry___ Path_( "@Path", Backend_ );
 	}
 
-	rgstry::entry___ Login_( "Loign", sclrgstry::Parameters );
+	rgstry::entry___ Login_( "Login", sclrgstry::Parameters );
 
 	namespace login_ {
 		rgstry::entry___ CypherKey_( "@CypherKey", Login_ );
 		rgstry::entry___ Mode_( "@Mode", Login_ );
-		rgstry::entry___ UserID_( "Login", Login_ );
+		rgstry::entry___ UserID_( "UserID", Login_ );
 		rgstry::entry___ Password_( "Password", Login_ );
 	}
 
