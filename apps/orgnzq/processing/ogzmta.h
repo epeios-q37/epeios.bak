@@ -239,7 +239,7 @@ namespace ogzmta {
 			return Search_( User, Target, Pattern, qNIL );
 		}
 		template <typename ... t> sdr::sRow Search(
-			ogzbsc::sURow USer,
+			ogzbsc::sURow User,
 			const str::dString &Pattern,
 			eTarget First,
 			t... Others ) const
@@ -247,7 +247,7 @@ namespace ogzmta {
 			sdr::sRow Row = Search( User, Pattern, First );
 
 			if ( Row == qNIL )
-				Row = Search( User, Pattern, Others );
+				Row = Search( User, Pattern, Others... );
 
 			return Row;
 		}

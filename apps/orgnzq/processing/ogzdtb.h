@@ -247,7 +247,7 @@ namespace ogzdtb {
 			sURow User,
 			const ogzusr::dRecords &Records,
 			cRecordRetriever &Callback ) const;
-		sFRow ogzdtb::mDatabase::Create_(
+		sFRow Create_(
 			sURow User,
 			const ogzclm::rColumnBuffer &Column,
 			sRRow Record,

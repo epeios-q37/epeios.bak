@@ -178,7 +178,7 @@ namespace common {
 
 # define BACKEND		sclbacknd::rBackend &Backend = *BACKEND_
 # define STUFF			common::rStuff &Stuff = *STUFF_
-# define USER			ogzusr::sRow &User = STUFF_->User();
+# define USER			const ogzusr::sRow &User = STUFF_->User()
 # define DATABASE		ogzdtb::mDatabase &Database = common::Database()
 # define AUTHENTICATION	ogzusr::mAuthentication &Authentication = common::Authentication()
 
