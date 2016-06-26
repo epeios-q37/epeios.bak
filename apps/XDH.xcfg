@@ -64,27 +64,27 @@
 			</xpp:bloc>
 			<xpp:bloc>
 				<!-- Login -->
-				<Translations text="lgnAuth">
+				<Translations text="lgnLog">
 					<Translation language="fr">Authentification</Translation>
-					<Translation language="en">Authentication</Translation>
+					<Translation language="en">Login</Translation>
 				</Translations>
-				<Translations text="lgnAuthTitle">
+				<Translations text="lgnLoginTitle">
 					<Translation language="fr">Paramètres d'authentification.</Translation>
-					<Translation language="en">Authentication parameters.</Translation>
+					<Translation language="en">Login parameters.</Translation>
 				</Translations>
-				<Translations text="lgnAuthLoginTitle">
+				<Translations text="lgnLoginUserIDTitle">
 					<Translation language="fr">Identifiant d'authentification.</Translation>
-					<Translation language="en">Authentication identifier.</Translation>
+					<Translation language="en">Login user ID.</Translation>
 				</Translations>
-				<Translations text="lgnAuthLoginPlaceholder">
+				<Translations text="lgnLoginUserIDPlaceholder">
 					<Translation language="fr">Identifiant</Translation>
-					<Translation language="en">Identifiert</Translation>
+					<Translation language="en">Identifier</Translation>
 				</Translations>
-				<Translations text="lgnAuthPasswordTitle">
+				<Translations text="lgnLoginPasswordTitle">
 					<Translation language="fr">Mot de passe pour l'authentification.</Translation>
-					<Translation language="en">Authentication password.</Translation>
+					<Translation language="en">Login password.</Translation>
 				</Translations>
-				<Translations text="lgnAuthPasswordPlaceholder">
+				<Translations text="lgnLoginPasswordPlaceholder">
 					<Translation language="fr">Mot de passe</Translation>
 					<Translation language="en">Password</Translation>
 				</Translations>

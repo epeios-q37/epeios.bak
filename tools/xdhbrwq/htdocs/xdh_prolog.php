@@ -21,8 +21,8 @@ $out = '
 		<script>handleQuery("xdh.php?_target=' . $target . '&_language=' . $language . '&_action=' . $action . '")</script>
 	</head>
 	<body>
-			<input type="hidden" id="AuthLogin" value="Hello"/>
-			<input type="hidden" id="AuthPassword" value="toto"/>
+			<input type="hidden" id="LoginUserID" value="' . $UserID . '"/>
+			<input type="hidden" id="LoginPassword" value="' . $Password . '"/>
 	</body>
 </html>'
 ?>

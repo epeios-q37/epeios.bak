@@ -34,57 +34,36 @@
 # include "plgn.h"
 
 namespace csdrcu {
-	typedef fdr::ioflow_driver___<> _driver___;
+	typedef fdr::ioflow_driver_base___ _driver___;
 
 	using csdrcc::driver___;
 
 	class core___
-	: public _driver___
 	{
 	private:
-		Q37_MRMDF( fdr::ioflow_driver_base___, D_, Driver_ );
 		plgn::retriever___<driver___> Retriever_;
-	protected:
-		virtual fdr::size__ FDRWrite(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum ) override
-		{
-			return D_().Write( NULL, Buffer, Maximum );
-		}
-		virtual void FDRCommit( void ) override
-		{
-			return D_().Commit( NULL );
-		}
-		virtual fdr::size__ FDRRead(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer ) override
-		{
-			return D_().Read( NULL, Maximum, Buffer, fdr::bNonBlocking );
-		}
-		virtual void FDRDismiss( void ) override
-		{
-			return D_().Dismiss( NULL );
-		}
-		virtual void T( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_driver___::reset( P );
-
-			if ( P  )
-
-				if ( Driver_ != NULL )
-					Retriever_.Plugin().Delete( Driver_ );
-
 			Retriever_.reset( P );
-			Driver_ = NULL;
 		}
 		E_CDTOR( core___ );
 		sdr::sRow Init(
 			const str::string_ &PluginPath,
 			const char *Identifier,
 			const str::string_ &Parameters,
-			const plgn::dAbstracts &Abstracts );
+			const plgn::dAbstracts &Abstracts )
+		{
+			return Retriever_.Initialize( PluginPath, Identifier, Parameters, Abstracts );
+		}
+		_driver___ *New( void )
+		{
+			return Retriever_.Plugin().New();
+		}
+		void Delete( _driver___ *D )
+		{
+			return Retriever_.Plugin().Delete( D );
+		}
 		const char *Identifier( void )
 		{
 			return Retriever_.Identifier();
@@ -95,7 +74,40 @@ namespace csdrcu {
 		}
 	};
 
-	typedef flw::standalone_ioflow__<> client__;
+	typedef flw::standalone_ioflow__<> _ioflow__;
+
+	class client__
+	: public _ioflow__
+	{
+	private:
+		qRMV( core___, C_, Core_ );
+		qRMV( _driver___, D_, Driver_ );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			_ioflow__::reset( P );
+
+			if ( P ) {
+				if ( Driver_ != NULL ) {
+					C_().Delete( Driver_ );
+				}
+			}
+
+			Driver_ = NULL;
+			Core_ = NULL;
+		}
+		qCDTOR( client__ );
+		void Init( core___ &Core )
+		{
+			reset();
+
+			Core_ = &Core;
+
+			Driver_ = C_().New();
+
+			_ioflow__::Init( D_() );
+		}
+	};
 
 }
 

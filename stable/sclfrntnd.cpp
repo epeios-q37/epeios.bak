@@ -36,13 +36,13 @@ namespace parameter_ {
 		rgstry::entry___ Path_( "@Path", Backend_ );
 	}
 
-	rgstry::entry___ Authentication_( "Authentication", sclrgstry::Parameters );
+	rgstry::entry___ Login_( "Loign", sclrgstry::Parameters );
 
-	namespace authentication_ {
-		rgstry::entry___ CypherKey_( "@CypherKey", Authentication_ );
-		rgstry::entry___ Mode_( "@Mode", Authentication_ );
-		rgstry::entry___ Login_( "Login", Authentication_ );
-		rgstry::entry___ Password_( "Password", Authentication_ );
+	namespace login_ {
+		rgstry::entry___ CypherKey_( "@CypherKey", Login_ );
+		rgstry::entry___ Mode_( "@Mode", Login_ );
+		rgstry::entry___ UserID_( "Login", Login_ );
+		rgstry::entry___ Password_( "Password", Login_ );
 	}
 
 	rgstry::rEntry Watchdog_( "Watchdog", sclrgstry::Parameters );
@@ -108,11 +108,11 @@ void sclfrntnd::GetRemoteBackendPluginPath(
 }
 
 
-#define C( name )	case a##name : return #name; break
+#define C( name )	case l##name : return #name; break
  
-const char *sclfrntnd::GetLabel( eAuth Auth )
+const char *sclfrntnd::GetLabel( eLogin Login )
 {
-	switch ( Auth ) {
+	switch ( Login ) {
 	C( Blank );
 	C( Partial );
 	C( Full );
@@ -128,76 +128,75 @@ const char *sclfrntnd::GetLabel( eAuth Auth )
 #undef C
  
 namespace {
-	stsfsm::wAutomat AuthAutomat_;
+	stsfsm::wAutomat LoginAutomat_;
  
-	void FillAuthAutomat_( void )
+	void FillLoginAutomat_( void )
 	{
-		AuthAutomat_.Init();
-		stsfsm::Fill<eAuth>( AuthAutomat_, a_amount, GetLabel );
+		LoginAutomat_.Init();
+		stsfsm::Fill<eLogin>( LoginAutomat_, l_amount, GetLabel );
 	}
 }
  
-eAuth sclfrntnd::GetAuth( const str::dString &Pattern )
+eLogin sclfrntnd::GetLogin( const str::dString &Pattern )
 {
-	return stsfsm::GetId( Pattern, AuthAutomat_, a_Undefined, a_amount );
+	return stsfsm::GetId( Pattern, LoginAutomat_, l_Undefined, l_amount );
 }
 
-eAuth sclfrntnd::GetAuthParameters(
-	str::dString &Login,
+eLogin sclfrntnd::GetLoginParameters(
+	str::dString &UserID,
 	str::dString &Password )
 {
-	eAuth Auth = a_Undefined;
+	eLogin Login = l_Undefined;
 qRH
 	str::wString Mode;
 qRB
 	Mode.Init();
 
-	if ( !sclmisc::OGetValue( parameter_::authentication_::Mode_, Mode ) ) {
-		Mode = aBlank;
+	if ( !sclmisc::OGetValue( parameter_::login_::Mode_, Mode ) ) {
+		Mode = lBlank;
 		qRReturn;
 	}
 
-	switch ( Auth = GetAuth( Mode ) ) {
-	case aBlank:
+	switch ( Login = GetLogin( Mode ) ) {
+	case lBlank:
 		break;
-	case aFull:
-	case aAutomatic:
-		sclmisc::MGetValue( parameter_::authentication_::Password_, Password );
-	case aPartial:
-		sclmisc::MGetValue( parameter_::authentication_::Login_, Login );
+	case lFull:
+	case lAutomatic:
+		sclmisc::MGetValue( parameter_::login_::Password_, Password );
+	case lPartial:
+		sclmisc::MGetValue( parameter_::login_::UserID_, UserID );
 		break;
 	default:
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::authentication_::Mode_ );
+		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::login_::Mode_ );
 		break;
 	}
 qRR
 qRT
 qRE
-	return Auth;
+	return Login;
 }
 
-eAuth sclfrntnd::GetAuthFeatures( xml::dWriter &Writer )
+eLogin sclfrntnd::GetLoginFeatures( xml::dWriter &Writer )
 {
-	eAuth Auth = a_Undefined;
+	eLogin Login = l_Undefined;
 qRH
-	str::wString Login, Password;
+	str::wString UserID, Password;
 qRB
-	Login.Init();
+	UserID.Init();
 	Password.Init();
+	Login = GetLoginParameters( UserID, Password );
 
-	Auth = GetAuthParameters( Login, Password );
+	Writer.PushTag( "Login" );
+	Writer.PutAttribute("Mode", GetLabel( Login ) );
 
-	Writer.PushTag("Authentication" );
-	Writer.PutAttribute("Mode", GetLabel( Auth ) );
-
-	switch ( Auth ) {
-	case aBlank:
+	switch ( Login ) {
+	case lBlank:
 		break;
-	case aFull:
-	case aAutomatic:
+	case lFull:
+	case lAutomatic:
 		Writer.PutValue( Password, "Password" );
-	case aPartial:
-		Writer.PutValue( Login, "Login" );
+	case lPartial:
+		Writer.PutValue( UserID, "UserID" );
 		break;
 	default:
 		qRFwk();
@@ -206,7 +205,7 @@ qRB
 qRR
 qRT
 qRE
-	return Auth;
+	return Login;
 }
 
 
@@ -773,7 +772,7 @@ qRE
 namespace {
 	void FillAutomats_( void )
 	{
-		FillAuthAutomat_();
+		FillLoginAutomat_();
 		FillBackendAutomat_();
 		FillBackendSetupTypeAutomat_();
 	}

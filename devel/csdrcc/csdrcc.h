@@ -34,17 +34,6 @@
 #define CSDRCC_PLUGIN_NAME			"Remote"
 #define CSDRCC_PLUGIN_API_VERSION	"1"
 
-# pragma message( __LOC__ "To ameliorate !" )
-/*
-	TODO:;
-	This library should be a 'frontend' specific one, as it uses the muxed connections.
-	Or it should be configurable.
-
-	Also, the same frontend (a CGI for example) which asks for multiple connections to backend
-	would receive a PHYSICAL connection to backend, rather then a LOGICAL one. Hence, the plugin
-	should have a method which gives a flow, rather than be a flow.
-*/
-
 namespace csdrcc {
 	typedef fdr::ioflow_driver_base___ _driver___;
 

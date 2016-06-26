@@ -25,6 +25,8 @@ $target = $_REQUEST["_target"];
 if ( isset($_REQUEST["_prolog"]) ) {
 	$action = $_REQUEST["_action"];
 	$language = $_REQUEST["_language"];
+	$UserID = $_REQUEST["UserID"];
+	$Password = $_REQUEST["Password"];
 
 	require 'xdh_prolog.php';
 

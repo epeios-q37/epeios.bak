@@ -60,6 +60,7 @@
 			<File>xdhbrwq.js</File>
 			<File Path="js/">xdhtml.js</File>
 			<File>xdh.php</File>
+			<File>xdh_prolog.php</File>
 		</Files>
 		<File>dmnzq.xprj</File>
 		<File Path="../">XDH.xcfg</File>

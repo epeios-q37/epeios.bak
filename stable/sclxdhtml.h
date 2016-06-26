@@ -511,7 +511,7 @@ namespace sclxdhtml {
 		E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
 		E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
 
-		sclfrntnd::eAuth GetContent(
+		sclfrntnd::eLogin GetContent(
 			sclfrntnd::frontend___ &Frontend,
 			xml::writer_ &Writer );
 

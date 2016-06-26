@@ -25,24 +25,24 @@
 		</xsl:variable>
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-				<fieldset title="#lgnAuthTitle#">
-					<legend>#lgnAuth#</legend>
+				<fieldset title="#lgnLoginTitle#">
+					<legend>#lgnLogin#</legend>
 					<xsl:element name="input">
 						<xsl:attribute name="type">text</xsl:attribute>
-						<xsl:attribute name="id">AuthLogin</xsl:attribute>
-						<xsl:attribute name="title">#lgnAuthLoginTitle#</xsl:attribute>
-						<xsl:attribute name="placeholder">#lgnAuthLoginPlaceholder#</xsl:attribute>
+						<xsl:attribute name="id">LoginUserID</xsl:attribute>
+						<xsl:attribute name="title">#lgnLoginUserIDTitle#</xsl:attribute>
+						<xsl:attribute name="placeholder">#lgnLoginUserIDPlaceholder#</xsl:attribute>
 						<xsl:attribute name="value">
-							<xsl:value-of select="Authentication/Login"/>
+							<xsl:value-of select="Login/UserID"/>
 						</xsl:attribute>
 					</xsl:element>
 					<xsl:element name="input">
 						<xsl:attribute name="type">password</xsl:attribute>
-						<xsl:attribute name="id">AuthPassword</xsl:attribute>
-						<xsl:attribute name="title">#lgnAuthPasswordTitle#</xsl:attribute>
-						<xsl:attribute name="placeholder">#lgnAuthPasswordPlaceholder#</xsl:attribute>
+						<xsl:attribute name="id">LoginPassword</xsl:attribute>
+						<xsl:attribute name="title">#lgnLoginPasswordTitle#</xsl:attribute>
+						<xsl:attribute name="placeholder">#lgnLoginPasswordPlaceholder#</xsl:attribute>
 						<xsl:attribute name="value">
-							<xsl:value-of select="Authentication/Password"/>
+							<xsl:value-of select="Login/Password"/>
 						</xsl:attribute>
 					</xsl:element>
 				</fieldset>

@@ -513,13 +513,13 @@ qRT
 qRE
 }
 
-sclfrntnd::eAuth sclxdhtml::login::GetContent(
+sclfrntnd::eLogin sclxdhtml::login::GetContent(
 	sclfrntnd::frontend___ &Frontend,
 	xml::writer_ &Writer)
 {
 	sclfrntnd::GetBackendsFeatures( Frontend.Language(), Writer );
 
-	return sclfrntnd::GetAuthFeatures( Writer );
+	return sclfrntnd::GetLoginFeatures( Writer );
 }
 
 static sclfrntnd::backend_type__ GetBackendType_( proxy__ &Proxy )

@@ -22,25 +22,3 @@
 #include "csdrcu.h"
 
 using namespace csdrcu;
-
-sdr::sRow csdrcu::core___::Init(
-	const str::string_ &PluginPath,
-	const char *Identifier,
-	const str::string_ &Parameters,
-	const plgn::dAbstracts &Abstracts )
-{
-	sdr::sRow Row = qNIL;
-qRH
-	TOL_CBUFFER___ Buffer;
-qRB
-	Retriever_.Init();
-
-	if ( ( Row = Retriever_.Initialize( PluginPath, Identifier, Parameters, Abstracts ) ) == qNIL ) {
-		Driver_ = Retriever_.Plugin().New();
-		_driver___::Init( fdr::ts_Default );
-	}
-qRR
-qRT
-qRE
-	return Row;
-}
