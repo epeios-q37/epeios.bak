@@ -126,6 +126,10 @@ namespace base {
 
 	XDHDWS_RACKS( Name );
 
+	void InitCallback_(
+		sCorpusCallback &Callback,
+		core::rSession &Session );
+
 	void DumpFocus_(
 		const core::rSession &Session,
 		xml::dWriter &Writer );
@@ -147,7 +151,7 @@ namespace base {
 			str::string_ &Target,
 			core::rSession &Session )
 		{
-			Callback_.Init( Session );
+			InitCallback_( Callback_, Session );
 			rack::Init( View, Target, Callback_ );
 
 			DumpFocus_( Session, *this );

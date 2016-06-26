@@ -80,6 +80,14 @@ bso::bool__ base::sActionHelper::SCLXHTMLOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
+void base::InitCallback_(
+	sCorpusCallback &Callback,
+	core::rSession &Session )
+{
+	Callback.Init( Session );
+}
+
+
 void base::DumpFocus_(
 	const core::rSession &Session,
 	xml::dWriter &Writer )
