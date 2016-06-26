@@ -80,16 +80,6 @@ bso::bool__ base::sActionHelper::SCLXHTMLOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
-void base::sRack_::Init(
-	core::rSession &Session,
-	xml::dWriter &Writer )
-{
-	Callback_.Init( Session );
-
-	if ( Session.User.GetFocus() != frdinstc::t_Undefined )
-		Writer.PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
-}
-
 Q37_GCTOR( base )
 {
 }

@@ -68,7 +68,7 @@
 					<xpp:bloc>Embedded.xprj</xpp:bloc>
 				</Project>
 			</Projects>
-			<Backends Default="Localhost">
+			<Backends Default="Embedded">
 				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="h:/bin/plugins/Remote/Straight">localhost:53700</Backend>
 				<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="h:/bin/plugins/Remote/Proxy">localhost:53700 test</Backend>
 				<xpp:bloc marker="$">
