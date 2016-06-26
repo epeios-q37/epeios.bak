@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<Translations text="recordNewFieldTitle">
+		<Translation language="fr">Définir un nouveau champ.</Translation>
+		<Translation language="en">Define new field.</Translation>
+	</Translations>
+	<Translations text="recordNewField">
+		<Translation language="fr">Nouveau</Translation>
+		<Translation language="en">New</Translation>
+	</Translations>
+	<Translations text="recordBackToListTitle">
+		<Translation language="fr">Retourner à la liste d'enregistrments.</Translation>
+		<Translation language="en">Back to the record list.</Translation>
+	</Translations>
+	<Translations text="recordBackToList">
+		<Translation language="fr">Retour</Translation>
+		<Translation language="en">Back</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<Translations text="columnMonoTypeLabel">
+		<Translation language="fr">Mono</Translation>
+		<Translation language="en">Mono</Translation>
+	</Translations>
+	<Translations text="columnMonoTypeTitle">
+		<Translation language="fr">Le champs peut contenir au maximum une entrée.</Translation>
+		<Translation language="en">Fiedls can contain at most one entry</Translation>
+	</Translations>
+	<Translations text="columnMultiTypeLabel">
+		<Translation language="fr">Multi</Translation>
+		<Translation language="en">Multi</Translation>
+	</Translations>
+	<Translations text="columnMultiTypeTitle">
+		<Translation language="fr">Le champ peut contenir plusieurs entrées</Translation>
+		<Translation language="en">The filed can contain several entries.</Translation>
+	</Translations>
+	<Translations text="columnFieldLabelPlaceholder">
+		<Translation language="fr">Libellé</Translation>
+		<Translation language="en">Label</Translation>
+	</Translations>
+	<Translations text="columnFieldLabelTitle">
+		<Translation language="fr">Libellé du champ.</Translation>
+		<Translation language="en">Field label.</Translation>
+	</Translations>
+	<Translations text="columnFieldCommentPlaceholder">
+		<Translation language="fr">Commentaire</Translation>
+		<Translation language="en">Comment</Translation>
+	</Translations>
+	<Translations text="columnFieldCommentTitle">
+		<Translation language="fr">Commentaire associé champ.</Translation>
+		<Translation language="en">Comment associated to the field.</Translation>
+	</Translations>
+	<Translations text="columnCreateFieldTitle">
+		<Translation language="fr">Créer le champ.</Translation>
+		<Translation language="en">Create the field.</Translation>
+	</Translations>
+	<Translations text="columnCreateField">
+		<Translation language="fr">Créer</Translation>
+		<Translation language="en">Create</Translation>
+	</Translations>
+	<!--
+	<Translations text="column">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

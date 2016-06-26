@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<Translations text="fieldsEmptyRecord">
+		<Translation language="fr">(Pas de champs)</Translation>
+		<Translation language="en">(No fields)</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

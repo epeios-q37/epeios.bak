@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<Translations text="fieldDefineNewEntry">
+		<Translation language="fr">Nouveau</Translation>
+		<Translation language="en">New</Translation>
+	</Translations>
+	<Translations text="fieldDefineNewEntryTitle">
+		<Translation language="fr">Créer une bouvell entréer.</Translation>
+		<Translation language="en">Create new entry.</Translation>
+	</Translations>
+	<Translations text="fieldNotImplementedYet">
+		<Translation language="fr">Non implémenté.</Translation>
+		<Translation language="en">Not implemented.</Translation>
+	</Translations>
+	<Translations text="fieldUnknownType">
+		<Translation language="fr">Type de champs inconnu !</Translation>
+		<Translation language="en">Unknown field type !</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>
