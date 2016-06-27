@@ -33,6 +33,10 @@
 #include "fnm.h"
 #include "flf.h"
 
+#ifdef CPE_S_LINUX
+# include <X11/Xlib.h>
+#endif
+
 using cio::CErr;
 using cio::COut;
 using cio::CIn;
@@ -130,6 +134,17 @@ F( Pre );
 F( Main );
 F( Post );
 
+#ifdef CPE_S_LINUX
+int XErrorHandlerImpl(Display *display, XErrorEvent *event) {
+  return 0;
+}
+
+int XIOErrorHandlerImpl(Display *display) {
+  return 0;
+}
+#endif
+
+
 static int Launch_( const scltool::oddities__ &Oddities )
 {
 	int ExitValue = EXIT_SUCCESS;
@@ -169,6 +184,12 @@ qRB
 		if ( ExitValue >= 0 )
 			qRReturn;
 	}
+
+#ifdef CEP_S_LINUX
+	XSetErrorHandler(XErrorHandlerImpl);
+	XSetIOErrorHandler(XIOErrorHandlerImpl);
+#endif
+
 	
 	if ( ( ProcessType.Amount() == 0 ) || ( ProcessType == "Main" ) ) {
 		Pre();

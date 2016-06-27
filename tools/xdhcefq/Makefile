@@ -26,18 +26,18 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio ctn 
-mods += dir dte dtfbsc dtfptb epsmsc 
-mods += err fdr flf flsq flw 
-mods += flx ias idsq iof iop 
-mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stkbse stkbch 
-mods += stkctn str strng tagsbs tol 
-mods += txf tys uys utf xtf 
-mods += llio tht bomhdl cdgb64 dlbrry 
-mods += fil fnm lcl plgn plgncore 
-mods += rgstry stsfsm xml xpp mtk 
-mods += strmrg 
+mods += cio cpe crptgr cslio crt 
+mods += ctn dir dte dtfbsc dtfptb 
+mods += epsmsc err fdr flf flsq 
+mods += flw flx ias idsq iof 
+mods += iop lst lstbch lstcrt lstctn 
+mods += mns mtx ntvstr que sdr 
+mods += stkbse stkbch stkctn str strng 
+mods += tagsbs tol txf tys uys 
+mods += utf xtf llio tht bomhdl 
+mods += cdgb64 dlbrry fil fnm lcl 
+mods += plgn plgncore rgstry stsfsm xml 
+mods += xpp mtk strmrg 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += scltool 
 mods += xdhujp xdhujr xdhujs 
@@ -264,7 +264,7 @@ ifeq ("$(os)","$(GNULinux)")
 		endif
 	endif
 	binary=$(name)
-	 libs += -L$(cef)/Release -lcef -ludev
+	 libs += -L$(cef)/Release -lcef -ludev -lX11
 	 lo += -Wl,-rpath=$(cef)/Release/
      
 
@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20151030"\"
+copt += -DVERSION=\""20160627"\"
 copt += -DCOPYRIGHT_YEARS=\""2014-2016"\"
 copt += -DIDENTIFIER=\""968ea869-90d0-4e03-a4d9-10f4f73d50aa"\"
 
