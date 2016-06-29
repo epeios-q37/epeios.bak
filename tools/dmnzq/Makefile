@@ -95,17 +95,11 @@ endif
 ##########################
 		
 all : common
-ifndef EPEIOS_SRC
-	mkdir -p out
-	echo \<xpp:expand href=\"../tool/dmnzq.xcfg\"/\> >out/dmnzq.xcfg
-	echo \<xpp:expand href=\"../tool/dmnzq.xlcl\"/\> >out/dmnzq.xlcl
-	cp tool/dmnzq$(exe) out
-	echo \<xpp:expand href=\"../plugins/Proxy/proxy.xcfg\"/\> >out/proxy.xcfg
-	echo \<xpp:expand href=\"../plugins/Proxy/proxy.xlcl\"/\> >out/proxy.xlcl
-	cp plugins/Proxy/$(libp)proxy$(libs) out
-	echo \<xpp:expand href=\"../plugins/Straight/straight.xcfg\"/\> >out/straight.xcfg
-	echo \<xpp:expand href=\"../plugins/Straight/straight.xlcl\"/\> >out/straight.xlcl
-	cp plugins/Straight/$(libp)straight$(libs) out
+ifdef EPEIOS_SRC
+else ifdef EPEIOS_OUT
+else
+	export EPEIOS_OUT=`pwd`/
+	mkdir -p "$EPEIOS_OUT"
 endif
 
 clean : common

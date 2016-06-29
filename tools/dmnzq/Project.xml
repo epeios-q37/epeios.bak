@@ -2,15 +2,10 @@
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml" />
-	<Content Type="Tool" Target="dmnzq" Dir="/cygdrive/h/hg/epeios/tools/dmnzq">
-		<Component Name="dmnzq" Dir="tool/"/>
-		<Component Name="proxy" Dir="plugins/Proxy/"/>
-		<Component Name="straight" Dir="plugins/Straight/"/>
-	</Content>
-	<Dependencies>
-		<Dependency Name="dmnzq" Source="tool" Target="./"/>
-		<Dependency Name="straight" Source="plugins/Straight" Target="plugins/dmnzq/"/>
-		<Dependency Name="proxy" Source="plugins/Proxy" Target="plugins/dmnzq/"/>
+	<Dependencies Target="dmnzq">
+		<Dependency Name="dmnzq" Dir="tool" Bin="./"/>
+		<Dependency Name="straight" Dir="plugins/Straight" Bin="plugins/dmnzq/"/>
+		<Dependency Name="proxy" Dir="plugins/Proxy" Bin="plugins/dmnzq/"/>
 	</Dependencies>
 	<WikiFiles Group="Doc" Path="Doc/">
 	</WikiFiles>

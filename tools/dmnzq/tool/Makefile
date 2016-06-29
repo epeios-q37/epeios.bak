@@ -333,6 +333,12 @@ else
 	src += :$(EPEIOS_SRC)
 endif
 
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
+endif
+
     
 ox = o
 ds = :
@@ -348,11 +354,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)
-	cp $(binary) $(dest)
-endif
-		
+	mkdir -p $(out)
+	cp $(binary) $(out)
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
