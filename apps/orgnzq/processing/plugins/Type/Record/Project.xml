@@ -28,7 +28,16 @@
 			</Modules>
 		</Modules>
 		<Modules Group="OGZ" Path="../../../">
+			<Module>ogzbsc</Module>
+			<Module>ogzclm</Module>
+			<Module>ogzdtb</Module>
+			<Module>ogzetr</Module>
+			<Module>ogzfld</Module>
+			<Module>ogzmta</Module>
 			<Module>ogzplg</Module>
+			<Module>ogzrcd</Module>
+			<Module>ogztyp</Module>
+			<Module>ogzusr</Module>
 		</Modules>
 		<Modules Group="TYP" Path="../">
 			<Module>typbse</Module>

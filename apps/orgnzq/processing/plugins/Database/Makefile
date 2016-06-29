@@ -1,19 +1,19 @@
 #	Copyright (C)  Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of dmnzq.
+#	This file is part of orgnzq.
 #
-#	dmnzq is free software: you can redistribute it and/or
+#	orgnzq is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	dmnzq is distributed in the hope that it will be useful,
+#	orgnzq is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with dmnzq. If not, see <http://www.gnu.org/licenses/>.
+#	along with orgnzq. If not, see <http://www.gnu.org/licenses/>.
 
 
 win=win
@@ -94,17 +94,15 @@ endif
 
 ##########################
 		
-all : common
-ifndef EPEIOS_SRC
-	mkdir -p out
-	echo \<xpp:expand href=\"../Regular/Regular.xcfg\"/\> >out/Regular.xcfg
-	echo \<xpp:expand href=\"../Regular/Regular.xlcl\"/\> >out/Regular.xlcl
-	cp Regular/$(libp)Regular$(libs) out
+ifdef EPEIOS_SRC
+else ifdef EPEIOS_OUT
+else
+export EPEIOS_OUT=$(shell pwd)/out/
 endif
+
+all : common
 
 clean : common
 
 common:
-ifndef EPEIOS_SRC
-endif
 	$(MAKE) $(MAKECMDGOALS) -C Regular/

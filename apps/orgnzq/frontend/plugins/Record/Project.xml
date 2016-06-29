@@ -28,6 +28,7 @@
 			</Modules>
 		</Modules>
 		<Modules Group="FRD" Path="../../">
+			<Module>frdcllbck</Module>
 			<Module>frdplgn</Module>
 		</Modules>
 		<Modules Group="Common" Path="../">

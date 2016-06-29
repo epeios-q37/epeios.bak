@@ -2,7 +2,7 @@
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
-	<Content Type="Tool" Target="dmnzq" Dir="/cygdrive/h/hg/epeios/tools/dmnzq">
-		<Component Name="Regular" Dir="Regular/"/>
-	</Content>
+	<Dependencies Target="orgnzq">
+		<Dependency Name="Regular" Dir="Regular/"/>
+	</Dependencies>
 </Project>

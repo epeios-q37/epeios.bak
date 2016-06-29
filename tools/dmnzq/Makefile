@@ -94,19 +94,17 @@ endif
 
 ##########################
 		
-all : common
 ifdef EPEIOS_SRC
 else ifdef EPEIOS_OUT
 else
-	export EPEIOS_OUT=`pwd`/
-	mkdir -p "$EPEIOS_OUT"
+export EPEIOS_OUT=$(shell pwd)/out/
 endif
+
+all : common
 
 clean : common
 
 common:
-ifndef EPEIOS_SRC
-endif
-	$(MAKE) $(MAKECMDGOALS) -C tool/
-	$(MAKE) $(MAKECMDGOALS) -C plugins/Proxy/
-	$(MAKE) $(MAKECMDGOALS) -C plugins/Straight/
+	$(MAKE) $(MAKECMDGOALS) -C tool
+	$(MAKE) $(MAKECMDGOALS) -C plugins/Straight
+	$(MAKE) $(MAKECMDGOALS) -C plugins/Proxy

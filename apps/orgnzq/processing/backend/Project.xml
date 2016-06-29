@@ -47,6 +47,7 @@
 			<Module>ogztyp</Module>
 			<Module>ogzusr</Module>
 			<Module>ogzxml</Module>
+			<Module>ogzxmp</Module>
 		</Modules>
 		<Module>common</Module>
 		<Module>registry</Module>

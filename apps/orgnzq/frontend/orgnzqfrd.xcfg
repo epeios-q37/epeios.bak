@@ -37,6 +37,9 @@
 					<xpp:ifeq select="env" value="mac">
 						<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
 					</xpp:ifeq>
+					<xpp:ifeq select="env" value="packing">
+						<xpp:bloc/>
+					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>
 			<xpp:ifeq select="env" value="windows">

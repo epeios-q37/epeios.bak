@@ -362,7 +362,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 	mkdir -p $(out)plugins/dmnzq/
-	cp $(binary) $(out)plugins/dmnzq/
+	cp $(binary) $(out)
+			plugins/dmnzq/
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

@@ -2,9 +2,9 @@
 <Project xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
-	<Content Type="Tool" Target="dmnzq" Dir="/cygdrive/h/hg/epeios/tools/dmnzq">
-		<Component Name="frontend" Dir="frontend/"/>
-		<Component Name="processing" Dir="processing/"/>
+	<Dependencies Target="orgnzq">
+		<Dependency Name="frontend" Dir="frontend/"/>
+		<Dependency Name="processing" Dir="processing/"/>
 		<!--Component Name="$Name$bkd" Dir="$BDir$"/-->
-	</Content>
+	</Dependencies>
 </Project>

@@ -34,10 +34,10 @@ mods += iop lst lstbch lstcrt lstctn
 mods += mns mtx ntvstr que sdr 
 mods += stkbse stkbch stkctn str strng 
 mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht mtk 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn plgncore rgstry stsfsm 
-mods += xml xpp 
+mods += utf xtf llio tht lck 
+mods += mtk bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
@@ -45,7 +45,7 @@ mods += fblbur fblcmd fblcst fbltyp fblovl
 mods += csdleo csdles csdmxb csdmxs csdscb 
 mods += ogzfbc ogzinf ogzbsc ogzclm ogzdtb 
 mods += ogzetr ogzfld ogzmta ogzplg ogzrcd 
-mods += ogzrgy ogztyp ogzusr ogzxml 
+mods += ogzrgy ogztyp ogzusr ogzxml ogzxmp 
 mods += wrpcolumn wrpfield wrpexample wrpunbound 
 mods += common registry 
 
@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160623"\"
+copt += -DVERSION=\""20160626"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""dc3beae2-d82c-4471-bc7e-03adb886d5f7"\"
 
@@ -349,6 +349,12 @@ ifndef EPEIOS_SRC
 	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
+endif
+
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
 endif
 
     
@@ -366,11 +372,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)
-	cp $(binary) $(dest)
-endif
-		
+	mkdir -p $(out)
+	cp $(binary) $(out)
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

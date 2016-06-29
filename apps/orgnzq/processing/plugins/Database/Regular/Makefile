@@ -40,7 +40,8 @@ mods += plgncore rgstry stsfsm xml xpp
 mods += tht 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
-mods += ogzmta ogzplg ogzusr 
+mods += ogzbsc ogzclm ogzdtb ogzetr ogzfld 
+mods += ogzmta ogzplg ogzrcd ogztyp ogzusr 
 mods += registry 
 
 pmods += pllio 
@@ -331,7 +332,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160623"\"
+copt += -DVERSION=\""20160626"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""421658e0-087c-42c3-9af3-4c6d8297e500"\"
 
@@ -339,6 +340,12 @@ ifndef EPEIOS_SRC
 	src = :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
+endif
+
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
 endif
 
     
@@ -356,11 +363,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)plugins/ogz/Backend/Database/
-	cp $(binary) $(dest)plugins/ogz/Backend/Database/
-endif
-		
+	mkdir -p $(out)plugins/ogz/Backend/Database/
+	cp $(binary) $(out)plugins/ogz/Backend/Database/
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

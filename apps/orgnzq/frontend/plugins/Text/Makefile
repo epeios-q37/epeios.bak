@@ -40,7 +40,7 @@ mods += plgncore rgstry stsfsm xml xpp
 mods += tht 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
-mods += frdplgn 
+mods += frdcllbck frdplgn 
 mods += cmnplgn cmnrgstry 
 mods += registry 
 
@@ -342,6 +342,12 @@ else
 	src += :$(EPEIOS_SRC)
 endif
 
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
+endif
+
     
 ox = o
 ds = :
@@ -357,11 +363,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)plugins/ogz/Frontend/
-	cp $(binary) $(dest)plugins/ogz/Frontend/
-endif
-		
+	mkdir -p $(out)plugins/ogz/Frontend/
+	cp $(binary) $(out)plugins/ogz/Frontend/
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

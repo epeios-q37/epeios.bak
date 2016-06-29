@@ -355,7 +355,13 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 	mkdir -p $(out)
+ifndef EPEIOS_SRC				
+	cp -a $(name).xcfg $(name).xlcl $(out)
+
+endif
+				
 	cp $(binary) $(out)
+			
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
