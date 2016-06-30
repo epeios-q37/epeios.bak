@@ -64,7 +64,7 @@
 			</xpp:bloc>
 			<xpp:bloc>
 				<!-- Login -->
-				<Translations text="lgnLog">
+				<Translations text="lgnLogin">
 					<Translation language="fr">Authentification</Translation>
 					<Translation language="en">Login</Translation>
 				</Translations>
