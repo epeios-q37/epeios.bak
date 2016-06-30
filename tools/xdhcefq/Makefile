@@ -354,6 +354,12 @@ else
 	src += :$(EPEIOS_SRC)
 endif
 
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
+endif
+
     
 ox = o
 ds = :
@@ -369,9 +375,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
+
+# No tabulation, otherwise it's passed to 'bash', until to be handled by 'make'.
 ifdef EPEIOS_SRC
 
-# No tabulation, otherwise it's passed to 'bash', until to be handled by 'make.
 ifeq ("$(os)","$(MacOS)")
 		cp $(binary) "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/cefsimple"
 		install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" "$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/MacOS/cefsimple"
@@ -388,13 +395,14 @@ ifeq ("$(os)","$(MacOS)")
 # 		echo "$(xcfgb)Sub$(xcfga)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xcfg"
 # 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
 endif
-					mkdir -p $(dest)
-	cp $(binary) $(dest)
 endif
-		
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)
+	cp $(binary) $(out)
 cefosx.o : cefosx.mm
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
 			
+endif
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

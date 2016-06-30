@@ -34,7 +34,7 @@
 			<xsl:attribute name="size">
 				<xsl:value-of select="@Amount"/>
 			</xsl:attribute>
-			<xsl:apply-templates select="Type"/>
+			<xsl:apply-templates select="Type[@label!='Record']"/>
 		</xsl:element>
 	</xsl:template>
 	<xsl:template match="Numbers">

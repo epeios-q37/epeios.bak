@@ -38,7 +38,8 @@ mods += utf xtf llio bomhdl cdgb64
 mods += dlbrry fil fnm lcl plgn 
 mods += plgncore rgstry stsfsm xml xpp 
 mods += tht mtk sck 
-mods += csdbnc csdmxb csdmxc csdrcc csdrcd 
+mods += csdbnc csdmnc csdmxb csdmxc csdrcc 
+mods += csdrcd 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
 mods += registry rpstraight 
@@ -337,6 +338,12 @@ else
 	src += :$(EPEIOS_SRC)
 endif
 
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
+endif
+
     
 ox = o
 ds = :
@@ -352,11 +359,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)plugins/remote/
-	cp $(binary) $(dest)plugins/remote/
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)plugins/remote/
+	cp $(binary) $(out)plugins/remote/
 endif
-		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

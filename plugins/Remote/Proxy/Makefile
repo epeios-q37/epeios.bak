@@ -338,6 +338,12 @@ else
 	src += :$(EPEIOS_SRC)
 endif
 
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
+endif
+
     
 ox = o
 ds = :
@@ -353,11 +359,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)plugins/remote/
-	cp $(binary) $(dest)plugins/remote/
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)plugins/remote/
+	cp $(binary) $(out)plugins/remote/
 endif
-		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

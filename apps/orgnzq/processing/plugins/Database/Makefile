@@ -94,11 +94,6 @@ endif
 
 ##########################
 		
-ifdef EPEIOS_SRC
-else ifdef EPEIOS_OUT
-else
-export EPEIOS_OUT=$(shell pwd)/out/
-endif
 
 all : common
 

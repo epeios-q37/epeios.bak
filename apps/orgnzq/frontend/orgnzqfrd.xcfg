@@ -51,6 +51,9 @@
 			<xpp:ifeq select="env" value="mac">
 				<xpp:set name="BinRootDir" value="/Users/csimon/bin/"/>
 			</xpp:ifeq>
+			<xpp:ifeq select="env" value="packing">
+				<xpp:set name="BinRootDir" value="../"/>
+			</xpp:ifeq>
 			<Projects Default="Embedded">
 				<xpp:define name="ProjectsRootDir">
 					<xpp:bloc>
@@ -72,22 +75,46 @@
 				</Project>
 			</Projects>
 			<Backends Default="Embedded">
-				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="h:/bin/plugins/Remote/Straight">localhost:53700</Backend>
-				<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="h:/bin/plugins/Remote/Proxy">localhost:53700 test</Backend>
 				<xpp:bloc marker="$">
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Straight">localhost:53700</Backend>
+					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Proxy">localhost:53700 test</Backend>
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$orgnzqbkd"/>
 				</xpp:bloc>
 			</Backends>
 			<Plugins target="XML">
 				<xpp:define name="XMLPluginsRootDir">
 					<xpp:bloc>
-						<xpp:expand value-of="PluginsDir"/>
-						<xpp:bloc>ogz/Frontend/</xpp:bloc>
+						<xpp:ifeq select="env" value="windows">
+							<xpp:bloc>
+								<xpp:expand value-of="PluginsDir"/>
+								<xpp:bloc>ogz/Frontend/</xpp:bloc>
+							</xpp:bloc>
+						</xpp:ifeq>
+						<xpp:ifeq select="env" value="mac">
+							<xpp:bloc>
+								<xpp:expand value-of="PluginsDir"/>
+								<xpp:bloc>ogz/Frontend/</xpp:bloc>
+							</xpp:bloc>
+						</xpp:ifeq>
+						<xpp:ifeq select="env" value="linux">
+							<xpp:bloc>
+								<xpp:expand value-of="PluginsDir"/>
+								<xpp:bloc>ogz/Frontend/</xpp:bloc>
+							</xpp:bloc>
+						</xpp:ifeq>
+						<xpp:ifeq select="env" value="packing">
+							<xpp:bloc>
+								<xpp:bloc>../plugins/</xpp:bloc>
+							</xpp:bloc>
+						</xpp:ifeq>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Record">
 					<Filename>
 						<xpp:expand select="XMLPluginsRootDir"/>
+						<xpp:ifeq select="env" value="packing">
+							<xpp:bloc>Record/</xpp:bloc>
+						</xpp:ifeq>
 						<xpp:bloc>record</xpp:bloc>
 					</Filename>
 					<Configuration>
@@ -100,6 +127,9 @@
 				<Plugin id="Text">
 					<Filename>
 						<xpp:expand select="XMLPluginsRootDir"/>
+						<xpp:ifeq select="env" value="packing">
+							<xpp:bloc>Text/</xpp:bloc>
+						</xpp:ifeq>
 						<xpp:bloc>text</xpp:bloc>
 					</Filename>
 					<Configuration>

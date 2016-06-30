@@ -361,9 +361,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
+ifdef EPEIOS_SRC			
 	mkdir -p $(out)plugins/dmnzq/
-	cp $(binary) $(out)
-			plugins/dmnzq/
+	cp $(binary) $(out)plugins/dmnzq/
+endif
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

@@ -94,21 +94,11 @@ endif
 
 ##########################
 		
+
 all : common
-ifndef EPEIOS_SRC
-	mkdir -p out
-	echo \<xpp:expand href=\"../Proxy/proxy.xcfg\"/\> >out/proxy.xcfg
-	echo \<xpp:expand href=\"../Proxy/proxy.xlcl\"/\> >out/proxy.xlcl
-	cp Proxy/$(libp)proxy$(libs) out
-	echo \<xpp:expand href=\"../Straight/straight.xcfg\"/\> >out/straight.xcfg
-	echo \<xpp:expand href=\"../Straight/straight.xlcl\"/\> >out/straight.xlcl
-	cp Straight/$(libp)straight$(libs) out
-endif
 
 clean : common
 
 common:
-ifndef EPEIOS_SRC
-endif
-	$(MAKE) $(MAKECMDGOALS) -C Proxy/
-	$(MAKE) $(MAKECMDGOALS) -C Straight/
+	$(MAKE) $(MAKECMDGOALS) -C Proxy
+	$(MAKE) $(MAKECMDGOALS) -C Straight

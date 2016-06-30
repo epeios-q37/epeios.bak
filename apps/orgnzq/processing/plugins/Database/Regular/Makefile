@@ -363,8 +363,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
+ifdef EPEIOS_SRC			
 	mkdir -p $(out)plugins/ogz/Backend/Database/
 	cp $(binary) $(out)plugins/ogz/Backend/Database/
+endif
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

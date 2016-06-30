@@ -47,4 +47,5 @@
 	</SourceDirs>
 	<PreprocessorDefinitions>
 	</PreprocessorDefinitions>
+	<Packing XFiles="No"/>
 </Project>
