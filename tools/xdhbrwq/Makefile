@@ -34,11 +34,11 @@ mods += iop lst lstbch lstcrt lstctn
 mods += mns mtx ntvstr que sdr 
 mods += stkbse stkbch stkctn str strng 
 mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht mtk 
-mods += bomhdl cdgb64 dlbrry fil fnm 
-mods += lcl plgn plgncore rgstry stsfsm 
-mods += xml xpp btr idxbtq idxbtr 
-mods += idxque lck ssnmng strmrg 
+mods += utf xtf llio tht lck 
+mods += mtk bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp btr idxbtq 
+mods += idxbtr idxque ssnmng strmrg 
 mods += csdleo csdles csdmxb csdmxs csdscb 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += xdhujp xdhujr xdhujs 
@@ -336,9 +336,15 @@ copt += -DCOPYRIGHT_YEARS=\""2015"\"
 copt += -DIDENTIFIER=\""6081a422-762f-4afd-b06a-7128d6244447"\"
 
 ifndef EPEIOS_SRC
-	src = :src:src/epeios
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
+endif
+
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
 endif
 
     
@@ -346,6 +352,7 @@ ox = o
 ds = :
 
 vpath %.cpp $(subst $(ds),:,$(src))
+vpath %.mm $(subst $(ds),:,$(src))
 
 srcd = $(subst $(ds), ,$(src))
 
@@ -356,11 +363,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)
-	cp $(binary) $(dest)
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)
+	cp $(binary) $(out)
 endif
-		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
