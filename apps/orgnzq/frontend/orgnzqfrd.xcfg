@@ -9,7 +9,7 @@
 			<DefaultProjectType>New</DefaultProjectType>
 			<DefaultBackendType>Embedded</DefaultBackendType>
 			<!-- For multi-user mode. Can be overriden by project file. -->
-			<Backend Type="Predefined">Embedded</Backend>
+			<Backend Type="Predefined">LocalHost</Backend>
 			<Login Mode="Full">
 				<UserID>TheUser</UserID>
 				<Password>ThePassword</Password>
@@ -74,7 +74,7 @@
 					<xpp:bloc>Embedded.xprj</xpp:bloc>
 				</Project>
 			</Projects>
-			<Backends Default="Embedded">
+			<Backends Default="LocalHost">
 				<xpp:bloc marker="$">
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Straight">localhost:53700</Backend>
 					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Proxy">localhost:53700 test</Backend>
