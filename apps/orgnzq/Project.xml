@@ -3,8 +3,8 @@
 	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
 	<Dependencies Target="orgnzq">
+		<xpp:expand select="AppDeps"/>
 		<Dependency Name="frontend" Dir="frontend/"/>
 		<Dependency Name="processing" Dir="processing/"/>
-		<!--Component Name="$Name$bkd" Dir="$BDir$"/-->
 	</Dependencies>
 </Project>

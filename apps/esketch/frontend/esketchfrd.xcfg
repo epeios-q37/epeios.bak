@@ -33,15 +33,6 @@
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>
-			<xpp:ifeq select="env" value="windows">
-				<xpp:set name="BinRootDir" value="h:/bin/"/>
-			</xpp:ifeq>
-			<xpp:ifeq select="env" value="linux">
-				<xpp:set name="BinRootDir" value="/home/csimon/bin/"/>
-			</xpp:ifeq>
-			<xpp:ifeq select="env" value="mac">
-				<xpp:set name="BinRootDir" value="/Users/csimon/bin/"/>
-			</xpp:ifeq>
 			<Projects Default="Embedded">
 				<xpp:define name="ProjectsRootDir">
 					<xpp:bloc>
@@ -63,8 +54,8 @@
 				</Project>
 			</Projects>
 			<Backends Default="Embedded">
-				<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="h:/bin/plugins/remote/straight">localhost:53700</Backend>
 				<xpp:bloc marker="$">
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$PlgDir$remote/straight">localhost:53700</Backend>
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$esketchbkd"/>
 				</xpp:bloc>
 			</Backends>

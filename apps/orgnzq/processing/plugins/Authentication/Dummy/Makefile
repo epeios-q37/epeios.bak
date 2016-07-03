@@ -337,7 +337,7 @@ copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""064fde57-d17f-4985-834b-8bf6cf00f53c"\"
 
 ifndef EPEIOS_SRC
-	src = :src:src/epeios
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -353,6 +353,7 @@ ox = o
 ds = :
 
 vpath %.cpp $(subst $(ds),:,$(src))
+vpath %.mm $(subst $(ds),:,$(src))
 
 srcd = $(subst $(ds), ,$(src))
 

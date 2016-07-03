@@ -5,6 +5,5 @@
 	<Dependencies Target="orgnzq">
 		<Dependency Name="backend" Dir="backend/"/>
 		<Dependency Name="plugins" Dir="plugins/"/>
-		<!--Dependency Name="dmnzq" Dir="../../../tools/dmnzq"/-->
 	</Dependencies>
 </Project>

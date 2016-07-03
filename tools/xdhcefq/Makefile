@@ -349,7 +349,7 @@ src += :"$(cef)"	# Had to be here (before the 'src += ...' below),
 					# otherwise 'MinGW' under 'MSYS' does not find some header files...
       
 ifndef EPEIOS_SRC
-	src = :src:src/epeios
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
 endif
@@ -365,6 +365,7 @@ ox = o
 ds = :
 
 vpath %.cpp $(subst $(ds),:,$(src))
+vpath %.mm $(subst $(ds),:,$(src))
 
 srcd = $(subst $(ds), ,$(src))
 

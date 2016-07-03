@@ -100,5 +100,8 @@ all : common
 clean : common
 
 common:
+	$(MAKE) $(MAKECMDGOALS) -C ~/epeios/tools/dmnzq/
+	$(MAKE) $(MAKECMDGOALS) -C ~/epeios/tools/xdhcefq/
+	$(MAKE) $(MAKECMDGOALS) -C ~/epeios/tools/xdhcefq/
 	$(MAKE) $(MAKECMDGOALS) -C frontend/
 	$(MAKE) $(MAKECMDGOALS) -C processing/

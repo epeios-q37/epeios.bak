@@ -1,6 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- For the frontends (based on 'SCLFRNTND'). -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:ifeq select="env" value="windows">
+		<xpp:set name="BinRootDir" value="h:/bin/"/>
+	</xpp:ifeq>
+	<xpp:ifeq select="env" value="linux">
+		<xpp:set name="BinDir" value="/home/csimon/bin/"/>
+	</xpp:ifeq>
+	<xpp:ifeq select="env" value="mac">
+		<xpp:set name="BinDir" value="/Users/csimon/bin/"/>
+	</xpp:ifeq>
+	<xpp:ifeq select="env" value="packing">
+		<xpp:set name="BinDir" value="./"/>
+	</xpp:ifeq>
+	<xpp:bloc marker="$">
+		<xpp:set name="PlgDir" value="$BinDir$plugins"/>
+	</xpp:bloc>
 	<xpp:define name="FRD_Parameters">
 		<xpp:bloc/>
 	</xpp:define>

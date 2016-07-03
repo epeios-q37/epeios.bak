@@ -26,17 +26,18 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio ctn 
-mods += dir dte dtfbsc dtfptb epsmsc 
-mods += err fdr flf flsq flw 
-mods += flx ias idsq iof iop 
-mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stkbse stkbch 
-mods += stkctn str strng tagsbs tol 
-mods += txf tys uys utf xtf 
-mods += llio tht mtk bomhdl cdgb64 
-mods += dlbrry fil fnm lcl plgn 
-mods += plgncore rgstry stsfsm xml xpp 
+mods += cio cpe crptgr cslio crt 
+mods += ctn dir dte dtfbsc dtfptb 
+mods += epsmsc err fdr flf flsq 
+mods += flw flx ias idsq iof 
+mods += iop lst lstbch lstcrt lstctn 
+mods += mns mtx ntvstr que sdr 
+mods += stkbse stkbch stkctn str strng 
+mods += tagsbs tol txf tys uys 
+mods += utf xtf llio tht lck 
+mods += mtk bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
@@ -338,14 +339,20 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""(Version)"\"
+copt += -DVERSION=\""20160622"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
 ifndef EPEIOS_SRC
-	src = :src:src/epeios
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
+endif
+
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
 endif
 
     
@@ -353,6 +360,7 @@ ox = o
 ds = :
 
 vpath %.cpp $(subst $(ds),:,$(src))
+vpath %.mm $(subst $(ds),:,$(src))
 
 srcd = $(subst $(ds), ,$(src))
 
@@ -363,11 +371,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)
-	cp $(binary) $(dest)
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)
+	cp $(binary) $(out)
 endif
-		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
