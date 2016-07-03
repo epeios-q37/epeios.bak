@@ -325,9 +325,15 @@ copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""84bb3ee5-a8a6-44ea-95b9-f5c467116cfb"\"
 
 ifndef EPEIOS_SRC
-	src = :src:src/epeios
+	src += :src:src/epeios
 else
 	src += :$(EPEIOS_SRC)
+endif
+
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
+	out = $(dest)
 endif
 
     
@@ -335,6 +341,7 @@ ox = o
 ds = :
 
 vpath %.cpp $(subst $(ds),:,$(src))
+vpath %.mm $(subst $(ds),:,$(src))
 
 srcd = $(subst $(ds), ,$(src))
 
@@ -345,11 +352,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)
-	cp $(binary) $(dest)
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)
+	cp $(binary) $(out)
 endif
-		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
