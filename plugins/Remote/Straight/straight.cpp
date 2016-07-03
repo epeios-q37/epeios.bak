@@ -33,11 +33,10 @@
 
 #define PLUGIN_NAME	"straight"
 
-typedef csdrcd::driver___ _plugin___;
+typedef csdrcd::cDriver cPlugin_;
 
-
-class plugin___
-: public _plugin___
+class rPlugin
+: public cPlugin_
 {
 private:
 	csdmnc::rCore Core_;
@@ -66,18 +65,15 @@ protected:
 public:
 	void reset( bso::bool__ P = true )
 	{
-		_plugin___::reset( P );
 		Core_.reset( P );
 		Connected_ = false;
 	}
-	E_CVDTOR( plugin___ );
+	qCVDTOR( rPlugin );
 	bso::bool__ Init(
 		const char *HostService,
 		bso::uint__ PingDelay,
 		sck::duration__ Timeout )
 	{
-		_plugin___::Init();
-
 		if ( !Core_.Init( HostService, PingDelay, Timeout ) )
 			return false;
 
@@ -126,7 +122,7 @@ public:
 	}
 };
 
-SCLPLUGIN_DEF( plugin___ );
+SCLPLUGIN_DEF( rPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
 

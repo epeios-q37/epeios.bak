@@ -230,6 +230,7 @@ namespace csducl {
 namespace csducl {
 	typedef universal_client_core___ rCore;
 	typedef universal_client_ioflow___ rIOFlow;
+	typedef universal_client_ioflow_driver___ rIOFlowDriver;
 }
 
 #endif

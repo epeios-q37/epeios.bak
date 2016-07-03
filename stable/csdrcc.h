@@ -35,30 +35,24 @@
 #define CSDRCC_PLUGIN_API_VERSION	"1"
 
 namespace csdrcc {
-	typedef fdr::ioflow_driver_base___ _driver___;
+	typedef fdr::ioflow_driver_base___ rDriver;
 
-	class driver___
+	class cDriver
 	{
 	protected:
-		virtual _driver___ *CSDRCCNew( void ) = 0;
-		virtual void CSDRCCDelete( _driver___ * ) = 0;
+		virtual rDriver *CSDRCCNew( void ) = 0;
+		virtual void CSDRCCDelete( rDriver * ) = 0;
 	public:
-		void reset( bso::bool__ P = true )
-		{
-		}
-		E_CVDTOR( driver___ );
-		void Init( void )
-		{
-		}
-		_driver___ *New( void )
+		qCALLBACK( Driver );
+		static const char *Label( void );
+		rDriver *New( void )
 		{
 			return CSDRCCNew();
 		}
-		void Delete( _driver___ *D )
+		void Delete( rDriver *Driver )
 		{
-			return CSDRCCDelete( D );
+			return CSDRCCDelete( Driver );
 		}
-		static const char *Label( void );
 	};
 }
 

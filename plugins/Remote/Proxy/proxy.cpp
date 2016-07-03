@@ -99,16 +99,17 @@ public:
 	}
 };
 
-typedef csdrcd::driver___ _plugin___;
+typedef csdrcd::cDriver cPlugin_;
+using csdrcd::rDriver;
 
-class plugin___
-: public _plugin___
+class rPlugin
+: public cPlugin_
 {
 private:
 	rCallback Callback_;
 	csdmxc::rCore Core_;
 protected:
-	virtual fdr::ioflow_driver_base___ *CSDRCCNew( void ) override
+	virtual rDriver *CSDRCCNew( void ) override
 	{
 		csdmxc::_driver___ *Driver = new csdmxc::_driver___;
 
@@ -126,17 +127,14 @@ protected:
 public:
 	void reset( bso::bool__ P = true )
 	{
-		_plugin___::reset( P );
 		Core_.reset( P );
 		Callback_.reset( P );
 	}
-	E_CVDTOR( plugin___ );
+	qCVDTOR( rPlugin );
 	bso::bool__ Init(
 		const char *HostService,
 		const char *Identifier )
 	{
-		_plugin___::Init();
-
 		Callback_.Init( str::string( HostService ), str::string( Identifier ) );
 
 		if ( !Core_.Init( Callback_ ) )
@@ -183,7 +181,7 @@ public:
 	}
 };
 
-SCLPLUGIN_DEF( plugin___ );
+SCLPLUGIN_DEF( rPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
 

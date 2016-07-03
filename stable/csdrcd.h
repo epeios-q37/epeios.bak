@@ -33,9 +33,8 @@
 # include "err.h"
 
 namespace csdrcd {
-
-	using csdrcc::driver___;
-
+	using csdrcc::cDriver;
+	using csdrcc::rDriver;
 }
 
 #endif

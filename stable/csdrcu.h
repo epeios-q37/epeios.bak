@@ -34,14 +34,13 @@
 # include "plgn.h"
 
 namespace csdrcu {
-	typedef fdr::ioflow_driver_base___ _driver___;
-
-	using csdrcc::driver___;
+	using csdrcc::cDriver;
+	using csdrcc::rDriver;
 
 	class core___
 	{
 	private:
-		plgn::retriever___<driver___> Retriever_;
+		plgn::retriever___<cDriver> Retriever_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -56,11 +55,11 @@ namespace csdrcu {
 		{
 			return Retriever_.Initialize( PluginPath, Identifier, Parameters, Abstracts );
 		}
-		_driver___ *New( void )
+		rDriver *New( void )
 		{
 			return Retriever_.Plugin().New();
 		}
-		void Delete( _driver___ *D )
+		void Delete( rDriver *D )
 		{
 			return Retriever_.Plugin().Delete( D );
 		}
@@ -81,7 +80,7 @@ namespace csdrcu {
 	{
 	private:
 		qRMV( core___, C_, Core_ );
-		qRMV( _driver___, D_, Driver_ );
+		qRMV( rDriver, D_, Driver_ );
 	public:
 		void reset( bso::sBool P = true )
 		{
