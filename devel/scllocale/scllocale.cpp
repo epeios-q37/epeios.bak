@@ -283,7 +283,7 @@ namespace {
 		else
 			return In.Previous( Row );
 	}
-
+	/*
 	bso::bool__ Normalize_(
 		const str::string_ &In,
 		str::string_ &Out )
@@ -377,8 +377,85 @@ namespace {
 	qRE
 		return Translation;
 	}
+	*/
 }
 
+bso::bool__ scllocale::Normalize_(
+	const str::string_ &In,
+	str::string_ &Out )
+{
+	bso::bool__ Success = false;
+qRH
+	sdr::row__ Row = qNIL;
+	bso::char__ C = 0;
+	bso::bool__ Escape = false;
+	flx::E_STRING_TOFLOW___ TFlow;
+qRB
+	Row = In.First();
+	TFlow.Init( Out );
+
+	while ( Row != qNIL ) {
+		switch ( C = In( Row ) ) {
+		case '\n':
+		case '\r':
+		case '\t':
+			if ( Escape )
+				qRReturn;
+
+			if ( TFlow.Flow().AmountWritten() )
+				TFlow << ' ';
+
+			Row = SkipLFCRTab_( In, Row );
+			break;
+		case 'n':
+		case 'r':
+			if ( Escape )
+				TFlow << txf::nl;
+			else
+				TFlow << C;
+			Escape = false;
+			break;
+		case 't':
+			if ( Escape )
+				TFlow << txf::tab;
+			else
+				TFlow << C;
+			Escape = false;
+			break;
+		case 'p':
+			if ( Escape )
+				TFlow << txf::pad;
+			else
+				TFlow << C;
+			Escape = false;
+			break;
+		case '\\':
+			if ( Escape ) {
+				TFlow << C;
+				Escape = false;
+			} else
+				Escape = true;
+			break;
+		default:
+			if ( Escape )
+				qRReturn;
+			else
+				TFlow << C;
+			break;
+		}
+
+		Row = In.Next( Row );
+	}
+
+	if ( !Escape )
+		Success = true;
+qRR
+qRT
+qRE
+	return Success;
+}
+
+/*
 const str::string_ &scllocale::GetTranslation(
 	const str::dString &Text,
 	const char *Language,
@@ -402,7 +479,7 @@ const str::string_ &scllocale::GetTranslation(
 {
 	return GetTranslation_( Meaning, Language, Translation );
 }
-
+*/
 
 void scllocale::TranslateTags(
 	str::string_ &String,

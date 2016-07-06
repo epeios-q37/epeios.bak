@@ -104,6 +104,31 @@ namespace scllocale {
 		const str::string_ &XML,
 		rgstry::eRootTagHandling RootTagHandling );
 
+	bso::bool__ Normalize_(
+		const str::string_ &In,
+		str::string_ &Out );
+
+	template <typename source, typename ... tags> inline const str::string_ &GetTranslation(
+		const source &Source,
+		const char *Language,
+		str::string_ &Translation,
+		const tags &... Tags )
+	{
+	qRH
+		str::string Intermediate;
+	qRB
+		Intermediate.Init();
+		GetLocale().GetTranslation( Source, Language, Intermediate, Tags... );
+
+		if ( !Normalize_( Intermediate, Translation ) )
+			qRFwk();
+	qRR
+	qRT
+	qRE
+		return Translation;
+	}
+
+	/*
 	const str::string_ &GetTranslation(
 		const str::dString &Text,
 		const char *Language,
@@ -118,6 +143,7 @@ namespace scllocale {
 		const lcl::meaning_ &Meaning,
 		const char *Language,
 		str::string_ &Translation );
+	*/
 
 	void TranslateTags(
 		str::string_ &String,

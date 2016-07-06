@@ -1,6 +1,20 @@
 CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
+
+
+2016-07-06 :
+	- LCL :
+		- Adding 'dMeaning::AddTags(...)' method.
+		- Adding 'locale_::GetTranslation(...)' method variant.
+	- SCLLOCALE :
+		- Replacing all 'GetTranslation(...)' with one based on variadics.
+	- STSFSM :
+		- Adding 'Fill(...)' function variant.
+		- Adding 'qRP' parameters to 'GetId(...)' functions.
+
+...
+
 2016-05-23 :
 - SCLBACKND, FBL...
 	- Reorganization.

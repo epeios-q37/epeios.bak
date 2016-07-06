@@ -412,7 +412,7 @@ qRB
 
 	Intermediate.Init();
 	if ( Basic.GetToTranslate() )
-		Locale.GetTranslation( Value.Convert( Buffer ), Language, Intermediate );
+		Locale.GetTranslation_( Value.Convert( Buffer ), Language, Intermediate );
 	else
 		Intermediate = Value;
 
@@ -428,14 +428,14 @@ qRE
 	return Translation;
 }
 
-const str::string_  &lcl::locale_::GetTranslation(
+const str::string_  &lcl::locale_::GetTranslation_(
 	const meaning_ &Meaning,
 	const char *Language,
 	str::string_ &Translation ) const
 {
 	ctn::qCMITEMs( _basic_, brow__ ) Basic;
 
-	return GetTranslation_( Meaning.GetBasic( Basic ), Meaning.Core, Language, *this, Translation );
+	return ::GetTranslation_( Meaning.GetBasic( Basic ), Meaning.Core, Language, *this, Translation );
 }
 
 

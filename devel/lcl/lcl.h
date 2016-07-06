@@ -226,6 +226,19 @@ namespace lcl {
 
 			return _Basic( Basic ).S_.Value == qNIL;
 		}
+		void AddTags( void )	// To help the compiler to deal with some '...' use.
+		{}
+		template <typename t> void AddTags( const t &Tag )
+		{
+			AddTag( Tag );
+		}
+		template <typename tag, typename... tags> void AddTags(
+			const tag &Tag,
+			const tags &... Tags )
+		{
+			AddTag( Tag );
+			AddTags( Tags... );
+		}
 	};
 
 	E_AUTO( meaning )
@@ -287,11 +300,18 @@ namespace lcl {
 		void GetLanguages(
 			strings_ &Labels,
 			strings_ &Wordings ) const;
-		const str::string_  &GetTranslation(
+		const str::string_  &GetTranslation_(
 			const meaning_ &Meaning,
 			const char *Language,
 			str::string_ &Translation ) const;
-		const str::string_ &GetTranslation(
+		const str::string_  &GetTranslation(
+			const meaning_ &Meaning,
+			const char *Language,
+			str::string_ &Translation ) const
+		{
+			return GetTranslation_( Meaning, Language, Translation );
+		}
+		const str::string_ &GetTranslation_(
 			const str::string_ &Text,
 			const char *Language,
 			str::string_ &Translation ) const	// Version simplifiée.
@@ -300,7 +320,7 @@ namespace lcl {
 
 			return Translation ;
 		}
-		const str::string_ &GetTranslation(
+		const str::string_ &GetTranslation_(
 			const char *Text,
 			const char *Language,
 			str::string_ &Translation ) const	// Version simplifiée.
@@ -308,6 +328,25 @@ namespace lcl {
 			_GetTranslation( str::string( Text ), Language, Translation );
 
 			return Translation ;
+		}
+		template <typename source, typename ... tags> const str::dString &GetTranslation(
+			const source &Source,
+			const char *Language,
+			str::string_ &Translation,
+			const tags&... Tags ) const
+		{
+		qRH
+			wMeaning Meaning;
+		qRB
+			Meaning.Init();
+			Meaning.SetValue( Source );
+			Meaning.AddTags( Tags... );
+
+			GetTranslation_( Meaning, Language, Translation );
+		qRR
+		qRT
+		qRE
+			return Translation;
 		}
 	};
 

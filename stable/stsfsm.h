@@ -244,6 +244,28 @@ namespace stsfsm {
 	template <typename type> inline void Fill(
 		automat_ &Automat,
 		type Amount,
+		const str::dString &(* GetLabel)( type, str::dString & ) )
+	{
+	qRH
+		int i = 0;
+		str::wString Label;
+	qRB
+		while ( i < Amount ) {
+			Label.Init();
+
+			if ( Add( GetLabel( (type)i, Label ), i, Automat ) != UndefinedId )
+				qRFwk();
+
+			i++;
+		}
+	qRR
+	qRT
+	qRE
+	}
+
+	template <typename type> inline void Fill(
+		automat_ &Automat,
+		type Amount,
 		const char *(* GetLabel)( type ) )
 	{
 		int i = 0;
@@ -279,11 +301,15 @@ namespace stsfsm {
 	template <typename type> inline type Normalize_(
 		id__ Id,
 		bso::uint__ Amount,
-		type UndefinedValue )
+		type UndefinedValue,
+		qRPN )
 	{
-		if ( Id == UndefinedId )
-			return UndefinedValue;
-		else if ( Id >= (id__)Amount )
+		if ( Id == UndefinedId ) {
+			if ( qRPT )
+				qRFwk();
+			else
+				return UndefinedValue;
+		} else if ( Id >= (id__)Amount )
 			qRFwk();
 		else
 			return (type)Id;
@@ -295,9 +321,10 @@ namespace stsfsm {
 		flw::iflow__ &Flow,
 		const automat_ &Automat,
 		type UndefinedValue,
-		bso::uint__ Amount )
+		bso::uint__ Amount,
+		qRPD )
 	{
-		return Normalize_<type>( GetId( Flow, Automat ), Amount, UndefinedValue );
+		return Normalize_<type>( GetId( Flow, Automat ), Amount, UndefinedValue, qRP );
 	}
 
 	id__ GetId(
@@ -308,9 +335,10 @@ namespace stsfsm {
 		const str::string_ &Pattern,
 		const automat_ &Automat,
 		type UndefinedValue,
-		bso::uint__ Amount )
+		bso::uint__ Amount,
+		qRPD )
 	{
-		return Normalize_<type>( GetId( Pattern, Automat ), Amount, UndefinedValue );
+		return Normalize_<type>( GetId( Pattern, Automat ), Amount, UndefinedValue, qRP );
 	}
 }
 
