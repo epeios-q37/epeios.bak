@@ -204,6 +204,11 @@ namespace lcl {
 
 			Core.Basics.Flush();
 		}
+		// Simplifies the use of variadics.
+		void SetValue( const meaning_ &Meaning )
+		{
+			operator =( Meaning );
+		}
 		void SetValue( const str::string_ &Value );
 		void SetValue( const char *Value )
 		{
@@ -272,6 +277,12 @@ namespace lcl {
 			const str::string_ &Text,
 			const char *Language,
 			str::string_ &Translation ) const;
+		const str::string_ &GetTranslation_(
+			const _basic_ &Basic,
+			const _core_ &Core,
+			const char *Language,
+			const locale_ &Locale,
+			str::string_ &Translation ) const;
 		void _GetTranslation(
 			const str::string_ &Text,
 			const char *Language,
@@ -280,6 +291,15 @@ namespace lcl {
 			const meaning_ &Meaning,
 			const char *Language,
 			str::string_ &Translation ) const;
+		const str::string_ &GetTranslation_(
+			const str::string_ &Text,
+			const char *Language,
+			str::string_ &Translation ) const
+		{
+			_GetTranslation( Text, Language, Translation );
+
+			return Translation ;
+		}
 		const str::string_ &GetTranslation_(
 			const char *Text,
 			const char *Language,
@@ -313,16 +333,6 @@ namespace lcl {
 		void GetLanguages(
 			strings_ &Labels,
 			strings_ &Wordings ) const;
-		// Temporary (?) workaround. Should be private.
-		const str::string_ &GetTranslation_(
-			const str::string_ &Text,
-			const char *Language,
-			str::string_ &Translation ) const
-		{
-			_GetTranslation( Text, Language, Translation );
-
-			return Translation ;
-		}
 		const str::string_  &GetTranslation(
 			const meaning_ &Meaning,
 			const char *Language,

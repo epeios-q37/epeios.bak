@@ -412,7 +412,7 @@ qRB
 
 	Intermediate.Init();
 	if ( Basic.GetToTranslate() )
-		Locale.GetTranslation_( Value, Language, Intermediate );
+		Locale.GetTranslation( Value, Language, Intermediate );
 	else
 		Intermediate = Value;
 

@@ -397,7 +397,7 @@ static const str::string_ &GetTranslation_(
 	const _core_ &Core,
 	const char *Language,
 	const locale_ &Locale,
-	str::string_ &Translation )
+	str::string_ &Translation ) const
 {
 qRH
 	str::strings Tags;
@@ -428,6 +428,17 @@ qRE
 	return Translation;
 }
 
+
+const str::string_ &lcl::locale_::GetTranslation_(
+	const _basic_ &Basic,
+	const _core_ &Core,
+	const char *Language,
+	const locale_ &Locale,
+	str::string_ &Translation ) const
+{
+	return ::GetTranslation_( Basic, Core, Language, Locale, Translation );
+}
+
 const str::string_  &lcl::locale_::GetTranslation_(
 	const meaning_ &Meaning,
 	const char *Language,
@@ -435,10 +446,8 @@ const str::string_  &lcl::locale_::GetTranslation_(
 {
 	ctn::qCMITEMs( _basic_, brow__ ) Basic;
 
-	return ::GetTranslation_( Meaning.GetBasic( Basic ), Meaning.Core, Language, *this, Translation );
+	return GetTranslation_( Meaning.GetBasic( Basic ), Meaning.Core, Language, *this, Translation );
 }
-
-
 
 /*
 
