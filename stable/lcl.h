@@ -276,6 +276,19 @@ namespace lcl {
 			const str::string_ &Text,
 			const char *Language,
 			str::string_ &Translation ) const;
+		const str::string_  &GetTranslation_(
+			const meaning_ &Meaning,
+			const char *Language,
+			str::string_ &Translation ) const;
+		const str::string_ &GetTranslation_(
+			const char *Text,
+			const char *Language,
+			str::string_ &Translation ) const
+		{
+			_GetTranslation( str::string( Text ), Language, Translation );
+
+			return Translation ;
+		}
 	public:
 		struct s
 			: public _registry_::s
@@ -300,34 +313,22 @@ namespace lcl {
 		void GetLanguages(
 			strings_ &Labels,
 			strings_ &Wordings ) const;
-		const str::string_  &GetTranslation_(
-			const meaning_ &Meaning,
+		// Temporary (?) workaround. Should be private.
+		const str::string_ &GetTranslation_(
+			const str::string_ &Text,
 			const char *Language,
-			str::string_ &Translation ) const;
+			str::string_ &Translation ) const
+		{
+			_GetTranslation( Text, Language, Translation );
+
+			return Translation ;
+		}
 		const str::string_  &GetTranslation(
 			const meaning_ &Meaning,
 			const char *Language,
 			str::string_ &Translation ) const
 		{
 			return GetTranslation_( Meaning, Language, Translation );
-		}
-		const str::string_ &GetTranslation_(
-			const str::string_ &Text,
-			const char *Language,
-			str::string_ &Translation ) const	// Version simplifiée.
-		{
-			_GetTranslation( Text, Language, Translation );
-
-			return Translation ;
-		}
-		const str::string_ &GetTranslation_(
-			const char *Text,
-			const char *Language,
-			str::string_ &Translation ) const	// Version simplifiée.
-		{
-			_GetTranslation( str::string( Text ), Language, Translation );
-
-			return Translation ;
 		}
 		template <typename source, typename ... tags> const str::dString &GetTranslation(
 			const source &Source,
