@@ -2,6 +2,11 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-07-07 :
+	- LCL :
+		- Reorganization to arrange some oddities due to below modifications.
+	- SCLFRNTND :
+		- Fixing missing login parameters bug.
 
 2016-07-06 :
 	- LCL :

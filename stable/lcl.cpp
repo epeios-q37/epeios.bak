@@ -356,19 +356,12 @@ void lcl::locale_::GetLanguages(
 		qRFwk();
 }
 
-static const str::string_ &GetTranslation_(
-	const _basic_ &Basic,
-	const _core_ &Core,
-	const char *Language,
-	const locale_ &Locale,
-	str::string_ &Translation );	// Pr-dclaration.
-
-static void GetTags_(
+void lcl::locale_::GetTags_(
 	const brows_ &InputTags,
 	const _core_ &Core,
 	const char *Language,
 	const locale_ &Locale,
-	str::strings_ &Tags )
+	str::strings_ &Tags ) const
 {
 qRH
 	ctn::qCMITEMs( _basic_, brow__ ) Basic;
@@ -392,12 +385,12 @@ qRT
 qRE
 }
 
-static const str::string_ &GetTranslation_(
+const str::string_ &lcl::locale_::GetTranslation_(
 	const _basic_ &Basic,
 	const _core_ &Core,
 	const char *Language,
 	const locale_ &Locale,
-	str::string_ &Translation )
+	str::string_ &Translation ) const
 {
 qRH
 	str::strings Tags;
@@ -412,7 +405,7 @@ qRB
 
 	Intermediate.Init();
 	if ( Basic.GetToTranslate() )
-		Locale.GetTranslation( Value, Language, Intermediate );
+		Locale.GetTranslation_( Value, Language, Intermediate );
 	else
 		Intermediate = Value;
 
@@ -435,10 +428,8 @@ const str::string_  &lcl::locale_::GetTranslation_(
 {
 	ctn::qCMITEMs( _basic_, brow__ ) Basic;
 
-	return ::GetTranslation_( Meaning.GetBasic( Basic ), Meaning.Core, Language, *this, Translation );
+	return GetTranslation_( Meaning.GetBasic( Basic ), Meaning.Core, Language, *this, Translation );
 }
-
-
 
 /*
 

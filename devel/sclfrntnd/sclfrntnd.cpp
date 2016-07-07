@@ -153,7 +153,7 @@ qRB
 	Mode.Init();
 
 	if ( !sclmisc::OGetValue( parameter_::login_::Mode_, Mode ) ) {
-		Mode = lBlank;
+		Login = lBlank;
 		qRReturn;
 	}
 

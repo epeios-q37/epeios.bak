@@ -277,6 +277,12 @@ namespace lcl {
 			const str::string_ &Text,
 			const char *Language,
 			str::string_ &Translation ) const;
+		void GetTags_(
+			const brows_ &InputTags,
+			const _core_ &Core,
+			const char *Language,
+			const locale_ &Locale,
+			str::strings_ &Tags ) const;
 		const str::string_ &GetTranslation_(
 			const _basic_ &Basic,
 			const _core_ &Core,
