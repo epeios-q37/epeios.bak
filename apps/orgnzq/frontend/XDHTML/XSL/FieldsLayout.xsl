@@ -42,7 +42,7 @@
 	</xsl:template>
 	<xsl:template match="Field">
 		<div style="display: flex;">
-			<img style="width: 15px; height: 15px" src="js/cursor_drag_hand.png" data-xdh-onevents="(dragstart|DragField)|(drop|DropField)|(dragend|EndFieldDragging)" data-xdh-casts="FieldDraggingCast|FieldDroppingCast">
+			<img title="#fieldsDragAndDropTitle#" style="width: 15px; height: 15px" src="js/cursor_drag_hand.png" data-xdh-onevents="(dragstart|DragField)|(drop|DropField)|(dragend|EndFieldDragging)" data-xdh-casts="FieldDraggingCast|FieldDroppingCast">
 				<xsl:attribute name="data-xdh-value">
 					<xsl:value-of select="@id"/>
 				</xsl:attribute>

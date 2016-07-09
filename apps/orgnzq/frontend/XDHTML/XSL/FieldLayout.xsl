@@ -42,7 +42,7 @@
 		</div>
 		<xsl:if test="$Number='Multi'">
 			<div>
-				<button data-xdh-onevents="DefineNewEntry|(drop|DropEntry)" title="#fieldDefineNewEntry#" data-xdh-cast="EntryDroppingCast">#fieldDefineNewEntry#</button>
+				<button data-xdh-onevents="DefineNewEntry|(drop|DropEntry)" title="#fieldDefineNewEntryTitle#" data-xdh-cast="EntryDroppingCast">#fieldDefineNewEntry#</button>
 			</div>
 		</xsl:if>
 	</xsl:template>
@@ -68,7 +68,7 @@
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<fieldset data-xdh-onevents="(dragstart|DragEntry)|(drop|DropEntry)|(dragend|EndEntryDragging)" data-xdh-casts="EntryDraggingCast|EntryDroppingCast">
+				<fieldset title="#fieldDragAndDropTitle#" data-xdh-onevents="(dragstart|DragEntry)|(drop|DropEntry)|(dragend|EndEntryDragging)" data-xdh-casts="EntryDraggingCast|EntryDroppingCast">
 					<xsl:attribute name="data-xdh-value">
 						<xsl:value-of select="@id"/>
 					</xsl:attribute>

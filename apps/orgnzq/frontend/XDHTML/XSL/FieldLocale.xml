@@ -5,7 +5,7 @@
 		<Translation language="en">New</Translation>
 	</Translations>
 	<Translations text="fieldDefineNewEntryTitle">
-		<Translation language="fr">Créer une bouvell entréer.</Translation>
+		<Translation language="fr">Créer une nouvelle entrée.</Translation>
 		<Translation language="en">Create new entry.</Translation>
 	</Translations>
 	<Translations text="fieldNotImplementedYet">
@@ -16,7 +16,11 @@
 		<Translation language="fr">Type de champs inconnu !</Translation>
 		<Translation language="en">Unknown field type !</Translation>
 	</Translations>
-	<!--
+	  <Translations text="fieldDragAndDropTitle">
+    <Translation language="fr">Glisser/déplacer pour réorganiser les entrées.</Translation>
+    <Translation language="en"></Translation>
+  </Translations>
+<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

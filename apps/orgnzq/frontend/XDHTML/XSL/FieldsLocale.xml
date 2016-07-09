@@ -4,7 +4,11 @@
 		<Translation language="fr">(Pas de champs)</Translation>
 		<Translation language="en">(No fields)</Translation>
 	</Translations>
-	<!--
+  <Translations text="fieldsDragAndDropTitle">
+    <Translation language="fr">Glisser/déplacer pour réorganiser les champs.</Translation>
+    <Translation language="en"></Translation>
+  </Translations>
+  <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

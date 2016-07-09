@@ -76,7 +76,7 @@
 			</Projects>
 			<Backends Default="LocalHost">
 				<xpp:bloc marker="$">
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Straight">localhost:53700</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Straight">10.0.0.15:53700</Backend>
 					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Proxy">localhost:53700 test</Backend>
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$orgnzqbkd"/>
 				</xpp:bloc>
