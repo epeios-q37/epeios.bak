@@ -21,6 +21,8 @@
 
 #include "dlbrry.h"
 
+#include "str.h"
+
 using namespace dlbrry;
 
 #if defined( CPE_S_POSIX )
@@ -44,7 +46,6 @@ using namespace dlbrry;
 #endif
 
 #ifdef TARGET_POSIX
-
 
 # ifdef CPE_S_DARWIN
 #  define PREFIX "lib"
@@ -119,6 +120,55 @@ qRT
 qRE
 	return Handler;
 }
+# elif defined( TARGET_WIN )
+namespace {
+	void Normalize_( str::dString &String )
+	{
+		sdr::sRow Row = String.First();
+
+		while ( Row != qNIL ) {
+			if ( String( Row ) == '/' )	// 'Windows' ('XP' only ?) doesn't handle '/' correctly. So, they are replaced by '\'.
+				String.Store( '\\', Row );
+
+			Row = String.Next( Row );
+		}
+	}
+
+	void Normalize_(
+		const ntvstr::rString &Raw,
+		ntvstr::rString &Normalized )
+	{
+	qRH
+		str::wString Buffer;
+	qRB
+		Buffer.Init();
+		
+		Raw.UTF8( Buffer );
+
+		Normalize_( Buffer );
+
+		Normalized.Init( Buffer );
+	qRR
+	qRT
+	qRE
+	}
+
+	library_handler__ WinLoadLibrary( const ntvstr::string___ &RawPath )
+	{
+		library_handler__ Handler = NULL;
+	qRH
+		ntvstr::string___ NormalizedPath;
+	qRB
+		NormalizedPath.Init();
+
+		Normalize_( RawPath, NormalizedPath );
+		Handler = LoadLibraryW( NormalizedPath.Internal() );
+	qRR
+	qRT
+	qRE
+		return Handler;
+	}
+}
 # endif
 
 bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &Name )
@@ -127,7 +177,7 @@ bso::bool__ dlbrry::dynamic_library___::_LoadLibrary( const ntvstr::string___ &N
 		qRFwk();
 
 #ifdef TARGET_WIN
-	if ( ( _LibraryHandler = LoadLibraryW( Name.Internal() ) ) == NULL )
+	if ( ( _LibraryHandler = WinLoadLibrary( Name ) ) == NULL )
 		return false;
 #elif defined( TARGET_POSIX )
 	if ( ( _LibraryHandler = PosixLoadLibrary_( Name ) ) == NULL )

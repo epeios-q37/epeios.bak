@@ -17,6 +17,8 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+// NaTiVe STRing
+
 #ifndef NTVSTR__INC
 # define NTVSTR__INC
 
@@ -25,8 +27,6 @@
 # if defined( E_DEBUG ) && !defined( NTVSTR_NODBG )
 #  define NTVSTR_DBG
 # endif
-
-// NaTiVe STRing
 
 # include "err.h"
 # include "flw.h"
@@ -234,6 +234,14 @@ namespace ntvstr {
 	{
 		return string___( String ).UTF8( Buffer );
 	}
+}
+
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace ntvstr {
+	typedef string___ rString;
 }
 
 #endif

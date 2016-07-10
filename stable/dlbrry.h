@@ -17,34 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: dlbrry.h,v 1.8 2013/04/09 08:03:08 csimon Exp $
+// Dynamic LiBRaRY 
 
 #ifndef DLBRRY__INC
-#define DLBRRY__INC
+# define DLBRRY__INC
 
-#define DLBRRY_NAME		"DLBRRY"
+# define DLBRRY_NAME		"DLBRRY"
 
-#define	DLBRRY_VERSION	"$Revision: 1.8 $"
-
-#define DLBRRY_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( DLBRRY_NODBG )
-#define DLBRRY_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.8 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/09 08:03:08 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Dynamic LiBRaRY 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( DLBRRY_NODBG )
+#  define DLBRRY_DBG
+# endif
 
 # include "err.h"
 # include "flw.h"
@@ -112,10 +94,6 @@ namespace dlbrry {
 
 		return (function)Library.GetFunction( FunctionName );
 	}
-
-
-
 }
 
-/*$END$*/
 #endif

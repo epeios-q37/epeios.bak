@@ -2,9 +2,9 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
-2016-07-08 :
-	- SCLXDHTML :
-		- Using the new 'Straight' plugin instead of the old 'INet' one.
+2016-07-10 :
+	- DLLBRY :
+		- Under 'Windows', all '/' in library path are replaced with '\', as Windows ('XP' only ?) needs '\'.'
 
 2016-07-07 :
 	- LCL :
