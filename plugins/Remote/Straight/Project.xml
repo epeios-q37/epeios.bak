@@ -17,7 +17,7 @@
 		<Software>remote</Software>
 		<UUID>2c95d4ed-2c57-4399-9c86-4115883be7cc</UUID>
 	</About>
-	<InstallPath>plugins/remote/</InstallPath>
+	<InstallPath>plugins/remote/straight/</InstallPath>
 	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">

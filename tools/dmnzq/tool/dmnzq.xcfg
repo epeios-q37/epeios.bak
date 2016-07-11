@@ -13,25 +13,13 @@
 			<Plugins target="Slot">
 				<xpp:define name="SlotPluginsDir">
 					<xpp:bloc>
-						<xpp:ifeq select="env" value="windows">
+						<xpp:ifeq select="packing" value="no">
 							<xpp:bloc>
-								<xpp:expand select="PluginsDir"/>
+								<xpp:expand select="PlgPath"/>
 								<xpp:bloc>dmnzq/</xpp:bloc>
 							</xpp:bloc>
 						</xpp:ifeq>
-						<xpp:ifeq select="env" value="mac">
-							<xpp:bloc>
-								<xpp:expand select="PluginsDir"/>
-								<xpp:bloc>dmnzq/</xpp:bloc>
-							</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:ifeq select="env" value="linux">
-							<xpp:bloc>
-								<xpp:expand select="PluginsDir"/>
-								<xpp:bloc>dmnzq/</xpp:bloc>
-							</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:ifeq select="env" value="packing">
+						<xpp:ifeq select="packing" value="yes">
 							<xpp:bloc>../plugins/</xpp:bloc>
 						</xpp:ifeq>
 					</xpp:bloc>
@@ -39,10 +27,7 @@
 				<Plugin id="Straight">
 					<Filename>
 						<xpp:expand select="SlotPluginsDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Straight/</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>straight</xpp:bloc>
+						<xpp:bloc>straight/straight</xpp:bloc>
 					</Filename>
 					<Configuration>
 						<xpp:expand href="../plugins/Straight/straight.xcfg"/>
@@ -54,10 +39,7 @@
 				<Plugin id="Proxy">
 					<Filename>
 						<xpp:expand select="SlotPluginsDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Proxy/</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>proxy</xpp:bloc>
+						<xpp:bloc>proxy/proxy</xpp:bloc>
 					</Filename>
 					<Configuration>
 						<xpp:expand href="../plugins/Proxy/proxy.xcfg"/>

@@ -34,6 +34,9 @@
 		<xpp:ifeq select="env" value="mac">
 			<xpp:set name="RootPath" value="/H/"/>
 		</xpp:ifeq>
+		<xpp:ifeq select="env" value="packing">
+			<xpp:set name="RootPath" value="h:/"/>
+		</xpp:ifeq>
 	</xpp:bloc>
 	<xpp:bloc marker="$"> 
 		<xpp:set name="CorpusPath" value="$RootPath$hg/epeios/corpus/"/>
@@ -44,41 +47,33 @@
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:bloc>
-		<xpp:ifeq select="env" value="windows">
-			<xpp:bloc>
-				<xpp:define name="BinPath">
-					<xpp:bloc>h:\bin\</xpp:bloc>
-				</xpp:define>
-				<xpp:set name="BinPath" value="h:\bin\"/>
-			</xpp:bloc>
-		</xpp:ifeq>
-		<xpp:ifeq select="env" value="linux">
-			<xpp:bloc>
-				<xpp:define name="BinPath">
-					<xpp:bloc>/home/csimon/bin/</xpp:bloc>
-				</xpp:define>
-				<xpp:set name="BinPath" value="/home/csimon/bin/"/>
-			</xpp:bloc>
-		</xpp:ifeq>
-		<xpp:ifeq select="env" value="mac">
-			<xpp:bloc>
-				<xpp:define name="BinPath">
-					<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
-				</xpp:define>
-				<xpp:set name="BinPath" value="/Users/csimon/bin/"/>
-			</xpp:bloc>
-		</xpp:ifeq>
-	</xpp:bloc>
-	<xpp:bloc>
 		<xpp:ifeq select="packing" value="no">
 			<xpp:bloc>
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>
+							<xpp:set name="BinPath" value="h:\bin\"/>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>
+							<xpp:set name="BinPath" value="/home/csimon/bin/"/>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>
+							<xpp:set name="BinPath" value="/Users/csimon/bin/"/>
+						</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+				<xpp:define name="BinPath">
+					<xpp:expand value-of="BinPath"/>
+				</xpp:define>
 				<xpp:bloc marker="$">
 					<xpp:set name="PlgPath" value="$BinPath$plugins/"/>
 				</xpp:bloc>
 				<xpp:define name="PlgPath">
-					<xpp:bloc>
-						<xpp:expand value-of="PlgPath"/>
-					</xpp:bloc>
+					<xpp:expand value-of="PlgPath"/>
 				</xpp:define>
 			</xpp:bloc>
 		</xpp:ifeq>

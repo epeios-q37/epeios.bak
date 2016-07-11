@@ -3,9 +3,9 @@
 	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml" />
 	<Dependencies Target="dmnzq">
-		<Dependency Name="dmnzq" Dir="tool" Bin="./"/>
-		<Dependency Name="straight" Dir="plugins/Straight" Bin="plugins/dmnzq/"/>
-		<Dependency Name="proxy" Dir="plugins/Proxy" Bin="plugins/dmnzq/"/>
+		<Dependency Dir="tool/"/>
+		<Dependency Dir="plugins/Straight/"/>
+		<Dependency Dir="plugins/Proxy/"/>
 	</Dependencies>
 	<WikiFiles Group="Doc" Path="Doc/">
 	</WikiFiles>
