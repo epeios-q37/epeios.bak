@@ -1,0 +1,1 @@
+For the maintainer of the files : the 'js' directory is a 'mklink /j' to the directory of the same name in the 'Auto' directory from the q37 mercurial repository.
