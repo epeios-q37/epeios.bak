@@ -17,7 +17,7 @@
 		<Software>orgnzq</Software>
 		<UUID>dc65c10b-5f97-49d0-8604-50fe4f93be03</UUID>
 	</About>
-	<InstallPath>plugins/ogz/Frontend/</InstallPath>
+	<InstallPath>plugins/ogz/frontend/record/</InstallPath>
 	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">

@@ -26,38 +26,10 @@
 	<xpp:define name="Definitions">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Definitions"/>
-			<xpp:define name="BinRootDir">
-				<xpp:bloc>
-					<xpp:ifeq select="env" value="windows">
-						<xpp:bloc>h:/bin/</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="linux">
-						<xpp:bloc>/home/csimon/bin/</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="mac">
-						<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="packing">
-						<xpp:bloc/>
-					</xpp:ifeq>
-				</xpp:bloc>
-			</xpp:define>
-			<xpp:ifeq select="env" value="windows">
-				<xpp:set name="BinRootDir" value="h:/bin/"/>
-			</xpp:ifeq>
-			<xpp:ifeq select="env" value="linux">
-				<xpp:set name="BinRootDir" value="/home/csimon/bin/"/>
-			</xpp:ifeq>
-			<xpp:ifeq select="env" value="mac">
-				<xpp:set name="BinRootDir" value="/Users/csimon/bin/"/>
-			</xpp:ifeq>
-			<xpp:ifeq select="env" value="packing">
-				<xpp:set name="BinRootDir" value="../"/>
-			</xpp:ifeq>
 			<Projects Default="Embedded">
 				<xpp:define name="ProjectsRootDir">
 					<xpp:bloc>
-						<xpp:expand select="BinRootDir"/>
+						<xpp:expand select="BinPath"/>
 						<xpp:bloc>ogz/Frontend/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
@@ -74,69 +46,45 @@
 					<xpp:bloc>Embedded.xprj</xpp:bloc>
 				</Project>
 			</Projects>
-			<Backends Default="LocalHost">
+			<Backends Default="Embedded">
 				<xpp:bloc marker="$">
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Straight">10.0.0.15:53700</Backend>
-					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinRootDir$plugins/Remote/Proxy">localhost:53700 test</Backend>
-					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$orgnzqbkd"/>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">10.0.0.15:53700</Backend>
+					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/proxy/proxy">localhost:53700 test</Backend>
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinPath$orgnzqbkd"/>
 				</xpp:bloc>
 			</Backends>
 			<Plugins target="XML">
+				<xpp:ifeq select="packing" value="yes">
+					<xpp:set name="PlgPath" value="../plugins/"/>
+				</xpp:ifeq>
 				<xpp:define name="XMLPluginsRootDir">
 					<xpp:bloc>
-						<xpp:ifeq select="env" value="windows">
-							<xpp:bloc>
-								<xpp:expand value-of="PluginsDir"/>
-								<xpp:bloc>ogz/Frontend/</xpp:bloc>
-							</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:ifeq select="env" value="mac">
-							<xpp:bloc>
-								<xpp:expand value-of="PluginsDir"/>
-								<xpp:bloc>ogz/Frontend/</xpp:bloc>
-							</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:ifeq select="env" value="linux">
-							<xpp:bloc>
-								<xpp:expand value-of="PluginsDir"/>
-								<xpp:bloc>ogz/Frontend/</xpp:bloc>
-							</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>
-								<xpp:bloc>../plugins/</xpp:bloc>
-							</xpp:bloc>
-						</xpp:ifeq>
+						<xpp:expand value-of="PlgPath"/>
+						<xpp:bloc>ogz/frontend/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Record">
 					<Filename>
 						<xpp:expand select="XMLPluginsRootDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Record/</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>record</xpp:bloc>
+						<xpp:bloc>record/record</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Record/record.xcfg"/>
+						<xpp:expand href="../plugins/record/record.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Record/record.xlcl"/>
+						<xpp:expand href="../plugins/record/record.xlcl"/>
 					</Locale>
 				</Plugin>
 				<Plugin id="Text">
 					<Filename>
 						<xpp:expand select="XMLPluginsRootDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Text/</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>text</xpp:bloc>
+						<xpp:bloc>text/text</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Text/text.xcfg"/>
+						<xpp:expand href="../plugins/text/text.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Text/text.xlcl"/>
+						<xpp:expand href="../plugins/text/text.xlcl"/>
 					</Locale>
 				</Plugin>
 			</Plugins>

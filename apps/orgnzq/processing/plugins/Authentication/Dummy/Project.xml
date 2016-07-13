@@ -17,7 +17,7 @@
 		<Software>orgnzq</Software>
 		<UUID>064fde57-d17f-4985-834b-8bf6cf00f53c</UUID>
 	</About>
-	<InstallPath>plugins/ogz/Backend/Authentication/</InstallPath>
+	<InstallPath>plugins/ogz/backend/authentication/dummy/</InstallPath>
 	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">

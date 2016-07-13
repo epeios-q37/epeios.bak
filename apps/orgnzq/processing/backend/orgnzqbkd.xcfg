@@ -16,31 +16,19 @@
 			</Plugins>
 		</Parameters>
 		<Definitions>
-			<xpp:define name="PluginsPath">
-				<xpp:bloc>ogz/Backend/</xpp:bloc>
-			</xpp:define>
+			<xpp:ifeq select="packing" value="yes">
+				<xpp:bloc>
+					<xpp:set name="PlgPath" value="../plugins"/>
+					<xpp:define name="PlgPath">
+						<xpp:expand value-of="PlgPath"/>
+					</xpp:define>
+				</xpp:bloc>
+			</xpp:ifeq>
 			<xpp:define name="PluginsRootDir">
 				<xpp:bloc>
-					<xpp:ifeq select="env" value="windows">
-						<xpp:bloc>
-							<xpp:expand select="PluginsDir"/>
-							<xpp:expand select="PluginsPath"/>
-						</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="linux">
-						<xpp:bloc>
-							<xpp:expand select="PluginsDir"/>
-							<xpp:expand select="PluginsPath"/>
-						</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="mac">
-						<xpp:bloc>
-							<xpp:expand select="PluginsDir"/>
-							<xpp:expand select="PluginsPath"/>
-						</xpp:bloc>
-					</xpp:ifeq>
-					<xpp:ifeq select="env" value="packing">
-						<xpp:bloc>../plugins/</xpp:bloc>
+					<xpp:expand select="PlgPath"/>
+					<xpp:ifeq select="packing" value="no">
+						<xpp:bloc>ogz/backend/</xpp:bloc>
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>
@@ -48,37 +36,31 @@
 				<xpp:define name="TypePluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:bloc>Type/</xpp:bloc>
+						<xpp:bloc>type/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Record">
 					<Filename>
 						<xpp:expand select="TypePluginsRootDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Record/</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>record</xpp:bloc>
+						<xpp:bloc>record/record</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Type/Record/record.xcfg"/>
+						<xpp:expand href="../plugins/type/record/record.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Type/Record/record.xlcl"/>
+						<xpp:expand href="../plugins/type/record/record.xlcl"/>
 					</Locale>
 				</Plugin>
 				<Plugin id="Text">
 					<Filename>
 						<xpp:expand select="TypePluginsRootDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Text/</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>text</xpp:bloc>
+						<xpp:bloc>text/text</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Type/Text/text.xcfg"/>
+						<xpp:expand href="../plugins/type/text/text.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Type/Text/text.xlcl"/>
+						<xpp:expand href="../plugins/type/text/text.xlcl"/>
 					</Locale>
 				</Plugin>
 			</Plugins>
@@ -86,22 +68,19 @@
 				<xpp:define name="DatabasePluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:bloc>Database/</xpp:bloc>
+						<xpp:bloc>database/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Regular">
 					<Filename>
 						<xpp:expand select="DatabasePluginsRootDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Regular</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>regular</xpp:bloc>
+						<xpp:bloc>regular/regular</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Database/Regular/regular.xcfg"/>
+						<xpp:expand href="../plugins/database/regular/regular.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Database/Regular/regular.xlcl"/>
+						<xpp:expand href="../plugins/database/regular/regular.xlcl"/>
 					</Locale>
 				</Plugin>
 			</Plugins>
@@ -109,25 +88,19 @@
 				<xpp:define name="AuthenticationPluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Authentication</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>Authentication/</xpp:bloc>
+						<xpp:bloc>authentication/</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Dummy">
 					<Filename>
 						<xpp:expand select="AuthenticationPluginsRootDir"/>
-						<xpp:ifeq select="env" value="packing">
-							<xpp:bloc>Dummy</xpp:bloc>
-						</xpp:ifeq>
-						<xpp:bloc>dummy</xpp:bloc>
+						<xpp:bloc>dummy/dummy</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Authentication/Dummy/dummy.xcfg"/>
+						<xpp:expand href="../plugins/authentication/dummy/dummy.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Authentication/Dummy/dummy.xlcl"/>
+						<xpp:expand href="../plugins/authentication/dummy/dummy.xlcl"/>
 					</Locale>
 				</Plugin>
 			</Plugins>
