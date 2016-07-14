@@ -10,50 +10,41 @@
 			<Command>Process</Command>
 			<!-- Default command -->
 			<Service>53730</Service>
-			<ModuleFilename>orgnzqxdh</ModuleFilename>
 		</Parameters>
 		<Definitions>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
-			<Translations text="TestCommandDescription">
-				<Translation language="fr">Commande de test.</Translation>
-				<Translation language="en">Test command.</Translation>
+			<Translations text="ProcessCommandDescription">
+				<Translation language="fr">Lancement de la CGI.</Translation>
+				<Translation language="en">CGI launching.</Translation>
 			</Translations>
-			<Translations text="TestFlagDescription">
-				<Translation language="fr">fanion de test.</Translation>
-				<Translation language="en">test flag.</Translation>
+			<Translations text="ModuleFilenameArgumentDescription">
+				<Translation language="fr">Nom et chemin de la bibliothèque dynamique correspondant au module XDHTML.</Translation>
+				<Translation language="en"> Name and path of the dynamic library corresponding to the XDHTML module.</Translation>
 			</Translations>
-			<Translations text="TestOptionDescription">
-				<Translation language="fr">option de test.</Translation>
-				<Translation language="en">test option.</Translation>
+			<Translations text="ModuleFilenameArgumentLabel">
+				<Translation language="fr">module</Translation>
+				<Translation language="en">module</Translation>
 			</Translations>
-			<Translations text="TestOptionLabel">
-				<Translation language="fr">option (fr)</Translation>
-				<Translation language="en">option (en)</Translation>
+			<Translations text="ServiceArgumentDescription">
+				<Translation language="fr">Port en écoute ('53730' si absent).</Translation>
+				<Translation language="en">Port to listen to ('53730' if missing).</Translation>
 			</Translations>
-			<Translations text="TestArgumentDescription">
-				<Translation language="fr">argument de test.</Translation>
-				<Translation language="en">test argument.</Translation>
-			</Translations>
-			<Translations text="TestArgumentLabel">
-				<Translation language="fr">argument (fr)</Translation>
-				<Translation language="en">argument (en)</Translation>
+			<Translations text="ServiceArgumentLabel">
+				<Translation language="fr">service</Translation>
+				<Translation language="en">service</Translation>
 			</Translations>
 		</Locale>
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
-			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage=""/>
-			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
-			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
-			<!-- Options : 'Path' ET 'Value'. -->
-			<Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
-			<!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
-			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Argument" Label="TestArgumentLabel"/>
-			<!-- Affectations des arguments libres-->
+			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage=" %ModuleFilenameArgument% [%ServiceArgument%]"/>
+			<Argument id="ModuleFilenameArgument" Description="ModuleFilenameArgumentDescription" Path="ModuleFilename" Label="ModuleFilenameArgumentLabel"/>
+			<Argument id="ServiceArgument" Description="ServiceArgumentDescription" Path="Service" Label="ServiceArgumentLabel"/>
 			<Layouts>
 				<Layout command="Process">
+					<Link index="0" Target="ModuleFilenameArgument"/>
+					<Link index="1" Target="ServiceArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

@@ -1,18 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Locales xmlns:xpp="http://q37.info/ns/xpp">
-	<Locale target="xdhbrwq">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand select="epeios.xlcl"/>
-		<Translations text="ProgramDescription">
-			<Translation language="fr">Mettre ici la description du programme en français !</Translation>
-			<Translation language="en">Put here the english description of the program !</Translation>
-		</Translations>
-		<!--
-		<Translations text="">
-		  <Translation language="fr"></Translation>
-		  <Translation language="en"></Translation>
-		</Translations>
-		-->
-	</Locale>
-</Locales>
+<Locale target="xdhbrwq" xmlns:xpp="http://q37.info/ns/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand select="epeios.xlcl"/>
+	<Translations text="ProgramDescription">
+		<Translation language="fr">Utilitaire ('CGI') de lancement d'un module XDHTML en tant qu'application Web.</Translation>
+		<Translation language="en">Tool (CGI) lauching a XDHTML module as Web app.</Translation>
+	</Translations>
+	<!--
+	<Translations text="">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+	-->
+</Locale>
