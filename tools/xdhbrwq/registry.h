@@ -1,11 +1,7 @@
 /*
-	Header for the 'registry' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
-	Part of the 'xdhbrwq' tool.
-	Copyright (C) 2014 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of the Epeios project (http://zeusw.org/epeios/).
-
-    This file is part of 'xdhbrwq'.
+	This file is part of 'xdhbrwq.
 
     'xdhbrwq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -26,23 +22,29 @@
 
 # include "sclrgstry.h"
 
-# include "xdhujp.h"
 # include "xdhujr.h"
 
 namespace registry {
 	using namespace sclrgstry;
 
-	namespace {
-		using rgstry::entry___;
+	using namespace xdhujr;
+
+	namespace parameter {
+		using namespace sclrgstry::parameter;
+
+		extern rEntry Service;
+
+		namespace script {
+			extern rEntry Fallback;
+		}
+
+	    extern rEntry ModuleFilename;
 	}
 
-	using namespace xdhujr;
-	
-    extern entry___ ModuleFilename;
-
-	namespace script {
-		extern entry___ Fallback;
+	namespace definition {
+		using namespace sclrgstry::definition;
 	}
 }
 
 #endif
+

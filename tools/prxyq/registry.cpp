@@ -21,7 +21,7 @@
 
 using namespace registry;
 
-entry___ registry::parameter::Service("Service", sclrgstry::Parameters );
+rEntry registry::parameter::Service("Service", sclrgstry::Parameters );
 
 namespace {
 	rEntry Watchdog_( "Watchdog", sclrgstry::Parameters );

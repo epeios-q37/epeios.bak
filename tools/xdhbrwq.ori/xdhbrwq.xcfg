@@ -1,18 +1,56 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp">
 	<Configuration target="xdhbrwq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
 		<xpp:expand href="../TOL.xcfg"/>
 		<xpp:expand href="../XDH.xcfg"/>
+		<xpp:bloc>
+			<xpp:define name="Module">
+				<xpp:bloc>orgnzq</xpp:bloc>
+			</xpp:define>
+			<xpp:ifeq select="env" value="windows">
+				<xpp:define name="BinDir">
+					<xpp:bloc>h:\bin\</xpp:bloc>
+				</xpp:define>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="linux">
+				<xpp:define name="BinDir">
+					<xpp:bloc>/home/csimon/bin/</xpp:bloc>
+				</xpp:define>
+			</xpp:ifeq>
+			<xpp:ifeq select="env" value="mac">
+				<xpp:define name="BinDir">
+					<xpp:bloc>/Users/csimon/bin/</xpp:bloc>
+				</xpp:define>
+			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="yes">
+				<xpp:define name="BinDir">
+					<xpp:bloc>out/</xpp:bloc>
+				</xpp:define>
+			</xpp:ifeq>
+		</xpp:bloc>
 		<Parameters>
+			<ModuleFilename>
+				<xpp:expand select="BinDir"/>
+				<xpp:expand select="Module"/>
+				<xpp:bloc>xdh</xpp:bloc>
+			</ModuleFilename>
 			<Language>fr</Language>
-			<Command>Process</Command>
-			<!-- Default command -->
-			<Service>53730</Service>
-			<ModuleFilename>orgnzqxdh</ModuleFilename>
+			<Command>Launch</Command>
 		</Parameters>
 		<Definitions>
+			<CustomItems>
+				<!-- Defined in 'XDH.xcfg'. -->
+			</CustomItems>
+			<Scripts>
+				<!-- Other scripts are in 'XDH.xcfg'. -->
+				<Fallback>
+					<![CDATA[
+						location.reload();
+					]]>
+				</Fallback>
+			</Scripts>
 		</Definitions>
 		<Locale>
 			<xpp:expand select="TOL_Locale"/>
@@ -44,7 +82,7 @@
 		<Arguments>
 			<xpp:expand select="TOL_Arguments"/>
 			<!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
-			<Argument id="ProcessCommand" Description="ProcessCommandDescription" long="process" Value="Process" Usage=""/>
+			<Argument id="TestCommand" Description="TestCommandDescription" long="test" short="t" Value="Test" Usage="%TestFlag% %TestOption% %TestArgument%"/>
 			<!-- Fanaux : 'Path', mais pas de 'Value'. -->
 			<Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
 			<!-- Options : 'Path' ET 'Value'. -->
@@ -53,7 +91,8 @@
 			<Argument id="TestArgument" Description="TestArgumentDescription" Path="Argument" Label="TestArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
-				<Layout command="Process">
+				<Layout command="test">
+					<Link index="0" Target="TestArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

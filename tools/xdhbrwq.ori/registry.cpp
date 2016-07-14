@@ -1,7 +1,11 @@
 /*
-	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	'registry' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Part of the 'xdhbrwq' tool.
+	Copyright (C) 2014 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'xdhbrwq'.
+	This file is part of the Epeios project (http://zeusw.org/epeios/).
+
+    This file is part of 'xdhbrwq'.
 
     'xdhbrwq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -21,9 +25,6 @@
 
 using namespace registry;
 
-rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );
-entry___ registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
-entry___ registry::parameter::script::Fallback( "Fallback", registry::Scripts );
+entry___ registry::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
 
-
-
+entry___ registry::script::Fallback( "Fallback", registry::Scripts );

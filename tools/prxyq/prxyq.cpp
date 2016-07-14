@@ -582,6 +582,7 @@ namespace {
 		csdbns::server___ Server;
 		callback__ Callback;
 	qRB
+		Callback.Init();
 		Server.Init(sclmisc::MGetU16( registry::parameter::Service ), Callback );
 		Server.Process( &FreezeFlag_ );
 	qRR

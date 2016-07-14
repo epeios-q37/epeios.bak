@@ -25,14 +25,10 @@
 namespace registry {
 	using namespace sclrgstry;
 
-	namespace {
-		using rgstry::entry___;
-	}
-
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern entry___ Service;
+		extern rEntry Service;
 
 		namespace watchdog {
 			extern rEntry

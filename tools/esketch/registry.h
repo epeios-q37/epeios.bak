@@ -25,10 +25,13 @@
 namespace registry {
 	using namespace sclrgstry;
 
-	namespace {
-		using rgstry::rEntry;
+	namespace parameter {
+		using namespace sclrgstry::parameter;
 	}
-	
+
+	namespace definition {
+		using namespace sclrgstry::definition;
+	}
 }
 
 #endif

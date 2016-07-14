@@ -1,7 +1,11 @@
 /*
-	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Header for the 'registry' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Part of the 'xdhbrwq' tool.
+	Copyright (C) 2014 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'xdhbrwq'.
+	This file is part of the Epeios project (http://zeusw.org/epeios/).
+
+    This file is part of 'xdhbrwq'.
 
     'xdhbrwq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -17,13 +21,28 @@
     along with 'xdhbrwq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "registry.h"
+#ifndef REGISTRY__INC
+# define REGISTRY__INC
 
-using namespace registry;
+# include "sclrgstry.h"
 
-rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );
-entry___ registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
-entry___ registry::parameter::script::Fallback( "Fallback", registry::Scripts );
+# include "xdhujp.h"
+# include "xdhujr.h"
 
+namespace registry {
+	using namespace sclrgstry;
 
+	namespace {
+		using rgstry::entry___;
+	}
 
+	using namespace xdhujr;
+	
+    extern entry___ ModuleFilename;
+
+	namespace script {
+		extern entry___ Fallback;
+	}
+}
+
+#endif

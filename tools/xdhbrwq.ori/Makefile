@@ -1,21 +1,21 @@
-#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
 #
-#	This file is part of eSketch.
+#	This file is part of xdhbrwq.
 #
-#	eSketch is free software: you can redistribute it and/or
+#	xdhbrwq is free software: you can redistribute it and/or
 #	modify it under the terms of the GNU Affero General Public License
 #	published by the Free Software Foundation, either version 3 of the
 #	License, or (at your option) any later version.
 #
-#	eSketch is distributed in the hope that it will be useful,
+#	xdhbrwq is distributed in the hope that it will be useful,
 #	but WITHOUT ANY WARRANTY; without even the implied warranty of
 #	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 #	Affero General Public License for more details.
 #
 #	You should have received a copy of the GNU Affero General Public License
-#	along with eSketch. If not, see <http://www.gnu.org/licenses/>.
+#	along with xdhbrwq. If not, see <http://www.gnu.org/licenses/>.
 
-name = esketch
+name = xdhbrwq
 
 
 # Epeios general debugging features
@@ -34,13 +34,16 @@ mods += iop lst lstbch lstcrt lstctn
 mods += mns mtx ntvstr que sdr 
 mods += stkbse stkbch stkctn str strng 
 mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht bomhdl 
-mods += cdgb64 dlbrry fil fnm lcl 
-mods += plgn plgncore rgstry stsfsm xml 
-mods += xpp 
-mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
-mods += scltool 
-mods += registry 
+mods += utf xtf llio tht lck 
+mods += mtk bomhdl cdgb64 dlbrry fil 
+mods += fnm lcl plgn plgncore rgstry 
+mods += stsfsm xml xpp btr idxbtq 
+mods += idxbtr idxque ssnmng strmrg 
+mods += csdleo csdles csdmxb csdmxs csdscb 
+mods += sclmisc sclerror scllocale sclrgstry scldaemon 
+mods += xdhujp xdhujr xdhujs 
+mods += xdhcmn xdhups xdhutl 
+mods += agent misc query registry session 
 
 pmods += pllio 
 
@@ -61,7 +64,9 @@ CXXFLAGS += -O
 
 ###############################
 	
-copt += -DE_ST
+copt += -DQ37_LIBRARY
+
+copt += -DE_MT
 
 win=win
 win32=win32
@@ -194,7 +199,8 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	binary=$(name).exe
+	binary=$(name).dll
+	lo += -Wl,--kill-at -shared
 
 	dest=/cygdrive/h/bin/
 
@@ -226,7 +232,8 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	binary=$(name).exe
+	binary=$(name).dll
+	lo += -Wl,--kill-at -shared
 
 	dest=/h/bin/
 endif
@@ -255,7 +262,9 @@ ifeq ("$(os)","$(GNULinux)")
 			lo += -m64
 		endif
 	endif
-	binary=$(name)
+	binary=lib$(name).so
+	lo += -shared
+	co += -fPIC
 
 	dest=/home/csimon/bin/
 endif
@@ -284,7 +293,9 @@ ifeq ("$(os)","$(Linux)")
 			lo += -m64
 		endif
 	endif
-	binary=$(name)
+	binary=lib$(name).so
+	lo += -shared
+	co += -fPIC
 endif
 
 #############################
@@ -309,7 +320,8 @@ ifeq ("$(os)","$(MacOS)")
 			lo += -m64
 		endif
 	endif
-	binary=$(name)
+	binary=lib$(name).dylib
+	lo += -dynamiclib
 
 	dest=/Users/csimon/bin/
 endif
@@ -319,15 +331,19 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160713"\"
-copt += -DCOPYRIGHT_YEARS=\""2016"\"
-copt += -DIDENTIFIER=\""effd756a-a901-46e8-939f-3f2a5e7986b0"\"
+copt += -DVERSION=\""20160622"\"
+copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DIDENTIFIER=\""6081a422-762f-4afd-b06a-7128d6244447"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
-	out = ./
 else
 	src += :$(EPEIOS_SRC)
+endif
+
+ifdef EPEIOS_OUT
+	out = $(EPEIOS_OUT)
+else
 	out = $(dest)
 endif
 

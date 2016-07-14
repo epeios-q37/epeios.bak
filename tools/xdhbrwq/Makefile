@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2016 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of xdhbrwq.
 #
@@ -34,16 +34,16 @@ mods += iop lst lstbch lstcrt lstctn
 mods += mns mtx ntvstr que sdr 
 mods += stkbse stkbch stkctn str strng 
 mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht lck 
-mods += mtk bomhdl cdgb64 dlbrry fil 
-mods += fnm lcl plgn plgncore rgstry 
-mods += stsfsm xml xpp btr idxbtq 
-mods += idxbtr idxque ssnmng strmrg 
-mods += csdleo csdles csdmxb csdmxs csdscb 
-mods += sclmisc sclerror scllocale sclrgstry scldaemon 
+mods += utf xtf llio tht bomhdl 
+mods += cdgb64 dlbrry fil fnm lcl 
+mods += plgn plgncore rgstry stsfsm xml 
+mods += xpp btr mtk sck strmrg 
+mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += scltool 
+mods += csdbnc csdbns csdscb csdcmn 
 mods += xdhujp xdhujr xdhujs 
 mods += xdhcmn xdhups xdhutl 
-mods += agent misc query registry session 
+mods += agent query misc registry session 
 
 pmods += pllio 
 
@@ -64,9 +64,7 @@ CXXFLAGS += -O
 
 ###############################
 	
-copt += -DQ37_LIBRARY
-
-copt += -DE_MT
+copt += -DE_ST
 
 win=win
 win32=win32
@@ -199,8 +197,7 @@ ifeq ("$(os)","$(Cygwin)")
     
 	endif
 	
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/cygdrive/h/bin/
 
@@ -232,8 +229,7 @@ ifeq ("$(os)", "$(MinGW)")
 		endif
 	endif
 
-	binary=$(name).dll
-	lo += -Wl,--kill-at -shared
+	binary=$(name).exe
 
 	dest=/h/bin/
 endif
@@ -262,9 +258,7 @@ ifeq ("$(os)","$(GNULinux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 
 	dest=/home/csimon/bin/
 endif
@@ -293,9 +287,7 @@ ifeq ("$(os)","$(Linux)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).so
-	lo += -shared
-	co += -fPIC
+	binary=$(name)
 endif
 
 #############################
@@ -320,8 +312,7 @@ ifeq ("$(os)","$(MacOS)")
 			lo += -m64
 		endif
 	endif
-	binary=lib$(name).dylib
-	lo += -dynamiclib
+	binary=$(name)
 
 	dest=/Users/csimon/bin/
 endif
@@ -331,19 +322,15 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160622"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
-copt += -DIDENTIFIER=\""6081a422-762f-4afd-b06a-7128d6244447"\"
+copt += -DVERSION=\""20160714"\"
+copt += -DCOPYRIGHT_YEARS=\""2016"\"
+copt += -DIDENTIFIER=\""745b5fbb-030c-4ada-b516-bb3b246f711a"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
+	out = ./
 else
 	src += :$(EPEIOS_SRC)
-endif
-
-ifdef EPEIOS_OUT
-	out = $(EPEIOS_OUT)
-else
 	out = $(dest)
 endif
 

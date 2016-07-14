@@ -1,7 +1,11 @@
 /*
-	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	'agent' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Part of the 'xdhbrwq' tool.
+	Copyright (C) 2014 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'xdhbrwq'.
+	This file is part of the Epeios project (http://zeusw.org/epeios/).
+
+    This file is part of 'xdhbrwq'.
 
     'xdhbrwq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -17,13 +21,20 @@
     along with 'xdhbrwq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "registry.h"
+#include "agent.h"
 
-using namespace registry;
+#include "misc.h"
+#include "session.h"
 
-rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );
-entry___ registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
-entry___ registry::parameter::script::Fallback( "Fallback", registry::Scripts );
+#include "xdhujp.h"
 
+#include "sclmisc.h"
+
+using namespace agent;
+
+using misc::nchar__;
+using misc::nstring___;
+
+typedef xdhcmn::proxy_callback__ _proxy_callback__;
 
 

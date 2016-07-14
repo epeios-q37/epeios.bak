@@ -1,7 +1,11 @@
 /*
-	Copyright (C) 2016 by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	'misc' module by Claude SIMON (http://zeusw.org/epeios/contact.html).
+	Part of the 'xdhbrwq' tool.
+	Copyright (C) 2015 by Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'xdhbrwq'.
+	This file is part of the Epeios project (http://zeusw.org/epeios/).
+
+    This file is part of 'xdhbrwq'.
 
     'xdhbrwq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
@@ -17,13 +21,25 @@
     along with 'xdhbrwq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "registry.h"
+#include "misc.h"
 
-using namespace registry;
+#include "xdhujs.h"
 
-rEntry registry::parameter::Service( "Service", sclrgstry::Parameters );
-entry___ registry::parameter::ModuleFilename( "ModuleFilename", sclrgstry::Parameters );
-entry___ registry::parameter::script::Fallback( "Fallback", registry::Scripts );
+using namespace misc;
 
+void misc::Report(
+	const nstring___ &Message,
+	str::string_ &Script )
+{
+qRH
+	str::string Buffer;
+qRB
+	Script.Append( "alert(\"" );
 
-
+	Buffer.Init();
+	xdhcmn::Escape( Message.UTF8( Buffer ), Script, '"' );
+	Script.Append( "\");");
+qRR
+qRT
+qRE
+}
