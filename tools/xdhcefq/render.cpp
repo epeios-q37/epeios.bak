@@ -27,6 +27,8 @@
 
 #include "scltool.h"
 
+#include "include/cef_version.h"
+
 namespace {
 	typedef int (CEF_CALLBACK execute__)(
 		struct _cef_v8handler_t* self,
@@ -257,7 +259,9 @@ qRB
 		Param.Init();
 		misc::GetString( ListValue, Param );
 
-		Identification.Init( MISC_NAME_LC " V" MISC_VERSION " Build " __DATE__ " " __TIME__ " - " );	
+		Identification.Init( MISC_NAME_LC " V" MISC_VERSION );	
+		Identification.Append( " (CEF " E_STRING( CEF_VERSION_MAJOR ) "." E_STRING( CHROME_VERSION_BUILD ) ") " );
+		Identification.Append( "Build " __DATE__ " " __TIME__ " - " );	
 		Identification.Append( cpe::GetDescription() );
 
 		if ( !Rack_.Agent.Init( browser, Param, Identification.Convert( IdentificationBuffer_ ) ) )

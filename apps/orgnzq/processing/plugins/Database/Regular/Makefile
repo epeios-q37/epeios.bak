@@ -332,7 +332,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160626"\"
+copt += -DVERSION=\""20160713"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""421658e0-087c-42c3-9af3-4c6d8297e500"\"
 
@@ -365,8 +365,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC			
-	mkdir -p $(out)plugins/ogz/Backend/Database/
-	cp $(binary) $(out)plugins/ogz/Backend/Database/
+	mkdir -p $(out)plugins/ogz/backend/database/regular/
+	cp $(binary) $(out)plugins/ogz/backend/database/regular/
 endif
 
 %.$(ox): %.cpp

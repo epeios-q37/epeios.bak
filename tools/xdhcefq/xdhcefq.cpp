@@ -33,6 +33,8 @@
 #include "fnm.h"
 #include "flf.h"
 
+#include "include/cef_version.h"
+
 #ifdef CPE_S_LINUX
 # include <X11/Xlib.h>
 #endif
@@ -44,6 +46,7 @@ using cio::CIn;
 static void PrintHeader_( void )
 {
 	COut << MISC_NAME_MC " V" MISC_VERSION << " (" MISC_WEBSITE_URL ")" << txf::nl;
+	COut << txf::pad << "CEF " << CEF_VERSION << txf::nl;
 	COut << "Copyright " MISC_COPYRIGHT << txf::nl;
 	COut << txf::pad << "Build : " __DATE__ " " __TIME__ << " - " << cpe::GetDescription() << txf::nl;
 }
@@ -185,7 +188,7 @@ qRB
 			qRReturn;
 	}
 
-#ifdef CEP_S_LINUX
+#ifdef CPE_S_LINUX
 	XSetErrorHandler(XErrorHandlerImpl);
 	XSetIOErrorHandler(XIOErrorHandlerImpl);
 #endif

@@ -353,7 +353,7 @@ namespace lcl {
 			const tags&... Tags ) const
 		{
 		qRH
-			wMeaning Meaning;
+			meaning Meaning;
 		qRB
 			Meaning.Init();
 			Meaning.SetValue( Source );

@@ -264,8 +264,10 @@ ifeq ("$(os)","$(GNULinux)")
 		endif
 	endif
 	binary=$(name)
+#	 co += $(shell pkg-config --cflags gtk+-3.0)
 	 libs += -L$(cef)/Release -lcef -ludev -lX11
 	 lo += -Wl,-rpath=$(cef)/Release/
+#	 lo += $(shell pkg-config --libs gtk+-3.0)
      
 
 	dest=/home/csimon/bin/
@@ -341,7 +343,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160627"\"
+copt += -DVERSION=\""20160714"\"
 copt += -DCOPYRIGHT_YEARS=\""2014-2016"\"
 copt += -DIDENTIFIER=\""968ea869-90d0-4e03-a4d9-10f4f73d50aa"\"
 
@@ -350,13 +352,9 @@ src += :"$(cef)"	# Had to be here (before the 'src += ...' below),
       
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
+	out = ./
 else
 	src += :$(EPEIOS_SRC)
-endif
-
-ifdef EPEIOS_OUT
-	out = $(EPEIOS_OUT)
-else
 	out = $(dest)
 endif
 
@@ -397,6 +395,15 @@ ifeq ("$(os)","$(MacOS)")
 # 		echo "$(xlcl)" | xppq --#Output="$(cef)/build/cefsimple/Debug/cefsimple.app/Contents/Frameworks/cefsimple Helper NP.app/Contents/MacOS/xdhcefq.xlcl"
 endif
 endif
+
+ifeq ("$(os)","$(GNULinux)")
+		cp -a $(cef)/Release/libcef.so $(out)
+		cp -a $(cef)/Release/*.bin $(out)
+		cp -a $(cef)/Resources/icudtl.dat $(out)
+		cp -a $(cef)/Resources/*.pak $(out)
+		cp -ra $(cef)/Resources/locales $(out)
+endif
+
 ifdef EPEIOS_SRC			
 	mkdir -p $(out)
 	cp $(binary) $(out)
