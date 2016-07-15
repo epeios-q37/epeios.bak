@@ -208,24 +208,30 @@ namespace sclmisc {
 		str::string_ &String,
 		char Marker = scllocale::DefaultMarker );
 
+	using sclrgstry::rRegistry;
+
 	void Load(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		rRegistry &Registry,
 		str::string_ &String );
 
 	void LoadAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		rRegistry &Registry,
 		str::string_ &String,
 		char Marker = scllocale::DefaultMarker );
 
 	void LoadXMLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		rRegistry &Registry,
 		str::string_ &String,
 		char Marker = scllocale::DefaultMarker );
 
-	sclrgstry::registry_ &GetRegistry( void );
+	inline const sclrgstry::dRegistry_ &GetNakedRegistry( void ) {
+		return sclrgstry::GetCommonNakedRegistry();
+	}
+
+	rRegistry &GetRegistry( void );
 
 	inline rgstry::level__ GetRegistryLevel( sclrgstry::name__ Name )
 	{

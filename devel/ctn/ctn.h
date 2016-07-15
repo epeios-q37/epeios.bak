@@ -111,355 +111,8 @@ namespace ctn {
 	};
 
 	//c The base of a container. Internal use.
-	template <typename t, typename st, typename r> class dContainer_
+	template <typename t, typename st, typename r> class basic_container_
 	: public amount_extent_manager_<r>
-	{
-	private:
-		void _Allocate(
-			sdr::size__ Size,
-			aem::mode__ Mode )
-		{
-			Dynamics.Allocate( Size, Mode );
-
-			if ( amount_extent_manager_<r>::Handle( Size, Mode ) ) {
-				Statics.Allocate( Size );
-			}
-		}
-		void Set_( r Row ) const
-		{
-			FlushObject_();
-
-			Flush_( false );
-
-			Hook_.Index( *Row );
-			Statics.Recall( Row, S_ );
-		}
-		bso::sBool IsSet_( void ) const
-		{
-			return Hook_.Index() != qNIL;
-		}
-		void Get_(
-			r Row,
-			bso::sBool IsConst ) const
-		{
-			if ( Row == qNIL ) {
-				if ( !IsSet_() )
-					qRFwk();
-				if ( !IsConst )
-					IsVolatile_ = true;
-			} else if ( Row != *Hook_.Index() ) {
-				Set_( Row );
-
-				IsVolatile_ = !IsConst;
-			} else if ( !IsConst ) {
-				IsVolatile_ = true;
-			}
-		}
-		const t &Get_( r Row ) const
-		{
-			Get_( Row, true );
-
-			return Object_;
-		}
-		t &Get_( r Row )
-		{
-			Get_( Row, false );
-
-			return Object_;
-		}
-		bso::bool__ AppendInsteadOfInsert_(	r Row )
-		{
-			return ( ( Row == qNIL ) || ( ( amount_extent_manager_<r>::Amount() == 0 ) && ( Row == 0 ) ) );
-		}
-		void Insert_(
-			const st &ST,
-			r Row,
-			aem::mode__ Mode )
-		{
-			_Allocate( amount_extent_manager_<r>::Amount() + 1, Mode );
-
-			Statics.Store( Statics, amount_extent_manager_<r>::Amount() - 1 - *Row, *Row + 1, Row );
-			Dynamics.Shift( *Row );
-
-			Statics.Store( ST, Row );
-		}
-	public:
-		//r All the static parts.
-		mutable tys::E_STORAGEt_( st, r ) Statics;
-		//r All the dynamic parts.
-		ias::indexed_aggregated_storage_ Dynamics;
-		struct s
-		: public aem::amount_extent_manager_<r>::s,
-		  public st
-		{
-			typename tys::E_STORAGEt_( st, r )::s Statics;
-			ias::indexed_aggregated_storage_::s Dynamics;
-		} &S_;
-		dContainer_( s &S )
-		: S_( S ),
-		  Dynamics( S.Dynamics ),
-		  Statics( S.Statics ),
-		  amount_extent_manager_<r>( S )
-		{}
-		void reset( bool P = true )
-		{
-			if ( P )
-				Flush_( true );
-
-			Object_.reset( false ); // Due to 'Flush_()' above, its content is useless.
-			Dynamics.reset( P );
-			Statics.reset( P );
-			amount_extent_manager_<r>::reset( P );
-			Hook_.reset( P );
-			IsVolatile_ = false;
-		}
-		void plug( cHooks &Hooks )
-		{
-			// 'Object' is plugged independently.
-			Statics.plug( Hooks.GetStaticsHook() );
-			Dynamics.plug( Hooks.GetDynamicsHooks() );
-			_Allocate( Dynamics.Amount(), aem::mFitted );
-			Hook_.Init( Dynamics );
-		}
-		void plug( qASd *AS )
-		{
-			if ( AS == NULL ) {
-				Flush();
-			} else {
-				// 'Object' is plugged independently.
-				Dynamics.plug( AS );
-				Statics.plug( AS );
-				Hook_.Init( Dynamics );
-		//		amount_extent_manager_::plug( M );	// Not relevant
-			}
-		}
-		dContainer_ &operator =( const dContainer_ &C )
-		{
-			size__ Size = C.Amount();
-
-			Dynamics.Copy( C.Dynamics, Size );
-			Statics.Allocate( Size );
-			Statics.Store( C.Statics, Size ); 
-
-			// Peu importe la valeur de retour, l'allocation des objets sous-jacent a dj t trait...
-			amount_extent_manager_<r>::Handle( Size, aem::mFitted );
-			amount_extent_manager_<r>::operator =( C );
-
-			return *this;
-		}
-		//f Initialization.
-		void Init( void )
-		{
-			Flush_( true );
-
-			Dynamics.Init();
-			Statics.Init();
-
-			amount_extent_manager_<r>::Init();
-
-			Hook_.Init( Dynamics );
-		}
-		void PreAllocate( sdr::size__ Size )
-		{
-			Dynamics.Init();
-			Statics.Init();
-
-			Dynamics.Allocate( Size );
-
-			if ( amount_extent_manager_<r>::SetFixed( Size ) ) {
-				Statics.Allocate( Size );
-			}
-		}
-		void SetStepped( sdr::size__ Step )
-		{
-			Dynamics.SetStepped( Step );
-
-			if ( amount_extent_manager_<r>::SetStepped( Step ) ) {
-				Statics.Allocate( Step );
-			}
-		}
-		void Allocate(
-			sdr::size__ Size,
-			aem::mode__ Mode = aem::m_Default )
-		{
-			Flush_( true );
-
-			sdr::size__ AncCap;
-			sdr::size__ Amount = Size;
-
-			AncCap = amount_extent_manager_<r>::Amount();
-
-			_Allocate( Size, Mode );
-
-			if ( AncCap < Size )
-			{
-				if ( ( Size - AncCap ) > 1 )
-					Statics.Fill( Reseted_, AncCap, Size - AncCap );
-				else
-					Statics.Store( Reseted_, AncCap );
-			}
-		}
-		void DecreaseTo(
-			sdr::size__ Size,
-			aem::mode__ Mode )
-		{
-# ifdef CTN_DBG
-			if ( Size > amount_extent_manager_<r>::Amount() )
-				qRFwk();
-# endif
-			Allocate( Size, Mode );
-		}
-		//f Remove 'Amount' entries from 'Position'.
-		void Remove(
-			r Position,
-			sdr::size__ Amount = 1,
-			aem::mode__ Mode = aem::m_Default )
-		{
-			if ( Amount == 0 )
-				return;
-
-			Flush_( true );
-
-			sdr::size__ CurrentAmount = amount_extent_manager_<r>::Amount();
-			sdr::size__ NewAmount = CurrentAmount - Amount;
-
-			Dynamics.RemoveWithoutReallocating( *Position, CurrentAmount, Amount );
-			Statics.Store( Statics, NewAmount - *Position, Position, *Position + Amount );
-
-			_Allocate( NewAmount, Mode );
-		}
-		//f Remove 'Amount' objects from the end of the container.
-		void Truncate(
-			sdr::size__ Amount = 1,
-			aem::mode__ Mode = aem::m_Default )
-		{
-# ifdef CTN_DBG
-			if ( Amount > this->Amount() )
-				qRFwk();
-# endif
-			DecreaseTo( this->Amount() - Amount, Mode );
-		}
-		//f Remove objects all objects beginning at 'Row'.
-		void Truncate(
-			r Row,
-			aem::mode__ Mode = aem::m_Default )
-		{
-# ifdef CTN_DBG
-			if ( !Exists( Row ) )
-				qRFwk();
-# endif
-			DecreaseTo( amount_extent_manager_<r>::Amount() - *Row, Mode );
-		}
-		//f Remove all objects but 'Amount()' objects from 'Row'. The size of the bunch is readjusted.
-		void Crop(
-			sdr::size__ Amount,
-			r Row = 0,
-			aem::mode__ Mode = aem::m_Default )
-		{
-			Truncate( this->Amount() - ( *Row + Amount ), Mode );
-
-			Remove( 0, *Row, Mode );
-		}
-		//f Remove all objects but objects between 'First' and 'Last' included.
-		void Crop(
-			r First,
-			r Last,
-			aem::mode__ Mode = aem::m_Default )
-		{
-#ifdef BCH_DBG
-			if ( Last < First )
-				qRFwk();
-#endif
-			Crop( Last - First + 1, First, Mode );
-		}
-		static sdr::size__ GetStaticsItemSize( void )
-		{
-			return sizeof( st );
-		}
-		t &Get( r Row = qNIL )
-		{
-			return Get_( Row );
-		}
-		const t &Get( r Row = qNIL ) const
-		{
-			return Get_( Row );
-		}
-		t &operator()( r Row = qNIL )
-		{
-			return Get( Row );
-		}
-		const t &operator()( r Row = qNIL ) const
-		{
-			return Get( Row );
-		}
-		void Store(
-			const t &Object,
-			r Row )
-		{
-			Get( Row ) = Object;
-		}
-		void Recall(
-			r Row,
-			t &Object ) const
-		{
-			Object = Get( Row );
-		}
-		void InsertAt(
-			const t &Object,
-			r Row = 0,	// If == qNIL, appends the object.
-			aem::mode__ Mode = aem::m_Default )
-		{
-			if ( AppendInsteadOfInsert_( Row ) )
-				Append( Object, Mode );
-			else {
-				Flush_( true );
-
-				Insert_( Reseted_, Row, Mode );
-
-				Get( Row ) = Object;
-			}
-			
-		}
-		r Append(
-			const t &Object,
-			aem::mode__ Mode = aem::m_Default )
-		{
-			r P = New( Mode );
-
-			operator()( P ) = Object;
-
-			return P;
-		}
-		// Pour faciliter l'interchangeabilit avec les object du module 'lstctn'.
-		r Add(
-			const t &Object,
-			aem::mode__ Mode = aem::m_Default )
-		{
-			return Append( Object, Mode );
-		}
-		//f Create a new object and return its position.
-		r New(
-			sdr::size__ Size = 1,
-			aem::mode__ Mode = aem::m_Default )
-		{
-			FlushObject_();
-
-			Flush_( true );
-
-			sdr::row_t__ P = this->Amount();
-
-			Allocate( P + Size, Mode );
-
-			return P;
-		}
-		r New( aem::mode__ Mode )
-		{
-			return New( 1, Mode );
-		}
-	};
-	//c The base of a container. Internal use.
-	template <typename t, typename st, typename r> class dXContainer_
-	: public dContainer_<t, st, r>
 	{
 	private:
 		void FlushObject_( void ) const
@@ -552,12 +205,23 @@ namespace ctn {
 		mutable rAHook_ Hook_;
 		mutable bso::sBool IsVolatile_;
 	public:
+		//r All the static parts.
+		mutable tys::E_STORAGEt_( st, r ) Statics;
+		//r All the dynamic parts.
+		ias::indexed_aggregated_storage_ Dynamics;
 		struct s
-		: public dContainer_<t, st, r>::s
-		{};
-		dXContainer_( s &S )
-		: dContainer_<t, st, r>( S ),
-		  Object_( S.ST )
+		: public aem::amount_extent_manager_<r>::s,
+		  public st
+		{
+			typename tys::E_STORAGEt_( st, r )::s Statics;
+			ias::indexed_aggregated_storage_::s Dynamics;
+		} &S_;
+		basic_container_( s &S )
+		: S_( S ),
+		  Object_( S.ST ),
+		  Dynamics( S.Dynamics ),
+		  Statics( S.Statics ),
+		  amount_extent_manager_<r>( S )
 		{}
 		void reset( bool P = true )
 		{
@@ -591,12 +255,20 @@ namespace ctn {
 		//		amount_extent_manager_::plug( M );	// Not relevant
 			}
 		}
-		dXContainer_ &operator =( const dXContainer_ &XC )
+		basic_container_ &operator =( const basic_container_ &O )
 		{
 			Flush_( true );
-			XC.Flush_( true );
+			O.Flush_( true );
 
-			dContainer_<t, st, r>::operator =( XC );
+			size__ Size = O.Amount();
+
+			Dynamics.Copy( O.Dynamics, Size );
+			Statics.Allocate( Size );
+			Statics.Store( O.Statics, Size ); 
+
+			// Peu importe la valeur de retour, l'allocation des objets sous-jacent a dj t trait...
+			amount_extent_manager_<r>::Handle( Size, aem::mFitted );
+			amount_extent_manager_<r>::operator =( O );
 
 			return *this;
 		}
@@ -908,7 +580,7 @@ public:
 	protected:
 		// Conteneur auquel est rattach l'lment.
 	//	ctn_conteneur_base_ < ctn_item_mono < t, st > :: s  > *Conteneur_;
-		dContainer_<t, st, r> *Conteneur_;
+		basic_container_<t, st, r> *Conteneur_;
 		/* Pilote permettant l'accs  la partie dynamique des objets contenus
 		dans le conteneur auquel cet lment est rattach. */
 		rAHook_ Pilote_;
@@ -940,14 +612,14 @@ public:
 		}
 	*/
 		// Rattache au conteneur 'Conteneur'.
-		void Init( dXContainer_<t, st, r> &Conteneur )
+		void Init( basic_container_<t, st, r> &Conteneur )
 		{
 			Conteneur.Flush();
 
 			Init( &Conteneur );
 		}
 		// Rattache au conteneur 'Conteneur'.
-		void Init( dXContainer_<t, st,r> *Conteneur )
+		void Init( basic_container_<t, st,r> *Conteneur )
 		{
 			Conteneur->Flush();
 
@@ -1026,7 +698,7 @@ public:
 	protected:
 		// Conteneur auquel est rattach l'lment.
 	//	ctn_conteneur_base_ < ctn_item_mono < t, st > :: s  > *Conteneur_;
-		const dContainer_<t, st,r> *Conteneur_;
+		const basic_container_<t, st,r> *Conteneur_;
 		/* Pilote permettant l'accs  la partie dynamique des objets contenus
 		dans le conteneur auquel cet lment est rattach. */
 		rCAHook_ Pilote_;
@@ -1057,7 +729,7 @@ public:
 			return Pilote_.Index();
 		}
 	*/	// Rattache au conteneur 'Conteneur'.
-		void Init( const dContainer_<t, st,r> &Conteneur )
+		void Init( const basic_container_<t, st,r> &Conteneur )
 		{
 			Conteneur.Flush();
 
@@ -1131,7 +803,7 @@ public:
 			reset( false );
 		}
 		// Remplace la fonction d'initialisation. 
-		volatile_mono_item( dContainer_< t, mono_static__< typename t::s >, r > &Conteneur )
+		volatile_mono_item( basic_container_< t, mono_static__< typename t::s >, r > &Conteneur )
 		: Objet_( item_base_volatile__< t, mono_static__< typename t::s >, r >::ctn_S_ )
 		{
 			reset( false );
@@ -1236,43 +908,43 @@ public:
 	/*c Container for object of type 'Type', which need only one memory.
 	Use 'MCONTAINER_( Type )' rather then directly this class. */
 	template <class t, typename r> class mono_container_
-	: public dXContainer_< t, mono_static__<typename t::s>, r >
+	: public basic_container_< t, mono_static__<typename t::s>, r >
 	{
 	private:
 		void SetReseted_( void )
 		{
-			t O( dXContainer_< t, mono_static__<typename t::s>, r >::Reseted_.ST );
+			t O( basic_container_< t, mono_static__<typename t::s>, r >::Reseted_.ST );
 
 			O.reset( false );
 		}
 	public:
 		struct s
-		: public dXContainer_< t, mono_static__<typename t::s>, r >::s
+		: public basic_container_< t, mono_static__<typename t::s>, r >::s
 		{};
 		mono_container_( s &S )
-		: dXContainer_< t, mono_static__<typename_ t::s>, r >( S )
+		: basic_container_< t, mono_static__<typename_ t::s>, r >( S )
 		{
 			reset( false );
 		}
 		void reset( bool P = true )
 		{
 			SetReseted_();
-			dXContainer_< t, mono_static__< typename_ t::s >, r >::reset( P );
-			dXContainer_< t, mono_static__< typename_ t::s >, r >::Object_.plug( dXContainer_< t, mono_static__< typename_ t::s >, r >::Hook_ );
+			basic_container_< t, mono_static__< typename_ t::s >, r >::reset( P );
+			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug( basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_ );
 		}
 		void FlushTest( void ) const
 		{
-			dXContainer_< t, mono_static__<typename t::s>, r >::FlushTest();
+			basic_container_< t, mono_static__<typename t::s>, r >::FlushTest();
 		}
 		mono_container_ &operator =( const mono_container_ &C )
 		{
-			dXContainer_< t, mono_static__< typename_ t::s >, r >::operator =( C );
+			basic_container_< t, mono_static__< typename_ t::s >, r >::operator =( C );
 
 			return *this;
 		}
 		void Init( void )
 		{
-			dXContainer_< t, mono_static__< typename_ t::s >, r >::Init();
+			basic_container_< t, mono_static__< typename_ t::s >, r >::Init();
 		}
 	};
 
@@ -1327,7 +999,7 @@ public:
 			reset( false );
 		}
 		// Remplace la fonction d'initialisation.
-		volatile_poly_item( dContainer_< t, poly_static__< typename t::s >, r > &Conteneur )
+		volatile_poly_item( basic_container_< t, poly_static__< typename t::s >, r > &Conteneur )
 		: Objet_( item_base_volatile__< t, poly_static__< typename_ t::s >, r >::ctn_S_ ),
 		  AStorage( item_base_volatile__< t, poly_static__< typename_ t::s >, r >::ctn_S_.AStorage )
 		{
@@ -1341,7 +1013,7 @@ public:
 			reset( true );
 		}
 		//f Initialize with container 'Container', in mode 'Mode'.
-		void Init( dContainer_< t, poly_static__< typename t::s >, r > &Container )
+		void Init( basic_container_< t, poly_static__< typename t::s >, r > &Container )
 		{
 			AStorage.Init();
 			item_base_volatile__< t, poly_static__< typename_ t::s >, r >::Init( Container );
@@ -1407,7 +1079,7 @@ public:
 			reset( true );
 		}
 		//f Initializing with container 'Container'.
-		void Init( const dContainer_< t, poly_static__<typename t::s>, r > &Container )
+		void Init( const basic_container_< t, poly_static__<typename t::s>, r > &Container )
 		{
 //			AStorage.Init();
 			item_base_const__< t, poly_static__< typename_ t::s >, r >::Init( Container );
@@ -1435,25 +1107,25 @@ public:
 	/*c Container for objects 't', with static part 'st', which need more then one memory.
 	Use 'CONTAINER_( t )' rather then directly this class.*/
 	template <class t, typename r> class poly_container_
-	: public dXContainer_< t, poly_static__< typename t::s >, r >
+	: public basic_container_< t, poly_static__< typename t::s >, r >
 	{
 	private:
 		ags::aggregated_storage_ AStorage_;
 	protected:
 		void SetReseted_( void )
 		{
-			t O( dXContainer_< t, poly_static__< typename t::s >, r >::Reseted_.ST );
-			ags::aggregated_storage_ A( dXContainer_< t, poly_static__< typename t::s >, r >::Reseted_.AStorage );
+			t O( basic_container_< t, poly_static__< typename t::s >, r >::Reseted_.ST );
+			ags::aggregated_storage_ A( basic_container_< t, poly_static__< typename t::s >, r >::Reseted_.AStorage );
 
 			O.reset( false );
 			A.reset( false );
 		}
 	public:
 		struct s
-		: public dXContainer_< t, poly_static__< typename t::s >, r >::s
+		: public basic_container_< t, poly_static__< typename t::s >, r >::s
 		{};
 		poly_container_( s &S )
-		: dXContainer_< t, poly_static__< typename_ t::s >, r >( S ),
+		: basic_container_< t, poly_static__< typename_ t::s >, r >( S ),
 		  AStorage_( S.AStorage )
 		{
 			reset( false );
@@ -1461,20 +1133,20 @@ public:
 		void reset( bool P = true )
 		{
 			SetReseted_();
-			dXContainer_< t, poly_static__< typename_ t::s >, r >::reset( P );
-			AStorage_.plug( dXContainer_< t, poly_static__< typename_ t::s >, r >::Hook_ );
-			dXContainer_< t, poly_static__< typename_ t::s >, r >::Object_.plug( &AStorage_ );
+			basic_container_< t, poly_static__< typename_ t::s >, r >::reset( P );
+			AStorage_.plug( basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_ );
+			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( &AStorage_ );
 		}
 		poly_container_ &operator =( const poly_container_ &C )
 		{
-			dXContainer_< t, poly_static__< typename_ t::s >, r >::operator =( C );
+			basic_container_< t, poly_static__< typename_ t::s >, r >::operator =( C );
 
 			return *this;
 		}
 		void Init( void )
 		{
 			AStorage_.Init();
-			dXContainer_< t, poly_static__< typename t::s >, r >::Init();
+			basic_container_< t, poly_static__< typename t::s >, r >::Init();
 		}
 	};
 

@@ -23,8 +23,7 @@
 # include "sclrgstry.h"
 
 namespace frdrgstry {
-	using sclrgstry::registry_;
-	E_AUTO( registry );
+	using sclrgstry::rRegistry;
 
 	using rgstry::rEntry;
 

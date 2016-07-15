@@ -40,7 +40,7 @@
 # define SCLXDHTML_DEFAULT_SUFFIX "xdh"
 
 namespace sclxdhtml {
-	const sclrgstry::registry_ &GetRegistry( void );
+	sclrgstry::rRegistry &GetRegistry( void );
 
 	const char *GetLauncher( void );
 
@@ -306,7 +306,7 @@ namespace sclxdhtml {
 		{
 			proxy__::Init( Callback );
 			_ReportingCallback.Init( *this, Language );
-			frontend::Init( Kernel, Language, _ReportingCallback, sclmisc::GetRegistry() );
+			frontend::Init( Kernel, Language, _ReportingCallback, sclmisc::GetNakedRegistry() );
 			_session_callback__::Init();
 			_Page = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
@@ -458,7 +458,7 @@ namespace sclxdhtml {
 
 	inline void LoadXSLAndTranslateTags(
 		const rgstry::tentry__ &FileName,
-		const sclrgstry::registry_ &Registry,
+		sclrgstry::rRegistry &Registry,
 		str::string_ &String,
 		bso::char__ Marker = '#' )
 	{

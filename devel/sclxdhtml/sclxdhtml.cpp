@@ -29,7 +29,7 @@ static bso::bool__ IsInitialized_ = false;
 
 static const char *Launcher_ = NULL;
 
-const sclrgstry::registry_ &sclxdhtml::GetRegistry( void )
+sclrgstry::rRegistry &sclxdhtml::GetRegistry( void )
 {
 	return sclrgstry::GetCommonRegistry();
 }

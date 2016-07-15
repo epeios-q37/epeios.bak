@@ -62,7 +62,7 @@ namespace {
 	}
 
 	static void GetContent_(
-		const sclrgstry::registry_ &Registry,
+		sclrgstry::rRegistry &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
 	{

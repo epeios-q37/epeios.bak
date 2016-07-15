@@ -26,7 +26,7 @@
 
 using namespace sclfrntnd;
 
-using sclrgstry::registry_;
+using sclrgstry::rRegistry;
 
 namespace parameter_ {
 	rgstry::entry___ Backend_( "Backend", sclrgstry::Parameters );
@@ -310,7 +310,7 @@ static void GetPredefinedItem_(
 	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
 	const str::string_ &Id,
-	const registry_ &Registry,
+	rRegistry &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
 	xml::writer_ &Writer )
@@ -347,7 +347,7 @@ static void GetPredefinedItems_(
 	const rgstry::entry___ &AliasEntry,
 	const rgstry::values_ &Ids,
 	const str::string_ &DefaultProjectId,
-	const registry_ &Registry,
+	rRegistry &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
 	xml::writer_ &Writer )
@@ -375,7 +375,7 @@ static void GetPredefinedItems_(
 	const rgstry::entry___ &DefaultEntry,
 	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
-	const registry_ &Registry,
+	rRegistry &Registry,
 	const lcl::locale_ &Locale,
 	const char *Language,
 	xml::writer_ &Writer )
@@ -464,12 +464,14 @@ qRH
 	str::wString Key;
 qRB
 	// _Flow.Init(...);	// Made on connection.
-	_Registry.Init();
-	_Registry.Push( Registry );
-	_RegistryLevel = _Registry.CreateEmbedded( rgstry::name( "Session" ) );
+	NakedRegistry_.Init();
+	NakedRegistry_.Push( Registry );
+	_RegistryLevel = NakedRegistry_.CreateEmbedded( rgstry::name( "Session" ) );
+
+	Registry_.Init( NakedRegistry_ );
 
 	if ( (Language != NULL) && *Language )
-		sclrgstry::SetValue( _Registry, str::string( Language ), rgstry::tentry___( sclrgstry::parameter::Language ) );
+		sclrgstry::SetValue( Registry_, str::string( Language ), rgstry::tentry___( sclrgstry::parameter::Language ) );
 
 	Kernel_ = &Kernel;
 

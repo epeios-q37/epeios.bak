@@ -682,7 +682,15 @@ namespace {
 		const str::dString &Value,
 		sdr::sRow *Error = NULL )
 	{
-		sclmisc::GetRegistry().SetValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+	qRH
+		lck::read_write_access___<sclrgstry::dRegistry_> R;
+	qRB
+		R.Init( sclmisc::GetRegistry() );
+
+		R().SetValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 
 	void AddValue_(
@@ -690,7 +698,14 @@ namespace {
 		const str::dString &Value,
 		sdr::sRow *Error = NULL )
 	{
-		sclmisc::GetRegistry().AddValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+	qRH
+		lck::read_write_access___<sclrgstry::dRegistry_> R;
+	qRB
+		R.Init( sclmisc::GetRegistry() );
+		R().AddValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -1429,9 +1444,13 @@ qRH
 	str::strings Ids, Commands, Flags, Options, Frees;
 	str::string  ProgramDescription;
 	str::string EntryPath;
+	lck::read_write_access___<sclrgstry::dRegistry_> R;
 qRB
 	EntryPath.Init();
-	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetLevel( sclrgstry::nArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	R.Init( sclrgstry::GetCommonRegistry() );
+	R().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetLevel( sclrgstry::nArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+
+	R.reset();	// To unlock registry.
 
 	Ids.Init();
 	GetValues( ArgumentId_, Ids );
