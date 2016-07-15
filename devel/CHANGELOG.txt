@@ -2,6 +2,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-07-15 :
+	- CTN :
+		- Adding variant to facilitate thread-safe handling.
+
 2016-07-10 :
 	- DLLBRY :
 		- Under 'Windows', all '/' in library path are replaced with '\', as Windows ('XP' only ?) needs '\'.'

@@ -4,6 +4,7 @@ $out = '
 <html>
 	<head>
 		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="js/jquery-ui/jquery-ui.css">
 		<script src="js/jquery.js"></script>
 		<script src="js/jquery-ui/jquery-ui.js"></script>
 		<script src="js/interact/interact-1.2.4.js"></script>
