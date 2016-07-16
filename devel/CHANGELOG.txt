@@ -5,10 +5,6 @@ NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characte
 2016-07-15 :
 	- RGSTRY :
 		- Modifications to facilitate a thread-safe use.
-	- SCLARGMNT, SCLFRNTND, SCLMISC, SCLXDHTML :
-		- Adaptation to changes in SCLRGSTRY.
-	- SCLRGSTRY :
-		- Is now thread-safe.
 
 2016-07-10 :
 	- DLLBRY :

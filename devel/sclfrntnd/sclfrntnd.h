@@ -136,8 +136,7 @@ namespace sclfrntnd {
 	private:
 		Q37_MRMDF( kernel___, K_, Kernel_ );
 		csducl::universal_client_ioflow___ _Flow;
-		rgstry::multi_level_registry NakedRegistry_;
-		sclrgstry::rRegistry Registry_;
+		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistryLevel;
 		mutable TOL_CBUFFER___ _Language;
 	public:
@@ -145,8 +144,7 @@ namespace sclfrntnd {
 		{
 			_frontend___::reset( P );
 			_Flow.reset( P );
-			Registry_.reset();
-			NakedRegistry_.reset( P );
+			_Registry.reset( P );
 			_RegistryLevel = rgstry::UndefinedLevel;
 			_Language.reset();
 			Kernel_ = NULL;
@@ -163,13 +161,13 @@ namespace sclfrntnd {
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
 			fblfrd::incompatibility_informations_ &IncompatibilityInformations );
 		void Disconnect( void );
-		sclrgstry::rRegistry &Registry( void )
+		const rgstry::multi_level_registry_ &Registry( void ) const
 		{
-			return Registry_;
+			return _Registry;
 		}
-		const char *Language( void )
+		const char *Language( void ) const
 		{
-			return sclrgstry::MGetValue( Registry_, rgstry::tentry___( sclrgstry::parameter::Language ), _Language );
+			return sclrgstry::MGetValue( _Registry, rgstry::tentry___( sclrgstry::parameter::Language ), _Language );
 		}
 	};
 

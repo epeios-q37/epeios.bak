@@ -329,10 +329,8 @@ namespace {
 		flx::E_STRING_OFLOW___ Flow;
 		txf::text_oflow__ TFlow;
 		xml::writer Writer;
-		lck::read_only_access___<sclrgstry::dRegistry_> R;
 	qRB
-		R.Init( sclrgstry::GetCommonRegistry() );
-		Row = R().Search( Level, sclrgstry::Locale );
+		Row = sclrgstry::GetCommonRegistry().Search( Level, sclrgstry::Locale );
 
 		if ( Row == qNIL )
 			qRReturn;
@@ -341,7 +339,7 @@ namespace {
 		TFlow.Init( Flow );
 		Writer.Init( TFlow, xml::lCompact, xml::e_Default );
 
-		R().Dump( Level, Row, true, Writer );
+		sclrgstry::GetCommonRegistry().Dump( Level, Row, true, Writer );
 
 		Found = true;
 	qRR
@@ -822,7 +820,7 @@ void sclmisc::LoadAndTranslateTags(
 
 static void Load_(
 	const rgstry::tentry__ &Entry,
-	rRegistry &Registry,
+	const sclrgstry::registry_ &Registry,
 	str::string_ &String,
 	str::string_ &FileName )
 {
@@ -831,9 +829,11 @@ static void Load_(
 	Load( FileName, String );
 }
 
+
+
 void sclmisc::Load(
 	const rgstry::tentry__ &Entry,
-	rRegistry &Registry,
+	const sclrgstry::registry_ &Registry,
 	str::string_ &String )
 {
 qRH
@@ -849,7 +849,7 @@ qRE
 
 void sclmisc::LoadAndTranslateTags(
 	const rgstry::tentry__ &FileName,
-	rRegistry &Registry,
+	const sclrgstry::registry_ &Registry,
 	str::string_ &String,
 	char Marker )
 {
@@ -867,7 +867,7 @@ qRE
 
 void sclmisc::LoadXMLAndTranslateTags(
 	const rgstry::tentry__ &FileNameEntry,
-	rRegistry &Registry,
+	const sclrgstry::registry_ &Registry,
 	str::string_ &String,
 	char Marker )
 {
@@ -891,7 +891,7 @@ qRT
 qRE
 }
 
-rRegistry &sclmisc::GetRegistry( void )
+sclrgstry::registry_ &sclmisc::GetRegistry( void )
 {
 	return sclrgstry::GetCommonRegistry();
 }
@@ -921,15 +921,8 @@ namespace {
 		sclrgstry::name__ Name,
 		txf::text_oflow__ &Flow	)
 	{
-	qRH
-		lck::read_only_access___<sclrgstry::dRegistry_> R;
-	qRB
-		R.Init( sclmisc::GetRegistry() );
 		Flow << txf::tab << "----- " << sclrgstry::GetLabel( Name ) << " registry -----" << txf::nl;
-		R().Dump( sclmisc::GetRegistryLevel( Name ), qNIL, true, xml::oIndent, xml::e_Default, Flow );
-	qRR
-	qRT
-	qRE
+		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryLevel( Name ), qNIL, true, xml::oIndent, xml::e_Default, Flow );
 	}
 }
 
@@ -1052,21 +1045,14 @@ static void GetPluginFeature_(
 	const rgstry::tentry__ &Path,
 	rgstry::entry__ &Entry )
 {
-qRH
 	rgstry::level__ Level = rgstry::UndefinedLevel;
-	lck::read_only_access___<sclrgstry::dRegistry_>  R;
-qRB
-	R.Init( GetRegistry() );
 
-	Entry.Root = R().Search( Path, Level );
+	Entry.Root = GetRegistry().Search( Path, Level );
 
 	if ( Entry.Root == qNIL )
 		qRFwk();
 
-	Entry.Registry = &R().GetRegistry( Level );
-qRR
-qRT
-qRE
+	Entry.Registry = &GetRegistry().GetRegistry( Level );
 }
 
 namespace {

@@ -34,11 +34,7 @@ using namespace sclrgstry;
 
 #define REGISTRY_FILE_EXTENSION ".xcfg"
 
-
-namespace {
-	rgstry::multi_level_registry NakedRegistry_;
-	rRegistry Registry_;
-}
+static rgstry::multi_level_registry Registry_;
 
 static rgstry::level__ ConfigurationLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ ProjectLevel_ = rgstry::UndefinedLevel;
@@ -111,12 +107,7 @@ rgstry::entry___ sclrgstry::definition::plugin::Locale( "Locale", ::definition::
 
 static rgstry::entry___ Setup_( "@Setup", sclrgstry::Parameters );
 
-const dRegistry_ &sclrgstry::GetCommonNakedRegistry( void )
-{
-	return NakedRegistry_;
-}
-
-rRegistry &sclrgstry::GetCommonRegistry( void )
+registry_ &sclrgstry::GetCommonRegistry( void )
 {
 	return Registry_;
 }
@@ -165,7 +156,7 @@ rgstry::level__ sclrgstry::GetLevel( name__ Name )
 #undef C
 
 const char *sclrgstry::GetLanguage_(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	TOL_CBUFFER___ &Buffer )
 {
 	sclrgstry::OGetValue( Registry, parameter::Language, Buffer );
@@ -176,32 +167,13 @@ const char *sclrgstry::GetLanguage_(
 		return Buffer;
 }
 
-#define ROD	lck::read_only_access___<dRegistry_> RegistryAccess
-#define RO\
-	RegistryAccess.Init( R );\
-	const dRegistry_ &Registry = RegistryAccess();
-
-#define RWD	lck::read_write_access___<dRegistry_> RegistryAccess
-#define RW\
-	RegistryAccess.Init( R );\
-	dRegistry_ &Registry = RegistryAccess();
-
 static bso::sBool FillConfigurationRegistry_(
 	xtf::extended_text_iflow__ &Flow,
 	const fnm::name___&Directory,
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	bso::sBool Success;
-qRH
-	RWD;
-qRB
-	RegistryAccess.Init( Registry_ );
-	Success = RegistryAccess().Fill( ConfigurationLevel_, Flow, xpp::criterions___( Directory ), RootPath );
-qRR
-qRT
-qRE
-	return Success;
+	return Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( Directory ), RootPath );
 }
 
 void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
@@ -238,35 +210,11 @@ qRT
 qRE
 }
 
-namespace {
-	void Erase_( rgstry::level__ Level )
-	{
-	qRH
-		RWD;
-	qRB
-		RegistryAccess.Init( Registry_ );
-		RegistryAccess().Erase( Level );
-	qRR
-	qRT
-	qRE
-	}
-}
-
-
 void sclrgstry::SetConfiguration( const rgstry::entry__ &Entry )
 {
-qRH
-	RWD;
-qRB
-	RegistryAccess.Init( Registry_ );
-	dRegistry_ &Registry = RegistryAccess();
+	Registry_.Erase( ConfigurationLevel_ );
 
-	Registry.Erase( ConfigurationLevel_ );
-
-	Registry.Set( ConfigurationLevel_, Entry );
-qRR
-qRT
-qRE
+	Registry_.Set( ConfigurationLevel_, Entry );
 }
 
 void sclrgstry::LoadConfiguration(
@@ -277,7 +225,7 @@ void sclrgstry::LoadConfiguration(
 qRH
 	rgstry::context___ Context;
 qRB
-	Erase_( ConfigurationLevel_ );
+	Registry_.Erase( ConfigurationLevel_ );
 
 	Context.Init();
 
@@ -290,7 +238,7 @@ qRE
 
 void sclrgstry::EraseProjectRegistry( void )
 {
-	Erase_( ProjectLevel_ );
+	Registry_.Erase( ProjectLevel_ );
 }
 
 template <typename source> static void LoadProject_(
@@ -303,7 +251,6 @@ qRH
 	str::string Path;
 	TOL_CBUFFER___ Buffer;
 	rgstry::context___ Context;
-	RWD;
 qRB
 	Path.Init();
 
@@ -311,14 +258,11 @@ qRB
 
 	EraseProjectRegistry();
 
-	RegistryAccess.Init( Registry_ );
-	dRegistry_ &Registry = RegistryAccess();
-
 	Context.Init();
-	if ( !Registry.Fill( ProjectLevel_, Source, xpp::criterions___( SelfPath ), Path.Convert( Buffer ), Context ) )
+	if ( !Registry_.Fill( ProjectLevel_, Source, xpp::criterions___( SelfPath ), Path.Convert( Buffer ), Context ) )
 		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
 
-	Registry.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
+	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
 qRR
 qRT
 qRE
@@ -358,7 +302,7 @@ qRE
 
 void sclrgstry::EraseSetupRegistry( void )
 {
-	Erase_( SetupLevel_ );
+	Registry_.Erase( SetupLevel_ );
 }
 
 static const str::string_ &GetSelectedSetupContent_(
@@ -371,7 +315,6 @@ qRH
 	rgstry::row__ Row = qNIL;
 	rgstry::level__ Level = rgstry::UndefinedLevel;
 	str::string SetupPath;
-	ROD;
 qRB
 	if ( SetupId.Amount() == 0  )
 		qRReturn;
@@ -383,13 +326,10 @@ qRB
 	OFlow.Init( Content );
 	TFlow.Init( OFlow );
 
-	RegistryAccess.Init( Registry_ );
-	const dRegistry_ &Registry = RegistryAccess();
-
-	Row = Registry.Search( SetupPath, Level );
+	Row = Registry_.Search( SetupPath, Level );
 
 	if ( Row != qNIL )
-		Registry.Dump( Level, Row, false, xml::oCompact, xml::e_None, TFlow );
+		Registry_.Dump( Level, Row, false, xml::oCompact, xml::e_None, TFlow );
 qRR
 qRT
 qRE
@@ -397,7 +337,7 @@ qRE
 }
 
 void sclrgstry::FillWithSetupOfId(
-	rRegistry &R,
+	registry_ &Registry,
 	rgstry::level__ Level,
 	const str::string_ &Id )
 {
@@ -406,7 +346,6 @@ qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
 	str::string EntryPath;
-	RWD;
 qRB
 	if ( Id.Amount() == 0 )
 		qRFwk();
@@ -423,8 +362,6 @@ qRB
 	sclrgstry::Parameters.GetPath( Setup );
 	Setup.Append( "></_>" );
 
-	RW;
-
 	Registry.Erase( Level );
 
 	IFlow.Init( Setup );
@@ -436,7 +373,7 @@ qRE
 }
 
 void sclrgstry::FillWithGivenSetup(
-	rRegistry &Registry,
+	registry_ &Registry,
 	rgstry::level__ Level )
 {
 qRH
@@ -453,20 +390,12 @@ qRE
 
 void sclrgstry::ReportIfNoSetupId( void )
 {
-qRH
-	ROD;
-qRB
-	RegistryAccess.Init( Registry_ );
-
-	if ( !RegistryAccess().Exists( Setup_  ) )
+	if ( !Registry_.Exists( Setup_  ) )
 		ReportBadOrNoValueForEntryErrorAndAbort( Setup_ );
-qRR
-qRT
-qRE
 }
 
 void sclrgstry::FillWithContent(
-	rRegistry &R,
+	registry_ &Registry,
 	rgstry::level__ Level,
 	const str::dString &BinPath,
 	const str::string_ &RawContent )
@@ -476,15 +405,12 @@ qRH
 	flx::E_STRING_IFLOW__ IFlow;
 	xtf::extended_text_iflow__ XFlow;
 	str::string EntryPath;
-	RWD;
 qRB
 	Content.Init();
 
 	Content.Append("<_>" );
 	Content.Append( RawContent );
 	Content.Append( "</_>" );
-
-	RW;
 
 	Registry.Erase( Level );
 
@@ -499,124 +425,62 @@ qRE
 
 void sclrgstry::EraseArgumentsRegistry( void )
 {
-qRH
-	RWD;
-qRB
-	RegistryAccess.Init( Registry_ );
-	dRegistry_ &Registry = RegistryAccess();
-
-
-	Registry.Erase( ArgumentsLevel_ );
-	ArgumentsLevel_ = Registry.CreateEmbedded();
-qRR
-qRT
-qRE
+	Registry_.Erase( ArgumentsLevel_ );
+	ArgumentsLevel_ = Registry_.CreateEmbedded();
 }
 
 bso::bool__ sclrgstry::BGetValue(
-	rRegistry &R,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
-	bso::sBool Success = false;
-qRH
-	ROD;
-qRB
-	RO;
-
-	Success = Registry.GetValue( Entry, Value );
-qRR
-qRT
-qRE
-	return Success;
+	return Registry.GetValue( Entry, Value );
 }
 
 void sclrgstry::AddValue(
-	rRegistry &R,
+	registry_ &Registry,
 	const str::string_ &Value,
 	const rgstry::tentry__ &Entry )
 {
-qRH
-	RWD;
-qRB
-	RW;
-
 	Registry.AddValue( Entry, Value );
-qRR
-qRT
-qRE
 }
 
 void sclrgstry::AddValue(
-	rRegistry &R,
+	registry_ &Registry,
 	const str::string_ &Path,
 	const str::string_ &Value,
 	sdr::row__ *Error )
 {
-qRH
-	RWD;
-qRB
-	RW;
-
 	Registry.AddValue( Path, Value, Error );
-qRR
-qRT
-qRE
 }
 
 void sclrgstry::SetValue(
-	rRegistry &R,
+	registry_ &Registry,
 	const str::string_ &Value,
 	const rgstry::tentry__ &Entry )
 {
-qRH
-	RWD;
-qRB
-	RW;
-
 	Registry.SetValue( Entry, Value );
-qRR
-qRT
-qRE
 }
 
 void sclrgstry::SetValue(
-	rRegistry &R,
+	registry_ &Registry,
 	const str::string_ &Path,
 	const str::string_ &Value,
 	sdr::row__ *Error )
 {
-qRH
-	RWD;
-qRB
-	RW;
-
 	Registry.SetValue( Path, Value, Error );
-qRR
-qRT
-qRE
 }
 
 bso::bool__ sclrgstry::GetValues(
-	rRegistry &R,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	str::strings_ &Values )
 {
-	bso::sBool Exists = false;
-qRH
-	RWD;
-qRB
-	RW;
-
-	Exists = Registry.GetValues( Entry, Values );
-qRR
-qRT
-qRE
-	return Exists;
+	return Registry.GetValues( Entry, Values );
 }
 
 bso:: bool__ sclrgstry::OGetValue(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
@@ -624,7 +488,7 @@ bso:: bool__ sclrgstry::OGetValue(
 }
 
 const char *sclrgstry::OGetValue(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	TOL_CBUFFER___ &Buffer )
 {
@@ -644,7 +508,7 @@ qRE
 }
 
 const str::string_ &sclrgstry::MGetValue(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	str::string_ &Value )
 {
@@ -655,7 +519,7 @@ const str::string_ &sclrgstry::MGetValue(
 }
 
 const char *sclrgstry::MGetValue(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	TOL_CBUFFER___ &Buffer )
 {
@@ -693,7 +557,7 @@ qRE
 }
 
 bso::bool__ sclrgstry::BGetBoolean(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	bso::bool__ DefaultValue )
 {
@@ -726,7 +590,7 @@ qRE
 }
 
 bso::bool__ sclrgstry::MGetBoolean(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry___ &Entry )
 {
 	bso::bool__ Result = false;
@@ -757,7 +621,7 @@ qRE
 
 
 template <typename t> static bso::bool__ GetUnsignedNumber_(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	t Limit,
 	t &Value )
@@ -783,7 +647,7 @@ qRE
 }
 
 template <typename t> static bso::bool__ GetSignedNumber_(
-	rRegistry &Registry,
+	const registry_ &Registry,
 	const rgstry::tentry__ &Entry,
 	t LowerLimit,
 	t UpperLimit,
@@ -811,7 +675,7 @@ qRE
 
 #define UN( name, type )\
 type sclrgstry::MGet##name(\
-	rRegistry &Registry,\
+	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type Limit  )\
 {\
@@ -823,7 +687,7 @@ type sclrgstry::MGet##name(\
 	return Value;\
 }\
 type sclrgstry::OGet##name(\
-	rRegistry &Registry,\
+	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type DefaultValue,\
 	type Limit )\
@@ -847,7 +711,7 @@ UN( U8, bso::u8__ )
 
 #define SN( name, type )\
 type sclrgstry::MGet##name(\
-	rRegistry &Registry,\
+	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type Min,\
 	type Max)\
@@ -860,7 +724,7 @@ type sclrgstry::MGet##name(\
 	return Value;\
 }\
 type sclrgstry::OGet##name(\
-	rRegistry &Registry,\
+	const registry_ &Registry,\
 	const rgstry::tentry__ &Entry,\
 	type DefaultValue,\
 	type Min,\
@@ -884,14 +748,12 @@ SN( S8, bso::s8__ )
 
 Q37_GCTOR( sclrgstry )
 {
-	NakedRegistry_.Init();
+	Registry_.Init();
 
 	// 3 firsts not as 'embedded', due to the fact that plugins use the registry of the main program.
-	ConfigurationLevel_ = NakedRegistry_.Create();
-	ProjectLevel_ = NakedRegistry_.Create();
-	SetupLevel_ = NakedRegistry_.Create();
-	ArgumentsLevel_ = NakedRegistry_.CreateEmbedded();
-	RuntimeLevel_ = NakedRegistry_.CreateEmbedded();
-
-	Registry_.Init( NakedRegistry_ );
+	ConfigurationLevel_ = Registry_.Create();
+	ProjectLevel_ = Registry_.Create();
+	SetupLevel_ = Registry_.Create();
+	ArgumentsLevel_ = Registry_.CreateEmbedded();
+	RuntimeLevel_ = Registry_.CreateEmbedded();
 }
