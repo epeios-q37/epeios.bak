@@ -511,12 +511,22 @@ namespace sclxdhtml {
 		E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
 		E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
 
+		qENUM( BackendVisibility ) {
+			bvHide,	
+			bvShow,
+			bv_amount,
+			bv_Undefined
+		};
+
+		const char *GetLabel( eBackendVisibility );
+
 		sclfrntnd::eLogin GetContent(
 			sclfrntnd::frontend___ &Frontend,
 			xml::writer_ &Writer );
 
 		void GetContext(
 			proxy__ &Proxy,
+			eBackendVisibility Visibility,
 			xml::writer_ &Writer );
 
 		void GetBackendFeatures(

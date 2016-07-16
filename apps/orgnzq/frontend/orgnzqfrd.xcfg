@@ -6,9 +6,7 @@
 	<xpp:define name="Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
-			<DefaultProjectType>New</DefaultProjectType>
-			<DefaultBackendType>Embedded</DefaultBackendType>
-			<!-- For multi-user mode. Can be overriden by project file. -->
+			<Project Type="New" Handling="Login">LocalHost</Project>
 			<Backend Type="Predefined">Embedded</Backend>
 			<Login Mode="Full">
 				<UserID>TheUser</UserID>

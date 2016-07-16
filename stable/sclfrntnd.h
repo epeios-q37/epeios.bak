@@ -178,11 +178,6 @@ namespace sclfrntnd {
 		sclmisc::LoadProject( Type, Feature );
 	}
 
-	inline void LoadProject( void )
-	{
-		sclmisc::LoadProject();
-	}
-
 	void GetProjectsFeatures(
 		const char *Language,
 		xml::writer_ &Writer );
@@ -526,6 +521,21 @@ namespace sclfrntnd {
 	const char *GetLabel( eBackendSetupType Type);
 
 	eBackendSetupType GetBackendSetupType( const str::dString &Pattern );
+
+	qENUM( ProjectHandling ) {
+		phNone,	// The project is not handled ; it's the one which is selected by default, user can change.
+		phLoad,	// The project is loaded.
+		phRun,	// Project loaded and run.
+		phLogin,	// Project is loaded, but only the login form is displayed ; login can be skipped depoending on loging configuration.
+		ph_amount,
+		ph_Undefined,
+	};
+
+	const char *GetLabel( eProjectHandling );
+
+	eProjectHandling GetProjectHandling( const str::dString &Pattern );
+
+	eProjectHandling HandleProject( void );
 }
 
 #endif

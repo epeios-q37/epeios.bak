@@ -35,7 +35,9 @@ namespace login {
 		BASE_ACR( Dismiss );
 	}
 
-	void SetLayout( core::rSession &Session );
+	void SetLayout(
+		core::rSession &Session,
+		sclxdhtml::login::eBackendVisibility Visibility );
 }
 
 #endif

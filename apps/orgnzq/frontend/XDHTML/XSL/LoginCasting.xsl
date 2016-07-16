@@ -4,10 +4,10 @@
 				>
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="Context">
-		<xsl:apply-templates select="BackendType"/>
+		<xsl:apply-templates select="Backend"/>
 	</xsl:template>
-	<xsl:template match="BackendType">
-		<xsl:variable name="Type" select="."/>
+	<xsl:template match="Backend">
+		<xsl:variable name="Type" select="@Type"/>
 		<xsl:choose>
 			<xsl:when test="$Type='None'">
 				<xdh-cast id="NoneBackendCast" kind="Vanish"/>
@@ -34,5 +34,17 @@
 				<xdh-cast id="PredefinedBackendCast" kind="Plain"/>
 			</xsl:when>
 		</xsl:choose>
+		<xdh-cast id="VisibleBackendCast">
+			<xsl:attribute name="kind">
+				<xsl:choose>
+					<xsl:when test="@Visibility='Show'">
+						<xsl:text>Plain</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>Hide</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
+		</xdh-cast>
 	</xsl:template>
 </xsl:stylesheet>

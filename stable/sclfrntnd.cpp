@@ -34,6 +34,13 @@ namespace parameter_ {
 	namespace backend_ {
 		rgstry::entry___ Type_( "@Type", Backend_ );
 		rgstry::entry___ Path_( "@Path", Backend_ );
+		rgstry::entry___ Feature_( Backend_ );
+	}
+
+	namespace project_ {
+		using namespace sclrgstry::parameter::project;
+
+		rgstry::entry___ Handling_( "@Handling", sclrgstry::parameter::Project );
 	}
 
 	rgstry::entry___ Login_( "Login", sclrgstry::Parameters );
@@ -52,10 +59,6 @@ namespace parameter_ {
 			Key_( "Key", Watchdog_ ),
 			Code_( "Code", Watchdog_ );
 	}
-
-	rgstry::entry___ DefaultProjectType_("DefaultProjectType", sclrgstry::Parameters );
-	rgstry::entry___ DefaultBackendType_("DefaultBackendType", sclrgstry::Parameters );
-
 }
 
 namespace definition_ {
@@ -372,7 +375,8 @@ static void GetPredefinedItems_(
 static void GetPredefinedItems_(
 	const char *Tag,
 	const rgstry::entry___ &IdEntry,
-	const rgstry::entry___ &DefaultEntry,
+	const rgstry::entry___ &ParameterDefaultEntry,
+	const rgstry::entry___ &DefinitionDefaultEntry,
 	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
 	const registry_ &Registry,
@@ -385,10 +389,13 @@ qRH
 	str::string DefaultId;
 qRB
 	DefaultId.Init();
-	sclrgstry::OGetValue( Registry, DefaultEntry, DefaultId );
+	if ( !sclrgstry::OGetValue(Registry, ParameterDefaultEntry, DefaultId)  || ( DefaultId.Amount() == 0 ) )
+		sclrgstry::OGetValue( Registry, DefinitionDefaultEntry, DefaultId );
 
 	Ids.Init();
 	sclrgstry::GetValues( Registry, IdEntry, Ids );
+
+	Writer.PutAttribute( "Amount", Ids.Amount() );
 
 	GetPredefinedItems_( Tag, ValueEntry, AliasEntry, Ids, DefaultId, Registry, Locale, Language, Writer );
 qRR
@@ -402,7 +409,8 @@ static void GetFeatures_(
 	const char *DefaultTypeTag,
 	const rgstry::entry___ &DefaultTypeEntry,
 	const rgstry::entry___ &IdEntry,
-	const rgstry::entry___ &DefaultEntry,
+	const rgstry::entry___ &ParameterDefaultEntry,
+	const rgstry::entry___ &DefinitionDefaultEntry,
 	const rgstry::entry___ &ValueEntry,
 	const rgstry::entry___ &AliasEntry,
 	const char *Language,
@@ -420,7 +428,7 @@ qRB
 	}
 
 	Writer.PushTag( ItemsTag );
-	GetPredefinedItems_( ItemTag, IdEntry, DefaultEntry, ValueEntry, AliasEntry, sclrgstry::GetCommonRegistry(), scllocale::GetLocale(), Language, Writer );
+	GetPredefinedItems_( ItemTag, IdEntry, ParameterDefaultEntry, DefinitionDefaultEntry, ValueEntry, AliasEntry, sclrgstry::GetCommonRegistry(), scllocale::GetLocale(), Language, Writer );
 	Writer.PopTag();
 qRR
 qRT
@@ -522,7 +530,7 @@ void sclfrntnd::GetProjectsFeatures(
 qRH
 	str::string Pattern;
 qRB
-	GetFeatures_( "Projects", "Project", "DefaultProjectType", parameter_::DefaultProjectType_, sclrgstry::definition::project::Id, sclrgstry::definition::DefaultProjectId, sclrgstry::definition::TaggedProject, definition_::tagged_project_::Alias_, Language, Writer );
+	GetFeatures_( "Projects", "Project", "DefaultProjectType", parameter_::project_::Type, sclrgstry::definition::project::Id, sclrgstry::parameter::project::Feature, sclrgstry::definition::DefaultProjectId, sclrgstry::definition::TaggedProject, definition_::tagged_project_::Alias_, Language, Writer );
 qRR
 qRT
 qRE
@@ -537,7 +545,7 @@ qRH
 qRB
 	Backend.Init();
 
-	if ( sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), parameter_::Backend_, Backend ) ) {
+	if ( sclrgstry::OGetValue( sclrgstry::GetCommonRegistry(), parameter_::backend_::Feature_, Backend ) ) {
 		Type.Init();
 		sclrgstry::MGetValue( sclrgstry::GetCommonRegistry(), parameter_::backend_::Type_, Type );
 
@@ -547,7 +555,7 @@ qRB
 		Writer.PopTag();
 	}
 
-	GetFeatures_( "Backends", "Backend", "DefaultBackendType", parameter_::DefaultBackendType_, definition_::backends_::backend_::Id_, definition_::backends_::DefaultBackendId_, definition_::backends_::Backend_, definition_::backends_::tagged_backend_::Alias_, Language, Writer );
+	GetFeatures_( "Backends", "Backend", "DefaultBackendType", parameter_::backend_::Type_, definition_::backends_::backend_::Id_,parameter_::backend_::Feature_, definition_::backends_::DefaultBackendId_, definition_::backends_::Backend_, definition_::backends_::tagged_backend_::Alias_, Language, Writer );
 qRR
 qRT
 qRE
@@ -594,6 +602,9 @@ void sclfrntnd::SetBackendFeatures(
 	const str::string_ &Parameters,
 	features___ &Features )
 {
+qRH
+	str::wString Id;
+qRB
 	switch ( BackendType ) {
 	case btNone:
 		Features.Type = csducl::tNone;
@@ -609,12 +620,20 @@ void sclfrntnd::SetBackendFeatures(
 		Features.Parameters = Parameters;
 		break;
 	case btPredefined:
-		GetBackendFeatures_( Parameters, Features );
+		Id.Init( Parameters );
+
+		if ( Id.Amount() == 0 )
+			sclmisc::MGetValue( definition_::backends_::DefaultBackendId_, Id );
+
+		GetBackendFeatures_( Id, Features );
 		break;
 	default:
 		qRFwk();
 		break;
 	}
+qRR
+qRT
+qRE
 }
 
 sdr::sRow sclfrntnd::kernel___::Init(
@@ -699,7 +718,7 @@ namespace{
 	qRB
 		Parameters.Init();
 
-		if ( sclmisc::OGetValue( parameter_::Backend_, Parameters ) ) {
+		if ( sclmisc::OGetValue( parameter_::backend_::Feature_, Parameters ) ) {
 			RawType.Init();
 			sclmisc::MGetValue( parameter_::backend_::Type_, RawType );
 
@@ -769,12 +788,81 @@ qRE
 	return About;
 }
 
+#define C( name )	case ph##name : return #name; break
+ 
+const char *sclfrntnd::GetLabel( eProjectHandling Handling )
+{
+	switch ( Handling ) {
+	C( None );
+	C( Load );
+	C( Run );
+	C( Login );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+ 
+#undef C
+ 
+namespace {
+	stsfsm::wAutomat ProjectHandlingAutomat_;
+ 
+	void FillProjectHandlingAutomat_( void )
+	{
+		ProjectHandlingAutomat_.Init();
+		stsfsm::Fill<eProjectHandling>( ProjectHandlingAutomat_, ph_amount, GetLabel );
+	}
+}
+ 
+eProjectHandling sclfrntnd::GetProjectHandling( const str::dString &Pattern )
+{
+	return stsfsm::GetId( Pattern, ProjectHandlingAutomat_, ph_Undefined, ph_amount );
+}
+
+eProjectHandling sclfrntnd::HandleProject( void )
+{
+	eProjectHandling Handling = phNone;;
+qRH
+	str::wString RawHandling;
+qRB
+	RawHandling.Init();
+
+	if ( ( sclmisc::OGetValue( parameter_::project_::Handling_, RawHandling ) )
+		  && ( RawHandling.Amount() != 0 ) ) {
+		Handling = GetProjectHandling( RawHandling );
+
+		if ( Handling == ph_Undefined )
+			sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( parameter_::project_::Handling_ );
+
+		switch ( Handling ) {
+		case phLoad:
+		case phRun:
+		case phLogin:
+			sclmisc::LoadProject();
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
+qRR
+qRT
+qRE
+	return Handling;
+}
+
+
+
 namespace {
 	void FillAutomats_( void )
 	{
 		FillLoginAutomat_();
 		FillBackendAutomat_();
 		FillBackendSetupTypeAutomat_();
+		FillProjectHandlingAutomat_();
 	}
 }
 

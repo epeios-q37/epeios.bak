@@ -65,7 +65,6 @@ namespace {
 			if ( Launcher_ == NULL ) {
 				Launcher_ = Data.LauncherIdentification();
 				sclmisc::Initialize( Data.SCLRack(), Data.Localization() );
-				sclfrntnd::LoadProject();
 
 				SCLXDHTMLInitialization( Data.Mode() );
 			}
@@ -513,6 +512,22 @@ qRT
 qRE
 }
 
+#define C( name ) case bv##name : return #name
+
+const char *sclxdhtml::login::GetLabel( eBackendVisibility Visibility )
+{
+	switch ( Visibility ) {
+	C( Show );
+	C( Hide );
+	default:
+		qRFwk();
+		break;
+	}
+
+	return NULL;	// To avoid a warning.
+}
+
+
 sclfrntnd::eLogin sclxdhtml::login::GetContent(
 	sclfrntnd::frontend___ &Frontend,
 	xml::writer_ &Writer)
@@ -538,11 +553,14 @@ qRE
 
 void sclxdhtml::login::GetContext(
 	proxy__ &Proxy,
+	eBackendVisibility Visibility,
 	xml::writer_ &Writer )
 {
-	Writer.PushTag( "BackendType" );
+	Writer.PushTag( "Backend" );
 
-	Writer.PutValue( sclfrntnd::GetLabel( GetBackendType_( Proxy ) ) );
+	Writer.PutAttribute( "Type", sclfrntnd::GetLabel( GetBackendType_( Proxy ) ) );
+
+	Writer.PutAttribute( "Visibility", GetLabel( Visibility ) );
 
 	Writer.PopTag();
 }

@@ -2,6 +2,13 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-07-16 :
+	- SCLFRNTND :
+		- Improving default project and backend handling.
+	- SCLXDHTML :
+		- Adapting to changes in SCLFRNTND.
+		- The login page can now be configured to hide the backend-related part.
+
 2016-07-15 :
 	- RGSTRY :
 		- Modifications to facilitate a thread-safe use.

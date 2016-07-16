@@ -32,6 +32,7 @@ namespace {
 
 	void GetContext_(
 		core::rSession &Session,
+		sclxdhtml::login::eBackendVisibility Visibility,
 		str::string_ &XML )
 	{
 	qRH
@@ -39,19 +40,21 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		sclxdhtml::login::GetContext( Session, Rack );
+		sclxdhtml::login::GetContext( Session, Visibility, Rack );
 	qRR
 	qRT
 	qRE
 	}
 
-	void SetCasting_( core::rSession &Session )
+	void SetCasting_(
+		core::rSession &Session,
+		sclxdhtml::login::eBackendVisibility Visibility )
 	{
 	qRH
 		str::string XML, XSL;
 	qRB
 		XML.Init();
-		GetContext_( Session,  XML );
+		GetContext_( Session, Visibility, XML );
 
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), sclxdhtml::GetRegistry() , XSL );	// Outside session, so we use the global registry...
@@ -80,7 +83,9 @@ namespace {
 	}
 }
 
-void login::SetLayout( core::rSession &Session )
+void login::SetLayout(
+	core::rSession &Session,
+	sclxdhtml::login::eBackendVisibility Visibility )
 {
 qRH
 	str::string XML, XSL;
@@ -93,7 +98,7 @@ qRB
 
 	Session.FillDocument( XML, XSL );
 
-	SetCasting_( Session );
+	SetCasting_( Session, Visibility );
 
 	Session.SwitchTo( core::pLogin );
 qRR
@@ -105,7 +110,7 @@ qRE
 
 AC( SwitchBackendType )
 {
-	SetCasting_( Session );
+	SetCasting_( Session, sclxdhtml::login::bvShow );	// Show, because this action could not be made if the backend-related form is hidden.
 }
 
 AC( DisplayEmbeddedBackendFilename )

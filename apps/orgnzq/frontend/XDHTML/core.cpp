@@ -65,7 +65,7 @@ void core::rSession::SCLXDHTMLRefresh( page__ Page )
 		prolog::SetLayout( *this );
 		break;
 	case pLogin:
-		login::SetLayout( *this );
+		login::SetLayout( *this, sclxdhtml::login::bvShow );	// Testing purpose. Should be reoved in production.
 		break;
 	case pMain:
 		main::SetLayout( *this );
