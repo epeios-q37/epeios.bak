@@ -101,4 +101,5 @@ clean : common
 
 common:
 	$(MAKE) $(MAKECMDGOALS) -C backend/
+	$(MAKE) $(MAKECMDGOALS) -C dmnzq/
 	$(MAKE) $(MAKECMDGOALS) -C plugins/

@@ -68,7 +68,8 @@ namespace sclfrntnd {
 
 	backend_type__ GetBackendType( const str::string_ &Pattern );
 
-	void GetRemoteBackendPluginPath(
+	// Returns the plugin of id 'Id' path an name for connecting to a remote backend.
+	void GetRemotePluginPath(
 		const str::string_ &Id,
 		str::string_ &Path );
 

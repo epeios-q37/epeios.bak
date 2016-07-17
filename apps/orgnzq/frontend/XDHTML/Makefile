@@ -343,19 +343,15 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160713"\"
+copt += -DVERSION=\""20160717"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
+	out = ./
 else
 	src += :$(EPEIOS_SRC)
-endif
-
-ifdef EPEIOS_OUT
-	out = $(EPEIOS_OUT)
-else
 	out = $(dest)
 endif
 

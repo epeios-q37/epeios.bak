@@ -3,7 +3,7 @@
 	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
 	<Dependencies Target="orgnzq">
-		<Dependency Name="backend" Dir="backend/"/>
+		<xpp:expand select="ProcessingDeps"/>
 		<Dependency Name="plugins" Dir="plugins/"/>
 	</Dependencies>
 </Project>

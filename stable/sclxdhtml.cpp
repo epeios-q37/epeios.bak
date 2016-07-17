@@ -23,7 +23,7 @@
 
 using namespace sclxdhtml;
 
-E_CDEF(char *, StraightRemoteBackendId_, "Straigth" );
+E_CDEF(char *, StraightRemoteBackendId_, "Straight" );
 
 static bso::bool__ IsInitialized_ = false;
 
@@ -581,7 +581,7 @@ qRB
 	case sclfrntnd::btNone:
 		break;
 	case sclfrntnd::btRemote:
-		sclfrntnd::GetRemoteBackendPluginPath( str::string( StraightRemoteBackendId_ ), Path );
+		sclfrntnd::GetRemotePluginPath( str::string( StraightRemoteBackendId_ ), Path );
 		Parameters.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
 		break;
 	case sclfrntnd::btEmbedded:

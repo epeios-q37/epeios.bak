@@ -1,6 +1,20 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- For the XDHTML-based interfaces (based on 'SCLXDHTML'). -->
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:define name="XDH_Definitions">
+		<xpp:bloc>
+			<RemotePlugins>
+				<RemotePlugin id="Straight">
+					<xpp:expand select="PlgPath"/>
+					<xpp:bloc>remote/straight/straight</xpp:bloc>
+				</RemotePlugin>
+				<RemotePlugin id="¨Proxy">
+					<xpp:expand select="PlgPath"/>
+					<xpp:bloc>remote/proxy/proxy</xpp:bloc>
+				</RemotePlugin>
+			</RemotePlugins>
+		</xpp:bloc>
+	</xpp:define>"
 	<xpp:define name="XDH_Locale">
 		<xpp:bloc>
 			<xpp:bloc>

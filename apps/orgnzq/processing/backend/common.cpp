@@ -138,6 +138,8 @@ void common::rTypes::FetchMandatoryTypes_( void )
 		else if ( !strcmp( Type.GetLabel(), TextTypeLabel_ ) )
 			MandatoryTextType_ = Row;
 
+		cio::COut << Type.GetLabel() << txf::nl << txf::commit;
+
 		Type.reset( false );
 
 		Row = Core_.Next( Row );

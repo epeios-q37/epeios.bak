@@ -59,7 +59,7 @@
 		</Modules>
 	</Modules>
 	<Files>
-		<File>dmnzq.xprj</File>
+		<File Pack="xpp">dmnzq.xprj</File>
 	</Files>
 	<SourceDirs>
 		<SourceDir>..</SourceDir>

@@ -87,27 +87,24 @@ namespace definition_ {
 		}
 	}
 
-	rgstry::entry___ RemoteBackends_( "RemoteBackends", sclrgstry::Definitions );
+	rgstry::entry___ RemotePlugins_( "RemotePlugins", sclrgstry::Definitions );
 
-	namespace remote_backends_ {
-		rgstry::entry___ RemoteBackend_( "RemoteBackend", RemoteBackends_ );
+	namespace remote_plugins_ {
+		rgstry::entry___ RemotePlugin_( "RemotePlugin", RemotePlugins_ );
 
-		rgstry::entry___ TaggedRemoteBackend_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), RemoteBackend_);
+		rgstry::entry___ TaggedRemotePlugin_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), RemotePlugin_);
 
-		namespace tagged_remote_backed_ {
-			rgstry::entry___ PluginPath_( "PluginPath", TaggedRemoteBackend_ );
+		namespace tagged_remote_plugin_ {
+			rgstry::entry___ Path_( TaggedRemotePlugin_ );
 		}
 	}
 }
 
-static rgstry::entry___ Internals_( "Internals" );
-static rgstry::entry___ ProjectId_( "ProjectId", Internals_ );
-
-void sclfrntnd::GetRemoteBackendPluginPath(
+void sclfrntnd::GetRemotePluginPath(
 	const str::string_ &Id,
 	str::string_ &Path )
 {
-	sclmisc::MGetValue( rgstry::tentry___( definition_::remote_backends_::tagged_remote_backed_::PluginPath_, Id ), Path );
+	sclmisc::MGetValue( rgstry::tentry___( definition_::remote_plugins_::tagged_remote_plugin_::Path_, Id ), Path );
 }
 
 

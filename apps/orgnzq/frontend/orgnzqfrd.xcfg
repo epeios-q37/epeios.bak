@@ -6,7 +6,7 @@
 	<xpp:define name="Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
-			<Project Type="New" Handling="Login">LocalHost</Project>
+			<Project Type="New" Handling="Load">LocalHost</Project>
 			<Backend Type="Predefined">Embedded</Backend>
 			<Login Mode="Full">
 				<UserID>TheUser</UserID>
@@ -46,9 +46,10 @@
 			</Projects>
 			<Backends Default="Embedded">
 				<xpp:bloc marker="$">
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">10.0.0.15:53700</Backend>
-					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/proxy/proxy">localhost:53700 test</Backend>
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinPath$orgnzqbkd"/>
+					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">q37.info:53700</Backend>
+					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/proxy/proxy">localhost:53700 test</Backend-->
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">10.0.0.15:53700</Backend>
 				</xpp:bloc>
 			</Backends>
 			<Plugins target="XML">
@@ -102,6 +103,10 @@
 			<Translations text="EmbeddedBackendProject">
 				<Translation language="fr">avec moteur de traitement enclavé</Translation>
 				<Translation language="en">with embedded backend</Translation>
+			</Translations>
+			<Translations text="q37PredefinedBackend">
+				<Translation language="fr">Moteur de traitement sur q37.info</Translation>
+				<Translation language="en">Backend on q37.info</Translation>
 			</Translations>
 			<Translations text="LocalPredefinedBackend">
 				<Translation language="fr">Moteur de traitement local</Translation>

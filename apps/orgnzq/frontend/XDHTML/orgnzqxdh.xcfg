@@ -34,6 +34,7 @@
 		</Parameters>
 		<Definitions>
 			<xpp:expand select="Definitions"/>
+			<xpp:expand select="XDH_Definitions"/>
 			<XSLFilesSet>
 				<XSLFiles target="About">
 					<Layout>
