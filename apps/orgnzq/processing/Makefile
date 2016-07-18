@@ -102,7 +102,7 @@ clean : common
 common:
 	$(MAKE) $(MAKECMDGOALS) -C backend/
 ifdef EPEIOS_SRC
-	$(MAKE) $(MAKECMDGOALS) -C /h/hg/epeios/tools/dmnzq/
+	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/tools/dmnzq/
 else
 	$(MAKE) $(MAKECMDGOALS) -C dmnzq/
 endif
