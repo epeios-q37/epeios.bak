@@ -101,5 +101,9 @@ clean : common
 
 common:
 	$(MAKE) $(MAKECMDGOALS) -C backend/
+ifdef EPEIOS_SRC
+	$(MAKE) $(MAKECMDGOALS) -C /cygdrive/h/hg/epeios/tools/dmnzq/
+else
 	$(MAKE) $(MAKECMDGOALS) -C dmnzq/
+endif
 	$(MAKE) $(MAKECMDGOALS) -C plugins/

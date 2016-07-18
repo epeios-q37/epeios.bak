@@ -102,5 +102,3 @@ clean : common
 common:
 	$(MAKE) $(MAKECMDGOALS) -C processing/
 	$(MAKE) $(MAKECMDGOALS) -C frontend/
-	$(MAKE) $(MAKECMDGOALS) -C frontend/
-	$(MAKE) $(MAKECMDGOALS) -C processing/

@@ -4,7 +4,5 @@
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
 	<Dependencies Target="orgnzq">
 		<xpp:expand select="AppDeps"/>
-		<Dependency Name="frontend" Dir="frontend/"/>
-		<Dependency Name="processing" Dir="processing/"/>
 	</Dependencies>
 </Project>
