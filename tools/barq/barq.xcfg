@@ -6,8 +6,8 @@
 		<xpp:expand href="../TOL.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
-			<StraightPluginPath>h:/bin/plugins/remote/straight</StraightPluginPath>
-			<ProxyPluginPath>h:/bin/plugins/remote/proxy</ProxyPluginPath>
+			<StraightPluginPath>h:/bin/plugins/remote/straight/straight</StraightPluginPath>
+			<ProxyPluginPath>h:/bin/plugins/remote/proxy/proxy</ProxyPluginPath>
 		</Parameters>
 		<Definitions>
 		</Definitions>
