@@ -47,9 +47,9 @@
 			<Backends Default="Embedded">
 				<xpp:bloc marker="$">
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinPath$orgnzqbkd"/>
-					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">q37.info:53700</Backend>
+					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">q37.info:57710</Backend>
 					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/proxy/proxy">localhost:53700 test</Backend-->
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">10.0.0.15:53700</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">localhost:53700</Backend>
 				</xpp:bloc>
 			</Backends>
 			<Plugins target="XML">
