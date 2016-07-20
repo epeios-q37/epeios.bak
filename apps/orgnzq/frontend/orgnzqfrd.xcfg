@@ -7,7 +7,12 @@
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
 			<Project Type="New" Handling="Load">LocalHost</Project>
-			<Backend Type="Predefined">Embedded</Backend>
+			<xpp:ifeq select="packing" value="yes">
+				<Backend Type="Predefined">Embedded</Backend>
+			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="no">
+				<Backend Type="Predefined">LinuxVM</Backend>
+			</xpp:ifeq>
 			<Login Mode="Full">
 				<UserID>TheUser</UserID>
 				<Password>ThePassword</Password>
@@ -50,6 +55,9 @@
 					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">q37.info:57710</Backend>
 					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/proxy/proxy">localhost:53700 test</Backend-->
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">localhost:53700</Backend>
+					<xpp:ifeq select="packing" value="no">
+						<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">192.168.44.131:53700</Backend>
+					</xpp:ifeq>
 				</xpp:bloc>
 			</Backends>
 			<Plugins target="XML">

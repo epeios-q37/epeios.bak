@@ -19,7 +19,7 @@
 					<xpp:bloc>h:\bin\</xpp:bloc>
 				</xpp:ifeq>
 				<xpp:ifeq select="env" value="linux">
-					<xpp:bloc>/home/csimon/bin/lib</xpp:bloc>
+					<xpp:bloc>/home/csimon/bin/</xpp:bloc>
 				</xpp:ifeq>
 				<xpp:ifeq select="env" value="darwin">
 					<xpp:bloc>/Users/csimon/bin/lib</xpp:bloc>

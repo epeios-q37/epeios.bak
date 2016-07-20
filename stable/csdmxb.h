@@ -34,13 +34,13 @@
 
 # include "err.h"
 
-# define CSDMXB_PING		BSO_UINT_MAX
+# define CSDMXB_PING		BSO_U16_MAX
 # define CSDMXB_CLOSE		( CSDMXB_PING - 1 )
 # define CSDMXB_UNDEFINED	( CSDMXB_CLOSE - 1 )
 # define CSDMXB_RESERVED	CSDMXB_UNDEFINED
 
 namespace csdmxb {
-	typedef bso::uint__ fId;
+	typedef bso::u16__ fId;
 
 	inline void PutId(
 		fId Id,
