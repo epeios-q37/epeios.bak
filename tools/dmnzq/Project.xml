@@ -4,8 +4,8 @@
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml" />
 	<Dependencies Target="dmnzq">
 		<Dependency Dir="tool/"/>
-		<Dependency Dir="plugins/Straight/"/>
-		<Dependency Dir="plugins/Proxy/"/>
+		<Dependency Dir="plugins/straight/"/>
+		<Dependency Dir="plugins/proxy/"/>
 	</Dependencies>
 	<WikiFiles Group="Doc" Path="Doc/">
 	</WikiFiles>

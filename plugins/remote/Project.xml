@@ -3,8 +3,8 @@
 	<xpp:set name="Type" value="Bundle"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml" />
 	<Dependencies Target="Remote">
-		<Dependency Name="Proxy" Dir="Proxy/"/>
-		<Dependency Name="Straight" Dir="Straight/"/>
+		<Dependency Dir="proxy/"/>
+		<Dependency Dir="straight/"/>
 	</Dependencies>
 	<WikiFiles Group="Doc" Path="Doc/">
 	</WikiFiles>
