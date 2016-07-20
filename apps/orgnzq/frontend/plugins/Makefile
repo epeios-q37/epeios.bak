@@ -100,5 +100,5 @@ all : common
 clean : common
 
 common:
-	$(MAKE) $(MAKECMDGOALS) -C Record/
-	$(MAKE) $(MAKECMDGOALS) -C Text/
+	$(MAKE) $(MAKECMDGOALS) -C record/
+	$(MAKE) $(MAKECMDGOALS) -C text/

@@ -101,5 +101,5 @@ clean : common
 
 common:
 	$(MAKE) $(MAKECMDGOALS) -C tool/
-	$(MAKE) $(MAKECMDGOALS) -C plugins/Straight/
-	$(MAKE) $(MAKECMDGOALS) -C plugins/Proxy/
+	$(MAKE) $(MAKECMDGOALS) -C plugins/straight/
+	$(MAKE) $(MAKECMDGOALS) -C plugins/proxy/

@@ -100,6 +100,6 @@ all : common
 clean : common
 
 common:
-	$(MAKE) $(MAKECMDGOALS) -C Authentication/
-	$(MAKE) $(MAKECMDGOALS) -C Database/
-	$(MAKE) $(MAKECMDGOALS) -C Type/
+	$(MAKE) $(MAKECMDGOALS) -C authentication/
+	$(MAKE) $(MAKECMDGOALS) -C database/
+	$(MAKE) $(MAKECMDGOALS) -C type/

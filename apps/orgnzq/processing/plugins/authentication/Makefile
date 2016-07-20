@@ -100,4 +100,4 @@ all : common
 clean : common
 
 common:
-	$(MAKE) $(MAKECMDGOALS) -C Dummy/
+	$(MAKE) $(MAKECMDGOALS) -C dummy/

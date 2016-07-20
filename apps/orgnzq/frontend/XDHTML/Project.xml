@@ -73,7 +73,7 @@
 		<SourceDir>../../..</SourceDir>
 	</SourceDirs>
 	<Files>
-		<Files Group="XSL" Path="XSL/">
+		<Files Group="XSL" Path="XSL/" Pack="no">
 			<Files Group="Frames">
 				<Files Group="Column">
 					<File>ColumnLayout.xsl</File>

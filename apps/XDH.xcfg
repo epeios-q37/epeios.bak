@@ -14,7 +14,7 @@
 				</RemotePlugin>
 			</RemotePlugins>
 		</xpp:bloc>
-	</xpp:define>"
+	</xpp:define>
 	<xpp:define name="XDH_Locale">
 		<xpp:bloc>
 			<xpp:bloc>

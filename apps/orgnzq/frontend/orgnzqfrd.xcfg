@@ -11,7 +11,7 @@
 				<Backend Type="Predefined">Embedded</Backend>
 			</xpp:ifeq>
 			<xpp:ifeq select="packing" value="no">
-				<Backend Type="Predefined">LinuxVM</Backend>
+				<Backend Type="Predefined">LocalHost</Backend>
 			</xpp:ifeq>
 			<Login Mode="Full">
 				<UserID>TheUser</UserID>
@@ -29,45 +29,62 @@
 	<xpp:define name="Definitions">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Definitions"/>
-			<Projects Default="Embedded">
-				<xpp:define name="ProjectsRootDir">
-					<xpp:bloc>
-						<xpp:expand select="BinPath"/>
-						<xpp:bloc>ogz/Frontend/</xpp:bloc>
-					</xpp:bloc>
-				</xpp:define>
-				<Project id="No" Alias="NoBackendProject">
-					<xpp:expand select="ProjectsRootDir"/>
-					<xpp:bloc>None.xprj</xpp:bloc>
-				</Project>
-				<Project id="LocalHost" Alias="LocalhostBackendProject">
-					<xpp:expand select="ProjectsRootDir"/>
-					<xpp:bloc>Localhost.xprj</xpp:bloc>
-				</Project>
-				<Project id="Embedded" Alias="EmbeddedBackendProject">
-					<xpp:expand select="ProjectsRootDir"/>
-					<xpp:bloc>Embedded.xprj</xpp:bloc>
-				</Project>
-			</Projects>
+			<xpp:ifeq select="packing" value="no">
+				<xpp:bloc>
+					<Projects Default="Embedded">
+						<xpp:define name="ProjectsRootDir">
+							<xpp:bloc>
+								<xpp:expand select="BinPath"/>
+								<xpp:bloc>ogz/Frontend/</xpp:bloc>
+							</xpp:bloc>
+						</xpp:define>
+						<Project id="No" Alias="NoBackendProject">
+							<xpp:expand select="ProjectsRootDir"/>
+							<xpp:bloc>None.xprj</xpp:bloc>
+						</Project>
+						<Project id="LocalHost" Alias="LocalhostBackendProject">
+							<xpp:expand select="ProjectsRootDir"/>
+							<xpp:bloc>Localhost.xprj</xpp:bloc>
+						</Project>
+						<Project id="Embedded" Alias="EmbeddedBackendProject">
+							<xpp:expand select="ProjectsRootDir"/>
+							<xpp:bloc>Embedded.xprj</xpp:bloc>
+						</Project>
+					</Projects>
+				</xpp:bloc>
+			</xpp:ifeq>
 			<Backends Default="Embedded">
+				<xpp:ifeq select="packing" value="yes">
+					<xpp:set name="BasePath" value=""/>
+				</xpp:ifeq>
+				<xpp:ifeq select="packing" value="no">
+					<xpp:bloc marker="$">
+						<xpp:set name="BasePath" value="$BinPath$"/>
+					</xpp:bloc>
+				</xpp:ifeq>
 				<xpp:bloc marker="$">
-					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinPath$orgnzqbkd"/>
-					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">q37.info:57710</Backend>
-					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/proxy/proxy">localhost:53700 test</Backend-->
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">localhost:53700</Backend>
+					<xpp:set name="PluginPath" value="$BasePath$plugins/"/>
+				</xpp:bloc>
+				<xpp:bloc marker="$">
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BasePath$orgnzqbkd"/>
+					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">q37.info:57710</Backend>
+					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$PluginPath$remote/proxy/proxy">localhost:53700 test</Backend-->
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">localhost:53700</Backend>
 					<xpp:ifeq select="packing" value="no">
-						<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Type="Remote" Path="$BinPath$plugins/remote/straight/straight">192.168.44.131:53700</Backend>
+						<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">192.168.44.131:53700</Backend>
 					</xpp:ifeq>
 				</xpp:bloc>
 			</Backends>
 			<Plugins target="XML">
 				<xpp:ifeq select="packing" value="yes">
-					<xpp:set name="PlgPath" value="../plugins/"/>
+					<xpp:set name="PlgPath" value="plugins/"/>
 				</xpp:ifeq>
 				<xpp:define name="XMLPluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand value-of="PlgPath"/>
-						<xpp:bloc>ogz/frontend/</xpp:bloc>
+						<xpp:ifeq select="packing" value="no">
+							<xpp:bloc>ogz/frontend/</xpp:bloc>
+						</xpp:ifeq>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Record">

@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+	<xpp:expand value-of="q37.xpp"/>
 	<Configuration target="orgnzqxdh">
 		<xpp:define name="PathToXSL">
 			<xpp:bloc>epeios/apps/orgnzq/frontend/XDHTML/XSL/</xpp:bloc>
 		</xpp:define>
+		<xpp:ifeq select="packing" value="yes">
+			<xpp:bloc>
+				<xpp:set name="PlgPath" value=""/>
+				<xpp:define name="PlgPath">
+					<xpp:expand value-of="PlgPath"/>
+				</xpp:define>
+			</xpp:bloc>
+		</xpp:ifeq>
 		<xpp:define name="XSLRootDir">
 			<xpp:bloc>
 				<xpp:ifeq select="env" value="windows">

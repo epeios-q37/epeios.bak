@@ -20,7 +20,7 @@
 							</xpp:bloc>
 						</xpp:ifeq>
 						<xpp:ifeq select="packing" value="yes">
-							<xpp:bloc>../plugins/</xpp:bloc>
+							<xpp:bloc>dmnzq/plugins/</xpp:bloc>
 						</xpp:ifeq>
 					</xpp:bloc>
 				</xpp:define>
