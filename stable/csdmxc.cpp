@@ -32,11 +32,11 @@ using namespace csdmxc;
 		return #n;\
 		break
 
-const char *csdmxc::GetLogLabel( eLog Log )
+const char *csdmxc::GetLabel( eLog Log )
 {
 	switch ( Log ) {
 		CASE( Creation );
-		CASE( Retrieval );
+		CASE( Acquire );
 		CASE( Release );
 	default:
 		qRFwk();

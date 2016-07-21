@@ -138,7 +138,7 @@ qRE
 }
 
 
-scldaemon::callback___ *scldaemon::SCLDAEMONGetCallback( 
+scldaemon::rCallback *scldaemon::SCLDAEMONGetCallback( 
 	csdleo::context__ Context,
 	csdleo::mode__ CSDMode )
 {

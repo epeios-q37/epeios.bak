@@ -31,7 +31,7 @@
 # include "csdmxb.h"
 
 # include "stkbch.h"
-
+# include "flf.h"
 # include "err.h"
 
 #ifdef CPE_F_MT
@@ -96,15 +96,15 @@ namespace csdmxc {
 
 	qENUM( Log ) {
 		lCreation,
-		lRetrieval,
+		lAcquire,
 		lRelease,
 		l_amount,
 		l_Undefined
 	};
 
-	const char *GetLogLabel( eLog Log );
+	const char *GetLabel( eLog Log );
 
-	class cLogCallback
+	class cLog
 	{
 	protected:
 		virtual void CSDMXCLog(
@@ -118,6 +118,33 @@ namespace csdmxc {
 			sdr::size__ Amount )
 		{
 			CSDMXCLog( Log, UP, Amount );
+		}
+	};
+
+	class rLogCallback
+	: public cLog
+	{
+	private:
+		flf::file_oflow___ Flow_;
+		txf::text_oflow__ TFlow_;
+	protected:
+		virtual void CSDMXCLog(
+			eLog Log,
+			const void *UP,
+			sdr::size__ Amount ) override
+		{
+			TFlow_ << GetLabel(Log) << " : " << UP << " - " << Amount << txf::nl << txf::commit;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, TFlow_, Flow_ );
+		}
+		qCVDTOR( rLogCallback );
+		void Init( const fnm::rName &Name )
+		{
+			Flow_.Init( Name );
+			TFlow_.Init( Flow_ );
 		}
 	};
 
@@ -161,7 +188,7 @@ namespace csdmxc {
 		wUPs UPs;
 		mutex__ MainMutex_;
 		struct fLog_ {
-			cLogCallback *Callback;
+			cLog *Callback;
 			mutex__ Mutex;
 		} Log_;
 		struct fPing__ {
@@ -219,7 +246,7 @@ qRE
 		bso::bool__ Init( 
 			cCallback &Callback,
 			bso::uint__ PingDelay = 0,
-			cLogCallback *LogCallback = NULL )
+			cLog *LogCallback = NULL )
 		{
 			reset();
 
@@ -251,7 +278,7 @@ qRE
 		bso::bool__ Init(
 			cCallback &Callback,
 			bso::uint__ PingDelay,
-			cLogCallback &LogCallback )
+			cLog &LogCallback )
 		{
 			return Init( Callback, PingDelay, &LogCallback );
 		}
@@ -267,7 +294,7 @@ qRE
 
 			if ( UPs.Amount() ) {
 				UP = UPs.Pop();
-				Log = lRetrieval;
+				Log = lAcquire;
 			} else {
 				UP = C_().New();
 

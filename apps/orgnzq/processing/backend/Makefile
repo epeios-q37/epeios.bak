@@ -42,7 +42,7 @@ mods += sclmisc sclerror scllocale sclrgstry scldaemon
 mods += sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
 mods += fblbur fblcmd fblcst fbltyp fblovl 
-mods += csdleo csdles csdmxb csdmxs csdscb 
+mods += csdleo csdles csdscb 
 mods += ogzfbc ogzinf ogzbsc ogzclm ogzdtb 
 mods += ogzetr ogzfld ogzmta ogzplg ogzrcd 
 mods += ogzrgy ogztyp ogzusr ogzxml ogzxmp 
@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160720"\"
+copt += -DVERSION=\""20160721"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""dc3beae2-d82c-4471-bc7e-03adb886d5f7"\"
 

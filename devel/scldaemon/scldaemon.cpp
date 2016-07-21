@@ -34,16 +34,6 @@ using namespace scldaemon;
 
 #include "fnm.h"
 
-void scldaemon::basic_callback__::reset( bso::bool__ P )
-{
-	Callback_ = NULL;
-}
-
-void *scldaemon::basic_callback__::CSDSCBPreProcess( const ntvstr::char__ *Origin )
-{
-	return C_().SCLDAEMONNew( Origin );
-}
-
 namespace {
 	bso::bool__ IsInitialized_ = false;
 

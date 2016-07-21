@@ -115,7 +115,7 @@ namespace sclbacknd {
 		}
 	};
 
-	typedef scldaemon::callback___ rCallback_;
+	typedef scldaemon::rCallback rCallback_;
 
 	class rCallback
 	: public rCallback_
@@ -152,24 +152,20 @@ namespace sclbacknd {
 		E_CVDTOR( rCallback );
 		void Init( fblbur::mode__ Mode )
 		{
-			scldaemon::mode__ DaemonMode = scldaemon::m_Undefined;
-
 			switch ( Mode ) {
 			case fblbur::mNone:
 				qRFwk();
 				break;
 			case fblbur::mEmbedded:
-				DaemonMode = scldaemon::mBasic;
 				break;
 			case fblbur::mRemote:
-				DaemonMode = scldaemon::mMuxed;
 				break;
 			default:
 				qRFwk();
 				break;
 			}
 
-			rCallback_::Init( DaemonMode );
+			rCallback_::Init();
 
 			_Mode = Mode;
 		}

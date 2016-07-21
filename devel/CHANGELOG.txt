@@ -2,6 +2,19 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-07-21 :
+	- CSDMNC :
+		- Adaptation to changes in CSDMXC.
+		- Fixing 'Timeout'<->'PingDelay' bug.
+	- CSDMXC :
+		- 'cLogCallback' -> 'cLog'.
+		- Introducing file log callback.
+		- 'Retrieve' -> 'Acquire'.
+	- SCLBACKND :
+		- Adaptation to changes in SCLDAEMON.
+	- SCLDAEMON :
+		- The muxing flow is deported to the 'straight' 'dmnzq' plugin.
+
 2016-07-20 :
 	- CSDMXB :
 		- Fixing bug when mixing 32/64 bits client/server.

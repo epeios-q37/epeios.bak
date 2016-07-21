@@ -32,7 +32,6 @@
 # include "flw.h"
 
 # include "csdleo.h"
-# include "csdmxs.h"
 
 # include "sclrgstry.h"
 
@@ -63,25 +62,22 @@ namespace scldaemon {
 		}
 	};
 
-	using csdscb::cProcessing;
+	typedef csdscb::cProcessing cProcessing_; 
 
-	E_ENUM( mode ) {
-		mBasic,
-		mMuxed,
-		m_amount,
-		m_Undefined
-	};
-
-	// Predefinition.
-	class callback___;
-
-	class basic_callback__
-	: public cProcessing
+	class rCallback
+	: public cProcessing_
 	{
-	private:
-		Q37_MRMDF( callback___, C_, Callback_ );
 	protected:
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override;
+		virtual bso::sBool CSDSCBPluginOverride(
+			str::dString &Id,
+			str::dString &Arguments ) override
+		{
+			return SCLDAEMONPluginOverride( Id, Arguments );
+		}
+		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+		{
+			return SCLDAEMONNew( Origin );
+		}
 		virtual csdscb::action__ CSDSCBProcess(
 			flw::ioflow__ &Flow,
 			void *UP ) override
@@ -108,79 +104,6 @@ namespace scldaemon {
 		qRT
 		qRE
 		}
-	public:
-		void reset( bso::bool__ P = true );
-		E_CVDTOR( basic_callback__ );
-		void Init( callback___ &Callback )
-		{
-			Callback_ = &Callback;
-		}
-	};
-
-	typedef csdmxs::rCallback muxed_callback___;
-
-	class callback___
-	: public cProcessing
-	{
-	private:
-		mode__ Mode_;
-		basic_callback__ Basic_;
-		muxed_callback___ Muxed_;
-	protected:
-		virtual bso::sBool CSDSCBPluginOverride(
-			str::dString &Id,
-			str::dString &Arguments ) override
-		{
-			return SCLDAEMONPluginOverride( Id, Arguments );
-		}
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
-		{
-			switch ( Mode_ ) {
-			case mBasic:
-				return Basic_.PreProcess( Origin );
-				break;
-			case mMuxed:
-				return Muxed_.PreProcess( Origin );
-				break;
-			default:
-				qRFwk();
-				break;
-			}
-
-			return NULL;	// To avoid a warning.
-		}
-		virtual csdscb::action__ CSDSCBProcess(
-			flw::ioflow__ &Flow,
-			void *UP ) override
-		{
-			switch ( Mode_ ) {
-			case mBasic:
-				return Basic_.Process( Flow, UP );
-				break;
-			case mMuxed:
-				return Muxed_.Process( Flow, UP );
-				break;
-			default:
-				qRFwk();
-				break;
-			}
-
-			return csdscb::a_Undefined;
-		}
-		virtual void CSDSCBPostProcess( void *UP ) override
-		{
-			switch ( Mode_ ) {
-			case mBasic:
-				return Basic_.PostProcess( UP );
-				break;
-			case mMuxed:
-				return Muxed_.PostProcess( UP );
-				break;
-			default:
-				qRFwk();
-				break;
-			}
-		}
 	protected:
 		virtual bso::sBool SCLDAEMONPluginOverride(
 			str::dString &Id,
@@ -192,35 +115,17 @@ namespace scldaemon {
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			Basic_.reset( P );
-			Muxed_.reset( P );
-			Mode_ = m_Undefined;
 		}
-		E_CVDTOR( callback___ );
-		void Init( mode__ Mode )
+		E_CVDTOR( rCallback );
+		void Init( void )
 		{
-			Mode_ = Mode;
-
-			switch ( Mode_ ) {
-			case mBasic:
-				Basic_.Init( *this );
-				break;
-			case mMuxed:
-				Basic_.Init( *this );
-				Muxed_.Init( Basic_ );
-				break;
-			default:
-				qRFwk();
-				break;
-			}
 		}
-		friend basic_callback__;
 	};
 
 	/* Called once, when the library is loaded. All the 'registry' stuff is already initialized.
 	The same returned callback is used to handle each connection (one callback for all connections,
 	and NOT a callbackper connection). */
-	callback___ *SCLDAEMONGetCallback(
+	rCallback *SCLDAEMONGetCallback(
 		csdleo::context__ Context,
 		csdleo::mode__ Mode );	// To overload !
 }

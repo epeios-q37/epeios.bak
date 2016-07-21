@@ -109,7 +109,7 @@ namespace csdmnc {
 
 	typedef csdmxc::rCore rCore_;
 
-	using csdmxc::cLogCallback;
+	using csdmxc::cLog;
 	
 	class rCore
 	: public rCore_
@@ -127,7 +127,7 @@ namespace csdmnc {
 			const char *HostService,
 			bso::uint__ PingDelay,
 			sck::duration__ Timeout,
-			cLogCallback *LogCallback = NULL )
+			cLog *LogCallback = NULL )
 		{
 			Callback_.Init( HostService, Timeout );
 
@@ -137,9 +137,9 @@ namespace csdmnc {
 			const char *HostService,
 			bso::uint__ PingDelay,
 			sck::duration__ Timeout,
-			cLogCallback &LogCallback )
+			cLog &LogCallback )
 		{
-			return Init( HostService, Timeout, PingDelay, &LogCallback );
+			return Init( HostService, PingDelay, Timeout, &LogCallback );
 		}
 	};
 

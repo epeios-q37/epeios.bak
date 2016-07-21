@@ -20,10 +20,10 @@
 // 'straight' slot plugin.
 
 #include "misc.h"
-
 #include "registry.h"
 
 #include "csdbns.h"
+#include "csdmxs.h"
 
 #include "sclplugin.h"
 #include "sclmisc.h"
@@ -45,21 +45,24 @@ namespace {
 	{
 	private:
 		csdbns::server___ Server_;
+		csdmxs::rCallback Muxer_;
 	protected:
 		virtual void MISCHandle( sModule &Module ) override
 		{
-			Server_.Init( GetPort_(), Module );
+			Muxer_.Init( Module );
+			Server_.Init( GetPort_(), Muxer_ );
 			Server_.Process( NULL );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Server_.reset( P );
+			Muxer_.reset();
 		}
 		E_CVDTOR( rPlugin );
 		void Init( void )
 		{
-			Server_.reset();	// See above for initialization will be made later.
+			reset();	// See above for initialization.
 		}
 		bso::sBool SCLPLUGINInitialize( plgn::sAbstract *Abstract )
 		{

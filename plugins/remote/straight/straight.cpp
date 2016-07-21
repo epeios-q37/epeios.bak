@@ -35,6 +35,10 @@
 
 typedef csdrcd::cDriver cPlugin_;
 
+namespace {
+	csdmxc::rLogCallback LogCallback_;
+}
+
 class rPlugin
 : public cPlugin_
 {
@@ -74,7 +78,9 @@ public:
 		bso::uint__ PingDelay,
 		sck::duration__ Timeout )
 	{
-		if ( !Core_.Init( HostService, PingDelay, Timeout ) )
+		LogCallback_.Init( "h:/temp/MXLog.txt" );
+
+		if ( !Core_.Init( HostService, PingDelay, Timeout, LogCallback_ ) )
 			return false;
 
 		Connected_ = true;
