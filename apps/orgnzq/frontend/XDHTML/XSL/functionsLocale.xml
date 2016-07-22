@@ -18,7 +18,7 @@
 	</Translations>
 	<Translations text="fTextTypeWording">
 		<Translation language="fr">Texte</Translation>
-		<Translation language="en">text</Translation>
+		<Translation language="en">Text</Translation>
 	</Translations>
 	<Translations text="fUnknownType">
 		<Translation language="fr">(Inconnu)</Translation>
