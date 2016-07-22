@@ -28,7 +28,7 @@ using namespace csdmxs;
 		return #n;\
 		break
 
-const char *csdmxs::GetLogLabel( eLog Log )
+const char *csdmxs::GetLabel( eLog Log )
 {
 	switch ( Log ) {
 		CASE( New );

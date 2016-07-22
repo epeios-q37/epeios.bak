@@ -2,6 +2,16 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-07-22 :
+	- CSDMXB :
+		- 'fId' -> 'sId'.
+	- CSDMXS :
+		- Adaptation to changes in CSDMXB.
+	- CSDMXS :
+		- Introducing file log callback.
+		- Fixing the logical connection closing also closing the physical connection bug.
+		- Adaptation to changes in CSDMXB.
+
 2016-07-21 :
 	- CSDMNC :
 		- Adaptation to changes in CSDMXC.

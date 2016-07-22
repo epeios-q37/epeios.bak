@@ -29,8 +29,9 @@
 # endif
 
 # include "csdmxb.h"
-
 # include "csdscb.h"
+
+# include "flf.h"
 
 # include "sdr.h"
 # include "lstbch.h"
@@ -51,7 +52,7 @@ namespace csdmxs {
 		l_Undefined
 	};
 
-	const char *GetLogLabel( eLog Log );
+	const char *GetLabel( eLog Log );
 
 	typedef void *sUserPointer;
 
@@ -59,14 +60,13 @@ namespace csdmxs {
 	protected:
 		virtual void CSDMXSLog(
 			eLog Log,
-			fId Id,
+			sId Id,
 			void *UP,
-			sdr::size__ Amount )
-		{}
+			sdr::size__ Amount ) = 0;
 	public:
 		void Log(
 			eLog Log,
-			fId Id,
+			sId Id,
 			sUserPointer UP,
 			sdr::size__ Amount )
 		{
@@ -74,18 +74,47 @@ namespace csdmxs {
 		}
 	};
 
+	class rLogCallback
+	: public cLog
+	{
+	private:
+		flf::file_oflow___ Flow_;
+		txf::text_oflow__ TFlow_;
+	protected:
+		virtual void CSDMXSLog(
+			eLog Log,
+			sId Id,
+			void *UP,
+			sdr::size__ Amount ) override
+		{
+			TFlow_ << GetLabel(Log) << " ("  << Id << ") : " << UP << " - " << Amount << txf::nl << txf::commit;
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, TFlow_, Flow_ );
+		}
+		qCVDTOR( rLogCallback );
+		void Init( const fnm::rName &Name )
+		{
+			Flow_.Init( Name );
+			TFlow_.Init( Flow_ );
+		}
+	};
+
+
 	typedef lstbch::qLBUNCHdl( sUserPointer ) dUserPointers;
 
 	class dCore
 	{
 	private:
-		bso::bool__ Exists_( fId Id ) const
+		bso::bool__ Exists_( sId Id ) const
 		{
 			return UPs.Exists( Id );
 		}
 		void Log_(
 			eLog Log,
-			fId Id,
+			sId Id,
 			void *UP ) const
 		{
 			if ( S_.Log.Callback != NULL ) {
@@ -146,7 +175,7 @@ qRE
 			S_.Log.Mutex = mtx::Create();
 			S_.Log.Callback = LogCallback;
 		}
-		fId New( void )
+		sId New( void )
 		{
 			mtx::Lock( S_.Mutex );
 
@@ -157,13 +186,13 @@ qRE
 
 			mtx::Unlock( S_.Mutex );
 
-			Log_( lNew, (fId)*Row, NULL );
+			Log_( lNew, (sId)*Row, NULL );
 
-			return (fId)*Row;
+			return (sId)*Row;
 		}
 		void Store(
 			sUserPointer UP,
-			fId Id )
+			sId Id )
 		{
 #ifdef CSDMXS_DBG
 			if ( Id == CSDMXB_UNDEFINED )
@@ -175,7 +204,7 @@ qRE
 
 			Log_( lStore, Id, UP );
 		}
-		bso::bool__ Exists( fId Id ) const
+		bso::bool__ Exists( sId Id ) const
 		{
 			bso::bool__ Result;
 
@@ -188,7 +217,7 @@ qRE
 			return Result;
 		}
 		bso::bool__ TestAndGet(
-			fId Id,
+			sId Id,
 			void *&UP ) const
 		{
 			bso::bool__ Result = false;
@@ -206,7 +235,7 @@ qRE
 
 			return Result;
 		}
-		bso::bool__ Delete( fId Id )
+		bso::bool__ Delete( sId Id )
 		{
 			bso::bool__ Result = false;
 
@@ -228,12 +257,25 @@ qRE
 
 	qW( Core );
 
+	class rData_
+	{
+	public:
+		void reset( bso::sBool P = true )
+		{
+		}
+		qCDTOR( rData_ );
+		void Init( void )
+		{
+		}
+	};
+
+
 	class rCallback
 	: public cProcessing
 	{
 	private:
 		wCore Core_;
-		cProcessing *Callback_;
+		qRMV( cProcessing,  C_, Callback_ );
 		ntvstr::string___ _Origin;
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
 	protected:
@@ -241,46 +283,57 @@ qRE
 		{
 			_Origin.Init( Origin );
 
-			return NULL;
+			rData_ *Data = new rData_;
+
+			if ( Data == NULL )
+				qRAlc();
+
+			Data->Init();
+
+			return Data;
 		}
 		virtual csdscb::action__ CSDSCBProcess(
 			flw::ioflow__ &Flow,
 			void *UP )
 		{
+			csdscb::action__ MainAction = csdscb::aContinue;
+		qRH
+			sId Id = CSDMXB_UNDEFINED;
+			csdscb::action__ Action = csdscb::aContinue;
+			rData_ &Data = *(rData_ *)UP;
+		qRB
 #ifdef CSDMXS_DBG
-			if ( UP != NULL )
+			if ( UP == NULL )
 				qRFwk();
 #endif
-			fId Id = CSDMXB_UNDEFINED;
-			csdscb::action__ Action = csdscb::aContinue;
 
-			UP = NULL;
+			void *SUP = NULL;	// Server UP.
 
 			Id = GetId( Flow );
 
 			if ( Id == CSDMXB_UNDEFINED ) {
 				Id = Core_.New();
 				PutId( Id, Flow );
-				UP = Callback_->PreProcess( _Origin );
-				Core_.Store( UP, Id );
-				Action = Callback_->Process( Flow, UP );
+				SUP = Callback_->PreProcess( _Origin );
+				Core_.Store( SUP, Id );
+				Action = Callback_->Process( Flow, SUP );
 			} else if ( Id == CSDMXB_PING ) {
 				Flow.Put( (flw::byte__)0 );
 				Flow.Commit();
-			} else if ( !Core_.TestAndGet( Id, UP ) ) {
+			} else if ( !Core_.TestAndGet( Id, SUP ) ) {
 				Flow.Put( (flw::byte__)-1 );
 				Flow.Commit();
 				Action = csdscb::aStop;
 			} else {
 				Flow.Put( 0 );
-				Action = Callback_->Process( Flow, UP );
+				Action = Callback_->Process( Flow, SUP );
 			}
 
 			switch ( Action ) {
 			case csdscb::aContinue:
 				break;
 			case csdscb::aStop:
-				Callback_->PostProcess( UP );
+				Callback_->PostProcess( SUP );
 				if ( Id < CSDMXB_RESERVED )
 					Core_.Delete( Id );
 				break;
@@ -288,13 +341,20 @@ qRE
 				qRFwk();
 				break;
 			}
-
-			return Action;
+		qRR
+			MainAction = csdscb::aStop;
+		qRT
+		qRE
+			return MainAction;	// Always 'aContinue', because we want to keep the physical connection, even when the logical connection was closed.
 		}
 		virtual void CSDSCBPostProcess( void *UP )
 		{
-			if ( UP != NULL )
+			if ( UP == NULL )
 				qRFwk();
+
+			rData_ *Data = (rData_ *)UP;
+
+			delete Data;
 		}
 	public:
 		void reset( bso::bool__ P = true )

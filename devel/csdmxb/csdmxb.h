@@ -34,24 +34,24 @@
 
 # include "err.h"
 
-# define CSDMXB_PING		BSO_U16_MAX
+# define CSDMXB_PING		BSO_U32_MAX
 # define CSDMXB_CLOSE		( CSDMXB_PING - 1 )
 # define CSDMXB_UNDEFINED	( CSDMXB_CLOSE - 1 )
 # define CSDMXB_RESERVED	CSDMXB_UNDEFINED
 
 namespace csdmxb {
-	typedef bso::u16__ fId;
+	typedef bso::u32__ sId;
 
 	inline void PutId(
-		fId Id,
+		sId Id,
 		flw::oflow__ &Flow )
 	{
 		dtfptb::VPut( Id, Flow );
 	}
 
-	inline fId GetId( flw::iflow__ &Flow )
+	inline sId GetId( flw::iflow__ &Flow )
 	{
-		fId Id = 0;
+		sId Id = 0;
 
 		return dtfptb::VGet( Flow,Id );
 	}

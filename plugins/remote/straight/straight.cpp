@@ -78,9 +78,9 @@ public:
 		bso::uint__ PingDelay,
 		sck::duration__ Timeout )
 	{
-		LogCallback_.Init( "h:/temp/MXLog.txt" );
+//		LogCallback_.Init( "h:/temp/MXCLog.txt" );
 
-		if ( !Core_.Init( HostService, PingDelay, Timeout, LogCallback_ ) )
+		if ( !Core_.Init( HostService, PingDelay, Timeout ) )
 			return false;
 
 		Connected_ = true;

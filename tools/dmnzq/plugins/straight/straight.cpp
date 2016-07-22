@@ -35,6 +35,8 @@ using misc::cHandler;
 using misc::sModule;
 
 namespace {
+	csdmxs::rLogCallback LogCallback_;
+
 	csdbns::port__ GetPort_( void )
 	{
 		return sclmisc::MGetU16( registry::Service );
@@ -49,6 +51,8 @@ namespace {
 	protected:
 		virtual void MISCHandle( sModule &Module ) override
 		{
+//			LogCallback_.Init("h:/temp/MXSLog.txt" );
+
 			Muxer_.Init( Module );
 			Server_.Init( GetPort_(), Muxer_ );
 			Server_.Process( NULL );

@@ -351,7 +351,7 @@ qRE
 
 			return C_().ExtractFlow( UP_ );
 		}
-		fId Id_;
+		sId Id_;
 		bso::bool__ Prepare_( void )	// Return true if has already a flow, false otherwise.
 		{
 			bso::bool__ Created = UP_ == NULL;

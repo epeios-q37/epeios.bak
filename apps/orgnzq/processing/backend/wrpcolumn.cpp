@@ -80,7 +80,7 @@ namespace {
 	qRB
 		Label.Init( RawLabel );
 
-		Label.StripCharacter(' ' );
+		Label.StripCharacter( ' ' );
 
 		if ( Label.Amount() == 0 )
 			REPORT( FieldLabelCanNotBeEmpty );
@@ -93,8 +93,8 @@ namespace {
 
 		Column.Init( Type, Number, Label, Comment );
 	qRR
-		qRT
-		qRE
+	qRT
+	qRE
 	}
 }
 
