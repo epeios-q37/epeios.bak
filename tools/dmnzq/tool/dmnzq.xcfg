@@ -30,10 +30,10 @@
 						<xpp:bloc>straight/straight</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Straight/straight.xcfg"/>
+						<xpp:expand href="../plugins/straight/straight.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Straight/straight.xlcl"/>
+						<xpp:expand href="../plugins/straight/straight.xlcl"/>
 					</Locale>
 				</Plugin>
 				<Plugin id="Proxy">
@@ -42,10 +42,10 @@
 						<xpp:bloc>proxy/proxy</xpp:bloc>
 					</Filename>
 					<Configuration>
-						<xpp:expand href="../plugins/Proxy/proxy.xcfg"/>
+						<xpp:expand href="../plugins/proxy/proxy.xcfg"/>
 					</Configuration>
 					<Locale>
-						<xpp:expand href="../plugins/Proxy/proxy.xlcl"/>
+						<xpp:expand href="../plugins/proxy/proxy.xlcl"/>
 					</Locale>
 				</Plugin>
 			</Plugins>
