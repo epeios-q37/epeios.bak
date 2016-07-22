@@ -100,6 +100,7 @@ all : common
 clean : common
 
 common:
+	$(MAKE) $(MAKECMDGOALS) -C plugins/
 	$(MAKE) $(MAKECMDGOALS) -C XDHTML/
 ifdef EPEIOS_SRC
 	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/tools/xdhbrwq/
@@ -116,4 +117,3 @@ ifdef EPEIOS_SRC
 else
 	$(MAKE) $(MAKECMDGOALS) -C xdhcefq/
 endif
-	$(MAKE) $(MAKECMDGOALS) -C plugins/
