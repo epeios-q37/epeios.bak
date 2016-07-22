@@ -44,7 +44,7 @@ function t( s )
 		
 function handleQuery( query ) {
 
-	log( "Q : " + query );
+//	log( "Q : " + query );
 
 	if (window.XMLHttpRequest) {	// code for IE7+, Firefox, Chrome, Opera, Safari
 		var xmlhttp = new XMLHttpRequest();
@@ -57,7 +57,7 @@ function handleQuery( query ) {
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 			var query = "";
 
-			log( "R : " + xmlhttp.responseText );
+//			log( "R : " + xmlhttp.responseText );
 			var result = eval( xmlhttp.responseText );
 
 			if ( query ) {
