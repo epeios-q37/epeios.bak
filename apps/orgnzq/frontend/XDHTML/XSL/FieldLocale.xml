@@ -18,7 +18,7 @@
 	</Translations>
 	  <Translations text="fieldDragAndDropTitle">
     <Translation language="fr">Glisser/déplacer pour réorganiser les entrées.</Translation>
-    <Translation language="en"></Translation>
+    <Translation language="en">Drag/drop to reorganize entries.</Translation>
   </Translations>
 <!--
 	<Translations text="">
