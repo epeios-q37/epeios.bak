@@ -29,10 +29,10 @@
 			<xpp:set name="RootPath" value="h:/"/>
 		</xpp:ifeq>
 		<xpp:ifeq select="env" value="linux">
-			<xpp:set name="RootPath" value="/H/"/>
+			<xpp:set name="RootPath" value="/"/>
 		</xpp:ifeq>
 		<xpp:ifeq select="env" value="mac">
-			<xpp:set name="RootPath" value="/H/"/>
+			<xpp:set name="RootPath" value="/"/>
 		</xpp:ifeq>
 		<xpp:ifeq select="env" value="packing">
 			<xpp:set name="RootPath" value="h:/"/>
