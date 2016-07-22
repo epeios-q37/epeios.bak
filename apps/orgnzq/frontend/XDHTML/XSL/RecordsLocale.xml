@@ -12,6 +12,10 @@
 		<Translation language="fr">(Pas d'enregistrements)</Translation>
 		<Translation language="en">(No records)</Translation>
 	</Translations>
+	<Translations text="recordsLegend">
+		<Translation language="fr">Enregistrements</Translation>
+		<Translation language="en">Records</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

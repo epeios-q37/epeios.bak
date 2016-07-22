@@ -6,9 +6,13 @@
 	</Translations>
   <Translations text="fieldsDragAndDropTitle">
     <Translation language="fr">Glisser/déplacer pour réorganiser les champs.</Translation>
-    <Translation language="en"></Translation>
+    <Translation language="en">Drag/drop to reorganize fields.</Translation>
   </Translations>
-  <!--
+	<Translations text="fieldsTitle">
+		<Translation language="fr">Champs</Translation>
+		<Translation language="en">Fields</Translation>
+	</Translations>
+	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

@@ -10,13 +10,16 @@
 	<xsl:template match="Content">
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-				<xsl:apply-templates select="Records"/>
-				<button data-xdh-onevent="DefineNewRecord" title="#recordsDefineNewRecordTitle#">#recordsDefineNewRecord#</button>
+				<fieldset>
+					<xsl:apply-templates select="Records"/>
+					<button data-xdh-onevent="DefineNewRecord" title="#recordsDefineNewRecordTitle#">#recordsDefineNewRecord#</button>
+				</fieldset>
 			</span>
 		</span>
 	</xsl:template>
 	<xsl:template match="Records">
 		<fieldset>
+			<legend>#recordsLegend#</legend>
 			<xsl:if test="@Amount='0'">
 				<span style="font-style: italic;">#recordsEmptyList#</span>
 			</xsl:if>

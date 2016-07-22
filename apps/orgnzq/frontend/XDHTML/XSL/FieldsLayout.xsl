@@ -21,11 +21,11 @@
 		</span>
 	</xsl:template>
 	<xsl:template match="Fields">
+		<fieldset>
+			<legend>#fieldsTitle#</legend>
 			<xsl:choose>
 				<xsl:when test="@Amount='0' and ../@Focus!='Field'">
-					<fieldset>
-						<span style="font-style: italic;">#fieldsEmptyRecord#</span>
-					</fieldset>
+					<span style="font-style: italic;">#fieldsEmptyRecord#</span>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:apply-templates select="Field"/>
@@ -39,6 +39,7 @@
 					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
+		</fieldset>
 	</xsl:template>
 	<xsl:template match="Field">
 		<div style="display: flex;">

@@ -11,7 +11,7 @@
 				<Backend Type="Predefined">Embedded</Backend>
 			</xpp:ifeq>
 			<xpp:ifeq select="packing" value="no">
-				<Backend Type="Predefined">q37.info</Backend>
+				<Backend Type="Predefined">Mini</Backend>
 			</xpp:ifeq>
 			<Login Mode="Full">
 				<UserID>TheUser</UserID>
@@ -71,7 +71,10 @@
 					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$PluginPath$remote/proxy/proxy">localhost:53700 test</Backend-->
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">localhost:53700</Backend>
 					<xpp:ifeq select="packing" value="no">
-						<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">192.168.44.131:53700</Backend>
+						<xpp:bloc>
+							<Backend id="Mini" Alias="MiniPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">mini:53700</Backend>
+							<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">192.168.44.131:53700</Backend>
+						</xpp:bloc>
 					</xpp:ifeq>
 				</xpp:bloc>
 			</Backends>
@@ -128,6 +131,10 @@
 			<Translations text="EmbeddedBackendProject">
 				<Translation language="fr">avec moteur de traitement enclavé</Translation>
 				<Translation language="en">with embedded backend</Translation>
+			</Translations>
+			<Translations text="MiniPredefinedBackend">
+				<Translation language="fr">Moteur de traitement sur 'mini'</Translation>
+				<Translation language="en">Backend on 'mini'</Translation>
 			</Translations>
 			<Translations text="q37PredefinedBackend">
 				<Translation language="fr">Moteur de traitement sur q37.info</Translation>
