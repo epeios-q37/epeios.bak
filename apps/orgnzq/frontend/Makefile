@@ -102,11 +102,6 @@ clean : common
 common:
 	$(MAKE) $(MAKECMDGOALS) -C XDHTML/
 ifdef EPEIOS_SRC
-	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/tools/xdhcefq/
-else
-	$(MAKE) $(MAKECMDGOALS) -C xdhcefq/
-endif
-ifdef EPEIOS_SRC
 	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/tools/xdhbrwq/
 else
 	$(MAKE) $(MAKECMDGOALS) -C xdhbrwq/
@@ -115,5 +110,10 @@ ifdef EPEIOS_SRC
 	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/plugins/remote/
 else
 	$(MAKE) $(MAKECMDGOALS) -C plugins/remote/
+endif
+ifdef EPEIOS_SRC
+	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/tools/xdhcefq/
+else
+	$(MAKE) $(MAKECMDGOALS) -C xdhcefq/
 endif
 	$(MAKE) $(MAKECMDGOALS) -C plugins/

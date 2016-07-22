@@ -11,7 +11,7 @@
 				<Backend Type="Predefined">Embedded</Backend>
 			</xpp:ifeq>
 			<xpp:ifeq select="packing" value="no">
-				<Backend Type="Predefined">LocalHost</Backend>
+				<Backend Type="Predefined">q37.info</Backend>
 			</xpp:ifeq>
 			<Login Mode="Full">
 				<UserID>TheUser</UserID>
