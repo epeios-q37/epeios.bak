@@ -70,18 +70,19 @@
 			</xpp:ifeq>
 			<Backends Default="Embedded">
 				<xpp:ifeq select="packing" value="yes">
-					<xpp:set name="BasePath" value=""/>
-				</xpp:ifeq>
+					<xpp:bloc>
+						<xpp:set name="PluginPath" value="./plugins/"/>
+						<xpp:set name="BackendPath" value="../processing/backend/"/>
+					</xpp:bloc>
+				</xpp:ifeq>>
 				<xpp:ifeq select="packing" value="no">
 					<xpp:bloc marker="$">
-						<xpp:set name="BasePath" value="$BinPath$"/>
+						<xpp:set name="PluginPath" value="$BinPath$plugins/"/>
+						<xpp:set name="BackendPath" value="./"/>
 					</xpp:bloc>
-				</xpp:ifeq>
+				</xpp:ifeq>>
 				<xpp:bloc marker="$">
-					<xpp:set name="PluginPath" value="$BasePath$plugins/"/>
-				</xpp:bloc>
-				<xpp:bloc marker="$">
-					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BasePath$orgnzqbkd"/>
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BackendPath$orgnzqbkd"/>
 					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">q37.info:57710</Backend>
 					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$PluginPath$remote/proxy/proxy">localhost:53700 test</Backend-->
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">localhost:53700</Backend>

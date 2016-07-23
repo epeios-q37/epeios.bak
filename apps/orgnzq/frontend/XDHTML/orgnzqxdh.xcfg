@@ -34,6 +34,9 @@
 						<xpp:expand select="PathToXSL"/>
 					</xpp:bloc>
 				</xpp:ifeq>
+				<xpp:ifeq select="env" value="packing">
+					<xpp:bloc>XDHTML/XSL/</xpp:bloc>
+				</xpp:ifeq>
 			</xpp:bloc>
 		</xpp:define>
 		<xpp:expand href="../orgnzqfrd.xcfg"/>

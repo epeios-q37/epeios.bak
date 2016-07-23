@@ -49,6 +49,7 @@
 		<Setups>
 			<Setup id="Default">
 				<CEF>
+					<NoSandbox>true</NoSandbox>
 					<xpp:ifeq select="env" value="windows">
 						<xpp:bloc>
 							<ResourcesDirPath>h:/bin/CEF/</ResourcesDirPath>
@@ -58,11 +59,6 @@
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="linux">
 						<xpp:bloc>
-							<LocaleDirPath>/home/csimon/CEF/Resources/locales/</LocaleDirPath>
-							<ResourcesDirPath>/home/csimon/CEF/Resources/</ResourcesDirPath>
-							<SingleProcess>false</SingleProcess>
-							<NoSandbox>true</NoSandbox>
-							<CachePath>/tmp</CachePath>
 						</xpp:bloc>
 					</xpp:ifeq>
 					<xpp:ifeq select="env" value="mac">
@@ -70,7 +66,6 @@
 							<ProcessType>
 								<xpp:expand select="ProcessType"/>
 							</ProcessType>
-							<NoSandbox>true</NoSandbox>
 						</xpp:bloc>
 					</xpp:ifeq>
 					<!-- Created if inexistent. This entry must exists to have 'console.log()' messages be displayed (see http://www.magpcss.org/ceforum/viewtopic.php?f=6&t=13349). -->
