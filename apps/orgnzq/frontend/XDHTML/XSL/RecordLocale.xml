@@ -9,8 +9,8 @@
 		<Translation language="en">New</Translation>
 	</Translations>
 	<Translations text="recordBackToListTitle">
-		<Translation language="fr">Retourner à la liste d'enregistrments.</Translation>
-		<Translation language="en">Back to the record list.</Translation>
+		<Translation language="fr">Retourner à la liste des fiches.</Translation>
+		<Translation language="en">Back to the records list.</Translation>
 	</Translations>
 	<Translations text="recordBackToList">
 		<Translation language="fr">Retour</Translation>

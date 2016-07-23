@@ -5,7 +5,7 @@
 		<Translation language="en">Mono</Translation>
 	</Translations>
 	<Translations text="columnMonoTypeTitle">
-		<Translation language="fr">Le champs peut contenir au maximum une entrée.</Translation>
+		<Translation language="fr">Le champ peut contenir au maximum une entrée.</Translation>
 		<Translation language="en">Fiedls can contain at most one entry</Translation>
 	</Translations>
 	<Translations text="columnMultiTypeLabel">
@@ -14,7 +14,7 @@
 	</Translations>
 	<Translations text="columnMultiTypeTitle">
 		<Translation language="fr">Le champ peut contenir plusieurs entrées</Translation>
-		<Translation language="en">The filed can contain several entries.</Translation>
+		<Translation language="en">The field can contain several entries.</Translation>
 	</Translations>
 	<Translations text="columnFieldLabelPlaceholder">
 		<Translation language="fr">Libellé</Translation>
@@ -29,7 +29,7 @@
 		<Translation language="en">Comment</Translation>
 	</Translations>
 	<Translations text="columnFieldCommentTitle">
-		<Translation language="fr">Commentaire associé champ.</Translation>
+		<Translation language="fr">Commentaire associé au champ.</Translation>
 		<Translation language="en">Comment associated to the field.</Translation>
 	</Translations>
 	<Translations text="columnCreateFieldTitle">

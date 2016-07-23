@@ -23,6 +23,13 @@
 				<xpp:set name="packing" value="yes"/>
 			</xpp:bloc>
 		</xpp:ifeq>
+		<xpp:set name="q37_prod" env-var="Q37_PROD"/>
+		<xpp:ifeq select="q37_packing" value="yes">
+			<xpp:set name="prod" value="yes"/>
+		</xpp:ifeq>
+		<xpp:ifeq select="q37_packing" value="">
+			<xpp:set name="prod" value="no"/>
+		</xpp:ifeq>
 	</xpp:bloc>
 	<xpp:bloc>
 		<xpp:ifeq select="env" value="windows">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
 	<Translations text="recordsDefineNewRecordTitle">
-		<Translation language="fr">Définir un nouvel enregistrement.</Translation>
+		<Translation language="fr">Définir une nouvelle fiche.</Translation>
 		<Translation language="en">Define new record.</Translation>
 	</Translations>
 	<Translations text="recordsDefineNewRecord">
@@ -9,11 +9,11 @@
 		<Translation language="en">New</Translation>
 	</Translations>
 	<Translations text="recordsEmptyList">
-		<Translation language="fr">(Pas d'enregistrements)</Translation>
+		<Translation language="fr">(Pas de fiches)</Translation>
 		<Translation language="en">(No records)</Translation>
 	</Translations>
 	<Translations text="recordsLegend">
-		<Translation language="fr">Enregistrements</Translation>
+		<Translation language="fr">Fiches</Translation>
 		<Translation language="en">Records</Translation>
 	</Translations>
 	<!--

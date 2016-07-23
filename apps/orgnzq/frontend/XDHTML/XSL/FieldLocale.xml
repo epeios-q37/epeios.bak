@@ -13,7 +13,7 @@
 		<Translation language="en">Not implemented.</Translation>
 	</Translations>
 	<Translations text="fieldUnknownType">
-		<Translation language="fr">Type de champs inconnu !</Translation>
+		<Translation language="fr">Type de champ inconnu !</Translation>
 		<Translation language="en">Unknown field type !</Translation>
 	</Translations>
 	  <Translations text="fieldDragAndDropTitle">
