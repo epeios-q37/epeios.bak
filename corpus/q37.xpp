@@ -24,10 +24,10 @@
 			</xpp:bloc>
 		</xpp:ifeq>
 		<xpp:set name="q37_prod" env-var="Q37_PROD"/>
-		<xpp:ifeq select="q37_packing" value="yes">
+		<xpp:ifeq select="q37_prod" value="yes">
 			<xpp:set name="prod" value="yes"/>
 		</xpp:ifeq>
-		<xpp:ifeq select="q37_packing" value="">
+		<xpp:ifeq select="q37_prod" value="">
 			<xpp:set name="prod" value="no"/>
 		</xpp:ifeq>
 	</xpp:bloc>
