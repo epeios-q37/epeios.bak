@@ -16,19 +16,23 @@
 			</Plugins>
 		</Parameters>
 		<Definitions>
-			<xpp:ifeq select="packing" value="yes">
-				<xpp:bloc>
-					<xpp:set name="PlgPath" value="plugins/"/>
-					<xpp:define name="PlgPath">
-						<xpp:expand value-of="PlgPath"/>
-					</xpp:define>
-				</xpp:bloc>
-			</xpp:ifeq>
 			<xpp:define name="PluginsRootDir">
 				<xpp:bloc>
-					<xpp:expand select="PlgPath"/>
+					<xpp:bloc preserve="yes">
+						<xpp:expand value-of="_BinPath"/>
+					</xpp:bloc>
+					<xpp:ifeq select="packing" value="yes">
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>../</xpp:bloc>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:bloc preserve="yes">
+						<xpp:bloc>plugins/</xpp:bloc>
+					</xpp:bloc>
 					<xpp:ifeq select="packing" value="no">
-						<xpp:bloc>ogz/backend/</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>ogz/backend/</xpp:bloc>
+						</xpp:bloc>
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:define>
@@ -36,13 +40,17 @@
 				<xpp:define name="TypePluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:bloc>type/</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>type/</xpp:bloc>
+						</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Record">
 					<Filename>
 						<xpp:expand select="TypePluginsRootDir"/>
-						<xpp:bloc>record/record</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>record/record</xpp:bloc>
+						</xpp:bloc>
 					</Filename>
 					<Configuration>
 						<xpp:expand href="../plugins/type/record/record.xcfg"/>
@@ -54,7 +62,9 @@
 				<Plugin id="Text">
 					<Filename>
 						<xpp:expand select="TypePluginsRootDir"/>
-						<xpp:bloc>text/text</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>text/text</xpp:bloc>
+						</xpp:bloc>
 					</Filename>
 					<Configuration>
 						<xpp:expand href="../plugins/type/text/text.xcfg"/>
@@ -68,13 +78,17 @@
 				<xpp:define name="DatabasePluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:bloc>database/</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>database/</xpp:bloc>
+						</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Regular">
 					<Filename>
 						<xpp:expand select="DatabasePluginsRootDir"/>
-						<xpp:bloc>regular/regular</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>regular/regular</xpp:bloc>
+						</xpp:bloc>
 					</Filename>
 					<Configuration>
 						<xpp:expand href="../plugins/database/regular/regular.xcfg"/>
@@ -88,13 +102,17 @@
 				<xpp:define name="AuthenticationPluginsRootDir">
 					<xpp:bloc>
 						<xpp:expand select="PluginsRootDir"/>
-						<xpp:bloc>authentication/</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>authentication/</xpp:bloc>
+						</xpp:bloc>
 					</xpp:bloc>
 				</xpp:define>
 				<Plugin id="Dummy">
 					<Filename>
 						<xpp:expand select="AuthenticationPluginsRootDir"/>
-						<xpp:bloc>dummy/dummy</xpp:bloc>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>dummy/dummy</xpp:bloc>
+						</xpp:bloc>
 					</Filename>
 					<Configuration>
 						<xpp:expand href="../plugins/authentication/dummy/dummy.xcfg"/>
