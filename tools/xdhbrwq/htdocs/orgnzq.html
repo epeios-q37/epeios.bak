@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+  <title>Epeios organizer demonstration</title>
+
+
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui/jquery-ui.js"></script>
+    <script src="js/interact/interact-1.2.4.js"></script>
+    <script src="js/Sortable/Sortable.js"></script>
+    <script src="js/ckeditor/ckeditor.js"></script>
+    <script src="js/ckeditor/adapters/jquery.js"></script>
+    <script src="js/jqte/jquery-te-1.4.0.min.js"></script>
+    <script src="js/datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="js/datepicker/js/locales/bootstrap-datepicker.fr.js" charset="UTF-8"></script>
+    <script src="js/timepicker/jquery.timepicker.js"></script>
+    <script src="js/jquery.alphanum/jquery.alphanum.js"></script>
+    <script src="js/Zebra_Dialog/public/javascript/zebra_dialog.js"></script>
+    <script src="js/xdhtml.js"></script>
+    <script src="xdhbrwq.js"></script>
+  	<style type="text/css">
+html, body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.vcenter-out, .hcenter {
+	display: table;
+	height: 100%;
+	margin: auto;
+}
+
+.vcenter-in {
+	display: table-cell;
+	vertical-align: middle;
+}
+  </style>
+
+  </head>
+	<body>
+		<span class="vcenter-out">
+			<span class="vcenter-in">
+        <span style="overflow: auto;">
+        <fieldset>
+          <legend>English</legend>
+            This is the demonstration page of the <span style="font-style: italic;">Epeios organizer</span> Web interface.<br>It runs on a small server behind an ADSL box ; you may experience some unresponsiveness.<br>
+            If you provide a <span style="font-style: italic;">User ID</span> which doesn't exist, an account is created with given <span style="font-style: italic;">User ID</span> and password.<br>
+            If the <span style="font-style: italic;">User ID</span> already exists, you must provide the password provided on creation to have access to corresponding account.<br>
+            This demonstration should work on all modern graphical Web browser, except <span style="font-style: italic;">Microsoft Edge</span> (bug?).<br>It's only a demonstration : passwords are not encrypted, and all accounts will be regularly erased.
+          </fieldset>
+          <fieldset>
+            <legend>Français</legend>
+            Ceci est la page de démonstration de l'interface <span style="font-style: italic;">Web</span> de l'application <span style="font-style: italic;">Epeios organizer</span>.<br>Elle tourne sur un petit serveur placé derrière une <span style="font-style: italic;">box</span> <span style="font-style: italic;">ADSL</span> ; vous serez peut-être confronté à un certain manque de réactivité. <br>
+            Si vous fournissez un identifiant utilisateur qui n'existe pas, un compte est créé avec cet identifiant et le mot de passe donné.<br>
+            Si l'identifiant utilisateur existe déjà, vous devez fournir le mot de passe fourni lors de la création pour avoir accès au compte correspondant.<br>
+            Cette démonstration devrait fonctionner sur tous les navigateurs Web graphique moderne, à l'exception de <span style="font-style: italic;">Microsoft Edge</span> (bogue?).<br>
+            Il s'agit là seulement d'une démonstration : les mots de passe ne sont pas cryptés, et tout les comptes seront régulièrement effacés.
+        </fieldset>
+        <form class="hcenter" action="xdh.php" method="post">
+          <input name="_prolog" type="hidden">
+          <fieldset title="Paramètres d'authentification / Login parameters">
+            <legend>Authentification / Login</legend>
+            <input required="required" name="UserID" title="Identifiant d'authentification / Login user ID" placeholder="Identifiant / User ID" type="text">
+            <input required="required" name="Password" title="Mot de passe pour l'authentification / Login password" placeholder="Mot de passe / Password" type="password">
+          <input name="_action" value="Connect" type="hidden">
+          <select title="Langage / Language" name="_language" required="required" size="2">
+            <option value="fr">français</option>
+            <option value="en">english</option>
+          </select>
+          <select size="1" title="Langage / Language" name="_target" required="required">
+            <option selected="selected" value="orgnzq.q37">q37.info</option>
+            <option value="orgnzq">localhost</option>
+          </select>
+          <input title="Lancer la demonstration / Launch demonstration" value="OK" type="submit">
+          </fieldset>
+        </form>
+      </span>
+    </span>
+  
+</span></body></html>
