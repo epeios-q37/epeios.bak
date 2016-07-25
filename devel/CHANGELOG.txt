@@ -2,6 +2,10 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-07-25 :
+	- SCLXDHTML :
+		- The backend visibility is now stored in 'rSession'.
+
 2016-07-22 :
 	- CSDMXB :
 		- 'fId' -> 'sId'.

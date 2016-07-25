@@ -277,6 +277,15 @@ namespace sclxdhtml {
 		proxy__ &Proxy,
 		const char *Language );
 
+	// To indicate if the backend dedicated part in the login page should or not be visible.
+	qENUM( BackendVisibility ) {
+		bvHide,	
+		bvShow,
+		bv_amount,
+		bv_Undefined
+	};
+
+
 	// User put in 'instances' all his own objects, instanciating all with a 'new' (by overloading 'SCLXHTMLNew(...)'), a 'delete' will be made automatically when unloading thie library.
 	template <typename instances, typename frontend, typename page, page UndefinedPage > class rSession
 	: public _session_callback__,
@@ -287,6 +296,7 @@ namespace sclxdhtml {
 	private:
 		page _Page;	// Current page;
 		reporting_callback__ _ReportingCallback;
+		eBackendVisibility BackendVisibility_;
 	protected:
 		virtual void SCLXDHTMLRefresh( page Page ) = 0;
 	public:
@@ -297,6 +307,7 @@ namespace sclxdhtml {
 			frontend::reset( P );
 			_Page = UndefinedPage;
 			_ReportingCallback.reset( P );
+			BackendVisibility_ = bv_Undefined;
 		}
 		qCVDTOR( rSession )
 		void Init(
@@ -310,6 +321,7 @@ namespace sclxdhtml {
 			_session_callback__::Init();
 			_Page = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
+			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 		}
 		bso::bool__ Connect(
 			const fblfrd::compatibility_informations__ &CompatibilityInformations,
@@ -383,6 +395,7 @@ namespace sclxdhtml {
 		{
 			return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
 		}
+		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
 	};
 
 	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
@@ -510,13 +523,6 @@ namespace sclxdhtml {
 		E_CDEF( char *, RemoteBackendId, "RemoteBackend" );
 		E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
 		E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
-
-		qENUM( BackendVisibility ) {
-			bvHide,	
-			bvShow,
-			bv_amount,
-			bv_Undefined
-		};
 
 		const char *GetLabel( eBackendVisibility );
 

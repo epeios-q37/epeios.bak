@@ -62,10 +62,11 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 			::prolog::SetLayout( *Session );
 			break;
 		case sclfrntnd::phLoad:
-			::login::SetLayout( *Session, sclxdhtml::login::bvShow );
+			::login::SetLayout( *Session );
 			break;
 		case sclfrntnd::phLogin:
-			::login::SetLayout( *Session, sclxdhtml::login::bvHide );
+			Session->SetBackendVisibility( sclxdhtml::bvHide );
+			::login::SetLayout( *Session );
 			break;
 		case sclfrntnd::phRun:
 			::main::SetLayout( *Session );

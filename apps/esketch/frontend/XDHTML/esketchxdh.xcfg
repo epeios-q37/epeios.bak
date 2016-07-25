@@ -96,7 +96,7 @@
 			<xpp:bloc>
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
-			<xpp:expand href="XSL/MainLocale.xml"/>"
+			<xpp:expand href="XSL/MainLocale.xml"/>
 		</Locale>
 	</Configuration>
 </Configurations>

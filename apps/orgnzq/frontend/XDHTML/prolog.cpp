@@ -115,5 +115,5 @@ AC( LoadProject )
 {
 	sclxdhtml::prolog::LoadProject( Session );
 
-	login::SetLayout( Session, sclxdhtml::login::bvHide );
+	login::SetLayout( Session );
 }

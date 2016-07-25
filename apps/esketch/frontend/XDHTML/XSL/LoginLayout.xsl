@@ -25,32 +25,32 @@
 		</xsl:variable>
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-				<fieldset title="#lgnLoginTitle#">
-					<legend>#lgnLogin#</legend>
-					<xsl:element name="input">
-						<xsl:attribute name="type">text</xsl:attribute>
-						<xsl:attribute name="id">LoginUserID</xsl:attribute>
-						<xsl:attribute name="title">#lgnLoginUserIDTitle#</xsl:attribute>
-						<xsl:attribute name="placeholder">#lgnLoginUserIDPlaceholder#</xsl:attribute>
-						<xsl:attribute name="value">
-							<xsl:value-of select="Login/UserID"/>
-						</xsl:attribute>
-					</xsl:element>
-					<xsl:element name="input">
-						<xsl:attribute name="type">password</xsl:attribute>
-						<xsl:attribute name="id">LoginPassword</xsl:attribute>
-						<xsl:attribute name="title">#lgnLoginPasswordTitle#</xsl:attribute>
-						<xsl:attribute name="placeholder">#lgnLoginPasswordPlaceholder#</xsl:attribute>
-						<xsl:attribute name="value">
-							<xsl:value-of select="Login/Password"/>
-						</xsl:attribute>
-					</xsl:element>
-				</fieldset>
-				<fieldset title="#lgnBackendToUse#">
-					<legend>#lgnBackend#</legend>
-					<div>
-						<span>
-							<fieldset data-xdh-cast="NoneBackendCast">
+				<fieldset>
+					<fieldset title="#lgnLoginTitle#">
+						<legend>#lgnLogin#</legend>
+						<xsl:element name="input">
+							<xsl:attribute name="type">text</xsl:attribute>
+							<xsl:attribute name="id">LoginUserID</xsl:attribute>
+							<xsl:attribute name="title">#lgnLoginUserIDTitle#</xsl:attribute>
+							<xsl:attribute name="placeholder">#lgnLoginUserIDPlaceholder#</xsl:attribute>
+							<xsl:attribute name="value">
+								<xsl:value-of select="Login/UserID"/>
+							</xsl:attribute>
+						</xsl:element>
+						<xsl:element name="input">
+							<xsl:attribute name="type">password</xsl:attribute>
+							<xsl:attribute name="id">LoginPassword</xsl:attribute>
+							<xsl:attribute name="title">#lgnLoginPasswordTitle#</xsl:attribute>
+							<xsl:attribute name="placeholder">#lgnLoginPasswordPlaceholder#</xsl:attribute>
+							<xsl:attribute name="value">
+								<xsl:value-of select="Login/Password"/>
+							</xsl:attribute>
+						</xsl:element>
+					</fieldset>
+					<fieldset title="#lgnBackendToUse#" data-xdh-cast="VisibleBackendCast">
+						<legend>#lgnBackend#</legend>
+						<div>
+							<span>
 								<select id="BackendType" title="#lgnBackendType#" data-xdh-onevent="SwitchBackendType">
 									<option value="Remote">
 										<xsl:if test="$BackendType='Remote'">
@@ -101,7 +101,7 @@
 												<xsl:text>(OpenFile|DisplayEmbeddedBackendFilename|(#lgnSelectEmbeddedBackend#|</xsl:text>
 												<xsl:value-of select="$DynamicLibraryExtension"/>
 												<xsl:text>|</xsl:text>
-												<xsl:text>orgnzqbkd</xsl:text>
+												<xsl:text>vtddspbkd</xsl:text>
 												<xsl:value-of select="$DynamicLibraryExtension"/>
 												<xsl:text>))</xsl:text>
 											</xsl:attribute>#lgnBrowse#
@@ -122,13 +122,13 @@
 										</xsl:attribute>
 									</xsl:if>
 								</input>
-							</fieldset>
-						</span>
-						<span class="hcenter">
-							<button title="#lgnConnectToBackend#" data-xdh-onevent="Connect">#lgnOK#</button>
-							<button title="#lgnCancelConnection#" data-xdh-onevent="Dismiss">#lgnCancel#</button>
-						</span>
-					</div>
+							</span>
+						</div>
+					</fieldset>
+					<span class="hcenter">
+						<button title="#lgnConnectToBackend#" data-xdh-onevent="Connect">#lgnOK#</button>
+						<button title="#lgnCancelConnection#" data-xdh-onevent="Dismiss">#lgnCancel#</button>
+					</span>
 				</fieldset>
 			</span>
 		</span>

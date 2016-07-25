@@ -56,7 +56,24 @@ xdhcmn::session_callback__ *sclxdhtml::SCLXDHTMLRetrieveCallback(
 
 	switch ( core::Core.Mode() ) {
 	case xdhcmn::mMonoUser:
-		::prolog::SetLayout( *Session );
+		switch ( sclfrntnd::HandleProject() ) {
+		case sclfrntnd::phNone:
+			::prolog::SetLayout( *Session );
+			break;
+		case sclfrntnd::phLoad:
+			::login::SetLayout( *Session );
+			break;
+		case sclfrntnd::phLogin:
+			Session->SetBackendVisibility( sclxdhtml::bvHide );
+			::login::SetLayout( *Session );
+			break;
+		case sclfrntnd::phRun:
+			::main::SetLayout( *Session );
+			break;
+		default:
+			qRGnr();
+			break;
+		}
 		break;
 	case xdhcmn::mMultiUser:
 //		login::SetLayout( *Session );

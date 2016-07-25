@@ -38,7 +38,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		sclxdhtml::login::GetContext( Session, Rack );
+		sclxdhtml::login::GetContext( Session, Session.BackendVisibility(), Rack );
 	qRR
 	qRT
 	qRE

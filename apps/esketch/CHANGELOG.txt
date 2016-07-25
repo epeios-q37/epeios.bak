@@ -1,12 +1,2 @@
 ***** eSketch changelog *****
 
-Meaning of list markers (2nd level):
-- '-' (Functionnalities (should) remain unchanged) :
-	- Cosmetic changes. Function/method and/or parameter name changes.
-	- Changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
-	   in a broad sense (parameters of a function, a method, or a template...).
-	- Changes fixing compiler errors/warnings.
-- '*' : Functionnality changes.
-- '%' : API changes (is superseded by functionnality changes).
-- '#' : Bug fixing.
-

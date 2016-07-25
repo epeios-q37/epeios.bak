@@ -301,7 +301,8 @@ namespace frdinstc {
 		}
 		void FocusOn_( sColumn Column )
 		{
-			if ( ( Focus_ != tRecord )
+			if ( ( Focus_ != tRecords )
+			     && ( Focus_ != tRecord )
 				 && ( Focus_ != tField ) )
 				qRGnr();
 

@@ -5,16 +5,25 @@
 	<xpp:expand href="../../FRD.xcfg"/>
 	<xpp:define name="Parameters">
 		<xpp:bloc>
-			<xpp:expand select="FRD_Parameters"/>
-			<DefaultProjectType>New</DefaultProjectType>
-			<DefaultBackendType>None</DefaultBackendType>
-
-			<!-- For multi-user mode. Can be overriden by project file. -->
-			<Backend Type="Predefined">Embedded</Backend>
-			<Authentication Mode="Full">
-				<Login>Hello</Login>
-				<Password>toto</Password>
-			</Authentication>
+			<Project Type="New" Handling="Load">LocalHost</Project>
+			<xpp:ifeq select="packing" value="yes">
+				<Backend Type="Predefined">Embedded</Backend>
+			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="no">
+				<Backend Type="Predefined">Embedded</Backend>
+			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="no">
+				<Login Mode="Full">
+					<UserID>TheUser</UserID>
+					<Password>ThePassword</Password>
+				</Login>
+			</xpp:ifeq>
+			<xpp:ifeq select="packing" value="yes">
+				<Login Mode="Full">
+					<UserID></UserID>
+					<Password></Password>
+				</Login>
+			</xpp:ifeq>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Definitions">
@@ -54,16 +63,23 @@
 				</Project>
 			</Projects>
 			<Backends Default="Embedded">
+				<xpp:ifeq select="packing" value="yes">
+					<xpp:bloc>
+						<xpp:set name="PluginPath" value="./plugins/"/>
+						<xpp:set name="BackendPath" value="../processing/backend/"/>
+					</xpp:bloc>
+				</xpp:ifeq>>
+				<xpp:ifeq select="packing" value="no">
+					<xpp:bloc marker="$">
+						<xpp:set name="PluginPath" value="$BinPath$plugins/"/>
+						<xpp:set name="BackendPath" value="./"/>
+					</xpp:bloc>
+				</xpp:ifeq>>
 				<xpp:bloc marker="$">
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$PlgDir$remote/straight">localhost:53700</Backend>
-					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BinRootDir$esketchbkd"/>
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BackendPath$esketchbkd"/>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">localhost:53700</Backend>
 				</xpp:bloc>
 			</Backends>
-			<RemoteBackends>
-				<RemoteBackend id="INet">
-					<PluginPath>h:/bin/Plugins/remote/inet</PluginPath>
-				</RemoteBackend>
-			</RemoteBackends>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="Locale">

@@ -1,12 +1,4 @@
 ***** orgnzq changelog *****
 
-Meaning of list markers (2nd level):
-- '-' (Functionnalities (should) remain unchanged) :
-	- Cosmetic changes. Function/method and/or parameter name changes.
-	- Changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
-	   in a broad sense (parameters of a function, a method, or a template...).
-	- Changes fixing compiler errors/warnings.
-- '*' : Functionnality changes.
-- '%' : API changes (is superseded by functionnality changes).
-- '#' : Bug fixing.
-
+2016-07-25 :
+	- Fixing bug which occurs on attempt to create a new field when previously field is empty (http://linuxfr.org/users/epeios/journaux/epeios-organizer-l-interface-web#comment-1666612).
