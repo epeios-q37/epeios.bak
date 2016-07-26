@@ -10,6 +10,7 @@
 					<!-- The 2 first are mandatory and must be the 2 first ! -->
 					<Plugin Id="Record">Record</Plugin>
 					<Plugin Id="Text">Text</Plugin>
+					<Plugin Id="RichText">RichText</Plugin>
 				</Set>
 				<Plugin target="Database" Id="Regular"></Plugin>
 				<Plugin target="Authentication" Id="Dummy"></Plugin>
@@ -71,6 +72,20 @@
 					</Configuration>
 					<Locale>
 						<xpp:expand href="../plugins/type/text/text.xlcl"/>
+					</Locale>
+				</Plugin>
+				<Plugin id="RichText">
+					<Filename>
+						<xpp:expand select="TypePluginsRootDir"/>
+						<xpp:bloc preserve="yes">
+							<xpp:bloc>rich_text_html/rich_text_html</xpp:bloc>
+						</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/type/rich_text_html/rich_text_html.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/type/rich_text_html/rich_text_html.xlcl"/>
 					</Locale>
 				</Plugin>
 			</Plugins>

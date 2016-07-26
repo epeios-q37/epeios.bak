@@ -12,6 +12,10 @@
 		<Translation language="fr">Champs</Translation>
 		<Translation language="en">Fields</Translation>
 	</Translations>
+	<Translations text="fieldsLanguage">
+		<Translation language="fr">fr</Translation>
+		<Translation language="en">en</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

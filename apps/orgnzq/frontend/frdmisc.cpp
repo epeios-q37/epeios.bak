@@ -56,7 +56,7 @@ qRE
 }
 
 
-void frdmisc::LoadPugins( void )
+void frdmisc::LoadPlugins( void )
 {
 	XML_.Init();
 	sclmisc::Plug( frdplgn::XMLTarget, NULL, XML_ );

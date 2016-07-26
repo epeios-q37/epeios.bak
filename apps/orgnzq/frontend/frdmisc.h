@@ -98,7 +98,7 @@ namespace frdmisc {
 	typedef ctn::qMCONTAINERdl( dXType ) dXTypes;
 	qW( XTypes );
 
-	void LoadPugins( void );
+	void LoadPlugins( void );
 }
 
 #endif

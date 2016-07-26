@@ -6,11 +6,24 @@
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xpp:expand href="functions.xsl"/>
 	<xsl:template name="DisplayEditableTextEntry">
+		<xsl:param name="Type"/>
 		<xsl:param name="Content"/>
 		<span>
-			<textarea id="EditableEntry" >
-				<xsl:value-of select="$Content"/>
-			</textarea>
+			<xsl:choose>
+				<xsl:when test="$Type='Text'">
+					<textarea id="EditableEntry" >
+						<xsl:value-of select="$Content"/>
+					</textarea>
+				</xsl:when>
+				<xsl:when test="$Type='RichText'">
+					<textarea id="EditableEntry"  data-xdh-onevent="focusout|Refresh" data-xdh-widget="ckeditor|enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,|val\(\)|ckeditor\(\).editor.focus\(\)">
+						<xsl:value-of select="$Content"/>
+					</textarea>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:text>#fieldUnknownType#</xsl:text>
+				</xsl:otherwise>
+			</xsl:choose>
 		</span>
 	</xsl:template>
 	<xsl:template match="/">
@@ -26,17 +39,15 @@
 		<div>
 			<xsl:choose>
 				<xsl:when test="$Type='Record'">
-				<xsl:apply-templates select="Entries" mode="Record">
-					<xsl:with-param name="Number" select="$Number"/>
-				</xsl:apply-templates>
-				</xsl:when>
-				<xsl:when test="$Type='Text'">
-					<xsl:apply-templates select="Entries" mode="Text">
+					<xsl:apply-templates select="Entries" mode="Record">
 						<xsl:with-param name="Number" select="$Number"/>
 					</xsl:apply-templates>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:text>#fieldUnknownType#</xsl:text>
+					<xsl:apply-templates select="Entries">
+						<xsl:with-param name="Type" select="$Type"/>
+						<xsl:with-param name="Number" select="$Number"/>
+					</xsl:apply-templates>
 				</xsl:otherwise>
 			</xsl:choose>
 		</div>
@@ -50,20 +61,26 @@
 		<xsl:param name="Number"/>
 		<xsl:text>#fieldNotImplementedYet#</xsl:text>
 	</xsl:template>
-	<xsl:template match="Entries" mode="Text">
+	<xsl:template match="Entries">
+		<xsl:param name="Type"/>
 		<xsl:param name="Number"/>
-		<xsl:apply-templates select="Entry" mode="Text">
+		<xsl:apply-templates select="Entry">
+			<xsl:with-param name="Type" select="$Type"/>
 			<xsl:with-param name="Number" select="$Number"/>
 		</xsl:apply-templates>
 		<xsl:if test="not(@Selected) and ($Number!='Mono' or @Amount='0')">
-			<xsl:call-template name="DisplayEditableTextEntry"/>
+			<xsl:call-template name="DisplayEditableTextEntry">
+				<xsl:with-param name="Type" select="$Type"/>
+			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
-	<xsl:template match="Entry" mode="Text">
+	<xsl:template match="Entry">
+		<xsl:param name="Type"/>
 		<xsl:param name="Number"/>
 		<xsl:choose>
 			<xsl:when test="@id=../@Selected or $Number='Mono'">
 				<xsl:call-template name="DisplayEditableTextEntry">
+					<xsl:with-param name="Type" select="$Type"/>
 					<xsl:with-param name="Content" select="."/>
 				</xsl:call-template>
 			</xsl:when>
@@ -76,7 +93,7 @@
 						<xsl:attribute name="data-xdh-value">
 							<xsl:value-of select="@id"/>
 						</xsl:attribute>
-						<xsl:value-of select="."/>
+						<xsl:value-of select="." disable-output-escaping="yes"/>
 					</span>
 				</fieldset>
 			</xsl:otherwise>

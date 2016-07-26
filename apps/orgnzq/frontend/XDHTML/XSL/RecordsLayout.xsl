@@ -31,7 +31,7 @@
 			<xsl:attribute name="data-xdh-value">
 				<xsl:value-of select="@id"/>
 			</xsl:attribute>
-			<xsl:value-of select="."/>
+			<xsl:value-of select="." disable-output-escaping="yes"/>
 		</fieldset>
 	</xsl:template>
 </xsl:stylesheet>

@@ -72,6 +72,9 @@
 			<xsl:when test="$Label='Text'">
 				<xsl:text>#fTextTypeWording#</xsl:text>
 			</xsl:when>
+			<xsl:when test="$Label='RichText'">
+				<xsl:text>#fRichTextTypeWording#</xsl:text>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>#fUnknownType#</xsl:text>
 			</xsl:otherwise>

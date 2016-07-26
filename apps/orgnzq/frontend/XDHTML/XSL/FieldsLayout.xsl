@@ -87,6 +87,6 @@
 		</fieldset>
 	</xsl:template>
 	<xsl:template match="Entry" mode="Unboxed">
-		<xsl:value-of select="."/>
+		<xsl:value-of select="." disable-output-escaping="yes"/>
 	</xsl:template>
 </xsl:stylesheet>
