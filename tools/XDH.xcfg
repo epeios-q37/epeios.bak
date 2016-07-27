@@ -159,9 +159,13 @@
 				<![CDATA[
 					log( "Document !" );
 					log( "%XML%" );
-					document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );
-					var digests = fetchEventHandlersAndWidgets( "" );
+					removeChildren( "Root" );
+					document.getElementById( "Root" ).appendChild( transformToFragment( "%XML%", "%XSL%" ) );"";
+					var digests = fetchEventHandlersAndWidgets( "Root" );
 					digests;
+//					document.documentElement.innerHTML = transformToHTML( "%XML%", "%XSL%" );
+//					var digests = fetchEventHandlersAndWidgets( "" );
+//					digests;
 				]]>
 			</DocumentFiller>
 			<CastingsFiller>
