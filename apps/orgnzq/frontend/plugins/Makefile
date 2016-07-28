@@ -102,3 +102,6 @@ clean : common
 common:
 	$(MAKE) $(MAKECMDGOALS) -C record/
 	$(MAKE) $(MAKECMDGOALS) -C text/
+	$(MAKE) $(MAKECMDGOALS) -C rich_text_html/
+	$(MAKE) $(MAKECMDGOALS) -C date/
+	$(MAKE) $(MAKECMDGOALS) -C time/

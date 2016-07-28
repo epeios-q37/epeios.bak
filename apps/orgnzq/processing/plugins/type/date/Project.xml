@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Version)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2015-2016</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="Plugin"/>
+	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<About>
+		<Program>date</Program>
+		<Software>orgnzq</Software>
+		<UUID>adc1d18d-2269-490b-8a26-cfcbad6ca0d9</UUID>
+	</About>
+	<InstallPath>plugins/ogz/backend/type/date/</InstallPath>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+		</Modules>
+		<Modules Group="OGZ" Path="../../../">
+			<Module>ogzbsc</Module>
+			<Module>ogzclm</Module>
+			<Module>ogzdtb</Module>
+			<Module>ogzetr</Module>
+			<Module>ogzfld</Module>
+			<Module>ogzmta</Module>
+			<Module>ogzplg</Module>
+			<Module>ogzrcd</Module>
+			<Module>ogztyp</Module>
+			<Module>ogzusr</Module>
+		</Modules>
+		<Modules Group="TYP" Path="../">
+			<Module>typbse</Module>
+			<Module>typrgy</Module>
+		</Modules>
+		<Module>registry</Module>
+	</Modules>
+	<SourceDirs>
+		<SourceDir>../</SourceDir>
+		<SourceDir>../../..</SourceDir>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+	<Packing XFiles="No"/>
+</Project>
