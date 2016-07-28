@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160615 Build Jun 21 2016 10:30:23 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20160722 Build Jul 23 2016 05:51:57 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20160313 (Build Jun  5 2016 10:29:06 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160313 (Build Jul 18 2016 20:04:44 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ORGNZQ__INC
@@ -44,7 +44,7 @@ namespace orgnzq {
 				25, 0, 
 				25, 25, 0, 2, 
 				0, 13, 26, 
-				0, 22, 26, 26, 
+				0, 22, 26, 
 				21, 0, 22, 22, 13, 26, 26, 
 				21, 0, 22, 22, 22, 27, 
 				0, 21, 
@@ -81,42 +81,42 @@ namespace orgnzq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetTypes";;
-			CommandDetail.Casts.Append( Parameters + 11, 4 );
+			CommandDetail.Casts.Append( Parameters + 11, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetRecordColumns";;
-			CommandDetail.Casts.Append( Parameters + 15, 7 );
+			CommandDetail.Casts.Append( Parameters + 14, 7 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetRecordFields";;
-			CommandDetail.Casts.Append( Parameters + 22, 6 );
+			CommandDetail.Casts.Append( Parameters + 21, 6 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZCreateRecord";;
-			CommandDetail.Casts.Append( Parameters + 28, 2 );
+			CommandDetail.Casts.Append( Parameters + 27, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZCreateField";;
-			CommandDetail.Casts.Append( Parameters + 30, 5 );
+			CommandDetail.Casts.Append( Parameters + 29, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZUpdateField";;
-			CommandDetail.Casts.Append( Parameters + 35, 5 );
+			CommandDetail.Casts.Append( Parameters + 34, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZGetRecords";;
-			CommandDetail.Casts.Append( Parameters + 40, 3 );
+			CommandDetail.Casts.Append( Parameters + 39, 3 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "OGZMoveField";;
-			CommandDetail.Casts.Append( Parameters + 43, 4 );
+			CommandDetail.Casts.Append( Parameters + 42, 4 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -176,8 +176,7 @@ namespace orgnzq {
 		}
 		fblovl::reply__ OGZGetTypes( 
 			fblfrd::ids_ &Out1,
-			fblfrd::strings_ &Out2,
-			fblfrd::strings_ &Out3 ) const
+			fblfrd::strings_ &Out2 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[4] );
 
@@ -185,7 +184,6 @@ namespace orgnzq {
 
 			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
-			Frontend().StringsOut( Out3 );
 
 			return Frontend().Handle();
 		}

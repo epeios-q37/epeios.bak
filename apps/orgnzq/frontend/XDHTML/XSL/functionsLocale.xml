@@ -20,9 +20,13 @@
 		<Translation language="fr">Texte</Translation>
 		<Translation language="en">Text</Translation>
 	</Translations>
-	<Translations text="fRichTextTypeWording">
-		<Translation language="fr">Texte enrichi</Translation>
-		<Translation language="en">Rich text</Translation>
+	<Translations text="fRichText1TypeWording">
+		<Translation language="fr">Texte enrichi 1</Translation>
+		<Translation language="en">Rich text 1</Translation>
+	</Translations>
+	<Translations text="fRichText2TypeWording">
+		<Translation language="fr">Texte enrichi 2</Translation>
+		<Translation language="en">Rich text 2</Translation>
 	</Translations>
 	<Translations text="fUnknownType">
 		<Translation language="fr">(Inconnu)</Translation>

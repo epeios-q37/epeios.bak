@@ -10,7 +10,8 @@
 					<!-- The 2 first are mandatory and must be the 2 first ! -->
 					<Plugin Id="Record">Record</Plugin>
 					<Plugin Id="Text">Text</Plugin>
-					<Plugin Id="RichText">RichText</Plugin>
+					<Plugin Id="RichText1">RichText1</Plugin>
+					<Plugin Id="RichText2">RichText2</Plugin>
 				</Set>
 				<Plugin target="Database" Id="Regular"></Plugin>
 				<Plugin target="Authentication" Id="Dummy"></Plugin>
@@ -74,19 +75,27 @@
 						<xpp:expand href="../plugins/type/text/text.xlcl"/>
 					</Locale>
 				</Plugin>
-				<Plugin id="RichText">
-					<Filename>
-						<xpp:expand select="TypePluginsRootDir"/>
-						<xpp:bloc preserve="yes">
-							<xpp:bloc>rich_text_html/rich_text_html</xpp:bloc>
-						</xpp:bloc>
-					</Filename>
-					<Configuration>
-						<xpp:expand href="../plugins/type/rich_text_html/rich_text_html.xcfg"/>
-					</Configuration>
-					<Locale>
-						<xpp:expand href="../plugins/type/rich_text_html/rich_text_html.xlcl"/>
-					</Locale>
+				<xpp:define name="RichTextHTML">
+					<xpp:bloc>
+						<Filename>
+							<xpp:expand select="TypePluginsRootDir"/>
+							<xpp:bloc preserve="yes">
+								<xpp:bloc>rich_text_html/rich_text_html</xpp:bloc>
+							</xpp:bloc>
+						</Filename>
+						<Configuration>
+							<xpp:expand href="../plugins/type/rich_text_html/rich_text_html.xcfg"/>
+						</Configuration>
+						<Locale>
+							<xpp:expand href="../plugins/type/rich_text_html/rich_text_html.xlcl"/>
+						</Locale>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="RichText1">
+					<xpp:expand select="RichTextHTML"/>
+				</Plugin>
+				<Plugin id="RichText2">
+					<xpp:expand select="RichTextHTML"/>
 				</Plugin>
 			</Plugins>
 			<Plugins target="Database">

@@ -7,12 +7,12 @@
 	</xpp:define>
 	<xpp:define name="Arguments">
 		<xpp:bloc>
-			<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="d" Value="Default" Usage="%BackendPluginIdArgument%"/>
-			<Argument id="BackendPluginIdArgument" Description="BackendPluginIdArgumentDescription" Path="BackendPluginId" Label="BackendPluginIdArgumentLabel"/>
+			<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="d" Value="Default" Usage="%BackendPluginLabelArgument%"/>
+			<Argument id="BackendPluginLabelArgument" Description="BackendPluginLabelArgumentDescription" Path="BackendPluginLabel" Label="BackendPluginLabelArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Default">
-					<Link index="0" Target="BackendPluginIdArgument"/>
+					<Link index="0" Target="BackendPluginLabelArgument"/>
 				</Layout>
 			</Layouts>
 		</xpp:bloc>

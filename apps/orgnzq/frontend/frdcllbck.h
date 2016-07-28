@@ -26,7 +26,7 @@ namespace frdcllbck {
 	class cXML
 	{
 	protected:
-		virtual void FRDCLLBCKGetBackendPluginId( str::dString &Id ) = 0;
+		virtual void FRDCLLBCKGetBackendPluginLabel( str::dString &Id ) = 0;
 		virtual void FRDCLLBCKToXML(
 			const str::dString &Input,
 			str::dString &Output ) = 0;
@@ -37,9 +37,9 @@ namespace frdcllbck {
 		{
 			return FRDCLLBCKToXML( Input, Output );
 		}
-		const str::dString &GetBackendPluginId( str::dString &Id )
+		const str::dString &GetBackendPluginLabel( str::dString &Id )
 		{
-			FRDCLLBCKGetBackendPluginId( Id );
+			FRDCLLBCKGetBackendPluginLabel( Id );
 
 			return Id;
 		}

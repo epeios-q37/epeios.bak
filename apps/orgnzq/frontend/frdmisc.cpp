@@ -41,7 +41,7 @@ qRB
 	Row = XML_.First();
 
 	Id.Init();
-	while ( (Row != qNIL) && ( Label != XML_.Plugin( Row ).GetBackendPluginId( Id ) ) ) {
+	while ( ( Row != qNIL) && ( Label != XML_.Plugin( Row ).GetBackendPluginLabel( Id ) ) ) {
 		Row = XML_.Next( Row );
 
 		Id.Init();

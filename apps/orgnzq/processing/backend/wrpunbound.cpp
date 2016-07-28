@@ -104,23 +104,20 @@ qRE
 namespace {
 	void GetType_(
 		const ogztyp::sType &Type,
-		fbltyp::strings_ &Labels,
-		fbltyp::strings_ &PluginIds )
+		fbltyp::strings_ &Labels )
 	{
 		Labels.Add( str::wString( Type.GetLabel() ) );
-		PluginIds.Append(str::wString( Type.GetIdentifier() ) );
 	}
 
 	void GetTypes_(
 		const ogztyp::dTypes &Types,
 		fbltyp::ids_ &Ids,
-		fbltyp::strings_ &Labels,
-		fbltyp::strings_ &PluginIds )
+		fbltyp::strings_ &Labels )
 	{
 		ogztyp::sRow Row = Types.First();
 
 		while ( Row != qNIL ) {
-			GetType_( Types( Row ), Labels, PluginIds );
+			GetType_( Types( Row ), Labels );
 
 			Ids.Add( *Row );
 
@@ -136,9 +133,8 @@ qRH
 qRB
 	fbltyp::dIds &Ids = Request.IdsOut();
 	fbltyp::dStrings &Labels = Request.StringsOut();
-	fbltyp::dStrings &PluginIds = Request.StringsOut();
 
-	GetTypes_( common::GetTypes(), Ids, Labels, PluginIds );
+	GetTypes_( common::GetTypes(), Ids, Labels );
 qRR 
 qRT
 qRE
@@ -399,7 +395,6 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids.
 			fblbkd::cStrings,	// Labels.
-			fblbkd::cStrings,	// Plugin ids.
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetRecordColumns ),

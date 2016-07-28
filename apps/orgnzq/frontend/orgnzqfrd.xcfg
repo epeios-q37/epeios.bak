@@ -35,9 +35,10 @@
 			<Plugins>
 				<Set target="XML">
 					<!-- First is mandatory and must be the first ! -->
-					<Plugin Id="Record">3cfe8169-fe17-4cfc-9523-eb245ccebe6f</Plugin>
-					<Plugin Id="Text">d59d9cbe-dfcb-45da-8910-adeea8f1d500</Plugin>
-					<Plugin Id="RichText">bbef9eaa-17e4-4951-a686-815fd627a7f3</Plugin>
+					<Plugin Id="Record">Record</Plugin>
+					<Plugin Id="Text">Text</Plugin>
+					<Plugin Id="RichText1">RichText1</Plugin>
+					<Plugin Id="RichText2">RichText2</Plugin>
 				</Set>
 			</Plugins>
 		</xpp:bloc>
@@ -131,17 +132,25 @@
 						<xpp:expand href="../plugins/text/text.xlcl"/>
 					</Locale>
 				</Plugin>
-				<Plugin id="RichText">
-					<Filename>
-						<xpp:expand select="XMLPluginsRootDir"/>
-						<xpp:bloc>rich_text_html/rich_text_html</xpp:bloc>
-					</Filename>
-					<Configuration>
-						<xpp:expand href="../plugins/rich_text_html/rich_text_html.xcfg"/>
-					</Configuration>
-					<Locale>
-						<xpp:expand href="../plugins/rich_text_html/rich_text_html.xlcl"/>
-					</Locale>
+				<xpp:define name="RichTextHTML">
+					<xpp:bloc>
+						<Filename>
+							<xpp:expand select="XMLPluginsRootDir"/>
+							<xpp:bloc>rich_text_html/rich_text_html</xpp:bloc>
+						</Filename>
+						<Configuration>
+							<xpp:expand href="../plugins/rich_text_html/rich_text_html.xcfg"/>
+						</Configuration>
+						<Locale>
+							<xpp:expand href="../plugins/rich_text_html/rich_text_html.xlcl"/>
+						</Locale>
+					</xpp:bloc>
+				</xpp:define>
+				<Plugin id="RichText1">
+					<xpp:expand select="RichTextHTML"/>
+				</Plugin>
+				<Plugin id="RichText2">
+					<xpp:expand select="RichTextHTML"/>
 				</Plugin>
 			</Plugins>
 		</xpp:bloc>

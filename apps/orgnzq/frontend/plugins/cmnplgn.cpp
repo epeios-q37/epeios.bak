@@ -25,8 +25,8 @@
 
 using namespace cmnplgn;
 
-void cmnplgn::sPlugin::FRDCLLBCKGetBackendPluginId( str::dString &Id )
+void cmnplgn::sPlugin::FRDCLLBCKGetBackendPluginLabel( str::dString &Id )
 {
-	sclmisc::MGetValue( cmnrgstry::parameter::BackendPluginId, Id );
+	sclmisc::MGetValue( cmnrgstry::parameter::BackendPluginLabel, Id );
 }
 

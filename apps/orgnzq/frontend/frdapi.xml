@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 22/06/2016 15:55:32
+    This document was generated the 28/07/2016 09:55:45
     using barq V20160313 (http://q37.info/)
-    Build : Jun  5 2016 10:29:06 (Win32;MSC 1800;IA-32)
+    Build : Jul 18 2016 20:04:44 (Win32;MSC 1800;IA-32)
 -->
 <API target="orgnzq" TargetUppercased="ORGNZQ" ProtocolVersion="13" APIVersion="1">
  <Misc>
   <Generator>
    <Name>barq</Name>
    <Version>20160313</Version>
-   <Build>Jun  5 2016 10:29:06 Win32;MSC 1800;IA-32</Build>
+   <Build>Jul 18 2016 20:04:44 Win32;MSC 1800;IA-32</Build>
    <URL>http://q37.info/</URL>
    <Author>
     <Name>Claude SIMON</Name>
@@ -18,12 +18,12 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>orgnzqbkd 20160615 Build Jun 21 2016 10:30:23 - Win32;MSC 1800;IA-32</Details>
+   <Details>orgnzqbkd 20160722 Build Jul 23 2016 05:51:57 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2015-2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>orgnzq V1.0</Software>
-  <Date>22/06/2016</Date>
-  <Time>15:55:32</Time>
+  <Date>28/07/2016</Date>
+  <Time>09:55:45</Time>
  </Misc>
  <Types>
   <Type Object="Master">
@@ -96,17 +96,13 @@
     <Command>
      <Name>OGZGetTypes</Name>
      <ID>22</ID>
-     <Parameters Amount="4" Position="11">
+     <Parameters Amount="3" Position="11">
       <Out>
        <Parameter Discriminator="1" Type="Bunch">
         <Name>ids</Name>
         <ID>22</ID>
        </Parameter>
-       <Parameter Discriminator="2" Type="Container">
-        <Name>strings</Name>
-        <ID>26</ID>
-       </Parameter>
-       <Parameter Discriminator="3" Position="Last" Type="Container">
+       <Parameter Discriminator="2" Position="Last" Type="Container">
         <Name>strings</Name>
         <ID>26</ID>
        </Parameter>
@@ -116,7 +112,7 @@
     <Command>
      <Name>OGZGetRecordColumns</Name>
      <ID>23</ID>
-     <Parameters Amount="7" Position="15">
+     <Parameters Amount="7" Position="14">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -150,7 +146,7 @@
     <Command>
      <Name>OGZGetRecordFields</Name>
      <ID>24</ID>
-     <Parameters Amount="6" Position="22">
+     <Parameters Amount="6" Position="21">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -180,7 +176,7 @@
     <Command>
      <Name>OGZCreateRecord</Name>
      <ID>25</ID>
-     <Parameters Amount="2" Position="28">
+     <Parameters Amount="2" Position="27">
       <Out>
        <Parameter Discriminator="1" Position="Last" Type="Static">
         <Name>id</Name>
@@ -192,7 +188,7 @@
     <Command>
      <Name>OGZCreateField</Name>
      <ID>26</ID>
-     <Parameters Amount="5" Position="30">
+     <Parameters Amount="5" Position="29">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -218,7 +214,7 @@
     <Command>
      <Name>OGZUpdateField</Name>
      <ID>27</ID>
-     <Parameters Amount="5" Position="35">
+     <Parameters Amount="5" Position="34">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -244,7 +240,7 @@
     <Command>
      <Name>OGZGetRecords</Name>
      <ID>28</ID>
-     <Parameters Amount="3" Position="40">
+     <Parameters Amount="3" Position="39">
       <Out>
        <Parameter Discriminator="1" Type="Bunch">
         <Name>ids</Name>
@@ -260,7 +256,7 @@
     <Command>
      <Name>OGZMoveField</Name>
      <ID>29</ID>
-     <Parameters Amount="4" Position="43">
+     <Parameters Amount="4" Position="42">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>

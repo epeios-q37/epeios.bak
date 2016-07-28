@@ -3,7 +3,7 @@
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:xpp="http://q37.info/ns/xpp/draft"
 				>
-	<xsl:output method="html" encoding="UTF-8"/>
+	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 	<xpp:expand href="functions.xsl"/>
 	<xsl:template name="DisplayEditableTextEntry">
 		<xsl:param name="Type"/>
@@ -15,9 +15,18 @@
 						<xsl:value-of select="$Content"/>
 					</textarea>
 				</xsl:when>
-				<xsl:when test="$Type='RichText'">
-					<textarea id="EditableEntry"  data-xdh-onevent="focusout|Refresh" data-xdh-widget="ckeditor|enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,|val\(\)|ckeditor\(\).editor.focus\(\)">
+				<xsl:when test="$Type='RichText1'">
+					<textarea id="EditableEntry"  data-xdh-onevent="focusout|Refresh">
+						<xsl:attribute name="data-xdh-widget">
+							<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
+							<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,}|val\(\)|ckeditor\(\).editor.focus\(\)</xsl:text>
+						</xsl:attribute>
 						<xsl:value-of select="$Content"/>
+					</textarea>
+				</xsl:when>
+				<xsl:when test="$Type='RichText2'">
+					<textarea id="EditableEntry" data-xdh-widget="markItUp|mySettings" autofocus="true">
+						<xsl:value-of select="."/>
 					</textarea>
 				</xsl:when>
 				<xsl:otherwise>
@@ -93,7 +102,9 @@
 						<xsl:attribute name="data-xdh-value">
 							<xsl:value-of select="@id"/>
 						</xsl:attribute>
-						<xsl:value-of select="." disable-output-escaping="yes"/>
+						<xsl:call-template name="DOE">
+							<xsl:with-param name="Content" select="."/>
+						</xsl:call-template>
 					</span>
 				</fieldset>
 			</xsl:otherwise>

@@ -21,4 +21,4 @@
 
 using namespace cmnrgstry;
 
-rEntry cmnrgstry::parameter::BackendPluginId("BackendPluginId", sclrgstry::Parameters );
+rEntry cmnrgstry::parameter::BackendPluginLabel( "BackendPluginLabel", sclrgstry::Parameters );

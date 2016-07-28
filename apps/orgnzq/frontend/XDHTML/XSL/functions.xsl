@@ -72,12 +72,19 @@
 			<xsl:when test="$Label='Text'">
 				<xsl:text>#fTextTypeWording#</xsl:text>
 			</xsl:when>
-			<xsl:when test="$Label='RichText'">
-				<xsl:text>#fRichTextTypeWording#</xsl:text>
+			<xsl:when test="$Label='RichText1'">
+				<xsl:text>#fRichText1TypeWording#</xsl:text>
+			</xsl:when>
+			<xsl:when test="$Label='RichText2'">
+				<xsl:text>#fRichText2TypeWording#</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>#fUnknownType#</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	<xsl:template name="DOE">
+		<xsl:param name="Content"/>
+		<xsl:value-of select="$Content" disable-output-escaping="yes"/>
 	</xsl:template>
 </xpp:bloc>

@@ -29,7 +29,7 @@ namespace cmnplgn {
 	: public sPlugin_
 	{
 	protected:
-		virtual void FRDCLLBCKGetBackendPluginId( str::dString &Id ) override;
+		virtual void FRDCLLBCKGetBackendPluginLabel( str::dString &Id ) override;
 	};
 }
 

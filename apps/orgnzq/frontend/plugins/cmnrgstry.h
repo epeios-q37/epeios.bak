@@ -28,7 +28,7 @@ namespace cmnrgstry {
 	namespace parameter {
 		using namespace sclrgstry::parameter;
 
-		extern rEntry BackendPluginId;
+		extern rEntry BackendPluginLabel;
 	}
 
 }

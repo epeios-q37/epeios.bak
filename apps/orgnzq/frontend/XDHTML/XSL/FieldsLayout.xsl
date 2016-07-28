@@ -3,7 +3,8 @@
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:xpp="http://q37.info/ns/xpp/draft"
 				>
-	<xsl:output method="html" encoding="UTF-8"/>
+	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
+	<xpp:expand href="functions.xsl"/>
 	<xsl:template match="/">
 		<xsl:apply-templates select="*/Content"/>
 	</xsl:template>
@@ -87,6 +88,8 @@
 		</fieldset>
 	</xsl:template>
 	<xsl:template match="Entry" mode="Unboxed">
-		<xsl:value-of select="." disable-output-escaping="yes"/>
+		<xsl:call-template name="DOE">
+			<xsl:with-param name="Content" select="."/>
+		</xsl:call-template>
 	</xsl:template>
 </xsl:stylesheet>
