@@ -6,5 +6,7 @@
 		<Dependency Dir="record/"/>
 		<Dependency Dir="text/"/>
 		<Dependency Dir="rich_text_html/"/>
+		<Dependency Dir="date/"/>
+		<Dependency Dir="time/"/>
 	</Dependencies>
 </Project>

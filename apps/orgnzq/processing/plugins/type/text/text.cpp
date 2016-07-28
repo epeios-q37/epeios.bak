@@ -30,7 +30,7 @@
 
 #include "uys.h"
 
-#define PLUGIN_NAME	"Record"
+#define PLUGIN_NAME	"Text"
 
 typedef typbse::rPluginCommon rPlugin_;
 

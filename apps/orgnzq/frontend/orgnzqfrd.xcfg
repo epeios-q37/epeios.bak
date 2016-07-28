@@ -37,8 +37,9 @@
 					<!-- First is mandatory and must be the first ! -->
 					<Plugin Id="Record">Record</Plugin>
 					<Plugin Id="Text">Text</Plugin>
-					<Plugin Id="RichText1">RichText1</Plugin>
-					<Plugin Id="RichText2">RichText2</Plugin>
+					<Plugin Id="RichText">RichText</Plugin>
+					<Plugin Id="Date">Date</Plugin>
+					<Plugin Id="Time">Time</Plugin>
 				</Set>
 			</Plugins>
 		</xpp:bloc>
@@ -132,25 +133,41 @@
 						<xpp:expand href="../plugins/text/text.xlcl"/>
 					</Locale>
 				</Plugin>
-				<xpp:define name="RichTextHTML">
-					<xpp:bloc>
-						<Filename>
-							<xpp:expand select="XMLPluginsRootDir"/>
-							<xpp:bloc>rich_text_html/rich_text_html</xpp:bloc>
-						</Filename>
-						<Configuration>
-							<xpp:expand href="../plugins/rich_text_html/rich_text_html.xcfg"/>
-						</Configuration>
-						<Locale>
-							<xpp:expand href="../plugins/rich_text_html/rich_text_html.xlcl"/>
-						</Locale>
-					</xpp:bloc>
-				</xpp:define>
-				<Plugin id="RichText1">
-					<xpp:expand select="RichTextHTML"/>
+				<Plugin id="RichText">
+					<Filename>
+						<xpp:expand select="XMLPluginsRootDir"/>
+						<xpp:bloc>rich_text_html/rich_text_html</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/rich_text_html/rich_text_html.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/rich_text_html/rich_text_html.xlcl"/>
+					</Locale>
 				</Plugin>
-				<Plugin id="RichText2">
-					<xpp:expand select="RichTextHTML"/>
+				<Plugin id="Date">
+					<Filename>
+						<xpp:expand select="XMLPluginsRootDir"/>
+						<xpp:bloc>date/date</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/date/date.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/date/date.xlcl"/>
+					</Locale>
+				</Plugin>
+				<Plugin id="Time">
+					<Filename>
+						<xpp:expand select="XMLPluginsRootDir"/>
+						<xpp:bloc>time/time</xpp:bloc>
+					</Filename>
+					<Configuration>
+						<xpp:expand href="../plugins/time/time.xcfg"/>
+					</Configuration>
+					<Locale>
+						<xpp:expand href="../plugins/time/time.xlcl"/>
+					</Locale>
 				</Plugin>
 			</Plugins>
 		</xpp:bloc>

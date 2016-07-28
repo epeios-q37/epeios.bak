@@ -47,7 +47,7 @@ namespace sclxdhtml {
 	template <typename session> class cAction
 	{
 	protected:
-		virtual void SCLXDHTMLLaunch(
+		virtual void SCLXLaunch(
 			session &Session,
 			const char *Id ) = 0;
 	public:
@@ -56,7 +56,7 @@ namespace sclxdhtml {
 			session &Session,
 			const char *Id )
 		{
-			return SCLXDHTMLLaunch( Session, Id );
+			return SCLXLaunch( Session, Id );
 		}
 	};
 
@@ -134,11 +134,12 @@ namespace sclxdhtml {
 	template <typename session> class cActionHelper
 	{
 	protected:
-		virtual bso::bool__ SCLXHTMLOnBeforeAction(
+		virtual bso::bool__ SCLXOnBeforeAction(
 			session &Session,
 			const char *Id,
 			const char *Action ) = 0;
-		virtual bso::bool__ SCLXHTMLOnClose( session &Session ) = 0;
+		virtual void SCLXOnRefresh( session &Session ) = 0;
+		virtual bso::bool__ SCLXOnClose( session &Session ) = 0;
 	public:
 		void reset( bso::bool__ = true )
 		{
@@ -154,11 +155,15 @@ namespace sclxdhtml {
 			const char *Id,
 			const char *Action )
 		{
-			return SCLXHTMLOnBeforeAction( Session, Id, Action );
+			return SCLXOnBeforeAction( Session, Id, Action );
+		}
+		void OnRefresh( session &Session )
+		{
+			return SCLXOnRefresh( Session );
 		}
 		bso::bool__ OnClose( session &Session )
 		{
-			return SCLXHTMLOnClose( Session );
+			return SCLXOnClose( Session );
 		}
 	};
 
@@ -294,18 +299,16 @@ namespace sclxdhtml {
 	  public frontend
 	{
 	private:
-		page _Page;	// Current page;
+		page Page_;	// Current page;
 		reporting_callback__ _ReportingCallback;
 		eBackendVisibility BackendVisibility_;
-	protected:
-		virtual void SCLXDHTMLRefresh( page Page ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_session_callback__::reset( P );
 			instances::reset( P );
 			frontend::reset( P );
-			_Page = UndefinedPage;
+			Page_ = UndefinedPage;
 			_ReportingCallback.reset( P );
 			BackendVisibility_ = bv_Undefined;
 		}
@@ -319,7 +322,7 @@ namespace sclxdhtml {
 			_ReportingCallback.Init( *this, Language );
 			frontend::Init( Kernel, Language, _ReportingCallback, sclmisc::GetRegistry() );
 			_session_callback__::Init();
-			_Page = UndefinedPage;
+			Page_ = UndefinedPage;
 			// instances::Init( *this );	// Made on connection.
 			BackendVisibility_ = bvShow;	// By default, the backend part of the login page is shown.
 		}
@@ -345,17 +348,10 @@ namespace sclxdhtml {
 		{
 			return frontend::Language();
 		}
-		void Refresh( void )
-		{
-			if ( _Page == UndefinedPage )
-				qRFwk();
-			else
-				SCLXDHTMLRefresh( _Page );
-		}
 		void SwitchTo( page Page = UndefinedPage )
 		{
 			if ( Page != UndefinedPage )
-				_Page = Page;
+				Page_ = Page;
 			else
 				qRFwk();
 		}
@@ -396,9 +392,9 @@ namespace sclxdhtml {
 			return sclxdhtml::Confirm( XML, XSL, Title, this, Language() );
 		}
 		qRWDISCLOSEr( eBackendVisibility, BackendVisibility );
+		qRODISCLOSEr( page, Page );
 	};
 
-	// L'utilisateur met dans le type 'instances' ses propres objets et instancie le tout par un 'new' (en surchargeant 'SCLXHTMLNew(...)', et il est assur qu'un 'delete' sera fait une fois la bibliothque dcharge.
 	template <typename session> class core___
 	{
 	private:
@@ -411,6 +407,10 @@ namespace sclxdhtml {
 			const char *Action )
 		{
 			return _AH().OnBeforeAction( Session, Id, Action );
+		}
+		void _OnRefresh( session &Session )
+		{
+			return _AH().OnRefresh( Session );
 		}
 		bso::bool__ _OnClose( session &Session )
 		{
@@ -447,7 +447,9 @@ namespace sclxdhtml {
 		qRH
 			TOL_CBUFFER___ Buffer;
 		qRB
-			if ( _OnBeforeAction(Session, Id, Action) ) {
+			if ( !strcmp( Action, xdhcmn::RefreshActionLabel) ) {
+				_OnRefresh( Session );
+			} else if ( _OnBeforeAction( Session, Id, Action) ) {
 				if ( !strcmp( Action, xdhcmn::CloseActionLabel ) )
 					Success = _OnClose( Session );	// Dans ce cas, si 'Success' est  'false', la fermeture de l'application est suspendue.
 				else

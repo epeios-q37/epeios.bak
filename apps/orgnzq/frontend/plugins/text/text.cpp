@@ -24,7 +24,7 @@
 
 #include "cmnplgn.h"
 
-#define PLUGIN_NAME	"text"
+#define PLUGIN_NAME	"Text"
 
 typedef cmnplgn::sPlugin sPlugin_;
 

@@ -20,15 +20,19 @@
 		<Translation language="fr">Texte</Translation>
 		<Translation language="en">Text</Translation>
 	</Translations>
-	<Translations text="fRichText1TypeWording">
-		<Translation language="fr">Texte enrichi 1</Translation>
-		<Translation language="en">Rich text 1</Translation>
+	<Translations text="fRichTextTypeWording">
+		<Translation language="fr">Texte enrichi</Translation>
+		<Translation language="en">Rich text</Translation>
 	</Translations>
-	<Translations text="fRichText2TypeWording">
-		<Translation language="fr">Texte enrichi 2</Translation>
-		<Translation language="en">Rich text 2</Translation>
+	<Translations text="fDateTypeWording">
+		<Translation language="fr">Date</Translation>
+		<Translation language="en">Date</Translation>
 	</Translations>
-	<Translations text="fUnknownType">
+	<Translations text="fTimeTypeWording">
+		<Translation language="fr">Heure</Translation>
+		<Translation language="en">Time</Translation>
+	</Translations>
+	<Translations text="fUnknownTypeWording">
 		<Translation language="fr">(Inconnu)</Translation>
 		<Translation language="en">(Unknown)</Translation>
 	</Translations>

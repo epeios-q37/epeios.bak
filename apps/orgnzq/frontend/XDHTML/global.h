@@ -24,13 +24,11 @@
 
 namespace global {
 	BASE_ACD( About );
-	BASE_ACD( Refresh );
 	BASE_ACD( Test );
 
 	inline void Register( void )
 	{
 		BASE_ACR( About );
-		BASE_ACR( Refresh );
 		BASE_ACR( Test );
 	}
 }

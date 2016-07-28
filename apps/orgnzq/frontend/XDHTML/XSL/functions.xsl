@@ -72,14 +72,17 @@
 			<xsl:when test="$Label='Text'">
 				<xsl:text>#fTextTypeWording#</xsl:text>
 			</xsl:when>
-			<xsl:when test="$Label='RichText1'">
-				<xsl:text>#fRichText1TypeWording#</xsl:text>
+			<xsl:when test="$Label='RichText'">
+				<xsl:text>#fRichTextTypeWording#</xsl:text>
 			</xsl:when>
-			<xsl:when test="$Label='RichText2'">
-				<xsl:text>#fRichText2TypeWording#</xsl:text>
+			<xsl:when test="$Label='Date'">
+				<xsl:text>#fDateTypeWording#</xsl:text>
+			</xsl:when>
+			<xsl:when test="$Label='Time'">
+				<xsl:text>#fTimeTypeWording#</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:text>#fUnknownType#</xsl:text>
+				<xsl:text>#fUnknownTypeWording#</xsl:text>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

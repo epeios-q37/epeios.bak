@@ -43,7 +43,7 @@
 		<xpp:expand href="../../../XDH.xcfg"/>
 		<Parameters>
 			<xpp:expand select="Parameters"/>
-			<Language>fr</Language>
+			<Language>en</Language>
 		</Parameters>
 		<Definitions>
 			<xpp:expand select="Definitions"/>

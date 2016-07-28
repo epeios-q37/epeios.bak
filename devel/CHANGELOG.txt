@@ -2,6 +2,13 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-07-28 :
+	- SCLXDHTML :
+		- 'Refresh' related actrion moved to action herlpet.
+		- Introducing 'SCLX' instead of 'SCLXDHTML' notation, which will be the new one in the future.
+	- XDHCMN :
+		- Introducing 'RefreshActionLabel'.
+
 2016-07-25 :
 	- SCLXDHTML :
 		- The backend visibility is now stored in 'rSession'.

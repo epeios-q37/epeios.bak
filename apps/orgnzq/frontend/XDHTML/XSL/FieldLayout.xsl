@@ -15,19 +15,38 @@
 						<xsl:value-of select="$Content"/>
 					</textarea>
 				</xsl:when>
-				<xsl:when test="$Type='RichText1'">
-					<textarea id="EditableEntry"  data-xdh-onevent="focusout|Refresh">
+				<xsl:when test="$Type='RichText'">
+					<textarea id="EditableEntry">
 						<xsl:attribute name="data-xdh-widget">
 							<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
-							<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldsLanguage#', startupFocus : true,}|val\(\)|ckeditor\(\).editor.focus\(\)</xsl:text>
+							<xsl:text>ckeditor|{enterMode : CKEDITOR.ENTER_BR, linkShowTargetTab: false, language: '#fieldLanguage#', startupFocus : true,}|val\(\)|ckeditor\(\).editor.focus\(\)</xsl:text>
+							<!-- Alternative -->
+							<!--<xsl:text>jqte</xsl:text>-->
 						</xsl:attribute>
 						<xsl:value-of select="$Content"/>
 					</textarea>
 				</xsl:when>
-				<xsl:when test="$Type='RichText2'">
-					<textarea id="EditableEntry" data-xdh-widget="markItUp|mySettings" autofocus="true">
-						<xsl:value-of select="."/>
-					</textarea>
+				<xsl:when test="$Type='Date'">
+					<input id="EditableEntry">
+						<xsl:attribute name="data-xdh-widget">
+							<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
+							<xsl:text>datepicker|{language:'#fieldLanguage#', autoclose: true, todayHighlight: true, todayBtn: true,}</xsl:text>
+						</xsl:attribute>
+						<xsl:attribute name="Value">
+							<xsl:value-of select="$Content"/>
+						</xsl:attribute>
+					</input>
+				</xsl:when>
+				<xsl:when test="$Type='Time'">
+					<input id="EditableEntry">
+						<xsl:attribute name="data-xdh-widget">
+							<!-- 'xsl:attribute' due to presence of '{' and '}'. -->
+							<xsl:text>timepicker|{#fieldTimePickerParameters#}</xsl:text>
+						</xsl:attribute>
+						<xsl:attribute name="Value">
+							<xsl:value-of select="$Content"/>
+						</xsl:attribute>
+					</input>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:text>#fieldUnknownType#</xsl:text>

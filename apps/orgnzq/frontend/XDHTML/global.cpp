@@ -54,11 +54,6 @@ qRT
 qRE
 }
 
-AC( Refresh )
-{
-	Session.Refresh();
-}
-
 AC( Test )
 {
 qRH

@@ -26,7 +26,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<span class="vcenter-out">
+		<span class="vcenter-out" data-xdh-onevents="(keypress|About|SC+a)(keypress|Refresh|SC+r)">
 			<span class="vcenter-in">
 				<fieldset>
 					<fieldset title="#lgnLoginTitle#">

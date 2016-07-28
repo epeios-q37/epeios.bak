@@ -49,7 +49,7 @@
 	: public base::cAction\
 	{\
 	protected:\
-		virtual void SCLXDHTMLLaunch(\
+		virtual void SCLXLaunch(\
 			core::rSession &Session,\
 			const char *Id ) override;\
 	public:\
@@ -64,7 +64,7 @@
 # define BASE_AC( owner, name )\
 	owner::s##name owner::name;\
 	const char *owner::s##name::Name = #name;\
-	void owner::s##name::SCLXDHTMLLaunch(\
+	void owner::s##name::SCLXLaunch(\
 		core::rSession &Session,\
 		const char *Id )
 /**********/
@@ -92,11 +92,12 @@ namespace base {
 	: public sclxdhtml::cActionHelper<core::rSession>
 	{
 	protected:
-		virtual bso::bool__ SCLXHTMLOnBeforeAction(
+		virtual bso::bool__ SCLXOnBeforeAction(
 			core::rSession &Session,
 			const char *Id,
 			const char *Action ) override;
-		virtual bso::bool__ SCLXHTMLOnClose( core::rSession &Session ) override;
+		virtual void SCLXOnRefresh( core::rSession &Session ) override;
+		virtual bso::bool__ SCLXOnClose( core::rSession &Session ) override;
 	};
 
 	typedef xdhdws::cCorpus cCorpus_;

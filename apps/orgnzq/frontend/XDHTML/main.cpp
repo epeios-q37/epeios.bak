@@ -74,7 +74,9 @@ namespace {
 	}
 }
 
-void main::SetLayout( core::rSession &Session )
+void main::SetLayout(
+	core::rSession &Session,
+	bso::sBool Refresh )
 {
 qRH
 	str::string XML, XSL;
@@ -88,6 +90,31 @@ qRB
 	Session.FillDocument( XML, XSL );
 
 	SetCasting_( Session );
+
+	if ( Refresh ) {
+		switch ( Session.User.Focus() )	{
+		case frdinstc::tColumn:
+			main::SetRecordLayout( Session );
+			record::SetFieldsLayout( Session );
+			record::SetColumnLayout( Session);
+			break;
+		case frdinstc::tField:
+			main::SetRecordLayout( Session );
+			record::SetFieldsLayout( Session );
+			fields::SetFieldLayout( Session );
+			break;
+		case frdinstc::tRecord:
+			main::SetRecordLayout( Session );
+			record::SetFieldsLayout( Session );
+			break;
+		case frdinstc::tRecords:
+			main::SetRecordsLayout( Session );
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
 
 	Session.SwitchTo( core::pMain );
 qRR

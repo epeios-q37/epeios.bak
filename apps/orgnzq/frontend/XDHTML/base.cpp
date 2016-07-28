@@ -56,7 +56,7 @@ namespace {
 }
  
 
-bso::bool__ base::sActionHelper::SCLXHTMLOnBeforeAction(
+bso::bool__ base::sActionHelper::SCLXOnBeforeAction(
 	core::rSession &Session,
 	const char *Id,
 	const char *Action )
@@ -75,7 +75,25 @@ bso::bool__ base::sActionHelper::SCLXHTMLOnBeforeAction(
 		return true;
 }
 
-bso::bool__ base::sActionHelper::SCLXHTMLOnClose( core::rSession &Session )
+void base::sActionHelper::SCLXOnRefresh( core::rSession &Session )
+{
+	switch ( Session.Page() ) {
+	case core::pProlog:
+		prolog::SetLayout( Session );
+		break;
+	case core::pLogin:
+		login::SetLayout( Session );
+		break;
+	case core::pMain:
+		main::SetLayout( Session, true );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+}
+
+bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 {
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
