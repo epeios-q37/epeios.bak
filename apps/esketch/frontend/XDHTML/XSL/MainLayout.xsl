@@ -6,12 +6,7 @@
 				>
 	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
-		<head>
-			<xpp:expand href="styles" />
-		</head>
-		<body data-xdh-onevent="keypress|About|SC+a">
-			<xsl:apply-templates select="*/Content"/>
-		</body>
+		<xsl:apply-templates select="*/Content"/>
 	</xsl:template>
 	<xsl:template match="Content">
 		<span class="vcenter-out">

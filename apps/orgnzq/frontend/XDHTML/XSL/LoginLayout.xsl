@@ -5,14 +5,6 @@
 				>
 	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 	<xsl:template match="/">
-	<!--
-		<head>
-			<xpp:expand href="styles" />
-		</head>
-		<body data-xdh-onevents="(keypress|About|SC+a)(keypress|Refresh|SC+r)">
-			<xsl:apply-templates select="*/Content"/>
-		</body>
-		-->
 		<xsl:apply-templates select="*/Content"/>
 	</xsl:template>
 	<xsl:template match="Content">

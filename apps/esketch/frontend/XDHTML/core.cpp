@@ -57,24 +57,6 @@ bso::bool__ core::rSession::XDHCMNLaunch(
 	return Core.Launch( *this, Id, Action );
 }
 
-void core::rSession::SCLXDHTMLRefresh( page__ Page )
-{
-	switch ( Page ) {
-	case pProlog:
-		prolog::SetLayout( *this );
-		break;
-	case pLogin:
-		login::SetLayout( *this );
-		break;
-	case pMain:
-		main::SetLayout( *this );
-		break;
-	default:
-		qRGnr();
-		break;
-	}
-}
-
 #define V( value, tag )	Writer.PutValue( value, #tag );
 
 static void About_(

@@ -47,7 +47,7 @@ namespace core {
 
 		OnNotConnectedAllowedActions.Add(
 			xdhcmn::CloseActionLabel,
-			global::About, global::Refresh, global::Test,
+			global::About, global::Test,
 			prolog::DisplayProjectFilename, prolog::LoadProject, prolog::SwitchProjectType,	// All 'prolog'-related actions are allowed.
 			login::Dismiss, login::DisplayEmbeddedBackendFilename, login::Connect, login::SwitchBackendType );	// All 'login'-related actions too.
 	};
@@ -73,7 +73,6 @@ namespace core {
 		virtual bso::bool__ XDHCMNLaunch(
 			const char *Id,
 			const char *Action ) override;
-		virtual void SCLXDHTMLRefresh( page__ Page ) override;
 	public:
 		qCVDTOR( rSession );
 	};
