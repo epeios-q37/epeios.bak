@@ -48,7 +48,7 @@ html, body {
             If you provide a <span style="font-style: italic;">User ID</span> which doesn't exist, an account is created with given <span style="font-style: italic;">User ID</span> and password.<br>
             If the <span style="font-style: italic;">User ID</span> already exists, you must provide the password provided on creation to have access to corresponding account.<br>
             This demonstration should work on all modern graphical Web browser, except <span style="font-style: italic;">Microsoft Edge</span> (bug?).<br>It's only a demonstration : passwords are not encrypted, and all accounts will be regularly erased.<br>
-          <div hidden="hidden">
+          <div> <!-- hidden -->
             <p>
               <span style="font-style: italic;">The installation of a new version is currently under progress. Please come back later.</span>
             </p>
@@ -61,13 +61,13 @@ html, body {
             Si l'identifiant utilisateur existe déjà, vous devez fournir le mot de passe fourni lors de la création pour avoir accès au compte correspondant.<br>
             Cette démonstration devrait fonctionner sur tous les navigateurs Web graphique moderne, à l'exception de <span style="font-style: italic;">Microsoft Edge</span> (bogue?).<br>
             Il s'agit là seulement d'une démonstration : les mots de passe ne sont pas cryptés, et tout les comptes seront régulièrement effacés.
-          <div hidden="hidden">
+          <div><!-- hidden -->
             <p>
               <span style="font-style: italic;">Une nouvelle version est en cours d'installation. Veuillez revenir plus tard.</span>
             </p>
           </div>
         </fieldset>
-        <span>
+        <span hidden="hidden"><!-- hidden -->
           <form class="hcenter" action="xdh.php" method="post">
             <input name="_prolog" type="hidden">
             <fieldset title="Paramètres d'authentification / Login parameters">

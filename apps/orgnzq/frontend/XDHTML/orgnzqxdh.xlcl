@@ -7,7 +7,7 @@
 	</Translations>
 	<Translations text="ClosingConfirmation">
 		<Translation language="fr">Êtes-vous sûr de vouloir fermer l'application ?</Translation>
-		<Translation language="en">Are yu sure you want to close ?</Translation>
+		<Translation language="en">Are you sure you want to close ?</Translation>
 	</Translations>
 	<Translations text="ActionNeedsBackend">
 		<Translation language="fr">Cette action nécessite une connection à un moteur de traitement.</Translation>

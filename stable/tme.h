@@ -82,7 +82,7 @@ namespace tme {
 
 	raw_time__ Convert(
 		const char *Time,
-		const char **End );
+		const char **End = NULL );
 
 	class time__ 
 	{

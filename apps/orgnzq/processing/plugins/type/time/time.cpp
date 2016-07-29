@@ -29,6 +29,8 @@
 #include "ogzplg.h"
 
 #include "uys.h"
+#include "tme.h"
+#include "tol.h"
 
 #define PLUGIN_NAME	"Time"
 
@@ -47,7 +49,18 @@ private:
 	}
 	bso::sBool OGZTYPTest( const str::dString &Pattern ) override
 	{
-		return true;
+		bso::sBool Success = false;
+	qRH
+		str::wString Time;
+		qCBUFFERr Buffer;
+	qRB
+		Time.Init( Pattern );
+		Time.StripCharacter(' ');
+		Success = tme::Convert( Time.Convert( Buffer ) ) != tme::Undefined;
+	qRR
+	qRT
+	qRE
+		return Success;
 	}
 public:
 	void reset( bso::bool__ P = true )

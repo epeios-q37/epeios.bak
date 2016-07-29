@@ -93,14 +93,26 @@ static inline item__ ExtractItem_( const char *&Time )
 	return Item;
 }
 
+namespace {
+	qENUM( Extension_ ) {
+		eNone,
+		eAM,
+		ePM,
+		e_amount,
+		e_Undefined
+	};
+}
+
 static inline bso::bool__ ExtractItems_(
 	const char *&Time,
 	item__ &Hours,
 	item__ &Minutes,
 	item__ &Seconds,
-	item__ &Ticks )
+	item__ &Ticks,
+	eExtension_ &Extension )
 {
 	Hours = Minutes = Seconds = Ticks = 0;
+	Extension = eNone;
 
 	if ( Time == NULL )
 		qRFwk();
@@ -113,7 +125,7 @@ static inline bso::bool__ ExtractItems_(
 	if  ( Time == NULL )
 		return false;
 
-	if ( *Time && !isdigit( *Time ) )
+	if ( *Time && ispunct( *Time ) )
 		Time++;
 
 	Minutes = ExtractItem_( Time );
@@ -121,7 +133,7 @@ static inline bso::bool__ ExtractItems_(
 	if  ( Time == NULL )
 		return false;
 
-	if ( *Time && !isdigit( *Time ) )
+	if ( *Time && ispunct( *Time ) )
 		Time++;
 
 	Seconds = ExtractItem_( Time );
@@ -129,10 +141,37 @@ static inline bso::bool__ ExtractItems_(
 	if  ( Time == NULL )
 		return false;
 
-	if ( *Time && !isdigit( *Time ) )
+	if ( *Time && ispunct( *Time ) )
 		Time++;
 
 	Ticks = ExtractItem_( Time );
+
+	while ( ( *Time != 0 ) && isspace( *Time ) )
+		Time++;
+
+	if ( *Time != 0 ) {
+		char X = tolower( *Time++ );
+
+		if ( ( *Time != 0 ) && ( tolower( *Time++ ) == 'm' ) ) {
+			switch ( X ) {
+			case 'a':
+				Extension = eAM;
+				if ( *Time )
+				break;
+			case 'p':
+				Extension = ePM;
+				break;
+			default:
+				Extension = e_Undefined;
+				return false;
+				break;
+			}
+		}
+		else {
+			Extension = e_Undefined;
+			return false;
+		}
+	}
 
 	return true;
 }
@@ -142,6 +181,7 @@ static inline bso::bool__ TestAndSet_(
 	item__ MinutesCandidate,
 	item__ SecondsCandidate,
 	item__ TicksCandidate,
+	eExtension_ Extension,
 	hours__ &Hours,
 	minutes__ &Minutes,
 	seconds__ &Seconds,
@@ -167,6 +207,33 @@ static inline bso::bool__ TestAndSet_(
 	else
 		return false;
 
+	switch ( Extension ) {
+	case eNone:
+		break;
+	case eAM:
+		if ( Hours > 12 )
+			return false;
+
+		if ( Hours == 12 )
+			Hours = 0;
+
+		break;
+	case ePM:
+		if ( Hours > 12 )
+			return false;
+
+		if ( Hours == 0 )
+			Hours = 12;
+
+		break;
+	case e_Undefined:
+		return false;
+		break;
+	default:
+		qRFwk();
+		break;
+	}
+
 	return true;
 }
 
@@ -179,10 +246,11 @@ raw_time__ tme::Convert(
 	minutes__ Minutes;
 	seconds__ Seconds;
 	ticks__ Ticks;
+	eExtension_ Extension = e_Undefined;
 
-	ExtractItems_( Time, HoursCandidate, MinutesCandidate, SecondsCandidate, TicksCandidate );
+	ExtractItems_( Time, HoursCandidate, MinutesCandidate, SecondsCandidate, TicksCandidate, Extension );
 
-	if ( !TestAndSet_( HoursCandidate, MinutesCandidate, SecondsCandidate, TicksCandidate, Hours, Minutes, Seconds, Ticks ) )
+	if ( !TestAndSet_( HoursCandidate, MinutesCandidate, SecondsCandidate, TicksCandidate, Extension, Hours, Minutes, Seconds, Ticks ) )
 		return Undefined;
 
 	if ( (End != NULL) && ( *End == NULL ) )
