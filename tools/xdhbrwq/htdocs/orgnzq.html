@@ -3,6 +3,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="content-type">
 
+
   <title>Epeios organizer demonstration</title>
     <script src="js/jquery.js"></script>
     <script src="js/jquery-ui/jquery-ui.js"></script>
@@ -47,8 +48,10 @@ html, body {
             This is the demonstration page of the <span style="font-style: italic;">Epeios organizer</span> Web interface.<br>It runs on a small server behind an ADSL box ; you may experience some unresponsiveness.<br>
             If you provide a <span style="font-style: italic;">User ID</span> which doesn't exist, an account is created with given <span style="font-style: italic;">User ID</span> and password.<br>
             If the <span style="font-style: italic;">User ID</span> already exists, you must provide the password provided on creation to have access to corresponding account.<br>
-            This demonstration should work on all modern graphical Web browser, except <span style="font-style: italic;">Microsoft Edge</span> (bug?).<br>It's only a demonstration : passwords are not encrypted, and all accounts will be regularly erased.<br>
-          <div> <!-- hidden -->
+            This demonstration should work on all modern graphical Web browser, except <span style="font-style: italic;">Microsoft Edge</span> (bug?).<br>
+            Due to this <a target="_blank" href="http://bugzilla.mozilla.org/show_bug.cgi?id=98168">issue</a>, some data may not be displayed correctly on<span style="font-style: italic;"> Firefox</span>.<br>
+            It's only a demonstration : passwords are not encrypted, and all accounts will be regularly erased.<br>
+          <div hidden="hidden"> <!-- hidden -->
             <p>
               <span style="font-style: italic;">The installation of a new version is currently under progress. Please come back later.</span>
             </p>
@@ -60,14 +63,15 @@ html, body {
             Si vous fournissez un identifiant utilisateur qui n'existe pas, un compte est créé avec cet identifiant et le mot de passe donné.<br>
             Si l'identifiant utilisateur existe déjà, vous devez fournir le mot de passe fourni lors de la création pour avoir accès au compte correspondant.<br>
             Cette démonstration devrait fonctionner sur tous les navigateurs Web graphique moderne, à l'exception de <span style="font-style: italic;">Microsoft Edge</span> (bogue?).<br>
+            A cause de&nbsp;<a target="_blank" href="http://bugzilla.mozilla.org/show_bug.cgi?id=98168">ceci</a>, certaines données peuvent ne pas s'afficher correctement dans <span style="font-style: italic;">Firefox</span>. <br>
             Il s'agit là seulement d'une démonstration : les mots de passe ne sont pas cryptés, et tout les comptes seront régulièrement effacés.
-          <div><!-- hidden -->
+          <div hidden="hidden"><!-- hidden -->
             <p>
               <span style="font-style: italic;">Une nouvelle version est en cours d'installation. Veuillez revenir plus tard.</span>
             </p>
           </div>
         </fieldset>
-        <span hidden="hidden"><!-- hidden -->
+        <span><!-- hidden -->
           <form class="hcenter" action="xdh.php" method="post">
             <input name="_prolog" type="hidden">
             <fieldset title="Paramètres d'authentification / Login parameters">
