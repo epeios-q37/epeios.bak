@@ -1,4 +1,7 @@
 ***** orgnzq changelog *****
 
+2016-07-28 :
+	- Adding 'rich text', 'date' and 'time' field types.
+
 2016-07-25 :
 	- Fixing bug which occurs on attempt to create a new field when previously field is empty (http://linuxfr.org/users/epeios/journaux/epeios-organizer-l-interface-web#comment-1666612).

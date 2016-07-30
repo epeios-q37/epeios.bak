@@ -6,7 +6,7 @@
 	</Translations>
 	<Translations text="columnMonoTypeTitle">
 		<Translation language="fr">Le champ peut contenir au maximum une entrée.</Translation>
-		<Translation language="en">Fiedls can contain at most one entry</Translation>
+		<Translation language="en">Fields can contain at most one entry</Translation>
 	</Translations>
 	<Translations text="columnMultiTypeLabel">
 		<Translation language="fr">Multi</Translation>

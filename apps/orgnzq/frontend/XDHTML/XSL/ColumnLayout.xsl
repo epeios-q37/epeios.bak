@@ -32,7 +32,7 @@
 		<xsl:element name="select">
 			<xsl:attribute name="id">Type</xsl:attribute>
 			<xsl:attribute name="size">
-				<xsl:value-of select="@Amount"/>
+				<xsl:value-of select="number(@Amount)-1"/>
 			</xsl:attribute>
 			<xsl:apply-templates select="Type[@label!='Record']"/>
 		</xsl:element>
