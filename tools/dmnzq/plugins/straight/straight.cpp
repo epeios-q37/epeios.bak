@@ -23,7 +23,6 @@
 #include "registry.h"
 
 #include "csdbns.h"
-#include "csdmxs.h"
 
 #include "sclplugin.h"
 #include "sclmisc.h"
@@ -35,8 +34,6 @@ using misc::cHandler;
 using misc::sModule;
 
 namespace {
-	csdmxs::rLogCallback LogCallback_;
-
 	csdbns::port__ GetPort_( void )
 	{
 		return sclmisc::MGetU16( registry::Service );
@@ -47,21 +44,16 @@ namespace {
 	{
 	private:
 		csdbns::server___ Server_;
-		csdmxs::rCallback Muxer_;
 	protected:
 		virtual void MISCHandle( sModule &Module ) override
 		{
-//			LogCallback_.Init("h:/temp/MXSLog.txt" );
-
-			Muxer_.Init( Module );
-			Server_.Init( GetPort_(), Muxer_ );
+			Server_.Init( GetPort_(), Module );
 			Server_.Process( NULL );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Server_.reset( P );
-			Muxer_.reset();
 		}
 		E_CVDTOR( rPlugin );
 		void Init( void )

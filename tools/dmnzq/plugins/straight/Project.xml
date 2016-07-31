@@ -28,8 +28,6 @@
 			<Modules Group="CSD">
 				<Module>csdbns</Module>
 				<Module>csdscb</Module>
-				<Module>csdmxb</Module>
-				<Module>csdmxs</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>

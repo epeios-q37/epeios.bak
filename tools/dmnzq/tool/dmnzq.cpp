@@ -33,6 +33,7 @@
 #include "fnm.h"
 #include "flf.h"
 #include "plgn.h"
+#include "csdmxs.h"
 
 using cio::CErr;
 using cio::COut;
@@ -137,7 +138,14 @@ namespace {
 		cHandler &Handler,
 		sModule &Module )
 	{
-		Handler.Handle( Module );
+	qRH
+		csdmxs::rCallback Muxer;
+	qRB
+		Muxer.Init( Module );
+		Handler.Handle( Muxer );
+	qRR
+	qRT
+	qRE
 	}
 
 	void Process_( misc::sModule &Module )

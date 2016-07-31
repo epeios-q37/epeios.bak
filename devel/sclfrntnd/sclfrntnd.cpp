@@ -33,7 +33,6 @@ namespace parameter_ {
 
 	namespace backend_ {
 		rgstry::entry___ Type_( "@Type", Backend_ );
-		rgstry::entry___ Path_( "@Path", Backend_ );
 		rgstry::entry___ Feature_( Backend_ );
 	}
 
@@ -215,7 +214,8 @@ const char *sclfrntnd::GetLabel( backend_type__ BackendType )
 {
 	switch ( BackendType ) {
 	C( None );
-	C( Remote );
+	C( Remote_ );
+	C( Proxy );
 	C( Embedded );
 	C( Predefined );
 	default:

@@ -1,16 +1,10 @@
 CHANGELOG FOR THE dmnzq TOOL.
 
-Meaning of list markers:
-- '-' (Functionnalities (should) remain unchanged) :
-	- Changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
-	   in a broad sense (parameters of a function, a method, or a template...).
-	- Changes fixing compiler errors/warnings.
-- '*' : Functionnality changes.
-- '%' : API changes (is superseded by functionnality changes).
-- '#' : Bug fixing.
+2016-07-30 :
+- Handles now the muxing, retrieved from 'SCLDAEMON' (implementing to the 'straight' plugin was a mistake).
 
 2016-01-08 :
-* The different connections mode are now operated through plugins.
+- The different connections mode are now operated through plugins.
 
 2016-01-06 :
 - Adaptation to chnages in underlying libraries.

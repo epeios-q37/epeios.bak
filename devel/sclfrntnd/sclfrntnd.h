@@ -57,7 +57,8 @@ namespace sclfrntnd {
 
 	enum backend_type__ {
 		btNone,			// Use of no backend.
-		btRemote,		// Remote, as a daemon.
+		btRemote_,		// To a remote daemon.
+		btProxy,		// As a daemon, through a proxy.
 		btEmbedded,		// Embedded, as a library.
 		btPredefined,	// Retrieve backend parameters from configuration file.
 		bt_amount,

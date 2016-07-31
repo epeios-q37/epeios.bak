@@ -25,6 +25,8 @@
 			<Modules Group="CSD">
 				<Module>csdlec</Module>
 				<Module>csdleo</Module>
+				<Module>csdmxb</Module>
+				<Module>csdmxs</Module>
 				<Module>csdscb</Module>
 			</Modules>
 			<Modules Group="SCL">
