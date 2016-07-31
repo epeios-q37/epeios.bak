@@ -20,7 +20,6 @@
 #define DTE__COMPILATION
 
 #include "dte.h"
-/*$BEGIN$*/
 
 #include <ctype.h>
 #include <time.h>
