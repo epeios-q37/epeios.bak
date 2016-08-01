@@ -10,6 +10,8 @@ NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characte
 - SCLFRNTND :
 	- Reorganizing and simplifying backend parameters handling.
 	- Fixing '\' issue with backend parameters feature.
+- SCLMISC :
+	- Adding 'rTOFlowRack::IsFile()'.
 - SCLPLUGIN :
 	- Fixing crash when reporting an error in the arguments.
 - SCLXDHTML :

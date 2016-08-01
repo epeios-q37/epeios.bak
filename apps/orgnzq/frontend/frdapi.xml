@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 28/07/2016 09:55:45
-    using barq V20160313 (http://q37.info/)
-    Build : Jul 18 2016 20:04:44 (Win32;MSC 1800;IA-32)
+    This document was generated the 01/08/2016 16:52:50
+    using barq V20160801 (http://q37.info/)
+    Build : Aug  1 2016 16:48:17 (Win32;MSC 1800;IA-32)
 -->
 <API target="orgnzq" TargetUppercased="ORGNZQ" ProtocolVersion="13" APIVersion="1">
  <Misc>
   <Generator>
    <Name>barq</Name>
-   <Version>20160313</Version>
-   <Build>Jul 18 2016 20:04:44 Win32;MSC 1800;IA-32</Build>
+   <Version>20160801</Version>
+   <Build>Aug  1 2016 16:48:17 Win32;MSC 1800;IA-32</Build>
    <URL>http://q37.info/</URL>
    <Author>
     <Name>Claude SIMON</Name>
@@ -18,12 +18,12 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>orgnzqbkd 20160722 Build Jul 23 2016 05:51:57 - Win32;MSC 1800;IA-32</Details>
+   <Details>orgnzqbkd 20160722 Build Aug  1 2016 16:45:43 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2015-2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>orgnzq V1.0</Software>
-  <Date>28/07/2016</Date>
-  <Time>09:55:45</Time>
+  <Date>01/08/2016</Date>
+  <Time>16:52:50</Time>
  </Misc>
  <Types>
   <Type Object="Master">

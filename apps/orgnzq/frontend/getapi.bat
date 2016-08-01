@@ -17,5 +17,5 @@ REM    along with 'orgnzq'.  If not, see <http://www.gnu.org/licenses/>.
 REM
 
 REM barq -d localhost:2000 ogzapi.xml
-barq -l h:\bin\orgnzqbkd frdapi.xml
+barq -e h:/bin/orgnzqbkd frdapi.xml
 sabcmd file://H:\hg\epeios\stable\frd4cpp.xsl frdapi.xml frdapi.h

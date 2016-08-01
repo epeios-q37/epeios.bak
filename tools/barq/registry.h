@@ -25,12 +25,20 @@
 namespace registry {
 	using namespace sclrgstry;
 
-	extern rEntry StraightPluginPath;
-	extern rEntry ProxyPluginPath;
-	extern rEntry BackendLocation;
-	extern rEntry Identifier;
-	extern rEntry OutputFilename;
-	
+	namespace parameter {
+		using namespace sclrgstry::parameter;
+
+		extern rEntry BackendFilename;
+		extern rEntry HostService;
+		extern rEntry Identifier;
+		extern rEntry OutputFilename;
+	}
+
+	namespace definition {
+		using namespace sclrgstry::definition;
+
+		extern rEntry TaggedPluginFilename;
+	}
 }
 
 #endif

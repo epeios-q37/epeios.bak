@@ -32,7 +32,7 @@
 #include "flf.h"
 #include "fblcst.h"
 #include "fblfaq.h"
-#include "csducl.h"
+#include "fblovl.h"
 
 using cio::CErr;
 using cio::COut;
@@ -527,10 +527,36 @@ namespace {
 	};
 }
 
+namespace {
+	qCDEF(char *, EmbeddedCommandLabel, "Embedded" );
+	qCDEF(char *, StraightCommandLabel, "Straight" );
+	qCDEF(char *, ProxyCommandLabel, "Proxy" );
+
+	const str::dString &GetPluginFilename_(
+		const str::dString &Id,
+		str::dString &Filename )
+	{
+		return sclmisc::MGetValue( rgstry::rTEntry( registry::definition::TaggedPluginFilename, Id ), Filename );
+	}
+
+	fblovl::eMode GetMode_( const str::dString &Command )
+	{
+		if ( Command == EmbeddedCommandLabel )
+			return fblovl::mReferenced;
+		else if ( Command == StraightCommandLabel )
+			return fblovl::mSerialized;
+		else if ( Command == ProxyCommandLabel )
+			return fblovl::mSerialized;
+		else
+			qRFwk();
+
+		return fblovl::m_Undefined;
+	}
+}
+
 static void GetBackendData_(
-	const str::dString &PluginPath,
+	const str::dString &Command,
 	const str::dString &Arguments,
-	csducl::type__ Type,
 	types_ &Types,
 	str::string_ &ProtocolVersion,
 	str::string_ &TargetLabel,
@@ -540,57 +566,33 @@ static void GetBackendData_(
 	str::string_ &SoftwareInformations )
 {
 qRH
-	csducl::universal_client_core___ Core;
-	csducl::universal_client_ioflow___ Flow;
+	plgn::rRetriever<fblovl::cDriver> Retriever;
+	csdrcc::rDriver *Driver = NULL;
+	str::wString PluginFilename;
+	flw::sDressedIOFlow<> Flow;
 	universal_frontend___ Frontend;
 	fblfrd::incompatibility_informations DummyIncompatibilityInformations;
 	fblfrd::compatibility_informations__ DummyCompatibilityInformations;
-	fblfrd::mode__ FBLMode = fblfrd::m_Undefined;
 	dummy_reporting_callbacks__ DummyReportingFunctions;
-	csdlec::library_data__ LibraryData;
 	lcl::meaning Meaning;
-	bso::sBool Success = false;
-	qCBUFFERr Buffer;
-	sclmisc::sRack SCLRack;
 qRB
-	switch ( Type ) {
-	case csducl::tRemote:
-		FBLMode = fblfrd::mRemote;
-		if ( Core.InitRemote( PluginPath, NULL, Arguments, plgn::EmptyAbstracts ) != qNIL )
-			qRFwk();
-		Success = true;
-		break;
-	case csducl::tLibrary:
-		FBLMode = fblfrd::mEmbedded;
-		SCLRack.Init();
-		LibraryData.Init( csdleo::cIntrospection, Arguments.Convert( Buffer ), &SCLRack );
-		Success = Core.InitLibrary( Arguments, LibraryData );
-		break;
-	default:
-		qRGnr();
-		break;
-	}
+	PluginFilename.Init();
+	GetPluginFilename_( Command, PluginFilename );
 
-	if ( !Success ) {
-		Meaning.Init();
+	Retriever.Init();
+	Retriever.Initialize( PluginFilename, NULL, Arguments, plgn::EmptyAbstracts );
 
-		Meaning.SetValue( "UnableToAccessBackendError" );
-		Meaning.AddTag( Arguments );
+	Driver = Retriever.Plugin().New();
 
-		sclerror::SetMeaning( Meaning );
-
-		qRAbort();
-	}
-
-
-	Flow.Init( Core );
+	Flow.Init( *Driver );
 
 	DummyCompatibilityInformations.Init( "", "" );
 	DummyIncompatibilityInformations.Init();
 
+	DummyReportingFunctions.Init();
 	Frontend.Init( str::wString(), DummyReportingFunctions );
 
-	if ( !Frontend.Connect( "",  Flow, FBLMode, DummyCompatibilityInformations, DummyIncompatibilityInformations ) ) {
+	if ( !Frontend.Connect( "",  Flow, GetMode_( Command ), DummyCompatibilityInformations, DummyIncompatibilityInformations ) ) {
 		Meaning.Init();
 
 		Meaning.SetValue( "IncompatibleBackend" );
@@ -603,7 +605,6 @@ qRB
 	GetDescription( Frontend, Types );
 	
 	Frontend.About( ProtocolVersion, TargetLabel, APIVersion, ExtendedBackendInformations, BackendCopyright, SoftwareInformations );
-
 qRR
 	if ( ERRFailure() ) { 
 		Meaning.Init();
@@ -616,6 +617,9 @@ qRR
 	}
 qRT
 	Frontend.Disconnect();
+
+	if ( Driver != NULL )
+		Retriever.Plugin().Delete( Driver );
 qRE
 }
 
@@ -746,12 +750,8 @@ qRH
 	str::string TargetLabel, ProtocolVersion, APIVersion;
 	str::string BackendInformations, BackendCopyright, SoftwareInformations;
 	sdr::row__ MasterRow = qNIL;
-	bso::bool__ Backup = false;
-	flf::file_oflow___ File;
-	txf::text_oflow__ TFile;
-	lcl::locale Dummy;
-	csducl::type__ Type = csducl::t_Undefined;
-	str::wString PluginPath, Arguments, OutputFilename;
+	str::wString Arguments, OutputFilename;
+	sclmisc::rTextOFlowRack TOFlowRack;
 qRB
 	Types.Init();
 
@@ -763,45 +763,33 @@ qRB
 	SoftwareInformations.Init();
 
 	Arguments.Init();
-	sclmisc::MGetValue( registry::BackendLocation, Arguments );
 
-	PluginPath.Init();
-
-	if ( Command == "Library" )
-		Type = csducl::tLibrary;
-	else if ( Command == "Daemon" ) {
-		Type = csducl::tRemote;
-		sclmisc::MGetValue( registry::StraightPluginPath, PluginPath );
-	} else if ( Command == "Proxy" ) {
-		Type = csducl::tRemote;
+	if ( Command == EmbeddedCommandLabel ) {
+		sclmisc::MGetValue( registry::parameter::BackendFilename, Arguments );
+	} else if ( Command == StraightCommandLabel ) {
+		sclmisc::MGetValue( registry::parameter::HostService, Arguments );
+	} else if ( Command == ProxyCommandLabel ) {
+		sclmisc::MGetValue( registry::parameter::HostService, Arguments );
 		Arguments.Append( ' ' );
-		sclmisc::MGetValue( registry::ProxyPluginPath, PluginPath );
-		sclmisc::MGetValue( registry::Identifier, Arguments );
+		sclmisc::MGetValue( registry::parameter::Identifier, Arguments );
 	} else
 		qRGnr();
 
 	OutputFilename.Init();
-	sclmisc::OGetValue( registry::OutputFilename, OutputFilename );
+	sclmisc::OGetValue( registry::parameter::OutputFilename, OutputFilename );
 
-	GetBackendData_( PluginPath, Arguments, Type, Types, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
+	GetBackendData_( Command, Arguments, Types, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 	
 	MasterRow = FindMasterType_( Types );
 
-	if ( OutputFilename.Amount() != 0 ) {
-		sclmisc::CreateBackupFile( OutputFilename );
-		Backup = true;
+	txf::sOFlow &Flow = TOFlowRack.Init( OutputFilename );
 
+	if ( TOFlowRack.IsFile() )
 		COut << "Backend : " << BackendInformations << " (" << SoftwareInformations << ')' << txf::nl << txf::commit;
 
-
-		File.Init( OutputFilename );
-		TFile.Init( File );
-		Generate_( Types, MasterRow, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations, TFile );
-	} else
-		Generate_( Types, MasterRow, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations, COut );
+	Generate_( Types, MasterRow, ProtocolVersion, TargetLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations, Flow );
 qRR
-	if ( Backup )
-		sclmisc::RecoverBackupFile( OutputFilename );
+	TOFlowRack.HandleError();
 qRT
 qRE
 }

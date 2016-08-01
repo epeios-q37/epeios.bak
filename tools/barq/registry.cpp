@@ -21,9 +21,14 @@
 
 using namespace registry;
 
-rEntry registry::StraightPluginPath( "StraightPluginPath", sclrgstry::Parameters );
-rEntry registry::ProxyPluginPath( "ProxyPluginPath", sclrgstry::Parameters );
-rEntry registry::BackendLocation("BackendLocation", sclrgstry::Parameters );
-rEntry registry::Identifier("Identifier", sclrgstry::Parameters );
-rEntry registry::OutputFilename( "OutputFilename", sclrgstry::Parameters );
+rEntry registry::parameter::BackendFilename( "BackendFilename", sclrgstry::Parameters );
+rEntry registry::parameter::HostService( "HostService", sclrgstry::Parameters );
+rEntry registry::parameter::Identifier( "Identifier", sclrgstry::Parameters );
+rEntry registry::parameter::OutputFilename( "OutputFilename", sclrgstry::Parameters );
 
+namespace definitions_ {
+	rEntry Plugins( "Plugins", sclrgstry::Definitions );
+	rEntry Plugin( "Plugin", Plugins );
+}
+
+rEntry registry::definition::TaggedPluginFilename( RGSTRY_TAGGING_ATTRIBUTE( "id" ), definitions_::Plugin );

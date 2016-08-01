@@ -85,11 +85,10 @@
 					</xpp:bloc>
 				</xpp:ifeq>>
 				<xpp:bloc marker="$">
-					<Backend id="EmbeddedOld" Alias="EmbeddedOldPredefinedBackend" Plugin="Embedded">
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">
 						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>orgnzqbkd</xpp:bloc>
 					</Backend>
-					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">h:/bin/orgnzqbkd</Backend>
 					<Backend id="q37.info" Alias="q37PredefinedBackend" Plugin="Straight">q37.info:57710</Backend>
 					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53700 test</Backend>
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>

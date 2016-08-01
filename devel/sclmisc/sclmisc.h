@@ -414,8 +414,13 @@ namespace sclmisc {
 			_Flow.reset( P );
 		}
 		E_CDTOR( text_oflow_rack___ );
+		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
 		txf::text_oflow__ &Init( const fnm::name___ &FileName );
 		void HandleError( void );	// A appeler  partir de 'qRR'.
+		bso::sBool IsFile( void ) const
+		{
+			return _BackedUp;
+		}
 	};
 
 	void DumpRegistries(
