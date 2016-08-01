@@ -3,7 +3,7 @@
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:xpp="http://q37.info/ns/xpp/draft"
 				>
-	<xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
+	<xsl:output method="html" encoding="UTF-8"/>
 	<xsl:template match="/">
 		<xsl:apply-templates select="*/Content"/>
 	</xsl:template>
@@ -51,7 +51,7 @@
 										<xsl:if test="$BackendType='Straight'">
 											<xsl:attribute name="selected">selected</xsl:attribute>
 										</xsl:if>
-										<xsl:text>#lgnRemoteBackendOption#</xsl:text>
+										<xsl:text>#lgnStraightBackendOption#</xsl:text>
 									</option>
 									<option value="Embedded">
 										<xsl:if test="$BackendType='Embedded'">

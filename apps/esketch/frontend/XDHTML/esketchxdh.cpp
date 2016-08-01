@@ -29,7 +29,7 @@ const char *sclmisc::SCLMISCTargetName = BASE_NAME;
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
 qRH
-	sclfrntnd::features___ Features;
+	sclfrntnd::rFeatures Features;
 qRB
 	core::Core.Init( Mode );
 

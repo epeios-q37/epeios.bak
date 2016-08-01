@@ -2,7 +2,7 @@
 <xsl:stylesheet	version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns="http://www.w3.org/1999/xhtml">
-	<xsl:output method="xml" encoding="UTF-8"/>
+	<xsl:output method="xml" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 	<xsl:template match="Content">
 		<xsl:apply-templates select="About"/>
 	</xsl:template>
@@ -52,7 +52,7 @@
 	</xsl:template>
 	<xsl:template match="Software">
 		<div style="text-align : center;">
-				<xsl:value-of select="Name"/>
+			<xsl:value-of select="Name"/>
 			<xsl:text> V</xsl:text>
 			<xsl:value-of select="Version"/>
 			<!-- No-break space. '&nbsp' is only available in html, not in xhtml. Under Windows, type Alt+0160-->
@@ -61,11 +61,13 @@
 				<xsl:attribute name="href">http://q37.info/</xsl:attribute>
 				<xsl:text>http://q37.info/</xsl:text>
 			</a>
-			</div>
+		</div>
 	</xsl:template>
 	<xsl:template match="Backend">
-		<xsl:text>#aBackend# ('</xsl:text>
-		<xsl:value-of select="Path"/>
+		<xsl:text>#aBackend# (</xsl:text>
+		<xsl:value-of select="Plugin"/>
+		<xsl:text> : '</xsl:text>
+		<xsl:value-of select="PluginParameters"/>
 		<xsl:text>') :</xsl:text>
 		<br/>
 		<xsl:value-of select="Build"/>

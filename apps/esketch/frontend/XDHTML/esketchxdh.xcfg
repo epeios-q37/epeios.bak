@@ -30,6 +30,7 @@
 		</Parameters>
 		<Definitions>
 			<xpp:expand select="Definitions"/>
+			<xpp:expand select="XDH_Definitions"/>
 			<xpp:bloc preserve="yes">
 				<XSLFilesSet>
 					<XSLFiles target="About">

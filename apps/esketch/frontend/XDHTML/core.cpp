@@ -32,10 +32,10 @@ core::core___ core::Core;
 sclxdhtml::rActionHelper core::OnNotConnectedAllowedActions;
 
 namespace {
-	sclfrntnd::kernel___ Kernel_;
+	sclfrntnd::rKernel Kernel_;
 }
 
-sclfrntnd::kernel___ &core::Kernel( void )
+sclfrntnd::rKernel &core::Kernel( void )
 {
 	return Kernel_;
 }
@@ -60,25 +60,27 @@ bso::bool__ core::rSession::XDHCMNLaunch(
 #define V( value, tag )	Writer.PutValue( value, #tag );
 
 static void About_(
-	sclfrntnd::frontend___ &Frontend,
+	sclfrntnd::rFrontend &Frontend,
 	xml::writer_ &Writer )
 {
 qRH
-	str::string ProtocolVersion, BackendPath, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
+	str::wString ProtocolVersion, Plugin, PluginParameters, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations;
 qRB
 	ProtocolVersion.Init();
-	BackendPath.Init();
+	Plugin.Init();
+	PluginParameters.Init();
 	BackendLabel.Init();
 	APIVersion.Init();
 	BackendInformations.Init();
 	BackendCopyright.Init();
 	SoftwareInformations.Init();
 
-	sclfrntnd::GetBackendPath( Kernel_, BackendPath );
+	Kernel_.GetFeatures( Plugin, PluginParameters );
 	Frontend.About( ProtocolVersion, BackendLabel, APIVersion, BackendInformations, BackendCopyright, SoftwareInformations );
 
 	V( ProtocolVersion, ProtocolVersion );
-	V( BackendPath, Path );
+	V( Plugin, Plugin );
+	V( PluginParameters, PluginParameters );
 	V( BackendLabel, Label );
 	V( APIVersion, APIVersion );
 	V( BackendInformations, Build );

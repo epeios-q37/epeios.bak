@@ -47,11 +47,11 @@
 						<div>
 							<span>
 								<select id="BackendType" title="#lgnBackendType#" data-xdh-onevent="SwitchBackendType">
-									<option value="Remote">
-										<xsl:if test="$BackendType='Remote'">
+									<option value="Straight">
+										<xsl:if test="$BackendType='Straight'">
 											<xsl:attribute name="selected">selected</xsl:attribute>
 										</xsl:if>
-										<xsl:text>#lgnRemoteBackendOption#</xsl:text>
+										<xsl:text>#lgnStraightBackendOption#</xsl:text>
 									</option>
 									<option value="Embedded">
 										<xsl:if test="$BackendType='Embedded'">
@@ -110,8 +110,8 @@
 										</input>
 									</fieldset>
 								</span>
-								<input id="RemoteBackend" title="#lgnRemoteBackendToUse#" placeholder="#lgnAddressPort#" type="text" data-xdh-cast="RemoteBackendCast">
-									<xsl:if test="Backend/@Type='Remote'">
+								<input id="StraightBackend" title="#lgnStraightBackendToUse#" placeholder="#lgnAddressPort#" type="text" data-xdh-cast="StraightBackendCast">
+									<xsl:if test="Backend/@Type='Straight'">
 										<xsl:attribute name="value">
 											<xsl:value-of select="Backend"/>
 										</xsl:attribute>

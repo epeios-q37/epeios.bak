@@ -38,8 +38,7 @@ mods += utf xtf llio bomhdl cdgb64
 mods += dlbrry fil fnm lcl plgn 
 mods += plgncore rgstry stsfsm xml xpp 
 mods += mtk tht strmrg 
-mods += csdlec csdleo csdrcc csdrcu csdscb 
-mods += csducl 
+mods += csdrcc 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp 
 mods += sclmisc sclerror scllocale sclrgstry sclxdhtml 
@@ -341,19 +340,15 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160626"\"
+copt += -DVERSION=\""20160801"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
+	out = ./
 else
 	src += :$(EPEIOS_SRC)
-endif
-
-ifdef EPEIOS_OUT
-	out = $(EPEIOS_OUT)
-else
 	out = $(dest)
 endif
 

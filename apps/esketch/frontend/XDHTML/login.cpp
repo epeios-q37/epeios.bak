@@ -116,7 +116,7 @@ AC( Connect )
 {
 qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
-	sclfrntnd::features___ Features;
+	sclfrntnd::rFeatures Features;
 qRB
 	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {
 		Features.Init();

@@ -31,7 +31,7 @@
 # define FBLOVL_PROTOCOL_VERSION	"13"
 
 # include "tol.h"
-# include "csdrcd.h"
+# include "csdrcc.h"
 
 namespace fblovl {
 
@@ -43,7 +43,7 @@ namespace fblovl {
 		m_Undefined
 	};
 
-	typedef csdrcd::cDriver cDriver_;
+	typedef csdrcc::cDriver cDriver_;
 
 	class cDriver
 	: public cDriver_
