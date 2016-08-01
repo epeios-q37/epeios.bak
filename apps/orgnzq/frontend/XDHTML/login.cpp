@@ -117,7 +117,7 @@ AC( Connect )
 {
 qRH
 	fblfrd::incompatibility_informations IncompatibilityInformations;
-	sclfrntnd::features___ Features;
+	sclfrntnd::rFeatures Features;
 	str::wString UserID, Password;
 qRB
 	if ( core::Core.Mode() == xdhcmn::mMonoUser ) {

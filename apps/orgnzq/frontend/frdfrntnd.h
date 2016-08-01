@@ -33,7 +33,7 @@
 
 
 namespace frdfrntnd {
-	typedef sclfrntnd::frontend___ rFrontend_;
+	typedef sclfrntnd::rFrontend rFrontend_;
 
 	using frdmisc::sType;
 	using frdmisc::dTypes;
@@ -98,7 +98,7 @@ namespace frdfrntnd {
 		}
 		qCVDTOR( rFrontend );
 		void Init(
-			sclfrntnd::kernel___ &Kernel,
+			sclfrntnd::rKernel &Kernel,
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback,
 			const rgstry::multi_level_registry_ &Registry )

@@ -747,7 +747,7 @@ namespace fblbkd {
 	{
 	private:
 		bso::bool__ _CompatibilityTested;
-		fblbur::mode__ Mode_;
+		fblbur::eMode Mode_;
 		TOL_CBUFFER___ _ClientOrigin;
 		TOL_CBUFFER___ _APIVersion;
 		rMasterModule Master_;
@@ -825,7 +825,7 @@ namespace fblbkd {
 		E_CVDTOR( backend___ );
 		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
 		void Init(
-			fblbur::mode__ Mode,
+			fblbur::eMode Mode,
 			const char *APIVersion,
 			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,

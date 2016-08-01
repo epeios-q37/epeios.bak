@@ -47,8 +47,8 @@
 						<div>
 							<span>
 								<select id="BackendType" title="#lgnBackendType#" data-xdh-onevent="SwitchBackendType">
-									<option value="Remote">
-										<xsl:if test="$BackendType='Remote'">
+									<option value="Straight">
+										<xsl:if test="$BackendType='Straight'">
 											<xsl:attribute name="selected">selected</xsl:attribute>
 										</xsl:if>
 										<xsl:text>#lgnRemoteBackendOption#</xsl:text>
@@ -96,7 +96,7 @@
 												<xsl:text>(OpenFile|DisplayEmbeddedBackendFilename|(#lgnSelectEmbeddedBackend#|</xsl:text>
 												<xsl:value-of select="$DynamicLibraryExtension"/>
 												<xsl:text>|</xsl:text>
-												<xsl:text>vtddspbkd</xsl:text>
+												<xsl:text>orgnzqbkd</xsl:text>
 												<xsl:value-of select="$DynamicLibraryExtension"/>
 												<xsl:text>))</xsl:text>
 											</xsl:attribute>#lgnBrowse#
@@ -110,8 +110,8 @@
 										</input>
 									</fieldset>
 								</span>
-								<input id="RemoteBackend" title="#lgnRemoteBackendToUse#" placeholder="#lgnAddressPort#" type="text" data-xdh-cast="RemoteBackendCast">
-									<xsl:if test="Backend/@Type='Remote'">
+								<input id="StraightBackend" title="#lgnStraightBackendToUse#" placeholder="#lgnAddressPort#" type="text" data-xdh-cast="StraightBackendCast">
+									<xsl:if test="Backend/@Type='Straight'">
 										<xsl:attribute name="value">
 											<xsl:value-of select="Backend"/>
 										</xsl:attribute>

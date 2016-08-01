@@ -17,32 +17,44 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
+//D Frontend/Backend Layout OVerLapping 
+
 #ifndef FBLOVL__INC
-#define FBLOVL__INC
+# define FBLOVL__INC
 
 #define FBLOVL_NAME		"FBLOVL"
 
-#define	FBLOVL_VERSION	"$Revision: 1.5 $"
+# if defined( E_DEBUG ) && !defined( FBLOVL_NODBG )
+#  define FBLOVL_DBG
+# endif
 
-#define FBLOVL_OWNER		"Claude SIMON"
+# define FBLOVL_PROTOCOL_VERSION	"13"
 
-
-#if defined( E_DEBUG ) && !defined( FBLOVL_NODBG )
-#define FBLOVL_DBG
-#endif
-
-//D Frontend/Backend Layout OVerLapping 
-
-#define FBLOVL_PROTOCOL_VERSION	"13"
+# include "tol.h"
+# include "csdrcd.h"
 
 namespace fblovl {
 
-	enum mode__ {
+	qENUM( Mode ) {
 		mNone,
-		mEmbedded,
-		mRemote,
+		mReferenced,	// Data is transmitted by reference.
+		mSerialized,		// Data is serialized.
 		m_Amount,
 		m_Undefined
+	};
+
+	typedef csdrcd::cDriver cDriver_;
+
+	class cDriver
+	: public cDriver_
+	{
+	protected:
+		virtual eMode FBLOVLMode( void ) = 0;
+	public:
+		eMode Mode( void )
+		{
+			return FBLOVLMode();
+		}
 	};
 
 	enum reply__ {
@@ -58,5 +70,4 @@ namespace fblovl {
 
 }
 
-/*$END$*/
 #endif

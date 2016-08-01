@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp">
-	<Configuration target="straight">
+	<Configuration target="Proxy">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
 		<Parameters>
 			<Language>fr</Language>
-			<Command>Send</Command>
+			<Command>Default</Command>
 		</Parameters>
 		<Definitions>
 		</Definitions>
@@ -36,14 +36,14 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<Argument id="SendCommand" Description="SendCommandDescription" long="send" short="s" Value="Send" Usage="%HostServiceArgument% [%Timeout%]"/>
-			<Argument id="HostServiceArgument" Description="HostArgumentDescription" Path="HostService" Label="HostArgumentLabel"/>
-			<Argument id="TimeoutArgument" Description="TimeoutArgumentDescription" Path="Timeout" Label="TimeoutArgumentLabel"/>
+			<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%HostServiceArgument% %IdentifierArgument%"/>
+			<Argument id="HostServiceArgument" Description="HostServiceArgumentDescription" Path="HostService" Label="HostServiceArgumentLabel"/>
+			<Argument id="IdentifierArgument" Description="IdentifierArgumentDescription" Path="Identifier" Label="IdentifierArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
-				<Layout command="Send">
+				<Layout command="Default">
 					<Link index="0" Target="HostServiceArgument"/>
-					<Link index="1" Target="TimeoutArgument"/>
+					<Link index="1" Target="IdentifierArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>

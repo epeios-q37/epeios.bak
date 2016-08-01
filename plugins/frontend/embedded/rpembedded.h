@@ -19,18 +19,18 @@
 
 // Exposed data from the remote plugin 'Straight'.
 
-#ifndef RPSTRAIGHT__INC
-# define RPSTRAIGHT__INC
+#ifndef RPEMBEDDED__INC
+# define RPEMBEDDED__INC
 
 # include "bso.h"
 # include "tol.h"
 # include "str.h"
 # include "plgncore.h"
 
-namespace rpstraight {
+namespace rpembedded {
 	typedef plgncore::sAbstract sAbstract_;
 
-	qCDEF( char *, Identifier, "2c95d4ed-2c57-4399-9c86-4115883be7cc" );
+	qCDEF( char *, Identifier, "99ca6539-a9d5-4df2-b48e-52f6ba4c950b" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as this header is used by other binaries!!!
 
 	class rAbstract
 	: public sAbstract_
@@ -38,20 +38,20 @@ namespace rpstraight {
 	protected:
 		virtual const char *PLGNCOREIdentifier( void ) override
 		{
-			return rpstraight::Identifier;
+			return rpembedded::Identifier;
 		}
 	public:
-		str::wString HostService;
+		str::wString BackendFilename;
 		void reset( bso::sBool P = true )
 		{
 			sAbstract_::reset( P );
-			HostService.reset( P );
+			BackendFilename.reset( P );
 		}
 		qCDTOR( rAbstract );
 		void Init( void )
 		{
 			sAbstract_::Init();
-			HostService.Init();
+			BackendFilename.Init();
 		}
 	};
 }

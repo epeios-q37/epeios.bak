@@ -82,7 +82,7 @@ namespace sclbacknd {
 		}
 		E_CVDTOR( rBackend );
 		void Init(
-			fblbur::mode__ Mo_de,
+			fblbur::eMode Mode,
 			const char *APIVersion,
 			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,
@@ -121,7 +121,7 @@ namespace sclbacknd {
 	: public rCallback_
 	{
 	private:
-		fblbur::mode__ _Mode;
+		fblbur::eMode _Mode;
 	protected:
 		virtual bso::sBool SCLDAEMONPluginOverride(
 			str::dString &Id,
@@ -140,7 +140,7 @@ namespace sclbacknd {
 			return false;
 		}
 		virtual rBackend *SCLBACKNDNew(
-			fblbur::mode__ Mode,
+			fblbur::eMode Mode,
 			const ntvstr::char__ *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
@@ -150,15 +150,15 @@ namespace sclbacknd {
 			_Mode = fblbur::m_Undefined;
 		}
 		E_CVDTOR( rCallback );
-		void Init( fblbur::mode__ Mode )
+		void Init( fblbur::eMode Mode )
 		{
 			switch ( Mode ) {
 			case fblbur::mNone:
 				qRFwk();
 				break;
-			case fblbur::mEmbedded:
+			case fblbur::mReferenced:
 				break;
-			case fblbur::mRemote:
+			case fblbur::mSerialized:
 				break;
 			default:
 				qRFwk();
@@ -189,7 +189,7 @@ namespace sclbacknd {
 	initialized. */
 	callback__ *SCLBACKNDGetCallback(
 		csdleo::context__ Context,
-		fblbur::mode__ Mode );	// To overload.
+		fblbur::eMode Mode );	// To overload.
 }
 
 #endif

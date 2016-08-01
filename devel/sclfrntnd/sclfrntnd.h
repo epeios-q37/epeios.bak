@@ -33,8 +33,6 @@
 
 # include "fblfrd.h"
 
-# include "csducl.h"
-
 # include "plgn.h"
 
 # include "err.h"
@@ -55,89 +53,128 @@ namespace sclfrntnd {
 
 	typedef fblfrd::universal_frontend___ _frontend___;
 
-	enum backend_type__ {
-		btNone,			// Use of no backend.
-		btRemote_,		// To a remote daemon.
-		btProxy,		// As a daemon, through a proxy.
-		btEmbedded,		// Embedded, as a library.
-		btPredefined,	// Retrieve backend parameters from configuration file.
-		bt_amount,
-		bt_Undefined
-	};
-
-	const char *GetLabel( backend_type__ BackendType );
-
-	backend_type__ GetBackendType( const str::string_ &Pattern );
-
 	// Returns the plugin of id 'Id' path an name for connecting to a remote backend.
-	void GetRemotePluginPath(
+	void GetFrontendPluginFilename(
 		const str::string_ &Id,
-		str::string_ &Path );
+		str::string_ &Filename );
 
-	struct features___ {
+	struct rFeatures {
 	public:
-		csducl::type__ Type;
-		str::string Path;
+		str::string Plugin;	// Name of the plugin.
 		const char *Identifier;
 		str::string Parameters;
 		void reset( bso::bool__ P = true )
 		{
-			Type = csducl::t_Undefined;
-			Path.reset( P );
+			Plugin.reset( P );
 			Identifier = NULL;
 			Parameters.reset( P );
 		}
-		E_CDTOR( features___ );
+		E_CDTOR( rFeatures );
 		void Init(void)
 		{
-			Type = csducl::t_Undefined;
-			Path.Init();
+			Plugin.Init();
 			Identifier = NULL;
 			Parameters.Init();
 		}
 	};
 
+	// Below both  definition refers to special backend type. Other backend types refers to a plugin defined in the 'FrontendPlugins' section.
+	qCDEF( char *, NoneBackendType, "None" );	// No backend is used.
+	qCDEF( char *, PredefinedBackendType, "Predefined" );	// Refers to a predefined backend.
+
 	void SetBackendFeatures(
-		backend_type__ BackendType,
-		const str::string_ &Path,
+		const str::dString &BackendType,
 		const str::string_ &Parameters,
-		features___ &Features );
+		rFeatures &Features );
 
 	// Is exposed because, even if there is generally only one kernel per frontend, there could be two (a frontend dealing with two different backends).
-	class kernel___
+	class rKernel
 	{
 	private:
-		csducl::universal_client_core___ _ClientCore;
+		plgn::rRetriever<fblovl::cDriver> Retriever_;
+		str::wString Plugin_, Parameters_;
+		fblovl::cDriver &P_( void )
+		{
+			return Retriever_.Plugin();
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_ClientCore.reset( P );
+			tol::reset( P, Retriever_, Plugin_, Parameters_ );
 		}
-		E_CVDTOR( kernel___ );
+		E_CVDTOR( rKernel );
 		sdr::sRow Init(
-			const features___ &Features,
+			const rFeatures &Features,
 			const plgn::dAbstracts &Abstracts );
-		const csducl::universal_client_core___ &Core( void ) const
-		{
-			return _ClientCore;
-		}
-		csducl::universal_client_core___ &Core( void )
-		{
-			return _ClientCore;
-		}
 		const char *Details( void )
 		{
-			return _ClientCore.RemoteDetails();
+			return Retriever_.Details();
 		}
 		const str::dString &AboutPlugin( str::dString &About );
+		fblovl::eMode Mode( void )
+		{
+			return P_().Mode();
+		}
+		csdrcc::rDriver *New( void )
+		{
+			return P_().New();
+		}
+		void Delete( csdrcc::rDriver *Driver )
+		{
+			P_().Delete( Driver );
+		}
+		void GetFeatures(
+			str::dString &Plugin,
+			str::dString &Parameters ) const
+		{
+			Plugin.Append( Plugin_ );
+			Parameters.Append( Parameters_ );
+		}
 	};
 
-	class frontend___
+	typedef flw::sDressedIOFlow<> sDressedIOFlow_;
+
+	class rIOFlow_
+	: public sDressedIOFlow_
+	{
+	private:
+		qRMV( rKernel, K_, Kernel_ );
+		qRMV( csdrcc::rDriver, D_, Driver_ );
+		void DeleteDriver_( void )
+		{
+			if ( Driver_ != NULL )
+				K_().Delete( Driver_ );
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			sDressedIOFlow_::reset( P );
+
+			if ( P ) {
+				DeleteDriver_();
+			}
+
+			Kernel_ = NULL;
+			Driver_ = NULL;
+		}
+		qCDTOR( rIOFlow_ );
+		void Init( rKernel &Kernel )
+		{
+			DeleteDriver_();
+
+			Kernel_ = &Kernel;
+			Driver_ = K_().New();
+
+			sDressedIOFlow_::Init( D_() );
+		}
+	};
+
+	class rFrontend
 	: public _frontend___
 	{
 	private:
-		Q37_MRMDF( kernel___, K_, Kernel_ );
-		csducl::universal_client_ioflow___ _Flow;
+		qRMV( rKernel, K_, Kernel_ );
+		rIOFlow_ Flow_;
 		rgstry::multi_level_registry _Registry;
 		rgstry::level__ _RegistryLevel;
 		mutable TOL_CBUFFER___ _Language;
@@ -145,15 +182,15 @@ namespace sclfrntnd {
 		void reset( bso::bool__ P = true )
 		{
 			_frontend___::reset( P );
-			_Flow.reset( P );
+			Flow_.reset( P );
 			_Registry.reset( P );
 			_RegistryLevel = rgstry::UndefinedLevel;
 			_Language.reset();
 			Kernel_ = NULL;
 		}
-		E_CVDTOR( frontend___ );
+		E_CVDTOR( rFrontend );
 		void Init(
-			kernel___ &Kernel,
+			rKernel &Kernel,
 			const char *Language,
 			fblfrd::reporting_callback__ &ReportingCallback,
 			const rgstry::multi_level_registry_ &Registry );
@@ -188,11 +225,7 @@ namespace sclfrntnd {
 		const char *Language,
 		xml::writer_ &Writer );
 
-	void GuessBackendFeatures( features___ &Features );	// Set features following what's in registry.
-
-	const str::string_ &GetBackendPath(
-		const kernel___ &Kernel,
-		str::string_ &Path );
+	void GuessBackendFeatures( rFeatures &Features );	// Set features following what's in registry.
 
 # define SCLF_I( name, id  )\
 	typedef fbltyp::s##id t##name;\
@@ -503,11 +536,6 @@ namespace sclfrntnd {
 
 	using fblfrd::cReporting;
 	using fblfrd::sDefaultReportingCallback;
-
-	typedef kernel___ rKernel;
-	typedef frontend___ rFrontend;
-
-	typedef features___ rFeatures;
 
 	const str::dString &About(
 		const rFeatures &Features,

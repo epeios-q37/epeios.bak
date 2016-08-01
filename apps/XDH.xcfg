@@ -3,16 +3,20 @@
 <xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:define name="XDH_Definitions">
 		<xpp:bloc>
-			<RemotePlugins>
-				<RemotePlugin id="Straight">
+			<FrontendPlugins>
+				<Plugin id="Straight">
 					<xpp:expand select="PlgPath"/>
-					<xpp:bloc>remote/straight/straight</xpp:bloc>
-				</RemotePlugin>
-				<RemotePlugin id="¨Proxy">
+					<xpp:bloc>frontend/straight/straight</xpp:bloc>
+				</Plugin>
+				<Plugin id="¨Proxy">
 					<xpp:expand select="PlgPath"/>
-					<xpp:bloc>remote/proxy/proxy</xpp:bloc>
-				</RemotePlugin>
-			</RemotePlugins>
+					<xpp:bloc>frontend/proxy/proxy</xpp:bloc>
+				</Plugin>
+				<Plugin id="Embedded">
+					<xpp:expand select="PlgPath"/>
+					<xpp:bloc>frontend/embedded/embedded</xpp:bloc>
+				</Plugin>
+			</FrontendPlugins>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:define name="XDH_Locale">

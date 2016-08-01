@@ -112,7 +112,7 @@ namespace core {
 
 	extern core___ Core;
 
-	sclfrntnd::kernel___ &Kernel( void );
+	sclfrntnd::rKernel &Kernel( void );
 
 	void About(
 		rSession &Session,

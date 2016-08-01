@@ -314,7 +314,7 @@ namespace sclxdhtml {
 		}
 		qCVDTOR( rSession )
 		void Init(
-			sclfrntnd::kernel___ &Kernel,
+			sclfrntnd::rKernel &Kernel,
 			const char *Language,
 			xdhcmn::proxy_callback__ *Callback )
 		{
@@ -502,7 +502,7 @@ namespace sclxdhtml {
 		E_CDEF( char *, RemoteProjectId, "RemoteProject" );
 
 		void GetContent(
-			sclfrntnd::frontend___ &Frontend,
+			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
 		void GetContext(
@@ -522,14 +522,14 @@ namespace sclxdhtml {
 
 	namespace login {
 		E_CDEF( char *, BackendTypeId, "BackendType" );
-		E_CDEF( char *, RemoteBackendId, "RemoteBackend" );
+		E_CDEF( char *, StraightBackendId, "StraightBackend" );
 		E_CDEF( char *, EmbeddedBackendId, "EmbeddedBackend" );
 		E_CDEF( char *, PredefinedBackendId, "PredefinedBackend" );
 
 		const char *GetLabel( eBackendVisibility );
 
 		sclfrntnd::eLogin GetContent(
-			sclfrntnd::frontend___ &Frontend,
+			sclfrntnd::rFrontend &Frontend,
 			xml::writer_ &Writer );
 
 		void GetContext(
@@ -539,7 +539,7 @@ namespace sclxdhtml {
 
 		void GetBackendFeatures(
 			proxy__ &Proxy,
-			sclfrntnd::features___ &Features );
+			sclfrntnd::rFeatures &Features );
 
 		void DisplaySelectedEmbeddedBackendFilename(
 			proxy__ &Proxy,

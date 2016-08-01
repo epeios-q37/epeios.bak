@@ -206,14 +206,11 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			_Create();
 		}
 	};
-
-
-	class _client_server_ioflow___
-	: public flw::ioflow__
+	
+	class rDriver
+	: public _active_generic_driver___
 	{
 	private:
-		flw::byte__ _Cache[CSDLEC_CACHE_SIZE];
-		_active_generic_driver___ _Driver;
 		data _Master, _Slave;
 		struct backend {
 			flw::byte__ Cache[CSDLEC_CACHE_SIZE];
@@ -241,19 +238,19 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			}
 		} _Backend;
 	public:
-		_client_server_ioflow___( void )
-		: _Driver( _Master, _Slave ),
+		rDriver( void )
+		: _active_generic_driver___( _Master, _Slave ),
 		  _Backend( _Slave ,_Master )
 		{
 			reset( false );
 		}
-		~_client_server_ioflow___( void )
+		~rDriver( void )
 		{
 			reset();
 		}
 		void reset( bso::bool__ P = true )
 		{
-			_Driver.reset( P );
+			_active_generic_driver___::reset( P );
 
 			_Backend.reset( P );
 
@@ -272,8 +269,27 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			_Backend.Init();
 
-			_Driver.Init( Callback, _Backend.Flow, fdr::ts_Default );
-			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
+			_active_generic_driver___::Init( Callback, _Backend.Flow, fdr::ts_Default );
+		}
+	};
+
+	class _client_server_ioflow___
+	: public flw::ioflow__
+	{
+	private:
+		rDriver Driver_;
+		flw::byte__ _Cache[CSDLEC_CACHE_SIZE];
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			Driver_.reset( P );
+		}
+		qCDTOR( _client_server_ioflow___ );
+		void Init( csdscb::callback__ &Callback )
+		{
+			reset();
+			Driver_.Init( Callback );
+			ioflow__::Init( Driver_, _Cache, sizeof( _Cache ) );
 		}
 	};
 

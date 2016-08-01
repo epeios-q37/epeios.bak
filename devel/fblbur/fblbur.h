@@ -64,17 +64,17 @@ namespace fblbur {
 			reset();
 		}
 		void Init(
-			mode__ Mode,
+			eMode Mode,
 			flw::ioflow__ &Flow )
 		{
 			reset();
 
 			switch ( Mode ) {
-			case mEmbedded:
+			case mReferenced:
 				_Embedded.Init();
 				rRequest_::Init( _Embedded, Flow );
 				break;
-			case mRemote:
+			case mSerialized:
 				_Remote.Init();
 				rRequest_::Init( _Remote, Flow );
 				break;

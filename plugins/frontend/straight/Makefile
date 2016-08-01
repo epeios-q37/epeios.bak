@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with remote. If not, see <http://www.gnu.org/licenses/>.
 
-name = proxy
+name = straight
 
 
 # Epeios general debugging features
@@ -37,12 +37,12 @@ mods += tagsbs tol txf tys uys
 mods += utf xtf llio bomhdl cdgb64 
 mods += dlbrry fil fnm lcl plgn 
 mods += plgncore rgstry stsfsm xml xpp 
-mods += tht mtk prxy prxybase sck 
-mods += csdbnc csdcmn csdmxb csdmxc csdrcc 
-mods += csdrcd csdmnc 
+mods += tht fblovl mtk sck 
+mods += csdbnc csdmnc csdmxb csdmxc csdrcc 
+mods += csdrcd 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
-mods += registry rpproxy 
+mods += registry rpstraight 
 
 pmods += pllio 
 
@@ -328,9 +328,9 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160722"\"
+copt += -DVERSION=\""20160801"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
-copt += -DIDENTIFIER=\""e51c58a9-0f0b-408a-9580-e0b2714c8619"\"
+copt += -DIDENTIFIER=\""2c95d4ed-2c57-4399-9c86-4115883be7cc"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
@@ -357,8 +357,8 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
 ifdef EPEIOS_SRC			
-	mkdir -p $(out)plugins/remote/proxy/
-	cp $(binary) $(out)plugins/remote/proxy/
+	mkdir -p $(out)plugins/frontend/straight/
+	cp $(binary) $(out)plugins/frontend/straight/
 endif
 
 %.$(ox): %.cpp

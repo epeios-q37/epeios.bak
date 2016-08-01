@@ -17,33 +17,28 @@
     along with 'remote'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// 'straight' remote plugin.
+// 'embedded' remote plugin.
 
 #include "registry.h"
 
-#include "rpstraight.h"
+#include "rpembedded.h"
 
 #include "sclmisc.h"
 #include "sclplugin.h"
 #include "sclmisc.h"
 
-#include "csdrcd.h"
+#include "fblovl.h"
+#include "csdlec.h"
 
-#include "csdmnc.h"
+#define PLUGIN_NAME	"Embedded"
 
-#define PLUGIN_NAME	"straight"
-
-typedef csdrcd::cDriver cPlugin_;
-
-namespace {
-	csdmxc::rLogCallback LogCallback_;
-}
+typedef fblovl::cDriver cPlugin_;
 
 class rPlugin
 : public cPlugin_
 {
 private:
-	csdmnc::rCore Core_;
+	csdlec::library_embedded_client_core__ Core_;
 	bso::sBool Connected_;
 	void HandleLostConnection_( void )
 	{
@@ -53,18 +48,22 @@ private:
 protected:
 	virtual fdr::ioflow_driver_base___ *CSDRCCNew( void ) override
 	{
-		csdmxc::_driver___ *Driver = new csdmxc::_driver___;
+		csdlec::rDriver *Driver = new csdlec::rDriver;
 
 		if ( Driver == NULL )
 			qRAlc();
 
-		Driver->Init( Core_, fdr::ts_Default );
+		Driver->Init( Core_.GetCallback() );
 
 		return Driver;
 	}
 	virtual void CSDRCCDelete( fdr::ioflow_driver_base___ *Driver ) override
 	{
 		delete Driver;
+	}
+	virtual fblovl::eMode FBLOVLMode( void ) override
+	{
+		return fblovl::mReferenced;
 	}
 public:
 	void reset( bso::bool__ P = true )
@@ -74,44 +73,49 @@ public:
 	}
 	qCVDTOR( rPlugin );
 	bso::bool__ Init(
-		const char *HostService,
-		bso::uint__ PingDelay,
-		sck::duration__ Timeout )
+		const char *BackendFilename,
+		csdleo::context__ Context )
 	{
-//		LogCallback_.Init( "h:/temp/MXCLog.txt" );
+		bso::sBool Success = false;
+	qRH
+		csdlec::library_data__ Data;
+		sclmisc::sRack SCLRack;
+	qRB
+		SCLRack.Init();
+		Data.Init( Context, BackendFilename, &SCLRack );
 
-		if ( !Core_.Init( HostService, PingDelay, Timeout ) )
-			return false;
+		if ( !Core_.Init( BackendFilename, Data, qRPU ) )
+			qRReturn;
+
+		Success = true;
 
 		Connected_ = true;
-
-		return true;
+	qRR
+	qRT
+	qRE
+		return Success;
 	}
 	bso::sBool SCLPLUGINInitialize( plgncore::sAbstract *BaseAbstract )
 	{
 		bso::sBool Success = false;
 	qRH
-		str::string HostService;
-		bso::uint__ PingDelay = 0;
-		sck::duration__ Timeout = sck::NoTimeout;
+		str::string BackendFilename;
 		TOL_CBUFFER___ Buffer;
-		rpstraight::rAbstract *Abstract = (rpstraight::rAbstract *)BaseAbstract;
+		rpembedded::rAbstract *Abstract = (rpembedded::rAbstract *)BaseAbstract;
 	qRB
-		plgn::Test( BaseAbstract, rpstraight::Identifier );
+		plgn::Test( BaseAbstract, rpembedded::Identifier );
 
-		HostService.Init();
+		BackendFilename.Init();
 
-		sclmisc::MGetValue( registry::parameter::HostService, HostService );
-		PingDelay = sclmisc::OGetUInt( registry::parameter::PingDelay, 0 );
-		Timeout = sclmisc::OGetU16( registry::parameter::Timeout, sck::NoTimeout );
+		sclmisc::MGetValue( registry::parameter::BackendFilename, BackendFilename );
 
-		if ( !Init( HostService.Convert(Buffer), PingDelay, Timeout ) )
+		if ( !Init( BackendFilename.Convert(Buffer), csdleo::cRegular ) )
 			switch ( plgn::ErrorReporting( Abstract ) ) {
 			case plgn::rhInternally:
-				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
+				sclmisc::ReportAndAbort( "UnableToLoad", BackendFilename );
 				break;
 			case plgn::rhDetailed:
-				Abstract->HostService = HostService;
+				Abstract->BackendFilename = BackendFilename;
 			case plgn::rhBasic:
 				qRReturn;
 				break;
@@ -146,7 +150,7 @@ void sclplugin::SCLPLUGINPluginDetails( str::dString &Details )
 
 qGCTOR(straight)
 {
-	if ( strcmp( rpstraight::Identifier, IDENTIFIER ) )
+	if ( strcmp( rpembedded::Identifier, IDENTIFIER ) )
 		qRChk();
 }
 

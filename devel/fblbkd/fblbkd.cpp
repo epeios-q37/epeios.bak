@@ -748,11 +748,11 @@ qRH
 	fblbrq::callbacks__ *Callbacks = NULL;
 qRB
 	switch ( Mode_ ) {
-	case fblovl::mEmbedded:
+	case fblovl::mReferenced:
 		_Embedded.Init();
 		Callbacks = &_Embedded;
 		break;
-	case fblovl::mRemote:
+	case fblovl::mSerialized:
 		_Remote.Init();
 		Callbacks = &_Remote;
 		break;

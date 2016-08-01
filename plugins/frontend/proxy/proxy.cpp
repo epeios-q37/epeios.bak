@@ -29,10 +29,11 @@
 
 #include "csdrcd.h"
 #include "csdmxc.h"
+#include "fblovl.h"
 
 #include "prxy.h"
 
-#define PLUGIN_NAME	"proxy"
+#define PLUGIN_NAME	"Proxy"
 
 typedef csdmxc::cCallback cCallback_;
 
@@ -99,7 +100,7 @@ public:
 	}
 };
 
-typedef csdrcd::cDriver cPlugin_;
+typedef fblovl::cDriver cPlugin_;
 using csdrcd::rDriver;
 
 class rPlugin
@@ -123,6 +124,10 @@ protected:
 	virtual void CSDRCCDelete( fdr::ioflow_driver_base___ *Driver ) override
 	{
 		delete Driver;
+	}
+	virtual fblovl::eMode FBLOVLMode( void ) override
+	{
+		return fblovl::mSerialized;
 	}
 public:
 	void reset( bso::bool__ P = true )

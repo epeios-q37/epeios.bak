@@ -68,8 +68,8 @@ namespace definition_ {
 
 	rgstry::entry___ Backends_( "Backends", sclrgstry::Definitions );
 
-	namespace backends_ {
-		rgstry::entry___ DefaultBackendId_( "@Default", Backends_ );
+	namespace backends {
+		rgstry::entry___ DefaultBackendId( "@Default", Backends_ );
 
 		rgstry::entry___ Backend_( "Backend", Backends_ );
 
@@ -77,33 +77,34 @@ namespace definition_ {
 			rgstry::entry___ Id_( "@id", Backend_ );
 		}
 
-		rgstry::entry___ TaggedBackend_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), Backend_);
+		rgstry::entry___ TaggedBackend( RGSTRY_TAGGING_ATTRIBUTE( "id" ), Backend_);
 
-		namespace tagged_backend_ {
-			rgstry::entry___ Alias_( "@Alias", TaggedBackend_ );
-			rgstry::entry___ Type_( "@Type", TaggedBackend_ );
-			rgstry::entry___ Path_( "@Path", TaggedBackend_ );
+		namespace tagged_backend {
+			rgstry::entry___ Alias( "@Alias", TaggedBackend );
+			rgstry::entry___ Plugin( "@Plugin", TaggedBackend );
 		}
 	}
 
-	rgstry::entry___ RemotePlugins_( "RemotePlugins", sclrgstry::Definitions );
+	namespace {
+		rgstry::entry___ FrontendPlugins_( "FrontendPlugins", sclrgstry::Definitions );
+	}
 
-	namespace remote_plugins_ {
-		rgstry::entry___ RemotePlugin_( "RemotePlugin", RemotePlugins_ );
+	namespace frontend_plugins {
+		rgstry::entry___ Plugin( "Plugin", FrontendPlugins_ );
 
-		rgstry::entry___ TaggedRemotePlugin_( RGSTRY_TAGGING_ATTRIBUTE( "id" ), RemotePlugin_);
+		rgstry::entry___ TaggedPlugin( RGSTRY_TAGGING_ATTRIBUTE( "id" ), Plugin );
 
-		namespace tagged_remote_plugin_ {
-			rgstry::entry___ Path_( TaggedRemotePlugin_ );
+		namespace tagged_plugin {
+			rgstry::entry___ Path( TaggedPlugin );
 		}
 	}
 }
 
-void sclfrntnd::GetRemotePluginPath(
+void sclfrntnd::GetFrontendPluginFilename(
 	const str::string_ &Id,
-	str::string_ &Path )
+	str::string_ &Filename )
 {
-	sclmisc::MGetValue( rgstry::tentry___( definition_::remote_plugins_::tagged_remote_plugin_::Path_, Id ), Path );
+	sclmisc::MGetValue( rgstry::tentry___( definition_::frontend_plugins::tagged_plugin::Path, Id ), Filename );
 }
 
 
@@ -206,73 +207,6 @@ qRT
 qRE
 	return Login;
 }
-
-
-#define C( name ) case bt##name: return #name; break
-
-const char *sclfrntnd::GetLabel( backend_type__ BackendType )
-{
-	switch ( BackendType ) {
-	C( None );
-	C( Remote_ );
-	C( Proxy );
-	C( Embedded );
-	C( Predefined );
-	default:
-		qRFwk();
-		break;
-	}
-
-	return NULL;	// Pour viter un 'warning'.
-}
-
-#undef C
-
-namespace {
-
-	stsfsm::automat BackendAutomat_;
-
-	void FillBackendAutomat_( void )
-	{
-		BackendAutomat_.Init();
-		stsfsm::Fill( BackendAutomat_, bt_amount, GetLabel );
-	}
-}
-
-backend_type__ sclfrntnd::GetBackendType( const str::string_ &Pattern )
-{
-	return stsfsm::GetId( Pattern, BackendAutomat_, bt_Undefined, bt_amount );
-}
-
-# if 0
-stsfsm::automat PendingActionAutomat_;
-
-static void FillPendingActionAutomat_( void )
-{
-	PendingActionAutomat_.Init();
-	stsfsm::Fill( PendingActionAutomat_, pa_amount, GetLabel );
-}
-
-#define A( name )	case pa##name : return #name; break
-
-const char *sclfrntnd::GetLabel( pending_action__ PendingAction )
-{
-	switch ( PendingAction ) {
-	A( None );
-	A( Login );
-	A( Connect );
-	default:
-		qRFwk();
-		break;
-	}
-
-	return NULL;	// To avoid a 'warning'.
-}
-pending_action__ sclfrntnd::GetPendingAction( const str::string_ &Pattern )
-{
-	return stsfsm::GetId( Pattern, PendingActionAutomat_, pa_Undefined, pa_amount );
-}
-#endif
 
 #define C( name )	case bst##name : return #name; break
  
@@ -432,35 +366,20 @@ qRT
 qRE
 }
 
-bso::bool__ sclfrntnd::frontend___::Connect(
+bso::bool__ sclfrntnd::rFrontend::Connect(
 	const fblfrd::compatibility_informations__ &CompatibilityInformations,
 	fblfrd::incompatibility_informations_ &IncompatibilityInformations )
 {
-	fblfrd::mode__ Mode = fblfrd::m_Undefined;
-
-	switch ( K_().Core().GetType() ) {
-	case csducl::tNone:
-		Mode = fblovl::mNone;
-		break;
-	case csducl::tLibrary:
-		Mode = fblfrd::mEmbedded;
-		break;
-	case csducl::tRemote:
-		Mode = fblfrd::mRemote;
-		break;
-	default:
-		qRFwk();
-		break;
-	}
+	fblfrd::eMode Mode = K_().Mode();
 
 	if ( Mode != fblovl::mNone )
-		_Flow.Init( K_().Core() );
+		Flow_.Init( K_() );
 
-	return _frontend___::Connect( Language(), _Flow, Mode, CompatibilityInformations, IncompatibilityInformations );
+	return _frontend___::Connect( Language(), Flow_, Mode, CompatibilityInformations, IncompatibilityInformations );
 }
 
-void sclfrntnd::frontend___::Init(
-	kernel___ &Kernel,
+void sclfrntnd::rFrontend::Init(
+	rKernel &Kernel,
 	const char *Language,
 	fblfrd::reporting_callback__ &ReportingCallback,
 	const rgstry::multi_level_registry_ &Registry )
@@ -486,7 +405,7 @@ qRT
 qRE
 }
 
-void sclfrntnd::frontend___::Ping( void )
+void sclfrntnd::rFrontend::Ping( void )
 {
 qRH
 	str::wString Code;
@@ -499,7 +418,7 @@ qRT
 qRE
 }
 
-void sclfrntnd::frontend___::Crash( void )
+void sclfrntnd::rFrontend::Crash( void )
 {
 qRH
 	str::wString Code;
@@ -512,11 +431,11 @@ qRT
 qRE
 }
 
-void sclfrntnd::frontend___::Disconnect( void )
+void sclfrntnd::rFrontend::Disconnect( void )
 {
 	_frontend___::Disconnect();
 
-	_Flow.reset();
+	Flow_.reset();
 }
 
 
@@ -552,7 +471,7 @@ qRB
 		Writer.PopTag();
 	}
 
-	GetFeatures_( "Backends", "Backend", "DefaultBackendType", parameter_::backend_::Type_, definition_::backends_::backend_::Id_,parameter_::backend_::Feature_, definition_::backends_::DefaultBackendId_, definition_::backends_::Backend_, definition_::backends_::tagged_backend_::Alias_, Language, Writer );
+	GetFeatures_( "Backends", "Backend", "DefaultBackendType", parameter_::backend_::Type_, definition_::backends::backend_::Id_,parameter_::backend_::Feature_, definition_::backends::DefaultBackendId, definition_::backends::Backend_, definition_::backends::tagged_backend::Alias, Language, Writer );
 qRR
 qRT
 qRE
@@ -560,110 +479,89 @@ qRE
 
 static void GetBackendFeatures_(
 	const str::string_ &Id,
-	features___ &Features )
+	rFeatures &Features )
 {
-qRH
-	str::string Buffer;
-	rgstry::tentry___ BackendTypeEntry;
-qRB
-	BackendTypeEntry.Init( definition_::backends_::tagged_backend_::Type_, Id );
+	sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends::tagged_backend::Plugin, Id ), Features.Plugin );
+	sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends::TaggedBackend, Id ), Features.Parameters );
+}
 
-	Buffer.Init();
-	switch ( GetBackendType(sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), BackendTypeEntry, Buffer ) ) ) {
-	case btNone:
-		Features.Type = csducl::tNone;
-		break;
-	case btRemote:
-		Features.Type = csducl::tRemote;
-		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::tagged_backend_::Path_, Id ), Features.Path );
-		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::TaggedBackend_, Id ), Features.Parameters );
-		break;
-	case btEmbedded:
-		Features.Type = csducl::tLibrary;
-		sclrgstry::MGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::tagged_backend_::Path_, Id ), Features.Path );
-		sclrgstry::OGetValue(sclrgstry::GetCommonRegistry(), rgstry::tentry___( definition_::backends_::TaggedBackend_, Id ), Features.Parameters );
-		break;
-	default:
-		sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( BackendTypeEntry );
-		break;
+namespace {
+	void EscapeBackslashs_(
+		flw::sIFlow &IFlow,
+		flw::sOFlow &OFlow )
+	{
+		bso::char__ C = 0;
+
+		while ( !IFlow.EndOfFlow() ) {
+			if ( ( C = IFlow.Get() ) == '\\' )
+				OFlow.Put( '\\' );
+
+			OFlow.Put( C );
+		}
 	}
 
-qRR
-qRT
-qRE
+	void EscapeBackslashs_(
+		const str::dString &In,
+		str::dString &Out )
+	{
+	qRH
+		flx::sStringIFlow IFlow;
+		flx::rStringOFlow OFlow;
+	qRB
+		IFlow.Init( In );
+		OFlow.Init( Out );
+
+		EscapeBackslashs_( IFlow, OFlow );
+	qRR
+	qRT
+	qRE
+	}
 }
 
 void sclfrntnd::SetBackendFeatures(
-	backend_type__ BackendType,
-	const str::string_ &Path,
+	const str::string_ &BackendType,
 	const str::string_ &Parameters,
-	features___ &Features )
+	rFeatures &Features )
 {
 qRH
 	str::wString Id;
 qRB
-	switch ( BackendType ) {
-	case btNone:
-		Features.Type = csducl::tNone;
-		break;
-	case btEmbedded:
-		Features.Type = csducl::tLibrary;
-		Features.Path = Path;
-		Features.Parameters = Parameters;
-		break;
-	case btRemote:
-		Features.Type = csducl::tRemote;
-		Features.Path = Path;
-		Features.Parameters = Parameters;
-		break;
-	case btPredefined:
-		Id.Init( Parameters );
+	if ( ( BackendType.Amount() != 0) &  ( BackendType != NoneBackendType ) ) {
+		if ( BackendType == PredefinedBackendType ) {
+			Id.Init( Parameters );
 
-		if ( Id.Amount() == 0 )
-			sclmisc::MGetValue( definition_::backends_::DefaultBackendId_, Id );
+			if ( Parameters.Amount() == 0 )
+				sclmisc::MGetValue( definition_::backends::DefaultBackendId, Id );
 
-		GetBackendFeatures_( Id, Features );
-		break;
-	default:
-		qRFwk();
-		break;
+			GetBackendFeatures_( Id, Features );
+		} else {
+			Features.Plugin = BackendType;
+			EscapeBackslashs_( Parameters, Features.Parameters );
+		}
 	}
 qRR
 qRT
 qRE
 }
 
-sdr::sRow sclfrntnd::kernel___::Init(
-	const features___ &Features,
+sdr::sRow sclfrntnd::rKernel::Init(
+	const rFeatures &Features,
 	const plgn::dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
 qRH
-	csdlec::library_data__ LibraryData;
-	csdleo::mode__ Mode = csdleo::m_Undefined;
-	TOL_CBUFFER___ Buffer;
-	bso::bool__ Success = false;
-	sclmisc::sRack SCLRack;
+	str::wString PluginFilename;
 qRB
-	SCLRack.Init();
+	Retriever_.Init();
+	Plugin_.Init( Features.Plugin );
+	Parameters_.Init( Features.Parameters );
 
-	switch ( Features.Type ) {
-	case csducl::tNone:
-		if ( !_ClientCore.InitNone() )
-			qRFwk();
-		break;
-	case csducl::tLibrary:
-		LibraryData.Init( csdleo::cRegular, Features.Path.Convert( Buffer ), &SCLRack );
-		if ( !_ClientCore.InitLibrary( Features.Path, LibraryData ) )
-			qRFwk();
-		break;
-	case csducl::tRemote:
-		Row = _ClientCore.InitRemote( Features.Path, Features.Identifier, Features.Parameters, Abstracts );
-		break;
-	default:
-		qRFwk();
-		break;
-	}
+	PluginFilename.Init();
+
+	GetFrontendPluginFilename( Plugin_, PluginFilename );
+
+	if ( Plugin_.Amount() != 0 )
+		Row = Retriever_.Initialize( PluginFilename, Features.Identifier, Parameters_, Abstracts );
 qRR
 qRT
 qRE
@@ -672,60 +570,43 @@ qRE
 
 namespace {
 	const str::dString &BuildAbout_(
-		csducl::type__ Type,
 		const str::dString &Identifier,
 		const str::dString &Details,
 		str::dString &About )
 	{
-		switch ( Type ) {
-		case csducl::tNone:
-			sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_NoBackend", About );
-			break;
-		case csducl::tLibrary:
-			sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_EmbeddedBackend", About );
-			break;
-		case csducl::tRemote:
-			About.Append( Details );
-			About.Append(" - {" );
-			About.Append( Identifier );
-			About.Append("}" );
-			break;
-		default:
-			qRFwk();
-			break;
-		}
+		About.Append( Details );
+		About.Append(" - {" );
+		About.Append( Identifier );
+		About.Append("}" );
 
 		return About;
 	}
 
 }
 
-const str::dString &sclfrntnd::kernel___::AboutPlugin( str::dString &About )
+const str::dString &sclfrntnd::rKernel::AboutPlugin( str::dString &About )
 {
-	return BuildAbout_( _ClientCore.GetType(), str::wString( _ClientCore.RemoteDetails() ), str::wString( _ClientCore.RemoteIdentifier() ), About );
+	if ( Retriever_.IsReady()  )
+		return BuildAbout_( str::wString( Retriever_.Details() ), str::wString( Retriever_.Identifier() ), About );
+	else
+		return sclmisc::GetBaseTranslation( SCLFRNTND_NAME "_NoBackend", About );
+
 }
 
 namespace{
-	bso::bool__ GuessBackendFeatures_( features___ &Features )
+	bso::bool__ GuessBackendFeatures_( rFeatures &Features )
 	{
 		bso::bool__ BackendFound = false;
 	qRH
-		backend_type__ Type = bt_Undefined;
-		str::string RawType, Parameters, Path;
+		str::string Type, Parameters;
 	qRB
 		Parameters.Init();
 
 		if ( sclmisc::OGetValue( parameter_::backend_::Feature_, Parameters ) ) {
-			RawType.Init();
-			sclmisc::MGetValue( parameter_::backend_::Type_, RawType );
+			Type.Init();
+			sclmisc::MGetValue( parameter_::backend_::Type_, Type );
 
-			Path.Init();
-			sclmisc::OGetValue( parameter_::backend_::Path_, Path  );
-
-			if ( ( Type = GetBackendType( RawType ) ) == bt_Undefined )
-				sclmisc::ReportAndAbort( SCLFRNTND_NAME "_NoOrBadBackendType" );
-
-			SetBackendFeatures( Type, Path, Parameters, Features );
+			SetBackendFeatures( Type, Parameters, Features );
 		}
 
 		BackendFound = true;
@@ -736,19 +617,10 @@ namespace{
 	}
 }
 
-void sclfrntnd::GuessBackendFeatures( features___ &Features )
+void sclfrntnd::GuessBackendFeatures( rFeatures &Features )
 {
 	if ( !GuessBackendFeatures_( Features ) )
 		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_MissingBackendDeclaration" );
-}
-
-const str::string_ &sclfrntnd::GetBackendPath(
-	const kernel___ &Kernel,
-	str::string_ &Location )
-{
-	Location.Append( Kernel.Core().Location() );
-
-	return Location;
 }
 
 const str::dString &sclfrntnd::About(
@@ -756,29 +628,19 @@ const str::dString &sclfrntnd::About(
 	str::dString &About )
 {
 qRH
-	sclmisc::sRack SCLRack;
-	str::wString Identifier, Details;
+	str::wString Filename, Identifier, Details;
 qRB
-	SCLRack.Init();
+	if ( Features.Plugin.Amount() != 0 ) {
+		Filename.Init();
+		GetFrontendPluginFilename( Features.Plugin, Filename );;
 
-	Identifier.Init();
-	Details.Init();
-
-	switch ( Features.Type ) {
-	case csducl::tNone:
-	case csducl::tLibrary:
-		break;
-	case csducl::tRemote:
 		Identifier.Init();
 		Details.Init();
-		plgn::IdentifierAndDetails( Features.Path, Identifier, Details );
-		break;
-	default:
-		qRFwk();
-		break;
-	}
 
-	BuildAbout_( Features.Type, Identifier, Details, About );
+		plgn::IdentifierAndDetails( Filename, Identifier, Details );
+
+		BuildAbout_( Identifier, Details, About );
+	}
 qRR
 qRT
 qRE
@@ -851,13 +713,10 @@ qRE
 	return Handling;
 }
 
-
-
 namespace {
 	void FillAutomats_( void )
 	{
 		FillLoginAutomat_();
-		FillBackendAutomat_();
 		FillBackendSetupTypeAutomat_();
 		FillProjectHandlingAutomat_();
 	}

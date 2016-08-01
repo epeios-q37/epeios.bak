@@ -128,6 +128,10 @@ namespace plgn {
 			const char *Identifier,
 			const str::string_ &Arguments,
 			const dAbstracts &Abstracts );
+		bso::sBool IsReady( void ) const
+		{
+			return Plugin_ != NULL;
+		}
 		const char *Identifier( void ) const
 		{
 			return C_().PluginIdentifier();
@@ -249,6 +253,10 @@ namespace plgn {
 			const dAbstracts &Abstracts )
 		{
 			return LooseRetriever_.Initialize( PluginPath, plugin::Label(), Identifier, Arguments, Abstracts );
+		}
+		bso::sBool IsReady( void ) const
+		{
+			return LooseRetriever_.IsReady();
 		}
 		const char *Identifier( void )
 		{

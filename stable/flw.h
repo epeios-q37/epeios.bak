@@ -54,21 +54,6 @@
 # define FLW_AMOUNT_MAX BSO_SIZE_MAX
 
 /**************/
-/**** NEW *****/
-/**************/
-
-namespace flw {
-	class iflow__;
-	typedef iflow__ sIFlow;
-
-	class oflow__;
-	typedef oflow__ sOFlow;
-
-	class ioflow__;
-	typedef ioflow__ sIOFlow;
-}
-
-/**************/
 /**** OLD *****/
 /**************/
 
@@ -621,6 +606,19 @@ inline flw::oflow__ &operator <<(
 	return OFlow;
 }
 
+/**************/
+/**** NEW *****/
+/**************/
 
-/*$END$*/
+namespace flw {
+	typedef iflow__ sIFlow;
+	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, sDressedIFlow );
+
+	typedef oflow__ sOFlow;
+	template <int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_oflow__<CacheSize>, sDressedOFlow );
+
+	typedef ioflow__ sIOFlow;
+	template <int OutCacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_ioflow__<OutCacheSize>, sDressedIOFlow );
+}
+
 #endif

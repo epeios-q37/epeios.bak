@@ -64,8 +64,10 @@
 			</div>
 	</xsl:template>
 	<xsl:template match="Backend">
-		<xsl:text>#aBackend# ('</xsl:text>
-		<xsl:value-of select="Path"/>
+		<xsl:text>#aBackend# (</xsl:text>
+		<xsl:value-of select="Plugin"/>
+		<xsl:text> : '</xsl:text>
+		<xsl:value-of select="PluginParameters"/>
 		<xsl:text>') :</xsl:text>
 		<br/>
 		<xsl:value-of select="Build"/>

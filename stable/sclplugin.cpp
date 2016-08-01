@@ -114,9 +114,7 @@ namespace {
 	qRE
 	}
 
-	void PreInitialize_(
-		const plgncore::sData *Data,
-		str::dStrings &Arguments )
+	void PreInitialize_( const plgncore::sData *Data )
 	{
 	if ( Data == NULL )
 		qRFwk();
@@ -126,9 +124,6 @@ namespace {
 
 	if ( Data->ControlValue != plgncore::sData::Control() )
 		qRFwk();
-
-	if ( Data->Arguments->Amount() != 0 )
-		HandleArguments_( *Data->Arguments, Arguments );
 	}
 }
 
@@ -141,13 +136,16 @@ qRH
 qRB
 	Arguments.Init();
 
-	PreInitialize_( Data, Arguments );
+	PreInitialize_( Data );
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( *Data->SCLRack, Configuration );
 	else // Same plugin loaded several times from same excutable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
 		sclrgstry::EraseArgumentsRegistry();
+
+	if ( Data->Arguments->Amount() != 0 )
+		HandleArguments_( *Data->Arguments, Arguments );
 
 	if ( Arguments.Amount() != 0 )
 		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );
@@ -166,14 +164,16 @@ qRH
 	str::wStrings Arguments;
 qRB
 	Arguments.Init();
-
-	PreInitialize_( Data, Arguments );
+	PreInitialize_( Data );
 
 	if ( !sclmisc::IsInitialized() )
 		sclmisc::Initialize( *Data->SCLRack, Directory );
 	else // Same plugin loaded several times from same excutable ; data is common,
 		// so the 'Arguments' registry from the previous loading is erased.
 		sclrgstry::EraseArgumentsRegistry();
+
+	if ( Data->Arguments->Amount() != 0 )
+		HandleArguments_( *Data->Arguments, Arguments );
 
 	if ( Arguments.Amount() != 0 )
 		sclargmnt::FillRegistry( Arguments, sclargmnt::faIsArgument, sclargmnt::uaReport );

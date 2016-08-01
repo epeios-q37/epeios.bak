@@ -23,7 +23,11 @@
 
 using namespace sclxdhtml;
 
-E_CDEF(char *, StraightRemoteBackendId_, "Straight" );
+
+namespace {
+	E_CDEF(char *, StraightBackendType_, "Straight" );
+	E_CDEF(char *, EmbeddedBackendType_, "Embedded" );
+}
 
 static bso::bool__ IsInitialized_ = false;
 
@@ -412,7 +416,7 @@ qRE
 
 */
 void sclxdhtml::prolog::GetContent(
-	sclfrntnd::frontend___ &Frontend,
+	sclfrntnd::rFrontend &Frontend,
 	xml::writer_ &Writer)
 {
 	sclfrntnd::GetProjectsFeatures( Frontend.Language(), Writer );
@@ -529,7 +533,7 @@ const char *sclxdhtml::login::GetLabel( eBackendVisibility Visibility )
 
 
 sclfrntnd::eLogin sclxdhtml::login::GetContent(
-	sclfrntnd::frontend___ &Frontend,
+	sclfrntnd::rFrontend &Frontend,
 	xml::writer_ &Writer)
 {
 	sclfrntnd::GetBackendsFeatures( Frontend.Language(), Writer );
@@ -537,18 +541,13 @@ sclfrntnd::eLogin sclxdhtml::login::GetContent(
 	return sclfrntnd::GetLoginFeatures( Writer );
 }
 
-static sclfrntnd::backend_type__ GetBackendType_( proxy__ &Proxy )
-{
-	sclfrntnd::backend_type__ BackendType = sclfrntnd::bt_Undefined;
-qRH
-	str::string Value;
-qRB
-	Value.Init();
-	BackendType = sclfrntnd::GetBackendType( Proxy.GetContent( login::BackendTypeId, Value ) );
-qRR
-qRT
-qRE
-	return BackendType;
+namespace {
+	const str::dString &GetBackendType_(
+		proxy__ &Proxy,
+		str::dString &Type )
+	{
+		return Proxy.GetContent( login::BackendTypeId, Type );
+	}
 }
 
 void sclxdhtml::login::GetContext(
@@ -556,46 +555,50 @@ void sclxdhtml::login::GetContext(
 	eBackendVisibility Visibility,
 	xml::writer_ &Writer )
 {
+qRH
+	str::wString Type;
+qRB
 	Writer.PushTag( "Backend" );
 
-	Writer.PutAttribute( "Type", sclfrntnd::GetLabel( GetBackendType_( Proxy ) ) );
+	Type.Init();
+	Writer.PutAttribute( "Type", GetBackendType_( Proxy, Type ) );
 
 	Writer.PutAttribute( "Visibility", GetLabel( Visibility ) );
 
 	Writer.PopTag();
+qRR
+qRT
+qRE
 }
 
 void sclxdhtml::login::GetBackendFeatures(
 	proxy__ &Proxy,
-	sclfrntnd::features___ &Features )
+	sclfrntnd::rFeatures &Features )
 {
 qRH
 	TOL_CBUFFER___ Buffer;
-	sclfrntnd::backend_type__ Type = sclfrntnd::bt_Undefined;
-	str::string Path, Parameters;
+	str::string Type, Parameters;
+	const char *BackendId = NULL;
 qRB
-	Path.Init();
 	Parameters.Init();
 
-	switch ( Type = GetBackendType_( Proxy ) ) {
-	case sclfrntnd::btNone:
-		break;
-	case sclfrntnd::btRemote:
-		sclfrntnd::GetRemotePluginPath( str::string( StraightRemoteBackendId_ ), Path );
-		Parameters.Append( Proxy.GetContent( RemoteBackendId, Buffer ) );
-		break;
-	case sclfrntnd::btEmbedded:
-		Path.Append( Proxy.GetContent( EmbeddedBackendId, Buffer ) );
-		break;
-	case sclfrntnd::btPredefined:
-		Parameters.Append( Proxy.GetContent( PredefinedBackendId, Buffer ) );
-		break;
-	default:
-		qRFwk();
-		break;
+	Type.Init();
+	Type = GetBackendType_( Proxy, Type );
+
+	if ( Type != sclfrntnd::NoneBackendType ) {
+		if ( Type == sclfrntnd::PredefinedBackendType )
+			BackendId = PredefinedBackendId;
+		else if ( Type == EmbeddedBackendType_ )
+			BackendId = EmbeddedBackendId;
+		else if ( Type == StraightBackendType_ )
+			BackendId = StraightBackendId;
+		else
+			qRGnr();
+
+		Parameters.Append( Proxy.GetContent( BackendId, Buffer ) );
 	}
 
-	sclfrntnd::SetBackendFeatures( Type, Path, Parameters, Features );
+	sclfrntnd::SetBackendFeatures( Type, Parameters, Features );
 qRR
 qRT
 qRE

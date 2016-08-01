@@ -106,7 +106,7 @@ namespace {
 
 
 void sclbacknd::backend___::Init(
-	fblbur::mode__ Mode,
+	fblbur::eMode Mode,
 	const char *APIVersion,
 	const ntvstr::char__ *ClientOrigin,
 	const char *BackendLabel,
@@ -144,14 +144,14 @@ scldaemon::rCallback *scldaemon::SCLDAEMONGetCallback(
 {
 	sclbacknd::callback__ *Callback = NULL;
 qRH
-	fblbur::mode__ FBLMode = fblbur::m_Undefined;
+	fblbur::eMode FBLMode = fblbur::m_Undefined;
 qRB
 	switch ( CSDMode ) {
 	case csdleo::mEmbedded:
-		FBLMode = fblbur::mEmbedded;
+		FBLMode = fblbur::mReferenced;
 		break;
 	case csdleo::mRemote:
-		FBLMode = fblbur::mRemote;
+		FBLMode = fblbur::mSerialized;
 		break;
 	default:
 		qRFwk();

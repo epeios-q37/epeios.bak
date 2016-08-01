@@ -13,32 +13,36 @@
 	<xpp:set name="Type" value="Plugin"/>
 	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
 	<About>
-		<Program>straight</Program>
+		<Program>proxy</Program>
 		<Software>remote</Software>
-		<UUID>2c95d4ed-2c57-4399-9c86-4115883be7cc</UUID>
+		<UUID>e51c58a9-0f0b-408a-9580-e0b2714c8619</UUID>
 	</About>
-	<InstallPath>plugins/remote/straight/</InstallPath>
+	<InstallPath>plugins/frontend/proxy/</InstallPath>
 	<Modules>
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+				<Module>fblovl</Module>
 				<Module>mtk</Module>
+				<Module>prxy</Module>
+				<Module>prxybase</Module>
 				<Module>sck</Module>
 			</Modules>
 			<Modules Group="CSD">
 				<Module>csdbnc</Module>
-				<Module>csdmnc</Module>
+				<Module>csdcmn</Module>
 				<Module>csdmxb</Module>
 				<Module>csdmxc</Module>
 				<Module>csdrcc</Module>
 				<Module>csdrcd</Module>
+				<Module>csdmnc</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
 		<Module>registry</Module>
-		<Module>rpstraight</Module>
+		<Module>rpproxy</Module>
 	</Modules>
 	<SourceDirs>
 	</SourceDirs>

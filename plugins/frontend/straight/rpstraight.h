@@ -17,20 +17,20 @@
     along with 'remote'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Exposed data from the remote plugin 'Proxy'.
+// Exposed data from the remote plugin 'Straight'.
 
-#ifndef RPPROXY__INC
-# define RPPROXY__INC
+#ifndef RPSTRAIGHT__INC
+# define RPSTRAIGHT__INC
 
 # include "bso.h"
 # include "tol.h"
 # include "str.h"
 # include "plgncore.h"
 
-namespace rpproxy {
+namespace rpstraight {
 	typedef plgncore::sAbstract sAbstract_;
 
-	qCDEF( char *, Identifier, "e51c58a9-0f0b-408a-9580-e0b2714c8619" );
+	qCDEF( char *, Identifier, "2c95d4ed-2c57-4399-9c86-4115883be7cc" );	// From 'Project.xml'. Don't use the 'IDENTIFIER' macro, as it is used to copile other binaries!!!
 
 	class rAbstract
 	: public sAbstract_
@@ -38,7 +38,7 @@ namespace rpproxy {
 	protected:
 		virtual const char *PLGNCOREIdentifier( void ) override
 		{
-			return rpproxy::Identifier;
+			return rpstraight::Identifier;
 		}
 	public:
 		str::wString HostService;

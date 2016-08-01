@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp">
+	<Configuration target="Embedded">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<Parameters>
+			<Language>fr</Language>
+			<Command>Load</Command>
+		</Parameters>
+		<Definitions>
+		</Definitions>
+		<Locale>
+		</Locale>
+		<Arguments>
+			<Argument id="LoadCommand" Description="LoadCommandDescription" long="load" short="l" Value="Load" Usage="%BackendFilenameArgument% [%ContextArgument%]"/>
+			<Argument id="BackendFilenameArgument" Description="BackendFilenameArgumentDescription" Path="BackendFilename" Label="BackendFilenameArgumentLabel"/>
+			<Argument id="ContextArgument" Description="ContextArgumentDescription" Path="Context" Label="ContextArgumentLabel"/>
+			<!-- Affectations des arguments libres-->
+			<Layouts>
+				<Layout command="Load">
+					<Link index="0" Target="BackendFilenameArgument"/>
+					<Link index="1" Target="ContextArgument"/>
+				</Layout>
+			</Layouts>
+		</Arguments>
+	</Configuration>
+</Configurations>

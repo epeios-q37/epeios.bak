@@ -85,14 +85,18 @@
 					</xpp:bloc>
 				</xpp:ifeq>>
 				<xpp:bloc marker="$">
-					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Type="Embedded" Path="$BackendPath$orgnzqbkd"/>
-					<Backend id="q37.info" Alias="q37PredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">q37.info:57710</Backend>
-					<!--Backend id="Proxy" Alias="ProxyPredefinedBackend" Type="Remote" Path="$PluginPath$remote/proxy/proxy">localhost:53700 test</Backend-->
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">localhost:53700</Backend>
+					<Backend id="EmbeddedOld" Alias="EmbeddedOldPredefinedBackend" Plugin="Embedded">
+						<xpp:expand value-of="BackendPath"/>
+						<xpp:bloc>orgnzqbkd</xpp:bloc>
+					</Backend>
+					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">h:/bin/orgnzqbkd</Backend>
+					<Backend id="q37.info" Alias="q37PredefinedBackend" Plugin="Straight">q37.info:57710</Backend>
+					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53700 test</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>
 					<xpp:ifeq select="packing" value="no">
 						<xpp:bloc>
-							<Backend id="Mini" Alias="MiniPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">mini:53700</Backend>
-							<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Type="Remote" Path="$PluginPath$remote/straight/straight">192.168.44.131:53700</Backend>
+							<Backend id="Mini" Alias="MiniPredefinedBackend" Plugin="Straight">mini:53700</Backend>
+							<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Plugin="Straight">192.168.44.131:53700</Backend>
 						</xpp:bloc>
 					</xpp:ifeq>
 				</xpp:bloc>
@@ -202,6 +206,10 @@
 			<Translations text="ProxyPredefinedBackend">
 				<Translation language="fr">Moteur de traitement via proxy</Translation>
 				<Translation language="en">Backend through proxy</Translation>
+			</Translations>
+			<Translations text="EmbeddedOldPredefinedBackend">
+				<Translation language="fr">Moteur de traitement enclavé (ancien)</Translation>
+				<Translation language="en">Embedded backend (old)</Translation>
 			</Translations>
 			<Translations text="EmbeddedPredefinedBackend">
 				<Translation language="fr">Moteur de traitement enclavé</Translation>

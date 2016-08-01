@@ -830,7 +830,7 @@ namespace fblfrd {
 		bso::bool__ Connect(
 			const char *Language,
 			flw::ioflow__ &Flow,
-			fblovl::mode__ Mode,
+			fblovl::eMode Mode,
 			const compatibility_informations__ &CompatibilityInformations,
 			incompatibility_informations_ &IncompatibilityInformations )
 		{
@@ -839,11 +839,11 @@ namespace fblfrd {
 			switch ( Mode ) {
 			case fblovl::mNone:
 				break;
-			case fblovl::mRemote:
+			case fblovl::mSerialized:
 				_RemoteCallbacks.Init();
 				Callbacks = &_RemoteCallbacks;
 				break;
-			case fblovl::mEmbedded:
+			case fblovl::mReferenced:
 				_EmbeddedCallbacks.Init();
 				Callbacks = &_EmbeddedCallbacks;
 				break;

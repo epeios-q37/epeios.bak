@@ -2,83 +2,112 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-01 :
+- FLW :
+	- New namings.
+- PLGN :
+	- Adding 'IsReady()' methods.
+- SCLFRNTND :
+	- Reorganizing and simplifying backend parameters handling.
+	- Fixing '\' issue with backend parameters feature.
+- SCLPLUGIN :
+	- Fixing crash when reporting an error in the arguments.
+- SCLXDHTML :
+	- Adapting to changes in 'SCLFRNTND'.
+
+2016-07-31 :
+- CSDLEC :
+	- Introducing 'rDriver'.
+- FBLOVL :
+	- 'mode__' -> 'eMode'.
+	- 'mRemote' -> 'mSerialized'.
+	- 'mEmbedded' -> 'mReferenced'.
+	- Introducing 'cDriver'.
+- FBLBKD, FBLBUR, FBLFRD, SCLBACKND :
+	- Adaptation to changes in 'FBLOVL'.
+- SCLFRNTND :
+	- 'features___' -> 'rFeatures'.
+	- 'kernel___' -> 'rKernel'.
+	- 'frontend___' -> 'rFrontend'.
+	- Embedded backend is now accessed through a plugin too.
+
 2016-07-29 :
-	- TME :
-		- Prise en compte du format sur 12 h ('AM'/'PM').
+- TME :
+	- Prise en compte du format sur 12 h ('AM'/'PM').
 
 2016-07-28 :
-	- SCLXDHTML :
-		- 'Refresh' related actrion moved to action herlpet.
-		- Introducing 'SCLX' instead of 'SCLXDHTML' notation, which will be the new one in the future.
-	- XDHCMN :
-		- Introducing 'RefreshActionLabel'.
+- SCLXDHTML :
+	- 'Refresh' related actrion moved to action herlpet.
+	- Introducing 'SCLX' instead of 'SCLXDHTML' notation, which will be the new one in the future.
+- XDHCMN :
+	- Introducing 'RefreshActionLabel'.
 
 2016-07-25 :
-	- SCLXDHTML :
-		- The backend visibility is now stored in 'rSession'.
+- SCLXDHTML :
+	- The backend visibility is now stored in 'rSession'.
 
 2016-07-22 :
-	- CSDMXB :
-		- 'fId' -> 'sId'.
-	- CSDMXS :
-		- Adaptation to changes in CSDMXB.
-	- CSDMXS :
-		- Introducing file log callback.
-		- Fixing the logical connection closing also closing the physical connection bug.
-		- Adaptation to changes in CSDMXB.
+- CSDMXB :
+	- 'fId' -> 'sId'.
+- CSDMXS :
+	- Adaptation to changes in CSDMXB.
+- CSDMXS :
+	- Introducing file log callback.
+	- Fixing the logical connection closing also closing the physical connection bug.
+	- Adaptation to changes in CSDMXB.
 
 2016-07-21 :
-	- CSDMNC :
-		- Adaptation to changes in CSDMXC.
-		- Fixing 'Timeout'<->'PingDelay' bug.
-	- CSDMXC :
-		- 'cLogCallback' -> 'cLog'.
-		- Introducing file log callback.
-		- 'Retrieve' -> 'Acquire'.
-	- SCLBACKND :
-		- Adaptation to changes in SCLDAEMON.
-	- SCLDAEMON :
-		- The muxing flow is deported to the 'straight' 'dmnzq' plugin.
+- CSDMNC :
+	- Adaptation to changes in CSDMXC.
+	- Fixing 'Timeout'<->'PingDelay' bug.
+- CSDMXC :
+	- 'cLogCallback' -> 'cLog'.
+	- Introducing file log callback.
+	- 'Retrieve' -> 'Acquire'.
+- SCLBACKND :
+	- Adaptation to changes in SCLDAEMON.
+- SCLDAEMON :
+	- The muxing flow is deported to the 'straight' 'dmnzq' plugin.
 
 2016-07-20 :
-	- CSDMXB :
-		- Fixing bug when mixing 32/64 bits client/server.
+- CSDMXB :
+	- Fixing bug when mixing 32/64 bits client/server.
 
 2016-07-17 :
-	- SCLFRNTND :
-		- Modifications to the 'RemotePlugins' handling.
-	- SCLXDHTML :
-		- Adaptation to changes in SCLFRNTND.
+- SCLFRNTND :
+	- Modifications to the 'RemotePlugins' handling.
+- SCLXDHTML :
+	- Adaptation to changes in SCLFRNTND.
 
 2016-07-16 :
-	- SCLFRNTND :
-		- Improving default project and backend handling.
-	- SCLXDHTML :
-		- Adapting to changes in SCLFRNTND.
-		- The login page can now be configured to hide the backend-related part.
+- SCLFRNTND :
+	- Improving default project and backend handling.
+- SCLXDHTML :
+	- Adapting to changes in SCLFRNTND.
+	- The login page can now be configured to hide the backend-related part.
 
 2016-07-15 :
-	- RGSTRY :
-		- Modifications to facilitate a thread-safe use.
+- RGSTRY :
+	- Modifications to facilitate a thread-safe use.
 
 2016-07-10 :
-	- DLLBRY :
-		- Under 'Windows', all '/' in library path are replaced with '\', as Windows ('XP' only ?) needs '\'.'
+- DLLBRY :
+	- Under 'Windows', all '/' in library path are replaced with '\', as Windows ('XP' only ?) needs '\'.'
 
 2016-07-07 :
-	- LCL :
-		- Reorganization to arrange some oddities due to below modifications.
-	- SCLFRNTND :
-		- Fixing missing login parameters bug.
+- LCL :
+	- Reorganization to arrange some oddities due to below modifications.
+- SCLFRNTND :
+	- Fixing missing login parameters bug.
 
 2016-07-06 :
-	- LCL :
-		- Adding 'dMeaning::AddTags(...)' method.
-		- Adding 'locale_::GetTranslation(...)' method variant.
-	- SCLLOCALE :
-		- Replacing all 'GetTranslation(...)' with one based on variadics.
-	- STSFSM :
-		- Adding 'Fill(...)' function variant.
+- LCL :
+	- Adding 'dMeaning::AddTags(...)' method.
+	- Adding 'locale_::GetTranslation(...)' method variant.
+- SCLLOCALE :
+	- Replacing all 'GetTranslation(...)' with one based on variadics.
+- STSFSM :
+	- Adding 'Fill(...)' function variant.
 		- Adding 'qRP' parameters to 'GetId(...)' functions.
 
 ...
