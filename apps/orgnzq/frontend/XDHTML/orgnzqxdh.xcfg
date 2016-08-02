@@ -2,45 +2,47 @@
 <Configurations xmlns:xpp="http://zeusw.org/epeios/xpp">
 	<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 	<xpp:expand value-of="q37.xpp"/>
+	<xpp:expand href="../orgnzqfrd.xcfg"/>
+	<xpp:expand href="../../../XDH.xcfg"/>
 	<Configuration target="orgnzqxdh">
-		<xpp:define name="PathToXSL">
-			<xpp:bloc>epeios/apps/orgnzq/frontend/XDHTML/XSL/</xpp:bloc>
-		</xpp:define>
-		<xpp:ifeq select="packing" value="yes">
-			<xpp:bloc>
-				<xpp:set name="PlgPath" value=""/>
-				<xpp:define name="PlgPath">
-					<xpp:expand value-of="PlgPath"/>
-				</xpp:define>
-			</xpp:bloc>
-		</xpp:ifeq>
-		<xpp:define name="XSLRootDir">
-			<xpp:bloc>
-				<xpp:ifeq select="env" value="windows">
-					<xpp:bloc>
-						<xpp:bloc>H:/hg/</xpp:bloc>
-						<xpp:expand select="PathToXSL"/>
-					</xpp:bloc>
-				</xpp:ifeq>
-				<xpp:ifeq select="env" value="linux">
-					<xpp:bloc>
-						<xpp:bloc>/home/csimon/</xpp:bloc>
-						<xpp:expand select="PathToXSL"/>
-					</xpp:bloc>
-				</xpp:ifeq>
-				<xpp:ifeq select="env" value="mac">
-					<xpp:bloc>
-						<xpp:bloc>/Users/csimon/</xpp:bloc>
-						<xpp:expand select="PathToXSL"/>
-					</xpp:bloc>
-				</xpp:ifeq>
-				<xpp:ifeq select="env" value="packing">
-					<xpp:bloc>XDHTML/XSL/</xpp:bloc>
-				</xpp:ifeq>
-			</xpp:bloc>
-		</xpp:define>
-		<xpp:expand href="../orgnzqfrd.xcfg"/>
-		<xpp:expand href="../../../XDH.xcfg"/>
+		<xpp:bloc><!-- Macros and variables -->
+			<xpp:define name="PathToXSL">
+				<xpp:bloc>epeios/apps/orgnzq/frontend/XDHTML/XSL/</xpp:bloc>
+			</xpp:define>
+			<xpp:ifeq select="packing" value="yes">
+				<xpp:bloc>
+					<xpp:set name="PlgPath" value=""/>
+					<xpp:define name="PlgPath">
+						<xpp:expand value-of="PlgPath"/>
+					</xpp:define>
+				</xpp:bloc>
+			</xpp:ifeq>
+			<xpp:define name="XSLRootDir">
+				<xpp:bloc>
+					<xpp:ifeq select="env" value="windows">
+						<xpp:bloc>
+							<xpp:bloc>H:/hg/</xpp:bloc>
+							<xpp:expand select="PathToXSL"/>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="linux">
+						<xpp:bloc>
+							<xpp:bloc>/home/csimon/</xpp:bloc>
+							<xpp:expand select="PathToXSL"/>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="mac">
+						<xpp:bloc>
+							<xpp:bloc>/Users/csimon/</xpp:bloc>
+							<xpp:expand select="PathToXSL"/>
+						</xpp:bloc>
+					</xpp:ifeq>
+					<xpp:ifeq select="env" value="packing">
+						<xpp:bloc>XDHTML/XSL/</xpp:bloc>
+					</xpp:ifeq>
+				</xpp:bloc>
+			</xpp:define>
+		</xpp:bloc>
 		<Parameters>
 			<xpp:expand select="Parameters"/>
 			<Language>en</Language>

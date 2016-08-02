@@ -16,7 +16,7 @@
 						<Backend Type="Predefined">Embedded</Backend>
 					</xpp:ifeq>
 					<xpp:ifeq select="packing" value="no">
-						<Backend Type="Predefined">Embedded</Backend>
+						<Backend Type="Straight">:53700</Backend>
 					</xpp:ifeq>
 				</xpp:bloc>
 			</xpp:ifeq>

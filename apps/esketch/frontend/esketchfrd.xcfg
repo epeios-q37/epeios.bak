@@ -5,12 +5,20 @@
 	<xpp:expand href="../../FRD.xcfg"/>
 	<xpp:define name="Parameters">
 		<xpp:bloc>
-			<Project Type="New" Handling="Load">LocalHost</Project>
-			<xpp:ifeq select="packing" value="yes">
-				<Backend Type="Predefined">Embedded</Backend>
+			<xpp:expand select="FRD_Parameters"/>
+			<Project Type="New"/>
+			<xpp:ifeq select="prod" value="yes">
+				<Backend Type="Predefined">LocalHost</Backend>
 			</xpp:ifeq>
-			<xpp:ifeq select="packing" value="no">
-				<Backend Type="Predefined">Embedded</Backend>
+			<xpp:ifeq select="prod" value="no">
+				<xpp:bloc>
+					<xpp:ifeq select="packing" value="yes">
+						<Backend Type="Predefined">Embedded</Backend>
+					</xpp:ifeq>
+					<xpp:ifeq select="packing" value="no">
+						<Backend Type="Predefined">Embedded</Backend>
+					</xpp:ifeq>
+				</xpp:bloc>
 			</xpp:ifeq>
 			<xpp:ifeq select="packing" value="no">
 				<Login Mode="Full">
