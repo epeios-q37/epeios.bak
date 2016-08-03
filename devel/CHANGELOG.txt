@@ -2,6 +2,16 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-03 :
+- CSDCMN :
+	- Adding integer 'Put'/'Get'.
+	- Adding strings 'Put'/'Get'.
+	- Some parameters renaming.
+- CSDSCB :
+	- Introducing timeout in plugin override.
+- SCLBACKND, SCLDAEMON :
+	- Adaptation to 'CSDSCB' changes.
+
 2016-08-01 :
 - FLW :
 	- New namings.

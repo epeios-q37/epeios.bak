@@ -68,4 +68,47 @@ qRE
 	return Version;
 }
 
+void csdcmn::Put(
+	const str::wStrings &Strings,
+	flw::sOFlow &Flow )
+{
+	sdr::sRow Row = Strings.First();
+
+	dtfptb::VPut( Strings.Amount(), Flow );
+
+	while ( Row != qNIL ) {
+		Put(Strings( Row ), Flow );
+
+		Row = Strings.Next( Row );
+	}
+}
+
+void csdcmn::Get(
+	flw::sIFlow &Flow,
+	str::dStrings &Strings )
+{
+qRH
+	str::wString String;
+qRB
+	bso::sSize Size = 0;
+
+	dtfptb::VGet( Flow, Size );
+
+	while ( Size-- ) {
+		String.Init();
+
+		Get( Flow, String );
+
+		Strings.Append( String );
+	}
+
+qRR
+qRT
+qRE
+
+
+}
+
+
+
 

@@ -37,13 +37,7 @@
 # define CSDNBS__DEFAULT_TIMEOUT	SCK__DEFAULT_TIMEOUT
 
 /***************/
-/***** NEW *****/
-/***************/
-
-// There is also another 'NEW' section at the end.
-
-/***************/
-/***** PLD *****/
+/***** OLD *****/
 /***************/
 
 namespace csdbns {

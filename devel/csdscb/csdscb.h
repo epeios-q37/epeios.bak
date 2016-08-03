@@ -46,12 +46,16 @@ namespace csdscb {
 		a_Undefined
 	};
 
+	typedef bso::sU16 sTimeout;	// Timeout duration in seconds.
+	qCDEF( sTimeout, NoTimeout, 0 );
+
 	class cProcessing {
 	protected:
 		// If returned value == 'true', the plugin with given 'Id' and 'Arguments' overrides the one defined in the caller's registry (see 'dmnzq').
 		virtual bso::sBool CSDSCBPluginOverride(
 			str::dString &Id,
-			str::dString &Arguments )
+			str::dString &Arguments,
+			sTimeout &Timeout )
 		{
 			return false;
 		}
@@ -64,9 +68,10 @@ namespace csdscb {
 		qCALLBACK( Processing );
 		bso::sBool PluginOverride(
 			str::dString &Id,
-			str::dString &Arguments )
+			str::dString &Arguments,
+			sTimeout &Timeout )
 		{
-			return CSDSCBPluginOverride( Id, Arguments );
+			return CSDSCBPluginOverride( Id, Arguments, Timeout );
 		}
 		void *PreProcess( const ntvstr::char__ *Origin )
 		{

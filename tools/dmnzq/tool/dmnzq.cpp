@@ -136,13 +136,14 @@ namespace {
 
 	void Process_(
 		cHandler &Handler,
-		sModule &Module )
+		sModule &Module,
+		misc::sTimeout Timeout )
 	{
 	qRH
 		csdmxs::rCallback Muxer;
 	qRB
 		Muxer.Init( Module );
-		Handler.Handle( Muxer );
+		Handler.Handle( Muxer, Timeout );
 	qRR
 	qRT
 	qRE
@@ -153,11 +154,12 @@ namespace {
 	qRH
 		plgn::rRetriever<cHandler> Retriever;
 		str::wString PluginId, PluginArguments;
+		misc::sTimeout Timeout = misc::NoTimeout;
 	qRB
 		PluginId.Init();
 		PluginArguments.Init();
 
-		if ( Module.PluginOverride(PluginId, PluginArguments) ) {
+		if ( Module.PluginOverride( PluginId, PluginArguments, Timeout ) ) {
 			if ( PluginId.Amount() == 0 )
 				qRFwk();
 		} else
@@ -169,11 +171,18 @@ namespace {
 
 		sclmisc::Plug( misc::SlotPluginTarget, PluginId, PluginArguments, NULL, Retriever );
 
-		Process_( Retriever.Plugin(), Module );
+		Process_( Retriever.Plugin(), Module, Timeout );
 	qRR
 	qRT
 	qRE
 	}
+
+	void ProcessLoop_( misc::sModule &Module )
+	{
+		while ( 1 )
+			Process_( Module );
+	}
+
 
 	void Process_( void )
 	{
@@ -186,7 +195,7 @@ namespace {
 
 		LoadModule_( sclmisc::MGetValue( registry::Module, Buffer ) );
 
-		Process_( Core_->GetCallback() );
+		ProcessLoop_( Core_->GetCallback() );
 	qRR
 	qRT
 	qRE

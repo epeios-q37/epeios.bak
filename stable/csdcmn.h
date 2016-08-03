@@ -52,40 +52,90 @@ namespace csdcmn {
 
 	// Facilities.
 
-	inline const str::dString &Get(
+	inline const str::dString &Get_(
 		flw::sIFlow &Flow,
-		str::dString &Value )
+		str::dString &String )
 	{
 		bso::sSize Size = 0;
 		
 		dtfptb::VGet( Flow, Size );
 
 		while ( Size-- )
-			Value.Append( Flow.Get() );
+			String.Append( Flow.Get() );
 
-		return Value;
+		return String;
 	}
 
-	inline void Put(
-		const str::dString &Value,
+	inline const str::dString &Get(
+		flw::sIFlow &Flow,
+		str::dString &String )
+	{
+		return Get_( Flow, String );
+	}
+
+	inline const str::dString &Get(
+		flw::sIFlow &Flow,
+		str::wString &String )
+	{
+		return Get_( Flow, String );
+	}
+
+	inline void Put_(
+		const str::dString &String,
 		flw::sOFlow &Flow )
 	{
-		dtfptb::VPut( Value.Amount(), Flow );
+		dtfptb::VPut( String.Amount(), Flow );
 
-		sdr::sRow Row = Value.First();
+		sdr::sRow Row = String.First();
 
 		while ( Row != qNIL ) {
-			Flow.Put(Value( Row ) );
+			Flow.Put( String( Row ) );
 
-			Row = Value.Next( Row );
+			Row = String.Next( Row );
 		}
 	}
 
 	inline void Put(
-		const char *Value,
+		const str::dString &String,
 		flw::sOFlow &Flow )
 	{
-		return csdcmn::Put( str::wString( Value ), Flow );	// 'csdcmn::' should not be necessary, but VC++ is confused.
+		return Put_( String, Flow );
+	}
+
+	inline void Put(
+		const str::wString &String,
+		flw::sOFlow &Flow )
+	{
+		return Put_( String, Flow );
+	}
+
+	inline void Put(
+		const char *String,
+		flw::sOFlow &Flow )
+	{
+		return Put( str::wString( String ), Flow );
+	}
+
+	void Put(
+		const str::wStrings &Strings,
+		flw::sOFlow &Flow );
+
+	void Get(
+		flw::sIFlow &Flow,
+		str::dStrings &Strings );
+
+	template <typename integer> void Put(
+		integer Integer,
+		flw::sOFlow &Flow )
+	{
+		return dtfptb::VPut( Integer, Flow );
+	}
+
+	template <typename integer> void Get(
+		flw::sIFlow &Flow,
+		integer &Integer )
+	{
+		return dtfptb::VGet( Flow, Integer );
 	}
 }
 

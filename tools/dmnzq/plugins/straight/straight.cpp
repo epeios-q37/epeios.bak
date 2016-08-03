@@ -29,11 +29,11 @@
 
 #define PLUGIN_NAME	"straight"
 
-using misc::cHandler;
-
-using misc::sModule;
-
 namespace {
+	using misc::cHandler;
+	using misc::sModule;
+	using misc::sTimeout;
+
 	csdbns::port__ GetPort_( void )
 	{
 		return sclmisc::MGetU16( registry::Service );
@@ -45,10 +45,12 @@ namespace {
 	private:
 		csdbns::server___ Server_;
 	protected:
-		virtual void MISCHandle( sModule &Module ) override
+		virtual void MISCHandle(
+			sModule &Module,
+			sTimeout Timeout ) override
 		{
 			Server_.Init( GetPort_(), Module );
-			Server_.Process( NULL );
+			Server_.Process( NULL,  Timeout == misc::NoTimeout ? sck::NoTimeout : Timeout * 1000 );
 		}
 	public:
 		void reset( bso::bool__ P = true )

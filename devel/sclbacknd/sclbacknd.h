@@ -125,9 +125,10 @@ namespace sclbacknd {
 	protected:
 		virtual bso::sBool SCLDAEMONPluginOverride(
 			str::dString &Id,
-			str::dString &Arguments ) override
+			str::dString &Arguments,
+			csdscb::sTimeout &Timeout ) override
 		{
-			return SCLBACKNDPluginOverride( Id, Arguments );
+			return SCLBACKNDPluginOverride( Id, Arguments, Timeout  );
 		}
 		virtual scldaemon::daemon___ *SCLDAEMONNew(	const ntvstr::char__ *Origin ) override
 		{
@@ -135,7 +136,8 @@ namespace sclbacknd {
 		}
 		virtual bso::sBool SCLBACKNDPluginOverride(
 			str::dString &Id,
-			str::dString &Arguments )
+			str::dString &Arguments,
+			csdscb::sTimeout &Timeout )
 		{
 			return false;
 		}

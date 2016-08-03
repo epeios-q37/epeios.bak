@@ -31,15 +31,21 @@ namespace misc {
 	E_CDEF( char *, SlotPluginTarget, MISC_SLOT_PLUGIN_TARGET );
 	E_CDEF( char *, SlotPluginVersion, MISC_SLOT_PLUGIN_VERSION );
 
+	using csdscb::sTimeout;		// Timeout duration in seconds.
+	using csdscb::NoTimeout;
 
 	class cHandler
 	{
 	protected:
-		virtual void MISCHandle( sModule &Module ) = 0;
+		virtual void MISCHandle(
+			sModule &Module,
+			sTimeout Timeout ) = 0;
 	public:
-		void Handle( sModule &Module )
+		void Handle(
+			sModule &Module,
+			sTimeout Timeout )
 		{
-			return MISCHandle( Module );
+			return MISCHandle( Module, Timeout );
 		}
 		static const char *Label( void );
 	};

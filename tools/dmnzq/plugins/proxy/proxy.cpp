@@ -32,11 +32,11 @@
 
 #define PLUGIN_NAME	"proxy"
 
-using misc::cHandler;
-
-using misc::sModule;
-
 namespace {
+
+	using misc::cHandler;
+	using misc::sModule;
+	using misc::sTimeout;
 
 	struct data__ {
 		prxy::rFlow *Flow;
@@ -101,7 +101,9 @@ namespace {
 	private:
 		TOL_CBUFFER___ HostService_, Identifier_;
 	protected:
-		virtual void MISCHandle( sModule &Module ) override
+		virtual void MISCHandle(
+			sModule &Module,
+			sTimeout Timeout) override
 		{
 		qRH
 			prxy::rFlow *Flow = NULL;
@@ -115,7 +117,7 @@ namespace {
 
 			Meaning.Init();
 
-			while ( Flow->Init( HostService_, Identifier_, prxybase::tServer, sck::NoTimeout, Meaning ) ) {
+			while ( Flow->Init( HostService_, Identifier_, prxybase::tServer, Timeout == misc::NoTimeout ? sck::NoTimeout : Timeout * 1000, Meaning ) ) {
 				Data.Init( Flow, Module, HostService_ );
 
 				mtx::Lock( Data.Mutex );

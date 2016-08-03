@@ -1,0 +1,10 @@
+Changelog of the 'straight' 'dmnzq' plugin.
+
+2016-08-03 :
+- Adding timeout handling.
+
+2016-07-31 :
+- Moving the muxing handling to 'dmnzq'.
+
+
+

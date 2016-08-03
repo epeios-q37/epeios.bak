@@ -1,0 +1,4 @@
+Changelot for the 'proxy' 'dmpnzq' plugin.
+
+2016-08-03 :
+- Adding timeout handling.

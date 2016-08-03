@@ -70,9 +70,10 @@ namespace scldaemon {
 	protected:
 		virtual bso::sBool CSDSCBPluginOverride(
 			str::dString &Id,
-			str::dString &Arguments ) override
+			str::dString &Arguments,
+			csdscb::sTimeout &Timeout ) override
 		{
-			return SCLDAEMONPluginOverride( Id, Arguments );
+			return SCLDAEMONPluginOverride( Id, Arguments, Timeout );
 		}
 		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
 		{
@@ -107,7 +108,8 @@ namespace scldaemon {
 	protected:
 		virtual bso::sBool SCLDAEMONPluginOverride(
 			str::dString &Id,
-			str::dString &Arguments )
+			str::dString &Arguments,
+			csdscb::sTimeout &Timeout )
 		{
 			return false;
 		}

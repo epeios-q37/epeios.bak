@@ -1,5 +1,8 @@
 CHANGELOG FOR THE dmnzq TOOL.
 
+2016-08-01 :
+- Introducing looping, the module be regularly asked which pligun should be used.
+
 2016-07-30 :
 - Handles now the muxing, retrieved from 'SCLDAEMON' (implementing to the 'straight' plugin was a mistake).
 
