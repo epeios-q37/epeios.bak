@@ -77,7 +77,7 @@ namespace {
 	}
 }
 
-void frdinstc::rUser::DumpCurrentRecordColumns( xml::dWriter &Writer ) const
+void frdinstc::rPanel::DumpCurrentRecordColumns( xml::dWriter &Writer ) const
 {
 qRH
 	fbltyp::wIds Columns;
@@ -94,7 +94,7 @@ qRB
 	Comments.Init();
 
 	if ( Record_ != UndefinedRecord )
-		Core_.GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
+		C_().GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
 
 	Dump_( Columns, Types, Numbers, Labels, Comments, Writer );
 qRR
@@ -172,7 +172,7 @@ namespace {
 	}
 }
 
-void frdinstc::rUser::DumpCurrentRecordFields( xml::dWriter &Writer ) const
+void frdinstc::rPanel::DumpCurrentRecordFields( xml::dWriter &Writer ) const
 {
 qRH
 	fbltyp::wIds Fields, Columns, Types;
@@ -184,15 +184,15 @@ qRB
 	Types.Init();
 
 	if ( Record_ != UndefinedRecord )
-		Core_.GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
+		C_().GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
 
-	Dump_( Fields, Columns, EntriesSet, Types, Field_, Core_.Types(), Writer );
+	Dump_( Fields, Columns, EntriesSet, Types, Field_, C_().Types(), Writer );
 qRR
 qRT
 qRE
 }
 
-void frdinstc::rUser::DumpColumnBuffer( xml::dWriter &Writer ) const
+void frdinstc::rPanel::DumpColumnBuffer( xml::dWriter &Writer ) const
 {
 qRH
 	sType Type = UndefinedType;
@@ -202,7 +202,7 @@ qRB
 	Label.Init();
 	Comment.Init();
 
-	Core_.GetColumnBuffer( Type, Number, Label, Comment );
+	C_().GetColumnBuffer( Type, Number, Label, Comment );
 
 	Writer.PushTag( "ColumnBuffer" );
 
@@ -217,7 +217,7 @@ qRT
 qRE
 }
 
-void frdinstc::rUser::DumpFieldBuffer( xml::dWriter &Writer ) const
+void frdinstc::rPanel::DumpFieldBuffer( xml::dWriter &Writer ) const
 {
 qRH
 	sType Type = UndefinedType;
@@ -226,7 +226,7 @@ qRH
 qRB
 	Entries.Init();
 
-	Core_.GetFieldBuffer( Type, Number, Entries );
+	C_().GetFieldBuffer( Type, Number, Entries );
 
 	Writer.PushTag( "Field" );
 
@@ -247,18 +247,55 @@ qRT
 qRE
 }
 
-void frdinstc::rUser::DumpRecords( xml::dWriter &Writer ) const
+void frdinstc::rPanel::DumpRecords( xml::dWriter &Writer ) const
 {
 qRH
 	wDigestsI1S Digests;
 qRB
 	Digests.Init();
-	Core_.GetRecords( Digests );
+	C_().GetRecords( Digests );
 
 	sclfrntnd::Dump( Digests, "Records", "Record", Writer );
 qRR
 qRE
 qRT
 }
+
+void frdinstc::rUser::DeletePanels_( void )
+{
+	sPRow Row = Panels_.First();
+
+	while ( Row != qNIL ) {
+		delete Panels_( Row );
+
+		Row = Panels_.Next( Row );
+	}
+
+	CurrentPanel_ = qNIL;
+	Panels_.reset();
+}
+
+void frdinstc::rUser::DumpPanels( xml::dWriter &Writer )
+{
+	sPRow Row = Panels_.First();
+
+	Writer.PushTag( "Tabs" );
+	Writer.PutAttribute("Amount", Panels_.Amount() );
+
+	Writer.PutAttribute( "Selected", *CurrentPanel_, qNIL );
+
+	while ( Row != qNIL ) {
+		Writer.PushTag("Tab");
+
+		Writer.PutAttribute("id", *Row );
+
+		Writer.PopTag();
+
+		Row = Panels_.Next( Row );
+	}
+
+	Writer.PopTag();
+}
+
 
 

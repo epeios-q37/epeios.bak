@@ -69,7 +69,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpRecords( Rack );
+		Session.User.Panel().DumpRecords( Rack );
 	qRR
 	qRT
 	qRE
@@ -103,7 +103,7 @@ qRE
 
 AC( DefineNewRecord )
 {
-	Session.User.NewRecord();
+	Session.User.Panel().NewRecord();
 
 	main::SetLayout( Session );
 	main::SetRecordLayout( Session );
@@ -116,7 +116,7 @@ AC( DefineRecord )
 
 	Session.GetNumericalContent( Id, **Record );
 
-	Session.User.DefineRecord( Record );
+	Session.User.Panel().DefineRecord( Record );
 
 	main::SetLayout( Session );
 	main::SetRecordLayout( Session );

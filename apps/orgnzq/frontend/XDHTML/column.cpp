@@ -69,7 +69,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpColumnBuffer( Rack() );
+		Session.User.Panel().DumpColumnBuffer( Rack() );
 	qRR
 	qRT
 	qRE
@@ -125,7 +125,7 @@ qRB
 	if ( Label.Amount() == 0 )
 		sclmisc::ReportAndAbort( "FieldLabelCanNotBeEmpty" );
 
-	Session.User.NewField( Type, Number, Label, Comment );
+	Session.User.Panel().NewField( Type, Number, Label, Comment );
 
 	main::SetRecordLayout( Session );
 	record::SetFieldsLayout( Session );

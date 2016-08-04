@@ -71,7 +71,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpFieldBuffer( Rack() );
+		Session.User.Panel().DumpFieldBuffer( Rack() );
 	qRR
 	qRT
 	qRE
@@ -118,7 +118,7 @@ void record::SetColumnLayout( core::rSession &Session )
 
 AC( DefineNewField )
 {
-	Session.User.NewColumn();
+	Session.User.Panel().NewColumn();
 
 	main::SetRecordLayout( Session );
 	record::SetFieldsLayout( Session );
@@ -127,7 +127,7 @@ AC( DefineNewField )
 
 AC( BackToList )
 {
-	Session.User.BackToList();
+	Session.User.Panel().BackToList();
 	main::SetLayout( Session, true );
 }
 

@@ -25,10 +25,12 @@
 # include "record.h"
 
 namespace main {
+	BASE_ACD( SelectPanel );
 	BASE_ACD( Template );
 
 	inline void Register( void ) {
 		BASE_ACR( Template );
+		BASE_ACR( SelectPanel );
 	}
 
 	void SetLayout(

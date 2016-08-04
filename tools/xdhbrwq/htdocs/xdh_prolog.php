@@ -34,22 +34,58 @@ $out = '
 		<script src="js/xdhtml.js"></script>
 
 		<style type="text/css">
-			html, body {
-			height: 100%;
-			padding: 0;
-			margin: 0;
-			}
+html, body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
 
-			.vcenter-out, .hcenter {
-			display: table;
-			height: 100%;
-			margin: auto;
-			}
+.vcenter-out, .hcenter {
+	display: table;
+	height: 100%;
+	margin: auto;
+}
 
-			.vcenter-in {
-			display: table-cell;
-			vertical-align: middle;
-			}
+.vcenter-in {
+	display: table-cell;
+	vertical-align: middle;
+}
+			
+/* Tabs handling section. */			
+/* From http://www.w3schools.com/howto/howto_js_tabs.asp */
+			
+ul.tab {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 1px solid #ccc;
+	background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+	display: inline-block;
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	transition: 0.3s;
+	font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {
+	background-color: #ddd;
+}
+
+ul.tab li a:focus, .active {
+	background-color: #ccc;
+}
+/* End of Tabs handling section. */			
 		</style>
 		<!-- END -->
 		<script src="xdhbrwq.js"></script>

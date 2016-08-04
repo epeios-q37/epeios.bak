@@ -38,7 +38,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		if ( Session.User.IsFieldDraggingInProgress() )
+		if ( Session.User.Panel().IsFieldDraggingInProgress() )
 			Rack().PutValue( "InProgress", "Dragging" );
 	qRR
 	qRT
@@ -55,9 +55,9 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpCurrentRecordColumns( Rack );
-		Session.User.DumpCurrentRecordFields( Rack );
-		Session.User.DumpColumnBuffer( Rack );
+		Session.User.Panel().DumpCurrentRecordColumns( Rack );
+		Session.User.Panel().DumpCurrentRecordFields( Rack );
+		Session.User.Panel().DumpColumnBuffer( Rack );
 	qRR
 	qRT
 	qRE
@@ -130,7 +130,7 @@ AC( DefineField )
 	
 	Session.GetNumericalContent( Id, **Field );
 
-	Session.User.DefineField( Field );
+	Session.User.Panel().DefineField( Field );
 
 	main::SetRecordLayout( Session );
 	record::SetFieldsLayout( Session );
@@ -152,18 +152,18 @@ namespace {
 
 AC( DragField )
 {
-	Session.User.DragField( GetContent_( Session, Id ) );
+	Session.User.Panel().DragField( GetContent_( Session, Id ) );
 	record::SetFieldsCasting( Session );
 }
 
 AC( DropField )
 {
-	Session.User.DropField( GetContent_( Session, Id ) );
+	Session.User.Panel().DropField( GetContent_( Session, Id ) );
 	record::SetFieldsLayout( Session );
 }
 
 AC( EndFieldDragging )
 {
-	Session.User.EndFieldDragging();
+	Session.User.Panel().EndFieldDragging();
 }
 

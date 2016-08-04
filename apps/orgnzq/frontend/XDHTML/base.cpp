@@ -45,10 +45,10 @@ namespace {
 
 		Session.GetContent( "EditableEntry", Content );
 
-		Session.User.UpdateEntry( Content );
+		Session.User.Panel().UpdateEntry( Content );
 
 		if ( !core::OnFieldDefiningAllowedActions.Search( Action ) )
-			Session.User.UpdateField();
+			Session.User.Panel().UpdateField();
 	qRR
 	qRT
 	qRE
@@ -67,8 +67,8 @@ bso::bool__ base::sActionHelper::SCLXOnBeforeAction(
 			return false;
 		} else
 			return true;
-	} else if ( Session.User.Focus() == frdinstc::tField ) {
-		if ( !Session.User.IsDraggingInProgress() )
+	} else if ( Session.User.Panel().Focus() == frdinstc::tField ) {
+		if ( !Session.User.Panel().IsDraggingInProgress() )
 			UpdateEntry_( Session, Action );
 		return true;
 	} else
@@ -110,8 +110,9 @@ void base::DumpFocus_(
 	const core::rSession &Session,
 	xml::dWriter &Writer )
 {
-	if ( Session.User.GetFocus() != frdinstc::t_Undefined )
-		Writer.PutAttribute( "Focus", frdinstc::GetLabel( Session.User.GetFocus() ) );
+	if ( Session.User.HasPanel() )
+		if ( Session.User.Panel().GetFocus() != frdinstc::t_Undefined )
+			Writer.PutAttribute( "Focus", frdinstc::GetLabel( Session.User.Panel().GetFocus() ) );
 }
 
 

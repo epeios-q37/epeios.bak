@@ -68,6 +68,8 @@ namespace {
 		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpPanels( Rack );
 	qRR
 	qRT
 	qRE
@@ -92,7 +94,7 @@ qRB
 	SetCasting_( Session );
 
 	if ( Refresh ) {
-		switch ( Session.User.Focus() )	{
+		switch ( Session.User.Panel().Focus() )	{
 		case frdinstc::tColumn:
 			main::SetRecordLayout( Session );
 			record::SetFieldsLayout( Session );
@@ -133,6 +135,17 @@ void main::SetRecordLayout( core::rSession &Session )
 }
 
 #define AC( name ) BASE_AC( main, name )
+
+AC( SelectPanel )
+{
+	frdinstc::sPRow Row = qNIL;
+
+	Session.GetNumericalContent( Id, *Row );
+
+	Session.User.SelectPanel( Row );
+
+	SetLayout( Session, true );
+}
 
 AC( Template )
 {

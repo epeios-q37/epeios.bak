@@ -11,9 +11,34 @@
 	<xsl:template match="Content">
 		<span class="vcenter-out">
 			<span class="vcenter-in">
-				<span id="Records"/>
-				<span id="Record"/>
+				<div>
+					<xsl:apply-templates select="Tabs"/>
+				</div>
+				<fieldset>
+					<span id="Records"/>
+					<span id="Record"/>
+				</fieldset>
 			</span>
 		</span>
+	</xsl:template>
+	<xsl:template match="Tabs">
+		<div>
+			<ul class="tab">
+				<xsl:apply-templates select="Tab"/>
+			</ul>
+		</div>
+	</xsl:template>
+	<xsl:template match="Tab">
+		<li>
+			<a data-xdh-onevent="SelectPanel">
+				<xsl:attribute name="data-xdh-value">
+					<xsl:value-of select="@id"/>
+				</xsl:attribute>
+				<xsl:if test="../@Selected=@id">
+					<xsl:attribute name="class">active</xsl:attribute>
+				</xsl:if>
+				<xsl:value-of select="@id"/>
+			</a>
+		</li>
 	</xsl:template>
 </xsl:stylesheet>
