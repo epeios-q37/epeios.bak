@@ -37,6 +37,9 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		if ( Session.User.IsPanelDraggingInProgress() )
+			Rack().PutValue( "InProgress", "Dragging" );
 	qRR
 	qRT
 	qRE
@@ -136,13 +139,49 @@ void main::SetRecordLayout( core::rSession &Session )
 
 #define AC( name ) BASE_AC( main, name )
 
+AC( NewPanel )
+{
+	Session.User.NewPanel();
+
+	SetLayout( Session, true );
+}
+
 AC( SelectPanel )
 {
-	frdinstc::sPRow Row = qNIL;
+	frdinstc::sPPos Pos = qNIL;
 
-	Session.GetNumericalContent( Id, *Row );
+	Session.GetNumericalContent( Id, *Pos );
 
-	Session.User.SelectPanel( Row );
+	Session.User.SelectPanel( Pos );
+
+	SetLayout( Session, true );
+}
+
+AC( DragPanel )
+{
+	frdinstc::sPPos Pos = qNIL;
+
+	Session.GetNumericalContent( Id, *Pos );
+
+	Session.User.DragPanel( Pos );
+
+	SetCasting_( Session );
+}
+
+AC( DropPanel )
+{
+	frdinstc::sPPos Pos = qNIL;
+
+	Session.GetNumericalContent( Id, *Pos );
+
+	Session.User.DropPanel( Pos );
+
+	SetCasting_( Session );
+}
+
+AC( EndPanelDragging )
+{
+	Session.User.EndPanelDragging();
 
 	SetLayout( Session, true );
 }

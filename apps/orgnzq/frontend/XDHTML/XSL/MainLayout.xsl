@@ -22,22 +22,25 @@
 		</span>
 	</xsl:template>
 	<xsl:template match="Tabs">
-		<div>
-			<ul class="tab">
-				<xsl:apply-templates select="Tab"/>
-			</ul>
-		</div>
+		<ul class="tab">
+			<xsl:apply-templates select="Tab"/>
+			<li>
+				<a data-xdh-onevents="NewPanel|(drop|DropPanel)" data-xdh-cast="PanelDroppingCast">
+					<xsl:text>+</xsl:text>
+				</a>
+			</li>
+		</ul>
 	</xsl:template>
 	<xsl:template match="Tab">
 		<li>
-			<a data-xdh-onevent="SelectPanel">
+			<a data-xdh-onevent="SelectPanel" data-xdh-onevents="(dragstart|DragPanel)|(drop|DropPanel)|(dragend|EndPanelDragging)" data-xdh-casts="PanelDraggingCast|PanelDroppingCast">
 				<xsl:attribute name="data-xdh-value">
 					<xsl:value-of select="@id"/>
 				</xsl:attribute>
 				<xsl:if test="../@Selected=@id">
 					<xsl:attribute name="class">active</xsl:attribute>
 				</xsl:if>
-				<xsl:value-of select="@id"/>
+				<xsl:value-of select="."/>
 			</a>
 		</li>
 	</xsl:template>

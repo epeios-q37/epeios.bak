@@ -6,6 +6,7 @@
 	<xpp:define name="Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
+			<MaxAllowedAmountOtTabs>10</MaxAllowedAmountOtTabs>
 			<Project Type="New" Handling="Load">LocalHost</Project>
 			<xpp:ifeq select="prod" value="yes">
 				<Backend Type="Predefined">LocalHost</Backend>

@@ -91,7 +91,8 @@ namespace fblbkd {
 	typedef lcl::strings_	messages_;
 	E_AUTO( messages )
 
-	typedef sdr::row__ index__;
+	qROW( Index );
+	qROW( IRow );	// Index row.
 	typedef fbltyp::id16_t__	command__;
 
 	typedef fbltyp::id16_t__	type_t__;
@@ -196,7 +197,7 @@ namespace fblbkd {
 		fblbrd::descriptions Descriptions;
 		//r User pointers.
 		bch::E_BUNCH( const void *) Functions;
-		bch::E_BUNCH( index__ ) Indexes;
+		bch::qBUNCHw( sIndex, sIRow ) Indexes;
 		void reset( bso::bool__ P = true )
 		{
 			Prefix_ = NULL;
@@ -313,18 +314,18 @@ namespace fblbkd {
 		void _Clean( void );	// Permet l'effacement correct de chaque objet utilisateur.
 	protected:
 		//v To get the index of a new object.
-		virtual index__ FBLBKDNew( void )
+		virtual sIndex FBLBKDNew( void )
 		{
 			qRFwk();
 			return 0;	// Pour éviter un warning.
 		}
 		//v To delete the object with index 'Index'.
-		virtual void FBLBKDDelete( index__ Index )
+		virtual void FBLBKDDelete( sIndex Index )
 		{
 			qRFwk();
 		}
 		//v To get a pointer of the object of index 'Index'.
-		virtual void *FBLBKDObject( index__ Index ) const
+		virtual void *FBLBKDObject( sIndex Index ) const
 		{
 			qRFwk();
 			return NULL;	// Pour éviter un 'warning'
@@ -335,7 +336,7 @@ namespace fblbkd {
 #endif
 		// Fonction appelée pour traiter la requête 'Requete' pour l'objet d'index 'Index'.
 		virtual void Handle_(
-			index__ Index,
+			sIndex Index,
 			rRequest &Requete,
 			log_functions__ &LogFunctions ) = 0;
 	public:
@@ -349,28 +350,28 @@ namespace fblbkd {
 		}
 		E_CDTOR( rModule );
 		//f Give the index of a new object.
-		index__ New( void )
+		sIndex New( void )
 		{
-			index__ Index = FBLBKDNew();
+			sIndex Index = FBLBKDNew();
 
 			Indexes.Append( Index );
 
 			return Index;
 		}
 		//f Delete the object of index 'Index'.
-		void Delete( index__ Index )
+		void Delete( sIndex Index )
 		{
-			sdr::row__ Row = Indexes.Search( Index );
+			sIRow Row = Indexes.Search( Index );
 
 			if ( Row == qNIL )
 				qRFwk();
 
-			Indexes.Remove( Index );
+			Indexes.Remove( Row );
 
 			FBLBKDDelete( Index );
 		}
 		//f Give an pointer to the object of index 'Index'.
-		void *Object( index__ Index ) const
+		void *Object( sIndex Index ) const
 		{
 			return FBLBKDObject( Index );
 		}
@@ -398,7 +399,7 @@ namespace fblbkd {
 		}
 		//f Handle the request 'Request' for object of index 'Index'.
 		void Handle(
-			index__ Index,
+			sIndex Index,
 			rRequest &Requete,
 			log_functions__ &LogFunctions )
 		{
@@ -497,7 +498,7 @@ namespace fblbkd {
 		}
 #endif
 		virtual void Handle_(
-			index__ Index,
+			sIndex Index,
 			rRequest &Requete,
 			log_functions__ &LogFunctions ) override
 		{
@@ -518,7 +519,7 @@ namespace fblbkd {
 	: public rModule_<t>
 	{
 	protected:
-		virtual index__ FBLBKDNew( void ) override
+		virtual sIndex FBLBKDNew( void ) override
 		{
 			t *Pointeur = NULL;
 
@@ -527,13 +528,13 @@ namespace fblbkd {
 
 			Pointeur->reset( false );
 
-			index__ Index = Objets.New();
+			sIndex Index = Objets.New();
 
 			Objets.Store( Pointeur, Index );
 
 			return Index;
 		}
-		virtual void FBLBKDDelete( index__ Index ) override
+		virtual void FBLBKDDelete( sIndex Index ) override
 		{
 			t *Object = Objets( Index );
 
@@ -543,7 +544,7 @@ namespace fblbkd {
 
 			Objets.Delete( Index );
 		}
-		virtual void *FBLBKDObject( index__ Index ) const override
+		virtual void *FBLBKDObject( sIndex Index ) const override
 		{
 			if ( *Index >= Objets.Amount() )
 				qRFwk();
@@ -551,7 +552,7 @@ namespace fblbkd {
 			return (void *)( Objets( Index )->OBJECT() );
 		}
 	public:
-		lstbch::qLBUNCHwl( t * ) Objets;
+		lstbch::qLBUNCHw( t *, sIndex ) Objets;
 		void reset( bso::bool__ P = true )
 		{
 			rModule_<t>::reset( P );
@@ -585,16 +586,16 @@ namespace fblbkd {
 		{
 			Objets.Allocate( Size, aem::mFitted );
 		}
-		virtual index__ FBLBKDNew( void )
+		virtual sIndex FBLBKDNew( void )
 		{
 			return _List().New();
 		}
-		virtual void FBLBKDDelete( index__ Index )
+		virtual void FBLBKDDelete( sIndex Index )
 		{
 			Objets( Index ).reset();
 			_List().Delete( Index );
 		}
-		virtual void *FBLBKDObject( index__ Index )
+		virtual void *FBLBKDObject( sIndex Index )
 		{
 			if ( *Index >= Objets.Amount() )
 				qRFwk();
@@ -627,7 +628,7 @@ namespace fblbkd {
 		t *T_;
 		bso::bool__ Created_;
 	protected:
-		virtual index__ FBLBKDNew( void )
+		virtual sIndex FBLBKDNew( void ) override
 		{
 			if ( Created_ )
 				return FBLBKD_SHARED_OBJECT_INDEX;
@@ -636,10 +637,10 @@ namespace fblbkd {
 				return 0;
 			}
 		}
-		virtual void FBLBKDDelete( index__ Index )
+		virtual void FBLBKDDelete( sIndex Index ) override
 		{
 		}
-		virtual void *FBLBKDObject( index__ Index )
+		virtual void *FBLBKDObject( sIndex Index ) override
 		{
 			return T_->OBJECT();
 		}
@@ -666,7 +667,7 @@ namespace fblbkd {
 	{
 	protected:
 		virtual void Handle_(
-			index__ Index,
+			sIndex Index,
 			rRequest &Requete,
 			log_functions__ &LogFunctions ) override;
 	public:
@@ -678,7 +679,7 @@ namespace fblbkd {
 		// Le type de l'objet
 		type__ Type;
 		// L'index de l'objet;
-		index__ Index;
+		sIndex Index;
 	};
 
 	//t To by-pass a visual C++ bug.
@@ -706,7 +707,7 @@ namespace fblbkd {
 		}
 		object__ New(
 			type__ IdType,
-			index__ Index )
+			sIndex Index )
 		{
 			link__ Lien;
 			object__ P;
@@ -731,7 +732,7 @@ namespace fblbkd {
 		{
 			return _storage::Get( IdObjet ).Type;
 		}
-		index__ Index( object__ IdObjet ) const
+		sIndex Index( object__ IdObjet ) const
 		{
 			return _storage::Get( IdObjet ).Index;
 		}
@@ -793,7 +794,7 @@ namespace fblbkd {
 			return Links.Type( IdObjet );
 		}
 		// Retourne l'indexcorrespondant à l'objet d'identificateur 'IdObjet'.
-		index__ Index_( object__ IdObjet ) const
+		sIndex Index_( object__ IdObjet ) const
 		{
 			return Links.Index( IdObjet );
 		}

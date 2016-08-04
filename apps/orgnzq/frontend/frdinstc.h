@@ -36,31 +36,19 @@ namespace frdinstc {
 		{
 			return F_().Statics;
 		}
-		orgnzq::rOGZColumn ColumnBuffer_;
-		orgnzq::rOGZField FieldBuffer_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Frontend_ = NULL;
-
-			ColumnBuffer_.reset( P );
-			FieldBuffer_.reset( P );
 		}
 		E_CVDTOR( rUser_ );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			Frontend_ = &Frontend;
-
-			ColumnBuffer_.Init( Frontend.Column );
-			FieldBuffer_.Init( Frontend.Field );
 		}
-		fbltyp::sObject GetColumnBuffer( void ) const
+		frdfrntnd::rFrontend &Frontend( void ) const
 		{
-			return ColumnBuffer_.ID();
-		}
-		fbltyp::sObject GetFieldBuffer( void ) const
-		{
-			return FieldBuffer_.ID();
+			return F_();
 		}
 		bso::sBool Login(
 			const str::dString &Username,
@@ -71,6 +59,97 @@ namespace frdinstc {
 			S_().OGZLogin( Username, Password, Success );
 
 			return Success;
+		}
+		void GetRecordColumns(
+			sRecord Record,
+			fbltyp::dIds &Columns,
+			fbltyp::dIds &Types,
+			fbltyp::dId8s &Numbers,
+			str::dStrings &Labels,
+			str::dStrings &Comments ) const
+		{
+			S_().OGZGetRecordColumns( *Record, Columns, Types, Numbers, Labels, Comments );
+		}
+		void GetRecordFields(
+			sRecord Record,
+			fbltyp::dIds &Fields,
+			fbltyp::dIds &Columns,
+			fbltyp::dStringsSet &EntriesSet,
+			fbltyp::dIds &Types ) const
+		{
+			S_().OGZGetRecordFields( *Record, Fields, Columns, Types, EntriesSet );
+		}
+		const frdmisc::wXTypes &Types( void ) const
+		{
+			return F_().Types();
+		}
+		sRecord CreateRecord( void ) const
+		{
+			sRecord Record = UndefinedRecord;
+
+			S_().OGZCreateRecord( *Record );
+
+			return Record;
+		}
+		sField CreateField(
+			sRecord Record,
+			fbltyp::sObject ColumnBuffer,
+			fbltyp::sObject FieldBuffer ) const
+		{
+			sField Field = UndefinedField;
+
+			S_().OGZCreateField( *Record, ColumnBuffer, FieldBuffer, *Field );
+
+			return Field;
+		}
+		bso::sBool UpdateField(
+			sField Field,
+			fbltyp::sObject FieldBuffer,
+			bso::sBool &RecordErased ) const
+		{
+			bso::sBool FieldErased = false;
+
+			S_().OGZUpdateField( *Field, FieldBuffer, FieldErased, RecordErased );
+
+			return FieldErased;
+		}
+		void GetRecords( dDigestsI1S &Digests ) const
+		{
+			S_().OGZGetRecords( Digests.Ids, Digests.Strings1 );
+		}
+		void MoveField(
+			sRecord Record,
+			sField Source,
+			sField Target ) const
+		{
+			S_().OGZMoveField( *Record, *Source, *Target );
+		}
+	};
+
+	class rPanel_
+	{
+	private:
+		orgnzq::rOGZColumn ColumnBuffer_;
+		orgnzq::rOGZField FieldBuffer_;
+	public:
+		void reset( bso::bool__ P = true )
+		{	
+			ColumnBuffer_.reset( P );
+			FieldBuffer_.reset( P );
+		}
+		E_CVDTOR( rPanel_ );
+		void Init( frdfrntnd::rFrontend &Frontend )
+		{
+			ColumnBuffer_.Init( Frontend.Column );
+			FieldBuffer_.Init( Frontend.Field );
+		}
+		fbltyp::sObject GetColumnBuffer( void ) const
+		{
+			return ColumnBuffer_.ID();
+		}
+		fbltyp::sObject GetFieldBuffer( void ) const
+		{
+			return FieldBuffer_.ID();
 		}
 		void NewColumnBuffer( void ) const
 		{
@@ -114,25 +193,6 @@ namespace frdinstc {
 		{
 			FieldBuffer_.Fill( *Field );
 		}
-		void GetRecordColumns(
-			sRecord Record,
-			fbltyp::dIds &Columns,
-			fbltyp::dIds &Types,
-			fbltyp::dId8s &Numbers,
-			str::dStrings &Labels,
-			str::dStrings &Comments ) const
-		{
-			S_().OGZGetRecordColumns( *Record, Columns, Types, Numbers, Labels, Comments );
-		}
-		void GetRecordFields(
-			sRecord Record,
-			fbltyp::dIds &Fields,
-			fbltyp::dIds &Columns,
-			fbltyp::dStringsSet &EntriesSet,
-			fbltyp::dIds &Types ) const
-		{
-			S_().OGZGetRecordFields( *Record, Fields, Columns, Types, EntriesSet );
-		}
 		void GetFieldBuffer(
 			sType &Type,
 			sNumber &Number,
@@ -140,56 +200,11 @@ namespace frdinstc {
 		{
 			FieldBuffer_.Get( *Type, *Number, Entries.Ids, Entries.Strings1 );
 		}
-		const frdmisc::wXTypes &Types( void ) const
-		{
-			return F_().Types();
-		}
-		sRecord CreateRecord( void ) const
-		{
-			sRecord Record = UndefinedRecord;
-
-			S_().OGZCreateRecord( *Record );
-
-			return Record;
-		}
-		sField CreateField(
-			sRecord Record,
-			fbltyp::sObject ColumnBuffer,
-			fbltyp::sObject FieldBuffer ) const
-		{
-			sField Field = UndefinedField;
-
-			S_().OGZCreateField( *Record, ColumnBuffer, FieldBuffer, *Field );
-
-			return Field;
-		}
-		bso::sBool UpdateField(
-			sField Field,
-			fbltyp::sObject FieldBuffer,
-			bso::sBool &RecordErased ) const
-		{
-			bso::sBool FieldErased = false;
-
-			S_().OGZUpdateField( *Field, FieldBuffer, FieldErased, RecordErased );
-
-			return FieldErased;
-		}
-		void GetRecords( dDigestsI1S &Digests ) const
-		{
-			S_().OGZGetRecords( Digests.Ids, Digests.Strings1 );
-		}
 		void MoveEntry(
 			sEntry Source,
 			sEntry Target ) const
 		{
 			FieldBuffer_.MoveEntry( *Source, *Target );
-		}
-		void MoveField(
-			sRecord Record,
-			sField Source,
-			sField Target ) const
-		{
-			S_().OGZMoveField( *Record, *Source, *Target );
 		}
 	};
 
@@ -249,7 +264,8 @@ namespace frdinstc {
 	class rPanel
 	{
 	private:
-		qRMV( rUser_, C_, Core_ );
+		rPanel_ Core_;
+		qRMV( rUser_, U_, User_ );
 		eTarget Focus_;
 		// Focused items.
 		sRecord Record_;
@@ -344,13 +360,15 @@ namespace frdinstc {
 	public:
 		void reset( bso::bool__ P = true )
 		{	
-			Core_ = NULL;
+			Core_.reset( P );
+			User_ = NULL;
 			UnselectAll_();
 		}
 		E_CVDTOR( rPanel );
-		void Init( rUser_ &Core )
+		void Init( rUser_ &User )
 		{
-			Core_ = &Core;
+			Core_.Init( User.Frontend() );
+			User_ = &User;
 
 			UnselectAll_();
 
@@ -370,14 +388,14 @@ namespace frdinstc {
 			const str::dString &Label,
 			const str::dString &Comment )
 		{
-			C_().UpdateColumnBuffer( Type, Number, Label, Comment );
-			C_().NewFieldBuffer( C_().GetColumnBuffer() );
+			Core_.UpdateColumnBuffer( Type, Number, Label, Comment );
+			Core_.NewFieldBuffer( Core_.GetColumnBuffer() );
 			FocusOn_( UndefinedField );
 			FocusOn_( UndefinedEntry );
 		}
 		void DefineField( sField Field )
 		{
-			C_().FillFieldBuffer( Field );
+			Core_.FillFieldBuffer( Field );
 			FocusOn_( Field );
 		}
 		void DefineEntry( sEntry Entry )
@@ -386,7 +404,7 @@ namespace frdinstc {
 		}
 		void NewColumn( void )
 		{
-			C_().NewColumnBuffer();
+			Core_.NewColumnBuffer();
 			FocusOn_( UndefinedColumn );
 		}
 		void GetColumn(
@@ -395,14 +413,14 @@ namespace frdinstc {
 			str::dString &Label,
 			str::dString &Comment ) const
 		{
-			C_().GetColumnBuffer( Type, Number, Label, Comment );
+			Core_.GetColumnBuffer( Type, Number, Label, Comment );
 		}
 		void UpdateEntry( const str::dString &Content )
 		{
 			if ( Focus_ != tField )
 				qRGnr();
 
-			if ( C_().UpdateFieldBufferEntry( Entry_.Get(), Content ) )
+			if ( Core_.UpdateFieldBufferEntry( Entry_.Get(), Content ) )
 				Entry_.MarkAsRemoved();
 		}
 		void UpdateField( void )
@@ -410,12 +428,12 @@ namespace frdinstc {
 			bso::sBool RecordErased = false;
 
 			if ( Record_ == UndefinedRecord )
-				Record_ = C_().CreateRecord();
+				Record_ = U_().CreateRecord();
 
 			if ( Field_ == UndefinedField )
-				Field_ = C_().CreateField( Record_, C_().GetColumnBuffer(), C_().GetFieldBuffer() );
+				Field_ = U_().CreateField( Record_, Core_.GetColumnBuffer(), Core_.GetFieldBuffer() );
 
-			if ( C_().UpdateField( Field_, C_().GetFieldBuffer(), RecordErased) ) {
+			if ( U_().UpdateField( Field_, Core_.GetFieldBuffer(), RecordErased) ) {
 				Field_ = UndefinedField;
 
 				if ( RecordErased )
@@ -441,7 +459,7 @@ namespace frdinstc {
 			if ( DraggedEntry_ == UndefinedEntry )
 				qRGnr();
 
-			C_().MoveEntry( DraggedEntry_, Entry );
+			Core_.MoveEntry( DraggedEntry_, Entry );
 		}
 		void EndEntryDragging( void )
 		{
@@ -468,7 +486,7 @@ namespace frdinstc {
 			if ( DraggedField_ == UndefinedField )
 				qRGnr();
 
-			C_().MoveField( Record_, DraggedField_, Field );
+			U_().MoveField( Record_, DraggedField_, Field );
 		}
 		void EndFieldDragging( void )
 		{
@@ -491,20 +509,20 @@ namespace frdinstc {
 	};
 
 	qROW( PRow );	// Panel row.
-
-	typedef lstbch::qLBUNCHd( rPanel*, sPRow ) dPanels;
-	qW( Panels );
+	qROW( PPos );	// Panel position.
 
 	class rUser
 	{
 	private:
 		rUser_ Core_;
-		wPanels Panels_;
-		sPRow CurrentPanel_;
+		lstbch::qLBUNCHw( rPanel*, sPRow ) Panels_;
+		bch::qBUNCHw( sPRow, sPPos ) PanelPositions_;
+		sPPos CurrentPanelPosition_;
+		sPPos DraggedPanel_;
 		void DeletePanels_( void );
-		sPRow NewPanel_( void )
+		sPPos NewPanel_( void )
 		{
-			sPRow Row = qNIL;
+			sPPos Pos = qNIL;
 		qRH
 			rPanel *Panel = NULL;
 		qRB
@@ -515,24 +533,25 @@ namespace frdinstc {
 
 			Panel->Init( Core_ );
 
-			Row = Panels_.Add( Panel );
+			Pos = PanelPositions_.Append( Panels_.Add( Panel ) );
 		qRR
 			if ( Panel != NULL )
 				delete Panel;
 		qRT
 		qRE
-			return Row;
+			return Pos;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{	
-			Core_.reset( P );
-
 			if ( P )
 				DeletePanels_();
 
 			Panels_.reset( P );
-			CurrentPanel_ = qNIL;
+			PanelPositions_.reset( P );
+			Core_.reset( P );
+			CurrentPanelPosition_ = qNIL;
+			DraggedPanel_ = qNIL;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -542,50 +561,100 @@ namespace frdinstc {
 
 			DeletePanels_();
 
-			CurrentPanel_ =  qNIL;
+			Panels_.Init();
+			PanelPositions_.Init();
+
+			CurrentPanelPosition_ =  qNIL;
+			DraggedPanel_ = qNIL;
 		}
 		bso::sBool Login(
 			const str::dString &Username,
 			const str::dString &Password )
 		{
 			if ( Core_.Login( Username, Password ) ) {
-				Panels_.Init();
-				CurrentPanel_ = NewPanel_();
-				CurrentPanel_ = NewPanel_();
-				CurrentPanel_ = NewPanel_();
-				CurrentPanel_ = NewPanel_();
-				CurrentPanel_ = NewPanel_();
-				CurrentPanel_ = NewPanel_();
+				CurrentPanelPosition_ = NewPanel_();
 				return true;
 			} else 
 				return false;
 
 		}
 		void DumpPanels( xml::dWriter &Writer );
-		void SelectPanel( sPRow Row )
+		void NewPanel( void )
 		{
-			if ( !Panels_.Exists( Row ) )
+			if ( PanelPositions_.Amount() >= sclmisc::OGetU8( frdrgstry::parameter::MaxAllowedAmountOfTabs, 10, 25 ) )
+				sclmisc::ReportAndAbort( "TooMuchTabs" );
+
+			CurrentPanelPosition_ = NewPanel_();
+		}
+		void SelectPanel( sPPos Pos )
+		{
+			if ( !PanelPositions_.Exists( Pos ) )
 				qRFwk();
 
-			CurrentPanel_ = Row;
+			CurrentPanelPosition_ = Pos;
 		}
 		bso::sBool HasPanel( void ) const
 		{
-			return CurrentPanel_ != qNIL;
+			return CurrentPanelPosition_ != qNIL;
+		}
+		void DragPanel( sPPos Pos )
+		{
+			if ( DraggedPanel_ != qNIL )
+				qRGnr();
+
+			DraggedPanel_ = Pos;
+		}
+		void DropPanel( sPPos Pos )
+		{
+			if ( DraggedPanel_ == qNIL )
+				qRGnr();
+
+			sPRow Row = PanelPositions_( DraggedPanel_ );
+			sPRow Current = PanelPositions_( CurrentPanelPosition_ );
+
+			if ( Pos != qNIL ) {
+				if ( !PanelPositions_.Exists( Pos ) )
+					qRGnr();
+
+				PanelPositions_.InsertAt( Row, Pos );
+
+				PanelPositions_.Remove( *DraggedPanel_ + ( *DraggedPanel_ > *Pos ? 1 : 0 ) );
+
+
+			}
+			else {
+				PanelPositions_.Append( Row );
+
+				PanelPositions_.Remove( DraggedPanel_ );
+
+				if ( CurrentPanelPosition_ == DraggedPanel_ )
+					CurrentPanelPosition_ = PanelPositions_.Last();
+			}
+
+			CurrentPanelPosition_ = PanelPositions_.Search( Current );
+
+		}
+		void EndPanelDragging( void )
+		{
+			DraggedPanel_ = qNIL;
+		}
+		bso::sBool IsPanelDraggingInProgress( void ) const
+		{
+			return DraggedPanel_ != qNIL;
 		}
 		rPanel &Panel( void )
 		{
-			if ( CurrentPanel_ == qNIL )
+			if ( CurrentPanelPosition_ == qNIL )
 				qRGnr();
 
-			return *Panels_( CurrentPanel_ );
+			return *Panels_( PanelPositions_( CurrentPanelPosition_ ) );
 		}
 		const rPanel &Panel( void ) const
 		{
-			if ( CurrentPanel_ == qNIL )
+			if ( CurrentPanelPosition_ == qNIL )
 				qRGnr();
 
-			return *Panels_( CurrentPanel_ );
+			return *Panels_( PanelPositions_( CurrentPanelPosition_ ) );
 		}
 	};
 

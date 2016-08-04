@@ -3,6 +3,12 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 2016-08-03 :
+- FBLBKD :
+	- Fixing object deletion bug.
+	- Introducing 'sIRow' to avoid above type of bugs.
+	- 'index__' -> 'sIndex' and has its own type (no more a 'sdr::sRow' type).
+
+2016-08-03 :
 - CSDCMN :
 	- Adding integer 'Put'/'Get'.
 	- Adding strings 'Put'/'Get'.

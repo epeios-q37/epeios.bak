@@ -85,7 +85,7 @@ qRE
 
 void fblbkd::rModule::_Clean( void )
 {
-	sdr::row__ Row = Indexes.First();
+	sIRow Row = Indexes.First();
 
 	while ( Row != qNIL ) {
 		FBLBKDDelete( Indexes( Row ) );
@@ -112,7 +112,7 @@ namespace {
 }
 
 void fblbkd::rMasterModule::Handle_(
-	index__ Index,
+	sIndex Index,
 	rRequest &Request,
 	log_functions__ &LogFunctions )
 {
@@ -771,7 +771,7 @@ qRB
 	if ( O != FBLBKD_MASTER_OBJECT ) {
 		Module_( O ).Handle( Index_( O ), Request, LogFunctions );
 	} else
-		Master_.Handle( (index__)0, Request, LogFunctions );
+		Master_.Handle( (sIndex)0, Request, LogFunctions );
 
 	Disconnect = Request.Disconnect();
 

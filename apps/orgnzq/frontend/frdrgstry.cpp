@@ -24,3 +24,5 @@
 
 using namespace frdrgstry;
 
+rEntry frdrgstry::parameter::MaxAllowedAmountOfTabs("MaxAllowedAmountOtTabs", sclrgstry::Parameters );
+

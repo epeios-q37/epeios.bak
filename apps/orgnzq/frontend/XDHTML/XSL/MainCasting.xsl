@@ -31,5 +31,15 @@
 				<xdh-cast id="RecordCasting" kind="Hide"/>
 			</xsl:otherwise>
 		</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="Dragging='InProgress'">
+				<xdh-cast id="PanelDraggingCast" kind="Undraggable"/>
+				<xdh-cast id="PanelDroppingCast" kind="Droppable"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xdh-cast id="PanelDraggingCast" kind="Draggable"/>
+				<xdh-cast id="PanelDroppingCast" kind="Undroppable"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>

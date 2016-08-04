@@ -28,6 +28,7 @@ namespace frdrgstry {
 	using rgstry::rEntry;
 
 	namespace parameter {
+		extern rEntry MaxAllowedAmountOfTabs;
 	}
 
 	namespace definition {

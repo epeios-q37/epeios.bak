@@ -94,7 +94,7 @@ qRB
 	Comments.Init();
 
 	if ( Record_ != UndefinedRecord )
-		C_().GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
+		U_().GetRecordColumns( Record_, Columns, Types, Numbers, Labels, Comments );
 
 	Dump_( Columns, Types, Numbers, Labels, Comments, Writer );
 qRR
@@ -184,9 +184,9 @@ qRB
 	Types.Init();
 
 	if ( Record_ != UndefinedRecord )
-		C_().GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
+		U_().GetRecordFields( Record_, Fields, Columns, EntriesSet, Types );
 
-	Dump_( Fields, Columns, EntriesSet, Types, Field_, C_().Types(), Writer );
+	Dump_( Fields, Columns, EntriesSet, Types, Field_, U_().Types(), Writer );
 qRR
 qRT
 qRE
@@ -202,7 +202,7 @@ qRB
 	Label.Init();
 	Comment.Init();
 
-	C_().GetColumnBuffer( Type, Number, Label, Comment );
+	Core_.GetColumnBuffer( Type, Number, Label, Comment );
 
 	Writer.PushTag( "ColumnBuffer" );
 
@@ -226,7 +226,7 @@ qRH
 qRB
 	Entries.Init();
 
-	C_().GetFieldBuffer( Type, Number, Entries );
+	Core_.GetFieldBuffer( Type, Number, Entries );
 
 	Writer.PushTag( "Field" );
 
@@ -253,7 +253,7 @@ qRH
 	wDigestsI1S Digests;
 qRB
 	Digests.Init();
-	C_().GetRecords( Digests );
+	U_().GetRecords( Digests );
 
 	sclfrntnd::Dump( Digests, "Records", "Record", Writer );
 qRR
@@ -263,35 +263,38 @@ qRT
 
 void frdinstc::rUser::DeletePanels_( void )
 {
-	sPRow Row = Panels_.First();
+	sPPos Pos = PanelPositions_.First();
 
-	while ( Row != qNIL ) {
-		delete Panels_( Row );
+	while ( Pos != qNIL ) {
+		delete Panels_( PanelPositions_( Pos ) );
 
-		Row = Panels_.Next( Row );
+		Pos = PanelPositions_.Next( Pos );
 	}
 
-	CurrentPanel_ = qNIL;
+	CurrentPanelPosition_ = qNIL;
+	PanelPositions_.reset();
 	Panels_.reset();
 }
 
 void frdinstc::rUser::DumpPanels( xml::dWriter &Writer )
 {
-	sPRow Row = Panels_.First();
+	sPPos Pos = PanelPositions_.First();
 
 	Writer.PushTag( "Tabs" );
-	Writer.PutAttribute("Amount", Panels_.Amount() );
+	Writer.PutAttribute("Amount", PanelPositions_.Amount() );
 
-	Writer.PutAttribute( "Selected", *CurrentPanel_, qNIL );
+	Writer.PutAttribute( "Selected", *CurrentPanelPosition_, qNIL );
 
-	while ( Row != qNIL ) {
+	while ( Pos != qNIL ) {
 		Writer.PushTag("Tab");
 
-		Writer.PutAttribute("id", *Row );
+		Writer.PutAttribute( "id", *Pos );
+
+		xml::PutValue( *PanelPositions_( Pos ), Writer );
 
 		Writer.PopTag();
 
-		Row = Panels_.Next( Row );
+		Pos = PanelPositions_.Next( Pos );
 	}
 
 	Writer.PopTag();

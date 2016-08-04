@@ -29,6 +29,10 @@
 		<Translation language="fr">Le nombre du champs doit être spécifié.</Translation>
 		<Translation language="en">The field number must be specified.</Translation>
 	</Translations>
+	<Translations text="TooMuchTabs">
+		<Translation language="fr">Vous avez atteint le nombre maximum d'onglets autorisés.</Translation>
+		<Translation language="en">You reached the maximum allowed amount of tabs.</Translation>
+	</Translations>
 	<!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
