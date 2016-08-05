@@ -108,9 +108,9 @@ else
 	$(MAKE) $(MAKECMDGOALS) -C xdhbrwq/
 endif
 ifdef EPEIOS_SRC
-	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/plugins/remote/
+	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/plugins/frontend/
 else
-	$(MAKE) $(MAKECMDGOALS) -C plugins/remote/
+	$(MAKE) $(MAKECMDGOALS) -C plugins/frontend/
 endif
 ifdef EPEIOS_SRC
 	$(MAKE) $(MAKECMDGOALS) -C /hg/epeios/tools/xdhcefq/

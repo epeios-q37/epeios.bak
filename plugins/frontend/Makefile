@@ -100,5 +100,6 @@ all : common
 clean : common
 
 common:
+	$(MAKE) $(MAKECMDGOALS) -C embedded/
 	$(MAKE) $(MAKECMDGOALS) -C proxy/
 	$(MAKE) $(MAKECMDGOALS) -C straight/
