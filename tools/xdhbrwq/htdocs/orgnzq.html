@@ -2,24 +2,7 @@
 <html>
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="content-type">
-
-
-
-  <title>Epeios organizer demonstration</title>
-    <script src="js/jquery.js"></script>
-    <script src="js/jquery-ui/jquery-ui.js"></script>
-    <script src="js/interact/interact-1.2.4.js"></script>
-    <script src="js/Sortable/Sortable.js"></script>
-    <script src="js/ckeditor/ckeditor.js"></script>
-    <script src="js/ckeditor/adapters/jquery.js"></script>
-    <script src="js/jqte/jquery-te-1.4.0.min.js"></script>
-    <script src="js/datepicker/js/bootstrap-datepicker.js"></script>
-    <script src="js/datepicker/js/locales/bootstrap-datepicker.fr.js" charset="UTF-8"></script>
-    <script src="js/timepicker/jquery.timepicker.js"></script>
-    <script src="js/jquery.alphanum/jquery.alphanum.js"></script>
-    <script src="js/Zebra_Dialog/public/javascript/zebra_dialog.js"></script>
-    <script src="js/xdhtml.js"></script>
-    <script src="xdhbrwq.js"></script>
+    <title>Epeios organizer demonstration</title>
   	<style type="text/css">
 html, body {
 	height: 100%;
@@ -37,6 +20,13 @@ html, body {
 	display: table-cell;
 	vertical-align: middle;
 }
+      
+.regular {
+}
+      
+.maintenance {
+  display: none;
+}
   </style>
 
   </head>
@@ -46,31 +36,28 @@ html, body {
         <span style="overflow: auto;">
         <fieldset>
           <legend>English</legend>
-            This is the demonstration page of the <span style="font-style: italic;">Epeios organizer</span> Web interface.<br>It runs on a small server behind an ADSL box ; you may experience some unresponsiveness.<br>
-            If you provide a <span style="font-style: italic;">User ID</span> which doesn't exist, an account is created with given <span style="font-style: italic;">User ID</span> and password.<br>
-            If the <span style="font-style: italic;">User ID</span> already exists, you must provide the password provided on creation to have access to corresponding account.<br>
-            This demonstration should work on all modern graphical Web browser, except <span style="font-style: italic;">Microsoft Edge</span> (unless it's the last version, the one coming with <span style="font-style: italic;">Windows 10</span> version 1607).<br>
-            Due to this <a target="_blank" href="http://bugzilla.mozilla.org/show_bug.cgi?id=98168">issue</a>, some data may not be displayed correctly on<span style="font-style: italic;"> Firefox</span>.<br>The interface is somewhat ugly, because I am not proficient regarding <span style="font-style: italic;">HTML</span> and <span style="font-style: italic;">CSS ; however, </span>the interface is easily modifiable by someone who knows <span style="font-style: italic;">HTML</span>, <span style="font-style: italic;">CSS</span> and <span style="font-style: italic;">XSL</span>.<br>It's only a demonstration : passwords are not encrypted, and all accounts will be regularly erased.<br><br>
-          <div hidden="hidden"> <!-- hidden -->
-            <p>
+            <p class="maintenance">
               <span style="font-style: italic;">The installation of a new version is currently under progress. Please come back later.</span>
             </p>
-          </div>
+            This is the demonstration page of the <span style="font-style: italic;">Epeios organizer</span> web interface.<br>It runs on a small server behind an ADSL box ; you may experience some unresponsiveness.<br>
+            If you provide a <span style="font-style: italic;">User ID</span> which doesn't exist, an account is created with given <span style="font-style: italic;">User ID</span> and password.<br>
+            If the <span style="font-style: italic;">User ID</span> already exists, you must provide the password provided at creation to have access to corresponding account.<br>
+            This demonstration should work on all modern graphical Web browser, except <span style="font-style: italic;">Microsoft Edge</span> (unless it's the last version, the one coming with <span style="font-style: italic;">Windows 10</span> version 1607).<br>
+            Due to this <a target="_blank" href="http://bugzilla.mozilla.org/show_bug.cgi?id=98168">issue</a>, some data will not be displayed correctly on<span style="font-style: italic;"> Firefox</span>.<br>The interface is somewhat ugly, because I am not proficient regarding <span style="font-style: italic;">HTML</span> and <span style="font-style: italic;">CSS</span> ; however<span style="font-style: italic;">, </span>the interface is easily modifiable by someone who knows <span style="font-style: italic;">HTML</span>, <span style="font-style: italic;">CSS</span> and <span style="font-style: italic;">XSL</span>.<br>It's only a demonstration : passwords are not encrypted, and all accounts will be regularly erased.<br>
          </fieldset>
          <fieldset>
            <legend>Français</legend>
-            Ceci est la page de démonstration de l'interface <span style="font-style: italic;">Web</span> de l'application <span style="font-style: italic;">Epeios organizer</span>.<br>Elle tourne sur un petit serveur placé derrière une <span style="font-style: italic;">box</span> <span style="font-style: italic;">ADSL</span> ; vous serez peut-être confronté à un certain manque de réactivité. <br>
+            <p class="maintenance">
+              <span style="font-style: italic;">Une nouvelle version est en cours d'installation. Veuillez revenir plus tard.</span>
+            </p>
+            Ceci est la page de démonstration de l'interface <span style="font-style: italic;">web</span> de l'application <span style="font-style: italic;">Epeios organizer</span>.<br>Elle tourne sur un petit serveur placé derrière une <span style="font-style: italic;">box</span> <span style="font-style: italic;">ADSL</span> ; vous serez peut-être confronté à un certain manque de réactivité. <br>
             Si vous fournissez un identifiant utilisateur qui n'existe pas, un compte est créé avec cet identifiant et le mot de passe donné.<br>
             Si l'identifiant utilisateur existe déjà, vous devez fournir le mot de passe fourni lors de la création pour avoir accès au compte correspondant.<br>
             Cette démonstration devrait fonctionner sur tous les navigateurs Web graphique moderne, à l'exception de <span style="font-style: italic;">Microsoft Edge</span> (sauf la dernière version, fournie avec <span style="font-style: italic;">Windows 10</span>, version 1607).<br>
             A cause de&nbsp;<a target="_blank" href="http://bugzilla.mozilla.org/show_bug.cgi?id=98168">ceci</a>, certaines données peuvent ne pas s'afficher correctement dans <span style="font-style: italic;">Firefox</span>. <br>L'interface est trés rustique, parce que mes compétences en <span style="font-style: italic;">HTML</span> et en <span style="font-style: italic;">CSS</span> sont trés limités ; cependant l'interface est facilement modifiable en connaissant <span style="font-style: italic;">HTML</span>, <span style="font-style: italic;">CSS</span> et <span style="font-style: italic;">XSL</span>.<br>
-            Il s'agit là seulement d'une démonstration : les mots de passe ne sont pas cryptés, et tout les comptes seront régulièrement effacés.<div hidden="hidden"><!-- hidden -->
-            <p>
-              <span style="font-style: italic;">Une nouvelle version est en cours d'installation. Veuillez revenir plus tard.</span>
-            </p>
-          </div>
+            Il s'agit là seulement d'une démonstration : les mots de passe ne sont pas cryptés, et tout les comptes seront régulièrement effacés.
         </fieldset>
-        <span><!-- hidden -->
+        <span class="regular">
           <form class="hcenter" action="xdh.php" method="post">
             <input name="_prolog" type="hidden">
             <fieldset title="Paramètres d'authentification / Login parameters">
