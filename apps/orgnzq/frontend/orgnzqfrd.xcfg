@@ -84,7 +84,7 @@
 						<xpp:set name="PluginPath" value="$BinPath$plugins/"/>
 						<xpp:set name="BackendPath" value="./"/>
 					</xpp:bloc>
-				</xpp:ifeq>>
+				</xpp:ifeq>
 				<xpp:bloc marker="$">
 					<Backend id="Embedded" Alias="EmbeddedPredefinedBackend" Plugin="Embedded">
 						<xpp:expand value-of="BackendPath"/>
