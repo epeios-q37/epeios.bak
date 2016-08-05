@@ -91,10 +91,10 @@
 						<xpp:bloc>orgnzqbkd</xpp:bloc>
 					</Backend>
 					<Backend id="q37.info" Alias="q37PredefinedBackend" Plugin="Straight">q37.info:57710</Backend>
-					<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53700 test</Backend>
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>
 					<xpp:ifeq select="packing" value="no">
 						<xpp:bloc>
+							<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53700 test</Backend>
 							<Backend id="Mini" Alias="MiniPredefinedBackend" Plugin="Straight">mini:53700</Backend>
 							<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Plugin="Straight">192.168.44.131:53700</Backend>
 						</xpp:bloc>

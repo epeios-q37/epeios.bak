@@ -30,7 +30,7 @@
 #include "fblovl.h"
 #include "csdlec.h"
 
-#define PLUGIN_NAME	"Embedded"
+#define PLUGIN_NAME	"embedded"
 
 typedef fblovl::cDriver cPlugin_;
 

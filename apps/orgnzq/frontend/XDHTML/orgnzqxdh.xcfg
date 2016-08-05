@@ -11,7 +11,7 @@
 			</xpp:define>
 			<xpp:ifeq select="packing" value="yes">
 				<xpp:bloc>
-					<xpp:set name="PlgPath" value=""/>
+					<xpp:set name="PlgPath" value="plugins/"/>
 					<xpp:define name="PlgPath">
 						<xpp:expand value-of="PlgPath"/>
 					</xpp:define>

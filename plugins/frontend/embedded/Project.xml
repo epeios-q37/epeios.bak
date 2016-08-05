@@ -28,7 +28,9 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 			<Module>csdlec</Module>
+			<Module>csdleo</Module>
 			<Module>csdrcc</Module>
+			<Module>csdscb</Module>
 		</Modules>
 		<Module>registry</Module>
 		<Module>rpembedded</Module>

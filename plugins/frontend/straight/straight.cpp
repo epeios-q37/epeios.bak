@@ -33,7 +33,7 @@
 
 #include "csdmnc.h"
 
-#define PLUGIN_NAME	"Straight"
+#define PLUGIN_NAME	"straight"
 
 typedef fblovl::cDriver cPlugin_;
 

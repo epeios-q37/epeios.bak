@@ -40,7 +40,7 @@ mods += plgncore rgstry stsfsm xml xpp
 mods += tht fblovl 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
 mods += sclplugin 
-mods += csdlec csdrcc 
+mods += csdlec csdleo csdrcc csdscb 
 mods += registry rpembedded 
 
 pmods += pllio 
@@ -327,7 +327,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160804"\"
+copt += -DVERSION=\""20160805"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""99ca6539-a9d5-4df2-b48e-52f6ba4c950b"\"
 

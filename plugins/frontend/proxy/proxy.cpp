@@ -33,7 +33,7 @@
 
 #include "prxy.h"
 
-#define PLUGIN_NAME	"Proxy"
+#define PLUGIN_NAME	"proxy"
 
 typedef csdmxc::cCallback cCallback_;
 
