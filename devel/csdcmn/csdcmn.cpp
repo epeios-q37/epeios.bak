@@ -69,7 +69,7 @@ qRE
 }
 
 void csdcmn::Put(
-	const str::wStrings &Strings,
+	const str::dStrings &Strings,
 	flw::sOFlow &Flow )
 {
 	sdr::sRow Row = Strings.First();

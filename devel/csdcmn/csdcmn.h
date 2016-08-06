@@ -117,7 +117,7 @@ namespace csdcmn {
 	}
 
 	void Put(
-		const str::wStrings &Strings,
+		const str::dStrings &Strings,
 		flw::sOFlow &Flow );
 
 	void Get(
