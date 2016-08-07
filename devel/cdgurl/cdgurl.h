@@ -34,6 +34,8 @@
 # include "err.h"
 # include "tol.h"
 
+# include <ctype.h>
+
 namespace cdgurl {
 	typedef fdr::oflow_driver___<> rOFlowDriver_;
 
