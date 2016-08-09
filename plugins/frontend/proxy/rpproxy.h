@@ -42,16 +42,17 @@ namespace rpproxy {
 		}
 	public:
 		str::wString HostService;
+		str::wString PartnerId;
 		void reset( bso::sBool P = true )
 		{
 			sAbstract_::reset( P );
-			HostService.reset( P );
+			tol::reset( P, HostService, PartnerId );
 		}
 		qCDTOR( rAbstract );
 		void Init( void )
 		{
 			sAbstract_::Init();
-			HostService.Init();
+			tol::Init( HostService, PartnerId );
 		}
 	};
 }

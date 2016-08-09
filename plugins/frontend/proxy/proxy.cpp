@@ -151,8 +151,8 @@ public:
 	{
 		bso::sBool Success = false;
 	qRH
-		str::wString HostService, Identifier;
-		qCBUFFERr HostServiceBuffer, IdentifierBuffer;
+		str::wString HostService, PartnerId;
+		qCBUFFERr HostServiceBuffer, PartnerIdBuffer;
 		rpproxy::rAbstract *Abstract = (rpproxy::rAbstract *)BaseAbstract;
 	qRB
 		plgn::Test( BaseAbstract, rpproxy::Identifier );
@@ -160,16 +160,17 @@ public:
 		HostService.Init();
 		sclmisc::MGetValue( registry::HostService, HostService );
 
-		Identifier.Init();
-		sclmisc::MGetValue( registry::Identifier, Identifier );
+		PartnerId.Init();
+		sclmisc::MGetValue( registry::PartnerId, PartnerId );
 
-		if ( !Init( HostService.Convert( HostServiceBuffer ), Identifier.Convert( IdentifierBuffer ) ) )
+		if ( !Init( HostService.Convert( HostServiceBuffer ), PartnerId.Convert( PartnerIdBuffer ) ) )
 			switch ( plgn::ErrorReporting( Abstract ) ) {
 			case plgn::rhInternally:
 				sclmisc::ReportAndAbort( "UnableToConnectTo", HostService );
 				break;
 			case plgn::rhDetailed:
 				Abstract->HostService = HostService;
+				Abstract->PartnerId = PartnerId;
 			case plgn::rhBasic:
 				qRReturn;
 				break;

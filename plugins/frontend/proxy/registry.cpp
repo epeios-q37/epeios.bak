@@ -21,5 +21,5 @@
 
 using namespace registry;
 
-rgstry::entry___ registry::HostService("HostService", sclrgstry::Parameters );
-rgstry::entry___ registry::Identifier("Identifier", sclrgstry::Parameters );
+rgstry::entry___ registry::HostService( "HostService", sclrgstry::Parameters );
+rgstry::entry___ registry::PartnerId( "PartnerId", sclrgstry::Parameters );

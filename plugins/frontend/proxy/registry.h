@@ -24,7 +24,7 @@
 
 namespace registry {
 	extern rgstry::entry___ HostService;
-	extern rgstry::entry___ Identifier;
+	extern rgstry::entry___ PartnerId;
 }
 
 #endif

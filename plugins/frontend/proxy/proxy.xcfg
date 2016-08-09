@@ -36,14 +36,14 @@
 			</Translations>
 		</Locale>
 		<Arguments>
-			<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%HostServiceArgument% %IdentifierArgument%"/>
+			<Argument id="DefaultCommand" Description="DefaultCommandDescription" long="default" short="s" Value="Default" Usage="%HostServiceArgument% %PartnerIdArgument%"/>
 			<Argument id="HostServiceArgument" Description="HostServiceArgumentDescription" Path="HostService" Label="HostServiceArgumentLabel"/>
-			<Argument id="IdentifierArgument" Description="IdentifierArgumentDescription" Path="Identifier" Label="IdentifierArgumentLabel"/>
+			<Argument id="PartnerIdArgument" Description="PartnerIdArgumentDescription" Path="PartnerId" Label="PartnerIdArgumentLabel"/>
 			<!-- Affectations des arguments libres-->
 			<Layouts>
 				<Layout command="Default">
 					<Link index="0" Target="HostServiceArgument"/>
-					<Link index="1" Target="IdentifierArgument"/>
+					<Link index="1" Target="PartnerIdArgument"/>
 				</Layout>
 			</Layouts>
 		</Arguments>
