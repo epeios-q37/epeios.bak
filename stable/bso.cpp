@@ -60,11 +60,7 @@ sBig bso::ConvertToBig(
 		if ( Big > LIMIT )
 			qRFwk();
 
-		Big <<= 7;
-
-		Big += DInt[Position] & 0x7f;
-
-//		Big = ( Big << 7 ) + ( DInt[Position] & 0x7f );
+		Big = ( Big << 7 ) + ( DInt[Position] & 0x7f );
 	} while ( DInt[Position++] & 0x80 );
 
 	if ( Length != NULL )

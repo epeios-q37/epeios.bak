@@ -30,12 +30,16 @@
 
 # include "bso.h"
 # include "cpe.h"
-# include "tht.h"
 # include "tol.h"
 
 /***************/
 /***** NEW *****/
 /***************/
+
+namespace tht {
+	void Defer( unsigned long Delay );
+	unsigned long GetTID( void );
+}
 
 /***************/
 /***** OLD *****/

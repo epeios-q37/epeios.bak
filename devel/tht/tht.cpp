@@ -26,15 +26,15 @@
 using namespace tht;
 
 #ifdef THT__WIN
-#	include <stdlib.h>
-#	include "windows.h"
+# include <stdlib.h>
+# include "windows.h"
 #elif defined( THT__POSIX )
-#	include <unistd.h>
-#	include <sched.h>
-#	include <errno.h>
-#	include <time.h>
+# include <unistd.h>
+# include <sched.h>
+# include <errno.h>
+# include <time.h>
 #else
-#	error "Unknown compilation enviroment"
+# error "Unknown compilation enviroment"
 #endif
 
 
@@ -61,7 +61,7 @@ void tht::Suspend( unsigned long Delay )
 void tht::Defer( void )
 {
 #ifdef THT__WIN
-	Sleep( 0 );	// PAs 0, sinon l'usage CPU monte  100%
+	Sleep( 0 );	// Pas 0, sinon l'usage CPU monte  100%
 #elif defined( THT__POSIX )
 	if( sched_yield() != 0 )
 		qRLbr();

@@ -17,77 +17,59 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: tht.h,v 1.10 2013/04/06 14:50:47 csimon Exp $
+// THread Tools 
 
 #ifndef THT__INC
-#define THT__INC
+# define THT__INC
 
-#define THT_NAME		"THT"
+# define THT_NAME		"THT"
 
-#define	THT_VERSION	"$Revision: 1.10 $"
-
-#define THT_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-#if defined( E_DEBUG ) && !defined( THT_NODBG )
-#define THT_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.10 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/06 14:50:47 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D THread Tools 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( THT_NODBG )
+#  define THT_DBG
+# endif
 
 # include "cpe.h"
+# include "mtx.h"
 
-#if defined( CPE_S_POSIX )
-#	define THT__POSIX
-#elif defined ( CPE_S_WIN )
-#	define THT__WIN
-#else
-#	error
-#endif
+# if defined( CPE_S_POSIX )
+#  define THT__POSIX
+# elif defined ( CPE_S_WIN )
+#  define THT__WIN
+# else
+#  error
+# endif
 
-#ifdef THT__WIN
-#	include <process.h>
-#	include <windows.h>
-#elif defined( THT__POSIX )
-#	include <pthread.h>
-#	include <unistd.h>
-#	include <stdlib.h>
-#	include <signal.h>
-#else
-#	error 
-#endif
+# ifdef THT__WIN
+#  include <process.h>
+#  include <windows.h>
+# elif defined( THT__POSIX )
+#  include <pthread.h>
+#  include <unistd.h>
+#  include <stdlib.h>
+#  include <signal.h>
+# else
+#  error 
+# endif
 
-#define THT_UNDEFINED_THREAD_ID	0	// Totalement arbitraire,  priori, correspond au thread systme, donc ne peut tre renvoy par la fonction 'GetTID()'.
-
+# define THT_UNDEFINED_THREAD_ID	0	// Totaly arbitrary ; should correspond to the system thread, so should never be returned by 'GetTID()'.
 
 namespace tht {
-#ifdef THT__WIN
+# ifdef THT__WIN
 	typedef DWORD	thread_id__;
-#elif defined( THT__POSIX )
+# elif defined( THT__POSIX )
 	typedef pthread_t	thread_id__;
-#endif
+# endif
 
 	//f Return an unique ID for the current thread.
 	inline thread_id__ GetTID( void )
 	{
-#ifdef THT__WIN
+# ifdef THT__WIN
 		return GetCurrentThreadId();
-#elif defined( THT__POSIX )
+# elif defined( THT__POSIX )
 		return pthread_self();
-#else
-#	error
-#endif
+# else
+#  error
+# endif
 	}
 
 
@@ -112,5 +94,158 @@ namespace tht {
 	}
 }
 
-/*$END$*/
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace tht {
+	typedef thread_id__ sThreadID;
+	typedef sThreadID sTID;
+
+	qCDEF( sTID, Undefined, THT_UNDEFINED_THREAD_ID );
+
+	class rCore_
+	{
+	private:
+		mtx::rHandler Mutex_;
+		void Release_( void )
+		{
+			if ( Mutex_ != mtx::UndefinedHandler )
+				Delete( Mutex_ );
+
+			Mutex_ = mtx::UndefinedHandler;
+		}
+		void Test_( void )
+		{
+			if ( Mutex_ == mtx::UndefinedHandler )
+				qRFwk();
+		}
+	public:
+		sTID ThreadID;
+		void reset( bso::sBool P = true )
+		{
+			if ( P )
+				Release_();
+
+			Mutex_ = mtx::UndefinedHandler;
+			ThreadID = Undefined;
+		}
+		qCDTOR( rCore_ );
+		void Init( void )
+		{
+			Release_();
+
+			Mutex_ = mtx::Create();
+			ThreadID = Undefined;
+		}
+		bso::sBool TryToLock( void )
+		{
+			Test_();
+
+			return mtx::TryToLock( Mutex_ );
+		}
+		void Lock( void )
+		{
+			Test_();
+
+			mtx::Lock( Mutex_ );
+		}
+		void Unlock( void )
+		{
+			Test_();
+
+			mtx::Unlock( Mutex_ );
+		}
+		void UnlockIfLocked( void )
+		{
+			if ( mtx::IsLocked( Mutex_ ) )
+				mtx::Unlock( Mutex_ );
+		}
+	};
+
+	// Block a thread until another unblocks it.
+	class rBlocker {
+	private:
+		rCore_ Core_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Core_.reset( P );
+		}
+		qCDTOR( rBlocker );
+		void Init( void )
+		{
+			Core_.Init();
+
+			Core_.Lock();
+			Core_.ThreadID = GetTID();
+		}
+		void Wait( void )
+		{
+			if ( Core_.ThreadID == Undefined ) {
+				Core_.Lock();
+				Core_.ThreadID = GetTID();
+			} else 	if ( Core_.ThreadID != GetTID() )
+				qRFwk();
+
+			Core_.Lock();
+
+			Core_.ThreadID = Undefined;
+
+			Core_.Unlock();
+		}
+		void Unblock( void )
+		{
+			if ( Core_.ThreadID == Undefined )
+				qRFwk();
+			else if ( Core_.ThreadID == GetTID() )
+				qRFwk();
+
+			Core_.Unlock();
+		}
+	};
+
+	// Ensure that a ressource is only acces by one thread at a time.
+	class rLocker {
+	private:
+		rCore_ Core_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			Core_.reset( P );
+		}
+		qCDTOR( rLocker );
+		void Init( void )
+		{
+			Core_.Init();
+		}
+		void Lock( void )
+		{
+			Core_.Lock();
+
+			if ( Core_.ThreadID != Undefined )
+				qRFwk();
+
+			Core_.ThreadID = GetTID();
+		}
+		void Unlock( void )
+		{
+			if ( Core_.ThreadID == Undefined )
+				qRFwk();
+			else if ( Core_.ThreadID == GetTID() )
+				qRFwk();
+
+			Core_.ThreadID = Undefined;
+
+			Core_.Unlock();
+		}
+		void UnlockIfLocked( void )
+		{
+			Core_.UnlockIfLocked();
+
+			Core_.ThreadID = Undefined;
+		}
+	};
+}
+
 #endif

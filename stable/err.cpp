@@ -29,6 +29,8 @@ using namespace err;
 
 #include "tol.h"
 
+#include "tht.h"
+
 // Utilis durant la phase de chargement du programme.
 static err::err___ FallbackError_( true );
 

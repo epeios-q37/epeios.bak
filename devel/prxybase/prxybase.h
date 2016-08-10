@@ -40,6 +40,7 @@ namespace prxybase {
 
 	qENUM( Request ) {
 		rPlug,
+		rDismiss,	// Tells the proxy to disconnect all pending connection from a given id, because no more connection are awaited.
 		rPing,
 		rFreeze,
 		rCrash,

@@ -2,6 +2,16 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-10 :
+- PRXYBASE :
+	- Adding the 'Dismiss' request.
+- MTX :
+	- Adding predeclaration oh 'THT' functions.
+- SCLERROR :
+	- Adaptation to changes in underlying modules.
+- THT :
+	- Adding 'rBlocker' and 'rLocker'.
+
 2016-08-07 :
 - CDGURL :
 	- Adding missing header.

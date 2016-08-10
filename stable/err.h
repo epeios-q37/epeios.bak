@@ -48,7 +48,6 @@
 
 # include "cpe.h"
 
-#  include "tht.h"
 // Prédéclaration.
 namespace mtx {
 	struct _mutex__;
@@ -96,7 +95,11 @@ namespace err {
 		// where to jump
 		static jmp_buf *Jump;
 # endif
+# if 0
 		tht::thread_id__ ThreadID;
+# else
+		unsigned long ThreadID;
+# endif
 		mtx::_mutex__ *Mutex;
 		void reset( bool P = true );
 		~err___( void )

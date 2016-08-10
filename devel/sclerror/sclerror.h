@@ -52,6 +52,7 @@
 # include "cio.h"
 # include "cpe.h"
 # include "mtx.h"
+# include "tht.h"
 
 #include "scllocale.h"
 

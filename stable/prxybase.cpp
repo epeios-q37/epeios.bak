@@ -31,6 +31,7 @@ const char *prxybase::GetLabel( eRequest Request )
 {
 	switch ( Request ) {
 	C( Plug );
+	C( Dismiss );
 	C( Ping );
 	C( Freeze );
 	C( Crash );
