@@ -33,15 +33,6 @@
 # include "tol.h"
 
 /***************/
-/***** NEW *****/
-/***************/
-
-namespace tht {
-	void Defer( unsigned long Delay );
-	unsigned long GetTID( void );
-}
-
-/***************/
 /***** OLD *****/
 /***************/
 
@@ -401,14 +392,13 @@ namespace mtx {
 		return Handler->TryToLock();
 	}
 
+	void Defer_( void );
+
 	// Wait until mutex unlocked.
 	inline void WaitUntilUnlocked_( handler___ Handler )
 	{
 		while( !TryToLock( Handler ) )
-		{
-			tol::InitializeRandomGenerator();
-			tht::Defer( ( (bso::uint__)tht::GetTID() + rand() ) % 5 + 1 ); // 'rand() donne-t'il la mme suite dans des coeurs diffrents ?
-		}
+			Defer_();
 	}
 
 	// Lock 'Handler'. Blocks until lock succeed.
