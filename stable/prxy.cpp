@@ -50,3 +50,19 @@ lcl::meaning_ &prxy::GetMeaning(
 	return Meaning;
 }
 
+eState prxy::RequestDismiss(
+	const char *HostService,
+	const char *Identifier,
+	qRPN )
+{
+	eState State = s_Undefined;
+qRH
+	rProxy_ Proxy;
+qRB
+	State = Proxy.Init( HostService, Identifier, prxybase::tServer, prxybase::rDismiss, sck::NoTimeout, qRP );
+qRR
+qRT
+qRE
+	return State;
+}
+

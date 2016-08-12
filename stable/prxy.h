@@ -39,69 +39,6 @@
 
 namespace prxy {
 
-	class rProxy
-	{
-	private:
-		qRMV( flw::ioflow__, F_, Flow_ );
-	public:
-		void reset( bso::bool__ P = true )
-		{
-			Flow_ = NULL;
-		}
-		qCDTOR( rProxy );
-		bso::bool__ Init(
-			flw::ioflow__ &Flow,
-			const char *Identifier,
-			prxybase::eType Type )
-		{
-			Flow_ = &Flow;
-
-			csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, Flow );
-
-			prxybase::PutRequest( prxybase::rPlug, Flow );
-
-			prxybase::PutType( Type, Flow );
-
-			prxybase::PutId( Identifier, Flow );
-
-			Flow.Commit();
-
-			if ( !Flow.EndOfFlow() ) {
-				if ( prxybase::GetAnswer( Flow ) != prxybase::aPlugged )
-					qRGnr();
-
-				Flow.Dismiss();
-
-				return true;
-			} else
-				return false;
-		}
-		fdr::size__ WriteUpTo(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
-		{
-			return F_().WriteUpTo( Buffer, Maximum );
-		}
-		void Commit( void )
-		{
-			F_().Commit();
-		}
-		fdr::size__ ReadUpTo(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
-		{
-			return F_().ReadUpTo( Maximum, Buffer );
-		}
-		void Dismiss( void )
-		{
-			F_().Dismiss();
-		}
-	};
-
-	typedef fdr::ioflow_driver___<>	rFlowDriver_;
-
-	typedef flw::standalone_ioflow__<> sFlow_;
-
 	qENUM( State ) {
 		sOK,
 		sUnableToConnect,
@@ -117,13 +54,107 @@ namespace prxy {
 		const char *HostService,
 		lcl::meaning_ &Meaning );
 
+	class rProxy_
+	{
+	private:
+		csdbnc::flow___ Flow_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			tol::reset( P, Flow_ );
+		}
+		qCDTOR( rProxy_ );
+		eState Init(
+			const char *HostService,
+			const char *Identifier,
+			prxybase::eType Type,
+			prxybase::eRequest Request,
+			sck::duration__ Timeout,
+			qRPD )
+		{
+			if ( !Flow_.Init(HostService, Timeout, qRP) ) {
+				if ( qRPT )
+					qRFwk();
+
+				return sUnableToConnect;
+			}
+
+			csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, Flow_ );
+
+			prxybase::PutRequest( Request, Flow_ );
+
+			prxybase::PutType( Type, Flow_ );
+
+			prxybase::PutId( Identifier, Flow_ );
+
+			Flow_.Commit();
+
+			return sOK;
+		}
+		eState Init(
+			const char *HostService,
+			const char *Identifier,
+			prxybase::eType Type,
+			sck::duration__ Timeout,
+			qRPD )
+		{
+			eState State = Init( HostService, Identifier, Type, prxybase::rPlug, Timeout, qRP );
+
+			if ( State != sOK )
+				return State;
+
+			if ( Flow_.EndOfFlow() ) {
+				if ( qRPT )
+					qRFwk();
+
+				return sLostProxyConnexion;
+			} else {
+				if ( prxybase::GetAnswer( Flow_ ) != prxybase::aPlugged )
+					qRGnr();
+
+				Flow_.Dismiss();
+
+				return sOK;
+			}
+		}
+		fdr::size__ WriteUpTo(
+			const fdr::byte__ *Buffer,
+			fdr::size__ Maximum )
+		{
+			return Flow_.WriteUpTo( Buffer, Maximum );
+		}
+		void Commit( void )
+		{
+			Flow_.Commit();
+		}
+		fdr::size__ ReadUpTo(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer )
+		{
+			return Flow_.ReadUpTo( Maximum, Buffer );
+		}
+		void Dismiss( void )
+		{
+			Flow_.Dismiss();
+		}
+		time_t EpochTimeStamp( void ) const
+		{
+			return Flow_.EpochTimeStamp();
+		}
+	};
+
+	typedef fdr::ioflow_driver___<>	rFlowDriver_;
+
+
+
+	typedef flw::standalone_ioflow__<> sFlow_;
+
 	class rFlow
 	: private rFlowDriver_,
 	  public sFlow_
 	{
 	private:
-		csdbnc::flow___ Flow_;
-		prxy::rProxy Proxy_;
+		prxy::rProxy_ Proxy_;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
@@ -151,7 +182,6 @@ namespace prxy {
 			sFlow_::reset( P );
 			rFlowDriver_::reset( P );
 			Proxy_.reset( P );
-			Flow_.reset( P );
 		}
 		qCVDTOR( rFlow );
 		eState Init(
@@ -159,25 +189,15 @@ namespace prxy {
 			const char *Identifier,
 			prxybase::eType Type,
 			sck::duration__ Timeout,
-			err::handling__ ErrorHandling )
+			qRPD )
 		{
 			reset();
-
-			if ( !Flow_.Init( HostService, Timeout, ErrorHandling ) )
-				return sUnableToConnect;
 
 			rFlowDriver_::Init( fdr::ts_Default );
 
 			sFlow_::Init( *this );
 
-			if ( Proxy_.Init( Flow_, Identifier, Type ) )
-				return sOK;
-			else if ( ErrorHandling == err::hThrowException )
-				qRFwk();
-			else
-				return sLostProxyConnexion;
-
-			return s_Undefined;	// To avoid a warning.
+			return Proxy_.Init( HostService, Identifier, Type, Timeout, qRP );
 		}
 		bso::sBool Init(
 			const char *HostService,
@@ -186,7 +206,7 @@ namespace prxy {
 			sck::duration__ Timeout,
 			lcl::meaning_ &Meaning )	// If returned value == 'false', then 'Meaning' contents the error message.
 		{
-			eState State = Init( HostService, Identifier, Type, Timeout, err::hUserDefined );
+			eState State = Init( HostService, Identifier, Type, Timeout, qRPU );
 
 			if ( State != sOK ) {
 				GetMeaning( State, HostService, Meaning );
@@ -196,10 +216,15 @@ namespace prxy {
 		}
 		time_t EpochTimeStamp( void ) const
 		{
-			return Flow_.EpochTimeStamp();
+			return Proxy_.EpochTimeStamp();
 		}
 	};
 
+	// Request the proxy to close all server connections related to 'Identifier'.
+	eState RequestDismiss(
+		const char *HostService,
+		const char *Identifier,
+		qRPD );
 }
 
 #endif

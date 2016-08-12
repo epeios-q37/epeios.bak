@@ -2031,6 +2031,13 @@ namespace tol {
 		O.reset( P );
 	}
 
+	template <typename t> void reset(
+		bso::sBool P,
+		t *&Pointer )
+	{
+		Pointer = NULL;
+	}
+
 	template <typename f, typename ... o> void reset(
 		bso::sBool P,
 		f &F,

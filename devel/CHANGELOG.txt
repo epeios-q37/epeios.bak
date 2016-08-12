@@ -2,9 +2,17 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-12 :
+- PRXY :
+	- 'rProxy' -> 'rProxy_'.
+	- Moving 'csdbnc::flow___ Flow_' from 'rFlow' to 'rProxy'.
+	- Adding 'RequestDimiss(...)' function.
+- TOL :
+	- Adding 'reset(...)' function to handle pointers.
+
 2016-08-11 :
 - MTX :
-	- Moving 'THT' related function to '.cpp' to facilitate headed managing.
+	- Moving 'THT' related function to '.cpp' to facilitate header managing.
 
 2016-08-10 :
 - PRXYBASE :
