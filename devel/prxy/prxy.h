@@ -54,14 +54,15 @@ namespace prxy {
 		const char *HostService,
 		lcl::meaning_ &Meaning );
 
+	typedef csdbnc::rIOFlow rFlow_;
+
 	class rProxy_
+	: public rFlow_
 	{
-	private:
-		csdbnc::flow___ Flow_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( P, Flow_ );
+			rFlow_::reset( P );
 		}
 		qCDTOR( rProxy_ );
 		eState Init(
@@ -72,22 +73,22 @@ namespace prxy {
 			sck::duration__ Timeout,
 			qRPD )
 		{
-			if ( !Flow_.Init(HostService, Timeout, qRP) ) {
+			if ( !rFlow_::Init(HostService, Timeout, qRP) ) {
 				if ( qRPT )
 					qRFwk();
 
 				return sUnableToConnect;
 			}
 
-			csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, Flow_ );
+			csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, *this );
 
-			prxybase::PutRequest( Request, Flow_ );
+			prxybase::PutRequest( Request, *this );
 
-			prxybase::PutType( Type, Flow_ );
+			prxybase::PutType( Type, *this );
 
-			prxybase::PutId( Identifier, Flow_ );
+			prxybase::PutId( Identifier, *this );
 
-			Flow_.Commit();
+			rFlow_::Commit();
 
 			return sOK;
 		}
@@ -103,43 +104,19 @@ namespace prxy {
 			if ( State != sOK )
 				return State;
 
-			if ( Flow_.EndOfFlow() ) {
+			if ( rFlow_::EndOfFlow() ) {
 				if ( qRPT )
 					qRFwk();
 
 				return sLostProxyConnexion;
 			} else {
-				if ( prxybase::GetAnswer( Flow_ ) != prxybase::aPlugged )
+				if ( prxybase::GetAnswer( *this ) != prxybase::aOK )
 					qRGnr();
 
-				Flow_.Dismiss();
+				rFlow_::Dismiss();
 
 				return sOK;
 			}
-		}
-		fdr::size__ WriteUpTo(
-			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
-		{
-			return Flow_.WriteUpTo( Buffer, Maximum );
-		}
-		void Commit( void )
-		{
-			Flow_.Commit();
-		}
-		fdr::size__ ReadUpTo(
-			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
-		{
-			return Flow_.ReadUpTo( Maximum, Buffer );
-		}
-		void Dismiss( void )
-		{
-			Flow_.Dismiss();
-		}
-		time_t EpochTimeStamp( void ) const
-		{
-			return Flow_.EpochTimeStamp();
 		}
 	};
 

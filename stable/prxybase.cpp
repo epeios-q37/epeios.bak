@@ -66,9 +66,6 @@ const char *prxybase::GetLabel( eAnswer Answer )
 {
 	switch ( Answer ) {
 	C( Forbidden );
-	C( Plugged );
-	C( Pong );
-	C( Frozen );
 	default:
 		qRFwk();
 		break;

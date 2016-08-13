@@ -59,10 +59,8 @@ namespace prxybase {
 		flw::oflow__ &Flow );
 
 	qENUM( Answer ) {
+		aOK,
 		aForbidden,
-		aPlugged,
-		aPong,
-		aFrozen,
 		// NOTA : no answer for 'crash', as the program can not answer because it is crashed !
 		a_amount,
 		a_Undefined

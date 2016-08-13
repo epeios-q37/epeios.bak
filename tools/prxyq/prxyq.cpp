@@ -251,7 +251,7 @@ public:
 			mtx::Lock( PairingMutex_ );	// Unlocked by 'Plug(...)'.
 			mtx::Unlock( PairingMutex_ );
 
-			prxybase::PutAnswer( prxybase::aPlugged, Flow );
+			prxybase::PutAnswer( prxybase::aOK, Flow );
 
 			Flow.Commit();
 
@@ -269,7 +269,7 @@ public:
 
 			mtx::Unlock( PairingMutex_ );
 
-			prxybase::PutAnswer( prxybase::aPlugged, Flow );
+			prxybase::PutAnswer( prxybase::aOK, Flow );
 
 			Flow.Commit();
 
@@ -341,7 +341,7 @@ public:
 
 	wPendings PendingClients_, PendingServers_;
 
-	mtx::handler___ Mutex_ = mtx::UndefinedHandler;
+	tht::rLocker Locker_;
 
 	void DeletePendings_( dPendings &Pendings)
 	{
@@ -400,111 +400,241 @@ public:
 		return *(dPendings *)NULL;	//To avoid a warning.
 	}
 
-	void Create_(
-		const str::string_ &Id,
-		flw::ioflow__ &Flow,
-		prxybase::eType Type )
+	namespace {
+		void Dismiss_(
+			dPendings &Pendings,
+			const str::dString &ID )
+		{
+			sdr::sRow Row = Pendings.Last();
+			sdr::sRow Previous = qNIL;
+
+			while ( Row != qNIL ) {
+				if ( Pendings( Row ).Id == ID ) {
+					Previous = Pendings.Previous( Row );
+
+					delete Pendings( Row ).Proxy();
+
+					Pendings.Remove( Row );
+
+					Row = Previous;
+				} else
+					Row = Pendings.Previous( Row );
+			}
+		}
+	}
+
+	// Close cponnections frome all server of ID 'ID'.
+	void DismissServers_( const str::dString &ID )
 	{
-	qRH
-		rProxy *Proxy = NULL;
-		wPending Pending;
-	qRB
-		Proxy = new rProxy;
+		Dismiss_( PendingServers_, ID );
+	}
 
-		if ( Proxy == NULL )
-			qRAlc();
+	namespace plug_ {
+		namespace {
+			void Create_(
+				const str::string_ &Id,
+				flw::ioflow__ &Flow,
+				prxybase::eType Type )
+			{
+			qRH
+				rProxy *Proxy = NULL;
+				wPending Pending;
+			qRB
+				Proxy = new rProxy;
 
-		Pending.Init( Proxy, Id );
+				if ( Proxy == NULL )
+					qRAlc();
 
-		GetPendings_( Type ).Append( Pending );
+				Pending.Init( Proxy, Id );
 
-		mtx::Unlock( Mutex_ );	// Locked by caller.
+				GetPendings_( Type ).Append( Pending );
 
-		if ( Proxy->Init( Flow, Type ) )	// Blocking until deconnection.
-			delete Proxy;
-	qRR
-	qRT
-	qRE
+				Locker_.Unlock();	// Locked by caller.
+
+				if ( Proxy->Init( Flow, Type ) )	// Blocking until deconnection.
+					delete Proxy;
+			qRR
+			qRT
+			qRE
+			}
+
+			void Plug_(
+				rProxy *Proxy,
+				flw::ioflow__ &Flow,
+				prxybase::eType Type )
+			{
+				Locker_.Unlock();	// Locked by caller.
+
+				if ( Proxy->Plug( Flow, Type ) )	// Blocking until deconnection.
+					delete Proxy;
+			}
+		}
+
+		void A (flw::ioflow__ &Flow )
+		{
+		qRH
+			prxybase::eType Type = prxybase::t_Undefined;
+			str::string Id;
+			rProxy *Proxy = NULL;
+		qRB
+			Type = prxybase::GetType( Flow );
+
+			Id.Init();
+			prxybase::GetId( Flow, Id );
+
+			Locker_.Lock();
+
+			switch ( Type ) {
+			case prxybase::tClient:
+				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
+				break;
+			case prxybase::tServer:
+				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+
+			if ( Proxy == NULL ) 
+				Create_( Id, Flow, Type );
+			else
+				Plug_( Proxy, Flow, Type );
+		qRR
+		qRT
+		qRE
+		}
 	}
 
 	void Plug_(
-		rProxy *Proxy,
-		flw::ioflow__ &Flow,
-		prxybase::eType Type )
+		csdcmn::sVersion Version,
+		flw::sIOFlow &Flow )
 	{
-		mtx::Unlock( Mutex_ );	// Locked by caller.
-
-		if ( Proxy->Plug( Flow, Type ) )	// Blocking until deconnection.
-			delete Proxy;
-	}
-
-	void Plug_( flw::ioflow__ &Flow )
-	{
-	qRH
-		prxybase::eType Type = prxybase::t_Undefined;
-		str::string Id;
-		rProxy *Proxy = NULL;
-	qRB
-		Type = prxybase::GetType( Flow );
-
-		Id.Init();
-		prxybase::GetId( Flow, Id );
-
-		mtx::Lock( Mutex_ );
-
-		switch ( Type ) {
-		case prxybase::tClient:
-			Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
-			break;
-		case prxybase::tServer:
-			Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
-			break;
+		switch ( Version ) {
 		default:
-			qRGnr();
+			return plug_::A( Flow );
 			break;
+#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
 		}
-
-		if ( Proxy == NULL ) 
-			Create_( Id, Flow, Type );
-		else
-			Plug_( Proxy, Flow, Type );
-	qRR
-	qRT
-	qRE
 	}
 
-	void Ping_( flw::ioflow__ &Flow )
-	{
-		prxybase::PutAnswer( prxybase::aPong, Flow );
+	namespace dismiss_ {
+		void A( flw::sIOFlow &Flow )
+		{
+		qRH
+			str::wString ID;
+		qRB
+			ID.Init();
 
-		Flow.Commit();
+			prxybase::GetId( Flow, ID );
+
+			Locker_.Lock();
+
+			DismissServers_( ID );
+
+			prxybase::PutAnswer( prxybase::aOK, Flow );
+
+			Flow.Commit();
+		qRR
+		qRT
+		qRE
+		}
+	}
+
+	void Dismiss_(
+		csdcmn::sVersion Version,
+		flw::sIOFlow &Flow )
+	{
+		switch ( Version ) {
+		default:
+			return dismiss_::A( Flow );
+			break;
+#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
+		}
+	}
+
+
+	namespace ping_ {
+		void A( flw::ioflow__ &Flow )
+		{
+			prxybase::PutAnswer( prxybase::aOK, Flow );
+
+			Flow.Commit();
+		}
+	}
+
+	void Ping_(
+		csdcmn::sVersion Version,
+		flw::sIOFlow &Flow )
+	{
+		switch ( Version ) {
+		default:
+			return ping_::A( Flow );
+			break;
+#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
+		}
+	}
+
+	namespace freeze_{
+		void A(
+			flw::ioflow__ &Flow,
+			bso::sBool FromLocalhost )
+		{
+			if ( FromLocalhost ) {
+				FreezeFlag_ = true;
+				prxybase::PutAnswer( prxybase::aOK, Flow );
+			} else
+				prxybase::PutAnswer( prxybase::aForbidden, Flow );
+
+
+			Flow.Commit();
+		}
 	}
 
 	void Freeze_(
-		flw::ioflow__ &Flow,
+		csdcmn::sVersion Version,
+		flw::sIOFlow &Flow,
 		bso::sBool FromLocalhost )
 	{
-		if ( FromLocalhost ) {
-			FreezeFlag_ = true;
-			prxybase::PutAnswer( prxybase::aFrozen, Flow );
-		} else
-			prxybase::PutAnswer( prxybase::aForbidden, Flow );
+		switch ( Version ) {
+		default:
+			return freeze_::A( Flow, FromLocalhost );
+			break;
+#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
+		}
+	}
 
+	namespace crash_ {
+		void A(
+			flw::ioflow__ &Flow,
+			bso::sBool FromLocalhost )
+		{
+			if ( FromLocalhost ) {
+				tol::Crash();
+			} else
+				prxybase::PutAnswer( prxybase::aForbidden, Flow );
 
-		Flow.Commit();
+			Flow.Commit();
+		}
 	}
 
 	void Crash_(
-		flw::ioflow__ &Flow,
+		csdcmn::sVersion Version,
+		flw::sIOFlow &Flow,
 		bso::sBool FromLocalhost )
 	{
-		if ( FromLocalhost ) {
-			tol::Crash();
-		} else
-			prxybase::PutAnswer( prxybase::aForbidden, Flow );
-
-		Flow.Commit();
+		switch ( Version ) {
+		default:
+			return crash_::A( Flow, FromLocalhost );
+			break;
+#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
+		}
 	}
+
+	namespace dismiss_ {
+
+	}
+
 
 	class callback__
 	: public cProcessing
@@ -531,30 +661,33 @@ public:
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
 			rProxy *Proxy = NULL;
+			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 		qRB
-			if ( csdcmn::GetProtocolVersion( prxybase::ProtocolId, Flow ) != prxybase::ProtocolVersion )
+			if ( ( Version = csdcmn::GetProtocolVersion( prxybase::ProtocolId, Flow ) ) != prxybase::ProtocolVersion )
 				qRGnr();
 
 			switch ( prxybase::GetRequest( Flow ) ) {
 			case prxybase::rPlug:
-				Plug_( Flow );
+				Plug_( Version, Flow );
+				break;
+			case prxybase::rDismiss:
+				Dismiss_( Version, Flow );
 				break;
 			case prxybase::rPing:
-				Ping_( Flow );
+				Ping_( Version, Flow );
 				break;
 			case prxybase::rFreeze:
-				Freeze_( Flow, FromLocalhost_ );
+				Freeze_( Version, Flow, FromLocalhost_ );
 				break;
 			case prxybase::rCrash:
-				Crash_( Flow, FromLocalhost_ );
+				Crash_( Version, Flow, FromLocalhost_ );
 				break;
 			default:
 				qRGnr();
 				break;
 			}
 		qRR
-			if (  mtx::IsLocked( Mutex_ ) )
-				mtx::Unlock( Mutex_ );
+			Locker_.UnlockIfLocked();
 		qRT
 		qRE
 			return csdscb::aStop;
@@ -643,15 +776,12 @@ Q37_GCTOR( prxyq )
 	PendingClients_.Init();
 	PendingServers_.Init();
 
-	Mutex_ = mtx::Create();
+	Locker_.Init();
 }
 
 Q37_GDTOR( prxyq )
 {
 	DeletePendings_( PendingClients_ );
 	DeletePendings_( PendingServers_ );
-
-	if ( Mutex_ != mtx::UndefinedHandler )
-		mtx::Delete( Mutex_ );
 }
 

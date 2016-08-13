@@ -60,6 +60,23 @@ qRH
 	rProxy_ Proxy;
 qRB
 	State = Proxy.Init( HostService, Identifier, prxybase::tServer, prxybase::rDismiss, sck::NoTimeout, qRP );
+
+	if ( State != sOK )
+		return State;
+
+	if ( Proxy.EndOfFlow() ) {
+		if ( qRPT )
+			qRFwk();
+
+		return sLostProxyConnexion;
+	} else {
+		if ( prxybase::GetAnswer( Proxy ) != prxybase::aOK )
+			qRGnr();
+
+		Proxy.Dismiss();
+
+		return sOK;
+	}
 qRR
 qRT
 qRE

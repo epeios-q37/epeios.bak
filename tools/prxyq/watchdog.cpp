@@ -75,7 +75,7 @@ namespace {
 
 		Flow.Commit();
 
-		HandleAnswer_( Flow, prxybase::aPong );
+		HandleAnswer_( Flow, prxybase::aOK );
 	}
 }
 
@@ -100,7 +100,7 @@ namespace {
 
 		Flow.Commit();
 
-		HandleAnswer_( Flow, prxybase::aFrozen );
+		HandleAnswer_( Flow, prxybase::aOK );
 	}
 }
 
