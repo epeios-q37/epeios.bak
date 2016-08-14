@@ -2,6 +2,12 @@ CHANGELOG FOR THE EPEIOS FRAMEWORK.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-14 :
+- CSDCMN :
+	- 'wStrings' were not correctly detected (template issue).
+- TOL :
+	- Adding 'plug(...)' for serialization.
+
 2016-08-13 :
 - PRXY :
 	- Adapting to changes in 'PRXYBASE'.

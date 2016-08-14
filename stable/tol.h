@@ -2017,13 +2017,15 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 
 # define qNAV( Object )	E_NAV( Object )
 
+// Predefinition.
+
 namespace tol {
 	typedef delay__ sDelay;
 	typedef timer__ sTimer;
 
 	void Crash( void );	// Crashes deliberately the program. For testing of daemons watchdog.
 
-	// 'reset( bso::sBool P )' serialization.
+	/* BEGIN 'reset' serialization with parameter */
 	template <typename t> void reset(
 		bso::sBool P,
 		t &O )
@@ -2046,11 +2048,17 @@ namespace tol {
 		reset( P, F );
 		reset( P, O... );
 	}
+	/* END 'reset' serialization with parameter */
 
-	// 'reset()' serialization.
+	/* BEGIN 'reset' serialization without parameter */
 	template <typename t> void reset( t &O )
 	{
 		O.reset();
+	}
+
+	template <typename t> void reset( t *&Pointer )
+	{
+		Pointer = NULL;
 	}
 
 	template <typename f, typename ... o> void reset(
@@ -2060,8 +2068,27 @@ namespace tol {
 		reset( F );
 		reset( O... );
 	}
+	/* END 'reset' serialization without parameter */
 
-	// 'Init()' serialization.
+	/* BEGIN 'plug' serialization */
+	template <typename t> void plug(
+		ags::aggregated_storage_ *AS,
+		t &O )
+	{
+		O.plug( AS );
+	}
+
+	template <typename f, typename ... o> void plug(
+		ags::aggregated_storage_ *AS,
+		f &F,
+		o&... O )
+	{
+		plug( AS, F );
+		plug( AS, O... );
+	}
+	/* END 'plug' serialization */
+
+	/* BEGIN 'Init' serialization */
 	template <typename t> void Init( t &O )
 	{
 		O.Init();
@@ -2074,6 +2101,7 @@ namespace tol {
 		Init( F );
 		Init( O... );
 	}
+	/* BEGIN 'Init' serialization */
 }
 
 

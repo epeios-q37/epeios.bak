@@ -68,7 +68,7 @@ qRE
 	return Version;
 }
 
-void csdcmn::Put(
+void csdcmn::Put_(
 	const str::dStrings &Strings,
 	flw::sOFlow &Flow )
 {
@@ -83,7 +83,7 @@ void csdcmn::Put(
 	}
 }
 
-void csdcmn::Get(
+void csdcmn::Get_(
 	flw::sIFlow &Flow,
 	str::dStrings &Strings )
 {

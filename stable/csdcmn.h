@@ -113,16 +113,44 @@ namespace csdcmn {
 		const char *String,
 		flw::sOFlow &Flow )
 	{
-		return Put( str::wString( String ), Flow );
+		return Put_( str::wString( String ), Flow );
 	}
 
-	void Put(
+	void Put_(
 		const str::dStrings &Strings,
 		flw::sOFlow &Flow );
 
-	void Get(
+	inline void Put(
+		const str::dStrings &Strings,
+		flw::sOFlow &Flow )
+	{
+		return Put_( Strings, Flow );
+	}
+
+	inline void Put(
+		const str::wStrings &Strings,
+		flw::sOFlow &Flow )
+	{
+		return Put_( Strings, Flow );
+	}
+
+	void Get_(
 		flw::sIFlow &Flow,
 		str::dStrings &Strings );
+
+	inline void Get(
+		flw::sIFlow &Flow,
+		str::dStrings &Strings )
+	{
+		Get_( Flow, Strings );
+	}
+
+	inline void Get(
+		flw::sIFlow &Flow,
+		str::wStrings &Strings )
+	{
+		Get_( Flow, Strings );
+	}
 
 	template <typename integer> void Put(
 		integer Integer,
