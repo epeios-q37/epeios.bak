@@ -2022,6 +2022,7 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 namespace tol {
 	typedef delay__ sDelay;
 	typedef timer__ sTimer;
+	typedef time_t sTimeStamp;
 
 	void Crash( void );	// Crashes deliberately the program. For testing of daemons watchdog.
 
