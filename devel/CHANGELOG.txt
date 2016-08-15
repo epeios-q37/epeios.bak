@@ -1,6 +1,12 @@
-CHANGELOG FOR THE EPEIOS FRAMEWORK.
+CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
+
+2016-08-15 :
+- ERR, THT :
+	- Use of 'THTSUB'.
+- THTSUB :
+	- Creation to put type declaration to simplify some header handlings.
 
 2016-08-14 :
 - CSDCMN :

@@ -30,6 +30,7 @@
 
 # include "cpe.h"
 # include "mtx.h"
+# include "thtsub.h"
 
 # if defined( CPE_S_POSIX )
 #  define THT__POSIX
@@ -54,11 +55,9 @@
 # define THT_UNDEFINED_THREAD_ID	0	// Totaly arbitrary ; should correspond to the system thread, so should never be returned by 'GetTID()'.
 
 namespace tht {
-# ifdef THT__WIN
-	typedef DWORD	thread_id__;
-# elif defined( THT__POSIX )
-	typedef pthread_t	thread_id__;
-# endif
+	using namespace thtsub;
+
+	typedef sThreadID thread_id__;
 
 	//f Return an unique ID for the current thread.
 	inline thread_id__ GetTID( void )

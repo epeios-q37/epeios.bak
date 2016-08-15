@@ -17,21 +17,34 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// TeST
+// THread Tool SUBmodule
 
-#ifndef TST__INC
-# define TST__INC
+#ifndef THTSUB__INC
+# define THTSUB__INC
 
-# define TST_NAME		"TST"
+# define THTSUB_NAME		"THTSUB"
 
-# if defined( E_DEBUG ) && !defined( TST_NODBG )
-#  define TST_DBG
+# if defined( E_DEBUG ) && !defined( THTSUB_NODBG )
+#  define THTSUB_DBG
 # endif
 
-# include "err.h"
+# include "cpe.h"
 
-namespace tst {
+# ifdef CPE_S_POSIX
+#  include <sys/types.h>
+# elif defined( CPE_S_WIN )
+# else 
+#  error
+# endif
 
+namespace thtsub {
+# ifdef CPE_S_POSIX
+	typedef pthread_t sThreadID;
+# elif defined( CPE_S_WIN )
+	typedef unsigned long sThreadID;
+# else 
+#  error
+# endif
 }
 
 #endif

@@ -17,21 +17,9 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-// TeST
+#define THTSUB__COMPILATION
 
-#ifndef TST__INC
-# define TST__INC
+#include "thtsub.h"
 
-# define TST_NAME		"TST"
+using namespace thtsub;
 
-# if defined( E_DEBUG ) && !defined( TST_NODBG )
-#  define TST_DBG
-# endif
-
-# include "err.h"
-
-namespace tst {
-
-}
-
-#endif

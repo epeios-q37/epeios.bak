@@ -47,6 +47,7 @@
 # endif
 
 # include "cpe.h"
+# include "thtsub.h"
 
 // Prédéclaration.
 namespace mtx {
@@ -95,11 +96,7 @@ namespace err {
 		// where to jump
 		static jmp_buf *Jump;
 # endif
-# if 0
-		tht::thread_id__ ThreadID;
-# else
-		unsigned long ThreadID;
-# endif
+		thtsub::sThreadID ThreadID;
 		mtx::_mutex__ *Mutex;
 		void reset( bool P = true );
 		~err___( void )
