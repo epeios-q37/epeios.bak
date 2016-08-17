@@ -3,6 +3,10 @@ CHANGELOG for the 'Epeios' framework.
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 2016-08-17 :
+- PRXYBASE :
+	- Adding missing 'eAnswer' 'aOK' label.
+- THT :
+	- Fixing 'rLocker::Unlock()' bug.
 - SCLRGSTRY :
 	- Adding '0' and '1' as recognized boolean values.
 

@@ -231,7 +231,7 @@ namespace tht {
 		{
 			if ( Core_.ThreadID == Undefined )
 				qRFwk();
-			else if ( Core_.ThreadID == GetTID() )
+			else if ( Core_.ThreadID != GetTID() )
 				qRFwk();
 
 			Core_.ThreadID = Undefined;

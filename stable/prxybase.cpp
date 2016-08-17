@@ -65,6 +65,7 @@ eRequest prxybase::GetRequest( const str::dString &Pattern )
 const char *prxybase::GetLabel( eAnswer Answer )
 {
 	switch ( Answer ) {
+	C( OK );
 	C( Forbidden );
 	default:
 		qRFwk();
