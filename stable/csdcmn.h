@@ -159,7 +159,7 @@ namespace csdcmn {
 		return dtfptb::VPut( Integer, Flow );
 	}
 
-	template <typename integer> void Get(
+	template <typename integer> integer Get(
 		flw::sIFlow &Flow,
 		integer &Integer )
 	{

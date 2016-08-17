@@ -544,11 +544,12 @@ qRH
 	str::string Buffer;
 qRB
 	Buffer.Init( Value );
+	Buffer.StripCharacter(' ');
 	str::ToLower( Buffer );
 
-	if ( ( Buffer == "true" ) || ( Buffer == "yes" ) )
+	if ( ( Buffer == "true" ) || ( Buffer == "yes" ) || ( Buffer == "1" ) )
 		Boolean = tol::xbTrue;
-	else if ( ( Buffer == "false" ) || ( Buffer == "no" ) )
+	else if ( ( Buffer == "false" ) || ( Buffer == "no" ) || ( Buffer == "0" ) )
 		Boolean = tol::xbFalse;
 qRR
 qRT

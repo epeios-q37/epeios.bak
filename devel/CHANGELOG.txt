@@ -2,6 +2,14 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-17 :
+- SCLRGSTRY :
+	- Adding '0' and '1' as recognized boolean values.
+
+2016-08-16 :
+- CSDCMN :
+	- Fixing 'Get(...)' return value issue.
+
 2016-08-15 :
 - ERR, THT :
 	- Use of 'THTSUB'.
