@@ -108,7 +108,9 @@ void sclmisc::ErrFinal( void )
 		qRR
 		qRT
 		qRE
-	} else
+	} else if ( sclerror::IsErrorPending() )
+		DisplaySCLBasePendingError( cio::CErr );
+	else
 		ERRRst();
 }
 

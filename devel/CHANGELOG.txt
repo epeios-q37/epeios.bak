@@ -2,6 +2,10 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-20 :
+- SCLMISC :
+	- 'ErrFinal()' displays now the pending 'SCL' errors.
+
 2016-08-17 :
 - PRXYBASE :
 	- Adding missing 'eAnswer' 'aOK' label.
