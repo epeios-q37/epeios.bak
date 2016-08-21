@@ -526,7 +526,7 @@ void sclfrntnd::SetBackendFeatures(
 qRH
 	str::wString Id;
 qRB
-	if ( ( BackendType.Amount() != 0) &  ( BackendType != NoneBackendType ) ) {
+	if ( ( BackendType.Amount() != 0 ) && ( BackendType != NoneBackendType ) ) {
 		if ( BackendType == PredefinedBackendType ) {
 			Id.Init( Parameters );
 

@@ -3,11 +3,13 @@ CHANGELOG for the 'Epeios' framework.
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 2016-08-21 :
+- SCLFRNTND :
+	- '&' ->'&&' in test.
 - SDR :
-	- Adding 'tol::reset()' ('tol' namespace to facilitate header inclusions) funtion to hnadle 'bRow'.
+	- Adding 'tol::reset(...)' ('tol' namespace to facilitate header inclusions) funtion to hnadle 'bRow'.
 - TOL :
 	- Adding 'reset(...)' function to handle boolean.
-	
+
 
 2016-08-20 :
 - SCLMISC :

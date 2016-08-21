@@ -52,15 +52,6 @@ namespace sdr {
 	typedef storage_driver__ sStorageDriver;
 }
 
-namespace tol {
-		inline void reset(
-		bso::sBool,
-		sdr::bRow &Row )
-	{
-		Row = 0;
-	}
-}
-
 # define qSDs	sdr::storage_driver__
 
 
@@ -164,6 +155,15 @@ namespace sdr {
 	};
 
 //	#define qSD__	sdr::storage_driver__
+}
+
+namespace tol {
+	inline void reset(
+		bso::sBool,
+		sdr::bRow &Row )
+	{
+		Row = qNIL;
+	}
 }
 
 #endif
