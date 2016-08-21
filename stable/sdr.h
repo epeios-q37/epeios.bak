@@ -20,13 +20,13 @@
 // Storage DRiver 
 
 #ifndef SDR__INC
-#define SDR__INC
+# define SDR__INC
 
-#define SDR_NAME		"SDR"
+# define SDR_NAME		"SDR"
 
-#if defined( E_DEBUG ) && !defined( SDR_NODBG )
-#define SDR_DBG
-#endif
+# if defined( E_DEBUG ) && !defined( SDR_NODBG )
+#  define SDR_DBG
+# endif
 
 # include "err.h"
 # include "bso.h"
@@ -52,6 +52,15 @@ namespace sdr {
 	typedef storage_driver__ sStorageDriver;
 }
 
+namespace tol {
+		inline void reset(
+		bso::sBool,
+		sdr::bRow &Row )
+	{
+		Row = 0;
+	}
+}
+
 # define qSDs	sdr::storage_driver__
 
 
@@ -61,7 +70,7 @@ namespace sdr {
 
 # define SDR_INTERNAL_SDRIVER *(qSD__ *)NULL
 
-# define qNIL ( (sdr::row_t__) -1 )
+# define qNIL ( (sdr::row_t__)-1 )
 
 # define SDR__DSIZE_SIZE_MAX ( ( ( 8 * sizeof( sdr::size__ ) ) / 7 ) + 1 )
 

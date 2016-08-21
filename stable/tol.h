@@ -2035,10 +2035,17 @@ namespace tol {
 	}
 
 	template <typename t> void reset(
-		bso::sBool P,
+		bso::sBool,
 		t *&Pointer )
 	{
 		Pointer = NULL;
+	}
+
+	inline void reset(
+		bso::sBool,
+		bso::sBool &Boolean )
+	{
+		Boolean = false;
 	}
 
 	template <typename f, typename ... o> void reset(
