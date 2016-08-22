@@ -171,7 +171,7 @@ namespace csdbnc {
 			Socket_ = Connect( Host, Service, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_, Timeout );
+				_flow___::Init( Socket_, false, Timeout );
 				return true;
 			} else
 				return false;
@@ -186,7 +186,7 @@ namespace csdbnc {
 			Socket_ = Connect( HostService, ErrorHandling );
 
 			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_, Timeout );
+				_flow___::Init( Socket_, false, Timeout );
 				return true;
 			} else
 				return false;

@@ -320,6 +320,8 @@ qRE
 			} else if ( Id == CSDMXB_PING ) {
 				Flow.Put( (flw::byte__)0 );
 				Flow.Commit();
+			} else if ( Id == CSDMXB_CLOSE ) {
+				MainAction = csdscb::aStop;
 			} else if ( !Core_.TestAndGet( Id, SUP ) ) {
 				Flow.Put( (flw::byte__)-1 );
 				Flow.Commit();

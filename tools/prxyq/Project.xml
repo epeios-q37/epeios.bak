@@ -29,7 +29,7 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 			<Modules Group="CSD">
-				<Module>csdbnc</Module>
+				<Module>csdbnc</Module><!-- For the watchdog handling ('prxyq' acts as a client).-->
 				<Module>csdbns</Module>
 				<Module>csdscb</Module>
 				<Module>csdcmn</Module>

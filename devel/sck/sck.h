@@ -258,6 +258,7 @@ namespace sck {
 		socket__ _Socket;
 		duration__ _Timeout;	// En secondes.
 		bso::bool__ _Error;
+		bso::sBool Owner_;
 		time_t _EpochTimeStamp;	// Horodatage de la dernire activit (lecture ou criture);
 		const flw::ioflow__ *_User;
 		void _Touch( void )
@@ -303,7 +304,8 @@ namespace sck {
 			if ( P ) {
 				if ( _Socket != SCK_INVALID_SOCKET ) {
 					_ioflow_driver___::Commit( _User );
-					//	Close( _Socket );	// Normally done by user.
+					if ( Owner_ )
+						Close( _Socket );
 				}
 			}
 
@@ -314,6 +316,7 @@ namespace sck {
 			_Error = false;
 			_EpochTimeStamp = 0;
 			_User = NULL;
+			Owner_ = false;
 		}
 		socket_ioflow_driver___( void )
 		{
@@ -326,6 +329,7 @@ namespace sck {
 		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		void Init(
 			socket__ Socket,
+			bso::sBool TakeOwnership,
 			const flw::ioflow__ *User,
 			fdr::thread_safety__ ThreadSafety,
 			duration__ Timeout )	// En secondes.
@@ -337,6 +341,7 @@ namespace sck {
 			_Socket = Socket;
 			_Timeout = Timeout;
 			_User = User;
+			Owner_ = TakeOwnership;
 			_Touch();	// On suppose qu'il n'y a pas une trop longue attente entre la cration de la socket et l'appel  cette mthode ...
 		}
 		E_RODISCLOSE__( socket__, Socket )
@@ -367,11 +372,12 @@ namespace sck {
 		//f Initialization with socket 'Socket' and 'Timeout' as timeout.
 		void Init(
 			socket__ Socket,
+			bso::sBool TakeOwnership,
 			duration__ Timeout ) // En secondes.
 		{
 			reset();
 
-			_Driver.Init( Socket, this, fdr::ts_Default, Timeout );
+			_Driver.Init( Socket, TakeOwnership, this, fdr::ts_Default, Timeout );
 			ioflow__::Init( _Driver, _Cache, sizeof( _Cache ) );
 		}
 		socket__ Socket( void ) const

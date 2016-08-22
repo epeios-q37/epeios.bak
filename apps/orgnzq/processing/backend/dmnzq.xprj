@@ -5,7 +5,7 @@
 	<Project target="dmnzq">
 		<Parameters>
 			<Plugins>
-				<xpp:set name="Slot" value="Proxy"/>
+				<xpp:set name="Slot" value="Straight"/>
 				<xpp:ifeq select="Slot" value="Straight">
 					<Plugin target="Slot" Id="Straight">53800</Plugin>
 				</xpp:ifeq>

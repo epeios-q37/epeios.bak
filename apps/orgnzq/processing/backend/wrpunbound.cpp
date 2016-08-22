@@ -46,7 +46,7 @@ qRH
 	fbltyp::strings Labels;
 	fbltyp::id8s Ids;
 	ogzusr::sRow UserRow = qNIL;
-	bso::sBool NEw = false;
+	bso::sBool New = false;
 qRB
 	STUFF;
 	AUTHENTICATION;

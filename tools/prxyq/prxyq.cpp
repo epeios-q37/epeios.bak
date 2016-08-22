@@ -32,7 +32,6 @@
 #include "fnm.h"
 #include "flf.h"
 #include "csdcmn.h"
-#include "csdbnc.h"
 #include "csdbns.h"
 #include "lstbch.h"
 #include "ctn.h"
@@ -221,10 +220,10 @@ public:
 
 			if ( P ) {
 				if ( PairingMutex_ != mtx::UndefinedHandler )
-					mtx::Delete( PairingMutex_ );
+					mtx::Delete( PairingMutex_, true );
 
 				if ( CommitMutex_ != mtx::UndefinedHandler )
-					mtx::Delete( CommitMutex_ );
+					mtx::Delete( CommitMutex_, true );
 			}
 
 			PairingMutex_ = mtx::UndefinedHandler;
@@ -522,10 +521,15 @@ public:
 		void A( flw::sIOFlow &Flow )
 		{
 		qRH
+			prxybase::eType Type = prxybase::t_Undefined;
 			str::wString ID;
 		qRB
-			ID.Init();
+			Type = prxybase::GetType( Flow );
 
+			if ( Type != prxybase::tServer )
+				qRGnr();
+
+			ID.Init();
 			prxybase::GetId( Flow, ID );
 
 			Locker_.Lock();
@@ -660,7 +664,6 @@ public:
 		qRH
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
-			rProxy *Proxy = NULL;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
 		qRB
 			if ( ( Version = csdcmn::GetProtocolVersion( prxybase::ProtocolId, Flow ) ) != prxybase::ProtocolVersion )

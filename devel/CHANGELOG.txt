@@ -2,6 +2,14 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-22 :
+- CSDBNC, CSDBNS :
+	- Adaptation to changes in 'SCK'.
+- CSDMXS :
+	- Fixing error occuring on regular deconnectio from frontend.
+- SCK :
+	- Adding possibility to give the ownership for a socket, so it can be properly closed.
+
 2016-08-21 :
 - SCLFRNTND :
 	- '&' ->'&&' in test.
@@ -9,7 +17,6 @@ NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characte
 	- Adding 'tol::reset(...)' ('tol' namespace to facilitate header inclusions) funtion to hnadle 'bRow'.
 - TOL :
 	- Adding 'reset(...)' function to handle boolean.
-
 
 2016-08-20 :
 - SCLMISC :
