@@ -94,7 +94,7 @@
 					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>
 					<xpp:ifeq select="packing" value="no">
 						<xpp:bloc>
-							<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53700 test</Backend>
+							<Backend id="Proxy" Alias="ProxyPredefinedBackend" Plugin="Proxy">localhost:53710 orgnzq</Backend>
 							<Backend id="Mini" Alias="MiniPredefinedBackend" Plugin="Straight">mini:53700</Backend>
 							<Backend id="LinuxVM" Alias="LinuxVMPredefinedBackend" Plugin="Straight">192.168.44.131:53700</Backend>
 						</xpp:bloc>
