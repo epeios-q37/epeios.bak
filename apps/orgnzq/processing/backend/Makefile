@@ -34,10 +34,10 @@ mods += iop lst lstbch lstcrt lstctn
 mods += mns mtx ntvstr que sdr 
 mods += stkbse stkbch stkctn str strng 
 mods += tagsbs tol txf tys uys 
-mods += utf xtf llio tht lck 
-mods += mtk bomhdl cdgb64 dlbrry fil 
-mods += fnm lcl plgn plgncore rgstry 
-mods += stsfsm xml xpp 
+mods += utf xtf llio tht thtsub 
+mods += lck mtk bomhdl cdgb64 dlbrry 
+mods += fil fnm lcl plgn plgncore 
+mods += rgstry stsfsm xml xpp 
 mods += sclmisc sclerror scllocale sclrgstry scldaemon 
 mods += sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
@@ -341,7 +341,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160814"\"
+copt += -DVERSION=\""20160822"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""dc3beae2-d82c-4471-bc7e-03adb886d5f7"\"
 
