@@ -137,11 +137,15 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		{
 		qRH
 			fnm::name___ Path;
+			bso::sBool OwnerShipTaken = false;
 		qRB
 			Path.Init();
 			dir::GetSelfPath( Path );
 
-			UP_ = _Callback->PreProcess( Path.Internal() );
+			UP_ = _Callback->PreProcess( _Flow, Path.Internal(), &OwnerShipTaken );
+
+			if ( OwnerShipTaken )
+				qRFwk();
 		qRR
 		qRT
 		qRE
@@ -163,7 +167,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		virtual void FDRCommit( void )
 		{
 			if ( _DataAvailable )
-				_Callback->Process( *_Flow, UP_ );
+				_Callback->Process( _Flow, UP_ );
 
 			_DataAvailable = false;
 		}

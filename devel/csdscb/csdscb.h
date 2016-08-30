@@ -59,9 +59,12 @@ namespace csdscb {
 		{
 			return false;
 		}
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) = 0;
+		virtual void *CSDSCBPreProcess(
+			flw::ioflow__ *Flow,
+			const ntvstr::char__ *Origin,
+			bso::sBool *OwnerShipTaken ) = 0;	// If set to true, it means that the 'Flow' will be destructed downstream.
 		virtual eAction CSDSCBProcess(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ *Flow,
 			void *UP ) = 0;
 		virtual void CSDSCBPostProcess( void *UP ) = 0;
 	public:
@@ -73,12 +76,15 @@ namespace csdscb {
 		{
 			return CSDSCBPluginOverride( Id, Arguments, Timeout );
 		}
-		void *PreProcess( const ntvstr::char__ *Origin )
+		void *PreProcess(
+			flw::ioflow__ *Flow,
+			const ntvstr::char__ *Origin,
+			bso::sBool *OwnerShipTaken )	// If set to true, it means that the 'Flow' will be destructed downstream.
 		{
-			return CSDSCBPreProcess( Origin );
+			return CSDSCBPreProcess( Flow, Origin, OwnerShipTaken );
 		}
 		eAction Process(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ *Flow,
 			void *UP )
 		{
 			return CSDSCBProcess( Flow, UP );

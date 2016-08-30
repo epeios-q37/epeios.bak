@@ -279,7 +279,10 @@ qRE
 		ntvstr::string___ _Origin;
 		void _Clean( void );	// Appelle le 'PostProcess' pour tous les objets utilisateurs.
 	protected:
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+		virtual void *CSDSCBPreProcess(
+			flw::sIOFlow *Flow,
+			const ntvstr::char__ *Origin,
+			bso::sBool *OwnerShipTaken ) override
 		{
 			_Origin.Init( Origin );
 
@@ -293,14 +296,15 @@ qRE
 			return Data;
 		}
 		virtual csdscb::action__ CSDSCBProcess(
-			flw::ioflow__ &Flow,
-			void *UP )
+			flw::sIOFlow *Flow,
+			void *UP ) override
 		{
 			csdscb::action__ MainAction = csdscb::aContinue;
 		qRH
 			sId Id = CSDMXB_UNDEFINED;
 			csdscb::action__ Action = csdscb::aContinue;
 			rData_ &Data = *(rData_ *)UP;
+			bso::sBool OwnerShipTaken = false;
 		qRB
 #ifdef CSDMXS_DBG
 			if ( UP == NULL )
@@ -309,25 +313,27 @@ qRE
 
 			void *SUP = NULL;	// Server UP.
 
-			Id = GetId( Flow );
+			Id = GetId( *Flow );
 
 			if ( Id == CSDMXB_UNDEFINED ) {
 				Id = Core_.New();
-				PutId( Id, Flow );
-				SUP = Callback_->PreProcess( _Origin );
+				PutId( Id, *Flow );
+				SUP = Callback_->PreProcess( Flow, _Origin, &OwnerShipTaken );
+				if ( OwnerShipTaken )
+					qRFwk();
 				Core_.Store( SUP, Id );
 				Action = Callback_->Process( Flow, SUP );
 			} else if ( Id == CSDMXB_PING ) {
-				Flow.Put( (flw::byte__)0 );
-				Flow.Commit();
+				Flow->Put( (flw::byte__)0 );
+				Flow->Commit();
 			} else if ( Id == CSDMXB_CLOSE ) {
 				MainAction = csdscb::aStop;
 			} else if ( !Core_.TestAndGet( Id, SUP ) ) {
-				Flow.Put( (flw::byte__)-1 );
-				Flow.Commit();
+				Flow->Put( (flw::byte__)-1 );
+				Flow->Commit();
 				Action = csdscb::aStop;
 			} else {
-				Flow.Put( 0 );
+				Flow->Put( 0 );
 				Action = Callback_->Process( Flow, SUP );
 			}
 

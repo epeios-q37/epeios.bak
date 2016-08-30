@@ -139,8 +139,11 @@ public:
 		}
 		void Clear( void )
 		{
-			_flow__::Commit();
-			_flow__::Dismiss();
+			if ( OFlow_ != NULL )
+				_flow__::Commit();
+
+			if ( IFlow_ != NULL )
+				_flow__::Dismiss();
 		}
 	};
 
@@ -209,33 +212,38 @@ public:
 				if ( Server_ != NULL )
 					delete( Server_ );
 
+				P = false;
+
 			}
 
-			tol::reset( P, C2S_, S2C_, Client_, Server_ );
+			tol::reset( P, Client_, Server_, C2S_, S2C_ );
 		}
 		qCDTOR( rRack_ );
 		void Init( void )
 		{
 			reset();
+
+			C2S_.Init();
+			S2C_.Init();
 		}
 		void Plug(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ *Flow,
 			prxybase::eType Type )
 		{
 			switch ( Type ) {
 			case prxybase::tClient:
-				C2S_.SetIn( Flow );
-				S2C_.SetOut( Flow );
+				C2S_.SetIn( *Flow );
+				S2C_.SetOut( *Flow );
 				if ( Client_ != NULL )
 					qRGnr();
-				Client_ = &Flow;
+				Client_ = Flow;
 				break;
 			case prxybase::tServer:
-				S2C_.SetIn( Flow );
-				C2S_.SetOut( Flow );
+				S2C_.SetIn( *Flow );
+				C2S_.SetOut( *Flow );
 				if ( Server_ != NULL )
 					qRGnr();
-				Server_ = &Flow;
+				Server_ = Flow;
 				break;
 			default:
 				qRGnr();
@@ -256,10 +264,10 @@ public:
 
 			switch ( Type ) {
 			case prxybase::tClient:
-				Flow = Client_;
+				Flow = &C_();
 				break;
 			case prxybase::tServer:
-				Flow = Server_;
+				Flow = &S_();
 				break;
 			default:
 				qRGnr();
@@ -346,7 +354,7 @@ public:
 		E_CDTOR( rProxy );
 		// NOT blocking ; 'PostInit(...)' is the blocking one.
 		void Init(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ *Flow,
 			prxybase::eType Type )
 		{
 			reset();
@@ -377,14 +385,14 @@ public:
 			Data.Wait();
 		}
 		void Plug(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ *Flow,
 			prxybase::eType Type )
 		{
 			Rack_.Plug( Flow, Type );
 
 			ASyncPostInit( prxybase::GetOther( Type ) );
 
-			AnswerOKAndCommit_( Flow );
+			AnswerOKAndCommit_( *Flow );
 
 			Process_( Type );
 
@@ -555,7 +563,7 @@ public:
 		namespace {
 			void Create_(
 				const str::string_ &Id,
-				flw::ioflow__ &Flow,
+				flw::ioflow__ *Flow,
 				prxybase::eType Type )
 			{
 			qRH
@@ -581,7 +589,7 @@ public:
 
 			void Plug_(
 				rProxy *Proxy,
-				flw::ioflow__ &Flow,
+				flw::ioflow__ *Flow,
 				prxybase::eType Type )
 			{
 				Locker_.Unlock();	// Locked by caller.
@@ -592,17 +600,17 @@ public:
 			}
 		}
 
-		void A (flw::ioflow__ &Flow )
+		void A(flw::ioflow__ *Flow )
 		{
 		qRH
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
 			rProxy *Proxy = NULL;
 		qRB
-			Type = prxybase::GetType( Flow );
+			Type = prxybase::GetType( *Flow );
 
 			Id.Init();
-			prxybase::GetId( Flow, Id );
+			prxybase::GetId( *Flow, Id );
 
 			Locker_.Lock();
 
@@ -624,13 +632,14 @@ public:
 				Plug_( Proxy, Flow, Type );
 		qRR
 		qRT
+			Locker_.UnlockIfLocked();
 		qRE
 		}
 	}
 
 	void Plug_(
 		csdcmn::sVersion Version,
-		flw::sIOFlow &Flow )
+		flw::sIOFlow *Flow )
 	{
 		switch ( Version ) {
 		default:
@@ -664,6 +673,7 @@ public:
 			Flow.Commit();
 		qRR
 		qRT
+			Locker_.UnlockIfLocked();
 		qRE
 		}
 	}
@@ -769,44 +779,51 @@ public:
 	private:
 		bso::sBool FromLocalhost_;
 	protected:
-		void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+		void *CSDSCBPreProcess(
+			flw::sIOFlow *Flow,
+			const ntvstr::char__ *Origin,
+			bso::sBool *OwnerShipTaken ) override
 		{
 		qRH
 			qCBUFFERr Buffer;
 		qRB
 			FromLocalhost_ = strncmp( ntvstr::string___( Origin ).UTF8( Buffer ), "127.", 4 ) == 0;
+
+			*OwnerShipTaken = true;
 		qRR
 		qRT
 		qRE
 			return NULL;
 		}
 		csdscb::action__ CSDSCBProcess(
-			flw::ioflow__ &Flow,
+			flw::sIOFlow *Flow,
 			void *UP ) override
 		{
 		qRH
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+			bso::sBool DeleteFlow = true;
 		qRB
-			if ( ( Version = csdcmn::GetProtocolVersion( prxybase::ProtocolId, Flow ) ) != prxybase::ProtocolVersion )
+			if ( ( Version = csdcmn::GetProtocolVersion( prxybase::ProtocolId, *Flow ) ) != prxybase::ProtocolVersion )
 				qRGnr();
 
-			switch ( prxybase::GetRequest( Flow ) ) {
+			switch ( prxybase::GetRequest( *Flow ) ) {
 			case prxybase::rPlug:
 				Plug_( Version, Flow );
+				DeleteFlow = false;
 				break;
 			case prxybase::rDismiss:
-				Dismiss_( Version, Flow );
+				Dismiss_( Version, *Flow );
 				break;
 			case prxybase::rPing:
-				Ping_( Version, Flow );
+				Ping_( Version, *Flow );
 				break;
 			case prxybase::rFreeze:
-				Freeze_( Version, Flow, FromLocalhost_ );
+				Freeze_( Version, *Flow, FromLocalhost_ );
 				break;
 			case prxybase::rCrash:
-				Crash_( Version, Flow, FromLocalhost_ );
+				Crash_( Version, *Flow, FromLocalhost_ );
 				break;
 			default:
 				qRGnr();
@@ -815,6 +832,8 @@ public:
 		qRR
 			Locker_.UnlockIfLocked();
 		qRT
+			if ( DeleteFlow )
+				delete Flow;
 		qRE
 			return csdscb::aStop;
 		}

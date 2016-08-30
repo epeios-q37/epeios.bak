@@ -75,17 +75,20 @@ namespace scldaemon {
 		{
 			return SCLDAEMONPluginOverride( Id, Arguments, Timeout );
 		}
-		virtual void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+		virtual void *CSDSCBPreProcess(
+			flw::sIOFlow *Flow,
+			const ntvstr::char__ *Origin,
+			bso::sBool *OwnerShipTaken ) override
 		{
 			return SCLDAEMONNew( Origin );
 		}
 		virtual csdscb::action__ CSDSCBProcess(
-			flw::ioflow__ &Flow,
+			flw::ioflow__ *Flow,
 			void *UP ) override
 		{
 			daemon___ &Daemon = *(daemon___ *)UP;
 
-			if ( Daemon.Process( Flow ) )
+			if ( Daemon.Process( *Flow ) )
 				return csdscb::aContinue;
 			else
 				return csdscb::aStop;

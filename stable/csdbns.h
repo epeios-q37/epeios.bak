@@ -50,11 +50,10 @@ namespace csdbns {
 
 	class socket_callback__ {
 	protected:
-		// Id 'SkipSocketClosing' (originally set to 'false') is set to 'true', this means that the socket is closed downstream.
 		virtual void *CSDBNSPreProcess(
 			sck::socket__ Socket,
 			const char *IP,
-			bso::sBool *SkipSocketClosing ) = 0;
+			bso::sBool *OwnerShipTaken ) = 0;	// If 'OwnerShipTaken' (initially set to 'false') is et to 'true', 'Socket' is destroyed downstream.
 		virtual action__ CSDBNSProcess(
 			sck::socket__ Socket,
 			void *UP ) = 0;
@@ -63,9 +62,9 @@ namespace csdbns {
 		void *PreProcess(
 			sck::socket__ Socket,
 			const char *IP,
-			bso::sBool *SkipSocketClosing )
+			bso::sBool *OwnerShipTaken )
 		{
-			return CSDBNSPreProcess( Socket, IP, SkipSocketClosing );
+			return CSDBNSPreProcess( Socket, IP, OwnerShipTaken );
 		}
 		action__ Process(
 			sck::socket__ Socket,
@@ -160,9 +159,23 @@ namespace csdbns {
 
 # ifdef CPE_F_MT
 
-	struct _flow_data__ {
-		sck::socket_ioflow___ Flow;
+	struct rData_ {
+		sck::socket_ioflow___ *Flow;
 		void *UP;
+		bso::sBool OwnerShipTaken;
+		void reset( bso::sBool P = true )
+		{
+			if ( P )
+				if ( Flow != NULL )
+					delete Flow;
+
+			tol::reset( P, Flow, UP, OwnerShipTaken );
+		}
+		qCDTOR( rData_ );
+		void Init( void )
+		{
+			reset();
+		}
 	};
 
 	class _callback__
@@ -171,20 +184,27 @@ namespace csdbns {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			socket__ Socket,
-			const char *IP,
-			bso::sBool *SkipSocketClosing ) override
+			const char *IP, 
+			bso::sBool *OwnerShipTaken ) override
 		{
-			_flow_data__ *Data = NULL;
+			rData_ *Data = NULL;
 		qRH
 		qRB
-			Data = new _flow_data__;
+			Data = new rData_;
 
 			if ( Data == NULL )
 				qRAlc();
 
-			Data->Flow.Init( Socket, true, sck::NoTimeout );
-			*SkipSocketClosing = true;
-			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );
+			Data->Init();
+
+			Data->Flow = new sck::socket_ioflow___;
+
+			if ( Data->Flow == NULL )
+				qRFwk();
+
+			Data->Flow->Init( Socket, true, sck::NoTimeout );
+			*OwnerShipTaken = true;	// Socket is should NOT be destroyed upstream.
+			Data->UP = BaseCallback->PreProcess( Data->Flow, ntvstr::string___( IP ).Internal(), &Data->OwnerShipTaken );	// The 'OwnerShipTaken' concerns the 'Flow'.
 		qRR
 			if ( Data != NULL )
 				delete Data;
@@ -197,12 +217,11 @@ namespace csdbns {
 			socket__ Socket,
 			void *UP ) override
 		{
-			_flow_data__ &Data = *(_flow_data__ *)UP;
+			rData_ &Data = *(rData_ *)UP;
 #  ifdef CSDNBS_DBG
 			if ( Data.Flow.GetSocket() != Socket )
 				ERRc();
 #  endif
-
 			return BaseCallback->Process( Data.Flow, Data.UP );
 		}
 		virtual void CSDBNSPostProcess( void *UP ) override
@@ -210,9 +229,14 @@ namespace csdbns {
 			if ( UP == NULL )
 				qRFwk();
 
-			BaseCallback->PostProcess( ((_flow_data__ *)UP)->UP );
+			rData_ &Data = *(rData_ *)UP;
 
-			delete (_flow_data__ *)UP;
+			if ( Data.OwnerShipTaken )
+				Data.Flow = NULL;	// To avoid destruction below.
+
+			BaseCallback->PostProcess( Data.UP );
+
+			delete (rData_ *)UP;
 		}
 	public:
 		csdscb::callback__ *BaseCallback;

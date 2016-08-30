@@ -79,14 +79,18 @@ namespace {
 		sModule &Module = *Data.Module;
 		ntvstr::string___ Origin;
 		void *MUP = NULL;
+		bso::sBool OwnerShipTaken = false;
 	qRFB
 		Origin.Init( Data.Origin );
 
 		mtx::Unlock( Data.Mutex );
 
-		MUP = Module.PreProcess( Origin );
+		MUP = Module.PreProcess( Flow, Origin, &OwnerShipTaken );
 
-		while ( Module.Process( *Flow, MUP ) == csdscb::aContinue );
+		if ( OwnerShipTaken )
+			qRGnr();
+
+		while ( Module.Process( Flow, MUP ) == csdscb::aContinue );
 	qRFR
 	qRFT
 		Module.PostProcess( MUP );

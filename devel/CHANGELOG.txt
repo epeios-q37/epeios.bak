@@ -5,6 +5,12 @@ NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characte
 2016-08-30 :
 - CSDBNS:
 	- Fixing some issues related to automatisation of socket closing.
+	- 'SkipSocketClosing' -> 'OwnerShipTaken'.
+- CSDLEC, CSDMXS, SCLDAEMON :
+	- Adaptation to 'CSDSCB'.
+- CSDSCB :
+	- Introducing 'OwnerShipTaken'.
+	- the flow is passed as pointer, so it can be deleted.
 - PRXYBASE :
 	- Introducing 'GetOther(...)'.
 
