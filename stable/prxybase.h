@@ -89,6 +89,23 @@ namespace prxybase {
 
 	eType GetType( flw::iflow__ &Flow );
 
+	inline eType GetOther( eType Type )
+	{
+		switch ( Type ) {
+		case tClient:
+			Type = tServer;
+			break;
+		case tServer:
+			Type = tClient;
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+
+		return Type;
+	}
+
 	void PutType(
 		eType Type,
 		flw::oflow__ &Flow );

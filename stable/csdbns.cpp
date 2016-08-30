@@ -154,6 +154,7 @@ qRH
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	action__ Action = a_Undefined;
 	const char *UP = NULL;
+	bso::sBool SkipSocketClosing = false;
 qRB
 	Socket = _Interroger( ErrorHandling, Timeout, UP );
 
@@ -165,7 +166,7 @@ qRB
 			correctement l'objet qu'il a cre (rfrenc par 'UP'), mme lors d'un ^C,
 			qui nous jecte directement de cette fonction, mais provoque quand mme un appel du destructeur. */
 
-		_UP = Callback.PreProcess( Socket, UP );
+		_UP = Callback.PreProcess( Socket, UP, &SkipSocketClosing );
 		_Callback = &Callback;
 
 		while ( ( Action = Callback.Process( Socket, _UP ) ) == aContinue );
@@ -193,9 +194,8 @@ qRT
 	}
 
 	if ( Socket != SCK_INVALID_SOCKET )
-		sck::Close( Socket );
-
-
+		if ( !SkipSocketClosing )
+			sck::Close( Socket );
 qRE
 	return Continue;
 }
@@ -324,8 +324,6 @@ static void Traiter_( void *PU )
 {
 	::socket_data__ &Data = *(::socket_data__ *)PU;
 qRFH
-
-	bso::bool__ Close = true;
 	socket_callback__ &Callback = *Data.Callback;
 	socket__ Socket = Data.Socket;
 	void *UP = NULL;
@@ -333,6 +331,7 @@ qRFH
 	rrow__ Row = qNIL;
 	csdbns_repository_item__ Item;
 	tol::E_FPOINTER___( char ) Buffer;
+	bso::sBool SkipSocketClosing = false;
 qRFB
 	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
 		qRAlc();
@@ -342,12 +341,13 @@ qRFB
 
 	qRH
 	qRB
-		UP = Callback.PreProcess( Socket, Buffer );
+		UP = Callback.PreProcess( Socket, Buffer, &SkipSocketClosing );
 
 		Item.Callback = &Callback;
 		Item.UP = UP;
 
-		Row = New_( Item );
+		if ( !SkipSocketClosing )
+			Row = New_( Item );
 
 		while ( ( Action = Callback.Process( Socket, UP ) ) == aContinue );
 	qRR
@@ -355,7 +355,8 @@ qRFB
 		if ( Row != qNIL )
 			Clean_( Row );
 
-		sck::Close( Socket );
+		if ( !SkipSocketClosing )
+			sck::Close( Socket );
 	qRE
 qRFR
 qRFT

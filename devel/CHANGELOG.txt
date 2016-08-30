@@ -2,11 +2,21 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-08-30 :
+- CSDBNS:
+	- Fixing some issues related to automatisation of socket closing.
+- PRXYBASE :
+	- Introducing 'GetOther(...)'.
+
+2016-08-28 :
+- CSDBNC :
+	- Introducing 'SkipSocketClosing'.
+
 2016-08-22 :
 - CSDBNC, CSDBNS :
 	- Adaptation to changes in 'SCK'.
 - CSDMXS :
-	- Fixing error occuring on regular deconnectio from frontend.
+	- Fixing error occuring on regular deconnection from frontend.
 - SCK :
 	- Adding possibility to give the ownership for a socket, so it can be properly closed.
 

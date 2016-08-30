@@ -50,9 +50,11 @@ namespace csdbns {
 
 	class socket_callback__ {
 	protected:
+		// Id 'SkipSocketClosing' (originally set to 'false') is set to 'true', this means that the socket is closed downstream.
 		virtual void *CSDBNSPreProcess(
 			sck::socket__ Socket,
-			const char *IP ) = 0;
+			const char *IP,
+			bso::sBool *SkipSocketClosing ) = 0;
 		virtual action__ CSDBNSProcess(
 			sck::socket__ Socket,
 			void *UP ) = 0;
@@ -60,9 +62,10 @@ namespace csdbns {
 	public:
 		void *PreProcess(
 			sck::socket__ Socket,
-			const char *IP )
+			const char *IP,
+			bso::sBool *SkipSocketClosing )
 		{
-			return CSDBNSPreProcess( Socket, IP );
+			return CSDBNSPreProcess( Socket, IP, SkipSocketClosing );
 		}
 		action__ Process(
 			sck::socket__ Socket,
@@ -168,7 +171,8 @@ namespace csdbns {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			socket__ Socket,
-			const char *IP ) override
+			const char *IP,
+			bso::sBool *SkipSocketClosing ) override
 		{
 			_flow_data__ *Data = NULL;
 		qRH
@@ -179,6 +183,7 @@ namespace csdbns {
 				qRAlc();
 
 			Data->Flow.Init( Socket, true, sck::NoTimeout );
+			*SkipSocketClosing = true;
 			Data->UP = BaseCallback->PreProcess( ntvstr::string___( IP ).Internal() );
 		qRR
 			if ( Data != NULL )
@@ -190,7 +195,7 @@ namespace csdbns {
 		}
 		virtual action__ CSDBNSProcess(
 			socket__ Socket,
-			void *UP )
+			void *UP ) override
 		{
 			_flow_data__ &Data = *(_flow_data__ *)UP;
 #  ifdef CSDNBS_DBG

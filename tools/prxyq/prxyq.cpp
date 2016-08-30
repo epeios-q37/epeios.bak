@@ -25,16 +25,17 @@
 #include "scltool.h"
 #include "sclerror.h"
 
-#include "err.h"
-#include "cio.h"
-#include "epsmsc.h"
-#include "xpp.h"
-#include "fnm.h"
-#include "flf.h"
 #include "csdcmn.h"
 #include "csdbns.h"
+#include "cio.h"
+#include "crt.h"
+#include "epsmsc.h"
+#include "err.h"
+#include "flf.h"
+#include "fnm.h"
+#include "mtk.h"
 #include "lstbch.h"
-#include "ctn.h"
+#include "xpp.h"
 
 using cio::CErr;
 using cio::COut;
@@ -135,19 +136,146 @@ public:
 				return false;
 			else
 				qRGnr();
+		}
+		void Clear( void )
+		{
+			_flow__::Commit();
+			_flow__::Dismiss();
+		}
+	};
 
+	// Pre-declaration.
+	class rProxy;
 
+	namespace {
+		struct sData_ {
+		private:
+			tht::rBlocker Blocker_;
+		public:
+			rProxy *Proxy;
+			prxybase::eType Type;
+			void reset( bso::sBool P = true )
+			{
+				tol::reset( P, Blocker_, Proxy );
+				Type = prxybase::t_Undefined;
+			}
+			qCDTOR( sData_ );
+			void Init(
+				rProxy &Proxy,
+				prxybase::eType Type )
+			{
+				Blocker_.Init();
+				this->Proxy = &Proxy;
+				this->Type = Type;
+			}
+			void Wait( void )
+			{
+				Blocker_.Wait();
+			}
+			void Unblock( void )
+			{
+				Blocker_.Unblock();
+			}
+		};
 
+		void PostInit_( sData_ &Data );
+
+		void PostInit_( void *UP )
+		{
+		qRFH
+		qRFB
+			PostInit_( *(sData_ *)UP );
+		qRFR
+		qRFT
+		qRFE( sclmisc::ErrFinal() )
+		}
+	}
+
+	class rRack_ {
+	private:
+		flow___ C2S_, S2C_;
+		Q37_MRMDF( flw::sIOFlow, C_, Client_ );
+		Q37_MRMDF( flw::sIOFlow, S_, Server_ );
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				C2S_.Clear();
+				S2C_.Clear();
+
+				if ( Client_ != NULL )
+					delete( Client_ );
+
+				if ( Server_ != NULL )
+					delete( Server_ );
+
+			}
+
+			tol::reset( P, C2S_, S2C_, Client_, Server_ );
+		}
+		qCDTOR( rRack_ );
+		void Init( void )
+		{
+			reset();
+		}
+		void Plug(
+			flw::ioflow__ &Flow,
+			prxybase::eType Type )
+		{
+			switch ( Type ) {
+			case prxybase::tClient:
+				C2S_.SetIn( Flow );
+				S2C_.SetOut( Flow );
+				if ( Client_ != NULL )
+					qRGnr();
+				Client_ = &Flow;
+				break;
+			case prxybase::tServer:
+				S2C_.SetIn( Flow );
+				C2S_.SetOut( Flow );
+				if ( Server_ != NULL )
+					qRGnr();
+				Server_ = &Flow;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
+		flw::sIOFlow &C2S( void )
+		{
+			return C2S_;
+		}
+		flw::sIOFlow &S2C( void )
+		{
+			return S2C_;
+		}
+		flw::sOFlow &GetCorrespondingOFlow( prxybase::eType Type )
+		{
+			flw::sOFlow *Flow = NULL;
+
+			switch ( Type ) {
+			case prxybase::tClient:
+				Flow = Client_;
+				break;
+			case prxybase::tServer:
+				Flow = Server_;
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+
+			return *Flow;
 		}
 	};
 
 	class rProxy
 	{
 	private:
-		flow___ C2S_, S2C_;
-		mtx::handler___
-			PairingMutex_,	// To wait for the pairing.
-			CommitMutex_;	// To ensure that the pairing data is transmitted.
+		rRack_ Rack_;
+		mtx::rHandler Mutex_;
+		bso::sBool FinalDismiss_;	// To ensure that this instance will no more be used before destruction.
 		void Process_( flw::ioflow__ &Flow )
 		{
 		qRFH
@@ -173,113 +301,108 @@ public:
 		{
 			switch ( Type ) {
 			case prxybase::tClient:
-				Process_( C2S_ );
+				Process_( Rack_.C2S() );
 				break;
 			case prxybase::tServer:
-				Process_( S2C_ );
+				Process_( Rack_.S2C() );
 				break;
 			default:
 				qRGnr();
 				break;
 			}
 		}
-		bso::sBool WaitForOther_(void)	// If the returning value is 'true', then the thread is the one which deletes the proxy.
+		void WaitForOther_( void )
 		{
-			if ( mtx::TryToLock( PairingMutex_ ) ) {
-				mtx::Lock( PairingMutex_ );
-				mtx::Unlock( PairingMutex_ );
-				return true;
+			if ( mtx::TryToLock(Mutex_) ) {
+				mtx::Lock( Mutex_ );
+				mtx::Unlock( Mutex_ );
+				FinalDismiss_ = true;
 			} else {
-				mtx::Unlock( PairingMutex_ );
-				return false;
+				mtx::Unlock( Mutex_ );
+				while ( !FinalDismiss_ )
+					tht::Defer( 10 );
 			}
 		}
-		void Plug_(
-			flw::ioflow__ &Flow,
-			prxybase::eType Type )
+		void AnswerOKAndCommit_( flw::sOFlow &Flow )
 		{
-			switch ( Type ) {
-			case prxybase::tClient:
-				C2S_.SetIn( Flow );
-				S2C_.SetOut( Flow );
-				break;
-			case prxybase::tServer:
-				S2C_.SetIn( Flow );
-				C2S_.SetOut( Flow );
-				break;
-			default:
-				qRGnr();
-				break;
-			}
+			prxybase::PutAnswer( prxybase::aOK, Flow );
+
+			Flow.Commit();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			C2S_.reset( false );
-			S2C_.reset( false );
+			Rack_.reset( P );
 
 			if ( P ) {
-				if ( PairingMutex_ != mtx::UndefinedHandler )
-					mtx::Delete( PairingMutex_, true );
-
-				if ( CommitMutex_ != mtx::UndefinedHandler )
-					mtx::Delete( CommitMutex_, true );
+				if ( Mutex_ != mtx::UndefinedHandler )
+					mtx::Delete( Mutex_ );
 			}
 
-			PairingMutex_ = mtx::UndefinedHandler;
-			CommitMutex_ = mtx::UndefinedHandler;
+			Mutex_ = mtx::UndefinedHandler;
+
+			FinalDismiss_ = false;
 		}
 		E_CDTOR( rProxy );
-		bso::sBool Init(
+		// NOT blocking ; 'PostInit(...)' is the blocking one.
+		void Init(
 			flw::ioflow__ &Flow,
 			prxybase::eType Type )
 		{
 			reset();
 
-			C2S_.Init();
-			S2C_.Init();
+			Rack_.Init();
 
-			Plug_( Flow, Type );
+			Rack_.Plug( Flow, Type );
 
-			PairingMutex_ = mtx::Create();
-			CommitMutex_ = mtx::Create();
-
-			mtx::Lock( CommitMutex_ );
-
-			mtx::Lock( PairingMutex_ );
-			mtx::Lock( PairingMutex_ );	// Unlocked by 'Plug(...)'.
-			mtx::Unlock( PairingMutex_ );
-
-			prxybase::PutAnswer( prxybase::aOK, Flow );
-
-			Flow.Commit();
-
-			mtx::Unlock( CommitMutex_ );
-
+			Mutex_ = mtx::Create();
+		}
+		// BLOCKING !
+		void PostInit( prxybase::eType Type )
+		{
 			Process_( Type );
 
 			return WaitForOther_();
 		}
-		bso::sBool Plug(
+		void ASyncPostInit( prxybase::eType Type )
+		{
+			sData_ Data;
+
+			Data.Init( *this, Type );
+
+			AnswerOKAndCommit_( Rack_.GetCorrespondingOFlow( Type ) );
+
+			mtk::Launch( PostInit_, &Data );
+
+			Data.Wait();
+		}
+		void Plug(
 			flw::ioflow__ &Flow,
 			prxybase::eType Type )
 		{
-			Plug_( Flow, Type );
+			Rack_.Plug( Flow, Type );
 
-			mtx::Unlock( PairingMutex_ );
+			ASyncPostInit( prxybase::GetOther( Type ) );
 
-			prxybase::PutAnswer( prxybase::aOK, Flow );
-
-			Flow.Commit();
-
-			mtx::Lock( CommitMutex_ );
-			mtx::Unlock( CommitMutex_ );
+			AnswerOKAndCommit_( Flow );
 
 			Process_( Type );
 
 			return WaitForOther_();
 		}
 	};
+
+	namespace {
+		void PostInit_( sData_ &Data )
+		{
+			rProxy &Proxy = *Data.Proxy;
+			prxybase::eType Type = Data.Type;
+
+			Data.Unblock();
+
+			Proxy.PostInit( Type );
+		}
+	}
 
 	using csdbns::cProcessing;
 
@@ -450,8 +573,7 @@ public:
 
 				Locker_.Unlock();	// Locked by caller.
 
-				if ( Proxy->Init( Flow, Type ) )	// Blocking until deconnection.
-					delete Proxy;
+				Proxy->Init( Flow, Type );
 			qRR
 			qRT
 			qRE
@@ -464,8 +586,9 @@ public:
 			{
 				Locker_.Unlock();	// Locked by caller.
 
-				if ( Proxy->Plug( Flow, Type ) )	// Blocking until deconnection.
-					delete Proxy;
+				Proxy->Plug( Flow, Type );	// Blocking until deconnection.
+
+				delete Proxy;
 			}
 		}
 
