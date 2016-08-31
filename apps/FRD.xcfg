@@ -6,6 +6,14 @@
 	</xpp:define>
 	<xpp:define name="FRD_Definitions">
 		<xpp:bloc>
+			<xpp:ifeq select="packing" value="yes">
+				<xpp:bloc>
+					<xpp:set name="PlgPath" value="../"/>
+					<xpp:define name="PlgPath">
+						<xpp:expand value-of="PlgPath"/>
+					</xpp:define>
+				</xpp:bloc>
+			</xpp:ifeq>
 			<FrontendPlugins>
 				<Plugin id="Straight">
 					<xpp:expand select="PlgPath"/>
