@@ -31,6 +31,8 @@
 # include <limits.h>
 # include <stdint.h>
 # include <float.h>
+# include <inttypes.h>
+
 
 # include "err.h"
 # include "cpe.h"
@@ -102,46 +104,50 @@ namespace bso {
 	BSO__INT_MIN_MAX_BDEF( type, type, affix, U##affix)
 
 
-	#define BSO_S8_MAX		INT8_MAX
-	#define BSO_S8_MIN		INT8_MIN
+# define BSO_S8_MAX		INT8_MAX
+# define BSO_S8_MIN		INT8_MIN
 	typedef int8_t	s8__;
 
-	#define BSO_U8_MAX		UINT8_MAX
-	#define BSO_U8_MIN		0
+# define BSO_U8_MAX		UINT8_MAX
+# define BSO_U8_MIN		0
 	typedef sU8 u8__;
 
 	BSO__INT_MIN_MAX_DEF( 8, INT8 );
 
 
-	#define BSO_S16_MAX		INT16_MAX
-	#define BSO_S16_MIN		INT16_MIN
+# define BSO_S16_MAX		INT16_MAX
+# define BSO_S16_MIN		INT16_MIN
 	typedef int16_t s16__;
 
-	#define BSO_U16_MAX		UINT16_MAX
-	#define BSO_U16_MIN		0
+# define BSO_U16_MAX		UINT16_MAX
+# define BSO_U16_MIN		0
 	typedef uint16_t u16__;
 
 	BSO__INT_MIN_MAX_DEF( 16, INT16 );
 
 
-	#define BSO_S32_MAX		INT32_MAX
-	#define BSO_S32_MIN		INT32_MIN
 	typedef int32_t s32__;
+# define BSO_S32_MAX		INT32_MAX
+# define BSO_S32_MIN		INT32_MIN
+# define BSO_S32_P_			PRIi32
 
-	#define BSO_U32_MAX		UINT32_MAX
-	#define BSO_U32_MIN   0
 	typedef uint32_t u32__;
+# define BSO_U32_MAX		UINT32_MAX
+# define BSO_U32_MIN   0
+# define BSO_U32_P_			PRIu32
 
 	BSO__INT_MIN_MAX_DEF( 32, INT32 );
 
 
-	#define BSO_S64_MAX		INT64_MAX
-	#define BSO_S64_MIN		INT64_MIN
 	typedef int64_t s64__;
+# define BSO_S64_MAX		INT64_MAX
+# define BSO_S64_MIN		INT64_MIN
+# define BSO_S64_P_			PRIi64
 
-	#define BSO_U64_MAX		UINT64_MAX
-	#define BSO_U64_MIN		0
 	typedef uint64_t u64__;
+# define BSO_U64_MAX		UINT64_MAX
+# define BSO_U64_MIN		0
+# define BSO_U64_P_			PRIu64
 
 	BSO__INT_MIN_MAX_DEF( 64, INT64 );
 
@@ -190,7 +196,7 @@ namespace bso {
 	*/
 
 	// Taille maximale nécessaire pour stocker la valeur d'un entirer en décimal dans une chaine de caractère (+ le signe).
-	#define BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE	( 1 + ( sizeof( bso::pointer__ ) * 8 ) )
+# define BSO_ASCII_CONVERTED_INTEGER_MAX_SIZE	( 1 + ( sizeof( bso::pointer__ ) * 8 ) )
 
 	typedef buffer__ integer_buffer__;
 
@@ -217,7 +223,7 @@ namespace bso {
 		u64__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%llu", Value );
+		sprintf( Buffer.Datum, "%" BSO_U64_P_, Value );
 
 		return Buffer.Datum;
 	}
@@ -234,7 +240,7 @@ namespace bso {
 		bso::u32__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%u", Value );
+		sprintf( Buffer.Datum, "%" BSO_U32_P_, Value );
 
 		return Buffer.Datum;
 	}
@@ -366,7 +372,7 @@ namespace bso {
 		s64__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%lli", Value );
+		sprintf( Buffer.Datum, "%" BSO_S64_P_, Value );
 
 		return Buffer.Datum;
 	}
@@ -386,7 +392,7 @@ namespace bso {
 		s32__ Value,
 		integer_buffer__ &Buffer )
 	{
-		sprintf( Buffer.Datum, "%i", Value );
+		sprintf( Buffer.Datum, "%" BSO_S32_P_, Value );
 
 		return Buffer.Datum;
 	}
