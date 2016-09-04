@@ -64,29 +64,33 @@ namespace ltf {
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
+			bso::sBool Overflow = false; 
+
 			if ( ( _Amount + Maximum ) > _Size ) {
+				Overflow = true;
+
 				if ( Maximum >= (fdr::size__)( _Size - _FreezePosition ) ) {
-					memcpy( _Data + _FreezePosition, Buffer + ( _Size - _FreezePosition - Maximum ), _Size - _FreezePosition );
+					memcpy( _Data + _FreezePosition, Buffer + ( Maximum - ( _Size - _FreezePosition ) ), _Size - _FreezePosition );
 				} else {
 					memcpy( _Data + _FreezePosition, _Data + _FreezePosition + Maximum, _Size - Maximum - _FreezePosition );
 					memcpy( _Data + _Size - Maximum, Buffer, Maximum );
 				}
 
-				_Amount = _Size + 1;
+				_Amount = _Size;
 			} else {
 				memcpy( _Data + _Amount, Buffer, Maximum );
 				_Amount += (bso::u8__)Maximum;
 			}
 
-			if ( _Amount < _Size ) {
-				_TF().Put( Buffer, Maximum );
-			} else if ( _Amount > _Size )
+			if ( Overflow )
 				_Data[_FreezePosition] = '<';
 
 			return Maximum;
 		}
 		virtual void FDRCommit( void )
 		{
+			_TF().Put(_Data, _Amount );
+			_Amount = 0;
 			_TF() << txf::commit;
 		}
 	public:
@@ -124,29 +128,30 @@ namespace ltf {
 			_Amount = 0;
 			_FreezePosition = 0;
 
-			Clear();
+			Clear( true );
 		}
 		txf::text_oflow__ &TFlow( void )
 		{
 			return _TF();
 		}
-		void Clear( void )
+		void Clear( bso::sBool Unfreeze )
 		{
 			memset( _Data + _FreezePosition, ' ', _Size - _FreezePosition);
 			_TF() << txf::rfl;
 			_TF().Put( _Data, _Size );
-			CR();
+			CR( Unfreeze );
 		}
 		void ClearAll( void )
 		{
-			_FreezePosition = 0;
-
-			Clear();
+			Clear( true );
 		}
-		void CR( void )
+		void CR( bso::sBool Unfreeze )
 		{
 			_TF() << txf::rfl;
-			_TF().Put( _Data, _FreezePosition );
+
+			if ( Unfreeze )
+				_FreezePosition = 0;
+
 			_Amount = _FreezePosition;
 		}
 		void Freeze( void )
@@ -154,9 +159,6 @@ namespace ltf {
 			_FreezePosition = _Amount;
 		}
 	};
-
-
-
 
 	class _line_text_oflow___
 	: public flw::oflow__
@@ -191,22 +193,21 @@ namespace ltf {
 		}
 		void Clear( void )
 		{
-			_Driver.Clear();
+			_Driver.Clear( false );
 		}
 		void ClearAll( void )
 		{
 			_Driver.ClearAll();
 		}
-		void CR( void )
+		void CR( bso::sBool Unfreeze )
 		{
-			_Driver.CR();
+			_Driver.CR( Unfreeze );
 		}
 		void Freeze( void )
 		{
 			_Driver.Freeze();
 		}
 	};
-
 
 	template <int size = 79> class line_text_oflow___
 	: public txf::text_oflow__
@@ -238,9 +239,9 @@ namespace ltf {
 		{
 			return Flow_.TFlow();
 		}
-		void CR( void )
+		void CR( bso::sBool Unfreeze = false )
 		{
-			Flow_.CR();
+			Flow_.CR( Unfreeze );
 		}
 		void Clear( void )
 		{

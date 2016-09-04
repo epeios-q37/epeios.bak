@@ -2,6 +2,12 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-04 :
+- LTF :
+	- Fixing overflow bug.
+- LOG :
+	- Creation.
+
 2016-09-02 :
 - BSO :
 	- Fixing warning issued when compiling under WSL (Widows Subsystem for Linux).

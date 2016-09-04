@@ -33,6 +33,7 @@
 #include "err.h"
 #include "flf.h"
 #include "fnm.h"
+#include "log.h"
 #include "mtk.h"
 #include "lstbch.h"
 #include "xpp.h"
@@ -50,6 +51,30 @@ using cio::CIn;
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"	
+
+namespace {
+	log::rFDriver<> Log_;
+
+	typedef txf::text_oflow__ rTFlow_;
+
+	class rLogRack_
+	: public rTFlow_
+	{
+	private:
+		flw::sDressedOFlow<> OFlow_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, OFlow_ );
+		}
+		qCDTOR( rLogRack_ );
+		void Init( void  )
+		{
+			OFlow_.Init( Log_ );
+			rTFlow_::Init( OFlow_ );
+		}
+	};
+}
 
 namespace {
 	bso::sBool FreezeFlag_ = false;	// For watchdog testing putpose.
@@ -600,12 +625,13 @@ public:
 			}
 		}
 
-		void A(flw::ioflow__ *Flow )
+		void A( flw::ioflow__ *Flow )
 		{
 		qRH
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
 			rProxy *Proxy = NULL;
+			rLogRack_ Log;
 		qRB
 			Type = prxybase::GetType( *Flow );
 
@@ -613,6 +639,8 @@ public:
 			prxybase::GetId( *Flow, Id );
 
 			Locker_.Lock();
+
+			Log.Init();
 
 			switch ( Type ) {
 			case prxybase::tClient:
@@ -626,10 +654,19 @@ public:
 				break;
 			}
 
-			if ( Proxy == NULL ) 
+			Log << prxybase::GetLabel( Type ) << ' ' << Id;
+
+			if ( Proxy == NULL ) {
 				Create_( Id, Flow, Type );
-			else
+				Log << "creation";
+			} else {
 				Plug_( Proxy, Flow, Type );
+				Log << "pluggin";
+			}
+
+			Log << prxybase::GetLabel( Type ) << ": " << Id;
+
+			Log.reset();
 		qRR
 		qRT
 			Locker_.UnlockIfLocked();
@@ -689,7 +726,6 @@ public:
 #pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
 		}
 	}
-
 
 	namespace ping_ {
 		void A( flw::ioflow__ &Flow )
@@ -767,11 +803,6 @@ public:
 #pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
 		}
 	}
-
-	namespace dismiss_ {
-
-	}
-
 
 	class callback__
 	: public cProcessing
@@ -896,6 +927,8 @@ int scltool::SCLTOOLMain(
 	int ExitValue = EXIT_FAILURE;
 qRH
 qRB
+	Log_.Init( cio::COut );
+
 	if ( Command == "Version" )
 		PrintHeader_();
 	else if ( Command == "License" )
