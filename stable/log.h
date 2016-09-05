@@ -32,11 +32,13 @@
 
 # include "ltf.h"
 
+# define LOG_DEFAULT_SIZE	1000
+
 namespace log {
 
 	typedef fdr::oflow_driver_base___ rFDRiver_;
 	
-	template <typename int size = 1000> class rFDriver
+	template <typename int size = LOG_DEFAULT_SIZE> class rFDriver
 	: public rFDRiver_
 	{
 	private:
@@ -45,7 +47,7 @@ namespace log {
 		tol::bDate Time_;
 		bso::sByte Message_[size+1];
 		bso::sBool Changed_;
-		bso::sSize Pos_ = 0;
+		bso::sSize Pos_, PreviousPos_;
 		bso::sSize DuplicateTimeCount_;
 	protected:
 		virtual bso::sSize FDRWrite(
@@ -73,6 +75,9 @@ namespace log {
 
 				LTFlow_.CR( true );
 
+				if ( Pos_ != PreviousPos_ )
+					Changed_ = true;
+
 				if ( Changed_ ) {
 					LTFlow_ << txf::nl;
 					LTFlow_.Commit();
@@ -82,8 +87,10 @@ namespace log {
 
 				tol::Date( Date );
 
+# if 0	// For testing datre change
 				if ( ( tol::EpochTime( false ) / 10 ) % 2 )
 					Date[2] = '-';
+# endif
 
 				if ( strcmp( Date, Date_ ) ) {
 					strcpy( Date_, Date );
@@ -111,6 +118,8 @@ namespace log {
 
 				LTFlow_ << (const char *)Message_;
 
+				PreviousPos_ = Pos_;
+
 				Pos_ = 0;
 
 				LTFlow_.Commit();
@@ -122,7 +131,7 @@ namespace log {
 			rFDRiver_::reset( P );
 			tol::reset( P, LTFlow_, Changed_ );
 			Message_[0] = 0;
-			Pos_ = 0;
+			Pos_ = PreviousPos_ = 0;
 			DuplicateTimeCount_ = 0;
 		}
 		qCVDTOR( rFDriver );
@@ -135,10 +144,10 @@ namespace log {
 		}
 	};
 
-	typedef txf::text_oflow__ rTOFlow_;
+	typedef txf::text_oflow__ rTFlow_;
 
 	class rLog
-	: public rTOFlow_
+	: public rTFlow_
 	{
 	private:
 		rFDriver<> Driver_;
@@ -147,17 +156,34 @@ namespace log {
 		void reset( bso::sBool P = true )
 		{
 			tol::reset( P, OFlow_, Driver_ );
-			rTOFlow_::reset( P );
+			rTFlow_::reset( P );
 		}
 		qCDTOR( rLog );
 		void Init( txf::text_oflow__ &Flow )
 		{
 			Driver_.Init( Flow );
 			OFlow_.Init( Driver_ );
-			rTOFlow_::Init( OFlow_ );
+			rTFlow_::Init( OFlow_ );
 		}
 	};
 
+	template <int size = LOG_DEFAULT_SIZE> class rLogRack
+	: public rTFlow_
+	{
+	private:
+		flw::sDressedOFlow<> OFlow_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, OFlow_ );
+		}
+		qCDTOR( rLogRack );
+		void Init( rFDriver<size> &Driver  )
+		{
+			OFlow_.Init( Driver );
+			rTFlow_::Init( OFlow_ );
+		}
+	};
 
 }
 

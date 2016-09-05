@@ -55,25 +55,7 @@ using cio::CIn;
 namespace {
 	log::rFDriver<> Log_;
 
-	typedef txf::text_oflow__ rTFlow_;
-
-	class rLogRack_
-	: public rTFlow_
-	{
-	private:
-		flw::sDressedOFlow<> OFlow_;
-	public:
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, OFlow_ );
-		}
-		qCDTOR( rLogRack_ );
-		void Init( void  )
-		{
-			OFlow_.Init( Log_ );
-			rTFlow_::Init( OFlow_ );
-		}
-	};
+	typedef log::rLogRack<> rLogRack_;
 }
 
 namespace {
@@ -640,8 +622,6 @@ public:
 
 			Locker_.Lock();
 
-			Log.Init();
-
 			switch ( Type ) {
 			case prxybase::tClient:
 				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
@@ -654,19 +634,19 @@ public:
 				break;
 			}
 
-			Log << prxybase::GetLabel( Type ) << ' ' << Id;
+			Log.Init( Log_ );
+
+			Log << prxybase::GetLabel( Type ) << ' ';
 
 			if ( Proxy == NULL ) {
 				Create_( Id, Flow, Type );
-				Log << "creation";
+				Log << "new";
 			} else {
 				Plug_( Proxy, Flow, Type );
-				Log << "pluggin";
+				Log << "plug";
 			}
 
-			Log << prxybase::GetLabel( Type ) << ": " << Id;
-
-			Log.reset();
+			Log << " (" << Id << ')';
 		qRR
 		qRT
 			Locker_.UnlockIfLocked();
@@ -692,6 +672,7 @@ public:
 		qRH
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::wString ID;
+			rLogRack_ Log;
 		qRB
 			Type = prxybase::GetType( Flow );
 
@@ -702,6 +683,10 @@ public:
 			prxybase::GetId( Flow, ID );
 
 			Locker_.Lock();
+
+			Log.Init( Log_ );
+
+			Log << "Dimissing (" << ID << ')' << txf::commit;
 
 			DismissServers_( ID );
 
