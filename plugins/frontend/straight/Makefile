@@ -37,7 +37,7 @@ mods += tagsbs tol txf tys uys
 mods += utf xtf llio bomhdl cdgb64 
 mods += dlbrry fil fnm lcl plgn 
 mods += plgncore rgstry stsfsm xml xpp 
-mods += tht fblovl mtk sck 
+mods += tht thtsub fblovl mtk sck 
 mods += csdbnc csdmnc csdmxb csdmxc csdrcc 
 mods += csdrcd 
 mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
@@ -328,7 +328,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160814"\"
+copt += -DVERSION=\""20160819"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""2c95d4ed-2c57-4399-9c86-4115883be7cc"\"
 
