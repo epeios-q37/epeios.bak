@@ -175,6 +175,7 @@ namespace log {
 	public:
 		void reset( bso::sBool P = true )
 		{
+			rTFlow_::reset( P );
 			tol::reset( P, OFlow_ );
 		}
 		qCDTOR( rLogRack );
