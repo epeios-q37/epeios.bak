@@ -2,6 +2,10 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-06 :
+- SCLMISC :
+	- Adding missng 'scelerror:ResetPendingError(...)', otherwise fiurther errors are not displayed.
+
 2016-09-05 :
 - LOG :
 	- Fixing the no newline bug when the new message is same but shorter as the old one.
