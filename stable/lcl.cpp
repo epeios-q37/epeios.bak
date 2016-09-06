@@ -330,10 +330,11 @@ void lcl::locale_::_GetTranslation(
 {
 	bso::bool__ Found = false;
 
-	if ( !( Found = _GetTranslationFollowingLanguageThenText( Text, Language, Translation ) ) )
-		if ( !( Found = _GetTranslationFollowingTextThenLanguage( Text, Language, Translation ) ) )
-			if ( !( Found = _GetTranslationFollowingLanguageThenMessage( Text, Language, Translation ) ) )	// Pour des raisons de compatibilit ascendante.
-				Found = _GetTranslationFollowingMessageThenLanguage( Text, Language, Translation );	// Pour des raisons de compatibilit ascendante.
+	if ( Text.Amount() != 0 )
+		if ( !( Found = _GetTranslationFollowingLanguageThenText( Text, Language, Translation ) ) )
+			if ( !( Found = _GetTranslationFollowingTextThenLanguage( Text, Language, Translation ) ) )
+				if ( !( Found = _GetTranslationFollowingLanguageThenMessage( Text, Language, Translation ) ) )	// Pour des raisons de compatibilit ascendante.
+					Found = _GetTranslationFollowingMessageThenLanguage( Text, Language, Translation );	// Pour des raisons de compatibilit ascendante.
 
 	if ( !Found ) {
 		Translation.Append( Text );

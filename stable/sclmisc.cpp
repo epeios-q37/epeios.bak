@@ -125,7 +125,7 @@ qRB
 	if ( Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation ) )
 		sclerror::ResetPendingError();
 
-	Flow << Translation << txf::nl  << txf::commit;
+	Flow << txf::nl << Translation << txf::nl  << txf::commit;
 qRR
 qRT
 qRE

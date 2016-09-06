@@ -3,6 +3,8 @@ CHANGELOG for the 'Epeios' framework.
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
 2016-09-06 :
+- LCL :
+	- From now on, translation of an empty text returns the lists of the tags ('%0' marker), even if there is an entry in the locale.
 - SCLMISC :
 	- Adding missng 'scelerror:ResetPendingError(...)', otherwise fiurther errors are not displayed.
 
