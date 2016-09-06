@@ -639,14 +639,17 @@ public:
 			Log << prxybase::GetLabel( Type ) << ' ';
 
 			if ( Proxy == NULL ) {
-				Create_( Id, Flow, Type );
 				Log << "new";
+				Log << " (" << Id << ')';
+				Log.reset();
+				Create_( Id, Flow, Type );
 			} else {
-				Plug_( Proxy, Flow, Type );
 				Log << "plug";
+				Log << " (" << Id << ')';
+				Log.reset();
+				Plug_( Proxy, Flow, Type );	// BLOQUANT !!! (d'où pas de 'log' aprés).
 			}
 
-			Log << " (" << Id << ')';
 		qRR
 		qRT
 			Locker_.UnlockIfLocked();
