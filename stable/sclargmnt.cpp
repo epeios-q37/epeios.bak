@@ -1460,6 +1460,123 @@ qRT
 qRE
 }
 
+namespace {
+	E_CDEF( char, EscapeChar, '\\' );
+}
+
+namespace {
+	void Split_(
+		flw::sIFlow &Flow,
+		str::dStrings &Splitted )
+	{
+	qRH
+		str::string Argument;
+		bso::bool__ Escape = false, Quoted = false;
+		bso::char__ C = 0;
+	qRB
+		Argument.Init();
+
+		while ( !Flow.EndOfFlow() ) {
+			C = Flow.Get();
+
+			if ( C == EscapeChar ) {
+				if ( Escape ) {
+					if ( Quoted )
+						Argument.Append( EscapeChar );
+
+					Argument.Append( EscapeChar );
+					Escape = false;
+				} else 
+					Escape = true;
+			} else if ( Escape ) {
+				if ( C == '"' )
+					Argument.Append('"' );
+				else if ( Quoted )
+					sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadArguments" );
+				else if ( C == ' ' )
+					Argument.Append( ' ' );
+				else if ( C == '"'  )
+					Argument.Append( '"' );
+				else
+					sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadArguments" );
+
+				Escape = false;
+			} else if ( C == '"' ) {
+				if ( Argument.Amount() != 0 )
+					Splitted.Append( Argument );
+
+				Quoted = !Quoted;
+			} else if ( ( C == ' ' ) && ( !Quoted ) ) {
+				if ( Argument.Amount() != 0 )
+					Splitted.Append( Argument );
+
+				Argument.Init();
+			} else
+				Argument.Append( C );
+		}
+
+		if ( Escape || Quoted )
+			sclmisc::ReportAndAbort( SCLARGMNT_NAME "_BadArguments" );
+
+		if ( Argument.Amount() != 0 )
+			Splitted.Append( Argument );
+
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void sclargmnt::Split(
+	const str::dString &Merged,
+	str::dStrings &Splitted )
+{
+qRH
+	flx::sStringIFlow Flow;
+qRB
+	Flow.Init( Merged );
+
+	Split_( Flow, Splitted );
+qRR
+qRT
+qRE
+}
+
+namespace {
+	void Normalize_(
+		flw::sIFlow &Flow,
+		str::dString &Normalized )
+	{
+		char C = 0;
+
+		while ( !Flow.EndOfFlow() ) {
+			C = Flow.Get();
+
+			if ( C == EscapeChar )
+				Normalized.Append( EscapeChar );
+
+			Normalized.Append( C );
+		}
+	}
+}
+
+
+void sclargmnt::Normalize(
+	const str::dString &Raw,
+	str::dString &Normalized )
+{
+qRH
+	flx::sStringIFlow Flow;
+qRB
+	Flow.Init( Raw );
+
+	Normalize_( Flow, Normalized );
+qRR
+qRT
+qRE
+}
+
+
 Q37_GCTOR( sclargmnt )
 {
 	ParametersTag_.Init( sclrgstry::ParametersTag );

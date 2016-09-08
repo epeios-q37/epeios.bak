@@ -24,6 +24,7 @@
 using namespace plgn;
 
 #include "sclmisc.h"
+#include "sclargmnt.h"
 
 namespace {
 	class sDummyAbstract_
@@ -127,7 +128,7 @@ sdr::sRow plgn::rLooseRetriever::Initialize(
 	const char *Label,
 	const char *Identifier,
 	const rgstry::entry__ &Configuration,
-	const str::string_ &Arguments,
+	const str::string_ &RawArguments,
 	const dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
@@ -135,12 +136,16 @@ qRH
 	plgncore::sData Data;
 	sclmisc::sRack SCLRack;
 	sAbstract *Abstract = NULL;
+	str::wString NormalizedArguments;
 qRB
 	SubInitialize_( PluginPath, Label, Identifier );
 
 	SCLRack.Init();
 
-	Data.Init( SCLRack, Arguments );
+	NormalizedArguments.Init();
+	sclargmnt::Normalize( RawArguments, NormalizedArguments );
+
+	Data.Init( SCLRack, NormalizedArguments );
 
 	C_().Initialize( &Data, Configuration );
 
@@ -158,7 +163,7 @@ sdr::sRow plgn::rLooseRetriever::Initialize(
 	const ntvstr::string___ &PluginPath,
 	const char *Label,
 	const char *Identifier,
-	const str::string_ &Arguments,
+	const str::string_ &RawArguments,
 	const dAbstracts &Abstracts )
 {
 	sdr::sRow Row = qNIL;
@@ -167,6 +172,7 @@ qRH
 	sclmisc::sRack SCLRack;
 	fnm::name___ Location;
 	sAbstract *Abstract = NULL;
+	str::wString NormalizedArguments;
 qRB
 	SubInitialize_( PluginPath, Label, Identifier );
 
@@ -174,7 +180,11 @@ qRB
 	fnm::GetLocation( PluginPath, Location );
 
 	SCLRack.Init();
-	Data.Init( SCLRack, Arguments );
+
+	NormalizedArguments.Init();
+	sclargmnt::Normalize( RawArguments, NormalizedArguments );
+
+	Data.Init( SCLRack, NormalizedArguments );
 
 	C_().Initialize( &Data, Location );
 

@@ -55,6 +55,14 @@ namespace sclargmnt {
 	const str::string_ &GetCommand( str::string_ &Command );
 
 	void PrintUsage( txf::text_oflow__ &Flow );
+
+	void Split(
+		const str::dString &Merged,
+		str::dStrings &Splitted );
+
+	void Normalize(
+		const str::dString &Raw,
+		str::dString &Normalized );
 }
 
 #endif

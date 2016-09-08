@@ -59,59 +59,17 @@ static callback__ Callback_;
 
 _callback__ &PLGNCORE_RETRIEVE_CALLBACK_FUNCTION_NAME( void )
 {
-	Callback_.Init();                             
+	Callback_.Init();
 
 	return Callback_;
 }
 
 namespace {
-	E_CDEF( char, EscapeChar, '\\' );
-
 	void HandleArguments_(
 		const str::string_ &MergedArguments,
 		str::dStrings &SplittedArguments	)
 	{
-	qRH
-		str::string Argument;
-		sdr::row__ Row = qNIL;
-		bso::bool__ Escape = false;
-		bso::char__ C = 0;
-	qRB
-		Row = MergedArguments.First();
-
-		Argument.Init();
-
-		while ( Row != qNIL ) {
-			if ( ( C = MergedArguments(Row) ) == EscapeChar ) {
-				if ( Escape ) {
-					Escape = false;
-					Argument.Append( EscapeChar );
-				} else 
-					Escape = true;
-			} else if ( Escape ) {
-				if ( C == ' ' )
-					Argument.Append( ' ' );
-				else
-					sclmisc::ReportAndAbort(SCLPLUGIN_NAME "_BadArguments" );
-
-				Escape = false;
-			} else if ( C == ' ' ) {
-				if ( Argument.Amount() != 0 )
-					SplittedArguments.Append( Argument );
-
-				Argument.Init();
-			} else
-				Argument.Append( C );
-
-			Row = MergedArguments.Next( Row );
-		}
-
-		if ( Argument.Amount() != 0 )
-			SplittedArguments.Append( Argument );
-
-	qRR
-	qRT
-	qRE
+		sclargmnt::Split( MergedArguments, SplittedArguments );
 	}
 
 	void PreInitialize_( const plgncore::sData *Data )

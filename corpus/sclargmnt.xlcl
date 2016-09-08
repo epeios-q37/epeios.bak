@@ -5,6 +5,10 @@
 		<Translation language="fr">'%1' : argument incorrect.</Translation>
 		<Translation language="en">'%1' : bad argument.</Translation>
 	</Translations>
+	<Translations message="SCLARGMNT_BadArguments">
+		<Translation language="fr">Arguments incorrects.</Translation>
+		<Translation language="en">Bad arguments.</Translation>
+	</Translations>
 	<Translations text="SCLARGMNT_UnknownFlag">
 		<Translation language="fr">'%1' inconnu.</Translation>
 		<Translation language="en">'%1' unknown.</Translation>

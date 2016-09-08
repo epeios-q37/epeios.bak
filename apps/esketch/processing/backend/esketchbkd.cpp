@@ -59,7 +59,7 @@ public:
 	}
 	qCVDTOR( rBackend );
 	void Init(
-		fblbur::mode__ Mode,
+		fblbur::eMode Mode,
 		const ntvstr::char__ *ClientOrigin )
 	{
 		Stuff_.Init();
@@ -86,8 +86,8 @@ class rCallback
 {
 protected:
 	virtual rBackend *SCLBACKNDNew( 
-		fblbur::mode__ Mode,
-		const ntvstr::char__ *Origin ) override
+		fblbur::eMode Mode,
+		const ntvstr:: char__ *Origin ) override
 	{
 		rBackend *Backend = NULL;
 	qRH
@@ -111,7 +111,7 @@ public:
 		rCallback_::reset( P );
 	}
 	qCVDTOR( rCallback )
-	void Init( fblbur::mode__ Mode )
+	void Init( fblbur::eMode Mode )
 	{
 		rCallback_::Init( Mode );
 	}
@@ -119,7 +119,7 @@ public:
 
 rCallback_ *sclbacknd::SCLBACKNDGetCallback(
 	csdleo::context__ Context,
-	fblbur::mode__ Mode )
+	fblbur::eMode Mode )
 {
 	rCallback *Callback = NULL;
 qRH
