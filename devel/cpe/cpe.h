@@ -143,21 +143,25 @@
 # endif
 
 // Architecture-related macros.
-# define CPE_TL_ARM		"ARM"
+# define CPE_TL_ARM32	"ARM32"
+# define CPE_TL_ARM64	"ARM64"
 # define CPE_TL_IA32	"IA-32"
 # define CPE_TL_AMD64	"AMD64"
 
 # ifdef __arm__
 #  define CPE_A_ARM
-#  ifdef __arch64
-#   define CPE_A_ARM64
-#   define CPE_F_64BITS
-#  else
-#   define CPE_A_ARM32
-#   define CPE_F_32BITS
-#  endif
-#  define CPE_AL	CPE_TL_ARM
+#  define CPE_A_ARM32
+#  define CPE_F_32BITS
+#  define CPE_AL	CPE_TL_ARM32
 # endif
+
+# ifdef __aarch64__
+#  define CPE_A_ARM
+#  define CPE_A_ARM64
+#  define CPE_F_64BITS
+#  define CPE_AL	CPE_TL_ARM64
+# endif
+
 
 #if defined(__x86_64__) || defined(_M_X64)
 #  define CPE_A_AMD64

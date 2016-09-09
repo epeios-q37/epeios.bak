@@ -2,6 +2,10 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-09 :
+- CPE :
+	- Adaptation to ARM 64 bits architecture (may compromise ARM 32 bits architecture).
+
 2016-09-08 :
 - PLGN :
 	- Normalizing arguments before passing them to plugin.

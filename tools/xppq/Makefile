@@ -38,8 +38,8 @@ mods += utf xtf llio tht thtsub
 mods += bomhdl cdgb64 dlbrry fil fnm 
 mods += lcl plgn plgncore rgstry stsfsm 
 mods += xml xpp 
-mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
-mods += scltool 
+mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
+mods += sclargmnt scltool 
 mods += i18n registry 
 
 pmods += pllio 
@@ -319,7 +319,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160821"\"
+copt += -DVERSION=\""20160908"\"
 copt += -DCOPYRIGHT_YEARS=\""2007-2015"\"
 copt += -DIDENTIFIER=\""4e0195ad-2b3d-4fc2-8b1f-73a59bd765fe"\"
 
