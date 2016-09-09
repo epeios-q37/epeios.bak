@@ -7,6 +7,7 @@
 		<Dependency Dir="plugins/straight/"/>
 		<Dependency Dir="plugins/proxy/"/>
 	</Dependencies>
-	<WikiFiles Group="Doc" Path="Doc/">
-	</WikiFiles>
+	<Doc>
+		<File Dir="computing/epeios/tools/" Name="dmnzq" Desc="general description of dmnzq" IsHome="yes"/>
+	</Doc>
 </Project>
