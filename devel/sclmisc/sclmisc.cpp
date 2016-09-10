@@ -122,7 +122,7 @@ qRH
 qRB
 	Translation.Init();
 	
-	if ( Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation ) )
+	if ( ( Exists = sclmisc::GetSCLBasePendingErrorTranslation( Translation ) ) )
 		sclerror::ResetPendingError();
 
 	Flow << txf::nl << Translation << txf::nl  << txf::commit;
