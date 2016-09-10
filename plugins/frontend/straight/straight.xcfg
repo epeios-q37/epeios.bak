@@ -34,6 +34,10 @@
 				<Translation language="fr">argument (fr)</Translation>
 				<Translation language="en">argument (en)</Translation>
 			</Translations>
+			<Translations text="UnableToConnectTo">
+				<Translation language="fr">Echec connexion à '%1'.</Translation>
+				<Translation language="en">Unable to connect to '%1'.</Translation>
+			</Translations>
 		</Locale>
 		<Arguments>
 			<Argument id="SendCommand" Description="SendCommandDescription" long="send" short="s" Value="Send" Usage="%HostServiceArgument% [%Timeout%]"/>

@@ -143,8 +143,8 @@
 # endif
 
 // Architecture-related macros.
-# define CPE_TL_ARM32	"ARM32"
-# define CPE_TL_ARM64	"ARM64"
+# define CPE_TL_ARM32	"AArch32"
+# define CPE_TL_ARM64	"AArch64"
 # define CPE_TL_IA32	"IA-32"
 # define CPE_TL_AMD64	"AMD64"
 
