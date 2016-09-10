@@ -33,24 +33,21 @@
 	</xpp:bloc>
 	<xpp:bloc>
 		<xpp:ifeq select="env" value="windows">
-			<xpp:set name="RootPath" value="h:/"/>
+			<xpp:set name="HomePath" value="h:/"/>
 		</xpp:ifeq>
 		<xpp:ifeq select="env" value="linux">
-			<xpp:set name="RootPath" value="/"/>
+			<xpp:set name="HomePath" value="/home/csimon/"/>
 		</xpp:ifeq>
 		<xpp:ifeq select="env" value="mac">
-			<xpp:set name="RootPath" value="/"/>
+			<xpp:set name="HomePath" value="/Users/csimon/"/>
 		</xpp:ifeq>
 		<xpp:ifeq select="env" value="packing">
-			<xpp:set name="RootPath" value="h:/"/>
+			<xpp:set name="HomePath" value="h:/"/>
 		</xpp:ifeq>
-	</xpp:bloc>
-	<xpp:bloc marker="$"> 
-		<xpp:set name="CorpusPath" value="$RootPath$hg/epeios/corpus/"/>
 	</xpp:bloc>
 	<xpp:define name="epeios.xlcl">
 		<xpp:bloc marker="$">
-			<xpp:expand href="$CorpusPath$epeios.xlcl"/>
+			<xpp:expand href="$HomePath$hg/epeios/corpus/epeios.xlcl"/>
 		</xpp:bloc>
 	</xpp:define>
 	<xpp:bloc>
