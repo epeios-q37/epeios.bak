@@ -43,7 +43,10 @@
 /***************/
 
 namespace sclmisc {
-	extern const char *SCLMISCTargetName;	// A définir par l'utilisateur.
+	// Three below items MUST be defined by user.
+	extern const char *SCLMISCTargetName;
+	extern const char *SCLMISCProductName;
+	extern const char *SCLMISCOrganizationName;
 
 	bso::bool__ IsInitialized( void );
 
@@ -156,6 +159,9 @@ namespace sclmisc {
 		const sRack &Rack,
 		const fnm::name___ &BinPath );
 
+	// Counter-part of 'Initalize'.
+	void Quit( void );
+
 	void DumpRegistriesAndOrLocalesIfRequired( void );
 
 	void EraseProjectRegistry( void );
@@ -227,19 +233,19 @@ namespace sclmisc {
 
 	sclrgstry::registry_ &GetRegistry( void );
 
-	inline rgstry::level__ GetRegistryLevel( sclrgstry::name__ Name )
+	inline rgstry::level__ GetRegistryRawLevel( sclrgstry::eLevel Level )
 	{
-		return sclrgstry::GetLevel( Name );
+		return sclrgstry::GetRawLevel( Level );
 	}
 
 	inline void FillSetupRegistry( const str::string_ &Id )
 	{
-		sclrgstry::FillWithSetupOfId( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ), Id );
+		sclrgstry::FillWithSetupOfId( sclrgstry::GetCommonRegistry(), sclrgstry::GetRawLevel( sclrgstry::lSetup ), Id );
 	}
 
 	inline void FillSetupRegistry( void )
 	{
-		sclrgstry::FillWithGivenSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetLevel( sclrgstry::nSetup ) );
+		sclrgstry::FillWithGivenSetup( sclrgstry::GetCommonRegistry(), sclrgstry::GetRawLevel( sclrgstry::lSetup ) );
 	}
 
 	inline void AddValue(

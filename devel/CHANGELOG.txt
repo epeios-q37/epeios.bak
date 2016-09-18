@@ -2,6 +2,40 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-16 :
+- DIR :
+	- Adding error parameter to 'CreateDir(...)' and 'CreateDirWithParents(...)'.
+- EPSMSC :
+	- Adding 'sclmisc::SCLMISCOrganizationName' definition.
+- RGSTRY :
+	- When an error occurs, the details is passed, and no more a generic errror.
+- SCLARGMNT :
+	- Adaptation to changes in 'SCLRGSTRY'.
+- SCLMISC :
+	- 'SCLMISCManufacturerName' -> 'SCLMISCOrganizationName'.
+- SCLRGSTRY :
+	- 'name__' -> 'eLevel'.
+	- Simplification.
+- XML :
+	- Adding error parameter to Parse(...)'.'
+
+2016-09-15 :
+- FBLBRR :
+	- Adding some missing types.
+- XDHDWS :
+	- Adding error flag to 'proxy__::GetNumeriaclaContent(...)'.
+
+2016-09-14 :
+- DIR :
+	Adding 'Get(User|Common)AppDataPath(...)' functions (implemented for windows only).
+- SCLMISC :
+	- Adaptation to changes in 'SCLRGSTRY'.
+	- Adding 'SCLMISCManufacturer' and 'SCLMISCProduct'.
+- SCLRGSTRY :
+	- Adding 'Common' and 'User' registry level.
+	- Replacing 'Configuration' related level by 'Main'.
+	- Replacing 'Configuration' related functions by generic ones.
+
 2016-09-09 :
 - CPE :
 	- Adaptation to ARM 64 bits architecture (may compromise ARM 32 bits architecture).

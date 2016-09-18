@@ -36,11 +36,13 @@ using namespace sclrgstry;
 
 static rgstry::multi_level_registry Registry_;
 
-static rgstry::level__ ConfigurationLevel_ = rgstry::UndefinedLevel;
+static rgstry::level__ MainLevel_ = rgstry::UndefinedLevel;
+static rgstry::level__ CommonLevel_ = rgstry::UndefinedLevel;	// Registry with data common to all users.
+static rgstry::level__ UserLevel_ = rgstry::UndefinedLevel;	// Registry with data specific to a user.
 static rgstry::level__ ProjectLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ SetupLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ ArgumentsLevel_ = rgstry::UndefinedLevel;
-static rgstry::level__ RuntimeLevel_ = rgstry::UndefinedLevel;
+static rgstry::level__ RuntimeLevel_ = rgstry::UndefinedLevel;	// Temporary registry.
 
 rgstry::entry___ sclrgstry::Parameters( ParametersTag );
 rgstry::entry___ sclrgstry::Definitions( "Definitions" );
@@ -112,12 +114,14 @@ registry_ &sclrgstry::GetCommonRegistry( void )
 	return Registry_;
 }
 
-#define C( name )	case n##name : return #name; break
+#define C( name )	case l##name : return #name; break
  
-const char *sclrgstry::GetLabel( name__ Name )
+const char *sclrgstry::GetLabel( eLevel Level )
 {
-	switch ( Name ) {
-	C( Configuration );
+	switch ( Level ) {
+	C( Main );
+	C( Common );
+	C( User );
 	C( Project );
 	C( Setup );
 	C( Arguments );
@@ -133,17 +137,19 @@ const char *sclrgstry::GetLabel( name__ Name )
 #undef C
 
 #define C( name )\
-case n##name:\
+case l##name:\
 	return name##Level_;\
 	break
 
-rgstry::level__ sclrgstry::GetLevel( name__ Name )
+rgstry::level__ sclrgstry::GetRawLevel( eLevel Level )
 {
-	switch ( Name ) {
-	C( Configuration );
+	switch ( Level ) {
+	C( Main );
 	C( Project );
 	C( Setup );
 	C( Arguments );
+	C( Common );
+	C( User );
 	C( Runtime );
 	default:
 		qRFwk();
@@ -167,14 +173,17 @@ const char *sclrgstry::GetLanguage_(
 		return Buffer;
 }
 
-static bso::sBool FillConfigurationRegistry_(
+#if 0
+static bso::sBool FillRegistry_(
+	eLevel Level,
 	xtf::extended_text_iflow__ &Flow,
 	const fnm::name___&Directory,
 	const char *RootPath,
 	rgstry::context___ &Context )
 {
-	return Registry_.Fill( ConfigurationLevel_, Flow, xpp::criterions___( Directory ), RootPath );
+	return Registry_.Fill( Level, Flow, xpp::criterions___( Directory ), RootPath, Context );
 }
+#endif
 
 void sclrgstry::ReportBadOrNoValueForEntryErrorAndAbort( const rgstry::tentry__ &Entry )
 {
@@ -188,84 +197,137 @@ qRT
 qRE
 }
 
-static inline void ReportFileParsingErrorAndAbort_(
-	const char *ErrorLabel,
-	const rgstry::context___ &Context )
+void sclrgstry::EraseRegistry( eLevel Level )
 {
-qRH
-	lcl::meaning Meaning;
-	lcl::meaning MeaningBuffer;
-qRB
-	Meaning.Init();
-	Meaning.SetValue( ErrorLabel );
-
-	MeaningBuffer.Init();
-	rgstry::GetMeaning( Context, MeaningBuffer );
-
-	Meaning.AddTag( MeaningBuffer );
-
-	sclmisc::ReportAndAbort( Meaning );
-qRR
-qRT
-qRE
+	Registry_.Erase( GetRawLevel( Level ) );
 }
 
-void sclrgstry::SetConfiguration( const rgstry::entry__ &Entry )
+void sclrgstry::Set(
+	eLevel Level,
+	const rgstry::entry__ &Entry )
 {
-	Registry_.Erase( ConfigurationLevel_ );
+	Registry_.Erase( Level );
 
-	Registry_.Set( ConfigurationLevel_, Entry );
+	Registry_.Set( Level, Entry );
 }
 
-void sclrgstry::LoadConfiguration(
-	xtf::extended_text_iflow__&Flow,
+
+namespace {
+	void ReportParsingErrorAndAbort_(
+		const str::dString &Source,
+		const rgstry::context___ &Context )
+	{
+	qRH
+		lcl::meaning Meaning;
+		lcl::meaning MeaningBuffer;
+	qRB
+		Meaning.Init();
+		Meaning.SetValue( SCLRGSTRY_NAME "_ParsingError" );
+
+		Meaning.AddTag( Source );
+
+		MeaningBuffer.Init();
+		rgstry::GetMeaning( Context, MeaningBuffer );
+
+		Meaning.AddTag( MeaningBuffer );
+
+		sclmisc::ReportAndAbort( Meaning );
+	qRR
+	qRT
+	qRE
+	}
+
+	void ReportParsingErrorAndAbort_(
+		xtf::extended_text_iflow__ &,
+		eLevel Level,
+		const rgstry::context___ &Context )
+	{
+		ReportParsingErrorAndAbort_( str::wString( GetLabel( Level ) ), Context );
+	}
+
+	void ReportParsingErrorAndAbort_(
+		const fnm::rName &Filename,
+		eLevel,
+		const rgstry::context___ &Context )
+	{
+	qRH
+		str::wString Buffer;
+	qRB
+		Buffer.Init();
+		ReportParsingErrorAndAbort_( Filename.UTF8( Buffer ), Context );
+	qRR
+	qRE
+	qRT
+	}
+
+	template <typename source> static void Load_(
+		eLevel Level,
+		source &Source,
+		const char *RootPath,
+		const fnm::name___ &Directory )
+	{
+	qRH
+		rgstry::context___ Context;
+	qRB
+		EraseRegistry( Level );
+
+		Context.Init();
+		if ( !Registry_.Fill( Level, Source, xpp::criterions___( Directory ), RootPath, Context ) )
+			ReportParsingErrorAndAbort_( Source, Level, Context );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void sclrgstry::Load(
+	eLevel Level,
+	xtf::extended_text_iflow__ &Flow,
+	const fnm::name___ &Directory,
+	const char *RootPath )
+{
+	Load_(Level, Flow, RootPath, Directory );
+}
+
+void sclrgstry::Load(
+	eLevel Level,
+	flw::sIFlow &Flow,
 	const fnm::name___ &Directory,
 	const char *RootPath )
 {
 qRH
-	rgstry::context___ Context;
+	xtf::extended_text_iflow__ XFlow;
 qRB
-	Registry_.Erase( ConfigurationLevel_ );
+	XFlow.Init( Flow, utf::f_Default );
 
-	Context.Init();
-
-	if ( !FillConfigurationRegistry_( Flow, Directory, RootPath, Context ) )
-		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ConfigurationFileParsingError", Context );
+	Load_(Level, XFlow, RootPath, Directory );
 qRR
 qRT
 qRE
 }
 
-void sclrgstry::EraseProjectRegistry( void )
-{
-	Registry_.Erase( ProjectLevel_ );
-}
+namespace {
+	template <typename source> static void LoadProject_(
+		source &Source,
+		const char *Target,
+		const fnm::rName &Dir,
+		str::string_ &Id )
+	{
+	qRH
+		str::string Path;
+		TOL_CBUFFER___ Buffer;
+	qRB
+		Path.Init();
 
-template <typename source> static void LoadProject_(
-	source &Source,
-	const char *Target,
-	const fnm::name___ &SelfPath,
-	str::string_ &Id )
-{
-qRH
-	str::string Path;
-	TOL_CBUFFER___ Buffer;
-	rgstry::context___ Context;
-qRB
-	Path.Init();
+		BuildRootPath( "Project", Target, Path );
 
-	BuildRootPath("Project", Target, Path );
+		Load_( lProject, Source, Path.Convert( Buffer ), Dir );
 
-	EraseProjectRegistry();
-
-	Context.Init();
-	if ( !Registry_.Fill( ProjectLevel_, Source, xpp::criterions___( SelfPath ), Path.Convert( Buffer ), Context ) )
-		ReportFileParsingErrorAndAbort_( SCLRGSTRY_NAME "_ProjectFileParsingError", Context );
-
-	Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
-qRR
-qRT
-qRE
+		Registry_.GetValue( ProjectLevel_, rgstry::entry___( "@Id" ), Id );
+	qRR
+	qRT
+	qRE
+	}
 }
 
 void sclrgstry::LoadProject(
@@ -277,7 +339,7 @@ void sclrgstry::LoadProject(
 qRH
 	xtf::extended_text_iflow__ XFlow;
 qRB
-	XFlow.Init( Flow, utf::f_Guess );
+	XFlow.Init( Flow, utf::f_Default );
 
 	LoadProject_( XFlow, Target, Directory, Id );
 qRR
@@ -290,19 +352,7 @@ void sclrgstry::LoadProject(
 	const char *Target,
 	str::string_ &Id )
 {
-qRH
-	fnm::name___ Location;
-qRB
-	Location.Init();
-	LoadProject_( Filename, Target, fnm::name___(), Id );
-qRR
-qRT
-qRE
-}
-
-void sclrgstry::EraseSetupRegistry( void )
-{
-	Registry_.Erase( SetupLevel_ );
+	LoadProject_( Filename, Target, str::wString( "" ), Id );
 }
 
 static const str::string_ &GetSelectedSetupContent_(
@@ -420,13 +470,6 @@ qRB
 qRR
 qRT
 qRE
-}
-
-
-void sclrgstry::EraseArgumentsRegistry( void )
-{
-	Registry_.Erase( ArgumentsLevel_ );
-	ArgumentsLevel_ = Registry_.CreateEmbedded();
 }
 
 bso::bool__ sclrgstry::BGetValue(
@@ -752,9 +795,15 @@ Q37_GCTOR( sclrgstry )
 	Registry_.Init();
 
 	// 3 firsts not as 'embedded', due to the fact that plugins use the registry of the main program.
-	ConfigurationLevel_ = Registry_.Create();
+	MainLevel_ = Registry_.Create();
+	CommonLevel_ = Registry_.CreateEmbedded();
+	UserLevel_ = Registry_.CreateEmbedded();
 	ProjectLevel_ = Registry_.Create();
 	SetupLevel_ = Registry_.Create();
 	ArgumentsLevel_ = Registry_.CreateEmbedded();
 	RuntimeLevel_ = Registry_.CreateEmbedded();
+}
+
+namespace {
+
 }

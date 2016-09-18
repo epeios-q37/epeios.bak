@@ -874,7 +874,7 @@ namespace {
 		PFlow.Init( XFlow, xpp::criterions___( Criterions.Directory, Criterions.CypherKey, Criterions.IsNamespaceDefined() ? Criterions.Namespace : str::string( DEFAULT_NAMESPACE ) ) );
 		PXFlow.Init( PFlow, XFlow.Format() );
 
-		switch ( Status = xml::Parse( PXFlow, xml::ehReplace, Callback ) ) {
+		switch ( Status = xml::Parse( PXFlow, xml::ehReplace, Callback, qRPU ) ) {
 		case xml::sOK:
 			Success = true;
 			break;
@@ -1675,7 +1675,8 @@ rgstry::row__ rgstry::Fill(
 			} else
 				Root = NewRoot;
 		}
-	}
+	} else
+		Context.Status = sParseError;
 
 	return Root;
 }

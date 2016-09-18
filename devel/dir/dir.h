@@ -155,7 +155,13 @@ namespace dir {
 		return fnm::GetLocation( GetSelfPath_( FileName ), Dir );
 	}
 
-	inline state__ CreateDir( const fnm::name___ &Dir )
+	const fnm::rName &GetCommonAppDataPath( fnm::rName &Path );
+
+	const fnm::rName &GetUserAppDataPath( fnm::rName &Path );
+
+	inline state__ CreateDir(
+		const fnm::name___ &Dir,
+		qRPD )
 	{
 # ifdef DIR__WIN
 		switch ( _wmkdir( Dir.Internal() ) ) {
@@ -168,7 +174,10 @@ namespace dir {
 			return sOK;
 			break;
 		case -1:
-			return HandleError();
+			if ( qRPT )
+				qRFwk();
+			else
+				return HandleError();
 			break;
 		default:
 			qRSys();
@@ -396,7 +405,9 @@ namespace dir {
 
 	typedef state__ eState;
 
-	eState CreateDirWithParents( const fnm::rName &Name );
+	eState CreateDirWithParents(
+		const fnm::rName &Name,
+		qRPD );
 
 	inline bso::sBool GetDiskFreeSpace(
 		const fnm::rName &Name,

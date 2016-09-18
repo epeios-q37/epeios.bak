@@ -147,9 +147,11 @@ void *sclplugin::callback__::PLGNCORERetrievePlugin( plgncore::sAbstract *Abstra
 	return sclplugin::SCLPLUGINRetrievePlugin( Abstract );
 }
 
-bso::sBool sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
+void sclplugin::callback__::PLGNCOREReleasePlugin( void *Plugin )
 {
-	return sclplugin::SCLPLUGINReleasePlugin( Plugin );
+	sclplugin::SCLPLUGINReleasePlugin( Plugin );
+
+	sclmisc::Quit();
 }
 
 const char *sclplugin::callback__::PLGNCOREPluginIdentifier( void )

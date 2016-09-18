@@ -47,7 +47,7 @@ namespace sclplugin {
 			const plgncore::sData *Data,
 			const fnm::name___ &Directory ) override;
 		virtual void *PLGNCORERetrievePlugin( plgncore::sAbstract *Abstract ) override;
-		virtual bso::sBool PLGNCOREReleasePlugin( void *Plugin ) override;
+		virtual void PLGNCOREReleasePlugin( void *Plugin ) override;
 		virtual const char *PLGNCOREPluginIdentifier( void ) override;
 		virtual const char *PLGNCOREPluginDetails( void ) override;
 	public:

@@ -23,6 +23,10 @@
 
 #include "flx.h"
 
+#ifdef DIR__WIN
+# include <shlobj.h>
+#endif
+
 using namespace dir;
 
 state__ dir::HandleError( void )
@@ -59,6 +63,49 @@ state__ dir::HandleError( void )
 
 	return s_Undefined;	// Pour viter un 'warning'.
 }
+
+#ifdef DIR__WIN
+namespace {
+	bso::sBool GetPath_(
+		int CSIDL,
+		fnm::rName &Path )
+	{
+		WCHAR szPath[MAX_PATH];
+		bso::sBool Success = false;
+
+		Success = SHGetFolderPathW( NULL, CSIDL, NULL, 0, szPath ) == S_OK;
+
+		if ( Success )
+			Path.Init( szPath );
+
+		return Success;
+	}
+}
+#endif
+
+
+const fnm::rName &dir::GetCommonAppDataPath( fnm::rName &Path )
+{
+#ifdef DIR__WIN
+	if ( !GetPath_( CSIDL_COMMON_APPDATA, Path ) )
+		qRLbr();
+# else
+	qRVct();
+# endif
+	return Path;
+}
+
+const fnm::rName &dir::GetUserAppDataPath( fnm::rName &Path )
+{
+#ifdef DIR__WIN
+	if ( !GetPath_( CSIDL_APPDATA, Path ) )
+		qRLbr();
+# else
+	qRVct();
+# endif
+	return Path;
+}
+
 
 namespace {
 	void BuildParts_(
@@ -153,11 +200,11 @@ namespace {
 	qRB
 		sdr::sRow &Row = First;
 
-		while ( (Row != qNIL) && ( State == sOK ) ) {
+		while ( ( Row != qNIL) && ( State == sOK ) ) {
 			Path.Init();
 			BuildPath_( Parts, Row, Path );
 
-			State = CreateDir( Path );
+			State = CreateDir( Path, qRPU );
 
 			Row = Parts.Next( Row );
 		}
@@ -197,7 +244,9 @@ namespace {
 	}
 }
 
-eState dir::CreateDirWithParents( const fnm::rName &Name )
+eState dir::CreateDirWithParents(
+	const fnm::rName &Name,
+	qRPN )
 {
 	eState State = s_Undefined;
 qRH
@@ -207,6 +256,9 @@ qRB
 	BuildParts_( Name, Parts );
 
 	State = CreateDirs_( Parts );
+
+	if ( ( State != sOK ) && qRPT )
+		qRFwk();
 qRR
 qRT
 qRE

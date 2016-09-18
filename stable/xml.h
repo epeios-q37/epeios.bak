@@ -874,8 +874,8 @@ namespace xml {
 	status__ Parse(
 		xtf::extended_text_iflow__ &Flow,
 		entities_handling__ EntitiesHandling,
-		callback__ &Callback );
-	// Si valeur retourne == 'false', 'Flow.Line()' et 'Flow.Column()' est positionn l o il y a l'erreur.
+		callback__ &Callback,
+		qRPD );
 
 	// Transformation des caractres spciaux, comm '<' qui devient '&lt;'.
 	void TransformUsingEntities(

@@ -132,6 +132,8 @@ qRT
 	cio::CIn.Dismiss();
 
 	sclmisc::DumpRegistriesAndOrLocalesIfRequired();
+
+	sclmisc::Quit();
 qRE
 	return ExitValue;
 }

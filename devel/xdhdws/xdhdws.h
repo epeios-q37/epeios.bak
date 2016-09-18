@@ -274,19 +274,28 @@ namespace xdhdws {
 		}
 		template <typename type> bso::sBool GetNumericalContent(
 			const nstring___ &Id,
-			type &Value )
+			type &Value,
+			bso::sBool *Error = NULL )
 		{
 			bso::sBool IsEmpty = true;
 		qRH
 			str::wString RawValue;
+			sdr::sRow ErrPos = qNIL;
 		qRB
 			RawValue.Init();
 
 			GetContent( Id, RawValue );
 
 			if ( RawValue.Amount() != 0 ) {
-				RawValue.ToNumber( Value );
-				IsEmpty = false;
+				RawValue.ToNumber( Value, Error != NULL ? &ErrPos : NULL );
+
+				if ( ErrPos != qNIL ) {
+					if ( Error != NULL )
+						*Error = true;
+					else
+						qRFwk();
+				} else
+					IsEmpty = false;
 			}
 		qRR
 		qRT

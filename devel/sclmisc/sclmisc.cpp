@@ -235,7 +235,7 @@ void sclmisc::Initialize(
 {
 	Initialize_( Rack );
 
-	sclrgstry::SetConfiguration( Configuration );
+	sclrgstry::Set( sclrgstry::lMain, Configuration );
 //	scllocale::Set( scllocale::tMain, Locale );
 }
 
@@ -375,6 +375,186 @@ namespace {
 }
 # endif
 
+namespace {
+	bso::sBool GetConfigurationFileName_(
+		const fnm::rName &Path,
+		fnm::rName &Name,
+		bso::sBool CreateDir )
+	{
+		bso::sBool Exist = false;
+	qRH
+		fnm::rName Buffer, Dir;
+	qRB
+		Buffer.Init();
+		fnm::BuildPath( Path, SCLMISCOrganizationName, "", Buffer );
+
+		Dir.Init();
+		fnm::BuildPath( Buffer, SCLMISCProductName, "", Dir );
+
+		fnm::BuildPath( Dir, SCLMISCTargetName, CONFIGURATION_DEFAULT_FILENAME_SUFFIX, Name );
+
+		Exist = fil::Exists( Name );
+		if ( CreateDir && !fil::Exists( Dir ) )
+			dir::CreateDirWithParents( Dir );
+	qRR
+	qRT
+	qRE
+		return Exist;
+	}
+
+	bso::sBool GetCommonConfigurationFilename_(
+		fnm::rName &Name,
+		bso::sBool CreateDir )
+	{
+		bso::sBool Exist = false;
+	qRH
+		fnm::rName Path;
+	qRB
+#ifndef CPE_S_WIN
+		qRReturn;
+#endif
+		Path.Init();
+		dir::GetCommonAppDataPath( Path );
+
+		Exist = GetConfigurationFileName_( Path, Name, CreateDir );
+	qRR
+	qRT
+	qRE
+		return Exist;
+	}
+
+	bso::sBool GetUserConfigurationFilename_(
+		fnm::rName &Name,
+		bso::sBool CreateDir )
+	{
+		bso::sBool Exist = false;
+	qRH
+		fnm::rName Path;
+	qRB
+#ifndef CPE_S_WIN
+		qRReturn;
+#endif
+		Path.Init();
+		dir::GetUserAppDataPath( Path );
+
+		Exist = GetConfigurationFileName_( Path, Name, CreateDir );
+	qRR
+	qRT
+	qRE
+		return Exist;
+	}
+
+	void Load_(
+		const fnm::rName &Filename,
+		sclrgstry::eLevel Level )
+	{
+	qRH
+		flf::rIFlow Flow;
+	qRB
+		Flow.Init( Filename );
+		sclrgstry::Load( Level, Flow, "", "" );
+	qRR
+	qRT
+	qRE
+	}
+
+	void LoadCommon_( void )
+	{
+	qRH
+		fnm::rName Filename;
+	qRB
+		Filename.Init();
+
+		if ( GetCommonConfigurationFilename_( Filename, false ) )
+			Load_( Filename, sclrgstry::lCommon );
+	qRR
+	qRT
+	qRE
+	}
+
+	void LoadUser_( void )
+	{
+	qRH
+		fnm::rName Filename;
+	qRB
+		Filename.Init();
+
+		if ( GetUserConfigurationFilename_( Filename, false ) )
+			Load_( Filename, sclrgstry::lUser );
+	qRR
+	qRT
+	qRE
+	}
+
+	void LoadCommonAndUser_( void )
+	{
+		LoadCommon_();
+		LoadUser_();
+	}
+
+	void Store_(
+		const fnm::rName &Filename,
+		sclrgstry::eLevel Level )
+	{
+	qRH
+		flf::rOFlow Flow;
+		txf::sOFlow TFlow;
+		xml::wWriter Writer;
+	qRB
+		Flow.Init( Filename );
+		TFlow.Init( Flow );
+		Writer.Init( TFlow, xml::lIndent, xml::e_Default );
+
+		sclrgstry::GetCommonRegistry().Dump( Level, qNIL, false, Writer  );
+	qRR
+	qRT
+	qRE
+	}
+
+	void StoreCommon_( void )
+	{
+	qRH
+		fnm::rName Filename;
+	qRB
+#ifndef CPE_S_WIN
+		qRReturn;
+#endif
+		Filename.Init();
+
+		GetCommonConfigurationFilename_( Filename, true );
+
+		Store_( Filename, sclrgstry::lCommon );
+	qRR
+	qRT
+	qRE
+	}
+
+	void StoreUser_( void )
+	{
+	qRH
+		fnm::rName Filename;
+	qRB
+#ifndef CPE_S_WIN
+		qRReturn;
+#endif
+		Filename.Init();
+
+		GetUserConfigurationFilename_( Filename, true );
+
+		Store_( Filename, sclrgstry::lUser );
+	qRR
+	qRT
+	qRE
+	}
+
+	void StoreCommonAndUser_( void )
+	{
+		StoreCommon_();
+		StoreUser_();
+	}
+
+}
+
 static void Initialize_(
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
@@ -394,11 +574,13 @@ qRB
 
 	scllocale::Load( scllocale::tMain, LocaleFlow, LocaleDirectory );
 
-	sclrgstry::LoadConfiguration( RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
+	sclrgstry::Load( sclrgstry::lMain, RegistryFlow, RegistryDirectory, RegistryRootPath.Convert( Buffer ) );
 
 	RefreshBaseLanguage();
 
-	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nConfiguration ), scllocale::tConfiguration );
+	LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lMain ), scllocale::tConfiguration );
+
+	LoadCommonAndUser_();
 
 	BinPath_.Init();
 	BinPath.UTF8( BinPath_ );
@@ -564,6 +746,13 @@ qRT
 qRE
 }
 
+void sclmisc::Quit( void )
+{
+	if ( IsInitialized() ) {
+		StoreCommonAndUser_();
+	}
+}
+
 namespace {
 	void DumpRegistriesIfRequired_( void )
 	{
@@ -603,7 +792,7 @@ void sclmisc::DumpRegistriesAndOrLocalesIfRequired( void )
 
 void sclmisc::EraseProjectRegistry( void )
 {
-	sclrgstry::EraseProjectRegistry();
+	sclrgstry::EraseRegistry( sclrgstry::lProject );
 	scllocale::Erase( scllocale::tProject );
 }
 
@@ -646,7 +835,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( Flow, SCLMISCTargetName, Directory, Id );
 
-	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject );
+	LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lProject ), scllocale::tProject );
 }
 
 void sclmisc::LoadProject(
@@ -655,7 +844,7 @@ void sclmisc::LoadProject(
 {
 	sclrgstry::LoadProject( FileName, SCLMISCTargetName, Id );
 
-	LoadLocale_( sclrgstry::GetLevel( sclrgstry::nProject ), scllocale::tProject );
+	LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lProject ), scllocale::tProject );
 }
 
 static void LoadProject_( const str::string_ &FileName )
@@ -696,7 +885,7 @@ void sclmisc::LoadProject(
 {
 	switch ( ProjectType ) {
 	case ptNew:
-		sclrgstry::EraseProjectRegistry();
+		sclrgstry::EraseRegistry( sclrgstry::lProject );
 		break;
 	case ptPredefined:
 		LoadPredefinedProject_( ProjectFeature );
@@ -921,17 +1110,17 @@ txf::text_oflow__ &sclmisc::text_oflow_rack___::Init( const fnm::name___ &FileNa
 
 namespace {
 	void DumpRegistry_(
-		sclrgstry::name__ Name,
+		sclrgstry::eLevel Level,
 		txf::text_oflow__ &Flow	)
 	{
-		Flow << txf::tab << "----- " << sclrgstry::GetLabel( Name ) << " registry -----" << txf::nl;
-		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryLevel( Name ), qNIL, true, xml::oIndent, xml::e_Default, Flow );
+		Flow << txf::tab << "----- " << sclrgstry::GetLabel( Level ) << " registry -----" << txf::nl;
+		sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLevel( Level ), qNIL, true, xml::oIndent, xml::e_Default, Flow );
 	}
 }
 
 #define T( c, name )\
 	if ( All || ( List.Search( c ) != qNIL ) )\
-		DumpRegistry_( sclrgstry::n##name, Flow )
+		DumpRegistry_( sclrgstry::l##name, Flow )
 
 void sclmisc::DumpRegistries(
 	const str::string_ &RawList,
@@ -951,7 +1140,9 @@ qRB
 	if ( List.Amount() == 0 )
 		All = true;
 
-	T( 'c', Configuration );
+	T( 'm', Main );
+	T( 'c', Common );
+	T( 'u', User );
 	T( 'p', Project );
 	T( 's', Setup );
 	T( 'a', Arguments );
@@ -1283,8 +1474,6 @@ qRR
 qRT
 qRE
 }
-
-
 
 Q37_GCTOR( sclmisc )
 {

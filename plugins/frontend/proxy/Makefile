@@ -41,8 +41,9 @@ mods += tht thtsub fblovl mtk prxy
 mods += prxybase sck 
 mods += csdbnc csdcmn csdmxb csdmxc csdrcc 
 mods += csdrcd csdmnc 
-mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclplugin 
+mods += infofrnt 
 mods += registry rpproxy 
 
 pmods += pllio 
@@ -79,6 +80,10 @@ MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
+src += :../
+
+src += :../../
+
 
 ##########################
 # For Cygwin environment #
@@ -329,7 +334,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160819"\"
+copt += -DVERSION=\""20160916"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""e51c58a9-0f0b-408a-9580-e0b2714c8619"\"
 

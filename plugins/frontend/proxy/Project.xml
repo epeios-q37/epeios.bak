@@ -41,10 +41,15 @@
 				<xpp:expand select="SCL"/>
 			</Modules>
 		</Modules>
+		<Modules Group="Misc">
+			<Module Path="../">infofrnt</Module>
+		</Modules>
 		<Module>registry</Module>
 		<Module>rpproxy</Module>
 	</Modules>
 	<SourceDirs>
+		<SourceDir>../</SourceDir>
+		<SourceDir>../../</SourceDir>
 	</SourceDirs>
 	<PreprocessorDefinitions>
 	</PreprocessorDefinitions>

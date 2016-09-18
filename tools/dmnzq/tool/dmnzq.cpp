@@ -24,7 +24,7 @@
 #include "scltool.h"
 #include "sclerror.h"
 
-#include "csdlec.h"
+#include "CSD/csdlec.h"
 
 #include "err.h"
 #include "cio.h"

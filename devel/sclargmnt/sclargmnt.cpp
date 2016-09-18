@@ -682,7 +682,7 @@ namespace {
 		const str::dString &Value,
 		sdr::sRow *Error = NULL )
 	{
-		sclmisc::GetRegistry().SetValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+		sclmisc::GetRegistry().SetValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
 	}
 
 	void AddValue_(
@@ -690,7 +690,7 @@ namespace {
 		const str::dString &Value,
 		sdr::sRow *Error = NULL )
 	{
-		sclmisc::GetRegistry().AddValue( sclrgstry::GetLevel( sclrgstry::nArguments ), Path, Value, Error );
+		sclmisc::GetRegistry().AddValue( sclrgstry::GetRawLevel( sclrgstry::lArguments ), Path, Value, Error );
 	}
 }
 
@@ -1431,7 +1431,7 @@ qRH
 	str::string EntryPath;
 qRB
 	EntryPath.Init();
-	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetLevel( sclrgstry::nArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
+	sclrgstry::GetCommonRegistry().Delete( Command_.GetPath( EntryPath ), sclrgstry::GetRawLevel( sclrgstry::lArguments ) );	// Pour pouvoir rcuprer la valeur correspondant  ce 'Path' tel qu'ventuellement dfini dans le fichier de configuration.
 
 	Ids.Init();
 	GetValues( ArgumentId_, Ids );

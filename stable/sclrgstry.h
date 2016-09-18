@@ -52,19 +52,21 @@ namespace sclrgstry {
 
 	registry_ &GetCommonRegistry( void );
 
-	E_ENUM( name ) {
-		nConfiguration,
-		nProject,
-		nSetup,
-		nArguments,
-		nRuntime,
-		n_amount,
-		n_Undefined
+	qENUM( Level ) {
+		lMain,
+		lCommon,	// Containing app data common to all users.
+		lUser,		// Containig app data specific to a user.
+		lProject,
+		lSetup,
+		lArguments,
+		lRuntime,
+		l_amount,
+		l_Undefined
 	};
 
-	const char *GetLabel( name__ Name );
+	const char *GetLabel( eLevel Level );
 
-	rgstry::level__ GetLevel( name__ Name );
+	rgstry::level__ GetRawLevel( eLevel Level );
 
 	extern rgstry::entry___ Parameters;
 	extern rgstry::entry___ Definitions;
@@ -145,14 +147,29 @@ namespace sclrgstry {
 		Path.Append( "\"]" );
 	}
 
-	void SetConfiguration( const rgstry::entry__ &Entry );
+	void EraseRegistry( eLevel Level );
 
-	void LoadConfiguration(
+	void Set(
+		eLevel Level,
+		const rgstry::entry__ &Entry );
+
+	void Load(
+		eLevel Level,
 		xtf::extended_text_iflow__ &Flow,
 		const fnm::name___ &Directory,
 		const char *RootPath );
 
-	void EraseProjectRegistry( void );
+	void Load(
+		eLevel Level,
+		flw::sIFlow &Flow,
+		const fnm::name___ &Directory,
+		const char *RootPath );
+
+	void Load(
+		eLevel Level,
+		const fnm::name___ &Filename,
+		const char *Target,
+		str::string_ &Id );
 
 	void LoadProject(
 		flw::iflow__ &Flow,
@@ -164,8 +181,6 @@ namespace sclrgstry {
 		const fnm::name___ &Filename,
 		const char *Target,
 		str::string_ &Id );
-
-	void EraseSetupRegistry( void );
 
 	void FillWithSetupOfId(
 		registry_ &Registry,
@@ -184,9 +199,6 @@ namespace sclrgstry {
 		const str::dString &BinPath,
 		const str::string_ &Content );
 	
-	void EraseArgumentsRegistry( void );
-
-
 # if 0
 	void FillRegistryWithSetup(
 		registry_ &Registry,

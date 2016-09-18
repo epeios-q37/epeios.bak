@@ -5,25 +5,9 @@
 		<Translation language="fr">Valeur absente ou incorrecte pour l'entrée '%1'.</Translation>
 		<Translation language="en">Bad or no value for entry '%1'.</Translation>
 	</Translations>
-  <Translations message="SCLRGSTRY_ConfigurationFileParsingError">
-    <Translation language="fr">Erreur fichier de configuration : %1.</Translation>
-    <Translation language="en">Configuration file error : %1.</Translation>
-  </Translations>
-	<Translations message="SCLRGSTRY_ProjectFileParsingError">
-		<Translation language="fr">Erreur fichier project : %1.</Translation>
-		<Translation language="en">Project file error : %1.</Translation>
-	</Translations>
-	<Translations message="SCLRGSTRY_ConfigurationLocaleParsingError">
-    <Translation language="fr">Erreur dans la locale du fichier de configuration : %1.</Translation>
-    <Translation language="en">Erreur in the configuration locale : %1.</Translation>
-  </Translations>
-  <Translations message="SCLRGSTRY_LocaleFileParsingError">
-    <Translation language="fr">Erreur fichier de locale : %1.</Translation>
-    <Translation language="en">Locale file error : %1.</Translation>
-  </Translations>
-  <Translations message="SCLRGSTRY__ProjectLocaleParsingError">
-    <Translation language="fr">Erreur dans la locale du fichier projet : %1.</Translation>
-    <Translation language="en">Erreur in the project locale : %1.</Translation>
+  <Translations message="SCLRGSTRY_ParsingError">
+    <Translation language="fr">Erreur dans '%1' : %2.</Translation>
+    <Translation language="en">Error in '%1' : %2.</Translation>
   </Translations>
   <!--
 	<Translations message="SCLRGSTRY_">

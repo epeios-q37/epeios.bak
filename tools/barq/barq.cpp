@@ -816,4 +816,5 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
+const char *sclmisc::SCLMISCProductName = NAME_MC;
 

@@ -1042,7 +1042,8 @@ void xml::parser___::Skip( void )
 status__ xml::Parse(
 	xtf::extended_text_iflow__ &UserFlow,
 	entities_handling__ EntitiesHandling,
-	callback__ &Callback )
+	callback__ &Callback,
+	qRPN )
 {
 	status__ Status = s_Undefined;
 qRH
@@ -1086,7 +1087,10 @@ qRB
 			Stop = !Callback.XMLComment( Value, Dump );
 			break;
 		case t_Error:
-			qRFwk();
+			if ( qRPT )
+				qRFwk();
+			else
+				Stop = true;
 			break;
 		case t_Processed:
 			Stop = true;

@@ -246,6 +246,7 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = MISC_NAME_LC;
+const char *sclmisc::SCLMISCProductName = MISC_NAME_MC;
 
 Q37_GCTOR( xdhcefq )
 {

@@ -38,9 +38,10 @@ mods += utf xtf llio bomhdl cdgb64
 mods += dlbrry fil fnm lcl plgn 
 mods += plgncore rgstry stsfsm xml xpp 
 mods += tht thtsub fblovl 
-mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += sclplugin 
 mods += csdlec csdleo csdrcc csdscb 
+mods += infofrnt 
 mods += registry rpembedded 
 
 pmods += pllio 
@@ -77,6 +78,10 @@ MacOS=Darwin
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
+src += :../
+
+src += :../../
+
 
 ##########################
 # For Cygwin environment #
@@ -327,7 +332,7 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20160819"\"
+copt += -DVERSION=\""20160916"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""99ca6539-a9d5-4df2-b48e-52f6ba4c950b"\"
 

@@ -137,7 +137,6 @@ void scllocale::Erase( target__ Target )
 }
 
 namespace {
-
 	void Load_(
 		level__ Level,
 		xtf::extended_text_iflow__ &Flow,

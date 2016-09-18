@@ -21,6 +21,8 @@
 
 #include "epsmsc.h"
 
+#include "sclmisc.h"
+
 using namespace epsmsc;
 using namespace txf;
 
@@ -44,15 +46,5 @@ void epsmsc::PrintLicense(
 	<< pad << "see <http://www.gnu.org/licenses/>" << nl;
 }
 
+const char *sclmisc::SCLMISCOrganizationName = "q37.info";
 
-
-	
-	
-	
-
-    
-    
-	
-
-    
-    

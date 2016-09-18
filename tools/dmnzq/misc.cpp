@@ -19,7 +19,11 @@
 
 #include "misc.h"
 
+#include "sclmisc.h"
+
 const char *misc::cHandler::Label( void )
 {
 	return MISC_SLOT_PLUGIN_TARGET " V" MISC_SLOT_PLUGIN_VERSION " " CPE_DESCRIPTION;
 }
+
+const char *sclmisc::SCLMISCProductName = "dmnzq";
