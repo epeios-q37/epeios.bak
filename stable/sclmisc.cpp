@@ -444,6 +444,8 @@ namespace {
 		return Exist;
 	}
 
+	qCDEF(char *, ApplicationDataRootTag_, "Configuration" );
+
 	void Load_(
 		const fnm::rName &Filename,
 		sclrgstry::eLevel Level )
@@ -500,12 +502,23 @@ namespace {
 		flf::rOFlow Flow;
 		txf::sOFlow TFlow;
 		xml::wWriter Writer;
+		tol::bDateAndTime Buffer;
 	qRB
-		Flow.Init( Filename );
-		TFlow.Init( Flow );
-		Writer.Init( TFlow, xml::lIndent, xml::e_Default );
+		if ( true || !sclrgstry::GetCommonRegistry().IsEmpty( Level ) ) {
+			Flow.Init( Filename );
+			TFlow.Init( Flow );
+			Writer.Init( TFlow, xml::lIndent, xml::e_Default );
 
-		sclrgstry::GetCommonRegistry().Dump( Level, qNIL, false, Writer  );
+			Writer.PushTag( ApplicationDataRootTag_ );
+
+			Writer.PutAttribute( "Timestamp", tol::DateAndTime( Buffer ) );
+
+			Writer.PutAttribute( "Generator", cpe::GetDescription() );
+
+			sclrgstry::GetCommonRegistry().Dump( Level, qNIL, false, Writer  );
+
+			Writer.PopTag();
+		}
 	qRR
 	qRT
 	qRE

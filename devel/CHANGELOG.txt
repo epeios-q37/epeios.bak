@@ -2,6 +2,16 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-18 :
+- DIR :
+	- Adding application data related functions.
+- SCLMISC :
+	- Adding application data handling functions.
+	- Adaptation to chnages in 'SCLRGSTRY'.
+- SCLRGSTRY :
+	- Adding application data related registry levels.
+	- Simplification.
+
 2016-09-16 :
 - DIR :
 	- Adding error parameter to 'CreateDir(...)' and 'CreateDirWithParents(...)'.
@@ -9,6 +19,7 @@ NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characte
 	- Adding 'sclmisc::SCLMISCOrganizationName' definition.
 - RGSTRY :
 	- When an error occurs, the details is passed, and no more a generic errror.
+	- 'multi_level_registry___' now returns 'true' is the registry has no children, instead of not being initialized.
 - SCLARGMNT :
 	- Adaptation to changes in 'SCLRGSTRY'.
 - SCLMISC :

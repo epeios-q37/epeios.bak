@@ -834,6 +834,10 @@ namespace rgstry {
 		{
 			Nodes.Init();
 		}
+		bso::sBool HasChildren( row__ Row ) const
+		{
+			return Nodes( Row ).Children.Amount() != 0;
+		}
 		void Add(
 			row__ Row,
 			row__ ParentRow )
@@ -1543,9 +1547,9 @@ namespace rgstry {
 		{
 			Init( Root, Registry );
 		}
-		bso::bool__ IsEmpty( void ) const
+		bso::bool__ IsInitialized( void ) const
 		{
-			return ( Root == qNIL ) && ( Registry == NULL );
+			return ( Root != qNIL );
 		}
 	};
 
@@ -1588,9 +1592,9 @@ namespace rgstry {
 		{
 			return Entries( Level );
 		}
-		bso::bool__ _IsEmpty( level__ Level ) const
+		bso::bool__ IsInitialized_( level__ Level ) const
 		{
-			return _GetEntry( Level ).IsEmpty();
+			return _GetEntry( Level ).IsInitialized();
 		}
 		const registry_ &_GetRegistry( level__ Level ) const
 		{
@@ -1657,21 +1661,24 @@ namespace rgstry {
 		E_NAVt( Entries., level__ );
 		const registry_ &GetRegistry( level__ Level ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				qRFwk();
 	
 			return _GetRegistry( Level );
 		}
 		registry_ &GetRegistry( level__ Level )
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				qRFwk();
 
 			return _GetRegistry( Level );
 		}
 		bso::bool__ IsEmpty( level__ Level ) const
 		{
-			return _IsEmpty( Level );
+			if ( !IsInitialized_( Level ) )
+				qRFwk();
+
+			return !GetRegistry( Level ).HasChildren( GetRoot( Level ) );
 		}
 		row__ GetRoot( level__ Level ) const
 		{
@@ -1695,7 +1702,7 @@ namespace rgstry {
 			level__ Level,
 			const entry__ Entry )
 		{
-			if ( !Entries(Level).IsEmpty() )
+			if ( !IsInitialized_( Level ) )
 				qRFwk();
 
 			Entries.Store( Entry, Level );
@@ -1729,7 +1736,7 @@ namespace rgstry {
 		{
 			entry__ Entry = Entries( Level );
 
-			if ( !Entry.IsEmpty() ) {
+			if ( Entry.IsInitialized() ) {
 
 				if ( Entry.Registry == NULL )
 					EmbeddedRegistry.Delete( Entry.Root );
@@ -1768,7 +1775,7 @@ namespace rgstry {
 			value_ &Value,
 			bso::bool__ *Missing ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				*Missing = true;
 			else
 				_GetRegistry( Level ).GetValue( Path, _GetRoot( Level ), Value, Missing );
@@ -1782,7 +1789,7 @@ namespace rgstry {
 			bso::bool__ *Missing,
 			sdr::row__ *PathErrorRow = NULL  ) const	// Nota : ne met 'Missing' à 'true' que lorque 'Path' n'existe pas. Si 'Missing' est à 'true', aucune action n'est réalisée.
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				*Missing = true;
 			else
 				_GetRegistry( Level ).GetValue( PathString, _GetRoot( Level ), Value, Missing, PathErrorRow );
@@ -1799,7 +1806,7 @@ namespace rgstry {
 			const path_ &Path,
 			value_ &Value ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return false;
 			else
 				return _GetRegistry( Level ).GetValue( Path, _GetRoot( Level ), Value );
@@ -1839,7 +1846,7 @@ namespace rgstry {
 			const path_ &Path,
 			values_ &Values ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return false;
 			else
 				return _GetRegistry( Level ).GetValues( Path, _GetRoot( Level ), Values );
@@ -1850,7 +1857,7 @@ namespace rgstry {
 			values_ &Values,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return false;
 			else
 				return _GetRegistry( Level ).GetValues( PathString, _GetRoot( Level ), Values, PathErrorRow );
@@ -1879,7 +1886,7 @@ namespace rgstry {
 			const value_ &Value,
 			sdr::row__ *PathErrorRow = NULL )
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				qRFwk();
 
 			_GetRegistry( Level ).SetValue( PathString, Value, _GetRoot( Level ), PathErrorRow );
@@ -1892,7 +1899,7 @@ namespace rgstry {
 			const value_ &Value,
 			sdr::row__ *PathErrorRow = NULL )
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				qRFwk();
 
 			_GetRegistry( Level ).AddValue( PathString, Value, _GetRoot( Level ), PathErrorRow );
@@ -1930,7 +1937,7 @@ namespace rgstry {
 			const path_ &Path,
 			level__ Level )
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return false;
 			else if ( _GetRegistry( Level ).Delete( Path, _GetRoot( Level ) ) ) {
 				_Touch( Level );
@@ -1943,7 +1950,7 @@ namespace rgstry {
 			level__ Level,
 			sdr::row__ *PathErrorRow = NULL )	// Retourne 'false' si 'PathString' a déjà la valeur 'Value', 'true' sinon.
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return false;
 			else if ( _GetRegistry( Level ).Delete( PathString, _GetRoot( Level ), PathErrorRow ) ) {
 				_Touch( Level );
@@ -1980,7 +1987,7 @@ namespace rgstry {
 			level__ Level,
 			const path_ &Path ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return qNIL;
 			else
 				return _GetRegistry( Level ).Search( Path, _GetRoot( Level ) );
@@ -1990,7 +1997,7 @@ namespace rgstry {
 			const str::string_ &PathString,
 			sdr::row__ *PathErrorRow = NULL ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return qNIL;
 			else
 				return _GetRegistry( Level ).Search( PathString, _GetRoot( Level ), PathErrorRow );
@@ -2124,7 +2131,7 @@ namespace rgstry {
 			bso::bool__ NodeToo,
 			xml::writer_ &Writer ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return 0;
 			else
 				return _GetRegistry( Level ).Dump( Node == qNIL ? _GetRoot( Level ) : Node, NodeToo, Writer );
@@ -2137,7 +2144,7 @@ namespace rgstry {
 			xml::encoding__ Encoding,
 			txf::text_oflow__ &TFlow ) const
 		{
-			if ( _IsEmpty( Level ) )
+			if ( !IsInitialized_( Level ) )
 				return 0;
 			else
 				return _GetRegistry( Level ).Dump( Node == qNIL ? _GetRoot( Level ) : Node, NodeToo, Outfit, Encoding, TFlow );
