@@ -8,6 +8,8 @@ NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characte
 	- Adding 'GetAppDataPath( ...)'.
 - SCLMISC :
 	- Adaptation to changes in 'SCLRGSTRY' and 'DIR'.'
+	- Adding '(Set|Add)LAstingValue(...)'.
+	- Adding 'StoreLastingRegistry()'.
 - SCLRGSTRY :
 	- 'User' and 'Common ' levels become 'Lasting'.
 - TOL :

@@ -162,6 +162,9 @@ namespace sclmisc {
 	// Counter-part of 'Initalize'.
 	void Quit( void );
 
+	// Store the content of the 'lastign' registry level as application data.
+	void StoreLastingRegistry( void );
+
 	void DumpRegistriesAndOrLocalesIfRequired( void );
 
 	void EraseProjectRegistry( void );
@@ -263,6 +266,29 @@ namespace sclmisc {
 		return sclrgstry::AddValue( GetRegistry(), Path, Value, Error );
 	}
 
+	inline void AddLastingValue(
+		const str::string_ &Path,
+		const str::string_ &Value,
+		sdr::row__ *Error = NULL )
+	{
+		GetRegistry().AddValue( sclrgstry::lLasting, Path, Value, Error );
+	}
+
+	inline void AddLastingValue(
+		const str::string_ &Value,
+		const rgstry::tentry__ &Entry,
+		sdr::row__ *Error = NULL )
+	{
+	qRH
+		str::wString Path;
+	qRB
+		Path.Init();
+		AddLastingValue(Entry.GetPath( Path ), Value, Error );
+	qRR
+	qRT
+	qRE
+	}
+
 	inline void SetValue(
 		const str::string_ &Value,
 		const rgstry::tentry__ &Entry )
@@ -276,6 +302,29 @@ namespace sclmisc {
 		sdr::row__ *Error = NULL )
 	{
 		return sclrgstry::SetValue( GetRegistry(), Path, Value, Error );
+	}
+
+	inline void SetLastingValue(
+		const str::string_ &Path,
+		const str::string_ &Value,
+		sdr::row__ *Error = NULL )
+	{
+		GetRegistry().SetValue( sclrgstry::lLasting, Path, Value, Error );
+	}
+
+	inline void SetLastingValue(
+		const str::string_ &Value,
+		const rgstry::tentry__ &Entry,
+		sdr::row__ *Error = NULL )
+	{
+	qRH
+		str::wString Path;
+	qRB
+		Path.Init();
+		SetLastingValue(Entry.GetPath( Path ), Value, Error );
+	qRR
+	qRT
+	qRE
 	}
 
 	inline bso::bool__ BGetValue(

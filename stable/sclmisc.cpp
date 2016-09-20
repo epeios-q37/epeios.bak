@@ -525,6 +525,12 @@ namespace {
 	}
 }
 
+void sclmisc::StoreLastingRegistry( void )
+{
+	StoreAppData_();
+}
+
+
 static void Initialize_(
 	xtf::extended_text_iflow__ &LocaleFlow,
 	const char *LocaleDirectory,
@@ -719,7 +725,7 @@ qRE
 void sclmisc::Quit( void )
 {
 	if ( IsInitialized() ) {
-		StoreAppData_();
+		StoreLastingRegistry();
 	}
 }
 
