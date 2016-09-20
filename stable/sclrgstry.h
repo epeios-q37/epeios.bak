@@ -54,12 +54,11 @@ namespace sclrgstry {
 
 	qENUM( Level ) {
 		lMain,
-		lCommon,	// Containing app data common to all users.
-		lUser,		// Containig app data specific to a user.
+		lLasting,	// Lasting data set by application.
 		lProject,
 		lSetup,
 		lArguments,
-		lRuntime,
+		lRuntime,	// Data set by application, but which are lost when quitting (contrary of the data of 'Lasting', which are persistent.
 		l_amount,
 		l_Undefined
 	};

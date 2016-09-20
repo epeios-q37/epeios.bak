@@ -22,8 +22,8 @@
 #include "tol.h"
 
 #include "fil.h"
-
 #include "str.h"
+#include "tht.h"
 
 using namespace tol;
 
@@ -262,9 +262,59 @@ qRT
 qRE
 }
 
+namespace {
+	tht::rLocker EnvLocker_;
+
+	bso::sBool GetEnv_(
+		const ntvstr::sChar *Name,
+		ntvstr::rString &Value )
+	{
+		ntvstr::sChar *Result = NULL;
+
+		EnvLocker_.Lock();
+
+#ifdef CPE_S_WIN 
+		Result = _wgetenv( Name );
+#elif defined( CPE_S_POSIX )
+		Result = getenv( Name );
+#else
+#  error
+#endif
+
+		if ( Result != NULL )
+			Value.Init( Result );
+
+		EnvLocker_.Unlock();
+
+		return Result != NULL;
+	}
+}
+
+bso::sBool tol::GetEnv(
+	const str::dString &Name,
+	str::dString &Value )
+{
+	bso::sBool Found = false;
+qRH
+	ntvstr::rString NativeName, NativeValue;
+qRB
+	NativeName.Init( Name );
+	NativeValue.Init();
+
+	if ( GetEnv_( NativeName.Internal(), NativeValue ) ) {
+		NativeValue.UTF8( Value );
+		Found = true;
+	}
+qRR
+qRT
+qRE
+	return Found;
+}
+
 Q37_GCTOR( tol )
 {
 	SetSystemCommandAvailabitity_();
+	EnvLocker_.Init();
 #ifdef TOL__WIN		
 	if ( QueryPerformanceFrequency( &tol::_TickFrequence ) == 0 )
 		qRSys();

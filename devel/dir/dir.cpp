@@ -81,29 +81,54 @@ namespace {
 		return Success;
 	}
 }
-#endif
 
-
-const fnm::rName &dir::GetCommonAppDataPath( fnm::rName &Path )
+const fnm::rName &dir::WinGetCommonAppDataPath( fnm::rName &Path )
 {
-#ifdef DIR__WIN
 	if ( !GetPath_( CSIDL_COMMON_APPDATA, Path ) )
 		qRLbr();
-# else
-	qRVct();
-# endif
+
 	return Path;
 }
 
-const fnm::rName &dir::GetUserAppDataPath( fnm::rName &Path )
+const fnm::rName &dir::WinGetUserAppDataPath( fnm::rName &Path )
 {
-#ifdef DIR__WIN
 	if ( !GetPath_( CSIDL_APPDATA, Path ) )
 		qRLbr();
-# else
-	qRVct();
-# endif
+
 	return Path;
+}
+#elif defined( DIR__POSIX )
+namespace {
+	const fnm::rName &PosixGetAppDataPath_( fnm::rName &Path )
+	{
+	qRH
+		str::wString Value;
+	qRB
+		Value.Init();
+
+		if ( !tol::GetEnv( str::wString( "HOME" ), Value ) )
+			qRSys();
+
+		Path.Init( Value );
+	qRR
+	qRT
+	qRE
+		return Path;
+	}
+}
+#else
+# error
+#endif
+
+const fnm::rName &dir::GetAppDataPath( fnm::rName &Path )
+{
+#ifdef DIR__WIN
+	return WinGetCommonAppDataPath( Path );
+#elif defined( DIR__POSIX )
+	return PosixGetAppDataPath_( Path );
+#else
+# error
+#endif
 }
 
 

@@ -376,7 +376,7 @@ namespace {
 # endif
 
 namespace {
-	bso::sBool GetConfigurationFileName_(
+	bso::sBool GetAppDataConfigurationFileName_(
 		const fnm::rName &Path,
 		fnm::rName &Name,
 		bso::sBool CreateDir )
@@ -385,7 +385,13 @@ namespace {
 	qRH
 		fnm::rName Buffer, Dir;
 	qRB
+#ifdef CPE_S_WIN
 		Buffer.Init();
+#elif defined( CPE_S_POSIX )
+		Buffer.Init( "." );
+#else
+# error
+#endif
 		fnm::BuildPath( Path, SCLMISCOrganizationName, "", Buffer );
 
 		Dir.Init();
@@ -402,7 +408,7 @@ namespace {
 		return Exist;
 	}
 
-	bso::sBool GetCommonConfigurationFilename_(
+	bso::sBool GetAppDataConfigurationFilename_(
 		fnm::rName &Name,
 		bso::sBool CreateDir )
 	{
@@ -414,30 +420,9 @@ namespace {
 		qRReturn;
 #endif
 		Path.Init();
-		dir::GetCommonAppDataPath( Path );
+		dir::GetAppDataPath( Path );
 
-		Exist = GetConfigurationFileName_( Path, Name, CreateDir );
-	qRR
-	qRT
-	qRE
-		return Exist;
-	}
-
-	bso::sBool GetUserConfigurationFilename_(
-		fnm::rName &Name,
-		bso::sBool CreateDir )
-	{
-		bso::sBool Exist = false;
-	qRH
-		fnm::rName Path;
-	qRB
-#ifndef CPE_S_WIN
-		qRReturn;
-#endif
-		Path.Init();
-		dir::GetUserAppDataPath( Path );
-
-		Exist = GetConfigurationFileName_( Path, Name, CreateDir );
+		Exist = GetAppDataConfigurationFileName_( Path, Name, CreateDir );
 	qRR
 	qRT
 	qRE
@@ -446,7 +431,7 @@ namespace {
 
 	qCDEF(char *, ApplicationDataRootTag_, "Configuration" );
 
-	void Load_(
+	void LoadAppData_(
 		const fnm::rName &Filename,
 		sclrgstry::eLevel Level )
 	{
@@ -460,41 +445,22 @@ namespace {
 	qRE
 	}
 
-	void LoadCommon_( void )
+	void LoadAppData_( void )
 	{
 	qRH
 		fnm::rName Filename;
 	qRB
 		Filename.Init();
 
-		if ( GetCommonConfigurationFilename_( Filename, false ) )
-			Load_( Filename, sclrgstry::lCommon );
+		if ( GetAppDataConfigurationFilename_( Filename, false ) )
+			LoadAppData_( Filename, sclrgstry::lLasting );
 	qRR
 	qRT
 	qRE
 	}
 
-	void LoadUser_( void )
-	{
-	qRH
-		fnm::rName Filename;
-	qRB
-		Filename.Init();
 
-		if ( GetUserConfigurationFilename_( Filename, false ) )
-			Load_( Filename, sclrgstry::lUser );
-	qRR
-	qRT
-	qRE
-	}
-
-	void LoadCommonAndUser_( void )
-	{
-		LoadCommon_();
-		LoadUser_();
-	}
-
-	void Store_(
+	void UnconditionalStoreAppData_(
 		const fnm::rName &Filename,
 		sclrgstry::eLevel Level )
 	{
@@ -504,27 +470,43 @@ namespace {
 		xml::wWriter Writer;
 		tol::bDateAndTime Buffer;
 	qRB
-		if ( true || !sclrgstry::GetCommonRegistry().IsEmpty( Level ) ) {
-			Flow.Init( Filename );
-			TFlow.Init( Flow );
-			Writer.Init( TFlow, xml::lIndent, xml::e_Default );
+		Flow.Init( Filename );
+		TFlow.Init( Flow );
+		Writer.Init( TFlow, xml::lIndent, xml::e_Default );
 
-			Writer.PushTag( ApplicationDataRootTag_ );
+		Writer.PushTag( ApplicationDataRootTag_ );
 
-			Writer.PutAttribute( "Timestamp", tol::DateAndTime( Buffer ) );
+		Writer.PutAttribute( "Timestamp", tol::DateAndTime( Buffer ) );
 
-			Writer.PutAttribute( "Generator", cpe::GetDescription() );
+		sclrgstry::GetCommonRegistry().Dump( Level, qNIL, false, Writer  );
 
-			sclrgstry::GetCommonRegistry().Dump( Level, qNIL, false, Writer  );
+		Writer.PopTag();
+	qRR
+	qRT
+	qRE
+	}
 
-			Writer.PopTag();
+	void StoreAppData_(
+		const fnm::rName &Filename,
+		sclrgstry::eLevel Level )
+	{
+	qRH
+		flf::rOFlow Flow;
+		txf::sOFlow TFlow;
+		xml::wWriter Writer;
+	qRB
+		if ( !sclrgstry::GetCommonRegistry().IsEmpty( Level ) ) {
+			if ( !fil::Exists(Filename) || ( fil::GetLastModificationTime(Filename) <= sclrgstry::GetCommonRegistry().TimeStamp( Level ) ) )
+				UnconditionalStoreAppData_( Filename, Level );
+		} else if ( fil::Exists( Filename ) ) {
+			fil::Remove( Filename );
 		}
 	qRR
 	qRT
 	qRE
 	}
 
-	void StoreCommon_( void )
+	void StoreAppData_( void )
 	{
 	qRH
 		fnm::rName Filename;
@@ -534,38 +516,13 @@ namespace {
 #endif
 		Filename.Init();
 
-		GetCommonConfigurationFilename_( Filename, true );
+		GetAppDataConfigurationFilename_( Filename, true );
 
-		Store_( Filename, sclrgstry::lCommon );
+		StoreAppData_( Filename, sclrgstry::lLasting );
 	qRR
 	qRT
 	qRE
 	}
-
-	void StoreUser_( void )
-	{
-	qRH
-		fnm::rName Filename;
-	qRB
-#ifndef CPE_S_WIN
-		qRReturn;
-#endif
-		Filename.Init();
-
-		GetUserConfigurationFilename_( Filename, true );
-
-		Store_( Filename, sclrgstry::lUser );
-	qRR
-	qRT
-	qRE
-	}
-
-	void StoreCommonAndUser_( void )
-	{
-		StoreCommon_();
-		StoreUser_();
-	}
-
 }
 
 static void Initialize_(
@@ -593,7 +550,7 @@ qRB
 
 	LoadLocale_( sclrgstry::GetRawLevel( sclrgstry::lMain ), scllocale::tConfiguration );
 
-	LoadCommonAndUser_();
+	LoadAppData_();
 
 	BinPath_.Init();
 	BinPath.UTF8( BinPath_ );
@@ -762,7 +719,7 @@ qRE
 void sclmisc::Quit( void )
 {
 	if ( IsInitialized() ) {
-		StoreCommonAndUser_();
+		StoreAppData_();
 	}
 }
 
@@ -1154,8 +1111,7 @@ qRB
 		All = true;
 
 	T( 'm', Main );
-	T( 'c', Common );
-	T( 'u', User );
+	T( 'l', Lasting );
 	T( 'p', Project );
 	T( 's', Setup );
 	T( 'a', Arguments );

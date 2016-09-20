@@ -155,9 +155,13 @@ namespace dir {
 		return fnm::GetLocation( GetSelfPath_( FileName ), Dir );
 	}
 
-	const fnm::rName &GetCommonAppDataPath( fnm::rName &Path );
+# ifdef DIR__WIN
+	const fnm::rName &WinGetCommonAppDataPath( fnm::rName &Path );
 
-	const fnm::rName &GetUserAppDataPath( fnm::rName &Path );
+	const fnm::rName &WinGetUserAppDataPath( fnm::rName &Path );
+# endif
+
+	const fnm::rName &GetAppDataPath( fnm::rName &Path );
 
 	inline state__ CreateDir(
 		const fnm::name___ &Dir,

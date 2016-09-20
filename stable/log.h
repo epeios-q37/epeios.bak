@@ -38,7 +38,7 @@ namespace log {
 
 	typedef fdr::oflow_driver_base___ rFDRiver_;
 	
-	template <typename int size = LOG_DEFAULT_SIZE> class rFDriver
+	template <int size = LOG_DEFAULT_SIZE> class rFDriver
 	: public rFDRiver_
 	{
 	private:

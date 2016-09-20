@@ -37,8 +37,7 @@ using namespace sclrgstry;
 static rgstry::multi_level_registry Registry_;
 
 static rgstry::level__ MainLevel_ = rgstry::UndefinedLevel;
-static rgstry::level__ CommonLevel_ = rgstry::UndefinedLevel;	// Registry with data common to all users.
-static rgstry::level__ UserLevel_ = rgstry::UndefinedLevel;	// Registry with data specific to a user.
+static rgstry::level__ LastingLevel_ = rgstry::UndefinedLevel;	// Application data.
 static rgstry::level__ ProjectLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ SetupLevel_ = rgstry::UndefinedLevel;
 static rgstry::level__ ArgumentsLevel_ = rgstry::UndefinedLevel;
@@ -120,8 +119,7 @@ const char *sclrgstry::GetLabel( eLevel Level )
 {
 	switch ( Level ) {
 	C( Main );
-	C( Common );
-	C( User );
+	C( Lasting );
 	C( Project );
 	C( Setup );
 	C( Arguments );
@@ -145,11 +143,10 @@ rgstry::level__ sclrgstry::GetRawLevel( eLevel Level )
 {
 	switch ( Level ) {
 	C( Main );
+	C( Lasting );
 	C( Project );
 	C( Setup );
 	C( Arguments );
-	C( Common );
-	C( User );
 	C( Runtime );
 	default:
 		qRFwk();
@@ -796,8 +793,7 @@ Q37_GCTOR( sclrgstry )
 
 	// 3 firsts not as 'embedded', due to the fact that plugins use the registry of the main program.
 	MainLevel_ = Registry_.Create();
-	CommonLevel_ = Registry_.CreateEmbedded();
-	UserLevel_ = Registry_.CreateEmbedded();
+	LastingLevel_ = Registry_.CreateEmbedded();
 	ProjectLevel_ = Registry_.Create();
 	SetupLevel_ = Registry_.Create();
 	ArgumentsLevel_ = Registry_.CreateEmbedded();

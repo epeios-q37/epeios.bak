@@ -2,6 +2,17 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-20 :
+- DIR :
+	- The 'Get(User|Common)AppDataPath(...)' are prefixed with 'Win'.
+	- Adding 'GetAppDataPath( ...)'.
+- SCLMISC :
+	- Adaptation to changes in 'SCLRGSTRY' and 'DIR'.'
+- SCLRGSTRY :
+	- 'User' and 'Common ' levels become 'Lasting'.
+- TOL :
+	- Adding 'GetnEnv(...)'.
+
 2016-09-18 :
 - DIR :
 	- Adding application data related functions.

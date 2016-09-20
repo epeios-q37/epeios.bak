@@ -33,9 +33,8 @@
 # include <signal.h>
 # include <locale.h>
 
-# include "strng.h"
-
 # include "cpe.h"
+# include "strng.h"
 
 # ifdef CPE_S_POSIX
 #  ifdef CPE_S_DARWIN
@@ -2109,7 +2108,12 @@ namespace tol {
 		Init( F );
 		Init( O... );
 	}
-	/* BEGIN 'Init' serialization */
+	/* End 'Init' serialization */
+
+	// 'false' if env var doesn't exist.
+	bso::sBool GetEnv(
+		const str::dString &Name,
+		str::dString &Value );
 }
 
 

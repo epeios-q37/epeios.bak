@@ -242,6 +242,8 @@ namespace ntvstr {
 
 namespace ntvstr {
 	typedef string___ rString;
+
+	typedef char__ sChar;
 }
 
 #endif
