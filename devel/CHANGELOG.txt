@@ -2,6 +2,17 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-21 :
+- ERR :
+	- Fixing bug which blocks all error handling in other threads after a 'ERRFinal'.
+- RGSTRY :	
+	- Fixing 'multi_level_registry_::Push(...)' bug.
+	- Fixing 'multi_level_registry_::Set(...)' bug.
+- SCLMISC :
+	- Adding '(Dump|Delete)LastingRegistryFile(...)'.
+- SCLPUGIN :
+	- Adaptation to changes in 'SCLRGSTRY'.
+
 2016-09-20 :
 - DIR :
 	- The 'Get(User|Common)AppDataPath(...)' are prefixed with 'Win'.

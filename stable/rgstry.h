@@ -1702,7 +1702,7 @@ namespace rgstry {
 			level__ Level,
 			const entry__ Entry )
 		{
-			if ( !IsInitialized_( Level ) )
+			if ( IsInitialized_( Level ) )
 				qRFwk();
 
 			Entries.Store( Entry, Level );
@@ -1726,7 +1726,7 @@ namespace rgstry {
 			level__ Level = Registry.First();
 
 			while ( Level != UndefinedLevel ) {
-				if ( !Registry.IsEmpty( Level ) )
+				if ( Registry.IsInitialized_( Level ) )
 					Push( Registry, Level );
 
 				Level = Registry.Next( Level );

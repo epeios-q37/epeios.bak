@@ -203,7 +203,7 @@ namespace err {
 
 // 'End' : end of error handling bloc.
 # define qRE					ERRCommonEnd ERRTestEnd } else ERRT();  };
-# define qRFE( action )			ERRCommonEnd ERRTestEnd } else action; };
+# define qRFE( action )			ERRCommonEnd ERRTestEnd } else { action; ERRRst(); } };
 # define qRFH					qRH
 # define qRFB					qRB
 # define qRFR					qRR

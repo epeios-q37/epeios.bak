@@ -376,7 +376,7 @@ namespace {
 # endif
 
 namespace {
-	bso::sBool GetAppDataConfigurationFileName_(
+	bso::sBool GetAppDataConfigurationFilename_(
 		const fnm::rName &Path,
 		fnm::rName &Name,
 		bso::sBool CreateDir )
@@ -422,7 +422,7 @@ namespace {
 		Path.Init();
 		dir::GetAppDataPath( Path );
 
-		Exist = GetAppDataConfigurationFileName_( Path, Name, CreateDir );
+		Exist = GetAppDataConfigurationFilename_( Path, Name, CreateDir );
 	qRR
 	qRT
 	qRE
@@ -530,6 +530,46 @@ void sclmisc::StoreLastingRegistry( void )
 	StoreAppData_();
 }
 
+void sclmisc::DumpLastingRegistryFile(
+	txf::sOFlow &OFlow,
+	const char *Target,
+	const char *Product,
+	const char *Organization )
+{
+qRH
+	fnm::rName Name;
+	flf::rIFlow IFlow;
+	xtf::extended_text_iflow__ XIFlow;
+qRB
+	Name.Init();
+
+	if ( GetAppDataConfigurationFilename_(Name, false) ) {
+		IFlow.Init( Name );
+		XIFlow.Init( IFlow, utf::f_Default );
+		xpp::Process( XIFlow, xpp::criterions___( "" ), xml::oIndent, OFlow );
+	}
+qRR
+qRT
+qRE
+}
+
+
+void sclmisc::DeleteLastingRegistryFile(
+	const char *Target,
+	const char *Product,
+	const char *Organization )
+{
+qRH
+	fnm::rName Name;
+qRB
+	Name.Init();
+
+	if ( GetAppDataConfigurationFilename_( Name, false ) )
+		fil::Remove( Name );
+qRR
+qRT
+qRE
+}
 
 static void Initialize_(
 	xtf::extended_text_iflow__ &LocaleFlow,

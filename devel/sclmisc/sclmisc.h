@@ -165,6 +165,19 @@ namespace sclmisc {
 	// Store the content of the 'lastign' registry level as application data.
 	void StoreLastingRegistry( void );
 
+	// Deletes the file which contains the lasting registry.
+	void DumpLastingRegistryFile(
+		txf::sOFlow &Flow,
+		const char *Target = SCLMISCTargetName,
+		const char *Product = SCLMISCProductName,
+		const char *Organization = SCLMISCOrganizationName );
+
+	// Deletes the file which contains the lasting registry.
+	void DeleteLastingRegistryFile(
+		const char *Target = SCLMISCTargetName,
+		const char *Product = SCLMISCProductName,
+		const char *Organization = SCLMISCOrganizationName );
+
 	void DumpRegistriesAndOrLocalesIfRequired( void );
 
 	void EraseProjectRegistry( void );
