@@ -405,7 +405,38 @@ namespace dir {
 /***************/
 
 namespace dir {
-	typedef handle___ rHandle;
+	class rFileBrowser {
+	private:
+		handle___ Handle_;
+		fnm::rName CurrentFile_, NextFile_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			if ( P )
+				Close( Handle_ );
+
+			tol::reset( P, Handle_, CurrentFile_ );
+		}
+		qCDTOR( rFileBrowser );
+		void Init( const fnm::rName &Path )
+		{
+			Handle_.Init();
+			CurrentFile_.Init();
+			NextFile_.Init( GetFirstFile( Path, Handle_ ) );
+		}
+		const fnm::rName &GetCurrentFile( void )
+		{
+			return CurrentFile_;
+		}
+		const fnm::rName &GetNextFile( void )
+		{
+			CurrentFile_ = NextFile_;
+
+			NextFile_ = dir::GetNextFile( Handle_ );
+
+			return CurrentFile_;
+		}
+	};
 
 	typedef state__ eState;
 

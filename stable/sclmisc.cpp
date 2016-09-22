@@ -379,6 +379,9 @@ namespace {
 	bso::sBool GetAppDataConfigurationFilename_(
 		const fnm::rName &Path,
 		fnm::rName &Name,
+		const char *Target,
+		const char *Product,
+		const char *Organization,
 		bso::sBool CreateDir )
 	{
 		bso::sBool Exist = false;
@@ -392,12 +395,12 @@ namespace {
 #else
 # error
 #endif
-		fnm::BuildPath( Path, SCLMISCOrganizationName, "", Buffer );
+		fnm::BuildPath( Path, Organization, "", Buffer );
 
 		Dir.Init();
-		fnm::BuildPath( Buffer, SCLMISCProductName, "", Dir );
+		fnm::BuildPath( Buffer, Product, "", Dir );
 
-		fnm::BuildPath( Dir, SCLMISCTargetName, CONFIGURATION_DEFAULT_FILENAME_SUFFIX, Name );
+		fnm::BuildPath( Dir, Target, CONFIGURATION_DEFAULT_FILENAME_SUFFIX, Name );
 
 		Exist = fil::Exists( Name );
 		if ( CreateDir && !fil::Exists( Dir ) )
@@ -410,6 +413,9 @@ namespace {
 
 	bso::sBool GetAppDataConfigurationFilename_(
 		fnm::rName &Name,
+		const char *Target,
+		const char *Product,
+		const char *Organization,
 		bso::sBool CreateDir )
 	{
 		bso::sBool Exist = false;
@@ -422,7 +428,7 @@ namespace {
 		Path.Init();
 		dir::GetAppDataPath( Path );
 
-		Exist = GetAppDataConfigurationFilename_( Path, Name, CreateDir );
+		Exist = GetAppDataConfigurationFilename_( Path, Name, Target, Product, Organization, CreateDir );
 	qRR
 	qRT
 	qRE
@@ -452,7 +458,7 @@ namespace {
 	qRB
 		Filename.Init();
 
-		if ( GetAppDataConfigurationFilename_( Filename, false ) )
+		if ( GetAppDataConfigurationFilename_( Filename, SCLMISCTargetName, SCLMISCProductName, SCLMISCOrganizationName, false ) )
 			LoadAppData_( Filename, sclrgstry::lLasting );
 	qRR
 	qRT
@@ -516,7 +522,7 @@ namespace {
 #endif
 		Filename.Init();
 
-		GetAppDataConfigurationFilename_( Filename, true );
+		GetAppDataConfigurationFilename_( Filename, SCLMISCTargetName, SCLMISCProductName, SCLMISCOrganizationName, true );
 
 		StoreAppData_( Filename, sclrgstry::lLasting );
 	qRR
@@ -543,7 +549,7 @@ qRH
 qRB
 	Name.Init();
 
-	if ( GetAppDataConfigurationFilename_(Name, false) ) {
+	if ( GetAppDataConfigurationFilename_( Name, Target, Product, Organization, false) ) {
 		IFlow.Init( Name );
 		XIFlow.Init( IFlow, utf::f_Default );
 		xpp::Process( XIFlow, xpp::criterions___( "" ), xml::oIndent, OFlow );
@@ -564,7 +570,7 @@ qRH
 qRB
 	Name.Init();
 
-	if ( GetAppDataConfigurationFilename_( Name, false ) )
+	if ( GetAppDataConfigurationFilename_( Name, Target, Product, Organization, false ) )
 		fil::Remove( Name );
 qRR
 qRT

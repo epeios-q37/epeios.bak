@@ -32,6 +32,9 @@ using cio::COut;
 using cio::CErr;
 
 const char *sclmisc::SCLMISCTargetName = "TEST";
+const char *sclmisc::SCLMISCProductName = "TEST";
+const char *sclmisc::SCLMISCOrganizationName = "TEST";
+ 
 
 int scltool::SCLTOOLMain(
 	const str::string_ &Command,
@@ -41,16 +44,21 @@ qRH
 	rgstry::row__ Row = qNIL;
 	rgstry::level__ Level = qNIL;
 qRB
-	cio::COut << txf::tab << "----- Configuration registry -----" << txf::nl;
-	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryConfigurationLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
-	cio::COut << txf::tab << "----- Project registry -----" << txf::nl;
-	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryProjectLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
-	cio::COut << txf::tab << "----- Setup registry -----" << txf::nl;
-	sclmisc::GetRegistry().Dump( sclmisc::GetRegistrySetupLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
-	cio::COut << txf::tab << "----- Arguments registry -----" << txf::nl;
-	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryArgumentsLevel(), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	sclmisc::SetLastingValue( str::wString( "test" ), str::wString( "TEST" ) );
+	sclmisc::SetLastingValue( str::wString( "essai" ), str::wString( "ESSAI" ) );
 
-	cio::COut << txf::nl;
+	cio::COut << txf::tab << "----- Configuration registry -----" << txf::nl;
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLevel( sclrgstry::lMain ), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Lasting registry -----" << txf::nl;
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLevel( sclrgstry::lLasting ), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Project registry -----" << txf::nl;
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLevel( sclrgstry::lProject ), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Setup registry -----" << txf::nl;
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLevel( sclrgstry::lSetup ), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
+	cio::COut << txf::tab << "----- Arguments registry -----" << txf::nl;
+	sclmisc::GetRegistry().Dump( sclmisc::GetRegistryRawLevel( sclrgstry::lArguments ), qNIL, true, xml::oIndent, xml::e_Default, cio::COut );
+
+	cio::COut << txf::nl << txf::commit;
 qRR
 qRT
 qRE

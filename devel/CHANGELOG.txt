@@ -2,6 +2,12 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-09-22 :
+- DIR :
+	- Introducing 'rFileBrowser' to replace 'rHandle' and related functions.
+- SCLMISC :
+	- Fixing parameters overriding for '(Dump|Delete)LastingRegistryFile(...)'.
+
 2016-09-21 :
 - ERR :
 	- Fixing bug which blocks all error handling in other threads after a 'ERRFinal'.
