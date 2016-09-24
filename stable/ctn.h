@@ -345,6 +345,11 @@ namespace ctn {
 
 			Flush_( true );
 
+# ifdef CTN_DBG
+			if ( ( *Position + Amount ) > this->Amount() )
+				qRFwk();
+# endif
+
 			sdr::size__ CurrentAmount = amount_extent_manager_<r>::Amount();
 			sdr::size__ NewAmount = CurrentAmount - Amount;
 
