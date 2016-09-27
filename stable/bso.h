@@ -27,10 +27,11 @@
 # endif
 
 // BaSic Objects
-
 # include <limits.h>
 # include <stdint.h>
 # include <float.h>
+
+# define __STDC_FORMAT_MACROS 1	// Needed by below header with the 'mingw' compiler.
 # include <inttypes.h>
 
 
