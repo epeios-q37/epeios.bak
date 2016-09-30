@@ -25,6 +25,7 @@
 #include "core.h"
 
 const char *sclmisc::SCLMISCTargetName = BASE_NAME;
+const char *sclmisc::SCLMISCProductName = OGZINF_MC_AFFIX;
 
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
