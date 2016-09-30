@@ -1,21 +1,17 @@
 CHANGELOG FOR THE xppq TOOL.
 
-Meaning of list markers:
-- '-' (Functionnalities (should) remain unchanged) :
-	- Changes for adaptation to changes of a module, resulting in adding or changing the type of parameters,
-	   in a broad sense (parameters of a function, a method, or a template...).
-	- Changes fixing compiler errors/warnings.
-- '*' : Functionnality changes.
-- '%' : API changes (is superseded by functionnality changes).
-- '#' : Bug fixing.
+See also CHANGELOG from the Epeios framework.
+
+2016-09-30 : Publication.
+- 'AArch64' (ARM 64-bit) version available.
 
 2015-10-11 :
 - 'fdr::datum__' -> 'fdr::byte__'.
 
-2015-06-04 : PUBLICATION !
+2015-06-04 : Publication.
 - No changes in the software itself, but only in the content of the packages.
 
-2015-06-01 : PUBLICATION !
+2015-06-01 : Publication.
 
 2015-05-28
 - 'locale.(h|cpp)' becomes 'i18n(.h|.cpp)' to avoid confusion with the 'locale.h' standard C header.

@@ -6,7 +6,7 @@
 			<xpp:bloc>20150620</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="CopyrightYears">
-			<xpp:bloc>2007-2015</xpp:bloc>
+			<xpp:bloc>2007-2016</xpp:bloc>
 		</xpp:define>
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
