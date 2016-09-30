@@ -1,6 +1,6 @@
 CHANGELOG FOR THE xppq TOOL.
 
-See also CHANGELOG from the Epeios framework.
+See also the CHANGELOG for the Epeios framework.
 
 2016-09-30 : Publication.
 - 'AArch64' (ARM 64-bit) version available.
