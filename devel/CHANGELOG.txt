@@ -2,6 +2,10 @@ CHANGELOG for the 'Epeios' framework.
 
 NOTA :due to some issues with genuine 'Xcode' compiler, all accentuated characters of french comments in source code were stripped.
 
+2016-10-03 :
+- DWTGHT
+	- Ghosts files/directories are now (again) made systm (hidden). Only under Windows. For POSIX system, their name have to begin with a '.'.
+
 2016-10-02 :
 - ERR :
 	- The 'qRFE(...)' macro now resets error only if there was one pending.

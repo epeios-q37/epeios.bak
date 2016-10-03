@@ -53,13 +53,10 @@ static inline status__ CreateGhost_(
 		break;
 	}
 
-# if 0
-	if ( !fil::MakeSystem( Name ) ) {
-		if ( dir::DropDir( Name ) != dir::sOK )
-			ERRSys();
-		Success = false;
-	}	
-# endif
+#ifdef CPE_S_WIN
+	fil::MakeSystem( Name );
+#endif
+
 	return ( Success ? sCreated : sFailed );
 }
 
