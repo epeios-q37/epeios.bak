@@ -9,7 +9,6 @@ TODO for the 'Epeios' framework.
 - Redesign log handling ('LOG' library) to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
 - Adaptation to IPv6 for the network-related libraries.
 
-
 IN PROGRESS :
 - XDHTML
 	- Implementation for Android.
