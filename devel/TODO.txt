@@ -13,7 +13,6 @@ TODO for the 'Epeios' framework.
 IN PROGRESS :
 - XDHTML
 	- Implementation for Android.
-
 	
 MADE :
 2016-09-24 :
