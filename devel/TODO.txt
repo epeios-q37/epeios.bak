@@ -1,0 +1,23 @@
+TODO for the 'Epeios' framework.
+
+- XDHTML
+	- Implementing data display in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
+	- Implementation for Android.
+	- Implementation for iOS.
+- 'CSDL...' : Reimplementation ; has no more to do with embedded library.
+- 'SCL...' : Renaming ('SCLXyyy...' in 'SCLX').
+- 'XPP' : Réimplementation in a simplified manner.
+- Redesign log handling ('LOG' library) to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
+- Adaptation to IPv6 for the network-related libraries.
+
+MADE :
+
+2016-09-24 :
+- Adding detection of 'crate' using as list without being a list (use of 'CRT' instead of 'LSTCRT' ; accessing a 'CRT' item with 'qNIL' row).
+
+2016-09-02 :
+- Fixing errors occuring when compiling using WSL (Widows Subsystem for Linux).
+
+2016-08-22 :
+- Fixing erros which occurs in backends on regular deconnection from frontend.
+
