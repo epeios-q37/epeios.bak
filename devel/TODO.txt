@@ -1,7 +1,7 @@
 TODO for the 'Epeios' framework.
 
 - XDHTML
-	- Implementing data display in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
+	- Implementing data filling in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
 	- Implementation for Android.
 - 'CSDL...' : Reimplementation ; has no more to do with embedded library.
 - 'SCL...' : Renaming ('SCLXyyy...' to 'SCLX').
