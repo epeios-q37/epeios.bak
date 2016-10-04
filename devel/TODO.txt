@@ -5,7 +5,7 @@ TODO for the 'Epeios' framework.
 	- Implementation for Android.
 - 'CSDL...' : Reimplementation ; has no more to do with embedded library.
 - 'SCL...' : Renaming ('SCLXyyy...' in 'SCLX').
-- 'XPP' : Réimplementation in a simplified manner.
+- 'XPP' : Réimplement in a simplified manner.
 - Reimplement log handling ('LOG' library) to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
 - Adaptation of the network related libraries to IPv6 .
 
