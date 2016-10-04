@@ -6,7 +6,7 @@ TODO for the 'Epeios' framework.
 - 'CSDL...' : Reimplementation ; has no more to do with embedded library.
 - 'SCL...' : Renaming ('SCLXyyy...' in 'SCLX').
 - 'XPP' : Réimplementation in a simplified manner.
-- Redesign log handling ('LOG' library) to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
+- Reimplement log handling ('LOG' library) to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
 - Adaptation to IPv6 for the network related libraries.
 
 IN PROGRESS :
