@@ -323,11 +323,20 @@ qRT
 qRE
 }
 
+namespace {
+	time_t AbsDiff_(
+		time_t Op1,
+		time_t Op2 )
+	{
+		return ( Op1 > Op2 ? Op1 - Op2 : Op2 - Op1 );
+	}
+}
+
 static bso::bool__ IsDifferent_(
 	const dwtftr::file__ &SFile,
 	const dwtftr::file__ &TFile )
 {
-	return ( ( SFile.Timestamp ^ TFile.Timestamp ) >> 2 ) || ( SFile.Size != TFile.Size ); // Timestamps within 3 seconds are considered as equal (due to Windows timestamp imprecision).
+	return ( AbsDiff_( SFile.Timestamp, TFile.Timestamp ) > 2 ) || ( SFile.Size != TFile.Size ); // Timestamps within 3 seconds are considered as equal (due to Windows timestamp imprecision).
 }
 
 static bso::bool__ Compare_(
