@@ -920,7 +920,7 @@ static inline const str::string_ &GetAbsolute_(
 	const str::string_ &Name,
 	str::string_ &Absolute )
 {
-	Absolute.Init( Path );
+	Absolute.Append( Path );
 
 	if ( Path.Amount() != 0  )
 		Absolute.Append( '/' );
@@ -957,9 +957,18 @@ static bso::bool__ Create_(
 qRH	
 	str::string Absolute;
 qRB
-	Absolute.Init( Path );
+	Absolute.Init();
 
-	Success = dir::CreateDir( GetAbsolute_( Path, Name, Absolute ) ) == dir::sOK;
+	GetAbsolute_( Path, Name, Absolute );
+
+	if ( fil::Exists( Absolute ) ) {
+		if ( fil::GetType( Absolute ) == fil::tFile ) {
+			if ( fil::Remove( Absolute ) )
+				Success = dir::CreateDir( Absolute, qRPU ) == dir::sOK;
+		} else
+			Success = true;
+	} else
+		Success = dir::CreateDir( Absolute, qRPU ) == dir::sOK;
 qRR
 qRT
 qRE

@@ -1,5 +1,14 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-07 :
+- DWTMOV :
+	- On directory creation, when the directory already exists, the creation is skipped.
+	- On directory creation, when a file exists with same name, the file is deleted.
+	- When an error occurs on directory creation, no more 'ERR' error is throwned,
+	  but the regular error handling is used.
+- DWTCPR :
+	- File modification timestamps within 3 seconds are considered as equal (to handle Windows file timestamp imprecisions).
+
 2016-10-03 :
 - DWTGHT
 	- Ghosts files/directories are now (again) made systm (hidden). Only under Windows. For POSIX system, their name have to begin with a '.'.
