@@ -20,6 +20,8 @@
 #include <jni.h>
 #include <string>
 
+#include "tol.h"
+
 extern "C"
 void
 Java_info_q37_xdhdvkq_MainActivity_00024Callback_onReceiveValue(
@@ -27,9 +29,14 @@ Java_info_q37_xdhdvkq_MainActivity_00024Callback_onReceiveValue(
         jobject Callback,
         jstring Value )
 {
+qRH
+qRB
     const char *toto = env->GetStringUTFChars( Value, NULL );
 
     printf( "%s\n", toto );
+qRR
+qRT
+qRE
 }
 
 namespace {
@@ -74,14 +81,14 @@ namespace {
 
 extern "C"
 void
-Java_info_q37_xdhdvkq_MainActivity_00024JsObject_launchEvent(
+Java_info_q37_xdhdvkq_MainActivity_launchEvent(
         JNIEnv* Env,
-        jobject Callback,
+        jobject MainActivity,
         jstring Digest )
 {
     const char *toto = Env->GetStringUTFChars( Digest, NULL );
 
-    ExecuteJavascript_( Env, GetMainActivity_( Env, Callback ), Digest );
+    ExecuteJavascript_( Env, MainActivity, Digest );
 
     Env->ReleaseStringUTFChars( Digest, toto );
 }

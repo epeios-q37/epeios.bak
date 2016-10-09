@@ -78,14 +78,12 @@
 # define CPE_SL_DARWIN		"Darwin"
 # define CPE_SL_WIN			"Win"
 
-# ifdef __ANDROID__
-#  define CPE_S_ANDROID
-#  define CPE_SL	CPE_SL_ANDROID
-# endif
-
 # ifdef __linux__
 #  define CPE_S_LINUX
-#  ifdef __gnu_linux__
+#  ifdef __ANDROID__
+#   define CPE_S_ANDROID
+#   define CPE_SL	CPE_SL_ANDROID
+#  elif defined( __gnu_linux__ )
 #   define CPE_S_GNULINUX
 #   define CPE_SL CPE_SL_GNULINUX
 #  else
@@ -147,6 +145,7 @@
 # define CPE_TL_ARM64	"AArch64"
 # define CPE_TL_IA32	"IA-32"
 # define CPE_TL_AMD64	"AMD64"
+# define CPE_TL_MIPSEL	"MIPSel"
 
 # ifdef __arm__
 #  define CPE_A_ARM
@@ -160,6 +159,12 @@
 #  define CPE_A_ARM64
 #  define CPE_F_64BITS
 #  define CPE_AL	CPE_TL_ARM64
+# endif
+
+# ifdef __MIPSEL__
+#  define CPE_A_MIPSEL
+#  define CPE_F_64BITS
+#  define CPE_AL	CPE_TL_MIPSEL
 # endif
 
 

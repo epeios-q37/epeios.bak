@@ -25,10 +25,6 @@
 
 using namespace ntvstr;
 
-#ifdef CPE_S_POSIX
-#  include <langinfo.h>
-#endif
-
 #ifdef NTVSTR__MBS
 # define strlen_	strlen 
 # define strchr_	strchr

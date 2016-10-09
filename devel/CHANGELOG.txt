@@ -1,5 +1,16 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-09 :
+- CPE :
+	- Adaptation to Android.
+	- Adaptation for MIPSel architecture.
+- NTVSTR :
+	- Removing inclusion of 'langinfo.h'.
+- THTSUB :
+	- Inclusion of 'pthread.h' instead of 'sys/types.h'.
+- TOL :
+	- Restricting inclusion of 'sys/timeb.h' to Windows.
+
 2016-10-07 :
 - DWTMOV :
 	- On directory creation, when the directory already exists, the creation is skipped.

@@ -38,8 +38,26 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
 
+    private native void launchEvent( String Digest );
+
     class Callback implements ValueCallback<String> {
+        @Override
         public native void onReceiveValue( String Value );
+    }
+
+    class LaunchEventRunnable implements Runnable
+    {
+        private String Digest_;
+
+        public LaunchEventRunnable( String Digest )
+        {
+               Digest_ = Digest;
+        }
+
+        @Override
+        public void run() {
+            launchEvent( Digest_ );
+        }
     }
 
     public Callback callback;
@@ -51,7 +69,10 @@ public class MainActivity extends AppCompatActivity {
             mainActivity_ = mainActivity;
         }
         @JavascriptInterface
-        public native void launchEvent( String Digest );
+        public void launchEvent( String Digest )
+        {
+           mainActivity_.runOnUiThread( new LaunchEventRunnable( Digest ) );
+        }
     }
 
     @Override

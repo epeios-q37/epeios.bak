@@ -31,7 +31,7 @@
 # include "cpe.h"
 
 # ifdef CPE_S_POSIX
-#  include <sys/types.h>
+#  include <pthread.h>
 # elif defined( CPE_S_WIN )
 # else 
 #  error

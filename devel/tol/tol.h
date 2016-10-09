@@ -52,6 +52,7 @@
 
 # ifdef TOL__WIN
 #  include <sys/utime.h>
+#  include <sys/timeb.h>
 # elif defined( TOL__DARWIN )
 #  include <mach/mach_time.h>
 # elif defined( TOL__POSIX )
@@ -59,8 +60,6 @@
 # else
 #  error
 # endif
-
-# include <sys/timeb.h>
 
 # include "err.h"
 
