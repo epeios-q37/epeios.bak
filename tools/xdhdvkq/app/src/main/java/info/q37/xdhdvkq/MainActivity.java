@@ -36,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("xdhdvkq");
     }
 
-    private WebView webView;
+    private native void initialize();
 
     private native void launchEvent( String Digest );
+
+    private WebView webView;
 
     class Callback implements ValueCallback<String> {
         @Override
@@ -79,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initialize();
+
         callback = new Callback();
 
         webView = (WebView) findViewById(R.id.activity_main_webview);

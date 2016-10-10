@@ -26,16 +26,54 @@ add_library( # Sets the name of the library.
              # file are automatically included.
              src/main/cpp/xdhdvkq.cpp
              ${EPEIOS}/ags.cpp
+             ${EPEIOS}/bomhdl.cpp
              ${EPEIOS}/bso.cpp
+             ${EPEIOS}/cdgb64.cpp
+             ${EPEIOS}/cio.cpp
+             ${EPEIOS}/ctn.cpp
+             ${EPEIOS}/dir.cpp
+             ${EPEIOS}/dlbrry.cpp
              ${EPEIOS}/dtfptb.cpp
              ${EPEIOS}/err.cpp
+             ${EPEIOS}/fil.cpp
              ${EPEIOS}/flw.cpp
+             ${EPEIOS}/fnm.cpp
+             ${EPEIOS}/ias.cpp
+             ${EPEIOS}/lcl.cpp
+             ${EPEIOS}/lst.cpp
              ${EPEIOS}/mtx.cpp
              ${EPEIOS}/ntvstr.cpp
+             ${EPEIOS}/plgn.cpp
+             ${EPEIOS}/rgstry.cpp
+             ${EPEIOS}/sclargmnt.cpp
+             ${EPEIOS}/sclerror.cpp
+             ${EPEIOS}/scllocale.cpp
+             ${EPEIOS}/sclmisc.cpp
+             ${EPEIOS}/sclrgstry.cpp
+             ${EPEIOS}/stsfsm.cpp
              ${EPEIOS}/str.cpp
+             ${EPEIOS}/tagsbs.cpp
              ${EPEIOS}/tht.cpp
              ${EPEIOS}/tol.cpp
              ${EPEIOS}/uys.cpp
+             ${EPEIOS}/xml.cpp
+             ${EPEIOS}/xpp.cpp
+
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
+#             ${EPEIOS}/.cpp
 #             ${EPEIOS}/.cpp
 #             ${EPEIOS}/.cpp
 #             ${EPEIOS}/.cpp
@@ -74,3 +112,5 @@ target_link_libraries( # Specifies the target library.
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )
+
+ add_definitions(-DXXX_DEBUG)
