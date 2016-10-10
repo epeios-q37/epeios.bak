@@ -99,7 +99,7 @@ namespace prxy {
 			sck::duration__ Timeout,
 			qRPD )
 		{
-			eState State = Init( HostService, Identifier, Type, prxybase::rPlug, Timeout, qRP );
+			eState State = Init( HostService, Identifier, Type, prxybase::rPlug_1, Timeout, qRP );
 
 			if ( State != sOK )
 				return State;

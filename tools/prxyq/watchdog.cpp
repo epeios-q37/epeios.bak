@@ -71,7 +71,7 @@ namespace {
 	{
 		csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, Flow );
 
-		prxybase::PutRequest( prxybase::rPing, Flow );
+		prxybase::PutRequest( prxybase::rPing_1, Flow );
 
 		Flow.Commit();
 
@@ -96,7 +96,7 @@ namespace {
 	{
 		csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, Flow );
 
-		prxybase::PutRequest( prxybase::rFreeze, Flow );
+		prxybase::PutRequest( prxybase::rFreeze_1, Flow );
 
 		Flow.Commit();
 
@@ -122,7 +122,7 @@ namespace {
 	{
 		csdcmn::SendProtocol( prxybase::ProtocolId, prxybase::ProtocolVersion, Flow );
 
-		prxybase::PutRequest( prxybase::rCrash, Flow );
+		prxybase::PutRequest( prxybase::rCrash_1, Flow );
 
 		Flow.Commit();
 

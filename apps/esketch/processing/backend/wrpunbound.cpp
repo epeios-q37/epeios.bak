@@ -29,12 +29,12 @@ using namespace wrpunbound;
 
 using common::rStuff;
 
-#define DEC( name )\
-	static inline void name(\
+#define DEC( name, version )\
+	static inline void name##_##version(\
 		fblbkd::backend___ &BaseBackend,\
 		fblbkd::rRequest &Request )
 
-DEC( Test )
+DEC( Test, 1 )
 {
 qRH
 qRB
@@ -44,11 +44,11 @@ qRT
 qRE
 }
 
-#define D( name )	SKTINF_UC_SHORT #name, ::name
+#define D( name, version )	SKTINF_UC_SHORT #name "_" #version, ::name##_##version
 
 void wrpunbound::Inform( fblbkd::backend___ &Backend )
 {
-	Backend.Add( D( Test ),
+	Backend.Add( D( Test, 1 ),
 		fblbkd::cEnd,
 		fblbkd::cEnd );
 }

@@ -139,3 +139,4 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = BACKEND_NAME;
+const char *sclmisc::SCLMISCProductName = SKTINF_MC_AFFIX;

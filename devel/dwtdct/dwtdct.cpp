@@ -235,6 +235,7 @@ static exclusion__ Convert_( dwtxcl::state__ State )
 }
 
 exclusion__ GetExclusion_(
+	const fnm::name___ &LocalizedFileNameWithRoot,
 	const fnm::name___ &LocalizedFileNameWithoutRoot,
 	const fnm::name___  &Name,
 	const fil::info__ &Info,
@@ -263,7 +264,7 @@ qRB
 	}
 
 	if ( Exclusion == xNo ) {
-		if ( ( Limitations.NameLengthMax > 0 ) && ( Name.Amount() > Limitations.NameLengthMax ) )
+		if ( ( Limitations.NameLengthMax > 0 ) && ( LocalizedFileNameWithRoot.Amount() > Limitations.NameLengthMax ) )
 			Exclusion = xNameTooLong;
 		else if ( ( Limitations.FileSizeMax > 0 ) && ( Info.Type == fil::tFile ) && ( Info.Size > Limitations.FileSizeMax ) )
 			Exclusion = xFileTooBig;
@@ -306,7 +307,7 @@ qRB
 		case fil::tDir:
 			Directory.Init();
 			SBuffer.Init();
-			Exclusion = GetExclusion_( LocalizedFileNameWithoutRoot, Name, Info, Excluder, Limitations );
+			Exclusion = GetExclusion_( LocalizedFileNameWithRoot, LocalizedFileNameWithoutRoot, Name, Info, Excluder, Limitations );
 			Fill_( Name, Exclusion, Info, Kernel.Names, SBuffer, Directory );
 			if ( Append_( Exclusion, ExclusionsHandling) )
 				Kernel.Directories.Append( Directory );
@@ -314,7 +315,7 @@ qRB
 		case fil::tFile:
 			File.Init();
 			SBuffer.Init();
-			Exclusion = GetExclusion_( LocalizedFileNameWithoutRoot, Name, Info, Excluder, Limitations );
+			Exclusion = GetExclusion_( LocalizedFileNameWithRoot, LocalizedFileNameWithoutRoot, Name, Info, Excluder, Limitations );
 			Fill_( Name, Exclusion, Info, Kernel.Names, SBuffer, File );
 			if ( Append_( Exclusion, ExclusionsHandling ) )
 				Kernel.Files.Append( File );

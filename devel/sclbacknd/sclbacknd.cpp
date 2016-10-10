@@ -45,12 +45,12 @@ namespace {
 		Key_( "Key", Watchdog_ );
 }
 
-#define DEC( name )\
-	static inline void name(\
+#define DEC( name, version )\
+	static inline void name##_##version##_(\
 		rBackend_ &BaseBackend,\
 		fblbkd::rRequest &Request )
 
-DEC( LoadSetupOfId )
+DEC( LoadSetupOfId, 1 )
 {
 qRH
 qRB
@@ -62,7 +62,7 @@ qRT
 qRE
 }
 
-DEC( LoadSetupContent )
+DEC( LoadSetupContent, 1 )
 {
 qRH
 	str::wString Content;
@@ -86,17 +86,17 @@ qRT
 qRE
 }
 
-#define D( name )	#name, ::name
+#define D( name, version )	#name "_" #version, ::name##_##version##_
 
 namespace {
 	void AppendFunctions_( rBackend_ &Backend )
 	{
-		Backend.Add( D( LoadSetupOfId ),
+		Backend.Add( D( LoadSetupOfId, 1 ),
 				fblbkd::cString,	// Id of the setup to load.
 			fblbkd::cEnd,
 			fblbkd::cEnd );
 
-		Backend.Add( D( LoadSetupContent ),
+		Backend.Add( D( LoadSetupContent,1  ),
 				fblbkd::cString,	// Content of the setup to load.
 			fblbkd::cEnd,
 			fblbkd::cEnd );

@@ -37,7 +37,7 @@ namespace fblcmd {
 	using namespace fblcst;
 
 	enum command {
-		cThrowERRFwk,
+		cThrowERRFwk_1,
 		cThrowERRFree,
 		cTestNotification,
 		cGetNewObject,

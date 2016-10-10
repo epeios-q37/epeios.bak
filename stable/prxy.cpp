@@ -59,7 +59,7 @@ eState prxy::RequestDismiss(
 qRH
 	rProxy_ Proxy;
 qRB
-	State = Proxy.Init( HostService, Identifier, prxybase::tServer, prxybase::rDismiss, sck::NoTimeout, qRP );
+	State = Proxy.Init( HostService, Identifier, prxybase::tServer, prxybase::rDismiss_1, sck::NoTimeout, qRP );
 
 	if ( State != sOK )
 		return State;

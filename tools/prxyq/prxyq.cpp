@@ -567,229 +567,157 @@ public:
 	}
 
 	namespace plug_ {
-		namespace {
-			void Create_(
-				const str::string_ &Id,
-				flw::ioflow__ *Flow,
-				prxybase::eType Type )
-			{
-			qRH
-				rProxy *Proxy = NULL;
-				wPending Pending;
-			qRB
-				Proxy = new rProxy;
-
-				if ( Proxy == NULL )
-					qRAlc();
-
-				Pending.Init( Proxy, Id );
-
-				GetPendings_( Type ).Append( Pending );
-
-				Locker_.Unlock();	// Locked by caller.
-
-				Proxy->Init( Flow, Type );
-			qRR
-			qRT
-			qRE
-			}
-
-			void Plug_(
-				rProxy *Proxy,
-				flw::ioflow__ *Flow,
-				prxybase::eType Type )
-			{
-				Locker_.Unlock();	// Locked by caller.
-
-				Proxy->Plug( Flow, Type );	// Blocking until deconnection.
-
-				delete Proxy;
-			}
-		}
-
-		void A( flw::ioflow__ *Flow )
+		void Create_(
+			const str::string_ &Id,
+			flw::ioflow__ *Flow,
+			prxybase::eType Type )
 		{
 		qRH
-			prxybase::eType Type = prxybase::t_Undefined;
-			str::string Id;
 			rProxy *Proxy = NULL;
-			rLogRack_ Log;
+			wPending Pending;
 		qRB
-			Type = prxybase::GetType( *Flow );
+			Proxy = new rProxy;
 
-			Id.Init();
-			prxybase::GetId( *Flow, Id );
+			if ( Proxy == NULL )
+				qRAlc();
 
-			Locker_.Lock();
+			Pending.Init( Proxy, Id );
 
-			switch ( Type ) {
-			case prxybase::tClient:
-				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
-				break;
-			case prxybase::tServer:
-				Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
-				break;
-			default:
-				qRGnr();
-				break;
-			}
+			GetPendings_( Type ).Append( Pending );
 
-			Log.Init( Log_ );
+			Locker_.Unlock();	// Locked by caller.
 
-			Log << prxybase::GetLabel( Type ) << ' ';
-
-			if ( Proxy == NULL ) {
-				Log << "new";
-				Log << " (" << Id << ')';
-				Log.reset();
-				Create_( Id, Flow, Type );
-			} else {
-				Log << "plug";
-				Log << " (" << Id << ')';
-				Log.reset();
-				Plug_( Proxy, Flow, Type );	// BLOQUANT !!! (d'où pas de 'log' aprés).
-			}
-
+			Proxy->Init( Flow, Type );
 		qRR
 		qRT
-			Locker_.UnlockIfLocked();
 		qRE
 		}
-	}
 
-	void Plug_(
-		csdcmn::sVersion Version,
-		flw::sIOFlow *Flow )
-	{
-		switch ( Version ) {
-		default:
-			return plug_::A( Flow );
-			break;
-#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
-		}
-	}
-
-	namespace dismiss_ {
-		void A( flw::sIOFlow &Flow )
+		void Plug_(
+			rProxy *Proxy,
+			flw::ioflow__ *Flow,
+			prxybase::eType Type )
 		{
-		qRH
-			prxybase::eType Type = prxybase::t_Undefined;
-			str::wString ID;
-			rLogRack_ Log;
-		qRB
-			Type = prxybase::GetType( Flow );
+			Locker_.Unlock();	// Locked by caller.
 
-			if ( Type != prxybase::tServer )
-				qRGnr();
+			Proxy->Plug( Flow, Type );	// Blocking until deconnection.
 
-			ID.Init();
-			prxybase::GetId( Flow, ID );
-
-			Locker_.Lock();
-
-			Log.Init( Log_ );
-
-			Log << "Dimissing (" << ID << ')' << txf::commit;
-
-			DismissServers_( ID );
-
-			prxybase::PutAnswer( prxybase::aOK, Flow );
-
-			Flow.Commit();
-		qRR
-		qRT
-			Locker_.UnlockIfLocked();
-		qRE
+			delete Proxy;
 		}
 	}
 
-	void Dismiss_(
-		csdcmn::sVersion Version,
-		flw::sIOFlow &Flow )
+	void Plug_1_( flw::ioflow__ *Flow )
 	{
-		switch ( Version ) {
-		default:
-			return dismiss_::A( Flow );
+	qRH
+		prxybase::eType Type = prxybase::t_Undefined;
+		str::string Id;
+		rProxy *Proxy = NULL;
+		rLogRack_ Log;
+	qRB
+		Type = prxybase::GetType( *Flow );
+
+		Id.Init();
+		prxybase::GetId( *Flow, Id );
+
+		Locker_.Lock();
+
+		switch ( Type ) {
+		case prxybase::tClient:
+			Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tServer ) );
 			break;
-#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
+		case prxybase::tServer:
+			Proxy = SearchPendingAndRemoveIfExists_( Id, GetPendings_( prxybase::tClient ) );
+			break;
+		default:
+			qRGnr();
+			break;
 		}
+
+		Log.Init( Log_ );
+
+		Log << prxybase::GetLabel( Type ) << ' ';
+
+		if ( Proxy == NULL ) {
+			Log << "new";
+			Log << " (" << Id << ')';
+			Log.reset();
+			plug_::Create_( Id, Flow, Type );
+		} else {
+			Log << "plug";
+			Log << " (" << Id << ')';
+			Log.reset();
+			plug_::Plug_( Proxy, Flow, Type );	// BLOQUANT !!! (d'où pas de 'log' aprés).
+		}
+
+	qRR
+	qRT
+		Locker_.UnlockIfLocked();
+	qRE
 	}
 
-	namespace ping_ {
-		void A( flw::ioflow__ &Flow )
-		{
-			prxybase::PutAnswer( prxybase::aOK, Flow );
-
-			Flow.Commit();
-		}
-	}
-
-	void Ping_(
-		csdcmn::sVersion Version,
-		flw::sIOFlow &Flow )
+	void Dismiss_1_( flw::sIOFlow &Flow )
 	{
-		switch ( Version ) {
-		default:
-			return ping_::A( Flow );
-			break;
-#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
-		}
+	qRH
+		prxybase::eType Type = prxybase::t_Undefined;
+		str::wString ID;
+		rLogRack_ Log;
+	qRB
+		Type = prxybase::GetType( Flow );
+
+		if ( Type != prxybase::tServer )
+			qRGnr();
+
+		ID.Init();
+		prxybase::GetId( Flow, ID );
+
+		Locker_.Lock();
+
+		Log.Init( Log_ );
+
+		Log << "Dimissing (" << ID << ')' << txf::commit;
+
+		DismissServers_( ID );
+
+		prxybase::PutAnswer( prxybase::aOK, Flow );
+
+		Flow.Commit();
+	qRR
+	qRT
+		Locker_.UnlockIfLocked();
+	qRE
 	}
 
-	namespace freeze_{
-		void A(
-			flw::ioflow__ &Flow,
-			bso::sBool FromLocalhost )
-		{
-			if ( FromLocalhost ) {
-				FreezeFlag_ = true;
-				prxybase::PutAnswer( prxybase::aOK, Flow );
-			} else
-				prxybase::PutAnswer( prxybase::aForbidden, Flow );
+	void Ping_1_( flw::ioflow__ &Flow )
+	{
+		prxybase::PutAnswer( prxybase::aOK, Flow );
 
-
-			Flow.Commit();
-		}
+		Flow.Commit();
 	}
 
-	void Freeze_(
-		csdcmn::sVersion Version,
-		flw::sIOFlow &Flow,
+	void Freeze_1_(
+		flw::ioflow__ &Flow,
 		bso::sBool FromLocalhost )
 	{
-		switch ( Version ) {
-		default:
-			return freeze_::A( Flow, FromLocalhost );
-			break;
-#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
-		}
+		if ( FromLocalhost ) {
+			FreezeFlag_ = true;
+			prxybase::PutAnswer( prxybase::aOK, Flow );
+		} else
+			prxybase::PutAnswer( prxybase::aForbidden, Flow );
+
+
+		Flow.Commit();
 	}
 
-	namespace crash_ {
-		void A(
-			flw::ioflow__ &Flow,
-			bso::sBool FromLocalhost )
-		{
-			if ( FromLocalhost ) {
-				tol::Crash();
-			} else
-				prxybase::PutAnswer( prxybase::aForbidden, Flow );
-
-			Flow.Commit();
-		}
-	}
-
-	void Crash_(
-		csdcmn::sVersion Version,
-		flw::sIOFlow &Flow,
+	void Crash_1_(
+		flw::ioflow__ &Flow,
 		bso::sBool FromLocalhost )
 	{
-		switch ( Version ) {
-		default:
-			return crash_::A( Flow, FromLocalhost );
-			break;
-#pragma warning( suppress: 4065 )	//  switch statement contains 'default' but no 'case' labels.
-		}
+		if ( FromLocalhost ) {
+			tol::Crash();
+		} else
+			prxybase::PutAnswer( prxybase::aForbidden, Flow );
+
+		Flow.Commit();
 	}
 
 	class callback__
@@ -828,21 +756,21 @@ public:
 				qRGnr();
 
 			switch ( prxybase::GetRequest( *Flow ) ) {
-			case prxybase::rPlug:
-				Plug_( Version, Flow );
+			case prxybase::rPlug_1:
+				Plug_1_( Flow );
 				DeleteFlow = false;
 				break;
-			case prxybase::rDismiss:
-				Dismiss_( Version, *Flow );
+			case prxybase::rDismiss_1:
+				Dismiss_1_( *Flow );
 				break;
-			case prxybase::rPing:
-				Ping_( Version, *Flow );
+			case prxybase::rPing_1:
+				Ping_1_( *Flow );
 				break;
-			case prxybase::rFreeze:
-				Freeze_( Version, *Flow, FromLocalhost_ );
+			case prxybase::rFreeze_1:
+				Freeze_1_( *Flow, FromLocalhost_ );
 				break;
-			case prxybase::rCrash:
-				Crash_( Version, *Flow, FromLocalhost_ );
+			case prxybase::rCrash_1:
+				Crash_1_( *Flow, FromLocalhost_ );
 				break;
 			default:
 				qRGnr();

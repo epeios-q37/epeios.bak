@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-10 :
+- DWTDCT :
+	- The filename size limit concerns now the absolute path of the file and not only its name.
+- SCLBACKND :
+	- Versionning the to frontend exposed function.
+
 2016-10-09 :
 - CPE :
 	- Adaptation to Android.
