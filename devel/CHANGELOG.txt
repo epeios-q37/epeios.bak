@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-11 :
+- DWTCPR :
+	- Fixing bug occuring when there were excluded directories (bug occuring due to the 'DWTDCT' modification the '2016-10-10').
+
 2016-10-10 :
 - DWTDCT :
 	- The filename size limit concerns now the absolute path of the file and not only its name.

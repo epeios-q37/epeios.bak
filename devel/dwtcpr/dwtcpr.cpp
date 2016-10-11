@@ -200,10 +200,11 @@ qRB
 	while ( ( SRow != qNIL ) && ( TRow != qNIL ) ) {
 		Exclusion = SDir( SRows( SRow ) )().Exclusion;
 		Dir.Init();
-		Rows.Append( Row = Directories.New() );
 		switch ( Compare_( SName( SDir( SRows( SRow ) )().Name ), TName( TDir( TRows( TRow ) )().Name ) ) ) {
 		case -1:
 			if ( Exclusion == dwtbsc::xNo ) {
+				Rows.Append( Row = Directories.New() );
+
 				Dir().Name = Names.Append( SName() );	// Déjà positionné.
 				Dir().Status = sCreated;
 				Modified = true;
@@ -219,6 +220,8 @@ qRB
 			break;
 		case 0:
 			if ( Exclusion == dwtbsc::xNo ) {
+				Rows.Append( Row = Directories.New() );
+
 				Dir().Name = Names.Append( SName() );	// Déjà positionné.
 				Dir().Status = sSteady;
 				Directories.Store( Dir, Row );
@@ -234,6 +237,8 @@ qRB
 			TRow = TRows.Next( TRow );
 			break;
 		case 1:
+			Rows.Append( Row = Directories.New() );
+
 			Dir().Name = Names.Append( TName() );	// Déjà positionné.
 			Dir().Status = sRemoved;
 			TRow = TRows.Next( TRow );
