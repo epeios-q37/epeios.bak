@@ -233,14 +233,24 @@ namespace fblfrd {
 			C_().Put( Cast );
 			P_().Out( C_(), Cast, Pointer );
 		}
-		void _FlowIn(
+		bso::sBool FlowIn_(
 			bso::bool__ FirstCall,
 			flw::iflow__ &Flow )
 		{
+			bso::sBool Success = false;
+		qRH
+		qRB
 			if ( _DismissPending )
 				qRFwk();
 
 			P_().FlowIn( FirstCall, Flow, C_() );
+
+			Success = true;
+		qRR
+			ERRRst();
+		qRT
+		qRE
+			return Success;
 		}
 		void _FlowOut( flw::iflow__ *&Flow )
 		{
@@ -475,7 +485,8 @@ namespace fblfrd {
 
 			C_().Put( fblcst::cFlow );
 
-			_FlowIn( true, Flow );
+			if ( !FlowIn_( true, Flow ) )
+				qRFwk();
 
 			_FlowInParameter = &Flow;
 
@@ -498,32 +509,39 @@ namespace fblfrd {
 		//f Send the request.
 		fblovl::reply__ Handle( void )
 		{
+			fblovl::reply__  Reply = fblovl::r_Undefined;
+
 			if ( _FlowInParameter != NULL ) {
-				_FlowIn( false, *_FlowInParameter );
+				if ( !FlowIn_(false, *_FlowInParameter) ) {
+					Channel_ = NULL;
+					Reply = fblovl::rDisconnected;
+				}
 				_FlowInParameter = NULL;
 			}
 
-			fblovl::reply__  Reply = _Send();
+			if ( Reply == fblovl::r_Undefined ) {
+				Reply = _Send();
 
-			if ( Reply == fblovl::rOK )
-				_PostProcess( C_() );
+				if ( Reply == fblovl::rOK )
+					_PostProcess( C_() );
 
-			if ( Reply != fblovl::rDisconnected ) {
+				if ( Reply != fblovl::rDisconnected ) {
 
-				if ( C_().Get() != fblcst::cEnd )
-					qRFwk();
-
-				if ( !_FlowOutParameter )
-					C_().Dismiss();
-				else {
-					if ( _DismissPending )
+					if ( C_().Get() != fblcst::cEnd )
 						qRFwk();
 
-					_DismissPending= true;
+					if ( !_FlowOutParameter )
+						C_().Dismiss();
+					else {
+						if ( _DismissPending )
+							qRFwk();
+
+						_DismissPending= true;
+						_FlowOutParameter = false;
+					}
+
 					_FlowOutParameter = false;
 				}
-
-				_FlowOutParameter = false;
 			}
 
 			if ( Reply != rOK )

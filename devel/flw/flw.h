@@ -361,6 +361,10 @@ namespace flw {
 
 			Written_ = 0;
 		}
+		void _Unlock( void )
+		{
+			_D().Unlock( this );
+		}
 		// Put up to 'Amount' bytes from 'Buffer'. Return number of bytes written.
 		size__ _WriteUpTo(
 			const byte__ *Buffer,

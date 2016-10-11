@@ -118,7 +118,7 @@ qRB
 #endif
 qRR
 	_Size = _Free = 0;	// Pour viter toute nouvelle criture dans le cache. La prochaine tentative gnrera une erreur.
-	Commit();	// N'crit rien ( priori) ; juste pour dverouiiler.
+	_Unlock();	
 qRT
 qRE
 	return Amount;

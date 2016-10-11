@@ -194,23 +194,6 @@ namespace fdr {
 			Lock_( _Mutex );
 # endif		
 		}
-		void Unlock( const flow *User )
-		{
-#ifdef FDR__TS
-			if ( _Mutex != mtx::UndefinedHandler ) {
-				if ( IsLocked_( _Mutex ) ) {
-					if ( ( _User != User) && ( User != NULL ) )
-						qRFwk();
-
-					Unlock_( _Mutex );
-
-					_User = NULL;
-				}
-			}
-# else
-			Unlock_( _Mutex );
-# endif
-		}
 		void Init( thread_safety__ ThreadSafety )
 		{
 			reset();
@@ -230,6 +213,23 @@ namespace fdr {
 		bso::bool__ IsLocked( void )
 		{
 			return IsLocked_( _Mutex );
+		}
+		void Unlock( const flow *User )
+		{
+#ifdef FDR__TS
+			if ( _Mutex != mtx::UndefinedHandler ) {
+				if ( IsLocked_( _Mutex ) ) {
+					if ( ( _User != User) && ( User != NULL ) )
+						qRFwk();
+
+					Unlock_( _Mutex );
+
+					_User = NULL;
+				}
+			}
+# else
+			Unlock_( _Mutex );
+# endif
 		}
 	};
 
