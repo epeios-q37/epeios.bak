@@ -614,4 +614,16 @@ namespace fdr {
 	};
 }
 
+/**************/
+/**** NEW *****/
+/**************/
+
+namespace fdr {
+	typedef fdr::iflow_driver___<> rIFlow;
+	typedef fdr::oflow_driver___<> rOFlow; 
+	typedef fdr::ioflow_driver___<> rFlow;
+	typedef fdr::size__ sSize;
+	typedef fdr::byte__ sByte;
+}
+
 #endif

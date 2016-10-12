@@ -20,6 +20,7 @@
 #include <jni.h>
 #include <string>
 #include <android/log.h>
+#include <android/asset_manager_jni.h>
 
 #include "tol.h"
 #include "sclerror.h"
@@ -78,6 +79,105 @@ namespace {
 
 # define LOC	LogD( __LOC__ )
 
+template<typename t> t T_( t T )
+{
+    if ( T == NULL )
+        qRGnr();
+
+    return T;
+}
+
+namespace asset_ {
+    qCDEF( fdr::sSize, BufferSize_, 1000 );
+
+    class sCommon {
+    public:
+        qPMV( JNIEnv, E, Env_ );
+        qPMV( AAsset, A, AAsset_  );
+        jbyteArray JByteArray_;
+        void reset( bso::sBool P = true )
+        {
+            if ( P )
+                if ( AAsset_ != NULL )
+                    AAsset_close( AAsset_ );
+
+            tol::reset( P, Env_, AAsset_ );
+        }
+        qCDTOR( sCommon );
+        void Init(
+            JNIEnv *Env,
+            AAsset *AAsset )
+        {
+            Env_ = Env;
+            AAsset_ = AAsset;
+        }
+    };
+
+    typedef fdr::rIFlow rIFlowDriver_;
+
+    class rIFlowDriver
+    : public sCommon,
+      public rIFlowDriver_
+    {
+    private:
+        fdr::sSize JRead_(
+            fdr::sSize Maximum,
+            fdr::sByte *Buffer )
+        {
+            return AAsset_read( A(), Buffer, Maximum );
+        }
+    protected:
+        virtual fdr::sSize FDRRead(
+            fdr::sSize Maximum,
+            fdr::sByte *Buffer ) override
+        {
+            return JRead_( Maximum, Buffer );
+        }
+        virtual void FDRDismiss( void ) override
+        {
+            // Nothing to do.
+        }
+        public:
+        void reset( bso::bool__ P = true )
+        {
+            sCommon::reset( P );
+            rIFlowDriver_::reset( P );
+        }
+        E_CVDTOR( rIFlowDriver )
+        void Init(
+            JNIEnv *Env,
+            AAsset *AAsset )
+        {
+            rIFlowDriver_::Init( fdr::ts_Default );
+
+            sCommon::Init( Env, AAsset );
+        }
+    };
+
+    typedef flw::sDressedIFlow<> sIFlow_;
+
+    class rIFlow
+    : public sIFlow_
+    {
+    private:
+        rIFlowDriver Driver_;
+    public:
+        void reset( bso::sBool P = true )
+        {
+            sIFlow_::reset( P );
+            tol::reset( P, Driver_ );
+        }
+        qCDTOR( rIFlow );
+        void Init(
+                JNIEnv *Env,
+                AAsset *AAsset )
+        {
+            Driver_.Init( Env, AAsset );
+            sIFlow_::Init( Driver_ );
+        }
+    };
+}
+
 namespace {
     err::err___ qRRor_;
     sclerror::rError SCLError_;
@@ -125,7 +225,6 @@ namespace {
     qRE
     }
 
-
     void ErrFinal_( JNIEnv *Env )
     {
     qRH
@@ -157,19 +256,28 @@ namespace {
 extern "C"
 void Java_info_q37_xdhdvkq_MainActivity_initialize(
     JNIEnv* Env,
-    jobject MainActivity )
+    jobject MainActivity,
+    jobject assetManager )
 {
 qRFH
     sclmisc::sRack Rack;
-    fnm::rName Dir;
+    asset_::rIFlow LFlow, CFlow;
+    xtf::sIFlow LXFlow, CXFlow;
+    AAssetManager *AssetManager = NULL;
 qRFB
-    LOC;
+    AssetManager = AAssetManager_fromJava( Env, assetManager );
+
     Rack.Init( qRRor_, SCLError_, cio::GetSet( cio::t_Default ), Locale_);
-    LOC;
-    sclmisc::Initialize( Rack, "" );
-    LOC;
-    sclmisc::ReportAndAbort( "The abort message !!!" );
-    LOC;
+
+    LFlow.Init( Env, AAssetManager_open( AssetManager, "xdhdvkq.xlcl", AASSET_MODE_STREAMING ) );
+    LXFlow.Init( LFlow, utf::f_Default );
+
+    CFlow.Init( Env, AAssetManager_open( AssetManager, "xdhdvkq.xcfg", AASSET_MODE_STREAMING ) );
+    CXFlow.Init( CFlow, utf::f_Default );
+
+    sclmisc::Initialize( Rack, LXFlow, "", CXFlow, "", "" );
+    LogD( "TEST");
+//    sclmisc::ReportAndAbort( "The abort message !!!" );
 qRFR
 qRFT
 qRFE( ErrFinal_( Env ) )

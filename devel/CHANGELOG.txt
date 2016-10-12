@@ -4,6 +4,8 @@ CHANGELOG for the 'Epeios' framework.
 - CSDMXC :
 	- Fixing dead lock problem.
 	- An error leads now to disconnection (no more try to /read:write on a closed connection).
+- FDR :
+	- Introducing new notation.
 - FBLFRD :
 	- Handling of input flow deconnection.
 	- Moving reporting callback to 'SCLFRNTND'.

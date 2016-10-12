@@ -19,6 +19,7 @@
 
 package info.q37.xdhdvkq;
 
+import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("xdhdvkq");
     }
 
-    private native void initialize();
+    private native void initialize( AssetManager assetManager );
 
     private native void launchEvent( String Digest );
 
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initialize();
+        initialize( getAssets() );
 
         callback = new Callback();
 

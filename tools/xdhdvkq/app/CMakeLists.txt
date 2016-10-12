@@ -108,9 +108,14 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
                        xdhdvkq
+                       android   # Needed by the 'AAsset' related stuff.
 
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )
 
- add_definitions(-DXXX_DEBUG)
+add_definitions(-DXXX_DEBUG)
+
+add_custom_command( TARGET xdhdvkq
+                    POST_BUILD
+                    COMMAND touch test.txt )
