@@ -272,8 +272,6 @@ namespace fblfrd {
 				qRFwk();
 
 			_ReportingCallback->Report( Reply, Message );
-
-			qRAbort();
 		}
 		id16__ Commands_[fblcmd::c_amount];
 		char Message_[256];
@@ -302,37 +300,38 @@ namespace fblfrd {
 		{
 			C_().Put( Cast );
 		}
-		void _Handle( void )
-		{
-			if ( Handle() != fblovl::rOK )
-				qRFwk();
-		}
-		fblovl::reply__ _Send( void )
+		fblovl::reply__ Send_( void )
 		{
 			fblovl::reply__ Reply = fblovl::r_Undefined;
 
-			C_().Commit();
+			if ( _FlowInParameter != NULL ) {
+				if ( !FlowIn_(false, *_FlowInParameter) ) {
+					Channel_ = NULL;
+					Reply = fblovl::rDisconnected;
+				}
 
-			if ( C_().EndOfFlow() ) {
-				Channel_ = NULL;
-				Reply = fblovl::rDisconnected;
-				Message_[0] = 0;
-			} else {
-				if ( ( Reply = (fblovl::reply__)C_().Get() ) != fblovl::rOK ) {
-					if ( Reply >= fblovl::r_amount )
-						qRFwk();
+				_FlowInParameter = NULL;
+			}
 
-					if ( ( !flw::GetString( C_(), Message_, sizeof( Message_ ) ) ) )
-						strcpy( Message_ + sizeof( Message_ ) - 7, " [...]" );
+			if ( Reply == fblovl::r_Undefined ) {
+				C_().Commit();
+
+				if ( C_().EndOfFlow() ) {
+					Channel_ = NULL;
+					Reply = fblovl::rDisconnected;
+					Message_[0] = 0;
+				} else {
+					if ( ( Reply = (fblovl::reply__)C_().Get() ) != fblovl::rOK ) {
+						if ( Reply >= fblovl::r_amount )
+							qRFwk();
+
+						if ( ( !flw::GetString( C_(), Message_, sizeof( Message_ ) ) ) )
+							strcpy( Message_ + sizeof( Message_ ) - 7, " [...]" );
+					}
 				}
 			}
 
 			return Reply;
-		}
-		void _SendAndTest( void )
-		{
-			if ( _Send() != fblovl::rOK )
-				qRFwk();
 		}
 		bso::bool__ _TestCompatibility(
 			const char *Language,
@@ -422,7 +421,7 @@ namespace fblfrd {
 
 			EndOfInParameters();
 
-			_Handle();
+			Handle();
 			
 			Channel_ = NULL;
 
@@ -507,47 +506,33 @@ namespace fblfrd {
 			C_().Put( 0 );	// End of request
 		}
 		//f Send the request.
-		fblovl::reply__ Handle( void )
+		void Handle( void )
 		{
-			fblovl::reply__  Reply = fblovl::r_Undefined;
+			fblovl::reply__  Reply = Send_();
 
-			if ( _FlowInParameter != NULL ) {
-				if ( !FlowIn_(false, *_FlowInParameter) ) {
-					Channel_ = NULL;
-					Reply = fblovl::rDisconnected;
-				}
-				_FlowInParameter = NULL;
-			}
+			if ( Reply == fblovl::rOK )
+				_PostProcess( C_() );
 
-			if ( Reply == fblovl::r_Undefined ) {
-				Reply = _Send();
+			if ( Reply != fblovl::rDisconnected ) {
 
-				if ( Reply == fblovl::rOK )
-					_PostProcess( C_() );
+				if ( C_().Get() != fblcst::cEnd )
+					qRFwk();
 
-				if ( Reply != fblovl::rDisconnected ) {
-
-					if ( C_().Get() != fblcst::cEnd )
+				if ( !_FlowOutParameter )
+					C_().Dismiss();
+				else {
+					if ( _DismissPending )
 						qRFwk();
 
-					if ( !_FlowOutParameter )
-						C_().Dismiss();
-					else {
-						if ( _DismissPending )
-							qRFwk();
-
-						_DismissPending= true;
-						_FlowOutParameter = false;
-					}
-
+					_DismissPending= true;
 					_FlowOutParameter = false;
 				}
+
+				_FlowOutParameter = false;
 			}
 
 			if ( Reply != rOK )
 				_ReportError( Reply, Message_ );
-
-			return Reply;
 		}
 		void DismissFlow( void )	// To call only when the flow as a out parameter was entirely red ('EndOfFlow()' retuns 'true').
 		{
@@ -577,25 +562,25 @@ namespace fblfrd {
 			return C_();
 		}
 		//f Throw an user error, for testing purpose.
-		fblovl::reply__ ThrowERRFwk( void )
+		void ThrowERRFwk( void )
 		{
 			Internal_( fblcmd::cThrowERRFwk );
 
 			EndOfInParameters();
 
-			return Handle();	// NOTA : Always to 'true'.
+			Handle();
 		}
 		//f Throw an intentional error, for testing purpose.
-		fblovl::reply__ ThrowERRFree( void )
+		void ThrowERRFree( void )
 		{
 			Internal_( fblcmd::cThrowERRFree );
 
 			EndOfInParameters();
 
-			return  Handle();	// NOTA : Always to 'true'.
+			Handle();
 		}
 		// Test la notification avec retournant le message 'Message'.
-		fblovl::reply__ TestNotification( const string_ &Message )
+		void TestNotification( const string_ &Message )
 		{
 			Internal_( fblcmd::cTestNotification );
 
@@ -603,7 +588,7 @@ namespace fblfrd {
 
 			EndOfInParameters();
 
-			return  Handle();	// NOTA : Always to 'true'.
+			return Handle();	// NOTA : Always to 'true'.
 		}
 		//f Return the id of a new object of type 'Type'.
 		object__ GetNewObject( type__ Type )
@@ -618,7 +603,7 @@ namespace fblfrd {
 
 			ObjectOut( O );
 
-			_Handle();
+			Handle();
 
 			return O;
 		}
@@ -635,7 +620,7 @@ namespace fblfrd {
 
 			Id16Out( Type );
 
-			_Handle();
+			Handle();
 
 			return Type;
 		}
@@ -670,7 +655,7 @@ namespace fblfrd {
 
 			Id16Out( Command );
 
-			_Handle();
+			Handle();
 
 			return Command;
 		}
@@ -690,7 +675,7 @@ namespace fblfrd {
 
 			Id16sOut( Commands );
 
-			_Handle();
+			Handle();
 		}
 		//f Remove object 'Object'.
 		void RemoveObject( object__ Object )
@@ -701,7 +686,7 @@ namespace fblfrd {
 
 			EndOfInParameters();
 
-			_Handle();
+			Handle();
 		}
 		void About(
 			string_ &ProtocolVersion,
@@ -722,7 +707,7 @@ namespace fblfrd {
 			StringOut( BackendCopyright );
 			StringOut( Software );
 
-			_Handle();
+			Handle();
 		}
 		/// (watchdog testing purpose) To verify if the the 'backend' is still responding. If 'Code' is correct, the backend doesn't return.
 		void Ping( const str::dString &Code );
@@ -742,7 +727,7 @@ namespace fblfrd {
 
 			XItem16sOut( TypeXItems );
 
-			_Handle();
+			Handle();
 		}
 		//f Put in 'Items' the commands name and id of an object of type 'Type'.
 		void GetCommandsIDAndName(
@@ -757,7 +742,7 @@ namespace fblfrd {
 
 			Item16sOut( CommandItems );
 
-			_Handle();
+			Handle();
 		}
    //f Return the current language. 	 
 		const string_ &GetLanguage( string_ &Language ) 	 
@@ -768,7 +753,7 @@ namespace fblfrd {
 
 			StringOut( Language ); 	 
 
-			_Handle(); 
+			Handle(); 
 
 			return Language;
         } 	 
@@ -781,7 +766,7 @@ namespace fblfrd {
 
 			EndOfInParameters(); 	 
 
-			_Handle(); 	 
+			Handle(); 	 
 		}
   		//f Put in 'Parameters' parameters of command 'Command' from object type 'Type'.
 		void GetParameters(
@@ -797,7 +782,7 @@ namespace fblfrd {
 
 			Id8sOut( Parameters );
 
-			_Handle();
+			Handle();
 		}
 	};
 
@@ -895,7 +880,7 @@ namespace fblfrd {
 	typedef incompatibility_informations_ dIncompatibilityInformations;
 	qW( IncompatibilityInformations );
 
-
+	/*
 	class sDefaultReportingCallback
 	: public cReporting
 	{
@@ -914,6 +899,7 @@ namespace fblfrd {
 			cReporting::Init();
 		}
 	};
+	*/
 }
 
 #endif

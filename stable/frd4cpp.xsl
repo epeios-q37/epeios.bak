@@ -342,7 +342,7 @@ This header file contains then the API to access to the backend to which 'getbkd
    </xsl:template>
    <xsl:template match="Command" mode="function">
         <xsl:param name="Base"/>
-		<xsl:text>&tab;&tab;fblovl::reply__ </xsl:text>
+		<xsl:text>&tab;&tab;void </xsl:text>
 		<xsl:value-of select="Name"/>
 		<xsl:text>( </xsl:text>
 		<xsl:apply-templates select="Parameters" mode="function"/>
@@ -489,7 +489,7 @@ This header file contains then the API to access to the backend to which 'getbkd
 			<xsl:with-param name="Base" select="$Base"/>
 		</xsl:apply-templates>
 		<xsl:text>&nl;</xsl:text>
-		<xsl:text>&tab;&tab;&tab;return </xsl:text>
+		<xsl:text>&tab;&tab;&tab;</xsl:text>
 		<xsl:value-of select="$Base"/>
 		<xsl:text>Frontend().Handle();&nl;</xsl:text>
 		<xsl:text>&tab;&tab;}&nl;</xsl:text>

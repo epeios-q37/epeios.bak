@@ -74,7 +74,7 @@ bso::bool__ fblfrd::frontend___::TestBackendCasts_()
 
 	Channel_->Put( 0 );
 
-	_SendAndTest();
+	Send_();
 
 	for( i = 0; i < fblcst::c_amount; i++ )
 		if ( i != Channel_->Get() )
@@ -96,7 +96,7 @@ command__ fblfrd::frontend___::GetBackendDefaultCommand_()
 	
 	Channel_->Put( 0 );	// End of request
 
-	_SendAndTest();
+	Send_();
 
 	flw::Get( *Channel_, DefaultCommand );
 
@@ -144,7 +144,7 @@ qRB
 
 	Id16Out( Commands_[fblcmd::cGetCommands] );
 
-	_Handle();
+	Handle();
 qRR
 qRT
 qRE
@@ -212,7 +212,7 @@ qRB
 
 	EndOfInParameters();
 
-	_Handle();
+	Handle();
 qRR
 qRT
 qRE
@@ -230,17 +230,20 @@ qRB
 
 	EndOfInParameters();
 
-	_Handle();
+	Handle();
 qRR
 qRT
 qRE
 }
 
-
+/*
 void fblfrd::sDefaultReportingCallback::FBLFRDReport(
 	fblovl::reply__ Reply,
 	const char *Message )
 {
+qRH
+	str::wString Translation;
+qRB
 	switch ( Reply ) {
 	case fblovl::rRequestError:
 	case fblovl::rSoftwareError:
@@ -253,4 +256,8 @@ void fblfrd::sDefaultReportingCallback::FBLFRDReport(
 		qRGnr();
 		break;
 	}
+qRR
+qRE
+qRE
 }
+*/

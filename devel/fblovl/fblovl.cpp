@@ -27,7 +27,7 @@ using namespace fblovl;
 
 #define CASE( m )\
 	case r##m:\
-	return FBLOVL_NAME "_" #m;\
+	return #m;\
 	break
 
 const char *fblovl::GetLabel( reply__ Reply )

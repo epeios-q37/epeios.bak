@@ -67,7 +67,6 @@ namespace fblovl {
 	};
 
 	const char *GetLabel( reply__ Reply );
-
 }
 
 #endif

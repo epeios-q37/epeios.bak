@@ -535,7 +535,25 @@ namespace sclfrntnd {
 	}
 
 	using fblfrd::cReporting;
-	using fblfrd::sDefaultReportingCallback;
+
+	class sReportingCallback
+	: public cReporting
+	{
+	protected:
+		virtual void FBLFRDReport(
+			fblovl::reply__ Reply,
+			const char *Message ) override;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			cReporting::reset( P );
+		}
+		E_CVDTOR( sReportingCallback );
+		void Init( void)
+		{
+			cReporting::Init();
+		}
+	};
 
 	const str::dString &About(
 		const rFeatures &Features,

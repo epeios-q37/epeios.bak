@@ -1,5 +1,12 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-12 :
+- FBLFRD :
+	- Handling of input flow deconnection.
+	- Moving reporting callback to 'SCLFRNTND'.
+- SCLFRNTND :
+	- Retrieving reporting callback from 'fblfrd'.
+
 2016-10-11 :
 - FDR :
 	- 'Unlock(...)' method is now public.
@@ -7,7 +14,6 @@ CHANGELOG for the 'Epeios' framework.
 	- No more call to 'Commit(...)' for unlocking, but directly 'Unlock(...)'.
 - DWTCPR :
 	- Fixing bug occuring when there were excluded directories (bug occuring due to the 'DWTDCT' modification the '2016-10-10').
-
 
 2016-10-10 :
 - DWTDCT :

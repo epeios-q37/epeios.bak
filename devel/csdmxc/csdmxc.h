@@ -324,18 +324,32 @@ qRE
 		}
 		void Release( void *UP )
 		{
+		qRH
+			bso::sBool Locked = false;
+		qRB
 			Lock_( MainMutex_ );
+			Locked = true;
 
 			UPs.Push( UP );
 
 			Unlock_( MainMutex_ );
+			Locked = false;
 
 			Record_( lRelease, UP );
+		qRR
+		qRT
+			if ( Locked )
+				Unlock_( MainMutex_ );
+		qRE
 		}
 		void Ping( void );	// Emet un 'ping' sur les connections reste inactives trop longtemps.
 # ifdef CSDMXC__MT
 		friend void csdmxc::KeepAlive_( void *UP );
 # endif
+		void GiveUp( void )
+		{
+			UPs.Init();
+		}
 	};
 
 	class _driver___
@@ -375,36 +389,69 @@ qRE
 			else if ( Flow.Get() != 0 )
 				qRFwk();
 		}
+		void GiveUp_( void )
+		{
+			C_().GiveUp();
+			UP_ = NULL;
+			Id_ = CSDMXB_UNDEFINED;
+			Core_ = NULL;
+		}
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
 		{
 			fdr::size__ Amount = 0;
-
+		qRH
+		qRB
 			Prepare_();
 
-			return F_().WriteUpTo( Buffer, Maximum );
+			Amount = F_().WriteUpTo( Buffer, Maximum );
+		qRR
+			GiveUp_();
+		qRT
+		qRE
+			return Amount;
 		}
 		virtual void FDRCommit( void )
 		{
+		qRH
+		qRB
 			if ( UP_ != NULL )
 				Commit_();
+		qRR
+			GiveUp_();
+		qRT
+		qRE
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer )
 		{
-			return F_().ReadUpTo( Maximum, Buffer );
+			fdr::size__ Amount = 0;
+		qRH
+		qRB
+			Amount = F_().ReadUpTo( Maximum, Buffer );
+		qRR
+			GiveUp_();
+		qRT
+		qRE
+			return Amount;
 		}
 		virtual void FDRDismiss( void )
 		{
+		qRH
+		qRB
 			if ( UP_ != NULL ) {
 				F_().Dismiss();
 				C_().Release( UP_ );
 			}
 
 			UP_ = NULL;
+		qRR
+			GiveUp_();
+		qRT
+		qRE
 		}
 		public:
 			void reset( bso::bool__ P = true )

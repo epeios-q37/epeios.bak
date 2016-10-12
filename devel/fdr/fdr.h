@@ -414,8 +414,13 @@ namespace fdr {
 		void Dismiss( flw::iflow__ *User )
 		{
 			if ( _Cache != NULL ) {
+			qRH
+			qRB
 				FDRDismiss();
+			qRR
+			qRT
 				Unlock( User );
+			qRE
 			}
 
 			Red_ = 0;
@@ -538,8 +543,13 @@ namespace fdr {
 		void Commit( const flw::oflow__ *User  )
 		{
 			if ( _Initialized ) {
+			qRH
+			qRB
 				FDRCommit();
+			qRR
+			qRT
 				Unlock( User );
+			qRE
 			}
 		}
 		size__ Write(

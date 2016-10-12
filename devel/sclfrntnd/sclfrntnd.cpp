@@ -208,6 +208,32 @@ qRE
 	return Login;
 }
 
+void sclfrntnd::sReportingCallback::FBLFRDReport(
+	fblovl::reply__ Reply,
+	const char *Message )
+{
+qRH
+	str::wString Translation;
+qRB
+	switch ( Reply ) {
+	case fblovl::rRequestError:
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_RequestError", Message );
+		break;
+	case fblovl::rSoftwareError:
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_BackendError", Message );
+		break;
+	case fblovl::rDisconnected:
+		sclmisc::ReportAndAbort( SCLFRNTND_NAME "_Disconnection" );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+qRR
+qRT
+qRE
+}
+
 #define C( name )	case bst##name : return #name; break
  
 const char *sclfrntnd::GetLabel( eBackendSetupType Type )
