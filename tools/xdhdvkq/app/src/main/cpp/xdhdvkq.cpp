@@ -19,12 +19,64 @@
 
 #include <jni.h>
 #include <string>
-#include <android/asset_manager.h>
+#include <android/log.h>
 
 #include "tol.h"
 #include "sclerror.h"
 #include "sclmisc.h"
 
+namespace {
+    qCDEF( char *, NameLC_, "xdhdvkq" );
+    qCDEF( char *, NameMC_, NameLC_ );
+    qCDEF( char *, NameUC_, "XDHDVKQ" );
+}
+
+namespace log_ {
+    inline  void Log(
+            android_LogPriority Priority,
+            const char *Tag,
+            const char *Text )
+    {
+        if ( ( Text != NULL ) && ( *Text ) )
+            __android_log_write( Priority, Tag, Text );
+    }
+
+    inline  void Log(
+            android_LogPriority Priority,
+            const char *Tag,
+            const str::string_ &Text )
+    {
+    qRH
+        TOL_CBUFFER___ Buffer;
+    qRB
+        Log( Priority, Tag, Text.Convert( Buffer ) );
+    qRR
+    qRT
+    qRE
+    }
+}
+
+namespace {
+#define L(Type, Priority)\
+    inline void Log##Type( const char *Text )\
+    {\
+        log_::Log( Priority, NameUC_, Text );\
+    }\
+    inline void Log##Type( const str::string_ &Text )\
+    {\
+        log_::Log( Priority, NameUC_, Text );\
+    }
+
+    L(I, ANDROID_LOG_INFO)\
+    L(D, ANDROID_LOG_DEBUG)\
+    L(W, ANDROID_LOG_WARN)\
+    L(E, ANDROID_LOG_ERROR)\
+    L(F, ANDROID_LOG_FATAL)\
+
+#undef L
+}
+
+# define LOC	LogD( __LOC__ )
 
 namespace {
     err::err___ qRRor_;
@@ -111,13 +163,13 @@ qRFH
     sclmisc::sRack Rack;
     fnm::rName Dir;
 qRFB
+    LOC;
     Rack.Init( qRRor_, SCLError_, cio::GetSet( cio::t_Default ), Locale_);
-    Dir.Init();
-    AAssetManager_open( )
-    sclmisc::Initialize( Rack, AAssetManager_openDir(mgr, "") );
+    LOC;
+    sclmisc::Initialize( Rack, "" );
+    LOC;
     sclmisc::ReportAndAbort( "The abort message !!!" );
-
-    MainActivity.
+    LOC;
 qRFR
 qRFT
 qRFE( ErrFinal_( Env ) )
@@ -224,7 +276,7 @@ Q37_GCTOR( xdhdvkq )
 }
 
 
-const char *sclmisc::SCLMISCTargetName = "xdhdvkq";
-const char *sclmisc::SCLMISCProductName = "xdhdvkq";
+const char *sclmisc::SCLMISCTargetName = NameLC_;
+const char *sclmisc::SCLMISCProductName = NameLC_;
 const char *sclmisc::SCLMISCOrganizationName = "q37.info";
 
