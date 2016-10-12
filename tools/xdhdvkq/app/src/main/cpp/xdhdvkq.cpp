@@ -94,7 +94,6 @@ namespace asset_ {
     public:
         qPMV( JNIEnv, E, Env_ );
         qPMV( AAsset, A, AAsset_  );
-        jbyteArray JByteArray_;
         void reset( bso::sBool P = true )
         {
             if ( P )
