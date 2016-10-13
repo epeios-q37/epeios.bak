@@ -10,7 +10,7 @@
   </xpp:bloc>
   <xpp:set name="Type" value="DalvikComponent"/>
   <xpp:set name="Credits" value="Epeios"/>
-  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
   <About>
     <Program>esketchdvk</Program>
     <Software>eSketch</Software>

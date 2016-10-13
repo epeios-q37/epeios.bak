@@ -26,18 +26,19 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio ctn 
-mods += dir dte dtfbsc dtfptb epsmsc 
-mods += err fdr flf flsq flw 
-mods += flx ias idsq iof iop 
-mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stkbse stkbch 
-mods += stkctn str strng tagsbs tol 
-mods += txf tys uys utf xtf 
-mods += llio tht bomhdl cdgb64 dlbrry 
-mods += fil fnm lcl plgn plgncore 
-mods += rgstry stsfsm xml xpp 
-mods += sclmisc sclerror scllocale sclrgstry sclargmnt 
+mods += cio cpe crptgr cslio crt 
+mods += ctn dir dte dtfbsc dtfptb 
+mods += epsmsc err fdr flf flsq 
+mods += flw flx ias idsq iof 
+mods += iop lst lstbch lstcrt lstctn 
+mods += mns mtx ntvstr que sdr 
+mods += stkbse stkbch stkctn str strng 
+mods += tagsbs tol txf tys uys 
+mods += utf xtf llio tht thtsub 
+mods += bomhdl cdgb64 dlbrry fil fnm 
+mods += lcl plgn plgncore rgstry stsfsm 
+mods += xml xpp 
+mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
 mods += dpkals dpkbsc dpkctx dpkrcd dpktbl 
 mods += registry 
@@ -73,6 +74,7 @@ MinGW=Msys
 GNULinux=GNU/Linux
 Linux=Linux
 MacOS=Darwin
+Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
@@ -155,9 +157,11 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	libs += -lws2_32
-
-	LDFLAGS += -static
+	
+	ifneq ("$(target)","$(Android)")
+		libs += -lws2_32
+		LDFLAGS += -static
+	endif
 	
 	ifeq ("$(target)","$(win)")
 		ifeq ("$(mach)","i686")
@@ -189,7 +193,19 @@ ifeq ("$(os)","$(Cygwin)")
 			lo += -municode -m64
 			co += -m64
 		else
-			mods += $(pmods)
+			ifeq ("$(target)","$(Android)")
+				CXX = C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe
+				mods += $(pmods)
+				binary=lib$(name).so
+				
+				lo += -target i686-none-linux-android -gcc-toolchain C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/windows-x86_64 --sysroot=C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/platforms/android-14/arch-x86 -fPIC -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-exceptions -fno-rtti -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-exceptions -fno-rtti -fexceptions -std=c++11 -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now -shared
+				
+				co += -target i686-none-linux-android -gcc-toolchain C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/windows-x86_64 --sysroot=C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/platforms/android-14/arch-x86  -DXXX_DEBUG -Ih:/hg/epeios/stable -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/include -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-rtti -fexceptions -std=c++11 -O0 -fno-limit-debug-info  -fPIC -MD
+				
+				libs += -ldl -landroid -llog -lm "C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/libgnustl_static.a"
+			else
+				mods += $(pmods)
+			endif
 		endif
     
 	endif
@@ -317,16 +333,21 @@ endif
 ##########################
 		
 all: $(binary)
-	rm -f *.o
+	rm -rf *.o
+ifeq ("$(target)","$(Android)")
+	rm -rf *.d
+endif
 
-copt += -DVERSION=\""20160316"\"
+copt += -DVERSION=\""20161012"\"
 copt += -DCOPYRIGHT_YEARS=\""2010-2016"\"
 copt += -DIDENTIFIER=\""394fda6e-03c2-4770-b819-57852b649521"\"
 
 ifndef EPEIOS_SRC
-	src = :src:src/epeios
+	src += :src:src/epeios
+	out = ./
 else
 	src += :$(EPEIOS_SRC)
+	out = $(dest)
 endif
 
     
@@ -334,6 +355,7 @@ ox = o
 ds = :
 
 vpath %.cpp $(subst $(ds),:,$(src))
+vpath %.mm $(subst $(ds),:,$(src))
 
 srcd = $(subst $(ds), ,$(src))
 
@@ -344,16 +366,19 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-	mkdir -p $(dest)
-	cp $(binary) $(dest)
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)
+	cp $(binary) $(out)
 endif
-		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<
 
 clean:
 	rm -rf *.o
+ifeq ("$(target)","$(Android)")
+	rm -rf *.d
+endif
+
 
 		

@@ -13,7 +13,7 @@
   <xpp:set name="_Gecko" value="yes"/>
   <xpp:set name="_UserPostBuild" value="yes"/>
   <xpp:set name="_UserFiles" value="yes"/>
-  <xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+  <xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
   <About>
     <Program>geckobug1</Program>
     <Software>GeckoBug1</Software>

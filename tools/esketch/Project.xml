@@ -11,7 +11,7 @@
 		<xpp:set name="Credits" value="Epeios"/>
 		<xpp:set name="Type" value="Tool"/>
 	</xpp:bloc>
-	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<Program>esketch</Program>
 		<Software>eSketch</Software>

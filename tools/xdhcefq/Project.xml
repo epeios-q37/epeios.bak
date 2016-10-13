@@ -12,7 +12,7 @@
 		<xpp:set name="Type" value="Tool"/>
 		<xpp:set name="_CEF" value="yes"/>
 	</xpp:bloc>
-	<xpp:expand href="h:/batchs/DVL/prj/Main.xml"/>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
 	<About>
 		<Program>xdhcefq</Program>
 		<Software>xdhcefq</Software>
