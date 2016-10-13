@@ -80,7 +80,7 @@ public:
 	}
 };
 
-// Dans cette classe, on place ce qui est commun  tous les 'backend's.
+// Put here what is common for all backends.
 class rCallback
 : public rCallback_
 {

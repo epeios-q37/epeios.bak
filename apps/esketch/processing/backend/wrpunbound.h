@@ -32,5 +32,4 @@ namespace wrpunbound {
 	void Inform( fblbkd::backend___ &Backend );
 }
 
-
 #endif

@@ -157,3 +157,5 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = BACKEND_NAME;
+const char *sclmisc::SCLMISCProductName = OGZINF_MC_AFFIX;
+
