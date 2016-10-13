@@ -1,4 +1,4 @@
-#	Copyright (C) 2015 Claude SIMON (http://q37.info/contact/).
+#	Copyright (C) 2013 Claude SIMON (http://q37.info/contact/).
 #
 #	This file is part of xdhdq.
 #
@@ -15,7 +15,7 @@
 #	You should have received a copy of the GNU Affero General Public License
 #	along with xdhdq. If not, see <http://www.gnu.org/licenses/>.
 
-name = xdhdqxdh
+name = xdhdqbkd
 
 
 # Epeios general debugging features
@@ -34,21 +34,18 @@ mods += iop lst lstbch lstcrt lstctn
 mods += mns mtx ntvstr que sdr 
 mods += stkbse stkbch stkctn str strng 
 mods += tagsbs tol txf tys uys 
-mods += utf xtf llio bomhdl cdgb64 
-mods += dlbrry fil fnm lcl plgn 
-mods += plgncore rgstry stsfsm xml xpp 
-mods += mtk tht thtsub strmrg 
-mods += csdrcc 
-mods += fblcmd fblcst fblfep fblfph fblfrd 
-mods += fblfrp fblovl fbltyp 
+mods += utf xtf llio tht thtsub 
+mods += lck mtk bomhdl cdgb64 dlbrry 
+mods += fil fnm lcl plgn plgncore 
+mods += rgstry stsfsm xml xpp 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
-mods += sclxdhtml sclfrntnd 
-mods += xdhcmn xdhdws 
-mods += frdapi frdfrntnd frdrgstry frdinstc 
-mods += xddfbc xddinf 
-mods += login main prolog 
-mods += fields 
-mods += base core global registry 
+mods += scldaemon sclbacknd 
+mods += fblber fblbkd fblbrd fblbrq fblbrr 
+mods += fblbur fblcmd fblcst fbltyp fblovl 
+mods += csdleo csdles csdrcc csdscb 
+mods += xddfbc xddinf xddbsc xddxmp 
+mods += wrpexample wrpunbound 
+mods += common registry 
 
 pmods += pllio 
 
@@ -71,6 +68,10 @@ CXXFLAGS += -O
 	
 copt += -DQ37_LIBRARY
 
+# Multitasking.
+
+copt += -DE_MT
+
 win=win
 win32=win32
 win64=win64
@@ -88,8 +89,6 @@ mach=$(shell uname -m)
 src += :..
 
 src += :../..
-
-src += :../../..
 
 
 ##########################
@@ -362,8 +361,8 @@ ifeq ("$(target)","$(Android)")
 endif
 
 copt += -DVERSION=\""20161013"\"
-copt += -DCOPYRIGHT_YEARS=\""2015"\"
-copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
+copt += -DCOPYRIGHT_YEARS=\""2013"\"
+copt += -DIDENTIFIER=\""0bb650ac-de40-407b-8732-23d2c1e1ee73"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
