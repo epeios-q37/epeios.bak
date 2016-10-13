@@ -93,22 +93,22 @@ namespace asset_ {
     class sCommon {
     public:
         qPMV( JNIEnv, E, Env_ );
-        qPMV( AAsset, A, AAsset_  );
+        qPMV( AAsset, A, Asset_  );
         void reset( bso::sBool P = true )
         {
             if ( P )
-                if ( AAsset_ != NULL )
-                    AAsset_close( AAsset_ );
+                if ( Asset_ != NULL )
+                    AAsset_close( Asset_ );
 
-            tol::reset( P, Env_, AAsset_ );
+            tol::reset( P, Env_, Asset_ );
         }
         qCDTOR( sCommon );
         void Init(
             JNIEnv *Env,
-            AAsset *AAsset )
+            AAsset *Asset )
         {
             Env_ = Env;
-            AAsset_ = AAsset;
+            Asset_ = Asset;
         }
     };
 
@@ -145,11 +145,11 @@ namespace asset_ {
         E_CVDTOR( rIFlowDriver )
         void Init(
             JNIEnv *Env,
-            AAsset *AAsset )
+            AAsset *Asset )
         {
             rIFlowDriver_::Init( fdr::ts_Default );
 
-            sCommon::Init( Env, AAsset );
+            sCommon::Init( Env, Asset );
         }
     };
 
@@ -169,9 +169,9 @@ namespace asset_ {
         qCDTOR( rIFlow );
         void Init(
                 JNIEnv *Env,
-                AAsset *AAsset )
+                AAsset *Asset )
         {
-            Driver_.Init( Env, AAsset );
+            Driver_.Init( Env, Asset );
             sIFlow_::Init( Driver_ );
         }
     };
@@ -263,6 +263,7 @@ qRFH
     asset_::rIFlow LFlow, CFlow;
     xtf::sIFlow LXFlow, CXFlow;
     AAssetManager *AssetManager = NULL;
+   str::wString Language;
 qRFB
     AssetManager = AAssetManager_fromJava( Env, assetManager );
 
@@ -276,6 +277,10 @@ qRFB
 
     sclmisc::Initialize( Rack, LXFlow, "", CXFlow, "", "" );
     LogD( "TEST");
+
+    Language.Init();
+    sclmisc::MGetValue(sclrgstry::parameter::Language, Language );
+    LogD( cpe::GetDescription() );
 //    sclmisc::ReportAndAbort( "The abort message !!!" );
 qRFR
 qRFT
@@ -313,10 +318,6 @@ namespace {
         return MainActivity;
     }
 
-#define T( variable )\
-        if ( variable == NULL )\
-            qRGnr()
-
     void ExecuteJavascript_(
             JNIEnv *Env,
             jobject MainActivity,
@@ -327,29 +328,17 @@ namespace {
 # else
         jclass MainActivityClass = env->FindClass( "info/q37/xdhdvkq/MainActivity" );
 #endif
-        jfieldID CallbackID = Env->GetFieldID( MainActivityClass, "callback", "Linfo/q37/xdhdvkq/MainActivity$Callback;" );
+        jfieldID CallbackID = T_( Env->GetFieldID( MainActivityClass, "callback", "Linfo/q37/xdhdvkq/MainActivity$Callback;" ) );
 
-        T( CallbackID );
+        jobject Callback = T_( Env->GetObjectField( MainActivity, CallbackID ) );
 
-        jobject Callback = Env->GetObjectField( MainActivity, CallbackID );
+        jfieldID WebViewID = T_( Env->GetFieldID( MainActivityClass, "webView", "Landroid/webkit/WebView;" ) );
 
-        T( Callback );
+        jobject WebView = T_( Env->GetObjectField( MainActivity, WebViewID ) );
 
-        jfieldID WebViewID = Env->GetFieldID( MainActivityClass, "webView", "Landroid/webkit/WebView;" );
+        jclass WebViewClass = T_( Env->GetObjectClass( WebView ) );
 
-        T( WebViewID );
-
-        jobject WebView = Env->GetObjectField( MainActivity, WebViewID );
-
-        T( WebView );
-
-        jclass WebViewClass = Env->GetObjectClass( WebView );
-
-        T( WebViewClass );
-
-        jmethodID EvaluateJavascriptID = Env->GetMethodID( WebViewClass, "evaluateJavascript", "(Ljava/lang/String;Landroid/webkit/ValueCallback;)V");
-
-        T( EvaluateJavascriptID );
+        jmethodID EvaluateJavascriptID = T_( Env->GetMethodID( WebViewClass, "evaluateJavascript", "(Ljava/lang/String;Landroid/webkit/ValueCallback;)V") );
 
         Env->CallNonvirtualVoidMethod( WebView, WebViewClass, EvaluateJavascriptID, Script, Callback);
     }
@@ -378,12 +367,22 @@ Q37_GCTOR( xdhdvkq )
 {
     qRRor_.Init();
     SCLError_.Init();
-
     Locale_.Init();
 }
 
 
+
+#if 0   // To display the compile/link command line for the below architecture.
+# ifdef CPE_A_IA32
+#  if 0   // 0 : link command line, 1 : compilation command line.
+#   error
+#  endif
+# else
 const char *sclmisc::SCLMISCTargetName = NameLC_;
+# endif
+#else
+const char *sclmisc::SCLMISCTargetName = NameLC_;
+#endif
 const char *sclmisc::SCLMISCProductName = NameLC_;
 const char *sclmisc::SCLMISCOrganizationName = "q37.info";
 

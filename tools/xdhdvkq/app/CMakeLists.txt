@@ -34,6 +34,7 @@ add_library( # Sets the name of the library.
              ${EPEIOS}/dir.cpp
              ${EPEIOS}/dlbrry.cpp
              ${EPEIOS}/dtfptb.cpp
+             ${EPEIOS}/dlbrry.cpp
              ${EPEIOS}/err.cpp
              ${EPEIOS}/fil.cpp
              ${EPEIOS}/flw.cpp
@@ -59,7 +60,6 @@ add_library( # Sets the name of the library.
              ${EPEIOS}/xml.cpp
              ${EPEIOS}/xpp.cpp
 
-#             ${EPEIOS}/.cpp
 #             ${EPEIOS}/.cpp
 #             ${EPEIOS}/.cpp
 #             ${EPEIOS}/.cpp

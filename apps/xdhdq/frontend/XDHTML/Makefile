@@ -26,23 +26,23 @@ copt += -DE_DEBUG
 #copt += -DERR_JMPUSE
 	
 mods += ags aem bch bitbch bso 
-mods += cio cpe crptgr cslio ctn 
-mods += dir dte dtfbsc dtfptb epsmsc 
-mods += err fdr flf flsq flw 
-mods += flx ias ids iof iop 
-mods += lst lstbch lstctn mns mtx 
-mods += ntvstr que sdr stk str 
-mods += strng tagsbs tol txf tys 
-mods += uys utf xtf llio bomhdl 
-mods += cdgb64 fil fnm lcl rgstry 
-mods += stsfsm xml xpp dlbrry mtk 
-mods += tht strmrg 
-mods += csdlec csdleo csdrcc csdrcu csdscb 
-mods += csducl 
+mods += cio cpe crptgr cslio crt 
+mods += ctn dir dte dtfbsc dtfptb 
+mods += epsmsc err fdr flf flsq 
+mods += flw flx ias idsq iof 
+mods += iop lst lstbch lstcrt lstctn 
+mods += mns mtx ntvstr que sdr 
+mods += stkbse stkbch stkctn str strng 
+mods += tagsbs tol txf tys uys 
+mods += utf xtf llio bomhdl cdgb64 
+mods += dlbrry fil fnm lcl plgn 
+mods += plgncore rgstry stsfsm xml xpp 
+mods += mtk tht thtsub strmrg 
+mods += csdrcc 
 mods += fblcmd fblcst fblfep fblfph fblfrd 
 mods += fblfrp fblovl fbltyp 
-mods += sclmisc sclerror scllocale sclrgstry sclxdhtml 
-mods += sclfrntnd 
+mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
+mods += sclxdhtml sclfrntnd 
 mods += xdhcmn xdhdws 
 mods += frdapi frdfrntnd frdrgstry frdinstc 
 mods += xddfbc xddinf 
@@ -340,13 +340,16 @@ endif
 all: $(binary)
 	rm -f *.o
 
-copt += -DVERSION=\""20151030"\"
+copt += -DVERSION=\""20161012"\"
 copt += -DCOPYRIGHT_YEARS=\""2015"\"
+copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 
 ifndef EPEIOS_SRC
 	src += :src:src/epeios
+	out = ./
 else
 	src += :$(EPEIOS_SRC)
+	out = $(dest)
 endif
 
     
@@ -354,6 +357,7 @@ ox = o
 ds = :
 
 vpath %.cpp $(subst $(ds),:,$(src))
+vpath %.mm $(subst $(ds),:,$(src))
 
 srcd = $(subst $(ds), ,$(src))
 
@@ -364,13 +368,10 @@ objs = $(name).$(ox) $(mods:=.$(ox))
 
 $(binary): $(objs)
 	$(CXX) $(lo) $(libs) $(LDFLAGS)
-ifdef EPEIOS_SRC
-		
-	mkdir -p $(dest)
-			
-	cp $(binary) $(dest)
+ifdef EPEIOS_SRC			
+	mkdir -p $(out)
+	cp $(binary) $(out)
 endif
-		
 
 %.$(ox): %.cpp
 	$(CXX) $(CPPFLAGS) $(co) $(CXXFLAGS) $<

@@ -20,7 +20,7 @@ namespace xdhdq {
 		typedef fblfrd::frontend_depot__ _frontend_depot__;
 	}
 
-	class statics___
+	class fStatics
 	: public _frontend_depot__
 	{
 	private:
@@ -32,7 +32,7 @@ namespace xdhdq {
 			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		E_CVDTOR( statics___ )
+		E_CVDTOR( fStatics )
 		void Init( fblfrd::frontend___ &Frontend )
 		{
 			fblfrd::commands_details CommandsDetails;
@@ -58,14 +58,14 @@ namespace xdhdq {
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
 			Commands.Recall( 0, 1, _Commands );
 		}
-		fblovl::reply__ XDDTest( void ) const
+		void XDDTest( void ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[0] );
 
 			Frontend().EndOfInParameters();
 
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
 		const fblfrd::command__ *Commands( void ) const
 		{
@@ -73,7 +73,7 @@ namespace xdhdq {
 		}
 	};
 
-	class xdd_myobject_common__
+	class fXDDmyobjectCommon
 	: public _frontend_depot__
 	{
 	private:
@@ -85,7 +85,7 @@ namespace xdhdq {
 			_frontend_depot__::reset( P );
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		E_CVDTOR( xdd_myobject_common__ )
+		E_CVDTOR( fXDDmyobjectCommon )
 		void Init( fblfrd::frontend___ &Frontend )
 		{
 			fblfrd::commands_details CommandsDetails;
@@ -132,26 +132,26 @@ namespace xdhdq {
 		}
 	};
 
-	class xdd_myobject___
+	class rXDDmyobject
 	{
 	private:
 		fblfrd::object__ _ID;
-		xdd_myobject_common__ *Common_;
+		fXDDmyobjectCommon *Common_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P == true )
-				if ( ( Common_ != NULL ) && ( _ID != FBLFRD_UNDEFINED_OBJECT ) )
+				if ( ( Common_ != NULL ) && ( _ID != FBLFRD_UNDEFINED_OBJECT ) && Common_->Frontend().IsConnected() )
 					Common_->RemoveObject( _ID );
 
 			Common_ = NULL;
 			_ID = FBLFRD_UNDEFINED_OBJECT;
 		}
-		xdd_myobject___( void )
+		rXDDmyobject( void )
 		{
 			reset( false );
 		}
-		~xdd_myobject___( void )
+		~rXDDmyobject( void )
 		{
 			reset();
 		}
@@ -159,13 +159,13 @@ namespace xdhdq {
 		{
 			return _ID;
 		}
-		void Init( xdd_myobject_common__ &Common )
+		void Init( fXDDmyobjectCommon &Common )
 		{
 			Common_ = &Common;
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ ToUC( 
+		void ToUC( 
 			const fblfrd::string_ &In1,
 			fblfrd::string_ &Out1 ) const
 		{
@@ -176,16 +176,16 @@ namespace xdhdq {
 
 			Common_->Frontend().StringOut( Out1 );
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Test( void ) const
+		void Test( void ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
 	};
 
