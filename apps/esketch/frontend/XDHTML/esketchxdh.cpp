@@ -24,8 +24,6 @@
 
 #include "core.h"
 
-const char *sclmisc::SCLMISCTargetName = BASE_NAME;
-
 void sclxdhtml::SCLXDHTMLInitialization( xdhcmn::mode__ Mode )
 {
 qRH
@@ -94,3 +92,5 @@ void sclxdhtml::SCLXDHTMLReleaseCallback( xdhcmn::session_callback__ *Callback )
 	delete Callback;
 }
 
+const char *sclmisc::SCLMISCTargetName = BASE_NAME;
+const char *sclmisc::SCLMISCProductName = SKTINF_MC_AFFIX;
