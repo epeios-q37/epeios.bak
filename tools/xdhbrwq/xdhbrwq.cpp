@@ -256,12 +256,15 @@ namespace {
 		private:
 			Q37_MRMDF( session::sessions___, S_, Sessions_ );
 		protected:
-			void *CSDSCBPreProcess( const ntvstr::char__ *Origin ) override
+			void *CSDSCBPreProcess(
+				flw::ioflow__ *Flow,
+				const ntvstr::char__ *Origin,
+				bso::sBool *OwnerShipTaken ) override
 			{
 				return NULL;
 			}
 			csdscb::action__ CSDSCBProcess(
-				flw::ioflow__ &Flow,
+				flw::ioflow__ *Flow,
 				void *UP ) override
 			{
 			qRH
@@ -270,12 +273,12 @@ namespace {
 				TOL_CBUFFER___ Buffer;
 			qRB
 				Pairs.Init();
-				Pairs.FillWith( Flow );
+				Pairs.FillWith( *Flow );
 
 				Response.Init();
 				Handle_( Pairs, S_(), Response );
-				Flow.Write(Response.Convert(Buffer), Response.Amount() );
-				Flow.Commit();
+				Flow->Write(Response.Convert(Buffer), Response.Amount() );
+				Flow->Commit();
 			qRR
 			qRT
 			qRE
@@ -359,4 +362,5 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
+const char *sclmisc::SCLMISCProductName = NAME_MC;
 
