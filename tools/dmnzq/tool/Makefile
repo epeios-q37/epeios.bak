@@ -75,6 +75,7 @@ MinGW=Msys
 GNULinux=GNU/Linux
 Linux=Linux
 MacOS=Darwin
+Android=Android
 os=$(shell uname -o 2>/dev/null || uname -s)
 mach=$(shell uname -m)
   
@@ -159,9 +160,11 @@ endif
 ifeq ("$(os)","$(Cygwin)")
 
 	co += -std=gnu++11 -DUNICODE -D_FILE_OFFSET_BITS=64
-	libs += -lws2_32
-
-	LDFLAGS += -static
+	
+	ifneq ("$(target)","$(Android)")
+		libs += -lws2_32
+		LDFLAGS += -static
+	endif
 	
 	ifeq ("$(target)","$(win)")
 		ifeq ("$(mach)","i686")
@@ -193,7 +196,19 @@ ifeq ("$(os)","$(Cygwin)")
 			lo += -municode -m64
 			co += -m64
 		else
-			mods += $(pmods)
+			ifeq ("$(target)","$(Android)")
+				CXX = C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe
+				mods += $(pmods)
+				binary=lib$(name).so
+				
+				lo += -target i686-none-linux-android -gcc-toolchain C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/windows-x86_64 --sysroot=C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/platforms/android-14/arch-x86 -fPIC -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-exceptions -fno-rtti -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-exceptions -fno-rtti -fexceptions -std=c++11 -O0 -fno-limit-debug-info -O0 -fno-limit-debug-info  -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now -shared
+				
+				co += -target i686-none-linux-android -gcc-toolchain C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/toolchains/x86-4.9/prebuilt/windows-x86_64 --sysroot=C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/platforms/android-14/arch-x86  -DXXX_DEBUG -Ih:/hg/epeios/stable -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/include -isystem C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security -fno-rtti -fexceptions -std=c++11 -O0 -fno-limit-debug-info  -fPIC -MD
+				
+				libs += -ldl -landroid -llog -lm "C:/Users/csimon/AppData/Local/Android/sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/libgnustl_static.a"
+			else
+				mods += $(pmods)
+			endif
 		endif
     
 	endif
@@ -321,9 +336,12 @@ endif
 ##########################
 		
 all: $(binary)
-	rm -f *.o
+	rm -rf *.o
+ifeq ("$(target)","$(Android)")
+	rm -rf *.d
+endif
 
-copt += -DVERSION=\""20160920"\"
+copt += -DVERSION=\""20161012"\"
 copt += -DCOPYRIGHT_YEARS=\""2015-2016"\"
 copt += -DIDENTIFIER=\""13299010-d5c2-4d64-aad7-94339d73cfcc"\"
 
@@ -361,5 +379,9 @@ endif
 
 clean:
 	rm -rf *.o
+ifeq ("$(target)","$(Android)")
+	rm -rf *.d
+endif
+
 
 		
