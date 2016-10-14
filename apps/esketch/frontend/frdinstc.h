@@ -61,11 +61,11 @@ namespace frdinstc {
 		}
 		void LoadSetupOfId( const str::string_ &Id )
 		{
-			S_().LoadSetupOfId( Id );
+			S_().LoadSetupOfId_1( Id );
 		}
 		void LoadSetupContent( const str::string_ &Content )
 		{
-			S_().LoadSetupContent( Content );
+			S_().LoadSetupContent_1( Content );
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{

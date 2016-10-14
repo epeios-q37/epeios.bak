@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd V`echo toto` Build Jun  2 2016 09:42:47 - Win32;MSC 1800;IA-32
+	API from : esketchbkd V20161013 Build Oct 14 2016 08:53:35 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20160313 (Build May 25 2016 10:23:05 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160801 (Build Oct 13 2016 10:16:24 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ESKETCH__INC
@@ -51,17 +51,17 @@ namespace esketch {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "LoadSetupOfId";;
+			CommandDetail.Name = "LoadSetupOfId_1";;
 			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "LoadSetupContent";;
+			CommandDetail.Name = "LoadSetupContent_1";;
 			CommandDetail.Casts.Append( Parameters + 2, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "SKTTest";;
+			CommandDetail.Name = "SKTTest_1";;
 			CommandDetail.Casts.Append( Parameters + 4, 1 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -70,7 +70,7 @@ namespace esketch {
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
 			Commands.Recall( 0, 3, _Commands );
 		}
-		fblovl::reply__ LoadSetupOfId( 
+		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[0] );
@@ -79,9 +79,9 @@ namespace esketch {
 			Frontend().EndOfInParameters();
 
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ LoadSetupContent( 
+		void LoadSetupContent_1( 
 			const fblfrd::string_ &In1 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[1] );
@@ -90,16 +90,16 @@ namespace esketch {
 			Frontend().EndOfInParameters();
 
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ SKTTest( void ) const
+		void SKTTest_1( void ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[2] );
 
 			Frontend().EndOfInParameters();
 
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
 		const fblfrd::command__ *Commands( void ) const
 		{
@@ -199,7 +199,7 @@ namespace esketch {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ ToUC( 
+		void ToUC( 
 			const fblfrd::string_ &In1,
 			fblfrd::string_ &Out1 ) const
 		{
@@ -210,16 +210,16 @@ namespace esketch {
 
 			Common_->Frontend().StringOut( Out1 );
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Test( void ) const
+		void Test( void ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
 
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
 	};
 
