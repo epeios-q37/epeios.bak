@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : esketchbkd V20161013 Build Oct 14 2016 08:53:35 - Win32;MSC 1800;IA-32
+	API from : esketchbkd V20161014 Build Oct 14 2016 09:07:21 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20160801 (Build Oct 13 2016 10:16:24 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20161013 (Build Oct 14 2016 15:13:31 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ESKETCH__INC
