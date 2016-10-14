@@ -40,7 +40,8 @@
 	<SourceDirs>
 		<SourceDir>../</SourceDir>
 		<SourceDir>../../</SourceDir>
-	</SourceDirs>
+  <SourceDir>../../..</SourceDir>
+ </SourceDirs>
 	<Files>
 		<File packing="no" Path="../">common.xcfg</File>
 	</Files>

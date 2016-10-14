@@ -44,6 +44,7 @@
 	<SourceDirs>
 		<SourceDir>../</SourceDir>
 		<SourceDir>../../..</SourceDir>
+ 	<SourceDir>../../../..</SourceDir>
 	</SourceDirs>
 	<PreprocessorDefinitions>
 	</PreprocessorDefinitions>

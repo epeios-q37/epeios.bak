@@ -27,6 +27,7 @@
 #include "sclplugin.h"
 
 #include "ogzplg.h"
+#include "ogzinf.h"
 
 #include "uys.h"
 #include "tme.h"
@@ -87,6 +88,7 @@ public:
 SCLPLUGIN_DEF( rPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
+const char *sclmisc::SCLMISCProductName = OGZINF_MC_AFFIX;
 
 void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 {

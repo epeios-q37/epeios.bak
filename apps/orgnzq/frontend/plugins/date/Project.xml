@@ -39,8 +39,9 @@
 	</Modules>
 	<SourceDirs>
 		<SourceDir>../</SourceDir>
-		<SourceDir>../../</SourceDir>
-	</SourceDirs>
+  <SourceDir>../../</SourceDir>
+  <SourceDir>../../../</SourceDir>
+ </SourceDirs>
 	<PreprocessorDefinitions>
 	</PreprocessorDefinitions>
 	<Packing XFiles="No"/>

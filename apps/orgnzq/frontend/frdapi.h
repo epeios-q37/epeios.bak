@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : orgnzqbkd 20160722 Build Aug  1 2016 16:45:43 - Win32;MSC 1800;IA-32
+	API from : orgnzqbkd 20161013 Build Oct 13 2016 09:22:25 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20160801 (Build Aug  1 2016 16:48:17 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20160801 (Build Oct 13 2016 10:16:24 Win32;MSC 1800;IA-32)
 */
 
 #ifndef ORGNZQ__INC
@@ -60,12 +60,12 @@ namespace orgnzq {
 			CommandsDetails.Init();
 
 			CommandDetail.Init();
-			CommandDetail.Name = "LoadSetupOfId";;
+			CommandDetail.Name = "LoadSetupOfId_1";;
 			CommandDetail.Casts.Append( Parameters + 0, 2 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "LoadSetupContent";;
+			CommandDetail.Name = "LoadSetupContent_1";;
 			CommandDetail.Casts.Append( Parameters + 2, 2 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -124,7 +124,7 @@ namespace orgnzq {
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
 			Commands.Recall( 0, 12, _Commands );
 		}
-		fblovl::reply__ LoadSetupOfId( 
+		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[0] );
@@ -133,9 +133,9 @@ namespace orgnzq {
 			Frontend().EndOfInParameters();
 
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ LoadSetupContent( 
+		void LoadSetupContent_1( 
 			const fblfrd::string_ &In1 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[1] );
@@ -144,9 +144,9 @@ namespace orgnzq {
 			Frontend().EndOfInParameters();
 
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZLogin( 
+		void OGZLogin( 
 			const fblfrd::string_ &In1,
 			const fblfrd::string_ &In2,
 			fblfrd::boolean__ &Out1 ) const
@@ -159,9 +159,9 @@ namespace orgnzq {
 
 			Frontend().BooleanOut( Out1 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZGetNumbers( 
+		void OGZGetNumbers( 
 			fblfrd::id8s_ &Out1,
 			fblfrd::strings_ &Out2 ) const
 		{
@@ -172,9 +172,9 @@ namespace orgnzq {
 			Frontend().Id8sOut( Out1 );
 			Frontend().StringsOut( Out2 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZGetTypes( 
+		void OGZGetTypes( 
 			fblfrd::ids_ &Out1,
 			fblfrd::strings_ &Out2 ) const
 		{
@@ -185,9 +185,9 @@ namespace orgnzq {
 			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZGetRecordColumns( 
+		void OGZGetRecordColumns( 
 			const fblfrd::id__ &In1,
 			fblfrd::ids_ &Out1,
 			fblfrd::ids_ &Out2,
@@ -206,9 +206,9 @@ namespace orgnzq {
 			Frontend().StringsOut( Out4 );
 			Frontend().StringsOut( Out5 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZGetRecordFields( 
+		void OGZGetRecordFields( 
 			const fblfrd::id__ &In1,
 			fblfrd::ids_ &Out1,
 			fblfrd::ids_ &Out2,
@@ -225,9 +225,9 @@ namespace orgnzq {
 			Frontend().IdsOut( Out3 );
 			Frontend().XStringsOut( Out4 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZCreateRecord( 
+		void OGZCreateRecord( 
 			fblfrd::id__ &Out1 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[7] );
@@ -236,9 +236,9 @@ namespace orgnzq {
 
 			Frontend().IdOut( Out1 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZCreateField( 
+		void OGZCreateField( 
 			const fblfrd::id__ &In1,
 			const fblfrd::object__ &In2,
 			const fblfrd::object__ &In3,
@@ -253,9 +253,9 @@ namespace orgnzq {
 
 			Frontend().IdOut( Out1 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZUpdateField( 
+		void OGZUpdateField( 
 			const fblfrd::id__ &In1,
 			const fblfrd::object__ &In2,
 			fblfrd::boolean__ &Out1,
@@ -270,9 +270,9 @@ namespace orgnzq {
 			Frontend().BooleanOut( Out1 );
 			Frontend().BooleanOut( Out2 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZGetRecords( 
+		void OGZGetRecords( 
 			fblfrd::ids_ &Out1,
 			fblfrd::strings_ &Out2 ) const
 		{
@@ -283,9 +283,9 @@ namespace orgnzq {
 			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
-		fblovl::reply__ OGZMoveField( 
+		void OGZMoveField( 
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2,
 			const fblfrd::id__ &In3 ) const
@@ -298,7 +298,7 @@ namespace orgnzq {
 			Frontend().EndOfInParameters();
 
 
-			return Frontend().Handle();
+			Frontend().Handle();
 		}
 		const fblfrd::command__ *Commands( void ) const
 		{
@@ -540,16 +540,16 @@ namespace orgnzq {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ New( void ) const
+		void New( void ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
 
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Fill( 
+		void Fill( 
 			const fblfrd::id__ &In1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
@@ -558,9 +558,9 @@ namespace orgnzq {
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Update( 
+		void Update( 
 			const fblfrd::id__ &In1,
 			const fblfrd::id8__ &In2,
 			const fblfrd::string_ &In3,
@@ -575,9 +575,9 @@ namespace orgnzq {
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Get( 
+		void Get( 
 			fblfrd::id__ &Out1,
 			fblfrd::id8__ &Out2,
 			fblfrd::string_ &Out3,
@@ -592,7 +592,7 @@ namespace orgnzq {
 			Common_->Frontend().StringOut( Out3 );
 			Common_->Frontend().StringOut( Out4 );
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
 	};
 
@@ -629,7 +629,7 @@ namespace orgnzq {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ New( 
+		void New( 
 			const fblfrd::object__ &In1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
@@ -638,9 +638,9 @@ namespace orgnzq {
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Fill( 
+		void Fill( 
 			const fblfrd::id__ &In1 ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[1] );
@@ -649,9 +649,9 @@ namespace orgnzq {
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ Get( 
+		void Get( 
 			fblfrd::id__ &Out1,
 			fblfrd::id8__ &Out2,
 			fblfrd::ids_ &Out3,
@@ -666,9 +666,9 @@ namespace orgnzq {
 			Common_->Frontend().IdsOut( Out3 );
 			Common_->Frontend().StringsOut( Out4 );
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ UpdateEntry( 
+		void UpdateEntry( 
 			const fblfrd::id__ &In1,
 			const fblfrd::string_ &In2,
 			fblfrd::boolean__ &Out1 ) const
@@ -681,9 +681,9 @@ namespace orgnzq {
 
 			Common_->Frontend().BooleanOut( Out1 );
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
-		fblovl::reply__ MoveEntry( 
+		void MoveEntry( 
 			const fblfrd::id__ &In1,
 			const fblfrd::id__ &In2 ) const
 		{
@@ -694,7 +694,7 @@ namespace orgnzq {
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
 	};
 
@@ -731,14 +731,14 @@ namespace orgnzq {
 
 			_ID = Common_->GetNewObject();
 		}
-		fblovl::reply__ Test( void ) const
+		void Test( void ) const
 		{
 			Common_->Frontend().PushHeader( _ID, Common_->Commands()[0] );
 
 			Common_->Frontend().EndOfInParameters();
 
 
-			return Common_->Frontend().Handle();
+			Common_->Frontend().Handle();
 		}
 	};
 

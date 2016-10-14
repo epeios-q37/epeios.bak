@@ -19,6 +19,8 @@
 
 // 'text' plugin.
 
+#include "ogzinf.h"
+
 #include "sclmisc.h"
 #include "sclplugin.h"
 
@@ -53,6 +55,7 @@ public:
 SCLPLUGIN_DEF( sPlugin );
 
 const char *sclmisc::SCLMISCTargetName = PLUGIN_NAME;
+const char *sclmisc::SCLMISCProductName = OGZINF_MC_AFFIX;
 
 void sclplugin::SCLPLUGINPluginIdentifier( str::dString &Identifier )
 {
