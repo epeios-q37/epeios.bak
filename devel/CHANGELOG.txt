@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-16
+- HTP :
+	- Implementing missing methods.
+
 2016-10-12 :
 - CSDMXC :
 	- Fixing dead lock problem.
