@@ -275,7 +275,22 @@ namespace htp {
 		qRODISCLOSEr( bso::sU16, StatusCode );
 	};
 
-	void Post( 
+	qENUM( Method )
+	{
+		mPost,
+		mGet,
+		mPut,
+		mDelete,
+		m_amount,
+		m_Undefined
+	};
+
+	const char *GetLabel( eMethod Method );
+
+	eMethod GetMethod( const str::dString &Pattern );
+
+	void Send( 
+		eMethod Method,
 		const str::string_ &URL,
 		const dFields &Fields,
 		const str::string_ &Content,

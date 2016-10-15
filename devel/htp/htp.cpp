@@ -23,6 +23,7 @@
 
 #include "str.h"
 #include "stdarg.h"
+#include "stsfsm.h"
 
 using namespace htp;
 
@@ -305,15 +306,58 @@ static inline void Write_(
 
 }
 
-void htp::Post( 
+#define C( name )	case m##name : return #name; break
+ 
+const char *htp::GetLabel( eMethod Method )
+{
+	switch ( Method ) {
+	C( Post );
+	C( Get );
+	C( Put );
+	C( Delete );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+ 
+#undef C
+ 
+namespace {
+	stsfsm::wAutomat MethodAutomat_;
+ 
+	void FillMethodAutomat_( void )
+	{
+		MethodAutomat_.Init();
+		stsfsm::Fill<eMethod>( MethodAutomat_, m_amount, GetLabel );
+	}
+}
+ 
+eMethod htp::GetMethod( const str::dString &Pattern )
+{
+	return stsfsm::GetId( Pattern, MethodAutomat_, m_Undefined, m_amount );
+}
+ 
+void htp::Send(
+	eMethod Method,
 	const str::string_ &URL,
 	const dFields &Fields,
 	const str::string_ &Content,
 	txf::text_oflow__ &Flow )
 {
-	sdr::sRow Row = Fields.First();
+qRH
+	str::wString MethodString;
+	sdr::sRow Row = qNIL;
+qRB
+	MethodString.Init( GetLabel( Method ) );
 
-	Flow << "POST " << URL << " HTTP/1.1" << NL;
+	str::ToUpper( MethodString );
+
+	Flow << MethodString << ' ' << URL << " HTTP/1.1" << NL;
+
+	Row = Fields.First();
 
 	while ( Row != qNIL ) {
 		Write_( Fields( Row ), Flow );
@@ -325,5 +369,13 @@ void htp::Post(
 	Flow << NL;
 
 	Flow << Content;
+qRR
+qRT
+qRE
+}
+
+qGCTOR( htp )
+{
+	FillMethodAutomat_();
 }
 
