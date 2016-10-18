@@ -404,9 +404,11 @@ qRE
 			fdr::size__ Amount = 0;
 		qRH
 		qRB
-			Prepare_();
+			if ( Core_ != NULL ) {
+				Prepare_();
 
-			Amount = F_().WriteUpTo( Buffer, Maximum );
+				Amount = F_().WriteUpTo( Buffer, Maximum );
+			}
 		qRR
 			GiveUp_();
 		qRT
@@ -431,7 +433,9 @@ qRE
 			fdr::size__ Amount = 0;
 		qRH
 		qRB
-			Amount = F_().ReadUpTo( Maximum, Buffer );
+			if ( Core_ != NULL ) {
+				Amount = F_().ReadUpTo( Maximum, Buffer );
+			}
 		qRR
 			GiveUp_();
 		qRT

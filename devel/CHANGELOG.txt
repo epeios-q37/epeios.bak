@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-18 :
+- CSDMXC :
+	- Skip reading/writing after having give up.
+
 2016-10-16
 - HTP :
 	- Implementing missing methods.
