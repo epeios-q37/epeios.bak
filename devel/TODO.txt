@@ -6,7 +6,10 @@ TODO for the 'Epeios' framework.
 - 'SCL...' : Renaming ('SCLXyyy...' to 'SCLX').
 - 'XPP' : Réimplement in a simplified manner.
 - Reimplement log handling ('LOG' library) to put is as part of 'SCLMISC' (depends if it's a file log or a console log).
-- Adaptation of the network related libraries to IPv6 .
+- Adaptation of the network related libraries to IPv6.
+- Implementing 'XDHTML' technology under 'Gecko' (without 'XUL' ; only 'HTML 5'). There are more platforms for 'Gecko' than for 'CEF', as,
+  for 'Gecko', if there is no 'XULRunner', there will be 'Firefox' (check if the '--app' option is always available for 'Firefox').
+  Furthermore, things as a file explorer are available under 'Gecko' and needs no to be reimplelmented as with 'CEF'.
 
 IN PROGRESS :
 - XDHTML

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- For tool-like software (based on 'SCLTOOL'). -->
-<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
 	<xpp:define name="TOL_Arguments">
 		<xpp:bloc>
 		  <Argument id="Usage" Description="UsageCommandDescription" long="help" Value="Usage"/>
