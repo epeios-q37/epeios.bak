@@ -7,6 +7,8 @@ CHANGELOG for the 'Epeios' framework.
 	- Skipping no base 64 characters (newlines, as found in mail bodies) when decoding.
 - FDR, FLW :
 	- Adding some new notations aliases.
+- FLX :
+	- Introducing 'SizeDelimitedIFlow(Driver)'.
 
 2016-10-18 :
 - CSDMXC :

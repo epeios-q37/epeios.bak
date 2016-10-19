@@ -777,8 +777,8 @@ namespace flx {
 	};
 
 	qENUM( CommitHandling ) {
-		chPropagate,	// 'Commit()' IS propagated to undelying flow.
-		chHold,			// 'Commit()' is NOT propagated to undelying flow.
+		chPropagate,	// 'Commit()' IS propagated to underlying flow.
+		chHold,			// 'Commit()' is NOT propagated to underlying flow.
 		ch_amount,
 		ch_Undefined,
 		ch_Default = chPropagate
@@ -986,7 +986,7 @@ namespace flx {
 
 # ifdef FLX__MT
 
-#  if 0 // Bogu !!!
+#  if 0 // Bugged !!!
 	// Permet de lire  partir d'un 'iflow' ce qui est crit dans un 'oflow'.
 	class mediator_ioflow_driver___
 	: public fdr::ioflow_driver___<>
@@ -1335,6 +1335,109 @@ namespace flx {
 	typedef _exec_flow___<flw::standalone_iflow__<>, exec_iflow_driver___> exec_iflow__;
 
 	typedef _exec_flow___<flw::standalone_oflow__<>, exec_oflow_driver___> exec_oflow__;
+}
+
+/***************/
+/***** NEW *****/
+/***************/
+
+namespace flx {
+	class cSizeDelimitedOFlow
+	{
+	protected:
+		virtual void FLXOnEOF( void ) = 0;
+	public:
+		void OnEOF( void )
+		{
+			return FLXOnEOF();
+		}
+		qCALLBACK( SizeDelimitedOFlow );
+	};
+
+	class sSizeDelimitedIFlowDriver
+	: public _iflow_driver___<>
+	{
+	private:
+		fdr::sSize Size_;
+		qRMV( flw::sIFlow, F_, Flow_ );
+		cSizeDelimitedOFlow *Callback_;
+	protected:
+		virtual fdr::size__ FDRRead(
+			fdr::size__ Maximum,
+			fdr::byte__ *Buffer ) override
+		{
+			fdr::sSize Amount = 0;
+
+			if ( Size_ != 0 )
+				Amount = F_().ReadUpTo( Maximum > Size_ ? Size_ : Maximum, Buffer );
+			else if ( Callback_ != NULL )
+				Callback_->OnEOF();
+
+			Size_ -= Amount;
+
+			return Amount;
+		}
+		virtual void FDRDismiss( void ) override
+		{
+			if ( Size_ != 0 )
+				qRFwk();
+
+			F_().Dismiss();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			_iflow_driver___::reset( P );
+
+			tol::reset( P, Flow_, Callback_ );
+
+			Size_ = 0;
+		}
+		qCVDTOR( sSizeDelimitedIFlowDriver );
+		void Init(
+			fdr::sSize Size,
+			flw::sIFlow &Flow,
+			cSizeDelimitedOFlow *Callback,
+			fdr::thread_safety__ ThreadSafety )
+		{
+			_iflow_driver___::Init( ThreadSafety );
+
+			Size_ = Size;
+			Flow_ = &Flow;
+			Callback_ = Callback;
+		}
+	};
+
+	typedef flw::sDressedIFlow<> sDressedIFlow_;
+
+	class sSizelimitedOFlow
+	: public sDressedIFlow_
+	{
+	private:
+		sSizeDelimitedIFlowDriver Driver_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			sDressedIFlow_::reset( P );
+			tol::reset( P, Driver_ );
+		}
+		qCDTOR( sSizelimitedOFlow );
+		void Init(
+			fdr::sSize Size,
+			flw::sIFlow &Flow,
+			cSizeDelimitedOFlow *Callback = NULL )
+		{
+			Driver_.Init( Size, Flow, Callback, fdr::ts_Default );
+			sDressedIFlow_::Init( Driver_ );
+		}
+		void Init(
+			fdr::sSize Size,
+			flw::sIFlow &Flow,
+			cSizeDelimitedOFlow &Callback )
+		{
+			Init( Size, Flow, &Callback );
+		}
+	};
 }
 
 #endif
