@@ -1,5 +1,13 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-19 :
+- CSDB64
+	- Implementing the true base 64 encoding/decoding algorithmes.
+	- Handling both original and URL varaint.
+	- Skipping no base 64 characters (newlines, as found in mail bodies) when decoding.
+- FDR, FLW :
+	- Adding some new notations aliases.
+
 2016-10-18 :
 - CSDMXC :
 	- Skip reading/writing after having give up.

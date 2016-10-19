@@ -1607,7 +1607,7 @@ qRH
 	crptgr::encrypt_oflow___ Encrypter;
 qRB
 	Flow.Init( Target );
-	Encoder.Init( Flow );
+	Encoder.Init( Flow, cdgb64::fOriginal );
 	Encrypter.Init( Encoder, CypherKey );
 
 	Status = RetrieveTree_( Parser, Encrypter );

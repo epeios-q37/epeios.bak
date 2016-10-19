@@ -40,25 +40,52 @@
 
 namespace cdgb64 {
 
-	extern bso::byte__ *Encoding_;
+	extern bso::sByte *CommonEncoding_;
+	extern bso::sByte *OriginalEncoding_;
+	extern bso::sByte *URLEncoding_;
 
-	inline bso::byte__ Encode_( flw::byte__ Value )
+	qENUM( Flavor ) {
+		fOriginal, // Using '+' and '/'.
+		fURL, // Using '-' and '_'.
+		f_amount,
+		f_Undefined
+	};
+
+	inline bso::sByte Encode_(
+		bso::sByte Value,
+		eFlavor Flavor )
 	{
-#ifdef CDGB64_DBG
-		if ( Value > 63 )
+		if ( Value <= 61 )
+			return CommonEncoding_[ Value ];
+		else if ( Value <= 63 ) {
+			Value -= 62;
+
+			switch ( Flavor ) {
+			case fOriginal:
+				return OriginalEncoding_[Value];
+				break;
+			case fURL:
+				return URLEncoding_[Value];
+				break;
+			default:
+				qRFwk();
+				break;
+			}
+		} else
 			qRFwk();
-#endif
-		return Encoding_[Value];
+
+		return 0;	// To avoid a warning.
 	}
 
 	inline void Encode_(
 		const flw::byte__ *Data,
+		eFlavor Flavor,
 		flw::byte__ *Result )
 	{
-		Result[0] = Encode_( Data[0]  & 0x3f );
-		Result[1] = Encode_( ( ( Data[0] >> 6 ) | ( ( Data[1] << 2 ) & 0x3f ) ) );
-		Result[2] = Encode_( ( ( Data[1] >> 4 ) | ( ( Data[2] << 4 ) & 0x3f ) ) );
-		Result[3] = Encode_( Data[2] >> 2 );
+		Result[0] = Encode_( Data[0] >> 2, Flavor );
+		Result[1] = Encode_( ( ( Data[0] << 4 ) | ( Data[1] >> 4 ) ) & 0x3f, Flavor );
+		Result[2] = Encode_( ( ( Data[1] << 2 ) | ( Data[2] >> 6 ) ) & 0x3f, Flavor );
+		Result[3] = Encode_( Data[2] & 0x3f, Flavor );
 	}
 
 #	define CDGB64__PROCESSED	BSO_U8_MAX
@@ -69,13 +96,14 @@ namespace cdgb64 {
 	: public _oflow_driver___
 	{
 	private:
+		eFlavor Flavor_;
 		fdr::byte__ _Cache[3];
 		bso::u8__ _Amount;
 		flw::oflow__ *_Flow;	
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			flw::byte__ Result[4];
 			fdr::size__ Amount = 0;
@@ -103,7 +131,8 @@ namespace cdgb64 {
 				case 2:
 					break;
 				case 3:
-					Encode_( _Cache, Result );
+					Encode_( _Cache, Flavor_, Result );
+					memset(_Cache, 0, sizeof( _Cache ) );
 					_Flow->Write( Result, 4 );
 					_Amount = 0;
 					break;
@@ -114,7 +143,8 @@ namespace cdgb64 {
 			}
 
 			while ( Maximum >= 3 ) {
-				Encode_( Buffer, Result );
+				Encode_( Buffer, Flavor_, Result );
+				memset(_Cache, 0, sizeof( _Cache ) );
 
 				_Flow->Write( Result, 4 );
 
@@ -140,7 +170,7 @@ namespace cdgb64 {
 
 			return Amount;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( void ) override
 		{
 			flw::byte__ Result[4];
 
@@ -150,22 +180,23 @@ namespace cdgb64 {
 			if ( _Amount == CDGB64__PROCESSED )
 				return;
 
-			Encode_( _Cache, Result );
+			Encode_( _Cache, Flavor_, Result );
+			memset(_Cache, 0, sizeof( _Cache ) );
 
 			switch ( _Amount ) {
 			case 0:
 				break;
 			case 1:
 				_Flow->Write( &Result, 2 );
+				_Flow->Write( "==", 2 );
 				break;
 			case 2:
 				_Flow->Write( &Result, 3 );
+				_Flow->Put( '=' );
 				break;
 			default:
 				break;
 			}
-
-			_Flow->Put( '=' );
 
 			_Amount = CDGB64__PROCESSED;
 
@@ -180,6 +211,7 @@ namespace cdgb64 {
 			_oflow_driver___::reset( P );
 			_Amount = CDGB64__PROCESSED;
 			_Flow = NULL;
+			Flavor_ = f_Undefined;
 		}
 		encoding_oflow_driver___( void )
 		{
@@ -191,14 +223,18 @@ namespace cdgb64 {
 		}
 		void Init(
 			flw::oflow__ &Flow,
+			eFlavor Flavor,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
 			Commit( _Flow );
 
 			_Amount = CDGB64__PROCESSED;
 			_Flow = &Flow;
+			memset(_Cache, 0, sizeof( _Cache ) );
 
 			_oflow_driver___::Init( ThreadSafety );
+
+			Flavor_ = Flavor;
 		}
 	};
 
@@ -216,9 +252,11 @@ namespace cdgb64 {
 			_Driver.reset( P );
 		}
 		qCDTOR( encoding_oflow___ );
-		void Init( flw::oflow__ &Flow )
+		void Init(
+			flw::oflow__ &Flow,
+			eFlavor Flavor )
 		{
-			_Driver.Init( Flow, fdr::tsDisabled );
+			_Driver.Init( Flow, Flavor, fdr::tsDisabled );
 			_oflow__::Init( _Driver  );
 
 #ifdef CDGB64_DBG
@@ -230,7 +268,60 @@ namespace cdgb64 {
 
 	const str::string_ &Encode(
 		const str::string_ &Plain,
+		eFlavor Flavor,
 		str::string_ &Encoded );
+
+	typedef fdr::rIFlow rIFlowDriver_;
+
+	class rSkipppingIFlowDriver_
+	: public rIFlowDriver_
+	{
+	private:
+		qRMV( flw::sIFlow, F_, Flow_ );
+	protected:
+		virtual fdr::sSize FDRRead(
+			fdr::sSize Maximum,
+			fdr::sByte *Buffer ) override
+		{
+			fdr::sByte C = 0;
+			fdr::sSize Amount = 0;
+
+			while ( !F_().EndOfFlow() && ( Amount < Maximum ) ) {
+				switch ( C = F_().Get() ) {
+				case '-':
+				case '+':
+				case '/':
+				case '_':
+					Buffer[Amount++] = C;
+					break;
+				default:
+					if ( isalnum(C) )
+						Buffer[Amount++] = C;
+					break;
+				}
+			}
+
+			return Amount;
+		}
+		virtual void FDRDismiss( void ) override
+		{
+			F_().Dismiss();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rIFlowDriver_::reset( P );
+			tol::reset( P, Flow_ );
+		}
+		qCVDTOR( rSkipppingIFlowDriver_ );
+		void Init(
+			flw::sIFlow &Flow, 
+			fdr::eThreadSafety ThreadSafety )
+		{
+			rIFlowDriver_::Init( ThreadSafety );
+			Flow_ = &Flow;
+		}
+	};
 
 	extern bso::byte__ *Decoding_;
 
@@ -247,9 +338,9 @@ namespace cdgb64 {
 		const fdr::byte__ *Source,	// Squence complte de 4 octets en b64, sans '='.
 		fdr::byte__ *Target )	// Doit avoir la place suffisante pour recevoir la squence de 3 octets rsultante.
 	{
-		Target[0] = Decode_( Source[0] ) | ( Decode_( Source[1] ) << 6 );
-		Target[1] = ( Decode_( Source[1] ) >> 2 ) | ( Decode_( Source[2] ) << 4 );
-		Target[2] = ( Decode_( Source[2] ) >> 4 ) | ( Decode_( Source[3] ) << 2 );
+		Target[0] = ( Decode_( Source[0] ) << 2 ) | ( Decode_( Source[1] ) >> 4 );
+		Target[1] = ( Decode_( Source[1] ) << 4 ) | ( Decode_( Source[2] ) >> 2 );
+		Target[2] = ( Decode_( Source[2] ) << 6 ) | Decode_( Source[3] );
 	}
 
 	inline void Decode_(
@@ -303,87 +394,77 @@ namespace cdgb64 {
 	: public _iflow_driver____
 	{
 	private:
-		flw::iflow__ *_Flow;
+		rSkipppingIFlowDriver_ SkippingIFlowDriver_;
+		flw::sDressedIFlow<> SkippingIFlow_;
 		fdr::byte__ _Cache[4];
 		bso::u8__ _Size;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
-			bso::size__ Amount = 0;
-			flw::byte__ Datum;
-			bso::bool__ CacheIsEmpty = false;
+			bso::size__ Amount = 0;	// Is the amount of handled imput data, not the amount of resulting data, which is calculated on the end of this method.
 
-			if ( _Flow->EndOfFlow() )
-				return 0;
+			if ( !SkippingIFlow_.EndOfFlow() ) {
+# ifdef CDGB64_DBG
+				if ( Maximum < 4 )
+					qRFwk();
+# endif
+				Maximum &= ~3UL;	// On veut un multiple de 4.
 
-#ifdef CDGB64_DBG
-			if ( Maximum < 4 )
-				qRFwk();
-#endif
-			Maximum &= ~3UL;	// On veut un multiple de 4.
+				if ( _Size != 0 ) {
+					memcpy( Buffer, _Cache, _Size );
+					Maximum -= _Size;
+					Amount = _Size;
+					_Size = 0;
+				}
 
-			if ( _Size != 0 ) {
-				memcpy( Buffer, _Cache, _Size );
-				Maximum -= _Size;
-				Amount = _Size;
-				_Size = 0;
-			}
+				while ( !SkippingIFlow_.IsCacheEmpty() && Maximum-- )
+					Buffer[Amount++] = SkippingIFlow_.Get();
 
-			while ( ( !CacheIsEmpty || Amount < 4 ) && Maximum-- && ( ( Datum = _Flow->Get() ) != '=' ) ) {
-				CacheIsEmpty = _Flow->IsCacheEmpty();
-				Buffer[Amount++] = (flw::byte__)Datum;
-			}
+				if ( Amount != 0 ) {
+					if ( Amount >= 4 )
+						Decode_( Buffer, Amount & ~3UL );
 
-			if ( Amount != 0 ) {
-				if ( Amount >= 4 )
-					Decode_( Buffer, Amount & ~3UL );
-
-				if ( Amount & 3 ) {
-					if ( Datum == '=' )
-						DecodePartial_( Buffer + ( Amount & ~3UL ), Amount & 3, Buffer + 3 * ( Amount >> 2 ) );
-					else {
+					if ( Amount & 3 ) {
 						_Size = Amount & 3;
 						memcpy( _Cache, Buffer + ( Amount & ~3UL ), _Size );
 						Amount &= ~3UL;
 					}
-				}
 
+				}
+			} else if ( _Size != 0 ) {
+				DecodePartial_( _Cache, _Size, Buffer );
+				Amount = _Size;
+				_Size = 0;
 			}
 
 			return 3 * ( Amount >> 2 ) + ( ( Amount & 3 ) > 1 ? ( Amount & 3 ) - 1 : 0 ); 
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( void ) override
 		{
-#ifdef CDGB64_DBG
-			if ( _Flow == NULL )
+			if ( _Size != 0 )
 				qRFwk();
-#endif
-			_Flow->Dismiss();
+
+			SkippingIFlow_.Dismiss();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_iflow_driver____::reset( P );
-			_Flow = NULL;
+			tol::reset( P, SkippingIFlow_, SkippingIFlowDriver_ );
+
 			_Size = 0;
 		}
-		decoding_iflow_driver___( void )
-		{
-			reset( false );
-		}
-		~decoding_iflow_driver___( void )
-		{
-			reset();
-		}
+		qCVDTOR( decoding_iflow_driver___ );
 		void Init(
 			flw::iflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			_Flow = &Flow;
 			_iflow_driver____::Init( ThreadSafety );
 			_Size = 0;
+			SkippingIFlowDriver_.Init( Flow, ThreadSafety );
+			SkippingIFlow_.Init( SkippingIFlowDriver_ );
 		}
 	};
 
@@ -411,6 +492,15 @@ namespace cdgb64 {
 	const str::string_ &Decode(
 		const str::string_ &Encoded,
 		str::string_ &Plain );
+}
+
+/*************/
+/**** NEW ****/
+/*************/
+
+namespace cdgb64 {
+	typedef cdgb64::encoding_oflow___ rEncodingOFlow;
+	typedef cdgb64::decoding_iflow___ rDecodingIFlow;
 }
 
 #endif

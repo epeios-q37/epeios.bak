@@ -25,12 +25,14 @@
 
 using namespace cdgb64;
 
-bso::byte__ *cdgb64::Encoding_ = (bso::byte__ *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+bso::byte__ *cdgb64::CommonEncoding_ = (bso::byte__ *)"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+flw::sByte *cdgb64::OriginalEncoding_ = (flw::sByte *)"+/";
+flw::sByte *cdgb64::URLEncoding_ = (flw::sByte *)"-_";
 
 bso::byte__ *cdgb64::Decoding_ = (bso::byte__ *)
 						"@@@@@@@@@@@@@@@@"
 						"@@@@@@@@@@@@@@@c"
-						"@@@@@@@@@@@@@\x3e@@"
+						"@@@@@@@@@@@\x3e@\x3e@\x3f"
 						"\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d@@@@@@"
 						"@\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e"
 						"\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19@@@@\x3f"
@@ -47,6 +49,7 @@ bso::byte__ *cdgb64::Decoding_ = (bso::byte__ *)
 
 const str::string_ &cdgb64::Encode(
 	const str::string_ &Plain,
+	eFlavor Flavor,
 	str::string_ &Encoded )
 {
 qRH
@@ -55,7 +58,7 @@ qRH
 	sdr::row__ Row = qNIL;
 qRB
 	SFlow.Init( Encoded );
-	EFlow.Init( SFlow );
+	EFlow.Init( SFlow, Flavor );
 
 	Row = Plain.First();
 

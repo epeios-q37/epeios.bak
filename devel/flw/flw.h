@@ -615,13 +615,15 @@ inline flw::oflow__ &operator <<(
 /**************/
 
 namespace flw {
-	typedef iflow__ sIFlow;
+	typedef flw::byte__ sByte;
+
+	typedef flw::iflow__ sIFlow;
 	template <int Dummy = 0> qTCLONEs( standalone_iflow__<Dummy>, sDressedIFlow );
 
-	typedef oflow__ sOFlow;
+	typedef flw::oflow__ sOFlow;
 	template <int CacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_oflow__<CacheSize>, sDressedOFlow );
 
-	typedef ioflow__ sIOFlow;
+	typedef flw::ioflow__ sIOFlow;
 	template <int OutCacheSize = FLW__OUTPUT_CACHE_SIZE> qTCLONEs( standalone_ioflow__<OutCacheSize>, sDressedIOFlow );
 }
 

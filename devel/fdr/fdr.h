@@ -624,6 +624,8 @@ namespace fdr {
 	typedef fdr::ioflow_driver___<> rFlow;
 	typedef fdr::size__ sSize;
 	typedef fdr::byte__ sByte;
+
+	typedef fdr::thread_safety__ eThreadSafety;
 }
 
 #endif
