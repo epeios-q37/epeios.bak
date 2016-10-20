@@ -1354,12 +1354,12 @@ namespace flx {
 		qCALLBACK( SizeDelimitedOFlow );
 	};
 
-	class sSizeDelimitedIFlowDriver
+	class rSizeDelimitedIDriver
 	: public _iflow_driver___<>
 	{
 	private:
 		fdr::sSize Size_;
-		qRMV( flw::sIFlow, F_, Flow_ );
+		flw::sIFlow Flow_;
 		cSizeDelimitedOFlow *Callback_;
 	protected:
 		virtual fdr::size__ FDRRead(
@@ -1369,7 +1369,7 @@ namespace flx {
 			fdr::sSize Amount = 0;
 
 			if ( Size_ != 0 )
-				Amount = F_().ReadUpTo( Maximum > Size_ ? Size_ : Maximum, Buffer );
+				Amount = Flow_.ReadUpTo( Maximum > Size_ ? Size_ : Maximum, Buffer );
 			else if ( Callback_ != NULL )
 				Callback_->OnEOF();
 
@@ -1382,7 +1382,7 @@ namespace flx {
 			if ( Size_ != 0 )
 				qRFwk();
 
-			F_().Dismiss();
+			Flow_.Dismiss();
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -1393,49 +1393,49 @@ namespace flx {
 
 			Size_ = 0;
 		}
-		qCVDTOR( sSizeDelimitedIFlowDriver );
+		qCVDTOR( rSizeDelimitedIDriver );
 		void Init(
 			fdr::sSize Size,
-			flw::sIFlow &Flow,
+			fdr::rIDriver &Driver,
 			cSizeDelimitedOFlow *Callback,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_iflow_driver___::Init( ThreadSafety );
 
 			Size_ = Size;
-			Flow_ = &Flow;
+			Flow_.Init( Driver );
 			Callback_ = Callback;
 		}
 	};
 
 	typedef flw::sDressedIFlow<> sDressedIFlow_;
 
-	class sSizelimitedOFlow
+	class rSizeDelimitedOFlow
 	: public sDressedIFlow_
 	{
 	private:
-		sSizeDelimitedIFlowDriver Driver_;
+		rSizeDelimitedIDriver Driver_;
 	public:
 		void reset( bso::sBool P = true )
 		{
 			sDressedIFlow_::reset( P );
 			tol::reset( P, Driver_ );
 		}
-		qCDTOR( sSizelimitedOFlow );
+		qCDTOR( rSizeDelimitedOFlow );
 		void Init(
 			fdr::sSize Size,
-			flw::sIFlow &Flow,
+			fdr::rIDriver &Driver,
 			cSizeDelimitedOFlow *Callback = NULL )
 		{
-			Driver_.Init( Size, Flow, Callback, fdr::ts_Default );
+			Driver_.Init( Size, Driver, Callback, fdr::ts_Default );
 			sDressedIFlow_::Init( Driver_ );
 		}
 		void Init(
 			fdr::sSize Size,
-			flw::sIFlow &Flow,
+			fdr::rIDriver &Driver,
 			cSizeDelimitedOFlow &Callback )
 		{
-			Init( Size, Flow, &Callback );
+			Init( Size, Driver, &Callback );
 		}
 	};
 }

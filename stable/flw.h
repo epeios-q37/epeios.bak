@@ -129,6 +129,11 @@ namespace flw {
 	public:
 		void reset( bso::bool__ P = true )
 		{
+			if ( P ) {
+				if ( _Driver != NULL )
+					_Dismiss();
+			}
+
 			_Driver = NULL;
 		}
 		iflow__( void )

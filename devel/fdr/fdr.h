@@ -619,9 +619,16 @@ namespace fdr {
 /**************/
 
 namespace fdr {
+# if 1	// Will be obsoleted.
 	typedef fdr::iflow_driver___<> rIFlow;
 	typedef fdr::oflow_driver___<> rOFlow; 
 	typedef fdr::ioflow_driver___<> rFlow;
+# endif
+
+	typedef fdr::iflow_driver_base___ rIDriver;
+	typedef fdr::oflow_driver_base___ rODriver; 
+	typedef fdr::ioflow_driver_base___ rIODriver;
+
 	typedef fdr::size__ sSize;
 	typedef fdr::byte__ sByte;
 

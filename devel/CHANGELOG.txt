@@ -1,5 +1,20 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-20 :
+- CSDBNC :
+	- Introducing 'rIODriver'.
+- FDR :
+	- Introducing 'r(I|O|IO)Driver'.
+- FLW :
+	- Adding missing 'Dismiss()' in 'iflow__::reset()'.
+- FLX :
+	- 'sSizeDelimitedIFlowDriver'' -> 'rSizeDelimitedIDriver'.
+	- 'sSizelimitedOFlow' (?) -> 'rSizeDelimitedOFlow'.
+- SCK :
+	- Removing 'socket_ioflow_driver___' useless 'User_' member.
+- TXF :
+	- Introducing 'rOFlow'.
+
 2016-10-19 :
 - CSDB64
 	- Implementing the true base 64 encoding/decoding algorithmes.

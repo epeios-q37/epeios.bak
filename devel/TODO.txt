@@ -13,6 +13,9 @@ TODO for the 'Epeios' framework.
 - Implementing the number conversion from the 'STR' library in another library based on a flow as input.
 
 IN PROGRESS :
+- Implementing flow variations (TXF, XTF, FLX libraries) to take a drive, not a flow ; the needed flow will be instantiete internally.
+
+SUSPENDED :
 - XDHTML
 	- Implementation for Android.
 	

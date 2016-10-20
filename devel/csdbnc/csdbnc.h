@@ -143,35 +143,62 @@ namespace csdbnc {
 
 	typedef sck::socket_ioflow___ _flow___;
 
+	class rSocket_
+	{
+	public:
+		sck::socket__ Socket;
+		void reset( bso::bool__ P = true )
+		{
+			if ( P )
+				if ( Socket != SCK_INVALID_SOCKET )
+					sck::Close( Socket );
+
+			Socket = SCK_INVALID_SOCKET;
+		}
+		E_CDTOR( rSocket_ );
+		bso::bool__ Init(
+			const char *Host,
+			const char *Service,
+			qRPN )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
+		{
+			reset();
+
+			Socket = Connect( Host, Service, qRP );
+
+			return Socket != SCK_INVALID_SOCKET;
+		}
+		bso::bool__ Init(
+			const char *HostService,
+			qRPN )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
+		{
+			reset();
+
+			Socket = Connect( HostService, qRP );
+
+			return Socket != SCK_INVALID_SOCKET;
+		}
+};
+
 	class flow___
 	: public _flow___
 	{
 	private:
-		sck::socket__ Socket_;
+		rSocket_ Socket_;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_flow___::reset( P );
-
-			if ( P )
-				if ( Socket_ != SCK_INVALID_SOCKET )
-					sck::Close( Socket_ );
-
-			Socket_ = SCK_INVALID_SOCKET;
+			tol::reset( P, Socket_ );
 		}
 		E_CDTOR( flow___ );
 		bso::bool__ Init(
 			const char *Host,
 			const char *Service,
 			sck::duration__ Timeout,
-			err::handling__ ErrorHandling )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
+			qRPN )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
 		{
-			reset();
-
-			Socket_ = Connect( Host, Service, ErrorHandling );
-
-			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_, false, Timeout );
+			if ( Socket_.Init( Host, Service, qRP ) ) {
+				_flow___::Init( Socket_.Socket, false, Timeout );
 				return true;
 			} else
 				return false;
@@ -179,19 +206,14 @@ namespace csdbnc {
 		bso::bool__ Init(
 			const char *HostService,
 			sck::duration__ Timeout,
-			err::handling__ ErrorHandling )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
+			qRPN )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
 		{
-			reset();
-
-			Socket_ = Connect( HostService, ErrorHandling );
-
-			if ( Socket_ != SCK_INVALID_SOCKET ) {
-				_flow___::Init( Socket_, false, Timeout );
+			if ( Socket_.Init( HostService, qRP ) ) {
+				_flow___::Init( Socket_.Socket, false, Timeout );
 				return true;
 			} else
 				return false;
 		}
-
 	};
 }
 
@@ -200,6 +222,45 @@ namespace csdbnc {
 /***************/
 
 namespace csdbnc {
+	typedef sck::socket_ioflow_driver___ rDriver_;
+
+	class rIODriver
+	: public rDriver_
+	{
+	private:
+		rSocket_ Socket_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rDriver_::reset( P );
+			tol::reset( P, Socket_ );
+		}
+		qCVDTOR( rIODriver );
+		bso::bool__ Init(
+			const char *Host,
+			const char *Service,
+			sck::duration__ Timeout,
+			qRPN )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
+		{
+			if ( Socket_.Init( Host, Service, qRP ) ) {
+				rDriver_::Init( Socket_.Socket, false, fdr::ts_Default, Timeout );
+				return true;
+			} else
+				return false;
+		}
+		bso::bool__ Init(
+			const char *HostService,
+			sck::duration__ Timeout,
+			qRPN )	// No default value, because a 'err::handling___' value is confused with a 'duration__'.
+		{
+			if ( Socket_.Init( HostService, qRP ) ) {
+				rDriver_::Init( Socket_.Socket, false, fdr::ts_Default, Timeout );
+				return true;
+			} else
+				return false;
+		}
+	};
+
 	typedef flow___ rIOFlow;
 }
 #endif

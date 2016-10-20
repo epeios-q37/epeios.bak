@@ -447,7 +447,28 @@ namespace txf {
 /***************/
 
 namespace txf {
+# if 1 // Deprecated.
 	typedef text_oflow__ sOFlow;
+# endif
+
+	class rOFlow
+	: public text_oflow__
+	{
+	private:
+		flw::sDressedOFlow<> Flow_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			text_oflow__::reset( P );
+			tol::reset( P, Flow_ );
+		}
+		qCDTOR( rOFlow );
+		void Init( fdr::rODriver &Driver )
+		{
+			Flow_.Init( Driver );
+			text_oflow__::Init( Flow_ );
+		}
+	};
 }
 
 
