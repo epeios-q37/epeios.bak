@@ -6,7 +6,7 @@ CHANGELOG for the 'Epeios' framework.
 - FBLFRD :
 	- Adaptation to changes in 'CDGB64'.
 - FDR :
-	- Introducing 'r(I|O|IO)Driver'.
+	- Introducing 'r(I|O|IO)[Dressed]Driver'.
 - FLW :
 	- Adding missing 'Dismiss()' in 'iflow__::reset()'.
 - FLX :

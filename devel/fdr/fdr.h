@@ -629,6 +629,10 @@ namespace fdr {
 	typedef fdr::oflow_driver_base___ rODriver; 
 	typedef fdr::ioflow_driver_base___ rIODriver;
 
+	typedef fdr::iflow_driver___<> rIDressedDriver;
+	typedef fdr::oflow_driver___<> rODressedDriver;
+	typedef fdr::ioflow_driver___<> rIODressedDriver;
+
 	typedef fdr::size__ sSize;
 	typedef fdr::byte__ sByte;
 
