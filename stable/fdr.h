@@ -619,7 +619,7 @@ namespace fdr {
 /**************/
 
 namespace fdr {
-# if 1	// Will be obsoleted.
+# if 1	// Deprecated.
 	typedef fdr::iflow_driver___<> rIFlow;
 	typedef fdr::oflow_driver___<> rOFlow; 
 	typedef fdr::ioflow_driver___<> rFlow;

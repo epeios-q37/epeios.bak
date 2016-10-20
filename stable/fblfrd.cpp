@@ -191,7 +191,7 @@ namespace {
 		if ( (Key.Amount() != 0) && (Code.Amount() != 0) ) {
 			Buffer.Init();
 			crptgr::Encrypt( Code, Key, Buffer );
-			cdgb64::Encode( Buffer, Crypted );
+			cdgb64::Encode( Buffer, cdgb64::fOriginal, Crypted );
 		}
 	qRR
 	qRT

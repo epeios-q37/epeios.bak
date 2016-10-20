@@ -3,6 +3,8 @@ CHANGELOG for the 'Epeios' framework.
 2016-10-20 :
 - CSDBNC :
 	- Introducing 'rIODriver'.
+- FBLFRD :
+	- Adaptation to changes in 'CDGB64'.
 - FDR :
 	- Introducing 'r(I|O|IO)Driver'.
 - FLW :
