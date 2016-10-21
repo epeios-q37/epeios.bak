@@ -37,7 +37,8 @@
 
 # include "fblbrq.h"
 # include "fbltyp.h"
-# include "fblbur.h"
+# include "fblber.h"
+# include "fblbrr.h"
 
 # ifdef FBLBKD_DEFAULT_LANGUAGE
 #  define FBLBKD__DEFAULT_LANGUAGE	FBLBKD_DEFAULT_LANGUAGE
@@ -748,7 +749,7 @@ namespace fblbkd {
 	{
 	private:
 		bso::bool__ _CompatibilityTested;
-		fblbur::eMode Mode_;
+		fblovl::eMode Mode_;
 		TOL_CBUFFER___ _ClientOrigin;
 		TOL_CBUFFER___ _APIVersion;
 		rMasterModule Master_;
@@ -817,7 +818,7 @@ namespace fblbkd {
 		void reset( bso::bool__ P = true )
 		{
 			_CompatibilityTested = false;
-			Mode_ = fblbur::m_Undefined;
+			Mode_ = fblovl::m_Undefined;
 			_Embedded.reset( P );
 			_Remote.reset( P );
 			Key_.reset( P );
@@ -826,7 +827,7 @@ namespace fblbkd {
 		E_CVDTOR( backend___ );
 		// '[Backend|Publisher]Informations' ne sont PAS dupliqué. Leur contenu de doit pas être modifié.
 		void Init(
-			fblbur::eMode Mode,
+			fblovl::eMode Mode,
 			const char *APIVersion,
 			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,

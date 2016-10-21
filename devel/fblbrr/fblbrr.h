@@ -17,34 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: fblbrr.h,v 1.10 2013/04/15 10:50:50 csimon Exp $
+//D Frontend/Backend Layout Backend Remote Request
 
 #ifndef FBLBRR__INC
-#define FBLBRR__INC
+# define FBLBRR__INC
 
-#define FBLBRR_NAME		"FBLBRR"
+# define FBLBRR_NAME		"FBLBRR"
 
-#define	FBLBRR_VERSION	"$Revision: 1.10 $"
-
-#define FBLBRR_OWNER		"Claude SIMON"
-
-#if defined( E_DEBUG ) && !defined( FBLBRR_NODBG )
-#define FBLBRR_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.10 $
-//C Claude SIMON (csimon at zeusw dot org)
-//R $Date: 2013/04/15 10:50:50 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Frontend/Backend Layout Backend Remote Request 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( FBLBRR_NODBG )
+#  define FBLBRR_DBG
+# endif
 
 # include "err.h"
 # include "flw.h"
@@ -175,5 +157,4 @@ namespace fblbrr {
 	};
 }
 
-/*$END$*/
 #endif

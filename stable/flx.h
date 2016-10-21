@@ -959,7 +959,7 @@ namespace flx {
 		}
 	};	
 
-	template <typename flow, typename sflow, typename driver, typename handling> class _sizes_embbeded_flow___
+	template <typename flow, typename sflow, typename driver, typename handling> class _size_embbeded_flow___
 	: public sflow
 	{
 	private:
@@ -970,7 +970,7 @@ namespace flx {
 			sflow::reset( P );
 			_Driver.reset( P );
 		}
-		E_CDTOR( _sizes_embbeded_flow___ );
+		E_CDTOR( _size_embbeded_flow___ );
 		void Init(
 			flow &Flow,
 			handling Handling )
@@ -980,8 +980,8 @@ namespace flx {
 		}
 	};
 
-	typedef _sizes_embbeded_flow___<flw::iflow__, _iflow__, size_embedded_iflow_driver___, dismiss_handling__> size_embedded_iflow___;
-	typedef _sizes_embbeded_flow___<flw::oflow__, _oflow__, size_embedded_oflow_driver___, eCommitHandling> size_embedded_oflow___;
+	typedef _size_embbeded_flow___<flw::iflow__, _iflow__, size_embedded_iflow_driver___, dismiss_handling__> size_embedded_iflow___;
+	typedef _size_embbeded_flow___<flw::oflow__, _oflow__, size_embedded_oflow_driver___, eCommitHandling> size_embedded_oflow___;
 
 
 # ifdef FLX__MT

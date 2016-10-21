@@ -19,6 +19,8 @@
 
 // Frontend/Backend Layout Backend Universal Request 
 
+# error	// Obsolete. References will mostly be replaced by 'fblovl'.
+
 #ifndef FBLBUR__INC
 # define FBLBUR__INC
 

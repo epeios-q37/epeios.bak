@@ -32,7 +32,7 @@
 #include "csdleo.h"
 #include "csdles.h"
 
-#include "fblbur.h"
+// #include "fblbur.h"
 
 #include "fnm.h"
 
@@ -106,7 +106,7 @@ namespace {
 
 
 void sclbacknd::backend___::Init(
-	fblbur::eMode Mode,
+	fblovl::eMode Mode,
 	const char *APIVersion,
 	const ntvstr::char__ *ClientOrigin,
 	const char *BackendLabel,
@@ -144,14 +144,14 @@ scldaemon::rCallback *scldaemon::SCLDAEMONGetCallback(
 {
 	sclbacknd::callback__ *Callback = NULL;
 qRH
-	fblbur::eMode FBLMode = fblbur::m_Undefined;
+	fblovl::eMode FBLMode = fblovl::m_Undefined;
 qRB
 	switch ( CSDMode ) {
 	case csdleo::mEmbedded:
-		FBLMode = fblbur::mReferenced;
+		FBLMode = fblovl::mReferenced;
 		break;
 	case csdleo::mRemote:
-		FBLMode = fblbur::mSerialized;
+		FBLMode = fblovl::mSerialized;
 		break;
 	default:
 		qRFwk();

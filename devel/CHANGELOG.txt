@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-21 :
+- FBLBUR :
+	- Is now obsolete.
+- FBLBKD, SCLBACKND :
+	- Adaptation to the fact that 'FBLBUR' is obsolete.
+
 2016-10-20 :
 - CSDBNC :
 	- Introducing 'rIODriver'.

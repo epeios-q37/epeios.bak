@@ -34,7 +34,7 @@
 # include "csdscb.h"
 
 # include "fblbkd.h"
-# include "fblbur.h"
+// # include "fblbur.h"
 
 # include "lcl.h"
 
@@ -82,7 +82,7 @@ namespace sclbacknd {
 		}
 		E_CVDTOR( rBackend );
 		void Init(
-			fblbur::eMode Mode,
+			fblovl::eMode Mode,
 			const char *APIVersion,
 			const ntvstr::char__ *ClientOrigin,
 			const char *BackendLabel,
@@ -121,7 +121,7 @@ namespace sclbacknd {
 	: public rCallback_
 	{
 	private:
-		fblbur::eMode _Mode;
+		fblovl::eMode _Mode;
 	protected:
 		virtual bso::sBool SCLDAEMONPluginOverride(
 			str::dString &Id,
@@ -142,25 +142,25 @@ namespace sclbacknd {
 			return false;
 		}
 		virtual rBackend *SCLBACKNDNew(
-			fblbur::eMode Mode,
+			fblovl::eMode Mode,
 			const ntvstr::char__ *Origin ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			rCallback_::reset( P );
 
-			_Mode = fblbur::m_Undefined;
+			_Mode = fblovl::m_Undefined;
 		}
 		E_CVDTOR( rCallback );
-		void Init( fblbur::eMode Mode )
+		void Init( fblovl::eMode Mode )
 		{
 			switch ( Mode ) {
-			case fblbur::mNone:
+			case fblovl::mNone:
 				qRFwk();
 				break;
-			case fblbur::mReferenced:
+			case fblovl::mReferenced:
 				break;
-			case fblbur::mSerialized:
+			case fblovl::mSerialized:
 				break;
 			default:
 				qRFwk();
@@ -191,7 +191,7 @@ namespace sclbacknd {
 	initialized. */
 	callback__ *SCLBACKNDGetCallback(
 		csdleo::context__ Context,
-		fblbur::eMode Mode );	// To overload.
+		fblovl::eMode Mode );	// To overload.
 }
 
 #endif
