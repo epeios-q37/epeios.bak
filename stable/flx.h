@@ -912,8 +912,10 @@ namespace flx {
 
 			Size = _Flow->ReadUpTo( ( Size > _EmbeddedSizeRemainder ? _EmbeddedSizeRemainder : Size ), Buffer );
 
-			if ( Size == 0 )
+			if ( Size == 0 ) {
+				_AllRed = true;	// Even if not true, there is no more data available in the underlying flow.
 				qRFwk();
+			}
 
 			_EmbeddedSizeRemainder -= Size;
 
