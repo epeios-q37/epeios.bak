@@ -85,15 +85,13 @@ namespace {
 
 		mtx::Unlock( Data.Mutex );
 
-		MUP = Module.PreProcess( Flow, Origin, &OwnerShipTaken );
-
-		if ( OwnerShipTaken )
-			qRGnr();
+		MUP = Module.PreProcess( Flow, Origin );
 
 		while ( Module.Process( Flow, MUP ) == csdscb::aContinue );
 	qRFR
 	qRFT
-		Module.PostProcess( MUP );
+		if( !Module.PostProcess( MUP ) )
+			qRGnr();
 	
 		delete Flow;
 	qRFE( sclmisc::ErrFinal() )

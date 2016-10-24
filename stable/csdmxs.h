@@ -281,8 +281,7 @@ qRE
 	protected:
 		virtual void *CSDSCBPreProcess(
 			flw::sIOFlow *Flow,
-			const ntvstr::char__ *Origin,
-			bso::sBool *OwnerShipTaken ) override
+			const ntvstr::char__ *Origin ) override
 		{
 			_Origin.Init( Origin );
 
@@ -318,7 +317,7 @@ qRE
 			if ( Id == CSDMXB_UNDEFINED ) {
 				Id = Core_.New();
 				PutId( Id, *Flow );
-				SUP = Callback_->PreProcess( Flow, _Origin, &OwnerShipTaken );
+				SUP = Callback_->PreProcess( Flow, _Origin );
 				if ( OwnerShipTaken )
 					qRFwk();
 				Core_.Store( SUP, Id );

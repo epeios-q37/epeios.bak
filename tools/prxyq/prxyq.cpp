@@ -396,7 +396,7 @@ public:
 
 			Data.Wait();
 		}
-		bso::sBool Plug(
+		void Plug(
 			flw::ioflow__ *Flow,
 			prxybase::eType Type,
 			tol::sDelay Timeout )
@@ -409,7 +409,8 @@ public:
 
 			Process_( Type );
 
-			return WaitForOther_( Timeout );
+			if ( !WaitForOther_( Timeout ) )
+				Rack_.reset();
 		}
 	};
 
@@ -599,7 +600,7 @@ public:
 		qRE
 		}
 
-		bso::sBool Plug_(
+		void Plug_(
 			rProxy *Proxy,
 			flw::ioflow__ *Flow,
 			prxybase::eType Type,
@@ -607,15 +608,13 @@ public:
 		{
 			Locker_.Unlock();	// Locked by caller.
 
-			if ( Proxy->Plug( Flow, Type, Timeout ) ) {	// Blocking until deconnection or 'Timeout' ms.
-				delete Proxy;
-				return true;
-			} else
-				return false;
+			Proxy->Plug( Flow, Type, Timeout );	// Blocking until deconnection or 'Timeout' ms.
+
+			delete Proxy;
 		}
 	}
 
-	bso::sBool Plug_1_(
+	void Plug_1_(
 		flw::ioflow__ *Flow,
 		tol::sDelay Timeout )
 	{
@@ -658,14 +657,13 @@ public:
 			Log << "plug";
 			Log << " (" << Id << ')';
 			Log.reset();
-			NoTimeout = plug_::Plug_( Proxy, Flow, Type, Timeout );	// BLOQUANT !!! (d'où pas de 'log' aprés).
+			plug_::Plug_( Proxy, Flow, Type, Timeout );	// BLOQUANT !!! (d'où pas de 'log' aprés).
 		}
 
 	qRR
 	qRT
 		Locker_.UnlockIfLocked();
 	qRE
-		return NoTimeout;
 	}
 
 	void Dismiss_1_( flw::sIOFlow &Flow )
@@ -738,19 +736,16 @@ public:
 	{
 	private:
 		bso::sBool FromLocalhost_;
-		bso::sBool CloseSocket_;
+		bso::sBool CloseSocketUpstream_;
 	protected:
 		void *CSDSCBPreProcess(
 			flw::sIOFlow *Flow,
-			const ntvstr::char__ *Origin,
-			bso::sBool *OwnerShipTaken ) override
+			const ntvstr::char__ *Origin ) override
 		{
 		qRH
 			qCBUFFERr Buffer;
 		qRB
 			FromLocalhost_ = strncmp( ntvstr::string___( Origin ).UTF8( Buffer ), "127.", 4 ) == 0;
-
-			*OwnerShipTaken = true;
 		qRR
 		qRT
 		qRE
@@ -764,14 +759,16 @@ public:
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
-			bso::sBool DeleteFlow = true;
 		qRB
 			if ( ( Version = csdcmn::GetProtocolVersion( prxybase::ProtocolId, *Flow ) ) != prxybase::ProtocolVersion )
 				qRGnr();
 
+			CloseSocketUpstream_ = true;
+
 			switch ( prxybase::GetRequest( *Flow ) ) {
 			case prxybase::rPlug_1:
-				DeleteFlow = !Plug_1_( Flow, 5000 );
+				 Plug_1_( Flow, 5000 );
+				 CloseSocketUpstream_ = false;
 				break;
 			case prxybase::rDismiss_1:
 				Dismiss_1_( *Flow );
@@ -792,25 +789,24 @@ public:
 		qRR
 			Locker_.UnlockIfLocked();
 		qRT
-			if ( DeleteFlow )
-				delete Flow;
 		qRE
 			return csdscb::aStop;
 		}
 		virtual bso::sBool CSDSCBPostProcess( void *UP ) override
 		{
-			return CloseSocket_;
+			return CloseSocketUpstream_;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			FromLocalhost_ = false;
-			CloseSocket_ = false;
+			CloseSocketUpstream_ = false;
 		}
 		E_CVDTOR( callback__ );
 		void Init( void )
 		{
 			FromLocalhost_ = false;
+			CloseSocketUpstream_ = true;
 		}
 	};
 }

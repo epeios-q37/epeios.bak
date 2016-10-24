@@ -322,7 +322,11 @@ static const str::string_ &GetPath_(
 	const names_ &Names,
 	str::string_ &Path )
 {
+	drow__ PreviousRow = qNIL;
+
 	if ( Row != qNIL) {
+		PreviousRow = Row;
+
 		if ( Handled( Row ) )
 		{
 			Path.Append( Names( Dirs( Row ).New.Name ) );
@@ -334,6 +338,11 @@ static const str::string_ &GetPath_(
 	}
 
 	while ( Row != qNIL ) {
+		if ( PreviousRow == Row )
+			qRFwk();
+
+		PreviousRow = Row;
+
 		Path.InsertAt( '/' );
 		if ( Handled( Row ) )
 		{

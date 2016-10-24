@@ -137,15 +137,11 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		{
 		qRH
 			fnm::name___ Path;
-			bso::sBool OwnerShipTaken = false;
 		qRB
 			Path.Init();
 			dir::GetSelfPath( Path );
 
-			UP_ = _Callback->PreProcess( _Flow, Path.Internal(), &OwnerShipTaken );
-
-			if ( OwnerShipTaken )
-				qRFwk();
+			UP_ = _Callback->PreProcess( _Flow, Path.Internal() );
 		qRR
 		qRT
 		qRE
@@ -153,7 +149,8 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		void _Delete( void )
 		{
 			if( UP_ != NULL )
-				_Callback->PostProcess( UP_ );
+				if ( !_Callback->PostProcess( UP_ ) )
+					qRFwk();
 		}
 	protected:
 		virtual fdr::size__ FDRWrite(

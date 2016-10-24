@@ -154,7 +154,7 @@ qRH
 	sck::socket__ Socket = SCK_INVALID_SOCKET;
 	action__ Action = a_Undefined;
 	const char *UP = NULL;
-	bso::sBool OwnerShipTaken = false;
+	bso::sBool CloseSocket = false;
 qRB
 	Socket = _Interroger( ErrorHandling, Timeout, UP );
 
@@ -166,7 +166,7 @@ qRB
 			correctement l'objet qu'il a cre (rfrenc par 'UP'), mme lors d'un ^C,
 			qui nous jecte directement de cette fonction, mais provoque quand mme un appel du destructeur. */
 
-		_UP = Callback.PreProcess( Socket, UP, &OwnerShipTaken );
+		_UP = Callback.PreProcess( Socket, UP );
 		_Callback = &Callback;
 
 		while ( ( Action = Callback.Process( Socket, _UP ) ) == aContinue );
@@ -188,13 +188,13 @@ qRB
 qRR
 qRT
 	if ( _CallbackAvailable() ) {
-		Callback.PostProcess( _UP );
+		CloseSocket = Callback.PostProcess( _UP );
 		_UP = NULL;
 		_Callback = NULL;	// Pour empcher un autre appel au 'PostProcess' lors de l'appel du destructeur.
 	}
 
 	if ( Socket != SCK_INVALID_SOCKET )
-		if ( !OwnerShipTaken )
+		if ( CloseSocket )
 			sck::Close( Socket );
 qRE
 	return Continue;
@@ -338,7 +338,6 @@ qRFH
 	rrow__ Row = qNIL;
 	csdbns_repository_item__ Item;
 	tol::E_FPOINTER___( char ) Buffer;
-	bso::sBool OwnerShipTaken = false;
 qRFB
 	if ( ( Buffer = malloc( strlen( Data.IP ) + 1 ) ) == NULL )
 		qRAlc();
@@ -348,7 +347,7 @@ qRFB
 
 	qRH
 	qRB
-		UP = Callback.PreProcess( Socket, Buffer, &OwnerShipTaken );
+		UP = Callback.PreProcess( Socket, Buffer );
 
 		Item.Callback = &Callback;
 		Item.UP = UP;
@@ -360,10 +359,7 @@ qRFB
 	qRT
 		if ( Row != qNIL )
 			if ( Clean_( Row ) )
-				OwnerShipTaken = false;	// To force the closing of the socket.
-
-		if ( !OwnerShipTaken )
-			sck::Close( Socket );
+				sck::Close( Socket );
 	qRE
 qRFR
 qRFT

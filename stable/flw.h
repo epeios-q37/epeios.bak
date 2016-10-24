@@ -136,14 +136,7 @@ namespace flw {
 
 			_Driver = NULL;
 		}
-		iflow__( void )
-		{
-			reset( false );
-		}
-		~iflow__( void )
-		{
-			reset();
-		}
+		qCVDTOR( iflow__ );
 		void Init( fdr::iflow_driver_base___ &Driver )
 		{
 			_Driver = &Driver;
@@ -402,15 +395,7 @@ namespace flw {
 			_Size = _Free = 0;
 			Written_ = 0;
 		}
-		oflow__( void )
-		{
-			reset( false );
-
-		}
-		virtual ~oflow__( void )
-		{
-			reset();
-		}
+		qCVDTOR( oflow__ );
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
 			byte__ *Cache,
@@ -543,10 +528,7 @@ namespace flw {
 			iflow__::reset( P );
 			oflow__::reset( P );
 		}
-		ioflow__( void )
-		{
-			reset( false );
-		}
+		qCVDTOR( ioflow__ );
 		void Init(
 			fdr::ioflow_driver_base___ &Driver,
 			byte__ *Cache,	// The cache is only used for the output flow.

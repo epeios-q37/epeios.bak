@@ -52,8 +52,7 @@ namespace csdbns {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			sck::socket__ Socket,
-			const char *IP,
-			bso::sBool *OwnerShipTaken ) = 0;	// If 'OwnerShipTaken' (initially set to 'false') is set to 'true', 'Socket' is destroyed downstream.
+			const char *IP ) = 0;	// If 'OwnerShipTaken' (initially set to 'false') is set to 'true', 'Socket' is destroyed downstream.
 		virtual action__ CSDBNSProcess(
 			sck::socket__ Socket,
 			void *UP ) = 0;
@@ -63,10 +62,9 @@ namespace csdbns {
 	public:
 		void *PreProcess(
 			sck::socket__ Socket,
-			const char *IP,
-			bso::sBool *OwnerShipTaken )
+			const char *IP )
 		{
-			return CSDBNSPreProcess( Socket, IP, OwnerShipTaken );
+			return CSDBNSPreProcess( Socket, IP );
 		}
 		action__ Process(
 			sck::socket__ Socket,
@@ -164,14 +162,13 @@ namespace csdbns {
 	struct rData_ {
 		sck::socket_ioflow___ *Flow;
 		void *UP;
-		bso::sBool OwnerShipTaken;
 		void reset( bso::sBool P = true )
 		{
 			if ( P )
 				if ( Flow != NULL )
 					delete Flow;
 
-			tol::reset( P, Flow, UP, OwnerShipTaken );
+			tol::reset( P, Flow, UP );
 		}
 		qCDTOR( rData_ );
 		void Init( void )
@@ -186,8 +183,7 @@ namespace csdbns {
 	protected:
 		virtual void *CSDBNSPreProcess(
 			socket__ Socket,
-			const char *IP, 
-			bso::sBool *OwnerShipTaken ) override
+			const char *IP ) override
 		{
 			rData_ *Data = NULL;
 		qRH
@@ -205,8 +201,7 @@ namespace csdbns {
 				qRFwk();
 
 			Data->Flow->Init( Socket, true, sck::NoTimeout );
-			*OwnerShipTaken = true;	// Socket is should NOT be destroyed upstream.
-			Data->UP = BaseCallback->PreProcess( Data->Flow, ntvstr::string___( IP ).Internal(), &Data->OwnerShipTaken );	// The 'OwnerShipTaken' concerns the 'Flow'.
+			Data->UP = BaseCallback->PreProcess( Data->Flow, ntvstr::string___( IP ).Internal() );	// The 'OwnerShipTaken' concerns the 'Flow'.
 		qRR
 			if ( Data != NULL )
 				delete Data;
@@ -235,14 +230,12 @@ namespace csdbns {
 
 			rData_ &Data = *(rData_ *)UP;
 
-			if ( Data.OwnerShipTaken )
+			if ( !( ReturnedValue = BaseCallback->PostProcess( Data.UP ) ) )
 				Data.Flow = NULL;	// To avoid destruction below.
-
-			ReturnedValue = BaseCallback->PostProcess( Data.UP );
 
 			delete (rData_ *)UP;
 
-			return ReturnedValue;
+			return false;
 		}
 	public:
 		csdscb::callback__ *BaseCallback;

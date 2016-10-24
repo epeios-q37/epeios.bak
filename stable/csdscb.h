@@ -61,8 +61,7 @@ namespace csdscb {
 		}
 		virtual void *CSDSCBPreProcess(
 			flw::ioflow__ *Flow,
-			const ntvstr::char__ *Origin,
-			bso::sBool *OwnerShipTaken ) = 0;	// If set to true, it means that the 'Flow' will be destructed downstream.
+			const ntvstr::char__ *Origin ) = 0;	// If set to true, it means that the 'Flow' will be destructed downstream.
 		virtual eAction CSDSCBProcess(
 			flw::ioflow__ *Flow,
 			void *UP ) = 0;
@@ -80,10 +79,9 @@ namespace csdscb {
 		}
 		void *PreProcess(
 			flw::ioflow__ *Flow,
-			const ntvstr::char__ *Origin,
-			bso::sBool *OwnerShipTaken )	// If set to true, it means that the 'Flow' will be destructed downstream.
+			const ntvstr::char__ *Origin )
 		{
-			return CSDSCBPreProcess( Flow, Origin, OwnerShipTaken );
+			return CSDSCBPreProcess( Flow, Origin );
 		}
 		eAction Process(
 			flw::ioflow__ *Flow,
@@ -91,6 +89,7 @@ namespace csdscb {
 		{
 			return CSDSCBProcess( Flow, UP );
 		}
+		// If the returned value is 'true', the underlying socket has to be closed upstream.
 		bso::sBool PostProcess( void *UP )
 		{
 			return CSDSCBPostProcess( UP );

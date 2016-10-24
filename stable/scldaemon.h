@@ -78,8 +78,7 @@ namespace scldaemon {
 		}
 		virtual void *CSDSCBPreProcess(
 			flw::sIOFlow *Flow,
-			const ntvstr::char__ *Origin,
-			bso::sBool *OwnerShipTaken ) override
+			const ntvstr::char__ *Origin ) override
 		{
 			return SCLDAEMONNew( Origin );
 		}
@@ -108,7 +107,7 @@ namespace scldaemon {
 			ERRRst();
 		qRT
 		qRE
-			return false;
+			return true;
 		}
 	protected:
 		virtual bso::sBool SCLDAEMONPluginOverride(
