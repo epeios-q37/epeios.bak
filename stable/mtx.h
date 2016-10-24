@@ -395,21 +395,36 @@ namespace mtx {
 	void Defer_( void );
 
 	// Wait until mutex unlocked.
-	inline void WaitUntilUnlocked_( handler___ Handler )
+	inline bso::sBool WaitUntilUnlocked_(
+		handler___ Handler,
+		tol::sDelay Timeout ) // If == '0' or lock succeed, returns always 'true', or returns false after 'Timeout' ms.
 	{
-		while( !TryToLock( Handler ) )
+		tol::sTimer Timer;
+		bso::sBool NoTimeout = true;
+
+		Timer.Init( Timeout );
+
+		Timer.Launch();
+
+		while( !TryToLock( Handler ) && ( NoTimeout = !Timer.IsElapsed() ) )
 			Defer_();
+
+		return NoTimeout;
 	}
 
-	// Lock 'Handler'. Blocks until lock succeed.
-	inline void Lock( handler___ Handler )
+	// Lock 'Handler'. Blocks until lock succeed or after 'Timeout' ms.
+	inline bso::sBool Lock(
+		handler___ Handler,
+		tol::sDelay Timeout = 0 ) // If == '0' or lock succeed, returns always 'true', or returns false after 'Timeout' ms.
 	{
 #ifdef MTX_DBG
 		if ( Handler == NULL )
 			qRFwk();
 #endif
 		if ( !TryToLock( Handler ) )
-			WaitUntilUnlocked_( Handler );
+			return WaitUntilUnlocked_( Handler, Timeout );
+		else
+			return true;
 	}
 
 	//f Unlock 'Handler'.
@@ -496,15 +511,18 @@ namespace mtx {
 			} else
 				return false;
 		}
-		void Lock( void )
+		bso::sBool Lock( tol::sDelay Timeout = 0 ) // If == '0' or lock succeed, returns always 'true', or returns false after 'Timeout' ms.
 		{
 			_Test();
 
 			if ( _State != sLocked ) {
-				mtx::Lock( _Handler );
-
-				_State = sLocked;
-			}
+				if ( mtx::Lock( _Handler, Timeout ) ) {
+					_State = sLocked;
+					return true;
+				} else
+					return false;
+			} else
+				return true;
 		}
 		void Unlock( void )
 		{

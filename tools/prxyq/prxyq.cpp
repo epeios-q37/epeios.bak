@@ -326,10 +326,13 @@ public:
 				break;
 			}
 		}
-		void WaitForOther_( void )
+		bso::sBool WaitForOther_( tol::sDelay Delay )
 		{
+			tol::sTimer;
+
 			if ( mtx::TryToLock(Mutex_) ) {
-				mtx::Lock( Mutex_ );
+				if ( !mtx::Lock( Mutex_, Delay ) )
+					return false;
 				mtx::Unlock( Mutex_ );
 				FinalDismiss_ = true;
 			} else {
@@ -337,6 +340,8 @@ public:
 				while ( !FinalDismiss_ )
 					tht::Defer( 10 );
 			}
+
+			return true;
 		}
 		void AnswerOKAndCommit_( flw::sOFlow &Flow )
 		{
@@ -377,7 +382,7 @@ public:
 		{
 			Process_( Type );
 
-			return WaitForOther_();
+			WaitForOther_( 0 );
 		}
 		void ASyncPostInit( prxybase::eType Type )
 		{
@@ -391,9 +396,10 @@ public:
 
 			Data.Wait();
 		}
-		void Plug(
+		bso::sBool Plug(
 			flw::ioflow__ *Flow,
-			prxybase::eType Type )
+			prxybase::eType Type,
+			tol::sDelay Timeout )
 		{
 			Rack_.Plug( Flow, Type );
 
@@ -403,7 +409,7 @@ public:
 
 			Process_( Type );
 
-			return WaitForOther_();
+			return WaitForOther_( Timeout );
 		}
 	};
 
@@ -593,21 +599,27 @@ public:
 		qRE
 		}
 
-		void Plug_(
+		bso::sBool Plug_(
 			rProxy *Proxy,
 			flw::ioflow__ *Flow,
-			prxybase::eType Type )
+			prxybase::eType Type,
+			tol::sDelay Timeout )
 		{
 			Locker_.Unlock();	// Locked by caller.
 
-			Proxy->Plug( Flow, Type );	// Blocking until deconnection.
-
-			delete Proxy;
+			if ( Proxy->Plug( Flow, Type, Timeout ) ) {	// Blocking until deconnection or 'Timeout' ms.
+				delete Proxy;
+				return true;
+			} else
+				return false;
 		}
 	}
 
-	void Plug_1_( flw::ioflow__ *Flow )
+	bso::sBool Plug_1_(
+		flw::ioflow__ *Flow,
+		tol::sDelay Timeout )
 	{
+		bso::sBool NoTimeout = true;
 	qRH
 		prxybase::eType Type = prxybase::t_Undefined;
 		str::string Id;
@@ -646,13 +658,14 @@ public:
 			Log << "plug";
 			Log << " (" << Id << ')';
 			Log.reset();
-			plug_::Plug_( Proxy, Flow, Type );	// BLOQUANT !!! (d'où pas de 'log' aprés).
+			NoTimeout = plug_::Plug_( Proxy, Flow, Type, Timeout );	// BLOQUANT !!! (d'où pas de 'log' aprés).
 		}
 
 	qRR
 	qRT
 		Locker_.UnlockIfLocked();
 	qRE
+		return NoTimeout;
 	}
 
 	void Dismiss_1_( flw::sIOFlow &Flow )
@@ -725,6 +738,7 @@ public:
 	{
 	private:
 		bso::sBool FromLocalhost_;
+		bso::sBool CloseSocket_;
 	protected:
 		void *CSDSCBPreProcess(
 			flw::sIOFlow *Flow,
@@ -757,8 +771,7 @@ public:
 
 			switch ( prxybase::GetRequest( *Flow ) ) {
 			case prxybase::rPlug_1:
-				Plug_1_( Flow );
-				DeleteFlow = false;
+				DeleteFlow = !Plug_1_( Flow, 5000 );
 				break;
 			case prxybase::rDismiss_1:
 				Dismiss_1_( *Flow );
@@ -786,12 +799,13 @@ public:
 		}
 		virtual bso::sBool CSDSCBPostProcess( void *UP ) override
 		{
-			return false;
+			return CloseSocket_;
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			FromLocalhost_ = false;
+			CloseSocket_ = false;
 		}
 		E_CVDTOR( callback__ );
 		void Init( void )

@@ -1543,14 +1543,14 @@ namespace tol {
 		{
 			return !IsDisabled();
 		}
-		diff__ Elapsed( void ) const
+		diff__ ElapsedTime( void ) const
 		{
 			return MilliSecDiff( Tick(), _Start );
 		}
 		bso::bool__ IsElapsed( void ) const
 		{
 			if ( IsEnabled() )
-				return Elapsed() >= _Delay;
+				return ElapsedTime() >= _Delay;
 			else
 				return false;
 		}

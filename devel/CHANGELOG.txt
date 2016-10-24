@@ -1,5 +1,10 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-24 :
+- TOL : In 'sTimer', 'Elapsed'()' -> 'ElapsedTime()', to avoid some oddities with 'sTimer::Elpased()'.
+- MTX :
+	- Adding timeout feature to lock operations.
+
 2016-10-23 :
 - CSDBNS, CSDSCB, CSDMXS :
 	- Adding a feature which simplifying the handling of socket reading and writing in different thread (as in 'prxyq').
