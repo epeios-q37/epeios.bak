@@ -66,7 +66,9 @@ namespace csdscb {
 		virtual eAction CSDSCBProcess(
 			flw::ioflow__ *Flow,
 			void *UP ) = 0;
-		virtual void CSDSCBPostProcess( void *UP ) = 0;
+		// If the returned value is 'true', the underlying socket will be closed.
+		// Usefull when the socket reading and writing are not handled by the same thread, so the other thread may not be wait indefinatly ( used in 'prxyq').
+		virtual bso::sBool CSDSCBPostProcess( void *UP ) = 0;
 	public:
 		qCALLBACK( Processing );
 		bso::sBool PluginOverride(
@@ -89,9 +91,9 @@ namespace csdscb {
 		{
 			return CSDSCBProcess( Flow, UP );
 		}
-		void PostProcess( void *UP )
+		bso::sBool PostProcess( void *UP )
 		{
-			CSDSCBPostProcess( UP );
+			return CSDSCBPostProcess( UP );
 		}
 	};
 }

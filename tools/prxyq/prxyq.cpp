@@ -403,7 +403,7 @@ public:
 
 			Process_( Type );
 
-//			return WaitForOther_();
+			return WaitForOther_();
 		}
 	};
 
@@ -784,8 +784,10 @@ public:
 		qRE
 			return csdscb::aStop;
 		}
-		virtual void CSDSCBPostProcess( void *UP ) override
-		{}
+		virtual bso::sBool CSDSCBPostProcess( void *UP ) override
+		{
+			return false;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{

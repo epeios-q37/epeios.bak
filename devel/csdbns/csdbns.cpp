@@ -250,24 +250,31 @@ inline static rrow__ New_( const csdbns_repository_item__ &Item )
 	return Row;
 }
 
-inline static void UnsafeClean_( rrow__ Row )
+inline static bso::sBool UnsafeClean_( rrow__ Row )
 {
+	bso::sBool Returning = false;
 	csdbns_repository_item__ Item;
 
 	Repository_.Recall( Row, Item );
 
-	Item.Callback->PostProcess( Item.UP );
+	Returning = Item.Callback->PostProcess( Item.UP );
 
 	Repository_.Delete( Row );
+
+	return Returning;
 }
 
-inline static void Clean_( rrow__ Row )
+inline static bso::sBool Clean_( rrow__ Row )
 {
+	bso::sBool Returning = false;
+
 	Lock_();
 
-	UnsafeClean_( Row );
+	Returning = UnsafeClean_( Row );
 
 	Unlock_();
+
+	return Returning;
 }
 
 inline static void Clean_( void )
@@ -352,7 +359,8 @@ qRFB
 	qRR
 	qRT
 		if ( Row != qNIL )
-			Clean_( Row );
+			if ( Clean_( Row ) )
+				OwnerShipTaken = false;	// To force the closing of the socket.
 
 		if ( !OwnerShipTaken )
 			sck::Close( Socket );

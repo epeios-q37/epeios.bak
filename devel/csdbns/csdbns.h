@@ -53,11 +53,13 @@ namespace csdbns {
 		virtual void *CSDBNSPreProcess(
 			sck::socket__ Socket,
 			const char *IP,
-			bso::sBool *OwnerShipTaken ) = 0;	// If 'OwnerShipTaken' (initially set to 'false') is et to 'true', 'Socket' is destroyed downstream.
+			bso::sBool *OwnerShipTaken ) = 0;	// If 'OwnerShipTaken' (initially set to 'false') is set to 'true', 'Socket' is destroyed downstream.
 		virtual action__ CSDBNSProcess(
 			sck::socket__ Socket,
 			void *UP ) = 0;
-		virtual void CSDBNSPostProcess( void *UP ) = 0;
+		// If the returned value is 'true', the underlying socket will be closed.
+		// Usefull when the socket reading and writing are not handled by the same thread, so the other thread may not be wait indefinatly ( used in 'prxyq').
+		virtual bso::sBool CSDBNSPostProcess( void *UP ) = 0;
 	public:
 		void *PreProcess(
 			sck::socket__ Socket,
@@ -72,9 +74,9 @@ namespace csdbns {
 		{
 			return CSDBNSProcess( Socket, UP );
 		}
-		void PostProcess( void *UP )
+		bso::sBool PostProcess( void *UP )
 		{
-			CSDBNSPostProcess( UP );
+			return CSDBNSPostProcess( UP );
 		}
 	};
 
@@ -224,8 +226,10 @@ namespace csdbns {
 #  endif
 			return BaseCallback->Process( Data.Flow, Data.UP );
 		}
-		virtual void CSDBNSPostProcess( void *UP ) override
+		virtual bso::sBool CSDBNSPostProcess( void *UP ) override
 		{
+			bso::sBool ReturnedValue = false;
+
 			if ( UP == NULL )
 				qRFwk();
 
@@ -234,9 +238,11 @@ namespace csdbns {
 			if ( Data.OwnerShipTaken )
 				Data.Flow = NULL;	// To avoid destruction below.
 
-			BaseCallback->PostProcess( Data.UP );
+			ReturnedValue = BaseCallback->PostProcess( Data.UP );
 
 			delete (rData_ *)UP;
+
+			return ReturnedValue;
 		}
 	public:
 		csdscb::callback__ *BaseCallback;

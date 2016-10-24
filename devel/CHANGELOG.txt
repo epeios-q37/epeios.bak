@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-23 :
+- CSDBNS, CSDSCB, CSDMXS :
+	- Adding a feature which simplifying the handling of socket reading and writing in different thread (as in 'prxyq').
+- SCLDAEMON :
+	- Adaptation to changes above.
+
 2016-10-22 :
 - FLX :
 	- Avoid further read attempt from underlying flow after abrupt deconnection.

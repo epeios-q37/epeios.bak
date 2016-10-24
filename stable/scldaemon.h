@@ -32,6 +32,7 @@
 # include "flw.h"
 
 # include "csdleo.h"
+# include "csdscb.h"
 
 # include "sclrgstry.h"
 
@@ -93,7 +94,7 @@ namespace scldaemon {
 			else
 				return csdscb::aStop;
 		}
-		virtual void CSDSCBPostProcess( void *UP ) override
+		virtual bso::sBool CSDSCBPostProcess( void *UP ) override
 		{
 		qRH
 		qRB
@@ -107,6 +108,7 @@ namespace scldaemon {
 			ERRRst();
 		qRT
 		qRE
+			return false;
 		}
 	protected:
 		virtual bso::sBool SCLDAEMONPluginOverride(
