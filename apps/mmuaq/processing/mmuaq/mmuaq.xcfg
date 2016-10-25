@@ -12,9 +12,6 @@
    <xpp:ifeq select="packing" value="no">
     <xpp:expand href="Setups.pxcfg"/>
    </xpp:ifeq>
-   <Setup id="mini">
-    <Message>1</Message>
-   </Setup>
   </Setups>
   <Definitions>
   </Definitions>
