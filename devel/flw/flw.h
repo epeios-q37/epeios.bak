@@ -124,7 +124,7 @@ namespace flw {
 # endif
 		void _Dismiss( void )
 		{
-			_D().Dismiss( this );
+			_D().Dismiss();
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -154,25 +154,25 @@ namespace flw {
 			size__ Amount,
 			void *Buffer )
 		{
-			return _D().Read( this, Amount, (byte__ *)Buffer, fdr::bNonBlocking );
+			return _D().Read( Amount, (byte__ *)Buffer, fdr::bNonBlocking );
 		}
 		//f Place 'Amount' bytes in 'Buffer'.
 		void Read(
 			size__ Amount,
 			void *Buffer )
 		{
-			if ( _D().Read( this, Amount, (byte__ *)Buffer, fdr::bBlocking ) != Amount )
+			if ( _D().Read( Amount, (byte__ *)Buffer, fdr::bBlocking ) != Amount )
 				qRFwk();
 		}
 		bso::bool__ EndOfFlow( void )
 		{
-			return _D().EndOfFlow( this );
+			return _D().EndOfFlow();
 		}
 		size__ View(
 			size__ Size,
 			byte__ *Datum )
 		{
-      			return _D().Read( this, Size, Datum, fdr::bKeep );
+      			return _D().Read( Size, Datum, fdr::bKeep );
 		}
 		byte__ View( void )
 		{
@@ -187,7 +187,7 @@ namespace flw {
 		{
 			byte__ C;
 
-			if ( _D().Read( this, 1, &C, fdr::bBlocking ) != 1 )
+			if ( _D().Read( 1, &C, fdr::bBlocking ) != 1 )
 				qRFwk();
 
 			return C;
@@ -292,11 +292,11 @@ namespace flw {
 			size__ Minimum,
 			size__ *TotalWritten )
 		{
-			size__ PonctualAmount = _D().Write( this, Buffer, Wanted );
+			size__ PonctualAmount = _D().Write( Buffer, Wanted );
 			size__ CumulativeAmount = PonctualAmount;
 
 			while ( ( PonctualAmount != 0 ) && ( Minimum > CumulativeAmount ) ) {
-				PonctualAmount = _D().Write( this, Buffer + CumulativeAmount, Wanted - CumulativeAmount );
+				PonctualAmount = _D().Write( Buffer + CumulativeAmount, Wanted - CumulativeAmount );
 				CumulativeAmount += PonctualAmount;
 			}
 
@@ -355,13 +355,13 @@ namespace flw {
 		void _Commit( void )
 		{
 			_DumpCache();
-			_D().Commit( this );
+			_D().Commit();
 
 			Written_ = 0;
 		}
 		void _Unlock( void )
 		{
-			_D().Unlock( this );
+			_D().Unlock();
 		}
 		// Put up to 'Amount' bytes from 'Buffer'. Return number of bytes written.
 		size__ _WriteUpTo(

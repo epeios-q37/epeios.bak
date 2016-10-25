@@ -206,7 +206,7 @@ namespace cdgb64 {
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				Commit( _Flow );
+				Commit();
 
 			_oflow_driver___::reset( P );
 			_Amount = CDGB64__PROCESSED;
@@ -226,7 +226,7 @@ namespace cdgb64 {
 			eFlavor Flavor,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			Commit( _Flow );
+			Commit();
 
 			_Amount = CDGB64__PROCESSED;
 			_Flow = &Flow;
@@ -419,7 +419,7 @@ namespace cdgb64 {
 					_Size = 0;
 				}
 
-				while ( !SkippingIFlow_.IsCacheEmpty() && Maximum-- )
+				while ( ( !SkippingIFlow_.IsCacheEmpty() || Amount < 4 ) && Maximum-- )
 					Buffer[Amount++] = SkippingIFlow_.Get();
 
 				if ( Amount != 0 ) {

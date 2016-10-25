@@ -674,7 +674,6 @@ namespace flx {
 	{
 	private:
 		fdr::oflow_driver_base___ *_Driver;
-		flw::oflow__ *_User;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
@@ -683,21 +682,20 @@ namespace flx {
 			if ( _Driver == NULL )
 				qRFwk();
 
-			return _Driver->Write( _User, Buffer, Maximum );
+			return _Driver->Write( Buffer, Maximum );
 		}
 		virtual void FDRCommit()
 		{
 			if ( _Driver == NULL )
 				qRFwk();
 
-			return _Driver->Commit( _User );
+			return _Driver->Commit();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_oflow_driver___::reset( P );
 			_Driver = NULL;
-			_User = NULL;
 		}
 		relay_oflow_driver___( void )
 		{
@@ -709,11 +707,9 @@ namespace flx {
 		}
 		void Init(
 			fdr::oflow_driver_base___ &Driver,
-			flw::oflow__ &User,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Driver = &Driver;
-			_User = &User;
 			_oflow_driver___::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const
@@ -728,7 +724,6 @@ namespace flx {
 	{
 	private:
 		fdr::iflow_driver_base___ *_Driver;
-		flw::iflow__ *_User;
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -737,21 +732,20 @@ namespace flx {
 			if ( _Driver == NULL )
 				qRFwk();
 
-			return _Driver->Read( _User, Maximum, Buffer, fdr::bNonBlocking );
+			return _Driver->Read( Maximum, Buffer, fdr::bNonBlocking );
 		}
 		virtual void FDRDismiss( void )
 		{
 			if ( _Driver == NULL )
 				qRFwk();
 
-			_Driver->Dismiss( _User );
+			_Driver->Dismiss();
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			_iflow_driver___<>::reset( P );
 			_Driver = NULL;
-			_User = NULL;
 		}
 		relay_iflow_driver___( void )
 		{
@@ -763,11 +757,9 @@ namespace flx {
 		}
 		void Init(
 			fdr::iflow_driver_base___ &Driver,
-			flw::iflow__ &User,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			_Driver = &Driver;
-			_User = &User;
 			_iflow_driver___<>::Init( ThreadSafety );
 		}
 		bso::bool__ IsInitialized( void ) const

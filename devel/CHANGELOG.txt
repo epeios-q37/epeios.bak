@@ -3,14 +3,19 @@ CHANGELOG for the 'Epeios' framework.
 2016-10-25 :
 - CDGB64 :
 	- Introducing 's(En|De)coding(I|O)Drive.)'
+	- Adaptation to changes in 'FDR'.
+	- Fixing wrong end of flow when decoding.
 - CIO :
 	- Adding 'Get(In|Out|Err)Driver()'.
 - CSDMXC :
 	- Amelioration of error handling.
 - FDR :
 	- Adding 'Copy(...)' and 'Purge(...)'.
+	- Using thread ID instead of owning flow to handle thead-safety.
 - FLF :
 	- Adding some default parameter variants.
+- FLW, FLX :
+	- Adaptation to changes in 'FDR'.
 - SCLMISC :
 	- Adding 'r(I|O)DriverRack'
 

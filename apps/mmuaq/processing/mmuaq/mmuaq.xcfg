@@ -70,11 +70,11 @@
 			<Layouts>
     <Layout command="B64Encode">
      <Link index="0" Target="InputArgument"/>
-     <Link index="0" Target="OutArgument"/>
+     <Link index="1" Target="OutputArgument"/>
     </Layout>
    <Layout command="B64Decode">
     <Link index="0" Target="InputArgument"/>
-    <Link index="0" Target="OutArgument"/>
+    <Link index="1" Target="OutputArgument"/>
    </Layout>
    </Layouts>
   </Arguments>

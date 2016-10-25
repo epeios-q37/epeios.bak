@@ -61,10 +61,10 @@ namespace {
 	void B64Encode_( void )
 	{
 	qRH
-		cdgb64::rEncodingODriver Encoder;
+		str::wString Input, Output;
 		sclmisc::rIDriverRack IRack;
 		sclmisc::rODriverRack ORack;
-		str::wString Input, Output;
+		cdgb64::rEncodingODriver Encoder;
 	qRB
 		Input.Init();
 		sclmisc::OGetValue( registry::parameter::Input, Input );
@@ -84,10 +84,10 @@ namespace {
 	void B64Decode_( void )
 	{
 	qRH
-		cdgb64::rDecodingIDriver Decoder;
+		str::wString Input, Output;
 		sclmisc::rIDriverRack IRack;
 		sclmisc::rODriverRack ORack;
-		str::wString Input, Output;
+		cdgb64::rDecodingIDriver Decoder;
 	qRB
 		Input.Init();
 		sclmisc::OGetValue( registry::parameter::Input, Input );

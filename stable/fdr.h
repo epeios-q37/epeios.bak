@@ -31,6 +31,7 @@
 # include "err.h"
 # include "bso.h"
 # include "strng.h"
+# include "tht.h"
 # include "tol.h"
 
 #ifdef FDR_THREAD_SAFE
@@ -170,24 +171,28 @@ namespace fdr {
 		return false;
 	}
 
-	template <typename flow> class _flow_driver_base__
+	typedef tht::sTID sTID_;
+
+	class _flow_driver_base__
 	{
 	private:
 		mutex__ _Mutex;	// Mutex pour protger la ressource.
-		const flow *_User;
+		sTID_ Owner_;
 	protected:
-		void Lock( const flow *User )
+		void Lock( void )
 		{
 #ifdef FDR__TS
+			sTID_ Caller = tht::GetTID();
+
 			if ( _Mutex != mtx::UndefinedHandler ) {
-				if ( TryToLock_(_Mutex) ) {
-					if ( _User != NULL )
+				if ( TryToLock_( _Mutex ) ) {
+					if ( Owner_ != tht::Undefined )
 						qRFwk();
 
-					_User = User;
-				} else if ( _User != User ) {
+					Owner_ = Caller;
+				} else if ( Owner_ != Caller ) {
 					Lock_( _Mutex );
-					_User = User;
+					Owner_ = Caller;
 				}
 			}
 # else
@@ -206,7 +211,7 @@ namespace fdr {
 			if ( P )
 				Delete_( _Mutex );
 
-			_User = NULL;
+			Owner_ = tht::Undefined;
 			_Mutex = NULL;
 		}
 		E_CVDTOR( _flow_driver_base__ );
@@ -214,17 +219,19 @@ namespace fdr {
 		{
 			return IsLocked_( _Mutex );
 		}
-		void Unlock( const flow *User )
+		void Unlock( void )
 		{
 #ifdef FDR__TS
+			sTID_ Caller = tht::GetTID();
+
 			if ( _Mutex != mtx::UndefinedHandler ) {
 				if ( IsLocked_( _Mutex ) ) {
-					if ( ( _User != User) && ( User != NULL ) )
+					if ( Owner_ != Caller )
 						qRFwk();
 
 					Unlock_( _Mutex );
 
-					_User = NULL;
+					Owner_ = tht::Undefined;
 				}
 			}
 # else
@@ -234,7 +241,7 @@ namespace fdr {
 	};
 
 	class iflow_driver_base___
-	: public _flow_driver_base__<flw::iflow__>
+	: public _flow_driver_base__
 	{
 	private:
 		byte__ *_Cache;
@@ -384,7 +391,7 @@ namespace fdr {
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Dismiss( NULL );
+				Dismiss();
 			}
 
 			_Cache = NULL;
@@ -411,7 +418,7 @@ namespace fdr {
 			_Available = _Position = 0;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Dismiss( flw::iflow__ *User )
+		void Dismiss()
 		{
 			if ( _Cache != NULL ) {
 			qRH
@@ -419,14 +426,13 @@ namespace fdr {
 				FDRDismiss();
 			qRR
 			qRT
-				Unlock( User );
+				Unlock();
 			qRE
 			}
 
 			Red_ = 0;
 		}
 		size__ Read(
-			const flw::iflow__ *User,
 			size__ Wanted,
 			byte__ *Buffer,
 			behavior__ Behavior )
@@ -435,7 +441,7 @@ namespace fdr {
 			if ( Wanted < 1 )
 				qRFwk();
 #endif
-			Lock( User );
+			Lock();
 
 			if ( _EOF() )
 				return 0;
@@ -478,9 +484,9 @@ namespace fdr {
 
 			return _Available == 0;
 		}
-		bso::bool__ EndOfFlow( const flw::iflow__ *User )
+		bso::bool__ EndOfFlow( void )
 		{
-			Lock( User );
+			Lock();
 
 			return _EOF();
 		}
@@ -512,7 +518,7 @@ namespace fdr {
 	};
 
 	class oflow_driver_base___
-	: public _flow_driver_base__<flw::oflow__>
+	: public _flow_driver_base__
 	{
 	private:
 		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
@@ -526,7 +532,7 @@ namespace fdr {
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Commit( NULL );
+				Commit();
 			}
 
 			_Initialized = false;
@@ -540,7 +546,7 @@ namespace fdr {
 			_Initialized = true;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Commit( const flw::oflow__ *User  )
+		void Commit( void  )
 		{
 			if ( _Initialized ) {
 			qRH
@@ -548,16 +554,15 @@ namespace fdr {
 				FDRCommit();
 			qRR
 			qRT
-				Unlock( User );
+				Unlock();
 			qRE
 			}
 		}
 		size__ Write(
-			const flw::oflow__ *User,
 			const byte__ *Buffer,
 			size__ Maximum )
 		{
-			Lock( User );
+			Lock();
 			return FDRWrite( Buffer, Maximum );
 		}
 		bso::bool__ OFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
@@ -645,16 +650,16 @@ namespace fdr {
 		fdr::byte__ Buffer[BufferSize];
 		fdr::sSize Amount = 0;
 
-		while ( !IDriver.EndOfFlow( NULL ) )
-			ODriver.Write( NULL, Buffer, IDriver.Read( NULL, BufferSize, Buffer, fdr::bNonBlocking ) );
+		while ( !IDriver.EndOfFlow() )
+			ODriver.Write( Buffer, IDriver.Read( BufferSize, Buffer, fdr::bNonBlocking ) );
 	}
 
 	template <int BufferSize = 1024> inline void Purge( fdr::rIDriver &Driver )
 	{
 		fdr::byte__ Buffer[BufferSize];
 
-		while ( !Driver.EndOfFlow( NULL ) )
-			Driver.Read( NULL, BufferSize, Buffer, fdr::bNonBlocking );
+		while ( !Driver.EndOfFlow() )
+			Driver.Read( BufferSize, Buffer, fdr::bNonBlocking );
 	}
 
 }
