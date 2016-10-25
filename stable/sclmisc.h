@@ -465,7 +465,7 @@ namespace sclmisc {
 		return sclmisc::OGetValue( entry, Value );\
 		}
 
-	// Facilite la gestion des fichiers de sorties optionel (si nom de fichier fourni, donne un flux texte vers ce fichier, sinon le flux texte de la sortie standard).
+	// To facilitate optional text output file handling. if no file name is given, then the standard output is given. Also creates a backup file, which can be restored.
 	class text_oflow_rack___
 	{
 	private:
@@ -580,6 +580,52 @@ namespace sclmisc {
 
 namespace sclmisc {
 	typedef text_oflow_rack___ rTextOFlowRack;
+
+	// To facilitate optional text output file handling. if no file name is given, then the standard output is given. Also creates a backup file, which can be restored.
+	class rODriverRack
+	{
+	private:
+		fnm::name___ Filename_;
+		flf::rODriver Driver_;
+		bso::bool__ BackedUp_;
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			tol::reset( P, Driver_, Filename_, BackedUp_ );
+		}
+		E_CDTOR( rODriverRack );
+		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
+		fdr::rODriver &Init( const fnm::name___ &FileName );
+		void HandleError( void );	// A appeler  partir de 'qRR'.
+		bso::sBool IsFile( void ) const
+		{
+			return BackedUp_;
+		}
+	};
+
+	class rIDriverRack
+	{
+	private:
+		fnm::name___ Filename_;
+		flf::rIDriver Driver_; 
+	public:
+		void reset( bso::bool__ P = true )
+		{
+			tol::reset( P, Driver_, Filename_ );
+		}
+		E_CDTOR( rIDriverRack );
+		// !!! Don't forget the 'HandleError()' in 'qRR'. !!!
+		fdr::rIDriver &Init( const fnm::name___ &FileName );
+		void HandleError( void )	// To call from' qRR'.
+		{
+			// Does nothing. For simetry with 'rODriverRack'.
+		}
+		bso::sBool IsFile( void ) const
+		{
+			return !Filename_.IsEmpty();
+		}
+	};
+
 }
 
 

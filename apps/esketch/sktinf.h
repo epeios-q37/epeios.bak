@@ -17,7 +17,7 @@
     along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// eSKeTch INFormations.
+// SKeTch INFormations.
 
 #ifndef SKTINF__INC
 # define SKTINF__INC

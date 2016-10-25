@@ -68,7 +68,7 @@ namespace flf {
 		}
 		tol::report__ Init(
 			const fnm::name___ &FileName,
-			fdr::thread_safety__ ThreadSafety,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default,
 			fil::mode__ Mode = fil::mReadOnly,
 			err::handling__ ErrorHandling = err::h_Default )
 		{
@@ -100,6 +100,14 @@ namespace flf {
 			const fnm::name___ &FileName,
 			fdr::thread_safety__ ThreadSafety,
 			err::handling__ ErrorHandling,
+			fil::mode__ Mode = fil::mReadOnly )
+		{
+			return Init( FileName, ThreadSafety, Mode, ErrorHandling );
+		}
+		tol::report__ Init(
+			const fnm::name___ &FileName,
+			err::handling__ ErrorHandling,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default,
 			fil::mode__ Mode = fil::mReadOnly )
 		{
 			return Init( FileName, ThreadSafety, Mode, ErrorHandling );
@@ -197,7 +205,7 @@ namespace flf {
 		}
 		tol::report__ Init(
 			const fnm::name___ &FileName,
-			fdr::thread_safety__ ThreadSafety,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default,
 			fil::mode__ Mode = fil::mRemove,
 			err::handling__ ErrorHandling = err::h_Default )
 		{
@@ -229,6 +237,14 @@ namespace flf {
 			const fnm::name___ &FileName,
 			fdr::thread_safety__ ThreadSafety,
 			err::handling__ ErrorHandling,
+			fil::mode__ Mode = fil::mRemove )
+		{
+			return Init( FileName, ThreadSafety, Mode, ErrorHandling );
+		}
+		tol::report__ Init(
+			const fnm::name___ &FileName,
+			err::handling__ ErrorHandling,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default,
 			fil::mode__ Mode = fil::mRemove )
 		{
 			return Init( FileName, ThreadSafety, Mode, ErrorHandling );
@@ -306,8 +322,11 @@ namespace flf {
 /***************/
 
 namespace flf {
-	typedef file_oflow___ rOFlow;
-	typedef file_iflow___ rIFlow;
+	typedef flf::file_oflow___ rOFlow;
+	typedef flf::file_iflow___ rIFlow;
+
+	typedef flf::file_iflow_driver___ rIDriver;
+	typedef flf::file_oflow_driver___ rODriver;
 }
 
 

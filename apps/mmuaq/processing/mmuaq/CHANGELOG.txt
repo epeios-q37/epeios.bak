@@ -1,0 +1,5 @@
+CHANGELOG FOR THE 'MMUAq' TOOL.
+
+See also the CHANGELOG for the Epeios framework.
+
+See the changelog for the 'MMUAq' software.

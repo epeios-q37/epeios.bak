@@ -501,6 +501,49 @@ namespace cdgb64 {
 namespace cdgb64 {
 	typedef cdgb64::encoding_oflow___ rEncodingOFlow;
 	typedef cdgb64::decoding_iflow___ rDecodingIFlow;
+
+	class rEncodingODriver
+	: public encoding_oflow_driver___
+	{
+	private:
+		flw::sDressedOFlow<> Flow_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			encoding_oflow_driver___::reset( P );
+			tol::reset( P, Flow_ );
+		}
+		qCVDTOR( rEncodingODriver );
+		void Init(
+			fdr::rODriver &Driver,
+			eFlavor Flavor,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Flow_.Init( Driver );
+			encoding_oflow_driver___::Init( Flow_, Flavor, ThreadSafety );
+		}
+	};
+
+	class rDecodingIDriver
+	: public decoding_iflow_driver___
+	{
+	private:
+		flw::sDressedIFlow<> Flow_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			decoding_iflow_driver___::reset( P );
+			tol::reset( P, Flow_ );
+		}
+		qCVDTOR( rDecodingIDriver );
+		void Init(
+			fdr::rIDriver &Driver,
+			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
+		{
+			Flow_.Init( Driver );
+			decoding_iflow_driver___::Init( Flow_, ThreadSafety );
+		}
+	};
 }
 
 #endif

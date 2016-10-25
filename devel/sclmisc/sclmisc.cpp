@@ -1496,6 +1496,47 @@ qRT
 qRE
 }
 
+fdr::rODriver &sclmisc::rODriverRack::Init( const fnm::name___ &FileName )
+{
+	Filename_.Init( FileName );
+
+	if ( Filename_.IsEmpty() ) {
+		BackedUp_ = false;
+		return cio::GetOutDriver();
+	} else {
+		sclmisc::CreateBackupFile( Filename_ );
+		BackedUp_ = true;
+
+		if ( Driver_.Init( Filename_, qRPU ) != tol::rSuccess )
+			sclmisc::ReportFileOpeningErrorAndAbort( Filename_ );
+
+		return Driver_;
+	}
+}
+
+void sclmisc::rODriverRack::HandleError( void )
+{
+	if ( BackedUp_ )
+		sclmisc::RecoverBackupFile( Filename_ );
+}
+
+
+fdr::rIDriver &sclmisc::rIDriverRack::Init( const fnm::name___ &FileName )
+{
+	Filename_.Init( FileName );
+
+	if ( Filename_.IsEmpty() ) {
+		return cio::GetInDriver();
+	} else {
+		if ( Driver_.Init( Filename_, qRPU ) != tol::rSuccess )
+			sclmisc::ReportFileOpeningErrorAndAbort( Filename_ );
+
+		return Driver_;
+	}
+}
+
+
+
 Q37_GCTOR( sclmisc )
 {
 	BinPath_.Init();

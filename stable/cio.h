@@ -17,34 +17,16 @@
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
 */
 
-//	$Id: cio.h,v 1.48 2013/04/06 14:50:43 csimon Exp $
+//D Console Input/Output 
 
 #ifndef CIO__INC
-#define CIO__INC
+# define CIO__INC
 
-#define CIO_NAME		"CIO"
+# define CIO_NAME		"CIO"
 
-#define	CIO_VERSION	"$Revision: 1.48 $"
-
-#define CIO_OWNER		"Claude SIMON (http://zeusw.org/intl/contact.html)"
-
-#if defined( E_DEBUG ) && !defined( CIO_NODBG )
-#define CIO_DBG
-#endif
-
-/* Begin of automatic documentation generation part. */
-
-//V $Revision: 1.48 $
-//C Claude SIMON (http://zeusw.org/intl/contact.html)
-//R $Date: 2013/04/06 14:50:43 $
-
-/* End of automatic documentation generation part. */
-
-/* Addendum to the automatic documentation generation part. */
-//D Console Input/Output 
-/* End addendum to automatic documentation generation part. */
-
-/*$BEGIN$*/
+# if defined( E_DEBUG ) && !defined( CIO_NODBG )
+#  define CIO_DBG
+# endif
 
 # include "err.h"
 # include "iof.h"
@@ -200,7 +182,10 @@ namespace cio {
 	{
 		return Target() != t_Undefined;
 	}
+
+	fdr::rIDriver &GetInDriver( void );
+	fdr::rODriver &GetOutDriver( void );
+	fdr::rODriver &GetErrDriver( void );
 }
 
-/*$END$*/
 #endif

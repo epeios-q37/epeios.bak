@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://q37.info/ns/xpp/">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+		<xpp:set name="Credits" value="Epeios"/>
+		<xpp:set name="Type" value="Tool"/>
+	</xpp:bloc>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>mmuaq</Program>
+		<Software>MMUAq</Software>
+		<UUID>d8d40658-515d-40f7-b847-337d9ef331db</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+   <Modules Group="CSD">
+    <Module>csdbnc</Module>
+   </Modules>
+   <Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+   <Module>sck</Module>
+		</Modules>
+  <Modules Group="MUA" Path="../">
+   <Module>muabsc</Module>
+   <Module>muapo3</Module>
+   <Module Path="../">muainf</Module>
+  </Modules>
+  <Module>registry</Module>
+	</Modules>
+	<Files/>
+	<Packing>
+		<WikiFiles>
+			<File Dir="computing/epeios/tools/" WikiOddity="IsHome">mmuaq</File>
+			<File Dir="computing/epeios/tools/mmuaq/">Manual</File>
+			<File Dir="computing/epeios/">Compilation</File>
+			<File Dir="computing/epeios/tools/">Configuration</File>
+		</WikiFiles>
+	</Packing>
+ <SourceDirs>
+  <SourceDir>../</SourceDir>
+  <SourceDir>../../</SourceDir>
+ </SourceDirs>
+ <PreprocessorDefinitions>
+		<PreprocessorDefinition>E_ST</PreprocessorDefinition>
+	</PreprocessorDefinitions>
+</Project>

@@ -1,8 +1,19 @@
 CHANGELOG for the 'Epeios' framework.
 
 2016-10-25 :
+- CDGB64 :
+	- Introducing 's(En|De)coding(I|O)Drive.)'
+- CIO :
+	- Adding 'Get(In|Out|Err)Driver()'.
 - CSDMXC :
 	- Amelioration of error handling.
+- FDR :
+	- Adding 'Copy(...)' and 'Purge(...)'.
+- FLF :
+	- Adding some default parameter variants.
+- SCLMISC :
+	- Adding 'r(I|O)DriverRack'
+
 
 2016-10-24 :
 - CSDBNC :

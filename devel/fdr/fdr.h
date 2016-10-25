@@ -637,6 +637,26 @@ namespace fdr {
 	typedef fdr::byte__ sByte;
 
 	typedef fdr::thread_safety__ eThreadSafety;
+
+	template <int BufferSize = 1024> inline void Copy(
+		fdr::rIDriver &IDriver,
+		fdr::rODriver &ODriver )
+	{
+		fdr::byte__ Buffer[BufferSize];
+		fdr::sSize Amount = 0;
+
+		while ( !IDriver.EndOfFlow( NULL ) )
+			ODriver.Write( NULL, Buffer, IDriver.Read( NULL, BufferSize, Buffer, fdr::bNonBlocking ) );
+	}
+
+	template <int BufferSize = 1024> inline void Purge( fdr::rIDriver &Driver )
+	{
+		fdr::byte__ Buffer[BufferSize];
+
+		while ( !Driver.EndOfFlow( NULL ) )
+			Driver.Read( NULL, BufferSize, Buffer, fdr::bNonBlocking );
+	}
+
 }
 
 #endif

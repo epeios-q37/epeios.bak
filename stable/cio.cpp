@@ -177,6 +177,21 @@ target__ cio::Target( void )
 	return ::Target_;
 }
 
+fdr::rIDriver &cio::GetInDriver( void )
+{
+	return _SInDriver;
+}
+
+fdr::rODriver &cio::GetOutDriver( void )
+{
+	return _SOutDriver;
+}
+
+fdr::rODriver &cio::GetErrDriver( void )
+{
+	return _SErrDriver;
+}
+
 Q37_GCTOR( cio )
 {
 	InitializeConsole_();
