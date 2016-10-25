@@ -58,7 +58,7 @@ namespace muapo3 {
 		eState State_;
 		flw::sIFlow Flow_;
 		// If returned value == 'true', we are in a potential termination sequen ce.
-		fdr::sSize StateSize_( void ) const
+		fdr::sByte StateSize_( void ) const
 		{
 			switch ( State_ ) {
 			case sRegular:

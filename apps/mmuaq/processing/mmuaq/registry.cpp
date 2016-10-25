@@ -26,5 +26,7 @@ rEntry registry::parameter::Username("Username", sclrgstry::Parameters );
 rEntry registry::parameter::Password("Password", sclrgstry::Parameters );
 rEntry registry::parameter::Input("Input", sclrgstry::Parameters );
 rEntry registry::parameter::Output("Output", sclrgstry::Parameters );
+rEntry registry::parameter::Message("Message", sclrgstry::Parameters );
+rEntry registry::parameter::Lines("Lines", sclrgstry::Parameters );
 
 

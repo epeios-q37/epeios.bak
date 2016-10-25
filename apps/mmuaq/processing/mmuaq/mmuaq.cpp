@@ -183,11 +183,14 @@ namespace {
 	qRH
 		csdbnc::rIODriver Server;	
 		muapo3::hMessage Message;
+		bso::sUInt Number = 0;
 	qRB
 		if ( !pop3_::InitAndAuthenticate_( Server ) )
 			qRGnr();
 
-		if ( !muapo3::Retrieve( 4, Server, Message ) )
+		Number = sclmisc::MGetUInt( registry::parameter::Message );
+
+		if ( !muapo3::Retrieve( Number, Server, Message ) )
 			qRGnr();
 
 		Dump_( Message.GetFlow() );
@@ -204,11 +207,15 @@ namespace {
 	qRH
 		csdbnc::rIODriver Server;	
 		muapo3::hMessage Message;
+		bso::sUInt Number = 0, Lines = 0;
 	qRB
 		if ( !pop3_::InitAndAuthenticate_( Server ) )
 			qRGnr();
 
-		if ( !muapo3::Top( 1, 0, Server, Message ) )
+		Number = sclmisc::MGetUInt( registry::parameter::Message );
+		Lines = sclmisc::MGetUInt( registry::parameter::Lines );
+
+		if ( !muapo3::Top( Number, Lines, Server, Message ) )
 			qRGnr();
 
 		Dump_( Message.GetFlow() );

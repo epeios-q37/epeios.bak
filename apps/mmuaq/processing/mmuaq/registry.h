@@ -32,7 +32,9 @@ namespace registry {
 			Username,
 			Password,
 			Input,
-			Output;
+			Output,
+			Message,
+			Lines;
 	}
 
 	namespace definition {
