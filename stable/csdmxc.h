@@ -378,16 +378,23 @@ qRE
 
 			return !Created;
 		}
-		void Commit_( void )
+		bso::sBool Commit_( void )
 		{
 			fFlow &Flow = F_();
 
 			Flow.Commit();
 
-			if ( Id_ == CSDMXB_UNDEFINED )
+			if ( Id_ == CSDMXB_UNDEFINED ) {
 				Id_ = GetId( Flow );
-			else if ( Flow.Get() != 0 )
+				return true;
+			} else if ( Flow.EndOfFlow() )
+				return false;
+			else if ( Flow.Get() == 0 )
+				return true;
+			else
 				qRFwk();
+
+			return false;	// To avoid a 'warning'.
 		}
 		void GiveUp_( void )
 		{
@@ -420,7 +427,8 @@ qRE
 		qRH
 		qRB
 			if ( UP_ != NULL )
-				Commit_();
+				if ( !Commit_() )
+					GiveUp_();
 		qRR
 			GiveUp_();
 		qRT

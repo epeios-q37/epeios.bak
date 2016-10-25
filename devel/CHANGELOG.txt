@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-25 :
+- CSDMXC :
+	- Amelioration of error handling.
+
 2016-10-24 :
 - CSDBNC :
 	-  Removing 'OwnershipTaken' argument in 'cProcessing::CSDSCBPreProcess(...)', in favor of  the boolean returned value of 'cProcessing::CSDSCBPostProcess'.
