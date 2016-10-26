@@ -170,7 +170,7 @@ namespace cdgb64 {
 
 			return Amount;
 		}
-		virtual void FDRCommit( void ) override
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			flw::byte__ Result[4];
 
@@ -200,13 +200,17 @@ namespace cdgb64 {
 
 			_Amount = CDGB64__PROCESSED;
 
-			_Flow->Commit();
+			_Flow->Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			_Flow->ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P )
-				Commit();
+				Commit( true );
 
 			_oflow_driver___::reset( P );
 			_Amount = CDGB64__PROCESSED;
@@ -226,7 +230,7 @@ namespace cdgb64 {
 			eFlavor Flavor,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			Commit();
+			Commit( true );
 
 			_Amount = CDGB64__PROCESSED;
 			_Flow = &Flow;
@@ -273,7 +277,7 @@ namespace cdgb64 {
 
 	typedef fdr::rIFlow rIFlowDriver_;
 
-	class rSkipppingIFlowDriver_
+	class rSkippingIFlowDriver_
 	: public rIFlowDriver_
 	{
 	private:
@@ -303,9 +307,13 @@ namespace cdgb64 {
 
 			return Amount;
 		}
-		virtual void FDRDismiss( void ) override
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			F_().Dismiss();
+			F_().Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			F_().IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -313,7 +321,7 @@ namespace cdgb64 {
 			rIFlowDriver_::reset( P );
 			tol::reset( P, Flow_ );
 		}
-		qCVDTOR( rSkipppingIFlowDriver_ );
+		qCVDTOR( rSkippingIFlowDriver_ );
 		void Init(
 			flw::sIFlow &Flow, 
 			fdr::eThreadSafety ThreadSafety )
@@ -388,13 +396,13 @@ namespace cdgb64 {
 		Decode_( Target, 4 );
 	}
 
-	typedef fdr::iflow_driver___<1023> _iflow_driver____;
+	typedef fdr::iflow_driver___<1023> _iflow_driver___;
 
 	class decoding_iflow_driver___
-	: public _iflow_driver____
+	: public _iflow_driver___
 	{
 	private:
-		rSkipppingIFlowDriver_ SkippingIFlowDriver_;
+		rSkippingIFlowDriver_ SkippingIFlowDriver_;
 		flw::sDressedIFlow<> SkippingIFlow_;
 		fdr::byte__ _Cache[4];
 		bso::u8__ _Size;
@@ -441,17 +449,21 @@ namespace cdgb64 {
 
 			return 3 * ( Amount >> 2 ) + ( ( Amount & 3 ) > 1 ? ( Amount & 3 ) - 1 : 0 ); 
 		}
-		virtual void FDRDismiss( void ) override
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 			if ( _Size != 0 )
 				qRFwk();
 
-			SkippingIFlow_.Dismiss();
+			SkippingIFlow_.Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			SkippingIFlowDriver_.ITake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			_iflow_driver____::reset( P );
+			_iflow_driver___::reset( P );
 			tol::reset( P, SkippingIFlow_, SkippingIFlowDriver_ );
 
 			_Size = 0;
@@ -461,7 +473,7 @@ namespace cdgb64 {
 			flw::iflow__ &Flow,
 			fdr::thread_safety__ ThreadSafety = fdr::ts_Default )
 		{
-			_iflow_driver____::Init( ThreadSafety );
+			_iflow_driver___::Init( ThreadSafety );
 			_Size = 0;
 			SkippingIFlowDriver_.Init( Flow, ThreadSafety );
 			SkippingIFlow_.Init( SkippingIFlowDriver_ );

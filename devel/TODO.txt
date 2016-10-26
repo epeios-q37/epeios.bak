@@ -1,7 +1,6 @@
 TODO for the 'Epeios' framework.
 
-- XDHTML
-	- Implementing data filling in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
+- XDHTML : Implementing data filling in a second pass through a 'data-xdh' attribute (like event and cast handling); should fix Mozilla issue.
 - 'CSDL...' : Reimplementation ; has no more to do with embedded library.
 - 'SCL...' : Renaming ('SCLxyyy...' to 'SCLx').
 - 'XPP' : Réimplement in a simplified manner.
@@ -11,6 +10,7 @@ TODO for the 'Epeios' framework.
   for 'Gecko', if there is no 'XULRunner', there will be 'Firefox' (check if the '--app' option is always available for 'Firefox').
   Furthermore, things as a file explorer are available under 'Gecko' and needs no to be reimplelmented as with 'CEF'.
 - Implementing the number conversion from the 'STR' library in another library based on a flow as input.
+- Reimplementing flow handling to be based on driver rather then on flow.
 
 IN PROGRESS :
 - Implementing flow variations (TXF, XTF, FLX libraries) to take a driver, not a flow ; the needed flow will be instantiated internally.

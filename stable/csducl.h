@@ -132,23 +132,31 @@ namespace csducl {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			return _Get().ReadUpTo( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			_Get().Dismiss();
+			_Get().Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			_Get().IDriver().ITake( Owner );
 		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			return _Get().WriteUpTo( Buffer, Maximum );
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
-			_Get().Commit();
+			_Get().Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			_Get().ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

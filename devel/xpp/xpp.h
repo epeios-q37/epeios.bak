@@ -717,9 +717,13 @@ namespace xpp {
 	protected:
 		virtual sdr::size__ FDRRead(
 			sdr::size__ Maximum,
-			sdr::byte__ *Buffer );
-		virtual void FDRDismiss( void )
+			sdr::byte__ *Buffer ) override;
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			qRVct();
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{

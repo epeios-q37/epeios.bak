@@ -81,9 +81,13 @@ namespace cdgurl {
 
 			return Written;
 		}
-		virtual void FDRCommit( void ) override
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
-			F_().Commit();
+			F_().Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			 F_().ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -175,9 +179,13 @@ namespace cdgurl {
 
 			return Red;
 		}
-		virtual void FDRDismiss( void ) override
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			F_().Dismiss();
+			F_().Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			 F_().IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )

@@ -75,7 +75,9 @@ namespace {
 	qRE
 	}
 
-	bso::sBool CleanBegin_( flw::sIFlow &Flow )
+	bso::sBool CleanBegin_(
+		flw::sIFlow &Flow,
+		str::dString &Message )
 	{
 		switch ( Flow.Get() ) {
 		case '+':
@@ -84,6 +86,11 @@ namespace {
 			break;
 		case '-':
 			Flow.Skip( 4 );
+			while ( Flow.View() != '\r' )
+				Message.Append( Flow.Get() );
+
+			Flow.Skip(2); //
+
 			return false;
 			break;
 		default:
@@ -94,20 +101,23 @@ namespace {
 		return false;	// To avoid a warning.
 	}
 
-	bso::sBool Clean_( flw::sIFlow &Flow )
+	bso::sBool Clean_(
+		flw::sIFlow &Flow,
+		str::dString &Message)
 	{
-		bso::sBool Success = CleanBegin_( Flow );
-
-		while ( Flow.Get() != '\n' );
-
-		return Success;
+		if ( CleanBegin_(Flow, Message) ) {
+			while ( Flow.Get() != '\n' );
+			return true;
+		} else
+			return false;
 	}
 
 	bso::sBool Authenticate_(
 		const str::dString &User,
 		const str::dString &Pass,
 		flw::sIFlow &In,
-		txf::sOFlow &Out )
+		txf::sOFlow &Out,
+		str::dString &Message )
 	{
 		if ( !Clean_( In ) )
 			return false;

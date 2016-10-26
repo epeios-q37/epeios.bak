@@ -43,7 +43,7 @@
 #endif
 
 namespace csdmnc {
-	typedef csdbnc::flow___ rFlow_;
+	typedef csdbnc::rIODriver rIODriver_;
 
 	typedef csdmxc::cCallback cCallback_;
 
@@ -53,43 +53,43 @@ namespace csdmnc {
 	private:
 		qCBUFFERr HostService_;
 		sck::duration__ Timeout_;
-		rFlow_ *FlowAsPointer_( void *UP )
+		rIODriver_ *DriverAsPointer_( void *UP )
 		{
 			if ( UP == NULL )
 				qRFwk();
 
-			return (rFlow_ *)UP;
+			return (rIODriver_ *)UP;
 		}
-		rFlow_ &F_( void *UP )
+		rIODriver_ &D_( void *UP )
 		{
-			return *FlowAsPointer_( UP );
+			return *DriverAsPointer_( UP );
 		}
 	protected:
 		virtual void *CSDMXCNew( void ) override
 		{
-			rFlow_ *Flow = new rFlow_;
+			rIODriver_ *IODriver = new rIODriver_;
 
-			if ( Flow == NULL )
+			if ( IODriver == NULL )
 				qRAlc();
 
-			if ( !Flow->Init( HostService_, Timeout_, err::hUserDefined ) ) {
-				delete Flow;
-				Flow = NULL;
+			if ( !IODriver->Init( HostService_, Timeout_, err::hUserDefined ) ) {
+				delete IODriver;
+				IODriver = NULL;
 			}
 
-			return Flow;
+			return IODriver;
 		}
-		virtual csdmxc::fFlow &CSDMXCExtractFlow( void *UP ) override
+		virtual csdmxc::rIODriver &CSDMXCExtractDriver( void *UP ) override
 		{
-			return F_( UP );
+			return D_( UP );
 		}
 		virtual void CSDMXCRelease( void *UP ) override
 		{
-			delete FlowAsPointer_( UP );
+			delete DriverAsPointer_( UP );
 		}
 		virtual time_t CSDMXCEpochTimeStamp( void *UP ) override
 		{
-			return F_( UP ).EpochTimeStamp();
+			return D_( UP ).EpochTimeStamp();
 		}
 	public:
 		void reset( bso::sBool = true )

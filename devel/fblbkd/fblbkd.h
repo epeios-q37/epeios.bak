@@ -800,13 +800,13 @@ namespace fblbkd {
 			return Links.Index( IdObjet );
 		}
 		bso::bool__ _TestCompatibility(
-			flw::ioflow__ &Flow,
+			fdr::rIODriver &FrontendIODriver,
 			const char *APIVersion,
 			const char *MessageLabel,
 			const char *URLLabel );
-		bso::bool__ _TestCompatibility( flw::ioflow__ &Flow );
+		bso::bool__ _TestCompatibility(	fdr::rIODriver &FrontendIODriver );
 		bso::bool__ _HandleRequest(
-			flw::ioflow__ &FrontendFlow,
+			fdr::rIODriver &FrontendIODriver,
 			log_functions__ &LogFunctions );
 	protected:
 		virtual void *FBLBKDUserPointer( void ) = 0;
@@ -889,14 +889,14 @@ namespace fblbkd {
 		/*f Handle the request which come by 'Channel' and write the answer to 'Channel'.
 		If 'true' is returned, than the request contains a deconnection request. */
 		bso::bool__ Handle(
-			flw::ioflow__ &FrontendFlow,
+			fdr::rIODriver &FrontendIODriver,
 			log_functions__ &LogFunctions )
 		{
 			if ( !_CompatibilityTested ) {
 				_CompatibilityTested = true;
-				return _TestCompatibility( FrontendFlow );
+				return _TestCompatibility( FrontendIODriver );
 			}else
-				return _HandleRequest( FrontendFlow, LogFunctions );
+				return _HandleRequest( FrontendIODriver, LogFunctions );
 		}
 		/*f Return the command corresponding at request description 'Description' and
 		object type 'Type'. 'FBLBKD_INVALID_COMMAND' is returned if command not found. */

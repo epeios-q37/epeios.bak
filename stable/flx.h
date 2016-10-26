@@ -110,7 +110,7 @@ namespace flx {
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			if ( !Taille_ )
 				return 0;
@@ -128,7 +128,9 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{}
+		virtual void FDRITake( fdr::sTID Owner ) override
 		{}
 	public:
 		void reset( bool P = true )
@@ -208,7 +210,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			if ( Maximum > Taille_ )
 				Maximum = Taille_;
@@ -220,7 +222,9 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{}
+		virtual void FDROTake( fdr::sTID Owner ) override
 		{}
 	public:
 		void reset( bool P = true )
@@ -296,7 +300,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			if ( (fdr::size__)Maximum > ( Bunch_->Amount() - Position_ ) )
 				Maximum = ( Bunch_->Amount() - Position_ );
@@ -309,7 +313,9 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{}
+		virtual void FDRITake( fdr::sTID Owner ) override
 		{}
 	private:
 		const bunch_ *Bunch_;
@@ -417,13 +423,15 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			_Bunch->Append( (const so__ *)Buffer, Maximum );
 
 			return Maximum;
 		}
-		virtual void FDRCommit()
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{}
+		virtual void FDROTake( fdr::sTID Owner ) override
 		{}
 	private:
 		bunch_ *_Bunch;
@@ -557,9 +565,10 @@ namespace flx {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( void ) override
-		{
-		}
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -614,15 +623,16 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			Test_( _Access );
 
 			return 0;
 		}
-		virtual void FDRDismiss( void )
-		{
-		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -677,19 +687,19 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			if ( _Driver == NULL )
 				qRFwk();
 
 			return _Driver->Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit()
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			if ( _Driver == NULL )
 				qRFwk();
 
-			return _Driver->Commit();
+			return _Driver->Commit( Unlock );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -727,19 +737,19 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			if ( _Driver == NULL )
 				qRFwk();
 
 			return _Driver->Read( Maximum, Buffer, fdr::bNonBlocking );
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 			if ( _Driver == NULL )
 				qRFwk();
 
-			_Driver->Dismiss();
+			_Driver->Dismiss( Unlock );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -790,7 +800,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			fdr::size__ &Size = Maximum;
 
@@ -810,7 +820,7 @@ namespace flx {
 
 			return Size;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			if ( !_PendingCommit )	// Pour viter qu'un 'commit( suite  un 'reset()' recrive un '0'.
 				return;
@@ -824,7 +834,11 @@ namespace flx {
 			_PendingCommit = false;
 
 			if ( CommitHandling_ == chPropagate )
-				_Flow->Commit();
+				_Flow->Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			_Flow->ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -884,7 +898,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			fdr::size__ &Size = Maximum;
 
@@ -913,7 +927,7 @@ namespace flx {
 
 			return Size;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 			if ( _Flow == NULL )
 				qRFwk();
@@ -924,7 +938,11 @@ namespace flx {
 			_AllRed = true;
 
 			if ( _DismissHandling == dhPropagate )
-				_Flow->Dismiss();
+				_Flow->Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			_Flow->IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -1166,7 +1184,7 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			if ( IO().OnEOF() )
 				return 0;
@@ -1180,10 +1198,12 @@ namespace flx {
 			return Maximum;
 
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 			// Nothing to do.
 		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -1212,17 +1232,19 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			if ( IO().Write( Buffer, Maximum ) != Maximum )
 				qRFwk();
 
 			return Maximum;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			IO().Flush();
 		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -1269,21 +1291,25 @@ namespace flx {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum );
-		virtual void FDRCommit( void )
+			fdr::size__ Maximum ) override;
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			if ( _In != UndefinedPipeDescriptor )
 				Close_( _In );
 
 			_In = UndefinedPipeDescriptor;
 		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer );
-		virtual void FDRDismiss( void )
+			fdr::byte__ *Buffer ) override;
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 			// Nothing to do.
 		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -1371,12 +1397,16 @@ namespace flx {
 
 			return Amount;
 		}
-		virtual void FDRDismiss( void ) override
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 			if ( Size_ != 0 )
 				qRFwk();
 
-			Flow_.Dismiss();
+			Flow_.Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			Flow_.IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )

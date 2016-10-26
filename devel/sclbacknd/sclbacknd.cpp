@@ -172,18 +172,23 @@ qRE
 namespace {
 	void ReportRequestError_(
 		const char *Language,
-		flw::ioflow__ &Flow )
+		fdr::rODriver &ODriver )
 	{
 		qRH
 			str::string Translation;
 			TOL_CBUFFER___ Buffer;
+			flw::sDressedOFlow<> Flow;
 		qRB
+			Flow.Init( ODriver );
+
 			Translation.Init();
 			sclerror::GetPendingErrorTranslation( Language, Translation );
 
 			sclerror::ResetPendingError();
 
 			fblbrq::Report( fblovl::rRequestError, Translation.Convert( Buffer ), Flow );
+
+			Flow.Commit( false );
 		qRR
 		qRT
 		qRE
@@ -191,7 +196,7 @@ namespace {
 
 	void ReportSoftwareError_(
 		const char *Language,
-		flw::ioflow__ &Flow )
+		fdr::rODriver &ODriver )
 	{
 	qRH
 		err::buffer__ ErrorBuffer;
@@ -199,7 +204,10 @@ namespace {
 		lcl::meaning Meaning;
 		str::wString Translation;
 		qCBUFFERr Buffer;
+		flw::sDressedOFlow<> Flow;
 	qRB
+		Flow.Init( ODriver );
+
 		Meaning.Init();
 
 		Meaning.SetValue( SCLBACKND_NAME "_BackendError" );
@@ -209,23 +217,25 @@ namespace {
 		scllocale::GetTranslation( Meaning, Language, Translation );
 
 		fblbrq::Report( fblovl::rSoftwareError, Translation.Convert( Buffer ), Flow );
+
+		Flow.Commit( false );
 	qRR
 	qRT
 	qRE
 	}
 }
 
-bso::sBool sclbacknd::backend___::SCLDAEMONProcess( flw::ioflow__ &Flow )
+bso::sBool sclbacknd::backend___::SCLDAEMONProcess( fdr::rIODriver *IODriver )
 {
 	bso::bool__ Continue = true;
 qRH
 qRB
-	Continue = Handle( Flow, _RequestLogFunctions );
+	Continue = Handle( *IODriver, _RequestLogFunctions );
 qRR
 	if ( ERRType == err::t_Abort )
-		ReportRequestError_ (Language(), Flow );
+		ReportRequestError_ (Language(), *IODriver );
 	else
-		ReportSoftwareError_( Language(), Flow );
+		ReportSoftwareError_( Language(), *IODriver );
 
 	ERRRst();
 qRT

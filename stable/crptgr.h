@@ -72,7 +72,7 @@ namespace crptgr {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			fdr::size__ Amount = 0;
 
@@ -82,9 +82,13 @@ namespace crptgr {
 
 			return Amount;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit(  bso::sBool Unlock  ) override
 		{
-			_Flow->Commit();
+			_Flow->Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			 _Flow->ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -175,7 +179,7 @@ namespace crptgr {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			fdr::size__ Amount = 0;
 
@@ -189,9 +193,13 @@ namespace crptgr {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss(  bso::sBool Unlock  ) override
 		{
-			_Flow->Dismiss();
+			_Flow->Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			_Flow->IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

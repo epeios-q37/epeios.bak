@@ -252,16 +252,16 @@ namespace txf {
 		{
 			_F().Write( Tampon, Nombre );
 		}
-		void Commit_( void )
+		void Commit_( bso::sBool Unlock )
 		{
-			_F().Commit();
+			_F().Commit( Unlock );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
 				if ( _Flow != NULL )
-					Commit_();
+					Commit_( true );
 			}
 
 			_Flow = NULL;
@@ -382,10 +382,10 @@ namespace txf {
 			Ecrire_( Buffer, Amount );
 		}
 		//f Synchronization.
-		void Commit( void )
+		void Commit( bso::sBool Unlock = true )
 		{
 			if ( IsInitialized() ) 
-				Commit_();
+				Commit_( Unlock );
 		}
 		flw::oflow__ &Flow( void ) const
 		{

@@ -662,7 +662,7 @@ type__ fblbkd::backend___::Type( const str::string_ &Name ) const
 }
 
 bso::bool__ fblbkd::backend___::_TestCompatibility(
-	flw::ioflow__ &Flow,
+	fdr::rIODriver &FrontendIODriver,
 	const char *APIVersion,
 	const char *MessageLabel,
 	const char *URLLabel )
@@ -675,7 +675,10 @@ qRH
 	char RemoteAPIVersion[10];
 	str::string Translation;
 	TOL_CBUFFER___ Buffer;
+	flw::sDressedIOFlow<> Flow;
 qRB
+	Flow.Init( FrontendIODriver );
+
 	if ( !flw::GetString( Flow, Language, sizeof( Language ) ) )
 		qRFwk();
 
@@ -717,7 +720,7 @@ qRE
 	return Success;
 }
 
-bso::bool__ fblbkd::backend___::_TestCompatibility( flw::ioflow__ &Flow )
+bso::bool__ fblbkd::backend___::_TestCompatibility( fdr::rIODriver &FrontendIODriver )
 {
 	bso::bool__ Success = false;
 qRH
@@ -730,7 +733,7 @@ qRB
 	URLLabel.Init( _BackendLabel );
 	URLLabel.Append( "UpdateURL" );
 
-	Success = _TestCompatibility( Flow, _APIVersion, MessageLabel.Convert( MessageLabelBuffer ), URLLabel.Convert( URLLAbelBuffer ) );
+	Success = _TestCompatibility( FrontendIODriver, _APIVersion, MessageLabel.Convert( MessageLabelBuffer ), URLLabel.Convert( URLLAbelBuffer ) );
 qRR
 qRT
 qRE
@@ -738,7 +741,7 @@ qRE
 }
 
 bso::bool__ backend___::_HandleRequest(
-	flw::ioflow__ &FrontendFlow,
+	fdr::rIODriver &Driver,
 	log_functions__ &LogFunctions )
 {
 	bso::sBool Disconnect = false;
@@ -761,7 +764,7 @@ qRB
 		break;
 	}
 
-	Request.Init( *Callbacks, FrontendFlow );
+	Request.Init( *Callbacks, Driver );
 
 	flw::Get( Request.Input(), O );
 

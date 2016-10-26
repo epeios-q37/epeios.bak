@@ -68,7 +68,7 @@ namespace sclbacknd {
 		{
 			return this;
 		}
-		bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) override;
+		bso::bool__ SCLDAEMONProcess( fdr::rIODriver *IODriver ) override;
 		virtual void *SCLBACKNDStuff( void ) = 0;
 	public:
 		void reset( bso::bool__ P = true )

@@ -56,7 +56,7 @@ namespace csdlec {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			if ( _Row == qNIL )
 				_Row = _Read.First();
@@ -80,7 +80,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 #ifdef CSDEBD_DBG
 			if ( _Row != qNIL )
@@ -88,6 +88,8 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 #endif
 			_Read.Init();
 		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
@@ -96,7 +98,9 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			return Maximum;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
+		{}
+		virtual void FDROTake( fdr::sTID Owner ) override
 		{}
 	public:
 		void reset( bso::bool__ P = true )
@@ -131,7 +135,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	private:
 		csdscb::callback__ *_Callback;
 		void *UP_;
-		flw::ioflow__ *_Flow;
+		fdr::rIODriver *IODriver_;
 		bso::bool__ _DataAvailable;
 		void _Create( void )
 		{
@@ -141,7 +145,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			Path.Init();
 			dir::GetSelfPath( Path );
 
-			UP_ = _Callback->PreProcess( _Flow, Path.Internal() );
+			UP_ = _Callback->PreProcess( IODriver_, Path.Internal() );
 		qRR
 		qRT
 		qRE
@@ -155,16 +159,16 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			_DataAvailable = true;
 
 			return _passive_generic_driver___::FDRWrite( Buffer, Maximum );
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			if ( _DataAvailable )
-				_Callback->Process( _Flow, UP_ );
+				_Callback->Process( IODriver_, UP_ );
 
 			_DataAvailable = false;
 		}
@@ -178,7 +182,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			_Callback = NULL;
 			UP_ = NULL;
-			_Flow = NULL;
+			IODriver_ = NULL;
 			_DataAvailable = false;
 		}
 		_active_generic_driver___(
@@ -194,13 +198,13 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		}
 		void Init(
 			csdscb::callback__ &Callback,
-			flw::ioflow__ &Flow,
+			fdr::rIODriver *IODriver,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			reset();
 
 			_Callback = &Callback;
-			_Flow = &Flow;
+			IODriver_ = IODriver;
 
 			_passive_generic_driver___::Init( ThreadSafety );
 
@@ -214,9 +218,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 	private:
 		data _Master, _Slave;
 		struct backend {
-			flw::byte__ Cache[CSDLEC_CACHE_SIZE];
 			_passive_generic_driver___ Driver;
-			flw::ioflow__ Flow;
 			void reset( bso::bool__ P = true )
 			{
 				Driver.reset( P );
@@ -235,7 +237,6 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 			void Init( void )
 			{
 				Driver.Init( fdr::ts_Default );
-				Flow.Init( Driver, Cache, sizeof( Cache ) );
 			}
 		} _Backend;
 	public:
@@ -270,7 +271,7 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 
 			_Backend.Init();
 
-			_active_generic_driver___::Init( Callback, _Backend.Flow, fdr::ts_Default );
+			_active_generic_driver___::Init( Callback, &_Backend.Driver, fdr::ts_Default );
 		}
 	};
 

@@ -66,7 +66,7 @@ namespace log {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( void ) override
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			tol::bDate Date;
 			tol::bTime Time;
@@ -80,7 +80,7 @@ namespace log {
 
 				if ( Changed_ ) {
 					LTFlow_ << txf::nl;
-					LTFlow_.Commit();
+					LTFlow_.Commit( Unlock );
 				}
 
 				LTFlow_ << '(';
@@ -122,8 +122,12 @@ namespace log {
 
 				Pos_ = 0;
 
-				LTFlow_.Commit();
+				LTFlow_.Commit( Unlock );
 			}
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			LTFlow_.Flow().ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )

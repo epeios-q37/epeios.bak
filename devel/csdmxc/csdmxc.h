@@ -89,7 +89,7 @@ namespace csdmxc {
 #endif
 	}
 
-	typedef flw::ioflow__ fFlow;
+	using fdr::rIODriver;
 
 	typedef stkbch::qBSTACKdl( void * )	dUPs;
 	qW( UPs );
@@ -152,7 +152,7 @@ namespace csdmxc {
 	{
 	protected:
 		virtual void *CSDMXCNew( void ) = 0;
-		virtual fFlow &CSDMXCExtractFlow( void *UP ) = 0;
+		virtual rIODriver &CSDMXCExtractDriver( void *UP ) = 0;
 		virtual void CSDMXCRelease( void *UP ) = 0;
 		virtual time_t CSDMXCEpochTimeStamp( void *UP )	// By default, the connection is always in use.
 		{
@@ -163,9 +163,9 @@ namespace csdmxc {
 		{
 			return CSDMXCNew();
 		}
-		virtual fFlow &ExtractFlow( void *UP )
+		virtual rIODriver &ExtractDriver( void *UP )
 		{
-			return CSDMXCExtractFlow( UP );
+			return CSDMXCExtractDriver( UP );
 		}
 		void Release( void *Flow )
 		{
@@ -318,9 +318,9 @@ qRE
 
 			return UP;
 		}
-		fFlow &ExtractFlow( void *UP )
+		rIODriver &ExtractDriver( void *UP )
 		{
-			return C_().ExtractFlow( UP );
+			return C_().ExtractDriver( UP );
 		}
 		void Release( void *UP )
 		{
@@ -358,43 +358,59 @@ qRE
 	private:
 		void *UP_;
 		qRMV( rCore, C_, Core_ );
-		fFlow &F_( void )
+		rIODriver &D_( void )
 		{
 			if ( UP_ == NULL )
 				qRFwk();
 
-			return C_().ExtractFlow( UP_ );
+			return C_().ExtractDriver( UP_ );
 		}
 		sId Id_;
 		bso::bool__ Prepare_( void )	// Return true if has already a flow, false otherwise.
 		{
 			bso::bool__ Created = UP_ == NULL;
+		qRH
+			flw::sDressedOFlow<> Flow;
+		qRB
 
 			if ( Created ) {
 				UP_ = C_().Get();
 
-				PutId( Id_, F_() );
-			}
+				Flow.Init( D_() );
 
+
+				PutId( Id_, Flow );
+
+				Flow.Commit( false );
+			}
+		qRR
+		qRT
+		qRE
 			return !Created;
 		}
-		bso::sBool Commit_( void )
+		bso::sBool Commit_( bso::sBool Unlock )
 		{
-			fFlow &Flow = F_();
+			bso::sBool Response = false;
+		qRH
+			flw::sDressedIOFlow<> Flow;
+		qRB
+			Flow.Init( D_() );
 
-			Flow.Commit();
+			Flow.Commit( Unlock );
 
 			if ( Id_ == CSDMXB_UNDEFINED ) {
 				Id_ = GetId( Flow );
-				return true;
+				Response = true;
 			} else if ( Flow.EndOfFlow() )
-				return false;
+				Response = false;
 			else if ( Flow.Get() == 0 )
-				return true;
+				Response = true;
 			else
 				qRFwk();
-
-			return false;	// To avoid a 'warning'.
+		qRR
+		qRT
+		qRE
+			return Response;
 		}
 		void GiveUp_( void )
 		{
@@ -406,15 +422,20 @@ qRE
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			fdr::size__ Amount = 0;
 		qRH
+			flw::sDressedOFlow<> Flow;
 		qRB
 			if ( Core_ != NULL ) {
 				Prepare_();
 
-				Amount = F_().WriteUpTo( Buffer, Maximum );
+				Flow.Init( D_() );
+
+				Amount = Flow.WriteUpTo( Buffer, Maximum );
+
+				Flow.Commit( false );
 			}
 		qRR
 			GiveUp_();
@@ -422,27 +443,36 @@ qRE
 		qRE
 			return Amount;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 		qRH
 		qRB
 			if ( UP_ != NULL )
-				if ( !Commit_() )
+				if ( !Commit_( Unlock ) )
 					GiveUp_();
 		qRR
 			GiveUp_();
 		qRT
 		qRE
 		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			 D_().OTake( Owner );
+		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			fdr::size__ Amount = 0;
 		qRH
+			flw::sDressedIFlow<> Flow;
 		qRB
 			if ( Core_ != NULL ) {
-				Amount = F_().ReadUpTo( Maximum, Buffer );
+				Flow.Init( D_() );
+
+				Amount = Flow.ReadUpTo( Maximum, Buffer );
+
+				Flow.Dismiss( false );
 			}
 		qRR
 			GiveUp_();
@@ -450,12 +480,12 @@ qRE
 		qRE
 			return Amount;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
 		qRH
 		qRB
 			if ( UP_ != NULL ) {
-				F_().Dismiss();
+				D_().Dismiss( Unlock );
 				C_().Release( UP_ );
 			}
 
@@ -464,6 +494,10 @@ qRE
 			GiveUp_();
 		qRT
 		qRE
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			 D_().ITake( Owner );
 		}
 		public:
 			void reset( bso::bool__ P = true )

@@ -267,7 +267,7 @@ namespace sck {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			if ( ( Maximum = sck::Read( _Socket, ( Maximum ), Buffer, _Timeout ) ) == SCK_DISCONNECTED )
 				Maximum = 0;
@@ -276,9 +276,13 @@ namespace sck {
 
 			return Maximum;
 		}
+		virtual void FDRDismiss( bso::sBool Unlock ) override
+		{}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			if ( _Error )
 				qRFwk();
@@ -293,9 +297,9 @@ namespace sck {
 
 			return Maximum;
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{}
-		virtual void FDRCommit( void )
+		virtual void FDROTake( fdr::sTID Owner ) override
 		{}
 	public:
 		void reset( bool P = true )

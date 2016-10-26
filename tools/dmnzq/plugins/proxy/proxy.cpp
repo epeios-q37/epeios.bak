@@ -39,7 +39,7 @@ namespace {
 	using misc::sTimeout;
 
 	struct data__ {
-		prxy::rFlow *Flow;
+		prxy::rIODriver *IODriver;
 		sModule *Module;
 		mtx::handler___ Mutex;
 		const char *Origin;
@@ -49,14 +49,14 @@ namespace {
 				if ( Mutex != mtx::UndefinedHandler )
 					mtx::Delete( Mutex );
 
-			Flow = NULL;
+			IODriver = NULL;
 			Module = NULL;
 			Origin = NULL;
 
 			Mutex = mtx::UndefinedHandler;
 		}
 		void Init(
-			prxy::rFlow *Flow,
+			prxy::rIODriver *IODriver,
 			sModule &Module,
 			const char *Origin )
 		{
@@ -64,7 +64,7 @@ namespace {
 
 			Mutex = mtx::Create();
 
-			this->Flow = Flow;
+			this->IODriver = IODriver;
 			this->Module = &Module;
 			this->Origin = Origin;
 		}
@@ -75,7 +75,7 @@ namespace {
 	{
 	qRFH
 		data__ &Data = *(data__ *)UP;
-		prxy::rFlow *Flow = Data.Flow;
+		prxy::rIODriver *IODriver = Data.IODriver;
 		sModule &Module = *Data.Module;
 		ntvstr::string___ Origin;
 		void *MUP = NULL;
@@ -85,15 +85,15 @@ namespace {
 
 		mtx::Unlock( Data.Mutex );
 
-		MUP = Module.PreProcess( Flow, Origin );
+		MUP = Module.PreProcess( IODriver, Origin );
 
-		while ( Module.Process( Flow, MUP ) == csdscb::aContinue );
+		while ( Module.Process( IODriver, MUP ) == csdscb::aContinue );
 	qRFR
 	qRFT
 		if( !Module.PostProcess( MUP ) )
 			qRGnr();
 	
-		delete Flow;
+		delete IODriver;
 	qRFE( sclmisc::ErrFinal() )
 	}
 
@@ -108,19 +108,19 @@ namespace {
 			sTimeout Timeout) override
 		{
 		qRH
-			prxy::rFlow *Flow = NULL;
+			prxy::rIODriver *IODriver = NULL;
 			data__ Data;
 			lcl::meaning Meaning;
 		qRB
-			Flow = new prxy::rFlow;
+			IODriver = new prxy::rIODriver;
 
-			if ( Flow == NULL )
+			if ( IODriver == NULL )
 				qRAlc();
 
 			Meaning.Init();
 
-			while ( Flow->Init( HostService_, Identifier_, prxybase::tServer, Timeout == misc::NoTimeout ? sck::NoTimeout : Timeout * 1000, Meaning ) ) {
-				Data.Init( Flow, Module, HostService_ );
+			while ( IODriver->Init( HostService_, Identifier_, prxybase::tServer, Timeout == misc::NoTimeout ? sck::NoTimeout : Timeout * 1000, Meaning ) ) {
+				Data.Init( IODriver, Module, HostService_ );
 
 				mtx::Lock( Data.Mutex );
 
@@ -129,19 +129,19 @@ namespace {
 				mtx::Lock( Data.Mutex );
 				mtx::Unlock( Data.Mutex );
 
-				Flow = NULL;
+				IODriver = NULL;
 
-				Flow = new prxy::rFlow;
+				IODriver = new prxy::rIODriver;
 
-				if ( Flow == NULL )
+				if ( IODriver == NULL )
 					qRAlc();
 			}
 
 			sclmisc::ReportAndAbort( Meaning );
 		qRR
 		qRT
-			if ( Flow != NULL )
-				delete Flow;
+			if ( IODriver != NULL )
+				delete IODriver;
 		qRE
 		}
 	public:

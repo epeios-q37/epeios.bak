@@ -126,9 +126,8 @@ namespace prxy {
 
 	typedef flw::standalone_ioflow__<> sFlow_;
 
-	class rFlow
-	: private rFlowDriver_,
-	  public sFlow_
+	class rIODriver
+	: public rFlowDriver_
 	{
 	private:
 		prxy::rProxy_ Proxy_;
@@ -139,9 +138,13 @@ namespace prxy {
 		{
 			return Proxy_.WriteUpTo( Buffer, Maximum );
 		}
-		virtual void FDRCommit( void ) override
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
-			Proxy_.Commit();
+			Proxy_.Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			Proxy_.ODriver().OTake( Owner );
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -149,18 +152,21 @@ namespace prxy {
 		{
 			return Proxy_.ReadUpTo( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( void ) override
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			Proxy_.Dismiss();
+			Proxy_.Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			Proxy_.IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			sFlow_::reset( P );
 			rFlowDriver_::reset( P );
 			Proxy_.reset( P );
 		}
-		qCVDTOR( rFlow );
+		qCVDTOR( rIODriver );
 		eState Init(
 			const char *HostService,
 			const char *Identifier,
@@ -171,8 +177,6 @@ namespace prxy {
 			reset();
 
 			rFlowDriver_::Init( fdr::ts_Default );
-
-			sFlow_::Init( *this );
 
 			return Proxy_.Init( HostService, Identifier, Type, Timeout, qRP );
 		}

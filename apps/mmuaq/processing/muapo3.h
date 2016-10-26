@@ -236,6 +236,7 @@ namespace muapo3 {
 	private:
 		rSequenceDelimitedIDriver Driver_;
 		flw::sIFlow Flow_;
+		str::wString Error_;
 	public:
 		void reset( bso::sBool P = true )
 		{

@@ -122,16 +122,16 @@ namespace flw {
 			bso::bool__ Adjust,
 			bso::bool__ &CacheIsEmpty );
 # endif
-		void _Dismiss( void )
+		void _Dismiss( bso::sBool Unlock )
 		{
-			_D().Dismiss();
+			_D().Dismiss( Unlock );
 		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			if ( P ) {
 				if ( _Driver != NULL )
-					_Dismiss();
+					_Dismiss( true );
 			}
 
 			_Driver = NULL;
@@ -141,7 +141,7 @@ namespace flw {
 		{
 			_Driver = &Driver;
 		}
-		fdr::iflow_driver_base___ &Driver( void ) const
+		fdr::iflow_driver_base___ &IDriver( void ) const
 		{
 			return _D();
 		}
@@ -203,10 +203,10 @@ namespace flw {
 		{
 			return _D().AmountRed();
 		}
-		void Dismiss( void )
+		void Dismiss( bso::sBool Unlock = true )
 		{
 			if ( _Driver != NULL )
-				_Dismiss();
+				_Dismiss( Unlock );
 		}
 		bso::bool__ IsInitialized( void ) const
 		{
@@ -312,7 +312,7 @@ namespace flw {
 			size__ Wanted,
 			size__ Minimum,
 			size__ *TotalSize );
-		void _DumpCache( void )
+		bso::sBool DumpCache_( void )
 		{
 			size__ Stayed = _Size - _Free;
 			
@@ -320,7 +320,10 @@ namespace flw {
 				_DirectWrite( _Cache, Stayed, Stayed, NULL );
 
 				_Free = _Size;
-			}
+
+				return true;
+			} else
+				return false;
 		}
 		size__ _WriteIntoCache(
 			const byte__ *Buffer,
@@ -352,10 +355,10 @@ namespace flw {
 				return _WriteIntoCache( Buffer, Amount );
 		}
 		// Synchronization.
-		void _Commit( void )
+		void _Commit( bso::sBool Unlock )
 		{
-			_DumpCache();
-			_D().Commit();
+//			if ( DumpCache_() )
+				_D().Commit( Unlock );
 
 			Written_ = 0;
 		}
@@ -372,7 +375,7 @@ namespace flw {
 			size__ AmountWritten = _WriteIntoCache( Buffer, Amount );
 
 			if ( ( AmountWritten == 0 )  && ( Amount != 0 ) ) {
-				_DumpCache();
+				DumpCache_();
 				AmountWritten = _DirectWriteOrIntoCache( Buffer, Amount, TotalWritten );
 			}
 
@@ -410,7 +413,7 @@ namespace flw {
 
 			Written_ = 0;
 		}
-		fdr::oflow_driver_base___ &Driver( void ) const
+		fdr::oflow_driver_base___ &ODriver( void ) const
 		{
 			return _D();
 		}
@@ -434,10 +437,10 @@ namespace flw {
 			_Write( &C, 1 );
 		}
 		//f Synchronization.
-		void Commit( void )
+		void Commit( bso::sBool Unlock = true )
 		{
 			if ( _Driver != NULL )
-				_Commit();
+				_Commit( Unlock );
 		}
 		//f Return the amount of data written since last 'Synchronize()'.
 		size__ AmountWritten( void ) const

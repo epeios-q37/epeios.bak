@@ -171,18 +171,18 @@ namespace fdr {
 		return false;
 	}
 
-	typedef tht::sTID sTID_;
+	using tht::sTID;
 
 	class _flow_driver_base__
 	{
 	private:
 		mutex__ _Mutex;	// Mutex pour protger la ressource.
-		sTID_ Owner_;
+		sTID Owner_;
 	protected:
 		void Lock( void )
 		{
 #ifdef FDR__TS
-			sTID_ Caller = tht::GetTID();
+			sTID Caller = tht::GetTID();
 
 			if ( _Mutex != mtx::UndefinedHandler ) {
 				if ( TryToLock_( _Mutex ) ) {
@@ -205,6 +205,24 @@ namespace fdr {
 
 			_Mutex = Create_( ThreadSafety );
 		}
+		sTID BaseTake( sTID TID )
+		{
+#ifdef FDR__TS
+			sTID Old = Owner_;
+
+			if ( Old != tht::Undefined ) {
+
+				if ( TID == tht::Undefined )
+					TID = tht::GetTID();
+
+				Owner_ = TID;
+			}
+
+			return Old;
+#else
+			return tht::Undefined;
+#endif
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -222,7 +240,7 @@ namespace fdr {
 		void Unlock( void )
 		{
 #ifdef FDR__TS
-			sTID_ Caller = tht::GetTID();
+			sTID Caller = tht::GetTID();
 
 			if ( _Mutex != mtx::UndefinedHandler ) {
 				if ( IsLocked_( _Mutex ) ) {
@@ -386,12 +404,13 @@ namespace fdr {
 		virtual size__ FDRRead(
 			size__ Maximum,
 			byte__ *Buffer ) = 0;
-		virtual void FDRDismiss( void ) = 0;
+		virtual void FDRDismiss( bso::sBool Unlock ) = 0;
+		virtual void FDRITake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Dismiss();
+				Dismiss( true );
 			}
 
 			_Cache = NULL;
@@ -418,15 +437,22 @@ namespace fdr {
 			_Available = _Position = 0;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Dismiss()
+		sTID ITake( sTID Owner )
+		{
+			FDRITake( Owner );
+
+			return BaseTake( Owner );
+		}
+		void Dismiss( bso::sBool Unlock )
 		{
 			if ( _Cache != NULL ) {
 			qRH
 			qRB
-				FDRDismiss();
+				FDRDismiss( Unlock );
 			qRR
 			qRT
-				Unlock();
+				if ( Unlock )
+					this->Unlock();
 			qRE
 			}
 
@@ -526,13 +552,14 @@ namespace fdr {
 		// Retourne le nombre d'octets effectivement crits. Ne retourne '0' que si plus aucune donne ne peut tre crite.
 		virtual size__ FDRWrite(
 			const byte__ *Buffer,
-			size__ MAximum ) = 0;
-		virtual void FDRCommit( void ) = 0;
+			size__ Maximum ) = 0;
+		virtual void FDRCommit( bso::sBool Unlock ) = 0;
+		virtual void FDROTake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
 			if ( P ) {
-				Commit();
+				Commit( true );
 			}
 
 			_Initialized = false;
@@ -546,15 +573,16 @@ namespace fdr {
 			_Initialized = true;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
-		void Commit( void  )
+		void Commit( bso::sBool Unlock )
 		{
 			if ( _Initialized ) {
 			qRH
 			qRB
-				FDRCommit();
+				FDRCommit( Unlock );
 			qRR
 			qRT
-				Unlock();
+				if ( Unlock )
+					this->Unlock();
 			qRE
 			}
 		}
@@ -564,6 +592,12 @@ namespace fdr {
 		{
 			Lock();
 			return FDRWrite( Buffer, Maximum );
+		}
+		sTID OTake( sTID Owner )
+		{
+			FDROTake( Owner );
+
+			return BaseTake( Owner );
 		}
 		bso::bool__ OFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{

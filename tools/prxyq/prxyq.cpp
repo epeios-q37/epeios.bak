@@ -77,36 +77,49 @@ namespace {
 	  public _flow__
 	{
 	private:
-		Q37_MRMDF( flw::iflow__, IF_, IFlow_ );
-		Q37_MRMDF( flw::oflow__, OF_, OFlow_ );
+		flw::sDressedIFlow<> IFlow_;
+		flw::sDressedOFlow<> OFlow_;
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum) override
 		{
-			return OF_().WriteUpTo( Buffer, Maximum );
+			return OFlow_.WriteUpTo( Buffer, Maximum );
 		}
-		virtual void FDRCommit( void ) override
+		virtual void FDRCommit( bso::sBool Unlock = true ) override
 		{
-			OF_().Commit();
+			OFlow_.Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner )
+		{
+			OFlow_.ODriver().OTake( Owner );
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override
 		{
-			return IF_().ReadUpTo( Maximum, Buffer );
+			return IFlow_.ReadUpTo( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( void ) override
+		virtual void FDRDismiss( bso::sBool Unlock = true ) override
 		{
-			IF_().Dismiss();
+			IFlow_.Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner )
+		{
+			IFlow_.IDriver().ITake( Owner );
 		}
 public:
 		void reset( bso::bool__ P = true )
 		{
+			if ( P ) {
+				IFlow_.Dismiss( false );
+				OFlow_.Commit( false );
+			}
+
 			_flow__::reset( P );
 			_flow_driver___::reset( P );
-			IFlow_ = NULL;
-			OFlow_ = NULL;
+
+			tol::reset( P, IFlow_, OFlow_ );
 		}
 		E_CVDTOR( flow___ );
 		void Init( void )
@@ -118,38 +131,38 @@ public:
 
 			// Other initializaiton will be made by other methods.
 		}
-		void SetIn( flw::iflow__ &Flow )
+		void SetIn( fdr::rIDriver &IDriver )
 		{
-			if ( IFlow_ != NULL )
+			if ( IFlow_.IsInitialized() )
 				qRGnr();
 
-			IFlow_ = &Flow;
+			IFlow_.Init( IDriver );
 		}
-		void SetOut( flw::oflow__ &Flow )
+		void SetOut( fdr::rODriver &ODriver )
 		{
-			if ( OFlow_ != NULL )
+			if ( OFlow_.IsInitialized() )
 				qRGnr();
 
-			OFlow_ = &Flow;
+			OFlow_.Init( ODriver );
 		}
 		bso::sBool IsSet( void ) const
 		{
-			if ( IFlow_ != NULL ) {
-				if ( OFlow_ != NULL )
+			if ( IFlow_.IsInitialized() ) {
+				if ( OFlow_.IsInitialized() )
 					return true;
 				else
 					qRGnr();
-			} else if ( OFlow_ == NULL )
+			} else if ( !OFlow_.IsInitialized() )
 				return false;
 			else
 				qRGnr();
 		}
 		void Clear( void )
 		{
-			if ( OFlow_ != NULL )
+			if ( OFlow_.IsInitialized() )
 				_flow__::Commit();
 
-			if ( IFlow_ != NULL )
+			if ( IFlow_.IsInitialized() )
 				_flow__::Dismiss();
 		}
 	};
@@ -204,8 +217,8 @@ public:
 	class rRack_ {
 	private:
 		flow___ C2S_, S2C_;
-		Q37_MRMDF( flw::sIOFlow, C_, Client_ );
-		Q37_MRMDF( flw::sIOFlow, S_, Server_ );
+		Q37_MRMDF( fdr::rIODriver, C_, Client_ );
+		Q37_MRMDF( fdr::rIODriver, S_, Server_ );
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -234,23 +247,23 @@ public:
 			S2C_.Init();
 		}
 		void Plug(
-			flw::ioflow__ *Flow,
+			fdr::rIODriver *IODriver,
 			prxybase::eType Type )
 		{
 			switch ( Type ) {
 			case prxybase::tClient:
-				C2S_.SetIn( *Flow );
-				S2C_.SetOut( *Flow );
+				C2S_.SetIn( *IODriver );
+				S2C_.SetOut( *IODriver );
 				if ( Client_ != NULL )
 					qRGnr();
-				Client_ = Flow;
+				Client_ = IODriver;
 				break;
 			case prxybase::tServer:
-				S2C_.SetIn( *Flow );
-				C2S_.SetOut( *Flow );
+				S2C_.SetIn( *IODriver );
+				C2S_.SetOut( *IODriver );
 				if ( Server_ != NULL )
 					qRGnr();
-				Server_ = Flow;
+				Server_ = IODriver;
 				break;
 			default:
 				qRGnr();
@@ -265,23 +278,23 @@ public:
 		{
 			return S2C_;
 		}
-		flw::sOFlow &GetCorrespondingOFlow( prxybase::eType Type )
+		fdr::rODriver &GetCorrespondingODriver( prxybase::eType Type )
 		{
-			flw::sOFlow *Flow = NULL;
+			fdr::rODriver *ODriver = NULL;
 
 			switch ( Type ) {
 			case prxybase::tClient:
-				Flow = &C_();
+				ODriver= &C_();
 				break;
 			case prxybase::tServer:
-				Flow = &S_();
+				ODriver = &S_();
 				break;
 			default:
 				qRGnr();
 				break;
 			}
 
-			return *Flow;
+			return *ODriver;
 		}
 	};
 
@@ -343,11 +356,18 @@ public:
 
 			return true;
 		}
-		void AnswerOKAndCommit_( flw::sOFlow &Flow )
+		void AnswerOKAndCommit_( fdr::rODriver &ODriver )
 		{
+		qRH
+			flw::sDressedOFlow<> Flow;
+		qRB
+			Flow.Init( ODriver );
 			prxybase::PutAnswer( prxybase::aOK, Flow );
 
 			Flow.Commit();
+		qRR
+		qRT
+		qRE
 		}
 	public:
 		void reset( bso::bool__ P = true )
@@ -366,14 +386,14 @@ public:
 		E_CDTOR( rProxy );
 		// NOT blocking ; 'PostInit(...)' is the blocking one.
 		void Init(
-			flw::ioflow__ *Flow,
+			fdr::rIODriver *IODriver,
 			prxybase::eType Type )
 		{
 			reset();
 
 			Rack_.Init();
 
-			Rack_.Plug( Flow, Type );
+			Rack_.Plug( IODriver, Type );
 
 			Mutex_ = mtx::Create();
 		}
@@ -390,22 +410,22 @@ public:
 
 			Data.Init( *this, Type );
 
-			AnswerOKAndCommit_( Rack_.GetCorrespondingOFlow( Type ) );
+			AnswerOKAndCommit_( Rack_.GetCorrespondingODriver( Type ) );
 
 			mtk::Launch( PostInit_, &Data );
 
 			Data.Wait();
 		}
 		void Plug(
-			flw::ioflow__ *Flow,
+			fdr::rIODriver *IODriver,
 			prxybase::eType Type,
 			tol::sDelay Timeout )
 		{
-			Rack_.Plug( Flow, Type );
+			Rack_.Plug( IODriver, Type );
 
 			ASyncPostInit( prxybase::GetOther( Type ) );
 
-			AnswerOKAndCommit_( *Flow );
+			AnswerOKAndCommit_( *IODriver );
 
 			Process_( Type );
 
@@ -576,7 +596,7 @@ public:
 	namespace plug_ {
 		void Create_(
 			const str::string_ &Id,
-			flw::ioflow__ *Flow,
+			fdr::rIODriver *IODriver,
 			prxybase::eType Type )
 		{
 		qRH
@@ -594,7 +614,7 @@ public:
 
 			Locker_.Unlock();	// Locked by caller.
 
-			Proxy->Init( Flow, Type );
+			Proxy->Init( IODriver, Type );
 		qRR
 		qRT
 		qRE
@@ -602,20 +622,20 @@ public:
 
 		void Plug_(
 			rProxy *Proxy,
-			flw::ioflow__ *Flow,
+			fdr::rIODriver *IODriver,
 			prxybase::eType Type,
 			tol::sDelay Timeout )
 		{
 			Locker_.Unlock();	// Locked by caller.
 
-			Proxy->Plug( Flow, Type, Timeout );	// Blocking until deconnection or 'Timeout' ms.
+			Proxy->Plug( IODriver, Type, Timeout );	// Blocking until deconnection or 'Timeout' ms.
 
 			delete Proxy;
 		}
 	}
 
 	void Plug_1_(
-		flw::ioflow__ *Flow,
+		fdr::rIODriver *IODriver,
 		tol::sDelay Timeout )
 	{
 		bso::sBool NoTimeout = true;
@@ -624,11 +644,14 @@ public:
 		str::string Id;
 		rProxy *Proxy = NULL;
 		rLogRack_ Log;
+		flw::sDressedIFlow<> Flow;
 	qRB
-		Type = prxybase::GetType( *Flow );
+		Flow.Init( *IODriver );
+
+		Type = prxybase::GetType( Flow );
 
 		Id.Init();
-		prxybase::GetId( *Flow, Id );
+		prxybase::GetId( Flow, Id );
 
 		Locker_.Lock();
 
@@ -652,12 +675,12 @@ public:
 			Log << "new";
 			Log << " (" << Id << ')';
 			Log.reset();
-			plug_::Create_( Id, Flow, Type );
+			plug_::Create_( Id, IODriver, Type );
 		} else {
 			Log << "plug";
 			Log << " (" << Id << ')';
 			Log.reset();
-			plug_::Plug_( Proxy, Flow, Type, Timeout );	// BLOQUANT !!! (d'où pas de 'log' aprés).
+			plug_::Plug_( Proxy, IODriver, Type, Timeout );	// BLOQUANT !!! (d'où pas de 'log' aprés).
 		}
 
 	qRR
@@ -739,7 +762,7 @@ public:
 		bso::sBool CloseSocketUpstream_;
 	protected:
 		void *CSDSCBPreProcess(
-			flw::sIOFlow *Flow,
+			fdr::rIODriver *IODriver,
 			const ntvstr::char__ *Origin ) override
 		{
 		qRH
@@ -752,40 +775,45 @@ public:
 			return NULL;
 		}
 		csdscb::action__ CSDSCBProcess(
-			flw::sIOFlow *Flow,
+			fdr::rIODriver *IODriver,
 			void *UP ) override
 		{
 		qRH
 			prxybase::eType Type = prxybase::t_Undefined;
 			str::string Id;
 			csdcmn::sVersion Version = csdcmn::UndefinedVersion;
+			flw::sDressedIOFlow<> Flow;
 		qRB
-			if ( ( Version = csdcmn::GetProtocolVersion( prxybase::ProtocolId, *Flow ) ) != prxybase::ProtocolVersion )
+			Flow.Init( *IODriver );
+
+			if ( ( Version = csdcmn::GetProtocolVersion( prxybase::ProtocolId, Flow ) ) != prxybase::ProtocolVersion )
 				qRGnr();
 
 			CloseSocketUpstream_ = true;
 
-			switch ( prxybase::GetRequest( *Flow ) ) {
+			switch ( prxybase::GetRequest( Flow ) ) {
 			case prxybase::rPlug_1:
-				 Plug_1_( Flow, 5000 );
+				 Plug_1_( IODriver, 5000 );
 				 CloseSocketUpstream_ = false;
 				break;
 			case prxybase::rDismiss_1:
-				Dismiss_1_( *Flow );
+				Dismiss_1_( Flow );
 				break;
 			case prxybase::rPing_1:
-				Ping_1_( *Flow );
+				Ping_1_( Flow );
 				break;
 			case prxybase::rFreeze_1:
-				Freeze_1_( *Flow, FromLocalhost_ );
+				Freeze_1_( Flow, FromLocalhost_ );
 				break;
 			case prxybase::rCrash_1:
-				Crash_1_( *Flow, FromLocalhost_ );
+				Crash_1_( Flow, FromLocalhost_ );
 				break;
 			default:
 				qRGnr();
 				break;
 			}
+
+			Flow.Commit( false );
 		qRR
 			Locker_.UnlockIfLocked();
 		qRT

@@ -42,49 +42,49 @@ class rCallback
 {
 private:
 	qCBUFFERr HostService_, Identifier_;
-	prxy::rFlow *FlowAsPointer_( void *UP ) const
+	prxy::rIODriver *DriverAsPointer_( void *UP ) const
 	{
 		if ( UP == NULL )
 			qRFwk();
 
-		return (prxy::rFlow *)UP;
+		return (prxy::rIODriver *)UP;
 	}
-	prxy::rFlow &F_( void *UP ) const
+	prxy::rIODriver &D_( void *UP ) const
 	{
-		return *FlowAsPointer_( UP );
+		return *DriverAsPointer_( UP );
 	}
 protected:
 	virtual void *CSDMXCNew( void ) override
 	{
-		prxy::rFlow *Flow = NULL;
+		prxy::rIODriver *IODriver = NULL;
 	qRH
 		lcl::meaning Meaning;
 	qRB
-		Flow = new prxy::rFlow;
+		IODriver = new prxy::rIODriver;
 
-		if ( Flow == NULL )
+		if ( IODriver == NULL )
 			qRAlc();
 
 		Meaning.Init();
 
-		if ( !Flow->Init( HostService_, Identifier_, prxybase::tClient, sck::NoTimeout, Meaning ) )
+		if ( !IODriver->Init( HostService_, Identifier_, prxybase::tClient, sck::NoTimeout, Meaning ) )
 			sclmisc::ReportAndAbort( Meaning );
 	qRR
 	qRT
 	qRE
-		return Flow;
+		return IODriver;
 	}
-	virtual csdmxc::fFlow &CSDMXCExtractFlow( void *UP ) override
+	virtual csdmxc::rIODriver &CSDMXCExtractDriver( void *UP ) override
 	{
-		return F_( UP );
+		return D_( UP );
 	}
 	virtual void CSDMXCRelease( void *UP ) override
 	{
-		delete FlowAsPointer_( UP );
+		delete DriverAsPointer_( UP );
 	}
 	virtual time_t CSDMXCEpochTimeStamp( void *UP ) override
 	{
-		return F_( UP ).EpochTimeStamp();
+		return D_( UP ).EpochTimeStamp();
 	}
 public:
 	void reset( bso::sBool = true )

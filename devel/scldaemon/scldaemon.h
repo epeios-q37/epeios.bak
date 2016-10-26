@@ -46,7 +46,7 @@ namespace scldaemon {
 	class daemon___
 	{
 	protected:
-		virtual bso::bool__ SCLDAEMONProcess( flw::ioflow__ &Flow ) = 0;
+		virtual bso::bool__ SCLDAEMONProcess( fdr::rIODriver *IODriver ) = 0;
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -57,9 +57,9 @@ namespace scldaemon {
 		{
 			// Standardization.
 		}
-		bso::bool__ Process( flw::ioflow__ &Flow )
+		bso::bool__ Process( fdr::rIODriver *IODriver )
 		{
-			return SCLDAEMONProcess( Flow );
+			return SCLDAEMONProcess( IODriver );
 		}
 	};
 
@@ -77,18 +77,18 @@ namespace scldaemon {
 			return SCLDAEMONPluginOverride( Id, Arguments, Timeout );
 		}
 		virtual void *CSDSCBPreProcess(
-			flw::sIOFlow *Flow,
+			fdr::rIODriver *IODriver,
 			const ntvstr::char__ *Origin ) override
 		{
 			return SCLDAEMONNew( Origin );
 		}
 		virtual csdscb::action__ CSDSCBProcess(
-			flw::ioflow__ *Flow,
+			fdr::rIODriver *IODriver,
 			void *UP ) override
 		{
 			daemon___ &Daemon = *(daemon___ *)UP;
 
-			if ( Daemon.Process( *Flow ) )
+			if ( Daemon.Process( IODriver ) )
 				return csdscb::aContinue;
 			else
 				return csdscb::aStop;

@@ -74,14 +74,16 @@ namespace iof {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Tampon,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			return (fdr::size__)_output_driver__::Write( Tampon, Maximum );
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			return _output_driver__::_Commit();
 		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -162,14 +164,16 @@ namespace iof {
 	protected:
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			return _input_driver__::_Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss(  bso::sBool Unlock  ) override
 		{
 			_input_driver__::_Dismiss();
 		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -229,24 +233,28 @@ namespace iof {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			return _output_driver__::_Write( Buffer, Maximum );
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit(  bso::sBool Unlock  ) override
 		{
 			_output_driver__::_Commit();
 		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
-			fdr::byte__ *Buffer )
+			fdr::byte__ *Buffer ) override
 		{
 			return _input_driver__::_Read( Maximum, Buffer );
 		}
-		virtual void FDRDismiss( void )
+		virtual void FDRDismiss(  bso::sBool Unlock  ) override
 		{
 			return _input_driver__::_Dismiss();
 		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{}
 	public:
 		void Init(
 			iop::descriptor__ D,

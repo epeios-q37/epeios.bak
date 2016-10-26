@@ -160,15 +160,15 @@ namespace csdbns {
 # ifdef CPE_F_MT
 
 	struct rData_ {
-		sck::socket_ioflow___ *Flow;
+		sck::socket_ioflow_driver___ *IODriver;
 		void *UP;
 		void reset( bso::sBool P = true )
 		{
 			if ( P )
-				if ( Flow != NULL )
-					delete Flow;
+				if ( IODriver != NULL )
+					delete IODriver;
 
-			tol::reset( P, Flow, UP );
+			tol::reset( P, IODriver, UP );
 		}
 		qCDTOR( rData_ );
 		void Init( void )
@@ -195,13 +195,13 @@ namespace csdbns {
 
 			Data->Init();
 
-			Data->Flow = new sck::socket_ioflow___;
+			Data->IODriver = new sck::socket_ioflow_driver___;
 
-			if ( Data->Flow == NULL )
+			if ( Data->IODriver == NULL )
 				qRFwk();
 
-			Data->Flow->Init( Socket, true, sck::NoTimeout );
-			Data->UP = BaseCallback->PreProcess( Data->Flow, ntvstr::string___( IP ).Internal() );	// The 'OwnerShipTaken' concerns the 'Flow'.
+			Data->IODriver->Init( Socket, true, fdr::ts_Default, sck::NoTimeout );
+			Data->UP = BaseCallback->PreProcess( Data->IODriver, ntvstr::string___( IP ).Internal() );	// The 'OwnerShipTaken' concerns the 'Flow'.
 		qRR
 			if ( Data != NULL )
 				delete Data;
@@ -219,7 +219,7 @@ namespace csdbns {
 			if ( Data.Flow.GetSocket() != Socket )
 				ERRc();
 #  endif
-			return BaseCallback->Process( Data.Flow, Data.UP );
+			return BaseCallback->Process( Data.IODriver, Data.UP );
 		}
 		virtual bso::sBool CSDBNSPostProcess( void *UP ) override
 		{
@@ -231,7 +231,7 @@ namespace csdbns {
 			rData_ &Data = *(rData_ *)UP;
 
 			if ( !( ReturnedValue = BaseCallback->PostProcess( Data.UP ) ) )
-				Data.Flow = NULL;	// To avoid destruction below.
+				Data.IODriver = NULL;	// To avoid destruction below.
 
 			delete (rData_ *)UP;
 

@@ -160,13 +160,18 @@ namespace htp {
 
 			return Size;
 		}
-		void FDRDismiss( void ) override
+		void FDRDismiss( bso::sBool Unlock ) override
 		{
 			if ( Size_ != 0 )
 				qRGnr();
 
-			F_().Dismiss();
+			F_().Dismiss( Unlock );
 		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			 F_().IDriver().ITake( Owner );
+		}
+
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -215,12 +220,16 @@ namespace htp {
 
 			return Size;
 		}
-		void FDRDismiss( void ) override
+		void FDRDismiss( bso::sBool Unlock ) override
 		{
 			if ( Size_ != 0 )
 				qRGnr();
 
-			F_().Dismiss();
+			F_().Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			 F_().IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )

@@ -51,7 +51,10 @@ namespace {
 		time_t Delay,
 		cCallback &Callback )
 	{
-		fFlow &Flow = Callback.ExtractFlow( UP );
+	qRH
+		flw::sDressedIOFlow<> Flow;
+	qRB
+		Flow.Init( Callback.ExtractDriver( UP ) );
 
 		if ( ( tol::EpochTime( false ) - Callback.EpochTimeStamp( UP ) ) >= Delay )
 			if ( !Flow.OFlowIsLocked() ) {
@@ -63,6 +66,13 @@ namespace {
 
 				Flow.Dismiss();
 			}
+			else {
+				Flow.Commit( false );
+				Flow.Dismiss( false );
+			}
+	qRR
+	qRT
+	qRE
 	}
 }
 
@@ -119,9 +129,17 @@ void csdmxc::rCore::KeepAlive_( time_t Delay )
 
 void csdmxc::rCore::ReleaseUPs_( void )
 {
+qRH
+	flw::sDressedIOFlow<> Flow;
+qRB
 	while ( UPs.Amount() != 0 )
 	{
-		PutId( CSDMXB_CLOSE, C_().ExtractFlow( UPs.Top() ) );
+		Flow.Init( C_().ExtractDriver( UPs.Top() ) );	
+		PutId( CSDMXB_CLOSE, Flow );
 		C_().Release( UPs.Pop() );
+		Flow.Commit( false );
 	}
+qRR
+qRT
+qRE
 }

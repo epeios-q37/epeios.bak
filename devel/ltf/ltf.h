@@ -62,7 +62,7 @@ namespace ltf {
 	protected:
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
-			fdr::size__ Maximum )
+			fdr::size__ Maximum ) override
 		{
 			bso::sBool Overflow = false; 
 
@@ -87,11 +87,15 @@ namespace ltf {
 
 			return Maximum;
 		}
-		virtual void FDRCommit( void )
+		virtual void FDRCommit( bso::sBool Unlock ) override
 		{
 			_TF().Put(_Data, _Amount );
 			_Amount = 0;
-			_TF() << txf::commit;
+			_TF().Commit( Unlock );
+		}
+		virtual void FDROTake( fdr::sTID Owner ) override
+		{
+			_TF().Flow().ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )
