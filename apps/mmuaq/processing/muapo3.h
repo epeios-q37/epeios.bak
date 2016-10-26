@@ -187,9 +187,13 @@ namespace muapo3 {
 
 			return Amount;
 		}
-		virtual void FDRDismiss( void ) override
+		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{
-			Flow_.Dismiss();
+			Flow_.Dismiss( Unlock );
+		}
+		virtual void FDRITake( fdr::sTID Owner ) override
+		{
+			Flow_.IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -231,22 +235,24 @@ namespace muapo3 {
 
 	const char *GetLabel( eCommand Command );
 
-	class hMessage
+	class hBody
 	{
 	private:
 		rSequenceDelimitedIDriver Driver_;
 		flw::sIFlow Flow_;
-		str::wString Error_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow_, Driver_ );
+			tol::reset( P, Flow_, Driver_, Message );
 		}
+		qCDTOR( hBody );
 		void Init( fdr::rIDriver &Driver )
 		{
 			Driver_.Init( Driver, fdr::ts_Default );
 			Flow_.Init( Driver_ );
+			tol::Init( Message );
 		}
+		str::wString Message;
 		flw::sIFlow &GetFlow( void )
 		{
 			return Flow_;
@@ -258,22 +264,27 @@ namespace muapo3 {
 	bso::sBool Authenticate(
 		const str::dString &Username,
 		const str::dString &Password,
-		fdr::rIODriver &Server );
+		fdr::rIODriver &Server,
+		hBody & Body );
 
-	bso::sBool List( fdr::rIODriver &Server );
+	bso::sBool List(
+		fdr::rIODriver &Server,
+		hBody & Body );
 
 	bso::sBool Retrieve(
 		bso::sUInt Index,
 		fdr::rIODriver &Server,
-		hMessage &Message );
+		hBody & Body );
 
 	bso::sBool Top(
 		bso::sUInt Index,
 		bso::sUInt AmoutOfLine,
 		fdr::rIODriver &Server,
-		hMessage &Message );
+		hBody & Body );
 
-	bso::sBool Quit( fdr::rIODriver &Server );
+	bso::sBool Quit(
+		fdr::rIODriver &Server,
+		hBody & Body );
 }
 
 

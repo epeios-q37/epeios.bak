@@ -128,7 +128,9 @@ namespace {
 	}
 
 	namespace pop3_ {
-		bso::sBool InitAndAuthenticate_( csdbnc::rIODriver &Server )
+		bso::sBool InitAndAuthenticate_(
+			csdbnc::rIODriver &Server,
+			muapo3::hBody &Body )
 		{
 			bso::sBool Success = false;
 		qRH
@@ -147,32 +149,38 @@ namespace {
 //			Buffer.Init();
 			Server.Init( HostPort.Convert( Buffer ) , SCK_INFINITE, err::hThrowException );
 
-			Success = muapo3::Authenticate( Username, Password, Server );
+			Success = muapo3::Authenticate( Username, Password, Server, Body );
 		qRR
 		qRT
 		qRE
 			return Success;
 		}
+
+		void Report( muapo3::hBody &Body )
+		{
+			cio::COut << Body.Message << txf::nl << txf::commit;
+			qRAbort();
+		}
 	}
+
+#define REPORT pop3_::Report( Body )
 
 	void POP3List_( void )
 	{
 	qRH
 		csdbnc::rIODriver Server;
-		muapo3::hMessage Message;
+		muapo3::hBody Body;
 	qRB
-		if ( !pop3_::InitAndAuthenticate_( Server ) )
-			qRGnr();
+		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
+			REPORT;
 
-		if ( !muapo3::List( Server ) )
-			qRGnr();
+		if ( !muapo3::List( Server, Body ) )
+			REPORT;
 
-		Message.Init( Server );
+		Dump_( Body.GetFlow() );
 
-		Dump_( Message.GetFlow() );
-
-		if ( !muapo3::Quit( Server ) )
-			qRGnr();
+		if ( !muapo3::Quit( Server, Body ) )
+			REPORT;
 	qRR
 	qRT
 	qRE
@@ -182,21 +190,21 @@ namespace {
 	{
 	qRH
 		csdbnc::rIODriver Server;	
-		muapo3::hMessage Message;
+		muapo3::hBody Body;
 		bso::sUInt Number = 0;
 	qRB
-		if ( !pop3_::InitAndAuthenticate_( Server ) )
-			qRGnr();
+		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
+			REPORT;
 
 		Number = sclmisc::MGetUInt( registry::parameter::Message );
 
-		if ( !muapo3::Retrieve( Number, Server, Message ) )
-			qRGnr();
+		if ( !muapo3::Retrieve( Number, Server, Body ) )
+			REPORT;
 
-		Dump_( Message.GetFlow() );
+		Dump_( Body.GetFlow() );
 
-		if ( !muapo3::Quit( Server ) )
-			qRGnr();
+		if ( !muapo3::Quit( Server, Body ) )
+			REPORT;
 	qRR
 	qRT
 	qRE
@@ -206,22 +214,22 @@ namespace {
 	{
 	qRH
 		csdbnc::rIODriver Server;	
-		muapo3::hMessage Message;
+		muapo3::hBody Body;
 		bso::sUInt Number = 0, Lines = 0;
 	qRB
-		if ( !pop3_::InitAndAuthenticate_( Server ) )
-			qRGnr();
+		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
+			REPORT;
 
 		Number = sclmisc::MGetUInt( registry::parameter::Message );
 		Lines = sclmisc::MGetUInt( registry::parameter::Lines );
 
-		if ( !muapo3::Top( Number, Lines, Server, Message ) )
-			qRGnr();
+		if ( !muapo3::Top( Number, Lines, Server, Body ) )
+			REPORT;
 
-		Dump_( Message.GetFlow() );
+		Dump_( Body.GetFlow() );
 
-		if ( !muapo3::Quit( Server ) )
-			qRGnr();
+		if ( !muapo3::Quit( Server, Body ) )
+			REPORT;
 	qRR
 	qRT
 	qRE

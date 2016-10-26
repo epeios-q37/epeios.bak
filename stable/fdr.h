@@ -267,6 +267,7 @@ namespace fdr {
 		size__ _Available;
 		size__ _Position;
 		size__ Red_;	// Amount of red data since last dismiss.
+		bso::sBool Dismissed_;
 		size__ _Read(
 			size__ Wanted,
 			byte__ *Buffer )	// Si valeur retourne == 0, alors , alors 'EOF' atteint.
@@ -275,9 +276,10 @@ namespace fdr {
 			if ( Wanted == 0 )
 				qRFwk();
 # endif
-			if ( _Size != 0 )
+			if ( _Size != 0 ) {
+				Dismissed_ = false;
 				return FDRRead( Wanted, Buffer );
-			else
+			} else
 				return 0;
 		}
 		size__ _LoopingRead(
@@ -417,6 +419,7 @@ namespace fdr {
 			_Size = _Available = _Position = 0;
 			_flow_driver_base__::reset( P );
 			Red_ = 0;
+			Dismissed_ = false;
 		}
 		E_CVDTOR( iflow_driver_base___ );
 		void Init(
@@ -433,6 +436,7 @@ namespace fdr {
 			_Cache = Cache;
 			_Size = Size;
 			Red_ = 0;
+			Dismissed_ = false;
 
 			_Available = _Position = 0;
 			_flow_driver_base__::Init( ThreadSafety );
@@ -445,18 +449,22 @@ namespace fdr {
 		}
 		void Dismiss( bso::sBool Unlock )
 		{
-			if ( _Cache != NULL ) {
-			qRH
-			qRB
-				FDRDismiss( Unlock );
-			qRR
-			qRT
-				if ( Unlock )
-					this->Unlock();
-			qRE
-			}
+			if ( !Dismissed_ ) {
+				if ( _Cache != NULL ) {
+				qRH
+				qRB
+					FDRDismiss( Unlock );
+				qRR
+				qRT
+					if ( Unlock )
+						this->Unlock();
+				qRE
+				}
 
-			Red_ = 0;
+				Red_ = 0;
+
+				Dismissed_ = true;
+			}
 		}
 		size__ Read(
 			size__ Wanted,
@@ -548,6 +556,7 @@ namespace fdr {
 	{
 	private:
 		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
+		bso::sBool Commited_;
 	protected:
 		// Retourne le nombre d'octets effectivement crits. Ne retourne '0' que si plus aucune donne ne peut tre crite.
 		virtual size__ FDRWrite(
@@ -563,6 +572,7 @@ namespace fdr {
 			}
 
 			_Initialized = false;
+			Commited_ = false;
 			_flow_driver_base__::reset( P );
 		}
 		E_CVDTOR( oflow_driver_base___ );
@@ -571,26 +581,33 @@ namespace fdr {
 			reset();
 
 			_Initialized = true;
+			Commited_ = false;
 			_flow_driver_base__::Init( ThreadSafety );
 		}
 		void Commit( bso::sBool Unlock )
 		{
-			if ( _Initialized ) {
-			qRH
-			qRB
-				FDRCommit( Unlock );
-			qRR
-			qRT
-				if ( Unlock )
-					this->Unlock();
-			qRE
+			if ( !Commited_ ) {
+				if ( _Initialized ) {
+				qRH
+				qRB
+					FDRCommit( Unlock );
+				qRR
+				qRT
+					if ( Unlock )
+						this->Unlock();
+				qRE
+				}
+
+				Commited_ = true;
 			}
+
 		}
 		size__ Write(
 			const byte__ *Buffer,
 			size__ Maximum )
 		{
 			Lock();
+			Commited_ = false;
 			return FDRWrite( Buffer, Maximum );
 		}
 		sTID OTake( sTID Owner )

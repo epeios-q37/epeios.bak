@@ -41,7 +41,7 @@ mods += rgstry stsfsm xml xpp
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scldaemon sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
-mods += fblbur fblcmd fblcst fbltyp fblovl 
+mods += fblcmd fblcst fbltyp fblovl 
 mods += csdleo csdles csdrcc csdscb 
 mods += sktfbc sktinf sktbsc sktxmp 
 mods += wrpexample wrpunbound 
@@ -360,7 +360,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161013"\"
+copt += -DVERSION=\""20161027"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""c8c33276-5e09-4f11-bd1b-3283b0ef0697"\"
 

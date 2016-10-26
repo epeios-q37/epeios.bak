@@ -2089,8 +2089,10 @@ namespace rgstry {
 				_Touch( Level );
 
 				return true;
-			} else
+			} else {
+				Context.Status = sParseError;
 				return false;
+			}
 		}
 		template <typename source> bso::sBool Insert(
 			level__ Level,

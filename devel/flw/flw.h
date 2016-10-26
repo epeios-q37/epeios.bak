@@ -357,8 +357,8 @@ namespace flw {
 		// Synchronization.
 		void _Commit( bso::sBool Unlock )
 		{
-//			if ( DumpCache_() )
-				_D().Commit( Unlock );
+			DumpCache_();
+			_D().Commit( Unlock );
 
 			Written_ = 0;
 		}

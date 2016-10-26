@@ -85,11 +85,11 @@ namespace {
 			return true;
 			break;
 		case '-':
-			Flow.Skip( 4 );
+			Flow.Skip( 3 );
 			while ( Flow.View() != '\r' )
 				Message.Append( Flow.Get() );
 
-			Flow.Skip(2); //
+			Flow.Skip(2); // To skip 'CRLF'.
 
 			return false;
 			break;
@@ -119,17 +119,17 @@ namespace {
 		txf::sOFlow &Out,
 		str::dString &Message )
 	{
-		if ( !Clean_( In ) )
+		if ( !Clean_( In, Message ) )
 			return false;
 
 		SendCommand_( cUser, Out );
 		Out << User << NL_ << txf::commit;
-		if ( !Clean_( In ) )
+		if ( !Clean_( In, Message ) )
 			return false;
 
 		SendCommand_( cPass, Out );
 		Out << Pass << NL_ << txf::commit;
-		return Clean_( In );
+		return Clean_( In, Message );
 	}
 
 	bso::sSize GetSize_( flw::sIFlow &Flow )
@@ -149,7 +149,8 @@ namespace {
 bso::sBool muapo3::Authenticate(
 	const str::dString &Username,
 	const str::dString &Password,
-	fdr::rIODriver &Server )
+	fdr::rIODriver &Server,
+	hBody & Body )
 {
 	bso::sBool Success = false;
 qRH
@@ -159,28 +160,33 @@ qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
 
-	Success = Authenticate_( Username, Password, IFlow, OFlow );
+	Body.Init( Server );
+
+	Success = Authenticate_( Username, Password, IFlow, OFlow, Body.Message );
 qRR
 qRT
 qRE
 	return Success;
 }
 
-
-bso::sBool muapo3::List( fdr::rIODriver &Server )
+bso::sBool muapo3::List(
+	fdr::rIODriver &Server,
+	hBody &Body )
 {
 	bso::sBool Success = false;
 qRH
 	flw::sIFlow IFlow;
 	txf::rOFlow OFlow;
 qRB
+	Body.Init( Server );
+
 	IFlow.Init( Server );
 	OFlow.Init( Server );
 
 	SendCommand_( cList, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
 
 	Success = true;
@@ -193,7 +199,7 @@ qRE
 bso::sBool muapo3::Retrieve(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
-	hMessage &Message )
+	hBody &Body )
 {
 	bso::sBool Success = false;
 qRH
@@ -206,7 +212,9 @@ qRB
 	SendCommand_( cRetr, OFlow );
 	OFlow << Index << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	Body.Init( Server );
+
+	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
 
 //	IFlow.Skip();	// Space after the 'OK'.
@@ -214,7 +222,6 @@ qRB
 	if ( ( Size = GetSize_( IFlow ) ) == 0 )
 		qRReturn;
 		*/
-	Message.Init( Server );
 
 	Success = true;
 qRR
@@ -227,7 +234,7 @@ bso::sBool muapo3::Top(
 	bso::sUInt Index,
 	bso::sUInt AmountOfLine,
 	fdr::rIODriver &Server,
-	hMessage &Message )
+	hBody &Body )
 {
 	bso::sBool Success = false;
 qRH
@@ -240,7 +247,9 @@ qRB
 	SendCommand_( cTop, OFlow );
 	OFlow << Index << ' ' << AmountOfLine << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	Body.Init( Server );
+
+	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
 
 //	IFlow.Skip();	// Space after the 'OK'.
@@ -248,7 +257,6 @@ qRB
 	if ( ( Size = GetSize_( IFlow ) ) == 0 )
 		qRReturn;
 		*/
-	Message.Init( Server );
 
 	Success = true;
 qRR
@@ -257,7 +265,9 @@ qRE
 	return Success;
 }
 
-bso::sBool muapo3::Quit( fdr::rIODriver &Server )
+bso::sBool muapo3::Quit(
+	fdr::rIODriver &Server,
+	hBody &Body )
 {
 	bso::sBool Success = false;
 qRH
@@ -270,7 +280,9 @@ qRB
 	SendCommand_( cQuit, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	Body.Init( Server );
+
+	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
 
 	Success = true;

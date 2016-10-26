@@ -16,6 +16,8 @@ CHANGELOG for the 'Epeios' framework.
 	- Adding some default parameter variants.
 - FLW, FLX :
 	- Adaptation to changes in 'FDR'.
+- RGSTRY :
+	- Fixing bad error relaying.
 - SCLMISC :
 	- Adding 'r(I|O)DriverRack'
 
