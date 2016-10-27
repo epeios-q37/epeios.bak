@@ -133,7 +133,7 @@ namespace fdr {
 	{
 #ifdef FDR__TS
 		if ( Mutex != FDR_NO_MUTEX )
-			mtx::Delete( Mutex );
+			mtx::Delete( Mutex, true );
 #endif
 	}
 
