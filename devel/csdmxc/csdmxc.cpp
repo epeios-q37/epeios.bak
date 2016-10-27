@@ -136,8 +136,8 @@ qRB
 	{
 		Flow.Init( C_().ExtractDriver( UPs.Top() ) );	
 		PutId( CSDMXB_CLOSE, Flow );
+		Flow.Commit();
 		C_().Release( UPs.Pop() );
-		Flow.Commit( false );
 	}
 qRR
 qRT

@@ -358,7 +358,8 @@ qRE
 	private:
 		void *UP_;
 		qRMV( rCore, C_, Core_ );
-		rIODriver &D_( void )
+		flw::sDressedIOFlow<> Flow_;
+		rIODriver &Driver_( void )
 		{
 			if ( UP_ == NULL )
 				qRFwk();
@@ -369,52 +370,39 @@ qRE
 		bso::bool__ Prepare_( void )	// Return true if has already a flow, false otherwise.
 		{
 			bso::bool__ Created = UP_ == NULL;
-		qRH
-			flw::sDressedOFlow<> Flow;
-		qRB
 
 			if ( Created ) {
 				UP_ = C_().Get();
-
-				Flow.Init( D_() );
-
-
-				PutId( Id_, Flow );
-
-				Flow.Commit( false );
 			}
-		qRR
-		qRT
-		qRE
+
+			Flow_.Init( Driver_() );
+
+			if ( Created ) {
+				PutId( Id_, Flow_ );
+			}
+
 			return !Created;
 		}
 		bso::sBool Commit_( bso::sBool Unlock )
 		{
-			bso::sBool Response = false;
-		qRH
-			flw::sDressedIOFlow<> Flow;
-		qRB
-			Flow.Init( D_() );
-
-			Flow.Commit( Unlock );
+			Flow_.Commit( Unlock );
 
 			if ( Id_ == CSDMXB_UNDEFINED ) {
-				Id_ = GetId( Flow );
-				Response = true;
-			} else if ( Flow.EndOfFlow() )
-				Response = false;
-			else if ( Flow.Get() == 0 )
-				Response = true;
+				Id_ = GetId( Flow_ );
+				return true;
+			} else if ( Flow_.EndOfFlow() )
+				return false;
+			else if ( Flow_.Get() == 0 )
+				return true;
 			else
 				qRFwk();
-		qRR
-		qRT
-		qRE
-			return Response;
+
+			return false;	// To avoid a 'warning'.
 		}
 		void GiveUp_( void )
 		{
 			C_().GiveUp();
+			Flow_.reset();
 			UP_ = NULL;
 			Id_ = CSDMXB_UNDEFINED;
 			Core_ = NULL;
@@ -425,22 +413,13 @@ qRE
 			fdr::size__ Maximum ) override
 		{
 			fdr::size__ Amount = 0;
-		qRH
-			flw::sDressedOFlow<> Flow;
-		qRB
+
 			if ( Core_ != NULL ) {
 				Prepare_();
 
-				Flow.Init( D_() );
-
-				Amount = Flow.WriteUpTo( Buffer, Maximum );
-
-				Flow.Commit( false );
+				Amount = Flow_.WriteUpTo( Buffer, Maximum );
 			}
-		qRR
-			GiveUp_();
-		qRT
-		qRE
+
 			return Amount;
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
@@ -457,7 +436,7 @@ qRE
 		}
 		virtual void FDROTake( fdr::sTID Owner ) override
 		{
-			 D_().OTake( Owner );
+			 Driver_().OTake( Owner );
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -465,14 +444,9 @@ qRE
 		{
 			fdr::size__ Amount = 0;
 		qRH
-			flw::sDressedIFlow<> Flow;
-		qRB
+			qRB
 			if ( Core_ != NULL ) {
-				Flow.Init( D_() );
-
-				Amount = Flow.ReadUpTo( Maximum, Buffer );
-
-				Flow.Dismiss( false );
+				Amount = Flow_.ReadUpTo( Maximum, Buffer );
 			}
 		qRR
 			GiveUp_();
@@ -485,7 +459,7 @@ qRE
 		qRH
 		qRB
 			if ( UP_ != NULL ) {
-				D_().Dismiss( Unlock );
+				Driver_().Dismiss( Unlock );
 				C_().Release( UP_ );
 			}
 
@@ -497,11 +471,12 @@ qRE
 		}
 		virtual void FDRITake( fdr::sTID Owner ) override
 		{
-			 D_().ITake( Owner );
+			 Driver_().ITake( Owner );
 		}
 		public:
 			void reset( bso::bool__ P = true )
 			{
+				Flow_.reset( P );
 				fdr::ioflow_driver___<>::reset( P );
 
 				if ( P ) {
@@ -529,6 +504,7 @@ qRE
 
 				fdr::ioflow_driver___<>::Init( ThreadSafety );
 				Core_ = &Core;
+				// 'Flow_' will be initalized later.
 			}
 	};
 

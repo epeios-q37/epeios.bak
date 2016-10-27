@@ -233,11 +233,14 @@ namespace flw {
 	: public iflow__
 	{
 	public:
-		standalone_iflow__( void )
+		void reset( bso::sBool P = true )
 		{
 			if ( Dummy != 0 )	
 				qRFwk();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
+
+			iflow__::reset( P );
 		}
+		qCVDTOR( standalone_iflow__ );
 		void Init( fdr::iflow_driver_base___ &Driver )
 		{
 			iflow__::Init( Driver );
@@ -497,6 +500,11 @@ namespace flw {
 	private:
 		flw::byte__ _Cache[CacheSize];
 	public:
+		void reset( bso::sBool P = true )
+		{
+			oflow__::reset( P );
+		}
+		qCVDTOR( standalone_oflow__ );
 		void Init( fdr::oflow_driver_base___ &Driver )
 		{
 			oflow__::Init( Driver, _Cache, sizeof( _Cache ) );
@@ -548,6 +556,11 @@ namespace flw {
 	private:
 		flw::byte__ _OutputCache[OutCacheSize];
 	public:
+		void reset( bso::sBool P = true )
+		{
+			ioflow__::reset( P );
+		}
+		qCVDTOR( standalone_ioflow__ );
 		void Init( fdr::ioflow_driver_base___ &Driver )
 		{
 			ioflow__::Init( Driver, _OutputCache, sizeof( _OutputCache ) );

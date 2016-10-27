@@ -172,6 +172,7 @@ namespace fdr {
 	}
 
 	using tht::sTID;
+	qCDEF( sTID, UndefinedTID, tht::Undefined );
 
 	class _flow_driver_base__
 	{
@@ -257,6 +258,27 @@ namespace fdr {
 # endif
 		}
 	};
+
+	inline sTID GetTID_(
+		sTID Donwstream,
+		sTID Base )
+	{
+		if ( Base != Donwstream )
+			if ( Base == tht::Undefined )
+				if ( Donwstream != tht::Undefined )
+					return Donwstream;
+				else
+					qRFwk();
+			else if ( Donwstream == tht::Undefined )
+				return Base;
+			else
+				qRFwk();
+		else
+			return Base;
+
+		return tht::Undefined;	// To avoid a warning.
+
+	}
 
 	class iflow_driver_base___
 	: public _flow_driver_base__
@@ -407,7 +429,7 @@ namespace fdr {
 			size__ Maximum,
 			byte__ *Buffer ) = 0;
 		virtual void FDRDismiss( bso::sBool Unlock ) = 0;
-		virtual void FDRITake( sTID Owner ) = 0;
+		virtual sTID FDRITake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
@@ -443,9 +465,7 @@ namespace fdr {
 		}
 		sTID ITake( sTID Owner )
 		{
-			FDRITake( Owner );
-
-			return BaseTake( Owner );
+			return GetTID_( FDRITake( Owner ), BaseTake( Owner ) );
 		}
 		void Dismiss( bso::sBool Unlock )
 		{
@@ -563,7 +583,7 @@ namespace fdr {
 			const byte__ *Buffer,
 			size__ Maximum ) = 0;
 		virtual void FDRCommit( bso::sBool Unlock ) = 0;
-		virtual void FDROTake( sTID Owner ) = 0;
+		virtual sTID FDROTake( sTID Owner ) = 0;
 	public:
 		void reset( bso::bool__ P = true ) 
 		{
@@ -612,9 +632,7 @@ namespace fdr {
 		}
 		sTID OTake( sTID Owner )
 		{
-			FDROTake( Owner );
-
-			return BaseTake( Owner );
+			return GetTID_( FDROTake( Owner ), BaseTake( Owner ) );
 		}
 		bso::bool__ OFlowIsLocked( void )	// Simplifie l'utilisation de 'ioflow_driver_...'
 		{

@@ -1,5 +1,22 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-27 :
+- CSDMXC :
+	- Simplification.
+- FDR :
+	- Fixing 'Take' issue.
+- FLW :
+	- Adding some (des|constr)uctor to be sure the rights ones are excuted.
+- FLX :
+	- Adaptation to chnages in 'FDR'.
+
+2016-10-27 :
+- FDR :
+	-Adding possibility to change the owner of a io driver.
+- GLBAL :
+	- Adaptation to changes in 'FDR'.
+
+
 2016-10-25 :
 - CDGB64 :
 	- Introducing 's(En|De)coding(I|O)Drive.)'
