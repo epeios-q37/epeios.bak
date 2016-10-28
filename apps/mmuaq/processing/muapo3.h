@@ -191,9 +191,9 @@ namespace muapo3 {
 		{
 			Flow_.Dismiss( Unlock );
 		}
-		virtual void FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
 		{
-			Flow_.IDriver().ITake( Owner );
+			return Flow_.IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )
@@ -279,6 +279,11 @@ namespace muapo3 {
 	bso::sBool Top(
 		bso::sUInt Index,
 		bso::sUInt AmoutOfLine,
+		fdr::rIODriver &Server,
+		hBody & Body );
+
+	bso::sBool UIDL(
+		bso::sUInt Index,	// Si = à '04, retourne l'ensemble des messages.
 		fdr::rIODriver &Server,
 		hBody & Body );
 

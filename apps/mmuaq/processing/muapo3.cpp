@@ -86,6 +86,10 @@ namespace {
 			break;
 		case '-':
 			Flow.Skip( 3 );
+
+			if ( Flow.View() == ' ' )
+				Flow.Skip();
+
 			while ( Flow.View() != '\r' )
 				Message.Append( Flow.Get() );
 
@@ -252,11 +256,35 @@ qRB
 	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
 
-//	IFlow.Skip();	// Space after the 'OK'.
-	/*
-	if ( ( Size = GetSize_( IFlow ) ) == 0 )
+	Success = true;
+qRR
+qRT
+qRE
+	return Success;
+}
+
+bso::sBool muapo3::UIDL(
+	bso::sUInt Index,
+	fdr::rIODriver &Server,
+	hBody &Body )
+{
+	bso::sBool Success = false;
+qRH
+	flw::sIFlow IFlow;
+	txf::rOFlow OFlow;
+qRB
+	IFlow.Init( Server );
+	OFlow.Init( Server );
+
+	SendCommand_( cUidl, OFlow );
+
+	if ( Index != 0 )
+		OFlow << Index << NL_ << txf::commit;
+
+	Body.Init( Server );
+
+	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
-		*/
 
 	Success = true;
 qRR
@@ -264,6 +292,8 @@ qRT
 qRE
 	return Success;
 }
+
+
 
 bso::sBool muapo3::Quit(
 	fdr::rIODriver &Server,

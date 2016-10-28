@@ -7,7 +7,15 @@
 		<Translation language="fr">Utilitaire de gestion de l'application 'MMUAq'.</Translation>
 		<Translation language="en">Management tool for the 'MMUAq' application.</Translation>
 	</Translations>
-	<!--
+ <Translations text="Error">
+  <Translation language="fr">Erreur : '%1'.</Translation>
+  <Translation language="en">Error : '%1'.</Translation>
+ </Translations>
+ <Translations text="ErrorWithNoMessage">
+  <Translation language="fr">Erreur sans message du serveur.</Translation>
+  <Translation language="en">Error with no message from server.</Translation>
+ </Translations>
+ <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>

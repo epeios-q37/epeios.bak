@@ -158,8 +158,10 @@ namespace {
 
 		void Report( muapo3::hBody &Body )
 		{
-			cio::COut << Body.Message << txf::nl << txf::commit;
-			qRAbort();
+			if ( Body.Message.Amount() )
+				sclmisc::ReportAndAbort("Error", Body.Message );
+			else
+				sclmisc::ReportAndAbort( "ErrorWithNoMessage" );
 		}
 	}
 
@@ -234,6 +236,30 @@ namespace {
 	qRT
 	qRE
 	}
+
+	void POP3UIDL_( void )
+	{
+	qRH
+		csdbnc::rIODriver Server;	
+		muapo3::hBody Body;
+		bso::sUInt Number = 0;
+	qRB
+		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
+			REPORT;
+
+		Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
+
+		if ( !muapo3::UIDL( Number, Server, Body ) )
+			REPORT;
+
+		Dump_( Body.GetFlow() );
+
+		if ( !muapo3::Quit( Server, Body ) )
+			REPORT;
+	qRR
+	qRT
+	qRE
+	}
 }
 
 #define C( name )\
@@ -257,6 +283,7 @@ qRB
 	C( POP3List );
 	C( POP3Retrieve );
 	C( POP3Top );
+	C( POP3UIDL );
 	else
 		qRGnr();
 

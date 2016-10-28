@@ -242,7 +242,7 @@ qRE
 			Ping_.Delay = 0;
 			Ping_.Mutex = CSDMXC_NO_MUTEX;
 		}
-		qVDTOR( rCore );
+		qCVDTOR( rCore );
 		bso::bool__ Init( 
 			cCallback &Callback,
 			bso::uint__ PingDelay = 0,
@@ -488,14 +488,7 @@ qRE
 				Id_ = CSDMXB_UNDEFINED;
 				Core_ = NULL;
 			}
-			_driver___( void )
-			{
-				reset( false );
-			}
-			~_driver___( void )
-			{
-				reset();
-			}
+			qCVDTOR( _driver___ );
 			void Init(
 				rCore &Core,
 				fdr::thread_safety__ ThreadSafety )
