@@ -747,24 +747,23 @@ bso::bool__ backend___::_HandleRequest(
 	bso::sBool Disconnect = false;
 qRH
 	object__ O;
+	fblber::embedded_callbacks___ Embedded;
+	fblbrr::remote_callbacks___ Remote;
 	rRequest Request;
-	fblbrq::callbacks__ *Callbacks = NULL;
 qRB
 	switch ( Mode_ ) {
 	case fblovl::mReferenced:
-		_Embedded.Init();
-		Callbacks = &_Embedded;
+		Embedded.Init();
+		Request.Init( Embedded, Driver );
 		break;
 	case fblovl::mSerialized:
-		_Remote.Init();
-		Callbacks = &_Remote;
+		Remote.Init();
+		Request.Init( Remote, Driver );
 		break;
 	default:
 		qRFwk();
 		break;
 	}
-
-	Request.Init( *Callbacks, Driver );
 
 	flw::Get( Request.Input(), O );
 

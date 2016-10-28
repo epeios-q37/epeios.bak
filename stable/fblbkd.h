@@ -760,8 +760,6 @@ namespace fblbkd {
 		TOL_CBUFFER___ _ExtendedBackendInformations;
 		TOL_CBUFFER___ _BackendCopyright;
 		TOL_CBUFFER___ _SoftwareInformations;
-		fblber::embedded_callbacks___ _Embedded;
-		fblbrr::remote_callbacks___ _Remote;
 		str::wString
 			Key_,	// Key used for encrypting the codes.
 			Code_;	// Code to allow a blocking ping or a crash.
@@ -819,8 +817,6 @@ namespace fblbkd {
 		{
 			_CompatibilityTested = false;
 			Mode_ = fblovl::m_Undefined;
-			_Embedded.reset( P );
-			_Remote.reset( P );
 			Key_.reset( P );
 			Code_.reset( P );
 		}
@@ -864,9 +860,6 @@ namespace fblbkd {
 			_Locale = &Locale;
 
 			str::string( FBLBKD__DEFAULT_LANGUAGE ).Convert( _Language );
-
-			_Embedded.Init();
-			_Remote.Init();
 
 			Key_.Init( Key );
 			Code_.Init( Code );

@@ -3,6 +3,8 @@ CHANGELOG for the 'Epeios' framework.
 2016-10-28 :
 - GLOBAL :
 	- Adaptation to FRD modifications.
+- FBLBKD :
+	- More accurate handling of frontend/backend parameters.
 
 2016-10-27 :
 - CSDMXC :
