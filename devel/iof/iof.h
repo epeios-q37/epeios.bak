@@ -82,8 +82,10 @@ namespace iof {
 		{
 			return _output_driver__::_Commit();
 		}
-		virtual void FDROTake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -172,8 +174,10 @@ namespace iof {
 		{
 			_input_driver__::_Dismiss();
 		}
-		virtual void FDRITake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -241,8 +245,10 @@ namespace iof {
 		{
 			_output_driver__::_Commit();
 		}
-		virtual void FDROTake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
 			fdr::byte__ *Buffer ) override
@@ -253,8 +259,10 @@ namespace iof {
 		{
 			return _input_driver__::_Dismiss();
 		}
-		virtual void FDRITake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 	public:
 		void Init(
 			iop::descriptor__ D,

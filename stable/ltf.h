@@ -93,9 +93,9 @@ namespace ltf {
 			_Amount = 0;
 			_TF().Commit( Unlock );
 		}
-		virtual void FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
 		{
-			_TF().Flow().ODriver().OTake( Owner );
+			return _TF().Flow().ODriver().OTake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

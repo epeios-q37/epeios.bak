@@ -1172,9 +1172,9 @@ namespace {
 		{
 			F_().Dismiss( Unlock );
 		}
-		virtual void FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
 		{
-			F_().IDriver().ITake( Owner );
+			return F_().IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::sBool P = true )

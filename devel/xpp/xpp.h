@@ -720,9 +720,11 @@ namespace xpp {
 			sdr::byte__ *Buffer ) override;
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual void FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
 		{
 			qRVct();
+
+			return fdr::UndefinedTID;	// To avoid a warning.
 		}
 	public:
 		void reset( bso::bool__ P = true )

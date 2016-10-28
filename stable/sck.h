@@ -278,8 +278,10 @@ namespace sck {
 		}
 		virtual void FDRDismiss( bso::sBool Unlock ) override
 		{}
-		virtual void FDRITake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
@@ -299,8 +301,10 @@ namespace sck {
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{}
-		virtual void FDROTake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 	public:
 		void reset( bool P = true )
 		{

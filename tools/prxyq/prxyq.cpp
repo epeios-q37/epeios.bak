@@ -90,9 +90,9 @@ namespace {
 		{
 			OFlow_.Commit( Unlock );
 		}
-		virtual void FDROTake( fdr::sTID Owner )
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
 		{
-			OFlow_.ODriver().OTake( Owner );
+			return OFlow_.ODriver().OTake( Owner );
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -104,9 +104,9 @@ namespace {
 		{
 			IFlow_.Dismiss( Unlock );
 		}
-		virtual void FDRITake( fdr::sTID Owner )
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
 		{
-			IFlow_.IDriver().ITake( Owner );
+			return IFlow_.IDriver().ITake( Owner );
 		}
 public:
 		void reset( bso::bool__ P = true )
@@ -310,19 +310,31 @@ public:
 			fdr::byte__ Buffer[1024];
 			fdr::size__ Size = 0,  Written = 0;
 //			err::buffer__ ERRBuffer;
+			fdr::sTID
+				ITID = fdr::UndefinedTID,
+				OTID = fdr::UndefinedTID;
 		qRFB
+			ITID = Flow.IDriver().ITake( fdr::UndefinedTID );
+			OTID = Flow.ODriver().OTake( fdr::UndefinedTID );
 			while ( ( Size = Flow.ReadUpTo( sizeof( Buffer ), Buffer ) ) != 0) {
 				Written = 0;
 				while ( Size > Written )
 					Written += Flow.WriteUpTo( Buffer + Written, Size - Written );
 				Flow.Commit();
 			}
+
+			Flow.Dismiss();
 		qRFR
 			if ( ERRType == err::tLibrary ) {
 				// cio::COut << ">>>" << txf::pad << err::Message( ERRBuffer ) << txf::nl << txf::commit;	// sck.cpp:78 'WSAECONNABORTED'.
 				ERRRst();
 			}
 		qRFT
+			if ( ITID != fdr::UndefinedTID )
+				Flow.IDriver().ITake( ITID );
+
+			if ( OTID != fdr::UndefinedTID )
+				Flow.IDriver().ITake( OTID );
 		qRFE( sclmisc::ErrFinal() )
 		}
 		void Process_( prxybase::eType Type )

@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-28 :
+- GLOBAL :
+	- Adaptation to FRD modifications.
+
 2016-10-27 :
 - CSDMXC :
 	- Simplification.

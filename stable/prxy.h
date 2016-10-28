@@ -142,9 +142,9 @@ namespace prxy {
 		{
 			Proxy_.Commit( Unlock );
 		}
-		virtual void FDROTake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
 		{
-			Proxy_.ODriver().OTake( Owner );
+			return Proxy_.ODriver().OTake( Owner );
 		}
 		virtual fdr::size__ FDRRead(
 			fdr::size__ Maximum,
@@ -156,9 +156,9 @@ namespace prxy {
 		{
 			Proxy_.Dismiss( Unlock );
 		}
-		virtual void FDRITake( fdr::sTID Owner ) override
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
 		{
-			Proxy_.IDriver().ITake( Owner );
+			return Proxy_.IDriver().ITake( Owner );
 		}
 	public:
 		void reset( bso::bool__ P = true )

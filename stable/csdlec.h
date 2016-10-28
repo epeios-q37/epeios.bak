@@ -88,8 +88,10 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 #endif
 			_Read.Init();
 		}
-		virtual void FDRITake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDRITake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 		virtual fdr::size__ FDRWrite(
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum )
@@ -100,8 +102,10 @@ une requte de manire trs intense (bombardage de 'push' 'join'). C'est comme si l
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{}
-		virtual void FDROTake( fdr::sTID Owner ) override
-		{}
+		virtual fdr::sTID FDROTake( fdr::sTID Owner ) override
+		{
+			return fdr::UndefinedTID;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
