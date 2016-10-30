@@ -747,9 +747,9 @@ bso::bool__ backend___::_HandleRequest(
 	bso::sBool Disconnect = false;
 qRH
 	object__ O;
+	rRequest Request;
 	fblber::embedded_callbacks___ Embedded;
 	fblbrr::remote_callbacks___ Remote;
-	rRequest Request;
 qRB
 	switch ( Mode_ ) {
 	case fblovl::mReferenced:

@@ -27,14 +27,20 @@
 
 using namespace flw;
 
-void flw::oflow__::_Write(
+fdr::sSize flw::oflow__::_Write(
 	const byte__ *Buffer,
 	size__ Amount )
 {
-	size__ AmountWritten = _WriteUpTo( Buffer, Amount, &Written_ );
+	size__ PonctualAmountWritten = _WriteUpTo( Buffer, Amount, &Written_ );
+	size__ AmountWritten = PonctualAmountWritten;
 
-	while( AmountWritten < Amount )
-		AmountWritten += _WriteUpTo( Buffer + AmountWritten, Amount - AmountWritten, &Written_ );
+	while( ( PonctualAmountWritten != 0 ) && ( AmountWritten < Amount ) )
+		AmountWritten += PonctualAmountWritten = _WriteUpTo( Buffer + AmountWritten, Amount - AmountWritten, &Written_ );
+
+	if ( PonctualAmountWritten == 0 )
+		AmountWritten = 0;	// To report dailure.
+
+	return AmountWritten;
 }
 
 bool flw::GetString(
@@ -106,15 +112,12 @@ qRB
 
 	Amount = _LoopingWrite( Buffer, Wanted, Minimum, Written );
 
-	if ( Amount == 0 )
+#ifdef FLW_DBG
+	if ( Amount > Wanted )
 		qRFwk();
 
-#ifdef FLW_DBG
-		if ( Amount > Wanted )
-			qRFwk();
-
-		if ( Amount < Minimum )
-			qRFwk();
+	if ( Amount < Minimum )
+		qRFwk();
 #endif
 qRR
 	_Size = _Free = 0;	// Pour viter toute nouvelle criture dans le cache. La prochaine tentative gnrera une erreur.

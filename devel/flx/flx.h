@@ -1248,10 +1248,7 @@ namespace flx {
 			const fdr::byte__ *Buffer,
 			fdr::size__ Maximum ) override
 		{
-			if ( IO().Write( Buffer, Maximum ) != Maximum )
-				qRFwk();
-
-			return Maximum;
+			return IO().Write( Buffer, Maximum );
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
 		{

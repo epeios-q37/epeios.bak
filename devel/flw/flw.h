@@ -265,7 +265,6 @@ namespace flw {
 		char *Buffer,
 		size__ Maximum );
 
-
 	//c Basic output flow.
 	class oflow__	/* Bien que cette classe ai un destructeur, elle est suffixe par '__', d'une part pour simplifier
 					son utilisation (comme dclaration de paramtre d'une fonction) et, d'autre part,
@@ -298,6 +297,9 @@ namespace flw {
 			size__ PonctualAmount = _D().Write( Buffer, Wanted );
 			size__ CumulativeAmount = PonctualAmount;
 
+			if ( Minimum == 0 )
+				qRFwk();
+
 			while ( ( PonctualAmount != 0 ) && ( Minimum > CumulativeAmount ) ) {
 				PonctualAmount = _D().Write( Buffer + CumulativeAmount, Wanted - CumulativeAmount );
 				CumulativeAmount += PonctualAmount;
@@ -305,6 +307,9 @@ namespace flw {
 
 			if ( TotalWritten != NULL )
 				TotalWritten += CumulativeAmount;
+
+			if ( CumulativeAmount < Minimum )
+					CumulativeAmount = 0;	// Even if some data were written, there was a problem, which is reported upstream by returning '0'.
 
 			return CumulativeAmount;
 		}
@@ -320,13 +325,14 @@ namespace flw {
 			size__ Stayed = _Size - _Free;
 			
 			if ( Stayed != 0 ) {
-				_DirectWrite( _Cache, Stayed, Stayed, NULL );
 
-				_Free = _Size;
-
-				return true;
+				if ( _DirectWrite( _Cache, Stayed, Stayed, NULL ) == Stayed ) {
+					_Free = _Size;
+					return true;
+				} else
+					return false;
 			} else
-				return false;
+				return true;
 		}
 		size__ _WriteIntoCache(
 			const byte__ *Buffer,
@@ -353,17 +359,21 @@ namespace flw {
 				qRFwk();
 #endif
 			if ( Amount > _Size )
-				return _DirectWrite( Buffer, Amount, Amount, TotalWritten );
+				return _DirectWrite( Buffer, Amount, Amount, TotalWritten);
 			else
 				return _WriteIntoCache( Buffer, Amount );
 		}
 		// Synchronization.
-		void _Commit( bso::sBool Unlock )
+		bso::sBool _Commit( bso::sBool Unlock )
 		{
-			DumpCache_();
-			_D().Commit( Unlock );
+			if ( DumpCache_() ) {
+				_D().Commit( Unlock );
+				Written_ = 0;
+				return true;
+			} else
+				return false;
 
-			Written_ = 0;
+			return false;	// To avoid a warning'.
 		}
 		void _Unlock( void )
 		{
@@ -385,7 +395,7 @@ namespace flw {
 			return AmountWritten;
 		}
 		// Put 'Amount' data from 'Buffer'.
-		void _Write(
+		bso::sSize _Write(
 			const byte__ *Buffer,
 			size__ Amount );
 	public:
@@ -428,22 +438,52 @@ namespace flw {
 			return _WriteUpTo( (byte__ *)Buffer, Amount, &Written_ );
 		}
 		//f Put 'Amount' data from 'Buffer'.
-		void Write(
+		size__ Write(
 			const void *Buffer,
-			size__ Amount )
+			size__ Amount,
+			qRPD )
 		{
-			_Write( (const byte__ *)Buffer, Amount );
+			if ( _Write((const byte__ *)Buffer, Amount) != Amount ) {
+				if ( qRPT )
+					qRFwk();
+				else
+					return false;
+			} else 
+				return true;
+
+			return false;	// To avoid a warning.
 		}
 		//f Put 'C'.
-		void Put( byte__ C )
+		bso::sBool Put(
+			byte__ C,
+			qRPD )
 		{
-			_Write( &C, 1 );
+			if ( _Write(&C, 1) != 1 ) {
+				if ( qRPT )
+					qRFwk();
+				else
+					return false;
+			} else
+				return true;
+
+			return false;	// To avoid a warning.
 		}
 		//f Synchronization.
-		void Commit( bso::sBool Unlock = true )
+		bso::sBool Commit(
+			bso::sBool Unlock = true,
+			qRPD )
 		{
-			if ( _Driver != NULL )
-				_Commit( Unlock );
+			if ( _Driver != NULL ) {
+				if ( _Commit( Unlock ) )
+					return true;
+				else if ( qRPT )
+					qRFwk();
+				else
+					return false;
+			} else
+				return true;
+
+			return false;	// To avoid a warning.
 		}
 		//f Return the amount of data written since last 'Synchronize()'.
 		size__ AmountWritten( void ) const

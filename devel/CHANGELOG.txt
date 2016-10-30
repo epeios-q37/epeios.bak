@@ -1,8 +1,14 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-10-30 :
+- FBLBKD :
+	- Fixing bug occuring when on error during the reading of a flow frontend/backend parameter.
+- FLX :
+	- Error failed 'exec_oflow_driver___' writing does no more generate an error. The error will be handled upstream.
+
 2016-10-28 :
 - GLOBAL :
-	- Adaptation to FRD modifications.
+	- Adaptation to FDR modifications.
 - FBLBKD :
 	- More accurate handling of frontend/backend parameters.
 

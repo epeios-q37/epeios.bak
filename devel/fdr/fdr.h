@@ -578,10 +578,11 @@ namespace fdr {
 		bso::bool__ _Initialized;	// Pour viter des 'pure virtual function call'.
 		bso::sBool Commited_;
 	protected:
-		// Retourne le nombre d'octets effectivement crits. Ne retourne '0' que si plus aucune donne ne peut tre crite.
+		// Returns amount of written data. Returns '0' only when no other data can be written (deconnection...), otherwise must block.
 		virtual size__ FDRWrite(
 			const byte__ *Buffer,
 			size__ Maximum ) = 0;
+		// Returns 'false' when underlying write fails, 'true' otherwise.
 		virtual void FDRCommit( bso::sBool Unlock ) = 0;
 		virtual sTID FDROTake( sTID Owner ) = 0;
 	public:
@@ -606,6 +607,8 @@ namespace fdr {
 		}
 		void Commit( bso::sBool Unlock )
 		{
+			bso::sBool Success = false;
+
 			if ( !Commited_ ) {
 				if ( _Initialized ) {
 				qRH
@@ -619,8 +622,8 @@ namespace fdr {
 				}
 
 				Commited_ = true;
-			}
-
+			} else
+				Success = true;
 		}
 		size__ Write(
 			const byte__ *Buffer,
