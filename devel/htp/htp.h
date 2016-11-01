@@ -253,7 +253,7 @@ namespace htp {
 	private:
 		rBlocFlow BlocFlow_;
 		rChunkFlow ChunkFlow_;
-		flw::iflow__ Flow_;
+		flw::sDressedIFlow<> Flow_;
 		void FillField_( flw::iflow__ &IFlow );
 		bso::sU16 StatusCode_;
 	public:

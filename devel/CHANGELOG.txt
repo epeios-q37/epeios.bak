@@ -3,7 +3,7 @@ CHANGELOG for the 'Epeios' framework.
 2016-11-01 :
 - CDBG64 :
 	- Adding missing header.
-- CIO, FLX, IOF :
+- CIO, FLX, HTP, IOF :
 	- Adaptation to changes in 'FLW'.
 - FLW :
 	- 'iflow' can no more be used in place of the dressed/standalone version.
