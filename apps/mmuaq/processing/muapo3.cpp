@@ -75,9 +75,7 @@ namespace {
 	qRE
 	}
 
-	bso::sBool CleanBegin_(
-		flw::sIFlow &Flow,
-		str::dString &Message )
+	bso::sBool CleanBegin_( flw::sIFlow &Flow )
 	{
 		switch ( Flow.Get() ) {
 		case '+':
@@ -90,11 +88,6 @@ namespace {
 			if ( Flow.View() == ' ' )
 				Flow.Skip();
 
-			while ( Flow.View() != '\r' )
-				Message.Append( Flow.Get() );
-
-			Flow.Skip(2); // To skip 'CRLF'.
-
 			return false;
 			break;
 		default:
@@ -105,11 +98,9 @@ namespace {
 		return false;	// To avoid a warning.
 	}
 
-	bso::sBool Clean_(
-		flw::sIFlow &Flow,
-		str::dString &Message)
+	bso::sBool Clean_( flw::sIFlow &Flow )
 	{
-		if ( CleanBegin_(Flow, Message) ) {
+		if ( CleanBegin_( Flow ) ) {
 			while ( Flow.Get() != '\n' );
 			return true;
 		} else
@@ -120,20 +111,19 @@ namespace {
 		const str::dString &User,
 		const str::dString &Pass,
 		flw::sIFlow &In,
-		txf::sOFlow &Out,
-		str::dString &Message )
+		txf::sOFlow &Out )
 	{
-		if ( !Clean_( In, Message ) )
+		if ( !Clean_( In ) )
 			return false;
 
 		SendCommand_( cUser, Out );
 		Out << User << NL_ << txf::commit;
-		if ( !Clean_( In, Message ) )
+		if ( !Clean_( In ) )
 			return false;
 
 		SendCommand_( cPass, Out );
 		Out << Pass << NL_ << txf::commit;
-		return Clean_( In, Message );
+		return Clean_( In );
 	}
 
 	bso::sSize GetSize_( flw::sIFlow &Flow )
@@ -158,15 +148,15 @@ bso::sBool muapo3::Authenticate(
 {
 	bso::sBool Success = false;
 qRH
-	flw::sIFlow IFlow;
+	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
 qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
 
-	Body.Init( Server,true );
+	Success = Authenticate_( Username, Password, IFlow, OFlow );
 
-	Success = Authenticate_( Username, Password, IFlow, OFlow, Body.Message );
+	Body.Init( Server, false );
 qRR
 qRT
 qRE
@@ -179,21 +169,21 @@ bso::sBool muapo3::List(
 {
 	bso::sBool Success = false;
 qRH
-	flw::sIFlow IFlow;
+	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
 qRB
-	Body.Init( Server, true );
-
 	IFlow.Init( Server );
 	OFlow.Init( Server );
 
 	SendCommand_( cList, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow, Body.Message ) )
+	if ( !CleanBegin_( IFlow ) )
 		qRReturn;
 
 	Success = true;
+
+	Body.Init( Server, true );
 qRR
 qRT
 qRE
@@ -207,7 +197,7 @@ bso::sBool muapo3::Retrieve(
 {
 	bso::sBool Success = false;
 qRH
-	flw::sIFlow IFlow;
+	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
 qRB
 	IFlow.Init( Server );
@@ -216,12 +206,12 @@ qRB
 	SendCommand_( cRetr, OFlow );
 	OFlow << Index << NL_ << txf::commit;
 
-	Body.Init( Server, true );
-
-	if ( !CleanBegin_( IFlow, Body.Message ) )
+	if ( !CleanBegin_( IFlow ) )
 		qRReturn;
 
 	Success = true;
+
+	Body.Init( Server, true );
 qRR
 qRT
 qRE
@@ -236,7 +226,7 @@ bso::sBool muapo3::Top(
 {
 	bso::sBool Success = false;
 qRH
-	flw::sIFlow IFlow;
+	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
 qRB
 	IFlow.Init( Server );
@@ -245,12 +235,12 @@ qRB
 	SendCommand_( cTop, OFlow );
 	OFlow << Index << ' ' << AmountOfLine << NL_ << txf::commit;
 
-	Body.Init( Server, true );
-
-	if ( !CleanBegin_( IFlow, Body.Message ) )
+	if ( !CleanBegin_( IFlow ) )
 		qRReturn;
 
 	Success = true;
+
+	Body.Init( Server, true );
 qRR
 qRT
 qRE
@@ -264,7 +254,7 @@ bso::sBool muapo3::UIDL(
 {
 	bso::sBool Success = false;
 qRH
-	flw::sIFlow IFlow;
+	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
 qRB
 	IFlow.Init( Server );
@@ -277,10 +267,12 @@ qRB
 	
 	OFlow  << NL_<< txf::commit;
 
-	Body.Init( Server, Index == 0 );
 
-	if ( !CleanBegin_( IFlow, Body.Message ) )
+	if ( !CleanBegin_(IFlow) ) {
+		Body.Init( Server, false );
 		qRReturn;
+	} else
+		Body.Init( Server, Index == 0 );
 
 	Success = true;
 qRR
@@ -295,7 +287,7 @@ bso::sBool muapo3::Quit(
 {
 	bso::sBool Success = false;
 qRH
-	flw::sIFlow IFlow;
+	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
 qRB
 	IFlow.Init( Server );
@@ -304,12 +296,12 @@ qRB
 	SendCommand_( cQuit, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	Body.Init( Server, true );
-
-	if ( !CleanBegin_( IFlow, Body.Message ) )
+	if ( !CleanBegin_( IFlow ) )
 		qRReturn;
 
 	Success = true;
+
+	Body.Init( Server, true );
 qRR
 qRT
 qRE

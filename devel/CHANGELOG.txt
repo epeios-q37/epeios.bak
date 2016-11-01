@@ -1,5 +1,13 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-01 :
+- CDBG64 :
+	- Adding missing header.
+- CIO, FLX, IOF :
+	- Adaptation to changes in 'FLW'.
+- FLW :
+	- 'iflow' can no more be used in place of the dressed/standalone version.
+
 2016-10-30 :
 - FBLBKD :
 	- Fixing bug occuring when on error during the reading of a flow frontend/backend parameter.

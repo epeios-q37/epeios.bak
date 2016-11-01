@@ -126,6 +126,10 @@ namespace flw {
 		{
 			_D().Dismiss( Unlock );
 		}
+		void Init( fdr::iflow_driver_base___ &Driver )	// To force the use of the 'Dressed' version.
+		{
+			_Driver = &Driver;
+		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -137,10 +141,6 @@ namespace flw {
 			_Driver = NULL;
 		}
 		qCVDTOR( iflow__ );
-		void Init( fdr::iflow_driver_base___ &Driver )
-		{
-			_Driver = &Driver;
-		}
 		fdr::iflow_driver_base___ &IDriver( void ) const
 		{
 			return _D();
@@ -225,12 +225,29 @@ namespace flw {
 		{
 			return IsLocked();
 		}
+		friend class _standalone_iflow__;
+		friend class ioflow__;
 	};
 
-
-	// Uniquement pour avoir une symtrie par rapport  'standalone_oflow__'.
-	template <int Dummy = 0> class standalone_iflow__
+	// To allow the declaration as 'friend', which does not allow templates.
+	class _standalone_iflow__
 	: public iflow__
+	{
+	public:
+		void reset( bso::sBool P = true )
+		{
+			iflow__::reset( P );
+		}
+		qCVDTOR( _standalone_iflow__ );
+		void Init( fdr::iflow_driver_base___ &Driver )
+		{
+			iflow__::Init( Driver );
+		}
+	};
+
+	// For symetry with  'standalone_oflow__'.
+	template <int Dummy = 0> class standalone_iflow__
+	: public _standalone_iflow__
 	{
 	public:
 		void reset( bso::sBool P = true )
@@ -238,12 +255,12 @@ namespace flw {
 			if ( Dummy != 0 )	
 				qRFwk();	// 'Dummy' n'tant pas utilis, rien ne sert de modifier sa valeur.
 
-			iflow__::reset( P );
+			_standalone_iflow__::reset( P );
 		}
 		qCVDTOR( standalone_iflow__ );
 		void Init( fdr::iflow_driver_base___ &Driver )
 		{
-			iflow__::Init( Driver );
+			_standalone_iflow__::Init( Driver );
 		}
 	};
 

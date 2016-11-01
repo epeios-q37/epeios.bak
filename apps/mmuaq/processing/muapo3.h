@@ -56,7 +56,7 @@ namespace muapo3 {
 	{
 	private:
 		eState State_;
-		flw::sIFlow Flow_;
+		flw::sDressedIFlow<> Flow_;
 		bso::sBool MultiLine_;
 		// If returned value == 'true', we are in a potential termination sequen ce.
 		fdr::sByte StateSize_( void ) const
@@ -248,11 +248,10 @@ namespace muapo3 {
 	{
 	private:
 		rSequenceDelimitedIDriver Driver_;
-		flw::sIFlow Flow_;
 	public:
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Flow_, Driver_, Message );
+			tol::reset( P, Driver_ );
 		}
 		qCDTOR( hBody );
 		void Init(
@@ -260,13 +259,10 @@ namespace muapo3 {
 			bso::sBool Multiline )
 		{
 			Driver_.Init( Driver, Multiline, fdr::ts_Default );
-			Flow_.Init( Driver_ );
-			tol::Init( Message );
 		}
-		str::wString Message;
-		flw::sIFlow &GetFlow( void )
+		fdr::rIDriver &GetDriver( void )
 		{
-			return Flow_;
+			return Driver_;
 		}
 	};
 

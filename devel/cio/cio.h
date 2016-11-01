@@ -123,12 +123,12 @@ namespace cio {
 
 
 	class cif__
-	: public flw::iflow__
+	: public flw::standalone_iflow__<>
 	{
 	public:
 		void Init( fdr::iflow_driver_base___ &Driver )
 		{
-			iflow__::Init( Driver );
+			standalone_iflow__::Init( Driver );
 		}
 		void Init(
 			fdr::oflow_driver_base___ &Driver,

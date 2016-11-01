@@ -15,6 +15,10 @@
   <Translation language="fr">Erreur sans message du serveur.</Translation>
   <Translation language="en">Error with no message from server.</Translation>
  </Translations>
+ <Translations text="UnableToConnect">
+  <Translation language="fr">Impossible de se connecter à '%1'.</Translation>
+  <Translation language="en">Unable to connect to '%1'.</Translation>
+ </Translations>
  <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

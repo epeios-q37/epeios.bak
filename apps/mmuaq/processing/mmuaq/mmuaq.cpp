@@ -105,22 +105,32 @@ namespace {
 	}
 
 	namespace { 
-		void Dump_( flw::sIFlow &Flow )
+		void Dump_( fdr::rIDriver &Driver )
 		{
+		qRH
+			flw::sDressedIFlow<> Flow;
+		qRB
+			Flow.Init( Driver );
+
 			while ( !Flow.EndOfFlow() )
 				cio::COut << Flow.Get() << txf::commit;
 
 			Flow.Dismiss();
+		qRR
+		qRT
+		qRE
 		}
 
-		void Dump_( fdr::rIDriver &Driver )
+		void Dump_(
+			fdr::rIDriver &Driver,
+			str::dString &Content )
 		{
 		qRH
-			flw::sIFlow Flow;
+			flx::rStringODriver ODriver;
 		qRB
-			Flow.Init( Driver );
+			ODriver.Init( Content, fdr::ts_Default );
 
-			Dump_( Flow );
+			fdr::Copy( Driver, ODriver );
 		qRR
 		qRT
 		qRE
@@ -146,8 +156,8 @@ namespace {
 			Password.Init();
 			sclmisc::MGetValue( registry::parameter::Password, Password );
 
-//			Buffer.Init();
-			Server.Init( HostPort.Convert( Buffer ) , SCK_INFINITE, err::hThrowException );
+			if ( !Server.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
+				sclmisc::ReportAndAbort("UnableToConnect", HostPort );
 
 			Success = muapo3::Authenticate( Username, Password, Server, Body );
 		qRR
@@ -158,10 +168,20 @@ namespace {
 
 		void Report( muapo3::hBody &Body )
 		{
-			if ( Body.Message.Amount() )
-				sclmisc::ReportAndAbort("Error", Body.Message );
+		qRH
+			str::wString Message;
+		qRB
+			Message.Init();
+
+			Dump_( Body.GetDriver(), Message );
+
+			if ( Message.Amount() )
+				sclmisc::ReportAndAbort("Error", Message );
 			else
 				sclmisc::ReportAndAbort( "ErrorWithNoMessage" );
+		qRR
+		qRT
+		qRE
 		}
 	}
 
@@ -179,7 +199,7 @@ namespace {
 		if ( !muapo3::List( Server, Body ) )
 			REPORT;
 
-		Dump_( Body.GetFlow() );
+		Dump_( Body.GetDriver() );
 
 		if ( !muapo3::Quit( Server, Body ) )
 			REPORT;
@@ -203,7 +223,7 @@ namespace {
 		if ( !muapo3::Retrieve( Number, Server, Body ) )
 			REPORT;
 
-		Dump_( Body.GetFlow() );
+		Dump_( Body.GetDriver() );
 
 		if ( !muapo3::Quit( Server, Body ) )
 			REPORT;
@@ -228,7 +248,7 @@ namespace {
 		if ( !muapo3::Top( Number, Lines, Server, Body ) )
 			REPORT;
 
-		Dump_( Body.GetFlow() );
+		Dump_( Body.GetDriver() );
 
 		if ( !muapo3::Quit( Server, Body ) )
 			REPORT;
@@ -252,7 +272,7 @@ namespace {
 		if ( !muapo3::UIDL( Number, Server, Body ) )
 			REPORT;
 
-		Dump_( Body.GetFlow() );
+		Dump_( Body.GetDriver() );
 
 		if ( !muapo3::Quit( Server, Body ) )
 			REPORT;

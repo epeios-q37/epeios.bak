@@ -38,6 +38,8 @@
 #include "bso.h"
 #include "fdr.h"
 
+#include <ctype.h>
+
 namespace cdgb64 {
 
 	extern bso::sByte *CommonEncoding_;
