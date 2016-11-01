@@ -5,6 +5,8 @@ CHANGELOG for the 'Epeios' framework.
 	- Adding missing header.
 - CIO, FLX, HTP, IOF :
 	- Adaptation to changes in 'FLW'.
+- CSDMXC :
+	- Amelioration of error handling.
 - FLW :
 	- 'iflow' can no more be used in place of the dressed/standalone version.
 

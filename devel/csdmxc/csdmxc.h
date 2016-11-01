@@ -413,13 +413,18 @@ qRE
 			fdr::size__ Maximum ) override
 		{
 			fdr::size__ Amount = 0;
+		qRH
+		qRB
 
 			if ( Core_ != NULL ) {
 				Prepare_();
 
 				Amount = Flow_.WriteUpTo( Buffer, Maximum );
 			}
-
+		qRR
+			GiveUp_();
+		qRT
+		qRE
 			return Amount;
 		}
 		virtual void FDRCommit( bso::sBool Unlock ) override
