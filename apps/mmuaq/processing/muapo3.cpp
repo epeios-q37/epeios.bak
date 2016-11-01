@@ -164,7 +164,7 @@ qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
 
-	Body.Init( Server );
+	Body.Init( Server,true );
 
 	Success = Authenticate_( Username, Password, IFlow, OFlow, Body.Message );
 qRR
@@ -182,7 +182,7 @@ qRH
 	flw::sIFlow IFlow;
 	txf::rOFlow OFlow;
 qRB
-	Body.Init( Server );
+	Body.Init( Server, true );
 
 	IFlow.Init( Server );
 	OFlow.Init( Server );
@@ -216,16 +216,10 @@ qRB
 	SendCommand_( cRetr, OFlow );
 	OFlow << Index << NL_ << txf::commit;
 
-	Body.Init( Server );
+	Body.Init( Server, true );
 
 	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
-
-//	IFlow.Skip();	// Space after the 'OK'.
-	/*
-	if ( ( Size = GetSize_( IFlow ) ) == 0 )
-		qRReturn;
-		*/
 
 	Success = true;
 qRR
@@ -251,7 +245,7 @@ qRB
 	SendCommand_( cTop, OFlow );
 	OFlow << Index << ' ' << AmountOfLine << NL_ << txf::commit;
 
-	Body.Init( Server );
+	Body.Init( Server, true );
 
 	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
@@ -279,9 +273,11 @@ qRB
 	SendCommand_( cUidl, OFlow );
 
 	if ( Index != 0 )
-		OFlow << Index << NL_ << txf::commit;
+		OFlow << Index;;
+	
+	OFlow  << NL_<< txf::commit;
 
-	Body.Init( Server );
+	Body.Init( Server, Index == 0 );
 
 	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;
@@ -292,8 +288,6 @@ qRT
 qRE
 	return Success;
 }
-
-
 
 bso::sBool muapo3::Quit(
 	fdr::rIODriver &Server,
@@ -310,7 +304,7 @@ qRB
 	SendCommand_( cQuit, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	Body.Init( Server );
+	Body.Init( Server, true );
 
 	if ( !CleanBegin_( IFlow, Body.Message ) )
 		qRReturn;

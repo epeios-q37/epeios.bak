@@ -57,6 +57,7 @@ namespace muapo3 {
 	private:
 		eState State_;
 		flw::sIFlow Flow_;
+		bso::sBool MultiLine_;
 		// If returned value == 'true', we are in a potential termination sequen ce.
 		fdr::sByte StateSize_( void ) const
 		{
@@ -108,10 +109,15 @@ namespace muapo3 {
 				Termination = HandleState_( C, CR_, sICR );
 				break;
 			case sICR:
-				Termination = HandleState_( C, LF_, sILF );
+				if ( MultiLine_ )
+					Termination = HandleState_( C, LF_, sILF );
+				else {
+					State_ = sCompleted;
+					Termination = true;
+				}
 				break;
 			case sILF:
-				Termination = HandleState_( C, Dot_, sDot );
+					Termination = HandleState_( C, Dot_, sDot );
 				break;
 			case sDot:
 				Termination = HandleState_( C, CR_, sFCR );
@@ -201,14 +207,17 @@ namespace muapo3 {
 			rIDressedDriver_::reset( P );
 			tol::reset( P, Flow_ );
 			State_ = s_Undefined;
+			MultiLine_ = false;
 		}
 		qCVDTOR( rSequenceDelimitedIDriver );
 		void Init(
 			fdr::rIDriver &Driver,
+			bso::sBool MultiLine,
 			fdr::thread_safety__ ThreadSafety )
 		{
 			rIDressedDriver_::Init( ThreadSafety );
 			Flow_.Init( Driver );
+			MultiLine_ = MultiLine;
 			State_ = sRegular;
 		}
 	};
@@ -246,9 +255,11 @@ namespace muapo3 {
 			tol::reset( P, Flow_, Driver_, Message );
 		}
 		qCDTOR( hBody );
-		void Init( fdr::rIDriver &Driver )
+		void Init(
+			fdr::rIDriver &Driver,
+			bso::sBool Multiline )
 		{
-			Driver_.Init( Driver, fdr::ts_Default );
+			Driver_.Init( Driver, Multiline, fdr::ts_Default );
 			Flow_.Init( Driver_ );
 			tol::Init( Message );
 		}

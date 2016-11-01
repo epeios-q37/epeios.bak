@@ -668,6 +668,7 @@ namespace fdr {
 			iflow_driver_base___::reset( P );
 			oflow_driver_base___::reset( P );
 		}
+		qCVDTOR( ioflow_driver_base___ );
 		void Init(
 			byte__ *InputCache,
 			size__ InputCacheSize,
