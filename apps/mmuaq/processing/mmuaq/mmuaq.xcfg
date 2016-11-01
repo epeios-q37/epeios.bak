@@ -26,8 +26,8 @@
     <Translation language="en">'Base64' decoding.</Translation>
    </Translations>
    <Translations text="POP3ListCommandDescription">
-    <Translation language="fr">Affiche la liste des messages d'un serveur 'POP3'.</Translation>
-    <Translation language="en">Displays message list from a 'POP3' server.</Translation>
+    <Translation language="fr">Affiche des informations sur les messages d'un serveur 'POP3'.</Translation>
+    <Translation language="en">Displays information about messages from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="POP3RetrieveCommandDescription">
     <Translation language="fr">Récupère un message d'un serveur 'POP3'.</Translation>
@@ -38,24 +38,12 @@
     <Translation language="en">Displays the begin of a message from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="POP3UIDLCommandDescription">
-    <Translation language="fr">Affiche l'identifiant unique d'un ou de tous les messages.</Translation>
-    <Translation language="en">Displays the unique ID of one or all messages.</Translation>
-   </Translations>
-   <Translations text="TestFlagDescription">
-    <Translation language="fr">fanion de test.</Translation>
-    <Translation language="en">test flag.</Translation>
-   </Translations>
-   <Translations text="TestOptionDescription">
-    <Translation language="fr">option de test.</Translation>
-    <Translation language="en">test option.</Translation>
-   </Translations>
-   <Translations text="TestOptionLabel">
-    <Translation language="fr">option (fr)</Translation>
-    <Translation language="en">option (en)</Translation>
+    <Translation language="fr">Affiche l'identifiant unique des messages d'un serveur 'POP3'.</Translation>
+    <Translation language="en">Displays the unique ID of messages from a 'POP3' server.</Translation>
    </Translations>
    <Translations text="InputArgumentDescription">
     <Translation language="fr">Nom du fichier d'entrée (utilisation de l'entrée standard si absent).</Translation>
-    <Translation language="en">Input file name use of (standard input if missing).</Translation>
+    <Translation language="en">Input file name (use of standard input if missing).</Translation>
    </Translations>
    <Translations text="InputArgumentLabel">
     <Translation language="fr">entrée</Translation>
@@ -85,24 +73,20 @@
     <Translation language="fr">lignes</Translation>
     <Translation language="en">lines</Translation>
    </Translations>
-   <Translations text="TestArgumentLabel">
-    <Translation language="fr">argument (fr)</Translation>
-    <Translation language="en">argument (en)</Translation>
-   </Translations>
   </Locale>
   <Arguments>
    <xpp:expand select="TOL_Arguments"/>
    <!-- Commandes : pas de 'Path' (vaut 'Parameters/Command'), ni de 'Value'. -->
    <Argument id="B64EncodeCommand" Description="B64EncodeCommandDescription" long="b64-encode" Value="B64Encode" Usage="[%InputArgument% [%OutputArgument%]]"/>
    <Argument id="B64DecodeCommand" Description="B64DecodeCommandDescription" long="b64-decode" Value="B64Decode" Usage="[%InputArgument% [%OutputArgument%]]"/>
-   <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage=""/>
+   <Argument id="POP3ListCommand" Description="POP3ListCommandDescription" long="pop3-list" Value="POP3List" Usage="[%MessageArgument%]"/>
    <Argument id="POP3RetrieveCommand" Description="POP3RetrieveCommandDescription" long="pop3-retrieve" Value="POP3Retrieve" Usage="%MessageArgument%"/>
    <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="%MessageArgument% %LinesArgument%"/>
    <Argument id="POP3UIDLCommand" Description="POP3UIDLCommandDescription" long="pop3-uidl" Value="POP3UIDL" Usage="[%MessageArgument%]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
-   <Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/>
+   <!--Argument id="TestFlag" Description="TestFlagDescription" long="flag" short="f" Path="Flag" Value="TestFlag"/-->
    <!-- Options : 'Path' ET 'Value'. -->
-   <Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/>
+   <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
    <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
    <Argument id="InputArgument" Description="InputArgumentDescription" Path="Input" Label="InputArgumentLabel"/>
    <Argument id="OutputArgument" Description="OutputArgumentDescription" Path="Output" Label="OutputArgumentLabel"/>
@@ -118,7 +102,9 @@
      <Link index="0" Target="InputArgument"/>
      <Link index="1" Target="OutputArgument"/>
     </Layout>
-    <Layout command="POP3List"/>
+    <Layout command="POP3List">
+     <Link index="0" Target="MessageArgument"/>
+    </Layout>
     <Layout command="POP3Retrieve">
      <Link index="0" Target="MessageArgument"/>
     </Layout>

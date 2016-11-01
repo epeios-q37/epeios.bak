@@ -20,6 +20,7 @@
 #include "muapo3.h"
 
 #include "flx.h"
+#include "htp.h"
 
 using namespace muapo3;
 
@@ -48,7 +49,6 @@ const char *muapo3::GetLabel( eCommand Command )
 	C( Quit );
 	C( Rset );
 	C( Uidl );
-	C( Capa );
 	default:
 		qRGnr();
 		break;
@@ -91,6 +91,7 @@ namespace {
 			return false;
 			break;
 		default:
+			// Server returned a anwser which is not POP3 compliant.
 			qRGnr();
 			break;
 		}
@@ -164,6 +165,7 @@ qRE
 }
 
 bso::sBool muapo3::List(
+	bso::sUInt Index,
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
@@ -176,14 +178,19 @@ qRB
 	OFlow.Init( Server );
 
 	SendCommand_( cList, OFlow );
-	OFlow << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	if ( Index != 0 )
+		OFlow << Index;
+	
+	OFlow << NL_<< txf::commit;
+
+	if ( !CleanBegin_(IFlow) ) {
+		Body.Init( Server, false );
 		qRReturn;
+	} else
+		Body.Init( Server, Index == 0 );
 
 	Success = true;
-
-	Body.Init( Server, true );
 qRR
 qRT
 qRE
@@ -263,10 +270,9 @@ qRB
 	SendCommand_( cUidl, OFlow );
 
 	if ( Index != 0 )
-		OFlow << Index;;
+		OFlow << Index;
 	
-	OFlow  << NL_<< txf::commit;
-
+	OFlow << NL_<< txf::commit;
 
 	if ( !CleanBegin_(IFlow) ) {
 		Body.Init( Server, false );

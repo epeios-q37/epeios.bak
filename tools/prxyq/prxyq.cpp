@@ -334,7 +334,7 @@ public:
 				Flow.IDriver().ITake( ITID );
 
 			if ( OTID != fdr::UndefinedTID )
-				Flow.IDriver().ITake( OTID );
+				Flow.ODriver().OTake( OTID );
 		qRFE( sclmisc::ErrFinal() )
 		}
 		void Process_( prxybase::eType Type )

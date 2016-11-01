@@ -192,11 +192,14 @@ namespace {
 	qRH
 		csdbnc::rIODriver Server;
 		muapo3::hBody Body;
+		bso::sUInt Number = 0;
 	qRB
 		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
 			REPORT;
 
-		if ( !muapo3::List( Server, Body ) )
+		Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
+
+		if ( !muapo3::List( Number, Server, Body ) )
 			REPORT;
 
 		Dump_( Body.GetDriver() );

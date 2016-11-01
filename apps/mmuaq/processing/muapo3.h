@@ -28,7 +28,7 @@
 
 # include "muabsc.h"
 
-# include "htp.h"
+# include "lstcrt.h"
 
 namespace muapo3 {
 
@@ -222,8 +222,6 @@ namespace muapo3 {
 		}
 	};
 
-
-
 	qENUM( Command ) {
 		cUser,
 		cPass,
@@ -237,7 +235,6 @@ namespace muapo3 {
 		cQuit,
 		cRset,
 		cUidl,
-		cCapa,
 		c_amount,
 		c_Undefined
 	};
@@ -275,6 +272,7 @@ namespace muapo3 {
 		hBody & Body );
 
 	bso::sBool List(
+		bso::sUInt Index,
 		fdr::rIODriver &Server,
 		hBody & Body );
 
@@ -297,6 +295,52 @@ namespace muapo3 {
 	bso::sBool Quit(
 		fdr::rIODriver &Server,
 		hBody & Body );
+
+	class dAccount
+	{
+	public:
+		struct s {
+			str::dString::s
+				HostPort,
+				Username,
+				Password;
+		};
+		str::dString
+			HostPort,
+			Username,
+			Password;
+		dAccount( s &S )
+		: HostPort( S.HostPort ),
+		  Username( S.Username ),
+		  Password( S.Password )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, HostPort, Username, Password );
+		}
+		void plug( qASd *AS )
+		{
+			tol::plug( AS, HostPort, Username, Password );
+		}
+		dAccount operator =(const dAccount &A)
+		{
+			HostPort = A.HostPort;
+			Username = A.Username;
+			Password = A.Password;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			tol::Init( HostPort, Username, Password );
+		}
+	};
+
+	qW( Account );
+
+	qROW( ARow );
+
+	typedef lstcrt::qLCRATEd( dAccount, sARow ) dAccounts;
 }
 
 
