@@ -19,6 +19,10 @@
   <Translation language="fr">Impossible de se connecter à '%1'.</Translation>
   <Translation language="en">Unable to connect to '%1'.</Translation>
  </Translations>
+ <Translations text="ErroneousAnswer">
+  <Translation language="fr">Réponse incorrecte du serveur 'POP3'.</Translation>
+  <Translation language="en">Erroneous anwser from the 'POP3' server.</Translation>
+ </Translations>
  <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

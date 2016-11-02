@@ -138,11 +138,11 @@ namespace {
 	}
 
 	namespace pop3_ {
-		bso::sBool InitAndAuthenticate_(
+		muapo3::eIndicator InitAndAuthenticate_(
 			csdbnc::rIODriver &Server,
 			muapo3::hBody &Body )
 		{
-			bso::sBool Success = false;
+			muapo3::eIndicator Indicator = muapo3::i_Undefined;
 		qRH
 			str::wString HostPort, Username, Password;
 			qCBUFFERr Buffer;
@@ -159,14 +159,14 @@ namespace {
 			if ( !Server.Init( HostPort.Convert( Buffer ), SCK_INFINITE, qRPU ) )
 				sclmisc::ReportAndAbort("UnableToConnect", HostPort );
 
-			Success = muapo3::Authenticate( Username, Password, Server, Body );
+			Indicator = muapo3::Authenticate( Username, Password, Server, Body );
 		qRR
 		qRT
 		qRE
-			return Success;
+			return Indicator;
 		}
 
-		void Report( muapo3::hBody &Body )
+		void ReportError_( muapo3::hBody &Body )
 		{
 		qRH
 			str::wString Message;
@@ -183,9 +183,27 @@ namespace {
 		qRT
 		qRE
 		}
-	}
 
-#define REPORT pop3_::Report( Body )
+
+		void Handle(
+			muapo3::eIndicator Indicator,
+			muapo3::hBody &Body )
+		{
+			switch ( Indicator.Value() ) {
+			case muapo3::iOK:
+				break;
+			case muapo3::iError:
+				ReportError_( Body );
+				break;
+			case muapo3::iErroneous:
+				sclmisc::ReportAndAbort( "ErroneousAnswer" );
+				break;
+			default:
+				qRGnr();
+				break;
+			}
+		}
+	}
 
 	void POP3List_( void )
 	{
@@ -194,18 +212,15 @@ namespace {
 		muapo3::hBody Body;
 		bso::sUInt Number = 0;
 	qRB
-		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
-			REPORT;
+		pop3_::Handle( pop3_::InitAndAuthenticate_( Server, Body ), Body );
 
 		Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
 
-		if ( !muapo3::List( Number, Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::List( Number, Server, Body ), Body );
 
 		Dump_( Body.GetDriver() );
 
-		if ( !muapo3::Quit( Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::Quit( Server, Body ), Body );
 	qRR
 	qRT
 	qRE
@@ -218,18 +233,15 @@ namespace {
 		muapo3::hBody Body;
 		bso::sUInt Number = 0;
 	qRB
-		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
-			REPORT;
+		pop3_::Handle( pop3_::InitAndAuthenticate_( Server, Body ), Body );
 
 		Number = sclmisc::MGetUInt( registry::parameter::Message );
 
-		if ( !muapo3::Retrieve( Number, Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::Retrieve( Number, Server, Body ), Body );
 
 		Dump_( Body.GetDriver() );
 
-		if ( !muapo3::Quit( Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::Quit( Server, Body ), Body );
 	qRR
 	qRT
 	qRE
@@ -242,19 +254,16 @@ namespace {
 		muapo3::hBody Body;
 		bso::sUInt Number = 0, Lines = 0;
 	qRB
-		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
-			REPORT;
+		pop3_::Handle( pop3_::InitAndAuthenticate_( Server, Body ), Body );
 
 		Number = sclmisc::MGetUInt( registry::parameter::Message );
 		Lines = sclmisc::MGetUInt( registry::parameter::Lines );
 
-		if ( !muapo3::Top( Number, Lines, Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::Top( Number, Lines, Server, Body ), Body );
 
 		Dump_( Body.GetDriver() );
 
-		if ( !muapo3::Quit( Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::Quit( Server, Body ), Body );
 	qRR
 	qRT
 	qRE
@@ -267,18 +276,15 @@ namespace {
 		muapo3::hBody Body;
 		bso::sUInt Number = 0;
 	qRB
-		if ( !pop3_::InitAndAuthenticate_( Server, Body ) )
-			REPORT;
+		pop3_::Handle( pop3_::InitAndAuthenticate_( Server, Body ), Body );
 
 		Number = sclmisc::OGetUInt( registry::parameter::Message, 0 );
 
-		if ( !muapo3::UIDL( Number, Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::UIDL( Number, Server, Body ), Body );
 
 		Dump_( Body.GetDriver() );
 
-		if ( !muapo3::Quit( Server, Body ) )
-			REPORT;
+		pop3_::Handle( muapo3::Quit( Server, Body ), Body );
 	qRR
 	qRT
 	qRE

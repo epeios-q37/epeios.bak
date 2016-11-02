@@ -75,12 +75,12 @@ namespace {
 	qRE
 	}
 
-	bso::sBool CleanBegin_( flw::sIFlow &Flow )
+	eIndicator CleanBegin_(	flw::sIFlow &Flow )
 	{
 		switch ( Flow.Get() ) {
 		case '+':
 			Flow.Skip( 3 );
-			return true;
+			return iOK;
 			break;
 		case '-':
 			Flow.Skip( 3 );
@@ -88,39 +88,45 @@ namespace {
 			if ( Flow.View() == ' ' )
 				Flow.Skip();
 
-			return false;
+			return iError;
 			break;
 		default:
 			// Server returned a anwser which is not POP3 compliant.
-			qRGnr();
+			return iErroneous;
 			break;
 		}
 
-		return false;	// To avoid a warning.
+		return i_Undefined;	// To avoid a warning.
 	}
 
-	bso::sBool Clean_( flw::sIFlow &Flow )
+	eIndicator Clean_( flw::sIFlow &Flow )
 	{
-		if ( CleanBegin_( Flow ) ) {
+		eIndicator Indicator = i_Undefined;
+
+		Indicator = CleanBegin_( Flow );
+
+		if ( Indicator.IsTrue() ) {
 			while ( Flow.Get() != '\n' );
-			return true;
-		} else
-			return false;
+		}
+
+		return Indicator;
 	}
 
-	bso::sBool Authenticate_(
+	eIndicator Authenticate_(
 		const str::dString &User,
 		const str::dString &Pass,
 		flw::sIFlow &In,
 		txf::sOFlow &Out )
 	{
-		if ( !Clean_( In ) )
-			return false;
+		eIndicator Indicator = i_Undefined;
+
+		if ( !( Indicator = Clean_( In ) ).IsTrue() )
+			return Indicator;
 
 		SendCommand_( cUser, Out );
 		Out << User << NL_ << txf::commit;
-		if ( !Clean_( In ) )
-			return false;
+		if ( !( Indicator = Clean_( In ) ).IsTrue() )
+			return Indicator;
 
 		SendCommand_( cPass, Out );
 		Out << Pass << NL_ << txf::commit;
@@ -141,13 +147,13 @@ namespace {
 	}
 }
 
-bso::sBool muapo3::Authenticate(
+eIndicator muapo3::Authenticate(
 	const str::dString &Username,
 	const str::dString &Password,
 	fdr::rIODriver &Server,
 	hBody & Body )
 {
-	bso::sBool Success = false;
+	eIndicator Indicator = i_Undefined;
 qRH
 	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
@@ -155,21 +161,21 @@ qRB
 	IFlow.Init( Server );
 	OFlow.Init( Server );
 
-	Success = Authenticate_( Username, Password, IFlow, OFlow );
+	Indicator = Authenticate_( Username, Password, IFlow, OFlow );
 
 	Body.Init( Server, false );
 qRR
 qRT
 qRE
-	return Success;
+	return Indicator;
 }
 
-bso::sBool muapo3::List(
+eIndicator muapo3::List(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
-	bso::sBool Success = false;
+	eIndicator Indicator = i_Undefined;
 qRH
 	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
@@ -184,25 +190,23 @@ qRB
 	
 	OFlow << NL_<< txf::commit;
 
-	if ( !CleanBegin_(IFlow) ) {
+	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() ) {
 		Body.Init( Server, false );
 		qRReturn;
 	} else
 		Body.Init( Server, Index == 0 );
-
-	Success = true;
 qRR
 qRT
 qRE
-	return Success;
+	return Indicator;
 }
 
-bso::sBool muapo3::Retrieve(
+eIndicator muapo3::Retrieve(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
-	bso::sBool Success = false;
+	eIndicator Indicator = i_Undefined;
 qRH
 	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
@@ -213,25 +217,23 @@ qRB
 	SendCommand_( cRetr, OFlow );
 	OFlow << Index << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() )
 		qRReturn;
-
-	Success = true;
 
 	Body.Init( Server, true );
 qRR
 qRT
 qRE
-	return Success;
+	return Indicator;
 }
 
-bso::sBool muapo3::Top(
+eIndicator muapo3::Top(
 	bso::sUInt Index,
 	bso::sUInt AmountOfLine,
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
-	bso::sBool Success = false;
+	eIndicator Indicator = i_Undefined;
 qRH
 	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
@@ -242,24 +244,22 @@ qRB
 	SendCommand_( cTop, OFlow );
 	OFlow << Index << ' ' << AmountOfLine << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() )
 		qRReturn;
-
-	Success = true;
 
 	Body.Init( Server, true );
 qRR
 qRT
 qRE
-	return Success;
+	return Indicator;
 }
 
-bso::sBool muapo3::UIDL(
+eIndicator muapo3::UIDL(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
-	bso::sBool Success = false;
+	eIndicator Indicator = i_Undefined;
 qRH
 	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
@@ -274,24 +274,22 @@ qRB
 	
 	OFlow << NL_<< txf::commit;
 
-	if ( !CleanBegin_(IFlow) ) {
+	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() ) {
 		Body.Init( Server, false );
 		qRReturn;
 	} else
 		Body.Init( Server, Index == 0 );
-
-	Success = true;
 qRR
 qRT
 qRE
-	return Success;
+	return Indicator;
 }
 
-bso::sBool muapo3::Quit(
+eIndicator muapo3::Quit(
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
-	bso::sBool Success = false;
+	eIndicator Indicator = i_Undefined;
 qRH
 	flw::sDressedIFlow<> IFlow;
 	txf::rOFlow OFlow;
@@ -302,16 +300,14 @@ qRB
 	SendCommand_( cQuit, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	if ( !CleanBegin_( IFlow ) )
+	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() )
 		qRReturn;
-
-	Success = true;
 
 	Body.Init( Server, true );
 qRR
 qRT
 qRE
-	return Success;
+	return Indicator;
 }
 
 

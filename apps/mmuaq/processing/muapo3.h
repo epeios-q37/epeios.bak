@@ -263,36 +263,48 @@ namespace muapo3 {
 		}
 	};
 
+	qENUM( Indicator_ ) {
+		iOK,
+		i_True = iOK,
+		iError,
+		i_False = iError,
+		i_Error,
+		iErroneous = i_Error,	// Server returned a not 'POP3' compliant answer.
+		i_amount,
+		i_Undefined
+	};
+
+	qXENUM( Indicator, i );
 
 	// To launch before any of the operation below. Eats the message sent on connection.
-	bso::sBool Authenticate(
+	eIndicator Authenticate(
 		const str::dString &Username,
 		const str::dString &Password,
 		fdr::rIODriver &Server,
 		hBody & Body );
 
-	bso::sBool List(
+	eIndicator List(
 		bso::sUInt Index,
 		fdr::rIODriver &Server,
 		hBody & Body );
 
-	bso::sBool Retrieve(
+	eIndicator Retrieve(
 		bso::sUInt Index,
 		fdr::rIODriver &Server,
 		hBody & Body );
 
-	bso::sBool Top(
+	eIndicator Top(
 		bso::sUInt Index,
 		bso::sUInt AmoutOfLine,
 		fdr::rIODriver &Server,
 		hBody & Body );
 
-	bso::sBool UIDL(
+	eIndicator UIDL(
 		bso::sUInt Index,	// Si = à '04, retourne l'ensemble des messages.
 		fdr::rIODriver &Server,
 		hBody & Body );
 
-	bso::sBool Quit(
+	eIndicator Quit(
 		fdr::rIODriver &Server,
 		hBody & Body );
 
