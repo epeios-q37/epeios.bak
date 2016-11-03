@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--                    DON'T MODIFY !!! !
+    This document was generated the 03/11/2016 10:05:55
+    using barq V20161027 (http://q37.info/)
+    Build : Oct 27 2016 17:45:25 (Win32;MSC 1800;IA-32)
+-->
+<API target="mmuaq" TargetUppercased="MMUAQ" ProtocolVersion="13" APIVersion="1">
+ <Misc>
+  <Generator>
+   <Name>barq</Name>
+   <Version>20161027</Version>
+   <Build>Oct 27 2016 17:45:25 Win32;MSC 1800;IA-32</Build>
+   <URL>http://q37.info/</URL>
+   <Author>
+    <Name>Claude SIMON</Name>
+    <Contact>http://q37.info/contact/</Contact>
+   </Author>
+   <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
+  </Generator>
+  <Backend>
+   <Details>mmuaqbkd V20161103 Build Nov  3 2016 09:07:00 - Win32;MSC 1800;IA-32</Details>
+   <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
+  </Backend>
+  <Software>MMUAq V1.0</Software>
+  <Date>03/11/2016</Date>
+  <Time>10:05:55</Time>
+ </Misc>
+ <Types>
+  <Type Object="Master">
+   <ID>65535</ID>
+   <Prefix Default="" Lower="" Upper=""/>
+   <Name Raw="" Underscored="" Mixedcased=""/>
+   <Commands Amount="4">
+    <Command>
+     <Name>LoadSetupOfId_1</Name>
+     <ID>18</ID>
+     <Parameters Amount="2" Position="0">
+      <In>
+       <Parameter Discriminator="1" Position="Last" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </In>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>LoadSetupContent_1</Name>
+     <ID>19</ID>
+     <Parameters Amount="2" Position="2">
+      <In>
+       <Parameter Discriminator="1" Position="Last" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </In>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUATest_1</Name>
+     <ID>20</ID>
+     <Parameters Amount="1" Position="4"/>
+    </Command>
+    <Command>
+     <Name>MUALogin_1</Name>
+     <ID>21</ID>
+     <Parameters Amount="4" Position="5">
+      <In>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Static">
+        <Name>boolean</Name>
+        <ID>2</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+   </Commands>
+  </Type>
+  <Type>
+   <ID>0</ID>
+   <Prefix Default="mua" Lower="mua" Upper="MUA"/>
+   <Name Raw="MyObject" Underscored="MyObject" Mixedcased="MyObject"/>
+   <Commands Amount="2">
+    <Command>
+     <Name>ToUC</Name>
+     <ID>0</ID>
+     <Parameters Amount="3" Position="0">
+      <In>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>Test</Name>
+     <ID>1</ID>
+     <Parameters Amount="1" Position="3"/>
+    </Command>
+   </Commands>
+  </Type>
+ </Types>
+</API>
