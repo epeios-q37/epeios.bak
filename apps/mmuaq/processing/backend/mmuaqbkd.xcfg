@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configurations xmlns:xpp="http://q37.info/ns/xpp/">
+	<Configuration target="mmuaqbkd">
+		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+		<xpp:expand value-of="q37.xpp"/>
+		<Parameters>
+			<Language>en</Language>
+   <Plugins>
+    <Plugin target="Authentication" Id="Basic"></Plugin>
+   </Plugins>
+  </Parameters>
+		<Definitions>
+   <xpp:define name="PluginsRootDir">
+    <xpp:bloc>
+     <xpp:bloc preserve="yes">
+      <xpp:expand value-of="_BinPath"/>
+     </xpp:bloc>
+     <xpp:ifeq select="packing" value="yes">
+      <xpp:bloc preserve="yes">
+       <xpp:bloc>../</xpp:bloc>
+      </xpp:bloc>
+     </xpp:ifeq>
+     <xpp:bloc preserve="yes">
+      <xpp:bloc>plugins/</xpp:bloc>
+     </xpp:bloc>
+     <xpp:ifeq select="packing" value="no">
+      <xpp:bloc preserve="yes">
+       <xpp:bloc>mmuaq/backend/</xpp:bloc>
+      </xpp:bloc>
+     </xpp:ifeq>
+    </xpp:bloc>
+   </xpp:define>
+   <Plugins target="Authentication">
+    <xpp:define name="AuthenticationPluginsRootDir">
+     <xpp:bloc>
+      <xpp:expand select="PluginsRootDir"/>
+      <xpp:bloc preserve="yes">
+       <xpp:bloc>authentication/</xpp:bloc>
+      </xpp:bloc>
+     </xpp:bloc>
+    </xpp:define>
+    <Plugin id="Basic">
+     <Filename>
+      <xpp:expand select="AuthenticationPluginsRootDir"/>
+      <xpp:bloc preserve="yes">
+       <xpp:bloc>basic/basic</xpp:bloc>
+      </xpp:bloc>
+     </Filename>
+     <Configuration>
+      <xpp:expand href="../plugins/authentication/basic/basic.xcfg"/>
+     </Configuration>
+     <Locale>
+      <xpp:expand href="../plugins/authentication/basic/basic.xlcl"/>
+     </Locale>
+    </Plugin>
+   </Plugins>
+  </Definitions>
+		<Locale>
+		</Locale>
+	</Configuration>
+</Configurations>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:bloc>
+		<!-- User definitions -->
+		<xpp:define name="Version">
+			<xpp:bloc>(Obsolete ; generated automatically)</xpp:bloc>
+		</xpp:define>
+		<xpp:define name="CopyrightYears">
+			<xpp:bloc>2016</xpp:bloc>
+		</xpp:define>
+	</xpp:bloc>
+	<xpp:set name="Credits" value="Epeios"/>
+	<xpp:set name="Type" value="Backend"/>
+	<xpp:expand href="h:/sbatch/DVL/prj/Main.xml"/>
+	<About>
+		<Program>mmuaqbkd</Program>
+		<Software>MMUAq</Software>
+		<UUID>189de286-5b16-4d82-b398-595aaaa23053</UUID>
+	</About>
+	<Modules>
+		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
+			<Modules Group="Core">
+				<xpp:expand select="Core"/>
+			</Modules>
+			<Modules Group="SCL">
+				<xpp:expand select="SCL"/>
+			</Modules>
+			<Modules Group="FBL">
+				<xpp:expand select="FBLB"/>
+			</Modules>
+			<Modules Group="CSD">
+				<xpp:expand select="CSDB"/>
+			</Modules>
+		</Modules>
+		<Modules Group="MUA" Path="../">
+			<Module Path="../">muafbc</Module>
+			<Module Path="../">muainf</Module>
+   <Module>muaacc</Module>
+   <Module>muabsc</Module>
+   <Module>muaplg</Module>
+   <Module>muapo3</Module>
+   <Module>muaxmp</Module>
+		</Modules>
+		<Module>common</Module>
+		<Module>registry</Module>
+		<Modules Group="WRP">
+			<Module>wrpexample</Module>
+			<Module>wrpunbound</Module>
+		</Modules>
+	</Modules>
+	<Files>
+		<File>dmnzq.xprj</File>
+	</Files>
+	<SourceDirs>
+		<SourceDir>..</SourceDir>
+		<SourceDir>../..</SourceDir>
+	</SourceDirs>
+	<PreprocessorDefinitions>
+	</PreprocessorDefinitions>
+</Project>

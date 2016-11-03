@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Projects xmlns:xpp="http://q37.info/ns/xpp">
+<Projects  xmlns:xpp="http://q37.info/ns/xpp">
 	<Project target="dmnzq">
 	  <xpp:bloc>
 		<xpp:set name="ostype" env-var="OSTYPE"/>
@@ -31,7 +31,7 @@
 			</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="lib_affix">
-			<xpp:bloc>esketchbkd</xpp:bloc>
+			<xpp:bloc>mmuaqbkd</xpp:bloc>
 		</xpp:define>
 		<xpp:define name="lib_suffix">
 			<xpp:bloc>

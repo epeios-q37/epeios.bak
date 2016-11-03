@@ -1,28 +1,28 @@
 /*
 	Copyright (C) 2016 Claude SIMON (http://zeusw.org/epeios/contact.html).
 
-	This file is part of 'eSketch' software.
+	This file is part of 'MMUAq' software.
 
-    'eSketch' is free software: you can redistribute it and/or modify it
+    'MMUAq' is free software: you can redistribute it and/or modify it
     under the terms of the GNU Affero General Public License as published
     by the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    'eSketch' is distributed in the hope that it will be useful,
+    'MMUAq' is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with 'eSketch'.  If not, see <http://www.gnu.org/licenses/>.
+    along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "sclbacknd.h"
 #include "sclmisc.h"
 
 #include "registry.h"
-#include "sktfbc.h"
-#include "sktinf.h"
+#include "muafbc.h"
+#include "muainf.h"
 
 #include "fdr.h"
 
@@ -31,8 +31,8 @@
 #include "wrpunbound.h"
 #include "wrpexample.h"
 
-#define BACKEND_NAME	SKTINF_LC_AFFIX	"bkd"
-#define COPYRIGHT		COPYRIGHT_YEARS " " SKTINF_OWNER_NAME " (" SKTINF_OWNER_CONTACT ")"	
+#define BACKEND_NAME	MUAINF_LC_AFFIX	"bkd"
+#define COPYRIGHT		COPYRIGHT_YEARS " " MUAINF_OWNER_NAME " (" MUAINF_OWNER_CONTACT ")"	
 #define API_VERSION		"1"
 
 typedef sclbacknd::rCallback rCallback_;
@@ -68,10 +68,10 @@ public:
 			Mode,
 			API_VERSION,
 			ClientOrigin,
-			SKTINF_LC_AFFIX,
+			MUAINF_LC_AFFIX,
 			BACKEND_NAME " V" VERSION,
 			COPYRIGHT,
-			SKTINF_SOFTWARE_NAME " V" SKTINF_SOFTWARE_VERSION );
+			MUAINF_SOFTWARE_NAME " V" MUAINF_SOFTWARE_VERSION );
 
 		wrpunbound::Inform( *this );
 
@@ -146,4 +146,4 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = BACKEND_NAME;
-const char *sclmisc::SCLMISCProductName = SKTINF_MC_AFFIX;
+const char *sclmisc::SCLMISCProductName = MUAINF_MC_AFFIX;
