@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpp:bloc xmlns:xpp="http://zeusw.org/epeios/xpp">
+	<xpp:expand href="../ath.xcfg"/>
+	<Parameters>
+		<xpp:expand select="Parameters"/>
+		<Language>fr</Language>
+	</Parameters>
+	<Arguments>
+		<xpp:expand select="Arguments"/>
+	</Arguments>
+</xpp:bloc>
