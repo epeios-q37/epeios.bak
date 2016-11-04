@@ -291,27 +291,131 @@ namespace {
 	qRE
 	}
 
+	namespace {
+		void GetHeader_( muaimf::dHeader &Header )
+		{
+		qRH
+			sclmisc::rIDriverRack IRack;
+			str::wString Input;
+		qRB
+			Input.Init();
+			sclmisc::OGetValue( registry::parameter::Input, Input );
+
+			muaimf::Fill( IRack.Init( Input ), Header );
+		qRR
+			IRack.HandleError();
+		qRT
+		qRE
+		}
+	}
+
 	void ShowHeader_( void )
 	{
 	qRH
-		sclmisc::rIDriverRack IRack;
 		sclmisc::rODriverRack ORack;
-		str::wString Input, Output;
-		muaimf::wFields Fields;
+		str::wString Output;
+		muaimf::wHeader Header;
 	qRB
-		Input.Init();
-		sclmisc::OGetValue( registry::parameter::Input, Input );
-
-		Fields.Init();
-		muaimf::Fill( IRack.Init( Input ), Fields );
+		Header.Init();
+		GetHeader_( Header );
 
 		Output.Init();
 		sclmisc::OGetValue( registry::parameter::Output, Output );
 
-		muaimf::Dump(Fields, ORack.Init( Output ) );
+		muaimf::Dump( Header, ORack.Init( Output ) );
 	qRR
-		IRack.HandleError();
 		ORack.HandleError();
+	qRT
+	qRE
+	}
+
+	namespace {
+		void Dump_(
+			muaimf::dFRows &Rows,
+			const muaimf::dHeader &Header,
+			txf::sOFlow &Flow )
+		{
+		qRH
+			str::wString Value;
+			sdr::sRow Row = qNIL;
+		qRB	
+			Row = Rows.First();
+
+			while ( Row != qNIL ) {
+				Value.Init();
+				Flow << Header.GetBody( Rows( Row ), Value ) << txf::nl;
+
+				Row = Rows.Next( Row );
+			}
+		qRR
+		qRT
+		qRE
+		}
+
+		void Dump_(
+			const str::dString &FieldName,
+			muaimf::dFRows &Rows,
+			const muaimf::dHeader &Header,
+			txf::sOFlow &Flow )
+		{
+		qRH
+			str::wString Translation;
+			str::wString Value;
+		qRB
+			switch ( Header.Amount() ) {
+			case 0:
+				Translation.Init();
+				sclmisc::GetBaseTranslation( "NoSuchField", Translation, FieldName );
+
+				Flow << Translation << txf::nl;
+				break;
+			case 1:
+				Value.Init();
+				Flow << FieldName << ": " << Header.GetBody( Header.First(), Value ) << txf::nl;
+				break;
+			default:
+				Flow << FieldName << ": ";
+				Dump_( Rows, Header, Flow );
+				break;
+			}
+		qRR
+		qRT
+		qRE
+		}
+	}
+
+	void GetField_( void )
+	{
+	qRH
+		muaimf::wHeader Header;
+		str::wString FieldName;
+		muaimf::eField Field;
+		muaimf::sFRow FieldRow = qNIL;
+		muaimf::wFRows FieldRows;
+		str::wString Output;
+		sclmisc::rTextOFlowRack Rack;
+	qRB
+		Header.Init();
+		GetHeader_( Header );
+
+		FieldName.Init();
+		sclmisc::MGetValue( registry::parameter::FieldName, FieldName );
+
+		Field = muaimf::GetField( FieldName );
+
+		if ( Field == muaimf::f_Undefined )
+			sclmisc::ReportAndAbort("UnknownField", FieldName );
+
+		FieldRows.Init();
+
+		Header.Search( Field, FieldRows );
+
+		Output.Init();
+		sclmisc::OGetValue( registry::parameter::Output, Output );
+
+		Dump_( FieldName, FieldRows, Header, Rack.Init( Output ) );
+	qRR
+		Rack.HandleError();
 	qRT
 	qRE
 	}
@@ -340,6 +444,7 @@ qRB
 	C( POP3Top );
 	C( POP3UIDL );
 	C( ShowHeader );
+	C( GetField );
 	else
 		qRGnr();
 

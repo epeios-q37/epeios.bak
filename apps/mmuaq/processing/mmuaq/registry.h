@@ -35,7 +35,8 @@ namespace registry {
 			Output,
 			Message,
 			Lines,
-			KeepAnswer;
+			KeepAnswer,
+			FieldName;
 	}
 
 	namespace definition {

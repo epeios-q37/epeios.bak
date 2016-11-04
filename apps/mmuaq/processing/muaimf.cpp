@@ -191,6 +191,39 @@ sFRow muaimf::dFields::Append(
 
 	return Fields.Add( Field );
 }
+
+void muaimf::dFields::Search(
+	eField Field,
+	dFRows &Rows ) const
+{
+	sFRow Row = First();
+
+	while ( Row != qNIL ) {
+		if ( Fields( Row ).Field == Field )
+			Rows.Append( Row );
+
+		Row = Next( Row );
+	}
+}
+
+sFRow muaimf::dFields::Search( eField Field ) const
+{
+	sFRow Row = qNIL;
+qRH
+	wFRows Rows;
+qRB
+	Rows.Init();
+
+	Search( Field, Rows );
+
+	if ( Rows.Amount() > 1 )
+		Row = Rows( Rows.First() );
+qRR
+qRT
+qRE
+	return Row;
+}
+
  
 namespace {
 	qCDEF( char, CR_, '\r' ) ;

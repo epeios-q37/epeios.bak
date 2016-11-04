@@ -23,6 +23,14 @@
   <Translation language="fr">Réponse incorrecte du serveur 'POP3'.</Translation>
   <Translation language="en">Erroneous anwser from the 'POP3' server.</Translation>
  </Translations>
+ <Translations text="UnknownField">
+  <Translation language="fr">'%1' n'est pas un libellé de champ reconnu.</Translation>
+  <Translation language="en">'%1' is not a recognized field name.</Translation>
+ </Translations>
+ <Translations text="NoSuchField">
+  <Translation language="fr">Pas de champ '%1'.</Translation>
+  <Translation language="en">No '%1' field.</Translation>
+ </Translations>
  <!--
 	<Translations text="">
 		<Translation language="fr"></Translation>

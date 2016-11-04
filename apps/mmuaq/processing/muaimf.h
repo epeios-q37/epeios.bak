@@ -74,6 +74,9 @@ namespace muaimf {
 
 	qROW( FRow );	// Field row.
 
+	typedef bch::qBUNCHdl( sFRow ) dFRows;
+	qW( FRows );
+
 	typedef lstbch::qLBUNCHd( sField_, sFRow ) dFields_;
 
 	typedef lstcrt::qLMCRATEd( str::dString, sSRow_ ) dStrings_;
@@ -123,7 +126,10 @@ namespace muaimf {
 		sFRow Append(
 			const str::dString &Name,
 			const str::dString &Body );
-		sFRow Search( const str::dString &Name ) const;
+		void Search(
+			eField Field,
+			dFRows &Rows ) const;
+		sFRow Search( eField Field ) const;
 		eField GetField( sFRow Row ) const
 		{
 			return Fields( Row ).Field;
@@ -148,6 +154,9 @@ namespace muaimf {
 	};
 
 	qW( Fields );
+
+	typedef dFields dHeader;
+	qW( Header );
 
 	void Fill(
 		flw::sIFlow &Flow,

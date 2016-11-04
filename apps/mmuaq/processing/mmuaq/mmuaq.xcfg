@@ -46,6 +46,10 @@
     <Translation language="fr">Affiche l'entête d'un courrier.</Translation>
     <Translation language="en">Displays the header of a mail.</Translation>
    </Translations>
+   <Translations text="GetFieldCommandDescription">
+    <Translation language="fr">Affiche le contenu d'un champ de l'entête d'un courrier.</Translation>
+    <Translation language="en">Displays the body of a field from a mail header.</Translation>
+   </Translations>
    <!-- Arguments -->
    <Translations text="InputArgumentDescription">
     <Translation language="fr">Nom du fichier d'entrée (utilisation de l'entrée standard si absent).</Translation>
@@ -79,6 +83,14 @@
     <Translation language="fr">lignes</Translation>
     <Translation language="en">lines</Translation>
    </Translations>
+   <Translations text="FieldArgumentDescription">
+    <Translation language="fr">Nom du champ.</Translation>
+    <Translation language="en">Field name.</Translation>
+   </Translations>
+   <Translations text="FieldArgumentLabel">
+    <Translation language="fr">champ</Translation>
+    <Translation language="en">field</Translation>
+   </Translations>
    <!-- Flags -->
    <Translations text="KeepAnswerFlagDescription">
     <Translation language="fr">Conserve la réponse du serveur.</Translation>
@@ -95,6 +107,7 @@
    <Argument id="POP3TopCommand" Description="POP3TopCommandDescription" long="pop3-top" Value="POP3Top" Usage="[%KeepAnswerFlag%] %MessageArgument% %LinesArgument%"/>
    <Argument id="POP3UIDLCommand" Description="POP3UIDLCommandDescription" long="pop3-uidl" Value="POP3UIDL" Usage="[%MessageArgument%]"/>
    <Argument id="ShowHeaderCommand" Description="ShowHeaderCommandDescription" long="show-header" Value="ShowHeader" Usage="[%InputArgument% [%OutputArgument%]]"/>
+   <Argument id="GetFieldCommand" Description="GetFieldCommandDescription" long="get-field" Value="GetField" Usage="%FieldArgument% [%InputArgument% [%OutputArgument%]]"/>
    <!-- Fanaux : 'Path', mais pas de 'Value'. -->
    <Argument id="KeepAnswerFlag" Description="KeepAnswerFlagDescription" long="keep-answer" Path="KeepAnswer" Value="true"/>
    <!-- Options : 'Path' ET 'Value'. -->
@@ -104,6 +117,7 @@
    <Argument id="OutputArgument" Description="OutputArgumentDescription" Path="Output" Label="OutputArgumentLabel"/>
    <Argument id="MessageArgument" Description="MessageArgumentDescription" Path="Message" Label="MessageArgumentLabel"/>
    <Argument id="LinesArgument" Description="LinesArgumentDescription" Path="Lines" Label="LinesArgumentLabel"/>
+   <Argument id="FieldArgument" Description="FieldArgumentDescription" Path="FieldName" Label="FieldArgumentLabel"/>
    <!-- Affectations des arguments libres-->
    <Layouts>
     <Layout command="B64Encode">
@@ -130,6 +144,11 @@
     <Layout command="ShowHeader">
      <Link index="0" Target="InputArgument"/>
      <Link index="1" Target="OutputArgument"/>
+    </Layout>
+    <Layout command="GetField">
+     <Link index="0" Target="FieldArgument"/>
+     <Link index="1" Target="InputArgument"/>
+     <Link index="2" Target="OutputArgument"/>
     </Layout>
    </Layouts>
   </Arguments>
