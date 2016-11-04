@@ -19,6 +19,7 @@
 
 #include "registry.h"
 
+#include "muaimf.h"
 #include "muapo3.h"
 
 #include "scltool.h"
@@ -237,7 +238,7 @@ namespace {
 
 		Number = sclmisc::MGetUInt( registry::parameter::Message );
 
-		pop3_::Handle( muapo3::Retrieve( Number, Server, Body ), Body );
+		pop3_::Handle( muapo3::Retrieve( Number, Server, !sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false ), Body ), Body );
 
 		Dump_( Body.GetDriver() );
 
@@ -259,7 +260,7 @@ namespace {
 		Number = sclmisc::MGetUInt( registry::parameter::Message );
 		Lines = sclmisc::MGetUInt( registry::parameter::Lines );
 
-		pop3_::Handle( muapo3::Top( Number, Lines, Server, Body ), Body );
+		pop3_::Handle( muapo3::Top( Number, Lines, Server, !sclmisc::BGetBoolean( registry::parameter::KeepAnswer, false ), Body ), Body );
 
 		Dump_( Body.GetDriver() );
 
@@ -289,6 +290,31 @@ namespace {
 	qRT
 	qRE
 	}
+
+	void ShowHeader_( void )
+	{
+	qRH
+		sclmisc::rIDriverRack IRack;
+		sclmisc::rODriverRack ORack;
+		str::wString Input, Output;
+		muaimf::wFields Fields;
+	qRB
+		Input.Init();
+		sclmisc::OGetValue( registry::parameter::Input, Input );
+
+		Fields.Init();
+		muaimf::Fill( IRack.Init( Input ), Fields );
+
+		Output.Init();
+		sclmisc::OGetValue( registry::parameter::Output, Output );
+
+		muaimf::Dump(Fields, ORack.Init( Output ) );
+	qRR
+		IRack.HandleError();
+		ORack.HandleError();
+	qRT
+	qRE
+	}
 }
 
 #define C( name )\
@@ -313,6 +339,7 @@ qRB
 	C( POP3Retrieve );
 	C( POP3Top );
 	C( POP3UIDL );
+	C( ShowHeader );
 	else
 		qRGnr();
 

@@ -32,6 +32,7 @@
 		</Modules>
   <Modules Group="MUA" Path="../">
    <Module>muabsc</Module>
+   <Module>muaimf</Module>
    <Module>muapo3</Module>
    <Module Path="../">muainf</Module>
   </Modules>

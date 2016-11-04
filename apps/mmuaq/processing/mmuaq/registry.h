@@ -34,7 +34,8 @@ namespace registry {
 			Input,
 			Output,
 			Message,
-			Lines;
+			Lines,
+			KeepAnswer;
 	}
 
 	namespace definition {

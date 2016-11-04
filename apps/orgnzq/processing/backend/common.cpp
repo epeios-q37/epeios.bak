@@ -58,7 +58,7 @@ namespace {
 	ogztyp::sRow
 		RecordType = qNIL,
 		TextType_ = qNIL;
-		class rRack {
+	class rRack {
 	public:
 		rDatabase Database;
 		rAuthentication Authentication;
@@ -91,7 +91,6 @@ ogztyp::sRow common::GetMandatoryTextType( void )
 {
 	return Types_.GetMandatoryTextType();
 }
-
 
 bso::bool__ common::IsInitialized( void )
 {

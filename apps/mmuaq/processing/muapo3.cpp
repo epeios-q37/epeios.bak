@@ -75,15 +75,41 @@ namespace {
 	qRE
 	}
 
-	eIndicator CleanBegin_(	flw::sIFlow &Flow )
+	void SkipAnswer_( flw::sIFlow &Flow )
+	{
+		bso::sBool Continue = !Flow.EndOfFlow();
+
+		while ( Continue ) {
+			switch ( Flow.Get() ) {
+			case CR_:
+				if ( !Flow.EndOfFlow() && Flow.View() == LF_ )
+					Flow.Skip();
+			case LF_:
+				Continue = false;
+				break;
+			default:
+				Continue = !Flow.EndOfFlow();
+				break;
+			}
+		}
+	}
+
+	eIndicator CleanBegin_(
+		flw::sIFlow &Flow,
+		bso::sBool SkipAnswer )	// Only used for an 'OK' answer.
 	{
 		switch ( Flow.Get() ) {
 		case '+':
-			Flow.Skip( 3 );
+			Flow.Skip( 2 );	// To skip 'OK'.
+
+			if ( SkipAnswer )
+				SkipAnswer_( Flow );
+			else
+				Flow.Skip( 1 );	// The space after the 'OK'.
 			return iOK;
 			break;
 		case '-':
-			Flow.Skip( 3 );
+			Flow.Skip( 3 );	// To skip 'ERR'.
 
 			if ( Flow.View() == ' ' )
 				Flow.Skip();
@@ -103,11 +129,7 @@ namespace {
 	{
 		eIndicator Indicator = i_Undefined;
 
-		Indicator = CleanBegin_( Flow );
-
-		if ( Indicator.IsTrue() ) {
-			while ( Flow.Get() != '\n' );
-		}
+		Indicator = CleanBegin_( Flow, true );
 
 		return Indicator;
 	}
@@ -190,7 +212,7 @@ qRB
 	
 	OFlow << NL_<< txf::commit;
 
-	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() ) {
+	if ( !( Indicator = CleanBegin_(IFlow, false ) ).IsTrue() ) {
 		Body.Init( Server, false );
 		qRReturn;
 	} else
@@ -204,6 +226,7 @@ qRE
 eIndicator muapo3::Retrieve(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
+	bso::sBool SkipAnswer,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
@@ -217,7 +240,7 @@ qRB
 	SendCommand_( cRetr, OFlow );
 	OFlow << Index << NL_ << txf::commit;
 
-	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() )
+	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
 		qRReturn;
 
 	Body.Init( Server, true );
@@ -231,6 +254,7 @@ eIndicator muapo3::Top(
 	bso::sUInt Index,
 	bso::sUInt AmountOfLine,
 	fdr::rIODriver &Server,
+	bso::sBool SkipAnswer,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
@@ -244,7 +268,7 @@ qRB
 	SendCommand_( cTop, OFlow );
 	OFlow << Index << ' ' << AmountOfLine << NL_ << txf::commit;
 
-	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() )
+	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
 		qRReturn;
 
 	Body.Init( Server, true );
@@ -274,7 +298,7 @@ qRB
 	
 	OFlow << NL_<< txf::commit;
 
-	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() ) {
+	if ( !( Indicator = CleanBegin_( IFlow, Index == 0 ) ).IsTrue() ) {
 		Body.Init( Server, false );
 		qRReturn;
 	} else
@@ -300,7 +324,7 @@ qRB
 	SendCommand_( cQuit, OFlow );
 	OFlow << NL_ << txf::commit;
 
-	if ( !( Indicator = CleanBegin_(IFlow) ).IsTrue() )
+	if ( !( Indicator = CleanBegin_( IFlow, false ) ).IsTrue() )
 		qRReturn;
 
 	Body.Init( Server, true );

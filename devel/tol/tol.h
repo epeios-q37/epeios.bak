@@ -2013,7 +2013,8 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 /***** NEW *****/
 /***************/
 
-# define qNAV( Object )	E_NAV( Object )
+# define qNAVl( Object )	E_NAV( Object )
+# define qNAV( Object, Type )	E_NAVt( Object, Type )
 
 // Predefinition.
 

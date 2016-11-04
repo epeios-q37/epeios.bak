@@ -17,7 +17,7 @@
     along with 'MUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// MUA Post Office protocole 3 (POP3).
+// MUA Post Office protocole 3 (POP3 - RFC 1939).
 
 #ifndef MUAXMP__INC
 # define MUAXMP__INC
@@ -291,12 +291,14 @@ namespace muapo3 {
 	eIndicator Retrieve(
 		bso::sUInt Index,
 		fdr::rIODriver &Server,
+		bso::sBool SkipAnswer,
 		hBody & Body );
 
 	eIndicator Top(
 		bso::sUInt Index,
 		bso::sUInt AmoutOfLine,
 		fdr::rIODriver &Server,
+		bso::sBool SkipAnswer,
 		hBody & Body );
 
 	eIndicator UIDL(
