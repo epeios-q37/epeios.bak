@@ -19,23 +19,184 @@
 
 #include "muaimf.h"
 
+#include "stsfsm.h"
+
 using namespace muaimf;
 
+#define C( name )	case f##name : return #name; break
+ 
+const char *muaimf::GetLabel( eField Field )
+{
+	switch ( Field ) {
+	C( To );
+	C( From );
+	C( Subject );
+	C( MessageId );
+	C( Date );
+	default:
+		qRFwk();
+		break;
+	}
+ 
+	return NULL;	// To avoid a warning.
+}
+ 
+#undef C
+
+namespace {
+	stsfsm::wAutomat FieldLabelAutomat_;
+ 
+	void FillFieldLabelAutomat_( void )
+	{
+		FieldLabelAutomat_.Init();
+		stsfsm::Fill<eField>( FieldLabelAutomat_, f_amount, GetLabel );
+	}
+}
+
+eField muaimf::GetField( const str::dString &Label )
+{
+	return stsfsm::GetId( Label, FieldLabelAutomat_, f_Undefined, f_amount );
+}
+
+namespace  {
+	typedef flw::sByte sByte_;
+}
+
+namespace {
+	inline void ConvertToWording_(
+		flw::sIFlow &IFlow,
+		flw::sOFlow &OFlow)
+	{
+		sByte_ Byte;
+		bso::sBool First = true;
+
+		while ( !IFlow.EndOfFlow() ) {
+			Byte = IFlow.Get();
+
+			if ( isupper( Byte ) )
+				if ( !First )
+					OFlow.Put( '-' );
+
+			First = false;
+
+			OFlow.Put( Byte );
+		}
+	}
+
+	inline void ConvertToWording_(
+		flw::sIFlow &IFlow,
+		str::dString &Wording )
+	{
+	qRH
+		flx::rStringOFlow OFlow;
+	qRB
+		OFlow.Init( Wording );
+		ConvertToWording_( IFlow, OFlow );
+	qRR
+	qRT
+	qRE
+	}
+
+	inline const char *ConvertToWording_( const char *Label )
+	{
+		static qCBUFFERr Buffer;
+	qRH
+		flx::sStringIFlow Flow;
+		str::wString 
+			LabelAsString,
+			Wording;
+	qRB
+		LabelAsString.Init( Label );
+		Flow.Init( LabelAsString );
+
+		Wording.Init();
+
+		ConvertToWording_( Flow, Wording );
+
+		Wording.Convert( Buffer );
+	qRR
+	qRT
+	qRE
+		return Buffer;
+	}
+}
+
+const char *muaimf::GetWording( eField Field )
+{
+	return ConvertToWording_( GetLabel( Field ) );
+}
+
+namespace {
+	stsfsm::wAutomat FieldWordingAutomat_;
+
+	// Not thhread-safe.
+	const char *GetUppercaseWording_( eField Field )
+	{
+		static qCBUFFERr Buffer;
+	qRH
+		str::wString Wording;
+	qRB
+		Wording.Init( GetWording( Field ) );
+
+		str::ToUpper( Wording );
+
+		Wording.Convert( Buffer );
+	qRR
+	qRT
+	qRE
+		return Buffer;
+	}
+ 
+	void FillFieldWordingAutomat_( void )
+	{
+		FieldWordingAutomat_.Init();
+		stsfsm::Fill<eField>( FieldWordingAutomat_, f_amount, GetUppercaseWording_ );
+	}
+}
+
+namespace {
+	eField Get_( const str::dString &Name )
+	{
+		eField Field = f_Undefined;
+	qRH
+		str::wString Upper;
+	qRB
+		Upper.Init( Name );
+
+		str::ToUpper( Upper );
+
+		Field = stsfsm::GetId( Upper, FieldWordingAutomat_, f_Undefined, f_amount, qRPU );
+
+		if ( Field == f_Undefined )
+			Field = f_Unknown;
+	qRR
+	qRT
+	qRE
+		return Field;
+	}
+}
+
+sFRow muaimf::dFields::Append(
+	const str::dString &Name,
+	const str::dString &Body )
+{
+	sField_ Field;
+
+	Field.Init();
+
+	Field.Field = Get_( Name );
+
+	Field.Name = Append_( Name );
+	Field.Body = Append_( Body );
+
+	return Fields.Add( Field );
+}
+ 
 namespace {
 	qCDEF( char, CR_, '\r' ) ;
 	qCDEF( char, LF_, '\n' ) ;
 
 	typedef flw::sByte sByte_;
-
-	inline bso::sBool IsUSACIIChar_( sByte_ Byte )
-	{
-		return ( Byte >= 33 ) && ( Byte <= 126 );
-	}
-
-	inline bso::sBool IsFieldNameChar_( sByte_ Byte )
-	{
-		return IsUSACIIChar_(Byte) && Byte != ':';
-	}
 
 	inline bso::sBool IsWSP_( sByte_ Byte )
 	{
@@ -143,8 +304,6 @@ qRT
 qRE
 }
 
-
-
 void muaimf::Dump(
 	const dFields &Fields,
 	txf::rOFlow Flow )
@@ -156,8 +315,13 @@ qRB
 	Row = Fields.First();
 
 	while ( Row != qNIL ) {
-		Entry.Init();
-		Flow << Fields.GetName( Row, Entry ) << ": ";
+		if ( Fields.GetField( Row ) == f_Unknown ) {
+			Entry.Init();
+			Flow << Fields.GetName( Row, Entry );
+		} else
+			Flow << "- " << GetLabel( Fields.GetField( Row ) );
+
+		Flow << ": ";
 
 		Entry.Init();
 		Flow << Fields.GetBody( Row, Entry ) << txf::nl;
@@ -184,7 +348,18 @@ qRT
 qRE
 }
 
+namespace {
+	void FillAutomats_( void )
+	{
+		FillFieldLabelAutomat_();
+		FillFieldWordingAutomat_();
+	}
+}
 
+qGCTOR( muaimf )
+{
+	FillAutomats_();
+}
 
 
 

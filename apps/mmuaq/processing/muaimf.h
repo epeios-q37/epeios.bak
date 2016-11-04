@@ -32,22 +32,42 @@
 # include "lstcrt.h"
 
 namespace muaimf {
-	qROW( SRow_ );	// String row.
 
-	typedef lstcrt::qLMCRATEd( str::dString, sSRow_ ) dStrings_;
+	qENUM( Field ) {
+		fTo,
+		fFrom,
+		fSubject,
+		fMessageId,
+		fDate,
+		f_amount,
+		f_Unknown,	// Not a known field.
+		f_Undefined
+	};
+
+	const char *GetLabel( eField Field );
+
+	eField GetField( const str::dString &Label );
+
+	// Not thread-safe.
+	const char *GetWording( eField Field );
+
+	qROW( SRow_ );	// String row.
 
 	class sField_ {
 	public:
+		eField Field;
 		sSRow_
 			Name,
 			Body;
 		void reset( bso::sBool P = true )
 		{
+			Field = f_Undefined;
 			Name = Body = qNIL;
 		}
 		qCDTOR( sField_ );
 		void Init( void )
 		{
+			Field = f_Undefined;
 			Name = Body = qNIL;
 		}
 	};
@@ -55,6 +75,8 @@ namespace muaimf {
 	qROW( FRow );	// Field row.
 
 	typedef lstbch::qLBUNCHd( sField_, sFRow ) dFields_;
+
+	typedef lstcrt::qLMCRATEd( str::dString, sSRow_ ) dStrings_;
 
 	class dFields
 	{
@@ -100,18 +122,12 @@ namespace muaimf {
 		}
 		sFRow Append(
 			const str::dString &Name,
-			const str::dString &Body )
-		{
-			sField_ Field;
-
-			Field.Init();
-
-			Field.Name = Append_( Name );
-			Field.Body = Append_( Body );
-
-			return Fields.Add( Field );
-		}
+			const str::dString &Body );
 		sFRow Search( const str::dString &Name ) const;
+		eField GetField( sFRow Row ) const
+		{
+			return Fields( Row ).Field;
+		}
 		const str::dString &GetName(
 			sFRow Row,
 			str::dString &Value ) const 
