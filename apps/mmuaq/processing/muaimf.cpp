@@ -55,7 +55,7 @@ namespace {
 
 eField muaimf::GetField( const str::dString &Label )
 {
-	return stsfsm::GetId( Label, FieldLabelAutomat_, f_Undefined, f_amount );
+	return stsfsm::GetId( Label, FieldLabelAutomat_, f_Undefined, f_amount, qRPU );
 }
 
 namespace  {
