@@ -309,52 +309,6 @@ namespace muapo3 {
 	eIndicator Quit(
 		fdr::rIODriver &Server,
 		hBody & Body );
-
-	class dAccount
-	{
-	public:
-		struct s {
-			str::dString::s
-				HostPort,
-				Username,
-				Password;
-		};
-		str::dString
-			HostPort,
-			Username,
-			Password;
-		dAccount( s &S )
-		: HostPort( S.HostPort ),
-		  Username( S.Username ),
-		  Password( S.Password )
-		{}
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, HostPort, Username, Password );
-		}
-		void plug( qASd *AS )
-		{
-			tol::plug( AS, HostPort, Username, Password );
-		}
-		dAccount operator =(const dAccount &A)
-		{
-			HostPort = A.HostPort;
-			Username = A.Username;
-			Password = A.Password;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			tol::Init( HostPort, Username, Password );
-		}
-	};
-
-	qW( Account );
-
-	qROW( ARow );
-
-	typedef lstcrt::qLCRATEd( dAccount, sARow ) dAccounts;
 }
 
 

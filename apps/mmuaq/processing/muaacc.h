@@ -95,26 +95,136 @@ namespace muaacc {
 		}
 	};
 
+	qENUM( Protocol ) {
+		pPOP3,
+		p_amount,
+		p_Undefined
+	};
+
+	class dAgent
+	{
+	public:
+		struct s {
+			eProtocol Protocol;
+			str::dString::s
+				HostPort,
+				Username,
+				Password;
+		} &S_;
+		str::dString
+			HostPort,
+			Username,
+			Password;
+		dAgent( s &S )
+		: S_( S ),
+		  HostPort( S.HostPort ),
+		  Username( S.Username ),
+		  Password( S.Password )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			S_.Protocol = p_Undefined;
+			tol::reset( P, HostPort, Username, Password );
+		}
+		void plug( qASd *AS )
+		{
+			tol::plug( AS, HostPort, Username, Password );
+		}
+		dAgent operator =(const dAgent &A)
+		{
+			S_.Protocol = A.S_.Protocol;
+			HostPort = A.HostPort;
+			Username = A.Username;
+			Password = A.Password;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			S_.Protocol = p_Undefined;
+			tol::Init( HostPort, Username, Password );
+		}
+	};
+
+	qW( Agent );
+
+	qROW( ARow );
+
+	namespace agent_ {
+
+		typedef lstcrt::qLCRATEd( dAgent, sARow ) dAgents;
+
+		typedef str::dString dLabel;
+		typedef lstcrt::qLMCRATEd( dLabel, sARow ) dLabels;
+	}
+
+
+	class dAgents {
+	public:
+		struct s {
+			agent_::dAgents::s Agents;
+			agent_::dLabels::s Labels;
+		};
+		agent_::dAgents Agents;
+		agent_::dLabels Labels;
+		dAgents( s &S )
+		: Agents( S.Agents ),
+		  Labels( S.Labels )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Agents, Labels );
+		}
+		void plug( qASd *AS )
+		{
+			tol::plug( AS, Agents, Labels );
+		}
+		dAgents &operator =(const dAgents &A)
+		{
+			Agents = A.Agents;
+			Labels = A.Labels;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			tol::Init( Agents, Labels );
+		}
+		sARow New(
+			const str::dString &Label,
+			const str::dString &HostPort,
+			const str::dString &Username,
+			const str::dString &Password );
+	};
+
 	class dAccount
 	{
 	private:
 	public:
 		struct s {
+			dAgents::s Agents;
 		};
+		dAgents Agents;
 		dAccount( s &S )
+		: Agents( S.Agents )
 		{}
 		void reset( bso::bool__ P = true )
 		{
+			tol::reset( P, Agents );
 		}
 		void plug( qASd *AS )
 		{
+			tol::plug( AS, Agents );
 		}
 		dAccount &operator =( const dAccount &A )
 		{
+			Agents = A.Agents;
 			return *this;
 		}
 		bso::sBool Init( void )
 		{
+			Agents.Init();
+
 			return true;
 		}
 	};
