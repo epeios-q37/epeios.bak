@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-08 :
+- SCLFRNTND :
+	- Adaptation to changes in 'TOL'.
+
 2016-11-01 :
 - CDBG64 :
 	- Adding missing header.

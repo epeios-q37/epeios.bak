@@ -270,7 +270,7 @@ namespace sclfrntnd {
 			Ids.Init();
 			Strings1.Init();
 		}
-		qNAV( Ids. );
+		qNAVl( Ids. );
 	};
 
 	qW1( I1S );
