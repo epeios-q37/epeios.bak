@@ -1,6 +1,8 @@
 CHANGELOG for the 'Epeios' framework.
 
 2016-11-08 :
+- FLW :
+	- Adding timer in 'Copy(...).'
 - SCLFRNTND :
 	- Adaptation to changes in 'TOL'.
 

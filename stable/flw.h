@@ -633,14 +633,26 @@ namespace flw {
 		oflow__ &OFlow );
 # endif
 
-	template <int BufferSize = 1024> inline void Copy(
+	template <int BufferSize = 1024> inline fdr::sSize Copy(
 		iflow__ &IFlow,
-		oflow__ &OFlow )
+		oflow__ &OFlow,
+		tol::sDelay Delay = 0 )
 	{
 		fdr::byte__ Buffer[BufferSize];
+		fdr::sSize TotalSize = 0, PartialSize = 0;
+		tol::sTimer Timer;
 
-		while ( !IFlow.EndOfFlow() )
-			OFlow.Write( Buffer, IFlow.ReadUpTo( BufferSize, Buffer ) );
+		Timer.Init( Delay );
+
+		Timer.Launch();
+
+		while ( !Timer.IsElapsed() && !IFlow.EndOfFlow() ) {
+			OFlow.Write( Buffer, PartialSize = IFlow.ReadUpTo( BufferSize, Buffer ) );
+			TotalSize += PartialSize;
+		}
+
+		return TotalSize;
+
 	}
 
 	template <int BufferSize = 1024> inline void Purge( iflow__ &IFlow )
