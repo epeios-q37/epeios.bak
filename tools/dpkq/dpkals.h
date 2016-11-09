@@ -53,9 +53,9 @@ namespace dpkals {
 		{
 			Label.plug( Hook );
 		}
-		void plug( qASd  &AS )
+		void plug( qASd *AS )
 		{
-			Label.plug( AS );
+			tol::plug( AS, Label );
 		}
 		record_alias_ &operator =( const record_alias_ &RA )
 		{

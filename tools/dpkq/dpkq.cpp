@@ -1411,7 +1411,7 @@ qRB
 	IFlow.Init( XML );
 	XFlow.Init( IFlow, utf::f_Default );
 
-	if ( xpp::Process( XFlow, Writer ) != xpp::sOK )
+	if ( xpp::Process( XFlow,  xpp::criterions___( "" ), Writer ) != xpp::sOK )
 		qRGnr();
 qRR
 qRT
@@ -2028,4 +2028,6 @@ qRE
 }
 
 const char *sclmisc::SCLMISCTargetName = NAME_LC;
+const char *sclmisc::SCLMISCProductName = NAME_MC;
+
 
