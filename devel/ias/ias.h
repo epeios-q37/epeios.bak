@@ -197,22 +197,7 @@ namespace ias {
 
 #define IAS_BUFFER_SIZE	1024
 
-	class cHooks
-	{
-	protected:
-		virtual bch::cHook &IASGetDescriptorsHook( void ) = 0;
-		virtual ags::cHook &IASGetStorageHook( void ) = 0;
-	public:
-		qCALLBACK( Hooks );
-		bch::cHook &GetDescriptorsHook( void )
-		{
-			return IASGetDescriptorsHook();
-		}
-		ags::cHook &GetStorageHook( void )
-		{
-			return IASGetStorageHook();
-		}
-	};
+	qHOOKS2( bch::sHook, Descriptors, ags::sHook, Storage );
 
 	//c An indexed multimemory.
 	class indexed_aggregated_storage_
@@ -321,10 +306,10 @@ namespace ias {
 			Descriptors.reset( P );
 			AStorage.reset( P );
 		}
-		void plug( cHooks &Hooks )
+		void plug( sHooks &Hooks )
 		{
-			Descriptors.plug( Hooks.GetDescriptorsHook() );
-			AStorage.plug( Hooks.GetStorageHook() );
+			Descriptors.plug( Hooks.Descriptors_ );
+			AStorage.plug( Hooks.Storage_ );
 		}
 		void plug( qASd *AS )
 		{
@@ -492,32 +477,28 @@ namespace ias {
 
 #ifndef FLS__COMPILATION
 
-	template <typename descriptors, typename storage> class rH_
-	: public cHooks
+	template <typename descriptors, typename storage> class hH_
+	: public sHooks
 	{
 	protected:
 		descriptors Descriptors_;
 		storage Storage_;
-		virtual bch::cHook &IASGetDescriptorsHook( void ) override
-		{
-			return Descriptors_;
-		}
-		virtual ags::cHook &IASGetStorageHook( void ) override
-		{
-			return Storage_;
-		}
 	public:
 		void reset( bso::bool__ P = true )
 		{
 			Descriptors_.reset( P );
 			Storage_.reset( P );
 		}
-		qCDTOR( rH_ );
+		hH_( void )
+		: sHooks( Descriptors_, Storage_ )
+		{
+			reset( false );
+		}
 	};
 
 
 	class rRH
-	: public rH_<bch::rRH, ags::rRH>
+	: public hH_<bch::rRH, ags::rRH>
 	{
 	public:
 		void Init( void )
@@ -544,7 +525,7 @@ namespace ias {
 	};
 
 	class rFH
-	: public rH_<bch::rFH, ags::rFH>
+	: public hH_<bch::rFH, ags::rFH>
 	{
 	public:
 		uys::eState Init( 

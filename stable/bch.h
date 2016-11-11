@@ -589,7 +589,7 @@ namespace bch {
 		}
 	};
 
-	using tys::cHook;
+	using tys::sHook;
 
 	/*c A bunch of static object of type 'type'. Use 'E_BUNCH_( type )' rather then directly this class. */
 	template <class type, typename row, typename sh=dummy_size_handler> class bunch_
@@ -606,9 +606,9 @@ namespace bch {
 		{
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
-			aem::size__ Amount = Hook.GetSD().Size() / sizeof( type );
+			aem::size__ Amount = Hook.D.Size() / sizeof( type );
 
 			_bunch_<type, row, aem::amount_extent_manager_< row >, sh >::plug( Hook );
 

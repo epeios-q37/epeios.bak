@@ -209,7 +209,7 @@ namespace tys {
 		}
 	};
 
-	using uys::cHook;
+	using uys::sHook;
 
 	template <typename t, typename r> class storage_
 	: public _storage_< t, uys::untyped_storage_, r >

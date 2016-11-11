@@ -260,15 +260,7 @@ namespace dwtbsc {
 	public:\
 		lib::c##hook &Get##name##hook( void ) { return DWTBSCGet##name##hook(); }
 
-	class cHook
-	{
-	public:
-		M( bch, Hook, Goofs );
-		M( bch, Hook, Files);
-		M( ctn, Hooks, Directories );
-		M( ctn, Hooks, Names );
-		M( ctn, Hooks, Oddities );
-	};
+	qHOOKS5( bch::sHook, Goofs, bch::sHook, Files, ctn::sHooks, Directories, ctn::sHooks, Names, ctn::sHooks, Oddities );
 
 # undef M
 
@@ -303,15 +295,13 @@ namespace dwtbsc {
 			Names.reset( P );
 			Oddities.reset( P );
 		}
-		void plug( cHook  &Hook )
+		void plug( sHooks  &Hooks )
 		{
-# define M( lib, hook, name ) name.plug( Hook.Get##name##hook() )
-			M( bch, Hook, Goofs );
-			M( bch, Hook, Files);
-			M( ctn, Hooks, Directories );
-			M( ctn, Hooks, Names );
-			M( ctn, Hooks, Oddities );
-# undef M
+			Goofs.plug( Hooks.Goofs_ );
+			Files.plug( Hooks.Files_ );
+			Directories.plug( Hooks.Directories_ );
+			Names.plug( Hooks.Names_ );
+			Oddities.plug( Hooks.Oddities_ );
 		}
 		void plug( qASd *AS )
 		{
@@ -372,16 +362,8 @@ namespace dwtbsc {
 	};
 
 	class rFH
-	: public cHook
+	: public sHooks
 	{
-	protected:
-# define M( lib, hook, name )	virtual lib::c##hook &DWTBSCGet##name##hook( void ) override { return name##_; }
-		M( bch, Hook, Goofs );
-		M( bch, Hook, Files);
-		M( ctn, Hooks, Directories );
-		M( ctn, Hooks, Names );
-		M( ctn, Hooks, Oddities );
-#undef M
 	private:
 		bch::rFH Goofs_;
 		bch::rFH Files_;
@@ -397,7 +379,11 @@ namespace dwtbsc {
 			Names_.reset( P );
 			Oddities_.reset( P );
 		}
-		E_CDTOR( rFH );
+		rFH( void )
+		: sHooks( Goofs_, Files_, Directories_, Names_, Oddities_ )
+		{
+			reset( false );
+		}
 		uys::eState Init(
 			rHF &Filenames,
 			uys::mode__ Mode,

@@ -98,7 +98,7 @@ public:
 		S_.Stamp = s_Undefined;
 		Name.reset( P );
 	}
-	void plug( uys::cHook &Hook )
+	void plug( uys::sHook &Hook )
 	{
 		Name.plug( Hook );
 	}

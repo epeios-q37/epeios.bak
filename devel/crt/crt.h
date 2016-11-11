@@ -41,7 +41,7 @@ namespace crt {
 	template <typename type, typename row> qTCLONEd( ctn::poly_container_<qCOVER2(type,row)>, dPolyCrate );
 	qW2( PolyCrate );
 
-	using ctn::cHooks;
+	using ctn::sHooks;
 }
 
 # define qMCRATEd( Type, r )	dMonoCrate< Type, r >

@@ -477,7 +477,7 @@ public:
 			S_.Proxy = NULL;
 			Id.reset( P );
 		}
-		void plug( str::cHook &Hook )
+		void plug( str::sHook &Hook )
 		{
 			Id.plug(Hook );
 		}

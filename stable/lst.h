@@ -71,7 +71,7 @@ namespace lst {
 		sdr::row_t__ Last,
 		dStore &Store );
 
-	using idsq::cHook;
+	using idsq::sHook;
 
 	//c Handle a list of objects. Use 'LIST_' rather than directly this class.
 	template <typename r, typename r_t> class list_
@@ -123,7 +123,7 @@ namespace lst {
 			Locations.reset( P );
 		}
 		void plug(
-			cHook &Hook,
+			sHook &Hook,
 			sdr::bRow FirstUnused )
 		{
 			Locations.plug( Hook, FirstUnused );

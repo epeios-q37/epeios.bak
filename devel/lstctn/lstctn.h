@@ -61,23 +61,7 @@
 namespace lstctn {
 	using lst::list_;
 
-	class cHooks
-	{
-	protected:
-		virtual ctn::cHooks &LSTCTNGetContainerHooks( void ) = 0;
-		virtual lst::cHook &LSTCTNGetListHook( void ) = 0;
-	public:
-		qCALLBACK( Hooks );
-		ctn::cHooks &GetContainerHooks( void )
-		{
-			return LSTCTNGetContainerHooks();
-		}
-		lst::cHook &GetListHook( void )
-		{
-			return LSTCTNGetListHook();
-		}
-	};
-
+	qHOOKS2( ctn::sHooks, Container, lst::sHook, List );
 
 	template <typename container, typename row, typename row_t> class list_container_
 	: public list_<row, row_t>,
@@ -103,10 +87,10 @@ namespace lstctn {
 			list_<row, row_t>::reset( P );
 			container::reset( P );
 		}
-		void plug( cHooks &Hooks )
+		void plug( sHooks &Hooks )
 		{
-			container::plug( Hooks.GetContainerHooks() );
-			list_<row, row_t>::plug( Hooks.GetListHook(), container::Dynamics.Amount() );
+			container::plug( Hooks.Container_ );
+			list_<row, row_t>::plug( Hooks.List_, container::Dynamics.Amount() );
 		}
 		void plug( qASd *AS )
 		{
@@ -164,32 +148,28 @@ namespace lstctn {
 
 	E_AUTO3( list_container );
 
-	template <typename container, typename list> class rH_
-	: public cHooks
+	template <typename container, typename list> struct rH_
+	: public sHooks
 	{
 	protected:
 		container Container_;
 		list List_;
-		virtual ctn::cHooks &LSTCTNGetContainerHooks( void ) override
-		{
-			return Container_;
-		}
-		virtual lst::cHook &LSTCTNGetListHook( void ) override
-		{
-			return List_;
-		}
 	public:
-		void reset( bso::sBool P = true )
-		{
-			Container_.reset( P );
-			List_.reset( P );
-		}
+		rH_( void )
+		: sHooks( Container_, List_ )
+		{}
 	};
 
 	class rRH
 	: public rH_<ctn::rRH, lst::rRH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Container_.reset( P );
+			List_.reset( P );
+		}
+		qCDTOR( rRH );
 		void Init( void )
 		{
 			Container_.Init();
@@ -217,6 +197,12 @@ namespace lstctn {
 	: public rH_<ctn::rFH, lst::rFH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Container_.reset( P );
+			List_.reset( P );
+		}
+		qCDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,

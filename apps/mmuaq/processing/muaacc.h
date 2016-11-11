@@ -231,48 +231,61 @@ namespace muaacc {
 		}
 	};
 
-	typedef lstbch::qLBUNCHd( dAccount *, sRow ) dAccountPointers_;
-	typedef lstbch::qLBUNCHd( tht::rLocker, sRow ) dAccountLockers_;
-
-	class dAccounts
+	struct lAccount_
 	{
 	private:
-		void Free_( void );
+		dAccount *Pointer_;
+		tht::rLocker Locker_;
+		void Free_( void )
+		{
+			if ( Pointer_ != NULL )
+				delete Pointer_;
+		}
 	public:
-		struct s {
-			dAccountPointers_::s Pointers;
-			dAccountLocks_::s Locks;
-		};
-		dAccountPointers_ Pointers;
-		dAccountLocks_ Locks;
-		dAccounts( s &S )
-		: Pointers( S.Pointers ),
-		  Locks( S.Locks )
-		{}
+		void reset( bso::sBool P )
+		{
+			if ( P ) {
+				Free_();
+			}
+
+			tol::reset( P, Pointer_, Locker_ );
+		}
+		qCDTOR( lAccount_ );
+		void Init( void )
+		{
+			Free_();
+
+			Pointer_->pl
+		}
+	};
+
+	class lAccounts
+	{
+	private:
+		tht::rLocker Locker_;
+		void Free_( void );
+		lstbch::qLBUNCHw( dAccount *, sRow ) Pointers_;
+		lstbch::qLBUNCHw( tht::rLocker, sRow ) Lockers_;
+	public:
 		void reset( bso::sBool P = true )
 		{
 			if ( P ) {
 				Free_();
 			}
 
-			tol::reset( P, Pointers, Locks );
-		}
-		void plug( qASd *AS )
-		{
-			tol::plug( AS, Pointers, Locks );
-		}
-		dAccounts &operator =(const dAccounts &A)
-		{
-			Pointers = A.Pointers;
-			Locks = A.Locks;
-
-			return *this;
+			tol::reset( P, Locker_, Pointers_, Lockers_ );
 		}
 		void Init( void )
 		{
 			Free_();
 
-			tol::Init( Pointers, Locks );
+			tol::Init( Locker_, Pointers_, Lockers_ );
+		}
+		dAccount &Get( sRow Row )
+		{
+			Locker_.Lock();
+
+			if ( !Pointers_.Exists )
 		}
 	};
 
@@ -280,7 +293,6 @@ namespace muaacc {
 	class lAccounts
 	{
 	private:
-		tht::rLocker Locker_;
 		qRMV( dAccounts, A_, Accounts_ );
 	public:
 		void reset( bso::sBool P = true )

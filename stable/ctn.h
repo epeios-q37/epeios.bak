@@ -79,35 +79,19 @@ namespace ctn {
 	using sdr::size__;
 	using aem::amount_extent_manager_;
 
-	class cHooks
-	{
-	protected:
-		virtual tys::cHook &CTNGetStaticsHook( void ) = 0;
-		virtual ias::cHooks &CTNGetDynamicsHooks( void ) = 0;
-	public:
-		qCALLBACK( Hooks );
-		tys::cHook &GetStaticsHook( void )
-		{
-			return CTNGetStaticsHook();
-		}
-		ias::cHooks &GetDynamicsHooks( void )
-		{
-			return CTNGetDynamicsHooks();
-		}
-	};
+	qHOOKS2( tys::sHook, Statics, ias::sHooks, Dynamics );
 
-	typedef uys::cHook cHook_;
+	typedef uys::sHook sHook_;
 	typedef ias::indexed_aggregated_storage_driver__ rADriver_;
 
-	class rAHook_
-	: public cHook_,
-	  public rADriver_
+	struct rAHook_
+	: public rADriver_
 	{
-	protected:
-		virtual sdr::sStorageDriver &UYSGetSD( void ) override
-		{
-			return *this;
-		}
+	public:
+		sHook_ Core;
+		rAHook_( void )
+		: Core( *this )
+		{}
 	};
 
 	//c The base of a container. Internal use.
@@ -235,11 +219,11 @@ namespace ctn {
 			Hook_.reset( P );
 			IsVolatile_ = false;
 		}
-		void plug( cHooks &Hooks )
+		void plug( sHooks &Hooks )
 		{
 			// 'Object' is plugged independently.
-			Statics.plug( Hooks.GetStaticsHook() );
-			Dynamics.plug( Hooks.GetDynamicsHooks() );
+			Statics.plug( Hooks.Statics_ );
+			Dynamics.plug( Hooks.Dynamics_ );
 			_Allocate( Dynamics.Amount(), aem::mFitted );
 			Hook_.Init( Dynamics );
 		}
@@ -493,32 +477,27 @@ namespace ctn {
 	};
 
 	template <typename statics, typename dynamics> class rH_
-	: public cHooks
+	: public sHooks
 	{
 	protected:
 		statics Statics_;
 		dynamics Dynamics_;
-		virtual tys::cHook &CTNGetStaticsHook( void ) override
-		{
-			return Statics_;
-		}
-		virtual ias::cHooks &CTNGetDynamicsHooks( void ) override
-		{
-			return Dynamics_;
-		}
-public:
-		void reset( bso::sBool P = true )
-		{
-			Statics_.reset( P );
-			Dynamics_.reset( P );
-		}
-		qCVDTOR( rH_ );
+	public:
+		rH_( void )
+		: sHooks( Statics_ , Dynamics_ )
+		{}
 	};
 
 	class rRH
 	: public rH_<tys::rRH, ias::rRH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Statics_.reset( P );
+			Dynamics_.reset( P );
+		}
+		qCDTOR( rRH );
 		void Init( void )
 		{
 			Statics_.Init();
@@ -546,6 +525,12 @@ public:
 	: public rH_<tys::rFH, ias::rFH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Statics_.reset( P );
+			Dynamics_.reset( P );
+		}
+		qCDTOR( rFH );
 		uys::eState Init( 
 			const rHF &Filenames,
 			uys::mode__ Mode,
@@ -677,15 +662,14 @@ public:
 
 	typedef ias::const_indexed_aggregated_storage_driver__ rCADriver_;
 
-	class rCAHook_
-	: public cHook_,
-	  public rCADriver_
+	struct rCAHook_
+	: public rCADriver_
 	{
-	protected:
-		virtual sdr::sStorageDriver &UYSGetSD( void ) override
-		{
-			return *this;
-		}
+	public:
+		sHook_ Core;
+		rCAHook_( void )
+		: Core( *this )
+		{}
 	};
 
 
@@ -865,7 +849,7 @@ public:
 			item_base_const__< t, mono_static__<typename_ t::s >, r >::reset( P );
 			Objet_.reset( false );
 
-			Objet_.plug( item_base_const__< t, mono_static__< typename_ t::s >, r >::Pilote_ );
+			Objet_.plug( item_base_const__< t, mono_static__< typename_ t::s >, r >::Pilote_.Core );
 		}
 		const_mono_item( void )
 		: Objet_( item_base_const__< t, mono_static__< typename_ t::s >, r >::ctn_S_.ST )
@@ -935,7 +919,7 @@ public:
 		{
 			SetReseted_();
 			basic_container_< t, mono_static__< typename_ t::s >, r >::reset( P );
-			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug( basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_ );
+			basic_container_< t, mono_static__< typename_ t::s >, r >::Object_.plug( basic_container_< t, mono_static__< typename_ t::s >, r >::Hook_.Core );
 		}
 		void FlushTest( void ) const
 		{
@@ -1070,7 +1054,7 @@ public:
 			Objet_.reset( false );
 			AStorage.reset( P );
 
-			AStorage.plug( item_base_const__< t, poly_static__< typename_ t::s >, r >::Pilote_ );
+			AStorage.plug( item_base_const__< t, poly_static__< typename_ t::s >, r >::Pilote_.Core );
 			Objet_.plug( &AStorage );
 		}
 		const_poly_item( void )
@@ -1139,7 +1123,7 @@ public:
 		{
 			SetReseted_();
 			basic_container_< t, poly_static__< typename_ t::s >, r >::reset( P );
-			AStorage_.plug( basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_ );
+			AStorage_.plug( basic_container_< t, poly_static__< typename_ t::s >, r >::Hook_.Core );
 			basic_container_< t, poly_static__< typename_ t::s >, r >::Object_.plug( &AStorage_ );
 		}
 		poly_container_ &operator =( const poly_container_ &C )

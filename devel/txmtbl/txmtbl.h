@@ -97,7 +97,7 @@ namespace txmtbl {
 		{
 			string_::plug( AS );
 		}
-		void plug( uys::cHook &Hook )
+		void plug( uys::sHook &Hook )
 		{
 			string_::plug( Hook );
 		}

@@ -232,7 +232,7 @@ namespace bitbch {
 		}
 	};
 
-	using tys::cHook;
+	using tys::sHook;
 
 	// N.B.: le contenu du tableau est invers bit  bit
 	//c Bits set.
@@ -282,7 +282,7 @@ namespace bitbch {
 			Table.reset( P );
 			amount_extent_manager_<r>::reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			return Table.plug( Hook );
 		}

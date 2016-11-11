@@ -39,7 +39,7 @@ namespace idxque {
 	using namespace que;
 	using que::queue_;	// VC++ has problem without this, despite line above.
 
-	using que::cHook;
+	using que::sHook;
 
 	//c Queue-based index, fast browsing, but slow sorting.
 	template <typename r> class queue_index_
@@ -61,7 +61,7 @@ namespace idxque {
 		{
 			E_QUEUEt_( r )::plug( AS );
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			E_QUEUEt_( r )::plug( Hook );
 		}

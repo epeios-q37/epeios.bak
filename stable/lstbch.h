@@ -56,23 +56,7 @@ namespace lstbch {
 	using lst::list_;
 	using bch::bunch_;
 
-	class cHooks
-	{
-	protected:
-		virtual bch::cHook &LSTBCHGetBunchHook( void ) = 0;
-		virtual lst::cHook &LSTBCHGetListHook( void ) = 0;
-	public:
-		qCALLBACK( Hooks );
-		bch::cHook &GetBunchHook( void )
-		{
-			return LSTBCHGetBunchHook();
-		}
-		lst::cHook &GetListHook( void )
-		{
-			return LSTBCHGetListHook();
-		}
-	};
-
+	qHOOKS2( lst::sHook, Bunch, lst::sHook, List );
 
 	//c Bunch associated to a list.
 	template <typename type, typename row, typename row_t> class list_bunch_
@@ -100,10 +84,10 @@ namespace lstbch {
 			list_<row, row_t>::reset( P );
 			bunch_<type, row>::reset( P );
 		}
-		void plug( cHooks &Hooks )
+		void plug( sHooks &Hooks )
 		{
-			bunch_<type, row>::plug( Hooks.GetBunchHook() );
-			list_<row, row_t>::plug( Hooks.GetListHook(), bunch_<type, row>::Amount );
+			bunch_<type, row>::plug( Hooks.Bunch_ );
+			list_<row, row_t>::plug( Hooks.List_, bunch_<type, row>::Amount );
 		}
 		void plug( qASd *AS )
 		{
@@ -203,33 +187,28 @@ namespace lstbch {
 
 #ifndef FLS__COMPILATION
 
-	template <typename bunch, typename list> class rH_
-	: public cHooks
+	template <typename bunch, typename list> struct rH_
+	: public sHooks
 	{
 	protected:
 		bunch Bunch_;
 		list List_;
-		virtual bch::cHook &LSTBCHGetBunchHook( void ) override
-		{
-			return Bunch_;
-		}
-		virtual lst::cHook &LSTBCHGetListHook( void ) override
-		{
-			return List_;
-		}
 	public:
-		void reset( bso::sBool P = true )
-		{
-			Bunch_.reset( P );
-			List_.reset( P );
-		}
-		qCVDTOR( rH_ );
+		rH_( void )
+		: sHooks( Bunch_, List_ )
+		{}
 	};
 
 	class rRH
 	: public rH_<bch::rRH, lst::rRH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Bunch_.reset( P );
+			List_.reset( P );
+		}
+		qCDTOR( rRH );
 		void Init( void )
 		{
 			Bunch_.Init();
@@ -257,6 +236,12 @@ namespace lstbch {
 	: public rH_<bch::rFH, lst::rFH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Bunch_.reset( P );
+			List_.reset( P );
+		}
+		qCDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,

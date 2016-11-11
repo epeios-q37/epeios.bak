@@ -37,22 +37,7 @@ namespace idxbtq {
 	using idxbtr::tree_index_;
 	using idxque::queue_index_;
 
-	class cHooks
-	{
-	protected:
-		virtual idxbtr::cHook &IDXBTQGetTreeHook( void ) = 0;
-		virtual idxque::cHook &IDXBTQGetQueueHook( void ) = 0;
-	public:
-		qCALLBACK( Hooks );
-		idxbtr::cHook &GetTreeHook( void )
-		{
-			return IDXBTQGetTreeHook();
-		}
-		idxque::cHook &GetQueueHook( void )
-		{
-			return IDXBTQGetQueueHook();
-		}
-	};
+	qHOOKS2( idxbtr::sHook, Tree, idxque::sHook, Queue );
 
 	//c Index using a tree-based index and a queue-based index. Fast browsing and sorting.
 	template <typename r> class tree_queue_index_
@@ -73,10 +58,10 @@ namespace idxbtq {
 			E_IBTREEt_( r )::reset( P );
 			E_IQUEUEt_( r )::reset( P );
 		}
-		void plug( cHooks &Hooks )
+		void plug( sHooks &Hooks )
 		{
-			E_IBTREEt_( r )::plug( Hooks.GetTreeHook() );
-			E_IQUEUEt_( r )::plug( Hooks.GetQueueHook() );
+			E_IBTREEt_( r )::plug( Hooks.Tree_ );
+			E_IQUEUEt_( r )::plug( Hooks.Queue_ );
 		}
 		void plug( qASd *AS )
 		{
@@ -150,7 +135,7 @@ namespace idxbtq {
 		//f Balances the tree of the index.
 		r Balance(
 			r Root,
-			uys::cHook *Hook )
+			uys::sHook *Hook )
 		{
 			return E_IBTREEt_( r )::Fill( *this, First( Root ), Hook );
 		}
@@ -263,32 +248,27 @@ namespace idxbtq {
 	E_AUTO1( tree_queue_index )
 
 	template <typename tree, typename queue> class rH_
-	: public cHooks
+	: public sHooks
 	{
 	protected:
 		tree Tree_;
 		queue Queue_;
-		virtual idxbtr::cHook &IDXBTQGetTreeHook( void ) override
-		{
-			return Tree_;
-		}
-		virtual idxque::cHook &IDXBTQGetQueueHook( void ) override
-		{
-			return Queue_;
-		}
 	public:
-		void reset( bso::sBool P = true )
-		{
-			Tree_.reset( P );
-			Queue_.reset( P );
-		}
-		qCVDTOR( rH_ );
+		rH_( void )
+		: sHooks( Tree_, Queue_ )
+		{}
 	};
 
 	class rRH
 	: public rH_<idxbtr::rRH, idxque::rRH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Tree_.reset( P );
+			Queue_.reset( P );
+		}
+		qCVDTOR( rRH );
 		void Init( void )
 		{
 			Tree_.Init();
@@ -315,6 +295,12 @@ namespace idxbtq {
 	class rFH
 	: public rH_<idxbtr::rFH, idxque::rFH>
 	{
+		void reset( bso::sBool P = true )
+		{
+			Tree_.reset( P );
+			Queue_.reset( P );
+		}
+		qCVDTOR( rFH );
 		uys::eState Init( 
 			const rHF &Filenames,
 			uys::mode__ Mode,
@@ -330,90 +316,6 @@ namespace idxbtq {
 
 			return State;
 		}
-		/*
-		uys::state__ State( void ) const
-		{
-			uys::state__ State = _Tree.State();
-
-			if ( !State.IsError() )
-				if ( State != _Queue.State() )
-					State = uys::sInconsistent;
-
-			return State;
-		}
-		uys::state__ Settle( void )
-		{
-			uys::state__ State = _Tree.Settle();
-
-			if ( State.IsError() )
-				return State;
-
-			if ( _Queue.Settle() != State )
-				State = uys::sInconsistent;
-
-			return State;
-
-		}
-		void ReleaseFiles( void )
-		{
-			_Tree.ReleaseFile();
-			_Queue.ReleaseFile();
-		}
-		void Mode( uys::mode__ Mode )
-		{
-			_Tree.Mode( Mode );
-			_Queue.Mode( Mode );
-		}
-		bso::bool__ IsPersistent( void ) const
-		{
-			if ( ( _Tree.IsPersistent() ) != _Queue.IsPersistent() )
-				qRFwk();
-
-			return _Tree.IsPersistent();
-		}
-		bso::bool__ Exists( void ) const
-		{
-			bso::bool__ Exists = _Tree.Exists();
-
-			if ( Exists != _Queue.Exists() )
-				qRFwk();
-
-			return Exists;
-		}
-		bso::bool__ CreateFiles( err::handling__ ErrorHandling = err::h_Default )
-		{
-			bso::bool__ Success = _Tree.CreateFiles( ErrorHandling );
-
-			if ( !Success )
-				return false;
-
-			Success = _Queue.CreateFiles( ErrorHandling );
-
-			return Success;
-		}
-		void Drop( void )
-		{
-			_Tree.Drop();
-			_Queue.Drop();
-		}
-		idxbtr::fh___ &TreeFilesHook( void )
-		{
-			return _Tree;
-		}
-		idxque::fh___ &QueueFilesHook( void )
-		{
-			return _Queue;
-		}
-		time_t TimeStamp( void ) const
-		{
-			time_t TreeTimeStamp, QueueTimeStamp;
-
-			TreeTimeStamp = _Tree.TimeStamp();
-			QueueTimeStamp = _Queue.TimeStamp();
-
-			return ( TreeTimeStamp > QueueTimeStamp ? TreeTimeStamp : QueueTimeStamp );
-		}
-		*/
 	};
 
 	template <typename r> E_TTCLONE__( idxbtr::E_TSEEKERt__( r ), index_seeker__ );

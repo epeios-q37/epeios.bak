@@ -102,7 +102,7 @@ namespace str {
 		}
 	};
 
-	using uys::cHook;
+	using uys::sHook;
 
 	//c A string.
 	class string_

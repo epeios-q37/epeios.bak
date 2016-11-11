@@ -175,15 +175,11 @@ namespace uys {
 		sdr::row_t__ PosDest,
 		sdr::size__ Nombre );
 
-	class cHook {
-	protected:
-		virtual sStorageDriver_ &UYSGetSD( void ) = 0;
-	public:
-		qCALLBACK( Hook );
-		sStorageDriver_ &GetSD( void )
-		{
-			return UYSGetSD();
-		}
+	struct sHook {
+		sStorageDriver_ &D;
+		sHook( sStorageDriver_ &Driver )
+		: D( Driver )
+		{}
 	};
 
 	//c Untyped storage.
@@ -259,9 +255,9 @@ namespace uys {
 		{
 			reset();
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
-			plug_( Hook.GetSD() );
+			plug_( Hook.D );
 		}
 		void plug( ags::aggregated_storage_ *AS )
 		{
@@ -454,18 +450,18 @@ namespace uys {
 
 namespace uys {
 
-	template <typename driver> class rH_
-	: public cHook
+	template <typename driver> struct rH_
+	: public sHook
 	{
 	protected:
 		driver Driver_;
-		sStorageDriver_ &UYSGetSD( void ) override
-		{
-			return Driver_;
-		}
+	public:
+		rH_( void )
+		: sHook( Driver_ )
+		{}
 	};
 
-	class rRH
+	class rRH	// Regular (memory - RAM) hook.
 	: public rH_<mns::standalone_conventional_memory_driver___>
 	{
 	public:
@@ -473,11 +469,11 @@ namespace uys {
 		{
 			Driver_.reset( P );
 		}
+		qCDTOR( rRH );
 		void Init( void )
 		{
 			Driver_.Init();
 		}
-		qCVDTOR( rRH );
 	};
 
 	// Hook filenames.

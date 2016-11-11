@@ -156,7 +156,7 @@ namespace fbltyp {
 		{
 			Value.reset( P );
 		}
-		void plug( str::cHook &Hook )
+		void plug( str::sHook &Hook )
 		{
 			Value.plug( Hook );
 		}

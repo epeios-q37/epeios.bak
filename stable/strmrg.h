@@ -75,7 +75,7 @@ namespace strmrg {
 				S_.String = qNIL;
 				Items.reset( P );
 			}
-			void plug( bch::cHook &Hook )
+			void plug( bch::sHook &Hook )
 			{
 				return Items.plug( Hook );
 			}

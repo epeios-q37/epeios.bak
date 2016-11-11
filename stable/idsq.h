@@ -34,7 +34,7 @@
 
 namespace idsq {
 
-	using stkbch::cHook;
+	using stkbch::sHook;
 
 	template <typename id> class dIdStore
 	{
@@ -62,7 +62,7 @@ namespace idsq {
 			S_.FirstUnused = 0;
 		}
 		void plug(
-			cHook &Hook,
+			sHook &Hook,
 			id FirstUnused )
 		{
 			S_.FirstUnused = FirstUnused,

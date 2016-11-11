@@ -79,22 +79,7 @@ namespace dtr {
 		friend class dynamic_tree_<r>;
 	};
 
-	class cHooks
-	{
-	protected:
-		virtual btr::cHook &DTRGetTreeHook( void ) = 0;
-		virtual que::cHook &DTRGetQueueHook( void ) = 0;
-	public:
-		qCALLBACK( Hooks );
-		btr::cHook &GetTreeHook( void )
-		{
-			return DTRGetTreeHook();
-		}
-		que::cHook &GetQueueHook( void )
-		{
-			return DTRGetQueueHook();
-		}
-	};
+	qHOOKS2( btr::sHook, Tree, que::sHook, Queue );
 
 # define E_BROWSER__( t )	browser__<t>
 	//c A dynamic tree.
@@ -119,15 +104,14 @@ namespace dtr {
 			Tree.reset( P );
 			Queue.reset( P );
 		}
-		void plug( cHooks &Hooks )
+		void plug( sHooks &Hooks )
 		{
-			Tree.plug (Hooks.GetTreeHook() );
-			Queue.plug( Hooks.GetQueueHook() );
+			Tree.plug (Hooks.Tree_ );
+			Queue.plug( Hooks.Queue_ );
 		}
 		void plug( qASd *AS )
 		{
-			Tree.plug( AS );
-			Queue.plug( AS );
+			tol::plug( AS, Tree, Queue );
 		}
 		dynamic_tree_ &operator =( const dynamic_tree_ &T )
 		{
@@ -380,32 +364,27 @@ namespace dtr {
 # define E_DTREE_	E_DTREEt_( epeios::row__ )
 
 	template <typename tree, typename queue> class rH_
-	: public cHooks
+	: public sHooks
 	{
 	protected:
 		tree Tree_;
 		queue Queue_;
-		virtual btr::cHook &DTRGetTreeHook( void ) override
-		{
-			return Tree_;
-		}
-		virtual que::cHook &DTRGetQueueHook( void ) override
-		{
-			return Queue_;
-		}
 	public:
-		void reset( bso::sBool P = true )
-		{
-			Tree_.reset( P );
-			Queue_.reset( P );
-		}
-		qCVDTOR( rH_ );
+		rH_( void )
+		: sHooks( Tree_, Queue_ )
+		{}
 	};
 
 	class rRH
 	: public rH_<btr::rRH, que::rRH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Tree_.reset( P );
+			Queue_.reset( P );
+		}
+		qCVDTOR( rRH );
 		void Init( void )
 		{
 			Tree_.Init();
@@ -433,6 +412,12 @@ namespace dtr {
 	: public rH_<btr::rFH, que::rFH>
 	{
 	public:
+		void reset( bso::sBool P = true )
+		{
+			Tree_.reset( P );
+			Queue_.reset( P );
+		}
+		qCVDTOR( rFH );
 		uys::eState Init(
 			const rHF &Filenames,
 			uys::mode__ Mode,

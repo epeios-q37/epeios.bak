@@ -2013,6 +2013,101 @@ template <typename type, typename _type, type False, type Error, type Undefined>
 /***** NEW *****/
 /***************/
 
+/* 2 */
+# define qHOOKS2D_( t1, n1, t2, n2 )\
+		t1 &n1##_;\
+		t2 &n2##_
+
+# define qHOOKS2P_( t1, n1, t2, n2 )\
+		t1 &n1,\
+		t2 &n2
+
+# define qHOOKS2C_( t1, n1, t2, n2 )\
+		n1##_( n1 ),\
+	    n2##_( n2 )
+
+# define qHOOKS2( t1, n1, t2, n2 )\
+	struct sHooks\
+	{\
+	qHOOKS2D_( t1, n1, t2, n2 );\
+	public:\
+		sHooks( qHOOKS2P_( t1, n1, t2, n2 ) )\
+		: qHOOKS2C_( t1, n1, t2, n2 )\
+		{}\
+	}
+
+/* 3 */
+# define qHOOKS3D_( t1, n1, t2, n2, t3, n3 )\
+		qHOOKS2D_( t1, n1, t2, n2 );\
+		t3 &n3##_
+
+# define qHOOKS3P_( t1, n1, t2, n2, t3, n3 )\
+		qHOOKS2P_( t1, n1, t2, n2 ),\
+		t3 &n3
+
+# define qHOOKS3C_( t1, n1, t2, n2, t3, n3 )\
+		qHOOKS2C_( t1, n1, t2, n2 ),\
+	    n3##_( n3 )
+
+# define qHOOKS3( t1, n1, t2, n2, t3, n3 )\
+	struct sHooks\
+	{\
+	qHOOKS3D_( t1, n1, t2, n2, t3, n3 );\
+	public:\
+		sHooks( qHOOKS3P_( t1, n1, t2, n2, t3, n3 ) )\
+		: qHOOKS3C_( t1, n1, t2, n2, t3, n3 )\
+		{}\
+	}
+
+/* 4 */
+# define qHOOKS4D_( t1, n1, t2, n2, t3, n3, t4, n4 )\
+		qHOOKS2D_( t1, n1, t2, n2 );\
+		qHOOKS2D_( t3, n3, t4, n4 )
+
+# define qHOOKS4P_( t1, n1, t2, n2, t3, n3, t4, n4 )\
+		qHOOKS2P_( t1, n1, t2, n2 ),\
+		qHOOKS2P_( t3, n3, t4, n4 )
+
+# define qHOOKS4C_( t1, n1, t2, n2, t3, n3, t4, n4 )\
+		qHOOKS2C_( t1, n1, t2, n2 ),\
+		qHOOKS2C_( t3, n3, t4, n4 )
+
+# define qHOOKS4( t1, n1, t2, n2, t3, n3, t4, n4 )\
+	struct sHooks\
+	{\
+	qHOOKS4D_( t1, n1, t2, n2, t3, n3, t4, n4 );\
+	public:\
+		sHooks( qHOOKS4P_( t1, n1, t2, n2, t3, n3, t4, n4 ) )\
+		: qHOOKS4C_( t1, n1, t2, n2, t3, n3, t4, n4 )\
+		{}\
+	}
+
+/* 5 */
+# define qHOOKS5D_( t1, n1, t2, n2, t3, n3, t4, n4, t5, n5 )\
+		qHOOKS4D_( t1, n1, t2, n2, t3, n3, t4, n4 );\
+		t5 &n5##_
+
+# define qHOOKS5P_( t1, n1, t2, n2, t3, n3, t4, n4, t5, n5 )\
+		qHOOKS4P_( t1, n1, t2, n2, t3, n3, t4, n4 ),\
+		t5 &n5
+
+# define qHOOKS5C_( t1, n1, t2, n2, t3, n3, t4, n4, t5, n5 )\
+		qHOOKS4C_( t1, n1, t2, n2, t3, n3, t4, n4 ),\
+	    n5##_( n5 )
+
+# define qHOOKS5( t1, n1, t2, n2, t3, n3, t4, n4, t5, n5 )\
+	struct sHooks\
+	{\
+	qHOOKS5D_( t1, n1, t2, n2, t3, n3, t4, n4, t5, n5 );\
+	public:\
+		sHooks( qHOOKS5P_( t1, n1, t2, n2, t3, n3, t4, n4, t5, n5 ) )\
+		: qHOOKS5C_( t1, n1, t2, n2, t3, n3, t4, n4, t5, n5 )\
+		{}\
+	}
+
+
+
+
 # define qNAVl( Object )	E_NAV( Object )
 # define qNAV( Object, Type )	E_NAVt( Object, Type )
 

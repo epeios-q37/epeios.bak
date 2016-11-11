@@ -374,7 +374,7 @@ namespace btr {
 		sdr::row_t__ ParentOfFirstRightNode( sdr::row_t__ Node ) const;
 	};
 
-	using bch::cHook;
+	using bch::sHook;
 
 	//c Binary tree.
 	template <typename r> class binary_tree_
@@ -483,7 +483,7 @@ namespace btr {
 		{
 			Nodes.plug( AS );
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			Nodes.plug( Hook );
 		}

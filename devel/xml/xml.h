@@ -521,7 +521,7 @@ namespace xml {
 
 			S_.Position.reset( P );
 		}
-		void plug( str::cHook &Hook )
+		void plug( str::sHook &Hook )
 		{
 			Data.plug( Hook );
 		}

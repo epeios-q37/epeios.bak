@@ -770,7 +770,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 		}
 	};
 
-	using uys::cHook;
+	using uys::sHook;
 
 	class aggregated_storage_
 	{
@@ -1342,7 +1342,7 @@ Si ce n'est plus le cas, alors il faut modifier cette fonction.
 
 			return *this;
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			Storage.plug( Hook );
 		}

@@ -71,7 +71,7 @@ namespace htp {
 	typedef str::dString	dValue;
 	typedef str::wString	wValue;
 
-	using str::cHook;
+	using str::sHook;
 
 	class dField {
 	public :
@@ -89,7 +89,7 @@ namespace htp {
 			Value.reset( P );
 			S_.Name = f_Undefined;
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			Value.plug( Hook );
 		}

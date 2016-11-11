@@ -34,7 +34,7 @@
 namespace stkbch {
 	using stkbse::dStack;
 
-	using bch::cHook;
+	using bch::sHook;
 
 	template <typename item, typename row> class dBunchStack
 	: public dStack< bch::bunch_< item, row >, item, row >

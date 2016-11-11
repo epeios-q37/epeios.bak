@@ -166,7 +166,7 @@ namespace que {
 # define qQSTACKd( r ) stkbch::qBSTACKdl( r )
 # define qQSTACKw( r ) stkbch::qBSTACKwl( r )
 
-	using bch::cHook;
+	using bch::sHook;
 
 	//c A queue. Use 'QUEUE_' rather than directly this.
 	template <typename r> class queue_
@@ -213,7 +213,7 @@ namespace que {
 		{
 			Links.reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			Links.plug( Hook );
 		}
@@ -620,7 +620,7 @@ namespace que {
 		: S_( S ),
 		  Queue( S.Queue )
 		{}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			return Queue.plug( Hook );
 		}

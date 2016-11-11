@@ -60,7 +60,7 @@ namespace stsfsm {
 
 	qCDEF( fId, UndefinedId, BSO_UINT_MAX );
 
-	using bch::cHook;
+	using bch::sHook;
 
 	class dCard {
 	private:
@@ -98,7 +98,7 @@ namespace stsfsm {
 			_ResetTable();
 			Cards.reset( P );
 		}
-		void plug( cHook &Hook )
+		void plug( sHook &Hook )
 		{
 			Cards.plug( Hook );
 		}
