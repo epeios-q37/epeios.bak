@@ -506,4 +506,11 @@ template <typename r__> txf::text_oflow__ &operator <<(
 	return OStream << *(const bitbch::E_BIT_BUNCH_ *)&Bunch;
 }
 
+/***************/
+/***** NEW *****/
+/***************/
+
+#define qBBUNCHd( row ) bit_bunch_<row>
+#define qBBUNCHdl bit_bunch_<sdr::sRow>
+
 #endif

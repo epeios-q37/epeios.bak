@@ -28,6 +28,8 @@
 
 # include "muabsc.h"
 
+# include "bitbch.h"
+# include "lstbch.h"
 # include "lstcrt.h"
 # include "tht.h"
 
@@ -229,8 +231,51 @@ namespace muaacc {
 		}
 	};
 
-	typedef lstcrt::qLCRATEd( dAccount, sRow ) dAccounts;
-	qW( Accounts );
+	typedef lstbch::qLBUNCHd( dAccount *, sRow ) dAccountPointers_;
+	typedef lstbch::qLBUNCHd( tht::rLocker, sRow ) dAccountLockers_;
+
+	class dAccounts
+	{
+	private:
+		void Free_( void );
+	public:
+		struct s {
+			dAccountPointers_::s Pointers;
+			dAccountLocks_::s Locks;
+		};
+		dAccountPointers_ Pointers;
+		dAccountLocks_ Locks;
+		dAccounts( s &S )
+		: Pointers( S.Pointers ),
+		  Locks( S.Locks )
+		{}
+		void reset( bso::sBool P = true )
+		{
+			if ( P ) {
+				Free_();
+			}
+
+			tol::reset( P, Pointers, Locks );
+		}
+		void plug( qASd *AS )
+		{
+			tol::plug( AS, Pointers, Locks );
+		}
+		dAccounts &operator =(const dAccounts &A)
+		{
+			Pointers = A.Pointers;
+			Locks = A.Locks;
+
+			return *this;
+		}
+		void Init( void )
+		{
+			Free_();
+
+			tol::Init( Pointers, Locks );
+		}
+	};
+
 
 	class lAccounts
 	{
