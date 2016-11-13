@@ -156,42 +156,6 @@ qRT
 qRE
 }
 
-void sclmisc::ReportAndAbort(
-	const char *Text,
-	const str::string_ &Tag )
-{
-qRH
-	lcl::meaning Meaning;
-qRB
-	Meaning.Init();
-
-	Meaning.SetValue( Text );
-	Meaning.AddTag( Tag );
-
-	ReportAndAbort( Meaning );
-qRR
-qRT
-qRE
-}
-
-void sclmisc::ReportAndAbort(
-	const char *Text,
-	const ntvstr::string___ &Tag )
-{
-qRH
-	lcl::meaning Meaning;
-qRB
-	Meaning.Init();
-
-	Meaning.SetValue( Text );
-	Meaning.AddTag( Tag );
-
-	ReportAndAbort( Meaning );
-qRR
-qRT
-qRE
-}
-
 void sclmisc::ReportParsingErrorAndAbort(
 	const char *ErrorLabel,
 	const rgstry::context___ &Context )

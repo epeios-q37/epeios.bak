@@ -21,5 +21,12 @@
 
 using namespace muaacc;
 
+sARow muaacc::dAgents::Search( const str::dString &Label ) const
+{
+	qRVct();
+
+	return qNIL;
+}
+
 
 

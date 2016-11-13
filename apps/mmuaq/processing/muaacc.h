@@ -198,6 +198,7 @@ namespace muaacc {
 			const str::dString &HostPort,
 			const str::dString &Username,
 			const str::dString &Password );
+		sARow Search( const str::dString &Label ) const;
 	};
 
 	class dAccount

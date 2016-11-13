@@ -34,6 +34,8 @@ namespace common {
 	qENUM( Message )
 	{
 		mTestMessage,
+		mNotLoggedIn,
+		mAgentWithSuchNameExists,
 		m_amount,
 		m_Undefined
 	};
@@ -65,9 +67,13 @@ namespace common {
 
 			Account_ = Account;
 		}
+		bso::sBool IsLogged( void ) const
+		{
+			return Account_ != qNIL; 
+		}
 		muaacc::sRow GetAccount( void ) const
 		{
-			if ( Account_ == qNIL )
+			if ( !IsLogged() )
 				qRGnr();
 
 			return Account_;
@@ -102,7 +108,7 @@ namespace common {
 	muaacc::rRack &Accounts( void );
 }
 
-# define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
+# define REPORT( message, ... ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ), __VA_ARGS__  )
 
 # define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
 # define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )
@@ -114,6 +120,8 @@ namespace common {
 #define ACCOUNTh muaacc::lAcount AccountAccess;
 
 #define ACCOUNTb\
+	if ( !STUFF_.IsLogged() )\
+		REPORT( NotLoggedIn );\
 	AccountAccess.Init( common::Accounts().Get( STUFF_.GetAccount() ) );\
 	muaacc::dAccount &Account = AccountAccess()
 

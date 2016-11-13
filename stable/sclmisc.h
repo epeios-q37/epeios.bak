@@ -15,7 +15,7 @@
 
 	You should have received a copy of the GNU Affero General Public License
 	along with the Epeios framework.  If not, see <http://www.gnu.org/licenses/>
-*/
+	*/
 
 // SoCLe MISCellaneous
 
@@ -80,13 +80,49 @@ namespace sclmisc {
 
 	void ReportAndAbort( const char *Text );
 
-	void ReportAndAbort(
-		const char *Text,
-		const str::string_ &Tag );	// Pour simplifier le cas où le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
+	// Variadics handling.
+	namespace report_and_abort_ {
+		inline void Add( const lcl::meaning_ &Meaning )
+		{
+			// Nothing to do.
+		}
 
-	void ReportAndAbort(
-		const char *Text,
-		const ntvstr::string___ &Tag );	// Pour simplifier le cas où le message a un seul 'tag'. Pour plus d'un tag, utiliser la version avec un 'lcl::meaning_'.
+		template <typename tag> inline void Add(
+			lcl::meaning_ &Meaning,
+			const tag &Tag )
+		{
+			Meaning.AddTag( Tag );
+		}
+
+		template <typename tag, typename... tags> inline void Add(
+			lcl::meaning_ &Meaning,
+			const tag &Tag,
+			const tags&... Tags )
+		{
+			Add( Meaning, Tag );
+
+			Add( Meaning, Tags... );
+		}
+	}
+
+	template <typename text, typename... tags> inline void ReportAndAbort(
+		const text &Text,
+		const tags&... Tags )
+	{
+	qRH
+		lcl::wMeaning Meaning;
+	qRB
+		Meaning.Init();
+
+		Meaning.SetValue( Text );
+
+		report_and_abort_::Add( Meaning, Tags... );
+
+		ReportAndAbort( Meaning );
+	qRR
+	qRT
+	qRE
+	}
 
 	void ReportParsingErrorAndAbort(
 		const char *ErrorLabel,

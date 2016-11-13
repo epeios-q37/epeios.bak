@@ -69,12 +69,43 @@ qRT
 qRE
 }
 
-DEC( Test_, 1 )
+namespace new_pop3_agent_ {
+	void New(
+		muaacc::dAgents &Agents,
+		const str::dString &RawLabel,
+		const str::dString &RawHostPort,
+		const str::dString &Username,
+		const str::dString &Password )
+	{
+	qRH
+		str::wString Label, HostPort;
+	qRB
+		Label.Init( RawLabel );
+		HostPort.Init( RawHostPort );
+
+		Label.StripCharacter( ' ' );
+		HostPort.StripCharacter( ' ' );
+
+		if ( Agents.Search( Label ) != qNIL )
+			REPORT( AgentWithSuchNameExists, Label );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+DEC( NewPOP3Agent, 1 )
 {
 qRH
 	ACCOUNTh;
 qRB
 	ACCOUNTb;
+
+	const str::dString
+		&Label = Request.StringIn(),
+		&HostPort = Request.StringIn(),
+		&Username = Request.StringIn(),
+		&Password = Request.StringIn();
 qRR 
 qRT
 qRE

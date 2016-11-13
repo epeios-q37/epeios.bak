@@ -7,7 +7,15 @@
 		<Translation language="fr">Message d'erreur de test</Translation>
 		<Translation language="en">Test error message</Translation>
 	</Translations>
-	<!--
+ <Translations text="NotLoggedIn">
+  <Translation language="fr">Pas de session ouverte.</Translation>
+  <Translation language="en">Not logged in.</Translation>
+ </Translations>
+ <Translations text="AgentWithSuchNameExists">
+  <Translation language="fr">Un agent de nom '%1' existe déjà.</Translation>
+  <Translation language="en">A agent named '%1' exists already.</Translation>
+ </Translations>
+ <!--
 <Translations text="">
 	<Translation language="fr"></Translation>
 	<Translation language="en"></Translation>

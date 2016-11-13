@@ -55,7 +55,7 @@ namespace common {
 	};
 }
 
-#define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
+# define REPORT( message, ... ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ), __VA_ARGS__  )
 
 # define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
 # define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )

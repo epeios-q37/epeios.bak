@@ -31,6 +31,11 @@ const char *common::GetLabel( eMessage Message )
 {
 	switch ( Message ){
 	C( TestMessage );
+	C( NotLoggedIn );
+	C( AgentWithSuchNameExists );
+/*
+	C(  );
+*/
 	default:
 		qRGnr();
 		break;

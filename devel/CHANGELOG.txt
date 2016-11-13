@@ -3,6 +3,8 @@ CHANGELOG for the 'Epeios' framework.
 2016-11-13 :
 - LCK :
 	- 'rControl' -> 'rTutor'.
+- SCLMISC :
+	- New more versatile 'ReportAndAbort(...)' versions, by using template variadics.
 
 2016-11-08 :
 - FLW :
