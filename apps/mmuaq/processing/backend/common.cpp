@@ -33,6 +33,8 @@ const char *common::GetLabel( eMessage Message )
 	C( TestMessage );
 	C( NotLoggedIn );
 	C( AgentWithSuchNameExists );
+	C( AgentNameCanNotBeEmpty );
+	C( UnknownAgent );
 /*
 	C(  );
 */
@@ -48,18 +50,17 @@ const char *common::GetLabel( eMessage Message )
 
 namespace {
 	class rRack_ {
-	private:
-		muaacc::rRack Accounts_;
 	public:
 		rAuthentication Authentication;
+		muaacc::rRack Accounts;
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Authentication, Accounts_ );
+			tol::reset( P, Authentication, Accounts );
 		}
 		void Init( void )
 		{
-			tol::Init( Accounts_ );
-			Authentication.Init( NULL, Accounts_ );
+			tol::Init( Accounts );
+			Authentication.Init( NULL, Accounts );
 		}
 	} Rack_;
 
@@ -99,5 +100,10 @@ bso::bool__ common::IsInitialized( void )
 muaacc::lAuthentication &common::Authentication( void )
 {
 	return Rack_.Authentication;
+}
+
+muaacc::lAccounts &common::Accounts( void )
+{
+	return Rack_.Accounts;
 }
 

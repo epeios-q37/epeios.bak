@@ -9,22 +9,10 @@
 		<xsl:apply-templates select="*/Content"/>
 	</xsl:template>
 	<xsl:template match="Content">
-		<span class="vcenter-out">
-			<span class="vcenter-in">
-				<span data-xdh-onevent="mouseleave|HideTestButton">
-					<fieldset title="#mainUCConverter#">
-						<legend>#mainConverter#</legend>
-						<div data-xdh-onevent="ShowTestButton">
-							<text>#mainHideShowTestButton#</text>
-						</div>
-						<div>
-							<button data-xdh-onevent="Testing" data-xdh-cast="TestButtonCasting" title="#mainDisplayTestMessage#">#mainTest#</button>
-						</div>
-						<input id="Pattern" type="text" size="50"/>
-						<button title="#mainConvert#" data-xdh-onevent="Submission">#mainOK#</button>
-					</fieldset>
-				</span>
-			</span>
-		</span>
-	</xsl:template>
+  <span class="vcenter-out">
+   <span class="vcenter-in">
+    <button title="#mainConfigTitle#" data-xdh-onevent="Configuration">#mainConfig#</button>
+   </span>
+  </span>
+ </xsl:template>
 </xsl:stylesheet>

@@ -1,8 +1,8 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : mmuaqbkd V20161103 Build Nov  3 2016 09:07:00 - Win32;MSC 1800;IA-32
+	API from : mmuaqbkd V20161103 Build Nov 13 2016 11:50:57 - Win32;MSC 1800;IA-32
 
-	This file was generated using barq 20161027 (Build Oct 27 2016 17:45:25 Win32;MSC 1800;IA-32)
+	This file was generated using barq 20161027 (Build Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32)
 */
 
 #ifndef MMUAQ__INC
@@ -25,7 +25,7 @@ namespace mmuaq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[4];
+		fblfrd::command__ _Commands[7];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -44,6 +44,9 @@ namespace mmuaq {
 				25, 0, 
 				0, 
 				25, 25, 0, 2, 
+				0, 22, 26, 
+				21, 0, 25, 25, 25, 25, 
+				25, 25, 25, 25, 0, 21, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -71,10 +74,25 @@ namespace mmuaq {
 			CommandDetail.Casts.Append( Parameters + 5, 4 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetAgents_1";;
+			CommandDetail.Casts.Append( Parameters + 9, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetAgent_1";;
+			CommandDetail.Casts.Append( Parameters + 12, 6 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUANewAgent_1";;
+			CommandDetail.Casts.Append( Parameters + 18, 6 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 4, _Commands );
+			Commands.Recall( 0, 7, _Commands );
 		}
 		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
@@ -119,6 +137,57 @@ namespace mmuaq {
 			Frontend().EndOfInParameters();
 
 			Frontend().BooleanOut( Out1 );
+
+			Frontend().Handle();
+		}
+		void MUAGetAgents_1( 
+			fblfrd::ids_ &Out1,
+			fblfrd::strings_ &Out2 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[4] );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdsOut( Out1 );
+			Frontend().StringsOut( Out2 );
+
+			Frontend().Handle();
+		}
+		void MUAGetAgent_1( 
+			const fblfrd::id__ &In1,
+			fblfrd::string_ &Out1,
+			fblfrd::string_ &Out2,
+			fblfrd::string_ &Out3,
+			fblfrd::string_ &Out4 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[5] );
+			Frontend().IdIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().StringOut( Out1 );
+			Frontend().StringOut( Out2 );
+			Frontend().StringOut( Out3 );
+			Frontend().StringOut( Out4 );
+
+			Frontend().Handle();
+		}
+		void MUANewAgent_1( 
+			const fblfrd::string_ &In1,
+			const fblfrd::string_ &In2,
+			const fblfrd::string_ &In3,
+			const fblfrd::string_ &In4,
+			fblfrd::id__ &Out1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[6] );
+			Frontend().StringIn( In1 );
+			Frontend().StringIn( In2 );
+			Frontend().StringIn( In3 );
+			Frontend().StringIn( In4 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdOut( Out1 );
 
 			Frontend().Handle();
 		}

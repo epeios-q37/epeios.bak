@@ -66,17 +66,27 @@
 							<xpp:bloc>LoginCasting.xsl</xpp:bloc>
 						</Casting>
 					</XSLFiles>
-					<XSLFiles target="Main">
-						<Layout>
-							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>MainLayout.xsl</xpp:bloc>
-						</Layout>
-						<Casting>
-							<xpp:expand select="XSLRootDir"/>
-							<xpp:bloc>MainCasting.xsl</xpp:bloc>
-						</Casting>
-					</XSLFiles>
-				</XSLFilesSet>
+     <XSLFiles target="Main">
+      <Layout>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>MainLayout.xsl</xpp:bloc>
+      </Layout>
+      <Casting>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>MainCasting.xsl</xpp:bloc>
+      </Casting>
+     </XSLFiles>
+     <XSLFiles target="Config">
+      <Layout>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>ConfigLayout.xsl</xpp:bloc>
+      </Layout>
+      <Casting>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>ConfigCasting.xsl</xpp:bloc>
+      </Casting>
+     </XSLFiles>
+    </XSLFilesSet>
 			</xpp:bloc>
 		</Definitions>
 		<Locale>
@@ -103,7 +113,8 @@
 			<xpp:bloc>
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
-			<xpp:expand href="XSL/MainLocale.xml"/>
-		</Locale>
+   <xpp:expand href="XSL/MainLocale.xml"/>
+   <xpp:expand href="XSL/ConfigLocale.xml"/>
+  </Locale>
 	</Configuration>
 </Configurations>

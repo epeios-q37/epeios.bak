@@ -47,8 +47,9 @@
 			<Module>muainf</Module>
 		</Modules>
 		<Modules Group="Pages">
-			<Module>login</Module>
-			<Module>main</Module>
+   <Module>config</Module>
+   <Module>login</Module>
+   <Module>main</Module>
 			<Module>prolog</Module>
 		</Modules>
 		<Modules Group="Frames">
@@ -77,7 +78,12 @@
 				<File>About.xsl</File>
 			</Files>
 			<Files Group="Pages">
-				<Files Group="Login">
+    <Files Group="Config">
+     <File>ConfigLayout.xsl</File>
+     <File>ConfigCasting.xsl</File>
+     <File>ConfigLocale.xml</File>
+    </Files>
+    <Files Group="Login">
 					<File>LoginLayout.xsl</File>
 					<File>LoginCasting.xsl</File>
 				</Files>

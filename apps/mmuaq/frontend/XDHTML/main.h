@@ -24,14 +24,14 @@
 
 namespace main {
 	BASE_ACD( Submission );
-	BASE_ACD( ShowTestButton );
+	BASE_ACD( Configuration );
 	BASE_ACD( HideTestButton );
 	BASE_ACD( Testing );
 
 	inline void Register( void  )
 	{
 		BASE_ACR( Submission );
-		BASE_ACR( ShowTestButton );
+		BASE_ACR( Configuration );
 		BASE_ACR( HideTestButton );
 		BASE_ACR( Testing );
 	};

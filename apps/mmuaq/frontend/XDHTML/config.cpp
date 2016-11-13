@@ -17,14 +17,15 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "main.h"
+#include "config.h"
 
 #include "core.h"
 #include "registry.h"
 #include "sclfrntnd.h"
 
 namespace {
-	E_CDEF( char *, XSLAffix_, "Main" );
+
+	E_CDEF( char *, XSLAffix_, "Config" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -34,10 +35,6 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
-
-		Rack().PushTag( "Test" );
-
-		Rack().PutAttribute("Enabled", (Session.User.TestButtonIsVisible() ? "true" : "false" ) );
 	qRR
 	qRT
 	qRE
@@ -60,7 +57,7 @@ namespace {
 	qRE
 	}
 
-	void GetContent_(
+	static void GetContent_(
 		const sclrgstry::registry_ &Registry,
 		core::rSession &Session,
 		str::string_ &XML )
@@ -75,7 +72,7 @@ namespace {
 	}
 }
 
-void main::SetLayout( core::rSession &Session )
+void config::SetLayout(	core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
@@ -96,33 +93,10 @@ qRT
 qRE
 }
 
-#define AC( name ) BASE_AC( main, name )
+#define AC( name ) BASE_AC( config, name )
 
-AC( Submission )
+AC( Template )
 {
-	str::string Test;
-	TOL_CBUFFER___ Buffer;
-
-	Test.Init( Session.GetContent( "Pattern", Buffer ) );
-
-	Session.User.ToUpper( Test );
-
-	Session.SetContent("Pattern", Test );
-}
-
-AC( Configuration )
-{
-	config::SetLayout( Session );
-}
-
-AC( HideTestButton )
-{
-	Session.User.TestButtonIsVisible() = false;
-	SetCasting_(Session );
-}
-
-AC( Testing )
-{
-	Session.User.TestMessage();
+	Session.AlertT( "Template" );
 }
 

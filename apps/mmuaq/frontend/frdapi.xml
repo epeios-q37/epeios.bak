@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 03/11/2016 10:05:55
+    This document was generated the 13/11/2016 17:39:38
     using barq V20161027 (http://q37.info/)
-    Build : Oct 27 2016 17:45:25 (Win32;MSC 1800;IA-32)
+    Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
 <API target="mmuaq" TargetUppercased="MMUAQ" ProtocolVersion="13" APIVersion="1">
  <Misc>
   <Generator>
    <Name>barq</Name>
    <Version>20161027</Version>
-   <Build>Oct 27 2016 17:45:25 Win32;MSC 1800;IA-32</Build>
+   <Build>Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32</Build>
    <URL>http://q37.info/</URL>
    <Author>
     <Name>Claude SIMON</Name>
@@ -18,19 +18,19 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>mmuaqbkd V20161103 Build Nov  3 2016 09:07:00 - Win32;MSC 1800;IA-32</Details>
+   <Details>mmuaqbkd V20161103 Build Nov 13 2016 11:50:57 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>03/11/2016</Date>
-  <Time>10:05:55</Time>
+  <Date>13/11/2016</Date>
+  <Time>17:39:38</Time>
  </Misc>
  <Types>
   <Type Object="Master">
    <ID>65535</ID>
    <Prefix Default="" Lower="" Upper=""/>
    <Name Raw="" Underscored="" Mixedcased=""/>
-   <Commands Amount="4">
+   <Commands Amount="7">
     <Command>
      <Name>LoadSetupOfId_1</Name>
      <ID>18</ID>
@@ -78,6 +78,82 @@
        <Parameter Discriminator="1" Position="Last" Type="Static">
         <Name>boolean</Name>
         <ID>2</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetAgents_1</Name>
+     <ID>22</ID>
+     <Parameters Amount="3" Position="9">
+      <Out>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Position="Last" Type="Container">
+        <Name>strings</Name>
+        <ID>26</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetAgent_1</Name>
+     <ID>23</ID>
+     <Parameters Amount="6" Position="12">
+      <In>
+       <Parameter Discriminator="1" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="3" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="4" Position="Last" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUANewAgent_1</Name>
+     <ID>24</ID>
+     <Parameters Amount="6" Position="18">
+      <In>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="3" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="4" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
        </Parameter>
       </Out>
      </Parameters>

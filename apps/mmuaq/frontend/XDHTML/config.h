@@ -17,19 +17,20 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "muaacc.h"
+#ifndef CONFIG__INC
+# define CONFIG__INC
 
-using namespace muaacc;
+# include "base.h"
 
-sARow muaacc::dAgents::Search( const str::dString &Label ) const
-{
-	sARow Row = First();
+namespace config {
+	BASE_ACD( Template );
 
-	while ( ( Row != qNIL ) && ( Labels( Row ) != Label ) )
-		Row = Next( Row );
+	inline void Register( void )
+	{
+		BASE_ACR( Template );
+	};
 
-	return Row;
+	void SetLayout( core::rSession &Session );
 }
 
-
-
+#endif

@@ -36,6 +36,8 @@ namespace common {
 		mTestMessage,
 		mNotLoggedIn,
 		mAgentWithSuchNameExists,
+		mAgentNameCanNotBeEmpty,
+		mUnknownAgent,
 		m_amount,
 		m_Undefined
 	};
@@ -105,7 +107,7 @@ namespace common {
 
 	muaacc::lAuthentication &Authentication( void );
 
-	muaacc::rRack &Accounts( void );
+	muaacc::lAccounts &Accounts( void );
 }
 
 # define REPORT( message, ... ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ), __VA_ARGS__  )

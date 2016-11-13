@@ -163,6 +163,19 @@ namespace muaacc {
 
 
 	class dAgents {
+	private:
+		void Init_(
+			dAgent &Agent,
+			const str::dString &HostPort,
+			const str::dString &Username,
+			const str::dString &Password )
+		{
+			Agent.Init();
+
+			Agent.HostPort = HostPort;
+			Agent.Username = Username;
+			Agent.Password = Password;
+		}
 	public:
 		struct s {
 			agent_::dAgents::s Agents;
@@ -193,11 +206,24 @@ namespace muaacc {
 		{
 			tol::Init( Agents, Labels );
 		}
+		qNAV( Labels., sARow );
 		sARow New(
 			const str::dString &Label,
 			const str::dString &HostPort,
 			const str::dString &Username,
-			const str::dString &Password );
+			const str::dString &Password )
+		{
+			sARow Row = Labels.New();
+
+			if ( Row != Agents.New() )
+				qRGnr();
+
+			Labels( Row ).Init( Label );
+
+			Init_( Agents( Row ), HostPort, Username, Password );
+
+			return Row;
+		}
 		sARow Search( const str::dString &Label ) const;
 	};
 

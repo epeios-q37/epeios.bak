@@ -15,6 +15,14 @@
   <Translation language="fr">Un agent de nom '%1' existe déjà.</Translation>
   <Translation language="en">A agent named '%1' exists already.</Translation>
  </Translations>
+ <Translations text="AgentNameCanNotBeEmpty">
+  <Translation language="fr">Le nom d'un agent ne peut être vide.</Translation>
+  <Translation language="en">Agent name can not be empty.</Translation>
+ </Translations>
+ <Translations text="UnknownAgent">
+  <Translation language="fr">Agent inconnu.</Translation>
+  <Translation language="en">Unknown agent.</Translation>
+ </Translations>
  <!--
 <Translations text="">
 	<Translation language="fr"></Translation>

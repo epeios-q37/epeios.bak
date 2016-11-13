@@ -24,6 +24,7 @@
 # include "prolog.h"
 # include "login.h"
 # include "main.h"
+# include "config.h"
 
 # include "frdinstc.h"
 
@@ -34,6 +35,7 @@ namespace core {
 		pProlog,
 		pLogin,
 		pMain,
+		pConfig,
 		p_amount,
 		p_Undefined
 	};
