@@ -29,6 +29,7 @@
 # include "muabsc.h"
 
 # include "bitbch.h"
+# include "lck.h"
 # include "lstbch.h"
 # include "lstcrt.h"
 # include "tht.h"
@@ -231,41 +232,45 @@ namespace muaacc {
 		}
 	};
 
-	struct lAccount_
+	qW( Account );
+
+	typedef lck::rTutor<dAccount> rAccountTutor;
+
+	typedef lck::rReadWriteAccess<dAccount> lAcount;
+
+	class lAccounts
 	{
 	private:
-		dAccount *Pointer_;
 		tht::rLocker Locker_;
+		lstbch::qLBUNCHw( rAccountTutor *, sRow ) Accounts_;
 		void Free_( void )
 		{
-			if ( Pointer_ != NULL )
-				delete Pointer_;
-		}
-	public:
-		void reset( bso::sBool P )
-		{
-			if ( P ) {
-				Free_();
+			sRow Row = Accounts_.First();
+
+			while ( Row != qNIL ) {
+				delete Accounts_( Row );
+
+				Row = Accounts_.Next( Row );
 			}
 
-			tol::reset( P, Pointer_, Locker_ );
+			Accounts_.Init();
 		}
-		qCDTOR( lAccount_ );
-		void Init( void )
+		sRow New_( sRow Row )
 		{
-			Free_();
+		qRH
+			rAccountTutor *Account = NULL;
+		qRB
+			if ( ( Account = new rAccountTutor ) == NULL )
+				qRAlc();
 
-			Pointer_->pl
+			Row = Accounts_.New( Row );
+
+			Accounts_.Store( Account, Row );
+		qRR
+		qRE
+		qRT
+			return Row;
 		}
-	};
-
-	class lAccounts
-	{
-	private:
-		tht::rLocker Locker_;
-		void Free_( void );
-		lstbch::qLBUNCHw( dAccount *, sRow ) Pointers_;
-		lstbch::qLBUNCHw( tht::rLocker, sRow ) Lockers_;
 	public:
 		void reset( bso::sBool P = true )
 		{
@@ -273,37 +278,13 @@ namespace muaacc {
 				Free_();
 			}
 
-			tol::reset( P, Locker_, Pointers_, Lockers_ );
-		}
-		void Init( void )
-		{
-			Free_();
-
-			tol::Init( Locker_, Pointers_, Lockers_ );
-		}
-		dAccount &Get( sRow Row )
-		{
-			Locker_.Lock();
-
-			if ( !Pointers_.Exists )
-		}
-	};
-
-
-	class lAccounts
-	{
-	private:
-		qRMV( dAccounts, A_, Accounts_ );
-	public:
-		void reset( bso::sBool P = true )
-		{
 			tol::reset( P, Locker_, Accounts_ );
 		}
-		qCDTOR( lAccounts );
-		void Init( dAccounts &Accounts )
+		void Init( void )
 		{
-			tol::Init( Locker_ );
-			Accounts_ = &Accounts;
+			Free_();
+
+			tol::Init( Locker_, Accounts_ );
 		}
 		sRow New( void )
 		{
@@ -311,36 +292,54 @@ namespace muaacc {
 		qRH
 		qRB
 			Locker_.Lock();
+		
+			Row = New_( qNIL );
 
-			Row = A_().New();
-			A_()( Row ).Init();
+			Locker_.Unlock();
 		qRR
 		qRT
-			Locker_.Unlock();
+			Locker_.UnlockIfLocked();
 		qRE
 			return Row;
+		}
+		rAccountTutor &Get( sRow Row )
+		{
+			rAccountTutor *Account = NULL;
+		qRH
+		qRB
+			if ( Row == qNIL )
+				qRGnr();
+
+			Locker_.Lock();
+		
+			if ( !Accounts_.Exists( Row ) )
+				New_( Row );
+
+			Accounts_.Recall( Row, Account );
+
+			Locker_.Unlock();
+		qRR
+		qRT
+			Locker_.UnlockIfLocked();
+		qRE
+			return *Account;
 		}
 	};
 
 	class rRack
 	: public lAccounts
 	{
-	private:
-		wAccounts Accounts_;
 	public:
 		void reset( bso::sBool P = true )
 		{
 			lAccounts::reset( P );
-			tol::reset( P, Accounts_ );
 		}
 		qCDTOR( rRack );
 		void Init( void )
 		{
-			Accounts_.Init();
-			lAccounts::Init( Accounts_ );
+			lAccounts::Init();
 		}
 	};
-
 
 	class lAuthentication
 	: public cProvider

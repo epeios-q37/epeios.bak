@@ -57,8 +57,14 @@ namespace common {
 
 #define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
 
-#define STUFF\
-	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\
-	common::rStuff &Stuff = *(common::rStuff *)Backend.Stuff()
+# define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
+# define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )
+
+// 'h' suffix : to put in error header  (between 'qRH' and 'qRB').
+// 'b' suffix : to put in error body  (just after and 'qRB').
+
+#define BACKENDb sclbacknd::rBackend &Backend = BACKEND_
+
+#define STUFFb common::rStuff &Stuff = STUFF_
 
 #endif

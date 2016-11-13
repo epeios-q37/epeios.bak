@@ -52,8 +52,8 @@ qRH
 	muaacc::sRow Account = qNIL;
 	bso::sBool New = false;
 qRB
-	STUFF;
-	AUTHENTICATION;
+	STUFFb;
+	AUTHENTICATIONb;
 
 	const str::dString &Username = Request.StringIn();
 	const str::dString &Password = Request.StringIn();
@@ -68,6 +68,18 @@ qRR
 qRT
 qRE
 }
+
+DEC( Test_, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
+qRR 
+qRT
+qRE
+}
+
 
 #define D( name, version )	MUAINF_UC_SHORT #name "_" #version, ::name##_##version
 

@@ -65,6 +65,13 @@ namespace common {
 
 			Account_ = Account;
 		}
+		muaacc::sRow GetAccount( void ) const
+		{
+			if ( Account_ == qNIL )
+				qRGnr();
+
+			return Account_;
+		}
 	};
 
 	typedef muaacc::lAuthentication lAuthentication_;
@@ -91,14 +98,29 @@ namespace common {
 	};
 
 	muaacc::lAuthentication &Authentication( void );
+
+	muaacc::rRack &Accounts( void );
 }
 
-#define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
+# define REPORT( message ) sclmisc::ReportAndAbort( common::GetLabel( common::m##message ) )
 
-#define STUFF\
-	sclbacknd::rBackend &Backend = *(sclbacknd::rBackend *)BaseBackend.UP();\
-	common::rStuff &Stuff = *(common::rStuff *)Backend.Stuff()
+# define BACKEND_ ( *(sclbacknd::rBackend *)BaseBackend.UP() )
+# define STUFF_ ( *(common::rStuff *)BACKEND_.Stuff() )
 
-# define AUTHENTICATION	muaacc::lAuthentication &Authentication = common::Authentication()
+
+// 'h' suffix : to put in error header  (between 'qRH' and 'qRB').
+// 'b' suffix : to put in error body  (just after and 'qRB').
+
+#define ACCOUNTh muaacc::lAcount AccountAccess;
+
+#define ACCOUNTb\
+	AccountAccess.Init( common::Accounts().Get( STUFF_.GetAccount() ) );\
+	muaacc::dAccount &Account = AccountAccess()
+
+#define BACKENDb sclbacknd::rBackend &Backend = BACKEND_
+
+#define STUFFb common::rStuff &Stuff = STUFF_
+
+# define AUTHENTICATIONb	muaacc::lAuthentication &Authentication = common::Authentication()
 
 #endif

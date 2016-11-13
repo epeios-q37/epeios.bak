@@ -476,7 +476,7 @@ namespace lck {
 /*************/
 
 namespace lck {
-	template <typename object> E_TTCLONE__( control___<object>, rControl );
+	template <typename object> E_TTCLONE__( control___<object>, rTutor );
 	template <typename object> E_TTCLONE__( read_write_access___<object>, rReadWriteAccess );
 	template <typename object> E_TTCLONE__( read_only_access___<object>, rReadOnlyAccess );
 }
