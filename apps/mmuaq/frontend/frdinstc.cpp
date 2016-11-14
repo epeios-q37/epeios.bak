@@ -96,3 +96,27 @@ qRR
 qRT
 qRE
 }
+
+void frdinstc::rUser::DumpAgentStatus( xml::dWriter &Writer )
+{
+qRH
+	str::wString Status;
+qRB
+	Status.Init();
+
+	if ( CurrentAgent_ != frdinstc::UndefinedAgent ) {
+		if ( AgentEdition_  )
+			Status = "Edition";
+		else
+			Status = "Display";
+	} else if ( AgentEdition_ )
+		Status = "Edition";
+
+	if ( Status.Amount() != 0 ) {
+		Writer.PutAttribute( "Status", Status );
+		Writer.PutAttribute( "Agent", **CurrentAgent_, **frdinstc::UndefinedAgent );
+	}
+qRR
+qRT
+qRE
+}

@@ -35,6 +35,8 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpAgentStatus( Rack );
 	qRR
 	qRT
 	qRE

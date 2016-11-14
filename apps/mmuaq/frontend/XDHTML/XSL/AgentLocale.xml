@@ -73,8 +73,8 @@
   <Translation language="en">Cancel the modifications./</Translation>
  </Translations>
  <Translations text="agentPasswordModificationLabel">
-  <Translation language="fr"> : changer le mot de passe.</Translation>
-  <Translation language="en">: change password.</Translation>
+  <Translation language="fr">changer le mot de passe.</Translation>
+  <Translation language="en">change password.</Translation>
  </Translations>
  <Translations text="agentPasswordModificationTitle">
   <Translation language="fr">Cocher pour changer le mot de passe.</Translation>

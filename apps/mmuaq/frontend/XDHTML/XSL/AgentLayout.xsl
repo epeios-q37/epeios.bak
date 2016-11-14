@@ -11,15 +11,15 @@
     <fieldset title="#agentTitle#" style="display: flex; justify-content: space-around;">
      <legend>#agentLegend#</legend>
       <fieldset style="display: flex; flex-direction: column;">
-       <span>
+       <span style="display: flex; justify-content: space-between;">
         <label>#agentNameLabel#</label>
         <input title="#agentNameTitle#" placeholder="#agentNamePlaceholder#" type="text"/>
        </span>
-       <span>
+       <span style="display: flex; justify-content: space-between;">
         <label>#agentHostPortLabel#</label>
         <input title="#agentHostPortTitle#" placeholder="#agentHostPortPlaceholder#" type="text"/>
        </span>
-       <span>
+       <span style="display: flex; justify-content: space-between;">
         <label>#agentUsernameLabel#</label>
         <input title="#agentUsernameTitle#" placeholder="#agentUsernamePlaceholder#" type="text"/>
        </span>
@@ -27,7 +27,7 @@
         <input title="#agentPasswordModificationTitle#" type="checkbox"/>
         <label>#agentPasswordModificationLabel#</label>
        </span>
-       <span>
+       <span style="display: flex; justify-content: space-between;">
         <label>#agentPasswordLabel#</label>
         <input title="#agentPasswordTitle#" placeholder="#agentPasswordPlaceholder#" type="password"/>
        </span>

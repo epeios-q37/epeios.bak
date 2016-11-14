@@ -37,6 +37,8 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpAgentStatus( Rack );
 	qRR
 	qRT
 	qRE
@@ -101,7 +103,7 @@ qRE
 
 #define AC( name ) BASE_AC( agents, name )
 
-AC( Template )
+AC( NewAgent )
 {
 	Session.AlertT( "Template" );
 }

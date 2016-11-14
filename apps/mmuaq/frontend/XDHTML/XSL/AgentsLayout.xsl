@@ -16,12 +16,11 @@
         <span style="display: flex; flex-direction: column;">
         <span>
          <select size="10">
-          <option>toto</option>
          </select>
         </span>
          <span style="display: flex; flex-direction: column;">
-         <button title="#agentsEditTitle#">#agentsEdit#</button>
-          <button title="#agentsNewTitle#">#agentsNew#</button>
+         <button title="#agentsEditTitle#" data-xdh-cast="AgentEditable">#agentsEdit#</button>
+         <button title="#agentsNewTitle#" data-xdh-cast="AgentDisplaying">#agentsNew#</button>
         </span>
         </span>
        </fieldset>

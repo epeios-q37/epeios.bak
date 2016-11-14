@@ -23,11 +23,11 @@
 # include "base.h"
 
 namespace agents {
-	BASE_ACD( Template );
+	BASE_ACD( NewAgent );
 
 	inline void Register( void )
 	{
-		BASE_ACR( Template );
+		BASE_ACR( NewAgent );
 	};
 
 	void SetLayout(
