@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
 	<Translations text="mainConverter">
 		<Translation language="fr">Convertisseur</Translation>
 		<Translation language="en">Convert</Translation>

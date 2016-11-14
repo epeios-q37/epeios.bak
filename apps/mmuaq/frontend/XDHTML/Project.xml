@@ -53,8 +53,10 @@
 			<Module>prolog</Module>
 		</Modules>
 		<Modules Group="Frames">
-			<Module>Frame</Module>
-		</Modules>
+   <Module>agents</Module>
+   <Module>agent</Module>
+   <Module>Frame</Module>
+  </Modules>
 		<Module>base</Module>
 		<Module>core</Module>
 		<Module>global</Module>
@@ -68,7 +70,17 @@
 	<Files>
 		<Files Group="XSL" Path="XSL/">
 			<Files Group="Frames">
-				<Files Group="Frame">
+    <Files Group="Agent">
+     <File>AgentLayout.xsl</File>
+     <File>AgentCasting.xsl</File>
+     <File>AgentLocale.xml</File>
+    </Files>
+    <Files Group="Agents">
+     <File>AgentsLayout.xsl</File>
+     <File>AgentsCasting.xsl</File>
+     <File>AgentsLocale.xml</File>
+    </Files>
+    <Files Group="Frame">
 					<File>FrameLayout.xsl</File>
 					<File>FrameCasting.xsl</File>
 					<File>FrameLocale.xml</File>

@@ -57,6 +57,9 @@ void base::sActionHelper::SCLXOnRefresh( core::rSession &Session )
 	case core::pMain:
 		main::SetLayout( Session );
 		break;
+	case core::pConfig:
+		config::SetLayout( Session );
+		break;
 	default:
 		qRGnr();
 		break;

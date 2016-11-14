@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 13/11/2016 17:39:38
+    This document was generated the 14/11/2016 08:03:52
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -22,8 +22,8 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>13/11/2016</Date>
-  <Time>17:39:38</Time>
+  <Date>14/11/2016</Date>
+  <Time>08:03:52</Time>
  </Misc>
  <Types>
   <Type Object="Master">
@@ -101,7 +101,7 @@
     <Command>
      <Name>MUAGetAgent_1</Name>
      <ID>23</ID>
-     <Parameters Amount="6" Position="12">
+     <Parameters Amount="5" Position="12">
       <In>
        <Parameter Discriminator="1" Type="Static">
         <Name>id</Name>
@@ -117,11 +117,7 @@
         <Name>string</Name>
         <ID>25</ID>
        </Parameter>
-       <Parameter Discriminator="3" Type="Bunch">
-        <Name>string</Name>
-        <ID>25</ID>
-       </Parameter>
-       <Parameter Discriminator="4" Position="Last" Type="Bunch">
+       <Parameter Discriminator="3" Position="Last" Type="Bunch">
         <Name>string</Name>
         <ID>25</ID>
        </Parameter>
@@ -131,7 +127,7 @@
     <Command>
      <Name>MUANewAgent_1</Name>
      <ID>24</ID>
-     <Parameters Amount="6" Position="18">
+     <Parameters Amount="6" Position="17">
       <In>
        <Parameter Discriminator="1" Type="Bunch">
         <Name>string</Name>

@@ -1230,13 +1230,13 @@ namespace fbltyp {
 
 namespace fbltyp {
 	typedef string_	dString;
-	qW( String );
+	typedef string wString;
 
-	typedef strings_	dStrings;
-	qW( Strings );
+	typedef strings_ dStrings;
+	typedef strings wStrings;
 
-	typedef xstrings_	dStringsSet;
-	qW( StringsSet );
+	typedef xstrings_ dStringsSet;
+	typedef xstrings wStringsSet;
 
 # define M( id, Id )\
 	typedef id##__	s##Id;\

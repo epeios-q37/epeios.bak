@@ -108,8 +108,7 @@ namespace get_agent_ {
 		const muaacc::dAgents &Agents,
 		str::dString &Label,
 		str::dString &HostPort,
-		str::dString &Username,
-		str::dString &Password )
+		str::dString &Username )
 	{
 		if ( !Agents.Exists( Row ) )
 			REPORT( UnknownAgent );
@@ -120,7 +119,6 @@ namespace get_agent_ {
 
 		HostPort = Agent.HostPort;
 		Username = Agent.Username;
-		Password = Agent.Password;
 	}
 }
 
@@ -136,10 +134,9 @@ qRB
 	str::dString
 		&Label = Request.StringOut(),
 		&HostPort = Request.StringOut(),
-		&Username = Request.StringOut(),
-		&Password = Request.StringOut();
+		&Username = Request.StringOut();
 
-	get_agent_::Get( *Id, Account.Agents, Label, HostPort, Username, Password );
+	get_agent_::Get( *Id, Account.Agents, Label, HostPort, Username );
 qRR 
 qRT
 qRE
@@ -224,7 +221,6 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cString,	// Label.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.
-			fblbkd::cString,	// Password.
 		fblbkd::cEnd );
 
 	Backend.Add(D( NewAgent, 1 ),

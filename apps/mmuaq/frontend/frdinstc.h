@@ -28,6 +28,11 @@ namespace frdinstc {
 
 	using namespace frdfrntnd;
 
+	SCLF_I( Agent , Id);
+
+	using fbltyp::dString;
+	using fbltyp::dStrings;
+
 	class rUser_
 	{
 	private:
@@ -59,15 +64,15 @@ namespace frdinstc {
 		{
 			F_().Crash();
 		}
-		void LoadSetupOfId( const str::string_ &Id )
+		void LoadSetupOfId( const dString &Id )
 		{
 			S_().LoadSetupOfId_1( Id );
 		}
-		void LoadSetupContent( const str::string_ &Content )
+		void LoadSetupContent( const dString &Content )
 		{
 			S_().LoadSetupContent_1( Content );
 		}
-		str::string_ &ToUpper( str::string_ &String )
+		str::string_ &ToUpper( dString &String )
 		{
 			str::string Result;
 
@@ -84,8 +89,8 @@ namespace frdinstc {
 			Object_.Test();
 		}
 		bso::sBool Login(
-			const str::dString &Username,
-			const str::dString &Password )
+			const dString &Username,
+			const dString &Password )
 		{
 			bso::sBool Success = false;
 
@@ -93,26 +98,36 @@ namespace frdinstc {
 
 			return Success;
 		}
+		void GetAgents(
+			dAgents &Agents,
+			dStrings &Labels )
+		{
+			S_().MUAGetAgents_1( Agents, Labels );
+		}
+		void GetAgent(
+			sAgent Agent,
+			dString &Label,
+			dString &HostPort,
+			dString &Username )
+		{
+			S_().MUAGetAgent_1( *Agent, Label, HostPort, Username );
+		}
 	};
 
 	class rUser
 	{
 	private:
 		rUser_ Core_;
-		bso::bool__ _TestButtonIsVisible;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
 			Core_.reset( P );
-			_TestButtonIsVisible = false;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
 		{
 			if ( Frontend.IsConnected() )
 				Core_.Init( Frontend );
-
-			_TestButtonIsVisible = false;
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -132,7 +147,12 @@ namespace frdinstc {
 				return false;
 
 		}
-		E_RWDISCLOSE__( bso::bool__, TestButtonIsVisible );
+		void DumpAgents(
+			sAgent Current,
+			xml::dWriter &Writer );
+		void DumpAgent(
+			sAgent Agent,
+			xml::dWriter &Writer );
 	};
 }
 

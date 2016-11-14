@@ -6,8 +6,8 @@
 	<xpp:define name="Parameters">
 		<xpp:bloc>
 			<xpp:expand select="FRD_Parameters"/>
-			<Project Type="New"/>
-			<xpp:ifeq select="prod" value="yes">
+   <Project Type="New" Handling="Load"/>
+   <xpp:ifeq select="prod" value="yes">
 				<Backend Type="Predefined">LocalHost</Backend>
 			</xpp:ifeq>
 			<xpp:ifeq select="prod" value="no">

@@ -387,7 +387,6 @@ namespace lcl {
 
 namespace lcl {
 	typedef meaning_ dMeaning;
-
-	qW( Meaning );
+	typedef meaning wMeaning;
 }
 #endif

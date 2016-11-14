@@ -28,6 +28,9 @@ namespace frdinstc {
 
 	using namespace frdfrntnd;
 
+	using fbltyp::dString;
+	using fbltyp::dStrings;
+
 	class rUser_
 	{
 	private:
@@ -59,26 +62,15 @@ namespace frdinstc {
 		{
 			F_().Crash();
 		}
-		void LoadSetupOfId( const str::string_ &Id )
+		void LoadSetupOfId( const dString &Id )
 		{
 			S_().LoadSetupOfId_1( Id );
 		}
-		void LoadSetupContent( const str::string_ &Content )
+		void LoadSetupContent( const dString &Content )
 		{
 			S_().LoadSetupContent_1( Content );
 		}
-		str::string_ &ToUpper( str::string_ &String )
-		{
-			str::string Result;
-
-			Result.Init();
-
-			Object_.ToUC( String, Result );
-
-			String = Result;
-
-			return String;
-		}
+		dString &ToUpper( dString &String );
 		void TestMessage( void )
 		{
 			Object_.Test();
@@ -104,7 +96,7 @@ namespace frdinstc {
 
 			_TestButtonIsVisible = false;
 		}
-		str::string_ &ToUpper( str::string_ &String )
+		dString &ToUpper( dString &String )
 		{
 			return Core_.ToUpper( String );
 		}

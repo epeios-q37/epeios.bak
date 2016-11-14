@@ -45,7 +45,7 @@ namespace mmuaq {
 				0, 
 				25, 25, 0, 2, 
 				0, 22, 26, 
-				21, 0, 25, 25, 25, 25, 
+				21, 0, 25, 25, 25, 
 				25, 25, 25, 25, 0, 21, 
 			};
 
@@ -81,12 +81,12 @@ namespace mmuaq {
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUAGetAgent_1";;
-			CommandDetail.Casts.Append( Parameters + 12, 6 );
+			CommandDetail.Casts.Append( Parameters + 12, 5 );
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
 			CommandDetail.Name = "MUANewAgent_1";;
-			CommandDetail.Casts.Append( Parameters + 18, 6 );
+			CommandDetail.Casts.Append( Parameters + 17, 6 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -157,8 +157,7 @@ namespace mmuaq {
 			const fblfrd::id__ &In1,
 			fblfrd::string_ &Out1,
 			fblfrd::string_ &Out2,
-			fblfrd::string_ &Out3,
-			fblfrd::string_ &Out4 ) const
+			fblfrd::string_ &Out3 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[5] );
 			Frontend().IdIn( In1 );
@@ -168,7 +167,6 @@ namespace mmuaq {
 			Frontend().StringOut( Out1 );
 			Frontend().StringOut( Out2 );
 			Frontend().StringOut( Out3 );
-			Frontend().StringOut( Out4 );
 
 			Frontend().Handle();
 		}

@@ -1,5 +1,13 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-14 :
+- FBLTYP :
+	- Redefintion of 'wString(s(Set))' to avoid some ambiguities.
+- LCL :
+	Redefinition of 'wMeaning' to avoid some ambiguities.
+- SCLMIC :
+	- Fixing 'ReportAndAbort(...') endless recursive call.
+
 2016-11-13 :
 - LCK :
 	- 'rControl' -> 'rTutor'.

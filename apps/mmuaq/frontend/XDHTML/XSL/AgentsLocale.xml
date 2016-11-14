@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
+ <Translations text="agentsTitle">
+  <Translation language="fr">Liste des agents.</Translation>
+  <Translation language="en">Agents list.</Translation>
+ </Translations>
+ <Translations text="agentsLegend">
+  <Translation language="fr">Agents</Translation>
+  <Translation language="en">Agents</Translation>
+ </Translations>
+ <Translations text="agentsEdit">
+  <Translation language="fr">Modifier</Translation>
+  <Translation language="en">Modify</Translation>
+ </Translations>
+ <Translations text="agentsEditTitle">
+  <Translation language="fr">Modifier l'agent sélectionné.</Translation>
+  <Translation language="en">Modify selected agent.</Translation>
+ </Translations>
+ <Translations text="agentsNew">
+  <Translation language="fr">Nouveau</Translation>
+  <Translation language="en">New</Translation>
+ </Translations>
+ <Translations text="agentsNewTitle">
+  <Translation language="fr">Créer un nouvel agent.</Translation>
+  <Translation language="en">Create new agent.</Translation>
+ </Translations>
+ <!--
+	<Translations text="agentsTitle">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xpp:bloc xmlns:xpp="http://q37.info/ns/xpp/">
+ <Translations text="agentTitle">
+  <Translation language="fr">Paramètres de l'agent.</Translation>
+  <Translation language="en">Agent parameters.</Translation>
+ </Translations>
+ <Translations text="agentLegend">
+  <Translation language="fr">Agent</Translation>
+  <Translation language="en">Agent</Translation>
+ </Translations>
+ <Translations text="agentNameLabel">
+  <Translation language="fr">Désignation : </Translation>
+  <Translation language="en">Designation: </Translation>
+ </Translations>
+ <Translations text="agentNameTitle">
+  <Translation language="fr">Désignation de l'agent.</Translation>
+  <Translation language="en">Designation of the agent.</Translation>
+ </Translations>
+ <Translations text="agentNamePlaceholder">
+  <Translation language="fr">Désignation</Translation>
+  <Translation language="en">Designation</Translation>
+ </Translations>
+ <Translations text="agentHostPortLabel">
+  <Translation language="fr">Addresse et port : </Translation>
+  <Translation language="en">Address and port: </Translation>
+ </Translations>
+ <Translations text="agentHostPortTitle">
+  <Translation language="fr">Adresse et port de l'agent.</Translation>
+  <Translation language="en">Address and port of the agent.</Translation>
+ </Translations>
+ <Translations text="agentHostPortPlaceholder">
+  <Translation language="fr">Adresse:Port</Translation>
+  <Translation language="en">Address:Port</Translation>
+ </Translations>
+ <Translations text="agentUsernameLabel">
+  <Translation language="fr">Nom d'utilisateur : </Translation>
+  <Translation language="en">User name: </Translation>
+ </Translations>
+ <Translations text="agentUsernameTitle">
+  <Translation language="fr">Nom d'utilisateur pour la connexion à l'agent.</Translation>
+  <Translation language="en">User name to connect to agent.</Translation>
+ </Translations>
+ <Translations text="agentUsernamePlaceholder">
+  <Translation language="fr">Nom</Translation>
+  <Translation language="en">Name</Translation>
+ </Translations>
+ <Translations text="agentPasswordLabel">
+  <Translation language="fr">Mot de passe : </Translation>
+  <Translation language="en">Password: </Translation>
+ </Translations>
+ <Translations text="agentPasswordTitle">
+  <Translation language="fr">Mot de passe pour la connexion à l'agent.</Translation>
+  <Translation language="en">Password for the conneciton to the agent.</Translation>
+ </Translations>
+ <Translations text="agentPasswordPlaceholder">
+  <Translation language="fr">Mot de passe</Translation>
+  <Translation language="en">Password</Translation>
+ </Translations>
+ <Translations text="agentSubmit">
+  <Translation language="fr">Valider</Translation>
+  <Translation language="en">Submit</Translation>
+ </Translations>
+ <Translations text="agentSubmitTitle">
+  <Translation language="fr">Valider les changements.</Translation>
+  <Translation language="en">Submit changes.</Translation>
+ </Translations>
+ <Translations text="agentCancel">
+  <Translation language="fr">Annuler</Translation>
+  <Translation language="en">Cancel</Translation>
+ </Translations>
+ <Translations text="agentCancelTitle">
+  <Translation language="fr">Annuler les modifications.</Translation>
+  <Translation language="en">Cancel the modifications./</Translation>
+ </Translations>
+ <Translations text="agentPasswordModificationLabel">
+  <Translation language="fr"> : changer le mot de passe.</Translation>
+  <Translation language="en">: change password.</Translation>
+ </Translations>
+ <Translations text="agentPasswordModificationTitle">
+  <Translation language="fr">Cocher pour changer le mot de passe.</Translation>
+  <Translation language="en">Check to modify password.</Translation>
+ </Translations>
+ <!--
+	<Translations text="agent">
+		<Translation language="fr"></Translation>
+		<Translation language="en"></Translation>
+	</Translations>
+-->
+</xpp:bloc>

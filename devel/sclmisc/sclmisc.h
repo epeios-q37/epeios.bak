@@ -76,7 +76,18 @@ namespace sclmisc {
 	// To use as 'action' parameter for the 'qRFE(...)' macro to display the file/line of an error.
 	void ErrFinal( void );
 
-	void ReportAndAbort( const lcl::meaning_ &Meaning );
+	// Simplifies the use of below variadics.
+	void ReportAndAbort_( const lcl::meaning_ &Meaning );
+
+	inline void ReportAndAbort( const lcl::meaning_ &Meaning )
+	{
+		ReportAndAbort_( Meaning );
+	}
+
+	inline void ReportAndAbort( const lcl::meaning &Meaning )
+	{
+		ReportAndAbort_( Meaning );
+	}
 
 	void ReportAndAbort( const char *Text );
 

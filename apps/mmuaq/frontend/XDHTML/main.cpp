@@ -34,10 +34,6 @@ namespace {
 		base::rContextRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
-
-		Rack().PushTag( "Test" );
-
-		Rack().PutAttribute("Enabled", (Session.User.TestButtonIsVisible() ? "true" : "false" ) );
 	qRR
 	qRT
 	qRE
@@ -98,31 +94,7 @@ qRE
 
 #define AC( name ) BASE_AC( main, name )
 
-AC( Submission )
-{
-	str::string Test;
-	TOL_CBUFFER___ Buffer;
-
-	Test.Init( Session.GetContent( "Pattern", Buffer ) );
-
-	Session.User.ToUpper( Test );
-
-	Session.SetContent("Pattern", Test );
-}
-
 AC( Configuration )
 {
 	config::SetLayout( Session );
 }
-
-AC( HideTestButton )
-{
-	Session.User.TestButtonIsVisible() = false;
-	SetCasting_(Session );
-}
-
-AC( Testing )
-{
-	Session.User.TestMessage();
-}
-

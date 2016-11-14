@@ -76,7 +76,7 @@ namespace lcl {
 			S_.ToTranslate = false;
 			Tags.reset( P );
 		}
-		void plug( bch::cHook &Hook )
+		void plug( bch::sHook &Hook )
 		{
 			Tags.plug( Hook );
 		}
@@ -387,7 +387,6 @@ namespace lcl {
 
 namespace lcl {
 	typedef meaning_ dMeaning;
-
-	qW( Meaning );
+	typedef meaning wMeaning;
 }
 #endif

@@ -17,9 +17,9 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "config.h"
-
 #include "agents.h"
+
+#include "agent.h"
 #include "core.h"
 #include "registry.h"
 
@@ -27,7 +27,7 @@
 
 namespace {
 
-	E_CDEF( char *, XSLAffix_, "Config" );
+	E_CDEF( char *, XSLAffix_, "Agents" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -42,7 +42,9 @@ namespace {
 	qRE
 	}
 
-	void SetCasting_( core::rSession &Session )
+	void SetCasting_(
+		const char *Id,
+		core::rSession &Session )
 	{
 	qRH
 		str::string XML, XSL;
@@ -53,7 +55,7 @@ namespace {
 		XSL.Init();
 		sclxdhtml::LoadXSLAndTranslateTags(rgstry::tentry___( registry::definition::XSLCastingFile, XSLAffix_ ), Session.Registry() , XSL );
 
-		Session.FillDocumentCastings( XML, XSL );
+		Session.FillElementCastings( Id, XML, XSL );
 	qRR
 	qRT
 	qRE
@@ -74,7 +76,9 @@ namespace {
 	}
 }
 
-void config::SetLayout(	core::rSession &Session )
+void agents::SetLayout(
+	const char *Id,
+	core::rSession &Session )
 {
 qRH
 	str::string XML, XSL;
@@ -85,19 +89,17 @@ qRB
 	XSL.Init();
 	sclxdhtml::LoadXSLAndTranslateTags( rgstry::tentry___( registry::definition::XSLLayoutFile, XSLAffix_ ), Session.Registry(), XSL );
 
-	Session.FillDocument( XML, XSL );
+	Session.FillElement( Id, XML, XSL );
 
-	SetCasting_( Session );
+	SetCasting_( Id, Session );
 
-	agents::SetLayout( "Agents", Session );
-
-	Session.SwitchTo( core::pConfig );
+	agent::SetLayout( "Agent", Session );
 qRR
 qRT
 qRE
 }
 
-#define AC( name ) BASE_AC( config, name )
+#define AC( name ) BASE_AC( agents, name )
 
 AC( Template )
 {

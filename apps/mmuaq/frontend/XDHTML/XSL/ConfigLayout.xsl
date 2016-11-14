@@ -11,7 +11,9 @@
 	<xsl:template match="Content">
   <span class="vcenter-out">
    <span class="vcenter-in">
-    <xsl:text>Config</xsl:text>
+    <fieldset>
+     <span id="Agents"/>
+    </fieldset>
    </span>
   </span>
  </xsl:template>

@@ -132,10 +132,7 @@ qRE
 	return Exists;
 }
 
-
-
-
-void sclmisc::ReportAndAbort( const lcl::meaning_ &Meaning )
+void sclmisc::ReportAndAbort_( const lcl::meaning_ &Meaning )
 {
 	sclerror::SetMeaning( Meaning );
 	qRAbort();

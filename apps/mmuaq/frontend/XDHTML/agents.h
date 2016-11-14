@@ -17,20 +17,22 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MAIN__INC
-# define MAIN__INC
+#ifndef AGENTS__INC
+# define AGENTS__INC
 
 # include "base.h"
 
-namespace main {
-	BASE_ACD( Configuration );
+namespace agents {
+	BASE_ACD( Template );
 
-	inline void Register( void  )
+	inline void Register( void )
 	{
-		BASE_ACR( Configuration );
+		BASE_ACR( Template );
 	};
 
-	void SetLayout( core::rSession &Session );
+	void SetLayout(
+		const char *Id,
+		core::rSession &Session );
 }
 
 #endif

@@ -24,3 +24,21 @@
 
 using namespace frdinstc;
 
+using fbltyp::wString;
+using fbltyp::wStrings;
+
+dString &frdinstc::rUser_::ToUpper( dString &String )
+{
+qRH
+	wString Result;
+qRB
+	Result.Init();
+
+	Object_.ToUC( String, Result );
+
+	String = Result;
+qRR
+qRT
+qRE
+	return String;
+}

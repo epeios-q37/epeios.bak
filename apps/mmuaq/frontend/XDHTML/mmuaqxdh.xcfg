@@ -46,7 +46,37 @@
 						</Layout>
 						<!-- No 'casting' XSL -->
 					</XSLFiles>
-					<XSLFiles target="Prolog">
+     <XSLFiles target="Agent">
+      <Layout>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>AgentLayout.xsl</xpp:bloc>
+      </Layout>
+      <Casting>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>AgentCasting.xsl</xpp:bloc>
+      </Casting>
+     </XSLFiles>
+     <XSLFiles target="Agents">
+      <Layout>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>AgentsLayout.xsl</xpp:bloc>
+      </Layout>
+      <Casting>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>AgentsCasting.xsl</xpp:bloc>
+      </Casting>
+     </XSLFiles>
+     <XSLFiles target="Config">
+      <Layout>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>ConfigLayout.xsl</xpp:bloc>
+      </Layout>
+      <Casting>
+       <xpp:expand select="XSLRootDir"/>
+       <xpp:bloc>ConfigCasting.xsl</xpp:bloc>
+      </Casting>
+     </XSLFiles>
+     <XSLFiles target="Prolog">
 						<Layout>
 							<xpp:expand select="XSLRootDir"/>
 							<xpp:bloc>PrologLayout.xsl</xpp:bloc>
@@ -76,16 +106,6 @@
        <xpp:bloc>MainCasting.xsl</xpp:bloc>
       </Casting>
      </XSLFiles>
-     <XSLFiles target="Config">
-      <Layout>
-       <xpp:expand select="XSLRootDir"/>
-       <xpp:bloc>ConfigLayout.xsl</xpp:bloc>
-      </Layout>
-      <Casting>
-       <xpp:expand select="XSLRootDir"/>
-       <xpp:bloc>ConfigCasting.xsl</xpp:bloc>
-      </Casting>
-     </XSLFiles>
     </XSLFilesSet>
 			</xpp:bloc>
 		</Definitions>
@@ -113,8 +133,10 @@
 			<xpp:bloc>
 				<!-- Login : in 'XDH.xcfg : XDH_Locale'-->
 			</xpp:bloc>
-   <xpp:expand href="XSL/MainLocale.xml"/>
+   <xpp:expand href="XSL/AgentLocale.xml"/>
+   <xpp:expand href="XSL/AgentsLocale.xml"/>
    <xpp:expand href="XSL/ConfigLocale.xml"/>
+   <xpp:expand href="XSL/MainLocale.xml"/>
   </Locale>
 	</Configuration>
 </Configurations>

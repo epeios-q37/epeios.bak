@@ -24,3 +24,75 @@
 
 using namespace frdinstc;
 
+using fbltyp::wString;
+using fbltyp::wStrings;
+
+namespace {
+	void DumpAgents_(
+		const dAgents &Ids,
+		dStrings &Labels,
+		xml::dWriter &Writer )
+	{
+		sdr::sRow Row = Ids.First();
+
+		while ( Row != qNIL ) {
+			Writer.PushTag( "Agent ");
+			Writer.PutAttribute( "id", *Ids( Row ) );
+			Writer.PutValue( Labels( Row ) );
+			Writer.PopTag();
+
+			Row = Ids.Next( Row );
+		}
+	}
+}
+
+void frdinstc::rUser::DumpAgents(
+	sAgent Agent,
+	xml::dWriter &Writer )
+{
+qRH
+	wAgents Agents;
+	wStrings Labels;
+qRB
+	Core_.GetAgents( Agents, Labels );
+
+	if ( Agents.Amount() != Labels.Amount() )
+		qRGnr();
+
+	Writer.PushTag( "Agents" );
+	Writer.PutAttribute( "Amount", Agents.Amount() );
+
+	Writer.PutAttribute( "Current", **Agent, **UndefinedAgent );
+
+	DumpAgents_( Agents, Labels, Writer );
+
+	Writer.PopTag();
+qRR
+qRT
+qRE
+}
+
+void frdinstc::rUser::DumpAgent(
+	sAgent Agent,
+	xml::dWriter &Writer )
+{
+qRH
+	wString Label, HostPort, Username; 
+qRB
+	if ( Agent == UndefinedAgent )
+		qRGnr();
+
+	tol::Init( Label, HostPort, Username );
+	Core_.GetAgent( Agent, Label, HostPort, Username );
+
+	Writer.PushTag( "Agent" );
+
+	Writer.PutAttribute( "Label", Label );
+	Writer.PutAttribute( "HostPort", HostPort );
+	Writer.PutAttribute( "Username", Username );
+
+	Writer.PopTag();
+qRR
+qRT
+qRE
+}
