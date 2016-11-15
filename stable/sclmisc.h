@@ -56,6 +56,13 @@ namespace sclmisc {
 
 	const char *GetBaseLanguage( void );	// Language d'administration, pouvant être language utilsateur selon contexte.
 
+	template <typename source> inline const str::string_ &GetBaseTranslation(
+		const source &Source,
+		str::dString &Translation )
+	{
+		return scllocale::GetTranslation( Source, GetBaseLanguage(), Translation );
+	}
+
 	template <typename source, typename ... tags> inline const str::string_ &GetBaseTranslation(
 		const source &Source,
 		str::dString &Translation,

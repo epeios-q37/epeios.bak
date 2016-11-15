@@ -165,14 +165,14 @@ namespace ltf {
 	};
 
 	class _line_text_oflow___
-	: public flw::oflow__
+	: public flw::standalone_oflow__<>
 	{
 	private:
 		_line_text_oflow_driver___ _Driver;
 	public:
 		void reset( bso::bool__ P = true )
 		{
-			flw::oflow__::reset( P );
+			flw::standalone_oflow__<>::reset( P );
 			_Driver.reset( P );
 		}
 		_line_text_oflow___(  )
@@ -189,7 +189,7 @@ namespace ltf {
 			flw::size__ Size )
 		{
 			_Driver.Init( TFlow, Data, Size, fdr::tsDisabled );
-			oflow__::Init( _Driver, NULL, 0 );
+			flw::standalone_oflow__<>::Init( _Driver );
 		}
 		txf::text_oflow__ &TFlow( void )
 		{

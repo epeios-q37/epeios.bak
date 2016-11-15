@@ -108,6 +108,25 @@ namespace scllocale {
 		const str::string_ &In,
 		str::string_ &Out );
 
+	template <typename source> inline const str::string_ &GetTranslation(
+		const source &Source,
+		const char *Language,
+		str::string_ &Translation )
+	{
+	qRH
+		str::string Intermediate;
+	qRB
+		Intermediate.Init();
+		GetLocale().GetTranslation( Source, Language, Intermediate );
+
+		if ( !Normalize_( Intermediate, Translation ) )
+			qRFwk();
+	qRR
+	qRT
+	qRE
+		return Translation;
+	}
+
 	template <typename source, typename ... tags> inline const str::string_ &GetTranslation(
 		const source &Source,
 		const char *Language,

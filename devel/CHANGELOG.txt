@@ -1,5 +1,11 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-15 :
+- LTF :
+	- Fixing cache size of 0 issue.
+- LCL, SCLLOCALE, SCLMISC :
+	- Fixing translation with no tag discarding tags issue.
+
 2016-11-14 :
 - FBLTYP :
 	- Redefintion of 'wString(s(Set))' to avoid some ambiguities.

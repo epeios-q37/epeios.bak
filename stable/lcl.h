@@ -346,6 +346,13 @@ namespace lcl {
 		{
 			return GetTranslation_( Meaning, Language, Translation );
 		}
+		template <typename source> const str::dString &GetTranslation(
+			const source &Source,
+			const char *Language,
+			str::string_ &Translation ) const
+		{
+			return GetTranslation_( Source, Language, Translation );
+		}
 		template <typename source, typename ... tags> const str::dString &GetTranslation(
 			const source &Source,
 			const char *Language,
