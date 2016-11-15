@@ -8,7 +8,7 @@
  <xsl:template match="Content">
   <span class="vcenter-out">
    <span class="vcenter-in">
-    <fieldset title="#agentTitle#" style="display: flex; justify-content: space-around;">
+    <fieldset title="#agentTitle#" style="display: flex; justify-content: space-around;" data-xdh-cast="InputCast">
      <legend>#agentLegend#</legend>
       <fieldset style="display: flex; flex-direction: column;">
        <span style="display: flex; justify-content: space-between;">
@@ -34,7 +34,7 @@
       </fieldset>
       <span style="display: flex; width: 100%; justify-content: space-around;">
        <button title="#agentSubmitTitle#">#agentSubmit#</button>
-       <button title="#agentCancelTitle#">#agentCancel#</button>
+       <button title="#agentCancelTitle#" data-xdh-onevent="DiscardAgent">#agentCancel#</button>
       </span>
     </fieldset>
    </span>

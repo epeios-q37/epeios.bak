@@ -27,7 +27,7 @@
 #include "sclfrntnd.h"
 
 namespace {
-	E_CDEF( char *, XSLAffix_, "Login" );
+	qCDEF( char *, XSLAffix_, "Login" );
 
 	void GetContext_(
 		core::rSession &Session,

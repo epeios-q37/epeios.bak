@@ -27,7 +27,7 @@
 #include "sclfrntnd.h"
 
 namespace {
-	E_CDEF(char *, XSLAffix_, "Prolog" );
+	qCDEF(char *, XSLAffix_, "Prolog" );
 
 	void GetContext_(
 		core::rSession &Session,

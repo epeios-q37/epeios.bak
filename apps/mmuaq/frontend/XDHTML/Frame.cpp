@@ -25,7 +25,7 @@
 
 namespace {
 
-	E_CDEF( char *, XSLAffix_, "Frame" );
+	qCDEF( char *, XSLAffix_, "Frame" );
 
 	void GetContext_(
 		core::rSession &Session,

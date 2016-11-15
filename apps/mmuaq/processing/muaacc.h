@@ -261,7 +261,27 @@ namespace muaacc {
 
 	qW( Account );
 
-	typedef lck::rTutor<dAccount> rAccountTutor;
+	typedef lck::rTutor<dAccount> rAccountTutor_;
+
+	class rAccountTutor
+	: public rAccountTutor_
+	{
+	private:
+		wAccount Account_;
+	public:
+		void reset( bso::sBool P = true )
+		{
+			rAccountTutor_::reset( P );
+			tol::reset( P, Account_ );
+		}
+		qCDTOR( rAccountTutor );
+		void Init( void )
+		{
+			Account_.Init();
+			rAccountTutor_::Init( Account_ );
+		}
+	};
+
 
 	typedef lck::rReadWriteAccess<dAccount> lAcount;
 
@@ -290,10 +310,14 @@ namespace muaacc {
 			if ( ( Account = new rAccountTutor ) == NULL )
 				qRAlc();
 
+			Account->Init();
+
 			Row = Accounts_.New( Row );
 
 			Accounts_.Store( Account, Row );
 		qRR
+			if ( Account != NULL )
+				delete Account;
 		qRE
 		qRT
 			return Row;

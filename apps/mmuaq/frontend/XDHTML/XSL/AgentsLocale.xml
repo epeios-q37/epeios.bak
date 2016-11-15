@@ -24,8 +24,12 @@
   <Translation language="fr">Créer un nouvel agent.</Translation>
   <Translation language="en">Create new agent.</Translation>
  </Translations>
+ <Translations text="agentsNoAgent">
+  <Translation language="fr">(vide)</Translation>
+  <Translation language="en">(empty)</Translation>
+ </Translations>
  <!--
-	<Translations text="agentsTitle">
+	<Translations text="agents">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

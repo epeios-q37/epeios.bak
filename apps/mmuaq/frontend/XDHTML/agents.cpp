@@ -27,7 +27,8 @@
 
 namespace {
 
-	E_CDEF( char *, XSLAffix_, "Agents" );
+	qCDEF( char *, XSLAffix_, "Agents" );
+	qCDEF( char *, AgentFrameId_, "Agent" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -38,7 +39,11 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpAgentStatus( Rack );
+		Rack().PushTag( "Agent" );
+
+		Session.User.PutAgentStatusAttribute( "Status", Rack );
+
+		Rack().PopTag();
 	qRR
 	qRT
 	qRE
@@ -72,6 +77,8 @@ namespace {
 		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpAgents( frdinstc::UndefinedAgent, Rack );
 	qRR
 	qRT
 	qRE
@@ -95,7 +102,7 @@ qRB
 
 	SetCasting_( Id, Session );
 
-	agent::SetLayout( "Agent", Session );
+	agent::SetLayout( AgentFrameId_, Session );
 qRR
 qRT
 qRE
@@ -105,6 +112,8 @@ qRE
 
 AC( NewAgent )
 {
-	Session.AlertT( "Template" );
+	Session.User.CreateAgent();
+
+	core::SetAgentsLayout( Session );
 }
 

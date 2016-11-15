@@ -27,7 +27,8 @@
 
 namespace {
 
-	E_CDEF( char *, XSLAffix_, "Config" );
+	qCDEF( char *, XSLAffix_, "Config" );
+	qCDEF( char *, AgentsFrameId_, "Agents" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -89,13 +90,19 @@ qRB
 
 	SetCasting_( Session );
 
-	agents::SetLayout( "Agents", Session );
+	agents::SetLayout( AgentsFrameId_, Session );
 
 	Session.SwitchTo( core::pConfig );
 qRR
 qRT
 qRE
 }
+
+void config::SetAgentsLayout( core::rSession &Session )
+{
+	agents::SetLayout( AgentsFrameId_, Session );
+}
+
 
 #define AC( name ) BASE_AC( config, name )
 

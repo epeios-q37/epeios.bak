@@ -20,6 +20,9 @@
 #ifndef CORE__INC
 # define CORE__INC
 
+# include "agent.h"
+# include "agents.h"
+# include "config.h"
 # include "global.h"
 # include "prolog.h"
 # include "login.h"
@@ -42,6 +45,9 @@ namespace core {
 
 	inline void Register_( void )
 	{
+		agent::Register();
+		agents::Register();
+		config::Register();
 		global::Register();
 		prolog::Register();
 		login::Register();
@@ -111,6 +117,8 @@ namespace core {
 	void About(
 		core::rSession &Session,
 		xml::writer_ &Writer );
+
+	void SetAgentsLayout( rSession &Session );
 }
 
 #endif

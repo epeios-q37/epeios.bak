@@ -31,6 +31,8 @@ namespace config {
 	};
 
 	void SetLayout( core::rSession &Session );
+	void SetAgentsLayout( core::rSession &Session );
+
 }
 
 #endif

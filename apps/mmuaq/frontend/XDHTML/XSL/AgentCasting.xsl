@@ -6,13 +6,16 @@
 	<xsl:template match="/">
 		<xsl:apply-templates select="*/Context"/>
 	</xsl:template>
-	<xsl:template match="Context">
+ <xsl:template match="Context">
   <xsl:choose>
-   <xsl:when test="@Status='Display'">
+   <xsl:when test="@Status='Show'">
+    <xdh-cast id="InputCast" kind="Disable"/>
    </xsl:when>
-   <xsl:when test="@Status='Edition'">
+   <xsl:when test="@Status='Create' or @Status='Edit'">
+    <xdh-cast id="InputCast" kind="Plain"/>
    </xsl:when>
    <xsl:otherwise>
+    <xdh-cast id="InputCast" kind="Disable"/>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>

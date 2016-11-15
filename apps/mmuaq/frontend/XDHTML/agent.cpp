@@ -25,7 +25,7 @@
 
 namespace {
 
-	E_CDEF( char *, XSLAffix_, "Agent" );
+	qCDEF( char *, XSLAffix_, "Agent" );
 
 	void GetContext_(
 		core::rSession &Session,
@@ -36,7 +36,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpAgentStatus( Rack );
+		Session.User.PutAgentStatusAttribute( "Status", Rack );
 	qRR
 	qRT
 	qRE
@@ -99,8 +99,10 @@ qRE
 
 #define AC( name ) BASE_AC( agent, name )
 
-AC( Template )
+AC( DiscardAgent )
 {
-	Session.AlertT( "Template" );
+	Session.User.DiscardAgent();
+
+	core::SetAgentsLayout( Session );
 }
 

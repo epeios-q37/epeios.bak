@@ -97,25 +97,32 @@ qRT
 qRE
 }
 
-void frdinstc::rUser::DumpAgentStatus( xml::dWriter &Writer )
+const str::dString &frdinstc::rUser::GetAgentStatus( str::dString &Status )
+{
+	if ( CurrentAgent_ != frdinstc::UndefinedAgent ) {
+		if ( AgentEdition_  )
+			Status = "Edit";
+		else
+			Status = "Show";
+	} else if ( AgentEdition_ )
+		Status = "Create";
+
+	return Status;
+}
+
+void frdinstc::rUser::PutAgentStatusAttribute(
+	const char *Name,
+	xml::dWriter &Writer )
 {
 qRH
 	str::wString Status;
 qRB
 	Status.Init();
 
-	if ( CurrentAgent_ != frdinstc::UndefinedAgent ) {
-		if ( AgentEdition_  )
-			Status = "Edition";
-		else
-			Status = "Display";
-	} else if ( AgentEdition_ )
-		Status = "Edition";
+	GetAgentStatus( Status );
 
-	if ( Status.Amount() != 0 ) {
-		Writer.PutAttribute( "Status", Status );
-		Writer.PutAttribute( "Agent", **CurrentAgent_, **frdinstc::UndefinedAgent );
-	}
+	if ( Status.Amount() != 0 )
+		Writer.PutAttribute( Name, Status );
 qRR
 qRT
 qRE

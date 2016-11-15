@@ -23,8 +23,10 @@
 #include "registry.h"
 #include "sclfrntnd.h"
 
+using namespace main;
+
 namespace {
-	E_CDEF( char *, XSLAffix_, "Main" );
+	qCDEF( char *, XSLAffix_, "Main" );
 
 	void GetContext_(
 		core::rSession &Session,

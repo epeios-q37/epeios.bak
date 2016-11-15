@@ -141,6 +141,18 @@ qRT
 qRE
 }
 
+void core::SetAgentsLayout( rSession &Session )
+{
+	switch ( Session.Page() ) {
+	case pConfig:
+		config::SetAgentsLayout( Session );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+}
+
 qGCTOR( core )
 {
 	OnNotConnectedAllowedActions.Init();

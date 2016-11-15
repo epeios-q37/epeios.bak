@@ -125,6 +125,7 @@ namespace frdinstc {
 		{	
 			Core_.reset( P );
 			CurrentAgent_ = UndefinedAgent;
+			AgentEdition_ = false;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -133,6 +134,7 @@ namespace frdinstc {
 				Core_.Init( Frontend );
 
 			CurrentAgent_ = UndefinedAgent;
+			AgentEdition_ = false;
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -159,13 +161,20 @@ namespace frdinstc {
 			sAgent Agent,
 			xml::dWriter &Writer );
 		// Write only attributes (only usable on a start tag).
-		void DumpAgentStatus( xml::dWriter &Writer );
+		const str::dString &GetAgentStatus( str::dString &Status );
+		void PutAgentStatusAttribute(
+			const char *Name,
+			xml::dWriter &Writer );
 		void CreateAgent( void )
 		{
 			CurrentAgent_ = UndefinedAgent;
 			AgentEdition_ = true;
 		}
-
+		void DiscardAgent( void )
+		{
+			CurrentAgent_ = UndefinedAgent;
+			AgentEdition_ = false;
+		}
 	};
 }
 

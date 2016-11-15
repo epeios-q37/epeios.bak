@@ -22,7 +22,7 @@
 #include "core.h"
 #include "registry.h"
 
-E_CDEF(char *, XSLAffix_, "Global" );
+qCDEF(char *, XSLAffix_, "Global" );
 
 #define AC( name ) BASE_AC( global, name )
 
