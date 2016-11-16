@@ -27,5 +27,5 @@ MADE :
 - Fixing errors occuring when compiling using WSL (Widows Subsystem for Linux).
 
 2016-08-22 :
-- Fixing erros which occurs in backends on regular deconnection from frontend.
+- Fixing errors which occurs in backends on regular deconnection from frontend.
 

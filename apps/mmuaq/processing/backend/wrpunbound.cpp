@@ -142,13 +142,13 @@ qRT
 qRE
 }
 
-namespace new_agent_ {
-	muaacc::sARow New(
-		muaacc::dAgents &Agents,
+namespace create_agent_ {
+	muaacc::sARow Create(
 		const str::dString &RawLabel,
 		const str::dString &RawHostPort,
 		const str::dString &Username,
-		const str::dString &Password )
+		const str::dString &Password,
+		muaacc::dAgents &Agents )
 	{
 		muaacc::sARow Row = qNIL;
 	qRH
@@ -175,7 +175,7 @@ namespace new_agent_ {
 	}
 }
 
-DEC( NewAgent, 1 )
+DEC( CreateAgent, 1 )
 {
 qRH
 	ACCOUNTh;
@@ -188,7 +188,7 @@ qRB
 		&Username = Request.StringIn(),
 		&Password = Request.StringIn();
 
-	Request.IdOut() = *new_agent_::New( Account.Agents, Label, HostPort, Username, Password );
+	Request.IdOut() = *create_agent_::Create( Label, HostPort, Username, Password, Account.Agents );
 qRR 
 qRT
 qRE
@@ -223,7 +223,7 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cString,	// Username.
 		fblbkd::cEnd );
 
-	Backend.Add(D( NewAgent, 1 ),
+	Backend.Add(D( CreateAgent, 1 ),
 			fblbkd::cString,	// Label.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.

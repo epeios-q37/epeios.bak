@@ -24,10 +24,14 @@
 
 namespace agents {
 	BASE_ACD( NewAgent );
+	BASE_ACD( SelectAgent );
+	BASE_ACD( UpdateAgent );
 
 	inline void Register( void )
 	{
 		BASE_ACR( NewAgent );
+		BASE_ACR( SelectAgent );
+		BASE_ACR( UpdateAgent );
 	};
 
 	void SetLayout(

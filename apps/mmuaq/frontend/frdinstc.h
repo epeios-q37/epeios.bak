@@ -100,17 +100,29 @@ namespace frdinstc {
 		}
 		void GetAgents(
 			dAgents &Agents,
-			dStrings &Labels )
+			dStrings &Names )
 		{
-			S_().MUAGetAgents_1( Agents, Labels );
+			S_().MUAGetAgents_1( Agents, Names );
 		}
 		void GetAgent(
 			sAgent Agent,
-			dString &Label,
+			dString &Name,
 			dString &HostPort,
 			dString &Username )
 		{
-			S_().MUAGetAgent_1( *Agent, Label, HostPort, Username );
+			S_().MUAGetAgent_1( *Agent, Name, HostPort, Username );
+		}
+		sAgent CreateAgent(
+			const dString &Name,
+			const dString &HostPort,
+			const dString &Username,
+			const dString &Password )
+		{
+			sAgent Agent = UndefinedAgent;
+
+			S_().MUACreateAgent_1( Name, HostPort, Username, Password, *Agent );
+
+			return Agent;
 		}
 	};
 
@@ -154,18 +166,14 @@ namespace frdinstc {
 				return false;
 
 		}
-		void DumpAgents(
-			sAgent Current,
-			xml::dWriter &Writer );
-		void DumpAgent(
-			sAgent Agent,
-			xml::dWriter &Writer );
+		void DumpAgents( xml::dWriter &Writer );
+		void DumpCurrentAgent( xml::dWriter &Writer );
 		// Write only attributes (only usable on a start tag).
 		const str::dString &GetAgentStatus( str::dString &Status );
 		void PutAgentStatusAttribute(
 			const char *Name,
 			xml::dWriter &Writer );
-		void CreateAgent( void )
+		void NewAgent( void )
 		{
 			CurrentAgent_ = UndefinedAgent;
 			AgentEdition_ = true;
@@ -174,6 +182,24 @@ namespace frdinstc {
 		{
 			CurrentAgent_ = UndefinedAgent;
 			AgentEdition_ = false;
+		}
+		void CreateAgent(
+			const dString &Name,
+			const dString &HostPort,
+			const dString &Username,
+			const dString &Password )
+		{
+			CurrentAgent_ = Core_.CreateAgent( Name, HostPort, Username, Password );
+			AgentEdition_ = false;
+		}
+		void SelectAgent( sAgent Agent )
+		{
+			CurrentAgent_ = Agent;
+			AgentEdition_ = false;
+		}
+		void UpdateAgent( void )
+		{
+			AgentEdition_ = true;
 		}
 	};
 }

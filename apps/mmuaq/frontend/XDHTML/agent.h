@@ -23,10 +23,12 @@
 # include "base.h"
 
 namespace agent {
+	BASE_ACD( SubmitAgent );
 	BASE_ACD( DiscardAgent );
 
 	inline void Register( void )
 	{
+		BASE_ACR( SubmitAgent );
 		BASE_ACR( DiscardAgent );
 	};
 

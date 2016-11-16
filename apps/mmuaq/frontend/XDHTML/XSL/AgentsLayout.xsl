@@ -20,7 +20,7 @@
          <xsl:apply-templates select="Agents"/>
         </span>
          <span style="display: flex; flex-direction: column;">
-         <button title="#agentsEditTitle#" data-xdh-cast="EditAgentCast">#agentsEdit#</button>
+         <button title="#agentsEditTitle#" data-xdh-onevent="UpdateAgent" data-xdh-cast="EditAgentCast">#agentsEdit#</button>
          <button title="#agentsNewTitle#" data-xdh-onevent="NewAgent" data-xdh-cast="CreateAgentCast">#agentsNew#</button>
         </span>
         </span>
@@ -38,7 +38,21 @@
     <xsl:when test="@Amount=0">
     <option style="font-style: italic;">#agentsNoAgent#</option>
     </xsl:when>
+    <xsl:otherwise>
+     <xsl:apply-templates select="Agent"/>
+    </xsl:otherwise>
    </xsl:choose>
   </select>
+ </xsl:template>
+ <xsl:template match="Agent">
+  <option data-xdh-onevent="SelectAgent">
+   <xsl:attribute name="value">
+    <xsl:value-of select="@id"/>
+   </xsl:attribute>
+   <xsl:if test="../@Current=@id">
+    <xsl:attribute name="selected">selected</xsl:attribute>
+   </xsl:if>
+   <xsl:value-of select="."/>
+  </option>
  </xsl:template>
 </xsl:stylesheet>

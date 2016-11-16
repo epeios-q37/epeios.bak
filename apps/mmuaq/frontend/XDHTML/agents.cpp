@@ -78,7 +78,7 @@ namespace {
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
 
-		Session.User.DumpAgents( frdinstc::UndefinedAgent, Rack );
+		Session.User.DumpAgents( Rack );
 	qRR
 	qRT
 	qRE
@@ -112,7 +112,25 @@ qRE
 
 AC( NewAgent )
 {
-	Session.User.CreateAgent();
+	Session.User.NewAgent();
+
+	core::SetAgentsLayout( Session );
+}
+
+AC( SelectAgent )
+{
+	frdinstc::sAgent Agent = frdinstc::UndefinedAgent;
+
+	Session.GetNumericalContent( Id, **Agent );
+
+	Session.User.SelectAgent( Agent );
+
+	core::SetAgentsLayout( Session );
+}
+
+AC( UpdateAgent )
+{
+	Session.User.UpdateAgent();
 
 	core::SetAgentsLayout( Session );
 }

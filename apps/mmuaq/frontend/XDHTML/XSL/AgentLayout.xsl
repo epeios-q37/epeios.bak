@@ -8,34 +8,47 @@
  <xsl:template match="Content">
   <span class="vcenter-out">
    <span class="vcenter-in">
-    <fieldset title="#agentTitle#" style="display: flex; justify-content: space-around;" data-xdh-cast="InputCast">
+    <fieldset title="#agentTitle#" style="display: flex;" data-xdh-cast="EditCast">
      <legend>#agentLegend#</legend>
-      <fieldset style="display: flex; flex-direction: column;">
-       <span style="display: flex; justify-content: space-between;">
-        <label>#agentNameLabel#</label>
-        <input title="#agentNameTitle#" placeholder="#agentNamePlaceholder#" type="text"/>
-       </span>
-       <span style="display: flex; justify-content: space-between;">
-        <label>#agentHostPortLabel#</label>
-        <input title="#agentHostPortTitle#" placeholder="#agentHostPortPlaceholder#" type="text"/>
-       </span>
-       <span style="display: flex; justify-content: space-between;">
-        <label>#agentUsernameLabel#</label>
-        <input title="#agentUsernameTitle#" placeholder="#agentUsernamePlaceholder#" type="text"/>
-       </span>
-       <span>
-        <input title="#agentPasswordModificationTitle#" type="checkbox"/>
-        <label>#agentPasswordModificationLabel#</label>
-       </span>
-       <span style="display: flex; justify-content: space-between;">
-        <label>#agentPasswordLabel#</label>
-        <input title="#agentPasswordTitle#" placeholder="#agentPasswordPlaceholder#" type="password"/>
-       </span>
-      </fieldset>
-      <span style="display: flex; width: 100%; justify-content: space-around;">
-       <button title="#agentSubmitTitle#">#agentSubmit#</button>
-       <button title="#agentCancelTitle#" data-xdh-onevent="DiscardAgent">#agentCancel#</button>
+     <div style="display: flex; flex-direction: column;">
+      <span style="display: flex; justify-content: space-between;">
+       <label>#agentNameLabel#</label>
+       <input id="AgentName" title="#agentNameTitle#" placeholder="#agentNamePlaceholder#" type="text">
+        <xsl:attribute name="value">
+         <xsl:value-of select="Agent/@Name"/>
+        </xsl:attribute>
+       </input>
       </span>
+      <span style="display: flex; justify-content: space-between;">
+       <label>#agentHostPortLabel#</label>
+       <input id="AgentHostPort" title="#agentHostPortTitle#" placeholder="#agentHostPortPlaceholder#" type="text">
+        <xsl:attribute name="value">
+         <xsl:value-of select="Agent/@HostPort"/>
+        </xsl:attribute>
+       </input>
+      </span>
+      <span style="display: flex; justify-content: space-between;">
+       <label>#agentUsernameLabel#</label>
+       <input id="AgentUsername" title="#agentUsernameTitle#" placeholder="#agentUsernamePlaceholder#" type="text">
+        <xsl:attribute name="value">
+         <xsl:value-of select="Agent/@Username"/>
+        </xsl:attribute>
+       </input>
+      </span>
+      <span data-xdh-cast="PasswordEditionChoiceCast">
+       <input title="#agentPasswordModificationTitle#" type="checkbox"/>
+       <label>#agentPasswordModificationLabel#</label>
+      </span>
+      <span style="display: flex; justify-content: space-between;" data-xdh-cast="PasswordEditCast">
+       <label>#agentPasswordLabel#</label>
+       <input id="AgentPassword" title="#agentPasswordTitle#" placeholder="#agentPasswordPlaceholder#" type="password"/>
+      </span>
+     </div>
+     <br  data-xdh-cast="ActionCast"/>
+     <div style="display: flex; width: 100%; justify-content: space-around;">
+      <button title="#agentSubmitTitle#" data-xdh-onevent="SubmitAgent" data-xdh-cast="ActionCast">#agentSubmit#</button>
+      <button title="#agentCancelTitle#" data-xdh-onevent="DiscardAgent" data-xdh-cast="ActionCast">#agentCancel#</button>
+     </div>
     </fieldset>
    </span>
   </span>

@@ -9,13 +9,28 @@
  <xsl:template match="Context">
   <xsl:choose>
    <xsl:when test="@Status='Show'">
-    <xdh-cast id="InputCast" kind="Disable"/>
+    <xdh-cast id="EditCast" kind="Disable"/>
+    <xdh-cast id="ActionCast" kind="Hide"/>
+    <xdh-cast id="PasswordEditionChoiceCast" kind="Hide"/>
+    <xdh-cast id="PasswordEditCast" kind="Hide"/>
    </xsl:when>
-   <xsl:when test="@Status='Create' or @Status='Edit'">
-    <xdh-cast id="InputCast" kind="Plain"/>
+   <xsl:when test="@Status='Create'">
+    <xdh-cast id="EditCast" kind="Plain"/>
+    <xdh-cast id="ActionCast" kind="Plain"/>
+    <xdh-cast id="PasswordEditionChoiceCast" kind="Hide"/>
+    <xdh-cast id="PasswordEditCast" kind="Plain"/>
+   </xsl:when>
+   <xsl:when test="@Status='Edit'">
+    <xdh-cast id="EditCast" kind="Plain"/>
+    <xdh-cast id="ActionCast" kind="Plain"/>
+    <xdh-cast id="PasswordEditionChoiceCast" kind="Plain"/>
+    <xdh-cast id="PasswordEditCast" kind="Plain"/>
    </xsl:when>
    <xsl:otherwise>
-    <xdh-cast id="InputCast" kind="Disable"/>
+    <xdh-cast id="EditCast" kind="Disable"/>
+    <xdh-cast id="ActionCast" kind="Hide"/>
+    <xdh-cast id="PasswordEditionChoiceCast" kind="Hide"/>
+    <xdh-cast id="PasswordEditCast" kind="Hide"/>
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>

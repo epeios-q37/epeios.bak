@@ -70,6 +70,8 @@ namespace {
 		base::rContentRack Rack;
 	qRB
 		Rack.Init( XSLAffix_, XML, Session );
+
+		Session.User.DumpCurrentAgent( Rack );
 	qRR
 	qRT
 	qRE
@@ -98,6 +100,27 @@ qRE
 }
 
 #define AC( name ) BASE_AC( agent, name )
+
+
+AC( SubmitAgent )
+{
+qRH
+	str::wString Name, HostPort, Username, Password;
+qRB
+	tol::Init( Name, HostPort, Username, Password );
+
+	Session.GetContent("AgentName", Name );
+	Session.GetContent("AgentHostPort", HostPort );
+	Session.GetContent("AgentUsername", Username );
+	Session.GetContent("AgentPassword", Password );
+
+	Session.User.CreateAgent( Name, HostPort, Username, Password );
+
+	core::SetAgentsLayout( Session );
+qRR
+qRT
+qRE
+}
 
 AC( DiscardAgent )
 {

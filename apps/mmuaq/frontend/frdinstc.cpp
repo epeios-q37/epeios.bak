@@ -36,7 +36,7 @@ namespace {
 		sdr::sRow Row = Ids.First();
 
 		while ( Row != qNIL ) {
-			Writer.PushTag( "Agent ");
+			Writer.PushTag( "Agent");
 			Writer.PutAttribute( "id", *Ids( Row ) );
 			Writer.PutValue( Labels( Row ) );
 			Writer.PopTag();
@@ -46,25 +46,25 @@ namespace {
 	}
 }
 
-void frdinstc::rUser::DumpAgents(
-	sAgent Agent,
-	xml::dWriter &Writer )
+void frdinstc::rUser::DumpAgents( xml::dWriter &Writer )
 {
 qRH
 	wAgents Agents;
-	wStrings Labels;
+	wStrings Names;
 qRB
-	Core_.GetAgents( Agents, Labels );
+	tol::Init( Agents, Names );
 
-	if ( Agents.Amount() != Labels.Amount() )
+	Core_.GetAgents( Agents, Names );
+
+	if ( Agents.Amount() != Names.Amount() )
 		qRGnr();
 
 	Writer.PushTag( "Agents" );
 	Writer.PutAttribute( "Amount", Agents.Amount() );
 
-	Writer.PutAttribute( "Current", **Agent, **UndefinedAgent );
+	Writer.PutAttribute( "Current", **CurrentAgent_, **UndefinedAgent );
 
-	DumpAgents_( Agents, Labels, Writer );
+	DumpAgents_( Agents, Names, Writer );
 
 	Writer.PopTag();
 qRR
@@ -72,26 +72,24 @@ qRT
 qRE
 }
 
-void frdinstc::rUser::DumpAgent(
-	sAgent Agent,
-	xml::dWriter &Writer )
+void frdinstc::rUser::DumpCurrentAgent( xml::dWriter &Writer )
 {
 qRH
-	wString Label, HostPort, Username; 
+	wString Name, HostPort, Username; 
 qRB
-	if ( Agent == UndefinedAgent )
-		qRGnr();
+	if ( CurrentAgent_ != UndefinedAgent ) {
 
-	tol::Init( Label, HostPort, Username );
-	Core_.GetAgent( Agent, Label, HostPort, Username );
+		tol::Init( Name, HostPort, Username );
+		Core_.GetAgent( CurrentAgent_, Name, HostPort, Username );
 
-	Writer.PushTag( "Agent" );
+		Writer.PushTag( "Agent" );
 
-	Writer.PutAttribute( "Label", Label );
-	Writer.PutAttribute( "HostPort", HostPort );
-	Writer.PutAttribute( "Username", Username );
+		Writer.PutAttribute( "Name", Name );
+		Writer.PutAttribute( "HostPort", HostPort );
+		Writer.PutAttribute( "Username", Username );
 
-	Writer.PopTag();
+		Writer.PopTag();
+	}
 qRR
 qRT
 qRE

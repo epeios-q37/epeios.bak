@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : mmuaqbkd V20161103 Build Nov 13 2016 11:50:57 - Win32;MSC 1800;IA-32
+	API from : mmuaqbkd V20161103 Build Nov 16 2016 10:06:44 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20161027 (Build Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32)
 */
@@ -85,7 +85,7 @@ namespace mmuaq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUANewAgent_1";;
+			CommandDetail.Name = "MUACreateAgent_1";;
 			CommandDetail.Casts.Append( Parameters + 17, 6 );
 			CommandsDetails.Append( CommandDetail );
 
@@ -170,7 +170,7 @@ namespace mmuaq {
 
 			Frontend().Handle();
 		}
-		void MUANewAgent_1( 
+		void MUACreateAgent_1( 
 			const fblfrd::string_ &In1,
 			const fblfrd::string_ &In2,
 			const fblfrd::string_ &In3,

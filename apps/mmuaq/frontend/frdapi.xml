@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 14/11/2016 08:03:52
+    This document was generated the 16/11/2016 10:09:13
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -18,12 +18,12 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>mmuaqbkd V20161103 Build Nov 13 2016 11:50:57 - Win32;MSC 1800;IA-32</Details>
+   <Details>mmuaqbkd V20161103 Build Nov 16 2016 10:06:44 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>14/11/2016</Date>
-  <Time>08:03:52</Time>
+  <Date>16/11/2016</Date>
+  <Time>10:09:13</Time>
  </Misc>
  <Types>
   <Type Object="Master">
@@ -125,7 +125,7 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>MUANewAgent_1</Name>
+     <Name>MUACreateAgent_1</Name>
      <ID>24</ID>
      <Parameters Amount="6" Position="17">
       <In>
