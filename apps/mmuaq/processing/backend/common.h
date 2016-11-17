@@ -38,6 +38,8 @@ namespace common {
 		mAgentWithSuchNameExists,
 		mAgentNameCanNotBeEmpty,
 		mUnknownAgent,
+		mHostPortCanNotBeEmpty,
+		mUsernameCanNotBeEmpty,
 		m_amount,
 		m_Undefined
 	};
@@ -119,7 +121,7 @@ namespace common {
 // 'h' suffix : to put in error header  (between 'qRH' and 'qRB').
 // 'b' suffix : to put in error body  (just after and 'qRB').
 
-#define ACCOUNTh muaacc::lAcount AccountAccess;
+#define ACCOUNTh muaacc::lAccount AccountAccess;
 
 #define ACCOUNTb\
 	if ( !STUFF_.IsLogged() )\

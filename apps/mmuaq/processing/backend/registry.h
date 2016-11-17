@@ -23,8 +23,25 @@
 # include "sclrgstry.h"
 
 namespace registry {
-
 	using namespace sclrgstry;
+
+	namespace parameter {
+		using namespace sclrgstry::parameter;
+	}
+
+	namespace definition {
+		using namespace sclrgstry::definition;
+
+		namespace demo {
+			namespace agent {
+				extern rEntry
+					Id,	// Also used as agent name.
+					TaggedHostPort,
+					TaggedUsername,
+					TaggedPassword;
+			}
+		}
+	}
 }
 
 #endif

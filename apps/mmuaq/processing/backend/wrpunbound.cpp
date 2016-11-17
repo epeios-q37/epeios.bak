@@ -18,12 +18,17 @@
 */
 
 #include "wrpunbound.h"
+
 #include "registry.h"
-#include "dir.h"
-#include "fnm.h"
+
 #include "muainf.h"
+#include "muapo3.h"
 
 #include "sclmisc.h"
+
+#include "csdbnc.h"
+#include "dir.h"
+#include "fnm.h"
 
 using namespace wrpunbound;
 
@@ -157,23 +162,32 @@ namespace update_agent_ {
 		muaacc::sARow Row,
 		const str::dString &RawName,
 		const str::dString &RawHostPort,
-		const str::dString &Username,
+		const str::dString &RawUsername,
 		bso::sBool PasswordIsSet,
 		const str::dString &Password,
 		muaacc::dAgents &Agents )
 	{
 	qRH
-		str::wString Name, HostPort;
+		str::wString Name, HostPort, Username;
 	qRB
 		Name.Init( RawName );
 		HostPort.Init( RawHostPort );
+		Username.Init( RawUsername );
 
 		Name.StripCharacter( ' ' );
-
 		if ( Name.Amount() == 0 )
 			REPORT( AgentNameCanNotBeEmpty );
 
 		HostPort.StripCharacter( ' ' );
+		if ( HostPort.Amount() == 0 )
+			REPORT( HostPortCanNotBeEmpty );
+
+		Username.StripCharacter( ' ' );
+		if ( Username.Amount() == 0 )
+			REPORT( UsernameCanNotBeEmpty );
+
+		if ( HostPort.Search(':') == qNIL )
+			HostPort.Append( ":110" );
 
 		if ( Row == qNIL ) {
 			if ( !PasswordIsSet )
@@ -215,6 +229,36 @@ qRB
 	const str::dString &Password = Request.StringIn();
 
 	Request.IdOut() = *update_agent_::Update( Row, Name, HostPort, Username, PasswordIsSet, Password, Account.Agents );
+qRR 
+qRT
+qRE
+}
+
+namespace get_mails_ {
+	void GetMail(
+		const muaacc::dAgent &Agent,
+		str::wStrings &Mails )
+	{
+	qRH
+		csdbnc::rIODriver Driver;
+		qCBUFFERr Buffer;
+		muapo3::hBody Body;
+	qRB
+		Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, err::h_Default );
+
+		muapo3::Retrieve( 0, Driver, true, Body );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+DEC( GetMails, 1 )
+{
+qRH
+	ACCOUNTh;
+qRB
+	ACCOUNTb;
 qRR 
 qRT
 qRE

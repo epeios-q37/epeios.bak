@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-17 :
+- XDHDWS :
+	- Adding 'proxy__::GetBooleanContent(...)'.
+
 2016-11-15 :
 - LTF :
 	- Fixing cache size of 0 issue.

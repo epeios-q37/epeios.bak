@@ -110,8 +110,8 @@ void config::SetAgentCasting( core::rSession &Session )
 
 #define AC( name ) BASE_AC( config, name )
 
-AC( Template )
+AC( CloseConfig )
 {
-	Session.AlertT( "Template" );
+	main::SetLayout( Session );
 }
 

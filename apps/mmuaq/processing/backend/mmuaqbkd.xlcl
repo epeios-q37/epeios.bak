@@ -23,6 +23,14 @@
   <Translation language="fr">Agent inconnu.</Translation>
   <Translation language="en">Unknown agent.</Translation>
  </Translations>
+ <Translations text="HostPortCanNotBeEmpty">
+  <Translation language="fr">L'adresse et le port ne peuve être vide.</Translation>
+  <Translation language="en">Address/port can not be empty.</Translation>
+ </Translations>
+ <Translations text="UsernameCanNotBeEmpty">
+  <Translation language="fr">Le nom d'utilisateur ne peut être vide.</Translation>
+  <Translation language="en">User name cannot not be empty.</Translation>
+ </Translations>
  <!--
 <Translations text="">
 	<Translation language="fr"></Translation>

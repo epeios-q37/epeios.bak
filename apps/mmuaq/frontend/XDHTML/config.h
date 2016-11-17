@@ -23,11 +23,11 @@
 # include "base.h"
 
 namespace config {
-	BASE_ACD( Template );
+	BASE_ACD( CloseConfig );
 
 	inline void Register( void )
 	{
-		BASE_ACR( Template );
+		BASE_ACR( CloseConfig );
 	};
 
 	void SetLayout( core::rSession &Session );

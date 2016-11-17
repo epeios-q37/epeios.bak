@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xpp:bloc xmlns:xpp="http://q37.info/ns/xpp">
+	<Translations text="configClose">
+		<Translation language="fr">Fermer</Translation>
+		<Translation language="en">Close</Translation>
+	</Translations>
 <!--
-	<Translations text="frame">
+	<Translations text="config">
 		<Translation language="fr"></Translation>
 		<Translation language="en"></Translation>
 	</Translations>

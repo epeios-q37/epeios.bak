@@ -37,12 +37,12 @@ mods += tagsbs tol txf tys uys
 mods += utf xtf llio tht thtsub 
 mods += lck mtk bomhdl cdgb64 dlbrry 
 mods += fil fnm lcl plgn plgncore 
-mods += rgstry stsfsm xml xpp 
+mods += rgstry stsfsm xml xpp sck 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scldaemon sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
 mods += fblcmd fblcst fbltyp fblovl 
-mods += csdleo csdles csdrcc csdscb 
+mods += csdleo csdles csdrcc csdscb csdbnc 
 mods += muafbc muainf muaacc muabsc muaplg 
 mods += muapo3 muaxmp 
 mods += wrpexample wrpunbound 
@@ -361,7 +361,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161103"\"
+copt += -DVERSION=\""20161117"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""189de286-5b16-4d82-b398-595aaaa23053"\"
 

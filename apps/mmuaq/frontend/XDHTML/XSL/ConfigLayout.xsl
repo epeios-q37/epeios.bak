@@ -14,6 +14,7 @@
     <fieldset>
      <span id="Agents"/>
     </fieldset>
+    <button data-xdh-onevent="CloseConfig">#configClose#</button>
    </span>
   </span>
  </xsl:template>

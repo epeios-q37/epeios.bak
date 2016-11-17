@@ -9,16 +9,16 @@
   <Translation language="en">Agent</Translation>
  </Translations>
  <Translations text="agentNameLabel">
-  <Translation language="fr">Désignation : </Translation>
-  <Translation language="en">Designation: </Translation>
+  <Translation language="fr">Nom : </Translation>
+  <Translation language="en">Name: </Translation>
  </Translations>
  <Translations text="agentNameTitle">
   <Translation language="fr">Désignation de l'agent.</Translation>
   <Translation language="en">Designation of the agent.</Translation>
  </Translations>
  <Translations text="agentNamePlaceholder">
-  <Translation language="fr">Désignation</Translation>
-  <Translation language="en">Designation</Translation>
+  <Translation language="fr">Nom</Translation>
+  <Translation language="en">Name</Translation>
  </Translations>
  <Translations text="agentHostPortLabel">
   <Translation language="fr">Addresse et port : </Translation>
@@ -41,8 +41,8 @@
   <Translation language="en">User name to connect to agent.</Translation>
  </Translations>
  <Translations text="agentUsernamePlaceholder">
-  <Translation language="fr">Nom</Translation>
-  <Translation language="en">Name</Translation>
+  <Translation language="fr">Nom utilisateur</Translation>
+  <Translation language="en">User name</Translation>
  </Translations>
  <Translations text="agentPasswordLabel">
   <Translation language="fr">Mot de passe : </Translation>

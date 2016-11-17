@@ -302,7 +302,7 @@ namespace muapo3 {
 		hBody & Body );
 
 	eIndicator UIDL(
-		bso::sUInt Index,	// Si = à '04, retourne l'ensemble des messages.
+		bso::sUInt Index,	// Si = à '0', retourne l'ensemble des messages.
 		fdr::rIODriver &Server,
 		hBody & Body );
 

@@ -21,3 +21,17 @@
 
 using namespace registry;
 
+namespace  {
+	rEntry Demo_("Demo", Definitions );
+}
+
+namespace demo_ {
+	rEntry Agents( "Agents", Demo_ );
+	rEntry FreeAgent( "Agent", Agents );
+	rEntry TaggedAgent( RGSTRY_TAGGING_ATTRIBUTE("id"), FreeAgent );
+}
+
+rEntry registry::definition::demo::agent::Id( "@id", demo_::FreeAgent );
+rEntry registry::definition::demo::agent::TaggedHostPort( "HostPort", demo_::TaggedAgent );
+rEntry registry::definition::demo::agent::TaggedUsername( "Username", demo_::TaggedAgent );
+rEntry registry::definition::demo::agent::TaggedPassword( "Password", demo_::TaggedAgent );

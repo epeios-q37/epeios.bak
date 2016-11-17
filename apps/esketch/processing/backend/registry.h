@@ -23,8 +23,15 @@
 # include "sclrgstry.h"
 
 namespace registry {
-
 	using namespace sclrgstry;
+
+	namespace parameter {
+		using namespace sclrgstry::parameter;
+	}
+
+	namespace definition {
+		using namespace sclrgstry::definition;
+	}
 }
 
 #endif

@@ -57,5 +57,8 @@
   </Definitions>
 		<Locale>
 		</Locale>
+  <xpp:ifeq select="packing" value="no">
+   <xpp:expand href="Demo.pxcfg"/>
+  </xpp:ifeq>
 	</Configuration>
 </Configurations>

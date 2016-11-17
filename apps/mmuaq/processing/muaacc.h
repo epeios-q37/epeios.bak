@@ -308,30 +308,43 @@ namespace muaacc {
 	class rAccountTutor
 	: public rAccountTutor_
 	{
-	private:
-		wAccount Account_;
 	public:
+		wAccount Core;
 		void reset( bso::sBool P = true )
 		{
 			rAccountTutor_::reset( P );
-			tol::reset( P, Account_ );
+			tol::reset( P, Core );
 		}
 		qCDTOR( rAccountTutor );
 		void Init( void )
 		{
-			Account_.Init();
-			rAccountTutor_::Init( Account_ );
+			Core.Init();
+			rAccountTutor_::Init( Core );
 		}
 	};
 
 
-	typedef lck::rReadWriteAccess<dAccount> lAcount;
+	typedef lck::rReadWriteAccess<dAccount> lAccount;
+
+	class cAccount
+	{
+	protected:
+		virtual void MUAACCOnCreate( dAccount &Account ) = 0;
+	public:
+		qCALLBACK( Account );
+		void OnCreate( dAccount &Account )
+		{
+			return MUAACCOnCreate( Account );
+		}
+	};
+
 
 	class lAccounts
 	{
 	private:
 		tht::rLocker Locker_;
 		lstbch::qLBUNCHw( rAccountTutor *, sRow ) Accounts_;
+		qRMV( cAccount, C_, Callback_ );
 		void Free_( void )
 		{
 			sRow Row = Accounts_.First();
@@ -356,6 +369,8 @@ namespace muaacc {
 
 			Row = Accounts_.New( Row );
 
+			C_().OnCreate( Account->Core );
+
 			Accounts_.Store( Account, Row );
 		qRR
 			if ( Account != NULL )
@@ -371,13 +386,14 @@ namespace muaacc {
 				Free_();
 			}
 
-			tol::reset( P, Locker_, Accounts_ );
+			tol::reset( P, Locker_, Accounts_, Callback_ );
 		}
-		void Init( void )
+		void Init( cAccount &Callback )
 		{
 			Free_();
 
 			tol::Init( Locker_, Accounts_ );
+			Callback_ = &Callback;
 		}
 		sRow New( void )
 		{
@@ -428,9 +444,9 @@ namespace muaacc {
 			lAccounts::reset( P );
 		}
 		qCDTOR( rRack );
-		void Init( void )
+		void Init( cAccount &Callback )
 		{
-			lAccounts::Init();
+			lAccounts::Init( Callback );
 		}
 	};
 

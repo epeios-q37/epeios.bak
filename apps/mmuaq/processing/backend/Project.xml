@@ -21,6 +21,7 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+    <Module>sck</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
@@ -29,8 +30,9 @@
 				<xpp:expand select="FBLB"/>
 			</Modules>
 			<Modules Group="CSD">
-				<xpp:expand select="CSDB"/>
-			</Modules>
+    <xpp:expand select="CSDB"/>
+    <Module>csdbnc</Module>
+   </Modules>
 		</Modules>
 		<Modules Group="MUA" Path="../">
 			<Module Path="../">muafbc</Module>
