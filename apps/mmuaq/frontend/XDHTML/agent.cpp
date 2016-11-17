@@ -37,6 +37,8 @@ namespace {
 		Rack.Init( XSLAffix_, XML, Session );
 
 		Session.User.PutAgentStatusAttribute( "Status", Rack );
+
+		Rack().PutAttribute("Password", Session.User.GetShowAgentPassword() ? "Visible" : "Hidden" );
 	qRR
 	qRT
 	qRE
@@ -99,6 +101,13 @@ qRT
 qRE
 }
 
+void agent::SetCasting(
+	const char *Id,
+	core::rSession &Session )
+{
+	SetCasting_( Id, Session );
+}
+
 #define AC( name ) BASE_AC( agent, name )
 
 
@@ -114,7 +123,7 @@ qRB
 	Session.GetContent("AgentUsername", Username );
 	Session.GetContent("AgentPassword", Password );
 
-	Session.User.CreateAgent( Name, HostPort, Username, Password );
+	Session.User.UpdateAgent( Name, HostPort, Username, Session.GetBooleanContent( "AgentPasswordToggle" ), Password );
 
 	core::SetAgentsLayout( Session );
 qRR
@@ -127,5 +136,12 @@ AC( DiscardAgent )
 	Session.User.DiscardAgent();
 
 	core::SetAgentsLayout( Session );
+}
+
+AC( ToggleAgentPassword )
+{
+	Session.User.SetShowAgentPassword( Session.GetBooleanContent( "AgentPasswordToggle" ) );
+
+	core::SetAgentCasting( Session );
 }
 

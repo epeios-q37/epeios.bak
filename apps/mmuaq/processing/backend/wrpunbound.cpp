@@ -47,7 +47,7 @@ qRE
 DEC( Login, 1 )
 {
 qRH
-	fbltyp::strings Labels;
+	fbltyp::strings Names;
 	fbltyp::id8s Ids;
 	muaacc::sRow Account = qNIL;
 	bso::sBool New = false;
@@ -73,13 +73,13 @@ namespace get_agents_ {
 	void Get(
 		const muaacc::dAgents &Agents,
 		fbltyp::dIds &Ids,
-		fbltyp::dStrings &Labels )
+		fbltyp::dStrings &Names )
 	{
 		muaacc::sARow Row = Agents.First();
 
 		while ( Row != qNIL ) {
 			Ids.Append( *Row );
-			Labels.Append( Agents.Labels( Row ) );
+			Names.Append( Agents.Names( Row ) );
 
 			Row = Agents.Next( Row );
 		}
@@ -94,9 +94,9 @@ qRB
 	ACCOUNTb;
 
 	fbltyp::dIds &Ids = Request.IdsOut();
-	fbltyp::dStrings &Labels = Request.StringsOut();
+	fbltyp::dStrings &Names = Request.StringsOut();
 
-	get_agents_::Get( Account.Agents, Ids, Labels );
+	get_agents_::Get( Account.Agents, Ids, Names );
 qRR 
 qRT
 qRE
@@ -106,14 +106,14 @@ namespace get_agent_ {
 	void Get(
 		muaacc::sARow Row,
 		const muaacc::dAgents &Agents,
-		str::dString &Label,
+		str::dString &Name,
 		str::dString &HostPort,
 		str::dString &Username )
 	{
 		if ( !Agents.Exists( Row ) )
 			REPORT( UnknownAgent );
 
-		Agents.Labels.Recall( Row, Label );
+		Agents.Names.Recall( Row, Name );
 
 		const muaacc::dAgent &Agent = Agents.Agents( Row );
 
@@ -132,42 +132,63 @@ qRB
 	const fbltyp::sId &Id = Request.IdIn();
 
 	str::dString
-		&Label = Request.StringOut(),
+		&Name = Request.StringOut(),
 		&HostPort = Request.StringOut(),
 		&Username = Request.StringOut();
 
-	get_agent_::Get( *Id, Account.Agents, Label, HostPort, Username );
+	get_agent_::Get( *Id, Account.Agents, Name, HostPort, Username );
 qRR 
 qRT
 qRE
 }
 
-namespace create_agent_ {
-	muaacc::sARow Create(
-		const str::dString &RawLabel,
+namespace update_agent_ {
+	inline bso::sBool CheckName_(
+		const str::dString &Name,
+		const muaacc::dAgents &Agents,
+		muaacc::sARow Candidate )
+	{
+		muaacc::sARow Target = Agents.Search( Name );
+
+		return ( Target == qNIL ) || ( Target == Candidate );
+	}
+
+	muaacc::sARow Update(
+		muaacc::sARow Row,
+		const str::dString &RawName,
 		const str::dString &RawHostPort,
 		const str::dString &Username,
+		bso::sBool PasswordIsSet,
 		const str::dString &Password,
 		muaacc::dAgents &Agents )
 	{
-		muaacc::sARow Row = qNIL;
 	qRH
-		str::wString Label, HostPort;
+		str::wString Name, HostPort;
 	qRB
-		Label.Init( RawLabel );
+		Name.Init( RawName );
 		HostPort.Init( RawHostPort );
 
-		Label.StripCharacter( ' ' );
+		Name.StripCharacter( ' ' );
 
-		if ( Label.Amount() == 0 )
+		if ( Name.Amount() == 0 )
 			REPORT( AgentNameCanNotBeEmpty );
 
 		HostPort.StripCharacter( ' ' );
 
-		if ( Agents.Search( Label ) != qNIL )
-			REPORT( AgentWithSuchNameExists, Label );
+		if ( Row == qNIL ) {
+			if ( !PasswordIsSet )
+				qRGnr();
 
-		Row = Agents.New( Label, HostPort, Username, Password );
+			if ( !CheckName_( Name, Agents, qNIL ) )
+				REPORT( AgentWithSuchNameExists, Name );
+
+			Row = Agents.New( Name, HostPort, Username, Password );
+		} else if ( !CheckName_( Name, Agents, Row ) )
+				REPORT( AgentWithSuchNameExists, Name );
+		else if ( PasswordIsSet )
+			Agents.Update( Row, Name, HostPort, Username );
+		else
+			Agents.Update( Row, Name, HostPort, Username, Password );
 	qRR
 	qRT
 	qRE
@@ -175,20 +196,25 @@ namespace create_agent_ {
 	}
 }
 
-DEC( CreateAgent, 1 )
+DEC( UpdateAgent, 1 )
 {
 qRH
 	ACCOUNTh;
 qRB
 	ACCOUNTb;
 
-	const str::dString
-		&Label = Request.StringIn(),
-		&HostPort = Request.StringIn(),
-		&Username = Request.StringIn(),
-		&Password = Request.StringIn();
+	muaacc::sARow Row = *Request.IdIn();
 
-	Request.IdOut() = *create_agent_::Create( Label, HostPort, Username, Password, Account.Agents );
+	const str::dString
+		&Name = Request.StringIn(),
+		&HostPort = Request.StringIn(),
+		&Username = Request.StringIn();
+
+	bso::sBool PasswordIsSet = Request.BooleanIn();
+
+	const str::dString &Password = Request.StringIn();
+
+	Request.IdOut() = *update_agent_::Update( Row, Name, HostPort, Username, PasswordIsSet, Password, Account.Agents );
 qRR 
 qRT
 qRE
@@ -212,21 +238,23 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 	Backend.Add( D( GetAgents, 1 ),
 		fblbkd::cEnd,
 			fblbkd::cIds,		// Ids.
-			fblbkd::cStrings,	// Labels.
+			fblbkd::cStrings,	// Names.
 		fblbkd::cEnd );
 
 	Backend.Add( D( GetAgent, 1 ),
 			fblbkd::cId,		// Id.
 		fblbkd::cEnd,
-			fblbkd::cString,	// Label.
+			fblbkd::cString,	// Name.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.
 		fblbkd::cEnd );
 
-	Backend.Add(D( CreateAgent, 1 ),
-			fblbkd::cString,	// Label.
+	Backend.Add(D( UpdateAgent, 1 ),
+			fblbkd::cId,		// If of the agent. New one is created if undefined.
+			fblbkd::cString,	// Name.
 			fblbkd::cString,	// HostPort.
 			fblbkd::cString,	// Username.
+			fblbkd::cBoolean,	// 'true' if following password is set.
 			fblbkd::cString,	// Password.
 		fblbkd::cEnd,
 			fblbkd::cId,		// Id.

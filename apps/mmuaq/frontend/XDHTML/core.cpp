@@ -153,6 +153,18 @@ void core::SetAgentsLayout( rSession &Session )
 	}
 }
 
+void core::SetAgentCasting( rSession &Session )
+{
+	switch ( Session.Page() ) {
+	case pConfig:
+		config::SetAgentCasting( Session );
+		break;
+	default:
+		qRGnr();
+		break;
+	}
+}
+
 qGCTOR( core )
 {
 	OnNotConnectedAllowedActions.Init();

@@ -25,14 +25,20 @@
 namespace agent {
 	BASE_ACD( SubmitAgent );
 	BASE_ACD( DiscardAgent );
+	BASE_ACD( ToggleAgentPassword );
 
 	inline void Register( void )
 	{
 		BASE_ACR( SubmitAgent );
 		BASE_ACR( DiscardAgent );
+		BASE_ACR( ToggleAgentPassword );
 	};
 
 	void SetLayout(
+		const char *Id,
+		core::rSession &Session );
+
+	void SetCasting(
 		const char *Id,
 		core::rSession &Session );
 }

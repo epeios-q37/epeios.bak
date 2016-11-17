@@ -157,13 +157,30 @@ namespace muaacc {
 
 		typedef lstcrt::qLCRATEd( dAgent, sARow ) dAgents;
 
-		typedef str::dString dLabel;
-		typedef lstcrt::qLMCRATEd( dLabel, sARow ) dLabels;
+		typedef str::dString dName;
+		typedef lstcrt::qLMCRATEd( dName, sARow ) dNames;
 	}
 
 
 	class dAgents {
 	private:
+		void Set_(
+			dAgent &Agent,
+			const str::dString &HostPort,
+			const str::dString &Username )
+		{
+			Agent.HostPort = HostPort;
+			Agent.Username = Username;
+		}
+		void Set_(
+			dAgent &Agent,
+			const str::dString &HostPort,
+			const str::dString &Username,
+			const str::dString &Password )
+		{
+			Set_( Agent, HostPort, Username );
+			Agent.Password = Password;
+		}
 		void Init_(
 			dAgent &Agent,
 			const str::dString &HostPort,
@@ -172,59 +189,84 @@ namespace muaacc {
 		{
 			Agent.Init();
 
-			Agent.HostPort = HostPort;
-			Agent.Username = Username;
-			Agent.Password = Password;
+			Set_( Agent, HostPort, Username, Password );
 		}
 	public:
 		struct s {
 			agent_::dAgents::s Agents;
-			agent_::dLabels::s Labels;
+			agent_::dNames::s Names;
 		};
 		agent_::dAgents Agents;
-		agent_::dLabels Labels;
+		agent_::dNames Names;
 		dAgents( s &S )
 		: Agents( S.Agents ),
-		  Labels( S.Labels )
+		  Names( S.Names )
 		{}
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Agents, Labels );
+			tol::reset( P, Agents, Names );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Agents, Labels );
+			tol::plug( AS, Agents, Names );
 		}
 		dAgents &operator =(const dAgents &A)
 		{
 			Agents = A.Agents;
-			Labels = A.Labels;
+			Names = A.Names;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Agents, Labels );
+			tol::Init( Agents, Names );
 		}
-		qNAV( Labels., sARow );
+		qNAV( Names., sARow );
 		sARow New(
-			const str::dString &Label,
+			const str::dString &Name,
 			const str::dString &HostPort,
 			const str::dString &Username,
 			const str::dString &Password )
 		{
-			sARow Row = Labels.New();
+			sARow Row = Names.New();
 
 			if ( Row != Agents.New() )
 				qRGnr();
 
-			Labels( Row ).Init( Label );
+			Names( Row ).Init( Name );
 
 			Init_( Agents( Row ), HostPort, Username, Password );
 
 			return Row;
 		}
-		sARow Search( const str::dString &Label ) const;
+		void Update(
+			sARow Row,
+			const str::dString &Name,
+			const str::dString &HostPort,
+			const str::dString &Username,
+			const str::dString &Password )
+		{
+			if ( !Exists( Row ) )
+				qRGnr();
+
+			Names( Row ) = Name;
+			Set_( Agents( Row ), HostPort, Username, Password );
+
+		}
+		void Update(
+			sARow Row,
+			const str::dString &Name,
+			const str::dString &HostPort,
+			const str::dString &Username )
+		{
+			if ( !Exists( Row ) )
+				qRGnr();
+
+			Names( Row ) = Name ;
+			Set_( Agents( Row ), HostPort, Username );
+
+		}
+		sARow Search( const str::dString &Name ) const;
 	};
 
 	class dAccount

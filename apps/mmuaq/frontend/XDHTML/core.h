@@ -119,6 +119,8 @@ namespace core {
 		xml::writer_ &Writer );
 
 	void SetAgentsLayout( rSession &Session );
+
+	void SetAgentCasting( rSession &Session );
 }
 
 #endif

@@ -20,8 +20,8 @@
          <xsl:apply-templates select="Agents"/>
         </span>
          <span style="display: flex; flex-direction: column;">
-         <button title="#agentsEditTitle#" data-xdh-onevent="UpdateAgent" data-xdh-cast="EditAgentCast">#agentsEdit#</button>
-         <button title="#agentsNewTitle#" data-xdh-onevent="NewAgent" data-xdh-cast="CreateAgentCast">#agentsNew#</button>
+         <button title="#agentsEditTitle#" data-xdh-onevent="EditAgent" data-xdh-cast="EditAgentCast">#agentsEdit#</button>
+         <button title="#agentsNewTitle#" data-xdh-onevent="DefineAgent" data-xdh-cast="CreateAgentCast">#agentsNew#</button>
         </span>
         </span>
        </fieldset>

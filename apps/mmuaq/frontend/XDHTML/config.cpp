@@ -103,6 +103,10 @@ void config::SetAgentsLayout( core::rSession &Session )
 	agents::SetLayout( AgentsFrameId_, Session );
 }
 
+void config::SetAgentCasting( core::rSession &Session )
+{
+	agents::SetAgentCasting( Session );
+}
 
 #define AC( name ) BASE_AC( config, name )
 

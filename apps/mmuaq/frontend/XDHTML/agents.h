@@ -23,20 +23,23 @@
 # include "base.h"
 
 namespace agents {
-	BASE_ACD( NewAgent );
+	BASE_ACD( DefineAgent );
 	BASE_ACD( SelectAgent );
-	BASE_ACD( UpdateAgent );
+	BASE_ACD( EditAgent );
 
 	inline void Register( void )
 	{
-		BASE_ACR( NewAgent );
+		BASE_ACR( DefineAgent );
 		BASE_ACR( SelectAgent );
-		BASE_ACR( UpdateAgent );
+		BASE_ACR( EditAgent );
 	};
 
 	void SetLayout(
 		const char *Id,
 		core::rSession &Session );
+
+	void SetAgentCasting( core::rSession &Session );
+
 }
 
 #endif

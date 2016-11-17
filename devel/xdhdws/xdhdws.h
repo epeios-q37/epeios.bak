@@ -302,6 +302,24 @@ namespace xdhdws {
 		qRE
 			return !IsEmpty;
 		}
+		bso::sBool GetBooleanContent( const nstring___ &Id )
+		{
+			bso::sBool Value = false;
+		qRH
+			str::wString RawValue;
+		qRB
+			RawValue.Init();
+
+			GetContent( Id, RawValue );
+
+			if ( RawValue.Amount() != 0 ) {
+				Value = RawValue == "true";
+			}
+		qRR
+		qRT
+		qRE
+			return Value;
+		}
 		void SetContent(
 			const nstring___ &Id,
 			const nstring___ &Value )

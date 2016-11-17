@@ -120,9 +120,22 @@ namespace frdinstc {
 		{
 			sAgent Agent = UndefinedAgent;
 
-			S_().MUACreateAgent_1( Name, HostPort, Username, Password, *Agent );
+			S_().MUAUpdateAgent_1( *Agent, Name, HostPort, Username, true, Password, *Agent );
 
 			return Agent;
+		}
+		void UpdateAgent(
+			sAgent Agent,
+			const dString &Name,
+			const dString &HostPort,
+			const dString &Username,
+			bso::sBool PasswordIsSet,
+			const dString &Password )
+		{
+			if ( Agent == UndefinedAgent )
+				qRGnr();
+
+			S_().MUAUpdateAgent_1( *Agent, Name, HostPort, Username, PasswordIsSet, Password, *Agent );
 		}
 	};
 
@@ -132,12 +145,12 @@ namespace frdinstc {
 		rUser_ Core_;
 		sAgent CurrentAgent_;
 		bso::sBool AgentEdition_;
+		bso::sBool ShowAgentPassword_;
 	public:
 		void reset( bso::bool__ P = true )
 		{	
-			Core_.reset( P );
+			tol::reset( P, Core_, AgentEdition_, ShowAgentPassword_ );
 			CurrentAgent_ = UndefinedAgent;
-			AgentEdition_ = false;
 		}
 		E_CVDTOR( rUser );
 		void Init( frdfrntnd::rFrontend &Frontend )
@@ -146,7 +159,7 @@ namespace frdinstc {
 				Core_.Init( Frontend );
 
 			CurrentAgent_ = UndefinedAgent;
-			AgentEdition_ = false;
+			AgentEdition_ = ShowAgentPassword_ = false;
 		}
 		str::string_ &ToUpper( str::string_ &String )
 		{
@@ -173,7 +186,7 @@ namespace frdinstc {
 		void PutAgentStatusAttribute(
 			const char *Name,
 			xml::dWriter &Writer );
-		void NewAgent( void )
+		void DefineAgent( void )
 		{
 			CurrentAgent_ = UndefinedAgent;
 			AgentEdition_ = true;
@@ -183,13 +196,18 @@ namespace frdinstc {
 			CurrentAgent_ = UndefinedAgent;
 			AgentEdition_ = false;
 		}
-		void CreateAgent(
+		void UpdateAgent(
 			const dString &Name,
 			const dString &HostPort,
 			const dString &Username,
+			bso::sBool PasswordIsSet,
 			const dString &Password )
 		{
-			CurrentAgent_ = Core_.CreateAgent( Name, HostPort, Username, Password );
+			if ( CurrentAgent_ != UndefinedAgent )
+				Core_.UpdateAgent( CurrentAgent_, Name, HostPort, Username, PasswordIsSet, Password );
+			else 
+				CurrentAgent_ = Core_.CreateAgent( Name, HostPort, Username, Password );
+
 			AgentEdition_ = false;
 		}
 		void SelectAgent( sAgent Agent )
@@ -197,10 +215,11 @@ namespace frdinstc {
 			CurrentAgent_ = Agent;
 			AgentEdition_ = false;
 		}
-		void UpdateAgent( void )
+		void EditAgent( void )
 		{
 			AgentEdition_ = true;
 		}
+		qRWDISCLOSEr( bso::sBool, ShowAgentPassword );
 	};
 }
 

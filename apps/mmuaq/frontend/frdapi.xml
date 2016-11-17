@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 16/11/2016 10:09:13
+    This document was generated the 17/11/2016 07:03:26
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -22,8 +22,8 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>16/11/2016</Date>
-  <Time>10:09:13</Time>
+  <Date>17/11/2016</Date>
+  <Time>07:03:26</Time>
  </Misc>
  <Types>
   <Type Object="Master">
@@ -125,13 +125,13 @@
      </Parameters>
     </Command>
     <Command>
-     <Name>MUACreateAgent_1</Name>
+     <Name>MUAUpdateAgent_1</Name>
      <ID>24</ID>
-     <Parameters Amount="6" Position="17">
+     <Parameters Amount="8" Position="17">
       <In>
-       <Parameter Discriminator="1" Type="Bunch">
-        <Name>string</Name>
-        <ID>25</ID>
+       <Parameter Discriminator="1" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
        </Parameter>
        <Parameter Discriminator="2" Type="Bunch">
         <Name>string</Name>
@@ -142,6 +142,14 @@
         <ID>25</ID>
        </Parameter>
        <Parameter Discriminator="4" Type="Bunch">
+        <Name>string</Name>
+        <ID>25</ID>
+       </Parameter>
+       <Parameter Discriminator="5" Type="Static">
+        <Name>boolean</Name>
+        <ID>2</ID>
+       </Parameter>
+       <Parameter Discriminator="6" Type="Bunch">
         <Name>string</Name>
         <ID>25</ID>
        </Parameter>

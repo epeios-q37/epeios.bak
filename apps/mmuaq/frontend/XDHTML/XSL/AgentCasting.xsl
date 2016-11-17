@@ -24,7 +24,18 @@
     <xdh-cast id="EditCast" kind="Plain"/>
     <xdh-cast id="ActionCast" kind="Plain"/>
     <xdh-cast id="PasswordEditionChoiceCast" kind="Plain"/>
-    <xdh-cast id="PasswordEditCast" kind="Plain"/>
+    <xdh-cast id="PasswordEditCast">
+     <xsl:attribute name="kind">
+      <xsl:choose>
+       <xsl:when test="@Password='Visible'">
+        <xsl:text>Plain</xsl:text>
+       </xsl:when>
+       <xsl:otherwise>
+        <xsl:text>Hidden</xsl:text>
+       </xsl:otherwise>
+      </xsl:choose>
+     </xsl:attribute>
+    </xdh-cast>
    </xsl:when>
    <xsl:otherwise>
     <xdh-cast id="EditCast" kind="Disable"/>

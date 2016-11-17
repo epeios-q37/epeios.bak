@@ -21,11 +21,11 @@
 
 using namespace muaacc;
 
-sARow muaacc::dAgents::Search( const str::dString &Label ) const
+sARow muaacc::dAgents::Search( const str::dString &Name ) const
 {
 	sARow Row = First();
 
-	while ( ( Row != qNIL ) && ( Labels( Row ) != Label ) )
+	while ( ( Row != qNIL ) && ( Names( Row ) != Name ) )
 		Row = Next( Row );
 
 	return Row;

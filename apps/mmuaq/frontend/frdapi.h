@@ -46,7 +46,7 @@ namespace mmuaq {
 				25, 25, 0, 2, 
 				0, 22, 26, 
 				21, 0, 25, 25, 25, 
-				25, 25, 25, 25, 0, 21, 
+				21, 25, 25, 25, 2, 25, 0, 21, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -85,8 +85,8 @@ namespace mmuaq {
 			CommandsDetails.Append( CommandDetail );
 
 			CommandDetail.Init();
-			CommandDetail.Name = "MUACreateAgent_1";;
-			CommandDetail.Casts.Append( Parameters + 17, 6 );
+			CommandDetail.Name = "MUAUpdateAgent_1";;
+			CommandDetail.Casts.Append( Parameters + 17, 8 );
 			CommandsDetails.Append( CommandDetail );
 
 
@@ -170,18 +170,22 @@ namespace mmuaq {
 
 			Frontend().Handle();
 		}
-		void MUACreateAgent_1( 
-			const fblfrd::string_ &In1,
+		void MUAUpdateAgent_1( 
+			const fblfrd::id__ &In1,
 			const fblfrd::string_ &In2,
 			const fblfrd::string_ &In3,
 			const fblfrd::string_ &In4,
+			const fblfrd::boolean__ &In5,
+			const fblfrd::string_ &In6,
 			fblfrd::id__ &Out1 ) const
 		{
 			Frontend().PushHeader( _ID, Commands()[6] );
-			Frontend().StringIn( In1 );
+			Frontend().IdIn( In1 );
 			Frontend().StringIn( In2 );
 			Frontend().StringIn( In3 );
 			Frontend().StringIn( In4 );
+			Frontend().BooleanIn( In5 );
+			Frontend().StringIn( In6 );
 
 			Frontend().EndOfInParameters();
 

@@ -108,11 +108,17 @@ qRT
 qRE
 }
 
+
+void agents::SetAgentCasting( core::rSession &Session )
+{
+	agent::SetCasting( AgentFrameId_, Session );
+}
+
 #define AC( name ) BASE_AC( agents, name )
 
-AC( NewAgent )
+AC( DefineAgent )
 {
-	Session.User.NewAgent();
+	Session.User.DefineAgent();
 
 	core::SetAgentsLayout( Session );
 }
@@ -128,9 +134,9 @@ AC( SelectAgent )
 	core::SetAgentsLayout( Session );
 }
 
-AC( UpdateAgent )
+AC( EditAgent )
 {
-	Session.User.UpdateAgent();
+	Session.User.EditAgent();
 
 	core::SetAgentsLayout( Session );
 }

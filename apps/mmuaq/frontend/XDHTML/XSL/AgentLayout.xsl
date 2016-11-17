@@ -36,7 +36,7 @@
        </input>
       </span>
       <span data-xdh-cast="PasswordEditionChoiceCast">
-       <input title="#agentPasswordModificationTitle#" type="checkbox"/>
+       <input id="AgentPasswordToggle" data-xdh-onevent="ToggleAgentPassword" title="#agentPasswordModificationTitle#" type="checkbox"/>
        <label>#agentPasswordModificationLabel#</label>
       </span>
       <span style="display: flex; justify-content: space-between;" data-xdh-cast="PasswordEditCast">
