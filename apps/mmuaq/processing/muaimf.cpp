@@ -216,7 +216,7 @@ qRB
 
 	Search( Field, Rows );
 
-	if ( Rows.Amount() > 1 )
+	if ( Rows.Amount() != 0 )
 		Row = Rows( Rows.First() );
 qRR
 qRT

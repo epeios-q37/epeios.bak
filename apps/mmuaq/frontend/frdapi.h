@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : mmuaqbkd V20161103 Build Nov 16 2016 10:06:44 - Win32;MSC 1800;IA-32
+	API from : mmuaqbkd V20161118 Build Nov 18 2016 11:59:53 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20161027 (Build Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32)
 */
@@ -25,7 +25,7 @@ namespace mmuaq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[7];
+		fblfrd::command__ _Commands[9];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -47,6 +47,8 @@ namespace mmuaq {
 				0, 22, 26, 
 				21, 0, 25, 25, 25, 
 				21, 25, 25, 25, 2, 25, 0, 21, 
+				0, 13, 
+				0, 22, 26, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -89,10 +91,20 @@ namespace mmuaq {
 			CommandDetail.Casts.Append( Parameters + 17, 8 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetFields_1";;
+			CommandDetail.Casts.Append( Parameters + 25, 2 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetMailsFields_1";;
+			CommandDetail.Casts.Append( Parameters + 27, 3 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 7, _Commands );
+			Commands.Recall( 0, 9, _Commands );
 		}
 		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
@@ -190,6 +202,30 @@ namespace mmuaq {
 			Frontend().EndOfInParameters();
 
 			Frontend().IdOut( Out1 );
+
+			Frontend().Handle();
+		}
+		void MUAGetFields_1( 
+			fblfrd::id8s_ &Out1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[7] );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().Id8sOut( Out1 );
+
+			Frontend().Handle();
+		}
+		void MUAGetMailsFields_1( 
+			fblfrd::ids_ &Out1,
+			fblfrd::strings_ &Out2 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[8] );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdsOut( Out1 );
+			Frontend().StringsOut( Out2 );
 
 			Frontend().Handle();
 		}

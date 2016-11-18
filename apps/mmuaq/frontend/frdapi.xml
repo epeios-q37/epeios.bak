@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 17/11/2016 07:03:26
+    This document was generated the 18/11/2016 12:04:48
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -18,19 +18,19 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>mmuaqbkd V20161103 Build Nov 16 2016 10:06:44 - Win32;MSC 1800;IA-32</Details>
+   <Details>mmuaqbkd V20161118 Build Nov 18 2016 11:59:53 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>17/11/2016</Date>
-  <Time>07:03:26</Time>
+  <Date>18/11/2016</Date>
+  <Time>12:04:48</Time>
  </Misc>
  <Types>
   <Type Object="Master">
    <ID>65535</ID>
    <Prefix Default="" Lower="" Upper=""/>
    <Name Raw="" Underscored="" Mixedcased=""/>
-   <Commands Amount="7">
+   <Commands Amount="9">
     <Command>
      <Name>LoadSetupOfId_1</Name>
      <ID>18</ID>
@@ -158,6 +158,34 @@
        <Parameter Discriminator="1" Position="Last" Type="Static">
         <Name>id</Name>
         <ID>21</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetFields_1</Name>
+     <ID>25</ID>
+     <Parameters Amount="2" Position="25">
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Bunch">
+        <Name>id8s</Name>
+        <ID>13</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetMailsFields_1</Name>
+     <ID>26</ID>
+     <Parameters Amount="3" Position="27">
+      <Out>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+       <Parameter Discriminator="2" Position="Last" Type="Container">
+        <Name>strings</Name>
+        <ID>26</ID>
        </Parameter>
       </Out>
      </Parameters>

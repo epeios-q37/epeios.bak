@@ -447,9 +447,8 @@ namespace txf {
 /***************/
 
 namespace txf {
-# if 1 // Deprecated.
+	// As parameter.
 	typedef text_oflow__ sOFlow;
-# endif
 
 	class rOFlow
 	: public text_oflow__

@@ -34,9 +34,10 @@
 namespace muaimf {
 
 	qENUM( Field ) {
-		fTo,
-		fFrom,
 		fSubject,
+		f_FirstOptional,
+		fTo = f_FirstOptional,
+		fFrom,
 		fMessageId,
 		fDate,
 		f_amount,

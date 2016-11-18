@@ -21,6 +21,7 @@
 
 #include "registry.h"
 
+#include "muaimf.h"
 #include "muainf.h"
 #include "muapo3.h"
 
@@ -120,7 +121,7 @@ namespace get_agent_ {
 
 		Agents.Names.Recall( Row, Name );
 
-		const muaacc::dAgent &Agent = Agents.Agents( Row );
+		const muaacc::dAgent &Agent = Agents.Core( Row );
 
 		HostPort = Agent.HostPort;
 		Username = Agent.Username;
@@ -234,35 +235,173 @@ qRT
 qRE
 }
 
-namespace get_mails_ {
-	void GetMail(
+namespace get_fields_ {
+	void Get( fbltyp::dId8s &Ids )
+	{
+		int i = muaimf::f_FirstOptional;
+
+		while ( i < muaimf::f_amount )
+			Ids.Add( i++ );
+
+	}
+}
+
+DEC( GetFields, 1 )
+{
+qRH
+qRB
+	get_fields_::Get( Request.Id8sOut() );
+qRR 
+qRT
+qRE
+}
+
+namespace get_fileds_infos_ {
+	void Get_(
+		const fblbkd::dId8s &Ids,
+		fblbkd::dStrings &Labels,
+		fblbkd::dStrings &Wording )
+	{
+		sdr::sRow Row = Ids.First();
+
+		while ( Row != qNIL );
+	}
+}
+
+namespace agent_{
+	void InitAndAuthenticate(
 		const muaacc::dAgent &Agent,
-		str::wStrings &Mails )
+		csdbnc::rIODriver &Driver )
 	{
 	qRH
-		csdbnc::rIODriver Driver;
-		qCBUFFERr Buffer;
-		muapo3::hBody Body;
+		qCBUFFERr( Buffer );
 	qRB
 		Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, err::h_Default );
 
-		muapo3::Retrieve( 0, Driver, true, Body );
+		muapo3::Authenticate( Agent.Username, Agent.Password, Driver );
 	qRR
 	qRT
 	qRE
 	}
+
+	void Quit( csdbnc::rIODriver &Driver )
+	{
+		muapo3::Quit( Driver );
+	}
 }
 
-DEC( GetMails, 1 )
+namespace get_mails_fields_ {
+	namespace {
+		void Get_(
+			muabsc::sIndex Index,
+			fdr::rIODriver &Driver,
+			fblbkd::dStrings &Subjects )
+		{
+		qRH
+			muapo3::hBody Body;
+			muaimf::wFields Fields;
+			str::wString Subject;
+			muaimf::sFRow Row = qNIL;
+		qRB
+			muapo3::GetHeader( Index, Driver, Body );
+
+			Fields.Init();
+			muaimf::Fill(Body.GetDriver(), Fields );
+
+			Subject.Init();
+			Row = Fields.Search( muaimf::fSubject );
+
+			if ( Row == qNIL )
+				qRGnr();
+
+			Subject.Init();
+			Fields.GetBody( Row, Subject );
+			Subjects.Add( Subject );
+		qRR
+		qRT
+		qRE
+		}
+
+		void Get_(
+			const muabsc::dIndexes &Indexes,
+			fdr::rIODriver &Driver,
+			fblbkd::dIds &Ids,
+			fblbkd::dStrings &Subjects )
+		{
+			sdr::sRow Row = Indexes.First();
+
+			while ( Row != qNIL ) {
+				Ids.Add( Indexes( Row ) );
+				Get_( Indexes( Row ), Driver, Subjects );
+
+				Row = Indexes.Next( Row );
+			}
+		}
+
+		void Get_(
+			const muaacc::dAgent &Agent,
+			fblbkd::dIds &Ids,
+			fblbkd::dStrings &Subjects )
+		{
+		qRH
+			csdbnc::rIODriver Driver;
+			muabsc::wIndexes Indexes;
+		qRB
+			agent_::InitAndAuthenticate( Agent, Driver );
+
+			Indexes.Init();
+
+			muapo3::GetIndexes( Driver, Indexes );
+
+			Get_( Indexes, Driver, Ids, Subjects );
+
+			agent_::Quit( Driver );
+		qRR
+		qRT
+		qRE
+		}
+
+		void Get_(
+			const muaacc::dAgents &Agents,
+			fblbkd::dIds &Ids,
+			fblbkd::dStrings &Subjects )
+		{
+			muaacc::sARow Row = Agents.First();
+
+			while ( Row != qNIL ) {
+				Get_( Agents.Core( Row ), Ids, Subjects );
+
+				Row = Agents.Next( Row );
+			}
+		}
+	}
+
+	void Get(
+		const muaacc::dAccount &Account,
+		fblbkd::dIds &Ids,
+		fblbkd::dStrings &Subjects )
+	{
+		Get_( Account.Agents, Ids, Subjects );
+	}
+}
+
+DEC( GetMailsFields, 1 )
 {
 qRH
 	ACCOUNTh;
 qRB
 	ACCOUNTb;
+
+	fblbkd::dIds &Ids = Request.IdsOut();
+	fblbkd::dStrings &Subjects = Request.StringsOut();
+
+	get_mails_fields_::Get( Account, Ids, Subjects );
 qRR 
 qRT
 qRE
 }
+
+
 
 #define D( name, version )	MUAINF_UC_SHORT #name "_" #version, ::name##_##version
 
@@ -304,5 +443,15 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cId,		// Id.
 		fblbkd::cEnd );
 
+	Backend.Add( D( GetFields, 1 ),
+		fblbkd::cEnd,
+			fblbkd::cId8s,	// Ids of the fields.
+		fblbkd::cEnd );
+
+	Backend.Add( D( GetMailsFields, 1 ),
+		fblbkd::cEnd,
+			fblbkd::cIds,		// Ids of the mails.
+			fblbkd::cStrings,	// Subjects of the mails.
+		fblbkd::cEnd );
 }
 

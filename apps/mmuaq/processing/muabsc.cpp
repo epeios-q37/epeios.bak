@@ -23,3 +23,16 @@
 
 using namespace muabsc;
 
+void muabsc::Dump(
+	const dIndexes &Indexes,
+	txf::sOFlow &Flow )
+{
+	sdr::sRow Row = Indexes.First();
+
+	while ( Row != qNIL ) {
+		Flow << Indexes( Row ) << txf::nl;
+
+		Row = Indexes.Next( Row );
+	}
+}
+

@@ -37,7 +37,7 @@ mods += tagsbs tol txf tys uys
 mods += utf xtf llio tht thtsub 
 mods += bomhdl cdgb64 dlbrry fil fnm 
 mods += lcl plgn plgncore rgstry stsfsm 
-mods += xml xpp 
+mods += xml xpp txmtbl 
 mods += csdbnc 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scltool 
@@ -344,7 +344,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161104"\"
+copt += -DVERSION=\""20161118"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""d8d40658-515d-40f7-b847-337d9ef331db"\"
 

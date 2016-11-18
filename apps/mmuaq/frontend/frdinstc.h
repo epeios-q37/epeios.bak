@@ -137,6 +137,12 @@ namespace frdinstc {
 
 			S_().MUAUpdateAgent_1( *Agent, Name, HostPort, Username, PasswordIsSet, Password, *Agent );
 		}
+		void GetMailsFields(
+			fbltyp::dIds &Ids,
+			dStrings &Subjects )
+		{
+			S_().MUAGetMailsFields_1( Ids, Subjects );
+		}
 	};
 
 	class rUser
@@ -182,6 +188,7 @@ namespace frdinstc {
 		void DumpAgents( xml::dWriter &Writer );
 		void DumpCurrentAgent( xml::dWriter &Writer );
 		// Write only attributes (only usable on a start tag).
+		void DumpMails( xml::dWriter &Writer );
 		const str::dString &GetAgentStatus( str::dString &Status );
 		void PutAgentStatusAttribute(
 			const char *Name,

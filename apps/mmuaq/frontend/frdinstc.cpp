@@ -95,6 +95,53 @@ qRT
 qRE
 }
 
+namespace dump_mails_{
+	void Dump(
+		const fbltyp::dIds &Ids,
+		fbltyp::dStrings &Subjects,
+		xml::dWriter &Writer )
+	{
+		sdr::sRow Row = Ids.First();
+
+		if ( Ids.Amount() != Subjects.Amount() )
+			qRGnr();
+
+		Writer.PushTag("Mails");
+
+		while ( Row != qNIL ) {
+			Writer.PushTag("Mail" );
+
+			Writer.PutAttribute("id", *Ids( Row ) );
+			Writer.PutAttribute("Subject", Subjects( Row ) );
+
+			Writer.PopTag();
+
+			Row = Ids.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+
+
+}
+
+void frdinstc::rUser::DumpMails( xml::dWriter &Writer )
+{
+qRH
+	fbltyp::wIds Ids;
+	fbltyp::wStrings Subjects;
+qRB
+	tol::Init( Ids, Subjects );
+
+	Core_.GetMailsFields( Ids, Subjects );
+
+	dump_mails_::Dump( Ids, Subjects, Writer );
+qRR
+qRT
+qRE
+}
+
+
 const str::dString &frdinstc::rUser::GetAgentStatus( str::dString &Status )
 {
 	if ( CurrentAgent_ != frdinstc::UndefinedAgent ) {

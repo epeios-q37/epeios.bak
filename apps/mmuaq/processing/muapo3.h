@@ -23,7 +23,7 @@
 # define MUAXMP__INC
 
 # ifdef XXX_DBG
-#	define MUAXMP__DBG
+#  define MUAXMP__DBG
 # endif
 
 # include "muabsc.h"
@@ -31,7 +31,6 @@
 # include "lstcrt.h"
 
 namespace muapo3 {
-
 	typedef fdr::rIDressedDriver rIDressedDriver_;
 
 	// For a given state, the next state can only be 's_Regular', or the immediatly following one (except for the last one).
@@ -276,39 +275,81 @@ namespace muapo3 {
 
 	qXENUM( Indicator, i );
 
-	// To launch before any of the operation below. Eats the message sent on connection.
-	eIndicator Authenticate(
+	namespace base{
+		// To launch before any of the operation below. Eats the message sent on connection.
+		eIndicator Authenticate(
+			const str::dString &Username,
+			const str::dString &Password,
+			fdr::rIODriver &Server,
+			hBody & Body );
+
+		eIndicator List(
+			bso::sUInt Index,
+			fdr::rIODriver &Server,
+			bso::sBool SkipAnswer,
+			hBody & Body );
+
+		eIndicator Retrieve(
+			bso::sUInt Index,
+			fdr::rIODriver &Server,
+			bso::sBool SkipAnswer,
+			hBody & Body );
+
+		eIndicator Top(
+			bso::sUInt Index,
+			bso::sUInt AmoutOfLine,
+			fdr::rIODriver &Server,
+			bso::sBool SkipAnswer,
+			hBody & Body );
+
+		eIndicator UIDL(
+			bso::sUInt Index,	// Si = à '0', retourne l'ensemble des messages.
+			fdr::rIODriver &Server,
+			hBody & Body );
+
+		eIndicator Quit(
+			fdr::rIODriver &Server,
+			hBody & Body );
+	}
+
+	/*
+	First call 'Authenticate', then you can call several
+	of the following functions one after the other. Call
+	'Quit()' as the last one.
+	*/
+
+	bso::sBool Authenticate(
 		const str::dString &Username,
 		const str::dString &Password,
 		fdr::rIODriver &Server,
-		hBody & Body );
+		qRPD );
 
-	eIndicator List(
+	bso::sBool Quit(
+		fdr::rIODriver &Server,
+		qRPD );
+
+	bso::sBool GetIndexes(
+		fdr::rIODriver &Server,
+		muabsc::cIndex &Callback,
+		qRPD );
+
+	inline bso::sBool GetIndexes(
+		fdr::rIODriver &Server,
+		muabsc::dIndexes &Indexes,
+		qRPD )
+		{
+			muabsc::sDefaultIndexCallback Callback;
+
+			Callback.Init( Indexes );
+
+			return GetIndexes( Server, Callback, qRP );
+		}
+
+	bso::sBool GetHeader(
 		bso::sUInt Index,
 		fdr::rIODriver &Server,
-		hBody & Body );
-
-	eIndicator Retrieve(
-		bso::sUInt Index,
-		fdr::rIODriver &Server,
-		bso::sBool SkipAnswer,
-		hBody & Body );
-
-	eIndicator Top(
-		bso::sUInt Index,
-		bso::sUInt AmoutOfLine,
-		fdr::rIODriver &Server,
-		bso::sBool SkipAnswer,
-		hBody & Body );
-
-	eIndicator UIDL(
-		bso::sUInt Index,	// Si = à '0', retourne l'ensemble des messages.
-		fdr::rIODriver &Server,
-		hBody & Body );
-
-	eIndicator Quit(
-		fdr::rIODriver &Server,
-		hBody & Body );
+		hBody &Body,
+		qRPD );
 }
 
 

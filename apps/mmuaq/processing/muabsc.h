@@ -22,12 +22,55 @@
 #ifndef MUABSC__INC
 # define MUABSC__INC
 
+# include "bch.h"
 # include "bso.h"
 # include "err.h"
 # include "flx.h"
 # include "str.h"
 
 namespace muabsc {
+	typedef bso::sUInt sIndex;
+
+	typedef bch::qBUNCHdl( sIndex ) dIndexes;
+	qW( Indexes );
+
+	void Dump(
+		const dIndexes &Indexes,
+		txf::sOFlow &Flow );
+
+	class cIndex
+	{
+	protected:
+		virtual void MUABSCOnIndex( sIndex Index ) = 0;
+	public:
+		qCALLBACK( Index );
+		void OnIndex( sIndex Index )
+		{
+			return MUABSCOnIndex( Index );
+		}
+	};
+
+	class sDefaultIndexCallback
+	: public cIndex
+	{
+	private:
+		qRMV( dIndexes, I_, Indexes_ );
+	protected:
+		virtual void MUABSCOnIndex( sIndex Index ) override
+		{
+			I_().Add( Index );
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Indexes_ );
+		}
+		qCVDTOR( sDefaultIndexCallback );
+		void Init( dIndexes &Indexes )
+		{
+			Indexes_ = &Indexes;
+		}
+	};
 }
 
 #endif

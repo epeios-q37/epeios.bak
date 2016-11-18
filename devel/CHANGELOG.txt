@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-18 :
+- TXMTBL :
+	- Fixing 'GetCell(...)' bad return vale.
+
 2016-11-17 :
 - XDHDWS :
 	- Adding 'proxy__::GetBooleanContent(...)'.

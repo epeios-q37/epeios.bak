@@ -193,33 +193,33 @@ namespace muaacc {
 		}
 	public:
 		struct s {
-			agent_::dAgents::s Agents;
+			agent_::dAgents::s Core;
 			agent_::dNames::s Names;
 		};
-		agent_::dAgents Agents;
+		agent_::dAgents Core;
 		agent_::dNames Names;
 		dAgents( s &S )
-		: Agents( S.Agents ),
+		: Core( S.Core ),
 		  Names( S.Names )
 		{}
 		void reset( bso::sBool P = true )
 		{
-			tol::reset( P, Agents, Names );
+			tol::reset( P, Core, Names );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Agents, Names );
+			tol::plug( AS, Core, Names );
 		}
 		dAgents &operator =(const dAgents &A)
 		{
-			Agents = A.Agents;
+			Core = A.Core;
 			Names = A.Names;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Agents, Names );
+			tol::Init( Core, Names );
 		}
 		qNAV( Names., sARow );
 		sARow New(
@@ -230,12 +230,12 @@ namespace muaacc {
 		{
 			sARow Row = Names.New();
 
-			if ( Row != Agents.New() )
+			if ( Row != Core.New() )
 				qRGnr();
 
 			Names( Row ).Init( Name );
 
-			Init_( Agents( Row ), HostPort, Username, Password );
+			Init_( Core( Row ), HostPort, Username, Password );
 
 			return Row;
 		}
@@ -250,7 +250,7 @@ namespace muaacc {
 				qRGnr();
 
 			Names( Row ) = Name;
-			Set_( Agents( Row ), HostPort, Username, Password );
+			Set_( Core( Row ), HostPort, Username, Password );
 
 		}
 		void Update(
@@ -263,7 +263,7 @@ namespace muaacc {
 				qRGnr();
 
 			Names( Row ) = Name ;
-			Set_( Agents( Row ), HostPort, Username );
+			Set_( Core( Row ), HostPort, Username );
 
 		}
 		sARow Search( const str::dString &Name ) const;

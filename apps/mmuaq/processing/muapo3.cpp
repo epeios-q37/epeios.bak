@@ -21,6 +21,7 @@
 
 #include "flx.h"
 #include "htp.h"
+#include "txmtbl.h"
 
 using namespace muapo3;
 
@@ -169,7 +170,7 @@ namespace {
 	}
 }
 
-eIndicator muapo3::Authenticate(
+eIndicator muapo3::base::Authenticate(
 	const str::dString &Username,
 	const str::dString &Password,
 	fdr::rIODriver &Server,
@@ -192,9 +193,10 @@ qRE
 	return Indicator;
 }
 
-eIndicator muapo3::List(
+eIndicator muapo3::base::List(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
+	bso::sBool SkipAnswer,
 	hBody &Body )
 {
 	eIndicator Indicator = i_Undefined;
@@ -212,7 +214,7 @@ qRB
 	
 	OFlow << NL_<< txf::commit;
 
-	if ( !( Indicator = CleanBegin_(IFlow, false ) ).IsTrue() ) {
+	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() ) {
 		Body.Init( Server, false );
 		qRReturn;
 	} else
@@ -223,7 +225,7 @@ qRE
 	return Indicator;
 }
 
-eIndicator muapo3::Retrieve(
+eIndicator muapo3::base::Retrieve(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
 	bso::sBool SkipAnswer,
@@ -250,7 +252,7 @@ qRE
 	return Indicator;
 }
 
-eIndicator muapo3::Top(
+eIndicator muapo3::base::Top(
 	bso::sUInt Index,
 	bso::sUInt AmountOfLine,
 	fdr::rIODriver &Server,
@@ -278,7 +280,7 @@ qRE
 	return Indicator;
 }
 
-eIndicator muapo3::UIDL(
+eIndicator muapo3::base::UIDL(
 	bso::sUInt Index,
 	fdr::rIODriver &Server,
 	hBody &Body )
@@ -309,7 +311,7 @@ qRE
 	return Indicator;
 }
 
-eIndicator muapo3::Quit(
+eIndicator muapo3::base::Quit(
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
@@ -334,9 +336,149 @@ qRE
 	return Indicator;
 }
 
+bso::sBool muapo3::Authenticate(
+	const str::dString &Username,
+	const str::dString &Password,
+	fdr::rIODriver &Server,
+	qRPN )
+{
+	bso::sBool Success = false;
+qRH
+	hBody Body;
+qRB
+	Success = base::Authenticate(Username, Password, Server, Body ).Boolean();
+
+	if ( !Success )
+		if ( qRPT )
+			qRGnr();
+qRR
+qRT
+qRE
+	return Success;
+}
+
+bso::sBool muapo3::Quit(
+	fdr::rIODriver &Server,
+	qRPN )
+{
+	bso::sBool Success = false;
+qRH
+	hBody Body;
+qRB
+	Success = base::Quit( Server, Body ).Boolean();
+
+	if ( !Success )
+		if ( qRPT )
+			qRGnr();
+qRR
+qRT
+qRE
+	return Success;
+}
 
 
+namespace indexes_ {
+	namespace {
+		bso::sBool Extract_(
+			const txmtbl::dLine &Line,
+			muabsc::cIndex &Callback )
+		{
+			muabsc::sIndex Index = 0;
+			sdr::sRow Error = qNIL;
 
+			if ( Line.Amount() == 0 )
+				return false;
 
+			Line( Line.First() ).ToNumber( Index, &Error );
 
+			if ( Error != qNIL )
+				return false;
+
+			Callback.OnIndex( Index );
+
+			return true;
+		}
+
+		bso::sBool Extract_(
+			fdr::rIDriver &Driver,
+			muabsc::cIndex &Callback )
+		{
+			bso::sBool Success = false;
+		qRH
+			flw::sDressedIFlow<> Flow;
+			xtf::sIFlow XFlow;
+			txmtbl::wLine Line;
+		qRB
+			Flow.Init( Driver );
+			XFlow.Init( Flow, utf::f_Default );
+
+			Line.Init();
+			while ( txmtbl::GetLine( XFlow, Line, ' ' ) ) {
+				if ( !Extract_( Line, Callback ) )
+					qRReturn;
+
+				Line.Init();
+			}
+
+			Success = true;
+		qRR
+		qRT
+		qRE
+			return Success;
+		}
+	}
+
+#define H( indicator )	if ( ( indicator ) != iOK ) qRReturn
+	bso::sBool Get(
+		fdr::rIODriver &Server,
+		muabsc::cIndex &Callback )
+	{
+		bso::sBool Success = false;
+	qRH
+		hBody Body;
+	qRB
+		H( base::List( 0, Server, true, Body ) );
+
+		if ( !Extract_(Body.GetDriver(), Callback ) )
+			qRReturn;
+
+		Success = true;
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
+#undef H
+}
+
+bso::sBool muapo3::GetIndexes(
+	fdr::rIODriver &Server,
+	muabsc::cIndex &Callback,
+	qRPN )
+{
+	if ( !indexes_::Get( Server, Callback ) )
+		if ( qRPT )
+			qRGnr();
+		else
+			return false;
+	else
+		return true;
+
+	return false;	// To avoid a warning.
+}
+
+bso::sBool muapo3::GetHeader(
+	bso::sUInt Index,
+	fdr::rIODriver &Server,
+	hBody &Body,
+	qRPN )
+{
+	bso::sBool Success = base::Top(Index, 0, Server, true, Body ).Boolean();
+
+	if ( !Success )
+		if ( qRPT )
+			qRGnr();
+
+	return Success;
+}
 

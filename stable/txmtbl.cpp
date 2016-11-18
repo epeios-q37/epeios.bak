@@ -159,8 +159,6 @@ txmtbl::delimiter txmtbl::GetCell(
 	bso::char__ C = 0;
 	bso::bool__ EOX = false;
 
-	Cell.Init();
-
 	Cell.Location( Flow.Position().Column );
 
 	while( IsNotEndOfCell_( Flow, Separator, Escape, EOX, C ) ) 
@@ -191,7 +189,7 @@ bso::bool__ txmtbl::GetLine(
 	bso::bool__ Result = false;
 qRH
 	cell Cell;
-	bso::bool__ Loop;
+	bso::bool__ Loop = false, ThereIsCell = false;
 	xtf::error__ Error = xtf::e_NoError;
 qRB
 	Cell.Init();
@@ -199,14 +197,18 @@ qRB
 	Line.Location( Flow.Position().Line );
 
 	do {
+		Cell.Init();
+
 		Loop = ( GetCell( Flow, Cell, Separator, Escape ) == txmtbl::dSeparator ) && !Flow.EndOfFlow( Error );
 
-		if ( Loop || Cell.Amount() || Line.Amount() )
+		if ( Loop || Cell.Amount() || Line.Amount() ) {
 			Line.Add( Cell );
+			ThereIsCell = true;
+		}
 
 	} while ( Loop );
 
-	Result = !Flow.EndOfFlow( Error );
+	Result = ThereIsCell || !Flow.EndOfFlow( Error );
 
 	if ( Error != xtf::e_NoError )
 		qRFwk();

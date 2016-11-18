@@ -21,6 +21,7 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+    <Module>txmtbl</Module>
 			</Modules>
    <Modules Group="CSD">
     <Module>csdbnc</Module>

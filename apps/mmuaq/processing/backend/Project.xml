@@ -22,6 +22,7 @@
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
     <Module>sck</Module>
+    <Module>txmtbl</Module>
 			</Modules>
 			<Modules Group="SCL">
 				<xpp:expand select="SCL"/>
@@ -39,6 +40,7 @@
 			<Module Path="../">muainf</Module>
    <Module>muaacc</Module>
    <Module>muabsc</Module>
+   <Module>muaimf</Module>
    <Module>muaplg</Module>
    <Module>muapo3</Module>
    <Module>muaxmp</Module>
