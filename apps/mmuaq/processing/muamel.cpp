@@ -17,7 +17,9 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "muaacc.h"
+#include "muamel.h"
 
-using namespace muaacc;
+using namespace muamel;
+
+
 

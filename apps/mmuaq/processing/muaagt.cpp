@@ -17,7 +17,19 @@
     along with 'MMUAq'.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "muaacc.h"
+#include "muaagt.h"
 
-using namespace muaacc;
+using namespace muaagt;
+
+sRow muaagt::dAgents::Search( const str::dString &Name ) const
+{
+	sRow Row = First();
+
+	while ( ( Row != qNIL ) && ( Names( Row ) != Name ) )
+		Row = Next( Row );
+
+	return Row;
+}
+
+
 

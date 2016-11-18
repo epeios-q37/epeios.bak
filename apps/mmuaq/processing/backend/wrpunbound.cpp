@@ -77,11 +77,11 @@ qRE
 
 namespace get_agents_ {
 	void Get(
-		const muaacc::dAgents &Agents,
+		const muaagt::dAgents &Agents,
 		fbltyp::dIds &Ids,
 		fbltyp::dStrings &Names )
 	{
-		muaacc::sARow Row = Agents.First();
+		muaagt::sRow Row = Agents.First();
 
 		while ( Row != qNIL ) {
 			Ids.Append( *Row );
@@ -110,8 +110,8 @@ qRE
 
 namespace get_agent_ {
 	void Get(
-		muaacc::sARow Row,
-		const muaacc::dAgents &Agents,
+		muaagt::sRow Row,
+		const muaagt::dAgents &Agents,
 		str::dString &Name,
 		str::dString &HostPort,
 		str::dString &Username )
@@ -121,7 +121,7 @@ namespace get_agent_ {
 
 		Agents.Names.Recall( Row, Name );
 
-		const muaacc::dAgent &Agent = Agents.Core( Row );
+		const muaagt::dAgent &Agent = Agents.Core( Row );
 
 		HostPort = Agent.HostPort;
 		Username = Agent.Username;
@@ -151,22 +151,22 @@ qRE
 namespace update_agent_ {
 	inline bso::sBool CheckName_(
 		const str::dString &Name,
-		const muaacc::dAgents &Agents,
-		muaacc::sARow Candidate )
+		const muaagt::dAgents &Agents,
+		muaagt::sRow Candidate )
 	{
-		muaacc::sARow Target = Agents.Search( Name );
+		muaagt::sRow Target = Agents.Search( Name );
 
 		return ( Target == qNIL ) || ( Target == Candidate );
 	}
 
-	muaacc::sARow Update(
-		muaacc::sARow Row,
+	muaagt::sRow Update(
+		muaagt::sRow Row,
 		const str::dString &RawName,
 		const str::dString &RawHostPort,
 		const str::dString &RawUsername,
 		bso::sBool PasswordIsSet,
 		const str::dString &Password,
-		muaacc::dAgents &Agents )
+		muaagt::dAgents &Agents )
 	{
 	qRH
 		str::wString Name, HostPort, Username;
@@ -218,7 +218,7 @@ qRH
 qRB
 	ACCOUNTb;
 
-	muaacc::sARow Row = *Request.IdIn();
+	muaagt::sRow Row = *Request.IdIn();
 
 	const str::dString
 		&Name = Request.StringIn(),
@@ -270,7 +270,7 @@ namespace get_fileds_infos_ {
 
 namespace agent_{
 	void InitAndAuthenticate(
-		const muaacc::dAgent &Agent,
+		const muaagt::dAgent &Agent,
 		csdbnc::rIODriver &Driver )
 	{
 	qRH
@@ -339,7 +339,7 @@ namespace get_mails_fields_ {
 		}
 
 		void Get_(
-			const muaacc::dAgent &Agent,
+			const muaagt::dAgent &Agent,
 			fblbkd::dIds &Ids,
 			fblbkd::dStrings &Subjects )
 		{
@@ -362,11 +362,11 @@ namespace get_mails_fields_ {
 		}
 
 		void Get_(
-			const muaacc::dAgents &Agents,
+			const muaagt::dAgents &Agents,
 			fblbkd::dIds &Ids,
 			fblbkd::dStrings &Subjects )
 		{
-			muaacc::sARow Row = Agents.First();
+			muaagt::sRow Row = Agents.First();
 
 			while ( Row != qNIL ) {
 				Get_( Agents.Core( Row ), Ids, Subjects );

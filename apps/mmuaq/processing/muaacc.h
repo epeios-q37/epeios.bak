@@ -26,7 +26,9 @@
 #	define MUAXMP__DBG
 # endif
 
+# include "muaagt.h"
 # include "muabsc.h"
+# include "muamel.h"
 
 # include "bitbch.h"
 # include "lck.h"
@@ -98,206 +100,38 @@ namespace muaacc {
 		}
 	};
 
-	qENUM( Protocol ) {
-		pPOP3,
-		p_amount,
-		p_Undefined
-	};
-
-	class dAgent
-	{
-	public:
-		struct s {
-			eProtocol Protocol;
-			str::dString::s
-				HostPort,
-				Username,
-				Password;
-		} &S_;
-		str::dString
-			HostPort,
-			Username,
-			Password;
-		dAgent( s &S )
-		: S_( S ),
-		  HostPort( S.HostPort ),
-		  Username( S.Username ),
-		  Password( S.Password )
-		{}
-		void reset( bso::sBool P = true )
-		{
-			S_.Protocol = p_Undefined;
-			tol::reset( P, HostPort, Username, Password );
-		}
-		void plug( qASd *AS )
-		{
-			tol::plug( AS, HostPort, Username, Password );
-		}
-		dAgent operator =(const dAgent &A)
-		{
-			S_.Protocol = A.S_.Protocol;
-			HostPort = A.HostPort;
-			Username = A.Username;
-			Password = A.Password;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			S_.Protocol = p_Undefined;
-			tol::Init( HostPort, Username, Password );
-		}
-	};
-
-	qW( Agent );
-
-	qROW( ARow );
-
-	namespace agent_ {
-
-		typedef lstcrt::qLCRATEd( dAgent, sARow ) dAgents;
-
-		typedef str::dString dName;
-		typedef lstcrt::qLMCRATEd( dName, sARow ) dNames;
-	}
-
-
-	class dAgents {
-	private:
-		void Set_(
-			dAgent &Agent,
-			const str::dString &HostPort,
-			const str::dString &Username )
-		{
-			Agent.HostPort = HostPort;
-			Agent.Username = Username;
-		}
-		void Set_(
-			dAgent &Agent,
-			const str::dString &HostPort,
-			const str::dString &Username,
-			const str::dString &Password )
-		{
-			Set_( Agent, HostPort, Username );
-			Agent.Password = Password;
-		}
-		void Init_(
-			dAgent &Agent,
-			const str::dString &HostPort,
-			const str::dString &Username,
-			const str::dString &Password )
-		{
-			Agent.Init();
-
-			Set_( Agent, HostPort, Username, Password );
-		}
-	public:
-		struct s {
-			agent_::dAgents::s Core;
-			agent_::dNames::s Names;
-		};
-		agent_::dAgents Core;
-		agent_::dNames Names;
-		dAgents( s &S )
-		: Core( S.Core ),
-		  Names( S.Names )
-		{}
-		void reset( bso::sBool P = true )
-		{
-			tol::reset( P, Core, Names );
-		}
-		void plug( qASd *AS )
-		{
-			tol::plug( AS, Core, Names );
-		}
-		dAgents &operator =(const dAgents &A)
-		{
-			Core = A.Core;
-			Names = A.Names;
-
-			return *this;
-		}
-		void Init( void )
-		{
-			tol::Init( Core, Names );
-		}
-		qNAV( Names., sARow );
-		sARow New(
-			const str::dString &Name,
-			const str::dString &HostPort,
-			const str::dString &Username,
-			const str::dString &Password )
-		{
-			sARow Row = Names.New();
-
-			if ( Row != Core.New() )
-				qRGnr();
-
-			Names( Row ).Init( Name );
-
-			Init_( Core( Row ), HostPort, Username, Password );
-
-			return Row;
-		}
-		void Update(
-			sARow Row,
-			const str::dString &Name,
-			const str::dString &HostPort,
-			const str::dString &Username,
-			const str::dString &Password )
-		{
-			if ( !Exists( Row ) )
-				qRGnr();
-
-			Names( Row ) = Name;
-			Set_( Core( Row ), HostPort, Username, Password );
-
-		}
-		void Update(
-			sARow Row,
-			const str::dString &Name,
-			const str::dString &HostPort,
-			const str::dString &Username )
-		{
-			if ( !Exists( Row ) )
-				qRGnr();
-
-			Names( Row ) = Name ;
-			Set_( Core( Row ), HostPort, Username );
-
-		}
-		sARow Search( const str::dString &Name ) const;
-	};
-
 	class dAccount
 	{
 	private:
 	public:
 		struct s {
-			dAgents::s Agents;
+			muaagt::dAgents::s Agents;
+			muamel::dMails::s Mails;
 		};
-		dAgents Agents;
+		muaagt::dAgents Agents;
+		muamel::dMails Mails;
 		dAccount( s &S )
-		: Agents( S.Agents )
+		: Agents( S.Agents ),
+		  Mails( S.Mails )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( P, Agents );
+			tol::reset( P, Agents, Mails );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Agents );
+			tol::plug( AS, Agents, Mails );
 		}
 		dAccount &operator =( const dAccount &A )
 		{
 			Agents = A.Agents;
+			Mails = A.Mails;
+
 			return *this;
 		}
-		bso::sBool Init( void )
+		void Init( void )
 		{
-			Agents.Init();
-
-			return true;
+			tol::Init( Agents, Mails );
 		}
 	};
 

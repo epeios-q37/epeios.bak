@@ -39,8 +39,10 @@
 			<Module Path="../">muafbc</Module>
 			<Module Path="../">muainf</Module>
    <Module>muaacc</Module>
+   <Module>muaagt</Module>
    <Module>muabsc</Module>
    <Module>muaimf</Module>
+   <Module>muamel</Module>
    <Module>muaplg</Module>
    <Module>muapo3</Module>
    <Module>muaxmp</Module>

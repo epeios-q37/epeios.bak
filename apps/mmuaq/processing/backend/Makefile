@@ -44,8 +44,8 @@ mods += scldaemon sclbacknd
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
 mods += fblcmd fblcst fbltyp fblovl 
 mods += csdleo csdles csdrcc csdscb csdbnc 
-mods += muafbc muainf muaacc muabsc muaimf 
-mods += muaplg muapo3 muaxmp 
+mods += muafbc muainf muaacc muaagt muabsc 
+mods += muaimf muamel muaplg muapo3 muaxmp 
 mods += wrpexample wrpunbound 
 mods += common registry 
 
