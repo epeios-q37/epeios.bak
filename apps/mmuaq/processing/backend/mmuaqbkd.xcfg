@@ -60,5 +60,8 @@
   <xpp:ifeq select="packing" value="no">
    <xpp:expand href="Demo.pxcfg"/>
   </xpp:ifeq>
+  <xpp:ifeq select="prod" value="yes">
+   <xpp:expand href="Prod.pxcfg"/>
+  </xpp:ifeq>
  </Configuration>
 </Configurations>

@@ -287,13 +287,14 @@ namespace {
 					Name.Append( Byte );
 			}
 
-			if ( TestFolding )
+			if ( TestFolding ) {
 				if ( Flow.EndOfFlow() )
 					Continue = false;
 				else if ( IsWSP_(Flow.View() ) )
 					TestFolding = false;
 				else
 					Continue = false;
+			}
 
 		}
 
