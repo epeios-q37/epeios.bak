@@ -88,7 +88,7 @@
 						<xpp:expand value-of="BackendPath"/>
 						<xpp:bloc>mmuaqbkd</xpp:bloc>
 					</Backend>
-					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53700</Backend>
+					<Backend id="LocalHost" Alias="LocalPredefinedBackend" Plugin="Straight">localhost:53740</Backend>
 				</xpp:bloc>
 			</Backends>
 		</xpp:bloc>

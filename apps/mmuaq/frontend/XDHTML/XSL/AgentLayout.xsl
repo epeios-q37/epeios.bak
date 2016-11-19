@@ -8,7 +8,7 @@
  <xsl:template match="Content">
   <span class="vcenter-out">
    <span class="vcenter-in">
-    <fieldset title="#agentTitle#" style="display: flex;" data-xdh-cast="EditCast">
+    <fieldset title="#agentTitle#" data-xdh-cast="EditCast">
      <legend>#agentLegend#</legend>
      <div style="display: flex; flex-direction: column;">
       <span style="display: flex; justify-content: space-between;">

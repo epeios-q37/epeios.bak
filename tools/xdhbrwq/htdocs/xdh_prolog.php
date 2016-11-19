@@ -34,6 +34,11 @@ $out = '
 		<script src="js/xdhtml.js"></script>
 
 		<style type="text/css">
+
+  * {
+min-height: 0;
+min-width: 0;
+}
 html, body {
 	height: 100%;
 	padding: 0;

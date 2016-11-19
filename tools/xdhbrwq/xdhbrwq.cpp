@@ -257,35 +257,38 @@ namespace {
 			Q37_MRMDF( session::sessions___, S_, Sessions_ );
 		protected:
 			void *CSDSCBPreProcess(
-				flw::ioflow__ *Flow,
-				const ntvstr::char__ *Origin,
-				bso::sBool *OwnerShipTaken ) override
+				fdr::rIODriver *IODriver,
+				const ntvstr::char__ *Origin ) override
 			{
 				return NULL;
 			}
 			csdscb::action__ CSDSCBProcess(
-				flw::ioflow__ *Flow,
+				fdr::rIODriver *IODriver,
 				void *UP ) override
 			{
 			qRH
 				query::pairs Pairs;
 				str::string Response;
 				TOL_CBUFFER___ Buffer;
+				flw::sDressedIOFlow<> Flow;
 			qRB
+				Flow.Init( *IODriver );
 				Pairs.Init();
-				Pairs.FillWith( *Flow );
+				Pairs.FillWith( Flow );
 
 				Response.Init();
 				Handle_( Pairs, S_(), Response );
-				Flow->Write(Response.Convert(Buffer), Response.Amount() );
-				Flow->Commit();
+				Flow.Write(Response.Convert(Buffer), Response.Amount() );
+				Flow.Commit();
 			qRR
 			qRT
 			qRE
 				return csdscb::aStop;
 			}
-			virtual void CSDSCBPostProcess( void *UP ) override
-			{}
+			virtual bso::sBool CSDSCBPostProcess( void *UP ) override
+			{
+				return true;
+			}
 		public:
 			void reset( bso::bool__ P = true )
 			{

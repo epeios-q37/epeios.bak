@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configurations xmlns:xpp="http://q37.info/ns/xpp/">
-	<Configuration target="mmuaqbkd">
-		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
-		<xpp:expand value-of="q37.xpp"/>
-		<Parameters>
-			<Language>en</Language>
+ <Configuration target="mmuaqbkd">
+  <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
+  <xpp:expand value-of="q37.xpp"/>
+  <Parameters>
+   <Language>en</Language>
    <Plugins>
     <Plugin target="Authentication" Id="Basic"></Plugin>
    </Plugins>
   </Parameters>
-		<Definitions>
+  <Definitions>
    <xpp:define name="PluginsRootDir">
     <xpp:bloc>
      <xpp:bloc preserve="yes">
@@ -55,10 +55,10 @@
     </Plugin>
    </Plugins>
   </Definitions>
-		<Locale>
-		</Locale>
+  <Locale>
+  </Locale>
   <xpp:ifeq select="packing" value="no">
    <xpp:expand href="Demo.pxcfg"/>
   </xpp:ifeq>
-	</Configuration>
+ </Configuration>
 </Configurations>

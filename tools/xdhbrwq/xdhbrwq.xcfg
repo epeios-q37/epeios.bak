@@ -3,13 +3,13 @@
 	<Configuration target="xdhbrwq">
 		<xpp:set name="q37.xpp" env-var="Q37_XPP"/>
 		<xpp:expand value-of="q37.xpp"/>
-		<xpp:expand href="../TOL.xcfg"/>
+		<xpp:expand href="../../TOL.xcfg"/>
 		<xpp:expand href="../XDH.xcfg"/>
 		<Parameters>
 			<Language>fr</Language>
 			<Command>Process</Command>
 			<!-- Default command -->
-			<Service>53730</Service>
+			<Service>53741</Service>
 		</Parameters>
 		<Definitions>
 		</Definitions>
@@ -28,8 +28,8 @@
 				<Translation language="en">module</Translation>
 			</Translations>
 			<Translations text="ServiceArgumentDescription">
-				<Translation language="fr">Port en écoute ('53730' si absent).</Translation>
-				<Translation language="en">Port to listen to ('53730' if missing).</Translation>
+				<Translation language="fr">Port en écoute ('53741' si absent).</Translation>
+				<Translation language="en">Port to listen to ('53741' if missing).</Translation>
 			</Translations>
 			<Translations text="ServiceArgumentLabel">
 				<Translation language="fr">service</Translation>

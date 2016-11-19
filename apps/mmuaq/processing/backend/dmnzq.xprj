@@ -15,7 +15,7 @@
 	  </xpp:bloc>
 		<Parameters>
 			<Plugins>
-				<Plugin target="Slot" Id="Straight">53700</Plugin>
+				<Plugin target="Slot" Id="Straight">53740</Plugin>
 			</Plugins>
 		<xpp:define name="lib_prefix">
 			<xpp:bloc>
