@@ -42,6 +42,8 @@ namespace crt {
 	qW2( PolyCrate );
 
 	using ctn::sHooks;
+
+	using ctn::Search;
 }
 
 # define qMCRATEd( Type, r )	dMonoCrate< Type, r >

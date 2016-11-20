@@ -376,6 +376,7 @@ qRE
 	return Success;
 }
 
+#define H( indicator )	if ( ( indicator ) != iOK ) qRReturn
 
 namespace indexes_ {
 	namespace {
@@ -428,7 +429,6 @@ namespace indexes_ {
 		}
 	}
 
-#define H( indicator )	if ( ( indicator ) != iOK ) qRReturn
 	bso::sBool Get(
 		fdr::rIODriver &Server,
 		muabsc::cIndex &Callback )
@@ -448,7 +448,6 @@ namespace indexes_ {
 	qRE
 		return Success;
 	}
-#undef H
 }
 
 bso::sBool muapo3::GetIndexes(
@@ -481,4 +480,93 @@ bso::sBool muapo3::GetHeader(
 
 	return Success;
 }
+
+namespace uidl_ {
+	namespace {
+		bso::sBool Extract_(
+			const txmtbl::dLine &Line,
+			cUIDL &Callback )
+		{
+			sNumber Number = 0;
+			sdr::sRow Error = qNIL;
+
+			if ( Line.Amount() != 2 )
+				return false;
+
+			Line( Line.First() ).ToNumber( Number, &Error );
+
+			if ( Error != qNIL )
+				return false;
+
+			Callback.OnUIDL( Number, Line( Line.First( 1 ) ) );
+
+			return true;
+		}
+
+		bso::sBool Extract_(
+			fdr::rIDriver &Driver,
+			cUIDL &Callback )
+		{
+			bso::sBool Success = false;
+		qRH
+			flw::sDressedIFlow<> Flow;
+			xtf::sIFlow XFlow;
+			txmtbl::wLine Line;
+		qRB
+			Flow.Init( Driver );
+			XFlow.Init( Flow, utf::f_Default );
+
+			Line.Init();
+			while ( txmtbl::GetLine( XFlow, Line, ' ' ) ) {
+				if ( !Extract_( Line, Callback ) )
+					qRReturn;
+
+				Line.Init();
+			}
+
+			Success = true;
+		qRR
+		qRT
+		qRE
+			return Success;
+		}
+	}
+
+	bso::sBool Get(
+		fdr::rIODriver &Server,
+		cUIDL &Callback )
+	{
+		bso::sBool Success = false;
+	qRH
+		hBody Body;
+	qRB
+		H( base::UIDL( 0, Server, Body ) );
+
+		if ( !Extract_( Body.GetDriver(), Callback ) )
+			qRReturn;
+
+		Success = true;
+	qRR
+	qRT
+	qRE
+		return Success;
+	}
+}
+
+bso::sBool muapo3::GetUIDLs(
+	fdr::rIODriver &Server,
+	cUIDL &Callback,
+	qRPN )
+{
+	if ( !uidl_::Get( Server, Callback ) )
+		if ( qRPT )
+			qRGnr();
+		else
+			return false;
+	else
+		return true;
+
+	return false;	// To avoid a warning.
+}
+
 

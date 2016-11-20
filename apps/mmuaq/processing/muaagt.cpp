@@ -19,16 +19,23 @@
 
 #include "muaagt.h"
 
+#include "muapo3.h"
+
 using namespace muaagt;
 
-sRow muaagt::dAgents::Search( const str::dString &Name ) const
+void muaagt::InitAndAuthenticate(
+	const muaagt::dAgent &Agent,
+	csdbnc::rIODriver &Driver )
 {
-	sRow Row = First();
+qRH
+	qCBUFFERr( Buffer );
+qRB
+	Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, err::h_Default );
 
-	while ( ( Row != qNIL ) && ( Names( Row ) != Name ) )
-		Row = Next( Row );
-
-	return Row;
+	muapo3::Authenticate( Agent.Username, Agent.Password, Driver );
+qRR
+qRT
+qRE
 }
 
 

@@ -33,11 +33,13 @@ namespace muamel {
 	typedef str::dString dId;
 	typedef str::wString wId;
 
+	typedef muaagt::sRow sARow_;
+
 	class dMail {
 	public:
 		struct s {
 			dId::s Id;
-			muaagt::sRow Agent;
+			sARow_ Agent;
 		} &S_;
 		dId Id;
 		dMail( s &S )
@@ -70,18 +72,41 @@ namespace muamel {
 			S_.Agent = qNIL;
 		}
 		void Init(
-			const dId &Id,
-			muaagt::sRow Agent )
+			sARow_ Agent,
+			const dId &Id )
 		{
 			this->Id.Init( Id );
 			S_.Agent = Agent;
 		}
+		qRODISCLOSEd( muaagt::sRow, Agent );
 	};
+
+	qW( Mail );
 
 	qROW( Row );
 
+	typedef bch::qBUNCHdl( sRow ) dRows;
+	qW( Rows );
+
 	typedef lstcrt::qLMCRATEd( dMail, sRow ) dMails;
 	qW( Mails );
+
+	inline sRow Add(
+		muaagt::sRow Agent,
+		const dId &Id,
+		dMails &Mails )
+	{
+		sRow Row = Mails.New();
+
+		Mails(Row).Init( Agent, Id );
+
+		return Row;
+	}
+
+	sRow Search(
+		muaagt::sRow Agent,
+		const dId Id,
+		const dMails &Mails );
 }
 
 

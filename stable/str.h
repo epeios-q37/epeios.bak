@@ -645,6 +645,12 @@ namespace str {
 		AppendInt( Value, Values );
 	}
 # endif
+	template <typename row> inline row Search(
+		const str::string &String,
+		const ctn::mono_container_<str::string_,row> &Strings )
+	{
+		return ctn::Search<row, string_>( String, Strings );
+	}
 }
 
 #endif

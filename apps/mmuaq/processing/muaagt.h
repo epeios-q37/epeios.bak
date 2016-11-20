@@ -29,8 +29,10 @@
 # include "muabsc.h"
 
 # include "bitbch.h"
+# include "csdbnc.h"
 # include "lck.h"
 # include "lstbch.h"
+# include "crt.h"
 # include "lstcrt.h"
 # include "tht.h"
 
@@ -203,8 +205,15 @@ namespace muaagt {
 			Set_( Core( Row ), HostPort, Username );
 
 		}
-		sRow Search( const str::dString &Name ) const;
+		sRow Search( const str::dString &Name ) const
+		{
+			return crt::Search( Name, Names );
+		}
 	};
+
+	void InitAndAuthenticate(
+		const dAgent &Agent,
+		csdbnc::rIODriver &Driver );
 }
 
 #endif

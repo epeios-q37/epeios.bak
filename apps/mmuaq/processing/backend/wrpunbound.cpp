@@ -273,15 +273,7 @@ namespace agent_{
 		const muaagt::dAgent &Agent,
 		csdbnc::rIODriver &Driver )
 	{
-	qRH
-		qCBUFFERr( Buffer );
-	qRB
-		Driver.Init( Agent.HostPort.Convert( Buffer ), SCK_INFINITE, err::h_Default );
-
-		muapo3::Authenticate( Agent.Username, Agent.Password, Driver );
-	qRR
-	qRT
-	qRE
+		muaagt::InitAndAuthenticate( Agent, Driver );
 	}
 
 	void Quit( csdbnc::rIODriver &Driver )
@@ -401,7 +393,9 @@ qRT
 qRE
 }
 
+namespace update_ {
 
+}
 
 #define D( name, version )	MUAINF_UC_SHORT #name "_" #version, ::name##_##version
 

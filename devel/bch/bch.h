@@ -833,7 +833,17 @@ namespace bch {
 	#define E_P_BUNCH__( c, i )		E_P_BUNCHt__( c, i , sdr::row__ )
 # endif
 
+	template <typename row, typename item> inline row Search(
+		item Item,
+		const bunch_<item, row> &Bunch )
+	{
+		row Row = Bunch.First();
 
+		while ( ( Row != qNIL ) && ( Bunch( Row ) != Item ) )
+			Row = Bunch.Next( Row );
+
+		return Row;
+	}
 }
 
 # endif

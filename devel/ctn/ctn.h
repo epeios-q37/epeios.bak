@@ -1151,6 +1151,33 @@ namespace ctn {
 # else
 	#define E_CONTAINER_( Type )	E_CONTAINERt_( Type, sdr::row__ )
 	#define E_CONTAINER( Type )		E_CONTAINERt( Type, sdr::row__ )
+
+	template <typename row, typename item, typename container> inline row Search_(
+		const item &Item,
+		const container &Container )
+	{
+		row Row = Container.First();
+
+		while ( ( Row != qNIL ) && ( Container( Row ) != Item ) )
+			Row = Container.Next( Row );
+
+		return Row;
+	}
+
+	template <typename row, typename item> inline row Search(
+		const item &Item,
+		const ctn::mono_container_<item, row> &Container )
+	{
+		return Search_<row, item, ctn::mono_container_<item, row>>( Item, Container );
+	}
+
+	template <typename row, typename item> inline row Search(
+		const item &Item,
+		const ctn::poly_container_<item, row> &Container )
+	{
+		return Search_<row, item, ctn::poly_container_<item, row>>( Item, Container );
+	}
+
 # endif
 }
 

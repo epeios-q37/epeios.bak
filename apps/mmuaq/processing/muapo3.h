@@ -28,6 +28,7 @@
 
 # include "muabsc.h"
 
+# include "crt.h"
 # include "lstcrt.h"
 
 namespace muapo3 {
@@ -352,6 +353,79 @@ namespace muapo3 {
 		fdr::rIODriver &Server,
 		hBody &Body,
 		qRPD );
+
+	typedef str::dString dUIDL;
+	typedef str::wString wUIDL;
+
+	class cUIDL {
+	protected:
+		virtual void MUAPO3OnUIDL(
+			sNumber Number,
+			const dUIDL &UIDL	) = 0;
+	public:
+		qCALLBACK( UIDL );
+		void OnUIDL(
+			sNumber Number,
+			const dUIDL &UIDL )
+		{
+			return MUAPO3OnUIDL( Number, UIDL );
+		}
+	};
+
+	bso::sBool GetUIDLs(
+		fdr::rIODriver &Server,
+		cUIDL &Callback,
+		qRPD );
+
+
+	typedef bch::qBUNCHdl( sNumber ) dNumbers;
+	qW( Numbers );
+
+	typedef crt::qCRATEdl( dUIDL ) dUIDLs;
+	qW( UIDLs);
+
+	class sDefaultUIDLCallback
+	: public cUIDL
+	{
+	private:
+		qRMV( dNumbers, N_, Numbers_ );
+		qRMV( dUIDLs, U_, UIDLs_ );
+	protected:
+		virtual void MUAPO3OnUIDL(
+			sNumber Number,
+			const dUIDL &UIDL ) override
+		{
+			if ( N_().Add( Number) != U_().Add( UIDL ) )
+				qRGnr();
+		}
+	public:
+		void reset( bso::sBool P = true )
+		{
+			tol::reset( P, Numbers_, UIDLs_ );
+		}
+		qCVDTOR( sDefaultUIDLCallback );
+		void Init(
+			dNumbers &Numbers,
+			dUIDLs &UIDLs )
+		{
+			Numbers_ = &Numbers;
+			UIDLs_ = &UIDLs;
+		}
+	};
+
+	inline bso::sBool GetUIDLs(
+		fdr::rIODriver &Server,
+		dNumbers &Numbers,
+		dUIDLs &UIDLs,
+		qRPD )
+	{
+		sDefaultUIDLCallback Callback;
+
+		Callback.Init( Numbers, UIDLs );
+
+		return GetUIDLs( Server, Callback, qRP );
+	}
+
 }
 
 

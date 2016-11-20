@@ -133,6 +133,10 @@ namespace muaacc {
 		{
 			tol::Init( Agents, Mails );
 		}
+		void Update( void );	// Updates the mail with the content on the different agent.
+		void GetFields(
+			const muamel::dRows &Mails,
+			str::dStrings &Subjects	) const;	// Returns only subjects now. Will return other fields in the future.
 	};
 
 	qW( Account );
