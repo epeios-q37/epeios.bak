@@ -194,7 +194,7 @@ qRE
 }
 
 eIndicator muapo3::base::List(
-	bso::sUInt Index,
+	sNumber Number,
 	fdr::rIODriver &Server,
 	bso::sBool SkipAnswer,
 	hBody &Body )
@@ -209,8 +209,8 @@ qRB
 
 	SendCommand_( cList, OFlow );
 
-	if ( Index != 0 )
-		OFlow << Index;
+	if ( Number != 0 )
+		OFlow << Number;
 	
 	OFlow << NL_<< txf::commit;
 
@@ -218,7 +218,7 @@ qRB
 		Body.Init( Server, false );
 		qRReturn;
 	} else
-		Body.Init( Server, Index == 0 );
+		Body.Init( Server, Number == 0 );
 qRR
 qRT
 qRE
@@ -226,7 +226,7 @@ qRE
 }
 
 eIndicator muapo3::base::Retrieve(
-	bso::sUInt Index,
+	sNumber Number,
 	fdr::rIODriver &Server,
 	bso::sBool SkipAnswer,
 	hBody &Body )
@@ -240,7 +240,7 @@ qRB
 	OFlow.Init( Server );
 
 	SendCommand_( cRetr, OFlow );
-	OFlow << Index << NL_ << txf::commit;
+	OFlow << Number << NL_ << txf::commit;
 
 	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
 		qRReturn;
@@ -253,7 +253,7 @@ qRE
 }
 
 eIndicator muapo3::base::Top(
-	bso::sUInt Index,
+	sNumber Number,
 	bso::sUInt AmountOfLine,
 	fdr::rIODriver &Server,
 	bso::sBool SkipAnswer,
@@ -268,7 +268,7 @@ qRB
 	OFlow.Init( Server );
 
 	SendCommand_( cTop, OFlow );
-	OFlow << Index << ' ' << AmountOfLine << NL_ << txf::commit;
+	OFlow << Number << ' ' << AmountOfLine << NL_ << txf::commit;
 
 	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
 		qRReturn;
@@ -281,7 +281,7 @@ qRE
 }
 
 eIndicator muapo3::base::UIDL(
-	bso::sUInt Index,
+	sNumber Number,
 	fdr::rIODriver &Server,
 	hBody &Body )
 {
@@ -295,16 +295,16 @@ qRB
 
 	SendCommand_( cUidl, OFlow );
 
-	if ( Index != 0 )
-		OFlow << Index;
+	if ( Number != 0 )
+		OFlow << Number;
 	
 	OFlow << NL_<< txf::commit;
 
-	if ( !( Indicator = CleanBegin_( IFlow, Index == 0 ) ).IsTrue() ) {
+	if ( !( Indicator = CleanBegin_( IFlow, Number == 0 ) ).IsTrue() ) {
 		Body.Init( Server, false );
 		qRReturn;
 	} else
-		Body.Init( Server, Index == 0 );
+		Body.Init( Server, Number == 0 );
 qRR
 qRT
 qRE
@@ -468,12 +468,12 @@ bso::sBool muapo3::GetIndexes(
 }
 
 bso::sBool muapo3::GetHeader(
-	bso::sUInt Index,
+	sNumber Number,
 	fdr::rIODriver &Server,
 	hBody &Body,
 	qRPN )
 {
-	bso::sBool Success = base::Top(Index, 0, Server, true, Body ).Boolean();
+	bso::sBool Success = base::Top( Number, 0, Server, true, Body ).Boolean();
 
 	if ( !Success )
 		if ( qRPT )

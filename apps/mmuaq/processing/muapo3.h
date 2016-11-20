@@ -275,6 +275,8 @@ namespace muapo3 {
 
 	qXENUM( Indicator, i );
 
+	typedef bso::sUInt sNumber;	// POP3 message-number.
+
 	namespace base{
 		// To launch before any of the operation below. Eats the message sent on connection.
 		eIndicator Authenticate(
@@ -284,26 +286,26 @@ namespace muapo3 {
 			hBody & Body );
 
 		eIndicator List(
-			bso::sUInt Index,
+			sNumber Number,
 			fdr::rIODriver &Server,
 			bso::sBool SkipAnswer,
 			hBody & Body );
 
 		eIndicator Retrieve(
-			bso::sUInt Index,
+			sNumber Number,
 			fdr::rIODriver &Server,
 			bso::sBool SkipAnswer,
 			hBody & Body );
 
 		eIndicator Top(
-			bso::sUInt Index,
+			sNumber Number,
 			bso::sUInt AmoutOfLine,
 			fdr::rIODriver &Server,
 			bso::sBool SkipAnswer,
 			hBody & Body );
 
 		eIndicator UIDL(
-			bso::sUInt Index,	// Si = à '0', retourne l'ensemble des messages.
+			sNumber Number,	// If = à '0', give all the messages.
 			fdr::rIODriver &Server,
 			hBody & Body );
 
@@ -346,7 +348,7 @@ namespace muapo3 {
 		}
 
 	bso::sBool GetHeader(
-		bso::sUInt Index,
+		sNumber Number,
 		fdr::rIODriver &Server,
 		hBody &Body,
 		qRPD );
