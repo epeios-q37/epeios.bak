@@ -11,8 +11,18 @@
  <xsl:template match="Content">
   <span class="vcenter-out">
    <span class="vcenter-in">
-    <xsl:apply-templates select="Mails"/>
-    <button title="#mainConfigTitle#" data-xdh-onevent="Configuration">#mainConfig#</button>
+    <!--div>
+     <ul class="tab">
+      <li>
+       <a>#mainMessages#</a>
+      </li>
+      <li>
+       <a title="#mainConfigTitle#" data-xdh-onevent="Configuration">#mainConfig#</a>
+      </li>
+     </ul>
+    </div-->
+     <xsl:apply-templates select="Mails"/>
+     <button title="#mainConfigTitle#" data-xdh-onevent="Configuration">#mainConfig#</button>
    </span>
   </span>
  </xsl:template>

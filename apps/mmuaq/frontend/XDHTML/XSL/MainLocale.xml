@@ -12,6 +12,14 @@
   <Translation language="fr">Affiche la page configuration.</Translation>
   <Translation language="en">Displays configuration page.</Translation>
  </Translations>
+ <Translations text="mainMessages">
+  <Translation language="fr">Messages</Translation>
+  <Translation language="en">Messages</Translation>
+ </Translations>
+ <Translations text="mainConfiguration">
+  <Translation language="fr">Configuration</Translation>
+  <Translation language="en">Configuration</Translation>
+ </Translations>
  <!--
 	<Translations text="main">
 		<Translation language="fr"></Translation>

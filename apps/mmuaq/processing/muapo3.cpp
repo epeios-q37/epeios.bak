@@ -105,7 +105,7 @@ namespace {
 
 			if ( SkipAnswer )
 				SkipAnswer_( Flow );
-			else
+			else if ( Flow.View() != CR_ )
 				Flow.Skip( 1 );	// The space after the 'OK'.
 			return iOK;
 			break;
@@ -186,7 +186,7 @@ qRB
 
 	Indicator = Authenticate_( Username, Password, IFlow, OFlow );
 
-	Body.Init( Server, false );
+	Body.Init( true, Server, false );
 qRR
 qRT
 qRE
@@ -215,10 +215,10 @@ qRB
 	OFlow << NL_<< txf::commit;
 
 	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() ) {
-		Body.Init( Server, false );
+		Body.Init( false, Server, false );
 		qRReturn;
 	} else
-		Body.Init( Server, Number == 0 );
+		Body.Init( SkipAnswer, Server, Number == 0 );
 qRR
 qRT
 qRE
@@ -245,7 +245,7 @@ qRB
 	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
 		qRReturn;
 
-	Body.Init( Server, true );
+	Body.Init( SkipAnswer, Server, true );
 qRR
 qRT
 qRE
@@ -273,7 +273,7 @@ qRB
 	if ( !( Indicator = CleanBegin_( IFlow, SkipAnswer ) ).IsTrue() )
 		qRReturn;
 
-	Body.Init( Server, true );
+	Body.Init( SkipAnswer, Server, true );
 qRR
 qRT
 qRE
@@ -301,10 +301,10 @@ qRB
 	OFlow << NL_<< txf::commit;
 
 	if ( !( Indicator = CleanBegin_( IFlow, Number == 0 ) ).IsTrue() ) {
-		Body.Init( Server, false );
+		Body.Init( false, Server, false );
 		qRReturn;
 	} else
-		Body.Init( Server, Number == 0 );
+		Body.Init( Number == 0, Server, Number == 0 );
 qRR
 qRT
 qRE
@@ -329,7 +329,7 @@ qRB
 	if ( !( Indicator = CleanBegin_( IFlow, false ) ).IsTrue() )
 		qRReturn;
 
-	Body.Init( Server, true );
+	Body.Init( false, Server, true );
 qRR
 qRT
 qRE

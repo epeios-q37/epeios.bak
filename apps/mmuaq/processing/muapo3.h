@@ -117,7 +117,7 @@ namespace muapo3 {
 				}
 				break;
 			case sILF:
-					Termination = HandleState_( C, Dot_, sDot );
+				Termination = HandleState_( C, Dot_, sDot );
 				break;
 			case sDot:
 				Termination = HandleState_( C, CR_, sFCR );
@@ -211,6 +211,7 @@ namespace muapo3 {
 		}
 		qCVDTOR( rSequenceDelimitedIDriver );
 		void Init(
+			bso::sBool EOL,
 			fdr::rIDriver &Driver,
 			bso::sBool MultiLine,
 			fdr::thread_safety__ ThreadSafety )
@@ -218,7 +219,10 @@ namespace muapo3 {
 			rIDressedDriver_::Init( ThreadSafety );
 			Flow_.Init( Driver );
 			MultiLine_ = MultiLine;
-			State_ = sRegular;
+			if ( EOL  )
+				State_ = sILF;
+			else
+				State_ = sRegular;
 		}
 	};
 
@@ -252,10 +256,11 @@ namespace muapo3 {
 		}
 		qCDTOR( hBody );
 		void Init(
+			bso::sBool EOL,
 			fdr::rIDriver &Driver,
 			bso::sBool Multiline )
 		{
-			Driver_.Init( Driver, Multiline, fdr::ts_Default );
+			Driver_.Init( EOL, Driver, Multiline, fdr::ts_Default );
 		}
 		fdr::rIDriver &GetDriver( void )
 		{
