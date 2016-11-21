@@ -377,17 +377,42 @@ namespace get_mails_fields_ {
 	}
 }
 
+namespace get_mails_fields_ {
+	void Convert(
+		const muamel::dRows &Rows,
+		fblbkd::dIds &Ids )
+	{
+		sdr::sRow Row = Rows.First();
+
+		while ( Row != qNIL ) {
+			Ids.Append( *Rows( Row ) );
+
+			Row = Rows.Next( Row );
+		}
+	}
+}
+
 DEC( GetMailsFields, 1 )
 {
 qRH
 	ACCOUNTh;
+	muamel::wRows Wanted, Available;
 qRB
 	ACCOUNTb;
+
+	Account.Update();
+
+	tol::Init( Wanted );
+	Account.GetAllMails( Wanted );
 
 	fblbkd::dIds &Ids = Request.IdsOut();
 	fblbkd::dStrings &Subjects = Request.StringsOut();
 
-	get_mails_fields_::Get( Account, Ids, Subjects );
+	tol::Init( Available );
+	Account.GetFields( Wanted, Subjects, Available );
+
+
+	get_mails_fields_::Convert( Available, Ids );
 qRR 
 qRT
 qRE

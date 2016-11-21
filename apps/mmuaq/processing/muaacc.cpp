@@ -26,6 +26,18 @@
 
 using namespace muaacc;
 
+void muaacc::dAccount::GetAllMails( muamel::dRows &Rows ) const
+{
+	muamel::sRow Row = Mails.First();
+
+	while ( Row != qNIL ) {
+		Rows.Append( Row );
+
+		Row = Mails.Next( Row );
+	}
+}
+
+
 namespace update_ {
 	namespace {
 		typedef crt::qCRATEdl( muamel::dId ) dIds;
@@ -157,142 +169,207 @@ namespace get_fields_ {
 		using muapo3::dNumbers;
 		using muapo3::dUIDLs;
 
-		void Get_(
-			sNumber Number,
-			fdr::rIODriver &Driver,
-			str::dStrings &Subjects )
-		{
-		qRH
-			muapo3::hBody Body;
-			muaimf::wFields Fields;
-			str::wString Subject;
-			muaimf::sFRow Row = qNIL;
-		qRB
-			if ( Number != 0 ) {	// 'Number' can be 0 it the corresponding 'UIDL4 was not found (mail erased).
-				muapo3::GetHeader( Number, Driver, Body );
+		// _m_ails to _U_IDLs
+		namespace m2u_ {
+			void Get(
+				muaagt::sRow Agent,
+				const muamel::dMails &Mails,
+				const muamel::dRows &Wanted,
+				dUIDLs &UIDLs,
+				muamel::dRows &Owned )	// Mails owned by agent.
+			{
+				sdr::sRow Row = Wanted.First();
+				muamel::sRow MRow = qNIL;
 
-				Fields.Init();
-				muaimf::Fill(Body.GetDriver(), Fields );
+				while ( Row != qNIL ) {
+					if ( Mails( MRow = Wanted( Row ) ).Agent() == Agent ) {
+						UIDLs.Add( Mails( MRow ).Id );
+						Owned.Append( MRow );
+					}
 
-				Subject.Init();
-				Row = Fields.Search( muaimf::fSubject );
-
-				if ( Row == qNIL )
-					qRGnr();
-
-				Subject.Init();
-				Fields.GetBody( Row, Subject );
-				Subjects.Add( Subject );
-			}
-		qRR
-		qRT
-		qRE
-		}
-
-		void Get_(
-			const dNumbers &Numbers,
-			fdr::rIODriver &Driver,
-			str::dStrings &Subjects )
-		{
-			sdr::sRow Row = Numbers.First();
-
-			while ( Row != qNIL ) {
-				Get_( Numbers( Row ), Driver, Subjects );
-
-				Row = Numbers.Next( Row );
+					Row = Wanted.Next( Row );
+				}
 			}
 		}
 
-		void Get_(
-			muaagt::sRow Agent,
-			const muamel::dRows &AllRows,
-			const muamel::dMails &Mails,
-			dUIDLs &UIDLs,
-			muamel::dRows &Rows )
-		{
-			sdr::sRow Row = AllRows.First();
-			muamel::sRow MRow = qNIL;
+		// _U_IDLs to _S_ubjects
+		namespace u2s_ {
+			// _U_idls to _n_umbers
+			namespace u2n_ {
+				namespace {
+					void Get_(
+						const dUIDLs &UIDLs,
+						const muamel::dRows &Wanted,
+						const dUIDLs &AllUIDLs,
+						const dNumbers &AllNumbers,
+						dNumbers &Numbers,
+						muamel::dRows &Available )
+					{
+						if ( UIDLs.Amount() != Wanted.Amount() )
+							qRGnr();
 
-			while ( Row != qNIL ) {
-				if ( ( Mails( MRow = AllRows( Row ) ) ).Agent() == Agent ) {
-					UIDLs.Add( Mails( MRow ).Id );
-					Rows.Append( MRow );
+						sdr::sRow Row = UIDLs.First();
+						sdr::sRow UIDLRow = qNIL;
+
+						while ( Row != qNIL ) {
+							UIDLRow = ctn::Search( UIDLs( Row ), AllUIDLs );
+
+							if ( UIDLRow != qNIL ) {
+								Numbers.Add( AllNumbers( Row ) );
+								Available.Append( Wanted( Row ) );
+							}
+
+							Row = UIDLs.Next( Row );
+						}
+					}
 				}
 
-				Row = AllRows.Next( Row );
+				void Get(
+					const dUIDLs &UIDLs,
+					const muamel::dRows &Wanted,
+					fdr::rIODriver &Driver,
+					dNumbers &Numbers,
+					muamel::dRows &Available )				{
+				qRH
+					muapo3::wNumbers AllNumbers;
+					muapo3::wUIDLs AllUIDLs;
+				qRB
+					tol::Init( AllNumbers, AllUIDLs );
+
+					muapo3::GetUIDLs( Driver, AllNumbers, AllUIDLs );
+
+					Get_( UIDLs, Wanted, AllUIDLs, AllNumbers, Numbers, Available );
+				qRR
+				qRT
+				qRE
+				}
+			}
+
+			// 'POP3' message _n_umbers to _s_ubjects.
+			namespace n2s_ {
+				namespace {
+					void Get_(
+						sNumber Number,
+						fdr::rIODriver &Driver,
+						str::dStrings &Subjects )
+					{
+					qRH
+						muapo3::hBody Body;
+						muaimf::wFields Fields;
+						str::wString Subject;
+						muaimf::sFRow Row = qNIL;
+					qRB
+						if ( Number != 0 ) {	// 'Number' can be 0 it the corresponding 'UIDL4 was not found (mail erased).
+							muapo3::GetHeader( Number, Driver, Body );
+
+							Fields.Init();
+							muaimf::Fill(Body.GetDriver(), Fields );
+
+							Subject.Init();
+							Row = Fields.Search( muaimf::fSubject );
+
+							if ( Row == qNIL )
+								qRGnr();
+
+							Subject.Init();
+							Fields.GetBody( Row, Subject );
+							Subjects.Add( Subject );
+						}
+					qRR
+					qRT
+					qRE
+					}
+				}
+
+				void Get(
+					const dNumbers &Numbers,
+					fdr::rIODriver &Driver,
+					str::dStrings &Subjects )
+				{
+					sdr::sRow Row = Numbers.First();
+
+					while ( Row != qNIL ) {
+						Get_( Numbers( Row ), Driver, Subjects );
+
+						Row = Numbers.Next( Row );
+					}
+				}
+			}
+
+			void Get(
+				const dUIDLs &UIDLs,
+				const muamel::dRows &Wanted,
+				muaagt::sRow AgentRow,
+				const muaagt::dAgent &Agent,
+				str::dStrings &Subjects,
+				muamel::dRows &Available )
+			{
+			qRH
+				csdbnc::rIODriver Driver;
+				muapo3::wNumbers Numbers;
+			qRB
+				muaagt::InitAndAuthenticate( Agent, Driver );
+
+				tol::Init( Numbers );
+				u2n_::Get( UIDLs, Wanted, Driver, Numbers, Available );
+
+				n2s_::Get( Numbers, Driver, Subjects );
+
+				muapo3::Quit( Driver );
+			qRR
+			qRT
+			qRE
 			}
 		}
-
+		
 		void Get_(
-			const dUIDLs &UIDLs,
-			const dUIDLs &AllUIDLs,
-			const dNumbers AllNumbers,
-			dNumbers Numbers )
-		{
-			sdr::sRow Row = UIDLs.First();
-			sdr::sRow UIDLRow = qNIL;
-
-			while ( Row != qNIL ) {
-				UIDLRow = ctn::Search( UIDLs( Row ), AllUIDLs );
-
-				if ( UIDLRow != qNIL )
-					Numbers.Add( AllNumbers( Row ) );
-				else
-					Numbers.Add( (sNumber)0 );
-
-				Row = UIDLs.Next( Row );
-			}
-		}
-
-		void Get_(
-			const dUIDLs &UIDLs,
-			fdr::rIODriver &Driver,
-			dNumbers &Numbers )
-		{
-		qRH
-			muapo3::wNumbers AllNumbers;
-			muapo3::wUIDLs AllUIDLs;
-		qRB
-			tol::Init( AllNumbers, AllUIDLs );
-
-			muapo3::GetUIDLs( Driver, AllNumbers, AllUIDLs );
-
-			Get_( UIDLs, AllUIDLs, AllNumbers, Numbers );
-		qRR
-		qRT
-		qRE
-		}
-
-		void Get_(
-			const dNumbers &Numbers,
+			const muamel::dMails &Mails,
+			const muamel::dRows &Wanted,
+			muaagt::sRow AgentRow,
 			const muaagt::dAgent &Agent,
-			str::dStrings &Subjects )
+			str::dStrings &Subjects,
+			muamel::dRows &Available )
 		{
 		qRH
 			csdbnc::rIODriver Driver;
+			muapo3::wUIDLs UIDLs;
+			muamel::wRows Owned;
 		qRB
+			tol::Init( UIDLs, Owned );	// Owned by agent.
+			m2u_::Get( AgentRow, Mails, Wanted, UIDLs, Owned );
+
 			muaagt::InitAndAuthenticate( Agent, Driver );
 
-			Get_( Numbers, Driver, Subjects );
-
-			muapo3::Quit( Driver );
+			u2s_::Get( UIDLs, Owned, AgentRow, Agent, Subjects, Available );
 		qRR
 		qRT
 		qRE
 		}
+	}
 
-		void Get_(
-			const muamel::dRows &Mails,
-			const muaagt::dAgent &Agent,
-			str::dStrings &Subjects )
-		{}
+	void Get(
+		const muamel::dMails &Mails,
+		const muamel::dRows &Wanted,
+		const muaagt::dAgents &Agents,
+		str::dStrings &Subjects,
+		muamel::dRows &Available )
+	{
+		muaagt::sRow Row = Agents.First();
+
+		while ( Row != qNIL ) {
+			Get_( Mails, Wanted, Row, Agents.Core( Row ), Subjects, Available );
+
+			Row = Agents.Next( Row);
+		}
+
 	}
 }
 
 void muaacc::dAccount::GetFields(
-	const muamel::dRows &Mails,
-	str::dStrings &Subjects ) const
+	const muamel::dRows &Wanted,
+	str::dStrings &Subjects,
+	muamel::dRows &Available ) const
 {
-
+	return get_fields_::Get( Mails, Wanted, Agents, Subjects, Available ); 
 }
 

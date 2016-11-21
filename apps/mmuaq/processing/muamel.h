@@ -105,7 +105,7 @@ namespace muamel {
 
 	sRow Search(
 		muaagt::sRow Agent,
-		const dId Id,
+		const dId &Id,
 		const dMails &Mails );
 }
 

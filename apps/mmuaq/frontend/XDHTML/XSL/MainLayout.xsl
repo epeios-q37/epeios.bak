@@ -4,11 +4,11 @@
 				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 				xmlns:xpp="http://q37.info/xpp"
 				>
-	<xsl:output method="html" encoding="UTF-8"/>
-	<xsl:template match="/">
-		<xsl:apply-templates select="*/Content"/>
-	</xsl:template>
-	<xsl:template match="Content">
+ <xsl:output method="html" encoding="UTF-8"/>
+ <xsl:template match="/">
+  <xsl:apply-templates select="*/Content"/>
+ </xsl:template>
+ <xsl:template match="Content">
   <span class="vcenter-out">
    <span class="vcenter-in">
     <xsl:apply-templates select="Mails"/>
@@ -17,12 +17,18 @@
   </span>
  </xsl:template>
  <xsl:template match="Mails">
-  <hr/>
-  <xsl:apply-templates select="Mail"/>
-  <hr/>
+  <table style="border: 1px solid black;	border-collapse: collapse;">
+   <tr>
+    <th style="border: 1px solid black;	border-collapse: collapse;">Subject</th>
+   </tr>
+   <xsl:apply-templates select="Mail"/>
+  </table>
  </xsl:template>
  <xsl:template match="Mail">
-  <xsl:apply-templates select="@Subject"/>
-  <br/>
+  <tr>
+   <td style="border: 1px solid black;	border-collapse: collapse;">
+    <xsl:apply-templates select="@Subject"/>
+   </td>
+  </tr>
  </xsl:template>
 </xsl:stylesheet>

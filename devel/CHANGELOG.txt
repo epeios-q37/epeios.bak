@@ -1,8 +1,12 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-20 :
+- BCH, CTN, CRT, STR :
+	- Adding 'Search(...)' functions.
+
 2016-11-18 :
 - TXMTBL :
-	- Fixing 'GetCell(...)' bad return vale.
+	- Fixing 'GetCell(...)' bad return value.
 
 2016-11-17 :
 - XDHDWS :

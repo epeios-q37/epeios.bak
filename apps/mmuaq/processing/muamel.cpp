@@ -23,12 +23,13 @@ using namespace muamel;
 
 sRow muamel::Search(
 	sARow_ Agent,
-	const str::dString Id,
+	const str::dString &Id,
 	const dMails &Mails )
 {
 	sRow Row = Mails.First();
 
-	while ( ( Row != qNIL ) && ( Mails(Row).S_.Agent != Agent) && ( Mails( Row ).Id != Id ) )
+	while ( ( Row != qNIL )
+		  && ( ( Mails(Row).S_.Agent != Agent) || ( Mails( Row ).Id != Id ) ) )
 		Row = Mails.Next( Row );
 
 	return Row;
