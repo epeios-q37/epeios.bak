@@ -28,7 +28,8 @@ namespace frdinstc {
 
 	using namespace frdfrntnd;
 
-	SCLF_I( Agent , Id);
+	SCLF_I( Agent, Id);
+	SCLF_I( Folder, Id );
 
 	using fbltyp::dString;
 	using fbltyp::dStrings;
@@ -143,6 +144,18 @@ namespace frdinstc {
 		{
 			S_().MUAGetMailsFields_1( Ids, Subjects );
 		}
+		void GetFolders(
+			sFolder Folder,
+			dFolders &Folders )
+		{
+			S_().MUAGetFolders_1( *Folder, Folders );
+		}
+		void GetFoldersNames(
+			const dFolders &Folders,
+			dStrings &Names )
+		{
+			S_().MUAGetFoldersNames_1( Folders, Names );
+		}
 	};
 
 	class rUser
@@ -189,6 +202,7 @@ namespace frdinstc {
 		void DumpCurrentAgent( xml::dWriter &Writer );
 		// Write only attributes (only usable on a start tag).
 		void DumpMails( xml::dWriter &Writer );
+		void DumpFolders( xml::dWriter &Writer );
 		const str::dString &GetAgentStatus( str::dString &Status );
 		void PutAgentStatusAttribute(
 			const char *Name,

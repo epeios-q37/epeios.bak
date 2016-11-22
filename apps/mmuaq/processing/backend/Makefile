@@ -37,15 +37,16 @@ mods += tagsbs tol txf tys uys
 mods += utf xtf llio tht thtsub 
 mods += lck mtk bomhdl cdgb64 dlbrry 
 mods += fil fnm lcl plgn plgncore 
-mods += rgstry stsfsm xml xpp sck 
-mods += txmtbl 
+mods += rgstry stsfsm xml xpp btr 
+mods += dtr sck txmtbl 
 mods += sclargmnt sclmisc sclerror scllocale sclrgstry 
 mods += scldaemon sclbacknd 
 mods += fblber fblbkd fblbrd fblbrq fblbrr 
 mods += fblcmd fblcst fbltyp fblovl 
 mods += csdleo csdles csdrcc csdscb csdbnc 
 mods += muafbc muainf muaacc muaagt muabsc 
-mods += muaimf muamel muaplg muapo3 muaxmp 
+mods += muafld muaimf muamel muaplg muapo3 
+mods += muaxmp 
 mods += wrpexample wrpunbound 
 mods += common registry 
 
@@ -362,7 +363,7 @@ ifeq ("$(target)","$(Android)")
 	rm -rf *.d
 endif
 
-copt += -DVERSION=\""20161118"\"
+copt += -DVERSION=\""20161122"\"
 copt += -DCOPYRIGHT_YEARS=\""2016"\"
 copt += -DIDENTIFIER=\""189de286-5b16-4d82-b398-595aaaa23053"\"
 

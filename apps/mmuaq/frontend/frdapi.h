@@ -1,6 +1,6 @@
 /* DON'T MODIFY : computer-generated file ! */
 /*
-	API from : mmuaqbkd V20161118 Build Nov 18 2016 11:59:53 - Win32;MSC 1800;IA-32
+	API from : mmuaqbkd V20161122 Build Nov 22 2016 10:03:56 - Win32;MSC 1800;IA-32
 
 	This file was generated using barq 20161027 (Build Nov 13 2016 17:38:12 Win32;MSC 1800;IA-32)
 */
@@ -25,7 +25,7 @@ namespace mmuaq {
 	{
 	private:
 		fblfrd::object__ _ID;
-		fblfrd::command__ _Commands[9];
+		fblfrd::command__ _Commands[11];
 	public:
 		void reset( bso::bool__ P = true )
 		{
@@ -49,6 +49,8 @@ namespace mmuaq {
 				21, 25, 25, 25, 2, 25, 0, 21, 
 				0, 13, 
 				0, 22, 26, 
+				21, 0, 22, 
+				22, 0, 26, 
 			};
 
 			_frontend_depot__::Init( Frontend );
@@ -101,10 +103,20 @@ namespace mmuaq {
 			CommandDetail.Casts.Append( Parameters + 27, 3 );
 			CommandsDetails.Append( CommandDetail );
 
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetFolders_1";;
+			CommandDetail.Casts.Append( Parameters + 30, 3 );
+			CommandsDetails.Append( CommandDetail );
+
+			CommandDetail.Init();
+			CommandDetail.Name = "MUAGetFoldersNames_1";;
+			CommandDetail.Casts.Append( Parameters + 33, 3 );
+			CommandsDetails.Append( CommandDetail );
+
 
 			Commands.Init();
 			this->Frontend().GetCommands( FBLFRD_MASTER_TYPE, CommandsDetails, Commands );
-			Commands.Recall( 0, 9, _Commands );
+			Commands.Recall( 0, 11, _Commands );
 		}
 		void LoadSetupOfId_1( 
 			const fblfrd::string_ &In1 ) const
@@ -226,6 +238,32 @@ namespace mmuaq {
 
 			Frontend().IdsOut( Out1 );
 			Frontend().StringsOut( Out2 );
+
+			Frontend().Handle();
+		}
+		void MUAGetFolders_1( 
+			const fblfrd::id__ &In1,
+			fblfrd::ids_ &Out1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[9] );
+			Frontend().IdIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().IdsOut( Out1 );
+
+			Frontend().Handle();
+		}
+		void MUAGetFoldersNames_1( 
+			const fblfrd::ids_ &In1,
+			fblfrd::strings_ &Out1 ) const
+		{
+			Frontend().PushHeader( _ID, Commands()[10] );
+			Frontend().IdsIn( In1 );
+
+			Frontend().EndOfInParameters();
+
+			Frontend().StringsOut( Out1 );
 
 			Frontend().Handle();
 		}

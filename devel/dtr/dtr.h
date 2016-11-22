@@ -33,6 +33,9 @@
 # include "que.h"
 # include "btr.h"
 
+/***************/
+/***** OLD *****/
+/***************/
 
 namespace dtr {
 	//e Browse status;
@@ -514,5 +517,18 @@ namespace dtr {
 		*/
 	};
 }
+
+/***************/
+/***** NEW *****/
+/***************/
+
+# define qDTREEd( row ) E_DTREEt_( row )
+# define qDTREEw( row ) E_DTREEt( row )
+
+# define qDTREEdl E_DTREE_
+# define qDTREEwl E_DTREEt
+
+# define qBROWSERb( row ) E_BROWSER__( row )
+
 
 #endif

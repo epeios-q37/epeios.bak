@@ -377,21 +377,6 @@ namespace get_mails_fields_ {
 	}
 }
 
-namespace get_mails_fields_ {
-	void Convert(
-		const muamel::dRows &Rows,
-		fblbkd::dIds &Ids )
-	{
-		sdr::sRow Row = Rows.First();
-
-		while ( Row != qNIL ) {
-			Ids.Append( *Rows( Row ) );
-
-			Row = Rows.Next( Row );
-		}
-	}
-}
-
 DEC( GetMailsFields, 1 )
 {
 qRH
@@ -412,14 +397,47 @@ qRB
 	Account.GetFields( Wanted, Subjects, Available );
 
 
-	get_mails_fields_::Convert( Available, Ids );
+	fbltyp::Convert( Available, Ids );
 qRR 
 qRT
 qRE
 }
 
-namespace update_ {
+DEC( GetFolders, 1 ) 
+{
+qRH
+	ACCOUNTh;
+	muafld::wRows Rows;
+qRB
+	ACCOUNTb;
 
+	muafld::sRow Row = *Request.IdIn();
+
+	tol::Init( Rows );
+
+	Account.GetFolders( Row, Rows );
+
+	fbltyp::Convert(Rows, Request.IdsOut() );
+qRR 
+qRT
+qRE
+}
+
+DEC( GetFoldersNames, 1 )
+{
+qRH
+	ACCOUNTh;
+	muafld::wRows Rows;
+qRB
+	ACCOUNTb;
+
+	tol::Init( Rows );
+	fbltyp::Convert( Request.IdsIn(), Rows );
+
+	Account.GetFoldersNames( Rows, Request.StringsOut() );
+qRR 
+qRT
+qRE
 }
 
 #define D( name, version )	MUAINF_UC_SHORT #name "_" #version, ::name##_##version
@@ -472,5 +490,19 @@ void wrpunbound::Inform( fblbkd::backend___ &Backend )
 			fblbkd::cIds,		// Ids of the mails.
 			fblbkd::cStrings,	// Subjects of the mails.
 		fblbkd::cEnd );
+
+	Backend.Add( D( GetFolders, 1 ),
+			fblbkd::cId,	// Folder.
+		fblbkd::cEnd,
+			fblbkd::cIds,	// Folders.
+		fblbkd::cEnd );
+
+	Backend.Add( D( GetFoldersNames, 1 ),
+			fblbkd::cIds,		// Folders.
+		fblbkd::cEnd,
+			fblbkd::cStrings,	// Names,
+		fblbkd::cEnd );
+
+
 }
 

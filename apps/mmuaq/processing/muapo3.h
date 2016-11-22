@@ -38,7 +38,8 @@ namespace muapo3 {
 	qENUM( State ) {
 		sRegular,	// We are not in a potential termination sequence.
 		sICR,	// Initial CR.
-		sILF,	// Initial LF.
+		sRILF,	// Regular Initial LF.
+		sBILF,	// LF right before the begin of the message.
 		sDot,
 		sFCR,	// Final CR.
 		sFLF,	// Final LF.
@@ -68,8 +69,11 @@ namespace muapo3 {
 			case sICR:
 				return 1;
 				break;
-			case sILF:
+			case sRILF:
 				return 2;
+				break;
+			case sBILF:	// LF (and CR) from the answer ; should not be displayed.
+				return 0;
 				break;
 			case sDot:
 				return 2;	// Not 3, because if the '.' will not be dumped.
@@ -110,13 +114,14 @@ namespace muapo3 {
 				break;
 			case sICR:
 				if ( MultiLine_ )
-					Termination = HandleState_( C, LF_, sILF );
+					Termination = HandleState_( C, LF_, sRILF );
 				else {
 					State_ = sCompleted;
 					Termination = true;
 				}
 				break;
-			case sILF:
+			case sRILF:
+			case sBILF:
 				Termination = HandleState_( C, Dot_, sDot );
 				break;
 			case sDot:
@@ -220,7 +225,7 @@ namespace muapo3 {
 			Flow_.Init( Driver );
 			MultiLine_ = MultiLine;
 			if ( EOL  )
-				State_ = sILF;
+				State_ = sBILF;
 			else
 				State_ = sRegular;
 		}

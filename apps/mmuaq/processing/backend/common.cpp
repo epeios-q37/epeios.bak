@@ -57,26 +57,29 @@ namespace {
 
 	namespace fill_account_ {
 		namespace {
+			namespace {
 #define G( name ) sclmisc::MGetValue( rgstry::rTEntry( registry::definition::demo::agent::Tagged##name, Id ), name );
-			void Fill_(
-				const str::dString &Id,
-				muaacc::dAccount &Account )
-			{
-			qRH
-				str::wString HostPort, Username, Password;
-			qRB
-				tol::Init( HostPort, Username, Password );
+				void Fill_(
+					const str::dString &Id,
+					muaacc::dAccount &Account )
+				{
+				qRH
+					str::wString HostPort, Username, Password;
+				qRB
+					tol::Init( HostPort, Username, Password );
 
-				G( HostPort );
-				G( Username );
-				G( Password );
+					G( HostPort );
+					G( Username );
+					G( Password );
 
-				Account.Agents.New( Id, HostPort, Username, Password );
-			qRR
-			qRT
-			qRE
-			}
+					Account.Agents.New( Id, HostPort, Username, Password );
+				qRR
+				qRT
+				qRE
+				}
 #undef G
+			}
+
 			void Fill_(
 				const str::dStrings &Ids,
 				muaacc::dAccount &Account )
@@ -89,6 +92,20 @@ namespace {
 					Row = Ids.Next( Row );
 				}
 			}
+
+			void CreateFolders_( muaacc::dAccount &Account )
+			{
+				muafld::sRow Folder1 = qNIL, Folder2 = qNIL;
+
+				Folder1 = Account.CreateFolder(str::wString("Folder 1"), qNIL );
+				Folder2 = Account.CreateFolder(str::wString("Folder 2"), qNIL );
+
+				Account.CreateFolder(str::wString("Folder 1.1"), Folder1 );
+				Account.CreateFolder(str::wString("Folder 1.2"), Folder1 );
+
+				Account.CreateFolder(str::wString("Folder 2.1"), Folder2 );
+				Account.CreateFolder(str::wString("Folder 2.2"), Folder2 );
+			}
 		}
 
 		void Fill( muaacc::dAccount &Account )
@@ -100,6 +117,7 @@ namespace {
 			sclmisc::GetValues( registry::definition::demo::agent::Id, Ids );
 
 			Fill_( Ids, Account );
+			CreateFolders_( Account );
 		qRR
 		qRT
 		qRE

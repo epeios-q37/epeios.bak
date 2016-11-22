@@ -4,7 +4,7 @@
   <xpp:set name="q37.xpp" env-var="Q37_XPP"/>
   <xpp:expand value-of="q37.xpp"/>
   <xpp:expand href="../../../../TOL.xcfg"/>
-  <Parameters Setup="Mail1">
+  <Parameters Setup="prod">
    <Language>fr</Language>
    <!-- Default command -->
   </Parameters>
@@ -112,6 +112,7 @@
    <Argument id="KeepAnswerFlag" Description="KeepAnswerFlagDescription" long="keep-answer" Path="KeepAnswer" Value="true"/>
    <!-- Options : 'Path' ET 'Value'. -->
    <!--Argument id="TestOption" Description="TestOptionDescription" long="option" short="o" Path="Option" Label="TestOptionLabel"/-->
+   <Argument id="SetupOption" Description="SetupOptionDescription" long="setup" short="s" Path="@Setup" Label="SetupOptionLabel"/>
    <!-- Arguments libres : 'Path' mais PAS de 'Value' (ni de 'short', ni de 'long'). -->
    <Argument id="InputArgument" Description="InputArgumentDescription" Path="Input" Label="InputArgumentLabel"/>
    <Argument id="OutputArgument" Description="OutputArgumentDescription" Path="Output" Label="OutputArgumentLabel"/>

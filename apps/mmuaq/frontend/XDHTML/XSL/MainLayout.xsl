@@ -21,23 +21,37 @@
       </li>
      </ul>
     </div-->
-     <xsl:apply-templates select="Mails"/>
+    <xsl:apply-templates select="Folders"/>
+    <xsl:apply-templates select="Mails"/>
      <button title="#mainConfigTitle#" data-xdh-onevent="Configuration">#mainConfig#</button>
    </span>
   </span>
  </xsl:template>
+ <xsl:template match="Folders">
+  <ul>
+   <xsl:apply-templates select="Folder"/>
+  </ul>
+ </xsl:template>
  <xsl:template match="Mails">
-  <table style="border: 1px solid black;	border-collapse: collapse;">
+  <table style="border: 1px solid black;">
    <tr>
-    <th style="border: 1px solid black;	border-collapse: collapse;">Subject</th>
+    <th>Subject</th>
    </tr>
    <xsl:apply-templates select="Mail"/>
   </table>
  </xsl:template>
+ <xsl:template match="Folder">
+  <li>
+   <xsl:value-of select="@id"/>
+   <xsl:text> : </xsl:text>
+   <xsl:value-of select="@Name"/>
+   <xsl:apply-templates select="Folders"/>
+  </li>
+ </xsl:template>
  <xsl:template match="Mail">
   <tr>
-   <td style="border: 1px solid black;	border-collapse: collapse;">
-    <xsl:apply-templates select="@Subject"/>
+   <td>
+    <xsl:value-of select="@Subject"/>
    </td>
   </tr>
  </xsl:template>

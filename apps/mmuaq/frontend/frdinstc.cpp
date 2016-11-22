@@ -141,6 +141,70 @@ qRT
 qRE
 }
 
+namespace dump_folders_ {
+	void Dump(
+		sFolder Folder,
+		rUser_ &Core,
+		xml::dWriter &Writer );
+
+	void Dump_(
+		const dFolders &Folders,
+		const dStrings &Names,
+		rUser_ &Core,
+		xml::dWriter &Writer )
+	{
+		sdr::sRow Row = Folders.First();
+
+		if ( Folders.Amount() != Names.Amount() )
+			qRGnr();
+
+		Writer.PushTag( "Folders" );
+
+		Writer.PutAttribute("Amount", Folders.Amount() );
+
+		while ( Row != qNIL ) {
+			Writer.PushTag("Folder");
+
+			Writer.PutAttribute("id", *Folders( Row ) );
+			Writer.PutAttribute("Name", Names( Row ) );
+
+			Dump( Folders( Row ), Core, Writer );
+
+			Writer.PopTag();
+
+			Row = Folders.Next( Row );
+		}
+
+		Writer.PopTag();
+	}
+
+	void Dump(
+		sFolder Folder,
+		rUser_ &Core,
+		xml::dWriter &Writer )
+	{
+	qRH
+		wFolders Folders;
+		wStrings Names;
+	qRB
+		tol::Init( Folders, Names );
+
+		Core.GetFolders( Folder, Folders );
+		Core.GetFoldersNames( Folders, Names );
+
+		Dump_( Folders, Names, Core, Writer );
+	qRR
+	qRT
+	qRE
+	}
+}
+
+void frdinstc::rUser::DumpFolders( xml::dWriter &Writer )
+{
+	dump_folders_::Dump( UndefinedFolder, Core_, Writer );
+}
+
+
 
 const str::dString &frdinstc::rUser::GetAgentStatus( str::dString &Status )
 {

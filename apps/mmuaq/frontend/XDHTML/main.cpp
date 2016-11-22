@@ -69,6 +69,7 @@ namespace {
 		Rack.Init( XSLAffix_, XML, Session );
 
 		Session.User.DumpMails( Rack );
+		Session.User.DumpFolders( Rack );
 	qRR
 	qRT
 	qRE

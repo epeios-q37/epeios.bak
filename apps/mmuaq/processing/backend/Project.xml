@@ -21,6 +21,8 @@
 		<Modules Group="Epeios" Path="h:/hg/epeios/stable/">
 			<Modules Group="Core">
 				<xpp:expand select="Core"/>
+    <Module>btr</Module>
+    <Module>dtr</Module>
     <Module>sck</Module>
     <Module>txmtbl</Module>
 			</Modules>
@@ -41,6 +43,7 @@
    <Module>muaacc</Module>
    <Module>muaagt</Module>
    <Module>muabsc</Module>
+   <Module>muafld</Module>
    <Module>muaimf</Module>
    <Module>muamel</Module>
    <Module>muaplg</Module>

@@ -1255,6 +1255,33 @@ namespace fbltyp {
 
 # undef M
 
+	template <typename bunch> inline void Convert(
+		const bunch &Bunch,
+		dIds &Ids )
+	{
+		sdr::sRow Row = Bunch.First();
+
+		while( Row != qNIL ) {
+			Ids.Add( *Bunch( Row ) );
+
+			Row = Bunch.Next( Row );
+		}
+	}
+
+
+	template <typename bunch> inline void Convert(
+		const dIds &Ids,
+		bunch &Bunch )
+	{
+		sdr::sRow Row = Ids.First();
+
+		while( Row != qNIL ) {
+			Bunch.Add( *Ids( Row ) );
+
+			Row = Ids.Next( Row );
+		}
+	}
+
 	typedef item_ dIString;
 	qW( IString );
 

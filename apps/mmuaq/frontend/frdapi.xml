@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--                    DON'T MODIFY !!! !
-    This document was generated the 18/11/2016 12:04:48
+    This document was generated the 22/11/2016 10:04:32
     using barq V20161027 (http://q37.info/)
     Build : Nov 13 2016 17:38:12 (Win32;MSC 1800;IA-32)
 -->
@@ -18,19 +18,19 @@
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Generator>
   <Backend>
-   <Details>mmuaqbkd V20161118 Build Nov 18 2016 11:59:53 - Win32;MSC 1800;IA-32</Details>
+   <Details>mmuaqbkd V20161122 Build Nov 22 2016 10:03:56 - Win32;MSC 1800;IA-32</Details>
    <Copyright>2016 Claude SIMON (http://q37.info/contact/)</Copyright>
   </Backend>
   <Software>MMUAq V1.0</Software>
-  <Date>18/11/2016</Date>
-  <Time>12:04:48</Time>
+  <Date>22/11/2016</Date>
+  <Time>10:04:32</Time>
  </Misc>
  <Types>
   <Type Object="Master">
    <ID>65535</ID>
    <Prefix Default="" Lower="" Upper=""/>
    <Name Raw="" Underscored="" Mixedcased=""/>
-   <Commands Amount="9">
+   <Commands Amount="11">
     <Command>
      <Name>LoadSetupOfId_1</Name>
      <ID>18</ID>
@@ -184,6 +184,42 @@
         <ID>22</ID>
        </Parameter>
        <Parameter Discriminator="2" Position="Last" Type="Container">
+        <Name>strings</Name>
+        <ID>26</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetFolders_1</Name>
+     <ID>27</ID>
+     <Parameters Amount="3" Position="30">
+      <In>
+       <Parameter Discriminator="1" Type="Static">
+        <Name>id</Name>
+        <ID>21</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+      </Out>
+     </Parameters>
+    </Command>
+    <Command>
+     <Name>MUAGetFoldersNames_1</Name>
+     <ID>28</ID>
+     <Parameters Amount="3" Position="33">
+      <In>
+       <Parameter Discriminator="1" Type="Bunch">
+        <Name>ids</Name>
+        <ID>22</ID>
+       </Parameter>
+      </In>
+      <Out>
+       <Parameter Discriminator="1" Position="Last" Type="Container">
         <Name>strings</Name>
         <ID>26</ID>
        </Parameter>

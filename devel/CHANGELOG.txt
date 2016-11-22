@@ -1,5 +1,9 @@
 CHANGELOG for the 'Epeios' framework.
 
+2016-11-22 :
+- FBLTYP :
+	- Adding 'Convert(...)'.
+
 2016-11-20 :
 - BCH, CTN, CRT, STR :
 	- Adding 'Search(...)' functions.

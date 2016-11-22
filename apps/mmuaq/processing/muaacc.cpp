@@ -26,6 +26,23 @@
 
 using namespace muaacc;
 
+void muaacc::dAccount::GetFoldersNames(
+	const muafld::dRows &Folders,
+	str::dStrings &Names ) const
+{
+	sdr::sRow Row = Folders.First(), NRow = qNIL;
+
+	while ( Row != qNIL ) {
+		NRow = Names.New();
+		Names( NRow ).Init();
+
+		Names( NRow ) = this->Folders.GetName( Folders( Row ), Names( NRow ) );
+
+		Row = Folders.Next( Row);
+	}
+}
+
+
 void muaacc::dAccount::GetAllMails( muamel::dRows &Rows ) const
 {
 	muamel::sRow Row = Mails.First();

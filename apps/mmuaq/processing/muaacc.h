@@ -28,6 +28,7 @@
 
 # include "muaagt.h"
 # include "muabsc.h"
+# include "muafld.h"
 # include "muamel.h"
 
 # include "bitbch.h"
@@ -102,37 +103,60 @@ namespace muaacc {
 
 	class dAccount
 	{
-	private:
 	public:
 		struct s {
 			muaagt::dAgents::s Agents;
 			muamel::dMails::s Mails;
-		};
+			muafld::dFoldersTree::s Folders;
+			muafld::sRow Inbox;
+		} &S_;
 		muaagt::dAgents Agents;
 		muamel::dMails Mails;
+		muafld::dFoldersTree Folders;
 		dAccount( s &S )
-		: Agents( S.Agents ),
-		  Mails( S.Mails )
+		: S_( S ),
+		  Agents( S.Agents ),
+		  Mails( S.Mails ),
+		  Folders( S.Folders )
 		{}
 		void reset( bso::bool__ P = true )
 		{
-			tol::reset( P, Agents, Mails );
+			tol::reset( P, Agents, Mails, Folders );
 		}
 		void plug( qASd *AS )
 		{
-			tol::plug( AS, Agents, Mails );
+			tol::plug( AS, Agents, Mails, Folders );
 		}
 		dAccount &operator =( const dAccount &A )
 		{
 			Agents = A.Agents;
 			Mails = A.Mails;
+			Folders = A.Folders;
+			S_.Inbox = A.S_.Inbox;
 
 			return *this;
 		}
 		void Init( void )
 		{
-			tol::Init( Agents, Mails );
+			tol::Init( Agents, Mails, Folders );
+
+			S_.Inbox = Folders.CreateChild( str::wString(), qNIL );
 		}
+		muafld::sRow CreateFolder(
+			const str::dString &Name,
+			muafld::sRow Parent )
+		{
+			return Folders.CreateChild( Name, Parent );
+		}
+		void GetFolders(
+			muafld::sRow Folder,
+			muafld::dRows &Folders ) const
+		{
+			this->Folders.GetFolders( Folder, Folders );
+		}
+		void GetFoldersNames(
+			const muafld::dRows &Folders,
+			str::dStrings &Names ) const;
 		void GetAllMails( muamel::dRows &Rows ) const;
 		void Update( void );	// Updates the mail with the content on the different agent.
 		void GetFields(
