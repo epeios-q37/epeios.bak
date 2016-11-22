@@ -68,6 +68,11 @@ bso::bool__ base::sActionHelper::SCLXOnClose( core::rSession &Session )
 	return Session.ConfirmT( "ClosingConfirmation" );
 }
 
+void base::sCorpusCallback::Init( core::rSession &Session )
+{
+	Frontend_ = &Session;
+}
+
 Q37_GCTOR( base )
 {
 }

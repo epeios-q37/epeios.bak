@@ -83,6 +83,10 @@ namespace core {
 			const char *Action ) override;
 	public:
 		qCVDTOR( rSession );
+		frdfrntnd::rFrontend &Frontend( void )
+		{
+			return *this;
+		}
 	};
 
 	typedef sclxdhtml::core___<rSession> _core___;

@@ -113,10 +113,12 @@ namespace base {
 			Frontend_ = NULL;
 		}
 		E_CVDTOR( sCorpusCallback );
-		void Init( frdfrntnd::rFrontend &Frontend )
-		{
-			Frontend_ = &Frontend;
-		}
+		/*
+		Deported to '.cpp' due to 'g++', which tries to convert 'core::rSession' to 'frdfrntnd::rFrontend'
+		in the template below right on the declaration (where 'core::rSession' is only declared, but no defined),
+		and not on instanciation.
+		*/
+		void Init( core::rSession &Session );
 	};
 
 	XDHDWS_RACKS( Name );
