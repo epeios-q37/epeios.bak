@@ -24,10 +24,12 @@
 
 namespace main {
 	BASE_ACD( Configuration );
+	BASE_ACD( SelectFolder );
 
 	inline void Register( void  )
 	{
 		BASE_ACR( Configuration );
+		BASE_ACR( SelectFolder );
 	};
 
 	void SetLayout( core::rSession &Session );

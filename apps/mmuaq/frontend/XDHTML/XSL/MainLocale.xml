@@ -20,6 +20,10 @@
   <Translation language="fr">Configuration</Translation>
   <Translation language="en">Configuration</Translation>
  </Translations>
+ <Translations text="mainInbox">
+  <Translation language="fr">Courrier entrant</Translation>
+  <Translation language="en">Inbox</Translation>
+ </Translations>
  <!--
 	<Translations text="main">
 		<Translation language="fr"></Translation>

@@ -103,3 +103,16 @@ AC( Configuration )
 {
 	config::SetLayout( Session );
 }
+
+AC( SelectFolder )
+{
+qRH
+	str::wString Value;
+qRB
+	Value.Init();
+	Session.AlertU( Session.GetContent( Id, Value ) );
+qRR
+qRT
+qRE
+}
+
